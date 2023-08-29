@@ -10,6 +10,8 @@
 
 #include "wx/palette.h"
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxPalette,wxGDIObject)
+
 wxPalette::wxPalette()
 {
 }
@@ -36,11 +38,11 @@ int wxPalette::GetPixel(unsigned char WXUNUSED(red), unsigned char WXUNUSED(gree
 
 wxGDIRefData *wxPalette::CreateGDIRefData() const
 {
-    return NULL;
+    return nullptr;
 }
 
 wxGDIRefData *wxPalette::CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
 {
-    return NULL;
+    return nullptr;
 }
 

@@ -39,8 +39,8 @@ public:
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo,
         wxStringToAnyHashMap &metadata);
 
-    // initialize the already allocated object having the ID objectID 
-    // with the Create method creation parameters which are objects are 
+    // initialize the already allocated object having the ID objectID
+    // with the Create method creation parameters which are objects are
     // having their Ids passed in objectIDValues having objectId <> wxInvalidObjectID
 
     virtual void CreateObject(int objectID,
@@ -52,9 +52,9 @@ public:
         wxStringToAnyHashMap &metadata
         );
 
-    // construct the new object on the heap, that object will have the 
-    // passed in ID (for objects that don't support allocate-create type 
-    // of creation) creation parameters which are objects are having their 
+    // construct the new object on the heap, that object will have the
+    // passed in ID (for objects that don't support allocate-create type
+    // of creation) creation parameters which are objects are having their
     // Ids passed in objectIDValues having objectId <> wxInvalidObjectID
 
     virtual void ConstructObject(int objectID,
@@ -65,8 +65,8 @@ public:
         const wxClassInfo **objectClassInfos,
         wxStringToAnyHashMap &metadata);
 
-    // destroy the heap-allocated object having the ID objectID, this may 
-    // be used if an object is embedded in another object and set via value 
+    // destroy the heap-allocated object having the ID objectID, this may
+    // be used if an object is embedded in another object and set via value
     // semantics, so the intermediate object can be destroyed after safely
     virtual void DestroyObject(int objectID, wxClassInfo *classInfo);
 

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/window.h"
 
@@ -59,6 +56,7 @@
 // implementation
 // ============================================================================
 
+#if wxUSE_SCROLLBAR
 // ----------------------------------------------------------------------------
 // scrollbars class
 // ----------------------------------------------------------------------------
@@ -80,6 +78,7 @@ public:
 
     virtual bool CanBeOutsideClientArea() const { return true; }
 };
+#endif // wxUSE_SCROLLBAR
 
 
 // ----------------------------------------------------------------------------
@@ -124,7 +123,7 @@ void wxWindow::Init()
 {
 #if wxUSE_SCROLLBAR
     m_scrollbarVert =
-    m_scrollbarHorz = NULL;
+    m_scrollbarHorz = nullptr;
 #endif // wxUSE_SCROLLBAR
 
     m_isCurrent = false;
@@ -226,7 +225,7 @@ wxWindow::~wxWindow()
     // children and so will be deleted by DestroyChildren() call below and if
     // any code using the scrollbars would be called in the process or from
     // ~wxWindowBase, the app would crash:
-    m_scrollbarVert = m_scrollbarHorz = NULL;
+    m_scrollbarVert = m_scrollbarHorz = nullptr;
 #endif
 
     // we have to destroy our children before we're destroyed because our
@@ -505,7 +504,7 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rect)
         childrect.Offset(-child->GetPosition());
         // NB: We must call wxWindowNative version because we need to refresh
         //     the entire control, not just its client area, and this is why we
-        //     don't account for child client area origin here neither. Also
+        //     don't account for child client area origin here either. Also
         //     note that we don't pass eraseBackground to the child, but use
         //     true instead: this is because we can't be sure that
         //     eraseBackground=false is safe for children as well and not only
@@ -524,7 +523,7 @@ bool wxWindow::Enable(bool enable)
         return false;
 
     // disabled window can't keep focus
-    if ( FindFocus() == this && GetParent() != NULL )
+    if ( FindFocus() == this && GetParent() != nullptr )
     {
         GetParent()->SetFocus();
     }
@@ -713,7 +712,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
 #endif
 }
 
-wxSize wxWindow::DoGetBorderSize() const
+wxSize wxWindow::GetWindowBorderSize() const
 {
     return AdjustSize(wxSize(0, 0));
 }
@@ -916,7 +915,7 @@ void wxWindow::SetScrollbar(int orient,
                             bool refresh)
 {
 #if wxUSE_SCROLLBAR
-    wxASSERT_MSG( pageSize <= range,
+    wxASSERT_MSG( (range == -1 || pageSize <= range),
                     wxT("page size can't be greater than range") );
 
     bool hasClientSizeChanged = false;
@@ -959,10 +958,10 @@ void wxWindow::SetScrollbar(int orient,
         if ( scrollbar )
         {
             // wxALWAYS_SHOW_SB only applies to the vertical scrollbar
-            if ( (orient & wxVERTICAL) && (GetWindowStyle() & wxALWAYS_SHOW_SB) )
+            if ( range == -1 || ((orient & wxVERTICAL) && (GetWindowStyle() & wxALWAYS_SHOW_SB)) )
             {
                 // just disable the scrollbar
-                scrollbar->SetScrollbar(pos, pageSize, range, pageSize, refresh);
+                scrollbar->SetScrollbar(pos, pageSize, range == -1 ? 0 : range, pageSize, refresh);
                 scrollbar->Disable();
             }
             else // really remove the scrollbar
@@ -970,9 +969,9 @@ void wxWindow::SetScrollbar(int orient,
                 delete scrollbar;
 
                 if ( orient & wxVERTICAL )
-                    m_scrollbarVert = NULL;
+                    m_scrollbarVert = nullptr;
                 else
-                    m_scrollbarHorz = NULL;
+                    m_scrollbarHorz = nullptr;
 
                 // the client area increased as we removed a scrollbar
                 hasClientSizeChanged = true;
@@ -1097,7 +1096,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             continue;
 #endif // wxUSE_SCROLLBAR
 
-        // VS: Scrolling children has non-trivial semantics. If rect=NULL then
+        // VS: Scrolling children has non-trivial semantics. If rect=nullptr then
         //     it is easy: we scroll all children. Otherwise it gets
         //     complicated:
         //       1. if scrolling in one direction only, scroll only
@@ -1122,7 +1121,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             }
             // else: child outside of scrolling shaft, don't move
         }
-        else // scrolling in both axes or rect=NULL
+        else // scrolling in both axes or rect=nullptr
         {
             shouldMove = true;
         }
@@ -1293,7 +1292,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
 
 #if wxUSE_MENUS
     // the last window over which Alt was pressed (used by OnKeyUp)
-    wxWindow *wxWindow::ms_winLastAltPress = NULL;
+    wxWindow *wxWindow::ms_winLastAltPress = nullptr;
 #endif // wxUSE_MENUS
 
 #if wxUSE_ACCEL || wxUSE_MENUS
@@ -1310,7 +1309,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
         return;
     }
 
-    ms_winLastAltPress = NULL;
+    ms_winLastAltPress = nullptr;
 #endif // wxUSE_MENUS
 
 #if wxUSE_ACCEL
@@ -1392,7 +1391,7 @@ wxMenuBar *wxWindow::GetParentFrameMenuBar() const
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void wxWindow::OnChar(wxKeyEvent& event)
@@ -1460,7 +1459,7 @@ void wxWindow::OnKeyUp(wxKeyEvent& event)
     }
 
     // in any case reset it
-    ms_winLastAltPress = NULL;
+    ms_winLastAltPress = nullptr;
 }
 
 #endif // wxUSE_MENUS

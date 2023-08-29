@@ -6,7 +6,7 @@
 # readable.
 #
 # Usage:
-#    ./regen.sh [html|chm|xml|latex|all]
+#    ./regen.sh [html|chm|xml|latex|docset|all]
 #
 # Pass "x" to regen only the X output format and "all" to regen them all.
 # If no arguments are passed, HTML is regenerated (just like passing "html").
@@ -17,6 +17,8 @@
 me=$(basename $0)
 path=${0%%/$me}        # path from which the script has been launched
 cd "$path"
+SCRIPTS_DIR="$(pwd)/scripts"
+
 if [[ -z "$WXWIDGETS" ]]; then
     # Notice the use of -P to ensure we get the canonical path even if there
     # are symlinks in the current path. This is important because Doxygen
@@ -39,22 +41,34 @@ fi
 # Still allow using incompatible version if explicitly requested.
 if [[ -z $WX_SKIP_DOXYGEN_VERSION_CHECK ]]; then
     doxygen_version=`$DOXYGEN --version`
-    doxygen_version_required=1.8.8
+    doxygen_version_required=1.9.1
     if [[ $doxygen_version != $doxygen_version_required ]]; then
-        echo "Doxygen version $doxygen_version is not supported."
+        echo "Doxygen version $doxygen_version is not officially supported."
         echo "Please use Doxygen $doxygen_version_required or export WX_SKIP_DOXYGEN_VERSION_CHECK."
         exit 1
     fi
 fi
 
+if [[ -z $WX_HTML_OUTPUT_DIR ]]; then
+    WX_HTML_OUTPUT_DIR=out/html
+fi
+
 # prepare folders for the cp commands below
-mkdir -p out/html       # we need to copy files in this folder below
-mkdir -p out/html/generic
+mkdir -p $WX_HTML_OUTPUT_DIR       # we need to copy files in this folder below
+mkdir -p $WX_HTML_OUTPUT_DIR/generic
 
 # These are not automatically copied by Doxygen because they're not
 # used in doxygen documentation, only in our html footer and by our
 # custom aliases
-cp images/generic/*png out/html/generic
+cp images/generic/*png $WX_HTML_OUTPUT_DIR/generic
+
+# These values are always used here, the corresponding options only exist in
+# order to allow not using them when generating CHM in regen.bat.
+export DOT_IMAGE_FORMAT='svg'
+export HTML_HEADER='custom_header.html'
+export CUSTOM_THEME_CSS='doxygen-awesome-css/doxygen-awesome.css'
+export CUSTOM_THEME_JS1='doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js'
+export CUSTOM_THEME_JS2='doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js'
 
 # Defaults for settings controlled by this script
 export GENERATE_DOCSET="NO"
@@ -80,6 +94,7 @@ case "$1" in
     docset)
         export GENERATE_DOCSET="YES"
         export GENERATE_HTML="YES"
+        export GENERATE_TAGFILE="$path/out/wxWidgets.tag"
         ;;
     latex)
         export GENERATE_LATEX="YES"
@@ -111,9 +126,14 @@ esac
 #
 $DOXYGEN Doxyfile
 
+if [[ "$1" = "php" ]]; then
+    # Work around a bug in Doxygen < 1.8.19 PHP search function.
+    cp custom_search_functions.php $WX_HTML_OUTPUT_DIR/search_functions.php
+fi
+
 if [[ "$1" = "qch" ]]; then
     # we need to add missing files to the .qhp
-    cd out/html
+    cd $WX_HTML_OUTPUT_DIR
     qhelpfile="index.qhp"
 
     # remove all <file> and <files> tags
@@ -136,7 +156,7 @@ if [[ "$1" = "qch" ]]; then
     # remove useless files to make the qch slim
     rm temp *map *md5
 
-    # add a <file> tag for _any_ file in out/html folder except the .qhp itself
+    # add a <file> tag for _any_ file in this directory except the .qhp itself
     for f in * */*png; do
         if [[ $f != $qhelpfile ]]; then
             echo "      <file>$f</file>" >>$qhelpfile
@@ -156,47 +176,75 @@ if [[ "$1" = "qch" ]]; then
 
     # last, run qhelpgenerator:
     cd ../..
-    qhelpgenerator out/html/index.qhp -o out/wx.qch
+    qhelpgenerator $WX_HTML_OUTPUT_DIR/index.qhp -o out/wx.qch
 fi
 
 if [[ "$1" = "docset" ]]; then
     BASENAME="wxWidgets-3.1"    # was org.wxwidgets.doxygen.docset.wx30
     DOCSETNAME="$BASENAME.docset"
     ATOM="$BASENAME.atom"
-    ATOMDIR="http://docs.wxwidgets.org/docsets"
+    ATOMDIR="https://docs.wxwidgets.org/docsets"
     XAR="$BASENAME.xar"
-    XARDIR="http://docs.wxwidgets.org/docsets"
-    XCODE_INSTALL=`xcode-select -print-path`
-    
-    cd out/html
+    XARDIR="https://docs.wxwidgets.org/docsets"
+
+    # See if xcode is installed
+    if [ -x "$(command -v xcode-select)" ]; then
+        XCODE_INSTALL=`xcode-select -print-path`
+    fi
+
+    cd $WX_HTML_OUTPUT_DIR
     DESTINATIONDIR=`pwd`/../docset
-    
+
     mkdir -p $DESTINATIONDIR
     rm -rf $DESTINATIONDIR/$DOCSETNAME
     rm -f $DESTINATIONDIR/$XAR
-    
+
     make DOCSET_NAME=$DESTINATIONDIR/$DOCSETNAME
-    
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 3.1"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL http://docs.wxwidgets.org
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2018 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx
 
-    $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
+    # Choose which plist modification utility to use
+    if [ -x "$(command -v defaults)" ]; then
+        PLIST_WRITE_CMD="defaults write"
+    else
+        PLIST_WRITE_CMD="python $SCRIPTS_DIR/write_info_tag.py"
+    fi
 
+    # Modify the Info.plist file
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 3.1"
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL https://docs.wxwidgets.org
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2023 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
+    $PLIST_WRITE_CMD $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx
+
+    echo "Creating docset database"
+    if ! [ -z "$XCODE_INSTALL" ]; then
+        # Use xcode to create the docset if it is installed
+        $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
+    else
+        # Use doxytag2zealdb to create the database
+        # This requires the python package doxytag2zealdb installed
+        python -m doxytag2zealdb --tag $DESTINATIONDIR/../wxWidgets.tag --db $DESTINATIONDIR/$DOCSETNAME/Contents/Resources/docSet.dsidx --include-parent-scopes --include-function-signatures
+    fi
+
+    # Copy the icon
+    cp $SCRIPTS_DIR/../../../art/wxwin16x16.png $DESTINATIONDIR/$DOCSETNAME/icon.png
+    cp $SCRIPTS_DIR/../../../art/wxwin32x32.png $DESTINATIONDIR/$DOCSETNAME/icon@2x.png
     cd ../..
 fi
 
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
 # more readable
-currpath=`pwd`/
-interfacepath=`cd ../../interface && pwd`/
-cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" > temp
-mv temp doxygen.log
+if [[ -s doxygen.log ]]; then
+    topsrcdir=`cd ../.. && pwd`
+    sed -i'' -e "s|$topsrcdir/||g" doxygen.log
+
+    echo '*** There were warnings during docs generation ***'
+else
+    # Don't leave empty file lying around.
+    rm doxygen.log
+fi

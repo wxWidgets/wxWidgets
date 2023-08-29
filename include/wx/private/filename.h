@@ -27,13 +27,13 @@
 #if wxUSE_FILE
 wxString wxCreateTempFileName(const wxString& prefix,
                               wxFile *fileTemp,
-                              bool *deleteOnClose = NULL);
+                              bool *deleteOnClose = nullptr);
 #endif
 
 #if wxUSE_FFILE
 wxString wxCreateTempFileName(const wxString& prefix,
                               wxFFile *fileTemp,
-                              bool *deleteOnClose = NULL);
+                              bool *deleteOnClose = nullptr);
 #endif
 
 // Returns an open temp file, if possible either an unlinked open file or one

@@ -78,7 +78,7 @@ if (dialog.ShowModal() == wxID_OK)
 {
     wxColourData retData = dialog.GetColourData();
     wxColour col = retData.GetColour();
-    wxBrush brush(col, wxSOLID);
+    wxBrush brush(col, wxBRUSHSTYLE_SOLID);
     myWindow->SetBackground(brush);
     myWindow->Clear();
     myWindow->Refresh();
@@ -202,6 +202,25 @@ Classes: wxPasswordEntryDialog
 
 This is a dialog with a password entry field. The value that the user entered
 is obtained using wxTextEntryDialog::GetValue().
+
+
+
+@section overview_cmndlg_numeric wxNumberEntryDialog Overview
+
+Classes: wxNumberEntryDialog
+
+This is a dialog with a numeric entry field. The value that the user entered
+is obtained using wxNumberEntryDialog::GetValue().
+
+
+
+@section overview_cmndlg_cred wxCredentialEntryDialog Overview
+
+Classes: wxCredentialEntryDialog
+
+This is a dialog with user and password entry fields. The values that the
+user entered are obtained using wxCredentialEntryDialog::GetUser() and
+wxCredentialEntryDialog::GetPassword().
 
 
 

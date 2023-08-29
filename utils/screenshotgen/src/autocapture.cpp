@@ -8,10 +8,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #include "autocapture.h"
 
 #ifndef WX_PRECOMP
@@ -38,7 +34,7 @@ AutoCaptureMechanism::AutoCaptureMechanism(wxNotebook *notebook,
 : m_notebook(notebook),
   m_flag(flag),
   m_margin(margin),
-  m_grid(NULL)
+  m_grid(nullptr)
 {
 }
 
@@ -48,9 +44,7 @@ wxString AutoCaptureMechanism::default_dir = wxT("screenshots");
 /* static */
 wxString AutoCaptureMechanism::GetDefaultDirectoryAbsPath()
 {
-    wxFileName output = wxFileName::DirName(GetDefaultDirectory());
-    output.MakeAbsolute();
-    return output.GetFullPath();
+    return wxFileName::DirName(GetDefaultDirectory()).GetAbsolutePath();
 }
 
 /* static */
@@ -358,7 +352,7 @@ void AutoCaptureMechanism::PutBack(wxWindow * ctrl)
 
     sizer->Detach(m_grid);
     delete m_grid;
-    m_grid = NULL;
+    m_grid = nullptr;
 
     sizer->Add(ctrl);
 }

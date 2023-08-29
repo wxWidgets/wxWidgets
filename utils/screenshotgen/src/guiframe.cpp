@@ -8,10 +8,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 // for all others, include the necessary headers wxWidgets headers)
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -56,7 +52,7 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
     statusBar = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
 
     // Connect Events
-    this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
+    Bind(wxEVT_CLOSE_WINDOW, &GUIFrame::OnClose, this);
 }
 
 void GUIFrame::AddMenuBar()
@@ -102,11 +98,11 @@ void GUIFrame::AddMenuBar()
     this->SetMenuBar( mbar );
 
     // Connect Events
-    this->Connect( m_menuSeeScr->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
-    this->Connect( m_menuFileQuit->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnQuit ) );
-    this->Connect( m_menuCapFullScreen->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Connect( m_menuCapAll->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
-    this->Connect( m_menuHelpAbout->GetId(), wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnAbout ) );
+    Bind(wxEVT_MENU, &GUIFrame::OnSeeScreenshots, this, m_menuSeeScr->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnQuit, this, m_menuFileQuit->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnCaptureFullScreen, this, m_menuCapFullScreen->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnCaptureAllControls, this, m_menuCapAll->GetId());
+    Bind(wxEVT_MENU, &GUIFrame::OnAbout, this, m_menuHelpAbout->GetId());
 }
 
 void GUIFrame::AddPanel_1()
@@ -148,7 +144,7 @@ void GUIFrame::AddPanel_1()
     m_radioBtn2->SetToolTip( _("wxRadioButton") );
     fgSizer1->Add( m_radioBtn2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
-    m_bpButton1 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+    m_bpButton1 = new wxBitmapButton( m_panel1, wxID_ANY, wxBitmap( wxT("bitmaps/wxwin32x32.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
     m_bpButton1->SetToolTip( _("wxBitmapButton") );
     m_bpButton1->SetToolTip( _("wxBitmapButton") );
     fgSizer1->Add( m_bpButton1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
@@ -213,7 +209,7 @@ void GUIFrame::AddPanel_2()
     m_checkList1->Check(0);
     fgSizer2->Add(m_checkList1, m_commonExpandFlags);
 
-    m_listBox1 = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+    m_listBox1 = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, 0 );
     m_listBox1->Append( _("wxListBox") );
     m_listBox1->Append( _("Item1") );
     m_listBox1->Append( _("Item2") );
@@ -398,7 +394,7 @@ void GUIFrame::AddPanel_5()
     m_choice1->SetSelection( 0 );
     fgSizer4->Add( m_choice1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
-    m_comboBox1 = new wxComboBox( m_panel5, wxID_ANY, _("wxComboBox"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+    m_comboBox1 = new wxComboBox( m_panel5, wxID_ANY, _("wxComboBox"), wxDefaultPosition, wxDefaultSize, 0, nullptr, 0 );
     m_comboBox1->Append( _("wxComboBox") );
     m_comboBox1->Append( _("Item1") );
     m_comboBox1->Append( _("Item2") );
@@ -421,7 +417,7 @@ void GUIFrame::AddPanel_5()
     for a screenshot.
     */
     m_bmpComboBox1 = new wxBitmapComboBox(m_panel5, wxID_ANY,_("Item1"),
-        wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+        wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY);
     m_bmpComboBox1->Append(_("Item1"), wxBitmap(wxT("bitmaps/bell.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->Append(_("Item2"), wxBitmap(wxT("bitmaps/sound.png"),wxBITMAP_TYPE_PNG));
     m_bmpComboBox1->Append(_("Item3"), wxBitmap(wxT("bitmaps/bell.png"),wxBITMAP_TYPE_PNG));
@@ -493,10 +489,10 @@ void GUIFrame::AddPanel_5()
 GUIFrame::~GUIFrame()
 {
     // Disconnect Events
-    this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnQuit ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
-    this->Disconnect( wxID_ANY, wxEVT_MENU, wxCommandEventHandler( GUIFrame::OnAbout ) );
+    Unbind(wxEVT_CLOSE_WINDOW, &GUIFrame::OnClose, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnSeeScreenshots, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnQuit, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnCaptureFullScreen, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnCaptureAllControls, this);
+    Unbind(wxEVT_MENU, &GUIFrame::OnAbout, this);
 }

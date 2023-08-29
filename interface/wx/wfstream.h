@@ -52,6 +52,54 @@ public:
 
 
 /**
+    @class wxTempFFileOutputStream
+
+    wxTempFFileOutputStream is an output stream based on wxTempFFile.
+    It provides a relatively safe way to replace the contents of the
+    existing file.
+
+    @since 3.1.4
+
+    @library{wxbase}
+    @category{streams}
+
+    @see wxTempFFile
+*/
+class wxTempFFileOutputStream : public wxOutputStream
+{
+public:
+    /**
+        Associates wxTempFFileOutputStream with the file to be replaced and opens it.
+
+        @warning
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
+
+        Call Commit() or wxOutputStream::Close() to replace the old file and close
+        this one. Calling Discard() (or allowing the destructor to do it) will
+        discard the changes.
+    */
+    wxTempFFileOutputStream(const wxString& fileName);
+
+    /**
+        Validate changes: deletes the old file of the given name and renames the new
+        file to the old name. Returns @true if both actions succeeded.
+
+        If @false is returned it may unfortunately mean two quite different things: either that
+        either the old file couldn't be deleted or that the new file couldn't be renamed
+        to the old name.
+    */
+    virtual bool Commit();
+
+    /**
+        Discard changes: the old file contents are not changed, the temporary file is
+        deleted.
+    */
+    virtual void Discard();
+};
+
+
+
+/**
     @class wxFFileOutputStream
 
     This class represents data written to a file.
@@ -276,7 +324,7 @@ public:
 /**
     @class wxFFileStream
 
-    This stream allows to both read from and write to a file using buffered
+    This stream allows both reading from and writing to a file using buffered
     STDIO functions.
 
     @library{wxbase}

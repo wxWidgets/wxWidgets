@@ -39,7 +39,7 @@ namespace
 
 const TCHAR *MAIN_WIN_CLASS_NAME = _TEXT("my_exe_main_win_class");
 
-const int IDB_RUN_GUI_FROM_DLL = 100;
+const INT_PTR IDB_RUN_GUI_FROM_DLL = 100;
 
 // ----------------------------------------------------------------------------
 // globals
@@ -65,7 +65,7 @@ OnCommand(HWND /* hwnd */, int id, HWND /* hwndCtl */, UINT /* codeNotify */)
     }
 }
 
-void OnDestroy(HWND hwnd)
+void OnDestroy(HWND /* hwnd */)
 {
     wx_dll_cleanup();
 
@@ -82,8 +82,6 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         default:
             return DefWindowProc(hwnd, msg, wParam, lParam);
     }
-
-    return 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -97,8 +95,8 @@ bool RegisterMainClass()
     wc.style         = CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc   = MainWndProc;
     wc.hInstance     = g_hInstance;
-    wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
+    wc.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wc.lpszClassName = MAIN_WIN_CLASS_NAME;
 
@@ -114,7 +112,7 @@ bool CreateMainWindow()
                     WS_OVERLAPPEDWINDOW,
                     CW_USEDEFAULT, CW_USEDEFAULT,
                     400, 300,
-                    NULL, NULL, g_hInstance, NULL
+                    nullptr, nullptr, g_hInstance, nullptr
                  );
     if ( !g_hwndMain )
         return false;
@@ -125,7 +123,7 @@ bool CreateMainWindow()
         _TEXT("Main Win32 application"),
         WS_CHILD | WS_VISIBLE,
         10, 10, 200, 30,
-        g_hwndMain, (HMENU)-1, g_hInstance, NULL
+        g_hwndMain, (HMENU)-1, g_hInstance, nullptr
     );
 
     CreateWindow
@@ -134,7 +132,7 @@ bool CreateMainWindow()
         _TEXT("Run GUI from DLL"),
         WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
         200, 200, 150, 35,
-        g_hwndMain, (HMENU)IDB_RUN_GUI_FROM_DLL, g_hInstance, NULL
+        g_hwndMain, (HMENU)IDB_RUN_GUI_FROM_DLL, g_hInstance, nullptr
     );
 
     return true;
@@ -159,7 +157,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
     ShowWindow(g_hwndMain, nCmdShow);
 
     MSG msg;
-    while ( GetMessage(&msg, NULL, 0, 0) )
+    while ( GetMessage(&msg, nullptr, 0, 0) )
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);

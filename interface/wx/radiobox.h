@@ -85,7 +85,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int n = 0,
-               const wxString choices[] = NULL,
+               const wxString choices[] = nullptr,
                int majorDimension = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& validator = wxDefaultValidator,
@@ -151,7 +151,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int n = 0,
-                const wxString choices[] = NULL,
+                const wxString choices[] = nullptr,
                 int majorDimension = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& validator = wxDefaultValidator,
@@ -317,6 +317,13 @@ public:
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& string);
+
+    /**
+        Returns the index of the selected item.
+
+        As radio boxes always have a selected item, the return value is never
+        @c wxNOT_FOUND for this class.
+     */
     virtual int GetSelection() const;
 
 };

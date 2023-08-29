@@ -49,8 +49,8 @@ private:
 
 wxCursorRefData::wxCursorRefData()
 {
-    m_cursor = NULL;
-    m_display = NULL;
+    m_cursor = nullptr;
+    m_display = nullptr;
 }
 
 wxCursorRefData::~wxCursorRefData()
@@ -139,6 +139,11 @@ wxCursor::wxCursor(const wxString& WXUNUSED(name),
 wxCursor::wxCursor( const wxImage & WXUNUSED(image) )
 {
    wxFAIL_MSG( wxT("wxCursor creation from wxImage not yet implemented") );
+}
+
+wxCursor::wxCursor(const char* const* WXUNUSED(xpmData))
+{
+    wxFAIL_MSG( wxT("wxCursor creation from XPM not yet implemented") );
 }
 #endif
 

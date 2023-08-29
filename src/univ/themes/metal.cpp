@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/univ/theme.h"
 
@@ -145,7 +142,7 @@ private:
 class wxMetalTheme : public wxDelegateTheme
 {
 public:
-    wxMetalTheme() : wxDelegateTheme(wxT("win32")), m_renderer(NULL) {}
+    wxMetalTheme() : wxDelegateTheme(wxT("win32")), m_renderer(nullptr) {}
     ~wxMetalTheme() { delete m_renderer; }
 
 protected:

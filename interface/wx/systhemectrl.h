@@ -10,10 +10,10 @@
 /**
    A helper class making it possible to use system theme for any control.
 
-   Under MSW, there an alternative theme available for the list and list-like
-   controls since Windows Vista. This theme us used by Windows Explorer list
-   and tree view and so is arguably more familiar to the users than the standard
-   appearance of these controls.
+   Under MSW, there is an alternative theme available for the list and list-like
+   controls. This theme is used by Windows Explorer list and tree view and so
+   is arguably more familiar to the users than the standard appearance of these
+   controls.
 
    This class is used in wxWidgets to enable this system theme in wxTreeCtrl,
    wxListCtrl and wxDataViewCtrl and thus give them the same, familiar look.
@@ -38,11 +38,32 @@
                 EnableSystemTheme();
             }
 
-            void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const wxOVERRIDE
+            void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const override
             {
                 wxRendererNative::GetDefault().DrawItemText(this, dc, "Item #x", rect);
             }
         };
+   @endcode
+
+   Please also note that if you want to disable the system theme use in the
+   control that use it by default, it's best to do it before actually creating
+   the control as enabling the system theme can't always be completely undone
+   later. I.e. instead of
+   @code
+        // THIS CODE IS WRONG, DO NOT DO IT LIKE THIS
+        wxTreeCtrl* tree = new wxTreeCtrl(parent, wxID_ANY);
+        tree->EnableSystemTheme(false);
+   @endcode
+   prefer the following version:
+   @code
+        // Use default ctor to create the object, avoiding creating the window.
+        wxTreeCtrl* tree = new wxTreeCtrl();
+
+        // Then disable the system theme used by default.
+        tree->EnableSystemTheme(false);
+
+        // And only then actually create the window.
+        tree->Create(parent, wxID_ANY);
    @endcode
 
    On non-MSW platforms this class currently does nothing but is still
@@ -59,7 +80,7 @@ template <class C>
 class wxSystemThemedControl : public C
 {
 public:
-    /// Trival default constructor.
+    /// Trivial default constructor.
     wxSystemThemedControl();
 
     /**

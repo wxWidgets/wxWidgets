@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMEPICKCTRL
 
@@ -64,13 +61,12 @@ class TimePickerWidgetsPage : public WidgetsPage
 {
 public:
     TimePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~TimePickerWidgetsPage(){};
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_timePicker; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateTimePicker(); }
+    virtual wxWindow *GetWidget() const override { return m_timePicker; }
+    virtual void RecreateWidget() override { CreateTimePicker(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -120,7 +116,7 @@ wxEND_EVENT_TABLE()
     #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, wxT("TimePicker"),
+IMPLEMENT_WIDGETS_PAGE(TimePickerWidgetsPage, "TimePicker",
                        FAMILY_CTRLS | PICKER_CTRLS
                        );
 
@@ -196,7 +192,11 @@ void TimePickerWidgetsPage::CreateTimePicker()
 
     delete m_timePicker;
 
-    m_timePicker = new wxTimePickerCtrl(this, TimePickerPage_Picker, value);
+    long style = GetAttrs().m_defaultFlags;
+
+    m_timePicker = new wxTimePickerCtrl(this, TimePickerPage_Picker, value,
+                                        wxDefaultPosition, wxDefaultSize,
+                                        style);
 
     m_sizerTimePicker->Add(0, 0, 1, wxCENTRE);
     m_sizerTimePicker->Add(m_timePicker, 1, wxCENTRE);

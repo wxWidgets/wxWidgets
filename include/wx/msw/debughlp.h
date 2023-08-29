@@ -3,7 +3,7 @@
 // Purpose:     wraps dbghelp.h standard file
 // Author:      Vadim Zeitlin, Suzumizaki-kimitaka
 // Created:     2005-01-08 (extracted from msw/crashrpt.cpp)
-// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -116,21 +116,12 @@ typedef BOOL
 
 #endif // API_VERSION_NUMBER < 10/*}}}*/
 
-// wx-prefixed types map to either the ANSI or Unicode ("W") version depending
-// on the build of wx itself.
-#ifdef UNICODE
-    #define wxPSYM_ENUMERATESYMBOLS_CALLBACK PSYM_ENUMERATESYMBOLS_CALLBACKW
-#else // !UNICODE
-    #define wxPSYM_ENUMERATESYMBOLS_CALLBACK PSYM_ENUMERATESYMBOLS_CALLBACK
-#endif // UNICODE/!UNICODE
+// wx-prefixed types map to Unicode ("W") version
+#define wxPSYM_ENUMERATESYMBOLS_CALLBACK PSYM_ENUMERATESYMBOLS_CALLBACKW
 
 // This one could be already defined by wx/msw/stackwalk.h
 #ifndef wxSYMBOL_INFO
-    #ifdef UNICODE
-        #define wxSYMBOL_INFO SYMBOL_INFOW
-    #else // !UNICODE
-        #define wxSYMBOL_INFO SYMBOL_INFO
-    #endif // UNICODE/!UNICODE
+    #define wxSYMBOL_INFO SYMBOL_INFOW
 #endif // !defined(wxSYMBOL_INFO)
 
 typedef wxSYMBOL_INFO* wxPSYMBOL_INFO;
@@ -305,7 +296,7 @@ public:
     // suffix in some cases. These 2 helper macros call the macro with the
     // correct arguments in both cases.
     #define wxSYM_CALL(what, name)  what(name, name)
-#if defined(_M_AMD64)
+#if defined(_M_AMD64) || defined(_M_ARM64)
     #define wxSYM_CALL_64(what, name)  what(name, name ## 64)
 
     // Also undo all the "helpful" definitions done by imagehlp.h that map 32
@@ -391,7 +382,7 @@ private:
     // dereference the given symbol, i.e. return symbol which is not a
     // pointer/reference any more
     //
-    // if ppData != NULL, dereference the pointer as many times as we
+    // if ppData != nullptr, dereference the pointer as many times as we
     // dereferenced the symbol
     //
     // return the tag of the dereferenced symbol

@@ -7,8 +7,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/frame.h"
-#include "wx/hashmap.h"
 #include "wx/event.h"
+
+#include <unordered_map>
 
 class wxTestableFrame : public wxFrame
 {
@@ -23,7 +24,7 @@ private:
     int GetEventCount(wxEventType type);
     void ClearEventCount(wxEventType type);
 
-    wxLongToLongHashMap m_count;
+    std::unordered_map<wxEventType, int> m_count;
 };
 
 class EventCounter
@@ -34,6 +35,13 @@ public:
 
     int GetCount() { return m_frame->GetEventCount(m_type); }
     void Clear() { m_frame->ClearEventCount(m_type); }
+
+    // Sometimes we need to yield a few times before getting the event we
+    // expect, so provide a function waiting for the expected event for up to
+    // the given number of milliseconds (supposed to be divisible by 50).
+    //
+    // Return true if we did receive the event or false otherwise.
+    bool WaitEvent(int timeInMs = 1000);
 
 private:
     wxEventType m_type;

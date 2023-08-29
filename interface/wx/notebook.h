@@ -125,7 +125,7 @@ public:
         window style.
 
         @param parent
-            The parent window. Must be non-@NULL.
+            The parent window. Must be non-null.
         @param id
             The window identifier.
         @param pos
@@ -145,6 +145,10 @@ public:
 
     /**
         Destroys the wxNotebook object.
+
+        @note When using wxGTK, destroying notebook can result in spurious GTK
+        diagnostic messages, you may use wxApp::GTKAllowDiagnosticsControl() to
+        suppress them.
     */
     virtual ~wxNotebook();
 
@@ -186,6 +190,30 @@ public:
         @note The vertical padding cannot be changed in wxGTK.
     */
     virtual void SetPadding(const wxSize& padding);
+
+    /**
+        This is a convenience function mapping wxBK_TOP etc styles to one of the
+        wxDirection enum elements.
+
+        @since 3.3.0
+    */
+    wxDirection GetTabOrientation() const;
+
+    /**
+        Return the rectangle of the given page tab in window coordinates.
+
+        This function always returns the rectangle for the specified tab, even
+        if the tab is currently not visible.
+
+        If @a page is invalid, an assert failure is triggered and an empty
+        rectangle is returned.
+
+        @note Currently only available in Univ and MSW and always asserts in
+        the other ports.
+
+        @since 3.3.0
+    */
+    virtual wxRect GetTabRect(size_t page) const;
 
     // implementations of pure virtuals
     virtual int GetPageImage(size_t nPage) const;

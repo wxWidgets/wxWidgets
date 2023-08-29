@@ -1,0 +1,412 @@
+# CI workflow for wxWidgets builds using configure+make under Unix.
+name: Unix builds
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.circleci/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/cmake/**'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'CMakeLists.txt'
+      - 'wxwidgets.props'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '.circleci/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/cmake/**'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'CMakeLists.txt'
+      - 'wxwidgets.props'
+  workflow_dispatch:
+    inputs:
+      debug_tests:
+        type: boolean
+        description: 'Enable ssh server before running the tests'
+        required: false
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    name: ${{ matrix.name }}
+    container:
+      image: ${{ matrix.container }}
+      # We need to make container privileged just to allow writing to
+      # /proc/sys/kernel/core* files below.
+      options: --privileged
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Ubuntu 18.04 wxGTK 2
+            runner: ubuntu-latest
+            container: ubuntu:18.04
+            gtk_version: 2
+            use_xvfb: true
+          - name: Ubuntu 18.04 wxGTK UTF-8
+            runner: ubuntu-latest
+            container: ubuntu:18.04
+            configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
+            use_xvfb: true
+          - name: Ubuntu 18.04 wxGTK 3 static with gcc 4.8
+            runner: ubuntu-latest
+            compiler: g++-4.8
+            container: ubuntu:18.04
+            configure_flags: --disable-shared
+            allow_extra_warnings: true
+            use_xvfb: true
+          - name: Ubuntu 18.04 wxGTK 3 compatible 3.0
+            runner: ubuntu-latest
+            container: ubuntu:18.04
+            configure_flags: --enable-compat30
+            use_xvfb: true
+          - name: Ubuntu 20.04 wxGTK 3 with clang
+            runner: ubuntu-20.04
+            compiler: clang++-10
+            configure_flags: --disable-sys-libs
+            use_xvfb: true
+          - name: Ubuntu 22.04 wxGTK with wx containers
+            runner: ubuntu-22.04
+            configure_flags: --enable-compat30 --disable-std_containers
+            use_xvfb: true
+          - name: Ubuntu 22.04 wxGTK with ASAN
+            runner: ubuntu-22.04
+            configure_flags: --disable-compat32 --disable-sys-libs
+            skip_samples: true
+            use_asan: true
+            use_xvfb: true
+          - name: Ubuntu 22.04 wxGTK UTF-8 C++20
+            runner: ubuntu-22.04
+            configure_flags: --with-cxx=20 --enable-utf8 --enable-utf8only
+            use_asan: true
+            use_xvfb: true
+            build_out_of_tree_samples: true
+          - name: Ubuntu 18.04 wxX11
+            runner: ubuntu-latest
+            container: ubuntu:18.04
+            configure_flags: --with-x11 --enable-pch --disable-stc
+            skip_samples: true
+          - name: Ubuntu 18.04 wxDFB
+            runner: ubuntu-latest
+            container: ubuntu:18.04
+            configure_flags: --with-directfb --enable-pch --disable-stc
+            skip_samples: true
+            allow_warnings: true
+          - name: Ubuntu 18.04 wxQt
+            runner: ubuntu-latest
+            container: ubuntu:18.04
+            configure_flags: --with-qt --enable-pch --without-opengl
+            skip_samples: true
+
+    env:
+      wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
+      wxCONFIGURE_FLAGS: ${{ matrix.configure_flags }}
+      wxUSE_ASAN: ${{ matrix.use_asan && 1 || 0 }}
+      wxUSE_XVFB: ${{ matrix.use_xvfb && 1 || 0 }}
+
+    steps:
+      - name: Set up build system
+        run: |
+          case '${{ matrix.container }}' in
+            ubuntu:*)
+              export DEBIAN_FRONTEND=noninteractive
+
+              if [ '${{ matrix.container }}' = 'ubuntu:18.04' ]; then
+                # First get the package containing /usr/bin/apt-add-repository.
+                apt-get update -qq
+                apt-get install -qq software-properties-common
+
+                # Git 2.17 in the official repository is too old to checkout
+                # submodules using it, so get a newer version.
+                apt-add-repository ppa:git-core/ppa
+              fi
+
+              compiler=${{ matrix.compiler }}
+
+              # Explanation for installing some less obvious packages:
+              #   - coreutils contains nproc used in proc_count.sh called below.
+              #   - Python can't be installed using the action as usual because
+              #     it installs an ABI-incompatible version, see (wrongly, IMO)
+              #     closed https://github.com/actions/setup-python/issues/370
+              #   - And python3-cffi can't be installed by pip because it can't
+              #     be built from source with gcc 4.8 any longer (its build
+              #     script uses -Wdate-time option unknown to this compiler).
+              #   - xvfb is used for running the GUI tests.
+              apt-get update -qq
+              apt-get install -qq coreutils ${compiler-g++} git make pkg-config python3 python3-cffi python3-pip sudo xvfb
+              ;;
+
+            '')
+              ;;
+
+            *)
+              echo '::error ::Unknown container kind.'
+              exit 1
+          esac
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Install CCache
+        uses: hendrikmuhs/ccache-action@v1.2.3
+        with:
+          key: ${{ matrix.name }}
+
+      - name: Set up build environment
+        run: |
+          echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
+
+          wxPROC_COUNT=`./build/tools/proc_count.sh`
+          echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
+
+          echo "PATH=/usr/lib/ccache:$PATH" >> $GITHUB_ENV
+
+          # Setting this variable suppresses "Error retrieving accessibility bus address"
+          # messages from WebKit tests that we're not interested in.
+          echo NO_AT_BRIDGE=1 >> $GITHUB_ENV
+
+          compiler=${{ matrix.compiler }}
+          case "$compiler" in
+            clang++*)
+              echo CC=`echo $compiler | sed s/++//` >> $GITHUB_ENV
+              echo CXX="$compiler -stdlib=libc++" >> $GITHUB_ENV
+              echo LD=$compiler >> $GITHUB_ENV
+
+              allow_warn_opt="-Wno-error=#warnings"
+              ;;
+
+            g++*)
+              echo CC=`echo $compiler | sed s/++/cc/` >> $GITHUB_ENV
+              echo CXX=$compiler >> $GITHUB_ENV
+              echo LD=$compiler >> $GITHUB_ENV
+              allow_warn_opt="-Wno-error=cpp"
+              ;;
+
+            '')
+              # Assume gcc.
+              allow_warn_opt="-Wno-error=cpp"
+              ;;
+
+            *)
+              echo "*** Unknown compiler: ${{ matrix.compiler }} ***"
+              ;;
+          esac
+
+          if [ -z ${{ matrix.allow_warnings }} ]; then
+            if [ -z ${{ matrix.allow_extra_warnings }} ]; then
+              error_opts="-Wextra"
+            fi
+            error_opts="$error_opts -Werror $allow_warn_opt"
+            echo "wxMAKEFILE_ERROR_CXXFLAGS=$error_opts" >> $GITHUB_ENV
+            echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
+          fi
+
+          echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
+
+          ./build/tools/before_install.sh
+
+      - name: Show build environment
+        run: |
+          echo "Environment:"
+          env | sort
+          echo
+
+          echo "Compiler version:"
+          ${CXX-g++} --version
+          echo
+
+          echo "ccache version:"
+          ccache --version
+          echo
+
+      - name: Configuring
+        run: |
+          wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
+          if [ -n "${{ matrix.gtk_version }}" ]; then
+            wxCONFIGURE_OPTIONS="--with-gtk=${{ matrix.gtk_version }} $wxCONFIGURE_OPTIONS"
+          fi
+
+          if [ ${{ matrix.use_asan }} ]; then
+            wxASAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+            wxASAN_CXXFLAGS=$wxASAN_CFLAGS
+            wxASAN_LDFLAGS="-fsanitize=address"
+
+            ./configure $wxCONFIGURE_OPTIONS --enable-debug "CFLAGS=$wxASAN_CFLAGS" "CXXFLAGS=$wxASAN_CXXFLAGS" "LDFLAGS=$wxASAN_LDFLAGS" || rc=$?
+          else
+            ./configure $wxCONFIGURE_OPTIONS --disable-debug_info || rc=$?
+          fi
+
+          if [ -n "$rc" ]; then
+            echo '*** Configuring failed, contents of config.log follows: ***'
+            echo '-----------------------------------------------------------'
+            cat config.log
+            echo '-----------------------------------------------------------'
+            exit $rc
+          fi
+
+      - name: Building
+        run: |
+          if [ ${{ matrix.use_asan }} ]; then
+            # This is a horrible hack needed to prevent ASAN from being used
+            # for the WebKit extension shared library: this wouldn't work
+            # because this library is loaded in a separate WebKit process not
+            # using ASAN. This should really be fixed at makefile level, but
+            # for now just work around the problem here by manually building
+            # this library without ASAN: get the compile and link commands
+            # (the only ones that should contain ASAN flags) and filter these
+            # flags out from them before running them.
+            /bin/sh -xc "`make -n install_webkit2_ext | sed -n -e 's/-fsanitize=address//gp'`"
+          fi
+          make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_ERROR_CXXFLAGS"
+
+      - name: Building tests
+        working-directory: tests
+        run: |
+          make $wxBUILD_ARGS failtest
+          make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+      - name: Setup tmate
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_tests }}
+
+      - name: Setup Python
+        if: matrix.container == ''
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Testing
+        working-directory: tests
+        run: |
+          . ../build/tools/httpbin.sh
+
+          httpbin_launch
+
+          export ASAN_OPTIONS=fast_unwind_on_malloc=0
+
+          # Explicitly use bash because /bin/sh doesn't have pipefail option
+          /bin/bash -o pipefail -c './test 2>&1 | tee test.out' || rc=$?
+          if [ ${{ matrix.use_asan }} ]; then
+            # Work around spurious crashes by running the test again.
+            # See https://github.com/google/sanitizers/issues/1353
+            if grep -qF 'LeakSanitizer has encountered a fatal error' test.out; then
+                echo '+++ Rerunning the tests once again after LeakSanitizer crash +++'
+                unset rc
+                ./test || rc=$?
+            fi
+          fi
+
+          if [ -n "$rc" ]; then
+            httpbin_show_log
+            exit $rc
+          fi
+
+      - name: Testing GUI using Xvfb
+        if: matrix.use_xvfb
+        working-directory: tests
+        run: |
+          if [ ${{ matrix.use_asan }} ]; then
+            # Leak suppression only works if we have debug symbols available,
+            # otherwise we disable it to avoid tons of reports about leaks in
+            # libfontconfig etc.
+            if [ -f wx_dbgsym_available ]; then
+                export LSAN_OPTIONS=suppressions=$(pwd)/misc/suppressions/lsan
+            else
+                ASAN_OPTIONS=detect_leaks=0
+            fi
+            export ASAN_OPTIONS="$ASAN_OPTIONS fast_unwind_on_malloc=0"
+
+            # Running all tests at once fails, apparently due to running out of
+            # memory when using ASAN, work around this problem by excluding
+            # RichTextCtrlTestCase whose Table sub-test seems to be problematic.
+            wx_tests_selection='~[.] ~RichTextCtrlTestCase'
+          fi
+
+          # Configure the system to create core files and create them in the
+          # current directory instead of using apport to handle them, as
+          # Ubuntu does by default (even in a container where apport is not
+          # only not running but not even installed). Also turn off appending
+          # PID to the core files names which is on by default.
+          ulimit -c unlimited
+          echo core | sudo tee /proc/sys/kernel/core_pattern
+          echo 0 | sudo tee /proc/sys/kernel/core_uses_pid
+
+          # This is exceedingly weird, but for some reason the first test using
+          # wxWebView sometimes fails (even if the timeout in the test is
+          # increased), so run it before really running the tests -- then they
+          # will succeed.
+          xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -c Title WebView >/dev/null 2>&1 || echo 'First wxWebView test failure ignored.'
+
+          /bin/bash -o pipefail -c "xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui -d 1 $wx_tests_selection 2>&1 | tee -a test_gui.out" || rc=$?
+          if [ -n "$rc" ]; then
+            if grep -qF '(core dumped)' test_gui.out; then
+                echo '*** Test crashed, trying to get more information ***'
+                gdb --quiet --core=core -ex 'where' -ex 'thread apply all bt' -ex 'q' ./test_gui
+            fi
+            exit $rc
+          fi
+
+      - name: Building samples
+        if: matrix.skip_samples != true
+        run: |
+          make -k $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS" samples
+
+      - name: Installing
+        run: |
+          sudo make install
+
+      - name: Testing installation
+        run: |
+          make -C samples/minimal -f makefile.unx clean
+          make -C samples/minimal -f makefile.unx $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+      - name: Building samples out of tree
+        if: matrix.build_out_of_tree_samples
+        run: |
+          make -C samples clean
+          for f in $(find samples -name makefile.unx); do
+              mv $f $(dirname $f)/Makefile
+          done
+          make -C samples -k $wxBUILD_ARGS

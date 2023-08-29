@@ -109,9 +109,10 @@ public:
             The default value, which may be the empty string.
         @param style
             A dialog style, specifying the buttons (wxOK, wxCANCEL)
-            and an optional wxCENTRE style. Additionally, wxTextCtrl styles
-            (such as @c wxTE_PASSWORD or @c wxTE_MULTILINE) may be specified
-            here.
+            and an optional wxCENTRE style. Additionally, most wxTextCtrl
+            styles (such as @c wxTE_PASSWORD or @c wxTE_MULTILINE) may be
+            specified here, but @c wxTE_READONLY may not be used, as it doesn't
+            make sense for this dialog, used for text input.
         @param pos
             Dialog position.
 
@@ -153,10 +154,10 @@ public:
         custom class derived from wxTextValidator while the second one creates
         a wxTextValidator with the specified @a style.
      */
-    //@{
+    ///@{
     void SetTextValidator(const wxTextValidator& validator);
     void SetTextValidator(wxTextValidatorStyle style = wxFILTER_NONE);
-    //@}
+    ///@}
 
     /**
         This function sets the maximum number of characters the user can enter
@@ -204,7 +205,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Pop up a dialog box with title set to @e caption, @c message, and a
@@ -225,7 +226,7 @@ public:
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = wxGetTextFromUserPromptStr,
                            const wxString& default_value = wxEmptyString,
-                           wxWindow* parent = NULL,
+                           wxWindow* parent = nullptr,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
                            bool centre = true);
@@ -240,10 +241,10 @@ wxString wxGetTextFromUser(const wxString& message,
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption = wxGetPasswordFromUserPromptStr,
                                const wxString& default_value = wxEmptyString,
-                               wxWindow* parent = NULL,
+                               wxWindow* parent = nullptr,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true);
 
-//@}
+///@}
 

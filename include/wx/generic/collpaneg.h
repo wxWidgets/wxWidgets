@@ -13,7 +13,6 @@
 
 // forward declared
 class WXDLLIMPEXP_FWD_CORE wxCollapsibleHeaderCtrl;
-class WXDLLIMPEXP_FWD_CORE wxStaticLine;
 
 #include "wx/containr.h"
 
@@ -34,7 +33,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxCP_DEFAULT_STYLE,
                         const wxValidator& val = wxDefaultValidator,
-                        const wxString& name = wxCollapsiblePaneNameStr)
+                        const wxString& name = wxASCII_STR(wxCollapsiblePaneNameStr))
     {
         Init();
 
@@ -50,19 +49,19 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxCP_DEFAULT_STYLE,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxCollapsiblePaneNameStr);
+                const wxString& name = wxASCII_STR(wxCollapsiblePaneNameStr));
 
     // public wxCollapsiblePane API
-    virtual void Collapse(bool collapse = true) wxOVERRIDE;
-    virtual void SetLabel(const wxString &label) wxOVERRIDE;
+    virtual void Collapse(bool collapse = true) override;
+    virtual void SetLabel(const wxString &label) override;
 
-    virtual bool IsCollapsed() const wxOVERRIDE
-        { return m_pPane==NULL || !m_pPane->IsShown(); }
-    virtual wxWindow *GetPane() const wxOVERRIDE
+    virtual bool IsCollapsed() const override
+        { return m_pPane==nullptr || !m_pPane->IsShown(); }
+    virtual wxWindow *GetPane() const override
         { return m_pPane; }
-    virtual wxString GetLabel() const wxOVERRIDE;
+    virtual wxString GetLabel() const override;
 
-    virtual bool Layout() wxOVERRIDE;
+    virtual bool Layout() override;
 
 
     // for the generic collapsible pane only:
@@ -74,13 +73,12 @@ public:
 
 protected:
     // overridden methods
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
     int GetBorder() const;
 
     // child controls
     wxCollapsibleHeaderCtrl *m_pButton;
-    wxStaticLine *m_pStaticLine;
     wxWindow *m_pPane;
     wxSizer *m_sz;
 

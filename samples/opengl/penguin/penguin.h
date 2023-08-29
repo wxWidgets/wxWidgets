@@ -45,7 +45,7 @@ struct GLData
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 
@@ -79,7 +79,7 @@ public:
     TestGLCanvas(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = wxT("TestGLCanvas"));
+        const wxString& name = "TestGLCanvas");
 
     virtual ~TestGLCanvas();
 

@@ -16,80 +16,82 @@ typedef wxString wxArtClient;
 typedef wxString wxArtID;
 
 
-wxArtClient wxART_TOOLBAR;
-wxArtClient wxART_MENU;
-wxArtClient wxART_FRAME_ICON;
+const char* wxART_TOOLBAR;
+const char* wxART_MENU;
+const char* wxART_FRAME_ICON;
 
-wxArtClient wxART_CMN_DIALOG;
-wxArtClient wxART_HELP_BROWSER;
-wxArtClient wxART_MESSAGE_BOX;
-wxArtClient wxART_BUTTON;
-wxArtClient wxART_LIST;
+const char* wxART_CMN_DIALOG;
+const char* wxART_HELP_BROWSER;
+const char* wxART_MESSAGE_BOX;
+const char* wxART_BUTTON;
+const char* wxART_LIST;
 
-wxArtClient wxART_OTHER;
+const char* wxART_OTHER;
 
 
-wxArtID wxART_ADD_BOOKMARK;         
-wxArtID wxART_DEL_BOOKMARK;         
-wxArtID wxART_HELP_SIDE_PANEL;      
-wxArtID wxART_HELP_SETTINGS;        
-wxArtID wxART_HELP_BOOK;            
-wxArtID wxART_HELP_FOLDER;          
-wxArtID wxART_HELP_PAGE;            
-wxArtID wxART_GO_BACK;              
-wxArtID wxART_GO_FORWARD;           
-wxArtID wxART_GO_UP;                
-wxArtID wxART_GO_DOWN;              
-wxArtID wxART_GO_TO_PARENT;         
-wxArtID wxART_GO_HOME;              
-wxArtID wxART_GOTO_FIRST;           
-wxArtID wxART_GOTO_LAST;            
-wxArtID wxART_FILE_OPEN;            
-wxArtID wxART_FILE_SAVE;            
-wxArtID wxART_FILE_SAVE_AS;         
-wxArtID wxART_PRINT;                
-wxArtID wxART_HELP;                 
-wxArtID wxART_TIP;                  
-wxArtID wxART_REPORT_VIEW;          
-wxArtID wxART_LIST_VIEW;            
-wxArtID wxART_NEW_DIR;              
-wxArtID wxART_HARDDISK;             
-wxArtID wxART_FLOPPY;               
-wxArtID wxART_CDROM;                
-wxArtID wxART_REMOVABLE;            
-wxArtID wxART_FOLDER;               
-wxArtID wxART_FOLDER_OPEN;          
-wxArtID wxART_GO_DIR_UP;            
-wxArtID wxART_EXECUTABLE_FILE;      
-wxArtID wxART_NORMAL_FILE;          
-wxArtID wxART_TICK_MARK;            
-wxArtID wxART_CROSS_MARK;           
-wxArtID wxART_ERROR;                
-wxArtID wxART_QUESTION;             
-wxArtID wxART_WARNING;              
-wxArtID wxART_INFORMATION;          
-wxArtID wxART_MISSING_IMAGE;        
+const char* wxART_ADD_BOOKMARK;
+const char* wxART_DEL_BOOKMARK;
+const char* wxART_HELP_SIDE_PANEL;
+const char* wxART_HELP_SETTINGS;
+const char* wxART_HELP_BOOK;
+const char* wxART_HELP_FOLDER;
+const char* wxART_HELP_PAGE;
+const char* wxART_GO_BACK;
+const char* wxART_GO_FORWARD;
+const char* wxART_GO_UP;
+const char* wxART_GO_DOWN;
+const char* wxART_GO_TO_PARENT;
+const char* wxART_GO_HOME;
+const char* wxART_GOTO_FIRST;
+const char* wxART_GOTO_LAST;
+const char* wxART_FILE_OPEN;
+const char* wxART_FILE_SAVE;
+const char* wxART_FILE_SAVE_AS;
+const char* wxART_PRINT;
+const char* wxART_HELP;
+const char* wxART_TIP;
+const char* wxART_REPORT_VIEW;
+const char* wxART_LIST_VIEW;
+const char* wxART_NEW_DIR;
+const char* wxART_HARDDISK;
+const char* wxART_FLOPPY;
+const char* wxART_CDROM;
+const char* wxART_REMOVABLE;
+const char* wxART_FOLDER;
+const char* wxART_FOLDER_OPEN;
+const char* wxART_GO_DIR_UP;
+const char* wxART_EXECUTABLE_FILE;
+const char* wxART_NORMAL_FILE;
+const char* wxART_TICK_MARK;
+const char* wxART_CROSS_MARK;
+const char* wxART_ERROR;
+const char* wxART_QUESTION;
+const char* wxART_WARNING;
+const char* wxART_INFORMATION;
+const char* wxART_MISSING_IMAGE;
 
-wxArtID wxART_COPY;                 
-wxArtID wxART_CUT;                  
-wxArtID wxART_PASTE;                
-wxArtID wxART_DELETE;               
-wxArtID wxART_NEW;                  
+const char* wxART_COPY;
+const char* wxART_CUT;
+const char* wxART_PASTE;
+const char* wxART_DELETE;
+const char* wxART_NEW;
 
-wxArtID wxART_UNDO;                 
-wxArtID wxART_REDO;                 
+const char* wxART_UNDO;
+const char* wxART_REDO;
 
-wxArtID wxART_PLUS;                 
-wxArtID wxART_MINUS;                
+const char* wxART_PLUS;
+const char* wxART_MINUS;
 
-wxArtID wxART_CLOSE;                
-wxArtID wxART_QUIT;                 
+const char* wxART_CLOSE;
+const char* wxART_QUIT;
 
-wxArtID wxART_FIND;                 
-wxArtID wxART_FIND_AND_REPLACE;     
+const char* wxART_FIND;
+const char* wxART_FIND_AND_REPLACE;
 
-wxArtID wxART_FULL_SCREEN;
-wxArtID wxART_EDIT;
+const char* wxART_FULL_SCREEN;
+const char* wxART_EDIT;
+
+const char* wxART_WX_LOGO;
 
 
 /**
@@ -110,30 +112,42 @@ wxArtID wxART_EDIT;
       class MyProvider : public wxArtProvider
       {
       protected:
+        // Override this method to return a bundle containing the required
+        // bitmap in all available sizes.
+        wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                          const wxArtClient& client,
+                                          const wxSize& size) override;
+
+        // If all bitmaps are available in a single size only, it may be
+        // simpler to override just this one.
         wxBitmap CreateBitmap(const wxArtID& id,
                               const wxArtClient& client,
-                              const wxSize size)
+                              const wxSize& size) override;
 
         // optionally override this one as well
         wxIconBundle CreateIconBundle(const wxArtID& id,
-                                      const wxArtClient& client)
+                                      const wxArtClient& client) override;
         { ... }
       };
       ...
       wxArtProvider::Push(new MyProvider);
     @endcode
 
+    Note that, as usual in wxWidgets API, wxArtProvider takes ownership of the
+    pointer and will destroy it on program shutdown. In particular, you should
+    not delete this pointer in your own code.
+
     If you need bitmap images (of the same artwork) that should be displayed at
     different sizes you should probably consider overriding wxArtProvider::CreateIconBundle
     and supplying icon bundles that contain different bitmap sizes.
 
     There's another way of taking advantage of this class: you can use it in your
-    code and use platform native icons as provided by wxArtProvider::GetBitmap or
-    wxArtProvider::GetIcon.
+    code and use platform native icons as provided by wxArtProvider::GetBitmapBundle
+    or wxArtProvider::GetIcon.
 
     @section artprovider_identify Identifying art resources
 
-    Every bitmap and icon bundle are known to wxArtProvider under an unique ID that
+    Every bitmap and icon bundle are known to wxArtProvider under a unique ID that
     is used when requesting a resource from it. The ID is represented by the ::wxArtID type
     and can have one of these predefined values (you can see bitmaps represented by these
     constants in the @ref page_samples_artprov):
@@ -197,8 +211,13 @@ wxArtID wxART_EDIT;
      @li @c wxART_FLOPPY
      @li @c wxART_CDROM
      @li @c wxART_REMOVABLE
+     @li @c wxART_WX_LOGO (since 3.1.6)
     </td></tr>
     </table>
+
+    @note When building with @c wxNO_IMPLICIT_WXSTRING_ENCODING defined (see
+          @ref overview_string for more details), you need to explicitly use
+          wxASCII_STR() around these constants.
 
     Additionally, any string recognized by custom art providers registered using
     wxArtProvider::Push may be used.
@@ -212,9 +231,9 @@ wxArtID wxART_EDIT;
     #endif
     @endcode
     For a list of the GTK+ stock items please refer to the
-    <a href="http://library.gnome.org/devel/gtk/stable/gtk-Stock-Items.html">GTK+ documentation
+    <a href="https://developer-old.gnome.org/gtk3/stable/gtk3-Stock-Items.html">GTK+ documentation
     page</a>.
-    It is also possible to load icons from the current icon theme by specifying their name 
+    It is also possible to load icons from the current icon theme by specifying their name
     (without extension and directory components).
     Icon themes recognized by GTK+ follow the freedesktop.org
     <a href="http://freedesktop.org/Standards/icon-theme-spec">Icon Themes specification</a>.
@@ -268,6 +287,9 @@ public:
     /**
         Query registered providers for bitmap with given ID.
 
+        Note that applications using wxWidgets 3.1.6 or later should prefer
+        calling GetBitmapBundle().
+
         @param id
             wxArtID unique identifier of the bitmap.
         @param client
@@ -283,6 +305,30 @@ public:
                               const wxSize& size = wxDefaultSize);
 
     /**
+        Query registered providers for a bundle of bitmaps with given ID.
+
+        @since 3.1.6
+
+        @param id
+            wxArtID unique identifier of the bitmap.
+        @param client
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+        @param size
+            Default size for the returned bundle, i.e. the size of the bitmap
+            in normal DPI (this implies that wxWindow::FromDIP() must @e not be
+            used with it).
+
+        @return If any of the registered providers recognizes the ID in its
+            CreateBitmapBundle(), this bundle is returned. Otherwise, if any of
+            providers returns a valid bitmap from CreateBitmap(), the bundle
+            containing only this bitmap is returned. Otherwise, an empty bundle
+            is returned.
+     */
+    static wxBitmapBundle GetBitmapBundle(const wxArtID& id,
+                                          const wxArtClient& client = wxART_OTHER,
+                                          const wxSize& size = wxDefaultSize);
+
+    /**
         Same as wxArtProvider::GetBitmap, but return a wxIcon object
         (or ::wxNullIcon on failure).
     */
@@ -291,7 +337,7 @@ public:
                           const wxSize& size = wxDefaultSize);
 
     /**
-        Returns native icon size for use specified by @a client hint.
+        Returns native icon size for use specified by @a client hint in DIPs.
 
         If the platform has no commonly used default for this use or if
         @a client is not recognized, returns wxDefaultSize.
@@ -301,22 +347,42 @@ public:
               In that case, this method returns only one of them, picked
               reasonably.
 
-        @since 2.9.0
+        @since 3.1.6
      */
-    static wxSize GetNativeSizeHint(const wxArtClient& client);
+    static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
+
+    /**
+        Returns native icon size for use specified by @a client hint.
+
+        This function does the same thing as GetNativeDIPSizeHint(), but uses
+        @a win to convert the returned value to logical pixels. If @a win is
+        @NULL, default DPI scaling (i.e. that of the primary display) is used.
+
+        @since 2.9.0 (@a win parameter is available only since 3.1.6)
+     */
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
+
+    /**
+        Returns a suitable size hint for the given @e wxArtClient in DIPs.
+
+        Return the size used by the topmost wxArtProvider for the given @a
+        client. @e wxDefaultSize may be returned if the client doesn't have a
+        specified size, like wxART_OTHER for example.
+
+        @see GetNativeDIPSizeHint()
+    */
+    static wxSize GetDIPSizeHint(const wxArtClient& client);
 
     /**
         Returns a suitable size hint for the given @e wxArtClient.
 
-        If @a platform_default is @true, return a size based on the current
-        platform using GetNativeSizeHint(), otherwise return the size from the
-        topmost wxArtProvider. @e wxDefaultSize may be returned if the client
-        doesn't have a specified size, like wxART_OTHER for example.
+        This function does the same thing as GetDIPSizeHint(), but uses @a win
+        to convert the returned value to logical pixels. If @a win is @NULL,
+        default DPI scaling (i.e. that of the primary display) is used.
 
-        @see GetNativeSizeHint()
-    */
-    static wxSize GetSizeHint(const wxArtClient& client,
-                              bool platform_default = false);
+        Note that @a win parameter is only available since wxWidgets 3.1.6.
+     */
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
 
     /**
         Query registered providers for icon bundle with given ID.
@@ -361,6 +427,8 @@ public:
         Register new art provider and add it to the top of providers stack
         (i.e. it will be queried as the first provider).
 
+        @param provider A valid pointer that becomes owned by wxArtProvider.
+
         @see PushBack()
     */
     static void Push(wxArtProvider* provider);
@@ -369,6 +437,8 @@ public:
         Register new art provider and add it to the bottom of providers stack.
         In other words, it will be queried as the last one, after all others,
         including the default provider.
+
+        @param provider A valid pointer that becomes owned by wxArtProvider.
 
         @see Push()
 
@@ -398,10 +468,24 @@ public:
 
 
 protected:
+    /**
+        Derived art provider classes may override this method to return the
+        size of the images used by this provider.
+
+        Note that the returned size should be in DPI-independent pixels, i.e.
+        DIPs. The default implementation returns the result of
+        GetNativeDIPSizeHint().
+     */
+    virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
     /**
-        Derived art provider classes must override this method to create requested art
-        resource. Note that returned bitmaps are cached by wxArtProvider and it is
+        Derived art provider classes may override this method to create requested art
+        resource.
+
+        For bitmaps available in more than one size, CreateBitmapBundle()
+        should be overridden instead.
+
+        Note that returned bitmaps are cached by wxArtProvider and it is
         therefore not necessary to optimize CreateBitmap() for speed (e.g. you may
         create wxBitmap objects from XPMs here).
 
@@ -424,6 +508,29 @@ protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id,
                                   const wxArtClient& client,
                                   const wxSize& size);
+
+    /**
+        Override this method to create the requested art resources available in
+        more than one size.
+
+        Unlike CreateBitmap(), this method can be overridden to return the same
+        bitmap in several (or all, if wxBitmapBundle::FromSVG() is used) sizes
+        at once, which will allow selecting the size best suited for the
+        current display resolution automatically.
+
+        @param id
+            wxArtID unique identifier of the bitmap.
+        @param client
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+            This only serves as a hint.
+        @param size
+            Default size of the bitmaps returned by the bundle.
+
+        @since 3.1.6
+     */
+    virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
+                                              const wxArtClient& client,
+                                              const wxSize& size);
 
     /**
         This method is similar to CreateBitmap() but can be used when a bitmap

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -61,7 +58,9 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
+
+    void DecorateSplashScreen(wxBitmap& bmp);
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -89,7 +88,7 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    Minimal_Run = wxID_HIGHEST + 1
+    Minimal_Run = wxID_HIGHEST
 };
 
 // ----------------------------------------------------------------------------
@@ -128,7 +127,7 @@ bool MyApp::OnInit()
     wxImage::AddHandler(new wxPNGHandler);
 
     // create the main application window
-    MyFrame *frame = new MyFrame(wxT("wxSplashScreen sample application"));
+    MyFrame *frame = new MyFrame("wxSplashScreen sample application");
 
     wxBitmap bitmap;
 
@@ -137,17 +136,21 @@ bool MyApp::OnInit()
 
     bool ok = frame->m_isPda
             ? bitmap.IsOk()
-            : bitmap.LoadFile(wxT("splash.png"), wxBITMAP_TYPE_PNG);
+            : bitmap.LoadFile("splash.png", wxBITMAP_TYPE_PNG);
 
     if (ok)
     {
+        // we can even draw dynamic artwork onto our splashscreen
+        DecorateSplashScreen(bitmap);
+
+        // show the splashscreen
         new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
             6000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
             wxSIMPLE_BORDER|wxSTAY_ON_TOP);
     }
 
-#if !defined(__WXGTK20__)
+#if !defined(__WXGTK__)
     // we don't need it at least on wxGTK with GTK+ 2.12.9
     wxYield();
 #endif
@@ -162,13 +165,48 @@ bool MyApp::OnInit()
     return true;
 }
 
+// Draws artwork onto our splashscreen at runtime
+void MyApp::DecorateSplashScreen(wxBitmap& bmp)
+{
+    // use a memory DC to draw directly onto the bitmap
+    wxMemoryDC memDc(bmp);
+
+    // draw an orange box (with black outline) at the bottom of the splashscreen.
+    // this box will be 10% of the height of the bitmap, and be at the bottom.
+    const wxRect bannerRect(wxPoint(0, (bmp.GetHeight() / 10)*9),
+                            wxPoint(bmp.GetWidth(), bmp.GetHeight()));
+    wxDCBrushChanger bc(memDc, wxBrush(wxColour(255, 102, 0)));
+    memDc.DrawRectangle(bannerRect);
+    memDc.DrawLine(bannerRect.GetTopLeft(), bannerRect.GetTopRight());
+
+    // dynamically get the wxWidgets version to display
+    wxString description = wxString::Format("wxWidgets %s", wxVERSION_NUM_DOT_STRING);
+    // create a copyright notice that uses the year that this file was compiled
+    wxString year(__DATE__);
+    wxString copyrightLabel = wxString::Format("%s%s wxWidgets. %s",
+        wxString::FromUTF8("\xc2\xa9"), year.Mid(year.length() - 4),
+        "All rights reserved.");
+
+    // draw the (white) labels inside of our orange box (at the bottom of the splashscreen)
+    memDc.SetTextForeground(*wxWHITE);
+    // draw the "wxWidget" label on the left side, vertically centered.
+    // note that we deflate the banner rect a little bit horizontally
+    // so that the text has some padding to its left.
+    memDc.DrawLabel(description, bannerRect.Deflate(5, 0), wxALIGN_CENTRE_VERTICAL|wxALIGN_LEFT);
+
+    // draw the copyright label on the right side
+    memDc.SetFont(wxFontInfo(8));
+    memDc.DrawLabel(copyrightLabel, bannerRect.Deflate(5, 0), wxALIGN_CENTRE_VERTICAL | wxALIGN_RIGHT);
+}
+
+
 // ----------------------------------------------------------------------------
 // main frame
 // ----------------------------------------------------------------------------
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
@@ -181,14 +219,14 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, wxT("&About\tF1"), wxT("Show about frame"));
+    helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about frame");
 
-    menuFile->Append(wxID_EXIT, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    menuFile->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, wxT("&File"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -197,7 +235,7 @@ MyFrame::MyFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(wxT("Welcome to wxWidgets!"));
+    SetStatusText("Welcome to wxWidgets!");
 #endif // wxUSE_STATUSBAR
 }
 
@@ -218,7 +256,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     bool ok = m_isPda
             ? bitmap.IsOk()
-            : bitmap.LoadFile(wxT("splash.png"), wxBITMAP_TYPE_PNG);
+            : bitmap.LoadFile("splash.png", wxBITMAP_TYPE_PNG);
 
     if (ok)
     {
@@ -236,19 +274,19 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
         wxWindow *win = splash->GetSplashWindow();
 #if wxUSE_MEDIACTRL
-        wxMediaCtrl *media = new wxMediaCtrl( win, wxID_EXIT, wxT("press.mpg"), wxPoint(2,2));
+        wxMediaCtrl *media = new wxMediaCtrl( win, wxID_EXIT, "press.mpg", wxPoint(2,2));
         media->Play();
 #else
         wxStaticText *text = new wxStaticText( win,
                                                wxID_EXIT,
-                                               wxT("click somewhere\non this image"),
+                                               "click somewhere\non this image",
                                                wxPoint(m_isPda ? 0 : 13,
                                                        m_isPda ? 0 : 11)
                                              );
         text->SetBackgroundColour(*wxWHITE);
         text->SetForegroundColour(*wxBLACK);
         wxFont font = text->GetFont();
-        font.SetPointSize(2*font.GetPointSize()/3);
+        font.SetFractionalPointSize(2.0*font.GetFractionalPointSize()/3.0);
         text->SetFont(font);
 #endif
     }

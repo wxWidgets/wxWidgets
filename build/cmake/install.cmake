@@ -12,19 +12,71 @@ if(NOT wxBUILD_INSTALL)
 endif()
 
 install(CODE "message(STATUS \"Installing: Headers...\")")
-wx_install(
+install(
     DIRECTORY "${wxSOURCE_DIR}/include/wx"
-    DESTINATION "include")
+    DESTINATION "${wxINSTALL_INCLUDE_DIR}")
 if(MSVC)
-    wx_install(
+    install(
         DIRECTORY "${wxSOURCE_DIR}/include/msvc"
-        DESTINATION "include")
+        DESTINATION "${wxINSTALL_INCLUDE_DIR}")
 endif()
-if(MSVC OR MINGW)
-    wx_install(
+
+# setup header and wx-config
+if(WIN32_MSVC_NAMING)
+    install(
         DIRECTORY "${wxSETUP_HEADER_PATH}"
-        DESTINATION "lib${wxPLATFORM_LIB_DIR}")
+        DESTINATION "lib/${wxPLATFORM_LIB_DIR}")
+else()
+    install(
+        DIRECTORY "${wxSETUP_HEADER_PATH}"
+        DESTINATION "lib/wx/include")
+
+    install(
+        FILES "${wxOUTPUT_DIR}/wx/config/${wxBUILD_FILE_ID}"
+        DESTINATION "lib/wx/config"
+        PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+                    GROUP_EXECUTE GROUP_READ
+                    WORLD_EXECUTE WORLD_READ
+        )
+
+    install(DIRECTORY DESTINATION "bin")
+    install(CODE "execute_process( \
+        COMMAND ${CMAKE_COMMAND} -E create_symlink \
+        \"${CMAKE_INSTALL_PREFIX}/lib/wx/config/${wxBUILD_FILE_ID}\" \
+        \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/wx-config\" \
+        )"
+    )
 endif()
+
+install(EXPORT wxWidgetsTargets NAMESPACE wx:: DESTINATION "lib/cmake/wxWidgets/${wxPLATFORM_LIB_DIR}")
+
+# find_package config file
+include(CMakePackageConfigHelpers)
+set(versionConfig "${wxOUTPUT_DIR}/wxWidgetsConfigVersion.cmake")
+set(projectConfig "${wxOUTPUT_DIR}/wxWidgetsConfig.cmake")
+if(CMAKE_VERSION VERSION_LESS "3.11")
+    set(versionCompat SameMajorVersion)
+else()
+    set(versionCompat SameMinorVersion)
+endif()
+if(WIN32_MSVC_NAMING AND NOT CMAKE_VERSION VERSION_LESS "3.14")
+    set(archCompat ARCH_INDEPENDENT)
+endif()
+
+write_basic_package_version_file(
+    "${versionConfig}"
+    COMPATIBILITY ${versionCompat}
+    ${archCompat}
+)
+configure_package_config_file(
+    "${wxSOURCE_DIR}/build/cmake/wxWidgetsConfig.cmake.in"
+    "${projectConfig}"
+    INSTALL_DESTINATION "lib/cmake/wxWidgets"
+)
+install(
+    FILES "${projectConfig}" "${versionConfig}"
+    DESTINATION "lib/cmake/wxWidgets"
+)
 
 # uninstall target
 if(MSVC_IDE)
@@ -34,6 +86,21 @@ else()
 endif()
 
 if(NOT TARGET ${UNINST_NAME})
+    # these symlinks are not included in the install manifest
+    set(WX_EXTRA_UNINSTALL_FILES)
+    if(NOT WIN32_MSVC_NAMING)
+        if(IPHONE)
+            set(EXE_SUFFIX ".app")
+        else()
+            set(EXE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
+        endif()
+
+        set(WX_EXTRA_UNINSTALL_FILES
+            "${CMAKE_INSTALL_PREFIX}/bin/wx-config"
+            "${CMAKE_INSTALL_PREFIX}/bin/wxrc${EXE_SUFFIX}"
+        )
+    endif()
+
     configure_file(
         "${wxSOURCE_DIR}/build/cmake/uninstall.cmake.in"
         "${wxBINARY_DIR}/uninstall.cmake"

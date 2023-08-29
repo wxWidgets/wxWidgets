@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CALENDARCTRL
 
@@ -95,7 +92,7 @@ wxCalendarCtrl::Create(wxWindow *parent,
     {
         // get a copy of standard class and modify it
         WNDCLASS wc;
-        if ( ::GetClassInfo(NULL, MONTHCAL_CLASS, &wc) )
+        if ( ::GetClassInfo(nullptr, MONTHCAL_CLASS, &wc) )
         {
             wc.lpszClassName = wxT("_wx_SysMonthCtl32");
             wc.style |= CS_DBLCLKS;
@@ -122,10 +119,8 @@ wxCalendarCtrl::Create(wxWindow *parent,
     SetHolidayAttrs();
     UpdateMarks();
 
-    Connect(wxEVT_LEFT_DOWN,
-            wxMouseEventHandler(wxCalendarCtrl::MSWOnClick));
-    Connect(wxEVT_LEFT_DCLICK,
-            wxMouseEventHandler(wxCalendarCtrl::MSWOnDoubleClick));
+    Bind(wxEVT_LEFT_DOWN, &wxCalendarCtrl::MSWOnClick, this);
+    Bind(wxEVT_LEFT_DCLICK, &wxCalendarCtrl::MSWOnDoubleClick, this);
 
     return true;
 }
@@ -183,14 +178,6 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
 {
     WinStruct<MCHITTESTINFO> hti;
 
-    // Vista and later SDKs add a few extra fields to MCHITTESTINFO which are
-    // not supported by the previous versions, as we don't use them anyhow we
-    // should pretend that we always use the old struct format to make the call
-    // below work on pre-Vista systems (see #11057)
-#ifdef MCHITTESTINFO_V1_SIZE
-    hti.cbSize = MCHITTESTINFO_V1_SIZE;
-#endif
-
     hti.pt.x = pos.x;
     hti.pt.y = pos.y;
     switch ( MonthCal_HitTest(GetHwnd(), &hti) )
@@ -198,7 +185,7 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
         default:
         case MCHT_CALENDARWEEKNUM:
             wxFAIL_MSG( "unexpected" );
-            // fall through
+            wxFALLTHROUGH;
 
         case MCHT_NOWHERE:
         case MCHT_CALENDARBK:
@@ -399,7 +386,7 @@ void wxCalendarCtrl::UpdateMarks()
     // possibility that we can display several of them: one before the current
     // one and up to 12 after it.
     MONTHDAYSTATE states[14] = { 0 };
-    const DWORD nMonths = MonthCal_GetMonthRange(GetHwnd(), GMR_DAYSTATE, NULL);
+    const DWORD nMonths = MonthCal_GetMonthRange(GetHwnd(), GMR_DAYSTATE, nullptr);
 
     // although in principle the calendar might not show any days from the
     // preceding months, it seems like it always does, consider e.g. Feb 2010

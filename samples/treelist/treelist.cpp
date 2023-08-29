@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if !wxUSE_TREELISTCTRL
     #error "wxUSE_TREELISTCTRL must be 1 for this sample."
@@ -97,7 +94,7 @@ public:
     Compare(wxTreeListCtrl* treelist,
             unsigned column,
             wxTreeListItem item1,
-            wxTreeListItem item2) wxOVERRIDE
+            wxTreeListItem item2) override
     {
         wxString text1 = treelist->GetItemText(item1, column),
                  text2 = treelist->GetItemText(item2, column);
@@ -164,7 +161,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // ----------------------------------------------------------------------------
@@ -287,7 +284,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets tree/list control sample",
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets tree/list control sample",
                  wxDefaultPosition, wxSize(600, 450))
 {
     m_isFlat = false;
@@ -366,14 +363,14 @@ MyFrame::~MyFrame()
 
 void MyFrame::InitImageList()
 {
-    wxSize iconSize = wxArtProvider::GetSizeHint(wxART_LIST);
+    wxSize iconSize = wxArtProvider::GetSizeHint(wxART_LIST, this);
     if ( iconSize == wxDefaultSize )
-        iconSize = wxSize(16, 16);
+        iconSize = FromDIP(wxSize(16, 16));
 
     m_imageList = new wxImageList(iconSize.x, iconSize.y);
 
     // The order should be the same as for the enum elements.
-    static const char* const icons[] =
+    static const wxString icons[] =
     {
         wxART_NORMAL_FILE,
         wxART_FOLDER,
@@ -695,7 +692,7 @@ void MyFrame::OnItemContextMenu(wxTreeListEvent& event)
 
         default:
             wxFAIL_MSG( "Unexpected menu selection" );
-            // Fall through.
+            wxFALLTHROUGH;
 
         case wxID_NONE:
             return;

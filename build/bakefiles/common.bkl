@@ -37,10 +37,14 @@
         <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORM=='win64'">_x64</if>
         <if cond="TARGET_CPU=='amd64'">_x64</if>
         <if cond="TARGET_CPU=='AMD64'">_x64</if>
+        <if cond="TARGET_CPU=='arm64'">_arm64</if>
+        <if cond="TARGET_CPU=='ARM64'">_arm64</if>
         <if cond="TARGET_CPU=='ia64'">_ia64</if>
         <if cond="TARGET_CPU=='IA64'">_ia64</if>
         <if cond="TARGET_CPU=='x64'">_x64</if>
         <if cond="TARGET_CPU=='X64'">_x64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">_x64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">_x64</if>
     </set>
 
     <!-- ================================================================== -->
@@ -73,7 +77,7 @@
      -->
     <set var="WXCOMPILER">
         <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='1'">_$(COMPILERORGCC)$(COMPILER_VERSION)$(ARCH_SUFFIX)</if>
-        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(COMPILERORGCC)</if>
+        <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(COMPILERORGCC)$(ARCH_SUFFIX)</if>
     </set>
 
     <set var="VENDORTAG">
@@ -86,11 +90,8 @@
         <if cond="BUILD=='debug' and DEBUG_RUNTIME_LIBS=='default'">d</if>
         <if cond="DEBUG_RUNTIME_LIBS=='1'">d</if>
     </set>
-    <set var="WXUNICODEFLAG">
-        <if cond="UNICODE=='1'">u</if>
-    </set>
     <set var="WX_U_D_SUFFIX">
-        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+        u$(WXDEBUGFLAG)
     </set>
     <set var="WXNAMESUFFIX">
         $(WX_U_D_SUFFIX)$(WX_LIB_FLAVOUR)
@@ -178,7 +179,7 @@
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('richtext')))</if>
     </set>
     <set var="WXLIB_STC">
-        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
+        <if cond="MONOLITHIC=='0' and USE_STC=='1'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
     </set>
 
     <set var="WXLIB_WEBVIEW">
@@ -210,7 +211,7 @@
         <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
 
         <set var="OBJS" make_var="1">
-            $(COMPILER_PREFIX)$(COMPILER_VERSION)_$(CFG_NAME_PART)$(ARCH_SUFFIX)
+            $(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(CFG_NAME_PART)
         </set>
 
         <set var="BUILDDIR">$(OBJS)</set>
@@ -294,14 +295,14 @@
         <if cond="FORMAT=='msvc' and BUILD=='debug' and DEBUG_RUNTIME_LIBS=='0'">__NO_VC_CRTDBG__</if>
         <if cond="FORMAT=='msvc' and BUILD=='release' and DEBUG_FLAG=='1'">__NO_VC_CRTDBG__</if>
     </set>
-    <set var="UNICODE_DEFINE">
-        <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
-        <if cond="FORMAT!='autoconf' and UNICODE=='0'">wxUSE_UNICODE=0</if>
-    </set>
 
     <!-- fill for the specific case of the format/compiler -->
     <set var="WIN32_WINNT">
         <if cond="FORMAT=='dmars' or FORMAT=='dmars_smake'">_WIN32_WINNT=0x0400</if>
+    </set>
+
+    <set var="WIN32_DPI_MANIFEST">
+        <if cond="PLATFORM_WIN32=='1' and IS_MSVC=='0'">wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)</if>
     </set>
 
     <set var="CAIRO_LIB">
@@ -317,11 +318,48 @@
     <set var="LINK_TARGET_CPU">
         <if cond="TARGET_CPU=='amd64'">/MACHINE:X64</if>
         <if cond="TARGET_CPU=='AMD64'">/MACHINE:X64</if>
+        <if cond="TARGET_CPU=='arm64'">/MACHINE:ARM64</if>
+        <if cond="TARGET_CPU=='ARM64'">/MACHINE:ARM64</if>
         <if cond="TARGET_CPU=='ia64'">/MACHINE:IA64</if>
         <if cond="TARGET_CPU=='IA64'">/MACHINE:IA64</if>
         <if cond="TARGET_CPU=='x64'">/MACHINE:X64</if>
         <if cond="TARGET_CPU=='X64'">/MACHINE:X64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'">/MACHINE:X64</if>
+        <if cond="FORMAT=='msvc' and TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'">/MACHINE:X64</if>
     </set>
+
+    <set var="WIN32_DPI_LINKFLAG"></set>
+    <if cond="IS_MSVC_PRJ">
+        <set var="WIN32_DPI_LINKFLAG">
+            <!-- system dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='1'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <!-- per-monitor dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='2'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+        </set>
+    </if>
+    <if cond="FORMAT=='msvc'">
+        <set var="WIN32_DPI_LINKFLAG">
+            <!-- system dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='14.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='15.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='16.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='1' and VISUALSTUDIOVERSION=='17.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware.manifest</if>
+            <!-- per-monitor dpi -->
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='14.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='15.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='16.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+            <if cond="USE_DPI_AWARE_MANIFEST=='2' and VISUALSTUDIOVERSION=='17.0'">/MANIFEST:EMBED /MANIFESTINPUT:$(TOP_SRCDIR)include/wx/msw/wx_dpi_aware_pmv2.manifest</if>
+        </set>
+    </if>
+
+    <set var="TARGET_CPU_COMPFLAG"></set>
+    <if cond="FORMAT=='msvc'">
+        <set var="TARGET_CPU_COMPFLAG">
+            <if cond="TARGET_CPU==''">TARGET_CPU_COMPFLAG=0</if>
+            <if cond="TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='x64'"></if>
+            <if cond="TARGET_CPU=='' and VISUALSTUDIOPLATFORM=='X64'"></if>
+        </set>
+    </if>
 
     <template id="common_settings">
         <debug-info>$(DEBUGINFO)</debug-info>
@@ -342,9 +380,25 @@
         </if>
         <define>$(NO_VC_CRTDBG)</define>
         <define>$(WIN32_WINNT)</define>
+        <cppflags cond="FORMAT=='autoconf'">$(WX_CPPFLAGS)</cppflags>
+        <cflags cond="FORMAT=='autoconf'">$(WX_CFLAGS)</cflags>
+        <cxxflags cond="FORMAT=='autoconf'">$(WX_CXXFLAGS)</cxxflags>
+        <!--
+            Surprisingly, WX_LDFLAGS doesn't go into ldflags, but into ldlibs,
+            because we need it to come after <lib-path> contents, which is
+            appended to ldflags, because we want to link with wx libraries in
+            the LIBDIRNAME and not any wx libraries installed system-wide.
+        -->
+        <ldlibs cond="FORMAT=='autoconf'">$(WX_LDFLAGS)</ldlibs>
         <if cond="FORMAT=='msvc'">
             <ldflags>$(LINK_TARGET_CPU)</ldflags>
+            <define>$(TARGET_CPU_COMPFLAG)</define>
         </if>
+    </template>
+
+    <template id="wx_dpi">
+        <res-define>$(WIN32_DPI_MANIFEST)</res-define>
+        <ldflags>$(WIN32_DPI_LINKFLAG)</ldflags>
     </template>
 
     <template id="anylib">
@@ -478,6 +532,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <include file="tiff.bkl"/>
     <include file="expat.bkl"/>
     <include file="scintilla.bkl"/>
+    <include file="lexilla.bkl"/>
 
 
     <!-- =============================================================== -->
@@ -511,14 +566,12 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <define>$(EXCEPTIONS_DEFINE)</define>
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
-        <define>$(UNICODE_DEFINE)</define>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
 
         <warnings>max</warnings>
-        <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
             -wcd=656 <!-- define this function inside its class definition (may improve code quality) -->
@@ -564,7 +617,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
                 <sys-lib>rpcrt4</sys-lib>
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>version</sys-lib>
-                <sys-lib>wsock32</sys-lib>
+                <sys-lib>ws2_32</sys-lib>
                 <!-- this one is only used if wxUSE_URL_NATIVE==1 but we don't
                      know if it is here so just add it unconditionally -->
                 <sys-lib>wininet</sys-lib>
@@ -600,6 +653,9 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <set var="LIB_SCINTILLA_IF_MONO">
         <if cond="MONOLITHIC=='1' and USE_STC=='1'">$(LIB_SCINTILLA)</if>
     </set>
+    <set var="LIB_LEXILLA_IF_MONO">
+        <if cond="MONOLITHIC=='1' and USE_STC=='1'">$(LIB_LEXILLA)</if>
+    </set>
     <template id="wx_append_base" template_append="wx_append_base_nomono">
         <!-- Always link against the full wx library in monolithic build and
              also against the PNG one as core code references it for Tango
@@ -611,6 +667,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <!-- Always link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
         <sys-lib>$(LIB_SCINTILLA_IF_MONO)</sys-lib>
+        <sys-lib>$(LIB_LEXILLA_IF_MONO)</sys-lib>
     </template>
 
 
@@ -667,6 +724,9 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
 
     <template id="wx_dll_b" template="wx_lib_b">
         <set var="WXDLLNAME">$(wxwin.mkDllName(wxid))</set>
+        <if cond="FORMAT=='autoconf'">
+            <set var="__dllinstdir">$(DLLDIR)</set>
+        </if>
         <dllname>$(WXDLLNAME)</dllname>
         <version>$(WX_VERSION)</version>
         <so_version>$(WXSOVERSION)</so_version>
@@ -688,48 +748,85 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
     </template>
 
-    <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">
-        <depends>wxtiff</depends>
-        <depends>wxjpeg</depends>
-        <depends>wxpng</depends>
-        <depends>wxscintilla</depends>
-    </template>
-
-    <template id="wx_3rdparty_dependencies"
-              template="wx_3rdparty_dependencies_gui">
+    <template id="wx_3rdparty_dependencies_base">
         <depends>wxexpat</depends>
         <depends>wxzlib</depends>
         <depends>wxregex</depends>
     </template>
 
-    <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">
+    <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'"
+              template="wx_3rdparty_dependencies_base">
+        <depends>wxtiff</depends>
+        <depends>wxjpeg</depends>
+        <depends>wxpng</depends>
+        <depends>wxscintilla</depends>
+        <depends>wxlexilla</depends>
+    </template>
+
+    <template id="wx_3rdparty_includes_base">
+        <include>$(INC_ZLIB)</include>
+        <include>$(INC_REGEX)</include>
+        <include>$(INC_EXPAT)</include>
+    </template>
+
+    <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'"
+              template_append="wx_3rdparty_includes_base">
         <include>$(INC_TIFF_BUILD)</include>
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>
     </template>
 
-    <template id="wx_3rdparty_includes"
-              template="wx_3rdparty_includes_gui">
-        <include>$(INC_ZLIB)</include>
-        <include>$(INC_REGEX)</include>
-        <include>$(INC_EXPAT)</include>
-    </template>
-
     <template id="wx_lib"
-              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h"/>
+              template="wx_3rdparty_includes_gui,wx_lib_b,msvc_setup_h"/>
     <template id="wx_base_lib"
-              template="wx_lib_b,wx_3rdparty_includes,msvc_setup_h">
+              template="wx_3rdparty_includes_base,wx_lib_b,msvc_setup_h">
         <define>wxUSE_GUI=0</define>
     </template>
 
     <template id="wx_dll"
-              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template="wx_3rdparty_includes_gui,wx_dll_b,wx_3rdparty_dependencies_gui"
               template_append="msvc_setup_h,wx_append_nomono"/>
     <template id="wx_base_dll"
-              template="wx_dll_b,wx_3rdparty_dependencies,wx_3rdparty_includes"
+              template="wx_3rdparty_includes_base,wx_dll_b,wx_3rdparty_dependencies_base"
               template_append="msvc_setup_h,wx_append_base_nomono">
         <define>wxUSE_GUI=0</define>
+    </template>
+
+    <!-- additional includes and defines for webview edge -->
+    <set var="webview_additional_include">
+        <if cond="TOOLKIT=='MSW'">$(TOP_SRCDIR)3rdparty/webview2/build/native/include</if>
+    </set>
+
+    <set var="webview_additional_include_wrl">
+        <if cond="TOOLKIT=='MSW' and IS_MSVC=='0'">$(TOP_SRCDIR)include/wx/msw/wrl</if>
+    </set>
+
+    <set var="webview_additional_libdirs_arch">
+        <if cond="TARGET_CPU=='amd64'">x64</if>
+        <if cond="TARGET_CPU=='AMD64'">x64</if>
+        <if cond="TARGET_CPU=='arm64'">arm64</if>
+        <if cond="TARGET_CPU=='ARM64'">arm64</if>
+        <if cond="TARGET_CPU=='x64'">x64</if>
+        <if cond="TARGET_CPU=='X64'">x64</if>
+        <if cond="TARGET_CPU=='x86'">x86</if>
+        <if cond="TARGET_CPU=='X86'">x86</if>
+        <if cond="TARGET_CPU==''">x86</if>
+    </set>
+
+    <set var="webview_additional_libdirs">
+        <if cond="IS_MSVC=='1' and TOOLKIT=='MSW'">$(TOP_SRCDIR)3rdparty/webview2/build/native/$(webview_additional_libdirs_arch)</if>
+    </set>
+
+    <set var="webview_edge_pragma_warning">
+        <if cond="TOOLKIT=='MSW' and IS_MSVC=='0'">-Wno-unknown-pragmas</if>
+    </set>
+
+    <template id="webview_additional">
+        <include>$(webview_additional_include_wrl)</include>
+        <include>$(webview_additional_include)</include>
+        <lib-path>$(webview_additional_libdirs)</lib-path>
+        <cxxflags>$(webview_edge_pragma_warning)</cxxflags>
     </template>
 
     <!-- =============================================================== -->
@@ -759,7 +856,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     </set>
 
     <define-rule name="wx-base-plugin" extends="module">
-        <template>
+        <template template="common_settings">
             <dllname>
                 $(id)$(WX_U_D_SUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
@@ -798,11 +895,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
          {top_srcdir} from configure, poor bakefile can't know that
          and won't output top_srcdir = @top_srcdir@ line): -->
     <set var="VARS_DONT_ELIMINATE" append="1">top_srcdir</set>
-
-
-    <set var="webviewdll_ext_dir_define">
-        <if cond="FORMAT=='autoconf' and USE_WEBVIEW_WEBKIT2=='1'">WX_WEB_EXTENSIONS_DIRECTORY=\"$(PLUGINS_INST_DIR)/web-extensions\"</if>
-    </set>
 
 
 </makefile>

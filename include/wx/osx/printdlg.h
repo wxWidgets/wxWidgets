@@ -28,16 +28,16 @@ class WXDLLIMPEXP_CORE wxMacPrintDialog: public wxPrintDialogBase
 {
 public:
     wxMacPrintDialog();
-    wxMacPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
+    wxMacPrintDialog(wxWindow *parent, wxPrintDialogData* data = nullptr);
     wxMacPrintDialog(wxWindow *parent, wxPrintData* data );
     virtual ~wxMacPrintDialog();
 
-    bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
-    virtual int ShowModal();
+    bool Create(wxWindow *parent, wxPrintDialogData* data = nullptr);
+    virtual int ShowModal() override;
 
-    virtual wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
-    virtual wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
-    virtual wxDC *GetPrintDC();
+    virtual wxPrintDialogData& GetPrintDialogData() override { return m_printDialogData; }
+    virtual wxPrintData& GetPrintData() override { return m_printDialogData.GetPrintData(); }
+    virtual wxDC *GetPrintDC() override;
 
 private:
     wxPrintDialogData   m_printDialogData;
@@ -57,13 +57,13 @@ private:
 class WXDLLIMPEXP_CORE wxMacPageSetupDialog: public wxPageSetupDialogBase
 {
 public:
-    wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
     virtual ~wxMacPageSetupDialog();
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData();
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() override;
 
-    bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
-    virtual int ShowModal();
+    bool Create(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
+    virtual int ShowModal() override;
 
 private:
     wxPageSetupDialogData   m_pageSetupData;
@@ -86,7 +86,7 @@ class WXDLLIMPEXP_CORE wxMacPageMarginsDialog : public wxDialog
 public:
     wxMacPageMarginsDialog(wxFrame* parent, wxPageSetupDialogData* data);
     bool TransferToWindow();
-    bool TransferDataFromWindow();
+    bool TransferDataFromWindow() override;
 
     virtual wxPageSetupDialogData& GetPageSetupDialogData() { return *m_pageSetupDialogData; }
 

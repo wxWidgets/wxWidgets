@@ -5,105 +5,310 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows 2.0 i18n sample\n"
-"POT-Creation-Date: 1999-01-13 18:19+0100\n"
-"PO-Revision-Date: 2016-09-20 19:38+0200\n"
-"Last-Translator: Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: 2021-12-10 10:11+0100\n"
+"PO-Revision-Date: 2021-12-10 10:12+0100\n"
+"Last-Translator: Ulrich Telle <ulrich@telle-online.eu>\n"
 "Language-Team: \n"
 "Language: fr\n"
-"X-Generator: Poedit 1.8.7\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-KeywordsList: _;wxTRANSLATE;wxPLURAL:1,2;wxGETTEXT_IN_CONTEXT:1c,2;"
+"wxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: internat.cpp\n"
 
-msgid "item"
-msgstr "Item without context"
+#: internat.cpp:168
+msgid "skip setting locale on startup"
+msgstr "ne pas changer les paramètres régionaux au démarrage"
 
-msgctxt "context_1"
-msgid "item"
-msgstr "Item in context 1"
+#: internat.cpp:170
+msgid "do set locale on startup without asking"
+msgstr "changes les paramètres régionaux au démarrage sans poser de questions"
 
-msgctxt "context_2"
-msgid "item"
-msgstr "Item in context 2"
+#: internat.cpp:253
+#, c-format
+msgid "Couldn't find/load 'internat' catalog for %s."
+msgstr "Impossible de trouver le catalogue 'internat' pour %s."
 
-msgid "sing"
-msgid_plural "plur"
-msgstr[0] "Singular form without context"
-msgstr[1] "Plural form without context"
+#: internat.cpp:289
+msgid "International wxWidgets App"
+msgstr "Application wxWidgets internationale"
 
-msgctxt "context_1"
-msgid "sing"
-msgid_plural "plur"
-msgstr[0] "Singular form in context 1"
-msgstr[1] "Plural form in context 1"
+#: internat.cpp:295
+msgid "&Test locale availability...\tCtrl-T"
+msgstr "&Tester la disponibilité de paramètres régionaux...\tCtrl-T"
 
-msgctxt "context_2"
-msgid "sing"
-msgid_plural "plur"
-msgstr[0] "Singular form in context 2"
-msgstr[1] "Plural form in context 2"
-
-#: internat.cpp:98
-msgid "International wxWindows App"
-msgstr "Application wxWindows internationale"
-
-#: internat.cpp:105
-msgid "&About"
-msgstr "&A propos"
-
-#: internat.cpp:107
+#: internat.cpp:300
 msgid "E&xit"
 msgstr "&Quitter"
 
-#: internat.cpp:110
+#: internat.cpp:303
 msgid "&Open bogus file"
 msgstr "&Ouvrir un fichier"
 
-#: internat.cpp:111
+#: internat.cpp:303
+msgid "Shows a wxWidgets localized error message"
+msgstr "Afficher un message d'erreur de wxWidgets traduit"
+
+#: internat.cpp:304
+msgid "&Save dummy file"
+msgstr "&Sauvegarder un fichier bidon"
+
+#: internat.cpp:304
+msgid "Shows a localized standard dialog"
+msgstr "Afficher une boîte de dialogue standard localisée"
+
+#: internat.cpp:305
 msgid "&Play a game"
-msgstr "&Jouer"
+msgstr "&Jouer à un jeu"
 
-#: internat.cpp:114
-msgid "&File"
-msgstr "&Fichier"
+#: internat.cpp:305
+msgid "A little game; hint: 17 is a lucky number for many"
+msgstr "Un petit jeu; indication: 17 est un nombre porte bonheur"
 
-#: internat.cpp:115
+#: internat.cpp:307
+msgid "&1 _() (gettext)"
+msgstr "&1 _() (gettext)"
+
+#: internat.cpp:307
+msgid "Tests the _() macro"
+msgstr "Tester la macro _()"
+
+#: internat.cpp:308
+msgid "&2 _N() (ngettext)"
+msgstr "&2 _N() (ngettext)"
+
+#: internat.cpp:308
+msgid "Tests the _N() macro"
+msgstr "Tester la macro _N()"
+
+#: internat.cpp:309
+msgid "&3 wxTRANSLATE() (gettext_noop)"
+msgstr "&3 wxTRANSLATE() (gettext_noop)"
+
+#: internat.cpp:309
+msgid "Tests the wxTRANSLATE() macro"
+msgstr "Tester la macro wxTRANSLATE()"
+
+#: internat.cpp:310
+msgid "&Message box test"
+msgstr "Test de boîte de dialogue"
+
+#: internat.cpp:311
+msgid "Tests message box buttons labels translation"
+msgstr "Tester la traduction de boutons de la boîte de dialogue"
+
+#: internat.cpp:316
+msgid "item"
+msgstr "Élément"
+
+#: internat.cpp:317
+msgctxt "context_1"
+msgid "item"
+msgstr "Élément dans un contexte 1"
+
+#: internat.cpp:318
+msgctxt "context_2"
+msgid "item"
+msgstr "Élément dans un contexte 2"
+
+#: internat.cpp:319 internat.cpp:320
+msgid "sing"
+msgid_plural "plur"
+msgstr[0] "Forme singulière sans contexte"
+msgstr[1] "Forme plurielle sans contexte"
+
+#: internat.cpp:321 internat.cpp:322
+msgctxt "context_1"
+msgid "sing"
+msgid_plural "plur"
+msgstr[0] "Forme singulière dans un contexte 1"
+msgstr[1] "Forme plurielle dans un contexte 1"
+
+#: internat.cpp:323 internat.cpp:324
+msgctxt "context_2"
+msgid "sing"
+msgid_plural "plur"
+msgstr[0] "Forme singulière dans un contexte 2"
+msgstr[1] "Forme plurielle dans un contexte 2"
+
+#: internat.cpp:328
+msgid "Show coreutils &help"
+msgstr "Afficher l'&aide pour coreutils"
+
+#: internat.cpp:331
+msgid "&About"
+msgstr "&A propos"
+
+#: internat.cpp:336
 msgid "&Test"
 msgstr "&Test"
 
-#: internat.cpp:138
+#: internat.cpp:337
+msgid "&Macro"
+msgstr "&Macro"
+
+#: internat.cpp:343
+msgctxt "standard Windows menu"
+msgid "&Help"
+msgstr "&Aide"
+
+#: internat.cpp:360
+#, c-format
+msgid "Current UI locale: %s; C locale: %s"
+msgstr "Paramètres régionaux courants: %s; paramètres régionaux C: %s"
+
+#: internat.cpp:373
+#, c-format
+msgid "UI locale name in English: %s"
+msgstr "Nom de paramètres régionaux en anglais: %s"
+
+#: internat.cpp:385
+#, c-format
+msgid "... and in the locale language: %s"
+msgstr "... et dans la langue courante: %s"
+
+#: internat.cpp:396
+msgid "Numeric input:"
+msgstr "Entrée numérique:"
+
+#: internat.cpp:417
+msgid "Number"
+msgstr "Numéro"
+
+#: internat.cpp:421
+msgid "Date"
+msgstr "Date"
+
+#: internat.cpp:437
+#, c-format
+msgid "Number in UI locale: %s; in C locale: %.2f"
+msgstr "Numéro utilisant les paramètres régionaux: %s; sans: %.2f"
+
+#: internat.cpp:457
 msgid ""
 "I18n sample\n"
-"© 1998, 1999 Vadim Zeitlin and Julian Smart"
+"(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
 msgstr ""
 "Exemple d'i18n\n"
-"© 1998, 1999 Vadim Zeitlin et Julian Smart"
+"(c) 1998, 1999 Vadim Zeitlin et Julian Smart"
 
-#: internat.cpp:139
+#: internat.cpp:458
 msgid "About Internat"
 msgstr "A propos d'Internat"
 
-#: internat.cpp:144
+#: internat.cpp:491
 msgid "Enter your number:"
 msgstr "Entrez votre numéro:"
 
-#: internat.cpp:145
+#: internat.cpp:492
 msgid "Try to guess my number!"
-msgstr "Essayez de déviner mon numéro!"
+msgstr "Essayez de deviner mon numéro!"
 
-#: internat.cpp:150
+#: internat.cpp:506
 msgid "You've probably entered an invalid number."
 msgstr "Vous avez probablement entré un nombre invalide."
 
-#: internat.cpp:154
-msgid "Bad luck! try again..."
-msgstr "Pas de chance! essayez encore..."
-
-#: internat.cpp:158
+#: internat.cpp:520
 msgid "Congratulations! you've won. Here is the magic phrase:"
 msgstr "Félicitations! vouz avez gagné. Voilà la phrase magique:"
 
-#: internat.cpp:162
+#: internat.cpp:521
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "impossible de créer fifo `%s'"
+
+#: internat.cpp:530
+msgid "Bad luck! try again..."
+msgstr "Pas de chance! essayez encore..."
+
+#: internat.cpp:538
 msgid "Result"
-msgstr "Resultat"
+msgstr "Résultat"
+
+#: internat.cpp:546
+msgid "Enter the locale to test"
+msgstr "Entres les paramètres régionaux à tester"
+
+#: internat.cpp:562
+#, c-format
+msgid ""
+"Locale \"%s\" is available.\n"
+"Identifier: %s; Layout: %s\n"
+"English name: %s\n"
+"Localized name: %s"
+msgstr ""
+"Les paramètres régionaux \"%s\" sont disponibles.\n"
+"Idéntifiant: %s; Direction d'écriture: %s\n"
+"Nom en anglais: %s\n"
+"Nom traduit: %s"
+
+#: internat.cpp:569
+#, c-format
+msgid "Locale \"%s\" is not available."
+msgstr "Les paramètres régionaux \"%s\" ne sont pas disponibles."
+
+#: internat.cpp:584
+msgid "Dummy file dialog"
+msgstr "Boîte d'ouverture de fichier bidon"
+
+#: internat.cpp:589
+msgid "Testing _() (gettext)"
+msgstr "Tester _() (gettext)"
+
+#: internat.cpp:597
+msgid "Please enter text to translate"
+msgstr "Entrez le texte à traduire"
+
+#: internat.cpp:598
+msgid "default value"
+msgstr "la valeur par défaut"
+
+#: internat.cpp:612
+msgid "Testing _N() (ngettext)"
+msgstr "Tester _N() (ngettext)"
+
+#: internat.cpp:614
+msgid "Please enter range for plural forms of \"n files deleted\" phrase"
+msgstr "Veuillez entrer le diapason pour les formes plurielles de la phrase \"n fichiers détruit(s)\""
+
+#: internat.cpp:626
+msgid "file deleted"
+msgid_plural "files deleted"
+msgstr[0] "fichier détruit"
+msgstr[1] "fichiers détruits"
+
+#: internat.cpp:637
+msgid "line 1"
+msgstr "ligne 1"
+
+#: internat.cpp:638
+msgid "line 2"
+msgstr "ligne 2"
+
+#: internat.cpp:639
+msgid "line 3"
+msgstr "ligne 3"
+
+#: internat.cpp:642
+msgid "Testing wxTRANSLATE() (gettext_noop)"
+msgstr "Tester wxTRANSLATE() (gettext_noop)"
+
+#: internat.cpp:655
+msgid ""
+"Are the labels of the buttons in this message box translated into the "
+"current locale language?"
+msgstr ""
+"Est-ce que les textes des boutons dans cette boîte de dialogue sont "
+"traduits dans la langue courante?"
+
+#: internat.cpp:657
+msgid "wxWidgets i18n sample"
+msgstr "Exemple wxWidgets de i18n"
+
+#: internat.cpp:662
+msgid "Please report the details of your platform to us."
+msgstr "Contactez-nous avec les détails sur votre environnement SVP."

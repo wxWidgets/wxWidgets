@@ -11,14 +11,11 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SPLASH
 
-#ifdef __WXGTK20__
-    #include <gtk/gtk.h>
+#ifdef __WXGTK__
+    #include "wx/gtk/private/wrapgtk.h"
 #endif
 
 #include "wx/splash.h"
@@ -43,7 +40,7 @@ wxEND_EVENT_TABLE()
 
 void wxSplashScreen::Init()
 {
-    m_window = NULL;
+    m_window = nullptr;
 
     wxEvtHandler::AddFilter(this);
 }
@@ -65,7 +62,7 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
     // is going to disappear soon, indicate it by giving it this special style
     SetExtraStyle(GetExtraStyle() | wxWS_EX_TRANSIENT);
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     gtk_window_set_type_hint(GTK_WINDOW(m_widget),
                              GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
 #endif
@@ -75,7 +72,7 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
 
     m_window = new wxSplashScreenWindow(bitmap, this, wxID_ANY, pos, size, wxNO_BORDER);
 
-    SetClientSize(bitmap.GetScaledWidth(), bitmap.GetScaledHeight());
+    SetClientSize(bitmap.GetLogicalWidth(), bitmap.GetLogicalHeight());
 
     if (m_splashStyle & wxSPLASH_CENTRE_ON_PARENT)
         CentreOnParent();
@@ -92,7 +89,7 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
     m_window->SetFocus();
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
     Update(); // Without this, you see a blank screen for an instant
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     // we don't need to do anything at least on wxGTK with GTK+ 2.12.9
 #else
     wxYieldIfNeeded(); // Should eliminate this
@@ -144,8 +141,8 @@ wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* par
                                            wxWindowID id, const wxPoint& pos,
                                            const wxSize& size, long style)
     : wxWindow(parent, id, pos, size, style)
+    , m_bitmap(bitmap)
 {
-    m_bitmap = bitmap;
 
 #if !defined(__WXGTK__) && wxUSE_PALETTE
     bool hiColour = (wxDisplayDepth() >= 16) ;
@@ -176,7 +173,7 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
 #endif // USE_PALETTE_IN_SPLASH
 
     dcMem.SelectObjectAsSource(bitmap);
-    dc.Blit(0, 0, bitmap.GetScaledWidth(), bitmap.GetScaledHeight(), &dcMem, 0, 0, wxCOPY,
+    dc.Blit(0, 0, bitmap.GetLogicalWidth(), bitmap.GetLogicalHeight(), &dcMem, 0, 0, wxCOPY,
             true /* use mask */);
     dcMem.SelectObject(wxNullBitmap);
 

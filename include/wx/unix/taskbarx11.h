@@ -11,9 +11,9 @@
 #ifndef _WX_UNIX_TASKBAR_H_
 #define _WX_UNIX_TASKBAR_H_
 
-class WXDLLIMPEXP_FWD_ADV wxTaskBarIconArea;
+class WXDLLIMPEXP_FWD_CORE wxTaskBarIconArea;
 
-class WXDLLIMPEXP_ADV wxTaskBarIcon: public wxTaskBarIconBase
+class WXDLLIMPEXP_CORE wxTaskBarIcon: public wxTaskBarIconBase
 {
 public:
     wxTaskBarIcon();
@@ -24,9 +24,9 @@ public:
     bool IsIconInstalled() const;
 
     // Operations:
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
-    bool RemoveIcon() wxOVERRIDE;
-    bool PopupMenu(wxMenu *menu) wxOVERRIDE;
+    bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) override;
+    bool RemoveIcon() override;
+    bool PopupMenu(wxMenu *menu) override;
 
 protected:
     wxTaskBarIconArea *m_iconWnd;

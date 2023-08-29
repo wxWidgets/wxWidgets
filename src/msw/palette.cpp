@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PALETTE
 
@@ -78,11 +75,11 @@ public:
             ::DeleteObject(m_hPalette);
     }
 
-    virtual bool IsOk() const wxOVERRIDE { return m_hPalette != 0; }
+    virtual bool IsOk() const override { return m_hPalette != 0; }
 
     UINT GetEntries() const
     {
-        return ::GetPaletteEntries(m_hPalette, 0, 0, NULL);
+        return ::GetPaletteEntries(m_hPalette, 0, 0, nullptr);
     }
 
 private:
@@ -159,7 +156,7 @@ bool wxPalette::GetRGB(int index,
     if ( !m_refData )
         return false;
 
-    if (index < 0 || index > 255)
+    if ( index < 0 || index >= GetColoursCount() )
         return false;
 
     PALETTEENTRY entry;

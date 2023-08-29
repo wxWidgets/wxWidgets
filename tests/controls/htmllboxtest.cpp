@@ -8,9 +8,8 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#if wxUSE_HTML
+
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -25,12 +24,12 @@ class HtmlListBoxTestCase : public ItemContainerTestCase,
 public:
     HtmlListBoxTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxItemContainer *GetContainer() const { return m_htmllbox; }
-    virtual wxWindow *GetContainerWindow() const { return m_htmllbox; }
+    virtual wxItemContainer *GetContainer() const override { return m_htmllbox; }
+    virtual wxWindow *GetContainerWindow() const override { return m_htmllbox; }
 
     CPPUNIT_TEST_SUITE( HtmlListBoxTestCase );
         wxITEM_CONTAINER_TESTS();
@@ -41,11 +40,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(HtmlListBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( HtmlListBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HtmlListBoxTestCase, "HtmlListBoxTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(HtmlListBoxTestCase,
+                               "[HtmlListBoxTestCase][item-container]");
 
 void HtmlListBoxTestCase::setUp()
 {
@@ -56,3 +52,5 @@ void HtmlListBoxTestCase::tearDown()
 {
     wxDELETE(m_htmllbox);
 }
+
+#endif //wxUSE_HTML

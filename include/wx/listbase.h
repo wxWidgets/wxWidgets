@@ -18,8 +18,7 @@
 #include "wx/control.h"
 #include "wx/itemattr.h"
 #include "wx/systhemectrl.h"
-
-class WXDLLIMPEXP_FWD_CORE wxImageList;
+#include "wx/withimages.h"
 
 // ----------------------------------------------------------------------------
 // types
@@ -135,11 +134,12 @@ enum wxListColumnFormat
     wxLIST_FORMAT_CENTER = wxLIST_FORMAT_CENTRE
 };
 
-// Autosize values for SetColumnWidth
+// Values for SetColumnWidth()
 enum
 {
     wxLIST_AUTOSIZE = -1,
-    wxLIST_AUTOSIZE_USEHEADER = -2      // partly supported by generic version
+    wxLIST_AUTOSIZE_USEHEADER = -2,     // partly supported by generic version
+    wxLIST_DEFAULT_COL_WIDTH = 80
 };
 
 // Flag values for GetItemRect
@@ -171,7 +171,7 @@ typedef wxItemAttr wxListItemAttr;
 class WXDLLIMPEXP_CORE wxListItem : public wxObject
 {
 public:
-    wxListItem() { Init(); m_attr = NULL; }
+    wxListItem() { Init(); m_attr = nullptr; }
     wxListItem(const wxListItem& item)
         : wxObject(),
           m_mask(item.m_mask),
@@ -184,7 +184,7 @@ public:
           m_data(item.m_data),
           m_format(item.m_format),
           m_width(item.m_width),
-          m_attr(NULL)
+          m_attr(nullptr)
     {
         // copy list item attributes
         if ( item.HasAttributes() )
@@ -205,7 +205,7 @@ public:
             m_data = item.m_data;
             m_format = item.m_format;
             m_width = item.m_width;
-            m_attr = item.m_attr ? new wxItemAttr(*item.m_attr) : NULL;
+            m_attr = item.m_attr ? new wxItemAttr(*item.m_attr) : nullptr;
         }
 
         return *this;
@@ -215,7 +215,7 @@ public:
 
     // resetting
     void Clear() { Init(); m_text.clear(); ClearAttributes(); }
-    void ClearAttributes() { if ( m_attr ) { delete m_attr; m_attr = NULL; } }
+    void ClearAttributes() { if ( m_attr ) { delete m_attr; m_attr = nullptr; } }
 
     // setters
     void SetMask(long mask)
@@ -262,7 +262,7 @@ public:
     wxListColumnFormat GetAlign() const { return (wxListColumnFormat)m_format; }
 
     wxItemAttr *GetAttributes() const { return m_attr; }
-    bool HasAttributes() const { return m_attr != NULL; }
+    bool HasAttributes() const { return m_attr != nullptr; }
 
     wxColour GetTextColour() const
         { return HasAttributes() ? m_attr->GetTextColour() : wxNullColour; }
@@ -334,23 +334,33 @@ class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 public:
     wxListCtrlBase() { }
 
-    // Image list methods.
-    // -------------------
+    // Image-related methods.
+    // ----------------------
 
-    // Associate the given (possibly NULL to indicate that no images will be
+    // Preferred way of specifying the images is by using the SetXXXImages(),
+    // methods using wxImageList below still work, but don't allow specifying
+    // images in different resolutions, which is necessary for good appearance
+    // on high DPI displays.
+
+    // "Normal" images are used only in icon view, the "report" view uses
+    // "small" images.
+    void SetNormalImages(const wxVector<wxBitmapBundle>& images);
+    void SetSmallImages(const wxVector<wxBitmapBundle>& images);
+
+    // Associate the given (possibly null to indicate that no images will be
     // used) image list with the control. The ownership of the image list
     // passes to the control, i.e. it will be deleted when the control itself
     // is destroyed.
     //
     // The value of "which" must be one of wxIMAGE_LIST_{NORMAL,SMALL,STATE}.
-    virtual void AssignImageList(wxImageList* imageList, int which) = 0;
+    virtual void AssignImageList(wxImageList* imageList, int which);
 
     // Same as AssignImageList() but the control does not delete the image list
     // so it can be shared among several controls.
-    virtual void SetImageList(wxImageList* imageList, int which) = 0;
+    virtual void SetImageList(wxImageList* imageList, int which);
 
-    // Return the currently used image list, may be NULL.
-    virtual wxImageList* GetImageList(int which) const = 0;
+    // Return the currently used image list, may be null.
+    virtual wxImageList* GetImageList(int which) const;
 
 
     // Column-related methods.
@@ -378,6 +388,12 @@ public:
     virtual bool DeleteColumn(int col) = 0;
     virtual bool DeleteAllColumns() = 0;
 
+    // Return the current number of items.
+    virtual int GetItemCount() const = 0;
+
+    // Check if the control is empty, i.e. doesn't contain any items.
+    bool IsEmpty() const { return GetItemCount() == 0; }
+
     // Return the current number of columns.
     virtual int GetColumnCount() const = 0;
 
@@ -393,8 +409,13 @@ public:
     virtual int GetColumnWidth(int col) const = 0;
     virtual bool SetColumnWidth(int col, int width) = 0;
 
-    // return the attribute for the item (may return NULL if none)
-    virtual wxItemAttr *OnGetItemAttr(long item) const;
+    // Column ordering functions
+    virtual int GetColumnOrder(int col) const = 0;
+    virtual int GetColumnIndexFromOrder(int order) const = 0;
+
+    virtual wxArrayInt GetColumnsOrder() const = 0;
+    virtual bool SetColumnsOrder(const wxArrayInt& orders) = 0;
+
 
     // Other miscellaneous accessors.
     // ------------------------------
@@ -403,6 +424,9 @@ public:
     bool InReportView() const { return HasFlag(wxLC_REPORT); }
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
+    // Check if the item is visible
+    virtual bool IsVisible(long WXUNUSED(item)) const { return false; }
+
     // Enable or disable beep when incremental match doesn't find any item.
     // Only implemented in the generic version currently.
     virtual void EnableBellOnNoMatch(bool WXUNUSED(on) = true) { }
@@ -410,6 +434,8 @@ public:
     void EnableAlternateRowColours(bool enable = true);
     void SetAlternateRowColour(const wxColour& colour);
     wxColour GetAlternateRowColour() const { return m_alternateRowColour.GetBackgroundColour(); }
+
+    virtual void ExtendRulesAndAlternateColour(bool WXUNUSED(extend) = true) { }
 
     // Header attributes support: only implemented in wxMSW currently.
     virtual bool SetHeaderAttr(const wxItemAttr& WXUNUSED(attr)) { return false; }
@@ -420,14 +446,62 @@ public:
     virtual bool IsItemChecked(long WXUNUSED(item)) const { return false; }
     virtual void CheckItem(long WXUNUSED(item), bool WXUNUSED(check)) { }
 
+    // Sort indicator in header.
+    virtual void ShowSortIndicator(int WXUNUSED(col), bool WXUNUSED(ascending) = true) { }
+    void RemoveSortIndicator() { ShowSortIndicator(-1); }
+    virtual int GetSortIndicator() const { return -1; }
+    virtual bool IsAscendingSortIndicator() const { return true; }
+    bool GetUpdatedAscendingSortIndicator(int col) const
+    {
+        // If clicking on the same column by which we already sort, toggle the sort
+        // direction, otherwise use ascending sort by default.
+        return col == GetSortIndicator() ? !IsAscendingSortIndicator() : true;
+    }
+
 protected:
+    // Return pointer to the corresponding m_imagesXXX.
+    const wxWithImages* GetImages(int which) const;
+    wxWithImages* GetImages(int which);
+
+    // Helper updating or creating the image list, if necessary, unlike
+    // GetImageList() which just returns the previously set image list.
+    wxImageList* GetUpdatedImageList(int which);
+
     // Real implementations methods to which our public forwards.
     virtual long DoInsertColumn(long col, const wxListItem& info) = 0;
+    virtual void DoUpdateImages(int which) = 0;
 
     // Overridden methods of the base class.
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
+
+    // these functions are only used for virtual list view controls, i.e. the
+    // ones with wxLC_VIRTUAL style
+
+    // return the attribute for the item (may return nullptr if none)
+    virtual wxItemAttr* OnGetItemAttr(long item) const;
+
+    // return the text for the given column of the given item
+    virtual wxString OnGetItemText(long item, long column) const;
+
+    // return whether the given item is checked
+    virtual bool OnGetItemIsChecked(long item) const;
+
+    // return the icon for the given item. In report view, OnGetItemImage will
+    // only be called for the first column. See OnGetItemColumnImage for
+    // details.
+    virtual int OnGetItemImage(long item) const;
+
+    // return the icon for the given item and column.
+    virtual int OnGetItemColumnImage(long item, long column) const;
+
+    // return the attribute for the given item and column (may return nullptr if none)
+    virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
 private:
+    wxWithImages m_imagesNormal,
+                 m_imagesSmall,
+                 m_imagesState;
+
     // user defined color to draw row lines, may be invalid
     wxItemAttr m_alternateRowColour;
 };
@@ -488,7 +562,7 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxListEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxListEvent(*this); }
 
 //protected: -- not for backwards compatibility
     int           m_code;

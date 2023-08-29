@@ -17,12 +17,13 @@
 
 #include "wx/help.h"
 
-#include "wx/hashmap.h"
 #if wxUSE_BMPBUTTON
 #include "wx/bmpbuttn.h"
 #endif
 
 #include "wx/event.h"
+
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // classes used to implement context help UI
@@ -38,7 +39,7 @@
 class WXDLLIMPEXP_CORE wxContextHelp : public wxObject
 {
 public:
-    wxContextHelp(wxWindow* win = NULL, bool beginHelp = true);
+    wxContextHelp(wxWindow* win = nullptr, bool beginHelp = true);
     virtual ~wxContextHelp();
 
     bool BeginContextHelp(wxWindow* win);
@@ -73,7 +74,7 @@ public:
                         wxWindowID id = wxID_CONTEXT_HELP,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        long style = wxBU_AUTODRAW)
+                        long style = 0)
     {
         Create(parent, id, pos, size, style);
     }
@@ -83,7 +84,7 @@ public:
                 wxWindowID id = wxID_CONTEXT_HELP,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxBU_AUTODRAW);
+                long style = 0);
 
 
     void OnContextHelp(wxCommandEvent& event);
@@ -146,7 +147,7 @@ public:
                                  const wxPoint& pt,
                                  wxHelpEvent::Origin origin)
     {
-        wxCHECK_MSG( window, false, wxT("window must not be NULL") );
+        wxCHECK_MSG( window, false, wxT("window must not be null") );
 
         m_helptextAtPoint = pt;
         m_helptextOrigin = origin;
@@ -194,9 +195,6 @@ private:
     static wxHelpProvider *ms_helpProvider;
 };
 
-WX_DECLARE_EXPORTED_HASH_MAP( wxUIntPtr, wxString, wxIntegerHash,
-                              wxIntegerEqual, wxSimpleHelpProviderHashMap );
-
 // wxSimpleHelpProvider is an implementation of wxHelpProvider which supports
 // only plain text help strings and shows the string associated with the
 // control (if any) in a tooltip
@@ -204,20 +202,20 @@ class WXDLLIMPEXP_CORE wxSimpleHelpProvider : public wxHelpProvider
 {
 public:
     // implement wxHelpProvider methods
-    virtual wxString GetHelp(const wxWindowBase *window) wxOVERRIDE;
+    virtual wxString GetHelp(const wxWindowBase *window) override;
 
     // override ShowHelp() and not ShowHelpAtPoint() as explained above
-    virtual bool ShowHelp(wxWindowBase *window) wxOVERRIDE;
+    virtual bool ShowHelp(wxWindowBase *window) override;
 
-    virtual void AddHelp(wxWindowBase *window, const wxString& text) wxOVERRIDE;
-    virtual void AddHelp(wxWindowID id, const wxString& text) wxOVERRIDE;
-    virtual void RemoveHelp(wxWindowBase* window) wxOVERRIDE;
+    virtual void AddHelp(wxWindowBase *window, const wxString& text) override;
+    virtual void AddHelp(wxWindowID id, const wxString& text) override;
+    virtual void RemoveHelp(wxWindowBase* window) override;
 
-protected:
+private:
     // we use 2 hashes for storing the help strings associated with windows
     // and the ids
-    wxSimpleHelpProviderHashMap m_hashWindows,
-                                m_hashIds;
+    std::unordered_map<const wxWindowBase*, wxString> m_hashWindows;
+    std::unordered_map<wxWindowID, wxString> m_hashIds;
 };
 
 // wxHelpControllerHelpProvider is an implementation of wxHelpProvider which supports
@@ -229,13 +227,13 @@ class WXDLLIMPEXP_CORE wxHelpControllerHelpProvider : public wxSimpleHelpProvide
 public:
     // Note that it doesn't own the help controller. The help controller
     // should be deleted separately.
-    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = NULL);
+    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = nullptr);
 
     // implement wxHelpProvider methods
 
     // again (see above): this should be ShowHelpAtPoint() but we need to
     // override ShowHelp() to avoid breaking existing code
-    virtual bool ShowHelp(wxWindowBase *window) wxOVERRIDE;
+    virtual bool ShowHelp(wxWindowBase *window) override;
 
     // Other accessors
     void SetHelpController(wxHelpControllerBase* hc) { m_helpController = hc; }

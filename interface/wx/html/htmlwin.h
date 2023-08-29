@@ -58,7 +58,7 @@ public:
         @param url      URL the parser wants to open
         @param redirect If the return value is wxHTML_REDIRECT, then the
                         URL to redirect to will be stored in this variable
-                        (the pointer must never be NULL)
+                        (the pointer must never be @NULL)
 
         @return indicator of how to treat the request
      */
@@ -73,7 +73,7 @@ public:
     virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell,
                                        const wxPoint& pos) const = 0;
 
-    /// Returns the window used for rendering (may be NULL).
+    /// Returns the window used for rendering (may be @NULL).
     virtual wxWindow* GetHTMLWindow() = 0;
 
     /// Returns background colour to use by default.
@@ -83,7 +83,7 @@ public:
     virtual void SetHTMLBackgroundColour(const wxColour& clr) = 0;
 
     /// Sets window's background to given bitmap.
-    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) = 0;
+    virtual void SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg) = 0;
 
     /// Sets status bar text.
     virtual void SetHTMLStatusText(const wxString& text) = 0;
@@ -143,7 +143,7 @@ public:
     @event{EVT_HTML_CELL_HOVER(id, func)}
         The mouse passed over a wxHtmlCell.
     @event{EVT_HTML_LINK_CLICKED(id, func)}
-        A wxHtmlCell which contains an hyperlink was clicked.
+        A wxHtmlCell which contains a hyperlink was clicked.
     @endEventTable
 
     @library{wxhtml}
@@ -395,7 +395,7 @@ public:
         @see SetSize()
     */
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
-                  const int* sizes = NULL);
+                  const int* sizes = nullptr);
 
     /**
         Sets default font sizes and/or default font size.
@@ -504,7 +504,7 @@ protected:
     /**
         This method is called when a mouse button is clicked inside wxHtmlWindow.
         The default behaviour is to emit a wxHtmlCellEvent and, if the event was
-        not processed or skipped, call OnLinkClicked() if the cell contains an
+        not processed or skipped, call OnLinkClicked() if the cell contains a
         hypertext link.
 
         Overloading this method is deprecated; intercept the event instead.
@@ -555,11 +555,11 @@ wxEventType wxEVT_HTML_LINK_CLICKED;
 
     @beginEventTable{wxHtmlLinkEvent}
     @event{EVT_HTML_LINK_CLICKED(id, func)}
-        User clicked on an hyperlink.
+        User clicked on a hyperlink.
     @endEventTable
 
     @library{wxhtml}
-    @category{html}
+    @category{html,events}
 */
 class wxHtmlLinkEvent : public wxCommandEvent
 {
@@ -592,7 +592,7 @@ public:
     @endEventTable
 
     @library{wxhtml}
-    @category{html}
+    @category{html,events}
 */
 class wxHtmlCellEvent : public wxCommandEvent
 {
@@ -620,6 +620,11 @@ public:
         Returns the wxPoint associated with the event.
     */
     wxPoint GetPoint() const;
+
+    /**
+        Returns the wxMouseEvent associated with the event.
+    */
+    wxMouseEvent GetMouseEvent() const;
 
     /**
         Call this function with @a linkclicked set to @true if the cell which has

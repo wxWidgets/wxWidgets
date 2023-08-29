@@ -10,9 +10,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -70,8 +67,8 @@ private:
 
 private:
     // Implement base class functions.
-    virtual wxMemoryInputStream  *DoCreateInStream();
-    virtual wxMemoryOutputStream *DoCreateOutStream();
+    virtual wxMemoryInputStream  *DoCreateInStream() override;
+    virtual wxMemoryOutputStream *DoCreateOutStream() override;
 
 private:
     char    m_DataBuffer[DATABUFFER_SIZE];

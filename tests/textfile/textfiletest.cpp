@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TEXTFILE
 
@@ -37,10 +34,10 @@ class TextFileTestCase : public CppUnit::TestCase
 public:
     TextFileTestCase()
     {
-        srand((unsigned)time(NULL));
+        srand((unsigned)time(nullptr));
     }
 
-    virtual void tearDown() { unlink(GetTestFileName()); }
+    virtual void tearDown() override { unlink(GetTestFileName()); }
 
 private:
     CPPUNIT_TEST_SUITE( TextFileTestCase );
@@ -54,10 +51,8 @@ private:
         CPPUNIT_TEST( ReadMixed );
         CPPUNIT_TEST( ReadMixedWithFuzzing );
         CPPUNIT_TEST( ReadCRCRLF );
-#if wxUSE_UNICODE
         CPPUNIT_TEST( ReadUTF8 );
         CPPUNIT_TEST( ReadUTF16 );
-#endif // wxUSE_UNICODE
         CPPUNIT_TEST( ReadBig );
     CPPUNIT_TEST_SUITE_END();
 
@@ -71,10 +66,8 @@ private:
     void ReadMixed();
     void ReadMixedWithFuzzing();
     void ReadCRCRLF();
-#if wxUSE_UNICODE
     void ReadUTF8();
     void ReadUTF16();
-#endif // wxUSE_UNICODE
     void ReadBig();
 
     // return the name of the test file we use
@@ -272,8 +265,6 @@ void TextFileTestCase::ReadCRCRLF()
     CPPUNIT_ASSERT_EQUAL( "foobarbaz", all );
 }
 
-#if wxUSE_UNICODE
-
 void TextFileTestCase::ReadUTF8()
 {
     CreateTestFile("\xd0\x9f\n"
@@ -313,8 +304,6 @@ void TextFileTestCase::ReadUTF16()
 #endif // wxHAVE_U_ESCAPE
 }
 
-#endif // wxUSE_UNICODE
-
 void TextFileTestCase::ReadBig()
 {
     static const size_t NUM_LINES = 10000;
@@ -347,7 +336,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
     SECTION("/proc")
     {
         wxTextFile f;
-        CHECK( f.Open("/proc/diskstats") );
+        CHECK( f.Open("/proc/cpuinfo") );
         CHECK( f.GetLineCount() > 1 );
     }
 
@@ -357,7 +346,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
         CHECK( f.Open("/sys/power/state") );
         REQUIRE( f.GetLineCount() == 1 );
         INFO( "/sys/power/state contains \"" << f[0] << "\"" );
-        CHECK( f[0].find("mem") != wxString::npos );
+        CHECK( (f[0].find("mem") != wxString::npos || f[0].find("disk") != wxString::npos) );
     }
 }
 

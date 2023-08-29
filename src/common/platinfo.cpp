@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/platinfo.h"
 
@@ -31,6 +28,11 @@
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
+
+#ifdef __WINDOWS__
+    #include "wx/dynlib.h"
+    #include "wx/versioninfo.h"
+#endif
 
 // global object
 // VERY IMPORTANT: do not use the default constructor since it would
@@ -86,7 +88,7 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxQT")
 };
 
-static const wxChar* const wxArchitectureNames[] =
+static const wxChar* const wxBitnessNames[] =
 {
     wxT("32 bit"),
     wxT("64 bit")
@@ -133,7 +135,7 @@ wxPlatformInfo::wxPlatformInfo()
 
 wxPlatformInfo::wxPlatformInfo(wxPortId pid, int tkMajor, int tkMinor,
                                wxOperatingSystemId id, int osMajor, int osMinor,
-                               wxArchitecture arch,
+                               wxBitness bitness,
                                wxEndianness endian,
                                bool usingUniversal)
 {
@@ -151,7 +153,7 @@ wxPlatformInfo::wxPlatformInfo(wxPortId pid, int tkMajor, int tkMinor,
     m_osVersionMicro = -1;
 
     m_endian = endian;
-    m_arch = arch;
+    m_bitness = bitness;
 }
 
 bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
@@ -168,7 +170,7 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_desktopEnv == t.m_desktopEnv &&
            m_port == t.m_port &&
            m_usingUniversal == t.m_usingUniversal &&
-           m_arch == t.m_arch &&
+           m_bitness == t.m_bitness &&
            m_endian == t.m_endian;
 }
 
@@ -177,7 +179,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_initializedForCurrentPlatform = true;
 
     // autodetect all informations
-    const wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    const wxAppTraits * const traits = wxApp::GetTraitsIfExists();
     if ( !traits )
     {
         wxFAIL_MSG( wxT("failed to initialize wxPlatformInfo") );
@@ -199,7 +201,9 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor, &m_osVersionMicro);
     m_osDesc = wxGetOsDescription();
     m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
-    m_arch = wxIsPlatform64Bit() ? wxARCH_64 : wxARCH_32;
+    m_bitness = wxIsPlatform64Bit() ? wxBITNESS_64 : wxBITNESS_32;
+    m_cpuArch = wxGetCpuArchitectureName();
+    m_nativeCpuArch = wxGetNativeCpuArchitectureName();
 
 #ifdef __LINUX__
     m_ldi = wxGetLinuxDistributionInfo();
@@ -290,12 +294,12 @@ wxString wxPlatformInfo::GetPortIdShortName(wxPortId port, bool usingUniversal)
     return ret;
 }
 
-wxString wxPlatformInfo::GetArchName(wxArchitecture arch)
+wxString wxPlatformInfo::GetBitnessName(wxBitness bitness)
 {
-    wxCOMPILE_TIME_ASSERT( WXSIZEOF(wxArchitectureNames) == wxARCH_MAX,
-                           wxArchitectureNamesMismatch );
+    wxCOMPILE_TIME_ASSERT( WXSIZEOF(wxBitnessNames) == wxBITNESS_MAX,
+                           wxBitnessNamesMismatch );
 
-    return wxArchitectureNames[arch];
+    return wxBitnessNames[bitness];
 }
 
 wxString wxPlatformInfo::GetEndiannessName(wxEndianness end)
@@ -375,3 +379,36 @@ wxEndianness wxPlatformInfo::GetEndianness(const wxString& end)
 
     return wxENDIAN_INVALID;
 }
+
+#ifdef __WINDOWS__
+
+bool wxIsRunningUnderWine(wxVersionInfo* ver)
+{
+    wxLoadedDLL dllNT("ntdll.dll");
+    const char* (*pfn_wine_get_version)() =
+        (decltype(pfn_wine_get_version))dllNT.RawGetSymbol(L"wine_get_version");
+    if ( !pfn_wine_get_version )
+        return false;
+
+    if ( ver )
+    {
+        const char* const wineVer = pfn_wine_get_version();
+        int major = 0,
+            minor = 0,
+            micro = 0;
+
+        // Ignore the return value because we can't do anything useful in case
+        // of an error anyhow.
+        sscanf(wineVer, "%d.%d.%d", &major, &minor, &micro);
+
+        *ver = wxVersionInfo{
+            wxString::FromAscii("Wine"),
+            major, minor, micro,
+            wxString::FromAscii(wineVer)
+        };
+    }
+
+    return true;
+}
+
+#endif // __WINDOWS__

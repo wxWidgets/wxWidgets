@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 
@@ -58,7 +55,7 @@ wxMemoryInputStream::wxMemoryInputStream(const wxMemoryOutputStream& stream)
     const wxFileOffset lenFile = stream.GetLength();
     if ( lenFile == wxInvalidOffset )
     {
-        m_i_streambuf = NULL;
+        m_i_streambuf = nullptr;
         m_lasterror = wxSTREAM_EOF;
         return;
     }
@@ -82,7 +79,7 @@ wxMemoryInputStream::InitFromStream(wxInputStream& stream, wxFileOffset lenFile)
 
     if ( lenFile == wxInvalidOffset )
     {
-        m_i_streambuf = NULL;
+        m_i_streambuf = nullptr;
         m_lasterror = wxSTREAM_EOF;
         return;
     }
@@ -115,10 +112,12 @@ char wxMemoryInputStream::Peek()
     if ( pos == m_length )
     {
         m_lasterror = wxSTREAM_READ_ERROR;
+        m_lastcount = 0;
 
         return 0;
     }
 
+    m_lastcount = 1;
     return buf[pos];
 }
 

@@ -12,7 +12,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer,
                   unsigned int model_column, int width,
@@ -22,7 +22,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *r
 {
 }
 
-wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *renderer,
+wxDataViewColumn::wxDataViewColumn( const wxBitmapBundle &bitmap, wxDataViewRenderer *renderer,
                   unsigned int model_column, int width,
                   wxAlignment align,
                   int flags )
@@ -34,7 +34,7 @@ void wxDataViewColumn::SetTitle( const wxString &title )
 {
 }
 
-void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
+void wxDataViewColumn::SetBitmap( const wxBitmapBundle &bitmap )
 {
 }
 
@@ -192,7 +192,7 @@ unsigned wxDataViewCtrl::GetColumnCount() const
 
 wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
 {
-    return NULL;
+    return nullptr;
 }
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
@@ -212,7 +212,7 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 {
-    return NULL;
+    return nullptr;
 }
 
 wxDataViewItem wxDataViewCtrl::GetSelection() const
@@ -267,7 +267,7 @@ wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem &item,
     return wxRect();
 }
 
-void wxDataViewCtrl::Expand( const wxDataViewItem & item )
+void wxDataViewCtrl::DoExpand( const wxDataViewItem & item, bool expandChildren )
 {
 }
 
@@ -285,7 +285,7 @@ bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
     return false;
 }
 
-bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+bool wxDataViewCtrl::DoEnableDropTarget( const wxVector<wxDataFormat> &formats )
 {
     return false;
 }
@@ -316,6 +316,6 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
 {
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

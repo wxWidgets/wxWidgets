@@ -43,7 +43,7 @@ class Card {
 
 public:
     Card(int value, WayUp way_up = facedown);
-    virtual ~Card(){};
+    virtual ~Card(){}
 
     void Draw(wxDC& pDC, int x, int y);
     static void DrawNullCard(wxDC& pDC, int x, int y); // Draw card place-holder
@@ -55,9 +55,9 @@ public:
     Suit GetSuit() const { return m_suit; }
     SuitColour GetColour() const { return m_colour; }
     static void SetScale(double scale);
-    static int GetHeight() { return m_height; };
-    static int GetWidth() { return m_width; };
-    static double GetScale() { return m_scale; };
+    static int GetHeight() { return m_height; }
+    static int GetWidth() { return m_width; }
+    static double GetScale() { return m_scale; }
 
 private:
     Suit m_suit;

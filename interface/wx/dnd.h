@@ -56,7 +56,7 @@ public:
     /**
         Constructor. @a data is the data to be associated with the drop target.
     */
-    wxDropTarget(wxDataObject* data = NULL);
+    wxDropTarget(wxDataObject* data = nullptr);
 
     /**
         Destructor. Deletes the associated data object, if any.
@@ -146,7 +146,7 @@ public:
     /**
        Sets the default action for drag and drop.  Use wxDragMove or
        wxDragCopy to set default action to move or copy and use wxDragNone
-       (default) to set default action specified by initialization of draging
+       (default) to set default action specified by initialization of dragging
        (see wxDropSource::DoDragDrop())
     */
     void SetDefaultAction(wxDragResult action);
@@ -194,7 +194,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxWindow* win = NULL,
+    wxDropSource(wxWindow* win = nullptr,
                  const wxCursor& iconCopy = wxNullCursor,
                  const wxCursor& iconMove = wxNullCursor,
                  const wxCursor& iconNone = wxNullCursor);
@@ -220,7 +220,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxDataObject& data, wxWindow* win = NULL,
+    wxDropSource(wxDataObject& data, wxWindow* win = nullptr,
                  const wxCursor& iconCopy = wxNullCursor,
                  const wxCursor& iconMove = wxNullCursor,
                  const wxCursor& iconNone = wxNullCursor);
@@ -242,7 +242,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxWindow* win = NULL,
+    wxDropSource(wxWindow* win = nullptr,
                  const wxIcon& iconCopy = wxNullIcon,
                  const wxIcon& iconMove = wxNullIcon,
                  const wxIcon& iconNone = wxNullIcon);
@@ -266,7 +266,7 @@ public:
         @param iconNone
             The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxDataObject& data, wxWindow* win = NULL,
+    wxDropSource(wxDataObject& data, wxWindow* win = nullptr,
                  const wxIcon& iconCopy = wxNullIcon,
                  const wxIcon& iconMove = wxNullIcon,
                  const wxIcon& iconNone = wxNullIcon);
@@ -429,7 +429,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_gdi */
-//@{
+///@{
 
 /**
     This macro creates either a cursor (MSW) or an icon (elsewhere) with the
@@ -451,5 +451,5 @@ public:
 */
 bool wxIsDragResultOk(wxDragResult res);
 
-//@}
+///@}
 

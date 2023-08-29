@@ -90,11 +90,25 @@ public:
     void SetMin(ValueType min);
 
     /**
+        Gets the minimal value accepted by the validator.
+
+        @since 3.1.3
+     */
+    ValueType GetMin() const;
+
+    /**
         Sets the maximal value accepted by the validator.
 
         This value is inclusive, i.e. the value equal to @a max is accepted.
      */
     void SetMax(ValueType max);
+
+    /**
+        Gets the maximum value accepted by the validator.
+
+        @since 3.1.3
+     */
+    ValueType GetMax() const;
 
     /**
         Sets both minimal and maximal values accepted by the validator.
@@ -103,6 +117,12 @@ public:
      */
     void SetRange(ValueType min, ValueType max);
 
+    /**
+        Gets both minimal and maximal values accepted by the validator.
+
+        @since 3.1.3
+     */
+    void GetRange(ValueType& min, ValueType& max) const;
 
     /**
         Change the validator style.
@@ -137,6 +157,57 @@ public:
         It does nothing if there is no associated variable.
      */
     virtual bool TransferFromWindow();
+
+protected:
+    /**
+        Pointer to the value associated with this validator.
+
+        This is the same pointer which is passed to the validator class ctor,
+        so please note that it can be null.
+
+        This field can be useful for the derived classes overriding the base
+        class TransferToWindow() and/or TransferFromWindow() methods, for
+        example here is a class which treats the absent value as @c 1
+        (similarly to how using wxNUM_VAL_ZERO_AS_BLANK would treat it as @c 0):
+
+        @code
+        class MyMultiplierValidator : public wxFloatingPointValidator<double>
+        {
+        public:
+            explicit MyMultiplierValidator(double& value)
+                : wxFloatingPointValidator(&value)
+            {
+                SetMin(0); // Multiplier is always positive.
+            }
+
+            bool TransferFromWindow() override
+            {
+                if ( GetTextEntry()->IsEmpty() )
+                {
+                    *m_value = 1.0;
+                    return true;
+                }
+
+                if ( !wxFloatingPointValidator<double>::TransferFromWindow() )
+                    return false;
+
+                // Multiplier must be strictly positive.
+                if ( *m_value == 0 )
+                    return false;
+
+                return true;
+            }
+
+            wxObject* Clone() const override
+            {
+                return new MyMultiplierValidator(*this);
+            }
+        };
+        @endcode
+
+        @since 3.1.5
+     */
+    ValueType* const m_value;
 };
 
 /**
@@ -216,7 +287,26 @@ public:
             A combination of wxNumValidatorStyle enum values with the exception
             of wxNUM_VAL_NO_TRAILING_ZEROES which can't be used here.
     */
-    wxIntegerValidator(ValueType *value = NULL, int style = wxNUM_VAL_DEFAULT);
+    wxIntegerValidator(ValueType *value = nullptr, int style = wxNUM_VAL_DEFAULT);
+
+    /**
+        Validator constructor with specified range.
+
+        @param value
+            A pointer to the variable associated with the validator. This variable
+            should have a lifetime equal to or longer than the validator lifetime
+            (which is usually determined by the lifetime of the window).
+        @param min
+            The minimum value accepted by the validator.
+        @param max
+            The maximum value accepted by the validator.
+        @param style
+            A combination of wxNumValidatorStyle enum values with the exception
+            of wxNUM_VAL_NO_TRAILING_ZEROES which can't be used here.
+
+        @since 3.1.6
+    */
+    wxIntegerValidator(ValueType *value, ValueType min, ValueType max, int style = wxNUM_VAL_DEFAULT);
 };
 
 /**
@@ -315,7 +405,7 @@ public:
         @param style
             A combination of wxNumValidatorStyle enum values.
     */
-    wxFloatingPointValidator(ValueType *value = NULL,
+    wxFloatingPointValidator(ValueType *value = nullptr,
                              int style = wxNUM_VAL_DEFAULT);
 
     /**
@@ -333,7 +423,7 @@ public:
             and accept.
     */
     wxFloatingPointValidator(int precision,
-                             ValueType *value = NULL,
+                             ValueType *value = nullptr,
                              int style = wxNUM_VAL_DEFAULT);
 
 
@@ -364,12 +454,12 @@ public:
 /**
     Creates a wxFloatingPointValidator object with automatic type deduction.
 
-    Similarly to wxMakeIntegerValidator(), this function allows to avoid
+    Similarly to wxMakeIntegerValidator(), this function allows avoiding
     explicitly specifying the validator type.
 
     @since 2.9.2
  */
-//@{
+///@{
 template <typename T>
 inline wxFloatingPointValidator<T>
 wxMakeFloatingPointValidator(T *value, int style = wxNUM_VAL_DEFAULT);
@@ -378,4 +468,4 @@ template <typename T>
 inline wxFloatingPointValidator<T>
 wxMakeFloatingPointValidator(int precision,
                              T *value, int style = wxNUM_VAL_DEFAULT);
-//@}
+///@}

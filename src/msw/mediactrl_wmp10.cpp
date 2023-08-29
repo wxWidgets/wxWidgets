@@ -29,7 +29,7 @@
 //
 // The ActiveX control itself is particularly stubborn, calling
 // IOleInPlaceSite::OnPosRectChange every file change trying to set itself
-// to something different then what we told it to before.
+// to something different from what we told it to before.
 //
 // The docs are at
 // http://msdn.microsoft.com/library/en-us/wmplay10/mmp_sdk/windowsmediaplayer10sdk.asp
@@ -44,10 +44,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #if wxUSE_MEDIACTRL && wxUSE_ACTIVEX
 
@@ -89,6 +85,7 @@
 // Various definitions dumped from wmp.IDL
 //---------------------------------------------------------------------------
 
+wxCLANG_WARNING_SUPPRESS(unused-const-variable)
 // CLSID_WMP10ALT is on CE and in some MS docs - on others it is the plain ver
 const CLSID CLSID_WMP10              = {0x6BF52A50,0x394A,0x11D3,{0xB1,0x53,0x00,0xC0,0x4F,0x79,0xFA,0xA6}};
 const CLSID CLSID_WMP10ALT           = {0x6BF52A52,0x394A,0x11D3,{0xB1,0x53,0x00,0xC0,0x4F,0x79,0xFA,0xA6}};
@@ -105,6 +102,8 @@ const IID IID_IWMPPlayer2 = {0x0E6B01D1,0xD407,0x4C85,{0xBF,0x5F,0x1C,0x01,0xF6,
 const IID IID_IWMPCore2 = {0xBC17E5B7,0x7561,0x4C18,{0xBB,0x90,0x17,0xD4,0x85,0x77,0x56,0x59}};
 const IID IID_IWMPCore3 = {0x7587C667,0x628F,0x499F,{0x88,0xE7,0x6A,0x6F,0x4E,0x88,0x84,0x64}};
 const IID IID_IWMPNetwork = {0xEC21B779,0xEDEF,0x462D,{0xBB,0xA4,0xAD,0x9D,0xDE,0x2B,0x29,0xA7}};
+const IID IID_IWMPControls2 = {0x6F030D25,0x0890,0x480F,{0x97, 0x75, 0x1F,0x7E,0x40,0xAB,0x5B,0x8E}};
+wxCLANG_WARNING_RESTORE(unused-const-variable)
 
 enum WMPOpenState
 {
@@ -265,6 +264,12 @@ public:
 
 };
 
+struct IWMPControls2 : public IWMPControls
+{
+public:
+    virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE step(
+        /* [in] */ long lStep ) = 0;
+};
 
 struct IWMPSettings : public IDispatch
 {
@@ -623,38 +628,38 @@ public:
                                      const wxSize& size,
                                      long style,
                                      const wxValidator& validator,
-                                     const wxString& name) wxOVERRIDE;
+                                     const wxString& name) override;
 
-    virtual bool Play() wxOVERRIDE;
-    virtual bool Pause() wxOVERRIDE;
-    virtual bool Stop() wxOVERRIDE;
+    virtual bool Play() override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
 
-    virtual bool Load(const wxString& fileName) wxOVERRIDE;
-    virtual bool Load(const wxURI& location) wxOVERRIDE;
-    virtual bool Load(const wxURI& location, const wxURI& proxy) wxOVERRIDE;
+    virtual bool Load(const wxString& fileName) override;
+    virtual bool Load(const wxURI& location) override;
+    virtual bool Load(const wxURI& location, const wxURI& proxy) override;
 
     bool DoLoad(const wxString& location);
     void FinishLoad();
 
-    virtual wxMediaState GetState() wxOVERRIDE;
+    virtual wxMediaState GetState() override;
 
-    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
-    virtual wxLongLong GetPosition() wxOVERRIDE;
-    virtual wxLongLong GetDuration() wxOVERRIDE;
+    virtual bool SetPosition(wxLongLong where) override;
+    virtual wxLongLong GetPosition() override;
+    virtual wxLongLong GetDuration() override;
 
-    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize GetVideoSize() const wxOVERRIDE;
+    virtual void Move(int x, int y, int w, int h) override;
+    wxSize GetVideoSize() const override;
 
-    virtual double GetPlaybackRate() wxOVERRIDE;
-    virtual bool SetPlaybackRate(double) wxOVERRIDE;
+    virtual double GetPlaybackRate() override;
+    virtual bool SetPlaybackRate(double) override;
 
-    virtual double GetVolume() wxOVERRIDE;
-    virtual bool SetVolume(double) wxOVERRIDE;
+    virtual double GetVolume() override;
+    virtual bool SetVolume(double) override;
 
-    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
+    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) override;
 
-    virtual wxLongLong GetDownloadProgress() wxOVERRIDE;
-    virtual wxLongLong GetDownloadTotal() wxOVERRIDE;
+    virtual wxLongLong GetDownloadProgress() override;
+    virtual wxLongLong GetDownloadTotal() override;
 
 
 #ifdef WXTEST_ATL
@@ -665,6 +670,8 @@ public:
     IWMPPlayer* m_pWMPPlayer;       // Main activex interface
     IWMPSettings* m_pWMPSettings;   // Settings such as volume
     IWMPControls* m_pWMPControls;   // Control interface (play etc.)
+    IWMPControls2* m_pWMPControls2; // Control interface (play etc.)
+
     wxSize m_bestSize;              // Actual movie size
 
     bool m_bWasStateChanged;        // See the "introduction"
@@ -681,11 +688,9 @@ public:
     wxWMP10MediaEvtHandler(wxWMP10MediaBackend *amb) :
        m_amb(amb)
     {
-        m_amb->m_pAX->Connect(m_amb->m_pAX->GetId(),
-            wxEVT_ACTIVEX,
-            wxActiveXEventHandler(wxWMP10MediaEvtHandler::OnActiveX),
-            NULL, this
-                              );
+        m_amb->m_pAX->Bind(wxEVT_ACTIVEX,
+            &wxWMP10MediaEvtHandler::OnActiveX, this,
+            m_amb->m_pAX->GetId());
     }
 
     void OnActiveX(wxActiveXEvent& event);
@@ -715,14 +720,15 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWMP10MediaBackend, wxMediaBackend);
 wxWMP10MediaBackend::wxWMP10MediaBackend()
                  :
 #ifndef WXTEST_ATL
-                m_pAX(NULL),
+                m_pAX(nullptr),
 #endif
-                m_pWMPPlayer(NULL),
-                m_pWMPSettings(NULL),
-                m_pWMPControls(NULL)
+                m_pWMPPlayer(nullptr),
+                m_pWMPSettings(nullptr),
+                m_pWMPControls(nullptr),
+                m_pWMPControls2(nullptr)
 
 {
-    m_evthandler = NULL;
+    m_evthandler = nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -751,6 +757,8 @@ wxWMP10MediaBackend::~wxWMP10MediaBackend()
             m_pWMPSettings->Release();
         if (m_pWMPControls)
             m_pWMPControls->Release();
+        if (m_pWMPControls2)
+            m_pWMPControls2->Release();
     }
 }
 
@@ -766,11 +774,11 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                      const wxString& name)
 {
 #ifndef WXTEST_ATL
-    if( ::CoCreateInstance(CLSID_WMP10, NULL,
+    if( ::CoCreateInstance(CLSID_WMP10, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IWMPPlayer, (void**)&m_pWMPPlayer) != 0 )
     {
-        if( ::CoCreateInstance(CLSID_WMP10ALT, NULL,
+        if( ::CoCreateInstance(CLSID_WMP10ALT, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IWMPPlayer, (void**)&m_pWMPPlayer) != 0 )
             return false;
@@ -789,6 +797,8 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
             wxLogSysError(wxT("Could not obtain controls from WMP10!"));
             return false;
         }
+        if (m_pWMPControls )
+            m_pWMPControls->QueryInterface(IID_IWMPControls2, (void**)&m_pWMPControls2);
     }
 #endif
 
@@ -818,14 +828,14 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     m_evthandler = new wxWMP10MediaEvtHandler(this);
     m_ctrl->PushEventHandler(m_evthandler);
 #else
-    _Module.Init(NULL, ::GetModuleHandle(NULL));
+    _Module.Init(nullptr, ::GetModuleHandle(nullptr));
     AtlAxWinInit();
     CComPtr<IAxWinHostWindow>  spHost;
 
     HRESULT hr;
     RECT rcClient;
     ::GetClientRect((HWND)ctrl->GetHandle(), &rcClient);
-    m_wndView.Create((HWND)ctrl->GetHandle(), rcClient, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
+    m_wndView.Create((HWND)ctrl->GetHandle(), rcClient, nullptr, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
     hr = m_wndView.QueryHost(&spHost);
     hr = spHost->CreateControl(CComBSTR(wxT("{6BF52A52-394A-11d3-B153-00C04F79FAA6}")), m_wndView, 0);
     hr = m_wndView.QueryControl(&m_pWMPPlayer);
@@ -870,7 +880,7 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     // don't erase the background of our control window so that resizing is a
     // bit smoother
-    m_ctrl->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    m_ctrl->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     // success
     return true;
@@ -1035,7 +1045,7 @@ void wxWMP10MediaBackend::FinishLoad()
     // THIS WILL NOT WORK UNLESS THE MEDIA IS ABOUT TO PLAY
     // See the "introduction" - also get_currentMedia will return
     // "1" which is a VALID HRESULT value
-    // and a NULL pWMPMedia if the media isn't the "current" one
+    // and a null pWMPMedia if the media isn't the "current" one
     // which is rather unintuitive in the sense that it uses it
     // (i.e. basically not currently playing)...
     IWMPMedia* pWMPMedia;
@@ -1138,14 +1148,28 @@ bool wxWMP10MediaBackend::Stop()
 //---------------------------------------------------------------------------
 bool wxWMP10MediaBackend::SetPosition(wxLongLong where)
 {
+    // The display does not update if only put_currentPosition is called.
+    // We have to find the time for the previous frame, set the control
+    // to that position and then tell it to step forward one frame.  This
+    // forces the control to draw the frame to the screen, otherwise we get
+    // just a black screen.
+
+    double timePerFrameInMSec = 0;
+    if (m_pWMPControls2)
+        timePerFrameInMSec = 1000 / GetPlaybackRate();
+
     HRESULT hr = m_pWMPControls->put_currentPosition(
-                        ((LONGLONG)where.GetValue()) / 1000.0
+                        ((LONGLONG)where.GetValue() - timePerFrameInMSec) / 1000.0
                                      );
     if(FAILED(hr))
     {
         wxWMP10LOG(hr);
         return false;
     }
+
+    if (m_pWMPControls2)
+        m_pWMPControls2->step(1);
+
 
     return true;
 }

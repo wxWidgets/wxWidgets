@@ -19,10 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
 #  include "wx/wx.h"
@@ -32,7 +28,8 @@
 #include "wx/url.h"
 #include "wx/sstream.h"
 #include "wx/thread.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 // --------------------------------------------------------------------------
 // resources
@@ -51,7 +48,7 @@
 class MyApp : public wxApp
 {
 public:
-  virtual bool OnInit() wxOVERRIDE;
+  virtual bool OnInit() override;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -202,7 +199,7 @@ bool MyApp::OnInit()
 // --------------------------------------------------------------------------
 
 // frame constructor
-MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
+MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY,
                              _("wxSocket demo: Client"),
                              wxDefaultPosition, wxSize(300, 200))
 {
@@ -328,7 +325,7 @@ void MyFrame::OpenConnection(wxSockAddress::Family family)
   wxString hostname = wxGetTextFromUser(
     _("Enter the address of the wxSocket demo server:"),
     _("Connect ..."),
-    _("localhost"));
+    "localhost");
   if ( hostname.empty() )
     return;
 
@@ -594,7 +591,7 @@ void DoDownload(const wxString& urlname)
 
     // Try to get the input stream (connects to the given URL)
     wxLogMessage("Establishing connection to \"%s\"...", urlname);
-    const wxScopedPtr<wxInputStream> data(url.GetInputStream());
+    const std::unique_ptr<wxInputStream> data(url.GetInputStream());
     if ( !data.get() )
     {
         wxLogError("Failed to retrieve URL \"%s\"", urlname);
@@ -602,9 +599,9 @@ void DoDownload(const wxString& urlname)
     }
 
     // Print the contents type and file size
-    wxLogMessage("Contents type: %s\nFile size: %lu\nStarting to download...",
+    wxLogMessage("Contents type: %s\nFile size: %s\nStarting to download...",
                  url.GetProtocol().GetContentType(),
-                 static_cast<unsigned long>( data->GetSize() ));
+                 data->GetSize() != (size_t)-1 ? wxString::Format("%zu", data->GetSize()) : "n/a");
 
     // Get the data
     wxStringOutputStream sout;
@@ -645,11 +642,11 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
             Run();
         }
 
-        virtual void* Entry() wxOVERRIDE
+        virtual void* Entry() override
         {
             DoDownload(m_url);
 
-            return NULL;
+            return nullptr;
         }
 
     private:

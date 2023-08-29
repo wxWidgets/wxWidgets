@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_BUTTON
 
@@ -32,6 +29,7 @@ wxButtonXmlHandler::wxButtonXmlHandler()
     XRC_ADD_STYLE(wxBU_TOP);
     XRC_ADD_STYLE(wxBU_BOTTOM);
     XRC_ADD_STYLE(wxBU_EXACTFIT);
+    XRC_ADD_STYLE(wxBU_NOTEXT);
     AddWindowStyles();
 }
 
@@ -52,11 +50,28 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
 
     if ( GetParamNode("bitmap") )
     {
-        button->SetBitmap(GetBitmap("bitmap", wxART_BUTTON),
+        button->SetBitmap(GetBitmapBundle("bitmap", wxART_BUTTON),
                           GetDirection("bitmapposition"));
     }
 
     SetupWindow(button);
+
+    const wxXmlNode* node = GetParamNode("pressed");
+    if (node)
+        button->SetBitmapPressed(GetBitmapBundle(node));
+    node = GetParamNode("focus");
+    if (node)
+        button->SetBitmapFocus(GetBitmapBundle(node));
+    node = GetParamNode("disabled");
+    if (node)
+        button->SetBitmapDisabled(GetBitmapBundle(node));
+    node = GetParamNode("current");
+    if (node)
+        button->SetBitmapCurrent(GetBitmapBundle(node));
+
+    const wxSize margins = GetSize("margins");
+    if (margins != wxDefaultSize)
+        button->SetBitmapMargins(margins);
 
     return button;
 }

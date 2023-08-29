@@ -14,7 +14,7 @@ enum
     /// a spin control-like date picker (not supported in generic version)
     wxDP_SPIN = 1,
 
-    /// a combobox-like date picker (not supported in mac version)
+    /// a combobox-like date picker (not supported on macOS <10.15.4)
     wxDP_DROPDOWN = 2,
 
     /// always show century in the default date display (otherwise it depends on
@@ -45,8 +45,8 @@ enum
            style is not supported by the generic version.
     @style{wxDP_DROPDOWN}
            Creates a control with a month calendar drop-down part from which
-           the user can select a date. This style is not supported in OSX/Cocoa
-           native version.
+           the user can select a date. In OSX/Cocoa native version this
+           style is supported on macOS 10.15.4 and later.
     @style{wxDP_DEFAULT}
            Creates a control with the style that is best supported for the
            current platform (currently wxDP_SPIN under Windows and OSX/Cocoa
@@ -70,15 +70,15 @@ enum
 
     @beginEventEmissionTable{wxDateEvent}
     @event{EVT_DATE_CHANGED(id, func)}
-           This event fires when the user changes the current selection in the
-           control.
+           Process a wxEVT_DATE_CHANGED event, which fires when the user
+           changes the current selection in the control.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{pickers}
     @appearance{datepickerctrl}
 
-    @see wxCalendarCtrl, wxDateEvent
+    @see wxTimePickerCtrl, wxCalendarCtrl, wxDateEvent
 */
 class wxDatePickerCtrl : public wxControl
 {
@@ -87,7 +87,7 @@ public:
        Default constructor.
     */
     wxDatePickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */
@@ -106,7 +106,7 @@ public:
         constructor.
 
         @param parent
-            Parent window, must not be non-@NULL.
+            Parent window, must not be non-null.
         @param id
             The identifier for the control.
         @param dt
@@ -122,7 +122,7 @@ public:
             The window style, see the description of the styles in the class
             documentation.
         @param validator
-            Validator which can be used for additional date checks.
+            Validator which can be used for additional data checks.
         @param name
             Control name.
 
@@ -167,6 +167,22 @@ public:
         invalid if no date is entered, otherwise it is always valid.
     */
     virtual wxDateTime GetValue() const;
+
+    /**
+        Set the text to show when there is no valid value.
+
+        For the controls with @c wxDP_ALLOWNONE style, set the string displayed
+        when the control doesn't have any valid value. Currently this is only
+        actually used under MSW, where it can be used to override the previous
+        value which is still displayed by the control in this case, and ignored
+        elsewhere.
+
+        Notably, @a text can be empty to completely hide the date if no valid
+        date is specified.
+
+        @since 3.1.5
+     */
+    void SetNullText(const wxString& text);
 
     /**
         Sets the valid range for the date selection. If @a dt1 is valid, it

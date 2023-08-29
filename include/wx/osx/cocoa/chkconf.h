@@ -22,7 +22,7 @@
 /*
  * leave is isFlipped and don't override
  */
-#ifndef wxOSX_USE_NATIVE_FLIPPED 
+#ifndef wxOSX_USE_NATIVE_FLIPPED
     #define wxOSX_USE_NATIVE_FLIPPED 1
 #endif
 
@@ -39,6 +39,13 @@
    allows watching files as well as sub directories.
  */
 #define wxHAVE_FSEVENTS_FILE_NOTIFICATIONS 1
+
+/*
+ * turn off old style icon format if not asked for
+ */
+#ifndef wxOSX_USE_ICONREF
+    #define wxOSX_USE_ICONREF 0
+#endif
 
 /*
  * turning off capabilities that don't work under cocoa yet

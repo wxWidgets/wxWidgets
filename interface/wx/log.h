@@ -49,12 +49,23 @@ public:
     /**
         The name of the function where the log record was generated.
 
-        This field may be @NULL if the compiler doesn't support @c __FUNCTION__
+        This field may be @NULL if the compiler doesn't support @c \__FUNCTION__
         (but most modern compilers do).
      */
     const char *func;
 
-    /// Time when the log message was generated.
+    /**
+        Time in milliseconds since Epoch when the log message was generated.
+
+        @since 3.1.5
+     */
+    wxLongLong_t timestampMS;
+
+    /**
+        Time when the log message was generated.
+
+        @deprecated Please use timestampMS instead.
+     */
     time_t timestamp;
 
     /**
@@ -149,7 +160,28 @@ public:
 
 protected:
     /**
+        This function formats the time stamp part of the log message including
+        milliseconds.
+
+        Override this function if you need to customize just the time stamp
+        formatting in the log messages.
+
+        @param msec
+            Time to format as the number of milliseconds since
+            1970-01-01T00:00:00.
+
+        @return
+            The formatted time string, may be empty.
+
+        @since 3.1.5
+    */
+    virtual wxString FormatTimeMS(wxLongLong_t msec) const;
+
+    /**
         This function formats the time stamp part of the log message.
+
+        @deprecated This function only exists for compatibility, please
+        override FormatTimeMS() in the new code.
 
         Override this function if you need to customize just the time stamp.
 
@@ -190,7 +222,7 @@ public:
     /**
         @name Trace mask functions
     */
-    //@{
+    ///@{
 
     /**
         Add the @a mask to the list of allowed masks for wxLogTrace().
@@ -228,14 +260,14 @@ public:
     */
     static void RemoveTraceMask(const wxString& mask);
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Log target functions
     */
-    //@{
+    ///@{
 
     /**
         Instructs wxLog to not create new log targets on the fly if there is none
@@ -337,20 +369,23 @@ public:
     */
     static void Suspend();
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Log level functions
     */
-    //@{
+    ///@{
 
     /**
         Returns the current log level limit.
 
         All messages at levels strictly greater than the value returned by this
         function are not logged at all.
+
+        Note that this function is *not* thread-safe and should only be used
+        from the main thread.
 
         @see SetLogLevel(), IsLevelEnabled()
     */
@@ -362,6 +397,9 @@ public:
         This function only returns @true if logging is globally enabled and if
         @a level is less than or equal to the maximal log level enabled for the
         given @a component.
+
+        Note that this function is *not* thread-safe and should only be used
+        from the main thread.
 
         @see IsEnabled(), SetLogLevel(), GetLogLevel(), SetComponentLevel()
 
@@ -395,24 +433,31 @@ public:
         Specifies that log messages with level greater (numerically) than
         @a logLevel should be ignored and not sent to the active log target.
 
+        Note that this function is *not* thread-safe and can only be called
+        from the main thread. To temporarily disable logging from the other
+        threads, use wxLogNull, which is safe to use from them.
+
         @see SetComponentLevel()
     */
     static void SetLogLevel(wxLogLevel logLevel);
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Enable/disable features functions
     */
-    //@{
+    ///@{
 
     /**
         Globally enable or disable logging.
 
         Calling this function with @false argument disables all log messages
         for the current thread.
+
+        This function is thread-safe and can be called by multiple threads
+        concurrently.
 
         @see wxLogNull, IsEnabled()
 
@@ -424,6 +469,9 @@ public:
 
     /**
         Returns true if logging is enabled at all now.
+
+        This function is thread-safe and can be called by multiple threads
+        concurrently.
 
         @see IsLevelEnabled(), EnableLogging()
      */
@@ -446,6 +494,11 @@ public:
 
         Notice that the current time stamp is only used by the default log
         formatter and custom formatters may ignore this format.
+
+        The default time stamp is `%X`, i.e. locale-dependent time
+        representation.
+
+        @see SetTimestamp()
     */
     static const wxString& GetTimestamp();
 
@@ -459,6 +512,11 @@ public:
         formatter and custom formatters may ignore this format. You can also
         define a custom wxLogFormatter to customize the time stamp handling
         beyond changing its format.
+
+        In addition to calling this function explicitly, it can also be called
+        implicitly by wxWidgets if `WXLOG_TIME_FORMAT` environment variable is
+        set, see @ref overview_envvars "overview of the environment variables"
+        affecting wxWidgets programs.
     */
     static void SetTimestamp(const wxString& format);
 
@@ -488,7 +546,7 @@ public:
     */
     static void SetVerbose(bool verbose = true);
 
-    //@}
+    ///@}
 
 
     /**
@@ -507,7 +565,7 @@ public:
 
     /**
         Show all pending output and clear the buffer.
-        
+
         Some of wxLog implementations, most notably the standard wxLogGui class,
         buffer the messages (for example, to avoid showing the user a zillion of modal
         message boxes one after another -- which would be really annoying).
@@ -562,7 +620,7 @@ protected:
         messages formatting but want to handle log messages of different levels
         differently or, in the simplest case, DoLogText().
      */
-    //@{
+    ///@{
 
     /**
         Called to log a new record.
@@ -601,7 +659,7 @@ protected:
     */
     virtual void DoLogText(const wxString& msg);
 
-    //@}
+    ///@}
 };
 
 
@@ -627,7 +685,7 @@ protected:
 
     // don't delete logChain directly as this would leave a dangling
     // pointer as active log target, use SetActiveTarget() instead
-    delete wxLog::SetActiveTarget(...something else or NULL...);
+    delete wxLog::SetActiveTarget(...something else or nullptr...);
     @endcode
 
     @library{wxbase}
@@ -668,7 +726,7 @@ public:
         By default, the log messages are passed to the previously active log target.
         Calling this function with @false parameter disables this behaviour
         (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
-        it can be reenabled by calling it again with @a passMessages set to @true.
+        it can be re-enabled by calling it again with @a passMessages set to @true.
     */
     void PassMessages(bool passMessages);
 
@@ -742,8 +800,9 @@ public:
 
     This class can be used to redirect the log messages to a C++ stream.
 
-    Please note that this class is only available if wxWidgets was compiled with
-    the standard iostream library support (@c wxUSE_STD_IOSTREAM must be on).
+    @note
+        This class is not available if `wxUSE_STD_IOSTREAM` is set to 0 (which
+        is done by `--disable-std_iostreams` option when using configure).
 
     @library{wxbase}
     @category{logging}
@@ -772,7 +831,7 @@ public:
             to the character set given by @a conv, that message will be
             silently ignored, i.e. it will not be written at all.
     */
-    wxLogStream(std::ostream *ostr = NULL,
+    wxLogStream(std::ostream *ostr = nullptr,
                 const wxMBConv &conv = wxConvWhateverWorks);
 };
 
@@ -801,7 +860,7 @@ public:
         The messages will be written in the encoding specified by the
         given @c wxMBConv.
 
-		The @a conv argument is only available in wxWidgets 3.1.1 and later.
+        The @a conv argument is only available in wxWidgets 3.1.1 and later.
 
         @note
             In practice, it is only advisable to specify @c wxConvUTF8 as
@@ -814,7 +873,7 @@ public:
             to the character set given by @a conv, that message will be
             silently ignored, i.e. it will not be written at all.
     */
-    wxLogStderr(FILE *fp = NULL,
+    wxLogStderr(FILE *fp = nullptr,
                 const wxMBConv &conv = wxConvWhateverWorks);
 };
 
@@ -905,6 +964,8 @@ public:
       }
     @endcode
 
+    This class is thread-safe and can be used from both the main and the
+    backgrounds threads.
 
     @library{wxbase}
     @category{logging}
@@ -1221,7 +1282,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 
 /**
     This function shows a message to the user in a safe way and should be safe
@@ -1236,12 +1297,17 @@ public:
         message string.
     @param text
         The text to show to the user.
+    @return
+        @true If a message box was actually shown or @false if the message was
+        logged to the console because there is no safe to show it currently
+        (the return value is only available since wxWidgets 3.1.5, the function
+        doesn't return anything in the previous versions).
 
     @see wxLogFatalError()
 
     @header{wx/log.h}
 */
-void wxSafeShowMessage(const wxString& title, const wxString& text);
+bool wxSafeShowMessage(const wxString& title, const wxString& text);
 
 /**
     Returns the error code from the last system call. This function uses
@@ -1283,10 +1349,10 @@ wxString wxSysErrorMsgStr(unsigned long errCode = 0);
 */
 const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Logs a message with the given wxLogLevel.
     E.g. using @c wxLOG_Message as first argument, this function behaves like wxLogMessage().
@@ -1295,10 +1361,10 @@ const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 */
 void wxLogGeneric(wxLogLevel level, const char* formatString, ... );
 void wxVLogGeneric(wxLogLevel level, const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For all normal, informational messages. They also appear in a message box
     by default (but it can be changed).
@@ -1307,10 +1373,10 @@ void wxVLogGeneric(wxLogLevel level, const char* formatString, va_list argPtr);
 */
 void wxLogMessage(const char* formatString, ... );
 void wxVLogMessage(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For low priority messages.
 
@@ -1321,10 +1387,10 @@ void wxVLogMessage(const char* formatString, va_list argPtr);
 */
 void wxLogInfo(const char* formatString, ... );
 void wxVLogInfo(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For verbose output.
 
@@ -1342,10 +1408,10 @@ void wxVLogInfo(const char* formatString, va_list argPtr);
 */
 void wxLogVerbose(const char* formatString, ... );
 void wxVLogVerbose(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     For warnings - they are also normally shown to the user, but don't
     interrupt the program work.
@@ -1354,10 +1420,10 @@ void wxVLogVerbose(const char* formatString, va_list argPtr);
 */
 void wxLogWarning(const char* formatString, ... );
 void wxVLogWarning(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Like wxLogError(), but also terminates the program with the exit code 3.
     Using @e abort() standard function also terminates the program with this
@@ -1367,10 +1433,10 @@ void wxVLogWarning(const char* formatString, va_list argPtr);
 */
 void wxLogFatalError(const char* formatString, ... );
 void wxVLogFatalError(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     The functions to use for error messages, i.e. the messages that must be
     shown to the user. The default processing is to pop up a message box to
@@ -1380,10 +1446,10 @@ void wxVLogFatalError(const char* formatString, va_list argPtr);
 */
 void wxLogError(const char* formatString, ... );
 void wxVLogError(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Log a message at @c wxLOG_Trace log level (see ::wxLogLevelValues enum).
 
@@ -1392,14 +1458,16 @@ void wxVLogError(const char* formatString, va_list argPtr);
     do the same thing for log messages of any level, and not just the tracing
     ones.
 
-    Like wxLogDebug(), trace functions only do something in debug builds and
-    expand to nothing in the release one. The reason for making it a separate
-    function is that usually there are a lot of trace messages, so it might
-    make sense to separate them from other debug messages.
+    Like wxLogDebug(), trace functions are disabled at compile time if
+    wxWidgets is compiled without debugging support, i.e. with `wxDEBUG_LEVEL`
+    set to 0 see @ref overview_debugging "Debugging overview" for more details).
+    The reason for having a separate function for tracing messages is that
+    usually there are a lot of them and so it may be useful to separate them
+    from the other debug messages.
 
     Trace messages can be separated into different categories; these functions in facts
-    only log the message if the given @a mask is currently enabled in wxLog. 
-    This lets you selectively trace only some operations and not others by enabling the 
+    only log the message if the given @a mask is currently enabled in wxLog.
+    This lets you selectively trace only some operations and not others by enabling the
     desired trace masks with wxLog::AddTraceMask() or by setting the
     @ref overview_envvars "@c WXTRACE environment variable".
 
@@ -1417,10 +1485,10 @@ void wxVLogError(const char* formatString, va_list argPtr);
 */
 void wxLogTrace(const char* mask, const char* formatString, ... );
 void wxVLogTrace(const char* mask, const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Like wxLogDebug(), trace functions only do something in debug builds and
     expand to nothing in the release one. The reason for making it a separate
@@ -1449,23 +1517,27 @@ void wxVLogTrace(const char* mask, const char* formatString, va_list argPtr);
 */
 void wxLogTrace(wxTraceMask mask, const char* formatString, ... );
 void wxVLogTrace(wxTraceMask mask, const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
-    The right functions for debug output. They only do something in debug mode
-    (when the preprocessor symbol @c __WXDEBUG__ is defined) and expand to
-    nothing in release mode (otherwise).
+    The function to use for debugging output.
+
+    In addition to not producing any output if the current log level is not
+    high enough, just as all the other logging function, this function does
+    nothing at all, and is not even present in the final executable code, if
+    wxWidgets was compiled without debugging support, i.e. `wxDEBUG_LEVEL` is 0
+    (see @ref overview_debugging "Debugging overview" for more details).
 
     @header{wx/log.h}
 */
 void wxLogDebug(const char* formatString, ... );
 void wxVLogDebug(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Messages logged by this function will appear in the statusbar of the
     @a frame or of the top level application window by default (i.e. when using
@@ -1479,10 +1551,10 @@ void wxLogStatus(wxFrame* frame, const char* formatString, ... );
 void wxVLogStatus(wxFrame* frame, const char* formatString, va_list argPtr);
 void wxLogStatus(const char* formatString, ... );
 void wxVLogStatus(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_log */
-//@{
+///@{
 /**
     Mostly used by wxWidgets itself, but might be handy for logging errors
     after system call (API function) failure. It logs the specified message
@@ -1497,10 +1569,10 @@ void wxVLogStatus(const char* formatString, va_list argPtr);
 */
 void wxLogSysError(const char* formatString, ... );
 void wxVLogSysError(const char* formatString, va_list argPtr);
-//@}
+///@}
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     @def wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
@@ -1518,6 +1590,6 @@ void wxVLogSysError(const char* formatString, va_list argPtr);
  */
 #define wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
-//@}
+///@}
 
 #endif // wxUSE_BASE

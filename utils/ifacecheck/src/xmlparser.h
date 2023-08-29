@@ -406,7 +406,7 @@ public:
             for (unsigned int i=0; i<m_classes.GetCount(); i++)
                 if (m_classes[i].GetName() == classname)
                     return &m_classes[i];
-            return NULL;
+            return nullptr;
         }
 
     void Dump(const wxString& filename);

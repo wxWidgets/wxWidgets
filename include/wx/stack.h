@@ -16,7 +16,9 @@
 #if wxUSE_STD_CONTAINERS
 
 #include <stack>
-#define wxStack std::stack
+
+template <typename T>
+using wxStack = std::stack<T>;
 
 #else // !wxUSE_STD_CONTAINERS
 

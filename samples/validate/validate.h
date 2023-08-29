@@ -11,7 +11,6 @@
 #include "wx/app.h"
 #include "wx/combobox.h"
 #include "wx/dialog.h"
-#include "wx/dynarray.h"
 #include "wx/frame.h"
 #include "wx/listbox.h"
 #include "wx/string.h"
@@ -20,7 +19,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame type
@@ -48,12 +47,88 @@ public:
             const wxSize& size = wxDefaultSize,
             const long style = wxDEFAULT_DIALOG_STYLE);
 
-    bool TransferDataToWindow() wxOVERRIDE;
+    void OnChangeValidator(wxCommandEvent& event);
+
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
 
     wxTextCtrl *m_numericTextInt;
     wxTextCtrl *m_numericTextDouble;
+};
+
+// ----------------------------------------------------------------------------
+// TextValidatorDialog
+// ----------------------------------------------------------------------------
+class TextValidatorDialog : public wxDialog
+{
+public:
+    TextValidatorDialog(wxWindow *parent, wxTextCtrl* txtCtrl);
+
+    void OnUpdateUI(wxUpdateUIEvent& event);
+    void OnChecked(wxCommandEvent& event);
+    void OnKillFocus( wxFocusEvent &event );
+
+    void ApplyValidator();
+
+private:
+    // Special validator for our checkboxes
+    class StyleValidator : public wxValidator
+    {
+    public:
+        StyleValidator(long* style) { m_style = style; }
+
+        virtual bool Validate(wxWindow *WXUNUSED(parent)) override { return true; }
+        virtual wxObject* Clone() const override { return new StyleValidator(*this); }
+
+        // Called to transfer data to the window
+        virtual bool TransferToWindow() override;
+
+        // Called to transfer data from the window
+        virtual bool TransferFromWindow() override;
+
+    private:
+        long* m_style;
+    };
+
+private:
+    bool HasFlag(wxTextValidatorStyle style) const
+    {
+        return (m_validatorStyle & style) != 0;
+    }
+
+    enum
+    {
+        // CheckBoxes Ids (should be in sync with wxTextValidatorStyle)
+        Id_None = wxID_HIGHEST,
+        Id_Empty,
+        Id_Ascii,
+        Id_Alpha,
+        Id_Alphanumeric,
+        Id_Digits,
+        Id_Numeric,
+        Id_IncludeList,
+        Id_IncludeCharList,
+        Id_ExcludeList,
+        Id_ExcludeCharList,
+        Id_Xdigits,
+        Id_Space,
+
+        // TextCtrls Ids
+        Id_IncludeListTxt,
+        Id_IncludeCharListTxt,
+        Id_ExcludeListTxt,
+        Id_ExcludeCharListTxt,
+    };
+
+    wxTextCtrl* const m_txtCtrl;
+
+    bool m_noValidation;
+    long m_validatorStyle;
+
+    wxString        m_charIncludes;
+    wxString        m_charExcludes;
+    wxArrayString   m_includes;
+    wxArrayString   m_excludes;
 };
 
 class MyData
@@ -89,14 +164,14 @@ class MyComboBoxValidator : public wxValidator
 public:
     MyComboBoxValidator(wxString* var) { m_var=var; }
 
-    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
-    virtual wxObject* Clone() const wxOVERRIDE { return new MyComboBoxValidator(*this); }
+    virtual bool Validate(wxWindow* parent) override;
+    virtual wxObject* Clone() const override { return new MyComboBoxValidator(*this); }
 
     // Called to transfer data to the window
-    virtual bool TransferToWindow() wxOVERRIDE;
+    virtual bool TransferToWindow() override;
 
     // Called to transfer data from the window
-    virtual bool TransferFromWindow() wxOVERRIDE;
+    virtual bool TransferFromWindow() override;
 
 protected:
     wxString* m_var;

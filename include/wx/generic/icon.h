@@ -23,9 +23,6 @@ public:
     wxIcon();
 
     wxIcon(const char* const* bits);
-#ifdef wxNEEDS_CHARPP
-    wxIcon(char **bits);
-#endif
 
     // For compatibility with wxMSW where desired size is sometimes required to
     // distinguish between multiple icons in a resource.
@@ -47,7 +44,7 @@ public:
 
     // unhide the base class version
     virtual bool LoadFile(const wxString& name,
-                          wxBitmapType flags = wxICON_DEFAULT_TYPE) wxOVERRIDE
+                          wxBitmapType flags = wxICON_DEFAULT_TYPE) override
         { return wxBitmap::LoadFile(name, flags); }
 
     // create from bitmap (which should have a mask unless it's monochrome):

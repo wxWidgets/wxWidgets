@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 3.1.2
+PROJECT_NUMBER         = 3.3.0
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
@@ -29,7 +29,6 @@ MULTILINE_CPP_IS_BRIEF = NO
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 4
-TCL_SUBST              =
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 OPTIMIZE_FOR_FORTRAN   = NO
@@ -60,47 +59,47 @@ LOOKUP_CACHE_SIZE      = 0
 #---------------------------------------------------------------------------
 
 # aliases to be used by classes which emit wxEvents (e.g. wxWindow, wxTextCtrl, etc):
-ALIASES = beginEventEmissionTable="\n<h2>Events emitted by this class</h2><p>Event macros for events emitted by this class:</p><div>"
-ALIASES += beginEventEmissionTable{1}="\n<h2>Events emitted by this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros for events emitted by this class:<div>"
-ALIASES += beginEventEmissionTable{2}="\n<h2>Events emitted by this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros for events emitted by this class:<div>"
+ALIASES = beginEventEmissionTable="^^<h2>Events emitted by this class</h2><p>Event macros for events emitted by this class:</p><div>"
+ALIASES += beginEventEmissionTable{1}="^^<h2>Events emitted by this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros for events emitted by this class:<div>"
+ALIASES += beginEventEmissionTable{2}="^^<h2>Events emitted by this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros for events emitted by this class:<div>"
 
 # aliases to be used in wxEvent-derived classes:
-ALIASES += beginEventTable{1}="\n<h2>Events using this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros:<div>"
-ALIASES += beginEventTable{2}="\n<h2>Events using this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros:<div>"
+ALIASES += beginEventTable{1}="^^<h2>Events using this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros:<div>"
+ALIASES += beginEventTable{2}="^^<h2>Events using this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros:<div>"
 
 # common event aliases:
 ALIASES += event{1}="</div>\li <span class='event'>\1</span>:<div class='eventDesc'>"
 ALIASES += event{2}="</div>\li <span class='event'>\1, \2</span>:<div class='eventDesc'>"
 ALIASES += event{3}="</div>\li <span class='event'>\1, \2, \3</span>:<div class='eventDesc'>"
 ALIASES += event{4}="</div>\li <span class='event'>\1, \2, \3, \4</span>:<div class='eventDesc'>"
-ALIASES += endEventTable="</div>\n"
+ALIASES += endEventTable="</div>^^"
 
 # style aliases
-ALIASES += beginStyleTable="\n<h2>Styles</h2><p>This class supports the following styles:</p><div>"
+ALIASES += beginStyleTable="^^<h2>Styles</h2><p>This class supports the following styles:</p><div>"
 ALIASES += style{1}="</div>\li <span class='style'>\1</span>:<div class='styleDesc'>"
-ALIASES += endStyleTable="</div>\n"
+ALIASES += endStyleTable="</div>^^"
 
 # extra style aliases
-ALIASES += beginExtraStyleTable="\n<hr><h2>Extra Styles</h2><p>This class supports the following extra styles:</p><div>"
-ALIASES += endExtraStyleTable="</div>\n"
+ALIASES += beginExtraStyleTable="^^<hr><h2>Extra Styles</h2><p>This class supports the following extra styles:</p><div>"
+ALIASES += endExtraStyleTable="</div>^^"
 
 # flag aliases
 ALIASES += beginFlagTable="<div>"
 ALIASES += flag{1}="</div>\li <span class='flag'>\1</span>:<div class='flagDesc'>"
-ALIASES += endFlagTable="</div>\n"
+ALIASES += endFlagTable="</div>^^"
 
 # creates appearance section: this should be used for all main GUI controls
 # that look different in different ports. genericAppearance can be used for the
 # controls that always look the same.
-ALIASES += appearance{1}="\htmlonly<div class="appearance"><span class='appearance'>Appearance:</span><table><tr><td>\endhtmlonly\n\image html appear-\1-msw.png \"wxMSW Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-gtk.png \"wxGTK Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-mac.png \"wxOSX Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
-ALIASES += genericAppearance{1}="\htmlonly<div class="appearance"><span class='appearance'>Appearance:</span><table class='appearance'><tr><td>\endhtmlonly\n\image html generic/\1.png \"Generic Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += appearance{1}="\htmlonly<div class='appearance'><span class='appearance'>Appearance:</span><table><tr><td>\endhtmlonly^^\image html appear-\1-msw.png \"wxMSW Appearance\"^^\htmlonly</td><td>\endhtmlonly^^\image html appear-\1-gtk.png \"wxGTK Appearance\"^^\htmlonly</td><td>\endhtmlonly^^\image html appear-\1-mac.png \"wxOSX Appearance\"^^\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += genericAppearance{1}="\htmlonly<div class='appearance'><span class='appearance'>Appearance:</span><table class='appearance'><tr><td>\endhtmlonly^^\image html generic/\1.png \"Generic Appearance\"^^\htmlonly</td></tr></table></div>\endhtmlonly"
 
 # these compact versions are only used on the screenshots page
-ALIASES += appearance_brief{2}="\htmlonly<div class="appearance_brief"><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-msw.png\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-gtk.png\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\2-mac.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
-ALIASES += genericAppearance_brief{2}="\htmlonly<div class="appearance_brief"><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html generic/\2.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += appearance_brief{2}="\htmlonly<div class='appearance_brief'><table><tr><td>\endhtmlonly^^\1\htmlonly</td><td>\endhtmlonly^^\image html appear-\2-msw.png ^^\htmlonly</td><td>\endhtmlonly^^\image html appear-\2-gtk.png ^^\htmlonly</td><td>\endhtmlonly^^\image html appear-\2-mac.png ^^\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += genericAppearance_brief{2}="\htmlonly<div class='appearance_brief'><table><tr><td>\endhtmlonly^^\1\htmlonly</td><td>\endhtmlonly^^\image html generic/\2.png ^^\htmlonly</td></tr></table></div>\endhtmlonly"
 
 # aliases for the creation of "named member groups"
-# USAGE: the first argument must not contain spaces and be a unique identifier 
+# USAGE: the first argument must not contain spaces and be a unique identifier
 #        of the member group for the class being documented;
 #        the second argument is the member group name and can contain spaces
 #        See wxString as an usage example.
@@ -113,9 +112,9 @@ ALIASES += ref_member_group{2}="<a href='#\1' class='el'>\2</a>"
 #---------------------------------------------------------------------------
 
 # aliases for additional wx-specific infos
-ALIASES += category{1}="\ingroup group_class_\1 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1</span></div>"
-ALIASES += category{2}="\ingroup group_class_\1 group_class_\2 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1, \ref group_class_\2</span></div>"
-ALIASES += category{3}="\ingroup group_class_\1 group_class_\2 group_class_\3 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1, \ref group_class_\2, \ref group_class_\3</span></div>"
+ALIASES += category{1}="\ingroup group_class_\1 ^^<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1</span></div>"
+ALIASES += category{2}="\ingroup group_class_\1 group_class_\2 ^^<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1, \ref group_class_\2</span></div>"
+ALIASES += category{3}="\ingroup group_class_\1 group_class_\2 group_class_\3 ^^<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1, \ref group_class_\2, \ref group_class_\3</span></div>"
 ALIASES += library{1}="<h2></h2><div><span class='lib'>Library:</span>&nbsp;&nbsp;<span class='lib_text'>\ref page_libs_\1</span></div>"
 ALIASES += nolibrary="<h2></h2><div><span class='lib'>Library:</span>&nbsp;&nbsp;<span class='lib_text'>None; this class implementation is entirely header-based.</span></div>"
 ALIASES += stdobjects="<span class='stdobj'>Predefined objects/pointers:</span>"
@@ -134,14 +133,18 @@ ALIASES += onlyfor{2}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;
 ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports.</div>       \xmlonly <onlyfor>\1,\2,\3</onlyfor> \endxmlonly"
 ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>       \xmlonly <onlyfor>\1,\2,\3,\4</onlyfor> \endxmlonly"
 
+# similar to standard @since but keeps everything on the same line:
+ALIASES += since_wx{1}="Available since wxWidgets version \1."
+
 # Use this in grouped global functions, and macros since they
 # wouldn't otherwise indicate what header they are defined in.
-ALIASES += header{1}="Include file:\n \verbatim #include <\1> \endverbatim"
+ALIASES += header{1}="Include file:^^ \verbatim #include <\1> \endverbatim"
 
 # some formatting aliases
 ALIASES += true="<span class='literal'>true</span>"
 ALIASES += false="<span class='literal'>false</span>"
-ALIASES += NULL="<span class='literal'>NULL</span>"
+ALIASES += nullptr="<span class='literal'>nullptr</span>"
+ALIASES += NULL="<span class='literal'>nullptr</span>"
 ALIASES += NUL="<span class='literal'>NUL</span>"
 
 # NOTE: these are important as you can't write in the docs
@@ -174,6 +177,12 @@ ALIASES += row3col{7}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7</td></tr>"
 ALIASES += row3col{8}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8</td></tr>"
 ALIASES += row3col{9}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += row3col{10}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
+ALIASES += row3col{11}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11</td></tr>"
+ALIASES += row3col{12}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12</td></tr>"
+ALIASES += row3col{13}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13</td></tr>"
+ALIASES += row3col{14}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13,\14</td></tr>"
+ALIASES += row3col{15}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13,\14,\15</td></tr>"
+ALIASES += row3col{16}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10,\11,\12,\13,\14,\15,\16</td></tr>"
 ALIASES += hdr3col{3}="<tr><th>\1</th> <th>\2</th> <th>\3</th></tr>"
 ALIASES += endTable="</table>"
 
@@ -194,7 +203,7 @@ ALIASES += itemdef{8}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4
 ALIASES += itemdef{9}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += itemdef{10}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
 ALIASES += endDefList="</table>"
-ALIASES += stock{3}="<tr><td><span class='itemdef'>\1</span></td> <td> @image html gtk-\2.png\n</td><td>\3</td></tr>"
+ALIASES += stock{3}="<tr><td><span class='itemdef'>\1</span></td> <td>\2</td> <td> @image html gtk-\3.png </td></tr>"
 
 # Aliases for documenting wxPerl/wxPython-specific parts
 #---------------------------------------------------------------------------
@@ -214,7 +223,7 @@ ALIASES += rightCurly="}"
 # For indicating a sample location
 ALIASES += sampledir{1}="@e Location: @c samples/\1 subdirectory of your wxWidgets installation or https://github.com/wxWidgets/wxWidgets/tree/master/samples/\1"
 
-# For refering to the corresponding sample in a class document or a overview
+# For referring to the corresponding sample in a class document or a overview
 # Usually placed in the queue of @see
 ALIASES += sample{1}="\ref page_samples_\1"
 
@@ -292,6 +301,12 @@ WARN_LOGFILE           = doxygen.log
 INPUT                  = mainpages \
                          groups \
                          overviews \
+                         ../gtk \
+                         ../ios \
+                         ../msw \
+                         ../osx \
+                         ../qt \
+                         ../x11 \
                          ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.md
@@ -331,7 +346,6 @@ VERBATIM_HEADERS       = NO # Default: YES
 #---------------------------------------------------------------------------
 
 ALPHABETICAL_INDEX     = YES
-COLS_IN_ALPHA_INDEX    = 5
 IGNORE_PREFIX          = wx
 
 
@@ -340,13 +354,13 @@ IGNORE_PREFIX          = wx
 #---------------------------------------------------------------------------
 
 GENERATE_HTML          = $(GENERATE_HTML)
-HTML_OUTPUT            = html
+HTML_OUTPUT            = $(WX_HTML_OUTPUT_DIR)
 HTML_FILE_EXTENSION    = .html
-HTML_HEADER            = custom_header.html
+HTML_HEADER            = $(HTML_HEADER)
 HTML_FOOTER            = custom_footer.html
 HTML_STYLESHEET        =
-HTML_EXTRA_STYLESHEET  = extra_stylesheet.css
-HTML_EXTRA_FILES       = wxwidgets.js
+HTML_EXTRA_STYLESHEET  = $(CUSTOM_THEME_CSS) extra_stylesheet.css
+HTML_EXTRA_FILES       = $(CUSTOM_THEME_JS1) $(CUSTOM_THEME_JS2) wxwidgets.js
 HTML_COLORSTYLE_HUE    = 220 # Default: 220
 HTML_COLORSTYLE_SAT    = 255 # Default: 100
 HTML_COLORSTYLE_GAMMA  = 100 # Default: 80
@@ -360,7 +374,7 @@ HTML_INDEX_NUM_ENTRIES = 100
 #---------------------------------------------------------------------------
 
 GENERATE_DOCSET        = $(GENERATE_DOCSET)
-DOCSET_FEEDNAME        = "wxWidgets 3.1"
+DOCSET_FEEDNAME        = "wxWidgets 3.3"
 DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx31
 DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
 DOCSET_PUBLISHER_NAME  = wxWidgets
@@ -377,6 +391,7 @@ GENERATE_CHI           = NO
 CHM_INDEX_ENCODING     =
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
+TOC_INCLUDE_HEADINGS   = 3
 
 
 #---------------------------------------------------------------------------
@@ -527,11 +542,10 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 
 TAGFILES               =
-GENERATE_TAGFILE       =
+GENERATE_TAGFILE       = $(GENERATE_TAGFILE)
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 EXTERNAL_PAGES         = YES
-PERL_PATH              = /usr/bin/perl
 
 
 #---------------------------------------------------------------------------
@@ -539,7 +553,6 @@ PERL_PATH              = /usr/bin/perl
 #---------------------------------------------------------------------------
 
 CLASS_DIAGRAMS         = YES
-MSCGEN_PATH            =
 DIA_PATH               =
 HIDE_UNDOC_RELATIONS   = YES
 HAVE_DOT               = YES # Default: NO
@@ -559,16 +572,16 @@ CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
 GRAPHICAL_HIERARCHY    = NO # TODO: Default: YES
 DIRECTORY_GRAPH        = NO # Default: YES
-DOT_IMAGE_FORMAT       = png
+DOT_IMAGE_FORMAT       = $(DOT_IMAGE_FORMAT)
 INTERACTIVE_SVG        = NO
 DOT_PATH               =
 DOTFILE_DIRS           =
 MSCFILE_DIRS           =
 DIAFILE_DIRS           =
 PLANTUML_JAR_PATH      =
-DOT_GRAPH_MAX_NODES    = 50
+DOT_GRAPH_MAX_NODES    = 150 # Default 50, we currently have 108 for wxObject
 MAX_DOT_GRAPH_DEPTH    = 1000 # Default: 0
-DOT_TRANSPARENT        = NO
+DOT_TRANSPARENT        = yes
 DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES

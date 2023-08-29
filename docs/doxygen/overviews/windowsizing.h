@@ -90,7 +90,7 @@ some simple explanations of things.
     sizers when determining what the requirements of each item in the sizer is,
     and is used for calculating the overall minimum needs of the sizer.
 
-@li wxWindow::SetInitialSize(): this is a little different than the typical size
+@li wxWindow::SetInitialSize(): this is a little different from the typical size
     setters. Rather than just setting an "initial size" attribute it actually sets
     the minimal size to the value passed in, blends that value with the best size,
     and then sets the size of the widget to be the result.
@@ -116,4 +116,9 @@ some simple explanations of things.
     the constraints algorithm is run. The @c Layout() method is what is called by
     the default @c EVT_SIZE handler for container windows.
 
+@li wxTopLevelWindow::Layout(): this overridden version does the same thing as
+    the base wxWindow::Layout() except, for convenience, it will also resize
+    the only child of the top-level window to cover its entire client area if
+    there is no sizer associated with the window. Note that this only happens
+    if there is exactly one child.
 */

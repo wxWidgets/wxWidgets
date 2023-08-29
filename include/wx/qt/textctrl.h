@@ -8,9 +8,8 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-class QLineEdit;
-class QTextEdit;
 class QScrollArea;
+class wxQtEdit;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
@@ -23,7 +22,9 @@ public:
                const wxSize &size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString &name = wxTextCtrlNameStr);
+               const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
+
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -32,47 +33,60 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxTextCtrlNameStr);
+                const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
-    virtual int GetLineLength(long lineNo) const;
-    virtual wxString GetLineText(long lineNo) const;
-    virtual int GetNumberOfLines() const;
+    virtual int GetLineLength(long lineNo) const override;
+    virtual wxString GetLineText(long lineNo) const override;
+    virtual int GetNumberOfLines() const override;
 
-    virtual bool IsModified() const;
-    virtual void MarkDirty();
-    virtual void DiscardEdits();
+    virtual bool IsModified() const override;
+    virtual void MarkDirty() override;
+    virtual void DiscardEdits() override;
 
-    virtual bool SetStyle(long start, long end, const wxTextAttr& style);
-    virtual bool GetStyle(long position, wxTextAttr& style);
-    virtual bool SetDefaultStyle(const wxTextAttr& style);
-    
-    virtual long XYToPosition(long x, long y) const;
-    virtual bool PositionToXY(long pos, long *x, long *y) const;
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style) override;
+    virtual bool GetStyle(long position, wxTextAttr& style) override;
+    virtual bool SetDefaultStyle(const wxTextAttr& style) override;
 
-    virtual void ShowPosition(long pos);
+    virtual long XYToPosition(long x, long y) const override;
+    virtual bool PositionToXY(long pos, long *x, long *y) const override;
 
-    virtual void SetInsertionPoint(long pos);
-    virtual long GetInsertionPoint() const;
-    virtual void SetSelection( long from, long to );
-    virtual void GetSelection(long *from, long *to) const;
+    virtual void ShowPosition(long pos) override;
 
-    virtual wxString DoGetValue() const;
-    virtual void DoSetValue(const wxString &text, int flags = 0);
-    virtual void WriteText(const wxString& text);
+    virtual void SetInsertionPoint(long pos) override;
+    virtual long GetInsertionPoint() const override;
+    virtual void SetSelection( long from, long to ) override;
+    virtual void GetSelection(long *from, long *to) const override;
 
-    virtual QWidget *GetHandle() const;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
+
+    virtual void EmptyUndoBuffer() override;
+
+    virtual wxString DoGetValue() const override;
+    virtual void DoSetValue(const wxString &text, int flags = 0) override;
+    virtual void WriteText(const wxString& text) override;
+
+    virtual QWidget *GetHandle() const override;
 
 protected:
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const override;
 
-    virtual bool DoLoadFile(const wxString& file, int fileType);
-    virtual bool DoSaveFile(const wxString& file, int fileType);
+    virtual bool DoLoadFile(const wxString& file, int fileType) override;
+    virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual QScrollArea *QtGetScrollBarsContainer() const override;
+
+    // From wxTextEntry:
+    virtual wxWindow *GetEditableWindow() override { return this; }
 
 private:
-    QLineEdit *m_qtLineEdit;
-    QTextEdit *m_qtTextEdit;
+    wxQtEdit *m_qtEdit;
 
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };

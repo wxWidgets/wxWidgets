@@ -21,7 +21,7 @@
 #include "wx/filesys.h"
 #include "wx/html/htmlfilt.h"
 #include "wx/filename.h"
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 class wxHtmlProcessor;
 class wxHtmlWinModule;
@@ -81,7 +81,7 @@ public:
         @param url      URL the parser wants to open
         @param redirect If the return value is wxHTML_REDIRECT, then the
                         URL to redirect to will be stored in this variable
-                        (the pointer must never be NULL)
+                        (the pointer must never be null)
 
         @return indicator of how to treat the request
      */
@@ -96,7 +96,7 @@ public:
     virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell,
                                        const wxPoint& pos) const = 0;
 
-    /// Returns the window used for rendering (may be NULL).
+    /// Returns the window used for rendering (may be null).
     virtual wxWindow* GetHTMLWindow() = 0;
 
     /// Returns background colour to use by default.
@@ -106,7 +106,7 @@ public:
     virtual void SetHTMLBackgroundColour(const wxColour& clr) = 0;
 
     /// Sets window's background to given bitmap.
-    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) = 0;
+    virtual void SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg) = 0;
 
     /// Sets status bar text.
     virtual void SetHTMLStatusText(const wxString& text) = 0;
@@ -146,7 +146,7 @@ protected:
     /**
         Virtual dtor.
 
-        It is not really needed in this case but at leats it prevents gcc from
+        It is not really needed in this case, but at least it prevents gcc from
         complaining about its absence.
      */
     virtual ~wxHtmlWindowMouseHelper() { }
@@ -260,7 +260,7 @@ public:
 
     // Set HTML page and display it. !! source is HTML document itself,
     // it is NOT address/filename of HTML document. If you want to
-    // specify document location, use LoadPage() istead
+    // specify document location, use LoadPage() instead
     // Return value : false if an error occurred, true otherwise
     virtual bool SetPage(const wxString& source);
 
@@ -302,7 +302,7 @@ public:
 
     // Sets fonts to be used when displaying HTML page.
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
-                  const int *sizes = NULL);
+                  const int *sizes = nullptr);
 
     // Sets font sizes to be relative to the given size or the system
     // default size; use either specified or default font
@@ -315,7 +315,7 @@ public:
 
     // Sets the bitmap to use for background (currnetly it will be tiled,
     // when/if we have CSS support we could add other possibilities...)
-    void SetBackgroundImage(const wxBitmap& bmpBg) { m_bmpBg = bmpBg; }
+    void SetBackgroundImage(const wxBitmapBundle& bmpBg) { m_bmpBg = bmpBg; }
 
 #if wxUSE_CONFIG
     // Saves custom settings into cfg config. it will use the path 'path'
@@ -383,7 +383,7 @@ public:
     wxString ToText();
 #endif // wxUSE_CLIPBOARD
 
-    virtual void OnInternalIdle() wxOVERRIDE;
+    virtual void OnInternalIdle() override;
 
     /// Returns standard HTML cursor as used by wxHtmlWindow
     static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
@@ -405,9 +405,11 @@ protected:
     void OnPaint(wxPaintEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
     void OnSize(wxSizeEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseDown(wxMouseEvent& event);
     void OnMouseUp(wxMouseEvent& event);
+    void OnFocusEvent(wxFocusEvent& event);
 #if wxUSE_CLIPBOARD
     void OnKeyUp(wxKeyEvent& event);
     void OnDoubleClick(wxMouseEvent& event);
@@ -448,19 +450,19 @@ protected:
 
 public:
     // wxHtmlWindowInterface methods:
-    virtual void SetHTMLWindowTitle(const wxString& title) wxOVERRIDE;
-    virtual void OnHTMLLinkClicked(const wxHtmlLinkInfo& link) wxOVERRIDE;
+    virtual void SetHTMLWindowTitle(const wxString& title) override;
+    virtual void OnHTMLLinkClicked(const wxHtmlLinkInfo& link) override;
     virtual wxHtmlOpeningStatus OnHTMLOpeningURL(wxHtmlURLType type,
                                                  const wxString& url,
-                                                 wxString *redirect) const wxOVERRIDE;
+                                                 wxString *redirect) const override;
     virtual wxPoint HTMLCoordsToWindow(wxHtmlCell *cell,
-                                       const wxPoint& pos) const wxOVERRIDE;
-    virtual wxWindow* GetHTMLWindow() wxOVERRIDE;
-    virtual wxColour GetHTMLBackgroundColour() const wxOVERRIDE;
-    virtual void SetHTMLBackgroundColour(const wxColour& clr) wxOVERRIDE;
-    virtual void SetHTMLBackgroundImage(const wxBitmap& bmpBg) wxOVERRIDE;
-    virtual void SetHTMLStatusText(const wxString& text) wxOVERRIDE;
-    virtual wxCursor GetHTMLCursor(HTMLCursor type) const wxOVERRIDE;
+                                       const wxPoint& pos) const override;
+    virtual wxWindow* GetHTMLWindow() override;
+    virtual wxColour GetHTMLBackgroundColour() const override;
+    virtual void SetHTMLBackgroundColour(const wxColour& clr) override;
+    virtual void SetHTMLBackgroundImage(const wxBitmapBundle& bmpBg) override;
+    virtual void SetHTMLStatusText(const wxString& text) override;
+    virtual wxCursor GetHTMLCursor(HTMLCursor type) const override;
 
     // implementation of SetPage()
     bool DoSetPage(const wxString& source);
@@ -495,15 +497,15 @@ protected:
     // defaults to 10 pixels.
     int m_Borders;
 
-    // current text selection or NULL
+    // current text selection or nullptr
     wxHtmlSelection *m_selection;
 
     // true if the user is dragging mouse to select text
     bool m_makingSelection;
 
 #if wxUSE_CLIPBOARD
-    // time of the last doubleclick event, used to detect tripleclicks
-    // (tripleclicks are used to select whole line):
+    // time of the last double-click event, used to detect triple clicks
+    // (triple clicks are used to select whole line):
     wxMilliClock_t m_lastDoubleClick;
 
     // helper class to automatically scroll the window if the user is selecting
@@ -521,7 +523,7 @@ private:
     wxBitmap m_backBuffer;
 
     // background image, may be invalid
-    wxBitmap m_bmpBg;
+    wxBitmapBundle m_bmpBg;
 
     // variables used when user is selecting text
     wxPoint     m_tmpSelFromPos;
@@ -578,10 +580,10 @@ public:
                     wxHtmlCell *cell, const wxPoint &pt,
                     const wxMouseEvent &ev)
         : wxCommandEvent(commandType, id)
+        , m_mouseEvent(ev)
+        , m_pt(pt)
     {
         m_cell = cell;
-        m_pt = pt;
-        m_mouseEvent = ev;
         m_bLinkWasClicked = false;
     }
 
@@ -593,7 +595,7 @@ public:
     bool GetLinkClicked() const { return m_bLinkWasClicked; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxHtmlCellEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxHtmlCellEvent(*this); }
 
 private:
     wxHtmlCell *m_cell;
@@ -602,7 +604,7 @@ private:
 
     bool m_bLinkWasClicked;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlCellEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxHtmlCellEvent);
 };
 
 
@@ -624,12 +626,12 @@ public:
     const wxHtmlLinkInfo &GetLinkInfo() const { return m_linkInfo; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxHtmlLinkEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxHtmlLinkEvent(*this); }
 
 private:
     wxHtmlLinkInfo m_linkInfo;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxHtmlLinkEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxHtmlLinkEvent);
 };
 
 

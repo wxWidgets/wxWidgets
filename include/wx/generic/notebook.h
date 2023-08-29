@@ -42,14 +42,14 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxNotebookNameStr);
+             const wxString& name = wxASCII_STR(wxNotebookNameStr));
     // Create() function
   bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxNotebookNameStr);
+              const wxString& name = wxASCII_STR(wxNotebookNameStr));
     // dtor
   virtual ~wxNotebook();
 
@@ -126,7 +126,7 @@ public:
 
   // Implementation
 
-  // wxNotebook on Motif uses a generic wxTabView to implement itself.
+  // Obsolete, don't use.
   wxTabView *GetTabView() const { return m_tabView; }
   void SetTabView(wxTabView *v) { m_tabView = v; }
 

@@ -11,10 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_STATTEXT
 
 #include "wx/stattext.h"
@@ -27,7 +23,9 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/msw/darkmode.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 bool wxStaticText::Create(wxWindow *parent,
@@ -149,6 +147,50 @@ void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     Refresh();
 }
 
+bool
+wxStaticText::MSWHandleMessage(WXLRESULT *result,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+    if ( wxStaticTextBase::MSWHandleMessage(result, message, wParam, lParam) )
+        return true;
+
+    switch ( message )
+    {
+        case WM_PAINT:
+            // We only customize drawing of disabled labels in dark mode.
+            if ( IsEnabled() || !wxMSWDarkMode::IsActive() )
+                break;
+
+            // For them, the default "greying out" of the text for the disabled
+            // controls looks ugly and unreadable in dark mode, so we draw it
+            // as normal text but use a different colour for it.
+            //
+            // We could alternatively make the control owner-drawn, which would
+            // be slightly cleaner, but would require more effort.
+            wxMSWWinStyleUpdater updateStyle(GetHwnd());
+            updateStyle.TurnOff(WS_DISABLED).Apply();
+
+            // Don't use Get/SetForegroundColour() here as they do more than we
+            // need, we just want to change m_foregroundColour temporarily
+            // without any side effects.
+            const auto colFgOrig = m_foregroundColour;
+            wxDarkModeSettings darkModeSettings;
+            m_foregroundColour = darkModeSettings.GetMenuColour(wxMenuColour::DisabledFg);
+
+            *result = MSWDefWindowProc(WM_PAINT, wParam, lParam);
+
+            updateStyle.TurnOn(WS_DISABLED).Apply();
+            if ( m_hasFgCol )
+                m_foregroundColour = colFgOrig;
+
+            return true;
+    }
+
+    return false;
+}
+
 void wxStaticText::SetLabel(const wxString& label)
 {
     // If the label doesn't really change, avoid flicker by not doing anything.
@@ -179,10 +221,10 @@ void wxStaticText::SetLabel(const wxString& label)
 
 #ifdef SS_ENDELLIPSIS
     if ( updateStyle.IsOn(SS_ENDELLIPSIS) )
-        DoSetLabel(GetLabel());
+        WXSetVisibleLabel(GetLabel());
     else
 #endif // SS_ENDELLIPSIS
-        DoSetLabel(GetEllipsizedLabel());
+        WXSetVisibleLabel(GetEllipsizedLabel());
 
     AutoResizeIfNecessary();
 }
@@ -197,16 +239,18 @@ bool wxStaticText::SetFont(const wxFont& font)
     return true;
 }
 
-// for wxST_ELLIPSIZE_* support:
+// These functions are used by wxST_ELLIPSIZE_* supporting code in
+// wxStaticTextBase which requires us to implement them, but actually the base
+// wxWindow methods already do exactly what we need under this platform.
 
-wxString wxStaticText::DoGetLabel() const
+wxString wxStaticText::WXGetVisibleLabel() const
 {
-    return wxGetWindowText(GetHwnd());
+    return wxWindow::GetLabel();
 }
 
-void wxStaticText::DoSetLabel(const wxString& str)
+void wxStaticText::WXSetVisibleLabel(const wxString& str)
 {
-    SetWindowText(GetHwnd(), str.c_str());
+    wxWindow::SetLabel(str);
 }
 
 

@@ -10,10 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_RICHMSGDLG
 
 #ifndef WX_PRECOMP
@@ -28,7 +24,7 @@
 #include "wx/statline.h"
 #include "wx/artprov.h"
 
-wxIMPLEMENT_CLASS(wxRichMessageDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxRichMessageDialog, wxDialog);
 
 // ----------------------------------------------------------------------------
 // Events and handlers

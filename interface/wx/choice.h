@@ -51,7 +51,7 @@ public:
             Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then the choice is sized appropriately.
         @param n
             Number of strings with which to initialise the choice control.
@@ -73,7 +73,7 @@ public:
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = NULL,
+            int n = 0, const wxString choices[] = nullptr,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
@@ -118,14 +118,14 @@ public:
     */
     virtual ~wxChoice();
 
-    //@{
+    ///@{
     /**
         Creates the choice for two-step construction. See wxChoice().
     */
     bool Create( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = NULL,
+            int n = 0, const wxString choices[] = nullptr,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
@@ -136,12 +136,12 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
-    //@}
+    ///@}
 
     /**
         Gets the number of columns in this choice item.
 
-        @remarks This is implemented for GTK and Motif only and always
+        @remarks This is implemented for GTK only and always
                  returns 1 for the other platforms.
     */
     virtual int GetColumns() const;
@@ -166,13 +166,13 @@ public:
         @param n
             Number of columns.
 
-        @remarks This is implemented for GTK and Motif only and doesn’t do
+        @remarks This is implemented for GTK only and doesn't do
                  anything under other platforms.
     */
     virtual void SetColumns(int n = 1);
 
     virtual bool IsSorted() const;
-    
+
     virtual unsigned int GetCount() const ;
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);

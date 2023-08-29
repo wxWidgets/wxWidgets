@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/toplevel.h"
 
@@ -30,6 +27,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/display.h"
+
+#include "wx/private/tlwgeom.h"
 
 // ----------------------------------------------------------------------------
 // event table
@@ -60,7 +59,7 @@ wxTopLevelWindowBase::~wxTopLevelWindowBase()
 {
     // don't let wxTheApp keep any stale pointers to us
     if ( wxTheApp && wxTheApp->GetTopWindow() == this )
-        wxTheApp->SetTopWindow(NULL);
+        wxTheApp->SetTopWindow(nullptr);
 
     wxTopLevelWindows.DeleteObject(this);
 
@@ -215,16 +214,18 @@ wxSize wxTopLevelWindowBase::GetDefaultSize()
 {
     wxSize size = wxGetClientDisplayRect().GetSize();
 #ifndef __WXOSX_IPHONE__
-    // create proportionally bigger windows on small screens
+    // create proportionally bigger windows on small screens but also scale the
+    // size with DPI on the large screens to avoid creating windows too small
+    // to fit anything at all when using high DPI
     if ( size.x >= 1024 )
-        size.x = 400;
+        size.x = FromDIP(400, nullptr /* no window */);
     else if ( size.x >= 800 )
         size.x = 300;
     else if ( size.x >= 320 )
         size.x = 240;
 
     if ( size.y >= 768 )
-        size.y = 250;
+        size.y = FromDIP(250, nullptr /* no window */);
     else if ( size.y > 200 )
     {
         size.y *= 2;
@@ -247,8 +248,7 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     // we need the display rect anyhow so store it first: notice that we should
     // be centered on the same display as our parent window, the display of
     // this window itself is not really defined yet
-    int nDisplay = wxDisplay::GetFromWindow(GetParent() ? GetParent() : this);
-    wxDisplay dpy(nDisplay == wxNOT_FOUND ? 0 : nDisplay);
+    wxDisplay dpy(GetParent() ? GetParent() : this);
     const wxRect rectDisplay(dpy.GetClientArea());
 
     // what should we centre this window on?
@@ -308,6 +308,28 @@ void wxTopLevelWindowBase::DoCentre(int dir)
 
     // -1 could be valid coordinate here if there are several displays
     SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
+}
+
+// ----------------------------------------------------------------------------
+// Saving/restoring geometry
+// ----------------------------------------------------------------------------
+
+bool wxTopLevelWindowBase::SaveGeometry(const GeometrySerializer& ser) const
+{
+    wxTLWGeometry geom;
+    if ( !geom.GetFrom(static_cast<const wxTopLevelWindow*>(this)) )
+        return false;
+
+    return geom.Save(ser);
+}
+
+bool wxTopLevelWindowBase::RestoreToGeometry(GeometrySerializer& ser)
+{
+    wxTLWGeometry geom;
+    if ( !geom.Restore(ser) )
+        return false;
+
+    return geom.ApplyTo(static_cast<wxTopLevelWindow*>(this));
 }
 
 // ----------------------------------------------------------------------------
@@ -386,57 +408,94 @@ bool wxTopLevelWindowBase::IsTopNavigationDomain(NavigationKind kind) const
     return true;
 }
 
+wxWindow* wxTopLevelWindowBase::GetUniqueChild() const
+{
+    // do we have _exactly_ one child?
+    wxWindow *child = nullptr;
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *win = node->GetData();
+
+        // exclude top level and managed windows (status bar isn't
+        // currently in the children list except under wxMac anyhow, but
+        // it makes no harm to test for it)
+        if ( !win->IsTopLevel() && !IsOneOfBars(win) )
+        {
+            // We don't take hidden children into account and we also consider
+            // that something more complicated than just the default resizing
+            // behaviour is necessary if there are any hidden windows, so give
+            // up immediately in this case.
+            if ( !win->IsShown() )
+                return nullptr;
+
+            // Also stop if it's not our first child.
+            if ( child )
+                return nullptr;
+
+            child = win;
+        }
+    }
+
+    return child;
+}
+
+bool wxTopLevelWindowBase::UsesAutoLayout() const
+{
+    return GetAutoLayout()
+                || GetSizer()
+#if wxUSE_CONSTRAINTS
+                    || GetConstraints()
+#endif
+        ;
+}
+
 // default resizing behaviour - if only ONE subwindow, resize to fill the
 // whole client area
-void wxTopLevelWindowBase::DoLayout()
+bool wxTopLevelWindowBase::Layout()
 {
     // We are called during the window destruction several times, e.g. as
     // wxFrame tries to adjust to its tool/status bars disappearing. But
     // actually doing the layout is pretty useless in this case as the window
     // will disappear anyhow -- so just don't bother.
     if ( IsBeingDeleted() )
-        return;
+        return false;
 
 
-    // if we're using constraints or sizers - do use them
-    if ( GetAutoLayout() )
+    // if we're using sizers or constraints - do use them
+    if ( UsesAutoLayout() )
     {
-        Layout();
+        return wxNonOwnedWindow::Layout();
     }
     else
     {
         // do we have _exactly_ one child?
-        wxWindow *child = NULL;
-        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-              node;
-              node = node->GetNext() )
+        if ( wxWindow* const child = GetUniqueChild() )
         {
-            wxWindow *win = node->GetData();
-
-            // exclude top level and managed windows (status bar isn't
-            // currently in the children list except under wxMac anyhow, but
-            // it makes no harm to test for it)
-            if ( !win->IsTopLevel() && !IsOneOfBars(win) )
-            {
-                if ( child )
-                {
-                    return;     // it's our second subwindow - nothing to do
-                }
-
-                child = win;
-            }
-        }
-
-        // do we have any children at all?
-        if ( child && child->IsShown() )
-        {
-            // exactly one child - set it's size to fill the whole frame
+            // yes - set its size to fill the whole frame
             int clientW, clientH;
             DoGetClientSize(&clientW, &clientH);
 
             child->SetSize(0, 0, clientW, clientH);
+
+            return true;
         }
     }
+
+    return false;
+}
+
+wxSize wxTopLevelWindowBase::DoGetBestClientSize() const
+{
+    // The logic here parallels that of Layout() above.
+    if ( !UsesAutoLayout() )
+    {
+        if ( wxWindow* const child = GetUniqueChild() )
+            return child->GetBestSize();
+    }
+
+    return wxNonOwnedWindow::DoGetBestClientSize();
 }
 
 // The default implementation for the close window event.

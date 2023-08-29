@@ -33,11 +33,12 @@ public:
         m_color.green = 0;
         m_color.blue = 0;
         m_color.pixel = 0;
-        m_colormap = NULL;
+        m_colormap = nullptr;
         m_hasPixel = false;
     }
 
     wxColourRefData(const wxColourRefData& data)
+        : wxGDIRefData()
     {
         m_color = data.m_color;
         m_colormap = data.m_colormap;
@@ -238,7 +239,7 @@ unsigned long wxColour::GetPixel() const
 
 WXColor *wxColour::GetColor() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid colour") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid colour") );
 
     return (WXColor*) &M_COLDATA->m_color;
 }

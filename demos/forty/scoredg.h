@@ -16,7 +16,7 @@ class ScoreDialog : public wxDialog
 {
 public:
     ScoreDialog(wxWindow* parent, ScoreFile* file);
-    virtual ~ScoreDialog(){};
+    virtual ~ScoreDialog(){}
 
     void Display();
 
@@ -24,10 +24,7 @@ protected:
     void OnCloseWindow(wxCloseEvent& event);
 
 private:
-    ScoreFile* m_scoreFile;
-    wxButton* m_OK;
-
-	wxDECLARE_EVENT_TABLE();
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

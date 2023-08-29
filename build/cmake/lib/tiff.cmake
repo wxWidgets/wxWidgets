@@ -8,13 +8,8 @@
 #############################################################################
 
 if(wxUSE_LIBTIFF STREQUAL "builtin")
-    # TODO: implement building libtiff via ExternalProject_Add()
-    if(UNIX AND NOT APPLE)
-        message(WARNING "Builtin libtiff on unix is currently not supported")
-        wx_option_force_value(wxUSE_LIBTIFF OFF)
-        return()
-    endif()
-
+    # TODO: implement building libtiff via its CMake file, using
+    # add_subdirectory or ExternalProject_Add
     if(WIN32)
         set(TIFF_PLATFORM_SRC src/tiff/libtiff/tif_win32.c)
     elseif(UNIX)
@@ -59,8 +54,10 @@ if(wxUSE_LIBTIFF STREQUAL "builtin")
         src/tiff/libtiff/tif_tile.c
         src/tiff/libtiff/tif_version.c
         src/tiff/libtiff/tif_warning.c
+        src/tiff/libtiff/tif_webp.c
         src/tiff/libtiff/tif_write.c
         src/tiff/libtiff/tif_zip.c
+        src/tiff/libtiff/tif_zstd.c
     )
     if(WIN32)
         # define this to get rid of a warning about using POSIX lfind():

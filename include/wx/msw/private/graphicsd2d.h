@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/private/graphicsd2d.h
-// Purpose:     Allow functions from graphicsd2d.cpp to be used in othe files
+// Purpose:     Allow functions from graphicsd2d.cpp to be used in other files
 // Author:      New Pagodi
 // Created:     2017-10-31
 // Copyright:   (c) 2017 wxWidgets development team
@@ -14,6 +14,9 @@
 
 // Ensure no previous defines interfere with the Direct2D API headers
 #undef GetHwnd
+
+// include before wincodec.h to prevent winsock/winsock2 redefinition warnings
+#include "wx/msw/wrapwin.h"
 
 #include <d2d1.h>
 #include <dwrite.h>

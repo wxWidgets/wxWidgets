@@ -15,7 +15,7 @@
 
     @since 3.1.0
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
     @appearance{activityindicator}
  */

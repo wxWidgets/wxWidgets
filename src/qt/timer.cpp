@@ -28,7 +28,7 @@ bool wxQtTimerImpl::Start( int millisecs, bool oneShot )
         return false;
 
     m_timerId = startTimer( GetInterval() );
-    
+
     return m_timerId >= 0;
 }
 

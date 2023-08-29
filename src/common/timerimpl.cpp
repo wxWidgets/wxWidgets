@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMER
 
@@ -33,7 +30,7 @@
 wxTimerImpl::wxTimerImpl(wxTimer *timer)
 {
     m_timer = timer;
-    m_owner = NULL;
+    m_owner = nullptr;
     m_idTimer = wxID_ANY;
     m_milli = 0;
     m_oneShot = false;

@@ -29,7 +29,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBoxNameStr)
+                const wxString& name = wxASCII_STR(wxStaticBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, name);
     }
@@ -40,7 +40,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxString& name = wxStaticBoxNameStr);
+                const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
     // the origin of the static box is inside the border and under the label:
     // take account of this
@@ -48,11 +48,11 @@ public:
 
     // returning true from here ensures that we act as a container window for
     // our children
-    virtual bool IsStaticBox() const wxOVERRIDE { return true; }
+    virtual bool IsStaticBox() const override { return true; }
 
 protected:
     // draw the control
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
 
     // get the size of the border
     wxRect GetBorderGeometry() const;

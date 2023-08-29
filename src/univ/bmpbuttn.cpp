@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BMPBUTTON
 
@@ -48,7 +45,7 @@ wxEND_EVENT_TABLE()
 
 bool wxBitmapButton::Create(wxWindow *parent,
                             wxWindowID id,
-                            const wxBitmap& bitmap,
+                            const wxBitmapBundle& bitmap,
                             const wxPoint &pos,
                             const wxSize &size,
                             long style,

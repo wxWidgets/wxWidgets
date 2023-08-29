@@ -107,17 +107,18 @@ public:
     WXWindow GetX11Window() const { return m_x11window; }
 
     virtual void ComputeScaleAndOrigin();
-
-    virtual void* GetCairoContext() const wxOVERRIDE;
+#if wxUSE_CAIRO
+    virtual void* GetCairoContext() const override;
+#endif
 
 protected:
     // implementation
     // --------------
     virtual void DoGetTextExtent(const wxString& string,
         wxCoord *x, wxCoord *y,
-        wxCoord *descent = NULL,
-        wxCoord *externalLeading = NULL,
-        const wxFont *theFont = NULL) const;
+        wxCoord *descent = nullptr,
+        wxCoord *externalLeading = nullptr,
+        const wxFont *theFont = nullptr) const;
 
     void Init();
 
@@ -133,10 +134,8 @@ protected:
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
 
-#if wxUSE_UNICODE
     PangoContext *m_context;
     PangoFontDescription *m_fontdesc;
-#endif
 
     void SetUpDC();
     void Destroy();

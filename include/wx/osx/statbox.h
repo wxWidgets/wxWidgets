@@ -22,7 +22,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxStaticBoxNameStr)
+           const wxString& name = wxASCII_STR(wxStaticBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, name);
     }
@@ -32,17 +32,17 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = 0,
-           const wxString& name = wxStaticBoxNameStr);
+           const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) {}
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) override {}
     virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {}
 
-    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const override;
 
-    virtual bool AcceptsFocus() const { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
     // protect native font of box
-    virtual bool SetFont( const wxFont &font );
+    virtual bool SetFont( const wxFont &font ) override;
 };
 
 #endif

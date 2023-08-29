@@ -15,7 +15,7 @@
 
 // the default service name
 #define IPC_SERVICE "4242"
-//#define IPC_SERVICE wxT("/tmp/wxsrv424")
+//#define IPC_SERVICE "/tmp/wxsrv424"
 
 // the hostname
 #define IPC_HOST "localhost"

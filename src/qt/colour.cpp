@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/colour.h
+// Name:        src/qt/colour.cpp
 // Purpose:     wxColour class implementation for wxQt
 // Author:      Kolya Kosenko
 // Created:     2010-05-12
@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/colour.h"

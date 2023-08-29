@@ -50,7 +50,7 @@
 
   I decided to keep apart all of this from wxWidgets. You won't find anything
   related to wxWidgets in the oglstuff[.h][.cpp] files.
-  That's why I use std::vector and std:string instead of those provided by wx.
+  That's why I use std::vector and std::string instead of those provided by wx.
 */
 
 
@@ -89,7 +89,7 @@ struct shaShas
 {
     GLuint shaId;
     GLenum typeSha; //The type of shader
-    const GLchar* scode; //The NULL terminated GLSL code
+    const GLchar* scode; //The nullptr terminated GLSL code
 };
 
 typedef std::vector<shaShas> shaShas_v;
@@ -109,10 +109,10 @@ public:
     void CleanUp();
 
     void AddCode(const GLchar* shaString, GLenum shaType);
-    void AddAttrib(std::string name);
-    void AddUnif(std::string name);
-    GLuint GetAttribLoc(std::string name);
-    GLuint GetUnifLoc(std::string name);
+    void AddAttrib(const std::string& name);
+    void AddUnif(const std::string& name);
+    GLuint GetAttribLoc(const std::string& name);
+    GLuint GetUnifLoc(const std::string& name);
     // Disable generic vertex attribute array
     void DisableGenericVAA();
 
@@ -293,7 +293,7 @@ private:
 class myOGLManager
 {
 public:
-    myOGLManager(myOGLErrHandler* extErrHnd = NULL);
+    myOGLManager(myOGLErrHandler* extErrHnd = nullptr);
     ~myOGLManager();
 
     // Constants, prototypes and pointers to OGL functions

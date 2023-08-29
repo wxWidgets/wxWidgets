@@ -28,7 +28,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxGaugeNameStr)
+            const wxString& name = wxASCII_STR(wxGaugeNameStr))
     {
         (void)Create(parent, id, range, pos, size, style, validator, name);
     }
@@ -42,25 +42,25 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxGA_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxGaugeNameStr);
+                const wxString& name = wxASCII_STR(wxGaugeNameStr));
 
     // set gauge range/value
-    virtual void SetRange(int range) wxOVERRIDE;
-    virtual void SetValue(int pos) wxOVERRIDE;
+    virtual void SetRange(int range) override;
+    virtual void SetValue(int pos) override;
 
     // overridden base class virtuals
-    virtual bool SetForegroundColour(const wxColour& col) wxOVERRIDE;
-    virtual bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
+    virtual bool SetForegroundColour(const wxColour& col) override;
+    virtual bool SetBackgroundColour(const wxColour& col) override;
 
-    virtual void Pulse() wxOVERRIDE;
+    virtual void Pulse() override;
 
-    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
 private:
     // returns true if the control is currently in indeterminate (a.k.a.

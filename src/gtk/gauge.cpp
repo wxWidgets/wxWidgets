@@ -13,7 +13,7 @@
 
 #include "wx/gauge.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 //-----------------------------------------------------------------------------
 // wxGauge
@@ -68,16 +68,6 @@ void wxGauge::DoSetGauge()
 
     gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (m_widget),
                                    m_rangeMax ? ((double)m_gaugePos)/m_rangeMax : 0.0);
-}
-
-wxSize wxGauge::DoGetBestSize() const
-{
-    wxSize best;
-    if (HasFlag(wxGA_VERTICAL))
-        best = wxSize(28, 100);
-    else
-        best = wxSize(100, 28);
-    return best;
 }
 
 void wxGauge::SetRange( int range )

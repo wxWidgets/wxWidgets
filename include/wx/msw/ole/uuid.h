@@ -37,7 +37,7 @@
 typedef unsigned char uchar;
 
 // ------------------------------------------------------------------
-// a class to store UUID and it's string representation
+// a class to store UUID and its string representation
 // ------------------------------------------------------------------
 
 // uses RPC functions to create/convert Universally Unique Identifiers
@@ -51,7 +51,7 @@ private:
   void  UuidToCForm();
 
   // function used to set initial state by all ctors
-  void  Init() { m_pszUuid = NULL; m_pszCForm = NULL; }
+  void  Init() { m_pszUuid = nullptr; m_pszCForm = nullptr; }
 
 public:
   // ctors & dtor

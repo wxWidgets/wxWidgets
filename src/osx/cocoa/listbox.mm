@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 // forward decls
 
@@ -104,53 +105,59 @@ public :
     ~wxListWidgetCocoaImpl();
 
     virtual wxListWidgetColumn*     InsertTextColumn( unsigned pos, const wxString& title, bool editable = false,
-                                wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1) wxOVERRIDE  ;
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1) override  ;
     virtual wxListWidgetColumn*     InsertCheckColumn( unsigned pos , const wxString& title, bool editable = false,
-                                wxAlignment just = wxALIGN_LEFT , int defaultWidth =  -1) wxOVERRIDE  ;
+                                wxAlignment just = wxALIGN_LEFT , int defaultWidth =  -1) override  ;
 
     // add and remove
 
-    virtual void            ListDelete( unsigned int n ) wxOVERRIDE ;
-    virtual void            ListInsert( unsigned int n ) wxOVERRIDE ;
-    virtual void            ListClear() wxOVERRIDE ;
+    virtual void            ListDelete( unsigned int n ) override ;
+    virtual void            ListInsert( unsigned int n ) override ;
+    virtual void            ListClear() override ;
 
     // selecting
 
-    virtual void            ListDeselectAll() wxOVERRIDE;
+    virtual void            ListDeselectAll() override;
 
-    virtual void            ListSetSelection( unsigned int n, bool select, bool multi ) wxOVERRIDE ;
-    virtual int             ListGetSelection() const wxOVERRIDE ;
+    virtual void            ListSetSelection( unsigned int n, bool select, bool multi ) override ;
+    virtual int             ListGetSelection() const override ;
 
-    virtual int             ListGetSelections( wxArrayInt& aSelections ) const wxOVERRIDE ;
+    virtual int             ListGetSelections( wxArrayInt& aSelections ) const override ;
 
-    virtual bool            ListIsSelected( unsigned int n ) const wxOVERRIDE ;
+    virtual bool            ListIsSelected( unsigned int n ) const override ;
 
     // display
 
-    virtual void            ListScrollTo( unsigned int n ) wxOVERRIDE ;
+    virtual void            ListScrollTo( unsigned int n ) override ;
 
-    virtual int             ListGetTopItem() const wxOVERRIDE;
-    virtual int             ListGetCountPerPage() const wxOVERRIDE;
+    virtual int             ListGetTopItem() const override;
+    virtual int             ListGetCountPerPage() const override;
 
     // accessing content
 
-    virtual unsigned int    ListGetCount() const wxOVERRIDE ;
-    virtual int             DoListHitTest( const wxPoint& inpoint ) const wxOVERRIDE;
+    virtual unsigned int    ListGetCount() const override ;
+    virtual int             DoListHitTest( const wxPoint& inpoint ) const override;
 
     int                     ListGetColumnType( int col )
     {
         return col;
     }
-    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) wxOVERRIDE ;
-    virtual void            UpdateLineToEnd( unsigned int n) wxOVERRIDE;
+    virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = nullptr ) override ;
+    virtual void            UpdateLineToEnd( unsigned int n) override;
 
-    virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
+    virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender) override;
 
 
 protected :
+    void                    AdaptColumnWidth ( int w );
+
     wxNSTableView*          m_tableView ;
 
     wxNSTableDataSource*    m_dataSource;
+
+    NSMutableArray*         m_widths;
+    int                     m_maxWidth;
+    bool                    m_autoSize;
 } ;
 
 //
@@ -189,20 +196,20 @@ public :
 
     virtual ~wxNSTableViewCellValue() {}
 
-    virtual void Set( CFStringRef v ) wxOVERRIDE
+    virtual void Set( CFStringRef v ) override
     {
         value = [[(NSString*)v retain] autorelease];
     }
-    virtual void Set( const wxString& value ) wxOVERRIDE
+    virtual void Set( const wxString& value ) override
     {
         Set( (CFStringRef) wxCFStringRef( value ) );
     }
-    virtual void Set( int v ) wxOVERRIDE
+    virtual void Set( int v ) override
     {
         value = [NSNumber numberWithInt:v];
     }
 
-    virtual int GetIntValue() const wxOVERRIDE
+    virtual int GetIntValue() const override
     {
         if ( [value isKindOfClass:[NSNumber class]] )
             return [ (NSNumber*) value intValue ];
@@ -210,7 +217,7 @@ public :
         return 0;
     }
 
-    virtual wxString GetStringValue() const wxOVERRIDE
+    virtual wxString GetStringValue() const override
     {
         if ( [value isKindOfClass:[NSString class]] )
             return wxCFStringRef::AsString( (NSString*) value );
@@ -297,24 +304,12 @@ protected:
 
     int row = [self selectedRow];
 
-    if (row == -1) 
-    {
-        // no row selected
-    } 
-    else 
-    {
-        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
-        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    wxListBox* const list = wxDynamicCast(impl->GetWXPeer(), wxListBox);
+    wxCHECK_RET( list != nullptr , "Associated control should be a wxListBox" );
 
-        if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
-            return;
-
-        if ( !list->MacGetBlockEvents() )
-            list->HandleLineEvent( row, false );
-    }
-
-} 
+    list->MacHandleSelectionChange(row);
+}
 
 - (void)setFont:(NSFont *)aFont
 {
@@ -344,10 +339,14 @@ wxListWidgetCocoaImpl::wxListWidgetCocoaImpl( wxWindowMac* peer, NSScrollView* v
     wxWidgetCocoaImpl( peer, view ), m_tableView(tableview), m_dataSource(data)
 {
     InstallEventHandler( tableview );
+    m_widths = [[NSMutableArray alloc] init];
+    m_maxWidth = 0;
+    m_autoSize = false;
 }
 
 wxListWidgetCocoaImpl::~wxListWidgetCocoaImpl()
 {
+    [m_widths release];
     [m_dataSource release];
 }
 
@@ -382,16 +381,12 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
     }
     else
     {
-        [col1 setMaxWidth:1000];
-        [col1 setMinWidth:10];
-        // temporary hack, because I cannot get the automatic column resizing
-        // to work properly
-        [col1 setWidth:1000];
+        m_autoSize = true;
     }
     [col1 setResizingMask: NSTableColumnAutoresizingMask];
 
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
-    if ( list != NULL )
+    if ( list != nullptr )
         [[col1 dataCell] setFont:list->GetFont().OSXGetNSFont()];
 
     wxCocoaTableColumn* wxcol = new wxCocoaTableColumn( col1, editable );
@@ -415,7 +410,7 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
     [col1 setDataCell:checkbox] ;
 
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
-    if ( list != NULL )
+    if ( list != nullptr )
     {
         NSControlSize size = NSRegularControlSize;
 
@@ -434,6 +429,11 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
                 break ;
 
             case wxWINDOW_VARIANT_LARGE :
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
+                if ( WX_IS_MACOS_AVAILABLE( 10, 16 ))
+                    size = NSControlSizeLarge;
+                else
+#endif
                 size = NSRegularControlSize;
                 break ;
 
@@ -471,24 +471,72 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
     return wxcol;
 }
 
+void wxListWidgetCocoaImpl::AdaptColumnWidth ( int w )
+{
+    // Note that the table can have more than one column as it's also used by
+    // wxCheckListBox, but the column containing the text is always the last one.
+    NSTableColumn *col = [[m_tableView tableColumns] lastObject];
+    [col setWidth:w];
+    m_maxWidth = w;
+}
 
 //
 // inserting / removing lines
 //
 
-void wxListWidgetCocoaImpl::ListInsert( unsigned int WXUNUSED(n) )
+void wxListWidgetCocoaImpl::ListInsert( unsigned int n )
 {
     [m_tableView reloadData];
+
+    if ( m_autoSize )
+    {
+        NSCell *cell = [m_tableView preparedCellAtColumn:[m_tableView numberOfColumns]-1 row:n];
+        NSSize size = [cell cellSize];
+        int width = (int) ceil(size.width);
+
+        [m_widths insertObject:[NSNumber numberWithInteger:width] atIndex:n];
+
+        if ( width > m_maxWidth )
+            AdaptColumnWidth( width );
+    }
 }
 
-void wxListWidgetCocoaImpl::ListDelete( unsigned int WXUNUSED(n) )
+void wxListWidgetCocoaImpl::ListDelete( unsigned int n )
 {
+    if ( [m_tableView isRowSelected:n] )
+    {
+        [m_tableView deselectRow:n];
+    }
+
     [m_tableView reloadData];
+
+    if ( m_autoSize )
+    {
+        [m_widths removeObjectAtIndex:n];
+
+        int maxWidth = 0;
+        for ( NSNumber *number in m_widths )
+        {
+            int n = [number intValue];
+
+            if ( n > maxWidth )
+                maxWidth = n;
+        }
+
+        if ( maxWidth < m_maxWidth )
+            AdaptColumnWidth( maxWidth );
+    }
 }
 
 void wxListWidgetCocoaImpl::ListClear()
 {
     [m_tableView reloadData];
+
+    if ( m_autoSize )
+    {
+        [m_widths removeAllObjects];
+        AdaptColumnWidth( 100 );
+    }
 }
 
 // selecting
@@ -571,7 +619,7 @@ void wxListWidgetCocoaImpl::UpdateLineToEnd( unsigned int WXUNUSED(n))
 void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget WXUNUSED(slf),void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
-    wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+    wxCHECK_RET( list != nullptr , wxT("Listbox expected"));
 
     int sel = [m_tableView clickedRow];
     if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
@@ -607,6 +655,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
 
     wxNSTableView* tableview = [[wxNSTableView alloc] init];
     [tableview setDelegate:tableview];
+    [tableview setFocusRingType:NSFocusRingTypeNone];
     // only one multi-select mode available
     if ( (style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE) )
         [tableview setAllowsMultipleSelection:YES];

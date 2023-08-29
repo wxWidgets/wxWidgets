@@ -1,47 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
-<plist version="0.9">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
 <dict>
-	<key>NSPrincipalClass</key>
-	<string>wxNSApplication</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleIdentifier</key>
-	<string>org.wxwindows.IDENTIFIER</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>de</string>
-		<string>en</string>
-		<string>fr</string>
-		<string>it</string>
-	</array>
 	<key>CFBundleExecutable</key>
-	<string>EXECUTABLE</string>
+	<string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
+	<key>CFBundleGetInfoString</key>
+	<string>${MACOSX_BUNDLE_INFO_STRING}</string>
 	<key>CFBundleIconFile</key>
 	<string>wxmac.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>${MACOSX_BUNDLE_GUI_IDENTIFIER}</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleLongVersionString</key>
+	<string>${MACOSX_BUNDLE_LONG_VERSION_STRING}</string>
 	<key>CFBundleName</key>
-	<string>EXECUTABLE</string>
+	<string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>VERSION</string>
 	<key>CFBundleShortVersionString</key>
-	<string>VERSION</string>
-	<key>CFBundleGetInfoString</key>
-	<string>EXECUTABLE version VERSION, (c) 2002-2018 wxWidgets</string>
-	<key>CFBundleLongVersionString</key>
-	<string>VERSION, (c) 2002-2018 wxWidgets</string>
+	<string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+	<key>CFBundleVersion</key>
+	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2002-2018 wxWidgets</string>
-	<key>LSRequiresCarbon</key>
-	<true/>
-	<key>CSResourcesFileMapped</key>
-	<true/>
+	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 	<key>ATSApplicationFontsPath</key>
 	<string>Fonts</string>
+	<key>NSPrincipalClass</key>
+	<string>wxNSApplication</string>
 </dict>
 </plist>

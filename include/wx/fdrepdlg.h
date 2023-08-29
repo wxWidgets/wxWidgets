@@ -26,7 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxFindReplaceDialogImpl;
 // Flags for wxFindReplaceData.Flags
 // ----------------------------------------------------------------------------
 
-// flages used by wxFindDialogEvent::GetFlags()
+// flags used by wxFindDialogEvent::GetFlags()
 enum wxFindReplaceFlags
 {
     // downward search/replace selected (otherwise - upwards)
@@ -96,7 +96,7 @@ class WXDLLIMPEXP_CORE wxFindReplaceDialogBase : public wxDialog
 {
 public:
     // ctors and such
-    wxFindReplaceDialogBase() { m_FindReplaceData = NULL; }
+    wxFindReplaceDialogBase() { m_FindReplaceData = nullptr; }
     wxFindReplaceDialogBase(wxWindow * WXUNUSED(parent),
                             wxFindReplaceData *data,
                             const wxString& WXUNUSED(title),
@@ -156,7 +156,7 @@ public:
     void SetFindString(const wxString& str) { SetString(str); }
     void SetReplaceString(const wxString& str) { m_strReplace = str; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxFindDialogEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxFindDialogEvent(*this); }
 
 private:
     wxString m_strReplace;

@@ -21,31 +21,31 @@ public:
     wxStatusBar();
     wxStatusBar(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr);
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
     bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
-                const wxString& name = wxStatusBarNameStr);
+                const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
-    virtual bool GetFieldRect(int i, wxRect& rect) const;
-    virtual void SetMinHeight(int height);
-    virtual int GetBorderX() const;
-    virtual int GetBorderY() const;
+    virtual bool GetFieldRect(int i, wxRect& rect) const override;
+    virtual void SetMinHeight(int height) override;
+    virtual int GetBorderX() const override;
+    virtual int GetBorderY() const override;
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL );
+                          const wxRect *rect = nullptr ) override;
 
     QStatusBar *GetQStatusBar() const { return m_qtStatusBar; }
-    QWidget *GetHandle() const;
-    
+    QWidget *GetHandle() const override;
+
 protected:
-    virtual void DoUpdateStatusText(int number);
+    virtual void DoUpdateStatusText(int number) override;
 
 private:
     void Init();
     void UpdateFields();
 
     QStatusBar *m_qtStatusBar;
-    QList< QLabel* > *m_qtPanes;
+    wxVector<QLabel*> m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);
 };

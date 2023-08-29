@@ -3,7 +3,7 @@
 // Purpose:     wxGLCanvasBase implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-04-09
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 
@@ -45,7 +42,7 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
     // Search for searchVal
     wxVector<int>::iterator it = m_GLValues.begin();
     while ( it != m_GLValues.end() && *it != searchVal )
-        it++;
+        ++it;
     // Have we searchVal?
     if ( it != m_GLValues.end() )
     {
@@ -70,13 +67,9 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
 
 wxGLCanvasBase::wxGLCanvasBase()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    m_glContext = NULL;
-#endif
-
     // we always paint background entirely ourselves so prevent wx from erasing
     // it to avoid flicker
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 bool wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
@@ -124,29 +117,7 @@ bool wxGLCanvasBase::SetColour(const wxString& colour)
 
 wxGLCanvasBase::~wxGLCanvasBase()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    delete m_glContext;
-#endif // WXWIN_COMPATIBILITY_2_8
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLContext *wxGLCanvasBase::GetContext() const
-{
-    return m_glContext;
-}
-
-void wxGLCanvasBase::SetCurrent()
-{
-    if ( m_glContext )
-        SetCurrent(*m_glContext);
-}
-
-void wxGLCanvasBase::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 /* static */
 bool wxGLCanvasBase::IsExtensionInList(const char *list, const char *extension)
@@ -187,8 +158,7 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
 
     if ( !attribList )
     {
-        // Default visual attributes used in wx versions before wx3.1
-        dispAttrs.AddDefaultsForWXBefore31();
+        dispAttrs.Defaults();
         dispAttrs.EndList();
         if ( ctxAttrs )
             ctxAttrs->EndList();
@@ -443,7 +413,8 @@ void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
 #if wxUSE_OPENGL_EMULATION
     ::glFrustumf(left, right, bottom, top, zNear, zFar);
 #else
-    ::glFrustum(left, right, bottom, top, zNear, zFar);
+    ::glFrustum(double(left), double(right),
+        double(bottom), double(top), double(zNear), double(zFar));
 #endif
 }
 

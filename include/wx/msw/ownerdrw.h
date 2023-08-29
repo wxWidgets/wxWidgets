@@ -20,7 +20,13 @@ public:
     virtual ~wxOwnerDrawn() {}
 
     virtual bool OnDrawItem(wxDC& dc, const wxRect& rc,
-                            wxODAction act, wxODStatus stat) wxOVERRIDE;
+                            wxODAction act, wxODStatus stat) override;
+
+protected:
+    // get the type of the text to draw in OnDrawItem(), by default is
+    // DST_PREFIXTEXT but can be overridden to return DST_TEXT when not using
+    // mnemonics
+    virtual int MSWGetTextType() const;
 };
 
 #endif // wxUSE_OWNER_DRAWN

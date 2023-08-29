@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MDI
 
@@ -63,7 +60,7 @@ wxEND_EVENT_TABLE()
 void wxGenericMDIParentFrame::Init()
 {
 #if wxUSE_MENUS
-    m_pMyMenuBar = NULL;
+    m_pMyMenuBar = nullptr;
 #endif // wxUSE_MENUS
 }
 
@@ -102,7 +99,7 @@ bool wxGenericMDIParentFrame::Create(wxWindow *parent,
 #endif // wxUSE_MENUS
     }
 
-    // the scrolling styles don't make sense neither for us nor for our client
+    // the scrolling styles don't make sense either for us nor for our client
     // window (to which they're supposed to apply)
     style &= ~(wxHSCROLL | wxVSCROLL);
 
@@ -135,7 +132,7 @@ bool wxGenericMDIParentFrame::CloseAll()
         wxGenericMDIChildFrame * const child = client->GetChild(0);
         if ( !child->Close() )
         {
-            // it refused to close, don't close the remaining ones neither
+            // it refused to close, don't close the remaining ones either
             return false;
         }
     }
@@ -178,21 +175,21 @@ void wxGenericMDIParentFrame::SetMenuBar(wxMenuBar *pMenuBar)
 void wxGenericMDIParentFrame::WXSetChildMenuBar(wxGenericMDIChildFrame *pChild)
 {
 #if wxUSE_MENUS
-    if (pChild  == NULL)
+    if (pChild  == nullptr)
     {
         // No Child, set Our menu bar back.
         SetMenuBar(m_pMyMenuBar);
 
         // Make sure we know our menu bar is in use
-        m_pMyMenuBar = NULL;
+        m_pMyMenuBar = nullptr;
     }
     else
     {
-        if (pChild->GetMenuBar() == NULL)
+        if (pChild->GetMenuBar() == nullptr)
             return;
 
         // Do we need to save the current bar?
-        if (m_pMyMenuBar == NULL)
+        if (m_pMyMenuBar == nullptr)
             m_pMyMenuBar = GetMenuBar();
 
         SetMenuBar(pChild->GetMenuBar());
@@ -209,7 +206,7 @@ wxGenericMDIParentFrame::GetGenericClientWindow() const
 wxBookCtrlBase *wxGenericMDIParentFrame::GetBookCtrl() const
 {
     wxGenericMDIClientWindow * const client = GetGenericClientWindow();
-    return client ? client->GetBookCtrl() : NULL;
+    return client ? client->GetBookCtrl() : nullptr;
 }
 
 void wxGenericMDIParentFrame::AdvanceActive(bool forward)
@@ -246,8 +243,8 @@ void wxGenericMDIParentFrame::WXRemoveChild(wxGenericMDIChildFrame *child)
     const bool removingActive = WXIsActiveChild(child);
     if ( removingActive )
     {
-        SetActiveChild(NULL);
-        WXSetChildMenuBar(NULL);
+        SetActiveChild(nullptr);
+        WXSetChildMenuBar(nullptr);
     }
 
     wxGenericMDIClientWindow * const client = GetGenericClientWindow();
@@ -382,7 +379,9 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
 wxIMPLEMENT_DYNAMIC_CLASS(wxGenericMDIChildFrame, wxFrame);
 
 wxBEGIN_EVENT_TABLE(wxGenericMDIChildFrame, wxFrame)
+#if wxUSE_MENUS
     EVT_MENU_HIGHLIGHT_ALL(wxGenericMDIChildFrame::OnMenuHighlight)
+#endif // wxUSE_MENUS
 
     EVT_CLOSE(wxGenericMDIChildFrame::OnClose)
 wxEND_EVENT_TABLE()
@@ -390,11 +389,11 @@ wxEND_EVENT_TABLE()
 void wxGenericMDIChildFrame::Init()
 {
 #if wxUSE_MENUS
-    m_pMenuBar = NULL;
+    m_pMenuBar = nullptr;
 #endif // wxUSE_MENUS
 
 #if !wxUSE_GENERIC_MDI_AS_NATIVE
-    m_mdiParentGeneric = NULL;
+    m_mdiParentGeneric = nullptr;
 #endif
 }
 
@@ -403,12 +402,20 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
     wxGenericMDIParentFrame * const parent = GetGenericMDIParent();
 
     // it could happen that we don't have a valid parent if we hadn't been ever
-    // really created -- but in this case there is nothing else to do neither
+    // really created -- but in this case there is nothing else to do either
     if ( parent )
         parent->WXRemoveChild(this);
 
 #if wxUSE_MENUS
-    delete m_pMenuBar;
+    if ( m_pMenuBar )
+    {
+        // calling WXRemoveChild() above broke the link between the menu bar
+        // and the parent, so we need to also remove it explicitly
+        if ( parent )
+            parent->RemoveChild(m_pMenuBar);
+
+        delete m_pMenuBar;
+    }
 #endif // wxUSE_MENUS
 }
 
@@ -425,7 +432,7 @@ bool wxGenericMDIChildFrame::Create(wxGenericMDIParentFrame *parent,
 #if wxUSE_GENERIC_MDI_AS_NATIVE
     m_mdiParent = parent;
 #else // generic != native
-    // leave m_mdiParent NULL, we don't have it
+    // leave m_mdiParent null, we don't have it
     m_mdiParentGeneric = parent;
 #endif
 
@@ -462,7 +469,7 @@ void wxGenericMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
             {
                 // Replace current menu bars
                 if (pOldMenuBar)
-                    parent->WXSetChildMenuBar(NULL);
+                    parent->WXSetChildMenuBar(nullptr);
                 parent->WXSetChildMenuBar(this);
             }
         }
@@ -493,6 +500,7 @@ void wxGenericMDIChildFrame::Activate()
     parent->WXActivateChild(this);
 }
 
+#if wxUSE_MENUS
 void wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
 {
     wxGenericMDIParentFrame * const parent = GetGenericMDIParent();
@@ -503,6 +511,7 @@ void wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
         parent->OnMenuHighlight(event);
     }
 }
+#endif // wxUSE_MENUS
 
 void wxGenericMDIChildFrame::OnClose(wxCloseEvent& WXUNUSED(event))
 {
@@ -534,17 +543,15 @@ wxGenericMDIClientWindow::CreateGenericClient(wxWindow *parent)
         return false;
 
     m_notebook = new wxNotebook(this, wxID_ANY);
-    m_notebook->Connect
+    m_notebook->Bind
                 (
                     wxEVT_NOTEBOOK_PAGE_CHANGED,
-                    wxNotebookEventHandler(
-                        wxGenericMDIClientWindow::OnPageChanged),
-                    NULL,
+                    &wxGenericMDIClientWindow::OnPageChanged,
                     this
                 );
 
     // now that we have a notebook to resize, hook up OnSize() too
-    Connect(wxEVT_SIZE, wxSizeEventHandler(wxGenericMDIClientWindow::OnSize));
+    Bind(wxEVT_SIZE, &wxGenericMDIClientWindow::OnSize, this);
 
     return true;
 }

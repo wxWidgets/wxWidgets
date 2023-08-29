@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BUTTON
 
@@ -57,7 +54,7 @@ void wxButton::Init()
 
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
-                      const wxBitmap& bitmap,
+                      const wxBitmapBundle& bitmap,
                       const wxString &lbl,
                       const wxPoint &pos,
                       const wxSize &size,
@@ -110,7 +107,7 @@ wxButton::~wxButton()
 // ----------------------------------------------------------------------------
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 {
     static wxSize s_sizeBtn;
 
@@ -151,12 +148,12 @@ wxBitmap wxButton::DoGetBitmap(State WXUNUSED(which)) const
     return m_bitmap;
 }
 
-void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+void wxButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
 {
     // we support only one bitmap right now, although this wouldn't be
     // difficult to change
     if ( which == State_Normal )
-        m_bitmap = bitmap;
+        m_bitmap = bitmap.GetBitmap(wxDefaultSize); // TODO-HIDPI
 
     SetBitmapMargins(DEFAULT_BTN_MARGIN_X, DEFAULT_BTN_MARGIN_Y);
 }

@@ -106,7 +106,7 @@ protected:
         : m_colour(colour)
     {
         m_nb_dashes = 0;
-        m_dash = NULL;
+        m_dash = nullptr;
         m_join = wxJOIN_ROUND;
         m_cap = wxCAP_ROUND;
         m_style = style;

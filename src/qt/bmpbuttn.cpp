@@ -17,7 +17,7 @@ wxBitmapButton::wxBitmapButton()
 
 wxBitmapButton::wxBitmapButton(wxWindow *parent,
                wxWindowID id,
-               const wxBitmap& bitmap,
+               const wxBitmapBundle& bitmap,
                const wxPoint& pos,
                const wxSize& size,
                long style,
@@ -30,7 +30,7 @@ wxBitmapButton::wxBitmapButton(wxWindow *parent,
 
 bool wxBitmapButton::Create(wxWindow *parent,
             wxWindowID id,
-            const wxBitmap& bitmap,
+            const wxBitmapBundle& bitmap,
             const wxPoint& pos,
             const wxSize& size,
             long style,

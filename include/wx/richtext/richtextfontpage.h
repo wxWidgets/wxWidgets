@@ -70,8 +70,8 @@ public:
     void CreateControls();
 
     /// Transfer data from/to window
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
+    virtual bool TransferDataToWindow() override;
 
     /// Updates the font preview
     void UpdatePreview();
@@ -87,7 +87,7 @@ public:
     /// be removed from the page. By default, these effects are not shown as they
     /// have no effect in the editor.
     static int GetAllowedTextEffects() { return sm_allowedTextEffects; }
-    
+
     /// Sets the allowed text effects in the page.
     static void SetAllowedTextEffects(int allowed) { sm_allowedTextEffects = allowed; }
 

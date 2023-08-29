@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-09
-// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +28,7 @@ enum
     // a spin control-like date picker (not supported in generic version)
     wxDP_SPIN = 1,
 
-    // a combobox-like date picker (not supported in mac version)
+    // a combobox-like date picker (not supported on macOS <10.15.4)
     wxDP_DROPDOWN = 2,
 
     // always show century in the default date display (otherwise it depends on
@@ -44,7 +44,10 @@ enum
 // wxDatePickerCtrl: allow the user to enter the date
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDatePickerCtrlBase : public wxDateTimePickerCtrl
+// The template argument must be a class deriving from wxDateTimePickerCtrlBase
+// (i.e. in practice either this class itself or wxDateTimePickerCtrl).
+template <typename Base>
+class WXDLLIMPEXP_ADV wxDatePickerCtrlCommonBase : public Base
 {
 public:
     /*
@@ -74,6 +77,10 @@ public:
     virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) = 0;
     virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const = 0;
 };
+
+// This class is defined mostly for compatibility and is used as the base class
+// by native wxDatePickerCtrl implementations.
+typedef wxDatePickerCtrlCommonBase<wxDateTimePickerCtrl> wxDatePickerCtrlBase;
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/datectrl.h"

@@ -28,12 +28,12 @@
 class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 {
 public:
-    wxDropTarget(wxDataObject *dataObject = NULL );
+    wxDropTarget(wxDataObject *dataObject = nullptr );
 
-    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
-    virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
-    virtual bool GetData() wxOVERRIDE;
+    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) override;
+    virtual bool OnDrop(wxCoord x, wxCoord y) override;
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) override;
+    virtual bool GetData() override;
 
     // Can only be called during OnXXX methods.
     wxDataFormat GetMatchingPair();
@@ -66,7 +66,7 @@ class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
     // constructor. set data later with SetData()
-    wxDropSource( wxWindow *win = NULL,
+    wxDropSource( wxWindow *win = nullptr,
                   const wxIcon &copy = wxNullIcon,
                   const wxIcon &move = wxNullIcon,
                   const wxIcon &none = wxNullIcon);
@@ -92,7 +92,7 @@ public:
     }
 
     // start drag action
-    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) wxOVERRIDE;
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) override;
 
     void PrepareIcon( int action, GdkDragContext *context );
 

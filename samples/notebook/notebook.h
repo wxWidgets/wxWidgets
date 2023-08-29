@@ -26,7 +26,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxDECLARE_APP(MyApp);
@@ -97,7 +97,7 @@ private:
 
     void RecreateBook();
     wxPanel *CreateNewPage() const;
-    void AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, const wxChar * flagName) const;
+    void AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag, const wxString& flagName) const;
 
     // Sample setup
     enum BookType
@@ -131,7 +131,7 @@ private:
 
     wxBoxSizer *m_sizerFrame;
 
-    wxImageList *m_imageList;
+    wxBookCtrlBase::Images m_images;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -186,15 +186,15 @@ enum ID_COMMANDS
     to decide what type of page it is.
 */
 
-#define I_WAS_INSERTED_PAGE_NAME        wxT("Inserted")
-#define RADIOBUTTONS_PAGE_NAME          wxT("Radiobuttons")
-#define VETO_PAGE_NAME                  wxT("Veto")
-#define MAXIMIZED_BUTTON_PAGE_NAME      wxT("Maximized button")
+#define I_WAS_INSERTED_PAGE_NAME        "Inserted"
+#define RADIOBUTTONS_PAGE_NAME          "Radiobuttons"
+#define VETO_PAGE_NAME                  "Veto"
+#define TEXT_PAGE_NAME                  "Text"
 
 // Pages that can be added by the user
-#define INSERTED_PAGE_NAME              wxT("Inserted ")
-#define ADDED_PAGE_NAME                 wxT("Added ")
-#define ADDED_PAGE_NAME_BEFORE          wxT(" Inserted before ")
-#define ADDED_SUB_PAGE_NAME             wxT(" Inserted sub-page ")
+#define INSERTED_PAGE_NAME              "Inserted "
+#define ADDED_PAGE_NAME                 "Added "
+#define ADDED_PAGE_NAME_BEFORE          " Inserted before "
+#define ADDED_SUB_PAGE_NAME             " Inserted sub-page "
 
 

@@ -20,11 +20,11 @@
 
 #include "wx/event.h"
 
-class WXDLLIMPEXP_FWD_ADV wxQueryLayoutInfoEvent;
-class WXDLLIMPEXP_FWD_ADV wxCalculateLayoutEvent;
+class WXDLLIMPEXP_FWD_CORE wxQueryLayoutInfoEvent;
+class WXDLLIMPEXP_FWD_CORE wxCalculateLayoutEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_QUERY_LAYOUT_INFO, wxQueryLayoutInfoEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALCULATE_LAYOUT,  wxCalculateLayoutEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_QUERY_LAYOUT_INFO, wxQueryLayoutInfoEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALCULATE_LAYOUT,  wxCalculateLayoutEvent );
 
 enum wxLayoutOrientation
 {
@@ -57,7 +57,7 @@ enum wxLayoutAlignment
  * orientation and size.
  */
 
-class WXDLLIMPEXP_ADV wxQueryLayoutInfoEvent: public wxEvent
+class WXDLLIMPEXP_CORE wxQueryLayoutInfoEvent: public wxEvent
 {
 public:
     wxQueryLayoutInfoEvent(wxWindowID id = 0)
@@ -87,7 +87,7 @@ public:
     void SetAlignment(wxLayoutAlignment align) { m_alignment = align; }
     wxLayoutAlignment GetAlignment() const { return m_alignment; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxQueryLayoutInfoEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxQueryLayoutInfoEvent(*this); }
 
 protected:
     int                     m_flags;
@@ -97,7 +97,7 @@ protected:
     wxLayoutAlignment       m_alignment;
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxQueryLayoutInfoEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxQueryLayoutInfoEvent);
 };
 
 typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEvent&);
@@ -106,13 +106,13 @@ typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEv
     wxEVENT_HANDLER_CAST( wxQueryLayoutInfoEventFunction, func )
 
 #define EVT_QUERY_LAYOUT_INFO(func) \
-    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_LAYOUT_INFO, wxID_ANY, wxID_ANY, wxQueryLayoutInfoEventHandler( func ), NULL ),
+    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_LAYOUT_INFO, wxID_ANY, wxID_ANY, wxQueryLayoutInfoEventHandler( func ), nullptr ),
 
 /*
  * This event is used to take a bite out of the available client area.
  */
 
-class WXDLLIMPEXP_ADV wxCalculateLayoutEvent: public wxEvent
+class WXDLLIMPEXP_CORE wxCalculateLayoutEvent: public wxEvent
 {
 public:
     wxCalculateLayoutEvent(wxWindowID id = 0)
@@ -130,14 +130,14 @@ public:
     void SetRect(const wxRect& rect) { m_rect = rect; }
     wxRect GetRect() const { return m_rect; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxCalculateLayoutEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxCalculateLayoutEvent(*this); }
 
 protected:
     int                     m_flags;
     wxRect                  m_rect;
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCalculateLayoutEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxCalculateLayoutEvent);
 };
 
 typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEvent&);
@@ -145,14 +145,14 @@ typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEv
 #define wxCalculateLayoutEventHandler( func ) wxEVENT_HANDLER_CAST(wxCalculateLayoutEventFunction, func)
 
 #define EVT_CALCULATE_LAYOUT(func) \
-    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_CALCULATE_LAYOUT, wxID_ANY, wxID_ANY, wxCalculateLayoutEventHandler( func ), NULL ),
+    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_CALCULATE_LAYOUT, wxID_ANY, wxID_ANY, wxCalculateLayoutEventHandler( func ), nullptr ),
 
 #if wxUSE_SASH
 
 // This is window that can remember alignment/orientation, does its own layout,
 // and can provide sashes too. Useful for implementing docked windows with sashes in
 // an IDE-style interface.
-class WXDLLIMPEXP_ADV wxSashLayoutWindow: public wxSashWindow
+class WXDLLIMPEXP_CORE wxSashLayoutWindow: public wxSashWindow
 {
 public:
     wxSashLayoutWindow()
@@ -205,22 +205,22 @@ class WXDLLIMPEXP_FWD_CORE wxMDIParentFrame;
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 
 // This class implements the layout algorithm
-class WXDLLIMPEXP_ADV wxLayoutAlgorithm: public wxObject
+class WXDLLIMPEXP_CORE wxLayoutAlgorithm: public wxObject
 {
 public:
     wxLayoutAlgorithm() {}
 
 #if wxUSE_MDI_ARCHITECTURE
     // The MDI client window is sized to whatever's left over.
-    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = NULL);
+    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = nullptr);
 #endif // wxUSE_MDI_ARCHITECTURE
 
     // mainWindow is sized to whatever's left over. This function for backward
     // compatibility; use LayoutWindow.
-    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = NULL);
+    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = nullptr);
 
     // mainWindow is sized to whatever's left over.
-    bool LayoutWindow(wxWindow* frame, wxWindow* mainWindow = NULL);
+    bool LayoutWindow(wxWindow* frame, wxWindow* mainWindow = nullptr);
 };
 
 #endif

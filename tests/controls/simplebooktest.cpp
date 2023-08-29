@@ -10,9 +10,6 @@
 
 #if wxUSE_BOOKCTRL
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -27,16 +24,16 @@ class SimplebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 public:
     SimplebookTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxBookCtrlBase *GetBase() const { return m_simplebook; }
+    virtual wxBookCtrlBase *GetBase() const override { return m_simplebook; }
 
-    virtual wxEventType GetChangedEvent() const
+    virtual wxEventType GetChangedEvent() const override
         { return wxEVT_BOOKCTRL_PAGE_CHANGED; }
 
-    virtual wxEventType GetChangingEvent() const
+    virtual wxEventType GetChangingEvent() const override
         { return wxEVT_BOOKCTRL_PAGE_CHANGING; }
 
     CPPUNIT_TEST_SUITE( SimplebookTestCase );

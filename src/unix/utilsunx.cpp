@@ -18,6 +18,10 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+// Define this as soon as possible and before string.h is included to get
+// memset_s() declaration from it if available.
+#define __STDC_WANT_LIB_EXT1__ 1
+
 #include "wx/utils.h"
 
 #if !defined(HAVE_SETENV) && defined(HAVE_PUTENV)
@@ -34,14 +38,12 @@
     #include "wx/wxcrtvararg.h"
     #if USE_PUTENV
         #include "wx/module.h"
-        #include "wx/hashmap.h"
     #endif
 #endif
 
 #include "wx/apptrait.h"
 
 #include "wx/process.h"
-#include "wx/scopedptr.h"
 #include "wx/thread.h"
 
 #include "wx/cmdline.h"
@@ -50,6 +52,7 @@
 
 #include "wx/private/selectdispatcher.h"
 #include "wx/private/fdiodispatcher.h"
+#include "wx/private/glibc.h"
 #include "wx/unix/private/execute.h"
 #include "wx/unix/pipe.h"
 #include "wx/unix/private.h"
@@ -57,6 +60,10 @@
 #include "wx/evtloop.h"
 #include "wx/mstream.h"
 #include "wx/private/fdioeventloopsourcehandler.h"
+#include "wx/config.h"
+#include "wx/filename.h"
+
+#include <memory>
 
 #include <pwd.h>
 #include <sys/wait.h>       // waitpid()
@@ -80,7 +87,11 @@
 // different platforms and even different versions of the same system (Solaris
 // 7 and 8): if you want to test for this, don't forget that the problems only
 // appear if the large files support is enabled
-#ifdef HAVE_STATFS
+#if defined(HAVE_STATVFS)
+    #include <sys/statvfs.h>
+
+    #define wxStatfs statvfs
+#elif defined(HAVE_STATFS)
     #ifdef __BSD__
         #include <sys/param.h>
         #include <sys/mount.h>
@@ -94,15 +105,9 @@
         // some systems lack statfs() prototype in the system headers (AIX 4)
         extern "C" int statfs(const char *path, struct statfs *buf);
     #endif
-#endif // HAVE_STATFS
+#endif // HAVE_STATVFS/HAVE_STATFS
 
-#ifdef HAVE_STATVFS
-    #include <sys/statvfs.h>
-
-    #define wxStatfs statvfs
-#endif // HAVE_STATVFS
-
-#if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
+#if defined(HAVE_STATVFS) || defined(HAVE_STATFS)
     // WX_STATFS_T is detected by configure
     #define wxStatfs_t WX_STATFS_T
 #endif
@@ -139,6 +144,10 @@
 
 #ifdef HAVE_SETPRIORITY
     #include <sys/resource.h>   // for setpriority()
+#endif
+
+#if defined(__DARWIN__)
+    #include <sys/sysctl.h>
 #endif
 
 // ----------------------------------------------------------------------------
@@ -181,7 +190,7 @@ void wxMicroSleep(unsigned long microseconds)
     tmReq.tv_nsec = (microseconds % 1000000) * 1000;
 
     // we're not interested in remaining time nor in return value
-    (void)nanosleep(&tmReq, NULL);
+    (void)nanosleep(&tmReq, nullptr);
 #elif defined(HAVE_USLEEP)
     // uncomment this if you feel brave or if you are sure that your version
     // of Solaris has a safe usleep() function but please notice that usleep()
@@ -192,9 +201,6 @@ void wxMicroSleep(unsigned long microseconds)
     #endif // Sun
 
     usleep(microseconds);
-#elif defined(HAVE_SLEEP)
-    // under BeOS sleep() takes seconds (what about other platforms, if any?)
-    sleep(microseconds * 1000000);
 #else // !sleep function
     #error "usleep() or nanosleep() function required for wxMicroSleep"
 #endif // sleep function
@@ -203,6 +209,32 @@ void wxMicroSleep(unsigned long microseconds)
 void wxMilliSleep(unsigned long milliseconds)
 {
     wxMicroSleep(milliseconds*1000);
+}
+
+// ----------------------------------------------------------------------------
+// security
+// ----------------------------------------------------------------------------
+
+void wxSecureZeroMemory(void* v, size_t n)
+{
+#if wxCHECK_GLIBC_VERSION(2, 25) || \
+    (defined(__FreeBSD__) && __FreeBSD__ >= 11)
+    // This non-standard function is somewhat widely available elsewhere too,
+    // but may be found in a non-standard header file, or in a library that is
+    // not linked by default.
+    explicit_bzero(v, n);
+#elif defined(__DARWIN__) || defined(__STDC_LIB_EXT1__)
+    // memset_s() is available since OS X 10.9, and may be available on
+    // other platforms.
+    memset_s(v, n, 0, n);
+#else
+    // A generic implementation based on the example at:
+    // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1381.pdf
+    int c = 0;
+    volatile unsigned char *p = reinterpret_cast<unsigned char *>(v);
+    while ( n-- )
+        *p++ = c;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -300,7 +332,7 @@ bool wxPipeInputStream::CanRead() const
     wxFD_ZERO(&readfds);
     wxFD_SET(fd, &readfds);
 
-    switch ( select(fd + 1, &readfds, NULL, NULL, &tv) )
+    switch ( select(fd + 1, &readfds, nullptr, nullptr, &tv) )
     {
         case -1:
             wxLogSysError(_("Impossible to get child process input"));
@@ -413,7 +445,6 @@ public:
         }
     }
 
-#if wxUSE_UNICODE
     ArgsArray(const wchar_t* const* wargv)
     {
         int argc = 0;
@@ -427,7 +458,6 @@ public:
             m_argv[i] = wxSafeConvertWX2MB(wargv[i]).release();
         }
     }
-#endif // wxUSE_UNICODE
 
     ~ArgsArray()
     {
@@ -446,7 +476,7 @@ private:
     {
         m_argc = argc;
         m_argv = new char *[m_argc + 1];
-        m_argv[m_argc] = NULL;
+        m_argv[m_argc] = nullptr;
     }
 
     int m_argc;
@@ -462,7 +492,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-bool wxMacLaunch(const char* const* argv);
+bool wxCocoaLaunch(const char* const* argv, pid_t &pid);
 #endif
 
 long wxExecute(const wxString& command, int flags, wxProcess *process,
@@ -474,8 +504,6 @@ long wxExecute(const wxString& command, int flags, wxProcess *process,
     return wxExecute(argv, flags, process, env);
 }
 
-#if wxUSE_UNICODE
-
 long wxExecute(const wchar_t* const* wargv, int flags, wxProcess* process,
         const wxExecuteEnv *env)
 {
@@ -483,8 +511,6 @@ long wxExecute(const wchar_t* const* wargv, int flags, wxProcess* process,
 
     return wxExecute(argv, flags, process, env);
 }
-
-#endif // wxUSE_UNICODE
 
 namespace
 {
@@ -522,12 +548,12 @@ int BlockUntilChildExit(wxExecuteData& execData)
 
     // Do register all the FDs we want to monitor here: first, the one used to
     // handle the signals asynchronously.
-    wxScopedPtr<wxFDIOHandler>
+    std::unique_ptr<wxFDIOHandler>
         signalHandler(wxTheApp->RegisterSignalWakeUpPipe(dispatcher));
 
 #if wxUSE_STREAMS
     // And then the two for the child output and error streams if necessary.
-    wxScopedPtr<wxFDIOHandler>
+    std::unique_ptr<wxFDIOHandler>
         stdoutHandler,
         stderrHandler;
     if ( execData.IsRedirected() )
@@ -535,25 +561,25 @@ int BlockUntilChildExit(wxExecuteData& execData)
         stdoutHandler.reset(new wxExecuteFDIOHandler
                                 (
                                     dispatcher,
-                                    execData.fdOut,
-                                    execData.bufOut
+                                    execData.m_fdOut,
+                                    execData.m_bufOut
                                 ));
         stderrHandler.reset(new wxExecuteFDIOHandler
                                 (
                                     dispatcher,
-                                    execData.fdErr,
-                                    execData.bufErr
+                                    execData.m_fdErr,
+                                    execData.m_bufErr
                                 ));
     }
 #endif // wxUSE_STREAMS
 
     // And dispatch until the PID is reset from wxExecuteData::OnExit().
-    while ( execData.pid )
+    while ( execData.m_pid )
     {
         dispatcher.Dispatch();
     }
 
-    return execData.exitcode;
+    return execData.m_exitcode;
 #else // !wxUSE_SELECT_DISPATCHER
     wxFAIL_MSG( wxS("Can't block until child exit without wxSelectDispatcher") );
 
@@ -585,24 +611,24 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     wxASSERT_MSG( wxThread::IsMain(),
                     wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
-
+    pid_t pid;
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-    // wxMacLaunch() only executes app bundles and only does it asynchronously.
+    pid = -1;
+    // wxCocoaLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling
     // through to the regular code for non app bundles.
-    if ( !(flags & wxEXEC_SYNC) && wxMacLaunch(argv) )
+    if ( !(flags & wxEXEC_SYNC) && wxCocoaLaunch(argv, pid) )
     {
-        // we don't have any PID to return so just make up something non null
-        return -1;
+        return pid;
     }
 #endif // __DARWIN__
 
     // this struct contains all information which we use for housekeeping
-    wxScopedPtr<wxExecuteData> execDataPtr(new wxExecuteData);
+    std::unique_ptr<wxExecuteData> execDataPtr(new wxExecuteData);
     wxExecuteData& execData = *execDataPtr;
 
-    execData.flags = flags;
-    execData.process = process;
+    execData.m_flags = flags;
+    execData.m_process = process;
 
     // create pipes for inter process communication
     wxPipe pipeIn,      // stdin
@@ -641,9 +667,9 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     //     But on OpenVMS we do not have fork so we have to use vfork and
     //     cross our fingers that it works.
 #ifdef __VMS
-   pid_t pid = vfork();
+   pid = vfork();
 #else
-   pid_t pid = fork();
+   pid = fork();
 #endif
    if ( pid == -1 )     // error?
     {
@@ -805,11 +831,11 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
 
             if ( flags & wxEXEC_SYNC )
             {
-                execData.bufOut.Init(outStream);
-                execData.bufErr.Init(errStream);
+                execData.m_bufOut.Init(outStream);
+                execData.m_bufErr.Init(errStream);
 
-                execData.fdOut = fdOut;
-                execData.fdErr = fdErr;
+                execData.m_fdOut = fdOut;
+                execData.m_fdErr = fdErr;
             }
         }
 #endif // HAS_PIPE_STREAMS
@@ -883,19 +909,19 @@ const wxChar* wxGetHomeDir( wxString *home  )
 
 wxString wxGetUserHome( const wxString &user )
 {
-    struct passwd *who = (struct passwd *) NULL;
+    struct passwd *who = (struct passwd *) nullptr;
 
     if ( !user )
     {
         wxChar *ptr;
 
-        if ((ptr = wxGetenv(wxT("HOME"))) != NULL)
+        if ((ptr = wxGetenv(wxT("HOME"))) != nullptr)
         {
             return ptr;
         }
 
-        if ((ptr = wxGetenv(wxT("USER"))) != NULL ||
-             (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
+        if ((ptr = wxGetenv(wxT("USER"))) != nullptr ||
+             (ptr = wxGetenv(wxT("LOGNAME"))) != nullptr)
         {
             who = getpwnam(wxSafeConvertWX2MB(ptr));
         }
@@ -911,7 +937,7 @@ wxString wxGetUserHome( const wxString &user )
       who = getpwnam (user.mb_str());
     }
 
-    return wxSafeConvertMB2WX(who ? who->pw_dir : 0);
+    return wxSafeConvertMB2WX(who ? who->pw_dir : nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -929,7 +955,11 @@ wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 {
     // Suppress stderr from the shell to avoid outputting errors if the command
     // doesn't exist.
+#ifdef __VMS
+    FILE *f = popen(( "pipe " + cmd + " 2>/nl:").ToAscii(), "r");
+#else
     FILE *f = popen((cmd + " 2>/dev/null").ToAscii(), "r");
+#endif
     if ( !f )
     {
         // Notice that this doesn't happen simply if the command doesn't exist,
@@ -962,7 +992,7 @@ wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 // private use only)
 static bool wxGetHostNameInternal(wxChar *buf, int sz)
 {
-    wxCHECK_MSG( buf, false, wxT("NULL pointer in wxGetHostNameInternal") );
+    wxCHECK_MSG( buf, false, wxT("null pointer in wxGetHostNameInternal") );
 
     *buf = wxT('\0');
 
@@ -1046,7 +1076,7 @@ bool wxGetUserId(wxChar *buf, int sz)
     struct passwd *who;
 
     *buf = wxT('\0');
-    if ((who = getpwuid(getuid ())) != NULL)
+    if ((who = getpwuid(getuid ())) != nullptr)
     {
         wxStrlcpy (buf, wxSafeConvertMB2WX(who->pw_name), sz);
         return true;
@@ -1061,7 +1091,7 @@ bool wxGetUserName(wxChar *buf, int sz)
     struct passwd *who;
 
     *buf = wxT('\0');
-    if ((who = getpwuid (getuid ())) != NULL)
+    if ((who = getpwuid (getuid ())) != nullptr)
     {
        char *comma = strchr(who->pw_gecos, ',');
        if (comma)
@@ -1078,18 +1108,58 @@ bool wxGetUserName(wxChar *buf, int sz)
 
 bool wxIsPlatform64Bit()
 {
-    const wxString machine = wxGetCommandOutput(wxT("uname -m"));
+#if SIZEOF_VOID_P == 8
+    (void)wxGetCommandOutput;
+    return true;  // 64-bit programs run only on 64-bit platforms
+#else
+    const wxString machine = wxGetCpuArchitectureName();
 
     // the test for "64" is obviously not 100% reliable but seems to work fine
     // in practice
     return machine.Contains(wxT("64")) ||
                 machine.Contains(wxT("alpha"));
+#endif
+}
+
+wxString wxGetCpuArchitectureName()
+{
+    return wxGetCommandOutput(wxT("uname -m"));
+}
+
+wxString wxGetNativeCpuArchitectureName()
+{
+#if defined(__DARWIN__)
+    // macOS on ARM will report an x86_64 process as translated, assume the native CPU is arm64
+    int translated;
+    size_t translated_size = sizeof(translated);
+    if (sysctlbyname("sysctl.proc_translated", &translated, &translated_size, nullptr, 0) == 0)
+        return "arm64";
+    else
+#endif
+        return wxGetCpuArchitectureName();
 }
 
 #ifdef __LINUX__
 
 static bool
-wxGetValueFromLSBRelease(wxString arg, const wxString& lhs, wxString* rhs)
+wxGetValuesFromOSRelease(const wxString& filename, wxLinuxDistributionInfo& ret)
+{
+    if ( !wxFileName::Exists(filename) )
+    {
+        return false;
+    }
+
+    wxFileConfig fc(wxEmptyString, wxEmptyString, wxEmptyString, filename);
+    ret.Id = fc.Read(wxS("ID"), wxEmptyString).Capitalize();
+    ret.Description = fc.Read(wxS("PRETTY_NAME"), wxEmptyString);
+    ret.Release = fc.Read(wxS("VERSION_ID"), wxEmptyString);
+    ret.CodeName = fc.Read(wxS("VERSION_CODENAME"), wxEmptyString);
+
+    return true;
+}
+
+static bool
+wxGetValueFromLSBRelease(const wxString& arg, const wxString& lhs, wxString* rhs)
 {
     // lsb_release seems to just read a global file which is always in UTF-8
     // and hence its output is always in UTF-8 as well, regardless of the
@@ -1101,6 +1171,17 @@ wxGetValueFromLSBRelease(wxString arg, const wxString& lhs, wxString* rhs)
 wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 {
     wxLinuxDistributionInfo ret;
+
+    // Read /etc/os-release and fall back to /usr/lib/os-release per below
+    // https://www.freedesktop.org/software/systemd/man/os-release.html
+    if ( wxGetValuesFromOSRelease(wxS("/etc/os-release"), ret) )
+    {
+        return ret;
+    }
+    if ( wxGetValuesFromOSRelease(wxS("/usr/lib/os-release"), ret) )
+    {
+        return ret;
+    }
 
     if ( !wxGetValueFromLSBRelease(wxS("--id"), wxS("Distributor ID:\t"),
                                    &ret.Id) )
@@ -1120,20 +1201,32 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 }
 #endif // __LINUX__
 
-// these functions are in src/osx/utilsexc_base.cpp for wxMac
+// these functions are in src/osx/utils_base.mm for wxOSX.
 #ifndef __DARWIN__
 
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
     // get OS version
     int major = -1, minor = -1, micro = -1;
+#ifdef __VMS
+    wxString release = wxGetCommandOutput(wxT("uname -v"));
+#else
     wxString release = wxGetCommandOutput(wxT("uname -r"));
+#endif
     if ( !release.empty() )
     {
+#ifdef __VMS
+        if ( wxSscanf(release.c_str(), wxT("V%d.%d-%d"), &major, &minor, &micro ) != 3 )
+#else
         if ( wxSscanf(release.c_str(), wxT("%d.%d.%d"), &major, &minor, &micro ) != 3 )
+#endif
         {
             micro = 0;
+#ifdef __VMS
+            if ( wxSscanf(release.c_str(), wxT("V%d.%d"), &major, &minor ) != 2 )
+#else
             if ( wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor ) != 2 )
+#endif
             {
                 // failed to get version string or unrecognized format
                 major = minor = micro = -1;
@@ -1161,7 +1254,11 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 
 wxString wxGetOsDescription()
 {
+#ifdef __VMS
+    return wxGetCommandOutput(wxT("uname -s -v -m"));
+#else
     return wxGetCommandOutput(wxT("uname -s -r -m"));
+#endif
 }
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
@@ -1260,7 +1357,7 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
     wxStatfs_t fs;
-    if ( wxStatfs((char *)(const char*)path.fn_str(), &fs) != 0 )
+    if ( wxStatfs(const_cast<char*>(static_cast<const char*>(path.fn_str())), &fs) != 0 )
     {
         wxLogSysError( wxT("Failed to get file system statistics") );
 
@@ -1297,9 +1394,9 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 
 #if USE_PUTENV
 
-WX_DECLARE_STRING_HASH_MAP(char *, wxEnvVars);
+#include <unordered_map>
 
-static wxEnvVars gs_envVars;
+static std::unordered_map<wxString, char*> gs_envVars;
 
 class wxSetEnvModule : public wxModule
 {
@@ -1307,7 +1404,7 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit()
     {
-        for ( wxEnvVars::const_iterator i = gs_envVars.begin();
+        for ( auto i = gs_envVars.begin();
               i != gs_envVars.end();
               ++i )
         {
@@ -1350,7 +1447,7 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
         unsetenv(variable.mb_str());
         return true;
 #else
-        value = ""; // we can't pass NULL to setenv()
+        value = ""; // we can't pass nullptr to setenv()
 #endif
     }
 
@@ -1391,7 +1488,7 @@ bool wxSetEnv(const wxString& variable, const wxString& value)
 
 bool wxUnsetEnv(const wxString& variable)
 {
-    return wxDoSetEnv(variable, NULL);
+    return wxDoSetEnv(variable, nullptr);
 }
 
 // ----------------------------------------------------------------------------
@@ -1403,7 +1500,7 @@ bool wxUnsetEnv(const wxString& variable)
 #include <signal.h>
 
 extern "C" {
-static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
+static void wxFatalSignalHandler(int WXUNUSED(signal))
 {
     if ( wxTheApp )
     {
@@ -1451,10 +1548,10 @@ bool wxHandleFatalExceptions(bool doit)
     else if ( s_savedHandlers )
     {
         // uninstall the signal handler
-        ok &= sigaction(SIGFPE, &s_handlerFPE, NULL) == 0;
-        ok &= sigaction(SIGILL, &s_handlerILL, NULL) == 0;
-        ok &= sigaction(SIGBUS, &s_handlerBUS, NULL) == 0;
-        ok &= sigaction(SIGSEGV, &s_handlerSEGV, NULL) == 0;
+        ok &= sigaction(SIGFPE, &s_handlerFPE, nullptr) == 0;
+        ok &= sigaction(SIGILL, &s_handlerILL, nullptr) == 0;
+        ok &= sigaction(SIGBUS, &s_handlerBUS, nullptr) == 0;
+        ok &= sigaction(SIGSEGV, &s_handlerSEGV, nullptr) == 0;
         if ( !ok )
         {
             wxLogDebug(wxT("Failed to uninstall our signal handler."));
@@ -1498,36 +1595,36 @@ wxAppTraits::RunLoopUntilChildExit(wxExecuteData& execData,
     // It is possible that wxExecuteData::OnExit() had already been called
     // and reset the PID to 0, in which case we don't need to do anything
     // at all.
-    if ( !execData.pid )
-        return execData.exitcode;
+    if ( !execData.m_pid )
+        return execData.m_exitcode;
 
 #if wxUSE_STREAMS
     // Monitor the child streams if necessary.
-    wxScopedPtr<wxEventLoopSourceHandler>
+    std::unique_ptr<wxEventLoopSourceHandler>
         stdoutHandler,
         stderrHandler;
     if ( execData.IsRedirected() )
     {
         stdoutHandler.reset(new wxExecuteEventLoopSourceHandler
                                 (
-                                    execData.fdOut, execData.bufOut
+                                    execData.m_fdOut, execData.m_bufOut
                                 ));
         stderrHandler.reset(new wxExecuteEventLoopSourceHandler
                                 (
-                                    execData.fdErr, execData.bufErr
+                                    execData.m_fdErr, execData.m_bufErr
                                 ));
     }
 #endif // wxUSE_STREAMS
 
     // Store the event loop in the data associated with the child
     // process so that it could exit the loop when the child exits.
-    execData.syncEventLoop = &loop;
+    execData.m_syncEventLoop = &loop;
 
     // And run it.
     loop.Run();
 
     // The exit code will have been set when the child termination was detected.
-    return execData.exitcode;
+    return execData.m_exitcode;
 }
 
 // ----------------------------------------------------------------------------
@@ -1608,11 +1705,9 @@ void wxExecuteData::OnSomeChildExited(int WXUNUSED(sig))
     // Make a copy of the list before iterating over it to avoid problems due
     // to deleting entries from it in the process.
     const ChildProcessesData allChildProcesses = ms_childProcesses;
-    for ( ChildProcessesData::const_iterator it = allChildProcesses.begin();
-          it != allChildProcesses.end();
-          ++it )
+    for ( const auto& kv : allChildProcesses )
     {
-        const int pid = it->first;
+        const int pid = kv.first;
 
         // Check whether this child exited.
         int exitcode;
@@ -1622,11 +1717,11 @@ void wxExecuteData::OnSomeChildExited(int WXUNUSED(sig))
         // And handle its termination if it did.
         //
         // Notice that this will implicitly remove it from ms_childProcesses.
-        it->second->OnExit(exitcode);
+        kv.second->OnExit(exitcode);
     }
 }
 
-void wxExecuteData::OnStart(int pid_)
+void wxExecuteData::OnStart(int pid)
 {
     wxCHECK_RET( wxTheApp,
                  wxS("Ensure wxTheApp is set before calling wxExecute()") );
@@ -1640,21 +1735,21 @@ void wxExecuteData::OnStart(int pid_)
 
 
     // Remember the child PID to be able to wait for it later.
-    pid = pid_;
+    m_pid = pid;
 
     // Also save it in wxProcess where it will be accessible to the user code.
-    if ( process )
-        process->SetPid(pid);
+    if ( m_process )
+        m_process->SetPid(m_pid);
 
     // Add this object itself to the list of child processes so that
     // we can check for its termination the next time we get SIGCHLD.
-    ms_childProcesses[pid] = this;
+    ms_childProcesses[m_pid] = this;
 
     // However, if the child exited before we finished setting up above,
     // we may have already missed its SIGCHLD.  So we also do an explicit
     // check here before returning.
     int exitcode;
-    if ( CheckForChildExit(pid, &exitcode) )
+    if ( CheckForChildExit(m_pid, &exitcode) )
     {
         // Handle its termination if it did.
         // This call will implicitly remove it from ms_childProcesses
@@ -1663,18 +1758,18 @@ void wxExecuteData::OnStart(int pid_)
     }
 }
 
-void wxExecuteData::OnExit(int exitcode_)
+void wxExecuteData::OnExit(int exitcode)
 {
     // Remove this process from the hash list of child processes that are
     // still open as soon as possible to ensure we don't process it again even
     // if another SIGCHLD happens.
-    if ( !ms_childProcesses.erase(pid) )
+    if ( !ms_childProcesses.erase(m_pid) )
     {
-        wxFAIL_MSG(wxString::Format(wxS("Data for PID %d not in the list?"), pid));
+        wxFAIL_MSG(wxString::Format(wxS("Data for PID %d not in the list?"), m_pid));
     }
 
 
-    exitcode = exitcode_;
+    m_exitcode = exitcode;
 
 #if wxUSE_STREAMS
     if ( IsRedirected() )
@@ -1682,16 +1777,16 @@ void wxExecuteData::OnExit(int exitcode_)
         // Read the remaining data in a blocking way: this is fine because the
         // child has already exited and hence all the data must be already
         // available in the streams buffers.
-        bufOut.ReadAll();
-        bufErr.ReadAll();
+        m_bufOut.ReadAll();
+        m_bufErr.ReadAll();
     }
 #endif // wxUSE_STREAMS
 
     // Notify user about termination if required
-    if ( !(flags & wxEXEC_SYNC) )
+    if ( !(m_flags & wxEXEC_SYNC) )
     {
-        if ( process )
-            process->OnTerminate(pid, exitcode);
+        if ( m_process )
+            m_process->OnTerminate(m_pid, m_exitcode);
 
         // in case of asynchronous execution we don't need this object any more
         // after the child terminates
@@ -1700,10 +1795,10 @@ void wxExecuteData::OnExit(int exitcode_)
     else // sync execution
     {
         // let wxExecute() know that the process has terminated
-        pid = 0;
+        m_pid = 0;
 
         // Stop the event loop for synchronous wxExecute() if we're running one.
-        if ( syncEventLoop )
-            syncEventLoop->ScheduleExit();
+        if ( m_syncEventLoop )
+            m_syncEventLoop->ScheduleExit();
     }
 }

@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/statline.h"
 
@@ -30,6 +27,8 @@
     #include "wx/msw/private.h"
     #include "wx/msw/missing.h"
 #endif
+
+#include "wx/msw/private/darkmode.h"
 
 // ============================================================================
 // implementation
@@ -63,8 +62,13 @@ WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
     // add our default styles
-    msStyle |= SS_SUNKEN | SS_NOTIFY | WS_CLIPSIBLINGS;
+    msStyle |= SS_NOTIFY | WS_CLIPSIBLINGS;
     msStyle |= SS_GRAYRECT ;
+
+    // Sunken 3D border looks too bright in dark mode as it uses white colour,
+    // so we use another style there for less ostentatious appearance.
+    if ( !wxMSWDarkMode::IsActive() )
+        msStyle |= SS_SUNKEN;
 
     return msStyle ;
 }

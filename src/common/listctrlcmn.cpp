@@ -18,13 +18,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTCTRL
 
 #include "wx/listctrl.h"
+#include "wx/imaglist.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -82,7 +80,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -125,7 +122,7 @@ wxCONSTRUCTOR_5( wxListCtrl, wxWindow*, Parent, wxWindowID, Id, \
                 wxPoint, Position, wxSize, Size, long, WindowStyle )
 
 /*
- TODO : Expose more information of a list's layout etc. via appropriate objects 
+ TODO : Expose more information of a list's layout etc. via appropriate objects
  (see NotebookPageInfo)
  */
 
@@ -248,7 +245,133 @@ wxItemAttr *wxListCtrlBase::OnGetItemAttr(long item) const
 {
     return (m_alternateRowColour.GetBackgroundColour().IsOk() && (item % 2))
         ? wxConstCast(&m_alternateRowColour, wxItemAttr)
-        : NULL; // no attributes by default
+        : nullptr; // no attributes by default
+}
+
+wxString wxListCtrlBase::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
+{
+    // this is a pure virtual function, in fact - which is not really pure
+    // because the controls which are not virtual don't need to implement it
+    wxFAIL_MSG("wxListCtrl::OnGetItemText not supposed to be called");
+
+    return wxEmptyString;
+}
+
+bool wxListCtrlBase::OnGetItemIsChecked(long WXUNUSED(item)) const
+{
+    // this is a pure virtual function, in fact - which is not really pure
+    // because the controls which are not virtual don't need to implement it
+    wxFAIL_MSG("wxListCtrl::OnGetItemIsChecked not supposed to be called");
+
+    return false;
+}
+
+int wxListCtrlBase::OnGetItemImage(long WXUNUSED(item)) const
+{
+    wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
+                -1,
+                "List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden.");
+    return -1;
+}
+
+int wxListCtrlBase::OnGetItemColumnImage(long item, long column) const
+{
+    if ( !column )
+        return OnGetItemImage(item);
+
+    return -1;
+}
+
+wxItemAttr* wxListCtrlBase::OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
+{
+    return OnGetItemAttr(item);
+}
+
+// ----------------------------------------------------------------------------
+// Images support
+// ----------------------------------------------------------------------------
+
+void wxListCtrlBase::SetNormalImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesNormal.SetImages(images);
+
+    DoUpdateImages(wxIMAGE_LIST_NORMAL);
+}
+
+void wxListCtrlBase::SetSmallImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesSmall.SetImages(images);
+
+    DoUpdateImages(wxIMAGE_LIST_SMALL);
+}
+
+wxWithImages* wxListCtrlBase::GetImages(int which)
+{
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        return &m_imagesNormal;
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        return &m_imagesSmall;
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        return &m_imagesState;
+    }
+    return nullptr;
+}
+
+const wxWithImages* wxListCtrlBase::GetImages(int which) const
+{
+    return const_cast<wxListCtrlBase*>(this)->GetImages(which);
+}
+
+wxImageList* wxListCtrlBase::GetUpdatedImageList(int which)
+{
+    wxWithImages* const images = GetImages(which);
+    return images ? images->GetUpdatedImageListFor(this) : nullptr;
+}
+
+wxImageList *wxListCtrlBase::GetImageList(int which) const
+{
+    const wxWithImages* const images = GetImages(which);
+    return images ? images->GetImageList() : nullptr;
+}
+
+void wxListCtrlBase::SetImageList(wxImageList *imageList, int which)
+{
+    if ( which == wxIMAGE_LIST_NORMAL )
+    {
+        m_imagesNormal.SetImageList(imageList);
+    }
+    else if ( which == wxIMAGE_LIST_SMALL )
+    {
+        m_imagesSmall.SetImageList(imageList);
+    }
+    else if ( which == wxIMAGE_LIST_STATE )
+    {
+        m_imagesState.SetImageList(imageList);
+    }
+    else
+    {
+        wxFAIL_MSG("unknown image list");
+        return;
+    }
+
+    // Actually update the images shown in the control.
+    DoUpdateImages(which);
+}
+
+void wxListCtrlBase::AssignImageList(wxImageList *imageList, int which)
+{
+    SetImageList(imageList, which);
+    if ( which == wxIMAGE_LIST_NORMAL )
+        m_imagesNormal.TakeOwnership();
+    else if ( which == wxIMAGE_LIST_SMALL )
+        m_imagesSmall.TakeOwnership();
+    else if ( which == wxIMAGE_LIST_STATE )
+        m_imagesState.TakeOwnership();
 }
 
 #endif // wxUSE_LISTCTRL

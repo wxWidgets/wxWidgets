@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by: Artur Bac 2010-10-01 AMD64 Port
 // Created:     2005-01-08
-// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STACKWALKER
 
@@ -233,6 +230,16 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
     sf.AddrFrame.Mode      = AddrModeFlat;
 
     dwMachineType = IMAGE_FILE_MACHINE_AMD64;
+#elif defined(_M_ARM64)
+    // TODO: Verify this code once Windows 10 for ARM64 is commercially available
+    sf.AddrPC.Offset       = ctx.Pc;
+    sf.AddrPC.Mode         = AddrModeFlat;
+    sf.AddrStack.Offset    = ctx.Sp;
+    sf.AddrStack.Mode      = AddrModeFlat;
+    sf.AddrFrame.Offset    = ctx.Fp;
+    sf.AddrFrame.Mode      = AddrModeFlat;
+
+    dwMachineType = IMAGE_FILE_MACHINE_ARM64;
 #elif  defined(_M_IX86)
     sf.AddrPC.Offset       = ctx.Eip;
     sf.AddrPC.Mode         = AddrModeFlat;
@@ -257,10 +264,10 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
                                 ::GetCurrentThread(),
                                 &sf,
                                 &ctx,
-                                NULL,       // read memory function (default)
+                                nullptr,       // read memory function (default)
                                 wxDbgHelpDLL::SymFunctionTableAccess,
                                 wxDbgHelpDLL::SymGetModuleBase,
-                                NULL        // address translator for 16 bit
+                                nullptr        // address translator for 16 bit
                             ) )
         {
             if ( ::GetLastError() )

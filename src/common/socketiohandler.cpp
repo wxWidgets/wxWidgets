@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SOCKETS
 
@@ -41,7 +38,7 @@ bool wxSocketFDBasedManager::OnInit()
         return false;
 
     m_fdioManager = traits->GetFDIOManager();
-    return m_fdioManager != NULL;
+    return m_fdioManager != nullptr;
 }
 
 void wxSocketFDBasedManager::Install_Callback(wxSocketImpl *socket_,

@@ -21,7 +21,7 @@
 
     @since 3.1.0
 
-    @library{wxadv}
+    @library{wxcore}
  */
 class wxAddRemoveAdaptor
 {
@@ -95,8 +95,8 @@ public:
     using this control instead of just creating and managing the buttons
     directly is that the correct buttons and layout for the current platform
     are used by this class. E.g. the buttons are positioned under the list
-    control under OS X and GTK+ but to its right under MSW and the buttons
-    themselves use system-specific bitmaps under OS X.
+    control under macOS and GTK+ but to its right under MSW and the buttons
+    themselves use system-specific bitmaps under macOS.
 
     This class is always used in conjunction with wxAddRemoveAdaptor which is
     used to actually add items to or remove them from the control containing
@@ -121,7 +121,7 @@ public:
             virtual wxWindow* GetItemsCtrl() const { return m_lbox; }
 
             virtual bool CanAdd() const { return true; }
-            virtual bool CanRename() const { return m_lbox->GetSelection() != wxNOT_FOUND; }
+            virtual bool CanRemove() const { return m_lbox->GetSelection() != wxNOT_FOUND; }
             virtual void OnAdd() { ... get the new item from user and add it ... }
             virtual void OnRemove() { m_lbox->Delete(m_lbox->GetSelection()); }
 
@@ -134,7 +134,7 @@ public:
 
     @since 3.1.0
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
  */
 class wxAddRemoveCtrl : public wxPanel
@@ -184,7 +184,7 @@ public:
         this window, i.e. wxAddRemoveAdaptor::GetItemsCtrl() must return a
         pointer to an existing child of this control.
 
-        The @a adaptor pointer must be non-NULL and heap-allocated as the
+        The @a adaptor pointer must be non-null and heap-allocated as the
         control takes ownership of it and will delete it later.
      */
     void SetAdaptor(wxAddRemoveAdaptor* adaptor);

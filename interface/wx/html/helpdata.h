@@ -20,7 +20,7 @@ public:
     wxString GetTitle() const;
     wxString GetStart() const;
     wxString GetBasePath() const;
-    
+
     /* SetContentsRange: store in the bookrecord where in the index/contents lists the
      * book's records are stored. This to facilitate searching in a specific book.
      * This code will have to be revised when loading/removing books becomes dynamic.

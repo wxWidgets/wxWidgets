@@ -20,7 +20,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxCheckBoxNameStr)
+            const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -29,18 +29,18 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxCheckBoxNameStr);
-    virtual void SetValue(bool);
-    virtual bool GetValue() const;
+            const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
+    virtual void SetValue(bool) override;
+    virtual bool GetValue() const override;
 
-    virtual void Command(wxCommandEvent& event);
+    virtual void Command(wxCommandEvent& event) override;
 
     // osx specific event handling common for all osx-ports
 
-    virtual bool        OSXHandleClicked( double timestampsec );
+    virtual bool        OSXHandleClicked( double timestampsec ) override;
 protected:
-    void DoSet3StateValue(wxCheckBoxState val);
-    virtual wxCheckBoxState DoGet3StateValue() const;
+    void DoSet3StateValue(wxCheckBoxState val) override;
+    virtual wxCheckBoxState DoGet3StateValue() const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
@@ -60,7 +60,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxCheckBoxNameStr)
+            const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -69,12 +69,11 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxCheckBoxNameStr);
-    virtual void SetValue(bool);
-    virtual bool GetValue() const;
-    virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+            const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
+    virtual void SetValue(bool) override;
+    virtual bool GetValue() const override;
     virtual void SetLabel(const wxBitmap *bitmap);
-    virtual void SetLabel( const wxString & WXUNUSED(name) ) {}
+    virtual void SetLabel( const wxString & WXUNUSED(name) ) override {}
 
     wxDECLARE_DYNAMIC_CLASS(wxBitmapCheckBox);
 };

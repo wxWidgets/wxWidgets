@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -33,7 +30,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 class MyFrame : public wxFrame
@@ -63,7 +60,7 @@ private:
 enum
 {
     ID_Quit = wxID_EXIT,
-    ID_Logs = wxID_HIGHEST+1,
+    ID_Logs = wxID_HIGHEST,
     ID_Browser,
     ID_PlugProvider
 };
@@ -99,7 +96,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame(wxT("wxArtProvider sample"),
+    MyFrame *frame = new MyFrame("wxArtProvider sample",
                                  wxPoint(50, 50), wxSize(450, 340));
     frame->Show(true);
     return true;
@@ -113,7 +110,7 @@ class MyArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
 };
 
 #include "info.xpm"
@@ -147,7 +144,7 @@ wxBitmap MyArtProvider::CreateBitmap(const wxArtID& id,
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size, style)
 {
     SetIcon(wxICON(sample));
 
@@ -156,23 +153,23 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, wxT("&About\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
-    menuFile->AppendCheckItem(ID_PlugProvider, wxT("&Plug-in art provider"), wxT("Enable custom art provider"));
+    menuFile->AppendCheckItem(ID_PlugProvider, "&Plug-in art provider\tCtrl-P", "Enable custom art provider");
     menuFile->AppendSeparator();
 
 #if wxUSE_LOG
-    menuFile->Append(ID_Logs, wxT("&Logging test"), wxT("Show some logging output"));
+    menuFile->Append(ID_Logs, "&Logging test\tCtrl-L", "Show some logging output");
 #endif // wxUSE_LOG
-    menuFile->Append(ID_Browser, wxT("&Resources browser"), wxT("Browse all available icons"));
+    menuFile->Append(ID_Browser, "&Resources browser\tCtrl-R", "Browse all available icons");
     menuFile->AppendSeparator();
 
-    menuFile->Append(ID_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    menuFile->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, wxT("&File"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -190,22 +187,22 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_LOG
 void MyFrame::OnLogs(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogMessage(wxT("Some information."));
-    wxLogError(wxT("This is an error."));
-    wxLogWarning(wxT("A warning."));
-    wxLogError(wxT("Yet another error."));
+    wxLogMessage("Some information.");
+    wxLogError("This is an error.");
+    wxLogWarning("A warning.");
+    wxLogError("Yet another error.");
     wxLog::GetActiveTarget()->Flush();
-    wxLogMessage(wxT("Check/uncheck 'File/Plug-in art provider' and try again."));
+    wxLogMessage("Check/uncheck 'File/Plug-in art provider' and try again.");
 }
 #endif // wxUSE_LOG
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( wxT("This is the about dialog of wxArtProvider sample.\n")
-                wxT("Welcome to %s"), wxVERSION_STRING);
+    msg.Printf( "This is the about dialog of wxArtProvider sample.\n"
+                "Welcome to %s", wxVERSION_STRING);
 
-    wxMessageBox(msg, wxT("About wxArtProvider sample"),
+    wxMessageBox(msg, "About wxArtProvider sample",
         wxOK | wxICON_INFORMATION, this);
 }
 

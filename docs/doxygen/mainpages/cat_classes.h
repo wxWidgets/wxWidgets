@@ -62,7 +62,7 @@ Other layout classes:
 @section page_class_cat_managedwnd Managed Windows
 
 There are several types of window that are directly controlled by the window
-manager (such as MS Windows, or the Motif Window Manager). Frames and dialogs
+manager (such as MS Windows, or the X11 Window Manager). Frames and dialogs
 are similar in wxWidgets, but only dialogs may be modal.
 
 Related Overviews: @ref overview_cmndlg
@@ -126,7 +126,7 @@ Controls that are not static can have wxValidator associated with them.
     mode
 @li wxNotebook: A notebook class
 @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
-@li wxPropertyGrid: A complex control to display hierachical, editable information
+@li wxPropertyGrid: A complex control to display hierarchical, editable information
 @li wxRadioBox: A group of radio buttons
 @li wxRadioButton: A round button to be used with others in a mutually
     exclusive way
@@ -354,6 +354,7 @@ Related Overviews: @ref overview_bitmap
 @li wxCursor: A small, transparent bitmap representing the cursor
 @li wxIcon: A small, transparent bitmap for assigning to frames and drawing on
     device contexts
+@li wxIconBundle: Contains multiple copies of an icon in different sizes
 @li wxImage: A platform-independent image class
 @li wxImageHandler: Class for loading a saving a wxImage in a specific format
 @li wxImageList: A list of images, used with some controls
@@ -632,13 +633,13 @@ these classes provide a subset or almost complete STL API.
 
 Related Overviews: @ref overview_container
 
-@li wxArray<T>: A type-safe dynamic array implementation (macro based)
+@li wxArray<T>: A legacy dynamic array, use std::vector or wxVector instead.
 @li wxArrayString: An efficient container for storing wxString objects
 @li wxHashMap<T>: A type-safe hash map implementation (macro based)
 @li wxHashSet<T>: A type-safe hash set implementation(macro based)
 @li wxHashTable: A simple hash table implementation (deprecated, use wxHashMap)
 @li wxList<T>: A type-safe linked list implementation (macro based)
-@li wxVector<T>: Template base vector implementation identical to std::vector
+@li wxVector<T>: A template-based vector implementation identical to std::vector
 
 
 
@@ -666,6 +667,7 @@ Related overview: @ref overview_file
 @li wxFile: Low-level file input/output class.
 @li wxFFile: Another low-level file input/output class.
 @li wxTempFile: Class to safely replace an existing file
+@li wxTempFFile: Another class to safely replace an existing file
 @li wxTextFile: Class for working with text files as with arrays of lines
 @li wxStandardPaths: Paths for standard directories
 @li wxPathList: A class to help search multiple paths
@@ -701,8 +703,11 @@ Related overview: @ref overview_stream
 @li wxFFileInputStream: Another file input stream class
 @li wxFFileOutputStream: Another file output stream class
 @li wxTempFileOutputStream: Stream to safely replace an existing file
+@li wxTempFFileOutputStream: Another stream to safely replace an existing file
 @li wxStringInputStream: String input stream class
 @li wxStringOutputStream: String output stream class
+@li wxLZMAInputStream: LZMA decompression stream class
+@li wxLZMAOutputStream: LZMA compression stream class
 @li wxZlibInputStream: Zlib and gzip (compression) input stream class
 @li wxZlibOutputStream: Zlib and gzip (compression) output stream class
 @li wxZipInputStream: Input stream for reading from ZIP archives

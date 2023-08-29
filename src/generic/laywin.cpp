@@ -14,10 +14,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
 #endif
@@ -267,7 +263,7 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
 
     // Find the last layout-aware window, so we can make it fill all remaining
     // space.
-    wxWindow *lastAwareWindow = NULL;
+    wxWindow *lastAwareWindow = nullptr;
     wxWindowList::compatibility_iterator node = parent->GetChildren().GetFirst();
 
     while (node)
@@ -293,9 +289,9 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     {
         wxWindow* win = node->GetData();
 
-        // If mainWindow is NULL and we're at the last window,
+        // If mainWindow is null and we're at the last window,
         // skip this, because we'll simply make it fit the remaining space.
-        if (win->IsShown() && (win != mainWindow) && (mainWindow != NULL || win != lastAwareWindow))
+        if (win->IsShown() && (win != mainWindow) && (mainWindow != nullptr || win != lastAwareWindow))
         {
             event.SetId(win->GetId());
             event.SetEventObject(win);
@@ -317,9 +313,9 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     {
         wxWindow* win = node->GetData();
 
-        // If mainWindow is NULL and we're at the last window,
+        // If mainWindow is null and we're at the last window,
         // skip this, because we'll simply make it fit the remaining space.
-        if (win->IsShown() && (win != mainWindow) && (mainWindow != NULL || win != lastAwareWindow))
+        if (win->IsShown() && (win != mainWindow) && (mainWindow != nullptr || win != lastAwareWindow))
         {
             event.SetId(win->GetId());
             event.SetEventObject(win);

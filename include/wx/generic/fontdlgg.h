@@ -45,7 +45,7 @@ public:
         : wxFontDialogBase(parent, data) { Init(); }
     virtual ~wxGenericFontDialog();
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
     // Internal functions
     void OnCloseWindow(wxCloseEvent& event);
@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    virtual bool DoCreate(wxWindow *parent) wxOVERRIDE;
+    virtual bool DoCreate(wxWindow *parent) override;
 
 private:
 
@@ -78,7 +78,9 @@ private:
     wxChoice *m_colourChoice;
     wxCheckBox *m_underLineCheckBox;
 
-#if !USE_SPINCTRL_FOR_POINT_SIZE
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    wxSpinCtrl *m_pointSizeSpin;
+#else
     wxChoice   *m_pointSizeChoice;
 #endif
 

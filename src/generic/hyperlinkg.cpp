@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HYPERLINKCTRL
 
@@ -37,10 +34,13 @@
     #include "wx/menu.h"
     #include "wx/log.h"
     #include "wx/dataobj.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/clipbrd.h"
 #include "wx/renderer.h"
+
+#include "wx/private/hyperlink.h"
 
 // ============================================================================
 // implementation
@@ -66,14 +66,14 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
 
-    // set to non empty strings both the url and the label
+    // set to non-empty strings both the url and the label
     SetURL(url.empty() ? label : url);
     SetLabel(label.empty() ? url : label);
 
     Init();
     SetForegroundColour(m_normalColour);
 
-    // by default the font of an hyperlink control is underlined
+    // by default the font of a hyperlink control is underlined
     wxFont f = GetFont();
     f.SetUnderlined(true);
     SetFont(f);
@@ -84,19 +84,19 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     // connect our event handlers:
     // NOTE: since this class is the base class of the GTK+'s native implementation
     //       of wxHyperlinkCtrl, we cannot use the static macros in wxBEGIN/wxEND_EVENT_TABLE
-    //       blocks, otherwise the GTK+'s native impl of wxHyperlinkCtrl would not
+    //       blocks; otherwise, the GTK+'s native impl of wxHyperlinkCtrl would not
     //       behave correctly (as we intercept events doing things which interfere
     //       with GTK+'s native handling):
 
-    Connect( wxEVT_PAINT, wxPaintEventHandler(wxGenericHyperlinkCtrl::OnPaint) );
-    Connect( wxEVT_SET_FOCUS, wxFocusEventHandler(wxGenericHyperlinkCtrl::OnFocus) );
-    Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler(wxGenericHyperlinkCtrl::OnFocus) );
-    Connect( wxEVT_CHAR, wxKeyEventHandler(wxGenericHyperlinkCtrl::OnChar) );
-    Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeaveWindow) );
+    Bind( wxEVT_PAINT, &wxGenericHyperlinkCtrl::OnPaint, this);
+    Bind( wxEVT_SET_FOCUS, &wxGenericHyperlinkCtrl::OnFocus, this);
+    Bind( wxEVT_KILL_FOCUS, &wxGenericHyperlinkCtrl::OnFocus, this);
+    Bind( wxEVT_CHAR, &wxGenericHyperlinkCtrl::OnChar, this);
+    Bind( wxEVT_LEAVE_WINDOW, &wxGenericHyperlinkCtrl::OnLeaveWindow, this);
 
-    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftDown) );
-    Connect( wxEVT_LEFT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftUp) );
-    Connect( wxEVT_MOTION, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnMotion) );
+    Bind( wxEVT_LEFT_DOWN, &wxGenericHyperlinkCtrl::OnLeftDown, this);
+    Bind( wxEVT_LEFT_UP, &wxGenericHyperlinkCtrl::OnLeftUp, this);
+    Bind( wxEVT_MOTION, &wxGenericHyperlinkCtrl::OnMotion, this);
 
     ConnectMenuHandlers();
 
@@ -110,7 +110,7 @@ void wxGenericHyperlinkCtrl::Init()
     m_visited = false;
 
     // colours
-    m_normalColour = *wxBLUE;
+    m_normalColour = wxPrivate::GetLinkColour();
     m_hoverColour = *wxRED;
     m_visitedColour = wxColour("#551a8b");
 }
@@ -118,15 +118,29 @@ void wxGenericHyperlinkCtrl::Init()
 void wxGenericHyperlinkCtrl::ConnectMenuHandlers()
 {
     // Connect the event handlers for the context menu.
-    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnRightUp) );
-    Connect( wxHYPERLINK_POPUP_COPY_ID, wxEVT_MENU,
-             wxCommandEventHandler(wxGenericHyperlinkCtrl::OnPopUpCopy) );
+    Bind( wxEVT_RIGHT_UP, &wxGenericHyperlinkCtrl::OnRightUp, this);
+    Bind( wxEVT_MENU, &wxGenericHyperlinkCtrl::OnPopUpCopy, this,
+          wxHYPERLINK_POPUP_COPY_ID);
 }
 
 wxSize wxGenericHyperlinkCtrl::DoGetBestClientSize() const
 {
-    wxClientDC dc((wxWindow *)this);
+    wxClientDC dc(const_cast<wxGenericHyperlinkCtrl*>(this));
     return dc.GetTextExtent(GetLabel());
+}
+
+wxVisualAttributes wxGenericHyperlinkCtrl::GetDefaultAttributes() const
+{
+    return GetClassDefaultAttributes(GetWindowVariant());
+}
+
+/* static */
+wxVisualAttributes
+wxGenericHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    auto attrs = wxHyperlinkCtrlBase::GetClassDefaultAttributes(variant);
+    attrs.colFg = wxPrivate::GetLinkColour();
+    return attrs;
 }
 
 

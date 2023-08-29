@@ -16,7 +16,7 @@
     Base abstract class for all pickers which support an auxiliary text control.
 
     This class handles all positioning and sizing of the text control like a
-    an horizontal wxBoxSizer would do, with the text control on the left of the
+    a horizontal wxBoxSizer would do, with the text control on the left of the
     picker button.
 
     The proportion (see wxSizer documentation for more info about proportion values)
@@ -163,7 +163,7 @@ public:
 
     virtual void UpdatePickerFromTextCtrl() = 0;
     virtual void UpdateTextCtrlFromPicker() = 0;
-    
+
 protected:
     virtual long GetTextCtrlStyle(long style) const;
     virtual long GetPickerStyle(long style) const;

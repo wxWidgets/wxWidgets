@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
@@ -61,7 +58,7 @@ void wxInputConsumer::OnActivate(wxActivateEvent& event)
 wxInputHandler *
 wxInputConsumer::DoGetStdInputHandler(wxInputHandler * WXUNUSED(handlerDef))
 {
-    return NULL;
+    return nullptr;
 }
 
 void wxInputConsumer::CreateInputHandler(const wxString& inphandler)

@@ -12,10 +12,10 @@
 #include "oglstuff.h"
 
 // External function for GL errors
-myOGLErrHandler* externalMyOGLErrHandler = NULL;
+myOGLErrHandler* externalMyOGLErrHandler = nullptr;
 
 // Allow GL errors to be handled in other part of the app.
-bool MyOnGLError(int err, const GLchar* glMsg = NULL)
+bool MyOnGLError(int err, const GLchar* glMsg = nullptr)
 {
     GLenum GLErrorVal = glGetError();
 
@@ -27,7 +27,7 @@ bool MyOnGLError(int err, const GLchar* glMsg = NULL)
         return true;
     }
 
-    if ( (GLErrorVal == GL_NO_ERROR) && (glMsg == NULL) )
+    if ( (GLErrorVal == GL_NO_ERROR) && (glMsg == nullptr) )
         return true;
 
     if ( externalMyOGLErrHandler )
@@ -42,7 +42,7 @@ bool MyOnGLError(int err, const GLchar* glMsg = NULL)
 
 // We do calculations with 'doubles'. We pass 'GLFloats' to the shaders
 // because OGL added 'doubles' since OGL 4.0, and this sample is for 3.2
-// Due to asynchronous nature of OGL, we can't not trust in the passed matrix
+// Due to asynchronous nature of OGL, we can't trust in the passed matrix
 // to be stored by GPU before the passing-function returns. So we don't use
 // temporary storage, but dedicated matrices
 void SetAsGLFloat4x4(double *matD, GLfloat *matF, int msize)
@@ -305,14 +305,14 @@ void myOGLShaders::AddCode(const GLchar* shaString, GLenum shaType)
     m_shaCode.push_back(sv);
 }
 
-void myOGLShaders::AddAttrib(std::string name)
+void myOGLShaders::AddAttrib(const std::string& name)
 {
     shaVars sv = {0, name}; //We will set the location later
     m_shaAttrib.push_back(sv);
     // We don't check the max number of attribute locations (usually 16)
 }
 
-void myOGLShaders::AddUnif(std::string name)
+void myOGLShaders::AddUnif(const std::string& name)
 {
     shaVars sv = {0, name};
     m_shaUnif.push_back(sv);
@@ -333,7 +333,7 @@ void myOGLShaders::SetAttribLocations()
     }
 }
 
-GLuint myOGLShaders::GetAttribLoc(std::string name)
+GLuint myOGLShaders::GetAttribLoc(const std::string& name)
 {
     for (shaVars_v::iterator it = m_shaAttrib.begin(); it != m_shaAttrib.end(); ++it)
     {
@@ -352,7 +352,7 @@ bool myOGLShaders::AskUnifLocations()
         GLint glret = glGetUniformLocation(m_proId, it->name.c_str());
         if ( glret == -1 )
         {
-            // Return now, this GPU program can not be used because we will
+            // Return now, this GPU program cannot be used because we will
             // pass data to unknown/unused uniform locations
             return false;
         }
@@ -362,7 +362,7 @@ bool myOGLShaders::AskUnifLocations()
     return true;
 }
 
-GLuint myOGLShaders::GetUnifLoc(std::string name)
+GLuint myOGLShaders::GetUnifLoc(const std::string& name)
 {
     for (shaVars_v::iterator it = m_shaUnif.begin(); it != m_shaUnif.end(); ++it)
     {
@@ -385,7 +385,7 @@ void myOGLShaders::Init()
     for (shaShas_v::iterator it = m_shaCode.begin(); it != m_shaCode.end(); ++it)
     {
         it->shaId = glCreateShader(it->typeSha);
-        glShaderSource(it->shaId, 1, &(it->scode), NULL);
+        glShaderSource(it->shaId, 1, &(it->scode), nullptr);
         MyOnGLError(myoglERR_SHADERCREATE);
 
         resC = Compile(it->shaId);
@@ -527,7 +527,7 @@ void myLight::Set(const myVec3& position, GLfloat intensity,
 myOGLTriangles::myOGLTriangles()
 {
     m_triangVAO = m_bufVertId = m_bufColNorId = m_bufIndexId = 0;
-    m_triangShaders = NULL;
+    m_triangShaders = nullptr;
 }
 
 myOGLTriangles::~myOGLTriangles()
@@ -557,7 +557,7 @@ void myOGLTriangles::Clear()
 
     glFlush(); //Tell GL to execute those commands now, but we don't wait for them
 
-    m_triangShaders = NULL;
+    m_triangShaders = nullptr;
     m_triangVAO = m_bufIndexId = m_bufColNorId = m_bufVertId = 0;
 }
 
@@ -568,7 +568,7 @@ void myOGLTriangles::SetBuffers(myOGLShaders* theShader,
 {
     MyOnGLError(myoglERR_CLEAR); //clear error stack
 
-    // NOTE: have you realized that I fully trust on parameters being != 0 and != NULL?
+    // NOTE: have you realized that I fully trust on parameters being != 0 and != nullptr?
 
     // Part 1: Buffers - - - - - - - - - - - - - - - - - - -
 
@@ -592,7 +592,7 @@ void myOGLTriangles::SetBuffers(myOGLShaders* theShader,
     glBindBuffer(GL_ARRAY_BUFFER, m_bufColNorId);
     // Allocate space for both arrays
     nBytes = (nuPoints * 4 + nuTriangs * 3) * sizeof(GLfloat);
-    glBufferData(GL_ARRAY_BUFFER, nBytes, NULL, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, nBytes, nullptr, GL_STATIC_DRAW);
     if ( ! MyOnGLError(myoglERR_BUFFER) )
     {
         // Likely the GPU got out of memory
@@ -707,7 +707,7 @@ void myOGLTriangles::Draw(const GLfloat* unifMvp, const GLfloat* unifToVw,
 myOGLString::myOGLString()
 {
     m_bufPosId = m_textureId = m_stringVAO = m_textureUnit = 0;
-    m_stringShaders = NULL;
+    m_stringShaders = nullptr;
 }
 
 myOGLString::~myOGLString()
@@ -740,7 +740,7 @@ void myOGLString::Clear()
     glFlush(); //Tell GL to execute those commands now, but we don't wait for them
 
     m_bufPosId = m_textureId = m_stringVAO = m_textureUnit = 0;
-    m_stringShaders = NULL;
+    m_stringShaders = nullptr;
 }
 
 void myOGLString::SetStringWithVerts(myOGLShaders* theShader,
@@ -759,7 +759,7 @@ void myOGLString::SetStringWithVerts(myOGLShaders* theShader,
     glBindBuffer(GL_ARRAY_BUFFER, m_bufPosId);
     // (4+4) (vertices + normals) x 3 components + 4 text-vertices x 2 components
     GLsizeiptr nBytes = (8 * 3 + 4 * 2) * sizeof(GLfloat);
-    glBufferData(GL_ARRAY_BUFFER, nBytes, NULL, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, nBytes, nullptr, GL_STATIC_DRAW);
 
     if ( ! MyOnGLError(myoglERR_BUFFER) )
     {
@@ -925,7 +925,7 @@ void myOGLImmutString::SetImmutString(myOGLShaders* theShader,
     SetAsGLFloat4x4(imaVerts, fimaVerts, 12);
 
     // Call the base class without normals, it will handle this case
-    SetStringWithVerts(theShader, tImage, tWidth, tHeigh, fimaVerts, NULL);
+    SetStringWithVerts(theShader, tImage, tWidth, tHeigh, fimaVerts, nullptr);
 }
 
 void myOGLImmutString::SetOrtho(int winWidth, int winHeight)
@@ -1187,16 +1187,16 @@ void myOGLManager::SetStringOnPyr(const unsigned char* strImage, int iWidth, int
     double edgeLen = MyDistance(myVec3(gVerts[0], gVerts[1], gVerts[2]),
                                  myVec3(gVerts[6], gVerts[7], gVerts[8]));
     GLfloat prop = ((GLfloat) iHeigh) / ((GLfloat) iWidth);
-    GLfloat rw = (GLfloat) (edgeLen / (1 + 4.0 * prop / sqrt(3.0)));
+    GLfloat rw = float(edgeLen) / (1 + 4 * prop / std::sqrt(3.0f));
     GLfloat h = prop * rw;
-    GLfloat de = (GLfloat)(2.0 * h / sqrt(3.0));
+    GLfloat de = 2 * h / std::sqrt(3.0f);
     // A bit of separation of the face so as to avoid z-fighting
-    GLfloat rY = gVerts[1] - (GLfloat)0.01; // Towards outside
+    GLfloat rY = gVerts[1] - 0.01f; // Towards outside
     GLfloat sVerts[12];
     // The image was created top to bottom, but OpenGL axis are bottom to top.
     // The image would display upside down. We avoid it choosing the right
     // order of vertices and texture coords. See myOGLString::SetStringWithVerts()
-    sVerts[0] = gVerts[6] + de;  sVerts[1] = rY;   sVerts[2] = gVerts[8] + h / (GLfloat)2.0;
+    sVerts[0] = gVerts[6] + de;  sVerts[1] = rY;   sVerts[2] = gVerts[8] + h / 2;
     sVerts[3] = sVerts[0]     ;  sVerts[4] = rY;   sVerts[5] = sVerts[2] + h;
     sVerts[6] = sVerts[0] + rw;  sVerts[7] = rY;   sVerts[8] = sVerts[2];
     sVerts[9] = sVerts[6]     ; sVerts[10] = rY;  sVerts[11] = sVerts[5];
@@ -1245,7 +1245,7 @@ void myOGLManager::Render()
     m_StringOnPyr.Draw(m_Camera.GetFloatMVP(), m_Camera.GetFloatToVw(), &m_Light);
     // This string is at the very front, whatever z-coords are given
     glDisable(GL_DEPTH_TEST);
-    m_ImmString.Draw(m_ImmString.GetFloatMVP(), NULL, NULL);
+    m_ImmString.Draw(m_ImmString.GetFloatMVP(), nullptr, nullptr);
 }
 
 void myOGLManager::OnMouseButDown(int posX, int posY)

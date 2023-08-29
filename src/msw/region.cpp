@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/region.h"
 
@@ -48,10 +45,10 @@ public:
 
     wxRegionRefData(const wxRegionRefData& data) : wxGDIRefData()
     {
-        DWORD noBytes = ::GetRegionData(data.m_region, 0, NULL);
+        DWORD noBytes = ::GetRegionData(data.m_region, 0, nullptr);
         RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
         ::GetRegionData(data.m_region, noBytes, rgnData);
-        m_region = ::ExtCreateRegion(NULL, noBytes, rgnData);
+        m_region = ::ExtCreateRegion(nullptr, noBytes, rgnData);
         delete[] (char*) rgnData;
     }
 
@@ -85,7 +82,7 @@ private:
 
 wxRegion::wxRegion()
 {
-    m_refData = NULL;
+    m_refData = nullptr;
 }
 
 wxRegion::wxRegion(WXHRGN hRegion)
@@ -135,7 +132,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
     m_refData = new wxRegionRefData;
     M_REGION = ::CreatePolygonRgn
                (
-                    (POINT*)points,
+                    reinterpret_cast<const POINT*>(points),
                     n,
                     fillStyle == wxODDEVEN_RULE ? ALTERNATE : WINDING
                );
@@ -153,7 +150,7 @@ wxGDIRefData *wxRegion::CreateGDIRefData() const
 
 wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxRegionRefData(*(wxRegionRefData *)data);
+    return new wxRegionRefData(*static_cast<const wxRegionRefData*>(data));
 }
 
 // ----------------------------------------------------------------------------
@@ -206,7 +203,7 @@ bool wxRegion::DoCombine(const wxRegion& rgn, wxRegionOp op)
 
             default:
                 wxFAIL_MSG( wxT("unknown region operation") );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxRGN_AND:
             case wxRGN_DIFF:
@@ -239,7 +236,7 @@ bool wxRegion::DoCombine(const wxRegion& rgn, wxRegionOp op)
 
             default:
                 wxFAIL_MSG( wxT("unknown region operation") );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxRGN_COPY:
                 mode = RGN_COPY;
@@ -341,7 +338,7 @@ void wxRegionIterator::Init()
     m_current =
     m_numRects = 0;
 
-    m_rects = NULL;
+    m_rects = nullptr;
 }
 
 wxRegionIterator::~wxRegionIterator()
@@ -352,13 +349,16 @@ wxRegionIterator::~wxRegionIterator()
 // Initialize iterator for region
 wxRegionIterator::wxRegionIterator(const wxRegion& region)
 {
-    m_rects = NULL;
+    m_rects = nullptr;
 
     Reset(region);
 }
 
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
 {
+    if (this == &ri)
+        return *this;
+
     delete [] m_rects;
 
     m_current = ri.m_current;
@@ -371,7 +371,7 @@ wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
     }
     else
     {
-        m_rects = NULL;
+        m_rects = nullptr;
     }
 
     return *this;
@@ -393,7 +393,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_numRects = 0;
     else
     {
-        DWORD noBytes = ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, 0, NULL);
+        DWORD noBytes = ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, 0, nullptr);
         RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
         ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, noBytes, rgnData);
 

@@ -8,7 +8,7 @@
 /**
     @class wxMemoryOutputStream
 
-    This class allows to use all methods taking a wxOutputStream reference to write
+    This class allows using all methods taking a wxOutputStream reference to write
     to in-memory data.
 
     Example:
@@ -45,7 +45,7 @@ public:
         If the buffer is created by wxMemoryOutputStream, it will be destroyed
         at the destruction of the stream.
     */
-    wxMemoryOutputStream(void* data = NULL, size_t length = 0);
+    wxMemoryOutputStream(void* data = nullptr, size_t length = 0);
 
     /**
         Destructor.
@@ -72,7 +72,7 @@ public:
 /**
     @class wxMemoryInputStream
 
-    This class allows to use all methods taking a wxInputStream reference to read
+    This class allows using all methods taking a wxInputStream reference to read
     in-memory data.
 
     Example:

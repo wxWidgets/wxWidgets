@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.05.03
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTBOX
 
@@ -69,7 +66,7 @@ void wxVListBox::Init()
 {
     m_current =
     m_anchor = wxNOT_FOUND;
-    m_selStore = NULL;
+    m_selStore = nullptr;
 }
 
 bool wxVListBox::Create(wxWindow *parent,
@@ -79,11 +76,6 @@ bool wxVListBox::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-#ifdef __WXMSW__
-    if ( (style & wxBORDER_MASK) == wxDEFAULT )
-        style |= wxBORDER_THEME;
-#endif
-
     style |= wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE;
     if ( !wxVScrolledWindow::Create(parent, id, pos, size, style, name) )
         return false;
@@ -100,7 +92,7 @@ bool wxVListBox::Create(wxWindow *parent,
     m_colBgSel = wxNullColour;
 
     // flicker-free drawing requires this
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }
@@ -426,14 +418,19 @@ wxVListBox::DoDrawSolidBackground(const wxColour& col,
 void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 {
     // use wxRendererNative for more native look unless we use custom bg colour
-    if ( !DoDrawSolidBackground(m_colBgSel, dc, rect, n) )
+    if ( DoDrawSolidBackground(m_colBgSel, dc, rect, n) )
+        return;
+
+    const bool isSelected = IsSelected(n),
+               isCurrent = IsCurrent(n);
+    if ( isSelected || isCurrent )
     {
         int flags = 0;
-        if ( IsSelected(n) )
+        if ( isSelected )
             flags |= wxCONTROL_SELECTED;
-        if ( IsCurrent(n) )
+        if ( isCurrent )
             flags |= wxCONTROL_CURRENT;
-        if ( wxWindow::FindFocus() == const_cast<wxVListBox*>(this) )
+        if ( HasFocus() )
             flags |= wxCONTROL_FOCUSED;
 
         wxRendererNative::Get().DrawItemSelectionRect(

@@ -10,7 +10,7 @@
     <include file="../build/bakefiles/common_samples.bkl"/>
 
     <template id="wx_test">
-        <include>$(TOP_SRCDIR)3rdparty/catch/include</include>
+        <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
             <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
@@ -34,6 +34,7 @@
             arrays/arrays.cpp
             base64/base64.cpp
             cmdline/cmdlinetest.cpp
+            config/config.cpp
             config/fileconf.cpp
             config/regconf.cpp
             datetime/datetimetest.cpp
@@ -70,6 +71,7 @@
             misc/typeinfotest.cpp
             net/ipc.cpp
             net/socket.cpp
+            net/webrequest.cpp
             regex/regextest.cpp
             regex/wxregextest.cpp
             scopeguard/scopeguardtest.cpp
@@ -90,6 +92,7 @@
             streams/filestream.cpp
             streams/iostreams.cpp
             streams/largefile.cpp
+            streams/lzmastream.cpp
             streams/memstream.cpp
             streams/socketstream.cpp
             streams/sstream.cpp
@@ -105,7 +108,6 @@
             uris/ftp.cpp
             uris/uris.cpp
             uris/url.cpp
-            vectors/vectors.cpp
             weakref/evtconnection.cpp
             weakref/weakref.cpp
             xlocale/xlocale.cpp
@@ -158,8 +160,15 @@
         <wx-lib>base</wx-lib>
     </module>
 
+    <template id="stc_append">
+        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+            <sys-lib>$(LIB_SCINTILLA)</sys-lib>
+            <sys-lib>$(LIB_LEXILLA)</sys-lib>
+        </if>
+    </template>
+
     <exe id="test_gui" template="wx_sample,wx_test"
-                       template_append="wx_append"
+                       template_append="stc_append,wx_append"
          cond="USE_GUI=='1'">
 
         <!-- link against GUI libraries, but be a console app: -->
@@ -174,14 +183,24 @@
             geometry/point.cpp
             geometry/region.cpp
             graphics/bitmap.cpp
+            graphics/bmpbundle.cpp
             graphics/colour.cpp
             graphics/ellipsization.cpp
             graphics/measuring.cpp
             graphics/affinematrix.cpp
             graphics/boundingbox.cpp
+            graphics/clipper.cpp
             graphics/clippingbox.cpp
+            graphics/coords.cpp
+            graphics/graphbitmap.cpp
             graphics/graphmatrix.cpp
+            graphics/graphpath.cpp
+            graphics/imagelist.cpp
+            <!--
+                Duplicate this file here to compile a GUI test in it too.
+             -->
             config/config.cpp
+            controls/auitest.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
             controls/bookctrlbasetest.cpp
@@ -211,6 +230,7 @@
             controls/ownerdrawncomboboxtest.cpp
             controls/pickerbasetest.cpp
             controls/pickertest.cpp
+            controls/propgridtest.cpp
             controls/radioboxtest.cpp
             controls/radiobuttontest.cpp
             controls/rearrangelisttest.cpp
@@ -220,6 +240,7 @@
             controls/slidertest.cpp
             controls/spinctrldbltest.cpp
             controls/spinctrltest.cpp
+            controls/styledtextctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             controls/togglebuttontest.cpp
@@ -248,6 +269,7 @@
             image/rawbmp.cpp
             html/htmlparser.cpp
             html/htmlwindow.cpp
+            html/htmprint.cpp
             menu/accelentry.cpp
             menu/menu.cpp
             misc/guifuncs.cpp
@@ -263,11 +285,13 @@
             net/socket.cpp
             persistence/tlw.cpp
             persistence/dataview.cpp
+            rowheightcache/rowheightcachetest.cpp
             sizers/boxsizer.cpp
             sizers/gridsizer.cpp
             sizers/wrapsizer.cpp
             toplevel/toplevel.cpp
             validators/valnum.cpp
+            validators/valtext.cpp
             window/clientsize.cpp
             window/setsize.cpp
             xml/xrctest.cpp
@@ -279,12 +303,41 @@
             wxWebView is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
+        <wx-lib>stc</wx-lib>
+        <wx-lib>aui</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
         <wx-lib>xml</wx-lib>
-        <wx-lib>adv</wx-lib>
         <wx-lib>html</wx-lib>
+        <wx-lib>propgrid</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+    <exe id="test_allheaders" template="wx_sample,wx_test"
+                              template_append="stc_append,wx_append"
+         cond="USE_GUI=='1'">
+        <!-- link against GUI libraries, but be a console app: -->
+        <app-type>console</app-type>
+
+        <sources>
+            asserthelper.cpp
+            test.cpp
+            allheaders.cpp
+            testableframe.cpp
+        </sources>
+        <!--
+            Can't use <wx-lib> here as it doesn't work with conditionally
+            defined variables, so fall back <sys-lib> as we must not link with
+            inexisting webview library to be able to run tests even if
+            wxWebView is not available.
+         -->
+        <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
+        <wx-lib>stc</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
@@ -292,17 +345,31 @@
 
 
     <wx-data id="data">
-        <files>testdata.fc</files>
-        
+        <files>testdata.conf horse.svg</files>
+    </wx-data>
+
+    <wx-data id="data-image-sample">
         <!-- test data for image/image.cpp test unit: -->
-        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg  
+        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg
                horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 
     <wx-data id="data-images">
         <srcdir>$(SRCDIR)/image</srcdir>
         <dstdir>image</dstdir>
+        <!--
+            Don't forget to update build/cmake/tests/gui/CMakeLists.txt when
+            adding new files here!
+         -->
         <files>
+            bitfields.bmp
+            bitfields-alpha.bmp
+            8bpp-colorsused-large.bmp
+            8bpp-colorsused-negative.bmp
+            rle4-delta-320x240.bmp
+            rle8-delta-320x240.bmp
+            rle8-delta-320x240-expected.bmp
+
             horse_grey.bmp horse_grey_flipped.bmp
             horse_rle4.bmp horse_rle4_flipped.bmp
             horse_rle8.bmp horse_rle8_flipped.bmp
@@ -326,6 +393,33 @@
             cross_bilinear_256x256.png
             cross_box_average_256x256.png
             cross_nearest_neighb_256x256.png
+
+            paste_input_background.png
+            paste_input_black.png
+            paste_input_overlay_transparent_border_opaque_square.png
+            paste_input_overlay_transparent_border_semitransparent_circle.png
+            paste_input_overlay_transparent_border_semitransparent_square.png
+            paste_result_background_plus_circle_plus_square.png
+            paste_result_background_plus_overlay_transparent_border_opaque_square.png
+            paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
+            paste_result_no_background_square_over_circle.png
+
+            wx.png
+
+            toucan.png
+            toucan_hue_0.538.png
+            toucan_sat_-0.41.png
+            toucan_bright_-0.259.png
+            toucan_hsv_0.538_-0.41_-0.259.png
+            toucan_light_46.png
+            toucan_dis_240.png
+            toucan_grey.png
+            toucan_mono_255_255_255.png
+
+            width-times-height-overflow.bmp
+            width_height_32_bit_overflow.pgm
+
+            bad_truncated.gif
         </files>
     </wx-data>
 
@@ -340,16 +434,11 @@
 
 
     <fragment format="autoconf">
-# notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as
-# currently the value in the makefile would be ignored if we did, but
-# warnings don't matter when we expect compilation to fail anyhow so we can
-# use this variable to enable the compilation of code which is supposed to
-# fail
-failtest: failtest_combobox failtest_evthandler failtest_weakref
+failtest: failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
 
 failtest_combobox:
 	@$(RM) test_gui_comboboxtest.o
-	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_INVALID_COMBOBOX_ISEMPTY unexpectedly succeeded.">&amp;2; \
 	    exit 1; \
 	fi; \
@@ -357,9 +446,9 @@ failtest_combobox:
 
 failtest_evthandler:
 	@$(RM) test_evthandler.o
-	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
-	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
-	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&amp;2; \
+	@for d in BIND_GLOBAL BIND_STATIC BIND_METHOD BIND_FUNCTOR BIND_NO_HANDLER BIND_DERIVED BIND_WRONG_CLASS EVENT_CREATION; do \
+	    if $(MAKE) CPPFLAGS=-DTEST_INVALID_$$d test_evthandler.o 2>/dev/null; then \
+	        echo "*** Compilation with TEST_INVALID_$$d unexpectedly succeeded.">&amp;2; \
 	        exit 1; \
 	    fi; \
 	done; \
@@ -367,13 +456,21 @@ failtest_evthandler:
 
 failtest_weakref:
 	@$(RM) test_weakref.o
-	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
+	if $(MAKE) CPPFLAGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
 	    echo "*** Compilation with TEST_INVALID_INCOMPLETE_WEAKREF unexpectedly succeeded.">&amp;2; \
 	    exit 1; \
 	fi; \
 	exit 0
 
-.PHONY: failtest
+failtest_allheaders:
+	@$(RM) test_allheaders.o
+	if $(MAKE) CPPFLAGS=-DwxNO_IMPLICIT_WXSTRING_ENCODING -DTEST_IMPLICIT_WXSTRING_ENCODING test_allheaders.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_IMPLICIT_WXSTRING_ENCODING unexpectedly succeeded.">&amp;2; \
+	    exit 1; \
+	fi; \
+	exit 0
+
+.PHONY: failtest failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
     </fragment>
 
 </makefile>

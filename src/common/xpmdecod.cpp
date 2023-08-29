@@ -92,9 +92,6 @@ license is as follows:
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_XPM
 
@@ -104,7 +101,6 @@ license is as follows:
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
-    #include "wx/hashmap.h"
     #include "wx/stream.h"
     #include "wx/image.h"
     #include "wx/palette.h"
@@ -112,6 +108,8 @@ license is as follows:
 
 #include <string.h>
 #include <ctype.h>
+
+#include <unordered_map>
 
 #if wxUSE_STREAMS
 bool wxXPMDecoder::CanRead(wxInputStream& stream)
@@ -226,7 +224,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
         }
     }
 
-    xpm_lines[lines_cnt] = NULL;
+    xpm_lines[lines_cnt] = nullptr;
 
     /*
      *  Read the image:
@@ -246,7 +244,7 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
 * A hard coded rgb.txt. To keep it short I removed all colornames with        *
 * trailing numbers, Blue3 etc, except the GrayXX. Sorry Grey-lovers I prefer  *
 * Gray ;-). But Grey is recognized on lookups, only on save Gray will be      *
-* used, maybe you want to do some substitue there too.                        *
+* used, maybe you want to do some substitute there too.                        *
 *                                                                             *
 * To save memory the RGBs are coded in one long value, as done by the RGB     *
 * macro.                                                                      *
@@ -500,7 +498,7 @@ static const rgbRecord theRGBRecords[] =
     {"whitesmoke", myRGB(245, 245, 245)},
     {"yellow", myRGB(255, 255, 0)},
     {"yellowgreen", myRGB(50, 216, 56)},
-    {NULL, myRGB(0, 0, 0)}
+    {nullptr, myRGB(0, 0, 0)}
 };
 static const int numTheRGBRecords = 235;
 
@@ -526,9 +524,6 @@ static unsigned char ParseHexadecimal(char digit1, char digit2)
 static bool GetRGBFromName(const char *inname, bool *isNone,
                            unsigned char *r, unsigned char*g, unsigned char *b)
 {
-    int left, right, middle;
-    int cmp;
-    wxUint32 rgbVal;
     char *name;
     char *grey, *p;
 
@@ -550,7 +545,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     // lot of gray...
 
     // so first extract ' '
-    while ((p = strchr(name, ' ')) != NULL)
+    while ((p = strchr(name, ' ')) != nullptr)
     {
         while (*(p))            // till eof of string
         {
@@ -568,7 +563,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 
     // substitute Grey with Gray, else rgbtab.h would have more than 100
     // 'duplicate' entries
-    if ( (grey = strstr(name, "grey")) != NULL )
+    if ( (grey = strstr(name, "grey")) != nullptr )
         grey[2] = 'a';
 
     // check for special 'none' colour:
@@ -583,14 +578,18 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         found = false;
 
         // binary search:
+        int left, right;
         left = 0;
         right = numTheRGBRecords - 1;
         do
         {
+            int middle;
             middle = (left + right) / 2;
+            int cmp;
             cmp = strcmp(name, theRGBRecords[middle].name);
             if ( cmp == 0 )
             {
+                wxUint32 rgbVal;
                 rgbVal = theRGBRecords[middle].rgb;
                 *r = (unsigned char)((rgbVal >> 16) & 0xFF);
                 *g = (unsigned char)((rgbVal >> 8) & 0xFF);
@@ -618,13 +617,13 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 static const char *ParseColor(const char *data)
 {
     static const char *const targets[] =
-                        {"c ", "g ", "g4 ", "m ", "b ", "s ", NULL};
+                        {"c ", "g ", "g4 ", "m ", "b ", "s ", nullptr};
 
     const char *p, *r;
     const char *q;
     int i;
 
-    for (i = 0; targets[i] != NULL; i++)
+    for (i = 0; targets[i] != nullptr; i++)
     {
         r = data;
         for (q = targets[i]; *r != '\0'; r++)
@@ -644,7 +643,7 @@ static const char *ParseColor(const char *data)
             q = targets[i];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 struct wxXPMColourMapData
@@ -652,18 +651,17 @@ struct wxXPMColourMapData
     wxXPMColourMapData() { R = G = B = 0; }
     unsigned char R,G,B;
 };
-WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap);
+using wxXPMColourMap = std::unordered_map<wxString, wxXPMColourMapData>;
 
 wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
 {
-    wxCHECK_MSG(xpm_data, wxNullImage, wxT("NULL XPM data") );
+    wxCHECK_MSG(xpm_data, wxNullImage, wxT("null XPM data") );
 
     wxImage img;
     int count;
     unsigned width, height, colors_cnt, chars_per_pixel;
     size_t i, j, i_key;
     char key[64];
-    const char *clr_def;
     wxXPMColourMap clr_tbl;
     wxXPMColourMap::iterator it;
     wxString maskKey;
@@ -709,9 +707,10 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
 
         for (i_key = 0; i_key < chars_per_pixel; i_key++)
             key[i_key] = xmpColLine[i_key];
+        const char *clr_def;
         clr_def = ParseColor(xmpColLine + chars_per_pixel);
 
-        if ( clr_def == NULL )
+        if ( clr_def == nullptr )
         {
             wxLogError(_("XPM: malformed colour definition '%s' at line %d!"),
                        xmpColLine, (int)(1 + i));
@@ -738,7 +737,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     // colour (which can be any colour not otherwise used in the image)
     if (!maskKey.empty())
     {
-        wxLongToLongHashMap rgb_table;
+        std::unordered_map<long, long> rgb_table;
         long rgb;
         const size_t n = clr_tbl.size();
         wxXPMColourMap::const_iterator iter = clr_tbl.begin();
@@ -812,7 +811,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     unsigned char* g = new unsigned char[colors_cnt];
     unsigned char* b = new unsigned char[colors_cnt];
 
-    for (it = clr_tbl.begin(), i = 0; it != clr_tbl.end(); it++, i++)
+    for (it = clr_tbl.begin(), i = 0; it != clr_tbl.end(); ++it, ++i)
     {
         r[i] = it->second.R;
         g[i] = it->second.G;

@@ -35,6 +35,7 @@ public:
     wxSpinCtrlBase() {}
 
     // accessor functions that derived classes are expected to have
+    virtual wxString GetTextValue() const = 0;
     // T GetValue() const
     // T GetMin() const
     // T GetMax() const
@@ -81,7 +82,7 @@ public:
     double GetValue() const       { return m_value; }
     void   SetValue(double value) { m_value = value; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSpinDoubleEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxSpinDoubleEvent(*this); }
 
 protected:
     double m_value;
@@ -120,13 +121,10 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #elif defined(__WXMSW__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/msw/spinctrl.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #define wxHAS_NATIVE_SPINCTRL
     #define wxHAS_NATIVE_SPINCTRLDOUBLE
     #include "wx/gtk/spinctrl.h"
-#elif defined(__WXGTK__)
-    #define wxHAS_NATIVE_SPINCTRL
-    #include "wx/gtk1/spinctrl.h"
 #elif defined(__WXQT__)
     #define wxHAS_NATIVE_SPINCTRL
     #define wxHAS_NATIVE_SPINCTRLDOUBLE
@@ -136,14 +134,6 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
     #include "wx/generic/spinctlg.h"
 #endif
-namespace wxPrivate
-{
-
-// This is an internal helper function currently used by all ports: return the
-// string containing hexadecimal representation of the given number.
-extern wxString wxSpinCtrlFormatAsHex(long val, long maxVal);
-
-} // namespace wxPrivate
 
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_SPINCTRL_UPDATED         wxEVT_SPINCTRL

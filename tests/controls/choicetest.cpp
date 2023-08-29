@@ -10,9 +10,6 @@
 
 #if wxUSE_CHOICE
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -26,30 +23,29 @@ class ChoiceTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 public:
     ChoiceTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxItemContainer *GetContainer() const { return m_choice; }
-    virtual wxWindow *GetContainerWindow() const { return m_choice; }
+    virtual wxItemContainer *GetContainer() const override { return m_choice; }
+    virtual wxWindow *GetContainerWindow() const override { return m_choice; }
 
     CPPUNIT_TEST_SUITE( ChoiceTestCase );
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Sort );
+        CPPUNIT_TEST( GetBestSize );
     CPPUNIT_TEST_SUITE_END();
 
     void Sort();
+    void GetBestSize();
 
     wxChoice* m_choice;
 
     wxDECLARE_NO_COPY_CLASS(ChoiceTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ChoiceTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ChoiceTestCase, "ChoiceTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ChoiceTestCase,
+                               "[ChoiceTestCase][item-container]");
 
 void ChoiceTestCase::setUp()
 {
@@ -66,7 +62,7 @@ void ChoiceTestCase::Sort()
 #if !defined(__WXOSX__)
     wxDELETE(m_choice);
     m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, 0,
+                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
                             wxCB_SORT);
 
     wxArrayString testitems;
@@ -90,6 +86,35 @@ void ChoiceTestCase::Sort()
 
     CPPUNIT_ASSERT_EQUAL("a", m_choice->GetString(0));
 #endif
+}
+
+void ChoiceTestCase::GetBestSize()
+{
+    wxArrayString testitems;
+    testitems.Add("1");
+    testitems.Add("11");
+    m_choice->Append(testitems);
+
+    SECTION("Normal best size")
+    {
+        // nothing to do here
+    }
+
+    // Ensure that the hidden control return a valid best size too.
+    SECTION("Hidden best size")
+    {
+        m_choice->Hide();
+    }
+
+    wxYield();
+
+    m_choice->InvalidateBestSize();
+    const wxSize bestSize = m_choice->GetBestSize();
+
+    CHECK(bestSize.GetWidth() > m_choice->FromDIP(30));
+    CHECK(bestSize.GetWidth() < m_choice->FromDIP(120));
+    CHECK(bestSize.GetHeight() > m_choice->FromDIP(15));
+    CHECK(bestSize.GetHeight() < m_choice->FromDIP(35));
 }
 
 #endif //wxUSE_CHOICE

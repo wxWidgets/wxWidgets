@@ -77,7 +77,7 @@
     {
         m_dragImage->EndDrag(this);
         delete m_dragImage;
-        m_dragImage = NULL;
+        m_dragImage = nullptr;
     }
     ReleaseMouse();
  }
@@ -144,14 +144,9 @@ public:
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
 
-#ifdef wxHAS_NATIVE_OVERLAY
-    // backing store is not used when native overlays are
-    void SetBackingBitmap(wxBitmap* WXUNUSED(bitmap)) { }
-#else
     // For efficiency, tell wxGenericDragImage to use a bitmap that's already
     // created (e.g. from last drag)
     void SetBackingBitmap(wxBitmap* bitmap) { m_pBackingBitmap = bitmap; }
-#endif // wxHAS_NATIVE_OVERLAY/!wxHAS_NATIVE_OVERLAY
 
     // Operations
     ////////////////////////////////////////////////////////////////////////////
@@ -180,7 +175,7 @@ public:
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image.
-    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen = false, wxRect* rect = NULL);
+    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen = false, wxRect* rect = nullptr);
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image. This is full screen only. fullScreenRect gives the
@@ -191,7 +186,7 @@ public:
     bool EndDrag();
 
     // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
-    // is non-NULL, or in screen coordinates if NULL.
+    // is non-null, or in screen coordinates if null.
     bool Move(const wxPoint& pt);
 
     // Show the image
@@ -234,19 +229,13 @@ protected:
     bool            m_isShown;
     wxWindow*       m_window;
     wxDC*           m_windowDC;
-
-#ifdef wxHAS_NATIVE_OVERLAY
     wxOverlay       m_overlay;
-    wxDCOverlay*     m_dcOverlay;
-#else
     // Stores the window contents while we're dragging the image around
     wxBitmap        m_backingBitmap;
     wxBitmap*       m_pBackingBitmap; // Pointer to existing backing bitmap
                                       // (pass to wxGenericDragImage as an efficiency measure)
     // A temporary bitmap for repairing/redrawing
     wxBitmap        m_repairBitmap;
-#endif // !wxHAS_NATIVE_OVERLAY
-
     wxRect          m_boundingRect;
     bool            m_fullScreen;
 

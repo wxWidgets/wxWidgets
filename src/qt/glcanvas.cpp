@@ -13,6 +13,15 @@
 #include "wx/glcanvas.h"
 
 #include <QtOpenGL/QGLWidget>
+#include <QtWidgets/QGestureRecognizer>
+#include <QtWidgets/QGestureEvent>
+
+#if defined(__VISUALC__)
+    #pragma message("OpenGL support is not implemented in wxQt")
+#else
+    #warning "OpenGL support is not implemented in wxQt"
+#endif
+wxGCC_WARNING_SUPPRESS(unused-parameter)
 
 class wxQtGLWidget : public wxQtEventSignalHandler< QGLWidget, wxGLCanvas >
 {
@@ -25,13 +34,13 @@ public:
         }
 
 protected:
-    virtual void showEvent ( QShowEvent * event );
-    virtual void hideEvent ( QHideEvent * event );
-    virtual void resizeEvent ( QResizeEvent * event );
-    virtual void paintEvent ( QPaintEvent * event );
+    virtual void showEvent ( QShowEvent * event ) override;
+    virtual void hideEvent ( QHideEvent * event ) override;
+    virtual void resizeEvent ( QResizeEvent * event ) override;
+    virtual void paintEvent ( QPaintEvent * event ) override;
 
-    virtual void resizeGL(int w, int h);
-    virtual void paintGL();
+    virtual void resizeGL(int w, int h) override;
+    virtual void paintGL() override;
 };
 
 void wxQtGLWidget::showEvent ( QShowEvent * event )
@@ -62,7 +71,7 @@ void wxQtGLWidget::resizeGL(int w, int h)
 
 void wxQtGLWidget::paintGL()
 {
-    wxPaintEvent event( GetHandler()->GetId() );
+    wxPaintEvent event( GetHandler() );
     EmitEvent(event);
 }
 
@@ -308,20 +317,6 @@ wxGLAttributes& wxGLAttributes::PlatformDefaults()
     return *this;
 }
 
-wxGLAttributes& wxGLAttributes::Defaults()
-{
-    RGBA().DoubleBuffer();
-//    if ( wxGLCanvasX11::GetGLXVersion() < 13 )
-//        Depth(1).MinRGBA(1, 1, 1, 0);
-//    else
-        Depth(16).SampleBuffers(1).Samplers(4);
-    return *this;
-}
-
-void wxGLAttributes::AddDefaultsForWXBefore31()
-{
-    Defaults();
-}
 
 //---------------------------------------------------------------------------
 // wxGlContext
@@ -329,9 +324,8 @@ void wxGLAttributes::AddDefaultsForWXBefore31()
 
 wxIMPLEMENT_CLASS(wxGLContext, wxWindow);
 
-wxGLContext::wxGLContext(wxGLCanvas *WXUNUSED(win), const wxGLContext* WXUNUSED(other))
+wxGLContext::wxGLContext(wxGLCanvas *WXUNUSED(win), const wxGLContext* WXUNUSED(other), const wxGLContextAttrs *WXUNUSED(ctxAttrs))
 {
-//    m_glContext = win->GetHandle()->context();
 }
 
 bool wxGLContext::SetCurrent(const wxGLCanvas&) const
@@ -342,10 +336,45 @@ bool wxGLContext::SetCurrent(const wxGLCanvas&) const
 }
 
 //---------------------------------------------------------------------------
+// PanGestureRecognizer - helper class for wxGLCanvas
+//---------------------------------------------------------------------------
+
+class PanGestureRecognizer : public QGestureRecognizer
+{
+private:
+    static const int MINIMUM_DISTANCE = 10;
+
+    typedef QGestureRecognizer parent;
+
+    bool IsValidMove(int dx, int dy);
+
+    virtual QGesture* create(QObject* pTarget);
+
+    virtual QGestureRecognizer::Result recognize(QGesture* pGesture, QObject *pWatched, QEvent *pEvent);
+
+    void reset (QGesture *pGesture);
+
+    QPointF m_startPoint;
+    QPointF m_lastPoint;
+};
+
+//---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
 
 wxIMPLEMENT_CLASS(wxGLCanvas, wxWindow);
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       const wxGLAttributes& dispAttrs,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const wxPalette& palette)
+{
+    Create(parent, dispAttrs, id, pos, size, style, name, palette);
+}
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        wxWindowID id,
@@ -357,6 +386,25 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxPalette& palette)
 {
     Create(parent, id, pos, size, style, name, attribList, palette);
+}
+
+wxGLCanvas::~wxGLCanvas()
+{
+    // Avoid sending further signals (i.e. if deleting the current page)
+    m_qtWindow->blockSignals(true);
+}
+
+bool wxGLCanvas::Create(wxWindow *parent,
+                        const wxGLAttributes& dispAttrs,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const wxPalette& palette)
+{
+    wxLogError("Missing implementation of " + wxString(__FUNCTION__));
+    return false;
 }
 
 bool wxGLCanvas::Create(wxWindow *parent,
@@ -379,6 +427,10 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     m_qtWindow = new wxQtGLWidget(parent, this, format);
 
+    // Create and register a custom pan recognizer, available to all instances of this class.
+    QGestureRecognizer* pPanRecognizer = new PanGestureRecognizer();
+    QGestureRecognizer::registerRecognizer(pPanRecognizer);
+
     return wxWindow::Create( parent, id, pos, size, style, name );
 }
 
@@ -393,7 +445,6 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
 {
     if (!wxattrs)
         return true;
-    return true;
 
     // set default parameters to false
     format.setDoubleBuffer(false);
@@ -481,6 +532,10 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format)
                 // can we somehow indicate if it's not supported?
                 break;
 
+            case WX_GL_MAJOR_VERSION:
+                 format.setVersion ( v,0 );
+                 break;
+
             default:
                 wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
                            wxattrs[arg]);
@@ -507,6 +562,143 @@ wxGLCanvasBase::IsDisplaySupported(const int *attribList)
         return false;
 
     return QGLWidget(format).isValid();
+}
+
+/* static */
+bool
+wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
+{
+    wxLogError("Missing implementation of " + wxString(__FUNCTION__));
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// wxGLApp
+// ----------------------------------------------------------------------------
+
+bool wxGLApp::InitGLVisual(const int *attribList)
+{
+    wxLogError("Missing implementation of " + wxString(__FUNCTION__));
+    return false;
+}
+
+// -----------------------------------------------------------------------------------------
+//  We want a private pan gesture recognizer for GL canvas,
+//  since the Qt standard recognizers do not function well for this window.
+// -----------------------------------------------------------------------------------------
+
+bool
+PanGestureRecognizer::IsValidMove(int dx, int dy)
+{
+   // The moved distance is to small to count as not just a glitch.
+   if ((qAbs(dx) < MINIMUM_DISTANCE) && (qAbs(dy) < MINIMUM_DISTANCE))
+      return false;
+
+   return true;
+}
+
+
+// virtual
+QGesture*
+PanGestureRecognizer::create(QObject* pTarget)
+{
+   return new QPanGesture(pTarget);
+}
+
+
+// virtual
+QGestureRecognizer::Result
+PanGestureRecognizer::recognize(QGesture* pGesture, QObject *pWatched, QEvent *pEvent)
+{
+    wxUnusedVar(pWatched);
+    QGestureRecognizer::Result result = QGestureRecognizer::Ignore;
+    QPanGesture *pPan = static_cast<QPanGesture*>(pGesture);
+
+    const QTouchEvent *ev = static_cast<const QTouchEvent *>(pEvent);
+
+    switch (pEvent->type())
+    {
+        case QEvent::TouchBegin:
+            {
+                QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
+                m_startPoint = p1.startScreenPos().toPoint();
+                m_lastPoint = m_startPoint;
+
+                pPan->setLastOffset(QPointF(0,0));
+                pPan->setOffset(QPointF(0,0));
+
+                result = QGestureRecognizer::MayBeGesture;
+            }
+            break;
+
+        case QEvent::TouchEnd:
+            {
+                QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
+                QPointF endPoint = p1.screenPos().toPoint();
+
+                pPan->setLastOffset(pPan->offset());
+                pPan->setOffset(QPointF(p1.pos().x() - p1.startPos().x(),
+                                        p1.pos().y() - p1.startPos().y()));
+
+                pPan->setHotSpot(p1.startScreenPos());
+
+                // process distance and direction
+                int dx = endPoint.x() - m_startPoint.x();
+                int dy = endPoint.y() - m_startPoint.y();
+
+                if (!IsValidMove(dx, dy))
+                {
+                    // Just a click, so no gesture.
+                    result = QGestureRecognizer::Ignore;
+                }
+                else
+                {
+                    result = QGestureRecognizer::FinishGesture;
+                }
+
+            }
+            break;
+
+        case QEvent::TouchUpdate:
+            {
+                QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
+                QPointF upPoint = p1.screenPos().toPoint();
+
+                pPan->setLastOffset(pPan->offset());
+                pPan->setOffset(QPointF(p1.pos().x() - p1.startPos().x(),
+                                        p1.pos().y() - p1.startPos().y()));
+
+                pPan->setHotSpot(p1.startScreenPos());
+
+                int dx = upPoint.x() - m_lastPoint.x();
+                int dy = upPoint.y() - m_lastPoint.y();
+
+                if( (dx > 2) || (dx < -2) || (dy > 2) || (dy < -2))
+                {
+                    result = QGestureRecognizer::TriggerGesture;
+
+                }
+                else
+                {
+                    result = QGestureRecognizer::Ignore;
+                }
+
+                m_lastPoint = upPoint;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    return result;
+}
+
+void
+PanGestureRecognizer::reset(QGesture *pGesture)
+{
+    pGesture->setProperty("startPoint", QVariant(QVariant::Invalid));
+    parent::reset(pGesture);
 }
 
 #endif // wxUSE_GLCANVAS

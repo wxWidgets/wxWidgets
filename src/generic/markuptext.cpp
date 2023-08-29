@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MARKUP
 
@@ -38,7 +35,8 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
     #include "wx/graphics.h"
-    #include "wx/scopedptr.h"
+
+    #include <memory>
 #endif
 
 namespace
@@ -66,7 +64,7 @@ public:
     const wxSize& GetSize() const { return m_size; }
 
 
-    virtual void OnText(const wxString& text) wxOVERRIDE
+    virtual void OnText(const wxString& text) override
     {
         // TODO-MULTILINE-MARKUP: Must use GetMultiLineTextExtent().
         const wxSize size = m_dc.GetTextExtent(text);
@@ -84,12 +82,12 @@ public:
         }
     }
 
-    virtual void OnAttrStart(const Attr& attr) wxOVERRIDE
+    virtual void OnAttrStart(const Attr& attr) override
     {
         m_dc.SetFont(attr.font);
     }
 
-    virtual void OnAttrEnd(const Attr& WXUNUSED(attr)) wxOVERRIDE
+    virtual void OnAttrEnd(const Attr& WXUNUSED(attr)) override
     {
         m_dc.SetFont(GetFont());
     }
@@ -99,7 +97,7 @@ private:
 
     // The values that we compute.
     wxSize m_size;
-    int * const m_visibleHeight;    // may be NULL
+    int * const m_visibleHeight;    // may be null
 
     wxDECLARE_NO_COPY_CLASS(wxMarkupParserMeasureOutput);
 };
@@ -123,8 +121,6 @@ public:
           m_dc(dc),
           m_rect(rect),
           m_flags(flags)
-    {
-        m_pos = m_rect.x;
 
         // We don't initialize the base class initial text background colour to
         // the valid value because we want to be able to detect when we revert
@@ -134,10 +130,12 @@ public:
         // background isn't used anyhow when the background mode is transparent
         // but it might affect the caller if it sets the background mode to
         // opaque and draws some text after using us.
-        m_origTextBackground = dc.GetTextBackground();
+        , m_origTextBackground(dc.GetTextBackground())
+        , m_pos(m_rect.x)
+    {
     }
 
-    virtual void OnAttrStart(const Attr& attr) wxOVERRIDE
+    virtual void OnAttrStart(const Attr& attr) override
     {
         m_dc.SetFont(attr.font);
         if ( attr.foreground.IsOk() )
@@ -147,12 +145,12 @@ public:
         {
             // Setting the background colour is not enough, we must also change
             // the mode to ensure that it is actually used.
-            m_dc.SetBackgroundMode(wxSOLID);
+            m_dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
             m_dc.SetTextBackground(attr.background);
         }
     }
 
-    virtual void OnAttrEnd(const Attr& attr) wxOVERRIDE
+    virtual void OnAttrEnd(const Attr& attr) override
     {
         // We always restore the font because we always change it...
         m_dc.SetFont(GetFont());
@@ -170,7 +168,7 @@ public:
                 // should actually be made transparent and in this case the
                 // actual value of background colour doesn't matter but we also
                 // restore it just in case, see comment in the ctor.
-                m_dc.SetBackgroundMode(wxTRANSPARENT);
+                m_dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
                 background = m_origTextBackground;
             }
 
@@ -204,7 +202,7 @@ public:
     {
     }
 
-    virtual void OnText(const wxString& text_) wxOVERRIDE
+    virtual void OnText(const wxString& text_) override
     {
         wxString text;
         int indexAccel = wxControl::FindAccelIndex(text_, &text);
@@ -214,7 +212,7 @@ public:
         // Adjust the position (unfortunately we need to do this manually as
         // there is no notion of current text position in wx API) rectangle to
         // ensure that all text segments use the same baseline (as there is
-        // nothing equivalent to Windows SetTextAlign(TA_BASELINE) neither).
+        // nothing equivalent to Windows SetTextAlign(TA_BASELINE) either).
         wxRect rect(m_rect);
         rect.x = m_pos;
 
@@ -251,7 +249,7 @@ public:
         m_ellipsizeMode = ellipsizeMode == wxELLIPSIZE_NONE ? wxELLIPSIZE_NONE : wxELLIPSIZE_END;
     }
 
-    virtual void OnText(const wxString& text) wxOVERRIDE
+    virtual void OnText(const wxString& text) override
     {
         wxRect rect(m_rect);
         rect.x = m_pos;
@@ -260,7 +258,7 @@ public:
         const wxSize extent = m_dc.GetTextExtent(text);
 
         // DrawItemText() ignores background color, so render it ourselves
-        if ( m_dc.GetBackgroundMode() == wxSOLID )
+        if ( m_dc.GetBackgroundMode() == wxBRUSHSTYLE_SOLID)
         {
 #if wxUSE_GRAPHICS_CONTEXT
             // Prefer to use wxGraphicsContext because it supports alpha channel; fall back to wxDC
@@ -295,7 +293,7 @@ public:
 
 private:
 #if wxUSE_GRAPHICS_CONTEXT
-    wxScopedPtr<wxGraphicsContext> m_gc;
+    std::unique_ptr<wxGraphicsContext> m_gc;
 #endif
     wxWindow* const m_win;
     int const m_rendererFlags;

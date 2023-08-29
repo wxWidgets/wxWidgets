@@ -13,6 +13,8 @@
 
 #include "wx/string.h"
 
+class wxVersionInfo;
+
 // ----------------------------------------------------------------------------
 // wxPlatformInfo enums & structs
 // ----------------------------------------------------------------------------
@@ -79,21 +81,30 @@ enum wxPortId
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
     wxPORT_WINCE    = 1 << 9,       // obsolete
-    wxPORT_QT       = 1 << 10       // wxQT, using QT4
+    wxPORT_QT       = 1 << 10       // wxQT, using Qt 5+
 };
 
-// architecture of the operating system
+// architecture bitness of the operating system
 // (regardless of the build environment of wxWidgets library - see
 // wxIsPlatform64bit documentation for more info)
-enum wxArchitecture
+
+enum wxBitness
 {
-    wxARCH_INVALID = -1,        // returned on error
+    wxBITNESS_INVALID = -1,     // returned on error
 
-    wxARCH_32,                  // 32 bit
-    wxARCH_64,
+    wxBITNESS_32,
+    wxBITNESS_64,
 
-    wxARCH_MAX
+    wxBITNESS_MAX
 };
+
+typedef wxBitness wxArchitecture;
+
+const wxArchitecture
+    wxARCH_INVALID = wxBITNESS_INVALID,
+    wxARCH_32 = wxBITNESS_32,
+    wxARCH_64 = wxBITNESS_64,
+    wxARCH_MAX = wxBITNESS_MAX;
 
 
 // endian-ness of the machine
@@ -128,13 +139,47 @@ struct wxLinuxDistributionInfo
     { return !(*this == ldi); }
 };
 
+// Platform ID is a very broad platform categorization used in external files
+// (e.g. XRC), so the values here must remain stable and cannot be changed.
+class wxPlatformId
+{
+public:
+    // Returns the preferred current platform name, use MatchesCurrent() to
+    // check if the name is one of the possibly several names corresponding to
+    // the current platform.
+    static wxString GetCurrent()
+    {
+#ifdef __WINDOWS__
+        return wxASCII_STR("msw");
+#elif defined(__APPLE__)
+        return wxASCII_STR("mac");
+#elif defined(__UNIX__)
+        return wxASCII_STR("unix");
+#else
+        return wxString();
+#endif
+    }
+
+    // Returns true if the given string matches the current platform.
+    static bool MatchesCurrent(const wxString& s)
+    {
+        // Under MSW we also support "win" platform name for compatibility with
+        // the existing XRC files using it.
+#ifdef __WINDOWS__
+        if (s == wxASCII_STR("win"))
+            return true;
+#endif // __WINDOWS__
+
+        return s == GetCurrent();
+    }
+};
 
 // ----------------------------------------------------------------------------
 // wxPlatformInfo
 // ----------------------------------------------------------------------------
 
 // Information about the toolkit that the app is running under and some basic
-// platform and architecture info
+// platform and architecture bitness info
 class WXDLLIMPEXP_BASE wxPlatformInfo
 {
 public:
@@ -143,7 +188,7 @@ public:
                    int tkMajor = -1, int tkMinor = -1,
                    wxOperatingSystemId id = wxOS_UNKNOWN,
                    int osMajor = -1, int osMinor = -1,
-                   wxArchitecture arch = wxARCH_INVALID,
+                   wxBitness bitness = wxBITNESS_INVALID,
                    wxEndianness endian = wxENDIAN_INVALID,
                    bool usingUniversal = false);
 
@@ -166,6 +211,8 @@ public:
     static wxOperatingSystemId GetOperatingSystemId(const wxString &name);
     static wxPortId GetPortId(const wxString &portname);
 
+    static wxBitness GetBitness(const wxString &bitness);
+    wxDEPRECATED_MSG("Use GetBitness() instead")
     static wxArchitecture GetArch(const wxString &arch);
     static wxEndianness GetEndianness(const wxString &end);
 
@@ -177,6 +224,8 @@ public:
     static wxString GetPortIdName(wxPortId port, bool usingUniversal);
     static wxString GetPortIdShortName(wxPortId port, bool usingUniversal);
 
+    static wxString GetBitnessName(wxBitness bitness);
+    wxDEPRECATED_MSG("Use GetBitnessName() instead")
     static wxString GetArchName(wxArchitecture arch);
     static wxString GetEndiannessName(wxEndianness end);
 
@@ -220,8 +269,11 @@ public:
         { return m_ldi; }
     wxPortId GetPortId() const
         { return m_port; }
+    wxBitness GetBitness() const
+        { return m_bitness; }
+    wxDEPRECATED_MSG("Use GetBitness() instead")
     wxArchitecture GetArchitecture() const
-        { return m_arch; }
+        { return GetBitness(); }
     wxEndianness GetEndianness() const
         { return m_endian; }
 
@@ -237,10 +289,17 @@ public:
         { return GetPortIdName(m_port, m_usingUniversal); }
     wxString GetPortIdShortName() const
         { return GetPortIdShortName(m_port, m_usingUniversal); }
+    wxString GetBitnessName() const
+        { return GetBitnessName(m_bitness); }
+    wxDEPRECATED_MSG("Use GetBitnessName() instead")
     wxString GetArchName() const
-        { return GetArchName(m_arch); }
+        { return GetBitnessName(); }
     wxString GetEndiannessName() const
         { return GetEndiannessName(m_endian); }
+    wxString GetCpuArchitectureName() const
+        { return m_cpuArch; }
+    wxString GetNativeCpuArchitectureName() const
+        { return m_nativeCpuArch; }
     wxString GetOperatingSystemDescription() const
         { return m_osDesc; }
     wxString GetDesktopEnvironment() const
@@ -275,10 +334,17 @@ public:
         { m_osDesc = desc; }
     void SetPortId(wxPortId n)
         { m_port = n; }
-    void SetArchitecture(wxArchitecture n)
-        { m_arch = n; }
+    void SetBitness(wxBitness n)
+        { m_bitness = n; }
+    wxDEPRECATED_MSG("Use SetBitness() instead")
+    void SetArchitecture(wxBitness n)
+        { SetBitness(n); }
     void SetEndianness(wxEndianness n)
         { m_endian = n; }
+    void SetCpuArchitectureName(const wxString& cpuArch)
+        { m_cpuArch = cpuArch; }
+    void SetNativeCpuArchitectureName(const wxString& cpuArch)
+        { m_nativeCpuArch = cpuArch; }
 
     void SetDesktopEnvironment(const wxString& de)
         { m_desktopEnv = de; }
@@ -298,7 +364,7 @@ public:
                m_tkVersionMajor != -1 && m_tkVersionMinor != -1 &&
                m_tkVersionMicro != -1 &&
                m_port != wxPORT_UNKNOWN &&
-               m_arch != wxARCH_INVALID &&
+               m_bitness != wxBITNESS_INVALID &&
                m_endian != wxENDIAN_INVALID;
 
                // do not check linux-specific info; it's ok to have them empty
@@ -359,13 +425,28 @@ protected:
     // others
     // -----------------
 
-    // architecture of the OS/machine
-    wxArchitecture m_arch;
+    // architecture bitness of the OS/machine
+    wxBitness m_bitness;
 
     // endianness of the machine
     wxEndianness m_endian;
+
+    // CPU architecture family name, possibly empty if unknown
+    wxString m_cpuArch;
+
+    // native CPU architecture family name, possibly empty if unknown
+    wxString m_nativeCpuArch;
 };
 
-
+// Return true if running under Wine and fills the provided pointer with
+// its version in this case if it's non-null.
+#ifdef __WINDOWS__
+WXDLLIMPEXP_BASE bool wxIsRunningUnderWine(wxVersionInfo* ver = nullptr);
+#else // !__WINDOWS__
+inline bool wxIsRunningUnderWine(wxVersionInfo* WXUNUSED(ver) = nullptr)
+{
+    return false;
+}
+#endif // __WINDOWS__/!__WINDOWS__
 
 #endif // _WX_PLATINFO_H_

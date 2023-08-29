@@ -13,7 +13,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 #include <limits>
 
@@ -50,6 +50,45 @@ wxString ConcatenateDataViewItemValues(wxDataViewCtrl const* dataViewCtrlPtr, wx
 }
 
 // ============================================================================
+// wxOSXDVCDeleting and wxOSXDVCScopedDeleter
+// ============================================================================
+
+struct wxOSXDVCDeleting
+{
+    explicit wxOSXDVCDeleting(const wxDataViewItem& parent) : m_parent(parent)
+    {
+    }
+
+    const wxDataViewItem m_parent;
+
+    wxDECLARE_NO_COPY_CLASS(wxOSXDVCDeleting);
+};
+
+// Helper class which exists only to reset m_Deleting on scope exit.
+class wxOSXDVCScopedDeleter
+{
+public:
+    wxOSXDVCScopedDeleter(wxDataViewCtrl* dvc, const wxDataViewItem& parent) :
+        m_dvc(dvc),
+        m_valueOrig(m_dvc->m_Deleting)
+    {
+        m_dvc->m_Deleting = new wxOSXDVCDeleting(parent);
+    }
+
+    ~wxOSXDVCScopedDeleter()
+    {
+        delete m_dvc->m_Deleting;
+        m_dvc->m_Deleting = m_valueOrig;
+    }
+
+private:
+    wxDataViewCtrl* const m_dvc;
+    wxOSXDVCDeleting* const m_valueOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxOSXDVCScopedDeleter);
+};
+
+// ============================================================================
 // wxOSXDataViewModelNotifier
 // ============================================================================
 class wxOSXDataViewModelNotifier : public wxDataViewModelNotifier
@@ -63,15 +102,36 @@ public:
  //
  // inherited methods from wxDataViewModelNotifier
  //
-  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item) wxOVERRIDE;
-  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ItemChanged (wxDataViewItem const& item) wxOVERRIDE;
-  virtual bool ItemsChanged(wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item) wxOVERRIDE;
-  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col) wxOVERRIDE;
-  virtual bool Cleared() wxOVERRIDE;
-  virtual void Resort() wxOVERRIDE;
+  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item) override;
+  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items) override;
+  virtual bool ItemChanged (wxDataViewItem const& item) override;
+  virtual bool ItemsChanged(wxDataViewItemArray const& items) override;
+  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item) override;
+  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items) override;
+  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col) override;
+  virtual bool Cleared() override;
+  virtual void Resort() override;
+
+  // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data, does nothing if the
+  // control is frozen but remember it for later
+  void AdjustAutosizedColumns()
+  {
+    if (!m_DataViewCtrlPtr->IsFrozen())
+      DoAdjustAutosizedColumns();
+    else
+      m_needsAdjustmentOnThaw = true;
+  }
+
+  // called by the control when it is thawed to adjust the columns if necessary
+  void OnThaw()
+  {
+    if (m_needsAdjustmentOnThaw)
+    {
+      DoAdjustAutosizedColumns();
+
+      m_needsAdjustmentOnThaw = false;
+    }
+  }
 
 protected:
  // if the dataview control can have a variable row height this method sets the dataview's control row height of
@@ -79,11 +139,17 @@ protected:
   void AdjustRowHeight(wxDataViewItem const& item);
  // ... and the same method for a couple of items:
   void AdjustRowHeights(wxDataViewItemArray const& items);
- // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data
-  void AdjustAutosizedColumns();
 
 private:
+  // adjust the columns unconditionally
+  void DoAdjustAutosizedColumns();
+
   wxDataViewCtrl* m_DataViewCtrlPtr;
+
+  // This is set to true only if AdjustAutosizedColumns() is called while the
+  // control is frozen and in this case OnThaw() readjusts the columns when it
+  // is thawed.
+  bool m_needsAdjustmentOnThaw;
 };
 
 //
@@ -92,8 +158,10 @@ private:
 wxOSXDataViewModelNotifier::wxOSXDataViewModelNotifier(wxDataViewCtrl* initDataViewCtrlPtr)
                            :m_DataViewCtrlPtr(initDataViewCtrlPtr)
 {
-  if (initDataViewCtrlPtr == NULL)
-    wxFAIL_MSG("Pointer to dataview control must not be NULL");
+  if (initDataViewCtrlPtr == nullptr)
+    wxFAIL_MSG("Pointer to dataview control must not be null");
+
+  m_needsAdjustmentOnThaw = false;
 }
 
 bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataViewItem const& item)
@@ -104,6 +172,7 @@ bool wxOSXDataViewModelNotifier::ItemAdded(wxDataViewItem const& parent, wxDataV
   wxCHECK_MSG(item.IsOk(),false,"Added item is invalid.");
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,item);
   AdjustRowHeight(item);
+  AdjustAutosizedColumns();
   return noFailureFlag;
 }
 
@@ -116,6 +185,7 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
   noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Add(parent,items);
  // adjust row heights:
   AdjustRowHeights(items);
+  AdjustAutosizedColumns();
  // done:
   return noFailureFlag;
 }
@@ -123,7 +193,7 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
 bool wxOSXDataViewModelNotifier::ItemChanged(wxDataViewItem const& item)
 {
   wxCHECK_MSG(item.IsOk(),             false,"Changed item is invalid.");
-  wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
+  wxCHECK_MSG(GetOwner() != nullptr,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
    // send the equivalent wxWidgets event:
@@ -161,48 +231,39 @@ bool wxOSXDataViewModelNotifier::ItemsChanged(wxDataViewItemArray const& items)
 
 bool wxOSXDataViewModelNotifier::ItemDeleted(wxDataViewItem const& parent, wxDataViewItem const& item)
 {
-  bool noFailureFlag;
-
-
   wxCHECK_MSG(item.IsOk(),false,"To be deleted item is invalid.");
  // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
-  m_DataViewCtrlPtr->SetDeleting(true);
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,item);
- // enable automatic updating again:
-  m_DataViewCtrlPtr->SetDeleting(false);
+  wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, parent);
+
+  bool ok = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
 
   AdjustAutosizedColumns();
- // done:
-  return noFailureFlag;
+
+  return ok;
 }
 
-bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items)
+bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& WXUNUSED(items))
 {
-  bool noFailureFlag;
-
-
  // when this method is called and currently an item is being edited this item may have already been deleted in the model (the passed item and the being edited item have
  // not to be identical because the being edited item might be below the passed item in the hierarchy);
  // to prevent the control trying to ask the model to update an already deleted item the control is informed that currently a deleting process
  // has been started and that variables can currently not be updated even when requested by the system:
-  m_DataViewCtrlPtr->SetDeleting(true);
+    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, parent);
  // delete all specified items:
-  noFailureFlag = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent,items);
- // enable automatic updating again:
-  m_DataViewCtrlPtr->SetDeleting(false);
+    bool ok = m_DataViewCtrlPtr->GetDataViewPeer()->Remove(parent);
 
   AdjustAutosizedColumns();
- // done:
-  return noFailureFlag;
+
+  return ok;
 }
 
 bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsigned int col)
 {
   wxCHECK_MSG(item.IsOk(),             false,"Passed item is invalid.");
-  wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
+  wxCHECK_MSG(GetOwner() != nullptr,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
     wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_DataViewCtrlPtr, m_DataViewCtrlPtr->GetColumn(col), item);
@@ -220,7 +281,9 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
 
 bool wxOSXDataViewModelNotifier::Cleared()
 {
-  return m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
+    // NOTE: See comments in ItemDeleted method above
+    wxOSXDVCScopedDeleter setDeleting(m_DataViewCtrlPtr, wxDataViewItem());
+    return m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
 }
 
 void wxOSXDataViewModelNotifier::Resort()
@@ -294,7 +357,7 @@ void wxOSXDataViewModelNotifier::AdjustRowHeights(wxDataViewItemArray const& ite
   }
 }
 
-void wxOSXDataViewModelNotifier::AdjustAutosizedColumns()
+void wxOSXDataViewModelNotifier::DoAdjustAutosizedColumns()
 {
   unsigned count = m_DataViewCtrlPtr->GetColumnCount();
   for ( unsigned col = 0; col < count; col++ )
@@ -319,7 +382,7 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
 
 wxDC* wxDataViewCustomRenderer::GetDC()
 {
-  if ((m_DCPtr == NULL) && (GetOwner() != NULL) && (GetOwner()->GetOwner() != NULL))
+  if ((m_DCPtr == nullptr) && (GetOwner() != nullptr) && (GetOwner()->GetOwner() != nullptr))
     m_DCPtr = new wxClientDC(GetOwner()->GetOwner());
   return m_DCPtr;
 }
@@ -345,16 +408,28 @@ wxDataViewCtrl::~wxDataViewCtrl()
 
   // Ensure that the already destructed controls is not notified about changes
   // in the model any more.
-  if (m_ModelNotifier != NULL)
+  if (m_ModelNotifier != nullptr)
     m_ModelNotifier->GetOwner()->RemoveNotifier(m_ModelNotifier);
 }
 
 void wxDataViewCtrl::Init()
 {
-  m_CustomRendererPtr = NULL;
-  m_Deleting          = false;
-  m_cgContext         = NULL;
-  m_ModelNotifier     = NULL;
+  m_CustomRendererPtr = nullptr;
+  m_Deleting          = nullptr;
+  m_cgContext         = nullptr;
+  m_ModelNotifier     = nullptr;
+}
+
+bool wxDataViewCtrl::IsDeleting() const
+{
+    return m_Deleting != nullptr;
+}
+
+bool wxDataViewCtrl::IsClearing() const
+{
+    // We only set the item being deleted to an invalid item when we're
+    // clearing the entire model.
+    return m_Deleting != nullptr && !m_Deleting->m_parent.IsOk();
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,
@@ -365,6 +440,10 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
+  // Remove wxVSCROLL and wxHSCROLL from the style, since the dataview panel has scrollbars
+  // by default, and wxControl::Create trys to make some but crashes in the process
+  style &= ~(wxVSCROLL | wxHSCROLL);
+
   DontCreatePeer();
   if (!(wxControl::Create(parent,id,pos,size,style,validator,name)))
     return false;
@@ -380,19 +459,19 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
   wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
 
 
-  wxCHECK_MSG(dataViewWidgetPtr != NULL,false,"Pointer to native control must not be NULL.");
+  wxCHECK_MSG(dataViewWidgetPtr != nullptr,false,"Pointer to native control must not be null.");
 
   // We could have been associated with another model previously, break the
   // association in this case.
   if ( m_ModelNotifier )
   {
       m_ModelNotifier->GetOwner()->RemoveNotifier(m_ModelNotifier);
-      m_ModelNotifier = NULL;
+      m_ModelNotifier = nullptr;
   }
 
   if (wxDataViewCtrlBase::AssociateModel(model) && dataViewWidgetPtr->AssociateModel(model))
   {
-    if (model != NULL)
+    if (model != nullptr)
     {
       m_ModelNotifier = new wxOSXDataViewModelNotifier(this);
       model->AddNotifier(m_ModelNotifier);
@@ -418,9 +497,9 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
   wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
 
  // first, some error checking:
-  wxCHECK_MSG(dataViewWidgetPtr != NULL,                                         false,"Pointer to native control must not be NULL.");
-  wxCHECK_MSG(columnPtr != NULL,                                                 false,"Column pointer must not be NULL.");
-  wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,"Column does not have a renderer.");
+  wxCHECK_MSG(dataViewWidgetPtr != nullptr,                                         false,"Pointer to native control must not be null.");
+  wxCHECK_MSG(columnPtr != nullptr,                                                 false,"Column pointer must not be null.");
+  wxCHECK_MSG(columnPtr->GetRenderer() != nullptr,                                  false,"Column does not have a renderer.");
 
  // add column to wxWidget's internal structure:
   if (wxDataViewCtrlBase::InsertColumn(pos,columnPtr))
@@ -499,6 +578,7 @@ int wxDataViewCtrl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
 void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 {
   GetDataViewPeer()->Collapse(item);
+  AdjustAutosizedColumns();
 }
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
@@ -510,9 +590,10 @@ void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn 
   }
 }
 
-void wxDataViewCtrl::DoExpand(wxDataViewItem const& item)
+void wxDataViewCtrl::DoExpand(wxDataViewItem const& item, bool expandChildren)
 {
-  return GetDataViewPeer()->DoExpand(item);
+  GetDataViewPeer()->DoExpand(item, expandChildren);
+  AdjustAutosizedColumns();
 }
 
 bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
@@ -547,10 +628,24 @@ wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
 
 wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const
 {
-  if (item.IsOk() && (columnPtr != NULL))
-    return GetDataViewPeer()->GetRectangle(item,columnPtr);
-  else
-    return wxRect();
+  if ( !item.IsOk() )
+      return wxRect();
+
+  wxRect rect = GetDataViewPeer()->GetRectangle(item, columnPtr ? columnPtr : GetColumn(0));
+
+  if ( !columnPtr )
+  {
+      const unsigned columnCount = GetColumnCount();
+      if ( columnCount != 1 )
+      {
+          // Extend the rectangle to the rightmost part of the last column.
+          const wxRect rectLastCol = GetDataViewPeer()->GetRectangle(item, GetColumn(columnCount - 1));
+          rect.SetRight(rectLastCol.GetRight());
+      }
+      //else: We already have the rectangle we need.
+  }
+
+  return rect;
 }
 
 int wxDataViewCtrl::GetSelectedItemsCount() const
@@ -627,9 +722,8 @@ void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
         last_parent = parent;
     }
 
-   // finally select the items:
-    for (i=0; i<noOfSelections; ++i)
-      dataViewWidgetPtr->Select(sel[i]);
+    // finally select the items:
+    dataViewWidgetPtr->Select(sel);
 }
 
 void wxDataViewCtrl::Unselect(wxDataViewItem const& item)
@@ -653,13 +747,10 @@ wxDataViewWidgetImpl* wxDataViewCtrl::GetDataViewPeer() const
 
 void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
 {
-  int noOfChildren;
-
   wxDataViewItemArray items;
 
-
-  wxCHECK_RET(GetModel() != NULL,"Model pointer not initialized.");
-  noOfChildren = GetModel()->GetChildren(parentItem,items);
+  wxCHECK_RET(GetModel() != nullptr,"Model pointer not initialized.");
+  GetModel()->GetChildren(parentItem,items);
   (void) GetModel()->ItemsAdded(parentItem,items);
 }
 
@@ -668,14 +759,45 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
     GetDataViewPeer()->StartEditor(item, GetColumnPosition(column));
 }
 
+#if wxUSE_DRAG_AND_DROP
+
+bool wxDataViewCtrl::DoEnableDropTarget(const wxVector<wxDataFormat> &formats)
+{
+    wxDropTarget* dt = nullptr;
+    if (wxDataObject* dataObject = CreateDataObject(formats))
+    {
+        dt = new wxDropTarget(dataObject);
+    }
+
+    SetDropTarget(dt);
+
+    return true;
+}
+
+#endif // wxUSE_DRAG_AND_DROP
+
 void wxDataViewCtrl::FinishCustomItemEditing()
 {
   if (GetCustomRendererItem().IsOk())
   {
     GetCustomRendererPtr()->FinishEditing();
     SetCustomRendererItem(wxDataViewItem());
-    SetCustomRendererPtr (NULL);
+    SetCustomRendererPtr (nullptr);
   }
+}
+
+void wxDataViewCtrl::AdjustAutosizedColumns() const
+{
+  if ( m_ModelNotifier )
+    m_ModelNotifier->AdjustAutosizedColumns();
+}
+
+void wxDataViewCtrl::DoThaw()
+{
+    if ( m_ModelNotifier )
+        m_ModelNotifier->OnThaw();
+
+    wxDataViewCtrlBase::DoThaw();
 }
 
 /*static*/
@@ -695,7 +817,7 @@ wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 // inherited methods from wxDataViewCtrlBase
 void wxDataViewCtrl::DoSetExpanderColumn()
 {
-  if (GetExpanderColumn() != NULL)
+  if (GetExpanderColumn() != nullptr)
     GetDataViewPeer()->DoSetExpanderColumn(GetExpanderColumn());
 }
 
@@ -715,12 +837,12 @@ void wxDataViewCtrl::OnSize(wxSizeEvent& event)
   {
     wxDataViewColumn* dataViewColumnPtr(GetColumn(i));
 
-    if (dataViewColumnPtr != NULL)
+    if (dataViewColumnPtr != nullptr)
     {
       wxDataViewCustomRenderer* dataViewCustomRendererPtr(dynamic_cast<wxDataViewCustomRenderer*>(dataViewColumnPtr->GetRenderer()));
 
-      if (dataViewCustomRendererPtr != NULL)
-        dataViewCustomRendererPtr->SetDC(NULL);
+      if (dataViewCustomRendererPtr != nullptr)
+        dataViewCustomRendererPtr->SetDC(nullptr);
     }
   }
 
@@ -738,18 +860,12 @@ wxSize wxDataViewCtrl::DoGetBestSize() const
     return best;
 }
 
-void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
-{
-    event.Skip();
-}
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl,wxDataViewCtrlBase);
 
 wxBEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_SIZE(wxDataViewCtrl::OnSize)
-  EVT_MOTION(wxDataViewCtrl::OnMouse)
 wxEND_EVENT_TABLE()
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

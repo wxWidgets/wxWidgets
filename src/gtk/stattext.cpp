@@ -13,7 +13,6 @@
 
 #include "wx/stattext.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------
@@ -50,7 +49,7 @@ bool wxStaticText::Create(wxWindow *parent,
         return false;
     }
 
-    m_widget = gtk_label_new(NULL);
+    m_widget = gtk_label_new(nullptr);
     g_object_ref(m_widget);
 
     GtkJustification justify;
@@ -109,7 +108,7 @@ bool wxStaticText::Create(wxWindow *parent,
     // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
     static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
 #ifdef __WXGTK4__
-    g_object_set(m_widget, "xalign", labelAlignments[justify], NULL);
+    g_object_set(m_widget, "xalign", labelAlignments[justify], nullptr);
 #else
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
@@ -136,7 +135,7 @@ bool wxStaticText::Create(wxWindow *parent,
 
 void wxStaticText::GTKDoSetLabel(GTKLabelSetter setter, const wxString& label)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid static text") );
 
     (this->*setter)(GTK_LABEL(m_widget), label);
 
@@ -210,7 +209,7 @@ bool wxStaticText::SetFont( const wxFont &font )
         else // No special attributes any more.
         {
             // Just remove any attributes we had set.
-            gtk_label_set_attributes(GTK_LABEL(m_widget), NULL);
+            gtk_label_set_attributes(GTK_LABEL(m_widget), nullptr);
         }
 
         // The underlines for mnemonics are incompatible with using attributes
@@ -271,17 +270,23 @@ void wxStaticText::GTKWidgetDoSetMnemonic(GtkWidget* w)
 }
 
 
-// These functions should be used only when GTK+ < 2.6 by wxStaticTextBase::UpdateLabel()
+// These functions are not used as GTK supports ellipsization natively and we
+// never call the base class UpdateText() which uses them.
+//
+// Note that, unfortunately, we still need to define them because they still
+// exist, as pure virtuals, in the base class even in wxGTK to allow
+// wxGenericStaticText to override them.
 
-wxString wxStaticText::DoGetLabel() const
+wxString wxStaticText::WXGetVisibleLabel() const
 {
-    GtkLabel *label = GTK_LABEL(m_widget);
-    return wxGTK_CONV_BACK( gtk_label_get_text( label ) );
+    wxFAIL_MSG(wxS("Unreachable"));
+
+    return wxString();
 }
 
-void wxStaticText::DoSetLabel(const wxString& str)
+void wxStaticText::WXSetVisibleLabel(const wxString& WXUNUSED(str))
 {
-    GTKSetLabelForLabel(GTK_LABEL(m_widget), str);
+    wxFAIL_MSG(wxS("Unreachable"));
 }
 
 // static

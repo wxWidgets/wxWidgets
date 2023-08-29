@@ -19,26 +19,25 @@ public:
     wxDirDialog() { }
 
     wxDirDialog(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxEmptyString,
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr);
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr));
     bool Create(wxWindow *parent,
-                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),
                 const wxString& defaultPath = wxEmptyString,
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                const wxString& name = wxDirDialogNameStr);
+                const wxString& name = wxASCII_STR(wxDirDialogNameStr));
     virtual ~wxDirDialog() { }
 
 
 public:     // overrides from wxGenericDirDialog
 
-    wxString GetPath() const wxOVERRIDE;
-    void SetPath(const wxString& path) wxOVERRIDE;
+    void SetPath(const wxString& path) override;
 
 
     // Implementation only.
@@ -51,12 +50,10 @@ protected:
     // form doesn't have any m_wxwindow
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+                           int sizeFlags = wxSIZE_AUTO) override;
 
 
 private:
-    wxString m_selectedDirectory;
-
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };
 

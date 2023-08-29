@@ -18,18 +18,17 @@ AUIDIR =   $(WXDIR)/src/aui
 RIBBONDIR = $(WXDIR)/src/ribbon
 PROPGRIDDIR = $(WXDIR)/src/propgrid
 STCDIR =   $(WXDIR)/src/stc
+SCINTILLADIR = $(WXDIR)/src/stc/scintilla
+LEXILLADIR = $(WXDIR)/src/stc/lexilla
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
 TIFFDIR  = $(WXDIR)/src/tiff
 ZLIBDIR  = $(WXDIR)/src/zlib
-REGEXDIR = $(WXDIR)/src/regex
 EXPATDIR = $(WXDIR)/src/expat
 GTKDIR   = $(WXDIR)/src/gtk
-GTK1DIR  = $(WXDIR)/src/gtk1
 X11DIR   = $(WXDIR)/src/x11
 X11INC   = $(WXDIR)/include/wx/x11
-MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
 MACDIR   = $(WXDIR)/src/osx
 COCOADIR = $(WXDIR)/src/cocoa
@@ -76,7 +75,7 @@ CP_P = cp -p
 ALL_DIST: distrib_clean
 	mkdir _dist_dir
 	mkdir $(DISTDIR)
-	$(CP_P) $(WXDIR)/configure.in $(DISTDIR)
+	$(CP_P) $(WXDIR)/configure.ac $(DISTDIR)
 	$(CP_P) $(WXDIR)/configure $(DISTDIR)
 	$(CP_P) $(WXDIR)/autoconf_inc.m4 $(DISTDIR)
 	$(CP_P) $(WXDIR)/wxwin.m4 $(DISTDIR)
@@ -100,11 +99,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
 	$(CP_P) $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
 	mkdir $(DISTDIR)/src
-	# temp hack for common/execcmn.cpp: it's not supported by tmake
-	# yet (it's a header-like file but in src/common directory and it
-	# shouldn't be distributed...)
-	mkdir $(DISTDIR)/src/common
-	$(CP_P) $(SRCDIR)/common/execcmn.cpp $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/xml
 	$(CP_P) $(SRCDIR)/xml/*.cpp $(DISTDIR)/src/xml
 	mkdir $(DISTDIR)/src/zlib
@@ -112,11 +106,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
 	$(CP_P) $(ZLIBDIR)/README $(DISTDIR)/src/zlib
 	#$(CP_P) $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
-	mkdir $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/*.h $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/*.c $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
-	$(CP_P) $(REGEXDIR)/README $(DISTDIR)/src/regex
 	$(CP_PR) $(EXPATDIR) $(DISTDIR)/src/expat
 	#(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	# copy some files from include/ that are not installed:
@@ -147,7 +136,6 @@ ALL_DIST: distrib_clean
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
-	$(CP_P) $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
 	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
 	  $(CP_P) $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES-$(TOOLKIT).txt ; fi
 	$(CP_P) $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README-$(TOOLKIT).txt
@@ -195,10 +183,8 @@ ALL_GUI_DIST: ALL_DIST
 
 	mkdir $(DISTDIR)/art
 	mkdir $(DISTDIR)/art/gtk
-	mkdir $(DISTDIR)/art/motif
 	$(CP_P) $(WXDIR)/art/*.xpm $(DISTDIR)/art
 	$(CP_P) $(WXDIR)/art/gtk/*.xpm $(DISTDIR)/art/gtk
-	$(CP_P) $(WXDIR)/art/motif/*.xpm $(DISTDIR)/art/motif
 
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	$(CP_P) $(COMMDIR)/*.cpp $(DISTDIR)/src/common
@@ -233,12 +219,13 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(PROPGRIDDIR)/*.cpp $(DISTDIR)/src/propgrid
 
 	mkdir $(DISTDIR)/src/stc
-	mkdir $(DISTDIR)/src/stc/scintilla
-	mkdir $(DISTDIR)/src/stc/scintilla/src
-	mkdir $(DISTDIR)/src/stc/scintilla/include
 	$(CP_P) $(STCDIR)/*.* $(DISTDIR)/src/stc
-	$(CP_P) $(STCDIR)/scintilla/src/* $(DISTDIR)/src/stc/scintilla/src
-	$(CP_P) $(STCDIR)/scintilla/include/* $(DISTDIR)/src/stc/scintilla/include
+
+	mkdir $(DISTDIR)/src/stc/scintilla
+	$(CP_PR) $(SCINTILLADIR)/* $(DISTDIR)/src/stc/scintilla
+
+	mkdir $(DISTDIR)/src/stc/lexilla
+	$(CP_PR) $(LEXILLADIR)/* $(DISTDIR)/src/stc/lexilla
 
 	mkdir $(DISTDIR)/src/png
 	$(CP_PR) $(PNGDIR)/* $(DISTDIR)/src/png
@@ -278,9 +265,9 @@ ALL_GUI_DIST: ALL_DIST
 
 BASE_DIST: ALL_DIST INTL_DIST
 	# make --disable-gui the default
-	rm $(DISTDIR)/configure.in
+	rm $(DISTDIR)/configure.ac
 	sed 's/DEFAULT_wxUSE_GUI=yes/DEFAULT_wxUSE_GUI=no/' \
-		$(WXDIR)/configure.in > $(DISTDIR)/configure.in
+		$(WXDIR)/configure.ac > $(DISTDIR)/configure.ac
 	rm $(DISTDIR)/configure
 	sed 's/DEFAULT_wxUSE_GUI=yes/DEFAULT_wxUSE_GUI=no/' \
 		$(WXDIR)/configure > $(DISTDIR)/configure
@@ -317,7 +304,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
-	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
@@ -326,7 +312,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	$(CP_P) $(SAMPDIR)/console/makefile.unx $(DISTDIR)/samples/console
 	$(CP_P) $(SAMPDIR)/console/console.cpp $(DISTDIR)/samples/console
 	$(CP_P) $(SAMPDIR)/console/console.dsp $(DISTDIR)/samples/console
-	$(CP_P) $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 	mv $(DISTDIR) $(BASEDISTDIR)
 
@@ -337,14 +322,6 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(GTKDIR)/*.c $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.xbm $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.mms $(DISTDIR)/src/gtk
-	mkdir $(DISTDIR)/include/wx/gtk1
-	$(CP_P) $(INCDIR)/wx/gtk1/*.h $(DISTDIR)/include/wx/gtk1
-	mkdir $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.h $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.cpp $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.c $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.xbm $(DISTDIR)/src/gtk1
-	$(CP_P) $(GTK1DIR)/*.mms $(DISTDIR)/src/gtk1
 	mkdir $(DISTDIR)/include/wx/x11/private
 	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
 
@@ -376,25 +353,6 @@ X11_DIST: UNIV_DIST
 	mkdir $(DISTDIR)/include/wx/osx/core
 	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
 
-MOTIF_DIST: ALL_GUI_DIST
-	$(CP_P) $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
-	$(CP_P) $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
-	$(CP_P) $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
-	mkdir $(DISTDIR)/src/motif/xmcombo
-	$(CP_P) $(MOTIFDIR)/xmcombo/*.c $(DISTDIR)/src/motif/xmcombo
-	$(CP_P) $(MOTIFDIR)/xmcombo/*.h $(DISTDIR)/src/motif/xmcombo
-	$(CP_P) $(MOTIFDIR)/xmcombo/copying.txt $(DISTDIR)/src/motif/xmcombo
-	mkdir $(DISTDIR)/src/x11
-	mkdir $(DISTDIR)/include/wx/x11
-	$(CP_P) $(X11DIR)/pen.cpp $(X11DIR)/brush.cpp $(X11DIR)/utilsx.cpp \
-		$(X11DIR)/bitmap.cpp $(X11DIR)/glcanvas.cpp $(X11DIR)/region.cpp \
-		$(DISTDIR)/src/x11
-	$(CP_P) $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
-		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
-		$(DISTDIR)/include/wx/x11
-	mkdir $(DISTDIR)/include/wx/x11/private
-	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
-
 OSX_CARBON_DIST: ALL_GUI_DIST
 	$(CP_P) $(INCDIR)/*.* $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx/osx/carbon
@@ -417,9 +375,6 @@ OSX_CARBON_DIST: ALL_GUI_DIST
 	$(CP_P) $(MACDIR)/cocoa/*.mm $(DISTDIR)/src/osx/cocoa
 	mkdir $(DISTDIR)/src/osx/iphone
 	$(CP_P) $(MACDIR)/iphone/*.mm $(DISTDIR)/src/osx/iphone
-	mkdir $(DISTDIR)/src/html/htmlctrl
-	mkdir $(DISTDIR)/src/html/htmlctrl/webkit
-	$(CP_P) $(WXDIR)/src/html/htmlctrl/webkit/*.mm $(DISTDIR)/src/html/htmlctrl/webkit
 	mkdir $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.cpp $(DISTDIR)/src/osx/carbon
 	$(CP_P) $(MACDIR)/carbon/*.mm $(DISTDIR)/src/osx/carbon
@@ -479,7 +434,6 @@ UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/univ
 	mkdir $(DISTDIR)/src/univ/themes
 	$(CP_P) $(INCDIR)/wx/univ/*.h $(DISTDIR)/include/wx/univ
-	$(CP_P) $(INCDIR)/wx/univ/setup0.h $(DISTDIR)/include/wx/univ/setup.h
 	$(CP_P) $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
 	$(CP_P) $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
 
@@ -544,7 +498,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
-	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
@@ -795,7 +748,7 @@ distdir: @GUIDIST@
 	@# in other dist targets.
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
 			\( -name "makefile.*" -a ! -name "makefile.gcc" -a ! -name "makefile.unx" \) \) \
-			-print | egrep -v '/samples/.*\.hh.$$' | xargs rm -rf
+			-print | grep -vE '/samples/.*\.hh.$$' | xargs rm -rf
 
 dist: distdir
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);

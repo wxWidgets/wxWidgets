@@ -10,10 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_RICHMSGDLG
 
 #include "wx/richmsgdlg.h"
@@ -21,10 +17,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/msw/private.h"
+    #include "wx/utils.h"                   // for wxWindowDisabler
 #endif
 
-// This will define wxHAS_MSW_TASKDIALOG if we have support for it in the
-// headers we use.
 #include "wx/msw/private/msgdlg.h"
 
 // ----------------------------------------------------------------------------
@@ -35,11 +30,12 @@ int wxRichMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-#ifdef wxHAS_MSW_TASKDIALOG
     using namespace wxMSWMessageDialog;
 
     if ( HasNativeTaskDialog() )
     {
+        wxWindowDisabler disableOthers(this, GetParentForModalDialog());
+
         // create a task dialog
         WinStruct<TASKDIALOGCONFIG> tdc;
         wxMSWTaskDialogConfig wxTdc(*this);
@@ -86,7 +82,7 @@ int wxRichMessageDialog::ShowModal()
         // create the task dialog, process the answer and return it.
         BOOL checkBoxChecked;
         int msAns;
-        HRESULT hr = taskDialogIndirect( &tdc, &msAns, NULL, &checkBoxChecked );
+        HRESULT hr = taskDialogIndirect( &tdc, &msAns, nullptr, &checkBoxChecked );
         if ( FAILED(hr) )
         {
             wxLogApiError( "TaskDialogIndirect", hr );
@@ -106,7 +102,6 @@ int wxRichMessageDialog::ShowModal()
 
         return MSWTranslateReturnCode( msAns );
     }
-#endif // wxHAS_MSW_TASKDIALOG
 
     // use the generic version when task dialog is't available at either
     // compile or run-time.

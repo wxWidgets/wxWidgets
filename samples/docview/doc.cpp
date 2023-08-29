@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
     #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
@@ -29,7 +26,7 @@
 #endif
 
 #if wxUSE_STD_IOSTREAM
-    #include "wx/ioswrap.h"
+    #include <iostream>
 #else
     #include "wx/txtstrm.h"
 #endif
@@ -193,13 +190,7 @@ bool wxTextDocument::OnCreate(const wxString& path, long flags)
 
     // subscribe to changes in the text control to update the document state
     // when it's modified
-    GetTextCtrl()->Connect
-    (
-        wxEVT_TEXT,
-        wxCommandEventHandler(wxTextDocument::OnTextChange),
-        NULL,
-        this
-    );
+    GetTextCtrl()->Bind(wxEVT_TEXT, &wxTextDocument::OnTextChange, this);
 
     return true;
 }
@@ -255,7 +246,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument);
 wxTextCtrl* TextEditDocument::GetTextCtrl() const
 {
     wxView* view = GetFirstView();
-    return view ? wxStaticCast(view, TextEditView)->GetText() : NULL;
+    return view ? wxStaticCast(view, TextEditView)->GetText() : nullptr;
 }
 
 // ----------------------------------------------------------------------------

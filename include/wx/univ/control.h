@@ -47,7 +47,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize, long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxControlNameStr)
+              const wxString& name = wxASCII_STR(wxControlNameStr))
     {
         Init();
 
@@ -59,14 +59,14 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxControlNameStr);
+                const wxString& name = wxASCII_STR(wxControlNameStr));
 
     // this function will filter out '&' characters and will put the
     // accelerator char (the one immediately after '&') into m_chAccel
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
 
     // return the current label
-    virtual wxString GetLabel() const wxOVERRIDE { return wxControlBase::GetLabel(); }
+    virtual wxString GetLabel() const override { return wxControlBase::GetLabel(); }
 
     // wxUniversal-specific methods
 
@@ -79,7 +79,10 @@ public:
         return m_indexAccel == -1 ? wxT('\0') : (wxChar)m_label[m_indexAccel];
     }
 
-    virtual wxWindow *GetInputWindow() const wxOVERRIDE { return (wxWindow*)this; }
+    virtual wxWindow *GetInputWindow() const override
+    {
+        return const_cast<wxControl*>(this);
+    }
 
 protected:
     // common part of all ctors

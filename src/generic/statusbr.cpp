@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATUSBAR
 
@@ -26,10 +23,8 @@
     #include "wx/control.h"
 #endif
 
-#ifdef __WXGTK20__
-    #include <gtk/gtk.h>
+#ifdef __WXGTK__
     #include "wx/gtk/private.h"
-    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
@@ -53,7 +48,7 @@
 // GTK+ signal handler
 // ----------------------------------------------------------------------------
 
-#if defined( __WXGTK20__ )
+#if defined( __WXGTK__ )
 #if GTK_CHECK_VERSION(2,12,0)
 extern "C" {
 static
@@ -76,7 +71,7 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
     if (str.empty())
         return FALSE;
 
-    gtk_tooltip_set_text(tooltip, wxGTK_CONV_SYS(str));
+    gtk_tooltip_set_text(tooltip, str.utf8_str());
     return TRUE;
 }
 }
@@ -90,7 +85,7 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
 wxBEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
     EVT_SIZE(wxStatusBarGeneric::OnSize)
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
 #endif
@@ -128,11 +123,11 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
     SetFieldsCount(1);
 
-#if defined( __WXGTK20__ )
+#if defined( __WXGTK__ )
 #if GTK_CHECK_VERSION(2,12,0)
     if (HasFlag(wxSTB_SHOW_TIPS) && wx_is_at_least_gtk2(12))
     {
-        g_object_set(m_widget, "has-tooltip", TRUE, NULL);
+        g_object_set(m_widget, "has-tooltip", TRUE, nullptr);
         g_signal_connect(m_widget, "query-tooltip",
                          G_CALLBACK(statusbar_query_tooltip), this);
     }
@@ -148,7 +143,7 @@ wxSize wxStatusBarGeneric::DoGetBestSize() const
 
     // best width is the width of the parent
     if (GetParent())
-        GetParent()->GetClientSize(&width, NULL);
+        GetParent()->GetClientSize(&width, nullptr);
     else
         width = 80;     // a dummy value
 
@@ -186,18 +181,27 @@ void wxStatusBarGeneric::DoUpdateFieldWidths()
 {
     m_lastClientSize = GetClientSize();
 
+    int width = m_lastClientSize.x;
+    if ( ShowsSizeGrip() )
+        width -= GetSizeGripRect().width;
+
     // recompute the cache of the field widths if the status bar width has changed
-    m_widthsAbs = CalculateAbsWidths(m_lastClientSize.x);
+    m_widthsAbs = CalculateAbsWidths(width);
 }
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const
 {
+    // Currently drawing size grip is implemented only in wxGTK.
+#ifdef __WXGTK__
     if ( !HasFlag(wxSTB_SIZEGRIP) )
         return false;
 
     wxTopLevelWindow * const
         tlw = wxDynamicCast(wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
     return tlw && !tlw->IsMaximized() && tlw->HasFlag(wxRESIZE_BORDER);
+#else // !__WXGTK__
+    return false;
+#endif // __WXGTK__/!__WXGTK__
 }
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
@@ -233,12 +237,12 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
 
     // eventually ellipsize the text so that it fits the field width
 
-    wxEllipsizeMode ellmode = (wxEllipsizeMode)-1;
+    wxEllipsizeMode ellmode = wxELLIPSIZE_NONE;
     if (HasFlag(wxSTB_ELLIPSIZE_START)) ellmode = wxELLIPSIZE_START;
     else if (HasFlag(wxSTB_ELLIPSIZE_MIDDLE)) ellmode = wxELLIPSIZE_MIDDLE;
     else if (HasFlag(wxSTB_ELLIPSIZE_END)) ellmode = wxELLIPSIZE_END;
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
     {
         // if we have the wxSTB_SHOW_TIPS we must set the ellipsized flag even if
         // we don't ellipsize the text but just truncate it
@@ -261,15 +265,17 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
         SetEllipsizedFlag(i, text != GetStatusText(i));
     }
 
-#if defined( __WXGTK__ ) || defined(__WXMAC__)
+#if defined( __WXGTK__ )
     xpos++;
     ypos++;
+#elif defined(__WXMAC__)
+    xpos++;
 #endif
 
     // draw the text
     dc.DrawText(text, xpos, ypos);
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
         dc.DestroyClippingRegion();
 }
 
@@ -281,7 +287,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
     if (rect.GetWidth() <= 0)
         return;     // happens when the status bar is shrunk in a very small area!
 
-    int style = m_panes[i].GetStyle();
+    int style = GetEffectiveFieldStyle(i);
     if (style == wxSB_RAISED || style == wxSB_SUNKEN)
     {
         // Draw border
@@ -383,9 +389,11 @@ wxRect wxStatusBarGeneric::GetSizeGripRect() const
     int width, height;
     wxWindow::DoGetClientSize(&width, &height);
 
+#ifndef __WXGTK3__
     if (GetLayoutDirection() == wxLayout_RightToLeft)
         return wxRect(2, 2, height-2, height-4);
-    else
+#endif
+
         return wxRect(width-height-2, 2, height-2, height-4);
 }
 
@@ -397,7 +405,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
     // Draw grip first
     if ( ShowsSizeGrip() )
     {
@@ -413,10 +421,6 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
             GtkStyleContext* sc = gtk_widget_get_style_context(toplevel);
             gtk_style_context_save(sc);
             gtk_style_context_add_class(sc, GTK_STYLE_CLASS_GRIP);
-            GtkJunctionSides sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
-            if (GetLayoutDirection() == wxLayout_RightToLeft)
-                sides = GTK_JUNCTION_CORNER_BOTTOMLEFT;
-            gtk_style_context_set_junction_sides(sc, sides);
             gtk_render_handle(sc,
                 static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext()),
                 rc.x, rc.y, rc.width, rc.height);
@@ -429,14 +433,14 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
         gtk_paint_resize_grip(gtk_widget_get_style(m_widget),
                             GTKGetDrawingWindow(),
                             gtk_widget_get_state(m_widget),
-                            NULL,
+                            nullptr,
                             m_widget,
                             "statusbar",
                             edge,
                             rc.x, rc.y, rc.width, rc.height );
 #endif
     }
-#endif // __WXGTK20__
+#endif // __WXGTK__
 
     if (GetFont().IsOk())
         dc.SetFont(GetFont());
@@ -457,7 +461,7 @@ void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
 void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
 {
     int width, height;
@@ -471,7 +475,7 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
         rect.width && rect.height)
     wxGCC_WARNING_RESTORE()
     {
-        ancestor = NULL;
+        ancestor = nullptr;
     }
 #endif
 
@@ -521,7 +525,7 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
         rect.width && rect.height)
     wxGCC_WARNING_RESTORE()
     {
-        ancestor = NULL;
+        ancestor = nullptr;
     }
 #endif
 
@@ -544,7 +548,7 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
         event.Skip( true );
     }
 }
-#endif // __WXGTK20__
+#endif // __WXGTK__
 
 void wxStatusBarGeneric::OnSize(wxSizeEvent& event)
 {

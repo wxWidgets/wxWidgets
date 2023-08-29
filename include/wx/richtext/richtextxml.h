@@ -15,7 +15,6 @@
  * Includes
  */
 
-#include "wx/hashmap.h"
 #include "wx/richtext/richtextbuffer.h"
 #include "wx/richtext/richtextstyles.h"
 
@@ -51,7 +50,7 @@ public:
 
     static wxString MakeString(const int& v) { return wxString::Format(wxT("%d"), v); }
     static wxString MakeString(const long& v) { return wxString::Format(wxT("%ld"), v); }
-    static wxString MakeString(const double& v) { return wxString::Format(wxT("%.2f"), (float) v); }
+    static wxString MakeString(const double& v) { return wxString::Format(wxS("%.2f"), v); }
     static wxString MakeString(const wxString& s) { return s; }
     static wxString MakeString(const wxColour& col) { return wxT("#") + ColourToHexString(col); }
 
@@ -98,10 +97,10 @@ public:
 
     void OutputString(wxOutputStream& stream, const wxString& str);
     void OutputStringEnt(wxOutputStream& stream, const wxString& str);
-    
+
     static void AddString(wxString& str, const int& v) { str << wxString::Format(wxT("%d"), v); }
     static void AddString(wxString& str, const long& v) { str << wxString::Format(wxT("%ld"), v); }
-    static void AddString(wxString& str, const double& v) { str << wxString::Format(wxT("%.2f"), (float) v); }
+    static void AddString(wxString& str, const double& v) { str << wxString::Format(wxS("%.2f"), v); }
     static void AddString(wxString& str, const wxChar* s) { str << s; }
     static void AddString(wxString& str, const wxString& s) { str << s; }
     static void AddString(wxString& str, const wxColour& col) { str << wxT("#") << ColourToHexString(col); }
@@ -122,7 +121,7 @@ public:
 
     /// Create a string containing style attributes, plus further object 'attributes' (shown, id)
     static wxString AddAttributes(wxRichTextObject* obj, bool isPara = false);
-    
+
     virtual bool ExportStyleDefinition(wxOutputStream& stream, wxRichTextStyleDefinition* def, int level);
 
     virtual bool WriteProperties(wxOutputStream& stream, const wxRichTextProperties& properties, int level);
@@ -202,10 +201,10 @@ public:
     virtual wxRichTextObject* CreateObjectForXMLName(wxRichTextObject* parent, const wxString& name) const;
 
     /// Can we save using this handler?
-    virtual bool CanSave() const wxOVERRIDE { return true; }
+    virtual bool CanSave() const override { return true; }
 
     /// Can we load using this handler?
-    virtual bool CanLoad() const wxOVERRIDE { return true; }
+    virtual bool CanLoad() const override { return true; }
 
     /// Returns the XML helper object, implementing functionality
     /// that can be reused elsewhere.
@@ -217,22 +216,20 @@ public:
         Call with XML node name, C++ class name so that wxRTC can read in the node.
         If you add a custom object, call this.
     */
-    static void RegisterNodeName(const wxString& nodeName, const wxString& className) { sm_nodeNameToClassMap[nodeName] = className; }
+    static void RegisterNodeName(const wxString& nodeName, const wxString& className);
 
     /**
         Cleans up the mapping between node name and C++ class.
     */
-    static void ClearNodeToClassMap() { sm_nodeNameToClassMap.clear(); }
+    static void ClearNodeToClassMap();
 
 protected:
 #if wxUSE_STREAMS
-    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) wxOVERRIDE;
-    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) wxOVERRIDE;
+    virtual bool DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& stream) override;
+    virtual bool DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& stream) override;
 #endif
 
     wxRichTextXMLHelper m_helper;
-
-    static wxStringToStringHashMap sm_nodeNameToClassMap;
 };
 
 #endif

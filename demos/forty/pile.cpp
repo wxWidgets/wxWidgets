@@ -17,10 +17,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -61,7 +57,7 @@ Pile::Pile(int x, int y, int dx, int dy)
 //+-------------------------------------------------------------+
 //| Description:                                                |
 //| Redraw the pile on the screen. If the pile is empty         |
-//| just draw a NULL card as a place holder for the pile.       |
+//| just draw a null card as a place holder for the pile.       |
 //| Otherwise draw the pile from the bottom up, starting        |
 //| at the origin of the pile, shifting each subsequent         |
 //| card by the pile's x and y offsets.                         |
@@ -69,7 +65,7 @@ Pile::Pile(int x, int y, int dx, int dy)
 void Pile::Redraw(wxDC& dc )
 {
     FortyFrame *frame = (FortyFrame*) wxTheApp->GetTopWindow();
-    wxWindow *canvas = (wxWindow *) NULL;
+    wxWindow *canvas = nullptr;
     if (frame)
     {
         canvas = frame->GetCanvas();
@@ -107,7 +103,7 @@ void Pile::Redraw(wxDC& dc )
 //| Pile::GetTopCard()                                          |
 //+-------------------------------------------------------------+
 //| Description:                                                |
-//| Return a pointer to the top card in the pile or NULL        |
+//| Return a pointer to the top card in the pile or nullptr     |
 //| if the pile is empty.                                       |
 //| NB: Gets a copy of the card without removing it from the    |
 //| pile.                                                       |
@@ -130,7 +126,7 @@ Card* Pile::GetTopCard()
 //| Description:                                                |
 //| If the pile is not empty, remove the top card from the      |
 //| pile and return the pointer to the removed card.            |
-//| If the pile is empty return a NULL pointer.                 |
+//| If the pile is empty return a null pointer.                 |
 //+-------------------------------------------------------------+
 Card* Pile::RemoveTopCard()
 {
@@ -155,13 +151,14 @@ Card* Pile::RemoveTopCard()
 //+-------------------------------------------------------------+
 Card* Pile::RemoveTopCard(wxDC& dc, int xOffset, int yOffset)
 {
-    int topX, topY, x, y;
+    int topX, topY;
 
     GetTopCardPos(topX, topY);
     Card* card = RemoveTopCard();
 
     if (card)
     {
+        int x, y;
         card->Erase(dc, topX - xOffset, topY - yOffset);
         GetTopCardPos(x, y);
         if (m_topCard < 0)
@@ -232,7 +229,7 @@ int Pile::CalcDistance(int x, int y)
 
 // Return the card at x, y. Check the top card first, then
 // work down the pile. If a card is found then return a pointer
-// to the card, otherwise return NULL
+// to the card, otherwise return nullptr
 Card* Pile::GetCard(int x, int y)
 {
     int cardX;

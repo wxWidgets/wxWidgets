@@ -19,11 +19,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FONTPICKERCTRL
+
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif // WX_PRECOMP
 
 #include "wx/fontpicker.h"
 
@@ -58,9 +59,7 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
     }
 
     // and handle user clicks on it
-    Connect(GetId(), wxEVT_BUTTON,
-            wxCommandEventHandler(wxGenericFontButton::OnButtonClick),
-            NULL, this);
+    Bind(wxEVT_BUTTON, &wxGenericFontButton::OnButtonClick, this, GetId());
 
     InitFontData();
 
@@ -73,7 +72,7 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
 void wxGenericFontButton::InitFontData()
 {
     m_data.SetAllowSymbols(true);
-    m_data.SetColour(*wxBLACK);
+    m_data.SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     m_data.EnableEffects(true);
 }
 

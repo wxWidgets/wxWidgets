@@ -23,30 +23,35 @@ public:
     wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
     wxRegion(const wxBitmap& bmp);
     wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance = 0);
-    
-    virtual bool IsEmpty() const;
-    virtual void Clear();
+
+    virtual bool IsEmpty() const override;
+    virtual void Clear() override;
 
     virtual const QRegion &GetHandle() const;
     virtual void QtSetRegion(QRegion region); // Hangs on to this region
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
-    virtual bool DoIsEqual(const wxRegion& region) const;
-    virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const;
-    virtual wxRegionContain DoContainsPoint(wxCoord x, wxCoord y) const;
-    virtual wxRegionContain DoContainsRect(const wxRect& rect) const;
+    virtual bool DoIsEqual(const wxRegion& region) const override;
+    virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const override;
+    virtual wxRegionContain DoContainsPoint(wxCoord x, wxCoord y) const override;
+    virtual wxRegionContain DoContainsRect(const wxRect& rect) const override;
 
-    virtual bool DoOffset(wxCoord x, wxCoord y);
+    virtual bool DoOffset(wxCoord x, wxCoord y) override;
 
-    virtual bool DoUnionWithRect(const wxRect& rect);
-    virtual bool DoUnionWithRegion(const wxRegion& region);
+    virtual bool DoUnionWithRect(const wxRect& rect) override;
+    virtual bool DoUnionWithRegion(const wxRegion& region) override;
 
-    virtual bool DoIntersect(const wxRegion& region);
-    virtual bool DoSubtract(const wxRegion& region);
-    virtual bool DoXor(const wxRegion& region);
+    virtual bool DoIntersect(const wxRegion& region) override;
+    virtual bool DoSubtract(const wxRegion& region) override;
+    virtual bool DoXor(const wxRegion& region) override;
+
+    virtual bool DoCombine(const wxRegion& rgn, wxRegionOp op);
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxRegion);
 };
 
 
@@ -77,10 +82,12 @@ public:
     wxCoord GetH() const;
     wxCoord GetHeight() const;
     wxRect GetRect() const;
-    
+
 private:
     QVector < QRect > *m_qtRects;
     int m_pos;
+
+    wxDECLARE_DYNAMIC_CLASS(wxRegionIterator);
 };
 
 #endif // _WX_QT_REGION_H_

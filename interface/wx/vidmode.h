@@ -15,8 +15,6 @@
 
     @stdobjects
     ::wxDefaultVideoMode
-
-    @see wxClientDisplayRect(), wxDisplaySize(), wxDisplaySizeMM()
 */
 struct wxVideoMode
 {
@@ -87,3 +85,11 @@ public:
 */
 const wxVideoMode wxDefaultVideoMode;
 
+/**
+    A vector of video modes.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxVideoMode objects in the application code.
+*/
+using wxArrayVideoModes = std::vector<wxVideoMode>;

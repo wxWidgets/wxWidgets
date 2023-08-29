@@ -32,10 +32,10 @@ public:
     void Destroy();
 
     // Unlocks the owned SAFEARRAY, returns it and gives up its ownership.
-    SAFEARRAY* Detach();
+    wxNODISCARD SAFEARRAY* Detach();
 
     // Returns true if has a valid SAFEARRAY.
-    bool HasArray() const { return m_array != NULL; }
+    bool HasArray() const { return m_array != nullptr; }
 
     // Returns the number of dimensions.
     size_t GetDim() const;
@@ -54,7 +54,7 @@ protected:
     // it's only used as a base class of wxSafeArray<>.
     wxSafeArrayBase()
     {
-        m_array = NULL;
+        m_array = nullptr;
     }
 
     bool Lock();
@@ -113,7 +113,7 @@ struct wxSafeArrayConvertor<VT_BSTR>
 
         if ( !bstr && !from.empty() )
         {
-            // BSTR can be NULL for empty strings but if the string was
+            // BSTR can be null for empty strings but if the string was
             // not empty, it means we failed to allocate memory for it.
             return false;
         }
@@ -158,7 +158,7 @@ public:
     // Default constructor.
     wxSafeArray()
     {
-        m_array = NULL;
+        m_array = nullptr;
     }
 
     // Creates and locks a zero-based one-dimensional SAFEARRAY with the given
@@ -294,7 +294,7 @@ public:
         Converts the array to a wxVariant with the list type, regardless of the
         underlying SAFEARRAY type.
 
-        If the array is multidimensional, it is flattened using the alghoritm
+        If the array is multidimensional, it is flattened using the algorithm
         originally employed in wxConvertOleToVariant().
     */
     bool ConvertToVariant(wxVariant& variant) const
@@ -327,7 +327,7 @@ public:
         Converts an array to an ArrayString.
 
         Can be called only for wxSafeArray<VT_BSTR>. If the array is
-        multidimensional, it is flattened using the alghoritm originally
+        multidimensional, it is flattened using the algorithm originally
         employed in wxConvertOleToVariant().
     */
     bool ConvertToArrayString(wxArrayString& strings) const
@@ -367,7 +367,7 @@ public:
             result = sa.ConvertToVariant(variant);
 
         if ( sa.HasArray() )
-            sa.Detach();
+            wxUnusedVar(sa.Detach()); // we do not own the array, just attached it
 
         return result;
     }
@@ -381,7 +381,7 @@ public:
             result = sa.ConvertToArrayString(strings);
 
         if ( sa.HasArray() )
-            sa.Detach();
+            wxUnusedVar(sa.Detach()); // we do not own the array, just attached it
 
         return result;
     }

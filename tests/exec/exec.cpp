@@ -15,9 +15,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/utils.h"
 #include "wx/process.h"
@@ -33,13 +30,13 @@
 #ifdef __UNIX__
     #define COMMAND "echo hi"
     #define COMMAND_STDERR "cat nonexistentfile"
-    #define ASYNC_COMMAND "xclock"
+    #define ASYNC_COMMAND "sleep 86400"
     #define SHELL_COMMAND "echo hi from shell>/dev/null"
     #define COMMAND_NO_OUTPUT "echo -n"
 #elif defined(__WINDOWS__)
     #define COMMAND "cmd.exe /c \"echo hi\""
     #define COMMAND_STDERR "cmd.exe /c \"type nonexistentfile\""
-    #define ASYNC_COMMAND "notepad"
+    #define ASYNC_COMMAND "mspaint"
     #define SHELL_COMMAND "echo hi > nul:"
     #define COMMAND_NO_OUTPUT COMMAND " > nul:"
 #else
@@ -116,10 +113,16 @@ private:
         long DoExecute(AsyncExecLoopExitEnum forceExitLoop_,
                      const wxString& command_,
                      int flags_ = wxEXEC_ASYNC,
-                     wxProcess* callback_ = NULL)
+                     wxProcess* callback_ = nullptr)
         {
             forceExitLoop = forceExitLoop_;
-            command = command_;
+
+            // Prepend the command with the value of wxTEST_RUNNER if it's
+            // defined to make this test work when using Wine too.
+            if ( wxGetEnv("wxTEST_RUNNER", &command) )
+                command += ' ';
+            command += command_;
+
             flags = flags_;
             callback = callback_;
 
@@ -135,7 +138,7 @@ private:
             return wxExecuteReturnCode;
         }
 
-        void Notify()
+        void Notify() override
         {
             // Run wxExecute inside the event loop.
             wxExecuteReturnCode = wxExecute(command, flags, callback);
@@ -323,7 +326,7 @@ public:
     }
 
     // may be overridden to be notified about process termination
-    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status))
+    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) override
     {
         wxEventLoop::GetActive()->ScheduleExit();
     }
@@ -360,7 +363,7 @@ ExecTestCase::DoTestAsyncRedirect(const wxString& command,
                                // to trigger the exit of the event loop.
                        command, wxEXEC_ASYNC, &proc) != 0 );
 
-    wxInputStream *streamToCheck = NULL;
+    wxInputStream *streamToCheck = nullptr;
     switch ( check )
     {
         case Check_Stdout:
@@ -469,7 +472,7 @@ void ExecTestCase::TestOverlappedSyncExecute()
             StartOnce(10);
         }
 
-        virtual void Notify()
+        virtual void Notify() override
         {
             wxExecute(m_command, m_outputArray);
         }
@@ -516,3 +519,28 @@ void ExecTestCase::TestOverlappedSyncExecute()
     CPPUNIT_ASSERT_EQUAL( SLEEP_END_STRING, longSleepOutput.Last() );
 #endif // !__WINDOWS__
 }
+
+#ifdef __UNIX__
+
+// This test is disabled by default because it must be run in French locale,
+// i.e. with explicit LC_ALL=fr_FR.UTF-8 and only works with GNU ls, which
+// produces the expected output.
+TEST_CASE("wxExecute::RedirectUTF8", "[exec][unicode][.]")
+{
+    wxArrayString output;
+    REQUIRE( wxExecute("/bin/ls --version", output) == 0 );
+
+    for ( size_t n = 0; n < output.size(); ++n )
+    {
+        // It seems unlikely that this part of the output will change for GNU
+        // ls, so check for its presence as a sign that the program output was
+        // decoded correctly.
+        if ( output[n].find(wxString::FromUTF8("vous \xc3\xaates libre")) != wxString::npos )
+            return;
+    }
+
+    INFO("output was:\n" << wxJoin(output, '\n'));
+    FAIL("Expected output fragment not found.");
+}
+
+#endif // __UNIX__

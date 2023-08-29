@@ -3,7 +3,7 @@
 // Purpose:     native wxAboutBox() implementation for wxMac
 // Author:      Vadim Zeitlin
 // Created:     2006-10-08
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +56,7 @@ public:
     void SetAttributedString( CFStringRef key, const wxString& value )
     {
           wxCFRef<CFAttributedStringRef> attrString(
-            CFAttributedStringCreate(kCFAllocatorDefault, wxCFStringRef(value), NULL) );
+            CFAttributedStringCreate(kCFAllocatorDefault, wxCFStringRef(value), nullptr) );
         CFDictionarySetValue(*this, key, attrString);
     }
 };

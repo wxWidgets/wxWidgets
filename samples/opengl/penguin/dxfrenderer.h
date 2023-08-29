@@ -11,6 +11,9 @@
 #ifndef _DXFRENDERER_H_
 #define _DXFRENDERER_H_
 
+#include <memory>
+#include <vector>
+
 struct DXFVector
 {
     DXFVector() { x = y = z = 0.0f; }
@@ -49,9 +52,6 @@ struct DXFLayer
     int colour;
 };
 
-WX_DECLARE_LIST(DXFEntity, DXFEntityList);
-WX_DECLARE_LIST(DXFLayer, DXFLayerList);
-
 class DXFRenderer
 {
 public:
@@ -71,8 +71,8 @@ private:
     void NormalizeEntities();
 
     bool m_loaded;
-    DXFLayerList m_layers;
-    DXFEntityList m_entities;
+    std::vector<DXFLayer> m_layers;
+    std::vector<std::unique_ptr<DXFEntity>> m_entities;
 };
 
 #endif // !_DXFRENDERER_H_

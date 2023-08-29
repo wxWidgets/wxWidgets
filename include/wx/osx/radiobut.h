@@ -11,7 +11,7 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 
@@ -22,7 +22,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr)
+           const wxString& name = wxASCII_STR(wxRadioButtonNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -33,21 +33,21 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxRadioButtonNameStr);
+           const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
 
-    virtual void SetValue(bool val);
-    virtual bool GetValue() const ;
+    virtual void SetValue(bool val) override;
+    virtual bool GetValue() const override;
 
     // implementation
 
-    void Command(wxCommandEvent& event);
+    void Command(wxCommandEvent& event) override;
     wxRadioButton *AddInCycle(wxRadioButton *cycle);
     void RemoveFromCycle();
     wxRadioButton *NextInCycle() {return m_cycle;}
 
     // osx specific event handling common for all osx-ports
 
-    virtual bool        OSXHandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked(double timestampsec) override;
   protected:
 
     wxRadioButton *m_cycle;
@@ -65,7 +65,7 @@ class WXDLLIMPEXP_CORE wxBitmapRadioButton: public wxRadioButton
 protected:
   wxBitmap *theButtonBitmap;
 public:
-  wxBitmapRadioButton() { theButtonBitmap = NULL; }
+  wxBitmapRadioButton() { theButtonBitmap = nullptr; }
   wxBitmapRadioButton(wxWindow *parent, wxWindowID id,
            const wxBitmap *label,
            const wxPoint& pos = wxDefaultPosition,

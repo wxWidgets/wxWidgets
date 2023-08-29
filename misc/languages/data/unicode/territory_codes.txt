@@ -1,0 +1,330 @@
+# TerritoryCodes
+# RFC3066; UN Numeric; ISO3166 Alpha-3, internet, FIPS-10
+# whitespace delimited: - for empty
+# See http://unstats.un.org/unsd/methods/m49/m49regin.htm
+# and http://www.iso.org/iso/en/prods-services/iso3166ma/01whats-new/index.html
+# See also http://www.cia.gov/cia/publications/factbook/appendix/appendix-d.html
+#      and http://data.iana.org/TLD/tlds-alpha-by-domain.txt for the latest domains
+#      and http://www.iana.org/cctld/cctld-whois.htm
+#      and https://www.icmwg.org/ccwg/documents/ISO3166-FIPS10-A2-Mapping/3166-1-A2--to-FIPS10-A2-mapping.htm
+#      for FIPS: http://earth-info.nga.mil/gns/html/fips_files.html
+RS	688	SRB	rs	RB
+ME	499	MNE	me	MJ
+AD	020	AND	ad	AN
+AE	784	ARE	ae	AE
+AF	004	AFG	af	AF
+AG	028	ATG	ag	AC
+AI	660	AIA	ai	AV
+AL	008	ALB	al	AL
+AM	051	ARM	am	AM
+AO	024	AGO	ao	AO
+AQ	010	ATA	aq	AY
+AR	032	ARG	ar	AR
+AS	016	ASM	as	AQ
+AT	040	AUT	at	AU
+AU	036	AUS	au	AS
+AW	533	ABW	aw	AA
+AZ	031	AZE	az	AJ
+BA	070	BIH	ba	BK
+BB	052	BRB	bb	BB
+BD	050	BGD	bd	BG
+BE	056	BEL	be	BE
+BF	854	BFA	bf	UV
+BG	100	BGR	bg	BU
+BH	048	BHR	bh	BA
+BI	108	BDI	bi	BY
+BJ	204	BEN	bj	BN
+BL	652	BLM	-	TB
+BM	060	BMU	bm	BD
+BN	096	BRN	bn	BX
+BO	068	BOL	bo	BL
+BQ	535 BES	-	-
+BR	076	BRA	br	BR
+BS	044	BHS	bs	BF
+BT	064	BTN	bt	BT
+BV	074	BVT	bv	BV
+BW	072	BWA	bw	BC
+BY	112	BLR	by	BO
+BZ	084	BLZ	bz	BH
+CA	124	CAN	ca	CA
+CC	166	CCK	cc	CK
+CD 	180	COD	cd	CG
+CF	140	CAF	cf	CT
+CG	178	COG	cg	CF
+CH	756	CHE	ch	SZ
+CI	384	CIV	ci	IV
+CK	184	COK	ck	CW
+CL	152	CHL	cl	CI
+CM	120	CMR	cm	CM
+CN	156	CHN	cn	CH
+CO	170	COL	co	CO
+CR	188	CRI	cr	CS
+CU	192	CUB	cu	CU
+CV	132	CPV	cv	CV
+CW	531	CUW cw	-
+CX	162	CXR	cx	KT
+CY	196	CYP	cy	CY
+CZ	203	CZE	cz	EZ
+DE	276	DEU	de	GM
+DJ	262	DJI	dj	DJ
+DK	208	DNK	dk	DA
+DM	212	DMA	dm	DO
+DO	214	DOM	do	DR
+DZ	012	DZA	dz	AG
+EC	218	ECU	ec	EC
+EE	233	EST	ee	EN
+EG	818	EGY	eg	EG
+EH	732	ESH	-	WI
+ER	232	ERI	er	ER
+ES	724	ESP	es	SP
+ET	231	ETH	et	ET
+FI	246	FIN	fi	FI
+FJ	242	FJI	fj	FJ
+FK	238	FLK	fk	FK
+FM	583	FSM	fm	FM
+FO	234	FRO	fo	FO
+FR	250	FRA	fr	FR
+FX	249	FXX	-	-
+GA	266	GAB	ga	GB
+GB	826	GBR	uk/gb	UK
+GD	308	GRD	gd	GJ
+GE	268	GEO	ge	GG
+GF	254	GUF	gf	FG
+GG	831	GGY	gg	GK
+GH	288	GHA	gh	GH
+GI	292	GIB	gi	GI
+GL	304	GRL	gl	GL
+GM	270	GMB	gm	GA
+GN	324	GIN	gn	GV
+GP	312	GLP	gp	GP
+GQ	226	GNQ	gq	EK
+GR	300	GRC	gr	GR
+GS	239	SGS	gs	SX
+GT	320	GTM	gt	GT
+GU	316	GUM	gu	GQ
+GW	624	GNB	gw	PU
+GY	328	GUY	gy	GY
+HK	344	HKG	hk	HK
+HM	334	HMD	hm	HM
+HN	340	HND	hn	HO
+HR	191	HRV	hr	HR
+HT	332	HTI	ht	HA
+HU	348	HUN	hu	HU
+ID	360	IDN	id	ID
+IE	372	IRL	ie	EI
+IL	376	ISR	il	IS
+IM	833	IMN	im	IM
+IN	356	IND	in	IN
+IO	086	IOT	io	IO
+IQ	368	IRQ	iq	IZ
+IR	364	IRN	ir	IR
+IS	352	ISL	is	IC
+IT	380	ITA	it	IT
+JE	832	JEY	je	JE
+JM	388	JAM	jm	JM
+JO	400	JOR	jo	JO
+JP	392	JPN	jp	JA
+KE	404	KEN	ke	KE
+KG	417	KGZ	kg	KG
+KH	116	KHM	kh	CB
+KI	296	KIR	ki	KR
+KM	174	COM	km	CN
+KN	659	KNA	kn	SC
+KP	408	PRK	kp	KN
+KR	410	KOR	kr	KS
+KW	414	KWT	kw	KU
+KY	136	CYM	ky	CJ
+KZ	398	KAZ	kz	KZ
+LA	418	LAO	la	LA
+LB	422	LBN	lb	LE
+LC	662	LCA	lc	ST
+LI	438	LIE	li	LS
+LK	144	LKA	lk	CE
+LR	430	LBR	lr	LI
+LS	426	LSO	ls	LT
+LT	440	LTU	lt	LH
+LU	442	LUX	lu	LU
+LV	428	LVA	lv	LG
+LY	434	LBY	ly	LY
+MA	504	MAR	ma	MO
+MC	492	MCO	mc	MN
+MD	498	MDA	md	MD
+MF  663 MAF -	RN
+MG	450	MDG	mg	MA
+MH	584	MHL	mh	RM
+MK	807	MKD	mk	MK
+ML	466	MLI	ml	ML
+MM	104	MMR	mm	BM
+MN	496	MNG	mn	MG
+MO	446	MAC	mo	MC
+MP	580	MNP	mp	CQ
+MQ	474	MTQ	mq	MB
+MR	478	MRT	mr	MR
+MS	500	MSR	ms	MH
+MT	470	MLT	mt	MT
+MU	480	MUS	mu	MP
+MV	462	MDV	mv	MV
+MW	454	MWI	mw	MI
+MX	484	MEX	mx	MX
+MY	458	MYS	my	MY
+MZ	508	MOZ	mz	MZ
+NA	516	NAM	na	WA
+NC	540	NCL	nc	NC
+NE	562	NER	ne	NG
+NF	574	NFK	nf	NF
+NG	566	NGA	ng	NI
+NI	558	NIC	ni	NU
+NL	528	NLD	nl	NL
+NO	578	NOR	no	NO
+NP	524	NPL	np	NP
+NR	520	NRU	nr	NR
+NU	570	NIU	nu	NE
+NZ	554	NZL	nz	NZ
+OM	512	OMN	om	MU
+PA	591	PAN	pa	PM
+PE	604	PER	pe	PE
+PF	258	PYF	pf	FP
+PG	598	PNG	pg	PP
+PH	608	PHL	ph	RP
+PK	586	PAK	pk	PK
+PL	616	POL	pl	PL
+PM	666	SPM	pm	SB
+PN	612	PCN	pn	PC
+PR	630	PRI	pr	RQ
+PS	275	PSE	ps	GZ
+PT	620	PRT	pt	PO
+PW	585	PLW	pw	PS
+PY	600	PRY	py	PA
+QA	634	QAT	qa	QA
+RE	638	REU	re	RE
+RO	642	ROU	ro	RO
+RU	643	RUS	ru/su	RS
+RW	646	RWA	rw	RW
+SA	682	SAU	sa	SA
+SB	090	SLB	sb	BP
+SC	690	SYC	sc	SE
+SD	729	SDN	sd	SU
+SE	752	SWE	se	SW
+SG	702	SGP	sg	SN
+SH	654	SHN	sh	SH
+SI	705	SVN	si	SI
+SJ	744	SJM	sj	SV
+SK	703	SVK	sk	LO
+SL	694	SLE	sl	SL
+SM	674	SMR	sm	SM
+SN	686	SEN	sn	SG
+SO	706	SOM	so	SO
+SR	740	SUR	sr	NS
+SS	728	SSD	-	-
+ST	678	STP	st	TP
+SV	222	SLV	sv	ES
+SX	534 SXM	sx	-
+SY	760	SYR	sy	SY
+SZ	748	SWZ	sz	WZ
+TC	796	TCA	tc	TK
+TD	148	TCD	td	CD
+TF	260	ATF	tf	FS
+TG	768	TGO	tg	TO
+TH	764	THA	th	TH
+TJ	762	TJK	tj	TI
+TK	772	TKL	tk	TL
+TL	626	TLS	tl	TT
+TM	795	TKM	tm	TX
+TN	788	TUN	tn	TS
+TO	776	TON	to	TN
+TR	792	TUR	tr	TU
+TT	780	TTO	tt	TD
+TV	798	TUV	tv	TV
+TW	158	TWN	tw	TW
+TZ	834	TZA	tz	TZ
+UA	804	UKR	ua	UP
+UG	800	UGA	ug	UG
+UM	581	UMI	-	-
+US	840	USA	us	US
+UY	858	URY	uy	UY
+UZ	860	UZB	uz	UZ
+VA	336	VAT	va	VT
+VC	670	VCT	vc	VC
+VE	862	VEN	ve	VE
+VG	092	VGB	vg	VI
+VI	850	VIR	vi	VQ
+VN	704	VNM	vn	VM
+VU	548	VUT	vu	NH
+WF	876	WLF	wf	WF
+WS	882	WSM	ws	WS
+YE	887	YEM	ye	YM
+YT	175	MYT	yt	MF
+ZA	710	ZAF	za	SF
+ZM	894	ZMB	zm	ZA
+ZW	716	ZWE	zw	ZI
+# codes missing from above
+AX	248	ALA	ax
+# private use codes
+AA	958	AAA
+QM	959	QMM
+QN	960	QNN
+QO	961	QOO
+QP	962	QPP
+QQ	963	QQQ
+QR	964	QRR
+QS	965	QSS
+QT	966	QTT
+QU	967	QUU
+QV	968	QVV
+QW	969	QWW
+QX	970	QXX
+QY	971	QYY
+QZ	972	QZZ
+XA	973	XAA
+XB	974	XBB
+XC	975	XCC
+XD	976	XDD
+XE	977	XEE
+XF	978	XFF
+XG	979	XGG
+XH	980	XHH
+XI	981	XII
+XJ	982	XJJ
+XK	983	XKK
+XL	984	XLL
+XM	985	XMM
+XN	986	XNN
+XO	987	XOO
+XP	988	XPP
+XQ	989	XQQ
+XR	990	XRR
+XS	991	XSS
+XT	992	XTT
+XU	993	XUU
+XV	994	XVV
+XW	995	XWW
+XX	996	XXX
+XY	997	XYY
+XZ	998	XZZ
+ZZ	999	ZZZ
+# Deprecated codes
+AN	530	ANT	-	NT
+BU	104	BUR
+CS  891 SCG -   YI
+DD	278	DDR
+NT	536	NTZ
+SU	810	SUN
+TP	626	TMP
+YD	720 YMD
+YU	891	YUG
+ZR	180	ZAR
+
+# Codes in the LST but not in UN Numeric
+
+AC  -   ASC AC -    # Ascension Island
+CP  -   CPT - -    # Clipperton Island
+DG  -   DGA - -    # Diego Garcia
+TA  -   TAA - -    # Tristan da Cunha
+
+EA  -   -  - - # Ceuta and Melilla
+EU  967   QUU  EU - # European Union
+EZ  -   -  - - # Eurozone
+IC  -   -  - - # Canary Islands
+UN  -   UNO  - - # United Nations
+
+#end

@@ -1,0 +1,170 @@
+# CI workflow building wxMSW under Windows.
+name: MSW builds
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.circleci/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/gtk/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '.circleci/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_cmake.yml'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/wx/gtk/**'
+      - 'include/wx/osx/**'
+      - 'locale/**'
+      - 'src/gtk/**'
+      - 'src/osx/**'
+      - '*.md'
+      - '*.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  msw-msvs:
+    runs-on: windows-${{ matrix.vsversion }}
+    name: wxMSW vs${{ matrix.vsversion }} ${{ matrix.configuration }} ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - configuration: 'DLL Debug'
+            platform: 'x64'
+            vsversion: 2022
+            use_utf8: true
+          - configuration: 'Debug'
+            platform: 'Win32'
+            vsversion: 2019
+          - configuration: 'DLL Release'
+            platform: 'x64'
+            vsversion: 2019
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Configure build options
+        working-directory: include/wx/msw
+        run: |
+            $use_utf8 = "${{ matrix.use_utf8 }}" ? 1 : 0
+            if ( $use_utf8 ) {
+              $txt = Get-Content setup.h
+              Write-Output $txt |
+              %{$_ -replace "define wxUSE_UNICODE_UTF8 0", "define wxUSE_UNICODE_UTF8 $use_utf8"} |
+              Set-Content setup.h
+            }
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.1.3
+        with:
+            vs-prerelease: true
+
+      - name: Build
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} build\msw\wx_vc16.sln
+            if ( '${{ matrix.configuration }}'.IndexOf('DLL') -ne -1 ) {
+                $dlldir = Join-Path (Get-Location) 'lib\vc_${{ matrix.platform }}_dll'
+                Write-Output "Adding $dlldir to the PATH"
+                $dlldir | Out-File -Append $env:GITHUB_PATH
+            }
+
+      - name: Build minimal sample
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} samples\minimal\minimal_vc16.sln
+
+      - name: Build tests
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_vc16.sln
+
+      - name: Run tests
+        working-directory: tests
+        run: |
+            .\vc*msw*\test.exe
+
+      - name: Build GUI tests
+        run: |
+            msbuild /noLogo /m '/p:Configuration=${{ matrix.configuration }}' /p:Platform=${{ matrix.platform }} tests\test_gui_vc16.sln
+
+      - name: Run GUI tests
+        working-directory: tests
+        run: |
+            .\vc*msw*\test_gui.exe
+
+  msw-msys2-clang:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: mingw-w64-x86_64-cmake mingw-w64-x86_64-toolchain mingw-w64-x86_64-clang
+
+      - name: Configuring
+        run: |
+          clang --version
+          cmake --version
+          mkdir build_cmake
+          pushd build_cmake
+          cmake -G "MinGW Makefiles" \
+                -DCMAKE_C_COMPILER=clang.exe \
+                -DCMAKE_CXX_COMPILER=clang++.exe \
+                -DCMAKE_CXX_FLAGS=-Werror \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DwxBUILD_SAMPLES=ALL \
+                -DwxBUILD_TESTS=ALL \
+                -DwxBUILD_DEMOS=ON \
+                -DwxUSE_WEBVIEW_EDGE=ON \
+                ..
+
+      - name: Building
+        working-directory: build_cmake
+        run: |
+          wxPROC_COUNT=`../build/tools/proc_count.sh`
+          cmake --build . -- -j$wxPROC_COUNT

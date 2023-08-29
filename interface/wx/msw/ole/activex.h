@@ -122,7 +122,7 @@ public:
     class WXDLLIMPEXP_MEDIA wxPDFMediaBackend : public wxMediaBackendCommonBase
     {
     public:
-        wxPDFMediaBackend() : m_pAX(NULL) {}
+        wxPDFMediaBackend() : m_pAX(nullptr) {}
         virtual ~wxPDFMediaBackend()
         {
             if(m_pAX)
@@ -140,7 +140,7 @@ public:
                                         const wxString& name)
         {
             IDispatch* pDispatch;
-            if( ::CoCreateInstance(CLSID_Pdf, NULL,
+            if( ::CoCreateInstance(CLSID_Pdf, nullptr,
                                     CLSCTX_INPROC_SERVER,
                                     DIID__DPdf, (void**)&pDispatch) != 0 )
                 return false;
@@ -280,7 +280,7 @@ public:
     @library{wxcore}
     @category{ctrl,ipc}
 
-    @see wxActiveXEvent, @ref page_samples_flash
+    @see wxActiveXEvent
 */
 class wxActiveXContainer : public wxControl
 {

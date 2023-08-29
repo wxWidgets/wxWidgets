@@ -53,7 +53,7 @@ public:
 
     virtual ~wxMetafileRefData();
 
-    virtual bool IsOk() const wxOVERRIDE { return m_data != NULL; }
+    virtual bool IsOk() const override { return m_data != nullptr; }
 
     void Init();
 
@@ -95,9 +95,7 @@ wxMetafileRefData::wxMetafileRefData( const wxString& filename )
 
     if ( !filename.empty() )
     {
-        wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(filename)));
-        CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-        wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+        wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(filename));
         m_pdfDoc.reset(CGPDFDocumentCreateWithURL(url));
     }
 }
@@ -115,11 +113,11 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 0);
     m_data.reset(data);
     CGDataConsumerRef dataConsumer = wxMacCGDataConsumerCreateWithCFData(data);
-    m_context = CGPDFContextCreate( dataConsumer, (width != 0 && height != 0) ? &r : NULL , NULL );
+    m_context = CGPDFContextCreate( dataConsumer, (width != 0 && height != 0) ? &r : nullptr , nullptr );
     CGDataConsumerRelease( dataConsumer );
     if ( m_context )
     {
-        CGPDFContextBeginPage(m_context, NULL);
+        CGPDFContextBeginPage(m_context, nullptr);
 
         CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
 
@@ -137,7 +135,7 @@ wxMetafileRefData::~wxMetafileRefData()
 
 void wxMetafileRefData::Init()
 {
-    m_context = NULL;
+    m_context = nullptr;
     m_width = -1;
     m_height = -1;
 }
@@ -147,7 +145,7 @@ void wxMetafileRefData::Close()
     CGPDFContextEndPage(m_context);
 
     CGContextRelease(m_context);
-    m_context = NULL;
+    m_context = nullptr;
 
     UpdateDocumentFromData();
 }
@@ -156,7 +154,7 @@ void wxMetafileRefData::UpdateDocumentFromData()
 {
     wxCFRef<CGDataProviderRef> provider(wxMacCGDataProviderCreateWithCFData(m_data));
     m_pdfDoc.reset(CGPDFDocumentCreateWithProvider(provider));
-    if ( m_pdfDoc != NULL )
+    if ( m_pdfDoc != nullptr )
     {
         CGPDFPageRef page = CGPDFDocumentGetPage( m_pdfDoc, 1 );
         CGRect rect = CGPDFPageGetBoxRect ( page, kCGPDFMediaBox);
@@ -189,7 +187,8 @@ wxMetaFile::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 
 WXHMETAFILE wxMetaFile::GetHMETAFILE() const
 {
-    return (WXHMETAFILE) (CFDataRef) M_METAFILEDATA->GetData();
+    const void* p = M_METAFILEDATA->GetData();
+    return static_cast<WXHMETAFILE>(const_cast<void*>(p));
 }
 
 bool wxMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
@@ -197,7 +196,7 @@ bool wxMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
     bool success = true;
 
 #if wxUSE_DRAG_AND_DROP
-    if (m_refData == NULL)
+    if (m_refData == nullptr)
         return false;
 
     bool alreadyOpen = wxTheClipboard->IsOpened();
@@ -283,7 +282,7 @@ wxMetafileDCImpl::wxMetafileDCImpl(
     m_metaFile->SetRefData( metafiledata );
 
     SetGraphicsContext( wxGraphicsContext::CreateFromNative(metafiledata->GetContext()));
-    m_ok = (m_graphicContext != NULL) ;
+    m_ok = (m_graphicContext != nullptr) ;
 
     SetMapMode( wxMM_TEXT );
 }
@@ -342,7 +341,7 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
 
 bool wxMetafileDataObject::SetData(size_t len, const void *buf)
 {
-    wxMetafileRefData* metafiledata = new wxMetafileRefData(wxCFRefFromGet(wxCFDataRef((UInt8*)buf, len).get()));
+    wxMetafileRefData* metafiledata = new wxMetafileRefData(wxCFRefFromGet(wxCFDataRef(static_cast<const UInt8*>(buf), len).get()));
     m_metafile.UnRef();
     m_metafile.SetRefData( metafiledata );
     return true;

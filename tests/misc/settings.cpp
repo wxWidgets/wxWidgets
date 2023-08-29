@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/settings.h"
 #include "wx/fontenum.h"
@@ -42,7 +39,7 @@ private:
 
     void GetColour();
     void GetFont();
-    
+
     // not really wxSystemSettings stuff but still nice to test:
     void GlobalColours();
     void GlobalFonts();
@@ -67,7 +64,7 @@ void SettingsTestCase::GetColour()
 
 void SettingsTestCase::GetFont()
 {
-    const wxSystemFont ids[] = 
+    const wxSystemFont ids[] =
     {
         wxSYS_OEM_FIXED_FONT,
         wxSYS_ANSI_FIXED_FONT,

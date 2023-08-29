@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 
@@ -44,7 +41,7 @@ wxFileInputStream::wxFileInputStream()
   : wxInputStream()
 {
     m_file_destroy = false;
-    m_file = NULL;
+    m_file = nullptr;
 }
 
 wxFileInputStream::wxFileInputStream(wxFile& file)
@@ -134,7 +131,7 @@ wxFileOutputStream::wxFileOutputStream()
                   : wxOutputStream()
 {
     m_file_destroy = false;
-    m_file = NULL;
+    m_file = nullptr;
 }
 
 wxFileOutputStream::wxFileOutputStream(int fd)
@@ -215,6 +212,33 @@ size_t wxTempFileOutputStream::OnSysWrite(const void *buffer, size_t size)
 }
 
 // ----------------------------------------------------------------------------
+// wxTempFFileOutputStream
+// ----------------------------------------------------------------------------
+
+wxTempFFileOutputStream::wxTempFFileOutputStream(const wxString& fileName)
+{
+    m_file = new wxTempFFile(fileName);
+
+    if (!m_file->IsOpened())
+        m_lasterror = wxSTREAM_WRITE_ERROR;
+}
+
+wxTempFFileOutputStream::~wxTempFFileOutputStream()
+{
+    if (m_file->IsOpened())
+        Discard();
+    delete m_file;
+}
+
+size_t wxTempFFileOutputStream::OnSysWrite(const void *buffer, size_t size)
+{
+    if (IsOk() && m_file->Write(buffer, size))
+        return size;
+    m_lasterror = wxSTREAM_WRITE_ERROR;
+    return 0;
+}
+
+// ----------------------------------------------------------------------------
 // wxFileStream
 // ----------------------------------------------------------------------------
 
@@ -258,7 +282,7 @@ wxFFileInputStream::wxFFileInputStream(const wxString& fileName,
 wxFFileInputStream::wxFFileInputStream()
                   : wxInputStream()
 {
-    m_file = NULL;
+    m_file = nullptr;
     m_file_destroy = false;
 }
 
@@ -346,7 +370,7 @@ wxFFileOutputStream::wxFFileOutputStream(wxFFile& file)
 wxFFileOutputStream::wxFFileOutputStream()
                    : wxOutputStream()
 {
-    m_file = NULL;
+    m_file = nullptr;
     m_file_destroy = false;
 }
 

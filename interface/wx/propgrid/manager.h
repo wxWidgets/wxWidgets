@@ -27,7 +27,7 @@
 
     wxPropertyGridPage receives events emitted by its wxPropertyGridManager, but
     only those events that are specific to that page. If wxPropertyGridPage::
-    IsHandlingAllEvents returns false, then unhandled events are sent to the
+    IsHandlingAllEvents returns @false, then unhandled events are sent to the
     manager's parent, as usual.
 
     See @ref propgrid_event_handling "wxPropertyGrid Event Handling"
@@ -223,7 +223,7 @@ public:
     /**
        The default constructor. The styles to be used are styles valid for
        the wxWindow.
-       @see @link wndflags Additional Window Styles @endlink
+       @see @ref propgrid_window_styles
     */
     wxPropertyGridManager( wxWindow *parent, wxWindowID id = wxID_ANY,
                            const wxPoint& pos = wxDefaultPosition,
@@ -244,12 +244,12 @@ public:
             A label for the page. This may be shown as a toolbar tooltip etc.
 
         @param bmp
-            Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-            default image is used.
+            Bitmap bundle for toolbar image. If the bundle is empty, then
+            a built-in default bitmap bundle is used.
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
-            object. NULL indicates that a default page instance should be created.
+            object. @NULL indicates that a default page instance should be created.
 
         @return Returns pointer to created property grid page.
 
@@ -257,9 +257,9 @@ public:
                 added when the toolbar is not turned off using window style flag
                 switching. Otherwise toolbar buttons might not be added properly.
     */
-    wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
-                                 const wxBitmap& bmp = wxPG_NULL_BITMAP,
-                                 wxPropertyGridPage* pageObj = NULL );
+    wxPropertyGridPage* AddPage( const wxString& label = wxString(),
+                                 const wxBitmapBundle& bmp = wxBitmapBundle(),
+                                 wxPropertyGridPage* pageObj = nullptr );
 
     /**
         Deletes all properties and all pages.
@@ -276,7 +276,7 @@ public:
 
         @return Returns @true if value was actually updated.
     */
-    bool CommitChangesFromEditor( wxUint32 flags = 0 );
+    bool CommitChangesFromEditor(wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null);
 
     /**
         Two step creation. Whenever the control is created without any parameters,
@@ -402,8 +402,8 @@ public:
             A label for the page. This may be shown as a toolbar tooltip etc.
 
         @param bmp
-            Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-            default image is used.
+            Bitmap bundle for toolbar image. If the bundle is empty, then
+            a built-in default bitmap bundle is used.
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
@@ -412,8 +412,8 @@ public:
         @return Returns pointer to created page.
     */
     virtual wxPropertyGridPage* InsertPage( int index, const wxString& label,
-                                            const wxBitmap& bmp = wxNullBitmap,
-                                            wxPropertyGridPage* pageObj = NULL );
+                                            const wxBitmapBundle& bmp = wxBitmapBundle(),
+                                            wxPropertyGridPage* pageObj = nullptr );
 
     /**
         Returns @true if any property on any page has been modified by the user.
@@ -421,17 +421,12 @@ public:
     bool IsAnyModified() const;
 
     /**
-        Returns @true if updating is frozen (i.e. Freeze() called but not yet Thaw() ).
-    */
-    bool IsFrozen() const;
-
-    /**
         Returns @true if any property on given page has been modified by the user.
     */
     bool IsPageModified( size_t index ) const;
 
     /**
-        Returns true if property is selected. Since selection is page
+        Returns @true if property is selected. Since selection is page
         based, this function checks every page in the manager.
     */
     virtual bool IsPropertySelected( wxPGPropArg id ) const;
@@ -538,7 +533,7 @@ public:
         Show or hide the property grid header control. It is hidden
         by the default.
 
-        @remarks Grid may look better if you use wxPG_NO_INTERNAL_BORDER
+        @remarks Grid may look better if you use ::wxPG_NO_INTERNAL_BORDER
                  window style when showing a header.
     */
     void ShowHeader(bool show = true);

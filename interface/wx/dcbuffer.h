@@ -36,11 +36,11 @@
     Otherwise, wxBufferedDC can be used in the same way as any other device
     context.
 
-    There is another possible use for wxBufferedDC is to use it to maintain a
+    Another possible use for wxBufferedDC is to use it to maintain a
     backing store for the window contents. In this case, the associated @e DC
     may be @NULL but a valid backing store bitmap should be specified.
 
-    Finally, please note that GTK+ 2.0 as well as OS X provide double buffering
+    Finally, please note that GTK+ 2.0 as well as macOS provide double buffering
     themselves natively. You can either use wxWindow::IsDoubleBuffered() to
     determine whether you need to use buffering or not, or use
     wxAutoBufferedPaintDC to avoid needless double buffering on the systems
@@ -107,7 +107,7 @@ public:
     */
     virtual ~wxBufferedDC();
 
-    //@{
+    ///@{
     /**
         Initializes the object created using the default constructor. Please
         see the constructors for parameter details.
@@ -116,13 +116,13 @@ public:
               int style = wxBUFFER_CLIENT_AREA);
     void Init(wxDC* dc, wxBitmap& buffer = wxNullBitmap,
               int style = wxBUFFER_CLIENT_AREA);
-    //@}
+    ///@}
 
 
     /**
        Blits the buffer to the dc, and detaches the dc from the buffer (so it
        can be effectively used once only).
-    
+
        Usually only called in the destructor or by the destructor of derived
        classes if the BufferedDC must blit before the derived class (which may
        own the dc it's blitting to) is destroyed.
@@ -203,7 +203,7 @@ wxDC* wxAutoBufferedPaintDCFactory(wxWindow* window);
 class wxBufferedPaintDC : public wxBufferedDC
 {
 public:
-    //@{
+    ///@{
     /**
         As with wxBufferedDC, you may either provide the bitmap to be used for
         buffering or let this object create one internally (in the latter case,
@@ -218,7 +218,7 @@ public:
                       int style = wxBUFFER_CLIENT_AREA);
     wxBufferedPaintDC(wxWindow* window,
                       int style = wxBUFFER_CLIENT_AREA);
-    //@}
+    ///@}
 
     /**
         Copies everything drawn on the DC so far to the window associated with

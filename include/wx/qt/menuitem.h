@@ -9,38 +9,46 @@
 #define _WX_QT_MENUITEM_H_
 
 #include "wx/menuitem.h"
-class QAction;
+#include "wx/bitmap.h"
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class QAction;
+class wxQtAction;
+
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
 class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
 {
 public:
-    wxMenuItem(wxMenu *parentMenu = NULL,
+    wxMenuItem(wxMenu *parentMenu = nullptr,
                int id = wxID_SEPARATOR,
                const wxString& text = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = NULL);
+               wxMenu *subMenu = nullptr);
 
-    virtual void SetItemLabel(const wxString& str);
-    virtual void SetCheckable(bool checkable);
+    virtual void SetItemLabel(const wxString& str) override;
+    virtual void SetCheckable(bool checkable) override;
 
-    virtual void Enable(bool enable = true);
-    virtual bool IsEnabled() const;
+    virtual void Enable(bool enable = true) override;
+    virtual bool IsEnabled() const override;
 
-    virtual void Check(bool check = true);
-    virtual bool IsChecked() const;
+    virtual void Check(bool check = true) override;
+    virtual bool IsChecked() const override;
 
-    void SetBitmap(const wxBitmap& bitmap);
-    const wxBitmap& GetBitmap() const;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) override;
 
     virtual QAction *GetHandle() const;
 
+    virtual void SetFont(const wxFont& font);
+
+#if wxUSE_ACCEL
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel) override;
+    virtual void ClearExtraAccels() override;
+#endif // wxUSE_ACCEL
+
 private:
     // Qt is using an action instead of a menu item.
-    QAction *m_qtAction;
+    wxQtAction *m_qtAction;
 
     wxDECLARE_DYNAMIC_CLASS( wxMenuItem );
 };

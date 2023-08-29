@@ -19,37 +19,40 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxNotebookNameStr);
-    
+             const wxString& name = wxASCII_STR(wxNotebookNameStr));
+
     bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxNotebookNameStr);
+              const wxString& name = wxASCII_STR(wxNotebookNameStr));
 
-    virtual void SetPadding(const wxSize& padding);
-    virtual void SetTabSize(const wxSize& sz);
+    virtual void SetPadding(const wxSize& padding) override;
+    virtual void SetTabSize(const wxSize& sz) override;
 
-    virtual bool SetPageText(size_t n, const wxString& strText);
-    virtual wxString GetPageText(size_t n) const;
+    virtual bool SetPageText(size_t n, const wxString& strText) override;
+    virtual wxString GetPageText(size_t n) const override;
 
-    virtual int GetPageImage(size_t n) const;
-    virtual bool SetPageImage(size_t n, int imageId);
+    virtual int GetPageImage(size_t n) const override;
+    virtual bool SetPageImage(size_t n, int imageId) override;
 
     virtual bool InsertPage(size_t n, wxWindow *page, const wxString& text,
-        bool bSelect = false, int imageId = -1);
+        bool bSelect = false, int imageId = -1) override;
 
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const override;
 
-    int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
-    int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
+    int SetSelection(size_t nPage) override;
+    int ChangeSelection(size_t nPage) override;
 
-    virtual QWidget *GetHandle() const;
+    virtual bool DeleteAllPages() override;
+
+    virtual QWidget *GetHandle() const override;
 
 protected:
-    virtual wxWindow *DoRemovePage(size_t page);
-    int DoSetSelection(size_t nPage, int flags = 0);
+    virtual wxWindow *DoRemovePage(size_t page) override;
+
+    virtual void OnImagesChanged() override;
 
 private:
     QTabWidget *m_qtTabWidget;

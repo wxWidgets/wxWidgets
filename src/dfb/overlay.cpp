@@ -18,16 +18,13 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dcclient.h"
 #endif
 
-#include "wx/private/overlay.h"
+#include "wx/dfb/private/overlay.h"
 #include "wx/dfb/dcclient.h"
 #include "wx/dfb/private.h"
 
@@ -35,13 +32,18 @@
 // implementation
 // ============================================================================
 
+wxOverlay::Impl* wxOverlay::Create()
+{
+    return new wxOverlayImpl;
+}
+
 // ----------------------------------------------------------------------------
 // wxOverlay
 // ----------------------------------------------------------------------------
 
 wxOverlayImpl::wxOverlayImpl()
 {
-    m_window = NULL;
+    m_window = nullptr;
     m_isEmpty = true;
 }
 
@@ -52,13 +54,13 @@ wxOverlayImpl::~wxOverlayImpl()
 
 bool wxOverlayImpl::IsOk()
 {
-    return m_window != NULL;
+    return m_window != nullptr;
 }
 
 void wxOverlayImpl::Init(wxDC *dc, int x, int y, int width, int height)
 {
-    wxCHECK_RET( dc, "NULL dc pointer" );
-    wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
+    wxCHECK_RET( dc, "null dc pointer" );
+    wxASSERT_MSG( !IsOk() , "You cannot Init an overlay twice" );
 
     wxDFBDCImpl * const dcimpl = wxDynamicCast(dc->GetImpl(), wxDFBDCImpl);
     wxCHECK_RET( dcimpl, "must have a DFB wxDC" );
@@ -81,7 +83,7 @@ void wxOverlayImpl::Init(wxDC *dc, int x, int y, int width, int height)
 
 void wxOverlayImpl::BeginDrawing(wxDC *dc)
 {
-    wxCHECK_RET( dc, "NULL dc pointer" );
+    wxCHECK_RET( dc, "null dc pointer" );
 
     wxWindowDCImpl * const
         dcimpl = static_cast<wxWindowDCImpl *>(dc->GetImpl());
@@ -119,7 +121,7 @@ void wxOverlayImpl::Reset()
     if ( m_window )
     {
         m_window->RemoveOverlay(this);
-        m_window = NULL;
+        m_window = nullptr;
         m_surface.Reset();
     }
 }

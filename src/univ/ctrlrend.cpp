@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -68,7 +65,7 @@ wxControlRenderer::wxControlRenderer(wxWindow *window,
 
 void wxControlRenderer::DrawLabel()
 {
-    m_dc.SetBackgroundMode(wxTRANSPARENT);
+    m_dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
@@ -89,7 +86,7 @@ void wxControlRenderer::DrawLabel()
 void wxControlRenderer::DrawButtonLabel(const wxBitmap& bitmap,
                                         wxCoord marginX, wxCoord marginY)
 {
-    m_dc.SetBackgroundMode(wxTRANSPARENT);
+    m_dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     m_dc.SetFont(m_window->GetFont());
     m_dc.SetTextForeground(m_window->GetForegroundColour());
 
@@ -188,7 +185,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
     {
         if ( alignment & wxALIGN_RIGHT )
         {
-            x = rect.GetRight() - width;
+            x = rect.GetRight() - width + 1;
         }
         else if ( alignment & wxALIGN_CENTRE )
         {
@@ -201,7 +198,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
 
         if ( alignment & wxALIGN_BOTTOM )
         {
-            y = rect.GetBottom() - height;
+            y = rect.GetBottom() - height + 1;
         }
         else if ( alignment & wxALIGN_CENTRE_VERTICAL )
         {
@@ -226,6 +223,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     wxRegion rgnUpdate = scrollbar->GetUpdateRegion();
 
     {
+#if wxUSE_LOG_TRACE
         wxRect rectUpdate = rgnUpdate.GetBox();
         wxLogTrace(wxT("scrollbar"),
                    wxT("%s redraw: update box is (%d, %d)-(%d, %d)"),
@@ -234,6 +232,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                    rectUpdate.GetTop(),
                    rectUpdate.GetRight(),
                    rectUpdate.GetBottom());
+#endif // wxUSE_LOG_TRACE
 
 #if 0 //def WXDEBUG_SCROLLBAR
         static bool s_refreshDebug = false;

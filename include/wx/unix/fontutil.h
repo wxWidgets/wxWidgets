@@ -21,14 +21,14 @@
 
 // returns the handle of the nearest available font or 0
 extern wxNativeFont
-wxLoadQueryNearestFont(int pointSize,
+wxLoadQueryNearestFont(double pointSize,
                        wxFontFamily family,
                        wxFontStyle style,
-                       wxFontWeight weight,
+                       int weight,
                        bool underlined,
                        const wxString &facename,
                        wxFontEncoding encoding,
-                       wxString* xFontName = NULL);
+                       wxString* xFontName = nullptr);
 
 // returns the font specified by the given XLFD
 extern wxNativeFont wxLoadFont(const wxString& fontSpec);

@@ -74,15 +74,7 @@ enum wxThreadWait
 {
     wxTHREAD_WAIT_BLOCK,
     wxTHREAD_WAIT_YIELD,       // process events while waiting; MSW only
-
-    // For compatibility reasons we use wxTHREAD_WAIT_YIELD by default as this
-    // was the default behaviour of wxMSW 2.8 but it should be avoided as it's
-    // dangerous and not portable.
-#if WXWIN_COMPATIBILITY_2_8
-    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_YIELD
-#else
     wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_BLOCK
-#endif
 };
 
 // Obsolete synonyms for wxPRIORITY_XXX for backwards compatibility-only
@@ -102,7 +94,7 @@ enum
 //
 // However recursive mutexes have several important drawbacks: first, in the
 // POSIX implementation, they're less efficient. Second, and more importantly,
-// they CAN NOT BE USED WITH CONDITION VARIABLES under Unix! Using them with
+// they CANNOT BE USED WITH CONDITION VARIABLES under Unix! Using them with
 // wxCondition will work under Windows and some Unices (notably Linux) but will
 // deadlock under other Unix versions (e.g. Solaris). As it might be difficult
 // to ensure that a recursive mutex is not used with wxCondition, it is a good
@@ -455,10 +447,10 @@ public:
     typedef void *ExitCode;
 
     // static functions
-        // Returns the wxThread object for the calling thread. NULL is returned
+        // Returns the wxThread object for the calling thread. nullptr is returned
         // if the caller is the main thread (but it's recommended to use
         // IsMain() and only call This() for threads other than the main one
-        // because NULL is also returned on error). If the thread wasn't
+        // because nullptr is also returned on error). If the thread wasn't
         // created with wxThread class, the returned value is undefined.
     static wxThread *This();
 
@@ -529,8 +521,8 @@ public:
         // periodically - the thread will only be deleted the next time it
         // does it!
         //
-        // will fill the rc pointer with the thread exit code if it's !NULL
-    wxThreadError Delete(ExitCode *rc = NULL,
+        // will fill the rc pointer with the thread exit code if it's non-null
+    wxThreadError Delete(ExitCode *rc = nullptr,
                          wxThreadWait waitMode = wxTHREAD_WAIT_DEFAULT);
 
         // waits for a joinable thread to finish and returns its exit code
@@ -559,9 +551,6 @@ public:
     // priority
         // Sets the priority to "prio" which must be in 0..100 range (see
         // also wxPRIORITY_XXX constants).
-        //
-        // NB: under MSW the priority can only be set after the thread is
-        //     created (but possibly before it is launched)
     void SetPriority(unsigned int prio);
 
         // Get the current priority.
@@ -599,16 +588,19 @@ public:
     // Delete() instead (or leave the thread terminate by itself)
     virtual ~wxThread();
 
+    // sets name to assist debugging
+    static bool SetNameForCurrent(const wxString &name);
+
 protected:
+    // sets name to assist debugging
+    bool SetName(const wxString &name);
+
     // exits from the current thread - can be called only from this thread
-    void Exit(ExitCode exitcode = 0);
+    void Exit(ExitCode exitcode = nullptr);
 
     // entry point for the thread - called by Run() and executes in the context
     // of this thread.
     virtual void *Entry() = 0;
-
-    // use this to call the Entry() virtual method
-    void *CallEntry();
 
     // Callbacks which may be overridden by the derived class to perform some
     // specific actions when the thread is deleted or killed. By default they
@@ -622,15 +614,15 @@ protected:
     // in the context of the thread that called Kill().
     virtual void OnKill() {}
 
+    // called when the thread exits - in the context of this thread
+    //
+    // NB: this function will not be called if the thread is Kill()ed
+    virtual void OnExit() {}
+
 private:
     // no copy ctor/assignment operator
     wxThread(const wxThread&);
     wxThread& operator=(const wxThread&);
-
-    // called when the thread exits - in the context of this thread
-    //
-    // NB: this function will not be called if the thread is Kill()ed
-    virtual void OnExit() { }
 
     friend class wxThreadInternal;
     friend class wxThreadModule;
@@ -643,7 +635,7 @@ private:
     wxThreadInternal *m_internal;
 
     // protects access to any methods of wxThreadInternal object
-    wxCriticalSection m_critsect;
+    mutable wxCriticalSection m_critsect;
 
     // true if the thread is detached, false if it is joinable
     bool m_isDetached;
@@ -652,7 +644,7 @@ private:
 // wxThreadHelperThread class
 // --------------------------
 
-class WXDLLIMPEXP_BASE wxThreadHelperThread : public wxThread
+class wxThreadHelperThread : public wxThread
 {
 public:
     // constructor only creates the C++ thread object and doesn't create (or
@@ -663,7 +655,7 @@ public:
 
 protected:
     // entry point for the thread -- calls Entry() in owner.
-    virtual void *Entry() wxOVERRIDE;
+    virtual void *Entry() override;
 
 private:
     // the owner of the thread
@@ -680,15 +672,15 @@ private:
 // derive from it to implement a threading background task in your class.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxThreadHelper
+class wxThreadHelper
 {
 private:
     void KillThread()
     {
         // If wxThreadHelperThread is detached and is about to finish, it will
-        // set m_thread to NULL so don't delete it then.
+        // set m_thread to nullptr so don't delete it then.
         // But if KillThread is called before wxThreadHelperThread (in detached mode)
-        // sets it to NULL, then the thread object still exists and can be killed
+        // sets it to nullptr, then the thread object still exists and can be killed
         wxCriticalSectionLocker locker(m_critSection);
 
         if ( m_thread )
@@ -698,21 +690,17 @@ private:
             if ( m_kind == wxTHREAD_JOINABLE )
               delete m_thread;
 
-            m_thread = NULL;
+            m_thread = nullptr;
         }
     }
 
 public:
-    // constructor only initializes m_thread to NULL
+    // constructor only initializes m_thread to nullptr
     wxThreadHelper(wxThreadKind kind = wxTHREAD_JOINABLE)
-        : m_thread(NULL), m_kind(kind) { }
+        : m_thread(nullptr), m_kind(kind) { }
 
     // destructor deletes m_thread
     virtual ~wxThreadHelper() { KillThread(); }
-
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( wxThreadError Create(unsigned int stackSize = 0) );
-#endif
 
     // create a new thread (and optionally set the stack size on platforms that
     // support/need that), call Run() to start it
@@ -734,7 +722,7 @@ public:
     // returns a pointer to the thread which can be used to call Run()
     wxThread *GetThread() const
     {
-        wxCriticalSectionLocker locker((wxCriticalSection&)m_critSection);
+        wxCriticalSectionLocker locker(m_critSection);
 
         wxThread* thread = m_thread;
 
@@ -744,15 +732,10 @@ public:
 protected:
     wxThread *m_thread;
     wxThreadKind m_kind;
-    wxCriticalSection m_critSection; // To guard the m_thread variable
+    mutable wxCriticalSection m_critSection; // To guard the m_thread variable
 
     friend class wxThreadHelperThread;
 };
-
-#if WXWIN_COMPATIBILITY_2_8
-inline wxThreadError wxThreadHelper::Create(unsigned int stackSize)
-{ return CreateThread(m_kind, stackSize); }
-#endif
 
 // call Entry() in owner, put it down here to avoid circular declarations
 inline void *wxThreadHelperThread::Entry()
@@ -766,7 +749,7 @@ inline void *wxThreadHelperThread::Entry()
     // And that wxThreadHelper::KillThread will not try to kill
     // an already deleted thread
     if ( m_owner.m_kind == wxTHREAD_DETACHED )
-        m_owner.m_thread = NULL;
+        m_owner.m_thread = nullptr;
 
     return result;
 }

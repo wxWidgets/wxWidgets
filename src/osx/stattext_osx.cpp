@@ -71,11 +71,11 @@ void wxStaticText::SetLabel(const wxString& label)
     )
     {
         // leave ellipsization to the OS
-        DoSetLabel(GetLabel());
+        WXSetVisibleLabel(GetLabel());
     }
     else // not supported natively
     {
-        DoSetLabel(GetEllipsizedLabel());
+        WXSetVisibleLabel(GetEllipsizedLabel());
     }
 
     AutoResizeIfNecessary();
@@ -98,10 +98,10 @@ bool wxStaticText::SetFont(const wxFont& font)
     return ret;
 }
 
-void wxStaticText::DoSetLabel(const wxString& label)
+void wxStaticText::WXSetVisibleLabel(const wxString& label)
 {
     m_label = RemoveMnemonics(label);
-    GetPeer()->SetLabel(m_label , GetFont().GetEncoding() );
+    GetPeer()->SetLabel(m_label);
 }
 
 #if wxUSE_MARKUP && wxOSX_USE_COCOA
@@ -118,7 +118,7 @@ bool wxStaticText::DoSetLabelMarkup(const wxString& markup)
 
 #endif // wxUSE_MARKUP && wxOSX_USE_COCOA
 
-wxString wxStaticText::DoGetLabel() const
+wxString wxStaticText::WXGetVisibleLabel() const
 {
     return m_label;
 }

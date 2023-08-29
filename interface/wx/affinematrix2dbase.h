@@ -36,7 +36,7 @@ struct wxMatrix2D
 
 /**
    @class wxAffineMatrix2DBase
-   
+
    A 2x3 matrix representing an affine 2D transformation.
 
    This is an abstract base class implemented by wxAffineMatrix2D only so far,
@@ -73,7 +73,7 @@ public:
 
         @param mat2D
             The rotational components of the matrix (upper 2 x 2), must be
-            non-@NULL.
+            non-null.
         @param tr
             The translational components of the matrix, may be @NULL.
     */
@@ -114,7 +114,7 @@ public:
     */
     virtual bool IsIdentity() const = 0;
 
-    //@{
+    ///@{
     /**
         Check that this matrix is identical with @a t.
 
@@ -123,7 +123,7 @@ public:
     */
     virtual bool IsEqual(const wxAffineMatrix2DBase& t) const = 0;
     bool operator==(const wxAffineMatrix2DBase& t) const;
-    //@}
+    ///@}
 
     /**
         Check that this matrix differs from @a t.
@@ -160,7 +160,7 @@ public:
 
         @param cRadians
             Rotation angle in radians, clockwise.
-    */    
+    */
     virtual void Rotate(wxDouble cRadians) = 0;
 
     /**

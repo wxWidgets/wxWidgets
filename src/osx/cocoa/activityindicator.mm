@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ACTIVITYINDICATOR
 
@@ -40,7 +37,7 @@ inline
 NSProgressIndicator *GetProgressIndicator(wxWidgetImpl* peer)
 {
     return peer ? static_cast<NSProgressIndicator*>(peer->GetWXWidget())
-                : NULL;
+                : nullptr;
 }
 
 } // anonymous namespace

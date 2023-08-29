@@ -108,14 +108,14 @@ wxListBox::~wxListBox()
     m_blockEvents = false;
 
     // make sure no native events get sent to a object in destruction
-    SetPeer(NULL);
+    SetPeer(nullptr);
 
     if ( IsSorted() )
         delete m_strings.sorted;
     else
         delete m_strings.unsorted;
 
-    m_strings.sorted = NULL;
+    m_strings.sorted = nullptr;
 }
 
 void wxListBox::FreeData()
@@ -191,6 +191,14 @@ void wxListBox::DoSetSelection(int n, bool select)
     wxCHECK_RET( n == wxNOT_FOUND || IsValid(n),
         wxT("invalid index in wxListBox::SetSelection") );
 
+    DoSetSelectionWithoutEnsureVisible(n, select);
+
+    if (select)
+        EnsureVisible(n);
+}
+
+void wxListBox::DoSetSelectionWithoutEnsureVisible(int n, bool select)
+{
     m_blockEvents = true;
 
     if ( n == wxNOT_FOUND )
@@ -201,9 +209,6 @@ void wxListBox::DoSetSelection(int n, bool select)
     m_blockEvents = false;
 
     UpdateOldSelections();
-
-    if (select)
-        EnsureVisible(n);
 }
 
 bool wxListBox::IsSelected(int n) const
@@ -248,7 +253,6 @@ wxSize wxListBox::DoGetBestSize() const
 {
     int lbWidth = 100;  // some defaults
     int lbHeight;
-    int wLine;
 
     {
         wxClientDC dc(const_cast<wxListBox*>(this));
@@ -261,8 +265,7 @@ wxSize wxListBox::DoGetBestSize() const
 
             wxCoord width, height ;
             dc.GetTextExtent( str , &width, &height);
-            wLine = width ;
-            lbWidth = wxMax( lbWidth, wLine );
+            lbWidth = wxMax( lbWidth, width );
         }
 
         // Add room for the scrollbar
@@ -277,16 +280,11 @@ wxSize wxListBox::DoGetBestSize() const
         lbWidth += cx;
 
         // don't make the listbox too tall (limit height to around 10 items)
-        // but don't make it too small neither
+        // but don't make it too small either
         lbHeight = wxMax( (cy + 4) * wxMin( wxMax( GetCount(), 3 ), 10 ), 70 );
     }
 
     return wxSize( lbWidth, lbHeight );
-}
-
-void wxListBox::Refresh(bool eraseBack, const wxRect *rect)
-{
-    wxControl::Refresh( eraseBack, rect );
 }
 
 // Some custom controls depend on this
@@ -356,6 +354,23 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 {
     int idx = wxNOT_FOUND;
     unsigned int startpos = pos;
+    wxArrayInt selections;
+
+    if ( !IsSorted() )
+    {
+        if ( HasMultipleSelection() )
+        {
+            GetSelections(selections);
+        }
+        else
+        {
+            int sel = GetSelection();
+            if ( sel != wxNOT_FOUND )
+            {
+                selections.Add(sel);
+            }
+        }
+    }
 
     const unsigned int numItems = items.GetCount();
     for ( unsigned int i = 0; i < numItems; ++i )
@@ -364,7 +379,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         idx = IsSorted() ? m_strings.sorted->Add(item)
                          : (m_strings.unsorted->Insert(item, pos), pos++);
 
-        m_itemsClientData.Insert(NULL, idx);
+        m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);
 
         GetListPeer()->ListInsert(startpos+i);
@@ -374,13 +389,29 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 
     GetListPeer()->UpdateLineToEnd(startpos);
 
-    // Inserting the items may scroll the listbox down to show the last
-    // selected one but we don't want to do it as it could result in e.g. the
-    // first items of a listbox be hidden immediately after its creation so
-    // show the first selected item instead. Ideal would probably be to
-    // preserve the old selection unchanged, in fact, but I don't know how to
-    // get the first visible item so for now do at least this.
-    SetFirstItem(startpos);
+    const size_t numSelections = selections.size();
+    for ( size_t i = 0; i < numSelections; ++i )
+    {
+        if ( int(startpos) <= selections[i] )
+        {
+            if ( HasMultipleSelection() )
+            {
+                size_t j;
+
+                // Do not deselect item if it is to be selected below
+                for ( j = 0; j < numSelections; ++j )
+                {
+                    if ( selections[i] == selections[j] + int(numItems) )
+                        break;
+                }
+
+                if ( j == numSelections )
+                    Deselect(selections[i]);
+            }
+
+            DoSetSelectionWithoutEnsureVisible(selections[i] + numItems, true);
+        }
+    }
 
     InvalidateBestSize();
 
@@ -418,6 +449,40 @@ void wxListBox::HandleLineEvent( unsigned int n, bool doubleClick )
     event.SetInt( n );
     event.SetExtraLong( 1 );
     HandleWindowEvent(event);
+}
+
+void wxListBox::MacHandleSelectionChange(int row)
+{
+    if ( m_blockEvents )
+        return;
+
+    // Correct notification events for multiselection list.
+    if ( HasMultipleSelection() )
+    {
+        CalcAndSendEvent();
+        return;
+    }
+
+    // OS X can select an item below the last item. In that case keep the old
+    // selection because in wxWidgets API there is no notification event for
+    // removing the selection from a single-selection list box.
+    //
+    // Otherwise call DoChangeSingleSelection so that m_oldSelections is
+    // updated with the correct value before it's possible used later.
+    const int count = static_cast<int>(GetCount());
+    if ( row < 0 || row >= count )
+    {
+        if ( !m_oldSelections.empty() )
+        {
+            const int oldsel = m_oldSelections[0];
+            if ( oldsel >= 0 && oldsel < count )
+                SetSelection(oldsel);
+        }
+    }
+    else if ( DoChangeSingleSelection(row) )
+    {
+        HandleLineEvent( row, false );
+    }
 }
 
 //

@@ -19,21 +19,22 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dcclient.h"
 #include "wx/msw/dcclient.h"
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
-    #include "wx/hashmap.h"
     #include "wx/log.h"
     #include "wx/window.h"
 #endif
 
+#include "wx/stack.h"
+
 #include "wx/msw/private.h"
+#include "wx/msw/private/paint.h"
+
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // local data structures
@@ -128,25 +129,11 @@ private:
 // all of them because we can't call BeginPaint() more than once. So we cache
 // the first HDC created for the window in this map and then reuse it later if
 // needed. And, of course, remove it from the map when the painting is done.
-WX_DECLARE_HASH_MAP(wxWindow *, wxPaintDCInfo *,
-                    wxPointerHash, wxPointerEqual,
-                    PaintDCInfos);
+using PaintDCInfos = std::unordered_map<wxWindow*, wxPaintDCInfo*>;
 
 PaintDCInfos gs_PaintDCInfos;
 
 } // anonymous namespace
-
-// ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
-#ifdef wxHAS_PAINT_DEBUG
-    // a global variable which we check to verify that wxPaintDC are only
-    // created in response to WM_PAINT message - doing this from elsewhere is a
-    // common programming error among wxWidgets programmers and might lead to
-    // very subtle and difficult to debug refresh/repaint bugs.
-    int g_isPainting = 0;
-#endif // wxHAS_PAINT_DEBUG
 
 // ===========================================================================
 // implementation
@@ -168,7 +155,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxCHECK_RET( window, wxT("invalid window in wxWindowDCImpl") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = (WXHDC) ::GetWindowDC(GetHwndOf(m_window));
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
@@ -211,7 +198,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = (WXHDC)::GetDC(GetHwndOf(window));
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
@@ -265,24 +252,17 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner ) :
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
    wxClientDCImpl( owner )
 {
-    wxCHECK_RET( window, wxT("NULL canvas in wxPaintDCImpl ctor") );
+    wxCHECK_RET( window, wxT("null canvas in wxPaintDCImpl ctor") );
 
-#ifdef wxHAS_PAINT_DEBUG
-    if ( g_isPainting <= 0 )
-    {
-        wxFAIL_MSG( wxT("wxPaintDCImpl may be created only in EVT_PAINT handler!") );
+    using namespace wxMSWImpl;
+    wxCHECK_RET( !paintStack.empty(),
+                 "wxPaintDC can't be created outside wxEVT_PAINT handler" );
+    wxCHECK_RET( paintStack.top().window == window,
+                 "wxPaintDC must be associated with the window being repainted" );
 
-        return;
-    }
-#endif // wxHAS_PAINT_DEBUG
+    paintStack.top().createdPaintDC = true;
 
-    // see comments in src/msw/window.cpp where this is defined
-    extern bool wxDidCreatePaintDC;
-
-    wxDidCreatePaintDC = true;
-
-
-    m_window = window;
+    InitWindow(window);
 
     // do we have a DC for this window in the cache?
     m_hDC = FindDCInCache(m_window);
@@ -294,7 +274,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
         m_hDC = info->GetHDC();
     }
 
-    // Note: at this point m_hDC can be NULL under MicroWindows, when dragging.
+    // Note: at this point m_hDC can be null under MicroWindows, when dragging.
     if (!GetHDC())
         return;
 
@@ -302,7 +282,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     InitDC();
 
     // the HDC can have a clipping box (which we didn't set), make sure our
-    // DoGetClippingBox() checks for it
+    // DoGetClippingRect() checks for it
     m_clipping = true;
 }
 
@@ -321,7 +301,7 @@ wxPaintDCInfo *wxPaintDCImpl::FindInCache(wxWindow *win)
 {
     PaintDCInfos::const_iterator it = gs_PaintDCInfos.find( win );
 
-    return it != gs_PaintDCInfos.end() ? it->second : NULL;
+    return it != gs_PaintDCInfos.end() ? it->second : nullptr;
 }
 
 /* static */
@@ -371,7 +351,7 @@ wxPaintDCExImpl::wxPaintDCExImpl(wxDC *owner, wxWindow *window, WXHDC dc)
 {
     wxCHECK_RET( dc, wxT("wxPaintDCEx requires an existing device context") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = dc;
 }
 

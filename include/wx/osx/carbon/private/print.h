@@ -23,13 +23,13 @@ public:
                             wxOSXPrintData();
     virtual                 ~wxOSXPrintData();
 
-    virtual bool            TransferTo( wxPrintData &data );
-    virtual bool            TransferFrom( const wxPrintData &data );
+    virtual bool            TransferTo( wxPrintData &data ) override;
+    virtual bool            TransferFrom( const wxPrintData &data ) override;
 
-    virtual bool            IsOk() const ;
+    virtual bool            IsOk() const override;
 
-    virtual void            TransferFrom( const wxPageSetupDialogData * );
-    virtual void            TransferTo( wxPageSetupDialogData * );
+    virtual void            TransferFrom( const wxPageSetupDialogData * ) override;
+    virtual void            TransferTo( wxPageSetupDialogData * ) override;
 
     virtual void            TransferFrom( const wxPrintDialogData * );
     virtual void            TransferTo( wxPrintDialogData * );
@@ -69,8 +69,8 @@ public:
 
     WX_NSPrintInfo          GetNSPrintInfo() { return m_macPrintInfo; }
 protected:
-    virtual void            UpdateFromPMState();
-    virtual void            UpdateToPMState();
+    virtual void            UpdateFromPMState() override;
+    virtual void            UpdateToPMState() override;
 
     WX_NSPrintInfo          m_macPrintInfo;
 private:

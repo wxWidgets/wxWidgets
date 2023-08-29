@@ -47,12 +47,19 @@ class wxTempFile
 {
 public:
     /**
+        Default constructor doesn't do anything.
+
+        Call Open() later.
+     */
+    wxTempFile();
+
+    /**
         Associates wxTempFile with the file to be replaced and opens it.
 
         @warning
         You should use IsOpened() to verify that the constructor succeeded.
     */
-    wxTempFile(const wxString& strName);
+    explicit wxTempFile(const wxString& strName);
 
     /**
         Destructor calls Discard() if temporary file is still open.
@@ -450,7 +457,7 @@ public:
         to write data with embedded @c NULs to the file you should use the other
         Write() overload.
     */
-    bool Write(const wxString& s, const wxMBConv& conv = wxConvUTF8);
+    bool Write(const wxString& s, const wxMBConv& conv = wxConvAuto());
 
     /**
         Returns the file descriptor associated with the file.

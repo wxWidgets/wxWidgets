@@ -55,7 +55,7 @@ public:
         range.
 
         The @a InputIterator template parameter must be an input iterator type.
-        This constructor adds all elements from @a first until, not not
+        This constructor adds all elements from @a first until, not
         including, @a last to the vector.
 
         @since 2.9.5
@@ -257,10 +257,10 @@ public:
         either the copies of the given object @a v or @c value_type() objects
         until it becomes of size @a n.
      */
-    //@{
+    ///@{
     void resize(size_type n);
     void resize(size_type n, const value_type& v);
-    //@}
+    ///@}
 
     /**
         Free unused memory allocated by the vector.
@@ -307,3 +307,13 @@ public:
 */
 template<typename T>
 void wxVectorSort(wxVector<T>& v);
+
+/**
+    Returns true if the vector contains the given value.
+
+    This is just a trivial wrapper around std::find().
+
+    @since 3.1.5
+ */
+template<typename T>
+bool wxVectorContains(const wxVector<T>& v, const T& value);

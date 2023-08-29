@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MIMETYPE && wxUSE_LIBGNOMEVFS
 
@@ -93,7 +90,7 @@ bool wxGnomeVFSLibrary::InitializeMethods()
     return true;
 }
 
-static wxGnomeVFSLibrary* gs_lgvfs = NULL;
+static wxGnomeVFSLibrary* gs_lgvfs = nullptr;
 
 //----------------------------------------------------------------------------
 // wxGnomeVFSMimeTypesManagerFactory

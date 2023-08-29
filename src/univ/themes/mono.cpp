@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/univ/theme.h"
 
@@ -59,7 +56,7 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
-                           wxRect *rectBounds = NULL);
+                           wxRect *rectBounds = nullptr);
     virtual void DrawButtonLabel(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& image,
@@ -67,14 +64,14 @@ public:
                                  int flags = 0,
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
-                                 wxRect *rectBounds = NULL);
+                                 wxRect *rectBounds = nullptr);
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
 
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxRect *rectIn = NULL);
+                                  wxRect *rectIn = nullptr);
 
     virtual void DrawHorizontalLine(wxDC& dc,
                                     wxCoord y, wxCoord x1, wxCoord x2);
@@ -122,7 +119,7 @@ public:
                                  wxOrientation orient,
                                  int flags = 0,
                                  long style = 0,
-                                 wxRect *rectShaft = NULL);
+                                 wxRect *rectShaft = nullptr);
 
     virtual void DrawSliderThumb(wxDC& dc,
                                  const wxRect& rect,
@@ -521,9 +518,9 @@ WX_IMPLEMENT_THEME(wxMonoTheme, mono, wxTRANSLATE("Simple monochrome theme"));
 
 wxMonoTheme::wxMonoTheme()
 {
-    m_scheme = NULL;
-    m_renderer = NULL;
-    m_artProvider = NULL;
+    m_scheme = nullptr;
+    m_renderer = nullptr;
+    m_artProvider = nullptr;
 }
 
 wxMonoTheme::~wxMonoTheme()
@@ -567,7 +564,7 @@ wxInputHandler *wxMonoTheme::GetInputHandler(const wxString& WXUNUSED(control),
                                              wxInputConsumer *consumer)
 {
     // no special input handlers so far
-    return consumer->DoGetStdInputHandler(NULL);
+    return consumer->DoGetStdInputHandler(nullptr);
 }
 
 // ============================================================================
@@ -942,7 +939,7 @@ wxMenuGeometryInfo *wxMonoRenderer::GetMenuGeometry(wxWindow *WXUNUSED(win),
 {
     wxFAIL_MSG(wxT("TODO"));
 
-    return NULL;
+    return nullptr;
 }
 
 #endif // wxUSE_MENUS
@@ -1060,7 +1057,7 @@ void wxMonoRenderer::DrawScrollbarThumb(wxDC& dc,
 {
     DrawSolidRect(dc, wxMONO_BG_COL, rect);
 
-    // manually draw stipple pattern (wxDFB doesn't implement the wxSTIPPLE
+    // manually draw stipple pattern (wxDFB doesn't implement the wxBRUSHSTYLE_STIPPLE
     // brush style):
     dc.SetPen(m_penFg);
     for ( wxCoord y = rect.GetTop(); y <= rect.GetBottom(); y++ )

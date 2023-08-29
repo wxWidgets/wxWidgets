@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/renderer.h"
 
@@ -31,7 +28,7 @@ public:
                                  const wxRect& rect,
                                  int WXUNUSED(flags) = 0,
                                  wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
-                                 wxHeaderButtonParams* WXUNUSED(params) = NULL) wxOVERRIDE
+                                 wxHeaderButtonParams* WXUNUSED(params) = nullptr) override
     {
         dc.SetBrush(*wxCYAN_BRUSH);
         dc.SetTextForeground(*wxRED);
@@ -41,7 +38,7 @@ public:
         return dc.GetTextExtent("MyDllRenderer").x;
     }
 
-    virtual wxRendererVersion GetVersion() const wxOVERRIDE
+    virtual wxRendererVersion GetVersion() const override
     {
         return wxRendererVersion(wxRendererVersion::Current_Version,
                                  wxRendererVersion::Current_Age);
@@ -50,12 +47,12 @@ public:
 #if 0 // just for debugging
     MyDllRenderer()
     {
-        wxMessageBox(wxT("Creating MyDllRenderer"), wxT("Renderer Sample"));
+        wxMessageBox("Creating MyDllRenderer", "Renderer Sample");
     }
 
     virtual ~MyDllRenderer()
     {
-        wxMessageBox(wxT("Deleting MyDllRenderer"), wxT("Renderer Sample"));
+        wxMessageBox("Deleting MyDllRenderer", "Renderer Sample");
     }
 #endif // 0
 };

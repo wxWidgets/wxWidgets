@@ -55,9 +55,6 @@ enum wxXmlNodeType
     The @c wxXML_DOCUMENT_TYPE_NODE is not implemented at this time. Instead,
     you should get and set the DOCTYPE values using the wxXmlDocument class.
 
-    If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
-    wxXmlDocument::Load (default is UTF-8).
-
     @note
     Once a wxXmlNode has been added to a wxXmlDocument it becomes owned by the
     document and this has two implications. Firstly, the wxXmlDocument takes
@@ -101,8 +98,8 @@ public:
     wxXmlNode(wxXmlNode* parent, wxXmlNodeType type,
               const wxString& name,
               const wxString& content = wxEmptyString,
-              wxXmlAttribute* attrs = NULL,
-              wxXmlNode* next = NULL, int lineNo = -1);
+              wxXmlAttribute* attrs = nullptr,
+              wxXmlNode* next = nullptr, int lineNo = -1);
 
     /**
         A simplified version of the first constructor form, assuming a @NULL parent.
@@ -136,7 +133,7 @@ public:
     virtual ~wxXmlNode();
 
     /**
-        Appends a attribute with given @a name and @a value to the list of
+        Appends an attribute with given @a name and @a value to the list of
         attributes for this node.
     */
     virtual void AddAttribute(const wxString& name, const wxString& value);
@@ -206,7 +203,7 @@ public:
         @a grandparent or the @NULL node (which is the parent of non-linked
         nodes or the parent of a wxXmlDocument's root element node).
     */
-    int GetDepth(wxXmlNode* grandparent = NULL) const;
+    int GetDepth(wxXmlNode* grandparent = nullptr) const;
 
     /**
         Returns a flag indicating whether encoding conversion is necessary when saving. The default is @false.
@@ -417,7 +414,7 @@ public:
         If @a next is not @NULL, then sets it as sibling of this attribute.
     */
     wxXmlAttribute(const wxString& name, const wxString& value,
-                   wxXmlAttribute* next = NULL);
+                   wxXmlAttribute* next = nullptr);
 
     /**
         The virtual destructor.
@@ -494,11 +491,11 @@ public:
     /**
         Creates and possible initializes the DOCTYPE.
 
-        @param name
+        @param rootName
             The root name.
-        @param sysid
+        @param systemId
             The system identifier.
-        @param pubid
+        @param publicId
             The public identifier.
     */
     wxXmlDoctype(const wxString& rootName = wxString(),
@@ -664,7 +661,7 @@ enum wxXmlDocumentLoadFlag
     // Create a document and add the root node.
     wxXmlDocument xmlDoc;
 
-    wxXmlNode* root = new wxXmlNode(NULL, wxXML_ELEMENT_NODE, "Root");
+    wxXmlNode* root = new wxXmlNode(nullptr, wxXML_ELEMENT_NODE, "Root");
     xmlDoc.SetRoot(root);
 
     // Add some XML.
@@ -715,7 +712,7 @@ public:
         Loads the given filename using the given encoding. See Load().
     */
     wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8"));
+                  const wxString& encoding = "UTF-8");
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().
@@ -886,7 +883,7 @@ public:
     void SetEncoding(const wxString& enc);
 
     /**
-        Sets the enconding of the file which will be used to save the document.
+        Sets the encoding of the file which will be used to save the document.
     */
     void SetFileEncoding(const wxString& encoding);
 

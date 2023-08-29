@@ -23,32 +23,35 @@ public:
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const;
 
-    virtual void SetColour(const wxColour& col);
-    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b);
+    virtual void SetColour(const wxColour& col) override;
+    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) override;
 
-    virtual void SetWidth(int width);
-    virtual void SetStyle(wxPenStyle style);
-    virtual void SetStipple(const wxBitmap& stipple);
-    virtual void SetDashes(int nb_dashes, const wxDash *dash);
-    virtual void SetJoin(wxPenJoin join);
-    virtual void SetCap(wxPenCap cap);
+    virtual void SetWidth(int width) override;
+    virtual void SetStyle(wxPenStyle style) override;
+    virtual void SetStipple(const wxBitmap& stipple) override;
+    virtual void SetDashes(int nb_dashes, const wxDash *dash) override;
+    virtual void SetJoin(wxPenJoin join) override;
+    virtual void SetCap(wxPenCap cap) override;
 
-    virtual wxColour GetColour() const;
-    virtual wxBitmap *GetStipple() const;
-    virtual wxPenStyle GetStyle() const;
-    virtual wxPenJoin GetJoin() const;
-    virtual wxPenCap GetCap() const;
-    virtual int GetWidth() const;
-    virtual int GetDashes(wxDash **ptr) const;
+    virtual wxColour GetColour() const override;
+    virtual wxBitmap *GetStipple() const override;
+    virtual wxPenStyle GetStyle() const override;
+    virtual wxPenJoin GetJoin() const override;
+    virtual wxPenCap GetCap() const override;
+    virtual int GetWidth() const override;
+    virtual int GetDashes(wxDash **ptr) const override;
 
     wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
     void SetStyle(int style) { SetStyle((wxPenStyle)style); }
-        
+
     QPen GetHandle() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxPen);
 };
 
 #endif // _WX_QT_PEN_H_

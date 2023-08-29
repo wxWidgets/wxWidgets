@@ -16,7 +16,7 @@ class PlayerSelectionDialog : public wxDialog
 {
 public:
     PlayerSelectionDialog(wxWindow* parent, ScoreFile* file);
-    virtual ~PlayerSelectionDialog(){};
+    virtual ~PlayerSelectionDialog(){}
 
     const wxString& GetPlayersName();
     void ButtonCallback(wxCommandEvent& event);

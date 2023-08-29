@@ -150,9 +150,7 @@ public:
             The window style. Default value includes wxHSCROLL and wxVSCROLL
             styles.
         @param name
-            The name of the window. This parameter is used to associate a name
-            with the item, allowing the application user to set Motif resource
-            values for individual windows.
+            The name of the window.
 
         @remarks
 
@@ -230,7 +228,7 @@ public:
     /**
         Returns a pointer to the active MDI child, if there is one.
 
-        If there are any children at all this function returns a non-@NULL
+        If there are any children at all this function returns a non-null
         pointer.
     */
     virtual wxMDIChildFrame* GetActiveChild() const;
@@ -251,7 +249,7 @@ public:
         and this function can be used to retrieve it. Notice that the default
         menu can be replaced by calling SetWindowMenu().
 
-        This function is currently not available under OS X.
+        This function is currently not available under macOS.
 
         @return The current Window menu or @NULL.
     */
@@ -306,7 +304,7 @@ public:
         SetWindowMenu() is called again).
 
         To remove the window completely, you can use the wxFRAME_NO_WINDOW_MENU
-        window style but this function also allows to do it by passing @NULL
+        window style but this function also allows doing it by passing @NULL
         pointer as @a menu.
 
         The menu may include the items with the following standard identifiers
@@ -320,7 +318,7 @@ public:
         All of which are handled by wxMDIParentFrame itself. If any other
         commands are used in the menu, the derived frame should handle them.
 
-        This function is currently not available under OS X.
+        This function is currently not available under macOS.
 
         @param menu
             The menu to be used instead of the standard MDI Window menu or @NULL.
@@ -394,9 +392,7 @@ public:
         @param style
             The window style. See wxMDIChildFrame.
         @param name
-            The name of the window. This parameter is used to associate a name with the
-            item, allowing the application user to set Motif resource values for individual
-            windows.
+            The name of the window.
 
         @see Create()
     */

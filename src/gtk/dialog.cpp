@@ -19,8 +19,7 @@
 #include "wx/scopedptr.h"
 #include "wx/modalhook.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/dialogcount.h"
 
 wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
@@ -32,7 +31,7 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 
 void wxDialog::Init()
 {
-    m_modalLoop = NULL;
+    m_modalLoop = nullptr;
     m_modalShowing = false;
 }
 
@@ -152,7 +151,7 @@ int wxDialog::ShowModal()
     if (wx_is_at_least_gtk2(24))
     {
         sigId = g_signal_lookup("realize", GTK_TYPE_WIDGET);
-        hookId = g_signal_add_emission_hook(sigId, 0, realize_hook, NULL, NULL);
+        hookId = g_signal_add_emission_hook(sigId, 0, realize_hook, nullptr, nullptr);
     }
 #endif
 

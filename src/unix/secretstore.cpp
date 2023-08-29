@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SECRETSTORE
 
@@ -98,16 +95,16 @@ public:
         secret_value_unref(m_value);
     }
 
-    virtual size_t GetSize() const wxOVERRIDE
+    virtual size_t GetSize() const override
     {
         gsize length = 0;
         (void)secret_value_get(m_value, &length);
         return length;
     }
 
-    virtual const void *GetData() const wxOVERRIDE
+    virtual const void *GetData() const override
     {
-        return secret_value_get(m_value, NULL);
+        return secret_value_get(m_value, nullptr);
     }
 
     SecretValue* GetValue() const
@@ -119,6 +116,52 @@ private:
     SecretValue* const m_value;
 };
 
+// Dummy implementation used when secret service is not available.
+class wxSecretStoreNotAvailableImpl : public wxSecretStoreImpl
+{
+public:
+    explicit wxSecretStoreNotAvailableImpl(const wxString& error)
+        : m_error(error)
+    {
+    }
+
+    virtual bool IsOk(wxString* errmsg) const override
+    {
+        if ( errmsg )
+            *errmsg = m_error;
+
+        return false;
+    }
+
+    virtual bool Save(const wxString& WXUNUSED(service),
+                      const wxString& WXUNUSED(user),
+                      const wxSecretValueImpl& WXUNUSED(secret),
+                      wxString& errmsg) override
+    {
+        errmsg = m_error;
+        return false;
+    }
+
+    virtual bool Load(const wxString& WXUNUSED(service),
+                      wxString* WXUNUSED(user),
+                      wxSecretValueImpl** WXUNUSED(secret),
+                      wxString& errmsg) const override
+    {
+        errmsg = m_error;
+        return false;
+    }
+
+    virtual bool Delete(const wxString& WXUNUSED(service),
+                        wxString& errmsg) override
+    {
+        errmsg = m_error;
+        return false;
+    }
+
+private:
+    const wxString m_error;
+};
+
 // This implementation uses synchronous libsecret functions which is supposed
 // to be a bad idea, but doesn't seem to be a big deal in practice and as there
 // is no simple way to implement asynchronous API under the other platforms, it
@@ -127,10 +170,29 @@ private:
 class wxSecretStoreLibSecretImpl : public wxSecretStoreImpl
 {
 public:
+    static wxSecretStoreLibSecretImpl* Create(wxString& errmsg)
+    {
+        wxGtkError error;
+        SecretService* const service = secret_service_get_sync
+                                       (
+                                            SECRET_SERVICE_OPEN_SESSION,
+                                            nullptr,   // No cancellation
+                                            error.Out()
+                                       );
+        if ( !service )
+        {
+            errmsg = error.GetMessage();
+            return nullptr;
+        }
+
+        // This passes ownership of service to the new object.
+        return new wxSecretStoreLibSecretImpl(service);
+    }
+
     virtual bool Save(const wxString& service,
                       const wxString& user,
                       const wxSecretValueImpl& secret,
-                      wxString& errmsg) wxOVERRIDE
+                      wxString& errmsg) override
     {
         // We don't have any argument for the user-visible secret description
         // supported by libsecret, so we just reuse the service string. It
@@ -142,13 +204,13 @@ public:
         wxGtkError error;
         if ( !secret_service_store_sync
               (
-                NULL,                           // Default service
+                m_service,
                 GetSchema(),
                 BuildAttributes(service, user),
                 SECRET_COLLECTION_DEFAULT,
                 service.utf8_str(),
                 static_cast<const wxSecretValueLibSecretImpl&>(secret).GetValue(),
-                NULL,                           // Can't be cancelled
+                nullptr,                           // Can't be cancelled
                 error.Out()
               ) )
         {
@@ -162,12 +224,12 @@ public:
     virtual bool Load(const wxString& service,
                       wxString* user,
                       wxSecretValueImpl** secret,
-                      wxString& errmsg) const wxOVERRIDE
+                      wxString& errmsg) const override
     {
         wxGtkError error;
         GList* const found = secret_service_search_sync
             (
-                NULL,                           // Default service
+                m_service,
                 GetSchema(),
                 BuildAttributes(service),
                 static_cast<SecretSearchFlags>
@@ -175,7 +237,7 @@ public:
                     SECRET_SEARCH_UNLOCK |
                     SECRET_SEARCH_LOAD_SECRETS
                 ),
-                NULL,                           // Can't be cancelled
+                nullptr,                           // Can't be cancelled
                 error.Out()
             );
 
@@ -206,14 +268,15 @@ public:
     }
 
     virtual bool Delete(const wxString& service,
-                        wxString& errmsg) wxOVERRIDE
+                        wxString& errmsg) override
     {
         wxGtkError error;
-        if ( !secret_password_clearv_sync
+        if ( !secret_service_clear_sync
               (
+                m_service,
                 GetSchema(),
                 BuildAttributes(service),
-                NULL,                           // Can't be cancelled
+                nullptr,                           // Can't be cancelled
                 error.Out()
               ) )
         {
@@ -247,7 +310,7 @@ private:
                 {
                     { FIELD_SERVICE,    SECRET_SCHEMA_ATTRIBUTE_STRING },
                     { FIELD_USER,       SECRET_SCHEMA_ATTRIBUTE_STRING },
-                    { NULL }
+                    { nullptr }
                 }
             };
 
@@ -263,7 +326,7 @@ private:
                             (
                                 GetSchema(),
                                 FIELD_SERVICE,  service.utf8_str().data(),
-                                NULL
+                                nullptr
                             ));
     }
 
@@ -275,9 +338,18 @@ private:
                                 GetSchema(),
                                 FIELD_SERVICE,  service.utf8_str().data(),
                                 FIELD_USER,     user.utf8_str().data(),
-                                NULL
+                                nullptr
                             ));
     }
+
+    // Ctor is private, Create() should be used for creating objects of this
+    // class.
+    explicit wxSecretStoreLibSecretImpl(SecretService* service)
+        : m_service(service)
+    {
+    }
+
+    wxGtkObject<SecretService> m_service;
 };
 
 const char* wxSecretStoreLibSecretImpl::FIELD_SERVICE = "service";
@@ -298,8 +370,17 @@ wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data)
 /* static */
 wxSecretStore wxSecretStore::GetDefault()
 {
-    // There is only a single store under Windows anyhow.
-    return wxSecretStore(new wxSecretStoreLibSecretImpl());
+    // Try to create the real implementation.
+    wxString errmsg;
+    wxSecretStoreImpl* impl = wxSecretStoreLibSecretImpl::Create(errmsg);
+    if ( !impl )
+    {
+        // But if we failed, fall back to a dummy one, so that we could at
+        // least return the error to the code using this class.
+        impl = new wxSecretStoreNotAvailableImpl(errmsg);
+    }
+
+    return wxSecretStore(impl);
 }
 
 #endif // wxUSE_SECRETSTORE

@@ -10,7 +10,7 @@
 
 class QSystemTrayIcon;
 
-class WXDLLIMPEXP_CORE wxTaskBarIcon : public wxTaskBarIconBase
+class WXDLLIMPEXP_ADV wxTaskBarIcon : public wxTaskBarIconBase
 {
 public:
     wxTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE);
@@ -21,10 +21,10 @@ public:
     bool IsIconInstalled() const { return false; }
 
     // Operations
-    virtual bool SetIcon(const wxIcon& icon,
-                         const wxString& tooltip = wxEmptyString);
-    virtual bool RemoveIcon();
-    virtual bool PopupMenu(wxMenu *menu);
+    virtual bool SetIcon(const wxBitmapBundle& icon,
+                         const wxString& tooltip = wxEmptyString) override;
+    virtual bool RemoveIcon() override;
+    virtual bool PopupMenu(wxMenu *menu) override;
 
 private:
     QSystemTrayIcon *m_qtSystemTrayIcon;

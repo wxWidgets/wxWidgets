@@ -22,7 +22,6 @@
 #include "wx/utils.h"
 #include "wx/sysopt.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/mnemonics.h"
 
@@ -61,7 +60,7 @@ bool wxControl::Create( wxWindow *parent,
 bool wxControl::SetFont(const wxFont& font)
 {
     const bool changed = base_type::SetFont(font);
-    if (changed && !gtk_widget_get_realized(m_widget) && gtk_check_version(3,5,0))
+    if (changed && m_widget && !gtk_widget_get_realized(m_widget) && gtk_check_version(3,5,0))
     {
         // GTK defers sending "style-updated" until widget is realized, but
         // GetBestSize() won't compute correct result until the signal is sent,
@@ -145,7 +144,7 @@ void wxControl::GTKFixSensitivity(bool WXUNUSED_IN_GTK3(onlyIfUnderMouse))
 void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
 {
     const wxString labelGTK = GTKConvertMnemonics(label);
-    gtk_label_set_text_with_mnemonic(w, wxGTK_CONV(labelGTK));
+    gtk_label_set_text_with_mnemonic(w, labelGTK.utf8_str());
 }
 
 #if wxUSE_MARKUP
@@ -153,7 +152,7 @@ void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
 void wxControl::GTKSetLabelWithMarkupForLabel(GtkLabel *w, const wxString& label)
 {
     const wxString labelGTK = GTKConvertMnemonicsWithMarkup(label);
-    gtk_label_set_markup_with_mnemonic(w, wxGTK_CONV(labelGTK));
+    gtk_label_set_markup_with_mnemonic(w, labelGTK.utf8_str());
 }
 
 #endif // wxUSE_MARKUP
@@ -169,10 +168,10 @@ void wxControl::GTKSetLabelWithMarkupForLabel(GtkLabel *w, const wxString& label
 GtkWidget* wxControl::GTKCreateFrame(const wxString& label)
 {
     const wxString labelGTK = GTKConvertMnemonics(label);
-    GtkWidget* labelwidget = gtk_label_new_with_mnemonic(wxGTK_CONV(labelGTK));
+    GtkWidget* labelwidget = gtk_label_new_with_mnemonic(labelGTK.utf8_str());
     gtk_widget_show(labelwidget); // without this it won't show...
 
-    GtkWidget* framewidget = gtk_frame_new(NULL);
+    GtkWidget* framewidget = gtk_frame_new(nullptr);
     gtk_frame_set_label_widget(GTK_FRAME(framewidget), labelwidget);
 
     return framewidget; // note that the label is already set so you'll
@@ -240,8 +239,8 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
 {
     wxVisualAttributes attr;
 
-    GtkWidget* tlw = NULL;
-    if (gtk_widget_get_parent(widget) == NULL)
+    GtkWidget* tlw = nullptr;
+    if (gtk_widget_get_parent(widget) == nullptr)
     {
         tlw = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         gtk_container_add(GTK_CONTAINER(tlw), widget);
@@ -261,13 +260,25 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     gtk_style_context_set_state(sc, stateFlag);
     gtk_style_context_get(sc, stateFlag,
         "color", &fc, "background-color", &bc,
-        GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
+        GTK_STYLE_PROPERTY_FONT, &info.description, nullptr);
     gtk_style_context_restore(sc);
     attr.colFg = wxColour(*fc);
     attr.colBg = wxColour(*bc);
     attr.font = wxFont(info);
     gdk_rgba_free(fc);
     gdk_rgba_free(bc);
+
+    // Go up the parent chain for a background color
+    while (attr.colBg.Alpha() == 0 && (widget = gtk_widget_get_parent(widget)))
+    {
+        sc = gtk_widget_get_style_context(widget);
+        gtk_style_context_save(sc);
+        gtk_style_context_set_state(sc, stateFlag);
+        gtk_style_context_get(sc, stateFlag, "background-color", &bc, nullptr);
+        gtk_style_context_restore(sc);
+        attr.colBg = wxColour(*bc);
+        gdk_rgba_free(bc);
+    }
 #else
     GtkStyle* style;
 
@@ -292,7 +303,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
             wxNativeFontInfo info;
             info.description = style->font_desc;
             attr.font = wxFont(info);
-            info.description = NULL;
+            info.description = nullptr;
         }
     }
     else
@@ -302,11 +313,11 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     if (!attr.font.IsOk())
     {
         GtkSettings *settings = gtk_settings_get_default();
-        gchar *font_name = NULL;
+        gchar *font_name = nullptr;
         g_object_get ( settings,
                        "gtk-font-name",
                        &font_name,
-                       NULL);
+                       nullptr);
         if (!font_name)
             attr.font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
         else
@@ -330,9 +341,21 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 #ifdef __WXGTK3__
     int w, h;
     gtk_widget_get_size_request(widget, &w, &h);
+
+    // gtk_widget_get_preferred_size() just returns 0 if the control is hidden,
+    // so we have to temporarily show the widget before calling it to get
+    // something useful from it, if it's currently hidden.
+    // So workaround this case.
+    const bool wasHidden = !gtk_widget_get_visible(widget);
+    if ( wasHidden )
+        gtk_widget_show(widget);
+
     gtk_widget_set_size_request(widget, -1, -1);
-    gtk_widget_get_preferred_size(widget, NULL, &req);
+    gtk_widget_get_preferred_size(widget, nullptr, &req);
     gtk_widget_set_size_request(widget, w, h);
+
+    if ( wasHidden )
+        gtk_widget_hide(widget);
 #else
     GTK_WIDGET_GET_CLASS(widget)->size_request(widget, &req);
 #endif
@@ -340,37 +363,56 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
     return wxSize(req.width, req.height);
 }
 
-wxPoint wxControl::GTKGetEntryMargins(GtkEntry* entry) const
+wxSize wxControl::GTKGetEntryMargins(GtkEntry* entry) const
 {
-    wxPoint marg(0, 0);
+    wxSize size;
 
-#ifndef __WXGTK3__
-#if GTK_CHECK_VERSION(2,10,0)
-    // The margins we have previously set
-    const GtkBorder* border = NULL;
-    if (wx_is_at_least_gtk2(10))
-        border = gtk_entry_get_inner_border(entry);
+#ifdef __WXGTK3__
+    GtkStyleContext* sc = gtk_widget_get_style_context(GTK_WIDGET(entry));
+    GtkStateFlags    state = gtk_style_context_get_state(sc);
 
-    if ( border )
+    GtkBorder padding, border;
+    gtk_style_context_get_padding(sc, state, &padding);
+    gtk_style_context_get_border(sc, state, &border);
+
+    size.x += padding.left + padding.right + border.left + border.right;
+    size.y += padding.top + padding.bottom + border.top + border.bottom;
+#else
+    if (gtk_entry_get_has_frame(entry))
     {
-        marg.x = border->left + border->right;
-        marg.y = border->top + border->bottom;
+        GtkStyle* style = GTK_WIDGET(entry)->style;
+        size.x += 2 * style->xthickness;
+        size.y += 2 * style->ythickness;
+    }
+
+    // Equivalent to the GTK2 private function _gtk_entry_effective_inner_border()
+
+    GtkBorder border = { 2, 2, 2, 2 };
+
+#if GTK_CHECK_VERSION(2,10,0)
+    if (wx_is_at_least_gtk2(10))
+    {
+        const GtkBorder* innerBorder1 = gtk_entry_get_inner_border(entry);
+        if (innerBorder1)
+            border = *innerBorder1;
+        else
+        {
+            GtkBorder* innerBorder2;
+            gtk_widget_style_get(GTK_WIDGET(entry), "inner-border", &innerBorder2, nullptr);
+            if (innerBorder2)
+            {
+                border = *innerBorder2;
+                gtk_border_free(innerBorder2);
+            }
+        }
     }
 #endif // GTK+ 2.10+
-#else // GTK+ 3
-    // Gtk3 does not use inner border, but StyleContext and CSS
-    // TODO: implement it, starting with wxTextEntry::DoSetMargins()
-#endif // GTK+ 2/3
 
-    int x, y;
-    gtk_entry_get_layout_offsets(entry, &x, &y);
-    // inner borders are included. Substract them so we can get other margins
-    x -= marg.x;
-    y -= marg.y;
-    marg.x += 2 * x + 2;
-    marg.y += 2 * y + 2;
+    size.x += border.left + border.right;
+    size.y += border.top  + border.bottom;
+#endif
 
-    return marg;
+    return size;
 }
 
 

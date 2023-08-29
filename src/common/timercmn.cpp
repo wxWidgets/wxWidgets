@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMER
 
@@ -38,7 +35,9 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent);
+// This class is not really abstract, but this macro has to be used because it
+// doesn't have a default ctor.
+wxIMPLEMENT_ABSTRACT_CLASS(wxTimerEvent, wxEvent);
 
 wxDEFINE_EVENT(wxEVT_TIMER, wxTimerEvent);
 
@@ -55,8 +54,8 @@ wxTimer::~wxTimer()
 
 void wxTimer::Init()
 {
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    m_impl = traits ? traits->CreateTimerImpl(this) : NULL;
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
+    m_impl = traits ? traits->CreateTimerImpl(this) : nullptr;
     if ( !m_impl )
     {
         wxFAIL_MSG( wxT("No timer implementation for this platform") );
@@ -77,7 +76,7 @@ void wxTimer::SetOwner(wxEvtHandler *owner, int timerid)
 
 wxEvtHandler *wxTimer::GetOwner() const
 {
-    wxCHECK_MSG( m_impl, NULL, wxT("uninitialized timer") );
+    wxCHECK_MSG( m_impl, nullptr, wxT("uninitialized timer") );
 
     return m_impl->GetOwner();
 }

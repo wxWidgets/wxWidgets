@@ -50,7 +50,7 @@ public:
         @param style
             Control style. For generic window styles, please see wxWindow.
         @param validator
-            Control validator. 
+            Control validator.
         @param name
             Control name.
     */
@@ -64,7 +64,7 @@ public:
        Default constructor to allow 2-phase creation.
     */
     wxControl();
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
@@ -139,6 +139,27 @@ public:
         @overload
     */
     wxSize GetSizeFromTextSize(const wxSize& tsize) const;
+
+    /**
+        Determine the minimum size needed by the control to display the given text.
+
+        The helper function that uses combination of GetSizeFromTextSize() and
+        GetTextExtent() which used together pretty often:
+        @code
+            wxSize GetSizeFromText(const wxString& text) const
+            {
+                return GetSizeFromTextSize(GetTextExtent(text).GetWidth());
+            }
+        @endcode
+
+        @param text The given text.
+        @return The size that the control should have to leave the area of the
+            specified text. May return wxDefaultSize if this method is not
+            implemented for this particular control under the current platform.
+
+        @since 3.1.3
+     */
+    wxSize GetSizeFromText(const wxString& text) const;
 
     /**
         Sets the control's label.
@@ -332,7 +353,7 @@ public:
 
 
 public:     // static functions
-    
+
     /**
         Returns the given @a label string without mnemonics ("&" characters).
     */
@@ -340,7 +361,7 @@ public:     // static functions
 
     /**
         Returns the given @a str string without mnemonics ("&" characters).
-        
+
         @note This function is identical to GetLabelText() and is provided
               mostly for symmetry with EscapeMnemonics().
     */

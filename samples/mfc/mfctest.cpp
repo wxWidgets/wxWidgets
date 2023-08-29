@@ -55,15 +55,18 @@
 #ifndef WINVER
     #define WINVER 0x0600
 #endif
+#ifndef _UNICODE
+#    define _UNICODE
+#endif
+#ifndef UNICODE
+#    define UNICODE
+#endif
 
 #include "stdafx.h"
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -92,7 +95,7 @@ SampleMFCWinApp theApp;
 class MyApp: public wxAppWithMFC
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     wxFrame *CreateFrame();
 };
@@ -162,7 +165,6 @@ wxDECLARE_APP(MyApp);
 // Notice use of wxIMPLEMENT_APP_NO_MAIN() instead of the usual wxIMPLEMENT_APP!
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
-#ifdef _UNICODE
 // In Unicode build MFC normally requires to manually change the entry point to
 // wWinMainCRTStartup() but to avoid having to modify the project options to do
 // it we provide an adapter for it.
@@ -172,13 +174,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, char *, int)
 {
     wWinMainCRTStartup();
 }
-#endif // _UNICODE
 
 CMainWindow::CMainWindow()
 {
-    LoadAccelTable( wxT("MainAccelTable") );
-    Create( NULL, wxT("Hello Foundation Application"),
-        WS_OVERLAPPEDWINDOW, rectDefault, NULL, wxT("MainMenu") );
+    LoadAccelTable( L"MainAccelTable" );
+    Create( nullptr, L"Hello Foundation Application",
+        WS_OVERLAPPEDWINDOW, rectDefault, nullptr, L"MainMenu" );
 
     // Create a container representing the MFC window in wxWidgets window
     // hierarchy.
@@ -195,7 +196,7 @@ CMainWindow::CMainWindow()
 
 void CMainWindow::OnPaint()
 {
-    CString s = wxT("Hello, Windows!");
+    CString s = "Hello, Windows!";
     CPaintDC dc( this );
     CRect rect;
 
@@ -209,13 +210,13 @@ void CMainWindow::OnPaint()
 
 void CMainWindow::OnAbout()
 {
-    CDialog about( wxT("AboutBox"), this );
+    CDialog about( L"AboutBox", this );
     about.DoModal();
 }
 
 void CMainWindow::OnTest()
 {
-    wxMessageBox(wxT("This is a wxWidgets message box.\nWe're about to create a new wxWidgets frame."), wxT("wxWidgets"), wxOK);
+    wxMessageBox("This is a wxWidgets message box.\nWe're about to create a new wxWidgets frame.", "wxWidgets", wxOK);
     wxGetApp().CreateFrame();
 }
 
@@ -254,10 +255,10 @@ bool MyApp::OnInit()
 
 wxFrame *MyApp::CreateFrame()
 {
-    MyChild *subframe = new MyChild(NULL, wxT("Canvas Frame"), wxPoint(10, 10), wxSize(300, 300),
+    MyChild *subframe = new MyChild(nullptr, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
         wxDEFAULT_FRAME_STYLE);
 
-    subframe->SetTitle(wxT("wxWidgets canvas frame"));
+    subframe->SetTitle("wxWidgets canvas frame");
 
     // Give it a status line
     subframe->CreateStatusBar();
@@ -265,12 +266,12 @@ wxFrame *MyApp::CreateFrame()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(HELLO_NEW, wxT("&New MFC Window"));
-    file_menu->Append(HELLO_QUIT, wxT("&Close"));
+    file_menu->Append(HELLO_NEW, "&New MFC Window");
+    file_menu->Append(HELLO_QUIT, "&Close");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(file_menu, "&File");
 
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
@@ -296,6 +297,7 @@ wxEND_EVENT_TABLE()
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
         : wxScrolledWindow(parent, -1, pos, size)
 {
+    MSWDisableComposited();
 }
 
 // Define the repainting behaviour
@@ -315,7 +317,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     dc.DrawEllipse(250, 250, 100, 50);
     dc.DrawLine(50, 230, 200, 230);
-    dc.DrawText(wxT("This is a test string"), 50, 230);
+    dc.DrawText("This is a test string", 50, 230);
 }
 
 // This implements a tiny doodling program! Drag the mouse using
@@ -346,7 +348,7 @@ wxEND_EVENT_TABLE()
 MyChild::MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style)
        : wxFrame(frame, -1, title, pos, size, style)
 {
-    canvas = NULL;
+    canvas = nullptr;
 }
 
 MyChild::~MyChild()

@@ -13,7 +13,7 @@
     parameter - this may be changed by giving non-default flags to it, i.e. use
     @c wxCMD_LINE_OPTION_MANDATORY to require that the option is given and
     @c wxCMD_LINE_PARAM_OPTIONAL to make a parameter optional.
-    
+
     Also, @c wxCMD_LINE_PARAM_MULTIPLE may be specified if the programs accepts a
     variable number of parameters - but it only can be given for the last
     parameter in the command line description. If you use this flag, you will
@@ -67,17 +67,17 @@ enum wxCmdLineEntryType
 {
     /// A boolean argument of the program; e.g. @c -v to enable verbose mode.
     wxCMD_LINE_SWITCH,
-    
+
     /// An argument with an associated value; e.g. @c "-o filename" to specify
     /// an optional output filename.
     wxCMD_LINE_OPTION,
-    
+
     /// A parameter: a required program argument.
     wxCMD_LINE_PARAM,
-    
+
     /// Additional usage text. See wxCmdLineParser::AddUsageText.
     wxCMD_LINE_USAGE_TEXT,
-    
+
     wxCMD_LINE_NONE     ///< Use this to terminate the list.
 };
 
@@ -126,7 +126,7 @@ struct wxCmdLineEntryDesc
 
     /**
         The usual, short, name of the switch or the option.
-        
+
         It may contain only letters, digits and the underscores.
         This field is unused if <tt>kind == wxCMD_LINE_PARAM</tt>.
     */
@@ -135,7 +135,7 @@ struct wxCmdLineEntryDesc
     /**
         The long name for this program argument (may be empty if the option
         has no long name).
-        
+
         It may contain only letters, digits and the underscores.
         This field is unused if <tt>kind == wxCMD_LINE_PARAM</tt>.
     */
@@ -152,7 +152,7 @@ struct wxCmdLineEntryDesc
         See ::wxCmdLineParamType for more info.
     */
     wxCmdLineParamType type;
-    
+
     /**
         A combination of one or more ::wxCmdLineEntryFlags enum values.
     */
@@ -212,7 +212,7 @@ struct wxCmdLineEntryDesc
     }
     @endcode
 
-    With C++11, the for loop could be written:
+    The for loop could be written:
     @code
     for (const auto &arg : parser.GetArguments()) {
         // working on arg as with *itarg above
@@ -224,7 +224,7 @@ struct wxCmdLineEntryDesc
 class wxCmdLineArg
 {
 public:
-    virtual ~wxCmdLineArg() {}
+    virtual ~wxCmdLineArg();
 
     /**
         Returns the command line argument value as a wxDateTime.
@@ -348,12 +348,12 @@ public:
 
     In the documentation below the following terminology is used:
 
-    - @b switch: a boolean option which can be given or not, but which doesn't have 
+    - @b switch: a boolean option which can be given or not, but which doesn't have
                  any value. We use the word @e switch to distinguish
                  such boolean options from more generic options like those
                  described below. For example, @c "-v" might be a switch
                  meaning "enable verbose mode".
-    - @b option: a switch with a value associated to it. 
+    - @b option: a switch with a value associated to it.
                  For example, @c "-o filename" might be an
                  option for specifying the name of the output file.
     - @b parameter: a required program argument.
@@ -449,24 +449,19 @@ public:
     wxCmdLineParser();
 
     /**
-        Constructor which specifies the command line to parse. This is the
-        traditional (Unix) command line format. The parameters @a argc and
-        @a argv have the same meaning as the typical @c main() function.
+        Constructor which specifies the command line to parse.
 
-        This constructor is available in both ANSI and Unicode modes because under
-        some platforms the command line arguments are passed as ASCII strings
-        even to Unicode programs.
+        This is the traditional (Unix) command line format and the parameters
+        @a argc and @a argv have the same meaning as the typical @c main()
+        function.
     */
     wxCmdLineParser(int argc, char** argv);
 
     /**
         Constructor which specifies the command line to parse.
-        This is the traditional (Unix) command line format.
 
         The parameters @a argc and @a argv have the same meaning as the typical
-        @c main() function.
-
-        This constructor is only available in Unicode build.
+        @c main() function, but the latter uses wide character strings.
     */
     wxCmdLineParser(int argc, wchar_t** argv);
 
@@ -580,7 +575,7 @@ public:
 
         By default, this function uses Windows-like word splitting algorithm,
         i.e. single quotes have no special meaning and backslash can't be used
-        to escape spaces neither. With @c wxCMD_LINE_SPLIT_UNIX flag Unix
+        to escape spaces either. With @c wxCMD_LINE_SPLIT_UNIX flag Unix
         semantics is used, i.e. both single and double quotes can be used and
         backslash can be used to escape all the other special characters.
     */
@@ -596,8 +591,8 @@ public:
     /**
         Enable or disable support for the long options.
 
-        As long options are not (yet) POSIX-compliant, this option allows to
-        disable them.
+        As long options are not (yet) POSIX-compliant, this option allows
+        disabling them.
 
         @see @ref cmdlineparser_customization and AreLongOptionsEnabled()
     */
@@ -688,7 +683,7 @@ public:
     */
     int Parse(bool giveUsage = true);
 
-    //@{
+    ///@{
     /**
         Set the command line to parse after using one of the constructors which
         don't do it.
@@ -696,7 +691,7 @@ public:
     void SetCmdLine(int argc, char** argv);
     void SetCmdLine(int argc, wchar_t** argv);
     void SetCmdLine(const wxString& cmdline);
-    //@}
+    ///@}
 
     /**
         Constructs the command line description.
@@ -717,7 +712,7 @@ public:
             { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
 
-            { wxCMD_LINE_PARAM,  NULL, NULL, "input file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
+            { wxCMD_LINE_PARAM,  nullptr, nullptr, "input file", wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
 
             { wxCMD_LINE_NONE }
         };

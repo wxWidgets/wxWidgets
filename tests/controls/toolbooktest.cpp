@@ -10,9 +10,6 @@
 
 #if wxUSE_TOOLBOOK
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -28,19 +25,19 @@ class ToolbookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 public:
     ToolbookTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxBookCtrlBase *GetBase() const { return m_toolbook; }
+    virtual wxBookCtrlBase *GetBase() const override { return m_toolbook; }
 
-    virtual wxEventType GetChangedEvent() const
+    virtual wxEventType GetChangedEvent() const override
     { return wxEVT_TOOLBOOK_PAGE_CHANGED; }
 
-    virtual wxEventType GetChangingEvent() const
+    virtual wxEventType GetChangingEvent() const override
     { return wxEVT_TOOLBOOK_PAGE_CHANGING; }
 
-    virtual void Realize() { m_toolbook->GetToolBar()->Realize(); }
+    virtual void Realize() override { m_toolbook->GetToolBar()->Realize(); }
 
     CPPUNIT_TEST_SUITE( ToolbookTestCase );
         wxBOOK_CTRL_BASE_TESTS();

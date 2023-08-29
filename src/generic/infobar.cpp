@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_INFOBAR
 
@@ -49,9 +46,9 @@ wxEND_EVENT_TABLE()
 
 void wxInfoBarGeneric::Init()
 {
-    m_icon = NULL;
-    m_text = NULL;
-    m_button = NULL;
+    m_icon = nullptr;
+    m_text = nullptr;
+    m_button = nullptr;
 
     m_showEffect =
     m_hideEffect = wxSHOW_EFFECT_MAX;
@@ -77,7 +74,7 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     // the icon is not shown unless it's assigned a valid bitmap
     m_icon = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap);
 
-    m_text = new wxStaticText(this, wxID_ANY, "");
+    m_text = new wxStaticText(this, wxID_ANY, wxString());
     m_text->SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOTEXT));
 
     m_button = wxBitmapButton::NewCloseButton(this, wxID_ANY);
@@ -227,7 +224,7 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
     }
     else // do show an icon
     {
-        m_icon->SetBitmap(wxArtProvider::GetBitmap(
+        m_icon->SetBitmap(wxArtProvider::GetBitmapBundle(
                             wxArtProvider::GetMessageBoxIconId(flags),
                           wxART_BUTTON));
         m_icon->Show();
@@ -236,7 +233,7 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
     // notice the use of EscapeMnemonics() to ensure that "&" come through
     // correctly
     m_text->SetLabel(wxControl::EscapeMnemonics(msg));
-
+    m_text->Wrap( GetClientSize().GetWidth() );
 
     // then show this entire window if not done yet
     if ( !IsShown() )
@@ -275,6 +272,8 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
 #endif // __WXMAC__
 
     sizer->Add(button, wxSizerFlags().Centre().DoubleBorder());
+    if ( IsShown() )
+        sizer->Layout();
 }
 
 size_t wxInfoBarGeneric::GetButtonCount() const

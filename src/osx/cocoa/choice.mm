@@ -55,53 +55,52 @@
 - (NSControlSize)controlSize;
 @end
 
-class wxChoiceCocoaImpl : public wxWidgetCocoaImpl
+class wxChoiceCocoaImpl : public wxWidgetCocoaImpl, public wxChoiceWidgetImpl
 {
 public:
     wxChoiceCocoaImpl(wxWindowMac *wxpeer, wxNSPopUpButton *v)
     : wxWidgetCocoaImpl(wxpeer, v)
     {
+        m_popUpMenu = new wxMenu();
+        m_popUpMenu->SetNoEventsMode(true);
+        [v setMenu: m_popUpMenu->GetHMenu()];
+        [v setAutoenablesItems:NO];
+
+    }
+
+    ~wxChoiceCocoaImpl()
+    {
+        delete m_popUpMenu;
     }
     
-    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const wxOVERRIDE
+    void InsertItem( size_t pos, int itemid, const wxString& text) override
     {
-        left = top = right = bottom = 0;
-        NSControlSize size = NSRegularControlSize;
-        if ( [m_osxView respondsToSelector:@selector(controlSize)] )
-            size = [m_osxView controlSize];
-        else if ([m_osxView respondsToSelector:@selector(cell)])
-        {
-            id cell = [(id)m_osxView cell];
-            if ([cell respondsToSelector:@selector(controlSize)])
-                size = [cell controlSize];
-        }
-        
-        switch( size )
-        {
-            case NSRegularControlSize:
-                left = right = 3;
-                top = 2;
-                bottom = 3;
-                break;
-            case NSSmallControlSize:
-                left = right = 3;
-                top = 1;
-                bottom = 3;
-                break;
-            case NSMiniControlSize:
-                left = 1;
-                right = 2;
-                top = 0;
-                bottom = 0;
-                break;
-        }
+        m_popUpMenu->Insert( pos, itemid, text );
     }
+
+    size_t GetNumberOfItems() const override
+    {
+        return m_popUpMenu->GetMenuItemCount();
+    }
+
+    void RemoveItem( size_t pos ) override
+    {
+        m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( pos ) );
+    }
+
+    void SetItem(int pos, const wxString& s) override
+    {
+        m_popUpMenu->FindItemByPosition( pos )->SetItemLabel( s ) ;
+    }
+
+private:
+    wxMenu* m_popUpMenu;
 };
 
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    wxMenu* menu,
+                                    wxMenu* WXUNUSED(menu),
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long WXUNUSED(style),
@@ -109,8 +108,6 @@ wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSPopUpButton* v = [[wxNSPopUpButton alloc] initWithFrame:r pullsDown:NO];
-    [v setMenu: menu->GetHMenu()];
-    [v setAutoenablesItems:NO];
     wxWidgetCocoaImpl* c = new wxChoiceCocoaImpl( wxpeer, v );
     return c;
 }

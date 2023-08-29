@@ -14,9 +14,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all 'standard' wxWidgets headers)
@@ -103,112 +100,112 @@ const LanguageInfo g_LanguagePrefs [] = {
     {"C++",
      "*.c;*.cc;*.cpp;*.cxx;*.cs;*.h;*.hh;*.hpp;*.hxx;*.sma",
      wxSTC_LEX_CPP,
-     {{mySTC_TYPE_DEFAULT, NULL},
-      {mySTC_TYPE_COMMENT, NULL},
-      {mySTC_TYPE_COMMENT_LINE, NULL},
-      {mySTC_TYPE_COMMENT_DOC, NULL},
-      {mySTC_TYPE_NUMBER, NULL},
+     {{mySTC_TYPE_DEFAULT, nullptr},
+      {mySTC_TYPE_COMMENT, nullptr},
+      {mySTC_TYPE_COMMENT_LINE, nullptr},
+      {mySTC_TYPE_COMMENT_DOC, nullptr},
+      {mySTC_TYPE_NUMBER, nullptr},
       {mySTC_TYPE_WORD1, CppWordlist1}, // KEYWORDS
-      {mySTC_TYPE_STRING, NULL},
-      {mySTC_TYPE_CHARACTER, NULL},
-      {mySTC_TYPE_UUID, NULL},
-      {mySTC_TYPE_PREPROCESSOR, NULL},
-      {mySTC_TYPE_OPERATOR, NULL},
-      {mySTC_TYPE_IDENTIFIER, NULL},
-      {mySTC_TYPE_STRING_EOL, NULL},
-      {mySTC_TYPE_DEFAULT, NULL}, // VERBATIM
-      {mySTC_TYPE_REGEX, NULL},
-      {mySTC_TYPE_COMMENT_SPECIAL, NULL}, // DOXY
+      {mySTC_TYPE_STRING, nullptr},
+      {mySTC_TYPE_CHARACTER, nullptr},
+      {mySTC_TYPE_UUID, nullptr},
+      {mySTC_TYPE_PREPROCESSOR, nullptr},
+      {mySTC_TYPE_OPERATOR, nullptr},
+      {mySTC_TYPE_IDENTIFIER, nullptr},
+      {mySTC_TYPE_STRING_EOL, nullptr},
+      {mySTC_TYPE_DEFAULT, nullptr}, // VERBATIM
+      {mySTC_TYPE_REGEX, nullptr},
+      {mySTC_TYPE_COMMENT_SPECIAL, nullptr}, // DOXY
       {mySTC_TYPE_WORD2, CppWordlist2}, // EXTRA WORDS
       {mySTC_TYPE_WORD3, CppWordlist3}, // DOXY KEYWORDS
-      {mySTC_TYPE_ERROR, NULL}, // KEYWORDS ERROR
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL}},
+      {mySTC_TYPE_ERROR, nullptr}, // KEYWORDS ERROR
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr}},
      mySTC_FOLD_COMMENT | mySTC_FOLD_COMPACT | mySTC_FOLD_PREPROC},
     // Python
     {"Python",
      "*.py;*.pyw",
      wxSTC_LEX_PYTHON,
-     {{mySTC_TYPE_DEFAULT, NULL},
-      {mySTC_TYPE_COMMENT_LINE, NULL},
-      {mySTC_TYPE_NUMBER, NULL},
-      {mySTC_TYPE_STRING, NULL},
-      {mySTC_TYPE_CHARACTER, NULL},
+     {{mySTC_TYPE_DEFAULT, nullptr},
+      {mySTC_TYPE_COMMENT_LINE, nullptr},
+      {mySTC_TYPE_NUMBER, nullptr},
+      {mySTC_TYPE_STRING, nullptr},
+      {mySTC_TYPE_CHARACTER, nullptr},
       {mySTC_TYPE_WORD1, PythonWordlist1}, // KEYWORDS
-      {mySTC_TYPE_DEFAULT, NULL}, // TRIPLE
-      {mySTC_TYPE_DEFAULT, NULL}, // TRIPLEDOUBLE
-      {mySTC_TYPE_DEFAULT, NULL}, // CLASSNAME
+      {mySTC_TYPE_DEFAULT, nullptr}, // TRIPLE
+      {mySTC_TYPE_DEFAULT, nullptr}, // TRIPLEDOUBLE
+      {mySTC_TYPE_DEFAULT, nullptr}, // CLASSNAME
       {mySTC_TYPE_DEFAULT, PythonWordlist2}, // DEFNAME
-      {mySTC_TYPE_OPERATOR, NULL},
-      {mySTC_TYPE_IDENTIFIER, NULL},
-      {mySTC_TYPE_DEFAULT, NULL}, // COMMENT_BLOCK
-      {mySTC_TYPE_STRING_EOL, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL}},
+      {mySTC_TYPE_OPERATOR, nullptr},
+      {mySTC_TYPE_IDENTIFIER, nullptr},
+      {mySTC_TYPE_DEFAULT, nullptr}, // COMMENT_BLOCK
+      {mySTC_TYPE_STRING_EOL, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr}},
      mySTC_FOLD_COMMENTPY | mySTC_FOLD_QUOTESPY},
     // * (any)
     {wxTRANSLATE(DEFAULT_LANGUAGE),
      "*.*",
      wxSTC_LEX_PROPERTIES,
-     {{mySTC_TYPE_DEFAULT, NULL},
-      {mySTC_TYPE_DEFAULT, NULL},
-      {mySTC_TYPE_DEFAULT, NULL},
-      {mySTC_TYPE_DEFAULT, NULL},
-      {mySTC_TYPE_DEFAULT, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL},
-      {-1, NULL}},
+     {{mySTC_TYPE_DEFAULT, nullptr},
+      {mySTC_TYPE_DEFAULT, nullptr},
+      {mySTC_TYPE_DEFAULT, nullptr},
+      {mySTC_TYPE_DEFAULT, nullptr},
+      {mySTC_TYPE_DEFAULT, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr},
+      {-1, nullptr}},
      0},
     };
 
@@ -218,159 +215,159 @@ const int g_LanguagePrefsSize = WXSIZEOF(g_LanguagePrefs);
 //! style types
 const StyleInfo g_StylePrefs [] = {
     // mySTC_TYPE_DEFAULT
-    {wxT("Default"),
-     wxT("BLACK"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Default",
+     "BLACK", "WHITE",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_WORD1
-    {wxT("Keyword1"),
-     wxT("BLUE"), wxT("WHITE"),
-     wxT(""), 10, mySTC_STYLE_BOLD, 0},
+    {"Keyword1",
+     "BLUE", "CYAN",
+     "", 10, mySTC_STYLE_BOLD, 0},
 
     // mySTC_TYPE_WORD2
-    {wxT("Keyword2"),
-     wxT("MIDNIGHT BLUE"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Keyword2",
+     "MIDNIGHT BLUE", "LIGHT BLUE",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_WORD3
-    {wxT("Keyword3"),
-     wxT("CORNFLOWER BLUE"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Keyword3",
+     "CORNFLOWER BLUE", "LIGHT STEEL BLUE",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_WORD4
-    {wxT("Keyword4"),
-     wxT("CYAN"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Keyword4",
+     "CYAN", "MAGENTA",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_WORD5
-    {wxT("Keyword5"),
-     wxT("DARK GREY"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Keyword5",
+     "DARK GREY", "LIGHT GREY",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_WORD6
-    {wxT("Keyword6"),
-     wxT("GREY"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Keyword6",
+     "GREY", "KHAKI",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT
-    {wxT("Comment"),
-     wxT("FOREST GREEN"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Comment",
+     "FOREST GREEN", "LIME GREEN",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_DOC
-    {wxT("Comment (Doc)"),
-     wxT("FOREST GREEN"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Comment (Doc)",
+     "FOREST GREEN", "LIME GREEN",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_LINE
-    {wxT("Comment line"),
-     wxT("FOREST GREEN"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Comment line",
+     "FOREST GREEN", "LIME GREEN",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_SPECIAL
-    {wxT("Special comment"),
-     wxT("FOREST GREEN"), wxT("WHITE"),
-     wxT(""), 10, mySTC_STYLE_ITALIC, 0},
+    {"Special comment",
+     "FOREST GREEN", "LIME GREEN",
+     "", 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_CHARACTER
-    {wxT("Character"),
-     wxT("KHAKI"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Character",
+     "KHAKI", "LIGHT MAGENTA",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_CHARACTER_EOL
-    {wxT("Character (EOL)"),
-     wxT("KHAKI"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Character (EOL)",
+     "KHAKI", "LIGHT MAGENTA",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_STRING
-    {wxT("String"),
-     wxT("BROWN"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"String",
+     "BROWN", "YELLOW",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_STRING_EOL
-    {wxT("String (EOL)"),
-     wxT("BROWN"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"String (EOL)",
+     "BROWN", "YELLOW",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_DELIMITER
-    {wxT("Delimiter"),
-     wxT("ORANGE"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Delimiter",
+     "ORANGE", "YELLOW GREEN",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_PUNCTUATION
-    {wxT("Punctuation"),
-     wxT("ORANGE"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Punctuation",
+     "ORANGE", "YELLOW GREEN",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_OPERATOR
-    {wxT("Operator"),
-     wxT("BLACK"), wxT("WHITE"),
-     wxT(""), 10, mySTC_STYLE_BOLD, 0},
+    {"Operator",
+     "BLACK", "WHITE",
+     "", 10, mySTC_STYLE_BOLD, 0},
 
     // mySTC_TYPE_BRACE
-    {wxT("Label"),
-     wxT("VIOLET"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Label",
+     "VIOLET", "PINK",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_COMMAND
-    {wxT("Command"),
-     wxT("BLUE"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Command",
+     "BLUE", "CYAN",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_IDENTIFIER
-    {wxT("Identifier"),
-     wxT("BLACK"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Identifier",
+     "BLACK", "WHITE",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_LABEL
-    {wxT("Label"),
-     wxT("VIOLET"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Label",
+     "VIOLET", "PINK",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_NUMBER
-    {wxT("Number"),
-     wxT("SIENNA"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Number",
+     "SIENNA", "SALMON",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_PARAMETER
-    {wxT("Parameter"),
-     wxT("VIOLET"), wxT("WHITE"),
-     wxT(""), 10, mySTC_STYLE_ITALIC, 0},
+    {"Parameter",
+     "VIOLET", "THISTLE",
+     "", 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_REGEX
-    {wxT("Regular expression"),
-     wxT("ORCHID"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Regular expression",
+     "ORCHID", "ORANGE",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_UUID
-    {wxT("UUID"),
-     wxT("ORCHID"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"UUID",
+     "ORCHID", "ORANGE",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_VALUE
-    {wxT("Value"),
-     wxT("ORCHID"), wxT("WHITE"),
-     wxT(""), 10, mySTC_STYLE_ITALIC, 0},
+    {"Value",
+     "ORCHID", "ORANGE",
+     "", 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_PREPROCESSOR
-    {wxT("Preprocessor"),
-     wxT("GREY"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Preprocessor",
+     "GREY", "LIGHT GREY",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_SCRIPT
-    {wxT("Script"),
-     wxT("DARK GREY"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Script",
+     "DARK GREY", "LIGHT GREY",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_ERROR
-    {wxT("Error"),
-     wxT("RED"), wxT("WHITE"),
-     wxT(""), 10, 0, 0},
+    {"Error",
+     "RED", "PURPLE",
+     "", 10, 0, 0},
 
     // mySTC_TYPE_UNDEFINED
-    {wxT("Undefined"),
-     wxT("ORANGE"), wxT("WHITE"),
-     wxT(""), 10, 0, 0}
+    {"Undefined",
+     "ORANGE", "ORCHID",
+     "", 10, 0, 0}
 
     };
 

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 //---------------------------------------------------------------------------
 // Compilation guard
@@ -31,11 +28,10 @@
 #include "wx/mediactrl.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
-#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9 && defined(__LP64__)
+#if wxOSX_USE_COCOA
     #define wxOSX_USE_AVKIT 1
-#else
-    #define wxOSX_USE_AVKIT 0
 #endif
 
 //===========================================================================
@@ -85,34 +81,34 @@ public:
                                const wxSize& size,
                                long style,
                                const wxValidator& validator,
-                               const wxString& name) wxOVERRIDE;
+                               const wxString& name) override;
 
-    virtual bool Play() wxOVERRIDE;
-    virtual bool Pause() wxOVERRIDE;
-    virtual bool Stop() wxOVERRIDE;
+    virtual bool Play() override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
 
-    virtual bool Load(const wxString& fileName) wxOVERRIDE;
-    virtual bool Load(const wxURI& location) wxOVERRIDE;
+    virtual bool Load(const wxString& fileName) override;
+    virtual bool Load(const wxURI& location) override;
 
-    virtual wxMediaState GetState() wxOVERRIDE;
+    virtual wxMediaState GetState() override;
 
-    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
-    virtual wxLongLong GetPosition() wxOVERRIDE;
-    virtual wxLongLong GetDuration() wxOVERRIDE;
+    virtual bool SetPosition(wxLongLong where) override;
+    virtual wxLongLong GetPosition() override;
+    virtual wxLongLong GetDuration() override;
 
-    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize GetVideoSize() const wxOVERRIDE;
+    virtual void Move(int x, int y, int w, int h) override;
+    wxSize GetVideoSize() const override;
 
-    virtual double GetPlaybackRate() wxOVERRIDE;
-    virtual bool SetPlaybackRate(double dRate) wxOVERRIDE;
+    virtual double GetPlaybackRate() override;
+    virtual bool SetPlaybackRate(double dRate) override;
 
-    virtual double GetVolume() wxOVERRIDE;
-    virtual bool SetVolume(double dVolume) wxOVERRIDE;
+    virtual double GetVolume() override;
+    virtual bool SetVolume(double dVolume) override;
 
     void Cleanup();
     void FinishLoad();
 
-    virtual bool   ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
+    virtual bool   ShowPlayerControls(wxMediaCtrlPlayerControls flags) override;
 private:
     void DoShowPlayerControls(wxMediaCtrlPlayerControls flags);
 
@@ -162,7 +158,7 @@ private:
         id val = [change objectForKey:NSKeyValueChangeNewKey];
         if ( val != [NSNull null ] )
         {
-            AVPlayerStatus status = (AVPlayerStatus) [ val integerValue];
+            AVPlayerItemStatus status = (AVPlayerItemStatus) [ val integerValue];
 
             switch (status)
             {
@@ -211,6 +207,7 @@ private:
 
 - (void)playerItemDidReachEnd:(NSNotification *)notification
 {
+    wxUnusedVar(notification);
     if ( m_backend )
     {
         if ( m_backend->SendStopEvent() )
@@ -393,19 +390,13 @@ bool wxAVMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
 
     WXRect r = wxOSXGetFrameForControl( mediactrl, pos , size ) ;
 
-    WXWidget view = NULL;
+    WXWidget view = nullptr;
 #if wxOSX_USE_AVKIT
-    if ( NSClassFromString(@"AVPlayerView") )
-    {
-        view = [[wxAVPlayerView alloc] initWithFrame: r player:m_player];
-        [(wxAVPlayerView*) view setControlsStyle:AVPlayerViewControlsStyleNone];
-    }
+    view = [[wxAVPlayerView alloc] initWithFrame: r player:m_player];
+    [(wxAVPlayerView*) view setControlsStyle:AVPlayerViewControlsStyleNone];
+#else
+    view = [[wxAVView alloc] initWithFrame: r player:m_player];
 #endif
-
-    if ( view == NULL )
-    {
-        view = [[wxAVView alloc] initWithFrame: r player:m_player];
-    }
 
 #if wxOSX_USE_IPHONE
     wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl(mediactrl,view);
@@ -500,7 +491,7 @@ bool wxAVMediaBackend::SetPlaybackRate(double dRate)
 
 bool wxAVMediaBackend::SetPosition(wxLongLong where)
 {
-    [m_player seekToTime:CMTimeMakeWithSeconds(where.GetValue() / 1000.0, 1)
+    [m_player seekToTime:CMTimeMakeWithSeconds(where.GetValue() / 1000.0, 60000)
               toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 
     return true;
@@ -546,7 +537,7 @@ wxSize wxAVMediaBackend::GetVideoSize() const
     return m_bestSize;
 }
 
-void wxAVMediaBackend::Move(int x, int y, int w, int h)
+void wxAVMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(w), int WXUNUSED(h))
 {
     // as we have a native player, no need to move the video area
 }

@@ -10,9 +10,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -63,8 +60,8 @@ protected:
 
 private:
     // Implement base class functions.
-    virtual wxStringInputStream  *DoCreateInStream();
-    virtual wxStringOutputStream *DoCreateOutStream();
+    virtual wxStringInputStream  *DoCreateInStream() override;
+    virtual wxStringOutputStream *DoCreateOutStream() override;
 
     // output the given string to wxStringOutputStream and check that its
     // contents is exactly the same string
@@ -134,9 +131,8 @@ TEST_CASE("wxStringOutputStream::Tell", "[stream]")
     wxString str(s);
     CHECK( wxStringOutputStream(&str).TellO() == len );
 
-
     wxMBConvUTF16 convUTF16;
-    wxStringOutputStream ss16(NULL, convUTF16);
+    wxStringOutputStream ss16(nullptr, convUTF16);
     CHECK( ss16.TellO() == 0 );
 
     const wxCharBuffer s16 = convUTF16.cWC2MB(wxWCharBuffer(str.wc_str()));

@@ -8,7 +8,7 @@
 
 /**
     @class wxNativeFontInfo
-   
+
     wxNativeFontInfo is platform-specific font representation: this class
     should be considered as an opaque font description only used by the native
     functions, the user code can only get the objects of this type from
@@ -29,10 +29,12 @@ public:
 
     void Init();
     void InitFromFont(const wxFont& font);
-    
+
     int GetPointSize() const;
+    float GetFractionalPointSize() const;
     wxSize GetPixelSize() const;
     wxFontStyle GetStyle() const;
+    int GetNumericWeight() const;
     wxFontWeight GetWeight() const;
     bool GetUnderlined() const;
     wxString GetFaceName() const;
@@ -40,8 +42,10 @@ public:
     wxFontEncoding GetEncoding() const;
 
     void SetPointSize(int pointsize);
+    void SetFractionalPointSize(float pointsize);
     void SetPixelSize(const wxSize& pixelSize);
     void SetStyle(wxFontStyle style);
+    void SetNumericWeight(int weight);
     void SetWeight(wxFontWeight weight);
     void SetUnderlined(bool underlined);
     bool SetFaceName(const wxString& facename);

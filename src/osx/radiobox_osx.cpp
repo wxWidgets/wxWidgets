@@ -50,7 +50,7 @@ wxRadioBox::wxRadioBox()
 {
     m_noItems = 0;
     m_noRowsOrCols = 0;
-    m_radioButtonCycle = NULL;
+    m_radioButtonCycle = nullptr;
 }
 
 wxRadioBox::~wxRadioBox()
@@ -59,18 +59,21 @@ wxRadioBox::~wxRadioBox()
 
     wxRadioButton *next, *current;
 
-    current = m_radioButtonCycle->NextInCycle();
-    if (current != NULL)
+    current = m_radioButtonCycle;
+    if (current != nullptr)
     {
-        while (current != m_radioButtonCycle)
+        // We need to start deleting the buttons from the second one because
+        // deleting the first one would change the pointers stored in them.
+        for (current = current->NextInCycle();;)
         {
             next = current->NextInCycle();
             delete current;
 
+            if (next == m_radioButtonCycle)
+                break;
+
             current = next;
         }
-
-        delete current;
     }
 }
 
@@ -102,10 +105,13 @@ bool wxRadioBox::Create( wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style, val, name ) )
         return false;
 
+    // The radio box itself never accepts focus, only its child buttons do.
+    m_container.DisableSelfFocus();
+
     // during construction we must keep this at 0, otherwise GetBestSize fails
     m_noItems = 0;
     m_noRowsOrCols = majorDim;
-    m_radioButtonCycle = NULL;
+    m_radioButtonCycle = nullptr;
 
     SetMajorDim( majorDim == 0 ? n : majorDim, style );
 
@@ -193,13 +199,6 @@ bool wxRadioBox::IsItemEnabled(unsigned int item) const
     return current->IsEnabled();
 }
 
-// Returns the radiobox label
-//
-wxString wxRadioBox::GetLabel() const
-{
-    return wxControl::GetLabel();
-}
-
 // Returns the label for the given button
 //
 wxString wxRadioBox::GetString(unsigned int item) const
@@ -236,13 +235,6 @@ int wxRadioBox::GetSelection() const
     }
 
     return i;
-}
-
-// Sets the radiobox label
-//
-void wxRadioBox::SetLabel(const wxString& label)
-{
-    return wxControl::SetLabel( label );
 }
 
 // Sets the label of a given button
@@ -350,6 +342,9 @@ void wxRadioBox::Command( wxCommandEvent& event )
 //
 void wxRadioBox::SetFocus()
 {
+    if (!m_radioButtonCycle)
+        return;
+
     wxRadioButton *current;
 
     current = m_radioButtonCycle;
@@ -368,7 +363,6 @@ void wxRadioBox::SetFocus()
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    int i;
     wxRadioButton *current;
 
     // define the position
@@ -470,6 +464,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     y_offset = y_start;
 
     current = m_radioButtonCycle;
+    int i;
     for (i = 0 ; i < (int)m_noItems; i++)
     {
         // not to do for the zero button!
@@ -507,7 +502,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     wxFont font = GetFont(); // GetParent()->GetFont()
     GetTextExtent(
         wxT("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-        &charWidth, &charHeight, NULL, NULL, &font );
+        &charWidth, &charHeight, nullptr, nullptr, &font );
 
     charWidth /= 52;
 
@@ -520,7 +515,7 @@ wxSize wxRadioBox::DoGetBestSize() const
 
     for (unsigned int i = 0 ; i < m_noItems; i++)
     {
-        GetTextExtent(GetString(i), &eachWidth, &eachHeight, NULL, NULL, &font );
+        GetTextExtent(GetString(i), &eachWidth, &eachHeight, nullptr, nullptr, &font );
         eachWidth  = (eachWidth + RADIO_SIZE);
         eachHeight = wxMax(eachHeight, bestSizeRadio.y );
         if (maxWidth < eachWidth)
@@ -546,7 +541,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     totHeight += 10;
 
     // handle radio box title as well
-    GetTextExtent( GetLabel(), &eachWidth, NULL );
+    GetTextExtent( GetLabel(), &eachWidth, nullptr );
     eachWidth  = (int)(eachWidth + RADIO_SIZE) +  3 * charWidth;
     if (totWidth < eachWidth)
         totWidth = eachWidth;

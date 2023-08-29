@@ -15,8 +15,7 @@
     All other models derive from it and must implement its pure virtual functions
     in order to define a complete data model. In detail, you need to override
     wxDataViewModel::IsContainer, wxDataViewModel::GetParent, wxDataViewModel::GetChildren,
-    wxDataViewModel::GetColumnCount, wxDataViewModel::GetColumnType and
-    wxDataViewModel::GetValue in order to define the data model which acts as an
+    and wxDataViewModel::GetValue in order to define the data model which acts as an
     interface between your actual data and the wxDataViewCtrl.
 
     Note that wxDataViewModel does not define the position or index of any item
@@ -52,6 +51,10 @@
     - wxDataViewModel::ItemsDeleted,
     - wxDataViewModel::ItemsChanged.
 
+    Note that Cleared() can be called for all changes involving many, or all,
+    of the model items and not only for deleting all of them (i.e. clearing the
+    model).
+
     This class maintains a list of wxDataViewModelNotifier which link this class
     to the specific implementations on the supported platforms so that e.g. calling
     wxDataViewModel::ValueChanged on this model will just call
@@ -69,28 +72,28 @@
     associating the model with a control like this:
 
     @code
-        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl(this, wxID_ANY);
         wxDataViewModel *musicModel = new MyMusicModel;
-        m_musicCtrl->AssociateModel( musicModel );
+
+        musicCtrl->AssociateModel(musicModel);
         musicModel->DecRef();  // avoid memory leak !!
 
         // add columns now
     @endcode
 
     A potentially better way to avoid memory leaks is to use wxObjectDataPtr
-    
+
     @code
-        wxObjectDataPtr<MyMusicModel> musicModel;
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl(this, wxID_ANY);
+        wxObjectDataPtr<wxDataViewModel> musicModel(new MyMusicModel);
         
-        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
-        musicModel = new MyMusicModel;
-        m_musicCtrl->AssociateModel( musicModel.get() );
+        musicCtrl->AssociateModel(musicModel.get());
 
         // add columns now
     @endcode
 
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewModel : public wxRefCounter
@@ -129,8 +132,16 @@ public:
                      unsigned int col);
 
     /**
-        Called to inform the model that all data has been cleared.
-        The control will reread the data from the model again.
+        Called to inform the model that all of its data has been changed.
+
+        This method should be called if so many of the model items have
+        changed, that the control should just reread all of them, repopulating
+        itself entirely.
+
+        Note that, contrary to the name of the method, it doesn't necessarily
+        indicate that model has become empty -- although this is the right
+        method to call, rather than ItemsDeleted(), if it was indeed cleared,
+        which explains the origin of its name.
     */
     bool Cleared();
 
@@ -153,7 +164,10 @@ public:
         @param item2
             Second item to compare.
         @param column
-            The column holding the items to be compared.
+            The column holding the items to be compared. If the model class
+            overrides HasDefaultCompare() to return @true, this parameter will
+            be @c (unsigned)-1 when sorting items if no column is selected for
+            sorting them.
         @param ascending
             Indicates whether the sort is being performed in ascending or
             descending order.
@@ -232,19 +246,6 @@ public:
                                      wxDataViewItemArray& children) const = 0;
 
     /**
-        Override this to indicate the number of columns in the model.
-    */
-    virtual unsigned int GetColumnCount() const = 0;
-
-    /**
-        Override this to indicate what type of data is stored in the
-        column specified by @a col.
-
-        This should return a string indicating the type of data as reported by wxVariant.
-    */
-    virtual wxString GetColumnType(unsigned int col) const = 0;
-
-    /**
         Override this to indicate which wxDataViewItem representing the parent
         of @a item or an invalid wxDataViewItem if the root item is
         the parent item.
@@ -253,7 +254,17 @@ public:
 
     /**
         Override this to indicate the value of @a item.
-        A wxVariant is used to store the data.
+
+        This function should fill the provided @a variant with the value to be
+        shown for the specified item in the given column. The value returned in
+        this wxVariant must have the appropriate type, e.g. string for the text
+        columns, boolean for the columns using wxDataViewToggleRenderer etc,
+        and if there is a type mismatch, nothing will be shown and a debug
+        error message will be logged.
+
+        It is also possible to not return any value, in which case nothing will
+        be shown in the corresponding cell, in the same way as if HasValue()
+        returned @false.
     */
     virtual void GetValue(wxVariant& variant, const wxDataViewItem& item,
                           unsigned int col) const = 0;
@@ -273,7 +284,14 @@ public:
 
         If any other order (e.g. by index or order of appearance) is required,
         then this should be used.
+
+        Note that if this method is overridden to return @true, the
+        implementation of Compare() should be ready to accept @c (unsigned)-1
+        as the value for the column index parameter.
+
         See wxDataViewIndexListModel for a model which makes use of this.
+
+        @see Compare()
     */
     virtual bool HasDefaultCompare() const;
 
@@ -282,17 +300,21 @@ public:
 
         All normal items have values in all columns but the container items
         only show their label in the first column (@a col == 0) by default (but
-        see HasContainerColumns()). So this function always returns true for
+        see HasContainerColumns()). So this function by default returns true for
         the first column while for the other ones it returns true only if the
         item is not a container or HasContainerColumns() was overridden to
         return true for it.
 
+        Since wxWidgets 3.1.4, this method is virtual and can be overridden to
+        explicitly specify for which columns a given item has, and doesn't
+        have, values.
+
         @since 2.9.1
      */
-    bool HasValue(const wxDataViewItem& item, unsigned col) const;
+    virtual bool HasValue(const wxDataViewItem& item, unsigned col) const;
 
     /**
-        Override this to indicate of @a item is a container, i.e.\ if
+        Override this to indicate if @a item is a container, i.e.\ if
         it can have child items.
     */
     virtual bool IsContainer(const wxDataViewItem& item) const = 0;
@@ -372,7 +394,7 @@ public:
     */
     bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 
-    
+
     virtual bool IsListModel() const;
     virtual bool IsVirtualListModel() const;
 
@@ -418,7 +440,7 @@ protected:
     Base class with abstract API for wxDataViewIndexListModel and
     wxDataViewVirtualListModel.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewListModel : public wxDataViewModel
@@ -517,8 +539,8 @@ public:
     have other reason to use a virtual control.
 
     @see wxDataViewListModel for the API.
-    
-    @library{wxadv}
+
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -587,13 +609,13 @@ public:
     wxDataViewVirtualListModel is a specialized data model which lets you address
     an item by its position (row) rather than its wxDataViewItem and as such offers
     the exact same interface as wxDataViewIndexListModel.
-    The important difference is that under platforms other than OS X, using this
+    The important difference is that under platforms other than macOS, using this
     model will result in a truly virtual control able to handle millions of items
-    as the control doesn't store any item (a feature not supported by OS X).
+    as the control doesn't store any item (a feature not supported by macOS).
 
     @see wxDataViewListModel for the API.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -667,7 +689,7 @@ public:
 
     Attributes are currently only supported by wxDataViewTextRendererText.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewItemAttr
@@ -691,10 +713,9 @@ public:
     /**
         Call this to set the background colour to use.
 
-        Currently this attribute is only supported in the generic version of
-        wxDataViewCtrl and ignored by the native GTK+ and OS X implementations.
-
-        @since 2.9.4
+        @since 2.9.4 - Generic
+        @since 3.1.1 - wxGTK
+        @since 3.1.4 - wxOSX
     */
     void SetBackgroundColour(const wxColour& colour);
 
@@ -702,6 +723,17 @@ public:
         Call this to indicate that the item shall be displayed in italic text.
     */
     void SetItalic(bool set);
+
+    /**
+        Call this to indicate that the item shall be displayed in strikethrough
+        text.
+
+        Currently this attribute is only supported in the generic version of
+        wxDataViewCtrl and GTK and ignored by the native macOS implementations.
+
+        @since 3.1.2
+    */
+    void SetStrikethrough( bool set );
 
 
     /**
@@ -768,20 +800,20 @@ public:
     the invisible root. Examples for this are wxDataViewModel::GetParent and
     wxDataViewModel::GetChildren.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewItem
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor.
     */
     wxDataViewItem();
     wxDataViewItem(const wxDataViewItem& item);
     explicit wxDataViewItem(void* id);
-    //@}
+    ///@}
 
     /**
         Returns the ID.
@@ -945,14 +977,15 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK event.
-           Notice that currently this event is not generated in the native OS X
-           versions of the control.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -969,7 +1002,7 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     you can call wxSystemThemedControl::EnableSystemTheme with @c false
     argument to disable this.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl,dvc}
     @appearance{dataviewctrl}
 */
@@ -1045,7 +1078,7 @@ public:
     */
     virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* col);
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a bitmap. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1053,18 +1086,18 @@ public:
     wxDataViewColumn* AppendBitmapColumn(const wxString& label,
                                          unsigned int model_column,
                                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                         int width = -1,
+                                         int width = wxCOL_WIDTH_DEFAULT,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendBitmapColumn(const wxBitmap& label,
                                          unsigned int model_column,
                                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                         int width = -1,
+                                         int width = wxCOL_WIDTH_DEFAULT,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a bitmap. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1072,18 +1105,18 @@ public:
     wxDataViewColumn* PrependBitmapColumn(const wxString& label,
                                          unsigned int model_column,
                                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                         int width = -1,
+                                         int width = wxCOL_WIDTH_DEFAULT,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* PrependBitmapColumn(const wxBitmap& label,
                                          unsigned int model_column,
                                          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                         int width = -1,
+                                         int width = wxCOL_WIDTH_DEFAULT,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a date. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1094,18 +1127,18 @@ public:
     wxDataViewColumn* AppendDateColumn(const wxString& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendDateColumn(const wxBitmap& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a date. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1116,18 +1149,18 @@ public:
     wxDataViewColumn* PrependDateColumn(const wxString& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* PrependDateColumn(const wxBitmap& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering text with an icon. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1139,18 +1172,18 @@ public:
     wxDataViewColumn* AppendIconTextColumn(const wxString& label,
                                            unsigned int model_column,
                                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                           int width = -1,
+                                           int width = wxCOL_WIDTH_DEFAULT,
                                            wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendIconTextColumn(const wxBitmap& label,
                                            unsigned int model_column,
                                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                           int width = -1,
+                                           int width = wxCOL_WIDTH_DEFAULT,
                                            wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering text with an icon. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1162,18 +1195,18 @@ public:
     wxDataViewColumn* PrependIconTextColumn(const wxString& label,
                                            unsigned int model_column,
                                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                           int width = -1,
+                                           int width = wxCOL_WIDTH_DEFAULT,
                                            wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* PrependIconTextColumn(const wxBitmap& label,
                                            unsigned int model_column,
                                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                           int width = -1,
+                                           int width = wxCOL_WIDTH_DEFAULT,
                                            wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a progress indicator. Returns the
         wxDataViewColumn created in the function or @NULL on failure.
@@ -1193,9 +1226,9 @@ public:
                                            int width = 80,
                                            wxAlignment align = wxALIGN_CENTER,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a progress indicator. Returns the
         wxDataViewColumn created in the function or @NULL on failure.
@@ -1215,9 +1248,9 @@ public:
                                            int width = 80,
                                            wxAlignment align = wxALIGN_CENTER,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering text. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1228,18 +1261,18 @@ public:
     wxDataViewColumn* AppendTextColumn(const wxString& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendTextColumn(const wxBitmap& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering text. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1250,18 +1283,18 @@ public:
     wxDataViewColumn* PrependTextColumn(const wxString& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* PrependTextColumn(const wxBitmap& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                       int width = -1,
+                                       int width = wxCOL_WIDTH_DEFAULT,
                                        wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Appends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1281,9 +1314,9 @@ public:
                                          int width = 30,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Prepends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
@@ -1303,7 +1336,7 @@ public:
                                          int width = 30,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
+    ///@}
 
     /**
         Associates a wxDataViewModel with the control.
@@ -1341,15 +1374,31 @@ public:
     virtual bool EnableDragSource( const wxDataFormat &format );
 
     /**
-       Enable drop operations using the given @a format.
+        Enable drop operations using any of the specified  @a formats.
+
+        Currently this is fully implemented in the generic and native macOS
+        versions. In wxGTK only the first element of the array is used.
+
+        @note Passing empty array disables drag and drop operations completely.
+
+        @since 3.1.6
     */
-    virtual bool EnableDropTarget( const wxDataFormat &format );
+    bool EnableDropTargets(const wxVector<wxDataFormat>& formats);
+
+    /**
+        Enable drop operations using the given @a format.
+
+        See EnableDropTargets() for providing more than one supported format.
+
+        @note Since 3.1.6 wxDF_INVALID can be passed to disable drag and drop support.
+    */
+    bool EnableDropTarget( const wxDataFormat &format );
 
     /**
         Call this to ensure that the given item is visible.
     */
     virtual void EnsureVisible(const wxDataViewItem& item,
-                               const wxDataViewColumn* column = NULL);
+                               const wxDataViewColumn* column = nullptr);
 
     /**
         Expands the item.
@@ -1362,6 +1411,16 @@ public:
        items have been read from the model by the control.
     */
     void ExpandAncestors( const wxDataViewItem & item );
+
+    /**
+        Expand all children of the given item recursively.
+
+        This is the same as calling Expand() on the @a item itself and then
+        calling it for all of its children, grandchildren etc recursively.
+
+        @since 3.1.5
+     */
+    void ExpandChildren( const wxDataViewItem & item );
 
     /**
         Returns pointer to the column. @a pos refers to the position in the
@@ -1394,8 +1453,8 @@ public:
         style as in the case of single selection it returns the same thing as
         GetSelection().
 
-        Notice that under all platforms except OS X the currently focused
-        item may be selected or not but under OS X the current item is always
+        Notice that under all platforms except macOS the currently focused
+        item may be selected or not but under macOS the current item is always
         selected.
 
         @see SetCurrentItem(), GetCurrentColumn()
@@ -1411,7 +1470,7 @@ public:
         item (as opposed to being on the item as a whole), then this is the
         column that the focus is on.
 
-        Returns NULL if no column currently has focus.
+        Returns @NULL if no column currently has focus.
 
         @see GetCurrentItem()
 
@@ -1425,22 +1484,24 @@ public:
     int GetIndent() const;
 
     /**
-        Returns item rectangle. Coordinates of the rectangle are specified in
-        wxDataViewCtrl client area coordinates.
+        Returns item rectangle.
+
+        If item is not currently visible, either because its parent is
+        collapsed or it is outside of the visible part of the control due to
+        the current vertical scrollbar position, return an empty rectangle.
+
+        Coordinates of the rectangle are specified in wxDataViewCtrl client
+        area coordinates.
 
         @param item
             A valid item.
         @param col
-            If non-@NULL, the rectangle returned corresponds to the
+            If non-null, the rectangle returned corresponds to the
             intersection of the item with the specified column. If @NULL, the
             rectangle spans all the columns.
-
-        @note This method is currently not implemented at all in wxGTK and only
-              implemented for non-@NULL @a col argument in wxOSX. It is fully
-              implemented in the generic version of the control.
     */
     virtual wxRect GetItemRect(const wxDataViewItem& item,
-                               const wxDataViewColumn* col = NULL) const;
+                               const wxDataViewColumn* col = nullptr) const;
 
     /**
         Returns the window corresponding to the main area of the control.
@@ -1535,6 +1596,9 @@ public:
 
     /**
         Return @true if the item is expanded.
+
+        @note When using the native macOS version this method has a bug which
+              may result in returning @true even for items without children.
     */
     virtual bool IsExpanded(const wxDataViewItem& item) const;
 
@@ -1595,7 +1659,7 @@ public:
         In single selection mode, calling this method is the same as calling
         Select() and is thus not very useful. In multiple selection mode this
         method only moves the current item however without changing the
-        selection except under OS X where the current item is always selected,
+        selection except under macOS where the current item is always selected,
         so calling SetCurrentItem() selects @a item if it hadn't been selected
         before.
 
@@ -1608,7 +1672,7 @@ public:
     /**
         Set custom colours and/or font to use for the header.
 
-        This method allows to customize the display of the control header (it
+        This method allows customizing the display of the control header (it
         does nothing if @c wxDV_NO_HEADER style is used).
 
         Currently it is only implemented in the generic version and just
@@ -1631,6 +1695,9 @@ public:
 
     /**
         Sets the selection to the array of wxDataViewItems.
+
+        Note that if @a sel contains any invalid items, they are simply
+        ignored.
     */
     virtual void SetSelections(const wxDataViewItemArray& sel);
 
@@ -1651,7 +1718,7 @@ public:
         This function can only be used when all rows have the same height, i.e.
         when wxDV_VARIABLE_LINE_HEIGHT flag is not used.
 
-        Currently this is implemented in the generic and native GTK and OS X
+        Currently this is implemented in the generic and native GTK and macOS
         (since 3.1.1) versions.
 
         Also notice that this method can only be used to increase the row
@@ -1707,7 +1774,7 @@ public:
     its notification interface.
     See the documentation of that class for further information.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewModelNotifier
@@ -1890,7 +1957,7 @@ enum wxDataViewCellRenderState
     by the constructors respectively controls what actions the cell data allows
     and how the renderer should display its contents in a cell.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewRenderer : public wxObject
@@ -1898,6 +1965,15 @@ class wxDataViewRenderer : public wxObject
 public:
     /**
         Constructor.
+
+        The @a varianttype parameter is the main type of wxVariant objects
+        supported by this renderer, i.e. those that can be passed to its
+        SetValue(), e.g. "string" for wxDataViewTextRenderer. The value of this
+        parameter is returned by GetVariantType().
+
+        When deriving a custom renderer, either an existing variant type or a
+        new custom one can be used, see wxVariant documentation for more
+        details.
     */
     wxDataViewRenderer(const wxString& varianttype,
                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
@@ -1978,15 +2054,33 @@ public:
 
     /**
         Returns a string with the type of the wxVariant supported by this renderer.
+
+        Note that a renderer may support more than one variant type, in which
+        case it needs to override IsCompatibleVariantType() to return @a true
+        for all types it supports. But by default only the type returned by
+        this function is supported.
     */
     wxString GetVariantType() const;
+
+    /**
+        Check if the given variant type is compatible with the type expected by
+        this renderer.
+
+        The base class implementation just compares @a variantType with the
+        value returned by GetVariantType(), but this function can be overridden
+        to accept other types that can be converted to the type needed by the
+        renderer.
+
+        @since 3.1.7
+     */
+    virtual bool IsCompatibleVariantType(const wxString& variantType) const;
 
     /**
         Sets the alignment of the renderer's content.
         The default value of @c wxDVR_DEFAULT_ALIGNMENT indicates that the content
         should have the same alignment as the column header.
 
-        The method is not implemented under OS X and the renderer always aligns
+        The method is not implemented under macOS and the renderer always aligns
         its contents as the column header on that platform. The other platforms
         support both vertical and horizontal alignment.
     */
@@ -2000,6 +2094,8 @@ public:
     /**
         Set the value of the renderer (and thus its cell) to @a value.
         The internal code will then render this cell with this data.
+
+        @param value A valid, i.e. non-null, value to be shown.
     */
     virtual bool SetValue(const wxVariant& value) = 0;
 
@@ -2038,7 +2134,7 @@ public:
     */
     virtual bool Validate(wxVariant& value);
 
-    
+
     virtual bool HasEditorCtrl() const;
     virtual wxWindow* CreateEditorCtrl(wxWindow * parent,
                                        wxRect labelRect,
@@ -2062,7 +2158,7 @@ protected:
     wxDataViewTextRenderer is used for rendering text.
     It supports in-place editing if desired.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewTextRenderer : public wxDataViewRenderer
@@ -2139,7 +2235,7 @@ public:
     shift operator.
 
     @see wxDataViewCheckIconTextRenderer
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewIconTextRenderer : public wxDataViewRenderer
@@ -2175,14 +2271,14 @@ public:
     in the corresponding sample.
 
     @see wxDataViewIconTextRenderer, wxDataViewToggleRenderer
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
     @since 3.1.1
  */
 class wxDataViewCheckIconTextRenderer : public wxDataViewRenderer
 {
 public:
-    static wxString GetDefaultType() { return wxS("wxDataViewCheckIconText"); }
+    static wxString GetDefaultType();
 
     /**
         Create a new renderer.
@@ -2219,7 +2315,7 @@ public:
 
     This class is used by wxDataViewCtrl to render progress bars.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewProgressRenderer : public wxDataViewRenderer
@@ -2250,7 +2346,7 @@ public:
     It supports modifying the values in-place by using a wxSpinCtrl.
     The renderer only support variants of type @e long.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewSpinRenderer : public wxDataViewCustomRenderer
@@ -2272,8 +2368,11 @@ public:
 
     This class is used by wxDataViewCtrl to render toggle controls.
 
+    Note that "toggles" can be represented either by check boxes (default) or
+    radio buttons.
+
     @see wxDataViewCheckIconTextRenderer
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewToggleRenderer : public wxDataViewRenderer
@@ -2292,6 +2391,24 @@ public:
     wxDataViewToggleRenderer(const wxString& varianttype = GetDefaultType(),
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
+
+    /**
+        Switch to using radiobutton-like appearance instead of the default
+        checkbox-like one.
+
+        By default, this renderer uses checkboxes to represent the boolean
+        values, but using this method its appearance can be changed to use
+        radio buttons instead.
+
+        Notice that only the appearance is changed, the cells don't really
+        start behaving as radio buttons after a call to ShowAsRadio(), i.e. the
+        application code also needs to react to selecting one of the cells
+        shown by this renderer and clearing all the other ones in the same row
+        or column to actually implement radio button-like behaviour.
+
+        @since 3.1.2
+     */
+    void ShowAsRadio();
 };
 
 
@@ -2305,7 +2422,7 @@ public:
 
     @see wxDataViewChoiceByIndexRenderer
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -2338,7 +2455,7 @@ public:
     index, i.e. an @c int, in the variant used by its SetValue() and
     GetValue().
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewChoiceByIndexRenderer : public wxDataViewChoiceRenderer
@@ -2358,7 +2475,7 @@ public:
 
     This class is used by wxDataViewCtrl to render calendar controls.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewDateRenderer : public wxDataViewRenderer
@@ -2400,7 +2517,7 @@ public:
     Note that a special event handler will be pushed onto that editor control
     which handles @e \<ENTER\> and focus out events in order to end the editing.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewCustomRenderer : public wxDataViewRenderer
@@ -2454,10 +2571,6 @@ public:
             corresponding event. Is @NULL otherwise (for keyboard activation).
             Mouse coordinates are adjusted to be relative to the cell.
 
-        @note Currently support for this method is not implemented in the
-            native macOS version of the control, i.e. it will be never called
-            there.
-
         @since 2.9.3
 
         @note Do not confuse this method with item activation in wxDataViewCtrl
@@ -2503,6 +2616,10 @@ public:
                         labelRect.GetTopLeft(), labelRect.GetSize(), 0, 0, 100, l );
         }
         @endcode
+
+        @note Currently support for this method is not implemented in the
+            native macOS version of the control, i.e. it will be never called
+            there.
 
         @see ActivateCell()
     */
@@ -2611,9 +2728,14 @@ protected:
 /**
     @class wxDataViewBitmapRenderer
 
-    This class is used by wxDataViewCtrl to render bitmap controls.
+    This class is used by wxDataViewCtrl to render bitmaps.
 
-    @library{wxadv}
+    This renderer accepts wxVariant objects storing wxBitmap, wxIcon or
+    wxBitmapBundle inside them, with the latter being preferred as it allows
+    the renderer to automatically select the bitmap of the best matching size
+    depending on the current DPI.
+
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewBitmapRenderer : public wxDataViewRenderer
@@ -2621,6 +2743,11 @@ class wxDataViewBitmapRenderer : public wxDataViewRenderer
 public:
     /**
         Returns the wxVariant type used with this renderer.
+
+        Note that the value returned by this function has changed from
+        "wxBitmap" to "wxBitmapBundle" in wxWidgets 3.1.7, however the exact
+        value shouldn't matter, as it is only supposed to be used as the value
+        for the first constructor argument.
 
         @since 3.1.0
      */
@@ -2656,7 +2783,13 @@ enum wxDataViewColumnFlags
 
     An instance of wxDataViewRenderer is used by this class to render its data.
 
-    @library{wxadv}
+    @note In wxGTK, setting the width of the column doesn't happen immediately
+        when SetWidth() is called, but only slightly later and GetWidth() will
+        return the old width (0 initially) until this happens. If the column
+        widths are set before wxDataViewCtrl is initially shown, they will only
+        be effectively set when it becomes visible.
+
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewColumn : public wxSettableHeaderColumn
@@ -2674,6 +2807,7 @@ public:
         @param width
             The width of the column.
             The @c wxDVC_DEFAULT_WIDTH value is the fixed default value.
+            You can also use @c wxCOL_WIDTH_DEFAULT or @c wxCOL_WIDTH_AUTOSIZE.
         @param align
             The alignment of the column title.
         @param flags
@@ -2698,12 +2832,13 @@ public:
         @param width
             The width of the column.
             The @c wxDVC_DEFAULT_WIDTH value is the fixed default value.
+            You can also use @c wxCOL_WIDTH_DEFAULT or @c wxCOL_WIDTH_AUTOSIZE.
         @param align
             The alignment of the column title.
         @param flags
             One or more flags of the ::wxDataViewColumnFlags enumeration.
     */
-    wxDataViewColumn(const wxBitmap& bitmap,
+    wxDataViewColumn(const wxBitmapBundle& bitmap,
                      wxDataViewRenderer* renderer,
                      unsigned int model_column,
                      int width = wxDVC_DEFAULT_WIDTH,
@@ -2765,7 +2900,7 @@ public:
     See wxDataViewCtrl for the list of events emitted by this class.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl,dvc}
 
     @since 2.9.0
@@ -2799,13 +2934,13 @@ public:
            const wxSize& size = wxDefaultSize, long style = wxDV_ROW_LINES,
            const wxValidator& validator = wxDefaultValidator );
 
-    //@{
+    ///@{
     /**
         Returns the store.
     */
     wxDataViewListStore *GetStore();
     const wxDataViewListStore *GetStore() const;
-    //@}
+    ///@}
 
     /**
         Returns the position of given @e item or wxNOT_FOUND if it's
@@ -2822,7 +2957,7 @@ public:
      */
     wxDataViewItem RowToItem(int row) const;
 
-    //@{
+    ///@{
     /**
         @name Selection handling functions
      */
@@ -2863,12 +2998,12 @@ public:
      */
     bool IsRowSelected(unsigned row) const;
 
-    //@}
+    ///@}
 
     /**
         @name Column management functions
     */
-    //@{
+    ///@{
 
     /**
         Appends a column to the control and additionally appends a
@@ -2890,7 +3025,7 @@ public:
     */
     wxDataViewColumn *AppendTextColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT,
+          int width = wxCOL_WIDTH_DEFAULT, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -2901,7 +3036,7 @@ public:
     */
     wxDataViewColumn *AppendToggleColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-          int width = -1, wxAlignment align = wxALIGN_LEFT,
+          int width = wxCOL_WIDTH_DEFAULT, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -2912,7 +3047,7 @@ public:
     */
     wxDataViewColumn *AppendProgressColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT,
+          int width = wxCOL_WIDTH_DEFAULT, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -2923,7 +3058,7 @@ public:
     */
     wxDataViewColumn *AppendIconTextColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT,
+          int width = wxCOL_WIDTH_DEFAULT, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -2951,13 +3086,13 @@ public:
     */
     void PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
 
-    //@}
+    ///@}
 
 
     /**
         @name Item management functions
     */
-    //@{
+    ///@{
 
     /**
         Appends an item (i.e.\ a row) to the control.
@@ -2967,14 +3102,14 @@ public:
         after adding any items to the control (or, conversely, items must not
         be added before the columns are set up).
     */
-    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Prepends an item (i.e.\ a row) to the control.
 
         See remarks for AppendItem() for preconditions of this method.
     */
-    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Inserts an item (i.e.\ a row) to the control.
@@ -2984,7 +3119,7 @@ public:
         Additionally, @a row must be less than or equal to the current number
         of items in the control (see GetItemCount()).
     */
-    void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Delete the row at position @a row.
@@ -3067,7 +3202,7 @@ public:
     */
     void SetItemData(const wxDataViewItem& item, wxUIntPtr data);
 
-    //@}
+    ///@}
 };
 
 
@@ -3089,7 +3224,7 @@ public:
     See wxDataViewCtrl for the list of events emitted by this class.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl,dvc}
 
     @since 2.9.0
@@ -3127,7 +3262,7 @@ public:
                                    const wxString& text,
                                    int icon = -1,
                                    int expanded = -1,
-                                   wxClientData* data = NULL);
+                                   wxClientData* data = nullptr);
 
     /**
         Appends an item to the given @a parent.
@@ -3135,7 +3270,7 @@ public:
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
                               int icon = -1,
-                              wxClientData* data = NULL);
+                              wxClientData* data = nullptr);
 
     /**
         Creates the control and a wxDataViewTreeStore as its internal model.
@@ -3182,12 +3317,19 @@ public:
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon& GetItemExpandedIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon& GetItemIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemIcon(const wxDataViewItem& item) const;
+
+    /**
+        Returns the item's parent.
+
+        @since 3.1.6
+    */
+    wxDataViewItem GetItemParent(wxDataViewItem item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
@@ -3200,13 +3342,13 @@ public:
     wxDataViewItem GetNthChild(const wxDataViewItem& parent,
                                unsigned int pos) const;
 
-    //@{
+    ///@{
     /**
         Returns the store.
     */
     wxDataViewTreeStore* GetStore();
     const wxDataViewTreeStore* GetStore() const;
-    //@}
+    ///@}
 
     /**
         Calls the same method from wxDataViewTreeStore but uses
@@ -3217,7 +3359,7 @@ public:
                                    const wxString& text,
                                    int icon = -1,
                                    int expanded = -1,
-                                   wxClientData* data = NULL);
+                                   wxClientData* data = nullptr);
 
     /**
         Calls the same method from wxDataViewTreeStore but uses
@@ -3227,13 +3369,13 @@ public:
                               const wxDataViewItem& previous,
                               const wxString& text,
                               int icon = -1,
-                              wxClientData* data = NULL);
+                              wxClientData* data = nullptr);
 
     /**
         Returns true if item is a container.
     */
     bool IsContainer( const wxDataViewItem& item );
-    
+
     /**
         Calls the same method from wxDataViewTreeStore but uses
         an index position in the image list instead of a wxIcon.
@@ -3242,7 +3384,7 @@ public:
                                     const wxString& text,
                                     int icon = -1,
                                     int expanded = -1,
-                                    wxClientData* data = NULL);
+                                    wxClientData* data = nullptr);
 
     /**
         Calls the same method from wxDataViewTreeStore but uses
@@ -3251,7 +3393,7 @@ public:
     wxDataViewItem PrependItem(const wxDataViewItem& parent,
                                const wxString& text,
                                int icon = -1,
-                               wxClientData* data = NULL);
+                               wxClientData* data = nullptr);
 
     /**
         Sets the image list.
@@ -3267,12 +3409,12 @@ public:
         Calls the identical method from wxDataViewTreeStore.
     */
     void SetItemExpandedIcon(const wxDataViewItem& item,
-                             const wxIcon& icon);
+                             const wxBitmapBundle& icon);
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    void SetItemIcon(const wxDataViewItem& item, const wxIcon& icon);
+    void SetItemIcon(const wxDataViewItem& item, const wxBitmapBundle& icon);
 
     /**
         Calls the identical method from wxDataViewTreeStore.
@@ -3295,7 +3437,7 @@ public:
     used directly without having to derive any class from it, but it is
     mostly used from within wxDataViewListCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -3349,7 +3491,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Prepends an item (=row) and fills it with @a values.
@@ -3358,7 +3500,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void PrependItem( const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Inserts an item (=row) and fills it with @a values.
@@ -3367,7 +3509,7 @@ public:
         in number and type. No (default) values are filled in
         automatically.
     */
-    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = NULL );
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = nullptr );
 
     /**
         Delete the item (=row) at position @a pos.
@@ -3394,16 +3536,6 @@ public:
         @since 2.9.4
     */
     wxUIntPtr GetItemData(const wxDataViewItem& item) const;
-
-    /**
-        Overridden from wxDataViewModel
-    */
-    virtual unsigned int GetColumnCount() const;
-
-    /**
-        Overridden from wxDataViewModel
-    */
-    virtual wxString GetColumnType( unsigned int col ) const;
 
     /**
         Sets the client data associated with the item.
@@ -3449,7 +3581,7 @@ public:
     which they were added, or its Compare() function to compare the items using
     some other criterion, e.g. alphabetically.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewTreeStore : public wxDataViewModel
@@ -3470,17 +3602,17 @@ public:
     */
     wxDataViewItem AppendContainer(const wxDataViewItem& parent,
                                    const wxString& text,
-                                   const wxIcon& icon = wxNullIcon,
-                                   const wxIcon& expanded = wxNullIcon,
-                                   wxClientData* data = NULL);
+                                   const wxBitmapBundle& icon = wxBitmapBundle(),
+                                   const wxBitmapBundle& expanded = wxBitmapBundle(),
+                                   wxClientData* data = nullptr);
 
     /**
         Append an item.
     */
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
-                              const wxIcon& icon = wxNullIcon,
-                              wxClientData* data = NULL);
+                              const wxBitmapBundle& icon = wxBitmapBundle(),
+                              wxClientData* data = nullptr);
 
     /**
         Delete all item in the model.
@@ -3510,12 +3642,12 @@ public:
     /**
         Returns the icon to display in expanded containers.
     */
-    const wxIcon& GetItemExpandedIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the icon of the item.
     */
-    const wxIcon& GetItemIcon(const wxDataViewItem& item) const;
+    wxIcon GetItemIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the text of the item.
@@ -3534,9 +3666,9 @@ public:
     wxDataViewItem InsertContainer(const wxDataViewItem& parent,
                                    const wxDataViewItem& previous,
                                    const wxString& text,
-                                   const wxIcon& icon = wxNullIcon,
-                                   const wxIcon& expanded = wxNullIcon,
-                                   wxClientData* data = NULL);
+                                   const wxBitmapBundle& icon = wxBitmapBundle(),
+                                   const wxBitmapBundle& expanded = wxBitmapBundle(),
+                                   wxClientData* data = nullptr);
 
     /**
         Inserts an item after @a previous.
@@ -3544,25 +3676,25 @@ public:
     wxDataViewItem InsertItem(const wxDataViewItem& parent,
                               const wxDataViewItem& previous,
                               const wxString& text,
-                              const wxIcon& icon = wxNullIcon,
-                              wxClientData* data = NULL);
+                              const wxBitmapBundle& icon = wxBitmapBundle(),
+                              wxClientData* data = nullptr);
 
     /**
         Inserts a container before the first child item or @a parent.
     */
     wxDataViewItem PrependContainer(const wxDataViewItem& parent,
                                     const wxString& text,
-                                    const wxIcon& icon = wxNullIcon,
-                                    const wxIcon& expanded = wxNullIcon,
-                                    wxClientData* data = NULL);
+                                    const wxBitmapBundle& icon = wxBitmapBundle(),
+                                    const wxBitmapBundle& expanded = wxBitmapBundle(),
+                                    wxClientData* data = nullptr);
 
     /**
         Inserts an item before the first child item or @a parent.
     */
     wxDataViewItem PrependItem(const wxDataViewItem& parent,
                                const wxString& text,
-                               const wxIcon& icon = wxNullIcon,
-                               wxClientData* data = NULL);
+                               const wxBitmapBundle& icon = wxBitmapBundle(),
+                               wxClientData* data = nullptr);
 
     /**
         Sets the client data associated with the item.
@@ -3573,12 +3705,12 @@ public:
         Sets the expanded icon for the item.
     */
     void SetItemExpandedIcon(const wxDataViewItem& item,
-                             const wxIcon& icon);
+                             const wxBitmapBundle& icon);
 
     /**
         Sets the icon for the item.
     */
-    void SetItemIcon(const wxDataViewItem& item, const wxIcon& icon);
+    void SetItemIcon(const wxDataViewItem& item, const wxBitmapBundle& icon);
 };
 
 
@@ -3588,25 +3720,36 @@ public:
     wxDataViewIconText is used by wxDataViewIconTextRenderer for data transfer.
     This class can be converted to and from a wxVariant.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewIconText : public wxObject
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor.
     */
     wxDataViewIconText(const wxString& text = wxEmptyString,
-                       const wxIcon& icon = wxNullIcon);
+                       const wxBitmapBundle& bitmap = wxBitmapBundle());
     wxDataViewIconText(const wxDataViewIconText& other);
-    //@}
+    ///@}
+
+    /**
+        Gets the associated image.
+
+        @since 3.1.6
+     */
+    const wxBitmapBundle& GetBitmapBundle() const;
 
     /**
         Gets the icon.
+
+        This function can only return the icon in the size appropriate for the
+        standard 100% DPI scaling, use GetBitmapBundle() to retrieve image
+        representation suitable for another DPI scaling value.
     */
-    const wxIcon& GetIcon() const;
+    wxIcon GetIcon() const;
 
     /**
         Gets the text.
@@ -3614,7 +3757,21 @@ public:
     wxString GetText() const;
 
     /**
+        Sets the associated image.
+
+        This function allows to provide several representations of the same
+        image, so that the most appropriate one for the current DPI scaling
+        could be used, and so should be preferred to SetIcon().
+
+        @since 3.1.6
+     */
+    void SetBitmapBundle(const wxBitmapBundle& bitmap);
+
+    /**
         Set the icon.
+
+        Use SetBitmapBundle() instead to allow specifying different image
+        representations for different DPI scaling values.
     */
     void SetIcon(const wxIcon& icon);
 
@@ -3622,6 +3779,44 @@ public:
         Set the text.
     */
     void SetText(const wxString& text);
+};
+
+
+/**
+    @class wxDataViewCheckIconText
+
+    wxDataViewCheckIconText is used by wxDataViewCheckIconTextRenderer for data
+    transfer.
+
+    This class can be converted to and from a wxVariant.
+
+    @library{wxcore}
+    @category{dvc}
+*/
+class wxDataViewCheckIconText : public wxDataViewIconText
+{
+public:
+    //@{
+    /**
+        Constructor.
+    */
+    wxDataViewCheckIconText(
+        const wxString& text = wxEmptyString,
+        const wxBitmapBundle& icon = wxBitmapBundle(),
+        wxCheckBoxState checkedState = wxCHK_UNDETERMINED
+        );
+    wxDataViewCheckIconText(const wxDataViewCheckIconText& other);
+    //@}
+
+    /**
+        Sets the checked state.
+    */
+    void SetCheckedState(wxCheckBoxState state);
+
+    /**
+        Gets the checked state.
+    */
+    wxCheckBoxState GetCheckedState() const;
 };
 
 
@@ -3663,7 +3858,10 @@ public:
            Currently this event is not generated when using the native GTK+
            version of the control.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event which is generated
+           when the user starts dragging a valid item. This event must be
+           processed and wxDataViewEvent::SetDataObject() must be called to
+           actually start dragging the item.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
            Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
@@ -3672,7 +3870,7 @@ public:
            Process a @c wxEVT_DATAVIEW_CACHE_HINT event.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events,dvc}
 */
 class wxDataViewEvent : public wxNotifyEvent
@@ -3704,10 +3902,9 @@ public:
     */
     wxDataViewEvent(const wxDataViewEvent& event);
 
-    
     /**
         Returns the position of the column in the control or -1
-        if no column field was set by the event emitter.
+        if column field is unavailable for this event.
 
         For wxEVT_DATAVIEW_COLUMN_REORDERED, this is the new position of the
         column.
@@ -3726,7 +3923,7 @@ public:
     wxDataViewModel* GetModel() const;
 
     /**
-        Returns the position of a context menu event in screen coordinates.
+        Returns the position of a context menu event in client coordinates.
     */
     wxPoint GetPosition() const;
 
@@ -3749,7 +3946,7 @@ public:
 
         Currently support for setting this field and for vetoing the change is
         only available in the generic version of wxDataViewCtrl, i.e. under MSW
-        but not GTK nor OS X.
+        but not GTK nor macOS.
 
         @since 2.9.3
      */
@@ -3777,6 +3974,12 @@ public:
 
     /**
         Set wxDataObject for data transfer within a drag operation.
+
+        This method must be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        handler to associate the data object to be dragged with the item.
+
+        Note that the control takes ownership of the data object, i.e. @a obj
+        must be heap-allocated and will be deleted by wxDataViewCtrl itself.
     */
     void SetDataObject( wxDataObject *obj );
 
@@ -3798,13 +4001,13 @@ public:
     /**
         Specify the kind of the drag operation to perform.
 
-        This method can be used inside a wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
+        This method can be used inside a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
         handler in order to configure the drag operation. Valid values are
         ::wxDrag_CopyOnly (default), ::wxDrag_AllowMove (allow the data to be
         moved) and ::wxDrag_DefaultMove.
 
         Currently it is only honoured by the generic version of wxDataViewCtrl
-        (used e.g. under MSW) and not supported by the native GTK and OS X
+        (used e.g. under MSW) and not supported by the native GTK and macOS
         versions.
 
         @see GetDropEffect()
@@ -3824,7 +4027,7 @@ public:
 
         Currently this is only available when using the generic version of
         wxDataViewCtrl (used e.g. under MSW) and always returns ::wxDragNone in
-        the GTK and OS X native versions.
+        the GTK and macOS native versions.
 
         @since 2.9.4
     */
@@ -3840,6 +4043,19 @@ public:
     */
     int GetCacheTo() const;
 
+    /**
+        Returns the index of the child item at which an item currently being
+        dragged would be dropped.
+
+        This function can be used from wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE
+        handlers to determine the exact position of the item being dropped.
+
+        Note that it currently always returns wxNOT_FOUND when using native GTK
+        implementation of this control.
+
+        @since 3.1.2
+     */
+    int GetProposedDropIndex() const;
 
     /**
         Returns the item affected by the event.
@@ -3908,7 +4124,7 @@ public:
 
     @since 3.1.1
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewValueAdjuster
@@ -3921,6 +4137,9 @@ public:
         (selected) row, typically on a dark background.
 
         Default implementation returns @a value unmodified.
+
+        The @a value passed to this method is always non-null and it must
+        return a non-null value too.
     */
     virtual wxVariant MakeHighlighted(const wxVariant& value) const;
 };

@@ -71,6 +71,7 @@ void ItemContainerTestCase::Count()
     wxItemContainer * const container = GetContainer();
 
     CPPUNIT_ASSERT(container->IsEmpty());
+    WX_ASSERT_FAILS_WITH_ASSERT( container->GetString(0) );
 
     wxArrayString testitems;
     testitems.Add("item 0");
@@ -95,6 +96,7 @@ void ItemContainerTestCase::Count()
     container->Insert(testitems, 1);
 
     CPPUNIT_ASSERT_EQUAL(5, container->GetCount());
+    WX_ASSERT_FAILS_WITH_ASSERT( container->GetString(10) );
 }
 
 void ItemContainerTestCase::ItemSelection()
@@ -199,8 +201,8 @@ void ItemContainerTestCase::VoidData()
 
     CPPUNIT_ASSERT_EQUAL(item2, container->GetClientData(2));
 
-    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, NULL) );
-    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, NULL) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, nullptr) );
+    WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, nullptr) );
 
     // wxMSW used to hace problems retrieving the client data of -1 from a few
     // standard controls, especially if the last error was set before doing it,
@@ -270,6 +272,33 @@ void ItemContainerTestCase::SetString()
 #endif
 }
 
+void ItemContainerTestCase::SelectionAfterDelete()
+{
+    wxItemContainer * const container = GetContainer();
+
+    container->Append("item 0");
+    container->Append("item 1");
+    container->Append("item 2");
+    container->Append("item 3");
+
+    container->SetSelection(1);
+    CHECK( container->GetSelection() == 1 );
+
+    container->Delete(3);
+    CHECK( container->GetSelection() == 1 );
+
+    container->Delete(1);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
+
+    container->SetSelection(1);
+    container->Delete(1);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
+
+    container->SetSelection(0);
+    container->Delete(0);
+    CHECK( container->GetSelection() == wxNOT_FOUND );
+}
+
 void ItemContainerTestCase::SetSelection()
 {
     wxItemContainer * const container = GetContainer();
@@ -282,7 +311,7 @@ void ItemContainerTestCase::SetSelection()
     class CommandEventHandler : public wxEvtHandler
     {
     public:
-        virtual bool ProcessEvent(wxEvent& event)
+        virtual bool ProcessEvent(wxEvent& event) override
         {
             CPPUNIT_ASSERT_MESSAGE
             (

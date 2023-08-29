@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RIBBON
 
@@ -29,9 +26,7 @@
 #include "wx/msw/private.h"
 #endif
 
-#include "wx/arrimpl.cpp"
-
-WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray)
+#include "wx/imaglist.h"
 
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
@@ -77,7 +72,7 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     wxString label;
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
         label = page->GetLabel();
-    wxBitmap icon = wxNullBitmap;
+    wxBitmap icon;
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
         icon = page->GetIcon();
     m_art->GetBarTabWidth(dcTemp, this, label, icon,
@@ -177,7 +172,7 @@ bool wxRibbonBar::Realize()
         wxString label;
         if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
             label = info.page->GetLabel();
-        wxBitmap icon = wxNullBitmap;
+        wxBitmap icon;
         if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
             icon = info.page->GetIcon();
         m_art->GetBarTabWidth(dcTemp, this, label, icon,
@@ -318,7 +313,7 @@ void wxRibbonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 wxRibbonPage* wxRibbonBar::GetPage(int n)
 {
     if(n < 0 || (size_t)n >= m_pages.GetCount())
-        return 0;
+        return nullptr;
     return m_pages.Item(n).page;
 }
 
@@ -672,7 +667,7 @@ void wxRibbonBar::RecalculateTabSizes()
                         continue;
                     if(info->small_must_have_separator_width * (int)(numtabs - i) <= width)
                     {
-                        info->rect.width = info->small_must_have_separator_width;;
+                        info->rect.width = info->small_must_have_separator_width;
                     }
                     else
                     {
@@ -735,6 +730,7 @@ wxRibbonBar::wxRibbonBar()
     m_tab_scroll_buttons_shown = false;
     m_arePanelsShown = true;
     m_help_button_hovered = false;
+
 }
 
 wxRibbonBar::wxRibbonBar(wxWindow* parent,
@@ -749,7 +745,12 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 
 wxRibbonBar::~wxRibbonBar()
 {
-    SetArtProvider(NULL);
+    SetArtProvider(nullptr);
+
+    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    {
+        delete m_image_lists[n];
+    }
 }
 
 bool wxRibbonBar::Create(wxWindow* parent,
@@ -788,16 +789,31 @@ void wxRibbonBar::CommonInit(long style)
     m_tab_scroll_buttons_shown = false;
     m_arePanelsShown = true;
 
-    if(m_art == NULL)
+    if(m_art == nullptr)
     {
         SetArtProvider(new wxRibbonDefaultArtProvider);
     }
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     m_toggle_button_hovered = false;
     m_bar_hovered = false;
 
     m_ribbon_state = wxRIBBON_BAR_PINNED;
+}
+
+wxImageList* wxRibbonBar::GetButtonImageList(wxSize size)
+{
+    for ( size_t n = 0; n < m_image_lists.size(); ++n )
+    {
+        if ( m_image_lists[n]->GetSize() == size )
+            return m_image_lists[n];
+    }
+
+    wxImageList* const
+        il = new wxImageList(size.GetWidth(), size.GetHeight(), /*mask*/false);
+    m_image_lists.push_back(il);
+
+    return il;
 }
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
@@ -974,7 +990,7 @@ wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
                 continue;
             if(info.rect.Contains(position))
             {
-                if(index != NULL)
+                if(index != nullptr)
                 {
                     *index = (int)i;
                 }
@@ -982,11 +998,11 @@ wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
             }
         }
     }
-    if(index != NULL)
+    if(index != nullptr)
     {
         *index = -1;
     }
-    return NULL;
+    return nullptr;
 }
 
 void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
@@ -1025,7 +1041,7 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
             ProcessWindowEvent(notification);
         }
     }
-    else if(tab == NULL)
+    else if(tab == nullptr)
     {
         if(m_tab_scroll_left_button_rect.Contains(evt.GetPosition()))
         {
@@ -1258,7 +1274,7 @@ wxSize wxRibbonBar::DoGetBestSize() const
 
 void wxRibbonBar::HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag)
 {
-    bool hovered = false, toggle_button_hovered = false;
+    bool hovered = false;
     if(position.x >= 0 && position.y >= 0)
     {
         wxSize size = GetSize();
@@ -1269,6 +1285,7 @@ void wxRibbonBar::HitTestRibbonButton(const wxRect& rect, const wxPoint& positio
     }
     if(hovered)
     {
+        bool toggle_button_hovered;
         toggle_button_hovered = rect.Contains(position);
 
         if ( hovered != m_bar_hovered || toggle_button_hovered != hover_flag )

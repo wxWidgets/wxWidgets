@@ -22,10 +22,10 @@
 #include "wx/window.h"
 #include "wx/withimages.h"
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
-class WXDLLIMPEXP_FWD_ADV wxDataViewEvent;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_CORE wxDataViewEvent;
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxTreeListCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxTreeListCtrlNameStr[];
 
 class wxTreeListCtrl;
 class wxTreeListModel;
@@ -65,7 +65,7 @@ enum
 class wxTreeListItem : public wxItemId<wxTreeListModelNode*>
 {
 public:
-    wxTreeListItem(wxTreeListModelNode* item = NULL)
+    wxTreeListItem(wxTreeListModelNode* item = nullptr)
         : wxItemId<wxTreeListModelNode*>(item)
     {
     }
@@ -75,8 +75,8 @@ public:
 typedef wxVector<wxTreeListItem> wxTreeListItems;
 
 // Some special "items" that can be used with InsertItem():
-extern WXDLLIMPEXP_DATA_ADV(const wxTreeListItem) wxTLI_FIRST;
-extern WXDLLIMPEXP_DATA_ADV(const wxTreeListItem) wxTLI_LAST;
+extern WXDLLIMPEXP_DATA_CORE(const wxTreeListItem) wxTLI_FIRST;
+extern WXDLLIMPEXP_DATA_CORE(const wxTreeListItem) wxTLI_LAST;
 
 // ----------------------------------------------------------------------------
 // wxTreeListItemComparator: defines order of wxTreeListCtrl items.
@@ -117,7 +117,7 @@ private:
 // with wxDataViewCtrl directly but doing this makes your unportable to possible
 // future non-wxDataViewCtrl-based implementations of this class.
 
-class WXDLLIMPEXP_ADV wxTreeListCtrl
+class WXDLLIMPEXP_CORE wxTreeListCtrl
     : public wxCompositeWindow< wxNavigationEnabled<wxWindow> >,
       public wxWithImages
 {
@@ -131,7 +131,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxTL_DEFAULT_STYLE,
-                   const wxString& name = wxTreeListCtrlNameStr)
+                   const wxString& name = wxASCII_STR(wxTreeListCtrlNameStr))
     {
         Init();
 
@@ -143,7 +143,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTL_DEFAULT_STYLE,
-                const wxString& name = wxTreeListCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxTreeListCtrlNameStr));
 
 
     virtual ~wxTreeListCtrl();
@@ -202,7 +202,7 @@ public:
                               const wxString& text,
                               int imageClosed = NO_IMAGE,
                               int imageOpened = NO_IMAGE,
-                              wxClientData* data = NULL)
+                              wxClientData* data = nullptr)
     {
         return DoInsertItem(parent, wxTLI_LAST, text,
                             imageClosed, imageOpened, data);
@@ -213,7 +213,7 @@ public:
                               const wxString& text,
                               int imageClosed = NO_IMAGE,
                               int imageOpened = NO_IMAGE,
-                              wxClientData* data = NULL)
+                              wxClientData* data = nullptr)
     {
         return DoInsertItem(parent, previous, text,
                             imageClosed, imageOpened, data);
@@ -223,7 +223,7 @@ public:
                                const wxString& text,
                                int imageClosed = NO_IMAGE,
                                int imageOpened = NO_IMAGE,
-                               wxClientData* data = NULL)
+                               wxClientData* data = nullptr)
     {
         return DoInsertItem(parent, wxTLI_FIRST, text,
                             imageClosed, imageOpened, data);
@@ -367,7 +367,7 @@ public:
     // parameters with the column which is currently used for sorting and
     // whether we sort using ascending or descending order. Otherwise, i.e. if
     // the control contents is unsorted, simply return false.
-    bool GetSortColumn(unsigned* col, bool* ascendingOrder = NULL);
+    bool GetSortColumn(unsigned* col, bool* ascendingOrder = nullptr);
 
     // Set the object to use for comparing the items. It will be called when
     // the control is being sorted because the user clicked on a sortable
@@ -375,7 +375,7 @@ public:
     //
     // The provided pointer is stored by the control so the object it points to
     // must have a life-time equal or greater to that of the control itself. In
-    // addition, the pointer can be NULL to stop using custom comparator and
+    // addition, the pointer can be null to stop using custom comparator and
     // revert to the default alphabetical comparison.
     void SetItemComparator(wxTreeListItemComparator* comparator);
 
@@ -396,7 +396,7 @@ private:
     void Init();
 
     // Pure virtual method inherited from wxCompositeWindow.
-    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+    virtual wxWindowList GetCompositeWindowParts() const override;
 
     // Implementation of AppendColumn().
     int DoInsertColumn(const wxString& title,
@@ -454,7 +454,7 @@ private:
 // wxTreeListEvent: event generated by wxTreeListCtrl.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxTreeListEvent : public wxNotifyEvent
+class WXDLLIMPEXP_CORE wxTreeListEvent : public wxNotifyEvent
 {
 public:
     // Default ctor is provided for wxRTTI needs only but should never be used.
@@ -471,7 +471,7 @@ public:
     // COLUMN_SORTED event.
     unsigned GetColumn() const { return m_column; }
 
-    virtual wxEvent* Clone() const wxOVERRIDE { return new wxTreeListEvent(*this); }
+    virtual wxEvent* Clone() const override { return new wxTreeListEvent(*this); }
 
 private:
     // Common part of all ctors.
@@ -515,7 +515,7 @@ private:
 
     friend class wxTreeListCtrl;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTreeListEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxTreeListEvent);
 };
 
 // Event types and event table macros.
@@ -529,7 +529,7 @@ typedef void (wxEvtHandler::*wxTreeListEventFunction)(wxTreeListEvent&);
     wx__DECLARE_EVT1(wxEVT_TREELIST_##name, id, wxTreeListEventHandler(fn))
 
 #define wxDECLARE_TREELIST_EVENT(name) \
-    wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, \
+    wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, \
                               wxEVT_TREELIST_##name, \
                               wxTreeListEvent)
 

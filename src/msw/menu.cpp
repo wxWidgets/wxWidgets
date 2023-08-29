@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MENUS
 
@@ -113,7 +110,7 @@ void SetOwnerDrawnMenuItem(HMENU hmenu,
 // Construct a menu with optional title (then use append)
 void wxMenu::InitNoCreate()
 {
-    m_radioData = NULL;
+    m_radioData = nullptr;
     m_doBreak = false;
 
 #if wxUSE_OWNER_DRAWN
@@ -228,29 +225,30 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
             return;
         }
 
-        // find the (new) accel for this item
+        // remove old accels
+        int n = wxNOT_FOUND;
+        while ( (n = FindAccel(item->GetId())) != wxNOT_FOUND )
+        {
+            delete m_accels[n];
+            m_accels.RemoveAt(n);
+        }
+
+        // find the (new) accel for this item and add it if any
         wxAcceleratorEntry *accel = wxAcceleratorEntry::Create(item->GetItemLabel());
         if ( accel )
+        {
             accel->m_command = item->GetId();
-
-        // find the old one
-        int n = FindAccel(item->GetId());
-        if ( n == wxNOT_FOUND )
-        {
-            // no old, add new if any
-            if ( accel )
-                m_accels.Add(accel);
-            else
-                return;     // skipping RebuildAccelTable() below
+            m_accels.Add(accel);
         }
-        else
+
+        // add extra accels
+        const wxVector<wxAcceleratorEntry>& extraAccelsVector = item->GetExtraAccels();
+        const int extraAccelsSize = extraAccelsVector.size();
+        for (int i = 0; i < extraAccelsSize; ++i)
         {
-            // replace old with new or just remove the old one if no new
-            delete m_accels[n];
-            if ( accel )
-                m_accels[n] = accel;
-            else
-                m_accels.RemoveAt(n);
+            wxAcceleratorEntry *extraAccel = new wxAcceleratorEntry(extraAccelsVector[i]);
+            extraAccel->m_command = item->GetId();
+            m_accels.Add(extraAccel);
         }
 
         if ( IsAttached() )
@@ -277,19 +275,22 @@ void wxMenu::RemoveAccel(wxMenuItem *item)
         return;
     }
 
-    // remove the corresponding accel from the accel table
-    int n = FindAccel(item->GetId());
-    if ( n != wxNOT_FOUND )
+    // remove the corresponding accels from the accel table
+    int n = wxNOT_FOUND;
+    bool accels_found = false;
+    while ( (n = FindAccel(item->GetId())) != wxNOT_FOUND )
     {
         delete m_accels[n];
-
         m_accels.RemoveAt(n);
+        accels_found = true;
+    }
 
 #if wxUSE_OWNER_DRAWN
+    if ( accels_found )
+    {
         ResetMaxAccelWidth();
-#endif
     }
-    //else: this item doesn't have an accel, nothing to do
+#endif
 }
 
 #endif // wxUSE_ACCEL
@@ -302,6 +303,25 @@ namespace
 bool wxMenu::MSWGetRadioGroupRange(int pos, int *start, int *end) const
 {
     return m_radioData && m_radioData->GetGroupRange(pos, start, end);
+}
+
+void wxMenu::SetupBitmaps()
+{
+    for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxMenuItem *item = node->GetData();
+        if ( item->IsSubMenu() )
+        {
+            item->GetSubMenu()->SetupBitmaps();
+        }
+
+        if ( !item->IsSeparator() )
+        {
+            item->SetupBitmaps();
+        }
+    }
 }
 
 // append a new item or submenu to the menu
@@ -329,7 +349,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // required by ::AppendMenu() API
     UINT_PTR id;
     wxMenu *submenu = pItem->GetSubMenu();
-    if ( submenu != NULL ) {
+    if ( submenu != nullptr ) {
         wxASSERT_MSG( submenu->GetHMenu(), wxT("invalid submenu") );
 
         submenu->SetParent(this);
@@ -345,7 +365,19 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
     // prepare to insert the item in the menu
     wxString itemText = pItem->GetItemLabel();
-    LPCTSTR pData = NULL;
+#if wxUSE_ACCEL
+    const int n = FindAccel(pItem->GetId());
+    if ( n != wxNOT_FOUND )
+    {
+        // We need to normalize the accelerator if only to account for RawCtrl
+        // modifier used: we want to show just "Ctrl" for it in the menu.
+        itemText = wxString::Format("%s\t%s",
+                                    itemText.BeforeFirst('\t'),
+                                    m_accels[n]->ToString());
+    }
+#endif // wxUSE_ACCEL
+
+    LPCTSTR pData = nullptr;
     if ( pos == (size_t)-1 )
     {
         // append at the end (note that the item is already appended to
@@ -356,7 +388,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // Update radio groups data if we're inserting a new menu item.
     // Inserting radio and non-radio item has a different impact
     // on radio groups so we have to handle each case separately.
-    // (Inserting a radio item in the middle of exisiting group extends
+    // (Inserting a radio item in the middle of existing group extends
     // the group, but inserting non-radio item breaks it into two subgroups.)
     //
     bool checkInitially = false;
@@ -372,7 +404,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     {
         if ( m_radioData->UpdateOnInsertNonRadio(pos) )
         {
-            // One of the exisiting groups has been split into two subgroups.
+            // One of the existing groups has been split into two subgroups.
             wxFAIL_MSG(wxS("Inserting non-radio item inside a radio group?"));
         }
     }
@@ -412,20 +444,6 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 WinStruct<MENUITEMINFO> mii;
                 mii.fMask = MIIM_STRING | MIIM_DATA;
 
-                // don't set hbmpItem for the checkable items as it would
-                // be used for both checked and unchecked state
-                if ( pItem->IsCheckable() )
-                {
-                    mii.fMask |= MIIM_CHECKMARKS;
-                    mii.hbmpChecked = pItem->GetHBitmapForMenu(wxMenuItem::Checked);
-                    mii.hbmpUnchecked = pItem->GetHBitmapForMenu(wxMenuItem::Unchecked);
-                }
-                else if ( pItem->GetBitmap().IsOk() )
-                {
-                    mii.fMask |= MIIM_BITMAP;
-                    mii.hbmpItem = pItem->GetHBitmapForMenu(wxMenuItem::Normal);
-                }
-
                 mii.cch = itemText.length();
                 mii.dwTypeData = wxMSW_CONV_LPTSTR(itemText);
 
@@ -450,6 +468,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 {
                     mii.fMask |= MIIM_STATE;
                     mii.fState = MFS_CHECKED;
+                }
+
+                if ( flags & MF_MENUBREAK )
+                {
+                    mii.fMask |= MIIM_FTYPE;
+                    mii.fType = MFT_MENUBREAK;
                 }
 
                 mii.dwItemData = reinterpret_cast<ULONG_PTR>(pItem);
@@ -594,7 +618,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
-    return wxMenuBase::DoAppend(item) && DoInsertOrAppend(item) ? item : NULL;
+    return wxMenuBase::DoAppend(item) && DoInsertOrAppend(item) ? item : nullptr;
 }
 
 wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
@@ -602,7 +626,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     if (wxMenuBase::DoInsert(pos, item) && DoInsertOrAppend(item, pos))
         return item;
     else
-        return NULL;
+        return nullptr;
 }
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
@@ -724,7 +748,7 @@ void wxMenu::SetTitle(const wxString& label)
         {
             if ( !::InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
                                (UINT_PTR)idMenuTitle, m_title.t_str()) ||
-                 !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
+                 !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, nullptr) )
             {
                 wxLogLastError(wxT("InsertMenu"));
             }
@@ -793,9 +817,13 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
                 UINT menuState = ::GetMenuState(GetHmenu(), id_, MF_BYCOMMAND);
                 checked = (menuState & MF_CHECKED) != 0;
             }
-        }
 
-        SendEvent(id, checked);
+            item->GetMenu()->SendEvent(id, checked);
+        }
+        else
+        {
+            SendEvent(id, checked);
+        }
     }
 
     return true;
@@ -822,7 +850,7 @@ wxMenu* wxMenu::MSWGetMenu(WXHMENU hMenu)
     }
 
     // unknown hMenu
-    return NULL;
+    return nullptr;
 }
 
 // ---------------------------------------------------------------------------
@@ -868,7 +896,7 @@ wxMenuBar::~wxMenuBar()
     if (m_hMenu && !IsAttached())
     {
         ::DestroyMenu((HMENU)m_hMenu);
-        m_hMenu = (WXHMENU)NULL;
+        m_hMenu = (WXHMENU)nullptr;
     }
 }
 
@@ -1029,7 +1057,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
     wxMenu *menuOld = wxMenuBarBase::Replace(pos, menu, title);
     if ( !menuOld )
-        return NULL;
+        return nullptr;
 
     menu->wxMenuBase::SetTitle(title);
 
@@ -1163,7 +1191,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
     if ( !menu )
-        return NULL;
+        return nullptr;
 
     if (GetHmenu())
     {
@@ -1253,7 +1281,7 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu) const
     // If we're called with the handle of the menu bar itself, we can return
     // immediately as it certainly can't be the handle of one of our menus.
     if ( hMenu == GetHMenu() )
-        return NULL;
+        return nullptr;
 
     // query all menus
     for ( size_t n = 0 ; n < GetMenuCount(); ++n )
@@ -1264,7 +1292,7 @@ wxMenu* wxMenuBar::MSWGetMenu(WXHMENU hMenu) const
     }
 
     // unknown hMenu
-    return NULL;
+    return nullptr;
 }
 
 #endif // wxUSE_MENUS

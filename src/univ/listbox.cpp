@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTBOX
 
@@ -61,15 +58,8 @@ public:
                                  const wxMouseEvent& event);
 
 protected:
-    // return the item under mouse, 0 if the mouse is above the listbox or
-    // GetCount() if it is below it
     int HitTest(const wxListBox *listbox, const wxMouseEvent& event);
 
-    // parts of HitTest(): first finds the pseudo (because not in range) index
-    // of the item and the second one adjusts it if necessary - that is if the
-    // third one returns false
-    int HitTestUnsafe(const wxListBox *listbox, const wxMouseEvent& event);
-    int FixItemIndex(const wxListBox *listbox, int item);
     bool IsValidIndex(const wxListBox *listbox, int item);
 
     // init m_btnCapture and m_actionMouse
@@ -112,7 +102,7 @@ void wxListBox::Init()
     m_maxWidth = 0;
     m_scrollRangeY = 0;
     m_maxWidthItem = -1;
-    m_strings.unsorted = NULL;
+    m_strings.unsorted = nullptr;
 
     // no items hence no current item
     m_current = -1;
@@ -175,7 +165,7 @@ bool wxListBox::Create(wxWindow *parent,
     if ( style & wxLB_ALWAYS_SB )
         style |= wxALWAYS_SHOW_SB;
 
-    // if we don't have neither multiple nor extended flag, we must have the
+    // if we have neither multiple nor extended flag, we must have the
     // single selection listbox
     if ( !(style & (wxLB_MULTIPLE | wxLB_EXTENDED)) )
         style |= wxLB_SINGLE;
@@ -207,14 +197,14 @@ bool wxListBox::Create(wxWindow *parent,
 wxListBox::~wxListBox()
 {
     // call this just to free the client data -- and avoid leaking memory
-    DoClear();
+    Clear();
 
     if ( IsSorted() )
         delete m_strings.sorted;
     else
         delete m_strings.unsorted;
 
-    m_strings.sorted = NULL;
+    m_strings.sorted = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -257,7 +247,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
         idx = IsSorted() ? m_strings.sorted->Add(item)
                          : (m_strings.unsorted->Insert(item, pos), pos++);
 
-        m_itemsClientData.Insert(NULL, idx);
+        m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);
 
         // call the wxCheckListBox hook
@@ -294,7 +284,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
         // horz scrollbar [dis]appear
         wxCoord width;
 
-        GetTextExtent(s, &width, NULL);
+        GetTextExtent(s, &width, nullptr);
 
         // it might have increased if the new string is long
         if ( width > m_maxWidth )
@@ -363,8 +353,8 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     }
     //else: current item may stay
 
-    // update the selections array: the indices of all seletected items after
-    // the one being deleted must change and the item itselfm ust be removed
+    // update the selections array: the indices of all selected items after
+    // the one being deleted must change and the item itself just be removed
     int index = wxNOT_FOUND;
     unsigned int count = m_selections.GetCount();
     for ( unsigned int item = 0; item < count; item++ )
@@ -650,7 +640,7 @@ void wxListBox::UpdateItems()
 
         // we don't need to calculate x position as we always refresh the
         // entire line(s)
-        CalcScrolledPosition(0, rect.y, NULL, &rect.y);
+        CalcScrolledPosition(0, rect.y, nullptr, &rect.y);
 
         wxLogTrace(wxT("listbox"), wxT("Refreshing items %d..%d (%d-%d)"),
                    m_updateFrom, m_updateFrom + m_updateCount - 1,
@@ -706,8 +696,8 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
     wxRect rectUpdate = GetUpdateClientRect();
 
     int yTop, yBottom;
-    CalcUnscrolledPosition(0, rectUpdate.GetTop(), NULL, &yTop);
-    CalcUnscrolledPosition(0, rectUpdate.GetBottom(), NULL, &yBottom);
+    CalcUnscrolledPosition(0, rectUpdate.GetTop(), nullptr, &yTop);
+    CalcUnscrolledPosition(0, rectUpdate.GetBottom(), nullptr, &yBottom);
 
     // get the items which must be redrawn
     wxCoord lineHeight = GetLineHeight();
@@ -785,7 +775,7 @@ wxCoord wxListBox::GetMaxWidth() const
         unsigned int count = GetCount();
         for ( unsigned int n = 0; n < count; n++ )
         {
-            GetTextExtent(this->GetString(n), &width, NULL);
+            GetTextExtent(this->GetString(n), &width, nullptr);
             if ( width > m_maxWidth )
             {
                 self->m_maxWidth = width;
@@ -994,7 +984,7 @@ void wxListBox::DoEnsureVisible(int n)
     }
 
     int first;
-    GetViewStart(0, &first);
+    GetViewStart(nullptr, &first);
     if ( first > n )
     {
         // we need to scroll upwards, so make the current item appear on top
@@ -1088,27 +1078,22 @@ void wxListBox::DoSelect(int item, bool sel)
 
 void wxListBox::SelectAndNotify(int item)
 {
-    DoSelect(item);
-
-    SendEvent(wxEVT_LISTBOX);
+    if ( item != -1 )
+    {
+        DoSelect(item);
+        SendEvent(wxEVT_LISTBOX);
+    }
 }
 
 void wxListBox::Activate(int item)
 {
     if ( item != -1 )
+    {
         SetCurrentItem(item);
-    else
-        item = m_current;
+        if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
+            DeselectAll(item);
 
-    if ( !(GetWindowStyle() & wxLB_MULTIPLE) )
-    {
-        DeselectAll(item);
-    }
-
-    if ( item != -1 )
-    {
         DoSelect(item);
-
         SendEvent(wxEVT_LISTBOX_DCLICK);
     }
 }
@@ -1124,19 +1109,12 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 
     int y, index;
 
-    CalcUnscrolledPosition(0, point.y, NULL, &y);
+    CalcUnscrolledPosition(0, point.y, nullptr, &y);
     index = y / GetLineHeight();
 
-    if ( index < 0 )
-    {
-        // mouse is above the first item
-        index = 0;
-    }
-    else if ( (unsigned int)index >= GetCount() )
-    {
-        // mouse is below the last item
-        index= GetCount() - 1;
-    }
+    // mouse is above the first item or below the last item
+    if ( index < 0 || (unsigned int)index >= GetCount() )
+        return wxNOT_FOUND;
 
     return index;
 }
@@ -1178,7 +1156,10 @@ bool wxListBox::PerformAction(const wxControlAction& action,
             item = m_current;
 
         if ( IsSelected(item) )
+        {
             DoUnselect(item);
+            SendEvent(wxEVT_LISTBOX);
+        }
         else
             SelectAndNotify(item);
     }
@@ -1249,36 +1230,7 @@ wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler,
 int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
                                       const wxMouseEvent& event)
 {
-    int item = HitTestUnsafe(lbox, event);
-
-    return FixItemIndex(lbox, item);
-}
-
-int wxStdListboxInputHandler::HitTestUnsafe(const wxListBox *lbox,
-                                            const wxMouseEvent& event)
-{
-    wxPoint pt = event.GetPosition();
-    pt -= lbox->GetClientAreaOrigin();
-    int y;
-    lbox->CalcUnscrolledPosition(0, pt.y, NULL, &y);
-    return y / lbox->GetLineHeight();
-}
-
-int wxStdListboxInputHandler::FixItemIndex(const wxListBox *lbox,
-                                           int item)
-{
-    if ( item < 0 )
-    {
-        // mouse is above the first item
-        item = 0;
-    }
-    else if ( (unsigned int)item >= lbox->GetCount() )
-    {
-        // mouse is below the last item
-        item = lbox->GetCount() - 1;
-    }
-
-    return item;
+    return lbox->HitTest(event.GetPosition());
 }
 
 bool wxStdListboxInputHandler::IsValidIndex(const wxListBox *lbox, int item)
@@ -1477,7 +1429,7 @@ bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
             winCapture->ReleaseMouse();
             m_btnCapture = 0;
         }
-        //else: the mouse wasn't presed over the listbox, only released here
+        //else: the mouse wasn't pressed over the listbox, only released here
     }
     else if ( event.LeftDClick() )
     {
@@ -1487,8 +1439,6 @@ bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
     if ( !action.IsEmpty() )
     {
         lbox->PerformAction(action, item);
-
-        return true;
     }
 
     return wxStdInputHandler::HandleMouse(consumer, event);

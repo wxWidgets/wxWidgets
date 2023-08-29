@@ -14,6 +14,8 @@
 
 #include "wx/private/timer.h"
 
+#include <list>
+
 // the type used for milliseconds is large enough for microseconds too but
 // introduce a synonym for it to avoid confusion
 typedef wxMilliClock_t wxUsecClock_t;
@@ -30,9 +32,9 @@ public:
     wxUnixTimerImpl(wxTimer *timer);
     virtual ~wxUnixTimerImpl();
 
-    virtual bool IsRunning() const wxOVERRIDE;
-    virtual bool Start(int milliseconds = -1, bool oneShot = false) wxOVERRIDE;
-    virtual void Stop() wxOVERRIDE;
+    virtual bool IsRunning() const override;
+    virtual bool Start(int milliseconds = -1, bool oneShot = false) override;
+    virtual void Stop() override;
 
     // for wxTimerScheduler only: resets the internal flag indicating that the
     // timer is running
@@ -67,7 +69,7 @@ struct wxTimerSchedule
 };
 
 // the linked list of all active timers, we keep it sorted by expiration time
-WX_DECLARE_LIST(wxTimerSchedule, wxTimerList);
+using wxTimerList = std::list<wxTimerSchedule>;
 
 // ----------------------------------------------------------------------------
 // wxTimerScheduler: class responsible for updating all timers
@@ -91,7 +93,7 @@ public:
         if ( ms_instance )
         {
             delete ms_instance;
-            ms_instance = NULL;
+            ms_instance = nullptr;
         }
     }
 
@@ -118,13 +120,11 @@ public:
 private:
     // ctor and dtor are private, this is a singleton class only created by
     // Get() and destroyed by Shutdown()
-    wxTimerScheduler() { }
-    ~wxTimerScheduler();
+    wxTimerScheduler() = default;
+    ~wxTimerScheduler() = default;
 
     // add the given timer schedule to the list in the right place
-    //
-    // we take ownership of the pointer "s" which must be heap-allocated
-    void DoAddTimer(wxTimerSchedule *s);
+    void DoAddTimer(const wxTimerSchedule& s);
 
 
     // the list of all currently active timers sorted by expiration

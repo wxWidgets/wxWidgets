@@ -20,9 +20,9 @@
     #include "wx/button.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/eventsdisabler.h"
+#include "wx/gtk/private/image.h"
 #include "wx/gtk/private/list.h"
 
 extern bool      g_blockEventsOnDrag;
@@ -50,7 +50,7 @@ wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxToggleButton);
 
 bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
-                            const wxBitmap &bitmap, const wxPoint &pos,
+                            const wxBitmapBundle &bitmap, const wxPoint &pos,
                             const wxSize &size, long style,
                             const wxValidator& validator,
                             const wxString &name)
@@ -104,7 +104,7 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
     {
         m_widget = gtk_toggle_button_new();
 
-        GtkWidget *image = gtk_image_new();
+        GtkWidget* image = wxGtkImage::New(this);
         gtk_widget_show(image);
         gtk_container_add(GTK_CONTAINER(m_widget), image);
     }
@@ -141,7 +141,7 @@ void wxToggleButton::GTKEnableEvents()
 // Set the value of the toggle button.
 void wxToggleButton::SetValue(bool state)
 {
-    wxCHECK_RET(m_widget != NULL, wxT("invalid toggle button"));
+    wxCHECK_RET(m_widget != nullptr, wxT("invalid toggle button"));
 
     if (state == GetValue())
         return;
@@ -149,20 +149,21 @@ void wxToggleButton::SetValue(bool state)
     wxGtkEventsDisabler<wxToggleButton> noEvents(this);
 
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_widget), state);
+    GTKUpdateBitmap();
 }
 
 // bool GetValue() const
 // Get the value of the toggle button.
 bool wxToggleButton::GetValue() const
 {
-    wxCHECK_MSG(m_widget != NULL, false, wxT("invalid toggle button"));
+    wxCHECK_MSG(m_widget != nullptr, false, wxT("invalid toggle button"));
 
     return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widget)) != 0;
 }
 
 void wxToggleButton::SetLabel(const wxString& label)
 {
-    wxCHECK_RET(m_widget != NULL, wxT("invalid toggle button"));
+    wxCHECK_RET(m_widget != nullptr, wxT("invalid toggle button"));
 
     wxAnyButton::SetLabel(label);
 
@@ -176,7 +177,7 @@ void wxToggleButton::SetLabel(const wxString& label)
 
     const wxString labelGTK = GTKConvertMnemonics(label);
 
-    gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
+    gtk_button_set_label(GTK_BUTTON(m_widget), labelGTK.utf8_str());
 
     GTKApplyWidgetStyle( false );
 }
@@ -184,7 +185,7 @@ void wxToggleButton::SetLabel(const wxString& label)
 #if wxUSE_MARKUP
 bool wxToggleButton::DoSetLabelMarkup(const wxString& markup)
 {
-    wxCHECK_MSG( m_widget != NULL, false, "invalid toggle button" );
+    wxCHECK_MSG( m_widget != nullptr, false, "invalid toggle button" );
 
     const wxString stripped = RemoveMarkup(markup);
     if ( stripped.empty() && !markup.empty() )

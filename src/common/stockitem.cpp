@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/stockitem.h"
 
@@ -123,6 +120,15 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
     // for it because it is already bound to Esc implicitly)
     if ( id == wxID_CANCEL )
         flags &= ~wxSTOCK_WITH_MNEMONIC;
+
+    // Another one: "Help" in the context of a menu label has a different
+    // translation for some languages (Italian), so try this first.
+    if ( id == wxID_HELP && (flags & wxSTOCK_WITH_MNEMONIC) )
+    {
+        stockLabel = wxGETTEXT_IN_CONTEXT("standard Windows menu", "&Help");
+        if ( !stockLabel.empty() )
+            return stockLabel;
+    }
 #endif // __WXMSW__
 
 
@@ -143,7 +149,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_BOLD,                _("&Bold"),               _("Bold"));
         STOCKITEM(wxID_BOTTOM,              _("&Bottom"),             _("Bottom"));
         STOCKITEM(wxID_CANCEL,              _("&Cancel"),             _("Cancel"));
-        STOCKITEM(wxID_CDROM,               _("&CD-Rom"),             _("CD-Rom"));
+        STOCKITEM(wxID_CDROM,               _("&CD-ROM"),             _("CD-ROM"));
         STOCKITEM(wxID_CLEAR,               _("&Clear"),              _("Clear"));
         STOCKITEM(wxID_CLOSE,               _("&Close"),              _("Close"));
         STOCKITEM(wxID_CONVERT,             _("&Convert"),            _("Convert"));
@@ -155,7 +161,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_EXECUTE,             _("&Execute"),            _("Execute"));
         STOCKITEM(wxID_EXIT,                _("&Quit"),               _("Quit"));
         STOCKITEM(wxID_FILE,                _("&File"),               _("File"));
-        STOCKITEM(wxID_FIND,                _("&Find"),               _("Find"));
+        STOCKITEM(wxID_FIND,                _("&Find..."),            _("Find..."));
         STOCKITEM(wxID_FIRST,               _("&First"),              _("First"));
         STOCKITEM(wxID_FLOPPY,              _("&Floppy"),             _("Floppy"));
         STOCKITEM(wxID_FORWARD,             _("&Forward"),            _("Forward"));
@@ -185,10 +191,10 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_REDO,                _("&Redo"),               _("Redo"));
         STOCKITEM(wxID_REFRESH,             _("Refresh"),             _("Refresh"));
         STOCKITEM(wxID_REMOVE,              _("Remove"),              _("Remove"));
-        STOCKITEM(wxID_REPLACE,             _("Rep&lace"),            _("Replace"));
+        STOCKITEM(wxID_REPLACE,             _("Rep&lace..."),         _("Replace..."));
         STOCKITEM(wxID_REVERT_TO_SAVED,     _("Revert to Saved"),     _("Revert to Saved"));
         STOCKITEM(wxID_SAVE,                _("&Save"),               _("Save"));
-        STOCKITEM(wxID_SAVEAS,              _("&Save as"),            _("Save as"));
+        STOCKITEM(wxID_SAVEAS,              _("Save &As..."),         _("Save As..."));
         STOCKITEM(wxID_SELECTALL,           _("Select &All"),         _("Select All"));
         STOCKITEM(wxID_SELECT_COLOR,        _("&Color"),              _("Color"));
         STOCKITEM(wxID_SELECT_FONT,         _("&Font"),               _("Font"));
@@ -212,7 +218,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         default:
             wxFAIL_MSG( wxT("invalid stock item ID") );
             break;
-    };
+    }
 
     #undef STOCKITEM
 
@@ -258,11 +264,14 @@ wxString wxGetStockHelpString(wxWindowID id, wxStockHelpStringClient client)
         STOCKITEM(wxID_COPY,     wxSTOCK_MENU, _("Copy selection"))
         STOCKITEM(wxID_CUT,      wxSTOCK_MENU, _("Cut selection"))
         STOCKITEM(wxID_DELETE,   wxSTOCK_MENU, _("Delete selection"))
-        STOCKITEM(wxID_REPLACE,  wxSTOCK_MENU, _("Replace selection"))
+        STOCKITEM(wxID_FIND,     wxSTOCK_MENU, _("Find in document"))
+        STOCKITEM(wxID_REPLACE,  wxSTOCK_MENU, _("Find and replace in document"))
         STOCKITEM(wxID_PASTE,    wxSTOCK_MENU, _("Paste selection"))
         STOCKITEM(wxID_EXIT,     wxSTOCK_MENU, _("Quit this program"))
         STOCKITEM(wxID_REDO,     wxSTOCK_MENU, _("Redo last action"))
         STOCKITEM(wxID_UNDO,     wxSTOCK_MENU, _("Undo last action"))
+        STOCKITEM(wxID_NEW,      wxSTOCK_MENU, _("Create new document"))
+        STOCKITEM(wxID_OPEN,     wxSTOCK_MENU, _("Open an existing document"))
         STOCKITEM(wxID_CLOSE,    wxSTOCK_MENU, _("Close current document"))
         STOCKITEM(wxID_SAVE,     wxSTOCK_MENU, _("Save current document"))
         STOCKITEM(wxID_SAVEAS,   wxSTOCK_MENU, _("Save current document with a different filename"))
@@ -293,13 +302,12 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
         STOCKITEM(wxID_COPY,                wxACCEL_CTRL,'C')
         STOCKITEM(wxID_CUT,                 wxACCEL_CTRL,'X')
         STOCKITEM(wxID_FIND,                wxACCEL_CTRL,'F')
-        STOCKITEM(wxID_HELP,                wxACCEL_CTRL,'H')
         STOCKITEM(wxID_NEW,                 wxACCEL_CTRL,'N')
         STOCKITEM(wxID_OPEN,                wxACCEL_CTRL,'O')
         STOCKITEM(wxID_PASTE,               wxACCEL_CTRL,'V')
         STOCKITEM(wxID_PRINT,               wxACCEL_CTRL,'P')
         STOCKITEM(wxID_REDO,                wxACCEL_CTRL | wxACCEL_SHIFT,'Z')
-        STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'R')
+        STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'H')
         STOCKITEM(wxID_SAVE,                wxACCEL_CTRL,'S')
         STOCKITEM(wxID_SELECTALL,           wxACCEL_CTRL,'A')
         STOCKITEM(wxID_UNDO,                wxACCEL_CTRL,'Z')
@@ -312,7 +320,7 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
             // there's no stock accelerator for that.
             ret.Set(0, 0, id);
             break;
-    };
+    }
 
     #undef STOCKITEM
 

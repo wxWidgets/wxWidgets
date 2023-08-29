@@ -12,9 +12,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -117,7 +114,7 @@ bool DrawingView::OnClose(bool deleteWindow)
     {
         m_canvas->ClearBackground();
         m_canvas->ResetView();
-        m_canvas = NULL;
+        m_canvas = nullptr;
 
         if (GetFrame())
             wxStaticCast(GetFrame(), wxFrame)->SetTitle(wxTheApp->GetAppDisplayName());
@@ -127,7 +124,7 @@ bool DrawingView::OnClose(bool deleteWindow)
         if ( deleteWindow )
         {
             GetFrame()->Destroy();
-            SetFrame(NULL);
+            SetFrame(nullptr);
         }
     }
     return true;
@@ -188,7 +185,7 @@ bool TextEditView::OnClose(bool deleteWindow)
         if ( deleteWindow )
         {
             GetFrame()->Destroy();
-            SetFrame(NULL);
+            SetFrame(nullptr);
         }
     }
     return true;
@@ -207,7 +204,7 @@ MyCanvas::MyCanvas(wxView *view, wxWindow *parent)
     : wxScrolledWindow(parent ? parent : view->GetFrame())
 {
     m_view = view;
-    m_currentSegment = NULL;
+    m_currentSegment = nullptr;
     m_lastMousePos = wxDefaultPosition;
 
     SetCursor(wxCursor(wxCURSOR_PENCIL));
@@ -355,7 +352,7 @@ bool ImageView::OnClose(bool deleteWindow)
         if ( deleteWindow )
         {
             GetFrame()->Destroy();
-            SetFrame(NULL);
+            SetFrame(nullptr);
         }
     }
     return true;
@@ -429,7 +426,7 @@ bool ImageDetailsView::OnClose(bool deleteWindow)
     if ( wxGetApp().GetMode() != MyApp::Mode_Single && deleteWindow )
     {
         delete m_frame;
-        m_frame = NULL;
+        m_frame = nullptr;
     }
 
     return true;

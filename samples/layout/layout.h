@@ -12,8 +12,8 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp(){};
-    bool OnInit() wxOVERRIDE;
+    MyApp(){}
+    bool OnInit() override;
 };
 
 // the main frame class
@@ -64,11 +64,11 @@ private:
 };
 
 
-// a dialog using notebook sizer for layout
-class MySizerDialog : public wxDialog
+// a dialog using notebook and sizers for layout
+class MyNotebookWithSizerDialog : public wxDialog
 {
 public:
-    MySizerDialog(wxWindow *parent, const wxString &title );
+    MyNotebookWithSizerDialog(wxWindow *parent, const wxString &title );
 };
 
 

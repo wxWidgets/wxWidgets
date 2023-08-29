@@ -11,10 +11,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-#pragma hdrstop
-#endif
-
 // ============================================================================
 // declarations
 // ============================================================================
@@ -64,8 +60,8 @@ wxAdoptedWindow::~wxAdoptedWindow()
 static bool Xerror;
 static Atom WM_STATE = 0;
 bool wxReparenter::sm_done = false;
-wxAdoptedWindow* wxReparenter::sm_toReparent = NULL;
-wxWindow* wxReparenter::sm_newParent = NULL;
+wxAdoptedWindow* wxReparenter::sm_toReparent = nullptr;
+wxWindow* wxReparenter::sm_newParent = nullptr;
 wxString wxReparenter::sm_name;
 bool wxReparenter::sm_exactMatch = false;
 
@@ -193,7 +189,7 @@ bool wxReparenter::ProcessXEvent(WXEvent* event)
             (client = (Window) FindAClientWindow((WXWindow) xevent->xmap.window, sm_name)))
         {
             wxLogDebug(wxT("Found a client window, about to reparent"));
-            wxASSERT(sm_toReparent->GetParent() == NULL);
+            wxASSERT(sm_toReparent->GetParent() == nullptr);
 
             sm_toReparent->SetHandle((WXWindow) client);
             sm_newParent->AddChild(sm_toReparent);
@@ -206,7 +202,7 @@ bool wxReparenter::ProcessXEvent(WXEvent* event)
             wxLogDebug(wxT("Found an override redirect window, about to reparent"));
             sm_toReparent->SetHandle((WXWindow) xevent->xmap.window);
             sm_newParent->AddChild(sm_toReparent);
-            wxASSERT(sm_toReparent->GetParent() == NULL);
+            wxASSERT(sm_toReparent->GetParent() == nullptr);
 
             sm_done = Reparent(sm_newParent, sm_toReparent);
             return sm_done;
@@ -263,7 +259,7 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
         if (matches)
             return (WXWindow) window;
         else
-            return NULL;
+            return nullptr;
     }
 
     old = XSetErrorHandler(ErrorHandler);
@@ -271,7 +267,7 @@ WXWindow wxReparenter::FindAClientWindow(WXWindow window, const wxString& name)
         &children, &numchildren) || Xerror)
     {
         XSetErrorHandler(old);
-        return NULL;
+        return nullptr;
     }
     XSetErrorHandler(old);
 

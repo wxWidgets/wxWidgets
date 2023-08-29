@@ -17,6 +17,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxControl;
 
 //--------------------------------------------------------------------------------
 // wxBusyInfo
@@ -32,10 +33,13 @@ public:
         Init(flags);
     }
 
-    wxBusyInfo(const wxString& message, wxWindow *parent = NULL)
+    wxBusyInfo(const wxString& message, wxWindow *parent = nullptr)
     {
         Init(wxBusyInfoFlags().Parent(parent).Label(message));
     }
+
+    void UpdateText(const wxString& str);
+    void UpdateLabel(const wxString& str);
 
     virtual ~wxBusyInfo();
 
@@ -43,6 +47,7 @@ private:
     void Init(const wxBusyInfoFlags& flags);
 
     wxFrame *m_InfoFrame;
+    wxControl *m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxBusyInfo);
 };

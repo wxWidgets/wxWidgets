@@ -31,19 +31,22 @@
     @style{wxCB_SIMPLE}
            Creates a combobox with a permanently displayed list. Windows only.
     @style{wxCB_DROPDOWN}
-           Creates a combobox with a drop-down list. MSW and Motif only.
+           Creates a combobox with a drop-down list. MSW only.
     @style{wxCB_READONLY}
            A combobox with this style behaves like a wxChoice (and may look in
            the same way as well, although this is platform-dependent), i.e. it
            allows the user to choose from the list of options but doesn't allow
            to enter a value not present in the list.
     @style{wxCB_SORT}
-           Sorts the entries in the list alphabetically. Notice that this style
-           is not currently implemented in wxOSX.
+           Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_TEXT_ENTER
-           (otherwise pressing Enter key is either processed internally by the
-           control or used for navigation between dialog controls).
+           The control will generate the event @c wxEVT_TEXT_ENTER that can be
+           handled by the program. Otherwise, i.e. either if this style not
+           specified at all, or it is used, but there is no event handler for
+           this event or the event handler called wxEvent::Skip() to avoid
+           overriding the default handling, pressing Enter key is either
+           processed internally by the control or used to activate the default
+           button of the dialog, if any.
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
@@ -101,7 +104,7 @@ public:
             Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then the window is sized appropriately.
         @param n
             Number of strings with which to initialise the control.
@@ -125,7 +128,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int n = 0,
-               const wxString choices[] = NULL,
+               const wxString choices[] = nullptr,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxComboBoxNameStr);
@@ -172,7 +175,7 @@ public:
     */
     virtual ~wxComboBox();
 
-    //@{
+    ///@{
     /**
         Creates the combobox for two-step construction. Derived classes should
         call or replace this function. See wxComboBox() for further details.
@@ -181,7 +184,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = (const wxString *) NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
@@ -193,7 +196,7 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
-    //@}
+    ///@}
 
     /**
         Returns the item being selected right now.

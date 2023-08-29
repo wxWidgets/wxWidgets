@@ -28,13 +28,20 @@ public:
     wxWindowDCImpl( wxDC *owner, wxWindow *window );
     virtual ~wxWindowDCImpl();
 
-    virtual void DoGetSize( int *width, int *height ) const;
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
+    virtual void DoGetSize( int *width, int *height ) const override;
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override;
+    virtual void DestroyClippingRegion() override;
 
 protected:
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Don't use OSXGetOrigin()")
+    virtual wxPoint OSXGetOrigin() const override;
+#endif // WXWIN_COMPATIBILITY_3_2
+
     bool m_release;
     int m_width;
     int m_height;
+    wxPoint m_origin;
 
     wxDECLARE_CLASS(wxWindowDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);

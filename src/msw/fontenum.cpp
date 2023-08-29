@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_FONTENUM
 
@@ -143,16 +140,16 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 
 void wxFontEnumeratorHelper::DoEnumerate()
 {
-    HDC hDC = ::GetDC(NULL);
+    HDC hDC = ::GetDC(nullptr);
 
     LOGFONT lf;
     lf.lfCharSet = (BYTE)m_charset;
     wxStrlcpy(lf.lfFaceName, m_facename.c_str(), WXSIZEOF(lf.lfFaceName));
     lf.lfPitchAndFamily = 0;
     ::EnumFontFamiliesEx(hDC, &lf, (FONTENUMPROC)wxFontEnumeratorProc,
-                         (LPARAM)this, 0 /* reserved */) ;
+                         (LPARAM)this, wxRESERVED_PARAM) ;
 
-    ::ReleaseDC(NULL, hDC);
+    ::ReleaseDC(nullptr, hDC);
 }
 
 bool wxFontEnumeratorHelper::OnFont(const LPLOGFONT lf,

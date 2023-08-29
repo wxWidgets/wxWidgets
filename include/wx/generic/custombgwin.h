@@ -61,24 +61,24 @@ public:
     wxCustomBackgroundWindow() { }
 
 protected:
-    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) wxOVERRIDE
+    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) override
     {
         m_bitmapBg = bmp;
 
         if ( m_bitmapBg.IsOk() )
         {
-            BaseWindowClass::Connect
+            BaseWindowClass::Bind
             (
                 wxEVT_ERASE_BACKGROUND,
-                wxEraseEventHandler(wxCustomBackgroundWindow::OnEraseBackground)
+                &wxCustomBackgroundWindow::OnEraseBackground, this
             );
         }
         else
         {
-            BaseWindowClass::Disconnect
+            BaseWindowClass::Unbind
             (
                 wxEVT_ERASE_BACKGROUND,
-                wxEraseEventHandler(wxCustomBackgroundWindow::OnEraseBackground)
+                &wxCustomBackgroundWindow::OnEraseBackground, this
             );
         }
     }

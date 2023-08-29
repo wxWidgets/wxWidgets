@@ -24,7 +24,7 @@ class wxScopedArray
 public:
     typedef T element_type;
 
-    explicit wxScopedArray(T * array = NULL) : m_array(array) { }
+    explicit wxScopedArray(T * array = nullptr) : m_array(array) { }
     explicit wxScopedArray(size_t count) : m_array(new T[count]) { }
 
     ~wxScopedArray() { delete [] m_array; }
@@ -34,10 +34,10 @@ public:
     typedef T *(wxScopedArray<T>::*unspecified_bool_type)() const;
     operator unspecified_bool_type() const
     {
-        return m_array ? &wxScopedArray<T>::get : NULL;
+        return m_array ? &wxScopedArray<T>::get : nullptr;
     }
 
-    void reset(T *array = NULL)
+    void reset(T *array = nullptr)
     {
         if ( array != m_array )
         {
@@ -77,15 +77,15 @@ private:                            \
     name & operator=(name const &); \
                                     \
 public:                             \
-    explicit name(T * p = NULL) : m_ptr(p) \
+    explicit name(T * p = nullptr) : m_ptr(p) \
     {}                              \
                                     \
     ~name();                        \
-    void reset(T * p = NULL);       \
+    void reset(T * p = nullptr);       \
                                     \
     T & operator[](long int i) const\
     {                               \
-        wxASSERT(m_ptr != NULL);    \
+        wxASSERT(m_ptr != nullptr);    \
         wxASSERT(i >= 0);           \
         return m_ptr[i];            \
     }                               \

@@ -10,9 +10,6 @@
 
 #if wxUSE_TOGGLEBTN
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/tglbtn.h"
 
@@ -31,8 +28,8 @@ class BitmapToggleButtonTestCase : public CppUnit::TestCase
 public:
     BitmapToggleButtonTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( BitmapToggleButtonTestCase );
@@ -88,7 +85,10 @@ void BitmapToggleButtonTestCase::Click()
     CPPUNIT_ASSERT(m_button->GetValue());
 
     clicked.Clear();
+
+#ifdef __WXMSW__
     wxMilliSleep(1000);
+#endif
 
     sim.MouseClick();
     wxYield();

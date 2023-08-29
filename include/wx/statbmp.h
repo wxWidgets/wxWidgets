@@ -16,7 +16,7 @@
 #if wxUSE_STATBMP
 
 #include "wx/control.h"
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/icon.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticBitmapNameStr[];
@@ -37,27 +37,27 @@ public:
     virtual ~wxStaticBitmapBase();
 
     // our interface
-    virtual void SetIcon(const wxIcon& icon) = 0;
-    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
-    virtual wxBitmap GetBitmap() const = 0;
-    virtual wxIcon GetIcon() const /* = 0 -- should be pure virtual */
-    {
-        // stub it out here for now as not all ports implement it (but they
-        // should)
-        return wxIcon();
-    }
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) = 0;
+    virtual wxBitmap GetBitmap() const;
+
+    virtual void SetIcon(const wxIcon& icon);
+    virtual wxIcon GetIcon() const;
+
     virtual void SetScaleMode(ScaleMode WXUNUSED(scaleMode)) { }
     virtual ScaleMode GetScaleMode() const { return Scale_None; }
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool AcceptsFocus() const override { return false; }
+    virtual bool HasTransparentBackground() override { return true; }
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+
+    // Bitmap bundle passed to ctor or SetBitmap().
+    wxBitmapBundle m_bitmapBundle;
 
     wxDECLARE_NO_COPY_CLASS(wxStaticBitmapBase);
 };
@@ -66,12 +66,8 @@ protected:
     #include "wx/univ/statbmp.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/statbmp.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/statbmp.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/statbmp.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/statbmp.h"
+    #include "wx/gtk/statbmp.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/statbmp.h"
 #elif defined(__WXQT__)

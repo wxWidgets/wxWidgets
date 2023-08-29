@@ -15,10 +15,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -116,10 +112,10 @@ Life::Life()
     // pattern data
     m_numcells    = 0;
     m_boxes       = new LifeCellBox *[HASHSIZE];
-    m_head        = NULL;
-    m_available   = NULL;
+    m_head        = nullptr;
+    m_available   = nullptr;
     for (int i = 0; i < HASHSIZE; i++)
-        m_boxes[i] = NULL;
+        m_boxes[i] = nullptr;
 
     // state vars for BeginFind & FindMore
     m_cells       = new LifeCell[CELLSARRAYSIZE];
@@ -145,7 +141,7 @@ void Life::Clear()
 
     // clear the hash table pointers
     for (int i = 0; i < HASHSIZE; i++)
-        m_boxes[i] = NULL;
+        m_boxes[i] = nullptr;
 
     // free used boxes
     c = m_head;
@@ -155,7 +151,7 @@ void Life::Clear()
         delete c;
         c = nc;
     }
-    m_head = NULL;
+    m_head = nullptr;
 
     // free available boxes
     c = m_available;
@@ -165,7 +161,7 @@ void Life::Clear()
         delete c;
         c = nc;
     }
-    m_available = NULL;
+    m_available = nullptr;
 
     // reset state
     m_name        = wxEmptyString;
@@ -299,7 +295,7 @@ LifeCellBox* Life::CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv)
 
 // LinkBox:
 //  Returns a pointer to the box (x, y); if it didn't exist yet,
-//  it returns NULL or creates a new one, depending on the value
+//  it returns nullptr or creates a new one, depending on the value
 //  of the 'create' parameter.
 //
 LifeCellBox* Life::LinkBox(wxInt32 x, wxInt32 y, bool create)
@@ -316,7 +312,7 @@ LifeCellBox* Life::LinkBox(wxInt32 x, wxInt32 y, bool create)
         if ((c->m_x == x) && (c->m_y == y)) return c;
 
     // if not found, and (create == true), create a new one
-    return create? CreateBox(x, y, hv) : (LifeCellBox*) NULL;
+    return create? CreateBox(x, y, hv) : nullptr;
 }
 
 // KillBox:
@@ -342,10 +338,10 @@ void Life::KillBox(LifeCellBox *c)
     // update neighbours
     if (c->m_next) c->m_next->m_prev = c->m_prev;
     if (c->m_hnext) c->m_hnext->m_hprev = c->m_hprev;
-    if (c->m_up) c->m_up->m_dn = NULL;
-    if (c->m_dn) c->m_dn->m_up = NULL;
-    if (c->m_lf) c->m_lf->m_rt = NULL;
-    if (c->m_rt) c->m_rt->m_lf = NULL;
+    if (c->m_up) c->m_up->m_dn = nullptr;
+    if (c->m_dn) c->m_dn->m_up = nullptr;
+    if (c->m_lf) c->m_lf->m_rt = nullptr;
+    if (c->m_rt) c->m_rt->m_lf = nullptr;
 
     // append to the list of available boxes
     c->m_next = m_available;
@@ -519,7 +515,7 @@ bool Life::FindMore(LifeCell *cells[], size_t *ncells)
         for ( ; m_y <= m_y1; m_y += 8, m_x = m_x0)
             for ( ; m_x <= m_x1; m_x += 8)
             {
-                if ((c = LinkBox(m_x, m_y, false)) == NULL)
+                if ((c = LinkBox(m_x, m_y, false)) == nullptr)
                     continue;
 
                 // check whether there is enough space left in the array
@@ -544,7 +540,7 @@ bool Life::FindMore(LifeCell *cells[], size_t *ncells)
         for ( ; m_y <= m_y1; m_y += 8, m_x = m_x0)
             for ( ; m_x <= m_x1; m_x += 8)
             {
-                if ((c = LinkBox(m_x, m_y, false)) == NULL)
+                if ((c = LinkBox(m_x, m_y, false)) == nullptr)
                     continue;
 
                 // check whether there is enough space left in the array
@@ -584,7 +580,7 @@ extern int g_tab2[];
 bool Life::NextTic()
 {
     LifeCellBox  *c, *up, *dn, *lf, *rt;
-    wxUint32 t1, t2, t3, t4;
+    wxUint32 t1, t2;
     bool     changed = false;
 
     m_numcells = 0;
@@ -833,6 +829,7 @@ bool Life::NextTic()
         t1 = 0;
         t2 = 0;
 
+        wxUint32 t3, t4;
         t3 = c->m_live1;
         c->m_old1 = t3;
 
@@ -925,9 +922,9 @@ class LifeModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(LifeModule);
 
 public:
-    LifeModule() {};
-    bool OnInit();
-    void OnExit();
+    LifeModule() {}
+    bool OnInit() override;
+    void OnExit() override;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(LifeModule, wxModule);

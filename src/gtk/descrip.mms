@@ -2,27 +2,27 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 June 2016                                                        *
+# Date : 17 September 2020                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXUNIVERSAL__
-CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1)/float=ieee\
+CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/ieee=denorm
 .else
-CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/iee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
+CC_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/iee=denorm
 .endif
 .endif
 
@@ -101,7 +101,7 @@ OBJECTS0= \
 	treeentry_gtk.obj,textentry.obj,filectrl.obj,print.obj,win_gtk.obj,\
 	mnemonics.obj,private.obj,assertdlg_gtk.obj,infobar.obj,anybutton.obj,\
 	nonownedwnd.obj,textmeasure.obj,display.obj,activityindicator.obj,\
-	mimetype_gtk.obj
+	mimetype_gtk.obj,image_gtk.obj
 
 SOURCES =\
 	animate.cpp,\
@@ -168,7 +168,7 @@ SOURCES =\
 	window.cpp,\
 	treeentry_gtk.c,textentry.cpp,filectrl.cpp,print.cpp,win_gtk.cpp,\
 	mnemonics.cpp,private.cpp,assertdlg_gtk.cpp,infobar.cpp,anybutton.cpp,\
-	nonownedwnd.cpp,textmeasure.cpp,display.cpp,mimetype.cpp
+	nonownedwnd.cpp,textmeasure.cpp,display.cpp,mimetype.cpp,image_gtk.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -273,3 +273,4 @@ mimetype_gtk.obj : mimetype.cpp
 	copy mimetype.cpp mimetype_gtk.cpp
 	cxx$(CXX_DEFINE)/obj=mimetype_gtk.obj mimetype_gtk.cpp
 	delete mimetype_gtk.cpp;*
+image_gtk.obj : image_gtk.cpp

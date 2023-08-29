@@ -17,37 +17,52 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QTimer>
+#include <QtCore/QEventLoop>
 
 #include <QtWidgets/QApplication>
 
-class wxQtIdleTimer : public QTimer
+class wxQtIdleTimer : public QTimer, public wxRefCounter
 {
 
 public:
-    wxQtIdleTimer( wxQtEventLoopBase *eventLoop );
-    virtual bool eventFilter( QObject * watched, QEvent * event  );
+    wxQtIdleTimer();
+    ~wxQtIdleTimer();
+    virtual bool eventFilter( QObject * watched, QEvent * event  ) override;
 
 private:
     void idle();
-
-private:
-    wxQtEventLoopBase *m_eventLoop;
+    void ScheduleIdleCheck();
 };
 
-wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
+wxQtIdleTimer::wxQtIdleTimer()
 {
-    m_eventLoop = eventLoop;
+    // We need a QCoreApplication for event loops, create it here if it doesn't
+    // already exist as we can't modify wxAppConsole
+    if ( !QCoreApplication::instance() )
+    {
+        new QApplication(wxAppConsole::GetInstance()->argc, wxAppConsole::GetInstance()->argv);
+    }
 
-    connect( this, &QTimer::timeout, this, &wxQtIdleTimer::idle );
-    setSingleShot( true );
-    start( 0 );
+
+    // Pass all events to the idle timer, so it can be restarted each time
+    // an event is received
+    qApp->installEventFilter(this);
+
+    connect(this, &QTimer::timeout, this, &wxQtIdleTimer::idle);
+    setSingleShot(true);
+}
+
+
+wxQtIdleTimer::~wxQtIdleTimer()
+{
+    qApp->removeEventFilter(this);
 }
 
 bool wxQtIdleTimer::eventFilter( QObject *WXUNUSED( watched ), QEvent *WXUNUSED( event ) )
 {
     // Called for each Qt event, start with timeout 0 (run as soon as idle)
     if ( !isActive() )
-        start( 0 );
+       ScheduleIdleCheck();
 
     return false; // Continue handling the event
 }
@@ -57,76 +72,73 @@ void wxQtIdleTimer::idle()
     // Process pending events
     if ( wxTheApp )
         wxTheApp->ProcessPendingEvents();
-    
+
     // Send idle event
-    if ( m_eventLoop->ProcessIdle() )
-        start( 0 );
+    if (wxTheApp->ProcessIdle())
+        ScheduleIdleCheck();
+}
+
+
+namespace
+{
+    wxObjectDataPtr<wxQtIdleTimer> gs_idleTimer;
+}
+
+void wxQtIdleTimer::ScheduleIdleCheck()
+{
+    wxQtEventLoopBase *eventLoop = static_cast<wxQtEventLoopBase*>(wxEventLoop::GetActive());
+    if ( eventLoop )
+        eventLoop->ScheduleIdleCheck();
 }
 
 wxQtEventLoopBase::wxQtEventLoopBase()
 {
-    // We need a QCoreApplication for event loops, create it here if it doesn't
-    // already exist as we can't modify wxAppConsole
-    if ( !QCoreApplication::instance() )
-    {
-        new QApplication( wxAppConsole::GetInstance()->argc, wxAppConsole::GetInstance()->argv );
-    }
-    
     // Create an idle timer to run each time there are no events (timeout = 0)
-    m_qtIdleTimer = new wxQtIdleTimer( this );
+    if ( !gs_idleTimer )
+        gs_idleTimer.reset(new wxQtIdleTimer());
 
-    // Pass all events to the idle timer, so it can be restarted each time
-    // an event is received
-    qApp->installEventFilter( m_qtIdleTimer );
+    m_qtIdleTimer = gs_idleTimer;
+    m_qtEventLoop = new QEventLoop;
 }
 
 wxQtEventLoopBase::~wxQtEventLoopBase()
 {
-    delete m_qtIdleTimer;
+    //Clear the shared timer if this is the only external reference to it
+    if ( gs_idleTimer->GetRefCount() <= 2 )
+        gs_idleTimer.reset(nullptr);
+
+    delete m_qtEventLoop;
 }
 
 void wxQtEventLoopBase::ScheduleExit(int rc)
 {
     wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
     m_shouldExit = true;
-    QCoreApplication::exit( rc );
+    m_qtEventLoop->exit(rc);
 }
 
 int wxQtEventLoopBase::DoRun()
 {
-    int ret;
-
-    // This is placed inside of a loop to take into account nested event loops
-    while ( !m_shouldExit )
-    {
-        // This will print Qt warnins if app already started:
-        // "QCoreApplication::exec: The event loop is already running"
-        // TODO: check the loopLevel (nested) like in wxGTK
-        ret = QCoreApplication::exec();
-        // process pending events (if exec was started previously)
-        // TODO: use a real new QEventLoop() ?
-        QCoreApplication::processEvents();
-    }
+    const int ret = m_qtEventLoop->exec();
     OnExit();
     return ret;
 }
 
 bool wxQtEventLoopBase::Pending() const
 {
-    return QCoreApplication::hasPendingEvents();
+    QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
+    return instance->hasPendingEvents();
 }
 
 bool wxQtEventLoopBase::Dispatch()
 {
-    QCoreApplication::processEvents();
-
+    m_qtEventLoop->processEvents();
     return true;
 }
 
 int wxQtEventLoopBase::DispatchTimeout(unsigned long timeout)
 {
-    QCoreApplication::processEvents( QEventLoop::AllEvents, timeout );
-
+    m_qtEventLoop->processEvents(QEventLoop::AllEvents, timeout);
     return true;
 }
 
@@ -139,11 +151,24 @@ void wxQtEventLoopBase::WakeUp()
 
 void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
 {
-    while (wxTheApp && wxTheApp->Pending())
-        // TODO: implement event filtering using the eventsToProcess mask
-        wxTheApp->Dispatch();
+
+    QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents;
+
+    if ( !(eventsToProcess & wxEVT_CATEGORY_USER_INPUT) )
+        flags |= QEventLoop::ExcludeUserInputEvents;
+
+    if ( !(eventsToProcess & wxEVT_CATEGORY_SOCKET) )
+        flags |= QEventLoop::ExcludeSocketNotifiers;
+
+    m_qtEventLoop->processEvents(flags);
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);
+}
+
+void wxQtEventLoopBase::ScheduleIdleCheck()
+{
+    if ( IsInsideRun() && !m_shouldExit )
+        m_qtIdleTimer->start(0);
 }
 
 #if wxUSE_EVENTLOOP_SOURCE
@@ -183,19 +208,19 @@ public:
             m_reader = new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnReadWaiting>
                 (fd, QSocketNotifier::Read, handler);
         else
-            m_reader = NULL;
+            m_reader = nullptr;
 
         if ( flags & wxEVENT_SOURCE_OUTPUT )
             m_writer = new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnWriteWaiting>
                 (fd, QSocketNotifier::Write, handler);
         else
-            m_writer = NULL;
+            m_writer = nullptr;
 
         if ( flags & wxEVENT_SOURCE_EXCEPTION )
             m_exception = new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnExceptionWaiting>
                 (fd, QSocketNotifier::Exception, handler);
         else
-            m_exception = NULL;
+            m_exception = nullptr;
     }
 
     virtual ~wxQtEventLoopSource()
@@ -214,7 +239,7 @@ class wxQtEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 {
 public:
     wxEventLoopSource*
-    AddSourceForFD(int fd, wxEventLoopSourceHandler* handler, int flags)
+    AddSourceForFD(int fd, wxEventLoopSourceHandler* handler, int flags) override
     {
         return new wxQtEventLoopSource(fd, handler, flags);
     }
@@ -239,16 +264,6 @@ wxEventLoopSourcesManagerBase* wxAppTraits::GetEventLoopSourcesManager()
 
 #endif
 
-wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags)
-{
-    wxGUIAppTraits *AppTraits = dynamic_cast<wxGUIAppTraits *>(wxApp::GetTraitsIfExists());
-
-    if ( AppTraits )
-        return AppTraits->GetEventLoopSourcesManager()->AddSourceForFD(fd, handler, flags);
-
-    return NULL;
-}
-
 #endif // wxUSE_EVENTLOOP_SOURCE
 
 //#############################################################################
@@ -258,17 +273,5 @@ wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHa
 wxGUIEventLoop::wxGUIEventLoop()
 {
 }
-
-#else // !wxUSE_GUI
-
-//#############################################################################
-
-#if wxUSE_CONSOLE_EVENTLOOP
-
-wxConsoleEventLoop::wxConsoleEventLoop()
-{
-}
-
-#endif // wxUSE_CONSOLE_EVENTLOOP
 
 #endif // wxUSE_GUI

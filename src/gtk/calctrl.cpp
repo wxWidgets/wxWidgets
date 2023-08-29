@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CALENDARCTRL
 
@@ -19,7 +16,7 @@
 
 #include "wx/calctrl.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 extern "C" {
 
@@ -82,9 +79,9 @@ bool wxGtkCalendarCtrl::Create(wxWindow *parent,
     SetDate(date.IsValid() ? date : wxDateTime::Today());
 
     if (style & wxCAL_NO_MONTH_CHANGE)
-        g_object_set (G_OBJECT (m_widget), "no-month-change", true, NULL);
+        g_object_set (G_OBJECT (m_widget), "no-month-change", true, nullptr);
     if (style & wxCAL_SHOW_WEEK_NUMBERS)
-        g_object_set (G_OBJECT (m_widget), "show-week-numbers", true, NULL);
+        g_object_set (G_OBJECT (m_widget), "show-week-numbers", true, nullptr);
 
     g_signal_connect_after(m_widget, "day-selected",
                            G_CALLBACK (gtk_day_selected_callback),
@@ -190,7 +187,7 @@ bool wxGtkCalendarCtrl::EnableMonthChange(bool enable)
     if ( !wxCalendarCtrlBase::EnableMonthChange(enable) )
         return false;
 
-    g_object_set (G_OBJECT (m_widget), "no-month-change", !enable, NULL);
+    g_object_set (G_OBJECT (m_widget), "no-month-change", !enable, nullptr);
 
     return true;
 }
@@ -198,7 +195,9 @@ bool wxGtkCalendarCtrl::EnableMonthChange(bool enable)
 
 bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
 {
-    if ( date.IsValid() && !IsInValidRange(date) )
+    wxCHECK_MSG( date.IsValid(), false, "invalid date" );
+
+    if ( !IsInValidRange(date) )
         return false;
 
     g_signal_handlers_block_by_func(m_widget,

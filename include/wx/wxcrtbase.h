@@ -126,7 +126,7 @@
 
 /* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
    And we need to declare it manually for MinGW in strict ANSI mode. */
-#if (defined(__VISUALC__) && __VISUALC__ >= 1400)
+#if defined(__VISUALC__)
     #define wxCRT_StrdupA _strdup
 #elif defined(__MINGW32__)
     wxDECL_FOR_STRICT_MINGW32(char*, _strdup, (const char *))
@@ -179,34 +179,19 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
     #define wxCRT_StrtollW   _wcstoi64
     #define wxCRT_StrtoullW  _wcstoui64
 #else
-    /* Both of these functions are implemented in C++11 compilers */
-    #if defined(__cplusplus) && __cplusplus >= 201103L
-        #ifndef HAVE_STRTOULL
-            #define HAVE_STRTOULL
-        #endif
-        #ifndef HAVE_WCSTOULL
-            #define HAVE_WCSTOULL
-        #endif
-    #endif
+    wxDECL_FOR_STRICT_MINGW32(long long, strtoll, (const char*, char**, int))
+    wxDECL_FOR_STRICT_MINGW32(unsigned long long, strtoull, (const char*, char**, int))
 
-    #ifdef HAVE_STRTOULL
-        wxDECL_FOR_STRICT_MINGW32(long long, strtoll, (const char*, char**, int))
-        wxDECL_FOR_STRICT_MINGW32(unsigned long long, strtoull, (const char*, char**, int))
-
-        #define wxCRT_StrtollA   strtoll
-        #define wxCRT_StrtoullA  strtoull
-    #endif /* HAVE_STRTOULL */
-    #ifdef HAVE_WCSTOULL
-        /* assume that we have wcstoull(), which is also C99, too */
-        #define wxCRT_StrtollW   wcstoll
-        #define wxCRT_StrtoullW  wcstoull
-    #endif /* HAVE_WCSTOULL */
+    #define wxCRT_StrtollA   strtoll
+    #define wxCRT_StrtoullA  strtoull
+    #define wxCRT_StrtollW   wcstoll
+    #define wxCRT_StrtoullW  wcstoull
 #endif
 
 /*
-    Only VC8 and later provide strnlen() and wcsnlen() functions under Windows.
+    Only MSVC provides strnlen() and wcsnlen() functions under Windows.
  */
-#if wxCHECK_VISUALC_VERSION(8)
+#ifdef __VISUALC__
     #ifndef HAVE_STRNLEN
         #define HAVE_STRNLEN
     #endif
@@ -231,11 +216,7 @@ extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int 
 #endif
 
 /* define wxCRT_StricmpA/W and wxCRT_StrnicmpA/W for various compilers */
-
-#if defined(__BORLANDC__)
-    #define wxCRT_StricmpA stricmp
-    #define wxCRT_StrnicmpA strnicmp
-#elif defined(__VISUALC__) || defined(__MINGW32__)
+#if defined(__VISUALC__) || defined(__MINGW32__)
     /*
         Due to MinGW 5.3 bug (https://sourceforge.net/p/mingw/bugs/2322/),
         _stricmp() and _strnicmp() are not declared in its standard headers
@@ -287,19 +268,6 @@ WXDLLIMPEXP_BASE int wxCRT_StrncmpW(const wchar_t *s1, const wchar_t *s2, size_t
 
 #ifdef __cplusplus
 }
-#endif
-
-/* FIXME-UTF8: remove this once we are Unicode only */
-#if wxUSE_UNICODE
-    #define wxCRT_StrlenNative  wxCRT_StrlenW
-    #define wxCRT_StrncmpNative wxCRT_StrncmpW
-    #define wxCRT_ToupperNative wxCRT_ToupperW
-    #define wxCRT_TolowerNative wxCRT_TolowerW
-#else
-    #define wxCRT_StrlenNative  wxCRT_StrlenA
-    #define wxCRT_StrncmpNative wxCRT_StrncmpA
-    #define wxCRT_ToupperNative toupper
-    #define wxCRT_TolowerNative tolower
 #endif
 
 #ifndef wxCRT_StrcatW
@@ -432,7 +400,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 
 /* these functions are only needed in the form used for filenames (i.e. char*
    on Unix, wchar_t* on Windows), so we don't need to use A/W suffix: */
-#if wxMBFILES || !wxUSE_UNICODE /* ANSI filenames */
+#if wxMBFILES /* ANSI filenames */
 
     #define wxCRT_Fopen   fopen
     #define wxCRT_Freopen freopen
@@ -504,7 +472,7 @@ WXDLLIMPEXP_BASE int wxCRT_FputcW(wchar_t wc, FILE *stream);
    ------------------------------------------------------------------------- */
 
 #define wxCRT_GetenvA           getenv
-#ifdef _tgetenv
+#ifdef wxHAVE_TCHAR_SUPPORT
     #define wxCRT_GetenvW       _wgetenv
 #endif
 
@@ -514,8 +482,7 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
 
 
 #define wxCRT_SystemA               system
-/* mingw32 doesn't provide _tsystem() or _wsystem(): */
-#if defined(_tsystem)
+#ifdef wxHAVE_TCHAR_SUPPORT
     #define  wxCRT_SystemW          _wsystem
 #endif
 
@@ -532,9 +499,9 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     /* _wtof doesn't exist */
 #else
 #ifndef __VMS
-    #define wxCRT_AtofW(s)         wcstod(s, NULL)
+    #define wxCRT_AtofW(s)         wcstod(s, nullptr)
 #endif
-    #define wxCRT_AtolW(s)         wcstol(s, NULL, 10)
+    #define wxCRT_AtolW(s)         wcstol(s, nullptr, 10)
     /* wcstoi doesn't exist */
 #endif
 
@@ -599,7 +566,7 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
 #define wxCRT_IsxdigitW(c)  iswxdigit(c)
 
 #ifdef __GLIBC__
-    #if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
+    #if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
         /* /usr/include/wctype.h incorrectly declares translations */
         /* tables which provokes tons of compile-time warnings -- try */
         /* to correct this */
@@ -647,10 +614,10 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
 #ifdef __cplusplus
 
 /* NB: this belongs to wxcrt.h and not this header, but it makes life easier
- *     for buffer.h and stringimpl.h (both of which must be included before
- *     string.h, which is required by wxcrt.h) to have them here: */
+ *     for buffer.h which must be included before string.h, which is required
+ *     by wxcrt.h, to have them here: */
 
-/* safe version of strlen() (returns 0 if passed NULL pointer) */
+/* safe version of strlen() (returns 0 if passed null pointer) */
 inline size_t wxStrlen(const char *s) { return s ? wxCRT_StrlenA(s) : 0; }
 inline size_t wxStrlen(const wchar_t *s) { return s ? wxCRT_StrlenW(s) : 0; }
 #ifndef wxWCHAR_T_IS_WXCHAR16

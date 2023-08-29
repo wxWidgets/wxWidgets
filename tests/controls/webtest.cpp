@@ -10,378 +10,435 @@
 
 #if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "testableframe.h"
-#include "wx/uiaction.h"
 #include "wx/webview.h"
 #include "asserthelper.h"
 #if wxUSE_WEBVIEW_IE
     #include "wx/msw/webview_ie.h"
 #endif
-
-class WebTestCase : public CppUnit::TestCase
-{
-public:
-    WebTestCase() { }
-
-    void setUp();
-    void tearDown();
-
-private:
-    CPPUNIT_TEST_SUITE( WebTestCase );
-        CPPUNIT_TEST( Title );
-        CPPUNIT_TEST( Url );
-        CPPUNIT_TEST( History );
-#if !wxUSE_WEBVIEW_WEBKIT2
-        //This is not implemented on WEBKIT2. See implementation.
-        CPPUNIT_TEST( HistoryEnable );
-        CPPUNIT_TEST( HistoryClear );
+#if wxUSE_WEBVIEW_WEBKIT2
+    #include "wx/stopwatch.h"
 #endif
-        CPPUNIT_TEST( HistoryList );
-        CPPUNIT_TEST( Editable );
-        CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( Zoom );
-        CPPUNIT_TEST( RunScript );
-        CPPUNIT_TEST( SetPage );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Title();
-    void Url();
-    void History();
-    void HistoryEnable();
-    void HistoryClear();
-    void HistoryList();
-    void Editable();
-    void Selection();
-    void Zoom();
-    void RunScript();
-    void SetPage();
-    void LoadUrl(int times = 1);
-
-    wxWebView* m_browser;
-    EventCounter* m_loaded;
-
-    wxDECLARE_NO_COPY_CLASS(WebTestCase);
-};
 
 //Convenience macro
-#define ENSURE_LOADED WX_ASSERT_EVENT_OCCURS_IN((*m_loaded), 1, 1000)
+#define ENSURE_LOADED CHECK( m_loaded->WaitEvent() )
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( WebTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WebTestCase, "WebTestCase" );
-
-void WebTestCase::setUp()
+class WebViewTestCase
 {
-    m_browser = wxWebView::New();
-    m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
+public:
+    WebViewTestCase()
+        : m_browser(wxWebView::New()),
+          m_loaded(new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED))
+    {
+#ifdef __WXMSW__
+        if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+        {
+            // The blank page does not have an empty title with edge
+            m_blankTitle = "about:blank";
+            // Edge does not support about: url use a different URL instead
+            m_alternateHistoryURL = "about:blank";
+        }
+        else
+#endif
+            m_alternateHistoryURL = "about:";
+    }
+
+    ~WebViewTestCase()
+    {
+        delete m_loaded;
+        delete m_browser;
+    }
+
+protected:
+    void LoadUrl(int times = 1)
+    {
+        //We alternate between urls as otherwise webkit merges them in the history
+        //we use about and about blank to avoid the need for a network connection
+        for(int i = 0; i < times; i++)
+        {
+            if(i % 2 == 1)
+                m_browser->LoadURL("about:blank");
+            else
+                m_browser->LoadURL(m_alternateHistoryURL);
+            ENSURE_LOADED;
+        }
+    }
+
+    void OnScriptResult(const wxWebViewEvent& evt)
+    {
+        m_asyncScriptResult = (evt.IsError()) ? 0 : 1;
+        m_asyncScriptString = evt.GetString();
+    }
+
+    void RunAsyncScript(const wxString& javascript)
+    {
+        m_browser->Bind(wxEVT_WEBVIEW_SCRIPT_RESULT, &WebViewTestCase::OnScriptResult, this);
+        m_asyncScriptResult = -1;
+        m_browser->RunScriptAsync(javascript);
+        while (m_asyncScriptResult == -1)
+            wxYield();
+        m_browser->Unbind(wxEVT_WEBVIEW_SCRIPT_RESULT, &WebViewTestCase::OnScriptResult, this);
+    }
+
+    wxWebView* const m_browser;
+    EventCounter* const m_loaded;
+    wxString m_blankTitle;
+    wxString m_alternateHistoryURL;
+    int m_asyncScriptResult;
+    wxString m_asyncScriptString;
+};
+
+TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
+{
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    wxString value;
+    if ( !wxGetEnv("wxTEST_WEBVIEW_GTK2", &value) || value != "1" )
+    {
+        WARN("Skipping WebView tests known to fail with wxGTK 2, set "
+             "wxTEST_WEBVIEW_GTK2=1 to force running them.");
+        return;
+    }
+#endif
 
     m_browser -> Create(wxTheApp->GetTopWindow(), wxID_ANY);
     ENSURE_LOADED;
-}
 
-void WebTestCase::tearDown()
-{
-    wxDELETE(m_loaded);
-    wxDELETE(m_browser);
-}
-
-void WebTestCase::LoadUrl(int times)
-{
-    //We alternate between urls as otherwise webkit merges them in the history
-    //we use about and about blank to avoid the need for a network connection
-    for(int i = 0; i < times; i++)
+    SECTION("Title")
     {
-        if(i % 2 == 1)
-            m_browser->LoadURL("about:blank");
-        else
-            m_browser->LoadURL("about:");
+        CHECK(m_browser->GetCurrentTitle() == "");
+
+        //Test title after loading raw html
+        m_browser->SetPage("<html><title>Title</title><body>Text</body></html>", "");
         ENSURE_LOADED;
-    }
-}
+        CHECK(m_browser->GetCurrentTitle() == "Title");
 
-void WebTestCase::Title()
-{
-    CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
-
-    //Test title after loading raw html
-    m_browser->SetPage("<html><title>Title</title><body>Text</body></html>", "");
-    ENSURE_LOADED;
-    CPPUNIT_ASSERT_EQUAL("Title", m_browser->GetCurrentTitle());
-
-    //Test title after loading a url, we yield to let events process
-    LoadUrl();
-    CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
-}
-
-void WebTestCase::Url()
-{
-    CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
-
-    //After first loading about:blank the next in the sequence is about:
-    LoadUrl();
-    CPPUNIT_ASSERT_EQUAL("about:", m_browser->GetCurrentURL());
-}
-
-void WebTestCase::History()
-{
-    LoadUrl(3);
-
-    CPPUNIT_ASSERT(m_browser->CanGoBack());
-    CPPUNIT_ASSERT(!m_browser->CanGoForward());
-
-    m_browser->GoBack();
-    ENSURE_LOADED;
-
-    CPPUNIT_ASSERT(m_browser->CanGoBack());
-    CPPUNIT_ASSERT(m_browser->CanGoForward());
-
-    m_browser->GoBack();
-    ENSURE_LOADED;
-    m_browser->GoBack();
-    ENSURE_LOADED;
-
-    //We should now be at the start of the history
-    CPPUNIT_ASSERT(!m_browser->CanGoBack());
-    CPPUNIT_ASSERT(m_browser->CanGoForward());
-}
-
-void WebTestCase::HistoryEnable()
-{
-    LoadUrl();
-    m_browser->EnableHistory(false);
-
-    CPPUNIT_ASSERT(!m_browser->CanGoForward());
-    CPPUNIT_ASSERT(!m_browser->CanGoBack());
-
-    LoadUrl();
-
-    CPPUNIT_ASSERT(!m_browser->CanGoForward());
-    CPPUNIT_ASSERT(!m_browser->CanGoBack());
-}
-
-void WebTestCase::HistoryClear()
-{
-    LoadUrl(2);
-
-    //Now we are in the 'middle' of the history
-    m_browser->GoBack();
-    ENSURE_LOADED;
-
-    CPPUNIT_ASSERT(m_browser->CanGoForward());
-    CPPUNIT_ASSERT(m_browser->CanGoBack());
-
-    m_browser->ClearHistory();
-
-    CPPUNIT_ASSERT(!m_browser->CanGoForward());
-    CPPUNIT_ASSERT(!m_browser->CanGoBack());
-}
-
-void WebTestCase::HistoryList()
-{
-    LoadUrl(2);
-    m_browser->GoBack();
-    ENSURE_LOADED;
-
-    CPPUNIT_ASSERT_EQUAL(1, m_browser->GetBackwardHistory().size());
-    CPPUNIT_ASSERT_EQUAL(1, m_browser->GetForwardHistory().size());
-
-    m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
-    ENSURE_LOADED;
-
-    CPPUNIT_ASSERT(!m_browser->CanGoForward());
-    CPPUNIT_ASSERT_EQUAL(2, m_browser->GetBackwardHistory().size());
-}
-
-void WebTestCase::Editable()
-{
-    CPPUNIT_ASSERT(!m_browser->IsEditable());
-
-    m_browser->SetEditable(true);
-
-    CPPUNIT_ASSERT(m_browser->IsEditable());
-
-    m_browser->SetEditable(false);
-
-    CPPUNIT_ASSERT(!m_browser->IsEditable());
-}
-
-void WebTestCase::Selection()
-{
-    m_browser->SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
-    ENSURE_LOADED;
-    CPPUNIT_ASSERT(!m_browser->HasSelection());
-
-    m_browser->SelectAll();
-
-    CPPUNIT_ASSERT(m_browser->HasSelection());
-    CPPUNIT_ASSERT_EQUAL("Some strong text", m_browser->GetSelectedText());
-
-    // The web engine doesn't necessarily represent the HTML in the same way as
-    // we used above, e.g. IE uses upper case for all the tags while WebKit
-    // under OS X inserts plenty of its own <span> tags, so don't test for
-    // equality and just check that the source contains things we'd expect it
-    // to.
-    const wxString selSource = m_browser->GetSelectedSource();
-    WX_ASSERT_MESSAGE
-    (
-        ("Unexpected selection source: \"%s\"", selSource),
-        selSource.Lower().Matches("*some*<strong*strong</strong>*text*")
-    );
-
-    m_browser->ClearSelection();
-    CPPUNIT_ASSERT(!m_browser->HasSelection());
-}
-
-void WebTestCase::Zoom()
-{
-    if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
-    {
-        m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
-        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_LAYOUT, m_browser->GetZoomType());
-
-        m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
-        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TINY, m_browser->GetZoom());
+        //Test title after loading a url, we yield to let events process
+        LoadUrl();
+        CHECK(m_browser->GetCurrentTitle() == m_blankTitle);
     }
 
-    //Reset the zoom level
-    m_browser->SetZoom(wxWEBVIEW_ZOOM_MEDIUM);
-
-    if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT))
+    SECTION("URL")
     {
-        m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
-        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_TEXT, m_browser->GetZoomType());
+        CHECK(m_browser->GetCurrentURL() == "about:blank");
 
-        m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
-        CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TINY, m_browser->GetZoom());
+        //After first loading about:blank the next in the sequence is about:
+        LoadUrl();
+        CHECK(m_browser->GetCurrentURL() == m_alternateHistoryURL);
     }
-}
 
-void WebTestCase::RunScript()
-{
-    m_browser->
-        SetPage("<html><head><script></script></head><body></body></html>", "");
-    ENSURE_LOADED;
-
-    wxString result;
-#if wxUSE_WEBVIEW_IE
-    CPPUNIT_ASSERT(wxWebViewIE::MSWSetModernEmulationLevel());
-
-    // Define a specialized scope guard ensuring that we reset the emulation
-    // level to its default value even if any asserts below fail.
-    class ResetEmulationLevel
+    SECTION("History")
     {
-    public:
-        ResetEmulationLevel()
+        LoadUrl(3);
+
+        CHECK(m_browser->CanGoBack());
+        CHECK(!m_browser->CanGoForward());
+
+        m_browser->GoBack();
+        ENSURE_LOADED;
+
+        CHECK(m_browser->CanGoBack());
+        CHECK(m_browser->CanGoForward());
+
+        m_browser->GoBack();
+        ENSURE_LOADED;
+        m_browser->GoBack();
+        ENSURE_LOADED;
+
+        //We should now be at the start of the history
+        CHECK(!m_browser->CanGoBack());
+        CHECK(m_browser->CanGoForward());
+    }
+
+#if !wxUSE_WEBVIEW_WEBKIT2 && !defined(__WXOSX__)
+    SECTION("HistoryEnable")
+    {
+        LoadUrl();
+        m_browser->EnableHistory(false);
+
+        CHECK(!m_browser->CanGoForward());
+        CHECK(!m_browser->CanGoBack());
+
+        LoadUrl();
+
+        CHECK(!m_browser->CanGoForward());
+        CHECK(!m_browser->CanGoBack());
+    }
+#endif
+
+#if !wxUSE_WEBVIEW_WEBKIT2 && !defined(__WXOSX__)
+    SECTION("HistoryClear")
+    {
+        LoadUrl(2);
+
+        //Now we are in the 'middle' of the history
+        m_browser->GoBack();
+        ENSURE_LOADED;
+
+        CHECK(m_browser->CanGoForward());
+        CHECK(m_browser->CanGoBack());
+
+        m_browser->ClearHistory();
+
+        CHECK(!m_browser->CanGoForward());
+        CHECK(!m_browser->CanGoBack());
+    }
+#endif
+
+    SECTION("HistoryList")
+    {
+        LoadUrl(2);
+        m_browser->GoBack();
+        ENSURE_LOADED;
+
+        CHECK(m_browser->GetBackwardHistory().size() == 1);
+        CHECK(m_browser->GetForwardHistory().size() == 1);
+
+        m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
+        ENSURE_LOADED;
+
+        CHECK(!m_browser->CanGoForward());
+        CHECK(m_browser->GetBackwardHistory().size() == 2);
+    }
+
+#if !defined(__WXOSX__) && (!defined(wxUSE_WEBVIEW_EDGE) || !wxUSE_WEBVIEW_EDGE)
+    SECTION("Editable")
+    {
+        CHECK(!m_browser->IsEditable());
+
+        m_browser->SetEditable(true);
+
+        CHECK(m_browser->IsEditable());
+
+        m_browser->SetEditable(false);
+
+        CHECK(!m_browser->IsEditable());
+    }
+#endif
+
+    SECTION("Selection")
+    {
+        m_browser->SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
+        ENSURE_LOADED;
+        CHECK(!m_browser->HasSelection());
+
+        m_browser->SelectAll();
+
+#if wxUSE_WEBVIEW_WEBKIT2
+        // With WebKit SelectAll() sends a request to perform the selection to
+        // another process via proxy and there doesn't seem to be any way to
+        // wait until this request is actually handled, so loop here for some a
+        // bit before giving up.  Avoid calling HasSelection() right away
+        // without wxYielding a bit because this seems to cause the extension
+        // to hang with webkit 2.40.0+.
+        for ( wxStopWatch sw; sw.Time() < 50; )
+            wxYield();
+#endif // wxUSE_WEBVIEW_WEBKIT2
+
+        CHECK(m_browser->HasSelection());
+        CHECK(m_browser->GetSelectedText() == "Some strong text");
+
+#if !defined(__WXOSX__) && (!defined(wxUSE_WEBVIEW_EDGE) || !wxUSE_WEBVIEW_EDGE)
+        // The web engine doesn't necessarily represent the HTML in the same way as
+        // we used above, e.g. IE uses upper case for all the tags while WebKit
+        // under OS X inserts plenty of its own <span> tags, so don't test for
+        // equality and just check that the source contains things we'd expect it
+        // to.
+        const wxString selSource = m_browser->GetSelectedSource();
+        WX_ASSERT_MESSAGE
+        (
+            ("Unexpected selection source: \"%s\"", selSource),
+            selSource.Lower().Matches("*some*<strong*strong</strong>*text*")
+        );
+#endif // !defined(__WXOSX__)
+
+        m_browser->ClearSelection();
+        CHECK(!m_browser->HasSelection());
+    }
+
+    SECTION("Zoom")
+    {
+        if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
         {
-            m_reset = true;
+            m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
+            CHECK(m_browser->GetZoomType() == wxWEBVIEW_ZOOM_TYPE_LAYOUT);
+
+            m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
+            CHECK(m_browser->GetZoom() == wxWEBVIEW_ZOOM_TINY);
         }
 
-        bool DoReset()
-        {
-            m_reset = false;
-            return wxWebViewIE::MSWSetModernEmulationLevel(false);
-        }
+        //Reset the zoom level
+        m_browser->SetZoom(wxWEBVIEW_ZOOM_MEDIUM);
 
-        ~ResetEmulationLevel()
+        if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT))
         {
-            if ( m_reset )
+            m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
+            CHECK(m_browser->GetZoomType() == wxWEBVIEW_ZOOM_TYPE_TEXT);
+
+            m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
+            CHECK(m_browser->GetZoom() == wxWEBVIEW_ZOOM_TINY);
+        }
+    }
+
+    SECTION("RunScript")
+    {
+        m_browser->
+            SetPage("<html><head><script></script></head><body></body></html>", "");
+        ENSURE_LOADED;
+
+        wxString result;
+    #if wxUSE_WEBVIEW_IE && !wxUSE_WEBVIEW_EDGE
+        // Define a specialized scope guard ensuring that we reset the emulation
+        // level to its default value even if any asserts below fail.
+        class ResetEmulationLevel
+        {
+        public:
+            ResetEmulationLevel()
+            {
+                // Allow this to fail because it doesn't work in GitHub Actions
+                // environment, but the tests below still pass there.
+                if ( !wxWebViewIE::MSWSetModernEmulationLevel() )
+                {
+                    WARN("Setting IE modern emulation level failed.");
+                    m_reset = false;
+                }
+                else
+                {
+                    m_reset = true;
+                }
+            }
+
+            void DoReset()
+            {
+                if ( m_reset )
+                {
+                    m_reset = false;
+                    if ( !wxWebViewIE::MSWSetModernEmulationLevel(false) )
+                    {
+                        WARN("Resetting IE modern emulation level failed.");
+                    }
+                }
+            }
+
+            ~ResetEmulationLevel()
+            {
                 DoReset();
-        }
+            }
 
-    private:
-        bool m_reset;
-    } resetEmulationLevel;
+        private:
+            bool m_reset;
+        } resetEmulationLevel;
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Bar'; \
-        person.lastName = 'Foo';return person;}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Bar\",\"lastName\":\"Foo\"}", result);
+        CHECK(m_browser->RunScript("function f(){var person = new Object();person.name = 'Bar'; \
+            person.lastName = 'Foo';return person;}f();", &result));
+        CHECK(result == "{\"name\":\"Bar\",\"lastName\":\"Foo\"}");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
-    CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
+        CHECK(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+        CHECK(result == "[\"foo\",\"bar\"]");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
-        var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
-        &result));
-    CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
+        CHECK(m_browser->RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+            var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
+            &result));
+        CHECK(result == "\"2017-10-08T21:30:40.000Z\"");
 
-    CPPUNIT_ASSERT(resetEmulationLevel.DoReset());
-#endif // wxUSE_WEBVIEW_IE
+        resetEmulationLevel.DoReset();
+    #endif // wxUSE_WEBVIEW_IE
 
-    CPPUNIT_ASSERT(m_browser->RunScript("document.write(\"Hello World!\");"));
-    CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
+        CHECK(m_browser->RunScript("document.write(\"Hello World!\");"));
+        CHECK(m_browser->GetPageText() == "Hello World!");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
-    CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
+        CHECK(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
+        CHECK(result == _("Hello World!"));
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(123);", &result));
-    CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
+        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
+        CHECK(result == _("a\'aa\n\rb\tb\\ccc\"ddd\b\fx"));
 
-    CPPUNIT_ASSERT(m_browser->
-        RunScript("function f(a){return a;}f(2.34);", &result));
-    double value;
-    result.ToDouble(&value);
-    CPPUNIT_ASSERT_EQUAL(2.34, value);
+        CHECK(m_browser->RunScript("function f(a){return a;}f(123);", &result));
+        CHECK(wxAtoi(result) == 123);
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(false);", &result));
-    CPPUNIT_ASSERT_EQUAL("false", result);
+        CHECK(m_browser->
+            RunScript("function f(a){return a;}f(2.34);", &result));
+        double value;
+        result.ToDouble(&value);
+        CHECK(value == 2.34);
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; \
-        person.lastName = 'Bar';return person;}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
+        CHECK(m_browser->RunScript("function f(a){return a;}f(false);", &result));
+        CHECK(result == "false");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
-    CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
+        CHECK(m_browser->RunScript("function f(){var person = new Object();person.lastName = 'Bar'; \
+            person.name = 'Foo';return person;}f();", &result));
+        CHECK(result == "{\"lastName\":\"Bar\",\"name\":\"Foo\"}");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("undefined", result);
+        CHECK(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+        CHECK(result == "[\"foo\",\"bar\"]");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){return null;}f();", &result));
-    CPPUNIT_ASSERT_EQUAL("null", result);
+        CHECK(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
+        CHECK(result == "undefined");
 
-    result = "";
-    CPPUNIT_ASSERT(!m_browser->RunScript("int main() { return 0; }", &result));
-    CPPUNIT_ASSERT(!result);
+        CHECK(m_browser->RunScript("function f(){return null;}f();", &result));
+        CHECK(result == "null");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function a() { return eval(\"function b() { \
-        return eval(\\\"function c() { return eval(\\\\\\\"function d() { \
-        return \\\\\\\\\\\\\\\"test\\\\\\\\\\\\\\\"; } d();\\\\\\\"); } \
-        c();\\\"); } b();\"); } a();", &result));
-    CPPUNIT_ASSERT_EQUAL("test", result);
+        result = "";
+        CHECK(!m_browser->RunScript("int main() { return 0; }", &result));
+        CHECK(!result);
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
-        &result));
-    CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
+        CHECK(m_browser->RunScript("function a() { return eval(\"function b() { \
+            return eval(\\\"function c() { return eval(\\\\\\\"function d() { \
+            return \\\\\\\\\\\\\\\"test\\\\\\\\\\\\\\\"; } d();\\\\\\\"); } \
+            c();\\\"); } b();\"); } a();", &result));
+        CHECK(result == "test");
 
-    CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2016 21:30:40'); \
-        var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
-        &result));
-    CPPUNIT_ASSERT_EQUAL("\"2016-10-08T21:30:40.000Z\"", result);
+        CHECK(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
+            &result));
+        CHECK(result == "This is a backslash: \\");
 
-    // Check for errors too.
-    CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error"));
-    CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error", &result));
-    CPPUNIT_ASSERT(!m_browser->RunScript("x.y.z"));
-}
+        CHECK(m_browser->RunScript("function f(){var d = new Date('10/08/2016 21:30:40'); \
+            var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
+            &result));
+        CHECK(result == "\"2016-10-08T21:30:40.000Z\"");
 
-void WebTestCase::SetPage()
-{
-    m_browser->SetPage("<html><body>text</body></html>", "");
-    ENSURE_LOADED;
-    CPPUNIT_ASSERT_EQUAL("text", m_browser->GetPageText());
+        // Check for C++-style comments which used to be broken.
+        CHECK(m_browser->RunScript("function f() {\n"
+                                   "    // A C++ style comment\n"
+                                   "    return 17;\n"
+                                   "}f();", &result));
+        CHECK(result == "17");
 
-    m_browser->SetPage("<html><body>other text</body></html>", "");
-    ENSURE_LOADED;
-    CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
+        // Check for errors too.
+        CHECK(!m_browser->RunScript("syntax(error"));
+        CHECK(!m_browser->RunScript("syntax(error", &result));
+        CHECK(!m_browser->RunScript("x.y.z"));
+    }
+
+    SECTION("RunScriptAsync")
+    {
+#ifdef __WXMSW__
+        // IE doesn't support async script execution
+        if (!wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+            return;
+#endif
+        RunAsyncScript("function f(a){return a;}f('Hello World!');");
+        CHECK(m_asyncScriptResult == 1);
+        CHECK(m_asyncScriptString == "Hello World!");
+
+        RunAsyncScript("int main() { return 0; }");
+        CHECK(m_asyncScriptResult == 0);
+    }
+
+    SECTION("SetPage")
+    {
+        m_browser->SetPage("<html><body>text</body></html>", "");
+        ENSURE_LOADED;
+        CHECK(m_browser->GetPageText() == "text");
+
+        m_browser->SetPage("<html><body>other text</body></html>", "");
+        ENSURE_LOADED;
+        CHECK(m_browser->GetPageText() == "other text");
+    }
 }
 
 #endif //wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)

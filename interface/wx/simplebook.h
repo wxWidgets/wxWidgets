@@ -73,7 +73,7 @@ public:
     /**
         Set the effects to use for showing and hiding the pages.
 
-        This method allows to specify the effects passed to
+        This method allows specifying the effects passed to
         wxWindow::ShowWithEffect() and wxWindow::HideWithEffect() respectively
         when the pages need to be shown or hidden.
 
@@ -102,7 +102,7 @@ public:
     /**
         Set the effect timeout to use for showing and hiding the pages.
 
-        This method allows to configure the timeout arguments passed to
+        This method allows configuring the timeout arguments passed to
         wxWindow::ShowWithEffect() and wxWindow::HideWithEffect() if a
         non-default effect is used.
 

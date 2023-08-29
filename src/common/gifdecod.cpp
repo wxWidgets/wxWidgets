@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS && wxUSE_GIF
 
@@ -26,8 +23,9 @@
 #include <string.h>
 #include "wx/gifdecod.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
+
+#include <memory>
 
 enum
 {
@@ -68,10 +66,6 @@ public:
     wxDECLARE_NO_COPY_CLASS(GIFImage);
 };
 
-wxDECLARE_SCOPED_PTR(GIFImage, GIFImagePtr)
-wxDEFINE_SCOPED_PTR(GIFImage, GIFImagePtr)
-
-
 //---------------------------------------------------------------------------
 // GIFImage constructor
 //---------------------------------------------------------------------------
@@ -84,8 +78,8 @@ GIFImage::GIFImage()
     transparent = 0;
     disposal = wxANIM_DONOTREMOVE;
     delay = -1;
-    p = (unsigned char *) NULL;
-    pal = (unsigned char *) NULL;
+    p = (unsigned char *) nullptr;
+    pal = (unsigned char *) nullptr;
     ncolours = 0;
 }
 
@@ -177,7 +171,7 @@ bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
         }
         else if ( transparency == wxIMAGE_OPTION_GIF_TRANSPARENCY_UNCHANGED )
         {
-            // Leave the GIF exactly as as it was, just adjust (in the least
+            // Leave the GIF exactly as it was, just adjust (in the least
             // noticeable way, by just flipping a single bit) non-transparent
             // pixels colour,
             for (i = 0; i < GetNcolours(frame); i++)
@@ -311,8 +305,9 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
              * an end-of-image symbol (ab_fin) they come up with
              * a zero-length subblock!! We catch this here so
              * that the decoder sees an ab_fin code.
+             * We also need to check if the file doesn't end unexpectedly.
              */
-            if (m_restbyte == 0)
+            if (stream.Eof() || m_restbyte == 0)
             {
                 code = ab_fin;
                 break;
@@ -373,10 +368,10 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     int ab_free;                    // first free position in alphabet
     int ab_max;                     // last possible character in alphabet
     int pass;                       // pass number in interlaced images
-    int pos;                        // index into decompresion stack
+    int pos;                        // index into decompression stack
     unsigned int x, y;              // position in image buffer
 
-    int code, readcode, lastcode, abcabca;
+    int code, lastcode, abcabca;
 
     // these won't change
     ab_clr = (1 << bits);
@@ -399,6 +394,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     do
     {
         // get next code
+        int readcode;
         readcode = code = getcode(stream, ab_bits, ab_fin);
 
         // end of image?
@@ -784,7 +780,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             case GIF_MARKER_SEP:
             {
                 // allocate memory for IMAGEN struct
-                GIFImagePtr pimg(new GIFImage());
+                std::unique_ptr<GIFImage> pimg(new GIFImage());
 
                 wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
 
@@ -865,7 +861,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 
                 // get initial code size from first byte in raster data
                 bits = stream.GetC();
-                if (bits == 0)
+                if (stream.Eof() || bits <= 0)
                     return wxGIF_INVFORMAT;
 
                 // decode image
@@ -887,7 +883,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         }
     }
 
-    if (m_nFrames <= 0)
+    if (m_nFrames == 0)
     {
         Destroy();
         return wxGIF_INVFORMAT;

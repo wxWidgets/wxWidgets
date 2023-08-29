@@ -10,10 +10,9 @@
 
 #include "wx/textctrl.h"
 
-class QTreeWidget;
-class QTreeWidgetItem;
-
-class WXDLLIMPEXP_FWD_CORE wxImageList;
+class wxQtListTreeWidget;
+class wxQtListModel;
+class wxQtVirtualListModel;
 
 class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
 {
@@ -26,7 +25,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxListCtrlNameStr);
+               const wxString& name = wxASCII_STR(wxListCtrlNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
@@ -34,7 +33,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxListCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxListCtrlNameStr));
 
     virtual ~wxListCtrl();
 
@@ -42,31 +41,31 @@ public:
     ////////////////////////////////////////////////////////////////////////////
 
     // Set the control colours
-    bool SetForegroundColour(const wxColour& col);
-    bool SetBackgroundColour(const wxColour& col);
+    bool SetForegroundColour(const wxColour& col) override;
+    bool SetBackgroundColour(const wxColour& col) override;
 
     // Gets information about this column
-    bool GetColumn(int col, wxListItem& info) const;
+    bool GetColumn(int col, wxListItem& info) const override;
 
     // Sets information about this column
-    bool SetColumn(int col, const wxListItem& info);
+    bool SetColumn(int col, const wxListItem& info) override;
 
     // Gets the column width
-    int GetColumnWidth(int col) const;
+    int GetColumnWidth(int col) const override;
 
     // Sets the column width
-    bool SetColumnWidth(int col, int width);
+    bool SetColumnWidth(int col, int width) override;
 
 
     // Gets the column order from its index or index from its order
-    int GetColumnOrder(int col) const;
-    int GetColumnIndexFromOrder(int order) const;
+    int GetColumnOrder(int col) const override;
+    int GetColumnIndexFromOrder(int order) const override;
 
     // Gets the column order for all columns
-    wxArrayInt GetColumnsOrder() const;
+    wxArrayInt GetColumnsOrder() const override;
 
     // Sets the column order for all columns
-    bool SetColumnsOrder(const wxArrayInt& orders);
+    bool SetColumnsOrder(const wxArrayInt& orders) override;
 
 
     // Gets the number of items that can fit vertically in the
@@ -126,10 +125,10 @@ public:
     bool SetItemPosition(long item, const wxPoint& pos);
 
     // Gets the number of items in the list control
-    int GetItemCount() const;
+    int GetItemCount() const override;
 
     // Gets the number of columns in the list control
-    int GetColumnCount() const;
+    int GetColumnCount() const override;
 
     // get the horizontal and vertical components of the item spacing
     wxSize GetItemSpacing() const;
@@ -159,24 +158,22 @@ public:
     // list or report view
     long GetTopItem() const;
 
+    virtual bool HasCheckBoxes() const override;
+    virtual bool EnableCheckBoxes(bool enable = true) override;
+    virtual bool IsItemChecked(long item) const override;
+    virtual void CheckItem(long item, bool check) override;
+
     // Add or remove a single window style
     void SetSingleStyle(long style, bool add = true);
 
     // Set the whole window style
-    void SetWindowStyleFlag(long style);
+    void SetWindowStyleFlag(long style) override;
 
     // Searches for an item, starting from 'item'.
     // item can be -1 to find the first item that matches the
     // specified flags.
     // Returns the item or -1 if unsuccessful.
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const;
-
-    // Gets one of the three image lists
-    wxImageList *GetImageList(int which) const;
-
-    // Sets the image list
-    void SetImageList(wxImageList *imageList, int which);
-    void AssignImageList(wxImageList *imageList, int which);
 
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
@@ -195,10 +192,10 @@ public:
     bool DeleteAllItems();
 
     // Deletes a column
-    bool DeleteColumn(int col);
+    bool DeleteColumn(int col) override;
 
     // Deletes all columns
-    bool DeleteAllColumns();
+    bool DeleteAllColumns() override;
 
     // Clears items, and columns if there are any.
     void ClearAll();
@@ -211,6 +208,8 @@ public:
 
     // Ensures this item is visible
     bool EnsureVisible(long item);
+
+    bool IsVisible(long item) const override;
 
     // Find an item whose label matches this string, starting from the item after 'start'
     // or the beginning if 'start' is -1.
@@ -227,7 +226,7 @@ public:
     // Determines which item (if any) is at the specified point,
     // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
     // Request the subitem number as well at the given coordinate.
-    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
+    long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = nullptr) const;
 
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.
@@ -265,45 +264,29 @@ public:
     // data is arbitrary data to be passed to the sort function.
     bool SortItems(wxListCtrlCompare fn, wxIntPtr data);
 
+    // Sort indicator in header.
+    virtual void ShowSortIndicator(int col, bool ascending = true) override;
+    virtual int GetSortIndicator() const override;
+    virtual bool IsAscendingSortIndicator() const override;
 
-    // these functions are only used for virtual list view controls, i.e. the
-    // ones with wxLC_VIRTUAL style (not currently implemented in wxQT)
-
-    // return the text for the given column of the given item
-    virtual wxString OnGetItemText(long item, long column) const;
-
-    // return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for
-    // details.
-    virtual int OnGetItemImage(long item) const;
-
-    // return the icon for the given item and column.
-    virtual int OnGetItemColumnImage(long item, long column) const;
-
-    // return the attribute for the given item and column (may return NULL if none)
-    virtual wxItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
-    {
-        return OnGetItemAttr(item);
-    }
-
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const override;
 
 protected:
     void Init();
 
     // Implement base class pure virtual methods.
-    long DoInsertColumn(long col, const wxListItem& info);
+    virtual long DoInsertColumn(long col, const wxListItem& info) override;
+    void DoUpdateImages(int which) override;
 
-    QTreeWidgetItem *QtGetItem(int id) const;
+    bool              m_hasCheckBoxes;
 
-    wxImageList *     m_imageListNormal; // The image list for normal icons
-    wxImageList *     m_imageListSmall;  // The image list for small icons
-    wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
-    bool              m_ownsImageListNormal,
-                      m_ownsImageListSmall,
-                      m_ownsImageListState;
 private:
-    QTreeWidget *m_qtTreeWidget;
+    // Allow access to OnGetItemXXX() method from the virtual model class.
+    friend class wxQtVirtualListModel;
+
+
+    wxQtListTreeWidget *m_qtTreeWidget;
+    wxQtListModel *m_model;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };

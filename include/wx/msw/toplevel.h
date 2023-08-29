@@ -29,7 +29,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
-                        const wxString& name = wxFrameNameStr)
+                        const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -42,40 +42,44 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxTopLevelWindowMSW();
 
     // implement base class pure virtuals
-    virtual void SetTitle( const wxString& title) wxOVERRIDE;
-    virtual wxString GetTitle() const wxOVERRIDE;
-    virtual void Maximize(bool maximize = true) wxOVERRIDE;
-    virtual bool IsMaximized() const wxOVERRIDE;
-    virtual void Iconize(bool iconize = true) wxOVERRIDE;
-    virtual bool IsIconized() const wxOVERRIDE;
-    virtual void SetIcons(const wxIconBundle& icons ) wxOVERRIDE;
-    virtual void Restore() wxOVERRIDE;
+    virtual void SetTitle( const wxString& title) override;
+    virtual wxString GetTitle() const override;
+    virtual void Maximize(bool maximize = true) override;
+    virtual bool IsMaximized() const override;
+    virtual void Iconize(bool iconize = true) override;
+    virtual bool IsIconized() const override;
+    virtual void SetIcons(const wxIconBundle& icons ) override;
+    virtual void Restore() override;
+    virtual bool Destroy() override;
 
-    virtual void SetLayoutDirection(wxLayoutDirection dir) wxOVERRIDE;
+    virtual void SetLayoutDirection(wxLayoutDirection dir) override;
 
-    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO) wxOVERRIDE;
+    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO) override;
 
-    virtual bool Show(bool show = true) wxOVERRIDE;
-    virtual void Raise() wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
+    virtual void Raise() override;
 
-    virtual void ShowWithoutActivating() wxOVERRIDE;
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
-    virtual bool IsFullScreen() const wxOVERRIDE { return m_fsIsShowing; }
+    virtual void ShowWithoutActivating() override;
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) override;
+    virtual bool IsFullScreen() const override { return m_fsIsShowing; }
+
+    virtual wxContentProtection GetContentProtection() const override;
+    virtual bool SetContentProtection(wxContentProtection contentProtection) override;
 
     // wxMSW only: EnableCloseButton(false) may be used to remove the "Close"
     // button from the title bar
-    virtual bool EnableCloseButton(bool enable = true) wxOVERRIDE;
-    virtual bool EnableMaximizeButton(bool enable = true) wxOVERRIDE;
-    virtual bool EnableMinimizeButton(bool enable = true) wxOVERRIDE;
+    virtual bool EnableCloseButton(bool enable = true) override;
+    virtual bool EnableMaximizeButton(bool enable = true) override;
+    virtual bool EnableMinimizeButton(bool enable = true) override;
 
     // Set window transparency if the platform supports it
-    virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
-    virtual bool CanSetTransparent() wxOVERRIDE;
+    virtual bool SetTransparent(wxByte alpha) override;
+    virtual bool CanSetTransparent() override;
 
 
     // MSW-specific methods
@@ -87,7 +91,7 @@ public:
     //
     // The pointer returned by this method belongs to the window and will be
     // deleted when the window itself is, do not delete it yourself. May return
-    // NULL if getting the system menu failed.
+    // nullptr if getting the system menu failed.
     wxMenu *MSWGetSystemMenu() const;
 
     // Enable or disable the close button of the specified window.
@@ -100,21 +104,27 @@ public:
     // event handlers
     void OnActivate(wxActivateEvent& event);
 
-    // called by wxWindow whenever it gets focus
-    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
-    wxWindow *GetLastFocus() const { return m_winLastFocused; }
+    // called from wxWidgets code itself only when the pending focus, i.e. the
+    // element which should get focus when this TLW is activated again, changes
+    virtual void WXSetPendingFocus(wxWindow* win) override
+    {
+        m_winLastFocused = win;
+    }
 
     // translate wxWidgets flags to Windows ones
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const override;
 
     // choose the right parent to use with CreateWindow()
-    virtual WXHWND MSWGetParent() const wxOVERRIDE;
+    virtual WXHWND MSWGetParent() const override;
 
     // window proc for the frames
-    WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
+
+    // This function is only for internal use.
+    void MSWSetShowCommand(WXUINT showCmd) { m_showCmd = showCmd; }
 
 protected:
     // common part of all ctors
@@ -132,17 +142,20 @@ protected:
                       const wxPoint& pos,
                       const wxSize& size);
 
-    // common part of Iconize(), Maximize() and Restore()
+    // Just a wrapper around MSW ShowWindow().
     void DoShowWindow(int nShowCmd);
+
+    // Return true if the window is iconized at MSW level, ignoring m_showCmd.
+    bool MSWIsIconized() const;
 
     // override those to return the normal window coordinates even when the
     // window is minimized
-    virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetPosition(int *x, int *y) const override;
+    virtual void DoGetSize(int *width, int *height) const override;
 
     // Top level windows have different freeze semantics on Windows
-    virtual void DoFreeze() wxOVERRIDE;
-    virtual void DoThaw() wxOVERRIDE;
+    virtual void DoFreeze() override;
+    virtual void DoThaw() override;
 
     // helper of SetIcons(): calls gets the icon with the size specified by the
     // given system metrics (SM_C{X|Y}[SM]ICON) from the bundle and sets it
@@ -154,15 +167,18 @@ protected:
     virtual void MSWGetCreateWindowCoords(const wxPoint& pos,
                                           const wxSize& size,
                                           int& x, int& y,
-                                          int& w, int& h) const wxOVERRIDE;
+                                          int& w, int& h) const override;
+
+    // override this one to update our icon on DPI change (not quite the same
+    // thing as font, but close enough...)
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) override;
 
 
-    // is the window currently iconized?
-    bool m_iconized;
-
-    // should the frame be maximized when it will be shown? set by Maximize()
-    // when it is called while the frame is hidden
-    bool m_maximizeOnShow;
+    // This field contains the show command to use when showing the window the
+    // next time and also indicates whether the window should be considered
+    // being iconized or maximized (which may be different from whether it's
+    // actually iconized or maximized at MSW level).
+    WXUINT m_showCmd;
 
     // Data to save/restore when calling ShowFullScreen
     long                  m_fsStyle; // Passed to ShowFullScreen
@@ -172,7 +188,7 @@ protected:
     bool                  m_fsIsShowing;
 
     // Save the current focus to m_winLastFocused if we're not iconized (the
-    // focus is always NULL when we're iconized).
+    // focus is always null when we're iconized).
     void DoSaveLastFocus();
 
     // Restore focus to m_winLastFocused if possible and needed.
@@ -184,8 +200,11 @@ protected:
     wxWindowRef m_winLastFocused;
 
 private:
+    // Part of SetIcons() actually updating the window icons.
+    void DoSetIcons();
 
-    // The system menu: initially NULL but can be set (once) by
+
+    // The system menu: initially nullptr but can be set (once) by
     // MSWGetSystemMenu(). Owned by this window.
     wxMenu *m_menuSystem;
 

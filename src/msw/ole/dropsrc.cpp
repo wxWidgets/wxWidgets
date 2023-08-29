@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-  #pragma hdrstop
-#endif
 
 #if wxUSE_OLE && wxUSE_DRAG_AND_DROP
 
@@ -49,8 +46,8 @@ public:
   virtual ~wxIDropSource() { }
 
   // IDropSource
-  STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState) wxOVERRIDE;
-  STDMETHODIMP GiveFeedback(DWORD dwEffect) wxOVERRIDE;
+  STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState) override;
+  STDMETHODIMP GiveFeedback(DWORD dwEffect) override;
 
     DECLARE_IUNKNOWN_METHODS;
 
@@ -77,7 +74,7 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIDropSource)
 
 wxIDropSource::wxIDropSource(wxDropSource *pDropSource)
 {
-  wxASSERT( pDropSource != NULL );
+  wxASSERT( pDropSource != nullptr );
 
   m_pDropSource = pDropSource;
   m_grfInitKeyState = 0;
@@ -178,7 +175,7 @@ wxDropSource::~wxDropSource()
 // Notes   : you must call SetData() before if you had used def ctor
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
-  wxCHECK_MSG( m_data != NULL, wxDragNone, wxT("No data in wxDropSource!") );
+  wxCHECK_MSG( m_data != nullptr, wxDragNone, wxT("No data in wxDropSource!") );
 
   DWORD dwEffect;
   HRESULT hr = ::DoDragDrop(m_data->GetInterface(),

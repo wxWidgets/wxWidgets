@@ -21,26 +21,29 @@ public:
 
     wxBrush(const wxBitmap& stipple);
 
-    virtual void SetColour(const wxColour& col);
-    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b);
-    virtual void SetStyle(wxBrushStyle style);
-    virtual void SetStipple(const wxBitmap& stipple);
+    virtual void SetColour(const wxColour& col) override;
+    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) override;
+    virtual void SetStyle(wxBrushStyle style) override;
+    virtual void SetStipple(const wxBitmap& stipple) override;
 
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 
-    virtual wxColour GetColour() const;
-    virtual wxBrushStyle GetStyle() const;
-    virtual wxBitmap *GetStipple() const;
+    virtual wxColour GetColour() const override;
+    virtual wxBrushStyle GetStyle() const override;
+    virtual wxBitmap *GetStipple() const override;
 
     wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants")
     void SetStyle(int style) { SetStyle((wxBrushStyle)style); }
-    
+
     QBrush GetHandle() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxBrush);
 };
 
 #endif // _WX_QT_BRUSH_H_

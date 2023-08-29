@@ -50,17 +50,17 @@ public:
         \param exclusion_column_caption The label of header of listctrl's exclusion
             column.
      */
-    MyResizableListCtrl( wxWindow *parent = NULL,
+    MyResizableListCtrl( wxWindow *parent = nullptr,
                          wxWindowID id = wxID_ANY,
                          const wxPoint &pos = wxDefaultPosition,
                          const wxSize &size = wxDefaultSize,
                          long style = wxLC_REPORT,
                          const wxValidator& validator = wxDefaultValidator,
-                         const wxString &name = wxT("myResizableListCtrl")
+                         const wxString &name = "myResizableListCtrl"
                        );
 
     // Destructor.
-    ~MyResizableListCtrl(){};
+    ~MyResizableListCtrl(){}
 
 protected:
 

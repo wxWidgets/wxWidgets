@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -44,7 +41,7 @@
 // control ids
 enum
 {
-    SpinTimer = wxID_HIGHEST + 1
+    SpinTimer = wxID_HIGHEST
 };
 
 // ----------------------------------------------------------------------------
@@ -66,20 +63,20 @@ static void CheckGLError()
         // so check that we get a different error than the last time
         if ( err == errLast )
         {
-            wxLogError(wxT("OpenGL error state couldn't be reset."));
+            wxLogError("OpenGL error state couldn't be reset.");
             return;
         }
 
         errLast = err;
 
-        wxLogError(wxT("OpenGL error %d"), err);
+        wxLogError("OpenGL error %d", err);
     }
 }
 
 // function to draw the texture for cube faces
 static wxImage DrawDice(int size, unsigned num)
 {
-    wxASSERT_MSG( num >= 1 && num <= 6, wxT("invalid dice index") );
+    wxASSERT_MSG( num >= 1 && num <= 6, "invalid dice index" );
 
     const int dot = size/16;        // radius of a single dot
     const int gap = 5*size/32;      // gap between dots
@@ -150,7 +147,7 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas)
     // set viewing projection
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 3.0f);
+    glFrustum(-0.5, 0.5, -0.5, 0.5, 1, 3);
 
     // create the textures to use for cube sides: they will be reused by all
     // canvases (which is probably not critical in the case of simple textures
@@ -312,29 +309,27 @@ wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_TIMER(SpinTimer, TestGLCanvas::OnSpinTimer)
 wxEND_EVENT_TABLE()
 
-TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
+TestGLCanvas::TestGLCanvas(wxWindow *parent, bool useStereo)
     // With perspective OpenGL graphics, the wxFULL_REPAINT_ON_RESIZE style
     // flag should always be set, because even making the canvas smaller should
     // be followed by a paint event that updates the entire canvas with new
     // viewport settings.
-    : wxGLCanvas(parent, wxID_ANY, attribList,
-                 wxDefaultPosition, wxDefaultSize,
-                 wxFULL_REPAINT_ON_RESIZE),
-      m_xangle(30.0),
+    : m_xangle(30.0),
       m_yangle(30.0),
       m_spinTimer(this,SpinTimer),
-      m_useStereo(false),
+      m_useStereo(useStereo),
       m_stereoWarningAlreadyDisplayed(false)
 {
-    if ( attribList )
+    wxGLAttributes attribs = wxGLAttributes().Defaults();
+    if ( useStereo )
+        attribs.Stereo();
+    attribs.EndList();
+
+    if ( !wxGLCanvas::Create(parent, attribs, wxID_ANY,
+                             wxDefaultPosition, wxDefaultSize,
+                             wxFULL_REPAINT_ON_RESIZE) )
     {
-        int i = 0;
-        while ( attribList[i] != 0 )
-        {
-            if ( attribList[i] == WX_GL_STEREO )
-                m_useStereo = true;
-            ++i;
-        }
+        wxLogError("Creating OpenGL window failed.");
     }
 }
 
@@ -349,7 +344,7 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     // multiple canvases: If we updated the viewport in the wxSizeEvent
     // handler, changing the size of one canvas causes a viewport setting that
     // is wrong when next another canvas is repainted.
-    const wxSize ClientSize = GetClientSize();
+    const wxSize ClientSize = GetClientSize() * GetContentScaleFactor();
 
     TestGLContext& canvas = wxGetApp().GetContext(this, m_useStereo);
     glViewport(0, 0, ClientSize.x, ClientSize.y);
@@ -362,13 +357,13 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
         glDrawBuffer( GL_BACK_LEFT );
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
+        glFrustum(-0.47, 0.53, -0.5, 0.5, 1, 3);
         canvas.DrawRotatedCube(m_xangle, m_yangle);
         CheckGLError();
         glDrawBuffer( GL_BACK_RIGHT );
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
+        glFrustum(-0.53, 0.47, -0.5, 0.5, 1, 3);
         canvas.DrawRotatedCube(m_xangle, m_yangle);
         CheckGLError();
     }
@@ -459,11 +454,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame( bool stereoWindow )
-       : wxFrame(NULL, wxID_ANY, wxT("wxWidgets OpenGL Cube Sample"))
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets OpenGL Cube Sample")
 {
-    int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO, 0 };
-
-    new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
+    new TestGLCanvas(this, stereoWindow);
 
     SetIcon(wxICON(sample));
 
@@ -474,7 +467,7 @@ MyFrame::MyFrame( bool stereoWindow )
     menu->AppendSeparator();
     menu->Append(wxID_CLOSE);
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menu, wxT("&Cube"));
+    menuBar->Append(menu, "&Cube");
 
     SetMenuBar(menuBar);
 
@@ -484,7 +477,8 @@ MyFrame::MyFrame( bool stereoWindow )
     Show();
 
     // test IsDisplaySupported() function:
-    static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
+    wxGLAttributes attribs;
+    attribs.RGBA().DoubleBuffer().EndList();
     wxLogStatus("Double-buffered display %s supported",
                 wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
 
@@ -511,5 +505,14 @@ void MyFrame::OnNewWindow( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnNewStereoWindow( wxCommandEvent& WXUNUSED(event) )
 {
-    new MyFrame(true);
+    wxGLAttributes attribs;
+    attribs.RGBA().DoubleBuffer().Stereo().EndList();
+    if ( wxGLCanvas::IsDisplaySupported(attribs) )
+    {
+        new MyFrame(true);
+    }
+    else
+    {
+        wxLogError("Stereo not supported by OpenGL on this system, sorry.");
+    }
 }

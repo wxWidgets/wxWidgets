@@ -45,7 +45,7 @@ public:
 //--------------------------------------------------------------------------------
 // wxHtmlFilterPlainText
 //                  This filter is used as default filter if no other can
-//                  be used (= uknown type of file). It is used by
+//                  be used (= unknown type of file). It is used by
 //                  wxHtmlWindow itself.
 //--------------------------------------------------------------------------------
 
@@ -55,8 +55,8 @@ class WXDLLIMPEXP_HTML wxHtmlFilterPlainText : public wxHtmlFilter
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterPlainText);
 
 public:
-    virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
-    virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
+    virtual bool CanRead(const wxFSFile& file) const override;
+    virtual wxString ReadFile(const wxFSFile& file) const override;
 };
 
 //--------------------------------------------------------------------------------
@@ -69,8 +69,8 @@ class wxHtmlFilterHTML : public wxHtmlFilter
     wxDECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML);
 
     public:
-        virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
-        virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
+        virtual bool CanRead(const wxFSFile& file) const override;
+        virtual wxString ReadFile(const wxFSFile& file) const override;
 };
 
 

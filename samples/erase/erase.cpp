@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -49,7 +46,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 
@@ -159,8 +156,7 @@ public:
         }
 
         Create (parent, wxID_ANY, pos, size, wxBORDER_NONE);
-        Connect(wxEVT_PAINT,
-                wxPaintEventHandler(ControlWithTransparency::OnPaint));
+        Bind(wxEVT_PAINT, &ControlWithTransparency::OnPaint, this);
 
         if ( !reason.empty() )
         {
@@ -179,7 +175,7 @@ private:
         dc.DrawRectangle(GetClientSize());
 
         dc.SetTextForeground(*wxBLUE);
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
         dc.DrawText(m_message, 0, 2);
 
         // Draw some bitmap/icon to ensure transparent bitmaps are indeed
@@ -250,7 +246,7 @@ wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "Erase sample",
+       : wxFrame(nullptr, wxID_ANY, "Erase sample",
                  wxPoint(50, 50), wxSize(450, 340))
 {
     SetIcon(wxICON(sample));
@@ -437,7 +433,7 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     }
 
     dc.SetTextForeground(*wxRED);
-    dc.SetBackgroundMode(wxSOLID);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
     dc.DrawText("This text is drawn from OnEraseBackground", 60, 160);
 }
 

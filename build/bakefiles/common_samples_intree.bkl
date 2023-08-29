@@ -19,7 +19,7 @@
         <define>$(DLLFLAG)</define>
     </template>
 
-    <template id="wx_util" template="wx_util_b">
+    <template id="wx_util" template="wx_util_b,wx_dpi">
         <app-type>gui</app-type>
         <!-- resource files includes: -->
         <include>$(SRCDIR)/$(WXTOPDIR)samples</include>

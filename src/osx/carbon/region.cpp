@@ -77,6 +77,21 @@ wxRegion::wxRegion(WXHRGN hRegion )
 
 wxRegion::wxRegion(long x, long y, long w, long h)
 {
+    // Rectangle needs to be given in the canonical form,
+    // with (x,y) pointing to the top-left corner
+    // and with non-negative width and height
+    // (for compatibility with wxMSW anf wxGTK).
+    if ( w < 0 )
+    {
+        w = -w;
+        x -= (w - 1);
+    }
+    if ( h < 0 )
+    {
+        h = -h;
+        y -= (h - 1);
+    }
+
     m_refData = new wxRegionRefData(x , y , w , h );
 }
 
@@ -466,14 +481,14 @@ miInsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE,  int scanline,
             if (!tmpSLLBlock)
                 return FALSE;
             (*SLLBlock)->next = tmpSLLBlock;
-            tmpSLLBlock->next = (ScanLineListBlock *)NULL;
+            tmpSLLBlock->next = (ScanLineListBlock *)nullptr;
             *SLLBlock = tmpSLLBlock;
             *iSLLBlock = 0;
         }
         pSLL = &((*SLLBlock)->SLLs[(*iSLLBlock)++]);
         
         pSLL->next = pPrevSLL->next;
-        pSLL->edgelist = (EdgeTableEntry *)NULL;
+        pSLL->edgelist = (EdgeTableEntry *)nullptr;
         pPrevSLL->next = pSLL;
     }
     pSLL->scanline = scanline;
@@ -481,7 +496,7 @@ miInsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE,  int scanline,
     /*
      * now insert the edge in the right bucket
      */
-    prev = (EdgeTableEntry *)NULL;
+    prev = (EdgeTableEntry *)nullptr;
     start = pSLL->edgelist;
     while (start && (start->bres.minor < ETE->bres.minor))
     {
@@ -537,18 +552,18 @@ miCreateETandAET(int count, const wxPoint * pts, EdgeTable *ET, EdgeTableEntry *
     /*
      *  initialize the Active Edge Table
      */
-    AET->next = (EdgeTableEntry *)NULL;
-    AET->back = (EdgeTableEntry *)NULL;
-    AET->nextWETE = (EdgeTableEntry *)NULL;
+    AET->next = (EdgeTableEntry *)nullptr;
+    AET->back = (EdgeTableEntry *)nullptr;
+    AET->nextWETE = (EdgeTableEntry *)nullptr;
     AET->bres.minor = INT_MIN;
     
     /*
      *  initialize the Edge Table.
      */
-    ET->scanlines.next = (ScanLineList *)NULL;
+    ET->scanlines.next = (ScanLineList *)nullptr;
     ET->ymax = INT_MIN;
     ET->ymin = INT_MAX;
-    pSLLBlock->next = (ScanLineListBlock *)NULL;
+    pSLLBlock->next = (ScanLineListBlock *)nullptr;
     
     PrevPt = &pts[count-1];
     
@@ -667,7 +682,7 @@ micomputeWAET(EdgeTableEntry *AET)
     int inside = 1;
     int isInside = 0;
     
-    AET->nextWETE = (EdgeTableEntry *)NULL;
+    AET->nextWETE = (EdgeTableEntry *)nullptr;
     pWETE = AET;
     AET = AET->next;
     while (AET)
@@ -686,7 +701,7 @@ micomputeWAET(EdgeTableEntry *AET)
         }
         AET = AET->next;
     }
-    pWETE->nextWETE = (EdgeTableEntry *)NULL;
+    pWETE->nextWETE = (EdgeTableEntry *)nullptr;
 }
 
 /*
@@ -1021,7 +1036,7 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 
     AllocExclusive();
 
-    __Verify_noErr(HIShapeOffset( M_REGION , x , y )) ;
+    wxOSX_VERIFY_NOERR(HIShapeOffset( M_REGION , x , y )) ;
 
     return true ;
 }
@@ -1076,11 +1091,11 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
     switch (op)
     {
         case wxRGN_AND:
-            __Verify_noErr(HIShapeIntersect( M_REGION , OTHER_M_REGION(region) , M_REGION ));
+            wxOSX_VERIFY_NOERR(HIShapeIntersect( M_REGION , OTHER_M_REGION(region) , M_REGION ));
             break ;
 
         case wxRGN_OR:
-            __Verify_noErr(HIShapeUnion( M_REGION , OTHER_M_REGION(region) , M_REGION ));
+            wxOSX_VERIFY_NOERR(HIShapeUnion( M_REGION , OTHER_M_REGION(region) , M_REGION ));
             break ;
 
         case wxRGN_XOR:
@@ -1088,12 +1103,12 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
                 // XOR is defined as the difference between union and intersection
                 wxCFRef< HIShapeRef > unionshape( HIShapeCreateUnion( M_REGION , OTHER_M_REGION(region) ) );
                 wxCFRef< HIShapeRef > intersectionshape( HIShapeCreateIntersection( M_REGION , OTHER_M_REGION(region) ) );
-                __Verify_noErr(HIShapeDifference( unionshape, intersectionshape, M_REGION ));
+                wxOSX_VERIFY_NOERR(HIShapeDifference( unionshape, intersectionshape, M_REGION ));
             }
             break ;
 
         case wxRGN_DIFF:
-            __Verify_noErr(HIShapeDifference( M_REGION , OTHER_M_REGION(region) , M_REGION )) ;
+            wxOSX_VERIFY_NOERR(HIShapeDifference( M_REGION , OTHER_M_REGION(region) , M_REGION )) ;
             break ;
 
         case wxRGN_COPY:
@@ -1160,7 +1175,7 @@ bool wxRegion::IsEmpty() const
 WXHRGN wxRegion::GetWXHRGN() const
 {
     if ( !m_refData )
-        return NULL;
+        return nullptr;
 
     return M_REGION ;
 }
@@ -1212,7 +1227,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
  * Initialize empty iterator
  */
 wxRegionIterator::wxRegionIterator()
-    : m_current(0), m_numRects(0), m_rects(NULL)
+    : m_current(0), m_numRects(0), m_rects(nullptr)
 {
 }
 
@@ -1225,7 +1240,7 @@ wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
     : wxObject()
     , m_current(iterator.m_current)
     , m_numRects(0)
-    , m_rects(NULL)
+    , m_rects(nullptr)
 {
     SetRects(iterator.m_numRects, iterator.m_rects);
 }
@@ -1262,7 +1277,7 @@ void wxRegionIterator::SetRects(long numRects, wxRect *rects)
  */
 wxRegionIterator::wxRegionIterator(const wxRegion& region)
 {
-    m_rects = NULL;
+    m_rects = nullptr;
 
     Reset(region);
 }
@@ -1300,7 +1315,7 @@ OSStatus wxOSXRegionToRectsSetterCallback(
     if (message == kHIShapeEnumerateRect)
     {
         RegionToRectsCallbackData *cb = (RegionToRectsCallbackData*) data ;
-        cb->m_rects[cb->m_current++] = wxRect( rect->origin.x , rect->origin.y , rect->size.width , rect->size.height ) ;
+        cb->m_rects[cb->m_current++] = wxRect(int(rect->origin.x), int(rect->origin.y), int(rect->size.width), int(rect->size.height)) ;
     }
 
     return noErr;

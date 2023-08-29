@@ -2,78 +2,324 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 1999-08-28 16:46+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2021-12-10 10:06+0100\n"
+"PO-Revision-Date: 2021-12-10 10:15+0100\n"
+"Last-Translator: Ulrich Telle <ulrich@telle-online.eu>\n"
+"Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: _;wxTRANSLATE;wxPLURAL:1,2;wxGETTEXT_IN_CONTEXT:1c,2;"
+"wxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
 
-#: ../internat.cpp:120
-msgid "International wxWindows App"
-msgstr "Internationales wxWindows Programm"
+#: internat.cpp:168
+msgid "skip setting locale on startup"
+msgstr "Setzen des Gebietsschemas überspringen"
 
-#: ../internat.cpp:128
-msgid "&About"
-msgstr "Ü&ber"
+#: internat.cpp:170
+msgid "do set locale on startup without asking"
+msgstr "Setze das Gebietsschema beim Start ohne Nachfrage"
 
-#: ../internat.cpp:130
+#: internat.cpp:253
+#, c-format
+msgid "Couldn't find/load 'internat' catalog for %s."
+msgstr "Konnte den 'internat'-Katalog für %s nicht finden/laden."
+
+#: internat.cpp:289
+msgid "International wxWidgets App"
+msgstr "Internationale wxWidgets-Anwendung"
+
+#: internat.cpp:295
+msgid "&Test locale availability...\tCtrl-T"
+msgstr "&Teste Gebietsschemaverfügbarkeit...\tCtrl-T"
+
+#: internat.cpp:300
 msgid "E&xit"
 msgstr "&Schließen"
 
-#: ../internat.cpp:133
+#: internat.cpp:303
 msgid "&Open bogus file"
 msgstr "Ö&ffne Unsinn-Datei"
 
-#: ../internat.cpp:134
+#: internat.cpp:303
+msgid "Shows a wxWidgets localized error message"
+msgstr "Zeigt eine lokalisierte wxWidgets-Fehlermeldung"
+
+#: internat.cpp:304
+msgid "&Save dummy file"
+msgstr "&Speichere Dummy-Datei"
+
+#: internat.cpp:304
+msgid "Shows a localized standard dialog"
+msgstr "Zeigt einen lokalisierten Standard-Dialog"
+
+#: internat.cpp:305
 msgid "&Play a game"
 msgstr "Spiele ein S&piel"
 
-#: ../internat.cpp:137
-msgid "&File"
-msgstr "&Datei"
+#: internat.cpp:305
+msgid "A little game; hint: 17 is a lucky number for many"
+msgstr "Ein kleines Spiel; Hinweis: 17 ist für viele eine Glückszahl"
 
-#: ../internat.cpp:138
+#: internat.cpp:307
+msgid "&1 _() (gettext)"
+msgstr "&1 _() (gettext)"
+
+#: internat.cpp:307
+msgid "Tests the _() macro"
+msgstr "Testet das _() Makro"
+
+#: internat.cpp:308
+msgid "&2 _N() (ngettext)"
+msgstr "&2 _N() (ngettext)"
+
+#: internat.cpp:308
+msgid "Tests the _N() macro"
+msgstr "Testet das _N() Makro"
+
+#: internat.cpp:309
+msgid "&3 wxTRANSLATE() (gettext_noop)"
+msgstr "&3 wxTRANSLATE() (gettext_noop)"
+
+#: internat.cpp:309
+msgid "Tests the wxTRANSLATE() macro"
+msgstr "Testet das wxTRANSLATE() Makro"
+
+#: internat.cpp:310
+msgid "&Message box test"
+msgstr "&Hinweisfenster-Test"
+
+#: internat.cpp:311
+msgid "Tests message box buttons labels translation"
+msgstr "Testet die Übersetzung der Schaltflächen im Hinweisfenster"
+
+#: internat.cpp:316
+msgid "item"
+msgstr "Eintrag ohne Kontext"
+
+#: internat.cpp:317
+msgctxt "context_1"
+msgid "item"
+msgstr "Eintrag Kontext 1"
+
+#: internat.cpp:318
+msgctxt "context_2"
+msgid "item"
+msgstr "Eintrag Kontext 2"
+
+#: internat.cpp:319 internat.cpp:320
+msgid "sing"
+msgid_plural "plur"
+msgstr[0] "Einzahl ohne Kontext"
+msgstr[1] "Mehrzahl ohne Kontext"
+
+#: internat.cpp:321 internat.cpp:322
+msgctxt "context_1"
+msgid "sing"
+msgid_plural "plur"
+msgstr[0] "Einzahl Kontext 1"
+msgstr[1] "Mehrzahl Kontext 1"
+
+#: internat.cpp:323 internat.cpp:324
+msgctxt "context_2"
+msgid "sing"
+msgid_plural "plur"
+msgstr[0] "Einzahl Kontext 2"
+msgstr[1] "Mehrzahl Kontext 2"
+
+#: internat.cpp:328
+msgid "Show coreutils &help"
+msgstr "Zeige coreutils-&Hilfe"
+
+#: internat.cpp:331
+msgid "&About"
+msgstr "Ü&ber"
+
+#: internat.cpp:336
 msgid "&Test"
 msgstr "&Test"
 
-#: ../internat.cpp:161
+#: internat.cpp:337
+msgid "&Macro"
+msgstr "&Makro"
+
+#: internat.cpp:343
+msgctxt "standard Windows menu"
+msgid "&Help"
+msgstr "&Hilfe"
+
+#: internat.cpp:360
+#, c-format
+msgid "Current UI locale: %s; C locale: %s"
+msgstr "Aktuelles UI Gebietsschema: %s; C Gebietsschema: %s"
+
+#: internat.cpp:373
+#, c-format
+msgid "UI locale name in English: %s"
+msgstr "Name des UI Gebietsschema auf Englisch: %s"
+
+#: internat.cpp:385
+#, c-format
+msgid "... and in the locale language: %s"
+msgstr "… und in der Sprache des Gebietsschemas: %s"
+
+#: internat.cpp:396
+msgid "Numeric input:"
+msgstr "Numerische Eingabe:"
+
+#: internat.cpp:417
+msgid "Number"
+msgstr "Zahl"
+
+#: internat.cpp:421
+msgid "Date"
+msgstr "Datum"
+
+#: internat.cpp:437
+#, c-format
+msgid "Number in UI locale: %s; in C locale: %.2f"
+msgstr "Zahl im UI Gebietsschema: %s; im C Gebietsschema: %.2f"
+
+#: internat.cpp:457
 msgid ""
 "I18n sample\n"
-"© 1998, 1999 Vadim Zeitlin and Julian Smart"
-msgstr "I18n Beispiel\n"
-"© 1998, 1999 Vadim Zeitlin and Julian Smart"
+"(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr ""
+"I18n Beispiel\n"
+"© 1998, 1999 Vadim Zeitlin und Julian Smart"
 
-#: ../internat.cpp:163
+#: internat.cpp:458
 msgid "About Internat"
-msgstr "Ü&ber Internat"
+msgstr "Über Internat"
 
-#: ../internat.cpp:168
+#: internat.cpp:491
 msgid "Enter your number:"
-msgstr "Geben Sie eine Nummer ein:"
+msgstr "Geben Sie eine Zahl ein:"
 
-#: ../internat.cpp:169
+#: internat.cpp:492
 msgid "Try to guess my number!"
-msgstr "Versuchen Sie, die Nummer zu raten"
+msgstr "Versuchen Sie, die Zahl zu raten!"
 
-#: ../internat.cpp:177
+#: internat.cpp:506
 msgid "You've probably entered an invalid number."
-msgstr "Sie haben wahrscheinlich eine ungültige Nummer eingegeben"
+msgstr "Sie haben wahrscheinlich eine ungültige Zahl eingegeben."
 
-#: ../internat.cpp:185
+#: internat.cpp:520
 msgid "Congratulations! you've won. Here is the magic phrase:"
-msgstr "Herzlichen Glückwunsch, Sie haben gewonnen. Hier ist der magische Satz:"
+msgstr ""
+"Herzlichen Glückwunsch! Sie haben gewonnen. Hier ist der magische Satz:"
 
-#: ../internat.cpp:186
+#: internat.cpp:521
 #, c-format
 msgid "cannot create fifo `%s'"
-msgstr "Der Fifo `%s' kan nicht erzeugt werden"
+msgstr "Fifo `%s' kann nicht erzeugt werden"
 
-#: ../internat.cpp:189
+#: internat.cpp:530
+msgid "Bad luck! try again..."
+msgstr "Pech gehabt! Versuchen Sie es noch einmal..."
+
+#: internat.cpp:538
 msgid "Result"
 msgstr "Ergebnis"
+
+#: internat.cpp:546
+msgid "Enter the locale to test"
+msgstr "Geben Sie das zu testende Gebietsschema ein"
+
+#: internat.cpp:562
+#, c-format
+msgid ""
+"Locale \"%s\" is available.\n"
+"Identifier: %s; Layout: %s\n"
+"English name: %s\n"
+"Localized name: %s"
+msgstr ""
+"Gebietsschema \"%s\" ist verfügbar.\n"
+"Identifikator: %s; Layout: %s\n"
+"Englischer Name: %s\n"
+"Lokaler Name: %s"
+
+#: internat.cpp:569
+#, c-format
+msgid "Locale \"%s\" is not available."
+msgstr "Gebietsschema \"%s\" ist nicht verfügbar."
+
+#: internat.cpp:584
+msgid "Dummy file dialog"
+msgstr "Dummy-Datei-Dialog"
+
+#: internat.cpp:589
+msgid "Testing _() (gettext)"
+msgstr "Test von _() (gettext)"
+
+#: internat.cpp:597
+msgid "Please enter text to translate"
+msgstr "Bitte geben Sie einen zu übersetzenden Text ein"
+
+#: internat.cpp:598
+msgid "default value"
+msgstr "Default-Wert"
+
+#: internat.cpp:612
+msgid "Testing _N() (ngettext)"
+msgstr "Test von _N() (ngettext)"
+
+#: internat.cpp:614
+msgid "Please enter range for plural forms of \"n files deleted\" phrase"
+msgstr ""
+"Bitte geben Sie einen Bereich für Pluralformen des Satzes \"n Dateien "
+"gelöscht\" ein"
+
+#: internat.cpp:626
+msgid "file deleted"
+msgid_plural "files deleted"
+msgstr[0] "Datei gelöscht"
+msgstr[1] "Dateien gelöscht"
+
+#: internat.cpp:637
+msgid "line 1"
+msgstr "Zeile 1"
+
+#: internat.cpp:638
+msgid "line 2"
+msgstr "Zeile 2"
+
+#: internat.cpp:639
+msgid "line 3"
+msgstr "Zeile 3"
+
+#: internat.cpp:642
+msgid "Testing wxTRANSLATE() (gettext_noop)"
+msgstr "Test von wxTRANSLATE() (gettext_noop)"
+
+#: internat.cpp:655
+msgid ""
+"Are the labels of the buttons in this message box translated into the "
+"current locale language?"
+msgstr ""
+"Wurden die Beschriftungen der Schaltflächen in diesem Hinweisfenster in die "
+"Sprache des aktuellen Gebietsschemas übersetzt?"
+
+#: internat.cpp:657
+msgid "wxWidgets i18n sample"
+msgstr "wxWidgets I18n Beispiel"
+
+#: internat.cpp:662
+msgid "Please report the details of your platform to us."
+msgstr "Bitte teilen Sie uns über die Details Ihrer Plattform mit."
+
+#, c-format
+#~ msgid "Locale \"%s\" is unknown."
+#~ msgstr "Gebietsschema \"%s\" ist unbekannt."
+
+#, c-format
+#~ msgid "Locale \"%s\" is available."
+#~ msgstr "Gebietsschema \"%s\" ist verfügbar."

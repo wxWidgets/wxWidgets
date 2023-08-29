@@ -8,7 +8,7 @@
 /**
     @class wxSingleInstanceChecker
 
-    wxSingleInstanceChecker class allows to check that only a single instance of a
+    wxSingleInstanceChecker class allows checking that only a single instance of a
     program is running.
 
     To do it, you should create an object of this class. As long as this object
@@ -28,7 +28,7 @@
             wxLogError(_("Another program instance is already running, aborting."));
 
             delete m_checker; // OnExit() won't be called if we return false
-            m_checker = NULL;
+            m_checker = nullptr;
 
             return false;
         }

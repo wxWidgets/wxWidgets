@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_PNM
 
@@ -97,9 +94,10 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     if (c=='2') // Ascii GREY
     {
-        wxUint32 value, size=width*height;
+        wxUint32 size=width*height;
         for (wxUint32 i=0; i<size; ++i)
         {
+            wxUint32 value;
             value=text_stream.Read32();
             if ( maxval != 255 )
                 value = (255 * value)/maxval;
@@ -118,11 +116,12 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     }
     if (c=='3') // Ascii RBG
     {
-        wxUint32 value, size=3*width*height;
+        wxUint32 size=3*width*height;
         for (wxUint32 i=0; i<size; ++i)
           {
             //this is very slow !!!
             //I wonder how we can make any better ?
+            wxUint32 value;
             value=text_stream.Read32();
             if ( maxval != 255 )
                 value = (255 * value)/maxval;
@@ -141,9 +140,9 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     if (c=='5') // Raw GREY
     {
         wxUint32 size=width*height;
-        unsigned char value;
         for (wxUint32 i=0; i<size; ++i)
         {
+            unsigned char value;
             buf_stream.Read(&value,1);
             if ( maxval != 255 )
                 value = (255 * value)/maxval;

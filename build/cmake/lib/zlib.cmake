@@ -8,6 +8,8 @@
 #############################################################################
 
 if(wxUSE_ZLIB STREQUAL "builtin")
+    # TODO: implement building zlib via its CMake file, using
+    # add_subdirectory or ExternalProject_Add
     wx_add_builtin_library(wxzlib
         src/zlib/adler32.c
         src/zlib/compress.c
@@ -30,6 +32,9 @@ if(wxUSE_ZLIB STREQUAL "builtin")
         # read() and other POSIX functions in zlib code. This is much
         # more convenient than having to modify it to avoid them.
         target_compile_definitions(wxzlib PRIVATE _CRT_NONSTDC_NO_WARNINGS)
+    endif()
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        target_compile_options(wxzlib PRIVATE -Wno-deprecated-non-prototype)
     endif()
     set(ZLIB_LIBRARIES wxzlib)
     set(ZLIB_INCLUDE_DIRS ${wxSOURCE_DIR}/src/zlib)

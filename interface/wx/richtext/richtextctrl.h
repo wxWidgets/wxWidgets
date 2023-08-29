@@ -595,7 +595,7 @@ public:
     */
     virtual void DiscardEdits();
 
-    
+
     void SetModified(bool modified);
 
     /**
@@ -784,7 +784,7 @@ public:
 
         @see SetListStyle(), PromoteList(), ClearListStyle().
     */
-    virtual bool NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def = NULL, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
+    virtual bool NumberList(const wxRichTextRange& range, wxRichTextListStyleDefinition* def = nullptr, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
     virtual bool NumberList(const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int startFrom = 1, int specifiedLevel = -1);
     //@}
 
@@ -805,7 +805,7 @@ public:
 
         @see SetListStyle(), @see SetListStyle(), ClearListStyle().
     */
-    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def = NULL, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
+    virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, wxRichTextListStyleDefinition* def = nullptr, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
     virtual bool PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO, int specifiedLevel = -1);
     //@}
 
@@ -1206,7 +1206,7 @@ public:
     bool EndParagraphSpacing();
 
     /**
-        Begins appling line spacing. @e spacing is a multiple, where 10 means
+        Begins applying line spacing. @e spacing is a multiple, where 10 means
         single-spacing, 15 means 1.5 spacing, and 20 means double spacing.
 
         The ::wxTextAttrLineSpacing constants are defined for convenience.
@@ -1236,7 +1236,7 @@ public:
         left of the actual paragraph is leftSubIndent.
     */
     bool BeginNumberedBullet(int bulletNumber, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_ARABIC|wxTEXT_ATTR_BULLET_STYLE_PERIOD);
-    
+
     /**
         Ends application of a numbered bullet.
     */
@@ -1248,7 +1248,7 @@ public:
         to render the bulleted paragraph.
     */
     bool BeginSymbolBullet(const wxString& symbol, int leftIndent, int leftSubIndent, int bulletStyle = wxTEXT_ATTR_BULLET_STYLE_SYMBOL);
-    
+
     /**
         Ends applying a symbol bullet.
     */
@@ -1385,7 +1385,7 @@ public:
         Please note that this does not update the current editing style
         from the new position; to do that, call wxRichTextCtrl::SetInsertionPoint instead.
     */
-    virtual bool MoveCaret(long pos, bool showAtLineStart = false, wxRichTextParagraphLayoutBox* container = NULL);
+    virtual bool MoveCaret(long pos, bool showAtLineStart = false, wxRichTextParagraphLayoutBox* container = nullptr);
 
     /**
         Moves right.
@@ -1453,7 +1453,7 @@ public:
     virtual bool WordLeft(int noPages = 1, int flags = 0);
 
     /**
-        Move a nuber of words to the right.
+        Move a number of words to the right.
     */
     virtual bool WordRight(int noPages = 1, int flags = 0);
 
@@ -1503,7 +1503,7 @@ public:
         @a style must have flags indicating which attributes are of interest.
     */
     virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const;
-    
+
 
     /**
         Test if this whole range has paragraph attributes of the specified kind.
@@ -1512,7 +1512,7 @@ public:
         @a style must have flags indicating which attributes are of interest.
     */
     virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const;
-    
+
 
     /**
         Returns @true if all of the selection, or the content at the caret position, is bold.
@@ -1601,7 +1601,7 @@ public:
     /**
         Applies the style sheet to the buffer, for example if the styles have changed.
     */
-    bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = NULL);
+    bool ApplyStyleSheet(wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         Shows the given context menu, optionally adding appropriate property-editing commands for the current position in the object hierarchy.
@@ -1921,7 +1921,7 @@ public:
         Internal function to position the visible caret according to the current caret
         position.
     */
-    virtual void PositionCaret(wxRichTextParagraphLayoutBox* container = NULL);
+    virtual void PositionCaret(wxRichTextParagraphLayoutBox* container = nullptr);
 
     /**
         Helper function for extending the selection, returning @true if the selection
@@ -1996,7 +1996,7 @@ public:
         2-element list (ok, rect).
         @endWxPerlOnly
     */
-    bool GetCaretPositionForIndex(long position, wxRect& rect, wxRichTextParagraphLayoutBox* container = NULL);
+    bool GetCaretPositionForIndex(long position, wxRect& rect, wxRichTextParagraphLayoutBox* container = nullptr);
 
     /**
         Internal helper function returning the line for the visible caret position.
@@ -2021,7 +2021,7 @@ public:
         list (ok, newPos).
         @endWxPerlOnly
     */
-    virtual bool DeleteSelectedContent(long* newPos= NULL);
+    virtual bool DeleteSelectedContent(long* newPos= nullptr);
 
     /**
         Transforms logical (unscrolled) position to physical window position.
@@ -2400,7 +2400,7 @@ public:
         Copy constructor.
     */
     wxRichTextEvent(const wxRichTextEvent& event);
-    
+
     /**
         Returns the buffer position at which the event occurred.
     */

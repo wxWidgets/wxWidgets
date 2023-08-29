@@ -9,23 +9,22 @@
 #ifndef _WX_XH_CHOICEBK_H_
 #define _WX_XH_CHOICEBK_H_
 
-#include "wx/xrc/xmlres.h"
+#include "wx/xrc/xh_bookctrlbase.h"
 
 #if wxUSE_XRC && wxUSE_CHOICEBOOK
 
 class WXDLLIMPEXP_FWD_CORE wxChoicebook;
 
-class WXDLLIMPEXP_XRC wxChoicebookXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxChoicebookXmlHandler : public wxBookCtrlXmlHandlerBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxChoicebookXmlHandler);
 
 public:
     wxChoicebookXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
-    bool m_isInside;
     wxChoicebook *m_choicebook;
 };
 

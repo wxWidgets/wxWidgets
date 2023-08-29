@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TREECTRL
 
@@ -82,7 +79,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -101,9 +97,6 @@ wxFLAGS_MEMBER(wxTR_ROW_LINES)
 wxFLAGS_MEMBER(wxTR_HAS_VARIABLE_ROW_HEIGHT)
 wxFLAGS_MEMBER(wxTR_SINGLE)
 wxFLAGS_MEMBER(wxTR_MULTIPLE)
-#if WXWIN_COMPATIBILITY_2_8
-wxFLAGS_MEMBER(wxTR_EXTENDED)
-#endif
 wxFLAGS_MEMBER(wxTR_DEFAULT_STYLE)
 wxEND_FLAGS( wxTreeCtrlStyle )
 
@@ -147,18 +140,18 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType,
 wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)
 {
-    m_itemOld = 0l;
+    m_itemOld = nullptr;
     m_editCancelled = false;
 }
 
 wxTreeEvent::wxTreeEvent(const wxTreeEvent & event)
            : wxNotifyEvent(event)
+    , m_evtKey(event.m_evtKey)
+    , m_item(event.m_item)
+    , m_itemOld(event.m_itemOld)
+    , m_pointDrag(event.m_pointDrag)
+    , m_label(event.m_label)
 {
-    m_evtKey = event.m_evtKey;
-    m_item = event.m_item;
-    m_itemOld = event.m_itemOld;
-    m_pointDrag = event.m_pointDrag;
-    m_label = event.m_label;
     m_editCancelled = event.m_editCancelled;
 }
 
@@ -168,26 +161,18 @@ wxTreeEvent::wxTreeEvent(const wxTreeEvent & event)
 
 wxTreeCtrlBase::wxTreeCtrlBase()
 {
-    m_imageListNormal =
-    m_imageListState = NULL;
-    m_ownsImageListNormal =
-    m_ownsImageListState = false;
-
     // arbitrary default
     m_spacing = 18;
 
     // quick DoGetBestSize calculation
     m_quickBestSize = true;
 
-    Connect(wxEVT_CHAR_HOOK, wxKeyEventHandler(wxTreeCtrlBase::OnCharHook));
+    Bind(wxEVT_CHAR_HOOK, &wxTreeCtrlBase::OnCharHook, this);
+    Bind(wxEVT_DPI_CHANGED, &wxTreeCtrlBase::WXHandleDPIChanged, this);
 }
 
 wxTreeCtrlBase::~wxTreeCtrlBase()
 {
-    if (m_ownsImageListNormal)
-        delete m_imageListNormal;
-    if (m_ownsImageListState)
-        delete m_imageListState;
 }
 
 void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
@@ -198,7 +183,7 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
         if ( current == wxTREE_ITEMSTATE_NONE )
             return;
         state = current + 1;
-        if ( m_imageListState && state >= m_imageListState->GetImageCount() )
+        if ( m_imagesState.HasImages() && state >= m_imagesState.GetImageCount() )
             state = 0;
     }
     else if ( state == wxTREE_ITEMSTATE_PREV )
@@ -208,7 +193,7 @@ void wxTreeCtrlBase::SetItemState(const wxTreeItemId& item, int state)
             return;
         state = current - 1;
         if ( state == -1 )
-            state = m_imageListState ? m_imageListState->GetImageCount() - 1 : 0;
+            state = m_imagesState.GetImageCount();
     }
     // else: wxTREE_ITEMSTATE_NONE depending on platform
 
@@ -357,6 +342,7 @@ void wxTreeCtrlBase::OnCharHook(wxKeyEvent& event)
                 wxFALLTHROUGH;
 
             case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
                 EndEditLabel(GetFocusedItem(), discardChanges);
 
                 // Do not call Skip() below.

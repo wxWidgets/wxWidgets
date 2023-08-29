@@ -56,7 +56,7 @@ enum
         m_embeddedHtmlHelp.SetHelpWindow(m_embeddedHelpWindow);
         m_embeddedHelpWindow->Create(this, wxID_ANY, wxDefaultPosition, GetClientSize(),
                                      wxTAB_TRAVERSAL|wxBORDER_NONE, wxHF_DEFAULT_STYLE);
-        m_embeddedHtmlHelp.AddBook(wxFileName(wxT("doc.zip")));
+        m_embeddedHtmlHelp.AddBook(wxFileName("doc.zip"));
     @endcode
 
     You should pass the style wxHF_EMBEDDED to the style parameter of
@@ -69,7 +69,7 @@ enum
 class wxHtmlHelpWindow : public wxWindow
 {
 public:
-    wxHtmlHelpWindow(wxHtmlHelpData* data = NULL);
+    wxHtmlHelpWindow(wxHtmlHelpData* data = nullptr);
 
     /**
         Constructor.
@@ -77,12 +77,12 @@ public:
         For the values of @a helpStyle, please see the documentation for
         wxHtmlHelpController.
     */
-    wxHtmlHelpWindow(wxWindow* parent, int wxWindowID,
+    wxHtmlHelpWindow(wxWindow* parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
                      int helpStyle = wxHF_DEFAULT_STYLE,
-                     wxHtmlHelpData* data = NULL);
+                     wxHtmlHelpData* data = nullptr);
 
     /**
         Creates the help window. See @ref wxHtmlHelpWindow() "the constructor"

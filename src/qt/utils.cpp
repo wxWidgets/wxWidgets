@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <QtGui/QCursor>
 #include <QtWidgets/QApplication>
@@ -34,14 +31,14 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 {
     // Make it look similar to the assert messages:
 
-    fprintf( stderr, "%s(%d): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
+    fprintf( stderr, "%s(%u): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
 }
 
 void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
 {
     state->SetLeftDown( buttons.testFlag( Qt::LeftButton ) );
     state->SetRightDown( buttons.testFlag( Qt::RightButton ) );
-    state->SetMiddleDown( buttons.testFlag( Qt::MidButton ) );
+    state->SetMiddleDown( buttons.testFlag( Qt::MiddleButton ) );
     state->SetAux1Down( buttons.testFlag( Qt::XButton1 ) );
     state->SetAux2Down( buttons.testFlag( Qt::XButton2 ) );
 }
@@ -85,7 +82,7 @@ wxWindow *wxFindWindowAtPoint(const wxPoint& pt)
 wxWindow *wxFindWindowAtPointer(wxPoint& pt)
 {
     pt = wxQtConvertPoint( QCursor::pos() );
-    
+
     return wxFindWindowAtPoint( pt );
 }
 
@@ -110,40 +107,9 @@ bool wxGetKeyState(wxKeyCode key)
     }
 }
 
-int wxDisplayDepth()
-{
-    return QApplication::desktop()->depth();
-}
-
-void wxDisplaySize(int *width, int *height)
-{
-    if ( width != NULL )
-        *width = QApplication::desktop()->width();
-    if ( height != NULL )
-        *height = QApplication::desktop()->height();
-}
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    if ( width != NULL )
-        *width = QApplication::desktop()->widthMM();
-    if ( height != NULL )
-        *height = QApplication::desktop()->heightMM();
-}
-
 void wxBell()
 {
     QApplication::beep();
-}
-
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-    QRect r = QApplication::desktop()->availableGeometry();
-
-    *x = r.x();
-    *y = r.y();
-    *width = r.width();
-    *height = r.height();
 }
 
 wxWindow *wxGetActiveWindow()
@@ -156,16 +122,11 @@ wxWindow *wxGetActiveWindow()
         wxWindow* win = node->GetData();
         if ( win->GetHandle() == w )
             return win;
-        
+
         node = node->GetPrevious();
     }
 
-    return NULL;
-}
-
-bool wxColourDisplay()
-{
-    return QApplication::desktop()->depth() > 1;
+    return nullptr;
 }
 
 bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )

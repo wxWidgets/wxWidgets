@@ -528,7 +528,7 @@ Build system changes
   it's not the default "x86". E.g. a library built with MSVC 10 for amd64 is
   called "wxbase294ud_vc110_amd64.dll" now.
 
-- MSVC projects don't include neither wxUniversal nor ANSI (non-Unicode)
+- MSVC projects don't include the wxUniversal or ANSI (non-Unicode)
   configurations any more. The simplest way to build wxWidgets in these
   configurations if you need them is to use nmake from the command line with
   WXUNIV=1 or UNICODE=0 command line parameter respectively.
@@ -733,10 +733,10 @@ All (GUI):
 - Support hexadecimal numbers in wxSpinCtrl.
 - Respect window max size in wxBoxSizer (Nathan Ridge).
 - Add support for searching in wxWebView for MSW and GTK (Allonii).
-- Add generic wxFileSystem support to wxWebView with 
+- Add generic wxFileSystem support to wxWebView with
   wxWebViewFSHandler (Nick Matthews).
 - Add possibility to disable context menu in wxWebView.
-- Add ability to register custom wxWebView backends using 
+- Add ability to register custom wxWebView backends using
   wxWebView::RegisterFactory and a wxWebViewFactory derived class.
 - Add possibility to hide and show again wxRibbonBar pages (wxBen).
 - Add wxRibbonBar pages highlighting (wxBen).

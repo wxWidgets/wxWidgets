@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/crt.h"
@@ -177,7 +174,7 @@ wxString wxURI::GetPassword() const
       size_t posColon = m_userinfo.find(':');
 
       if ( posColon == wxString::npos )
-          return "";
+          return wxString();
 
       return m_userinfo(posColon + 1, wxString::npos);
 }
@@ -289,7 +286,10 @@ bool wxURI::operator==(const wxURI& uri) const
 // ---------------------------------------------------------------------------
 // IsReference
 //
-// if there is no authority or scheme, it is a reference
+// if there is no authority or scheme, it is a reference.
+// May be needed to have an RFC Deviation here where file doesn't need to
+// have a server so that raw file paths work as users expect. I.E.:
+// return !HasScheme() || (!HasServer() && m_scheme != wxT("file"));
 // ---------------------------------------------------------------------------
 
 bool wxURI::IsReference() const
@@ -299,8 +299,6 @@ bool wxURI::IsReference() const
 
 // ---------------------------------------------------------------------------
 // IsRelative
-//
-// FIXME: may need refinement
 // ---------------------------------------------------------------------------
 
 bool wxURI::IsRelative() const
@@ -373,20 +371,57 @@ const char* wxURI::ParseScheme(const char *uri)
 
 const char* wxURI::ParseAuthority(const char* uri)
 {
-    // authority     = [ userinfo "@" ] host [ ":" port ]
-    if ( uri[0] == '/' && uri[1] == '/' )
+    // URI			 = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
+    // hier-part	 = "//" authority path-abempty
+    bool leadswithdoubleslash = uri[0] == '/' && uri[1] == '/';
+    if(leadswithdoubleslash)
     {
         //skip past the two slashes
         uri += 2;
+    }
 
-        // ############# DEVIATION FROM RFC #########################
-        // Don't parse the server component for file URIs
-        if(m_scheme != "file")
+    // ############# DEVIATION FROM RFC #########################
+    // Evidence shows us that users expect us to parse the
+    // server component in the case of [server][#fragment].
+    // Otherwise they don't want us to parse the server at all
+    // for file uris.
+    if (m_scheme == "file") // RFC 8089 allows for leading "//" with file
+    { // look for [server][#fragment] case
+        bool serverfragmentfound = false;
+        const char* uristart = uri;
+        uri = ParseServer(uri);
+        if(HasServer())
         {
-            //normal way
-            uri = ParseUserInfo(uri);
+            uri = ParseFragment(uri);
+            serverfragmentfound = HasFragment();
+        }
+        if(!serverfragmentfound)
+        { // nope... clear fields, return to point after opening slashes
+            uri = uristart;
+            m_server.erase();
+            m_fields &= ~wxURI_SERVER;
+        }
+    }
+    else if(leadswithdoubleslash)
+    { // normal RFC-based authority parsing
+        // authority	 = [ userinfo "@" ] host [ ":" port ]
+        // file-hier-part = ( "//" auth-path ) / local-path
+        const char* uristart = uri;
+        uri = ParseUserInfo(uri);
+        uri = ParseServer(uri);
+        if (!HasServer() && HasUserInfo()) // in practice this case doesn't happen without scheme-based parsing
+        { // userinfo can't exist without host, backtrack and reparse
+            m_userinfo.erase();
+            m_fields &= ~wxURI_USERINFO;
+            uri = uristart;
             uri = ParseServer(uri);
-            return ParsePort(uri);
+        }
+        uri = ParsePort(uri);
+        if (!HasServer()) // in practice this case doesn't happen without scheme-based parsing
+        {
+            m_port.erase(); // port can't exist without host
+            m_fields &= ~wxURI_PORT;
+            uri = uristart - 2; // nothing found, skip to before the leading "//"
         }
     }
 
@@ -455,7 +490,7 @@ const char* wxURI::ParseServer(const char* uri)
     }
     else // IPv4 or a reg-name
     {
-        if (ParseIPv4address(uri))
+        if (ParseIPv4address(uri) && (!*uri || *uri == '/' || *uri == ':'))
         {
             m_hostType = wxURI_IPV4ADDRESS;
 
@@ -505,80 +540,79 @@ const char* wxURI::ParsePort(const char* uri)
 
 const char* wxURI::ParsePath(const char* uri)
 {
-    /// hier-part     = "//" authority path-abempty
-    ///               / path-absolute
-    ///               / path-rootless
-    ///               / path-empty
-    ///
-    /// relative-part = "//" authority path-abempty
-    ///               / path-absolute
-    ///               / path-noscheme
-    ///               / path-empty
-    ///
-    /// path-abempty  = *( "/" segment )
-    /// path-absolute = "/" [ segment-nz *( "/" segment ) ]
-    /// path-noscheme = segment-nz-nc *( "/" segment )
-    /// path-rootless = segment-nz *( "/" segment )
-    /// path-empty    = 0<pchar>
-    ///
-    /// segment       = *pchar
-    /// segment-nz    = 1*pchar
-    /// segment-nz-nc = 1*( unreserved / pct-encoded / sub-delims / "@" )
-    ///               ; non-zero-length segment without any colon ":"
-    ///
-    /// pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
+    // hier-part     = "//" authority path-abempty
+    //               / path-absolute
+    //               / path-rootless
+    //               / path-empty
+    //
+    // relative-part = "//" authority path-abempty
+    //               / path-absolute
+    //               / path-noscheme
+    //               / path-empty
+    //
+    // path-abempty  = *( "/" segment )
+    // path-absolute = "/" [ segment-nz *( "/" segment ) ]
+    // path-noscheme = segment-nz-nc *( "/" segment )
+    // path-rootless = segment-nz *( "/" segment )
+    // path-empty    = 0<pchar>
+    //
+    // segment       = *pchar
+    // segment-nz    = 1*pchar
+    // segment-nz-nc = 1*( unreserved / pct-encoded / sub-delims / "@" )
+    //               ; non-zero-length segment without any colon ":"
+    //
+    // pchar         = unreserved / pct-encoded / sub-delims / ":" / "@"
 
-    if ( IsEndPath(*uri) )
+    if (IsEndPath(*uri)
+        // When authority is present,
+        // the path must either be empty or begin with a slash ("/") character.
+        // When authority is not present,
+        // the path cannot begin with two slash characters ("//").
+        || (m_server.length() ? (!(!*uri || *uri == '/')) : (*uri == '/' && *(uri+1) == '/')))
         return uri;
-
-    const bool isAbs = *uri == '/';
-    if ( isAbs )
-        m_path += *uri++;
-
-    wxArrayString segments;
-    wxString segment;
-    for ( ;; )
+    const char* uristart = uri;
+    const bool isAbsolute = *uri == '/';
+    if (isAbsolute)
     {
-        const bool endPath = IsEndPath(*uri);
-        if ( endPath || *uri == '/' )
+        m_path += *uri++;
+        // segment-nz	 = 1*pchar
+        while (!IsEndPath(*uri))
         {
-            // end of a segment, look at what we got
-            if ( segment == ".." )
-            {
-                if ( !segments.empty() && *segments.rbegin() != ".." )
-                    segments.pop_back();
-                else if ( !isAbs )
-                    segments.push_back("..");
-            }
-            else if ( segment == "." )
-            {
-                // normally we ignore "." but the last one should be taken into
-                // account as "path/." is the same as "path/" and not just "path"
-                if ( endPath )
-                    segments.push_back("");
-            }
-            else // normal segment
-            {
-                segments.push_back(segment);
-            }
-
-            if ( endPath )
-                break;
-
-            segment.clear();
-            ++uri;
-            continue;
+            if (IsPCharNE(*uri) || *uri == '/')
+                m_path += *uri++;
+            else
+                AppendNextEscaped(m_path, uri);
         }
-
-        if ( IsUnreserved(*uri) || IsSubDelim(*uri) || *uri == ':' || *uri == '@' )
-            segment += *uri++;
-        else
-            AppendNextEscaped(segment, uri);
+        m_fields |= wxURI_PATH; //mark the path as valid
     }
-
-    m_path += wxJoin(segments, '/', '\0');
-    m_fields |= wxURI_PATH;
-
+    else if (*uri) //Relative path
+    {
+        if (!HasScheme())
+        {
+            // segment-nz-nc = 1*( unreserved / pct-encoded / sub-delims / "@" )
+            //				 ; non-zero-length segment without any colon ":"
+            while (!IsEndPath(*uri))
+            {
+                if (IsPCharNCNE(*uri) || *uri == '/')
+                    m_path += *uri++;
+                else
+                    AppendNextEscaped(m_path, uri);
+            }
+        }
+        else
+        {
+            // segment-nz	 = 1*pchar
+            while (!IsEndPath(*uri))
+            {
+                if (IsPCharNE(*uri) || *uri == '/')
+                    m_path += *uri++;
+                else
+                    AppendNextEscaped(m_path, uri);
+            }
+        }
+        if (uri != uristart)
+            m_fields |= wxURI_PATH; // mark the path as valid
+    }
     return uri;
 }
 
@@ -591,8 +625,7 @@ const char* wxURI::ParseQuery(const char* uri)
         ++uri;
         while ( *uri && *uri != '#' )
         {
-            if ( IsUnreserved(*uri) || IsSubDelim(*uri) ||
-                    *uri == ':' || *uri == '@' || *uri == '/' || *uri == '?' )
+            if ( IsPCharNE(*uri) || *uri == '/' || *uri == '?' )
                 m_query += *uri++;
             else
                 AppendNextEscaped(m_query, uri);
@@ -613,8 +646,7 @@ const char* wxURI::ParseFragment(const char* uri)
         ++uri;
         while ( *uri )
         {
-            if ( IsUnreserved(*uri) || IsSubDelim(*uri) ||
-                    *uri == ':' || *uri == '@' || *uri == '/' || *uri == '?')
+            if ( IsPCharNE(*uri) || *uri == '/' || *uri == '?' )
                 m_fragment += *uri++;
             else
                 AppendNextEscaped(m_fragment, uri);
@@ -645,8 +677,8 @@ wxArrayString wxURI::SplitInSegments(const wxString& path)
 
 void wxURI::Resolve(const wxURI& base, int flags)
 {
-    wxASSERT_MSG(!base.IsReference(),
-                "wxURI to inherit from must not be a reference!");
+    wxASSERT_MSG((!base.IsReference()),
+        "wxURI to inherit from must not be a reference!");
 
     // If we aren't being strict, enable the older (pre-RFC2396) loophole that
     // allows this uri to inherit other properties from the base uri - even if
@@ -702,69 +734,78 @@ void wxURI::Resolve(const wxURI& base, int flags)
     // Simple path inheritance from base
     if (!HasPath())
     {
-        //             T.path = Base.path;
+        // T.path = Base.path;
         m_path = base.m_path;
         m_fields |= wxURI_PATH;
 
 
-        //             if defined(R.query) then
-        //                T.query = R.query;
-        //             else
-        //                T.query = Base.query;
-        //             endif;
+        // if defined(R.query) then
+        //     T.query = R.query;
+        // else
+        //     T.query = Base.query;
+        // endif;
         if (!HasQuery())
         {
             m_query = base.m_query;
             m_fields |= wxURI_QUERY;
         }
     }
-    else if ( m_path.empty() || m_path[0u] != '/' )
+    else
     {
-        //             if (R.path starts-with "/") then
-        //                T.path = remove_dot_segments(R.path);
-        //             else
-        //                T.path = merge(Base.path, R.path);
-        //                T.path = remove_dot_segments(T.path);
-        //             endif;
-        //             T.query = R.query;
+        // if (R.path starts-with "/") then
+        //     T.path = remove_dot_segments(R.path);
+        // else
+        //     T.path = merge(Base.path, R.path);
+        //     T.path = remove_dot_segments(T.path);
+        // endif;
+        //     T.query = R.query;
         //
-        // So we don't do anything for absolute paths and implement merge for
-        // the relative ones
+        // So we just normalize (./.. handling) absolute paths and
+        // merge the two together if the one we are resolving with
+        // (right side/operand) is relative
 
         wxArrayString our(SplitInSegments(m_path)),
                       result(SplitInSegments(base.m_path));
+        bool isRightAbsolute = !m_path.empty() && m_path[0u] == '/';
 
         if ( !result.empty() )
-            result.pop_back();
+        {
+            if ( isRightAbsolute )
+                result.clear(); // just resolve right side
+            else
+                result.pop_back();
+        }
 
         if ( our.empty() )
         {
             // if we have an empty path it means we were constructed from a "."
             // string or something similar (e.g. "././././"), it should count
             // as (empty) segment
-            our.push_back("");
+            our.push_back(wxString());
         }
 
         const wxArrayString::const_iterator end = our.end();
         for ( wxArrayString::const_iterator i = our.begin(); i != end; ++i )
         {
-            if ( i->empty() || *i == "." )
+            //. _or_ ./ - remove (6.2.2.3. Path Segment Normalization)
+            if ( i->empty() || *i == "." || *i == "/")
             {
                 // as in ParsePath(), while normally we ignore the empty
                 // segments, we need to take account of them at the end
                 if ( i == end - 1 )
-                    result.push_back("");
+                    result.push_back(wxString());
                 continue;
             }
 
-            if ( *i == ".." )
+            //.. _or_ ../ - remove as well as previous path if it exists (6.2.2.3)
+            if ( *i == ".." || *i == "../")
             {
                 if ( !result.empty() )
                 {
                     result.pop_back();
 
                     if ( i == end - 1 )
-                        result.push_back("");
+                        result.push_back(wxString());
                 }
                 //else: just ignore, extra ".." don't accumulate
             }
@@ -773,7 +814,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
                 if ( result.empty() )
                 {
                     // ensure that the resulting path will always be absolute
-                    result.push_back("");
+                    result.push_back(wxString());
                 }
 
                 result.push_back(*i);
@@ -784,6 +825,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
     }
 
     //T.fragment = R.fragment;
+    // (done implicitly)
 }
 
 // ---------------------------------------------------------------------------
@@ -797,7 +839,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
 bool wxURI::ParseH16(const char*& uri)
 {
     // h16           = 1*4HEXDIG
-    if(!IsHex(*++uri))
+    if(!IsHex(*uri))
         return false;
 
     if(IsHex(*++uri) && IsHex(*++uri) && IsHex(*++uri))
@@ -825,26 +867,29 @@ bool wxURI::ParseIPv4address(const char*& uri)
     //                / "2" %x30-34 DIGIT           ; 200-249
     //                / "25" %x30-35                ; 250-255
     size_t iIPv4 = 0;
+    const char* uriOrig = uri;
     if (IsDigit(*uri))
     {
         ++iIPv4;
 
 
         //each ip part must be between 0-255 (dupe of version in for loop)
-        if( IsDigit(*++uri) && IsDigit(*++uri) &&
+        if( (IsDigit(*++uri) && IsDigit(*++uri) &&
            //100 or less  (note !)
-           !( (*(uri-2) < '2') ||
+           !( (*(uri-2) == '1') ||
            //240 or less
              (*(uri-2) == '2' &&
                (*(uri-1) < '5' || (*(uri-1) == '5' && *uri <= '5'))
              )
             )
-          )
+          ) || ((uri - uriOrig >= 2) && (*uriOrig == '0')) // leading 0
+         )
         {
             return false;
         }
 
-        if(IsDigit(*uri))++uri;
+        if(IsDigit(*uri))
+            ++uri;
 
         //compilers should unroll this loop
         for(; iIPv4 < 4; ++iIPv4)
@@ -853,19 +898,22 @@ bool wxURI::ParseIPv4address(const char*& uri)
                 break;
 
             //each ip part must be between 0-255
-            if( IsDigit(*++uri) && IsDigit(*++uri) &&
+            uriOrig = uri;
+            if( (IsDigit(*++uri) && IsDigit(*++uri) &&
                //100 or less  (note !)
-               !( (*(uri-2) < '2') ||
+               !( (*(uri-2) == '1') ||
                //240 or less
                  (*(uri-2) == '2' &&
                    (*(uri-1) < '5' || (*(uri-1) == '5' && *uri <= '5'))
                  )
                 )
+               ) || ((uri - uriOrig >= 2) && (*uriOrig == '0')) // leading 0
               )
             {
                 return false;
             }
-            if(IsDigit(*uri))++uri;
+            if(IsDigit(*uri))
+                ++uri;
         }
     }
     return iIPv4 == 4;
@@ -883,108 +931,95 @@ bool wxURI::ParseIPv6address(const char*& uri)
     //               / [ *5( h16 ":" ) h16 ] "::"              h16
     //               / [ *6( h16 ":" ) h16 ] "::"
 
-    size_t numPrefix = 0,
-              maxPostfix;
-
-    bool bEndHex = false;
-
-    for( ; numPrefix < 6; ++numPrefix)
+    size_t leftHexpairs = 0, rightHexpairs, maxRightHexpairs;
+    const char* uristart;
+    bool doublecolon = false;
+    if (*uri == ':' && *(uri+1) == ':')
+        doublecolon = true;
+    else
     {
-        if(!ParseH16(uri))
+        uristart = uri;
+        if (ParseH16(uri))
         {
-            --uri;
-            bEndHex = true;
-            break;
-        }
-
-        if(*uri != ':')
-        {
-            break;
-        }
-    }
-
-    if(!bEndHex && !ParseH16(uri))
-    {
-        --uri;
-
-        if (numPrefix)
-            return false;
-
-        if (*uri == ':')
-        {
-            if (*++uri != ':')
-                return false;
-
-            maxPostfix = 5;
-        }
+            ++leftHexpairs;
+            if (*uri == ':' && *(uri+1) == ':')
+                doublecolon = true;
+            else
+            {
+                for (;leftHexpairs < 7;)
+                { // skip up to 6 leading [":" h16] pairs
+                    if (*uri == ':')
+                    {
+                        ++uri; // skip over single colon
+                        uristart = uri;
+                        if (!ParseH16(uri) || (*uri != ':' && *uri))
+                        {
+                            uri = uristart;
+                            break;
+                        }
+                        ++leftHexpairs;
+                    }
+                    else
+                        break;
+                    if (*uri == ':' && *(uri+1) == ':')
+                    {
+                        doublecolon = true;
+                        break;
+                    }
+                } // [":" h16] skipping loop
+                if (!doublecolon && leftHexpairs == 7 && *uri == ':')
+                    ++uri; // skip over single colon
+            }//leading h16 :: check
+        }//h16
         else
-            maxPostfix = 6;
+            uri = uristart;
+    }
+    if (doublecolon)
+    {
+        uri += 2;
+        if (leftHexpairs < 5)
+            maxRightHexpairs = 5 - leftHexpairs;
+        else
+            maxRightHexpairs = 0;
     }
     else
     {
-        if (*uri != ':' || *(uri+1) != ':')
-        {
-            if (numPrefix != 6)
-                return false;
-
-            while (*--uri != ':') {}
-            ++uri;
-
-            const char * const start = uri;
-            //parse ls32
-            // ls32          = ( h16 ":" h16 ) / IPv4address
-            if (ParseH16(uri) && *uri == ':' && ParseH16(uri))
-                return true;
-
-            uri = start;
-
-            if (ParseIPv4address(uri))
-                return true;
-            else
-                return false;
-        }
+        if (leftHexpairs < 6)
+            maxRightHexpairs = 6 - leftHexpairs;
         else
+            maxRightHexpairs = 0;
+    }
+    for (rightHexpairs = 0; rightHexpairs < maxRightHexpairs; ++rightHexpairs)
+    { // skip up to 6 trailing [h16 ":"] pairs
+        uristart = uri;
+        if (!ParseH16(uri) || *uri != ':')
         {
-            uri += 2;
-
-            if (numPrefix > 3)
-                maxPostfix = 0;
-            else
-                maxPostfix = 4 - numPrefix;
+            uri = uristart;
+            break;
         }
+        ++uri;
     }
-
-    bool bAllowAltEnding = maxPostfix == 0;
-
-    for(; maxPostfix != 0; --maxPostfix)
+    if (!doublecolon)
     {
-        if(!ParseH16(uri) || *uri != ':')
+        if (leftHexpairs < 6)
             return false;
+        rightHexpairs = leftHexpairs;
+        leftHexpairs = 0;
     }
-
-    if(numPrefix <= 4)
+    uristart = uri;
+    if (leftHexpairs < 6 && rightHexpairs < 7) // ls32 = ( h16 ":" h16 ) / IPv4address
     {
-        const char * const start = uri;
-        //parse ls32
-        // ls32          = ( h16 ":" h16 ) / IPv4address
-        if (ParseH16(uri) && *uri == ':' && ParseH16(uri))
+        if (ParseH16(uri) && *uri++ == ':' && ParseH16(uri) && *uri == ']')
             return true;
-
-        uri = start;
-
-        if (ParseIPv4address(uri))
+        uri = uristart;
+        if (ParseIPv4address(uri) && *uri == ']')
             return true;
-
-        uri = start;
-
-        if (!bAllowAltEnding)
-            return false;
+        uri = uristart;
     }
-
-    if(numPrefix <= 5 && ParseH16(uri))
+    if (leftHexpairs < 7 && (doublecolon || rightHexpairs == 7)
+        && ParseH16(uri) && *uri == ']') // final single h16 case or tail end of ending ls32
         return true;
-
-    return true;
+    return doublecolon && *uri == ']'; // can only be empty if a "::" was detecte
 }
 
 bool wxURI::ParseIPvFuture(const char*& uri)
@@ -1080,3 +1115,14 @@ bool wxURI::IsEndPath(char c)
     return c == '\0' || c == '#' || c == '?';
 }
 
+// pchar		 = unreserved / pct-encoded / sub-delims / ":" / "@"
+// pct-encoded handled outside, NC is for no colon for relative paths
+bool wxURI::IsPCharNCNE(char c)
+{
+    return IsUnreserved(c) || IsSubDelim(c) || c == '@' || c == '/';
+}
+
+bool wxURI::IsPCharNE(char c)
+{
+    return IsPCharNCNE(c) || c == ':';
+}

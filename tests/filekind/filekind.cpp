@@ -8,9 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -73,7 +70,7 @@ class FileKindTestCase : public CppUnit::TestCase
 };
 
 // test a wxFFile and wxFFileInput/OutputStreams of a known type
-// 
+//
 void FileKindTestCase::TestFILE(wxFFile& file, bool expected)
 {
     CPPUNIT_ASSERT(file.IsOpened());
@@ -178,7 +175,7 @@ void FileKindTestCase::SocketStream()
 //
 void FileKindTestCase::MemoryStream()
 {
-    char buf[20];
+    char buf[20] = { 0 };
     wxMemoryInputStream inStream(buf, sizeof(buf));
     CPPUNIT_ASSERT(inStream.IsSeekable());
     wxMemoryOutputStream outStream(buf, sizeof(buf));
@@ -191,7 +188,7 @@ void FileKindTestCase::MemoryStream()
 }
 
 // Stdin will usually be a terminal, if so then test it
-// 
+//
 void FileKindTestCase::Stdin()
 {
     if (isatty(0))

@@ -10,9 +10,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // FIXME: this tests currently sometimes hangs in Connect() for unknown reason
 //        and this prevents buildbot builds from working so disabling it, but
@@ -80,7 +77,7 @@ protected:
     {
         wxTheApp->MainLoop();
 
-        return NULL;
+        return nullptr;
     }
 
     wxDECLARE_NO_COPY_CLASS(EventThread);
@@ -95,7 +92,7 @@ class IPCTestServer : public wxServer
 public:
     IPCTestServer()
     {
-        m_conn = NULL;
+        m_conn = nullptr;
 
 #if wxUSE_SOCKETS_FOR_IPC
         // we must call this from the main thread
@@ -125,7 +122,7 @@ public:
     virtual wxConnectionBase *OnAcceptConnection(const wxString& topic)
     {
         if ( topic != IPC_TEST_TOPIC )
-            return NULL;
+            return nullptr;
 
         m_conn = new IPCTestConnection;
         return m_conn;
@@ -138,7 +135,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(IPCTestServer);
 };
 
-static IPCTestServer *gs_server = NULL;
+static IPCTestServer *gs_server = nullptr;
 
 // ----------------------------------------------------------------------------
 // test client class
@@ -149,7 +146,7 @@ class IPCTestClient : public wxClient
 public:
     IPCTestClient()
     {
-        m_conn = NULL;
+        m_conn = nullptr;
     }
 
     virtual ~IPCTestClient()
@@ -162,7 +159,7 @@ public:
     {
         m_conn = MakeConnection(host, service, topic);
 
-        return m_conn != NULL;
+        return m_conn != nullptr;
     }
 
     void Disconnect()
@@ -170,7 +167,7 @@ public:
         if ( m_conn )
         {
             delete m_conn;
-            m_conn = NULL;
+            m_conn = nullptr;
         }
     }
 
@@ -187,7 +184,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(IPCTestClient);
 };
 
-static IPCTestClient *gs_client = NULL;
+static IPCTestClient *gs_client = nullptr;
 
 // ----------------------------------------------------------------------------
 // the test code itself
@@ -249,13 +246,13 @@ void IPCTestCase::Disconnect()
     {
         gs_client->Disconnect();
         delete gs_client;
-        gs_client = NULL;
+        gs_client = nullptr;
     }
 
     if ( gs_server )
     {
         delete gs_server;
-        gs_server = NULL;
+        gs_server = nullptr;
     }
 }
 

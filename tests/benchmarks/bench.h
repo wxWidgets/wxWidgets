@@ -32,8 +32,8 @@ public:
     /// Ctor is used implicitly by BENCHMARK_FUNC().
     Function(const char *name,
              FuncType func,
-             InitType init = NULL,
-             DoneType done = NULL)
+             InitType init = nullptr,
+             DoneType done = nullptr)
         : m_name(name),
           m_func(func),
           m_init(init),
@@ -58,7 +58,7 @@ public:
     /// Get the head of the linked list of benchmark objects
     static Function *GetFirst() { return ms_head; }
 
-    /// Get the next object in the linked list or NULL
+    /// Get the next object in the linked list or nullptr
     Function *GetNext() const { return m_next; }
 
 private:
@@ -71,7 +71,7 @@ private:
     const InitType m_init;
     const DoneType m_done;
 
-    // pointer to the next object in the linked list or NULL
+    // pointer to the next object in the linked list or nullptr
     Function * const m_next;
 
     wxDECLARE_NO_COPY_CLASS(Function);
@@ -83,7 +83,7 @@ private:
     Tests may use this parameter in whatever way they see fit, by default it is
     1 but can be set to a different value by user from the command line.
  */
-long GetNumericParameter();
+long GetNumericParameter(long defValue = 1);
 
 /**
     Get the string parameter.
@@ -91,7 +91,7 @@ long GetNumericParameter();
     Tests may use this parameter in whatever way they see fit, by default it is
     empty but can be set to a different value by user from the command line.
  */
-wxString GetStringParameter();
+wxString GetStringParameter(const wxString& defValue = wxString());
 
 } // namespace Bench
 

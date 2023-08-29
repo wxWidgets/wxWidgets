@@ -13,9 +13,6 @@
 
 # /build/
 
-# /build/autoconf_prepend-include/autoconf/
-/build/autoconf_prepend-include/autoconf/autoconf.m4f
-
 # /build/bakefiles/
 /build/bakefiles/.bakefile_gen.state
 /build/bakefiles/Bakefiles.local.bkgen
@@ -28,32 +25,46 @@
 /build/msw/makefile.dmc
 /build/msw/*c*_msw
 /build/msw/*c*_msw_x64
+/build/msw/*c*_msw_arm64
 /build/msw/*c*_msw[du]
 /build/msw/*c*_msw[du]_x64
+/build/msw/*c*_msw[du]_arm64
 /build/msw/*c*_mswud
 /build/msw/*c*_mswud_x64
+/build/msw/*c*_mswud_arm64
 /build/msw/*c*_mswdll
 /build/msw/*c*_mswdll_x64
+/build/msw/*c*_mswdll_arm64
 /build/msw/*c*_msw[du]dll
 /build/msw/*c*_msw[du]dll_x64
+/build/msw/*c*_msw[du]dll_arm64
 /build/msw/*c*_mswuddll
 /build/msw/*c*_mswuddll_x64
+/build/msw/*c*_mswuddll_arm64
 /build/msw/*c*_mswuniv
 /build/msw/*c*_mswuniv_x64
+/build/msw/*c*_mswuniv_arm64
 /build/msw/*c*_mswuniv[du]
 /build/msw/*c*_mswuniv[du]_x64
+/build/msw/*c*_mswuniv[du]_arm64
 /build/msw/*c*_mswunivud
 /build/msw/*c*_mswunivud_x64
+/build/msw/*c*_mswunivud_arm64
 /build/msw/*c*_mswunivdll
 /build/msw/*c*_mswunivdll_x64
+/build/msw/*c*_mswunivdll_arm64
 /build/msw/*c*_mswuniv[du]dll
 /build/msw/*c*_mswuniv[du]dll_x64
+/build/msw/*c*_mswuniv[du]dll_arm64
 /build/msw/*c*_mswunivuddll
 /build/msw/*c*_mswunivuddll_x64
+/build/msw/*c*_mswunivuddll_arm64
 /build/msw/*c*_mswhdll
 /build/msw/*c*_mswhdll_x64
+/build/msw/*c*_mswhdll_arm64
 /build/msw/*c*_mswuhdll
 /build/msw/*c*_mswuhdll_x64
+/build/msw/*c*_mswuhdll_arm64
 /build/msw/wx_local.props
 
 /build/msw/*.vcproj.*.user
@@ -70,8 +81,9 @@
 /build/msw/.vs/
 
 # /build/osx
-/build/osx/wxcocoa.xcodeproj/xcuserdata
-/build/osx/wxiphone.xcodeproj/xcuserdata
+**/xcuserdata/
+**/DerivedData/
+/build/osx/build
 /build/osx/setup/cocoa/include/wx/setup.h
 /build/osx/setup/iphone/include/wx/setup.h
 
@@ -79,28 +91,40 @@
 /demos/*/*.sln
 /demos/*/*c*_msw
 /demos/*/*c*_msw_x64
+/demos/*/*c*_msw_arm64
 /demos/*/*c*_msw[du]
 /demos/*/*c*_msw[du]_x64
+/demos/*/*c*_msw[du]_arm64
 /demos/*/*c*_mswud
 /demos/*/*c*_mswud_x64
+/demos/*/*c*_mswud_arm64
 /demos/*/*c*_mswdll
 /demos/*/*c*_mswdll_x64
+/demos/*/*c*_mswdll_arm64
 /demos/*/*c*_msw[du]dll
 /demos/*/*c*_msw[du]dll_x64
+/demos/*/*c*_msw[du]dll_arm64
 /demos/*/*c*_mswuddll
 /demos/*/*c*_mswuddll_x64
+/demos/*/*c*_mswuddll_arm64
 /demos/*/*c*_mswuniv
 /demos/*/*c*_mswuniv_x64
+/demos/*/*c*_mswuniv_arm64
 /demos/*/*c*_mswuniv[du]
 /demos/*/*c*_mswuniv[du]_x64
+/demos/*/*c*_mswuniv[du]_arm64
 /demos/*/*c*_mswunivud
 /demos/*/*c*_mswunivud_x64
+/demos/*/*c*_mswunivud_arm64
 /demos/*/*c*_mswunivdll
 /demos/*/*c*_mswunivdll_x64
+/demos/*/*c*_mswunivdll_arm64
 /demos/*/*c*_mswuniv[du]dll
 /demos/*/*c*_mswuniv[du]dll_x64
+/demos/*/*c*_mswuniv[du]dll_arm64
 /demos/*/*c*_mswunivuddll
 /demos/*/*c*_mswunivuddll_x64
+/demos/*/*c*_mswunivuddll_arm64
 /demos/*/*Classic?Debug*
 /demos/*/*Classic?Release*
 /demos/*/*Carbon?Debug*
@@ -130,7 +154,6 @@
 /distrib/release
 
 # /docs/doxygen/
-/docs/doxygen/doxygen.log
 /docs/doxygen/out
 
 # /include/
@@ -144,32 +167,17 @@
 /include/wx/generic/Makefile.in
 
 # /include/wx/gtk/
-/include/wx/gtk/setup.h
 /include/wx/gtk/Makefile.in
-
-# /include/wx/gtk1/
-/include/wx/gtk1/setup.h
-/include/wx/gtk1/Makefile.in
 
 # /include/wx/html/
 /include/wx/html/Makefile.in
 
-# /include/wx/motif/
-/include/wx/motif/Makefile.in
-
 # /include/wx/msw/
-/include/wx/msw/setup.h
 /include/wx/msw/Makefile.in
 /include/wx/msw/Makefile
 
-# /include/wx/osx/
-/include/wx/osx/setup.h
-
 # /include/wx/protocol/
 /include/wx/protocol/Makefile.in
-
-# /include/wx/univ/
-/include/wx/univ/setup.h
 
 # /include/wx/unix/
 /include/wx/unix/Makefile.in
@@ -185,13 +193,11 @@
 /lib/bcc_lib
 /lib/cdef*.res
 /lib/dmc_lib
-/lib/evc_armv4_lib
-/lib/evc_emulator_lib
 /lib/expat*.lib
-/lib/gcc_dll
+/lib/gcc*_dll
 /lib/gcc_dll32
 /lib/gcc_dll64
-/lib/gcc_lib
+/lib/gcc*_lib
 /lib/gcc_lib32
 /lib/gcc_lib64
 /lib/jpeg*.lib
@@ -207,7 +213,6 @@
 /lib/mswud
 /lib/png*.lib
 /lib/regex*.lib
-/lib/shell32_sc.lib
 /lib/tiff*.lib
 /lib/univ
 /lib/univd
@@ -215,11 +220,6 @@
 /lib/univdlld
 /lib/vc*_dll
 /lib/vc*_lib
-/lib/vc*_x64_dll
-/lib/vc*_x64_lib
-/lib/wat_lib
-/lib/winmm32_sc.lib
-/lib/wsock32_sc.lib
 /lib/wx_*.rsrc
 /lib/wxbase*.dll
 /lib/wxbase*.exp
@@ -237,64 +237,43 @@
 # /locale/msw/
 /locale/msw/*.mo
 
-# /misc/
-/misc/system.list
-/misc/bin
-/misc/.gdb_history
-/misc/Test
-/misc/config.cache
-/misc/config.status
-/misc/system.list
-/misc/linux.system.cache
-/misc/wx-config
-/misc/config.log
-/misc/linux-gnu.system.cache
-/misc/*.dsp
-/misc/*.plg
-/misc/*.opt
-/misc/*.aps
-/misc/*.ncb
-/misc/*.pro
-/misc/*.opt
-/misc/Release
-/misc/Debug
-/misc/ReleaseDLL
-/misc/DebugDLL
-/misc/robert
-/misc/Makefile.in
-/misc/setup.h.in
-/misc/stamp-h.in
-/misc/Makefile
-/misc/configure
-/misc/setup.h
-/misc/stamp-h
-/misc/libtool
-
 # /samples/
 /samples/**/*c*_msw
 /samples/**/*c*_msw_x64
+/samples/**/*c*_msw_arm64
 /samples/**/*c*_msw[du]
 /samples/**/*c*_msw[du]_x64
+/samples/**/*c*_msw[du]_arm64
 /samples/**/*c*_mswud
 /samples/**/*c*_mswud_x64
+/samples/**/*c*_mswud_arm64
 /samples/**/*c*_mswdll
 /samples/**/*c*_mswdll_x64
+/samples/**/*c*_mswdll_arm64
 /samples/**/*c*_msw[du]dll
 /samples/**/*c*_msw[du]dll_x64
+/samples/**/*c*_msw[du]dll_arm64
 /samples/**/*c*_mswuddll
 /samples/**/*c*_mswuddll_x64
+/samples/**/*c*_mswuddll_arm64
 /samples/**/*c*_mswuniv
 /samples/**/*c*_mswuniv_x64
+/samples/**/*c*_mswuniv_arm64
 /samples/**/*c*_mswuniv[du]
 /samples/**/*c*_mswuniv[du]_x64
+/samples/**/*c*_mswuniv[du]_arm64
 /samples/**/*c*_mswunivud
 /samples/**/*c*_mswunivud_x64
+/samples/**/*c*_mswunivud_arm64
 /samples/**/*c*_mswunivdll
 /samples/**/*c*_mswunivdll_x64
+/samples/**/*c*_mswunivdll_arm64
 /samples/**/*c*_mswuniv[du]dll
 /samples/**/*c*_mswuniv[du]dll_x64
+/samples/**/*c*_mswuniv[du]dll_arm64
 /samples/**/*c*_mswunivuddll
 /samples/**/*c*_mswunivuddll_x64
+/samples/**/*c*_mswunivuddll_arm64
 
 # /samples/image/
 /samples/image/saved.xpm
@@ -329,27 +308,14 @@
 /src/gtk/*.lo
 /src/gtk/*.la
 
-# /src/gtk1/
-/src/gtk1/Makefile.in
-/src/gtk1/*.lo
-/src/gtk1/*.la
-
 # /src/jpeg/
 /src/jpeg/jpegM*Data
 /src/jpeg/jpegM5.mcp
 /src/jpeg/Debug
 /src/jpeg/Release
 
-# /src/motif/
-/src/motif/Makefile.in
-
 # /src/msw/
 /src/msw/Makefile.in
-
-# /src/regex/
-/src/regex/Debug
-/src/regex/Release
-/src/regex/*.vcl
 
 # /src/zlib/
 /src/zlib/zlibM*Data
@@ -360,31 +326,42 @@
 # /tests/
 /tests/*c*_msw
 /tests/*c*_msw_x64
+/tests/*c*_msw_arm64
 /tests/*c*_msw[du]
 /tests/*c*_msw[du]_x64
+/tests/*c*_msw[du]_arm64
 /tests/*c*_mswud
 /tests/*c*_mswud_x64
+/tests/*c*_mswud_arm64
 /tests/*c*_mswdll
 /tests/*c*_mswdll_x64
+/tests/*c*_mswdll_arm64
 /tests/*c*_msw[du]dll
 /tests/*c*_msw[du]dll_x64
+/tests/*c*_msw[du]dll_arm64
 /tests/*c*_mswuddll
 /tests/*c*_mswuddll_x64
+/tests/*c*_mswuddll_arm64
 /tests/*c*_mswuniv
 /tests/*c*_mswuniv_x64
+/tests/*c*_mswuniv_arm64
 /tests/*c*_mswuniv[du]
 /tests/*c*_mswuniv[du]_x64
+/tests/*c*_mswuniv[du]_arm64
 /tests/*c*_mswunivud
 /tests/*c*_mswunivud_x64
+/tests/*c*_mswunivud_arm64
 /tests/*c*_mswunivdll
 /tests/*c*_mswunivdll_x64
+/tests/*c*_mswunivdll_arm64
 /tests/*c*_mswuniv[du]dll
 /tests/*c*_mswuniv[du]dll_x64
+/tests/*c*_mswuniv[du]dll_arm64
 /tests/*c*_mswunivuddll
 /tests/*c*_mswunivuddll_x64
+/tests/*c*_mswunivuddll_arm64
 /tests/test.opt
 /tests/test*.dsw
-/tests/test*.sln
 /tests/test.suo
 /tests/test_test.vcproj
 
@@ -395,12 +372,16 @@
 # /utils/
 /utils/**/*c*_mswu
 /utils/**/*c*_mswu_x64
+/utils/**/*c*_mswu_arm64
 /utils/**/*c*_mswud
 /utils/**/*c*_mswud_x64
+/utils/**/*c*_mswud_arm64
 /utils/**/*c*_mswudll
 /utils/**/*c*_mswudll_x64
+/utils/**/*c*_mswudll_arm64
 /utils/**/*c*_mswuddll
 /utils/**/*c*_mswuddll_x64
+/utils/**/*c*_mswuddll_arm64
 
 # /utils/emulator/src/
 /utils/emulator/src/*.sln
@@ -417,4 +398,6 @@
 /utils/hhp2cached/*Carbon?Release*
 
 # /utils/wxrc/
-/utils/wxrc/*.sln
+/utils/wxrc/wxrc_vc[789].sln
+
+/3rdparty/webview2

@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BITMAPCOMBOBOX
 
@@ -38,8 +35,6 @@
 // For wxODCB_XXX flags
 #include "wx/odcombo.h"
 
-
-#define IMAGE_SPACING_CTRL_VERTICAL 7  // Spacing used in control size calculation
 
 
 // ============================================================================
@@ -128,94 +123,9 @@ void wxBitmapComboBox::RecreateControl()
     // Can't use CBS_OWNERDRAWVARIABLE because it has odd
     // mouse-wheel behaviour.
     //
-    wxString value = GetValue();
-    wxPoint pos = GetPosition();
-    wxSize size = GetSize();
-    size.y = GetBestSize().y;
-    const wxArrayString strings = GetStrings();
-    const unsigned numItems = strings.size();
-    unsigned i;
-
-    // Save the client data pointers before clearing the control, if any.
-    const wxClientDataType clientDataType = GetClientDataType();
-    wxVector<wxClientData*> objectClientData;
-    wxVector<void*> voidClientData;
-    switch ( clientDataType )
-    {
-        case wxClientData_None:
-            break;
-
-        case wxClientData_Object:
-            objectClientData.reserve(numItems);
-            for ( i = 0; i < numItems; ++i )
-                objectClientData.push_back(GetClientObject(i));
-            break;
-
-        case wxClientData_Void:
-            voidClientData.reserve(numItems);
-            for ( i = 0; i < numItems; ++i )
-                voidClientData.push_back(GetClientData(i));
-            break;
-    }
-
-    wxComboBox::DoClear();
-
-    HWND hwnd = GetHwnd();
-    DissociateHandle();
-    ::DestroyWindow(hwnd);
-
-    if ( !MSWCreateControl(wxT("COMBOBOX"), wxEmptyString, pos, size) )
-        return;
-
-    // initialize the controls contents
-    for ( i = 0; i < numItems; i++ )
-    {
-        wxComboBox::Append(strings[i]);
-
-        if ( !objectClientData.empty() )
-            SetClientObject(i, objectClientData[i]);
-        else if ( !voidClientData.empty() )
-            SetClientData(i, voidClientData[i]);
-    }
-
-    // and make sure it has the same attributes as before
-    if ( m_hasFont )
-    {
-        // calling SetFont(m_font) would do nothing as the code would
-        // notice that the font didn't change, so force it to believe
-        // that it did
-        wxFont font = m_font;
-        m_font = wxNullFont;
-        SetFont(font);
-    }
-
-    if ( m_hasFgCol )
-    {
-        wxColour colFg = m_foregroundColour;
-        m_foregroundColour = wxNullColour;
-        SetForegroundColour(colFg);
-    }
-
-    if ( m_hasBgCol )
-    {
-        wxColour colBg = m_backgroundColour;
-        m_backgroundColour = wxNullColour;
-        SetBackgroundColour(colBg);
-    }
-    else
-    {
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    }
+    MSWRecreate();
 
     ::SendMessage(GetHwnd(), CB_SETITEMHEIGHT, 0, MeasureItem(0));
-
-    // Revert the old string value
-    if ( !HasFlag(wxCB_READONLY) )
-        ChangeValue(value);
-
-    // If disabled we'll have to disable it again after re-creating
-    if ( !IsEnabled() )
-        DoEnable(false);
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()
@@ -238,7 +148,7 @@ wxSize wxBitmapComboBox::DoGetBestSize() const
 // Item manipulation
 // ----------------------------------------------------------------------------
 
-void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmap& bitmap)
+void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap)
 {
     OnAddBitmap(bitmap);
     DoSetItemBitmap(n, bitmap);
@@ -247,7 +157,7 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmap& bitmap)
         Refresh();
 }
 
-int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap)
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmapBundle& bitmap)
 {
     OnAddBitmap(bitmap);
     const int n = wxComboBox::Append(item);
@@ -256,7 +166,7 @@ int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap)
     return n;
 }
 
-int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmapBundle& bitmap,
                              void *clientData)
 {
     OnAddBitmap(bitmap);
@@ -266,7 +176,7 @@ int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
     return n;
 }
 
-int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmapBundle& bitmap,
                              wxClientData *clientData)
 {
     OnAddBitmap(bitmap);
@@ -277,7 +187,7 @@ int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
 }
 
 int wxBitmapComboBox::Insert(const wxString& item,
-                             const wxBitmap& bitmap,
+                             const wxBitmapBundle& bitmap,
                              unsigned int pos)
 {
     OnAddBitmap(bitmap);
@@ -287,7 +197,7 @@ int wxBitmapComboBox::Insert(const wxString& item,
     return n;
 }
 
-int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Insert(const wxString& item, const wxBitmapBundle& bitmap,
                              unsigned int pos, void *clientData)
 {
     OnAddBitmap(bitmap);
@@ -297,7 +207,7 @@ int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
     return n;
 }
 
-int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Insert(const wxString& item, const wxBitmapBundle& bitmap,
                              unsigned int pos, wxClientData *clientData)
 {
     OnAddBitmap(bitmap);
@@ -325,7 +235,7 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
             if ( clientData )
                 index = wxComboBox::DoInsertItems(items[i], pos+i, clientData+i, type);
             else
-                index = wxComboBox::DoInsertItems(items[i], pos+i, NULL, wxClientData_None);
+                index = wxComboBox::DoInsertItems(items[i], pos+i, nullptr, wxClientData_None);
 
             wxASSERT_MSG( index != wxNOT_FOUND, wxS("Invalid wxBitmapComboBox state") );
             if ( index == wxNOT_FOUND )
@@ -334,16 +244,16 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
             }
 
             // Update the bitmap array.
-            if ( GetCount() > m_bitmaps.Count() )
+            if ( GetCount() > m_bitmapbundles.size() )
             {
-                wxASSERT_MSG( GetCount() == m_bitmaps.Count() + 1,
+                wxASSERT_MSG( GetCount() == m_bitmapbundles.size() + 1,
                               wxS("Invalid wxBitmapComboBox state") );
                 // Control is in the normal state.
                 // New item has been just added.
                 // Insert bitmap at the given index into the array.
-                wxASSERT_MSG( (size_t)index <= m_bitmaps.Count(),
+                wxASSERT_MSG( (size_t)index <= m_bitmapbundles.size(),
                               wxS("wxBitmapComboBox item index out of bound") );
-                m_bitmaps.Insert(new wxBitmap(wxNullBitmap), index);
+                m_bitmapbundles.insert(m_bitmapbundles.begin() + index, wxBitmapBundle());
             }
             else
             {
@@ -352,7 +262,7 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
                 // In this case existing bitmaps are reused.
                 // Required and actual indices should be the same to assure
                 // consistency between list of items and bitmap array.
-                wxASSERT_MSG( (size_t)index < m_bitmaps.Count(),
+                wxASSERT_MSG( (size_t)index < m_bitmapbundles.size(),
                               wxS("wxBitmapComboBox item index out of bound") );
                 wxASSERT_MSG( (unsigned int)index == pos+i,
                               wxS("Invalid index for wxBitmapComboBox item") );
@@ -361,28 +271,28 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
     }
     else
     {
-        if ( GetCount() == m_bitmaps.Count() )
+        if ( GetCount() == m_bitmapbundles.size() )
         {
             // Control is in the normal state.
             // Just insert new bitmaps into the array.
             const unsigned int countNew = GetCount() + numItems;
-            m_bitmaps.Alloc(countNew);
+            m_bitmapbundles.reserve(countNew);
 
             for ( unsigned int i = 0; i < numItems; i++ )
             {
-                m_bitmaps.Insert(new wxBitmap(wxNullBitmap), pos + i);
+                m_bitmapbundles.insert(m_bitmapbundles.begin() + pos + i, wxBitmapBundle());
             }
         }
         else
         {
-            wxASSERT_MSG( GetCount() < m_bitmaps.Count(),
+            wxASSERT_MSG( GetCount() < m_bitmapbundles.size(),
                           wxS("Invalid wxBitmapComboBox state") );
             // There are less items then bitmaps.
             // (This can happen if control is e.g. recreated with RecreateControl).
             // In this case existing bitmaps are reused.
             // The whole block of inserted items should be within the range
             // of indices of the existing bitmap array.
-            wxASSERT_MSG( pos + numItems <= m_bitmaps.Count(),
+            wxASSERT_MSG( pos + numItems <= m_bitmapbundles.size(),
                       wxS("wxBitmapComboBox item index out of bound") );
         }
 
@@ -407,9 +317,9 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
     return index;
 }
 
-bool wxBitmapComboBox::OnAddBitmap(const wxBitmap& bitmap)
+bool wxBitmapComboBox::OnAddBitmap(const wxBitmapBundle& bitmap)
 {
-    if ( wxBitmapComboBoxBase::OnAddBitmap(bitmap) )
+    if ( wxBitmapComboBoxBase::OnAddBitmap(bitmap) || !GetCount() )
     {
         // Need to recreate control for a new measureitem call?
         int prevItemHeight = ::SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
@@ -530,6 +440,15 @@ bool wxBitmapComboBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
     }
 
     return true;
+}
+
+void wxBitmapComboBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxComboBox::MSWUpdateFontOnDPIChange(newDPI);
+
+    UpdateInternals();
+
+    RecreateControl();
 }
 
 #endif // wxUSE_BITMAPCOMBOBOX

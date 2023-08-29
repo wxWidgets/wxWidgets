@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/scrolwin.h"
 
@@ -44,18 +41,6 @@
     #include "wx/msw/winundef.h"
 #endif
 
-#ifdef __WXMOTIF__
-// For wxRETAINED implementation
-#ifdef __VMS__ //VMS's Xm.h is not (yet) compatible with C++
-               //This code switches off the compiler warnings
-# pragma message disable nosimpint
-#endif
-#include <Xm/Xm.h>
-#ifdef __VMS__
-# pragma message enable nosimpint
-#endif
-#endif
-
 /*
     TODO PROPERTIES
         style wxHSCROLL | wxVSCROLL
@@ -74,7 +59,7 @@ public:
         m_scrollHelper = scrollHelper;
     }
 
-    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
+    virtual bool ProcessEvent(wxEvent& event) override;
 
 private:
     wxScrollHelperBase *m_scrollHelper;
@@ -96,7 +81,7 @@ public:
                       wxEventType eventTypeToSend,
                       int pos, int orient);
 
-    virtual void Notify() wxOVERRIDE;
+    virtual void Notify() override;
 
 private:
     wxWindow *m_win;
@@ -150,12 +135,7 @@ void wxAutoScrollTimer::Notify()
 
             // the mouse event coordinates should be client, not screen as
             // returned by wxGetMousePosition
-            wxWindow *parentTop = m_win;
-            while ( parentTop->GetParent() )
-                parentTop = parentTop->GetParent();
-            wxPoint ptOrig = parentTop->GetPosition();
-            event2.m_x -= ptOrig.x;
-            event2.m_y -= ptOrig.y;
+            m_win->ScreenToClient(&event2.m_x, &event2.m_y);
 
             event2.SetEventObject(m_win);
 
@@ -278,7 +258,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     }
 #if wxUSE_MOUSEWHEEL
     // Use GTK's own scroll wheel handling in GtkScrolledWindow
-#ifndef __WXGTK20__
+#ifndef __WXGTK__
     else if ( evType == wxEVT_MOUSEWHEEL )
     {
         m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
@@ -322,10 +302,10 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 
 wxAnyScrollHelperBase::wxAnyScrollHelperBase(wxWindow* win)
 {
-    wxASSERT_MSG( win, wxT("associated window can't be NULL in wxScrollHelper") );
+    wxASSERT_MSG( win, wxT("associated window can't be null in wxScrollHelper") );
 
     m_win = win;
-    m_targetWindow = NULL;
+    m_targetWindow = nullptr;
 
     m_kbdScrollingEnabled = true;
 }
@@ -355,9 +335,9 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
     m_wheelRotation = 0;
 #endif
 
-    m_timerAutoScroll = NULL;
+    m_timerAutoScroll = nullptr;
 
-    m_handler = NULL;
+    m_handler = nullptr;
 
     m_win->SetScrollHelper(static_cast<wxScrollHelper *>(this));
 
@@ -456,7 +436,7 @@ void wxScrollHelperBase::DeleteEvtHandler()
         //else: something is very wrong, so better [maybe] leak memory than
         //      risk a crash because of double deletion
 
-        m_handler = NULL;
+        m_handler = nullptr;
     }
 }
 
@@ -482,7 +462,7 @@ void wxScrollHelperBase::DoSetTargetWindow(wxWindow *target)
 
 void wxScrollHelperBase::SetTargetWindow(wxWindow *target)
 {
-    wxCHECK_RET( target, wxT("target window must not be NULL") );
+    wxCHECK_RET( target, wxT("target window must not be null") );
 
     if ( target == m_targetWindow )
         return;
@@ -564,6 +544,12 @@ void wxScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
     {
         m_targetWindow->ScrollWindow(dx, dy, GetScrollRect());
     }
+#ifdef __WXUNIVERSAL__
+    if (m_win != m_targetWindow)
+    {
+        m_win->Refresh(true, GetScrollRect());
+    }
+#endif // __WXUNIVERSAL__
 }
 
 int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
@@ -658,7 +644,7 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
 void wxScrollHelperBase::DoPrepareDC(wxDC& dc)
 {
     wxPoint pt = dc.GetDeviceOrigin();
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
     // It may actually be correct to always query
     // the m_sign from the DC here, but I leave the
     // #ifdef GTK for now.
@@ -767,10 +753,18 @@ bool wxScrollHelperBase::ScrollLayout()
         // If we're the scroll target, take into account the
         // virtual size and scrolled position of the window.
 
-        int x = 0, y = 0, w = 0, h = 0;
-        CalcScrolledPosition(0,0, &x,&y);
-        m_win->GetVirtualSize(&w, &h);
-        m_win->GetSizer()->SetDimension(x, y, w, h);
+        wxSize size = m_win->GetVirtualSize();
+
+        // However we should use the real window size in the direction in which
+        // scrolling is disabled, if any.
+        const wxSize clientSize = m_win->GetClientSize();
+        if ( !IsScrollbarShown(wxHORIZONTAL) )
+            size.x = clientSize.x;
+        if ( !IsScrollbarShown(wxVERTICAL) )
+            size.y = clientSize.y;
+
+        m_win->GetSizer()->SetDimension(CalcScrolledPosition(wxPoint(0, 0)),
+                                        size);
         return true;
     }
 
@@ -1062,12 +1056,13 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     if ( win == m_targetWindow )
         return; // nothing to do
 
-#if defined( __WXOSX__ ) && wxUSE_SCROLLBAR
-    if (wxDynamicCast(win, wxScrollBar))
+    if ( !ShouldScrollToChildOnFocus(win) )
+    {
+        // the window does not require to be scrolled into view
         return;
-#endif
+    }
 
-    // Fixing ticket: https://trac.wxwidgets.org/ticket/9563
+    // Fixing ticket: https://github.com/wxWidgets/wxWidgets/issues/9563
     // When a child inside a wxControlContainer receives a focus, the
     // wxControlContainer generates an artificial wxChildFocusEvent for
     // itself, telling its parent that 'it' received the focus. The effect is
@@ -1093,7 +1088,7 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     for ( wxWindow* w = win; w; w = w->GetParent() )
     {
         if ( w != actual_focus &&
-             wxDynamicCast(w, wxPanel) != NULL &&
+             wxDynamicCast(w, wxPanel) != nullptr &&
              w->GetParent() == m_targetWindow )
         {
             // if it is a wxPanel and receives the focus, it should not be
@@ -1383,39 +1378,6 @@ void wxScrollHelper::AdjustScrollbars()
             break;
     }
 
-#ifdef __WXMOTIF__
-    // Sorry, some Motif-specific code to implement a backing pixmap
-    // for the wxRETAINED style. Implementing a backing store can't
-    // be entirely generic because it relies on the wxWindowDC implementation
-    // to duplicate X drawing calls for the backing pixmap.
-
-    if ( m_targetWindow->GetWindowStyle() & wxRETAINED )
-    {
-        Display* dpy = XtDisplay((Widget)m_targetWindow->GetMainWidget());
-
-        int totalPixelWidth = m_xScrollLines * m_xScrollPixelsPerLine;
-        int totalPixelHeight = m_yScrollLines * m_yScrollPixelsPerLine;
-        if (m_targetWindow->GetBackingPixmap() &&
-           !((m_targetWindow->GetPixmapWidth() == totalPixelWidth) &&
-             (m_targetWindow->GetPixmapHeight() == totalPixelHeight)))
-        {
-            XFreePixmap (dpy, (Pixmap) m_targetWindow->GetBackingPixmap());
-            m_targetWindow->SetBackingPixmap((WXPixmap) 0);
-        }
-
-        if (!m_targetWindow->GetBackingPixmap() &&
-           (m_xScrollLines != 0) && (m_yScrollLines != 0))
-        {
-            int depth = wxDisplayDepth();
-            m_targetWindow->SetPixmapWidth(totalPixelWidth);
-            m_targetWindow->SetPixmapHeight(totalPixelHeight);
-            m_targetWindow->SetBackingPixmap((WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-              m_targetWindow->GetPixmapWidth(), m_targetWindow->GetPixmapHeight(), depth));
-        }
-
-    }
-#endif // Motif
-
     if (oldXScroll != m_xScrollPosition)
     {
        if (m_xScrollingEnabled)
@@ -1546,10 +1508,10 @@ wxSize wxScrolledT_Helper::FilterBestSize(const wxWindow *win,
         wxSize minSize = win->GetMinSize();
 
         if ( ppuX > 0 )
-            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win);
 
         if ( ppuY > 0 )
-            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, win);
     }
 
     return best;

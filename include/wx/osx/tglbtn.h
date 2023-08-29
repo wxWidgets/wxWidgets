@@ -23,7 +23,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -35,17 +35,17 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
-    virtual void SetValue(bool value);
-    virtual bool GetValue() const ;
+    virtual void SetValue(bool value) override;
+    virtual bool GetValue() const override;
 
-    virtual bool OSXHandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked( double timestampsec ) override;
 
-    virtual void Command(wxCommandEvent& event);
+    virtual void Command(wxCommandEvent& event) override;
 
 protected:
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToggleButton);
@@ -58,24 +58,24 @@ public:
     wxBitmapToggleButton() {}
     wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
-                   const wxBitmap& label,
+                   const wxBitmapBundle& label,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxCheckBoxNameStr)
+                   const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr);
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapToggleButton);

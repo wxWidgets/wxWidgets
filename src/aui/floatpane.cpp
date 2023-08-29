@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -52,10 +49,11 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                         (pane.HasMaximizeButton()?wxMAXIMIZE_BOX:0) |
                         (pane.IsFixed()?0:wxRESIZE_BORDER)
                         )
+    , m_ownerMgr(owner_mgr)
 {
-    m_ownerMgr = owner_mgr;
     m_moving = false;
     m_mgr.SetManagedWindow(this);
+    m_mgr.SetArtProvider(owner_mgr->GetArtProvider()->Clone());
     m_solidDrag = true;
 
     // find out if the system supports solid window drag.
@@ -74,7 +72,7 @@ wxAuiFloatingFrame::~wxAuiFloatingFrame()
     // if we do not do this, then we can crash...
     if (m_ownerMgr && m_ownerMgr->m_actionWindow == this)
     {
-        m_ownerMgr->m_actionWindow = NULL;
+        m_ownerMgr->m_actionWindow = nullptr;
     }
 
     m_mgr.UnInit();
@@ -205,6 +203,13 @@ void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
 
 void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 {
+    // Always sync pane's floating_pos with frame's position
+    if (m_ownerMgr)
+    {
+        m_ownerMgr->GetPane(m_paneWindow).
+            floating_pos = GetRect().GetPosition();
+    }
+
     if (!m_solidDrag)
     {
         // systems without solid window dragging need to be
@@ -236,20 +241,13 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 #ifndef __WXOSX__
     // skip if moving too fast to avoid massive redraws and
     // jumping hint windows
+    // TODO: Should 3x3px threshold increase on Retina displays?
     if ((abs(winRect.x - m_lastRect.x) > 3) ||
         (abs(winRect.y - m_lastRect.y) > 3))
     {
         m_last3Rect = m_last2Rect;
         m_last2Rect = m_lastRect;
         m_lastRect = winRect;
-
-        // However still update the internally stored position to avoid
-        // snapping back to the old one later.
-        if (m_ownerMgr)
-        {
-            m_ownerMgr->GetPane(m_paneWindow).
-                floating_pos = winRect.GetPosition();
-        }
 
         return;
     }

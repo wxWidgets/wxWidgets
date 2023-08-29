@@ -3,7 +3,7 @@
 // Purpose:     wxNativeWindow implementation
 // Author:      Vadim Zeitlin
 // Created:     2008-03-05
-// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP

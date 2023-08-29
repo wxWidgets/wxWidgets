@@ -11,18 +11,36 @@
 
 @tableofcontents
 
-Various controls and other parts of wxWidgets need an ID.  Sometimes the ID may
-be directly provided by the user or have a predefined value, such as
-@c wxID_OPEN. Often, however, the value of the ID is unimportant and in this
-case it is enough to use @c wxID_ANY as the ID of an object which tells
-wxWidgets to assign an ID automatically. All such automatically-assigned IDs
-are negative, so the IDs predefined in the user code should always be positive
-to avoid clashes with them.
+When creating a new wxWindow-derived class or adding a menu item, its ID must
+be specified. An ID is just a unique (at least locally, i.e. inside the same
+top level window) integer allowing to find the window or menu item later and to
+distinguish between events from different objects.
+
+If applicable, stock IDs such as ::wxID_EXIT (for menu item) or ::wxID_OK (for
+a button) should be used, see @ref page_stockitems for the full list of such
+IDs.
+
+If the value of an ID is not important, ::wxID_ANY should be used, telling
+wxWidgets to allocate a unique ID automatically. All such
+automatically-assigned IDs are negative and so won't conflict with any
+user-defined IDs as long as they are positive.
 
 If you do care about the ID value but don't want to specify it as a literal in
 your code, you can use wxWindow::NewControlId() to create an ID that had never
-been returned by this function before and, being also negative, never conflicts
-with any IDs explicitly defined in the program if the advice above is followed.
+been returned by this function before. Such IDs are also negative.
+
+Finally, you can just define your own IDs. Typically this is done by using a
+C++ enum to automatically ensure their uniqueness. If you do this, please note
+that your custom IDs must be positive to avoid clashes with the automatically
+assigned IDs discussed above and should @e not have values 0 or 1, that can
+result in surprising behaviour under some platforms. Finally, you also need to
+avoid defining IDs in the range from ::wxID_LOWEST to ::wxID_HIGHEST which is
+reserved for wxWidgets-defined IDs, see ::wxStandardID for more details.
+
+To avoid all these restrictions, it is best to avoid using hard-coded IDs at
+all, they are not needed when using wxEvtHandler::Bind() for event handling
+(unlike with the previously used event tables).
+
 
 @see wxIdManager, wxWindow::NewControlId(), wxWindow::UnreserveControlId()
 

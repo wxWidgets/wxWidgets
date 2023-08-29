@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/wrapsizer.h"
 #include "wx/vector.h"
@@ -92,8 +89,8 @@ void wxWrapSizer::ClearRows()
 {
     // all elements of the row sizers are also elements of this one (we
     // directly add pointers to elements of our own m_children list to the row
-    // sizers in RecalcSizes()), so we need to detach them from the row sizer
-    // to avoid double deletion
+    // sizers in RepositionChildren()), so we need to detach them from the row
+    // sizer to avoid double deletion
     wxSizerItemList& rows = m_rows.GetChildren();
     for ( wxSizerItemList::iterator i = rows.begin(),
                                   end = rows.end();
@@ -115,7 +112,7 @@ void wxWrapSizer::ClearRows()
         if ( propChanger )
         {
             // this deletes propChanger and so restores the old proportion
-            item->SetUserData(NULL);
+            item->SetUserData(nullptr);
         }
     }
 }
@@ -331,7 +328,7 @@ void wxWrapSizer::CalcMinFromMajor(int totMajor)
 // Helper struct for CalcMinFromMinor
 struct wxWrapLine
 {
-    wxWrapLine() : m_first(NULL), m_width(0) { }
+    wxWrapLine() : m_first(nullptr), m_width(0) { }
     wxSizerItem *m_first;
     int m_width;        // Width of line
 };
@@ -465,7 +462,11 @@ void wxWrapSizer::CalcMinFromMinor(int totMinor)
 
         // No spill over?
         if ( !tailSize )
+        {
+            // Add minor size of the last line
+            sumMinor += maxMinor;
             break;
+        }
     }
 
     // Now have min size in the opposite direction
@@ -485,7 +486,7 @@ void wxWrapSizer::FinishRow(size_t n,
     AdjustLastRowItemProp(n, itemLast);
 }
 
-void wxWrapSizer::RecalcSizes()
+void wxWrapSizer::RepositionChildren(const wxSize& WXUNUSED(minSize))
 {
     // First restore any proportions we may have changed and remove the old rows
     ClearRows();
@@ -506,8 +507,8 @@ void wxWrapSizer::RecalcSizes()
     size_t nRow = 0;
     wxSizer *sizer = GetRowSizer(nRow);
 
-    wxSizerItem *itemLast = NULL,   // last item processed in this row
-                *itemSpace = NULL;  // spacer which we delayed adding
+    wxSizerItem *itemLast = nullptr,   // last item processed in this row
+                *itemSpace = nullptr;  // spacer which we delayed adding
 
     // Now put our child items into child sizers instead
     for ( wxSizerItemList::iterator i = m_children.begin();
@@ -545,7 +546,7 @@ void wxWrapSizer::RecalcSizes()
             sizer = GetRowSizer(++nRow);
 
             itemLast =
-            itemSpace = NULL;
+            itemSpace = nullptr;
         }
 
         // Only remove first/last spaces if that flag is set
@@ -570,7 +571,7 @@ void wxWrapSizer::RecalcSizes()
             // to a conflict with the current containing sizer.
             wxWindow * const win = item->GetWindow();
             if ( win )
-                win->SetContainingSizer(NULL);
+                win->SetContainingSizer(nullptr);
 
             // Notice that we reuse a pointer to our own sizer item here, so we
             // must remember to remove it by calling ClearRows() to avoid
@@ -581,12 +582,12 @@ void wxWrapSizer::RecalcSizes()
             // which is wrong. Set it to point to us.
             if ( win )
             {
-                win->SetContainingSizer(NULL);
+                win->SetContainingSizer(nullptr);
                 win->SetContainingSizer(this);
             }
 
             itemLast = item;
-            itemSpace = NULL;
+            itemSpace = nullptr;
         }
     }
 

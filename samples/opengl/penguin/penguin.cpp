@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -43,15 +40,15 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, wxT("wxWidgets Penguin Sample"),
+    MyFrame *frame = new MyFrame(nullptr, "wxWidgets Penguin Sample",
         wxDefaultPosition, wxDefaultSize);
 
 #if wxUSE_ZLIB
-    if (wxFileExists(wxT("penguin.dxf.gz")))
-        frame->GetCanvas()->LoadDXF(wxT("penguin.dxf.gz"));
+    if (wxFileExists("penguin.dxf.gz"))
+        frame->GetCanvas()->LoadDXF("penguin.dxf.gz");
 #else
-    if (wxFileExists(wxT("penguin.dxf")))
-        frame->GetCanvas()->LoadDXF(wxT("penguin.dxf"));
+    if (wxFileExists("penguin.dxf"))
+        frame->GetCanvas()->LoadDXF("penguin.dxf");
 #endif
 
     /* Show the frame */
@@ -81,16 +78,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 
     // Make the "File" menu
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(wxID_OPEN, wxT("&Open..."));
+    fileMenu->Append(wxID_OPEN, "&Open...");
     fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_EXIT, wxT("E&xit\tALT-X"));
+    fileMenu->Append(wxID_EXIT, "E&xit\tALT-X");
     // Make the "Help" menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, wxT("&About"));
+    helpMenu->Append(wxID_HELP, "&About");
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(fileMenu, wxT("&File"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(helpMenu, "&Help");
     SetMenuBar(menuBar);
 
     Show(true);
@@ -102,11 +99,11 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 // File|Open... command
 void MyFrame::OnMenuFileOpen( wxCommandEvent& WXUNUSED(event) )
 {
-    wxString filename = wxFileSelector(wxT("Choose DXF Model"), wxT(""), wxT(""), wxT(""),
+    wxString filename = wxFileSelector("Choose DXF Model", "", "", "",
 #if wxUSE_ZLIB
-        wxT("DXF Drawing (*.dxf;*.dxf.gz)|*.dxf;*.dxf.gz|All files (*.*)|*.*"),
+        "DXF Drawing (*.dxf;*.dxf.gz)|*.dxf;*.dxf.gz|All files (*.*)|*.*",
 #else
-        wxT("DXF Drawing (*.dxf)|*.dxf)|All files (*.*)|*.*"),
+        "DXF Drawing (*.dxf)|*.dxf)|All files (*.*)|*.*",
 #endif
         wxFD_OPEN);
     if (!filename.IsEmpty())
@@ -126,7 +123,7 @@ void MyFrame::OnMenuFileExit( wxCommandEvent& WXUNUSED(event) )
 // Help|About command
 void MyFrame::OnMenuHelpAbout( wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageBox(wxT("OpenGL Penguin Sample (c) Robert Roebling, Sandro Sigala et al"));
+    wxMessageBox("OpenGL Penguin Sample (c) Robert Roebling, Sandro Sigala et al");
 }
 
 // ---------------------------------------------------------------------------
@@ -146,7 +143,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent,
                            const wxSize& size,
                            long style,
                            const wxString& name)
-    : wxGLCanvas(parent, id, NULL, pos, size,
+    : wxGLCanvas(parent, id, nullptr, pos, size,
                  style | wxFULL_REPAINT_ON_RESIZE, name)
 {
     // Explicitly create a new rendering context instance for this canvas.
@@ -222,7 +219,7 @@ void TestGLCanvas::LoadDXF(const wxString& filename)
     if (stream.IsOk())
 #if wxUSE_ZLIB
     {
-        if (filename.Right(3).Lower() == wxT(".gz"))
+        if (filename.Right(3).Lower() == ".gz")
         {
             wxZlibInputStream zstream(stream);
             m_renderer.Load(zstream);
@@ -247,10 +244,10 @@ void TestGLCanvas::OnMouse(wxMouseEvent& event)
         /* drag in progress, simulate trackball */
         float spin_quat[4];
         trackball(spin_quat,
-            (2.0*m_gldata.beginx - sz.x) / sz.x,
-            (sz.y - 2.0*m_gldata.beginy) / sz.y,
-            (2.0*event.GetX() - sz.x)    / sz.x,
-            (sz.y - 2.0*event.GetY())    / sz.y);
+            (2 * m_gldata.beginx - sz.x) / sz.x,
+            (sz.y - 2 * m_gldata.beginy) / sz.y,
+            float(2 * event.GetX() - sz.x) / sz.x,
+            float(sz.y - 2 * event.GetY()) / sz.y);
 
         add_quats(spin_quat, m_gldata.quat, m_gldata.quat);
 
@@ -306,17 +303,16 @@ void TestGLCanvas::ResetProjectionMode()
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);
 
-    int w, h;
-    GetClientSize(&w, &h);
+    const wxSize ClientSize = GetClientSize() * GetContentScaleFactor();
 
     // It's up to the application code to update the OpenGL viewport settings.
     // In order to avoid extensive context switching, consider doing this in
     // OnPaint() rather than here, though.
-    glViewport(0, 0, (GLint) w, (GLint) h);
+    glViewport(0, 0, ClientSize.x, ClientSize.y);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, (GLfloat)w/h, 1.0, 100.0);
+    gluPerspective(45, double(ClientSize.x) / ClientSize.y, 1, 100);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

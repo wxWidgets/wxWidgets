@@ -22,18 +22,26 @@ class wxArtBrowserDialog : public wxDialog
 {
 public:
     wxArtBrowserDialog(wxWindow *parent);
+    ~wxArtBrowserDialog();
 
     void SetArtClient(const wxArtClient& client);
     void SetArtBitmap(const wxArtID& id, const wxArtClient& client, const wxSize& size = wxDefaultSize);
 
 private:
     void OnSelectItem(wxListEvent &event);
+    void OnChangeSize(wxCommandEvent &event);
     void OnChooseClient(wxCommandEvent &event);
+
+    wxSize GetSelectedBitmapSize() const;
+
+    void DeleteListItemData();
 
     wxListCtrl *m_list;
     wxStaticBitmap *m_canvas;
     wxStaticText *m_text;
     wxString m_client;
+    wxChoice *m_sizes;
+    wxString m_currentArtId;
 
     wxDECLARE_EVENT_TABLE();
 };

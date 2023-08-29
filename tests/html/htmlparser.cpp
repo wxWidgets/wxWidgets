@@ -14,9 +14,6 @@
 
 #if wxUSE_HTML
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
@@ -24,55 +21,85 @@
 
 #include "wx/html/winpars.h"
 
-// ----------------------------------------------------------------------------
-// test class
-// ----------------------------------------------------------------------------
-
-class HtmlParserTestCase : public CppUnit::TestCase
-{
-public:
-    HtmlParserTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( HtmlParserTestCase );
-        CPPUNIT_TEST( Invalid );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Invalid();
-
-    wxDECLARE_NO_COPY_CLASS(HtmlParserTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( HtmlParserTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( HtmlParserTestCase, "HtmlParserTestCase" );
-
-// ----------------------------------------------------------------------------
-// tests themselves
-// ----------------------------------------------------------------------------
+#include <memory>
 
 // Test that parsing invalid HTML simply fails but doesn't crash for example.
-void HtmlParserTestCase::Invalid()
+TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
 {
     class NullParser : public wxHtmlWinParser
     {
-    public:
-        virtual wxObject *GetProduct() { return NULL; }
-
     protected:
-        virtual void AddText(const wxString& WXUNUSED(txt)) { }
+        virtual void AddText(const wxString& WXUNUSED(txt)) override { }
     };
 
     NullParser p;
     wxMemoryDC dc;
     p.SetDC(&dc);
 
-    p.Parse("<");
-    p.Parse("<foo");
-    p.Parse("<!--");
-    p.Parse("<!---");
+    delete p.Parse("<");
+    delete p.Parse("<foo");
+    delete p.Parse("<!--");
+    delete p.Parse("<!---");
+}
+
+TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
+{
+    wxMemoryDC dc;
+
+    std::unique_ptr<wxHtmlContainerCell> const top(new wxHtmlContainerCell(nullptr));
+    wxHtmlContainerCell* const cont = new wxHtmlContainerCell(nullptr);
+    wxHtmlCell* const cell1 = new wxHtmlWordCell("Hello", dc);
+    wxHtmlCell* const cell2 = new wxHtmlColourCell(*wxRED);
+    wxHtmlCell* const cell3 = new wxHtmlWordCell("world", dc);
+
+    cont->InsertCell(cell1);
+    cont->InsertCell(cell2);
+    cont->InsertCell(cell3);
+    top->InsertCell(cont);
+
+    SECTION("container")
+    {
+        top->Detach(cont);
+        CHECK( top->GetFirstChild() == nullptr );
+
+        delete cont;
+    }
+
+    SECTION("first-child")
+    {
+        cont->Detach(cell1);
+        CHECK( cont->GetFirstChild() == cell2 );
+
+        delete cell1;
+    }
+
+    SECTION("middle-child")
+    {
+        cont->Detach(cell2);
+        CHECK( cont->GetFirstChild() == cell1 );
+        CHECK( cell1->GetNext() == cell3 );
+
+        delete cell2;
+    }
+
+    SECTION("last-child")
+    {
+        cont->Detach(cell3);
+        CHECK( cont->GetFirstChild() == cell1 );
+        CHECK( cell1->GetNext() == cell2 );
+        CHECK( cell2->GetNext() == nullptr );
+
+        delete cell3;
+    }
+
+    SECTION("invalid")
+    {
+        WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE
+        (
+            "Expected assertion for detaching non-child",
+            top->Detach(cell1);
+        );
+    }
 }
 
 #endif //wxUSE_HTML

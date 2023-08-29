@@ -14,9 +14,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
@@ -46,8 +43,8 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
 
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
 private:
     wxHtmlHelpController *help;
@@ -59,31 +56,23 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-#endif
-
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
-    SetVendorName(wxT("wxWidgets"));
-    SetAppName(wxT("wxHTMLHelp"));
+    SetVendorName("wxWidgets");
+    SetAppName("wxHTMLHelp");
     wxConfig::Get(); // create an instance
 
     help = new wxHtmlHelpController;
 
     if (argc < 2) {
-        wxLogError(wxT("Usage : helpview <helpfile> [<more helpfiles>]"));
-        wxLogError(wxT("  helpfile may be .hhp, .zip or .htb"));
+        wxLogError("Usage : helpview <helpfile> [<more helpfiles>]");
+        wxLogError("  helpfile may be .hhp, .zip or .htb");
         return false;
     }
 
     for (int i = 1; i < argc; i++)
         help->AddBook(wxFileName(argv[i]));
-
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogGui);
-#endif
 
     help->SetShouldPreventAppExit(true);
 
@@ -95,7 +84,7 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
     delete help;
-    delete wxConfig::Set(NULL);
+    delete wxConfig::Set(nullptr);
 
     return 0;
 }

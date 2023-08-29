@@ -265,11 +265,19 @@ public:
         // flags for GetWeekDayName and GetMonthName
     enum NameFlags
     {
-        Name_Full = 0x01,       // return full name
-        Name_Abbr = 0x02        // return abbreviated name
+        Name_Full = 0x01,        // return full name
+        Name_Abbr = 0x02,        // return abbreviated name
+        Name_Shortest = 0x03     // return shortest name
     };
 
-        // flags for GetWeekOfYear and GetWeekOfMonth
+    // context for GetWeekDayName and GetMonthName
+    enum NameContext
+    {
+        Context_Formatting,      // return name for date formatting context
+        Context_Standalone       // return name for standalone context
+    };
+
+    // flags for GetWeekOfYear and GetWeekOfMonth
     enum WeekFlags
     {
         Default_First,   // Sunday_First for US, Monday_First for the rest
@@ -288,6 +296,28 @@ public:
 
     // helper classes
     // ------------------------------------------------------------------------
+
+        // Describes the form of the month or week-day name.
+    class NameForm
+    {
+    public:
+        // Ctor is non-explicit for compatibility.
+        NameForm(NameFlags flags = Name_Full) : m_flags(flags) {}
+
+        // Chainable methods allowing to set various fields.
+        NameForm& Full() { m_flags = Name_Full; return *this; }
+        NameForm& Abbr() { m_flags = Name_Abbr; return *this; }
+        NameForm& Shortest() { m_flags = Name_Shortest; return *this; }
+        NameForm& Formatting() { m_context = Context_Formatting; return *this; }
+        NameForm& Standalone() { m_context = Context_Standalone; return *this; }
+
+        NameFlags GetFlags() const { return m_flags; }
+        NameContext GetContext() const { return m_context; }
+
+    private:
+        NameFlags m_flags;
+        NameContext m_context = Context_Formatting;
+    };
 
         // a class representing a time zone: basically, this is just an offset
         // (in seconds) from GMT
@@ -411,23 +441,23 @@ public:
                                         Calendar cal = Gregorian);
 
 
-        // get the full (default) or abbreviated month name in the current
+        // get the full (default), abbreviated or shortest month name in the current
         // locale, returns empty string on error
     static wxString GetMonthName(Month month,
-                                 NameFlags flags = Name_Full);
+                                 const NameForm& form = {});
 
-        // get the standard English full (default) or abbreviated month name
+        // get the standard English full (default), abbreviated or shortest month name
     static wxString GetEnglishMonthName(Month month,
-                                        NameFlags flags = Name_Full);
+                                        const NameForm& form = {});
 
-        // get the full (default) or abbreviated weekday name in the current
+        // get the full (default), abbreviated or shortest weekday name in the current
         // locale, returns empty string on error
     static wxString GetWeekDayName(WeekDay weekday,
-                                   NameFlags flags = Name_Full);
+                                   const NameForm& form = {});
 
-        // get the standard English full (default) or abbreviated weekday name
+        // get the standard English full (default), abbreviated or shortest weekday name
     static wxString GetEnglishWeekDayName(WeekDay weekday,
-                                          NameFlags flags = Name_Full);
+                                          const NameForm& form = {});
 
         // get the AM and PM strings in the current locale (may be empty)
     static void GetAmPmStrings(wxString *am, wxString *pm);
@@ -464,7 +494,7 @@ public:
     // ------------------------------------------------------------------------
 
         // default ctor does not initialize the object, use Set()!
-    wxDateTime() { m_time = wxINT64_MIN; }
+    wxDateTime() : m_time(wxINT64_MIN) { }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
     inline wxDateTime(time_t timet);
@@ -723,7 +753,7 @@ public:
         // get the broken down date/time representation in the given timezone
         //
         // If you wish to get several time components (day, month and year),
-        // consider getting the whole Tm strcuture first and retrieving the
+        // consider getting the whole Tm structure first and retrieving the
         // value from it - this is much more efficient
     Tm GetTm(const TimeZone& tz = Local) const;
 
@@ -861,7 +891,7 @@ public:
         return m_time != dt.m_time;
     }
 
-    // arithmetics with dates (see also below for more operators)
+    // arithmetic with dates (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of the date with a time span (positive or negative)
@@ -927,7 +957,7 @@ public:
 
     // all conversions functions return true to indicate whether parsing
     // succeeded or failed and fill in the provided end iterator, which must
-    // not be NULL, with the location of the character where the parsing
+    // not be null, with the location of the character where the parsing
     // stopped (this will be end() of the passed string if everything was
     // parsed)
 
@@ -955,7 +985,7 @@ public:
     bool ParseFormat(const wxString& date,
                      wxString::const_iterator *end)
     {
-        return ParseFormat(date, wxDefaultDateTimeFormat, wxDefaultDateTime, end);
+        return ParseFormat(date, wxASCII_STR(wxDefaultDateTimeFormat), wxDefaultDateTime, end);
     }
 
         // parse a string containing date, time or both in ISO 8601 format
@@ -1000,7 +1030,7 @@ public:
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxString& format = wxDefaultDateTimeFormat,
+    wxString Format(const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                     const TimeZone& tz = Local) const;
         // preferred date representation for the current locale
     wxString FormatDate() const { return Format(wxS("%x")); }
@@ -1021,7 +1051,7 @@ public:
 
     // backwards compatible versions of the parsing functions: they return an
     // object representing the next character following the date specification
-    // (i.e. the one where the scan had to stop) or a special NULL-like object
+    // (i.e. the one where the scan had to stop) or a special nullptr-like object
     // on failure
     //
     // they're not deprecated because a lot of existing code uses them and
@@ -1035,7 +1065,7 @@ public:
     }
 
     wxAnyStrPtr ParseFormat(const wxString& date,
-                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                             const wxDateTime& dateDef = wxDefaultDateTime)
     {
         wxString::const_iterator end;
@@ -1070,7 +1100,7 @@ public:
     // if the overloads above were used.
     //
     // And then we also have to provide the overloads for wxCStrData, as usual.
-    // Unfortunately those ones can't return anything as we don't have any
+    // Unfortunately those can't return anything as we don't have any
     // sufficiently long-lived wxAnyStrPtr to return from them: any temporary
     // strings it would point to would be destroyed when this function returns
     // making it impossible to dereference the return value. So we just don't
@@ -1084,14 +1114,14 @@ public:
     const wchar_t* ParseRfc822Date(const wchar_t* date);
 
     void ParseFormat(const wxCStrData& date,
-                     const wxString& format = wxDefaultDateTimeFormat,
+                     const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                      const wxDateTime& dateDef = wxDefaultDateTime)
         { ParseFormat(wxString(date), format, dateDef); }
     const char* ParseFormat(const char* date,
-                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                             const wxDateTime& dateDef = wxDefaultDateTime);
     const wchar_t* ParseFormat(const wchar_t* date,
-                               const wxString& format = wxDefaultDateTimeFormat,
+                               const wxString& format = wxASCII_STR(wxDefaultDateTimeFormat),
                                const wxDateTime& dateDef = wxDefaultDateTime);
 
     void ParseDateTime(const wxCStrData& datetime)
@@ -1114,13 +1144,13 @@ public:
     // ------------------------------------------------------------------------
 
         // construct from internal representation
-    wxDateTime(const wxLongLong& time) { m_time = time; }
+    wxDateTime(const wxLongLong& time) : m_time(time) { }
 
         // get the internal representation
     inline wxLongLong GetValue() const;
 
     // a helper function to get the current time_t
-    static time_t GetTimeNow() { return time(NULL); }
+    static time_t GetTimeNow() { return time(nullptr); }
 
     // another one to get the current time broken down
     static struct tm *GetTmNow()
@@ -1149,6 +1179,10 @@ private:
 
     // assign the preferred first day of a week to flags, if necessary
     void UseEffectiveWeekDayFlags(WeekFlags &flags) const;
+
+    // parse time zone (e.g. "+0100") between [iterator,dateEnd)
+    bool ParseRFC822TimeZone(wxString::const_iterator* iterator,
+                             const wxString::const_iterator& dateEnd);
 
     // the internal representation of the time is the amount of milliseconds
     // elapsed since the origin which is set by convention to the UNIX/C epoch
@@ -1207,7 +1241,7 @@ public:
 
         // no dtor
 
-    // arithmetics with time spans (see also below for more operators)
+    // arithmetic with time spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return the sum of two timespans
@@ -1337,13 +1371,13 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxString& format = wxDefaultTimeSpanFormat) const;
+    wxString Format(const wxString& format = wxASCII_STR(wxDefaultTimeSpanFormat)) const;
 
     // implementation
     // ------------------------------------------------------------------------
 
         // construct from internal representation
-    wxTimeSpan(const wxLongLong& diff) { m_diff = diff; }
+    wxTimeSpan(const wxLongLong& diff) : m_diff(diff) { }
 
         // get the internal representation
     wxLongLong GetValue() const { return m_diff; }
@@ -1448,7 +1482,7 @@ public:
         // returns 7*GetWeeks() + GetDays()
     int GetTotalDays() const { return 7*m_weeks + m_days; }
 
-    // arithmetics with date spans (see also below for more operators)
+    // arithmetic with date spans (see also below for more operators)
     // ------------------------------------------------------------------------
 
         // return sum of two date spans
@@ -1521,7 +1555,7 @@ private:
 // wxDateTimeArray: array of dates.
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDateTime, wxDateTimeArray, WXDLLIMPEXP_BASE);
+using wxDateTimeArray = wxBaseArray<wxDateTime>;
 
 // ----------------------------------------------------------------------------
 // wxDateTimeHolidayAuthority: an object of this class will decide whether a
@@ -1586,10 +1620,10 @@ private:
 class WXDLLIMPEXP_BASE wxDateTimeWorkDays : public wxDateTimeHolidayAuthority
 {
 protected:
-    virtual bool DoIsHoliday(const wxDateTime& dt) const wxOVERRIDE;
+    virtual bool DoIsHoliday(const wxDateTime& dt) const override;
     virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
                                         const wxDateTime& dtEnd,
-                                        wxDateTimeArray& holidays) const wxOVERRIDE;
+                                        wxDateTimeArray& holidays) const override;
 };
 
 // ============================================================================
@@ -1848,7 +1882,7 @@ inline bool wxDateTime::IsEqualUpTo(const wxDateTime& dt,
 }
 
 // ----------------------------------------------------------------------------
-// wxDateTime arithmetics
+// wxDateTime arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxDateTime wxDateTime::Add(const wxTimeSpan& diff) const
@@ -1997,7 +2031,7 @@ inline int wxTimeSpan::GetWeeks() const
 }
 
 // ----------------------------------------------------------------------------
-// wxTimeSpan arithmetics
+// wxTimeSpan arithmetic
 // ----------------------------------------------------------------------------
 
 inline wxTimeSpan wxTimeSpan::Add(const wxTimeSpan& diff) const

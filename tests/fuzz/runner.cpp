@@ -12,8 +12,7 @@
 // fuzzing. To do this, link the fuzzer code with this file and run it with the
 // file name containing the test data. E.g. an example use:
 //
-//  $ g++ -g -fsanitize=undefined -c tests/fuzz/{zip,runner}.cpp \
-//      `wx-config --cxxflags --libs base`
+//  $ g++ -g -fsanitize=undefined tests/fuzz/{zip,runner}.cpp `wx-config --cxxflags --libs base`
 //  $ ./a.out testcase-found-by-libfuzzer
 
 #include "wx/buffer.h"

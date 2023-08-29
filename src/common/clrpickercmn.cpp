@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COLOURPICKERCTRL
 
@@ -39,6 +36,9 @@ const char wxColourPickerWidgetNameStr[] = "colourpickerwidget";
 // ============================================================================
 
 wxDEFINE_EVENT(wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent);
+wxDEFINE_EVENT(wxEVT_COLOURPICKER_CURRENT_CHANGED, wxColourPickerEvent);
+wxDEFINE_EVENT(wxEVT_COLOURPICKER_DIALOG_CANCELLED, wxColourPickerEvent);
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourPickerCtrl, wxPickerBase);
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourPickerEvent, wxEvent);
 
@@ -67,9 +67,8 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     // complete sizer creation
     wxPickerBase::PostCreation();
 
-    m_picker->Connect(wxEVT_COLOURPICKER_CHANGED,
-            wxColourPickerEventHandler(wxColourPickerCtrl::OnColourChange),
-            NULL, this);
+    m_picker->Bind(wxEVT_COLOURPICKER_CHANGED,
+            &wxColourPickerCtrl::OnColourChange, this);
 
     return true;
 }
@@ -130,10 +129,7 @@ void wxColourPickerCtrl::OnColourChange(wxColourPickerEvent &ev)
 {
     UpdateTextCtrlFromPicker();
 
-    // the wxColourPickerWidget sent us a colour-change notification.
-    // forward this event to our parent
-    wxColourPickerEvent event(this, GetId(), ev.GetColour());
-    GetEventHandler()->ProcessEvent(event);
+    ev.Skip();
 }
 
 #endif  // wxUSE_COLOURPICKERCTRL

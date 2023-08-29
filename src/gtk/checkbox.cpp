@@ -13,8 +13,7 @@
 
 #include "wx/checkbox.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/eventsdisabler.h"
 
 //-----------------------------------------------------------------------------
@@ -89,7 +88,7 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 
 wxCheckBox::wxCheckBox()
 {
-    m_widgetCheckbox = NULL;
+    m_widgetCheckbox = nullptr;
 }
 
 wxCheckBox::~wxCheckBox()
@@ -124,7 +123,7 @@ bool wxCheckBox::Create(wxWindow *parent,
 
         m_widgetLabel = gtk_label_new("");
 #ifdef __WXGTK4__
-        g_object_set(m_widgetLabel, "xalign", 0.0f, NULL);
+        g_object_set(m_widgetLabel, "xalign", 0.0f, nullptr);
 #else
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_misc_set_alignment(GTK_MISC(m_widgetLabel), 0.0, 0.5);
@@ -147,12 +146,31 @@ bool wxCheckBox::Create(wxWindow *parent,
     g_object_ref(m_widget);
     SetLabel( label );
 
+    if ( style & wxNO_BORDER )
+    {
+        gtk_container_set_border_width(GTK_CONTAINER(m_widgetCheckbox), 0);
+    }
+
     g_signal_connect (m_widgetCheckbox, "toggled",
                       G_CALLBACK (gtk_checkbox_toggled_callback), this);
 
     m_parent->DoAddChild( this );
 
+#ifdef __WXGTK3__
+    // CSS added if the window has wxNO_BORDER inside base class PostCreation()
+    // makes checkbox look broken in the default GTK 3 theme, so avoid doing
+    // this by temporarily turning this flag off.
+    if ( style & wxNO_BORDER )
+        ToggleWindowStyle(wxNO_BORDER);
+#endif
+
     PostCreation(size);
+
+#ifdef __WXGTK3__
+    // Turn it back on if necessary.
+    if ( style & wxNO_BORDER )
+        ToggleWindowStyle(wxNO_BORDER);
+#endif
 
     return true;
 }
@@ -171,7 +189,7 @@ void wxCheckBox::GTKEnableEvents()
 
 void wxCheckBox::SetValue( bool state )
 {
-    wxCHECK_RET( m_widgetCheckbox != NULL, wxT("invalid checkbox") );
+    wxCHECK_RET( m_widgetCheckbox != nullptr, wxT("invalid checkbox") );
 
     if (state == GetValue())
         return;
@@ -182,7 +200,7 @@ void wxCheckBox::SetValue( bool state )
 
 bool wxCheckBox::GetValue() const
 {
-    wxCHECK_MSG( m_widgetCheckbox != NULL, false, wxT("invalid checkbox") );
+    wxCHECK_MSG( m_widgetCheckbox != nullptr, false, wxT("invalid checkbox") );
 
     return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widgetCheckbox)) != 0;
 }
@@ -208,7 +226,7 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 
 void wxCheckBox::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widgetLabel != NULL, wxT("invalid checkbox") );
+    wxCHECK_RET( m_widgetLabel != nullptr, wxT("invalid checkbox") );
 
     // If we don't hide the empty label, in some themes a focus rectangle is
     // still drawn around it and this looks out of place.
@@ -223,17 +241,17 @@ void wxCheckBox::SetLabel( const wxString& label )
     GTKSetLabelForLabel(GTK_LABEL(m_widgetLabel), label);
 }
 
-bool wxCheckBox::Enable( bool enable )
+void wxCheckBox::DoEnable(bool enable)
 {
-    if (!base_type::Enable(enable))
-        return false;
+    if ( !m_widgetLabel )
+        return;
+
+    base_type::DoEnable(enable);
 
     gtk_widget_set_sensitive( m_widgetLabel, enable );
 
     if (enable)
         GTKFixSensitivity();
-
-    return true;
 }
 
 void wxCheckBox::DoApplyWidgetStyle(GtkRcStyle *style)

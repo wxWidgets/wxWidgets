@@ -1,122 +1,18 @@
 /* wxWidgets Custom Styles */
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-}
-
-#page_container {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    height: auto !important;
-    height: 100%;
-    min-height: 100%;
-}
-
-div.contents, div.searchresults {
-    margin-top: 10px;
-    margin-right: 12px;
-    padding-bottom: 70px;
-}
-
-#projectlogo {
-    text-align: left;
-}
-
-#projectnumber {
-    font-size: 120%;
-    font-family: Tahoma, Arial, sans-serif;
-    text-align: right;
-    padding: 0.5em 1em;
-}
-
-.tabs {
-    font-size: 14px;
-}
-.tabs2, .tabs3 {
-    font-size: 12px;
-}
-
-.navpath ul {
-    font-size: 12px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    color: #002D88;
-    font-weight: normal;
-    margin-top: 1em;
-    margin-bottom: 0.5em;
-    padding-top: 8px;
-    padding-bottom: 4px;
-    width: 100%;
-}
-
-h1 {
-    font-size: 150%;
-    border-bottom: 1px solid #3276FF;
-}
-h2 {
-    font-size: 135%;
-    margin-top: 0.75em;
-}
-h3 {
-    font-size: 120%;
-    margin-top: 0.5em;
-}
-h4 {
-    font-size: 100%;
-    margin-top: 0.5em;
-}
-
-div.headertitle h1 {
-    margin: 10px 2px;
-    border: none;
-    padding: 0;
-    width: auto;
-    color: black;
-    font-weight: bold;
-}
-
-div.toc h3 {
-    font-size: 14px;
-}
-
-div.toc li {
-    font-size: 12px;
-    line-height: 1.3;
-    padding-left: 14px;
-}
-
-img.logo {
-    float: right;
-    margin: 20px;
-}
-
-div.logo {
-    float: right;
-    margin: 20px;
-}
-
-table.directory {
-    line-height: 1.5;
-}
-
-.icon {
-    line-height: 1.25;
-}
-
 div.appearance {
     margin: 1em 0em;
 }
 div.appearance table {
+    /* this is set to inline-block by the custom CSS theme, override it */
+    display: table !important;
     margin: 0.5em 0em;
     width: 100%;
     text-align: center;
 }
 div.appearance img {
     margin: 0.5em;
+    filter: none !important;
 }
 div.appearance .caption {
     font-style: italic;
@@ -165,7 +61,6 @@ span.events, span.flags, span.appearance, span.impl, span.avail {
 
 span.style, span.event, span.flag {
     font-weight: bold;
-    color: #880000;
 }
 
 div.styleDesc, div.eventDesc, div.flagDesc {
@@ -180,27 +75,5 @@ div.eventHandler {
 
 div.eventHandler span {
     padding: 5px;
-    background-color: #eeeeee;
     font-family: monospace, fixed;
-}
-
-code {
-    font-size: 110%;
-    color: #444444;
-}
-
-address.footer {
-    position: absolute;
-    bottom: 0;
-    margin: 0;
-    padding: 10px 0;
-    width: 100%;
-    border-top: 1px solid #0043CC;
-    background-image: url('nav_h.png');
-    background-repeat: repeat-x;
-    background-color: #F4F8FF;
-}
-
-address.footer small {
-    padding: 0 10px;
 }

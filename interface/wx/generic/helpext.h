@@ -26,7 +26,7 @@
 
     Lines starting with ';' will be ignored.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{help}
 
     @see wxHelpController
@@ -34,7 +34,7 @@
 class wxExtHelpController : public wxHelpControllerBase
 {
 public:
-    wxExtHelpController(wxWindow* parentWindow = NULL);
+    wxExtHelpController(wxWindow* parentWindow = nullptr);
     virtual ~wxExtHelpController();
 
     /**
@@ -111,9 +111,9 @@ public:
 
         @param k
             string to search for, empty string will list all entries
-        
-        @param mode    
-            optional parameter allows the search the index (wxHELP_SEARCH_INDEX) 
+
+        @param mode
+            optional parameter allows the search the index (wxHELP_SEARCH_INDEX)
             but this currently only supported by the wxHtmlHelpController.
 
         @return @true on success
@@ -147,8 +147,8 @@ public:
     /**
         Obtains the latest settings used by the help frame and the help frame.
     */
-    virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
-                                        wxPoint *pos = NULL,
-                                        bool *newFrameEachTime = NULL);
+    virtual wxFrame *GetFrameParameters(wxSize *size = nullptr,
+                                        wxPoint *pos = nullptr,
+                                        bool *newFrameEachTime = nullptr);
 };
 

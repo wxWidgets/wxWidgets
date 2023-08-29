@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTEXT
 
@@ -34,7 +31,7 @@
 #include "wx/fontenum.h"
 #include "wx/accel.h"
 
-#if defined (__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
+#if defined (__WXGTK__) || defined(__WXX11__)
 #define wxHAVE_PRIMARY_SELECTION 1
 #else
 #define wxHAVE_PRIMARY_SELECTION 0
@@ -88,7 +85,7 @@ class wxRichTextCaretTimer: public wxTimer
     {
         m_caret = caret;
     }
-    virtual void Notify() wxOVERRIDE;
+    virtual void Notify() override;
     wxRichTextCaret* m_caret;
 };
 
@@ -111,8 +108,8 @@ public:
     // --------------
 
     // called by wxWindow (not using the event tables)
-    virtual void OnSetFocus() wxOVERRIDE;
-    virtual void OnKillFocus() wxOVERRIDE;
+    virtual void OnSetFocus() override;
+    virtual void OnKillFocus() override;
 
     // draw the caret on the given DC
     void DoDraw(wxDC *dc);
@@ -130,10 +127,10 @@ public:
     void EnableRefresh(bool b) { m_refreshEnabled = b; }
 
 protected:
-    virtual void DoShow() wxOVERRIDE;
-    virtual void DoHide() wxOVERRIDE;
-    virtual void DoMove() wxOVERRIDE;
-    virtual void DoSize() wxOVERRIDE;
+    virtual void DoShow() override;
+    virtual void DoHide() override;
+    virtual void DoMove() override;
+    virtual void DoSize() override;
 
     // refresh the caret
     void Refresh();
@@ -242,7 +239,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
                              const wxValidator& validator, const wxString& name)
 {
     style |= wxVSCROLL;
-    
+
     // If read-only, the programmer probably wants to retain dialog keyboard navigation.
     // If you don't, then pass wxWANTS_CHARS explicitly.
     if ((style & wxTE_READONLY) == 0)
@@ -283,7 +280,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     SetDefaultStyle(defaultAttributes);
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     GetBuffer().Reset();
     GetBuffer().SetRichTextCtrl(this);
@@ -343,7 +340,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(new wxRichTextDropTarget(this));
 #endif
-
+    SetModified( false );
     return true;
 }
 
@@ -360,11 +357,11 @@ wxRichTextCtrl::~wxRichTextCtrl()
 /// Member initialisation
 void wxRichTextCtrl::Init()
 {
-    m_contextMenu = NULL;
-    m_caret = NULL;
+    m_contextMenu = nullptr;
+    m_caret = nullptr;
     m_caretPosition = -1;
     m_selectionAnchor = -2;
-    m_selectionAnchorObject = NULL;
+    m_selectionAnchorObject = nullptr;
     m_selectionState = wxRichTextCtrlSelectionState_Normal;
     m_editable = true;
     m_useVirtualAttributes = false;
@@ -615,8 +612,8 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
     // TODO: detect change of focus object
     long position = 0;
-    wxRichTextObject* hitObj = NULL;
-    wxRichTextObject* contextObj = NULL;
+    wxRichTextObject* hitObj = nullptr;
+    wxRichTextObject* contextObj = nullptr;
     wxRichTextDrawingContext context(& GetBuffer());
     int hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(event.GetLogicalPosition(dc)), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
@@ -694,8 +691,8 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
 
         long position = 0;
         wxPoint logicalPt = event.GetLogicalPosition(dc);
-        wxRichTextObject* hitObj = NULL;
-        wxRichTextObject* contextObj = NULL;
+        wxRichTextObject* hitObj = nullptr;
+        wxRichTextObject* contextObj = nullptr;
         wxRichTextDrawingContext context(& GetBuffer());
         // Only get objects at this level, not nested, because otherwise we couldn't swipe text at a single level.
         int hit = GetFocusObject()->HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS|wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
@@ -708,8 +705,8 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
 
             // Do the actions that would have been done in OnLeftClick if we hadn't tried to drag
             long prePosition = 0;
-            wxRichTextObject* preHitObj = NULL;
-            wxRichTextObject* preContextObj = NULL;
+            wxRichTextObject* preHitObj = nullptr;
+            wxRichTextObject* preContextObj = nullptr;
             int preHit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(event.GetLogicalPosition(dc)), prePosition, & preHitObj, & preContextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
             wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
             wxRichTextParagraphLayoutBox* container = wxDynamicCast(preContextObj, wxRichTextParagraphLayoutBox);
@@ -878,6 +875,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
                     Refresh(); // This is needed in wxMSW, otherwise resetting the position doesn't 'take'
                     SetCaretPosition(oldPos);
                     SetFocusObject(oldFocus, false);
+                    wxFALLTHROUGH;
                 default: break;
             }
             EndBatchUndo();
@@ -894,8 +892,8 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 
     long position = 0;
     wxPoint logicalPt = event.GetLogicalPosition(dc);
-    wxRichTextObject* hitObj = NULL;
-    wxRichTextObject* contextObj = NULL;
+    wxRichTextObject* hitObj = nullptr;
+    wxRichTextObject* contextObj = nullptr;
 
     int flags = 0;
 
@@ -936,13 +934,13 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 #endif
         )
     {
-        wxRichTextParagraphLayoutBox* commonAncestor = NULL;
-        wxRichTextParagraphLayoutBox* otherContainer = NULL;
-        wxRichTextParagraphLayoutBox* firstContainer = NULL;
+        wxRichTextParagraphLayoutBox* commonAncestor = nullptr;
+        wxRichTextParagraphLayoutBox* otherContainer = nullptr;
+        wxRichTextParagraphLayoutBox* firstContainer = nullptr;
 
         // Check for dragging across multiple containers
         long position2 = 0;
-        wxRichTextObject* hitObj2 = NULL, *contextObj2 = NULL;
+        wxRichTextObject* hitObj2 = nullptr, *contextObj2 = nullptr;
         int hit2 = GetBuffer().HitTest(dc, context, GetUnscaledPoint(logicalPt), position2, & hitObj2, & contextObj2, 0);
         if (hit2 != wxRICHTEXT_HITTEST_NONE && hitObj2 && hitObj != hitObj2)
         {
@@ -1013,7 +1011,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         && (distance > 4)
 #endif
         // Don't select to the end of the container when going outside the window
-        // For analysis, see https://trac.wxwidgets.org/ticket/15714
+        // For analysis, see https://github.com/wxWidgets/wxWidgets/issues/15714
         && (! (hitObj == (& m_buffer) && ((hit & wxRICHTEXT_HITTEST_OUTSIDE) != 0)))
         )
     {
@@ -1032,8 +1030,8 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
 
     long position = 0;
     wxPoint logicalPt = event.GetLogicalPosition(dc);
-    wxRichTextObject* hitObj = NULL;
-    wxRichTextObject* contextObj = NULL;
+    wxRichTextObject* hitObj = nullptr;
+    wxRichTextObject* contextObj = nullptr;
     wxRichTextDrawingContext context(& GetBuffer());
     int hit = GetFocusObject()->HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
 
@@ -1082,8 +1080,8 @@ void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& event)
 
             long position = 0;
             wxPoint logicalPt = event.GetLogicalPosition(dc);
-            wxRichTextObject* hitObj = NULL;
-            wxRichTextObject* contextObj = NULL;
+            wxRichTextObject* hitObj = nullptr;
+            wxRichTextObject* contextObj = nullptr;
             wxRichTextDrawingContext context(& GetBuffer());
             int hit = GetFocusObject()->HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
             wxUnusedVar(hit);
@@ -1099,7 +1097,7 @@ void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& event)
 
                     wxRichTextSelection oldSelection = m_selection;
                     m_selectionAnchor = from-1;
-                    m_selectionAnchorObject = NULL;
+                    m_selectionAnchorObject = nullptr;
                     m_selection.Set(wxRichTextRange(from, to-1), GetFocusObject());
                     RefreshForSelectionChange(oldSelection, m_selection);
                 }
@@ -1306,7 +1304,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         wxRichTextRange numberedListRange = FindRangeForList(newPos+1, isNumberedList);
         if (isNumberedList && numberedListRange != wxRichTextRange(-1, -1))
         {
-            NumberList(numberedListRange, NULL, wxRICHTEXT_SETSTYLE_RENUMBER|wxRICHTEXT_SETSTYLE_WITH_UNDO);
+            NumberList(numberedListRange, nullptr, wxRICHTEXT_SETSTYLE_RENUMBER|wxRICHTEXT_SETSTYLE_WITH_UNDO);
         }
 
         EndBatchUndo();
@@ -1349,10 +1347,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         bool processed = DeleteSelectedContent(& newPos);
 
-        int deletions = 0;
-        if (processed)
-            deletions ++;
-
         // Submit range in character positions, which are greater than caret positions,
         if (newPos < GetFocusObject()->GetOwnRange().GetEnd()+1)
         {
@@ -1365,7 +1359,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                     {
                         GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                        deletions ++;
                     }
                     processed = true;
                 }
@@ -1377,7 +1370,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                 {
                     GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                    deletions ++;
                 }
             }
         }
@@ -1439,11 +1431,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     GetId());
                 cmdEvent1.SetEventObject(this);
                 cmdEvent1.SetFlags(flags);
-#if wxUSE_UNICODE
                 cmdEvent1.SetCharacter(event.GetUnicodeKey());
-#else
-                cmdEvent1.SetCharacter((wxChar) keycode);
-#endif
                 cmdEvent1.SetPosition(m_caretPosition+1);
                 cmdEvent1.SetContainer(GetFocusObject());
                 if (GetEventHandler()->ProcessEvent(cmdEvent1) && !cmdEvent1.IsAllowed())
@@ -1456,11 +1444,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     GetId());
                 cmdEvent.SetEventObject(this);
                 cmdEvent.SetFlags(flags);
-#if wxUSE_UNICODE
                 cmdEvent.SetCharacter(event.GetUnicodeKey());
-#else
-                cmdEvent.SetCharacter((wxChar) keycode);
-#endif
                 cmdEvent.SetPosition(m_caretPosition+1);
                 cmdEvent.SetContainer(GetFocusObject());
 
@@ -1480,7 +1464,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
                         int promoteBy = event.ShiftDown() ? 1 : -1;
 
-                        PromoteList(promoteBy, range, NULL);
+                        PromoteList(promoteBy, range, nullptr);
 
                         GetEventHandler()->ProcessEvent(cmdEvent);
 
@@ -1499,11 +1483,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 long newPos = m_caretPosition;
                 DeleteSelectedContent(& newPos);
 
-#if wxUSE_UNICODE
                 wxString str = event.GetUnicodeKey();
-#else
-                wxString str = (wxChar) event.GetKeyCode();
-#endif
                 GetFocusObject()->InsertTextWithUndo(& GetBuffer(), newPos+1, str, this, 0);
 
                 EndBatchUndo();
@@ -1562,7 +1542,7 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
         wxRichTextParagraph* newPara = wxDynamicCast(para->Clone(), wxRichTextParagraph);
         newPara->GetAttributes().SetBulletStyle(newPara->GetAttributes().GetBulletStyle() | wxTEXT_ATTR_BULLET_STYLE_CONTINUATION);
 
-        wxRichTextAction* action = new wxRichTextAction(NULL, _("Remove Bullet"), wxRICHTEXT_CHANGE_STYLE, & GetBuffer(), GetFocusObject(), this);
+        wxRichTextAction* action = new wxRichTextAction(nullptr, _("Remove Bullet"), wxRICHTEXT_CHANGE_STYLE, & GetBuffer(), GetFocusObject(), this);
         action->SetRange(newPara->GetRange());
         action->SetPosition(GetCaretPosition());
         action->GetNewParagraphs().AppendChild(newPara);
@@ -1577,7 +1557,7 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
         wxRichTextRange numberedListRange = FindRangeForList(m_caretPosition, isNumberedList);
         if (isNumberedList && numberedListRange != wxRichTextRange(-1, -1))
         {
-            NumberList(numberedListRange, NULL, wxRICHTEXT_SETSTYLE_RENUMBER|wxRICHTEXT_SETSTYLE_WITH_UNDO);
+            NumberList(numberedListRange, nullptr, wxRICHTEXT_SETSTYLE_RENUMBER|wxRICHTEXT_SETSTYLE_WITH_UNDO);
         }
 
         Update();
@@ -1589,10 +1569,6 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
         long newPos = m_caretPosition;
 
         bool processed = DeleteSelectedContent(& newPos);
-
-        int deletions = 0;
-        if (processed)
-            deletions ++;
 
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
@@ -1607,7 +1583,6 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
                     if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                     {
                         GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                        deletions ++;
                     }
                     processed = true;
                 }
@@ -1619,7 +1594,6 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
                 if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                 {
                     GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                    deletions ++;
                 }
             }
         }
@@ -1836,6 +1810,9 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
 /// This takes a _caret_ position.
 bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
 {
+    if (!m_verticalScrollbarEnabled)
+        return false;
+
     wxRichTextLine* line = GetVisibleLineForCaretPosition(position);
 
     if (!line)
@@ -1873,7 +1850,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     if (GetWindowStyle() & wxRE_CENTRE_CARET)
     {
         int y = rect.y - GetClientSize().y/2;
-        int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+        int yUnits = (y + ppuY - 1) / ppuY;
         if (y >= 0 && (y + clientSize.y) < (int) (0.5 + GetBuffer().GetCachedSize().y * GetScale()))
         {
             if (startYUnits != yUnits)
@@ -1901,7 +1878,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the bottom
             // of the window
             int y = rect.y - (clientSize.y - rect.height);
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             // If we're still off the screen, scroll another line down
             if ((rect.y + rect.height) > (clientSize.y + (yUnits*ppuY)))
@@ -1918,7 +1895,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the top
             // of the window
             int y = rect.y - (int) (0.5 + GetBuffer().GetTopMargin() * GetScale());
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             if (startYUnits != yUnits)
             {
@@ -1938,7 +1915,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the top
             // of the window
             int y = rect.y - (int) (0.5 + GetBuffer().GetTopMargin() * GetScale());
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             if (startYUnits != yUnits)
             {
@@ -1951,7 +1928,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             // Make it scroll so this item is at the bottom
             // of the window
             int y = rect.y - (clientSize.y - rect.height);
-            int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+            int yUnits = (y + ppuY - 1) / ppuY;
 
             // If we're still off the screen, scroll another line down
             if ((rect.y + rect.height) > (clientSize.y + (yUnits*ppuY)))
@@ -2141,8 +2118,8 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
         PrepareDC(dc);
         dc.SetFont(GetFont());
 
-        wxRichTextObject* hitObj = NULL;
-        wxRichTextObject* contextObj = NULL;
+        wxRichTextObject* hitObj = nullptr;
+        wxRichTextObject* contextObj = nullptr;
         wxRichTextDrawingContext context(& GetBuffer());
         int hitTest = GetBuffer().HitTest(dc, context, pt, newPos, & hitObj, & contextObj, hitTestFlags);
 
@@ -2180,7 +2157,7 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
                 SetFocusObject(actualContainer, false /* don't set caret position yet */);
                 bool caretLineStart = true;
                 long caretPosition = FindCaretPositionForCharacterPosition(newPos, hitTest, actualContainer, caretLineStart);
- 
+
                 SelectNone();
 
                 SetCaretPosition(caretPosition, caretLineStart);
@@ -2338,8 +2315,8 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
-    wxRichTextObject* hitObj = NULL;
-    wxRichTextObject* contextObj = NULL;
+    wxRichTextObject* hitObj = nullptr;
+    wxRichTextObject* contextObj = nullptr;
     wxRichTextDrawingContext context(& GetBuffer());
     int hitTest = container->HitTest(dc, context, pt, newPos, & hitObj, & contextObj, hitTestFlags);
 
@@ -2511,7 +2488,7 @@ bool wxRichTextCtrl::StartCellSelection(wxRichTextTable* table, wxRichTextParagr
         SetFocusObject(newCell, false /* don't set caret and clear selection */);
     MoveCaret(-1, false);
     SetDefaultStyleToCursorStyle();
-    
+
     return true;
 }
 
@@ -2736,7 +2713,7 @@ long wxRichTextCtrl::FindNextWordPosition(int direction) const
 
             if (text.empty()) // End of paragraph, or maybe an image
                 return wxMax(-1, i - 1);
-            else if (wxRichTextCtrlIsWhitespace(text) || text.empty())
+            else if (wxRichTextCtrlIsWhitespace(text))
                 i += direction;
             else
             {
@@ -2954,14 +2931,14 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop, bool fromOnPaint)
     int maxHeight = (int) (0.5 + GetScale() * (GetBuffer().GetCachedSize().y + GetBuffer().GetTopMargin()));
 
     // Round up so we have at least maxHeight pixels
-    int unitsY = (int) (((float)maxHeight/(float)pixelsPerUnit) + 0.5);
+    int unitsY = (maxHeight + pixelsPerUnit - 1) / pixelsPerUnit;
 
     int startX = 0, startY = 0;
     if (!atTop)
         GetViewStart(& startX, & startY);
 
     int maxPositionX = 0;
-    int maxPositionY = (int) ((((float)(wxMax((unitsY*pixelsPerUnit) - clientSize.y, 0)))/((float)pixelsPerUnit)) + 0.5);
+    int maxPositionY = (wxMax(unitsY * pixelsPerUnit - clientSize.y, 0) + pixelsPerUnit - 1) / pixelsPerUnit;
 
     int newStartX = wxMin(maxPositionX, startX);
     int newStartY = wxMin(maxPositionY, startY);
@@ -3001,7 +2978,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop, bool fromOnPaint)
                 doSetScrollbars = false;
         }
     }
-    
+
     m_lastWindowSize = windowSize;
     m_setupScrollbarsCount ++;
     if (m_setupScrollbarsCount > 32000)
@@ -3045,7 +3022,7 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
         return false;
 
     if (!m_bufferBitmap.IsOk() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
-        // As per https://trac.wxwidgets.org/ticket/14403, prevent very inefficient fix to alpha bits of
+        // As per https://github.com/wxWidgets/wxWidgets/issues/14403, prevent very inefficient fix to alpha bits of
         // destination by making the backing bitmap 24-bit. Note that using 24-bit depth breaks painting of
         // scrolled areas on wxWidgets 2.8.
 #if defined(__WXMSW__) && wxCHECK_VERSION(3,0,0)
@@ -3142,7 +3119,7 @@ void wxRichTextCtrl::SelectNone()
         RefreshForSelectionChange(oldSelection, m_selection);
     }
     m_selectionAnchor = -2;
-    m_selectionAnchorObject = NULL;
+    m_selectionAnchorObject = nullptr;
     m_selectionState = wxRichTextCtrlSelectionState_Normal;
 }
 
@@ -3238,17 +3215,17 @@ wxTextCtrlHitTestResult
 wxRichTextCtrl::HitTest(const wxPoint& pt,
                         long * pos) const
 {
-    wxClientDC dc((wxRichTextCtrl*) this);
-    ((wxRichTextCtrl*)this)->PrepareDC(dc);
+    wxClientDC dc(const_cast<wxRichTextCtrl*>(this));
+    const_cast<wxRichTextCtrl*>(this)->PrepareDC(dc);
 
     // Buffer uses logical position (relative to start of buffer)
     // so convert
     wxPoint pt2 = GetLogicalPoint(pt);
 
-    wxRichTextObject* hitObj = NULL;
-    wxRichTextObject* contextObj = NULL;
-    wxRichTextDrawingContext context((wxRichTextBuffer*) & GetBuffer());
-    int hit = ((wxRichTextCtrl*)this)->GetFocusObject()->HitTest(dc, context, pt2, *pos, & hitObj, & contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
+    wxRichTextObject* hitObj = nullptr;
+    wxRichTextObject* contextObj = nullptr;
+    wxRichTextDrawingContext context(const_cast<wxRichTextBuffer*>(&GetBuffer()));
+    int hit = const_cast<wxRichTextCtrl*>(this)->GetFocusObject()->HitTest(dc, context, pt2, *pos, &hitObj, &contextObj, wxRICHTEXT_HITTEST_NO_NESTED_OBJECTS);
 
     if ((hit & wxRICHTEXT_HITTEST_BEFORE) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
         return wxTE_HT_BEFORE;
@@ -3269,7 +3246,7 @@ wxRichTextCtrl::FindContainerAtPoint(const wxPoint& pt, long& position, int& hit
 
     wxPoint logicalPt = GetLogicalPoint(pt);
 
-    wxRichTextObject* contextObj = NULL;
+    wxRichTextObject* contextObj = nullptr;
     wxRichTextDrawingContext context(& GetBuffer());
     hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(logicalPt), position, &hitObj, &contextObj, flags);
     wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
@@ -3406,7 +3383,7 @@ wxRichTextBox* wxRichTextCtrl::WriteTextBox(const wxRichTextAttr& textAttr)
     textBox->SetAttributes(textAttr);
     textBox->SetParent(& GetBuffer()); // set parent temporarily for AddParagraph to use correct style
     textBox->AddParagraph(wxEmptyString);
-    textBox->SetParent(NULL);
+    textBox->SetParent(nullptr);
 
     // If the box has an invalid foreground colour, its text will mimic any upstream value (see #15224)
     if (!textBox->GetAttributes().GetTextColour().IsOk())
@@ -3434,7 +3411,7 @@ wxRichTextTable* wxRichTextCtrl::WriteTable(int rows, int cols, const wxRichText
     wxASSERT(rows > 0 && cols > 0);
 
     if (rows <= 0 || cols <= 0)
-        return NULL;
+        return nullptr;
 
     wxRichTextTable* table = new wxRichTextTable;
     table->SetAttributes(tableAttr);
@@ -3443,7 +3420,7 @@ wxRichTextTable* wxRichTextCtrl::WriteTable(int rows, int cols, const wxRichText
 
     table->CreateTable(rows, cols);
 
-    table->SetParent(NULL);
+    table->SetParent(nullptr);
 
     // If cells have an invalid foreground colour, their text will mimic any upstream value (see #15224)
     wxRichTextAttr attr = cellAttr;
@@ -3656,7 +3633,7 @@ void wxRichTextCtrl::SetSelection(long from, long to)
         wxRichTextSelection oldSelection = m_selection;
 
         m_selectionAnchor = from-1;
-        m_selectionAnchorObject = NULL;
+        m_selectionAnchorObject = nullptr;
         m_selection.Set(wxRichTextRange(from, to-1), GetFocusObject());
 
         m_caretPosition = wxMax(-1, to-1);
@@ -3807,7 +3784,7 @@ void wxRichTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 wxSize wxRichTextCtrl::DoGetBestSize() const
 {
-    return wxSize(10, 10);
+    return FromDIP(wxSize(10, 10));
 }
 
 // ----------------------------------------------------------------------------
@@ -3928,8 +3905,8 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
     m_contextMenuPropertiesInfo.Clear();
 
     long position = 0;
-    wxRichTextObject* hitObj = NULL;
-    wxRichTextObject* contextObj = NULL;
+    wxRichTextObject* hitObj = nullptr;
+    wxRichTextObject* contextObj = nullptr;
     if (pt != wxDefaultPosition)
     {
         wxPoint logicalPt = GetLogicalPoint(ScreenToClient(pt));
@@ -3959,7 +3936,7 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
         else
         {
             if (addPropertyCommands)
-                m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), NULL);
+                m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), nullptr);
         }
     }
     else
@@ -3981,7 +3958,7 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
         else
         {
             if (addPropertyCommands)
-                m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), NULL);
+                m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), nullptr);
         }
     }
 
@@ -4998,7 +4975,7 @@ bool wxRichTextCtrl::SetFocusObject(wxRichTextParagraphLayoutBox* obj, bool setC
     {
         m_selection.Reset();
         m_selectionAnchor = -2;
-        m_selectionAnchorObject = NULL;
+        m_selectionAnchorObject = nullptr;
         m_selectionState = wxRichTextCtrlSelectionState_Normal;
 
         long pos = -1;
@@ -5106,11 +5083,11 @@ void wxRichTextCtrl::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResu
 #if wxUSE_DRAG_AND_DROP
 bool wxRichTextDropSource::GiveFeedback(wxDragResult WXUNUSED(effect))
 {
-    wxCHECK_MSG(m_rtc, false, wxT("NULL m_rtc"));
+    wxCHECK_MSG(m_rtc, false, wxT("null m_rtc"));
 
     long position = 0;
     int hit = 0;
-    wxRichTextObject* hitObj = NULL;
+    wxRichTextObject* hitObj = nullptr;
     wxRichTextParagraphLayoutBox* container = m_rtc->FindContainerAtPoint(m_rtc->GetUnscaledPoint(m_rtc->ScreenToClient(wxGetMousePosition())), position, hit, hitObj);
 
     if (!(hit & wxRICHTEXT_HITTEST_NONE) && container && container->AcceptsFocus())
@@ -5345,7 +5322,7 @@ void wxRichTextCaret::Init()
 
     m_xOld =
     m_yOld = -1;
-    m_richTextCtrl = NULL;
+    m_richTextCtrl = nullptr;
     m_needsUpdate = false;
     m_flashOn = true;
 }
@@ -5406,10 +5383,7 @@ void wxRichTextCaret::DoSize()
     {
         m_countVisible = 0;
         DoHide();
-    }
 
-    if (countVisible > 0)
-    {
         m_countVisible = countVisible;
         DoShow();
     }

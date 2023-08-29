@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #if wxUSE_FILECTRL
 
@@ -70,11 +67,11 @@ public:
     FileCtrlWidgetsPage( WidgetsBookCtrl *book, wxImageList *imaglist );
     virtual ~FileCtrlWidgetsPage() {}
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_fileCtrl; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateFileCtrl(); }
+    virtual wxWindow *GetWidget() const override { return m_fileCtrl; }
+    virtual void RecreateWidget() override { CreateFileCtrl(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -83,7 +80,7 @@ protected:
     void OnButtonSetFilename( wxCommandEvent& event );
     void OnButtonReset( wxCommandEvent& event );
     void OnCheckBox( wxCommandEvent& event );
-    void OnRadioBox( wxCommandEvent& event );
+    void OnSwitchMode( wxCommandEvent& event );
     void OnFileCtrl( wxFileCtrlEvent& event );
 
     // reset the control parameters
@@ -127,7 +124,7 @@ wxBEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
     EVT_BUTTON( FileCtrlPage_SetPath, FileCtrlWidgetsPage::OnButtonSetPath )
     EVT_BUTTON( FileCtrlPage_SetFilename, FileCtrlWidgetsPage::OnButtonSetFilename )
     EVT_CHECKBOX( wxID_ANY, FileCtrlWidgetsPage::OnCheckBox )
-    EVT_RADIOBOX( wxID_ANY, FileCtrlWidgetsPage::OnRadioBox )
+    EVT_RADIOBOX( wxID_ANY, FileCtrlWidgetsPage::OnSwitchMode )
 
     EVT_FILECTRL_FILTERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_FOLDERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
@@ -145,7 +142,7 @@ wxEND_EVENT_TABLE()
     #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE( FileCtrlWidgetsPage, wxT( "FileCtrl" ),
+IMPLEMENT_WIDGETS_PAGE( FileCtrlWidgetsPage, "FileCtrl",
                         FAMILY_CTRLS );
 
 FileCtrlWidgetsPage::FileCtrlWidgetsPage( WidgetsBookCtrl *book,
@@ -161,37 +158,37 @@ void FileCtrlWidgetsPage::CreateContent()
     // left pane
     wxSizer *sizerLeft = new wxBoxSizer( wxVERTICAL );
 
-    static const wxString mode[] = { wxT( "open" ), wxT( "save" ) };
-    m_radioFileCtrlMode = new wxRadioBox( this, wxID_ANY, wxT( "wxFileCtrl mode" ),
+    static const wxString mode[] = { "open", "save" };
+    m_radioFileCtrlMode = new wxRadioBox( this, wxID_ANY, "wxFileCtrl mode",
                                           wxDefaultPosition, wxDefaultSize,
                                           WXSIZEOF( mode ), mode );
 
     sizerLeft->Add( m_radioFileCtrlMode,
                     0, wxALL | wxEXPAND , 5 );
 
-    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetDirectory , wxT( "Set &directory" ), wxID_ANY, &m_dir ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetDirectory , "Set &directory", wxID_ANY, &m_dir ),
                     0, wxALL | wxEXPAND , 5 );
-    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetPath , wxT( "Set &path" ), wxID_ANY, &m_path ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetPath , "Set &path", wxID_ANY, &m_path ),
                     0, wxALL | wxEXPAND , 5 );
-    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetFilename , wxT( "Set &filename" ), wxID_ANY, &m_filename ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetFilename , "Set &filename", wxID_ANY, &m_filename ),
                     0, wxALL | wxEXPAND , 5 );
 
     wxSizer *sizerUseFlags =
-        new wxStaticBoxSizer( wxVERTICAL, this, wxT( "&Flags" ) );
+        new wxStaticBoxSizer( wxVERTICAL, this, "&Flags");
 
-    m_chkMultiple   = CreateCheckBoxAndAddToSizer( sizerUseFlags, wxT( "wxFC_MULTIPLE" ) );
-    m_chkNoShowHidden   = CreateCheckBoxAndAddToSizer( sizerUseFlags, wxT( "wxFC_NOSHOWHIDDEN" ) );
+    m_chkMultiple   = CreateCheckBoxAndAddToSizer( sizerUseFlags, "wxFC_MULTIPLE");
+    m_chkNoShowHidden   = CreateCheckBoxAndAddToSizer( sizerUseFlags, "wxFC_NOSHOWHIDDEN");
     sizerLeft->Add( sizerUseFlags, wxSizerFlags().Expand().Border() );
 
     wxSizer *sizerFilters =
-        new wxStaticBoxSizer( wxVERTICAL, this, wxT( "&Filters" ) );
-    m_fltr[0] = CreateCheckBoxAndAddToSizer( sizerFilters, wxString::Format( wxT( "all files (%s)|%s" ),
+        new wxStaticBoxSizer( wxVERTICAL, this, "&Filters");
+    m_fltr[0] = CreateCheckBoxAndAddToSizer( sizerFilters, wxString::Format("all files (%s)|%s",
                 wxFileSelectorDefaultWildcardStr, wxFileSelectorDefaultWildcardStr ) );
-    m_fltr[1] = CreateCheckBoxAndAddToSizer( sizerFilters, wxT( "C++ files (*.cpp; *.h)|*.cpp;*.h" ) );
-    m_fltr[2] = CreateCheckBoxAndAddToSizer( sizerFilters, wxT( "PNG images (*.png)|*.png" ) );
+    m_fltr[1] = CreateCheckBoxAndAddToSizer( sizerFilters, "C++ files (*.cpp; *.h)|*.cpp;*.h" );
+    m_fltr[2] = CreateCheckBoxAndAddToSizer( sizerFilters, "PNG images (*.png)|*.png");
     sizerLeft->Add( sizerFilters, wxSizerFlags().Expand().Border() );
 
-    wxButton *btn = new wxButton( this, FileCtrlPage_Reset, wxT( "&Reset" ) );
+    wxButton *btn = new wxButton( this, FileCtrlPage_Reset, "&Reset" );
     sizerLeft->Add( btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15 );
 
     // right pane
@@ -227,11 +224,25 @@ void FileCtrlWidgetsPage::CreateFileCtrl()
 {
     wxWindowUpdateLocker noUpdates( this );
 
-    const int style =
-        ( m_radioFileCtrlMode->GetSelection() == FileCtrlMode_Open ?
-          wxFC_OPEN : wxFC_SAVE ) |
-        ( m_chkMultiple->IsChecked() ? wxFC_MULTIPLE : 0 ) |
-        ( m_chkNoShowHidden->IsChecked() ? wxFC_NOSHOWHIDDEN : 0 );
+    long style = GetAttrs().m_defaultFlags;
+
+    if ( m_radioFileCtrlMode->GetSelection() == FileCtrlMode_Open )
+    {
+        style |= wxFC_OPEN;
+        m_chkMultiple->Enable();
+        if ( m_chkMultiple->IsChecked() )
+            style |= wxFC_MULTIPLE;
+    }
+    else
+    {
+        style |= wxFC_SAVE;
+        // wxFC_SAVE is incompatible with wxFC_MULTIPLE
+        m_chkMultiple->SetValue(false);
+        m_chkMultiple->Enable(false);
+    }
+
+    if ( m_chkNoShowHidden->IsChecked() )
+        style |= wxFC_NOSHOWHIDDEN;
 
     wxFileCtrl *fileCtrl = new wxFileCtrl(
                                this,
@@ -250,7 +261,7 @@ void FileCtrlWidgetsPage::CreateFileCtrl()
         if ( m_fltr[i]->IsChecked() )
         {
             if ( !wildcard.IsEmpty() )
-                wildcard += wxT( "|" );
+                wildcard += "|";
             wildcard += m_fltr[i]->GetLabel();
         }
     }
@@ -298,7 +309,7 @@ void FileCtrlWidgetsPage::OnCheckBox( wxCommandEvent& WXUNUSED( event ) )
     CreateFileCtrl();
 }
 
-void FileCtrlWidgetsPage::OnRadioBox( wxCommandEvent& WXUNUSED( event ) )
+void FileCtrlWidgetsPage::OnSwitchMode( wxCommandEvent& WXUNUSED( event ) )
 {
     CreateFileCtrl();
 }

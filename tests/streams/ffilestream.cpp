@@ -10,9 +10,6 @@
 // and "wx/cppunit.h"
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -65,9 +62,9 @@ protected:
 
 private:
     // Implement base class functions.
-    virtual wxFFileInputStream  *DoCreateInStream();
-    virtual wxFFileOutputStream *DoCreateOutStream();
-    virtual void DoDeleteOutStream();
+    virtual wxFFileInputStream  *DoCreateInStream() override;
+    virtual wxFFileOutputStream *DoCreateOutStream() override;
+    virtual void DoDeleteOutStream() override;
 
 private:
     wxString GetInFileName() const;

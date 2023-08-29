@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_HTML
 
@@ -42,7 +39,7 @@ wxObject *wxSimpleHtmlListBoxXmlHandler::DoCreateResource()
 
         // need to build the list of strings from children
         m_insideBox = true;
-        CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
+        CreateChildrenPrivately(nullptr, GetParamNode(wxT("content")));
         m_insideBox = false;
 
         XRC_MAKE_INSTANCE(control, wxSimpleHtmlListBox)
@@ -71,7 +68,7 @@ wxObject *wxSimpleHtmlListBoxXmlHandler::DoCreateResource()
         // add to the list
         strList.Add(GetNodeText(m_node, wxXRC_TEXT_NO_ESCAPE));
 
-        return NULL;
+        return nullptr;
     }
 }
 

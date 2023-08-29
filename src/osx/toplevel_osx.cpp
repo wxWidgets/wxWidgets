@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/toplevel.h"
 
@@ -76,7 +73,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
         return false;
 
     wxWindow::SetLabel( title ) ;
-    m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
+    m_nowpeer->SetTitle(title);
     wxTopLevelWindows.Append(this);
 
     return true;
@@ -121,7 +118,7 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return false;
 
     return m_nowpeer->IsMaximized();
@@ -135,7 +132,7 @@ void wxTopLevelWindowMac::Iconize(bool iconize)
 
 bool wxTopLevelWindowMac::IsIconized() const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return false;
 
     return m_nowpeer->IsIconized();
@@ -163,7 +160,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
     m_label = title ;
 
     if ( m_nowpeer )
-        m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
+        m_nowpeer->SetTitle(title);
 }
 
 wxString wxTopLevelWindowMac::GetTitle() const
@@ -184,9 +181,9 @@ void wxTopLevelWindowMac::ShowWithoutActivating()
     SendSizeEvent();
 }
 
-bool wxTopLevelWindowMac::EnableFullScreenView(bool enable)
+bool wxTopLevelWindowMac::EnableFullScreenView(bool enable, long style)
 {
-    return m_nowpeer->EnableFullScreenView(enable);
+    return m_nowpeer->EnableFullScreenView(enable, style);
 }
 
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
@@ -197,6 +194,16 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
 bool wxTopLevelWindowMac::IsFullScreen() const
 {
     return m_nowpeer->IsFullScreen();
+}
+
+wxContentProtection wxTopLevelWindowMac::GetContentProtection() const
+{
+    return m_nowpeer->GetContentProtection();
+}
+
+bool wxTopLevelWindowMac::SetContentProtection(wxContentProtection contentProtection)
+{
+    return m_nowpeer->SetContentProtection(contentProtection);
 }
 
 bool wxTopLevelWindowMac::EnableCloseButton(bool enable)

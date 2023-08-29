@@ -86,7 +86,7 @@ class wxCocoaDataViewControl;
 class wxDataViewColumnNativeData
 {
 public:
-    wxDataViewColumnNativeData() : m_NativeColumnPtr(NULL)
+    wxDataViewColumnNativeData() : m_NativeColumnPtr(nullptr)
     {
     }
 
@@ -118,19 +118,19 @@ class wxDataViewRendererNativeData
 {
 public:
     wxDataViewRendererNativeData()
-        : m_Object(NULL), m_ColumnCell(NULL)
+        : m_Object(nullptr), m_ColumnCell(nullptr), m_ItemCell(nullptr)
     {
         Init();
     }
 
     wxDataViewRendererNativeData(NSCell* initColumnCell)
-        : m_Object(NULL), m_ColumnCell([initColumnCell retain])
+        : m_Object(nullptr), m_ColumnCell([initColumnCell retain]), m_ItemCell(nullptr)
     {
         Init();
     }
 
     wxDataViewRendererNativeData(NSCell* initColumnCell, id initObject)
-        : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain])
+        : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain]), m_ItemCell(nullptr)
     {
         Init();
     }
@@ -142,6 +142,7 @@ public:
 
         [m_origFont release];
         [m_origTextColour release];
+        [m_origBackgroundColour release];
     }
 
     NSCell* GetColumnCell() const { return m_ColumnCell; }
@@ -175,7 +176,7 @@ public:
         m_Object = newObject;
     }
 
-    // The original cell font and text colour stored here are NULL by default
+    // The original cell font and text colour stored here are null by default
     // and are only initialized to the values retrieved from the cell when we
     // change them from wxCocoaOutlineView:willDisplayCell:forTableColumn:item:
     // which calls our SaveOriginalXXX() methods before changing the cell
@@ -186,6 +187,7 @@ public:
     // ones that do.
     NSFont *GetOriginalFont() const { return m_origFont; }
     NSColor *GetOriginalTextColour() const { return m_origTextColour; }
+    NSColor *GetOriginalBackgroundColour() const { return m_origBackgroundColour; }
 
     void SaveOriginalFont(NSFont *font)
     {
@@ -195,6 +197,11 @@ public:
     void SaveOriginalTextColour(NSColor *textColour)
     {
         m_origTextColour = [textColour retain];
+    }
+
+    void SaveOriginalBackgroundColour(NSColor *backgroundColour)
+    {
+        m_origBackgroundColour = [backgroundColour retain];
     }
 
     // The ellipsization mode which we need to set for each cell being rendered.
@@ -223,9 +230,10 @@ private:
 
     NSTableColumn* m_TableColumnPtr; // column NOT owned by renderer
 
-    // we own those if they're non-NULL
+    // we own those if they're non-null
     NSFont *m_origFont;
     NSColor *m_origTextColour;
+    NSColor *m_origBackgroundColour;
 
     wxEllipsizeMode m_ellipsizeMode;
 
@@ -464,85 +472,82 @@ public:
     }
 
     // column related methods (inherited from wxDataViewWidgetImpl)
-    virtual bool ClearColumns();
-    virtual bool DeleteColumn(wxDataViewColumn* columnPtr);
-    virtual void DoSetExpanderColumn(wxDataViewColumn const* columnPtr);
-    virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
-    virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const;
-    virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr);
-    virtual void FitColumnWidthToContent(unsigned int pos);
+    virtual bool ClearColumns() override;
+    virtual bool DeleteColumn(wxDataViewColumn* columnPtr) override;
+    virtual void DoSetExpanderColumn(wxDataViewColumn const* columnPtr) override;
+    virtual wxDataViewColumn* GetColumn(unsigned int pos) const override;
+    virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const override;
+    virtual bool InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr) override;
+    virtual void FitColumnWidthToContent(unsigned int pos) override;
 
     // item related methods (inherited from wxDataViewWidgetImpl)
-    virtual bool Add(const wxDataViewItem& parent, const wxDataViewItem& item);
+    virtual bool Add(const wxDataViewItem& parent, const wxDataViewItem& item) override;
     virtual bool Add(const wxDataViewItem& parent,
-                     const wxDataViewItemArray& items);
-    virtual void Collapse(const wxDataViewItem& item);
+                     const wxDataViewItemArray& items) override;
+    virtual void Collapse(const wxDataViewItem& item) override;
     virtual void EnsureVisible(const wxDataViewItem& item,
-                               wxDataViewColumn const* columnPtr);
-    virtual unsigned int GetCount() const;
-    virtual int GetCountPerPage() const;
+                               wxDataViewColumn const* columnPtr) override;
+    virtual unsigned int GetCount() const override;
+    virtual int GetCountPerPage() const override;
     virtual wxRect GetRectangle(const wxDataViewItem& item,
-                                wxDataViewColumn const* columnPtr);
-    virtual wxDataViewItem GetTopItem() const;
-    virtual bool IsExpanded(const wxDataViewItem& item) const;
-    virtual bool Reload();
-    virtual bool Remove(const wxDataViewItem& parent,
-                        const wxDataViewItem& item);
-    virtual bool Remove(const wxDataViewItem& parent,
-                        const wxDataViewItemArray& item);
-    virtual bool Update(const wxDataViewColumn* columnPtr);
+                                wxDataViewColumn const* columnPtr) override;
+    virtual wxDataViewItem GetTopItem() const override;
+    virtual bool IsExpanded(const wxDataViewItem& item) const override;
+    virtual bool Reload() override;
+    virtual bool Remove(const wxDataViewItem& parent) override;
+    virtual bool Update(const wxDataViewColumn* columnPtr) override;
     virtual bool Update(const wxDataViewItem& parent,
-                        const wxDataViewItem& item);
+                        const wxDataViewItem& item) override;
     virtual bool Update(const wxDataViewItem& parent,
-                        const wxDataViewItemArray& items);
+                        const wxDataViewItemArray& items) override;
 
     // model related methods
-    virtual bool AssociateModel(wxDataViewModel* model);
+    virtual bool AssociateModel(wxDataViewModel* model) override;
 
     //
     // selection related methods (inherited from wxDataViewWidgetImpl)
     //
-    virtual wxDataViewItem GetCurrentItem() const;
-    virtual void SetCurrentItem(const wxDataViewItem& item);
-    virtual wxDataViewColumn *GetCurrentColumn() const;
-    virtual int  GetSelectedItemsCount() const;
-    virtual int  GetSelections(wxDataViewItemArray& sel)   const;
-    virtual bool IsSelected(const wxDataViewItem& item) const;
-    virtual void Select(const wxDataViewItem& item);
-    virtual void SelectAll();
-    virtual void Unselect(const wxDataViewItem& item);
-    virtual void UnselectAll();
+    virtual wxDataViewItem GetCurrentItem() const override;
+    virtual void SetCurrentItem(const wxDataViewItem& item) override;
+    virtual wxDataViewColumn *GetCurrentColumn() const override;
+    virtual int  GetSelectedItemsCount() const override;
+    virtual int  GetSelections(wxDataViewItemArray& sel)   const override;
+    virtual bool IsSelected(const wxDataViewItem& item) const override;
+    virtual void Select(const wxDataViewItem& item) override;
+    virtual void Select(const wxDataViewItemArray& items) override;
+    virtual void SelectAll() override;
+    virtual void Unselect(const wxDataViewItem& item) override;
+    virtual void UnselectAll() override;
 
     //
     // sorting related methods
     //
-    virtual wxDataViewColumn* GetSortingColumn () const;
-    virtual void Resort();
+    virtual wxDataViewColumn* GetSortingColumn () const override;
+    virtual void Resort() override;
 
     //
     // other methods (inherited from wxDataViewWidgetImpl)
     //
-    virtual void DoSetIndent(int indent);
+    virtual void DoSetIndent(int indent) override;
 
-    virtual void DoExpand(const wxDataViewItem& item);
+    virtual void DoExpand(const wxDataViewItem& item, bool expandChildren) override;
 
     virtual void HitTest(const wxPoint& point,
                          wxDataViewItem& item,
-                         wxDataViewColumn*& columnPtr) const;
-    virtual void SetRowHeight(int height);
-    virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height);
-    virtual void OnSize();
-    
-    virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
+                         wxDataViewColumn*& columnPtr) const override;
+    virtual void SetRowHeight(int height) override;
+    virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height) override;
+    virtual void OnSize() override;
 
-    // drag & drop helper methods
-    wxDataFormat GetDnDDataFormat(wxDataObjectComposite* dataObjects);
-    wxDataObjectComposite* GetDnDDataObjects(NSData* dataObject) const;
+    virtual void StartEditor( const wxDataViewItem & item, unsigned int column ) override;
 
     // Cocoa-specific helpers
     id GetItemAtRow(int row) const;
 
-    virtual void SetFont(const wxFont& font, const wxColour& foreground, long windowStyle, bool ignoreBlack = true);
+    virtual void SetFont(const wxFont& font) override;
+
+    virtual void keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd) override;
+    virtual bool doCommandBySelector(void* sel, WXWidget slf, void* _cmd) override;
 
 private:
     void InitOutlineView(long style);
@@ -551,6 +556,9 @@ private:
     wxCocoaOutlineDataSource* m_DataSource;
 
     wxCocoaOutlineView* m_OutlineView;
+
+    // Width of expander in pixels, computed on demand.
+    int m_expanderWidth;
 };
 
 #endif // _WX_DATAVIEWCTRL_COCOOA_H_

@@ -9,11 +9,28 @@
 #include "wx/wxprec.h"
 
 #include "wx/fontenum.h"
+#include "wx/qt/private/converter.h"
 
-bool wxFontEnumerator::EnumerateFacenames( wxFontEncoding WXUNUSED(encoding),
-                bool WXUNUSED(fixedWidthOnly))
+#include <QtCore/QStringList>
+#include <QtGui/QFontDatabase>
+
+bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding WXUNUSED(encoding), bool fixedWidthOnly)
 {
-    return false;
+    QFontDatabase fontDatabase;
+    const QStringList allFonts = fontDatabase.families(QFontDatabase::Any);
+    for( QStringList::const_iterator i = allFonts.begin(); i != allFonts.end(); ++i )
+    {
+        const QString& fontFamily = *i;
+        if ( !fixedWidthOnly || fontDatabase.isFixedPitch(fontFamily) )
+        {
+            if ( !OnFacename(wxQtConvertString(fontFamily)) )
+            {
+                break;
+            }
+        }
+    }
+
+    return true;
 }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& WXUNUSED(facename))

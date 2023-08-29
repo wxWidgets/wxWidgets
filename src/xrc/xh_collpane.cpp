@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_COLLPANE
 
@@ -46,7 +43,7 @@ wxObject *wxCollapsiblePaneXmlHandler::DoCreateResource()
         {
             bool old_ins = m_isInside;
             m_isInside = false;
-            wxObject *item = CreateResFromNode(n, m_collpane->GetPane(), NULL);
+            wxObject *item = CreateResFromNode(n, m_collpane->GetPane(), nullptr);
             m_isInside = old_ins;
 
             return item;
@@ -54,7 +51,7 @@ wxObject *wxCollapsiblePaneXmlHandler::DoCreateResource()
         else
         {
             ReportError("no control within panewindow");
-            return NULL;
+            return nullptr;
         }
     }
     else
@@ -65,7 +62,7 @@ wxObject *wxCollapsiblePaneXmlHandler::DoCreateResource()
         if (label.empty())
         {
             ReportParamError("label", "label cannot be empty");
-            return NULL;
+            return nullptr;
         }
 
         ctrl->Create(m_parentAsWindow,

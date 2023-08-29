@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SELECT_DISPATCHER
 
@@ -28,7 +25,6 @@
 #include "wx/unix/private.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/log.h"
     #include "wx/intl.h"
 #endif
@@ -78,7 +74,7 @@ bool wxSelectSets::HasFD(int fd) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
+        if ( wxFD_ISSET(fd, const_cast<fd_set*>(&m_fds[n])) )
             return true;
     }
 
@@ -113,7 +109,7 @@ bool wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
+        if ( wxFD_ISSET(fd, const_cast<fd_set*>(&m_fds[n])) )
         {
             wxLogTrace(wxSelectDispatcher_Trace,
                        wxT("Got %s event on fd %d"), ms_names[n], fd);
@@ -207,7 +203,7 @@ int wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
         wxFDIOHandler * const handler = FindHandler(fd);
         if ( !handler )
         {
-            wxFAIL_MSG( wxT("NULL handler in wxSelectDispatcher?") );
+            wxFAIL_MSG( wxT("null handler in wxSelectDispatcher?") );
             continue;
         }
 
@@ -230,7 +226,7 @@ int wxSelectDispatcher::DoSelect(wxSelectSets& sets, int timeout) const
     }
     else // no timeout
     {
-        ptv = NULL;
+        ptv = nullptr;
     }
 
     int ret = sets.Select(m_maxFD + 1, ptv);

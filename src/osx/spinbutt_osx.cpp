@@ -142,4 +142,14 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
         SendThumbTrackEvent() ;
 }
 
+void wxSpinButton::SetIncrement(int value)
+{
+    GetPeer()->SetIncrement( value );
+}
+
+int wxSpinButton::GetIncrement() const
+{
+    return GetPeer()->GetIncrement();
+}
+
 #endif // wxUSE_SPINBTN

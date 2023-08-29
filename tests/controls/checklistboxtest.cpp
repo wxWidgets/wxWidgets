@@ -10,9 +10,6 @@
 
 #if wxUSE_CHECKLISTBOX
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -27,12 +24,12 @@ class CheckListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestC
 public:
     CheckListBoxTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxItemContainer *GetContainer() const { return m_check; }
-    virtual wxWindow *GetContainerWindow() const { return m_check; }
+    virtual wxItemContainer *GetContainer() const override { return m_check; }
+    virtual wxWindow *GetContainerWindow() const override { return m_check; }
 
     CPPUNIT_TEST_SUITE( CheckListBoxTestCase );
         wxITEM_CONTAINER_TESTS();
@@ -46,11 +43,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(CheckListBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( CheckListBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CheckListBoxTestCase, "CheckListBoxTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(CheckListBoxTestCase,
+                               "[CheckListBoxTestCase][item-container]");
 
 void CheckListBoxTestCase::setUp()
 {

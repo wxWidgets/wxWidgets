@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 3 February 2016                                                     *
+# Date : 6 January 2021                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -157,7 +157,10 @@ gtk : [.include.wx]setup.h
 	set default [-.widgets]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.tests]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)/ignore=warning
+	if (f$getsyi("ARCH_NAME") .eqs. "IA64" ) then\
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,ITANIUM=1)/ignore=warning
+	if (f$getsyi("ARCH_NAME") .eqs. "Alpha" ) then\
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,ALPHA=1)/ignore=warning
 	set default [-]
 
 gtk2 : [.include.wx]setup.h

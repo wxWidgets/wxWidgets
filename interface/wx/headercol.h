@@ -18,8 +18,8 @@ enum
     /**
         Size the column automatically to fit all values.
 
-        @note On OS X, this style is only implemented in the Cocoa build on
-              OS X >= 10.5; it behaves identically to wxCOL_WIDTH_DEFAULT otherwise.
+        @note On macOS, this style is only implemented in the Cocoa build on
+              macOS >= 10.5; it behaves identically to wxCOL_WIDTH_DEFAULT otherwise.
      */
     wxCOL_WIDTH_AUTOSIZE = -2
 };
@@ -78,11 +78,23 @@ public:
     virtual wxString GetTitle() const = 0;
 
     /**
-        Returns the bitmap in the header of the column, if any.
-
-        If the column has no associated bitmap, wxNullBitmap should be returned.
+        This function exists only for backwards compatibility, it's recommended to override
+        GetBitmapBundle() in the new code and override this one to do nothing, as it will
+        never be called if GetBitmapBundle() is overridden.
     */
     virtual wxBitmap GetBitmap() const = 0;
+
+    /**
+        Returns the bitmap in the header of the column, if any.
+        If the column has no associated bitmap, empty wxBitmapBundle should be returned.
+
+        Override this function to return the bundle containing the bitmap to show in the
+        column header. By default delegates to GetBitmap() but should be overridden if
+        the bitmaps are used.
+
+        @since 3.1.6
+    */
+    virtual wxBitmapBundle GetBitmapBundle() const;
 
     /**
         Returns the current width of the column.
@@ -205,7 +217,7 @@ public:
         Notice that the bitmaps displayed in different columns of the same
         control must all be of the same size.
      */
-    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) = 0;
 
     /**
         Set the column width.
@@ -248,7 +260,7 @@ public:
     /**
         Set the column flags.
 
-        This method allows to set all flags at once, see also generic
+        This method allows setting all flags at once, see also generic
         ChangeFlag(), SetFlag(), ClearFlag() and ToggleFlag() methods below as
         well as specific SetResizeable(), SetSortable(), SetReorderable() and
         SetHidden() ones.
@@ -397,7 +409,7 @@ public:
 class wxHeaderColumnSimple : public wxSettableHeaderColumn
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor for a column header.
 
@@ -409,20 +421,21 @@ public:
                          wxAlignment align = wxALIGN_NOT,
                          int flags = wxCOL_DEFAULT_FLAGS);
 
-    wxHeaderColumnSimple(const wxBitmap &bitmap,
+    wxHeaderColumnSimple(const wxBitmapBundle &bitmap,
                          int width = wxCOL_WIDTH_DEFAULT,
                          wxAlignment align = wxALIGN_CENTER,
                          int flags = wxCOL_DEFAULT_FLAGS);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
 
     /// Trivial implementations of the base class pure virtual functions.
 
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
-    virtual void SetBitmap(const wxBitmap& bitmap);
+    virtual void SetBitmap(const wxBitmapBundle& bitmap);
     virtual wxBitmap GetBitmap() const;
+    virtual wxBitmapBundle GetBitmapBundle() const;
     virtual void SetWidth(int width);
     virtual int GetWidth() const;
     virtual void SetMinWidth(int minWidth);
@@ -435,5 +448,5 @@ public:
     virtual void SetSortOrder(bool ascending);
     virtual bool IsSortOrderAscending() const;
 
-    //@}
+    ///@}
 };

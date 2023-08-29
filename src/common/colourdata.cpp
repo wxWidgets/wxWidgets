@@ -7,9 +7,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COLOURDLG || wxUSE_COLOURPICKERCTRL
 
@@ -128,6 +125,10 @@ bool wxColourData::FromString(const wxString& str)
 #if wxUSE_COLOURDLG
 
 #include "wx/colordlg.h"
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialogEvent, wxCommandEvent);
+
+wxDEFINE_EVENT(wxEVT_COLOUR_CHANGED, wxColourDialogEvent);
 
 wxColour wxGetColourFromUser(wxWindow *parent,
                              const wxColour& colInit,

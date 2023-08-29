@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FINDREPLDLG
 
@@ -295,8 +292,8 @@ wxFindReplaceDialogHookProc(HWND hwnd,
 
 void wxFindReplaceDialog::Init()
 {
-    m_impl = NULL;
-    m_FindReplaceData = NULL;
+    m_impl = nullptr;
+    m_FindReplaceData = nullptr;
 
     // as we're created in the hidden state, bring the internal flag in sync
     m_isShown = false;
@@ -337,7 +334,7 @@ wxFindReplaceDialog::~wxFindReplaceDialog()
     m_isShown = false;
 
     // and from destroying our window [again]
-    m_hWnd = (WXHWND)NULL;
+    m_hWnd = (WXHWND)nullptr;
 }
 
 bool wxFindReplaceDialog::Create(wxWindow *parent,
@@ -347,12 +344,14 @@ bool wxFindReplaceDialog::Create(wxWindow *parent,
 {
     m_windowStyle = flags;
     m_FindReplaceData = data;
-    m_parent = parent;
+
+    if ( parent )
+        parent->AddChild(this);
 
     SetTitle(title);
 
     // we must have a parent as it will get the messages from us
-    return parent != NULL;
+    return parent != nullptr;
 }
 
 // ----------------------------------------------------------------------------

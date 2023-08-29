@@ -34,7 +34,7 @@
         If set to non-zero value, abort the program if an assertion fails. The
         default behaviour in case of assertion failure depends on the build mode
         and can be changed by overriding wxApp::OnAssertFailure() but setting
-        this option allows to change it without modifying the program code and
+        this option allows changing it without modifying the program code and
         also applies to asserts which may happen before the wxApp object
         creation or after its destruction.
     @endFlagTable
@@ -66,15 +66,21 @@
         Setting this to 0 causes more flicker, but allows applications to paint
         graphics on the parent of a static box (the optimized refresh causes any
         such drawing to disappear).
-    @flag{msw.display.directdraw}
-        If set to 1, use DirectDraw-based implementation of wxDisplay.
-        By default the standard Win32 functions are used.
     @flag{msw.font.no-proof-quality}
         If set to 1, use default fonts quality instead of proof quality when
         creating fonts. With proof quality the fonts have slightly better
         appearance but not all fonts are available in this quality,
         e.g. the Terminal font in small sizes is not and this option may be
         used if wider fonts selection is more important than higher quality.
+    @flag{msw.window.no-composited}
+        If set to 1, disables the use of composited, i.e. double-buffered,
+        windows by default in wxMSW. This is not recommended, but can be useful
+        for debugging or working around redraw problems in the existing code.
+    @flag{msw.dark-mode}
+        If set to 1, enable experimental support of dark mode if the system is
+        using it, i.e. this has the same effect as calling
+        wxApp::MSWEnableDarkMode(). If set to 2, use dark mode unconditionally,
+        as if this function were called with wxApp::DarkMode_Always argument.
     @endFlagTable
 
 
@@ -84,8 +90,8 @@
     @flag{gtk.tlw.can-set-transparent}
         wxTopLevelWindow::CanSetTransparent() method normally tries to detect
         automatically whether transparency for top level windows is currently
-        supported, however this may sometimes fail and this option allows to
-        override the automatic detection. Setting it to 1 makes the transparency
+        supported, however this may sometimes fail and this option allows
+        overriding the automatic detection. Setting it to 1 makes the transparency
         be always available (setting it can still fail, of course) and setting it
         to 0 makes it always unavailable.
     @flag{gtk.desktop}
@@ -108,23 +114,12 @@
     @flag{window-default-variant}
         The default variant used by windows (cast to integer from the wxWindowVariant enum).
         Also known as wxWINDOW_DEFAULT_VARIANT.
-    @flag{mac.listctrl.always_use_generic}
-        Tells wxListCtrl to use the generic control even when it is capable of
-        using the native control instead. Also known as wxMAC_ALWAYS_USE_GENERIC_LISTCTRL.
     @flag{mac.textcontrol-use-spell-checker}
         If 1 activates the spell checking in wxTextCtrl.
     @flag{osx.openfiledialog.always-show-types}
-        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on OS X but allows
-        the selection of files from any of the supported types. Setting this to 1 shows a wxChoice 
+        Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on macOS but allows
+        the selection of files from any of the supported types. Setting this to 1 shows a wxChoice
         for selection (if there is more than one supported filetype).
-    @endFlagTable
-
-
-    @section sysopt_motif Motif
-
-    @beginFlagTable
-    @flag{motif.largebuttons}
-        If 1, uses a bigger default size for wxButtons.
     @endFlagTable
 
 
@@ -179,12 +174,12 @@ public:
     */
     static bool IsFalse(const wxString& name);
 
-    //@{
+    ///@{
     /**
         Sets an option. The function is case-insensitive to @a name.
     */
     static void SetOption(const wxString& name, const wxString& value);
     static void SetOption(const wxString& name, int value);
-    //@}
+    ///@}
 };
 

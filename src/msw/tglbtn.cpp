@@ -20,9 +20,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TOGGLEBTN
 
@@ -57,7 +54,7 @@ wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxToggleButton);
 
 bool wxBitmapToggleButton::Create( wxWindow *parent, wxWindowID id,
-                const wxBitmap& label,const wxPoint& pos, const wxSize& size, long style,
+                const wxBitmapBundle& label,const wxPoint& pos, const wxSize& size, long style,
                 const wxValidator& validator, const wxString& name )
 {
     if (!wxToggleButton::Create( parent, id, wxEmptyString, pos, size, style, validator, name ))

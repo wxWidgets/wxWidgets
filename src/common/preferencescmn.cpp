@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PREFERENCES_EDITOR
 
@@ -58,7 +55,7 @@ wxPreferencesEditor::~wxPreferencesEditor()
 
 void wxPreferencesEditor::AddPage(wxPreferencesPage* page)
 {
-    wxCHECK_RET( page, "can't set NULL page" );
+    wxCHECK_RET( page, "can't set null page" );
     m_impl->AddPage(page);
 }
 

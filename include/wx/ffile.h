@@ -34,7 +34,7 @@ public:
   // ctors
   // -----
     // def ctor
-  wxFFile() { m_fp = NULL; }
+  wxFFile() { m_fp = nullptr; }
     // open specified file (may fail, use IsOpened())
   wxFFile(const wxString& filename, const wxString& mode = wxT("r"));
     // attach to (already opened) file
@@ -49,7 +49,7 @@ public:
   // assign an existing file descriptor and get it back from wxFFile object
   void Attach(FILE *lfp, const wxString& name = wxEmptyString)
     { Close(); m_fp = lfp; m_name = name; }
-  FILE* Detach() { FILE* fpOld = m_fp; m_fp = NULL; return fpOld; }
+  FILE* Detach() { FILE* fpOld = m_fp; m_fp = nullptr; return fpOld; }
   FILE *fp() const { return m_fp; }
 
   // read/write (unbuffered)
@@ -78,7 +78,7 @@ public:
   // simple accessors: note that Eof() and Error() may only be called if
   // IsOpened(). Otherwise they assert and return false.
     // is file opened?
-  bool IsOpened() const { return m_fp != NULL; }
+  bool IsOpened() const { return m_fp != nullptr; }
     // is end of file reached?
   bool Eof() const;
     // has an error occurred?
@@ -98,9 +98,67 @@ private:
   wxFFile(const wxFFile&);
   wxFFile& operator=(const wxFFile&);
 
-  FILE *m_fp;       // IO stream or NULL if not opened
+  FILE *m_fp;       // IO stream or nullptr if not opened
 
   wxString m_name;  // the name of the file (for diagnostic messages)
+};
+
+// ----------------------------------------------------------------------------
+// class wxTempFFile: if you want to replace another file, create an instance
+// of wxTempFFile passing the name of the file to be replaced to the ctor. Then
+// you can write to wxTempFFile and call Commit() function to replace the old
+// file (and close this one) or call Discard() to cancel the modification. If
+// you call neither of them, dtor will call Discard().
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxTempFFile
+{
+public:
+  // ctors
+    // default
+  wxTempFFile() { }
+    // associates the temp file with the file to be replaced and opens it
+  explicit wxTempFFile(const wxString& strName);
+
+  // open the temp file (strName is the name of file to be replaced)
+  bool Open(const wxString& strName);
+
+  // is the file opened?
+  bool IsOpened() const { return m_file.IsOpened(); }
+    // get current file length
+  wxFileOffset Length() const { return m_file.Length(); }
+    // move ptr ofs bytes related to start/current pos/end of file
+  bool Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart)
+    { return m_file.Seek(ofs, mode); }
+    // get current position in the file
+  wxFileOffset Tell() const { return m_file.Tell(); }
+
+  // I/O (both functions return true on success, false on failure)
+  bool Write(const void *p, size_t n) { return m_file.Write(p, n) == n; }
+  bool Write(const wxString& str, const wxMBConv& conv = wxMBConvUTF8())
+    { return m_file.Write(str, conv); }
+
+  // flush data: can be called before closing file to ensure that data was
+  // correctly written out
+  bool Flush() { return m_file.Flush(); }
+
+  // different ways to close the file
+    // validate changes and delete the old file of name m_strName
+  bool Commit();
+    // discard changes
+  void Discard();
+
+  // dtor calls Discard() if file is still opened
+ ~wxTempFFile();
+
+private:
+  // no copy ctor/assignment operator
+  wxTempFFile(const wxTempFFile&);
+  wxTempFFile& operator=(const wxTempFFile&);
+
+  wxString  m_strName,  // name of the file to replace in Commit()
+            m_strTemp;  // temporary file name
+  wxFFile   m_file;     // the temporary file
 };
 
 #endif // wxUSE_FFILE

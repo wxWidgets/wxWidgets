@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/brush.h"
 
@@ -44,9 +41,9 @@ public:
 
     void SetStyle(wxBrushStyle style)
     {
-        if ( style != wxSOLID && style != wxTRANSPARENT )
+        if ( style != wxBRUSHSTYLE_SOLID && style != wxBRUSHSTYLE_TRANSPARENT )
         {
-            wxFAIL_MSG( wxT("only wxSOLID and wxTRANSPARENT styles are supported") );
+            wxFAIL_MSG( wxT("only wxBRUSHSTYLE_SOLID and wxBRUSHSTYLE_TRANSPARENT styles are supported") );
             style = wxBRUSHSTYLE_SOLID;
         }
 

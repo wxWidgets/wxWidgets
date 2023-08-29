@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/event.h"
@@ -29,10 +26,6 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
-// wxCmdLineParser is only used when we can't use ::CommandLineToArgvW().
-#if !wxUSE_UNICODE
-    #include "wx/cmdline.h"
-#endif
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
@@ -43,15 +36,9 @@
     #include "wx/msw/crashrpt.h"
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#ifdef __BORLANDC__
-    // BC++ has to be special: its run-time expects the DLL entry point to be
-    // named DllEntryPoint instead of the (more) standard DllMain
-    #define DllMain DllEntryPoint
-#endif // __BORLANDC__
-
 // defined in common/init.cpp
 extern int wxEntryReal(int& argc, wxChar **argv);
-extern int wxEntryCleanupReal(int& argc, wxChar **argv);
+extern void wxEntryCleanupReal();
 
 // ============================================================================
 // implementation: various entry points
@@ -69,7 +56,7 @@ extern int wxEntryCleanupReal(int& argc, wxChar **argv);
 
 // global pointer to exception information, only valid inside OnFatalException,
 // used by wxStackWalker and wxCrashReport
-extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
+extern EXCEPTION_POINTERS *wxGlobalSEInformation = nullptr;
 
 // flag telling us whether the application wants to handle exceptions at all
 static bool gs_handleExceptions = false;
@@ -94,7 +81,7 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
         }
         wxSEH_IGNORE      // ignore any exceptions inside the exception handler
 
-        wxGlobalSEInformation = NULL;
+        wxGlobalSEInformation = nullptr;
 
         // this will execute our handler and terminate the process
         return EXCEPTION_EXECUTE_HANDLER;
@@ -201,70 +188,77 @@ int wxEntry(int& argc, wxChar **argv)
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
 
+// Declare the functions used in wxCore to access the command line arguments
+// data in wxBase.
+WXDLLIMPEXP_BASE void wxMSWCommandLineInit();
+WXDLLIMPEXP_BASE void wxMSWCommandLineCleanup();
+WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc();
+WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv();
+
+#if wxUSE_BASE
+
+namespace
+{
+
 struct wxMSWCommandLineArguments
 {
-    wxMSWCommandLineArguments() { argc = 0; argv = NULL; }
+    wxMSWCommandLineArguments() { argc = 0; argv = nullptr; }
 
     // Initialize this object from the current process command line.
     //
     // In Unicode build prefer to use the standard function for tokenizing the
     // command line, but we can't use it with narrow strings, so use our own
     // approximation instead then.
-#if wxUSE_UNICODE
     void Init()
     {
         argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
     }
 
-    ~wxMSWCommandLineArguments()
+    void Cleanup()
     {
         if ( argc )
-            ::LocalFree(argv);
-    }
-#else // !wxUSE_UNICODE
-    void Init()
-    {
-        // Get the command line.
-        const wxChar* const cmdLine = ::GetCommandLine();
-        if ( !cmdLine )
-            return;
-
-        // And tokenize it.
-        const wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdLine);
-
-        argc = args.size();
-
-        // +1 here for the terminating NULL
-        argv = new wxChar *[argc + 1];
-        for ( int i = 0; i < argc; i++ )
         {
-            argv[i] = wxStrdup(args[i].t_str());
+            ::LocalFree(argv);
+            argc = 0;
         }
-
-        // argv[] must be NULL-terminated
-        argv[argc] = NULL;
     }
 
     ~wxMSWCommandLineArguments()
     {
-        if ( !argc )
-            return;
-
-        for ( int i = 0; i < argc; i++ )
-        {
-            free(argv[i]);
-        }
-
-        wxDELETEA(argv);
-        argc = 0;
+        Cleanup();
     }
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     int argc;
     wxChar **argv;
+
+    wxDECLARE_NO_COPY_CLASS(wxMSWCommandLineArguments);
 };
 
 static wxMSWCommandLineArguments wxArgs;
+
+} // anonymous namespace
+
+WXDLLIMPEXP_BASE void wxMSWCommandLineInit()
+{
+    wxArgs.Init();
+}
+
+WXDLLIMPEXP_BASE void wxMSWCommandLineCleanup()
+{
+    wxArgs.Cleanup();
+}
+
+WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc()
+{
+    return wxArgs.argc;
+}
+
+WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv()
+{
+    return wxArgs.argv;
+}
+
+#endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
@@ -276,9 +270,11 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     wxSetInstance(hInstance);
 #ifdef __WXMSW__
     wxApp::m_nCmdShow = nCmdShow;
+#else
+    wxUnusedVar(nCmdShow);
 #endif
 
-    wxArgs.Init();
+    wxMSWCommandLineInit();
 
     return true;
 }
@@ -291,7 +287,7 @@ WXDLLEXPORT bool wxEntryStart(HINSTANCE hInstance,
     if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
        return false;
 
-    return wxEntryStart(wxArgs.argc, wxArgs.argv);
+    return wxEntryStart(wxMSWCommandLineGetArgc(), wxMSWCommandLineGetArgv());
 }
 
 WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
@@ -302,7 +298,7 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
         return -1;
 
-    return wxEntry(wxArgs.argc, wxArgs.argv);
+    return wxEntry(wxMSWCommandLineGetArgc(), wxMSWCommandLineGetArgv());
 }
 
 #endif // wxUSE_GUI
@@ -315,9 +311,16 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
 
 int wxEntry()
 {
-    wxArgs.Init();
+    wxMSWCommandLineInit();
 
-    return wxEntry(wxArgs.argc, wxArgs.argv);
+    return wxEntry(wxMSWCommandLineGetArgc(), wxMSWCommandLineGetArgv());
+}
+
+void wxEntryCleanup()
+{
+    wxEntryCleanupReal();
+
+    wxMSWCommandLineCleanup();
 }
 
 HINSTANCE wxhInstance = 0;

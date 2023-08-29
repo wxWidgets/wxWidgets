@@ -26,7 +26,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxButtonNameStr)
+             const wxString& name = wxASCII_STR(wxButtonNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -38,15 +38,15 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+                const wxString& name = wxASCII_STR(wxButtonNameStr));
 
-    virtual void SetLabel(const wxString& label);
-    virtual wxWindow *SetDefault();
-    virtual void Command(wxCommandEvent& event);
+    virtual void SetLabel(const wxString& label) override;
+    virtual wxWindow *SetDefault() override;
+    virtual void Command(wxCommandEvent& event) override;
 
     // osx specific event handling common for all osx-ports
 
-    virtual bool        OSXHandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked(double timestampsec) override;
 
 #if wxOSX_USE_COCOA
     void OSXUpdateAfterLabelChange(const wxString& label);

@@ -18,11 +18,8 @@
               **************************************************
 
     If you get an error saying "wxUSE_FOO must be defined", it means that you
-    are not using the correct up-to-date version of setup.h. This happens most
-    often when using git or snapshots and a new symbol was added to setup0.h
-    and you haven't updated your local setup.h to reflect it. If this is the
-    case, you need to propagate the changes from setup0.h to your setup.h and,
-    if using makefiles under MSW, also remove setup.h under the build directory
+    are not using the correct up-to-date version of setup.h. If you're building
+    using makefiles under MSW, also remove setup.h under the build directory
     (lib/$(COMPILER)_{lib,dll}/msw[u][d][dll]/wx) so that the new setup.h is
     copied there.
 
@@ -90,14 +87,6 @@
 #       define wxUSE_ANY 0
 #   endif
 #endif /* wxUSE_ANY */
-
-#ifndef wxUSE_COMPILER_TLS
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_COMPILER_TLS must be defined, please read comment near the top of this file."
-#   else
-#       define wxUSE_COMPILER_TLS 0
-#   endif
-#endif /* !defined(wxUSE_COMPILER_TLS) */
 
 #ifndef wxUSE_CONSOLE_EVENTLOOP
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -285,6 +274,14 @@
 #   endif
 #endif /* !defined(wxUSE_SECRETSTORE) */
 
+#ifndef wxUSE_SPELLCHECK
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SPELLCHECK must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_SPELLCHECK 1
+#   endif
+#endif /* !defined(wxUSE_SPELLCHECK) */
+
 #ifndef wxUSE_STDPATHS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_STDPATHS must be defined, please read comment near the top of this file."
@@ -316,14 +313,6 @@
 #       define wxUSE_STD_CONTAINERS 0
 #   endif
 #endif /* !defined(wxUSE_STD_CONTAINERS) */
-
-#ifndef wxUSE_STD_CONTAINERS_COMPATIBLY
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_STD_CONTAINERS_COMPATIBLY must be defined, please read comment near the top of this file."
-#   else
-#       define wxUSE_STD_CONTAINERS_COMPATIBLY 0
-#   endif
-#endif /* !defined(wxUSE_STD_CONTAINERS_COMPATIBLY) */
 
 #ifndef wxUSE_STD_STRING_CONV_IN_WXSTRING
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -364,14 +353,6 @@
 #       define wxUSE_TEXTFILE 0
 #   endif
 #endif /* !defined(wxUSE_TEXTFILE) */
-
-#ifndef wxUSE_UNICODE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_UNICODE must be defined, please read comment near the top of this file."
-#   else
-#       define wxUSE_UNICODE 0
-#   endif
-#endif /* !defined(wxUSE_UNICODE) */
 
 #ifndef wxUSE_UNSAFE_WXSTRING_CONV
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -649,6 +630,14 @@
 #   endif
 #endif /* !defined(wxUSE_DATAVIEWCTRL) */
 
+#ifndef wxUSE_NATIVE_DATAVIEWCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_NATIVE_DATAVIEWCTRL must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_NATIVE_DATAVIEWCTRL 1
+#   endif
+#endif /* !defined(wxUSE_NATIVE_DATAVIEWCTRL) */
+
 #ifndef wxUSE_DATEPICKCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DATEPICKCTRL must be defined, please read comment near the top of this file."
@@ -918,6 +907,14 @@
 #       define wxUSE_MDI_ARCHITECTURE 0
 #   endif
 #endif /* !defined(wxUSE_MDI_ARCHITECTURE) */
+
+#ifndef wxUSE_MENUBAR
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MENUBAR must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_MENUBAR 0
+#   endif
+#endif /* !defined(wxUSE_MENUBAR) */
 
 #ifndef wxUSE_MENUS
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -1231,6 +1228,14 @@
 #   endif
 #endif /* !defined(wxUSE_VALIDATORS) */
 
+#ifndef wxUSE_WEBREQUEST
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WEBREQUEST must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_WEBREQUEST 0
+#   endif
+#endif /* !defined(wxUSE_WEBREQUEST) */
+
 #ifndef wxUSE_WEBVIEW
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WEBVIEW must be defined, please read comment near the top of this file."
@@ -1275,8 +1280,6 @@
 #  include "wx/osx/chkconf.h"
 #elif defined(__WXDFB__)
 #  include "wx/dfb/chkconf.h"
-#elif defined(__WXMOTIF__)
-#  include "wx/motif/chkconf.h"
 #elif defined(__WXX11__)
 #  include "wx/x11/chkconf.h"
 #elif defined(__WXANDROID__)
@@ -1299,16 +1302,16 @@
    Section 3a: check consistency of the non-GUI settings.
  */
 
-#if WXWIN_COMPATIBILITY_2_8
-#   if !WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
+#   if !WXWIN_COMPATIBILITY_3_2
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "2.8.X compatibility requires 3.0.X compatibility"
+#           error "3.0.X compatibility requires 3.2.X compatibility"
 #       else
-#           undef WXWIN_COMPATIBILITY_3_0
-#           define WXWIN_COMPATIBILITY_3_0 1
+#           undef WXWIN_COMPATIBILITY_3_2
+#           define WXWIN_COMPATIBILITY_3_2 1
 #       endif
 #   endif
-#endif /* WXWIN_COMPATIBILITY_2_8 */
+#endif /* WXWIN_COMPATIBILITY_3_0 */
 
 #if wxUSE_ARCHIVE_STREAMS
 #   if !wxUSE_DATETIME
@@ -1721,6 +1724,11 @@
 #   endif
 #endif
 
+#if wxUSE_ACTIVITYINDICATOR && !wxUSE_GRAPHICS_CONTEXT
+#   undef wxUSE_ACTIVITYINDICATOR
+#   define wxUSE_ACTIVITYINDICATOR 0
+#endif /* wxUSE_ACTIVITYINDICATOR */
+
 #if wxUSE_GRAPHICS_CONTEXT && !wxUSE_GEOMETRY
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_GRAPHICS_CONTEXT requires wxUSE_GEOMETRY"
@@ -1737,7 +1745,7 @@
 #       undef wxUSE_DC_TRANSFORM_MATRIX
 #       define wxUSE_DC_TRANSFORM_MATRIX 0
 #   endif
-#endif /* wxUSE_GRAPHICS_CONTEXT */
+#endif /* wxUSE_DC_TRANSFORM_MATRIX */
 
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
@@ -2037,15 +2045,6 @@
 #        endif
 #   endif
 
-#   if !wxUSE_STREAMS && !wxUSE_STD_IOSTREAM
-#        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "DocView requires wxUSE_STREAMS or wxUSE_STD_IOSTREAM"
-#        else
-#            undef wxUSE_STREAMS
-#            define wxUSE_STREAMS 1
-#        endif
-#   endif
-
 #   if !wxUSE_FILE_HISTORY
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "DocView requires wxUSE_FILE_HISTORY"
@@ -2115,6 +2114,7 @@
 #   if wxUSE_FONTDLG || \
        wxUSE_FILEDLG || \
        wxUSE_CHOICEDLG || \
+       wxUSE_CREDENTIALDLG || \
        wxUSE_NUMBERDLG || \
        wxUSE_TEXTDLG || \
        wxUSE_DIRDLG || \
@@ -2212,15 +2212,6 @@
 #   endif
 #endif /* wxUSE_XRC */
 
-#if wxUSE_SOCKETS && !wxUSE_STOPWATCH
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_SOCKETS requires wxUSE_STOPWATCH"
-#   else
-#       undef wxUSE_SOCKETS
-#       define wxUSE_SOCKETS 0
-#   endif
-#endif /* wxUSE_SOCKETS */
-
 #if wxUSE_SVG && !wxUSE_STREAMS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SVG requires wxUSE_STREAMS"
@@ -2248,14 +2239,25 @@
 #   endif
 #endif /* wxUSE_SVG */
 
-#if wxUSE_TASKBARICON && !wxUSE_MENUS
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TASKBARICON requires wxUSE_MENUS"
-#   else
-#       undef wxUSE_TASKBARICON
-#       define wxUSE_TASKBARICON 0
-#   endif
-#endif /* wxUSE_TASKBARICON */
+#if !wxUSE_MENUS
+#   if wxUSE_MENUBAR
+#      ifdef wxABORT_ON_CONFIG_ERROR
+#          error "wxUSE_MENUBAR requires wxUSE_MENUS"
+#      else
+#          undef wxUSE_MENUBAR
+#          define wxUSE_MENUBAR 0
+#      endif
+#   endif /* wxUSE_MENUBAR */
+
+#   if wxUSE_TASKBARICON
+#      ifdef wxABORT_ON_CONFIG_ERROR
+#          error "wxUSE_TASKBARICON requires wxUSE_MENUS"
+#      else
+#          undef wxUSE_TASKBARICON
+#          define wxUSE_TASKBARICON 0
+#      endif
+#   endif /* wxUSE_TASKBARICON */
+#endif /* !wxUSE_MENUS */
 
 #if !wxUSE_VARIANT
 #   if wxUSE_DATAVIEWCTRL
@@ -2277,7 +2279,8 @@
 #   endif
 #endif /* wxUSE_TREELISTCTRL */
 
-#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || wxUSE_WEBVIEW_IE)
+#if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || \
+                       wxUSE_WEBVIEW_IE || wxUSE_WEBVIEW_EDGE)
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WEBVIEW requires at least one backend"
 #   else
@@ -2285,6 +2288,15 @@
 #       define wxUSE_WEBVIEW 0
 #   endif
 #endif /* wxUSE_WEBVIEW && !any web view backend */
+
+#if wxUSE_WEBREQUEST && !(wxUSE_WEBREQUEST_WINHTTP || wxUSE_WEBREQUEST_URLSESSION || wxUSE_WEBREQUEST_CURL)
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WEBREQUEST requires at least one backend"
+#   else
+#       undef wxUSE_WEBREQUEST
+#       define wxUSE_WEBREQUEST 0
+#   endif
+#endif /* wxUSE_WEBREQUEST && !any web request backend */
 
 #if wxUSE_PREFERENCES_EDITOR
     /*
@@ -2340,6 +2352,15 @@
 #           define wxUSE_STC 0
 #       endif
 #   endif
+
+#   if !wxUSE_SCROLLBAR
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxStyledTextCtrl requires wxUSE_SCROLLBAR"
+#       else
+#           undef wxUSE_STC
+#           define wxUSE_STC 0
+#       endif
+#   endif
 #endif /* wxUSE_STC */
 
 #if wxUSE_RICHTEXT
@@ -2359,7 +2380,48 @@
 #           define wxUSE_LONLONG 1
 #       endif
 #   endif
+#   if !wxUSE_VARIANT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichTextCtrl requires wxUSE_VARIANT"
+#       else
+#           undef wxUSE_VARIANT
+#           define wxUSE_VARIANT 1
+#       endif
+#   endif
 #endif /* wxUSE_RICHTEXT */
+
+#if wxUSE_RICHTOOLTIP
+#   if !wxUSE_POPUPWIN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichToolTip requires wxUSE_POPUPWIN"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
+#   endif
+#endif /* wxUSE_RICHTOOLTIP */
+
+#if wxUSE_PROPGRID
+#   if !wxUSE_VARIANT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxPropertyGrid requires wxUSE_VARIANT"
+#       else
+#           undef wxUSE_VARIANT
+#           define wxUSE_VARIANT 1
+#       endif
+#   endif
+#endif /* wxUSE_PROPGRID */
+
+#if wxUSE_TIPWINDOW
+#   if !wxUSE_POPUPWIN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxTipWindow requires wxUSE_POPUPWIN"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
+#   endif
+#endif /* wxUSE_TIPWINDOW */
 
 #endif /* wxUSE_GUI */
 

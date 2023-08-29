@@ -8,13 +8,8 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
-#include <gtk/gtk.h>
-#include "wx/gtk/private/win_gtk.h"
-
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/win_gtk.h"
 
 /*
 wxPizza is a custom GTK+ widget derived from GtkFixed.  A custom widget
@@ -193,7 +188,7 @@ static void children_get_preferred_size(const GList* p)
         if (gtk_widget_get_visible(child->widget))
         {
             GtkRequisition req;
-            gtk_widget_get_preferred_size(child->widget, &req, NULL);
+            gtk_widget_get_preferred_size(child->widget, &req, nullptr);
         }
     }
 }
@@ -202,7 +197,7 @@ static void pizza_get_preferred_width(GtkWidget* widget, int* minimum, int* natu
 {
     children_get_preferred_size(WX_PIZZA(widget)->m_children);
     *minimum = 0;
-    gtk_widget_get_size_request(widget, natural, NULL);
+    gtk_widget_get_size_request(widget, natural, nullptr);
     if (*natural < 0)
         *natural = 0;
 }
@@ -211,7 +206,7 @@ static void pizza_get_preferred_height(GtkWidget* widget, int* minimum, int* nat
 {
     children_get_preferred_size(WX_PIZZA(widget)->m_children);
     *minimum = 0;
-    gtk_widget_get_size_request(widget, NULL, natural);
+    gtk_widget_get_size_request(widget, nullptr, natural);
     if (*natural < 0)
         *natural = 0;
 }
@@ -223,16 +218,18 @@ static void pizza_adjust_size_request(GtkWidget* widget, GtkOrientation orientat
     // will use the size request, if set, as the minimum.
     // But don't override if in a GtkToolbar, it uses the minimum as actual size.
     GtkWidget* parent = gtk_widget_get_parent(widget);
-    if (parent)
-        parent = gtk_widget_get_parent(parent);
     if (!GTK_IS_TOOL_ITEM(parent))
         *minimum = 0;
 }
 
-// Needed to implement GtkScrollable interface, but we don't care about the
-// properties. wxWindowGTK handles the adjustments and scroll policy.
-static void pizza_get_property(GObject*, guint, GValue*, GParamSpec*)
+// GtkScrollable interface
+static void pizza_get_property(GObject*, guint property_id, GValue* value, GParamSpec*)
 {
+    if (property_id == PROP_HSCROLL_POLICY || property_id == PROP_VSCROLL_POLICY)
+    {
+        // Use natural size, rather than minimum, as virtual size
+        g_value_set_enum(value, GTK_SCROLL_NATURAL);
+    }
 }
 
 static void pizza_set_property(GObject*, guint, const GValue*, GParamSpec*)
@@ -316,7 +313,7 @@ static void class_init(void* g_class, void*)
             G_TYPE_FROM_CLASS(g_class),
             G_SIGNAL_RUN_LAST,
             G_STRUCT_OFFSET(wxPizzaClass, set_scroll_adjustments),
-            NULL, NULL,
+            nullptr, nullptr,
             g_cclosure_user_marshal_VOID__OBJECT_OBJECT,
             G_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 #endif
@@ -339,16 +336,16 @@ GType wxPizza::type()
         }
         const GTypeInfo info = {
             sizeof(wxPizzaClass),
-            NULL, NULL,
+            nullptr, nullptr,
             class_init,
-            NULL, NULL,
+            nullptr, nullptr,
             sizeof(wxPizza), 0,
-            NULL, NULL
+            nullptr, nullptr
         };
         type = g_type_register_static(
             GTK_TYPE_FIXED, name, &info, GTypeFlags(0));
 #ifdef __WXGTK3__
-        const GInterfaceInfo interface_info = { NULL, NULL, NULL };
+        const GInterfaceInfo interface_info = { nullptr, nullptr, nullptr };
         g_type_add_interface_static(type, GTK_TYPE_SCROLLABLE, &interface_info);
 #endif
     }
@@ -357,9 +354,9 @@ GType wxPizza::type()
 
 GtkWidget* wxPizza::New(long windowStyle)
 {
-    GtkWidget* widget = GTK_WIDGET(g_object_new(type(), NULL));
+    GtkWidget* widget = GTK_WIDGET(g_object_new(type(), nullptr));
     wxPizza* pizza = WX_PIZZA(widget);
-    pizza->m_children = NULL;
+    pizza->m_children = nullptr;
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;
     pizza->m_windowStyle = windowStyle;
@@ -371,6 +368,9 @@ GtkWidget* wxPizza::New(long windowStyle)
     gtk_widget_add_events(widget,
         GDK_EXPOSURE_MASK |
         GDK_SCROLL_MASK |
+#if GTK_CHECK_VERSION(3,4,0)
+        GDK_SMOOTH_SCROLL_MASK |
+#endif
         GDK_POINTER_MOTION_MASK |
         GDK_POINTER_MOTION_HINT_MASK |
         GDK_BUTTON_MOTION_MASK |
@@ -480,8 +480,10 @@ static void scroll_adjust(GtkWidget* widget, void* data)
 void wxPizza::scroll(int dx, int dy)
 {
     GtkWidget* widget = GTK_WIDGET(this);
+#ifndef __WXGTK3__
     if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
         dx = -dx;
+#endif
     m_scroll_x -= dx;
     m_scroll_y -= dy;
     GdkWindow* window = gtk_widget_get_window(widget);

@@ -23,6 +23,8 @@ enum wxCondError
     They may be used in a multithreaded application to wait until the given condition
     becomes @true which happens when the condition becomes signaled.
 
+    @note Prefer using @c std::condition rather than this class in the new code.
+
     For example, if a worker thread is doing some long task and another thread has
     to wait until it is finished, the latter thread will wait on the condition
     object and the worker thread will signal it on exit (this example is not
@@ -186,7 +188,7 @@ public:
         return wxCOND_NO_ERROR;
         @endcode
 
-        The predicate would typically be a C++11 lambda:
+        The predicate would typically be a lambda:
         @code
         condvar.Wait([]{return value == 1;});
         @endcode
@@ -484,28 +486,45 @@ public:
         will be executed in the context of the thread that called Delete() and
         <b>not</b> in this thread's context.
 
-        TestDestroy() will be true for the thread before OnDelete() gets
-        executed.
+        Note that TestDestroy() will block until OnDelete() returns, so this
+        function should return as quickly as possible and definitely shouldn't
+        perform any GUI actions nor try acquiring any locks, as this could
+        easily result in a deadlock.
 
         @since 2.9.2
 
-        @see OnKill()
+        @see OnKill(), OnExit()
     */
     virtual void OnDelete();
 
     /**
-        Callback called by Kill() before actually killing the thread.
+        Callback called by wxThread::Kill() before actually killing the thread.
 
         This function can be overridden by the derived class to perform some
         specific task when the thread is terminated. Notice that it will be
-        executed in the context of the thread that called Kill() and <b>not</b>
+        executed in the context of the thread that called wxThread::Kill() and <b>not</b>
         in this thread's context.
 
         @since 2.9.2
 
-        @see OnDelete()
+        @see OnDelete(), OnExit()
     */
     virtual void OnKill();
+
+    /**
+        Callback called by wxThread::Exit() before actually exiting the thread.
+        This function will not be called if the thread was killed with wxThread::Kill.
+
+        This function can be overridden by the derived class to perform some
+        specific task when the thread is exited. The base class version does
+        nothing and doesn't need to be called if this method is overridden.
+
+        Note that this function is protected since wxWidgets 3.1.1,
+        but previously existed as a private method since 2.9.2.
+
+        @see OnDelete(), OnKill()
+    */
+    virtual void OnExit();
 
     /**
         @deprecated
@@ -631,7 +650,7 @@ enum wxThreadWait
     /**
         No events are processed while waiting.
 
-        This is the default under all platforms except for wxMSW.
+        This is the default value.
      */
     wxTHREAD_WAIT_BLOCK,
 
@@ -651,14 +670,8 @@ enum wxThreadWait
 
     /**
         Default wait mode for wxThread::Wait() and wxThread::Delete().
-
-        For compatibility reasons, the default wait mode is currently
-        wxTHREAD_WAIT_YIELD if WXWIN_COMPATIBILITY_2_8 is defined (and it is
-        by default). However, as mentioned above, you're strongly encouraged to
-        not use wxTHREAD_WAIT_YIELD and pass wxTHREAD_WAIT_BLOCK to wxThread
-        method explicitly.
      */
-    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_YIELD
+    wxTHREAD_WAIT_DEFAULT = wxTHREAD_WAIT_BLOCK
 };
 
 /**
@@ -704,6 +717,8 @@ enum wxThreadError
     Threads are sometimes called @e light-weight processes, but the fundamental difference
     between threads and processes is that memory spaces of different processes are
     separated while all threads share the same address space.
+
+    @note Prefer using @c std::thread rather than this class in the new code.
 
     While it makes it much easier to share common data between several threads, it
     also makes it much easier to shoot oneself in the foot, so careful use of
@@ -800,13 +815,13 @@ enum wxThreadError
         {
             wxLogError("Can't create the thread!");
             delete m_pThread;
-            m_pThread = NULL;
+            m_pThread = nullptr;
         }
 
         // after the call to wxThread::Run(), the m_pThread pointer is "unsafe":
         // at any moment the thread may cease to exist (because it completes its work).
         // To avoid dangling pointers OnThreadExit() will set m_pThread
-        // to NULL when the thread dies.
+        // to nullptr when the thread dies.
     }
 
     wxThread::ExitCode MyThread::Entry()
@@ -831,7 +846,7 @@ enum wxThreadError
         wxCriticalSectionLocker enter(m_pHandler->m_pThreadCS);
 
         // the thread is being destroyed; make sure not to leave dangling pointers around
-        m_pHandler->m_pThread = NULL;
+        m_pHandler->m_pThread = nullptr;
     }
 
     void MyFrame::OnThreadCompletion(wxThreadEvent&)
@@ -1042,11 +1057,19 @@ public:
     wxThreadError Create(unsigned int stackSize = 0);
 
     /**
-        Calling Delete() gracefully terminates a @b detached thread, either when
-        the thread calls TestDestroy() or when it finishes processing.
+        Calling Delete() requests termination of any thread.
+
+        Note that Delete() doesn't actually stop the thread, but simply asks it
+        to terminate and so will work only if the thread calls TestDestroy()
+        periodically. For detached threads, Delete() returns immediately,
+        without waiting for the thread to actually terminate, while for
+        joinable threads it does wait for the thread to terminate and may also
+        return its exit code in @a rc argument.
 
         @param rc
-            The thread exit code, if rc is not NULL.
+            For joinable threads, filled with the thread exit code on
+            successful return, if non-null. For detached threads this
+            parameter is not used.
 
         @param waitMode
             As described in wxThreadWait documentation, wxTHREAD_WAIT_BLOCK
@@ -1062,7 +1085,7 @@ public:
 
         See @ref thread_deletion for a broader explanation of this routine.
     */
-    wxThreadError Delete(ExitCode *rc = NULL,
+    wxThreadError Delete(ExitCode *rc = nullptr,
                          wxThreadWait waitMode = wxTHREAD_WAIT_DEFAULT);
 
     /**
@@ -1216,7 +1239,7 @@ public:
         of detached threads.
 
         This function can only be called from another thread context.
-        
+
         Finally, note that once a thread has completed and its Entry() function
         returns, you cannot call Run() on it again (an assert will fail in debug
         builds or @c wxTHREAD_RUNNING will be returned in release builds).
@@ -1244,10 +1267,8 @@ public:
           - @c wxPRIORITY_DEFAULT: 50
           - @c wxPRIORITY_MAX: 100
 
-        Notice that in the MSW implementation the thread priority can currently
-        be only set after creating the thread with CreateThread(). But under
-        all platforms this method can be called either before launching the
-        thread using Run() or after doing it.
+        Please note that currently this function is not implemented when using
+        the default (@c SCHED_OTHER) scheduling policy under POSIX systems.
     */
     void SetPriority(unsigned int priority);
 
@@ -1361,18 +1382,39 @@ protected:
     */
     void Exit(ExitCode exitcode = 0);
 
-private:
+    /**
+        Sets an internal name for the thread, which enables the debugger to
+        show the name along with the list of threads, as long as both the OS
+        and the debugger support this. The thread name may also be visible
+        in list of processes and in crash dumps (also in release builds).
+
+        This function is protected, as it should be called from a derived
+        class, in the context of the derived thread. A good place to call this
+        function is at the beginning of your Entry() function.
+
+        For portable code, the name should be in ASCII. On Linux the length
+        is truncated to 15 characters, on other platforms the name can be
+        longer than that.
+
+        @return Either:
+            - @false: Failure or missing implementation for this OS.
+            - @true: Success or undetectable failure.
+
+        @since 3.1.6
+    */
+    bool SetName(const wxString &name);
 
     /**
-        Called when the thread exits.
+        Sets an internal name for the current thread, which may be a wxThread
+        or any other kind of thread; e.g. an std::thread.
 
-        This function is called in the context of the thread associated with the
-        wxThread object, not in the context of the main thread.
-        This function will not be called if the thread was @ref Kill() killed.
+        @return Either:
+            - @false: Failure or missing implementation for this OS.
+            - @true: Success or undetectable failure.
 
-        This function should never be called directly.
+        @since 3.1.6
     */
-    virtual void OnExit();
+    static bool SetNameForCurrent(const wxString &name);
 };
 
 
@@ -1561,6 +1603,8 @@ enum wxMutexError
     from its usefulness in coordinating mutually-exclusive access to a shared
     resource as only one thread at a time can own a mutex object.
 
+    @note Prefer using @c std::mutex rather than this class in the new code.
+
     Mutexes may be recursive in the sense that a thread can lock a mutex which it
     had already locked before (instead of dead locking the entire process in this
     situation by starting to wait on a mutex which will never be released while the
@@ -1578,7 +1622,7 @@ enum wxMutexError
     // this variable has an "s_" prefix because it is static: seeing an "s_" in
     // a multithreaded program is in general a good sign that you should use a
     // mutex (or a critical section)
-    static wxMutex *s_mutexProtectingTheGlobalData;
+    static wxMutex s_mutexProtectingTheGlobalData;
 
     // we store some numbers in this global array which is presumably used by
     // several threads simultaneously
@@ -1587,11 +1631,15 @@ enum wxMutexError
     void MyThread::AddNewNode(int num)
     {
         // ensure that no other thread accesses the list
-        s_mutexProtectingTheGlobalList->Lock();
+
+        // Note that using Lock() and Unlock() explicitly is not recommended
+        // and only done here for illustrative purposes, prefer to use
+        // wxMutexLocker, as shown below, instead!
+        s_mutexProtectingTheGlobalData.Lock();
 
         s_data.Add(num);
 
-        s_mutexProtectingTheGlobalList->Unlock();
+        s_mutexProtectingTheGlobaData.Unlock();
     }
 
     // return true if the given number is greater than all array elements
@@ -1675,7 +1723,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_thread */
-//@{
+///@{
 
 /**
     This macro declares a (static) critical section object named @a cs if
@@ -1769,7 +1817,7 @@ bool wxIsMainThread();
     Typically, these functions are used like this:
 
     @code
-    void MyThread::Foo(void)
+    void MyThread::Foo()
     {
         // before doing any GUI calls we must ensure that
         // this thread is the only one doing it!
@@ -1803,5 +1851,5 @@ void wxMutexGuiEnter();
 */
 void wxMutexGuiLeave();
 
-//@}
+///@}
 

@@ -15,6 +15,8 @@
  * Includes
  */
 
+#include "wx/dialog.h"
+
 #include "wx/richtext/richtextuicustomization.h"
 
 ////@begin includes
@@ -43,7 +45,7 @@ class WXDLLIMPEXP_FWD_CORE wxCheckBox;
  */
 
 #define SYMBOL_WXRICHTEXTSTYLEORGANISERDIALOG_STYLE wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
-#define SYMBOL_WXRICHTEXTSTYLEORGANISERDIALOG_TITLE wxGetTranslation("Style Organiser")
+#define SYMBOL_WXRICHTEXTSTYLEORGANISERDIALOG_TITLE wxGetTranslation(wxASCII_STR("Style Organiser"))
 #define SYMBOL_WXRICHTEXTSTYLEORGANISERDIALOG_IDNAME ID_RICHTEXTSTYLEORGANISERDIALOG
 #define SYMBOL_WXRICHTEXTSTYLEORGANISERDIALOG_SIZE wxSize(400, 300)
 #define SYMBOL_WXRICHTEXTSTYLEORGANISERDIALOG_POSITION wxDefaultPosition
@@ -97,8 +99,8 @@ public:
     void Init();
 
     /// Transfer data from/to window
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
+    virtual bool TransferDataToWindow() override;
 
     /// Set/get style sheet
     void SetStyleSheet(wxRichTextStyleSheet* sheet) { m_richTextStyleSheet = sheet; }
@@ -130,7 +132,7 @@ public:
     wxRichTextStyleDefinition* GetSelectedStyleDefinition() const;
 
     /// Apply the style
-    bool ApplyStyle(wxRichTextCtrl* ctrl = NULL);
+    bool ApplyStyle(wxRichTextCtrl* ctrl = nullptr);
 
     /// Should we show tooltips?
     static bool ShowToolTips() { return sm_showToolTips; }

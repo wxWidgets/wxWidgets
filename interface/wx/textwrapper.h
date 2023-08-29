@@ -19,7 +19,7 @@
 
     Here is an example function using this class which inserts hard line breaks
     into a string of text at the positions where it would be wrapped:
-    
+
     @code
     wxString WrapText(wxWindow *win, const wxString& text, int widthMax)
     {
@@ -73,7 +73,7 @@ public:
         less than @a widthMax).
 
         @param win
-            A non-@NULL window used for measuring the text extents.
+            A non-null window used for measuring the text extents.
         @param text
             The text to wrap.
         @param widthMax

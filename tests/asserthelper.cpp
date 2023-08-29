@@ -8,48 +8,19 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "asserthelper.h"
 
-namespace wxTestPrivate
-{
-
-std::ostream& operator<<(std::ostream& os, const ColourChannel& cc)
-{
-    os.width(2);
-    os.fill('0');
-    os << static_cast<int>(cc.m_value);
-    return os;
-}
-
-}
-
 std::ostream& operator<<(std::ostream& os, const wxColour& c)
 {
-    using wxTestPrivate::ColourChannel;
-
-    os << std::hex << std::noshowbase
-       << "("
-       << ColourChannel(c.Red()) << ", "
-       << ColourChannel(c.Green()) << ", "
-       << ColourChannel(c.Blue());
-
-    if ( const unsigned char a = c.Alpha() )
-    {
-        os << ", " << ColourChannel(a);
-    }
-
-    os << ")";
+    os << c.GetAsString(wxC2S_HTML_SYNTAX);
 
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const wxSize& s)
 {
-    os << s.x << "x" << s.y;
+    os << s.x << "*" << s.y;
 
     return os;
 }
@@ -65,5 +36,13 @@ std::ostream& operator<<(std::ostream& os, const wxPoint& p)
 {
     os << "(" << p.x << ", " << p.y << ")";
 
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const wxRect& r)
+{
+    os << "{"
+        << r.x << ", " << r.y << "  " << r.width << "*" << r.height
+       << "}";
     return os;
 }

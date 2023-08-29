@@ -7,7 +7,12 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-wx_add_sample(webview LIBRARIES webview stc adv NAME webviewsample)
+wx_add_sample(webview LIBRARIES wxwebview
+    DATA ../help/doc.zip:doc.zip handler_advanced.html
+    NAME webviewsample)
+if(wxUSE_STC)
+    wx_exe_link_libraries(webviewsample wxstc)
+endif()
 
 if(wxUSE_WEBVIEW_CHROMIUM)
     wx_add_sample(webview LIBRARIES webview_chromium stc adv NAME webviewsample_chromium)

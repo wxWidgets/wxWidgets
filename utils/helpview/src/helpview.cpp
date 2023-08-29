@@ -12,10 +12,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
 #ifndef WX_PRECOMP
@@ -44,16 +40,12 @@ wxIMPLEMENT_APP(hvApp);
 hvApp::hvApp()
 {
 #if wxUSE_IPC
-    m_server = NULL;
+    m_server = nullptr;
 #endif
 }
 
 bool hvApp::OnInit()
 {
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-#endif
-
     wxArtProvider::Push(new AlternateArtProvider);
 
     int istyle = wxHF_DEFAULT_STYLE;
@@ -67,7 +59,7 @@ bool hvApp::OnInit()
     bool createServer = false;
 
 #if wxUSE_IPC
-    m_server = NULL;
+    m_server = nullptr;
 #endif
 
     // Help books are recognized by extension ".hhp" ".htb" or ".zip".
@@ -147,7 +139,7 @@ bool hvApp::OnInit()
             wxEmptyString,
             wxT("Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp"),
             wxFD_OPEN | wxFD_FILE_MUST_EXIST,
-            NULL);
+            nullptr);
 
         if (!s.empty())
         {
@@ -213,10 +205,6 @@ bool hvApp::OnInit()
         m_helpController->AddBook(fileName);
     }
 
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogGui);
-#endif
-
     m_helpController->DisplayContents();
 
     return true;
@@ -240,12 +228,12 @@ int hvApp::OnExit()
     if (m_server)
     {
         delete m_server;
-        m_server = NULL;
+        m_server = nullptr;
     }
 #endif
 
     delete m_helpController;
-    delete wxConfig::Set(NULL);
+    delete wxConfig::Set(nullptr);
 
     return 0;
 }
@@ -260,7 +248,7 @@ bool hvApp::OpenBook(wxHtmlHelpController* controller)
         "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|\
         HTML Help Project (*.hhp)|*.hhp"),
         wxFD_OPEN | wxFD_FILE_MUST_EXIST,
-        NULL);
+        nullptr);
 
     if ( !s.empty() )
     {
@@ -307,7 +295,7 @@ if ( id == artId ) return wxBitmap(xpmRc##_xpm);
 // wxIcon ctor. This depends on the platform:
 #if defined(__WXUNIVERSAL__)
 #define CREATE_STD_ICON(iconId, xpmRc) return wxNullBitmap;
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+#elif defined(__WXGTK__)
 #define CREATE_STD_ICON(iconId, xpmRc) return wxBitmap(xpmRc##_xpm);
 #else
 #define CREATE_STD_ICON(iconId, xpmRc) \
@@ -389,7 +377,7 @@ wxConnectionBase *hvServer::OnAcceptConnection(const wxString& topic)
     if (topic == wxT("HELP"))
         return new hvConnection();
     else
-        return NULL;
+        return nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -442,7 +430,7 @@ bool hvConnection::OnPoke(const wxString& WXUNUSED(topic),
 {
     const wxString data = GetTextFromData(buf, size, format);
 
-    //    wxLogStatus("Poke command: %s = %s", item.c_str(), data);
+    //    wxLogStatus("Poke command: %s = %s", item, data);
     //topic is not tested
 
     if ( wxGetApp().GetHelpController() )

@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/cursor.h"
@@ -117,55 +114,6 @@ void wxGetMousePosition( int* x, int* y )
     if ( y ) *y = pt.y;
 }
 
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    // this function is called from wxDC ctor so it is called a *lot* of times
-    // hence we optimize it a bit but doing the check only once
-    //
-    // this should be MT safe as only the GUI thread (holding the GUI mutex)
-    // can call us
-    static int s_isColour = -1;
-
-    if ( s_isColour == -1 )
-    {
-        ScreenHDC dc;
-        int noCols = ::GetDeviceCaps(dc, NUMCOLORS);
-
-        s_isColour = (noCols == -1) || (noCols > 2);
-    }
-
-    return s_isColour != 0;
-}
-
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    ScreenHDC dc;
-    return GetDeviceCaps(dc, PLANES) * GetDeviceCaps(dc, BITSPIXEL);
-}
-
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    ScreenHDC dc;
-
-    if ( width )
-        *width = ::GetDeviceCaps(dc, HORZRES);
-    if ( height )
-        *height = ::GetDeviceCaps(dc, VERTRES);
-}
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    ScreenHDC dc;
-
-    if ( width )
-        *width = ::GetDeviceCaps(dc, HORZSIZE);
-    if ( height )
-        *height = ::GetDeviceCaps(dc, VERTSIZE);
-}
-
 // ---------------------------------------------------------------------------
 // window information functions
 // ---------------------------------------------------------------------------
@@ -255,9 +203,38 @@ void PixelToHIMETRIC(LONG *x, LONG *y)
 
 void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2)
 {
-    MoveToEx(hdc, x1, y1, NULL); LineTo((HDC) hdc, x2, y2);
+    MoveToEx(hdc, x1, y1, nullptr); LineTo(hdc, x2, y2);
 }
 
+// Function dedicated to drawing horizontal/vertical lines with solid color
+// It fills rectangle representing the line with ::ExtTextOut() API which
+// apparently is faster than ::MoveTo()/::LineTo() on DC with a non-rotated
+// coordinate system.
+void wxDrawHVLine(HDC hdc, int x1, int y1, int x2, int y2, COLORREF color, int width)
+{
+    wxASSERT(x1 == x2 || y1 == y2);
+
+    int w1 = width / 2;
+    int w2 = width - w1;
+    RECT r;
+    if ( y1 == y2 )
+    {
+        if ( x1 == x2 )
+            return;
+        ::SetRect(&r, x1, y1 - w1, x2, y1 + w2);
+    }
+    else
+    {
+        ::SetRect(&r, x1 - w1, y1, x2 + w2, y2);
+    }
+
+    COLORREF bgColorOrig = ::GetBkColor(hdc);
+    ::SetBkColor(hdc, color);
+
+    ::ExtTextOutW(hdc, 0, 0, ETO_OPAQUE, &r, L"", 0, nullptr);
+
+    ::SetBkColor(hdc, bgColorOrig);
+}
 
 // ----------------------------------------------------------------------------
 // Shell API wrappers

@@ -8,13 +8,11 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WX_PRECOMP
+    #include "wx/brush.h"
 #endif
 
 #include "wx/html/forcelnk.h"
@@ -85,10 +83,10 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
                 m_Faces = wxFontEnumerator::GetFacenames();
 
             wxStringTokenizer tk(faces, wxT(","));
-            int index;
 
             while (tk.HasMoreTokens())
             {
+                int index;
                 if ((index = m_Faces.Index(tk.GetNextToken(), false)) != wxNOT_FOUND)
                 {
                     m_WParser->SetFontFace(m_Faces[index]);
@@ -140,7 +138,7 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
             m_WParser->SetActualBackgroundMode(oldbackmode);
             m_WParser->SetActualBackgroundColor(oldbackclr);
             m_WParser->GetContainer()->InsertCell(
-                new wxHtmlColourCell(oldbackclr, oldbackmode == wxTRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
+                new wxHtmlColourCell(oldbackclr, oldbackmode == wxBRUSHSTYLE_TRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
         }
 
         return true;
@@ -332,7 +330,7 @@ TAG_HANDLER_BEGIN(BIGSMALL, "BIG,SMALL")
         int oldsize = m_WParser->GetFontSize();
         int sz = (tag.GetName() == wxT("BIG")) ? +1 : -1;
 
-        m_WParser->SetFontSize(sz);
+        m_WParser->SetFontSize(oldsize + sz);
         m_WParser->GetContainer()->InsertCell(
             new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 

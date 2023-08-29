@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATUSBAR
 
@@ -235,7 +232,7 @@ wxRect wxStatusBarUniv::DoGetFieldRect(int n) const
     wxCoord borderBetweenFields;
     wxRect rect = self->GetTotalFieldRect(&borderBetweenFields);
 
-    // it's the caller responsability to check this, if unsure - call
+    // it's the caller responsibility to check this, if unsure - call
     // GetFieldRect() instead
     wxCHECK_MSG( !m_widthsAbs.IsEmpty(), rect,
                  wxT("can't be called if we don't have the widths") );

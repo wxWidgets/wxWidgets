@@ -11,6 +11,8 @@
 #include "wx/dcprint.h"
 #include "wx/qt/dcprint.h"
 
+wxIMPLEMENT_CLASS(wxPrinterDCImpl,wxDCImpl)
+
 wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData & )
     : wxDCImpl( owner )
 {

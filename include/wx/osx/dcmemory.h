@@ -22,14 +22,14 @@ public:
 
     virtual ~wxMemoryDCImpl();
 
-    virtual void DoGetSize( int *width, int *height ) const;
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const
-       { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
-    virtual void DoSelect(const wxBitmap& bitmap);
+    virtual void DoGetSize( int *width, int *height ) const override;
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override
+       { return subrect == nullptr ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
+    virtual void DoSelect(const wxBitmap& bitmap) override;
 
-    virtual const wxBitmap& GetSelectedBitmap() const
+    virtual const wxBitmap& GetSelectedBitmap() const override
         { return m_selected; }
-    virtual wxBitmap& GetSelectedBitmap()
+    virtual wxBitmap& GetSelectedBitmap() override
         { return m_selected; }
 
 private:

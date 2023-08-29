@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS && wxUSE_ICO_CUR
 
@@ -40,13 +37,6 @@ public:
     unsigned int m_delay;
     int m_imageIndex;
 };
-
-#include "wx/arrimpl.cpp" // this is a magic incantation which must be done!
-WX_DEFINE_OBJARRAY(wxImageArray)
-
-#include "wx/arrimpl.cpp" // this is a magic incantation which must be done!
-WX_DEFINE_OBJARRAY(wxANIFrameInfoArray)
-
 
 //---------------------------------------------------------------------------
 // wxANIDecoder
@@ -237,8 +227,8 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     m_nFrames = 0;
     m_szAnimation = wxDefaultSize;
 
-    m_images.Clear();
-    m_info.Clear();
+    m_images.clear();
+    m_info.clear();
 
     // we have a riff file:
     while ( !stream.Eof() )
@@ -281,8 +271,8 @@ bool wxANIDecoder::Load( wxInputStream& stream )
 
             globaldelay = header.JifRate * 1000 / 60;
 
-            m_images.Alloc(header.cFrames);
-            m_info.Add(wxANIFrameInfo(), m_nFrames);
+            m_images.reserve(header.cFrames);
+            m_info.resize(m_nFrames);
         }
         else if ( FCC1 == rate32 )
         {
@@ -290,7 +280,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             if (m_nFrames == 0)
                 return false;       // rate chunks should always be placed after anih chunk
 
-            wxASSERT(m_info.GetCount() == m_nFrames);
+            wxASSERT(m_info.size() == m_nFrames);
             for (unsigned int i=0; i<m_nFrames; i++)
             {
                 if (!stream.Read(&FCC2, 4))
@@ -304,7 +294,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             if (m_nFrames == 0)
                 return false;       // seq chunks should always be placed after anih chunk
 
-            wxASSERT(m_info.GetCount() == m_nFrames);
+            wxASSERT(m_info.size() == m_nFrames);
             for (unsigned int i=0; i<m_nFrames; i++)
             {
                 if (!stream.Read(&FCC2, 4))
@@ -320,7 +310,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
                 return false;
 
             image.SetType(wxBITMAP_TYPE_ANI);
-            m_images.Add(image);
+            m_images.push_back(image);
         }
         else
         {
@@ -341,7 +331,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     if (m_nFrames==0)
         return false;
 
-    if (m_nFrames==m_images.GetCount())
+    if (m_nFrames==m_images.size())
     {
         // if no SEQ chunk is available, display the frames in the order
         // they were loaded

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FILEDLG
 
@@ -26,7 +23,6 @@
     #ifdef __WXMSW__
         #include "wx/msw/wrapwin.h"
     #endif
-    #include "wx/hash.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
     #include "wx/log.h"
@@ -115,9 +111,9 @@ void wxGenericFileDialog::Init()
 {
     m_bypassGenericImpl = false;
 
-    m_filectrl   = NULL;
-    m_upDirButton  = NULL;
-    m_newDirButton = NULL;
+    m_filectrl   = nullptr;
+    m_upDirButton  = nullptr;
+    m_newDirButton = nullptr;
 }
 
 wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
@@ -187,7 +183,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     if ((len > 1) && (wxEndsWithPathSeparator(m_dir)))
         m_dir.Remove( len-1, 1 );
 
-    m_filterExtension = wxEmptyString;
+    m_filterExtension.clear();
 
     // layout
 
@@ -304,12 +300,22 @@ int wxGenericFileDialog::ShowModal()
 
     m_filectrl->SetDirectory(m_dir);
 
-    return wxDialog::ShowModal();
+    const int rc = wxDialog::ShowModal();
+
+    // Destroy the extra controls before ShowModal() returns for consistency
+    // with the native implementations.
+    if (m_extraControl)
+    {
+        m_extraControl->Destroy();
+        m_extraControl = nullptr;
+    }
+
+    return rc;
 }
 
 bool wxGenericFileDialog::Show( bool show )
 {
-    // Called by ShowModal, so don't repeate the update
+    // Called by ShowModal, so don't repeat the update
 #ifndef __WIN32__
     if (show)
     {
@@ -359,6 +365,8 @@ void wxGenericFileDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
         return;
     }
 
+    TransferDataFromExtraControl();
+
     EndModal(wxID_OK);
 }
 
@@ -405,6 +413,8 @@ void wxGenericFileDialog::OnUpdateButtonsUI(wxUpdateUIEvent& event)
     // wxFileCtrl ctor itself can generate idle events, so we need this test
     if ( m_filectrl )
         event.Enable( !IsTopMostDir(m_filectrl->GetShownDirectory()) );
+
+    UpdateExtraControlUI();
 }
 
 #ifdef wxHAS_GENERIC_FILEDIALOG

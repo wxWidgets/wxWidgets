@@ -52,7 +52,7 @@ double MyDistance(const myVec3& v1, const myVec3& v2)
 }
 
 // Angle between two normalized vectors, in radians
-double AngleBetween(myVec3 v1, myVec3 v2)
+double AngleBetween(const myVec3& v1, const myVec3& v2)
 {
     double angle = MyDot(v1, v2);
     // Prevent issues due to numerical precision

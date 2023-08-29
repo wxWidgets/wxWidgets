@@ -48,7 +48,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr)
+                     const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -61,7 +61,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxGenericMDIParentFrame();
 
@@ -113,14 +113,14 @@ private:
 
     void OnClose(wxCloseEvent& event);
 
-    // return the client window, may be NULL if we hadn't been created yet
+    // return the client window, may be null if we hadn't been created yet
     wxGenericMDIClientWindow *GetGenericClientWindow() const;
 
     // close all children, return false if any of them vetoed it
     bool CloseAll();
 
 
-    // this pointer is non-NULL if we're currently inside our ProcessEvent()
+    // this pointer is non-null if we're currently inside our ProcessEvent()
     // and we forwarded the event to this child (as we do with menu events)
     wxMDIChildFrameBase *m_childHandler;
 
@@ -142,7 +142,7 @@ public:
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxDEFAULT_FRAME_STYLE,
-                           const wxString& name = wxFrameNameStr)
+                           const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -155,7 +155,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxGenericMDIChildFrame();
 
@@ -199,7 +199,9 @@ protected:
     void Init();
 
 private:
+#if wxUSE_MENUS
     void OnMenuHighlight(wxMenuEvent& event);
+#endif // wxUSE_MENUS
     void OnClose(wxCloseEvent& event);
 
     wxDECLARE_DYNAMIC_CLASS(wxGenericMDIChildFrame);

@@ -23,13 +23,13 @@ class WXDLLIMPEXP_CORE wxQtTimerImpl : public wxTimerImpl, QObject
 public:
     wxQtTimerImpl( wxTimer* timer );
 
-    virtual bool Start( int millisecs = -1, bool oneShot = false );
-    virtual void Stop();
-    virtual bool IsRunning() const;
+    virtual bool Start( int millisecs = -1, bool oneShot = false ) override;
+    virtual void Stop() override;
+    virtual bool IsRunning() const override;
 
 protected:
-    virtual void timerEvent( QTimerEvent * event );
-    
+    virtual void timerEvent( QTimerEvent * event ) override;
+
 private:
     int m_timerId;
 };

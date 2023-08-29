@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CALENDARCTRL
 
@@ -41,11 +38,11 @@ private:
 
 void wxCalendarCtrl::Init()
 {
-    m_qtCalendar = NULL;
+    m_qtCalendar = nullptr;
 
     for ( size_t n = 0; n < WXSIZEOF(m_attrs); n++ )
     {
-        m_attrs[n] = NULL;
+        m_attrs[n] = nullptr;
     }
 }
 
@@ -136,9 +133,12 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& date)
     if ( !m_qtCalendar )
         return false;
 
-    m_qtCalendar->blockSignals(true);
+    if ( wxQtConvertDate( date ) > m_qtCalendar->maximumDate() ||
+            wxQtConvertDate( date ) < m_qtCalendar->minimumDate() )
+        return false;
+
+    wxQtEnsureSignalsBlocked blocker(m_qtCalendar);
     m_qtCalendar->setSelectedDate(wxQtConvertDate(date));
-    m_qtCalendar->blockSignals(false);
 
     return true;
 }
@@ -157,10 +157,9 @@ bool wxCalendarCtrl::SetDateRange(const wxDateTime& lowerdate,
     if ( !m_qtCalendar )
         return false;
 
-    m_qtCalendar->blockSignals(true);
+    wxQtEnsureSignalsBlocked blocker(m_qtCalendar);
     m_qtCalendar->setMinimumDate(wxQtConvertDate(lowerdate));
     m_qtCalendar->setMaximumDate(wxQtConvertDate(upperdate));
-    m_qtCalendar->blockSignals(false);
 
     return true;
 }
@@ -171,12 +170,21 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
     if ( !m_qtCalendar )
         return false;
 
-    if (lowerdate)
-        *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
-    if (upperdate)
-        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+    bool status = false;
 
-    return true;
+    if ( lowerdate )
+    {
+        *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
+        status = true;
+    }
+
+    if ( upperdate )
+    {
+        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+        status = true;
+    }
+
+    return status;
 }
 
 // Copied from wxMSW
@@ -286,7 +294,7 @@ void wxCalendarCtrl::SetHeaderColours(const wxColour& colFg, const wxColour& col
 
 wxCalendarDateAttr *wxCalendarCtrl::GetAttr(size_t day) const
 {
-    wxCHECK_MSG( day > 0 && day < 32, NULL, wxT("invalid day") );
+    wxCHECK_MSG( day > 0 && day < 32, nullptr, wxT("invalid day") );
 
     return m_attrs[day - 1];
 }
@@ -312,7 +320,7 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
     // wxFont is not implemented yet
     //if ( attr->HasFont() )
     //    format.setFont(attr->GetFont().GetQFont());
-    
+
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
@@ -325,8 +333,8 @@ QWidget *wxCalendarCtrl::GetHandle() const
 
 wxQtCalendarWidget::wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler )
     : wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >( parent, handler )
+    , m_date(selectedDate())
 {
-    m_date = selectedDate();
     connect(this, &QCalendarWidget::selectionChanged, this, &wxQtCalendarWidget::selectionChanged);
     connect(this, &QCalendarWidget::activated, this, &wxQtCalendarWidget::activated);
 }

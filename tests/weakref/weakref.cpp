@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -89,9 +86,9 @@ struct IncompleteClass;
 void WeakRefTestCase::DeclareTest()
 {
     {
-        // Not initializing or initializing with NULL should work too
+        // Not initializing or initializing with nullptr should work too
         wxWeakRef<wxEvtHandler> wroDef;
-        wxWeakRef<wxEvtHandler> wro0(NULL);
+        wxWeakRef<wxEvtHandler> wro0(nullptr);
 
         wxObject o; // Should not work
         wxEvtHandler eh;
@@ -133,7 +130,9 @@ void WeakRefTestCase::DeclareTest()
         wxWeakRef<IncompleteClass> p;
 
         // Copying should be also OK
+        wxCLANG_WARNING_SUPPRESS(self-assign-overloaded)
         p = p;
+        wxCLANG_WARNING_RESTORE(self-assign-overloaded)
 
         // Assigning a raw pointer should cause compile error
 #ifdef TEST_INVALID_INCOMPLETE_WEAKREF
@@ -171,8 +170,8 @@ void WeakRefTestCase::AssignTest()
     wro1 = &eh;
     wro2 = &ot;
 
-    wro1 = NULL;
-    wro2 = NULL;
+    wro1 = nullptr;
+    wro2 = nullptr;
 
     CPPUNIT_ASSERT( !wro1 );
     CPPUNIT_ASSERT( !wro2 );

@@ -22,7 +22,7 @@
     // In other words, it isn't guaranteed to map to Meta. This is a real
     // problem: it is common to map NumLock to it (in fact, it's an exception
     // if the X server _doesn't_ use it for NumLock).  So the old code caused
-    // wxKeyEvent::MetaDown() to always return true as long as NumLock was on
+    // wxKeyEvent::MetaDown() to always return true as long as NumLock was
     // on many systems, which broke all applications using
     // wxKeyEvent::GetModifiers() to check modifiers state (see e.g.  here:
     // http://tinyurl.com/56lsk2).
@@ -58,6 +58,21 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = (wxCoord)gdk_event->x - pt.x;
     event.m_y = (wxCoord)gdk_event->y - pt.y;
+
+    // Some no-window widgets, notably GtkEntry on GTK3, have a GdkWindow
+    // covering part of their area. Event coordinates from that window are
+    // not relative to the widget, so do the conversion here.
+    if (!gtk_widget_get_has_window(win->m_widget) &&
+        gtk_widget_get_window(win->m_widget) == gdk_window_get_parent(gdk_event->window))
+    {
+        GtkAllocation a;
+        gtk_widget_get_allocation(win->m_widget, &a);
+        int posX, posY;
+        gdk_window_get_position(gdk_event->window, &posX, &posY);
+
+        event.m_x += posX - a.x;
+        event.m_y += posY - a.y;
+    }
 
     if ((win->m_wxwindow) && (win->GetLayoutDirection() == wxLayout_RightToLeft))
     {

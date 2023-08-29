@@ -58,7 +58,7 @@ enum wxFSIconType
     Unix ports of wxWidgets do not have the concept of volumes and thus do
     not implement wxFSVolume.
 
-    @onlyfor{wxmsw}
+    @onlyfor{wxmsw,wxosx}
 
     @library{wxbase}
     @category{misc}
@@ -138,6 +138,8 @@ public:
         This function is available only when @c wxUSE_GUI is @c 1.
 
         Returns the icon used by the native toolkit for the given file system type.
+
+        @onlyfor{wxmsw}
     */
     wxIcon GetIcon(wxFSIconType type) const;
 };

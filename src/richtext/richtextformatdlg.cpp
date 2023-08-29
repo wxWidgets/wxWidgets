@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RICHTEXT
 
@@ -91,14 +88,14 @@ wxEND_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextFormattingDialog)
 
-wxRichTextFormattingDialogFactory* wxRichTextFormattingDialog::ms_FormattingDialogFactory = NULL;
+wxRichTextFormattingDialogFactory* wxRichTextFormattingDialog::ms_FormattingDialogFactory = nullptr;
 wxColourData wxRichTextFormattingDialog::sm_colourData;
 
 void wxRichTextFormattingDialog::Init()
 {
-    m_styleDefinition = NULL;
-    m_styleSheet = NULL;
-    m_object = NULL;
+    m_styleDefinition = nullptr;
+    m_styleSheet = nullptr;
+    m_object = nullptr;
     m_options = 0;
     m_ignoreUpdates = false;
 }
@@ -120,13 +117,9 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
 
-    int resizeBorder = wxRESIZE_BORDER;
-
     GetFormattingDialogFactory()->SetSheetStyle(this);
 
-    wxPropertySheetDialog::Create(parent, id, title, pos, sz,
-        style | (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
-    );
+    wxPropertySheetDialog::Create(parent, id, title, pos, sz, style | wxRESIZE_BORDER);
 
     GetFormattingDialogFactory()->CreateButtons(this);
     GetFormattingDialogFactory()->CreatePages(flags, this);
@@ -289,7 +282,7 @@ wxWindow* wxRichTextFormattingDialog::FindPage(wxClassInfo* info) const
         if (w && w->GetClassInfo() == info)
             return w;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -313,7 +306,7 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
         {
             wxString title;
             wxPanel* panel = CreatePage(pageId, title, dialog);
-            wxASSERT( panel != NULL );
+            wxASSERT( panel != nullptr );
             if (panel)
             {
                 int imageIndex = GetPageImage(pageId);
@@ -331,7 +324,7 @@ bool wxRichTextFormattingDialogFactory::CreatePages(long pages, wxRichTextFormat
 /// Create a page, given a page identifier
 wxPanel* wxRichTextFormattingDialogFactory::CreatePage(int page, wxString& title, wxRichTextFormattingDialog* dialog)
 {
-    wxPanel* panel = NULL;
+    wxPanel* panel = nullptr;
 
     if (page == wxRICHTEXT_FORMAT_STYLE_EDITOR)
     {
@@ -454,7 +447,7 @@ bool wxRichTextFormattingDialogFactory::CreateButtons(wxRichTextFormattingDialog
 // Invoke help for the dialog
 bool wxRichTextFormattingDialogFactory::ShowHelp(int WXUNUSED(page), wxRichTextFormattingDialog* dialog)
 {
-    wxRichTextDialogPage* window = NULL;
+    wxRichTextDialogPage* window = nullptr;
     int sel = dialog->GetBookCtrl()->GetSelection();
     if (sel != -1)
         window = wxDynamicCast(dialog->GetBookCtrl()->GetPage(sel), wxRichTextDialogPage);
@@ -482,8 +475,8 @@ class wxRichTextFormattingDialogModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxRichTextFormattingDialogModule);
 public:
     wxRichTextFormattingDialogModule() {}
-    bool OnInit() wxOVERRIDE { wxRichTextFormattingDialog::SetFormattingDialogFactory(new wxRichTextFormattingDialogFactory); return true; }
-    void OnExit() wxOVERRIDE { wxRichTextFormattingDialog::SetFormattingDialogFactory(NULL); }
+    bool OnInit() override { wxRichTextFormattingDialog::SetFormattingDialogFactory(new wxRichTextFormattingDialogFactory); return true; }
+    void OnExit() override { wxRichTextFormattingDialog::SetFormattingDialogFactory(nullptr); }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextFormattingDialogModule, wxModule);
@@ -516,8 +509,7 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ((GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) || (GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT))
     {
-        double fontSize = static_cast<double>(font.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
-        font.SetPointSize( static_cast<int>(fontSize) );
+        font.SetFractionalPointSize(font.GetFractionalPointSize() / wxSCRIPT_MUL_FACTOR);
     }
 
     if ( font.IsOk() )
@@ -570,7 +562,7 @@ wxRichTextAttr* wxRichTextFormattingDialog::GetDialogAttributes(wxWindow* win)
     if (dialog)
         return & dialog->GetAttributes();
     else
-        return NULL;
+        return nullptr;
 }
 
 #if 0
@@ -581,7 +573,7 @@ wxRichTextAttr* wxRichTextFormattingDialog::GetDialogResetAttributes(wxWindow* w
     if (dialog)
         return & dialog->GetResetAttributes();
     else
-        return NULL;
+        return nullptr;
 }
 #endif
 
@@ -592,7 +584,7 @@ wxRichTextStyleDefinition* wxRichTextFormattingDialog::GetDialogStyleDefinition(
     if (dialog)
         return dialog->GetStyleDefinition();
     else
-        return NULL;
+        return nullptr;
 }
 
 void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units)
@@ -620,7 +612,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
         {
             unitsIdx = 1; // By default, the 2nd in the list.
-            float value = dim.GetValue() / 100.0f;
+            double value = dim.GetValue() / 100.0;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
         }
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
@@ -631,7 +623,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
         {
             unitsIdx = 3; // By default, the 4th in the list.
-            float value = dim.GetValue() / 100.0f;
+            double value = dim.GetValue() / 100.0;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
         }
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)
@@ -696,11 +688,11 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     }
     else if (unit == wxTEXT_ATTR_UNITS_TENTHS_MM)
     {
-        float value = 0.0;
+        float value = 0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
         // Convert from cm
         // Do this in two steps, since using one step causes strange rounding error for VS 2010 at least.
-        float v = (value * 100.0);
+        float v = value * 100;
         ret = (int) (v);
         return true;
     }
@@ -711,9 +703,9 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     }
     else if (unit == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
     {
-        float value = 0.0;
+        float value = 0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
-        float v = (value * 100.0);
+        float v = value * 100;
         ret = (int) (v);
     }
     else if (unit == wxTEXT_ATTR_UNITS_POINTS)
@@ -759,7 +751,7 @@ void wxRichTextColourSwatchCtrl::OnMouseEvent(wxMouseEvent& event)
     if (event.LeftDown())
     {
         wxWindow* parent = GetParent();
-        while (parent != NULL && !wxDynamicCast(parent, wxDialog) && !wxDynamicCast(parent, wxFrame))
+        while (parent != nullptr && !wxDynamicCast(parent, wxDialog) && !wxDynamicCast(parent, wxFrame))
             parent = parent->GetParent();
 
         wxRichTextFormattingDialog* dlg = wxDynamicCast(parent, wxRichTextFormattingDialog);
@@ -879,7 +871,7 @@ wxString wxRichTextFontListBox::CreateHTML(const wxString& facename) const
 {
     wxString str = wxT("<font");
 
-    str << wxT(" size=\"+2\"");;
+    str << wxT(" size=\"+2\"");
 
     if (!facename.IsEmpty() && facename != _("(none)"))
         str << wxT(" face=\"") << facename << wxT("\"");

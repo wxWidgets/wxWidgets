@@ -62,7 +62,7 @@ public:
         Globally disable restoring the persistence object properties.
 
         By default, restoring properties in Restore() is enabled but this
-        function allows to disable it. This is mostly useful for testing.
+        function allows disabling it. This is mostly useful for testing.
 
         @see DisableSaving()
      */
@@ -153,12 +153,12 @@ public:
     void SaveAndUnregister(void *obj);
 
     /// Combines both Register() and Restore() calls.
-    //@{
+    ///@{
     template <class T>
     bool RegisterAndRestore(T *obj);
 
     bool RegisterAndRestore(void *obj, wxPersistentObject *po);
-    //@}
+    ///@}
 
 protected:
     /**
@@ -239,7 +239,7 @@ public:
         Notice that these methods are only used by wxPersistenceManager
         normally and shouldn't be called directly.
      */
-    //@{
+    ///@{
 
     /**
         Save the object properties.
@@ -274,7 +274,7 @@ public:
      */
     virtual wxString GetName() const = 0;
 
-    //@}
+    ///@}
 
 
     /// Return the associated object.

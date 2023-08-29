@@ -3,7 +3,7 @@
 // Purpose:     wxGtkObject class declaration
 // Author:      Vadim Zeitlin
 // Created:     2008-08-27
-// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

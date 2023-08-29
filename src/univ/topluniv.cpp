@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/toplevel.h"
 
@@ -49,7 +46,7 @@ public:
     virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
 
 private:
-    // the window (button) which has capture or NULL and the last hittest result
+    // the window (button) which has capture or nullptr and the last hittest result
     wxTopLevelWindow *m_winCapture;
     long              m_winHitTest;
     long              m_winPressed;
@@ -84,7 +81,7 @@ void wxTopLevelWindow::Init()
     {
         ms_drawDecorations =
             !wxSystemSettings::HasFeature(wxSYS_CAN_DRAW_FRAME_DECORATIONS) ||
-            wxGetEnv(wxT("WXDECOR"), NULL);
+            wxGetEnv(wxT("WXDECOR"), nullptr);
     }
 
     m_usingNativeDecorations = ms_drawDecorations == 0;
@@ -216,8 +213,7 @@ long wxTopLevelWindow::GetDecorationsStyle() const
 
 void wxTopLevelWindow::RefreshTitleBar()
 {
-    wxNcPaintEvent event(GetId());
-    event.SetEventObject(this);
+    wxNcPaintEvent event(this);
     GetEventHandler()->ProcessEvent(event);
 }
 
@@ -828,7 +824,7 @@ wxTopLevelWindow::GetStdInputHandler(wxInputHandler *handlerDef)
 wxStdTLWInputHandler::wxStdTLWInputHandler(wxInputHandler *inphand)
                     : wxStdInputHandler(inphand)
 {
-    m_winCapture = NULL;
+    m_winCapture = nullptr;
     m_winHitTest = 0;
     m_winPressed = 0;
     m_borderCursorOn = false;
@@ -879,7 +875,7 @@ bool wxStdTLWInputHandler::HandleMouse(wxInputConsumer *consumer,
             if ( m_winCapture )
             {
                 m_winCapture->ReleaseMouse();
-                m_winCapture = NULL;
+                m_winCapture = nullptr;
 
                 if ( m_winHitTest == m_winPressed )
                 {

@@ -55,8 +55,9 @@
 
     @beginStyleTable
     @style{wxPD_APP_MODAL}
-           Make the progress dialog modal. If this flag is not given, it is
-           only "locally" modal - that is the input to the parent window is
+           Make the progress dialog application-modal, i.e. disable all
+           application windows while it is shown. If this flag is not given, it
+           is only "locally" modal -- that is the input to the parent window is
            disabled, but not to the other ones.
     @style{wxPD_AUTO_HIDE}
            Causes the progress dialog to disappear from screen as soon as the
@@ -104,13 +105,17 @@ public:
             In the generic implementation the progress bar is constructed
             only if this value is greater than zero.
         @param parent
-            Parent window.
+            Parent window. It will be disabled while this dialog is shown if
+            non-null (whether @c wxPD_APP_MODAL is specified or not). Note that
+            if you specify null parent and don't use @c wxPD_APP_MODAL, you
+            need to take care to avoid reentrancies, i.e. avoiding showing the
+            progress dialog again while this one is shown.
         @param style
             The dialog style. See wxProgressDialog.
     */
     wxGenericProgressDialog(const wxString& title, const wxString& message,
                             int maximum = 100,
-                            wxWindow* parent = NULL,
+                            wxWindow* parent = nullptr,
                             int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL);
 
     /**
@@ -153,7 +158,7 @@ public:
 
         @see wxGauge::Pulse(), Update()
     */
-    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool* skip = NULL);
+    virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool* skip = nullptr);
 
     /**
         Can be used to continue with the dialog, after the user had clicked the "Abort" button.
@@ -162,7 +167,7 @@ public:
 
     /**
         Changes the maximum value of the progress meter given in the constructor.
-        This function can only be called (with a positive value) if the value passed 
+        This function can only be called (with a positive value) if the value passed
         in the constructor was positive.
 
         @since 2.9.1
@@ -175,8 +180,8 @@ public:
 
          Normally a Cancel button press is indicated by Update() returning
          @false but sometimes it may be more convenient to check if the dialog
-         was cancelled from elsewhere in the code and this function allows to
-         do it.
+         was cancelled from elsewhere in the code and this function allows
+         doing it.
 
          It always returns @false if the Cancel button is not shown at all.
 
@@ -223,7 +228,7 @@ public:
         text constant in order to avoid jarring dialog size changes. You may
         also want to make the initial message, specified when creating the
         dialog, wide enough to avoid having to resize the dialog later, e.g. by
-        appending a long string of unbreakable spaces (@c wxString(L'\u00a0',
+        appending a long string of unbreakable spaces (@c wxString(L'\\u00a0',
         100)) to it.
 
         @param value
@@ -237,7 +242,7 @@ public:
             this is set to @true.
     */
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString,
-                        bool* skip = NULL);
+                        bool* skip = nullptr);
 };
 
 
@@ -254,6 +259,6 @@ class wxProgressDialog : public wxGenericProgressDialog
 public:
     wxProgressDialog( const wxString& title, const wxString& message,
                       int maximum = 100,
-                      wxWindow *parent = NULL,
+                      wxWindow *parent = nullptr,
                       int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE );
 };

@@ -7,16 +7,12 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(AUI_FILES AUI_CMN)
 
 if(WXMSW)
     wx_append_sources(AUI_FILES AUI_MSW)
-elseif(WXGTK)
+elseif(WXGTK2)
     wx_append_sources(AUI_FILES AUI_GTK)
 endif()
 
-wx_add_library(aui ${AUI_FILES})
-
-wx_finalize_lib(aui)
+wx_add_library(wxaui ${AUI_FILES})

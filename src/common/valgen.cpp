@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_VALIDATORS
 
@@ -128,7 +125,7 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
 }
 
 // Called to transfer data to the window
-bool wxGenericValidator::TransferToWindow(void)
+bool wxGenericValidator::TransferToWindow()
 {
     if ( !m_validatorWindow )
         return false;
@@ -167,7 +164,7 @@ bool wxGenericValidator::TransferToWindow(void)
             return true;
         }
     } else
-#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK__)) && !defined(__WXUNIVERSAL__)
     if (wxDynamicCast(m_validatorWindow, wxBitmapToggleButton))
     {
         wxBitmapToggleButton * pControl = (wxBitmapToggleButton *) m_validatorWindow;
@@ -214,7 +211,7 @@ bool wxGenericValidator::TransferToWindow(void)
         }
     } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WXMOTIF__)
+#if wxUSE_SPINCTRL
     if (wxDynamicCast(m_validatorWindow, wxSpinCtrl))
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
@@ -349,7 +346,7 @@ bool wxGenericValidator::TransferToWindow(void)
         }
         else if (m_pFloat)
         {
-            pControl->SetValue(wxString::Format(wxT("%g"), *m_pFloat));
+            pControl->SetValue(wxString::Format(wxS("%g"), double(*m_pFloat)));
             return true;
         }
         else if (m_pDouble)
@@ -414,7 +411,7 @@ bool wxGenericValidator::TransferToWindow(void)
 }
 
 // Called to transfer data from the window
-bool wxGenericValidator::TransferFromWindow(void)
+bool wxGenericValidator::TransferFromWindow()
 {
     if ( !m_validatorWindow )
         return false;
@@ -452,7 +449,7 @@ bool wxGenericValidator::TransferFromWindow(void)
             return true;
         }
     } else
-#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK__)) && !defined(__WXUNIVERSAL__)
     if (wxDynamicCast(m_validatorWindow, wxBitmapToggleButton))
     {
         wxBitmapToggleButton *pControl = (wxBitmapToggleButton *) m_validatorWindow;
@@ -499,7 +496,7 @@ bool wxGenericValidator::TransferFromWindow(void)
         }
     } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WXMOTIF__)
+#if wxUSE_SPINCTRL
     if (wxDynamicCast(m_validatorWindow, wxSpinCtrl))
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
@@ -696,16 +693,16 @@ bool wxGenericValidator::TransferFromWindow(void)
 */
 void wxGenericValidator::Initialize()
 {
-    m_pBool = NULL;
-    m_pInt = NULL;
-    m_pString = NULL;
-    m_pArrayInt = NULL;
+    m_pBool = nullptr;
+    m_pInt = nullptr;
+    m_pString = nullptr;
+    m_pArrayInt = nullptr;
 #if wxUSE_DATETIME
-    m_pDateTime = NULL;
+    m_pDateTime = nullptr;
 #endif // wxUSE_DATETIME
-    m_pFileName = NULL;
-    m_pFloat = NULL;
-    m_pDouble = NULL;
+    m_pFileName = nullptr;
+    m_pFloat = nullptr;
+    m_pDouble = nullptr;
 }
 
 #endif // wxUSE_VALIDATORS

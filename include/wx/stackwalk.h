@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-07
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@ private:
         { return const_cast<wxStackFrameBase *>(this); }
 
 public:
-    wxStackFrameBase(size_t level, void *address = NULL)
+    wxStackFrameBase(size_t level, void *address = nullptr)
     {
         m_level = level;
 
@@ -80,7 +80,7 @@ public:
 
     // get the name, type and value (in text form) of the given parameter
     //
-    // any pointer may be NULL
+    // any pointer may be null
     //
     // return true if at least some values could be retrieved
     virtual bool GetParam(size_t WXUNUSED(n),
@@ -126,7 +126,7 @@ public:
     // ctor does nothing, use Walk() to walk the stack
     wxStackWalkerBase() { }
 
-    // dtor does nothing neither but should be virtual
+    // dtor does nothing either but should be virtual
     virtual ~wxStackWalkerBase() { }
 
     // enumerate stack frames from the current location, skipping the initial
@@ -143,7 +143,7 @@ public:
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
 protected:
-    // this function must be overrided to process the given frame
+    // this function must be overridden to process the given frame
     virtual void OnStackFrame(const wxStackFrame& frame) = 0;
 };
 

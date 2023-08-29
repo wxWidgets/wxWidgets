@@ -18,8 +18,7 @@
     #include "wx/math.h"
 #endif
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/eventsdisabler.h"
 
 //-----------------------------------------------------------------------------
@@ -274,13 +273,22 @@ static gchar* gtk_format_value(GtkScale*, double value, void*)
 
 wxSlider::wxSlider()
 {
-    m_scale = NULL;
+    Init();
 }
 
 wxSlider::~wxSlider()
 {
     if (m_scale && m_scale != m_widget)
         GTKDisconnect(m_scale);
+}
+
+void wxSlider::Init()
+{
+    m_scrollEventType = GTK_SCROLL_NONE;
+    m_needThumbRelease = false;
+    m_blockScrollEvent = false;
+    m_tickFreq = 0;
+    m_scale = nullptr;
 }
 
 bool wxSlider::Create(wxWindow *parent,
@@ -294,10 +302,8 @@ bool wxSlider::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
+    Init();
     m_pos = value;
-    m_scrollEventType = GTK_SCROLL_NONE;
-    m_needThumbRelease = false;
-    m_blockScrollEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
@@ -307,7 +313,7 @@ bool wxSlider::Create(wxWindow *parent,
     }
 
     const bool isVertical = (style & wxSL_VERTICAL) != 0;
-    m_scale = gtk_scale_new(GtkOrientation(isVertical), NULL);
+    m_scale = gtk_scale_new(GtkOrientation(isVertical), nullptr);
 
     if (style & wxSL_MIN_MAX_LABELS)
     {
@@ -320,24 +326,24 @@ bool wxSlider::Create(wxWindow *parent,
         gtk_widget_show(box);
         gtk_box_pack_start(GTK_BOX(m_widget), box, true, true, 0);
 
-        m_minLabel = gtk_label_new(NULL);
+        m_minLabel = gtk_label_new(nullptr);
         gtk_widget_show( m_minLabel );
         gtk_box_pack_start(GTK_BOX(box), m_minLabel, false, false, 0);
 
         // expanding empty space between the min/max labels
-        GtkWidget *space = gtk_label_new(NULL);
+        GtkWidget *space = gtk_label_new(nullptr);
         gtk_widget_show( space );
         gtk_box_pack_start(GTK_BOX(box), space, true, false, 0);
 
-        m_maxLabel = gtk_label_new(NULL);
+        m_maxLabel = gtk_label_new(nullptr);
         gtk_widget_show( m_maxLabel );
         gtk_box_pack_end(GTK_BOX(box), m_maxLabel, false, false, 0);
     }
     else
     {
         m_widget = m_scale;
-        m_maxLabel = NULL;
-        m_minLabel = NULL;
+        m_maxLabel = nullptr;
+        m_minLabel = nullptr;
     }
     g_object_ref(m_widget);
 
@@ -345,9 +351,9 @@ bool wxSlider::Create(wxWindow *parent,
     gtk_scale_set_draw_value(GTK_SCALE (m_scale), showValueLabel );
     if ( showValueLabel )
     {
-        // position the label appropriately: notice that wxSL_DIRECTION flags
-        // specify the position of the ticks, not label, under MSW and so the
-        // label is on the opposite side
+        // Position the label appropriately: notice that wxSL_DIRECTION flags
+        // specify the position of the ticks, not label, and so the
+        // label is on the opposite side.
         GtkPositionType posLabel;
         if ( style & wxSL_VERTICAL )
         {
@@ -376,7 +382,7 @@ bool wxSlider::Create(wxWindow *parent,
     g_signal_connect(m_scale, "button_press_event", G_CALLBACK(gtk_button_press_event), this);
     g_signal_connect(m_scale, "button_release_event", G_CALLBACK(gtk_button_release_event), this);
     g_signal_connect(m_scale, "move_slider", G_CALLBACK(gtk_move_slider), this);
-    g_signal_connect(m_scale, "format_value", G_CALLBACK(gtk_format_value), NULL);
+    g_signal_connect(m_scale, "format_value", G_CALLBACK(gtk_format_value), nullptr);
     g_signal_connect(m_scale, "value_changed", G_CALLBACK(gtk_value_changed), this);
     gulong handler_id = g_signal_connect(m_scale, "event_after", G_CALLBACK(gtk_event_after), this);
     g_signal_handler_block(m_scale, handler_id);
@@ -502,6 +508,79 @@ int wxSlider::GetLineSize() const
     return int(gtk_adjustment_get_step_increment(adj));
 }
 
+void wxSlider::ClearTicks()
+{
+#if GTK_CHECK_VERSION(2,16,0)
+    if (wx_is_at_least_gtk2(16))
+        gtk_scale_clear_marks(GTK_SCALE (m_scale));
+#endif
+}
+
+void wxSlider::SetTick(int tickPos)
+{
+#if GTK_CHECK_VERSION(2,16,0)
+    if ( wx_is_at_least_gtk2(16) )
+    {
+        GtkPositionType posTicks;
+        long style = GetWindowStyle();
+
+        if ( style & wxSL_VERTICAL )
+        {
+            if ( style & wxSL_LEFT )
+                posTicks = GTK_POS_LEFT;
+            else
+                posTicks = GTK_POS_RIGHT;
+        }
+        else // horizontal slider
+        {
+            if ( style & wxSL_TOP )
+                posTicks = GTK_POS_TOP;
+            else
+                posTicks = GTK_POS_BOTTOM;
+        }
+
+        gtk_scale_add_mark(GTK_SCALE (m_scale), (double)tickPos, posTicks, nullptr);
+    }
+#else
+    wxUnusedVar(tickPos);
+#endif
+}
+
+void wxSlider::DoSetTickFreq(int freq)
+{
+#if GTK_CHECK_VERSION(2,16,0)
+    if ( wx_is_at_least_gtk2(16) )
+    {
+        m_tickFreq = freq;
+        gtk_scale_clear_marks(GTK_SCALE (m_scale));
+
+        for (int i = GetMin() + freq; i < GetMax(); i += freq)
+            SetTick(i);
+    }
+#else
+    wxUnusedVar(freq);
+#endif
+}
+
+int wxSlider::GetTickFreq() const
+{
+#if GTK_CHECK_VERSION(2,16,0)
+    return wx_is_at_least_gtk2(16) ? m_tickFreq : -1;
+#else
+    return -1;
+#endif
+}
+
+wxSize wxSlider::DoGetBestSize() const
+{
+    // We need to get the size in the transverse direction from GTK, but we use
+    // hard-coded default in the other direction, as otherwise the slider would
+    // have the smallest possible size and not have any extent at all.
+    wxSize size = GTKGetPreferredSize(m_widget);
+    (HasFlag(wxSL_VERTICAL) ? size.y : size.x) = 100;
+    return size;
+}
+
 GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
 #ifdef __WXGTK3__
@@ -515,7 +594,7 @@ GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 wxVisualAttributes
 wxSlider::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_scale_new(GTK_ORIENTATION_VERTICAL, NULL));
+    return GetDefaultAttributesFromGTKWidget(gtk_scale_new(GTK_ORIENTATION_VERTICAL, nullptr));
 }
 
 #endif // wxUSE_SLIDER

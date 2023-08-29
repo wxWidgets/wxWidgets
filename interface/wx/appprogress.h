@@ -9,7 +9,7 @@
     @class wxAppProgressIndicator
 
     A helper class that can be used to update the progress bar in the taskbar
-    button on Windows and the dock icon on OS X.
+    button on Windows and the dock icon on macOS.
 
     @library{wxcore}
     @category{misc}
@@ -27,13 +27,13 @@ public:
 
         @param parent
             The parent window of wxAppProgressIndicator. Note that the
-            window should has taskbar button showing. If parent is NULL,
+            window should has taskbar button showing. If parent is @NULL,
             the progress will reflect on the taskbar buttons of all the
             top level windows.
         @param maxValue
             Integer range (maximum value) of the progress indicator.
     */
-    wxAppProgressIndicator(wxWindow* parent = NULL, int maxValue = 100);
+    wxAppProgressIndicator(wxWindow* parent = nullptr, int maxValue = 100);
 
     /**
         Destructor, stops displaying progress and returns the indicator to its

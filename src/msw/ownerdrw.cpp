@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_OWNER_DRAWN
 
@@ -23,15 +20,15 @@
 #include "wx/msw/private/dc.h"
 #include "wx/msw/wrapcctl.h"            // for HIMAGELIST
 
-// ----------------------------------------------------------------------------
-// constants for base class
-// ----------------------------------------------------------------------------
-
-int wxOwnerDrawnBase::ms_defaultMargin = 3;
-
 // ============================================================================
 // implementation of wxOwnerDrawn class
 // ============================================================================
+
+int wxOwnerDrawn::MSWGetTextType() const
+{
+    // By default, handle the mnemonics.
+    return DST_PREFIXTEXT;
+}
 
 // draw the item
 bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc,
@@ -73,7 +70,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc,
         SIZE sizeRect;
         ::GetTextExtentPoint32(hdc, text.c_str(), text.length(), &sizeRect);
 
-        int flags = DST_PREFIXTEXT;
+        int flags = MSWGetTextType();
         if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
             flags |= DSS_DISABLED;
 
@@ -85,7 +82,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc,
         int cx = rc.GetWidth() - GetMarginWidth();
         int cy = sizeRect.cy;
 
-        ::DrawState(hdc, NULL, NULL, wxMSW_CONV_LPARAM(text),
+        ::DrawState(hdc, nullptr, nullptr, wxMSW_CONV_LPARAM(text),
                     text.length(), x, y, cx, cy, flags);
 
     } // reset to default the font, colors and brush
@@ -121,7 +118,7 @@ BOOL wxDrawStateBitmap(HDC hDC, HBITMAP hBitmap, int x, int y, UINT uState)
                 //    (like default selected items)
                 HIMAGELIST hIml = ::ImageList_Create(bmp.bmWidth, bmp.bmHeight,
                                                      ILC_COLOR32 | ILC_MASK, 1, 1);
-                ::ImageList_Add(hIml, hBitmap, NULL);
+                ::ImageList_Add(hIml, hBitmap, nullptr);
                 UINT fStyle = uState == wxDSB_SELECTED ? ILD_SELECTED : ILD_NORMAL;
                 result = ::ImageList_Draw(hIml, 0, hDC, x, y, fStyle);
                 ::ImageList_Destroy(hIml);
@@ -129,7 +126,7 @@ BOOL wxDrawStateBitmap(HDC hDC, HBITMAP hBitmap, int x, int y, UINT uState)
             break;
 
         case wxDSB_DISABLED:
-            result = ::DrawState(hDC, NULL, NULL, (LPARAM)hBitmap, 0, x, y,
+            result = ::DrawState(hDC, nullptr, nullptr, (LPARAM)hBitmap, 0, x, y,
                                  bmp.bmWidth, bmp.bmHeight,
                                  DST_BITMAP | DSS_DISABLED);
             break;

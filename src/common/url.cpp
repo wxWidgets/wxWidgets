@@ -11,16 +11,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_URL
 
 #include "wx/url.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/module.h"
@@ -32,15 +28,17 @@
 wxIMPLEMENT_CLASS(wxURL, wxURI);
 
 // Protocols list
-wxProtoInfo *wxURL::ms_protocols = NULL;
+wxProtoInfo *wxURL::ms_protocols = nullptr;
 
 // Enforce linking of protocol classes:
+#if wxUSE_PROTOCOL_FILE
 USE_PROTOCOL(wxFileProto)
+#endif
 
 #if wxUSE_PROTOCOL_HTTP
 USE_PROTOCOL(wxHTTP)
 
-    wxHTTP *wxURL::ms_proxyDefault = NULL;
+    wxHTTP *wxURL::ms_proxyDefault = nullptr;
     bool wxURL::ms_useDefaultProxy = false;
 #endif
 
@@ -78,7 +76,7 @@ wxURL::wxURL(const wxURL& url) : wxURI(url)
 
 void wxURL::Init(const wxString& url)
 {
-    m_protocol = NULL;
+    m_protocol = nullptr;
     m_error = wxURL_NOERR;
     m_url = url;
 #if wxUSE_URL_NATIVE
@@ -97,7 +95,7 @@ void wxURL::Init(const wxString& url)
         }
     }
 
-    m_useProxy = ms_proxyDefault != NULL;
+    m_useProxy = ms_proxyDefault != nullptr;
     m_proxy = ms_proxyDefault;
 #endif // wxUSE_PROTOCOL_HTTP
 
@@ -151,7 +149,7 @@ wxURL& wxURL::operator = (const wxURL& url)
 
 bool wxURL::ParseURL()
 {
-    // If the URL was already parsed (m_protocol != NULL), pass this section.
+    // If the URL was already parsed (m_protocol != nullptr), pass this section.
     if (!m_protocol)
     {
         // Clean up
@@ -216,7 +214,7 @@ void wxURL::CleanData()
         {
             // Need to safely delete the socket (pending events)
             m_protocol->Destroy();
-            m_protocol = NULL;
+            m_protocol = nullptr;
         }
     }
 }
@@ -270,7 +268,7 @@ wxInputStream *wxURL::GetInputStream()
     if (!m_protocol)
     {
         m_error = wxURL_NOPROTO;
-        return NULL;
+        return nullptr;
     }
 
     m_error = wxURL_NOERR;
@@ -303,7 +301,7 @@ wxInputStream *wxURL::GetInputStream()
 #if wxUSE_SOCKETS
     wxIPV4address addr;
 
-    // m_protoinfo is NULL when we use a proxy
+    // m_protoinfo is null when we use a proxy
     if (
 #if wxUSE_PROTOCOL_HTTP
          !m_useProxy &&
@@ -313,7 +311,7 @@ wxInputStream *wxURL::GetInputStream()
         if (!addr.Hostname(m_server))
         {
             m_error = wxURL_NOHOST;
-            return NULL;
+            return nullptr;
         }
 
         addr.Service(m_port);
@@ -321,7 +319,7 @@ wxInputStream *wxURL::GetInputStream()
         if (!m_protocol->Connect(addr))
         {
             m_error = wxURL_CONNERR;
-            return NULL;
+            return nullptr;
         }
     }
 #endif // wxUSE_SOCKETS
@@ -350,7 +348,7 @@ wxInputStream *wxURL::GetInputStream()
     if (!the_i_stream)
     {
         m_error = wxURL_PROTOERR;
-        return NULL;
+        return nullptr;
     }
 
     return the_i_stream;
@@ -450,8 +448,8 @@ class wxURLModule : public wxModule
 public:
     wxURLModule();
 
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxURLModule);

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONTROLS
 
@@ -39,18 +36,11 @@
     #include "wx/msw/missing.h"
 #endif
 
-#if wxUSE_LISTCTRL
-    #include "wx/listctrl.h"
-#endif // wxUSE_LISTCTRL
-
-#if wxUSE_TREECTRL
-    #include "wx/treectrl.h"
-#endif // wxUSE_TREECTRL
-
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
 #include "wx/msw/ownerdrawnbutton.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
 // ----------------------------------------------------------------------------
@@ -132,43 +122,37 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // ... and adjust it to account for a possible parent frames toolbar
     AdjustForParentClientOrigin(x, y);
 
-    m_hWnd = (WXHWND)::CreateWindowEx
-                       (
-                        exstyle,            // extended style
-                        classname,          // the kind of control to create
-                        label.t_str(),      // the window name
-                        style,              // the window style
-                        x, y, w, h,         // the window position and size
-                        GetHwndOf(GetParent()),         // parent
-                        (HMENU)wxUIntToPtr(GetId()),    // child id
-                        wxGetInstance(),    // app instance
-                        NULL                // creation parameters
-                       );
+    m_hWnd = MSWCreateWindowAtAnyPosition
+             (
+              exstyle,            // extended style
+              classname,          // the kind of control to create
+              label.t_str(),      // the window name
+              style,              // the window style
+              x, y, w, h,         // the window position and size
+              GetHwndOf(GetParent()),         // parent
+              GetId()             // child id
+             );
 
     if ( !m_hWnd )
     {
-        wxLogLastError(wxString::Format
-                       (
-                        wxT("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx)"),
-                        classname, style, exstyle
-                       ));
-
         return false;
     }
 
-#if !wxUSE_UNICODE
-    // Text labels starting with the character 0xff (which is a valid character
-    // in many code pages) don't appear correctly as CreateWindowEx() has some
-    // special treatment for this case, apparently the strings starting with -1
-    // are not really strings but something called "ordinals". There is no
-    // documentation about it but the fact is that the label gets mangled or
-    // not displayed at all if we don't do this, see #9572.
-    //
-    // Notice that 0xffff is not a valid Unicode character so the problem
-    // doesn't arise in Unicode build.
-    if ( !label.empty() && label[0] == -1 )
-        ::SetWindowText(GetHwnd(), label.t_str());
-#endif // !wxUSE_UNICODE
+    MSWDarkModeSupport support;
+    if ( wxMSWDarkMode::IsActive() && MSWGetDarkModeSupport(support) )
+    {
+        wxMSWDarkMode::AllowForWindow(m_hWnd, support.themeName, support.themeId);
+
+        if ( support.setForeground )
+            SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT));
+
+        if ( const int msgTT = MSWGetToolTipMessage() )
+        {
+            const HWND hwndTT = (HWND)::SendMessage(GetHwnd(), msgTT, 0, 0);
+            if ( ::IsWindow(hwndTT) )
+                wxMSWDarkMode::AllowForWindow(hwndTT);
+        }
+    }
 
     // saving the label in m_labelOrig to return it verbatim
     // later in GetLabel()
@@ -189,6 +173,39 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
     // set the size now if no initial size specified
     SetInitialSize(size);
+
+    if ( size.IsFullySpecified() )
+    {
+        // Usually all windows get WM_NCCALCSIZE when their size is set,
+        // however if the initial size is fixed, it's not going to change and
+        // this message won't be sent at all, meaning that we won't get a
+        // chance to tell Windows that we need extra space for our custom
+        // themed borders, when using them. So force sending this message by
+        // using SWP_FRAMECHANGED (and use SWP_NOXXX to avoid doing anything
+        // else) to fix themed borders when they're used (if they're not, this
+        // is harmless, and it's simpler and more fool proof to always do it
+        // rather than try to determine whether we need to do it or not).
+        ::SetWindowPos(GetHwnd(), nullptr, 0, 0, 0, 0,
+                       SWP_FRAMECHANGED |
+                       SWP_NOSIZE |
+                       SWP_NOMOVE |
+                       SWP_NOZORDER |
+                       SWP_NOREDRAW |
+                       SWP_NOACTIVATE |
+                       SWP_NOCOPYBITS |
+                       SWP_NOOWNERZORDER |
+                       SWP_NOSENDCHANGING);
+    }
+
+    return true;
+}
+
+bool wxControl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // This theme works for a few controls (buttons, texts, comboboxes) and
+    // doesn't seem to do any harm for those that don't support it, so use it
+    // by default.
+    support.themeName = L"Explorer";
 
     return true;
 }
@@ -301,6 +318,8 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 {
     HDC hdc = (HDC)pDC;
 
+    wxColour colFg;
+
     WXHBRUSH hbr = 0;
     if ( !colBg.IsOk() )
     {
@@ -335,11 +354,22 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
         if ( win )
             hbr = win->MSWGetBgBrush(pDC);
 
-        // if the control doesn't have any bg colour, foreground colour will be
-        // ignored as the return value would be 0 -- so forcefully give it a
-        // non default background brush in this case
-        if ( !hbr && m_hasFgCol )
-            colBg = GetBackgroundColour();
+        if ( !hbr )
+        {
+            if ( wxMSWDarkMode::IsActive() )
+            {
+                colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+                if ( !m_hasFgCol )
+                    colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+            }
+            // if the control doesn't have any bg colour, foreground colour will be
+            // ignored as the return value would be 0 -- so forcefully give it a
+            // non default background brush in this case
+            else if ( m_hasFgCol )
+            {
+                colBg = GetBackgroundColour();
+            }
+        }
     }
 
     // use the background colour override if a valid colour is given: this is
@@ -357,7 +387,9 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     // default just the simple black is used
     if ( hbr )
     {
-        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+        if ( !colFg.IsOk() )
+            colFg = GetForegroundColour();
+        ::SetTextColor(hdc, wxColourToRGB(colFg));
     }
 
     // finally also set the background colour for text drawing: without this,
@@ -538,34 +570,29 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
 
     // choose the values consistent with those used for native, non
     // owner-drawn, buttons
-    static const int MARGIN = 3;
-    int CXMENUCHECK = ::GetSystemMetrics(SM_CXMENUCHECK) + 1;
 
-    // the buttons were even bigger under Windows XP
-    if ( wxGetWinVersion() < wxWinVersion_6 )
-        CXMENUCHECK += 2;
+    const int spacing = m_win->FromDIP(3);
+    const wxSize cbSize = wxRendererNative::Get().GetCheckBoxSize(m_win, flags);
 
-    // The space between the button and the label
-    // is included in the button bitmap.
-    const int buttonSize = wxMin(CXMENUCHECK - MARGIN, m_win->GetSize().y);
+    const int buttonSize = wxMin(cbSize.y, m_win->GetSize().y);
     rectButton.top = rect.top + (rect.bottom - rect.top - buttonSize) / 2;
     rectButton.bottom = rectButton.top + buttonSize;
 
     const bool isRightAligned = m_win->HasFlag(wxALIGN_RIGHT);
     if ( isRightAligned )
     {
-        rectLabel.right = rect.right - CXMENUCHECK;
-        rectLabel.left = rect.left;
+        rectButton.right = rect.right;
+        rectButton.left = rectButton.right - buttonSize;
 
-        rectButton.left = rectLabel.right + ( CXMENUCHECK + MARGIN - buttonSize ) / 2;
-        rectButton.right = rectButton.left + buttonSize;
+        rectLabel.right = rectButton.left - spacing;
+        rectLabel.left = rect.left;
     }
     else // normal, left-aligned button
     {
-        rectButton.left = rect.left + ( CXMENUCHECK - MARGIN - buttonSize ) / 2;
+        rectButton.left = rect.left;
         rectButton.right = rectButton.left + buttonSize;
 
-        rectLabel.left = rect.left + CXMENUCHECK;
+        rectLabel.left = spacing + rectButton.right;
         rectLabel.right = rect.right;
     }
 

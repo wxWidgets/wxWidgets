@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/xtistrm.h"
 
@@ -42,17 +39,13 @@ using namespace std;
 
 struct wxObjectCodeReaderCallback::wxObjectCodeReaderCallbackInternal
 {
-#if wxUSE_UNICODE
     map<int,wstring> m_objectNames;
-#else
-    map<int,string> m_objectNames;
-#endif
 
     void SetObjectName(int objectID, const wxString &name )
     {
         if ( m_objectNames.find(objectID) != m_objectNames.end() )
         {
-            wxLogError( _("Passing a already registered object to SetObjectName") );
+            wxLogError( _("Passing an already registered object to SetObjectName") );
             return ;
         }
         m_objectNames[objectID] = (const wxChar *)name;
@@ -61,7 +54,7 @@ struct wxObjectCodeReaderCallback::wxObjectCodeReaderCallbackInternal
     wxString GetObjectName( int objectID )
     {
         if ( objectID == wxNullObjectID )
-            return wxT("NULL");
+            return "NULL";
 
         if ( m_objectNames.find(objectID) == m_objectNames.end() )
         {
@@ -90,30 +83,30 @@ void wxObjectCodeReaderCallback::AllocateObject(int objectID, wxClassInfo *class
     {
         // add corresponding header if not already included
         wxString include;
-        include.Printf(wxT("#include \"%s\"\n"),classInfo->GetIncludeName());
+        include.Printf("#include \"%s\"\n",classInfo->GetIncludeName());
         if ( m_headerincludes.Find(include) == wxNOT_FOUND)
             m_headerincludes += include;
     }
 
-    wxString objectName = wxString::Format( wxT("LocalObject_%d"), objectID );
-    m_source += ( wxString::Format( wxT("\t%s *%s = new %s;\n"),
+    wxString objectName = wxString::Format( "LocalObject_%d", objectID );
+    m_source += ( wxString::Format( "\t%s *%s = new %s;\n",
         classInfo->GetClassName(),
-        objectName.c_str(),
+        objectName,
         classInfo->GetClassName()) );
     m_data->SetObjectName( objectID, objectName );
 }
 
 void wxObjectCodeReaderCallback::DestroyObject(int objectID, wxClassInfo *WXUNUSED(classInfo))
 {
-    m_source += ( wxString::Format( wxT("\tdelete %s;\n"),
-        m_data->GetObjectName( objectID).c_str() ) );
+    m_source += ( wxString::Format( "\tdelete %s;\n",
+        m_data->GetObjectName( objectID) ) );
 }
 
 class WXDLLIMPEXP_BASE wxObjectConstructorWriter: public wxObjectWriterFunctor
 {
 public:
     wxObjectConstructorWriter(const wxClassTypeInfo* cti,
-        wxObjectCodeReaderCallback* writer) : 
+        wxObjectCodeReaderCallback* writer) :
     m_cti(cti),m_writer(writer)
     {}
 
@@ -150,17 +143,17 @@ wxString wxObjectCodeReaderCallback::ValueAsCode( const wxAny &param )
         const wxCustomTypeInfo* cti = wx_dynamic_cast(const wxCustomTypeInfo*, type);
         if ( cti )
         {
-            value.Printf( wxT("%s(%s)"), cti->GetTypeName().c_str(),
-                          wxAnyGetAsString(param).c_str() );
+            value.Printf( "%s(%s)", cti->GetTypeName(),
+                          wxAnyGetAsString(param) );
         }
         else
         {
-            wxLogError ( _("Internal error, illegal wxCustomTypeInfo") );
+            wxLogError ( "Internal error, illegal wxCustomTypeInfo" );
         }
     }
     else if ( type->GetKind() == wxT_STRING )
     {
-        value.Printf( wxT("\"%s\""), wxAnyGetAsString(param).c_str() );
+        value.Printf( "\"%s\"", wxAnyGetAsString(param) );
     }
     else if ( type->GetKind() == wxT_OBJECT )
     {
@@ -172,13 +165,13 @@ wxString wxObjectCodeReaderCallback::ValueAsCode( const wxAny &param )
 
             ci->CallOnAny(param,&cw);
 
-            value.Printf( wxT("%s(%s)"), ctype->GetClassInfo()->GetClassName(),
+            value.Printf( "%s(%s)", ctype->GetClassInfo()->GetClassName(),
                 cw.GetConstructorString() );
         }
     }
     else
     {
-        value.Printf( wxT("%s"),  wxAnyGetAsString(param).c_str() );
+        value.Printf( "%s",  wxAnyGetAsString(param) );
     }
 
     return value;
@@ -194,26 +187,26 @@ void wxObjectCodeReaderCallback::CreateObject(int objectID,
                                      )
 {
     int i;
-    m_source += ( wxString::Format( wxT("\t%s->Create("), 
-                       m_data->GetObjectName(objectID).c_str() ) );
+    m_source += ( wxString::Format( "\t%s->Create(",
+                       m_data->GetObjectName(objectID) ) );
     for (i = 0; i < paramCount; i++)
     {
         if ( objectIDValues[i] != wxInvalidObjectID )
         {
-            wxString str = 
-                wxString::Format( wxT("%s"), 
-                                  m_data->GetObjectName( objectIDValues[i] ).c_str() );
+            wxString str =
+                wxString::Format( "%s",
+                                  m_data->GetObjectName( objectIDValues[i] ) );
             m_source += ( str );
         }
         else
         {
-            m_source += ( 
-                wxString::Format( wxT("%s"), ValueAsCode(params[i]).c_str() ) );
+            m_source += (
+                wxString::Format( "%s", ValueAsCode(params[i]) ) );
         }
         if (i < paramCount - 1)
-            m_source += ( wxT(", "));
+            m_source += ( ", ");
     }
-    m_source += ( wxT(");\n") );
+    m_source += ( ");\n" );
 }
 
 void wxObjectCodeReaderCallback::ConstructObject(int objectID,
@@ -225,10 +218,10 @@ void wxObjectCodeReaderCallback::ConstructObject(int objectID,
                                      wxStringToAnyHashMap &WXUNUSED(metadata)
                                      )
 {
-    wxString objectName = wxString::Format( wxT("LocalObject_%d"), objectID );
-    m_source += ( wxString::Format( wxT("\t%s *%s = new %s("),
+    wxString objectName = wxString::Format( "LocalObject_%d", objectID );
+    m_source += ( wxString::Format( "\t%s *%s = new %s(",
         classInfo->GetClassName(),
-        objectName.c_str(),
+        objectName,
         classInfo->GetClassName()) );
     m_data->SetObjectName( objectID, objectName );
 
@@ -236,17 +229,17 @@ void wxObjectCodeReaderCallback::ConstructObject(int objectID,
     for (i = 0; i < paramCount; i++)
     {
         if ( objectIDValues[i] != wxInvalidObjectID )
-            m_source += ( wxString::Format( wxT("%s"), 
-                               m_data->GetObjectName( objectIDValues[i] ).c_str() ) );
+            m_source += ( wxString::Format( "%s",
+                               m_data->GetObjectName( objectIDValues[i] ) ) );
         else
         {
-            m_source += ( 
-                wxString::Format( wxT("%s"), ValueAsCode(params[i]).c_str() ) );
+            m_source += (
+                wxString::Format( "%s", ValueAsCode(params[i]) ) );
         }
         if (i < paramCount - 1)
-            m_source += ( wxT(", ") );
+            m_source += ( ", " );
     }
-    m_source += ( wxT(");\n") );
+    m_source += ( ");\n" );
 }
 
 void wxObjectCodeReaderCallback::SetProperty(int objectID,
@@ -254,10 +247,10 @@ void wxObjectCodeReaderCallback::SetProperty(int objectID,
                                     const wxPropertyInfo* propertyInfo,
                                     const wxAny &value)
 {
-    m_source += ( wxString::Format( wxT("\t%s->%s(%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetSetterName().c_str(),
-        ValueAsCode(value).c_str()) );
+    m_source += ( wxString::Format( "\t%s->%s(%s);\n",
+        m_data->GetObjectName(objectID),
+        propertyInfo->GetAccessor()->GetSetterName(),
+        ValueAsCode(value)) );
 }
 
 void wxObjectCodeReaderCallback::SetPropertyAsObject(int objectID,
@@ -266,15 +259,15 @@ void wxObjectCodeReaderCallback::SetPropertyAsObject(int objectID,
                                             int valueObjectId)
 {
     if ( propertyInfo->GetTypeInfo()->GetKind() == wxT_OBJECT )
-        m_source += ( wxString::Format( wxT("\t%s->%s(*%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetSetterName().c_str(),
-        m_data->GetObjectName( valueObjectId).c_str() ) );
+        m_source += ( wxString::Format( "\t%s->%s(*%s);\n",
+        m_data->GetObjectName(objectID),
+        propertyInfo->GetAccessor()->GetSetterName(),
+        m_data->GetObjectName( valueObjectId) ) );
     else
-        m_source += ( wxString::Format( wxT("\t%s->%s(%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetSetterName().c_str(),
-        m_data->GetObjectName( valueObjectId).c_str() ) );
+        m_source += ( wxString::Format( "\t%s->%s(%s);\n",
+        m_data->GetObjectName(objectID),
+        propertyInfo->GetAccessor()->GetSetterName(),
+        m_data->GetObjectName( valueObjectId) ) );
 }
 
 void wxObjectCodeReaderCallback::AddToPropertyCollection( int objectID,
@@ -282,10 +275,10 @@ void wxObjectCodeReaderCallback::AddToPropertyCollection( int objectID,
                                                 const wxPropertyInfo* propertyInfo,
                                                 const wxAny &value)
 {
-    m_source += ( wxString::Format( wxT("\t%s->%s(%s);\n"),
-        m_data->GetObjectName(objectID).c_str(),
-        propertyInfo->GetAccessor()->GetAdderName().c_str(),
-        ValueAsCode(value).c_str()) );
+    m_source += ( wxString::Format( "\t%s->%s(%s);\n",
+        m_data->GetObjectName(objectID),
+        propertyInfo->GetAccessor()->GetAdderName(),
+        ValueAsCode(value)) );
 }
 
 // sets the corresponding property (value is an object)
@@ -308,7 +301,7 @@ void wxObjectCodeReaderCallback::SetConnect(int eventSourceObjectID,
     wxString ehsource = m_data->GetObjectName( eventSourceObjectID );
     wxString ehsink = m_data->GetObjectName(eventSinkObjectID);
     wxString ehsinkClass = eventSinkClassInfo->GetClassName();
-    const wxEventSourceTypeInfo *delegateTypeInfo = 
+    const wxEventSourceTypeInfo *delegateTypeInfo =
         wx_dynamic_cast(const wxEventSourceTypeInfo*, delegateInfo->GetTypeInfo());
     if ( delegateTypeInfo )
     {
@@ -316,11 +309,11 @@ void wxObjectCodeReaderCallback::SetConnect(int eventSourceObjectID,
         wxString handlerName = handlerInfo->GetName();
 
         wxString code =
-            wxString::Format( 
-                wxT("\t%s->Connect( %s->GetId(), %d, ")
-                wxT("(wxObjectEventFunction)(wxEventFunction) & %s::%s, NULL, %s );"),
-                ehsource.c_str(), ehsource.c_str(), eventType, ehsinkClass.c_str(),
-                handlerName.c_str(), ehsink.c_str() );
+            wxString::Format(
+                "\t%s->Connect( %s->GetId(), %d, "
+                "(wxObjectEventFunction)(wxEventFunction) & %s::%s, NULL, %s );",
+                ehsource, ehsource, eventType, ehsinkClass,
+                handlerName, ehsink );
 
         m_source += ( code );
     }

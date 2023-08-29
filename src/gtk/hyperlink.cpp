@@ -18,18 +18,15 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HYPERLINKCTRL && defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/hyperlink.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 // ----------------------------------------------------------------------------
@@ -74,9 +71,9 @@ static void clicked_hook(GtkLinkButton* button, const char*, void*)
             return;
         }
     }
-    gtk_link_button_set_uri_hook(NULL, NULL, NULL);
+    gtk_link_button_set_uri_hook(nullptr, nullptr, nullptr);
     GTK_BUTTON_GET_CLASS(button)->clicked(GTK_BUTTON(button));
-    gtk_link_button_set_uri_hook(clicked_hook, NULL, NULL);
+    gtk_link_button_set_uri_hook(clicked_hook, nullptr, nullptr);
 }
 }
 #endif
@@ -128,14 +125,14 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         g_object_ref(m_widget);
 
         // alignment
-        float x_alignment = 0.5;
+        float x_alignment = 0.5f;
         if (HasFlag(wxHL_ALIGN_LEFT))
-            x_alignment = 0.0;
+            x_alignment = 0;
         else if (HasFlag(wxHL_ALIGN_RIGHT))
-            x_alignment = 1.0;
+            x_alignment = 1;
 
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5);
+        gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, 0.5f);
         wxGCC_WARNING_RESTORE()
 
         // set to non empty strings both the url and the label
@@ -146,7 +143,7 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         g_signal_connect(m_widget, "activate_link", G_CALLBACK(activate_link), this);
 #else
         gs_hyperlinkctrl_list = g_slist_prepend(gs_hyperlinkctrl_list, this);
-        gtk_link_button_set_uri_hook(clicked_hook, NULL, NULL);
+        gtk_link_button_set_uri_hook(clicked_hook, nullptr, nullptr);
 #endif
 
         m_parent->DoAddChild( this );
@@ -184,7 +181,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
     {
         wxControl::SetLabel(label);
         const wxString labelGTK = GTKConvertMnemonics(label);
-        gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
+        gtk_button_set_label(GTK_BUTTON(m_widget), labelGTK.utf8_str());
     }
     else
         wxGenericHyperlinkCtrl::SetLabel(label);
@@ -193,7 +190,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
 void wxHyperlinkCtrl::SetURL(const wxString &uri)
 {
     if ( UseNative() )
-        gtk_link_button_set_uri(GTK_LINK_BUTTON(m_widget), wxGTK_CONV(uri));
+        gtk_link_button_set_uri(GTK_LINK_BUTTON(m_widget), uri.utf8_str());
     else
         wxGenericHyperlinkCtrl::SetURL(uri);
 }
@@ -221,28 +218,9 @@ void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
-    wxColour ret;
-    if ( UseNative() )
-    {
-        GdkColor* link_color;
-        GdkColor color = { 0, 0, 0, 0xeeee };
-
-        GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_widget_ensure_style(widget);
-        gtk_widget_style_get(widget, "link-color", &link_color, NULL);
-        if (link_color)
-        {
-            color = *link_color;
-            gdk_color_free(link_color);
-        }
-        wxGCC_WARNING_RESTORE()
-        ret = wxColour(color);
-    }
-    else
-        ret = wxGenericHyperlinkCtrl::GetNormalColour();
-
-    return ret;
+    return UseNative()
+        ? wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT)
+        : wxGenericHyperlinkCtrl::GetNormalColour();
 }
 
 void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
@@ -266,7 +244,7 @@ wxColour wxHyperlinkCtrl::GetVisitedColour() const
         GtkWidget* widget = gtk_bin_get_child(GTK_BIN(m_widget));
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         gtk_widget_ensure_style(widget);
-        gtk_widget_style_get(widget, "visited-link-color", &link_color, NULL);
+        gtk_widget_style_get(widget, "visited-link-color", &link_color, nullptr);
         if (link_color)
         {
             color = *link_color;

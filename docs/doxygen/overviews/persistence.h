@@ -56,9 +56,10 @@ Currently the following classes are supported:
 To automatically save and restore the properties of the windows of classes
 listed above you need to:
 
--# Set a unique name for the window using wxWindow::SetName(): this step is
-   important as the name is used in the configuration file and so must be
-   unique among all windows of the same class.
+-# Set a unique name for the window by either using this name in its
+   constructor or calling wxWindow::SetName(): this step is important as the
+   name is used in the configuration file and so must be unique among all
+   windows of the same class.
 -# Call wxPersistenceManager::Register() at any moment after creating the
    window and then wxPersistenceManager::Restore() when the settings may be
    restored (which can't be always done immediately, e.g. often the window
@@ -72,8 +73,37 @@ listed above you need to:
    Otherwise the settings will be automatically saved when the control itself
    is destroyed.
 
-Example of using a notebook control which automatically remembers the last open
-page:
+A convenient wxPersistentRegisterAndRestore() helper function can be used to
+perform the first steps at once, e.g. to automatically save and restore the
+position of a @c MyFrame window in your application, you need to only do the
+following:
+
+@code
+#include <wx/persist/toplevel.h>
+
+...
+
+MyFrame::MyFrame(wxWindow* parent, ...)
+       : wxFrame(parent, ...)
+{
+    ... all the other initialization ...
+
+    // Restore the previously saved geometry, if any, and register this frame
+    // for its geometry to be saved when it is closed using the given wxConfig
+    // key name.
+    if ( !wxPersistentRegisterAndRestore(this, "my_frame_name") )
+    {
+        // Choose some custom default size for the first run -- or don't do
+        // anything at all and let the system use the default initial size.
+        SetClientSize(FromDIP(wxSize(800, 600)));
+    }
+
+    Show(true);
+}
+@endcode
+
+And here is an example of using a notebook control which automatically
+remembers the last open page without using the helper function:
 
 @code
     wxNotebook *book = new wxNotebook(parent, wxID_ANY);
@@ -81,11 +111,10 @@ page:
     book->AddPage(...);
     book->AddPage(...);
     book->AddPage(...);
-    if ( !wxPersistenceManager::RegisterAndRestore(book) )
-    {
-        // nothing was restored, so choose the default page ourselves
-        book->SetSelection(0);
-    }
+
+    // We don't check for the return value here as the first page is selected
+    // by default anyhow and we just keep this selection in this case.
+    wxPersistenceManager::Get().RegisterAndRestore(book);
 @endcode
 
 

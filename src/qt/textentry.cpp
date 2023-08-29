@@ -9,6 +9,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/textentry.h"
+#include "wx/window.h"
+
 
 wxTextEntry::wxTextEntry()
 {
@@ -18,8 +20,13 @@ void wxTextEntry::WriteText(const wxString& WXUNUSED(text))
 {
 }
 
-void wxTextEntry::Remove(long WXUNUSED(from), long WXUNUSED(to))
+void wxTextEntry::Remove(long from, long to)
 {
+    const long insertionPoint = GetInsertionPoint();
+    wxString string = GetValue();
+    string.erase(from, to - from);
+    SetValue(string);
+    SetInsertionPoint( std::min(insertionPoint, static_cast<long>(string.length())) );
 }
 
 void wxTextEntry::Copy()
@@ -63,17 +70,17 @@ long wxTextEntry::GetInsertionPoint() const
 
 long wxTextEntry::GetLastPosition() const
 {
-    return 0;
+    return GetValue().length();
 }
 
 void wxTextEntry::SetSelection(long WXUNUSED(from), long WXUNUSED(to))
 {
-    wxFAIL_MSG("wxTextEntry::SetSelection should be overriden");
+    wxFAIL_MSG("wxTextEntry::SetSelection should be overridden");
 }
 
 void wxTextEntry::GetSelection(long *from, long *to) const
 {
-    // no unified get selection method in Qt (overriden in textctrl & combobox)
+    // no unified get selection method in Qt (overridden in textctrl & combobox)
     // only called if no selection
     // If the return values from and to are the same, there is no
     // selection.
@@ -103,6 +110,5 @@ void wxTextEntry::DoSetValue(const wxString &WXUNUSED(value), int WXUNUSED(flags
 
 wxWindow *wxTextEntry::GetEditableWindow()
 {
-    return NULL;
+    return nullptr;
 }
-

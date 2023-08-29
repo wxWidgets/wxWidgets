@@ -16,26 +16,24 @@ public:
     wxStaticBitmap();
     wxStaticBitmap( wxWindow *parent,
                     wxWindowID id,
-                    const wxBitmap& label,
+                    const wxBitmapBundle& label,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
-                    const wxString& name = wxStaticBitmapNameStr );
+                    const wxString& name = wxASCII_STR(wxStaticBitmapNameStr) );
 
     bool Create( wxWindow *parent,
                  wxWindowID id,
-                 const wxBitmap& label,
+                 const wxBitmapBundle& label,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxStaticBitmapNameStr);
+                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetIcon(const wxIcon& icon);
-    virtual void SetBitmap(const wxBitmap& bitmap);
-    virtual wxBitmap GetBitmap() const;
-    virtual wxIcon GetIcon() const;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) override;
+    virtual wxBitmap GetBitmap() const override;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const override;
 protected:
 
 private:

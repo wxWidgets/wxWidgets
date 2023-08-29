@@ -3,7 +3,7 @@
 // Purpose:     generic implementation of wxGenericNotificationMessage
 // Author:      Vadim Zeitlin
 // Created:     2007-11-24
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -24,7 +24,7 @@ public:
 
     wxGenericNotificationMessage(const wxString& title,
                                  const wxString& message = wxString(),
-                                 wxWindow *parent = NULL,
+                                 wxWindow *parent = nullptr,
                                  int flags = wxICON_INFORMATION)
     {
         Init();

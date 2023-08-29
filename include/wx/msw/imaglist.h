@@ -24,7 +24,7 @@ public:
    * Public interface
    */
 
-  wxImageList();
+  wxImageList() { Init(); }
 
   // Creates an image list.
   // Specify the width and height of the images in the list,
@@ -32,6 +32,7 @@ public:
   // from icons), and the initial size of the list.
   wxImageList(int width, int height, bool mask = true, int initialCount = 1)
   {
+    Init();
     Create(width, height, mask, initialCount);
   }
   virtual ~wxImageList();
@@ -57,6 +58,9 @@ public:
   // mask specifies whether the images have masks or not.
   // initialNumber is the initial number of images to reserve.
   bool Create(int width, int height, bool mask = true, int initialNumber = 1);
+
+  // Destroys the image list, Create() may then be called again later.
+  void Destroy();
 
   // Adds a bitmap, and optionally a mask bitmap.
   // Note that wxImageList creates *new* bitmaps, so you may delete
@@ -115,7 +119,7 @@ public:
   bool SetDragCursorImage(int index, const wxPoint& hotSpot);
 
   // If successful, returns a pointer to the temporary image list that is used for dragging;
-  // otherwise, NULL.
+  // otherwise, nullptr.
   // dragPos: receives the current drag position.
   // hotSpot: receives the offset of the drag image relative to the drag position.
   static wxImageList *GetDragImageList(wxPoint& dragPos, wxPoint& hotSpot);
@@ -140,7 +144,7 @@ public:
   // The coordinates are relative to the window's upper left corner, so you must compensate
   // for the widths of window elements, such as the border, title bar, and menu bar, when
   // specifying the coordinates.
-  // If lockWindow is NULL, this function draws the image in the display context associated
+  // If lockWindow is null, this function draws the image in the display context associated
   // with the desktop window, and coordinates are relative to the upper left corner of the screen.
   // This function locks all other updates to the given window during the drag operation.
   // If you need to do any drawing during a drag operation, such as highlighting the target
@@ -174,7 +178,7 @@ public:
   // These two functions could possibly be combined into one, since DragEnter is
   // a bit obscure.
   wxImageList::DragMove(wxPoint(x, y));  // x, y are current cursor position
-  wxImageList::DragEnter(NULL, wxPoint(x, y)); // NULL assumes dragging across whole screen
+  wxImageList::DragEnter(nullptr, wxPoint(x, y)); // nullptr assumes dragging across whole screen
 
   3) Finishing dragging:
 
@@ -194,6 +198,23 @@ public:
 protected:
   WXHIMAGELIST m_hImageList;
   wxSize m_size;
+
+private:
+  // Private helper used by GetImageListBitmaps().
+  class wxMSWBitmaps;
+
+  // Fills the provided output "bitmaps" object with the actual bitmaps we need
+  // to use with the native control.
+  void GetImageListBitmaps(wxMSWBitmaps& bitmaps,
+                           const wxBitmap& bitmap, const wxBitmap& mask);
+
+  bool m_useMask;
+
+  void Init()
+  {
+    m_hImageList = nullptr;
+    m_useMask = false;
+  }
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxImageList);
 };

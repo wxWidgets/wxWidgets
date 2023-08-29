@@ -29,7 +29,6 @@
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
-    #include "wx/memory.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
 #endif
@@ -45,6 +44,7 @@
 
 // mac
 #include "wx/osx/private.h"
+#include "wx/display.h"
 
 #if defined(WXMAKINGDLL_CORE)
 #   include <mach-o/dyld.h>
@@ -61,13 +61,14 @@ wxBEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 wxEND_EVENT_TABLE()
 
 
-wxWindow* wxApp::s_captureWindow = NULL ;
+wxWindow* wxApp::s_captureWindow = nullptr ;
 long      wxApp::s_lastModifiers = 0 ;
 
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
+wxString  wxApp::s_macWindowMenuTitleName = wxT("&Window") ;
 
 bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
 
@@ -156,50 +157,39 @@ void wxApp::MacReopenApp()
     // if there is no open window -> create a new one
     // if all windows are hidden -> show the first
     // if some windows are not hidden -> do nothing
+    //
+    // Showing hidden windows is not really always a good solution, also non-modal dialogs when closed end up
+    // as hidden TLWs, so do preferences and some classes like wxTaskBarIconWindow use placeholder TLWs.
+    // We don't want to reshow those, so let's just reopen the minimized a.k.a. iconized TLWs.
 
+    wxTopLevelWindow* firstIconized = nullptr;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
-    if ( !node )
-    {
-        MacNewFile() ;
-    }
-    else
-    {
-        wxTopLevelWindow* firstIconized = NULL ;
-        wxTopLevelWindow* firstHidden = NULL ;
-        while (node)
-        {
-            wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
-            if ( !win->IsShown() )
-            {
-                // make sure we don't show 'virtual toplevel windows' like wxTaskBarIconWindow
-                if ( firstHidden == NULL && ( wxDynamicCast( win, wxFrame ) || wxDynamicCast( win, wxDialog ) ) )
-                   firstHidden = win ;
-            }
-            else if ( win->IsIconized() )
-            {
-                if ( firstIconized == NULL )
-                    firstIconized = win ;
-            }
-            else
-            {
-                // we do have a visible, non-iconized toplevelwindow -> do nothing
-                return;
-            }
 
-            node = node->GetNext();
+    while (node)
+    {
+        wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
+        if ( win->IsIconized() )
+        {
+            if ( firstIconized == nullptr )
+                firstIconized = win;
+        }
+        else if ( win->IsShown() )
+        {
+            // we do have a visible, non-iconized toplevelwindow -> do nothing
+            return;
         }
 
-        if ( firstIconized )
-            firstIconized->Iconize( false ) ;
-        
-        // showing hidden windows is not really always a good solution, also non-modal dialogs when closed end up
-        // as hidden tlws, we don't want to reshow those, so let's just reopen the minimized a.k.a. iconized tlws
-        // unless we find a regression ...
-#if 0
-        else if ( firstHidden )
-            firstHidden->Show( true );
-#endif
+        node = node->GetNext();
     }
+
+    if ( firstIconized )
+    {
+        firstIconized->Iconize(false);
+        return;
+    }
+
+    // no window was shown, we need to create a new one
+    MacNewFile();
 }
 
 #if wxOSX_USE_COCOA_OR_IPHONE
@@ -235,16 +225,14 @@ bool wxApp::OSXOnShouldTerminate()
 
 #if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
 
-pascal static void
-wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
-                         UInt32 WXUNUSED(options),
+extern "C" void
+wxMacAssertOutputHandler(const char *WXUNUSED(componentName),
                          const char *assertionString,
                          const char *exceptionLabelString,
                          const char *errorString,
                          const char *fileName,
                          long lineNumber,
-                         void *value,
-                         ConstStr255Param WXUNUSED(outputMsg))
+                         int errorCode)
 {
     // flow into assert handling
     wxString fileNameStr ;
@@ -252,30 +240,23 @@ wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
     wxString exceptionStr ;
     wxString errorStr ;
 
-#if wxUSE_UNICODE
     fileNameStr = wxString(fileName, wxConvLocal);
     assertionStr = wxString(assertionString, wxConvLocal);
-    exceptionStr = wxString((exceptionLabelString!=0) ? exceptionLabelString : "", wxConvLocal) ;
-    errorStr = wxString((errorString!=0) ? errorString : "", wxConvLocal) ;
-#else
-    fileNameStr = fileName;
-    assertionStr = assertionString;
-    exceptionStr = (exceptionLabelString!=0) ? exceptionLabelString : "" ;
-    errorStr = (errorString!=0) ? errorString : "" ;
-#endif
+    exceptionStr = wxString((exceptionLabelString!=nullptr) ? exceptionLabelString : "", wxConvLocal) ;
+    errorStr = wxString((errorString!=nullptr) ? errorString : "", wxConvLocal) ;
 
-#if 1
-    // flow into log
-    wxLogDebug( wxT("AssertMacros: %s %s %s file: %s, line: %ld (value %p)\n"),
+    // turn this on, if you want the macOS asserts to flow into log, otherwise they are handled via wxOnAssert
+#if 0
+    wxLogDebug( wxT("AssertMacros: %s %s %s file: %s, line: %ld (error code %d)\n"),
         assertionStr.c_str() ,
         exceptionStr.c_str() ,
         errorStr.c_str(),
         fileNameStr.c_str(), lineNumber ,
-        value ) ;
+               errorCode ) ;
 #else
 
     wxOnAssert(fileNameStr, lineNumber , assertionStr ,
-        wxString::Format( wxT("%s %s value (%p)") , exceptionStr, errorStr , value ) ) ;
+        wxString::Format( wxT("%s %s value (%d)") , exceptionStr, errorStr , errorCode ) ) ;
 #endif
 }
 
@@ -283,12 +264,6 @@ wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
-    // Mac-specific
-
-#if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
-    InstallDebugAssertOutputHandler( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
-#endif
-
     /*
      Cocoa supports -Key value options which set the user defaults key "Key"
      to the value "value"  Some of them are very handy for debugging like
@@ -335,12 +310,24 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         CFRelease( url ) ;
         CFStringRef path = CFURLCopyFileSystemPath ( urlParent , kCFURLPOSIXPathStyle ) ;
         CFRelease( urlParent ) ;
-        wxString cwd = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
+        wxString cwd = wxCFStringRef(path).AsString();
         wxSetWorkingDirectory( cwd ) ;
     }
 
     return true;
 }
+
+#ifdef __WXOSX_COCOA__
+void wxCGDisplayReconfigurationCallBack(CGDirectDisplayID WXUNUSED(display),
+                                        CGDisplayChangeSummaryFlags WXUNUSED(flags),
+                                        void* WXUNUSED(userInfo))
+{
+    // flags could be tested to know about removal, addition etc. right now
+    // this is called multiple times for a change but for invalidating the
+    // cache these things don't matter yet
+    wxDisplay::InvalidateCache();
+}
+#endif
 
 bool wxApp::OnInitGui()
 {
@@ -349,6 +336,10 @@ bool wxApp::OnInitGui()
 
     if ( !DoInitGui() )
         return false;
+
+#ifdef __WXOSX_COCOA__
+    CGDisplayRegisterReconfigurationCallback(wxCGDisplayReconfigurationCallBack, nullptr);
+#endif
 
     return true ;
 }
@@ -385,9 +376,11 @@ wxApp::wxApp()
 {
     m_printMode = wxPRINT_WINDOWS;
 
-    m_macCurrentEvent = NULL ;
-    m_macCurrentEventHandlerCallRef = NULL ;
-    m_macPool = new wxMacAutoreleasePool();
+    m_macCurrentEvent = nullptr ;
+    m_macCurrentEventHandlerCallRef = nullptr ;
+    m_macPool = sm_isEmbedded ? nullptr : new wxMacAutoreleasePool();
+
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()
@@ -398,8 +391,8 @@ wxApp::~wxApp()
 
 CFMutableArrayRef GetAutoReleaseArray()
 {
-    static CFMutableArrayRef array = 0;
-    if ( array == 0)
+    static CFMutableArrayRef array = nullptr;
+    if ( array == nullptr)
         array= CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
     return array;
 }
@@ -422,7 +415,7 @@ void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
     // either events to the threads other than main or events posted with
     // wxPostEvent() functions
 #ifndef __WXUNIVERSAL__
-#if wxUSE_MENUS
+#if wxUSE_MENUBAR
   if (!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
 #endif
@@ -829,13 +822,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
-#ifdef __LP64__
         // TODO new implementation using TextInputSources
-#else
-        UInt32 state = 0;
-        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey | shiftKey | optionKey))) | keycode, &state);
-        keychar = short(keyInfo & charCodeMask);
-#endif
     }
 
     long keyval = wxMacTranslateKey(keychar, keycode) ;
@@ -893,9 +880,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     event.m_altDown = modifiers & optionKey;
     event.m_controlDown = modifiers & cmdKey;
     event.m_keyCode = keyval ;
-#if wxUSE_UNICODE
     event.m_uniChar = uniChar ;
-#endif
 
     event.m_rawCode = keymessage;
     event.m_rawFlags = modifiers;

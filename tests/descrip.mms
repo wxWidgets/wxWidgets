@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 30 November 2017                                                    *
+# Date : 6 January 2021                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -130,7 +130,6 @@ TEST_OBJECTS1=test_ipc.obj,\
 	test_ftp.obj,\
 	test_uris.obj,\
 	test_url.obj,\
-	test_vectors.obj,\
 	test_evtconnection.obj,\
 	test_weakref.obj,\
 	test_xlocale.obj,\
@@ -184,6 +183,7 @@ TEST_GUI_OBJECTS2=test_gui_richtextctrltest.obj,\
 	test_gui_slidertest.obj,\
 	test_gui_spinctrldbltest.obj,\
 	test_gui_spinctrltest.obj,\
+	test_gui_styledtextctrltest.obj,\
 	test_gui_textctrltest.obj,\
 	test_gui_textentrytest.obj,\
 	test_gui_togglebuttontest.obj,\
@@ -279,7 +279,16 @@ test_datetimetest.obj : [.datetime]datetimetest.cpp
 	[.datetime]datetimetest.cpp
 
 test_evthandler.obj : [.events]evthandler.cpp 
+.ifdef ALPHA
+	pipe gsed\
+	-e "s/handler.Connect(wxEVT_THREAD, wxThreadEventHandler(MyHandler::OnOverloadedHandler));//"\
+	-e "s/handler.Connect(wxEVT_IDLE, wxIdleEventHandler(MyHandler::OnOverloadedHandler));//" \
+	< [.events]evthandler.cpp > [.events]evthandler.cpp_
+	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.events]evthandler.cpp_
+	delete [.events]evthandler.cpp_;*
+.else
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.events]evthandler.cpp
+.endif
 
 test_evtsource.obj : [.events]evtsource.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.events]evtsource.cpp
@@ -470,9 +479,6 @@ test_uris.obj : [.uris]uris.cpp
 test_url.obj : [.uris]url.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.uris]url.cpp
 
-test_vectors.obj : [.vectors]vectors.cpp 
-	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.vectors]vectors.cpp
-
 test_evtconnection.obj : [.weakref]evtconnection.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.weakref]evtconnection.cpp
 
@@ -616,6 +622,9 @@ test_gui_spinctrldbltest.obj : [.controls]spinctrldbltest.cpp
 
 test_gui_spinctrltest.obj : [.controls]spinctrltest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]spinctrltest.cpp
+
+test_gui_styledtextctrltest.obj : [.controls]styledtextctrltest.cpp 
+	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]styledtextctrltest.cpp
 
 test_gui_textctrltest.obj : [.controls]textctrltest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_GUI_CXXFLAGS) [.controls]textctrltest.cpp

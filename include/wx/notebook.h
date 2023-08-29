@@ -63,9 +63,9 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxNotebookNameStr[];
 class WXDLLEXPORT wxNotebookPageInfo : public wxObject
 {
 public:
-    wxNotebookPageInfo() { m_page = NULL; m_imageId = -1; m_selected = false; }
+    wxNotebookPageInfo() { m_page = nullptr; m_imageId = -1; m_selected = false; }
     virtual ~wxNotebookPageInfo() { }
-    
+
     bool Create(wxNotebookPage *page,
                 const wxString& text,
                 bool selected,
@@ -77,18 +77,18 @@ public:
         m_imageId = imageId;
         return true;
     }
-    
+
     wxNotebookPage* GetPage() const { return m_page; }
     wxString GetText() const { return m_text; }
     bool GetSelected() const { return m_selected; }
     int GetImageId() const { return m_imageId; }
-    
+
 private:
     wxNotebookPage *m_page;
     wxString m_text;
     bool m_selected;
     int m_imageId;
-    
+
     wxDECLARE_DYNAMIC_CLASS(wxNotebookPageInfo);
 };
 
@@ -124,7 +124,7 @@ public:
 
 
     // implement some base class functions
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const wxOVERRIDE;
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const override;
 
     // On platforms that support it, get the theme page background colour, else invalid colour
     virtual wxColour GetThemeBackgroundColour() const { return wxNullColour; }
@@ -139,16 +139,23 @@ public:
     // new is wxNOT_FOUND)
     void SendPageChangedEvent(int nPageOld, int nPageNew = wxNOT_FOUND);
 
-#if wxUSE_EXTENDED_RTTI    
+    // return wxTOP/wxBOTTOM/wxRIGHT/wxLEFT
+    wxDirection GetTabOrientation() const;
+
+    // return the rectangle in window coordinates of the page selector.
+    // For example, for a wxNotebook this would be its tab.
+    virtual wxRect GetTabRect(size_t page) const;
+
+#if wxUSE_EXTENDED_RTTI
     // XTI accessors
     virtual void AddPageInfo( wxNotebookPageInfo* info );
     virtual const wxNotebookPageInfoList& GetPageInfos() const;
 #endif
-        
+
 protected:
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
     wxNotebookPageInfoList m_pageInfos;
-#endif    
+#endif
     wxDECLARE_NO_COPY_CLASS(wxNotebookBase);
 };
 
@@ -180,12 +187,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTEBOOK_PAGE_CHANGING, wxBook
     #include "wx/univ/notebook.h"
 #elif defined(__WXMSW__)
     #include  "wx/msw/notebook.h"
-#elif defined(__WXMOTIF__)
-    #include  "wx/generic/notebook.h"
-#elif defined(__WXGTK20__)
-    #include  "wx/gtk/notebook.h"
 #elif defined(__WXGTK__)
-    #include  "wx/gtk1/notebook.h"
+    #include  "wx/gtk/notebook.h"
 #elif defined(__WXMAC__)
     #include  "wx/osx/notebook.h"
 #elif defined(__WXQT__)

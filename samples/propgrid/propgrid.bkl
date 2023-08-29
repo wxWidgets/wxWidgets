@@ -8,17 +8,14 @@
             propgrid.cpp
             propgrid_minimal.cpp
             sampleprops.cpp
-            tests.cpp
         </sources>
         <headers>
             sampleprops.h
             propgrid.h
         </headers>
         <wx-lib>propgrid</wx-lib>
-        <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>../sample.rc</win32-res>
     </exe>
 
 </makefile>

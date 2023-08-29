@@ -16,6 +16,7 @@
 #if wxUSE_ACCEL
 
 #include "wx/object.h"
+#include "wx/string.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
 class WXDLLIMPEXP_FWD_CORE wxMenuItem;
@@ -33,7 +34,7 @@ enum wxAcceleratorEntryFlags
     wxACCEL_CTRL    = 0x0002,   // hold Ctrl key down
     wxACCEL_SHIFT   = 0x0004,   // hold Shift key down
 #if defined(__WXMAC__)
-    wxACCEL_RAW_CTRL= 0x0008,   // 
+    wxACCEL_RAW_CTRL= 0x0008,   //
 #else
     wxACCEL_RAW_CTRL= wxACCEL_CTRL,
 #endif
@@ -48,32 +49,18 @@ class WXDLLIMPEXP_CORE wxAcceleratorEntry
 {
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0,
-                       wxMenuItem *item = NULL)
+                       wxMenuItem *item = nullptr)
         : m_flags(flags)
         , m_keyCode(keyCode)
         , m_command(cmd)
         , m_item(item)
         { }
 
-    wxAcceleratorEntry(const wxAcceleratorEntry& entry)
-        : m_flags(entry.m_flags)
-        , m_keyCode(entry.m_keyCode)
-        , m_command(entry.m_command)
-        , m_item(entry.m_item)
-        { }
-
-    // create accelerator corresponding to the specified string, return NULL if
+    // create accelerator corresponding to the specified string, return nullptr if
     // string couldn't be parsed or a pointer to be deleted by the caller
     static wxAcceleratorEntry *Create(const wxString& str);
 
-    wxAcceleratorEntry& operator=(const wxAcceleratorEntry& entry)
-    {
-        if (&entry != this)
-            Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
-        return *this;
-    }
-
-    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
+    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = nullptr)
     {
         m_flags = flags;
         m_keyCode = keyCode;
@@ -100,11 +87,6 @@ public:
     bool operator!=(const wxAcceleratorEntry& entry) const
         { return !(*this == entry); }
 
-#if defined(__WXMOTIF__)
-    // Implementation use only
-    bool MatchesEvent(const wxKeyEvent& event) const;
-#endif
-
     bool IsOk() const
     {
         return  m_keyCode != 0;
@@ -114,7 +96,7 @@ public:
     // string <-> wxAcceleratorEntry conversion
     // ----------------------------------------
 
-    // returns a wxString for the this accelerator.
+    // returns a wxString for this accelerator.
     // this function formats it using the <flags>-<keycode> format
     // where <flags> maybe a hyphen-separated list of "shift|alt|ctrl"
     wxString ToString() const { return AsPossiblyLocalizedString(true); }
@@ -140,7 +122,7 @@ private:
     int m_keyCode;  // ASCII or virtual keycode
     int m_command;  // Command id to generate
 
-    // the menu item this entry corresponds to, may be NULL
+    // the menu item this entry corresponds to, may be null
     wxMenuItem *m_item;
 
     // for compatibility with old code, use accessors now!
@@ -156,12 +138,8 @@ private:
     #include "wx/generic/accel.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/accel.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/accel.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/accel.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/accel.h"
+    #include "wx/gtk/accel.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/accel.h"
 #elif defined(__WXQT__)

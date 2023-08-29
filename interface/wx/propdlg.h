@@ -49,7 +49,7 @@ enum wxPropertySheetDialogFlags
 
     /**
         Shrinks the dialog window to fit the currently selected page
-        (common behaviour for property sheets on OS X).
+        (common behaviour for property sheets on macOS).
     */
     wxPROPSHEET_SHRINKTOFIT = 0x0100,
 };
@@ -101,7 +101,7 @@ enum wxPropertySheetDialogFlags
 
     For more about layout adaptation, see @ref overview_dialog_autoscrolling.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{managedwnd}
 */
 class wxPropertySheetDialog : public wxDialog
@@ -197,7 +197,7 @@ public:
     */
     void SetSheetStyle(long style);
 
-    
+
     /**
        Set the border around the whole dialog
     */
@@ -208,18 +208,18 @@ public:
     */
     int GetSheetOuterBorder() const;
 
-    
+
     /**
        Set the border around the book control only.
     */
     void SetSheetInnerBorder(int border);
-    
+
     /**
        Returns the border around the book control only.
     */
     int GetSheetInnerBorder() const;
 
-    
+
     virtual wxWindow* GetContentWindow() const;
 
 };

@@ -11,17 +11,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_EXTENDED_RTTI
 
 #include "wx/xtistrm.h"
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
-    #include "wx/hash.h"
     #include "wx/event.h"
 #endif
 
@@ -188,7 +183,7 @@ void wxObjectXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),
                                    const wxClassInfo* WXUNUSED(eventSinkClassInfo),
                                    const wxHandlerInfo* handlerInfo )
 {
-    if ( eventSink != NULL && handlerInfo != NULL )
+    if ( eventSink != nullptr && handlerInfo != nullptr )
     {
         wxXmlAddContentToNode( m_data->m_current,
             wxString::Format(wxT("%d.%s"), sinkObjectID, handlerInfo->GetName().c_str()) );
@@ -248,13 +243,13 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectReaderCallback *ca
     }
 
     classInfo = wxClassInfo::FindClass(className);
-    if ( classInfo == NULL )
+    if ( classInfo == nullptr )
     {
         wxLogError( wxString::Format(_("unknown class %s"),className ) );
         return wxInvalidObjectID;
     }
 
-    if ( children != NULL && children->GetType() == wxXML_TEXT_NODE )
+    if ( children != nullptr && children->GetType() == wxXML_TEXT_NODE )
     {
         wxLogError(_("objects cannot have XML Text Nodes") );
         return wxInvalidObjectID;
@@ -298,13 +293,8 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectReaderCallback *ca
     createParamOids = new int[classInfo->GetCreateParamCount() ];
     createClassInfos = new const wxClassInfo*[classInfo->GetCreateParamCount() ];
 
-#if wxUSE_UNICODE
     typedef map<wstring, wxXmlNode *> PropertyNodes;
     typedef vector<wstring> PropertyNames;
-#else
-    typedef map<string, wxXmlNode *> PropertyNodes;
-    typedef vector<string> PropertyNames;
-#endif
     PropertyNodes propertyNodes;
     PropertyNames propertyNames;
 
@@ -356,7 +346,7 @@ int wxObjectXmlReader::ReadComponent(wxXmlNode *node, wxObjectReaderCallback *ca
                         wxLogError( _("Type must have enum - long conversion") );
                     }
                 }
-                createClassInfos[i] = NULL;
+                createClassInfos[i] = nullptr;
             }
 
             for ( size_t j = 0; j < propertyNames.size(); ++j )

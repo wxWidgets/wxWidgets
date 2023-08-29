@@ -36,7 +36,7 @@ public:
     PreferencesDialog( wxWindow* parent );
 
     // Destructor.
-    ~PreferencesDialog(){};
+    ~PreferencesDialog(){}
 
 private:
 

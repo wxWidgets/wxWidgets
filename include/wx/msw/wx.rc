@@ -25,7 +25,7 @@ BEGIN
         MENUITEM "&Cascade",                    4002
         MENUITEM "Tile &Horizontally",          4001
         MENUITEM "Tile &Vertically",            4005
-	MENUITEM "", -1
+        MENUITEM "",                            -1
         MENUITEM "&Arrange Icons",              4003
         MENUITEM "&Next",                       4004
     END
@@ -100,26 +100,19 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 
 // see "about isolated applications" topic in MSDN
 #ifdef ISOLATION_AWARE_ENABLED
-#define wxMANIFEST_ID 2
+    #define wxMANIFEST_ID ISOLATIONAWARE_MANIFEST_RESOURCE_ID
 #else
-#define wxMANIFEST_ID 1
+    #define wxMANIFEST_ID CREATEPROCESS_MANIFEST_RESOURCE_ID
 #endif
 
-#if defined(WX_CPU_AMD64)
-wxMANIFEST_ID 24 "wx/msw/amd64.manifest"
-#elif defined(WX_CPU_IA64)
-wxMANIFEST_ID 24 "wx/msw/ia64.manifest"
-#elif defined(WX_CPU_X86)
-wxMANIFEST_ID 24 "wx/msw/wx.manifest"
-#else
-// Notice that if the manifest is included, WX_CPU_XXX constant corresponding
-// to the architecture we're compiling for must be defined. This can be done
-// either manually in your make/project file or by configuring the resource
-// compiler paths to search in $(WXWIN)/lib/$(COMPILER_PREFIX)_lib/mswu[d]
-// directory for its include files, as wx/msw/rcdefs.h file in this directory
-// is generated during wxWidgets build and contains the correct definition.
-#error "One of WX_CPU_XXX constants must be defined. See comment above."
+#if !defined(wxUSE_DPI_AWARE_MANIFEST) || wxUSE_DPI_AWARE_MANIFEST == 0
+    #define wxMANIFEST_FILE "wx/msw/wx.manifest"
+#elif wxUSE_DPI_AWARE_MANIFEST == 1
+    #define wxMANIFEST_FILE "wx/msw/wx_dpi_aware.manifest"
+#elif wxUSE_DPI_AWARE_MANIFEST == 2
+    #define wxMANIFEST_FILE "wx/msw/wx_dpi_aware_pmv2.manifest"
 #endif
+wxMANIFEST_ID RT_MANIFEST wxMANIFEST_FILE
 
 #endif // wxUSE_RC_MANIFEST
 

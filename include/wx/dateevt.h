@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-10
-// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -34,12 +34,12 @@ public:
     void SetDate(const wxDateTime &date) { m_date = date; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxDateEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxDateEvent(*this); }
 
 private:
     wxDateTime m_date;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDateEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxDateEvent);
 };
 
 // ----------------------------------------------------------------------------

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -56,7 +53,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"));
+    new MyFrame(nullptr, "wxWidgets OpenGL Isosurf Sample");
 
     return true;
 }
@@ -94,7 +91,7 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
                  const wxSize& size, long style)
     : wxFrame(frame, wxID_ANY, title, pos, size, style),
-      m_canvas(NULL)
+      m_canvas(nullptr)
 {
     SetIcon(wxICON(sample));
 
@@ -102,9 +99,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     // Make a menubar
     wxMenu *fileMenu = new wxMenu;
 
-    fileMenu->Append(wxID_EXIT, wxT("E&xit"));
+    fileMenu->Append(wxID_EXIT, "E&xit");
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(fileMenu, wxT("&File"));
+    menuBar->Append(fileMenu, "&File");
     SetMenuBar(menuBar);
 
 
@@ -112,17 +109,13 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 
   // JACS
 #ifdef __WXMSW__
-    int *gl_attrib = NULL;
+    int *gl_attrib = nullptr;
 #else
     int gl_attrib[20] =
         { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
         WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
         WX_GL_DOUBLEBUFFER,
-#  if defined(__WXMAC__)  || defined(__WXQT__)
-        GL_NONE };
-#  else
-        None };
-#  endif
+        0 };
 #endif
 
     if (!g_doubleBuffer)
@@ -130,7 +123,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
         wxLogWarning("Disabling double buffering");
 
 #ifdef __WXGTK__
-        gl_attrib[9] = None;
+        gl_attrib[9] = 0;
 #endif
         g_doubleBuffer = GL_FALSE;
     }
@@ -198,13 +191,13 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
         new wxZlibInputStream(new wxFFileInputStream(filename));
     if (!stream || !stream->IsOk())
     {
-        wxLogError("Cannot load '%s' type of files!", filename.c_str());
+        wxLogError("Cannot load '%s' type of files!", filename);
         delete stream;
         return;
     }
 
     {
-        // we suppose to have in input a text file containing floating numbers
+        // we are supposed to have as input a text file containing floating numbers
         // space/newline-separated... first 3 numbers are the coordinates of a
         // vertex and the following 3 are the relative vertex normal and so on...
 
@@ -225,8 +218,8 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
 
     delete stream;
 
-    wxLogMessage(wxT("Loaded %d vertices, %d triangles from '%s'"),
-                 m_numverts, m_numverts-2, filename.c_str());
+    wxLogMessage("Loaded %d vertices, %d triangles from '%s'",
+                 m_numverts, m_numverts-2, filename);
 
     // NOTE: for some reason under wxGTK the following is required to avoid that
     //       the surface gets rendered in a small rectangle in the top-left corner of the frame
@@ -284,7 +277,8 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     // This is OK here only because there is only one canvas that uses the
     // context. See the cube sample for that case that multiple canvases are
     // made current with one context.
-    glViewport(0, 0, event.GetSize().x, event.GetSize().y);
+    const wxSize size = event.GetSize() * GetContentScaleFactor();
+    glViewport(0, 0, size.x, size.y);
 }
 
 void TestGLCanvas::OnChar(wxKeyEvent& event)
@@ -296,19 +290,19 @@ void TestGLCanvas::OnChar(wxKeyEvent& event)
         return;
 
     case WXK_LEFT:
-        m_yrot -= 15.0;
+        m_yrot -= 15;
         break;
 
     case WXK_RIGHT:
-        m_yrot += 15.0;
+        m_yrot += 15;
         break;
 
     case WXK_UP:
-        m_xrot += 15.0;
+        m_xrot += 15;
         break;
 
     case WXK_DOWN:
-        m_xrot -= 15.0;
+        m_xrot -= 15;
         break;
 
     case 's': case 'S':
@@ -352,8 +346,8 @@ void TestGLCanvas::OnMouseEvent(wxMouseEvent& event)
         }
         else
         {
-            m_yrot += (event.GetX() - last_x)*1.0;
-            m_xrot += (event.GetY() - last_y)*1.0;
+            m_yrot += event.GetX() - last_x;
+            m_xrot += event.GetY() - last_y;
             Refresh(false);
         }
         last_x = event.GetX();

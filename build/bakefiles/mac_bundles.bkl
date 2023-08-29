@@ -5,15 +5,7 @@
     <!--
     Support for application bundles, for wxWidgets samples.
     -->
-    
-    <!-- 
-    Nasty hack: use $(srcdir) to obtain usable CFBundleIdentifier suffix;
-    converts $(srcdir) like "../../samples/minimal" to "samples.minimal".
-    -->
-    <set var="BUNDLE_IDENTIFIER">
-        `echo $(DOLLAR)(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`
-    </set>
-    
+
     <set var="BUNDLE_PLIST" overwrite="0">
         $(TOP_SRCDIR)src/osx/carbon/Info.plist.in
     </set>
@@ -54,9 +46,14 @@
                 mkdir -p $(BUNDLE)/Resources
 
                 <!-- Info.plist: -->
-                sed -e "s/IDENTIFIER/$(BUNDLE_IDENTIFIER)/" \
-                    -e "s/EXECUTABLE/$(id)/" \
-                    -e "s/VERSION/$(WX_VERSION)/" \
+                sed -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$(id)/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_EXECUTABLE_NAME}/$(id)/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_BUNDLE_NAME}/$(id)/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2023 wxWidgets/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_INFO_STRING}/$(id) version $(WX_VERSION), (c) 2002-2023 wxWidgets/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2023 wxWidgets/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
                     $(BUNDLE_PLIST) >$(BUNDLE)/Info.plist
 
                 <!-- PkgInfo: -->
@@ -67,7 +64,7 @@
 
                 <!-- copy the application icon: -->
                 cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns
-	        </command>            
+                </command>
             <if cond="BUNDLE_RESOURCES!=''">
                 <command>
                     <!-- copy all other bundle resources: -->
@@ -84,9 +81,9 @@
                     cp -f $(BUNDLE_FONT_RESOURCES) $(BUNDLE)/Resources/Fonts
                 </command>
             </if>
- 
+
         </modify-target>
-        
+
         <!-- add pseudo target id_bundle: -->
         <add-target target="$(id)_bundle" type="phony"
                     cond="target and PLATFORM_MACOSX=='1'"/>
@@ -99,7 +96,7 @@
         <modify-target target="clean">
             <command>rm -rf $(id).app</command>
         </modify-target>
-        
+
     </define-tag>
 
 </makefile>

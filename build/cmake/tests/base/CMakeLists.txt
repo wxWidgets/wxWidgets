@@ -52,11 +52,11 @@ set(TEST_SRC
     misc/typeinfotest.cpp
     net/ipc.cpp
     net/socket.cpp
+    net/webrequest.cpp
     regex/regextest.cpp
     regex/wxregextest.cpp
     scopeguard/scopeguardtest.cpp
     strings/iostream.cpp
-    strings/hexconv.cpp
     strings/numformatter.cpp
     strings/strings.cpp
     strings/stdstrings.cpp
@@ -66,12 +66,14 @@ set(TEST_SRC
     strings/vararg.cpp
     strings/crt.cpp
     strings/vsnprintf.cpp
+    strings/hexconv.cpp
     streams/datastreamtest.cpp
     streams/ffilestream.cpp
     streams/fileback.cpp
     streams/filestream.cpp
     streams/iostreams.cpp
     streams/largefile.cpp
+    streams/lzmastream.cpp
     streams/memstream.cpp
     streams/socketstream.cpp
     streams/sstream.cpp
@@ -87,22 +89,39 @@ set(TEST_SRC
     uris/ftp.cpp
     uris/uris.cpp
     uris/url.cpp
-    vectors/vectors.cpp
     weakref/evtconnection.cpp
     weakref/weakref.cpp
     xlocale/xlocale.cpp
+
+    testprec.h
+    testableframe.h
+    testdate.h
+    testfile.h
+    archive/archivetest.h
+    streams/bstream.h
     )
 
 if(wxUSE_XML)
     list(APPEND TEST_SRC xml/xmltest.cpp)
 endif()
 
-wx_add_test(test_base ${TEST_SRC})
-target_compile_definitions(test_base PRIVATE wxUSE_GUI=0 wxUSE_BASE=1)
+set(TEST_DATA
+    intl/fr/internat.mo
+    intl/fr/internat.po
+    intl/ja/internat.mo
+    intl/ja/internat.po
+    horse.bmp
+    horse.png
+    horse.xpm
+    testdata.conf
+    )
+
+wx_add_test(test_base CONSOLE ${TEST_SRC}
+    DATA ${TEST_DATA}
+    )
 if(wxUSE_SOCKETS)
-    wx_exe_link_libraries(test_base net)
+    wx_exe_link_libraries(test_base wxnet)
 endif()
 if(wxUSE_XML)
-    wx_exe_link_libraries(test_base xml)
+    wx_exe_link_libraries(test_base wxxml)
 endif()
-wx_test_enable_precomp(test_base)

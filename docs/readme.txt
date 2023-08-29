@@ -1,9 +1,9 @@
-wxWidgets 3.1.2 Release Notes
+wxWidgets 3.3.0 Release Notes
 =============================
 
-Welcome to the latest development release of wxWidgets, a free and open source
-cross-platform C++ framework for writing advanced GUI applications using native
-controls.
+Welcome to the latest release of wxWidgets, a free and open source
+cross-platform C++ framework for writing advanced GUI applications using
+native controls.
 
 wxWidgets allows you to write native-looking GUI applications for all the major
 desktop platforms and also helps with abstracting the differences in the non-GUI
@@ -16,132 +16,48 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* http://docs.wxwidgets.org/3.1.2/
+* https://docs.wxwidgets.org/3.3.0/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.2/
+* https://www.wxwidgets.org/downloads/
+
+or, for a more more permanent but less convenient to use link, from
+
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.3.0/
+
+Please see https://docs.wxwidgets.org/3.3.0/overview_install.html for full
+installation instructions.
 
 
-Changes since 3.1.0
--------------------
 
-There have been more than 2800 commits from more than 160 contributors (79 with
-multiple contributions) since 3.1.0 release. New features added since then
-include:
-
-- Support for gesture events has been added (GSoC 2017 project).
-- wxWebView can now return JavaScript results to the C++ code (GSoC 2017).
-- New wxSecretStore class for securely storing user passwords.
-
-Some of the other improvements:
-
-- wxWidgets can now be built with CMake too.
-- Strings can now be translated differently depending on their context.
-- Converting between wxString and UTF-8 encoded std::string is now
-  simpler and unsafe wxString can now be disabled on the opt-in basis
-  (see http://wxwidgets.blogspot.com/2017/02/safer-s.html)
-- It is possible to use any window (e.g. wxCheckBox) as wxStaticBox label now.
-- Many improvements to accessibility support under MSW.
-- wxGraphicsContext now supports pens with fractional widths.
-- Support for XDG file layout under Unix.
-- Many bug fixes to the behaviour (including TAB navigation) and appearances,
-  especially in wxGTK3 and wxOSX ports.
-- wxDataViewCtrl items and headers can be formatted using simple markup
-  and it is simpler to combine to put items with checkboxes into it. Many bugs
-  and inconsistencies between platforms in this control have been fixed too.
-- Several enhancements to wxStyledTextCtrl including better support for
-  custom lexers and auto-completion.
-- Many improvements to the (still experimental) wxQt port.
-
-Additionally, the latest versions of compilers (e.g. MSVS 2017) and
-operating systems (macOS 10.12) are now supported and all the third
-party libraries have been updated to their latest versions.
-
-Please refer to the detailed change log for the full list of changes:
-
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.2/docs/changes.txt
-
-
-Changes since 3.0
+Changes since 3.2
 -----------------
 
-Compared to the stable 3.0.x series, this version brings too many
-improvements and even more bug fixes to list them them all. Here is the
-maximally condensed summary:
+- TODO
 
-- New features: support for mouse gesture events (GSoC 2017 project);
-  fractional pen widths in wxGraphicsContext; arbitrary label windows in
-  wxStaticBox; markup in wxDataViewCtrl items text; better support for high DPI
-  monitors; support for ZIP 64 files; much improved accessibility support under
-  MSW.
-- New classes: wxActivityIndicator, wxAddRemoveCtrl,
-  wxAppProgressIndicator, wxNativeWindow, wxPowerResourceBlocker,
-  wxSecretStore.
-- And methods: wxDateTime::GetWeekBasedYear(), wxListBox::GetTopItem(),
-  wxProcess::Activate(), wxTextEntry::ForceUpper(), several ones in
-  wxRendererNative, wxStandardPaths::GetUserDir(), wxUIActionSimulator
-  ::Select() and many others.
-- Significant improvements to: wxBusyInfo, wxNotificationMessage.
-- Latest versions of all bundled 3rd party libraries, including all the
-  security fixed and support for WebKit 2 and GStreamer 1.7 under Unix.
-- Revamped OpenGL support better suited to modern OpenGL (3.2+).
-- Further C++11 support improvements.
-- New CMake-based alternative build system.
-- Support for latest compilers: MSVS 2017, g++ 7, clang 6.
-- A lot of bug fixes, especially in wxGTK3 and wxOSX/Cocoa ports.
-- New experimental wxQt port.
+Note that in spite of all these changes, wxWidgets 3.3 is almost fully
+compatible with wxWidgets 3.2 and updating the existing applications to
+use it shouldn't require much effort.
 
 
-
-Platforms Supported
+Supported Platforms
 -------------------
 
-wxWidgets currently supports the following primary platforms:
+This version of wxWidgets supports the following primary platforms:
 
-* Windows XP, Vista, 7, 8 and 10 (32/64 bits).
+* Windows 7, 8, 10 and 11 (32/64 bits).
 * Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-* OS X (10.7 or newer) using Cocoa (32/64 bits)
+* macOS (10.10 or newer) using Cocoa (x86-64 or ARM).
 
 There is some support for the following platforms:
 
 * Most Unix variants with X11
-* Most Unix variants with Motif/Lesstif
 * Most Unix variants with GTK+ 1.2
 * Most Unix variants with Qt 5 or newer (experimental)
 
-Most popular C++ compilers are supported; see the install.txt file for each
-platform (following the links from docs/index.htm).
-
-
-Files
------
-
-wxWidgets is distributed in source form in several archive formats. ZIP and 7z
-archives are for Microsoft Windows users and contain the files with DOS/Windows
-line endings while the compressed tar archives are for Unix systems (including
-OS X) and contain the files with Unix line endings. Please notice that some
-Windows tools still don't accept files with Unix line endings and that compiling
-sources with DOS line endings under Unix will fail, so please choose the correct
-file for your system.
-
-In addition to the sources, documentation in HTML, CHM and HTB (wxWidgets help
-viewer) formats is provided as well as an installer for Microsoft Windows.
-Notice that you will still need to compile wxWidgets even when using the
-installer.
-
-We also supply binaries of wxMSW libraries built with several versions of
-Microsoft Visual C++ and GNU g++ compiler for this release.
-
-
-Installation
-------------
-
-Unless you have downloaded the binaries for your compiler, you will need to
-build wxWidgets before you can test out the samples or write your own
-applications. For installation information, please see the install.txt file in
-the docs subdirectory appropriate for the platform you use.
+All C++ compilers in common use are supported.
 
 
 Licence
@@ -163,8 +79,8 @@ unrestricted distribution of application binaries. To answer a FAQ, you don't
 have to distribute any source if you wish to write commercial applications using
 wxWidgets.
 
-However, if you distribute wxGTK, wxQt or wxMotif (with Lesstif) version of your
-application, don't forget that it is linked against GTK+, Qt or Lesstif, which
+However, if you distribute wxGTK or wxQt version of your
+application, don't forget that it is linked against GTK or Qt, which
 are covered by LGPL *without* exception notice and so is bound by its
 requirements.
 
@@ -175,9 +91,8 @@ If you use JPEG image handler, documentation for your program should contain
 following sentence: "This software is based in part on the work of the
 Independent JPEG Group". See src/jpeg/README for details.
 
-If you use wxRegEx class on a system without native regular expressions support
-(i.e. MS Windows), see src/regex/COPYRIGHT file for Henry Spencer's regular
-expression library copyright.
+If you use wxRegEx class, please see 3rdparty/pcre/LICENCE for PCRE licence
+details.
 
 If you use wxXML classes or XRC, see src/expat/COPYING for licence details.
 
@@ -187,20 +102,20 @@ Reporting Bugs
 
 The wxWidgets bug tracker can be found here:
 
-* https://trac.wxwidgets.org/newticket
+* https://github.com/wxWidgets/wxWidgets/issues/
 
-Please use the search function of our Trac installation to find any possibly
-relevant bugs before reporting new ones. Also please notice that often trying to
-correct the bug yourself is the quickest way to fix it. Even if you fail to do
-it, you may discover valuable information allowing us to fix it while doing it.
-We also give much higher priority to bug reports with patches fixing the
-problems so this ensures that your report will be addressed sooner.
+Please use the search function find any possibly relevant bugs before reporting
+new ones. Also please notice that often trying to correct the bug yourself is
+the quickest way to fix it. Even if you fail to do it, you may discover
+valuable information allowing us to fix it while doing it. We also give much
+higher priority to bug reports with patches fixing the problems so this ensures
+that your report will be addressed sooner.
 
 
 Further Information
 -------------------
 
-If you are looking for support, you can get it from
+If you are looking for community support, you can get it from
 
 * Mailing Lists: https://www.wxwidgets.org/support/mailing-lists/
 * Discussion Forums: https://forums.wxwidgets.org/
@@ -208,6 +123,13 @@ If you are looking for support, you can get it from
 * Stack Overflow (tag your questions with "wxwidgets"):
   https://stackoverflow.com/questions/tagged/wxwidgets
 
+Commercial support is also available, please see
+https://www.wxwidgets.org/support/commercial/
+
+Finally, keep in mind that wxWidgets is an open source project collaboratively
+developed by its users and your contributions to it are always welcome!
+
+
 Have fun!
 
-The wxWidgets Team, February 2018
+The wxWidgets Team, July 2022

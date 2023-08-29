@@ -36,12 +36,6 @@ enum wxPenStyle
     wxPENSTYLE_TRANSPARENT,
         /**< No pen is used. */
 
-    wxPENSTYLE_STIPPLE_MASK_OPAQUE,
-        /**< @todo WHAT's this? */
-
-    wxPENSTYLE_STIPPLE_MASK,
-        /**< @todo WHAT's this? */
-
     wxPENSTYLE_STIPPLE,
         /**< Use the stipple bitmap. */
 
@@ -71,6 +65,31 @@ enum wxPenStyle
 };
 
 /**
+    Possible values for pen quality.
+
+    Pen quality is currently only used in wxMSW, the other ports ignore it and
+    always use the same default pen quality.
+
+    In wxMSW the choice of quality affects whether "cosmetic" or "geometric"
+    native pens are used in situations when both are usable. Notably, for
+    dotted and dashed pens of width 1, high quality geometric pens are used by
+    default since wxWidgets 3.1.4, while previous versions used lower quality
+    but much faster cosmetic pens. If drawing performance is more important
+    than the exact appearance of the lines drawn using this pen, low quality
+    may be explicitly selected.
+
+    See wxPenInfo::Quality() and wxPen::SetQuality().
+
+    @since 3.1.5
+ */
+enum wxPenQuality
+{
+    wxPEN_QUALITY_DEFAULT,  ///< Select the appropriate quality automatically.
+    wxPEN_QUALITY_LOW,      ///< Less good looking but faster.
+    wxPEN_QUALITY_HIGH      ///< Best looking, at the expense of speed.
+};
+
+/**
     The possible join values of a wxPen.
 
     @todo use wxPENJOIN_ prefix
@@ -80,8 +99,14 @@ enum wxPenJoin
     wxJOIN_INVALID = -1,
 
     wxJOIN_BEVEL = 120,
+        /**< The intersection of two lines will have
+             a diagonal edge "cut" into it. */
     wxJOIN_MITER,
+        /**< The intersection of two lines will have
+             a sharp corner. */
     wxJOIN_ROUND,
+        /**< The intersection of two lines will have
+             a rounded edge. */
 };
 
 
@@ -95,8 +120,14 @@ enum wxPenCap
     wxCAP_INVALID = -1,
 
     wxCAP_ROUND = 130,
+        /**< The pen will have a rounded edge and will extend
+             beyond the start and end of a line. */
     wxCAP_PROJECTING,
+        /**< The pen's edge will be square and will extend
+             beyond the start and end of a line. */
     wxCAP_BUTT
+        /**< The pen's edge will be square and will not extend
+             beyond the start and end of a line. */
 };
 
 
@@ -105,7 +136,7 @@ enum wxPenCap
     @class wxPenInfo
 
     This class is a helper used for wxPen creation using named parameter
-    idiom: it allows to specify various wxPen attributes using the chained
+    idiom: it allows specifying various wxPen attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxPen constructors.
 
@@ -137,6 +168,47 @@ public:
     wxPenInfo& Join(wxPenJoin join);
 
     wxPenInfo& Cap(wxPenCap cap);
+
+    /**
+        Set the pen quality.
+
+        Using LowQuality() or HighQuality() is usually more convenient.
+
+        @see wxPen::SetQuality()
+
+        @since 3.1.5
+     */
+    wxPenInfo& Quality(wxPenQuality quality);
+
+    /**
+        Set low pen quality.
+
+        This is the same as calling Quality() with ::wxPEN_QUALITY_LOW.
+
+        @since 3.1.5
+     */
+    wxPenInfo& LowQuality();
+
+    /**
+        Set high pen quality.
+
+        This is the same as calling Quality() with ::wxPEN_QUALITY_HIGH.
+
+        @since 3.1.5
+     */
+    wxPenInfo& HighQuality();
+
+    wxColour GetColour() const;
+    wxBitmap GetStipple() const;
+    wxPenStyle GetStyle() const;
+    wxPenJoin GetJoin() const;
+    wxPenCap GetCap() const;
+    wxPenQuality GetQuality() const;
+    int GetDashes(wxDash **ptr);
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+    bool IsTransparent() const;
+    int GetWidth() const;
 };
 
 
@@ -269,6 +341,15 @@ public:
     virtual wxPenCap GetCap() const;
 
     /**
+        Returns the pen quality.
+
+        The default is ::wxPEN_QUALITY_DEFAULT.
+
+        @see wxPenQuality, SetQuality()
+     */
+    wxPenQuality GetQuality() const;
+
+    /**
         Returns a reference to the pen colour.
 
         @see SetColour()
@@ -364,7 +445,20 @@ public:
     */
     virtual void SetCap(wxPenCap capStyle);
 
-    //@{
+    /**
+        Sets the pen quality.
+
+        Explicitly selecting low pen quality may be useful in wxMSW if drawing
+        performance is more important than the exact appearance of the lines
+        drawn with this pen.
+
+        @see wxPenQuality
+
+        @since 3.1.5
+     */
+    void SetQuality(wxPenQuality quality);
+
+    ///@{
     /**
         The pen's colour is changed to the given colour.
 
@@ -372,7 +466,7 @@ public:
     */
     virtual void SetColour(wxColour& colour);
     virtual void SetColour(unsigned char red, unsigned char green, unsigned char blue);
-    //@}
+    ///@}
 
     /**
         Associates an array of dash values (defined as @c char in X, @c DWORD under

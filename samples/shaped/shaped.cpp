@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -39,6 +36,10 @@
 #include "wx/dcclient.h"
 #include "wx/graphics.h"
 #include "wx/image.h"
+#include "wx/sizer.h"
+#include "wx/slider.h"
+
+#include <memory>
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -53,6 +54,7 @@ enum
 {
     Show_Shaped = 100,
     Show_Transparent,
+    Show_TransparentBg,
 
     // must be consecutive and in the same order as wxShowEffect enum elements
     Show_Effect_First,
@@ -77,7 +79,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 
@@ -137,12 +139,13 @@ private:
 class SeeThroughFrame : public wxFrame
 {
 public:
-    void Create();
+    void Create(wxWindow* parent);
 
 private:
     // event handlers (these functions should _not_ be virtual)
-    void OnDoubleClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
+
+    void OnAlpha(wxCommandEvent& event);
 
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
@@ -172,7 +175,7 @@ public:
 
         ShowWithEffect(m_effect, m_timeout);
 
-        Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(EffectFrame::OnClose));
+        Bind(wxEVT_CLOSE_WINDOW, &EffectFrame::OnClose, this);
     }
 
 private:
@@ -242,12 +245,13 @@ bool MyApp::OnInit()
 wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(Show_Shaped, MainFrame::OnShowShaped)
     EVT_MENU(Show_Transparent, MainFrame::OnShowTransparent)
+    EVT_MENU(Show_TransparentBg, MainFrame::OnShowTransparent)
     EVT_MENU_RANGE(Show_Effect_First, Show_Effect_Last, MainFrame::OnShowEffect)
     EVT_MENU(wxID_EXIT, MainFrame::OnExit)
 wxEND_EVENT_TABLE()
 
 MainFrame::MainFrame()
-         : wxFrame(NULL, wxID_ANY, "wxWidgets Shaped Sample",
+         : wxFrame(nullptr, wxID_ANY, "wxWidgets Shaped Sample",
                    wxDefaultPosition, wxSize(200, 100))
 {
     SetIcon(wxICON(sample));
@@ -256,6 +260,8 @@ MainFrame::MainFrame()
     wxMenu * const menuFrames = new wxMenu;
     menuFrames->Append(Show_Shaped, "Show &shaped window\tCtrl-S");
     menuFrames->Append(Show_Transparent, "Show &transparent window\tCtrl-T");
+    menuFrames->Append(Show_TransparentBg,
+                       "Show with &transparent background\tShift-Ctrl-T");
     menuFrames->AppendSeparator();
     menuFrames->Append(Show_Effect_Roll, "Show &rolled effect\tCtrl-R");
     menuFrames->Append(Show_Effect_Slide, "Show s&lide effect\tCtrl-L");
@@ -276,16 +282,27 @@ void MainFrame::OnShowShaped(wxCommandEvent& WXUNUSED(event))
     shapedFrame->Show(true);
 }
 
-void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::OnShowTransparent(wxCommandEvent& event)
 {
-    if (IsTransparentBackgroundSupported())
+    SeeThroughFrame *seeThroughFrame = new SeeThroughFrame;
+
+    if ( event.GetId() == Show_TransparentBg )
     {
-        SeeThroughFrame *seeThroughFrame = new SeeThroughFrame;
-        seeThroughFrame->Create();
-        seeThroughFrame->Show(true);
+        wxString reason;
+        if (IsTransparentBackgroundSupported(&reason))
+        {
+            seeThroughFrame->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+        }
+        else
+        {
+            wxLogError("Can't use transparent background: %s", reason);
+            delete seeThroughFrame;
+            return;
+        }
     }
-    else
-        wxMessageBox(wxS("transparent window requires a composited screen"));
+
+    seeThroughFrame->Create(this);
+    seeThroughFrame->Show(true);
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
@@ -387,9 +404,9 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
             )
 {
     m_shapeKind = Shape_Star;
-    m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
+    m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-    SetToolTip(wxT("Right-click to close, double click to cycle shape"));
+    SetToolTip("Right-click to close, double click to cycle shape");
     SetWindowShape();
 }
 
@@ -472,58 +489,80 @@ void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 // ----------------------------------------------------------------------------
 
 wxBEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
-    EVT_LEFT_DCLICK(SeeThroughFrame::OnDoubleClick)
     EVT_PAINT(SeeThroughFrame::OnPaint)
 wxEND_EVENT_TABLE()
 
-void SeeThroughFrame::Create()
+void
+SeeThroughFrame::Create(wxWindow* parent)
 {
-    SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-    wxFrame::Create(NULL, wxID_ANY, "Transparency test: double click here",
-           wxPoint(100, 30), wxSize(300, 300),
+    wxFrame::Create(parent, wxID_ANY, "Transparency test",
+           wxDefaultPosition, wxWindow::FromDIP(wxSize(300, 300), parent),
            wxDEFAULT_FRAME_STYLE |
            wxFULL_REPAINT_ON_RESIZE |
            wxSTAY_ON_TOP);
     SetBackgroundColour(*wxWHITE);
+
+    const int initialAlpha = wxALPHA_OPAQUE / 2;
+
+    // Create control for choosing alpha and put it in the middle of the window.
+    wxPanel* panel = new wxPanel(this);
+    wxSlider* slider = new wxSlider
+                           (
+                                panel,
+                                wxID_ANY,
+                                initialAlpha,
+                                wxALPHA_TRANSPARENT,
+                                wxALPHA_OPAQUE,
+                                wxDefaultPosition,
+                                FromDIP(wxSize(256, -1)),
+                                wxSL_HORIZONTAL | wxSL_LABELS
+                           );
+    slider->Bind(wxEVT_SLIDER, &SeeThroughFrame::OnAlpha, this);
+
+    const wxSizerFlags center = wxSizerFlags().Center().Border();
+
+    wxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(new wxStaticText(panel, wxID_ANY, "Window opacity:"), center);
+    sizer->Add(slider, center);
+    panel->SetSizer(sizer);
+
+    wxSizer* sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->AddStretchSpacer();
+    sizerTop->Add(panel, center);
+    sizerTop->AddStretchSpacer();
+    SetSizer(sizerTop);
+
+    // Note that this must be called before the frame is shown.
+    SetTransparent(initialAlpha);
 }
 
 // Paints a grid of varying hue and alpha
 void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxPaintDC dc(this);
-    dc.SetPen(wxNullPen);
+    std::unique_ptr<wxGraphicsContext> gc(wxGraphicsContext::Create(dc));
 
-    int xcount = 8;
-    int ycount = 8;
+    // Draw 3 bands: one opaque, one semi-transparent and one transparent.
+    const wxSize size = GetClientSize();
+    const double h = size.y / 3.0;
 
-    float xstep = 1. / xcount;
-    float ystep = 1. / ycount;
+    wxGraphicsPath path = gc->CreatePath();
+    path.AddRectangle(0, 0, size.x, h);
+    gc->SetBrush(wxBrush(wxColour(0, 0, 255, wxALPHA_OPAQUE)));
+    gc->FillPath(path);
 
-    int width = GetClientSize().GetWidth();
-    int height = GetClientSize().GetHeight();
+    gc->SetBrush(wxBrush(wxColour(0, 0, 255, wxALPHA_OPAQUE / 2)));
+    gc->Translate(0, h);
+    gc->FillPath(path);
 
-    for ( float x = 0.; x < 1.; x += xstep )
-    {
-        for ( float y = 0.; y < 1.; y += ystep )
-        {
-            wxImage::RGBValue v = wxImage::HSVtoRGB(wxImage::HSVValue(x, 1., 1.));
-            dc.SetBrush(wxBrush(wxColour(v.red, v.green, v.blue,
-                                (int)(255*(1. - y)))));
-            int x1 = (int)(x * width);
-            int y1 = (int)(y * height);
-            int x2 = (int)((x + xstep) * width);
-            int y2 = (int)((y + ystep) * height);
-            dc.DrawRectangle(x1, y1, x2 - x1, y2 - y1);
-        }
-    }
+    // This blue won't actually be seen and instead the white background will
+    // be visible, because this brush is fully transparent.
+    gc->SetBrush(wxBrush(wxColour(0, 0, 255, wxALPHA_TRANSPARENT)));
+    gc->Translate(0, h);
+    gc->FillPath(path);
 }
 
-void SeeThroughFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
+void SeeThroughFrame::OnAlpha(wxCommandEvent& event)
 {
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
-    SetTransparent(255);
-    SetTitle("Opaque");
-
-    Refresh();
+    SetTransparent(event.GetInt());
 }
-

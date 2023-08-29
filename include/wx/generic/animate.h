@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/animate.h
-// Purpose:     wxAnimation and wxAnimationCtrl
+// Purpose:     wxGenericAnimationCtrl
 // Author:      Julian Smart and Guillermo Rodriguez Garcia
 // Modified by: Francesco Montorsi
 // Created:     13/8/99
@@ -11,72 +11,24 @@
 #ifndef _WX_GENERIC_ANIMATEH__
 #define _WX_GENERIC_ANIMATEH__
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
+
 
 // ----------------------------------------------------------------------------
-// wxAnimation
+// wxGenericAnimationCtrl
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDLLIMPEXP_ADV);
-
-class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
+class WXDLLIMPEXP_ADV wxGenericAnimationCtrl: public wxAnimationCtrlBase
 {
 public:
-    wxAnimation() {}
-    wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
-        { LoadFile(name, type); }
-
-    virtual bool IsOk() const wxOVERRIDE
-        { return m_refData != NULL; }
-
-    virtual unsigned int GetFrameCount() const wxOVERRIDE;
-    virtual int GetDelay(unsigned int i) const wxOVERRIDE;
-    virtual wxImage GetFrame(unsigned int i) const wxOVERRIDE;
-    virtual wxSize GetSize() const wxOVERRIDE;
-
-    virtual bool LoadFile(const wxString& filename,
-                          wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-    virtual bool Load(wxInputStream& stream,
-                      wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-
-    // extended interface used by the generic implementation of wxAnimationCtrl
-    wxPoint GetFramePosition(unsigned int frame) const;
-    wxSize GetFrameSize(unsigned int frame) const;
-    wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
-    wxColour GetTransparentColour(unsigned int frame) const;
-    wxColour GetBackgroundColour() const;
-
-protected:
-    static wxAnimationDecoderList sm_handlers;
-
-public:
-    static inline wxAnimationDecoderList& GetHandlers() { return sm_handlers; }
-    static void AddHandler(wxAnimationDecoder *handler);
-    static void InsertHandler(wxAnimationDecoder *handler);
-    static const wxAnimationDecoder *FindHandler( wxAnimationType animType );
-
-    static void CleanUpHandlers();
-    static void InitStandardHandlers();
-
-    wxDECLARE_DYNAMIC_CLASS(wxAnimation);
-};
-
-
-// ----------------------------------------------------------------------------
-// wxAnimationCtrl
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxAnimationCtrl: public wxAnimationCtrlBase
-{
-public:
-    wxAnimationCtrl() { Init(); }
-    wxAnimationCtrl(wxWindow *parent,
-                    wxWindowID id,
-                    const wxAnimation& anim = wxNullAnimation,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxAC_DEFAULT_STYLE,
-                    const wxString& name = wxAnimationCtrlNameStr)
+    wxGenericAnimationCtrl() { Init(); }
+    wxGenericAnimationCtrl(wxWindow *parent,
+                           wxWindowID id,
+                           const wxAnimation& anim = wxNullAnimation,
+                           const wxPoint& pos = wxDefaultPosition,
+                           const wxSize& size = wxDefaultSize,
+                           long style = wxAC_DEFAULT_STYLE,
+                           const wxString& name = wxASCII_STR(wxAnimationCtrlNameStr))
     {
         Init();
 
@@ -90,28 +42,29 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
-                const wxString& name = wxAnimationCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxAnimationCtrlNameStr));
 
-    ~wxAnimationCtrl();
+    ~wxGenericAnimationCtrl();
+
 
 public:
-    virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-    virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
+    virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
+    virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
 
-    virtual void Stop() wxOVERRIDE;
-    virtual bool Play() wxOVERRIDE
+    virtual void Stop() override;
+    virtual bool Play() override
         { return Play(true /* looped */); }
-    virtual bool IsPlaying() const wxOVERRIDE
+    virtual bool IsPlaying() const override
         { return m_isPlaying; }
 
-    void SetAnimation(const wxAnimation &animation) wxOVERRIDE;
-    wxAnimation GetAnimation() const wxOVERRIDE
-        { return m_animation; }
+    void SetAnimation(const wxAnimationBundle &animations) override;
 
-    virtual void SetInactiveBitmap(const wxBitmap &bmp) wxOVERRIDE;
+    virtual void SetInactiveBitmap(const wxBitmapBundle &bmp) override;
 
     // override base class method
-    virtual bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
+    virtual bool SetBackgroundColour(const wxColour& col) override;
+
+    static wxAnimation CreateCompatibleAnimation();
 
 public:     // event handlers
 
@@ -140,6 +93,7 @@ public:     // extended API specific to this implementation of wxAnimateCtrl
         { return m_backingStore; }
 
 protected:      // internal utilities
+    virtual wxAnimationImpl* DoCreateAnimationImpl() const override;
 
     // resize this control to fit m_animation
     void FitToAnimation();
@@ -153,14 +107,31 @@ protected:      // internal utilities
     bool RebuildBackingStoreUpToFrame(unsigned int);
     void DrawFrame(wxDC &dc, unsigned int);
 
-    virtual void DisplayStaticImage() wxOVERRIDE;
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DisplayStaticImage() override;
+    virtual wxSize DoGetBestSize() const override;
+
+    // This function can be used as event handler for wxEVT_DPI_CHANGED event
+    // and simply calls UpdateStaticImage() to refresh the m_bmpStaticReal when it happens.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event)
+    {
+        UpdateStaticImage();
+
+        event.Skip();
+    }
+
+    // Helpers to safely access methods in the wxAnimationGenericImpl that are
+    // specific to the generic implementation
+    wxPoint AnimationImplGetFramePosition(unsigned int frame) const;
+    wxSize AnimationImplGetFrameSize(unsigned int frame) const;
+    wxAnimationDisposal AnimationImplGetDisposalMethod(unsigned int frame) const;
+    wxColour AnimationImplGetTransparentColour(unsigned int frame) const;
+    wxColour AnimationImplGetBackgroundColour() const;
+
 
 protected:
     unsigned int  m_currentFrame;     // Current frame
     bool          m_looped;           // Looped, or not
     wxTimer       m_timer;            // The timer
-    wxAnimation   m_animation;        // The animation
 
     bool          m_isPlaying;        // Is the animation playing?
     bool          m_useWinBackgroundColour; // Use animation bg colour or window bg colour?
@@ -169,8 +140,11 @@ protected:
                                       // on the screen
 
 private:
+    // True if we need to show the next frame after painting the current one.
+    bool m_needToShowNextFrame = false;
+
     typedef wxAnimationCtrlBase base_type;
-    wxDECLARE_DYNAMIC_CLASS(wxAnimationCtrl);
+    wxDECLARE_DYNAMIC_CLASS(wxGenericAnimationCtrl);
     wxDECLARE_EVENT_TABLE();
 };
 

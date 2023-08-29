@@ -41,6 +41,7 @@ class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextEntryBase;
 class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 
 class WidgetsPageInfo;
@@ -94,9 +95,9 @@ struct WidgetAttributes
 #endif // wxUSE_TOOLTIPS
         m_enabled = true;
         m_show = true;
-        m_dir = wxLayout_LeftToRight;
+        m_dir = wxLayout_Default;
         m_variant = wxWINDOW_VARIANT_NORMAL;
-        m_cursor = *wxSTANDARD_CURSOR;
+        m_cursor = wxNullCursor;
         m_defaultFlags = wxBORDER_DEFAULT;
     }
 
@@ -115,7 +116,7 @@ struct WidgetAttributes
     wxWindowVariant m_variant;
     wxCursor m_cursor;
     // the default flags, currently only contains border flags
-    int m_defaultFlags;
+    long m_defaultFlags;
 };
 
 class WidgetsPage : public wxPanel
@@ -129,7 +130,7 @@ public:
     virtual wxWindow *GetWidget() const = 0;
 
     // return the control shown by this page, if it supports text entry interface
-    virtual wxTextEntryBase *GetTextEntry() const { return NULL; }
+    virtual wxTextEntryBase *GetTextEntry() const { return nullptr; }
 
     // lazy creation of the content
     virtual void CreateContent() = 0;
@@ -148,32 +149,36 @@ public:
     // this is currently used only to take into account the border flags
     virtual void RecreateWidget() = 0;
 
-    // apply current atrributes to the widget(s)
+    // apply current attributes to the widget(s)
     void SetUpWidget();
 
     // the default attributes for the widget
     static WidgetAttributes& GetAttrs();
 
+    // return true if we're showing logs in the log window (always the case
+    // except during startup and shutdown)
+    static bool IsUsingLogWindow();
+
 protected:
     // several helper functions for page creation
 
     // create a horz sizer containing the given control and the text ctrl
-    // (pointer to which will be saved in the provided variable if not NULL)
+    // (pointer to which will be saved in the provided variable if not null)
     // with the specified id
     wxSizer *CreateSizerWithText(wxControl *control,
                                  wxWindowID id = wxID_ANY,
-                                 wxTextCtrl **ppText = NULL);
+                                 wxTextCtrl **ppText = nullptr);
 
     // create a sizer containing a label and a text ctrl
     wxSizer *CreateSizerWithTextAndLabel(const wxString& label,
                                          wxWindowID id = wxID_ANY,
-                                         wxTextCtrl **ppText = NULL);
+                                         wxTextCtrl **ppText = nullptr);
 
     // create a sizer containing a button and a text ctrl
     wxSizer *CreateSizerWithTextAndButton(wxWindowID idBtn,
                                           const wxString& labelBtn,
                                           wxWindowID id = wxID_ANY,
-                                          wxTextCtrl **ppText = NULL);
+                                          wxTextCtrl **ppText = nullptr);
 
     // create a checkbox and add it to the sizer
     wxCheckBox *CreateCheckBoxAndAddToSizer(wxSizer *sizer,
@@ -196,7 +201,7 @@ public:
                                         wxImageList *imaglist);
 
     // our ctor
-    WidgetsPageInfo(Constructor ctor, const wxChar *label, int categories);
+    WidgetsPageInfo(Constructor ctor, const wxString& label, int categories);
 
     // accessors
     const wxString& GetLabel() const { return m_label; }
@@ -216,7 +221,7 @@ private:
     // the function to create this page
     Constructor m_ctor;
 
-    // next node in the linked list or NULL
+    // next node in the linked list or nullptr
     WidgetsPageInfo *m_next;
 };
 

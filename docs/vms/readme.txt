@@ -7,7 +7,7 @@ The compilation was tested with
     -Compaq C++ 6.2
     -DECWindows 1.2-5
     -GTK1.2.8 (for wxGTK)
-    
+
 To get everything compiled you'll need to have installed prior to compiling
 wxWidgets:
     -Bison
@@ -19,7 +19,7 @@ wxWidgets:
 	  #define alloca malloc
         before
 	  #endif /* __hpux */
-        
+
     -Flex
       get it from http://www.openvms.digital.com/freeware/
 
@@ -119,7 +119,7 @@ $  ass $disk2:[joukj.public.gtk.gtk.glib],-
 
   -I think in general wxGTK is better maintained, so that version is my
     first choice.
-  
+
   -Note that only a few people have used wxWidgets on VMS so many problems are
    to be expected.
 
@@ -147,7 +147,7 @@ $  ass $disk2:[joukj.public.gtk.gtk.glib],-
         again.
        -image sample: after clicking "about" the colourmap is permanently
         changed resulting in strange images
-     
+
 Finally :
  I like the idea of Robert Roebling that CD's with classical music should be
 send to the authors.
@@ -156,7 +156,7 @@ send to the authors.
 >-----------------------------------------------------------------------------<
 
   Jouk Jansen
-		 
+
   joukj@hrem.stm.tudelft.nl
 
 

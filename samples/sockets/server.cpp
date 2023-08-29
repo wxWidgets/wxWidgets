@@ -19,10 +19,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#  pragma hdrstop
-#endif
-
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
 #  include "wx/wx.h"
@@ -56,7 +52,7 @@
 class MyApp : public wxApp
 {
 public:
-  virtual bool OnInit() wxOVERRIDE;
+  virtual bool OnInit() override;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -174,7 +170,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 
-MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
+MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY,
                              _("wxSocket demo: Server"),
                              wxDefaultPosition, wxSize(300, 200))
 {
@@ -305,7 +301,7 @@ void MyFrame::OnWaitForAccept(wxCommandEvent& WXUNUSED(event))
 {
     TestLogger logtest("WaitForAccept() test");
 
-    wxBusyInfo("Waiting for connection for 10 seconds...", this);
+    wxBusyInfo info("Waiting for connection for 10 seconds...", this);
     if ( m_server->WaitForAccept(10) )
         wxLogMessage("Accepted client connection.");
     else
@@ -385,12 +381,12 @@ void MyFrame::Test3(wxSocketBase *sock)
 
 void MyFrame::OnServerEvent(wxSocketEvent& event)
 {
-  wxString s = _("OnServerEvent: ");
+  wxString s = "OnServerEvent: ";
   wxSocketBase *sock;
 
   switch(event.GetSocketEvent())
   {
-    case wxSOCKET_CONNECTION : s.Append(_("wxSOCKET_CONNECTION\n")); break;
+    case wxSOCKET_CONNECTION : s.Append("wxSOCKET_CONNECTION\n"); break;
     default                  : s.Append(_("Unexpected event !\n")); break;
   }
 
@@ -432,14 +428,14 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
-  wxString s = _("OnSocketEvent: ");
+  wxString s = "OnSocketEvent: ";
   wxSocketBase *sock = event.GetSocket();
 
   // First, print a message
   switch(event.GetSocketEvent())
   {
-    case wxSOCKET_INPUT : s.Append(_("wxSOCKET_INPUT\n")); break;
-    case wxSOCKET_LOST  : s.Append(_("wxSOCKET_LOST\n")); break;
+    case wxSOCKET_INPUT : s.Append("wxSOCKET_INPUT\n"); break;
+    case wxSOCKET_LOST  : s.Append("wxSOCKET_LOST\n"); break;
     default             : s.Append(_("Unexpected event !\n")); break;
   }
 

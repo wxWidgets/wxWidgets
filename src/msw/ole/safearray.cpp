@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_OLE && wxUSE_VARIANT
 
@@ -48,17 +45,17 @@ void wxSafeArrayBase::Destroy()
         {
             wxLogApiError(wxS("SafeArrayDestroy()"), hr);
         }
-        m_array = NULL;
+        m_array = nullptr;
     }
 }
 
 SAFEARRAY* wxSafeArrayBase::Detach()
 {
-    wxCHECK_MSG( m_array, NULL, wxS("Uninitialized safe array") );
+    wxCHECK_MSG( m_array, nullptr, wxS("Uninitialized safe array") );
 
     Unlock();
     SAFEARRAY* array = m_array;
-    m_array = NULL;
+    m_array = nullptr;
     return array;
 }
 

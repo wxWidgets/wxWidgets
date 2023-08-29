@@ -3,7 +3,7 @@
 // Purpose:     implementation of wxStdRenderer
 // Author:      Vadim Zeitlin
 // Created:     2006-09-16
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -199,7 +196,7 @@ void wxStdRenderer::DrawButtonSurface(wxDC& dc,
 void
 wxStdRenderer::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
 {
-    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // draw the pixels manually because the "dots" in wxPen with wxPENSTYLE_DOT style
     // may be short traits and not really dots
     //
     // note that to behave in the same manner as DrawRect(), we must exclude
@@ -288,7 +285,7 @@ void wxStdRenderer::DrawButtonLabel(wxDC& dc,
     {
         rectLabel.Inflate(-1);
 
-        DrawFocusRect(NULL, dc, rectLabel);
+        DrawFocusRect(nullptr, dc, rectLabel);
     }
 }
 
@@ -586,7 +583,7 @@ void wxStdRenderer::DrawFrame(wxDC& dc,
     {
         // the text should touch the top border of the rect, so the frame
         // itself should be lower
-        dc.GetTextExtent(label, NULL, &height);
+        dc.GetTextExtent(label, nullptr, &height);
         rectFrame.y += height / 2;
         rectFrame.height -= height / 2;
 
@@ -635,7 +632,7 @@ void wxStdRenderer::DrawItem(wxDC& dc,
 
     if ( flags & wxCONTROL_FOCUSED )
     {
-        DrawFocusRect(NULL, dc, rect, flags);
+        DrawFocusRect(nullptr, dc, rect, flags);
     }
 }
 
@@ -711,7 +708,7 @@ void wxStdRenderer::DrawCheckOrRadioButton(wxDC& dc,
             yBmp = rect.y + (rect.height - heightBmp) / 2;
 
     wxRect rectLabel;
-    dc.GetMultiLineTextExtent(label, NULL, &rectLabel.height);
+    dc.GetMultiLineTextExtent(label, nullptr, &rectLabel.height);
     rectLabel.y = rect.y + (rect.height - rectLabel.height) / 2;
 
     // align label vertically with the bitmap - looks nicer like this
@@ -762,7 +759,7 @@ void wxStdRenderer::DrawTextLine(wxDC& dc,
         {
             dc.DrawText(s, x, rect.y);
 
-            dc.GetTextExtent(s, &width, NULL);
+            dc.GetTextExtent(s, &width, nullptr);
             x += width;
         }
 
@@ -774,13 +771,13 @@ void wxStdRenderer::DrawTextLine(wxDC& dc,
                      colBg = dc.GetTextBackground();
             dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT_TEXT));
             dc.SetTextBackground(wxSCHEME_COLOUR(m_scheme, HIGHLIGHT));
-            dc.SetBackgroundMode(wxSOLID);
+            dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
 
             dc.DrawText(s, x, rect.y);
-            dc.GetTextExtent(s, &width, NULL);
+            dc.GetTextExtent(s, &width, nullptr);
             x += width;
 
-            dc.SetBackgroundMode(wxTRANSPARENT);
+            dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
             dc.SetTextBackground(colBg);
             dc.SetTextForeground(colFg);
         }
@@ -1108,14 +1105,14 @@ void wxStdRenderer::DrawFrameTitle(wxDC& dc,
 
     wxString s;
     wxCoord textW;
-    dc.GetTextExtent(title, &textW, NULL);
+    dc.GetTextExtent(title, &textW, nullptr);
     if ( textW > r.width )
     {
         // text is too big, let's shorten it and add "..." after it:
         size_t len = title.length();
         wxCoord WSoFar, letterW;
 
-        dc.GetTextExtent(wxT("..."), &WSoFar, NULL);
+        dc.GetTextExtent(wxT("..."), &WSoFar, nullptr);
         if ( WSoFar > r.width )
         {
             // not enough space to draw anything
@@ -1125,7 +1122,7 @@ void wxStdRenderer::DrawFrameTitle(wxDC& dc,
         s.Alloc(len);
         for (size_t i = 0; i < len; i++)
         {
-            dc.GetTextExtent(title[i], &letterW, NULL);
+            dc.GetTextExtent(title[i], &letterW, nullptr);
             if ( letterW + WSoFar > r.width )
                 break;
             WSoFar += letterW;

@@ -7,7 +7,7 @@
 
 
 /**
-    This class allows to get translations for strings.
+    This class allows getting translations for strings.
 
     In wxWidgets this class manages message catalogs which contain the
     translations of the strings used to the current language. Unlike wxLocale,
@@ -38,7 +38,7 @@ public:
     wxTranslations();
 
     /**
-        Returns current translations object, may return NULL.
+        Returns current translations object, may return @NULL.
 
         You must either call this early in app initialization code, or let
         wxLocale do it for you.
@@ -95,8 +95,8 @@ public:
         The language is determined from the preferred UI language or languages
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
-        wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        wxLocale::GetSystemLanguage() as operating systems have separate
+        language and regional (i.e. locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -118,8 +118,8 @@ public:
         The language is determined from the preferred UI language or languages
         list the user configured in the OS. Notice that this may or may not
         correspond to the default @em locale as obtained from
-        wxLocale::GetSystemLanguage(); modern operation systems (Windows
-        Vista+, OS X) have separate language and regional (= locale) settings.
+        wxLocale::GetSystemLanguage() as operating systems have separate
+        language and regional (i.e. locale) settings.
 
         @param domain
             The catalog domain to look for.
@@ -157,7 +157,7 @@ public:
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
 
-        Bu default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
+        By default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
         to be in English and written only using 7-bit ASCII characters.
         If you have to deal with non-English strings or 8-bit characters in the
         source code, see the instructions in @ref overview_nonenglish.
@@ -269,7 +269,7 @@ public:
 
     /**
         Returns the header value for header @a header.
-        The search for @a header is case sensitive. If an @a domain is passed,
+        The search for @a header is case sensitive. If a @a domain is passed,
         this domain is searched. Else all domains will be searched until a
         header has been found.
 
@@ -313,7 +313,7 @@ public:
                              additional modifiers (e.g. "fr", "en_GB" or
                              "ca@valencia").
 
-        @return Loaded catalog or NULL on failure.
+        @return Loaded catalog or @NULL on failure.
      */
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang) = 0;
@@ -333,7 +333,7 @@ public:
 
     Catalogs are searched for in standard places (system locales directory,
     `LC_PATH` on Unix systems, Resources subdirectory of the application bundle
-    on OS X, executable's directory on Windows), but you may also prepend
+    on macOS, executable's directory on Windows), but you may also prepend
     additional directories to the search path with
     AddCatalogLookupPathPrefix().
 
@@ -368,13 +368,15 @@ public:
     Translations are stored in resources as compiled MO files, with type
     set to "MOFILE" (unless you override GetResourceType()) and name
     consisting of the domain, followed by underscore, followed by language
-    identification. For example, the relevant part of .rc file would look
-    like this:
+    identification. Non-alphanumeric characters in language identification
+    should be replaced by '_'. For example, the relevant part of .rc file
+    would look like this:
 
     @code
-    myapp_de     MOFILE   "catalogs/de/myapp.mo"
-    myapp_fr     MOFILE   "catalogs/fr/myapp.mo"
-    myapp_en_GB  MOFILE   "catalogs/en_GB/myapp.mo"
+    myapp_de        MOFILE  "catalogs/de/myapp.mo"
+    myapp_fr        MOFILE  "catalogs/fr/myapp.mo"
+    myapp_en_GB     MOFILE  "catalogs/en_GB/myapp.mo"
+    myapp_sr_latin  MOFILE  "catalogs/sr@latin/myapp.mo"
     @endcode
 
     This class is only available on Windows.
@@ -418,7 +420,7 @@ public:
         @param domain    Catalog's domain. This typically matches
                          the @a filename.
 
-        @return Successfully loaded catalog or NULL on failure.
+        @return Successfully loaded catalog or @NULL on failure.
      */
     static wxMsgCatalog *CreateFromFile(const wxString& filename,
                                         const wxString& domain);
@@ -430,7 +432,7 @@ public:
         @param domain    Catalog's domain. This typically matches
                          the @a filename.
 
-        @return Successfully loaded catalog or NULL on failure.
+        @return Successfully loaded catalog or @NULL on failure.
      */
     static wxMsgCatalog *CreateFromData(const wxScopedCharBuffer& data,
                                         const wxString& domain);
@@ -442,7 +444,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     This macro is identical to _() but for the plural variant of
@@ -522,6 +524,18 @@ public:
 #define wxTRANSLATE(string)
 
 /**
+    This macro doesn't do anything in the program code -- it simply expands to
+    the value of its argument.
+
+    Similar to wxTRANSLATE(), but with a context argument. Both the context and
+    string need to be string literals. Be sure to use the same context when
+    calling wxGetTranslation().
+
+    @since 3.1.7
+*/
+#define wxTRANSLATE_IN_CONTEXT(context, string)
+
+/**
     This function returns the translation of @a string in the current
     @c locale().
 
@@ -539,7 +553,7 @@ public:
 
     If @a context is not empty (notice that this argument is only available
     starting from wxWidgets 3.1.1), item translation is looked up in the
-    specified context. This allows to have different translations for the same
+    specified context. This allows having different translations for the same
     string appearing in different contexts, e.g. it may be necessary to
     translate the same English "Open" verb differently depending on the object
     it applies to. To do this, you need to use @c msgctxt in the source message
@@ -603,5 +617,5 @@ const wxString& wxGetTranslation(const wxString& string,
 */
 const wxString& _(const wxString& string);
 
-//@}
+///@}
 

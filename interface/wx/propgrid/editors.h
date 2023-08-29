@@ -14,14 +14,18 @@
 class wxPGWindowList
 {
 public:
-    wxPGWindowList();
-    void SetSecondary( wxWindow* secondary );
+    wxPGWindowList(wxWindow* primary, wxWindow* secondary = nullptr);
 
-    wxWindow*   m_primary;
-    wxWindow*   m_secondary;
+    void SetSecondary(wxWindow* secondary);
 
-    wxPGWindowList( wxWindow* a );
-    wxPGWindowList( wxWindow* a, wxWindow* b );
+    /** Gets window of primary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetPrimary() const;
+    /** Gets window of secondary editor.
+        @since 3.1.4
+    */
+    wxWindow* GetSecondary() const;
 };
 
 
@@ -87,9 +91,8 @@ public:
             Initial size for control(s).
 
         @remarks
-        - Unlike in previous version of wxPropertyGrid, it is no longer
-          necessary to call wxEvtHandler::Connect() for interesting editor
-          events. Instead, all events from control are now automatically
+        - It is not necessary to call wxEvtHandler::Bind() for interesting
+          editor events. All events from controls are automatically
           forwarded to wxPGEditor::OnEvent() and wxPGProperty::OnEvent().
     */
     virtual wxPGWindowList CreateControls( wxPropertyGrid* propgrid,
@@ -136,12 +139,21 @@ public:
         Default implementation  sets foreground colour, background colour,
         font, plus text for wxTextCtrl and wxComboCtrl.
 
+        @param pg
+            Property grid to which the edited property belongs.
+
+        @param property
+            Edited property to which the editor control belongs.
+
+        @param ctrl
+            Editor control.
+
         @param appearance
             New appearance to be applied.
 
         @param oldAppearance
-            Previously applied appearance.  Used to detect which control
-            attributes need to be changed (e.g. so we onlychange background
+            Previously applied appearance. Used to detect which control
+            attributes need to be changed (e.g. so we only change background
             colour if really needed).
 
         @param unspecified
@@ -238,7 +250,7 @@ public:
 class wxPGChoiceEditor : public wxPGEditor
 {
 public:
-    wxPGChoiceEditor()
+    wxPGChoiceEditor();
     virtual ~wxPGChoiceEditor();
 
     virtual wxPGWindowList CreateControls(wxPropertyGrid* propgrid,
@@ -427,7 +439,7 @@ public:
     class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
     {
         wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
-        
+
     public:
         wxSampleMultiButtonEditor() {}
         virtual ~wxSampleMultiButtonEditor() {}
@@ -541,7 +553,7 @@ public:
     /**
         Adds new bitmap button.
     */
-    void Add( const wxBitmap& bitmap, int id = -2 );
+    void Add( const wxBitmapBundle& bitmap, int id = -2 );
 
     /**
         Call this in CreateControls() of your custom editor class

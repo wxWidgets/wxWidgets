@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     08.06.03 (extracted from src/generic/listctrl.cpp)
-// Copyright:   (c) 2000-2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2000-2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/selstore.h"
 
@@ -117,7 +114,7 @@ bool wxSelectionStore::SelectRange(unsigned itemFrom, unsigned itemTo,
             }
 
             // many items (> half) changed state
-            itemsChanged = NULL;
+            itemsChanged = nullptr;
         }
         else // select == m_defaultState
         {
@@ -146,7 +143,7 @@ bool wxSelectionStore::SelectRange(unsigned itemFrom, unsigned itemTo,
                         if ( itemsChanged->GetCount() > MANY_ITEMS )
                         {
                             // stop counting (see comment below)
-                            itemsChanged = NULL;
+                            itemsChanged = nullptr;
                         }
                         else
                         {
@@ -178,14 +175,14 @@ bool wxSelectionStore::SelectRange(unsigned itemFrom, unsigned itemTo,
                     // stop counting them, we'll just eat gobs of memory
                     // for nothing at all - faster to refresh everything in
                     // this case
-                    itemsChanged = NULL;
+                    itemsChanged = nullptr;
                 }
             }
         }
     }
 
-    // we set it to NULL if there are many items changing state
-    return itemsChanged != NULL;
+    // we set it to nullptr if there are many items changing state
+    return itemsChanged != nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -210,7 +207,7 @@ void wxSelectionStore::OnItemsInserted(unsigned item, unsigned numItems)
         // items indices.
         for ( unsigned n = item; n < item + numItems; n++ )
         {
-            m_itemsSel.AddAt(item, idx++);
+            m_itemsSel.AddAt(n, idx++);
         }
     }
 

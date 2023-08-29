@@ -15,10 +15,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif  //__BORLANDC__
-
 #ifndef wxUSE_CONFIG_NATIVE
     #define wxUSE_CONFIG_NATIVE 1
 #endif
@@ -48,7 +44,7 @@
 // global and class static variables
 // ----------------------------------------------------------------------------
 
-wxConfigBase *wxConfigBase::ms_pConfig     = NULL;
+wxConfigBase *wxConfigBase::ms_pConfig     = nullptr;
 bool          wxConfigBase::ms_bAutoCreate = true;
 
 // ============================================================================
@@ -101,9 +97,9 @@ wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 
 wxConfigBase *wxConfigBase::Create()
 {
-  if ( ms_bAutoCreate && ms_pConfig == NULL ) {
-    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    wxCHECK_MSG( traits, NULL, wxT("create wxApp before calling this") );
+  if ( ms_bAutoCreate && ms_pConfig == nullptr ) {
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
+    wxCHECK_MSG( traits, nullptr, wxT("create wxApp before calling this") );
 
     ms_pConfig = traits->CreateConfig();
   }
@@ -119,12 +115,12 @@ wxConfigBase *wxConfigBase::Create()
 #define IMPLEMENT_READ_FOR_TYPE(name, type, deftype, extra)                 \
     bool wxConfigBase::Read(const wxString& key, type *val) const           \
     {                                                                       \
-        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );  \
                                                                             \
         if ( !DoRead##name(key, val) )                                      \
             return false;                                                   \
                                                                             \
-        *val = extra(*val);                                                 \
+        *val = (extra)(*val);                                               \
                                                                             \
         return true;                                                        \
     }                                                                       \
@@ -133,20 +129,20 @@ wxConfigBase *wxConfigBase::Create()
                             type *val,                                      \
                             deftype defVal) const                           \
     {                                                                       \
-        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );  \
                                                                             \
         bool read = DoRead##name(key, val);                                 \
         if ( !read )                                                        \
         {                                                                   \
             if ( IsRecordingDefaults() )                                    \
             {                                                               \
-                ((wxConfigBase *)this)->DoWrite##name(key, defVal);         \
+                const_cast<wxConfigBase*>(this)->DoWrite##name(key, defVal);\
             }                                                               \
                                                                             \
             *val = defVal;                                                  \
         }                                                                   \
                                                                             \
-        *val = extra(*val);                                                 \
+        *val = (extra)(*val);                                               \
                                                                             \
         return read;                                                        \
     }
@@ -154,6 +150,9 @@ wxConfigBase *wxConfigBase::Create()
 
 IMPLEMENT_READ_FOR_TYPE(String, wxString, const wxString&, ExpandEnvVars)
 IMPLEMENT_READ_FOR_TYPE(Long, long, long, long)
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+IMPLEMENT_READ_FOR_TYPE(LongLong, wxLongLong_t, wxLongLong_t, wxLongLong_t)
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 IMPLEMENT_READ_FOR_TYPE(Double, double, double, double)
 IMPLEMENT_READ_FOR_TYPE(Bool, bool, bool, bool)
 
@@ -178,18 +177,52 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
     return r;
 }
 
+// size_t is stored either as long or long long (Win64)
+#if SIZEOF_SIZE_T == SIZEOF_LONG
+    typedef long SizeSameSizeAsSizeT;
+#elif SIZEOF_SIZE_T == SIZEOF_LONG_LONG
+    typedef wxLongLong_t SizeSameSizeAsSizeT;
+#else
+    #error Unexpected sizeof(size_t)
+#endif
+
+bool wxConfigBase::Read(const wxString& key, size_t* val) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
+
+    SizeSameSizeAsSizeT tmp;
+    if ( !Read(key, &tmp) )
+        return false;
+
+    *val = static_cast<size_t>(tmp);
+    return true;
+}
+
+bool wxConfigBase::Read(const wxString& key, size_t* val, size_t defVal) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
+
+    if ( !Read(key, val) )
+    {
+        *val = defVal;
+        return false;
+    }
+
+    return true;
+}
+
 // Read floats as doubles then just type cast it down.
 bool wxConfigBase::Read(const wxString& key, float* val) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     double temp;
     if ( !Read(key, &temp) )
         return false;
 
-    wxCHECK_MSG( fabs(temp) <= FLT_MAX, false,
+    wxCHECK_MSG( fabs(temp) <= double(FLT_MAX), false,
                      wxT("float overflow in wxConfig::Read") );
-    wxCHECK_MSG( (temp == 0.0) || (fabs(temp) >= FLT_MIN), false,
+    wxCHECK_MSG( temp == 0.0 || fabs(temp) >= double(FLT_MIN), false,
                      wxT("float underflow in wxConfig::Read") );
 
     *val = static_cast<float>(temp);
@@ -199,7 +232,7 @@ bool wxConfigBase::Read(const wxString& key, float* val) const
 
 bool wxConfigBase::Read(const wxString& key, float* val, float defVal) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     if ( Read(key, val) )
         return true;
@@ -212,7 +245,7 @@ bool wxConfigBase::Read(const wxString& key, float* val, float defVal) const
 // but can be overridden in the derived ones
 bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
 {
-    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): null parameter") );
 
     long l;
     if ( !DoReadLong(key, &l) )
@@ -232,6 +265,21 @@ bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
 
     return true;
 }
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+bool wxConfigBase::DoReadLongLong(const wxString& key, wxLongLong_t *pll) const
+{
+    wxString str;
+    if ( !Read(key, &str) )
+        return false;
+
+    str.Trim();
+
+    return str.ToLongLong(pll);
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
 bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
 {
@@ -265,6 +313,15 @@ wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 // ----------------------------------------------------------------------------
 // wxConfigBase writing
 // ----------------------------------------------------------------------------
+
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+
+bool wxConfigBase::DoWriteLongLong(const wxString& key, wxLongLong_t llValue)
+{
+  return Write(key, wxString::Format("%" wxLongLongFmtSpec "d", llValue));
+}
+
+#endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
 
 bool wxConfigBase::DoWriteDouble(const wxString& key, double val)
 {

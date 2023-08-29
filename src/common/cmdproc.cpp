@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -44,9 +41,9 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxCommandProcessor, wxObject);
 // ----------------------------------------------------------------------------
 
 wxCommand::wxCommand(bool canUndoIt, const wxString& name)
+    : m_commandName(name)
 {
     m_canUndo = canUndoIt;
-    m_commandName = name;
 }
 
 // ----------------------------------------------------------------------------
@@ -54,19 +51,15 @@ wxCommand::wxCommand(bool canUndoIt, const wxString& name)
 // ----------------------------------------------------------------------------
 
 wxCommandProcessor::wxCommandProcessor(int maxCommands)
+#if wxUSE_ACCEL
+    : m_undoAccelerator('\t' + wxAcceleratorEntry(wxACCEL_CTRL, 'Z').ToString())
+    , m_redoAccelerator('\t' + wxAcceleratorEntry(wxACCEL_CTRL, 'Y').ToString())
+#endif // wxUSE_ACCEL
 {
     m_maxNoCommands = maxCommands;
 #if wxUSE_MENUS
-    m_commandEditMenu = NULL;
+    m_commandEditMenu = nullptr;
 #endif // wxUSE_MENUS
-
-#if wxUSE_ACCEL
-    m_undoAccelerator = '\t' + wxAcceleratorEntry(wxACCEL_CTRL, 'Z').ToString();
-    m_redoAccelerator = '\t' + wxAcceleratorEntry(wxACCEL_CTRL, 'Y').ToString();
-#endif // wxUSE_ACCEL
-
-    m_lastSavedCommand =
-    m_currentCommand = wxList::compatibility_iterator();
 }
 
 wxCommandProcessor::~wxCommandProcessor()
@@ -169,12 +162,8 @@ bool wxCommandProcessor::Undo()
 
 bool wxCommandProcessor::Redo()
 {
-    wxCommand *redoCommand = NULL;
-    wxList::compatibility_iterator redoNode
-#if !wxUSE_STD_CONTAINERS
-        = NULL          // just to avoid warnings
-#endif // !wxUSE_STD_CONTAINERS
-        ;
+    wxCommand *redoCommand = nullptr;
+    wxList::compatibility_iterator redoNode;
 
     if ( m_currentCommand )
     {
@@ -301,7 +290,7 @@ wxString wxCommandProcessor::GetRedoMenuLabel() const
         }
         else
         {
-            // currentCommand is NULL but there are commands: this means that
+            // currentCommand is null but there are commands: this means that
             // we've undone to the start of the list, but can redo the first.
             wxCommand *redoCommand = (wxCommand *)m_commands.GetFirst()->GetData();
             wxString redoCommandName(redoCommand->GetName());

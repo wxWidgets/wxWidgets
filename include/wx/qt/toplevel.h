@@ -19,7 +19,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxDEFAULT_FRAME_STYLE,
-               const wxString& name = wxFrameNameStr);
+               const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -27,23 +27,24 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
-    
-    virtual void Maximize(bool maximize = true);
-    virtual void Restore();
-    virtual void Iconize(bool iconize = true);
-    virtual bool IsMaximized() const;
-    virtual bool IsIconized() const;
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual bool IsFullScreen() const;
-    virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
-    virtual void SetIcons(const wxIconBundle& icons);
-    
+    virtual bool Show(bool show = true) override;
+    virtual void Maximize(bool maximize = true) override;
+    virtual void Restore() override;
+    virtual void Iconize(bool iconize = true) override;
+    virtual bool IsMaximized() const override;
+    virtual bool IsIconized() const override;
+
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) override;
+    virtual bool IsFullScreen() const override;
+    virtual void SetTitle(const wxString& title) override;
+    virtual wxString GetTitle() const override;
+    virtual void SetIcons(const wxIconBundle& icons) override;
+
     // Styles
-    virtual void SetWindowStyleFlag( long style );
-    virtual long GetWindowStyleFlag() const;
+    virtual void SetWindowStyleFlag( long style ) override;
+    virtual long GetWindowStyleFlag() const override;
 };
-    
+
 #endif // _WX_QT_TOPLEVEL_H_

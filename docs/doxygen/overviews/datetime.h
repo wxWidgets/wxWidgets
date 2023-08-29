@@ -106,7 +106,7 @@ just @c wxDateTime::Now() + wxDateSpan::Month()).
 
 
 
-@section overview_datetime_arithmetics Date Arithmetics
+@section overview_datetime_arithmetics Date Arithmetic
 
 Many different operations may be performed with the dates, however not all of
 them make sense. For example, multiplying a date by a number is an invalid

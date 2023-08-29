@@ -111,11 +111,11 @@ public:
         : wxAddRemoveImplBase(adaptor, parent, ctrlItems)
     {
         m_btnAdd =
-        m_btnRemove = NULL;
+        m_btnRemove = nullptr;
     }
 
     virtual void SetButtonsToolTips(const wxString& addtip,
-                                    const wxString& removetip) wxOVERRIDE
+                                    const wxString& removetip) override
     {
         m_btnAdd->SetToolTip(addtip);
         m_btnRemove->SetToolTip(removetip);

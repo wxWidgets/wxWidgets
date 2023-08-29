@@ -15,9 +15,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -38,7 +35,7 @@
 // resources
 // --------------------------------------------------------------------------
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXQT__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     // application icon
     #include "mondrian.xpm"
 
@@ -166,11 +163,6 @@ bool LifeApp::OnInit()
     // show it
     frame->Show(true);
 
-    // just for Motif
-#ifdef __WXMOTIF__
-    frame->UpdateInfoText();
-#endif
-
     // enter the main message loop and run the app
     return true;
 }
@@ -181,8 +173,8 @@ bool LifeApp::OnInit()
 
 // frame constructor
 LifeFrame::LifeFrame() :
-  wxFrame( (wxFrame *) NULL, wxID_ANY, _("Life!"), wxDefaultPosition ),
-  m_navigator(NULL)
+  wxFrame( nullptr, wxID_ANY, _("Life!"), wxDefaultPosition ),
+  m_navigator(nullptr)
 {
     // frame icon
     SetIcon(wxICON(mondrian));
@@ -431,10 +423,10 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
             m_running = true;
             m_topspeed = true;
             UpdateUI();
-            
+
             const long YIELD_INTERVAL = 1000 / 30;
             wxMilliClock_t lastyield = 0, now;
-            
+
             while (m_running && m_topspeed)
             {
                 OnStep();
@@ -444,7 +436,7 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
                     lastyield = now;
                 }
             }
- 
+
             break;
         }
     }
@@ -534,7 +526,7 @@ void LifeFrame::OnNavigate(wxCommandEvent& event)
         case ID_CENTER: c = m_life->FindCenter(); break;
         default :
             wxFAIL;
-            // Fall through!
+            wxFALLTHROUGH;
         case ID_ORIGIN: c.i = c.j = 0; break;
     }
 
@@ -626,7 +618,7 @@ LifeNavigator::LifeNavigator(wxWindow *parent)
         bmpe = wxBITMAP(east),
         bmps = wxBITMAP(south);
 
-#if !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXMAC__)
+#if !defined(__WXGTK__) && !defined(__WXMAC__)
     bmpn.SetMask(new wxMask(bmpn, *wxLIGHT_GREY));
     bmpw.SetMask(new wxMask(bmpw, *wxLIGHT_GREY));
     bmpc.SetMask(new wxMask(bmpc, *wxLIGHT_GREY));
@@ -797,17 +789,17 @@ void LifeCanvas::DrawCell(wxInt32 i, wxInt32 j, wxDC &dc)
 void LifeCanvas::DrawChanged()
 {
     wxClientDC dc(this);
-    
+
     size_t ncells;
     LifeCell *cells;
     bool done = false;
-    
+
     m_life->BeginFind(m_viewportX,
                       m_viewportY,
                       m_viewportX + m_viewportW,
                       m_viewportY + m_viewportH,
                       true);
-    
+
     if (m_cellsize == 1)
     {
         dc.SetPen(*wxWHITE_PEN);
@@ -818,11 +810,11 @@ void LifeCanvas::DrawChanged()
         dc.SetBrush(*wxWHITE_BRUSH);
     }
     dc.SetLogicalFunction(wxXOR);
-    
+
     while (!done)
     {
         done = m_life->FindMore(&cells, &ncells);
-        
+
         for (size_t m = 0; m < ncells; m++)
             DrawCell(cells[m].i, cells[m].j, dc);
     }
@@ -1096,8 +1088,8 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
         m_thumbY = m_viewportH;
     }
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-    // wxGTK and wxMotif update the thumb automatically (wxMSW doesn't);
+#if defined(__WXGTK__)
+    // wxGTK updates the thumb automatically (wxMSW doesn't);
     // so reset it back as we always want it to be in the same position.
     if (type != wxEVT_SCROLLWIN_THUMBTRACK)
     {
@@ -1112,12 +1104,12 @@ void LifeCanvas::OnScroll(wxScrollWinEvent& event)
     if (orient == wxHORIZONTAL)
     {
         m_viewportX += scrollinc;
-        ScrollWindow( -m_cellsize * scrollinc, 0, (const wxRect *) NULL);
+        ScrollWindow( -m_cellsize * scrollinc, 0, nullptr);
     }
     else
     {
         m_viewportY += scrollinc;
-        ScrollWindow( 0, -m_cellsize * scrollinc, (const wxRect *) NULL);
+        ScrollWindow( 0, -m_cellsize * scrollinc, nullptr);
     }
 }
 

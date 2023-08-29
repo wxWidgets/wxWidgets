@@ -65,11 +65,12 @@ wxPenRefData::wxPenRefData()
     m_join = wxJOIN_ROUND ;
     m_cap = wxCAP_ROUND ;
     m_nbDash = 0 ;
-    m_dash = 0 ;
+    m_dash = nullptr ;
 }
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
 : wxGDIRefData()
+    , m_colour(data.m_colour)
 {
     m_style = data.m_style;
     m_width = data.m_width;
@@ -77,7 +78,6 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_cap = data.m_cap;
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
-    m_colour = data.m_colour;
 }
 
 wxPenRefData::wxPenRefData(const wxPenInfo& info)
@@ -203,7 +203,7 @@ int wxPen::GetDashCount() const
 
 wxBitmap *wxPen::GetStipple() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid pen") );
 
     return &M_PENDATA->m_stipple;
 }
@@ -274,7 +274,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxDash *)Dash;
+    M_PENDATA->m_dash = const_cast<wxDash*>(Dash);
 
     RealizeResource();
 }

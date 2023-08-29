@@ -34,7 +34,7 @@ public:
 class WXDLLIMPEXP_ADV wxDataViewBitmapRenderer: public wxDataViewRenderer
 {
 public:
-    static wxString GetDefaultType() { return wxS("wxBitmap"); }
+    static wxString GetDefaultType() { return wxS("wxBitmapBundle"); }
 
     wxDataViewBitmapRenderer( const wxString &varianttype = GetDefaultType(),
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
@@ -42,6 +42,8 @@ public:
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
+
+    bool IsCompatibleVariantType(const wxString& variantType) const;
 };
 
 // ---------------------------------------------------------

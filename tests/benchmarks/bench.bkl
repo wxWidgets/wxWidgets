@@ -16,6 +16,7 @@
             ipcclient.cpp
             log.cpp
             mbconv.cpp
+            regex.cpp
             strings.cpp
             tls.cpp
             printfbench.cpp
@@ -36,6 +37,7 @@
 
         <sources>
             bench.cpp
+            display.cpp
             image.cpp
         </sources>
         <wx-lib>core</wx-lib>

@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CHECKLISTBOX && wxUSE_OWNER_DRAWN
 
@@ -81,7 +78,7 @@ public:
     wxCheckListBoxItem(wxCheckListBox *parent);
 
     // drawing functions
-    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) wxOVERRIDE;
+    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) override;
 
     // simple accessors and operations
     wxCheckListBox *GetParent() const
@@ -90,7 +87,7 @@ public:
     int GetIndex() const
         { return m_parent->GetItemIndex(const_cast<wxCheckListBoxItem*>(this)); }
 
-    wxString GetName() const wxOVERRIDE
+    wxString GetName() const override
         { return m_parent->GetString(GetIndex()); }
 
 
@@ -102,6 +99,15 @@ public:
 
     void Toggle()
         { Check(!IsChecked()); }
+
+protected:
+    virtual int MSWGetTextType() const override
+    {
+        // Don't handle mnemonics in the label specially, they don't make sense
+        // for the listbox items that can't be activated from keyboard using
+        // them.
+        return DST_TEXT;
+    }
 
 private:
     wxCheckListBox *m_parent;
@@ -246,21 +252,29 @@ bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
     {
         MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
-        wxSize size = wxRendererNative::Get().GetCheckBoxSize(this);
-        size.x += 2 * CHECKMARK_EXTRA_SPACE;
-        size.y += 2 * CHECKMARK_EXTRA_SPACE;
-
-        // add place for the check mark
-        pStruct->itemWidth += size.GetWidth();
-
-        if ( pStruct->itemHeight < static_cast<unsigned int>(size.GetHeight()) )
-            pStruct->itemHeight = size.GetHeight();
+        const wxSize size = MSWGetFullItemSize(pStruct->itemWidth,
+                                                 pStruct->itemHeight);
+        pStruct->itemWidth = size.x;
+        pStruct->itemHeight = size.y;
 
         return true;
     }
 
     return false;
-  }
+}
+
+void wxCheckListBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxCheckListBoxBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    wxSize size = wxRendererNative::Get().GetCheckBoxSize(this);
+    size.x += 2 * CHECKMARK_EXTRA_SPACE + CHECKMARK_LABEL_SPACE;
+
+    for ( unsigned int i = 0; i < GetCount(); ++i )
+    {
+        GetItem(i)->SetMarginWidth(size.GetWidth());
+    }
+}
 
 // check items
 // -----------
@@ -404,7 +418,7 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
                 // scroll one item down if the item is the last one
                 // and isn't visible at all
                 int h;
-                GetClientSize(NULL, &h);
+                GetClientSize(nullptr, &h);
                 if ( rect.GetBottom() > h )
                     ScrollLines(1);
             }
@@ -422,20 +436,25 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
     }
 }
 
+wxSize wxCheckListBox::MSWGetFullItemSize(int w, int h) const
+{
+    wxSize size = wxRendererNative::Get().GetCheckBoxSize(const_cast<wxCheckListBox*>(this));
+    size.x += 2 * CHECKMARK_EXTRA_SPACE;
+    size.y += 2 * CHECKMARK_EXTRA_SPACE;
+
+    w += size.GetWidth();
+    if ( h < size.GetHeight() )
+        h = size.GetHeight();
+
+    return wxSize(w, h);
+}
+
 wxSize wxCheckListBox::DoGetBestClientSize() const
 {
     wxSize best = wxListBox::DoGetBestClientSize();
 
     // add room for the checkbox
-    wxSize size = wxRendererNative::Get().GetCheckBoxSize(const_cast<wxCheckListBox*>(this));
-    size.x += 2 * CHECKMARK_EXTRA_SPACE;
-    size.y += 2 * CHECKMARK_EXTRA_SPACE;
-
-    best.x += size.GetWidth();
-    if ( best.y < size.GetHeight() )
-        best.y = size.GetHeight();
-
-    return best;
+    return MSWGetFullItemSize(best.x, best.y);
 }
 
 #endif // wxUSE_CHECKLISTBOX

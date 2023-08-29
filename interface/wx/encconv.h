@@ -94,7 +94,7 @@ public:
         See the Convert(const char*,char*) const overload for more info.
     */
     wxString Convert(const wxString& input) const;
-    //@}
+    ///@}
 
 
     /**

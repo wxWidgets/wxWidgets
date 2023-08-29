@@ -19,7 +19,8 @@
 #include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/dir.h"
-#include "wx/hashmap.h"
+
+#include <unordered_map>
 
 #define wxTRACE_FSWATCHER "fswatcher"
 
@@ -159,7 +160,7 @@ public:
         return m_changeType;
     }
 
-    virtual wxEvent* Clone() const wxOVERRIDE
+    virtual wxEvent* Clone() const override
     {
         wxFileSystemWatcherEvent* evt = new wxFileSystemWatcherEvent(*this);
         evt->m_errorMsg = m_errorMsg.Clone();
@@ -169,7 +170,7 @@ public:
         return evt;
     }
 
-    virtual wxEventCategory GetEventCategory() const wxOVERRIDE
+    virtual wxEventCategory GetEventCategory() const override
     {
         // TODO this has to be merged with "similar" categories and changed
         return wxEVT_CATEGORY_UNKNOWN;
@@ -205,7 +206,7 @@ protected:
     wxFileName m_newPath;
     wxString m_errorMsg;
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFileSystemWatcherEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxFileSystemWatcherEvent);
 };
 
 typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
@@ -279,7 +280,7 @@ protected:
     int m_refcount;
 };
 
-WX_DECLARE_STRING_HASH_MAP(wxFSWatchInfo, wxFSWatchInfoMap);
+using wxFSWatchInfoMap = std::unordered_map<wxString, wxFSWatchInfo>;
 
 /**
  * Encapsulation of platform-specific file system event mechanism
@@ -337,7 +338,7 @@ public:
     int GetWatchedPathsCount() const;
 
     /**
-     * Retrevies all watched paths and places them in wxArrayString. Returns
+     * Retrieves all watched paths and places them in wxArrayString. Returns
      * the number of paths.
      *
      * TODO think about API here: we need to return more information (like is
@@ -370,15 +371,7 @@ protected:
 
     static wxString GetCanonicalPath(const wxFileName& path)
     {
-        wxFileName path_copy = wxFileName(path);
-        if ( !path_copy.Normalize() )
-        {
-            wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
-                                         path.GetFullPath()));
-            return wxEmptyString;
-        }
-
-        return path_copy.GetFullPath();
+        return path.GetAbsolutePath();
     }
 
 

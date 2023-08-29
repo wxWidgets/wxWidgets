@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/notifmsg.h"
 
@@ -31,9 +28,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
-#include "wx/generic/notifmsg.h"
+#include "wx/osx/private/available.h"
 #include "wx/private/notifmsg.h"
-#include "wx/generic/private/notifmsg.h"
 #include "wx/timer.h"
 #include "wx/platinfo.h"
 #include "wx/artprov.h"
@@ -74,12 +70,12 @@ public:
 
     virtual ~wxUserNotificationMsgImpl()
     {
-        ms_activeNotifications[m_id] = NULL;
+        ms_activeNotifications[m_id] = nullptr;
         ReleaseHandler();
         [m_notif release];
     }
 
-    virtual bool Show(int WXUNUSED(timeout)) wxOVERRIDE
+    virtual bool Show(int WXUNUSED(timeout)) override
     {
         NSUserNotificationCenter* nc = [NSUserNotificationCenter defaultUserNotificationCenter];
         [nc deliverNotification:m_notif];
@@ -87,7 +83,7 @@ public:
         return true;
     }
     
-    virtual bool Close() wxOVERRIDE
+    virtual bool Close() override
     {
         NSUserNotificationCenter* nc = [NSUserNotificationCenter defaultUserNotificationCenter];
         [nc removeDeliveredNotification:m_notif];
@@ -95,38 +91,34 @@ public:
         return true;
     }
     
-    virtual void SetTitle(const wxString& title) wxOVERRIDE
+    virtual void SetTitle(const wxString& title) override
     {
         wxCFStringRef cftitle(title);
         m_notif.title = cftitle.AsNSString();
     }
     
-    virtual void SetMessage(const wxString& message) wxOVERRIDE
+    virtual void SetMessage(const wxString& message) override
     {
         wxCFStringRef cfmsg(message);
         m_notif.informativeText = cfmsg.AsNSString();
     }
     
-    virtual void SetParent(wxWindow *WXUNUSED(parent)) wxOVERRIDE
+    virtual void SetParent(wxWindow *WXUNUSED(parent)) override
     {
     }
     
-    virtual void SetFlags(int WXUNUSED(flags)) wxOVERRIDE
+    virtual void SetFlags(int WXUNUSED(flags)) override
     {
         // On OS X we do not add an icon based on the flags,
         // as this is primarily meant for custom icons
     }
     
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE
+    virtual void SetIcon(const wxIcon& icon) override
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-        // Additional icon in the notification is only supported on OS X 10.9+
-        if ([NSUserNotification instancesRespondToSelector:@selector(setContentImage:)])
-            m_notif.contentImage = icon.GetNSImage();
-#endif
+        m_notif.contentImage = icon.GetNSImage();
     }
     
-    virtual bool AddAction(wxWindowID actionid, const wxString &label) wxOVERRIDE
+    virtual bool AddAction(wxWindowID actionid, const wxString &label) override
     {
         if (m_actions.size() >= 1) // Currently only 1 actions are supported
             return false;
@@ -227,6 +219,7 @@ int wxUserNotificationMsgImpl::ms_notifIdBase = 1000;
 
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
+    wxUnusedVar(center);
     NSString* notifId = [notification.userInfo objectForKey:@"wxId"];
     if (notifId)
         wxUserNotificationMsgImpl::NotificationActivated(wxCFStringRef::AsString(notifId), notification.activationType);
@@ -245,12 +238,7 @@ int wxUserNotificationMsgImpl::ms_notifIdBase = 1000;
 
 void wxNotificationMessage::Init()
 {
-    // Native notifications are not available prior to 10.8, fallback
-    // to generic ones on 10.7
-    if (wxPlatformInfo::Get().CheckOSVersion(10, 8))
-        m_impl = new wxUserNotificationMsgImpl(this);
-    else
-        m_impl = new wxGenericNotificationMessageImpl(this);
+    m_impl = new wxUserNotificationMsgImpl(this);
 }
 
 #endif // wxUSE_NOTIFICATION_MESSAGE && defined(wxHAS_NATIVE_NOTIFICATION_MESSAGE)

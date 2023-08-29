@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_RIBBON
 
@@ -43,7 +40,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRibbonXmlHandler, wxXmlResourceHandler);
 
 wxRibbonXmlHandler::wxRibbonXmlHandler()
     : wxXmlResourceHandler(),
-      m_isInside(NULL)
+      m_isInside(nullptr)
 {
     XRC_ADD_STYLE(wxRIBBON_BAR_SHOW_PAGE_LABELS);
     XRC_ADD_STYLE(wxRIBBON_BAR_SHOW_PAGE_ICONS);
@@ -115,7 +112,7 @@ void wxRibbonXmlHandler::Handle_RibbonArtProvider(wxRibbonControl *control)
 
 wxObject* wxRibbonXmlHandler::Handle_buttonbar()
 {
-    XRC_MAKE_INSTANCE (buttonBar, wxRibbonButtonBar);
+    XRC_MAKE_INSTANCE (buttonBar, wxRibbonButtonBar)
 
     if (!buttonBar->Create (wxDynamicCast(m_parent, wxWindow), GetID(),
             GetPosition(), GetSize(), GetStyle()))
@@ -154,7 +151,7 @@ wxObject* wxRibbonXmlHandler::Handle_button()
     // FIXME: If re-enabling, don't forget to update the docs and RELAG NG schema!
 #if 0 // wxUSE_MENUS
     // check whether we have dropdown tag inside
-    wxMenu *menu = NULL; // menu for drop down items
+    wxMenu *menu = nullptr; // menu for drop down items
     wxXmlNode * const nodeDropdown = GetParamNode("dropdown");
     if ( nodeDropdown )
     {
@@ -167,7 +164,7 @@ wxObject* wxRibbonXmlHandler::Handle_button()
         wxXmlNode * const nodeMenu = nodeDropdown->GetChildren();
         if ( nodeMenu )
         {
-            wxObject *res = CreateResFromNode(nodeMenu, NULL);
+            wxObject *res = CreateResFromNode(nodeMenu, nullptr);
             menu = wxDynamicCast(res, wxMenu);
             if ( !menu )
             {
@@ -205,7 +202,7 @@ wxObject* wxRibbonXmlHandler::Handle_button()
     if ( GetBool(wxT("disabled")) )
             buttonBar->EnableButton(GetID(), false);
 
-    return NULL; // nothing to return
+    return nullptr; // nothing to return
 }
 
 wxObject* wxRibbonXmlHandler::Handle_control()
@@ -225,7 +222,7 @@ wxObject* wxRibbonXmlHandler::Handle_control()
 
 wxObject* wxRibbonXmlHandler::Handle_page()
 {
-    XRC_MAKE_INSTANCE (ribbonPage, wxRibbonPage);
+    XRC_MAKE_INSTANCE (ribbonPage, wxRibbonPage)
 
     if (!ribbonPage->Create (wxDynamicCast(m_parent, wxRibbonBar), GetID(),
             GetText ("label"), GetBitmap ("icon"), GetStyle()))
@@ -248,7 +245,7 @@ wxObject* wxRibbonXmlHandler::Handle_page()
 
 wxObject* wxRibbonXmlHandler::Handle_gallery()
 {
-    XRC_MAKE_INSTANCE (ribbonGallery, wxRibbonGallery);
+    XRC_MAKE_INSTANCE (ribbonGallery, wxRibbonGallery)
 
     if (!ribbonGallery->Create (wxDynamicCast(m_parent, wxWindow), GetID(),
             GetPosition(), GetSize(), GetStyle()))
@@ -272,16 +269,16 @@ wxObject* wxRibbonXmlHandler::Handle_gallery()
 wxObject* wxRibbonXmlHandler::Handle_galleryitem()
 {
     wxRibbonGallery *gallery = wxStaticCast(m_parent, wxRibbonGallery);
-    wxCHECK (gallery, NULL);
+    wxCHECK (gallery, nullptr);
 
     gallery->Append (GetBitmap(), GetID());
 
-    return NULL; // nothing to return
+    return nullptr; // nothing to return
 }
 
 wxObject* wxRibbonXmlHandler::Handle_panel()
 {
-    XRC_MAKE_INSTANCE (ribbonPanel, wxRibbonPanel);
+    XRC_MAKE_INSTANCE (ribbonPanel, wxRibbonPanel)
 
     if (!ribbonPanel->Create (wxDynamicCast(m_parent, wxWindow), GetID(),
             GetText ("label"), GetBitmap ("icon"), GetPosition(), GetSize(),
@@ -301,7 +298,7 @@ wxObject* wxRibbonXmlHandler::Handle_panel()
 
 wxObject* wxRibbonXmlHandler::Handle_bar()
 {
-    XRC_MAKE_INSTANCE (ribbonBar, wxRibbonBar);
+    XRC_MAKE_INSTANCE (ribbonBar, wxRibbonBar)
 
     Handle_RibbonArtProvider (ribbonBar);
 

@@ -1,5 +1,5 @@
 #############################################################################
-# Name:        build/cmake/tests/base/CMakeLists.txt
+# Name:        build/cmake/tests/gui/CMakeLists.txt
 # Purpose:     CMake file for gui test
 # Author:      Tobias Taschner
 # Created:     2016-10-31
@@ -21,9 +21,15 @@ set(TEST_GUI_SRC
     graphics/measuring.cpp
     graphics/affinematrix.cpp
     graphics/boundingbox.cpp
+    graphics/clipper.cpp
     graphics/clippingbox.cpp
+    graphics/coords.cpp
+    graphics/graphbitmap.cpp
     graphics/graphmatrix.cpp
+    graphics/graphpath.cpp
+    graphics/imagelist.cpp
     config/config.cpp
+    controls/auitest.cpp
     controls/bitmapcomboboxtest.cpp
     controls/bitmaptogglebuttontest.cpp
     controls/bookctrlbasetest.cpp
@@ -53,6 +59,7 @@ set(TEST_GUI_SRC
     controls/ownerdrawncomboboxtest.cpp
     controls/pickerbasetest.cpp
     controls/pickertest.cpp
+    controls/propgridtest.cpp
     controls/radioboxtest.cpp
     controls/radiobuttontest.cpp
     controls/rearrangelisttest.cpp
@@ -62,6 +69,7 @@ set(TEST_GUI_SRC
     controls/slidertest.cpp
     controls/spinctrldbltest.cpp
     controls/spinctrltest.cpp
+    controls/styledtextctrltest.cpp
     controls/textctrltest.cpp
     controls/textentrytest.cpp
     controls/togglebuttontest.cpp
@@ -86,6 +94,7 @@ set(TEST_GUI_SRC
     image/rawbmp.cpp
     html/htmlparser.cpp
     html/htmlwindow.cpp
+    html/htmprint.cpp
     menu/accelentry.cpp
     menu/menu.cpp
     misc/guifuncs.cpp
@@ -97,37 +106,132 @@ set(TEST_GUI_SRC
     # non-GUI test) as sockets behave differently in console and GUI
     # applications.
     net/socket.cpp
+    persistence/tlw.cpp
+    persistence/dataview.cpp
+    rowheightcache/rowheightcachetest.cpp
     sizers/boxsizer.cpp
     sizers/gridsizer.cpp
     sizers/wrapsizer.cpp
     toplevel/toplevel.cpp
     validators/valnum.cpp
+    validators/valtext.cpp
     window/clientsize.cpp
     window/setsize.cpp
     xml/xrctest.cpp
+
+    testprec.h
+    testableframe.h
+    asserthelper.h
+    testdate.h
+    testfile.h
+    testimage.h
+    controls/bookctrlbasetest.h
+    controls/itemcontainertest.h
+    controls/listbasetest.h
+    controls/pickerbasetest.h
+    controls/textentrytest.h
+    persistence/testpersistence.h
     )
-wx_add_test(test_gui ${TEST_GUI_SRC})
-wx_exe_link_libraries(test_gui core)
+
+set(TEST_GUI_DATA
+    horse.ani
+    horse.bmp
+    horse.cur
+    horse.gif
+    horse.ico
+    horse.jpg
+    horse.pcx
+    horse.png
+    horse.pnm
+    horse.svg
+    horse.tga
+    horse.tif
+    horse.xpm
+    image/bitfields.bmp
+    image/bitfields-alpha.bmp
+    image/8bpp-colorsused-large.bmp
+    image/8bpp-colorsused-negative.bmp
+    image/rle4-delta-320x240.bmp
+    image/rle8-delta-320x240-expected.bmp
+    image/rle8-delta-320x240.bmp
+    image/horse_grey.bmp
+    image/horse_grey_flipped.bmp
+    image/horse_rle4.bmp
+    image/horse_rle4_flipped.bmp
+    image/horse_rle8.bmp
+    image/horse_rle8_flipped.bmp
+    image/cross_bicubic_256x256.png
+    image/cross_bilinear_256x256.png
+    image/cross_box_average_256x256.png
+    image/cross_nearest_neighb_256x256.png
+    image/horse_bicubic_50x50.png
+    image/horse_bicubic_100x100.png
+    image/horse_bicubic_150x150.png
+    image/horse_bicubic_300x300.png
+    image/horse_bilinear_50x50.png
+    image/horse_bilinear_100x100.png
+    image/horse_bilinear_150x150.png
+    image/horse_bilinear_300x300.png
+    image/horse_box_average_50x50.png
+    image/horse_box_average_100x100.png
+    image/horse_box_average_150x150.png
+    image/horse_box_average_300x300.png
+    image/paste_input_background.png
+    image/paste_input_black.png
+    image/paste_input_overlay_transparent_border_opaque_square.png
+    image/paste_input_overlay_transparent_border_semitransparent_circle.png
+    image/paste_input_overlay_transparent_border_semitransparent_square.png
+    image/paste_result_background_plus_circle_plus_square.png
+    image/paste_result_background_plus_overlay_transparent_border_opaque_square.png
+    image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
+    image/paste_result_no_background_square_over_circle.png
+    image/wx.png
+    image/toucan.png
+    image/toucan_hue_0.538.png
+    image/toucan_sat_-0.41.png
+    image/toucan_bright_-0.259.png
+    image/toucan_hsv_0.538_-0.41_-0.259.png
+    image/toucan_light_46.png
+    image/toucan_dis_240.png
+    image/toucan_grey.png
+    image/toucan_mono_255_255_255.png
+    image/width-times-height-overflow.bmp
+    image/width_height_32_bit_overflow.pgm
+    image/bad_truncated.gif
+    intl/ja/internat.mo
+    intl/ja/internat.po
+    )
+
+wx_add_test(test_gui CONSOLE_GUI ${TEST_GUI_SRC}
+    DATA ${TEST_GUI_DATA}
+    )
+if(wxUSE_AUI)
+    wx_exe_link_libraries(test_gui wxaui)
+endif()
 if(wxUSE_RICHTEXT)
-    wx_exe_link_libraries(test_gui richtext)
+    wx_exe_link_libraries(test_gui wxrichtext)
+endif()
+if(wxUSE_STC)
+    wx_exe_link_libraries(test_gui wxstc)
 endif()
 if(wxUSE_MEDIACTRL)
-    wx_exe_link_libraries(test_gui media)
+    wx_exe_link_libraries(test_gui wxmedia)
 endif()
 if(wxUSE_XRC)
-    wx_exe_link_libraries(test_gui xrc)
+    wx_exe_link_libraries(test_gui wxxrc)
 endif()
 if(wxUSE_XML)
-    wx_exe_link_libraries(test_gui xml)
+    wx_exe_link_libraries(test_gui wxxml)
 endif()
-wx_exe_link_libraries(test_gui adv)
 if(wxUSE_HTML)
-    wx_exe_link_libraries(test_gui html)
+    wx_exe_link_libraries(test_gui wxhtml)
 endif()
 if(wxUSE_SOCKETS)
-    wx_exe_link_libraries(test_gui net)
+    wx_exe_link_libraries(test_gui wxnet)
 endif()
 if(wxUSE_WEBVIEW)
-    wx_exe_link_libraries(test_gui webview)
+    wx_exe_link_libraries(test_gui wxwebview)
 endif()
-wx_test_enable_precomp(test_gui)
+if(wxUSE_PROPGRID)
+    wx_exe_link_libraries(test_gui wxpropgrid)
+endif()

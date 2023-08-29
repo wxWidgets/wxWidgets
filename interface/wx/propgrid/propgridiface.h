@@ -71,38 +71,6 @@ wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
 /** @}
 */
 
-/** @section propgrid_misc_data wxPropertyGrid Miscellaneous
-
-    This section describes some miscellaneous values, types and macros.
-    @{
-*/
-
-/**
-    Used to tell wxPGProperty to use label as name as well.
-*/
-#define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
-
-/**
-    This is the value placed in wxPGProperty::sm_wxPG_LABEL
-*/
-#define wxPG_LABEL_STRING       wxS("@!")
-
-#define wxPG_COLOUR_BLACK       (*wxBLACK)
-
-/**
-    Convert Red, Green and Blue to a single 32-bit value.
-*/
-#define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
-
-/**
-    If property is supposed to have custom-painted image, then returning
-    this in OnMeasureImage() will usually be enough.
-*/
-#define wxPG_DEFAULT_IMAGE_SIZE  wxDefaultSize
-
-/** @}
-*/
-
 /**
     @class wxPropertyGridInterface
 
@@ -142,7 +110,7 @@ public:
           Refresh() when calling this function after control has been shown for
           the first time.
         - This functions deselects selected property, if any. Validation
-          failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
+          failure option wxPGVFBFlags::StayInProperty is not respected, i.e.
           selection is cleared even if editor had invalid value.
     */
     wxPGProperty* Append( wxPGProperty* property );
@@ -171,7 +139,7 @@ public:
         Deletes all properties.
 
         @remarks This functions deselects selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
+                failure option wxPGVFBFlags::StayInProperty is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     virtual void Clear() = 0;
@@ -187,9 +155,8 @@ public:
                fail if validation was enabled and active editor had invalid
                value.
 
-        @remarks In wxPropertyGrid 1.4, this member function used to send
-                 wxPG_EVT_SELECTED. In wxWidgets 2.9 and later, it no longer
-                 does that.
+        @remarks In wxWidgets 2.9 and later, this function no longer
+        sends @c wxPG_EVT_SELECTED.
 
         @see wxPropertyGrid::SelectProperty()
     */
@@ -206,7 +173,7 @@ public:
         @return Returns @true if actually collapsed.
 
         @remarks This function may deselect selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
+                failure option wxPGVFBFlags::StayInProperty is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     bool Collapse( wxPGPropArg id );
@@ -218,7 +185,7 @@ public:
         Return @false if failed (may fail if editor value cannot be validated).
 
         @remarks This functions clears selection. Validation failure option
-                wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e. selection
+                wxPGVFBFlags::StayInProperty is not respected, i.e. selection
                 is cleared even if editor had invalid value.
     */
     bool CollapseAll();
@@ -226,7 +193,10 @@ public:
     /**
         Changes value of a property, as if by user. Use this instead of
         SetPropertyValue() if you need the value to run through validation
-        process, and also send the property change event.
+        process, and also send @c wxEVT_PG_CHANGED.
+
+        @remarks Since this function sends @c wxEVT_PG_CHANGED, it should not
+        be called from @c EVT_PG_CHANGED handler.
 
         @return Returns @true if value was successfully changed.
     */
@@ -243,7 +213,7 @@ public:
                  idle event.
 
                  This functions deselects selected property, if any.
-                 Validation failure option wxPG_VFB_STAY_IN_PROPERTY is not
+                 Validation failure option wxPGVFBFlags::StayInProperty is not
                  respected, i.e. selection is cleared even if editor had
                  invalid value.
     */
@@ -295,7 +265,7 @@ public:
         @return Returns @true if actually expanded.
 
         @remarks This function may deselect selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
+                failure option wxPGVFBFlags::StayInProperty is not respected, i.e.
                 selection is cleared even if editor had invalid value.
     */
     bool Expand( wxPGPropArg id );
@@ -304,7 +274,7 @@ public:
         Expands all items that can be expanded.
 
         @remarks This functions clears selection. Validation failure option
-                wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e. selection
+                wxPGVFBFlags::StayInProperty is not respected, i.e. selection
                 is cleared even if editor had invalid value.
     */
     bool ExpandAll( bool expand = true );
@@ -336,9 +306,9 @@ public:
 
     */
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                        wxPGProperty* firstProp = NULL );
+                                        wxPGProperty* firstProp = nullptr );
     wxPropertyGridConstIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                             wxPGProperty* firstProp = NULL ) const;
+                                             wxPGProperty* firstProp = nullptr ) const;
     //@}
 
     //@{
@@ -403,7 +373,7 @@ public:
                                 int iterFlags = (wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES) ) const;
 
     /**
-        Returns value of given attribute. If none found, returns wxNullVariant.
+        Returns value of given attribute. If none found, returns null wxVariant.
     */
     wxVariant GetPropertyAttribute( wxPGPropArg id, const wxString& attrName ) const;
 
@@ -411,7 +381,7 @@ public:
         Returns map-like storage of property's attributes.
 
         @remarks
-        Note that if extra style wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
+        Note that if extra style ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
         then builtin-attributes are not included in the storage.
     */
     const wxPGAttributeStorage& GetPropertyAttributes( wxPGPropArg id ) const;
@@ -498,7 +468,7 @@ public:
     /**
         Returns property's value as wxVariant.
 
-        If property value is unspecified, wxNullVariant is returned.
+        If property value is unspecified, null wxVariant is returned.
     */
     wxVariant GetPropertyValue( wxPGPropArg id );
 
@@ -549,14 +519,16 @@ public:
             The base property which children properties will be queried for
             values.
         @param flags
-            Use @c wxPG_KEEP_STRUCTURE to retain category structure; each sub
-            category will be its own wxVariantList of wxVariant.
-            Use @c wxPG_INC_ATTRIBUTES to include property attributes as well.
+            Use wxPGPropertyValuesFlags::KeepStructure to retain category structure;
+            each sub category will be its own wxVariantList of wxVariant.
+            Use wxPGPropertyValuesFlags::IncAttributes to include property attributes
+            as well.
             Each attribute will be stored as list variant named
             @"@@@<propname@>@@attr.@"
     */
-    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
-                                 wxPGProperty* baseparent = NULL, long flags = 0 ) const;
+    wxVariant GetPropertyValues(const wxString& listname = wxString(),
+                                wxPGProperty* baseparent = nullptr,
+                                wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse) const;
 
     /**
         Returns list of currently selected properties.
@@ -593,9 +565,10 @@ public:
             If @true, hides property, otherwise reveals it.
         @param flags
             By default changes are applied recursively. Set this parameter
-            wxPG_DONT_RECURSE to prevent this.
+            wxPGPropertyValuesFlags::DontRecurse to prevent this.
     */
-    bool HideProperty( wxPGPropArg id, bool hide = true, int flags = wxPG_RECURSE );
+    bool HideProperty(wxPGPropArg id, bool hide = true,
+                      wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /**
         Initializes *all* property types. Causes references to most object
@@ -628,7 +601,7 @@ public:
           especially true if current mode is non-categoric.
 
         - This functions deselects selected property, if any. Validation
-          failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, i.e.
+          failure option wxPGVFBFlags::StayInProperty is not respected, i.e.
           selection is cleared even if editor had invalid value.
 
         Example of use:
@@ -691,7 +664,7 @@ public:
     /**
         Returns @true if property is selected.
     */
-    virtual bool IsPropertySelected( wxPGPropArg id ) const;
+    bool IsPropertySelected( wxPGPropArg id ) const;
 
     /**
         Returns @true if property is shown (i.e. HideProperty() with @true not
@@ -716,7 +689,7 @@ public:
     /**
         If state is shown in its grid, refresh it now.
     */
-    virtual void RefreshGrid( wxPropertyGridPageState* state = NULL );
+    virtual void RefreshGrid( wxPropertyGridPageState* state = nullptr );
 
     /**
         Initializes additional property editors (SpinCtrl etc.). Causes
@@ -849,7 +822,7 @@ public:
                                 const wxString& falseChoice );
 
     /**
-        Set proportion of a auto-stretchable column. wxPG_SPLITTER_AUTO_CENTER
+        Set proportion of an auto-stretchable column. wxPG_SPLITTER_AUTO_CENTER
         window style needs to be used to indicate that columns are auto-
         resizable.
 
@@ -873,15 +846,16 @@ public:
             Value of attribute.
         @param argFlags
             Optional.
-            Use wxPG_RECURSE to set the attribute to child properties recursively.
+            Use wxPGPropertyValuesFlags::Recurse to set the attribute to child
+            properties recursively.
 
         @remarks
-        - Setting attribute's value to wxNullVariant will simply remove it
+        - Setting attribute's value to null wxVariant will simply remove it
         from property's set of attributes.
         - Property is refreshed with new settings.
     */
-    void SetPropertyAttribute( wxPGPropArg id, const wxString& attrName,
-                               wxVariant value, long argFlags = 0 );
+    void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName, wxVariant value,
+                              wxPGPropertyValuesFlags argFlags = wxPGPropertyValuesFlags::DontRecurse);
 
     /**
         Sets property attribute for all applicable properties.
@@ -903,7 +877,8 @@ public:
             New background colour.
 
         @param flags
-            Default is wxPG_RECURSE which causes colour to be set recursively.
+            Default is wxPGPropertyValuesFlags::Recurse which causes colour
+            to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
 
@@ -911,9 +886,8 @@ public:
         - If category is tried to set recursively, only its children are affected.
         - Property is redrawn with new colour.
     */
-    void SetPropertyBackgroundColour( wxPGPropArg id,
-                                      const wxColour& colour,
-                                      int flags = wxPG_RECURSE );
+    void SetPropertyBackgroundColour(wxPGPropArg id, const wxColour& colour,
+                                     wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /**
         Sets text, bitmap, and colours for given column's cell.
@@ -924,8 +898,8 @@ public:
     */
     void SetPropertyCell( wxPGPropArg id,
                           int column,
-                          const wxString& text = wxEmptyString,
-                          const wxBitmap& bitmap = wxNullBitmap,
+                          const wxString& text = wxString(),
+                          const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );
 
@@ -944,14 +918,16 @@ public:
             Property name or pointer.
 
         @param flags
-            Default is wxPG_DONT_RECURSE which causes colour to be reset
+            Default is wxPGPropertyValuesFlags::DontRecurse which causes
+            colour to be reset
             only for the property in question (for backward compatibility).
 
         @remarks
         - If category is tried to set recursively, only its children are affected.
         - Property is redrawn with new colours.
     */
-    void SetPropertyColoursToDefault(wxPGPropArg id, int flags = wxPG_DONT_RECURSE);
+    void SetPropertyColoursToDefault(wxPGPropArg id,
+                                     wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     /**
         Sets editor for a property.
@@ -1006,15 +982,15 @@ public:
 
         @param flags
             By default changes are applied recursively. Set this parameter
-            to wxPG_DONT_RECURSE to prevent this.
+            to wxPGPropertyValuesFlags::DontRecurse to prevent this.
 
         @remarks
         - This is mainly for use with textctrl editor. Only some other
         editors fully support it.
         - Property is refreshed with new settings.
     */
-    void SetPropertyReadOnly( wxPGPropArg id, bool set = true,
-                              int flags = wxPG_RECURSE );
+    void SetPropertyReadOnly(wxPGPropArg id, bool set = true,
+                             wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /**
         Sets property's value to unspecified. If it has children (it may be
@@ -1045,15 +1021,27 @@ public:
     void SetPropertyHelpString( wxPGPropArg id, const wxString& helpString );
 
     /**
-        Set wxBitmap in front of the value.
+        Set wxBitmap taken from wxBitmapBundle in front of the value.
 
         @remarks Bitmap will be scaled to a size returned by
                 wxPropertyGrid::GetImageSize();
     */
-    void SetPropertyImage( wxPGPropArg id, wxBitmap& bmp );
+    void SetPropertyImage( wxPGPropArg id, wxBitmapBundle& bmp );
 
     /**
-        Sets max length of property's text.
+        Sets maximum length of text in property text editor.
+
+        @param id
+            Property name or pointer.
+        @param maxLen
+            Maximum number of characters of the text the user can enter in
+            the text editor. If it is 0, the length is not limited and the text
+            can be as long as it is supported by the underlying native text
+            control widget.
+        @return
+            Returns @true if maximum length was set.
+        @see
+            wxPGProperty::SetMaxLength.
     */
     bool SetPropertyMaxLength( wxPGPropArg id, int maxLen );
 
@@ -1068,7 +1056,8 @@ public:
             New text colour.
 
         @param flags
-            Default is wxPG_RECURSE which causes colour to be set recursively.
+            Default is wxPGPropertyValuesFlags::Recurse which causes colour
+            to be set recursively.
             Omit this flag to only set colour for the property in question
             and not any of its children.
 
@@ -1076,9 +1065,8 @@ public:
         - If category is tried to set recursively, only its children are affected.
         - Property is redrawn with new colour.
     */
-    void SetPropertyTextColour( wxPGPropArg id,
-                                const wxColour& colour,
-                                int flags = wxPG_RECURSE );
+    void SetPropertyTextColour(wxPGPropArg id, const wxColour& colour,
+                               wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     /**
         Sets validator of a property.
@@ -1146,8 +1134,8 @@ public:
     /**
         Sets value (wxVariant) of a property.
 
-        @remarks Use wxPropertyGrid::ChangePropertyValue() instead if you need to
-                run through validation process and send property change event.
+        @remarks Use ChangePropertyValue() instead if you need to
+        run through validation process and send property change event.
     */
     void SetPropertyValue( wxPGPropArg id, wxVariant value );
 
@@ -1164,20 +1152,20 @@ public:
         @param vfbFlags
             See @ref propgrid_vfbflags for possible values.
     */
-    void SetValidationFailureBehavior( int vfbFlags );
+    void SetValidationFailureBehavior( wxPGVFBFlags vfbFlags );
 
     /**
         Sorts all properties recursively.
 
         @param flags
             This can contain any of the following options:
-              wxPG_SORT_TOP_LEVEL_ONLY: Only sort categories and their
-                immediate children. Sorting done by wxPG_AUTO_SORT option
-                uses this.
+              wxPGPropertyValuesFlags::SortTopLevelOnly: Only sort categories
+              and their immediate children. Sorting done by wxPG_AUTO_SORT
+              option uses this.
 
         @see SortChildren, wxPropertyGrid::SetSortFunction
     */
-    void Sort( int flags = 0 );
+    void Sort(wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     /**
         Sorts children of a property.
@@ -1187,11 +1175,12 @@ public:
 
         @param flags
             This can contain any of the following options:
-              wxPG_RECURSE: Sorts recursively.
+              wxPGPropertyValuesFlags::Recurse: Sorts recursively.
 
         @see Sort, wxPropertyGrid::SetSortFunction
     */
-    void SortChildren( wxPGPropArg id, int flags = 0 );
+    void SortChildren(wxPGPropArg id,
+                      wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     /**
         Returns editor pointer of editor with given name.

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -35,10 +32,6 @@
 #include <sstream>
 
 #include "dxfrenderer.h"
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(DXFEntityList)
-WX_DEFINE_LIST(DXFLayerList)
 
 // Conversion table from AutoCAD ACI colours to RGB values
 static const struct { unsigned char r, g, b; } aci_to_rgb[256] = {
@@ -344,31 +337,16 @@ DXFRenderer::~DXFRenderer()
 void DXFRenderer::Clear()
 {
     m_loaded = false;
-    {
-        for (DXFLayerList::compatibility_iterator node = m_layers.GetFirst(); node; node = node->GetNext())
-        {
-            DXFLayer *current = node->GetData();
-            delete current;
-        }
-    }
-    m_layers.Clear();
-    {
-        for (DXFEntityList::compatibility_iterator node = m_entities.GetFirst(); node; node = node->GetNext())
-        {
-            DXFEntity *current = node->GetData();
-            delete current;
-        }
-        m_entities.Clear();
-    }
+    m_layers.clear();
+    m_entities.clear();
 }
 
 int DXFRenderer::GetLayerColour(const wxString& layer) const
 {
-    for (DXFLayerList::compatibility_iterator node = m_layers.GetFirst(); node; node = node->GetNext())
+    for (const auto& current : m_layers)
     {
-        DXFLayer *current = node->GetData();
-        if (current->name == layer)
-            return current->colour;
+        if (current.name == layer)
+            return current.colour;
     }
     return 7;   // white
 }
@@ -388,7 +366,7 @@ bool DXFRenderer::ParseHeader(wxInputStream& stream)
     while (stream.CanRead())
     {
         GetLines(text, line1, line2);
-        if (line1 == wxT("0") && line2 == wxT("ENDSEC"))
+        if (line1 == "0" && line2 == "ENDSEC")
             return true;
     }
     return false;
@@ -404,28 +382,28 @@ bool DXFRenderer::ParseTables(wxInputStream& stream)
     while (stream.CanRead())
     {
         GetLines(text, line1, line2);
-        if (line1 == wxT("0") && inlayer)
+        if (line1 == "0" && inlayer)
         {
             // flush layer
             if (!layer.name.IsEmpty() && layer.colour != -1)
             {
-                DXFLayer *p = new DXFLayer;
-                p->name = layer.name;
-                p->colour = layer.colour;
-                m_layers.Append(p);
+                DXFLayer p;
+                p.name = layer.name;
+                p.colour = layer.colour;
+                m_layers.push_back(p);
             }
             layer = DXFLayer();
             inlayer = false;
         }
-        if (line1 == wxT("0") && line2 == wxT("ENDSEC"))
+        if (line1 == "0" && line2 == "ENDSEC")
             return true;
-        else if (line1 == wxT("0") && line2 == wxT("LAYER"))
+        else if (line1 == "0" && line2 == "LAYER")
             inlayer = true;
         else if (inlayer)
         {
-            if (line1 == wxT("2")) // layer name
+            if (line1 == "2") // layer name
                 layer.name = line2;
-            else if (line1 == wxT("62")) // ACI colour
+            else if (line1 == "62") // ACI colour
             {
                 long l;
                 line2.ToLong(&l);
@@ -464,12 +442,12 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
     while (stream.CanRead())
     {
         GetLines(text, line1, line2);
-        if (line1 == wxT("0") && state > 0)
+        if (line1 == "0" && state > 0)
         {
             // flush entity
             if (state == 1) // 3DFACE
             {
-                DXFFace *p = new DXFFace;
+                std::unique_ptr<DXFFace> p(new DXFFace);
                 p->v0 = v[0];
                 p->v1 = v[1];
                 p->v2 = v[2];
@@ -479,63 +457,63 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
                     p->colour = colour;
                 else
                     p->colour = GetLayerColour(layer);
-                m_entities.Append(p);
-                colour = -1; layer = wxEmptyString;
+                m_entities.push_back(std::move(p));
+                colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
             }
             else if (state == 2) // LINE
             {
-                DXFLine *p = new DXFLine;
+                std::unique_ptr<DXFLine> p(new DXFLine);
                 p->v0 = v[0];
                 p->v1 = v[1];
                 if (colour != -1)
                     p->colour = colour;
                 else
                     p->colour = GetLayerColour(layer);
-                m_entities.Append(p);
-                colour = -1; layer = wxEmptyString;
+                m_entities.push_back(std::move(p));
+                colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
             }
         }
-        if (line1 == wxT("0") && line2 == wxT("ENDSEC"))
+        if (line1 == "0" && line2 == "ENDSEC")
             return true;
-        else if (line1 == wxT("0") && line2 == wxT("3DFACE"))
+        else if (line1 == "0" && line2 == "3DFACE")
             state = 1;
-        else if (line1 == wxT("0") && line2 == wxT("LINE"))
+        else if (line1 == "0" && line2 == "LINE")
             state = 2;
         else if (state > 0)
         {
-            const double d=ToDouble(line2);
+            const float d = float(ToDouble(line2));
 
-            if (line1 == wxT("10"))
+            if (line1 == "10")
                 v[0].x = d;
-            else if (line1 == wxT("20"))
+            else if (line1 == "20")
                 v[0].y = d;
-            else if (line1 == wxT("30"))
+            else if (line1 == "30")
                 v[0].z = d;
-            else if (line1 == wxT("11"))
+            else if (line1 == "11")
                 v[1].x = d;
-            else if (line1 == wxT("21"))
+            else if (line1 == "21")
                 v[1].y = d;
-            else if (line1 == wxT("31"))
+            else if (line1 == "31")
                 v[1].z = d;
-            else if (line1 == wxT("12"))
+            else if (line1 == "12")
                 v[2].x = d;
-            else if (line1 == wxT("22"))
+            else if (line1 == "22")
                 v[2].y = d;
-            else if (line1 == wxT("32"))
+            else if (line1 == "32")
                 v[2].z = d;
-            else if (line1 == wxT("13"))
+            else if (line1 == "13")
                 v[3].x = d;
-            else if (line1 == wxT("23"))
+            else if (line1 == "23")
                 v[3].y = d;
-            else if (line1 == wxT("33"))
+            else if (line1 == "33")
                 v[3].z = d;
-            else if (line1 == wxT("8"))  // layer
+            else if (line1 == "8")  // layer
                 layer = line2;
-            else if (line1 == wxT("62")) // colour
+            else if (line1 == "62") // colour
             {
                 long l;
                 line2.ToLong(&l);
@@ -557,24 +535,24 @@ bool DXFRenderer::Load(wxInputStream& stream)
     while (stream.CanRead())
     {
         GetLines(text, line1, line2);
-        if (line1 == wxT("999")) // comment
+        if (line1 == "999") // comment
             continue;
-        else if (line1 == wxT("0") && line2 == wxT("SECTION"))
+        else if (line1 == "0" && line2 == "SECTION")
         {
             GetLines(text, line1, line2);
-            if (line1 == wxT("2"))
+            if (line1 == "2")
             {
-                if (line2 == wxT("HEADER"))
+                if (line2 == "HEADER")
                 {
                     if (!ParseHeader(stream))
                         return false;
                 }
-                else if (line2 == wxT("TABLES"))
+                else if (line2 == "TABLES")
                 {
                     if (!ParseTables(stream))
                         return false;
                 }
-                else if (line2 == wxT("ENTITIES"))
+                else if (line2 == "ENTITIES")
                 {
                     if (!ParseEntities(stream))
                         return false;
@@ -597,12 +575,11 @@ void DXFRenderer::NormalizeEntities()
     // calculate current min and max boundings of object
     DXFVector minv(10e20f, 10e20f, 10e20f);
     DXFVector maxv(-10e20f, -10e20f, -10e20f);
-    for (DXFEntityList::compatibility_iterator node = m_entities.GetFirst(); node; node = node->GetNext())
+    for (auto& entity : m_entities)
     {
-        DXFEntity *p = node->GetData();
-        if (p->type == DXFEntity::Line)
+        if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)p;
+            DXFLine *line = (DXFLine *)entity.get();
             const DXFVector *v[2] = { &line->v0, &line->v1 };
             for (int i = 0; i < 2; ++i)
             {
@@ -613,9 +590,9 @@ void DXFRenderer::NormalizeEntities()
                 maxv.y = mymax(v[i]->y, maxv.y);
                 maxv.z = mymax(v[i]->z, maxv.z);
             }
-        } else if (p->type == DXFEntity::Face)
+        } else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)p;
+            DXFFace *face = (DXFFace *)entity.get();
             const DXFVector *v[4] = { &face->v0, &face->v1, &face->v2, &face->v3 };
             for (int i = 0; i < 4; ++i)
             {
@@ -632,12 +609,11 @@ void DXFRenderer::NormalizeEntities()
     // rescale object down to [-5,5]
     DXFVector span(maxv.x - minv.x, maxv.y - minv.y, maxv.z - minv.z);
     float factor = mymin(mymin(10.0f / span.x, 10.0f / span.y), 10.0f / span.z);
-    for (DXFEntityList::compatibility_iterator node2 = m_entities.GetFirst(); node2; node2 = node2->GetNext())
+    for (auto& entity : m_entities)
     {
-        DXFEntity *p = node2->GetData();
-        if (p->type == DXFEntity::Line)
+        if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)p;
+            DXFLine *line = (DXFLine *)entity.get();
             DXFVector *v[2] = { &line->v0, &line->v1 };
             for (int i = 0; i < 2; ++i)
             {
@@ -645,9 +621,9 @@ void DXFRenderer::NormalizeEntities()
                 v[i]->y -= minv.y + span.y/2; v[i]->y *= factor;
                 v[i]->z -= minv.z + span.z/2; v[i]->z *= factor;
             }
-        } else if (p->type == DXFEntity::Face)
+        } else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)p;
+            DXFFace *face = (DXFFace *)entity.get();
             DXFVector *v[4] = { &face->v0, &face->v1, &face->v2, &face->v3 };
             for (int i = 0; i < 4; ++i)
             {
@@ -665,24 +641,23 @@ void DXFRenderer::Render() const
     if (!m_loaded)
         return;
 
-    for (DXFEntityList::compatibility_iterator node = m_entities.GetFirst(); node; node = node->GetNext())
+    for (const auto& entity : m_entities)
     {
-        DXFEntity *p = node->GetData();
-        wxColour c = ACIColourToRGB(p->colour);
-        if (p->type == DXFEntity::Line)
+        wxColour c = ACIColourToRGB(entity->colour);
+        if (entity->type == DXFEntity::Line)
         {
-            DXFLine *line = (DXFLine *)p;
+            DXFLine *line = (DXFLine *)entity.get();
             glBegin(GL_LINES);
-            glColor3f(c.Red()/255.0,c.Green()/255.0,c.Blue()/255.0);
+            glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glVertex3f(line->v0.x, line->v0.y, line->v0.z);
             glVertex3f(line->v1.x, line->v1.y, line->v1.z);
             glEnd();
         }
-        else if (p->type == DXFEntity::Face)
+        else if (entity->type == DXFEntity::Face)
         {
-            DXFFace *face = (DXFFace *)p;
+            DXFFace *face = (DXFFace *)entity.get();
             glBegin(GL_TRIANGLES);
-            glColor3f(c.Red()/255.0,c.Green()/255.0,c.Blue()/255.0);
+            glColor3f(c.Red()/255.0f, c.Green()/255.0f, c.Blue()/255.0f);
             glNormal3f(face->n.x, face->n.y, face->n.z);
             glVertex3f(face->v0.x, face->v0.y, face->v0.z);
             glVertex3f(face->v1.x, face->v1.y, face->v1.z);

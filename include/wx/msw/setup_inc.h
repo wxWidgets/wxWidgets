@@ -2,13 +2,13 @@
 // Name:        wx/msw/setup_inc.h
 // Purpose:     MSW-specific setup.h options
 // Author:      Vadim Zeitlin
-// Created:     2007-07-21 (extracted from wx/msw/setup0.h)
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Created:     2007-07-21 (extracted from wx/msw/setup.h)
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
-// Graphics backends choices for Windows
+// Windows-specific backends choices
 // ----------------------------------------------------------------------------
 
 // The options here are only taken into account if wxUSE_GRAPHICS_CONTEXT is 1.
@@ -17,24 +17,31 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 if you need to support XP, as Direct2D is not
-// available there.
+// Recommended setting: 1, GDI+ is always available.
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
 // Enable support for Direct2D-based implementation of wxGraphicsContext.
 //
-// Default is 1 for compilers which support it, i.e. VC10+ currently. If you
-// use an earlier MSVC version or another compiler and installed the necessary
-// SDK components manually, you need to change this setting.
+// Default is 1 for MSVS. MinGW-w64 supports Direct2D as well, but if you use
+// it, you need to change this setting manually as other MinGW distributions
+// may not support it.
 //
-// Recommended setting: 1 for faster and better quality graphics under Windows
-// 7 and later systems (if wxUSE_GRAPHICS_GDIPLUS is also enabled, earlier
-// systems will fall back on using GDI+).
-#if defined(_MSC_VER) && _MSC_VER >= 1600
+// Recommended setting: 1 for faster and better quality graphics.
+#if defined(_MSC_VER)
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
 #endif
+
+// wxWebRequest backend based on WinHTTP.
+//
+// This is only taken into account if wxUSE_WEBREQUEST==1.
+//
+// Default is 1 if supported by the compiler (MSVS or MinGW64).
+//
+// Recommended setting: 1, can be set to 0 if wxUSE_WEBREQUEST_CURL==1,
+// otherwise wxWebRequest won't be available at all.
+#define wxUSE_WEBREQUEST_WINHTTP 1
 
 // ----------------------------------------------------------------------------
 // Windows-only settings
@@ -67,12 +74,10 @@
 
 // Enable WinRT support
 //
-// Default is 1 for compilers which support it, i.e. VS2012+ currently. If you
-// use an earlier MSVC version or another compiler and installed the necessary
-// SDK components manually, you need to change this setting.
+// Default is 1 for compilers which support it, i.e. MSVS currently.
 //
 // Recommended setting: 1
-#if defined(_MSC_VER) && _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
+#if defined(_MSC_VER)
     #define wxUSE_WINRT 1
 #else
     #define wxUSE_WINRT 0
@@ -84,7 +89,7 @@
 // Set this to 1 to enable wxDIB class used internally for manipulating
 // wxBitmap data.
 //
-// Default is 1, set it to 0 only if you don't use wxImage neither
+// Default is 1, set it to 0 only if you don't use wxImage either
 //
 // Recommended setting: 1 (without it conversion to/from wxImage won't work)
 #define wxUSE_WXDIB 1
@@ -155,6 +160,13 @@
 //
 // Recommended setting: 0, nobody uses .INI files any more
 #define wxUSE_INICONF 0
+
+// Set to 0 if you need to include <winsock.h> rather than <winsock2.h>
+//
+// Default is 1.
+//
+// Recommended setting: 1, required to be 1 if wxUSE_IPV6 is 1.
+#define wxUSE_WINSOCK2 1
 
 // ----------------------------------------------------------------------------
 // Generic versions of native controls

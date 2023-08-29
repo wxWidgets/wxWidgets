@@ -31,7 +31,7 @@ class wxRegionRefData : public wxGDIRefData
 public:
     wxRegionRefData()
     {
-        m_region = NULL;
+        m_region = nullptr;
     }
 
     wxRegionRefData(const wxRegionRefData& refData)
@@ -201,7 +201,7 @@ wxGDIRefData *wxRegion::CreateGDIRefData() const
 {
     // should never be called
     wxFAIL;
-    return NULL;
+    return nullptr;
 }
 
 wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
@@ -267,9 +267,9 @@ bool wxRegion::DoUnionWithRect(const wxRect& r)
 
 bool wxRegion::DoUnionWithRegion( const wxRegion& region )
 {
-    if (region.m_refData == NULL)
+    if (region.m_refData == nullptr)
         { }
-    else if (m_refData == NULL)
+    else if (m_refData == nullptr)
     {
         m_refData = new wxRegionRefData(*M_REGIONDATA_OF(region));
     }
@@ -288,7 +288,7 @@ bool wxRegion::DoUnionWithRegion( const wxRegion& region )
 
 bool wxRegion::DoIntersect( const wxRegion& region )
 {
-    if (region.m_refData == NULL || m_refData == NULL)
+    if (region.m_refData == nullptr || m_refData == nullptr)
         return false;
 
     AllocExclusive();
@@ -304,7 +304,7 @@ bool wxRegion::DoIntersect( const wxRegion& region )
 
 bool wxRegion::DoSubtract( const wxRegion& region )
 {
-    if (region.m_refData == NULL || m_refData == NULL)
+    if (region.m_refData == nullptr || m_refData == nullptr)
         return false;
 
     AllocExclusive();
@@ -320,9 +320,9 @@ bool wxRegion::DoSubtract( const wxRegion& region )
 
 bool wxRegion::DoXor( const wxRegion& region )
 {
-    if (region.m_refData == NULL)
+    if (region.m_refData == nullptr)
         { }
-    else if (m_refData == NULL)
+    else if (m_refData == nullptr)
     {
         // XOR-ing with an invalid region is the same as XOR-ing with an empty
         // one, i.e. it is simply a copy.
@@ -392,18 +392,18 @@ bool wxRegion::DoGetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
 bool wxRegion::IsEmpty() const
 {
 #ifdef __WXGTK3__
-    return m_refData == NULL || cairo_region_is_empty(M_REGIONDATA->m_region);
+    return m_refData == nullptr || cairo_region_is_empty(M_REGIONDATA->m_region);
 #else
-    return m_refData == NULL || gdk_region_empty(M_REGIONDATA->m_region);
+    return m_refData == nullptr || gdk_region_empty(M_REGIONDATA->m_region);
 #endif
 }
 
 wxRegionContain wxRegion::DoContainsPoint( wxCoord x, wxCoord y ) const
 {
 #ifdef __WXGTK3__
-    if (m_refData == NULL || !cairo_region_contains_point(M_REGIONDATA->m_region, x, y))
+    if (m_refData == nullptr || !cairo_region_contains_point(M_REGIONDATA->m_region, x, y))
 #else
-    if (m_refData == NULL || !gdk_region_point_in(M_REGIONDATA->m_region, x, y))
+    if (m_refData == nullptr || !gdk_region_point_in(M_REGIONDATA->m_region, x, y))
 #endif
         return wxOutRegion;
 
@@ -446,7 +446,7 @@ GdkRegion *wxRegion::GetRegion() const
 #endif
 {
     if (!m_refData)
-        return NULL;
+        return nullptr;
 
     return M_REGIONDATA->m_region;
 }
@@ -469,7 +469,7 @@ wxRegionIterator::wxRegionIterator( const wxRegion& region )
 
 void wxRegionIterator::Init()
 {
-    m_rects = NULL;
+    m_rects = nullptr;
     m_numRects = 0;
 }
 
@@ -485,7 +485,7 @@ void wxRegionIterator::CreateRects( const wxRegion& region )
 
 #ifdef __WXGTK3__
     cairo_region_t* cairoRegion = region.GetRegion();
-    if (cairoRegion == NULL)
+    if (cairoRegion == nullptr)
         return;
     m_numRects = cairo_region_num_rectangles(cairoRegion);
      

@@ -46,11 +46,18 @@ mkdir -p $destdir
 tar x -C $destdir -i
 
 cd $destdir
-# All setup0.h files are supposed to be renamed to just setup.h when checked
-# out and in the distribution.
-find $prefix/include/wx -type f -name setup0.h | while read f; do
-    mv $f ${f%0.h}.h
-done
+
+# Check that there are no symlinks because we don't handle them correctly
+# under MSW systems currently.
+if ! find . -type l -exec false {} + -quit; then
+    set +x
+    echo 'There are unexpected symlinks in the source tree:' >&2
+    echo '' >& 2
+    find . -type l -fprint /dev/stderr
+    echo '' >& 2
+    echo 'Please remove them or fix #22271.' >&2
+    exit 2
+fi
 
 # Compile gettext catalogs.
 make -C $prefix/locale -s MSGFMT=msgfmt allmo

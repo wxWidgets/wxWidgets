@@ -17,14 +17,7 @@
 
 #include "wx/propgrid/propgrid.h"
 
-#include "wx/dcclient.h"
-#include "wx/scrolwin.h"
-#include "wx/toolbar.h"
-#include "wx/stattext.h"
-#include "wx/button.h"
-#include "wx/textctrl.h"
-#include "wx/dialog.h"
-#include "wx/headerctrl.h"
+#include <vector>
 
 // -----------------------------------------------------------------------
 
@@ -60,10 +53,10 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridPage : public wxEvtHandler,
 public:
 
     wxPropertyGridPage();
-    virtual ~wxPropertyGridPage();
+    virtual ~wxPropertyGridPage() = default;
 
     // Deletes all properties on page.
-    virtual void Clear() wxOVERRIDE;
+    virtual void Clear() override;
 
     // Reduces column sizes to minimum possible that contents are still
     // visibly (naturally some margin space will be applied as well).
@@ -119,7 +112,7 @@ public:
     virtual void OnShow();
 
     //  Refreshes given property on page.
-    virtual void RefreshProperty( wxPGProperty* p ) wxOVERRIDE;
+    virtual void RefreshProperty( wxPGProperty* p ) override;
 
     // Sets splitter position on page.
     // Splitter position cannot exceed grid size, and therefore setting it
@@ -135,10 +128,10 @@ public:
 
 protected:
 
-    // Propagate to other pages.
-    virtual void DoSetSplitterPosition( int pos,
-                                        int splitterColumn = 0,
-                                        int flags = wxPG_SPLITTER_REFRESH ) wxOVERRIDE;
+    // Propagate to other pages
+    virtual void DoSetSplitter(int pos,
+                               int splitterColumn,
+                               wxPGSplitterPositionFlags flags) override;
 
     // Page label (may be referred as name in some parts of documentation).
     // Can be set in constructor, or passed in
@@ -161,10 +154,13 @@ private:
 
 // -----------------------------------------------------------------------
 
+#if wxUSE_TOOLBAR
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
+#endif
 #if wxUSE_HEADERCTRL
 class wxPGHeaderCtrl;
 #endif
-
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
 
 // wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
 // which can optionally have toolbar for mode and page selection, and help
@@ -174,7 +170,6 @@ class WXDLLIMPEXP_PROPGRID
     wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
     wxDECLARE_CLASS(wxPropertyGridManager);
-    friend class wxPropertyGridPage;
 public:
 
 #ifndef SWIG
@@ -190,7 +185,7 @@ public:
                            const wxPoint& pos = wxDefaultPosition,
                            const wxSize& size = wxDefaultSize,
                            long style = wxPGMAN_DEFAULT_STYLE,
-                           const wxString& name = wxPropertyGridManagerNameStr );
+                           const wxString& name = wxASCII_STR(wxPropertyGridManagerNameStr) );
 
     // Destructor.
     virtual ~wxPropertyGridManager();
@@ -198,30 +193,37 @@ public:
     // Creates new property page. Note that the first page is not created
     // automatically.
     // label - A label for the page. This may be shown as a toolbar tooltip etc.
-    // bmp - Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-    //   default image is used.
+    // bmp - Bitmap bundle image for toolbar. If it's null then a built-in
+    //   default bitmap bundle is used.
     // pageObj - wxPropertyGridPage instance. Manager will take ownership of this object.
-    // NULL indicates that a default page instance should be created.
+    // nullptr indicates that a default page instance should be created.
     // Returns pointer to created page.
     // If toolbar is used, it is highly recommended that the pages are
     // added when the toolbar is not turned off using window style flag
     // switching.
-    wxPropertyGridPage* AddPage( const wxString& label = wxEmptyString,
-                                 const wxBitmap& bmp = wxNullBitmap,
-                                 wxPropertyGridPage* pageObj = NULL )
+    wxPropertyGridPage* AddPage( const wxString& label = wxString(),
+                                 const wxBitmapBundle& bmp = wxBitmapBundle(),
+                                 wxPropertyGridPage* pageObj = nullptr )
     {
         return InsertPage(-1, label, bmp, pageObj);
     }
 
-    // Deletes all all properties and all pages.
-    virtual void Clear() wxOVERRIDE;
+    // Deletes all properties and all pages.
+    virtual void Clear() override;
 
     // Deletes all properties on given page.
     void ClearPage( int page );
 
     // Forces updating the value of property from the editor control.
     // Returns true if DoPropertyChanged was actually called.
-    bool CommitChangesFromEditor( wxUint32 flags = 0 )
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use CommitChangesFromEditor with wxPGSelectPropertyFlags argument")
+    bool CommitChangesFromEditor(wxUint32 flags)
+    {
+        return CommitChangesFromEditor(static_cast<wxPGSelectPropertyFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    bool CommitChangesFromEditor(wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::Null)
     {
         return m_pPropGrid->CommitChangesFromEditor(flags);
     }
@@ -234,7 +236,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxPGMAN_DEFAULT_STYLE,
-                 const wxString& name = wxPropertyGridManagerNameStr );
+                 const wxString& name = wxASCII_STR(wxPropertyGridManagerNameStr) );
 
     // Enables or disables (shows/hides) categories according to parameter
     // enable.
@@ -270,7 +272,7 @@ public:
     const wxPropertyGrid* GetGrid() const
     {
         wxASSERT(m_pPropGrid);
-        return (const wxPropertyGrid*)m_pPropGrid;
+        return m_pPropGrid;
     }
 
     // Returns iterator class instance.
@@ -278,7 +280,7 @@ public:
     // failure. Please only iterate through individual pages or use
     // CreateVIterator().
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                        wxPGProperty* firstProp = NULL )
+                                        wxPGProperty* firstProp = nullptr )
     {
         wxFAIL_MSG( wxS("Please only iterate through individual pages ")
                     wxS("or use CreateVIterator()") );
@@ -287,7 +289,7 @@ public:
 
     wxPropertyGridConstIterator
     GetIterator(int flags = wxPG_ITERATE_DEFAULT,
-                wxPGProperty* firstProp = NULL) const
+                wxPGProperty* firstProp = nullptr) const
     {
         wxFAIL_MSG( wxS("Please only iterate through individual pages ")
                     wxS("or use CreateVIterator()") );
@@ -316,7 +318,7 @@ public:
     // Similar to GetIterator, but instead returns wxPGVIterator instance,
     // which can be useful for forward-iterating through arbitrary property
     // containers.
-    virtual wxPGVIterator GetVIterator( int flags ) const wxOVERRIDE;
+    virtual wxPGVIterator GetVIterator( int flags ) const override;
 
     // Returns currently selected page.
     wxPropertyGridPage* GetCurrentPage() const
@@ -346,7 +348,7 @@ public:
 
 protected:
     // Returns wxPropertyGridPageState of given page, current page's for -1.
-    virtual wxPropertyGridPageState* GetPageState( int page ) const wxOVERRIDE;
+    virtual wxPropertyGridPageState* GetPageState( int page ) const override;
 
 public:
     // Returns number of managed pages.
@@ -384,15 +386,15 @@ public:
     // automatically.
     // index - Add to this position. -1 will add as the last item.
     // label - A label for the page. This may be shown as a toolbar tooltip etc.
-    // bmp - Bitmap image for toolbar. If wxNullBitmap is used, then a built-in
-    //   default image is used.
+    // bmp - Bitmap bundle for toolbar. If it's null, then a built-in
+    //   default bitmap bundle is used.
     // pageObj - wxPropertyGridPage instance. Manager will take ownership of this object.
-    //   If NULL, default page object is constructed.
+    //   If nullptr, default page object is constructed.
     // Returns pointer to created page.
     virtual wxPropertyGridPage* InsertPage( int index,
                                             const wxString& label,
-                                            const wxBitmap& bmp = wxNullBitmap,
-                                            wxPropertyGridPage* pageObj = NULL );
+                                            const wxBitmapBundle& bmp = wxBitmapBundle(),
+                                            wxPropertyGridPage* pageObj = nullptr );
 
     // Returns true if any property on any page has been modified by the user.
     bool IsAnyModified() const;
@@ -404,9 +406,6 @@ public:
     // Returns true if property is selected. Since selection is page
     // based, this function checks every page in the manager.
     virtual bool IsPropertySelected( wxPGPropArg id ) const;
-
-    virtual void Refresh( bool eraseBackground = true,
-                          const wxRect* rect = (const wxRect*) NULL ) wxOVERRIDE;
 
     // Removes a page.
     // Returns false if it was not possible to remove page in question.
@@ -434,9 +433,9 @@ public:
     bool SelectProperty( wxPGPropArg id, bool focus = false )
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        unsigned int flags = wxPG_SEL_DONT_SEND_EVENT;
+        wxPGSelectPropertyFlags flags = wxPGSelectPropertyFlags::DontSendEvent;
         if ( focus )
-            flags |= wxPG_SEL_FOCUS;
+            flags |= wxPGSelectPropertyFlags::Focus;
 
         return p->GetParentState()->DoSelectProperty(p, flags);
     }
@@ -510,23 +509,20 @@ protected:
     virtual wxPropertyGrid* CreatePropertyGrid() const;
 
 public:
-    virtual void RefreshProperty( wxPGProperty* p ) wxOVERRIDE;
+    virtual void RefreshProperty( wxPGProperty* p ) override;
 
     //
     // Overridden functions - no documentation required.
     //
 
-    void SetId( wxWindowID winid ) wxOVERRIDE;
-    virtual void SetExtraStyle ( long exStyle ) wxOVERRIDE;
-    virtual bool SetFont ( const wxFont& font ) wxOVERRIDE;
-    virtual void SetWindowStyleFlag ( long style ) wxOVERRIDE;
-    virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
+    void SetId( wxWindowID winid ) override;
+    virtual void SetExtraStyle ( long exStyle ) override;
+    virtual bool SetFont ( const wxFont& font ) override;
+    virtual void SetWindowStyleFlag ( long style ) override;
+    virtual bool Reparent( wxWindowBase *newParent ) override;
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-
-    virtual void DoFreeze() wxOVERRIDE;
-    virtual void DoThaw() wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     //
     // Event handlers
@@ -543,12 +539,13 @@ protected:
 #endif
     void OnResize( wxSizeEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );
-    void OnPGColDrag( wxPropertyGridEvent& event );
+    void OnPGScrollH(wxPropertyGridEvent& evt);
+    void OnColWidthsChanged(wxPropertyGridEvent& evt);
 
 
     wxPropertyGrid* m_pPropGrid;
 
-    wxVector<wxPropertyGridPage*>   m_arrPages;
+    std::vector<wxPropertyGridPage*> m_arrPages;
 
 #if wxUSE_TOOLBAR
     wxToolBar*      m_pToolbar;
@@ -560,8 +557,6 @@ protected:
     wxStaticText*   m_pTxtHelpContent;
 
     wxPropertyGridPage*     m_emptyPage;
-
-    wxArrayString   m_columnLabels;
 
     long            m_iFlags;
 
@@ -590,14 +585,14 @@ protected:
 
     unsigned char   m_dragStatus;
 
-    unsigned char   m_onSplitter;
+    bool            m_onSplitter;
 
     bool            m_showHeader;
 
-    virtual wxPGProperty* DoGetPropertyByName( const wxString& name ) const wxOVERRIDE;
+    virtual wxPGProperty* DoGetPropertyByName( const wxString& name ) const override;
 
     // Select and displays a given page.
-    virtual bool DoSelectPage( int index ) wxOVERRIDE;
+    virtual bool DoSelectPage( int index ) override;
 
     // Sets some members to defaults.
     void Init1();
@@ -605,11 +600,7 @@ protected:
     // Initializes some members.
     void Init2( int style );
 
-/*#ifdef __WXMSW__
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
-#endif*/
-
-    virtual bool ProcessEvent( wxEvent& event ) wxOVERRIDE;
+    virtual bool ProcessEvent( wxEvent& event ) override;
 
     // Recalculates new positions for components, according to the
     // given size.
@@ -628,8 +619,8 @@ protected:
     void SetDescribedProperty( wxPGProperty* p );
 
     // Reimplement these to handle "descboxheight" state item
-    virtual bool SetEditableStateItem( const wxString& name, wxVariant value ) wxOVERRIDE;
-    virtual wxVariant GetEditableStateItem( const wxString& name ) const wxOVERRIDE;
+    virtual bool SetEditableStateItem( const wxString& name, wxVariant value ) override;
+    virtual wxVariant GetEditableStateItem( const wxString& name ) const override;
 
     // Reconnect propgrid event handlers.
     void ReconnectEventHandlers(wxWindowID oldId, wxWindowID newId);
@@ -641,9 +632,7 @@ private:
 
 inline int wxPropertyGridPage::GetIndex() const
 {
-    if ( !m_manager )
-        return wxNOT_FOUND;
-    return m_manager->GetPageByState(this);
+    return m_manager ? m_manager->GetPageByState(this) : wxNOT_FOUND;
 }
 
 // -----------------------------------------------------------------------

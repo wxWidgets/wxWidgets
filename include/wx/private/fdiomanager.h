@@ -16,7 +16,7 @@
 // wxFDIOManager: register or unregister wxFDIOHandlers
 // ----------------------------------------------------------------------------
 
-// currently only used in wxGTK and wxMotif, see wx/unix/apptrait.h
+// currently only used in wxGTK and wxQt, see wx/unix/apptrait.h
 
 class wxFDIOManager
 {

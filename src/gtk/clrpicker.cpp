@@ -20,7 +20,7 @@
 
 #include "wx/clrpicker.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 // ============================================================================
 // implementation
@@ -50,8 +50,11 @@ static void gtk_clrbutton_setcolor_callback(GtkColorButton *widget,
 #endif
     p->GTKSetColour(gdkColor);
 
-    // fire the colour-changed event
-    wxColourPickerEvent event(p, p->GetId(), p->GetColour());
+    // Fire the corresponding event: note that we want it to appear as
+    // originating from our parent, which is the user-visible window, and not
+    // this button itself, which is just an implementation detail.
+    wxWindow* const parent = p->GetParent();
+    wxColourPickerEvent event(parent, parent->GetId(), p->GetColour());
     p->HandleWindowEvent(event);
 }
 }
@@ -85,7 +88,7 @@ bool wxColourButton::Create( wxWindow *parent, wxWindowID id,
 
     // Display opacity slider
     g_object_set(G_OBJECT(m_widget), "use-alpha",
-                 static_cast<bool>(style & wxCLRP_SHOW_ALPHA), NULL);
+                 static_cast<bool>(style & wxCLRP_SHOW_ALPHA), nullptr);
     // GtkColourButton signals
     g_signal_connect(m_widget, "color-set",
                     G_CALLBACK(gtk_clrbutton_setcolor_callback), this);

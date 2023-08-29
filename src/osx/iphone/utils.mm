@@ -10,8 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/wxprec.h"
-
 #include "wx/utils.h"
 
 #ifndef WX_PRECOMP
@@ -24,6 +22,8 @@
 #endif
 
 #include "wx/apptrait.h"
+
+#include "wx/private/display.h"
 
 #include "wx/osx/private.h"
 
@@ -58,7 +58,7 @@
     return YES;
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {	
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
     wxTheApp->OSXOnDidFinishLaunching();
 }
 
@@ -116,46 +116,6 @@ CFArrayRef CopyAvailableFontFamilyNames()
     return (CFArrayRef) [[UIFont familyNames] retain];
 }
 
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-#if 0
-    CGRect r = [[UIScreen mainScreen] applicationFrame];
-    CGRect bounds = [[UIScreen mainScreen] bounds];
-    if ( bounds.size.height > r.size.height )
-    {
-        // portrait
-        if ( x )
-            *x = r.origin.x;
-        if ( y )
-            *y = r.origin.y;
-        if ( width )
-            *width = r.size.width;
-        if ( height )
-            *height = r.size.height;
-    }
-    else
-    {
-        // landscape
-        if ( x )
-            *x = r.origin.y;
-        if ( y )
-            *y = r.origin.x;
-        if ( width )
-            *width = r.size.height;
-        if ( height )
-            *height = r.size.width;
-    }
-#else
-    // it's easier to treat the status bar as an element of the toplevel window 
-    // instead of the desktop in order to support easy rotation
-    if ( x )
-        *x = 0;
-    if ( y )
-        *y = 0;
-    wxDisplaySize(width, height);
-#endif
-}
-
 void wxGetMousePosition( int* x, int* y )
 {
     if ( x )
@@ -170,33 +130,55 @@ wxMouseState wxGetMouseState()
     return ms;
 }    
 
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    return 32; // TODO can we determine this ?
-}
-
 // Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    CGRect bounds = [[UIScreen mainScreen] bounds];
 
-    if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
+class wxDisplayImplSingleiOS : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const override
     {
-        // portrait
-        if ( width )
-            *width = (int)bounds.size.width ;
-        if ( height )
-            *height = (int)bounds.size.height;
+        CGRect bounds = [[UIScreen mainScreen] bounds];
+
+        int width, height;
+        if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
+        {
+            // portrait
+            width = (int)bounds.size.width ;
+            height = (int)bounds.size.height;
+        }
+        else
+        {
+            // landscape
+            width = (int)bounds.size.height ;
+            height = (int)bounds.size.width;
+        }
+
+        return wxRect(0, 0, width, height);
     }
-    else
+
+    virtual int GetDepth() const override
     {
-        // landscape
-        if ( width )
-            *width = (int)bounds.size.height ;
-        if ( height )
-            *height = (int)bounds.size.width;
+        return 32; // TODO can we determine this ?
     }
+
+    virtual wxSize GetPPI() const override
+    {
+        return wxSize(72, 72);
+    }
+};
+
+class wxDisplayFactorySingleiOS : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay() override
+    {
+        return new wxDisplayImplSingleiOS;
+    }
+};
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
+{
+    return new wxDisplayFactorySingleiOS;
 }
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
@@ -256,10 +238,10 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     wxSize sz = m_window->GetSize();
 
-    int left = subrect != NULL ? subrect->x : 0 ;
-    int top = subrect != NULL ? subrect->y : 0 ;
-    int width = subrect != NULL ? subrect->width : sz.x;
-    int height = subrect !=  NULL ? subrect->height : sz.y ;
+    int left = subrect != nullptr ? subrect->x : 0 ;
+    int top = subrect != nullptr ? subrect->y : 0 ;
+    int width = subrect != nullptr ? subrect->width : sz.x;
+    int height = subrect != nullptr ? subrect->height : sz.y ;
 
     wxBitmap bmp = wxBitmap(width, height, 32);
 
@@ -275,7 +257,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         CGContextTranslateCTM( context, -subrect->x, -subrect->y ) ;
 
     UIGraphicsPushContext(context);
-    [ (NSView*) m_window->GetHandle() drawRect:CGRectMake(left, top, width, height ) ];
+    [ (UIView*) m_window->GetHandle() drawRect:CGRectMake(left, top, width, height ) ];
     UIGraphicsPopContext();
     CGContextRestoreGState(context);
 

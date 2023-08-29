@@ -8,9 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
@@ -57,30 +54,30 @@ void MarkupTestCase::RoundTrip()
         const wxString& GetText() const { return m_text; }
 
 
-        virtual void OnText(const wxString& text) { m_text += text; }
+        virtual void OnText(const wxString& text) override { m_text += text; }
 
-        virtual void OnBoldStart() { m_text += "<b>"; }
-        virtual void OnBoldEnd() { m_text += "</b>"; }
+        virtual void OnBoldStart() override { m_text += "<b>"; }
+        virtual void OnBoldEnd() override { m_text += "</b>"; }
 
-        virtual void OnItalicStart() { m_text += "<i>"; }
-        virtual void OnItalicEnd() { m_text += "</i>"; }
+        virtual void OnItalicStart() override { m_text += "<i>"; }
+        virtual void OnItalicEnd() override { m_text += "</i>"; }
 
-        virtual void OnUnderlinedStart() { m_text += "<u>"; }
-        virtual void OnUnderlinedEnd() { m_text += "</u>"; }
+        virtual void OnUnderlinedStart() override { m_text += "<u>"; }
+        virtual void OnUnderlinedEnd() override { m_text += "</u>"; }
 
-        virtual void OnStrikethroughStart() { m_text += "<s>"; }
-        virtual void OnStrikethroughEnd() { m_text += "</s>"; }
+        virtual void OnStrikethroughStart() override { m_text += "<s>"; }
+        virtual void OnStrikethroughEnd() override { m_text += "</s>"; }
 
-        virtual void OnBigStart() { m_text += "<big>"; }
-        virtual void OnBigEnd() { m_text += "</big>"; }
+        virtual void OnBigStart() override { m_text += "<big>"; }
+        virtual void OnBigEnd() override { m_text += "</big>"; }
 
-        virtual void OnSmallStart() { m_text += "<small>"; }
-        virtual void OnSmallEnd() { m_text += "</small>"; }
+        virtual void OnSmallStart() override { m_text += "<small>"; }
+        virtual void OnSmallEnd() override { m_text += "</small>"; }
 
-        virtual void OnTeletypeStart() { m_text += "<tt>"; }
-        virtual void OnTeletypeEnd() { m_text += "</tt>"; }
+        virtual void OnTeletypeStart() override { m_text += "<tt>"; }
+        virtual void OnTeletypeEnd() override { m_text += "</tt>"; }
 
-        virtual void OnSpanStart(const wxMarkupSpanAttributes& attrs)
+        virtual void OnSpanStart(const wxMarkupSpanAttributes& attrs) override
         {
             m_text << "<span";
 
@@ -131,7 +128,7 @@ void MarkupTestCase::RoundTrip()
             m_text << ">";
         }
 
-        virtual void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(attrs))
+        virtual void OnSpanEnd(const wxMarkupSpanAttributes& WXUNUSED(attrs)) override
         {
             m_text += "</span>";
         }

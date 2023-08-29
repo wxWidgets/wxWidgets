@@ -13,9 +13,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -101,9 +98,7 @@ private:
         wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxLongLongCompare ); )
         wxIF_LONG_LONG_TYPE( CPPUNIT_TEST( RefwxULongLongCompare ); )
         wxIF_WCHAR_T_TYPE( CPPUNIT_TEST( RefWideCharCompare ); )
-#if wxUSE_UNICODE
         CPPUNIT_TEST( StringCompareIntl );
-#endif // wxUSE_UNICODE
     CPPUNIT_TEST_SUITE_END();
 
     void CharCompare();
@@ -378,7 +373,6 @@ void UniCharTestCase::StringCompare()
     CPPUNIT_ASSERT( sb[0] != sa);
 }
 
-#if wxUSE_UNICODE
 void UniCharTestCase::StringCompareIntl()
 {
     // test string comparison with chars
@@ -414,7 +408,6 @@ void UniCharTestCase::StringCompareIntl()
     CPPUNIT_ASSERT( sa != sb[0]);
     CPPUNIT_ASSERT( sb[0] != sa);
 }
-#endif // wxUSE_UNICODE
 
 #define wxUNICHAR_TEST_INT_COMPARE \
     wxUniChar a(aVal); \

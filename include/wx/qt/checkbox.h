@@ -18,7 +18,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxCheckBoxNameStr);
+            const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -27,16 +27,19 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr );
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr) );
 
-    virtual void SetValue(bool value);
-    virtual bool GetValue() const;
+    virtual void SetValue(bool value) override;
+    virtual bool GetValue() const override;
 
-    virtual QWidget *GetHandle() const;
+    virtual void SetLabel(const wxString& label) override;
+    virtual wxString GetLabel() const override;
+
+    virtual QWidget *GetHandle() const override;
 
 protected:
-    virtual void DoSet3StateValue(wxCheckBoxState state);
-    virtual wxCheckBoxState DoGet3StateValue() const;
+    virtual void DoSet3StateValue(wxCheckBoxState state) override;
+    virtual wxCheckBoxState DoGet3StateValue() const override;
 
 private:
     QCheckBox *m_qtCheckBox;

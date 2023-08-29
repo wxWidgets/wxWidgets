@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,15 +19,13 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/window.h"
     #include "wx/control.h"     // for wxControl::Ellipsize()
     #include "wx/dc.h"
+    #include "wx/dcmemory.h"
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
@@ -38,31 +36,10 @@
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/msw/wrapcctl.h"
 #include "wx/dynlib.h"
 
-// These Vista+ only types used by DrawThemeTextEx may not be available in older SDK headers
-typedef int(__stdcall *WXDTT_CALLBACK_PROC)(HDC hdc, const wchar_t * pszText,
-    int cchText, RECT * prc, unsigned int dwFlags, WXLPARAM lParam);
-
-typedef struct _WXDTTOPTS
-{
-    DWORD             dwSize;
-    DWORD             dwFlags;
-    COLORREF          crText;
-    COLORREF          crBorder;
-    COLORREF          crShadow;
-    int               iTextShadowType;
-    POINT             ptShadowOffset;
-    int               iBorderSize;
-    int               iFontPropId;
-    int               iColorPropId;
-    int               iStateId;
-    BOOL              fApplyOverlay;
-    int               iGlowSize;
-    WXDTT_CALLBACK_PROC pfnDrawTextCallback;
-    WXLPARAM          lParam;
-} WXDTTOPTS, *WXPDTTOPTS;
-
+#include "wx/msw/private/darkmode.h"
 
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
@@ -78,35 +55,43 @@ public:
     void DrawFocusRect(wxWindow * win,
                         wxDC& dc,
                         const wxRect& rect,
-                        int flags = 0) wxOVERRIDE;
+                        int flags = 0) override;
 
     void DrawItemSelectionRect(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0) wxOVERRIDE;
+                                int flags = 0) override;
 
     void DrawChoice(wxWindow* win,
                      wxDC& dc,
                      const wxRect& rect,
-                     int flags = 0) wxOVERRIDE;
+                     int flags = 0) override;
 
     void DrawComboBox(wxWindow* win,
                        wxDC& dc,
                        const wxRect& rect,
-                       int flags = 0) wxOVERRIDE;
+                       int flags = 0) override;
 
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                          wxDC& dc,
                                          const wxRect& rect,
-                                         int flags = 0) wxOVERRIDE = 0;
+                                         int flags = 0) override = 0;
 
 protected:
     // Helper function returning the MSW RECT corresponding to the wxRect
     // adjusted for the given wxDC.
     static RECT ConvertToRECT(wxDC& dc, const wxRect& rect)
     {
+        // Theme API doesn't know anything about GDI+ transforms, so apply them
+        // manually.
+        wxRect rectDevice = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
+
+        // We also need to handle the origin offset manually as we don't use
+        // Windows support for this, see wxDC code.
+        rectDevice.Offset(dc.GetDeviceOrigin());
+
         RECT rc;
-        wxCopyRectToRECT(dc.GetImpl()->MSWApplyGDIPlusTransform(rect), rc);
+        wxCopyRectToRECT(rectDevice, rc);
         return rc;
     }
 };
@@ -125,25 +110,33 @@ public:
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
-                                        int flags = 0) wxOVERRIDE;
+                                        int flags = 0) override;
 
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0) wxOVERRIDE
+                              int flags = 0) override
     {
         DoDrawButton(DFCS_BUTTONCHECK, win, dc, rect, flags);
+    }
+
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) override
+    {
+        DoDrawFrameControl(DFC_MENU, DFCS_MENUCHECK, win, dc, rect, flags);
     }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0) wxOVERRIDE;
+                                int flags = 0) override;
 
     virtual void DrawRadioBitmap(wxWindow* win,
                                  wxDC& dc,
                                  const wxRect& rect,
-                                 int flags = 0) wxOVERRIDE
+                                 int flags = 0) override
     {
         DoDrawButton(DFCS_BUTTONRADIO, win, dc, rect, flags);
     }
@@ -152,13 +145,13 @@ public:
                                     wxDC& dc,
                                     const wxRect& rect,
                                     wxTitleBarButton button,
-                                    int flags = 0) wxOVERRIDE;
+                                    int flags = 0) override;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) override;
 
-    virtual int GetHeaderButtonHeight(wxWindow *win) wxOVERRIDE;
+    virtual int GetHeaderButtonHeight(wxWindow *win) override;
 
-    virtual int GetHeaderButtonMargin(wxWindow *win) wxOVERRIDE;
+    virtual int GetHeaderButtonMargin(wxWindow *win) override;
 
 private:
     // wrapper of DrawFrameControl()
@@ -201,39 +194,48 @@ public:
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params = NULL) wxOVERRIDE;
+                                  wxHeaderButtonParams* params = nullptr) override;
 
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
-                                    int flags = 0) wxOVERRIDE;
+                                    int flags = 0) override;
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
-                                    int flags = 0) wxOVERRIDE;
+                                    int flags = 0) override;
     virtual void DrawSplitterSash(wxWindow *win,
                                   wxDC& dc,
                                   const wxSize& size,
                                   wxCoord position,
                                   wxOrientation orient,
-                                  int flags = 0) wxOVERRIDE;
+                                  int flags = 0) override;
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
-                                        int flags = 0) wxOVERRIDE;
+                                        int flags = 0) override;
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0) wxOVERRIDE
+                              int flags = 0) override
     {
         if ( !DoDrawXPButton(BP_CHECKBOX, win, dc, rect, flags) )
             m_rendererNative.DrawCheckBox(win, dc, rect, flags);
     }
 
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) override
+    {
+        if ( !DoDrawCheckMark(MENU_POPUPCHECK, win, dc, rect, flags) )
+            m_rendererNative.DrawCheckMark(win, dc, rect, flags);
+    }
+
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0) wxOVERRIDE
+                                int flags = 0) override
     {
         if ( !DoDrawXPButton(BP_PUSHBUTTON, win, dc, rect, flags) )
             m_rendererNative.DrawPushButton(win, dc, rect, flags);
@@ -242,24 +244,24 @@ public:
     virtual void DrawCollapseButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
-                                    int flags = 0) wxOVERRIDE;
+                                    int flags = 0) override;
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) override;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
-                                       int flags = 0) wxOVERRIDE;
+                                       int flags = 0) override;
 
     virtual void DrawTextCtrl(wxWindow* win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0) wxOVERRIDE;
+                              int flags = 0) override;
 
     virtual void DrawRadioBitmap(wxWindow *win,
                                  wxDC& dc,
                                  const wxRect& rect,
-                                 int flags = 0) wxOVERRIDE
+                                 int flags = 0) override
     {
         if ( !DoDrawXPButton(BP_RADIOBUTTON, win, dc, rect, flags) )
             m_rendererNative.DrawRadioBitmap(win, dc, rect, flags);
@@ -269,16 +271,20 @@ public:
                                     wxDC& dc,
                                     const wxRect& rect,
                                     wxTitleBarButton button,
-                                    int flags = 0) wxOVERRIDE;
+                                    int flags = 0) override;
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+    virtual wxSize GetCheckBoxSize(wxWindow *win, int flags = 0) override;
+
+    virtual wxSize GetCheckMarkSize(wxWindow* win) override;
+
+    virtual wxSize GetExpanderSize(wxWindow *win) override;
 
     virtual void DrawGauge(wxWindow* win,
                            wxDC& dc,
                            const wxRect& rect,
                            int value,
                            int max,
-                           int flags = 0) wxOVERRIDE;
+                           int flags = 0) override;
 
     virtual void DrawItemText(wxWindow* win,
                               wxDC& dc,
@@ -286,15 +292,15 @@ public:
                               const wxRect& rect,
                               int align = wxALIGN_LEFT | wxALIGN_TOP,
                               int flags = 0,
-                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) wxOVERRIDE;
+                              wxEllipsizeMode ellipsizeMode = wxELLIPSIZE_END) override;
 
-    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
+    virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) override;
 
 private:
     // wrapper around DrawThemeBackground() translating flags to NORMAL/HOT/
     // PUSHED/DISABLED states (and so suitable for drawing anything
     // button-like)
-    void DoDrawButtonLike(HTHEME htheme,
+    void DoDrawButtonLike(wxUxThemeHandle& hTheme,
                           int part,
                           wxDC& dc,
                           const wxRect& rect,
@@ -306,6 +312,12 @@ private:
                         wxDC& dc,
                         const wxRect& rect,
                         int flags);
+
+    bool DoDrawCheckMark(int kind,
+                         wxWindow *win,
+                         wxDC& dc,
+                         const wxRect& rect,
+                         int flags);
 
     wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
@@ -338,26 +350,24 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
         return;
     }
 
-    wxBrush brush;
     if ( flags & wxCONTROL_SELECTED )
     {
-        if ( flags & wxCONTROL_FOCUSED )
+        wxColour color(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        if ((flags & wxCONTROL_FOCUSED) == 0)
         {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+            // Use wxSYS_COLOUR_BTNFACE for unfocused selection, but only if it
+            // has enough contrast with wxSYS_COLOUR_HIGHLIGHTTEXT, as otherwise
+            // the text will be unreadable
+            const wxColour btnface(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+            const wxColour highlightText(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+            if (fabs(btnface.GetLuminance() - highlightText.GetLuminance()) > 0.5)
+                color = btnface;
         }
-        else // !focused
-        {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-        }
-    }
-    else // !selected
-    {
-        brush = *wxTRANSPARENT_BRUSH;
-    }
 
-    dc.SetBrush(brush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle( rect );
+        wxDCBrushChanger setBrush(dc, wxBrush(color));
+        wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+        dc.DrawRectangle(rect);
+    }
 
     if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
         DrawFocusRect( win, dc, rect, flags );
@@ -521,10 +531,14 @@ wxRendererMSW::DrawTitleBarBitmap(wxWindow *win,
     DoDrawFrameControl(DFC_CAPTION, kind, win, dc, rect, flags);
 }
 
-wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
+wxSize wxRendererMSW::GetCheckBoxSize(wxWindow* win, int WXUNUSED(flags))
 {
-    return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
-                  ::GetSystemMetrics(SM_CYMENUCHECK));
+    // We must have a valid window in order to return the size which is correct
+    // for the display this window is on.
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    return wxSize(wxGetSystemMetrics(SM_CXMENUCHECK, win),
+                  wxGetSystemMetrics(SM_CYMENUCHECK, win));
 }
 
 int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
@@ -535,8 +549,8 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
 
 
     // create a temporary header window just to get its geometry
-    HWND hwndHeader = ::CreateWindow(WC_HEADER, NULL, 0,
-                                     0, 0, 0, 0, NULL, NULL, NULL, NULL);
+    HWND hwndHeader = ::CreateWindow(WC_HEADER, nullptr, 0,
+                                     0, 0, 0, 0, nullptr, nullptr, nullptr, nullptr);
     if ( !hwndHeader )
         return DEFAULT_HEIGHT;
 
@@ -548,7 +562,8 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
         font = win->GetFont();
     if ( !font.IsOk() )
         wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    ::SendMessage(hwndHeader, WM_SETFONT, (WPARAM)GetHfontOf(font), 0);
+
+    wxSetWindowFont(hwndHeader, font);
 
     // initialize the struct filled with the values by Header_Layout()
     RECT parentRect = { 0, 0, 100, 100 };
@@ -558,9 +573,10 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
     return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
 }
 
-int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+int wxRendererMSW::GetHeaderButtonMargin(wxWindow *win)
 {
-    return 10;
+    // The native control seems to use 3*SM_CXEDGE margins on each size.
+    return 6*wxGetSystemMetrics(SM_CXEDGE, win);
 }
 
 // ============================================================================
@@ -628,16 +644,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
     else
         state = CBXS_NORMAL;
 
-    ::DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                CP_DROPDOWNBUTTON,
-                                state,
-                                &r,
-                                NULL
-                            );
-
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, CP_DROPDOWNBUTTON, state);
 }
 
 int
@@ -665,15 +672,8 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
         state = HIS_HOT;
     else
         state = HIS_NORMAL;
-    ::DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                HP_HEADERITEM,
-                                state,
-                                &r,
-                                NULL
-                            );
+
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, HP_HEADERITEM, state);
 
     // NOTE: Using the theme to draw HP_HEADERSORTARROW doesn't do anything.
     // Why?  If this can be fixed then draw the sort arrows using the theme
@@ -702,15 +702,8 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
     RECT r = ConvertToRECT(dc, rect);
 
     int state = flags & wxCONTROL_EXPANDED ? GLPS_OPENED : GLPS_CLOSED;
-    ::DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                TVP_GLYPH,
-                                state,
-                                &r,
-                                NULL
-                            );
+
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, TVP_GLYPH, state);
 }
 
 bool
@@ -729,8 +722,32 @@ wxRendererXP::DoDrawXPButton(int kind,
     return true;
 }
 
+bool
+wxRendererXP::DoDrawCheckMark(int kind,
+                              wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags)
+{
+    wxUxThemeHandle hTheme(win, L"MENU");
+    if ( !hTheme )
+        return false;
+
+    wxCHECK_MSG( dc.GetImpl(), false, wxT("Invalid wxDC") );
+
+    RECT r = ConvertToRECT(dc, rect);
+
+    int state = MC_CHECKMARKNORMAL;
+    if ( flags & wxCONTROL_DISABLED )
+        state = MC_CHECKMARKDISABLED;
+
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, kind, state);
+
+    return true;
+}
+
 void
-wxRendererXP::DoDrawButtonLike(HTHEME htheme,
+wxRendererXP::DoDrawButtonLike(wxUxThemeHandle& hTheme,
                                int part,
                                wxDC& dc,
                                const wxRect& rect,
@@ -772,15 +789,7 @@ wxRendererXP::DoDrawButtonLike(HTHEME htheme,
     else if ( part == BP_PUSHBUTTON && (flags & wxCONTROL_ISDEFAULT) )
         state = PBS_DEFAULTED;
 
-    ::DrawThemeBackground
-                            (
-                                htheme,
-                                GetHdcOf(dc.GetTempHDC()),
-                                part,
-                                state,
-                                &r,
-                                NULL
-                            );
+    hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, part, state);
 }
 
 void
@@ -828,19 +837,76 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
 }
 
-wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
+wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win, int flags)
 {
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     wxUxThemeHandle hTheme(win, L"BUTTON");
     if (hTheme)
     {
         if (::IsThemePartDefined(hTheme, BP_CHECKBOX, 0))
         {
-            SIZE checkSize;
-            if (::GetThemePartSize(hTheme, NULL, BP_CHECKBOX, CBS_UNCHECKEDNORMAL, NULL, TS_DRAW, &checkSize) == S_OK)
-                return wxSize(checkSize.cx, checkSize.cy);
+            return hTheme.GetDrawSize(BP_CHECKBOX, CBS_UNCHECKEDNORMAL);
         }
     }
-    return m_rendererNative.GetCheckBoxSize(win);
+    return m_rendererNative.GetCheckBoxSize(win, flags);
+}
+
+wxSize wxRendererXP::GetCheckMarkSize(wxWindow* win)
+{
+    wxCHECK_MSG(win, wxSize(0, 0), "Must have a valid window");
+
+    wxUxThemeHandle hTheme(win, L"MENU");
+    if (hTheme)
+    {
+        if (::IsThemePartDefined(hTheme, MENU_POPUPCHECK, 0))
+        {
+            return hTheme.GetDrawSize(MENU_POPUPCHECK, MC_CHECKMARKNORMAL);
+        }
+    }
+    return m_rendererNative.GetCheckMarkSize(win);
+}
+
+wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    if ( hTheme )
+    {
+        if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
+        {
+            return hTheme.GetDrawSize(TVP_GLYPH, GLPS_CLOSED);
+        }
+    }
+
+    return m_rendererNative.GetExpanderSize(win);
+}
+
+static bool
+DoDrawCollapseButton(wxWindow* win, HDC hdc, RECT r, int flags)
+{
+    wxUxThemeHandle hTheme(win, L"TASKDIALOG");
+
+    if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
+    {
+        int state;
+        if (flags & wxCONTROL_PRESSED)
+            state = TDLGEBS_PRESSED;
+        else if (flags & wxCONTROL_CURRENT)
+            state = TDLGEBS_HOVER;
+        else
+            state = TDLGEBS_NORMAL;
+
+        if ( flags & wxCONTROL_EXPANDED )
+            state += 3;
+
+        hTheme.DrawBackground(hdc, r, TDLG_EXPANDOBUTTON, state);
+
+        return true;
+    }
+
+    return false;
 }
 
 void
@@ -849,38 +915,41 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
                                  const wxRect& rect,
                                  int flags)
 {
-    wxUxThemeHandle hTheme(win, L"TASKDIALOG");
+    RECT r = ConvertToRECT(dc, rect);
 
-    int state;
-    if (flags & wxCONTROL_PRESSED)
-        state = TDLGEBS_PRESSED;
-    else if (flags & wxCONTROL_CURRENT)
-        state = TDLGEBS_HOVER;
-    else
-        state = TDLGEBS_NORMAL;
-
-    if ( flags & wxCONTROL_EXPANDED )
-        state += 3;
-
-    if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
+    // Default theme draws the button on light background which looks very out
+    // of place when using dark mode, so invert it if necessary and fall back
+    // on the generic version if this fails.
+    //
+    // Ideal would be to find the theme drawing the version appropriate for the
+    // dark mode, but it's unknown if there is one providing this.
+    if ( wxMSWDarkMode::IsActive() )
     {
-        if (flags & wxCONTROL_EXPANDED)
-            flags |= wxCONTROL_CHECKED;
+        wxBitmap bmp(rect.GetSize());
 
-        RECT r = ConvertToRECT(dc, rect);
+        bool ok;
+        {
+            wxMemoryDC mdc(bmp);
+            ok = DoDrawCollapseButton(win, GetHdcOf(mdc), r, flags);
+        }
 
-        ::DrawThemeBackground
-            (
-            hTheme,
-            GetHdcOf(dc.GetTempHDC()),
-            TDLG_EXPANDOBUTTON,
-            state,
-            &r,
-            NULL
-            );
+        if ( ok )
+        {
+            wxBitmap bmpInv = wxMSWDarkMode::InvertBitmap(bmp);
+            if ( bmpInv.IsOk() )
+            {
+                dc.DrawBitmap(bmpInv, rect.GetPosition());
+                return;
+            }
+        }
     }
     else
-        m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
+    {
+        if ( DoDrawCollapseButton(win, GetHdcOf(dc.GetTempHDC()), r, flags) )
+            return;
+    }
+
+    m_rendererNative.DrawCollapseButton(win, dc, rect, flags);
 }
 
 wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
@@ -891,19 +960,10 @@ wxSize wxRendererXP::GetCollapseButtonSize(wxWindow *win, wxDC& dc)
 
     if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
-        SIZE s;
-        ::GetThemePartSize(hTheme,
-            GetHdcOf(dc.GetTempHDC()),
-            TDLG_EXPANDOBUTTON,
-            TDLGEBS_NORMAL,
-            NULL,
-            TS_TRUE,
-            &s);
-
-        return wxSize(s.cx, s.cy);
+        return hTheme.GetTrueSize(TDLG_EXPANDOBUTTON, TDLGEBS_NORMAL);
     }
-    else
-        return m_rendererNative.GetCollapseButtonSize(win, dc);
+
+    return m_rendererNative.GetCollapseButtonSize(win, dc);
 }
 
 void
@@ -912,7 +972,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
                                     const wxRect& rect,
                                     int flags)
 {
-    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
@@ -923,7 +983,7 @@ wxRendererXP::DrawItemSelectionRect(wxWindow *win,
         if ( ::IsThemeBackgroundPartiallyTransparent(hTheme, LVP_LISTITEM, itemState) )
             ::DrawThemeParentBackground(GetHwndOf(win), GetHdcOf(dc.GetTempHDC()), &rc);
 
-        ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), LVP_LISTITEM, itemState, &rc, 0);
+        hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), rc, LVP_LISTITEM, itemState);
     }
     else
     {
@@ -939,25 +999,15 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                                 int flags,
                                 wxEllipsizeMode ellipsizeMode)
 {
-    wxUxThemeHandle hTheme(win, L"LISTVIEW");
+    wxUxThemeHandle hTheme(win, L"EXPLORER::LISTVIEW;LISTVIEW");
 
     const int itemState = GetListItemState(flags);
 
-    typedef HRESULT(__stdcall *DrawThemeTextEx_t)(HTHEME, HDC, int, int, const wchar_t *, int, DWORD, RECT *, const WXDTTOPTS *);
-    static DrawThemeTextEx_t s_DrawThemeTextEx = NULL;
-
-    if (wxGetWinVersion() >= wxWinVersion_Vista)
-    {
-        wxLoadedDLL dllUxTheme(wxS("uxtheme.dll"));
-        wxDL_INIT_FUNC(s_, DrawThemeTextEx, dllUxTheme);
-    }
-
-    if ( s_DrawThemeTextEx && // Might be not available if we're under XP
-            ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
+    if ( ::IsThemePartDefined(hTheme, LVP_LISTITEM, 0) )
     {
         RECT rc = ConvertToRECT(dc, rect);
 
-        WXDTTOPTS textOpts;
+        DTTOPTS textOpts;
         textOpts.dwSize = sizeof(textOpts);
         textOpts.dwFlags = DTT_STATEID;
         textOpts.iStateId = itemState;
@@ -977,23 +1027,133 @@ void wxRendererXP::DrawItemText(wxWindow* win,
             textOpts.crText = textColour.GetPixel();
         }
 
-        DWORD textFlags = DT_NOPREFIX;
+        const DWORD defTextFlags = DT_NOPREFIX;
+        DWORD textFlags = defTextFlags;
+
+        // Always use DT_* flags for horizontal alignment.
         if ( align & wxALIGN_CENTER_HORIZONTAL )
             textFlags |= DT_CENTER;
         else if ( align & wxALIGN_RIGHT )
-        {
             textFlags |= DT_RIGHT;
-            rc.right--; // Alignment is inconsistent with DrawLabel otherwise
-        }
         else
             textFlags |= DT_LEFT;
 
-        if ( align & wxALIGN_BOTTOM )
-            textFlags |= DT_BOTTOM;
-        else if ( align & wxALIGN_CENTER_VERTICAL )
-            textFlags |= DT_VCENTER;
-        else
-            textFlags |= DT_TOP;
+        /*
+        Bottom (DT_BOTTOM) and centered vertical (DT_VCENTER) alignment
+        are documented to be only used with the DT_SINGLELINE flag which
+        doesn't handle multi-lines. In case of drawing multi-lines with
+        such alignment use DT_TOP (0), which does work for multi-lines,
+        and deal with the actual desired vertical alignment ourselves with
+        the help of GetThemeTextExtent().
+
+        [TODO] Ideally text measurement should only be needed for the above
+        mentioned situations but because there can be a difference between
+        the extent from GetThemeTextExtent() and the rect received by this
+        function could have involved other text measurements (e.g. with wxDVC,
+        see #18487), use it in all cases for now.
+        */
+        bool useTopDrawing = false;
+
+        /*
+        Get the actual text extent using GetThemeTextExtent() and adjust
+        drawing rect if needed.
+
+        Note that DrawThemeTextEx() in combination with DT_CALCRECT
+        and DTT_CALCRECT can also be used to get the text extent.
+        This seems to always result in the exact same extent (checked
+        with an assert) as using GetThemeTextExtent(), despite having
+        an additional DTTOPTS argument for various effects.
+        Some effects have been tried (DTT_BORDERSIZE, DTT_SHADOWTYPE
+        and DTT_SHADOWOFFSET) and while rendered correctly with effects
+        the returned extent remains the same as without effects.
+
+        Official docs don't seem to prefer one method over the other
+        though a possibly outdated note for DrawThemeText() recommends
+        using GetThemeTextExtent(). Because Wine as of writing doesn't
+        support DT_CALCRECT with DrawThemeTextEx() while it does support
+        GetThemeTextExtent(), opt to use the latter.
+        */
+
+        /*
+        It's important for the dwTextFlags parameter passed to
+        GetThemeTextExtent() not to have some DT_* flags because they
+        influence the extent size in unwanted ways: Using
+        DT_SINGLELINE combined with either DT_VCENTER or DT_BOTTOM
+        results in a height that can't be used (either halved or 0),
+        and having DT_END_ELLIPSIS ends up always ellipsizing.
+        Passing a non-null rect solves these problems but is not
+        really a good option as it doesn't make the rectangle extent
+        a tight fit and calculations would have to be done with large
+        numbers needlessly (provided the passed rect is set to
+        something like {0, 0, LONG_MAX, LONG_MAX} ).
+        */
+        RECT rcExtent;
+        HRESULT hr = ::GetThemeTextExtent(hTheme, dc.GetHDC(),
+            LVP_LISTITEM, itemState, text.wchar_str(), -1,
+            defTextFlags, nullptr, &rcExtent);
+        if ( SUCCEEDED(hr) )
+        {
+            /*
+            Compensate for rare cases where the horizontal extents differ
+            slightly. Don't use the width of the passed rect here to deal
+            with horizontal alignment as it results in the text always
+            fitting and ellipsization then can't occur. Instead check for
+            width differences by comparing with the extent as calculated
+            by wxDC.
+            */
+            const int textWidthDc = dc.GetMultiLineTextExtent(text).x;
+            const int widthDiff = textWidthDc - rcExtent.right;
+            if ( widthDiff )
+            {
+                if ( align & wxALIGN_CENTRE_HORIZONTAL )
+                {
+                    const int widthOffset = widthDiff / 2;
+                    rc.left += widthOffset;
+                    rc.right -= widthOffset;
+                }
+                else if ( align & wxALIGN_RIGHT )
+                    rc.left += widthDiff;
+                else // left aligned
+                    rc.right -= widthDiff;
+            }
+
+            /*
+            For height compare with the height of the passed rect and use
+            the difference for handling vertical alignment. This has
+            consequences for particularly multi-line text: it will now
+            always try to fit vertically while a rect received from wxDVC
+            may have its extent based on calculations for a single line
+            only and therefore couldn't show more than one line. This is
+            consistent with other major platforms where no clipping to
+            the rect takes places either, including non-themed MSW.
+            */
+            if ( text.Contains(wxS('\n')) )
+            {
+                useTopDrawing = true;
+
+                const int heightDiff = rect.GetHeight() - rcExtent.bottom;
+                if ( align & wxALIGN_CENTRE_VERTICAL )
+                {
+                    const int heightOffset = heightDiff / 2;
+                    rc.top += heightOffset;
+                    rc.bottom -= heightOffset;
+                }
+                else if ( align & wxALIGN_BOTTOM )
+                    rc.top += heightDiff;
+                else // top aligned
+                    rc.bottom -= heightDiff;
+            }
+        }
+
+        if ( !useTopDrawing )
+        {
+            if ( align & wxALIGN_BOTTOM )
+                textFlags |= DT_BOTTOM | DT_SINGLELINE;
+            else if ( align & wxALIGN_CENTER_VERTICAL )
+                textFlags |= DT_VCENTER | DT_SINGLELINE;
+            else
+                textFlags |= DT_TOP;
+        }
 
         const wxString* drawText = &text;
         wxString ellipsizedText;
@@ -1020,7 +1180,7 @@ void wxRendererXP::DrawItemText(wxWindow* win,
                 break;
         }
 
-        s_DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
+        ::DrawThemeTextEx(hTheme, dc.GetHDC(), LVP_LISTITEM, itemState,
                             drawText->wchar_str(), -1, textFlags, &rc, &textOpts);
     }
     else
@@ -1042,26 +1202,14 @@ void wxRendererXP::DrawTextCtrl(wxWindow* win,
         return;
     }
 
-    wxColour fill;
-    wxColour bdr;
-    COLORREF cref;
+    wxColour fill = hTheme.GetColour(EP_EDITTEXT, TMT_FILLCOLOR, ETS_NORMAL);
+    wxColour bdr = hTheme.GetColour(EP_EDITTEXT, TMT_BORDERCOLOR,
+                                    flags & wxCONTROL_DISABLED
+                                        ? ETS_DISABLED
+                                        : ETS_NORMAL);
 
-    ::GetThemeColor(hTheme, EP_EDITTEXT,
-                                          ETS_NORMAL, TMT_FILLCOLOR, &cref);
-    fill = wxRGBToColour(cref);
-
-    int etsState;
-    if ( flags & wxCONTROL_DISABLED )
-        etsState = ETS_DISABLED;
-    else
-        etsState = ETS_NORMAL;
-
-    ::GetThemeColor(hTheme, EP_EDITTEXT,
-                                              etsState, TMT_BORDERCOLOR, &cref);
-    bdr = wxRGBToColour(cref);
-
-    dc.SetPen( bdr );
-    dc.SetBrush( fill );
+    wxDCPenChanger setPen(dc, bdr);
+    wxDCBrushChanger setBrush(dc, fill);
     dc.DrawRectangle(rect);
 }
 
@@ -1081,13 +1229,11 @@ void wxRendererXP::DrawGauge(wxWindow* win,
 
     RECT r = ConvertToRECT(dc, rect);
 
-    ::DrawThemeBackground(
-        hTheme,
+    hTheme.DrawBackground(
         GetHdcOf(dc.GetTempHDC()),
-        flags & wxCONTROL_SPECIAL ? PP_BARVERT : PP_BAR,
-        0,
-        &r,
-        NULL);
+        r,
+        flags & wxCONTROL_SPECIAL ? PP_BARVERT : PP_BAR
+    );
 
     RECT contentRect;
     ::GetThemeBackgroundContentRect(
@@ -1114,13 +1260,11 @@ void wxRendererXP::DrawGauge(wxWindow* win,
                                           max);
     }
 
-    ::DrawThemeBackground(
-        hTheme,
+    hTheme.DrawBackground(
         GetHdcOf(dc.GetTempHDC()),
-        flags & wxCONTROL_SPECIAL ? PP_CHUNKVERT : PP_CHUNK,
-        0,
-        &contentRect,
-        NULL);
+        contentRect,
+        flags & wxCONTROL_SPECIAL ? PP_CHUNKVERT : PP_CHUNK
+    );
 }
 
 // ----------------------------------------------------------------------------
@@ -1161,8 +1305,8 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
 {
     if ( !win->HasFlag(wxSP_NO_XP_THEME) )
     {
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)));
+        wxDCPenChanger setPen(dc, *wxTRANSPARENT_PEN);
+        wxDCBrushChanger setBrush(dc, wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)));
         if ( orient == wxVERTICAL )
         {
             dc.DrawRectangle(position, 0, SASH_WIDTH, size.y);

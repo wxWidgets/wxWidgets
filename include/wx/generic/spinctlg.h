@@ -52,7 +52,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrl"));
@@ -60,31 +60,32 @@ public:
     virtual ~wxSpinCtrlGenericBase();
 
     // accessors
+    virtual wxString GetTextValue() const override;
     // T GetValue() const
     // T GetMin() const
     // T GetMax() const
     // T GetIncrement() const
-    virtual bool GetSnapToTicks() const wxOVERRIDE { return m_snap_to_ticks; }
+    virtual bool GetSnapToTicks() const override { return m_snap_to_ticks; }
     // unsigned GetDigits() const                   - wxSpinCtrlDouble only
 
     // operations
-    virtual void SetValue(const wxString& text) wxOVERRIDE;
+    virtual void SetValue(const wxString& text) override;
     // void SetValue(T val)
     // void SetRange(T minVal, T maxVal)
     // void SetIncrement(T inc)
-    virtual void SetSnapToTicks(bool snap_to_ticks) wxOVERRIDE;
+    virtual void SetSnapToTicks(bool snap_to_ticks) override;
     // void SetDigits(unsigned digits)              - wxSpinCtrlDouble only
 
     // Select text in the textctrl
-    void SetSelection(long from, long to) wxOVERRIDE;
+    void SetSelection(long from, long to) override;
 
     // implementation from now on
 
     // forward these functions to all subcontrols
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
-    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Enable(bool enable = true) override;
+    virtual bool Show(bool show = true) override;
 
-    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetBackgroundColour(const wxColour& colour) override;
 
     // get the subcontrols
     wxTextCtrl   *GetText() const       { return m_textCtrl; }
@@ -98,20 +99,20 @@ public:
     // this window itself is used only as a container for its sub windows so it
     // shouldn't accept the focus at all and any attempts to explicitly set
     // focus to it should give focus to its text constol part
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
-    virtual void SetFocus() wxOVERRIDE;
+    virtual bool AcceptsFocus() const override { return false; }
+    virtual void SetFocus() override;
 
     friend class wxSpinCtrlTextGeneric;
 
 protected:
     // override the base class virtuals involved into geometry calculations
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+    virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const override;
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
 
 #ifdef __WXMSW__
     // and, for MSW, enabling this window itself
-    virtual void DoEnable(bool enable) wxOVERRIDE;
+    virtual void DoEnable(bool enable) override;
 #endif // __WXMSW__
 
     enum SendEvent
@@ -144,9 +145,14 @@ protected:
     // check if the value is in range
     bool InRange(double n) const { return (n >= m_min) && (n <= m_max); }
 
+    // adjust the value to fit the range and snap it to ticks if necessary
+    double AdjustAndSnap(double value) const;
+
     // ensure that the value is in range wrapping it round if necessary
     double AdjustToFitInRange(double value) const;
 
+    // Assign validator with current parameters
+    virtual void ResetTextValidator() = 0;
 
     double m_value;
     double m_min;
@@ -165,7 +171,7 @@ private:
     void Init();
 
     // Implement pure virtual function inherited from wxCompositeWindow.
-    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+    virtual wxWindowList GetCompositeWindowParts() const override;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -192,7 +198,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
                 const wxString& name = wxT("wxSpinCtrl"))
@@ -288,7 +294,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+               long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = wxT("wxSpinCtrl"))
     {
@@ -302,7 +308,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"))
     {
@@ -317,20 +323,21 @@ public:
     int GetIncrement() const { return int(m_increment); }
 
     // operations
-    void SetValue(const wxString& value)
+    virtual void SetValue(const wxString& value) override
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue( int value )              { DoSetValue(value, SendEvent_None); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
     void SetIncrement(int inc) { DoSetIncrement(inc); }
 
-    virtual int GetBase() const { return m_base; }
-    virtual bool SetBase(int base);
+    virtual int GetBase() const override { return m_base; }
+    virtual bool SetBase(int base) override;
 
 protected:
-    virtual void DoSendEvent();
+    virtual void DoSendEvent() override;
 
-    virtual bool DoTextToValue(const wxString& text, double *val);
-    virtual wxString DoValueToText(double val);
+    virtual bool DoTextToValue(const wxString& text, double *val) override;
+    virtual wxString DoValueToText(double val) override;
+    virtual void ResetTextValidator() override;
 
 private:
     // Common part of all ctors.
@@ -359,7 +366,7 @@ public:
                      const wxString& value = wxEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                     long style = wxSP_ARROW_KEYS,
                      double min = 0, double max = 100, double initial = 0,
                      double inc = 1,
                      const wxString& name = wxT("wxSpinCtrlDouble"))
@@ -375,15 +382,10 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
-                const wxString& name = wxT("wxSpinCtrlDouble"))
-    {
-        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
-                                             style, min, max, initial,
-                                             inc, name);
-    }
+                const wxString& name = wxT("wxSpinCtrlDouble"));
 
     // accessors
     double GetValue(wxSPINCTRL_GETVALUE_FIX) const { return DoGetValue(); }
@@ -393,23 +395,24 @@ public:
     unsigned GetDigits() const { return m_digits; }
 
     // operations
-    void SetValue(const wxString& value) wxOVERRIDE
+    void SetValue(const wxString& value) override
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue(double value)                 { DoSetValue(value, SendEvent_None); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
-    void SetIncrement(double inc)               { DoSetIncrement(inc); }
+    void SetIncrement(double inc);
     void SetDigits(unsigned digits);
 
     // We don't implement bases support for floating point numbers, this is not
     // very useful in practice.
-    virtual int GetBase() const wxOVERRIDE { return 10; }
-    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return 0; }
+    virtual int GetBase() const override { return 10; }
+    virtual bool SetBase(int WXUNUSED(base)) override { return false; }
 
 protected:
-    virtual void DoSendEvent() wxOVERRIDE;
+    virtual void DoSendEvent() override;
 
-    virtual bool DoTextToValue(const wxString& text, double *val) wxOVERRIDE;
-    virtual wxString DoValueToText(double val) wxOVERRIDE;
+    virtual bool DoTextToValue(const wxString& text, double *val) override;
+    virtual wxString DoValueToText(double val) override;
+    virtual void ResetTextValidator() override;
 
     unsigned m_digits;
 
@@ -417,11 +420,15 @@ private:
     // Common part of all ctors.
     void Init()
     {
-        m_digits = 0;
-        m_format = wxS("%g");
+        DoSetDigits(0);
     }
 
-    wxString m_format;
+    // Just set the number of digits and the format unconditionally.
+    void DoSetDigits(unsigned digits);
+
+    // Call DoSetDigits() and update the appearance.
+    void DoSetDigitsAndUpdate(unsigned digits);
+
 
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble);
 };

@@ -137,7 +137,7 @@ enum wxDirFlags
     @class wxDir
 
     wxDir is a portable equivalent of Unix open/read/closedir functions which
-    allow enumerating of the files in a directory. wxDir allows to enumerate
+    allow enumerating of the files in a directory. wxDir allows enumerating
     files as well as directories.
 
     wxDir also provides a flexible way to enumerate files recursively using
@@ -226,14 +226,16 @@ public:
     /**
         The function appends the names of all the files under directory
         @a dirname to the array @a files (note that its old content is
-        preserved). Only files matching the @a filespec are taken, with empty
-        spec matching all the files.
+        preserved).
+
+        Only files matching the @a filespec are taken, with empty spec matching
+        all non-hidden files (use ::wxDIR_HIDDEN to include them too).
 
         The @a flags parameter should always include ::wxDIR_FILES or the array
         would be unchanged and should include ::wxDIR_DIRS flag to recurse into
         subdirectories (both flags are included in the value by default).
         See ::wxDirFlags for the list of the possible flags.
-        
+
         @return Returns the total number of files found while traversing
                 the directory @a dirname (i.e. the number of entries appended
                 to the @a files array).
@@ -300,7 +302,7 @@ public:
         @see wxFileName::GetHumanReadableSize(), wxGetDiskSpace()
     */
     static wxULongLong GetTotalSize(const wxString& dir,
-                                    wxArrayString* filesSkipped = NULL);
+                                    wxArrayString* filesSkipped = nullptr);
 
     /**
         Returns @true if the directory contains any files matching the given
@@ -311,7 +313,7 @@ public:
 
     /**
         Returns @true if the directory contains any subdirectories (if a non
-        empty @a filespec is given, only check for directories matching it).
+        empty @a dirspec is given, only check for directories matching it).
         The hidden subdirectories are taken into account as well.
     */
     bool HasSubDirs(const wxString& dirspec = wxEmptyString) const;
@@ -324,7 +326,7 @@ public:
 
     /**
         Creates a directory.
-        
+
         This is just an alias for wxFileName::Mkdir(); refer to that function
         for more info.
     */
@@ -339,12 +341,12 @@ public:
 
     /**
         Removes a directory.
-        
+
         This is just an alias for wxFileName::Rmdir(); refer to that function
         for more info.
     */
     static bool Remove(const wxString &dir, int flags = 0);
-    
+
     /**
         Enumerate all files and directories under the given directory.
 

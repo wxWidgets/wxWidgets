@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/any.h"
 
@@ -26,9 +23,9 @@
 
 #include "wx/vector.h"
 #include "wx/module.h"
-#include "wx/hashmap.h"
-#include "wx/hashset.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
+#include <unordered_map>
 
 using namespace wxPrivate;
 
@@ -38,11 +35,13 @@ using namespace wxPrivate;
 // wxAnyValueTypeGlobals
 //-------------------------------------------------------------------------
 
-WX_DECLARE_HASH_MAP(wxAnyValueType*,
-                    wxVariantDataFactory,
-                    wxPointerHash,
-                    wxPointerEqual,
-                    wxAnyTypeToVariantDataFactoryMap);
+namespace
+{
+
+using wxAnyTypeToVariantDataFactoryMap =
+    std::unordered_map<const wxAnyValueType*, wxVariantDataFactory>;
+
+} // anonymous namespace
 
 //
 // Helper class to manage global variables related to type conversion
@@ -66,16 +65,10 @@ public:
 
     // Find wxVariantData factory function for given value type,
     // (or compatible, if possible)
-    wxVariantDataFactory FindVariantDataFactory(const wxAnyValueType* type_)
+    wxVariantDataFactory FindVariantDataFactory(const wxAnyValueType* type)
     {
-        // Ideally we'd have the hash map of type 'const wxAnyValueType*',
-        // but WX_DECLARE_HASH_MAP() has some trouble with it.
-        wxAnyValueType* type = const_cast<wxAnyValueType*>(type_);
-
-        wxAnyTypeToVariantDataFactoryMap& anyToVariant = m_anyToVariant;
-        wxAnyTypeToVariantDataFactoryMap::const_iterator it;
-        it = anyToVariant.find(type);
-        if ( it != anyToVariant.end() )
+        auto it = m_anyToVariant.find(type);
+        if ( it != m_anyToVariant.end() )
             return it->second;
 
         // Not found, handle pre-registrations
@@ -91,29 +84,29 @@ public:
                 // now been properly initialized, so remove the
                 // pre-registration entry and move data to anyToVarian
                 // map.
-                anyToVariant[assocType] = reg->GetFactory();
+                m_anyToVariant[assocType] = reg->GetFactory();
                 m_anyToVariantRegs.erase( m_anyToVariantRegs.begin() + i );
             }
         }
 
         // Then try again
-        it = anyToVariant.find(type);
-        if ( it != anyToVariant.end() )
+        it = m_anyToVariant.find(type);
+        if ( it != m_anyToVariant.end() )
             return it->second;
 
         // Finally, attempt to find a compatible type
-        for ( it = anyToVariant.begin(); it != anyToVariant.end(); ++it )
+        for ( auto& kv : m_anyToVariant )
         {
-            if ( type->IsSameType(it->first) )
+            if ( type->IsSameType(kv.first) )
             {
-                wxVariantDataFactory f = it->second;
-                anyToVariant[type] = f;
+                wxVariantDataFactory f = kv.second;
+                m_anyToVariant[type] = f;
                 return f;
             }
         }
 
         // Nothing found
-        return NULL;
+        return nullptr;
     }
 
 private:
@@ -121,9 +114,9 @@ private:
     wxVector<wxAnyToVariantRegistration*>   m_anyToVariantRegs;
 };
 
-static wxScopedPtr<wxAnyValueTypeGlobals>& GetAnyValueTypeGlobals()
+static std::unique_ptr<wxAnyValueTypeGlobals>& GetAnyValueTypeGlobals()
 {
-    static wxScopedPtr<wxAnyValueTypeGlobals> s_wxAnyValueTypeGlobals;
+    static std::unique_ptr<wxAnyValueTypeGlobals> s_wxAnyValueTypeGlobals;
     if ( !s_wxAnyValueTypeGlobals )
     {
         // Notice that it is _not_ sufficient to just initialize the static
@@ -168,7 +161,7 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
             if ( ll > wxINT32_MAX || ll < wxINT32_MIN )
                 *variant = wxLongLong(ll);
             else
-                *variant = (long) wxLongLong(ll).GetLo();
+                *variant = static_cast<long>(ll);
         }
         else
         {
@@ -188,7 +181,7 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
     wxVariantDataFactory f =
         GetAnyValueTypeGlobals()->FindVariantDataFactory(any.GetType());
 
-    wxVariantData* data = NULL;
+    wxVariantData* data = nullptr;
 
     if ( f )
     {
@@ -228,11 +221,11 @@ public:
     wxAnyValueTypeGlobalsManager() : wxModule() { }
     virtual ~wxAnyValueTypeGlobalsManager() { }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         GetAnyValueTypeGlobals().reset();
     }
@@ -501,13 +494,13 @@ class wxAnyValueTypeImpl<wxAnyNullValue> : public wxAnyValueType
     WX_DECLARE_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxAnyNullValue>)
 public:
     // Dummy implementations
-    virtual void DeleteValue(wxAnyValueBuffer& buf) const wxOVERRIDE
+    virtual void DeleteValue(wxAnyValueBuffer& buf) const override
     {
         wxUnusedVar(buf);
     }
 
     virtual void CopyBuffer(const wxAnyValueBuffer& src,
-                            wxAnyValueBuffer& dst) const wxOVERRIDE
+                            wxAnyValueBuffer& dst) const override
     {
         wxUnusedVar(src);
         wxUnusedVar(dst);
@@ -515,7 +508,7 @@ public:
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
-                              wxAnyValueBuffer& dst) const wxOVERRIDE
+                              wxAnyValueBuffer& dst) const override
     {
         wxUnusedVar(src);
         wxUnusedVar(dstType);
@@ -527,7 +520,7 @@ public:
     virtual const wxTypeInfo* GetTypeInfo() const
     {
         wxFAIL_MSG("Null Type Info not available");
-        return NULL;
+        return nullptr;
     }
 #endif
 

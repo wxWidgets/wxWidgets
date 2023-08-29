@@ -18,9 +18,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RADIOBOX
 
@@ -140,28 +137,8 @@ bool wxRadioBox::Create(wxWindow *parent,
                         const wxValidator& wxVALIDATOR_PARAM(val),
                         const wxString& name)
 {
-    // for compatibility with the other ports which don't handle (yet?)
-    // wxRA_LEFTTORIGHT and wxRA_TOPTOBOTTOM flags, we add them ourselves if
-    // not specified
-    if ( !(style & (wxRA_LEFTTORIGHT | wxRA_TOPTOBOTTOM)) )
-    {
-        // horizontal radiobox use left to right layout
-        if ( style & wxRA_SPECIFY_COLS )
-        {
-            style |= wxRA_LEFTTORIGHT;
-        }
-        else if ( style & wxRA_SPECIFY_ROWS )
-        {
-            style |= wxRA_TOPTOBOTTOM;
-        }
-        else
-        {
-            wxFAIL_MSG( wxT("you must specify wxRA_XXX style!") );
-
-            // use default
-            style = wxRA_SPECIFY_COLS | wxRA_LEFTTORIGHT;
-        }
-    }
+    if ( !(style & (wxRA_SPECIFY_ROWS | wxRA_SPECIFY_COLS)) )
+        style |= wxRA_SPECIFY_COLS;
 
     if ( !wxStaticBox::Create(parent, id, title, pos, size, style, name) )
         return false;
@@ -185,8 +162,10 @@ bool wxRadioBox::Create(wxWindow *parent,
     wxSize actualSize = GetSize();
     DoMoveWindow(actualPos.x, actualPos.y, actualSize.x, actualSize.y);
 
-    // radiobox should already have selection so select at least one item
-    SetSelection(0);
+    // Select first radio button if we have any buttons at all, as the radiobox
+    // should always have some selection.
+    if ( n != 0 )
+        SetSelection(0);
 
     return true;
 }
@@ -381,7 +360,7 @@ void wxRadioBox::DoSetToolTip(wxToolTip *tooltip)
         if (tooltip)
             m_buttons[n]->SetToolTip(tooltip->GetTip());
         else
-            m_buttons[n]->SetToolTip(NULL);
+            m_buttons[n]->SetToolTip(nullptr);
     }
 }
 #endif // wxUSE_TOOLTIPS
@@ -447,7 +426,7 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
     {
         m_buttons[n]->SetSize(x, y, sizeBtn.x, sizeBtn.y);
 
-        if ( GetWindowStyle() & wxRA_TOPTOBOTTOM )
+        if ( GetWindowStyle() & wxRA_SPECIFY_ROWS )
         {
             // from top to bottom
             if ( (n + 1) % GetRowCount() )
@@ -462,7 +441,7 @@ void wxRadioBox::DoMoveWindow(int x0, int y0, int width, int height)
                 y = y0;
             }
         }
-        else // wxRA_LEFTTORIGHT: mirror the code above
+        else // wxRA_SPECIFY_COLS: mirror the code above
         {
             // from left to right
             if ( (n + 1) % GetColumnCount() )

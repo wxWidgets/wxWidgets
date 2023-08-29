@@ -21,7 +21,7 @@ bool wxTaskBarIconBase::IsAvailable()
 
 //=============================================================================
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxTaskBarIconBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler);
 
 wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED(iconType))
 {
@@ -33,7 +33,7 @@ wxTaskBarIcon::~wxTaskBarIcon()
     delete m_qtSystemTrayIcon;
 }
 
-bool wxTaskBarIcon::SetIcon(const wxIcon& WXUNUSED(icon),
+bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& WXUNUSED(icon),
              const wxString& WXUNUSED(tooltip))
 {
     return false;

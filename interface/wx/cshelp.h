@@ -142,7 +142,7 @@ public:
         Note that the instance doesn't own the help controller. The help
         controller should be deleted separately.
     */
-    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = NULL);
+    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = nullptr);
 
     /**
         Returns the help controller associated with this help provider.
@@ -182,7 +182,7 @@ public:
       so that this button is only added to a dialog for non-Windows platforms
       (use wxDIALOG_EX_CONTEXTHELP on Windows).
 
-    Note that on OS X, the cursor does not change when in context-sensitive
+    Note that on macOS, the cursor does not change when in context-sensitive
     help mode.
 
     @library{wxcore}
@@ -199,7 +199,7 @@ public:
 
         If @a window is @NULL, the top window is used.
     */
-    wxContextHelp(wxWindow* window = NULL, bool doNow = true);
+    wxContextHelp(wxWindow* window = nullptr, bool doNow = true);
 
     /**
         Destroys the context help object.
@@ -257,8 +257,8 @@ public:
             Button position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Button size. 
-            If ::wxDefaultSize is specified then the button is sized appropriately 
+            Button size.
+            If ::wxDefaultSize is specified then the button is sized appropriately
             for the question mark bitmap.
         @param style
             Window style.
@@ -271,7 +271,7 @@ public:
                         wxWindowID id = wxID_CONTEXT_HELP,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        long style = wxBU_AUTODRAW);
+                        long style = 0);
 };
 
 

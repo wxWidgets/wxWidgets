@@ -16,21 +16,21 @@
     #include "wx/image.h"
     #include "wx/colour.h"
     #include "wx/cursor.h"
+    #include "wx/dc.h"
 #endif
 
+#include "wx/math.h"
 #include "wx/rawbmp.h"
 
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private.h"
-
-#include <gtk/gtk.h>
 
 GdkWindow* wxGetTopLevelGDK();
 
 #ifndef __WXGTK3__
 static void PixmapToPixbuf(GdkPixmap* pixmap, GdkPixbuf* pixbuf, int w, int h)
 {
-    gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
+    gdk_pixbuf_get_from_drawable(pixbuf, pixmap, nullptr, 0, 0, 0, 0, w, h);
     if (gdk_drawable_get_depth(pixmap) == 1)
     {
         // invert to match XBM convention
@@ -51,7 +51,7 @@ static void PixmapToPixbuf(GdkPixmap* pixmap, GdkPixbuf* pixbuf, int w, int h)
 static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
 {
     GdkPixbuf* mask_pixbuf = gdk_pixbuf_get_from_drawable(
-        NULL, mask, NULL, 0, 0, 0, 0, w, h);
+        nullptr, mask, nullptr, 0, 0, 0, 0, w, h);
     guchar* p = gdk_pixbuf_get_pixels(pixbuf) + 3;
     const guchar* mask_data = gdk_pixbuf_get_pixels(mask_pixbuf);
     const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - w * 4;
@@ -60,7 +60,6 @@ static void MaskToAlpha(GdkPixmap* mask, GdkPixbuf* pixbuf, int w, int h)
     {
         for (int x = w; x; x--, p += 4, mask_data += 3)
         {
-            *p = 255;
             // no need to test all 3 components,
             //   pixels are either (0,0,0) or (0xff,0xff,0xff)
             if (mask_data[0] == 0)
@@ -79,13 +78,13 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxMask, wxMaskBase);
 
 wxMask::wxMask()
 {
-    m_bitmap = NULL;
+    m_bitmap = nullptr;
 }
 
 wxMask::wxMask(const wxMask& mask)
 {
 #ifdef __WXGTK3__
-    m_bitmap = NULL;
+    m_bitmap = nullptr;
     if (mask.m_bitmap)
     {
         const int w = cairo_image_surface_get_width(mask.m_bitmap);
@@ -101,7 +100,7 @@ wxMask::wxMask(const wxMask& mask)
 #else
     if ( !mask.m_bitmap )
     {
-        m_bitmap = NULL;
+        m_bitmap = nullptr;
         return;
     }
 
@@ -117,21 +116,21 @@ wxMask::wxMask(const wxMask& mask)
 
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
 {
-    m_bitmap = NULL;
+    m_bitmap = nullptr;
     InitFromColour(bitmap, colour);
 }
 
 #if wxUSE_PALETTE
 wxMask::wxMask( const wxBitmap& bitmap, int paletteIndex )
 {
-    m_bitmap = NULL;
+    m_bitmap = nullptr;
     Create( bitmap, paletteIndex );
 }
 #endif // wxUSE_PALETTE
 
 wxMask::wxMask( const wxBitmap& bitmap )
 {
-    m_bitmap = NULL;
+    m_bitmap = nullptr;
     InitFromMonoBitmap(bitmap);
 }
 
@@ -165,7 +164,7 @@ void wxMask::FreeData()
 #else
         g_object_unref (m_bitmap);
 #endif
-        m_bitmap = NULL;
+        m_bitmap = nullptr;
     }
 }
 
@@ -210,7 +209,7 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
         const wxByte r_mask = colour.Red();
         const wxByte g_mask = colour.Green();
         const wxByte b_mask = colour.Blue();
-        GdkPixbuf* pixbuf = bitmap.GetPixbuf();
+        GdkPixbuf* pixbuf = bitmap.GetPixbufNoMask();
         const wxByte* in = gdk_pixbuf_get_pixels(pixbuf);
         const int inc = 3 + int(gdk_pixbuf_get_has_alpha(pixbuf) != 0);
         const int rowpadding = gdk_pixbuf_get_rowstride(pixbuf) - inc * w;
@@ -228,7 +227,7 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
         GdkImage* image = gdk_drawable_get_image(bitmap.GetPixmap(), 0, 0, w, h);
         GdkColormap* colormap = gdk_image_get_colormap(image);
         guint32 mask_pixel;
-        if (colormap == NULL)
+        if (colormap == nullptr)
             // mono bitmap, white is pixel value 0
             mask_pixel = guint32(colour.Red() != 255 || colour.Green() != 255 || colour.Blue() != 255);
         else
@@ -332,10 +331,9 @@ public:
     wxBitmapRefData(int width, int height, int depth);
     virtual ~wxBitmapRefData();
 
-    virtual bool IsOk() const wxOVERRIDE;
+    virtual bool IsOk() const override;
 
 #ifdef __WXGTK3__
-    GdkPixbuf* m_pixbufMask;
     GdkPixbuf* m_pixbufNoMask;
     cairo_surface_t* m_surface;
     double m_scaleFactor;
@@ -343,6 +341,7 @@ public:
     GdkPixmap      *m_pixmap;
     GdkPixbuf      *m_pixbuf;
 #endif
+    GdkPixbuf      *m_pixbufMask;
     wxMask         *m_mask;
     int             m_width;
     int             m_height;
@@ -361,15 +360,15 @@ public:
 wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
 {
 #ifdef __WXGTK3__
-    m_pixbufMask = NULL;
-    m_pixbufNoMask = NULL;
-    m_surface = NULL;
+    m_pixbufNoMask = nullptr;
+    m_surface = nullptr;
     m_scaleFactor = 1;
 #else
-    m_pixmap = NULL;
-    m_pixbuf = NULL;
+    m_pixmap = nullptr;
+    m_pixbuf = nullptr;
 #endif
-    m_mask = NULL;
+    m_pixbufMask = nullptr;
+    m_mask = nullptr;
     m_width = width;
     m_height = height;
     m_bpp = depth;
@@ -386,13 +385,13 @@ wxBitmapRefData::wxBitmapRefData(int width, int height, int depth)
 wxBitmapRefData::~wxBitmapRefData()
 {
 #ifdef __WXGTK3__
-    if (m_pixbufMask)
-        g_object_unref(m_pixbufMask);
     if (m_pixbufNoMask)
         g_object_unref(m_pixbufNoMask);
     if (m_surface)
         cairo_surface_destroy(m_surface);
 #else
+    if (m_pixbufMask)
+        g_object_unref(m_pixbufMask);
     if (m_pixmap)
         g_object_unref (m_pixmap);
     if (m_pixbuf)
@@ -454,7 +453,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 
 wxBitmap::wxBitmap(const char* const* bits)
 {
-    wxCHECK2_MSG(bits != NULL, return, wxT("invalid bitmap data"));
+    wxCHECK2_MSG(bits != nullptr, return, wxT("invalid bitmap data"));
 
 #if wxUSE_IMAGE
     *this = wxBitmap(wxImage(bits));
@@ -469,9 +468,9 @@ wxBitmap::wxBitmap(const char* const* bits)
         wxASSERT(M_BMPDATA->m_bpp == 32 || !gdk_pixbuf_get_has_alpha(M_BMPDATA->m_pixbufNoMask));
     }
 #else
-    GdkBitmap* mask = NULL;
+    GdkBitmap* mask = nullptr;
     GdkPixmap* pixmap = gdk_pixmap_create_from_xpm_d(
-        wxGetTopLevelGDK(), &mask, NULL, const_cast<char**>(bits));
+        wxGetTopLevelGDK(), &mask, nullptr, const_cast<char**>(bits));
     if (pixmap)
     {
         int width, height;
@@ -544,7 +543,6 @@ bool wxBitmap::Create( int width, int height, int depth )
     return true;
 }
 
-#ifdef __WXGTK3__
 static void CopyImageData(
     guchar* dst, int dstChannels, int dstStride,
     const guchar* src, int srcChannels, int srcStride,
@@ -589,11 +587,10 @@ static void CopyImageData(
         }
     }
 }
-#endif
 
 #if wxUSE_IMAGE
 #ifdef __WXGTK3__
-wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale)
 {
     wxCHECK_RET(image.IsOk(), "invalid image");
 
@@ -640,7 +637,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     }
 }
 #else
-wxBitmap::wxBitmap(const wxImage& image, int depth, double WXUNUSED(scale))
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale))
 {
     wxCHECK_RET(image.IsOk(), "invalid image");
 
@@ -694,7 +691,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
     }
 
     const wxByte* alpha = image.GetAlpha();
-    if (alpha != NULL || image.HasMask())
+    if (alpha != nullptr || image.HasMask())
     {
         // create mask as XBM format bitmap
 
@@ -702,7 +699,7 @@ bool wxBitmap::CreateFromImageAsPixmap(const wxImage& image, int depth)
         wxByte* out = new wxByte[out_size];
         memset(out, 0xff, out_size);
         unsigned bit_index = 0;
-        if (alpha != NULL)
+        if (alpha != nullptr)
         {
             for (int y = 0; y < h; y++)
             {
@@ -761,9 +758,40 @@ bool wxBitmap::CreateFromImageAsPixbuf(const wxImage& image)
         }
     }
 
+    if ( image.HasMask() )
+    {
+        const size_t out_size = size_t((width + 7) / 8) * unsigned(height);
+        wxByte* out = new wxByte[out_size];
+        memset(out, 0xff, out_size);
+        const wxByte r_mask = image.GetMaskRed();
+        const wxByte g_mask = image.GetMaskGreen();
+        const wxByte b_mask = image.GetMaskBlue();
+        const wxByte* in = image.GetData();
+        unsigned bit_index = 0;
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++, in += 3, bit_index++)
+                if (in[0] == r_mask && in[1] == g_mask && in[2] == b_mask)
+                    out[bit_index >> 3] ^= 1 << (bit_index & 7);
+            bit_index = (bit_index + 7) & ~7u;
+        }
+        SetMask(new wxMask(gdk_bitmap_create_from_data(wxGetTopLevelGDK(), reinterpret_cast<char*>(out), width, height)));
+        delete[] out;
+    }
+
     return true;
 }
 #endif
+
+wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+{
+    InitFromImage(image, depth, scale);
+}
+
+wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
+{
+    InitFromImage(image, -1, dc.GetContentScaleFactor());
+}
 
 wxImage wxBitmap::ConvertToImage() const
 {
@@ -775,7 +803,7 @@ wxImage wxBitmap::ConvertToImage() const
     const int h = bmpData->m_height;
     image.Create(w, h, false);
     guchar* dst = image.GetData();
-    GdkPixbuf* pixbuf_src = NULL;
+    GdkPixbuf* pixbuf_src = nullptr;
     if (bmpData->m_pixbufNoMask)
         pixbuf_src = bmpData->m_pixbufNoMask;
     else if (bmpData->m_surface)
@@ -803,7 +831,7 @@ wxImage wxBitmap::ConvertToImage() const
             }
         }
     }
-    cairo_surface_t* maskSurf = NULL;
+    cairo_surface_t* maskSurf = nullptr;
     if (bmpData->m_mask)
         maskSurf = *bmpData->m_mask;
     if (maskSurf)
@@ -836,13 +864,13 @@ wxImage wxBitmap::ConvertToImage() const
     wxImage image(w, h, false);
     unsigned char *data = image.GetData();
 
-    wxCHECK_MSG(data != NULL, wxNullImage, wxT("couldn't create image") );
+    wxCHECK_MSG(data != nullptr, wxNullImage, wxT("couldn't create image") );
 
     // prefer pixbuf if available, it will preserve alpha and should be quicker
     if (HasPixbuf())
     {
-        GdkPixbuf *pixbuf = GetPixbuf();
-        unsigned char* alpha = NULL;
+        GdkPixbuf *pixbuf = GetPixbufNoMask();
+        unsigned char* alpha = nullptr;
         if (gdk_pixbuf_get_has_alpha(pixbuf))
         {
             image.SetAlpha();
@@ -850,7 +878,7 @@ wxImage wxBitmap::ConvertToImage() const
         }
         const unsigned char* in = gdk_pixbuf_get_pixels(pixbuf);
         unsigned char *out = data;
-        const int inc = 3 + int(alpha != NULL);
+        const int inc = 3 + int(alpha != nullptr);
         const int rowpad = gdk_pixbuf_get_rowstride(pixbuf) - inc * w;
 
         for (int y = 0; y < h; y++, in += rowpad)
@@ -860,7 +888,7 @@ wxImage wxBitmap::ConvertToImage() const
                 out[0] = in[0];
                 out[1] = in[1];
                 out[2] = in[2];
-                if (alpha != NULL)
+                if (alpha != nullptr)
                     *alpha++ = in[3];
             }
         }
@@ -868,7 +896,7 @@ wxImage wxBitmap::ConvertToImage() const
     else
     {
         GdkPixmap* pixmap = GetPixmap();
-        GdkPixmap* pixmap_invert = NULL;
+        GdkPixmap* pixmap_invert = nullptr;
         if (GetDepth() == 1)
         {
             // mono bitmaps are inverted, i.e. 0 is white
@@ -880,16 +908,16 @@ wxImage wxBitmap::ConvertToImage() const
         }
         // create a pixbuf which shares data with the wxImage
         GdkPixbuf* pixbuf = gdk_pixbuf_new_from_data(
-            data, GDK_COLORSPACE_RGB, false, 8, w, h, 3 * w, NULL, NULL);
+            data, GDK_COLORSPACE_RGB, false, 8, w, h, 3 * w, nullptr, nullptr);
 
-        gdk_pixbuf_get_from_drawable(pixbuf, pixmap, NULL, 0, 0, 0, 0, w, h);
+        gdk_pixbuf_get_from_drawable(pixbuf, pixmap, nullptr, 0, 0, 0, 0, w, h);
 
         g_object_unref(pixbuf);
-        if (pixmap_invert != NULL)
+        if (pixmap_invert != nullptr)
             g_object_unref(pixmap_invert);
     }
-    // convert mask, unless there is already alpha
-    if (GetMask() && !image.HasAlpha())
+    // convert mask, even there is already alpha. Image can have both.
+    if ( GetMask() )
     {
         // we hard code the mask colour for now but we could also make an
         // effort (and waste time) to choose a colour not present in the
@@ -953,7 +981,7 @@ int wxBitmap::GetDepth() const
 
 wxMask *wxBitmap::GetMask() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_mask;
 }
@@ -965,24 +993,44 @@ void wxBitmap::SetMask( wxMask *mask )
     AllocExclusive();
     delete M_BMPDATA->m_mask;
     M_BMPDATA->m_mask = mask;
-}
-
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
-{
-    *this = icon;
-    return IsOk();
+    if (M_BMPDATA->m_pixbufMask)
+    {
+        g_object_unref(M_BMPDATA->m_pixbufMask);
+        M_BMPDATA->m_pixbufMask = nullptr;
+    }
 }
 
 #ifdef __WXGTK3__
-bool wxBitmap::CreateScaled(int w, int h, int depth, double scale)
+bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
-    Create(int(w * scale), int(h * scale), depth);
+    return DoCreate(wxSize(width, height),
+                    dc.GetContentScaleFactor(),
+                    wxBITMAP_SCREEN_DEPTH);
+}
+
+bool wxBitmap::DoCreate(const wxSize& size, double scale, int depth)
+{
+    Create(size*scale, depth);
     M_BMPDATA->m_scaleFactor = scale;
     return true;
 }
 
+void wxBitmap::SetScaleFactor(double scale)
+{
+    wxCHECK_RET(m_refData, "invalid bitmap");
+
+    if ( M_BMPDATA->m_scaleFactor != scale )
+    {
+        AllocExclusive();
+
+        M_BMPDATA->m_scaleFactor = scale;
+    }
+}
+
 double wxBitmap::GetScaleFactor() const
 {
+    wxCHECK_MSG(m_refData, -1, "invalid bitmap");
+
     return M_BMPDATA->m_scaleFactor;
 }
 
@@ -1005,15 +1053,22 @@ static cairo_surface_t* GetSubSurface(cairo_surface_t* surface, const wxRect& re
 }
 #endif
 
-wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
+wxBitmap wxBitmap::GetSubBitmap(const wxRect& r) const
 {
     wxBitmap ret;
 
     wxCHECK_MSG(IsOk(), ret, wxT("invalid bitmap"));
 
+    const wxBitmapRefData* bmpData = M_BMPDATA;
+#ifdef __WXGTK3__
+    const double s = bmpData->m_scaleFactor;
+    const wxRect rect(int(r.x * s), int(r.y * s), int(r.width * s), int(r.height * s));
+#else
+    const wxRect& rect = r;
+#endif
+
     const int w = rect.width;
     const int h = rect.height;
-    const wxBitmapRefData* bmpData = M_BMPDATA;
 
     wxCHECK_MSG(rect.x >= 0 && rect.y >= 0 &&
                 rect.x + w <= bmpData->m_width &&
@@ -1035,7 +1090,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     else if (bmpData->m_surface)
         newRef->m_surface = GetSubSurface(bmpData->m_surface, rect);
 
-    cairo_surface_t* maskSurf = NULL;
+    cairo_surface_t* maskSurf = nullptr;
     if (bmpData->m_mask)
         maskSurf = *bmpData->m_mask;
     if (maskSurf)
@@ -1058,7 +1113,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
             newRef->m_pixmap, gc, bmpData->m_pixmap, rect.x, rect.y, 0, 0, w, h);
         g_object_unref(gc);
     }
-    GdkPixmap* mask = NULL;
+    GdkPixmap* mask = nullptr;
     if (bmpData->m_mask)
         mask = *bmpData->m_mask;
     if (mask)
@@ -1079,7 +1134,7 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid bitmap") );
 
-    const char* type_name = NULL;
+    const char* type_name = nullptr;
     switch (type)
     {
         case wxBITMAP_TYPE_ANI:  type_name = "ani";  break;
@@ -1097,7 +1152,7 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
         default: break;
     }
     if (type_name &&
-        gdk_pixbuf_save(GetPixbuf(), wxGTK_CONV_FN(name), type_name, NULL, NULL))
+        gdk_pixbuf_save(GetPixbuf(), wxGTK_CONV_FN(name), type_name, nullptr, nullptr))
     {
         return true;
     }
@@ -1110,7 +1165,7 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
 
 bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
 {
-    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(wxGTK_CONV_FN(name), NULL);
+    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(wxGTK_CONV_FN(name), nullptr);
     if (pixbuf)
     {
         *this = wxBitmap(pixbuf);
@@ -1132,7 +1187,7 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
 #if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
-    return NULL;
+    return nullptr;
 }
 
 void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
@@ -1141,6 +1196,7 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 }
 #endif // wxUSE_PALETTE
 
+#if WXWIN_COMPATIBILITY_3_0
 void wxBitmap::SetHeight( int height )
 {
     AllocExclusive();
@@ -1158,6 +1214,7 @@ void wxBitmap::SetDepth( int depth )
     AllocExclusive();
     M_BMPDATA->m_bpp = depth;
 }
+#endif
 
 #ifndef __WXGTK3__
 void wxBitmap::SetPixmap( GdkPixmap *pixmap )
@@ -1177,7 +1234,7 @@ void wxBitmap::SetPixmap( GdkPixmap *pixmap )
 
 GdkPixmap *wxBitmap::GetPixmap() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
 
     wxBitmapRefData* bmpData = M_BMPDATA;
     if (bmpData->m_pixmap)
@@ -1185,8 +1242,8 @@ GdkPixmap *wxBitmap::GetPixmap() const
 
     if (bmpData->m_pixbuf)
     {
-        GdkPixmap* pixmap = NULL;
-        GdkPixmap** mask_pixmap = NULL;
+        GdkPixmap* pixmap = nullptr;
+        GdkPixmap** mask_pixmap = nullptr;
         if (gdk_pixbuf_get_has_alpha(bmpData->m_pixbuf))
         {
             // make new mask from alpha
@@ -1212,14 +1269,14 @@ bool wxBitmap::HasPixmap() const
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid bitmap") );
 
-    return M_BMPDATA->m_pixmap != NULL;
+    return M_BMPDATA->m_pixmap != nullptr;
 }
 #endif
 
 #ifdef __WXGTK3__
 GdkPixbuf* wxBitmap::GetPixbufNoMask() const
 {
-    wxCHECK_MSG(IsOk(), NULL, "invalid bitmap");
+    wxCHECK_MSG(IsOk(), nullptr, "invalid bitmap");
 
     wxBitmapRefData* bmpData = M_BMPDATA;
     GdkPixbuf* pixbuf = bmpData->m_pixbufNoMask;
@@ -1290,7 +1347,12 @@ void wxBitmap::SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg, c
         cairo_set_source_surface(cr, bmpData->m_surface, x, y);
         return;
     }
-    wxCHECK_RET(bmpData->m_pixbufNoMask, "no bitmap data");
+
+    // Silently ignore attempts to draw uninitialized bitmap,
+    // because other platforms don't complain about it
+    if (bmpData->m_pixbufNoMask == nullptr)
+        return;
+
     if (bmpData->m_bpp == 1)
         SetSourceSurface1(bmpData, cr, x, y, fg, bg);
     else
@@ -1303,7 +1365,7 @@ void wxBitmap::SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg, c
 
 cairo_t* wxBitmap::CairoCreate() const
 {
-    wxCHECK_MSG(IsOk(), NULL, "invalid bitmap");
+    wxCHECK_MSG(IsOk(), nullptr, "invalid bitmap");
 
     wxBitmapRefData* bmpData = M_BMPDATA;
     cairo_t* cr;
@@ -1327,12 +1389,12 @@ cairo_t* wxBitmap::CairoCreate() const
     if (bmpData->m_pixbufNoMask)
     {
         g_object_unref(bmpData->m_pixbufNoMask);
-        bmpData->m_pixbufNoMask = NULL;
+        bmpData->m_pixbufNoMask = nullptr;
     }
     if (bmpData->m_pixbufMask)
     {
         g_object_unref(bmpData->m_pixbufMask);
-        bmpData->m_pixbufMask = NULL;
+        bmpData->m_pixbufMask = nullptr;
     }
     wxASSERT(cr && cairo_status(cr) == 0);
     if (!wxIsSameDouble(bmpData->m_scaleFactor, 1))
@@ -1355,31 +1417,88 @@ void wxBitmap::Draw(cairo_t* cr, int x, int y, bool useMask, const wxColour* fg,
     }
     SetSourceSurface(cr, x, y, fg, bg);
     cairo_pattern_set_filter(cairo_get_source(cr), CAIRO_FILTER_NEAREST);
-    cairo_surface_t* mask = NULL;
+    cairo_surface_t* mask = nullptr;
     if (useMask && bmpData->m_mask)
         mask = *bmpData->m_mask;
     if (mask)
-        cairo_mask_surface(cr, mask, x, y);
+    {
+        cairo_pattern_t* pattern = cairo_pattern_create_for_surface(mask);
+        cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
+        if (x || y)
+        {
+            cairo_matrix_t matrix;
+            cairo_matrix_init_translate(&matrix, -x, -y);
+            cairo_pattern_set_matrix(pattern, &matrix);
+        }
+        cairo_mask(cr, pattern);
+        cairo_pattern_destroy(pattern);
+    }
     else
         cairo_paint(cr);
+}
+
+wxBitmap wxBitmap::CreateDisabled() const
+{
+    wxBitmap disabled;
+    if (m_refData == nullptr)
+        return disabled;
+
+    const wxBitmapRefData* bmpData = M_BMPDATA;
+    wxBitmapRefData* newRef = new wxBitmapRefData(bmpData->m_width, bmpData->m_height, 32);
+    newRef->m_scaleFactor = bmpData->m_scaleFactor;
+    disabled.m_refData = newRef;
+
+    cairo_t* cr = disabled.CairoCreate();
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_set_source_rgba(cr, 0, 0, 0, 0);
+    // clear to transparent
+    cairo_paint(cr);
+    // draw in this bitmap
+    Draw(cr, 0, 0);
+    cairo_set_source_rgba(cr, 0, 0, 0, 0);
+    // create disabled appearance
+    cairo_paint_with_alpha(cr, 0.5);
+    cairo_destroy(cr);
+
+    return disabled;
+}
+#else
+GdkPixbuf* wxBitmap::GetPixbufNoMask() const
+{
+    wxCHECK_MSG(IsOk(), nullptr, "invalid bitmap");
+
+    wxBitmapRefData* bmpData = M_BMPDATA;
+    GdkPixbuf* pixbuf = bmpData->m_pixbuf;
+    if (pixbuf)
+        return pixbuf;
+
+    const int w = bmpData->m_width;
+    const int h = bmpData->m_height;
+
+    pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, bmpData->m_alphaRequested, 8, w, h);
+    if ( bmpData->m_pixmap )
+        PixmapToPixbuf(bmpData->m_pixmap, pixbuf, w, h);
+
+    bmpData->m_pixbuf = pixbuf;
+    return pixbuf;
 }
 #endif
 
 GdkPixbuf *wxBitmap::GetPixbuf() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
 
     wxBitmapRefData* bmpData = M_BMPDATA;
 #ifdef __WXGTK3__
     if (bmpData->m_pixbufMask)
         return bmpData->m_pixbufMask;
 
-    if (bmpData->m_pixbufNoMask == NULL)
+    if (bmpData->m_pixbufNoMask == nullptr)
         GetPixbufNoMask();
-    cairo_surface_t* mask = NULL;
+    cairo_surface_t* mask = nullptr;
     if (bmpData->m_mask)
         mask = *bmpData->m_mask;
-    if (mask == NULL)
+    if (mask == nullptr)
         return bmpData->m_pixbufNoMask;
 
     const int w = bmpData->m_width;
@@ -1403,21 +1522,31 @@ GdkPixbuf *wxBitmap::GetPixbuf() const
 
     return bmpData->m_pixbufMask;
 #else
-    if (bmpData->m_pixbuf)
-        return bmpData->m_pixbuf;
+    if ( bmpData->m_pixbufMask )
+        return bmpData->m_pixbufMask;
 
     const int w = bmpData->m_width;
     const int h = bmpData->m_height;
-    GdkPixmap* mask = NULL;
+    if ( !bmpData->m_pixbuf )
+        GetPixbufNoMask();
+
+    GdkPixmap* mask = nullptr;
     if (bmpData->m_mask)
         mask = *bmpData->m_mask;
-    const bool useAlpha = bmpData->m_alphaRequested || mask;
-    bmpData->m_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, useAlpha, 8, w, h);
-    if (bmpData->m_pixmap)
-        PixmapToPixbuf(bmpData->m_pixmap, bmpData->m_pixbuf, w, h);
-    if (mask)
-        MaskToAlpha(mask, bmpData->m_pixbuf, w, h);
-    return bmpData->m_pixbuf;
+
+    if ( !mask )
+        return bmpData->m_pixbuf;
+
+    bmpData->m_pixbufMask = gdk_pixbuf_new(GDK_COLORSPACE_RGB, true, 8, w, h);
+    guchar* dst = gdk_pixbuf_get_pixels(bmpData->m_pixbufMask);
+    guchar* src = gdk_pixbuf_get_pixels(bmpData->m_pixbuf);
+    const int dstStride = gdk_pixbuf_get_rowstride(bmpData->m_pixbufMask);
+    const int srcStride = gdk_pixbuf_get_rowstride(bmpData->m_pixbuf);
+    CopyImageData(dst, 4, dstStride,
+                  src, gdk_pixbuf_get_n_channels(bmpData->m_pixbuf), srcStride,
+                  w, h);
+    MaskToAlpha(mask, bmpData->m_pixbufMask, w, h);
+    return bmpData->m_pixbufMask;
 #endif
 }
 
@@ -1426,7 +1555,7 @@ bool wxBitmap::HasPixbuf() const
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid bitmap") );
 
-    return M_BMPDATA->m_pixbuf != NULL;
+    return M_BMPDATA->m_pixbuf != nullptr;
 }
 
 void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
@@ -1434,12 +1563,12 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
     if (keep == Pixmap && HasPixbuf())
     {
         g_object_unref (M_BMPDATA->m_pixbuf);
-        M_BMPDATA->m_pixbuf = NULL;
+        M_BMPDATA->m_pixbuf = nullptr;
     }
     if (keep == Pixbuf && HasPixmap())
     {
         g_object_unref (M_BMPDATA->m_pixmap);
-        M_BMPDATA->m_pixmap = NULL;
+        M_BMPDATA->m_pixmap = nullptr;
     }
 }
 #endif
@@ -1447,7 +1576,7 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
 #ifdef wxHAS_RAW_BITMAP
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
-    void* bits = NULL;
+    void* bits = nullptr;
 #ifdef __WXGTK3__
     GdkPixbuf* pixbuf = GetPixbufNoMask();
     if ((bpp == 32) == (gdk_pixbuf_get_has_alpha(pixbuf) != 0))
@@ -1460,20 +1589,26 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
         if (bmpData->m_pixbufMask)
         {
             g_object_unref(bmpData->m_pixbufMask);
-            bmpData->m_pixbufMask = NULL;
+            bmpData->m_pixbufMask = nullptr;
         }
         if (bmpData->m_surface)
         {
             cairo_surface_destroy(bmpData->m_surface);
-            bmpData->m_surface = NULL;
+            bmpData->m_surface = nullptr;
         }
     }
 #else
-    GdkPixbuf *pixbuf = GetPixbuf();
+    GdkPixbuf *pixbuf = GetPixbufNoMask();
 
     // Pixmap will get out of date when our pixbuf is accessed directly, so
     // ensure we don't keep the old data in it.
     PurgeOtherRepresentations(Pixbuf);
+    // Pixbuf with masked data will get out of date too
+    if ( M_BMPDATA->m_pixbufMask )
+    {
+        g_object_unref(M_BMPDATA->m_pixbufMask);
+        M_BMPDATA->m_pixbufMask = nullptr;
+    }
 
     const bool hasAlpha = HasAlpha();
 
@@ -1536,7 +1671,7 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
         cairo_surface_mark_dirty(surface);
     }
 #else
-    if (oldRef->m_pixmap != NULL)
+    if (oldRef->m_pixmap != nullptr)
     {
         newRef->m_pixmap = gdk_pixmap_new(
             oldRef->m_pixmap, oldRef->m_width, oldRef->m_height,
@@ -1546,12 +1681,12 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
         gdk_draw_drawable(
             newRef->m_pixmap, gc, oldRef->m_pixmap, 0, 0, 0, 0, -1, -1);
     }
-    if (oldRef->m_pixbuf != NULL)
+    if (oldRef->m_pixbuf != nullptr)
     {
         newRef->m_pixbuf = gdk_pixbuf_copy(oldRef->m_pixbuf);
     }
 #endif
-    if (oldRef->m_mask != NULL)
+    if (oldRef->m_mask != nullptr)
     {
         newRef->m_mask = new wxMask(*oldRef->m_mask);
     }

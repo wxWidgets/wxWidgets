@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SNGLINST_CHECKER
 
@@ -46,12 +43,12 @@ public:
     {
         // we don't care about m_wasOpened, it can't be accessed before being
         // initialized
-        m_hMutex = NULL;
+        m_hMutex = nullptr;
     }
 
     bool Create(const wxString& name)
     {
-        m_hMutex = ::CreateMutex(NULL, FALSE, name.t_str());
+        m_hMutex = ::CreateMutex(nullptr, FALSE, name.t_str());
         if ( !m_hMutex )
         {
             wxLogLastError(wxT("CreateMutex"));
@@ -88,7 +85,7 @@ private:
     // the result of the CreateMutex() call
     bool m_wasOpened;
 
-    // the mutex handle, may be NULL
+    // the mutex handle, may be null
     HANDLE m_hMutex;
 
     wxDECLARE_NO_COPY_CLASS(wxSingleInstanceCheckerImpl);

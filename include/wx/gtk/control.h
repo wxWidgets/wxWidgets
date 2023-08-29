@@ -26,7 +26,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxControlNameStr)
+             const wxString& name = wxASCII_STR(wxControlNameStr))
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -35,15 +35,15 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxControlNameStr);
+            const wxString& name = wxASCII_STR(wxControlNameStr));
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE;
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
 #ifdef __WXGTK3__
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) override;
 #endif
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
     void PostCreation(const wxSize& size);
 
     // sets the label to the given string and also sets it for the given widget
@@ -84,7 +84,7 @@ protected:
     wxSize GTKGetPreferredSize(GtkWidget* widget) const;
 
     // Inner margins in a GtkEntry
-    wxPoint GTKGetEntryMargins(GtkEntry* entry) const;
+    wxSize GTKGetEntryMargins(GtkEntry* entry) const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxControl);

@@ -17,7 +17,7 @@
     simple text file, you will want to derive a new class from wxTipProvider and
     use it instead of the one returned by wxCreateFileTipProvider().
 
-    @library{wxadv}
+    @library{wxcore}
     @category{misc}
 
     @see @ref overview_tips, ::wxShowTip
@@ -59,7 +59,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     This function creates a wxTipProvider which may be used with wxShowTip().
@@ -99,5 +99,5 @@ bool wxShowTip(wxWindow *parent,
                wxTipProvider *tipProvider,
                bool showAtStartup = true);
 
-//@}
+///@}
 

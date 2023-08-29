@@ -1,0 +1,886 @@
+aa|Afar|Afar|Ethiopia|Latn;|ETH|ETB|0|1000|Qafar|Qafar|Otobbia
+aa-DJ|Afar (Djibouti)|Afar|Djibouti|Latn;|DJI|DJF|0|1000|Qafar (Yabuuti)|Qafar|Yabuuti
+aa-ER|Afar (Eritrea)|Afar|Eritrea|Latn;|ERI|ERN|0|1000|Qafar (Eretria)|Qafar|Eretria
+aa-ET|Afar (Ethiopia)|Afar|Ethiopia|Latn;|ETH|ETB|0|1000|Qafar (Otobbia)|Qafar|Otobbia
+af|Afrikaans|Afrikaans|South Africa|Latn;|ZAF|ZAR|0|0436|Afrikaans|Afrikaans|Suid-Afrika
+af-NA|Afrikaans (Namibia)|Afrikaans|Namibia|Latn;|NAM|NAD|0|1000|Afrikaans (Namibië)|Afrikaans|Namibië
+af-ZA|Afrikaans (South Africa)|Afrikaans|South Africa|Latn;|ZAF|ZAR|0|0436|Afrikaans (Suid-Afrika)|Afrikaans|Suid-Afrika
+agq|Aghem|Aghem|Cameroon|Latn;|CMR|XAF|0|1000|Aghem|Aghem|Kàmàlûŋ
+agq-CM|Aghem (Cameroon)|Aghem|Cameroon|Latn;|CMR|XAF|0|1000|Aghem (Kàmàlûŋ)|Aghem|Kàmàlûŋ
+ak|Akan|Akan|Ghana|Latn;|GHA|GHS|0|1000|Akan|Akan|Gaana
+ak-GH|Akan (Ghana)|Akan|Ghana|Latn;|GHA|GHS|0|1000|Akan (Gaana)|Akan|Gaana
+am|Amharic|Amharic|Ethiopia|Ethi;|ETH|ETB|0|045e|አማርኛ|አማርኛ|ኢትዮጵያ
+am-ET|Amharic (Ethiopia)|Amharic|Ethiopia|Ethi;|ETH|ETB|0|045e|አማርኛ (ኢትዮጵያ)|አማርኛ|ኢትዮጵያ
+ar|Arabic|Arabic|Saudi Arabia|Arab;|SAU|SAR|1|0401|العربية|العربية|المملكة العربية السعودية
+ar-001|Arabic (World)|Arabic|World|Arab;|001|XDR|1|1000|العربية (العالم)|العربية|العالم
+ar-AE|Arabic (United Arab Emirates)|Arabic|United Arab Emirates|Arab;|ARE|AED|1|3801|العربية (الإمارات العربية المتحدة)|العربية|الإمارات العربية المتحدة
+ar-BH|Arabic (Bahrain)|Arabic|Bahrain|Arab;|BHR|BHD|1|3c01|العربية (البحرين)|العربية|البحرين
+ar-DJ|Arabic (Djibouti)|Arabic|Djibouti|Arab;|DJI|DJF|1|1000|العربية (جيبوتي)|العربية|جيبوتي
+ar-DZ|Arabic (Algeria)|Arabic|Algeria|Arab;|DZA|DZD|1|1401|العربية (الجزائر)|العربية|الجزائر
+ar-EG|Arabic (Egypt)|Arabic|Egypt|Arab;|EGY|EGP|1|0c01|العربية (مصر)|العربية|مصر
+ar-ER|Arabic (Eritrea)|Arabic|Eritrea|Arab;|ERI|ERN|1|1000|العربية (إريتريا)|العربية|إريتريا
+ar-IL|Arabic (Israel)|Arabic|Israel|Arab;|ISR|ILS|1|1000|العربية (إسرائيل)|العربية|إسرائيل
+ar-IQ|Arabic (Iraq)|Arabic|Iraq|Arab;|IRQ|IQD|1|0801|العربية (العراق)|العربية|العراق
+ar-JO|Arabic (Jordan)|Arabic|Jordan|Arab;|JOR|JOD|1|2c01|العربية (الأردن)|العربية|الأردن
+ar-KM|Arabic (Comoros)|Arabic|Comoros|Arab;|COM|KMF|1|1000|العربية (جزر القمر)|العربية|جزر القمر
+ar-KW|Arabic (Kuwait)|Arabic|Kuwait|Arab;|KWT|KWD|1|3401|العربية (الكويت)|العربية|الكويت
+ar-LB|Arabic (Lebanon)|Arabic|Lebanon|Arab;|LBN|LBP|1|3001|العربية (لبنان)|العربية|لبنان
+ar-LY|Arabic (Libya)|Arabic|Libya|Arab;|LBY|LYD|1|1001|العربية (ليبيا)|العربية|ليبيا
+ar-MA|Arabic (Morocco)|Arabic|Morocco|Arab;|MAR|MAD|1|1801|العربية (المملكة المغربية)|العربية|المملكة المغربية
+ar-MR|Arabic (Mauritania)|Arabic|Mauritania|Arab;|MRT|MRU|1|1000|العربية (موريتانيا)|العربية|موريتانيا
+ar-OM|Arabic (Oman)|Arabic|Oman|Arab;|OMN|OMR|1|2001|العربية (عمان)|العربية|عمان
+ar-PS|Arabic (Palestinian Authority)|Arabic|Palestinian Authority|Arab;|PSE|ILS|1|1000|العربية (السلطة الفلسطينية)|العربية|السلطة الفلسطينية
+ar-QA|Arabic (Qatar)|Arabic|Qatar|Arab;|QAT|QAR|1|4001|العربية (قطر)|العربية|قطر
+ar-SA|Arabic (Saudi Arabia)|Arabic|Saudi Arabia|Arab;|SAU|SAR|1|0401|العربية (المملكة العربية السعودية)|العربية|المملكة العربية السعودية
+ar-SD|Arabic (Sudan)|Arabic|Sudan|Arab;|SDN|SDG|1|1000|العربية (السودان)|العربية|السودان
+ar-SO|Arabic (Somalia)|Arabic|Somalia|Arab;|SOM|SOS|1|1000|العربية (الصومال)|العربية|الصومال
+ar-SS|Arabic (South Sudan)|Arabic|South Sudan|Arab;|SSD|SSP|1|1000|العربية (جنوب السودان)|العربية|جنوب السودان
+ar-SY|Arabic (Syria)|Arabic|Syria|Arab;|SYR|SYP|1|2801|العربية (سوريا)|العربية|سوريا
+ar-TD|Arabic (Chad)|Arabic|Chad|Arab;|TCD|XAF|1|1000|العربية (تشاد)|العربية|تشاد
+ar-TN|Arabic (Tunisia)|Arabic|Tunisia|Arab;|TUN|TND|1|1c01|العربية (تونس)|العربية|تونس
+ar-YE|Arabic (Yemen)|Arabic|Yemen|Arab;|YEM|YER|1|2401|العربية (اليمن)|العربية|اليمن
+arn|Mapuche|Mapuche|Chile|Latn;|CHL|CLP|0|047a|Mapudungun|Mapudungun|Chile
+arn-CL|Mapuche (Chile)|Mapuche|Chile|Latn;|CHL|CLP|0|047a|Mapudungun (Chile)|Mapudungun|Chile
+as|Assamese|Assamese|India|Beng;|IND|INR|0|044d|অসমীয়া|অসমীয়া|ভাৰত
+as-IN|Assamese (India)|Assamese|India|Beng;|IND|INR|0|044d|অসমীয়া (ভাৰত)|অসমীয়া|ভাৰত
+asa|Asu|Asu|Tanzania|Latn;|TZA|TZS|0|1000|Kipare|Kipare|Tadhania
+asa-TZ|Asu (Tanzania)|Asu|Tanzania|Latn;|TZA|TZS|0|1000|Kipare (Tadhania)|Kipare|Tadhania
+ast|Asturian|Asturian|Spain|Latn;|ESP|EUR|0|1000|asturianu|asturianu|España
+ast-ES|Asturian (Spain)|Asturian|Spain|Latn;|ESP|EUR|0|1000|asturianu (España)|asturianu|España
+az|Azerbaijani|Azerbaijani|Azerbaijan|Latn;|AZE|AZN|0|042c|azərbaycan|azərbaycan|Azərbaycan
+az-Cyrl|Azerbaijani (Cyrillic)|Azerbaijani (Cyrillic)|Azerbaijan|Cyrl;|AZE|AZN|0|082c|Азәрбајҹан дили (Кирил)|азәрбајҹан|Азәрбајҹан
+az-Cyrl-AZ|Azerbaijani (Cyrillic, Azerbaijan)|Azerbaijani (Cyrillic)|Azerbaijan|Cyrl;|AZE|AZN|0|082c|азәрбајҹан (Азәрбајҹан)|азәрбајҹан|Азәрбајҹан
+az-Latn|Azerbaijani (Latin)|Azerbaijani (Latin)|Azerbaijan|Latn;|AZE|AZN|0|042c|Azərbaycan­ılı (Latın)|azərbaycan|Azərbaycan
+az-Latn-AZ|Azerbaijani (Latin, Azerbaijan)|Azerbaijani (Latin)|Azerbaijan|Latn;|AZE|AZN|0|042c|azərbaycan (Azərbaycan)|azərbaycan|Azərbaycan
+ba|Bashkir|Bashkir|Russia|Cyrl;|RUS|RUB|0|046d|Башҡорт|Башҡорт|Рәсәй
+ba-RU|Bashkir (Russia)|Bashkir|Russia|Cyrl;|RUS|RUB|0|046d|Башҡорт (Рәсәй)|Башҡорт|Рәсәй
+bas|Basaa|Basaa|Cameroon|Latn;|CMR|XAF|0|1000|Ɓàsàa|Ɓàsàa|Kàmɛ̀rûn
+bas-CM|Basaa (Cameroon)|Basaa|Cameroon|Latn;|CMR|XAF|0|1000|Ɓàsàa (Kàmɛ̀rûn)|Ɓàsàa|Kàmɛ̀rûn
+be|Belarusian|Belarusian|Belarus|Cyrl;|BLR|BYN|0|0423|Беларуская|Беларуская|Беларусь
+be-BY|Belarusian (Belarus)|Belarusian|Belarus|Cyrl;|BLR|BYN|0|0423|Беларуская (Беларусь)|Беларуская|Беларусь
+bem|Bemba|Bemba|Zambia|Latn;|ZMB|ZMW|0|1000|Ichibemba|Ichibemba|Zambia
+bem-ZM|Bemba (Zambia)|Bemba|Zambia|Latn;|ZMB|ZMW|0|1000|Ichibemba (Zambia)|Ichibemba|Zambia
+bez|Bena|Bena|Tanzania|Latn;|TZA|TZS|0|1000|Hibena|Hibena|Hutanzania
+bez-TZ|Bena (Tanzania)|Bena|Tanzania|Latn;|TZA|TZS|0|1000|Hibena (Hutanzania)|Hibena|Hutanzania
+bg|Bulgarian|Bulgarian|Bulgaria|Cyrl;|BGR|BGN|0|0402|български|български|България
+bg-BG|Bulgarian (Bulgaria)|Bulgarian|Bulgaria|Cyrl;|BGR|BGN|0|0402|български (България)|български|България
+bin|Edo|Edo|Nigeria|Latn;|NGA|NGN|0|0466|Ẹ̀dó|Ẹ̀dó|Nigeria
+bin-NG|Edo (Nigeria)|Edo|Nigeria|Latn;|NGA|NGN|0|0466|Ẹ̀dó (Nigeria)|Ẹ̀dó|Nigeria
+bm|Bamanankan|Bamanankan|Mali|Latn;|MLI|XOF|0|1000|bamanakan|bamanakan|Mali
+bm-Latn|Bamanankan (Latin)|Bamanankan (Latin)|Mali|Latn;|MLI|XOF|0|1000|bamanakan (Latin)|bamanakan|Mali
+bm-Latn-ML|Bamanankan (Latin, Mali)|Bamanankan (Latin)|Mali|Latn;|MLI|XOF|0|1000|bamanakan (Mali)|bamanakan|Mali
+bn|Bangla|Bangla|Bangladesh|Beng;|BGD|BDT|0|0845|বাংলা|বাংলা|বাংলাদেশ
+bn-BD|Bangla (Bangladesh)|Bangla|Bangladesh|Beng;|BGD|BDT|0|0845|বাংলা (বাংলাদেশ)|বাংলা|বাংলাদেশ
+bn-IN|Bengali (India)|Bengali|India|Beng;|IND|INR|0|0445|বাংলা (ভারত)|বাংলা|ভারত
+bo|Tibetan|Tibetan|China|Tibt;|CHN|CNY|0|0451|བོད་ཡིག|བོད་ཡིག|ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།
+bo-CN|Tibetan (China)|Tibetan|China|Tibt;|CHN|CNY|0|0451|བོད་ཡིག (ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།)|བོད་ཡིག|ཀྲུང་ཧྭ་མི་དམངས་སྤྱི་མཐུན་རྒྱལ་ཁབ།
+bo-IN|Tibetan (India)|Tibetan|India|Tibt;|IND|INR|0|1000|བོད་སྐད་ (རྒྱ་གར་)|བོད་སྐད་|རྒྱ་གར་
+br|Breton|Breton|France|Latn;|FRA|EUR|0|047e|brezhoneg|brezhoneg|Frañs
+br-FR|Breton (France)|Breton|France|Latn;|FRA|EUR|0|047e|brezhoneg (Frañs)|brezhoneg|Frañs
+brx|Bodo|Bodo|India|Deva;|IND|INR|0|1000|बड़ो|बड़ो|भारत
+brx-IN|Bodo (India)|Bodo|India|Deva;|IND|INR|0|1000|बड़ो (भारत)|बड़ो|भारत
+bs|Bosnian|Bosnian|Bosnia & Herzegovina|Latn;|BIH|BAM|0|141a|bosanski|bosanski|Bosna i Hercegovina
+bs-Cyrl|Bosnian (Cyrillic)|Bosnian (Cyrillic)|Bosnia and Herzegovina|Cyrl;|BIH|BAM|0|201a|босански (Ћирилица)|босански|Босна и Херцеговина
+bs-Cyrl-BA|Bosnian (Cyrillic, Bosnia and Herzegovina)|Bosnian (Cyrillic)|Bosnia and Herzegovina|Cyrl;|BIH|BAM|0|201a|босански (Босна и Херцеговина)|босански|Босна и Херцеговина
+bs-Latn|Bosnian (Latin)|Bosnian (Latin)|Bosnia & Herzegovina|Latn;|BIH|BAM|0|141a|bosanski (Latinica)|bosanski|Bosna i Hercegovina
+bs-Latn-BA|Bosnian (Latin, Bosnia & Herzegovina)|Bosnian (Latin)|Bosnia & Herzegovina|Latn;|BIH|BAM|0|141a|bosanski (Bosna i Hercegovina)|bosanski|Bosna i Hercegovina
+byn|Blin|Blin|Eritrea|Ethi;|ERI|ERN|0|1000|ብሊን|ብሊን|ኤርትራ
+byn-ER|Blin (Eritrea)|Blin|Eritrea|Ethi;|ERI|ERN|0|1000|ብሊን (ኤርትራ)|ብሊን|ኤርትራ
+ca|Catalan|Catalan|Spain|Latn;|ESP|EUR|0|0403|català|català|Espanya
+ca-AD|Catalan (Andorra)|Catalan|Andorra|Latn;|AND|EUR|0|1000|català (Andorra)|català|Andorra
+ca-ES|Catalan (Catalan)|Catalan|Spain|Latn;|ESP|EUR|0|0403|català (català)|català|Espanya
+ca-ES-valencia|Valencian (Spain)|Valencian|Spain|Latn;|ESP|EUR|0|0803|valencià (Espanya)|valencià|Espanya
+ca-FR|Catalan (France)|Catalan|France|Latn;|FRA|EUR|0|1000|català (França)|català|França
+ca-IT|Catalan (Italy)|Catalan|Italy|Latn;|ITA|EUR|0|1000|català (Itàlia)|català|Itàlia
+ccp|Chakma|Chakma|Bangladesh|Cakm;|BGD|BDT|0|1000|𑄌𑄋𑄴𑄟𑄳𑄦|𑄌𑄋𑄴𑄟𑄳𑄦|𑄝𑄁𑄣𑄘𑄬𑄌𑄴
+ccp-Cakm|Chakma (Chakma)|Chakma (Chakma)|Bangladesh|Cakm;|BGD|BDT|0|1000|𑄌𑄋𑄴𑄟𑄳𑄦 (𑄌𑄇𑄴𑄟)|𑄌𑄋𑄴𑄟𑄳𑄦|𑄝𑄁𑄣𑄘𑄬𑄌𑄴
+ccp-Cakm-BD|Chakma (Chakma, Bangladesh)|Chakma (Chakma)|Bangladesh|Cakm;|BGD|BDT|0|1000|𑄌𑄋𑄴𑄟𑄳𑄦 (𑄝𑄁𑄣𑄘𑄬𑄌𑄴)|𑄌𑄋𑄴𑄟𑄳𑄦|𑄝𑄁𑄣𑄘𑄬𑄌𑄴
+ccp-Cakm-IN|Chakma (Chakma, India)|Chakma (Chakma)|India|Cakm;|IND|INR|0|1000|𑄌𑄋𑄴𑄟𑄳𑄦 (𑄞𑄢𑄧𑄖𑄴)|𑄌𑄋𑄴𑄟𑄳𑄦|𑄞𑄢𑄧𑄖𑄴
+ce|Chechen|Chechen|Russia|Cyrl;|RUS|RUB|0|1000|нохчийн|нохчийн|Росси
+ce-RU|Chechen (Russia)|Chechen|Russia|Cyrl;|RUS|RUB|0|1000|нохчийн (Росси)|нохчийн|Росси
+ceb|Cebuano|Cebuano|Philippines|Latn;|PHL|PHP|0|1000|Binisaya|Binisaya|Pilipinas
+ceb-Latn|Cebuano (Latin)|Cebuano (Latin)|Philippines|Latn;|PHL|PHP|0|1000|Binisaya (Latin)|Binisaya|Pilipinas
+ceb-Latn-PH|Cebuano (Latin, Philippines)|Cebuano (Latin)|Philippines|Latn;|PHL|PHP|0|1000|Binisaya (Pilipinas)|Binisaya|Pilipinas
+cgg|Chiga|Chiga|Uganda|Latn;|UGA|UGX|0|1000|Rukiga|Rukiga|Uganda
+cgg-UG|Chiga (Uganda)|Chiga|Uganda|Latn;|UGA|UGX|0|1000|Rukiga (Uganda)|Rukiga|Uganda
+chr|Cherokee|Cherokee|United States|Cher;|USA|USD|0|045c|ᏣᎳᎩ|ᏣᎳᎩ|ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ
+chr-Cher|Cherokee|Cherokee|United States|Cher;|USA|USD|0|045c|ᏣᎳᎩ|ᏣᎳᎩ|ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ
+chr-Cher-US|Cherokee (Cherokee, United States)|Cherokee|United States|Cher;|USA|USD|0|045c|ᏣᎳᎩ (ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ)|ᏣᎳᎩ|ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ
+co|Corsican|Corsican|France|Latn;|FRA|EUR|0|0483|Corsu|Corsu|Francia
+co-FR|Corsican (France)|Corsican|France|Latn;|FRA|EUR|0|0483|Corsu (Francia)|Corsu|Francia
+cs|Czech|Czech|Czechia|Latn;|CZE|CZK|0|0405|čeština|čeština|Česko
+cs-CZ|Czech (Czechia)|Czech|Czechia|Latn;|CZE|CZK|0|0405|čeština (Česko)|čeština|Česko
+cu|Church Slavic|Church Slavic|Russia|Cyrl;|RUS|RUB|0|1000|церковнослове́нскїй|церковнослове́нскїй|рѡссі́а
+cu-RU|Church Slavic (Russia)|Church Slavic|Russia|Cyrl;|RUS|RUB|0|1000|церковнослове́нскїй (рѡссі́а)|церковнослове́нскїй|рѡссі́а
+cy|Welsh|Welsh|United Kingdom|Latn;|GBR|GBP|0|0452|Cymraeg|Cymraeg|Y Deyrnas Unedig
+cy-GB|Welsh (United Kingdom)|Welsh|United Kingdom|Latn;|GBR|GBP|0|0452|Cymraeg (Y Deyrnas Unedig)|Cymraeg|Y Deyrnas Unedig
+da|Danish|Danish|Denmark|Latn;|DNK|DKK|0|0406|dansk|dansk|Danmark
+da-DK|Danish (Denmark)|Danish|Denmark|Latn;|DNK|DKK|0|0406|dansk (Danmark)|dansk|Danmark
+da-GL|Danish (Greenland)|Danish|Greenland|Latn;|GRL|DKK|0|1000|dansk (Grønland)|dansk|Grønland
+dav|Taita|Taita|Kenya|Latn;|KEN|KES|0|1000|Kitaita|Kitaita|Kenya
+dav-KE|Taita (Kenya)|Taita|Kenya|Latn;|KEN|KES|0|1000|Kitaita (Kenya)|Kitaita|Kenya
+de|German|German|Germany|Latn;|DEU|EUR|0|0407|Deutsch|Deutsch|Deutschland
+de-AT|German (Austria)|German|Austria|Latn;|AUT|EUR|0|0c07|Deutsch (Österreich)|Deutsch|Österreich
+de-BE|German (Belgium)|German|Belgium|Latn;|BEL|EUR|0|1000|Deutsch (Belgien)|Deutsch|Belgien
+de-CH|German (Switzerland)|German|Switzerland|Latn;|CHE|CHF|0|0807|Deutsch (Schweiz)|Deutsch|Schweiz
+de-DE|German (Germany)|German|Germany|Latn;|DEU|EUR|0|0407|Deutsch (Deutschland)|Deutsch|Deutschland
+de-IT|German (Italy)|German|Italy|Latn;|ITA|EUR|0|1000|Deutsch (Italien)|Deutsch|Italien
+de-LI|German (Liechtenstein)|German|Liechtenstein|Latn;|LIE|CHF|0|1407|Deutsch (Liechtenstein)|Deutsch|Liechtenstein
+de-LU|German (Luxembourg)|German|Luxembourg|Latn;|LUX|EUR|0|1007|Deutsch (Luxemburg)|Deutsch|Luxemburg
+dje|Zarma|Zarma|Niger|Latn;|NER|XOF|0|1000|Zarmaciine|Zarmaciine|Nižer
+dje-NE|Zarma (Niger)|Zarma|Niger|Latn;|NER|XOF|0|1000|Zarmaciine (Nižer)|Zarmaciine|Nižer
+doi|Dogri|Dogri|India|Deva;|IND|INR|0|1000|डोगरी|डोगरी|भारत
+doi-Deva|Dogri (Devanagari)|Dogri (Devanagari)|India|Deva;|IND|INR|0|1000|डोगरी (देवनागरी)|डोगरी|भारत
+doi-Deva-IN|Dogri (Devanagari, India)|Dogri (Devanagari)|India|Deva;|IND|INR|0|1000|डोगरी (भारत)|डोगरी|भारत
+dsb|Lower Sorbian|Lower Sorbian|Germany|Latn;|DEU|EUR|0|082e|dolnoserbšćina|dolnoserbšćina|Nimska
+dsb-DE|Lower Sorbian (Germany)|Lower Sorbian|Germany|Latn;|DEU|EUR|0|082e|dolnoserbšćina (Nimska)|dolnoserbšćina|Nimska
+dua|Duala|Duala|Cameroon|Latn;|CMR|XAF|0|1000|duálá|duálá|Cameroun
+dua-CM|Duala (Cameroon)|Duala|Cameroon|Latn;|CMR|XAF|0|1000|duálá (Cameroun)|duálá|Cameroun
+dv|Divehi|Divehi|Maldives|Thaa;|MDV|MVR|1|0465|ދިވެހިބަސް|ދިވެހިބަސް|ދިވެހި ރާއްޖެ
+dv-MV|Divehi (Maldives)|Divehi|Maldives|Thaa;|MDV|MVR|1|0465|ދިވެހިބަސް (ދިވެހި ރާއްޖެ)|ދިވެހިބަސް|ދިވެހި ރާއްޖެ
+dyo|Jola-Fonyi|Jola-Fonyi|Senegal|Latn;|SEN|XOF|0|1000|joola|joola|Senegal
+dyo-SN|Jola-Fonyi (Senegal)|Jola-Fonyi|Senegal|Latn;|SEN|XOF|0|1000|joola (Senegal)|joola|Senegal
+dz|Dzongkha|Dzongkha|Bhutan|Tibt;|BTN|BTN|0|0c51|རྫོང་ཁ|རྫོང་ཁ|འབྲུག
+dz-BT|Dzongkha (Bhutan)|Dzongkha|Bhutan|Tibt;|BTN|BTN|0|0c51|རྫོང་ཁ (འབྲུག)|རྫོང་ཁ|འབྲུག
+ebu|Embu|Embu|Kenya|Latn;|KEN|KES|0|1000|Kĩembu|Kĩembu|Kenya
+ebu-KE|Embu (Kenya)|Embu|Kenya|Latn;|KEN|KES|0|1000|Kĩembu (Kenya)|Kĩembu|Kenya
+ee|Ewe|Ewe|Ghana|Latn;|GHA|GHS|0|1000|Eʋegbe|Eʋegbe|Ghana nutome
+ee-GH|Ewe (Ghana)|Ewe|Ghana|Latn;|GHA|GHS|0|1000|Eʋegbe (Ghana nutome)|Eʋegbe|Ghana nutome
+ee-TG|Ewe (Togo)|Ewe|Togo|Latn;|TGO|XOF|0|1000|Eʋegbe (Togo nutome)|Eʋegbe|Togo nutome
+el|Greek|Greek|Greece|Grek;|GRC|EUR|0|0408|Ελληνικά|Ελληνικά|Ελλάδα
+el-CY|Greek (Cyprus)|Greek|Cyprus|Grek;|CYP|EUR|0|1000|Ελληνικά (Κύπρος)|Ελληνικά|Κύπρος
+el-GR|Greek (Greece)|Greek|Greece|Grek;|GRC|EUR|0|0408|Ελληνικά (Ελλάδα)|Ελληνικά|Ελλάδα
+en|English|English|United States|Latn;|USA|USD|0|0409|English|English|United States
+en-001|English (World)|English|World|Latn;|001|XDR|0|1000|English (World)|English|World
+en-029|English (Caribbean)|English|Caribbean|Latn;|029|XCD|0|2409|English (Caribbean)|English|Caribbean
+en-150|English (Europe)|English|Europe|Latn;|150|XDR|0|1000|English (Europe)|English|Europe
+en-AE|English (United Arab Emirates)|English|United Arab Emirates|Latn;|ARE|AED|0|4c09|English (United Arab Emirates)|English|United Arab Emirates
+en-AG|English (Antigua & Barbuda)|English|Antigua & Barbuda|Latn;|ATG|XCD|0|1000|English (Antigua & Barbuda)|English|Antigua & Barbuda
+en-AI|English (Anguilla)|English|Anguilla|Latn;|AIA|XCD|0|1000|English (Anguilla)|English|Anguilla
+en-AS|English (American Samoa)|English|American Samoa|Latn;|ASM|USD|0|1000|English (American Samoa)|English|American Samoa
+en-AT|English (Austria)|English|Austria|Latn;|AUT|EUR|0|1000|English (Austria)|English|Austria
+en-AU|English (Australia)|English|Australia|Latn;|AUS|AUD|0|0c09|English (Australia)|English|Australia
+en-BB|English (Barbados)|English|Barbados|Latn;|BRB|BBD|0|1000|English (Barbados)|English|Barbados
+en-BE|English (Belgium)|English|Belgium|Latn;|BEL|EUR|0|1000|English (Belgium)|English|Belgium
+en-BI|English (Burundi)|English|Burundi|Latn;|BDI|BIF|0|1000|English (Burundi)|English|Burundi
+en-BM|English (Bermuda)|English|Bermuda|Latn;|BMU|BMD|0|1000|English (Bermuda)|English|Bermuda
+en-BS|English (Bahamas)|English|Bahamas|Latn;|BHS|BSD|0|1000|English (Bahamas)|English|Bahamas
+en-BW|English (Botswana)|English|Botswana|Latn;|BWA|BWP|0|1000|English (Botswana)|English|Botswana
+en-BZ|English (Belize)|English|Belize|Latn;|BLZ|BZD|0|2809|English (Belize)|English|Belize
+en-CA|English (Canada)|English|Canada|Latn;|CAN|CAD|0|1009|English (Canada)|English|Canada
+en-CC|English (Cocos (Keeling) Islands)|English|Cocos (Keeling) Islands|Latn;|CCK|AUD|0|1000|English (Cocos (Keeling) Islands)|English|Cocos (Keeling) Islands
+en-CH|English (Switzerland)|English|Switzerland|Latn;|CHE|CHF|0|1000|English (Switzerland)|English|Switzerland
+en-CK|English (Cook Islands)|English|Cook Islands|Latn;|COK|NZD|0|1000|English (Cook Islands)|English|Cook Islands
+en-CM|English (Cameroon)|English|Cameroon|Latn;|CMR|XAF|0|1000|English (Cameroon)|English|Cameroon
+en-CX|English (Christmas Island)|English|Christmas Island|Latn;|CXR|AUD|0|1000|English (Christmas Island)|English|Christmas Island
+en-CY|English (Cyprus)|English|Cyprus|Latn;|CYP|EUR|0|1000|English (Cyprus)|English|Cyprus
+en-DE|English (Germany)|English|Germany|Latn;|DEU|EUR|0|1000|English (Germany)|English|Germany
+en-DK|English (Denmark)|English|Denmark|Latn;|DNK|DKK|0|1000|English (Denmark)|English|Denmark
+en-DM|English (Dominica)|English|Dominica|Latn;|DMA|XCD|0|1000|English (Dominica)|English|Dominica
+en-ER|English (Eritrea)|English|Eritrea|Latn;|ERI|ERN|0|1000|English (Eritrea)|English|Eritrea
+en-FI|English (Finland)|English|Finland|Latn;|FIN|EUR|0|1000|English (Finland)|English|Finland
+en-FJ|English (Fiji)|English|Fiji|Latn;|FJI|FJD|0|1000|English (Fiji)|English|Fiji
+en-FK|English (Falkland Islands)|English|Falkland Islands|Latn;|FLK|FKP|0|1000|English (Falkland Islands)|English|Falkland Islands
+en-FM|English (Micronesia)|English|Micronesia|Latn;|FSM|USD|0|1000|English (Micronesia)|English|Micronesia
+en-GB|English (United Kingdom)|English|United Kingdom|Latn;|GBR|GBP|0|0809|English (United Kingdom)|English|United Kingdom
+en-GD|English (Grenada)|English|Grenada|Latn;|GRD|XCD|0|1000|English (Grenada)|English|Grenada
+en-GG|English (Guernsey)|English|Guernsey|Latn;|GGY|GBP|0|1000|English (Guernsey)|English|Guernsey
+en-GH|English (Ghana)|English|Ghana|Latn;|GHA|GHS|0|1000|English (Ghana)|English|Ghana
+en-GI|English (Gibraltar)|English|Gibraltar|Latn;|GIB|GIP|0|1000|English (Gibraltar)|English|Gibraltar
+en-GM|English (Gambia)|English|Gambia|Latn;|GMB|GMD|0|1000|English (Gambia)|English|Gambia
+en-GU|English (Guam)|English|Guam|Latn;|GUM|USD|0|1000|English (Guam)|English|Guam
+en-GY|English (Guyana)|English|Guyana|Latn;|GUY|GYD|0|1000|English (Guyana)|English|Guyana
+en-HK|English (Hong Kong SAR)|English|Hong Kong SAR|Latn;|HKG|HKD|0|3c09|English (Hong Kong SAR)|English|Hong Kong SAR
+en-ID|English (Indonesia)|English|Indonesia|Latn;|IDN|IDR|0|3809|English (Indonesia)|English|Indonesia
+en-IE|English (Ireland)|English|Ireland|Latn;|IRL|EUR|0|1809|English (Ireland)|English|Ireland
+en-IL|English (Israel)|English|Israel|Latn;|ISR|ILS|0|1000|English (Israel)|English|Israel
+en-IM|English (Isle of Man)|English|Isle of Man|Latn;|IMN|GBP|0|1000|English (Isle of Man)|English|Isle of Man
+en-IN|English (India)|English|India|Latn;|IND|INR|0|4009|English (India)|English|India
+en-IO|English (British Indian Ocean Territory)|English|British Indian Ocean Territory|Latn;|IOT|USD|0|1000|English (British Indian Ocean Territory)|English|British Indian Ocean Territory
+en-JE|English (Jersey)|English|Jersey|Latn;|JEY|GBP|0|1000|English (Jersey)|English|Jersey
+en-JM|English (Jamaica)|English|Jamaica|Latn;|JAM|JMD|0|2009|English (Jamaica)|English|Jamaica
+en-KE|English (Kenya)|English|Kenya|Latn;|KEN|KES|0|1000|English (Kenya)|English|Kenya
+en-KI|English (Kiribati)|English|Kiribati|Latn;|KIR|AUD|0|1000|English (Kiribati)|English|Kiribati
+en-KN|English (St. Kitts & Nevis)|English|St. Kitts & Nevis|Latn;|KNA|XCD|0|1000|English (St. Kitts & Nevis)|English|St. Kitts & Nevis
+en-KY|English (Cayman Islands)|English|Cayman Islands|Latn;|CYM|KYD|0|1000|English (Cayman Islands)|English|Cayman Islands
+en-LC|English (St. Lucia)|English|St. Lucia|Latn;|LCA|XCD|0|1000|English (St. Lucia)|English|St. Lucia
+en-LR|English (Liberia)|English|Liberia|Latn;|LBR|LRD|0|1000|English (Liberia)|English|Liberia
+en-LS|English (Lesotho)|English|Lesotho|Latn;|LSO|ZAR|0|1000|English (Lesotho)|English|Lesotho
+en-MG|English (Madagascar)|English|Madagascar|Latn;|MDG|MGA|0|1000|English (Madagascar)|English|Madagascar
+en-MH|English (Marshall Islands)|English|Marshall Islands|Latn;|MHL|USD|0|1000|English (Marshall Islands)|English|Marshall Islands
+en-MO|English (Macao SAR)|English|Macao SAR|Latn;|MAC|MOP|0|1000|English (Macao SAR)|English|Macao SAR
+en-MP|English (Northern Mariana Islands)|English|Northern Mariana Islands|Latn;|MNP|USD|0|1000|English (Northern Mariana Islands)|English|Northern Mariana Islands
+en-MS|English (Montserrat)|English|Montserrat|Latn;|MSR|XCD|0|1000|English (Montserrat)|English|Montserrat
+en-MT|English (Malta)|English|Malta|Latn;|MLT|EUR|0|1000|English (Malta)|English|Malta
+en-MU|English (Mauritius)|English|Mauritius|Latn;|MUS|MUR|0|1000|English (Mauritius)|English|Mauritius
+en-MW|English (Malawi)|English|Malawi|Latn;|MWI|MWK|0|1000|English (Malawi)|English|Malawi
+en-MY|English (Malaysia)|English|Malaysia|Latn;|MYS|MYR|0|4409|English (Malaysia)|English|Malaysia
+en-NA|English (Namibia)|English|Namibia|Latn;|NAM|NAD|0|1000|English (Namibia)|English|Namibia
+en-NF|English (Norfolk Island)|English|Norfolk Island|Latn;|NFK|AUD|0|1000|English (Norfolk Island)|English|Norfolk Island
+en-NG|English (Nigeria)|English|Nigeria|Latn;|NGA|NGN|0|1000|English (Nigeria)|English|Nigeria
+en-NL|English (Netherlands)|English|Netherlands|Latn;|NLD|EUR|0|1000|English (Netherlands)|English|Netherlands
+en-NR|English (Nauru)|English|Nauru|Latn;|NRU|AUD|0|1000|English (Nauru)|English|Nauru
+en-NU|English (Niue)|English|Niue|Latn;|NIU|NZD|0|1000|English (Niue)|English|Niue
+en-NZ|English (New Zealand)|English|New Zealand|Latn;|NZL|NZD|0|1409|English (New Zealand)|English|New Zealand
+en-PG|English (Papua New Guinea)|English|Papua New Guinea|Latn;|PNG|PGK|0|1000|English (Papua New Guinea)|English|Papua New Guinea
+en-PH|English (Philippines)|English|Philippines|Latn;|PHL|PHP|0|3409|English (Philippines)|English|Philippines
+en-PK|English (Pakistan)|English|Pakistan|Latn;|PAK|PKR|0|1000|English (Pakistan)|English|Pakistan
+en-PN|English (Pitcairn Islands)|English|Pitcairn Islands|Latn;|PCN|NZD|0|1000|English (Pitcairn Islands)|English|Pitcairn Islands
+en-PR|English (Puerto Rico)|English|Puerto Rico|Latn;|PRI|USD|0|1000|English (Puerto Rico)|English|Puerto Rico
+en-PW|English (Palau)|English|Palau|Latn;|PLW|USD|0|1000|English (Palau)|English|Palau
+en-RW|English (Rwanda)|English|Rwanda|Latn;|RWA|RWF|0|1000|English (Rwanda)|English|Rwanda
+en-SB|English (Solomon Islands)|English|Solomon Islands|Latn;|SLB|SBD|0|1000|English (Solomon Islands)|English|Solomon Islands
+en-SC|English (Seychelles)|English|Seychelles|Latn;|SYC|SCR|0|1000|English (Seychelles)|English|Seychelles
+en-SD|English (Sudan)|English|Sudan|Latn;|SDN|SDG|0|1000|English (Sudan)|English|Sudan
+en-SE|English (Sweden)|English|Sweden|Latn;|SWE|SEK|0|1000|English (Sweden)|English|Sweden
+en-SG|English (Singapore)|English|Singapore|Latn;|SGP|SGD|0|4809|English (Singapore)|English|Singapore
+en-SH|English (St Helena, Ascension, Tristan da Cunha)|English|St Helena, Ascension, Tristan da Cunha|Latn;|SHN|SHP|0|1000|English (St Helena, Ascension, Tristan da Cunha)|English|St Helena, Ascension, Tristan da Cunha
+en-SI|English (Slovenia)|English|Slovenia|Latn;|SVN|EUR|0|1000|English (Slovenia)|English|Slovenia
+en-SL|English (Sierra Leone)|English|Sierra Leone|Latn;|SLE|SLL|0|1000|English (Sierra Leone)|English|Sierra Leone
+en-SS|English (South Sudan)|English|South Sudan|Latn;|SSD|SSP|0|1000|English (South Sudan)|English|South Sudan
+en-SX|English (Sint Maarten)|English|Sint Maarten|Latn;|SXM|ANG|0|1000|English (Sint Maarten)|English|Sint Maarten
+en-SZ|English (Eswatini)|English|Eswatini|Latn;|SWZ|SZL|0|1000|English (Eswatini)|English|Eswatini
+en-TC|English (Turks & Caicos Islands)|English|Turks & Caicos Islands|Latn;|TCA|USD|0|1000|English (Turks & Caicos Islands)|English|Turks & Caicos Islands
+en-TK|English (Tokelau)|English|Tokelau|Latn;|TKL|NZD|0|1000|English (Tokelau)|English|Tokelau
+en-TO|English (Tonga)|English|Tonga|Latn;|TON|TOP|0|1000|English (Tonga)|English|Tonga
+en-TT|English (Trinidad & Tobago)|English|Trinidad & Tobago|Latn;|TTO|TTD|0|2c09|English (Trinidad & Tobago)|English|Trinidad & Tobago
+en-TV|English (Tuvalu)|English|Tuvalu|Latn;|TUV|AUD|0|1000|English (Tuvalu)|English|Tuvalu
+en-TZ|English (Tanzania)|English|Tanzania|Latn;|TZA|TZS|0|1000|English (Tanzania)|English|Tanzania
+en-UG|English (Uganda)|English|Uganda|Latn;|UGA|UGX|0|1000|English (Uganda)|English|Uganda
+en-UM|English (U.S. Outlying Islands)|English|U.S. Outlying Islands|Latn;|UMI|USD|0|1000|English (U.S. Outlying Islands)|English|U.S. Outlying Islands
+en-US|English (United States)|English|United States|Latn;|USA|USD|0|0409|English (United States)|English|United States
+en-VC|English (St. Vincent & Grenadines)|English|St. Vincent & Grenadines|Latn;|VCT|XCD|0|1000|English (St. Vincent & Grenadines)|English|St. Vincent & Grenadines
+en-VG|English (British Virgin Islands)|English|British Virgin Islands|Latn;|VGB|USD|0|1000|English (British Virgin Islands)|English|British Virgin Islands
+en-VI|English (U.S. Virgin Islands)|English|U.S. Virgin Islands|Latn;|VIR|USD|0|1000|English (U.S. Virgin Islands)|English|U.S. Virgin Islands
+en-VU|English (Vanuatu)|English|Vanuatu|Latn;|VUT|VUV|0|1000|English (Vanuatu)|English|Vanuatu
+en-WS|English (Samoa)|English|Samoa|Latn;|WSM|WST|0|1000|English (Samoa)|English|Samoa
+en-ZA|English (South Africa)|English|South Africa|Latn;|ZAF|ZAR|0|1c09|English (South Africa)|English|South Africa
+en-ZM|English (Zambia)|English|Zambia|Latn;|ZMB|ZMW|0|1000|English (Zambia)|English|Zambia
+en-ZW|English (Zimbabwe)|English|Zimbabwe|Latn;|ZWE|USD|0|3009|English (Zimbabwe)|English|Zimbabwe
+eo|Esperanto|Esperanto|World|Latn;|001|XDR|0|1000|esperanto|esperanto|Mondo
+eo-001|Esperanto (World)|Esperanto|World|Latn;|001|XDR|0|1000|esperanto (Mondo)|esperanto|Mondo
+es|Spanish|Spanish|Spain|Latn;|ESP|EUR|0|0c0a|español|español|España
+es-419|Spanish (Latin America)|Spanish|Latin America|Latn;|419|XDR|0|580a|español (Latinoamérica)|español|Latinoamérica
+es-AR|Spanish (Argentina)|Spanish|Argentina|Latn;|ARG|ARS|0|2c0a|español (Argentina)|español|Argentina
+es-BO|Spanish (Bolivia)|Spanish|Bolivia|Latn;|BOL|BOB|0|400a|español (Bolivia)|español|Bolivia
+es-BR|Spanish (Brazil)|Spanish|Brazil|Latn;|BRA|BRL|0|1000|español (Brasil)|español|Brasil
+es-BZ|Spanish (Belize)|Spanish|Belize|Latn;|BLZ|BZD|0|1000|español (Belice)|español|Belice
+es-CL|Spanish (Chile)|Spanish|Chile|Latn;|CHL|CLP|0|340a|español (Chile)|español|Chile
+es-CO|Spanish (Colombia)|Spanish|Colombia|Latn;|COL|COP|0|240a|español (Colombia)|español|Colombia
+es-CR|Spanish (Costa Rica)|Spanish|Costa Rica|Latn;|CRI|CRC|0|140a|español (Costa Rica)|español|Costa Rica
+es-CU|Spanish (Cuba)|Spanish|Cuba|Latn;|CUB|CUP|0|5c0a|español (Cuba)|español|Cuba
+es-DO|Spanish (Dominican Republic)|Spanish|Dominican Republic|Latn;|DOM|DOP|0|1c0a|español (República Dominicana)|español|República Dominicana
+es-EC|Spanish (Ecuador)|Spanish|Ecuador|Latn;|ECU|USD|0|300a|español (Ecuador)|español|Ecuador
+es-ES|Spanish (Spain, International Sort)|Spanish|Spain|Latn;|ESP|EUR|0|0c0a|español (España, alfabetización internacional)|español|España
+es-GQ|Spanish (Equatorial Guinea)|Spanish|Equatorial Guinea|Latn;|GNQ|XAF|0|1000|español (Guinea Ecuatorial)|español|Guinea Ecuatorial
+es-GT|Spanish (Guatemala)|Spanish|Guatemala|Latn;|GTM|GTQ|0|100a|español (Guatemala)|español|Guatemala
+es-HN|Spanish (Honduras)|Spanish|Honduras|Latn;|HND|HNL|0|480a|español (Honduras)|español|Honduras
+es-MX|Spanish (Mexico)|Spanish|Mexico|Latn;|MEX|MXN|0|080a|español (México)|español|México
+es-NI|Spanish (Nicaragua)|Spanish|Nicaragua|Latn;|NIC|NIO|0|4c0a|español (Nicaragua)|español|Nicaragua
+es-PA|Spanish (Panama)|Spanish|Panama|Latn;|PAN|PAB|0|180a|español (Panamá)|español|Panamá
+es-PE|Spanish (Peru)|Spanish|Peru|Latn;|PER|PEN|0|280a|español (Perú)|español|Perú
+es-PH|Spanish (Philippines)|Spanish|Philippines|Latn;|PHL|PHP|0|1000|español (Filipinas)|español|Filipinas
+es-PR|Spanish (Puerto Rico)|Spanish|Puerto Rico|Latn;|PRI|USD|0|500a|español (Puerto Rico)|español|Puerto Rico
+es-PY|Spanish (Paraguay)|Spanish|Paraguay|Latn;|PRY|PYG|0|3c0a|español (Paraguay)|español|Paraguay
+es-SV|Spanish (El Salvador)|Spanish|El Salvador|Latn;|SLV|USD|0|440a|español (El Salvador)|español|El Salvador
+es-US|Spanish (United States)|Spanish|United States|Latn;|USA|USD|0|540a|español (Estados Unidos)|español|Estados Unidos
+es-UY|Spanish (Uruguay)|Spanish|Uruguay|Latn;|URY|UYU|0|380a|español (Uruguay)|español|Uruguay
+es-VE|Spanish (Venezuela)|Spanish|Venezuela|Latn;|VEN|VES|0|200a|español (Venezuela)|español|Venezuela
+et|Estonian|Estonian|Estonia|Latn;|EST|EUR|0|0425|eesti|eesti|Eesti
+et-EE|Estonian (Estonia)|Estonian|Estonia|Latn;|EST|EUR|0|0425|eesti (Eesti)|eesti|Eesti
+eu|Basque|Basque|Spain|Latn;|ESP|EUR|0|042d|euskara|euskara|Espainia
+eu-ES|Basque (Basque)|Basque|Spain|Latn;|ESP|EUR|0|042d|euskara (euskara)|euskara|Espainia
+ewo|Ewondo|Ewondo|Cameroon|Latn;|CMR|XAF|0|1000|ewondo|ewondo|Kamərún
+ewo-CM|Ewondo (Cameroon)|Ewondo|Cameroon|Latn;|CMR|XAF|0|1000|ewondo (Kamərún)|ewondo|Kamərún
+fa|Persian|Persian|Iran|Arab;|IRN|IRR|1|0429|فارسی|فارسی|ایران
+fa-IR|Persian (Iran)|Persian|Iran|Arab;|IRN|IRR|1|0429|فارسی (ایران)|فارسی|ایران
+ff|Fulah (Latin)|Fulah (Latin)|Senegal|Latn;|SEN|XOF|0|0867|Pulaar|Pulaar|Senegaal
+ff-Adlm|Fulah (Adlam)|Fulah (Adlam)|Guinea|Adlm;|GIN|GNF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤀𞤁𞤂𞤢𞤃)|𞤆𞤵𞤤𞤢𞤪|𞤘𞤭𞤲𞤫
+ff-Adlm-BF|Fulah (Adlam, Burkina Faso)|Fulah (Adlam)|Burkina Faso|Adlm;|BFA|XOF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤄𞤵𞤪𞤳𞤭𞤲𞤢 𞤊𞤢𞤧𞤮𞥅)|𞤆𞤵𞤤𞤢𞤪|𞤄𞤵𞤪𞤳𞤭𞤲𞤢 𞤊𞤢𞤧𞤮𞥅
+ff-Adlm-CM|Fulah (Adlam, Cameroon)|Fulah (Adlam)|Cameroon|Adlm;|CMR|XAF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤑𞤢𞤥𞤢𞤪𞤵𞥅𞤲)|𞤆𞤵𞤤𞤢𞤪|𞤑𞤢𞤥𞤢𞤪𞤵𞥅𞤲
+ff-Adlm-GH|Fulah (Adlam, Ghana)|Fulah (Adlam)|Ghana|Adlm;|GHA|GHS|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤘𞤢𞤲𞤢)|𞤆𞤵𞤤𞤢𞤪|𞤘𞤢𞤲𞤢
+ff-Adlm-GM|Fulah (Adlam, Gambia)|Fulah (Adlam)|Gambia|Adlm;|GMB|GMD|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤘𞤢𞤥𞤦𞤭𞤴𞤢)|𞤆𞤵𞤤𞤢𞤪|𞤘𞤢𞤥𞤦𞤭𞤴𞤢
+ff-Adlm-GN|Fulah (Adlam, Guinea)|Fulah (Adlam)|Guinea|Adlm;|GIN|GNF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤘𞤭𞤲𞤫)|𞤆𞤵𞤤𞤢𞤪|𞤘𞤭𞤲𞤫
+ff-Adlm-GW|Fulah (Adlam, Guinea-Bissau)|Fulah (Adlam)|Guinea-Bissau|Adlm;|GNB|XOF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤘𞤭𞤲𞤫-𞤄𞤭𞤧𞤢𞤱𞤮𞥅)|𞤆𞤵𞤤𞤢𞤪|𞤘𞤭𞤲𞤫-𞤄𞤭𞤧𞤢𞤱𞤮𞥅
+ff-Adlm-LR|Fulah (Adlam, Liberia)|Fulah (Adlam)|Liberia|Adlm;|LBR|LRD|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤂𞤢𞤦𞤭𞤪𞤭𞤴𞤢𞥄)|𞤆𞤵𞤤𞤢𞤪|𞤂𞤢𞤦𞤭𞤪𞤭𞤴𞤢𞥄
+ff-Adlm-MR|Fulah (Adlam, Mauritania)|Fulah (Adlam)|Mauritania|Adlm;|MRT|MRU|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤃𞤮𞤪𞤼𞤢𞤲𞤭𞥅)|𞤆𞤵𞤤𞤢𞤪|𞤃𞤮𞤪𞤼𞤢𞤲𞤭𞥅
+ff-Adlm-NE|Fulah (Adlam, Niger)|Fulah (Adlam)|Niger|Adlm;|NER|XOF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤐𞤭𞥅𞤶𞤫𞤪)|𞤆𞤵𞤤𞤢𞤪|𞤐𞤭𞥅𞤶𞤫𞤪
+ff-Adlm-NG|Fulah (Adlam, Nigeria)|Fulah (Adlam)|Nigeria|Adlm;|NGA|NGN|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤐𞤢𞤶𞤫𞤪𞤭𞤴𞤢𞥄)|𞤆𞤵𞤤𞤢𞤪|𞤐𞤢𞤶𞤫𞤪𞤭𞤴𞤢𞥄
+ff-Adlm-SL|Fulah (Adlam, Sierra Leone)|Fulah (Adlam)|Sierra Leone|Adlm;|SLE|SLL|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤅𞤢𞤪𞤢𞤤𞤮𞤲)|𞤆𞤵𞤤𞤢𞤪|𞤅𞤢𞤪𞤢𞤤𞤮𞤲
+ff-Adlm-SN|Fulah (Adlam, Senegal)|Fulah (Adlam)|Senegal|Adlm;|SEN|XOF|0|1000|𞤆𞤵𞤤𞤢𞤪 (𞤅𞤫𞤲𞤫𞤺𞤢𞥄𞤤)|𞤆𞤵𞤤𞤢𞤪|𞤅𞤫𞤲𞤫𞤺𞤢𞥄𞤤
+ff-Latn|Fulah (Latin)|Fulah (Latin)|Senegal|Latn;|SEN|XOF|0|0867|Pulaar|Pulaar|Senegaal
+ff-Latn-BF|Fulah (Latin, Burkina Faso)|Fulah (Latin)|Burkina Faso|Latn;|BFA|XOF|0|1000|Pulaar (Burkibaa Faaso)|Pulaar|Burkibaa Faaso
+ff-Latn-CM|Fulah (Latin, Cameroon)|Fulah (Latin)|Cameroon|Latn;|CMR|XAF|0|1000|Pulaar (Kameruun)|Pulaar|Kameruun
+ff-Latn-GH|Fulah (Latin, Ghana)|Fulah (Latin)|Ghana|Latn;|GHA|GHS|0|1000|Pulaar (Ganaa)|Pulaar|Ganaa
+ff-Latn-GM|Fulah (Latin, Gambia)|Fulah (Latin)|Gambia|Latn;|GMB|GMD|0|1000|Pulaar (Gammbi)|Pulaar|Gammbi
+ff-Latn-GN|Fulah (Latin, Guinea)|Fulah (Latin)|Guinea|Latn;|GIN|GNF|0|1000|Pulaar (Gine)|Pulaar|Gine
+ff-Latn-GW|Fulah (Latin, Guinea-Bissau)|Fulah (Latin)|Guinea-Bissau|Latn;|GNB|XOF|0|1000|Pulaar (Gine-Bisaawo)|Pulaar|Gine-Bisaawo
+ff-Latn-LR|Fulah (Latin, Liberia)|Fulah (Latin)|Liberia|Latn;|LBR|LRD|0|1000|Pulaar (Liberiyaa)|Pulaar|Liberiyaa
+ff-Latn-MR|Fulah (Latin, Mauritania)|Fulah (Latin)|Mauritania|Latn;|MRT|MRU|0|1000|Pulaar (Muritani)|Pulaar|Muritani
+ff-Latn-NE|Fulah (Latin, Niger)|Fulah (Latin)|Niger|Latn;|NER|XOF|0|1000|Pulaar (Nijeer)|Pulaar|Nijeer
+ff-Latn-NG|Fulah (Latin, Nigeria)|Fulah (Latin)|Nigeria|Latn;|NGA|NGN|0|0467|Pulaar (Nijeriyaa)|Pulaar|Nijeriyaa
+ff-Latn-SL|Fulah (Latin, Sierra Leone)|Fulah (Latin)|Sierra Leone|Latn;|SLE|SLL|0|1000|Pulaar (Seraa liyon)|Pulaar|Seraa liyon
+ff-Latn-SN|Fulah (Latin, Senegal)|Fulah (Latin)|Senegal|Latn;|SEN|XOF|0|0867|Pulaar (Senegaal)|Pulaar|Senegaal
+fi|Finnish|Finnish|Finland|Latn;|FIN|EUR|0|040b|suomi|suomi|Suomi
+fi-FI|Finnish (Finland)|Finnish|Finland|Latn;|FIN|EUR|0|040b|suomi (Suomi)|suomi|Suomi
+fil|Filipino|Filipino|Philippines|Latn;|PHL|PHP|0|0464|Filipino|Filipino|Pilipinas
+fil-PH|Filipino (Philippines)|Filipino|Philippines|Latn;|PHL|PHP|0|0464|Filipino (Pilipinas)|Filipino|Pilipinas
+fo|Faroese|Faroese|Faroe Islands|Latn;|FRO|DKK|0|0438|føroyskt|føroyskt|Føroyar
+fo-DK|Faroese (Denmark)|Faroese|Denmark|Latn;|DNK|DKK|0|1000|føroyskt (Danmark)|føroyskt|Danmark
+fo-FO|Faroese (Faroe Islands)|Faroese|Faroe Islands|Latn;|FRO|DKK|0|0438|føroyskt (Føroyar)|føroyskt|Føroyar
+fr|French|French|France|Latn;|FRA|EUR|0|040c|français|français|France
+fr-029|French (Caribbean)|French|Caribbean|Latn;|029|XCD|0|1c0c|français (Caraïbes)|français|Caraïbes
+fr-BE|French (Belgium)|French|Belgium|Latn;|BEL|EUR|0|080c|français (Belgique)|français|Belgique
+fr-BF|French (Burkina Faso)|French|Burkina Faso|Latn;|BFA|XOF|0|1000|français (Burkina Faso)|français|Burkina Faso
+fr-BI|French (Burundi)|French|Burundi|Latn;|BDI|BIF|0|1000|français (Burundi)|français|Burundi
+fr-BJ|French (Benin)|French|Benin|Latn;|BEN|XOF|0|1000|français (Bénin)|français|Bénin
+fr-BL|French (St. Barthélemy)|French|St. Barthélemy|Latn;|BLM|EUR|0|1000|français (Saint-Barthélemy)|français|Saint-Barthélemy
+fr-CA|French (Canada)|French|Canada|Latn;|CAN|CAD|0|0c0c|français (Canada)|français|Canada
+fr-CD|French Congo (DRC)|French|Congo (DRC)|Latn;|COD|CDF|0|240c|français (Congo, République démocratique du)|français|Congo, République démocratique du
+fr-CF|French (Central African Republic)|French|Central African Republic|Latn;|CAF|XAF|0|1000|français (République centrafricaine)|français|République centrafricaine
+fr-CG|French (Congo)|French|Congo|Latn;|COG|XAF|0|1000|français (Congo)|français|Congo
+fr-CH|French (Switzerland)|French|Switzerland|Latn;|CHE|CHF|0|100c|français (Suisse)|français|Suisse
+fr-CI|French (Côte d’Ivoire)|French|Côte d’Ivoire|Latn;|CIV|XOF|0|300c|français (Côte d’Ivoire)|français|Côte d’Ivoire
+fr-CM|French (Cameroon)|French|Cameroon|Latn;|CMR|XAF|0|2c0c|français (Cameroun)|français|Cameroun
+fr-DJ|French (Djibouti)|French|Djibouti|Latn;|DJI|DJF|0|1000|français (Djibouti)|français|Djibouti
+fr-DZ|French (Algeria)|French|Algeria|Latn;|DZA|DZD|0|1000|français (Algérie)|français|Algérie
+fr-FR|French (France)|French|France|Latn;|FRA|EUR|0|040c|français (France)|français|France
+fr-GA|French (Gabon)|French|Gabon|Latn;|GAB|XAF|0|1000|français (Gabon)|français|Gabon
+fr-GF|French (French Guiana)|French|French Guiana|Latn;|GUF|EUR|0|1000|français (Guyane française)|français|Guyane française
+fr-GN|French (Guinea)|French|Guinea|Latn;|GIN|GNF|0|1000|français (Guinée)|français|Guinée
+fr-GP|French (Guadeloupe)|French|Guadeloupe|Latn;|GLP|EUR|0|1000|français (Guadeloupe)|français|Guadeloupe
+fr-GQ|French (Equatorial Guinea)|French|Equatorial Guinea|Latn;|GNQ|XAF|0|1000|français (Guinée équatoriale)|français|Guinée équatoriale
+fr-HT|French (Haiti)|French|Haiti|Latn;|HTI|HTG|0|3c0c|français (Haïti)|français|Haïti
+fr-KM|French (Comoros)|French|Comoros|Latn;|COM|KMF|0|1000|français (Comores)|français|Comores
+fr-LU|French (Luxembourg)|French|Luxembourg|Latn;|LUX|EUR|0|140c|français (Luxembourg)|français|Luxembourg
+fr-MA|French (Morocco)|French|Morocco|Latn;|MAR|MAD|0|380c|français (Maroc)|français|Maroc
+fr-MC|French (Monaco)|French|Monaco|Latn;|MCO|EUR|0|180c|français (Monaco)|français|Monaco
+fr-MF|French (St. Martin)|French|St. Martin|Latn;|MAF|EUR|0|1000|français (Saint-Martin)|français|Saint-Martin
+fr-MG|French (Madagascar)|French|Madagascar|Latn;|MDG|MGA|0|1000|français (Madagascar)|français|Madagascar
+fr-ML|French (Mali)|French|Mali|Latn;|MLI|XOF|0|340c|français (Mali)|français|Mali
+fr-MQ|French (Martinique)|French|Martinique|Latn;|MTQ|EUR|0|1000|français (Martinique)|français|Martinique
+fr-MR|French (Mauritania)|French|Mauritania|Latn;|MRT|MRU|0|1000|français (Mauritanie)|français|Mauritanie
+fr-MU|French (Mauritius)|French|Mauritius|Latn;|MUS|MUR|0|1000|français (Maurice)|français|Maurice
+fr-NC|French (New Caledonia)|French|New Caledonia|Latn;|NCL|XPF|0|1000|français (Nouvelle-Calédonie)|français|Nouvelle-Calédonie
+fr-NE|French (Niger)|French|Niger|Latn;|NER|XOF|0|1000|français (Niger)|français|Niger
+fr-PF|French (French Polynesia)|French|French Polynesia|Latn;|PYF|XPF|0|1000|français (Polynésie française)|français|Polynésie française
+fr-PM|French (St. Pierre & Miquelon)|French|St. Pierre & Miquelon|Latn;|SPM|EUR|0|1000|français (Saint-Pierre-et-Miquelon)|français|Saint-Pierre-et-Miquelon
+fr-RE|French (Réunion)|French|Réunion|Latn;|REU|EUR|0|200c|français (La Réunion)|français|La Réunion
+fr-RW|French (Rwanda)|French|Rwanda|Latn;|RWA|RWF|0|1000|français (Rwanda)|français|Rwanda
+fr-SC|French (Seychelles)|French|Seychelles|Latn;|SYC|SCR|0|1000|français (Seychelles)|français|Seychelles
+fr-SN|French (Senegal)|French|Senegal|Latn;|SEN|XOF|0|280c|français (Sénégal)|français|Sénégal
+fr-SY|French (Syria)|French|Syria|Latn;|SYR|SYP|0|1000|français (Syrie)|français|Syrie
+fr-TD|French (Chad)|French|Chad|Latn;|TCD|XAF|0|1000|français (Tchad)|français|Tchad
+fr-TG|French (Togo)|French|Togo|Latn;|TGO|XOF|0|1000|français (Togo)|français|Togo
+fr-TN|French (Tunisia)|French|Tunisia|Latn;|TUN|TND|0|1000|français (Tunisie)|français|Tunisie
+fr-VU|French (Vanuatu)|French|Vanuatu|Latn;|VUT|VUV|0|1000|français (Vanuatu)|français|Vanuatu
+fr-WF|French (Wallis & Futuna)|French|Wallis & Futuna|Latn;|WLF|XPF|0|1000|français (Wallis-et-Futuna)|français|Wallis-et-Futuna
+fr-YT|French (Mayotte)|French|Mayotte|Latn;|MYT|EUR|0|1000|français (Mayotte)|français|Mayotte
+fur|Friulian|Friulian|Italy|Latn;|ITA|EUR|0|1000|furlan|furlan|Italie
+fur-IT|Friulian (Italy)|Friulian|Italy|Latn;|ITA|EUR|0|1000|furlan (Italie)|furlan|Italie
+fy|Western Frisian|Western Frisian|Netherlands|Latn;|NLD|EUR|0|0462|Frysk|Frysk|Nederlân
+fy-NL|Western Frisian (Netherlands)|Western Frisian|Netherlands|Latn;|NLD|EUR|0|0462|Frysk (Nederlân)|Frysk|Nederlân
+ga|Irish|Irish|Ireland|Latn;|IRL|EUR|0|083c|Gaeilge|Gaeilge|Éire
+ga-GB|Irish (United Kingdom)|Irish|United Kingdom|Latn;|GBR|GBP|0|1000|Gaeilge (an Ríocht Aontaithe)|Gaeilge|an Ríocht Aontaithe
+ga-IE|Irish (Ireland)|Irish|Ireland|Latn;|IRL|EUR|0|083c|Gaeilge (Éire)|Gaeilge|Éire
+gd|Scottish Gaelic|Scottish Gaelic|United Kingdom|Latn;|GBR|GBP|0|0491|Gàidhlig|Gàidhlig|An Rìoghachd Aonaichte
+gd-GB|Scottish Gaelic (United Kingdom)|Scottish Gaelic|United Kingdom|Latn;|GBR|GBP|0|0491|Gàidhlig (An Rìoghachd Aonaichte)|Gàidhlig|An Rìoghachd Aonaichte
+gl|Galician|Galician|Spain|Latn;|ESP|EUR|0|0456|galego|galego|España
+gl-ES|Galician (Galician)|Galician|Spain|Latn;|ESP|EUR|0|0456|galego (galego)|galego|España
+gn|Guarani|Guarani|Paraguay|Latn;|PRY|PYG|0|0474|Avañe’ẽ|Avañe’ẽ|Paraguái
+gn-PY|Guarani (Paraguay)|Guarani|Paraguay|Latn;|PRY|PYG|0|0474|Avañe’ẽ (Paraguái)|Avañe’ẽ|Paraguái
+gsw|Swiss German|Swiss German|Switzerland|Latn;|CHE|CHF|0|1000|Schwiizertüütsch|Schwiizertüütsch|Schwiiz
+gsw-CH|Swiss German (Switzerland)|Swiss German|Switzerland|Latn;|CHE|CHF|0|1000|Schwiizertüütsch (Schwiiz)|Schwiizertüütsch|Schwiiz
+gsw-FR|Alsatian (France)|Alsatian|France|Latn;|FRA|EUR|0|0484|Elsässisch (Frànkrisch)|Elsässisch|Frànkrisch
+gsw-LI|Swiss German (Liechtenstein)|Swiss German|Liechtenstein|Latn;|LIE|CHF|0|1000|Schwiizertüütsch (Liächteschtäi)|Schwiizertüütsch|Liächteschtäi
+gu|Gujarati|Gujarati|India|Gujr;|IND|INR|0|0447|ગુજરાતી|ગુજરાતી|ભારત
+gu-IN|Gujarati (India)|Gujarati|India|Gujr;|IND|INR|0|0447|ગુજરાતી (ભારત)|ગુજરાતી|ભારત
+guz|Gusii|Gusii|Kenya|Latn;|KEN|KES|0|1000|Ekegusii|Ekegusii|Kenya
+guz-KE|Gusii (Kenya)|Gusii|Kenya|Latn;|KEN|KES|0|1000|Ekegusii (Kenya)|Ekegusii|Kenya
+gv|Manx|Manx|Isle of Man|Latn;|IMN|GBP|0|1000|Gaelg|Gaelg|Ellan Vannin
+gv-IM|Manx (Isle of Man)|Manx|Isle of Man|Latn;|IMN|GBP|0|1000|Gaelg (Ellan Vannin)|Gaelg|Ellan Vannin
+ha|Hausa|Hausa|Nigeria|Latn;|NGA|NGN|0|0468|Hausa|Hausa|Najeriya
+ha-Latn|Hausa (Latin)|Hausa (Latin)|Nigeria|Latn;|NGA|NGN|0|0468|Hausa (Latin)|Hausa|Najeriya
+ha-Latn-GH|Hausa (Latin, Ghana)|Hausa (Latin)|Ghana|Latn;|GHA|GHS|0|1000|Hausa (Gana)|Hausa|Gana
+ha-Latn-NE|Hausa (Latin, Niger)|Hausa (Latin)|Niger|Latn;|NER|XOF|0|1000|Hausa (Nijar)|Hausa|Nijar
+ha-Latn-NG|Hausa (Latin, Nigeria)|Hausa (Latin)|Nigeria|Latn;|NGA|NGN|0|0468|Hausa (Najeriya)|Hausa|Najeriya
+haw|Hawaiian|Hawaiian|United States|Latn;|USA|USD|0|0475|ʻŌlelo Hawaiʻi|ʻŌlelo Hawaiʻi|ʻAmelika Hui Pū ʻIa
+haw-US|Hawaiian (United States)|Hawaiian|United States|Latn;|USA|USD|0|0475|ʻŌlelo Hawaiʻi (ʻAmelika Hui Pū ʻIa)|ʻŌlelo Hawaiʻi|ʻAmelika Hui Pū ʻIa
+he|Hebrew|Hebrew|Israel|Hebr;|ISR|ILS|1|040d|עברית|עברית|ישראל
+he-IL|Hebrew (Israel)|Hebrew|Israel|Hebr;|ISR|ILS|1|040d|עברית (ישראל)|עברית|ישראל
+hi|Hindi|Hindi|India|Deva;|IND|INR|0|0439|हिन्दी|हिन्दी|भारत
+hi-IN|Hindi (India)|Hindi|India|Deva;|IND|INR|0|0439|हिन्दी (भारत)|हिन्दी|भारत
+hr|Croatian|Croatian|Croatia|Latn;|HRV|HRK|0|041a|hrvatski|hrvatski|Hrvatska
+hr-BA|Croatian (Bosnia & Herzegovina)|Croatian|Bosnia & Herzegovina|Latn;|BIH|BAM|0|101a|hrvatski (Bosna i Hercegovina)|hrvatski|Bosna i Hercegovina
+hr-HR|Croatian (Croatia)|Croatian|Croatia|Latn;|HRV|HRK|0|041a|hrvatski (Hrvatska)|hrvatski|Hrvatska
+hsb|Upper Sorbian|Upper Sorbian|Germany|Latn;|DEU|EUR|0|042e|hornjoserbšćina|hornjoserbšćina|Němska
+hsb-DE|Upper Sorbian (Germany)|Upper Sorbian|Germany|Latn;|DEU|EUR|0|042e|hornjoserbšćina (Němska)|hornjoserbšćina|Němska
+hu|Hungarian|Hungarian|Hungary|Latn;|HUN|HUF|0|040e|magyar|magyar|Magyarország
+hu-HU|Hungarian (Hungary)|Hungarian|Hungary|Latn;|HUN|HUF|0|040e|magyar (Magyarország)|magyar|Magyarország
+hy|Armenian|Armenian|Armenia|Armn;|ARM|AMD|0|042b|Հայերեն|Հայերեն|Հայաստան
+hy-AM|Armenian (Armenia)|Armenian|Armenia|Armn;|ARM|AMD|0|042b|Հայերեն (Հայաստան)|Հայերեն|Հայաստան
+ia|Interlingua|Interlingua|World|Latn;|001|XDR|0|1000|interlingua|interlingua|Mundo
+ia-001|Interlingua (World)|Interlingua|World|Latn;|001|XDR|0|1000|interlingua (Mundo)|interlingua|Mundo
+ibb|Ibibio|Ibibio|Nigeria|Latn;|NGA|NGN|0|0469|Ibibio-Efik|Ibibio-Efik|Nigeria
+ibb-NG|Ibibio (Nigeria)|Ibibio|Nigeria|Latn;|NGA|NGN|0|0469|Ibibio-Efik (Nigeria)|Ibibio-Efik|Nigeria
+id|Indonesian|Indonesian|Indonesia|Latn;|IDN|IDR|0|0421|Indonesia|Indonesia|Indonesia
+id-ID|Indonesian (Indonesia)|Indonesian|Indonesia|Latn;|IDN|IDR|0|0421|Indonesia (Indonesia)|Indonesia|Indonesia
+ig|Igbo|Igbo|Nigeria|Latn;|NGA|NGN|0|0470|Igbo|Igbo|Naịjịrịa
+ig-NG|Igbo (Nigeria)|Igbo|Nigeria|Latn;|NGA|NGN|0|0470|Igbo (Naịjịrịa)|Igbo|Naịjịrịa
+ii|Yi|Yi|China|Yiii;|CHN|CNY|0|0478|ꆈꌠꁱꂷ|ꆈꌠꁱꂷ|ꍏꉸꏓꂱꇭꉼꇩ
+ii-CN|Yi (China)|Yi|China|Yiii;|CHN|CNY|0|0478|ꆈꌠꁱꂷ (ꍏꉸꏓꂱꇭꉼꇩ)|ꆈꌠꁱꂷ|ꍏꉸꏓꂱꇭꉼꇩ
+is|Icelandic|Icelandic|Iceland|Latn;|ISL|ISK|0|040f|íslenska|íslenska|Ísland
+is-IS|Icelandic (Iceland)|Icelandic|Iceland|Latn;|ISL|ISK|0|040f|íslenska (Ísland)|íslenska|Ísland
+it|Italian|Italian|Italy|Latn;|ITA|EUR|0|0410|italiano|italiano|Italia
+it-CH|Italian (Switzerland)|Italian|Switzerland|Latn;|CHE|CHF|0|0810|italiano (Svizzera)|italiano|Svizzera
+it-IT|Italian (Italy)|Italian|Italy|Latn;|ITA|EUR|0|0410|italiano (Italia)|italiano|Italia
+it-SM|Italian (San Marino)|Italian|San Marino|Latn;|SMR|EUR|0|1000|italiano (San Marino)|italiano|San Marino
+it-VA|Italian (Vatican City)|Italian|Vatican City|Latn;|VAT|EUR|0|1000|italiano (Città del Vaticano)|italiano|Città del Vaticano
+iu|Inuktitut|Inuktitut|Canada|Latn;|CAN|CAD|0|085d|Inuktitut|Inuktitut|Kanata
+iu-Cans|Inuktitut (Syllabics)|Inuktitut (Syllabics)|Canada|Cans;|CAN|CAD|0|045d|ᐃᓄᒃᑎᑐᑦ (ᖃᓂᐅᔮᖅᐸᐃᑦ)|ᐃᓄᒃᑎᑐᑦ|ᑲᓇᑕ
+iu-Cans-CA|Inuktitut (Syllabics, Canada)|Inuktitut (Syllabics)|Canada|Cans;|CAN|CAD|0|045d|ᐃᓄᒃᑎᑐᑦ (ᑲᓇᑕᒥ)|ᐃᓄᒃᑎᑐᑦ|ᑲᓇᑕ
+iu-Latn|Inuktitut (Latin)|Inuktitut (Latin)|Canada|Latn;|CAN|CAD|0|085d|Inuktitut (Qaliujaaqpait)|Inuktitut|Kanata
+iu-Latn-CA|Inuktitut (Latin, Canada)|Inuktitut (Latin)|Canada|Latn;|CAN|CAD|0|085d|Inuktitut (Kanatami)|Inuktitut|Kanata
+ja|Japanese|Japanese|Japan|Hani;Hira;Jpan;Kana;|JPN|JPY|2|0411|日本語|日本語|日本
+ja-JP|Japanese (Japan)|Japanese|Japan|Hani;Hira;Jpan;Kana;|JPN|JPY|2|0411|日本語 (日本)|日本語|日本
+jgo|Ngomba|Ngomba|Cameroon|Latn;|CMR|XAF|0|1000|Ndaꞌa|Ndaꞌa|Kamɛlûn
+jgo-CM|Ngomba (Cameroon)|Ngomba|Cameroon|Latn;|CMR|XAF|0|1000|Ndaꞌa (Kamɛlûn)|Ndaꞌa|Kamɛlûn
+jmc|Machame|Machame|Tanzania|Latn;|TZA|TZS|0|1000|Kimachame|Kimachame|Tanzania
+jmc-TZ|Machame (Tanzania)|Machame|Tanzania|Latn;|TZA|TZS|0|1000|Kimachame (Tanzania)|Kimachame|Tanzania
+jv|Javanese|Javanese|Indonesia|Latn;|IDN|IDR|0|1000|Basa Jawa|Basa Jawa|Indonesia
+jv-Java|Javanese (Javanese)|Javanese (Javanese)|Indonesia|Java;|IDN|IDR|0|1000|ꦧꦱꦗꦮ|ꦧꦱꦗꦮ|Indonésia
+jv-Java-ID|Javanese (Javanese, Indonesia)|Javanese (Javanese)|Indonesia|Java;|IDN|IDR|0|1000|ꦧꦱꦗꦮ (Indonésia)|ꦧꦱꦗꦮ|Indonésia
+jv-Latn|Javanese|Javanese|Indonesia|Latn;|IDN|IDR|0|1000|Basa Jawa|Basa Jawa|Indonesia
+jv-Latn-ID|Javanese (Indonesia)|Javanese|Indonesia|Latn;|IDN|IDR|0|1000|Basa Jawa (Indonesia)|Basa Jawa|Indonesia
+ka|Georgian|Georgian|Georgia|Geor;|GEO|GEL|0|0437|ქართული|ქართული|საქართველო
+ka-GE|Georgian (Georgia)|Georgian|Georgia|Geor;|GEO|GEL|0|0437|ქართული (საქართველო)|ქართული|საქართველო
+kab|Kabyle|Kabyle|Algeria|Latn;|DZA|DZD|0|1000|Taqbaylit|Taqbaylit|Lezzayer
+kab-DZ|Kabyle (Algeria)|Kabyle|Algeria|Latn;|DZA|DZD|0|1000|Taqbaylit (Lezzayer)|Taqbaylit|Lezzayer
+kam|Kamba|Kamba|Kenya|Latn;|KEN|KES|0|1000|Kikamba|Kikamba|Kenya
+kam-KE|Kamba (Kenya)|Kamba|Kenya|Latn;|KEN|KES|0|1000|Kikamba (Kenya)|Kikamba|Kenya
+kde|Makonde|Makonde|Tanzania|Latn;|TZA|TZS|0|1000|Chimakonde|Chimakonde|Tanzania
+kde-TZ|Makonde (Tanzania)|Makonde|Tanzania|Latn;|TZA|TZS|0|1000|Chimakonde (Tanzania)|Chimakonde|Tanzania
+kea|Kabuverdianu|Kabuverdianu|Cabo Verde|Latn;|CPV|CVE|0|1000|kabuverdianu|kabuverdianu|Kabu Verdi
+kea-CV|Kabuverdianu (Cabo Verde)|Kabuverdianu|Cabo Verde|Latn;|CPV|CVE|0|1000|kabuverdianu (Kabu Verdi)|kabuverdianu|Kabu Verdi
+khq|Koyra Chiini|Koyra Chiini|Mali|Latn;|MLI|XOF|0|1000|Koyra ciini|Koyra ciini|Maali
+khq-ML|Koyra Chiini (Mali)|Koyra Chiini|Mali|Latn;|MLI|XOF|0|1000|Koyra ciini (Maali)|Koyra ciini|Maali
+ki|Kikuyu|Kikuyu|Kenya|Latn;|KEN|KES|0|1000|Gikuyu|Gikuyu|Kenya
+ki-KE|Kikuyu (Kenya)|Kikuyu|Kenya|Latn;|KEN|KES|0|1000|Gikuyu (Kenya)|Gikuyu|Kenya
+kk|Kazakh|Kazakh|Kazakhstan|Cyrl;|KAZ|KZT|0|043f|қазақ тілі|қазақ тілі|Қазақстан
+kk-KZ|Kazakh (Kazakhstan)|Kazakh|Kazakhstan|Cyrl;|KAZ|KZT|0|043f|қазақ тілі (Қазақстан)|қазақ тілі|Қазақстан
+kkj|Kako|Kako|Cameroon|Latn;|CMR|XAF|0|1000|kakɔ|kakɔ|Kamɛrun
+kkj-CM|Kako (Cameroon)|Kako|Cameroon|Latn;|CMR|XAF|0|1000|kakɔ (Kamɛrun)|kakɔ|Kamɛrun
+kl|Kalaallisut|Kalaallisut|Greenland|Latn;|GRL|DKK|0|046f|kalaallisut|kalaallisut|Kalaallit Nunaat
+kl-GL|Kalaallisut (Greenland)|Kalaallisut|Greenland|Latn;|GRL|DKK|0|046f|kalaallisut (Kalaallit Nunaat)|kalaallisut|Kalaallit Nunaat
+kln|Kalenjin|Kalenjin|Kenya|Latn;|KEN|KES|0|1000|Kalenjin|Kalenjin|Emetab Kenya
+kln-KE|Kalenjin (Kenya)|Kalenjin|Kenya|Latn;|KEN|KES|0|1000|Kalenjin (Emetab Kenya)|Kalenjin|Emetab Kenya
+km|Khmer|Khmer|Cambodia|Khmr;|KHM|KHR|0|0453|ខ្មែរ|ខ្មែរ|កម្ពុជា
+km-KH|Khmer (Cambodia)|Khmer|Cambodia|Khmr;|KHM|KHR|0|0453|ខ្មែរ (កម្ពុជា)|ខ្មែរ|កម្ពុជា
+kn|Kannada|Kannada|India|Knda;|IND|INR|0|044b|ಕನ್ನಡ|ಕನ್ನಡ|ಭಾರತ
+kn-IN|Kannada (India)|Kannada|India|Knda;|IND|INR|0|044b|ಕನ್ನಡ (ಭಾರತ)|ಕನ್ನಡ|ಭಾರತ
+ko|Korean|Korean|Korea|Hang;Hani;Kore;|KOR|KRW|2|0412|한국어|한국어|대한민국
+ko-KP|Korean (North Korea)|Korean|North Korea|Kore;|PRK|KPW|0|1000|한국어 (조선민주주의인민공화국)|한국어|조선민주주의인민공화국
+ko-KR|Korean (Korea)|Korean|Korea|Hang;Hani;Kore;|KOR|KRW|2|0412|한국어(대한민국)|한국어|대한민국
+kok|Konkani|Konkani|India|Deva;|IND|INR|0|0457|कोंकणी|कोंकणी|भारत
+kok-IN|Konkani (India)|Konkani|India|Deva;|IND|INR|0|0457|कोंकणी (भारत)|कोंकणी|भारत
+kr|Kanuri (Latin)|Kanuri (Latin)|Nigeria|Latn;|NGA|NGN|0|0471|Kanuri|Kanuri|Nigeria
+kr-Latn|Kanuri (Latin)|Kanuri (Latin)|Nigeria|Latn;|NGA|NGN|0|0471|Kanuri|Kanuri|Nigeria
+kr-Latn-NG|Kanuri (Latin, Nigeria)|Kanuri (Latin)|Nigeria|Latn;|NGA|NGN|0|0471|Kanuri (Nigeria)|Kanuri|Nigeria
+ks|Kashmiri|Kashmiri|India|Arab;|IND|INR|1|1000|کٲشُر|کٲشُر|ہِندوستان
+ks-Arab|Kashmiri (Arabic)|Kashmiri (Arabic)|India|Arab;|IND|INR|1|1000|کٲشُر (اَربی)|کٲشُر|ہِندوستان
+ks-Arab-IN|Kashmiri (Arabic)|Kashmiri (Arabic)|India|Arab;|IND|INR|1|1000|کٲشُر (اَربی)|کٲشُر|ہِندوستان
+ks-Deva|Kashmiri (Devanagari)|Kashmiri (Devanagari)|India|Deva;|IND|INR|0|0860|कॉशुर|कॉशुर|India
+ks-Deva-IN|Kashmiri (Devanagari, India)|Kashmiri (Devanagari)|India|Deva;|IND|INR|0|0860|कॉशुर (India)|कॉशुर|India
+ksb|Shambala|Shambala|Tanzania|Latn;|TZA|TZS|0|1000|Kishambaa|Kishambaa|Tanzania
+ksb-TZ|Shambala (Tanzania)|Shambala|Tanzania|Latn;|TZA|TZS|0|1000|Kishambaa (Tanzania)|Kishambaa|Tanzania
+ksf|Bafia|Bafia|Cameroon|Latn;|CMR|XAF|0|1000|rikpa|rikpa|kamɛrún
+ksf-CM|Bafia (Cameroon)|Bafia|Cameroon|Latn;|CMR|XAF|0|1000|rikpa (kamɛrún)|rikpa|kamɛrún
+ksh|Colognian|Colognian|Germany|Latn;|DEU|EUR|0|1000|Kölsch|Kölsch|Doütschland
+ksh-DE|Colognian (Germany)|Colognian|Germany|Latn;|DEU|EUR|0|1000|Kölsch (Doütschland)|Kölsch|Doütschland
+ku|Central Kurdish|Central Kurdish|Iraq|Arab;|IRQ|IQD|1|0492|کوردیی ناوەڕاست|کوردیی ناوەڕاست|عێراق
+ku-Arab|Central Kurdish|Central Kurdish|Iraq|Arab;|IRQ|IQD|1|0492|کوردیی ناوەڕاست|کوردیی ناوەڕاست|عێراق
+ku-Arab-IQ|Central Kurdish (Iraq)|Central Kurdish|Iraq|Arab;|IRQ|IQD|1|0492|کوردیی ناوەڕاست (عێراق)|کوردیی ناوەڕاست|عێراق
+ku-Arab-IR|Kurdish (Arabic, Iran)|Kurdish (Arabic)|Iran|Arab;|IRN|IRR|1|1000|کوردی (ئێران)|کوردی|ئێران
+kw|Cornish|Cornish|United Kingdom|Latn;|GBR|GBP|0|1000|kernewek|kernewek|Rywvaneth Unys
+kw-GB|Cornish (United Kingdom)|Cornish|United Kingdom|Latn;|GBR|GBP|0|1000|kernewek (Rywvaneth Unys)|kernewek|Rywvaneth Unys
+ky|Kyrgyz|Kyrgyz|Kyrgyzstan|Cyrl;|KGZ|KGS|0|0440|кыргызча|кыргызча|Кыргызстан
+ky-KG|Kyrgyz (Kyrgyzstan)|Kyrgyz|Kyrgyzstan|Cyrl;|KGZ|KGS|0|0440|кыргызча (Кыргызстан)|кыргызча|Кыргызстан
+la|Latin|Latin|Vatican City|Latn;|VAT|EUR|0|0476|Latina|Latina|Civitas Vaticana
+la-VA|Latin (Vatican City)|Latin|Vatican City|Latn;|VAT|EUR|0|0476|Latina (Civitas Vaticana)|Latina|Civitas Vaticana
+lag|Langi|Langi|Tanzania|Latn;|TZA|TZS|0|1000|Kɨlaangi|Kɨlaangi|Taansanía
+lag-TZ|Langi (Tanzania)|Langi|Tanzania|Latn;|TZA|TZS|0|1000|Kɨlaangi (Taansanía)|Kɨlaangi|Taansanía
+lb|Luxembourgish|Luxembourgish|Luxembourg|Latn;|LUX|EUR|0|046e|Lëtzebuergesch|Lëtzebuergesch|Lëtzebuerg
+lb-LU|Luxembourgish (Luxembourg)|Luxembourgish|Luxembourg|Latn;|LUX|EUR|0|046e|Lëtzebuergesch (Lëtzebuerg)|Lëtzebuergesch|Lëtzebuerg
+lg|Ganda|Ganda|Uganda|Latn;|UGA|UGX|0|1000|Luganda|Luganda|Yuganda
+lg-UG|Ganda (Uganda)|Ganda|Uganda|Latn;|UGA|UGX|0|1000|Luganda (Yuganda)|Luganda|Yuganda
+lkt|Lakota|Lakota|United States|Latn;|USA|USD|0|1000|Lakȟólʼiyapi|Lakȟólʼiyapi|Mílahaŋska Tȟamákȟočhe
+lkt-US|Lakota (United States)|Lakota|United States|Latn;|USA|USD|0|1000|Lakȟólʼiyapi (Mílahaŋska Tȟamákȟočhe)|Lakȟólʼiyapi|Mílahaŋska Tȟamákȟočhe
+ln|Lingala|Lingala|Congo (DRC)|Latn;|COD|CDF|0|1000|lingála|lingála|Republíki ya Kongó Demokratíki
+ln-AO|Lingala (Angola)|Lingala|Angola|Latn;|AGO|AOA|0|1000|lingála (Angóla)|lingála|Angóla
+ln-CD|Lingala (Congo DRC)|Lingala|Congo (DRC)|Latn;|COD|CDF|0|1000|lingála (Republíki ya Kongó Demokratíki)|lingála|Republíki ya Kongó Demokratíki
+ln-CF|Lingala (Central African Republic)|Lingala|Central African Republic|Latn;|CAF|XAF|0|1000|lingála (Repibiki ya Afríka ya Káti)|lingála|Repibiki ya Afríka ya Káti
+ln-CG|Lingala (Congo)|Lingala|Congo|Latn;|COG|XAF|0|1000|lingála (Kongo)|lingála|Kongo
+lo|Lao|Lao|Laos|Laoo;|LAO|LAK|0|0454|ລາວ|ລາວ|ລາວ
+lo-LA|Lao (Laos)|Lao|Laos|Laoo;|LAO|LAK|0|0454|ລາວ (ລາວ)|ລາວ|ລາວ
+lrc|Northern Luri|Northern Luri|Iran|Arab;|IRN|IRR|1|1000|لۊری شومالی|لۊری شومالی|Iran
+lrc-IQ|Northern Luri (Iraq)|Northern Luri|Iraq|Arab;|IRQ|IQD|1|1000|لۊری شومالی (Iraq)|لۊری شومالی|Iraq
+lrc-IR|Northern Luri (Iran)|Northern Luri|Iran|Arab;|IRN|IRR|1|1000|لۊری شومالی (Iran)|لۊری شومالی|Iran
+lt|Lithuanian|Lithuanian|Lithuania|Latn;|LTU|EUR|0|0427|lietuvių|lietuvių|Lietuva
+lt-LT|Lithuanian (Lithuania)|Lithuanian|Lithuania|Latn;|LTU|EUR|0|0427|lietuvių (Lietuva)|lietuvių|Lietuva
+lu|Luba-Katanga|Luba-Katanga|Congo (DRC)|Latn;|COD|CDF|0|1000|Tshiluba|Tshiluba|Ditunga wa Kongu
+lu-CD|Luba-Katanga (Congo DRC)|Luba-Katanga|Congo (DRC)|Latn;|COD|CDF|0|1000|Tshiluba (Ditunga wa Kongu)|Tshiluba|Ditunga wa Kongu
+luo|Luo|Luo|Kenya|Latn;|KEN|KES|0|1000|Dholuo|Dholuo|Kenya
+luo-KE|Luo (Kenya)|Luo|Kenya|Latn;|KEN|KES|0|1000|Dholuo (Kenya)|Dholuo|Kenya
+luy|Luyia|Luyia|Kenya|Latn;|KEN|KES|0|1000|Luluhia|Luluhia|Kenya
+luy-KE|Luyia (Kenya)|Luyia|Kenya|Latn;|KEN|KES|0|1000|Luluhia (Kenya)|Luluhia|Kenya
+lv|Latvian|Latvian|Latvia|Latn;|LVA|EUR|0|0426|latviešu|latviešu|Latvija
+lv-LV|Latvian (Latvia)|Latvian|Latvia|Latn;|LVA|EUR|0|0426|latviešu (Latvija)|latviešu|Latvija
+mai|Maithili|Maithili|India|Deva;|IND|INR|0|1000|मैथिली|मैथिली|भारत
+mai-IN|Maithili (India)|Maithili|India|Deva;|IND|INR|0|1000|मैथिली (भारत)|मैथिली|भारत
+mas|Masai|Masai|Kenya|Latn;|KEN|KES|0|1000|Maa|Maa|Kenya
+mas-KE|Masai (Kenya)|Masai|Kenya|Latn;|KEN|KES|0|1000|Maa (Kenya)|Maa|Kenya
+mas-TZ|Masai (Tanzania)|Masai|Tanzania|Latn;|TZA|TZS|0|1000|Maa (Tansania)|Maa|Tansania
+mer|Meru|Meru|Kenya|Latn;|KEN|KES|0|1000|Kĩmĩrũ|Kĩmĩrũ|Kenya
+mer-KE|Meru (Kenya)|Meru|Kenya|Latn;|KEN|KES|0|1000|Kĩmĩrũ (Kenya)|Kĩmĩrũ|Kenya
+mfe|Morisyen|Morisyen|Mauritius|Latn;|MUS|MUR|0|1000|kreol morisien|kreol morisien|Moris
+mfe-MU|Morisyen (Mauritius)|Morisyen|Mauritius|Latn;|MUS|MUR|0|1000|kreol morisien (Moris)|kreol morisien|Moris
+mg|Malagasy|Malagasy|Madagascar|Latn;|MDG|MGA|0|1000|Malagasy|Malagasy|Madagasikara
+mg-MG|Malagasy (Madagascar)|Malagasy|Madagascar|Latn;|MDG|MGA|0|1000|Malagasy (Madagasikara)|Malagasy|Madagasikara
+mgh|Makhuwa-Meetto|Makhuwa-Meetto|Mozambique|Latn;|MOZ|MZN|0|1000|Makua|Makua|Umozambiki
+mgh-MZ|Makhuwa-Meetto (Mozambique)|Makhuwa-Meetto|Mozambique|Latn;|MOZ|MZN|0|1000|Makua (Umozambiki)|Makua|Umozambiki
+mgo|Metaʼ|Metaʼ|Cameroon|Latn;|CMR|XAF|0|1000|metaʼ|metaʼ|Kamalun
+mgo-CM|Metaʼ (Cameroon)|Metaʼ|Cameroon|Latn;|CMR|XAF|0|1000|metaʼ (Kamalun)|metaʼ|Kamalun
+mi|Maori|Maori|New Zealand|Latn;|NZL|NZD|0|0481|te reo Māori|te reo Māori|Aotearoa
+mi-NZ|Maori (New Zealand)|Maori|New Zealand|Latn;|NZL|NZD|0|0481|te reo Māori (Aotearoa)|te reo Māori|Aotearoa
+mk|Macedonian|Macedonian|North Macedonia|Cyrl;|MKD|MKD|0|042f|македонски|македонски|Северна Македонија
+mk-MK|Macedonian (North Macedonia)|Macedonian|North Macedonia|Cyrl;|MKD|MKD|0|042f|македонски (Северна Македонија)|македонски|Северна Македонија
+ml|Malayalam|Malayalam|India|Mlym;|IND|INR|0|044c|മലയാളം|മലയാളം|ഇന്ത്യ
+ml-IN|Malayalam (India)|Malayalam|India|Mlym;|IND|INR|0|044c|മലയാളം (ഇന്ത്യ)|മലയാളം|ഇന്ത്യ
+mn|Mongolian|Mongolian|Mongolia|Cyrl;|MNG|MNT|0|0450|Монгол хэл|монгол|Монгол
+mn-Cyrl|Mongolian|Mongolian|Mongolia|Cyrl;|MNG|MNT|0|0450|Монгол хэл (Кирилл үсэг)|монгол|Монгол
+mn-MN|Mongolian (Mongolia)|Mongolian|Mongolia|Cyrl;|MNG|MNT|0|0450|монгол (Монгол)|монгол|Монгол
+mn-Mong|Mongolian (Traditional Mongolian)|Mongolian (Traditional Mongolian)|China|Mong;|CHN|CNY|3|0850|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ (ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ)|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ|ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ
+mn-Mong-CN|Mongolian (Traditional Mongolian, China)|Mongolian (Traditional Mongolian)|China|Mong;|CHN|CNY|3|0850|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ (ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ)|ᠮᠣᠩᠭᠣᠤᠯ ᠬᠡᠯᠡ|ᠪᠦᠭᠦᠳᠡ ᠨᠠᠢᠷᠠᠮᠳᠠᠬᠤ ᠳᠤᠮᠳᠠᠳᠤ ᠠᠷᠠᠳ ᠣᠯᠣᠰ
+mn-Mong-MN|Mongolian (Traditional Mongolian, Mongolia)|Mongolian (Traditional Mongolian)|Mongolia|Mong;|MNG|MNT|3|0c50|ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ (ᠮᠣᠩᠭᠣᠯ ᠣᠯᠣᠰ)|ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ|ᠮᠣᠩᠭᠣᠯ ᠣᠯᠣᠰ
+mni|Manipuri (Bangla)|Manipuri (Bangla)|India|Beng;|IND|INR|0|0458|মৈতৈলোন্|মৈতৈলোন্|ইন্দিয়া
+mni-Beng|Manipuri (Bangla)|Manipuri (Bangla)|India|Beng;|IND|INR|0|0458|মৈতৈলোন্|মৈতৈলোন্|ইন্দিয়া
+mni-IN|Manipuri (Bangla, India)|Manipuri (Bangla)|India|Beng;|IND|INR|0|0458|মৈতৈলোন্ (ইন্দিয়া)|মৈতৈলোন্|ইন্দিয়া
+moh|Mohawk|Mohawk|Canada|Latn;|CAN|CAD|0|047c|Kanien’kéha|Kanien’kéha|Canada
+moh-CA|Mohawk (Mohawk)|Mohawk|Canada|Latn;|CAN|CAD|0|047c|Kanien'kéha|Kanien’kéha|Canada
+mr|Marathi|Marathi|India|Deva;|IND|INR|0|044e|मराठी|मराठी|भारत
+mr-IN|Marathi (India)|Marathi|India|Deva;|IND|INR|0|044e|मराठी (भारत)|मराठी|भारत
+ms|Malay|Malay|Malaysia|Latn;|MYS|MYR|0|043e|Melayu|Melayu|Malaysia
+ms-BN|Malay (Brunei)|Malay|Brunei|Latn;|BRN|BND|0|083e|Melayu (Brunei)|Melayu|Brunei
+ms-ID|Malay (Indonesia)|Malay|Indonesia|Latn;|IDN|IDR|0|1000|Melayu (Indonesia)|Melayu|Indonesia
+ms-MY|Malay (Malaysia)|Malay|Malaysia|Latn;|MYS|MYR|0|043e|Melayu (Malaysia)|Melayu|Malaysia
+ms-SG|Malay (Singapore)|Malay|Singapore|Latn;|SGP|SGD|0|1000|Melayu (Singapura)|Melayu|Singapura
+mt|Maltese|Maltese|Malta|Latn;|MLT|EUR|0|043a|Malti|Malti|Malta
+mt-MT|Maltese (Malta)|Maltese|Malta|Latn;|MLT|EUR|0|043a|Malti (Malta)|Malti|Malta
+mua|Mundang|Mundang|Cameroon|Latn;|CMR|XAF|0|1000|MUNDAŊ|MUNDAŊ|kameruŋ
+mua-CM|Mundang (Cameroon)|Mundang|Cameroon|Latn;|CMR|XAF|0|1000|MUNDAŊ (kameruŋ)|MUNDAŊ|kameruŋ
+my|Burmese|Burmese|Myanmar|Mymr;|MMR|MMK|0|0455|ဗမာ|ဗမာ|မြန်မာ
+my-MM|Burmese (Myanmar)|Burmese|Myanmar|Mymr;|MMR|MMK|0|0455|မြန်မာ (မြန်မာ)|မြန်မာ|မြန်မာ
+mzn|Mazanderani|Mazanderani|Iran|Arab;|IRN|IRR|1|1000|مازرونی|مازرونی|ایران
+mzn-IR|Mazanderani (Iran)|Mazanderani|Iran|Arab;|IRN|IRR|1|1000|مازرونی (ایران)|مازرونی|ایران
+naq|Nama|Nama|Namibia|Latn;|NAM|NAD|0|1000|Khoekhoegowab|Khoekhoegowab|Namibiab
+naq-NA|Nama (Namibia)|Nama|Namibia|Latn;|NAM|NAD|0|1000|Khoekhoegowab (Namibiab)|Khoekhoegowab|Namibiab
+nb|Norwegian Bokmål|Norwegian Bokmål|Norway|Latn;|NOR|NOK|0|0414|norsk bokmål|norsk bokmål|Norge
+nb-NO|Norwegian Bokmål (Norway)|Norwegian Bokmål|Norway|Latn;|NOR|NOK|0|0414|norsk bokmål (Norge)|norsk bokmål|Norge
+nb-SJ|Norwegian Bokmål (Svalbard & Jan Mayen)|Norwegian Bokmål|Svalbard & Jan Mayen|Latn;|SJM|NOK|0|1000|norsk bokmål (Svalbard og Jan Mayen)|norsk bokmål|Svalbard og Jan Mayen
+nd|North Ndebele|North Ndebele|Zimbabwe|Latn;|ZWE|USD|0|1000|isiNdebele|isiNdebele|Zimbabwe
+nd-ZW|North Ndebele (Zimbabwe)|North Ndebele|Zimbabwe|Latn;|ZWE|USD|0|1000|isiNdebele (Zimbabwe)|isiNdebele|Zimbabwe
+nds|Low German|Low German|Germany|Latn;|DEU|EUR|0|1000|Neddersass’sch|Neddersass’sch|Düütschland
+nds-DE|Low German (Germany)|Low German|Germany|Latn;|DEU|EUR|0|1000|Neddersass’sch (Düütschland)|Neddersass’sch|Düütschland
+nds-NL|Low German (Netherlands)|Low German|Netherlands|Latn;|NLD|EUR|0|1000|Neddersass’sch (Nedderlannen)|Neddersass’sch|Nedderlannen
+ne|Nepali|Nepali|Nepal|Deva;|NPL|NPR|0|0461|नेपाली|नेपाली|नेपाल
+ne-IN|Nepali (India)|Nepali|India|Deva;|IND|INR|0|0861|नेपाली (भारत)|नेपाली|भारत
+ne-NP|Nepali (Nepal)|Nepali|Nepal|Deva;|NPL|NPR|0|0461|नेपाली (नेपाल)|नेपाली|नेपाल
+nl|Dutch|Dutch|Netherlands|Latn;|NLD|EUR|0|0413|Nederlands|Nederlands|Nederland
+nl-AW|Dutch (Aruba)|Dutch|Aruba|Latn;|ABW|AWG|0|1000|Nederlands (Aruba)|Nederlands|Aruba
+nl-BE|Dutch (Belgium)|Dutch|Belgium|Latn;|BEL|EUR|0|0813|Nederlands (België)|Nederlands|België
+nl-BQ|Dutch (Bonaire, Sint Eustatius and Saba)|Dutch|Bonaire, Sint Eustatius and Saba|Latn;|BES|USD|0|1000|Nederlands (Bonaire, Sint Eustatius en Saba)|Nederlands|Bonaire, Sint Eustatius en Saba
+nl-CW|Dutch (Curaçao)|Dutch|Curaçao|Latn;|CUW|ANG|0|1000|Nederlands (Curaçao)|Nederlands|Curaçao
+nl-NL|Dutch (Netherlands)|Dutch|Netherlands|Latn;|NLD|EUR|0|0413|Nederlands (Nederland)|Nederlands|Nederland
+nl-SR|Dutch (Suriname)|Dutch|Suriname|Latn;|SUR|SRD|0|1000|Nederlands (Suriname)|Nederlands|Suriname
+nl-SX|Dutch (Sint Maarten)|Dutch|Sint Maarten|Latn;|SXM|ANG|0|1000|Nederlands (Sint-Maarten)|Nederlands|Sint-Maarten
+nmg|Kwasio|Kwasio|Cameroon|Latn;|CMR|XAF|0|1000|Kwasio|Kwasio|Kamerun
+nmg-CM|Kwasio (Cameroon)|Kwasio|Cameroon|Latn;|CMR|XAF|0|1000|Kwasio (Kamerun)|Kwasio|Kamerun
+nn|Norwegian Nynorsk|Norwegian Nynorsk|Norway|Latn;|NOR|NOK|0|0814|norsk nynorsk|norsk nynorsk|Noreg
+nn-NO|Norwegian Nynorsk (Norway)|Norwegian Nynorsk|Norway|Latn;|NOR|NOK|0|0814|norsk nynorsk (Noreg)|norsk nynorsk|Noreg
+nnh|Ngiemboon|Ngiemboon|Cameroon|Latn;|CMR|XAF|0|1000|Shwóŋò ngiembɔɔn|Shwóŋò ngiembɔɔn|Kàmalûm
+nnh-CM|Ngiemboon (Cameroon)|Ngiemboon|Cameroon|Latn;|CMR|XAF|0|1000|Shwóŋò ngiembɔɔn (Kàmalûm)|Shwóŋò ngiembɔɔn|Kàmalûm
+no|Norwegian|Norwegian|Norway|Latn;|NOR|NOK|0|0414|norsk|norsk|Norge
+nqo|N'ko|N'ko|Guinea|Nkoo;|GIN|GNF|1|1000|ߒߞߏ|ߒߞߏ|ߖߌ߬ߣߍ߬ ߞߊ߲ߓߍ߲
+nqo-GN|N'ko (Guinea)|N'ko|Guinea|Nkoo;|GIN|GNF|1|1000|ߒߞߏ (ߖߌ߬ߣߍ߬ ߞߊ߲ߓߍ߲)|ߒߞߏ|ߖߌ߬ߣߍ߬ ߞߊ߲ߓߍ߲
+nr|South Ndebele|South Ndebele|South Africa|Latn;|ZAF|ZAR|0|1000|isiNdebele|isiNdebele|South Africa
+nr-ZA|South Ndebele (South Africa)|South Ndebele|South Africa|Latn;|ZAF|ZAR|0|1000|isiNdebele (South Africa)|isiNdebele|South Africa
+nso|Sesotho sa Leboa|Sesotho sa Leboa|South Africa|Latn;|ZAF|ZAR|0|046c|Sesotho sa Leboa|Sesotho sa Leboa|Afrika Borwa
+nso-ZA|Sesotho sa Leboa (South Africa)|Sesotho sa Leboa|South Africa|Latn;|ZAF|ZAR|0|046c|Sesotho sa Leboa (Afrika Borwa)|Sesotho sa Leboa|Afrika Borwa
+nus|Nuer|Nuer|South Sudan|Latn;|SSD|SSP|0|1000|Thok Nath|Thok Nath|South Sudan
+nus-SS|Nuer (South Sudan)|Nuer|South Sudan|Latn;|SSD|SSP|0|1000|Thok Nath (South Sudan)|Thok Nath|South Sudan
+nyn|Nyankole|Nyankole|Uganda|Latn;|UGA|UGX|0|1000|Runyankore|Runyankore|Uganda
+nyn-UG|Nyankole (Uganda)|Nyankole|Uganda|Latn;|UGA|UGX|0|1000|Runyankore (Uganda)|Runyankore|Uganda
+oc|Occitan|Occitan|France|Latn;|FRA|EUR|0|0482|Occitan|Occitan|França
+oc-FR|Occitan (France)|Occitan|France|Latn;|FRA|EUR|0|0482|Occitan (França)|Occitan|França
+om|Oromo|Oromo|Ethiopia|Latn;|ETH|ETB|0|0472|Oromoo|Oromoo|Itoophiyaa
+om-ET|Oromo (Ethiopia)|Oromo|Ethiopia|Latn;|ETH|ETB|0|0472|Oromoo (Itoophiyaa)|Oromoo|Itoophiyaa
+om-KE|Oromo (Kenya)|Oromo|Kenya|Latn;|KEN|KES|0|1000|Oromoo (Keeniyaa)|Oromoo|Keeniyaa
+or|Odia|Odia|India|Orya;|IND|INR|0|0448|ଓଡ଼ିଆ|ଓଡ଼ିଆ|ଭାରତ
+or-IN|Odia (India)|Odia|India|Orya;|IND|INR|0|0448|ଓଡ଼ିଆ (ଭାରତ)|ଓଡ଼ିଆ|ଭାରତ
+os|Ossetic|Ossetic|Georgia|Cyrl;|GEO|GEL|0|1000|ирон|ирон|Гуырдзыстон
+os-GE|Ossetic (Georgia)|Ossetic|Georgia|Cyrl;|GEO|GEL|0|1000|ирон (Гуырдзыстон)|ирон|Гуырдзыстон
+os-RU|Ossetic (Russia)|Ossetic|Russia|Cyrl;|RUS|RUB|0|1000|ирон (Уӕрӕсе)|ирон|Уӕрӕсе
+pa|Punjabi|Punjabi|India|Guru;|IND|INR|0|0446|ਪੰਜਾਬੀ|ਪੰਜਾਬੀ|ਭਾਰਤ
+pa-Arab|Punjabi|Punjabi|Pakistan|Arab;|PAK|PKR|1|0846|پنجابی|پنجابی|پاکستان
+pa-Arab-PK|Punjabi (Pakistan)|Punjabi|Pakistan|Arab;|PAK|PKR|1|0846|پنجابی (پاکستان)|پنجابی|پاکستان
+pa-Guru|Punjabi|Punjabi|India|Guru;|IND|INR|0|0446|ਪੰਜਾਬੀ|ਪੰਜਾਬੀ|ਭਾਰਤ
+pa-IN|Punjabi (India)|Punjabi|India|Guru;|IND|INR|0|0446|ਪੰਜਾਬੀ (ਭਾਰਤ)|ਪੰਜਾਬੀ|ਭਾਰਤ
+pap|Papiamento|Papiamento|Caribbean|Latn;|029|XCD|0|0479|Papiamentu|Papiamentu|Caribbean
+pap-029|Papiamento (Caribbean)|Papiamento|Caribbean|Latn;|029|XCD|0|0479|Papiamentu (Caribbean)|Papiamentu|Caribbean
+pcm|Nigerian Pidgin|Nigerian Pidgin|Nigeria|Latn;|NGA|NGN|0|1000|Naijíriá Píjin|Naijíriá Píjin|Naijíria
+pcm-Latn|Nigerian Pidgin (Latin)|Nigerian Pidgin (Latin)|Nigeria|Latn;|NGA|NGN|0|1000|Naijíriá Píjin (Látin)|Naijíriá Píjin|Naijíria
+pcm-Latn-NG|Nigerian Pidgin (Latin, Nigeria)|Nigerian Pidgin (Latin)|Nigeria|Latn;|NGA|NGN|0|1000|Naijíriá Píjin (Naijíria)|Naijíriá Píjin|Naijíria
+pl|Polish|Polish|Poland|Latn;|POL|PLN|0|0415|polski|polski|Polska
+pl-PL|Polish (Poland)|Polish|Poland|Latn;|POL|PLN|0|0415|polski (Polska)|polski|Polska
+prg|Prussian|Prussian|World|Latn;|001|XDR|0|1000|prūsiskan|prūsiskan|swītai
+prg-001|Prussian (World)|Prussian|World|Latn;|001|XDR|0|1000|prūsiskan (swītai)|prūsiskan|swītai
+prs|Dari|Dari|Afghanistan|Arab;|AFG|AFN|1|048c|درى|درى|افغانستان
+prs-AF|Dari (Afghanistan)|Dari|Afghanistan|Arab;|AFG|AFN|1|048c|درى (افغانستان)|درى|افغانستان
+ps|Pashto|Pashto|Afghanistan|Arab;|AFG|AFN|1|0463|پښتو|پښتو|افغانستان
+ps-AF|Pashto (Afghanistan)|Pashto|Afghanistan|Arab;|AFG|AFN|1|0463|پښتو (افغانستان)|پښتو|افغانستان
+ps-PK|Pashto (Pakistan)|Pashto|Pakistan|Arab;|PAK|PKR|1|1000|پښتو (پاکستان)|پښتو|پاکستان
+pt|Portuguese|Portuguese|Brazil|Latn;|BRA|BRL|0|0416|português|português|Brasil
+pt-AO|Portuguese (Angola)|Portuguese|Angola|Latn;|AGO|AOA|0|1000|português (Angola)|português|Angola
+pt-BR|Portuguese (Brazil)|Portuguese|Brazil|Latn;|BRA|BRL|0|0416|português (Brasil)|português|Brasil
+pt-CH|Portuguese (Switzerland)|Portuguese|Switzerland|Latn;|CHE|CHF|0|1000|português (Suíça)|português|Suíça
+pt-CV|Portuguese (Cabo Verde)|Portuguese|Cabo Verde|Latn;|CPV|CVE|0|1000|português (Cabo Verde)|português|Cabo Verde
+pt-GQ|Portuguese (Equatorial Guinea)|Portuguese|Equatorial Guinea|Latn;|GNQ|XAF|0|1000|português (Guiné Equatorial)|português|Guiné Equatorial
+pt-GW|Portuguese (Guinea-Bissau)|Portuguese|Guinea-Bissau|Latn;|GNB|XOF|0|1000|português (Guiné-Bissau)|português|Guiné-Bissau
+pt-LU|Portuguese (Luxembourg)|Portuguese|Luxembourg|Latn;|LUX|EUR|0|1000|português (Luxemburgo)|português|Luxemburgo
+pt-MO|Portuguese (Macao SAR)|Portuguese|Macao SAR|Latn;|MAC|MOP|0|1000|português (RAE de Macau)|português|RAE de Macau
+pt-MZ|Portuguese (Mozambique)|Portuguese|Mozambique|Latn;|MOZ|MZN|0|1000|português (Moçambique)|português|Moçambique
+pt-PT|Portuguese (Portugal)|Portuguese|Portugal|Latn;|PRT|EUR|0|0816|português (Portugal)|português|Portugal
+pt-ST|Portuguese (São Tomé & Príncipe)|Portuguese|São Tomé & Príncipe|Latn;|STP|STN|0|1000|português (São Tomé e Príncipe)|português|São Tomé e Príncipe
+pt-TL|Portuguese (Timor-Leste)|Portuguese|Timor-Leste|Latn;|TLS|USD|0|1000|português (Timor-Leste)|português|Timor-Leste
+quc|K'iche'|K'iche'|Guatemala|Latn;|GTM|GTQ|0|0486|K'iche'|K'iche'|Guatemala
+quc-Latn|K'iche'|K'iche'|Guatemala|Latn;|GTM|GTQ|0|0486|K'iche'|K'iche'|Guatemala
+quc-Latn-GT|K'iche' (Guatemala)|K'iche'|Guatemala|Latn;|GTM|GTQ|0|0486|K'iche' (Guatemala)|K'iche'|Guatemala
+quz|Quechua|Quechua|Bolivia|Latn;|BOL|BOB|0|046b|Runasimi|Runasimi|Bolivia
+quz-BO|Quechua (Bolivia)|Quechua|Bolivia|Latn;|BOL|BOB|0|046b|Runasimi (Bolivia)|Runasimi|Bolivia
+quz-EC|Quechua (Ecuador)|Quechua|Ecuador|Latn;|ECU|USD|0|086b|Runasimi (Ecuador)|Runasimi|Ecuador
+quz-PE|Quechua (Peru)|Quechua|Peru|Latn;|PER|PEN|0|0c6b|Runasimi (Perú)|Runasimi|Perú
+rm|Romansh|Romansh|Switzerland|Latn;|CHE|CHF|0|0417|rumantsch|rumantsch|Svizra
+rm-CH|Romansh (Switzerland)|Romansh|Switzerland|Latn;|CHE|CHF|0|0417|rumantsch (Svizra)|rumantsch|Svizra
+rn|Rundi|Rundi|Burundi|Latn;|BDI|BIF|0|1000|Ikirundi|Ikirundi|Uburundi
+rn-BI|Rundi (Burundi)|Rundi|Burundi|Latn;|BDI|BIF|0|1000|Ikirundi (Uburundi)|Ikirundi|Uburundi
+ro|Romanian|Romanian|Romania|Latn;|ROU|RON|0|0418|română|română|România
+ro-MD|Romanian (Moldova)|Romanian|Moldova|Latn;|MDA|MDL|0|0818|română (Republica Moldova)|română|Republica Moldova
+ro-RO|Romanian (Romania)|Romanian|Romania|Latn;|ROU|RON|0|0418|română (România)|română|România
+rof|Rombo|Rombo|Tanzania|Latn;|TZA|TZS|0|1000|Kihorombo|Kihorombo|Tanzania
+rof-TZ|Rombo (Tanzania)|Rombo|Tanzania|Latn;|TZA|TZS|0|1000|Kihorombo (Tanzania)|Kihorombo|Tanzania
+ru|Russian|Russian|Russia|Cyrl;|RUS|RUB|0|0419|русский|русский|Россия
+ru-BY|Russian (Belarus)|Russian|Belarus|Cyrl;|BLR|BYN|0|1000|русский (Беларусь)|русский|Беларусь
+ru-KG|Russian (Kyrgyzstan)|Russian|Kyrgyzstan|Cyrl;|KGZ|KGS|0|1000|русский (Киргизия)|русский|Киргизия
+ru-KZ|Russian (Kazakhstan)|Russian|Kazakhstan|Cyrl;|KAZ|KZT|0|1000|русский (Казахстан)|русский|Казахстан
+ru-MD|Russian (Moldova)|Russian|Moldova|Cyrl;|MDA|MDL|0|0819|русский (Молдова)|русский|Молдова
+ru-RU|Russian (Russia)|Russian|Russia|Cyrl;|RUS|RUB|0|0419|русский (Россия)|русский|Россия
+ru-UA|Russian (Ukraine)|Russian|Ukraine|Cyrl;|UKR|UAH|0|1000|русский (Украина)|русский|Украина
+rw|Kinyarwanda|Kinyarwanda|Rwanda|Latn;|RWA|RWF|0|0487|Kinyarwanda|Kinyarwanda|U Rwanda
+rw-RW|Kinyarwanda (Rwanda)|Kinyarwanda|Rwanda|Latn;|RWA|RWF|0|0487|Kinyarwanda (U Rwanda)|Kinyarwanda|U Rwanda
+rwk|Rwa|Rwa|Tanzania|Latn;|TZA|TZS|0|1000|Kiruwa|Kiruwa|Tanzania
+rwk-TZ|Rwa (Tanzania)|Rwa|Tanzania|Latn;|TZA|TZS|0|1000|Kiruwa (Tanzania)|Kiruwa|Tanzania
+sa|Sanskrit|Sanskrit|India|Deva;|IND|INR|0|044f|संस्कृत|संस्कृत|भारतम्
+sa-IN|Sanskrit (India)|Sanskrit|India|Deva;|IND|INR|0|044f|संस्कृत (भारतम्)|संस्कृत|भारतम्
+sah|Sakha|Sakha|Russia|Cyrl;|RUS|RUB|0|0485|саха тыла|саха тыла|Арассыыйа
+sah-RU|Sakha (Russia)|Sakha|Russia|Cyrl;|RUS|RUB|0|0485|саха тыла (Арассыыйа)|саха тыла|Арассыыйа
+saq|Samburu|Samburu|Kenya|Latn;|KEN|KES|0|1000|Kisampur|Kisampur|Kenya
+saq-KE|Samburu (Kenya)|Samburu|Kenya|Latn;|KEN|KES|0|1000|Kisampur (Kenya)|Kisampur|Kenya
+sat|Santali|Santali|India|Olck;|IND|INR|0|1000|ᱥᱟᱱᱛᱟᱲᱤ|ᱥᱟᱱᱛᱟᱲᱤ|ᱤᱱᱰᱤᱭᱟ
+sat-Olck|Santali (Ol Chiki)|Santali (Ol Chiki)|India|Olck;|IND|INR|0|1000|ᱥᱟᱱᱛᱟᱲᱤ (ᱚᱞ ᱪᱤᱠᱤ)|ᱥᱟᱱᱛᱟᱲᱤ|ᱤᱱᱰᱤᱭᱟ
+sat-Olck-IN|Santali (Ol Chiki, India)|Santali (Ol Chiki)|India|Olck;|IND|INR|0|1000|ᱥᱟᱱᱛᱟᱲᱤ (ᱤᱱᱰᱤᱭᱟ)|ᱥᱟᱱᱛᱟᱲᱤ|ᱤᱱᱰᱤᱭᱟ
+sbp|Sangu|Sangu|Tanzania|Latn;|TZA|TZS|0|1000|Ishisangu|Ishisangu|Tansaniya
+sbp-TZ|Sangu (Tanzania)|Sangu|Tanzania|Latn;|TZA|TZS|0|1000|Ishisangu (Tansaniya)|Ishisangu|Tansaniya
+sd|Sindhi|Sindhi|Pakistan|Arab;|PAK|PKR|1|0859|سنڌي|سنڌي|پاکستان
+sd-Arab|Sindhi|Sindhi|Pakistan|Arab;|PAK|PKR|1|0859|سنڌي|سنڌي|پاکستان
+sd-Arab-PK|Sindhi (Pakistan)|Sindhi|Pakistan|Arab;|PAK|PKR|1|0859|سنڌي (پاکستان)|سنڌي|پاکستان
+sd-Deva|Sindhi (Devanagari)|Sindhi (Devanagari)|India|Deva;|IND|INR|0|0459|सिन्धी|सिन्धी|भारत
+sd-Deva-IN|Sindhi (Devanagari, India)|Sindhi (Devanagari)|India|Deva;|IND|INR|0|0459|सिन्धी (भारत)|सिन्धी|भारत
+se|Northern Sami|Northern Sami|Norway|Latn;|NOR|NOK|0|043b|davvisámegiella|davvisámegiella|Norga
+se-FI|Sami, Northern (Finland)|Sami (Northern)|Finland|Latn;|FIN|EUR|0|0c3b|davvisámegiella (Suopma)|davvisámegiella|Suopma
+se-NO|Sami, Northern (Norway)|Northern Sami|Norway|Latn;|NOR|NOK|0|043b|davvisámegiella (Norga)|davvisámegiella|Norga
+se-SE|Sami, Northern (Sweden)|Sami (Northern)|Sweden|Latn;|SWE|SEK|0|083b|davvisámegiella (Ruoŧŧa)|davvisámegiella|Ruoŧŧa
+seh|Sena|Sena|Mozambique|Latn;|MOZ|MZN|0|1000|sena|sena|Moçambique
+seh-MZ|Sena (Mozambique)|Sena|Mozambique|Latn;|MOZ|MZN|0|1000|sena (Moçambique)|sena|Moçambique
+ses|Koyraboro Senni|Koyraboro Senni|Mali|Latn;|MLI|XOF|0|1000|Koyraboro senni|Koyraboro senni|Maali
+ses-ML|Koyraboro Senni (Mali)|Koyraboro Senni|Mali|Latn;|MLI|XOF|0|1000|Koyraboro senni (Maali)|Koyraboro senni|Maali
+sg|Sango|Sango|Central African Republic|Latn;|CAF|XAF|0|1000|Sängö|Sängö|Ködörösêse tî Bêafrîka
+sg-CF|Sango (Central African Republic)|Sango|Central African Republic|Latn;|CAF|XAF|0|1000|Sängö (Ködörösêse tî Bêafrîka)|Sängö|Ködörösêse tî Bêafrîka
+shi|Tachelhit|Tachelhit|Morocco|Tfng;|MAR|MAD|0|1000|ⵜⴰⵛⵍⵃⵉⵜ|ⵜⴰⵛⵍⵃⵉⵜ|ⵍⵎⵖⵔⵉⴱ
+shi-Latn|Tachelhit (Latin)|Tachelhit (Latin)|Morocco|Latn;|MAR|MAD|0|1000|Tashelḥiyt (Latin)|Tashelḥiyt|lmɣrib
+shi-Latn-MA|Tachelhit (Latin, Morocco)|Tachelhit (Latin)|Morocco|Latn;|MAR|MAD|0|1000|Tashelḥiyt (lmɣrib)|Tashelḥiyt|lmɣrib
+shi-Tfng|Tachelhit (Tifinagh)|Tachelhit (Tifinagh)|Morocco|Tfng;|MAR|MAD|0|1000|ⵜⴰⵛⵍⵃⵉⵜ (Tifinagh)|ⵜⴰⵛⵍⵃⵉⵜ|ⵍⵎⵖⵔⵉⴱ
+shi-Tfng-MA|Tachelhit (Tifinagh, Morocco)|Tachelhit (Tifinagh)|Morocco|Tfng;|MAR|MAD|0|1000|ⵜⴰⵛⵍⵃⵉⵜ (ⵍⵎⵖⵔⵉⴱ)|ⵜⴰⵛⵍⵃⵉⵜ|ⵍⵎⵖⵔⵉⴱ
+si|Sinhala|Sinhala|Sri Lanka|Sinh;|LKA|LKR|0|045b|සිංහල|සිංහල|ශ්‍රී ලංකාව
+si-LK|Sinhala (Sri Lanka)|Sinhala|Sri Lanka|Sinh;|LKA|LKR|0|045b|සිංහල (ශ්‍රී ලංකාව)|සිංහල|ශ්‍රී ලංකාව
+sk|Slovak|Slovak|Slovakia|Latn;|SVK|EUR|0|041b|slovenčina|slovenčina|Slovensko
+sk-SK|Slovak (Slovakia)|Slovak|Slovakia|Latn;|SVK|EUR|0|041b|slovenčina (Slovensko)|slovenčina|Slovensko
+sl|Slovenian|Slovenian|Slovenia|Latn;|SVN|EUR|0|0424|slovenščina|slovenščina|Slovenija
+sl-SI|Slovenian (Slovenia)|Slovenian|Slovenia|Latn;|SVN|EUR|0|0424|slovenščina (Slovenija)|slovenščina|Slovenija
+sma|Sami (Southern)|Sami (Southern)|Sweden|Latn;|SWE|SEK|0|1c3b|åarjelsaemiengïele|åarjelsaemiengïele|Sveerje
+sma-NO|Sami, Southern (Norway)|Sami (Southern)|Norway|Latn;|NOR|NOK|0|183b|åarjelsaemiengïele (Nöörje)|åarjelsaemiengïele|Nöörje
+sma-SE|Sami, Southern (Sweden)|Sami (Southern)|Sweden|Latn;|SWE|SEK|0|1c3b|åarjelsaemiengïele (Sveerje)|åarjelsaemiengïele|Sveerje
+smj|Sami (Lule)|Sami (Lule)|Sweden|Latn;|SWE|SEK|0|143b|julevusámegiella|julevusámegiella|Svierik
+smj-NO|Sami, Lule (Norway)|Sami (Lule)|Norway|Latn;|NOR|NOK|0|103b|julevusámegiella (Vuodna)|julevusámegiella|Vuodna
+smj-SE|Sami, Lule (Sweden)|Sami (Lule)|Sweden|Latn;|SWE|SEK|0|143b|julevusámegiella (Svierik)|julevusámegiella|Svierik
+smn|Sami (Inari)|Sami (Inari)|Finland|Latn;|FIN|EUR|0|243b|anarâškielâ|anarâškielâ|Suomâ
+smn-FI|Sami, Inari (Finland)|Sami (Inari)|Finland|Latn;|FIN|EUR|0|243b|anarâškielâ (Suomâ)|anarâškielâ|Suomâ
+sms|Sami (Skolt)|Sami (Skolt)|Finland|Latn;|FIN|EUR|0|203b|sää´mǩiõll|sää´mǩiõll|Lää´ddjânnam
+sms-FI|Sami, Skolt (Finland)|Sami (Skolt)|Finland|Latn;|FIN|EUR|0|203b|sää´mǩiõll (Lää´ddjânnam)|sää´mǩiõll|Lää´ddjânnam
+sn|Shona|Shona|Zimbabwe|Latn;|ZWE|USD|0|1000|chiShona|chiShona|Zimbabwe
+sn-Latn|Shona (Latin)|Shona (Latin)|Zimbabwe|Latn;|ZWE|USD|0|1000|chiShona (Latin)|chiShona (Latin)|Zimbabwe
+sn-Latn-ZW|Shona (Latin, Zimbabwe)|Shona (Latin)|Zimbabwe|Latn;|ZWE|USD|0|1000|chiShona (Zimbabwe)|chiShona|Zimbabwe
+so|Somali|Somali|Somalia|Latn;|SOM|SOS|0|0477|Soomaali|Soomaali|Soomaaliya
+so-DJ|Somali (Djibouti)|Somali|Djibouti|Latn;|DJI|DJF|0|1000|Soomaali (Jabuuti)|Soomaali|Jabuuti
+so-ET|Somali (Ethiopia)|Somali|Ethiopia|Latn;|ETH|ETB|0|1000|Soomaali (Itoobiya)|Soomaali|Itoobiya
+so-KE|Somali (Kenya)|Somali|Kenya|Latn;|KEN|KES|0|1000|Soomaali (Kenya)|Soomaali|Kenya
+so-SO|Somali (Somalia)|Somali|Somalia|Latn;|SOM|SOS|0|0477|Soomaali (Soomaaliya)|Soomaali|Soomaaliya
+sq|Albanian|Albanian|Albania|Latn;|ALB|ALL|0|041c|shqip|shqip|Shqipëri
+sq-AL|Albanian (Albania)|Albanian|Albania|Latn;|ALB|ALL|0|041c|shqip (Shqipëri)|shqip|Shqipëri
+sq-MK|Albanian (North Macedonia)|Albanian|North Macedonia|Latn;|MKD|MKD|0|1000|shqip (Maqedonia e Veriut)|shqip|Maqedonia e Veriut
+sq-XK|Albanian (Kosovo)|Albanian|Kosovo|Latn;|XKS|EUR|0|1000|shqip (Kosovë)|shqip|Kosovë
+sr|Serbian|Serbian|Serbia|Latn;|SRB|RSD|0|241a|srpski|srpski|Srbija
+sr-Cyrl|Serbian (Cyrillic)|Serbian (Cyrillic)|Serbia|Cyrl;|SRB|RSD|0|281a|српски (Ћирилица)|српски|Србија
+sr-Cyrl-BA|Serbian (Cyrillic, Bosnia and Herzegovina)|Serbian (Cyrillic)|Bosnia and Herzegovina|Cyrl;|BIH|BAM|0|1c1a|српски (Босна и Херцеговина)|српски|Босна и Херцеговина
+sr-Cyrl-ME|Serbian (Cyrillic, Montenegro)|Serbian (Cyrillic)|Montenegro|Cyrl;|MNE|EUR|0|301a|српски (Црна Гора)|српски|Црна Гора
+sr-Cyrl-RS|Serbian (Cyrillic, Serbia)|Serbian (Cyrillic)|Serbia|Cyrl;|SRB|RSD|0|281a|српски (Србија)|српски|Србија
+sr-Cyrl-XK|Serbian (Cyrillic, Kosovo)|Serbian (Cyrillic)|Kosovo|Cyrl;|XKS|EUR|0|1000|српски (Косово)|српски|Косово
+sr-Latn|Serbian (Latin)|Serbian (Latin)|Serbia|Latn;|SRB|RSD|0|241a|srpski (latinica)|srpski|Srbija
+sr-Latn-BA|Serbian (Latin, Bosnia & Herzegovina)|Serbian (Latin)|Bosnia & Herzegovina|Latn;|BIH|BAM|0|181a|srpski (Bosna i Hercegovina)|srpski|Bosna i Hercegovina
+sr-Latn-ME|Serbian (Latin, Montenegro)|Serbian (Latin)|Montenegro|Latn;|MNE|EUR|0|2c1a|srpski (Crna Gora)|srpski|Crna Gora
+sr-Latn-RS|Serbian (Latin, Serbia)|Serbian (Latin)|Serbia|Latn;|SRB|RSD|0|241a|srpski (Srbija)|srpski|Srbija
+sr-Latn-XK|Serbian (Latin, Kosovo)|Serbian (Latin)|Kosovo|Latn;|XKS|EUR|0|1000|srpski (Kosovo)|srpski|Kosovo
+ss|siSwati|siSwati|South Africa|Latn;|ZAF|ZAR|0|1000|Siswati|Siswati|South Africa
+ss-SZ|siSwati (Eswatini)|siSwati|Eswatini|Latn;|SWZ|SZL|0|1000|siSwati (eSwatini)|siSwati|eSwatini
+ss-ZA|siSwati (South Africa)|siSwati|South Africa|Latn;|ZAF|ZAR|0|1000|siSwati (South Africa)|siSwati|South Africa
+ssy|Saho|Saho|Eritrea|Latn;|ERI|ERN|0|1000|Saho|Saho|Eretria
+ssy-ER|Saho (Eritrea)|Saho|Eritrea|Latn;|ERI|ERN|0|1000|Saho (Eretria)|Saho|Eretria
+st|Sesotho|Sesotho|South Africa|Latn;|ZAF|ZAR|0|0430|Sesotho|Sesotho|South Africa
+st-LS|Sesotho (Lesotho)|Sesotho|Lesotho|Latn;|LSO|ZAR|0|1000|Sesotho (Lesotho)|Sesotho|Lesotho
+st-ZA|Sesotho (South Africa)|Sesotho|South Africa|Latn;|ZAF|ZAR|0|0430|Sesotho (South Africa)|Sesotho|South Africa
+su|Sundanese|Sundanese|Indonesia|Latn;|IDN|IDR|0|1000|Basa Sunda|Basa Sunda|Indonesia
+su-Latn|Sundanese (Latin)|Sundanese (Latin)|Indonesia|Latn;|IDN|IDR|0|1000|Basa Sunda (Latin)|Basa Sunda|Indonesia
+su-Latn-ID|Sundanese (Latin, Indonesia)|Sundanese (Latin)|Indonesia|Latn;|IDN|IDR|0|1000|Basa Sunda (Indonesia)|Basa Sunda|Indonesia
+sv|Swedish|Swedish|Sweden|Latn;|SWE|SEK|0|041d|svenska|svenska|Sverige
+sv-AX|Swedish (Åland Islands)|Swedish|Åland Islands|Latn;|ALA|EUR|0|1000|svenska (Åland)|svenska|Åland
+sv-FI|Swedish (Finland)|Swedish|Finland|Latn;|FIN|EUR|0|081d|svenska (Finland)|svenska|Finland
+sv-SE|Swedish (Sweden)|Swedish|Sweden|Latn;|SWE|SEK|0|041d|svenska (Sverige)|svenska|Sverige
+sw|Kiswahili|Kiswahili|Kenya|Latn;|KEN|KES|0|0441|Kiswahili|Kiswahili|Kenya
+sw-CD|Kiswahili (Congo DRC)|Kiswahili|Congo (DRC)|Latn;|COD|CDF|0|1000|Kiswahili (Jamhuri ya Kidemokrasia ya Kongo)|Kiswahili|Jamhuri ya Kidemokrasia ya Kongo
+sw-KE|Kiswahili (Kenya)|Kiswahili|Kenya|Latn;|KEN|KES|0|0441|Kiswahili (Kenya)|Kiswahili|Kenya
+sw-TZ|Kiswahili (Tanzania)|Kiswahili|Tanzania|Latn;|TZA|TZS|0|1000|Kiswahili (Tanzania)|Kiswahili|Tanzania
+sw-UG|Kiswahili (Uganda)|Kiswahili|Uganda|Latn;|UGA|UGX|0|1000|Kiswahili (Uganda)|Kiswahili|Uganda
+syr|Syriac|Syriac|Syria|Syrc;|SYR|SYP|1|045a|ܣܘܪܝܝܐ|ܣܘܪܝܝܐ|ܣܘܪܝܐ
+syr-SY|Syriac (Syria)|Syriac|Syria|Syrc;|SYR|SYP|1|045a|ܣܘܪܝܝܐ (ܣܘܪܝܐ)|ܣܘܪܝܝܐ|ܣܘܪܝܐ
+ta|Tamil|Tamil|India|Taml;|IND|INR|0|0449|தமிழ்|தமிழ்|இந்தியா
+ta-IN|Tamil (India)|Tamil|India|Taml;|IND|INR|0|0449|தமிழ் (இந்தியா)|தமிழ்|இந்தியா
+ta-LK|Tamil (Sri Lanka)|Tamil|Sri Lanka|Taml;|LKA|LKR|0|0849|தமிழ் (இலங்கை)|தமிழ்|இலங்கை
+ta-MY|Tamil (Malaysia)|Tamil|Malaysia|Taml;|MYS|MYR|0|1000|தமிழ் (மலேசியா)|தமிழ்|மலேசியா
+ta-SG|Tamil (Singapore)|Tamil|Singapore|Taml;|SGP|SGD|0|1000|தமிழ் (சிங்கப்பூர்)|தமிழ்|சிங்கப்பூர்
+te|Telugu|Telugu|India|Telu;|IND|INR|0|044a|తెలుగు|తెలుగు|భారతదేశం
+te-IN|Telugu (India)|Telugu|India|Telu;|IND|INR|0|044a|తెలుగు (భారతదేశం)|తెలుగు|భారతదేశం
+teo|Teso|Teso|Uganda|Latn;|UGA|UGX|0|1000|Kiteso|Kiteso|Uganda
+teo-KE|Teso (Kenya)|Teso|Kenya|Latn;|KEN|KES|0|1000|Kiteso (Kenia)|Kiteso|Kenia
+teo-UG|Teso (Uganda)|Teso|Uganda|Latn;|UGA|UGX|0|1000|Kiteso (Uganda)|Kiteso|Uganda
+tg|Tajik|Tajik|Tajikistan|Cyrl;|TJK|TJS|0|0428|Тоҷикӣ|Тоҷикӣ|Тоҷикистон
+tg-Cyrl|Tajik (Cyrillic)|Tajik (Cyrillic)|Tajikistan|Cyrl;|TJK|TJS|0|0428|Тоҷикӣ (Кирилликӣ)|тоҷикӣ|Тоҷикистон
+tg-Cyrl-TJ|Tajik (Cyrillic, Tajikistan)|Tajik (Cyrillic)|Tajikistan|Cyrl;|TJK|TJS|0|0428|тоҷикӣ (Тоҷикистон)|тоҷикӣ|Тоҷикистон
+th|Thai|Thai|Thailand|Thai;|THA|THB|0|041e|ไทย|ไทย|ไทย
+th-TH|Thai (Thailand)|Thai|Thailand|Thai;|THA|THB|0|041e|ไทย (ไทย)|ไทย|ไทย
+ti|Tigrinya|Tigrinya|Eritrea|Ethi;|ERI|ERN|0|0873|ትግር|ትግር|ኤርትራ
+ti-ER|Tigrinya (Eritrea)|Tigrinya|Eritrea|Ethi;|ERI|ERN|0|0873|ትግር (ኤርትራ)|ትግር|ኤርትራ
+ti-ET|Tigrinya (Ethiopia)|Tigrinya|Ethiopia|Ethi;|ETH|ETB|0|0473|ትግር (ኢትዮጵያ)|ትግር|ኢትዮጵያ
+tig|Tigre|Tigre|Eritrea|Ethi;|ERI|ERN|0|1000|ትግረ|ትግረ|ኤርትራ
+tig-ER|Tigre (Eritrea)|Tigre|Eritrea|Ethi;|ERI|ERN|0|1000|ትግረ (ኤርትራ)|ትግረ|ኤርትራ
+tk|Turkmen|Turkmen|Turkmenistan|Latn;|TKM|TMT|0|0442|Türkmen dili|Türkmen dili|Türkmenistan
+tk-TM|Turkmen (Turkmenistan)|Turkmen|Turkmenistan|Latn;|TKM|TMT|0|0442|Türkmen dili (Türkmenistan)|Türkmen dili|Türkmenistan
+tn|Setswana|Setswana|South Africa|Latn;|ZAF|ZAR|0|0432|Setswana|Setswana|Aforika Borwa
+tn-BW|Setswana (Botswana)|Setswana|Botswana|Latn;|BWA|BWP|0|0832|Setswana (Botswana)|Setswana|Botswana
+tn-ZA|Setswana (South Africa)|Setswana|South Africa|Latn;|ZAF|ZAR|0|0432|Setswana (Aforika Borwa)|Setswana|Aforika Borwa
+to|Tongan|Tongan|Tonga|Latn;|TON|TOP|0|1000|lea fakatonga|lea fakatonga|Tonga
+to-TO|Tongan (Tonga)|Tongan|Tonga|Latn;|TON|TOP|0|1000|lea fakatonga (Tonga)|lea fakatonga|Tonga
+tr|Turkish|Turkish|Turkey|Latn;|TUR|TRY|0|041f|Türkçe|Türkçe|Türkiye
+tr-CY|Turkish (Cyprus)|Turkish|Cyprus|Latn;|CYP|EUR|0|1000|Türkçe (Kıbrıs)|Türkçe|Kıbrıs
+tr-TR|Turkish (Turkey)|Turkish|Turkey|Latn;|TUR|TRY|0|041f|Türkçe (Türkiye)|Türkçe|Türkiye
+ts|Xitsonga|Xitsonga|South Africa|Latn;|ZAF|ZAR|0|0431|Xitsonga|Xitsonga|South Africa
+ts-ZA|Xitsonga (South Africa)|Xitsonga|South Africa|Latn;|ZAF|ZAR|0|0431|Xitsonga (South Africa)|Xitsonga|South Africa
+tt|Tatar|Tatar|Russia|Cyrl;|RUS|RUB|0|0444|Татар|Татар|Россия
+tt-RU|Tatar (Russia)|Tatar|Russia|Cyrl;|RUS|RUB|0|0444|Татар (Россия)|Татар|Россия
+twq|Tasawaq|Tasawaq|Niger|Latn;|NER|XOF|0|1000|Tasawaq senni|Tasawaq senni|Nižer
+twq-NE|Tasawaq (Niger)|Tasawaq|Niger|Latn;|NER|XOF|0|1000|Tasawaq senni (Nižer)|Tasawaq senni|Nižer
+tzm|Central Atlas Tamazight|Central Atlas Tamazight|Algeria|Latn;|DZA|DZD|0|085f|Tamaziɣt n laṭlaṣ|Tamaziɣt n laṭlaṣ|Djazaïr
+tzm-Arab|Central Atlas Tamazight (Arabic)|Central Atlas Tamazight (Arabic)|Morocco|Arab;|MAR|MAD|1|045f|الأمازيغية وسط الأطلس|الأمازيغية وسط الأطلس|المغرب
+tzm-Arab-MA|Central Atlas Tamazight (Arabic, Morocco)|Central Atlas Tamazight (Arabic)|Morocco|Arab;|MAR|MAD|1|045f|الأمازيغية وسط الأطلس (المغرب)|الأمازيغية وسط الأطلس|المغرب
+tzm-Latn|Central Atlas Tamazight (Latin)|Central Atlas Tamazight (Latin)|Algeria|Latn;|DZA|DZD|0|085f|Tamaziɣt n laṭlaṣ (Latin)|Tamaziɣt n laṭlaṣ|Djazaïr
+tzm-Latn-DZ|Central Atlas Tamazight (Latin, Algeria)|Central Atlas Tamazight (Latin)|Algeria|Latn;|DZA|DZD|0|085f|Tamaziɣt n laṭlaṣ (Djazaïr)|Tamaziɣt n laṭlaṣ|Djazaïr
+tzm-Latn-MA|Central Atlas Tamazight (Latin, Morocco)|Central Atlas Tamazight (Latin)|Morocco|Latn;|MAR|MAD|0|1000|Tamaziɣt n laṭlaṣ (Meṛṛuk)|Tamaziɣt n laṭlaṣ|Meṛṛuk
+tzm-Tfng|Central Atlas Tamazight (Tifinagh)|Central Atlas Tamazight (Tifinagh)|Morocco|Tfng;|MAR|MAD|0|105f|Tamazight (Tifinagh)|ⵜⴰⵎⴰⵣⵉⵖⵜ|ⵍⵎⵖⵔⵉⴱ
+tzm-Tfng-MA|Central Atlas Tamazight (Tifinagh, Morocco)|Central Atlas Tamazight (Tifinagh)|Morocco|Tfng;|MAR|MAD|0|105f|ⵜⴰⵎⴰⵣⵉⵖⵜ (ⵍⵎⵖⵔⵉⴱ)|ⵜⴰⵎⴰⵣⵉⵖⵜ|ⵍⵎⵖⵔⵉⴱ
+ug|Uyghur|Uyghur|China|Arab;|CHN|CNY|1|0480|ئۇيغۇرچە|ئۇيغۇرچە|جۇڭخۇا خەلق جۇمھۇرىيىتى
+ug-CN|Uyghur (China)|Uyghur|China|Arab;|CHN|CNY|1|0480|ئۇيغۇرچە (جۇڭخۇا خەلق جۇمھۇرىيىتى)|ئۇيغۇرچە|جۇڭخۇا خەلق جۇمھۇرىيىتى
+uk|Ukrainian|Ukrainian|Ukraine|Cyrl;|UKR|UAH|0|0422|українська|українська|Україна
+uk-UA|Ukrainian (Ukraine)|Ukrainian|Ukraine|Cyrl;|UKR|UAH|0|0422|українська (Україна)|українська|Україна
+ur|Urdu|Urdu|Pakistan|Arab;|PAK|PKR|1|0420|اُردو|اُردو|پاکستان
+ur-IN|Urdu (India)|Urdu|India|Arab;|IND|INR|1|0820|اردو (بھارت)|اردو|بھارت
+ur-PK|Urdu (Pakistan)|Urdu|Pakistan|Arab;|PAK|PKR|1|0420|اُردو (پاکستان)|اُردو|پاکستان
+uz|Uzbek|Uzbek|Uzbekistan|Latn;|UZB|UZS|0|0443|o‘zbek|o‘zbek|Oʻzbekiston
+uz-Arab|Uzbek (Arabic)|Uzbek (Arabic)|Afghanistan|Arab;|AFG|AFN|1|1000|اوزبیک (عربی)|اوزبیک|افغانستان
+uz-Arab-AF|Uzbek (Arabic, Afghanistan)|Uzbek (Arabic)|Afghanistan|Arab;|AFG|AFN|1|1000|اوزبیک (افغانستان)|اوزبیک|افغانستان
+uz-Cyrl|Uzbek (Cyrillic)|Uzbek (Cyrillic)|Uzbekistan|Cyrl;|UZB|UZS|0|0843|Ўзбек (Кирил)|ўзбекча|Ўзбекистон
+uz-Cyrl-UZ|Uzbek (Cyrillic, Uzbekistan)|Uzbek (Cyrillic)|Uzbekistan|Cyrl;|UZB|UZS|0|0843|ўзбекча (Ўзбекистон)|ўзбекча|Ўзбекистон
+uz-Latn|Uzbek (Latin)|Uzbek (Latin)|Uzbekistan|Latn;|UZB|UZS|0|0443|o‘zbek|o‘zbek|Oʻzbekiston
+uz-Latn-UZ|Uzbek (Latin, Uzbekistan)|Uzbek (Latin)|Uzbekistan|Latn;|UZB|UZS|0|0443|o‘zbek (Oʻzbekiston)|o‘zbek|Oʻzbekiston
+vai|Vai|Vai|Liberia|Vaii;|LBR|LRD|0|1000|ꕙꔤ|ꕙꔤ|ꕞꔤꔫꕩ
+vai-Latn|Vai (Latin)|Vai (Latin)|Liberia|Latn;|LBR|LRD|0|1000|Vai (Latin)|Vai|Laibhiya
+vai-Latn-LR|Vai (Latin, Liberia)|Vai (Latin)|Liberia|Latn;|LBR|LRD|0|1000|Vai (Laibhiya)|Vai|Laibhiya
+vai-Vaii|Vai (Vai)|Vai (Vai)|Liberia|Vaii;|LBR|LRD|0|1000|ꕙꔤ (Vai)|ꕙꔤ|ꕞꔤꔫꕩ
+vai-Vaii-LR|Vai (Vai, Liberia)|Vai (Vai)|Liberia|Vaii;|LBR|LRD|0|1000|ꕙꔤ (ꕞꔤꔫꕩ)|ꕙꔤ|ꕞꔤꔫꕩ
+ve|Venda|Venda|South Africa|Latn;|ZAF|ZAR|0|0433|Tshivenḓa|Tshivenḓa|South Africa
+ve-ZA|Venda (South Africa)|Venda|South Africa|Latn;|ZAF|ZAR|0|0433|Tshivenḓa (South Africa)|Tshivenḓa|South Africa
+vi|Vietnamese|Vietnamese|Vietnam|Latn;|VNM|VND|0|042a|Tiếng Việt|Tiếng Việt|Việt Nam
+vi-VN|Vietnamese (Vietnam)|Vietnamese|Vietnam|Latn;|VNM|VND|0|042a|Tiếng Việt (Việt Nam)|Tiếng Việt|Việt Nam
+vo|Volapük|Volapük|World|Latn;|001|XDR|0|1000|Volapük|Volapük|World
+vo-001|Volapük (World)|Volapük|World|Latn;|001|XDR|0|1000|Volapük (World)|Volapük|World
+vun|Vunjo|Vunjo|Tanzania|Latn;|TZA|TZS|0|1000|Kyivunjo|Kyivunjo|Tanzania
+vun-TZ|Vunjo (Tanzania)|Vunjo|Tanzania|Latn;|TZA|TZS|0|1000|Kyivunjo (Tanzania)|Kyivunjo|Tanzania
+wae|Walser|Walser|Switzerland|Latn;|CHE|CHF|0|1000|Walser|Walser|Schwiz
+wae-CH|Walser (Switzerland)|Walser|Switzerland|Latn;|CHE|CHF|0|1000|Walser (Schwiz)|Walser|Schwiz
+wal|Wolaytta|Wolaytta|Ethiopia|Ethi;|ETH|ETB|0|1000|ወላይታቱ|ወላይታቱ|ኢትዮጵያ
+wal-ET|Wolaytta (Ethiopia)|Wolaytta|Ethiopia|Ethi;|ETH|ETB|0|1000|ወላይታቱ (ኢትዮጵያ)|ወላይታቱ|ኢትዮጵያ
+wo|Wolof|Wolof|Senegal|Latn;|SEN|XOF|0|0488|Wolof|Wolof|Senegaal
+wo-SN|Wolof (Senegal)|Wolof|Senegal|Latn;|SEN|XOF|0|0488|Wolof (Senegaal)|Wolof|Senegaal
+xh|isiXhosa|isiXhosa|South Africa|Latn;|ZAF|ZAR|0|0434|isiXhosa|isiXhosa|eMzantsi Afrika
+xh-ZA|isiXhosa (South Africa)|isiXhosa|South Africa|Latn;|ZAF|ZAR|0|0434|isiXhosa (eMzantsi Afrika)|isiXhosa|eMzantsi Afrika
+xog|Soga|Soga|Uganda|Latn;|UGA|UGX|0|1000|Olusoga|Olusoga|Yuganda
+xog-UG|Soga (Uganda)|Soga|Uganda|Latn;|UGA|UGX|0|1000|Olusoga (Yuganda)|Olusoga|Yuganda
+yav|Yangben|Yangben|Cameroon|Latn;|CMR|XAF|0|1000|nuasue|nuasue|Kemelún
+yav-CM|Yangben (Cameroon)|Yangben|Cameroon|Latn;|CMR|XAF|0|1000|nuasue (Kemelún)|nuasue|Kemelún
+yi|Yiddish|Yiddish|World|Hebr;|001|XDR|1|043d|ייִדיש|ייִדיש|וועלט
+yi-001|Yiddish (World)|Yiddish|World|Hebr;|001|XDR|1|043d|ייִדיש (וועלט)|ייִדיש|וועלט
+yo|Yoruba|Yoruba|Nigeria|Latn;|NGA|NGN|0|046a|Èdè Yorùbá|Èdè Yorùbá|Nàìjíríà
+yo-BJ|Yoruba (Benin)|Yoruba|Benin|Latn;|BEN|XOF|0|1000|Èdè Yorùbá (Bɛ̀nɛ̀)|Èdè Yorùbá|Bɛ̀nɛ̀
+yo-NG|Yoruba (Nigeria)|Yoruba|Nigeria|Latn;|NGA|NGN|0|046a|Èdè Yorùbá (Nàìjíríà)|Èdè Yorùbá|Nàìjíríà
+zgh|Standard Moroccan Tamazight|Standard Moroccan Tamazight|Morocco|Tfng;|MAR|MAD|0|1000|ⵜⴰⵎⴰⵣⵉⵖⵜ|ⵜⴰⵎⴰⵣⵉⵖⵜ|ⵍⵎⵖⵔⵉⴱ
+zgh-Tfng|Standard Moroccan Tamazight (Tifinagh)|Standard Moroccan Tamazight (Tifinagh)|Morocco|Tfng;|MAR|MAD|0|1000|ⵜⴰⵎⴰⵣⵉⵖⵜ (Tifinagh)|ⵜⴰⵎⴰⵣⵉⵖⵜ|ⵍⵎⵖⵔⵉⴱ
+zgh-Tfng-MA|Standard Moroccan Tamazight (Tifinagh, Morocco)|Standard Moroccan Tamazight (Tifinagh)|Morocco|Tfng;|MAR|MAD|0|1000|ⵜⴰⵎⴰⵣⵉⵖⵜ (ⵍⵎⵖⵔⵉⴱ)|ⵜⴰⵎⴰⵣⵉⵖⵜ|ⵍⵎⵖⵔⵉⴱ
+zh|Chinese|Chinese|China|Hani;Hans;|CHN|CNY|2|0804|中文|中文|中国
+zh-CN|Chinese (Simplified, China)|Chinese (Simplified)|China|Hani;Hans;|CHN|CNY|2|0804|中文(中国)|中文(简体)|中国
+zh-Hans|Chinese (Simplified)|Chinese (Simplified)|China|Hani;Hans;|CHN|CNY|2|0804|中文(简体)|中文(简体)|中国
+zh-Hans-HK|Chinese (Simplified, Hong Kong SAR)|Chinese (Simplified)|Hong Kong SAR|Hans;|HKG|HKD|0|1000|中文 (香港特别行政区)|中文(简体)|香港特别行政区
+zh-Hans-MO|Chinese (Simplified, Macao SAR)|Chinese (Simplified)|Macao SAR|Hans;|MAC|MOP|0|1000|中文 (澳门特别行政区)|中文(简体)|澳门特别行政区
+zh-Hant|Chinese (Traditional)|Chinese (Traditional)|Hong Kong SAR|Hani;Hant;|HKG|HKD|2|0c04|中文(繁體)|中文(繁體)|香港特別行政區
+zh-HK|Chinese (Traditional, Hong Kong SAR)|Chinese (Traditional)|Hong Kong SAR|Hani;Hant;|HKG|HKD|2|0c04|中文(香港特別行政區)|中文(繁體)|香港特別行政區
+zh-MO|Chinese (Traditional, Macao SAR)|Chinese (Traditional)|Macao SAR|Hani;Hant;|MAC|MOP|0|1404|中文(澳門特別行政區)|中文(繁體)|澳門特別行政區
+zh-SG|Chinese (Simplified, Singapore)|Chinese (Simplified)|Singapore|Hani;Hans;|SGP|SGD|2|1004|中文(新加坡)|中文(简体)|新加坡
+zh-TW|Chinese (Traditional, Taiwan)|Chinese (Traditional)|Taiwan|Hani;Hant;|TWN|TWD|2|0404|中文(台灣)|中文(繁體)|台灣
+zu|isiZulu|isiZulu|South Africa|Latn;|ZAF|ZAR|0|0435|isiZulu|isiZulu|iNingizimu Afrika
+zu-ZA|isiZulu (South Africa)|isiZulu|South Africa|Latn;|ZAF|ZAR|0|0435|isiZulu (iNingizimu Afrika)|isiZulu|iNingizimu Afrika

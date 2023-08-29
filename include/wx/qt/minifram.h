@@ -22,10 +22,10 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxCAPTION | wxCLIP_CHILDREN | wxRESIZE_BORDER,
-              const wxString& name = wxFrameNameStr)
+              const wxString& name = wxASCII_STR(wxFrameNameStr))
   {
       return wxFrame::Create(parent, id, title, pos, size,
-                             style | wxFRAME_TOOL_WINDOW | wxFRAME_NO_TASKBAR, 
+                             style | wxFRAME_TOOL_WINDOW | wxFRAME_NO_TASKBAR,
                              name);
   }
 
@@ -35,7 +35,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxCAPTION | wxCLIP_CHILDREN | wxRESIZE_BORDER,
-              const wxString& name = wxFrameNameStr)
+              const wxString& name = wxASCII_STR(wxFrameNameStr))
   {
       Create(parent, id, title, pos, size, style, name);
   }

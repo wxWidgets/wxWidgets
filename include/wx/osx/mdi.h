@@ -22,7 +22,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr)
+                     const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
         Create(parent, id, title, pos, size, style, name);
@@ -34,7 +34,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxMDIParentFrame();
 
@@ -43,29 +43,29 @@ public:
 
     static bool IsTDI() { return false; }
 
-    virtual void AddChild(wxWindowBase *child) wxOVERRIDE;
-    virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
+    virtual void AddChild(wxWindowBase *child) override;
+    virtual void RemoveChild(wxWindowBase *child) override;
 
-    virtual void ActivateNext() wxOVERRIDE { /* TODO */ }
-    virtual void ActivatePrevious() wxOVERRIDE { /* TODO */ }
+    virtual void ActivateNext() override { /* TODO */ }
+    virtual void ActivatePrevious() override { /* TODO */ }
 
-    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
 
 
     // Mac-specific implementation from now on
     // ---------------------------------------
 
     // Mac OS activate event
-    virtual void MacActivate(long timestamp, bool activating) wxOVERRIDE;
+    virtual void MacActivate(long timestamp, bool activating) override;
 
     // wxWidgets activate event
     void OnActivate(wxActivateEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-    void SetMenuBar(wxMenuBar *menu_bar) wxOVERRIDE;
+    void SetMenuBar(wxMenuBar *menu_bar) override;
 
     // Get rect to be used to center top-level children
-    virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h) wxOVERRIDE;
+    virtual void GetRectForTopLevelChildren(int *x, int *y, int *w, int *h) override;
 
 protected:
     // common part of all ctors
@@ -102,7 +102,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr)
+                    const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init() ;
         Create(parent, id, title, pos, size, style, name);
@@ -114,19 +114,19 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxMDIChildFrame();
 
     // un-override the base class override
-    virtual bool IsTopLevel() const { return true; }
+    virtual bool IsTopLevel() const override { return true; }
 
     // implement MDI operations
-    virtual void Activate();
+    virtual void Activate() override;
 
 
     // Mac OS activate event
-    virtual void MacActivate(long timestamp, bool activating);
+    virtual void MacActivate(long timestamp, bool activating) override;
 
 protected:
     // common part of all ctors
@@ -142,10 +142,10 @@ public:
     virtual ~wxMDIClientWindow();
 
     virtual bool CreateClient(wxMDIParentFrame *parent,
-                              long style = wxVSCROLL | wxHSCROLL);
+                              long style = wxVSCROLL | wxHSCROLL) override;
 
 protected:
-    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoGetClientSize(int *width, int *height) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxMDIClientWindow);
 };

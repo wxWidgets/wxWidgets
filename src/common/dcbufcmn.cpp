@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dcbuffer.h"
 
@@ -45,8 +42,8 @@ class wxSharedDCBufferManager : public wxModule
 public:
     wxSharedDCBufferManager() { }
 
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxDELETE(ms_buffer); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxDELETE(ms_buffer); }
 
     static wxBitmap* GetBuffer(wxDC* dc, int w, int h)
     {
@@ -54,8 +51,9 @@ public:
             return DoCreateBuffer(dc, w, h);
 
         if ( !ms_buffer ||
-                w > ms_buffer->GetScaledWidth() ||
-                    h > ms_buffer->GetScaledHeight() )
+                w > ms_buffer->GetLogicalWidth() ||
+                h > ms_buffer->GetLogicalHeight() ||
+                (dc && dc->GetContentScaleFactor() != ms_buffer->GetScaleFactor()) )
         {
             delete ms_buffer;
 
@@ -87,7 +85,7 @@ private:
 
         // we must always return a valid bitmap but creating a bitmap of
         // size 0 would fail, so create a 1*1 bitmap in this case
-        buffer->CreateScaled(wxMax(w, 1), wxMax(h, 1), -1, scale);
+        buffer->CreateWithDIPSize(wxMax(w, 1), wxMax(h, 1), scale);
 
         return buffer;
     }
@@ -98,7 +96,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxSharedDCBufferManager);
 };
 
-wxBitmap* wxSharedDCBufferManager::ms_buffer = NULL;
+wxBitmap* wxSharedDCBufferManager::ms_buffer = nullptr;
 bool wxSharedDCBufferManager::ms_usingSharedBuffer = false;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSharedDCBufferManager, wxModule);
@@ -164,7 +162,7 @@ void wxBufferedDC::UnMask()
 
     const wxPoint origin = GetLogicalOrigin();
     m_dc->Blit(-origin.x, -origin.y, width, height, this, -x, -y);
-    m_dc = NULL;
+    m_dc = nullptr;
 
     if ( m_style & wxBUFFER_USES_SHARED_BUFFER )
         wxSharedDCBufferManager::ReleaseBuffer(m_buffer);

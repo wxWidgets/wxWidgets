@@ -14,7 +14,7 @@
 
 #if wxUSE_XRC && wxUSE_BITMAPCOMBOBOX
 
-class WXDLLIMPEXP_FWD_ADV wxBitmapComboBox;
+class WXDLLIMPEXP_FWD_CORE wxBitmapComboBox;
 
 class WXDLLIMPEXP_XRC wxBitmapComboBoxXmlHandler : public wxXmlResourceHandler
 {
@@ -22,8 +22,8 @@ class WXDLLIMPEXP_XRC wxBitmapComboBoxXmlHandler : public wxXmlResourceHandler
 
 public:
     wxBitmapComboBoxXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
     wxBitmapComboBox*    m_combobox;

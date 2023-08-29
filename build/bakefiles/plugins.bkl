@@ -7,7 +7,7 @@
     <!-- ================================================================ -->
     
     <wx-base-plugin id="sound_sdl" cond="WITH_PLUGIN_SDL=='1'">
-        <sources>$(UNIX_SOUND_SRC_SDL)</sources>
+        <sources>$(UNIX_SOUND_SDL_SRC)</sources>
         <ldlibs>$(EXTRALIBS_SDL)</ldlibs>
     </wx-base-plugin>
 

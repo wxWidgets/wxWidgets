@@ -13,19 +13,10 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/scopedarray.h"
 
-// Macro to help identify if task dialogs are available: we rely on
-// TD_WARNING_ICON being defined in the headers for this as this symbol is used
-// by the task dialogs only. Also notice that task dialogs are available for
-// Unicode applications only.
-#if defined(TD_WARNING_ICON) && wxUSE_UNICODE
-    #define wxHAS_MSW_TASKDIALOG
-#endif
-
 // Provides methods for creating a task dialog.
 namespace wxMSWMessageDialog
 {
 
-#ifdef wxHAS_MSW_TASKDIALOG
     class wxMSWTaskDialogConfig
     {
     public:
@@ -33,7 +24,7 @@ namespace wxMSWMessageDialog
 
         wxMSWTaskDialogConfig()
             : buttons(new TASKDIALOG_BUTTON[MAX_BUTTONS]),
-              parent(NULL),
+              parent(nullptr),
               iconId(0),
               style(0),
               useCustomLabels(false)
@@ -56,7 +47,7 @@ namespace wxMSWMessageDialog
         wxString btnCancelLabel;
         wxString btnHelpLabel;
 
-        // Will create a task dialog with it's parameters for it's creation
+        // Will create a task dialog with its parameters for its creation
         // stored in the provided TASKDIALOGCONFIG parameter.
         // NOTE: The wxMSWTaskDialogConfig object needs to remain accessible
         // during the subsequent call to TaskDialogIndirect().
@@ -74,15 +65,15 @@ namespace wxMSWMessageDialog
     typedef HRESULT (WINAPI *TaskDialogIndirect_t)(const TASKDIALOGCONFIG *,
                                                    int *, int *, BOOL *);
 
-    // Return the pointer to TaskDialogIndirect(). This should only be called
-    // if HasNativeTaskDialog() returned true and is normally guaranteed to
-    // succeed in this case.
+    // Return the pointer to TaskDialogIndirect(). It can return a null pointer
+    // if the task dialog is not available, which may happen even under modern
+    // OS versions when using comctl32.dll v5, as it happens if the application
+    // doesn't provide a manifest specifying that it wants to use v6.
     TaskDialogIndirect_t GetTaskDialogIndirectFunc();
-#endif // wxHAS_MSW_TASKDIALOG
 
-
-    // Check if the task dialog is available: this simply checks the OS version
-    // as we know that it's only present in Vista and later.
+    // Return true if the task dialog is available, but we don't actually need
+    // to show it yet (if we do, then GetTaskDialogIndirectFunc() should be
+    // used directly).
     bool HasNativeTaskDialog();
 
     // Translates standard MSW button IDs like IDCANCEL into an equivalent

@@ -36,7 +36,7 @@ class WXDLLIMPEXP_CORE wxPickerBase : public wxNavigationEnabled<wxControl>
 {
 public:
     // ctor: text is the associated text control
-    wxPickerBase() : m_text(NULL), m_picker(NULL), m_sizer(NULL)
+    wxPickerBase() : m_text(nullptr), m_picker(nullptr), m_sizer(nullptr)
         { }
     virtual ~wxPickerBase() {}
 
@@ -50,7 +50,7 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxButtonNameStr);
+                    const wxString& name = wxASCII_STR(wxButtonNameStr));
 
 public:     // public API
 
@@ -87,7 +87,7 @@ public:     // public API
     }
 
     bool HasTextCtrl() const
-        { return m_text != NULL; }
+        { return m_text != nullptr; }
     wxTextCtrl *GetTextCtrl()
         { return m_text; }
     wxControl *GetPickerCtrl()
@@ -105,7 +105,7 @@ public:     // public API
 protected:
     // overridden base class methods
 #if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;
+    virtual void DoSetToolTip(wxToolTip *tip) override;
 #endif // wxUSE_TOOLTIPS
 
 
@@ -147,14 +147,15 @@ protected:
     wxDEPRECATED_MSG("useless and will be removed in the future")
     int GetDefaultTextCtrlFlag() const
     {
-        return wxALIGN_CENTER_VERTICAL | wxRIGHT;
+        // Cast to avoid warnings about mixing elements of different enums.
+        return wxALIGN_CENTER_VERTICAL | static_cast<int>(wxRIGHT);
     }
 #endif // WXWIN_COMPATIBILITY_3_0
 
     void PostCreation();
 
 protected:
-    wxTextCtrl *m_text;     // can be NULL
+    wxTextCtrl *m_text;     // can be null
     wxControl *m_picker;
     wxBoxSizer *m_sizer;
 

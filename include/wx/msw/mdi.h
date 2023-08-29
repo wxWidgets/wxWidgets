@@ -30,7 +30,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const wxString& name = wxFrameNameStr)
+                     const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -45,7 +45,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     // override/implement base class [pure] virtual methods
     // ----------------------------------------------------
@@ -54,21 +54,21 @@ public:
 
     // we don't store the active child in m_currentChild so override this
     // function to find it dynamically
-    virtual wxMDIChildFrame *GetActiveChild() const wxOVERRIDE;
+    virtual wxMDIChildFrame *GetActiveChild() const override;
 
-    virtual void Cascade() wxOVERRIDE;
-    virtual void Tile(wxOrientation orient = wxHORIZONTAL) wxOVERRIDE;
-    virtual void ArrangeIcons() wxOVERRIDE;
-    virtual void ActivateNext() wxOVERRIDE;
-    virtual void ActivatePrevious() wxOVERRIDE;
+    virtual void Cascade() override;
+    virtual void Tile(wxOrientation orient = wxHORIZONTAL) override;
+    virtual void ArrangeIcons() override;
+    virtual void ActivateNext() override;
+    virtual void ActivatePrevious() override;
 
 #if wxUSE_MENUS
-    virtual void SetWindowMenu(wxMenu* menu) wxOVERRIDE;
+    virtual void SetWindowMenu(wxMenu* menu) override;
 
-    virtual void DoMenuUpdates(wxMenu* menu = NULL) wxOVERRIDE;
+    virtual void DoMenuUpdates(wxMenu* menu = nullptr) override;
 
     // return the active child menu, if any
-    virtual WXHMENU MSWGetActiveMenu() const wxOVERRIDE;
+    virtual WXHMENU MSWGetActiveMenu() const override;
 #endif // wxUSE_MENUS
 
 
@@ -85,6 +85,13 @@ public:
     virtual void RemoveMDIChild(wxMDIChildFrame *child);
 #endif // wxUSE_MENUS
 
+    // Retrieve the current window menu label: it can be different from
+    // "Window" when using non-English translations and can also be different
+    // from wxGetTranslation("Window") if the locale has changed since the
+    // "Window" menu was added.
+    const wxString& MSWGetCurrentWindowMenuLabel() const
+        { return m_currentWindowMenuLabel; }
+
     // handlers
     // --------
 
@@ -98,24 +105,24 @@ public:
     bool HandleActivate(int state, bool minimized, WXHWND activate);
 
     // override window proc for MDI-specific message processing
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 
-    virtual WXLRESULT MSWDefWindowProc(WXUINT, WXWPARAM, WXLPARAM) wxOVERRIDE;
-    virtual bool MSWTranslateMessage(WXMSG* msg) wxOVERRIDE;
+    virtual WXLRESULT MSWDefWindowProc(WXUINT, WXWPARAM, WXLPARAM) override;
+    virtual bool MSWTranslateMessage(WXMSG* msg) override;
 
 #if wxUSE_MENUS
     // override the menu-relayed methods to also look in the active child menu
     // bar and the "Window" menu
-    virtual wxMenuItem *FindItemInMenuBar(int menuId) const wxOVERRIDE;
-    virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu) wxOVERRIDE;
+    virtual wxMenuItem *FindItemInMenuBar(int menuId) const override;
+    virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu) override;
 #endif // wxUSE_MENUS
 
 protected:
 #if wxUSE_MENUS_NATIVE
-    virtual void InternalSetMenuBar() wxOVERRIDE;
+    virtual void InternalSetMenuBar() override;
 #endif // wxUSE_MENUS_NATIVE
 
-    virtual WXHICON GetDefaultIcon() const wxOVERRIDE;
+    virtual WXHICON GetDefaultIcon() const override;
 
     // set the size of the MDI client window to match the frame size
     void UpdateClientSize();
@@ -130,7 +137,7 @@ private:
     void OnMDIChild(wxCommandEvent& event);
 
 
-    // add/remove window menu if we have it (i.e. m_windowMenu != NULL)
+    // add/remove window menu if we have it (i.e. m_windowMenu != nullptr)
     void AddWindowMenu();
     void RemoveWindowMenu();
 
@@ -149,6 +156,9 @@ private:
     // if true, indicates whether the event wasn't really processed even though
     // it was "handled", see OnActivate() and HandleActivate()
     bool m_activationNotHandled;
+
+    // holds the current translation for the window menu label
+    wxString m_currentWindowMenuLabel;
 
 
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
@@ -172,7 +182,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr)
+                    const wxString& name = wxASCII_STR(wxFrameNameStr))
     {
         Init();
 
@@ -185,18 +195,18 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxASCII_STR(wxFrameNameStr));
 
     virtual ~wxMDIChildFrame();
 
     // implement MDI operations
-    virtual void Activate() wxOVERRIDE;
+    virtual void Activate() override;
 
     // Override some frame operations too
-    virtual void Maximize(bool maximize = true) wxOVERRIDE;
-    virtual void Restore() wxOVERRIDE;
+    virtual void Maximize(bool maximize = true) override;
+    virtual void Restore() override;
 
-    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) override;
 
     // Implementation only from now on
     // -------------------------------
@@ -206,26 +216,26 @@ public:
     bool HandleWindowPosChanging(void *lpPos);
     bool HandleGetMinMaxInfo(void *mmInfo);
 
-    virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
-    virtual WXLRESULT MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
-    virtual bool MSWTranslateMessage(WXMSG *msg) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) override;
+    virtual WXLRESULT MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam) override;
+    virtual bool MSWTranslateMessage(WXMSG *msg) override;
 
-    virtual void MSWDestroyWindow() wxOVERRIDE;
+    virtual void MSWDestroyWindow() override;
 
     bool ResetWindowStyle(void *vrect);
 
     void OnIdle(wxIdleEvent& event);
 
 protected:
-    virtual void DoGetScreenPosition(int *x, int *y) const wxOVERRIDE;
-    virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
-    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
-    virtual void InternalSetMenuBar() wxOVERRIDE;
-    virtual bool IsMDIChild() const wxOVERRIDE { return true; }
-    virtual void DetachMenuBar() wxOVERRIDE;
+    virtual void DoGetScreenPosition(int *x, int *y) const override;
+    virtual void DoGetPosition(int *x, int *y) const override;
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags) override;
+    virtual void DoSetClientSize(int width, int height) override;
+    virtual void InternalSetMenuBar() override;
+    virtual bool IsMDIChild() const override { return true; }
+    virtual void DetachMenuBar() override;
 
-    virtual WXHICON GetDefaultIcon() const wxOVERRIDE;
+    virtual WXHICON GetDefaultIcon() const override;
 
     // common part of all ctors
     void Init();
@@ -248,7 +258,7 @@ public:
 
     // Note: this is virtual, to allow overridden behaviour.
     virtual bool CreateClient(wxMDIParentFrame *parent,
-                              long style = wxVSCROLL | wxHSCROLL) wxOVERRIDE;
+                              long style = wxVSCROLL | wxHSCROLL) override;
 
     // Explicitly call default scroll behaviour
     void OnScroll(wxScrollEvent& event);
@@ -256,7 +266,7 @@ public:
 protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+                           int sizeFlags = wxSIZE_AUTO) override;
 
     void Init() { m_scrollX = m_scrollY = 0; }
 

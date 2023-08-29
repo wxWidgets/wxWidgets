@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -24,7 +21,7 @@
 // Under Windows, change this to 1
 // to use wxGenericDragImage
 
-#define wxUSE_GENERIC_DRAGIMAGE 1
+#define wxUSE_GENERIC_DRAGIMAGE 0
 
 #if wxUSE_GENERIC_DRAGIMAGE
 #include "wx/generic/dragimgg.h"
@@ -63,9 +60,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     SetCursor(wxCursor(wxCURSOR_ARROW));
 
     m_dragMode = TEST_DRAG_NONE;
-    m_draggedShape = (DragShape*) NULL;
-    m_dragImage = (wxDragImage*) NULL;
-    m_currentlyHighlighted = (DragShape*) NULL;
+    m_draggedShape = nullptr;
+    m_dragImage = nullptr;
+    m_currentlyHighlighted = nullptr;
 }
 
 MyCanvas::~MyCanvas()
@@ -138,9 +135,9 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
         m_draggedShape->SetShow(true);
 
-        m_currentlyHighlighted = (DragShape*) NULL;
+        m_currentlyHighlighted = nullptr;
 
-        m_draggedShape = (DragShape*) NULL;
+        m_draggedShape = nullptr;
 
         Refresh(true);
     }
@@ -178,7 +175,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
                 }
                 case SHAPE_DRAG_TEXT:
                 {
-                    m_dragImage = new MyDragImage(this, wxString(wxT("Dragging some test text")), wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new MyDragImage(this, wxString("Dragging some test text"), wxCursor(wxCURSOR_HAND));
                     break;
                 }
                 case SHAPE_DRAG_ICON:
@@ -220,7 +217,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             if (m_currentlyHighlighted)
             {
-                if ((onShape == (DragShape*) NULL) || (m_currentlyHighlighted != onShape))
+                if ((onShape == nullptr) || (m_currentlyHighlighted != onShape))
                     mustUnhighlightOld = true;
             }
 
@@ -232,7 +229,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             // Now with the drag image switched off, we can change the window contents.
             if (mustUnhighlightOld)
-                m_currentlyHighlighted = (DragShape*) NULL;
+                m_currentlyHighlighted = nullptr;
 
             if (mustHighlightNew)
                 m_currentlyHighlighted = onShape;
@@ -301,7 +298,7 @@ DragShape* MyCanvas::FindShape(const wxPoint& pt) const
             return shape;
         node = node->GetNext();
     }
-    return (DragShape*) NULL;
+    return nullptr;
 }
 
 // MyFrame
@@ -313,16 +310,16 @@ wxBEGIN_EVENT_TABLE(MyFrame,wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-: wxFrame( (wxFrame *)NULL, wxID_ANY, wxT("wxDragImage sample"),
+: wxFrame(nullptr, wxID_ANY, "wxDragImage sample",
           wxPoint(20,20), wxSize(470,360) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( wxID_ABOUT, wxT("&About"));
-    file_menu->AppendCheckItem( TEST_USE_SCREEN, wxT("&Use whole screen for dragging"), wxT("Use whole screen"));
-    file_menu->Append( wxID_EXIT, wxT("E&xit"));
+    file_menu->Append( wxID_ABOUT, "&About");
+    file_menu->AppendCheckItem( TEST_USE_SCREEN, "&Use whole screen for dragging", "Use whole screen");
+    file_menu->Append( wxID_EXIT, "E&xit");
 
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(file_menu, "&File");
 
     SetIcon(wxICON(sample));
     SetMenuBar( menu_bar );
@@ -343,9 +340,9 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-    (void)wxMessageBox( wxT("wxDragImage demo\n")
-        wxT("Julian Smart (c) 2000"),
-        wxT("About wxDragImage Demo"),
+    (void)wxMessageBox( "wxDragImage demo\n"
+        "Julian Smart (c) 2000",
+        "About wxDragImage Demo",
         wxICON_INFORMATION | wxOK );
 }
 
@@ -373,14 +370,14 @@ bool MyApp::OnInit()
 #endif
 
     wxImage image;
-    if (image.LoadFile(wxT("backgrnd.png"), wxBITMAP_TYPE_PNG))
+    if (image.LoadFile("backgrnd.png", wxBITMAP_TYPE_PNG))
     {
         m_background = wxBitmap(image);
     }
 
     MyFrame *frame = new MyFrame();
 
-    wxString rootName(wxT("shape0"));
+    wxString rootName("shape0");
 
     for (int i = 1; i < 4; i++)
     {
@@ -403,7 +400,7 @@ bool MyApp::OnInit()
     }
 
 #if 0
-    // Under Motif or GTK, this demonstrates that
+    // Under GTK, this demonstrates that
     // wxScreenDC only gets the root window content.
     // We need to be able to copy the overall content
     // for full-screen dragging to work.
@@ -429,7 +426,7 @@ int MyApp::OnExit()
     return 0;
 }
 
-bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
+bool MyApp::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
 {
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
@@ -488,6 +485,7 @@ bool DragShape::Draw(wxDC& dc, bool highlight)
         return false;
 }
 
+#if wxUSE_GENERIC_DRAGIMAGE
 // MyDragImage
 
 // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
@@ -503,4 +501,4 @@ bool MyDragImage::UpdateBackingFromWindow(wxDC& WXUNUSED(windowDC), wxMemoryDC& 
     m_canvas->DrawShapes(destDC);
     return true;
 }
-
+#endif

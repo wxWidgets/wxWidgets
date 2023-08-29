@@ -29,13 +29,13 @@
       {
           wxSplashScreen* splash = new wxSplashScreen(bitmap,
               wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-              6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+              6000, nullptr, -1, wxDefaultPosition, wxDefaultSize,
               wxBORDER_SIMPLE|wxSTAY_ON_TOP);
       }
       wxYield();
     @endcode
 
-    @library{wxadv}
+    @library{wxcore}
     @category{managedwnd}
 */
 class wxSplashScreen : public wxFrame

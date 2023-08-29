@@ -17,7 +17,8 @@ from fileinput import FileInput
 sys.dont_write_bytecode = True
 from gen_docs import categoriesList,buildDocs
 
-IFACE         = os.path.abspath('./scintilla/include/Scintilla.iface')
+IFACE1        = os.path.abspath('./scintilla/include/Scintilla.iface')
+IFACE2        = os.path.abspath('./lexilla/include/LexicalStyles.iface')
 HDR_SCN       = os.path.abspath('./scintilla/include/Scintilla.h')
 H_TEMPLATE    = os.path.abspath('./stc.h.in')
 IH_TEMPLATE   = os.path.abspath('./stc.interface.h.in')
@@ -78,23 +79,75 @@ notMappedSciValues = set([
     'INDIC0_MASK',
     'INDIC1_MASK',
     'INDIC2_MASK',
-    'INDICS_MASK'
+    'INDICS_MASK',
+    'SCFIND_CXX11REGEX'
 ])
 
 # Map some generic typenames to wx types, using return value syntax
 retTypeMap = {
+    'Accessibility': 'int',
+    'Alpha': 'int',
+    'AnnotationVisible': 'int',
+    'AutomaticFold': 'int',
+    'CaretPolicy': 'int',
+    'CaretSticky': 'int',
+    'CaretStyle': 'int',
+    'CaseInsensitiveBehaviour': 'int',
+    'CaseVisible': 'int',
+    'CharacterSet': 'int',
+    'colour': 'wxColour',
+    'CursorShape': 'int',
+    'DocumentOption': 'int',
+    'EdgeVisualStyle': 'int',
+    'EndOfLine': 'int',
+    'EOLAnnotationVisible': 'int',
+    'FindOption': 'int',
+    'FoldAction': 'int',
+    'FoldDisplayTextStyle': 'int',
+    'FoldFlag': 'int',
+    'FoldLevel': 'int',
+    'FontQuality': 'int',
+    'FontWeight': 'int',
+    'IdleStyling': 'int',
+    'IMEInteraction': 'int',
+    'IndentView': 'int',
+    'IndicatorStyle': 'int',
+    'IndicFlag': 'int',
+    'line': 'int',
+    'LineCache': 'int',
+    'LineEndType': 'int',
+    'MarginOption': 'int',
+    'MarginType': 'int',
+    'ModificationFlags': 'int',
+    'MultiAutoComplete': 'int',
+    'MultiPaste': 'int',
+    'Ordering': 'int',
+    'PhasesDraw': 'int',
+    'PopUp': 'int',
     'position': 'int',
-    'string':   'wxString',
-    'colour':   'wxColour',
+    'PrintOption': 'int',
+    'SelectionMode': 'int',
+    'Status': 'int',
+    'string': 'wxString',
+    'TabDrawMode': 'int',
+    'Technology': 'int',
+    'TypeProperty': 'int',
+    'UndoFlags': 'int',
+    'VirtualSpace': 'int',
+    'VisiblePolicy': 'int',
+    'WhiteSpace': 'int',
+    'Wrap': 'int',
+    'WrapIndentMode': 'int',
+    'WrapVisualFlag': 'int',
+    'WrapVisualLocation': 'int',
     }
 
 # Map some generic typenames to wx types, using parameter syntax
-paramTypeMap = {
-    'position': 'int',
-    'string':   'const wxString&',
-    'colour':   'const wxColour&',
-    'keymod':   'int',
-}
+paramTypeMap = retTypeMap.copy()
+paramTypeMap.update({
+    'string': 'const wxString&',
+    'colour': 'const wxColour&',
+    })
 
 # Map of method info that needs tweaked.  Either the name needs changed, or
 # the method definition/implementation.  Tuple items are:
@@ -121,7 +174,7 @@ methodOverrideMap = {
                        ),
 
     'AppendText' : (0,
-                 'void %s(const wxString& text) wxOVERRIDE;',
+                 'void %s(const wxString& text) override;',
 
                  '''void %s(const wxString& text) {
                     const wxWX2MBbuf buf = wx2stc(text);
@@ -174,7 +227,7 @@ methodOverrideMap = {
 
     'GetCurLine' :
     (0,
-     '#ifdef SWIG\n    wxString %s(int* OUTPUT);\n#else\n    wxString GetCurLine(int* linePos=NULL);\n#endif',
+     '#ifdef SWIG\n    wxString %s(int* OUTPUT);\n#else\n    wxString GetCurLine(int* linePos=nullptr);\n#endif',
 
         '''wxString %s(int* linePos) {
         int len = LineLength(GetCurrentLine());
@@ -213,23 +266,11 @@ methodOverrideMap = {
     ),
 
 
-    'MarkerDefinePixmap' :
-    ('MarkerDefineBitmap',
-     '''void %s(int markerNumber, const wxBitmap& bmp);''',
-     '''void %s(int markerNumber, const wxBitmap& bmp) {
-        // convert bmp to a xpm in a string
-        wxMemoryOutputStream strm;
-        wxImage img = bmp.ConvertToImage();
-        if (img.HasAlpha())
-            img.ConvertAlphaToMask();
-        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
-        size_t len = strm.GetSize();
-        char* buff = new char[len+1];
-        strm.CopyTo(buff, len);
-        buff[len] = 0;
-        SendMsg(%s, markerNumber, (sptr_t)buff);
-        delete [] buff;
-        '''
+   'MarkerDefinePixmap' :
+    (0,
+     '''void %s(int markerNumber, const char* const* xpmData);''',
+     '''void %s(int markerNumber, const char* const* xpmData) {
+        SendMsg(%s, markerNumber, (sptr_t)xpmData);'''
     ),
 
     'GetMargins' : ('GetMarginCount', 0, 0),
@@ -539,21 +580,9 @@ methodOverrideMap = {
 
     'RegisterImage' :
     (0,
-     '''void %s(int type, const wxBitmap& bmp);''',
-     '''void %s(int type, const wxBitmap& bmp) {
-        // convert bmp to a xpm in a string
-        wxMemoryOutputStream strm;
-        wxImage img = bmp.ConvertToImage();
-        if (img.HasAlpha())
-            img.ConvertAlphaToMask();
-        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
-        size_t len = strm.GetSize();
-        char* buff = new char[len+1];
-        strm.CopyTo(buff, len);
-        buff[len] = 0;
-        SendMsg(%s, type, (sptr_t)buff);
-        delete [] buff;
-     '''
+     '''void %s(int type, const char* const* xpmData);''',
+     '''void %s(int type, const char* const* xpmData) {
+        SendMsg(%s, type, (sptr_t)xpmData);'''
     ),
 
     'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0),
@@ -567,7 +596,7 @@ methodOverrideMap = {
     'FindText' :
     (0,
      '''int %s(int minPos, int maxPos, const wxString& text, int flags=0,
-                 int* findEnd=NULL);''',
+                 int* findEnd=nullptr);''',
 
      '''int %s(int minPos, int maxPos, const wxString& text,
                                int flags, int* findEnd) {
@@ -575,7 +604,7 @@ methodOverrideMap = {
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
-            ft.lpstrText = (char*)(const char*)buf;
+            ft.lpstrText = buf;
 
             int pos = SendMsg(%s, flags, (sptr_t)&ft);
             if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);
@@ -860,13 +889,8 @@ methodOverrideMap = {
     (0,
      0,
      '''void %s(int codePage) {
-#if wxUSE_UNICODE
     wxASSERT_MSG(codePage == wxSTC_CP_UTF8,
-                 wxT("Only wxSTC_CP_UTF8 may be used when wxUSE_UNICODE is on."));
-#else
-    wxASSERT_MSG(codePage != wxSTC_CP_UTF8,
-                 wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
-#endif
+                 wxT("Only wxSTC_CP_UTF8 may be used."));
     SendMsg(%s, codePage);'''
     ),
 
@@ -887,7 +911,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         int len = SendMsg(msg, 0, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
@@ -915,7 +939,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         int len = SendMsg(msg, 0, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -932,7 +956,7 @@ methodOverrideMap = {
 
      '''wxString %s(int tagNumber) const {
          const int msg = %s;
-         long len = SendMsg(msg, tagNumber, (sptr_t)NULL);
+         long len = SendMsg(msg, tagNumber, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
@@ -946,7 +970,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         int len = SendMsg(msg, 0, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -964,7 +988,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         int len = SendMsg(msg, 0, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -982,7 +1006,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         long len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
@@ -999,7 +1023,7 @@ methodOverrideMap = {
      '''wxString %s(const wxString& name) const {
          const int msg = %s;
          const wxWX2MBbuf nameBuf = wx2stc(name);
-         long len = SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)NULL);
+         long len = SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
@@ -1015,7 +1039,7 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         long len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
@@ -1049,7 +1073,7 @@ methodOverrideMap = {
     (0,
      'void* %s(int bytes) const;',
      """void* %s(int bytes) const {
-         return (void*)(sptr_t)SendMsg(%s, bytes); """
+         return (void*)(sptr_t)SendMsg(%s, bytes);"""
     ),
 
     'GetRepresentation' :
@@ -1058,7 +1082,7 @@ methodOverrideMap = {
      '''wxString %s(const wxString& encodedCharacter) const {
          const int msg = %s;
          const wxWX2MBbuf encCharBuf = wx2stc(encodedCharacter);
-         long len = SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)NULL);
+         long len = SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
@@ -1070,7 +1094,7 @@ methodOverrideMap = {
      (0,
       'void* %s(int operation, void* pointer);',
       """void* %s(int operation, void* pointer) {
-           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer); """
+           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer);"""
      ),
 
     'GetSubStyleBases' :
@@ -1078,7 +1102,7 @@ methodOverrideMap = {
      'wxString %s() const;',
      '''wxString %s() const {
          const int msg = %s;
-         long len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)nullptr);
          if (!len) return wxEmptyString;
 
          wxCharBuffer buf(len);
@@ -1088,6 +1112,78 @@ methodOverrideMap = {
 
     'SetKeysUnicode' : (None,0,0),
     'GetKeysUnicode' : (None,0,0),
+
+    'NameOfStyle' :
+    (0,
+     'wxString %s(int style) const;',
+     '''wxString %s(int style) const {
+         const int msg = %s;
+         long len = SendMsg(msg, style, (sptr_t)nullptr);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, style, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'TagsOfStyle' :
+    (0,
+     'wxString %s(int style) const;',
+     '''wxString %s(int style) const {
+         const int msg = %s;
+         long len = SendMsg(msg, style, (sptr_t)nullptr);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, style, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'DescriptionOfStyle' :
+    (0,
+     'wxString %s(int style) const;',
+     '''wxString %s(int style) const {
+         const int msg = %s;
+         long len = SendMsg(msg, style, (sptr_t)nullptr);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, style, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'GetDefaultFoldDisplayText' :
+    (0,
+     'wxString %s() const;',
+     '''wxString %s() const {
+         const int msg = %s;
+         long len = SendMsg(msg, 0, (sptr_t)nullptr);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'EOLAnnotationGetText' :
+    (0,
+     'wxString %s(int line) const;',
+     '''wxString %s(int line) const {
+         const int msg = %s;
+         long len = SendMsg(msg, line, (sptr_t)nullptr);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, line, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'SetILexer' :
+    (0,
+     'void %s(void* ilexer);',
+     '''void %s(void* ilexer) {
+         SendMsg(%s, 0, (sptr_t)ilexer);'''
+    ),
 
     '' : ('', 0, 0),
 
@@ -1106,7 +1202,7 @@ constNonGetterMethods = (
     'CanUndo',
 )
 
-# several methods require wxOVERRIDE
+# several methods require override
 overrideNeeded = (
     'Redo',
     'SelectAll',
@@ -1117,6 +1213,7 @@ overrideNeeded = (
     'CanPaste',
     'CanRedo',
     'CanUndo',
+    'EmptyUndoBuffer',
     'Clear',
     'AppendText',
 )
@@ -1131,8 +1228,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     icat = 'Basics'
 
     # parse iface file
-    fi = FileInput(iface)
-    for line in fi:
+    for line in iface:
         line = line[:-1]
         if line[:2] == '##' or line == '':
             #curDocStrings = []
@@ -1161,6 +1257,9 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
             pass
 
         elif op == 'lex ':
+            pass
+
+        elif op == 'ali ':
             pass
 
         else:
@@ -1197,11 +1296,20 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     ih_text = ih_text % data
 
     # write out destination files
-    open(h_dest, 'w').write(h_text)
-    open(cpp_dest, 'w').write(cpp_text)
+    # Use 'wb' with Python 2 to enforce LF newlines. This does not work with
+    # Python 3, use 'newline':'\n' there (which in turn does not work with 2).
+    if sys.version_info[0] == 2:
+        acc = 'wb'
+        eol = {}
+    else:
+        acc = 'wt'
+        eol = {'newline':'\n'}
+
+    open(h_dest, acc, **eol).write(h_text)
+    open(cpp_dest, acc, **eol).write(cpp_text)
     if docstr_dest:
-        open(docstr_dest, 'w').write(docstrings)
-    open(ih_dest, 'w').write(ih_text)
+        open(docstr_dest, acc, **eol).write(docstrings)
+    open(ih_dest, acc, **eol).write(ih_text)
 
 
 def joinWithNewLines(values):
@@ -1285,7 +1393,7 @@ def processMethods(methods):
             if is_const:
                 theDef = theDef + ' const'
             if is_override:
-                theDef = theDef + ' wxOVERRIDE'
+                theDef = theDef + ' override'
             theDef = theDef + ';'
         if category=='DeprecatedMessages' or icat=='Deprecated':
             defs.append('    wxDEPRECATED_MSG( "This method uses a function '
@@ -1294,7 +1402,7 @@ def processMethods(methods):
 
         # Skip override from the interface file
         if is_override:
-          theDef = theDef.replace(' wxOVERRIDE', '')
+          theDef = theDef.replace(' override', '')
 
         # Build the method definition for the interface .h file
         intrflines = []
@@ -1313,7 +1421,7 @@ def processMethods(methods):
             print('warning: ' + name + ' is undocumented.')
 
         if name == 'GetCurLine':
-            intrflines.append('    wxString GetCurLine(int* linePos=NULL);')
+            intrflines.append('    wxString GetCurLine(int* linePos=nullptr);')
         else:
             intrflines.append(theDef)
 
@@ -1500,7 +1608,7 @@ def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
 def main(args):
     # TODO: parse command line args to replace default input/output files???
 
-    if not os.path.exists(IFACE):
+    if not os.path.exists(IFACE1):
         print('Please run this script from src/stc subdirectory.')
         sys.exit(1)
 
@@ -1508,8 +1616,12 @@ def main(args):
     msgcodes = {}
     processHeader(HDR_SCN, msgcodes)
 
+    i1_lines = open(IFACE1).readlines()
+    i2_lines = open(IFACE2).readlines()
+    iface = i1_lines + i2_lines
+
     # Now just do it
-    processIface(IFACE, H_TEMPLATE, CPP_TEMPLATE, IH_TEMPLATE, H_DEST, CPP_DEST, DOCSTR_DEST, IH_DEST, msgcodes)
+    processIface(iface, H_TEMPLATE, CPP_TEMPLATE, IH_TEMPLATE, H_DEST, CPP_DEST, DOCSTR_DEST, IH_DEST, msgcodes)
 
 
 

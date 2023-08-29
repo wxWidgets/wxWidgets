@@ -51,10 +51,19 @@
     <ClCompile Include="..\..\src\common\url.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\webrequest.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\webrequest_curl.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\sockmsw.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\urlmsw.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\webrequest_winhttp.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -64,10 +73,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\wx\protocol\file.h">
+    <ClInclude Include="..\..\include\wx\fs_inet.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\fs_inet.h">
+    <ClInclude Include="..\..\include\wx\protocol\file.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\protocol\ftp.h">
@@ -95,6 +104,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\url.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\webrequest.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
   </ItemGroup>

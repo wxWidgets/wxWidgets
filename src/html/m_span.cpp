@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML
 
@@ -69,7 +66,7 @@ TAG_HANDLER_BEGIN(SPAN, "SPAN" )
             m_WParser->SetActualBackgroundMode(oldbackmode);
             m_WParser->SetActualBackgroundColor(oldbackclr);
             m_WParser->GetContainer()->InsertCell(
-                new wxHtmlColourCell(oldbackclr, oldbackmode == wxTRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
+                new wxHtmlColourCell(oldbackclr, oldbackmode == wxBRUSHSTYLE_TRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
         }
 
         return true;

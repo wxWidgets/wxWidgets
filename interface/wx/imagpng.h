@@ -1,9 +1,9 @@
-///////////////////////////////////////////////////////////////////////////// 
-// Name:        imagpng.h 
-// Purpose:     interface of wxPNGHandler 
-// Author:      Samuel Dunn 
-// Licence:     wxWindows licence 
-//////////////////////////////////////////////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+// Name:        imagpng.h
+// Purpose:     interface of wxPNGHandler
+// Author:      Samuel Dunn
+// Licence:     wxWindows licence
+////////////////////////////////////////////////////////////////////////////
 
 #define wxIMAGE_OPTION_PNG_FORMAT                   wxT("PngFormat")
 #define wxIMAGE_OPTION_PNG_BITDEPTH                 wxT("PngBitDepth")
@@ -30,7 +30,7 @@ enum
 
     This is the image handler for the PNG format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()

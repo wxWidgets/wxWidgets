@@ -10,14 +10,19 @@
         <headers></headers>
         <wx-lib>webview</wx-lib>
         <wx-lib>stc</wx-lib>
-        <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>../sample.rc</win32-res>
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
+            <sys-lib>$(LIB_LEXILLA)</sys-lib>
         </if>
     </exe>
+
+    <wx-data id="data">
+        <files>
+            handler_advanced.html
+        </files>
+    </wx-data>
 
     <exe id="webview_chromium_helper"
         cond="FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1' and FORMAT[:3] != 'msv'">

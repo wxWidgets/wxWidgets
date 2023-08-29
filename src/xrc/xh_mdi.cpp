@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_MDI
 
@@ -59,7 +56,7 @@ wxWindow *wxMdiXmlHandler::CreateFrame()
 {
     if (m_class == wxT("wxMDIParentFrame"))
     {
-        XRC_MAKE_INSTANCE(frame, wxMDIParentFrame);
+        XRC_MAKE_INSTANCE(frame, wxMDIParentFrame)
 
         frame->Create(m_parentAsWindow,
                       GetID(),
@@ -77,10 +74,10 @@ wxWindow *wxMdiXmlHandler::CreateFrame()
         if ( !mdiParent )
         {
             ReportError("parent of wxMDIChildFrame must be wxMDIParentFrame");
-            return NULL;
+            return nullptr;
         }
 
-        XRC_MAKE_INSTANCE(frame, wxMDIChildFrame);
+        XRC_MAKE_INSTANCE(frame, wxMDIChildFrame)
 
         frame->Create(mdiParent,
                       GetID(),

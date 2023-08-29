@@ -9,10 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_FILECTRL
 
 #include "wx/generic/filectrlg.h"
@@ -188,7 +184,7 @@ void wxFileData::ReadData()
     wxStructStat buff;
 
 #if defined(__UNIX__) && !defined(__VMS)
-    const bool hasStat = lstat( m_filePath.fn_str(), &buff ) == 0;
+    const bool hasStat = wxLstat( m_filePath, &buff ) == 0;
     if ( hasStat )
         m_type |= S_ISLNK(buff.st_mode) ? is_link : 0;
 #else // no lstat()
@@ -674,7 +670,7 @@ void wxFileListCtrl::GoToParentDir()
         if (!m_dirName.empty())
         {
             if (m_dirName.Last() == wxT('.'))
-                m_dirName = wxEmptyString;
+                m_dirName.clear();
         }
 #elif defined(__UNIX__)
         if (m_dirName.empty())
@@ -751,7 +747,7 @@ void wxFileListCtrl::OnListEndLabelEdit( wxListEvent &event )
     if ((event.GetLabel().empty()) ||
         (event.GetLabel() == wxT(".")) ||
         (event.GetLabel() == wxT("..")) ||
-        (event.GetLabel().First( wxFILE_SEP_PATH ) != wxNOT_FOUND))
+        (event.GetLabel().Find( wxFILE_SEP_PATH ) != wxNOT_FOUND))
     {
         wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
         dialog.ShowModal();
@@ -897,7 +893,7 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     this->m_style = style;
     m_inSelected = false;
     m_noSelChgEvent = false;
-    m_check = NULL;
+    m_check = nullptr;
 
     // check that the styles are not contradictory
     wxASSERT_MSG( !( ( m_style & wxFC_SAVE ) && ( m_style & wxFC_OPEN ) ),
@@ -927,7 +923,7 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     if ( ( len > 1 ) && ( wxEndsWithPathSeparator( m_dir ) ) )
         m_dir.Remove( len - 1, 1 );
 
-    m_filterExtension = wxEmptyString;
+    m_filterExtension.clear();
 
     // layout
 
@@ -989,7 +985,6 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
 
     SetWildcard( wildCard );
 
-    SetAutoLayout( true );
     SetSizer( mainsizer );
 
     if ( !is_pda )
@@ -1064,13 +1059,6 @@ wxFileName wxGenericFileCtrl::DoGetFileName() const
     return fn;
 }
 
-// helper used in DoGetFilenames() and needed because Borland can't compile
-// operator?: inline
-static inline wxString GetFileNameOrPath(const wxFileName& fn, bool fullPath)
-{
-    return fullPath ? fn.GetFullPath() : fn.GetFullName();
-}
-
 void
 wxGenericFileCtrl::DoGetFilenames(wxArrayString& filenames, bool fullPath) const
 {
@@ -1085,7 +1073,7 @@ wxGenericFileCtrl::DoGetFilenames(wxArrayString& filenames, bool fullPath) const
         if ( fn.IsRelative() )
             fn.MakeAbsolute(dir);
 
-        filenames.push_back(GetFileNameOrPath(fn, fullPath));
+        filenames.push_back(fullPath ? fn.GetFullPath() : fn.GetFullName());
         return;
     }
 
@@ -1109,7 +1097,7 @@ wxGenericFileCtrl::DoGetFilenames(wxArrayString& filenames, bool fullPath) const
         m_list->GetItem(item);
 
         const wxFileName fn(dir, item.m_text);
-        filenames.push_back(GetFileNameOrPath(fn, fullPath));
+        filenames.push_back(fullPath ? fn.GetFullPath() : fn.GetFullName());
     }
 }
 

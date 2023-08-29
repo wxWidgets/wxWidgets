@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/nonownedwnd.h"
@@ -31,8 +28,9 @@
 
 #include "wx/graphics.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // wxNonOwnedWindowShapeImpl: base class for region and path-based classes.
@@ -67,7 +65,7 @@ protected:
     wxWindow* const m_win;
 
 private:
-    // SetShape to the given GDK window by calling DoSetShape() if it's non-NULL.
+    // SetShape to the given GDK window by calling DoSetShape() if it's non-null.
     bool SetShapeIfNonNull(GdkWindow* window)
     {
         return window && DoSetShape(window);
@@ -89,12 +87,12 @@ public:
     {
     }
 
-    virtual bool CanBeDeleted() const wxOVERRIDE { return true; }
+    virtual bool CanBeDeleted() const override { return true; }
 
 private:
-    virtual bool DoSetShape(GdkWindow* window) wxOVERRIDE
+    virtual bool DoSetShape(GdkWindow* window) override
     {
-        gdk_window_shape_combine_region(window, NULL, 0, 0);
+        gdk_window_shape_combine_region(window, nullptr, 0, 0);
 
         return true;
     }
@@ -110,10 +108,10 @@ public:
     {
     }
 
-    virtual bool CanBeDeleted() const wxOVERRIDE { return true; }
+    virtual bool CanBeDeleted() const override { return true; }
 
 private:
-    virtual bool DoSetShape(GdkWindow* window) wxOVERRIDE
+    virtual bool DoSetShape(GdkWindow* window) override
     {
         gdk_window_shape_combine_region(window, m_region.GetRegion(), 0, 0);
 
@@ -135,29 +133,17 @@ public:
         m_mask(CreateShapeBitmap(path), *wxBLACK)
     {
 
-        m_win->Connect
-               (
-                wxEVT_PAINT,
-                wxPaintEventHandler(wxNonOwnedWindowShapeImplPath::OnPaint),
-                NULL,
-                this
-               );
+        m_win->Bind(wxEVT_PAINT, &wxNonOwnedWindowShapeImplPath::OnPaint, this);
     }
 
     virtual ~wxNonOwnedWindowShapeImplPath()
     {
-        m_win->Disconnect
-               (
-                wxEVT_PAINT,
-                wxPaintEventHandler(wxNonOwnedWindowShapeImplPath::OnPaint),
-                NULL,
-                this
-               );
+        m_win->Unbind(wxEVT_PAINT, &wxNonOwnedWindowShapeImplPath::OnPaint, this);
     }
 
     // Currently we always return false from here, if drawing the border
     // becomes optional, we could return true if we don't need to draw it.
-    virtual bool CanBeDeleted() const wxOVERRIDE { return false; }
+    virtual bool CanBeDeleted() const override { return false; }
 
 private:
     wxBitmap CreateShapeBitmap(const wxGraphicsPath& path)
@@ -177,7 +163,7 @@ private:
 #ifdef __WXGTK3__
         wxGraphicsContext* context = dc.GetGraphicsContext();
 #else
-        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
 #endif
         context->SetBrush(*wxWHITE);
         context->FillPath(path);
@@ -185,7 +171,7 @@ private:
         return bmp;
     }
 
-    virtual bool DoSetShape(GdkWindow *window) wxOVERRIDE
+    virtual bool DoSetShape(GdkWindow *window) override
     {
         if (!m_mask)
             return false;
@@ -210,7 +196,7 @@ private:
 #ifdef __WXGTK3__
         wxGraphicsContext* context = dc.GetGraphicsContext();
 #else
-        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
 #endif
         context->SetPen(wxPen(*wxLIGHT_GREY, 2));
         context->StrokePath(m_path);
@@ -245,7 +231,7 @@ void wxNonOwnedWindow::GTKHandleRealized()
         if ( m_shapeImpl->CanBeDeleted() )
         {
             delete m_shapeImpl;
-            m_shapeImpl = NULL;
+            m_shapeImpl = nullptr;
         }
     }
 }
@@ -268,7 +254,7 @@ bool wxNonOwnedWindow::DoClearShape()
     // don't set the custom shape later when we're realized.
 
     delete m_shapeImpl;
-    m_shapeImpl = NULL;
+    m_shapeImpl = nullptr;
 
     return true;
 }
@@ -277,7 +263,7 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
     // In any case get rid of the old data.
     delete m_shapeImpl;
-    m_shapeImpl = NULL;
+    m_shapeImpl = nullptr;
 
     if ( gtk_widget_get_realized(m_widget) )
     {

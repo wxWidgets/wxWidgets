@@ -14,7 +14,7 @@
     possible to extend this class (interface) to other types of
     image content.
 
-    Implemented on Windows, GTK+ and OS X:
+    Implemented on Windows, GTK+ and macOS:
        @li wxNativePixelData: Class to access to wxBitmap's internal data
            without alpha channel (RGB).
        @li wxAlphaPixelData: Class to access to wxBitmap's internal data with
@@ -205,7 +205,7 @@ public:
         */
         void MoveTo(const PixelData& data, int x, int y);
 
-        //@{
+        ///@{
         /**
             Data Access: Access to individual colour components.
         */
@@ -213,7 +213,7 @@ public:
         ChannelType& Green();
         ChannelType& Blue();
         ChannelType& Alpha();
-        //@}
+        ///@}
     };
 };
 

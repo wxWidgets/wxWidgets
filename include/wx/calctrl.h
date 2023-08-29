@@ -39,7 +39,7 @@ enum
     // deprecated
     wxCAL_NO_YEAR_CHANGE             = 0x0004,
 
-    // don't allow changing neither month nor year (implies
+    // don't allow changing either month or year (implies
     // wxCAL_NO_YEAR_CHANGE)
     wxCAL_NO_MONTH_CHANGE            = 0x000c,
 
@@ -81,7 +81,7 @@ enum wxCalendarDateBorder
 // wxCalendarDateAttr: custom attributes for a calendar date
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxCalendarDateAttr
+class WXDLLIMPEXP_CORE wxCalendarDateAttr
 {
 public:
     // ctors
@@ -152,9 +152,9 @@ private:
 // wxCalendarCtrl events
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
+class WXDLLIMPEXP_FWD_CORE wxCalendarCtrl;
 
-class WXDLLIMPEXP_ADV wxCalendarEvent : public wxDateEvent
+class WXDLLIMPEXP_CORE wxCalendarEvent : public wxDateEvent
 {
 public:
     wxCalendarEvent() : m_wday(wxDateTime::Inv_WeekDay)  { }
@@ -167,7 +167,7 @@ public:
     void SetWeekDay(wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxCalendarEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxCalendarEvent(*this); }
 
 private:
     wxDateTime::WeekDay m_wday;
@@ -179,7 +179,7 @@ private:
 // wxCalendarCtrlBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxCalendarCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxCalendarCtrlBase : public wxControl
 {
 public:
     // do we allow changing the month/year?
@@ -204,7 +204,7 @@ public:
     }
 
     // retrieves the limits currently in use (wxDefaultDateTime if none) in the
-    // provided pointers (which may be NULL) and returns true if there are any
+    // provided pointers (which may be null) and returns true if there are any
     // limits or false if none
     virtual bool
     GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const
@@ -223,8 +223,8 @@ public:
     // notice that this is not implemented in all versions
     virtual wxCalendarHitTestResult
     HitTest(const wxPoint& WXUNUSED(pos),
-            wxDateTime* WXUNUSED(date) = NULL,
-            wxDateTime::WeekDay* WXUNUSED(wd) = NULL)
+            wxDateTime* WXUNUSED(date) = nullptr,
+            wxDateTime::WeekDay* WXUNUSED(wd) = nullptr)
     {
         return wxCAL_HITTEST_NOWHERE;
     }
@@ -253,7 +253,7 @@ public:
     virtual void Mark(size_t day, bool mark) = 0;
 
     virtual wxCalendarDateAttr *GetAttr(size_t WXUNUSED(day)) const
-        { return NULL; }
+        { return nullptr; }
     virtual void SetAttr(size_t WXUNUSED(day), wxCalendarDateAttr *attr)
         { delete attr; }
     virtual void ResetAttr(size_t WXUNUSED(day)) { }
@@ -344,7 +344,7 @@ protected:
 #define wxCalendarNameStr "CalendarCtrl"
 
 #ifndef __WXUNIVERSAL__
-    #if defined(__WXGTK20__)
+    #if defined(__WXGTK__)
         #define wxHAS_NATIVE_CALENDARCTRL
         #include "wx/gtk/calctrl.h"
         #define wxCalendarCtrl wxGtkCalendarCtrl
@@ -366,16 +366,16 @@ protected:
 // calendar event types and macros for handling them
 // ----------------------------------------------------------------------------
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_PAGE_CHANGED, wxCalendarEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_DOUBLECLICKED, wxCalendarEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_WEEKDAY_CLICKED, wxCalendarEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_WEEK_CLICKED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_PAGE_CHANGED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_DOUBLECLICKED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_WEEKDAY_CLICKED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_WEEK_CLICKED, wxCalendarEvent );
 
 // deprecated events
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_DAY_CHANGED, wxCalendarEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_MONTH_CHANGED, wxCalendarEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_YEAR_CHANGED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_DAY_CHANGED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_MONTH_CHANGED, wxCalendarEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CALENDAR_YEAR_CHANGED, wxCalendarEvent );
 
 typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 

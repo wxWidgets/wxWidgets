@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROTOCOL
 
@@ -47,7 +44,7 @@ wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
     next = wxURL::ms_protocols;
     wxURL::ms_protocols = this;
 #else
-    next = NULL;
+    next = nullptr;
 #endif
 }
 
@@ -69,7 +66,7 @@ wxProtocol::wxProtocol()
 #endif
 {
     m_lastError = wxPROTO_NOERR;
-    m_log = NULL;
+    m_log = nullptr;
     SetDefaultTimeout(60);      // default timeout is 60 seconds
 }
 
@@ -117,6 +114,11 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
 
     result.clear();
 
+    // Although we're supposed to get 7-bit ASCII from the server, some FTP
+    // servers are known to send 8-bit data, so we try to decode it in
+    // any way that works as this is more useful than just throwing it away.
+    wxWhateverWorksConv conv;
+
     wxCharBuffer buf(LINE_BUF);
     char *pBuf = buf.data();
     while ( sock->WaitForRead() )
@@ -125,8 +127,17 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
         sock->Peek(pBuf, LINE_BUF);
 
         size_t nRead = sock->LastCount();
-        if ( !nRead && sock->Error() )
+        if ( !nRead )
+        {
+            // If we didn't read anything, it must mean either an error or EOF,
+            // but as we don't have any specific error code for the latter,
+            // just return the generic error in either case.
+            //
+            // Note that we can't return wxPROTO_NOERR from here because wxFTP
+            // relies on the function returning some error to exit the loop
+            // when retrieving the list of files.
             return wxPROTO_NETERR;
+        }
 
         // look for "\r\n" paying attention to a special case: "\r\n" could
         // have been split by buffer boundary, so check also for \r at the end
@@ -143,7 +154,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
                 if ( result.empty() || result.Last() != wxT('\r') )
                 {
                     // ignore the stray '\n'
-                    eol = NULL;
+                    eol = nullptr;
                 }
                 //else: ok, got real EOL
 
@@ -158,7 +169,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
                 if ( eol[-1] != '\r' )
                 {
                     // as above, simply ignore stray '\n'
-                    eol = NULL;
+                    eol = nullptr;
                 }
             }
         }
@@ -168,7 +179,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
             return wxPROTO_NETERR;
 
         pBuf[nRead] = '\0';
-        result += wxString::FromAscii(pBuf);
+        result += conv.cMB2WX(pBuf);
 
         if ( eol )
         {

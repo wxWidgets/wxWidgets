@@ -39,7 +39,7 @@ enum wxStockLabelQueryFlag
         Return the label without any ellipsis at the end.
 
         By default, stock items text is returned with ellipsis, if appropriate,
-        this flag allows to avoid having it. So using the same example as
+        this flag allows one to avoid having it. So using the same example as
         above, the returned string would be "Print" or "&Print" if
         wxSTOCK_WITH_MNEMONIC were also used.
 
@@ -65,7 +65,7 @@ enum wxStockLabelQueryFlag
 };
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Returns label that should be used for given @a id element.
@@ -79,5 +79,5 @@ enum wxStockLabelQueryFlag
 */
 wxString wxGetStockLabel(wxWindowID id, long flags = wxSTOCK_WITH_MNEMONIC);
 
-//@}
+///@}
 

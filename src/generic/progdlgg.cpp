@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PROGRESSDLG
 
@@ -66,7 +63,7 @@ wxEND_EVENT_TABLE()
 // wxGenericProgressDialog implementation
 // ============================================================================
 
-wxIMPLEMENT_CLASS(wxProgressDialog, wxDialog)
+wxIMPLEMENT_CLASS(wxProgressDialog, wxDialog);
 
 // ----------------------------------------------------------------------------
 // wxGenericProgressDialog creation
@@ -81,13 +78,13 @@ void wxGenericProgressDialog::Init()
     // create a valid window in this class).
 
     m_pdStyle = 0;
-    m_parentTop = NULL;
+    m_parentTop = nullptr;
 
-    m_gauge = NULL;
-    m_msg = NULL;
+    m_gauge = nullptr;
+    m_msg = nullptr;
     m_elapsed =
     m_estimated =
-    m_remaining = NULL;
+    m_remaining = nullptr;
 
     m_state = Uncancelable;
     m_maximum = 0;
@@ -99,7 +96,7 @@ void wxGenericProgressDialog::Init()
     m_skip = false;
 
     m_btnAbort =
-    m_btnSkip = NULL;
+    m_btnSkip = nullptr;
 
     m_display_estimated =
     m_last_timeupdate =
@@ -107,8 +104,8 @@ void wxGenericProgressDialog::Init()
 
     m_delay = 3;
 
-    m_winDisabler = NULL;
-    m_tempEventLoop = NULL;
+    m_winDisabler = nullptr;
+    m_tempEventLoop = nullptr;
 
     SetWindowStyle(wxDEFAULT_DIALOG_STYLE);
 }
@@ -134,7 +131,14 @@ wxGenericProgressDialog::wxGenericProgressDialog(const wxString& title,
 void wxGenericProgressDialog::SetTopParent(wxWindow* parent)
 {
     m_parent = parent;
-    m_parentTop = GetParentForModalDialog(parent, GetWindowStyle());
+
+    // Notice that we intentionally do not use GetParentForModalDialog() here
+    // as we don't want to disable the main application window if null parent
+    // was given (and GetParentForModalDialog() would fall back to it in this
+    // case). This allows creating modeless progress dialog, which can be
+    // useful even though it is also dangerous because it can easily result in
+    // unwanted reentrancies.
+    m_parentTop = parent;
 }
 
 bool wxGenericProgressDialog::Create( const wxString& title,
@@ -175,7 +179,14 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     // top-level sizerTop
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
 
-    m_msg = new wxStaticText(this, wxID_ANY, message);
+    // We use wxST_NO_AUTORESIZE to prevent the label from snapping back to
+    // smaller size if the message becomes shorter: we need this because we
+    // always increase its size to fit the longest message and so we assume
+    // that its current size is always this longest size and not some maybe
+    // shorter size.
+    m_msg = new wxStaticText(this, wxID_ANY, message,
+                             wxDefaultPosition, wxDefaultSize,
+                             wxST_NO_AUTORESIZE);
     sizerTop->Add(m_msg, 0, wxLEFT | wxRIGHT | wxTOP, 2*LAYOUT_MARGIN);
 
     int gauge_style = wxGA_HORIZONTAL;
@@ -204,31 +215,22 @@ bool wxGenericProgressDialog::Create( const wxString& title,
     // create the estimated/remaining/total time zones if requested
     m_elapsed =
     m_estimated =
-    m_remaining = NULL;
-
-    // also count how many labels we really have
-    size_t nTimeLabels = 0;
+    m_remaining = nullptr;
 
     wxSizer * const sizerLabels = new wxFlexGridSizer(2);
 
     if ( style & wxPD_ELAPSED_TIME )
     {
-        nTimeLabels++;
-
         m_elapsed = CreateLabel(GetElapsedLabel(), sizerLabels);
     }
 
     if ( style & wxPD_ESTIMATED_TIME )
     {
-        nTimeLabels++;
-
         m_estimated = CreateLabel(GetEstimatedLabel(), sizerLabels);
     }
 
     if ( style & wxPD_REMAINING_TIME )
     {
-        nTimeLabels++;
-
         m_remaining = CreateLabel(GetRemainingLabel(), sizerLabels);
     }
     sizerTop->Add(sizerLabels, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, LAYOUT_MARGIN);
@@ -237,8 +239,8 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 
     const int borderFlags = wxALL;
 
-    wxSizerFlags sizerFlags
-        = wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
+    wxSizerFlags sizerFlags =
+        wxSizerFlags().Border(borderFlags, LAYOUT_MARGIN);
 
     if ( HasPDFlag(wxPD_CAN_SKIP) )
     {
@@ -372,7 +374,7 @@ wxGenericProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
     wxStaticText *value = new wxStaticText(this, wxID_ANY, _("unknown"));
 
     // select placement most native or nice on target GUI
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK__)
     // value and time centered in one row
     sizer->Add(label, 1, wxALIGN_RIGHT | wxTOP | wxRIGHT, LAYOUT_MARGIN);
     sizer->Add(value, 1, wxALIGN_LEFT | wxTOP, LAYOUT_MARGIN);
@@ -593,6 +595,7 @@ void wxGenericProgressDialog::SetMaximum(int maximum)
     // we can't have values > 65,536 in the progress control under Windows, so
     // scale everything down
     m_factor = m_maximum / 65536 + 1;
+    m_maximum /= m_factor;
 #endif // __WXMSW__
 }
 
@@ -712,7 +715,7 @@ wxGenericProgressDialog::~wxGenericProgressDialog()
             "wxGenericProgressDialog lifetime"
         );
 
-        wxEventLoopBase::SetActive(NULL);
+        wxEventLoopBase::SetActive(nullptr);
         delete m_tempEventLoop;
     }
 }
@@ -727,7 +730,7 @@ void wxGenericProgressDialog::DisableOtherWindows()
     {
         if ( m_parentTop )
             m_parentTop->Disable();
-        m_winDisabler = NULL;
+        m_winDisabler = nullptr;
     }
 }
 
@@ -782,12 +785,18 @@ void wxGenericProgressDialog::UpdateMessage(const wxString &newmsg)
 {
     if ( !newmsg.empty() && newmsg != m_msg->GetLabel() )
     {
-        const wxSize sizeOld = m_msg->GetSize();
-
         m_msg->SetLabel(newmsg);
 
-        if ( m_msg->GetSize().x > sizeOld.x )
+        // When using wxST_NO_AUTORESIZE, best size is not invalidated by
+        // changing the label, but we do want to compute the best size here
+        // so do it manually.
+        m_msg->InvalidateBestSize();
+
+        const wxSize sizeNeeded = m_msg->GetBestSize();
+        if ( sizeNeeded.x > m_msg->GetSize().x )
         {
+            m_msg->SetSize(sizeNeeded);
+
             // Resize the dialog to fit its new, longer contents instead of
             // just truncating it.
             Fit();

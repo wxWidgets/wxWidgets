@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATTEXT
 
@@ -70,7 +67,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -178,12 +174,12 @@ public:
     }
 
 protected:
-    virtual void OnOutputLine(const wxString& line) wxOVERRIDE
+    virtual void OnOutputLine(const wxString& line) override
     {
         m_text += line;
     }
 
-    virtual void OnNewLine() wxOVERRIDE
+    virtual void OnNewLine() override
     {
         m_text += wxT('\n');
     }
@@ -211,7 +207,7 @@ void wxStaticTextBase::AutoResizeIfNecessary()
         return;
 
     // This method is only called if either the label or the font changed, i.e.
-    // if the label extent changed, so the best size is not the same neither
+    // if the label extent changed, so the best size is not the same either
     // any more.
     //
     // Note that we don't invalidate it when wxST_NO_AUTORESIZE is on because
@@ -232,7 +228,7 @@ void wxStaticTextBase::UpdateLabel()
     if (!IsEllipsized())
         return;
 
-    wxString newlabel = GetEllipsizedLabel();
+    const wxString& newlabel = GetEllipsizedLabel();
 
     // we need to touch the "real" label (i.e. the text set inside the control,
     // using port-specific functions) instead of the string returned by GetLabel().
@@ -240,9 +236,9 @@ void wxStaticTextBase::UpdateLabel()
     // In fact, we must be careful not to touch the original label passed to
     // SetLabel() otherwise GetLabel() will behave in a strange way to the user
     // (e.g. returning a "Ver...ing" instead of "Very long string") !
-    if (newlabel == DoGetLabel())
+    if (newlabel == WXGetVisibleLabel())
         return;
-    DoSetLabel(newlabel);
+    WXSetVisibleLabel(newlabel);
 }
 
 wxString wxStaticTextBase::GetEllipsizedLabel() const
@@ -261,7 +257,7 @@ wxString wxStaticTextBase::GetEllipsizedLabel() const
 
 wxString wxStaticTextBase::Ellipsize(const wxString& label) const
 {
-    wxSize sz(GetSize());
+    wxSize sz(GetClientSize());
     if (sz.GetWidth() < 2 || sz.GetHeight() < 2)
     {
         // the size of this window is not valid (yet)
@@ -269,7 +265,6 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
     }
 
     wxClientDC dc(const_cast<wxStaticTextBase*>(this));
-    dc.SetFont(GetFont());
 
     wxEllipsizeMode mode;
     if ( HasFlag(wxST_ELLIPSIZE_START) )

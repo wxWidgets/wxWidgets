@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -59,7 +56,7 @@ public:
                            const wxRect& rect,
                            int horizAlign,
                            int vertAlign,
-                           int WXUNUSED(textOrientation)) const wxOVERRIDE
+                           int WXUNUSED(textOrientation)) const override
     {
         dc.SetTextForeground(m_colFg);
         dc.SetFont(wxITALIC_FONT->Bold());
@@ -68,7 +65,7 @@ public:
 
     virtual void DrawBorder(const wxGrid& WXUNUSED(grid),
                             wxDC& dc,
-                            wxRect& rect) const wxOVERRIDE
+                            wxRect& rect) const override
     {
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(wxBrush(m_colBg));
@@ -99,7 +96,7 @@ public:
     void UseCustomColHeaders(bool use = true) { m_useCustom = use; }
 
 protected:
-    virtual const wxGridColumnHeaderRenderer& GetColumnHeaderRenderer(int col) wxOVERRIDE
+    virtual const wxGridColumnHeaderRenderer& GetColumnHeaderRenderer(int col) override
     {
         // if enabled, use custom renderers
         if ( m_useCustom )
@@ -119,6 +116,137 @@ private:
     bool m_useCustom;
 
     wxDECLARE_NO_COPY_CLASS(CustomColumnHeadersProvider);
+};
+
+// ----------------------------------------------------------------------------
+// Custom wxGrid renderer and editor for showing stars as used for rating
+// ----------------------------------------------------------------------------
+
+// Max number of stars shown by MyGridStarRenderer.
+static const int MAX_STARS = 5;
+
+// Helper function returning the number between 0 and MAX_STARS corresponding
+// to the value of the cell.
+static int GetStarValue(wxGrid& grid, int row, int col)
+{
+    unsigned long n = 0;
+    if ( !grid.GetCellValue(row, col).ToULong(&n) || n > MAX_STARS )
+        n = 0;
+
+    return static_cast<int>(n);
+}
+
+// Another helper returning the string containing the appropriate number of
+// black and white stars.
+static wxString GetStarString(int numBlackStars)
+{
+    const wxUniChar BLACK_STAR = 0x2605;
+    const wxUniChar WHITE_STAR = 0x2606;
+
+    return wxString(BLACK_STAR, numBlackStars) +
+            wxString(WHITE_STAR, MAX_STARS - numBlackStars);
+}
+
+// Renders the value of the cell, which is supposed to be a number between 1
+// and 5, as a sequence of that number of black stars followed by the number of
+// white stars needed to have 5 stars in total.
+class MyGridStarRenderer : public wxGridCellRenderer
+{
+public:
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected) override
+    {
+        wxGridCellRenderer::Draw(grid, attr, dc, rect, row, col, isSelected);
+
+        SetTextColoursAndFont(grid, attr, dc, isSelected);
+
+        grid.DrawTextRectangle(dc, GetStarString(GetStarValue(grid, row, col)),
+                               rect, attr);
+    }
+
+    virtual wxSize GetBestSize(wxGrid& WXUNUSED(grid),
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int WXUNUSED(row),
+                               int WXUNUSED(col)) override
+    {
+        dc.SetFont(attr.GetFont());
+        return dc.GetTextExtent(GetStarString(MAX_STARS));
+    }
+
+    virtual wxGridCellRenderer *Clone() const override
+    {
+        return new MyGridStarRenderer();
+    }
+};
+
+// Activatable editor cycling the number of stars on each activation.
+class MyGridStarEditor : public wxGridCellActivatableEditor
+{
+public:
+    virtual wxGridActivationResult
+    TryActivate(int row, int col, wxGrid* grid,
+                const wxGridActivationSource& actSource) override
+    {
+        int numStars = -1;
+
+        switch ( actSource.GetOrigin() )
+        {
+            case wxGridActivationSource::Program:
+                // It isn't really possible to programmatically start editing a
+                // cell using this editor.
+                return wxGridActivationResult::DoNothing();
+
+            case wxGridActivationSource::Key:
+                switch ( actSource.GetKeyEvent().GetKeyCode() )
+                {
+                    case '0': numStars = 0; break;
+                    case '1': numStars = 1; break;
+                    case '2': numStars = 2; break;
+                    case '3': numStars = 3; break;
+                    case '4': numStars = 4; break;
+                    case '5': numStars = 5; break;
+                    case ' ':
+                        // Use space key to cycle over the values.
+                        break;
+
+                    default:
+                        return wxGridActivationResult::DoNothing();
+                }
+
+                break;
+
+            case wxGridActivationSource::Mouse:
+                // Ideally we should use the mouse event position to determine
+                // on which star the user clicked, but for now keep it simple
+                // and just cycle through the star value.
+                break;
+        }
+
+        if ( numStars == -1 )
+            numStars = (GetStarValue(*grid, row, col) + 1) % (MAX_STARS + 1);
+
+        m_value.Printf("%d", numStars);
+
+        return wxGridActivationResult::DoChange(m_value);
+    }
+
+    virtual void DoActivate(int row, int col, wxGrid* grid) override
+    {
+        grid->SetCellValue(row, col, m_value);
+    }
+
+    virtual wxGridCellEditor *Clone() const override
+    {
+        return new MyGridStarEditor();
+    }
+
+private:
+    wxString m_value;
 };
 
 // ----------------------------------------------------------------------------
@@ -153,10 +281,13 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
+    EVT_MENU( ID_TOGGLEROWMOVING, GridFrame::ToggleRowMoving)
     EVT_MENU( ID_TOGGLECOLMOVING, GridFrame::ToggleColMoving )
+    EVT_MENU( ID_TOGGLECOLHIDING, GridFrame::ToggleColHiding )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDDRAGCELL, GridFrame::ToggleGridDragCell )
     EVT_MENU( ID_COLNATIVEHEADER, GridFrame::SetNativeColHeader )
+    EVT_MENU( ID_COLNATIVELABELS, GridFrame::SetNativeColLabels )
     EVT_MENU( ID_COLDEFAULTHEADER, GridFrame::SetDefaultColHeader )
     EVT_MENU( ID_COLCUSTOMHEADER, GridFrame::SetCustomColHeader )
     EVT_MENU_RANGE( ID_TAB_STOP, ID_TAB_LEAVE, GridFrame::SetTabBehaviour )
@@ -165,6 +296,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_CELLOVERFLOW, GridFrame::CellOverflow )
     EVT_MENU( ID_RESIZECELL, GridFrame::ResizeCell )
+    EVT_MENU( ID_TOGGLE_CHECKERED_CELLS, GridFrame::ToggleCheckeredCells )
+    EVT_MENU( ID_TOGGLE_COLOURED_CELLS, GridFrame::ToggleColouredCells )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_SETLABEL_FONT, GridFrame::SetLabelFont )
@@ -172,22 +305,31 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_ROWLABELVERTALIGN, GridFrame::SetRowLabelVertAlignment )
     EVT_MENU( ID_COLLABELHORIZALIGN, GridFrame::SetColLabelHorizAlignment )
     EVT_MENU( ID_COLLABELVERTALIGN, GridFrame::SetColLabelVertAlignment )
+    EVT_MENU( ID_CORNERLABELHORIZALIGN, GridFrame::SetCornerLabelHorizAlignment )
+    EVT_MENU( ID_CORNERLABELVERTALIGN, GridFrame::SetCornerLabelVertAlignment )
+    EVT_MENU( ID_CORNERLABELORIENTATION, GridFrame::ToggleCornerLabelOrientation )
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
     EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
     EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+    EVT_MENU( ID_EDITCELL, GridFrame::EditCell )
+    EVT_MENU( ID_SETCORNERLABEL, GridFrame::SetCornerLabelValue )
     EVT_MENU( ID_SHOWSEL,   GridFrame::ShowSelection )
     EVT_MENU( ID_SELCELLS,  GridFrame::SelectCells )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
     EVT_MENU( ID_SELROWSORCOLS,  GridFrame::SelectRowsOrCols )
+    EVT_MENU( ID_SELNONE,  GridFrame::SelectNone )
+
+    EVT_MENU( ID_FREEZE_OR_THAW,  GridFrame::FreezeOrThaw )
 
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
-    EVT_MENU( wxID_ABOUT, GridFrame::About )
+    EVT_MENU( wxID_ABOUT, GridFrame::OnAbout )
+    EVT_MENU( wxID_CLEAR, GridFrame::OnClear )
     EVT_MENU( wxID_EXIT, GridFrame::OnQuit )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
@@ -228,7 +370,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
     EVT_GRID_COL_AUTO_SIZE( GridFrame::OnColAutoSize )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
-    EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
+    EVT_GRID_RANGE_SELECTING( GridFrame::OnRangeSelecting )
+    EVT_GRID_RANGE_SELECTED( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGING( GridFrame::OnCellValueChanging )
     EVT_GRID_CELL_CHANGED( GridFrame::OnCellValueChanged )
     EVT_GRID_CELL_BEGIN_DRAG( GridFrame::OnCellBeginDrag )
@@ -239,16 +382,16 @@ wxEND_EVENT_TABLE()
 
 
 GridFrame::GridFrame()
-        : wxFrame( (wxFrame *)NULL, wxID_ANY, wxT("wxWidgets grid class demo"),
+        : wxFrame( nullptr, wxID_ANY, "wxWidgets grid class demo",
                    wxDefaultPosition,
                    wxDefaultSize )
 {
     SetIcon(wxICON(sample));
 
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append( ID_VTABLE, wxT("&Virtual table test\tCtrl-V"));
-    fileMenu->Append( ID_BUGS_TABLE, wxT("&Bugs table test\tCtrl-B"));
-    fileMenu->Append( ID_TABULAR_TABLE, wxT("&Tabular table test\tCtrl-T"));
+    fileMenu->Append( ID_VTABLE, "&Virtual table test\tCtrl-V");
+    fileMenu->Append( ID_BUGS_TABLE, "&Bugs table test\tCtrl-B");
+    fileMenu->Append( ID_TABULAR_TABLE, "&Tabular table test\tCtrl-T");
     fileMenu->AppendSeparator();
 
     wxMenu* setupMenu = new wxMenu;
@@ -281,8 +424,13 @@ GridFrame::GridFrame()
     fileMenu->Append( wxID_PRINT, "Render" );
     fileMenu->Append( ID_RENDER_COORDS, "Render G5:P30" );
 
+#if wxUSE_LOG
     fileMenu->AppendSeparator();
-    fileMenu->Append( wxID_EXIT, wxT("E&xit\tAlt-X") );
+    fileMenu->Append( wxID_CLEAR, "Clear &log\tCtrl-L" );
+#endif // wxUSE_LOG
+
+    fileMenu->AppendSeparator();
+    fileMenu->Append( wxID_EXIT, "E&xit\tAlt-X" );
 
     wxMenu *viewMenu = new wxMenu;
     viewMenu->AppendCheckItem(ID_TOGGLEROWLABELS, "&Row labels");
@@ -290,7 +438,9 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_TOGGLEEDIT,"&Editable");
     viewMenu->AppendCheckItem(ID_TOGGLEROWSIZING, "Ro&w drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLECOLSIZING, "C&ol drag-resize");
+    viewMenu->AppendCheckItem(ID_TOGGLEROWMOVING, "Row drag-move");
     viewMenu->AppendCheckItem(ID_TOGGLECOLMOVING, "Col drag-&move");
+    viewMenu->AppendCheckItem(ID_TOGGLECOLHIDING, "Col hiding popup menu");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDSIZING, "&Grid drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDDRAGCELL, "&Grid drag-cell");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDLINES, "&Grid Lines");
@@ -299,37 +449,52 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_AUTOSIZECOLS, "&Auto-size cols");
     viewMenu->AppendCheckItem(ID_CELLOVERFLOW, "&Overflow cells");
     viewMenu->AppendCheckItem(ID_RESIZECELL, "&Resize cell (7,1)");
+    viewMenu->AppendCheckItem(ID_TOGGLE_CHECKERED_CELLS,
+                              "Toggle Chec&kered Cells\tCtrl+Shift+K");
+    viewMenu->AppendCheckItem(ID_TOGGLE_COLOURED_CELLS,
+                              "Toggle Co&loured Cells\tCtrl+Shift+L");
     viewMenu->Append(ID_HIDECOL, "&Hide column A");
     viewMenu->Append(ID_SHOWCOL, "&Show column A");
     viewMenu->Append(ID_HIDEROW, "&Hide row 2");
     viewMenu->Append(ID_SHOWROW, "&Show row 2");
     wxMenu *rowLabelMenu = new wxMenu;
 
-    viewMenu->Append( ID_ROWLABELALIGN, wxT("R&ow label alignment"),
+    viewMenu->Append( ID_ROWLABELALIGN, "R&ow label alignment",
                       rowLabelMenu,
-                      wxT("Change alignment of row labels") );
+                      "Change alignment of row labels" );
 
-    rowLabelMenu->AppendRadioItem( ID_ROWLABELHORIZALIGN, wxT("&Horizontal") );
-    rowLabelMenu->AppendRadioItem( ID_ROWLABELVERTALIGN, wxT("&Vertical") );
+    rowLabelMenu->AppendRadioItem( ID_ROWLABELHORIZALIGN, "&Horizontal" );
+    rowLabelMenu->AppendRadioItem( ID_ROWLABELVERTALIGN, "&Vertical" );
 
     wxMenu *colLabelMenu = new wxMenu;
 
-    viewMenu->Append( ID_COLLABELALIGN, wxT("Col l&abel alignment"),
+    viewMenu->Append( ID_COLLABELALIGN, "Col l&abel alignment",
                       colLabelMenu,
-                      wxT("Change alignment of col labels") );
+                      "Change alignment of col labels" );
 
-    colLabelMenu->AppendRadioItem( ID_COLLABELHORIZALIGN, wxT("&Horizontal") );
-    colLabelMenu->AppendRadioItem( ID_COLLABELVERTALIGN, wxT("&Vertical") );
+    colLabelMenu->AppendRadioItem( ID_COLLABELHORIZALIGN, "&Horizontal" );
+    colLabelMenu->AppendRadioItem( ID_COLLABELVERTALIGN, "&Vertical" );
+
+    wxMenu *cornerLabelMenu = new wxMenu;
+    viewMenu->Append( ID_CORNERLABELALIGN, "Corner label alignment",
+                      cornerLabelMenu,
+                      "Change alignment of corner label" );
+
+    cornerLabelMenu->AppendRadioItem( ID_CORNERLABELHORIZALIGN, "&Horizontal" );
+    cornerLabelMenu->AppendRadioItem( ID_CORNERLABELVERTALIGN, "&Vertical" );
+
+    viewMenu->Append( ID_CORNERLABELORIENTATION, "Toggle corner label orientation" );
 
     wxMenu *colHeaderMenu = new wxMenu;
 
-    viewMenu->Append( ID_ROWLABELALIGN, wxT("Col header style"),
+    viewMenu->Append( ID_ROWLABELALIGN, "Col header style",
                       colHeaderMenu,
-                      wxT("Change style of col header") );
+                      "Change style of col header" );
 
-    colHeaderMenu->AppendRadioItem( ID_COLDEFAULTHEADER, wxT("&Default") );
-    colHeaderMenu->AppendRadioItem( ID_COLNATIVEHEADER, wxT("&Native") );
-    colHeaderMenu->AppendRadioItem( ID_COLCUSTOMHEADER, wxT("&Custom") );
+    colHeaderMenu->AppendRadioItem( ID_COLDEFAULTHEADER, "&Default" );
+    colHeaderMenu->AppendRadioItem( ID_COLNATIVEHEADER, "&Native" );
+    colHeaderMenu->AppendRadioItem( ID_COLNATIVELABELS, "Native-&like" );
+    colHeaderMenu->AppendRadioItem( ID_COLCUSTOMHEADER, "&Custom" );
 
     wxMenu *tabBehaviourMenu = new wxMenu;
     tabBehaviourMenu->AppendRadioItem(ID_TAB_STOP, "&Stop at the boundary");
@@ -339,66 +504,71 @@ GridFrame::GridFrame()
     viewMenu->AppendSubMenu(tabBehaviourMenu, "&Tab behaviour");
 
     wxMenu *colMenu = new wxMenu;
-    colMenu->Append( ID_SETLABELCOLOUR, wxT("Set &label colour...") );
-    colMenu->Append( ID_SETLABELTEXTCOLOUR, wxT("Set label &text colour...") );
-    colMenu->Append( ID_SETLABEL_FONT, wxT("Set label fo&nt...") );
-    colMenu->Append( ID_GRIDLINECOLOUR, wxT("&Grid line colour...") );
-    colMenu->Append( ID_SET_CELL_FG_COLOUR, wxT("Set cell &foreground colour...") );
-    colMenu->Append( ID_SET_CELL_BG_COLOUR, wxT("Set cell &background colour...") );
+    colMenu->Append( ID_SETLABELCOLOUR, "Set &label colour..." );
+    colMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour..." );
+    colMenu->Append( ID_SETLABEL_FONT, "Set label fo&nt..." );
+    colMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour..." );
+    colMenu->Append( ID_SET_CELL_FG_COLOUR, "Set cell &foreground colour..." );
+    colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour..." );
 
     wxMenu *editMenu = new wxMenu;
-    editMenu->Append( ID_INSERTROW, wxT("Insert &row") );
-    editMenu->Append( ID_INSERTCOL, wxT("Insert &column") );
-    editMenu->Append( ID_DELETEROW, wxT("Delete selected ro&ws") );
-    editMenu->Append( ID_DELETECOL, wxT("Delete selected co&ls") );
-    editMenu->Append( ID_CLEARGRID, wxT("Cl&ear grid cell contents") );
+    editMenu->Append( ID_INSERTROW, "Insert &rows\tCtrl+I" );
+    editMenu->Append( ID_INSERTCOL, "Insert &columns\tCtrl+Shift+I" );
+    editMenu->Append( ID_DELETEROW, "Delete selected ro&ws\tCtrl+D" );
+    editMenu->Append( ID_DELETECOL, "Delete selected co&ls\tCtrl+Shift+D" );
+    editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
+    editMenu->Append( ID_EDITCELL, "&Edit current cell" );
+    editMenu->Append( ID_SETCORNERLABEL, "&Set corner label..." );
+
+    editMenu->AppendCheckItem( ID_FREEZE_OR_THAW, "Freeze up to cursor\tCtrl-F" );
 
     wxMenu *selectMenu = new wxMenu;
-    selectMenu->Append( ID_SELECT_UNSELECT, wxT("Add new cells to the selection"),
-                        wxT("When off, old selection is deselected before ")
-                        wxT("selecting the new cells"), wxITEM_CHECK );
+    selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
+                        "When off, old selection is deselected before "
+                        "selecting the new cells", wxITEM_CHECK );
     selectMenu->AppendSeparator();
-    selectMenu->Append( ID_SELECT_ALL, wxT("Select all"));
-    selectMenu->Append( ID_SELECT_ROW, wxT("Select row 2"));
-    selectMenu->Append( ID_SELECT_COL, wxT("Select col 2"));
-    selectMenu->Append( ID_SELECT_CELL, wxT("Select cell (3, 1)"));
+    selectMenu->Append( ID_SELECT_ALL, "Select all");
+    selectMenu->Append( ID_SELECT_ROW, "Select row 2");
+    selectMenu->Append( ID_SELECT_COL, "Select col 2");
+    selectMenu->Append( ID_SELECT_CELL, "Select cell (3, 1)");
     selectMenu->AppendSeparator();
-    selectMenu->Append( ID_DESELECT_ALL, wxT("Deselect all"));
-    selectMenu->Append( ID_DESELECT_ROW, wxT("Deselect row 2"));
-    selectMenu->Append( ID_DESELECT_COL, wxT("Deselect col 2"));
-    selectMenu->Append( ID_DESELECT_CELL, wxT("Deselect cell (3, 1)"));
+    selectMenu->Append( ID_DESELECT_ALL, "Deselect all");
+    selectMenu->Append( ID_DESELECT_ROW, "Deselect row 2");
+    selectMenu->Append( ID_DESELECT_COL, "Deselect col 2");
+    selectMenu->Append( ID_DESELECT_CELL, "Deselect cell (3, 1)");
     selectMenu->AppendSeparator();
     wxMenu *selectionMenu = new wxMenu;
     selectMenu->Append( ID_SHOWSEL, "&Show current selection\tCtrl-S" );
-    selectMenu->Append( ID_CHANGESEL, wxT("Change &selection mode"),
+    selectMenu->Append( ID_CHANGESEL, "Change &selection mode",
                       selectionMenu,
-                      wxT("Change selection mode") );
+                      "Change selection mode" );
 
-    selectionMenu->Append( ID_SELCELLS, wxT("Select &cells") );
-    selectionMenu->Append( ID_SELROWS, wxT("Select &rows") );
-    selectionMenu->Append( ID_SELCOLS, wxT("Select col&umns") );
-    selectionMenu->Append( ID_SELROWSORCOLS, wxT("Select rows &or columns") );
+    selectionMenu->Append( ID_SELCELLS, "Select &cells" );
+    selectionMenu->Append( ID_SELROWS, "Select &rows" );
+    selectionMenu->Append( ID_SELCOLS, "Select col&umns" );
+    selectionMenu->Append( ID_SELROWSORCOLS, "Select rows &or columns" );
+    selectionMenu->Append( ID_SELNONE, "&Disallow selection" );
 
     wxMenu *autosizeMenu = new wxMenu;
-    autosizeMenu->Append( ID_SIZE_ROW, wxT("Selected &row data") );
-    autosizeMenu->Append( ID_SIZE_COL, wxT("Selected &column data") );
-    autosizeMenu->Append( ID_SIZE_ROW_LABEL, wxT("Selected row la&bel") );
-    autosizeMenu->Append( ID_SIZE_COL_LABEL, wxT("Selected column &label") );
-    autosizeMenu->Append( ID_SIZE_LABELS_COL, wxT("Column la&bels") );
-    autosizeMenu->Append( ID_SIZE_LABELS_ROW, wxT("Row label&s") );
-    autosizeMenu->Append( ID_SIZE_GRID, wxT("Entire &grid") );
+    autosizeMenu->Append( ID_SIZE_ROW, "Selected &row data" );
+    autosizeMenu->Append( ID_SIZE_COL, "Selected &column data" );
+    autosizeMenu->Append( ID_SIZE_ROW_LABEL, "Selected row la&bel" );
+    autosizeMenu->Append( ID_SIZE_COL_LABEL, "Selected column &label" );
+    autosizeMenu->Append( ID_SIZE_LABELS_COL, "Column la&bels" );
+    autosizeMenu->Append( ID_SIZE_LABELS_ROW, "Row label&s" );
+    autosizeMenu->Append( ID_SIZE_GRID, "Entire &grid" );
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append( wxID_ABOUT, wxT("&About wxGrid demo") );
+    helpMenu->Append( wxID_ABOUT, "&About wxGrid demo" );
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append( fileMenu, wxT("&File") );
-    menuBar->Append( viewMenu, wxT("&Grid") );
-    menuBar->Append( colMenu,  wxT("&Colours") );
-    menuBar->Append( editMenu, wxT("&Edit") );
-    menuBar->Append( selectMenu, wxT("&Select") );
-    menuBar->Append( autosizeMenu, wxT("&Autosize") );
-    menuBar->Append( helpMenu, wxT("&Help") );
+    menuBar->Append( fileMenu, "&File" );
+    menuBar->Append( viewMenu, "&Grid" );
+    menuBar->Append( colMenu,  "&Colours" );
+    menuBar->Append( editMenu, "&Edit" );
+    menuBar->Append( selectMenu, "&Select" );
+    menuBar->Append( autosizeMenu, "&Autosize" );
+    menuBar->Append( helpMenu, "&Help" );
 
     SetMenuBar( menuBar );
 
@@ -407,18 +577,15 @@ GridFrame::GridFrame()
     grid = new wxGrid( this,
                        wxID_ANY,
                        wxPoint( 0, 0 ),
-                       wxSize( 400, 300 ) );
+                       FromDIP(wxSize( 800, 450 )) );
 
 
 #if wxUSE_LOG
-    int gridW = 600, gridH = 300;
-    int logW = gridW, logH = 100;
-
     logWin = new wxTextCtrl( this,
                              wxID_ANY,
                              wxEmptyString,
-                             wxPoint( 0, gridH + 20 ),
-                             wxSize( logW, logH ),
+                             wxDefaultPosition,
+                             wxSize(-1, 8*GetCharHeight()),
                              wxTE_MULTILINE );
 
     logger = new wxLogTextCtrl( logWin );
@@ -432,69 +599,83 @@ GridFrame::GridFrame()
 
     grid->GetTable()->SetAttrProvider(new CustomColumnHeadersProvider());
 
-    grid->AppendRows(100);
+    grid->AppendRows(1000);
     grid->AppendCols(100);
 
     int ir = grid->GetNumberRows();
     grid->DeleteRows(0, ir);
     grid->AppendRows(ir);
 
-    grid->SetRowSize( 0, 60 );
-    grid->SetCellValue( 0, 0, wxT("Ctrl+Home\nwill go to\nthis cell") );
+    grid->SetRowSize( 0, 4*grid->GetDefaultRowSize() );
+    grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
 
-    grid->SetCellValue( 0, 1, wxT("A long piece of text to demonstrate wrapping.") );
+    grid->SetCellValue( 0, 1, "A long piece of text to demonstrate wrapping." );
     grid->SetCellRenderer(0 , 1, new wxGridCellAutoWrapStringRenderer);
     grid->SetCellEditor( 0,  1 , new wxGridCellAutoWrapStringEditor);
 
-    grid->SetCellValue( 0, 2, wxT("Blah") );
-    grid->SetCellValue( 0, 3, wxT("Read only") );
+    grid->SetCellValue( 0, 2, "Blah" );
+    grid->SetCellValue( 0, 3, "Read only" );
     grid->SetReadOnly( 0, 3 );
 
-    grid->SetCellValue( 0, 4, wxT("Can veto edit this cell") );
+    grid->SetCellValue( 0, 4, "Can veto edit this cell" );
 
-    grid->SetColSize(10, 150);
-    wxString longtext = wxT("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\n\n");
-    longtext += wxT("With tabs :\n");
-    longtext += wxT("Home,\t\thome\t\t\tagain\n");
-    longtext += wxT("Long word at start :\n");
-    longtext += wxT("ILikeToBeHereWhen I can\n");
-    longtext += wxT("Long word in the middle :\n");
-    longtext += wxT("When IComeHome,ColdAnd tired\n");
-    longtext += wxT("Long last word :\n");
-    longtext += wxT("It's GoodToWarmMyBonesBesideTheFire");
+    grid->SetColSize(10, FromDIP(150));
+    wxString longtext = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\n\n";
+    longtext += "With tabs :\n";
+    longtext += "Home,\t\thome\t\t\tagain\n";
+    longtext += "Long word at start :\n";
+    longtext += "ILikeToBeHereWhen I can\n";
+    longtext += "Long word in the middle :\n";
+    longtext += "When IComeHome,ColdAnd tired\n";
+    longtext += "Long last word :\n";
+    longtext += "It's GoodToWarmMyBonesBesideTheFire";
     grid->SetCellValue( 0, 10, longtext );
     grid->SetCellRenderer(0 , 10, new wxGridCellAutoWrapStringRenderer);
     grid->SetCellEditor( 0,  10 , new wxGridCellAutoWrapStringEditor);
-    grid->SetCellValue( 0, 11, wxT("K1 cell editor blocker") );
+    grid->SetCellValue( 0, 11, "K1 cell editor blocker" );
 
-    grid->SetCellValue( 0, 5, wxT("Press\nCtrl+arrow\nto skip over\ncells") );
+    grid->SetCellValue( 0, 5, "Press\nCtrl+arrow\nto skip over\ncells" );
 
-    grid->SetRowSize( 99, 60 );
-    grid->SetCellValue(98, 98, "Test background colour setting");
-    grid->SetCellBackgroundColour(98, 99, wxColour(255, 127, 127));
-    grid->SetCellBackgroundColour(99, 98, wxColour(255, 127, 127));
-    grid->SetCellValue( 99, 99, wxT("Ctrl+End\nwill go to\nthis cell") );
-    grid->SetCellValue( 1, 0, wxT("This default cell will overflow into neighboring cells, but not if you turn overflow off."));
+    const int endRow = grid->GetNumberRows() - 1,
+              endCol = grid->GetNumberCols() - 1;
+
+    grid->SetRowSize(endRow, 4 * grid->GetDefaultRowSize());
+    grid->SetCellValue(endRow - 1, endCol - 1, "Test background colour setting");
+    grid->SetCellBackgroundColour(endRow - 1, endCol, wxColour(255, 127, 127));
+    grid->SetCellBackgroundColour(endRow, endCol - 1, wxColour(255, 127, 127));
+    grid->SetCellValue(endRow, endCol, "Ctrl+End\nwill go to\nthis cell");
+    grid->SetCellValue( 1, 0, "This default cell will overflow into neighboring cells, but not if you turn overflow off.");
+
+    grid->SetCellValue(2, 0, "This one always overflows");
+    grid->SetCellFitMode(2, 0, wxGridFitMode::Overflow());
 
     grid->SetCellTextColour(1, 2, *wxRED);
     grid->SetCellBackgroundColour(1, 2, *wxGREEN);
 
-    grid->SetCellValue( 1, 4, wxT("I'm in the middle"));
+    grid->SetCellValue( 1, 4, "I'm in the middle");
 
-    grid->SetCellValue(2, 2, wxT("red"));
+    grid->SetCellValue(2, 2, "red");
 
     grid->SetCellTextColour(2, 2, *wxRED);
-    grid->SetCellValue(3, 3, wxT("green on grey"));
+    grid->SetCellValue(3, 3, "green on grey");
     grid->SetCellTextColour(3, 3, *wxGREEN);
     grid->SetCellBackgroundColour(3, 3, *wxLIGHT_GREY);
 
-    grid->SetCellValue(4, 4, wxT("a weird looking cell"));
+    grid->SetCellValue(4, 4, "a weird looking cell");
     grid->SetCellAlignment(4, 4, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellRenderer(4, 4, new MyGridCellRenderer);
+
+    grid->SetCellValue(4, 5, "3");
+    grid->SetCellRenderer(4, 5, new MyGridStarRenderer);
+    grid->SetCellEditor(4, 5, new MyGridStarEditor);
 
     grid->SetCellRenderer(3, 0, new wxGridCellBoolRenderer);
     grid->SetCellEditor(3, 0, new wxGridCellBoolEditor);
     grid->SetCellBackgroundColour(3, 0, wxColour(255, 127, 127));
+
+    grid->SetCellRenderer(3, 1, new wxGridCellBoolRenderer);
+    grid->SetCellEditor(3, 1, new wxGridCellBoolEditor);
+    grid->SetCellValue(3, 1, "1");
 
     wxGridCellAttr *attr;
     attr = new wxGridCellAttr;
@@ -504,80 +685,109 @@ GridFrame::GridFrame()
     attr->SetBackgroundColour(*wxRED);
     grid->SetRowAttr(5, attr);
 
-    grid->SetCellValue(2, 4, wxT("a wider column"));
-    grid->SetColSize(4, 120);
-    grid->SetColMinimalWidth(4, 120);
+    grid->SetCellValue(2, 4, "a wider column");
+    grid->SetColSize(4, 3*grid->GetDefaultColSize()/2);
+    grid->SetColMinimalWidth(4, grid->GetColSize(4));
 
     grid->SetCellTextColour(5, 8, *wxGREEN);
-    grid->SetCellValue(5, 8, wxT("Bg from row attr\nText col from cell attr"));
-    grid->SetCellValue(5, 5, wxT("Bg from row attr Text col from col attr and this text is so long that it covers over many many empty cells but is broken by one that isn't"));
+    grid->SetCellValue(5, 8, "Bg from row attr\nText col from cell attr");
+    grid->SetCellValue(5, 5, "Bg from row attr Text col from col attr and this text is so long that it covers over many many empty cells but is broken by one that isn't");
 
     // Some numeric columns with different formatting.
     grid->SetColFormatFloat(6);
+    grid->SetReadOnly(0, 6);
     grid->SetCellValue(0, 6, "Default\nfloat format");
-    grid->SetCellValue(1, 6, wxString::Format(wxT("%g"), 3.1415));
-    grid->SetCellValue(2, 6, wxString::Format(wxT("%g"), 1415.0));
-    grid->SetCellValue(3, 6, wxString::Format(wxT("%g"), 12345.67890));
+    grid->SetCellValue(1, 6, wxString::Format("%g", 3.1415));
+    grid->SetCellValue(2, 6, wxString::Format("%g", 1415.0));
+    grid->SetCellValue(3, 6, wxString::Format("%g", 12345.67890));
 
     grid->SetColFormatFloat(7, 6, 2);
+    grid->SetReadOnly(0, 7);
     grid->SetCellValue(0, 7, "Width 6\nprecision 2");
-    grid->SetCellValue(1, 7, wxString::Format(wxT("%g"), 3.1415));
-    grid->SetCellValue(2, 7, wxString::Format(wxT("%g"), 1415.0));
-    grid->SetCellValue(3, 7, wxString::Format(wxT("%g"), 12345.67890));
+    grid->SetCellValue(1, 7, wxString::Format("%g", 3.1415));
+    grid->SetCellValue(2, 7, wxString::Format("%g", 1415.0));
+    grid->SetCellValue(3, 7, wxString::Format("%g", 12345.67890));
 
     grid->SetColFormatCustom(8,
             wxString::Format("%s:%i,%i,%s", wxGRID_VALUE_FLOAT, -1, 4, "g"));
+    grid->SetReadOnly(0, 8);
     grid->SetCellValue(0, 8, "Compact\nformat");
-    grid->SetCellValue(1, 8, wxT("31415e-4"));
-    grid->SetCellValue(2, 8, wxT("1415"));
-    grid->SetCellValue(3, 8, wxT("123456789e-4"));
+    grid->SetCellValue(1, 8, "31415e-4");
+    grid->SetCellValue(2, 8, "1415");
+    grid->SetCellValue(3, 8, "123456789e-4");
 
     grid->SetColFormatNumber(9);
+    grid->SetReadOnly(0, 9);
     grid->SetCellValue(0, 9, "Integer\ncolumn");
     grid->SetCellValue(1, 9, "17");
     grid->SetCellValue(2, 9, "0");
+    grid->SetCellEditor(2, 9, new wxGridCellNumberEditor(0, 100));
+    grid->SetCellValue(2, 10, "<- This cell uses [0, 100] range");
     grid->SetCellValue(3, 9, "-666");
     grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
     grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
 
+    grid->SetReadOnly(0, 13);
+    grid->SetCellValue(0, 13, "Localized date\ncolumn");
+    grid->SetColFormatDate(13); // Localized by default.
+    grid->SetCellValue(1, 13, "Today");
+    grid->SetReadOnly(0, 14);
+    grid->SetCellValue(0, 14, "ISO 8601 date\ncolumn");
+    grid->SetColFormatDate(14, "%Y-%m-%d"); // ISO 8601 date format.
+    grid->SetCellValue(1, 14, "Tomorrow");
+
+    grid->SetCellValue(13, 0, "Date cell:");
+    grid->SetCellValue(13, 1, "Today");
+    grid->SetCellRenderer(13, 1, new wxGridCellDateRenderer);
+    grid->SetCellEditor(13, 1, new wxGridCellDateEditor);
+    grid->SetCellValue(14, 0, "ISO date cell:");
+    grid->SetCellValue(14, 1, "Tomorrow");
+    grid->SetCellRenderer(14, 1, new wxGridCellDateRenderer("%Y-%m-%d"));
+    grid->SetCellEditor(14, 1, new wxGridCellDateEditor);
+
+    grid->SetCellValue(13, 3, "String using default ellipsization");
+    grid->SetCellFitMode(13, 3, wxGridFitMode::Ellipsize());
+
+    grid->SetCellValue(13, 4, "String ellipsized in the middle");
+    grid->SetCellFitMode(13, 4, wxGridFitMode::Ellipsize(wxELLIPSIZE_MIDDLE));
+
     const wxString choices[] =
     {
-        wxT("Please select a choice"),
-        wxT("This takes two cells"),
-        wxT("Another choice"),
+        "Please select a choice",
+        "This takes two cells",
+        "Another choice",
     };
-    grid->SetCellEditor(4, 0, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
-    grid->SetCellSize(4, 0, 1, 2);
-    grid->SetCellValue(4, 0, choices[0]);
-    grid->SetCellOverflow(4, 0, false);
+    grid->SetCellEditor(4, 2, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
+    grid->SetCellSize(4, 2, 1, 2);
+    grid->SetCellValue(4, 2, choices[0]);
+    grid->SetCellOverflow(4, 2, false);
 
     grid->SetCellSize(7, 1, 3, 4);
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
-    grid->SetCellValue(7, 1, wxT("Big box!"));
+    grid->SetCellValue(7, 1, "Big box!");
 
     // create a separator-like row: it's grey and it's non-resizable
     grid->DisableRowResize(10);
-    grid->SetRowSize(10, 30);
+    grid->SetRowSize(10, 3*grid->GetDefaultRowSize()/2);
     attr = new wxGridCellAttr;
     attr->SetBackgroundColour(*wxLIGHT_GREY);
+    attr->SetAlignment(wxALIGN_INVALID, wxALIGN_CENTRE);
     grid->SetRowAttr(10, attr);
     grid->SetCellValue(10, 0, "You can't resize this row interactively -- try it");
 
-    // this does exactly nothing except testing that SetAttr() handles NULL
+    // this does exactly nothing except testing that SetAttr() handles null
     // attributes and does reference counting correctly
-    grid->SetAttr(11, 11, NULL);
+    grid->SetAttr(11, 11, nullptr);
     grid->SetAttr(11, 11, new wxGridCellAttr);
-    grid->SetAttr(11, 11, NULL);
+    grid->SetAttr(11, 11, nullptr);
+
+    grid->Bind(wxEVT_CONTEXT_MENU, &GridFrame::OnGridContextMenu, this, grid->GetId());
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-    topSizer->Add( grid,
-                   1,
-                   wxEXPAND );
+    topSizer->Add(grid, wxSizerFlags(2).Expand());
 
 #if wxUSE_LOG
-    topSizer->Add( logWin,
-                   0,
-                   wxEXPAND );
+    topSizer->Add(logWin, wxSizerFlags(1).Expand());
 #endif // wxUSE_LOG
 
     SetSizerAndFit( topSizer );
@@ -603,6 +813,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
+    GetMenuBar()->Check( ID_TOGGLECOLHIDING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDDRAGCELL, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDLINES, true );
@@ -656,10 +867,25 @@ void GridFrame::ToggleColSizing( wxCommandEvent& WXUNUSED(ev) )
         GetMenuBar()->IsChecked( ID_TOGGLECOLSIZING ) );
 }
 
+void GridFrame::ToggleRowMoving( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableDragRowMove(
+        GetMenuBar()->IsChecked( ID_TOGGLEROWMOVING ) );
+}
+
 void GridFrame::ToggleColMoving( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragColMove(
         GetMenuBar()->IsChecked( ID_TOGGLECOLMOVING ) );
+}
+
+void GridFrame::ToggleColHiding( wxCommandEvent& WXUNUSED(ev) )
+{
+    if ( !grid->EnableHidingColumns(
+        GetMenuBar()->IsChecked( ID_TOGGLECOLHIDING ) ) )
+    {
+        GetMenuBar()->Check( ID_TOGGLECOLHIDING, grid->CanHideColumns() );
+    }
 }
 
 void GridFrame::ToggleGridSizing( wxCommandEvent& WXUNUSED(ev) )
@@ -679,6 +905,15 @@ void GridFrame::SetNativeColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(true);
+}
+
+void GridFrame::SetNativeColLabels( wxCommandEvent& WXUNUSED(ev) )
+{
+    CustomColumnHeadersProvider* provider =
+        static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
+    provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(true);
 }
 
@@ -687,6 +922,7 @@ void GridFrame::SetCustomColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(true);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(false);
 }
 
@@ -695,6 +931,7 @@ void GridFrame::SetDefaultColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(false);
 }
 
@@ -719,8 +956,7 @@ void GridFrame::SetTabBehaviour(wxCommandEvent& event)
 {
     // To make any built-in behaviour work, we need to disable the custom TAB
     // handler, otherwise it would be overriding them.
-    grid->Disconnect(wxEVT_GRID_TABBING,
-                     wxGridEventHandler(GridFrame::OnGridCustomTab));
+    grid->Unbind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 
     grid->SetTabBehaviour(
             static_cast<wxGrid::TabBehaviour>(event.GetId() - ID_TAB_STOP)
@@ -729,11 +965,26 @@ void GridFrame::SetTabBehaviour(wxCommandEvent& event)
 
 void GridFrame::SetTabCustomHandler(wxCommandEvent&)
 {
-    grid->Connect(wxEVT_GRID_TABBING,
-                  wxGridEventHandler(GridFrame::OnGridCustomTab),
-                  NULL, this);
+    grid->Bind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 }
 
+void GridFrame::OnGridContextMenu(wxContextMenuEvent& event)
+{
+    // This is not supposed to happen: even if the grid consists of different
+    // subwindows internally, all context menu events should be seen as coming
+    // from the grid itself.
+    if ( event.GetEventObject() != grid )
+    {
+        wxLogError("Context menu unexpectedly sent from non-grid window.");
+    }
+    else
+    {
+        wxLogMessage("wxEVT_CONTEXT_MENU in the grid at at (%d, %d)",
+                     event.GetPosition().x, event.GetPosition().y);
+    }
+
+    event.Skip();
+}
 
 void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
 {
@@ -743,10 +994,10 @@ void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::OnSetHighlightWidth( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxString choices[] = { wxT("0"), wxT("1"), wxT("2"), wxT("3"), wxT("4"), wxT("5"), wxT("6"), wxT("7"), wxT("8"), wxT("9"), wxT("10")};
+    wxString choices[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-    wxSingleChoiceDialog dlg(this, wxT("Choose the thickness of the highlight pen:"),
-                             wxT("Pen Width"), 11, choices);
+    wxSingleChoiceDialog dlg(this, "Choose the thickness of the highlight pen:",
+                             "Pen Width", 11, choices);
 
     int current = grid->GetCellHighlightPenWidth();
     dlg.SetSelection(current);
@@ -757,10 +1008,10 @@ void GridFrame::OnSetHighlightWidth( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::OnSetROHighlightWidth( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxString choices[] = { wxT("0"), wxT("1"), wxT("2"), wxT("3"), wxT("4"), wxT("5"), wxT("6"), wxT("7"), wxT("8"), wxT("9"), wxT("10")};
+    wxString choices[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-    wxSingleChoiceDialog dlg(this, wxT("Choose the thickness of the highlight pen:"),
-                             wxT("Pen Width"), 11, choices);
+    wxSingleChoiceDialog dlg(this, "Choose the thickness of the highlight pen:",
+                             "Pen Width", 11, choices);
 
     int current = grid->GetCellHighlightROPenWidth();
     dlg.SetSelection(current);
@@ -794,7 +1045,7 @@ void GridFrame::ResizeCell( wxCommandEvent& ev )
 
 void GridFrame::SetLabelColour( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxColourDialog dlg( NULL );
+    wxColourDialog dlg( nullptr );
     if ( dlg.ShowModal() == wxID_OK )
     {
         wxColourData retData;
@@ -808,7 +1059,7 @@ void GridFrame::SetLabelColour( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::SetLabelTextColour( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxColourDialog dlg( NULL );
+    wxColourDialog dlg( nullptr );
     if ( dlg.ShowModal() == wxID_OK )
     {
         wxColourData retData;
@@ -923,9 +1174,76 @@ void GridFrame::SetColLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
 }
 
 
+void GridFrame::SetCornerLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
+{
+    int horiz, vert;
+    grid->GetCornerLabelAlignment( &horiz, &vert );
+
+    switch ( horiz )
+    {
+        case wxALIGN_LEFT:
+            horiz = wxALIGN_CENTRE;
+            break;
+
+        case wxALIGN_CENTRE:
+            horiz = wxALIGN_RIGHT;
+            break;
+
+        case wxALIGN_RIGHT:
+            horiz = wxALIGN_LEFT;
+            break;
+    }
+
+    grid->SetCornerLabelAlignment( horiz, vert );
+}
+
+
+void GridFrame::SetCornerLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
+{
+    int horiz, vert;
+    grid->GetCornerLabelAlignment( &horiz, &vert );
+
+    switch ( vert )
+    {
+        case wxALIGN_TOP:
+            vert = wxALIGN_CENTRE;
+            break;
+
+        case wxALIGN_CENTRE:
+            vert = wxALIGN_BOTTOM;
+            break;
+
+        case wxALIGN_BOTTOM:
+            vert = wxALIGN_TOP;
+            break;
+    }
+
+    grid->SetCornerLabelAlignment( horiz, vert );
+}
+
+
+void GridFrame::ToggleCornerLabelOrientation( wxCommandEvent& WXUNUSED(ev) )
+{
+    int orientation = grid->GetCornerLabelTextOrientation();
+
+    switch(orientation)
+    {
+        case wxHORIZONTAL:
+            orientation = wxVERTICAL;
+            break;
+
+        case wxVERTICAL:
+            orientation = wxHORIZONTAL;
+            break;
+    }
+
+    grid->SetCornerLabelTextOrientation(orientation);
+}
+
+
 void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
 {
-    wxColourDialog dlg( NULL );
+    wxColourDialog dlg( nullptr );
     if ( dlg.ShowModal() == wxID_OK )
     {
         wxColourData retData;
@@ -936,32 +1254,115 @@ void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
     }
 }
 
+namespace
+{
+
+// Helper used to insert/delete rows/columns. Allows changing by more than
+// one row/column at once.
+void HandleEdits(wxGrid* grid, wxGridDirection direction, bool isInsertion)
+{
+    const bool isRow = (direction == wxGRID_ROW);
+
+    const wxGridBlocks selected = grid->GetSelectedBlocks();
+    wxGridBlocks::iterator it = selected.begin();
+
+    if ( isInsertion )
+    {
+        int pos, count;
+        // Only do multiple insertions if we have a single consecutive
+        // selection (mimicking LibreOffice), otherwise do a single insertion
+        // at cursor.
+        if ( it != selected.end() && ++it == selected.end() )
+        {
+            const wxGridBlockCoords& b = *selected.begin();
+            pos = isRow ? b.GetTopRow() : b.GetLeftCol();
+            count = (isRow ? b.GetBottomRow() : b.GetRightCol()) - pos + 1;
+        }
+        else
+        {
+            pos = isRow ? grid->GetGridCursorRow() : grid->GetGridCursorCol();
+            count = 1;
+        }
+
+        if ( isRow )
+            grid->InsertRows(pos, count);
+        else
+            grid->InsertCols(pos, count);
+
+        return;
+    }
+
+    wxGridUpdateLocker locker(grid);
+
+    wxVector<int> deletions;
+
+    for (; it != selected.end(); ++it )
+    {
+        const wxGridBlockCoords& b = *it;
+        const int begin = isRow ? b.GetTopRow() : b.GetLeftCol();
+        const int end = isRow ? b.GetBottomRow() : b.GetRightCol();
+
+        for ( int n = begin; n <= end; ++n )
+        {
+            if ( !wxVectorContains(deletions, n) )
+                deletions.push_back(n);
+        }
+    }
+
+    wxVectorSort(deletions);
+
+    const size_t deletionCount = deletions.size();
+
+    if ( !deletionCount )
+        return;
+
+    int seqEnd = 0, seqCount = 0;
+    for ( size_t i = deletionCount; i > 0; --i )
+    {
+        const int n = deletions[i - 1];
+
+        if ( n != seqEnd - seqCount )
+        {
+            if (i != deletionCount)
+            {
+                const int seqStart = seqEnd - seqCount + 1;
+                if ( isRow )
+                    grid->DeleteRows(seqStart, seqCount);
+                else
+                    grid->DeleteCols(seqStart, seqCount);
+            }
+
+            seqEnd = n;
+            seqCount = 0;
+        }
+
+        seqCount++;
+    }
+
+    const int seqStart = seqEnd - seqCount + 1;
+    if ( isRow )
+        grid->DeleteRows(seqStart, seqCount);
+    else
+        grid->DeleteCols(seqStart, seqCount);
+}
+
+} // anoymous namespace
 
 void GridFrame::InsertRow( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->InsertRows( grid->GetGridCursorRow(), 1 );
+    HandleEdits(grid, wxGRID_ROW, /* isInsertion = */ true);
 }
 
 
 void GridFrame::InsertCol( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->InsertCols( grid->GetGridCursorCol(), 1 );
+    HandleEdits(grid, wxGRID_COLUMN, /* isInsertion = */ true);
 }
 
 
 void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
-    if ( grid->IsSelection() )
-    {
-        wxGridUpdateLocker locker(grid);
-        for ( int n = 0; n < grid->GetNumberRows(); )
-        {
-            if ( grid->IsInSelection( n , 0 ) )
-                grid->DeleteRows( n, 1 );
-            else
-                n++;
-        }
-    }
+    HandleEdits(grid, wxGRID_ROW, /* isInsertion = */ false);
 }
 
 
@@ -1024,17 +1425,7 @@ void GridFrame::AutoSizeTable(wxCommandEvent& WXUNUSED(event))
 
 void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
-    if ( grid->IsSelection() )
-    {
-        wxGridUpdateLocker locker(grid);
-        for ( int n = 0; n < grid->GetNumberCols(); )
-        {
-            if ( grid->IsInSelection( 0 , n ) )
-                grid->DeleteCols( n, 1 );
-            else
-                n++;
-        }
-    }
+    HandleEdits(grid, wxGRID_COLUMN, /* isInsertion = */ false);
 }
 
 
@@ -1043,34 +1434,87 @@ void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
     grid->ClearGrid();
 }
 
+void GridFrame::EditCell( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableCellEditControl();
+}
+
+void GridFrame::SetCornerLabelValue( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxTextEntryDialog dialog(this,
+                             "Please enter corner label:",
+                             "Please enter a string",
+                             grid->GetCornerLabelValue(),
+                             wxOK | wxCANCEL);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        grid->SetCornerLabelValue(dialog.GetValue());
+    }
+}
+
 void GridFrame::ShowSelection( wxCommandEvent& WXUNUSED(ev) )
 {
-    switch ( grid->GetSelectionMode() )
+    int count = 0;
+    wxString desc;
+    const wxGridBlocks& sel = grid->GetSelectedBlocks();
+    for ( wxGridBlocks::iterator it = sel.begin(); it != sel.end(); ++it )
     {
-        case wxGrid::wxGridSelectCells:
-            wxLogMessage("%zu individual cells and "
-                         "%zu blocks of contiguous cells selected",
-                         grid->GetSelectedCells().size(),
-                         grid->GetSelectionBlockTopLeft().size());
-            return;
+        const wxGridBlockCoords& b = *it;
 
-        case wxGrid::wxGridSelectRows:
-        case wxGrid::wxGridSelectColumns:
-        case wxGrid::wxGridSelectRowsOrColumns:
-            const wxArrayInt& rows = grid->GetSelectedRows();
-            if ( !rows.empty() )
-                wxLogMessage("%zu rows selected", rows.size());
+        wxString blockDesc;
+        if ( b.GetLeftCol() == 0 &&
+                b.GetRightCol() == grid->GetNumberCols() - 1 )
+        {
+            if ( b.GetTopRow() == b.GetBottomRow() )
+                blockDesc.Printf("row %d", b.GetTopRow() + 1);
+            else
+                blockDesc.Printf("rows %d..%d",
+                                 b.GetTopRow() + 1, b.GetBottomRow() + 1);
+        }
+        else if ( b.GetTopRow() == 0 &&
+                        b.GetBottomRow() == grid->GetNumberRows() - 1 )
+        {
+            if ( b.GetLeftCol() == b.GetRightCol() )
+                blockDesc.Printf("column %d", b.GetLeftCol() + 1);
+            else
+                blockDesc.Printf("columns %d..%d",
+                                 b.GetLeftCol() + 1,
+                                 b.GetRightCol() + 1);
+        }
+        else if ( b.GetTopRow() == b.GetBottomRow() &&
+                    b.GetLeftCol() == b.GetRightCol() )
+        {
+            blockDesc.Printf("cell R%dC%d",
+                             b.GetTopRow() + 1, b.GetLeftCol() + 1);
+        }
+        else
+        {
+            blockDesc.Printf("block R%dC%d - R%dC%d",
+                             b.GetTopRow() + 1,
+                             b.GetLeftCol() + 1,
+                             b.GetBottomRow() + 1,
+                             b.GetRightCol() + 1);
+        }
 
-            const wxArrayInt& cols = grid->GetSelectedCols();
-            if ( !cols.empty() )
-                wxLogMessage("%zu columns selected", rows.size());
-
-            if ( rows.empty() && cols.empty() )
-                wxLogMessage("No selection");
-            return;
+        if ( count++ )
+            desc += "\n\t";
+        desc += blockDesc;
     }
 
-    wxLogError("Unknown grid selection mode.");
+    switch ( count )
+    {
+        case 0:
+            wxLogMessage("No selection");
+            break;
+
+        case 1:
+            wxLogMessage("Selection: %s", desc);
+            break;
+
+        default:
+            wxLogMessage("%d selected blocks:\n\t%s", count, desc);
+    }
 }
 
 void GridFrame::SelectCells( wxCommandEvent& WXUNUSED(ev) )
@@ -1091,6 +1535,36 @@ void GridFrame::SelectCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
+}
+
+void GridFrame::SelectNone( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->SetSelectionMode( wxGrid::wxGridSelectNone );
+}
+
+void GridFrame::FreezeOrThaw(wxCommandEvent& ev)
+{
+    if ( ev.IsChecked() )
+    {
+        if ( !grid->FreezeTo(grid->GetGridCursorCoords()) )
+        {
+            wxLogMessage("Failed to freeze the grid.");
+            GetMenuBar()->Check(ID_FREEZE_OR_THAW, false);
+            return;
+        }
+
+        wxLogMessage("Grid is now frozen");
+    }
+    else
+    {
+        // This never fails.
+        grid->FreezeTo(0, 0);
+
+        wxLogMessage("Grid is now thawed");
+    }
+
+    GetMenuBar()->Enable( ID_TOGGLECOLMOVING, !grid->IsFrozen() );
+    GetMenuBar()->Enable( ID_TOGGLEROWMOVING, !grid->IsFrozen() );
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
@@ -1167,22 +1641,22 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
     wxString logBuf;
     if ( ev.GetRow() != -1 )
     {
-        logBuf << wxT("Left click on row label ") << ev.GetRow();
+        logBuf << "Left click on row label " << ev.GetRow();
     }
     else if ( ev.GetCol() != -1 )
     {
-        logBuf << wxT("Left click on col label ") << ev.GetCol();
+        logBuf << "Left click on col label " << ev.GetCol();
     }
     else
     {
-        logBuf << wxT("Left click on corner label");
+        logBuf << "Left click on corner label";
     }
 
     if ( ev.ShiftDown() )
-        logBuf << wxT(" (shift down)");
+        logBuf << " (shift down)";
     if ( ev.ControlDown() )
-        logBuf << wxT(" (control down)");
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+        logBuf << " (control down)";
+    wxLogMessage( "%s", logBuf );
 
     // you must call event skip if you want default grid processing
     //
@@ -1192,7 +1666,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
 
 void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 {
-    wxLogMessage(wxT("Left click at row %d, col %d"), ev.GetRow(), ev.GetCol());
+    wxLogMessage("Left click at row %d, col %d", ev.GetRow(), ev.GetCol());
 
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -1242,45 +1716,65 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
 {
     wxString logBuf;
     if ( ev.Selecting() )
-        logBuf << wxT("Selected ");
+        logBuf << "Selected ";
     else
-        logBuf << wxT("Deselected ");
-    logBuf << wxT("cell at row ") << ev.GetRow()
-           << wxT(" col ") << ev.GetCol()
-           << wxT(" ( ControlDown: ")<< (ev.ControlDown() ? 'T':'F')
-           << wxT(", ShiftDown: ")<< (ev.ShiftDown() ? 'T':'F')
-           << wxT(", AltDown: ")<< (ev.AltDown() ? 'T':'F')
-           << wxT(", MetaDown: ")<< (ev.MetaDown() ? 'T':'F') << wxT(" )");
+        logBuf << "Deselected ";
+    logBuf << "cell at row " << ev.GetRow()
+           << " col " << ev.GetCol()
+           << " ( ControlDown: "<< (ev.ControlDown() ? 'T':'F')
+           << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
+           << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
+           << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
 
+    //Indicate whether this row was moved
+    if ( grid->GetRowPos( ev.GetRow() ) != ev.GetRow() )
+        logBuf << " *** Row moved, current position: " << grid->GetRowPos( ev.GetRow() );
     //Indicate whether this column was moved
-    if ( ((wxGrid *)ev.GetEventObject())->GetColPos( ev.GetCol() ) != ev.GetCol() )
-        logBuf << wxT(" *** Column moved, current position: ") << ((wxGrid *)ev.GetEventObject())->GetColPos( ev.GetCol() );
+    if ( grid->GetColPos( ev.GetCol() ) != ev.GetCol() )
+        logBuf << " *** Column moved, current position: " << grid->GetColPos( ev.GetCol() );
 
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+    wxLogMessage( "%s", logBuf );
 
     // you must call Skip() if you want the default processing
     // to occur in wxGrid
     ev.Skip();
 }
 
-void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
+namespace
+{
+
+void
+LogRangeSelectEvent(wxGridRangeSelectEvent& ev, const char* suffix)
 {
     wxString logBuf;
     if ( ev.Selecting() )
-        logBuf << wxT("Selected ");
+        logBuf << "Select";
     else
-        logBuf << wxT("Deselected ");
-    logBuf << wxT("cells from row ") << ev.GetTopRow()
-           << wxT(" col ") << ev.GetLeftCol()
-           << wxT(" to row ") << ev.GetBottomRow()
-           << wxT(" col ") << ev.GetRightCol()
-           << wxT(" ( ControlDown: ")<< (ev.ControlDown() ? 'T':'F')
-           << wxT(", ShiftDown: ")<< (ev.ShiftDown() ? 'T':'F')
-           << wxT(", AltDown: ")<< (ev.AltDown() ? 'T':'F')
-           << wxT(", MetaDown: ")<< (ev.MetaDown() ? 'T':'F') << wxT(" )");
-    wxLogMessage( wxT("%s"), logBuf.c_str() );
+        logBuf << "Deselect";
+    logBuf << suffix
+           << " cells from row " << ev.GetTopRow()
+           << " col " << ev.GetLeftCol()
+           << " to row " << ev.GetBottomRow()
+           << " col " << ev.GetRightCol()
+           << " ( ControlDown: "<< (ev.ControlDown() ? 'T':'F')
+           << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
+           << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
+           << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
+    wxLogMessage( "%s", logBuf );
 
     ev.Skip();
+}
+
+} // anonymous namespace
+
+void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
+{
+    LogRangeSelectEvent(ev, "ed");
+}
+
+void GridFrame::OnRangeSelecting( wxGridRangeSelectEvent& ev )
+{
+    LogRangeSelectEvent(ev, "ing");
 }
 
 void GridFrame::OnCellValueChanging( wxGridEvent& ev )
@@ -1319,7 +1813,7 @@ void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 
 void GridFrame::OnCellBeginDrag( wxGridEvent& ev )
 {
-    wxLogMessage(wxT("Got request to drag cell at row %d, col %d"),
+    wxLogMessage("Got request to drag cell at row %d, col %d",
                  ev.GetRow(), ev.GetCol());
 
     ev.Skip();
@@ -1330,14 +1824,14 @@ void GridFrame::OnEditorShown( wxGridEvent& ev )
 
     if ( (ev.GetCol() == 4) &&
          (ev.GetRow() == 0) &&
-     (wxMessageBox(wxT("Are you sure you wish to edit this cell"),
-                   wxT("Checking"),wxYES_NO) == wxNO ) ) {
+     (wxMessageBox("Are you sure you wish to edit this cell",
+                   "Checking",wxYES_NO) == wxNO ) ) {
 
      ev.Veto();
      return;
     }
 
-    wxLogMessage( wxT("Cell editor shown.") );
+    wxLogMessage( "Cell editor shown." );
 
     ev.Skip();
 }
@@ -1347,37 +1841,44 @@ void GridFrame::OnEditorHidden( wxGridEvent& ev )
 
     if ( (ev.GetCol() == 4) &&
          (ev.GetRow() == 0) &&
-     (wxMessageBox(wxT("Are you sure you wish to finish editing this cell"),
-                   wxT("Checking"),wxYES_NO) == wxNO ) ) {
+     (wxMessageBox("Are you sure you wish to finish editing this cell",
+                   "Checking",wxYES_NO) == wxNO ) ) {
 
         ev.Veto();
         return;
     }
 
-    wxLogMessage( wxT("Cell editor hidden.") );
+    wxLogMessage( "Cell editor hidden." );
 
     ev.Skip();
 }
 
-void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
+void GridFrame::OnAbout(  wxCommandEvent& WXUNUSED(ev) )
 {
     wxAboutDialogInfo aboutInfo;
-    aboutInfo.SetName(wxT("wxGrid demo"));
+    aboutInfo.SetName("wxGrid demo");
     aboutInfo.SetDescription(_("wxGrid sample program"));
-    aboutInfo.AddDeveloper(wxT("Michael Bedward"));
-    aboutInfo.AddDeveloper(wxT("Julian Smart"));
-    aboutInfo.AddDeveloper(wxT("Vadim Zeitlin"));
+    aboutInfo.AddDeveloper("Michael Bedward");
+    aboutInfo.AddDeveloper("Julian Smart");
+    aboutInfo.AddDeveloper("Vadim Zeitlin");
 
     // this is just to force the generic version of the about
     // dialog under wxMSW so that it's easy to test if the grid
     // repaints correctly when it has lost focus and a dialog
     // (different from the Windows standard message box -- it doesn't
     // work with it for some reason) is moved over it.
-    aboutInfo.SetWebSite(wxT("http://www.wxwidgets.org"));
+    aboutInfo.SetWebSite("http://www.wxwidgets.org");
 
     wxAboutBox(aboutInfo, this);
 }
 
+
+void GridFrame::OnClear( wxCommandEvent& WXUNUSED(ev) )
+{
+#if wxUSE_LOG
+    logWin->Clear();
+#endif // wxUSE_LOG
+}
 
 void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
 {
@@ -1395,52 +1896,44 @@ void GridFrame::OnBugsTable(wxCommandEvent& )
 // ----------------------------------------------------------------------------
 
 MyGridCellAttrProvider::MyGridCellAttrProvider()
+    : m_attrForOddRows(new wxGridCellAttr)
 {
-    m_attrForOddRows = new wxGridCellAttr;
     m_attrForOddRows->SetBackgroundColour(*wxLIGHT_GREY);
-}
-
-MyGridCellAttrProvider::~MyGridCellAttrProvider()
-{
-    m_attrForOddRows->DecRef();
 }
 
 wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
                            wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const
 {
-    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
+    wxGridCellAttrPtr attr(wxGridCellAttrProvider::GetAttr(row, col, kind));
 
     if ( row % 2 )
     {
         if ( !attr )
         {
             attr = m_attrForOddRows;
-            attr->IncRef();
         }
         else
         {
             if ( !attr->HasBackgroundColour() )
             {
-                wxGridCellAttr *attrNew = attr->Clone();
-                attr->DecRef();
-                attr = attrNew;
+                attr = attr->Clone();
                 attr->SetBackgroundColour(*wxLIGHT_GREY);
             }
         }
     }
 
-    return attr;
+    return attr.release();
 }
 
 void GridFrame::OnVTable(wxCommandEvent& )
 {
     static long s_sizeGrid = 10000;
 
-    s_sizeGrid = wxGetNumberFromUser(wxT("Size of the table to create"),
-                                     wxT("Size: "),
-                                     wxT("wxGridDemo question"),
+    s_sizeGrid = wxGetNumberFromUser("Size of the table to create",
+                                     "Size: ",
+                                     "wxGridDemo question",
                                      s_sizeGrid,
-                                     0, 32000, this);
+                                     0, 10000000, this);
 
     if ( s_sizeGrid != -1 )
     {
@@ -1475,8 +1968,7 @@ void MyGridCellRenderer::Draw(wxGrid& grid,
 // ============================================================================
 
 BigGridFrame::BigGridFrame(long sizeGrid)
-            : wxFrame(NULL, wxID_ANY, wxT("Plugin Virtual Table"),
-                      wxDefaultPosition, wxSize(500, 450))
+            : wxFrame(nullptr, wxID_ANY, "Plugin Virtual Table")
 {
     m_grid = new wxGrid(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     m_table = new BigGridTable(sizeGrid);
@@ -1485,14 +1977,9 @@ BigGridFrame::BigGridFrame(long sizeGrid)
     //     must profile it...
     //m_table->SetAttrProvider(new MyGridCellAttrProvider);
 
-    m_grid->SetTable(m_table, true);
+    m_grid->AssignTable(m_table);
 
-#if defined __WXMOTIF__
-    // MB: the grid isn't getting a sensible default size under wxMotif
-    int cw, ch;
-    GetClientSize( &cw, &ch );
-    m_grid->SetSize( cw, ch );
-#endif
+    SetClientSize(FromDIP(wxSize(500, 450)));
 }
 
 // ============================================================================
@@ -1526,37 +2013,27 @@ enum Severity
 
 static const wxString severities[] =
 {
-    wxT("wishlist"),
-    wxT("minor"),
-    wxT("normal"),
-    wxT("major"),
-    wxT("critical"),
+    "wishlist",
+    "minor",
+    "normal",
+    "major",
+    "critical",
 };
 
 static struct BugsGridData
 {
     int id;
-    wxChar summary[80];
+    wxString summary;
     Severity severity;
     int prio;
-    wxChar platform[12];
+    wxString platform;
     bool opened;
 } gs_dataBugsGrid [] =
 {
-    { 18, wxT("foo doesn't work"), Sev_Major, 1, wxT("wxMSW"), true },
-    { 27, wxT("bar crashes"), Sev_Critical, 1, wxT("all"), false },
-    { 45, wxT("printing is slow"), Sev_Minor, 3, wxT("wxMSW"), true },
-    { 68, wxT("Rectangle() fails"), Sev_Normal, 1, wxT("wxMSW"), false },
-};
-
-static const wxChar *headers[Col_Max] =
-{
-    wxT("Id"),
-    wxT("Summary"),
-    wxT("Severity"),
-    wxT("Priority"),
-    wxT("Platform"),
-    wxT("Opened?"),
+    { 18, "foo doesn't work", Sev_Major, 1, "wxMSW", true },
+    { 27, "bar crashes", Sev_Critical, 1, "all", false },
+    { 45, "printing is slow", Sev_Minor, 3, "wxMSW", true },
+    { 68, "Rectangle() fails", Sev_Normal, 1, "wxMSW", false },
 };
 
 // ----------------------------------------------------------------------------
@@ -1569,22 +2046,22 @@ wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
     {
         case Col_Id:
         case Col_Priority:
-            return wxGRID_VALUE_NUMBER;;
+            return wxGRID_VALUE_NUMBER;
 
         case Col_Severity:
-            // fall thorugh (TODO should be a list)
+            wxFALLTHROUGH;
 
         case Col_Summary:
-            return wxString::Format(wxT("%s:80"), wxGRID_VALUE_STRING);
+            return wxString::Format("%s:80", wxGRID_VALUE_STRING);
 
         case Col_Platform:
-            return wxString::Format(wxT("%s:all,MSW,GTK,other"), wxGRID_VALUE_CHOICE);
+            return wxString::Format("%s:all,MSW,GTK,other", wxGRID_VALUE_CHOICE);
 
         case Col_Opened:
             return wxGRID_VALUE_BOOL;
     }
 
-    wxFAIL_MSG(wxT("unknown column"));
+    wxFAIL_MSG("unknown column");
 
     return wxEmptyString;
 }
@@ -1611,13 +2088,13 @@ wxString BugsGridTable::GetValue( int row, int col )
     switch ( col )
     {
         case Col_Id:
-            return wxString::Format(wxT("%d"), gd.id);
+            return wxString::Format("%d", gd.id);
 
         case Col_Priority:
-            return wxString::Format(wxT("%d"), gd.prio);
+            return wxString::Format("%d", gd.prio);
 
         case Col_Opened:
-            return gd.opened ? wxT("1") : wxT("0");
+            return gd.opened ? "1" : "0";
 
         case Col_Severity:
             return severities[gd.severity];
@@ -1641,7 +2118,7 @@ void BugsGridTable::SetValue( int row, int col, const wxString& value )
         case Col_Id:
         case Col_Priority:
         case Col_Opened:
-            wxFAIL_MSG(wxT("unexpected column"));
+            wxFAIL_MSG("unexpected column");
             break;
 
         case Col_Severity:
@@ -1658,19 +2135,19 @@ void BugsGridTable::SetValue( int row, int col, const wxString& value )
 
                 if ( n == WXSIZEOF(severities) )
                 {
-                    wxLogWarning(wxT("Invalid severity value '%s'."),
-                                 value.c_str());
+                    wxLogWarning("Invalid severity value '%s'.",
+                                 value);
                     gd.severity = Sev_Normal;
                 }
             }
             break;
 
         case Col_Summary:
-            wxStrncpy(gd.summary, value, WXSIZEOF(gd.summary));
+            gd.summary = value;
             break;
 
         case Col_Platform:
-            wxStrncpy(gd.platform, value, WXSIZEOF(gd.platform));
+            gd.platform = value;
             break;
     }
 }
@@ -1719,7 +2196,7 @@ long BugsGridTable::GetValueAsLong( int row, int col )
             return gd.severity;
 
         default:
-            wxFAIL_MSG(wxT("unexpected column"));
+            wxFAIL_MSG("unexpected column");
             return -1;
     }
 }
@@ -1732,7 +2209,7 @@ bool BugsGridTable::GetValueAsBool( int row, int col )
     }
     else
     {
-        wxFAIL_MSG(wxT("unexpected column"));
+        wxFAIL_MSG("unexpected column");
 
         return false;
     }
@@ -1749,7 +2226,7 @@ void BugsGridTable::SetValueAsLong( int row, int col, long value )
             break;
 
         default:
-            wxFAIL_MSG(wxT("unexpected column"));
+            wxFAIL_MSG("unexpected column");
     }
 }
 
@@ -1761,12 +2238,18 @@ void BugsGridTable::SetValueAsBool( int row, int col, bool value )
     }
     else
     {
-        wxFAIL_MSG(wxT("unexpected column"));
+        wxFAIL_MSG("unexpected column");
     }
 }
 
 wxString BugsGridTable::GetColLabelValue( int col )
 {
+    static const wxString headers[] = { "Id",
+        "Summary",
+        "Severity",
+        "Priority",
+        "Platform",
+        "Opened?" };
     return headers[col];
 }
 
@@ -1775,12 +2258,12 @@ wxString BugsGridTable::GetColLabelValue( int col )
 // ----------------------------------------------------------------------------
 
 BugsGridFrame::BugsGridFrame()
-             : wxFrame(NULL, wxID_ANY, wxT("Bugs table"))
+             : wxFrame(nullptr, wxID_ANY, "Bugs table")
 {
     wxGrid *grid = new wxGrid(this, wxID_ANY);
     wxGridTableBase *table = new BugsGridTable();
     table->SetAttrProvider(new MyGridCellAttrProvider);
-    grid->SetTable(table, true);
+    grid->AssignTable(table);
 
     wxGridCellAttr *attrRO = new wxGridCellAttr,
                    *attrRangeEditor = new wxGridCellAttr,
@@ -1820,12 +2303,12 @@ public:
         ROW_MAX = 3
     };
 
-    TabularGridTable() { m_sortOrder = NULL; }
+    TabularGridTable() { m_sortOrder = nullptr; }
 
-    virtual int GetNumberRows() wxOVERRIDE { return ROW_MAX; }
-    virtual int GetNumberCols() wxOVERRIDE { return COL_MAX; }
+    virtual int GetNumberRows() override { return ROW_MAX; }
+    virtual int GetNumberCols() override { return COL_MAX; }
 
-    virtual wxString GetValue(int row, int col) wxOVERRIDE
+    virtual wxString GetValue(int row, int col) override
     {
         if ( m_sortOrder )
             row = m_sortOrder[row];
@@ -1850,12 +2333,12 @@ public:
         return wxString();
     }
 
-    virtual void SetValue(int, int, const wxString&) wxOVERRIDE
+    virtual void SetValue(int, int, const wxString&) override
     {
         wxFAIL_MSG( "shouldn't be called" );
     }
 
-    virtual wxString GetColLabelValue(int col) wxOVERRIDE
+    virtual wxString GetColLabelValue(int col) override
     {
         // notice that column parameter here always refers to the internal
         // column index, independently of its position on the screen
@@ -1865,7 +2348,7 @@ public:
         return labels[col];
     }
 
-    virtual void SetColLabelValue(int, const wxString&) wxOVERRIDE
+    virtual void SetColLabelValue(int, const wxString&) override
     {
         wxFAIL_MSG( "shouldn't be called" );
     }
@@ -1882,7 +2365,7 @@ public:
             { { 1, 0, 2 }, { 2, 0, 1 } },
         };
 
-        m_sortOrder = col == wxNOT_FOUND ? NULL : sortOrders[col][ascending];
+        m_sortOrder = col == wxNOT_FOUND ? nullptr : sortOrders[col][ascending];
     }
 
 private:
@@ -1942,7 +2425,7 @@ public:
     }
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE
+    virtual wxSize DoGetBestSize() const override
     {
         wxSize size = wxTextCtrl::DoGetBestSize();
         size.x = 3*GetCharWidth();
@@ -1961,6 +2444,7 @@ private:
         Id_Check_UseNativeHeader,
         Id_Check_DrawNativeLabels,
         Id_Check_ShowRowLabels,
+        Id_Check_EnableRowMove,
         Id_Check_EnableColMove
     };
 
@@ -1990,6 +2474,11 @@ private:
                                     : 0);
     }
 
+    void OnToggleRowMove(wxCommandEvent&)
+    {
+        m_grid->EnableDragRowMove(m_chkEnableRowMove->IsChecked());
+    }
+
     void OnToggleColMove(wxCommandEvent&)
     {
         m_grid->EnableDragColMove(m_chkEnableColMove->IsChecked());
@@ -2003,7 +2492,7 @@ private:
             m_grid->SetColSize(col,
                                event.GetId() == wxID_ADD ? wxGRID_AUTOSIZE : 0);
 
-            UpdateOrderAndVisibility();
+            UpdateColOrderAndVisibility();
         }
     }
 
@@ -2016,14 +2505,14 @@ private:
 
         m_grid->SetColPos(col, pos);
 
-        UpdateOrderAndVisibility();
+        UpdateColOrderAndVisibility();
     }
 
     void OnResetColumnOrder(wxCommandEvent&)
     {
         m_grid->ResetColPos();
 
-        UpdateOrderAndVisibility();
+        UpdateColOrderAndVisibility();
     }
 
     void OnGridColSort(wxGridEvent& event)
@@ -2033,11 +2522,20 @@ private:
                              m_grid->IsSortOrderAscending()));
     }
 
+    void OnGridRowMove(wxGridEvent& event)
+    {
+        // can't update it yet as the order hasn't been changed, so do it a bit
+        // later
+        m_shouldUpdateRowOrder = true;
+
+        event.Skip();
+    }
+
     void OnGridColMove(wxGridEvent& event)
     {
         // can't update it yet as the order hasn't been changed, so do it a bit
         // later
-        m_shouldUpdateOrder = true;
+        m_shouldUpdateColOrder = true;
 
         event.Skip();
     }
@@ -2047,23 +2545,29 @@ private:
         // we only catch this event to react to the user showing or hiding this
         // column using the header control menu and not because we're
         // interested in column resizing
-        UpdateOrderAndVisibility();
+        UpdateColOrderAndVisibility();
 
         event.Skip();
     }
 
     void OnIdle(wxIdleEvent& event)
     {
-        if ( m_shouldUpdateOrder )
+        if ( m_shouldUpdateColOrder )
         {
-            m_shouldUpdateOrder = false;
-            UpdateOrderAndVisibility();
+            m_shouldUpdateColOrder = false;
+            UpdateColOrderAndVisibility();
+        }
+
+        if ( m_shouldUpdateRowOrder )
+        {
+            m_shouldUpdateRowOrder = false;
+            UpdateRowOrderAndVisibility();
         }
 
         event.Skip();
     }
 
-    void UpdateOrderAndVisibility()
+    void UpdateColOrderAndVisibility()
     {
         wxString s;
         for ( int pos = 0; pos < TabularGridTable::COL_MAX; pos++ )
@@ -2083,12 +2587,33 @@ private:
         m_statOrder->SetLabel(s);
     }
 
+    void UpdateRowOrderAndVisibility()
+    {
+        wxString s;
+        for ( int pos = 0; pos < TabularGridTable::ROW_MAX; pos++ )
+        {
+            const int row = m_grid->GetRowAt(pos);
+            const bool isHidden = m_grid->GetRowSize(row) == 0;
+
+            if ( isHidden )
+                s << '[';
+            s << row;
+            if ( isHidden )
+                s << ']';
+
+            s << ' ';
+        }
+
+        m_statOrder->SetLabel(s);
+    }
+
     // controls
     wxGrid *m_grid;
     TabularGridTable *m_table;
     wxCheckBox *m_chkUseNative,
                *m_chkDrawNative,
                *m_chkShowRowLabels,
+               *m_chkEnableRowMove,
                *m_chkEnableColMove;
 
     ColIndexEntry *m_txtColIndex,
@@ -2098,7 +2623,8 @@ private:
     wxStaticText *m_statOrder;
 
     // fla for EVT_IDLE handler
-    bool m_shouldUpdateOrder;
+    bool m_shouldUpdateRowOrder,
+         m_shouldUpdateColOrder;
 
     wxDECLARE_NO_COPY_CLASS(TabularGridFrame);
     wxDECLARE_EVENT_TABLE();
@@ -2123,6 +2649,7 @@ wxBEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
     EVT_BUTTON(wxID_DELETE, TabularGridFrame::OnShowHideColumn)
 
     EVT_GRID_COL_SORT(TabularGridFrame::OnGridColSort)
+    EVT_GRID_ROW_MOVE(TabularGridFrame::OnGridRowMove)
     EVT_GRID_COL_MOVE(TabularGridFrame::OnGridColMove)
     EVT_GRID_COL_SIZE(TabularGridFrame::OnGridColSize)
 
@@ -2130,9 +2657,9 @@ wxBEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 TabularGridFrame::TabularGridFrame()
-                : wxFrame(NULL, wxID_ANY, "Tabular table")
+                : wxFrame(nullptr, wxID_ANY, "Tabular table")
 {
-    m_shouldUpdateOrder = false;
+    m_shouldUpdateColOrder = false;
 
     wxPanel * const panel = new wxPanel(this);
 
@@ -2141,8 +2668,9 @@ TabularGridFrame::TabularGridFrame()
     m_grid = new wxGrid(panel, wxID_ANY,
                         wxDefaultPosition, wxDefaultSize,
                         wxBORDER_STATIC | wxWANTS_CHARS);
-    m_grid->SetTable(m_table, true, wxGrid::wxGridSelectRows);
+    m_grid->AssignTable(m_table, wxGrid::wxGridSelectRows);
 
+    m_grid->EnableDragRowMove();
     m_grid->EnableDragColMove();
     m_grid->UseNativeColHeader();
     m_grid->HideRowLabels();
@@ -2167,13 +2695,19 @@ TabularGridFrame::TabularGridFrame()
                                         "Show &row labels");
     sizerStyles->Add(m_chkShowRowLabels, wxSizerFlags().Border());
 
+    m_chkEnableRowMove = new wxCheckBox(panel, Id_Check_EnableRowMove,
+                                        "Allow row reordering");
+    m_chkEnableRowMove->SetValue(true);
+    sizerStyles->Add(m_chkEnableRowMove, wxSizerFlags().Border());
+
     m_chkEnableColMove = new wxCheckBox(panel, Id_Check_EnableColMove,
                                         "Allow column re&ordering");
     m_chkEnableColMove->SetValue(true);
     sizerStyles->Add(m_chkEnableColMove, wxSizerFlags().Border());
+
     sizerControls->Add(sizerStyles);
 
-    sizerControls->AddSpacer(10);
+    sizerControls->AddSpacer(FromDIP(10));
 
     wxSizer * const sizerColumns = new wxBoxSizer(wxVERTICAL);
     wxSizer * const sizerMoveCols = new wxBoxSizer(wxHORIZONTAL);
@@ -2275,10 +2809,10 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     }
     else if ( grid->IsSelection() && grid->GetSelectionBlockTopLeft().Count() )
     {
-        wxGridCellCoordsArray cells = grid->GetSelectionBlockTopLeft();
+        wxGridCellCoordsVector cells = grid->GetSelectionBlockTopLeft();
         if ( grid->GetSelectionBlockBottomRight().Count() )
         {
-            cells.Add( grid->GetSelectionBlockBottomRight()[ 0 ] );
+            cells.push_back( grid->GetSelectionBlockBottomRight()[ 0 ] );
             topLeft.Set( cells[ 0 ].GetRow(),
                             cells[ 0 ].GetCol() );
             bottomRight.Set( cells[ 1 ].GetRow(),
@@ -2306,8 +2840,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     if ( styleRender & wxGRID_DRAW_COLS_HEADER )
         sizeRender.y += grid->GetColLabelSize();
 
-    sizeRender.x *= zoom;
-    sizeRender.y *= zoom;
+    sizeRender *= zoom;
 
     // delete any existing render frame and create new one
     wxWindow* win = FindWindowByName( "frameRender" );
@@ -2349,10 +2882,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
 
     m_gridBitmap = bmp;
 
-    canvas->Connect( wxEVT_PAINT,
-                     wxPaintEventHandler(GridFrame::OnRenderPaint),
-                     NULL,
-                     this );
+    canvas->Bind( wxEVT_PAINT, &GridFrame::OnRenderPaint, this );
 
     frame->Show();
 }
@@ -2364,7 +2894,7 @@ void GridFrame::OnRenderPaint( wxPaintEvent& event )
     canvas->PrepareDC( dc );
 
     if ( !m_gridBitmap.IsOk() )
-        return;;
+        return;
 
     wxMemoryDC memDc( m_gridBitmap );
 
@@ -2392,4 +2922,87 @@ void GridFrame::HideRow( wxCommandEvent& WXUNUSED(event) )
 void GridFrame::ShowRow( wxCommandEvent& WXUNUSED(event) )
 {
     grid->ShowRow(1);
+}
+
+namespace
+{
+
+// Toggle status of either checkered or coloured cells in the grid.
+// Note that, for shared attribute testing purposes, with checkered cells
+// a cell's complete attribute is destructively overwritten (except merged
+// cells which are skipped). While with coloured cells only the background
+// colour changes.
+void ToggleGridCells(wxGrid* grid, bool useCheckered)
+{
+    static bool s_checkeredOn, s_colouredOn;
+    if ( useCheckered )
+        s_checkeredOn = !s_checkeredOn;
+    else
+        s_colouredOn = !s_colouredOn;
+
+    wxGridCellAttrPtr attr;
+    if ( useCheckered && s_checkeredOn )
+    {
+        attr = wxGridCellAttrPtr(new wxGridCellAttr);
+        attr->SetBackgroundColour(*wxLIGHT_GREY);
+    }
+
+    wxColour bgCol = grid->GetDefaultCellBackgroundColour();
+
+    for ( int row = 0; row < grid->GetNumberRows(); ++row )
+    {
+        for ( int col = 0; col < grid->GetNumberCols(); ++col )
+        {
+            if ( useCheckered && (row ^ col) & 1 )
+                continue;
+
+            // Skip overwriting attributes of merged cells.
+            int rows, cols;
+            if ( useCheckered
+                 && grid->GetCellSize(row, col, &rows, &cols)
+                    != wxGrid::CellSpan_None )
+            {
+                continue;
+            }
+
+            if ( useCheckered )
+            {
+                grid->SetAttr(row, col, attr.get());
+
+                if ( s_checkeredOn )
+                    attr->IncRef();
+            }
+            else
+            {
+                if ( s_colouredOn )
+                {
+                    const int factor = 256 / 64;
+                    unsigned char r, g, b;
+                    r = (127 + row * factor + col / factor) & 0xff;
+                    g = (col * factor + row / (factor * 2)) & 0xff;
+                    b = ((row ^ col) * factor) & 0xff;
+
+                    bgCol.Set(r < 128 ? r * 2 : 255 - r * 2,
+                              g < 128 ? g * 2 : 255 - g * 2,
+                              b < 128 ? b * 2 : 255 - b * 2);
+                }
+
+                grid->SetCellBackgroundColour(row, col, bgCol);
+            }
+        }
+    }
+
+    grid->Refresh();
+}
+
+} // anoymous namespace
+
+void GridFrame::ToggleCheckeredCells( wxCommandEvent& WXUNUSED(event) )
+{
+    ToggleGridCells(grid, /* useCheckered = */ true);
+}
+
+void GridFrame::ToggleColouredCells( wxCommandEvent& WXUNUSED(event) )
+{
+    ToggleGridCells(grid, /* useCheckered = */ false);
 }

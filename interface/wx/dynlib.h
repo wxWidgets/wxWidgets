@@ -56,6 +56,14 @@ public:
 };
 
 
+/**
+    A vector of wxDynamicLibraryDetails.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxDynamicLibraryDetails objects in the application code.
+*/
+using wxDynamicLibraryDetailsArray = std::vector<wxDynamicLibraryDetails>;
 
 /**
     Dynamic library category used with wxDynamicLibrary::CanonicalizeName().
@@ -123,7 +131,7 @@ public:
         is included.
 
         For example, on Windows @c ".dll" is returned, and either @c ".dylib"
-        or @c ".bundle" on OS X.
+        or @c ".bundle" on macOS.
     */
     static wxString GetDllExt(wxDynamicLibraryCategory cat = wxDL_LIBRARY);
 
@@ -147,9 +155,23 @@ public:
                                            wxPluginCategory cat = wxDL_PLUGIN_GUI);
 
     /**
-        Detaches this object from its library handle, i.e.\ the object will not
-        unload the library any longer in its destructor but it is now the
-        callers responsibility to do this using Unload().
+        Attaches the object to an existing handle.
+
+        This allows to give ownership of an existing handle, possibly obtained
+        from Detach(), to this object, so that it will unload it when destroyed.
+
+        @since 3.1.5
+     */
+    void Attach(wxDllType h);
+
+    /**
+        Detaches this object from its library handle.
+
+        This means that the object will not unload the library any longer in
+        its destructor but it is now the callers responsibility to do this
+        using static Unload().
+
+        @see Attach()
     */
     wxDllType Detach();
 
@@ -218,7 +240,7 @@ public:
 
         @since 3.1.0
     */
-    static void* GetModuleFromAddress(const void* addr, wxString* path = NULL);
+    static void* GetModuleFromAddress(const void* addr, wxString* path = nullptr);
 
     /**
         Loads DLL with the given @a name into memory. The @a flags argument can
@@ -254,7 +276,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     When loading a function from a DLL you always have to cast the returned
@@ -279,5 +301,5 @@ public:
 */
 #define wxDYNLIB_FUNCTION(type, name, dynlib)
 
-//@}
+///@}
 

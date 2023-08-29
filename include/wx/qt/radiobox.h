@@ -10,7 +10,7 @@
 
 class QGroupBox;
 class QButtonGroup;
-class QBoxLayout;
+class QGridLayout;
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
@@ -22,11 +22,11 @@ public:
                const wxString& title,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               int n = 0, const wxString choices[] = NULL,
+               int n = 0, const wxString choices[] = nullptr,
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr);
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
@@ -37,18 +37,18 @@ public:
                int majorDim = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
-               const wxString& name = wxRadioBoxNameStr);
+               const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -59,25 +59,27 @@ public:
                 int majorDim = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
-                const wxString& name = wxRadioBoxNameStr);
+                const wxString& name = wxASCII_STR(wxRadioBoxNameStr));
 
     using wxWindowBase::Show;
     using wxWindowBase::Enable;
     using wxRadioBoxBase::GetDefaultBorder;
 
-    virtual bool Enable(unsigned int n, bool enable = true);
-    virtual bool Show(unsigned int n, bool show = true);
-    virtual bool IsItemEnabled(unsigned int n) const;
-    virtual bool IsItemShown(unsigned int n) const;
+    virtual bool Enable(unsigned int n, bool enable = true) override;
+    virtual bool Enable(bool enable = true) override;
+    virtual bool Show(unsigned int n, bool show = true) override;
+    virtual bool Show(bool show = true) override;
+    virtual bool IsItemEnabled(unsigned int n) const override;
+    virtual bool IsItemShown(unsigned int n) const override;
 
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& s);
+    virtual unsigned int GetCount() const override;
+    virtual wxString GetString(unsigned int n) const override;
+    virtual void SetString(unsigned int n, const wxString& s) override;
 
-    virtual void SetSelection(int n);
-    virtual int GetSelection() const;
+    virtual void SetSelection(int n) override;
+    virtual int GetSelection() const override;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const override;
 
 private:
     // The 'visual' group box:
@@ -87,7 +89,7 @@ private:
     QButtonGroup *m_qtButtonGroup;
 
     // Autofit layout for buttons (either vert. or horiz.):
-    QBoxLayout *m_qtBoxLayout;
+    QGridLayout *m_qtGridLayout;
 
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };

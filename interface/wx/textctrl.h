@@ -220,6 +220,19 @@ enum wxTextAttrLineSpacing
 
 
 /**
+    Underline types that can be used in wxTextAttr::SetFontUnderline().
+
+    @since 3.1.3
+*/
+enum wxTextAttrUnderlineType
+{
+     wxTEXT_ATTR_UNDERLINE_NONE,
+     wxTEXT_ATTR_UNDERLINE_SOLID,
+     wxTEXT_ATTR_UNDERLINE_DOUBLE,
+     wxTEXT_ATTR_UNDERLINE_SPECIAL
+};
+
+/**
     Describes the possible return values of wxTextCtrl::HitTest().
 
     The element names correspond to the relationship between the point asked
@@ -245,7 +258,6 @@ enum wxTextCtrlHitTestResult
     wxTE_HT_BEYOND
 };
 
-
 /**
     @class wxTextAttr
 
@@ -265,7 +277,7 @@ enum wxTextCtrlHitTestResult
 class wxTextAttr
 {
 public:
-    //@{
+    ///@{
     /**
         Constructors.
     */
@@ -275,14 +287,14 @@ public:
                const wxFont& font = wxNullFont,
                wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
     wxTextAttr(const wxTextAttr& attr);
-    //@}
+    ///@}
 
     /**
         Applies the attributes in @a style to the original object, but not those
         attributes from @a style that are the same as those in @a compareWith (if passed).
     */
     bool Apply(const wxTextAttr& style,
-               const wxTextAttr* compareWith = NULL);
+               const wxTextAttr* compareWith = nullptr);
 
     /**
         Copies all defined/valid properties from overlay to current object.
@@ -311,7 +323,7 @@ public:
         @name GetXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Returns the alignment flags.
@@ -423,6 +435,20 @@ public:
     bool GetFontUnderlined() const;
 
     /**
+        Returns the underline type, which is one of the wxTextAttrUnderlineType values.
+
+        @since 3.1.3
+    */
+    wxTextAttrUnderlineType GetUnderlineType() const;
+
+    /**
+        Returns the underline color used. wxNullColour when the text colour is used.
+
+        @since 3.1.3
+    */
+    const wxColour& GetUnderlineColour() const;
+
+    /**
         Returns the font weight.
     */
     wxFontWeight GetFontWeight() const;
@@ -506,7 +532,7 @@ public:
     */
     const wxString& GetURL() const;
 
-    //@}
+    ///@}
 
 
 
@@ -514,7 +540,7 @@ public:
         @name HasXXX and IsXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Returns @true if the attribute object specifies alignment.
@@ -694,14 +720,14 @@ public:
     */
     bool IsParagraphStyle() const;
 
-    //@}
+    ///@}
 
 
     /**
         @name SetXXX functions
      */
 
-    //@{
+    ///@{
 
     /**
         Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
@@ -803,9 +829,33 @@ public:
     void SetFontStyle(wxFontStyle fontStyle);
 
     /**
-        Sets the font underlining.
+        Sets the font underlining (solid line, text colour).
     */
     void SetFontUnderlined(bool underlined);
+
+    /**
+        Sets the font underlining.
+
+        @param type Type of underline.
+
+        @param colour Colour to use for underlining, text colour is used by
+        default.
+
+        @note On wxMSW, wxTEXT_ATTR_UNDERLINE_DOUBLE is shown as
+        wxTEXT_ATTR_UNDERLINE_SOLID. There is only a limited number of colours
+        supported, the RGB values are listed
+        <a href="https://docs.microsoft.com/en-us/windows/win32/api/tom/nf-tom-itextdocument2-geteffectcolor">here</a>.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line.
+
+        @note On wxGTK, underline colour is only supported by wxGTK3.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line. GTK might
+        overrule the colour of wxTEXT_ATTR_UNDERLINE_SPECIAL.
+
+        @note On wxOSX, wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a dotted line.
+
+        @since 3.1.3
+    */
+    void SetFontUnderlined(wxTextAttrUnderlineType type, const wxColour& colour = wxNullColour);
 
     /**
         Sets the font weight.
@@ -919,7 +969,7 @@ public:
     */
     void SetURL(const wxString& url);
 
-    //@}
+    ///@}
 
 
     /**
@@ -928,6 +978,75 @@ public:
     void operator=(const wxTextAttr& attr);
 };
 
+/**
+    @class wxTextProofOptions
+
+    This class provides a convenient means of passing multiple parameters to
+    wxTextCtrl::EnableProofCheck().
+
+    By default, i.e. when calling EnableProofCheck() without any parameters,
+    Default() proof options are used, which enable spelling (but not grammar)
+    checks for the current language.
+
+    However it is also possible to customize the options:
+
+    @code
+    textctrl->EnableProofCheck(wxTextProofOptions::Default().Language("fr").GrammarCheck());
+    @endcode
+
+    or disable the all checks entirely:
+
+    @code
+    textctrl->EnableProofCheck(wxTextProofOptions::Disable());
+    @endcode
+
+    Note that this class has no public constructor, except for the copy
+    constructor, so its objects can only be created using the static factory
+    methods Default() or Disable().
+
+    @see wxTextCtrl::EnableProofCheck(), wxTextCtrl::GetProofCheckOptions().
+
+    @since 3.1.6
+*/
+class WXDLLIMPEXP_CORE wxTextProofOptions
+{
+    /**
+       Create an object corresponding to the default checks.
+
+       The returned object enables spelling checks and disables grammar checks.
+     */
+    static wxTextProofOptions Default()
+
+    /**
+       Create an object disabling all checks.
+
+       The returned object can be passed to wxTextCtrl::EnableProofCheck() to
+       disable all checks in the text control.
+     */
+    static wxTextProofOptions Disable()
+
+    /**
+       Enable / disable spell checking for this control.
+     */
+    wxTextProofOptions& SpellCheck(bool enable = true)
+
+    /**
+       Enable / disable grammar checking for this control.
+
+       This option is currently only supported under macOS and is ignored under
+       the other platforms.
+     */
+    wxTextProofOptions& GrammarCheck(bool enable = true)
+
+    /// Return true if spell checking is enabled.
+    bool IsSpellCheckEnabled() const;
+
+    /// Return true if grammar checking is enabled.
+    bool IsGrammarCheckEnabled() const;
+
+    /// Returns true if any checks are enabled.
+    bool AnyChecksEnabled() const
+};
 
 /**
     @class wxTextCtrl
@@ -941,9 +1060,13 @@ public:
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_TEXT_ENTER
-           (otherwise pressing Enter key is either processed internally by the
-           control or used to activate the default button of the dialog, if any).
+           The control will generate the event @c wxEVT_TEXT_ENTER that can be
+           handled by the program. Otherwise, i.e. either if this style not
+           specified at all, or it is used, but there is no event handler for
+           this event or the event handler called wxEvent::Skip() to avoid
+           overriding the default handling, pressing Enter key is either
+           processed internally by the control or used to activate the default
+           button of the dialog, if any.
     @style{wxTE_PROCESS_TAB}
            Normally, TAB key is used for keyboard navigation and pressing it in
            a control switches focus to the next one. With this style, this
@@ -960,11 +1083,16 @@ public:
     @style{wxTE_READONLY}
            The text will not be user-editable.
     @style{wxTE_RICH}
-           Use rich text control under MSW, this allows to have more than 64KB
-           of text in the control. This style is ignored under other platforms.
+           Use rich text control under MSW, this allows having more than 64KB
+           of text in the control. This style is ignored under other platforms
+           and it is recommended to use wxTE_RICH2 instead of it under MSW.
     @style{wxTE_RICH2}
            Use rich text control version 2.0 or higher under MSW, this style is
-           ignored under other platforms
+           ignored under other platforms. Note that this style may be turned on
+           automatically even if it is not used explicitly when creating a text
+           control with a long (i.e. much more than 64KiB) initial text, as
+           creating the control would simply fail in this case under MSW if
+           neither this style nor wxTE_RICH is used.
     @style{wxTE_AUTO_URL}
            Highlight the URLs and generate the wxTextUrlEvents when mouse
            events occur over them.
@@ -974,7 +1102,7 @@ public:
            show it. It doesn't do anything under other platforms.
     @style{wxHSCROLL}
            A horizontal scrollbar will be created and used, so that text won't
-           be wrapped. No effect under wxGTK1.
+           be wrapped.
     @style{wxTE_NO_VSCROLL}
            For multiline controls only: vertical scrollbar will never be
            created. This limits the amount of text which can be entered into
@@ -1085,7 +1213,7 @@ public:
     text->AppendText("Red text\n");
     text->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
     text->AppendText("Red on grey text\n");
-    text->SetDefaultStyle(wxTextAttr(*wxBLUE);
+    text->SetDefaultStyle(wxTextAttr(*wxBLUE));
     text->AppendText("Blue on grey text\n");
     @endcode
 
@@ -1258,6 +1386,18 @@ public:
     virtual void DiscardEdits();
 
     /**
+        Delete the undo history.
+
+        Currently only implemented in wxMSW (for controls using wxTE_RICH2
+        style only), wxOSX and wxQt (for multiline text controls only in both
+        of these ports), does nothing in the other ports or for the controls
+        not using the appropriate styles.
+
+        @since 3.1.6
+    */
+    virtual void EmptyUndoBuffer();
+
+    /**
         This function inserts into the control the character which would have
         been inserted if the given key event had occurred in the text control.
 
@@ -1269,6 +1409,36 @@ public:
             @true if the event resulted in a change to the control, @false otherwise.
     */
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
+
+    /**
+        Enable or disable native spell checking on this text control if it is
+        available on the current platform.
+
+        Currently this is supported in wxMSW (when running under Windows 8 or
+        later), wxGTK when using GTK 3 and wxOSX. In addition, wxMSW requires
+        that the text control has the wxTE_RICH2 style set, while wxOSX
+        requires that the control has the wxTE_MULTILINE style.
+
+        When using wxGTK, this method only works if gspell library was
+        available during the library build.
+
+        @param options
+            A wxTextProofOptions object specifying the desired behaviour
+            of the proof checker (e.g. language to use, spell check, grammar
+            check, etc.) and whether the proof checks should be enabled at all.
+            By default, spelling checks for the current language are enabled.
+            Passing wxTextProofOptions::Disable() disables all the checks.
+
+        @return
+            @true if proof checking has been successfully enabled or disabled,
+            @false otherwise (usually because the corresponding functionality
+            is not available under the current platform or for this type of
+            text control).
+
+        @since 3.1.6
+    */
+    virtual bool EnableProofCheck(const wxTextProofOptions& options
+                                    = wxTextProofOptions::Default());
 
     /**
         Returns the style currently used for the new text.
@@ -1337,7 +1507,7 @@ public:
         parameter is not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly
@@ -1347,6 +1517,8 @@ public:
 
         @param pt
             The position of the point to check, in window device coordinates.
+            In wxGTK, and only there, the coordinates can be negative, but in
+            portable code only positive values should be used.
         @param pos
             Receives the position of the character at the given position. May
             be @NULL.
@@ -1363,7 +1535,7 @@ public:
         parameters are not modified.
 
         Please note that this function is currently only implemented in wxUniv,
-        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        wxMSW and wxGTK ports and always returns @c wxTE_HT_UNKNOWN in the
         other ports.
 
         @beginWxPerlOnly
@@ -1408,6 +1580,18 @@ public:
         @see IsSingleLine(), IsMultiLine()
     */
     bool IsSingleLine() const;
+
+    /**
+        Returns the current text proofing options.
+
+        This function is implemented for the same platforms as
+        EnableProofCheck() and returns wxTextProofOptions with all checks
+        disabled, i.e. such that wxTextProofOptions::AnyChecksEnabled() returns
+        @false.
+
+        @since 3.1.6
+    */
+    virtual wxTextProofOptions GetProofCheckOptions();
 
     /**
         Loads and displays the named file, if it exists.
@@ -1469,7 +1653,7 @@ public:
     /**
         Converts given text position to client coordinates in pixels.
 
-        This function allows to find where is the character at the given
+        This function allows finding where is the character at the given
         position displayed in the text control.
 
         @onlyfor{wxmsw,wxgtk}. Additionally, wxGTK only implements this method
@@ -1511,7 +1695,7 @@ public:
 
         If either of the font, foreground, or background colour is not set in
         @a style, the values of the previous default style are used for them.
-        If the previous default style didn't set them neither, the global font
+        If the previous default style didn't set them either, the global font
         or colours of the text control itself are used as fall back.
 
         However if the @a style parameter is the default wxTextAttr, then the default
@@ -1578,7 +1762,72 @@ public:
     */
     virtual long XYToPosition(long x, long y) const;
 
-    //@{
+    /**
+        @name Mac-specific functions
+    */
+    ///@{
+
+    /**
+        Enable the automatic replacement of new lines characters in a
+        single-line text field with spaces under macOS.
+
+        This feature is enabled by default and will replace any new line (`\n`)
+        character entered into a single-line text field with the space
+        character. Usually single-line text fields are not expected to hold
+        multiple lines of text (that is what wxTE_MULTILINE is for, after all)
+        and it is impossible to have multiple lines of text in them under
+        non-Mac platforms. However, under macOS/Cocoa, a single-line text
+        control can still show multiple lines and this function allows to lift
+        the restriction preventing multiple lines from being entered unless
+        wxTE_MULTILINE is specified.
+
+        @note This function is only available for macOS/Cocoa. It also has no
+        effect if the wxTE_MULTILINE flag is set on a text control.
+
+        @onlyfor{wxosx}
+        @since 3.1.6
+    */
+    void OSXEnableNewLineReplacement(bool enable);
+
+    ///@}
+
+    /**
+        @name Gtk-specific functions
+    */
+    ///@{
+
+    /**
+        Gets the underlying text buffer for multi-line controls.
+
+        This function returns the underlying GTK object for multiline text
+        controls, i.e. those with wxTE_MULTILINE style, and @NULL for single
+        line text controls.
+
+        Having direct access to the `GtkTextBuffer` allows to use GTK API
+        directly if necessary, but beware that doing it may interfere with the
+        normal wxTextCtrl operation.
+
+        @onlyfor{wxgtk}
+
+        @since 3.3
+    */
+    GtkTextBuffer *GTKGetTextBuffer();
+
+    /**
+        Gets the underlying text control that can be uses with GTK’s API.
+
+        This function can only be called for single-line text controls, i.e.
+        those without wxTE_MULTILINE style.
+
+        @onlyfor{wxgtk}
+
+        @since 3.3
+    */
+    GtkEditable *GTKGetEditable();
+
+    ///@}
+
+    ///@{
     /**
         Operator definitions for appending to a text control.
 
@@ -1598,7 +1847,7 @@ public:
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(char c);
     wxTextCtrl& operator<<(wchar_t c);
-    //@}
+    ///@}
 };
 
 
@@ -1637,12 +1886,8 @@ public:
     ostream object to a wxTextCtrl instead.
 
     @note
-        Some compilers and/or build configurations don't support multiply
-        inheriting wxTextCtrl from @c std::streambuf in which case this class is
-        not compiled in.
-        You also must have @c wxUSE_STD_IOSTREAM option on (i.e. set to 1) in your
-        @c setup.h to be able to use it. Under Unix, specify @c \--enable-std_iostreams
-        switch when running configure for this.
+        This class is not available if `wxUSE_STD_IOSTREAM` is set to 0 (which
+        is done by `--disable-std_iostreams` option when using configure).
 
     Example of usage:
 
@@ -1672,7 +1917,7 @@ public:
         the default parameter value to the text control @a text.
 
         @param text
-            The text control to append output too, must be non-@NULL
+            The text control to append output too, must be non-null
         @param ostr
             The C++ stream to redirect, cout is used if it is @NULL
     */

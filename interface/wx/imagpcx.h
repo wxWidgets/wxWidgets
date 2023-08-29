@@ -1,16 +1,16 @@
-///////////////////////////////////////////////////////////////////////////// 
-// Name:        imagpcx.h 
-// Purpose:     interface of wxPCXHandler 
-// Author:      Samuel Dunn 
-// Licence:     wxWindows licence 
-//////////////////////////////////////////////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+// Name:        imagpcx.h
+// Purpose:     interface of wxPCXHandler
+// Author:      Samuel Dunn
+// Licence:     wxWindows licence
+////////////////////////////////////////////////////////////////////////////
 
-/** 
+/**
     @class wxPCXHandler
 
     This is the image handler for the PCX format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()

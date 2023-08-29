@@ -3,7 +3,7 @@
 // Purpose:     declaration of wxDebugReport class
 // Author:      Vadim Zeitlin
 // Created:     2005-01-17
-// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,6 +16,7 @@
 
 #include "wx/string.h"
 #include "wx/arrstr.h"
+#include "wx/filename.h"
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 
@@ -25,6 +26,8 @@ class WXDLLIMPEXP_FWD_XML wxXmlNode;
 
 class WXDLLIMPEXP_QA wxDebugReport
 {
+    friend class wxDebugReportDialog;
+
 public:
     // this is used for the functions which may report either the current state
     // or the state during the last (fatal) exception
@@ -113,6 +116,9 @@ protected:
     // used by Process()
     virtual bool DoProcess();
 
+    // return the location where the report will be saved
+    virtual wxFileName GetSaveLocation() const;
+
 private:
     // name of the report directory
     wxString m_dir;
@@ -146,7 +152,10 @@ public:
     const wxString& GetCompressedFileName() const { return m_zipfile; }
 
 protected:
-    virtual bool DoProcess() wxOVERRIDE;
+    virtual bool DoProcess() override;
+
+    // return the location where the report will be saved
+    wxFileName GetSaveLocation() const override;
 
 private:
     // user-specified file directory/base name, use defaults if empty
@@ -176,7 +185,7 @@ public:
                         const wxString& curl = wxT("curl"));
 
 protected:
-    virtual bool DoProcess() wxOVERRIDE;
+    virtual bool DoProcess() override;
 
     // this function may be overridden in a derived class to show the output
     // from curl: this may be an HTML page or anything else that the server
@@ -237,7 +246,7 @@ class WXDLLIMPEXP_QA wxDebugReportPreviewStd : public wxDebugReportPreview
 public:
     wxDebugReportPreviewStd() { }
 
-    virtual bool Show(wxDebugReport& dbgrpt) const wxOVERRIDE;
+    virtual bool Show(wxDebugReport& dbgrpt) const override;
 };
 
 #endif // wxUSE_GUI

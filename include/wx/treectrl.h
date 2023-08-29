@@ -23,10 +23,9 @@
 #include "wx/treebase.h"
 #include "wx/textctrl.h" // wxTextCtrl::ms_classinfo used through wxCLASSINFO macro
 #include "wx/systhemectrl.h"
+#include "wx/withimages.h"
 
-class WXDLLIMPEXP_FWD_CORE wxImageList;
-
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+#if !defined(__WXMSW__) && !defined(__WXQT__) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_TREECTRL
 #endif
 
@@ -34,7 +33,8 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 // wxTreeCtrlBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxSystemThemedControl<wxControl>
+class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxSystemThemedControl<wxControl>,
+                                        public wxWithImages
 {
 public:
     wxTreeCtrlBase();
@@ -57,30 +57,19 @@ public:
     unsigned int GetSpacing() const { return m_spacing; }
     void SetSpacing(unsigned int spacing) { m_spacing = spacing; }
 
-        // image list: these functions allow to associate an image list with
-        // the control and retrieve it. Note that the control does _not_ delete
-        // the associated image list when it's deleted in order to allow image
-        // lists to be shared between different controls.
-        //
-        // The normal image list is for the icons which correspond to the
-        // normal tree item state (whether it is selected or not).
-        // Additionally, the application might choose to show a state icon
-        // which corresponds to an app-defined item state (for example,
-        // checked/unchecked) which are taken from the state image list.
-    wxImageList *GetImageList() const { return m_imageListNormal; }
-    wxImageList *GetStateImageList() const { return m_imageListState; }
-
-    virtual void SetImageList(wxImageList *imageList) = 0;
-    virtual void SetStateImageList(wxImageList *imageList) = 0;
-    void AssignImageList(wxImageList *imageList)
+        // In addition to {Set,Get,Assign}ImageList() methods inherited from
+        // wxWithImages, this control has similar functions for the state image
+        // list that can be used to show a state icon corresponding to an
+        // app-defined item state (for example, checked/unchecked).
+    wxImageList *GetStateImageList() const
     {
-        SetImageList(imageList);
-        m_ownsImageListNormal = true;
+        return m_imagesState.GetImageList();
     }
+    virtual void SetStateImageList(wxImageList *imageList) = 0;
     void AssignStateImageList(wxImageList *imageList)
     {
         SetStateImageList(imageList);
-        m_ownsImageListState = true;
+        m_imagesState.TakeOwnership();
     }
 
 
@@ -192,7 +181,7 @@ public:
         // get the root tree item
     virtual wxTreeItemId GetRootItem() const = 0;
 
-        // get the item currently selected (may return NULL if no selection)
+        // get the item currently selected (may return nullptr if no selection)
     virtual wxTreeItemId GetSelection() const = 0;
 
         // get the items currently selected, return the number of such item
@@ -212,7 +201,7 @@ public:
     virtual void SetFocusedItem(const wxTreeItemId& item) = 0;
 
 
-        // get the parent of this item (may return NULL if root)
+        // get the parent of this item (may return nullptr if root)
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const = 0;
 
         // for this enumeration function you must pass in a "cookie" parameter
@@ -250,13 +239,13 @@ public:
         // add the root node to the tree
     virtual wxTreeItemId AddRoot(const wxString& text,
                                  int image = -1, int selImage = -1,
-                                 wxTreeItemData *data = NULL) = 0;
+                                 wxTreeItemData *data = nullptr) = 0;
 
         // insert a new item in as the first child of the parent
     wxTreeItemId PrependItem(const wxTreeItemId& parent,
                              const wxString& text,
                              int image = -1, int selImage = -1,
-                             wxTreeItemData *data = NULL)
+                             wxTreeItemData *data = nullptr)
     {
         return DoInsertItem(parent, 0u, text, image, selImage, data);
     }
@@ -266,7 +255,7 @@ public:
                             const wxTreeItemId& idPrevious,
                             const wxString& text,
                             int image = -1, int selImage = -1,
-                            wxTreeItemData *data = NULL)
+                            wxTreeItemData *data = nullptr)
     {
         return DoInsertAfter(parent, idPrevious, text, image, selImage, data);
     }
@@ -276,7 +265,7 @@ public:
                             size_t pos,
                             const wxString& text,
                             int image = -1, int selImage = -1,
-                            wxTreeItemData *data = NULL)
+                            wxTreeItemData *data = nullptr)
     {
         return DoInsertItem(parent, pos, text, image, selImage, data);
     }
@@ -285,7 +274,7 @@ public:
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,
                             int image = -1, int selImage = -1,
-                            wxTreeItemData *data = NULL)
+                            wxTreeItemData *data = nullptr)
     {
         return DoInsertItem(parent, (size_t)-1, text, image, selImage, data);
     }
@@ -346,7 +335,7 @@ public:
     virtual wxTextCtrl *EditLabel(const wxTreeItemId& item,
                       wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl)) = 0;
         // returns the same pointer as StartEdit() if the item is being edited,
-        // NULL otherwise (it's assumed that no more than one item may be
+        // nullptr otherwise (it's assumed that no more than one item may be
         // edited simultaneously)
     virtual wxTextCtrl *GetEditControl() const = 0;
         // end editing and accept or discard the changes to item label
@@ -396,14 +385,14 @@ public:
     // implementation
     // --------------
 
-    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
+    virtual bool ShouldInheritColours() const override { return false; }
 
     // hint whether to calculate best size quickly or accurately
     void SetQuickBestSize(bool q) { m_quickBestSize = q; }
     bool GetQuickBestSize() const { return m_quickBestSize; }
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // common part of Get/SetItemState()
     virtual int DoGetItemState(const wxTreeItemId& item) const = 0;
@@ -426,7 +415,7 @@ protected:
                                        const wxTreeItemId& idPrevious,
                                        const wxString& text,
                                        int image = -1, int selImage = -1,
-                                       wxTreeItemData *data = NULL) = 0;
+                                       wxTreeItemData *data = nullptr) = 0;
 
     // real HitTest() implementation: again, can't be called just HitTest()
     // because it's overloaded and so the non-virtual overload would be hidden
@@ -435,10 +424,9 @@ protected:
                                         int& flags) const = 0;
 
 
-    wxImageList *m_imageListNormal, // images for tree elements
-                *m_imageListState;  // special images for app defined states
-    bool         m_ownsImageListNormal,
-                 m_ownsImageListState;
+    // Usually we inherit from this class, rather than aggregating it, but we
+    // need two different sets of images here, so we do both.
+    wxWithImages m_imagesState;
 
     // spacing between left border and the text
     unsigned int m_spacing;
@@ -465,6 +453,8 @@ private:
     #include "wx/generic/treectlg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/treectrl.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/treectrl.h"
 #else
     #error "unknown native wxTreeCtrl implementation"
 #endif

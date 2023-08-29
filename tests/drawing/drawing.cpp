@@ -11,9 +11,6 @@
 // ----------------------------------------------------------------------------
 
 #include "testprec.h"
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "drawing.h"
 
@@ -128,7 +125,7 @@ void GraphicsContextDrawingTestCase::RunIndividualDrawingCase (
         gcFactory.GetExtensionForFileName());
 
     {
-        wxGraphicsContext *gc = NULL;
+        wxGraphicsContext *gc = nullptr;
 
         wxON_BLOCK_EXIT_OBJ1(gcFactory, DrawingTestGCFactory::CleanUp, gc);
 
@@ -254,7 +251,7 @@ GraphicsContextDrawingTestCase::SvgGraphicsContextLifeCycle::
     double WXUNUSED(pointsPerInch),
     const wxFileName &WXUNUSED(targetFileName))
 {
-    m_svgFileDc = NULL;
+    m_svgFileDc = nullptr;
     //m_svg_file_dc = new wxSVGFileDC (target_file_name.GetFullPath(),
     //    expected_size.GetWidth(), expected_size.GetHeight(), points_per_inch);
 

@@ -11,9 +11,6 @@
 #include "wx/wxprec.h"
 
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -174,7 +171,7 @@ bool wxAnyButton::DoDrawBackground(wxDC& dc)
 wxStdAnyButtonInputHandler::wxStdAnyButtonInputHandler(wxInputHandler *handler)
                        : wxStdInputHandler(handler)
 {
-    m_winCapture = NULL;
+    m_winCapture = nullptr;
     m_winHasMouse = false;
 }
 
@@ -213,15 +210,13 @@ bool wxStdAnyButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
             m_winHasMouse = true;
 
             consumer->PerformAction(wxACTION_BUTTON_PRESS);
-
-            return true;
         }
         else if ( event.LeftUp() )
         {
             if ( m_winCapture )
             {
                 m_winCapture->ReleaseMouse();
-                m_winCapture = NULL;
+                m_winCapture = nullptr;
             }
 
             if ( m_winHasMouse )

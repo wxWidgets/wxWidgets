@@ -17,14 +17,497 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTextEdit>
 
+/*
+ * Abstract base class for wxQtSingleLineEdit and wxQtMultiLineEdit.
+ * This splits the polymorphic behaviour into two separate classes, avoiding
+ * unnecessary branches.
+ */
+class wxQtEdit
+{
+public:
+    virtual ~wxQtEdit() {}
+
+    virtual bool IsModified() const = 0;
+    virtual int GetNumberOfLines() const = 0;
+    virtual wxString DoGetValue() const = 0;
+    virtual long GetInsertionPoint() const = 0;
+    virtual QWidget *GetHandle() const = 0;
+    virtual int GetLineLength(long lineNo) const = 0;
+    virtual wxString GetLineText(long lineNo) const = 0;
+    virtual bool GetSelection(long *from, long *to) const = 0;
+    virtual long XYToPosition(long x, long y) const = 0;
+    virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
+    virtual QScrollArea *ScrollBarsContainer() const = 0;
+    virtual void WriteText( const wxString &text ) = 0;
+    virtual void MarkDirty() = 0;
+    virtual void DiscardEdits() = 0;
+    virtual void blockSignals(bool block) = 0;
+    virtual void SetValue( const wxString &value ) = 0;
+    virtual void SetSelection( long from, long to ) = 0;
+    virtual void SetInsertionPoint(long pos) = 0;
+    virtual void SetStyleFlags(long flags) = 0;
+    virtual void Copy() = 0;
+    virtual void Cut() = 0;
+    virtual void Paste() = 0;
+    virtual void Undo() = 0;
+    virtual void Redo() = 0;
+    virtual bool CanUndo() const = 0;
+    virtual bool CanRedo() const = 0;
+    virtual void EmptyUndoBuffer() = 0;
+};
+
+namespace
+{
+
+// Helper for SetStyleFlags(): takes care of flags that are handled in the same
+// way in both QLineEdit and QTextEdit.
+template <typename Edit>
+void ApplyCommonStyles(Edit* edit, long flags)
+{
+    edit->setReadOnly(flags & wxTE_READONLY);
+
+    if ( flags & wxTE_CENTRE )
+        edit->setAlignment(Qt::AlignHCenter);
+    else if ( flags & wxTE_RIGHT )
+        edit->setAlignment(Qt::AlignRight);
+    else // wxTE_LEFT is 0, so can't test for it, just use it by default
+        edit->setAlignment(Qt::AlignLeft);
+}
+
+
+struct wxQtLineInfo
+{
+  wxQtLineInfo(size_t start, size_t end) :
+    startPos(start),
+    endPos(end)
+  {
+  }
+
+  size_t startPos, endPos;
+};
+
 class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 {
 public:
     wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler );
 
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
+
 private:
-    void textChanged(const QString &text);
-    void returnPressed();
+    void textChanged();
+};
+
+class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
+{
+public:
+    wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler );
+
+    virtual wxString GetValueForProcessEnter() override
+    {
+        return GetHandler()->GetValue();
+    }
+
+    bool IsUndoAvailable() const { return m_undoAvailable; }
+    bool IsRedoAvailable() const { return m_redoAvailable; }
+
+private:
+    void textChanged();
+
+    bool m_undoAvailable = false,
+         m_redoAvailable = false;
+};
+
+class wxQtMultiLineEdit : public wxQtEdit
+{
+public:
+    explicit wxQtMultiLineEdit(QTextEdit *edit) : m_edit(edit)
+    {
+        // wx expects no initial undo when the control is first created, i.e.:
+        // CanUndo() should return false. but Qt emits undoAvailable(true) for
+        // a freshly created control and we should prevent this by disabling
+        // undo/redo here and re-enable it in textChanged signal.
+        m_edit->setUndoRedoEnabled(false);
+    }
+
+    virtual bool IsModified() const override
+    {
+        return m_edit->isWindowModified();
+    }
+
+    virtual void Copy() override { m_edit->copy(); }
+    virtual void Cut() override  { m_edit->cut(); }
+    virtual void Paste() override  { m_edit->paste(); }
+
+    virtual void Undo() override  { m_edit->undo(); }
+    virtual void Redo() override  { m_edit->redo(); }
+
+    virtual bool CanUndo() const override
+    {
+        return static_cast<wxQtTextEdit*>(m_edit)->IsUndoAvailable();
+    }
+
+    virtual bool CanRedo() const override
+    {
+        return static_cast<wxQtTextEdit*>(m_edit)->IsRedoAvailable();
+    }
+
+    virtual void EmptyUndoBuffer() override
+    {
+        m_edit->setUndoRedoEnabled(false);
+        m_edit->setUndoRedoEnabled(true);
+    }
+
+    virtual wxString DoGetValue() const override
+    {
+        return wxQtConvertString( m_edit->toPlainText() );
+    }
+
+    virtual long GetInsertionPoint() const override
+    {
+        QTextCursor cursor = m_edit->textCursor();
+        return cursor.anchor();
+    }
+
+    virtual QWidget *GetHandle() const override
+    {
+        return m_edit;
+    }
+
+    virtual int GetNumberOfLines() const override
+    {
+        const wxString &value = DoGetValue();
+        return std::count(value.begin(), value.end(), '\n') + 1;
+    }
+
+    virtual int GetLineLength(long lineNo) const override
+    {
+        wxQtLineInfo start = GetLineInfo(lineNo, DoGetValue());
+        if ( start.startPos == wxString::npos )
+            return -1;
+
+        return start.endPos - start.startPos;
+    }
+
+    virtual wxString GetLineText(long lineNo) const override
+    {
+        const wxString &value = DoGetValue();
+
+        wxQtLineInfo start = GetLineInfo(lineNo, value);
+        if ( start.startPos == wxString::npos )
+            return wxString();
+
+        return value.Mid(start.startPos, start.endPos - start.startPos);
+    }
+
+    virtual long XYToPosition(long x, long y) const override
+    {
+        if ( x < 0 || y < 0 )
+            return -1;
+
+        wxQtLineInfo start = GetLineInfo(y, DoGetValue());
+        if ( start.startPos == wxString::npos )
+            return -1;
+
+        if ( start.endPos - start.startPos < static_cast<size_t>(x) )
+            return -1;
+
+        return start.startPos + x;
+    }
+
+    virtual bool PositionToXY(long pos, long *x, long *y) const override
+    {
+        const wxString &value = DoGetValue();
+
+        if ( static_cast<size_t>(pos) > value.length() )
+          return false;
+
+        int cnt = 0;
+        int xval = 0;
+
+        for ( long xx = 0; xx < pos; xx++ )
+        {
+            if ( value[xx] == '\n' )
+            {
+                xval = 0;
+                cnt++;
+            }
+            else xval++;
+        }
+        *y = cnt;
+        *x = xval;
+
+        return true;
+    }
+    virtual void WriteText( const wxString &text ) override
+    {
+        m_edit->insertPlainText(wxQtConvertString( text ));
+        // the cursor is moved to the end, ensure it is shown
+        m_edit->ensureCursorVisible();
+    }
+
+    virtual void MarkDirty() override
+    {
+        return m_edit->setWindowModified( true );
+    }
+
+    virtual void DiscardEdits() override
+    {
+        return m_edit->setWindowModified( false );
+    }
+
+    virtual void blockSignals(bool block) override
+    {
+        m_edit->blockSignals(block);
+    }
+
+    virtual void SetValue( const wxString &value ) override
+    {
+        m_edit->setPlainText(wxQtConvertString( value ));
+        // the cursor is moved to the end, ensure it is shown
+        m_edit->ensureCursorVisible();
+    }
+
+    virtual void SetSelection( long from, long to ) override
+    {
+        QTextCursor cursor = m_edit->textCursor();
+        cursor.setPosition(from);
+
+        cursor.setPosition(to, QTextCursor::KeepAnchor);
+        m_edit->setTextCursor(cursor);
+    }
+
+    virtual bool GetSelection( long *from, long *to ) const override
+    {
+        QTextCursor cursor = m_edit->textCursor();
+        *from = cursor.selectionStart();
+        *to = cursor.selectionEnd();
+        return cursor.hasSelection();
+    }
+
+    virtual void SetInsertionPoint(long pos) override
+    {
+        QTextCursor::MoveOperation op;
+
+        // check if pos indicates end of text:
+        if ( pos == -1 )
+        {
+            pos = 0;
+            op = QTextCursor::End;
+        }
+        else
+        {
+            op = QTextCursor::Start;
+        }
+
+        QTextCursor cursor = m_edit->textCursor();
+        cursor.movePosition(op, QTextCursor::MoveAnchor, pos);
+
+        if (op != QTextCursor::End )
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, pos);
+        m_edit->setTextCursor(cursor);
+        m_edit->ensureCursorVisible();
+    }
+
+    QScrollArea *ScrollBarsContainer() const override
+    {
+        return (QScrollArea *) m_edit;
+    }
+
+    virtual void SetStyleFlags(long flags) override
+    {
+        ApplyCommonStyles(m_edit, flags);
+
+        if ( flags & wxNO_BORDER )
+            m_edit->setFrameStyle(QFrame::NoFrame);
+
+        if ( flags & wxTE_RICH || flags & wxTE_RICH2 )
+            m_edit->setAcceptRichText(true);
+    }
+
+private:
+    wxQtLineInfo GetLineInfo(long lineNo, const wxString &value) const
+    {
+        size_t pos = 0;
+        long cnt = 0;
+
+        while ( cnt < lineNo )
+        {
+            size_t tpos = value.find('\n', pos);
+            if ( tpos == wxString::npos )
+              return wxQtLineInfo(tpos, tpos);
+
+            pos = tpos + 1;
+            cnt++;
+        }
+
+        size_t end = value.find('\n', pos);
+        if ( end == wxString::npos )
+            end = value.length();
+
+        return wxQtLineInfo(pos, end);
+    }
+
+    QTextEdit* const m_edit;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtMultiLineEdit);
+};
+
+class wxQtSingleLineEdit : public wxQtEdit
+{
+public:
+    explicit wxQtSingleLineEdit(QLineEdit *edit) :
+        m_edit(edit)
+    {
+    }
+
+    virtual bool IsModified() const override
+    {
+        return m_edit->isModified();
+    }
+
+    virtual int GetNumberOfLines() const override
+    {
+        return 1;
+    }
+
+    virtual void Copy() override { m_edit->copy(); }
+    virtual void Cut() override  { m_edit->cut(); }
+    virtual void Paste() override  { m_edit->paste(); }
+
+    virtual void Undo() override  { m_edit->undo(); }
+    virtual void Redo() override  { m_edit->redo(); }
+    virtual bool CanUndo() const override  { return m_edit->isUndoAvailable(); }
+    virtual bool CanRedo() const override  { return m_edit->isRedoAvailable(); }
+
+    virtual void EmptyUndoBuffer() override
+    {
+        // how to empty undo buffer for QLineEdit control ?
+    }
+
+    virtual wxString DoGetValue() const override
+    {
+        return wxQtConvertString( m_edit->text() );
+    }
+
+    virtual long GetInsertionPoint() const override
+    {
+        long selectionStart = m_edit->selectionStart();
+
+        if ( selectionStart >= 0 )
+            return selectionStart;
+
+        return m_edit->cursorPosition();
+    }
+
+    virtual QWidget *GetHandle() const override
+    {
+        return m_edit;
+    }
+
+    virtual int GetLineLength(long WXUNUSED(lineNo)) const override
+    {
+        return DoGetValue().length();
+    }
+
+    virtual wxString GetLineText(long lineNo) const override
+    {
+        return lineNo == 0 ? DoGetValue() : wxString();
+    }
+
+    virtual void WriteText( const wxString &text ) override
+    {
+        m_edit->insert(wxQtConvertString( text ));
+    }
+
+    virtual void MarkDirty() override
+    {
+        return m_edit->setModified( true );
+    }
+
+    virtual void DiscardEdits() override
+    {
+        return m_edit->setModified( false );
+    }
+
+    virtual void blockSignals(bool block) override
+    {
+        m_edit->blockSignals(block);
+    }
+
+    virtual void SetValue( const wxString &value ) override
+    {
+        m_edit->setText(wxQtConvertString( value ));
+    }
+
+    virtual void SetSelection( long from, long to ) override
+    {
+        m_edit->setSelection(from, to - from);
+    }
+
+    virtual bool GetSelection( long *from, long *to ) const override
+    {
+        *from = m_edit->selectionStart();
+        if ( *from < 0 )
+            return false;
+
+        *to = *from + m_edit->selectedText().length();
+        return true;
+    }
+
+    virtual void SetInsertionPoint(long pos) override
+    {
+        // check if pos indicates end of text:
+        if ( pos == -1 )
+            m_edit->end(false);
+        else
+            m_edit->setCursorPosition(pos);
+    }
+
+    virtual long XYToPosition(long x, long y) const override
+    {
+        if ( y == 0 && x >= 0 )
+        {
+            if ( static_cast<size_t>(x) <= DoGetValue().length() )
+              return x;
+        }
+
+        return -1;
+    }
+
+    virtual bool PositionToXY(long pos, long *x, long *y) const override
+    {
+        const wxString &value = DoGetValue();
+
+        if ( static_cast<size_t>(pos) > value.length() )
+          return false;
+
+        *y = 0;
+        *x = pos;
+        return true;
+    }
+
+    virtual QScrollArea *ScrollBarsContainer() const override
+    {
+        return nullptr;
+    }
+
+    virtual void SetStyleFlags(long flags) override
+    {
+        ApplyCommonStyles(m_edit, flags);
+
+        m_edit->setFrame(!(flags & wxNO_BORDER));
+
+        if ( flags & wxTE_PASSWORD )
+            m_edit->setEchoMode(QLineEdit::Password);
+    }
+
+private:
+    QLineEdit *m_edit;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtSingleLineEdit);
 };
 
 wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
@@ -32,65 +515,48 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
 {
     connect(this, &QLineEdit::textChanged,
             this, &wxQtLineEdit::textChanged);
-    connect(this, &QLineEdit::returnPressed,
-            this, &wxQtLineEdit::returnPressed);
 }
 
-void wxQtLineEdit::textChanged(const QString &text)
+void wxQtLineEdit::textChanged()
 {
-    wxTextCtrl *handler = GetHandler();
+    wxTextEntryBase *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
-        event.SetString( wxQtConvertString( text ) );
-        EmitEvent( event );
+        handler->SendTextUpdatedEventIfAllowed();
     }
 }
-
-void wxQtLineEdit::returnPressed()
-{
-    wxTextCtrl *handler = GetHandler();
-    if ( handler )
-    {
-        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
-        {
-            wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
-            event.SetString( handler->GetValue() );
-            EmitEvent( event );
-        }
-    }
-}
-
-
-class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
-{
-public:
-    wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler );
-
-private:
-    void textChanged();
-};
 
 wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
     : wxQtEventSignalHandler< QTextEdit, wxTextCtrl >( parent, handler )
 {
     connect(this, &QTextEdit::textChanged,
             this, &wxQtTextEdit::textChanged);
+
+    connect(this, &QTextEdit::undoAvailable, [this](bool available) {
+                m_undoAvailable = available;
+            });
+    connect(this, &QTextEdit::redoAvailable, [this](bool available) {
+                m_redoAvailable = available;
+            });
 }
 
 void wxQtTextEdit::textChanged()
 {
-    wxTextCtrl *handler = GetHandler();
+    wxTextEntryBase *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
-        event.SetString( handler->GetValue() );
-        EmitEvent( event );
+        handler->SendTextUpdatedEventIfAllowed();
     }
+
+    if ( !isUndoRedoEnabled() )
+        setUndoRedoEnabled(true);
 }
 
+} // anonymous namespace
 
-wxTextCtrl::wxTextCtrl()
+
+wxTextCtrl::wxTextCtrl() :
+    m_qtEdit(nullptr)
 {
 }
 
@@ -115,18 +581,17 @@ bool wxTextCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString &name)
 {
-    bool multiline = (style & wxTE_MULTILINE) != 0;
-
-    if (!multiline)
+    if ( style & wxTE_MULTILINE )
     {
-        m_qtLineEdit = new wxQtLineEdit( parent, this );
-        m_qtTextEdit = NULL;
+        m_qtEdit = new wxQtMultiLineEdit(new wxQtTextEdit(parent, this));
     }
     else
     {
-        m_qtTextEdit =  new wxQtTextEdit( parent, this );
-        m_qtLineEdit = NULL;
+        m_qtEdit = new wxQtSingleLineEdit(new wxQtLineEdit(parent, this));
     }
+
+    m_qtEdit->SetStyleFlags(style);
+
     if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
     {
         // set the initial text value without sending the event:
@@ -139,37 +604,44 @@ bool wxTextCtrl::Create(wxWindow *parent,
     return false;
 }
 
+wxTextCtrl::~wxTextCtrl()
+{
+    delete m_qtEdit;
+}
+
 wxSize wxTextCtrl::DoGetBestSize() const
 {
     return wxTextCtrlBase::DoGetBestSize();
-
-}
-int wxTextCtrl::GetLineLength(long WXUNUSED(lineNo)) const
-{
-    return 0;
 }
 
-wxString wxTextCtrl::GetLineText(long WXUNUSED(lineNo)) const
+int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    return wxString();
+    return m_qtEdit->GetLineLength(lineNo);
+}
+
+wxString wxTextCtrl::GetLineText(long lineNo) const
+{
+    return m_qtEdit->GetLineText(lineNo);
 }
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    return 0;
+    return m_qtEdit->GetNumberOfLines();
 }
 
 bool wxTextCtrl::IsModified() const
 {
-    return false;
+    return m_qtEdit->IsModified();
 }
 
 void wxTextCtrl::MarkDirty()
 {
+    m_qtEdit->MarkDirty();
 }
 
 void wxTextCtrl::DiscardEdits()
 {
+    m_qtEdit->DiscardEdits();
 }
 
 bool wxTextCtrl::SetStyle(long WXUNUSED(start), long WXUNUSED(end), const wxTextAttr& WXUNUSED(style))
@@ -187,14 +659,17 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& WXUNUSED(style))
     return false;
 }
 
-long wxTextCtrl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
+long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    return 0;
+    return m_qtEdit->XYToPosition(x, y);
 }
 
-bool wxTextCtrl::PositionToXY(long WXUNUSED(pos), long *WXUNUSED(x), long *WXUNUSED(y)) const
+bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    return false;
+    if ( x == nullptr || y == nullptr || pos < 0 )
+        return false;
+
+    return m_qtEdit->PositionToXY(pos, x, y);
 }
 
 void wxTextCtrl::ShowPosition(long WXUNUSED(pos))
@@ -211,100 +686,77 @@ bool wxTextCtrl::DoSaveFile(const wxString& WXUNUSED(file), int WXUNUSED(fileTyp
     return false;
 }
 
+void wxTextCtrl::Copy()
+{
+    m_qtEdit->Copy();
+}
+
+void wxTextCtrl::Cut()
+{
+    m_qtEdit->Cut();
+}
+
+void wxTextCtrl::Paste()
+{
+    m_qtEdit->Paste();
+}
+
+void wxTextCtrl::Undo()
+{
+    m_qtEdit->Undo();
+}
+
+void wxTextCtrl::Redo()
+{
+    m_qtEdit->Redo();
+}
+
+bool wxTextCtrl::CanUndo() const
+{
+    return m_qtEdit->CanUndo();
+}
+
+bool wxTextCtrl::CanRedo() const
+{
+    return m_qtEdit->CanRedo();
+}
+
+void wxTextCtrl::EmptyUndoBuffer()
+{
+    m_qtEdit->EmptyUndoBuffer();
+}
+
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
-    QTextCursor::MoveOperation op;
-    QTextCursor cursor;
-
-    // check if pos indicates end of text:
-    if ( pos == -1 )
-    {
-        pos = 0;
-        op = QTextCursor::End;
-    }
-    else
-    {
-        op = QTextCursor::Start;
-    }
-    if ( !IsMultiLine() )
-    {
-        if (op == QTextCursor::End)
-            m_qtLineEdit->end(false);
-        else
-            m_qtLineEdit->setCursorPosition(pos);
-    }
-    else
-    {
-        cursor = m_qtTextEdit->textCursor();
-        cursor.movePosition(op, QTextCursor::MoveAnchor, pos);
-        m_qtTextEdit->setTextCursor(cursor);
-        m_qtTextEdit->ensureCursorVisible();
-    }
+    m_qtEdit->SetInsertionPoint(pos);
 }
 
 long wxTextCtrl::GetInsertionPoint() const
 {
-    QTextCursor cursor;
-
-    if ( !IsMultiLine() )
-    {
-        return m_qtLineEdit->cursorPosition();
-    }
-    else
-    {
-        cursor = m_qtTextEdit->textCursor();
-        return cursor.position();
-    }
+    return m_qtEdit->GetInsertionPoint();
 }
 
 wxString wxTextCtrl::DoGetValue() const
 {
-    if ( IsMultiLine() )
-        return wxQtConvertString( m_qtTextEdit->toPlainText() );
-    else
-        return wxQtConvertString( m_qtLineEdit->text() );
+    return m_qtEdit->DoGetValue();
 }
 
 void wxTextCtrl::SetSelection( long from, long to )
 {
     // SelectAll uses -1 to -1, adjust for qt:
-    if (from == -1 && to == -1)
-    {
-        from = 0;
+    if ( to == -1 )
         to = GetValue().length();
-    }
-    if ( IsMultiLine() )
-    {
-        QTextCursor cursor = m_qtTextEdit->textCursor();
-        cursor.setPosition(from);
-        cursor.setPosition(to, QTextCursor::KeepAnchor);
-        m_qtTextEdit->setTextCursor(cursor);
-    }
-    else // single line
-    {
-        m_qtLineEdit->setSelection(from, to);
-    }
+
+    if ( from == -1 )
+        from = 0;
+
+    m_qtEdit->SetSelection( from, to );
 }
 
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
-    if ( IsMultiLine() )
-    {
-        QTextCursor cursor = m_qtTextEdit->textCursor();
-        *from = cursor.selectionStart();
-        *to = cursor.selectionEnd();
-        if ( cursor.hasSelection() )
-            return;
-    }
-    else // single line
-    {
-        *from = m_qtLineEdit->selectionStart();
-        if ( *from >= 0 )
-        {
-            *to = *from + m_qtLineEdit->selectedText().length();
-            return;
-        }
-    }
+    if ( m_qtEdit->GetSelection(from, to) )
+        return;
     // No selection, call base for default behaviour:
     wxTextEntry::GetSelection(from, to);
 }
@@ -312,16 +764,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 void wxTextCtrl::WriteText( const wxString &text )
 {
     // Insert the text
-    if ( !IsMultiLine() )
-    {
-        m_qtLineEdit->insert(wxQtConvertString( text ));
-    }
-    else
-    {
-        m_qtTextEdit->insertPlainText(wxQtConvertString( text ));
-        // the cursor is moved to the end, ensure it is shown
-        m_qtTextEdit->ensureCursorVisible();
-    }
+    m_qtEdit->WriteText(text);
 }
 
 void wxTextCtrl::DoSetValue( const wxString &text, int flags )
@@ -329,46 +772,25 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
     // do not fire qt signals for certain methods (i.e. ChangeText)
     if ( !(flags & SetValue_SendEvent) )
     {
-        if ( !IsMultiLine() )
-            m_qtLineEdit->blockSignals(true);
-        else
-            m_qtTextEdit->blockSignals(true);
+        m_qtEdit->blockSignals(true);
     }
 
-    // Replace the text int the control
-    if ( !IsMultiLine() )
-    {
-        m_qtLineEdit->setText(wxQtConvertString( text ));
-    }
-    else
-    {
-        m_qtTextEdit->setPlainText(wxQtConvertString( text ));
-        // the cursor is moved to the end, ensure it is shown
-        m_qtTextEdit->ensureCursorVisible();
-    }
+    m_qtEdit->SetValue( text );
 
     // re-enable qt signals
     if ( !(flags & SetValue_SendEvent) )
     {
-        if ( !IsMultiLine() )
-            m_qtLineEdit->blockSignals(false);
-        else
-            m_qtTextEdit->blockSignals(false);
+        m_qtEdit->blockSignals(false);
     }
+    SetInsertionPoint(0);
 }
 
 QWidget *wxTextCtrl::GetHandle() const
 {
-    if (m_qtLineEdit!=NULL)
-        return (QWidget *) m_qtLineEdit;
-    else
-        return (QWidget *) m_qtTextEdit;
+    return (QWidget *) m_qtEdit->GetHandle();
 }
 
 QScrollArea *wxTextCtrl::QtGetScrollBarsContainer() const
 {
-    if (m_qtTextEdit!=NULL)
-        return (QScrollArea *) m_qtTextEdit;
-    else
-        return NULL;
+    return m_qtEdit->ScrollBarsContainer();
 }

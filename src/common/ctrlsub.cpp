@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONTROLS
 
@@ -168,10 +165,9 @@ void wxItemContainer::SetClientObject(unsigned int n, wxClientData *data)
 
     if ( HasClientObjectData() )
     {
-        wxClientData * clientDataOld
-            = static_cast<wxClientData *>(DoGetItemClientData(n));
-        if ( clientDataOld )
-            delete clientDataOld;
+        wxClientData * clientDataOld =
+            static_cast<wxClientData *>(DoGetItemClientData(n));
+        delete clientDataOld;
     }
     else // didn't have any client data so far
     {
@@ -186,10 +182,10 @@ void wxItemContainer::SetClientObject(unsigned int n, wxClientData *data)
 
 wxClientData *wxItemContainer::GetClientObject(unsigned int n) const
 {
-    wxCHECK_MSG( HasClientObjectData(), NULL,
+    wxCHECK_MSG( HasClientObjectData(), nullptr,
                   wxT("this window doesn't have object client data") );
 
-    wxCHECK_MSG( IsValid(n), NULL,
+    wxCHECK_MSG( IsValid(n), nullptr,
                  "Invalid index passed to GetClientObject()" );
 
     return static_cast<wxClientData *>(DoGetItemClientData(n));
@@ -201,7 +197,7 @@ wxClientData *wxItemContainer::DetachClientObject(unsigned int n)
     if ( data )
     {
         // reset the pointer as we don't own it any more
-        DoSetItemClientData(n, NULL);
+        DoSetItemClientData(n, nullptr);
     }
 
     return data;
@@ -225,10 +221,10 @@ void wxItemContainer::SetClientData(unsigned int n, void *data)
 
 void *wxItemContainer::GetClientData(unsigned int n) const
 {
-    wxCHECK_MSG( HasClientUntypedData(), NULL,
+    wxCHECK_MSG( HasClientUntypedData(), nullptr,
                   wxT("this window doesn't have void client data") );
 
-    wxCHECK_MSG( IsValid(n), NULL,
+    wxCHECK_MSG( IsValid(n), nullptr,
                  "Invalid index passed to GetClientData()" );
 
     return DoGetItemClientData(n);
@@ -269,7 +265,7 @@ void wxItemContainer::ResetItemClientObject(unsigned int n)
     if ( data )
     {
         delete data;
-        DoSetItemClientData(n, NULL);
+        DoSetItemClientData(n, nullptr);
     }
 }
 
@@ -299,7 +295,6 @@ void wxControlWithItemsBase::SendSelectionChangedEvent(wxEventType eventType)
 
     wxCommandEvent event(eventType, m_windowId);
     event.SetInt(n);
-    event.SetEventObject(this);
     event.SetString(GetStringSelection());
     InitCommandEventWithItems(event, n);
 

@@ -23,6 +23,13 @@ public:
     void SetPaneWindow(const wxAuiPaneInfo& pane);
     wxAuiManager* GetOwnerManager() const;
 
+    /**
+       Returns the embedded wxAuiManager managing this floating pane's contents.
+
+       @since 3.1.5
+    */
+    wxAuiManager& GetAuiManager();
+
 protected:
     virtual void OnMoveStart();
     virtual void OnMoving(const wxRect& windowRect, wxDirection dir);

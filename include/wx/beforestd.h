@@ -19,32 +19,18 @@
     it can be included several times.
  */
 
-// VC 7.x isn't as bad as VC6 and doesn't give these warnings but eVC (which
-// defines _MSC_VER as 1201) does need to be included as it's VC6-like
-#if defined(__VISUALC__) && __VISUALC__ <= 1201
-    // these warning have to be disabled and not just temporarily disabled
-    // because they will be given at the end of the compilation of the
-    // current source and there is absolutely nothing we can do about them so
-    // disable them before warning(push) below
-
-    // 'foo': unreferenced inline function has been removed
-    #pragma warning(disable:4514)
-
-    // 'function' : function not inlined
-    #pragma warning(disable:4710)
-
-    // 'id': identifier was truncated to 'num' characters in the debug info
-    #pragma warning(disable:4786)
-
-    // we have to disable (and reenable in afterstd.h) this one because,
-    // even though it is of level 4, it is not disabled by warning(push, 1)
-    // below for VC7.1!
-
-    // unreachable code
-    #pragma warning(disable:4702)
-
+#if defined(__VISUALC__) && __VISUALC__ >= 1910
     #pragma warning(push, 1)
-#endif // VC++ < 7
+
+    // This warning, given when a malloc.h from 10.0.240.0 version of UCRT,
+    // which is used when building projects targeting 8.1 SDK, compiled by MSVS
+    // 2017 or later, is still given even at warning level 1, in spite of it
+    // being level 4, so we have to explicitly disable it here (as we do it
+    // after the warning push pragma, it will be restored after pop).
+    //
+    // expression before comma has no effect; expected expression with side-effect
+    #pragma warning(disable:4548)
+#endif // VC++ >= 14.1
 
 /**
     GCC's visibility support is broken for libstdc++ in some older versions

@@ -13,8 +13,8 @@
 Below are a number of convenience functions for getting input from the user
 or displaying messages. Note that in these functions the last three parameters
 are optional. However, it is recommended to pass a parent frame parameter, or
-(in MS Windows or Motif) the wrong window frame may be brought to the front when
-the dialog box is popped up.
+the wrong window frame may be brought to the front when the dialog box is
+popped up.
 
 */
 

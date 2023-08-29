@@ -4,23 +4,19 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-07-31
-// Copyright:   (c) 2003-2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003-2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSW_EVTLOOP_H_
 #define _WX_MSW_EVTLOOP_H_
 
-#include "wx/dynarray.h"
-#include "wx/msw/wrapwin.h"
 #include "wx/window.h"
 #include "wx/msw/evtloopconsole.h" // for wxMSWEventLoopBase
 
 // ----------------------------------------------------------------------------
 // wxEventLoop
 // ----------------------------------------------------------------------------
-
-WX_DECLARE_EXPORTED_OBJARRAY(MSG, wxMSGArray);
 
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxMSWEventLoopBase
 {
@@ -39,7 +35,7 @@ public:
     // except those to this window (and its children) stop to be processed
     // (typical examples: assert or crash report dialog)
     //
-    // calling this function with NULL argument restores the normal event
+    // calling this function with null argument restores the normal event
     // handling
     static void SetCriticalWindow(wxWindowMSW *win) { ms_winCritical = win; }
 
@@ -51,22 +47,19 @@ public:
     }
 
     // override/implement base class virtuals
-    virtual bool Dispatch() wxOVERRIDE;
-    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
+    virtual bool Dispatch() override;
+    virtual int DispatchTimeout(unsigned long timeout) override;
 
 protected:
-    virtual void OnNextIteration() wxOVERRIDE;
-    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
+    virtual void OnNextIteration() override;
+    virtual void DoYieldFor(long eventsToProcess) override;
 
 private:
     // check if the given window is a child of ms_winCritical (which must be
-    // non NULL)
+    // non null)
     static bool IsChildOfCriticalWindow(wxWindowMSW *win);
 
-    // array of messages used for temporary storage by YieldFor()
-    wxMSGArray m_arrMSG;
-
-    // critical window or NULL
+    // critical window or nullptr
     static wxWindowMSW *ms_winCritical;
 };
 

@@ -39,11 +39,6 @@ public:
     // Read directly from XPM data (as passed to wxBitmap ctor):
     wxImage ReadData(const char* const* xpm_data);
 
-#ifdef __BORLANDC__
-    // needed for Borland 5.5
-    wxImage ReadData(char** xpm_data)
-        { return ReadData(const_cast<const char* const*>(xpm_data)); }
-#endif
 };
 
 #endif // wxUSE_IMAGE && wxUSE_XPM

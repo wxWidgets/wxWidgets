@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/timer.h"
 
@@ -63,7 +60,7 @@ public:
     {
     }
 
-    virtual void Notify()
+    virtual void Notify() override
     {
         m_loop.ScheduleExit(m_rc);
     }
@@ -87,7 +84,7 @@ public:
     {
     }
 
-    virtual void Notify()
+    virtual void Notify() override
     {
         wxEventLoop loopInner;
         ScheduleLoopExitTimer timerInner(loopInner, EXIT_CODE_INNER_LOOP);

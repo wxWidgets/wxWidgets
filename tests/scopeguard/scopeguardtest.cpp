@@ -16,9 +16,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/string.h"
 #include "wx/scopeguard.h"

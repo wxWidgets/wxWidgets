@@ -8,32 +8,29 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+
+#if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
 #include "wx/private/uiaction.h"
 
 #include <QtTest/QtTestGui>
-#include <QApplication>
-#include <QWidget>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QWidget>
 
 #include "wx/qt/defs.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 
 
-#if wxUSE_UIACTIONSIMULATOR
-
 using namespace Qt;
 using namespace QTest;
 
 // Apparently {mouse,key}Event() functions signature has changed from QWidget
 // to QWindow at some time during Qt5, but we don't know when exactly. We do
-// know that they take QWindow for 5.3 and, presumably, later versions (but not
+// know that they take QWindow for 5.2 and, presumably, later versions (but not
 // for whichever version this code was originally written for).
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
 inline QWindow* argForEvents(QWidget* w) { return w->windowHandle(); }
 #else
 inline QWidget* argForEvents(QWidget* w) { return w; }
@@ -51,11 +48,11 @@ public:
         return &s_impl;
     }
 
-    virtual bool MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
-    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseMove(long x, long y) override;
+    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
 
-    virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
+    virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
 private:
     // This class has no public ctors, use Get() instead.
@@ -103,23 +100,23 @@ static bool SimulateMouseButton( MouseAction mouseAction, MouseButton mouseButto
 {
     QPoint mousePosition = QCursor::pos();
     QWidget *widget = QApplication::widgetAt( mousePosition );
-    if ( widget != NULL )
+    if ( widget != nullptr )
         mouseEvent( mouseAction, argForEvents(widget), mouseButton, NoModifier, mousePosition );
 
     // If we found a widget then we successfully simulated an event:
 
-    return widget != NULL;
+    return widget != nullptr;
 }
 
 static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
 {
     QWidget *widget = QApplication::focusWidget();
-    if ( widget != NULL )
+    if ( widget != nullptr )
         keyEvent( keyAction, argForEvents(widget), key );
 
     // If we found a widget then we successfully simulated an event:
 
-    return widget != NULL;
+    return widget != nullptr;
 }
 
 bool wxUIActionSimulatorQtImpl::MouseDown( int button )

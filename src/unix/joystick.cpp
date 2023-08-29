@@ -63,7 +63,7 @@ class wxJoystickThread : public wxThread
 {
 public:
     wxJoystickThread(int device, int joystick);
-    void* Entry() wxOVERRIDE;
+    void* Entry() override;
 
 private:
     void      SendEvent(wxEventType type, long ts, int change = 0);
@@ -85,7 +85,7 @@ wxJoystickThread::wxJoystickThread(int device, int joystick)
       m_joystick(joystick),
       m_lastposition(wxDefaultPosition),
       m_buttons(0),
-      m_catchwin(NULL),
+      m_catchwin(nullptr),
       m_polling(0),
       m_threshold(0)
 {
@@ -125,7 +125,7 @@ void* wxJoystickThread::Entry()
             time_out.tv_usec = 10 * 1000; // check at least every 10 msec in blocking case
 
         wxFD_SET(m_device, &read_fds);
-        select(m_device+1, &read_fds, NULL, NULL, &time_out);
+        select(m_device+1, &read_fds, nullptr, nullptr, &time_out);
         if (wxFD_ISSET(m_device, &read_fds))
         {
             memset(&j_evt, 0, sizeof(j_evt));
@@ -141,14 +141,6 @@ void* wxJoystickThread::Entry()
 
             if ((j_evt.type & JS_EVENT_AXIS) && (j_evt.number < wxJS_MAX_AXES))
             {
-                // Ignore invalid axis.
-                if ( j_evt.number >= wxJS_MAX_AXES )
-                {
-                    wxLogDebug(wxS("Invalid axis index %d in joystick message."),
-                               j_evt.number);
-                    continue;
-                }
-
                 if (   (m_axe[j_evt.number] + m_threshold < j_evt.value)
                     || (m_axe[j_evt.number] - m_threshold > j_evt.value) )
             {
@@ -181,18 +173,18 @@ void* wxJoystickThread::Entry()
                 if (j_evt.value)
                 {
                     m_buttons |= (1 << j_evt.number);
-                    SendEvent(wxEVT_JOY_BUTTON_DOWN, j_evt.time, j_evt.number);
+                    SendEvent(wxEVT_JOY_BUTTON_DOWN, j_evt.time, 1 << j_evt.number);
                 }
                 else
                 {
                     m_buttons &= ~(1 << j_evt.number);
-                    SendEvent(wxEVT_JOY_BUTTON_UP, j_evt.time, j_evt.number);
+                    SendEvent(wxEVT_JOY_BUTTON_UP, j_evt.time, 1 << j_evt.number);
                 }
             }
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -201,7 +193,7 @@ void* wxJoystickThread::Entry()
 wxJoystick::wxJoystick(int joystick)
     : m_device(-1),
       m_joystick(joystick),
-      m_thread(NULL)
+      m_thread(nullptr)
 {
     wxString dev_name;
 
@@ -270,7 +262,7 @@ int wxJoystick::GetButtonState() const
 bool wxJoystick::GetButtonState(unsigned id) const
 {
     if (m_thread && (id < wxJS_MAX_BUTTONS))
-        return (m_thread->m_buttons & (1 << id)) != 0;
+        return (m_thread->m_buttons & (1u << id)) != 0;
     return false;
 }
 
@@ -532,7 +524,7 @@ bool wxJoystick::ReleaseCapture()
 {
     if (m_thread)
     {
-        m_thread->m_catchwin = NULL;
+        m_thread->m_catchwin = nullptr;
         m_thread->m_polling = 0;
         return true;
     }

@@ -8,7 +8,7 @@ Format-specific notes:
 
 * autoconf:
         Beware that you have to use WX_CONFIG_OPTIONS and
-        WX_CONFIG_CHECK in your configure.in to get at least the
+        WX_CONFIG_CHECK in your configure.ac to get at least the
         WX_CPPFLAGS, WX_CFLAGS, WX_CXXFLAGS, WX_LIBS option values defined.
 
         To detect the WX_* option values typically you also want to use
@@ -79,7 +79,7 @@ Format-specific notes:
             $(DOLLAR)(shell $(WX_CONFIG) --query-toolkit)
         </set>
         <option name="WX_PORT">
-            <values>gtk1,gtk2,msw,x11,motif,osx_cocoa,osx_carbon,dfb</values>
+            <values>gtk2,msw,x11,osx_cocoa,osx_carbon,dfb</values>
             <default-value force="1">$(WX_PORT_DEFAULT)</default-value>
             <description>
                 Port of the wx library to build against

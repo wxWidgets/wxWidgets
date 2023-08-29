@@ -33,9 +33,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -48,6 +45,10 @@
 
 #include "wx/docview.h"
 #include "wx/docmdi.h"
+
+#if wxUSE_AUI
+    #include "wx/aui/tabmdi.h"
+#endif // wxUSE_AUI
 
 #include "docview.h"
 #include "doc.h"
@@ -74,6 +75,7 @@ wxIMPLEMENT_APP(MyApp);
 
 wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(wxID_ABOUT, MyApp::OnAbout)
+    EVT_MENU(wxID_CLEAR, MyApp::OnForceCloseAll)
 wxEND_EVENT_TABLE()
 
 MyApp::MyApp()
@@ -84,15 +86,20 @@ MyApp::MyApp()
     m_mode = Mode_SDI;
 #endif
 
-    m_canvas = NULL;
-    m_menuEdit = NULL;
+    m_canvas = nullptr;
+    m_menuEdit = nullptr;
 }
 
 // constants for the command line options names
 namespace CmdLineOption
 {
 
+#if wxUSE_MDI_ARCHITECTURE
 const char * const MDI = "mdi";
+#endif // wxUSE_MDI_ARCHITECTURE
+#if wxUSE_AUI
+const char * const AUI = "aui";
+#endif // wxUSE_AUI
 const char * const SDI = "sdi";
 const char * const SINGLE = "single";
 
@@ -102,8 +109,14 @@ void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
     wxApp::OnInitCmdLine(parser);
 
+#if wxUSE_MDI_ARCHITECTURE
     parser.AddSwitch("", CmdLineOption::MDI,
                      "run in MDI mode: multiple documents, single window");
+#endif // wxUSE_MDI_ARCHITECTURE
+#if wxUSE_AUI
+    parser.AddSwitch("", CmdLineOption::AUI,
+                     "run in MDI mode using AUI: multiple documents, single window");
+#endif // wxUSE_AUI
     parser.AddSwitch("", CmdLineOption::SDI,
                      "run in SDI mode: multiple documents, multiple windows");
     parser.AddSwitch("", CmdLineOption::SINGLE,
@@ -125,6 +138,14 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
         numModeOptions++;
     }
 #endif // wxUSE_MDI_ARCHITECTURE
+
+#if wxUSE_AUI
+    if ( parser.Found(CmdLineOption::AUI) )
+    {
+        m_mode = Mode_AUI;
+        numModeOptions++;
+    }
+#endif // wxUSE_AUI
 
     if ( parser.Found(CmdLineOption::SDI) )
     {
@@ -198,22 +219,37 @@ bool MyApp::OnInit()
     }
 
     // create the main frame window
-    wxFrame *frame;
+    wxFrame *frame = nullptr;
+    switch ( m_mode )
+    {
 #if wxUSE_MDI_ARCHITECTURE
-    if ( m_mode == Mode_MDI )
-    {
-        frame = new wxDocMDIParentFrame(docManager, NULL, wxID_ANY,
-                                        GetAppDisplayName(),
-                                        wxDefaultPosition,
-                                        wxSize(500, 400));
-    }
-    else
+        case Mode_MDI:
+            frame = new wxDocMDIParentFrame(docManager, nullptr, wxID_ANY,
+                                            GetAppDisplayName(),
+                                            wxDefaultPosition,
+                                            wxSize(500, 400));
+            break;
 #endif // wxUSE_MDI_ARCHITECTURE
-    {
-        frame = new wxDocParentFrame(docManager, NULL, wxID_ANY,
-                                     GetAppDisplayName(),
-                                     wxDefaultPosition,
-                                     wxSize(500, 400));
+
+#if wxUSE_AUI
+        case Mode_AUI:
+            frame = new wxDocParentFrameAny<wxAuiMDIParentFrame>
+                        (
+                            docManager, nullptr, wxID_ANY,
+                            GetAppDisplayName(),
+                            wxDefaultPosition,
+                            wxSize(500, 400)
+                        );
+            break;
+#endif // wxUSE_AUI
+
+        case Mode_SDI:
+        case Mode_Single:
+            frame = new wxDocParentFrame(docManager, nullptr, wxID_ANY,
+                                         GetAppDisplayName(),
+                                         wxDefaultPosition,
+                                         wxSize(500, 400));
+            break;
     }
 
     // and its menu bar
@@ -237,7 +273,7 @@ bool MyApp::OnInit()
 
     if ( m_mode == Mode_Single )
     {
-        m_canvas = new MyCanvas(NULL, frame);
+        m_canvas = new MyCanvas(nullptr, frame);
         m_menuEdit = CreateDrawingEditMenu();
     }
 
@@ -249,7 +285,10 @@ bool MyApp::OnInit()
 
     if ( m_filesFromCmdLine.empty() )
     {
+        // on macOS the dialog will be shown by MacNewFile
+#ifndef __WXMAC__
         docManager->CreateNewDocument();
+#endif
     }
     else // we have files to open on command line
     {
@@ -277,6 +316,7 @@ void MyApp::AppendDocumentFileCommands(wxMenu *menu, bool supportsPrinting)
     menu->Append(wxID_SAVE);
     menu->Append(wxID_SAVEAS);
     menu->Append(wxID_REVERT, _("Re&vert..."));
+    menu->Append(wxID_CLEAR, "&Force close all");
 
     if ( supportsPrinting )
     {
@@ -317,37 +357,55 @@ void MyApp::CreateMenuBarForFrame(wxFrame *frame, wxMenu *file, wxMenu *edit)
 wxFrame *MyApp::CreateChildFrame(wxView *view, bool isCanvas)
 {
     // create a child frame of appropriate class for the current mode
-    wxFrame *subframe;
+    wxFrame *subframe = nullptr;
     wxDocument *doc = view->GetDocument();
+    switch ( GetMode() )
 #if wxUSE_MDI_ARCHITECTURE
-    if ( GetMode() == Mode_MDI )
     {
-        subframe = new wxDocMDIChildFrame
-                       (
-                            doc,
-                            view,
-                            wxStaticCast(GetTopWindow(), wxDocMDIParentFrame),
-                            wxID_ANY,
-                            "Child Frame",
-                            wxDefaultPosition,
-                            wxSize(300, 300)
-                       );
-    }
-    else
+        case Mode_MDI:
+            subframe = new wxDocMDIChildFrame
+                           (
+                                doc,
+                                view,
+                                wxStaticCast(GetTopWindow(), wxDocMDIParentFrame),
+                                wxID_ANY,
+                                "Child Frame",
+                                wxDefaultPosition,
+                                wxSize(300, 300)
+                           );
+            break;
 #endif // wxUSE_MDI_ARCHITECTURE
-    {
-        subframe = new wxDocChildFrame
-                       (
-                            doc,
-                            view,
-                            wxStaticCast(GetTopWindow(), wxDocParentFrame),
-                            wxID_ANY,
-                            "Child Frame",
-                            wxDefaultPosition,
-                            wxSize(300, 300)
-                       );
 
-        subframe->Centre();
+#if wxUSE_AUI
+        case Mode_AUI:
+            subframe = new wxDocChildFrameAny<wxAuiMDIChildFrame, wxAuiMDIParentFrame>
+                           (
+                                doc,
+                                view,
+                                wxStaticCast(GetTopWindow(), wxAuiMDIParentFrame),
+                                wxID_ANY,
+                                "Child Frame",
+                                wxDefaultPosition,
+                                wxSize(300, 300)
+                           );
+            break;
+#endif // wxUSE_AUI
+
+        case Mode_SDI:
+        case Mode_Single:
+            subframe = new wxDocChildFrame
+                           (
+                                doc,
+                                view,
+                                wxStaticCast(GetTopWindow(), wxDocParentFrame),
+                                wxID_ANY,
+                                "Child Frame",
+                                wxDefaultPosition,
+                                wxSize(300, 300)
+                           );
+
+            subframe->Centre();
+            break;
     }
 
     wxMenu *menuFile = new wxMenu;
@@ -381,6 +439,13 @@ wxFrame *MyApp::CreateChildFrame(wxView *view, bool isCanvas)
     return subframe;
 }
 
+void MyApp::OnForceCloseAll(wxCommandEvent& WXUNUSED(event))
+{
+    // Pass "true" here to force closing just for testing this functionality,
+    // there is no real reason to force the issue here.
+    wxDocManager::GetDocumentManager()->CloseDocuments(true);
+}
+
 void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString modeName;
@@ -391,6 +456,12 @@ void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
             modeName = "MDI";
             break;
 #endif // wxUSE_MDI_ARCHITECTURE
+
+#if wxUSE_AUI
+        case Mode_AUI:
+            modeName = "AUI";
+            break;
+#endif // wxUSE_AUI
 
         case Mode_SDI:
             modeName = "SDI";
@@ -415,7 +486,7 @@ void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
         "\n"
         "Authors: Julian Smart, Vadim Zeitlin\n"
         "\n"
-        "Usage: docview [--{mdi,sdi,single}]",
+        "Usage: docview [--{mdi,aui,sdi,single}]",
         modeName,
         docsCount
     );

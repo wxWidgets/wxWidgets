@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 <makefile>
 
+    <set var="BUNDLE_PLIST">$(SRCDIR)/Info.plist.in</set>
+
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="internat" template="wx_sample" template_append="wx_append">

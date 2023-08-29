@@ -15,13 +15,8 @@
 #include "wx/dcclient.h"
 #include "wx/window.h"
 
-// Split platforms into two groups - those which have well-working
-// double-buffering by default, and those which do not.
-#if defined(__WXMAC__) || defined(__WXGTK20__) || defined(__WXDFB__) || defined(__WXQT__)
-    #define wxALWAYS_NATIVE_DOUBLE_BUFFER       1
-#else
-    #define wxALWAYS_NATIVE_DOUBLE_BUFFER       0
-#endif
+// All current ports use double buffering.
+#define wxALWAYS_NATIVE_DOUBLE_BUFFER       1
 
 
 // ----------------------------------------------------------------------------
@@ -45,8 +40,8 @@ class WXDLLIMPEXP_CORE wxBufferedDC : public wxMemoryDC
 public:
     // Default ctor, must subsequently call Init for two stage construction.
     wxBufferedDC()
-        : m_dc(NULL),
-          m_buffer(NULL),
+        : m_dc(nullptr),
+          m_buffer(nullptr),
           m_style(0)
     {
     }
@@ -55,7 +50,7 @@ public:
     wxBufferedDC(wxDC *dc,
                  wxBitmap& buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL), m_buffer(NULL)
+        : m_dc(nullptr), m_buffer(nullptr)
     {
         Init(dc, buffer, style);
     }
@@ -64,7 +59,7 @@ public:
     // (where area is usually something like the size of the window
     // being buffered)
     wxBufferedDC(wxDC *dc, const wxSize& area, int style = wxBUFFER_CLIENT_AREA)
-        : m_dc(NULL), m_buffer(NULL)
+        : m_dc(nullptr), m_buffer(nullptr)
     {
         Init(dc, area, style);
     }
@@ -134,7 +129,7 @@ private:
     int m_style;
 
     wxSize m_area;
-    
+
     wxDECLARE_DYNAMIC_CLASS(wxBufferedDC);
     wxDECLARE_NO_COPY_CLASS(wxBufferedDC);
 };
@@ -153,6 +148,8 @@ public:
     wxBufferedPaintDC(wxWindow *window, wxBitmap& buffer, int style = wxBUFFER_CLIENT_AREA)
         : m_paintdc(window)
     {
+        SetWindow(window);
+
         // If we're buffering the virtual window, scale the paint DC as well
         if (style & wxBUFFER_VIRTUAL_AREA)
             window->PrepareDC( m_paintdc );
@@ -167,6 +164,8 @@ public:
     wxBufferedPaintDC(wxWindow *window, int style = wxBUFFER_CLIENT_AREA)
         : m_paintdc(window)
     {
+        SetWindow(window);
+
         // If we're using the virtual window, scale the paint DC as well
         if (style & wxBUFFER_VIRTUAL_AREA)
             window->PrepareDC( m_paintdc );

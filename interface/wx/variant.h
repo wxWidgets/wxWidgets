@@ -236,7 +236,7 @@ public:
     wxVariant(void* value, const wxString& name = wxEmptyString);
 
     /**
-        Constructs a variant from a pointer to an wxObject
+        Constructs a variant from a pointer to a wxObject
         derived class.
     */
     wxVariant(wxObject* value, const wxString& name = wxEmptyString);
@@ -265,7 +265,7 @@ public:
     /**
         @name List Functionality
     */
-    //@{
+    ///@{
 
     /**
         Returns the value at @a idx (zero-based).
@@ -321,10 +321,10 @@ public:
     */
     void NullList();
 
-    //@}
+    ///@}
 
 
-    //@{
+    ///@{
     /**
         Retrieves and converts the value of this variant to the type that
         @a value is.
@@ -337,7 +337,7 @@ public:
     bool Convert(wxLongLong* value) const;
     bool Convert(wxULongLong* value) const;
     bool Convert(wxDateTime* value) const;
-    //@}
+    ///@}
 
     /**
         Converts wxVariant into wxAny.
@@ -482,7 +482,7 @@ public:
     */
     bool Unshare();
 
-    //@{
+    ///@{
     /**
         Inequality test operator.
     */
@@ -500,9 +500,9 @@ public:
     bool operator !=(const wxVariantList& value) const;
     bool operator !=(const wxArrayString& value) const;
     bool operator !=(const wxDateTime& value) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Assignment operator, using @ref overview_refcount "reference counting"
         if possible.
@@ -522,9 +522,9 @@ public:
     void operator =(const wxVariantList& value);
     void operator =(const wxDateTime& value);
     void operator =(const wxArrayString& value);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Equality test operator.
     */
@@ -542,9 +542,9 @@ public:
     bool operator ==(const wxVariantList& value) const;
     bool operator ==(const wxArrayString& value) const;
     bool operator ==(const wxDateTime& value) const;
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Operators for implicit conversion, using appropriate getter member
         function.
@@ -553,7 +553,7 @@ public:
     long operator long() const;
     wxLongLong operator wxLongLong() const;
     wxULongLong operator wxULongLong() const;
-    //@}
+    ///@}
 
     /**
         Operator for implicit conversion to a pointer to a void, using
@@ -680,7 +680,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_rtti */
-//@{
+///@{
 
 /**
     This macro returns a pointer to the data stored in @a var (wxVariant) cast
@@ -693,5 +693,5 @@ public:
 */
 #define wxGetVariantCast(var, classname)
 
-//@}
+///@}
 

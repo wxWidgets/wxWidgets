@@ -1,9 +1,9 @@
-///////////////////////////////////////////////////////////////////////////// 
-// Name:        imaggif.h 
-// Purpose:     interface of wxGIFHandler 
-// Author:      Samuel Dunn 
-// Licence:     wxWindows licence 
-//////////////////////////////////////////////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+// Name:        imaggif.h
+// Purpose:     interface of wxGIFHandler
+// Author:      Samuel Dunn
+// Licence:     wxWindows licence
+////////////////////////////////////////////////////////////////////////////
 
 #define wxIMAGE_OPTION_GIF_COMMENT wxT("GifComment")
 
@@ -12,7 +12,7 @@
 
     This is the image handler for the GIF format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()
@@ -25,15 +25,15 @@ public:
     */
     wxGIFHandler();
 
-    virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose = true, 
+    virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose = true,
                             int index = -1);
     virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose=true);
 
     /**
         Save the animated gif.
-        
+
         @param images
-            The image array object which is to be affected by this operation.
+            The images making up the animation.
         @param stream
             Opened output stream for writing the data.
         @param verbose
@@ -45,7 +45,7 @@ public:
         @return @true if the operation succeeded, @false otherwise.
 
     */
-    bool SaveAnimation(const wxImageArray& images, wxOutputStream *stream,
+    bool SaveAnimation(const std::vector<wxImage>& images, wxOutputStream *stream,
                         bool verbose = true, int delayMilliSecs = 1000);
 
 protected:

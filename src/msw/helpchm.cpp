@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP
 
@@ -35,17 +32,12 @@
 // of hhctrl.ocx
 // ----------------------------------------------------------------------------
 
-#ifndef UNICODE
-    typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCSTR, UINT, ULONG_PTR );
-    #define HTMLHELP_NAME wxT("HtmlHelpA")
-#else // ANSI
-    typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, ULONG_PTR );
-    #define HTMLHELP_NAME wxT("HtmlHelpW")
-#endif
+typedef HWND ( WINAPI * HTMLHELP )( HWND, LPCWSTR, UINT, ULONG_PTR );
+#define HTMLHELP_NAME wxT("HtmlHelpW")
 
 HTMLHELP GetHtmlHelpFunction()
 {
-    static HTMLHELP s_htmlHelp = NULL;
+    static HTMLHELP s_htmlHelp = nullptr;
 
     if ( !s_htmlHelp )
     {
@@ -69,11 +61,11 @@ HTMLHELP GetHtmlHelpFunction()
 }
 
 // find the window to use in HtmlHelp() call: use the given one by default but
-// fall back to the top level app window and then the desktop if it's NULL
+// fall back to the top level app window and then the desktop if it's null
 static HWND GetSuitableHWND(wxWindow *win)
 {
-    if ( !win && wxTheApp )
-        win = wxTheApp->GetTopWindow();
+    if ( !win )
+        win = wxApp::GetMainTopWindow();
 
     return win ? GetHwndOf(win) : ::GetDesktopWindow();
 }
@@ -113,7 +105,7 @@ bool wxCHMHelpController::DisplayContents()
     if (m_helpFile.IsEmpty())
         return false;
 
-    return CallHtmlHelp(HH_DISPLAY_TOPIC);
+    return CallHtmlHelp(HH_DISPLAY_TOC);
 }
 
 // Use topic or HTML filename
@@ -138,6 +130,12 @@ bool wxCHMHelpController::DisplaySection(int section)
     if (m_helpFile.IsEmpty())
         return false;
 
+    // Treat -1 as a special context number that displays the index
+    if (section == -1)
+    {
+        return CallHtmlHelp(HH_DISPLAY_INDEX);
+    }
+
     return CallHtmlHelp(HH_HELP_CONTEXT, section);
 }
 
@@ -161,14 +159,14 @@ wxCHMHelpController::DoDisplayTextPopup(const wxChar *text,
     popup.rcMargins.left =
     popup.rcMargins.right =
     popup.rcMargins.bottom = -1;
-    popup.pszFont = NULL;
+    popup.pszFont = nullptr;
 
-    return CallHtmlHelp(window, NULL, HH_DISPLAY_TEXT_POPUP, &popup);
+    return CallHtmlHelp(window, nullptr, HH_DISPLAY_TEXT_POPUP, &popup);
 }
 
 bool wxCHMHelpController::DisplayContextPopup(int contextId)
 {
-    return DoDisplayTextPopup(NULL, wxGetMousePosition(), contextId,
+    return DoDisplayTextPopup(nullptr, wxGetMousePosition(), contextId,
                               GetParentWindow());
 }
 
@@ -197,22 +195,39 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
     if (m_helpFile.IsEmpty())
         return false;
 
-    HH_AKLINK link;
-    link.cbStruct =     sizeof(HH_AKLINK);
-    link.fReserved =    FALSE;
-    link.pszKeywords =  k.t_str();
-    link.pszUrl =       NULL;
-    link.pszMsgText =   NULL;
-    link.pszMsgTitle =  NULL;
-    link.pszWindow =    NULL;
-    link.fIndexOnFail = TRUE;
+    if (k.IsEmpty())
+    {
+        HH_FTS_QUERY oQuery;
+        oQuery.cbStruct = sizeof(HH_FTS_QUERY);
+        oQuery.fStemmedSearch = 0;
+        oQuery.fTitleOnly = 0;
+        oQuery.fUniCodeStrings = 0;
+        oQuery.iProximity = 0;
+        oQuery.pszSearchQuery = TEXT("");
+        oQuery.pszWindow = TEXT("");
+        oQuery.fExecute = 1;
 
-    return CallHtmlHelp(HH_KEYWORD_LOOKUP, &link);
+        return CallHtmlHelp(HH_DISPLAY_SEARCH, &oQuery);
+    }
+    else
+    {
+        HH_AKLINK link;
+        link.cbStruct =     sizeof(HH_AKLINK);
+        link.fReserved =    FALSE;
+        link.pszKeywords =  k.t_str();
+        link.pszUrl =       nullptr;
+        link.pszMsgText =   nullptr;
+        link.pszMsgTitle =  nullptr;
+        link.pszWindow =    nullptr;
+        link.fIndexOnFail = TRUE;
+
+        return CallHtmlHelp(HH_KEYWORD_LOOKUP, &link);
+    }
 }
 
 bool wxCHMHelpController::Quit()
 {
-    return CallHtmlHelp(NULL, NULL, HH_CLOSE_ALL);
+    return CallHtmlHelp(nullptr, nullptr, HH_CLOSE_ALL);
 }
 
 wxString wxCHMHelpController::GetValidFilename() const
