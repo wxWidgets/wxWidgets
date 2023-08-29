@@ -367,7 +367,7 @@ void wxWebViewChromium::ShutdownCEF()
     }
 }
 
-void wxWebViewChromium::OnIdle(wxIdleEvent& evt)
+void wxWebViewChromium::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     CefDoMessageLoopWork();
 }
@@ -708,7 +708,7 @@ void ClientHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString
 }
 
 bool ClientHandler::OnConsoleMessage(CefRefPtr<CefBrowser> WXUNUSED(browser),
-                                     cef_log_severity_t level,
+                                     cef_log_severity_t WXUNUSED(level),
                                      const CefString& WXUNUSED(message),
                                      const CefString& WXUNUSED(source), int WXUNUSED(line))
 {
