@@ -1241,7 +1241,7 @@ enable_postscript
 enable_printarch
 enable_svg
 enable_webview
-enable_
+enable_webviewchromium
 enable_graphics_ctx
 enable_graphics_d2d
 enable_clipboard
@@ -2211,7 +2211,7 @@ Optional Features:
   --enable-printarch      use printing architecture
   --enable-svg            use wxSVGFileDC device context
   --enable-webview        use wxWebView library
-
+  --enable-webviewchromium        use wxWebView Chromium backend
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-graphics-d2d   use Direct2D-based graphics context
   --enable-clipboard      use wxClipboard class
@@ -8829,6 +8829,7 @@ fi
           eval "$wx_cv_use_webview"
 
 
+
           enablestring=
           defaultval=
           if test -z "$defaultval"; then
@@ -8839,24 +8840,24 @@ fi
               fi
           fi
 
-          # Check whether --enable- was given.
-if test "${enable_+set}" = set; then :
-  enableval=$enable_;
+          # Check whether --enable-webviewchromium was given.
+if test "${enable_webviewchromium+set}" = set; then :
+  enableval=$enable_webviewchromium;
                           if test "$enableval" = yes; then
-                            wx_cv_use_='=yes'
+                            wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=yes'
                           else
-                            wx_cv_use_='=no'
+                            wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=no'
                           fi
 
 else
 
-                          wx_cv_use_='=${'DEFAULT_":-$defaultval}"
+                          wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=${'DEFAULT_wxUSE_WEBVIEW_CHROMIUM":-$defaultval}"
 
 fi
 
 
-          eval "$wx_cv_use_"
-         (webviewchromium,       --enable-webviewchromium        use wxWebView Chromium backend, wxUSE_WEBVIEW_CHROMIUM)
+          eval "$wx_cv_use_webviewchromium"
+
 
 if test "$wxUSE_MAC" != 1; then
 
@@ -39689,8 +39690,7 @@ if test "x$ac_cv_header_include_cef_version_h" = xyes; then :
 else
 
                             wxUSE_WEBVIEW_CHROMIUM="no"
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Chromium headers not found" >&5
-$as_echo "$as_me: WARNING: Chromium headers not found" >&2;}
+                            as_fn_error $? "Chromium headers not found" "$LINENO" 5
 
 fi
 

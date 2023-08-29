@@ -784,7 +784,10 @@ WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
 WX_ARG_FEATURE(webview,     [  --enable-webview        use wxWebView library], wxUSE_WEBVIEW)
-WX_ARG_ENABLE (webviewchromium,     [  --enable-webviewchromium        use wxWebView Chromium backend], wxUSE_WEBVIEW_CHROMIUM)
+
+dnl This one is not enabled by default as it requires CEF to be available under
+dnl 3rdparty/cef.
+WX_ARG_ENABLE(webviewchromium, [  --enable-webviewchromium        use wxWebView Chromium backend], wxUSE_WEBVIEW_CHROMIUM)
 
 dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 dnl can't be disabled, don't even provide an option to do it
@@ -6882,7 +6885,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                         ],
                         [
                             wxUSE_WEBVIEW_CHROMIUM="no"
-                            AC_MSG_WARN([Chromium headers not found])
+                            AC_MSG_ERROR([Chromium headers not found])
                         ],
                         [])
         CPPFLAGS="$old_CPPFLAGS"
