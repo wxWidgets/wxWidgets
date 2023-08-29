@@ -80,6 +80,8 @@ public:
 
     virtual wxWebViewZoom GetZoom() const override;
     virtual void SetZoom(wxWebViewZoom zoom) override;
+    virtual float GetZoomFactor() const override;
+    virtual void SetZoomFactor(float zoom) override;
 
     virtual void* GetNativeBackend() const override;
 

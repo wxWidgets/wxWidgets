@@ -615,6 +615,15 @@ wxWebViewZoom wxWebViewChromium::GetZoom() const
      return m_zoomLevel;
 }
 
+float wxWebViewChromium::GetZoomFactor() const
+{
+    return m_clientHandler->GetBrowser()->GetHost()->GetZoomLevel();
+}
+
+void wxWebViewChromium::SetZoomFactor(float mapzoom)
+{
+    m_clientHandler->GetBrowser()->GetHost()->SetZoomLevel(mapzoom);
+}
 
 void wxWebViewChromium::SetZoom(wxWebViewZoom zoom)
 {
@@ -647,7 +656,8 @@ void wxWebViewChromium::SetZoom(wxWebViewZoom zoom)
         default:
             wxASSERT(false);
     }
-    m_clientHandler->GetBrowser()->GetHost()->SetZoomLevel(mapzoom);
+
+    SetZoomFactor(mapzoom);
 }
 
 void wxWebViewChromium::SetZoomType(wxWebViewZoomType type)
