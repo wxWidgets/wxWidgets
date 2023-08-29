@@ -31,6 +31,8 @@
 #pragma warning(disable:4100)
 #endif
 
+wxGCC_WARNING_SUPPRESS(unused-parameter)
+
 #include "include/cef_app.h"
 #include "include/cef_browser.h"
 #include "include/cef_client.h"
@@ -38,6 +40,8 @@
 #include "include/cef_string_visitor.h"
 #include "include/cef_version.h"
 #include "include/base/cef_lock.h"
+
+wxGCC_WARNING_RESTORE(unused-parameter)
 
 #ifdef __VISUALC__
 #pragma warning(pop)
