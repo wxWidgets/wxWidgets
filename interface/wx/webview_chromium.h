@@ -134,7 +134,7 @@
     - RunScript: Retrieving the result of JavaScript execution is not supported and
       if the @a output parameter is non-null, the function will always return false.
 
-    @since 3.1.2
+    @since 3.3.0
     @library{wxwebview_chromium}
     @category{webview}
 
