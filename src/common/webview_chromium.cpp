@@ -574,7 +574,7 @@ void wxWebViewChromium::ClearSelection()
     RunScript(jsclear);
 }
 
-bool wxWebViewChromium::RunScript(const wxString& javascript, wxString* output)
+bool wxWebViewChromium::RunScript(const wxString& javascript, wxString* output) const
 {
     m_clientHandler->GetBrowser()->GetMainFrame()->ExecuteJavaScript(javascript.ToStdString(),
                                                                      "", 0);
