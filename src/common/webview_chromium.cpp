@@ -15,6 +15,7 @@
 #include "wx/rtti.h"
 #include "wx/stdpaths.h"
 #include "wx/app.h"
+#include "wx/base64.h"
 #include "wx/module.h"
 
 #ifdef __WXMSW__
@@ -604,13 +605,16 @@ void wxWebViewChromium::SetEditable(bool enable)
 
 void wxWebViewChromium::DoSetPage(const wxString& html, const wxString& baseUrl)
 {
-	wxString pageBaseUrl = baseUrl;
-	// CEF needs a baseURL that is not empty, set one if not specified
-	if(pageBaseUrl.empty())
-		pageBaseUrl = "file://";
+    wxUnusedVar(baseUrl);
 
-    m_clientHandler->GetBrowser()->GetMainFrame()->LoadString(html.ToStdString(),
-                                                              pageBaseUrl.ToStdString());
+    // This seems to be the only way to load a string in CEF now, see
+    // https://github.com/chromiumembedded/cef/issues/2586
+    const wxScopedCharBuffer& buf = html.utf8_str();
+    const wxString url{
+        "data:text/html;base64," + wxBase64Encode(buf.data(), buf.length())
+    };
+
+    m_clientHandler->GetBrowser()->GetMainFrame()->LoadURL(url.ToStdWstring());
 }
 
 wxWebViewZoom wxWebViewChromium::GetZoom() const
