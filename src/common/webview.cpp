@@ -521,7 +521,7 @@ void wxWebView::InitFactoryMap()
         (new wxWebViewFactoryEdge));
 #endif
 
-#else
+#elif wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2
     if(m_factoryMap.find(wxWebViewBackendWebKit) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>
                                                        (new wxWebViewFactoryWebKit));
