@@ -643,7 +643,7 @@ void wxWebViewChromium::SetZoom(wxWebViewZoom zoom)
 {
     m_zoomLevel = zoom;
 
-    double mapzoom;
+    double mapzoom = 0.0;
     // arbitrary way to map our common zoom enum to float zoom
     switch ( zoom )
     {
@@ -666,9 +666,6 @@ void wxWebViewChromium::SetZoom(wxWebViewZoom zoom)
         case wxWEBVIEW_ZOOM_LARGEST:
             mapzoom = 1.0;
             break;
-
-        default:
-            wxASSERT(false);
     }
 
     SetZoomFactor(mapzoom);
