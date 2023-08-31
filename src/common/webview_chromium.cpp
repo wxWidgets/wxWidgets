@@ -67,8 +67,9 @@ class ClientHandler : public CefClient,
     public CefLoadHandler
 {
 public:
-    ClientHandler() : m_loadErrorCode(-1) {}
-    virtual ~ClientHandler() {}
+    // Ctor must be given a backpointer to wxWebView which must remain valid
+    // for the entire lifetime of this object.
+    explicit ClientHandler(wxWebViewChromium& webview) : m_webview{webview} {}
 
     virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() override { return this; }
     virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override  { return this; }
@@ -135,15 +136,13 @@ public:
 
     CefRefPtr<CefBrowser> GetBrowser() { return m_browser; }
 
-    void SetWebView(wxWebViewChromium *webview) { m_webview = webview; }
-
 private:
     CefRefPtr<CefBrowser> m_browser;
-    wxWebViewChromium *m_webview;
+    wxWebViewChromium& m_webview;
     int m_browserId;
     // Record the load error code: enum wxWebViewNavigationError
     // -1 means no error.
-    int m_loadErrorCode;
+    int m_loadErrorCode = -1;
     IMPLEMENT_REFCOUNTING(ClientHandler);
 };
 
@@ -201,23 +200,23 @@ public:
       PAGE_SOURCE,
       PAGE_TEXT,
     };
-    wxStringVisitor(wxWebViewChromium* webview, StringType type) :
+    wxStringVisitor(wxWebViewChromium& webview, StringType type) :
         m_type(type), m_webview(webview) {}
     void Visit(const CefString& string) override
     {
         switch(m_type)
         {
             case PAGE_SOURCE:
-                 m_webview->SetPageSource(string.ToWString());
+                 m_webview.SetPageSource(string.ToWString());
                  break;
             case PAGE_TEXT:
-                 m_webview->SetPageText(string.ToWString());
+                 m_webview.SetPageText(string.ToWString());
                  break;
         }
     }
 private:
     StringType m_type;
-    wxWebViewChromium *m_webview;
+    wxWebViewChromium& m_webview;
     IMPLEMENT_REFCOUNTING(wxStringVisitor);
 };
 
@@ -255,9 +254,8 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     CefBrowserSettings browsersettings;
     CefWindowInfo info;
 
-    m_clientHandler = new ClientHandler();
+    m_clientHandler = new ClientHandler{*this};
     m_clientHandler->AddRef();
-    m_clientHandler->SetWebView(this);
 
     // Initialize window info to the defaults for a child window
 #ifdef __WXGTK__
@@ -703,14 +701,14 @@ void ClientHandler::OnAddressChange(CefRefPtr<CefBrowser> WXUNUSED(browser),
 
 void ClientHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title)
 {
-    m_webview->m_title = title.ToWString();
+    m_webview.m_title = title.ToWString();
     wxString target = browser->GetMainFrame()->GetName().ToString();
 
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED, m_webview->GetId(), "", target);
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED, m_webview.GetId(), "", target);
     event.SetString(title.ToWString());
-    event.SetEventObject(m_webview);
+    event.SetEventObject(&m_webview);
 
-    m_webview->HandleWindowEvent(event);
+    m_webview.HandleWindowEvent(event);
 }
 
 bool ClientHandler::OnConsoleMessage(CefRefPtr<CefBrowser> WXUNUSED(browser),
@@ -727,7 +725,7 @@ void ClientHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> WXUNUSED(browser),
                                         CefRefPtr<CefContextMenuParams> WXUNUSED(params),
                                         CefRefPtr<CefMenuModel> model)
 {
-    if(!m_webview->IsContextMenuEnabled())
+    if(!m_webview.IsContextMenuEnabled())
         model->Clear();
 }
 
@@ -759,12 +757,12 @@ bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> WXUNUSED(browser),
                              bool* WXUNUSED(no_javascript_access))
 {
     wxWebViewEvent *event = new wxWebViewEvent(wxEVT_WEBVIEW_NEWWINDOW,
-                                               m_webview->GetId(),
+                                               m_webview.GetId(),
                                                target_url.ToString(),
                                                target_frame_name.ToString());
-    event->SetEventObject(m_webview);
+    event->SetEventObject(&m_webview);
     // We use queue event as this function is called on the render thread
-    m_webview->GetEventHandler()->QueueEvent(event);
+    m_webview.GetEventHandler()->QueueEvent(event);
 
     return true;
 }
@@ -776,7 +774,7 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
         m_browser = browser;
         m_browserId = browser->GetIdentifier();
 
-        m_webview->PostSizeEvent();
+        m_webview.PostSizeEvent();
     }
 }
 bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))
@@ -800,10 +798,10 @@ void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> WXUNUSED(browser),
     wxString url = frame->GetURL().ToString();
     wxString target = frame->GetName().ToString();
 
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING, m_webview->GetId(), url, target);
-    event.SetEventObject(m_webview);
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING, m_webview.GetId(), url, target);
+    event.SetEventObject(&m_webview);
 
-    m_webview->HandleWindowEvent(event);
+    m_webview.HandleWindowEvent(event);
 
     if ( !event.IsAllowed() )
     {
@@ -822,14 +820,14 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> WXUNUSED(browser),
     if ( m_loadErrorCode != -1 )
     {
         m_loadErrorCode = -1;
-        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR, m_webview->GetId(), url, target);
-        event.SetEventObject(m_webview);
-        m_webview->HandleWindowEvent(event);
+        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR, m_webview.GetId(), url, target);
+        event.SetEventObject(&m_webview);
+        m_webview.HandleWindowEvent(event);
     }
 
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED, m_webview->GetId(), url, target);
-    event.SetEventObject(m_webview);
-    m_webview->HandleWindowEvent(event);
+    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED, m_webview.GetId(), url, target);
+    event.SetEventObject(&m_webview);
+    m_webview.HandleWindowEvent(event);
 
     if ( frame->IsMain() )
     {
@@ -845,26 +843,26 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> WXUNUSED(browser),
 
         //As we are complete we also add to the history list, but not if the
         //page is not the main page, ie it is a subframe
-        if ( m_webview->m_historyEnabled && !m_webview->m_historyLoadingFromList )
+        if ( m_webview.m_historyEnabled && !m_webview.m_historyLoadingFromList )
         {
             //If we are not at the end of the list, then erase everything
             //between us and the end before adding the new page
-            if ( m_webview->m_historyPosition != static_cast<int>(m_webview->m_historyList.size()) - 1 )
+            if ( m_webview.m_historyPosition != static_cast<int>(m_webview.m_historyList.size()) - 1 )
             {
-                m_webview->m_historyList.erase(m_webview->m_historyList.begin() + m_webview->m_historyPosition + 1,
-                                               m_webview->m_historyList.end());
+                m_webview.m_historyList.erase(m_webview.m_historyList.begin() + m_webview.m_historyPosition + 1,
+                                              m_webview.m_historyList.end());
             }
-            wxSharedPtr<wxWebViewHistoryItem> item(new wxWebViewHistoryItem(url, m_webview->GetCurrentTitle()));
-            m_webview->m_historyList.push_back(item);
-            m_webview->m_historyPosition++;
+            wxSharedPtr<wxWebViewHistoryItem> item(new wxWebViewHistoryItem(url, m_webview.GetCurrentTitle()));
+            m_webview.m_historyList.push_back(item);
+            m_webview.m_historyPosition++;
         }
         //Reset as we are done now
-        m_webview->m_historyLoadingFromList = false;
+        m_webview.m_historyLoadingFromList = false;
 
-        wxWebViewEvent levent(wxEVT_COMMAND_WEBVIEW_LOADED, m_webview->GetId(), url, target);
-        levent.SetEventObject(m_webview);
+        wxWebViewEvent levent(wxEVT_COMMAND_WEBVIEW_LOADED, m_webview.GetId(), url, target);
+        levent.SetEventObject(&m_webview);
 
-        m_webview->HandleWindowEvent(levent);
+        m_webview.HandleWindowEvent(levent);
     }
 }
 
