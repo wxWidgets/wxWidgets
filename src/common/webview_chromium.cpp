@@ -48,7 +48,7 @@ wxGCC_WARNING_RESTORE(unused-parameter)
 #pragma warning(pop)
 #endif
 
-#if CHROME_VERSION_BUILD < 3282
+#if CHROME_VERSION_BUILD < 5845
 #error "Unsupported CEF version"
 #endif
 
@@ -114,6 +114,7 @@ public:
         CefWindowInfo& windowInfo,
         CefRefPtr<CefClient>& client,
         CefBrowserSettings& settings,
+        CefRefPtr<CefDictionaryValue>& extra_info,
         bool* no_javascript_access) override;
     virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) override;
     virtual bool DoClose(CefRefPtr<CefBrowser> browser) override;
@@ -155,7 +156,7 @@ public:
     virtual bool ProcessRequest(CefRefPtr<CefRequest> request,
         CefRefPtr<CefCallback> callback) override;
     virtual void GetResponseHeaders(CefRefPtr<CefResponse> response,
-        int64& response_length,
+        int64_t& response_length,
         CefString& redirectUrl) override;
     virtual bool ReadResponse(void* data_out,
         int bytes_to_read,
@@ -290,7 +291,10 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
     CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
-                                  url.ToStdString(), browsersettings, nullptr);
+                                  url.ToStdString(), browsersettings,
+                                  nullptr, // No extra info
+                                  nullptr  // Use global request context
+                                  );
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
@@ -330,8 +334,11 @@ bool wxWebViewChromium::InitCEF()
     wxFileName cachePath(cefDataFolder.GetFullPath(), "Cache");
     CefString(&settings.cache_path).FromWString(cachePath.GetFullPath().ToStdWstring());
 
+    // According to b5386249b (alloy: Remove CefSettings.user_data_path (fixes
+    // #3511), 2023-06-06) in CEF sources, root_cache_path should be used for
+    // all files now.
     wxFileName userDataPath(cefDataFolder.GetFullPath(), "UserData");
-    CefString(&settings.user_data_path).FromWString(userDataPath.GetFullPath().ToStdWstring());
+    CefString(&settings.root_cache_path).FromWString(userDataPath.GetFullPath().ToStdWstring());
 
     settings.no_sandbox = true;
 
@@ -409,7 +416,7 @@ void wxWebViewChromium::SetPageText(const wxString& pageText)
 
 void* wxWebViewChromium::GetNativeBackend() const
 {
-    return m_clientHandler->GetBrowser();
+    return m_clientHandler->GetBrowser().get();
 }
 
 bool wxWebViewChromium::CanGoForward() const
@@ -756,6 +763,7 @@ bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> WXUNUSED(browser),
                              CefWindowInfo& WXUNUSED(windowInfo),
                              CefRefPtr<CefClient>& WXUNUSED(client),
                              CefBrowserSettings& WXUNUSED(settings),
+                             CefRefPtr<CefDictionaryValue>& WXUNUSED(extra_info),
                              bool* WXUNUSED(no_javascript_access))
 {
     wxWebViewEvent *event = new wxWebViewEvent(wxEVT_WEBVIEW_NEWWINDOW,
@@ -959,7 +967,7 @@ bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
 }
 
 void SchemeHandler::GetResponseHeaders(CefRefPtr<CefResponse> response,
-                                       int64& response_length,
+                                       int64_t& response_length,
                                        CefString& WXUNUSED(redirectUrl))
 {
     if ( !m_mime_type.empty() )
