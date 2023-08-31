@@ -269,8 +269,11 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     // Hide the scroll bar.
     gtk_scrolled_window_set_policy( scrolled_window, GTK_POLICY_NEVER, GTK_POLICY_NEVER);
     GtkWidget* view_port = gtk_viewport_new( nullptr, nullptr );
-    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(scrolled_window),
-                                           view_port );
+#ifdef __WXGTK3__
+    gtk_container_add( GTK_CONTAINER(m_widget), view_port );
+#else
+    gtk_scrolled_window_add_with_viewport( scrolled_window, view_port );
+#endif
     // TODO: figure out correct parameters for Linux SetAsChild() call
     ::Window xid = GDK_WINDOW_XID(gtk_widget_get_window(view_port));
     wxASSERT(xid != 0);
