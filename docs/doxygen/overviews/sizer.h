@@ -98,7 +98,7 @@ size plus its border. Depending on what flags are used for the respective
 dialog item, the dialog item can be made to fill out the available space
 entirely, i.e. it will grow to a size larger than the minimal size, or it will
 be moved to either the centre of the available space or to either side of the
-space. The following sample shows a listbox and three buttons in a horizontal
+space. The following sample shows a listbox and three buttons in a vertical
 box sizer; one button is centred, one is aligned at the top, one is aligned at
 the bottom:
 
