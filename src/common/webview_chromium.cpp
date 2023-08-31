@@ -285,7 +285,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     info.SetAsChild(GetHandle(), {0, 0, sz.x, sz.y});
 #endif
 
-    CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
+    CefBrowserHost::CreateBrowser(info, CefRefPtr<CefClient>{m_clientHandler},
                                   url.ToStdString(), browsersettings,
                                   nullptr, // No extra info
                                   nullptr  // Use global request context
