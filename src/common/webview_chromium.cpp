@@ -259,11 +259,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     m_clientHandler->AddRef();
     m_clientHandler->SetWebView(this);
 
-#ifdef __WXMSW__
     // Initialize window info to the defaults for a child window
-    info.SetAsChild(GetHWND(), wxGetClientRect(this->GetHWND()));
-#endif
-
 #ifdef __WXGTK__
     m_widget = gtk_scrolled_window_new( nullptr, nullptr );
     g_object_ref( m_widget );
@@ -284,10 +280,9 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     PostCreation( size );
 
     gtk_widget_show( view_port );
-#endif
-
-#ifdef __WXOSX__
-    info.SetAsChild( GetHandle(), 0, 0, size.GetX(), size.GetY() );
+#else
+    const wxSize sz = GetClientSize();
+    info.SetAsChild(GetHandle(), {0, 0, sz.x, sz.y});
 #endif
 
     CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
