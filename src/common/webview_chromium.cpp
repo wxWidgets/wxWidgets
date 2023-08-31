@@ -52,6 +52,15 @@ wxGCC_WARNING_RESTORE(unused-parameter)
 #error "Unsupported CEF version"
 #endif
 
+namespace
+{
+
+constexpr const char* TRACE_CEF = "cef";
+
+#define TRACE_CEF_FUNCTION() wxLogTrace(TRACE_CEF, "%s called", __FUNCTION__)
+
+} // anonymous namespace
+
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 int wxWebViewChromium::ms_activeWebViewCount = 0;
@@ -769,6 +778,8 @@ bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> WXUNUSED(browser),
 
 void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 {
+    TRACE_CEF_FUNCTION();
+
     if ( !m_browser.get() )
     {
         m_browser = browser;
@@ -779,11 +790,15 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 }
 bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))
 {
+    TRACE_CEF_FUNCTION();
+
     return false;
 }
 
 void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 {
+    TRACE_CEF_FUNCTION();
+
     if ( browser->GetIdentifier() == m_browserId )
     {
         m_browser = nullptr;

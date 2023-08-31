@@ -335,6 +335,24 @@ bool WebApp::OnInit()
         "<p><a href='memory:page1.htm'>Page 1</a> was better.</p></body>");
     wxMemoryFSHandler::AddFile("test.css", "h1 {color: red;}");
 
+    // Set log target which only logs debugging messages in the usual way: all
+    // the rest will be shown in wxLogWindow created by WebFrame.
+    class DebugOnlyLog : public wxLog
+    {
+    public:
+        DebugOnlyLog() = default;
+
+    protected:
+        void DoLogTextAtLevel(wxLogLevel level, const wxString& msg) override
+        {
+            // Ignore all non-debug/trace messages.
+            if ( level == wxLOG_Debug || level == wxLOG_Trace )
+                wxLog::DoLogTextAtLevel(level, msg);
+        }
+    };
+
+    delete wxLog::SetActiveTarget(new DebugOnlyLog);
+
     WebFrame *frame = new WebFrame(m_url);
     frame->Show();
 
@@ -412,7 +430,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
 
     // Create a log window
     if (m_isMainFrame)
-        new wxLogWindow(this, _("Logging"), true, false);
+        new wxLogWindow(this, _("Logging"));
 
 #if wxUSE_WEBVIEW_EDGE
     // Check if a fixed version of edge is present in
