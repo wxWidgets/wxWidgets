@@ -1,0 +1,1 @@
+wxAll (GUI): Fix wxTextCtrl proof checking functions return values (mcorino, #23832).
