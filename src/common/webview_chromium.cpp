@@ -384,11 +384,17 @@ wxWebViewChromium::~wxWebViewChromium()
     {
         wxLogTrace(TRACE_CEF, "closing browser");
 
+        // Preserve the original pointer.
+        const auto clientHandler = m_clientHandler;
+
         constexpr bool forceClose = true;
         m_clientHandler->GetBrowser()->GetHost()->CloseBrowser(forceClose);
 
-        m_clientHandler->Release();
-        m_clientHandler = nullptr;
+        // This should be set to nullptr from ClientHandler::DoClose().
+        while ( m_clientHandler )
+            CefDoMessageLoopWork();
+
+        clientHandler->Release();
     }
 }
 
@@ -858,6 +864,8 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))
 {
     TRACE_CEF_FUNCTION();
+
+    m_webview.m_clientHandler = nullptr;
 
     return false;
 }
