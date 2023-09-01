@@ -2379,10 +2379,10 @@
 #if wxUSE_MEDIACTRL
 #   if !wxUSE_LONGLONG
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxMediaCtrl requires wxUSE_LONLONG"
+#           error "wxMediaCtrl requires wxUSE_LONGLONG"
 #       else
-#           undef wxUSE_LONLONG
-#           define wxUSE_LONLONG 1
+#           undef wxUSE_LONGLONG
+#           define wxUSE_LONGLONG 1
 #       endif
 #   endif
 #endif /* wxUSE_MEDIACTRL */
@@ -2418,10 +2418,10 @@
 #   endif
 #   if !wxUSE_LONGLONG
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxRichTextCtrl requires wxUSE_LONLONG"
+#           error "wxRichTextCtrl requires wxUSE_LONGLONG"
 #       else
-#           undef wxUSE_LONLONG
-#           define wxUSE_LONLONG 1
+#           undef wxUSE_LONGLONG
+#           define wxUSE_LONGLONG 1
 #       endif
 #   endif
 #   if !wxUSE_VARIANT
