@@ -63,7 +63,6 @@ constexpr const char* TRACE_CEF = "cef";
 
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
-int wxWebViewChromium::ms_activeWebViewCount = 0;
 bool wxWebViewChromium::ms_cefInitialized = false;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
@@ -229,6 +228,73 @@ private:
     IMPLEMENT_REFCOUNTING(wxStringVisitor);
 };
 
+namespace
+{
+
+class wxBrowserProcessHandler : public CefBrowserProcessHandler
+{
+public:
+    wxBrowserProcessHandler() = default;
+
+    void OnScheduleMessagePumpWork(int64_t delay_ms) override
+    {
+        if ( delay_ms > 0 )
+        {
+            if ( !m_timer.IsRunning() )
+            {
+                wxLogTrace(TRACE_CEF, "schedule work in %lldms", delay_ms);
+                m_timer.StartOnce(delay_ms);
+            }
+            else
+            {
+                wxLogTrace(TRACE_CEF, "work already scheduled");
+            }
+        }
+        else
+        {
+            if ( wxTheApp )
+                wxTheApp->CallAfter([]() { CefDoMessageLoopWork(); });
+            else
+                wxLogTrace(TRACE_CEF, "can't schedule message pump work");
+        }
+    }
+
+private:
+    class CEFTimer : public wxTimer
+    {
+    public:
+        CEFTimer() = default;
+
+        void Notify() override
+        {
+            CefDoMessageLoopWork();
+        }
+    } m_timer;
+
+    IMPLEMENT_REFCOUNTING(wxBrowserProcessHandler);
+};
+
+class wxCefApp : public CefApp
+{
+public:
+    wxCefApp()
+        : m_browserProcessHandler(new wxBrowserProcessHandler{})
+    {
+    }
+
+    CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() override
+    {
+        return m_browserProcessHandler;
+    }
+
+private:
+    CefRefPtr<CefBrowserProcessHandler> m_browserProcessHandler;
+
+    IMPLEMENT_REFCOUNTING(wxCefApp);
+};
+
+} // anonymous namespace
+
 bool wxWebViewChromium::Create(wxWindow* parent,
            wxWindowID id,
            const wxString& url,
@@ -307,23 +373,20 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
-    // Initalize CEF message loop handling
-    if (ms_activeWebViewCount == 0)
-        wxTheApp->Bind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
-    ms_activeWebViewCount++;
+    Bind(wxEVT_IDLE, [](wxIdleEvent&) { CefDoMessageLoopWork(); });
 
     return true;
 }
 
 wxWebViewChromium::~wxWebViewChromium()
 {
-    // Delete CEF idle handler when there is no active webview
-    ms_activeWebViewCount--;
-    if (ms_activeWebViewCount == 0)
-        wxTheApp->Unbind(wxEVT_IDLE, &wxWebViewChromium::OnIdle);
-
     if (m_clientHandler)
     {
+        wxLogTrace(TRACE_CEF, "closing browser");
+
+        constexpr bool forceClose = true;
+        m_clientHandler->GetBrowser()->GetHost()->CloseBrowser(forceClose);
+
         m_clientHandler->Release();
         m_clientHandler = nullptr;
     }
@@ -349,6 +412,10 @@ bool wxWebViewChromium::InitCEF()
     wxFileName userDataPath(cefDataFolder.GetFullPath(), "UserData");
     CefString(&settings.root_cache_path).FromWString(userDataPath.GetFullPath().ToStdWstring());
 
+    // Set up CEF for use inside another application, as is the case for us.
+    settings.multi_threaded_message_loop = false;
+    settings.external_message_pump = true;
+
     settings.no_sandbox = true;
 
 #ifdef __WXDEBUG__
@@ -363,7 +430,9 @@ bool wxWebViewChromium::InitCEF()
     wxAppConsole* app = wxApp::GetInstance();
     CefMainArgs args(app->argc, app->argv);
 #endif
-    if (CefInitialize(args, settings, nullptr, nullptr))
+
+    CefRefPtr<CefApp> cefApp{new wxCefApp{}};
+    if (CefInitialize(args, settings, cefApp, nullptr))
     {
         ms_cefInitialized = true;
         return true;
@@ -379,17 +448,8 @@ void wxWebViewChromium::ShutdownCEF()
 {
     if (ms_cefInitialized)
     {
-        // Give CEF a chance for some cleanup work
-        for (int i = 0; i < 10; i++)
-            CefDoMessageLoopWork();
-
         CefShutdown();
     }
-}
-
-void wxWebViewChromium::OnIdle(wxIdleEvent& WXUNUSED(event))
-{
-    CefDoMessageLoopWork();
 }
 
 void wxWebViewChromium::OnSize(wxSizeEvent& event)

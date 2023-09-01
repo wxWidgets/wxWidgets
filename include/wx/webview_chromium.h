@@ -143,10 +143,7 @@ private:
     ClientHandler* m_clientHandler;
 
     friend class wxWebViewChromiumModule;
-    static int ms_activeWebViewCount;
     static bool ms_cefInitialized;
-
-    static void OnIdle(wxIdleEvent& evt);
 
     static bool InitCEF();
 
