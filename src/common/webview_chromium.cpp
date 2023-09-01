@@ -255,6 +255,10 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     if ( !InitCEF() )
         return false;
 
+#ifdef __WXMSW__
+    MSWDisableComposited();
+#endif // __WXMSW__
+
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
     m_historyPosition = -1;
