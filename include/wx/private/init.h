@@ -44,6 +44,11 @@ struct WXDLLIMPEXP_BASE wxInitData
     void MSWInitialize();
 
     wchar_t** argvMSW = nullptr;
+#else // !__WINDOWS__
+    // Under other platforms we typically need the original, non-Unicode
+    // command line version, so we keep it too. Unlike argv that we allocate,
+    // this pointer doesn't need to be freed.
+    char** argvA = nullptr;
 #endif // __WINDOWS__
 
     wxDECLARE_NO_COPY_CLASS(wxInitData);

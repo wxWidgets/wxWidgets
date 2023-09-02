@@ -154,6 +154,10 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
 {
     wxASSERT_MSG( !argc && !argv, "initializing twice?" );
 
+#ifndef __WINDOWS__
+    argvA = argvIn;
+#endif
+
     argvOrig = new wchar_t *[argcIn + 1];
     argv = new wchar_t *[argcIn + 1];
 
