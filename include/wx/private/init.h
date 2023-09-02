@@ -29,7 +29,8 @@ struct WXDLLIMPEXP_BASE wxInitData
     void Free();
 
 
-    // We always have argc and (Unicode) argv, they're filled by Initialize().
+    // We always have argc and (Unicode) argv, they're filled by Initialize()
+    // and argv as well as its elements are owned by us, see Free().
     int argc = 0;
     wchar_t** argv = nullptr;
 
@@ -37,6 +38,12 @@ struct WXDLLIMPEXP_BASE wxInitData
     // Initialize from the implicitly available Unicode command line.
     void MSWInitialize();
 
+    // This pointer is non-null only if MSWInitialize() was called. In this
+    // case, argv is also set to it and, because this pointer needs to be freed
+    // using MSW-specific function, argv must not be freed at all.
+    //
+    // It's also possible to use Initialize(), even under Windows, in which
+    // case this pointer remains null and argv must be freed as usual.
     wchar_t** argvMSW = nullptr;
 #else // !__WINDOWS__
     // Under other platforms we typically need the original, non-Unicode
