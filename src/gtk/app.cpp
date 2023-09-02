@@ -502,6 +502,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         {
             while ( strcmp(wxConvUTF8.cWX2MB(argv_[i]), argvA[i]) != 0 )
             {
+                free(argv_[i]);
                 memmove(argv_ + i, argv_ + i + 1, (argc_ - i)*sizeof(*argv_));
             }
         }

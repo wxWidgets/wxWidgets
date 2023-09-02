@@ -33,12 +33,6 @@ struct WXDLLIMPEXP_BASE wxInitData
     int argc = 0;
     wchar_t** argv = nullptr;
 
-    // We also need to keep their original copies as they can be modified
-    // during initialization (e.g. GTK removes GTK-specific parameters from
-    // it), but we must free the originally allocated array at the end.
-    int argcOrig = 0;
-    wchar_t** argvOrig = nullptr;
-
 #ifdef __WINDOWS__
     // Initialize from the implicitly available Unicode command line.
     void MSWInitialize();

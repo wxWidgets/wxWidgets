@@ -158,7 +158,6 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
     argvA = argvIn;
 #endif
 
-    argvOrig = new wchar_t *[argcIn + 1];
     argv = new wchar_t *[argcIn + 1];
 
     int wargc = 0;
@@ -176,13 +175,13 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
         }
         else // converted ok
         {
-            argvOrig[wargc] = argv[wargc] = wxStrdup(buf);
+            argv[wargc] = wxStrdup(buf);
             wargc++;
         }
     }
 
-    argcOrig = argc = wargc;
-    argvOrig[wargc] = argv[wargc] = nullptr;
+    argc = wargc;
+    argv[wargc] = nullptr;
 }
 
 #ifdef __WINDOWS__
@@ -202,35 +201,33 @@ void wxInitData::MSWInitialize()
     // argvMSW because it could be allocated by Initialize() if a custom entry
     // point is used.
     argv = argvMSW;
-
-    // However in this case we don't need to set argvOrig because argv itself
-    // is never modified under Windows.
 }
 
 #endif // __WINDOWS__
 
 void wxInitData::Free()
 {
-    if ( argvOrig )
-    {
-        for ( int i = 0; i < argcOrig; i++ )
-        {
-            free(argvOrig[i]);
-            // argv[i] normally points to the same data
-        }
-
-        wxDELETEA(argvOrig);
-        wxDELETEA(argv);
-        argcOrig = argc = 0;
-    }
-
 #ifdef __WINDOWS__
     if ( argvMSW )
     {
         ::LocalFree(argvMSW);
-        argvMSW = nullptr;
+
+        // If argvMSW is non-null, argv must be the same value, so reset it too.
+        argv = argvMSW = nullptr;
+        argc = 0;
     }
 #endif // __WINDOWS__
+
+    if ( argc )
+    {
+        for ( int i = 0; i < argc; i++ )
+        {
+            free(argv[i]);
+        }
+
+        wxDELETEA(argv);
+        argc = 0;
+    }
 }
 
 // ----------------------------------------------------------------------------
