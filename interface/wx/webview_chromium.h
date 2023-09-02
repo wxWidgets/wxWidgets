@@ -64,6 +64,23 @@
 
     Only Microsoft Visual C++ 2015 or newer can be used to build wxWebViewChromium.
 
+    __Linux with GTK__
+
+    wxWebviewChromium currently only supports X11 and not Wayland, i.e. you
+    need to either ensure that `GDK_BACKEND` environment variable is set to
+    "x11" before running your program using it or call
+
+    @code
+    gdk_set_allowed_backends("x11")
+    @endcode
+
+    in your application code.
+
+    Moreover, the actual browser is only created once the window is shown, and
+    can't be used until then. You can bind an event handler for wxEVT_CREATE to
+    know when it is usable.
+
+
     __Mac OS X Platform__
 
     OS X 10.9 or above is required.

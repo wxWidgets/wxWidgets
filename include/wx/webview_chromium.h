@@ -118,10 +118,18 @@ public:
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) override;
 
+#ifdef __WXGTK__
+    virtual void GTKHandleRealized() override;
+#endif
+
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) override;
 
 private:
+    // Actually create the browser: this can only be done once the window is
+    // created in wxGTK.
+    bool DoCreateBrowser(const wxString& url);
+
     //History related variables, we currently use our own implementation
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;
@@ -141,6 +149,10 @@ private:
     //We also friend ClientHandler so it can access the history
     friend class ClientHandler;
     ClientHandler* m_clientHandler;
+
+#ifdef __WXGTK__
+    wxString m_url;
+#endif
 
     friend class wxWebViewChromiumModule;
     static bool ms_cefInitialized;

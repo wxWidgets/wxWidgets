@@ -460,14 +460,17 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
         m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new AdvancedWebViewHandler()));
     }
 #endif
-    m_browser->Create(this, wxID_ANY, url, wxDefaultPosition,
+    if ( !m_browser->Create(this, wxID_ANY, url, wxDefaultPosition,
 #if defined(wxWEBVIEW_SAMPLE_CHROMIUM) && defined(__WXOSX__)
         // OSX implementation currently cannot handle the default size
         wxSize(800, 600)
 #else
         wxDefaultSize
 #endif
-    );
+    ) )
+    {
+        wxLogFatalError("Failed to create wxWebView");
+    }
 
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
@@ -476,7 +479,14 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
         // Log backend information
         wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
             wxWebView::GetBackendVersionInfo().ToString());
-        wxLogMessage("User Agent: %s", m_browser->GetUserAgent());
+
+        // Chromium backend can't be used immediately after creation, so wait
+        // until the browser is created before calling GetUserAgent().
+        m_browser->Bind(wxEVT_CREATE, [this](wxWindowCreateEvent& event) {
+            wxLogMessage("User Agent: %s", m_browser->GetUserAgent());
+
+            event.Skip();
+        });
 
 #ifndef __WXMAC__
         //We register the wxfs:// protocol for testing purposes

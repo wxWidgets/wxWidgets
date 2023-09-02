@@ -305,20 +305,18 @@ bool wxWebViewChromium::Create(wxWindow* parent,
            const wxString& name)
 {
 #ifdef __WXGTK__
-    style |= wxHSCROLL | wxVSCROLL;
-    if ( !PreCreation( parent, pos, size ) ||
-         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ) )
-    {
-        wxFAIL_MSG( wxT("wxWebViewChromium creation failed") );
+    // Currently CEF works only with X11.
+    if ( wxGetDisplayInfo().type != wxDisplayX11 )
         return false;
-    }
-#else
+
+    style |= wxHSCROLL | wxVSCROLL;
+#endif
+
     if ( !wxControl::Create(parent, id, pos, size, style,
                            wxDefaultValidator, name) )
     {
         return false;
     }
-#endif
     if ( !InitCEF() )
         return false;
 
@@ -331,50 +329,100 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     m_historyPosition = -1;
     m_zoomLevel = wxWEBVIEW_ZOOM_MEDIUM;
 
-    CefBrowserSettings browsersettings;
-    CefWindowInfo info;
-
     m_clientHandler = new ClientHandler{*this};
     m_clientHandler->AddRef();
 
-    // Initialize window info to the defaults for a child window
 #ifdef __WXGTK__
-    m_widget = gtk_scrolled_window_new( nullptr, nullptr );
-    g_object_ref( m_widget );
-    GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW( m_widget );
-    // Hide the scroll bar.
-    gtk_scrolled_window_set_policy( scrolled_window, GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-    GtkWidget* view_port = gtk_viewport_new( nullptr, nullptr );
+
 #ifdef __WXGTK3__
-    gtk_container_add( GTK_CONTAINER(m_widget), view_port );
-#else
-    gtk_scrolled_window_add_with_viewport( scrolled_window, view_port );
-#endif
-    // TODO: figure out correct parameters for Linux SetAsChild() call
-    ::Window xid = GDK_WINDOW_XID(gtk_widget_get_window(view_port));
-    wxASSERT(xid != 0);
-    info.SetAsChild(xid, CefRect(0, 0, size.GetX(), size.GetY()));
-    m_parent->DoAddChild( this );
-    PostCreation( size );
+    // CEF window creation fails with Match error unless we use the default X11
+    // visual, which is not the case by default since GTK 3.15, see dae447728d
+    // (X11: Pick better system and rgba visuals for GL, 2014-10-29).
+    //
+    // We do this unconditionally instead of checking for GTK version because
+    // it shouldn't hurt even with earlier version and nobody uses them anyhow.
+    GdkScreen* screen = gdk_screen_get_default();
+    GdkX11Screen* x11_screen = GDK_X11_SCREEN(screen);
+    Visual* default_xvisual = DefaultVisual(GDK_SCREEN_XDISPLAY(x11_screen),
+                                            GDK_SCREEN_XNUMBER(x11_screen));
+    GdkVisual* default_visual = nullptr;
 
-    gtk_widget_show( view_port );
-#else
-    const wxSize sz = GetClientSize();
-    info.SetAsChild(GetHandle(), {0, 0, sz.x, sz.y});
-#endif
+    for ( GList* visuals = gdk_screen_list_visuals(screen);
+          visuals;
+          visuals = visuals->next)
+    {
+        GdkVisual* visual = GDK_X11_VISUAL (visuals->data);
+        Visual* xvisual = gdk_x11_visual_get_xvisual(GDK_X11_VISUAL (visuals->data));
 
-    CefBrowserHost::CreateBrowser(
-        info,
-        CefRefPtr<CefClient>{m_clientHandler},
-        url.ToStdString(),
-        browsersettings,
-        nullptr, // No extra info
-        nullptr  // Use global request context
-    );
+        if ( xvisual->visualid == default_xvisual->visualid )
+        {
+           default_visual = visual;
+           break;
+        }
+    }
+
+    if ( default_visual )
+        gtk_widget_set_visual(m_widget, default_visual);
+#endif // wxGTK3
+
+    // Under wxGTK we need to wait until the window becomes realized in order
+    // to get the X11 window handle, so postpone calling DoCreateBrowser()
+    // until GTKHandleRealized().
+    m_url = url;
+#else
+    // Under the other platforms we can call it immediately.
+    if ( !DoCreateBrowser(url) )
+        return false;
+#endif
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
     Bind(wxEVT_IDLE, [](wxIdleEvent&) { CefDoMessageLoopWork(); });
+
+    return true;
+}
+
+#ifdef __WXGTK__
+
+void wxWebViewChromium::GTKHandleRealized()
+{
+    // Unfortunately there is nothing we can do here if it fails, so just
+    // ignore the return value.
+    DoCreateBrowser(m_url);
+}
+
+#endif // __WXGTK__
+
+bool wxWebViewChromium::DoCreateBrowser(const wxString& url)
+{
+    CefBrowserSettings browsersettings;
+
+    // Initialize window info to the defaults for a child window
+    CefWindowInfo info;
+
+    // In wxGTK the handle returned by GetHandle() is the GtkWidget, but we
+    // need the underlying X11 window here.
+#ifdef __WXGTK__
+    const auto handle = GDK_WINDOW_XID(GTKGetDrawingWindow());
+#else
+    const auto handle = GetHandle();
+#endif
+
+    const wxSize sz = GetClientSize();
+    info.SetAsChild(handle, {0, 0, sz.x, sz.y});
+
+    if ( !CefBrowserHost::CreateBrowser(
+            info,
+            CefRefPtr<CefClient>{m_clientHandler},
+            url.ToStdString(),
+            browsersettings,
+            nullptr, // No extra info
+            nullptr  // Use global request context
+        ) )
+    {
+        wxLogTrace(TRACE_CEF, "CefBrowserHost::CreateBrowser() failed");
+        return false;
+    }
 
     return true;
 }
@@ -461,23 +509,34 @@ void wxWebViewChromium::ShutdownCEF()
 
 void wxWebViewChromium::OnSize(wxSizeEvent& event)
 {
-#ifdef __WXMSW__
-    wxSize size = GetClientSize();
-    if ( m_clientHandler && m_clientHandler->GetBrowser() && m_clientHandler->GetBrowser()->GetHost() )
-    {
-        HWND handle = m_clientHandler->GetBrowser()->GetHost()->GetWindowHandle();
-
-        if ( handle )
-        {
-            HDWP hdwp = BeginDeferWindowPos(1);
-            hdwp = DeferWindowPos(hdwp, handle, nullptr, 0, 0,
-                                  size.GetWidth(), size.GetHeight(), SWP_NOZORDER);
-            EndDeferWindowPos(hdwp);
-        }
-    }
-#endif
-
     event.Skip();
+
+    CefRefPtr<CefBrowserHost> host;
+    if ( m_clientHandler )
+    {
+        if ( auto browser = m_clientHandler->GetBrowser() )
+            host = browser->GetHost();
+    }
+
+    if ( !host )
+        return;
+
+    auto handle = host->GetWindowHandle();
+    if ( !handle )
+        return;
+
+    wxSize size = GetClientSize();
+
+#ifdef __WXMSW__
+    HDWP hdwp = BeginDeferWindowPos(1);
+    hdwp = DeferWindowPos(hdwp, handle, nullptr, 0, 0,
+                          size.GetWidth(), size.GetHeight(), SWP_NOZORDER);
+    EndDeferWindowPos(hdwp);
+#elif defined(__WXGTK__)
+    size *= GetDPIScaleFactor();
+
+    ::XResizeWindow(wxGetX11Display(), handle, size.x, size.y);
+#endif
 }
 
 void wxWebViewChromium::SetPageSource(const wxString& pageSource)
