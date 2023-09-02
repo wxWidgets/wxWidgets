@@ -18,6 +18,7 @@
 #include "wx/base64.h"
 #include "wx/module.h"
 
+#include "wx/private/init.h"
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
 #endif
@@ -1086,28 +1087,65 @@ bool SchemeHandler::ReadResponse(void* data_out,
 void wxWebViewChromium_InitOSX();
 #endif
 
+namespace
+{
+
+class wxWebViewChromiumEntry
+{
+public:
+    wxWebViewChromiumEntry()
+    {
+        wxAddEntryHook(&wxWebViewChromiumEntry::Hook);
+    }
+
+private:
+    static int Hook()
+    {
+        const auto& initData = wxInitData::Get();
+        for ( int n = 0; n < initData.argc; ++n )
+        {
+            constexpr const wchar_t* TYPE_OPTION = L"--type=";
+            if ( wcsncmp(initData.argv[n], TYPE_OPTION, wcslen(TYPE_OPTION)) == 0 )
+            {
+                // It looks like we have been launched by CEF as a helper
+                // process, so execute it now.
+#ifdef __WXMSW__
+                // Under MSW CEF wants to have HINSTANCE, so give it to it.
+                CefMainArgs args(wxGetInstance());
+#else
+                // Elsewhere it needs the actual arguments as narrow strings,
+                // and, serendipitously, we always have them under non-MSW.
+                CefMainArgs args(initData.argc, initData.argvA);
+#endif
+
+                // If there is no subprocess then we need to execute on this process
+                int code = CefExecuteProcess(args, nullptr, nullptr);
+                if (code < 0)
+                {
+                    // This wasn't a CEF helper process finally, somehow.
+                    break;
+                }
+
+                // Exit immediately with the returned code.
+                return code;
+            }
+        }
+
+        // Continue normal execution.
+        return -1;
+    }
+};
+
+wxWebViewChromiumEntry gs_chromiumEntryHook;
+
+} // anonymous namespace
+
 class wxWebViewChromiumModule : public wxModule
 {
 public:
     wxWebViewChromiumModule() { }
     virtual bool OnInit() override
     {
-        m_isHelperProcess = false;
-#ifdef __WXMSW__
-        CefMainArgs args(wxGetInstance());
-#else
-        wxAppConsole* app = wxApp::GetInstance();
-        CefMainArgs args(app->argc, app->argv);
-#endif
-        // If there is no subprocess then we need to execute on this process
-        int code = CefExecuteProcess(args, nullptr, nullptr);
-        if (code >= 0)
-        {
-            m_isHelperProcess = true;
-            exit(code);
-            return false;
-        }
-
         // Register with wxWebView
         wxWebView::RegisterFactory(wxWebViewBackendChromium,
             wxSharedPtr<wxWebViewFactory>(new wxWebViewFactoryChromium));
@@ -1119,14 +1157,9 @@ public:
     }
     virtual void OnExit() override
     {
-        if (m_isHelperProcess)
-            return;
-
         wxWebViewChromium::ShutdownCEF();
     }
 private:
-    bool m_isHelperProcess;
-
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromiumModule);
 };
 

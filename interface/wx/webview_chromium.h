@@ -51,6 +51,11 @@
     setting wxUSE_WEBVIEW_CHROMIUM equal to 1 in setup.h for Visual Studio
     based builds.
 
+    When running applications using wxWebViewChromium, the command line option
+    `--type=xxx` is interpreted specially as it is used by CEF to launch helper
+    applications, so your program must not use this option for anything else.
+
+
     __Microsoft Windows Platform__
     
     Windows 7 or newer is required to run applications using wxWebViewChromium.
