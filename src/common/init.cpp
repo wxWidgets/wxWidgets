@@ -152,6 +152,8 @@ wxInitData& wxInitData::Get()
 
 void wxInitData::Initialize(int argcIn, char **argvIn)
 {
+    wxASSERT_MSG( !argc && !argv, "initializing twice?" );
+
     argvOrig = new wchar_t *[argcIn + 1];
     argv = new wchar_t *[argcIn + 1];
 
@@ -179,6 +181,30 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
     argvOrig[wargc] = argv[wargc] = nullptr;
 }
 
+#ifdef __WINDOWS__
+
+void wxInitData::MSWInitialize()
+{
+    wxASSERT_MSG( !argc && !argvMSW, "initializing twice?" );
+
+    // Prefer to use the standard function for tokenizing the command line,
+    // instead of our own wxCmdLineParser::ConvertStringToArgs() which might
+    // not use exactly the same logic.
+
+    // This pointer will be freed in Free().
+    argvMSW = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+
+    // And this one will be used by the rest of the code. It is separate from
+    // argvMSW because it could be allocated by Initialize() if a custom entry
+    // point is used.
+    argv = argvMSW;
+
+    // However in this case we don't need to set argvOrig because argv itself
+    // is never modified under Windows.
+}
+
+#endif // __WINDOWS__
+
 void wxInitData::Free()
 {
     if ( argvOrig )
@@ -193,6 +219,14 @@ void wxInitData::Free()
         wxDELETEA(argv);
         argcOrig = argc = 0;
     }
+
+#ifdef __WINDOWS__
+    if ( argvMSW )
+    {
+        ::LocalFree(argvMSW);
+        argvMSW = nullptr;
+    }
+#endif // __WINDOWS__
 }
 
 // ----------------------------------------------------------------------------
@@ -390,12 +424,7 @@ static void DoCommonPostCleanup()
 #endif // wxUSE_LOG
 }
 
-// for MSW the real wxEntryCleanup() is defined in msw/main.cpp
-#ifndef __WINDOWS__
-    #define wxEntryCleanupReal wxEntryCleanup
-#endif // !__WINDOWS__
-
-void wxEntryCleanupReal()
+void wxEntryCleanup()
 {
     DoCommonPreCleanup();
 

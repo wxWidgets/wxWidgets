@@ -39,6 +39,13 @@ struct WXDLLIMPEXP_BASE wxInitData
     int argcOrig = 0;
     wchar_t** argvOrig = nullptr;
 
+#ifdef __WINDOWS__
+    // Initialize from the implicitly available Unicode command line.
+    void MSWInitialize();
+
+    wchar_t** argvMSW = nullptr;
+#endif // __WINDOWS__
+
     wxDECLARE_NO_COPY_CLASS(wxInitData);
 };
 
