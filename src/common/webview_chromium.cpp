@@ -1116,14 +1116,14 @@ public:
         wxWebViewChromium_InitOSX();
 #endif
         return true;
-    };
+    }
     virtual void OnExit() override
     {
         if (m_isHelperProcess)
             return;
 
         wxWebViewChromium::ShutdownCEF();
-    };
+    }
 private:
     bool m_isHelperProcess;
 
