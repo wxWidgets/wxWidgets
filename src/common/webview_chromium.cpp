@@ -160,7 +160,24 @@ public:
         const CefString& errorText,
         const CefString& failedUrl) override;
 
-    CefRefPtr<CefBrowser> GetBrowser() { return m_browser; }
+    CefRefPtr<CefBrowser> GetBrowser() const { return m_browser; }
+
+    // Return the underlying window handle: HWND under MSW, X11 Window under
+    // GTK.
+    //
+    // The handle can be 0.
+    CefWindowHandle GetWindowHandle() const
+    {
+        auto browser = GetBrowser();
+        if ( !browser )
+            return 0;
+
+        auto host = browser->GetHost();
+        if ( !host )
+            return 0;
+
+        return host->GetWindowHandle();
+    }
 
 private:
     CefRefPtr<CefBrowser> m_browser;
@@ -530,17 +547,7 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 {
     event.Skip();
 
-    CefRefPtr<CefBrowserHost> host;
-    if ( m_clientHandler )
-    {
-        if ( auto browser = m_clientHandler->GetBrowser() )
-            host = browser->GetHost();
-    }
-
-    if ( !host )
-        return;
-
-    auto handle = host->GetWindowHandle();
+    const auto handle = m_clientHandler ? m_clientHandler->GetWindowHandle() : 0;
     if ( !handle )
         return;
 
