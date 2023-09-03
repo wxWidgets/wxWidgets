@@ -554,10 +554,8 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
     wxSize size = GetClientSize();
 
 #ifdef __WXMSW__
-    HDWP hdwp = BeginDeferWindowPos(1);
-    hdwp = DeferWindowPos(hdwp, handle, nullptr, 0, 0,
-                          size.GetWidth(), size.GetHeight(), SWP_NOZORDER);
-    EndDeferWindowPos(hdwp);
+    ::SetWindowPos(handle, nullptr, 0, 0, size.x, size.y,
+                   SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
 #elif defined(__WXGTK__)
     size *= GetDPIScaleFactor();
 
