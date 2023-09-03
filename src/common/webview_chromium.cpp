@@ -275,15 +275,27 @@ public:
     {
         if ( delay_ms > 0 )
         {
-            if ( !m_timer.IsRunning() )
+            // Time when we should do work.
+            const auto scheduledTime = wxGetUTCTimeMillis() + delay_ms;
+
+            if ( m_timer.IsRunning() )
             {
-                wxLogTrace(TRACE_CEF, "schedule work in %lldms", delay_ms);
-                m_timer.StartOnce(delay_ms);
+                if ( m_nextTimer > scheduledTime )
+                {
+                    // Existing timer will expire too late, restart it.
+                    m_timer.Stop();
+                }
+                else
+                {
+                    wxLogTrace(TRACE_CEF, "work already scheduled");
+                    return;
+                }
             }
-            else
-            {
-                wxLogTrace(TRACE_CEF, "work already scheduled");
-            }
+
+            wxLogTrace(TRACE_CEF, "schedule work in %lldms", delay_ms);
+            m_timer.StartOnce(delay_ms);
+
+            m_nextTimer = scheduledTime;
         }
         else
         {
@@ -305,6 +317,9 @@ private:
             CefDoMessageLoopWork();
         }
     } m_timer;
+
+    // Time when the currently running timer will expire.
+    wxLongLong m_nextTimer = 0;
 
     IMPLEMENT_REFCOUNTING(wxBrowserProcessHandler);
 };
