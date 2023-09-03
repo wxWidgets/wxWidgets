@@ -69,11 +69,14 @@ bool wxWebViewChromium::ms_cefInitialized = false;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
 
+namespace wxCEF
+{
+
 // ----------------------------------------------------------------------------
-// wxWebViewChromiumImplData
+// ImplData
 // ----------------------------------------------------------------------------
 
-struct wxWebViewChromiumImplData
+struct ImplData
 {
 #ifdef __WXGTK__
     // Due to delayed creation of the browser in wxGTK we need to remember the
@@ -268,9 +271,6 @@ private:
     IMPLEMENT_REFCOUNTING(wxStringVisitor);
 };
 
-namespace
-{
-
 class wxBrowserProcessHandler : public CefBrowserProcessHandler
 {
 public:
@@ -348,7 +348,9 @@ private:
     IMPLEMENT_REFCOUNTING(wxCefApp);
 };
 
-} // anonymous namespace
+} // namespace wxCEF
+
+using namespace wxCEF;
 
 bool wxWebViewChromium::Create(wxWindow* parent,
            wxWindowID id,
@@ -383,7 +385,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     m_historyPosition = -1;
     m_zoomLevel = wxWEBVIEW_ZOOM_MEDIUM;
 
-    m_implData = new wxWebViewChromiumImplData{};
+    m_implData = new ImplData{};
 
     m_clientHandler = new ClientHandler{*this};
     m_clientHandler->AddRef();

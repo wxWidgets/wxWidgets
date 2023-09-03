@@ -17,7 +17,13 @@
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[];
 
 class wxWebViewChromium;
+
+// Private namespace containing classes used only in the implementation.
+namespace wxCEF
+{
 class ClientHandler;
+struct ImplData;
+}
 
 class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewChromium : public wxWebView
 {
@@ -146,12 +152,12 @@ private:
     // The text of the current page
     wxString m_pageText;
 
-    // Private data used by ClientHandler.
-    struct wxWebViewChromiumImplData* m_implData = nullptr;
+    // Private data used by wxCEFClientHandler.
+    struct wxCEF::ImplData* m_implData = nullptr;
 
-    // We also friend ClientHandler so it can access m_implData.
-    friend class ClientHandler;
-    ClientHandler* m_clientHandler;
+    // We also friend wxCEFClientHandler so it can access m_implData.
+    friend class wxCEF::ClientHandler;
+    wxCEF::ClientHandler* m_clientHandler;
 
     friend class wxWebViewChromiumModule;
     static bool ms_cefInitialized;
