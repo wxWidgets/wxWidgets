@@ -10,6 +10,7 @@
 
 #include "wx/webview.h"
 #include "wx/webview_chromium.h"
+#include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/filesys.h"
 #include "wx/rtti.h"
@@ -79,6 +80,10 @@ struct wxWebViewChromiumImplData
     // URL passed to Create() as we can't use it there directly.
     wxString m_initialURL;
 #endif // __WXGTK__
+
+    // These flags are used when destroying wxWebViewChromium, see its dtor.
+    bool m_calledDoClose = false;
+    bool m_calledOnBeforeClose = false;
 };
 
 // ----------------------------------------------------------------------------
@@ -484,18 +489,53 @@ wxWebViewChromium::~wxWebViewChromium()
     {
         wxLogTrace(TRACE_CEF, "closing browser");
 
-        // Preserve the original pointer.
-        const auto clientHandler = m_clientHandler;
+        const auto handle = m_clientHandler->GetWindowHandle();
 
         constexpr bool forceClose = true;
         m_clientHandler->GetBrowser()->GetHost()->CloseBrowser(forceClose);
+        m_clientHandler->Release();
 
-        // This should be set to nullptr from ClientHandler::DoClose().
-        while ( m_clientHandler )
+        // We need to wait until the browser is really closed, which happens
+        // asynchronously, as otherwise we could exit the program and call
+        // CefShutdown() before ClientHandler is destroyed, which would kill
+        // the program with "Object reference incorrectly held at CefShutdown"
+        // error message.
+
+        // First wait until our ClientHandler::DoClose() is called: it will
+        // reset our m_clientHandler when this happens.
+        while ( !m_implData->m_calledDoClose )
             CefDoMessageLoopWork();
 
-        clientHandler->Release();
+#ifdef __WXMSW__
+        // Under MSW we need to destroy the window: if we don't do this,
+        // OnBeforeClose() won't get called at all, no matter how many messages
+        // we dispatch or how many times we call CefDoMessageLoopWork().
+        ::DestroyWindow(handle);
+
+        while ( !m_implData->m_calledOnBeforeClose )
+            CefDoMessageLoopWork();
+#elif defined(__WXGTK__)
+        // This doesn't seem to be necessary, the window gets destroyed on its
+        // own when dispatching the events, but still do it as it might speed
+        // up the shutdown and we can also do this if there is no active event
+        // loop (which should never happen, of course).
+        ::XDestroyWindow(wxGetX11Display(), handle);
+
+        if ( const auto eventLoop = wxEventLoop::GetActive() )
+        {
+            while ( !m_implData->m_calledOnBeforeClose )
+            {
+                // Under GTK just calling CefDoMessageLoopWork() isn't enough,
+                // we need to dispatch the lower level (e.g. X11) events
+                // notifying CEF about the window destruction.
+                eventLoop->DispatchTimeout(10);
+            }
+        }
+        //else: we're going to crash on shutdown, but what else can we do?
+#endif
     }
+
+    delete m_implData;
 }
 
 bool wxWebViewChromium::InitCEF()
@@ -964,7 +1004,7 @@ bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))
 {
     TRACE_CEF_FUNCTION();
 
-    m_webview.m_clientHandler = nullptr;
+    m_webview.m_implData->m_calledDoClose = true;
 
     return false;
 }
@@ -972,6 +1012,8 @@ bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))
 void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 {
     TRACE_CEF_FUNCTION();
+
+    m_webview.m_implData->m_calledOnBeforeClose = true;
 
     if ( browser->GetIdentifier() == m_browserId )
     {
