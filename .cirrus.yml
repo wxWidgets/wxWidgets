@@ -39,6 +39,7 @@ task:
 
     case "${osname}" in
       Linux)
+        chmod 1777 /tmp
         WX_EXTRA_PACKAGES="$WX_EXTRA_PACKAGES \
               g++ libexpat1-dev libjpeg-dev libpng-dev libtiff-dev make zlib1g-dev"
         ;;
