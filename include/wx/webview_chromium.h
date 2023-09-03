@@ -146,13 +146,12 @@ private:
     // The text of the current page
     wxString m_pageText;
 
-    //We also friend ClientHandler so it can access the history
+    // Private data used by ClientHandler.
+    struct wxWebViewChromiumImplData* m_implData = nullptr;
+
+    // We also friend ClientHandler so it can access m_implData.
     friend class ClientHandler;
     ClientHandler* m_clientHandler;
-
-#ifdef __WXGTK__
-    wxString m_url;
-#endif
 
     friend class wxWebViewChromiumModule;
     static bool ms_cefInitialized;

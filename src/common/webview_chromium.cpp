@@ -68,6 +68,23 @@ bool wxWebViewChromium::ms_cefInitialized = false;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
 
+// ----------------------------------------------------------------------------
+// wxWebViewChromiumImplData
+// ----------------------------------------------------------------------------
+
+struct wxWebViewChromiumImplData
+{
+#ifdef __WXGTK__
+    // Due to delayed creation of the browser in wxGTK we need to remember the
+    // URL passed to Create() as we can't use it there directly.
+    wxString m_initialURL;
+#endif // __WXGTK__
+};
+
+// ----------------------------------------------------------------------------
+// ClientHandler
+// ----------------------------------------------------------------------------
+
 // ClientHandler implementation.
 class ClientHandler : public CefClient,
     public CefContextMenuHandler,
@@ -329,6 +346,8 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     m_historyPosition = -1;
     m_zoomLevel = wxWEBVIEW_ZOOM_MEDIUM;
 
+    m_implData = new wxWebViewChromiumImplData{};
+
     m_clientHandler = new ClientHandler{*this};
     m_clientHandler->AddRef();
 
@@ -368,7 +387,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     // Under wxGTK we need to wait until the window becomes realized in order
     // to get the X11 window handle, so postpone calling DoCreateBrowser()
     // until GTKHandleRealized().
-    m_url = url;
+    m_implData->m_initialURL = url;
 #else
     // Under the other platforms we can call it immediately.
     if ( !DoCreateBrowser(url) )
@@ -388,7 +407,7 @@ void wxWebViewChromium::GTKHandleRealized()
 {
     // Unfortunately there is nothing we can do here if it fails, so just
     // ignore the return value.
-    DoCreateBrowser(m_url);
+    DoCreateBrowser(m_implData->m_initialURL);
 }
 
 #endif // __WXGTK__
