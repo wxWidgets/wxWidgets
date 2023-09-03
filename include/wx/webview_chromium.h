@@ -16,8 +16,6 @@
 
 extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[];
 
-class wxWebViewChromium;
-
 // Private namespace containing classes used only in the implementation.
 namespace wxCEF
 {
