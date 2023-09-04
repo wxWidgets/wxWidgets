@@ -534,6 +534,12 @@ wxWebViewChromium::~wxWebViewChromium()
             }
         }
         //else: we're going to crash on shutdown, but what else can we do?
+#elif defined(__WXOSX__)
+        // There doesn't seem to be any way to force OnBeforeClose() to be
+        // called from here under Mac as it's referenced by an autorelease pool
+        // in the outer frame, so just return and count on that pool dtor
+        // really destroying the object before CefShutdown() is called.
+        wxUnusedVar(handle);
 #endif
     }
 
@@ -604,6 +610,8 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 {
     event.Skip();
 
+    // Under Mac we don't have to do anything to resize the browser window.
+#ifndef __WXOSX__
     const auto handle = m_clientHandler ? m_clientHandler->GetWindowHandle() : 0;
     if ( !handle )
         return;
@@ -618,6 +626,7 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 
     ::XResizeWindow(wxGetX11Display(), handle, size.x, size.y);
 #endif
+#endif // !__WXOSX__
 }
 
 void wxWebViewChromium::SetPageSource(const wxString& pageSource)
@@ -1015,7 +1024,11 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 {
     TRACE_CEF_FUNCTION();
 
+    // Under Mac the web view and its data might be already destroyed, so don't
+    // touch them there, see Mac-specific comment in wxWebViewChromium dtor.
+#ifndef __WXOSX__
     m_webview.m_implData->m_calledOnBeforeClose = true;
+#endif
 
     if ( browser->GetIdentifier() == m_browserId )
     {
