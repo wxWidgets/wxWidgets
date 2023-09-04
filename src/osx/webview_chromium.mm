@@ -42,17 +42,22 @@
 
 @end
 
-id isHandlingSendEventImpl(id self, SEL, ...)
+namespace
 {
 
-    return nil;
-}
+BOOL gs_handlingSendEvent = FALSE;
 
-id setHandlingSendEventImpl(id self, SEL, ...)
+BOOL isHandlingSendEventImpl(id self, SEL)
 {
-
-    return nil;
+    return gs_handlingSendEvent;
 }
+
+void setHandlingSendEventImpl(id self, SEL, BOOL handlingSendEvent)
+{
+    gs_handlingSendEvent = handlingSendEvent;
+}
+
+} // anonymous namespace
 
 void wxWebViewChromium_InitOSX()
 {
@@ -61,9 +66,9 @@ void wxWebViewChromium_InitOSX()
     {
         Class appClass = objc_getClass("wxNSApplication");
         class_addProtocol(appClass, prot);
-        if (!class_addMethod(appClass, @selector(isHandlingSendEvent), &isHandlingSendEventImpl, "c@:"))
+        if (!class_addMethod(appClass, @selector(isHandlingSendEvent), (IMP)&isHandlingSendEventImpl, "c@:"))
             wxLogError("Could not add isHandlingSendEvent impl");
-        if (!class_addMethod(appClass, @selector(setHandlingSendEvent:), &isHandlingSendEventImpl, "v@:c"))
+        if (!class_addMethod(appClass, @selector(setHandlingSendEvent:), (IMP)&setHandlingSendEventImpl, "v@:c"))
             wxLogError("Could not add setHandlingSendEvent impl");
     }
 }
