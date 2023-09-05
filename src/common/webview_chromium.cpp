@@ -564,10 +564,58 @@ wxWebViewChromium::~wxWebViewChromium()
     delete m_implData;
 }
 
+// This Linux-specific section exists in order to check that we're not going to
+// hang after calling CefInitialize(), as happens if libcef.so doesn't come
+// first (or at least before libc.so) in the load order. As debugging this is
+// if it happens is not fun at all, it justifies having all this extra code
+// just to check for this.
+#ifdef __LINUX__
+
+#include "wx/dynlib.h"
+
+bool CheckCEFLoadOrder()
+{
+    bool foundLibc = false;
+
+    for ( const auto& det : wxDynamicLibrary::ListLoaded() )
+    {
+        const auto& name = det.GetName();
+        if ( name.StartsWith("libc.so") )
+        {
+            foundLibc = true;
+        }
+        else if ( name.StartsWith("libcef.so") )
+        {
+            if ( foundLibc )
+            {
+                wxLogError(
+                    _("Chromium can't be used because libcef.so was't "
+                      "loaded early enough; please relink the application "
+                      "or use LD_PRELOAD to load it earlier.")
+                );
+                return false;
+            }
+
+            // We've found libcef.so before libc.so, no need to continue.
+            break;
+        }
+        //else: some other library, ignore
+    }
+
+    return true;
+}
+
+#endif // __LINUX__
+
 bool wxWebViewChromium::InitCEF()
 {
     if (ms_cefInitialized)
         return true;
+
+#ifdef __LINUX__
+    if ( !CheckCEFLoadOrder() )
+        return false;
+#endif
 
     wxFileName cefDataFolder(wxStandardPaths::Get().GetUserLocalDataDir(), "");
     cefDataFolder.AppendDir("CEF");
