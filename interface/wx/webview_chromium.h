@@ -8,22 +8,24 @@
 /**
     @class wxWebViewChromium
 
-    wxWebViewChromium is a Chromium backend for wxWebView based on the
-    Chromium Embedded Framework (CEF3). The current CEF3 required version is
-    3.3239.1723. This backend is available for Windows, Linux and OS X only.
+    wxWebViewChromium is a Chromium-based backend for wxWebView using the
+    Chromium Embedded Framework (CEF).
 
-    @section requirements CEF3 Requirements
+    This backend is only available for Windows, Linux and macOS and currently
+    requires CEF version 116.
 
-    If you are compiling your own copy of CEF3 then your compile flags must
+    Using CEF also requires a compiler with C++14 support.
+
+    @section requirements Building CEF
+
+    If you are compiling your own copy of CEF then your compile flags must
     match those you are using to compile wxWidgets. Specifically on Windows
-    it is likely you will need to adjust the following properties in the CEF3
+    it is likely you will need to adjust the following properties in the CEF
     provided build files:
 
     - C/C++ - Code Generation - Runtime Library - Multithreaded [Debug] DLL
     - C/C++ - Code Generation - Enable C++ Exceptions - Yes
     - C/C++ - Language - Enable Run-Time Type Information - Yes
-
-    The following release branches of CEF3 have been tested: 3.3239.1723.
 
     @section instructions Build Instructions
 
@@ -32,14 +34,14 @@
     The wxWebViewChromium backend is built into a separate webview_chromium
     library which depends on the webview library.
 
-    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF3 will be
+    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF will be
     automatically downloaded during configuration based on your platform.
 
     For other build systems please follow the following instructions:
 
-    Once you have a copy of CEF3, either from compiling it yourself or using
+    Once you have a copy of CEF, either from compiling it yourself or using
     prebuilt binaries, you should copy it into `wx_root/3rdparty/cef`. To run the
-    webview_chromium sample you need to copy the CEF3 resources into the
+    webview_chromium sample you need to copy the CEF resources into the
     sample directory. The following files need to be copied:
 
     - The shared objects in the wx_root/3rdparty/cef/Debug or
