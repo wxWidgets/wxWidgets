@@ -614,8 +614,6 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 {
     event.Skip();
 
-    // Under Mac we don't have to do anything to resize the browser window.
-#ifndef __WXOSX__
     const auto handle = m_clientHandler ? m_clientHandler->GetWindowHandle() : 0;
     if ( !handle )
         return;
@@ -629,8 +627,9 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
     size *= GetDPIScaleFactor();
 
     ::XResizeWindow(wxGetX11Display(), handle, size.x, size.y);
+#elif defined(__WXOSX__)
+    wxWebViewChromium_Resize(handle, size);
 #endif
-#endif // !__WXOSX__
 }
 
 void wxWebViewChromium::SetPageSource(const wxString& pageSource)

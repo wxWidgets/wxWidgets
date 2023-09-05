@@ -460,14 +460,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
         m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new AdvancedWebViewHandler()));
     }
 #endif
-    if ( !m_browser->Create(this, wxID_ANY, url, wxDefaultPosition,
-#if defined(wxWEBVIEW_SAMPLE_CHROMIUM) && defined(__WXOSX__)
-        // OSX implementation currently cannot handle the default size
-        wxSize(800, 600)
-#else
-        wxDefaultSize
-#endif
-    ) )
+    if ( !m_browser->Create(this, wxID_ANY, url) )
     {
         wxLogFatalError("Failed to create wxWebView");
     }

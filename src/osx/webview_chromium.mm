@@ -13,6 +13,7 @@
 #include <objc/runtime.h>
 #include "wx/log.h"
 
+#include "wx/osx/private.h"
 #include "wx/osx/private/webview_chromium.h"
 
 #import "include/cef_application_mac.h"
@@ -74,4 +75,11 @@ void wxWebViewChromium_InitOSX()
         if (!class_addMethod(appClass, @selector(setHandlingSendEvent:), (IMP)&setHandlingSendEventImpl, "v@:c"))
             wxLogError("Could not add setHandlingSendEvent impl");
     }
+}
+
+void wxWebViewChromium_Resize(cef_window_handle_t handle, wxSize size)
+{
+    auto const view = static_cast<NSView*>(handle);
+
+    [view setFrame:wxToNSRect([view superview], size)];
 }
