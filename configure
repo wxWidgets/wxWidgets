@@ -15346,7 +15346,7 @@ else
         wxDEFAULT_CXXSTD=11
 fi
 
-case "${wxWITH_CXX-wxDEFAULT_CXXSTD}" in
+case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
     11)
         if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
             as_fn_error $? "Using wxWebView Chromium backend requires C++14 or later." "$LINENO" 5
@@ -39699,25 +39699,104 @@ fi
     fi
 
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
-                old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
-        ac_fn_c_check_header_mongrel "$LINENO" "include/cef_version.h" "ac_cv_header_include_cef_version_h" "$ac_includes_default"
-if test "x$ac_cv_header_include_cef_version_h" = xyes; then :
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CEF" >&5
+$as_echo_n "checking for CEF... " >&6; }
+if ${wx_cv_lib_cef+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
 
-                            wxUSE_WEBVIEW="yes"
-                            USE_WEBVIEW_CHROMIUM=1
-                            $as_echo "#define wxUSE_WEBVIEW_CHROMIUM 1" >>confdefs.h
+                ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
+
+                                old_CPPFLAGS="$CPPFLAGS"
+                CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include "include/cef_version.h"
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  wx_cv_lib_cef=yes
+else
+  cef_error="Chromium headers not found"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+                                if test "$wx_cv_lib_cef" = "yes"; then
+                    old_LIBS="$LIBS"
+
+                    CEF_DIR="$srcdir/3rdparty/cef"
+                    CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
+
+                    if test "$wxUSE_MAC" != 1; then
+                        CEF_LIB="-L$CEF_DIR/Release -lcef"
+                    fi
+
+                    LIBS="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $CEF_LIB $LIBS"
+
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                            #include "include/cef_app.h"
+
+                            int main()
+                            {
+                                CefShutdown();
+                            }
+
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
 
 else
 
-                            wxUSE_WEBVIEW_CHROMIUM="no"
-                            as_fn_error $? "Chromium headers not found" "$LINENO" 5
+                            wx_cv_lib_cef=no,
+                            cef_error="Linking with CEF failed, check that CEF wrapper library is in $CEF_DLL_WRAPPER_DIR"
+
 
 fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+                    LIBS="$old_LIBS"
+                fi
+
+                CPPFLAGS="$old_CPPFLAGS"
+
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-        CPPFLAGS="$old_CPPFLAGS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_lib_cef" >&5
+$as_echo "$wx_cv_lib_cef" >&6; }
+
+        if test "$wx_cv_lib_cef" = "yes"; then
+            wxUSE_WEBVIEW="yes"
+            USE_WEBVIEW_CHROMIUM=1
+            $as_echo "#define wxUSE_WEBVIEW_CHROMIUM 1" >>confdefs.h
+
+        else
+            as_fn_error $? "CEF not detected: $cef_error
+
+Please install it following the instructions in the manual or remove the
+--enable-webviewchromium option from configure command line" "$LINENO" 5
+        fi
     fi
 
 fi

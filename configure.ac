@@ -1095,7 +1095,7 @@ fi
 
 dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
 dnl autoconf, not run, time.
-case "${wxWITH_CXX-wxDEFAULT_CXXSTD}" in
+case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
     11)
         if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
             AC_MSG_ERROR([Using wxWebView Chromium backend requires C++14 or later.])
@@ -6888,21 +6888,67 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     fi
 
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
-        dnl Search for the Chromium headers in 3rdparty/cef
-        old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
-        AC_CHECK_HEADER([include/cef_version.h],
-                        [
-                            wxUSE_WEBVIEW="yes"
-                            USE_WEBVIEW_CHROMIUM=1
-                            AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
+        AC_CACHE_CHECK([for CEF], wx_cv_lib_cef,
+            [
+                AC_LANG_PUSH(C++)
+
+                dnl Search for the Chromium headers in 3rdparty/cef
+                old_CPPFLAGS="$CPPFLAGS"
+                CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
+                AC_COMPILE_IFELSE(
+                    [AC_LANG_PROGRAM([#include "include/cef_version.h"], [])],
+                    [wx_cv_lib_cef=yes],
+                    [cef_error="Chromium headers not found"]
+                )
+
+                dnl And that we can link with CEF.
+                if test "$wx_cv_lib_cef" = "yes"; then
+                    old_LIBS="$LIBS"
+
+                    CEF_DIR="$srcdir/3rdparty/cef"
+                    CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
+
+                    if test "$wxUSE_MAC" != 1; then
+                        CEF_LIB="-L$CEF_DIR/Release -lcef"
+                    fi
+
+                    LIBS="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $CEF_LIB $LIBS"
+
+                    AC_LINK_IFELSE([
+                        AC_LANG_SOURCE([
+                            #include "include/cef_app.h"
+
+                            int main()
+                            {
+                                CefShutdown();
+                            }])
                         ],
+                        [],
                         [
-                            wxUSE_WEBVIEW_CHROMIUM="no"
-                            AC_MSG_ERROR([Chromium headers not found])
-                        ],
-                        [])
-        CPPFLAGS="$old_CPPFLAGS"
+                            wx_cv_lib_cef=no,
+                            cef_error="Linking with CEF failed, check that CEF wrapper library is in $CEF_DLL_WRAPPER_DIR"
+                        ]
+                    )
+
+                    LIBS="$old_LIBS"
+                fi
+
+                CPPFLAGS="$old_CPPFLAGS"
+
+                AC_LANG_POP()
+            ]
+        )
+
+        if test "$wx_cv_lib_cef" = "yes"; then
+            wxUSE_WEBVIEW="yes"
+            USE_WEBVIEW_CHROMIUM=1
+            AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
+        else
+            AC_MSG_ERROR([CEF not detected: $cef_error
+
+Please install it following the instructions in the manual or remove the
+--enable-webviewchromium option from configure command line])
+        fi
     fi
 
 fi
