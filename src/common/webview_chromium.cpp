@@ -183,17 +183,22 @@ public:
         return m_browser->GetMainFrame();
     }
 
+    // Return the browser host. May be null.
+    CefRefPtr<CefBrowserHost> GetHost() const
+    {
+        if ( !m_browser )
+            return {};
+
+        return m_browser->GetHost();
+    }
+
     // Return the underlying window handle: HWND under MSW, X11 Window under
     // GTK.
     //
     // The handle can be 0.
     CefWindowHandle GetWindowHandle() const
     {
-        auto browser = GetBrowser();
-        if ( !browser )
-            return 0;
-
-        auto host = browser->GetHost();
+        auto host = GetHost();
         if ( !host )
             return 0;
 
@@ -507,7 +512,7 @@ wxWebViewChromium::~wxWebViewChromium()
         const auto handle = m_clientHandler->GetWindowHandle();
 
         constexpr bool forceClose = true;
-        m_clientHandler->GetBrowser()->GetHost()->CloseBrowser(forceClose);
+        m_clientHandler->GetHost()->CloseBrowser(forceClose);
         m_clientHandler->Release();
 
         // We need to wait until the browser is really closed, which happens
@@ -783,7 +788,10 @@ wxString wxWebViewChromium::GetCurrentTitle() const
 
 void wxWebViewChromium::Print()
 {
-    m_clientHandler->GetBrowser()->GetHost()->Print();
+    auto host = m_clientHandler->GetHost();
+    wxCHECK_RET( host, "No valid host" );
+
+    host->Print();
 }
 
 void wxWebViewChromium::Cut()
@@ -898,12 +906,18 @@ wxWebViewZoom wxWebViewChromium::GetZoom() const
 
 float wxWebViewChromium::GetZoomFactor() const
 {
-    return m_clientHandler->GetBrowser()->GetHost()->GetZoomLevel();
+    auto host = m_clientHandler->GetHost();
+    wxCHECK_MSG( host, 0.0, "No valid host" );
+
+    return host->GetZoomLevel();
 }
 
 void wxWebViewChromium::SetZoomFactor(float mapzoom)
 {
-    m_clientHandler->GetBrowser()->GetHost()->SetZoomLevel(mapzoom);
+    auto host = m_clientHandler->GetHost();
+    wxCHECK_RET( host, "No valid host" );
+
+    host->SetZoomLevel(mapzoom);
 }
 
 void wxWebViewChromium::SetZoom(wxWebViewZoom zoom)
