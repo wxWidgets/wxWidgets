@@ -2301,10 +2301,14 @@ LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_
 @COND_DEPS_TRACKING_1@CCC = $(BK_DEPS) $(CC)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
-COND_PLATFORM_MACOSX_1_LIBCEF_FRAMEWORK = \
-	-F$(top_srcdir)/3rdparty/cef/Release/ -framework Chromium\ Embedded\ \
-	Framework
-@COND_PLATFORM_MACOSX_1@LIBCEF_FRAMEWORK = $(COND_PLATFORM_MACOSX_1_LIBCEF_FRAMEWORK)
+COND_PLATFORM_MACOSX_1_LIBCEF_LINK = -F$(top_srcdir)//3rdparty/cef/Release/ \
+	-framework Chromium\ Embedded\ Framework
+@COND_PLATFORM_MACOSX_1@LIBCEF_LINK = $(COND_PLATFORM_MACOSX_1_LIBCEF_LINK)
+COND_PLATFORM_UNIX_1_LIBCEF_LINK = -L$(top_srcdir)//3rdparty/cef/Release/ \
+	-Wl,--no-as-needed -lcef -Wl,--as-needed
+@COND_PLATFORM_UNIX_1@LIBCEF_LINK = $(COND_PLATFORM_UNIX_1_LIBCEF_LINK)
+@COND_PLATFORM_WIN32_1@LIBCEF_LINK = \
+@COND_PLATFORM_WIN32_1@	$(top_srcdir)//3rdparty/cef/Release/libcef/libcef.lib
 @COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_PLATFORM_MACOSX_1@WXMACVERSION_CMD = \
 @COND_PLATFORM_MACOSX_1@	-compatibility_version 1.0 -current_version 1.0
@@ -11493,9 +11497,6 @@ COND_USE_SOVERSOLARIS_1___webviewchromiumdll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_UNIX_1@	-L$(top_srcdir)//3rdparty/cef/libcef_dll_wrapper/
 @COND_PLATFORM_WIN32_1@__LIBCEF_WRAPPER_PATH_p = \
 @COND_PLATFORM_WIN32_1@	-L$(top_srcdir)//3rdparty/cef/libcef_dll_wrapper/Release/
-@COND_PLATFORM_MACOSX_1@__LIBCEF_NAME_p = 
-@COND_PLATFORM_UNIX_1@__LIBCEF_NAME_p = -lcef
-@COND_PLATFORM_WIN32_1@__LIBCEF_NAME_p = -llibcef
 @COND_PLATFORM_MACOSX_1@__LIBCEF_DLL_WRAPPER_NAME_p = -lcef_dll_wrapper
 @COND_PLATFORM_UNIX_1@__LIBCEF_DLL_WRAPPER_NAME_p = -lcef_dll_wrapper
 @COND_PLATFORM_WIN32_1@__LIBCEF_DLL_WRAPPER_NAME_p = -llibcef_dll_wrapper
@@ -13520,7 +13521,7 @@ distclean: clean
 @COND_MONOLITHIC_0_USE_WEBVIEW_1@wxwebview: $(____wxwebview_namedll_DEP) $(____wxwebview_namelib_DEP)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(WEBVIEWCHROMIUMDLL_OBJECTS) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxregex___depname) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla___depname) $(__wxlexilla___depname) $(__coredll___depname) $(__basedll___depname) $(__webviewdll___depname) $(__webviewchromiumdll___win32rc)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1@	$(SHARED_LD_CXX) $@ $(WEBVIEWCHROMIUMDLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) -L$(LIBDIRNAME)    -L$(LIBDIRNAME) $(__webviewchromiumdll___macinstnamecmd) $(__webviewchromiumdll___importlib) $(__webviewchromiumdll___soname_flags) $(WXMACVERSION_CMD) -L$(top_srcdir)//3rdparty/cef/Release/ $(__LIBCEF_WRAPPER_PATH_p) $(LIBCEF_FRAMEWORK) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX) $(__LIBCEF_NAME_p) $(__LIBCEF_DLL_WRAPPER_NAME_p) $(LIBS)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1@	$(SHARED_LD_CXX) $@ $(WEBVIEWCHROMIUMDLL_OBJECTS) -L$(LIBDIRNAME) -L$(LIBDIRNAME) -L$(LIBDIRNAME)    -L$(LIBDIRNAME) $(__webviewchromiumdll___macinstnamecmd) $(__webviewchromiumdll___importlib) $(__webviewchromiumdll___soname_flags) $(WXMACVERSION_CMD) $(__LIBCEF_WRAPPER_PATH_p) $(LIBCEF_LINK) $(LDFLAGS)  $(WX_LDFLAGS) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) -lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_base$(WXBASEPORT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) -lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX) $(__LIBCEF_DLL_WRAPPER_NAME_p) $(LIBS)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1@	$(DYLIB_RPATH_POSTLINK)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1@	
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1@	$(__webviewchromiumdll___so_symlinks_cmd)

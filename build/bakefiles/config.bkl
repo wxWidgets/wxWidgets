@@ -582,16 +582,18 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         </if>
     </set>
 
-    <set var="LIBCEF_NAME">
+    <!-- linker flags needed to link with CEF -->
+    <set var="LIBCEF_LINK">
         <if cond="PLATFORM_WIN32=='1'">
-            libcef
+            $(LIBCEF_PATH)libcef/libcef.lib
         </if>
         <if cond="PLATFORM_MACOSX=='1'">
-            <!--Unlike Windows/Linux platfomrs, CEF3 won't provide libcef.so library on OS X. -->
-            <!--Instead, a Framework with related resources is provided. -->
+            <!-- CEF is a framework and not just a shared library under Mac. -->
+            -F$(LIBCEF_PATH) -framework Chromium\ Embedded\ Framework
         </if>
         <if cond="PLATFORM_UNIX=='1'">
-            cef
+            <!-- We need to make sure that libcef.so is loaded first. -->
+            -L$(LIBCEF_PATH) -Wl,--no-as-needed -lcef -Wl,--as-needed
         </if>
     </set>
 
@@ -604,12 +606,6 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         </if>
         <if cond="PLATFORM_UNIX=='1'">
             cef_dll_wrapper
-        </if>
-    </set>
-
-    <set var="LIBCEF_FRAMEWORK">
-        <if cond="PLATFORM_MACOSX=='1'">
-            -F$(TOP_SRCDIR)3rdparty/cef/Release/ -framework Chromium\ Embedded\ Framework
         </if>
     </set>
 

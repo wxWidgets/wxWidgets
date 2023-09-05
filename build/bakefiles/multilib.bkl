@@ -205,11 +205,9 @@
         <library>basedll</library>
         <library>webviewdll</library>
         <include>$(CEF_INCLUDE_DIR)</include>
-        <lib-path>$(LIBCEF_PATH)</lib-path>
         <lib-path>$(LIBCEF_WRAPPER_PATH)</lib-path>
-        <sys-lib>$(LIBCEF_NAME)</sys-lib>
         <sys-lib>$(LIBCEF_DLL_WRAPPER_NAME)</sys-lib>
-        <ldflags>$(LIBCEF_FRAMEWORK)</ldflags>>
+        <ldflags>$(LIBCEF_LINK)</ldflags>>
     </dll>
 
     <lib id="webviewchromiumlib" template="wx_lib"
