@@ -748,18 +748,24 @@ void wxWebViewChromium::EnableHistory(bool enable)
 
 void wxWebViewChromium::Stop()
 {
-    m_clientHandler->GetBrowser()->StopLoad();
+    auto browser = m_clientHandler->GetBrowser();
+    wxCHECK_RET( browser, "No valid browser object" );
+
+    browser->StopLoad();
 }
 
 void wxWebViewChromium::Reload(wxWebViewReloadFlags flags)
 {
+    auto browser = m_clientHandler->GetBrowser();
+    wxCHECK_RET( browser, "No valid browser object" );
+
     if ( flags == wxWEBVIEW_RELOAD_NO_CACHE )
     {
-        m_clientHandler->GetBrowser()->ReloadIgnoreCache();
+        browser->ReloadIgnoreCache();
     }
     else
     {
-        m_clientHandler->GetBrowser()->Reload();
+        browser->Reload();
     }
 }
 
@@ -870,10 +876,11 @@ bool wxWebViewChromium::RunScript(const wxString& javascript, wxString* output) 
 
 bool wxWebViewChromium::IsBusy() const
 {
-    if(m_clientHandler->GetBrowser())
-        return m_clientHandler->GetBrowser()->IsLoading();
-    else
+    auto browser = m_clientHandler->GetBrowser();
+    if ( !browser )
         return false;
+
+    return browser->IsLoading();
 }
 
 void wxWebViewChromium::SetEditable(bool enable)
