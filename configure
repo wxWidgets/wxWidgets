@@ -15340,8 +15340,18 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     as_fn_error $? "C++ compiler is needed to build wxWidgets" "$LINENO" 5
 fi
 
-case "${wxWITH_CXX-11}" in
+if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+    wxDEFAULT_CXXSTD=14
+else
+        wxDEFAULT_CXXSTD=11
+fi
+
+case "${wxWITH_CXX-wxDEFAULT_CXXSTD}" in
     11)
+        if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+            as_fn_error $? "Using wxWebView Chromium backend requires C++14 or later." "$LINENO" 5
+        fi
+
           ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'

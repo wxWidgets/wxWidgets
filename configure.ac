@@ -1085,10 +1085,22 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
+dnl CEF requires at least C++14, so default to it and not C++11 when using it.
+if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+    wxDEFAULT_CXXSTD=14
+else
+    dnl By default we just need C++11.
+    wxDEFAULT_CXXSTD=11
+fi
+
 dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
 dnl autoconf, not run, time.
-case "${wxWITH_CXX-11}" in
+case "${wxWITH_CXX-wxDEFAULT_CXXSTD}" in
     11)
+        if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+            AC_MSG_ERROR([Using wxWebView Chromium backend requires C++14 or later.])
+        fi
+
         AX_CXX_COMPILE_STDCXX(11)
         ;;
 
