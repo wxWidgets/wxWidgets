@@ -375,7 +375,8 @@ protected:
 class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
 {
 public:
-    wxWebViewEvent() {}
+    wxWebViewEvent() = default;
+
     wxWebViewEvent(wxEventType type, int id, const wxString& url,
                    const wxString target,
                    wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE,
