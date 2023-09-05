@@ -45,6 +45,7 @@ extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendDefault[] = "wxWebVi
 wxIMPLEMENT_ABSTRACT_CLASS(wxWebView, wxControl);
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewEvent, wxCommandEvent);
 
+wxDEFINE_EVENT( wxEVT_WEBVIEW_CREATED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NAVIGATING, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_NAVIGATED, wxWebViewEvent );
 wxDEFINE_EVENT( wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
@@ -444,6 +445,13 @@ wxWebView* wxWebView::New(wxWindow* parent, wxWindowID id, const wxString& url,
     else
         return (*iter).second->Create(parent, id, url, pos, size, style, name);
 
+}
+
+void wxWebView::NotifyWebViewCreated()
+{
+    GetEventHandler()->QueueEvent(
+        new wxWebViewEvent{*this, wxEVT_WEBVIEW_CREATED}
+    );
 }
 
 // static

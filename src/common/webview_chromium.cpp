@@ -1012,6 +1012,8 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
         m_browserId = browser->GetIdentifier();
 
         m_webview.PostSizeEvent();
+
+        m_webview.NotifyWebViewCreated();
     }
 }
 bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))

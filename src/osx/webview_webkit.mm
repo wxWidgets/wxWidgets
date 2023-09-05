@@ -321,6 +321,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     m_UIDelegate = uiDelegate;
 
+    NotifyWebViewCreated();
+
     if (m_request)
         [m_webView loadRequest:(NSURLRequest*)m_request];
     else

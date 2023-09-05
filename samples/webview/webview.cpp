@@ -475,8 +475,8 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
 
         // Chromium backend can't be used immediately after creation, so wait
         // until the browser is created before calling GetUserAgent().
-        m_browser->Bind(wxEVT_CREATE, [this](wxWindowCreateEvent& event) {
-            wxLogMessage("User Agent: %s", m_browser->GetUserAgent());
+        m_browser->Bind(wxEVT_WEBVIEW_CREATED, [this](wxWebViewEvent& event) {
+            wxLogMessage("Web view created, user agent is \"%s\"", m_browser->GetUserAgent());
 
             event.Skip();
         });
@@ -1398,7 +1398,7 @@ void WebFrame::OnAddUserScript(wxCommandEvent & WXUNUSED(evt))
 
 void WebFrame::OnSetCustomUserAgent(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1";
+    wxString customUserAgent = m_browser->GetUserAgent();
     wxTextEntryDialog dialog
     (
         this,

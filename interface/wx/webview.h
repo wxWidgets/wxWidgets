@@ -904,6 +904,11 @@ public:
     @c scheme:///C:/example/docs.zip;protocol=zip/main.htm
 
     @beginEventEmissionTable{wxWebViewEvent}
+    @event{EVT_WEBVIEW_CREATED(id, func)}
+       Process a @c wxEVT_WEBVIEW_CREATED event, generated when the object is
+       fully initialized. For the backends using asynchronous initialization,
+       such as wxWebViewChromium, most of this class member functions can be
+       only used once this event is received.
     @event{EVT_WEBVIEW_NAVIGATING(id, func)}
        Process a @c wxEVT_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
@@ -967,6 +972,12 @@ public:
 
     /**
         Creation function for two-step creation.
+
+        Please note that the object creation may be asynchronous when using
+        some backends (currently this is the case only for wxWebViewChromium)
+        and the object is not really created until wxEVT_WEBVIEW_CREATED event
+        is received, so any non-trivial calls to its member functions should be
+        delayed until then.
     */
     virtual bool Create(wxWindow* parent,
                         wxWindowID id,
@@ -999,6 +1010,10 @@ public:
 
     /**
         Factory function to create a new wxWebView using a wxWebViewFactory.
+
+        Note that the returned object may not be immediately usable yet, see
+        Create() and wxEVT_WEBVIEW_CREATED.
+
         @param parent Parent window for the control
         @param id ID of this control
         @param url Initial URL to load
@@ -1785,6 +1800,11 @@ public:
     wxWebView objects.
 
     @beginEventEmissionTable{wxWebViewEvent}
+    @event{EVT_WEBVIEW_CREATED(id, func)}
+       Process a @c wxEVT_WEBVIEW_CREATED event, generated when the object is
+       fully initialized. For the backends using asynchronous initialization,
+       such as wxWebViewChromium, most of this class member functions can be
+       only used once this event is received.
     @event{EVT_WEBVIEW_NAVIGATING(id, func)}
        Process a @c wxEVT_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
@@ -1911,6 +1931,7 @@ public:
 };
 
 
+wxEventType wxEVT_WEBVIEW_CREATED;
 wxEventType wxEVT_WEBVIEW_NAVIGATING;
 wxEventType wxEVT_WEBVIEW_NAVIGATED;
 wxEventType wxEVT_WEBVIEW_LOADED;
