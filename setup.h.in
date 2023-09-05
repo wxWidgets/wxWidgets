@@ -935,6 +935,9 @@
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
 
+/* Define if you have the dl_iterate_phdr function.  */
+#undef HAVE_DL_ITERATE_PHDR
+
 /* Define if you have Posix fnctl() function. */
 #undef HAVE_FCNTL
 

@@ -35459,6 +35459,18 @@ fi
 fi
 done
 
+
+                for ac_func in dl_iterate_phdr
+do :
+  ac_fn_c_check_func "$LINENO" "dl_iterate_phdr" "ac_cv_func_dl_iterate_phdr"
+if test "x$ac_cv_func_dl_iterate_phdr" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DL_ITERATE_PHDR 1
+_ACEOF
+
+fi
+done
+
             fi
         fi
 

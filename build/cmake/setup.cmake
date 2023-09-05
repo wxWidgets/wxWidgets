@@ -565,6 +565,7 @@ check_symbol_exists(dlopen dlfcn.h HAVE_DLOPEN)
 cmake_pop_check_state()
 if(HAVE_DLOPEN)
     check_symbol_exists(dladdr dlfcn.h HAVE_DLADDR)
+    check_symbol_exists(dl_iterate_phdr link.h HAVE_DL_ITERATE_PHDR)
 endif()
 
 if(APPLE)
