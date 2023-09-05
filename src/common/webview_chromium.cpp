@@ -174,6 +174,15 @@ public:
 
     CefRefPtr<CefBrowser> GetBrowser() const { return m_browser; }
 
+    // Return the main frame. May be null.
+    CefRefPtr<CefFrame> GetMainFrame() const
+    {
+        if ( !m_browser )
+            return {};
+
+        return m_browser->GetMainFrame();
+    }
+
     // Return the underlying window handle: HWND under MSW, X11 Window under
     // GTK.
     //
@@ -715,7 +724,10 @@ void wxWebViewChromium::GoForward()
 
 void wxWebViewChromium::LoadURL(const wxString& url)
 {
-    m_clientHandler->GetBrowser()->GetMainFrame()->LoadURL(url.ToStdString());
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
+    frame->LoadURL(url.ToStdString());
 }
 
 void wxWebViewChromium::ClearHistory()
@@ -758,7 +770,10 @@ wxString wxWebViewChromium::GetPageText() const
 
 wxString wxWebViewChromium::GetCurrentURL() const
 {
-    return m_clientHandler->GetBrowser()->GetMainFrame()->GetURL().ToString();
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_MSG( frame, {}, "No valid frame" );
+
+    return frame->GetURL().ToString();
 }
 
 wxString wxWebViewChromium::GetCurrentTitle() const
@@ -773,32 +788,50 @@ void wxWebViewChromium::Print()
 
 void wxWebViewChromium::Cut()
 {
-    m_clientHandler->GetBrowser()->GetMainFrame()->Cut();
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
+    frame->Cut();
 }
 
 void wxWebViewChromium::Copy()
 {
-    m_clientHandler->GetBrowser()->GetMainFrame()->Copy();
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
+    frame->Copy();
 }
 
 void wxWebViewChromium::Paste()
 {
-    m_clientHandler->GetBrowser()->GetMainFrame()->Paste();
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
+    frame->Paste();
 }
 
 void wxWebViewChromium::Undo()
 {
-    m_clientHandler->GetBrowser()->GetMainFrame()->Undo();
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
+    frame->Undo();
 }
 
 void wxWebViewChromium::Redo()
 {
-    m_clientHandler->GetBrowser()->GetMainFrame()->Redo();
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
+    frame->Redo();
 }
 
 void wxWebViewChromium::SelectAll()
 {
-   m_clientHandler->GetBrowser()->GetMainFrame()->SelectAll();
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
+   frame->SelectAll();
 }
 
 void wxWebViewChromium::DeleteSelection()
@@ -815,8 +848,11 @@ void wxWebViewChromium::ClearSelection()
 
 bool wxWebViewChromium::RunScript(const wxString& javascript, wxString* output) const
 {
-    m_clientHandler->GetBrowser()->GetMainFrame()->ExecuteJavaScript(javascript.ToStdString(),
-                                                                     "", 0);
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_MSG( frame, false, "No valid frame" );
+
+    frame->ExecuteJavaScript(javascript.ToStdString(), {}, 0);
+
     // Returning a result is currently unsupported
     if (output)
         return false;
@@ -840,6 +876,9 @@ void wxWebViewChromium::SetEditable(bool enable)
 
 void wxWebViewChromium::DoSetPage(const wxString& html, const wxString& baseUrl)
 {
+    auto frame = m_clientHandler->GetMainFrame();
+    wxCHECK_RET( frame, "No valid frame" );
+
     wxUnusedVar(baseUrl);
 
     // This seems to be the only way to load a string in CEF now, see
@@ -849,7 +888,7 @@ void wxWebViewChromium::DoSetPage(const wxString& html, const wxString& baseUrl)
         "data:text/html;base64," + wxBase64Encode(buf.data(), buf.length())
     };
 
-    m_clientHandler->GetBrowser()->GetMainFrame()->LoadURL(url.ToStdWstring());
+    frame->LoadURL(url.ToStdWstring());
 }
 
 wxWebViewZoom wxWebViewChromium::GetZoom() const
