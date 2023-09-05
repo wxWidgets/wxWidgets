@@ -12,6 +12,9 @@
 #import "Cocoa/Cocoa.h"
 #include <objc/runtime.h>
 #include "wx/log.h"
+
+#include "wx/osx/private/webview_chromium.h"
+
 #import "include/cef_application_mac.h"
 
 /*

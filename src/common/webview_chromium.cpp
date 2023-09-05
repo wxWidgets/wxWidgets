@@ -29,6 +29,10 @@
 #include <gdk/gdkx.h>
 #endif
 
+#ifdef __WXOSX__
+#include "wx/osx/private/webview_chromium.h"
+#endif
+
 #ifdef __VISUALC__
 #pragma warning(push)
 #pragma warning(disable:4100)
@@ -1237,10 +1241,6 @@ bool SchemeHandler::ReadResponse(void* data_out,
 
     return has_data;
 }
-
-#ifdef __WXOSX__
-void wxWebViewChromium_InitOSX();
-#endif
 
 namespace
 {
