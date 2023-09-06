@@ -623,9 +623,6 @@ bool wxWebViewChromium::InitCEF()
 
     CefSettings settings;
 
-    wxFileName cachePath(cefDataFolder.GetFullPath(), "Cache");
-    CefString(&settings.cache_path).FromWString(cachePath.GetFullPath().ToStdWstring());
-
     // According to b5386249b (alloy: Remove CefSettings.user_data_path (fixes
     // #3511), 2023-06-06) in CEF sources, root_cache_path should be used for
     // all files now.
