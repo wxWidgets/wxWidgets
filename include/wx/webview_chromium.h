@@ -26,7 +26,7 @@ struct ImplData;
 class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewChromium : public wxWebView
 {
 public:
-    wxWebViewChromium() {}
+    wxWebViewChromium() { Init(); }
 
     wxWebViewChromium(wxWindow* parent,
            wxWindowID id,
@@ -36,6 +36,8 @@ public:
            long style = 0,
            const wxString& name = wxWebViewNameStr)
    {
+       Init();
+
        Create(parent, id, url, pos, size, style, name);
    }
 
@@ -68,6 +70,7 @@ public:
     virtual void EnableHistory(bool enable = true) override;
     virtual void Stop() override;
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) override;
+    virtual bool SetProxy(const wxString& proxy) override;
 
     virtual wxString GetPageSource() const override;
     virtual wxString GetPageText() const override;
@@ -130,6 +133,9 @@ protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) override;
 
 private:
+    // Common part of all ctors.
+    void Init();
+
     // Actually create the browser: this can only be done once the window is
     // created in wxGTK.
     bool DoCreateBrowser(const wxString& url);

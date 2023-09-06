@@ -1237,8 +1237,17 @@ public:
         The @a proxy string must be a valid proxy specification, e.g. @c
         http://my.local.proxy.corp:8080
 
-        @note Currently this function is only implemented in WebKit2 and Edge
-            backends and must be called before Create() for the latter one.
+        Currently this function is only implemented in WebKit2, Edge and
+        Chromium backends and only WebKit2 backend allows to set the proxy
+        after creating the webview, so it is recommended to call it before
+        Create():
+        @code
+            auto webview = wxWebView::New();
+            if ( !webview->SetProxy("http://127.0.0.1:8080") ) {
+                wxLogWarning("Setting proxy failed!");
+            }
+            webview->Create(parent, wxID_ANY);
+        @endcode
 
         @return @true if proxy was set successfully or @false if it failed,
             e.g. because this is not supported by the currently used backend.

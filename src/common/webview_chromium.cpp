@@ -43,6 +43,7 @@ wxGCC_WARNING_SUPPRESS(unused-parameter)
 #include "include/cef_app.h"
 #include "include/cef_browser.h"
 #include "include/cef_client.h"
+#include "include/cef_request_context_handler.h"
 #include "include/cef_scheme.h"
 #include "include/cef_string_visitor.h"
 #include "include/cef_version.h"
@@ -87,6 +88,10 @@ struct ImplData
     // URL passed to Create() as we can't use it there directly.
     wxString m_initialURL;
 #endif // __WXGTK__
+
+    // We also remember the proxy passed to wxWebView::SetProxy() as we can
+    // only set it when creating the browser currently.
+    wxString m_proxy;
 
     // These flags are used when destroying wxWebViewChromium, see its dtor.
     bool m_calledDoClose = false;
@@ -370,6 +375,11 @@ private:
 
 using namespace wxCEF;
 
+void wxWebViewChromium::Init()
+{
+    m_implData = new ImplData{};
+}
+
 bool wxWebViewChromium::Create(wxWindow* parent,
            wxWindowID id,
            const wxString& url,
@@ -397,8 +407,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #ifdef __WXMSW__
     MSWDisableComposited();
 #endif // __WXMSW__
-
-    m_implData = new ImplData{};
 
     m_clientHandler = new ClientHandler{*this};
     m_clientHandler->AddRef();
@@ -482,13 +490,48 @@ bool wxWebViewChromium::DoCreateBrowser(const wxString& url)
     const wxSize sz = GetClientSize();
     info.SetAsChild(handle, {0, 0, sz.x, sz.y});
 
+    // Create a request context (which will possibly remain empty) to allow
+    // setting the proxy if it was specified.
+    CefRefPtr<CefRequestContext> reqContext;
+
+    const auto& proxy = m_implData->m_proxy;
+    if ( !proxy.empty() )
+    {
+        CefRequestContextSettings reqSettings;
+        reqContext = CefRequestContext::CreateContext(reqSettings, nullptr);
+
+        // The structure of "proxy" dictionary seems to be documented at
+        //
+        // https://developer.chrome.com/docs/extensions/reference/proxy/
+        //
+        // but it looks like we can also use a much simpler dictionary instead
+        // of defining "ProxyRules" sub-dictionary as documented there, so just
+        // do this instead.
+        auto proxyDict = CefDictionaryValue::Create();
+        auto proxyVal = CefValue::Create();
+
+        if ( !proxyDict->SetString("mode", "fixed_servers") ||
+                !proxyDict->SetString("server", proxy.ToStdWstring()) ||
+                    !proxyVal->SetDictionary(proxyDict) )
+        {
+            // This is really not supposed to happen.
+            wxFAIL_MSG("constructing proxy value failed?");
+        }
+
+        CefString error;
+        if ( !reqContext->SetPreference("proxy", proxyVal, error) )
+        {
+            wxLogError(_("Failed to set proxy \"%s\": %s"), proxy, error.ToWString());
+        }
+    }
+
     if ( !CefBrowserHost::CreateBrowser(
             info,
             CefRefPtr<CefClient>{m_clientHandler},
             url.ToStdString(),
             browsersettings,
             nullptr, // No extra info
-            nullptr  // Use global request context
+            reqContext
         ) )
     {
         wxLogTrace(TRACE_CEF, "CefBrowserHost::CreateBrowser() failed");
@@ -807,6 +850,15 @@ void wxWebViewChromium::Reload(wxWebViewReloadFlags flags)
     {
         browser->Reload();
     }
+}
+
+bool wxWebViewChromium::SetProxy(const wxString& proxy)
+{
+    wxCHECK_MSG( !m_clientHandler, false, "should be called before Create()" );
+
+    m_implData->m_proxy = proxy;
+
+    return true;
 }
 
 wxString wxWebViewChromium::GetPageSource() const
