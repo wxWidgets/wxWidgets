@@ -335,8 +335,18 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf $(top_srcdir)//3rdparty/cef/Release//Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	for name in Alerts GPU Plugin Renderer; do \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	helper_name="webview_chromium Helper ($$name)"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	helper_contents="webview_chromium.app/Contents/Frameworks/$$helper_name.app/Contents"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p "$$helper_contents/MacOS"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	ln -fs "../../../webview_chromium Helper.app/Contents/MacOS/webview_chromium Helper" "$$helper_contents/MacOS/$$helper_name"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/$$helper_name/"  \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/$$helper_name/" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in > "$$helper_contents/Info.plist"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp webview_chromium_helper.app/Contents/PkgInfo "$$helper_contents"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_chromium_helper.app/Contents/Resources "$$helper_contents"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	done
 
 webview_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include

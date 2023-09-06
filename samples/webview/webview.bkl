@@ -95,9 +95,19 @@
                 mkdir -p webview_chromium.app/Contents/Frameworks/
                 mkdir -p webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
                 cp -Rf $(LIBCEF_PATH)/Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
-
-                <!--Copy helper app-->
+                <!-- Copy helper app and create all the required clones of it. -->
                 cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
+                for name in Alerts GPU Plugin Renderer; do \
+                    helper_name="webview_chromium Helper ($$name)"; \
+                    helper_contents="webview_chromium.app/Contents/Frameworks/$$helper_name.app/Contents"; \
+                    mkdir -p "$$helper_contents/MacOS"; \
+                    ln -fs "../../../webview_chromium Helper.app/Contents/MacOS/webview_chromium Helper" "$$helper_contents/MacOS/$$helper_name"; \
+                    sed -e "s/\$${PRODUCT_NAME}/$$helper_name/"  \
+                        -e "s/\$${EXECUTABLE_NAME}/$$helper_name/" \
+                        $(TOP_SRCDIR)/samples/webview/cef_helper_info.plist.in > "$$helper_contents/Info.plist"; \
+                    cp webview_chromium_helper.app/Contents/PkgInfo "$$helper_contents"; \
+                    cp -Rf webview_chromium_helper.app/Contents/Resources "$$helper_contents"; \
+                done
             </command>
         </add-target>
 
