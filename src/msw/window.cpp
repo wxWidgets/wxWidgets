@@ -291,7 +291,7 @@ void wxTraceMSWMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 #endif  // wxDEBUG_LEVEL >= 2
 
-void wxRemoveHandleAssociation(wxWindowMSW *win);
+extern void wxRemoveHandleAssociation(wxWindowMSW *win);
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
 
 // get the text metrics for the current font
@@ -7098,44 +7098,31 @@ wxWindow *wxGetActiveWindow()
 extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 {
     HWND hwnd = (HWND)hWnd;
+    if ( !hwnd )
+        return nullptr;
 
-    // For a radiobutton, we get the radiobox from GWL_USERDATA (which is set
-    // by code in msw/radiobox.cpp), for all the others we just search up the
-    // window hierarchy
-    wxWindow *win = nullptr;
-    if ( hwnd )
-    {
-        win = wxFindWinFromHandle(hwnd);
-        if ( !win )
-        {
-            // spin control text buddy window should be mapped to spin ctrl
-            // itself so try it too
+    wxWindow *win = wxFindWinFromHandle(hwnd);
+
+    // spin control text buddy window should be mapped to spin ctrl
+    // itself so try it too
 #if wxUSE_SPINCTRL && !defined(__WXUNIVERSAL__)
-            if ( !win )
-            {
-                win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
-            }
-#endif // wxUSE_SPINCTRL
-        }
-    }
-
-    while ( hwnd && !win )
+    if ( !win )
     {
-        // this is a really ugly hack needed to avoid mistakenly returning the
-        // parent frame wxWindow for the find/replace modeless dialog HWND -
-        // this, in turn, is needed to call IsDialogMessage() from
-        // wxApp::ProcessMessage() as for this we must return nullptr from here
-        //
-        // FIXME: this is clearly not the best way to do it but I think we'll
-        //        need to change HWND <-> wxWindow code more heavily than I can
-        //        do it now to fix it
+        win = wxSpinCtrl::GetSpinForTextCtrl((WXHWND)hwnd);
+    }
+#endif // wxUSE_SPINCTRL
+
+    while ( !win )
+    {
+        // Avoid going beyond the top level window (only they have owner in
+        // Win32) as we could find its owner wxFrame which would be unwanted.
         if ( ::GetWindow(hwnd, GW_OWNER) )
-        {
-            // it's a dialog box, don't go upwards
-            break;
-        }
+            return nullptr;
 
         hwnd = ::GetParent(hwnd);
+        if ( !hwnd )
+            return nullptr;
+
         win = wxFindWinFromHandle(hwnd);
     }
 
