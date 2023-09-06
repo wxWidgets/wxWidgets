@@ -34,8 +34,11 @@
     The wxWebViewChromium backend is built into a separate webview_chromium
     library which depends on the webview library.
 
-    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF will be
+    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF can be
     automatically downloaded during configuration based on your platform.
+    You can also download it manually from the CEF official binaries site at
+    https://cef-builds.spotifycdn.com/index.html and then build only
+    `libcef_dll_wrapper` -- but not the `libcef` itself.
 
     For other build systems please follow the following instructions:
 
@@ -44,9 +47,12 @@
     webview_chromium sample you need to copy the CEF resources into the
     sample directory. The following files need to be copied:
 
-    - The shared objects in the wx_root/3rdparty/cef/Debug or
-      wx_root/3rdparty/cef/Release folder, depending on your build type.
+    - All files from either `wx_root/3rdparty/cef/Debug` or
+      `wx_root/3rdparty/cef/Release` folder, depending on your build type
     - The contents of the wx_root/3rdparty/cef/Resources folder.
+
+    Please see CEF `README.txt` for more details and also note that when
+    redistributing CEF you must abide by the terms of its `LICENSE.txt`.
 
     When building wxWidgets you need to ensure wxWebViewChromium is enabled,
     either by passing --enable-webviewchromium for autoconf based builds or
@@ -60,11 +66,11 @@
 
     __Microsoft Windows Platform__
     
-    Windows 7 or newer is required to run applications using wxWebViewChromium.
+    Windows 10 or newer is required to run applications using wxWebViewChromium.
     Such applications should also have an application manifest declaring compatibility 
     with supported Windows versions.
 
-    Only Microsoft Visual C++ 2015 or newer can be used to build wxWebViewChromium.
+    Microsoft Visual C++ 2022 must be used to build wxWebViewChromium.
 
     __Linux with GTK__
 
@@ -85,65 +91,95 @@
 
     __Mac OS X Platform__
 
-    OS X 10.9 or above is required.
+    OS X 10.13 or above is required.
 
     Due to the application bundle structure on OS X, wxWebviewChromium is a
-    little more complicated than on Windows/Linux platforms. An extra helper
-    application for executing separate Chromium processes(renderer, plugin,
-    etc) is required.
+    little more complicated than on Windows/Linux platforms as extra helper
+    applications for executing separate Chromium processes(renderer, plugin,
+    etc) are required.
 
     For applications using wxWebviewChromium, below are the steps to make
     it work, based off the webview_chromium sample bakefile.
 
     1. Build the webview_chromium library.
-       - Use system tool `install_name_tool -change` to correct `Chromium
-         Embedded Framework.framework/Chromium Embedded Framework` location.
-    2. Compile/link/package the `helper` app:
-       - Require `process_helper_mac.cpp`
+    2. Compile/link/package the `YourApp helper` app:
+       - Require `cef_process_helper.cpp`
        - Require link frameworks: Chromium Embedded Framework.framework,
          AppKit.frameworks.
        - Require app bundle configuration: Info.plist
        - Use system tool `install_name_tool -change` to correct `Chromium
          Embedded Framework.framework/Chromium Embedded Framework` location.
-    3. Compile/link/package the `webviewchromium` app:
-       - Require `webview.cpp`
-       - Require link frameworks: Chromium Embedded Framework.framework,
-         AppKit.frameworks.
-       - Require app bundle configuration: Info.plist
-       - Use system tool `install_name_tool -change` to correct `Chromium
-         Embedded Framework.framework/Chromium Embedded Framework` location.
-    4. Create a `Contents/Frameworks` directory in `webviewchromium.app` bundle
-       and copy `helper.app`, `webviewchromium.dylib`, 'webview.dylib'
-       and `Chromium Embedded Framework` into it.
-    5. Use `samples/webview_chromium/mac/tools/make_more_helper.sh` to make
-       sub-process helper app bundles based on the `helper` app.
+    3. Compile/link/package `YourApp` itself as usual under macOS.
+    4. Create a `Contents/Frameworks` directory in `YourApp.app` bundle
+       and copy `Chromium Embedded Framework` and `YourApp helper.app` into it.
+    5. Create clones of `YourApp helper.app`, in the same directory, with the
+       names `YourApp helper (Alerts).app`, `YourApp helper (GUI).app` etc. It
+       is possible to use symbolic links to `YourApp helper` binary for the
+       executable files of these extra helpers.
 
-    Below is the wxWebviewChromium sample app bundle directory structure:
+    Below is the wxWebviewChromium sample app bundle directory structure,
+    omitting some resource files
 
         webview_chromium.app
-        `-- Contents
-            |-- Frameworks
-            |   |-- Chromium Embedded Framework.framework       <= CEF framework
-            |   |   |-- Chromium Embedded Framework
-            |   |   |-- Libraries
-            |   |   |   `-- ffmpegsumo.so
-            |   |   `-- Resources\
-            |   |-- libwx_osx_cocoau_webviewchromium-3.1.dylib  <= wxWebviewChromium library supports webviewChromium backend.
-            |   |-- libwx_osx_cocoau_webview-3.1.dylib          <= wxWebview library supports other backends.
-            |   `-- webview_chromium Helper.app                 <= helper app
-            |       `-- Contents
-            |           |-- Info.plist
-            |           |-- MacOS
-            |           |   `-- webview_chromium Helper
-            |           |-- PkgInfo
-            |           `-- Resources
-            |               `-- wxmac.icns
-            |-- Info.plist
-            |-- MacOS
-            |   `-- webview_chromium                            <= webviewchromium sample executable
-            |-- PkgInfo
-            `-- Resources
-                `-- wxmac.icns                                  <= resources.
+        |____Contents
+          |____MacOS
+          | |____webview_chromium
+          |____Resources
+          | |____wxmac.icns
+          |____Frameworks
+          | |____webview_chromium Helper.app
+          | | |____Contents
+          | |   |____MacOS
+          | |   | |____webview_chromium Helper
+          | |   |____Resources
+          | |   | |____wxmac.icns
+          | |   |____Info.plist
+          | |____webview_chromium Helper (GPU).app
+          | | |____Contents
+          | |   |____MacOS
+          | |   | |____webview_chromium Helper (GPU)
+          | |   |____Resources
+          | |   | |____wxmac.icns
+          | |   |____Info.plist
+          | |____webview_chromium Helper (Plugin).app
+          | | |____Contents
+          | |   |____MacOS
+          | |   | |____webview_chromium Helper (Plugin)
+          | |   |____Resources
+          | |   | |____wxmac.icns
+          | |   |____Info.plist
+          | |____Chromium Embedded Framework.framework
+          | | |____Resources
+          | | | |____chrome_200_percent.pak
+          | | | |____chrome_100_percent.pak
+          | | | |____icudtl.dat
+          | | | |____snapshot_blob.bin
+          | | | |____v8_context_snapshot.arm64.bin
+          | | | |____resources.pak
+          | | | |____gpu_shader_cache.bin
+          | | | |____Info.plist
+          | | |____Libraries
+          | | | |____libEGL.dylib
+          | | | |____vk_swiftshader_icd.json
+          | | | |____libvk_swiftshader.dylib
+          | | | |____libGLESv2.dylib
+          | | |____Chromium Embedded Framework
+          | |____webview_chromium Helper (Renderer).app
+          | | |____Contents
+          | |   |____MacOS
+          | |   | |____webview_chromium Helper (Renderer)
+          | |   |____Resources
+          | |   | |____wxmac.icns
+          | |   |____Info.plist
+          | |____webview_chromium Helper (Alerts).app
+          |   |____Contents
+          |     |____MacOS
+          |     | |____webview_chromium Helper (Alerts)
+          |     |____Resources
+          |     | |____wxmac.icns
+          |     |____Info.plist
+          |____Info.plist
+
 
     @section differences API Differences
 
