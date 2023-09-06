@@ -28,6 +28,8 @@
 
 #include "wx/dynlib.h"
 
+#include "wx/private/init.h"
+
 #include "wx/msw/private.h"
 #include "wx/msw/seh.h"
 
@@ -38,7 +40,6 @@
 
 // defined in common/init.cpp
 extern int wxEntryReal(int& argc, wxChar **argv);
-extern void wxEntryCleanupReal();
 
 // ============================================================================
 // implementation: various entry points
@@ -188,78 +189,6 @@ int wxEntry(int& argc, wxChar **argv)
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
 
-// Declare the functions used in wxCore to access the command line arguments
-// data in wxBase.
-WXDLLIMPEXP_BASE void wxMSWCommandLineInit();
-WXDLLIMPEXP_BASE void wxMSWCommandLineCleanup();
-WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc();
-WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv();
-
-#if wxUSE_BASE
-
-namespace
-{
-
-struct wxMSWCommandLineArguments
-{
-    wxMSWCommandLineArguments() { argc = 0; argv = nullptr; }
-
-    // Initialize this object from the current process command line.
-    //
-    // In Unicode build prefer to use the standard function for tokenizing the
-    // command line, but we can't use it with narrow strings, so use our own
-    // approximation instead then.
-    void Init()
-    {
-        argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
-    }
-
-    void Cleanup()
-    {
-        if ( argc )
-        {
-            ::LocalFree(argv);
-            argc = 0;
-        }
-    }
-
-    ~wxMSWCommandLineArguments()
-    {
-        Cleanup();
-    }
-
-    int argc;
-    wxChar **argv;
-
-    wxDECLARE_NO_COPY_CLASS(wxMSWCommandLineArguments);
-};
-
-static wxMSWCommandLineArguments wxArgs;
-
-} // anonymous namespace
-
-WXDLLIMPEXP_BASE void wxMSWCommandLineInit()
-{
-    wxArgs.Init();
-}
-
-WXDLLIMPEXP_BASE void wxMSWCommandLineCleanup()
-{
-    wxArgs.Cleanup();
-}
-
-WXDLLIMPEXP_BASE int& wxMSWCommandLineGetArgc()
-{
-    return wxArgs.argc;
-}
-
-WXDLLIMPEXP_BASE wchar_t** wxMSWCommandLineGetArgv()
-{
-    return wxArgs.argv;
-}
-
-#endif // wxUSE_BASE
-
 #if wxUSE_GUI
 
 // common part of wxMSW-specific wxEntryStart() and wxEntry() overloads
@@ -274,7 +203,7 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     wxUnusedVar(nCmdShow);
 #endif
 
-    wxMSWCommandLineInit();
+    wxInitData().Get().MSWInitialize();
 
     return true;
 }
@@ -287,7 +216,8 @@ WXDLLEXPORT bool wxEntryStart(HINSTANCE hInstance,
     if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
        return false;
 
-    return wxEntryStart(wxMSWCommandLineGetArgc(), wxMSWCommandLineGetArgv());
+    auto& initData = wxInitData::Get();
+    return wxEntryStart(initData.argc, initData.argv);
 }
 
 WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
@@ -298,7 +228,8 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
         return -1;
 
-    return wxEntry(wxMSWCommandLineGetArgc(), wxMSWCommandLineGetArgv());
+    auto& initData = wxInitData::Get();
+    return wxEntry(initData.argc, initData.argv);
 }
 
 #endif // wxUSE_GUI
@@ -311,16 +242,10 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
 
 int wxEntry()
 {
-    wxMSWCommandLineInit();
+    wxInitData().Get().MSWInitialize();
 
-    return wxEntry(wxMSWCommandLineGetArgc(), wxMSWCommandLineGetArgv());
-}
-
-void wxEntryCleanup()
-{
-    wxEntryCleanupReal();
-
-    wxMSWCommandLineCleanup();
+    auto& initData = wxInitData::Get();
+    return wxEntry(initData.argc, initData.argv);
 }
 
 HINSTANCE wxhInstance = 0;
