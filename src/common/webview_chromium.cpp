@@ -1157,6 +1157,8 @@ void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> WXUNUSED(browser),
     wxString url = frame->GetURL().ToString();
     wxString target = frame->GetName().ToString();
 
+    wxLogTrace(TRACE_CEF, "Starting to load \"%s\"", url);
+
     wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING, m_webview.GetId(), url, target);
     event.SetEventObject(&m_webview);
 
@@ -1174,6 +1176,8 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> WXUNUSED(browser),
 {
     wxString url = frame->GetURL().ToString();
     wxString target = frame->GetName().ToString();
+
+    wxLogTrace(TRACE_CEF, "Loaded \"%s\"", url);
 
     // Send webview_error event in case of loading error.
     if ( m_loadErrorCode != -1 )
