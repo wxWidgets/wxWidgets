@@ -17,7 +17,6 @@ NM = @NM@
 BK_DEPS = @BK_DEPS@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
-DLLPREFIX = @DLLPREFIX@
 LIBS = @LIBS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 CXX = @CXX@
@@ -25,7 +24,6 @@ CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 USE_DPI_AWARE_MANIFEST = @USE_DPI_AWARE_MANIFEST@
-VENDOR = @VENDOR@
 WX_LIB_FLAVOUR = @WX_LIB_FLAVOUR@
 TOOLKIT = @TOOLKIT@
 TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
@@ -49,9 +47,7 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 3.3
-WX_RELEASE_NODOT = 33
 WX_VERSION = $(WX_RELEASE).0
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 LIBDIRNAME = $(wx_top_builddir)/lib
 WEBVIEW_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -90,21 +86,8 @@ COND_PLATFORM_UNIX_1_LIBCEF_LINK = -L$(top_srcdir)//3rdparty/cef/Release/ \
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
-@COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@COMPILER_VERSION \
-@COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@	= \
-@COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@	ERROR-COMPILER-VERSION-MUST-BE-SET-FOR-OFFICIAL-BUILD
-@COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1@WXCOMPILER = _gcc
-@COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@WXCOMPILER \
-@COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@	= _gcc$(COMPILER_VERSION)
-@COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1@VENDORTAG = _$(VENDOR)
-@COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@VENDORTAG = 
 @COND_BUILD_debug@WXDEBUGFLAG = d
 @COND_WXUNIV_1@WXUNIVNAME = univ
-@COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = \
-@COND_PLATFORM_WIN32_1@	wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)
-@COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -$(WX_RELEASE)
-@COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) \
 @COND_MONOLITHIC_1@	$(EXTRALIBS_XML) $(EXTRALIBS_GUI)
@@ -167,9 +150,6 @@ COND_MONOLITHIC_0___WXLIB_ADV_p = \
 @COND_PLATFORM_WIN32_1@	= webview_chromium_sample_rc.o
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__package___depname \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= package
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@__copy_and_correct_webviewchromium___depname \
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	= \
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	copy_and_correct_webviewchromium
 @COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p_1 \
 @COND_MONOLITHIC_1_USE_STC_1@	= $(__LIB_SCINTILLA_p)
 @COND_MONOLITHIC_1_USE_STC_1@__LIB_LEXILLA_IF_MONO_p_1 = $(__LIB_LEXILLA_p)
@@ -236,7 +216,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: webview$(EXEEXT) $(__webview_bundle___depname) data $(__webview_chromium_helper___depname) $(__fix_cef_link___depname) $(__webview_chromium___depname) $(__webview_chromium_bundle___depname) $(__package___depname) $(__copy_and_correct_webviewchromium___depname)
+all: webview$(EXEEXT) $(__webview_bundle___depname) data $(__webview_chromium_helper___depname) $(__fix_cef_link___depname) $(__webview_chromium___depname) $(__webview_chromium_bundle___depname) $(__package___depname)
 
 install: 
 
@@ -312,7 +292,8 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in >webview_chromium_helper.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	/bin/echo "APPL????" >webview_chromium_helper.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	webview_chromium_helper
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -f webview_chromium_helper webview_chromium_helper.app/Contents/MacOS/webview_chromium\ Helper
@@ -355,19 +336,7 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf $(top_srcdir)//3rdparty/cef/Release//Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	webview_chromium.app/Contents/MacOS/webview_chromium
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
-
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@copy_and_correct_webviewchromium: $(__package___depname)
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	cp $(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	cp $(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change "@executable_path/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1@	$(wx_top_builddir)/lib/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG).dylib
 
 webview_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include

@@ -49,7 +49,8 @@
                     $(TOP_SRCDIR)/samples/webview/cef_helper_info.plist.in >webview_chromium_helper.app/Contents/Info.plist
                 /bin/echo "APPL????" >webview_chromium_helper.app/Contents/PkgInfo
                 <!--Fix CEF link path -->
-                install_name_tool -change "@executable_path/Chromium Embedded Framework" \
+                install_name_tool -change \
+                    "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
                     "@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
                     webview_chromium_helper
                 cp -f webview_chromium_helper webview_chromium_helper.app/Contents/MacOS/webview_chromium\ Helper
@@ -95,34 +96,10 @@
                 mkdir -p webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
                 cp -Rf $(LIBCEF_PATH)/Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
 
-                <!--Correct the CEF executable path of webview_chromium exe binary for both static/dynamic builds -->
-                install_name_tool -change "@executable_path/Chromium Embedded Framework" \
-                    "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
-                     webview_chromium.app/Contents/MacOS/webview_chromium
-
                 <!--Copy helper app-->
                 cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
             </command>
         </add-target>
-
-        <!--For dynamic builds, we need to do two extra things:
-            1. Copy webview_chromium library to webview_chromium.app/Contents/Frameworks/
-            2. correct the CEF Frameworks executable path of webview_chromium library.
-        -->
-        <add-target target="copy_and_correct_webviewchromium" type="action"
-            cond="FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1' and SHARED=='1'">
-            <depends>package</depends>
-            <dependency-of>all</dependency-of>
-            <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webview")).dylib</set>
-            <set var="webviewchromiumdll">$(DLLPREFIX)$(wxwin.mkDllName("webviewchromium")).dylib</set>
-            <command>
-                cp $(wx_top_builddir)/lib/$(webviewdll) webview_chromium.app/Contents/Frameworks/
-                cp $(wx_top_builddir)/lib/$(webviewchromiumdll) webview_chromium.app/Contents/Frameworks/
-                install_name_tool -change "@executable_path/Chromium Embedded Framework" \
-                    "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
-                    $(wx_top_builddir)/lib/$(webviewchromiumdll)
-            </command>
-        </add-target>>
 
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
