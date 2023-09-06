@@ -65,9 +65,9 @@
 
 
     __Microsoft Windows Platform__
-    
+
     Windows 10 or newer is required to run applications using wxWebViewChromium.
-    Such applications should also have an application manifest declaring compatibility 
+    Such applications should also have an application manifest declaring compatibility
     with supported Windows versions.
 
     Microsoft Visual C++ 2022 must be used to build wxWebViewChromium.
