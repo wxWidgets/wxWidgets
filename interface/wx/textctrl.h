@@ -1791,6 +1791,29 @@ public:
 
     ///@}
 
+    ///@{
+    /**
+        Operator definitions for appending to a text control.
+
+        These operators can be used as with the standard C++ streams, for
+        example:
+        @code
+            wxTextCtrl *wnd = new wxTextCtrl(my_frame);
+
+            (*wnd) << "Welcome to text control number " << 1 << ".\n";
+        @endcode
+    */
+
+    wxTextCtrl& operator<<(const wxString& s);
+    wxTextCtrl& operator<<(int i);
+    wxTextCtrl& operator<<(long i);
+    wxTextCtrl& operator<<(float f);
+    wxTextCtrl& operator<<(double d);
+    wxTextCtrl& operator<<(char c);
+    wxTextCtrl& operator<<(wchar_t c);
+    ///@}
+
+protected:
     /**
         @name Gtk-specific functions
     */
@@ -1814,10 +1837,10 @@ public:
     GtkTextBuffer *GTKGetTextBuffer();
 
     /**
-        Gets the underlying text control that can be uses with GTK’s API.
+        Gets the underlying text control that can be used with GTK’s API.
 
-        This function can only be called for single-line text controls, i.e.
-        those without wxTE_MULTILINE style.
+        This function can only be called for single-line text controls (i.e.,
+        those without wxTE_MULTILINE style).
 
         @onlyfor{wxgtk}
 
@@ -1825,28 +1848,6 @@ public:
     */
     GtkEditable *GTKGetEditable();
 
-    ///@}
-
-    ///@{
-    /**
-        Operator definitions for appending to a text control.
-
-        These operators can be used as with the standard C++ streams, for
-        example:
-        @code
-            wxTextCtrl *wnd = new wxTextCtrl(my_frame);
-
-            (*wnd) << "Welcome to text control number " << 1 << ".\n";
-        @endcode
-    */
-
-    wxTextCtrl& operator<<(const wxString& s);
-    wxTextCtrl& operator<<(int i);
-    wxTextCtrl& operator<<(long i);
-    wxTextCtrl& operator<<(float f);
-    wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(char c);
-    wxTextCtrl& operator<<(wchar_t c);
     ///@}
 };
 
