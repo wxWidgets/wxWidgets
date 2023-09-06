@@ -36,7 +36,7 @@
             <ldflags>$(LIBCEF_LINK)</ldflags>
         </if>
         <add-target target="fix_cef_link" type="action"
-                    cond="target and FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
+                    cond="FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
             <dependency-of>all</dependency-of>
             <command>
                 <!--make helper app bundle -->
