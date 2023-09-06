@@ -136,13 +136,13 @@ private:
 
     //History related variables, we currently use our own implementation
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
-    int m_historyPosition;
-    bool m_historyLoadingFromList;
-    bool m_historyEnabled;
+    int m_historyPosition = -1;
+    bool m_historyLoadingFromList = false;
+    bool m_historyEnabled = true;
 
     //We need to store the title and zoom ourselves
     wxString m_title;
-    wxWebViewZoom m_zoomLevel;
+    wxWebViewZoom m_zoomLevel = wxWEBVIEW_ZOOM_MEDIUM;
 
     // Current main frame page source
     wxString m_pageSource;
@@ -155,7 +155,7 @@ private:
 
     // We also friend wxCEFClientHandler so it can access m_implData.
     friend class wxCEF::ClientHandler;
-    wxCEF::ClientHandler* m_clientHandler;
+    wxCEF::ClientHandler* m_clientHandler = nullptr;
 
     friend class wxWebViewChromiumModule;
     static bool ms_cefInitialized;

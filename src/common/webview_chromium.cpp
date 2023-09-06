@@ -398,11 +398,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     MSWDisableComposited();
 #endif // __WXMSW__
 
-    m_historyLoadingFromList = false;
-    m_historyEnabled = true;
-    m_historyPosition = -1;
-    m_zoomLevel = wxWEBVIEW_ZOOM_MEDIUM;
-
     m_implData = new ImplData{};
 
     m_clientHandler = new ClientHandler{*this};
