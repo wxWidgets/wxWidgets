@@ -424,15 +424,15 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     // Create the webview
     m_browser = (windowFeatures) ? windowFeatures->GetChildWebView() : wxWebView::New();
 
-#if wxUSE_WEBVIEW_EDGE
-    // With Edge the proxy can only be set before creation, so do it here.
-    if (wxWebView::IsBackendAvailable(wxWebViewBackendEdge))
+    // With several backends the proxy can only be set before creation, so do
+    // it here if the standard environment variable is defined.
+    wxString proxy;
+    if ( wxGetEnv("http_proxy", &proxy) )
     {
-        wxString proxy;
-        if (wxGetEnv("http_proxy", &proxy))
-            m_browser->SetProxy(proxy);
+        if ( m_browser->SetProxy(proxy) )
+            wxLogMessage("Using proxy \"%s\"", proxy);
+        //else: error message should have been already given by wxWebView itself
     }
-#endif // wxUSE_WEBVIEW_EDGE
 
 #ifdef __WXMAC__
     if (m_isMainFrame)
