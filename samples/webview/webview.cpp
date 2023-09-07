@@ -490,6 +490,13 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
         m_browser->Bind(wxEVT_WEBVIEW_CREATED, [this](wxWebViewEvent& event) {
             wxLogMessage("Web view created, user agent is \"%s\"", m_browser->GetUserAgent());
 
+            // We need to synchronize this call with GetUserAgent() one, as
+            // otherwise the results of executing JavaScript inside
+            // GetUserAgent() and AddScriptMessageHandler() could arrive out of
+            // order and we'd get the wrong user agent string back.
+            if (!m_browser->AddScriptMessageHandler("wx"))
+                wxLogError("Could not add script message handler");
+
             event.Skip();
         });
 
@@ -500,8 +507,6 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
         m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewFSHandler("memory")));
         m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new AdvancedWebViewHandler()));
 #endif
-        if (!m_browser->AddScriptMessageHandler("wx"))
-            wxLogError("Could not add script message handler");
     }
     else
         wxLogMessage("Created new window");
