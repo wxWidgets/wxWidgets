@@ -271,6 +271,7 @@ All (GUI):
 - Use DIPs for toolbar image sizes in wxPropertyGrid.
 - Fix undefined behaviour in wxImage::Paste() (aurel32, #23791).
 - Fix EVT_PRESS_AND_TAP() event macro definition (Kumazuma, #23819).
+- Fix wxFileHistory formatting after calling Load() (Hartwig Wiesmann, #23799).
 
 wxGTK:
 
