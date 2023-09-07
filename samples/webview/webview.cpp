@@ -161,6 +161,7 @@ public:
     void OnRunScriptCustom(wxCommandEvent& evt);
     void OnAddUserScript(wxCommandEvent& evt);
     void OnSetCustomUserAgent(wxCommandEvent& evt);
+    void OnSetProxy(wxCommandEvent& evt);
     void OnClearSelection(wxCommandEvent& evt);
     void OnDeleteSelection(wxCommandEvent& evt);
     void OnSelectAll(wxCommandEvent& evt);
@@ -422,6 +423,17 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
 #endif
     // Create the webview
     m_browser = (windowFeatures) ? windowFeatures->GetChildWebView() : wxWebView::New();
+
+    // With several backends the proxy can only be set before creation, so do
+    // it here if the standard environment variable is defined.
+    wxString proxy;
+    if ( wxGetEnv("http_proxy", &proxy) )
+    {
+        if ( m_browser->SetProxy(proxy) )
+            wxLogMessage("Using proxy \"%s\"", proxy);
+        //else: error message should have been already given by wxWebView itself
+    }
+
 #ifdef __WXMAC__
     if (m_isMainFrame)
     {
@@ -548,6 +560,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     m_tools_menu->AppendSubMenu(script_menu, _("Run Script"));
     wxMenuItem* addUserScript = m_tools_menu->Append(wxID_ANY, _("Add user script"));
     wxMenuItem* setCustomUserAgent = m_tools_menu->Append(wxID_ANY, _("Set custom user agent"));
+    wxMenuItem* setProxy = m_tools_menu->Append(wxID_ANY, _("Set proxy"));
 
     //Selection menu
     wxMenu* selection = new wxMenu();
@@ -657,6 +670,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     Bind(wxEVT_MENU, &WebFrame::OnRunScriptAsync, this, m_script_async->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnAddUserScript, this, addUserScript->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetCustomUserAgent, this, setCustomUserAgent->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetProxy, this, setProxy->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnDeleteSelection, this, m_selection_delete->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSelectAll, this, selectall->GetId());
@@ -1372,6 +1386,29 @@ void WebFrame::OnSetCustomUserAgent(wxCommandEvent& WXUNUSED(evt))
 
     if (!m_browser->SetUserAgent(customUserAgent))
         wxLogError("Could not set custom user agent");
+}
+
+void WebFrame::OnSetProxy(wxCommandEvent& WXUNUSED(evt))
+{
+    static wxString s_proxy;
+    if ( s_proxy.empty() )
+        wxGetEnv("http_proxy", &s_proxy);
+
+    const auto proxy = wxGetTextFromUser
+        (
+            "Enter the proxy to use",
+            wxGetTextFromUserPromptStr,
+            s_proxy,
+            this
+        );
+
+    if (proxy.empty())
+        return;
+
+    s_proxy = proxy;
+
+    if (!m_browser->SetProxy(s_proxy))
+        wxLogError("Could not set proxy");
 }
 
 void WebFrame::OnClearSelection(wxCommandEvent& WXUNUSED(evt))
