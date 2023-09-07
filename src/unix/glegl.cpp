@@ -17,6 +17,7 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include <EGL/eglplatform.h>
 
 #if wxUSE_GLCANVAS && wxUSE_GLCANVAS_EGL
 
@@ -367,21 +368,7 @@ bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
 /* static */
 EGLDisplay wxGLCanvasEGL::GetDisplay()
 {
-    wxDisplayInfo info = wxGetDisplayInfo();
-    EGLenum platform;
-    switch ( info.type )
-    {
-        case wxDisplayX11:
-            platform = EGL_PLATFORM_X11_EXT;
-            break;
-        case wxDisplayWayland:
-            platform = EGL_PLATFORM_WAYLAND_EXT;
-            break;
-        default:
-            return EGL_NO_DISPLAY;
-    }
-
-    return eglGetPlatformDisplay(platform, info.dpy, nullptr);
+    return eglGetDisplay(static_cast<EGLNativeDisplayType>(wxGetDisplay()));
 }
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -607,7 +594,7 @@ void wxGLCanvasEGL::DestroyWaylandSubsurface()
 /* static */
 bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
 {
-    EGLDisplay dpy = eglGetDisplay(static_cast<EGLNativeDisplayType>(wxGetDisplay()));
+    EGLDisplay dpy = wxGLCanvasEGL::GetDisplay();
 
     return IsExtensionInList(eglQueryString(dpy, EGL_EXTENSIONS), extension);
 }
@@ -628,11 +615,26 @@ EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         wxFAIL_MSG("Unable to get EGL Display");
         return nullptr;
     }
-    if ( !eglInitialize(dpy, nullptr, nullptr) )
+
+    EGLint egl_major = 0;
+    EGLint egl_minor = 0;
+    if ( !eglInitialize(dpy, &egl_major, &egl_minor) )
     {
         wxFAIL_MSG("eglInitialize failed");
         return nullptr;
     }
+
+    // The runtime EGL version cannot be known until EGL has been initialized.
+    if ( egl_major < 1 || (egl_major == 1 && egl_minor < 5) )
+    {
+        // Ignore the return value here, we cannot recover at this point.
+        eglTerminate(dpy);
+        wxFAIL_MSG(wxString::Format(
+            "EGL version is %d.%d. EGL version 1.5 or greater is required.",
+            egl_major, egl_minor));
+        return nullptr;
+    }
+
     if ( !eglBindAPI(EGL_OPENGL_API) ) {
         wxFAIL_MSG("eglBindAPI failed");
         return nullptr;
