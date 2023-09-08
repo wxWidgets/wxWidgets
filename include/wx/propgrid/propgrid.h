@@ -439,35 +439,56 @@ private:
 
 // These are used with wxPropertyGrid::AddActionTrigger() and
 // wxPropertyGrid::ClearActionTriggers().
-enum wxPG_KEYBOARD_ACTIONS
+enum class wxPGKeyboardActions
 {
-    wxPG_ACTION_INVALID = 0,
+#if WXWIN_COMPATIBILITY_3_2
+    Invalid = 0,
+#else
+    Invalid,
+#endif
 
     // Select the next property.
-    wxPG_ACTION_NEXT_PROPERTY,
+    NextProperty,
 
     // Select the previous property.
-    wxPG_ACTION_PREV_PROPERTY,
+    PrevProperty,
 
     // Expand the selected property, if it has child items.
-    wxPG_ACTION_EXPAND_PROPERTY,
+    ExpandProperty,
 
     // Collapse the selected property, if it has child items.
-    wxPG_ACTION_COLLAPSE_PROPERTY,
+    CollapseProperty,
 
     // Cancel and undo any editing done in the currently active property
     // editor.
-    wxPG_ACTION_CANCEL_EDIT,
+    CancelEdit,
 
     // Move focus to the editor control of the currently selected
     // property.
-    wxPG_ACTION_EDIT,
+    Edit,
 
     // Causes editor's button (if any) to be pressed.
-    wxPG_ACTION_PRESS_BUTTON,
-
-    wxPG_ACTION_MAX
+    PressButton,
 };
+
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("use wxPGKeyboardActions::Invalid instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_INVALID { wxPGKeyboardActions::Invalid };
+wxDEPRECATED_MSG("use wxPGKeyboardActions::NextProperty instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_NEXT_PROPERTY { wxPGKeyboardActions::NextProperty };
+wxDEPRECATED_MSG("use wxPGKeyboardActions::PrevProperty instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_PREV_PROPERTY { wxPGKeyboardActions::PrevProperty };
+wxDEPRECATED_MSG("use wxPGKeyboardActions::ExpandProperty instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_EXPAND_PROPERTY { wxPGKeyboardActions::ExpandProperty };
+wxDEPRECATED_MSG("use wxPGKeyboardActions::CollapseProperty instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_COLLAPSE_PROPERTY { wxPGKeyboardActions::CollapseProperty };
+wxDEPRECATED_MSG("use wxPGKeyboardActions::CancelEdit instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_CANCEL_EDIT { wxPGKeyboardActions::CancelEdit };
+wxDEPRECATED_MSG("use wxPGKeyboardActions::Edit instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_EDIT { wxPGKeyboardActions::Edit };
+wxDEPRECATED_MSG("use wxPGKeyboardActions::PressButton instead")
+constexpr wxPGKeyboardActions wxPG_ACTION_PRESS_BUTTON { wxPGKeyboardActions::PressButton };
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
 
@@ -565,13 +586,20 @@ public:
     // Adds given key combination to trigger given action.
     // Here is a sample code to make Enter key press move focus to
     // the next property.
-    //   propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN);
+    //   propGrid->AddActionTrigger(wxPGKeyboardActions::NextProperty, WXK_RETURN);
     //   propGrid->DedicateKey(WXK_RETURN);
     // action - Which action to trigger. See @ref propgrid_keyboard_actions.
     // keycode - Which keycode triggers the action.
     // modifiers - Which key event modifiers, in addition to keycode, are needed to
     //   trigger the action.
-    void AddActionTrigger( int action, int keycode, int modifiers = 0 );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use AddActionTrigger with 'action' argument as wxPGKeyboardActions")
+    void AddActionTrigger(int action, int keycode, int modifiers)
+    {
+        AddActionTrigger(static_cast<wxPGKeyboardActions>(action), keycode, modifiers);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void AddActionTrigger(wxPGKeyboardActions action, int keycode, int modifiers = 0);
 
     // Dedicates a specific keycode to wxPropertyGrid. This means that such
     // key presses will not be redirected to editor controls.
@@ -604,7 +632,14 @@ public:
     virtual void Clear() override;
 
     // Clears action triggers for given action.
-    void ClearActionTriggers( int action );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use ClearActionTriggers with wxPGKeyboardActions argument")
+    void ClearActionTriggers(int action)
+    {
+        ClearActionTriggers(static_cast<wxPGKeyboardActions>(action));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void ClearActionTriggers(wxPGKeyboardActions action);
 
     // Forces updating the value of property from the editor control.
     // Note that wxEVT_PG_CHANGING and wxEVT_PG_CHANGED are dispatched using
@@ -1478,7 +1513,7 @@ protected:
     wxPGValidationInfo  m_validationInfo;
 
     // Actions and keys that trigger them.
-    std::unordered_map<int, std::pair<int, int>>  m_actionTriggers;
+    std::unordered_map<int, std::pair<wxPGKeyboardActions, wxPGKeyboardActions>> m_actionTriggers;
 
     // Appearance of currently active editor.
     wxPGCell            m_editorAppearance;
@@ -1734,14 +1769,14 @@ protected:
                     unsigned int bottomItemY,
                     const wxRect* itemsRect = nullptr );
 
-    // Translate wxKeyEvent to wxPG_ACTION_XXX
-    std::pair<int, int> KeyEventToActions(const wxKeyEvent& event) const;
+    // Translate wxKeyEvent to wxPGKeyboardActions::XXX
+    std::pair<wxPGKeyboardActions, wxPGKeyboardActions> KeyEventToActions(const wxKeyEvent& event) const;
 #if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("use single-argument function KeyEventToActions(event)")
-    int KeyEventToActions(wxKeyEvent &event, int* pSecond) const;
+    wxPGKeyboardActions KeyEventToActions(wxKeyEvent &event, wxPGKeyboardActions* pSecond) const;
 #endif // WXWIN_COMPATIBILITY_3_2
 
-    int KeyEventToAction(wxKeyEvent& event) const;
+    wxPGKeyboardActions KeyEventToAction(wxKeyEvent& event) const;
 
     void ImprovedClientToScreen( int* px, int* py ) const;
 
@@ -1835,7 +1870,7 @@ protected:
 
 private:
 
-    bool ButtonTriggerKeyTest( int action, wxKeyEvent& event );
+    bool ButtonTriggerKeyTest(wxPGKeyboardActions action, wxKeyEvent& event);
 
     wxDECLARE_EVENT_TABLE();
 };

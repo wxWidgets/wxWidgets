@@ -2436,7 +2436,7 @@ void FormMain::OnExtendedKeyNav( wxCommandEvent& WXUNUSED(event) )
     // Up, and Down keys for navigating between properties.
     wxPropertyGrid* propGrid = m_pPropGridManager->GetGrid();
 
-    propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+    propGrid->AddActionTrigger(wxPGKeyboardActions::NextProperty,
                                WXK_RETURN);
     propGrid->DedicateKey(WXK_RETURN);
 
