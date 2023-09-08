@@ -665,6 +665,7 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
     if (memcmp(&data[data_offset], "LIST", 4) == 0) {
         wxUint32 list_chunk_length;
         memcpy(&list_chunk_length, &data[data_offset + 4], 4);
+        list_chunk_length = wxUINT32_SWAP_ON_BE(list_chunk_length);
         if (length - (data_offset + 8u) < list_chunk_length)
             return false;
 
