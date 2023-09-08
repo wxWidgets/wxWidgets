@@ -17,7 +17,6 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include <EGL/eglplatform.h>
 
 #if wxUSE_GLCANVAS && wxUSE_GLCANVAS_EGL
 
@@ -368,7 +367,32 @@ bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
 /* static */
 EGLDisplay wxGLCanvasEGL::GetDisplay()
 {
-    return eglGetDisplay(static_cast<EGLNativeDisplayType>(wxGetDisplay()));
+    // Static initializer ensures this is only computed once.
+    static const bool s_EGLHasPlatformDisplay =
+        wxGLCanvasBase::IsExtensionInList(
+            eglQueryString(nullptr, EGL_EXTENSIONS),
+            "EGL_EXT_platform_base");
+
+    if (!s_EGLHasPlatformDisplay) {
+        // For backward compatibility with EGL 1.4.
+        return eglGetDisplay(static_cast<EGLNativeDisplayType>(wxGetDisplay()));
+    }
+
+    wxDisplayInfo info = wxGetDisplayInfo();
+    EGLenum platform;
+    switch ( info.type )
+    {
+        case wxDisplayX11:
+            platform = EGL_PLATFORM_X11_EXT;
+            break;
+        case wxDisplayWayland:
+            platform = EGL_PLATFORM_WAYLAND_EXT;
+            break;
+        default:
+            return EGL_NO_DISPLAY;
+    }
+
+    return eglGetPlatformDisplay(platform, info.dpy, nullptr);
 }
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -616,22 +640,22 @@ EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         return nullptr;
     }
 
-    EGLint egl_major = 0;
-    EGLint egl_minor = 0;
-    if ( !eglInitialize(dpy, &egl_major, &egl_minor) )
+    EGLint eglMajor = 0;
+    EGLint eglMinor = 0;
+    if ( !eglInitialize(dpy, &eglMajor, &eglMinor) )
     {
         wxFAIL_MSG("eglInitialize failed");
         return nullptr;
     }
 
     // The runtime EGL version cannot be known until EGL has been initialized.
-    if ( egl_major < 1 || (egl_major == 1 && egl_minor < 5) )
+    if ( eglMajor < 1 || (eglMajor == 1 && eglMinor < 5) )
     {
         // Ignore the return value here, we cannot recover at this point.
         eglTerminate(dpy);
-        wxFAIL_MSG(wxString::Format(
+        wxLogError(wxString::Format(
             "EGL version is %d.%d. EGL version 1.5 or greater is required.",
-            egl_major, egl_minor));
+            eglMajor, eglMinor));
         return nullptr;
     }
 
