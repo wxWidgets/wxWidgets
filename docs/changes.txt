@@ -248,6 +248,7 @@ All:
 - Use grep instead of fgrep and egrep in makefiles/scripts (#23537).
 - Use /etc/os-release if lsb_release isn't available (Scott Talbert, #23712).
 - Add wxUILocale::GetMonthName() and GetWeekDayName() (Ulrich Telle, #23556).
+- Support WAV files with LIST chunks under Unix (A. Jiang, #23859).
 
 All (GUI):
 
