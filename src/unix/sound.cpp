@@ -660,7 +660,18 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
     if (waveformat.uiSize != 16)
         return false;
 
-    if (memcmp(&data[FMT_INDEX + waveformat.uiSize + 8], "data", 4) != 0)
+    // Skip the "LIST" chunk.
+    wxUint32 data_offset = FMT_INDEX + waveformat.uiSize + 8;
+    if (memcmp(&data[data_offset], "LIST", 4) == 0) {
+        wxUint32 list_chunk_length;
+        memcpy(&list_chunk_length, &data[data_offset + 4], 4);
+        if (length - (data_offset + 8u) < list_chunk_length)
+            return false;
+
+        data_offset += (list_chunk_length + 8u);
+    }
+
+    if (memcmp(&data[data_offset], "data", 4) != 0)
         return false;
 
     if (waveformat.uiFormatTag != WAVE_FORMAT_PCM)
@@ -694,7 +705,7 @@ bool wxSound::LoadWAV(const void* data_, size_t length, bool copyData)
 
     // get the sound data size
     wxUint32 ul;
-    memcpy(&ul, &data[FMT_INDEX + waveformat.uiSize + 12], 4);
+    memcpy(&ul, &data[data_offset + 4u], 4);
     ul = wxUINT32_SWAP_ON_BE(ul);
 
     // ensure we actually have at least that much data in the input
