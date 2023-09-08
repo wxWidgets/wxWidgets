@@ -604,7 +604,7 @@ public:
         Clears action triggers for given action.
 
         @param action
-            Which action to trigger. @ref propgrid_keyboard_actions.
+            Which action to clear. @ref propgrid_keyboard_actions.
     */
     void ClearActionTriggers( int action );
 

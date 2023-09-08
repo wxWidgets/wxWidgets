@@ -604,7 +604,6 @@ public:
     virtual void Clear() override;
 
     // Clears action triggers for given action.
-    // action - Which action to trigger.
     void ClearActionTriggers( int action );
 
     // Forces updating the value of property from the editor control.
@@ -1479,7 +1478,7 @@ protected:
     wxPGValidationInfo  m_validationInfo;
 
     // Actions and keys that trigger them.
-    std::unordered_map<int, wxInt32>  m_actionTriggers;
+    std::unordered_map<int, std::pair<int, int>>  m_actionTriggers;
 
     // Appearance of currently active editor.
     wxPGCell            m_editorAppearance;

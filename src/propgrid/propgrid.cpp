@@ -5542,8 +5542,7 @@ std::pair<int, int> wxPropertyGrid::KeyEventToActions(const wxKeyEvent& event) c
     if ( it == m_actionTriggers.end() )
         return std::make_pair(0, 0);
 
-    wxInt32 actions = it->second;
-    return std::make_pair(actions & 0xFFFF, (actions >> 16) & 0xFFFF);
+    return it->second;
 }
 
 #if WXWIN_COMPATIBILITY_3_2
@@ -5572,35 +5571,52 @@ void wxPropertyGrid::AddActionTrigger( int action, int keycode, int modifiers )
 
     int hashMapKey = (keycode & 0xFFFF) | ((modifiers & 0xFFFF) << 16);
 
-    auto it = m_actionTriggers.find(hashMapKey);
+    std::pair<int, int> curActions;
 
+    auto it = m_actionTriggers.find(hashMapKey);
     if ( it != m_actionTriggers.end() )
     {
         // This key combination is already used
+        curActions = it->second;
 
         // Can add secondary?
-        wxASSERT_MSG( !(it->second&~(0xFFFF)),
+        wxASSERT_MSG( curActions.second == 0,
                       wxS("You can only add up to two separate actions per key combination.") );
 
-        action = it->second | (action<<16);
+        curActions.second = action;
+    }
+    else
+    {
+        curActions = std::make_pair(action, 0);
     }
 
-    m_actionTriggers[hashMapKey] = action;
+    m_actionTriggers[hashMapKey] = curActions;
 }
 
-void wxPropertyGrid::ClearActionTriggers( int action )
+void wxPropertyGrid::ClearActionTriggers(int action)
 {
+    wxCHECK_RET(!(action & ~(0xFFFF)), wxS("You can only clear triggers for one action at a time.")
+
     auto it = m_actionTriggers.begin();
     while ( it != m_actionTriggers.end() )
     {
-        if ( it->second == action )
+        if ( it->second.second == action )
         {
-            it = m_actionTriggers.erase(it);
+            it->second.second = 0;
         }
-        else
+
+        if ( it->second.first == action )
         {
-            ++it;
+            if ( it->second.second == 0 )
+            {
+                it = m_actionTriggers.erase(it);
+                continue;
+            }
+
+            it->second.first = it->second.second;
         }
+
+        ++it;
     }
 }
 
