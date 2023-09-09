@@ -189,6 +189,8 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
     m_brush = brush;
 
+    if ( !m_brush.IsOk() ) return;
+
     if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE)
     {
         // Use a monochrome mask: use foreground color for the mask

@@ -92,7 +92,6 @@ class wxBrushRefData: public wxGDIRefData
 
 wxBrush::wxBrush()
 {
-    m_refData = new wxBrushRefData();
 }
 
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
@@ -165,16 +164,22 @@ bool wxBrush::operator==(const wxBrush& brush) const
 
 wxColour wxBrush::GetColour() const
 {
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid brush") );
+
     return wxColour(M_BRUSHDATA.color());
 }
 
 wxBrushStyle wxBrush::GetStyle() const
 {
+    wxCHECK_MSG( IsOk(), wxBRUSHSTYLE_INVALID, "invalid brush" );
+
     return M_STYLEDATA;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
+    wxCHECK_MSG( IsOk(), nullptr, "invalid brush" );
+
     QPixmap p = M_BRUSHDATA.texture();
 
     if (p.isNull())
@@ -185,7 +190,7 @@ wxBitmap *wxBrush::GetStipple() const
 
 QBrush wxBrush::GetHandle() const
 {
-    return M_BRUSHDATA;
+    return IsOk() ? M_BRUSHDATA : QBrush();
 }
 
 wxGDIRefData *wxBrush::CreateGDIRefData() const
