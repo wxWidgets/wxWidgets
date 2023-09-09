@@ -241,7 +241,6 @@ class wxPenRefData: public wxGDIRefData
 
 wxPen::wxPen()
 {
-    m_refData = new wxPenRefData();
 }
 
 wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style)
@@ -334,6 +333,8 @@ void wxPen::SetCap(wxPenCap cap)
 
 wxColour wxPen::GetColour() const
 {
+    wxCHECK_MSG( IsOk(), wxNullColour, "invalid pen" );
+
     wxColour c(M_PENDATA.color());
     return c;
 }
@@ -345,33 +346,43 @@ wxBitmap *wxPen::GetStipple() const
 
 wxPenStyle wxPen::GetStyle() const
 {
+    wxCHECK_MSG( IsOk(), wxPENSTYLE_INVALID, "invalid pen" );
+
     return ConvertPenStyle(M_PENDATA.style());
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
+    wxCHECK_MSG( IsOk(), wxJOIN_INVALID, "invalid pen" );
+
     return ConvertPenJoinStyle(M_PENDATA.joinStyle());
 }
 
 wxPenCap wxPen::GetCap() const
 {
+    wxCHECK_MSG( IsOk(), wxCAP_INVALID, "invalid pen" );
+
     return ConvertPenCapStyle(M_PENDATA.capStyle());
 }
 
 int wxPen::GetWidth() const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid pen" );
+
     return M_PENDATA.width();
 }
 
 int wxPen::GetDashes(wxDash **ptr) const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid pen" );
+
     *ptr = (wxDash *)((wxPenRefData *)m_refData)->m_dashes;
     return ((wxPenRefData *)m_refData)->m_dashesSize;
 }
 
 QPen wxPen::GetHandle() const
 {
-    return M_PENDATA;
+    return IsOk() ? M_PENDATA : QPen();
 }
 
 wxGDIRefData *wxPen::CreateGDIRefData() const

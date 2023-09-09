@@ -178,6 +178,8 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 {
     m_pen = pen;
 
+    if ( !m_pen.IsOk() ) return;
+
     m_qtPainter->setPen(pen.GetHandle());
 
     ApplyRasterColourOp();
