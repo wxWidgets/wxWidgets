@@ -61,28 +61,28 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 
 class wxBrushRefData: public wxGDIRefData
 {
-    public:
-        wxBrushRefData() :
-            m_style(wxBRUSHSTYLE_INVALID)
-        {
-        }
+public:
+    wxBrushRefData() :
+        m_style(wxBRUSHSTYLE_INVALID)
+    {
+    }
 
-        wxBrushRefData( const wxBrushRefData& data )
-            : wxGDIRefData(),
-              m_qtBrush(data.m_qtBrush)
-        {
-            m_style = data.m_style;
-        }
+    wxBrushRefData( const wxBrushRefData& data )
+        : wxGDIRefData(),
+          m_qtBrush(data.m_qtBrush)
+    {
+        m_style = data.m_style;
+    }
 
-        bool operator == (const wxBrushRefData& data) const
-        {
-            return m_qtBrush == data.m_qtBrush;
-        }
+    bool operator == (const wxBrushRefData& data) const
+    {
+        return m_qtBrush == data.m_qtBrush;
+    }
 
-        QBrush m_qtBrush;
+    QBrush m_qtBrush;
 
-        // To keep if mask is stippled
-        wxBrushStyle m_style;
+    // To keep if mask is stippled
+    wxBrushStyle m_style;
 };
 
 //-----------------------------------------------------------------------------
