@@ -225,9 +225,36 @@ class wxPenRefData: public wxGDIRefData
             defaultPen();
         }
 
+        wxPenRefData(const wxPenInfo& info)
+        {
+            m_qtPen.setWidth(info.GetWidth());
+            m_qtPen.setStyle(ConvertPenStyle(info.GetStyle()));
+            m_qtPen.setCapStyle(ConvertPenCapStyle(info.GetCap()));
+            m_qtPen.setJoinStyle(ConvertPenJoinStyle(info.GetJoin()));
+            m_qtPen.setColor(info.GetColour().GetQColor());
+
+            m_dashesSize = info.GetDashes(const_cast<wxDash**>(&m_dashes));
+        }
+
         bool operator == (const wxPenRefData& data) const
         {
-             return m_qtPen == data.m_qtPen;
+            if ( m_dashesSize != data.m_dashesSize )
+                return false;
+
+            if ( m_dashes )
+            {
+                if ( !data.m_dashes ||
+                     memcmp(m_dashes, data.m_dashes, m_dashesSize*sizeof(wxDash)) )
+                {
+                    return false;
+                }
+            }
+            else if ( data.m_dashes )
+            {
+                return false;
+            }
+
+            return m_qtPen == data.m_qtPen;
         }
 
         QPen m_qtPen;
@@ -259,6 +286,10 @@ wxPen::wxPen(const wxColour& col, int width, int style)
     M_PENDATA.setColor(col.GetQColor());
 }
 
+wxPen::wxPen(const wxPenInfo& info)
+{
+    m_refData = new wxPenRefData(info);
+}
 
 bool wxPen::operator==(const wxPen& pen) const
 {
