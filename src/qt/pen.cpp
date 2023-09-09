@@ -204,62 +204,62 @@ static wxPenJoin ConvertPenJoinStyle(Qt::PenJoinStyle style)
 
 class wxPenRefData: public wxGDIRefData
 {
-    public:
-        void defaultPen()
+public:
+    void defaultPen()
+    {
+        m_qtPen.setCapStyle(Qt::RoundCap);
+        m_qtPen.setJoinStyle(Qt::RoundJoin);
+        m_dashes = nullptr;
+        m_dashesSize = 0;
+    }
+
+    wxPenRefData()
+    {
+        defaultPen();
+    }
+
+    wxPenRefData( const wxPenRefData& data )
+    : wxGDIRefData()
+        , m_qtPen(data.m_qtPen)
+    {
+        defaultPen();
+    }
+
+    wxPenRefData(const wxPenInfo& info)
+    {
+        m_qtPen.setWidth(info.GetWidth());
+        m_qtPen.setStyle(ConvertPenStyle(info.GetStyle()));
+        m_qtPen.setCapStyle(ConvertPenCapStyle(info.GetCap()));
+        m_qtPen.setJoinStyle(ConvertPenJoinStyle(info.GetJoin()));
+        m_qtPen.setColor(info.GetColour().GetQColor());
+
+        m_dashesSize = info.GetDashes(const_cast<wxDash**>(&m_dashes));
+    }
+
+    bool operator == (const wxPenRefData& data) const
+    {
+        if ( m_dashesSize != data.m_dashesSize )
+            return false;
+
+        if ( m_dashes )
         {
-            m_qtPen.setCapStyle(Qt::RoundCap);
-            m_qtPen.setJoinStyle(Qt::RoundJoin);
-            m_dashes = nullptr;
-            m_dashesSize = 0;
-        }
-
-        wxPenRefData()
-        {
-            defaultPen();
-        }
-
-        wxPenRefData( const wxPenRefData& data )
-        : wxGDIRefData()
-            , m_qtPen(data.m_qtPen)
-        {
-            defaultPen();
-        }
-
-        wxPenRefData(const wxPenInfo& info)
-        {
-            m_qtPen.setWidth(info.GetWidth());
-            m_qtPen.setStyle(ConvertPenStyle(info.GetStyle()));
-            m_qtPen.setCapStyle(ConvertPenCapStyle(info.GetCap()));
-            m_qtPen.setJoinStyle(ConvertPenJoinStyle(info.GetJoin()));
-            m_qtPen.setColor(info.GetColour().GetQColor());
-
-            m_dashesSize = info.GetDashes(const_cast<wxDash**>(&m_dashes));
-        }
-
-        bool operator == (const wxPenRefData& data) const
-        {
-            if ( m_dashesSize != data.m_dashesSize )
-                return false;
-
-            if ( m_dashes )
-            {
-                if ( !data.m_dashes ||
-                     memcmp(m_dashes, data.m_dashes, m_dashesSize*sizeof(wxDash)) )
-                {
-                    return false;
-                }
-            }
-            else if ( data.m_dashes )
+            if ( !data.m_dashes ||
+                 memcmp(m_dashes, data.m_dashes, m_dashesSize*sizeof(wxDash)) )
             {
                 return false;
             }
-
-            return m_qtPen == data.m_qtPen;
+        }
+        else if ( data.m_dashes )
+        {
+            return false;
         }
 
-        QPen m_qtPen;
-        const wxDash *m_dashes;
-        int m_dashesSize;
+        return m_qtPen == data.m_qtPen;
+    }
+
+    QPen m_qtPen;
+    const wxDash *m_dashes;
+    int m_dashesSize;
 };
 
 //-----------------------------------------------------------------------------
