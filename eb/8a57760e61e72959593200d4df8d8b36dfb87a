@@ -1,0 +1,1 @@
+wxQt: Make wxPen and wxBrush behaviour more consistent with the other ports (AliKet, #23863).
