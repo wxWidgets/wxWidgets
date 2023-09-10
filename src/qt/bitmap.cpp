@@ -29,9 +29,9 @@
 
 static wxImage ConvertImage( QImage qtImage )
 {
-    bool hasAlpha = qtImage.hasAlphaChannel();
+    const bool hasAlpha = qtImage.hasAlphaChannel();
 
-    int numPixels = qtImage.height() * qtImage.width();
+    const int numPixels = qtImage.height() * qtImage.width();
 
     //Convert to ARGB32 for scanLine
     qtImage = qtImage.convertToFormat(QImage::Format_ARGB32);
@@ -45,11 +45,11 @@ static wxImage ConvertImage( QImage qtImage )
 
     unsigned char *startAlpha = alpha;
 
-    for (int y = 0; y < qtImage.height(); y++)
+    for (int y = 0; y < qtImage.height(); ++y)
     {
         QRgb *line = (QRgb*)qtImage.scanLine(y);
 
-        for (int x = 0; x < qtImage.width(); x++)
+        for (int x = 0; x < qtImage.width(); ++x)
         {
             QRgb colour = line[x];
 
@@ -73,8 +73,8 @@ static wxImage ConvertImage( QImage qtImage )
 
 static QImage ConvertImage( const wxImage &image )
 {
-    bool hasAlpha = image.HasAlpha();
-    bool hasMask = image.HasMask();
+    const bool hasAlpha = image.HasAlpha();
+    const bool hasMask = image.HasMask();
     QImage qtImage( wxQtConvertSize( image.GetSize() ),
                    ( (hasAlpha || hasMask ) ? QImage::Format_ARGB32 : QImage::Format_RGB32 ) );
 
@@ -90,9 +90,9 @@ static QImage ConvertImage( const wxImage &image )
         maskedColour = ( r << 16 ) + ( g << 8 ) + b;
     }
 
-    for (int y = 0; y < image.GetHeight(); y++)
+    for (int y = 0; y < image.GetHeight(); ++y)
     {
-        for (int x = 0; x < image.GetWidth(); x++)
+        for (int x = 0; x < image.GetWidth(); ++x)
         {
             if (hasAlpha)
             {
