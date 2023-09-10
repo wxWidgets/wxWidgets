@@ -178,6 +178,8 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 {
     m_pen = pen;
 
+    if ( !m_pen.IsOk() ) return;
+
     m_qtPainter->setPen(pen.GetHandle());
 
     ApplyRasterColourOp();
@@ -186,6 +188,8 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
     m_brush = brush;
+
+    if ( !m_brush.IsOk() ) return;
 
     if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE)
     {
@@ -219,7 +223,14 @@ void wxQtDCImpl::SetBackground(const wxBrush& brush)
     m_backgroundBrush = brush;
 
     if (m_qtPainter->isActive())
-        m_qtPainter->setBackground(brush.GetHandle());
+    {
+        // For consistency with the other ports: clearing the dc with
+        // invalid brush (Qt::NoBrush) should use white colour (which
+        // happens to be the default colour in Qt too) instead of no
+        // colour at all.
+        m_qtPainter->setBackground(
+            brush.IsOk() ? brush.GetHandle() : Qt::white);
+    }
 }
 
 void wxQtDCImpl::SetBackgroundMode(int mode)

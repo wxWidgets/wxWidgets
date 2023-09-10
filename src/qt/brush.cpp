@@ -61,28 +61,28 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 
 class wxBrushRefData: public wxGDIRefData
 {
-    public:
-        wxBrushRefData() :
-            m_style(wxBRUSHSTYLE_INVALID)
-        {
-        }
+public:
+    wxBrushRefData() :
+        m_style(wxBRUSHSTYLE_INVALID)
+    {
+    }
 
-        wxBrushRefData( const wxBrushRefData& data )
-            : wxGDIRefData(),
-              m_qtBrush(data.m_qtBrush)
-        {
-            m_style = data.m_style;
-        }
+    wxBrushRefData( const wxBrushRefData& data )
+        : wxGDIRefData(),
+          m_qtBrush(data.m_qtBrush)
+    {
+        m_style = data.m_style;
+    }
 
-        bool operator == (const wxBrushRefData& data) const
-        {
-            return m_qtBrush == data.m_qtBrush;
-        }
+    bool operator == (const wxBrushRefData& data) const
+    {
+        return m_qtBrush == data.m_qtBrush;
+    }
 
-        QBrush m_qtBrush;
+    QBrush m_qtBrush;
 
-        // To keep if mask is stippled
-        wxBrushStyle m_style;
+    // To keep if mask is stippled
+    wxBrushStyle m_style;
 };
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,6 @@ class wxBrushRefData: public wxGDIRefData
 
 wxBrush::wxBrush()
 {
-    m_refData = new wxBrushRefData();
 }
 
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
@@ -165,16 +164,22 @@ bool wxBrush::operator==(const wxBrush& brush) const
 
 wxColour wxBrush::GetColour() const
 {
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid brush") );
+
     return wxColour(M_BRUSHDATA.color());
 }
 
 wxBrushStyle wxBrush::GetStyle() const
 {
+    wxCHECK_MSG( IsOk(), wxBRUSHSTYLE_INVALID, "invalid brush" );
+
     return M_STYLEDATA;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
+    wxCHECK_MSG( IsOk(), nullptr, "invalid brush" );
+
     QPixmap p = M_BRUSHDATA.texture();
 
     if (p.isNull())
@@ -185,7 +190,7 @@ wxBitmap *wxBrush::GetStipple() const
 
 QBrush wxBrush::GetHandle() const
 {
-    return M_BRUSHDATA;
+    return IsOk() ? M_BRUSHDATA : QBrush();
 }
 
 wxGDIRefData *wxBrush::CreateGDIRefData() const
