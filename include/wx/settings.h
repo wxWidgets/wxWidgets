@@ -183,6 +183,9 @@ public:
     // Return true if this application itself uses a dark theme.
     bool IsDark() const;
 
+    // Forces the Application to use Dark Mode. Currently only availalbe on MacOS
+    void ForceDark() const;
+
     // Return true if the background is darker than foreground. This is used by
     // IsDark() if there is no platform-specific way to determine whether a
     // dark mode is being used.
