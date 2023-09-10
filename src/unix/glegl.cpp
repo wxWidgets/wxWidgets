@@ -364,18 +364,49 @@ bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
     return m_config != nullptr;
 }
 
+
+extern "C"
+{
+
+typedef EGLDisplay (*GetPlatformDisplayFunc)(EGLenum platform,
+                                             void* native_display,
+                                             const EGLAttrib* attrib_list);
+
+// Returns the appropriate function pointer for "eglGetPlatformDisplay()" or
+// "eglGetPlatformDisplayEXT()" or nullptr if neither is available at runtime.
+static GetPlatformDisplayFunc get_edl_platform_display_func()
+{
+    // Static initializer ensures this is only computed once.
+    static const GetPlatformDisplayFunc s_getPlatformDisplayFunc([] ()
+    {
+        const GetPlatformDisplayFunc getPlatformDisplayFunc =
+            reinterpret_cast<GetPlatformDisplayFunc>(
+                eglGetProcAddress("eglGetPlatformDisplay"));
+        if ( getPlatformDisplayFunc )
+        {
+            return getPlatformDisplayFunc;
+        }
+
+        // Fallback or nullptr if not available.
+        return reinterpret_cast<GetPlatformDisplayFunc>(
+            eglGetProcAddress("eglGetPlatformDisplayEXT"));
+    } ());
+    return s_getPlatformDisplayFunc;
+}
+
+} // extern "C"
+
 /* static */
 EGLDisplay wxGLCanvasEGL::GetDisplay()
 {
-    // Static initializer ensures this is only computed once.
-    static const bool s_EGLHasPlatformDisplay =
-        wxGLCanvasBase::IsExtensionInList(
-            eglQueryString(nullptr, EGL_EXTENSIONS),
-            "EGL_EXT_platform_base");
+    static const GetPlatformDisplayFunc s_eglGetPlatformDisplay(
+        get_edl_platform_display_func());
 
-    if (!s_EGLHasPlatformDisplay) {
-        // For backward compatibility with EGL 1.4.
-        return eglGetDisplay(static_cast<EGLNativeDisplayType>(wxGetDisplay()));
+    if ( !s_eglGetPlatformDisplay )
+    {
+        // For backward compatibility.
+        return eglGetDisplay(
+            static_cast<EGLNativeDisplayType>(wxGetDisplay()));
     }
 
     wxDisplayInfo info = wxGetDisplayInfo();
@@ -392,7 +423,7 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
             return EGL_NO_DISPLAY;
     }
 
-    return eglGetPlatformDisplay(platform, info.dpy, nullptr);
+    return s_eglGetPlatformDisplay(platform, info.dpy, nullptr);
 }
 
 #ifdef GDK_WINDOWING_WAYLAND
