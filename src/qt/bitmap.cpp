@@ -56,15 +56,17 @@ static wxImage ConvertImage( QImage qtImage )
         {
             QRgb colour = line[x];
 
+            if (hasAlpha)
+            {
+                colour = qUnpremultiply(colour);
+                alpha[0] = qAlpha(colour);
+                alpha++;
+            }
+
             data[0] = qRed(colour);
             data[1] = qGreen(colour);
             data[2] = qBlue(colour);
 
-            if (hasAlpha)
-            {
-                alpha[0] = qAlpha(colour);
-                alpha++;
-            }
             data += 3;
         }
     }
