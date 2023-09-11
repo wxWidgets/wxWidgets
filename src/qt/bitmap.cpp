@@ -233,7 +233,7 @@ void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(sc
 {
     wxMask* mask = nullptr;
     auto qtImage = depth == 1
-                 ? QBitmap::fromImage(ConvertImage(image))
+                 ? QBitmap::fromImage(ConvertImage(image), Qt::ThresholdDither)
                  : QPixmap::fromImage(ConvertImage(image, &mask));
 
     m_refData = new wxBitmapRefData(qtImage, mask);
@@ -435,7 +435,7 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
     if ( img.load(wxQtConvertString(name), type_name) )
     {
         M_PIXDATA = (img.colorCount() > 0 && img.colorCount() <= 2)
-                  ? QBitmap::fromImage(img)
+                  ? QBitmap::fromImage(img, Qt::ThresholdDither)
                   : QPixmap::fromImage(img);
 
         return true;
