@@ -444,24 +444,27 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     wxBitmapRefData *refData = static_cast<wxBitmapRefData *>(m_refData);
 
     // allow access if bpp is valid
-    if ( !refData->m_qtPixmap.isNull() )
+    if ( !refData->m_qtPixmap.isNull() && (bpp == 32 || bpp == 24 || bpp == 1) )
     {
-        if ( bpp == 32 )
-        {
-            refData->m_rawPixelSource = refData->m_qtPixmap.toImage().convertToFormat(QImage::Format_RGBA8888);
-            data.m_height = refData->m_rawPixelSource.height();
-            data.m_width = refData->m_rawPixelSource.width();
-            data.m_stride = refData->m_rawPixelSource.bytesPerLine();
-            bits = refData->m_rawPixelSource.bits();
-        }
+        refData->m_rawPixelSource = refData->m_qtPixmap.toImage().convertToFormat(
+                                        bpp == 1 ? QImage::Format_Mono
+                                                 : bpp == 32 ? QImage::Format_RGBA8888_Premultiplied
+                                                             : QImage::Format_RGB888);
+        data.m_height = refData->m_rawPixelSource.height();
+        data.m_width = refData->m_rawPixelSource.width();
+        data.m_stride = refData->m_rawPixelSource.bytesPerLine();
+        bits = refData->m_rawPixelSource.bits();
     }
+
     return bits;
 }
 
 void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
     wxBitmapRefData *refData = static_cast<wxBitmapRefData *>(m_refData);
-    refData->m_qtPixmap = QPixmap::fromImage(refData->m_rawPixelSource);
+    refData->m_qtPixmap = GetDepth() == 1
+                        ? QBitmap::fromImage(refData->m_rawPixelSource)
+                        : QPixmap::fromImage(refData->m_rawPixelSource);
     refData->m_rawPixelSource = QImage();
 }
 
