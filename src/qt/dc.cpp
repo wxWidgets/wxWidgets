@@ -702,7 +702,19 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
     else
     {
             if ( useMask && bmp.GetMask() && bmp.GetMask()->GetHandle() )
-                pix.setMask(*bmp.GetMask()->GetHandle());
+            {
+                // Unfortunately, how Qt applies mask bitmaps is the opposite of how
+                // wx applies them. the mask must therefore be inverted before passing
+                // it to Qt to get the expected result.
+                QBitmap qtMask = *bmp.GetMask()->GetHandle();
+
+                QImage qtImage = qtMask.toImage();
+                qtImage.invertPixels();
+                qtMask = QBitmap::fromImage(qtImage);
+
+                pix.setMask(qtMask);
+            }
+
             m_qtPainter->drawPixmap(x, y, pix);
     }
 }
