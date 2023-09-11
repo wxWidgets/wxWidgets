@@ -79,10 +79,10 @@ bool wxSystemAppearance::IsDark() const
 void wxSystemAppearance::ForceDark() const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-	if ( WX_IS_MACOS_AVAILABLE(10, 14) )
-	{
-		[NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
-	}
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
+    }
 #endif
 }
 
