@@ -74,10 +74,10 @@ static wxImage ConvertImage( QImage qtImage )
         return wxImage(wxQtConvertSize(qtImage.size()), startData);
 }
 
-static QImage ConvertImage( const wxImage &image )
+static QImage ConvertImage( const wxImage &image, wxMask** mask = nullptr  )
 {
     bool hasAlpha = image.HasAlpha();
-    bool hasMask = image.HasMask();
+    bool hasMask = image.HasMask() && mask;
     QImage qtImage( wxQtConvertSize( image.GetSize() ),
                    ( hasAlpha ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32 ) );
 
@@ -85,12 +85,16 @@ static QImage ConvertImage( const wxImage &image )
     unsigned char *alpha = hasAlpha ? image.GetAlpha() : nullptr;
     QRgb colour;
 
+    QImage qtMask;
     QRgb maskedColour;
     if ( hasMask )
     {
         unsigned char r, g, b;
         image.GetOrFindMaskColour( &r, &g, &b );
         maskedColour = qRgb(r, g, b);
+
+        qtMask = QImage(image.GetWidth(), image.GetHeight(), QImage::Format_Mono);
+        qtMask.fill(Qt::color0); // filled with 0s
     }
 
     for (int y = 0; y < image.GetHeight(); y++)
@@ -104,8 +108,11 @@ static QImage ConvertImage( const wxImage &image )
 
             colour = qRgba(r, g, b, a);
 
-            if ( qRgb(r, g, b) == maskedColour )
-                colour &= 0x00FFFFFF;
+            if ( !qtMask.isNull() )
+            {
+                if ( qRgb(r, g, b) == maskedColour )
+                    qtMask.setPixel(x, y, Qt::color1); // set to 1
+            }
 
             if (hasAlpha)
             {
@@ -118,6 +125,12 @@ static QImage ConvertImage( const wxImage &image )
             data += 3;
         }
     }
+
+    if ( hasMask )
+    {
+        *mask = new wxMask(new QBitmap{QBitmap::fromImage(qtMask)});
+    }
+
     return qtImage;
 }
 
@@ -139,10 +152,10 @@ class wxBitmapRefData: public wxGDIRefData
             m_mask = nullptr;
         }
 
-        wxBitmapRefData( QPixmap pix )
+        wxBitmapRefData( QPixmap pix, wxMask* mask = nullptr )
             : m_qtPixmap(pix)
         {
-            m_mask = nullptr;
+            m_mask = mask;
         }
 
         virtual ~wxBitmapRefData() { delete m_mask; }
@@ -218,10 +231,12 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
 
 void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale) )
 {
-    Qt::ImageConversionFlags flags;
-    if (depth == 1)
-        flags = Qt::MonoOnly;
-    m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image), flags));
+    wxMask* mask = nullptr;
+    auto qtImage = depth == 1
+                 ? QBitmap::fromImage(ConvertImage(image))
+                 : QPixmap::fromImage(ConvertImage(image, &mask));
+
+    m_refData = new wxBitmapRefData(qtImage, mask);
 }
 
 wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
@@ -300,7 +315,15 @@ void wxBitmap::SetMask(wxMask *mask)
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 {
-    return wxBitmap(M_PIXDATA.copy(wxQtConvertRect(rect)));
+    wxBitmap bmp = wxBitmap(M_PIXDATA.copy(wxQtConvertRect(rect)));
+
+    if ( M_MASK && M_MASK->GetHandle() )
+    {
+        QBitmap* qtMask = M_MASK->GetHandle();
+        bmp.SetMask(new wxMask(new QBitmap{qtMask->copy(wxQtConvertRect(rect))}));
+    }
+
+    return bmp;
 }
 
 
@@ -494,6 +517,11 @@ wxMask& wxMask::operator=(const wxMask &mask)
     return *this;
 }
 
+wxMask::wxMask(QBitmap* qtBitmap)
+{
+    m_qtBitmap = qtBitmap;
+}
+
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {
     m_qtBitmap = nullptr;
@@ -542,7 +570,12 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
         return false;
 
     delete m_qtBitmap;
-    m_qtBitmap = new QBitmap(*bitmap.GetHandle());
+
+    // Notice that under Qt masked/unmasked areas are reversed. Inverting the mask here
+    // to obtain the correct result according to wx when the mask get applied to bitmap.
+    QImage qtImage = bitmap.GetHandle()->toImage();
+    qtImage.invertPixels();
+    m_qtBitmap = new QBitmap{QBitmap::fromImage(qtImage)};
 
     return true;
 }
