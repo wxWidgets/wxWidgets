@@ -22,7 +22,7 @@ class WXDLLIMPEXP_CORE wxGenericFontButton : public wxButton,
                                              public wxFontPickerWidgetBase
 {
 public:
-    wxGenericFontButton() {}
+    wxGenericFontButton() = default;
     wxGenericFontButton(wxWindow *parent,
                         wxWindowID id,
                         const wxFont &initial = wxNullFont,
@@ -41,7 +41,7 @@ public:
     virtual void SetSelectedColour(const wxColour &colour) override
         { m_data.SetColour(colour); UpdateFont(); }
 
-    virtual ~wxGenericFontButton() {}
+    virtual ~wxGenericFontButton() = default;
 
 
 public:     // API extensions specific for wxGenericFontButton

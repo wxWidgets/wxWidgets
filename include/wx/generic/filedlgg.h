@@ -140,7 +140,7 @@ private:
 class WXDLLIMPEXP_CORE wxFileDialog: public wxGenericFileDialog
 {
 public:
-    wxFileDialog() {}
+    wxFileDialog() = default;
 
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),

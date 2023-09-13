@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxGenericStaticBitmap : public wxStaticBitmapBase
 {
 public:
-    wxGenericStaticBitmap() {}
+    wxGenericStaticBitmap() = default;
     wxGenericStaticBitmap(wxWindow *parent,
                           wxWindowID id,
                           const wxBitmapBundle& bitmap,

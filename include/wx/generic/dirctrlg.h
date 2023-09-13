@@ -60,7 +60,7 @@ class WXDLLIMPEXP_CORE wxDirItemData : public wxTreeItemData
 {
 public:
     wxDirItemData(const wxString& path, const wxString& name, bool isDir);
-    virtual ~wxDirItemData(){}
+    virtual ~wxDirItemData() = default;
     void SetNewDirName(const wxString& path);
 
     bool HasSubDirs() const;

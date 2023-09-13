@@ -81,7 +81,7 @@ class WXDLLIMPEXP_CORE wxImageList: public wxGenericImageList
     wxDECLARE_DYNAMIC_CLASS(wxImageList);
 
 public:
-    wxImageList() {}
+    wxImageList() = default;
 
     wxImageList( int width, int height, bool mask = true, int initialCount = 1 )
         : wxGenericImageList(width, height, mask, initialCount)

@@ -140,7 +140,7 @@ class WXDLLIMPEXP_CORE wxGridCellWorker : public wxSharedClientDataContainer,
                                           public wxRefCounter
 {
 public:
-    wxGridCellWorker() { }
+    wxGridCellWorker() = default;
 
     wxGridCellWorker(const wxGridCellWorker& other);
 
@@ -593,7 +593,7 @@ public:
 class WXDLLIMPEXP_CORE wxGridHeaderLabelsRenderer
 {
 public:
-    virtual ~wxGridHeaderLabelsRenderer() {}
+    virtual ~wxGridHeaderLabelsRenderer() = default;
 
     // Draw the border around cell window.
     virtual void DrawBorder(const wxGrid& grid,
@@ -1464,7 +1464,7 @@ using wxUnsignedToIntHashMap = std::unordered_map<unsigned, int>;
 struct WXDLLIMPEXP_CORE wxGridSizesInfo
 {
     // default ctor, initialize m_sizeDefault and m_customSizes later
-    wxGridSizesInfo() { }
+    wxGridSizesInfo() = default;
 
     // ctor used by wxGrid::Get{Col,Row}Sizes()
     wxGridSizesInfo(int defSize, const wxArrayInt& allSizes);

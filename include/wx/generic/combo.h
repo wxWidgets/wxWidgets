@@ -133,7 +133,7 @@ public:
         (void)Create(parent, id, value, pos, size, style, validator, name);
     }
 
-    virtual ~wxComboCtrl() {}
+    virtual ~wxComboCtrl() = default;
 
 protected:
 
