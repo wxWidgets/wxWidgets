@@ -19,7 +19,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxGaugeNameStr[];
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
 public:
-    wxGauge() { }
+    wxGauge() = default;
 
     wxGauge(wxWindow *parent,
             wxWindowID id,

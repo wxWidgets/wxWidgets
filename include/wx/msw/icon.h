@@ -26,7 +26,7 @@
 class WXDLLIMPEXP_CORE wxIconRefData : public wxGDIImageRefData
 {
 public:
-    wxIconRefData() { }
+    wxIconRefData() = default;
     virtual ~wxIconRefData() { Free(); }
 
     virtual void Free() override;
@@ -41,7 +41,7 @@ class WXDLLIMPEXP_CORE wxIcon : public wxGDIImage
 public:
     // ctors
         // default
-    wxIcon() { }
+    wxIcon() = default;
 
         // from raw data
     wxIcon(const char bits[], int width, int height);

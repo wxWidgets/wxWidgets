@@ -21,14 +21,14 @@
 class WXDLLIMPEXP_CORE wxPen : public wxPenBase
 {
 public:
-    wxPen() { }
+    wxPen() = default;
     wxPen(const wxColour& col, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
 
     wxPen(const wxBitmap& stipple, int width);
 
     wxPen(const wxPenInfo& info);
 
-    virtual ~wxPen() { }
+    virtual ~wxPen() = default;
 
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }

@@ -20,7 +20,7 @@ class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
     // construction
-    wxSpinButton() { }
+    wxSpinButton() = default;
 
     wxSpinButton(wxWindow *parent,
                  wxWindowID id = wxID_ANY,

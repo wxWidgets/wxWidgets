@@ -19,7 +19,7 @@ class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlBase
 {
 public:
     // ctors
-    wxDatePickerCtrl() { }
+    wxDatePickerCtrl() = default;
 
     wxDatePickerCtrl(wxWindow *parent,
                      wxWindowID id,

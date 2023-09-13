@@ -246,7 +246,7 @@ public:
 
     void Init();
 
-    virtual ~wxDirFilterListCtrl() {}
+    virtual ~wxDirFilterListCtrl() = default;
 
     //// Operations
     void FillFilterList(const wxString& filter, int defaultFilter);

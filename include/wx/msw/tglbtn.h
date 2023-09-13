@@ -74,7 +74,7 @@ class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButton
 {
 public:
     // construction/destruction
-    wxBitmapToggleButton() {}
+    wxBitmapToggleButton() = default;
     wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmapBundle& label,
