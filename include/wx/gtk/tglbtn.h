@@ -22,7 +22,7 @@ class WXDLLIMPEXP_CORE wxToggleButton: public wxToggleButtonBase
 {
 public:
     // construction/destruction
-    wxToggleButton() {}
+    wxToggleButton() = default;
     wxToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,

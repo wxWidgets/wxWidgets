@@ -663,7 +663,7 @@ public:
 
     // This class is never used polymorphically but give it a virtual dtor
     // anyhow to suppress g++ complaints about it
-    virtual ~wxGridOperations() { }
+    virtual ~wxGridOperations() = default;
 };
 
 class wxGridRowOperations : public wxGridOperations
@@ -1022,7 +1022,7 @@ public:
 
     // This class is never used polymorphically but give it a virtual dtor
     // anyhow to suppress g++ complaints about it
-    virtual ~wxGridDirectionOperations() { }
+    virtual ~wxGridDirectionOperations() = default;
 
 protected:
     // Get the position of the row or column from the given coordinates pair.
