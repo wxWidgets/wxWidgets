@@ -29,7 +29,7 @@ public :
           wxTextWidgetImpl(entry)
     {
     }
-    virtual ~wxNSTextBase() { }
+    virtual ~wxNSTextBase() = default;
 
     virtual bool ShouldHandleKeyNavigation(const wxKeyEvent &event) const override;
 

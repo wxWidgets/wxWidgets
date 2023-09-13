@@ -28,8 +28,7 @@ public:
     /*! @method     wxCFDataRef
         @abstract   Creates a null data ref
     */
-    wxCFDataRef()
-    {}
+    wxCFDataRef() = default;
 
     typedef wxCFRef<CFDataRef> super_type;
 

@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
 {
 public:
-    wxToggleButton() {}
+    wxToggleButton() = default;
     wxToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,
@@ -55,7 +55,7 @@ private:
 class WXDLLIMPEXP_CORE wxBitmapToggleButton : public wxToggleButton
 {
 public:
-    wxBitmapToggleButton() {}
+    wxBitmapToggleButton() = default;
     wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmapBundle& label,

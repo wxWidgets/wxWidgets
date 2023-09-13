@@ -14,7 +14,7 @@
 class WXDLLIMPEXP_CORE wxAnyButton : public wxAnyButtonBase
 {
 public:
-    wxAnyButton() {}
+    wxAnyButton() = default;
 
     static wxSize GetDefaultSize();
 

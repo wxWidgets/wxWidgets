@@ -38,7 +38,7 @@ class WXDLLIMPEXP_CORE wxComboBox :
     virtual void DelegateTextChanged( const wxString& value );
     virtual void DelegateChoice( const wxString& value );
 
-    wxComboBox() { }
+    wxComboBox() = default;
 
     wxComboBox(wxWindow *parent, wxWindowID id,
            const wxString& value = wxEmptyString,
