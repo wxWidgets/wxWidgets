@@ -330,12 +330,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
               const wxPalette *WXUNUSED(palette) ) const
 {
-    #if wxUSE_IMAGE
-    //Try to save using wx
-    wxImage image = ConvertToImage();
-    if (image.IsOk() && image.SaveFile(name, type))
-        return true;
-    #endif
+    wxCHECK_MSG( IsOk(), false, "invalid bitmap" );
 
     //Try to save using Qt
     const char* type_name = nullptr;
@@ -377,29 +372,88 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
         default:
             break;
     }
-    return type_name &&
-        M_PIXDATA.save(wxQtConvertString(name), type_name);
+
+    if ( M_PIXDATA.save(wxQtConvertString(name), type_name) )
+    {
+        return true;
+    }
+
+#if wxUSE_IMAGE
+    //Try to save using wx
+    return ConvertToImage().SaveFile(name, type);
+#else
+    return false;
+#endif
 }
 
 bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
 {
-#if wxUSE_IMAGE
-    //Try to load using wx
-    wxImage image;
-    if (image.LoadFile(name, type) && image.IsOk())
+    //Try to load using Qt
+    AllocExclusive();
+
+    const char* type_name = nullptr;
+    switch (type)
     {
-        *this = wxBitmap(image);
+        case wxBITMAP_TYPE_BMP:  type_name = "bmp";  break;
+        case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
+        case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
+        case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
+        case wxBITMAP_TYPE_GIF:  type_name = "gif";  break;
+        case wxBITMAP_TYPE_CUR:  type_name = "cur";  break;
+        case wxBITMAP_TYPE_TIFF: type_name = "tif";  break;
+        case wxBITMAP_TYPE_XBM:  type_name = "xbm";  break;
+        case wxBITMAP_TYPE_PCX:  type_name = "pcx";  break;
+        case wxBITMAP_TYPE_BMP_RESOURCE:
+        case wxBITMAP_TYPE_ICO_RESOURCE:
+        case wxBITMAP_TYPE_CUR_RESOURCE:
+        case wxBITMAP_TYPE_XBM_DATA:
+        case wxBITMAP_TYPE_XPM:
+        case wxBITMAP_TYPE_XPM_DATA:
+        case wxBITMAP_TYPE_TIFF_RESOURCE:
+        case wxBITMAP_TYPE_GIF_RESOURCE:
+        case wxBITMAP_TYPE_PNG_RESOURCE:
+        case wxBITMAP_TYPE_JPEG_RESOURCE:
+        case wxBITMAP_TYPE_PNM:
+        case wxBITMAP_TYPE_PNM_RESOURCE:
+        case wxBITMAP_TYPE_PCX_RESOURCE:
+        case wxBITMAP_TYPE_PICT:
+        case wxBITMAP_TYPE_PICT_RESOURCE:
+        case wxBITMAP_TYPE_ICON:
+        case wxBITMAP_TYPE_ICON_RESOURCE:
+        case wxBITMAP_TYPE_ANI:
+        case wxBITMAP_TYPE_IFF:
+        case wxBITMAP_TYPE_TGA:
+        case wxBITMAP_TYPE_MACCURSOR:
+        case wxBITMAP_TYPE_MACCURSOR_RESOURCE:
+        case wxBITMAP_TYPE_MAX:
+        case wxBITMAP_TYPE_ANY:
+        default:
+            break;
+    }
+
+    QImage img;
+    if ( img.load(wxQtConvertString(name), type_name) )
+    {
+        M_PIXDATA = (img.colorCount() > 0 && img.colorCount() <= 2)
+                  ? QBitmap::fromImage(img)
+                  : QPixmap::fromImage(img);
+
         return true;
     }
+#if wxUSE_IMAGE
     else
-#endif
     {
-        //Try to load using Qt
-        AllocExclusive();
-
-        //TODO: Use passed image type instead of auto-detection
-        return M_PIXDATA.load(wxQtConvertString(name));
+        //Try to load using wx
+        wxImage image;
+        if (image.LoadFile(name, type) && image.IsOk())
+        {
+            *this = wxBitmap(image);
+            return true;
+        }
     }
+#endif
+
+    return false;
 }
 
 
