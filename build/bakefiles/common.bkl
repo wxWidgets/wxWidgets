@@ -185,9 +185,6 @@
     <set var="WXLIB_WEBVIEW">
         <if cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'">$(mk.evalExpr(wxwin.mkLibName('webview')))</if>
     </set>
-    <set var="WXLIB_WEBVIEW_CHROMIUM">
-        <if cond="MONOLITHIC=='0' and USE_WEBVIEW_CHROMIUM=='1' and FORMAT=='autoconf'">$(mk.evalExpr(wxwin.mkLibName('webview_chromium')))</if>
-    </set>
     <set var="WXLIB_MONO">
         <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>
     </set>
@@ -883,7 +880,8 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <!-- Link against one wxWin library. Value must be literal! -->
     <define-tag name="wx-lib" rules="exe,dll,module">
         <sys-lib>$(wxwin.libToLink(value))</sys-lib>
-        <ldlibs>$(wxwin.extraLdflags(value))</ldlibs>
+        <ldflags>$(wxwin.extraLdflags(value))</ldflags>
+        <ldlibs>$(wxwin.extraLdlibs(value))</ldlibs>
         <!-- msvs200?prj formats don't support external dependencies yet: -->
         <if cond="FORMAT=='msvc6prj' and MONOLITHIC=='0'">
             <depends-on-dsp>$(wxwin.makeDspDependency(value))</depends-on-dsp>
