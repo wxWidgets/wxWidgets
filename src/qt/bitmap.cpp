@@ -56,15 +56,17 @@ static wxImage ConvertImage( QImage qtImage )
         {
             QRgb colour = line[x];
 
+            if (hasAlpha)
+            {
+                colour = qUnpremultiply(colour);
+                alpha[0] = qAlpha(colour);
+                alpha++;
+            }
+
             data[0] = qRed(colour);
             data[1] = qGreen(colour);
             data[2] = qBlue(colour);
 
-            if (hasAlpha)
-            {
-                alpha[0] = qAlpha(colour);
-                alpha++;
-            }
             data += 3;
         }
     }
@@ -293,10 +295,67 @@ int wxBitmap::GetDepth() const
 #if wxUSE_IMAGE
 wxImage wxBitmap::ConvertToImage() const
 {
-    QPixmap pixmap(M_PIXDATA);
+    wxImage image;
+
+    wxCHECK_MSG(IsOk(), image, "invalid bitmap");
+
+    image = ConvertImage(M_PIXDATA.toImage());
+
+    // now handle the mask, if we have any
     if ( M_MASK && M_MASK->GetHandle() )
-        pixmap.setMask(*M_MASK->GetHandle());
-    return ConvertImage(pixmap.toImage());
+    {
+        // we hard code the mask colour for now but we could also make an
+        // effort (and waste time) to choose a colour not present in the
+        // image already to avoid having to fudge the pixels below --
+        // whether it's worth to do it is unclear however
+        static const int MASK_RED = 1;
+        static const int MASK_GREEN = 2;
+        static const int MASK_BLUE = 3;
+        static const int MASK_BLUE_REPLACEMENT = 2;
+
+        wxBitmap bmpMask(M_MASK->GetBitmap());
+        wxMonoPixelData dataMask(bmpMask);
+        const int h = dataMask.GetHeight();
+        const int w = dataMask.GetWidth();
+        unsigned char* data = image.GetData();
+
+        wxMonoPixelData::Iterator rowStart(dataMask);
+        for ( int y = 0; y < h; ++y )
+        {
+            // traverse one mask line
+            wxMonoPixelData::Iterator p = rowStart;
+            for ( int x = 0; x < w; ++x )
+            {
+                // should this pixel be transparent?
+                if ( p.Pixel() )
+                {
+                    // no, check that it isn't transparent by accident
+                    if ( (data[0] == MASK_RED) &&
+                            (data[1] == MASK_GREEN) &&
+                                (data[2] == MASK_BLUE) )
+                    {
+                        // we have to fudge the colour a bit to prevent
+                        // this pixel from appearing transparent
+                        data[2] = MASK_BLUE_REPLACEMENT;
+                    }
+
+                    data += 3;
+                }
+                else // yes, transparent pixel
+                {
+                    *data++ = MASK_RED;
+                    *data++ = MASK_GREEN;
+                    *data++ = MASK_BLUE;
+                }
+                ++p;
+            }
+            rowStart.OffsetY(dataMask, 1);
+        }
+
+        image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
+    }
+
+    return image;
 }
 
 #endif // wxUSE_IMAGE
