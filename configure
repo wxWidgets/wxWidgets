@@ -12660,6 +12660,11 @@ fi
           eval "$wx_cv_use_wxdib"
 
 
+if test "$wxUSE_MSW" != 1; then
+    DEFAULT_wxUSE_WEBVIEW_IE=no
+fi
+
+
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
           if test -z "$defaultval"; then
@@ -39695,6 +39700,17 @@ fi
             wxUSE_WEBVIEW="yes"
             $as_echo "#define wxUSE_WEBVIEW_EDGE 1" >>confdefs.h
 
+        fi
+    else
+        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxWebView IE backend only available under MSW, ignoring --enable-webviewie" >&5
+$as_echo "$as_me: WARNING: wxWebView IE backend only available under MSW, ignoring --enable-webviewie" >&2;}
+            wxUSE_WEBVIEW_IE=no
+        fi
+        if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxWebView Edge backend only available under MSW, ignoring --enable-webviewedge" >&5
+$as_echo "$as_me: WARNING: wxWebView Edge backend only available under MSW, ignoring --enable-webviewedge" >&2;}
+            wxUSE_WEBVIEW_EDGE=no
         fi
     fi
 

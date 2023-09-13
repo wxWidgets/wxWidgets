@@ -1031,6 +1031,13 @@ WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls 
 WX_ARG_FEATURE(taskbarbutton,[  --enable-taskbarbutton  enable wxTaskBarButton (Win32 only)], wxUSE_TASKBARBUTTON)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
+
+dnl Turn off MSW-only IE webview backend here to avoid reporting it as "on" in
+dnl the final summary message (Edge is turned off by default).
+if test "$wxUSE_MSW" != 1; then
+    DEFAULT_wxUSE_WEBVIEW_IE=no
+fi
+
 WX_ARG_FEATURE(webviewie,   [  --enable-webviewie      use wxWebView IE backend (Win32 only)], wxUSE_WEBVIEW_IE)
 WX_ARG_FEATURE(webviewedge, [  --enable-webviewedge    use wxWebView Edge backend (Win32 only)], wxUSE_WEBVIEW_EDGE)
 
@@ -6884,6 +6891,15 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
             wxUSE_WEBVIEW="yes"
             AC_DEFINE(wxUSE_WEBVIEW_EDGE)
+        fi
+    else
+        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+            AC_MSG_WARN([wxWebView IE backend only available under MSW, ignoring --enable-webviewie])
+            wxUSE_WEBVIEW_IE=no
+        fi
+        if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+            AC_MSG_WARN([wxWebView Edge backend only available under MSW, ignoring --enable-webviewedge])
+            wxUSE_WEBVIEW_EDGE=no
         fi
     fi
 
