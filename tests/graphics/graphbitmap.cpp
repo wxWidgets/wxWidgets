@@ -26,10 +26,10 @@
 typedef wxPixelFormat<unsigned char, 32, 2, 1, 0> wxNative32PixelFormat;
 typedef wxPixelData<wxBitmap, wxNative32PixelFormat> wxNative32PixelData;
 #endif // __WXMSW__
-#ifdef __WXOSX__
+#if defined(__WXOSX__) || defined(__WXQT__)
 // 32 bpp xRGB bitmaps are native ones
 typedef wxNativePixelData wxNative32PixelData;
-#endif // __WXOSX__
+#endif // __WXOSX__ || __WXQT__
 
 // ----------------------------------------------------------------------------
 // tests
@@ -82,13 +82,13 @@ wxBitmap CreateBitmapRGB(int w, int h, bool withMask)
     return DoCreateBitmapRGB(w, h, 24, withMask);
 }
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
 // 32-bit RGB bitmap
 wxBitmap CreateBitmapXRGB(int w, int h, bool withMask)
 {
     return DoCreateBitmapRGB(w, h, 32, withMask);
 }
-#endif // __WXMSW__ || __WXOSX__
+#endif // __WXMSW__ || __WXOSX__ || __WXQT__
 
 wxBitmap CreateBitmapRGBA(int w, int h, bool withMask)
 {
@@ -101,12 +101,12 @@ wxBitmap CreateBitmapRGBA(int w, int h, bool withMask)
         const wxColour clrBg(*wxGREEN);
         const unsigned char alpha = 51;
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
         // premultiplied values
         const wxColour clrFgAlpha(((clrFg.Red() * alpha) + 127) / 255, ((clrFg.Green() * alpha) + 127) / 255, ((clrFg.Blue() * alpha) + 127) / 255);
 #else
         const wxColour clrFgAlpha(clrFg);
-#endif // __WXMSW__ || __WXOSX__
+#endif // __WXMSW__ || __WXOSX__ || __WXQT__
 
         wxAlphaPixelData data(bmp);
         REQUIRE(data);
@@ -358,7 +358,7 @@ TEST_CASE("GraphicsBitmapTestCase::Create", "[graphbitmap][create]")
 #endif // wxUSE_GRAPHICS_CAIRO
     }
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
     SECTION("xRGB bitmap without mask")
     {
         // xRGB bitmap
@@ -467,7 +467,7 @@ TEST_CASE("GraphicsBitmapTestCase::Create", "[graphbitmap][create]")
         }
 #endif // wxUSE_GRAPHICS_CAIRO
     }
-#endif // _WXMSW__ || __WXOSX__
+#endif // _WXMSW__ || __WXOSX__ || __WXQT__
 
     SECTION("RGBA bitmap without mask")
     {
@@ -694,7 +694,7 @@ TEST_CASE("GraphicsBitmapTestCase::SubBitmap", "[graphbitmap][subbitmap][create]
 #endif // wxUSE_GRAPHICS_CAIRO
     }
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
     SECTION("xRGB bitmap without mask")
     {
         // xRGB bitmap
@@ -827,7 +827,7 @@ TEST_CASE("GraphicsBitmapTestCase::SubBitmap", "[graphbitmap][subbitmap][create]
         }
 #endif // wxUSE_GRAPHICS_CAIRO
     }
-#endif // __WXMSW__ || __WXOSX__
+#endif // __WXMSW__ || __WXOSX__ || __WXQT__
 
     SECTION("RGBA bitmap without mask")
     {

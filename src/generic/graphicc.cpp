@@ -586,7 +586,7 @@ protected:
 #ifdef __WXMAC__
     CGContextRef m_cgContext;
 #endif // __WXMAC__
-    
+
 private:
     cairo_t* m_context;
     cairo_matrix_t m_internalTransform;
@@ -1608,6 +1608,21 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surfac
     m_buffer = nullptr;
 }
 
+namespace
+{
+#ifdef wxHAS_RAW_BITMAP
+// Return true if the pixel is masked under this platform
+inline bool IsMasked(wxNativePixelData::Iterator& p)
+{
+#ifndef __WXQT__
+    return p.Red()+p.Green()+p.Blue() == 0;
+#else
+    return p.Red()+p.Green()+p.Blue() != 0;
+#endif
+}
+#endif
+}
+
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp )
     : wxGraphicsBitmapData(renderer)
 {
@@ -1622,14 +1637,14 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     // different format and iterator than if it doesn't...
     const bool isSrcBpp32 = bmp.GetDepth() == 32;
 
-#if defined(__WXMSW__) || defined(__WXOSX__)
-    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
+    // Under MSW, OSX and Qt we can have 32 bpp xRGB bitmaps (without alpha).
     const bool hasAlpha = bmp.HasAlpha();
 #endif
 
     cairo_format_t bufferFormat =
-    // Under MSW and OSX we can have 32 bpp xRGB bitmaps (without alpha).
-#if defined(__WXMSW__) || defined(__WXOSX__)
+    // Under MSW, OSX and Qt we can have 32 bpp xRGB bitmaps (without alpha).
+#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
         (isSrcBpp32 && hasAlpha) || bmp.GetMask() != nullptr
 #else
         isSrcBpp32 || bmp.GetMask() != nullptr
@@ -1659,11 +1674,11 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-#if defined (__WXMSW__) || defined(__WXOSX__)
+#if defined (__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
                     unsigned char alpha = hasAlpha ? p.Alpha() : wxALPHA_OPAQUE;
-                    // MSW and OSX bitmap pixel bits are already premultiplied.
+                    // MSW, OSX and Qt bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
-#else // !__WXMSW__ , !__WXOSX__
+#else // !__WXMSW__ , !__WXOSX__ , !__WXQT__
                     // We always have alpha, but we need to premultiply it.
                     unsigned char alpha = p.Alpha();
                     if (alpha == wxALPHA_TRANSPARENT)
@@ -1673,7 +1688,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                             | Premultiply(alpha, p.Red()) << 16
                             | Premultiply(alpha, p.Green()) << 8
                             | Premultiply(alpha, p.Blue()));
-#endif // __WXMSW__, __WXOSX__ / !__WXMSW__, !__WXOSX__
+#endif // __WXMSW__, __WXOSX__, __WXQT__ / !__WXMSW__, !__WXOSX__, !__WXQT__
                     ++data;
                     ++p;
                 }
@@ -1735,7 +1750,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
-                if (p.Red()+p.Green()+p.Blue() == 0)
+                if ( IsMasked(p) )
                     *data = 0;
 
                 ++data;
@@ -2414,7 +2429,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 #ifdef __WXMAC__
     m_cgContext = nullptr;
 #endif // __WXMAC__
-    
+
     Init( cairo_reference(context), true );
     m_width = 0;
     m_height = 0;
