@@ -1741,6 +1741,14 @@ wxImage::Paste(const wxImage & image, int x, int y,
                         float light_left = (alpha_target_data[i] / 255.0f) * (1.0f - source_alpha);
                         float result_alpha = source_alpha + light_left;
                         alpha_target_data[i] = (unsigned char)((result_alpha * 255) + 0.5f);
+                        if (result_alpha <= 0)
+                        {
+                            int c = 3 * i;
+                            target_data[c++] = 0;
+                            target_data[c++] = 0;
+                            target_data[c] = 0;
+                            continue;
+                        }
                         for (int c = 3 * i; c < 3 * (i + 1); c++)
                         {
                             target_data[c] =

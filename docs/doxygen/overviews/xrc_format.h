@@ -653,7 +653,9 @@ controls cannot have children.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{animation, @ref overview_xrcformat_type_url,
-    Animation file to load into the control (default: none).}
+    Animation file to load into the control or, since wxWindow 3.3.0, multiple
+    semicolon-separated files in order of increasing size, corresponding to
+    multiple versions of the animation for different resolutions (default: none).}
 @row3col{inactive-bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to use when not playing the animation (default: the default).}
 @endTable

@@ -306,7 +306,7 @@ MyCanvas::MyCanvas( wxWindow *parent )
 {
     m_text = nullptr;
 
-    SetBackgroundColour(*wxWHITE);
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
     SetFontSize(12);
 

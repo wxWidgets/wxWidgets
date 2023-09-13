@@ -108,6 +108,11 @@ Changes in behaviour which may result in build errors
   compatible with the previous wxWidgets versions, but now compare values, and
   not pointers, in their Index() member function.
 
+- Due to the possibility to construct wxString from std::string_view some
+  previously valid code, such as "wxstr = {"Hello", 2}", is now ambiguous.
+  Please use explicit class name, e.g. "wxstr = wxString{"Hello", 2}" to
+  preserve the previous behaviour.
+
 - Generic wxSearchCtrl doesn't provide methods that make sense only for
   multiline text controls any longer, for consistency with the other ports.
 

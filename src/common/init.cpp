@@ -49,6 +49,7 @@
     #endif // wxCrtSetDbgFlag
 #endif // __WINDOWS__
 
+#include "wx/private/init.h"
 #include "wx/private/localeset.h"
 
 #include <memory>
@@ -121,38 +122,25 @@ static inline void Use(void *) { }
 // initialization data
 // ----------------------------------------------------------------------------
 
-static struct InitData
+namespace
 {
-    InitData()
-        : nInitCount(0)
-    {
-        argc = argcOrig = 0;
-        // argv = argvOrig = nullptr; -- not even really needed
-    }
 
     // number of times wxInitialize() was called minus the number of times
     // wxUninitialize() was
     //
     // it is atomic to allow more than one thread to call wxInitialize() but
     // only one of them to actually initialize the library
-    wxAtomicInt nInitCount;
+    wxAtomicInt gs_nInitCount{0};
 
-    int argc;
+} // anonymous namespace
 
-    // if we receive the command line arguments as ASCII and have to convert
-    // them to Unicode ourselves (this is the case under Unix but not Windows,
-    // for example), we remember the converted argv here because we'll have to
-    // free it when doing cleanup to avoid memory leaks
-    wchar_t **argv;
+/* static */
+wxInitData& wxInitData::Get()
+{
+    static wxInitData s_initData;
 
-    // we also need to keep two copies, one passed to other functions, and one
-    // unmodified original; somebody may modify the former, so we need to have
-    // the latter to be able to free everything correctly
-    int argcOrig;
-    wchar_t **argvOrig;
-
-    wxDECLARE_NO_COPY_CLASS(InitData);
-} gs_initData;
+    return s_initData;
+}
 
 // ============================================================================
 // implementation
@@ -162,18 +150,23 @@ static struct InitData
 // command line arguments ANSI -> Unicode conversion
 // ----------------------------------------------------------------------------
 
-static void ConvertArgsToUnicode(int argc, char **argv)
+void wxInitData::Initialize(int argcIn, char **argvIn)
 {
-    gs_initData.argvOrig = new wchar_t *[argc + 1];
-    gs_initData.argv = new wchar_t *[argc + 1];
+    wxASSERT_MSG( !argc && !argv, "initializing twice?" );
+
+#ifndef __WINDOWS__
+    argvA = argvIn;
+#endif
+
+    argv = new wchar_t *[argcIn + 1];
 
     int wargc = 0;
-    for ( int i = 0; i < argc; i++ )
+    for ( int i = 0; i < argcIn; i++ )
     {
 #ifdef __DARWIN__
-        wxWCharBuffer buf(wxConvFileName->cMB2WX(argv[i]));
+        wxWCharBuffer buf(wxConvFileName->cMB2WX(argvIn[i]));
 #else
-        wxWCharBuffer buf(wxConvLocal.cMB2WX(argv[i]));
+        wxWCharBuffer buf(wxConvLocal.cMB2WX(argvIn[i]));
 #endif
         if ( !buf )
         {
@@ -182,28 +175,58 @@ static void ConvertArgsToUnicode(int argc, char **argv)
         }
         else // converted ok
         {
-            gs_initData.argvOrig[wargc] = gs_initData.argv[wargc] = wxStrdup(buf);
+            argv[wargc] = wxStrdup(buf);
             wargc++;
         }
     }
 
-    gs_initData.argcOrig = gs_initData.argc = wargc;
-    gs_initData.argvOrig[wargc] =gs_initData.argv[wargc] = nullptr;
+    argc = wargc;
+    argv[wargc] = nullptr;
 }
 
-static void FreeConvertedArgs()
+#ifdef __WINDOWS__
+
+void wxInitData::MSWInitialize()
 {
-    if ( gs_initData.argvOrig )
+    wxASSERT_MSG( !argc && !argvMSW, "initializing twice?" );
+
+    // Prefer to use the standard function for tokenizing the command line,
+    // instead of our own wxCmdLineParser::ConvertStringToArgs() which might
+    // not use exactly the same logic.
+
+    // This pointer will be freed in Free().
+    argvMSW = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+
+    // And this one will be used by the rest of the code. It is separate from
+    // argvMSW because it could be allocated by Initialize() if a custom entry
+    // point is used.
+    argv = argvMSW;
+}
+
+#endif // __WINDOWS__
+
+void wxInitData::Free()
+{
+#ifdef __WINDOWS__
+    if ( argvMSW )
     {
-        for ( int i = 0; i < gs_initData.argcOrig; i++ )
+        ::LocalFree(argvMSW);
+
+        // If argvMSW is non-null, argv must be the same value, so reset it too.
+        argv = argvMSW = nullptr;
+        argc = 0;
+    }
+#endif // __WINDOWS__
+
+    if ( argc )
+    {
+        for ( int i = 0; i < argc; i++ )
         {
-            free(gs_initData.argvOrig[i]);
-            // gs_initData.argv[i] normally points to the same data
+            free(argv[i]);
         }
 
-        wxDELETEA(gs_initData.argvOrig);
-        wxDELETEA(gs_initData.argv);
-        gs_initData.argcOrig = gs_initData.argc = 0;
+        wxDELETEA(argv);
+        argc = 0;
     }
 }
 
@@ -339,11 +362,12 @@ bool wxEntryStart(int& argc, wxChar **argv)
 // we provide a wxEntryStart() wrapper taking "char *" pointer too
 bool wxEntryStart(int& argc, char **argv)
 {
-    ConvertArgsToUnicode(argc, argv);
+    auto& initData = wxInitData::Get();
+    initData.Initialize(argc, argv);
 
-    if ( !wxEntryStart(gs_initData.argc, gs_initData.argv) )
+    if ( !wxEntryStart(initData.argc, initData.argv) )
     {
-        FreeConvertedArgs();
+        initData.Free();
 
         return false;
     }
@@ -378,7 +402,7 @@ static void DoCommonPostCleanup()
 
     // we can't do this in wxApp itself because it doesn't know if argv had
     // been allocated
-    FreeConvertedArgs();
+    wxInitData::Get().Free();
 
     // use Set(nullptr) and not Get() to avoid creating a message output object on
     // demand when we just want to delete it
@@ -401,12 +425,7 @@ static void DoCommonPostCleanup()
 #endif // wxUSE_LOG
 }
 
-// for MSW the real wxEntryCleanup() is defined in msw/main.cpp
-#ifndef __WINDOWS__
-    #define wxEntryCleanupReal wxEntryCleanup
-#endif // !__WINDOWS__
-
-void wxEntryCleanupReal()
+void wxEntryCleanup()
 {
     DoCommonPreCleanup();
 
@@ -478,9 +497,10 @@ int wxEntryReal(int& argc, wxChar **argv)
 // as with wxEntryStart, we provide an ANSI wrapper
 int wxEntry(int& argc, char **argv)
 {
-    ConvertArgsToUnicode(argc, argv);
+    auto& initData = wxInitData::Get();
+    initData.Initialize(argc, argv);
 
-    return wxEntry(gs_initData.argc, gs_initData.argv);
+    return wxEntry(initData.argc, initData.argv);
 }
 
 // ----------------------------------------------------------------------------
@@ -495,7 +515,7 @@ bool wxInitialize()
 
 bool wxInitialize(int& argc, wxChar **argv)
 {
-    if ( wxAtomicInc(gs_initData.nInitCount) != 1 )
+    if ( wxAtomicInc(gs_nInitCount) != 1 )
     {
         // already initialized
         return true;
@@ -506,7 +526,7 @@ bool wxInitialize(int& argc, wxChar **argv)
 
 bool wxInitialize(int& argc, char **argv)
 {
-    if ( wxAtomicInc(gs_initData.nInitCount) != 1 )
+    if ( wxAtomicInc(gs_nInitCount) != 1 )
     {
         // already initialized
         return true;
@@ -517,7 +537,7 @@ bool wxInitialize(int& argc, char **argv)
 
 void wxUninitialize()
 {
-    if ( wxAtomicDec(gs_initData.nInitCount) != 0 )
+    if ( wxAtomicDec(gs_nInitCount) != 0 )
         return;
 
     wxEntryCleanup();

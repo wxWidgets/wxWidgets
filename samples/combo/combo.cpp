@@ -209,7 +209,7 @@ public:
         else if ( item == 11 )
             penStyle = wxPENSTYLE_VERTICAL_HATCH;
 
-        wxPen pen( dc.GetTextForeground(), 3, penStyle );
+        wxPen pen( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT), 3, penStyle );
 
         // Get text colour as pen colour
         dc.SetPen( pen );
@@ -243,7 +243,8 @@ public:
         }
 
         // Otherwise, draw every other background with different colour.
-        wxColour bgCol(240,240,250);
+        wxColour bgCol = wxSystemSettings::SelectLightDark(wxColour(240,240,250), wxColour(48,48,64));
+
         dc.SetBrush(wxBrush(bgCol));
         dc.SetPen(wxPen(bgCol));
         dc.DrawRectangle(rect);
@@ -259,7 +260,6 @@ public:
     {
         return -1; // default - will be measured from text width
     }
-
 };
 
 
@@ -893,7 +893,7 @@ MyFrame::MyFrame(const wxString& title)
     comboCustom->SetMainControl(cbox);
     comboCustom->Create(panel, wxID_ANY, wxEmptyString);
     cbox->Create(comboCustom, wxID_ANY, "Checkbox as main control");
-    cbox->SetBackgroundColour(*wxWHITE);
+    cbox->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
     comboCustom->SetPopupControl(new ListViewComboPopup());
 
@@ -974,11 +974,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer = new wxStaticBoxSizer(new wxStaticBox(dlg,wxID_ANY," wxOwnerDrawnComboBox "),
                                       wxVERTICAL);
 
-    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+    groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY,
                      "Writable, with margins, sorted:"),
                      wxSizerFlags().Expand().Border(wxRIGHT, border) );
 
-    odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
+    odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                                    wxDefaultPosition, wxDefaultSize,
                                    m_arrItems,
                                    wxCB_SORT // wxNO_BORDER|wxCB_READONLY
@@ -993,11 +993,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     //
     // Readonly ODComboBox
-    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+    groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,
                      "Read-only, big font:"),
                      wxSizerFlags().Border(wxRIGHT, border) );
 
-    odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
+    odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                                    wxDefaultPosition, wxDefaultSize,
                                    m_arrItems,
                                    wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
@@ -1012,10 +1012,10 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     //
     // Disabled read-only ODComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Read-only disabled:"),
+    groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,"Read-only disabled:"),
                    wxSizerFlags().Border(wxRIGHT, border) );
 
-    odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
+    odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                                      wxDefaultPosition, wxDefaultSize,
                                      m_arrItems,
                                      wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
@@ -1027,10 +1027,10 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer->Add( odc, wxSizerFlags(3).Expand().Border(wxALL, border) );
 
     // Disabled ODComboBox
-    groupSizer->Add(new wxStaticText(dlg, wxID_ANY, "Disabled:"),
+    groupSizer->Add(new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY, "Disabled:"),
         wxSizerFlags().Border(wxRIGHT, border));
 
-    odc = new wxOwnerDrawnComboBox(dlg, wxID_ANY, wxEmptyString,
+    odc = new wxOwnerDrawnComboBox(groupSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, m_arrItems);
 
     odc->SetValue("Dot Dash");
@@ -1047,11 +1047,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     //
     // wxComboBox
     //
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,
+    groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,
                      "Writable, with margins, sorted:"),
                      wxSizerFlags().Expand().Border(wxRIGHT, border) );
 
-    cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
+    cb = new wxComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
                         m_arrItems,
                         wxCB_SORT // wxNO_BORDER|wxCB_READONLY
@@ -1066,11 +1066,11 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     //
     // Readonly wxComboBox
-    groupSizer->Add( new wxStaticText(dlg, wxID_ANY,
+    groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY,
                      "Read-only, big font:"),
                      wxSizerFlags().Border(wxRIGHT, border) );
 
-    cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
+    cb = new wxComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
                         m_arrItems,
                         wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
@@ -1084,10 +1084,10 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     //
     // Disabled read-only wxComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Read-only disabled:"),
+    groupSizer->Add( new wxStaticText(groupSizer->GetStaticBox(),wxID_ANY,"Read-only disabled:"),
                    wxSizerFlags().Border(wxRIGHT, border) );
 
-    cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
+    cb = new wxComboBox(groupSizer->GetStaticBox(),wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
                         m_arrItems,
                         wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
@@ -1100,10 +1100,10 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
 
     //
     // Disabled wxComboBox
-    groupSizer->Add(new wxStaticText(dlg, wxID_ANY, "Disabled:"),
+    groupSizer->Add(new wxStaticText(groupSizer->GetStaticBox(), wxID_ANY, "Disabled:"),
         wxSizerFlags().Border(wxRIGHT, border));
 
-    cb = new wxComboBox(dlg, wxID_ANY, wxEmptyString,
+    cb = new wxComboBox(groupSizer->GetStaticBox(), wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, m_arrItems);
 
     cb->SetValue("Dot Dash");

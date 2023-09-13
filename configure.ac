@@ -4839,7 +4839,7 @@ else
                             ])
             ])
 
-            dnl check also for dlerror()
+            dnl check also for some optional functions which we may use
             if test "$HAVE_DL_FUNCS" = 1; then
                 AC_CHECK_FUNCS(dladdr,
                     AC_DEFINE(HAVE_DLADDR),
@@ -4851,6 +4851,8 @@ else
                             ])
                     ]
                 )
+
+                AC_CHECK_FUNCS(dl_iterate_phdr)
             fi
         fi
 

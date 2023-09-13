@@ -57,14 +57,7 @@ include(build/cmake/install.cmake)
 # Determine minimum required OS at runtime
 set(wxREQUIRED_OS_DESC "${CMAKE_SYSTEM_NAME} ${CMAKE_SYSTEM_PROCESSOR}")
 if(MSVC OR MINGW OR CYGWIN)
-    # Determine based on used toolkit
-    if(MINGW OR CYGWIN OR (MSVC_VERSION LESS 1700) OR (CMAKE_VS_PLATFORM_TOOLSET MATCHES "_xp$") )
-        # Visual Studio < 2012 and MinGW always create XP compatible binaries
-        # XP Toolset is required since VS 2012
-        set(wxREQUIRED_OS_DESC "Windows XP / Windows Server 2003")
-    else()
-        set(wxREQUIRED_OS_DESC "Windows Vista / Windows Server 2008")
-    endif()
+    set(wxREQUIRED_OS_DESC "Windows 7 / Windows Server 2008")
     if(wxPLATFORM_ARCH)
         wx_string_append(wxREQUIRED_OS_DESC " (${wxPLATFORM_ARCH} Edition)")
     endif()

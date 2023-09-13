@@ -3773,6 +3773,9 @@ public:
               applications (and probably avoid using it under the other
               platforms without good reason as well).
 
+        @note This function does nothing when using wxGTK with Wayland because
+              Wayland intentionally doesn't provide the required functionality.
+
         @param x
             The new x position for the cursor.
         @param y

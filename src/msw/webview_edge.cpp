@@ -268,6 +268,22 @@ public:
 #endif
     }
 
+    bool SetProxy(const wxString& proxy)
+    {
+#ifdef __VISUALC__
+        m_webViewEnvironmentOptions->put_AdditionalBrowserArguments(
+            wxString::Format("--proxy-server=\"%s\"", proxy).wc_str()
+        );
+        return true;
+#else
+        wxUnusedVar(proxy);
+
+        wxLogError(_("This program was compiled without support for setting Edge proxy."));
+
+        return false;
+#endif
+    }
+
     virtual void* GetNativeConfiguration() const override
     {
         return m_webViewEnvironmentOptions;
@@ -1357,6 +1373,16 @@ wxString wxWebViewEdge::GetUserAgent() const
     return wxString{};
 }
 
+
+bool wxWebViewEdge::SetProxy(const wxString& proxy)
+{
+    wxCHECK_MSG(!m_impl->m_webViewController, false,
+                "Proxy must be set before calling Create()");
+
+    auto configImpl = static_cast<wxWebViewConfigurationImplEdge*>(m_impl->m_config.GetImpl());
+
+    return configImpl->SetProxy(proxy);
+}
 
 void* wxWebViewEdge::GetNativeBackend() const
 {

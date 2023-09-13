@@ -690,5 +690,14 @@ TEST_CASE("StdString::View", "[stdstring]")
     std::string_view strViewInvalidUTF(strInvalidUTF);
 
     CHECK( "" == wxString::FromUTF8(strViewInvalidUTF) );
+
+    /* Ensure we don't clobber comparisons on base types */
+    std::string_view view = "abc";
+    const char *str = "abc";
+    CHECK( view == str );
+
+    std::wstring_view wview = L"abc";
+    const wchar_t *wstr = L"abc";
+    CHECK( wview == wstr );
 }
 #endif // wxHAS_STD_STRING_VIEW

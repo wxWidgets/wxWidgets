@@ -20,13 +20,25 @@ aaaaaaaa ICON "sample.ico"
 // this icon is used with wxFrame::SetIcon()
 sample ICON "sample.ico"
 
-// set this to 1 if you don't want to use manifest resource provided by wxWidgets.
-// An aplication manifest is needed for the application UI to look properly and other
-// things - see docs/msw/install.md for more information)
+// Note that wxUSE_RC_MANIFEST needs to be defined to 1 to embed the wx-defined
+// manifest, this is not done by default to avoid conflicts with the manifest
+// embedded by MSVS projects.
+//
+// An application manifest is needed for the application UI to look properly
+// and for DPI awareness, so make sure that you define wxUSE_RC_MANIFEST=1 to
+// include it from here or add the manifest at the build system level.
+//
+// See "Using a Manifest" section of docs/msw/install.md for more information.
+
+// Set this to 1 if you don't want to use manifest resource provided by
+// wxWidgets but wxUSE_RC_MANIFEST is somehow defined elsewhere.
 #define wxUSE_NO_MANIFEST 0
 
-// to enable full High DPI suppport, we need to opt in into Per-Monitor (V2) DPI awareness,
-// see section Issues/MSW in programming guide High DPI Support in wxWidgets
+// When embedding manifest here, predefine this symbol to enable full High DPI
+// support, see MSW subsection of "Platform-Specific Build Issues" section in
+// the "High DPI Support" guide in wxWidgets manual for more details.
+//
+// As mentioned above, this has no effect unless wxUSE_RC_MANIFEST=1.
 #ifndef wxUSE_DPI_AWARE_MANIFEST
 #define wxUSE_DPI_AWARE_MANIFEST 2
 #endif

@@ -371,11 +371,7 @@ if(wxUSE_GUI)
         endif()
     endif()
      if(MSVC) # match setup.h
-        if(MSVC_VERSION LESS 1600)
-            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
-        else()
-            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D ${wxUSE_GRAPHICS_CONTEXT})
-        endif()
+        wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D ${wxUSE_GRAPHICS_CONTEXT})
      endif()
 
     # WXQT checks

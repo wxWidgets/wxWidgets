@@ -1212,6 +1212,20 @@ public:
     virtual wxString GetUserAgent() const;
 
     /**
+        Set the proxy to use for all requests.
+
+        The @a proxy string must be a valid proxy specification, e.g. @c
+        http://my.local.proxy.corp:8080
+
+        @note Currently this function is only implemented in WebKit2 and Edge
+            backends and must be called before Create() for the latter one.
+
+        @return @true if proxy was set successfully or @false if it failed,
+            e.g. because this is not supported by the currently used backend.
+     */
+    virtual bool SetProxy(const wxString& proxy);
+
+    /**
         @name Scripting
     */
     /**

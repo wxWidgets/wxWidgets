@@ -63,7 +63,7 @@
 static int gs_htmlcfid = 0;
 static int gs_pngcfid = 0;
 
-#ifdef WXWIN_COMPATIBILITY_3_2
+#if WXWIN_COMPATIBILITY_3_2
 
 static bool gs_wxClipboardIsOpen = false;
 
