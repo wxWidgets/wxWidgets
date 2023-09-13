@@ -29,9 +29,9 @@
 
 static wxImage ConvertImage( QImage qtImage )
 {
-    bool hasAlpha = qtImage.hasAlphaChannel();
+    const bool hasAlpha = qtImage.hasAlphaChannel();
 
-    int numPixels = qtImage.height() * qtImage.width();
+    const int numPixels = qtImage.height() * qtImage.width();
 
     // Convert monochrome bitmaps to RGB32 so we don't have to do any
     // bit twiddling to get at pixels, and the same code below should
@@ -48,11 +48,11 @@ static wxImage ConvertImage( QImage qtImage )
 
     unsigned char *startAlpha = alpha;
 
-    for (int y = 0; y < qtImage.height(); y++)
+    for (int y = 0; y < qtImage.height(); ++y)
     {
         QRgb *line = (QRgb*)qtImage.scanLine(y);
 
-        for (int x = 0; x < qtImage.width(); x++)
+        for (int x = 0; x < qtImage.width(); ++x)
         {
             QRgb colour = line[x];
 
@@ -70,16 +70,14 @@ static wxImage ConvertImage( QImage qtImage )
             data += 3;
         }
     }
-    if (hasAlpha)
-        return wxImage(wxQtConvertSize(qtImage.size()), startData, startAlpha);
-    else
-        return wxImage(wxQtConvertSize(qtImage.size()), startData);
+
+    return wxImage(wxQtConvertSize(qtImage.size()), startData, startAlpha);
 }
 
 static QImage ConvertImage( const wxImage &image, wxMask** mask = nullptr  )
 {
-    bool hasAlpha = image.HasAlpha();
-    bool hasMask = image.HasMask() && mask;
+    const bool hasAlpha = image.HasAlpha();
+    const bool hasMask = image.HasMask() && mask;
     QImage qtImage( wxQtConvertSize( image.GetSize() ),
                    ( hasAlpha ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32 ) );
 
@@ -99,9 +97,9 @@ static QImage ConvertImage( const wxImage &image, wxMask** mask = nullptr  )
         qtMask.fill(Qt::color0); // filled with 0s
     }
 
-    for (int y = 0; y < image.GetHeight(); y++)
+    for (int y = 0; y < image.GetHeight(); ++y)
     {
-        for (int x = 0; x < image.GetWidth(); x++)
+        for (int x = 0; x < image.GetWidth(); ++x)
         {
             const unsigned char a = hasAlpha ? alpha[0] : 255;
             const unsigned char r = data[0];
