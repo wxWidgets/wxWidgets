@@ -34,6 +34,7 @@ EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_STC = @EXTRALIBS_STC@
 EXTRALIBS_WEBVIEW = @EXTRALIBS_WEBVIEW@
+EXTRALDFLAGS_WEBVIEW = @EXTRALDFLAGS_WEBVIEW@
 WX_CPPFLAGS = @WX_CPPFLAGS@
 WX_CXXFLAGS = @WX_CXXFLAGS@
 WX_LDFLAGS = @WX_LDFLAGS@
@@ -55,32 +56,15 @@ WEBVIEW_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 WEBVIEW_OBJECTS =  \
 	$(__webview___win32rc) \
 	webview_webview.o
-WEBVIEW_CHROMIUM_HELPER_CXXFLAGS = -I$(top_srcdir)//3rdparty/cef $(CPPFLAGS) \
+WEBVIEW_HELPER_CXXFLAGS = -I$(top_srcdir)//3rdparty/cef $(CPPFLAGS) \
 	$(CXXFLAGS)
-WEBVIEW_CHROMIUM_HELPER_OBJECTS =  \
-	webview_chromium_helper_cef_process_helper.o
-WEBVIEW_CHROMIUM_CXXFLAGS = $(WX_CPPFLAGS) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
-	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
-	-I$(srcdir)/../../samples -DwxWEBVIEW_SAMPLE_CHROMIUM \
-	-I$(top_srcdir)//3rdparty/cef $(WX_CXXFLAGS) $(SAMPLES_CXXFLAGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
-WEBVIEW_CHROMIUM_OBJECTS =  \
-	webview_chromium_webview.o \
-	$(__webview_chromium___win32rc)
+WEBVIEW_HELPER_OBJECTS =  \
+	webview_helper_cef_process_helper.o
 
 ### Conditionally set variables: ###
 
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
-COND_PLATFORM_MACOSX_1_LIBCEF_LINK = -F$(top_srcdir)//3rdparty/cef/Release/ \
-	-framework Chromium\ Embedded\ Framework
-@COND_PLATFORM_MACOSX_1@LIBCEF_LINK = $(COND_PLATFORM_MACOSX_1_LIBCEF_LINK)
-COND_PLATFORM_UNIX_1_LIBCEF_LINK = -L$(top_srcdir)//3rdparty/cef/Release/ \
-	-Wl,--no-as-needed -lcef -Wl,--as-needed
-@COND_PLATFORM_UNIX_1@LIBCEF_LINK = $(COND_PLATFORM_UNIX_1_LIBCEF_LINK)
-@COND_PLATFORM_WIN32_1@LIBCEF_LINK = \
-@COND_PLATFORM_WIN32_1@	$(top_srcdir)//3rdparty/cef/Release/libcef/libcef.lib
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -91,15 +75,30 @@ COND_PLATFORM_UNIX_1_LIBCEF_LINK = -L$(top_srcdir)//3rdparty/cef/Release/ \
 @COND_MONOLITHIC_1@	$(EXTRALIBS_XML) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_1 = --define wxDEBUG_LEVEL=0
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_1 = --define wxNO_EXCEPTIONS
+@COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
+@COND_USE_RTTI_0@__RTTI_DEFINE_p_1 = --define wxNO_RTTI
+@COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
+@COND_USE_THREADS_0@__THREAD_DEFINE_p_1 = --define wxNO_THREADS
+@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
+@COND_SHARED_1@__DLLFLAG_p_1 = --define WXUSINGDLL
+@COND_PLATFORM_WIN32_1@__WIN32_DPI_MANIFEST_p = \
+@COND_PLATFORM_WIN32_1@	--define \
+@COND_PLATFORM_WIN32_1@	wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)
 COND_PLATFORM_OS2_1___webview___os2_emxbindcmd = $(NM) webview$(EXEEXT) | if \
 	grep -q pmwin.763 ; then emxbind -ep webview$(EXEEXT) ; fi
 @COND_PLATFORM_OS2_1@__webview___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___webview___os2_emxbindcmd)
+@COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
+@COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__webview___win32rc = webview_sample_rc.o
 @COND_PLATFORM_MACOSX_1@__webview_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= webview.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__webview_bundle___depname = webview_bundle
-@COND_TOOLKIT_COCOA@____webview_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	$(__webview_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_MAC@____webview_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_MAC@	$(__webview_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_CARBON@____webview_BUNDLE_TGT_REF_DEP \
@@ -108,63 +107,8 @@ COND_PLATFORM_OS2_1___webview___os2_emxbindcmd = $(NM) webview$(EXEEXT) | if \
 @COND_TOOLKIT_OSX_COCOA@	= $(__webview_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_OSX_IPHONE@____webview_BUNDLE_TGT_REF_DEP \
 @COND_TOOLKIT_OSX_IPHONE@	= $(__webview_app_Contents_PkgInfo___depname)
-@COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p \
-@COND_MONOLITHIC_1_USE_STC_1@	= $(__LIB_SCINTILLA_p)
-@COND_MONOLITHIC_1_USE_STC_1@__LIB_LEXILLA_IF_MONO_p = $(__LIB_LEXILLA_p)
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__webview_chromium_helper___depname \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	webview_chromium_helper$(EXEEXT)
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__fix_cef_link___depname \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= fix_cef_link
-@COND_USE_WEBVIEW_CHROMIUM_1@__webview_chromium___depname \
-@COND_USE_WEBVIEW_CHROMIUM_1@	= webview_chromium$(EXEEXT)
-COND_PLATFORM_OS2_1___webview_chromium___os2_emxbindcmd = $(NM) \
-	webview_chromium$(EXEEXT) | if grep -q pmwin.763 ; then emxbind -ep \
-	webview_chromium$(EXEEXT) ; fi
-@COND_PLATFORM_OS2_1@__webview_chromium___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___webview_chromium___os2_emxbindcmd)
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__webview_chromium_app_Contents_PkgInfo___depname \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	webview_chromium.app/Contents/PkgInfo
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__webview_chromium_bundle___depname \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= webview_chromium_bundle
-@COND_TOOLKIT_COCOA@____webview_chromium_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_COCOA@	= \
-@COND_TOOLKIT_COCOA@	$(__webview_chromium_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_MAC@____webview_chromium_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_MAC@	= $(__webview_chromium_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_OSX_CARBON@____webview_chromium_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_OSX_CARBON@	= \
-@COND_TOOLKIT_OSX_CARBON@	$(__webview_chromium_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_OSX_COCOA@____webview_chromium_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_OSX_COCOA@	= \
-@COND_TOOLKIT_OSX_COCOA@	$(__webview_chromium_app_Contents_PkgInfo___depname)
-@COND_TOOLKIT_OSX_IPHONE@____webview_chromium_BUNDLE_TGT_REF_DEP \
-@COND_TOOLKIT_OSX_IPHONE@	= \
-@COND_TOOLKIT_OSX_IPHONE@	$(__webview_chromium_app_Contents_PkgInfo___depname)
-@COND_PLATFORM_WIN32_1@__webview_chromium___win32rc \
-@COND_PLATFORM_WIN32_1@	= webview_chromium_sample_rc.o
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__package___depname \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= package
-@COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p_1 \
-@COND_MONOLITHIC_1_USE_STC_1@	= $(__LIB_SCINTILLA_p)
-@COND_MONOLITHIC_1_USE_STC_1@__LIB_LEXILLA_IF_MONO_p_1 = $(__LIB_LEXILLA_p)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
-@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
-@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_0 = --define wxDEBUG_LEVEL=0
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_0 = --define wxNO_EXCEPTIONS
-@COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
-@COND_USE_RTTI_0@__RTTI_DEFINE_p_0 = --define wxNO_RTTI
-@COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
-@COND_USE_THREADS_0@__THREAD_DEFINE_p_0 = --define wxNO_THREADS
-@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
-@COND_SHARED_1@__DLLFLAG_p_0 = --define WXUSINGDLL
-@COND_PLATFORM_WIN32_1@__WIN32_DPI_MANIFEST_p = \
-@COND_PLATFORM_WIN32_1@	--define \
-@COND_PLATFORM_WIN32_1@	wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST)
-@COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
-@COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+@COND_TOOLKIT_COCOA@____webview_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	$(__webview_app_Contents_PkgInfo___depname)
 COND_MONOLITHIC_0_USE_WEBVIEW_1___WXLIB_WEBVIEW_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0_USE_WEBVIEW_1@__WXLIB_WEBVIEW_p = $(COND_MONOLITHIC_0_USE_WEBVIEW_1___WXLIB_WEBVIEW_p)
@@ -177,11 +121,14 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__package___depname \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= package
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
-@COND_USE_STC_1@__LIB_LEXILLA_p = \
-@COND_USE_STC_1@	-lwxlexilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p \
+@COND_MONOLITHIC_1_USE_STC_1@	= $(__LIB_SCINTILLA_p)
+@COND_MONOLITHIC_1_USE_STC_1@__LIB_LEXILLA_IF_MONO_p = $(__LIB_LEXILLA_p)
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@__LIB_TIFF_p \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	-lwxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -197,21 +144,18 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_wxUSE_REGEX_builtin@	-lwxregexu$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_wxUSE_EXPAT_builtin@__LIB_EXPAT_p = \
 @COND_wxUSE_EXPAT_builtin@	-lwxexpat$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_PLATFORM_MACOSX_1@__LIBCEF_WRAPPER_PATH_p = \
-@COND_PLATFORM_MACOSX_1@	-L$(top_srcdir)//3rdparty/cef/libcef_dll_wrapper/
-@COND_PLATFORM_UNIX_1@__LIBCEF_WRAPPER_PATH_p = \
-@COND_PLATFORM_UNIX_1@	-L$(top_srcdir)//3rdparty/cef/libcef_dll_wrapper/
-@COND_PLATFORM_WIN32_1@__LIBCEF_WRAPPER_PATH_p = \
-@COND_PLATFORM_WIN32_1@	-L$(top_srcdir)//3rdparty/cef/libcef_dll_wrapper/Release/
-@COND_PLATFORM_MACOSX_1@__LIBCEF_DLL_WRAPPER_NAME_p = -lcef_dll_wrapper
-@COND_PLATFORM_UNIX_1@__LIBCEF_DLL_WRAPPER_NAME_p = -lcef_dll_wrapper
-@COND_PLATFORM_WIN32_1@__LIBCEF_DLL_WRAPPER_NAME_p = -llibcef_dll_wrapper
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__webview_helper___depname \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= webview_helper$(EXEEXT)
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__fix_cef_link___depname \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= fix_cef_link
 @COND_USE_STC_1@__LIB_SCINTILLA_p = \
 @COND_USE_STC_1@	-lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_USE_STC_1@__LIB_LEXILLA_p = \
+@COND_USE_STC_1@	-lwxlexilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 
 ### Targets: ###
 
-all: webview$(EXEEXT) $(__webview_bundle___depname) data $(__webview_chromium_helper___depname) $(__fix_cef_link___depname) $(__webview_chromium___depname) $(__webview_chromium_bundle___depname) $(__package___depname)
+all: webview$(EXEEXT) $(__webview_bundle___depname) $(__package___depname) data $(__webview_helper___depname) $(__fix_cef_link___depname)
 
 install: 
 
@@ -224,16 +168,14 @@ clean:
 	rm -f ./*.o
 	rm -f webview$(EXEEXT)
 	rm -rf webview.app
-	rm -f webview_chromium_helper$(EXEEXT)
-	rm -rf webview_chromium_helper.app
-	rm -f webview_chromium$(EXEEXT)
-	rm -rf webview_chromium.app
+	rm -f webview_helper$(EXEEXT)
+	rm -rf webview_helper.app
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
-	$(CXX) -o $@ $(WEBVIEW_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_WEBVIEW_p) $(EXTRALIBS_WEBVIEW) $(__WXLIB_STC_p) $(EXTRALIBS_STC) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__LIB_SCINTILLA_p) $(__LIB_LEXILLA_p) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(WEBVIEW_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(EXTRALDFLAGS_WEBVIEW)    $(EXTRALDFLAGS_WEBVIEW) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_WEBVIEW_p) $(EXTRALIBS_WEBVIEW) $(__WXLIB_STC_p) $(EXTRALIBS_STC) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__LIB_SCINTILLA_p) $(__LIB_LEXILLA_p) $(EXTRALIBS_WEBVIEW) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	$(__webview___os2_emxbindcmd)
 
 @COND_PLATFORM_MACOSX_1@webview.app/Contents/PkgInfo: webview$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
@@ -263,6 +205,24 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 
 @COND_PLATFORM_MACOSX_1@webview_bundle: $(____webview_BUNDLE_TGT_REF_DEP)
 
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@package: $(__webview_helper___depname)
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview.app/Contents/Frameworks/
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview.app/Contents/Frameworks/webview\ Helper.app
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf $(top_srcdir)//3rdparty/cef/Release/Chromium\ Embedded\ Framework.framework webview.app/Contents/Frameworks/
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_helper.app/ webview.app/Contents/Frameworks/webview\ Helper.app/
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	for name in Alerts GPU Plugin Renderer; do \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	helper_name="webview Helper ($$name)"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	helper_contents="webview.app/Contents/Frameworks/$$helper_name.app/Contents"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p "$$helper_contents/MacOS"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	ln -fs "../../../webview Helper.app/Contents/MacOS/webview Helper" "$$helper_contents/MacOS/$$helper_name"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/$$helper_name/"  \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/$$helper_name/" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in > "$$helper_contents/Info.plist"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp webview_helper.app/Contents/PkgInfo "$$helper_contents"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_helper.app/Contents/Resources "$$helper_contents"; \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	done
+
 data: 
 	@mkdir -p .
 	@for f in handler_advanced.html; do \
@@ -275,92 +235,36 @@ data:
 	esac; \
 	done
 
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@webview_chromium_helper$(EXEEXT): $(WEBVIEW_CHROMIUM_HELPER_OBJECTS)
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(CXX) -o $@ $(WEBVIEW_CHROMIUM_HELPER_OBJECTS)  $(__LIBCEF_WRAPPER_PATH_p) $(LIBCEF_LINK) $(LDFLAGS)  $(__LIBCEF_DLL_WRAPPER_NAME_p) $(LIBS)
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@webview_helper$(EXEEXT): $(WEBVIEW_HELPER_OBJECTS)
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(CXX) -o $@ $(WEBVIEW_HELPER_OBJECTS)  $(EXTRALDFLAGS_WEBVIEW) $(LDFLAGS)  $(EXTRALIBS_WEBVIEW) $(LIBS)
 
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@fix_cef_link: $(__webview_chromium_helper___depname)
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium_helper.app
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium_helper.app/Contents/MacOS
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium_helper.app/Contents/Resources
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/webview_chromium Helper/"  \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/webview_chromium Helper/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in >webview_chromium_helper.app/Contents/Info.plist
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	/bin/echo "APPL????" >webview_chromium_helper.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@fix_cef_link: $(__webview_helper___depname)
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_helper.app
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_helper.app/Contents/MacOS
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_helper.app/Contents/Resources
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/webview Helper/"  \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/webview Helper/" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in >webview_helper.app/Contents/Info.plist
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	/bin/echo "APPL????" >webview_helper.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	install_name_tool -change \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	"@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	webview_chromium_helper
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -f webview_chromium_helper webview_chromium_helper.app/Contents/MacOS/webview_chromium\ Helper
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -f $(top_srcdir)//src/osx/carbon/wxmac.icns webview_chromium_helper.app/Contents/Resources/wxmac.icns
-
-@COND_USE_WEBVIEW_CHROMIUM_1@webview_chromium$(EXEEXT): $(WEBVIEW_CHROMIUM_OBJECTS) $(__webview_chromium___win32rc)
-@COND_USE_WEBVIEW_CHROMIUM_1@	$(CXX) -o $@ $(WEBVIEW_CHROMIUM_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) -Wl,-rpath,. $(__LIBCEF_WRAPPER_PATH_p) $(LIBCEF_LINK) $(LDFLAGS)  $(WX_LDFLAGS) -lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webviewchromium-$(WX_RELEASE)$(HOST_SUFFIX)  $(__WXLIB_WEBVIEW_p) $(EXTRALIBS_WEBVIEW) $(__WXLIB_STC_p) $(EXTRALIBS_STC) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__LIBCEF_DLL_WRAPPER_NAME_p) $(__LIB_SCINTILLA_p) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p_1) $(__LIB_LEXILLA_IF_MONO_p_1) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
-@COND_USE_WEBVIEW_CHROMIUM_1@	$(__webview_chromium___os2_emxbindcmd)
-
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@webview_chromium.app/Contents/PkgInfo: $(__webview_chromium___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents/MacOS
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents/Resources
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.webview_chromium/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/webview_chromium/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/webview_chromium/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2023 wxWidgets/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/webview_chromium version $(WX_VERSION), (c) 2002-2023 wxWidgets/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2023 wxWidgets/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >webview_chromium.app/Contents/Info.plist
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	/bin/echo "APPL????" >webview_chromium.app/Contents/PkgInfo
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	ln -f webview_chromium$(EXEEXT) webview_chromium.app/Contents/MacOS/webview_chromium
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns webview_chromium.app/Contents/Resources/wxmac.icns
-
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@webview_chromium_bundle: $(____webview_chromium_BUNDLE_TGT_REF_DEP)
-
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@package: $(__webview_chromium_helper___depname)
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf $(top_srcdir)//3rdparty/cef/Release//Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	for name in Alerts GPU Plugin Renderer; do \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	helper_name="webview_chromium Helper ($$name)"; \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	helper_contents="webview_chromium.app/Contents/Frameworks/$$helper_name.app/Contents"; \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p "$$helper_contents/MacOS"; \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	ln -fs "../../../webview_chromium Helper.app/Contents/MacOS/webview_chromium Helper" "$$helper_contents/MacOS/$$helper_name"; \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/$$helper_name/"  \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/$$helper_name/" \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in > "$$helper_contents/Info.plist"; \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp webview_chromium_helper.app/Contents/PkgInfo "$$helper_contents"; \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_chromium_helper.app/Contents/Resources "$$helper_contents"; \
-@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	done
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	webview_helper
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -f webview_helper webview_helper.app/Contents/MacOS/webview\ Helper
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -f $(top_srcdir)//src/osx/carbon/wxmac.icns webview_helper.app/Contents/Resources/wxmac.icns
 
 webview_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1)  $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) --include-dir $(srcdir) $(__DLLFLAG_p_1) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 webview_webview.o: $(srcdir)/webview.cpp
 	$(CXXC) -c -o $@ $(WEBVIEW_CXXFLAGS) $(srcdir)/webview.cpp
 
-webview_chromium_helper_cef_process_helper.o: $(srcdir)/cef_process_helper.cpp
-	$(CXXC) -c -o $@ $(WEBVIEW_CHROMIUM_HELPER_CXXFLAGS) $(srcdir)/cef_process_helper.cpp
-
-webview_chromium_webview.o: $(srcdir)/webview.cpp
-	$(CXXC) -c -o $@ $(WEBVIEW_CHROMIUM_CXXFLAGS) $(srcdir)/webview.cpp
-
-webview_chromium_sample_rc.o: $(srcdir)/../sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define wxWEBVIEW_SAMPLE_CHROMIUM --include-dir $(top_srcdir)//3rdparty/cef
+webview_helper_cef_process_helper.o: $(srcdir)/cef_process_helper.cpp
+	$(CXXC) -c -o $@ $(WEBVIEW_HELPER_CXXFLAGS) $(srcdir)/cef_process_helper.cpp
 
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean webview_bundle data \
-	webview_chromium_bundle
+.PHONY: all install uninstall clean distclean webview_bundle data

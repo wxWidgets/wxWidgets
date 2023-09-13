@@ -68,7 +68,7 @@ constexpr const char* TRACE_CEF = "cef";
 
 } // anonymous namespace
 
-extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 bool wxWebViewChromium::ms_cefInitialized = false;
 
@@ -1452,7 +1452,7 @@ wxWebViewChromiumEntry gs_chromiumEntryHook;
 
 } // anonymous namespace
 
-class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewFactoryChromium : public wxWebViewFactory
+class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryChromium : public wxWebViewFactory
 {
 public:
     virtual wxWebView* Create() override { return new wxWebViewChromium; }

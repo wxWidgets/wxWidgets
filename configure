@@ -676,7 +676,6 @@ COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
 COND_USE_XML_1
 COND_USE_WEBVIEW_WEBKIT2_1
-COND_USE_WEBVIEW_CHROMIUM_1
 COND_USE_THREADS_1
 COND_USE_THREADS_0
 COND_USE_STC_1
@@ -776,7 +775,6 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
-COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1
 COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_MACOSX_1
 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1
@@ -807,7 +805,6 @@ COND_MONOLITHIC_0_SHARED_1_USE_STC_1
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1_USE_XML_1
 COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1
-COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1
@@ -821,7 +818,6 @@ COND_MONOLITHIC_0_SHARED_0_USE_STC_1
 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1
 COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1
-COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1
@@ -902,6 +898,7 @@ TOOLKIT_LOWERCASE
 DEBUG_FLAG
 DEBUG_INFO
 WITH_PLUGIN_SDL
+EXTRALDFLAGS_WEBVIEW
 EXTRALIBS_WEBVIEW
 EXTRALIBS_STC
 EXTRALIBS_SDL
@@ -39715,6 +39712,14 @@ $as_echo "$as_me: WARNING: wxWebView Edge backend only available under MSW, igno
     fi
 
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        CEF_DIR="$srcdir/3rdparty/cef"
+        CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
+
+        EXTRALIBS_WEBVIEW="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $EXTRALIBS_WEBVIEW"
+        if test "$wxUSE_MAC" != 1; then
+                                    EXTRALDFLAGS_WEBVIEW="-L$CEF_DIR/Release -Wl,--no-as-needed -lcef -Wl,--as-needed"
+        fi
+
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CEF" >&5
 $as_echo_n "checking for CEF... " >&6; }
 if ${wx_cv_lib_cef+:} false; then :
@@ -39729,7 +39734,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
                                 old_CPPFLAGS="$CPPFLAGS"
-                CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
+                CPPFLAGS="-I$CEF_DIR $CPPFLAGS"
                 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include "include/cef_version.h"
@@ -39752,14 +39757,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
                                 if test "$wx_cv_lib_cef" = "yes"; then
                     old_LIBS="$LIBS"
 
-                    CEF_DIR="$srcdir/3rdparty/cef"
-                    CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
-
-                    if test "$wxUSE_MAC" != 1; then
-                        CEF_LIB="-L$CEF_DIR/Release -lcef"
-                    fi
-
-                    LIBS="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $CEF_LIB $LIBS"
+                    LIBS="$EXTRALDFLAGS_WEBVIEW $EXTRALIBS_WEBVIEW $LIBS"
 
                     cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -39803,6 +39801,10 @@ fi
 $as_echo "$wx_cv_lib_cef" >&6; }
 
         if test "$wx_cv_lib_cef" = "yes"; then
+                                                                        if test "$wxUSE_MAC" = 1; then
+                EXTRALIBS_WEBVIEW="-F$CEF_DIR/Release -framework Chromium\ Embedded\ Framework $EXTRALIBS_WEBVIEW"
+            fi
+
             wxUSE_WEBVIEW="yes"
             USE_WEBVIEW_CHROMIUM=1
             $as_echo "#define wxUSE_WEBVIEW_CHROMIUM 1" >>confdefs.h
@@ -41002,6 +41004,7 @@ if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
 else
     OFFICIAL_BUILD=0
 fi
+
 
 
 
@@ -42502,11 +42505,6 @@ EOF
         COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_1=""
     fi
 
-    COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1=""
-    fi
-
     COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_PROPGRID" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1=""
@@ -42570,11 +42568,6 @@ EOF
     COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_WEBVIEW" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_1=""
-    fi
-
-    COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
-        COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1="#"
@@ -42725,11 +42718,6 @@ EOF
     COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$PLATFORM_WIN32" = "x1" -a "x$SHARED" = "x0" ; then
         COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0=""
-    fi
-
-    COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$SHARED" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
-        COND_PLATFORM_MACOSX_1_SHARED_1_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
@@ -43225,11 +43213,6 @@ EOF
     COND_USE_THREADS_1="#"
     if test "x$USE_THREADS" = "x1" ; then
         COND_USE_THREADS_1=""
-    fi
-
-    COND_USE_WEBVIEW_CHROMIUM_1="#"
-    if test "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
-        COND_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_USE_WEBVIEW_WEBKIT2_1="#"

@@ -409,6 +409,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="EXTRALIBS_SDL"/>
         <option name="EXTRALIBS_STC"/>
         <option name="EXTRALIBS_WEBVIEW"/>
+        <option name="EXTRALDFLAGS_WEBVIEW"/>
         <option name="WX_CPPFLAGS"/>
         <option name="WX_CFLAGS"/>
         <option name="WX_CXXFLAGS"/>
@@ -495,6 +496,7 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc' and TOOLKIT=='MSW'">-limm32</if>
         </set>
         <set var="EXTRALIBS_WEBVIEW"/>
+        <set var="EXTRALDFLAGS_WEBVIEW"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
 
@@ -559,54 +561,8 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_OPENGL">0</set>
     </if>
 
-    <!--Specify CEF root directory here-->
-    <set var="CEF_INCLUDE_DIR">
+    <!-- Directory where CEF should be available -->
+    <set var="CEF_DIR">
         $(TOP_SRCDIR)/3rdparty/cef
     </set>
-
-    <!--specify libcef library directory-->
-    <set var="LIBCEF_PATH">
-        $(CEF_INCLUDE_DIR)/Release/
-    </set>
-
-    <!--specify libcef_dll_wrapper library directory-->
-    <set var="LIBCEF_WRAPPER_PATH">
-        <if cond="PLATFORM_WIN32=='1'">
-            $(CEF_INCLUDE_DIR)/libcef_dll_wrapper/Release/
-        </if>
-        <if cond="PLATFORM_MACOSX=='1'">
-            $(CEF_INCLUDE_DIR)/libcef_dll_wrapper/
-        </if>
-        <if cond="PLATFORM_UNIX=='1'">
-            $(CEF_INCLUDE_DIR)/libcef_dll_wrapper/
-        </if>
-    </set>
-
-    <!-- linker flags needed to link with CEF -->
-    <set var="LIBCEF_LINK">
-        <if cond="PLATFORM_WIN32=='1'">
-            $(LIBCEF_PATH)libcef/libcef.lib
-        </if>
-        <if cond="PLATFORM_MACOSX=='1'">
-            <!-- CEF is a framework and not just a shared library under Mac. -->
-            -F$(LIBCEF_PATH) -framework Chromium\ Embedded\ Framework
-        </if>
-        <if cond="PLATFORM_UNIX=='1'">
-            <!-- We need to make sure that libcef.so is loaded first. -->
-            -L$(LIBCEF_PATH) -Wl,--no-as-needed -lcef -Wl,--as-needed
-        </if>
-    </set>
-
-    <set var="LIBCEF_DLL_WRAPPER_NAME">
-        <if cond="PLATFORM_WIN32=='1'">
-            libcef_dll_wrapper
-        </if>
-        <if cond="PLATFORM_MACOSX=='1'">
-            cef_dll_wrapper
-        </if>
-        <if cond="PLATFORM_UNIX=='1'">
-            cef_dll_wrapper
-        </if>
-    </set>
-
 </makefile>

@@ -31,37 +31,57 @@
 
     __General__
 
-    The wxWebViewChromium backend is built into a separate webview_chromium
-    library which depends on the webview library.
+    When wxWebViewChromium backend is enabled, it is compiled as part of the
+    webview library which means that this library depends on CEF and all
+    applications using it must be linked with it.
 
-    When building with CMake enable wxUSE_WEBVIEW_CHROMIUM and CEF can be
-    automatically downloaded during configuration based on your platform.
-    You can also download it manually from the CEF official binaries site at
-    https://cef-builds.spotifycdn.com/index.html and then build only
-    `libcef_dll_wrapper` -- but not the `libcef` itself.
+    Currently building wxWebViewChromium is possible only with configure-based
+    build system under Unix (including macOS) and using the provided MSVS
+    project files under MSW. Notably building it using CMake does not work.
 
-    For other build systems please follow the following instructions:
+    Before enabling wxWebViewChromium you need to ensure that CEF is available:
 
-    Once you have a copy of CEF, either from compiling it yourself or using
-    prebuilt binaries, you should copy it into `wx_root/3rdparty/cef`. To run the
-    webview_chromium sample you need to copy the CEF resources into the
-    sample directory. The following files need to be copied:
+    1. Download the binaries for your platform from the CEF official site at
+    https://cef-builds.spotifycdn.com/index.html ("Minimal Distribution" is
+    sufficient)
+    2. Unpack the archive into `3rdparty/cef` directory under wxWidgets source
+    directory.
+    3. Build `libcef_dll_wrapper` using the instructions provided in the CEF
+    distribution, but, in short, just by using `cmake` to do it.
+    4. Copy the static library binary in the platform-dependent location:
+      - Under MSW, copy `libcefl_dll_wrapper.lib` file to either
+      `3rdparty/cef/Release` or `3rdparty/cef/Debug` depending on the build
+      configuration (it's recommended to build CEF wrapper in both
+      configurations and so copy the two files to both locations).
+      - Under Unix (including macOS), copy `libcef_dll_wrapper.a` file to
+      `3rdparty/cef/libcef_dll_wrapper` directory.
 
-    - All files from either `wx_root/3rdparty/cef/Debug` or
-      `wx_root/3rdparty/cef/Release` folder, depending on your build type
+    Then enable wxWebViewChromium support:
+
+    - Under MSW, set `wxUSE_WEBVIEW_CHROMIUM` to 1 in `wx/msw/setup.h`.
+    - Under Unix, add `--enable-webviewchromium` option to configure command
+    line.
+
+    Finally, build wxWidgets as usual: the resulting webview library will
+    include wxWebViewChromium.
+
+    It is recommended to build webview sample to check that everything is
+    working as expected. Under Unix, the required CEF files will be copied to
+    the sample directory as part of the build process, but under MSW you need
+    to copy them manually before running the sample: please copy
+
+    - All files from either `3rdparty/cef/Debug` or
+      `3rdparty/cef/Release` folder, depending on your build type
     - The contents of the wx_root/3rdparty/cef/Resources folder.
+
+    to the directory containing `webview` executable.
 
     Please see CEF `README.txt` for more details and also note that when
     redistributing CEF you must abide by the terms of its `LICENSE.txt`.
 
-    When building wxWidgets you need to ensure wxWebViewChromium is enabled,
-    either by passing --enable-webviewchromium for autoconf based builds or
-    setting wxUSE_WEBVIEW_CHROMIUM equal to 1 in setup.h for Visual Studio
-    based builds.
-
-    When running applications using wxWebViewChromium, the command line option
-    `--type=xxx` is interpreted specially as it is used by CEF to launch helper
-    applications, so your program must not use this option for anything else.
+    Note that by default the webview sample uses the default platform-dependent
+    wxWebView backend and to use Chromium backend in it you need to set
+    `WX_WEBVIEW_BACKEND` environment variable to the value `wxWebViewChromium`.
 
 
     __Microsoft Windows Platform__
@@ -71,6 +91,9 @@
     with supported Windows versions.
 
     Microsoft Visual C++ 2022 must be used to build wxWebViewChromium.
+
+    When linking an application using it, both `libcef.lib` and
+    `libcef_dll_wrapper.lib` should be included in the libraries list.
 
     __Linux with GTK__
 
@@ -101,9 +124,9 @@
     etc) are required.
 
     For applications using wxWebviewChromium, below are the steps to make
-    it work, based off the webview_chromium sample bakefile.
+    it work, based off the webview sample bakefile.
 
-    1. Build the webview_chromium library.
+    1. Build the webview library with CEF support.
     2. Compile/link/package the `YourApp helper` app:
        - Require `cef_process_helper.cpp`
        - Require link frameworks: Chromium Embedded Framework.framework,
@@ -122,31 +145,31 @@
     Below is the wxWebviewChromium sample app bundle directory structure,
     omitting some resource files
 
-        webview_chromium.app
+        webview.app
         |____Contents
           |____MacOS
-          | |____webview_chromium
+          | |____webview
           |____Resources
           | |____wxmac.icns
           |____Frameworks
-          | |____webview_chromium Helper.app
+          | |____webview Helper.app
           | | |____Contents
           | |   |____MacOS
-          | |   | |____webview_chromium Helper
+          | |   | |____webview Helper
           | |   |____Resources
           | |   | |____wxmac.icns
           | |   |____Info.plist
-          | |____webview_chromium Helper (GPU).app
+          | |____webview Helper (GPU).app
           | | |____Contents
           | |   |____MacOS
-          | |   | |____webview_chromium Helper (GPU)
+          | |   | |____webview Helper (GPU)
           | |   |____Resources
           | |   | |____wxmac.icns
           | |   |____Info.plist
-          | |____webview_chromium Helper (Plugin).app
+          | |____webview Helper (Plugin).app
           | | |____Contents
           | |   |____MacOS
-          | |   | |____webview_chromium Helper (Plugin)
+          | |   | |____webview Helper (Plugin)
           | |   |____Resources
           | |   | |____wxmac.icns
           | |   |____Info.plist
@@ -166,21 +189,29 @@
           | | | |____libvk_swiftshader.dylib
           | | | |____libGLESv2.dylib
           | | |____Chromium Embedded Framework
-          | |____webview_chromium Helper (Renderer).app
+          | |____webview Helper (Renderer).app
           | | |____Contents
           | |   |____MacOS
-          | |   | |____webview_chromium Helper (Renderer)
+          | |   | |____webview Helper (Renderer)
           | |   |____Resources
           | |   | |____wxmac.icns
           | |   |____Info.plist
-          | |____webview_chromium Helper (Alerts).app
+          | |____webview Helper (Alerts).app
           |   |____Contents
           |     |____MacOS
-          |     | |____webview_chromium Helper (Alerts)
+          |     | |____webview Helper (Alerts)
           |     |____Resources
           |     | |____wxmac.icns
           |     |____Info.plist
           |____Info.plist
+
+
+    __Miscellaneous Notes__
+
+    When running applications using wxWebViewChromium, the command line option
+    `--type=xxx` is interpreted specially as it is used by CEF to launch helper
+    applications, so your program must not use this option for anything else.
+
 
 
     @section differences API Differences
@@ -197,7 +228,7 @@
       if the @a output parameter is non-null, the function will always return false.
 
     @since 3.3.0
-    @library{wxwebview_chromium}
+    @library{wxwebview}
     @category{webview}
 
 **/

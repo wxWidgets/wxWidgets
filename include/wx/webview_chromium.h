@@ -14,7 +14,7 @@
 #include "wx/webview.h"
 #include "wx/timer.h"
 
-extern WXDLLIMPEXP_DATA_WEBVIEW_CHROMIUM(const char) wxWebViewBackendChromium[];
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[];
 
 // Private namespace containing classes used only in the implementation.
 namespace wxCEF
@@ -23,7 +23,7 @@ class ClientHandler;
 struct ImplData;
 }
 
-class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewChromium : public wxWebView
+class WXDLLIMPEXP_WEBVIEW wxWebViewChromium : public wxWebView
 {
 public:
     wxWebViewChromium() { Init(); }

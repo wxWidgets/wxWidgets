@@ -183,41 +183,20 @@
         <sources>$(WEBVIEW_SRC)</sources>
         <library>coredll</library>
         <library>basedll</library>
+        <ldflags>$(EXTRALDFLAGS_WEBVIEW)</ldflags>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+        <include>$(CEF_DIR)</include>
     </dll>
 
     <lib id="webviewlib" template="wx_lib,webview_additional"
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <sources>$(WEBVIEW_SRC)</sources>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+        <include>$(CEF_DIR)</include>
     </lib>
 
     <wxshortcut id="wxwebview" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>
-
-    <dll id="webviewchromiumdll" template="wx_dll"
-         cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW_CHROMIUM=='1' and MONOLITHIC=='0' and FORMAT=='autoconf'">
-        <define>WXUSINGDLL</define>
-        <define>WXMAKINGDLL_WEBVIEW_CHROMIUM</define>
-        <sources>$(WEBVIEWCHROMIUM_SRC)</sources>
-        <msvc-headers>$(WEBVIEWCHROMIUM_HDR)</msvc-headers>
-        <library>coredll</library>
-        <library>basedll</library>
-        <library>webviewdll</library>
-        <include>$(CEF_INCLUDE_DIR)</include>
-        <lib-path>$(LIBCEF_WRAPPER_PATH)</lib-path>
-        <sys-lib>$(LIBCEF_DLL_WRAPPER_NAME)</sys-lib>
-        <ldflags>$(LIBCEF_LINK)</ldflags>>
-    </dll>
-
-    <lib id="webviewchromiumlib" template="wx_lib"
-         cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW_CHROMIUM=='1' and MONOLITHIC=='0' and FORMAT=='autoconf'">
-        <sources>$(WEBVIEWCHROMIUM_SRC)</sources>
-        <msvc-headers>$(WEBVIEWCHROMIUM_HDR)</msvc-headers>
-        <include>$(CEF_INCLUDE_DIR)</include>
-    </lib>
-
-    <wxshortcut id="wxwebviewchromium" cond="MONOLITHIC=='0' and USE_WEBVIEW_CHROMIUM=='1' and FORMAT=='autoconf'"/>
 
     <!-- ================================================================ -->
     <!--                             OpenGL                               -->

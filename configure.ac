@@ -6904,13 +6904,23 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     fi
 
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        CEF_DIR="$srcdir/3rdparty/cef"
+        CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
+
+        EXTRALIBS_WEBVIEW="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $EXTRALIBS_WEBVIEW"
+        if test "$wxUSE_MAC" != 1; then
+            dnl We need to make sure that libcef.so is loaded
+            dnl first, so ensure that it is always linked in.
+            EXTRALDFLAGS_WEBVIEW="-L$CEF_DIR/Release -Wl,--no-as-needed -lcef -Wl,--as-needed"
+        fi
+
         AC_CACHE_CHECK([for CEF], wx_cv_lib_cef,
             [
                 AC_LANG_PUSH(C++)
 
                 dnl Search for the Chromium headers in 3rdparty/cef
                 old_CPPFLAGS="$CPPFLAGS"
-                CPPFLAGS="-I$srcdir/3rdparty/cef $CPPFLAGS"
+                CPPFLAGS="-I$CEF_DIR $CPPFLAGS"
                 AC_COMPILE_IFELSE(
                     [AC_LANG_PROGRAM([#include "include/cef_version.h"], [])],
                     [wx_cv_lib_cef=yes],
@@ -6921,14 +6931,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                 if test "$wx_cv_lib_cef" = "yes"; then
                     old_LIBS="$LIBS"
 
-                    CEF_DIR="$srcdir/3rdparty/cef"
-                    CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
-
-                    if test "$wxUSE_MAC" != 1; then
-                        CEF_LIB="-L$CEF_DIR/Release -lcef"
-                    fi
-
-                    LIBS="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $CEF_LIB $LIBS"
+                    LIBS="$EXTRALDFLAGS_WEBVIEW $EXTRALIBS_WEBVIEW $LIBS"
 
                     AC_LINK_IFELSE([
                         AC_LANG_SOURCE([
@@ -6956,6 +6959,15 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         )
 
         if test "$wx_cv_lib_cef" = "yes"; then
+            dnl This is a horrible hack but there simply doesn't seem to be a
+            dnl way to pass a string containing spaces as a single argument, so
+            dnl we can't include it in LIBS above, but luckily the test program
+            dnl actually links under Mac even without it, so we just add it
+            dnl here after the test, so it's used when linking our actual code.
+            if test "$wxUSE_MAC" = 1; then
+                EXTRALIBS_WEBVIEW="-F$CEF_DIR/Release -framework Chromium\ Embedded\ Framework $EXTRALIBS_WEBVIEW"
+            fi
+
             wxUSE_WEBVIEW="yes"
             USE_WEBVIEW_CHROMIUM=1
             AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
@@ -7786,6 +7798,7 @@ AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(EXTRALIBS_STC)
 AC_SUBST(EXTRALIBS_WEBVIEW)
+AC_SUBST(EXTRALDFLAGS_WEBVIEW)
 AC_SUBST(WITH_PLUGIN_SDL)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)

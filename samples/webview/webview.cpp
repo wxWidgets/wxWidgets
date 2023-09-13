@@ -29,6 +29,9 @@
 #include "wx/notifmsg.h"
 #include "wx/settings.h"
 #include "wx/webview.h"
+#if wxUSE_WEBVIEW_CHROMIUM
+#include "wx/webview_chromium.h"
+#endif
 #if wxUSE_WEBVIEW_IE
 #include "wx/msw/webview_ie.h"
 #endif
@@ -43,10 +46,7 @@
 #include "wx/fs_arc.h"
 #include "wx/fs_mem.h"
 #include "wx/stdpaths.h"
-
-#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-#include "wx/webview_chromium.h"
-#endif
+#include "wx/utils.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -61,6 +61,14 @@
 #include "wxlogo.xpm"
 
 #include <map>
+
+// This sample can be built with and without wxUSE_WEBVIEW_CHROMIUM, so we
+// can't put the libraries in the project linker options and have to link them
+// from here.
+#if defined(_MSC_VER) && wxUSE_WEBVIEW_CHROMIUM
+    #pragma comment(lib, "libcef")
+    #pragma comment(lib, "libcef_dll_wrapper")
+#endif
 
 //We map menu items to their history items
 using wxMenuHistoryMap = std::map<int, wxSharedPtr<wxWebViewHistoryItem>>;
@@ -445,13 +453,39 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
         wxLogMessage("Using fixed edge version");
     }
 #endif
-    // Create the webview
+
+    // Create the webview: WX_WEBVIEW_BACKEND environment variable allows to
+    // select the backend to use if there is more than one available.
+    wxString backend;
+    if ( !wxGetEnv("WX_WEBVIEW_BACKEND", &backend) )
+        backend = wxWebViewBackendDefault;
+#if wxUSE_WEBVIEW_CHROMIUM
+    // Allow specifying shorter "CEF" instead of having to type the full class
+    // name.
+    //
+    // Note that this is more than just a minor convenience: this also ensures
+    // that we reference wxWebViewBackendChromium from this file and this means
+    // that MSVC linker keeps wxWebViewChromium code when using static
+    // libraries while without it, it could discard it completely and it
+    // wouldn't be available during run-time at all.
+    else if ( backend.CmpNoCase("cef") )
+        backend = wxWebViewBackendChromium;
+#endif // wxUSE_WEBVIEW_CHROMIUM
+
+    if ( backend != wxWebViewBackendDefault &&
+            !wxWebView::IsBackendAvailable(backend) )
+    {
+        wxLogWarning("Requested backend \"%s\" is not available, using default "
+                     "backend instead.", backend);
+        backend = wxWebViewBackendDefault;
+    }
+
     m_browser = (windowFeatures) ? windowFeatures->GetChildWebView()
-                                 : wxWebView::New(
-#ifdef wxWEBVIEW_SAMPLE_CHROMIUM
-                                     wxWebViewBackendChromium
-#endif
-                                   );
+                                 : wxWebView::New(backend);
+    if ( !m_browser )
+    {
+        wxLogFatalError("Failed to create wxWebView object using \"%s\" backend", backend);
+    }
 
     // With several backends the proxy can only be set before creation, so do
     // it here if the standard environment variable is defined.
