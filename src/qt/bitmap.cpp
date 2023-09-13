@@ -33,8 +33,11 @@ static wxImage ConvertImage( QImage qtImage )
 
     int numPixels = qtImage.height() * qtImage.width();
 
-    //Convert to ARGB32 for scanLine
-    qtImage = qtImage.convertToFormat(QImage::Format_ARGB32);
+    // Convert monochrome bitmaps to RGB32 so we don't have to do any
+    // bit twiddling to get at pixels, and the same code below should
+    // work for any image format we support.
+    if ( qtImage.depth() == 1 )
+        qtImage = qtImage.convertToFormat(QImage::Format_RGB32);
 
     unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
     unsigned char *startData = data;
@@ -76,7 +79,7 @@ static QImage ConvertImage( const wxImage &image )
     bool hasAlpha = image.HasAlpha();
     bool hasMask = image.HasMask();
     QImage qtImage( wxQtConvertSize( image.GetSize() ),
-                   ( (hasAlpha || hasMask ) ? QImage::Format_ARGB32 : QImage::Format_RGB32 ) );
+                   ( hasAlpha ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32 ) );
 
     unsigned char *data = image.GetData();
     unsigned char *alpha = hasAlpha ? image.GetAlpha() : nullptr;
@@ -87,25 +90,28 @@ static QImage ConvertImage( const wxImage &image )
     {
         unsigned char r, g, b;
         image.GetOrFindMaskColour( &r, &g, &b );
-        maskedColour = ( r << 16 ) + ( g << 8 ) + b;
+        maskedColour = qRgb(r, g, b);
     }
 
     for (int y = 0; y < image.GetHeight(); y++)
     {
         for (int x = 0; x < image.GetWidth(); x++)
         {
+            const unsigned char a = hasAlpha ? alpha[0] : 255;
+            const unsigned char r = data[0];
+            const unsigned char g = data[1];
+            const unsigned char b = data[2];
+
+            colour = qRgba(r, g, b, a);
+
+            if ( qRgb(r, g, b) == maskedColour )
+                colour &= 0x00FFFFFF;
+
             if (hasAlpha)
             {
-                colour = alpha[0] << 24;
+                colour = qPremultiply(colour);
                 alpha++;
             }
-            else
-                colour = 0;
-
-            colour += (data[0] << 16) + (data[1] << 8) + data[2];
-
-            if ( hasMask && colour != maskedColour )
-                colour += 0xFF000000; // 255 << 24
 
             qtImage.setPixel(x, y, colour);
 
