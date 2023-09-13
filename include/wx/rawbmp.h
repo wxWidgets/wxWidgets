@@ -191,6 +191,24 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+
+    template<>
+    struct wxPixelFormat<void, 1, -1, -1, -1, -1, bool>
+    {
+        // the type which may hold the entire pixel value
+        typedef bool PixelType;
+
+        // size of one pixel in bits
+        static const int BitsPerPixel = 1;
+
+        // size of one pixel in ChannelType units (usually bytes)
+        static const int SizePixel = 1;
+
+        // true if we have an alpha channel (together with the other channels, this
+        // doesn't cover the case of wxImage which stores alpha separately)
+        enum { HasAlpha = false };
+    };
+    typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxMonoPixelFormat;
 #endif
 
 // the (most common) native format for bitmaps with alpha channel
@@ -695,7 +713,7 @@ struct wxPixelDataOut<wxBitmap>
     };
 };
 
-    #if defined(__WXMSW__)
+    #if defined(__WXMSW__) || defined(__WXQT__)
         template <>
         struct wxPixelDataOut<wxBitmap>::wxPixelDataIn<wxMonoPixelFormat> : public wxPixelDataBase
         {
@@ -943,7 +961,7 @@ typedef wxPixelData<wxImage> wxImagePixelData;
 typedef wxPixelData<wxBitmap, wxNativePixelFormat> wxNativePixelData;
 typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> wxAlphaPixelData;
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXQT__)
 typedef wxPixelData<wxBitmap, wxMonoPixelFormat> wxMonoPixelData;
 #endif
 
