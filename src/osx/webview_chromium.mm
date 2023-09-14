@@ -9,6 +9,8 @@
 
 #include "wx/webview_chromium.h"
 
+#if wxUSE_WEBVIEW_CHROMIUM
+
 #import "Cocoa/Cocoa.h"
 #include <objc/runtime.h>
 #include "wx/log.h"
@@ -83,3 +85,5 @@ void wxWebViewChromium_Resize(cef_window_handle_t handle, wxSize size)
 
     [view setFrame:wxToNSRect([view superview], size)];
 }
+
+#endif // wxUSE_WEBVIEW_CHROMIUM
