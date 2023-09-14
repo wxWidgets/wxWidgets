@@ -364,43 +364,36 @@ bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
     return m_config != nullptr;
 }
 
-
-extern "C"
-{
-
-typedef EGLDisplay (*GetPlatformDisplayFunc)(EGLenum platform,
-                                             void* native_display,
-                                             const EGLAttrib* attrib_list);
-
-// Returns the appropriate function pointer for "eglGetPlatformDisplay()" or
-// "eglGetPlatformDisplayEXT()" or nullptr if neither is available at runtime.
-static GetPlatformDisplayFunc get_edl_platform_display_func()
-{
-    // Static initializer ensures this is only computed once.
-    static const GetPlatformDisplayFunc s_getPlatformDisplayFunc([] ()
-    {
-        const GetPlatformDisplayFunc getPlatformDisplayFunc =
-            reinterpret_cast<GetPlatformDisplayFunc>(
-                eglGetProcAddress("eglGetPlatformDisplay"));
-        if ( getPlatformDisplayFunc )
-        {
-            return getPlatformDisplayFunc;
-        }
-
-        // Fallback or nullptr if not available.
-        return reinterpret_cast<GetPlatformDisplayFunc>(
-            eglGetProcAddress("eglGetPlatformDisplayEXT"));
-    } ());
-    return s_getPlatformDisplayFunc;
-}
-
-} // extern "C"
-
 /* static */
 EGLDisplay wxGLCanvasEGL::GetDisplay()
 {
+    typedef EGLDisplay (*GetPlatformDisplayFunc)(EGLenum platform,
+                                                 void* native_display,
+                                                 const EGLAttrib* attrib_list);
+
+    // Static initializer ensures this is only computed once.
     static const GetPlatformDisplayFunc s_eglGetPlatformDisplay(
-        get_edl_platform_display_func());
+        []() -> GetPlatformDisplayFunc
+        {
+            if ( !wxGLCanvasBase::IsExtensionInList(
+                eglQueryString(nullptr, EGL_EXTENSIONS),
+                "EGL_EXT_platform_base") )
+            {
+                return nullptr;
+            }
+
+            const GetPlatformDisplayFunc getPlatformDisplayFunc =
+                reinterpret_cast<GetPlatformDisplayFunc>(
+                    eglGetProcAddress("eglGetPlatformDisplay"));
+            if ( getPlatformDisplayFunc )
+            {
+                return getPlatformDisplayFunc;
+            }
+
+            // Fallback or nullptr if not available.
+            return reinterpret_cast<GetPlatformDisplayFunc>(
+                eglGetProcAddress("eglGetPlatformDisplayEXT"));
+        } ());
 
     if ( !s_eglGetPlatformDisplay )
     {
