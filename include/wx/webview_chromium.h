@@ -173,20 +173,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromium);
 };
 
-class WXDLLIMPEXP_WEBVIEW_CHROMIUM wxWebViewFactoryChromium : public wxWebViewFactory
-{
-public:
-    virtual wxWebView* Create() { return new wxWebViewChromium; }
-    virtual wxWebView* Create(wxWindow* parent,
-                              wxWindowID id,
-                              const wxString& url = wxWebViewDefaultURLStr,
-                              const wxPoint& pos = wxDefaultPosition,
-                              const wxSize& size = wxDefaultSize,
-                              long style = 0,
-                              const wxString& name = wxWebViewNameStr)
-    { return new wxWebViewChromium(parent, id, url, pos, size, style, name); }
-};
-
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
 
 #endif // _WX_WEBVIEWCHROMIUM_H_
