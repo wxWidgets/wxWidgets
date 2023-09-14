@@ -370,14 +370,16 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
     typedef EGLDisplay (*GetPlatformDisplayFunc)(EGLenum platform,
                                                  void* native_display,
                                                  const EGLAttrib* attrib_list);
+    // Static initializers ensure these are only computed once.
+    static const bool s_EGLHasPlatformDisplay(
+        wxGLCanvasBase::IsExtensionInList(
+            eglQueryString(nullptr, EGL_EXTENSIONS),
+            "EGL_EXT_platform_base"));
 
-    // Static initializer ensures this is only computed once.
     static const GetPlatformDisplayFunc s_eglGetPlatformDisplay(
         []() -> GetPlatformDisplayFunc
         {
-            if ( !wxGLCanvasBase::IsExtensionInList(
-                eglQueryString(nullptr, EGL_EXTENSIONS),
-                "EGL_EXT_platform_base") )
+            if ( !s_EGLHasPlatformDisplay )
             {
                 return nullptr;
             }
