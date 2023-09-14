@@ -1464,6 +1464,17 @@ public:
                               long style = 0,
                               const wxString& name = wxWebViewNameStr) override
     { return new wxWebViewChromium(parent, id, url, pos, size, style, name); }
+
+    virtual bool IsAvailable() override
+    {
+#ifdef __WXGTK__
+        // Currently CEF works only with X11.
+        if ( wxGetDisplayInfo().type != wxDisplayX11 )
+            return false;
+#endif // __WXGTK__
+
+        return true;
+    }
 };
 
 class wxWebViewChromiumModule : public wxModule

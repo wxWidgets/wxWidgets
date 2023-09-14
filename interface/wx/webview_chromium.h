@@ -82,7 +82,9 @@
     gdk_set_allowed_backends("x11")
     @endcode
 
-    in your application code.
+    in your application code, otherwise wxWebView::IsBackendAvailable() will
+    return @false when the application is running under Wayland and creating
+    wxWebviewChromium will fail in this case.
 
     Moreover, the actual browser is only created once the window is shown, and
     can't be used until then. You can bind an event handler for wxEVT_CREATE to
