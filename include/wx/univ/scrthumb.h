@@ -85,7 +85,7 @@ private:
 class WXDLLIMPEXP_CORE wxControlWithThumb
 {
 public:
-    virtual ~wxControlWithThumb() {}
+    virtual ~wxControlWithThumb() = default;
 
     // simple accessors
     // ----------------

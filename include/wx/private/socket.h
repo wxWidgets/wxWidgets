@@ -157,7 +157,7 @@ public:
     virtual void Uninstall_Callback(wxSocketImpl *socket,
                                     wxSocketNotify event = wxSOCKET_LOST) = 0;
 
-    virtual ~wxSocketManager() { }
+    virtual ~wxSocketManager() = default;
 
 private:
     // get the manager to use if we don't have it yet

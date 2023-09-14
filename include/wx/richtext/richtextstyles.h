@@ -60,7 +60,7 @@ public:
     wxRichTextStyleDefinition(const wxString& name = wxEmptyString) { Init(); m_name = name; }
 
     /// Destructor
-    virtual ~wxRichTextStyleDefinition() {}
+    virtual ~wxRichTextStyleDefinition() = default;
 
     /// Initialises members
     void Init() {}
@@ -137,7 +137,7 @@ public:
         wxRichTextStyleDefinition(name) {}
 
     /// Destructor
-    virtual ~wxRichTextCharacterStyleDefinition() {}
+    virtual ~wxRichTextCharacterStyleDefinition() = default;
 
     /// Clones the object
     virtual wxRichTextStyleDefinition* Clone() const override { return new wxRichTextCharacterStyleDefinition(*this); }
@@ -162,7 +162,7 @@ public:
         wxRichTextStyleDefinition(name) {}
 
     // Destructor
-    virtual ~wxRichTextParagraphStyleDefinition() {}
+    virtual ~wxRichTextParagraphStyleDefinition() = default;
 
     /// Sets and gets the next style
     void SetNextStyle(const wxString& name) { m_nextStyle = name; }
@@ -203,7 +203,7 @@ public:
         wxRichTextParagraphStyleDefinition(name) { Init(); }
 
     /// Destructor
-    virtual ~wxRichTextListStyleDefinition() {}
+    virtual ~wxRichTextListStyleDefinition() = default;
 
     /// Copies from def
     void Copy(const wxRichTextListStyleDefinition& def);
@@ -269,7 +269,7 @@ public:
         wxRichTextStyleDefinition(name) {}
 
     // Destructor
-    virtual ~wxRichTextBoxStyleDefinition() {}
+    virtual ~wxRichTextBoxStyleDefinition() = default;
 
     /// Copies from def
     void Copy(const wxRichTextBoxStyleDefinition& def);
@@ -713,7 +713,7 @@ public:
         Create(parent, id, pos, size, style);
     }
 
-    virtual ~wxRichTextStyleComboCtrl() {}
+    virtual ~wxRichTextStyleComboCtrl() = default;
 
     void Init()
     {
