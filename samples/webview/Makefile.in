@@ -123,6 +123,8 @@ COND_MONOLITHIC_0___WXLIB_BASE_p = \
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@__package___depname \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	= package
+@COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1@__copy_cef_files___depname \
+@COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1@	= copy_cef_files
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -155,7 +157,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: webview$(EXEEXT) $(__webview_bundle___depname) $(__package___depname) data $(__webview_helper___depname) $(__fix_cef_link___depname)
+all: webview$(EXEEXT) $(__webview_bundle___depname) $(__package___depname) $(__copy_cef_files___depname) data $(__webview_helper___depname) $(__fix_cef_link___depname)
 
 install: 
 
@@ -222,6 +224,9 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp webview_helper.app/Contents/PkgInfo "$$helper_contents"; \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_helper.app/Contents/Resources "$$helper_contents"; \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	done
+
+@COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1@copy_cef_files: webview$(EXEEXT)
+@COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1@	@for f in $(top_srcdir)//3rdparty/cef/Release/* $(top_srcdir)//3rdparty/cef/Resources/*; do [ -e $$f ] || ln -s $$f .; done
 
 data: 
 	@mkdir -p .
