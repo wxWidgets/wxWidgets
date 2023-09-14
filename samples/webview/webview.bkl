@@ -45,6 +45,21 @@
                 done
             </command>
         </add-target>
+
+        <!--
+            Under Unix we don't need to build a separate helper, but we still
+            need to copy (or link, so save some space, as these files are huge)
+            all the required files to the sample directory.
+        -->
+        <add-target target="copy_cef_files" type="action"
+            cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
+            <depends>webview</depends>
+            <dependency-of>all</dependency-of>
+            <command>
+                @for f in $(CEF_DIR)/Release/* $(CEF_DIR)/Resources/*; do [ -e $$f ] || ln -s $$f .; done
+            </command>
+        </add-target>
+
     </exe>
 
     <wx-data id="data">
