@@ -483,7 +483,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     {
         // Log backend information
         wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
-            wxWebView::GetBackendVersionInfo().ToString());
+            wxWebView::GetBackendVersionInfo(backend).ToString());
 
         // Chromium backend can't be used immediately after creation, so wait
         // until the browser is created before calling GetUserAgent().

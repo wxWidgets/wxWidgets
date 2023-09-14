@@ -1475,6 +1475,18 @@ public:
 
         return true;
     }
+
+    virtual wxVersionInfo GetVersionInfo() override
+    {
+        return {
+            "CEF",
+            CEF_VERSION_MAJOR,
+            CEF_VERSION_MINOR,
+            CEF_VERSION_PATCH,
+            CEF_COMMIT_NUMBER,
+            CEF_VERSION
+        };
+    }
 };
 
 class wxWebViewChromiumModule : public wxModule
