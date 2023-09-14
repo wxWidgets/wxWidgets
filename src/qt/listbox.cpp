@@ -71,7 +71,7 @@ void wxQtListWidgetItem::setData(int role, const QVariant& value)
     if ( role == Qt::CheckStateRole )
     {
         const auto list = static_cast<wxQtListWidget*>(listWidget());
-        if ( list && list->isVisible() )
+        if ( list && list->isVisible() && !list->signalsBlocked() )
         {
             const auto handler = list->GetHandler();
             if ( handler )
