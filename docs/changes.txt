@@ -273,6 +273,8 @@ All (GUI):
 - Fix undefined behaviour in wxImage::Paste() (aurel32, #23791).
 - Fix EVT_PRESS_AND_TAP() event macro definition (Kumazuma, #23819).
 - Fix wxFileHistory formatting after calling Load() (Hartwig Wiesmann, #23799).
+- Fix wxRichTextCtrl layout in high DPI (mbc-one, Maarten Bent, #23828).
+- Ensure current cell stays valid when wxGrid table changes (CookieLau, #23751).
 
 wxGTK:
 
