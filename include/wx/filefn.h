@@ -584,7 +584,7 @@ private:
 class WXDLLIMPEXP_BASE wxPathList : public wxArrayString
 {
 public:
-    wxPathList() {}
+    wxPathList() = default;
     wxPathList(const wxArrayString &arr)
         { Add(arr); }
 

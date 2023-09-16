@@ -248,7 +248,7 @@ public:
             : m_value(value)
         {
         }
-        virtual ~DataHolder() { }
+        virtual ~DataHolder() = default;
 
         T2   m_value;
     private:
@@ -299,7 +299,7 @@ class wxAnyValueTypeImplBase : public wxAnyValueType
 
 public:
     wxAnyValueTypeImplBase() : wxAnyValueType() { }
-    virtual ~wxAnyValueTypeImplBase() { }
+    virtual ~wxAnyValueTypeImplBase() = default;
 
     virtual void DeleteValue(wxAnyValueBuffer& buf) const override
     {
@@ -349,7 +349,7 @@ class wxAnyValueTypeImpl : public wxAnyValueTypeImplBase<T>
     WX_DECLARE_ANY_VALUE_TYPE(wxAnyValueTypeImpl<T>)
 public:
     wxAnyValueTypeImpl() : wxAnyValueTypeImplBase<T>() { }
-    virtual ~wxAnyValueTypeImpl() { }
+    virtual ~wxAnyValueTypeImpl() = default;
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
@@ -377,7 +377,7 @@ class wxAnyValueTypeImpl<T> : public wxAnyValueTypeImpl##CLSTYPE \
     typedef wxAnyBase##CLSTYPE##Type UseDataType; \
 public: \
     wxAnyValueTypeImpl() : wxAnyValueTypeImpl##CLSTYPE() { } \
-    virtual ~wxAnyValueTypeImpl() { } \
+    virtual ~wxAnyValueTypeImpl() = default; \
     static void SetValue(const T& value, wxAnyValueBuffer& buf) \
     { \
         void* voidPtr = reinterpret_cast<void*>(&buf.m_buffer[0]); \
@@ -427,7 +427,7 @@ class WXDLLIMPEXP_BASE wxAnyValueTypeImplInt :
 public:
     wxAnyValueTypeImplInt() :
         wxAnyValueTypeImplBase<wxAnyBaseIntType>() { }
-    virtual ~wxAnyValueTypeImplInt() { }
+    virtual ~wxAnyValueTypeImplInt() = default;
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
@@ -442,7 +442,7 @@ class WXDLLIMPEXP_BASE wxAnyValueTypeImplUint :
 public:
     wxAnyValueTypeImplUint() :
         wxAnyValueTypeImplBase<wxAnyBaseUintType>() { }
-    virtual ~wxAnyValueTypeImplUint() { }
+    virtual ~wxAnyValueTypeImplUint() = default;
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
@@ -479,7 +479,7 @@ class WXDLLIMPEXP_BASE wxAnyValueTypeImpl##TYPENAME : \
 public: \
     wxAnyValueTypeImpl##TYPENAME() : \
         wxAnyValueTypeImplBase<T>() { } \
-    virtual ~wxAnyValueTypeImpl##TYPENAME() { } \
+    virtual ~wxAnyValueTypeImpl##TYPENAME() = default; \
     virtual bool ConvertValue(const wxAnyValueBuffer& src, \
                               wxAnyValueType* dstType, \
                               wxAnyValueBuffer& dst) const override \
@@ -493,7 +493,7 @@ class wxAnyValueTypeImpl<T> : public wxAnyValueTypeImpl##TYPENAME \
 { \
 public: \
     wxAnyValueTypeImpl() : wxAnyValueTypeImpl##TYPENAME() { } \
-    virtual ~wxAnyValueTypeImpl() { } \
+    virtual ~wxAnyValueTypeImpl() = default; \
 };
 
 #define WX_ANY_DEFINE_CONVERTIBLE_TYPE(T, TYPENAME, CONVFUNC, BT) \
@@ -531,7 +531,7 @@ class WXDLLIMPEXP_BASE wxAnyValueTypeImpl<bool> :
 public:
     wxAnyValueTypeImpl() :
         wxAnyValueTypeImplBase<bool>() { }
-    virtual ~wxAnyValueTypeImpl() { }
+    virtual ~wxAnyValueTypeImpl() = default;
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
@@ -548,7 +548,7 @@ class WXDLLIMPEXP_BASE wxAnyValueTypeImplDouble :
 public:
     wxAnyValueTypeImplDouble() :
         wxAnyValueTypeImplBase<double>() { }
-    virtual ~wxAnyValueTypeImplDouble() { }
+    virtual ~wxAnyValueTypeImplDouble() = default;
 
     virtual bool ConvertValue(const wxAnyValueBuffer& src,
                               wxAnyValueType* dstType,
@@ -576,7 +576,7 @@ class DECL wxAnyValueTypeImpl<CLS> : \
 public: \
     wxAnyValueTypeImpl() : \
         wxAnyValueTypeImplBase<CLS>() { } \
-    virtual ~wxAnyValueTypeImpl() { } \
+    virtual ~wxAnyValueTypeImpl() = default; \
  \
     virtual bool ConvertValue(const wxAnyValueBuffer& src, \
                               wxAnyValueType* dstType, \
@@ -627,7 +627,7 @@ class WXDLLIMPEXP_BASE wxAnyValueTypeImplVariantData :
 public:
     wxAnyValueTypeImplVariantData() :
         wxAnyValueTypeImplBase<wxVariantData*>() { }
-    virtual ~wxAnyValueTypeImplVariantData() { }
+    virtual ~wxAnyValueTypeImplVariantData() = default;
 
     virtual void DeleteValue(wxAnyValueBuffer& buf) const override
     {
@@ -674,7 +674,7 @@ class wxAnyValueTypeImpl<wxVariantData*> :
 {
 public:
     wxAnyValueTypeImpl() : wxAnyValueTypeImplVariantData() { }
-    virtual ~wxAnyValueTypeImpl() { }
+    virtual ~wxAnyValueTypeImpl() = default;
 };
 
 #endif // wxUSE_VARIANT

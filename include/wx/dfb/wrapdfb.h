@@ -98,7 +98,7 @@ protected:
     wxDfbWrapperBase() : m_refCnt(1), m_lastResult(DFB_OK) {}
 
     /// Dtor may only be called from Release()
-    virtual ~wxDfbWrapperBase() {}
+    virtual ~wxDfbWrapperBase() = default;
 
     /**
         Checks the @a result of a DirectFB call and returns true if it was

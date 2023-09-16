@@ -116,7 +116,7 @@ class WXDLLIMPEXP_BASE wxTempFFile
 public:
   // ctors
     // default
-  wxTempFFile() { }
+  wxTempFFile() = default;
     // associates the temp file with the file to be replaced and opens it
   explicit wxTempFFile(const wxString& strName);
 

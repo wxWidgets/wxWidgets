@@ -65,7 +65,7 @@ class WXDLLIMPEXP_CORE wxDialogBase : public wxNavigationEnabled<wxTopLevelWindo
 {
 public:
     wxDialogBase();
-    virtual ~wxDialogBase() { }
+    virtual ~wxDialogBase() = default;
 
     // define public wxDialog methods to be implemented by the derived classes
     virtual int ShowModal() = 0;
@@ -301,7 +301,7 @@ class WXDLLIMPEXP_CORE wxDialogLayoutAdapter: public wxObject
 {
     wxDECLARE_CLASS(wxDialogLayoutAdapter);
 public:
-    wxDialogLayoutAdapter() {}
+    wxDialogLayoutAdapter() = default;
 
     // Override this function to indicate that adaptation should be done
     virtual bool CanDoLayoutAdaptation(wxDialog* dialog) = 0;
@@ -319,7 +319,7 @@ class WXDLLIMPEXP_CORE wxStandardDialogLayoutAdapter: public wxDialogLayoutAdapt
 {
     wxDECLARE_CLASS(wxStandardDialogLayoutAdapter);
 public:
-    wxStandardDialogLayoutAdapter() {}
+    wxStandardDialogLayoutAdapter() = default;
 
 // Overrides
 

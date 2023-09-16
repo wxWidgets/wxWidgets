@@ -34,7 +34,7 @@
 class WXDLLIMPEXP_CORE wxItemContainerImmutable
 {
 public:
-    wxItemContainerImmutable() { }
+    wxItemContainerImmutable() = default;
     virtual ~wxItemContainerImmutable();
 
     // accessing strings
@@ -416,7 +416,7 @@ public:
     typedef W BaseWindowClass;
     typedef C BaseContainerInterface;
 
-    wxWindowWithItems() { }
+    wxWindowWithItems() = default;
 
     void SetClientData(void *data)
         { BaseWindowClass::SetClientData(data); }
@@ -441,7 +441,7 @@ class WXDLLIMPEXP_CORE wxControlWithItemsBase :
     public wxWindowWithItems<wxControl, wxItemContainer>
 {
 public:
-    wxControlWithItemsBase() { }
+    wxControlWithItemsBase() = default;
 
     // usually the controls like list/combo boxes have their own background
     // colour
@@ -473,7 +473,7 @@ private:
     class WXDLLIMPEXP_CORE wxControlWithItems : public wxControlWithItemsBase
     {
     public:
-        wxControlWithItems() { }
+        wxControlWithItems() = default;
 
     private:
         wxDECLARE_ABSTRACT_CLASS(wxControlWithItems);

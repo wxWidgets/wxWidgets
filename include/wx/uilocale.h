@@ -41,7 +41,7 @@ public:
     static wxLocaleIdent FromTag(const wxString& tag);
 
     // Default ctor creates an empty, invalid identifier.
-    wxLocaleIdent() { }
+    wxLocaleIdent() = default;
 
     // Set language
     wxLocaleIdent& Language(const wxString& language);

@@ -225,7 +225,7 @@ public:
         );
     }
 
-    virtual ~wxAutoBufferedPaintDC() { }
+    virtual ~wxAutoBufferedPaintDC() = default;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxAutoBufferedPaintDC);

@@ -284,7 +284,7 @@ public:
         double value;
     };
 
-    wxImage() {}
+    wxImage() = default;
     wxImage( int width, int height, bool clear = true )
         { Create( width, height, clear ); }
     wxImage( int width, int height, unsigned char* data, bool static_data = false )

@@ -57,7 +57,7 @@ public:
     }
 
     // a virtual dtor has been provided since this class has virtual members
-    virtual ~wxCaretBase() { }
+    virtual ~wxCaretBase() = default;
 
     // Create() functions - same as ctor but returns the success code
     // --------------------------------------------------------------

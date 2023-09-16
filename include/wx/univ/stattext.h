@@ -16,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxStaticText : public wxGenericStaticText
 {
 public:
-    wxStaticText() { }
+    wxStaticText() = default;
 
     // usual ctor
     wxStaticText(wxWindow *parent,

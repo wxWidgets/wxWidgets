@@ -213,8 +213,8 @@ private:
 class WXDLLIMPEXP_BASE wxTranslationsLoader
 {
 public:
-    wxTranslationsLoader() {}
-    virtual ~wxTranslationsLoader() {}
+    wxTranslationsLoader() = default;
+    virtual ~wxTranslationsLoader() = default;
 
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang) = 0;

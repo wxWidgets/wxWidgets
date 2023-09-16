@@ -863,7 +863,7 @@ public:
     /**
         Default constructor.
     */
-    wxTextAttrBorders() { }
+    wxTextAttrBorders() wxTextAttrBorders
 
     /**
         Equality operator.

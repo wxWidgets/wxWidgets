@@ -96,7 +96,7 @@ typedef wxDatePickerCtrlCommonBase<wxDateTimePickerCtrl> wxDatePickerCtrlBase;
     class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlGeneric
     {
     public:
-        wxDatePickerCtrl() { }
+        wxDatePickerCtrl() = default;
         wxDatePickerCtrl(wxWindow *parent,
                          wxWindowID id,
                          const wxDateTime& date = wxDefaultDateTime,

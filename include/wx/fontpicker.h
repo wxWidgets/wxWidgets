@@ -34,7 +34,7 @@ class WXDLLIMPEXP_CORE wxFontPickerWidgetBase
 {
 public:
     wxFontPickerWidgetBase() : m_selectedFont(*wxNORMAL_FONT) { }
-    virtual ~wxFontPickerWidgetBase() {}
+    virtual ~wxFontPickerWidgetBase() = default;
 
     wxFont GetSelectedFont() const
         { return m_selectedFont; }
@@ -107,7 +107,7 @@ public:
     {
     }
 
-    virtual ~wxFontPickerCtrl() {}
+    virtual ~wxFontPickerCtrl() = default;
 
 
     wxFontPickerCtrl(wxWindow *parent,
@@ -201,7 +201,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FONTPICKER_CHANGED, wxFontPick
 class WXDLLIMPEXP_CORE wxFontPickerEvent : public wxCommandEvent
 {
 public:
-    wxFontPickerEvent() {}
+    wxFontPickerEvent() = default;
     wxFontPickerEvent(wxObject *generator, int id, const wxFont &f)
         : wxCommandEvent(wxEVT_FONTPICKER_CHANGED, id),
           m_font(f)

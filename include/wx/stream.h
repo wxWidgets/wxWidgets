@@ -357,7 +357,7 @@ void WXDLLIMPEXP_BASE wxUseFilterClasses();
 class WXDLLIMPEXP_BASE wxFilterClassFactoryBase : public wxObject
 {
 public:
-    virtual ~wxFilterClassFactoryBase() { }
+    virtual ~wxFilterClassFactoryBase() = default;
 
     wxString GetProtocol() const { return wxString(*GetProtocols()); }
     wxString PopExtension(const wxString& location) const;
@@ -378,7 +378,7 @@ protected:
 class WXDLLIMPEXP_BASE wxFilterClassFactory : public wxFilterClassFactoryBase
 {
 public:
-    virtual ~wxFilterClassFactory() { }
+    virtual ~wxFilterClassFactory() = default;
 
     virtual wxFilterInputStream  *NewStream(wxInputStream& stream)  const = 0;
     virtual wxFilterOutputStream *NewStream(wxOutputStream& stream) const = 0;

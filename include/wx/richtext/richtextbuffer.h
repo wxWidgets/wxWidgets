@@ -1014,7 +1014,7 @@ public:
     /**
         Default constructor.
     */
-    wxTextAttrBorders() { }
+    wxTextAttrBorders() = default;
 
     /**
         Equality operator.

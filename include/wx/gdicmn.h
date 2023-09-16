@@ -949,7 +949,7 @@ wxDEPRECATED_MSG("Use wxList directly or just a standard container")
 wxResourceCache : public wxList
 {
 public:
-    wxResourceCache() { }
+    wxResourceCache() = default;
 #if !wxUSE_STD_CONTAINERS
     wxResourceCache(unsigned int keyType) : wxList(keyType) { }
 #endif

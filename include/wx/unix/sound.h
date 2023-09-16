@@ -119,7 +119,7 @@ struct wxSoundPlaybackStatus
 class WXDLLIMPEXP_CORE wxSoundBackend
 {
 public:
-    virtual ~wxSoundBackend() {}
+    virtual ~wxSoundBackend() = default;
 
     // Returns the name of the backend (e.g. "Open Sound System")
     virtual wxString GetName() const = 0;

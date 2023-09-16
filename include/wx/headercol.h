@@ -74,7 +74,7 @@ public:
     // virtual dtor for the base class to avoid gcc warnings even though we
     // don't normally delete the objects of this class via a pointer to
     // wxHeaderColumn so it's not necessary, strictly speaking
-    virtual ~wxHeaderColumn() { }
+    virtual ~wxHeaderColumn() = default;
 
     // getters for various attributes
     // ------------------------------

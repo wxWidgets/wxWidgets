@@ -125,7 +125,7 @@ enum wxDataViewCellRenderState
 class WXDLLIMPEXP_CORE wxDataViewValueAdjuster
 {
 public:
-    virtual ~wxDataViewValueAdjuster() {}
+    virtual ~wxDataViewValueAdjuster() = default;
 
     // changes the value to have appearance suitable for highlighted rows
     virtual wxVariant MakeHighlighted(const wxVariant& value) const { return value; }

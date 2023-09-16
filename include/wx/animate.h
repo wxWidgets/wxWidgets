@@ -154,7 +154,7 @@ private:
 class WXDLLIMPEXP_CORE wxAnimationCtrlBase : public wxControl
 {
 public:
-    wxAnimationCtrlBase() { }
+    wxAnimationCtrlBase() = default;
 
     // public API
     virtual bool LoadFile(const wxString& filename,

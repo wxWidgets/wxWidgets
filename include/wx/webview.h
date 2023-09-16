@@ -97,7 +97,7 @@ enum wxWebViewUserScriptInjectionTime
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerRequest
 {
 public:
-    virtual ~wxWebViewHandlerRequest() { }
+    virtual ~wxWebViewHandlerRequest() = default;
     virtual wxString GetRawURI() const = 0;
     virtual wxString GetURI() const { return GetRawURI(); }
     virtual wxInputStream* GetData() const = 0;
@@ -109,14 +109,14 @@ public:
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerResponseData
 {
 public:
-    virtual ~wxWebViewHandlerResponseData() { }
+    virtual ~wxWebViewHandlerResponseData() = default;
     virtual wxInputStream* GetStream() = 0;
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerResponse
 {
 public:
-    virtual ~wxWebViewHandlerResponse() { }
+    virtual ~wxWebViewHandlerResponse() = default;
     virtual void SetStatus(int status) = 0;
     virtual void SetContentType(const wxString& contentType) = 0;
     virtual void SetHeader(const wxString& name, const wxString& value) = 0;
@@ -131,7 +131,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 public:
     wxWebViewHandler(const wxString& scheme)
         : m_scheme(scheme), m_securityURL() {}
-    virtual ~wxWebViewHandler() {}
+    virtual ~wxWebViewHandler() = default;
     virtual wxString GetName() const { return m_scheme; }
     virtual wxFSFile* GetFile(const wxString &uri);
     virtual void SetSecurityURL(const wxString& url) { m_securityURL = url; }
@@ -199,7 +199,7 @@ public:
         m_syncScriptResult = 0;
     }
 
-    virtual ~wxWebView() {}
+    virtual ~wxWebView() = default;
 
     virtual bool Create(wxWindow* parent,
            wxWindowID id,
@@ -376,7 +376,7 @@ protected:
 class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
 {
 public:
-    wxWebViewEvent() {}
+    wxWebViewEvent() = default;
     wxWebViewEvent(wxEventType type, int id, const wxString& url,
                    const wxString target,
                    wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE,

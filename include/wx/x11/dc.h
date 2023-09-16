@@ -25,7 +25,7 @@ class WXDLLIMPEXP_CORE wxX11DCImpl : public wxDCImpl
 {
 public:
     wxX11DCImpl( wxDC *owner );
-    virtual ~wxX11DCImpl() { }
+    virtual ~wxX11DCImpl() = default;
 
     virtual wxSize GetPPI() const;
 

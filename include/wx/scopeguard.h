@@ -80,7 +80,7 @@ public:
     bool WasDismissed() const { return m_wasDismissed; }
 
 protected:
-    ~wxScopeGuardImplBase() { }
+    ~wxScopeGuardImplBase() = default;
 
     // must be mutable for copy ctor to work
     mutable bool m_wasDismissed;

@@ -40,8 +40,8 @@ public:
 
 //// Constructor
 
-    wxQuantize() {}
-    virtual ~wxQuantize() {}
+    wxQuantize() = default;
+    virtual ~wxQuantize() = default;
 
 //// Operations
 

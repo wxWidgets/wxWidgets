@@ -462,7 +462,7 @@ private:
     void (Class::*m_method)(EventArg&);
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorMethod() { }
+    wxEventFunctorMethod() = default;
 
     typedef wxEventFunctorMethod<EventTag, Class,
                                  EventArg, EventHandler> thisClass;
@@ -518,7 +518,7 @@ private:
     void (*m_handler)(EventArg&);
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunction() { }
+    wxEventFunctorFunction() = default;
 
     typedef wxEventFunctorFunction<EventTag, EventArg> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
@@ -570,7 +570,7 @@ private:
     const void *m_handlerAddr;
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunctor() { }
+    wxEventFunctorFunctor() = default;
 
     typedef wxEventFunctorFunctor<EventTag, Functor> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)

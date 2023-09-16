@@ -23,7 +23,7 @@ class WXDLLIMPEXP_BASE wxFilterFSHandler : public wxFileSystemHandler
 {
 public:
     wxFilterFSHandler() : wxFileSystemHandler() { }
-    virtual ~wxFilterFSHandler() { }
+    virtual ~wxFilterFSHandler() = default;
 
     virtual bool CanOpen(const wxString& location) override;
     virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) override;
