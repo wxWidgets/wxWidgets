@@ -6283,7 +6283,7 @@ public:
     */
     wxRichTextObjectAddress(const wxRichTextObjectAddress& address) { Copy(address); }
 
-    void Init() = default;
+    void Init() {}
 
     /**
         Copies the address.
