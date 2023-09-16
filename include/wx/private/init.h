@@ -21,8 +21,13 @@ struct WXDLLIMPEXP_BASE wxInitData
     // Get the single global object.
     static wxInitData& Get();
 
-    // Initialize from ANSI command line arguments.
+    // Initialize from ANSI command line arguments: argv contents should be
+    // static, i.e. remain valid until the end of the program.
     void Initialize(int argc, char** argv);
+
+    // Initialize from wide command line arguments: here we currently make a
+    // copy of the arguments internally, so they don't need to be static.
+    void InitializeFromWide(int argc, wchar_t** argv);
 
     // This function is used instead of the dtor because the global object can
     // be initialized multiple times.
@@ -47,9 +52,10 @@ struct WXDLLIMPEXP_BASE wxInitData
     wchar_t** argvMSW = nullptr;
 #else // !__WINDOWS__
     // Under other platforms we typically need the original, non-Unicode
-    // command line version, so we keep it too. Unlike argv that we allocate,
-    // this pointer doesn't need to be freed.
+    // command line version, so we keep it too. This pointer may or not need to
+    // be freed, as indicated by ownsArgvA flag.
     char** argvA = nullptr;
+    bool ownsArgvA = false;
 #endif // __WINDOWS__
 
     wxDECLARE_NO_COPY_CLASS(wxInitData);
