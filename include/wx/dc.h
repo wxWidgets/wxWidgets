@@ -1323,167 +1323,95 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDC);
 };
 
-// ----------------------------------------------------------------------------
-// helper class: you can use it to temporarily change the DC text colour and
-// restore it automatically when the object goes out of scope
-// ----------------------------------------------------------------------------
+// wxDCXXXChanger implementation
 
-class WXDLLIMPEXP_CORE wxDCTextColourChanger
+namespace wxPrivate
+{
+
+template <typename AttrType, typename GetDCFunc, GetDCFunc,
+    typename SetDCFunc, SetDCFunc> class wxDCChanger;
+
+template <typename AttrType, typename ParamType,
+    ParamType (wxDC::*GetDCFunc)() const,
+    void (wxDC::*SetDCFunc)(ParamType)>
+class wxDCChanger<AttrType, ParamType (wxDC::*)() const, GetDCFunc,
+    void (wxDC::*)(ParamType), SetDCFunc>
 {
 public:
-    wxDCTextColourChanger(wxDC& dc) : m_dc(dc), m_colFgOld() { }
+    // Note: for wxDCTextBgModeChanger this inits m_oldAttr to 0!
+    wxDCChanger(wxDC& dc) : m_dc(dc), m_oldAttr() { }
 
-    wxDCTextColourChanger(wxDC& dc, const wxColour& col) : m_dc(dc)
+    wxDCChanger(wxDC& dc, ParamType attr) : m_dc(dc), m_oldAttr((m_dc.*GetDCFunc)())
     {
-        Set(col);
+        (m_dc.*SetDCFunc)(attr);
     }
 
-    ~wxDCTextColourChanger()
+    ~wxDCChanger()
     {
-        if ( m_colFgOld.IsOk() )
-            m_dc.SetTextForeground(m_colFgOld);
+        if ( AttrIsOk(m_oldAttr) )
+            (m_dc.*SetDCFunc)(m_oldAttr);
     }
 
-    void Set(const wxColour& col)
+    void Set(ParamType attr)
     {
-        if ( !m_colFgOld.IsOk() )
-            m_colFgOld = m_dc.GetTextForeground();
-        m_dc.SetTextForeground(col);
+        if ( !AttrIsOk(m_oldAttr) )
+            m_oldAttr = (m_dc.*GetDCFunc)();
+
+        (m_dc.*SetDCFunc)(attr);
     }
 
 private:
+    static bool AttrIsOk(int mode)
+    {
+        /*
+        This function is only used by wxDCTextBgModeChanger which has an int
+        as attribute type that gets initialized to 0 by the (non-preserving)
+        ctor. This unused value can be used to check if the old attribute is
+        preserved or not.
+        Even though it's probably not needed, check for wxBRUSHSTYLE_INVALID
+        to conform with previous non-templated code.
+        */
+        return mode && mode != wxBRUSHSTYLE_INVALID;
+    }
+
+    static bool AttrIsOk(const wxGDIObject& attr)
+    {
+        return attr.IsOk();
+    }
+
+    static bool AttrIsOk(const wxColour& attr)
+    {
+        return attr.IsOk();
+    }
+
     wxDC& m_dc;
+    AttrType m_oldAttr;
 
-    wxColour m_colFgOld;
-
-    wxDECLARE_NO_COPY_CLASS(wxDCTextColourChanger);
+    wxDECLARE_NO_COPY_CLASS(wxDCChanger);
 };
 
-// ----------------------------------------------------------------------------
-// helper class: you can use it to temporarily change the DC text background colour and
-// restore it automatically when the object goes out of scope
-// ----------------------------------------------------------------------------
+} // namespace wxPrivate
 
-class WXDLLIMPEXP_CORE wxDCTextBgColourChanger
-{
-public:
-    wxDCTextBgColourChanger(wxDC& dc) : m_dc(dc) { }
-
-    wxDCTextBgColourChanger(wxDC& dc, const wxColour& col) : m_dc(dc)
-    {
-        Set(col);
-    }
-
-    ~wxDCTextBgColourChanger()
-    {
-        if ( m_colBgOld.IsOk() )
-            m_dc.SetTextBackground(m_colBgOld);
-    }
-
-    void Set(const wxColour& col)
-    {
-        if ( !m_colBgOld.IsOk() )
-            m_colBgOld = m_dc.GetTextBackground();
-        m_dc.SetTextBackground(col);
-    }
-
-private:
-    wxDC& m_dc;
-
-    wxColour m_colBgOld;
-
-    wxDECLARE_NO_COPY_CLASS(wxDCTextBgColourChanger);
-};
+#define wxDC_CHANGER_GDI(classname, attr_type, func_base) \
+typedef wxPrivate::wxDCChanger<attr_type, \
+    const attr_type& (wxDC::*)() const, &wxDC::Get##func_base, \
+    void(wxDC::*)(const attr_type&), &wxDC::Set##func_base> classname
 
 // ----------------------------------------------------------------------------
-// helper class: you can use it to temporarily change the DC text background mode and
-// restore it automatically when the object goes out of scope
+// Helper classes: you can use these to temporarily change a DC attribute and
+// restore it automatically when the object goes out of scope.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDCTextBgModeChanger
-{
-public:
-    wxDCTextBgModeChanger(wxDC& dc) : m_dc(dc), m_modeOld(wxBRUSHSTYLE_INVALID) { }
+wxDC_CHANGER_GDI(wxDCTextColourChanger, wxColour, TextForeground);
+wxDC_CHANGER_GDI(wxDCTextBgColourChanger, wxColour, TextBackground);
 
-    wxDCTextBgModeChanger(wxDC& dc, int mode) : m_dc(dc), m_modeOld(wxBRUSHSTYLE_INVALID)
-    {
-        Set(mode);
-    }
+typedef wxPrivate::wxDCChanger<int,
+    int (wxDC::*)() const, &wxDC::GetBackgroundMode,
+    void (wxDC::*)(int), &wxDC::SetBackgroundMode> wxDCTextBgModeChanger;
 
-    ~wxDCTextBgModeChanger()
-    {
-        if ( m_modeOld != wxBRUSHSTYLE_INVALID )
-            m_dc.SetBackgroundMode(m_modeOld);
-    }
-
-    void Set(int mode)
-    {
-        if ( m_modeOld == wxBRUSHSTYLE_INVALID )
-            m_modeOld = m_dc.GetBackgroundMode();
-        m_dc.SetBackgroundMode(mode);
-    }
-
-private:
-    wxDC& m_dc;
-
-    int m_modeOld;
-
-    wxDECLARE_NO_COPY_CLASS(wxDCTextBgModeChanger);
-};
-
-// ----------------------------------------------------------------------------
-// helper class: you can use it to temporarily change the DC pen and
-// restore it automatically when the object goes out of scope
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxDCPenChanger
-{
-public:
-    wxDCPenChanger(wxDC& dc, const wxPen& pen) : m_dc(dc), m_penOld(dc.GetPen())
-    {
-        m_dc.SetPen(pen);
-    }
-
-    ~wxDCPenChanger()
-    {
-        if ( m_penOld.IsOk() )
-            m_dc.SetPen(m_penOld);
-    }
-
-private:
-    wxDC& m_dc;
-
-    wxPen m_penOld;
-
-    wxDECLARE_NO_COPY_CLASS(wxDCPenChanger);
-};
-
-// ----------------------------------------------------------------------------
-// helper class: you can use it to temporarily change the DC brush and
-// restore it automatically when the object goes out of scope
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxDCBrushChanger
-{
-public:
-    wxDCBrushChanger(wxDC& dc, const wxBrush& brush) : m_dc(dc), m_brushOld(dc.GetBrush())
-    {
-        m_dc.SetBrush(brush);
-    }
-
-    ~wxDCBrushChanger()
-    {
-        if ( m_brushOld.IsOk() )
-            m_dc.SetBrush(m_brushOld);
-    }
-
-private:
-    wxDC& m_dc;
-
-    wxBrush m_brushOld;
-
-    wxDECLARE_NO_COPY_CLASS(wxDCBrushChanger);
-};
+wxDC_CHANGER_GDI(wxDCPenChanger, wxPen, Pen);
+wxDC_CHANGER_GDI(wxDCBrushChanger, wxBrush, Brush);
+wxDC_CHANGER_GDI(wxDCFontChanger, wxFont, Font);
 
 // ----------------------------------------------------------------------------
 // another small helper class: sets the clipping region in its ctor and
@@ -1528,46 +1456,5 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxDCClipper);
 };
-
-// ----------------------------------------------------------------------------
-// helper class: you can use it to temporarily change the DC font and
-// restore it automatically when the object goes out of scope
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxDCFontChanger
-{
-public:
-    wxDCFontChanger(wxDC& dc)
-        : m_dc(dc), m_fontOld()
-    {
-    }
-
-    wxDCFontChanger(wxDC& dc, const wxFont& font)
-        : m_dc(dc), m_fontOld(dc.GetFont())
-    {
-        m_dc.SetFont(font);
-    }
-
-    void Set(const wxFont& font)
-    {
-        if ( !m_fontOld.IsOk() )
-            m_fontOld = m_dc.GetFont();
-        m_dc.SetFont(font);
-    }
-
-    ~wxDCFontChanger()
-    {
-        if ( m_fontOld.IsOk() )
-            m_dc.SetFont(m_fontOld);
-    }
-
-private:
-    wxDC& m_dc;
-
-    wxFont m_fontOld;
-
-    wxDECLARE_NO_COPY_CLASS(wxDCFontChanger);
-};
-
 
 #endif // _WX_DC_H_BASE_
