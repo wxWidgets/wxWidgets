@@ -205,6 +205,35 @@ void wxInitData::MSWInitialize()
 
 #endif // __WINDOWS__
 
+void wxInitData::InitializeFromWide(int argcIn, wchar_t** argvIn)
+{
+    // For simplicity, make a copy of the arguments, even though we could avoid
+    // it -- but this would complicate the cleanup.
+    argc = argcIn;
+    argv = new wchar_t*[argc + 1];
+    argv[argc] = nullptr;
+
+#ifdef __WINDOWS__
+    // Not used in this case and shouldn't be passed to LocalFree().
+    argvMSW = nullptr;
+#else // !__WINDOWS__
+    // We need to convert from wide arguments back to the narrow ones.
+    argvA = new char*[argc + 1];
+    argvA[argc] = nullptr;
+
+    ownsArgvA = true;
+#endif // __WINDOWS__/!__WINDOWS__
+
+    for ( int i = 0; i < argc; i++ )
+    {
+        argv[i] = wxCRT_StrdupW(argvIn[i]);
+
+#ifndef __WINDOWS__
+        argvA[i] = wxStrdup(wxConvUTF8.cWC2MB(argv[i]));
+#endif // !__WINDOWS__
+    }
+}
+
 void wxInitData::Free()
 {
 #ifdef __WINDOWS__
@@ -224,6 +253,18 @@ void wxInitData::Free()
         {
             free(argv[i]);
         }
+
+#ifndef __WINDOWS__
+        if ( ownsArgvA )
+        {
+            for ( int i = 0; i < argc; i++ )
+            {
+                free(argvA[i]);
+            }
+
+            wxDELETEA(argvA);
+        }
+#endif // !__WINDOWS__
 
         wxDELETEA(argv);
         argc = 0;
@@ -292,6 +333,15 @@ bool wxEntryStart(int& argc, wxChar **argv)
 {
     // do minimal, always necessary, initialization
     // --------------------------------------------
+
+    // typically the command line arguments would be already initialized before
+    // we're called, e.g. both the entry point taking (narrow) char argv and
+    // the MSW one, using the entire (wide) string command line do it, but if
+    // this function is called directly from the application initialization
+    // code this wouldn't be the case, and we need to handle this too
+    auto& initData = wxInitData::Get();
+    if ( !initData.argc )
+        initData.InitializeFromWide(argc, argv);
 
     // initialize wxRTTI
     if ( !DoCommonPreInit() )
