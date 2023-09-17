@@ -1657,9 +1657,7 @@ void wxFlagsProperty::OnSetValue()
         const wxPGChoices& choices = m_choices;
         for ( unsigned int i = 0; i < GetItemCount(); i++ )
         {
-            int flag;
-
-            flag = choices.GetValue(i);
+            long flag = choices.GetValue(i);
 
             if ( (newFlags & flag) != (m_oldValue & flag) )
                 Item(i)->ChangeFlag( wxPG_PROP_MODIFIED, true );
@@ -1757,9 +1755,7 @@ void wxFlagsProperty::RefreshChildren()
     const wxPGChoices& choices = m_choices;
     for ( unsigned int i = 0; i < GetItemCount(); i++ )
     {
-        long flag;
-
-        flag = choices.GetValue(i);
+        long flag = choices.GetValue(i);
 
         long subVal = flags & flag;
         wxPGProperty* p = Item(i);
