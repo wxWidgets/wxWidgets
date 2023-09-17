@@ -1724,9 +1724,9 @@ bool wxFlagsProperty::StringToValue( wxVariant& variant, const wxString& text, i
 
     WX_PG_TOKENIZER1_END()
 
-    if ( variant != (long)newFlags )
+    if ( variant != newFlags )
     {
-        variant = (long)newFlags;
+        variant = newFlags;
         return true;
     }
 
