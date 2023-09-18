@@ -789,6 +789,11 @@ dnl This one is not enabled by default as it requires CEF to be available under
 dnl 3rdparty/cef.
 WX_ARG_ENABLE(webviewchromium, [  --enable-webviewchromium        use wxWebView Chromium backend], wxUSE_WEBVIEW_CHROMIUM)
 
+dnl When using wxWebViewChromium, we assume that CEF wrapper DLL was built in
+dnl release mode, use this option if it was built in debug one, i.e. with
+dnl -DCMAKE_BUILD_TYPE=Debug
+WX_ARG_ENABLE(cef_debug,    [  --enable-cef_debug      use debug build of CEF wrapper], wxUSE_CEF_DEBUG)
+
 dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 dnl can't be disabled, don't even provide an option to do it
 if test "$wxUSE_MAC" != 1; then
@@ -6971,6 +6976,12 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             wxUSE_WEBVIEW="yes"
             USE_WEBVIEW_CHROMIUM=1
             AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
+
+            dnl Just trust the option value, we don't really have any simple
+            dnl way to check the CEF wrapper DLL build type.
+            if test "$wxUSE_CEF_DEBUG" = "yes"; then
+                AC_DEFINE(wxHAVE_CEF_DEBUG)
+            fi
         else
             AC_MSG_ERROR([CEF not detected: $cef_error
 

@@ -1240,6 +1240,7 @@ enable_printarch
 enable_svg
 enable_webview
 enable_webviewchromium
+enable_cef_debug
 enable_graphics_ctx
 enable_graphics_d2d
 enable_clipboard
@@ -2210,6 +2211,7 @@ Optional Features:
   --enable-svg            use wxSVGFileDC device context
   --enable-webview        use wxWebView library
   --enable-webviewchromium        use wxWebView Chromium backend
+  --enable-cef_debug      use debug build of CEF wrapper
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-graphics-d2d   use Direct2D-based graphics context
   --enable-clipboard      use wxClipboard class
@@ -8855,6 +8857,36 @@ fi
 
 
           eval "$wx_cv_use_webviewchromium"
+
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-cef_debug was given.
+if test "${enable_cef_debug+set}" = set; then :
+  enableval=$enable_cef_debug;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_cef_debug='wxUSE_CEF_DEBUG=yes'
+                          else
+                            wx_cv_use_cef_debug='wxUSE_CEF_DEBUG=no'
+                          fi
+
+else
+
+                          wx_cv_use_cef_debug='wxUSE_CEF_DEBUG=${'DEFAULT_wxUSE_CEF_DEBUG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_cef_debug"
 
 
 if test "$wxUSE_MAC" != 1; then
@@ -39810,6 +39842,11 @@ $as_echo "$wx_cv_lib_cef" >&6; }
             USE_WEBVIEW_CHROMIUM=1
             $as_echo "#define wxUSE_WEBVIEW_CHROMIUM 1" >>confdefs.h
 
+
+                                    if test "$wxUSE_CEF_DEBUG" = "yes"; then
+                $as_echo "#define wxHAVE_CEF_DEBUG 1" >>confdefs.h
+
+            fi
         else
             as_fn_error $? "CEF not detected: $cef_error
 

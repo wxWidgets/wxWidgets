@@ -602,6 +602,11 @@
 #define wxUSE_EPOLL_DISPATCHER 0
 
 /*
+   Use debug version of CEF in wxWebViewChromium.
+ */
+#undef wxHAVE_CEF_DEBUG
+
+/*
    Use GStreamer for Unix.
 
    Default is 0 as this requires a lot of dependencies which might not be

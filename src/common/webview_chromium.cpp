@@ -29,6 +29,15 @@
 #include <gdk/gdkx.h>
 #endif
 
+// When not using debug version of CEF under Unix we need to make sure to
+// predefine NDEBUG before including its headers to avoid ODR violations.
+#ifndef wxHAVE_CEF_DEBUG
+    #ifndef NDEBUG
+        #define NDEBUG
+        #define wxUNDEF_NDEBUG
+    #endif
+#endif
+
 #ifdef __WXOSX__
 #include "wx/osx/private/webview_chromium.h"
 #endif
@@ -53,6 +62,10 @@ wxGCC_WARNING_RESTORE(unused-parameter)
 
 #ifdef __VISUALC__
 #pragma warning(pop)
+#endif
+
+#ifdef wxUNDEF_NDEBUG
+    #undef NDEBUG
 #endif
 
 #if CHROME_VERSION_BUILD < 5845
