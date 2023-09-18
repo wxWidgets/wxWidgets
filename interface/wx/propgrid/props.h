@@ -99,7 +99,7 @@ public:
     };
 
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
-    virtual ~wxNumericPropertyValidator() { }
+    virtual ~wxNumericPropertyValidator() = default;
     virtual bool Validate(wxWindow* parent);
 };
 
@@ -881,7 +881,7 @@ class wxPGArrayStringEditorDialog : public wxPGArrayEditorDialog
 {
 public:
     wxPGArrayStringEditorDialog();
-    virtual ~wxPGArrayStringEditorDialog() { }
+    virtual ~wxPGArrayStringEditorDialog() = default;
 
     void Init();
 

@@ -1847,7 +1847,7 @@ template <typename T> void wxDELETEA(T*& array);
         void DecRef() { if ( !--m_nRef ) delete this; }
 
     private:
-        ~RefCounted() { }
+        ~RefCounted() = default;
 
         wxSUPPRESS_GCC_PRIVATE_DTOR(RefCounted)
     };
