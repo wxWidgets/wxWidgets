@@ -696,7 +696,9 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 
 wxBitmap wxMask::GetBitmap() const
 {
-    return wxBitmap(*m_qtBitmap);
+    QImage qtImage = m_qtBitmap->toImage();
+    qtImage.invertPixels();
+    return wxBitmap(QBitmap::fromImage(qtImage));
 }
 
 QBitmap *wxMask::GetHandle() const
