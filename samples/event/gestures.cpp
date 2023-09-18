@@ -23,7 +23,7 @@ MyGestureFrame::MyGestureFrame()
     SetSizeHints(wxMin(800,dsplySz.GetWidth()), wxMin(600,dsplySz.GetHeight()));
 
     // Log to the text control
-    delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
+    m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
 
     // Bind all gestures to the same event handler, which must run before
     // the other handlers, to clear the log window
@@ -64,6 +64,7 @@ MyGesturePanel::MyGesturePanel(MyGestureFrame *parent)
 
 void MyGestureFrame::OnQuit(wxCloseEvent& WXUNUSED(event))
 {
+    delete wxLog::SetActiveTarget(m_logOld);
     Destroy();
 }
 
