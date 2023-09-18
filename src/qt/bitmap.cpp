@@ -557,10 +557,25 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     // allow access if bpp is valid
     if ( !refData->m_qtPixmap.isNull() && (bpp == 32 || bpp == 24 || bpp == 1) )
     {
-        refData->m_rawPixelSource = refData->m_qtPixmap.toImage().convertToFormat(
-                                        bpp == 1 ? QImage::Format_Mono
-                                                 : bpp == 32 ? QImage::Format_RGBA8888_Premultiplied
-                                                             : QImage::Format_RGB888);
+        if ( bpp == 1 )
+        {
+            // Iterator::Pixel() actually returns an index into the colour table
+            // of the bitmap when accessing pixels via wxMonoPixelData. So make
+            // sure the entries are in the correct order in the table to provide
+            // one-to-one correspondence between pixel state (on/off) and its
+            // colour (white/black)
+            const QVector<QRgb> colorTable {qRgb(0, 0, 0), qRgb(255, 255, 255)};
+
+            refData->m_rawPixelSource =
+                refData->m_qtPixmap.toImage().convertToFormat(QImage::Format_Mono, colorTable);
+        }
+        else
+        {
+            refData->m_rawPixelSource =
+                refData->m_qtPixmap.toImage().convertToFormat(bpp == 32 ? QImage::Format_RGBA8888_Premultiplied
+                                                                        : QImage::Format_RGB888);
+        }
+
         data.m_height = refData->m_rawPixelSource.height();
         data.m_width = refData->m_rawPixelSource.width();
         data.m_stride = refData->m_rawPixelSource.bytesPerLine();
