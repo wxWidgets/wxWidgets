@@ -1608,21 +1608,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surfac
     m_buffer = nullptr;
 }
 
-namespace
-{
-#ifdef wxHAS_RAW_BITMAP
-// Return true if the pixel is masked under this platform
-inline bool IsMasked(wxNativePixelData::Iterator& p)
-{
-#ifndef __WXQT__
-    return p.Red()+p.Green()+p.Blue() == 0;
-#else
-    return p.Red()+p.Green()+p.Blue() != 0;
-#endif
-}
-#endif
-}
-
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp )
     : wxGraphicsBitmapData(renderer)
 {
@@ -1750,7 +1735,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             wxUint32* const rowStartDst = data;
             for (int x=0; x < pixData.GetWidth(); x++)
             {
-                if ( IsMasked(p) )
+                if (p.Red()+p.Green()+p.Blue() == 0)
                     *data = 0;
 
                 ++data;

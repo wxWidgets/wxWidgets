@@ -55,18 +55,6 @@ typedef wxPixelData<wxBitmap, wxNative32PixelFormat> wxNative32PixelData;
 typedef wxNativePixelData wxNative32PixelData;
 #endif // __WXOSX__ || __WXQT__
 
-// masked/unmasked colours are revered in wxQt:
-
-#ifndef __WXQT__
-#define wxMASK_COLOUR_OPAQUE        wxWHITE
-#define wxMASK_COLOUR_TRANSPARENT   wxBLACK
-#else // __WXQT__
-#define wxMASK_COLOUR_OPAQUE        wxBLACK
-#define wxMASK_COLOUR_TRANSPARENT   wxWHITE
-#endif // !__WXQT__
-
-static const wxColour wxMASK_COLOUR = *wxMASK_COLOUR_OPAQUE;
-
 // ----------------------------------------------------------------------------
 // tests
 // ----------------------------------------------------------------------------
@@ -237,7 +225,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
                 wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
                 wxColour maskc(iMask.Red(), iMask.Green(), iMask.Blue());
                 wxColour imgc(image.GetRed(x, y), image.GetGreen(x, y), image.GetBlue(x, y));
-                if ( maskc == wxMASK_COLOUR )
+                if ( maskc == *wxWHITE )
                 {
                     CHECK_EQUAL_COLOUR_RGB(imgc, bmpc);
                     unmaskedPixelsCount++;
@@ -422,7 +410,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
                 wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue(), iBmp.Alpha());
                 wxColour maskc(iMask.Red(), iMask.Green(), iMask.Blue());
                 wxColour imgc(image.GetRed(x, y), image.GetGreen(x, y), image.GetBlue(x, y), image.GetAlpha(x,y));
-                if ( maskc == wxMASK_COLOUR )
+                if ( maskc == *wxWHITE )
                 {
 #if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
                     // Premultiplied values
@@ -518,7 +506,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
                 wxColour maskc(iMask.Red(), iMask.Green(), iMask.Blue());
                 wxColour imgc(img.GetRed(x, y), img.GetGreen(x, y), img.GetBlue(x, y));
                 CHECK_EQUAL_COLOUR_RGB(bmpc, imgc);
-                wxColour c = maskc == wxMASK_COLOUR ? fillCol : maskCol;
+                wxColour c = maskc == *wxWHITE ? fillCol : maskCol;
                 CHECK_EQUAL_COLOUR_RGB(bmpc, c);
             }
             rowStartBmp.OffsetY(dataBmp, 1);
@@ -617,7 +605,7 @@ TEST_CASE("BitmapTestCase::FromImage", "[bitmap][image][convertfrom]")
 #endif // __WXMSW__ || __WXOSX__ || __WXQT__
                 CHECK_EQUAL_COLOUR_RGBA(bmpc, imgc);
 
-                wxColour c = maskc == wxMASK_COLOUR ? fillCol : maskCol;
+                wxColour c = maskc == *wxWHITE ? fillCol : maskCol;
 #if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
                 // Premultiplied values
                 r = ((c.Red() * imgc.Alpha()) + 127) / 255;
@@ -1299,10 +1287,10 @@ TEST_CASE("BitmapTestCase::SubBitmapNonAlphaWithMask", "[bitmap][subbitmap][nona
         p.OffsetX(data, w / 2); // bottom-right point
         maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
     }
-    CHECK(maskClrTopLeft == *wxMASK_COLOUR_OPAQUE);
-    CHECK(maskClrTopRight == *wxMASK_COLOUR_OPAQUE);
-    CHECK(maskClrBottomLeft == *wxMASK_COLOUR_TRANSPARENT);
-    CHECK(maskClrBottomRight == *wxMASK_COLOUR_TRANSPARENT);
+    CHECK(maskClrTopLeft == *wxWHITE);
+    CHECK(maskClrTopRight == *wxWHITE);
+    CHECK(maskClrBottomLeft == *wxBLACK);
+    CHECK(maskClrBottomRight == *wxBLACK);
 
     // wxMonoPixelData only exists in wxMSW and wxQt
 #if defined(__WXMSW__) || defined(__WXQT__)
@@ -1501,10 +1489,10 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
         p.OffsetX(data, w / 2); // bottom-right point
         maskClrBottomRight = wxColour(p.Red(), p.Green(), p.Blue());
     }
-    CHECK(maskClrTopLeft == *wxMASK_COLOUR_OPAQUE);
-    CHECK(maskClrTopRight == *wxMASK_COLOUR_OPAQUE);
-    CHECK(maskClrBottomLeft == *wxMASK_COLOUR_TRANSPARENT);
-    CHECK(maskClrBottomRight == *wxMASK_COLOUR_TRANSPARENT);
+    CHECK(maskClrTopLeft == *wxWHITE);
+    CHECK(maskClrTopRight == *wxWHITE);
+    CHECK(maskClrBottomLeft == *wxBLACK);
+    CHECK(maskClrBottomRight == *wxBLACK);
 
     // wxMonoPixelData only exists in wxMSW and wxQt
 #if defined(__WXMSW__) || defined(__WXQT__)
