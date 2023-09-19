@@ -529,26 +529,14 @@ public:
     virtual void RefreshChildren();
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
-    // GetChoiceSelection needs to overridden since m_choices is
-    // used and value is integer, but it is not index.
     virtual int GetChoiceSelection() const;
 
-    // helpers
     size_t GetItemCount() const;
     const wxString& GetLabel( size_t ind ) const;
 
 protected:
-    // Used to detect if choices have been changed
-    wxPGChoicesData*        m_oldChoicesData;
-
-    // Needed to properly mark changed sub-properties
-    long                    m_oldValue;
-
-    // Converts string id to a relevant bit.
     long IdToBit( const wxString& id ) const;
-
-    // Creates children and sets value.
-    void Init();
+    void Init(long value);
 };
 
 

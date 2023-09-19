@@ -556,17 +556,16 @@ public:
         { return m_choices.GetLabel(static_cast<unsigned int>(ind)); }
 
 protected:
-    // Used to detect if choices have been changed
-    wxPGChoicesData*        m_oldChoicesData;
-
     // Needed to properly mark changed sub-properties
     long                    m_oldValue;
+
+    long                    m_allValueFlags;
 
     // Converts string id to a relevant bit.
     long IdToBit( const wxString& id ) const;
 
     // Creates children and sets value.
-    void Init();
+    void Init(long value);
 };
 
 // -----------------------------------------------------------------------
