@@ -2912,6 +2912,8 @@ wxGrid::SetTable(wxGridTableBase *table,
 
     InvalidateBestSize();
 
+    UpdateCurrentCellOnRedim();
+
     return m_created;
 }
 
