@@ -1312,13 +1312,6 @@ wxArrayString wxTranslations::GetAvailableTranslations(const wxString& domain) c
 
 bool wxTranslations::AddStdCatalog()
 {
-    // Try loading the message catalog for this version first, but fall back to
-    // the name without the version if it's not found, as message catalogs
-    // typically won't have the version in their names under non-Unix platforms
-    // (i.e. where they're not installed by our own "make install").
-    if ( AddCatalog("wxstd-" wxSTRINGIZE(wxMAJOR_VERSION) "." wxSTRINGIZE(wxMINOR_VERSION)) )
-        return true;
-
     if ( AddCatalog(wxS("wxstd")) )
         return true;
 
