@@ -5329,16 +5329,15 @@ void wxWindowGTK::Update()
     if (m_widget && gtk_widget_get_mapped(m_widget) && m_width > 0 && m_height > 0)
     {
         GdkDisplay* display = gtk_widget_get_display(m_widget);
-        // Flush everything out to the server, and wait for it to finish.
-        // This ensures nothing will overwrite the drawing we are about to do.
-        gdk_display_sync(display);
+        // If window has just been shown, drawing may not work unless pending
+        // requests queued for the windowing system are flushed first.
+        gdk_display_flush(display);
 
         GdkWindow* window = GTKGetDrawingWindow();
         if (window == NULL)
             window = gtk_widget_get_window(m_widget);
         gdk_window_process_updates(window, true);
 
-        // Flush again, but no need to wait for it to finish
         gdk_display_flush(display);
     }
 }
