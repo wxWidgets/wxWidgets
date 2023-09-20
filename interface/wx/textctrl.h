@@ -1768,7 +1768,7 @@ public:
     ///@{
 
     /**
-        Enable the automatic replacement of new lines characters in a
+        Enables the automatic replacement of new lines characters in a
         single-line text field with spaces under macOS.
 
         This feature is enabled by default and will replace any new line (`\n`)
@@ -1781,13 +1781,43 @@ public:
         the restriction preventing multiple lines from being entered unless
         wxTE_MULTILINE is specified.
 
-        @note This function is only available for macOS/Cocoa. It also has no
-        effect if the wxTE_MULTILINE flag is set on a text control.
+        @note Has no effect if the wxTE_MULTILINE flag is set on a text control.
 
         @onlyfor{wxosx}
         @since 3.1.6
     */
     void OSXEnableNewLineReplacement(bool enable);
+
+    /**
+        Enables the automatic replacement of ASCII quotation marks and
+        apostrophes with their typographic symbols.
+
+        This feature is enabled by default.
+
+        @onlyfor{wxosx}
+        @since 3.1.1
+    */
+    void OSXEnableAutomaticQuoteSubstitution(bool enable);
+
+    /**
+        Enables the automatic conversion of two ASCII hyphens into an m-dash.
+
+        This feature is enabled by default.
+
+        @onlyfor{wxosx}
+        @since 3.1.1
+    */
+    void OSXEnableAutomaticDashSubstitution(bool enable);
+
+    /**
+        Disables all automatic character substitutions.
+
+        @onlyfor{wxosx}
+        @since 3.1.1
+
+        @see OSXEnableAutomaticQuoteSubstitution(), OSXEnableAutomaticDashSubstitution()
+    */
+    void OSXDisableAllSmartSubstitutions();
 
     ///@}
 
