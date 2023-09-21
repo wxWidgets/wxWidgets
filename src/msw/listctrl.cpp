@@ -1511,7 +1511,10 @@ void wxListCtrl::CheckItem(long item, bool state)
 
 bool wxListCtrl::IsItemChecked(long item) const
 {
-    return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
+    if ( IsVirtual() )
+        return OnGetItemIsChecked(item);
+    else
+        return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
 void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
