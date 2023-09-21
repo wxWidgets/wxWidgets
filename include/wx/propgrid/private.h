@@ -9,6 +9,10 @@
 #ifndef _WX_PROPGRID_PRIVATE_H_
 #define _WX_PROPGRID_PRIVATE_H_
 
+#if !defined(WXBUILDING)
+#error This header is intended for internal use
+#endif // !WXBUILDING
+
 #include "wx/defs.h"
 
 // -----------------------------------------------------------------------
