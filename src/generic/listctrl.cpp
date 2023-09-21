@@ -3906,6 +3906,8 @@ bool wxListMainWindow::EnableCheckBoxes(bool enable)
 
 void wxListMainWindow::CheckItem(long item, bool state)
 {
+    wxCHECK_RET( HasCheckBoxes(), "checkboxes are disabled" );
+
     if ( !IsVirtual() )
     {
         wxListLineData* line = GetLine((size_t)item);
@@ -3920,6 +3922,9 @@ void wxListMainWindow::CheckItem(long item, bool state)
 
 bool wxListMainWindow::IsItemChecked(long item) const
 {
+    if ( !HasCheckBoxes() )
+        return false;
+
     if ( !IsVirtual() )
     {
         wxListLineData* line = GetLine((size_t)item);

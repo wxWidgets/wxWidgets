@@ -1494,6 +1494,8 @@ bool wxListCtrl::EnableCheckBoxes(bool enable)
 
 void wxListCtrl::CheckItem(long item, bool state)
 {
+    wxCHECK_RET( HasCheckBoxes(), "checkboxes are disabled" );
+
     if ( IsVirtual() )
     {
         // ListView_SetCheckState does nothing for a virtual control, so generate
@@ -1511,6 +1513,9 @@ void wxListCtrl::CheckItem(long item, bool state)
 
 bool wxListCtrl::IsItemChecked(long item) const
 {
+    if ( !HasCheckBoxes() )
+        return false;
+
     if ( IsVirtual() )
         return OnGetItemIsChecked(item);
     else
