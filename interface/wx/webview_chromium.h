@@ -88,6 +88,32 @@
     `WX_WEBVIEW_BACKEND` environment variable to the value `wxWebViewChromium`.
 
 
+    __CEF Helper Process__
+
+    CEF uses multiple processes. The main process, using wxWidgets and creating
+    wxWebViewChromium, is known as the "browser process" but CEF also creates
+    additional helper processes for other tasks it needs to perform. Under
+    non-Mac platforms by default the main process itself is also used as the
+    helper process: if the main process detects the presence of the special
+    `--type=` command line option, it considers that it is executed as "CEF
+    helper" and just passes the command line to CEF instead of executing as
+    usual. This happens before executing any application-specific code and so
+    makes it impossible to use `--type` option for the application itself.
+
+    Under macOS main process cannot be used as the helper process and a
+    separate executable with the fixed name must be built to be used instead.
+    wxWidgets provides a trivial source of such helper process in
+    `samples/webview/cef_process_helper.cpp` file, which has to be compiled and
+    linked with CEF at least under macOS.
+
+    It may also be desirable to use a separate helper process under the other
+    platforms too and if an executable called `yourapp_cef_helper` (Unix) or
+    `yourapp_cef_helper.exe` (MSW), where `yourapp` is the name of the
+    application such as returned by wxApp::GetAppName(), is found in the same
+    directory as the main application executable itself, it will be used as the
+    CEF helper process.
+
+
     __Microsoft Windows Platform__
 
     Windows 10 or newer is required to run applications using wxWebViewChromium.
@@ -208,13 +234,6 @@
           |     | |____wxmac.icns
           |     |____Info.plist
           |____Info.plist
-
-
-    __Miscellaneous Notes__
-
-    When running applications using wxWebViewChromium, the command line option
-    `--type=xxx` is interpreted specially as it is used by CEF to launch helper
-    applications, so your program must not use this option for anything else.
 
 
 

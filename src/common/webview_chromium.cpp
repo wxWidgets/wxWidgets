@@ -674,6 +674,24 @@ bool wxWebViewChromium::InitCEF()
 
     CefSettings settings;
 
+    // Check for the presence of a separate helper application under non-macOS
+    // platforms (under the latter the helper process must always be present
+    // inside the application bundle).
+#ifndef __WXOSX__
+    const auto app = wxApp::GetInstance();
+    wxCHECK_MSG( app, false, "Can't use wxWebViewChromium without wxApp" );
+
+    wxFileName helperApp(wxStandardPaths::Get().GetExecutablePath());
+    helperApp.SetName(app->GetAppName() + "_cef_helper");
+    if ( helperApp.FileExists() )
+    {
+        const wxString& helperPath = helperApp.GetAbsolutePath();
+
+        wxLogTrace(TRACE_CEF, "Using \"%s\" as CEF helper", helperPath);
+        CefString(&settings.browser_subprocess_path).FromWString(helperPath.ToStdWstring());
+    }
+#endif // !__WXOSX__
+
     // According to b5386249b (alloy: Remove CefSettings.user_data_path (fixes
     // #3511), 2023-06-06) in CEF sources, root_cache_path should be used for
     // all files now.
@@ -695,7 +713,6 @@ bool wxWebViewChromium::InitCEF()
 #ifdef __WXMSW__
     CefMainArgs args(wxGetInstance());
 #else
-    wxAppConsole* app = wxApp::GetInstance();
     CefMainArgs args(app->argc, app->argv);
 #endif
 
