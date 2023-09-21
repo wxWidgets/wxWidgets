@@ -370,42 +370,38 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
     typedef EGLDisplay (*GetPlatformDisplayFunc)(EGLenum platform,
                                                  void* native_display,
                                                  const EGLAttrib* attrib_list);
-    // Static initializers ensure these are only computed once.
-    static const bool s_EGLHasPlatformDisplay(
-        wxGLCanvasBase::IsExtensionInList(
-            eglQueryString(nullptr, EGL_EXTENSIONS),
-            "EGL_EXT_platform_base"));
 
-    static const GetPlatformDisplayFunc s_eglGetPlatformDisplay(
-        []() -> GetPlatformDisplayFunc
+    // Try loading the appropriate EGL function on first use.
+    static GetPlatformDisplayFunc s_eglGetPlatformDisplay = nullptr;
+    static bool s_eglGetPlatformDisplayInitialized = false;
+    if ( !s_eglGetPlatformDisplayInitialized )
+    {
+        s_eglGetPlatformDisplayInitialized = true;
+
+        if ( wxGLCanvasBase::IsExtensionInList(
+                eglQueryString(nullptr, EGL_EXTENSIONS),
+                "EGL_EXT_platform_base") )
         {
-            if ( !s_EGLHasPlatformDisplay )
-            {
-                return nullptr;
-            }
-
-            const GetPlatformDisplayFunc getPlatformDisplayFunc =
-                reinterpret_cast<GetPlatformDisplayFunc>(
+            s_eglGetPlatformDisplay = reinterpret_cast<GetPlatformDisplayFunc>(
                     eglGetProcAddress("eglGetPlatformDisplay"));
-            if ( getPlatformDisplayFunc )
+            if ( !s_eglGetPlatformDisplay )
             {
-                return getPlatformDisplayFunc;
+                // Try the fallback if not available.
+                s_eglGetPlatformDisplay = reinterpret_cast<GetPlatformDisplayFunc>(
+                    eglGetProcAddress("eglGetPlatformDisplayEXT"));
             }
+        }
+    }
 
-            // Fallback or nullptr if not available.
-            return reinterpret_cast<GetPlatformDisplayFunc>(
-                eglGetProcAddress("eglGetPlatformDisplayEXT"));
-        } ());
+    const wxDisplayInfo info = wxGetDisplayInfo();
 
     if ( !s_eglGetPlatformDisplay )
     {
-        // For backward compatibility.
-        return eglGetDisplay(
-            static_cast<EGLNativeDisplayType>(wxGetDisplay()));
+        // Use the last fallback for backward compatibility.
+        return eglGetDisplay(static_cast<EGLNativeDisplayType>(info.dpy));
     }
 
-    wxDisplayInfo info = wxGetDisplayInfo();
-    EGLenum platform;
+    EGLenum platform = 0;
     switch ( info.type )
     {
         case wxDisplayX11:
@@ -414,9 +410,11 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
         case wxDisplayWayland:
             platform = EGL_PLATFORM_WAYLAND_EXT;
             break;
-        default:
-            return EGL_NO_DISPLAY;
+        case wxDisplayNone:
+            break;
     }
+
+    wxCHECK_MSG( platform, EGL_NO_DISPLAY, "unknown display type" );
 
     return s_eglGetPlatformDisplay(platform, info.dpy, nullptr);
 }
