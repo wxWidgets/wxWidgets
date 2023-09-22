@@ -390,19 +390,28 @@ wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
 // See wxPGProperty::SetAutoUnspecified().
 wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
 
-// Indicates the bit usable by derived properties.
-wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
+// For internal use only.
+wxPG_PROP_RESERVED_1                = 0x00080000,
 
-// Indicates the bit usable by derived properties.
-wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
+// For internal use only.
+wxPG_PROP_RESERVED_2                = 0x00100000,
 
 // Indicates that the property is being deleted and should be ignored.
 wxPG_PROP_BEING_DELETED             = 0x00200000,
 
-// Indicates the bit usable by derived properties.
-wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
-
+// For internal use only.
+wxPG_PROP_RESERVED_3                = 0x00400000
 };
+
+#if WXWIN_COMPATIBILITY_3_2
+// Indicates bits usable by derived properties.
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_CLASS_SPECIFIC_1 in intended for internal use only.")
+constexpr wxPGPropertyFlags wxPG_PROP_CLASS_SPECIFIC_1 = wxPG_PROP_RESERVED_1;
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_CLASS_SPECIFIC_2 in intended for internal use only.")
+constexpr wxPGPropertyFlags wxPG_PROP_CLASS_SPECIFIC_2 = wxPG_PROP_RESERVED_2;
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_CLASS_SPECIFIC_3 in intended for internal use only.")
+constexpr wxPGPropertyFlags wxPG_PROP_CLASS_SPECIFIC_3 = wxPG_PROP_RESERVED_3;
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // Topmost flag.
 constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;

@@ -28,11 +28,6 @@ public:
 // Property classes
 // -----------------------------------------------------------------------
 
-/** If set, enables ::wxTE_PASSWORD on wxStringProperty editor.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_PASSWORD = wxPG_PROP_CLASS_SPECIFIC_2;
-
 /** @class wxStringProperty
     @ingroup classes
     Basic property with string value.
@@ -350,14 +345,6 @@ public:
 };
 
 
-
-/** If set, then selection of choices is static and should not be
-    changed (i.e. returns @NULL in GetPropertyChoices).
-    Used by wxSystemColourProperty, wxCursorProperty.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPG_PROP_CLASS_SPECIFIC_1;
-
 /** @class wxEnumProperty
     @ingroup classes
     You can derive custom properties with choices from this class. See
@@ -589,12 +576,6 @@ protected:
 };
 
 
-/**
-    If set, full path is shownin wxFileProperty.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_CLASS_SPECIFIC_1;
-
 /** @class wxFileProperty
     @ingroup classes
     Like wxLongStringProperty, but the button triggers file selector instead.
@@ -644,12 +625,6 @@ protected:
     int         m_indFilter;
 };
 
-
-/** Flag used in wxLongStringProperty to mark that edit button
-    should be enabled even in the read-only mode.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_1;
 
 /** @class wxLongStringProperty
     @ingroup classes
@@ -702,18 +677,6 @@ public:
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
 };
-
-
-/** wxBoolProperty, wxFlagsProperty specific flag.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_USE_CHECKBOX = wxPG_PROP_CLASS_SPECIFIC_1;
-/** wxBoolProperty, wxFlagsProperty specific flag.
-    DCC = Double Click Cycles
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_USE_DCC = wxPG_PROP_CLASS_SPECIFIC_2;
-
 
 
 /** @class wxArrayStringProperty

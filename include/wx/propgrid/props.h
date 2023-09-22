@@ -347,9 +347,12 @@ public:
 
 // -----------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_3_2
 // If set, then selection of choices is static and should not be
 // changed (i.e. returns nullptr in GetPropertyChoices).
-constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPG_PROP_CLASS_SPECIFIC_1;
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_STATIC_CHOICES is intended for internal use.")
+constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPG_PROP_RESERVED_1;
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // Represents a single selection from a list of choices
 // You can derive custom properties with choices from this class.
@@ -591,8 +594,11 @@ protected:
 
 // -----------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_3_2
 // Indicates first bit usable by derived properties.
-constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_CLASS_SPECIFIC_1;
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_SHOW_FULL_FILENAME is intended for internal use.")
+constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_RESERVED_1;
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // Like wxLongStringProperty, but the button triggers file selector instead.
 class WXDLLIMPEXP_PROPGRID wxFileProperty : public wxEditorDialogProperty
@@ -629,9 +635,12 @@ protected:
 
 // -----------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_3_2
 // Flag used in wxLongStringProperty to mark that edit button
 // should be enabled even in the read-only mode.
-constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_CLASS_SPECIFIC_3;
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_ACTIVE_BTN is intended for internal use.")
+constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_RESERVED_3;
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // Like wxStringProperty, but has a button that triggers a small text
 // editor dialog.

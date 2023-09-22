@@ -26,6 +26,7 @@
 #if wxPG_INCLUDE_ADVPROPS
 
 #include "wx/propgrid/advprops.h"
+#include "wx/propgrid/private.h"
 
 #include "wx/odcombo.h"
 #include "wx/uilocale.h"
@@ -758,9 +759,13 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 // wxSystemColourProperty
 // -----------------------------------------------------------------------
 
-// wxEnumProperty based classes cannot use wxPG_PROP_CLASS_SPECIFIC_1
-#define wxPG_PROP_HIDE_CUSTOM_COLOUR        wxPG_PROP_CLASS_SPECIFIC_2
-#define wxPG_PROP_COLOUR_HAS_ALPHA          wxPG_PROP_CLASS_SPECIFIC_3
+#if WXWIN_COMPATIBILITY_3_2
+// wxEnumProperty based classes cannot use wxPG_PROP_RESERVED_1
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_HIDE_CUSTOM_COLOUR is intended for internal use.")
+constexpr wxPGPropertyFlags wxPG_PROP_HIDE_CUSTOM_COLOUR = wxPG_PROP_RESERVED_2;
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_COLOUR_HAS_ALPHA is intended for internal use.")
+constexpr wxPGPropertyFlags wxPG_PROP_COLOUR_HAS_ALPHA = wxPG_PROP_RESERVED_3;
+#endif // if WXWIN_COMPATIBILITY_3_2
 
 #include "wx/colordlg.h"
 
