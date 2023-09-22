@@ -1398,12 +1398,11 @@ void FormMain::PopulateWithExamples ()
     myTestBitmap2x.SetScaleFactor(2);
     pg->SetPropertyImage( "StringPropertyWithBitmap", wxBitmapBundle::FromBitmaps(myTestBitmap1x, myTestBitmap2x));
 
-    // this value array would be optional if values matched string indexes
-    //long flags_prop_values[] = { wxICONIZE, wxCAPTION, wxMINIMIZE_BOX, wxMAXIMIZE_BOX };
-
-    //pg->Append( wxFlagsProperty("Example of FlagsProperty","FlagsProp",
-    //    flags_prop_labels, flags_prop_values, 0, GetWindowStyle() ) );
-
+    const wxString flagsPropLabels[] = { "Bit 0", "Bit 1", "Bit 2", "Bit 3"};
+    long flagsPropValues[] = { 0x01, 0x02, 0x04, 0x08 };
+    wxPGChoices flagsPropChoices(WXSIZEOF(flagsPropLabels), flagsPropLabels, flagsPropValues);
+    pg->Append( new wxFlagsProperty("FlagsProperty", wxPG_LABEL, flagsPropChoices, 0x03 ) );
+    pg->SetPropertyAttribute("FlagsProperty", wxPG_BOOL_USE_CHECKBOX, true);
 
     // Multi choice dialog.
     wxArrayString tchoices;
