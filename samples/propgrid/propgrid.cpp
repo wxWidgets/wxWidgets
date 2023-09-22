@@ -71,6 +71,11 @@
 
 #include "wx/popupwin.h"
 
+#include <random>
+
+static std::random_device s_rd;
+static std::default_random_engine s_rng(s_rd());
+
 // -----------------------------------------------------------------------
 // wxSampleMultiButtonEditor
 //   A sample editor class that has multiple buttons.
@@ -2300,13 +2305,14 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 {
     // Delete random property
     wxPGProperty* p = m_pPropGridManager->GetGrid()->GetRoot();
+    std::uniform_int_distribution<unsigned int> distrib(0, 1000);
 
     for (;;)
     {
         if ( !p->HasAnyChild() )
             break;
 
-        unsigned int n = static_cast<unsigned int>(rand()) % p->GetChildCount();
+        unsigned int n = distrib(s_rng) % p->GetChildCount();
         p = p->Item(n);
 
         if ( !p->IsCategory() )
