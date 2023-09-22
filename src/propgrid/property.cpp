@@ -729,9 +729,8 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
 
         //
         // Prepare children recursively
-        for ( unsigned int i=0; i<GetChildCount(); i++ )
+        for ( wxPGProperty* child : m_children )
         {
-            wxPGProperty* child = Item(i);
             child->InitAfterAdded(pageState, pageState->GetGrid());
         }
 
@@ -1571,8 +1570,8 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, wxPGSetValueFlag
         // value is <composed>
         if ( AreChildrenComponents() )
         {
-            for ( unsigned int i = 0; i < GetChildCount(); i++ )
-                Item(i)->SetValue(value, nullptr, flags| wxPGSetValueFlags::FromParent);
+            for ( wxPGProperty* child : m_children )
+                child->SetValue(value, nullptr, flags| wxPGSetValueFlags::FromParent);
         }
     }
 
@@ -1612,8 +1611,8 @@ void wxPGProperty::SetFlagRecursively( wxPGPropertyFlags flag, bool set )
 {
     ChangeFlag(flag, set);
 
-    for ( unsigned int i = 0; i < GetChildCount(); i++ )
-        Item(i)->SetFlagRecursively(flag, set);
+    for ( wxPGProperty* child : m_children )
+        child->SetFlagRecursively(flag, set);
 }
 
 void wxPGProperty::RefreshEditor()
@@ -1688,8 +1687,8 @@ void wxPGProperty::DoEnable( bool enable )
     ChangeFlag(wxPG_PROP_DISABLED, !enable);
 
     // Apply same to sub-properties as well
-    for ( unsigned int i = 0; i < GetChildCount(); i++ )
-        Item(i)->DoEnable( enable );
+    for ( wxPGProperty* child : m_children )
+        child->DoEnable( enable );
 }
 
 void wxPGProperty::EnsureCells( unsigned int column )
@@ -1755,14 +1754,14 @@ void wxPGProperty::AdaptiveSetCell( unsigned int firstCol,
 
     if ( recursively )
     {
-        for ( unsigned int i=0; i<GetChildCount(); i++ )
-            Item(i)->AdaptiveSetCell( firstCol,
-                                      lastCol,
-                                      cell,
-                                      srcData,
-                                      unmodCellData,
-                                      ignoreWithFlags,
-                                      recursively );
+        for ( wxPGProperty* child : m_children )
+            child->AdaptiveSetCell( firstCol,
+                                    lastCol,
+                                    cell,
+                                    srcData,
+                                    unmodCellData,
+                                    ignoreWithFlags,
+                                    recursively );
     }
 }
 
@@ -1775,9 +1774,9 @@ void wxPGProperty::ClearCells(FlagType ignoreWithFlags, bool recursively)
 
     if ( recursively )
     {
-        for ( unsigned int i = 0; i < GetChildCount(); i++ )
+        for ( wxPGProperty* child : m_children )
         {
-            Item(i)->ClearCells(ignoreWithFlags, recursively);
+            child->ClearCells(ignoreWithFlags, recursively);
         }
     }
 }
@@ -2201,8 +2200,8 @@ bool wxPGProperty::DoHide( bool hide, wxPGPropertyValuesFlags flags )
 
     if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
     {
-        for ( unsigned int i = 0; i < GetChildCount(); i++ )
-            Item(i)->DoHide(hide, flags | wxPGPropertyValuesFlags::RecurseStarts);
+        for ( wxPGProperty* child : m_children )
+            child->DoHide(hide, flags | wxPGPropertyValuesFlags::RecurseStarts);
     }
 
     return true;
@@ -2210,10 +2209,8 @@ bool wxPGProperty::DoHide( bool hide, wxPGPropertyValuesFlags flags )
 
 bool wxPGProperty::HasVisibleChildren() const
 {
-    for ( unsigned int i = 0; i < GetChildCount(); i++ )
+    for ( wxPGProperty* child : m_children )
     {
-        wxPGProperty* child = Item(i);
-
         if ( !child->HasFlag(wxPG_PROP_HIDDEN) )
             return true;
     }
@@ -2463,7 +2460,6 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
         const wxPGProperty* child = Item(i);
-
         if ( childValue.GetName() == child->GetBaseName() )
         {
             //wxLogDebug(wxS("  %s(n=%i), %s"),childValue.GetName(),n,childValue.GetType());
@@ -2499,9 +2495,8 @@ void wxPGProperty::FixIndicesOfChildren( unsigned int starthere )
 // Returns (direct) child property with given name (or nullptr if not found)
 wxPGProperty* wxPGProperty::GetPropertyByName( const wxString& name ) const
 {
-    for ( unsigned int i = 0; i < GetChildCount(); i++ )
+    for ( wxPGProperty* p : m_children )
     {
-        wxPGProperty* p = Item(i);
         if ( p->m_name == name )
             return p;
     }
@@ -2589,10 +2584,8 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     wxPGProperty* current = nullptr;
     unsigned int iy = *nextItemY;
 
-    for ( unsigned int i = 0; i < GetChildCount(); i++ )
+    for ( wxPGProperty* pwc : m_children )
     {
-        wxPGProperty* pwc = Item(i);
-
         if ( !pwc->HasFlag(wxPG_PROP_HIDDEN) )
         {
             // Found?
@@ -2640,9 +2633,9 @@ void wxPGProperty::Empty()
 {
     if ( !HasFlag(wxPG_PROP_CHILDREN_ARE_COPIES) )
     {
-        for ( size_t i = 0; i < GetChildCount(); i++ )
+        for ( wxPGProperty* child : m_children )
         {
-            delete m_children[i];
+            delete child;
         }
     }
 
@@ -2678,10 +2671,8 @@ void wxPGProperty::DeleteChildren()
 
 bool wxPGProperty::IsChildSelected( bool recursive ) const
 {
-    for ( unsigned int i = 0; i < GetChildCount(); i++ )
+    for ( wxPGProperty* child : m_children )
     {
-        wxPGProperty* child = Item(i);
-
         // Test child
         if ( m_parentState->DoIsPropertySelected( child ) )
             return true;
@@ -2712,9 +2703,8 @@ bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
         node = pList->begin();
     }
 
-    for ( unsigned int i = 0; i < GetChildCount(); i++ )
+    for ( wxPGProperty* child : m_children )
     {
-        wxPGProperty* child = Item(i);
         const wxVariant* listValue = nullptr;
         wxVariant value;
 
@@ -2795,9 +2785,8 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
 
     //
     // Re-repare children (recursively)
-    for ( unsigned int i=0; i<GetChildCount(); i++ )
+    for ( wxPGProperty* child : m_children )
     {
-        wxPGProperty* child = Item(i);
         child->InitAfterAdded(state, grid);
     }
 

@@ -1732,9 +1732,9 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     {
         ChangeFlag(wxPG_PROP_USE_CHECKBOX, value.GetBool());
 
-        for ( size_t i = 0; i < GetChildCount(); i++ )
+        for ( wxPGProperty* child : m_children )
         {
-            Item(i)->SetAttribute(name, value);
+            child->SetAttribute(name, value);
         }
         return true;
     }
@@ -1742,9 +1742,9 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     {
         ChangeFlag(wxPG_PROP_USE_DCC, value.GetBool());
 
-        for ( size_t i = 0; i < GetChildCount(); i++ )
+        for ( wxPGProperty* child : m_children )
         {
-            Item(i)->SetAttribute(name, value);
+            child->SetAttribute(name, value);
         }
         return true;
     }
