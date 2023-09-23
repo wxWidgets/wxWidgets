@@ -618,6 +618,20 @@ bool wxBitmap::HasAlpha() const
     return M_PIXDATA.hasAlphaChannel();
 }
 
+void wxBitmap::QtBlendMaskWithAlpha()
+{
+    // For performance reasons, permanently merge the mask with pixmap's
+    // alpha channel, if it has any. Notice that the bitmap can still be
+    // converted to wxImage, but without mask information.
+
+    if ( IsOk() && HasAlpha() && M_MASK && M_MASK->GetHandle() )
+    {
+        AllocExclusive();
+        M_PIXDATA.setMask(*M_MASK->GetHandle());
+        wxDELETE(M_MASK);
+    }
+}
+
 //-----------------------------------------------------------------------------
 // wxMask
 //-----------------------------------------------------------------------------

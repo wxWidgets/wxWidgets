@@ -72,6 +72,9 @@ public:
     // disappear in the future
     bool HasAlpha() const override;
 
+    // Blend mask with alpha channel and remove the mask
+    void QtBlendMaskWithAlpha();
+
     QPixmap *GetHandle() const;
 
 protected:
