@@ -3245,6 +3245,9 @@ public:
         The position where the menu will appear can be specified either as a
         wxPoint @a pos or by two integers (@a x and @a y).
 
+        @note The position is ignored when using wxGTK with Wayland because
+              Wayland doesn't provide support for positioning the menu.
+
         Note that this function switches focus to this window before showing
         the menu.
 

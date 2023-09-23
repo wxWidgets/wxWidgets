@@ -6064,6 +6064,19 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     wxPopupMenuPositionCallbackData data;
     gpointer userdata;
     GtkMenuPositionFunc posfunc;
+
+#ifdef GDK_WINDOWING_WAYLAND
+    wxArrayGdkWindows windows;
+    if ( wxGTKImpl::IsWayland(GTKGetWindow(windows)) )
+    {
+        // We can't position the menu at the requested position when using
+        // Wayland and trying to do it results in the menu not being shown at
+        // all somehow, so don't even try.
+        x =
+        y = -1;
+    }
+#endif // Wayland
+
     if ( x == -1 && y == -1 )
     {
         // use GTK's default positioning algorithm
