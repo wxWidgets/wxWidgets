@@ -6079,36 +6079,50 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     }
 
     menu->m_popupShown = true;
-#if GTK_CHECK_VERSION(3,22,0)
-    GdkWindow* window = gtk_widget_get_window(m_wxwindow ? m_wxwindow : m_widget);
-    if (wxGTKImpl::IsWayland(window) && wx_is_at_least_gtk3(22))
+
+    // We need to attach menu to the widget to avoid "critical" GDK errors
+    // about not having "transient_for" window.
+    //
+    // Use this RAII class to ensure that we also detach the menu from the
+    // widget: even though this will be done when the menu destroyed, we could
+    // run into trouble if we try to pop it up for another window before it
+    // happens, which is allowed by wx API but would result in an assertion
+    // failure from gtk_menu_attach_to_widget() if the menu were still attached
+    // to the previous widget.
+    class MenuAttacher
     {
-        if (x == -1 && y == -1)
-            gtk_menu_popup_at_pointer(GTK_MENU(menu->m_menu), nullptr);
-        else
+    public:
+        MenuAttacher(GtkMenu* menu, GtkWidget* widget)
+            : m_menu{menu}
         {
-            const GdkRectangle rect = { x, y, 1, 1 };
-            gtk_menu_popup_at_rect(GTK_MENU(menu->m_menu),
-                window, &rect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
+            gtk_menu_attach_to_widget(m_menu, widget, nullptr);
         }
-    }
-    else
-#endif // GTK_CHECK_VERSION(3,22,0)
-    {
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 
-        gtk_menu_popup(
-                  GTK_MENU(menu->m_menu),
-                  nullptr,           // parent menu shell
-                  nullptr,           // parent menu item
-                  posfunc,                      // function to position it
-                  userdata,                     // client data
-                  0,                            // button used to activate it
-                  gtk_get_current_event_time()
-                );
+        ~MenuAttacher()
+        {
+            gtk_menu_detach(m_menu);
+        }
 
-        wxGCC_WARNING_RESTORE(deprecated-declarations)
-    }
+        MenuAttacher(const MenuAttacher&) = delete;
+        MenuAttacher& operator=(const MenuAttacher&) = delete;
+
+    private:
+        GtkMenu* const m_menu;
+    } attacher(GTK_MENU(menu->m_menu), GTK_WIDGET(m_widget));
+
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    gtk_menu_popup(
+              GTK_MENU(menu->m_menu),
+              nullptr,           // parent menu shell
+              nullptr,           // parent menu item
+              posfunc,                      // function to position it
+              userdata,                     // client data
+              0,                            // button used to activate it
+              gtk_get_current_event_time()
+            );
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 
     // it is possible for gtk_menu_popup() to fail
     if (!gtk_widget_get_visible(GTK_WIDGET(menu->m_menu)))
