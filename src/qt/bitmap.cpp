@@ -383,25 +383,21 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
     return bmp;
 }
 
-
-bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
-              const wxPalette *WXUNUSED(palette) ) const
+namespace
 {
-    wxCHECK_MSG( IsOk(), false, "invalid bitmap" );
-
-    //Try to save using Qt
-    const char* type_name = nullptr;
+inline const char* wxQtConvertBitmapType(wxBitmapType type)
+{
     switch (type)
     {
-        case wxBITMAP_TYPE_BMP:  type_name = "bmp";  break;
-        case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
-        case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
-        case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
-        case wxBITMAP_TYPE_GIF:  type_name = "gif";  break;
-        case wxBITMAP_TYPE_CUR:  type_name = "cur";  break;
-        case wxBITMAP_TYPE_TIFF: type_name = "tif";  break;
-        case wxBITMAP_TYPE_XBM:  type_name = "xbm";  break;
-        case wxBITMAP_TYPE_PCX:  type_name = "pcx";  break;
+        case wxBITMAP_TYPE_BMP:  return "bmp";
+        case wxBITMAP_TYPE_ICO:  return "ico";
+        case wxBITMAP_TYPE_JPEG: return "jpeg";
+        case wxBITMAP_TYPE_PNG:  return "png";
+        case wxBITMAP_TYPE_GIF:  return "gif";
+        case wxBITMAP_TYPE_CUR:  return "cur";
+        case wxBITMAP_TYPE_TIFF: return "tif";
+        case wxBITMAP_TYPE_XBM:  return "xbm";
+        case wxBITMAP_TYPE_PCX:  return "pcx";
         case wxBITMAP_TYPE_BMP_RESOURCE:
         case wxBITMAP_TYPE_ICO_RESOURCE:
         case wxBITMAP_TYPE_CUR_RESOURCE:
@@ -427,10 +423,19 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
         case wxBITMAP_TYPE_MAX:
         case wxBITMAP_TYPE_ANY:
         default:
-            break;
+            return nullptr;
     }
+}
+} // anonymous namespace
 
-    if ( M_PIXDATA.save(wxQtConvertString(name), type_name) )
+bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
+              const wxPalette *WXUNUSED(palette) ) const
+{
+    wxCHECK_MSG( IsOk(), false, "invalid bitmap" );
+
+    //Try to save using Qt
+
+    if ( M_PIXDATA.save(wxQtConvertString(name), wxQtConvertBitmapType(type)) )
     {
         return true;
     }
@@ -448,48 +453,8 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
     //Try to load using Qt
     AllocExclusive();
 
-    const char* type_name = nullptr;
-    switch (type)
-    {
-        case wxBITMAP_TYPE_BMP:  type_name = "bmp";  break;
-        case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
-        case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
-        case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
-        case wxBITMAP_TYPE_GIF:  type_name = "gif";  break;
-        case wxBITMAP_TYPE_CUR:  type_name = "cur";  break;
-        case wxBITMAP_TYPE_TIFF: type_name = "tif";  break;
-        case wxBITMAP_TYPE_XBM:  type_name = "xbm";  break;
-        case wxBITMAP_TYPE_PCX:  type_name = "pcx";  break;
-        case wxBITMAP_TYPE_BMP_RESOURCE:
-        case wxBITMAP_TYPE_ICO_RESOURCE:
-        case wxBITMAP_TYPE_CUR_RESOURCE:
-        case wxBITMAP_TYPE_XBM_DATA:
-        case wxBITMAP_TYPE_XPM:
-        case wxBITMAP_TYPE_XPM_DATA:
-        case wxBITMAP_TYPE_TIFF_RESOURCE:
-        case wxBITMAP_TYPE_GIF_RESOURCE:
-        case wxBITMAP_TYPE_PNG_RESOURCE:
-        case wxBITMAP_TYPE_JPEG_RESOURCE:
-        case wxBITMAP_TYPE_PNM:
-        case wxBITMAP_TYPE_PNM_RESOURCE:
-        case wxBITMAP_TYPE_PCX_RESOURCE:
-        case wxBITMAP_TYPE_PICT:
-        case wxBITMAP_TYPE_PICT_RESOURCE:
-        case wxBITMAP_TYPE_ICON:
-        case wxBITMAP_TYPE_ICON_RESOURCE:
-        case wxBITMAP_TYPE_ANI:
-        case wxBITMAP_TYPE_IFF:
-        case wxBITMAP_TYPE_TGA:
-        case wxBITMAP_TYPE_MACCURSOR:
-        case wxBITMAP_TYPE_MACCURSOR_RESOURCE:
-        case wxBITMAP_TYPE_MAX:
-        case wxBITMAP_TYPE_ANY:
-        default:
-            break;
-    }
-
     QImage img;
-    if ( img.load(wxQtConvertString(name), type_name) )
+    if ( img.load(wxQtConvertString(name), wxQtConvertBitmapType(type)) )
     {
         M_PIXDATA = (img.colorCount() > 0 && img.colorCount() <= 2)
                   ? QBitmap::fromImage(img, Qt::ThresholdDither)
