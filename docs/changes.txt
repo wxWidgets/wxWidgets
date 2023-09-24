@@ -287,6 +287,7 @@ wxGTK:
 - Improve and document wxGLCanvas::CreateSurface() (Dan Gudmundsson, #23366).
 - Fix loading WebKit2 extension when using wxWebView (Scott Talbert, #23497).
 - Fix editing cells without values in wxDataViewCtrl (#23523).
+- Fix showing popup menu with GTK/Wayland without active event (#23892).
 - Fix uninitialized wxKeyEvent::m_isRepeat (jolz, #23593).
 - Improve best size computation of wxTextCtrl (Alex Shvartzkop, #23610).
 - Fix missing borders for scrollable windows, e.g. wxListCtrl (#23236).
