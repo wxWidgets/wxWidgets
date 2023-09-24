@@ -705,6 +705,8 @@ bool wxGLCanvasEGL::SwapBuffers()
 #ifdef GDK_WINDOWING_X11
     if (wxGTKImpl::IsX11(window))
     {
+        // TODO: We need to check if it's really shown on screen, i.e. if it's
+        // not completely occluded even if it hadn't been explicitly hidden.
         if ( !IsShownOnScreen() )
         {
             // Trying to draw on a hidden window is useless and can actually be
@@ -713,6 +715,12 @@ bool wxGLCanvasEGL::SwapBuffers()
             wxLogTrace(TRACE_EGL, "Window %p is hidden, not drawing", this);
             return false;
         }
+
+        // As long as the TODO comment above is not resolved, we must disable
+        // blocking in eglSwapBuffers(), as it would make all the other, not
+        // occluded, application windows impossible to use. This is clearly not
+        // ideal, but better than making the application unusable.
+        eglSwapInterval(m_display, 0);
     }
 #endif // GDK_WINDOWING_X11
 #ifdef GDK_WINDOWING_WAYLAND
