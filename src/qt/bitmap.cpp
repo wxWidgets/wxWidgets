@@ -220,8 +220,7 @@ wxBitmap::wxBitmap(int width, int height, const wxDC& dc)
 // Create a wxBitmap from xpm data
 wxBitmap::wxBitmap(const char* const* bits)
 {
-    m_refData = new wxBitmapRefData();
-    M_PIXDATA = QPixmap( bits );
+    m_refData = new wxBitmapRefData(QPixmap( bits ));
 }
 
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )

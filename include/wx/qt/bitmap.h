@@ -109,7 +109,7 @@ public:
     virtual ~wxMask();
 
     // Construct a mask from QBitmap, takes ownership.
-    wxMask(QBitmap* qtBitmap);
+    explicit wxMask(QBitmap* qtBitmap);
 
     wxBitmap GetBitmap() const;
 
