@@ -275,16 +275,22 @@ bool wxBitmap::Create(int width, int height, const wxDC& WXUNUSED(dc))
 
 int wxBitmap::GetHeight() const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
+
     return M_PIXDATA.height();
 }
 
 int wxBitmap::GetWidth() const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
+
     return M_PIXDATA.width();
 }
 
 int wxBitmap::GetDepth() const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
+
     return M_PIXDATA.depth();
 }
 
