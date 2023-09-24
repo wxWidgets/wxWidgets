@@ -750,9 +750,11 @@ bool wxGLCanvasEGL::IsShownOnScreen() const
             return GetXWindow() && wxGLCanvasBase::IsShownOnScreen();
         case wxDisplayWayland:
             return m_readyToDraw && wxGLCanvasBase::IsShownOnScreen();
-        default:
-            return false;
+        case wxDisplayNone:
+            break;
     }
+
+    return false;
 }
 
 #endif // wxUSE_GLCANVAS && wxUSE_GLCANVAS_EGL
