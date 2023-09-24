@@ -26,7 +26,7 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
-
+#if wxUSE_IMAGE
 static wxImage ConvertImage( QImage qtImage )
 {
     const bool hasAlpha = qtImage.hasAlphaChannel();
@@ -133,6 +133,7 @@ static QImage ConvertImage( const wxImage &image, wxMask** mask = nullptr  )
 
     return qtImage;
 }
+#endif // wxUSE_IMAGE
 
 //-----------------------------------------------------------------------------
 // wxBitmapRefData
@@ -228,6 +229,7 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
+#if wxUSE_IMAGE
 void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale) )
 {
     wxMask* mask = nullptr;
@@ -247,6 +249,7 @@ wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
 {
     InitFromImage(image, -1, dc.GetContentScaleFactor());
 }
+#endif // wxUSE_IMAGE
 
 wxBitmap::wxBitmap(const wxCursor& cursor)
 {
