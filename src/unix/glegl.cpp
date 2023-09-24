@@ -434,7 +434,7 @@ static void wl_frame_callback_handler(void* data,
                                       struct wl_callback *,
                                       uint32_t)
 {
-    wxLogTrace(TRACE_EGL, "In frame callback handler");
+    wxLogTrace(TRACE_EGL, "In frame callback handler for window %p", data);
 
     wxGLCanvasEGL *glc = static_cast<wxGLCanvasEGL *>(data);
     glc->m_readyToDraw = true;
@@ -710,7 +710,7 @@ bool wxGLCanvasEGL::SwapBuffers()
             // Trying to draw on a hidden window is useless and can actually be
             // harmful if the compositor blocks in eglSwapBuffers() in this
             // case, so avoid it.
-            wxLogTrace(TRACE_EGL, "Not drawing hidden window");
+            wxLogTrace(TRACE_EGL, "Window %p is hidden, not drawing", this);
             return false;
         }
     }
@@ -723,7 +723,7 @@ bool wxGLCanvasEGL::SwapBuffers()
         // worst if we're called before the window is realized.
         if ( !m_readyToDraw )
         {
-            wxLogTrace(TRACE_EGL, "Not ready to draw yet");
+            wxLogTrace(TRACE_EGL, "Window %p is not not ready to draw yet", this);
             return false;
         }
 
@@ -736,7 +736,7 @@ bool wxGLCanvasEGL::SwapBuffers()
     }
 #endif // GDK_WINDOWING_WAYLAND
 
-    wxLogTrace(TRACE_EGL, "Swapping buffers");
+    wxLogTrace(TRACE_EGL, "Swapping buffers for window %p", this);
 
     return eglSwapBuffers(m_display, m_surface);
 }
