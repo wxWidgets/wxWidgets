@@ -2835,7 +2835,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxDataViewTreeNode *node = nullptr;
             wxDataViewItem dataitem;
             const int line_height = GetLineHeight(item);
-            bool hasValue = true;
 
             if (!IsVirtualList())
             {
@@ -2847,10 +2846,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 }
 
                 dataitem = node->GetItem();
-
-                if ( !model->HasValue(dataitem, col->GetModelColumn()) )
-                    hasValue = false;
-
             }
             else
             {
@@ -2867,8 +2862,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             cell->SetState(state);
-            if (hasValue)
-                hasValue = cell->PrepareForItem(model, dataitem, col->GetModelColumn());
+            const bool hasValue = cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
             if ( !selected )
