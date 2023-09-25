@@ -902,12 +902,13 @@ wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
         }
 
         SetValue(value);
-
-        // Also set up the attributes for this item if it's not empty.
-        wxDataViewItemAttr attr;
-        model->GetAttr(item, column, attr);
-        SetAttr(attr);
     }
+
+    // Also set up the attributes: note that we need to do this even for the
+    // empty cells because background colour is still relevant for them.
+    wxDataViewItemAttr attr;
+    model->GetAttr(item, column, attr);
+    SetAttr(attr);
 
     // Finally determine the enabled/disabled state and apply it, even to the
     // empty cells.

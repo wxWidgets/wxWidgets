@@ -316,6 +316,7 @@ wxMSW:
 - Fix using wxComboCtrl with AUI floating pane as parent (#23399).
 - Fix wrong wxWindowsPrintNativeData initialization (Stefan Ziegler, #23685).
 - Fix position of wxStaticBox label after DPI change (Maarten Bent, #23740).
+- Fix background colour of empty cells in wxDataViewCtrl (#23708).
 
 wxOSX:
 
