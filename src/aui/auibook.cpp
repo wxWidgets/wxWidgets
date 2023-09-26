@@ -521,7 +521,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     // prepare the tab-close-button array
     // make sure tab button entries which aren't used are marked as hidden
     for (i = page_count; i < m_tabCloseButtons.GetCount(); ++i)
+    {
         m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
+    }
 
     // make sure there are enough tab button entries to accommodate all tabs
     while (m_tabCloseButtons.GetCount() < page_count)
@@ -535,12 +537,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
     // buttons before the tab offset must be set to hidden
     for (i = 0; i < m_tabOffset; ++i)
-    {
-        m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
-    }
-
-    // make sure to deactivate buttons which are off the screen to the right
-    for (++i; i < m_tabCloseButtons.GetCount(); ++i)
     {
         m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
     }
@@ -691,9 +687,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
             }
         }
         else
-        {
             tab_button.curState = wxAUI_BUTTON_STATE_HIDDEN;
-        }
 
         rect.x = offset;
         if (m_flags & (wxAUI_NB_LEFT | wxAUI_NB_BOTTOM)) rect.x = m_rect.x + bmp_sz.x - offset;
@@ -718,6 +712,12 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
             active_rect = rect;
         }
         offset += x_extent;
+    }
+
+    // make sure to deactivate buttons which are off the screen to the right
+    for (++i; i < m_tabCloseButtons.GetCount(); ++i)
+    {
+        m_tabCloseButtons.Item(i).curState = wxAUI_BUTTON_STATE_HIDDEN;
     }
 
     // draw the active tab again so it stands in the foreground
@@ -984,7 +984,8 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_buttons.Item(i);
-        if (CalculateActualRect(button.rect, false).Contains(x,y) &&
+        wxRect r = CalculateActualRect(button.rect, false);
+        if (r.Contains(x,y) &&
             !(button.curState & wxAUI_BUTTON_STATE_HIDDEN ))
         {
             if (hit) *hit = &button;
@@ -996,7 +997,8 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     for (i = 0; i < button_count; ++i)
     {
         wxAuiTabContainerButton& button = m_tabCloseButtons.Item(i);
-        if (CalculateActualRect(button.rect, true).Contains(x,y) &&
+        wxRect r = CalculateActualRect(button.rect, true);
+        if (r.Contains(x,y) &&
             !(button.curState & (wxAUI_BUTTON_STATE_HIDDEN |
                                    wxAUI_BUTTON_STATE_DISABLED)))
         {
