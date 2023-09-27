@@ -160,7 +160,7 @@ public:
     virtual void SelectChildren(const wxTreeItemId& parent) wxOVERRIDE;
 
     virtual void EnsureVisible(const wxTreeItemId& item) wxOVERRIDE;
-    virtual void ScrollTo(const wxTreeItemId& item) wxOVERRIDE;
+    virtual void ScrollTo(const wxTreeItemId& item, bool to_top=true) wxOVERRIDE;
 
     virtual wxTextCtrl *EditLabel(const wxTreeItemId& item,
                           wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl)) wxOVERRIDE;

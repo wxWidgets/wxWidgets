@@ -765,9 +765,10 @@ bool wxTreeCtrl::Create(wxWindow *parent,
         wstyle |= TVS_LINESATROOT;
 
     if ( m_windowStyle & wxTR_FULL_ROW_HIGHLIGHT )
-    {
         wstyle |= TVS_FULLROWSELECT;
-    }
+
+    if ( m_windowStyle & wxTR_HOVER_HIGHLIGHT )
+        wstyle |= TVS_TRACKSELECT;
 
 #if defined(TVS_INFOTIP)
     // Need so that TVN_GETINFOTIP messages will be sent
@@ -2011,7 +2012,7 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
     (void)TreeView_EnsureVisible(GetHwnd(), HITEM(item));
 }
 
-void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
+void wxTreeCtrl::ScrollTo(const wxTreeItemId& item, bool WXUNUSED(to_top))
 {
     if ( !TreeView_SelectSetFirstVisible(GetHwnd(), HITEM(item)) )
     {
@@ -3298,6 +3299,24 @@ wxTreeCtrl::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     return wxControl::MSWDefWindowProc(nMsg, wParam, lParam);
 }
 
+// Window procedure for EDIT sub-classing. Suppresses the auto-resizing from its parent
+LRESULT CALLBACK NativeEditProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
+                                UINT_PTR WXUNUSED(uIdSubclass), DWORD_PTR WXUNUSED(dwRefData))
+{
+    if (uMsg == WM_WINDOWPOSCHANGING)
+    {
+        // Restrict the editor size to keep its right edge next to the
+        // tree control's client area right edge
+        WINDOWPOS* info = (WINDOWPOS*)lParam;
+        HWND parent = GetParent(hWnd);
+        RECT r;
+        GetClientRect(parent, &r);
+        info->cx = r.right - info->x;
+        return TRUE;
+    }
+    return DefSubclassProc(hWnd, uMsg, wParam, lParam);
+}
+
 // process WM_NOTIFY Windows message
 bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
@@ -3798,9 +3817,21 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         DeleteTextCtrl();
                     if ( !m_textCtrl )
                         m_textCtrl = new wxTextCtrl();
-                    m_textCtrl->SetParent(this);
+                    // Previously the change of parent was done with a SetParent call
+                    // but that does not work properly as it only changes a variable
+                    // within the wxTextCtrl object, without changing the children
+                    // lists on its old and new parents. For the wxTextCtrl to get its
+                    // colours (through WX_CTLCOLOR__ messages to its parent) then its
+                    // parent has to be able to find it in its children list.
+                    m_textCtrl->Reparent(this);
                     m_textCtrl->SetHWND((WXHWND)hText);
                     m_textCtrl->SubclassWin((WXHWND)hText);
+
+                    // Optionally subclass the native EDIT control to suppress the
+                    // auto-resizing. Note that the method used is the recommended
+                    // one for version 6.0 controls (XP and above)
+                    if (HasFlag(wxTR_FULL_WIDTH_EDITOR))
+                        SetWindowSubclass(hText, NativeEditProc, 0, 0);
 
                     // set wxTE_PROCESS_ENTER style for the text control to
                     // force it to process the Enter presses itself, otherwise

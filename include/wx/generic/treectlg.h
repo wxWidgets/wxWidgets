@@ -160,7 +160,7 @@ public:
     virtual void SelectChildren(const wxTreeItemId& parent) wxOVERRIDE;
 
     virtual void EnsureVisible(const wxTreeItemId& item) wxOVERRIDE;
-    virtual void ScrollTo(const wxTreeItemId& item) wxOVERRIDE;
+    virtual void ScrollTo(const wxTreeItemId& item, bool to_top=false) wxOVERRIDE;
 
     virtual wxTextCtrl *EditLabel(const wxTreeItemId& item,
                           wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl)) wxOVERRIDE;
@@ -262,6 +262,7 @@ protected:
     wxCursor             m_oldCursor;  // cursor is changed while dragging
     wxGenericTreeItem   *m_oldSelection;
     wxGenericTreeItem   *m_underMouse; // for visual effects
+    wxGenericTreeItem   *m_hoverMouse; // for mouse hover
 
     enum { NoEffect, BorderEffect, AboveEffect, BelowEffect } m_dndEffect;
     wxGenericTreeItem   *m_dndEffectItem;

@@ -436,7 +436,10 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
 #elif defined(__WXGTK__)
     rect.x -= 5;
     rect.y -= 2;
-    rect.width  += 8;
+    if (m_owner->HasFlag(wxTR_FULL_WIDTH_EDITOR))
+        rect.width = m_owner->GetSize().x - rect.x;
+    else
+        rect.width  += 8;
     rect.height += 4;
 #endif // platforms
 
@@ -539,17 +542,20 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
 {
     if ( !m_aboutToFinish )
     {
-        // auto-grow the textctrl:
-        wxSize parentSize = m_owner->GetSize();
-        wxPoint myPos = GetPosition();
-        wxSize mySize = GetSize();
-        int sx, sy;
-        GetTextExtent(GetValue() + wxT("M"), &sx, &sy);
-        if (myPos.x + sx > parentSize.x)
-            sx = parentSize.x - myPos.x;
-        if (mySize.x > sx)
-            sx = mySize.x;
-        SetSize(sx, wxDefaultCoord);
+        if (!m_owner->HasFlag(wxTR_FULL_WIDTH_EDITOR))
+        {
+            // auto-grow the textctrl:
+            wxSize parentSize = m_owner->GetSize();
+            wxPoint myPos = GetPosition();
+            wxSize mySize = GetSize();
+            int sx, sy;
+            GetTextExtent(GetValue() + wxT("M"), &sx, &sy);
+            if (myPos.x + sx > parentSize.x)
+                sx = parentSize.x - myPos.x;
+            if (mySize.x > sx)
+                sx = mySize.x;
+            SetSize(sx, wxDefaultCoord);
+        }
     }
 
     event.Skip();
@@ -926,7 +932,7 @@ void wxGenericTreeCtrl::Init()
     m_current =
     m_key_current =
     m_anchor =
-    m_select_me = NULL;
+    m_select_me = nullptr;
     m_hasFocus = false;
     m_dirty = false;
 
@@ -936,19 +942,20 @@ void wxGenericTreeCtrl::Init()
 
     m_dragCount = 0;
     m_isDragging = false;
-    m_dropTarget = m_oldSelection = NULL;
-    m_underMouse = NULL;
-    m_textCtrl = NULL;
+    m_dropTarget = m_oldSelection = nullptr;
+    m_underMouse = nullptr;
+    m_hoverMouse = nullptr;
+    m_textCtrl = nullptr;
 
-    m_renameTimer = NULL;
+    m_renameTimer = nullptr;
 
-    m_findTimer = NULL;
+    m_findTimer = nullptr;
     m_findBell = 0;  // default is to not ring bell at all
 
     m_dropEffectAboveItem = false;
 
     m_dndEffect = NoEffect;
-    m_dndEffectItem = NULL;
+    m_dndEffectItem = nullptr;
 
     m_lastOnSame = false;
 }
@@ -2288,7 +2295,7 @@ void wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId& item)
     ScrollTo(item);
 }
 
-void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
+void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item, bool to_top)
 {
     if (!item.IsOk())
         return;
@@ -2310,31 +2317,33 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 
     int itemY = gitem->GetY();
 
-    int start_x = 0;
-    int start_y = 0;
-    GetViewStart( &start_x, &start_y );
-
-    const int clientHeight = GetClientSize().y;
-
-    const int itemHeight = GetLineHeight(gitem) + 2;
-
-    if ( itemY + itemHeight > start_y*PIXELS_PER_UNIT + clientHeight )
+    if (!to_top)
     {
-        // need to scroll down by enough to show this item fully
-        itemY += itemHeight - clientHeight;
+        int start_x = 0;
+        int start_y = 0;
+        GetViewStart( &start_x, &start_y );
 
-        // because itemY below will be divided by PIXELS_PER_UNIT it may
-        // be rounded down, with the result of the item still only being
-        // partially visible, so make sure we are rounding up
-        itemY += PIXELS_PER_UNIT - 1;
-    }
-    else if ( itemY > start_y*PIXELS_PER_UNIT )
-    {
-        // item is already fully visible, don't do anything
-        return;
-    }
-    //else: scroll up to make this item the top one displayed
+        const int clientHeight = GetClientSize().y;
 
+        const int itemHeight = GetLineHeight(gitem) + 2;
+
+        if ( itemY + itemHeight > start_y*PIXELS_PER_UNIT + clientHeight )
+        {
+            // need to scroll down by enough to show this item fully
+            itemY += itemHeight - clientHeight;
+
+            // because itemY below will be divided by PIXELS_PER_UNIT it may
+            // be rounded down, with the result of the item still only being
+            // partially visible, so make sure we are rounding up
+            itemY += PIXELS_PER_UNIT - 1;
+        }
+        else if ( itemY > start_y*PIXELS_PER_UNIT )
+        {
+            // item is already fully visible, don't do anything
+            return;
+        }
+        //else: scroll up to make this item the top one displayed
+    }
     Scroll(-1, itemY/PIXELS_PER_UNIT);
 }
 
@@ -2548,10 +2557,19 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     bool drawItemBackground = false,
          hasBgColour = false;
 
+    int w, h;
+    GetVirtualSize(&w, &h);
+    int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
+
     if ( item->IsSelected() )
     {
         dc.SetBrush(m_hasFocus ? m_hilightBrush : m_hilightUnfocusedBrush);
         drawItemBackground = true;
+    }
+    else if (item == m_hoverMouse)
+    {
+        wxRect rect(0, item->GetY() + offset, w, total_h - offset);
+        wxRendererNative::Get().DrawTreeItemBackground(this, dc, rect, wxCONTROL_CURRENT);
     }
     else
     {
@@ -2570,17 +2588,12 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         dc.SetBrush(wxBrush(colBg, wxBRUSHSTYLE_SOLID));
     }
 
-    int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
-
     if ( HasFlag(wxTR_FULL_ROW_HIGHLIGHT) )
     {
-        int x, w, h;
-        x=0;
-        GetVirtualSize(&w, &h);
-        wxRect rect( x, item->GetY()+offset, w, total_h-offset);
+        wxRect rect( 0, item->GetY()+offset, w, total_h-offset);
         if (!item->IsSelected())
         {
-            dc.DrawRectangle(rect);
+            if (drawItemBackground) dc.DrawRectangle(rect);
         }
         else
         {
@@ -2597,15 +2610,15 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     else // no full row highlight
     {
         if ( item->IsSelected() &&
-                (state != wxTREE_ITEMSTATE_NONE || image != NO_IMAGE) )
+            (state != wxTREE_ITEMSTATE_NONE || image != NO_IMAGE) )
         {
             // If it's selected, and there's an state image or normal image,
             // then we should take care to leave the area under the image
             // painted in the background colour.
             wxRect rect( item->GetX() + state_w + image_w - 2,
-                         item->GetY() + offset,
-                         item->GetWidth() - state_w - image_w + 2,
-                         total_h - offset );
+                        item->GetY() + offset,
+                        item->GetWidth() - state_w - image_w + 2,
+                        total_h - offset );
             rect.x -= 1;
             rect.width += 2;
 
@@ -2623,9 +2636,9 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         else if (drawItemBackground)
         {
             wxRect rect( item->GetX() + state_w + image_w - 2,
-                         item->GetY() + offset,
-                         item->GetWidth() - state_w - image_w + 2,
-                         total_h - offset );
+                        item->GetY() + offset,
+                        item->GetWidth() - state_w - image_w + 2,
+                        total_h - offset );
             if ( hasBgColour )
             {
                 dc.DrawRectangle( rect );
@@ -3561,20 +3574,25 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
     int flags = 0;
     wxGenericTreeItem *thisItem = m_anchor->HitTest(pt, this, flags, 0);
     wxGenericTreeItem *underMouse = thisItem;
+    wxGenericTreeItem *hoverMouse = thisItem;
 #if wxUSE_TOOLTIPS
     bool underMouseChanged = (underMouse != m_underMouse) ;
 #endif // wxUSE_TOOLTIPS
 
-    if ((underMouse) &&
-        (flags & wxTREE_HITTEST_ONITEMBUTTON) &&
-        (!event.LeftIsDown()) &&
-        (!m_isDragging) &&
+    if ((underMouse) && (flags & wxTREE_HITTEST_ONITEMBUTTON) &&
+        !event.LeftIsDown() && !event.Leaving() && !m_isDragging &&
         (!m_renameTimer || !m_renameTimer->IsRunning()))
     {
     }
+    else if (hoverMouse && flags && !event.LeftIsDown() && !event.Leaving() &&
+             !m_isDragging && (!m_renameTimer || !m_renameTimer->IsRunning()))
+    {
+        underMouse = nullptr;
+    }
     else
     {
-        underMouse = NULL;
+        underMouse = nullptr;
+        hoverMouse = nullptr;
     }
 
     if (underMouse != m_underMouse)
@@ -3583,13 +3601,31 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
          {
             // unhighlight old item
             wxGenericTreeItem *tmp = m_underMouse;
-            m_underMouse = NULL;
+            m_underMouse = nullptr;
             RefreshLine( tmp );
          }
 
          m_underMouse = underMouse;
          if (m_underMouse)
             RefreshLine( m_underMouse );
+    }
+
+    if ( GetWindowStyleFlag() & wxTR_HOVER_HIGHLIGHT )
+    {
+        if (hoverMouse != m_hoverMouse)
+        {
+            if (m_hoverMouse)
+            {
+                // unhighlight old item
+                wxGenericTreeItem *tmp = m_hoverMouse;
+                m_hoverMouse = nullptr;
+                RefreshLine( tmp );
+            }
+
+            m_hoverMouse = hoverMouse;
+            if (m_hoverMouse)
+                RefreshLine( m_hoverMouse );
+        }
     }
 
 #if wxUSE_TOOLTIPS

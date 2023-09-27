@@ -135,6 +135,11 @@ static const int wxTREE_ITEMSTATE_PREV  = -3;   // cycle to the previous state
 
 #define wxTR_FULL_ROW_HIGHLIGHT      0x2000     // highlight full horz space
 
+#define wxTR_HOVER_HIGHLIGHT         0x4000     // highlight on hover
+
+#define wxTR_FULL_WIDTH_EDITOR       0x8000     // make the editor control as
+                                                // wide as possible
+
 // make the default control appearance look more native-like depending on the
 // platform
 #if defined(__WXGTK20__)
@@ -257,6 +262,7 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_BEGIN_DRAG, wxTreeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_BEGIN_RDRAG, wxTreeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_BEGIN_LABEL_EDIT, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_DOING_LABEL_EDIT, wxTreeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_END_LABEL_EDIT, wxTreeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_DELETE_ITEM, wxTreeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_GET_INFO, wxTreeEvent );
@@ -293,12 +299,13 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_ITEM_MENU, wxTreeEvent );
 // current mouse coords
 #define EVT_TREE_END_DRAG(id, fn) wx__DECLARE_TREEEVT(END_DRAG, id, fn)
 
-// GetItem() returns the itme whose label is being edited, GetLabel() returns
+// GetItem() returns the item whose label is being edited, GetLabel() returns
 // the current item label for BEGIN and the would be new one for END.
 //
 // Vetoing BEGIN event means that label editing won't happen at all,
 // vetoing END means that the new value is discarded and the old one kept
 #define EVT_TREE_BEGIN_LABEL_EDIT(id, fn) wx__DECLARE_TREEEVT(BEGIN_LABEL_EDIT, id, fn)
+#define EVT_TREE_DOING_LABEL_EDIT(id, fn) wx__DECLARE_TREEEVT(DOING_LABEL_EDIT, id, fn)
 #define EVT_TREE_END_LABEL_EDIT(id, fn) wx__DECLARE_TREEEVT(END_LABEL_EDIT, id, fn)
 
 // provide/update information about GetItem() item
@@ -345,6 +352,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TREE_ITEM_MENU, wxTreeEvent );
 #define wxEVT_COMMAND_TREE_BEGIN_DRAG          wxEVT_TREE_BEGIN_DRAG
 #define wxEVT_COMMAND_TREE_BEGIN_RDRAG         wxEVT_TREE_BEGIN_RDRAG
 #define wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT    wxEVT_TREE_BEGIN_LABEL_EDIT
+#define wxEVT_COMMAND_TREE_DOING_LABEL_EDIT    wxEVT_TREE_DOING_LABEL_EDIT
 #define wxEVT_COMMAND_TREE_END_LABEL_EDIT      wxEVT_TREE_END_LABEL_EDIT
 #define wxEVT_COMMAND_TREE_DELETE_ITEM         wxEVT_TREE_DELETE_ITEM
 #define wxEVT_COMMAND_TREE_GET_INFO            wxEVT_TREE_GET_INFO

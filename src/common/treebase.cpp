@@ -34,6 +34,7 @@ extern WXDLLEXPORT_DATA(const char) wxTreeCtrlNameStr[] = "treeCtrl";
 wxDEFINE_EVENT( wxEVT_TREE_BEGIN_DRAG, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_BEGIN_RDRAG, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_BEGIN_LABEL_EDIT, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_TREE_DOING_LABEL_EDIT, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_END_LABEL_EDIT, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_DELETE_ITEM, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_TREE_GET_INFO, wxTreeEvent );
@@ -173,6 +174,7 @@ wxTreeCtrlBase::wxTreeCtrlBase()
 
     Bind(wxEVT_CHAR_HOOK, &wxTreeCtrlBase::OnCharHook, this);
     Bind(wxEVT_DPI_CHANGED, &wxTreeCtrlBase::WXHandleDPIChanged, this);
+    Bind(wxEVT_TEXT, &wxTreeCtrlBase::OnTextEdit, this);
 }
 
 wxTreeCtrlBase::~wxTreeCtrlBase()
@@ -355,6 +357,13 @@ void wxTreeCtrlBase::OnCharHook(wxKeyEvent& event)
     }
 
     event.Skip();
+}
+
+void wxTreeCtrlBase::OnTextEdit(wxCommandEvent& WXUNUSED(event))
+{
+    wxTreeEvent evt(wxEVT_TREE_DOING_LABEL_EDIT, GetId());
+    evt.SetClientData(GetEditControl());
+    GetEventHandler()->ProcessEvent(evt);
 }
 
 #endif // wxUSE_TREECTRL

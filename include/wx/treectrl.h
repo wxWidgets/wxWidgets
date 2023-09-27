@@ -325,8 +325,12 @@ public:
         // make sure this item is visible (expanding the parent item and/or
         // scrolling to this item if necessary)
     virtual void EnsureVisible(const wxTreeItemId& item) = 0;
-        // scroll to this item (but don't expand its parent)
-    virtual void ScrollTo(const wxTreeItemId& item) = 0;
+        // scroll to this item (but don't expand its parent) and
+        // optionally make it the top item on the view;
+        // the only possible behavior on MSW is to scroll the item to the top,
+        // while the default on the generic implementation (GTK, OSX) is
+        // to only scroll it into view, regardless of position.
+    virtual void ScrollTo(const wxTreeItemId& item, bool to_top) = 0;
 
         // start editing the item label: this (temporarily) replaces the item
         // with a one line edit control. The item will be selected if it hadn't
@@ -441,6 +445,8 @@ private:
     // anything else.
     void OnCharHook(wxKeyEvent& event);
 
+    // Notify on text edits
+    void OnTextEdit(wxCommandEvent& event);
 
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrlBase);
 };
