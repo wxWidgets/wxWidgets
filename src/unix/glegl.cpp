@@ -384,6 +384,18 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
     return eglGetPlatformDisplay(platform, info.dpy, nullptr);
 }
 
+void wxGLCanvasEGL::OnWLFrameCallback()
+{
+#ifdef GDK_WINDOWING_WAYLAND
+    wxLogTrace(TRACE_EGL, "In frame callback handler");
+
+    m_readyToDraw = true;
+    g_clear_pointer(&m_wlFrameCallbackHandler, wl_callback_destroy);
+    SendSizeEvent();
+    gtk_widget_queue_draw(m_wxwindow);
+#endif // GDK_WINDOWING_WAYLAND
+}
+
 #ifdef GDK_WINDOWING_WAYLAND
 
 // Helper declared as friend in the header and so can access m_wlSubsurface.
@@ -434,13 +446,8 @@ static void wl_frame_callback_handler(void* data,
                                       struct wl_callback *,
                                       uint32_t)
 {
-    wxLogTrace(TRACE_EGL, "In frame callback handler");
-
     wxGLCanvasEGL *glc = static_cast<wxGLCanvasEGL *>(data);
-    glc->m_readyToDraw = true;
-    g_clear_pointer(&glc->m_wlFrameCallbackHandler, wl_callback_destroy);
-    glc->SendSizeEvent();
-    gtk_widget_queue_draw(glc->m_wxwindow);
+    glc->OnWLFrameCallback();
 }
 
 static const struct wl_callback_listener wl_frame_listener = {
