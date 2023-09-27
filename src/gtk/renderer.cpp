@@ -66,6 +66,7 @@ public:
 
     virtual int GetHeaderButtonMargin(wxWindow *win) wxOVERRIDE;
 
+    virtual wxSize GetButtonPaddingSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
 
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton(wxWindow *win,
@@ -323,6 +324,32 @@ int wxRendererGTK::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
     return 0; // TODO: How to determine the real margin?
 }
 
+wxSize wxRendererGTK::GetButtonPaddingSize(wxWindow* WXUNUSED(win), wxDC& dc)
+{
+#ifdef __WXGTK3__
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
+    if (drawable == NULL) return wxSize(-1, -1);
+
+    GtkWidgetPath* path = gtk_widget_path_new();
+    gtk_widget_path_append_type(path, G_TYPE_NONE);
+    gtk_widget_path_iter_set_object_name(path, -1, "button");
+    gtk_widget_path_iter_set_state (path, -1, GTK_STATE_FLAG_NORMAL);
+    GtkStyleContext* context = gtk_style_context_new ();
+    gtk_style_context_set_path(context, path);
+    gtk_style_context_set_parent(context, nullptr);
+    gtk_widget_path_unref(path);
+    GtkBorder margin, border, padding;
+    gtk_style_context_get_margin(context, gtk_style_context_get_state(context), &margin);
+    gtk_style_context_get_border(context, gtk_style_context_get_state(context), &border);
+    gtk_style_context_get_padding(context, gtk_style_context_get_state(context), &padding);
+    int h = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+    int v = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+    g_object_unref(context);
+    return wxSize(h, v);
+#else
+    #warning Missing implementation
+#endif
+}
 
 // draw a ">" or "v" button
 void

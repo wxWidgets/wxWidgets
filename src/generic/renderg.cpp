@@ -119,6 +119,8 @@ public:
 
     virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE;
 
+    virtual wxSize GetButtonPaddingSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
+
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
@@ -785,6 +787,13 @@ wxSize wxRendererGeneric::GetExpanderSize(wxWindow *win)
     return win->FromDIP(wxSize(16, 16));
 }
 
+wxSize wxRendererGeneric::GetButtonPaddingSize(wxWindow *win, wxDC& WXUNUSED(dc))
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    return win->FromDIP(wxSize(3, 3));
+}
+
 void
 wxRendererGeneric::DrawPushButton(wxWindow *win,
                                   wxDC& dc,
@@ -1107,11 +1116,10 @@ void wxRendererGeneric::DrawTabControlBackground(wxWindow* WXUNUSED(win), wxDC& 
 
     wxColor top_color    = baseColour.ChangeLightness(topLightness);
     wxColor bottom_color = baseColour.ChangeLightness(bottomLightness);
-    wxRect r(rect.x, rect.y, rect.width+2, rect.height-3);
+    wxRect r(rect.x, rect.y, rect.width + 2, rect.height - 3);
     dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
 
     // draw base lines
-
     wxDCPenChanger(dc, wxPen(borderColour));
     wxDCBrushChanger(dc, wxBrush(baseColour));
     dc.DrawRectangle(0, rect.GetHeight() - 4, rect.GetWidth(), 4);

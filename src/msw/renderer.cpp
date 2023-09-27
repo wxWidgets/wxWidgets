@@ -174,6 +174,7 @@ public:
 
     virtual int GetHeaderButtonMargin(wxWindow *win) wxOVERRIDE;
 
+    virtual wxSize GetButtonPaddingSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
 private:
     // wrapper of DrawFrameControl()
     void DoDrawFrameControl(UINT type,
@@ -272,6 +273,8 @@ public:
                                     int flags = 0) wxOVERRIDE;
 
     virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
+
+    virtual wxSize GetButtonPaddingSize(wxWindow *win, wxDC& dc) wxOVERRIDE;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
@@ -619,6 +622,11 @@ int wxRendererMSW::GetHeaderButtonMargin(wxWindow *win)
     return 6*wxGetSystemMetrics(SM_CXEDGE, win);
 }
 
+wxSize wxRendererMSW::GetButtonPaddingSize(wxWindow* win, wxDC& WXUNUSED(dc))
+{
+    return win->FromDIP(wxSize(3, 3));
+}
+
 // ============================================================================
 // wxRendererXP implementation
 // ============================================================================
@@ -739,7 +747,6 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
-
 void
 wxRendererXP::DrawTreeItemButton(wxWindow *win,
                                  wxDC& dc,
@@ -757,12 +764,12 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
 
     RECT r = ConvertToRECT(dc, rect);
 
-    int state = flags & wxCONTROL_EXPANDED ? GLPS_OPENED : GLPS_CLOSED;
+    int state = (flags & wxCONTROL_EXPANDED) ? GLPS_OPENED : GLPS_CLOSED;
     ::DrawThemeBackground
                             (
                                 hTheme,
                                 GetHdcOf(dc.GetTempHDC()),
-                                TVP_GLYPH,
+                                (flags & wxCONTROL_CURRENT) ? /* TVP_HOTGLYPH */ 4 : TVP_GLYPH,
                                 state,
                                 &r,
                                 NULL
@@ -984,6 +991,21 @@ wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
     }
 
     return m_rendererNative.GetExpanderSize(win);
+}
+
+wxSize
+wxRendererXP::GetButtonPaddingSize(wxWindow* win, wxDC& dc)
+{
+    wxCHECK_MSG(win, wxSize(0, 0), "Must have a valid window");
+
+    wxUxThemeHandle hTheme(win, L"BUTTON");
+    if (hTheme)
+    {
+        MARGINS marg;
+        if (::GetThemeMargins(hTheme, NULL, BP_PUSHBUTTON, PBS_NORMAL, TMT_CONTENTMARGINS, NULL, &marg) == S_OK)
+            return wxSize(marg.cxLeftWidth + marg.cxRightWidth + 2, marg.cyTopHeight + marg.cyBottomHeight + 2);
+    }
+    return m_rendererNative.GetButtonPaddingSize(win, dc);
 }
 
 void
@@ -1434,8 +1456,8 @@ void wxRendererXP::DrawTabControlTab(wxWindow* win, wxDC& dc, const wxRect& rect
     // Non-selected tabs are rendered as vertically smaller
     if (!(flags & wxCONTROL_SELECTED))
     {
-        r.top = 2;
-        r.bottom -= 1;
+        r.top = win->FromDIP(2);
+        r.bottom -= win->FromDIP(1);
     }
 
     int state = TIS_NORMAL;

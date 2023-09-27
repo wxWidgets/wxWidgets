@@ -280,6 +280,10 @@ public:
     // Returns the default size of a expander.
     virtual wxSize GetExpanderSize(wxWindow *win) = 0;
 
+    // Returns the size of the padding inside a button; used
+    // to calculate bitmap size needed to achieve button size.
+    virtual wxSize GetButtonPaddingSize(wxWindow *win, wxDC& dc) = 0;
+
     // draw blank button
     //
     // flags may use wxCONTROL_PRESSED, wxCONTROL_CURRENT and wxCONTROL_ISDEFAULT
@@ -541,6 +545,9 @@ public:
 
     virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE
         { return m_rendererNative.GetExpanderSize(win); }
+
+    virtual wxSize GetButtonPaddingSize(wxWindow *win, wxDC& dc) wxOVERRIDE
+        { return m_rendererNative.GetButtonPaddingSize(win, dc); }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
