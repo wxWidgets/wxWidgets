@@ -37,17 +37,27 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogDefaultFolderStr[];
 enum
 {
     // Only allow directory viewing/selection, no files
-    wxDIRCTRL_DIR_ONLY       = 0x0010,
+    wxDIRCTRL_DIR_ONLY          = 0x0010,
     // When setting the default path, select the first file in the directory
-    wxDIRCTRL_SELECT_FIRST   = 0x0020,
+    wxDIRCTRL_SELECT_FIRST      = 0x0020,
     // Show the filter list
-    wxDIRCTRL_SHOW_FILTERS   = 0x0040,
+    wxDIRCTRL_SHOW_FILTERS      = 0x0040,
     // Use 3D borders on internal controls
-    wxDIRCTRL_3D_INTERNAL    = 0x0080,
+    wxDIRCTRL_3D_INTERNAL       = 0x0080,
     // Editable labels
-    wxDIRCTRL_EDIT_LABELS    = 0x0100,
+    wxDIRCTRL_EDIT_LABELS       = 0x0100,
     // Allow multiple selection
-    wxDIRCTRL_MULTIPLE       = 0x0200,
+    wxDIRCTRL_MULTIPLE          = 0x0200,
+    // On selection show the entire row, not just the text
+    wxDIRCTRL_ROW_HIGHLIGHT     = 0x0400,
+    // Use themed representation where possible
+    wxDIRCTRL_THEMED            = 0x0800,
+    // Use mouse hover highlighting
+    wxDIRCTRL_HOVER_HIGHLIGHT   = 0x1000,
+    // Show bookbarks/favorites at top
+    wxDIRCTRL_BOOKMARKS         = 0x2000,
+    // When editing labels, peg the editor width to the maximum
+    wxDIRCTRL_FULL_WIDTH_EDITOR = 0x4000,
 
     wxDIRCTRL_DEFAULT_STYLE  = wxDIRCTRL_3D_INTERNAL
 };
@@ -56,20 +66,37 @@ enum
 // wxDirItemData
 //-----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_CORE wxFavItemData
+{
+public:
+    wxFavItemData(const wxString& path, const wxString& name) : m_path(path), m_name(name) {}
+    wxFavItemData(const wxFavItemData& other) : m_path(other.m_path.Clone()), m_name(other.m_name.Clone()) {}
+    wxString GetPath() { return m_path; }
+    wxString GetName() { return m_name; }
+    void SetName(const wxString& name) { m_name = name; }
+private:
+    wxString m_path, m_name;
+};
+
 class WXDLLIMPEXP_CORE wxDirItemData : public wxTreeItemData
 {
 public:
-    wxDirItemData(const wxString& path, const wxString& name, bool isDir);
+    wxDirItemData(const wxString& path, const wxString& name, bool isDir, bool isFav, wxFavItemData* fav = nullptr);
     virtual ~wxDirItemData(){}
     void SetNewDirName(const wxString& path);
 
     bool HasSubDirs() const;
     bool HasFiles(const wxString& spec = wxEmptyString) const;
 
+    bool IsDirectory() { return m_isDir && !m_isFav; }
+    bool IsFavorite() { return m_isFav && (m_fav != nullptr); }
+
     wxString m_path, m_name;
     bool m_isHidden;
     bool m_isExpanded;
     bool m_isDir;
+    bool m_isFav;
+    wxFavItemData* m_fav;
 };
 
 //-----------------------------------------------------------------------------
@@ -78,7 +105,9 @@ public:
 
 class WXDLLIMPEXP_FWD_CORE wxDirFilterListCtrl;
 
-class WXDLLIMPEXP_CORE wxGenericDirCtrl: public wxControl
+WX_DEFINE_SORTED_ARRAY(wxFavItemData*, wxFavArray);
+
+class WXDLLIMPEXP_CORE wxGenericDirCtrl: public wxPanel
 {
 public:
     wxGenericDirCtrl();
@@ -89,11 +118,7 @@ public:
               long style = wxDIRCTRL_DEFAULT_STYLE,
               const wxString& filter = wxEmptyString,
               int defaultFilter = 0,
-              const wxString& name = wxASCII_STR(wxTreeCtrlNameStr) )
-    {
-        Init();
-        Create(parent, id, dir, pos, size, style, filter, defaultFilter, name);
-    }
+              const wxString& name = wxASCII_STR(wxTreeCtrlNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
               const wxString &dir = wxASCII_STR(wxDirDialogDefaultFolderStr),
@@ -111,6 +136,7 @@ public:
     void OnExpandItem(wxTreeEvent &event );
     void OnCollapseItem(wxTreeEvent &event );
     void OnBeginEditItem(wxTreeEvent &event );
+    void OnDoingEditItem(wxTreeEvent & event );
     void OnEndEditItem(wxTreeEvent &event );
     void OnTreeSelChange(wxTreeEvent &event);
     void OnItemActivated(wxTreeEvent &event);
@@ -175,14 +201,40 @@ public:
     // Collapse the entire tree
     virtual void CollapseTree();
 
-    // overridden base class methods
-    virtual void SetFocus() wxOVERRIDE;
+    // Scroll the tree control so as to show the selected dir on top
+    virtual void SelectedToTop();
 
+    // Add a favorite to the tree
+    wxFavItemData* AddFavorite(const wxString& path, const wxString& name);
+
+    // Start editing a favorite
+    void EditFavorite(wxFavItemData* item);
+
+    // Get the path from a favorite
+    wxString GetFavoritePath(size_t index);
+
+    // Get the name from a favorite
+    wxString GetFavoriteName(size_t index);
+
+    // True if the item is a favorite
+    bool IsFavorite(const wxTreeItemId& item);
+
+    // True if the item is a directory
+    bool IsDirectory(const wxTreeItemId& item);
+
+    // Get the favorite count
+    size_t GetFavoriteCount();
+
+    // Remove a favorite
+    void RemoveFavorite(wxFavItemData* item);
+
+    // Get the currently selected favorite, if any; nullptr otherwise
+    wxFavItemData* GetFavorite();
 protected:
     virtual void ExpandRoot();
     virtual void ExpandDir(wxTreeItemId parentId);
     virtual void CollapseDir(wxTreeItemId parentId);
-    virtual const wxTreeItemId AddSection(const wxString& path, const wxString& name, int imageId = 0);
+    virtual const wxTreeItemId AddSection(const wxString& path, const wxString& name, int imageId = 0, bool isFav = false);
     virtual wxTreeItemId AppendItem (const wxTreeItemId & parent,
                 const wxString & text,
                 int image = -1, int selectedImage = -1,
@@ -193,12 +245,17 @@ protected:
     // Extract description and actual filter from overall filter string
     bool ExtractWildcard(const wxString& filterStr, int n, wxString& filter, wxString& description);
 
+    // Find a favorite tree id
+    wxTreeItemId FindFavoriteInTree(wxFavItemData* item);
+    // Update the tree with the new favorites
+    void UpdateFavoriteBranch();
 private:
     void PopulateNode(wxTreeItemId node);
-    wxDirItemData* GetItemData(wxTreeItemId itemId);
+    wxDirItemData* GetItemData(wxTreeItemId itemId) const;
 
     bool            m_showHidden;
     wxTreeItemId    m_rootId;
+    wxTreeItemId    m_favId;
     wxString        m_defaultPath; // Starting path
     long            m_styleEx; // Extended style
     wxString        m_filter;  // Wildcards in same format as per wxFileDialog
@@ -206,6 +263,8 @@ private:
     wxString        m_currentFilterStr; // Current filter string
     wxTreeCtrl*     m_treeCtrl;
     wxDirFilterListCtrl* m_filterListCtrl;
+    wxFavArray      m_favs;
+    wxFavItemData*  m_favInEdit;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -215,12 +274,20 @@ private:
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_DIRACTIVATED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FAVACTIVATED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FAVEDITED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_EDITING, wxTreeEvent );
 
 #define wx__DECLARE_DIRCTRL_EVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_DIRCTRL_ ## evt, id, wxTreeEventHandler(fn))
 
 #define EVT_DIRCTRL_SELECTIONCHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(SELECTIONCHANGED, id, fn)
 #define EVT_DIRCTRL_FILEACTIVATED(id, fn) wx__DECLARE_DIRCTRL_EVT(FILEACTIVATED, id, fn)
+#define EVT_DIRCTRL_DIRACTIVATED(id, fn) wx__DECLARE_DIRCTRL_EVT(DIRACTIVATED, id, fn)
+#define EVT_DIRCTRL_FAVACTIVATED(id, fn) wx__DECLARE_DIRCTRL_EVT(FAVACTIVATED, id, fn)
+#define EVT_DIRCTRL_FAVEDITED(id, fn) wx__DECLARE_DIRCTRL_EVT(FAVEDITED, id, fn)
+#define EVT_DIRCTRL_EDITING(id, fn) wx__DECLARE_DIRCTRL_EVT(EDITING, id, fn)
 
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl
@@ -296,7 +363,9 @@ public:
         floppy,
         removeable,
         file,
-        executable
+        executable,
+        bookmark,
+        bookmark_folder
     };
 
     int GetIconID(const wxString& extension, const wxString& mime = wxEmptyString);
@@ -321,8 +390,11 @@ extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG || wxUSE_FILECTRL
 
 // old wxEVT_COMMAND_* constants
-#define wxEVT_COMMAND_DIRCTRL_SELECTIONCHANGED wxEVT_DIRCTRL_SELECTIONCHANGED
-#define wxEVT_COMMAND_DIRCTRL_FILEACTIVATED   wxEVT_DIRCTRL_FILEACTIVATED
+#define wxEVT_COMMAND_DIRCTRL_SELECTIONCHANGED  wxEVT_DIRCTRL_SELECTIONCHANGED
+#define wxEVT_COMMAND_DIRCTRL_FILEACTIVATED     wxEVT_DIRCTRL_FILEACTIVATED
+#define wxEVT_COMMAND_DIRCTRL_DIRACTIVATED      wxEVT_DIRCTRL_DIRACTIVATED
+#define wxEVT_COMMAND_DIRCTRL_FAVACTIVATED      wxEVT_DIRCTRL_FAVACTIVATED
+#define wxEVT_COMMAND_DIRCTRL_FAVEDITED         wxEVT_DIRCTRL_FAVEDITED
+#define wxEVT_COMMAND_DIRCTRL_EDITING           wxEVT_DIRCTRL_EDITING
 
-#endif
-    // _WX_DIRCTRLG_H_
+#endif // _WX_DIRCTRLG_H_

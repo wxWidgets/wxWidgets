@@ -70,10 +70,6 @@
 
 #endif // __WINDOWS__
 
-#if defined(__WXMAC__)
-//    #include "MoreFilesX.h"
-#endif
-
 extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[];
 
 // If compiled under Windows, this macro can cause problems
@@ -89,6 +85,10 @@ bool wxIsDriveAvailable(const wxString& dirName);
 
 wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_DIRACTIVATED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_FAVACTIVATED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_FAVEDITED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_EDITING, wxTreeEvent );
 
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, OSX, UNIX (returns "/")
@@ -246,7 +246,7 @@ static int wxCMPFUNC_CONV wxDirCtrlStringCompareFunction(const wxString& strFirs
 //-----------------------------------------------------------------------------
 
 wxDirItemData::wxDirItemData(const wxString& path, const wxString& name,
-                             bool isDir)
+                             bool isDir, bool isFav, wxFavItemData* fav)
     : m_path(path)
     , m_name(name)
 {
@@ -257,12 +257,15 @@ wxDirItemData::wxDirItemData(const wxString& path, const wxString& name,
     m_isHidden = false;
     m_isExpanded = false;
     m_isDir = isDir;
+    m_isFav = isFav;
+    m_fav = fav;
 }
 
 void wxDirItemData::SetNewDirName(const wxString& path)
 {
     m_path = path;
-    m_name = wxFileNameFromPath(path);
+    if (m_fav == nullptr)
+        m_name = wxFileNameFromPath(path);
 }
 
 bool wxDirItemData::HasSubDirs() const
@@ -296,22 +299,39 @@ bool wxDirItemData::HasFiles(const wxString& WXUNUSED(spec)) const
 }
 
 //-----------------------------------------------------------------------------
+
+static int wxCompareFavorites(wxFavItemData* item1, wxFavItemData* item2)
+{
+    return item1->GetName().CmpNoCase(item2->GetName());
+}
+
+//-----------------------------------------------------------------------------
 // wxGenericDirCtrl
 //-----------------------------------------------------------------------------
 
-wxBEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxGenericDirCtrl, wxPanel)
   EVT_TREE_ITEM_EXPANDING     (wxID_TREECTRL, wxGenericDirCtrl::OnExpandItem)
   EVT_TREE_ITEM_COLLAPSED     (wxID_TREECTRL, wxGenericDirCtrl::OnCollapseItem)
   EVT_TREE_BEGIN_LABEL_EDIT   (wxID_TREECTRL, wxGenericDirCtrl::OnBeginEditItem)
+  EVT_TREE_DOING_LABEL_EDIT   (wxID_TREECTRL, wxGenericDirCtrl::OnDoingEditItem)
   EVT_TREE_END_LABEL_EDIT     (wxID_TREECTRL, wxGenericDirCtrl::OnEndEditItem)
   EVT_TREE_SEL_CHANGED        (wxID_TREECTRL, wxGenericDirCtrl::OnTreeSelChange)
   EVT_TREE_ITEM_ACTIVATED     (wxID_TREECTRL, wxGenericDirCtrl::OnItemActivated)
   EVT_SIZE                    (wxGenericDirCtrl::OnSize)
 wxEND_EVENT_TABLE()
 
-wxGenericDirCtrl::wxGenericDirCtrl(void)
+wxGenericDirCtrl::wxGenericDirCtrl() : m_favs(wxCompareFavorites)
 {
     Init();
+}
+
+wxGenericDirCtrl::wxGenericDirCtrl(wxWindow *parent, wxWindowID id, const wxString &dir,
+                                   const wxPoint& pos, const wxSize& size, long style,
+                                   const wxString& filter, int defaultFilter,
+                                   const wxString& name) : m_favs(wxCompareFavorites)
+{
+    Init();
+    Create(parent, id, dir, pos, size, style, filter, defaultFilter, name);
 }
 
 void wxGenericDirCtrl::ExpandRoot()
@@ -344,7 +364,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
                               int defaultFilter,
                               const wxString& name)
 {
-    if (!wxControl::Create(parent, treeid, pos, size, style, wxDefaultValidator, name))
+    if (!wxPanel::Create(parent, treeid, pos, size, style, name))
         return false;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
@@ -358,7 +378,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     treeStyle |= wxTR_NO_LINES;
 #endif
 
-    if (style & wxDIRCTRL_EDIT_LABELS)
+    if (style & (wxDIRCTRL_EDIT_LABELS | wxDIRCTRL_BOOKMARKS))
         treeStyle |= wxTR_EDIT_LABELS;
 
     if (style & wxDIRCTRL_MULTIPLE)
@@ -366,6 +386,18 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
+
+    if (style & wxDIRCTRL_ROW_HIGHLIGHT)
+        treeStyle |= wxTR_FULL_ROW_HIGHLIGHT | wxTR_NO_LINES;
+
+    if (style & wxDIRCTRL_THEMED)
+        treeStyle |= wxTR_TWIST_BUTTONS;
+
+    if (style & wxDIRCTRL_HOVER_HIGHLIGHT)
+        treeStyle |= wxTR_HOVER_HIGHLIGHT;
+
+    if (style & wxDIRCTRL_FULL_WIDTH_EDITOR)
+        treeStyle |= wxTR_FULL_WIDTH_EDITOR;
 
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
                                 wxPoint(0,0), GetClientSize(), treeStyle);
@@ -400,7 +432,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_treeCtrl->SetImageList(wxTheFileIconsTable->GetSmallImageList());
 
     m_showHidden = false;
-    wxDirItemData* rootData = new wxDirItemData(wxEmptyString, wxEmptyString, true);
+    wxDirItemData* rootData = new wxDirItemData(wxEmptyString, wxEmptyString, true, false);
 
     wxString rootName;
 
@@ -423,6 +455,8 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
 wxGenericDirCtrl::~wxGenericDirCtrl()
 {
+    for (unsigned i = 0; i < m_favs.GetCount(); i++)
+        delete m_favs.Item(i);
 }
 
 void wxGenericDirCtrl::Init()
@@ -432,6 +466,8 @@ void wxGenericDirCtrl::Init()
     m_currentFilterStr.clear(); // Default: any file
     m_treeCtrl = NULL;
     m_filterListCtrl = NULL;
+    m_favId = nullptr;
+    m_favInEdit = nullptr;
 }
 
 wxTreeCtrl* wxGenericDirCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID treeid, const wxPoint& pos, const wxSize& size, long treeStyle)
@@ -465,9 +501,9 @@ void wxGenericDirCtrl::ShowHidden( bool show )
 }
 
 const wxTreeItemId
-wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)
+wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId, bool isFav)
 {
-    wxDirItemData *dir_item = new wxDirItemData(path,name,true);
+    wxDirItemData *dir_item = new wxDirItemData(path, name, true, isFav);
 
     wxTreeItemId treeid = AppendItem( m_rootId, name, imageId, -1, dir_item);
 
@@ -480,6 +516,13 @@ void wxGenericDirCtrl::SetupSections()
 {
     wxArrayString paths, names;
     wxArrayInt icons;
+
+    if (HasFlag(wxDIRCTRL_BOOKMARKS))
+#ifdef __WXMSW__
+        m_favId = AddSection(wxEmptyString, _("Favorites"), wxFileIconsTable::bookmark_folder, true);
+#else
+        m_favId = AddSection(wxEmptyString, _("Favorites"), wxFileIconsTable::bookmark, true);
+#endif
 
     size_t n, count = wxGetAvailableDrives(paths, names, icons);
 
@@ -494,16 +537,19 @@ void wxGenericDirCtrl::SetupSections()
         AddSection(paths[n], names[n], icons[n]);
 }
 
-void wxGenericDirCtrl::SetFocus()
-{
-    // we don't need focus ourselves, give it to the tree so that the user
-    // could navigate it
-    if (m_treeCtrl)
-        m_treeCtrl->SetFocus();
-}
-
 void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
 {
+    // if using favorites only allow them to be edited
+    if (HasFlag(wxDIRCTRL_BOOKMARKS) && !HasFlag(wxDIRCTRL_EDIT_LABELS))
+    {
+        wxDirItemData *data = GetItemData(event.GetItem());
+        if (!data || !data->m_isFav)
+        {
+            event.Veto();
+            return;
+        }
+    }
+
     // don't rename the main entry "Sections"
     if (event.GetItem() == m_rootId)
     {
@@ -519,21 +565,18 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
     }
 }
 
+void wxGenericDirCtrl::OnDoingEditItem(wxTreeEvent &event)
+{
+    wxTreeEvent editEvent(wxEVT_DIRCTRL_EDITING, GetId());
+    editEvent.SetClientData(event.GetClientData());
+    GetEventHandler()->ProcessEvent(editEvent);
+}
+
 void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
 {
     if (event.IsEditCancelled())
-        return;
-
-    if ((event.GetLabel().empty()) ||
-        (event.GetLabel() == wxT(".")) ||
-        (event.GetLabel() == wxT("..")) ||
-        (event.GetLabel().Find(wxT('/')) != wxNOT_FOUND) ||
-        (event.GetLabel().Find(wxT('\\')) != wxNOT_FOUND) ||
-        (event.GetLabel().Find(wxT('|')) != wxNOT_FOUND))
     {
-        wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
-        dialog.ShowModal();
-        event.Veto();
+        m_favInEdit = nullptr;
         return;
     }
 
@@ -541,28 +584,75 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
     wxDirItemData *data = GetItemData( treeid );
     wxASSERT( data );
 
-    wxString new_name( wxPathOnly( data->m_path ) );
-    new_name += wxString(wxFILE_SEP_PATH);
-    new_name += event.GetLabel();
-
-    wxLogNull log;
-
-    if (wxFileExists(new_name))
+    if (data->m_isFav)
     {
-        wxMessageDialog dialog(this, _("File name exists already."), _("Error"), wxOK | wxICON_ERROR );
-        dialog.ShowModal();
-        event.Veto();
-    }
-
-    if (wxRenameFile(data->m_path,new_name))
-    {
-        data->SetNewDirName( new_name );
+        // Check for a duplicate name
+        for (size_t i = 0; i < m_favs.GetCount(); i++)
+        {
+            wxFavItemData* scan = m_favs.Item(i);
+            if (scan->GetName().IsSameAs(event.GetLabel()))
+            {
+                event.Veto();
+                return;
+            }
+        }
+        wxString old_name = m_favInEdit->GetName();
+        // Update the name on the favorite array and item object
+        m_favInEdit->SetName(event.GetLabel());
+        data->m_name = event.GetLabel();
+        // Re-sort because of the name change
+        m_favs.Sort(wxCompareFavorites);
+        // Notify interested parties of the name change
+        wxTreeEvent editedEvent(wxEVT_DIRCTRL_FAVEDITED, GetId());
+        editedEvent.SetEventObject(this);
+        editedEvent.SetItem(treeid);
+        editedEvent.SetClientData(data->m_fav);
+        editedEvent.SetString(old_name);
+        GetEventHandler()->SafelyProcessEvent(editedEvent);
+        // Reload them later; cannot be done now as it would
+        // invalidate tree ID's already in use and referenced
+        // in code that will run after this handler
+        CallAfter(&wxGenericDirCtrl::UpdateFavoriteBranch);
+        m_favInEdit = nullptr;
     }
     else
     {
-        wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
-        dialog.ShowModal();
-        event.Veto();
+        if ((event.GetLabel().empty()) ||
+            (event.GetLabel() == wxT(".")) ||
+            (event.GetLabel() == wxT("..")) ||
+            (event.GetLabel().Find(wxT('/')) != wxNOT_FOUND) ||
+            (event.GetLabel().Find(wxT('\\')) != wxNOT_FOUND) ||
+            (event.GetLabel().Find(wxT('|')) != wxNOT_FOUND))
+        {
+            wxMessageDialog dialog(this, _("Illegal directory name."), _("Error"), wxOK | wxICON_ERROR );
+            dialog.ShowModal();
+            event.Veto();
+            return;
+        }
+
+        wxString new_name( wxPathOnly( data->m_path ) );
+        new_name += wxString(wxFILE_SEP_PATH);
+        new_name += event.GetLabel();
+
+        wxLogNull log;
+
+        if (wxFileExists(new_name))
+        {
+            wxMessageDialog dialog(this, _("File name exists already."), _("Error"), wxOK | wxICON_ERROR );
+            dialog.ShowModal();
+            event.Veto();
+        }
+
+        if (wxRenameFile(data->m_path,new_name))
+        {
+            data->SetNewDirName( new_name );
+        }
+        else
+        {
+            wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
+            dialog.ShowModal();
+            event.Veto();
+        }
     }
 }
 
@@ -576,7 +666,7 @@ void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
     if ( item.IsOk() )
     {
         changedEvent.SetItem(item);
-        changedEvent.SetClientObject(m_treeCtrl->GetItemData(item));
+        changedEvent.SetClientObject(GetItemData(item));
     }
 
     if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
@@ -590,19 +680,16 @@ void wxGenericDirCtrl::OnItemActivated(wxTreeEvent &event)
     wxTreeItemId treeid = event.GetItem();
     const wxDirItemData *data = GetItemData(treeid);
 
-    if (data->m_isDir)
+    int evtid = 0;
+    if (data->m_isFav && !data->m_isDir) evtid = wxEVT_DIRCTRL_FAVACTIVATED;
+    else if (data->m_isDir) evtid = wxEVT_DIRCTRL_DIRACTIVATED;
+    else evtid = wxEVT_DIRCTRL_FILEACTIVATED;
+    if (evtid != 0)
     {
-        // is dir
-        event.Skip();
-    }
-    else
-    {
-        // is file
-        wxTreeEvent changedEvent(wxEVT_DIRCTRL_FILEACTIVATED, GetId());
-
+        wxTreeEvent changedEvent(evtid, GetId());
         changedEvent.SetEventObject(this);
         changedEvent.SetItem(treeid);
-        changedEvent.SetClientObject(m_treeCtrl->GetItemData(treeid));
+        changedEvent.SetClientObject(GetItemData(treeid));
 
         if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
             event.Veto();
@@ -663,132 +750,154 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     wxASSERT(data);
 
-    wxString path;
-
-    wxString dirName(data->m_path);
-
-#if defined(__WINDOWS__)
-    // Check if this is a root directory and if so,
-    // whether the drive is available.
-    if (!wxIsDriveAvailable(dirName))
+    // Expand only the top Favorites virtual folder
+    if (data->m_isFav)
     {
-        data->m_isExpanded = false;
-        //wxMessageBox(wxT("Sorry, this drive is not available."));
-        return;
-    }
-#endif
-
-    // This may take a longish time. Go to busy cursor
-    wxBusyCursor busy;
-
-#if defined(__WINDOWS__)
-    if (dirName.Last() == ':')
-        dirName += wxString(wxFILE_SEP_PATH);
-#endif
-
-    wxArrayString dirs;
-    wxArrayString filenames;
-
-    wxDir d;
-    wxString eachFilename;
-
-    wxLogNull log;
-    d.Open(dirName);
-
-    if (d.IsOpened())
-    {
-        int style = wxDIR_DIRS;
-        if (m_showHidden) style |= wxDIR_HIDDEN;
-        if (d.GetFirst(& eachFilename, wxEmptyString, style))
+        // No individual favorite
+        if (data->m_isDir)
         {
-            do
+            m_treeCtrl->Freeze();
+            for (size_t i = 0; i < m_favs.GetCount(); i++)
             {
-                if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
-                {
-                    dirs.Add(eachFilename);
-                }
+                wxFavItemData* fav = m_favs.Item(i);
+                wxDirItemData* item = new wxDirItemData(fav->GetPath(), fav->GetName(), false, true, fav);
+                AppendItem(m_favId, item->m_name, wxFileIconsTable::bookmark, -1, item);
             }
-            while (d.GetNext(&eachFilename));
+            m_treeCtrl->Thaw();
+        }
+        else
+        {
+            data->m_isExpanded = false;
+            return;
         }
     }
-    dirs.Sort(wxDirCtrlStringCompareFunction);
-
-    // Now do the filenames -- but only if we're allowed to
-    if (!HasFlag(wxDIRCTRL_DIR_ONLY))
+    else
     {
+        wxString path;
+
+        wxString dirName(data->m_path);
+
+#if defined(__WINDOWS__)
+        // Check if this is a root directory and if so,
+        // whether the drive is available.
+        if (!wxIsDriveAvailable(dirName))
+        {
+            data->m_isExpanded = false;
+            return;
+        }
+#endif
+
+        // This may take a longish time. Go to busy cursor
+        wxBusyCursor busy;
+
+#if defined(__WINDOWS__)
+        if (dirName.Last() == ':')
+            dirName += wxString(wxFILE_SEP_PATH);
+#endif
+
+        wxArrayString dirs;
+        wxArrayString filenames;
+
+        wxDir d;
+        wxString eachFilename;
+
+        wxLogNull log;
         d.Open(dirName);
 
         if (d.IsOpened())
         {
-            int style = wxDIR_FILES;
+            int style = wxDIR_DIRS;
             if (m_showHidden) style |= wxDIR_HIDDEN;
-            // Process each filter (ex: "JPEG Files (*.jpg;*.jpeg)|*.jpg;*.jpeg")
-            wxStringTokenizer strTok;
-            wxString curFilter;
-            strTok.SetString(m_currentFilterStr,wxT(";"));
-            while(strTok.HasMoreTokens())
+            if (d.GetFirst(& eachFilename, wxEmptyString, style))
             {
-                curFilter = strTok.GetNextToken();
-                if (d.GetFirst(& eachFilename, curFilter, style))
+                do
                 {
-                    do
+                    if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
                     {
-                        if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
-                        {
-                            filenames.Add(eachFilename);
-                        }
+                        dirs.Add(eachFilename);
                     }
-                    while (d.GetNext(& eachFilename));
                 }
+                while (d.GetNext(&eachFilename));
             }
         }
-        filenames.Sort(wxDirCtrlStringCompareFunction);
-    }
+        dirs.Sort(wxDirCtrlStringCompareFunction);
 
-    // Now we really know whether we have any children so tell the tree control
-    // about it.
-    m_treeCtrl->SetItemHasChildren(parentId, !dirs.empty() || !filenames.empty());
-
-    // Add the sorted dirs
-    size_t i;
-    for (i = 0; i < dirs.GetCount(); i++)
-    {
-        eachFilename = dirs[i];
-        path = dirName;
-        if (!wxEndsWithPathSeparator(path))
-            path += wxString(wxFILE_SEP_PATH);
-        path += eachFilename;
-
-        wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,true);
-        wxTreeItemId treeid = AppendItem( parentId, eachFilename,
-                                      wxFileIconsTable::folder, -1, dir_item);
-        m_treeCtrl->SetItemImage( treeid, wxFileIconsTable::folder_open,
-                                  wxTreeItemIcon_Expanded );
-
-        // assume that it does have children by default as it can take a long
-        // time to really check for this (think remote drives...)
-        //
-        // and if we're wrong, we'll correct the icon later if
-        // the user really tries to open this item
-        m_treeCtrl->SetItemHasChildren(treeid);
-    }
-
-    // Add the sorted filenames
-    if (!HasFlag(wxDIRCTRL_DIR_ONLY))
-    {
-        for (i = 0; i < filenames.GetCount(); i++)
+        // Now do the filenames -- but only if we're allowed to
+        if (!HasFlag(wxDIRCTRL_DIR_ONLY))
         {
-            eachFilename = filenames[i];
+            d.Open(dirName);
+
+            if (d.IsOpened())
+            {
+                int style = wxDIR_FILES;
+                if (m_showHidden) style |= wxDIR_HIDDEN;
+                // Process each filter (ex: "JPEG Files (*.jpg;*.jpeg)|*.jpg;*.jpeg")
+                wxStringTokenizer strTok;
+                wxString curFilter;
+                strTok.SetString(m_currentFilterStr,wxT(";"));
+                while(strTok.HasMoreTokens())
+                {
+                    curFilter = strTok.GetNextToken();
+                    if (d.GetFirst(& eachFilename, curFilter, style))
+                    {
+                        do
+                        {
+                            if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
+                            {
+                                filenames.Add(eachFilename);
+                            }
+                        }
+                        while (d.GetNext(& eachFilename));
+                    }
+                }
+            }
+            filenames.Sort(wxDirCtrlStringCompareFunction);
+        }
+
+        // Now we really know whether we have any children so tell the tree control
+        // about it.
+        m_treeCtrl->SetItemHasChildren(parentId, !dirs.empty() || !filenames.empty());
+
+        // Add the sorted dirs
+        size_t i;
+        for (i = 0; i < dirs.GetCount(); i++)
+        {
+            eachFilename = dirs[i];
             path = dirName;
             if (!wxEndsWithPathSeparator(path))
                 path += wxString(wxFILE_SEP_PATH);
             path += eachFilename;
-            //path = dirName + wxString(wxT("/")) + eachFilename;
-            wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,false);
-            int image_id = wxFileIconsTable::file;
-            if (eachFilename.Find(wxT('.')) != wxNOT_FOUND)
-                image_id = wxTheFileIconsTable->GetIconID(eachFilename.AfterLast(wxT('.')));
-            (void) AppendItem( parentId, eachFilename, image_id, -1, dir_item);
+
+            wxDirItemData *dir_item = new wxDirItemData(path, eachFilename, true, false);
+            wxTreeItemId treeid = AppendItem( parentId, eachFilename,
+                                              wxFileIconsTable::folder, -1, dir_item);
+            m_treeCtrl->SetItemImage( treeid, wxFileIconsTable::folder_open,
+                                      wxTreeItemIcon_Expanded );
+
+            // assume that it does have children by default as it can take a long
+            // time to really check for this (think remote drives...)
+            //
+            // and if we're wrong, we'll correct the icon later if
+            // the user really tries to open this item
+            m_treeCtrl->SetItemHasChildren(treeid);
+        }
+
+        // Add the sorted filenames
+        if (!HasFlag(wxDIRCTRL_DIR_ONLY))
+        {
+            for (i = 0; i < filenames.GetCount(); i++)
+            {
+                eachFilename = filenames[i];
+                path = dirName;
+                if (!wxEndsWithPathSeparator(path))
+                    path += wxString(wxFILE_SEP_PATH);
+                path += eachFilename;
+                wxDirItemData *dir_item = new wxDirItemData(path, eachFilename, false, false);
+                int image_id = wxFileIconsTable::file;
+                if (eachFilename.Find(wxT('.')) != wxNOT_FOUND)
+                    image_id = wxTheFileIconsTable->GetIconID(eachFilename.AfterLast(wxT('.')));
+                (void) AppendItem( parentId, eachFilename, image_id, -1, dir_item);
+            }
         }
     }
 }
@@ -842,7 +951,8 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     {
         wxDirItemData* data = GetItemData(childId);
 
-        if (data && !data->m_path.empty())
+        // Do not look inside the favorites
+        if (data && !data->m_path.empty() && !data->m_isFav)
         {
             wxString childPath(data->m_path);
             if (!wxEndsWithPathSeparator(childPath))
@@ -956,15 +1066,14 @@ bool wxGenericDirCtrl::CollapsePath(const wxString& path)
     return true;
 }
 
-wxDirItemData* wxGenericDirCtrl::GetItemData(wxTreeItemId itemId)
+wxDirItemData* wxGenericDirCtrl::GetItemData(wxTreeItemId itemId) const
 {
     return static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
 }
 
 wxString wxGenericDirCtrl::GetPath(wxTreeItemId itemId) const
 {
-    const wxDirItemData*
-        data = static_cast<wxDirItemData*>(m_treeCtrl->GetItemData(itemId));
+    const wxDirItemData* data = GetItemData(itemId);
 
     return data ? data->m_path : wxString();
 }
@@ -1013,7 +1122,7 @@ wxString wxGenericDirCtrl::GetFilePath() const
     wxTreeItemId treeid = m_treeCtrl->GetSelection();
     if (treeid)
     {
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
+        wxDirItemData* data = GetItemData(treeid);
         if (data->m_isDir)
             return wxEmptyString;
         else
@@ -1032,7 +1141,7 @@ void wxGenericDirCtrl::GetFilePaths(wxArrayString& paths) const
     for ( unsigned n = 0; n < items.size(); n++ )
     {
         wxTreeItemId treeid = items[n];
-        wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(treeid);
+        wxDirItemData* data = GetItemData(treeid);
         if ( !data->m_isDir )
             paths.Add(data->m_path);
     }
@@ -1081,49 +1190,6 @@ void wxGenericDirCtrl::UnselectAll()
 {
     m_treeCtrl->UnselectAll();
 }
-
-// Not used
-#if 0
-void wxGenericDirCtrl::FindChildFiles(wxTreeItemId treeid, int dirFlags, wxArrayString& filenames)
-{
-    wxDirItemData *data = (wxDirItemData *) m_treeCtrl->GetItemData(treeid);
-
-    // This may take a longish time. Go to busy cursor
-    wxBusyCursor busy;
-
-    wxASSERT(data);
-
-    wxString search,path,filename;
-
-    wxString dirName(data->m_path);
-
-#if defined(__WINDOWS__)
-    if (dirName.Last() == ':')
-        dirName += wxString(wxFILE_SEP_PATH);
-#endif
-
-    wxDir d;
-    wxString eachFilename;
-
-    wxLogNull log;
-    d.Open(dirName);
-
-    if (d.IsOpened())
-    {
-        if (d.GetFirst(& eachFilename, m_currentFilterStr, dirFlags))
-        {
-            do
-            {
-                if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
-                {
-                    filenames.Add(eachFilename);
-                }
-            }
-            while (d.GetNext(& eachFilename)) ;
-        }
-    }
-}
-#endif
 
 void wxGenericDirCtrl::SetFilterIndex(int n)
 {
@@ -1230,6 +1296,108 @@ wxTreeItemId wxGenericDirCtrl::AppendItem (const wxTreeItemId & parent,
   }
 }
 
+void wxGenericDirCtrl::SelectedToTop()
+{
+    wxTreeCtrl* treeCtrl = GetTreeCtrl();
+
+    wxTreeItemId id = treeCtrl->GetFocusedItem();
+    if (id.IsOk()) treeCtrl->ScrollTo(id, true);
+}
+
+wxFavItemData* wxGenericDirCtrl::AddFavorite(const wxString& path, const wxString& name)
+{
+    wxFavItemData* item = new wxFavItemData(path, name);
+    m_favs.Add(item);
+    CollapseDir(m_favId);
+    ExpandDir(m_favId);
+    return item;
+}
+
+void wxGenericDirCtrl::EditFavorite(wxFavItemData* item)
+{
+    m_favInEdit = item;
+    wxTreeItemId id = FindFavoriteInTree(item);
+    if (id.IsOk())
+    {
+        m_treeCtrl->EnsureVisible(id);
+        m_treeCtrl->EditLabel(id);
+    }
+}
+
+wxTreeItemId wxGenericDirCtrl::FindFavoriteInTree(wxFavItemData* item)
+{
+    wxTreeItemIdValue cookie;
+    wxTreeItemId id = m_treeCtrl->GetFirstChild(m_favId, cookie);
+    while (id.IsOk())
+    {
+        wxDirItemData* data = GetItemData(id);
+        if (data->m_fav == item) return id;
+        id = m_treeCtrl->GetNextChild(m_favId, cookie);
+    }
+    return wxTreeItemId();
+}
+
+wxString wxGenericDirCtrl::GetFavoritePath(size_t index)
+{
+    assert(index < m_favs.GetCount());
+    return m_favs[index]->GetPath();
+}
+
+wxString wxGenericDirCtrl::GetFavoriteName(size_t index)
+{
+    assert(index < m_favs.GetCount());
+    return m_favs[index]->GetName();
+}
+
+bool wxGenericDirCtrl::IsFavorite(const wxTreeItemId& item)
+{
+    if (item.IsOk())
+    {
+        wxDirItemData* data = GetItemData(item);
+        if (data) return data->IsFavorite();
+    }
+    return false;
+}
+
+bool wxGenericDirCtrl::IsDirectory(const wxTreeItemId& item)
+{
+    if (item.IsOk())
+    {
+        wxDirItemData* data = GetItemData(item);
+        if (data) return data->IsDirectory();
+    }
+    return false;
+}
+
+size_t wxGenericDirCtrl::GetFavoriteCount()
+{
+    return m_favs.GetCount();
+}
+
+void wxGenericDirCtrl::RemoveFavorite(wxFavItemData* item)
+{
+    // Remove from array and delete it
+    m_favs.Remove(item);
+    delete item;
+    UpdateFavoriteBranch();
+}
+
+wxFavItemData* wxGenericDirCtrl::GetFavorite()
+{
+    wxTreeItemId id = m_treeCtrl->GetSelection();
+    if (id.IsOk())
+    {
+        wxDirItemData* data = GetItemData(id);
+        return data->m_fav;
+    }
+    return nullptr;
+}
+
+void wxGenericDirCtrl::UpdateFavoriteBranch()
+{
+    CollapseDir(m_favId);
+    ExpandDir(m_favId);
+}
 
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl
@@ -1488,6 +1656,14 @@ void wxFileIconsTable::Create(const wxSize& sz)
     /* else put into list by GetIconID
        (KDE defines application/x-executable for *.exe and has nice icon)
      */
+    // favorite
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_BOOKMARK,
+                                                   wxART_CMN_DIALOG,
+                                                   sz));
+    // favorite folder
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_BOOKMARK_FOLDER,
+                                                   wxART_CMN_DIALOG,
+                                                   sz));
 }
 
 wxImageList *wxFileIconsTable::GetSmallImageList()
