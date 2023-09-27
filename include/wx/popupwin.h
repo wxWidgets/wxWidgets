@@ -22,7 +22,8 @@
 // This flag can be used in MSW if some controls are not working with the
 // default popup style.
 #define wxPU_CONTAINS_CONTROLS     0x0001
-
+// This flag is used in GTK to allow manual resizing of the window
+#define wxPU_ALLOW_RESIZING        0x0002
 
 #include "wx/nonownedwnd.h"
 

@@ -90,6 +90,36 @@ gboolean on_popup_focus_out( GtkWidget *, GdkEventFocus *, wxPopupWindow* win )
 }
 
 //-----------------------------------------------------------------------------
+// "configure-event"
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static
+gboolean configure_callback(GtkWidget*, GdkEventConfigure* gdk_event, wxPopupWindow* win)
+{
+    bool moved = (win->m_x != gdk_event->x) || (win->m_y != gdk_event->y);
+    win->m_x = gdk_event->x;
+    win->m_y = gdk_event->y;
+    if (moved)
+    {
+        wxMoveEvent event(wxPoint(win->m_x, win->m_y), win->GetId());
+        event.SetEventObject(win);
+        win->HandleWindowEvent(event);
+    }
+    bool resized = (win->m_width != gdk_event->width) || (win->m_height != gdk_event->height);
+    win->m_width = gdk_event->width;
+    win->m_height = gdk_event->height;
+    if (resized)
+    {
+        wxSizeEvent event(wxSize(win->m_width, win->m_height), win->GetId());
+        event.SetEventObject(win);
+        win->HandleWindowEvent(event);
+    }
+    return false;
+}
+}
+
+//-----------------------------------------------------------------------------
 // wxPopupWindow
 //-----------------------------------------------------------------------------
 
@@ -125,10 +155,10 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         // shown as a separate window on the taskbar or pager.
         m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
         gtk_window_set_title( GTK_WINDOW (m_widget), "wxPopUpWindow" );
-        gtk_window_set_resizable( GTK_WINDOW (m_widget), FALSE );
-        gtk_window_set_decorated( GTK_WINDOW (m_widget), FALSE );
-        gtk_window_set_skip_taskbar_hint( GTK_WINDOW (m_widget), TRUE );
-        gtk_window_set_skip_pager_hint( GTK_WINDOW (m_widget), TRUE );
+        gtk_window_set_resizable( GTK_WINDOW (m_widget), HasFlag(wxPU_ALLOW_RESIZING) );
+        gtk_window_set_decorated( GTK_WINDOW (m_widget), false );
+        gtk_window_set_skip_taskbar_hint( GTK_WINDOW (m_widget), true );
+        gtk_window_set_skip_pager_hint( GTK_WINDOW (m_widget), true );
 
         // Popup windows can be created without parent, so handle this correctly.
         if (parent)
@@ -170,7 +200,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
                 gtk_window_set_transient_for (GTK_WINDOW (m_widget), GTK_WINDOW (toplevel));
         }
 
-        gtk_window_set_resizable (GTK_WINDOW (m_widget), FALSE);
+        gtk_window_set_resizable (GTK_WINDOW (m_widget), HasFlag(wxPU_ALLOW_RESIZING));
 
         g_signal_connect (m_widget, "delete_event",
                          G_CALLBACK (gtk_dialog_delete_callback), this);
@@ -189,6 +219,9 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         g_signal_connect (m_widget, "button_press_event",
                          G_CALLBACK (gtk_popup_button_press), this);
     }
+    if (HasFlag(wxPU_ALLOW_RESIZING))
+        g_signal_connect (m_widget, "configure_event",
+                          G_CALLBACK (configure_callback), this);
     return true;
 }
 
