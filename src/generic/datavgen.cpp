@@ -5072,15 +5072,16 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // set the hover position
         if (event.Moving())
         {
+            // Repaint old selected row
+            if (m_hovered_row != -1) RefreshRow(m_hovered_row);
             m_hovered_row = current;
-            Refresh();
-            return;
+            // Repaint newly selected row
+            RefreshRow(m_hovered_row);
         }
         else if (event.Leaving())
         {
+            if (m_hovered_row != -1) RefreshRow(m_hovered_row);
             m_hovered_row = -1;
-            Refresh();
-            if (m_dragCount == 0) return;
         }
     }
 
@@ -5212,15 +5213,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 // So the mouse is over the expander
                 hoverOverExpander = true;
                 if (m_underMouse && m_underMouse != node)
-                {
-                    // wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
                     RefreshRow(GetRowByItem(m_underMouse->GetItem()));
-                }
                 if (m_underMouse != node)
-                {
-                    // wxLogMessage("Do the row: %d", current);
                     RefreshRow(current);
-                }
                 m_underMouse = node;
             }
         }
@@ -5233,7 +5228,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     {
         if (m_underMouse != NULL)
         {
-            // wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
             RefreshRow(GetRowByItem(m_underMouse->GetItem()));
             m_underMouse = NULL;
         }
