@@ -20,6 +20,16 @@
 #define DIRTEST_FOLDER      wxString("dirTest_folder")
 #define SEP                 wxFileName::GetPathSeparator()
 
+// We can't use wxFileSelectorDefaultWildcardStr from wxCore here, so define
+// our own.
+const char WILDCARD_ALL[] =
+#if defined(__WXMSW__)
+"*.*"
+#else // Unix/Mac
+"*"
+#endif
+;
+
 // ----------------------------------------------------------------------------
 // test fixture
 // ----------------------------------------------------------------------------
@@ -144,6 +154,9 @@ TEST_CASE_METHOD(DirTestCase, "Dir::Traverse", "[dir]")
     // enum all files
     wxArrayString files;
     CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files) == 4 );
+
+    // enum all files using an explicit wildcard
+    CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, WILDCARD_ALL) == 4);
 
     // enum all files according to the filter
     CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo") == 1 );
