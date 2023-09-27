@@ -255,6 +255,15 @@ void wxAuiGenericToolBarArt::DrawPlainBackground(wxDC& dc,
     dc.DrawRectangle(rect);
 }
 
+void wxAuiGenericToolBarArt::DrawParentBackground(wxDC& dc,
+                                                   wxWindow* wnd,
+                                                   const wxRect& rect)
+{
+    dc.SetBrush(wnd->GetBackgroundColour());
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(rect);
+}
+
 void wxAuiGenericToolBarArt::DrawLabel(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),
@@ -2453,6 +2462,8 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     if (m_windowStyle & wxAUI_TB_PLAIN_BACKGROUND)
         m_art->DrawPlainBackground(dc, this, cli_rect);
+    else if (m_windowStyle & wxAUI_TB_PARENT_BACKGROUND)
+        m_art->DrawParentBackground(dc, this, cli_rect);
     else
         m_art->DrawBackground(dc, this, cli_rect);
 
