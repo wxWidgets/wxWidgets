@@ -2077,7 +2077,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 #elif wxUSE_POPUPWIN
 
     wxSTCPopupBase::wxSTCPopupBase(wxWindow* parent)
-                   :wxPopupWindow(parent, wxPU_CONTAINS_CONTROLS)
+                   :wxPopupWindow(parent, 0)
     {
     }
 
