@@ -55,6 +55,8 @@ typedef wxString wxArtID;
 // Art IDs
 // ----------------------------------------------------------------------------
 
+#define wxART_BOOKMARK_FOLDER      wxART_MAKE_ART_ID(wxART_BOOKMARK_FOLDER)
+#define wxART_BOOKMARK             wxART_MAKE_ART_ID(wxART_BOOKMARK)
 #define wxART_ADD_BOOKMARK         wxART_MAKE_ART_ID(wxART_ADD_BOOKMARK)
 #define wxART_DEL_BOOKMARK         wxART_MAKE_ART_ID(wxART_DEL_BOOKMARK)
 #define wxART_HELP_SIDE_PANEL      wxART_MAKE_ART_ID(wxART_HELP_SIDE_PANEL)

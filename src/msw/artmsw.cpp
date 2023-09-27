@@ -29,9 +29,9 @@
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/wrapshl.h"
 
-#ifdef SHGSI_ICON
+//#ifdef SHGSI_ICON
     #define wxHAS_SHGetStockIconInfo
-#endif
+//#endif
 
 namespace
 {
@@ -74,22 +74,24 @@ MSW_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
 SHSTOCKICONID MSWGetStockIconIdForArtProviderId(const wxArtID& art_id)
 {
     // try to find an equivalent MSW stock icon id for wxArtID
-    if ( art_id == wxART_ERROR)             return SIID_ERROR;
-    else if ( art_id == wxART_QUESTION )    return SIID_HELP;
-    else if ( art_id == wxART_WARNING )     return SIID_WARNING;
-    else if ( art_id == wxART_INFORMATION ) return SIID_INFO;
-    else if ( art_id == wxART_HELP )        return SIID_HELP;
-    else if ( art_id == wxART_FOLDER )      return SIID_FOLDER;
-    else if ( art_id == wxART_FOLDER_OPEN ) return SIID_FOLDEROPEN;
-    else if ( art_id == wxART_DELETE )      return SIID_DELETE;
-    else if ( art_id == wxART_FIND )        return SIID_FIND;
-    else if ( art_id == wxART_HARDDISK )    return SIID_DRIVEFIXED;
-    else if ( art_id == wxART_FLOPPY )      return SIID_DRIVE35;
-    else if ( art_id == wxART_CDROM )       return SIID_DRIVECD;
-    else if ( art_id == wxART_REMOVABLE )   return SIID_DRIVEREMOVE;
-    else if ( art_id == wxART_PRINT )       return SIID_PRINTER;
+    if ( art_id == wxART_ERROR)                 return SIID_ERROR;
+    else if ( art_id == wxART_QUESTION )        return SIID_HELP;
+    else if ( art_id == wxART_WARNING )         return SIID_WARNING;
+    else if ( art_id == wxART_INFORMATION )     return SIID_INFO;
+    else if ( art_id == wxART_HELP )            return SIID_HELP;
+    else if ( art_id == wxART_FOLDER )          return SIID_FOLDER;
+    else if ( art_id == wxART_FOLDER_OPEN )     return SIID_FOLDEROPEN;
+    else if ( art_id == wxART_DELETE )          return SIID_DELETE;
+    else if ( art_id == wxART_FIND )            return SIID_FIND;
+    else if ( art_id == wxART_HARDDISK )        return SIID_DRIVEFIXED;
+    else if ( art_id == wxART_FLOPPY )          return SIID_DRIVE35;
+    else if ( art_id == wxART_CDROM )           return SIID_DRIVECD;
+    else if ( art_id == wxART_REMOVABLE )       return SIID_DRIVEREMOVE;
+    else if ( art_id == wxART_PRINT )           return SIID_PRINTER;
     else if ( art_id == wxART_EXECUTABLE_FILE ) return SIID_APPLICATION;
-    else if ( art_id == wxART_NORMAL_FILE ) return SIID_DOCNOASSOC;
+    else if ( art_id == wxART_NORMAL_FILE )     return SIID_DOCNOASSOC;
+    else if ( art_id == wxART_BOOKMARK )        return (SHSTOCKICONID)43;
+    else if ( art_id == wxART_BOOKMARK_FOLDER ) return (SHSTOCKICONID)43;
 
     return SIID_INVALID;
 };

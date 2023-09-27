@@ -67,6 +67,8 @@ const wxString wxId2Gtk[] = {
     ART(wxART_HELP_FOLDER,      GTK_STOCK_DIRECTORY, "folder")
     ART(wxART_HELP_PAGE,        GTK_STOCK_FILE, "text-x-generic")
     ART(wxART_MISSING_IMAGE,    GTK_STOCK_MISSING_IMAGE, "image-missing")
+    ART(wxART_BOOKMARK,         GTK_STOCK_ADD, "starred")
+    ART(wxART_BOOKMARK_FOLDER,  GTK_STOCK_ADD, "starred")
     ART(wxART_ADD_BOOKMARK,     GTK_STOCK_ADD, "list-add")
     ART(wxART_DEL_BOOKMARK,     GTK_STOCK_REMOVE, "list-remove")
     ART(wxART_GO_BACK,          GTK_STOCK_GO_BACK, "go-previous")
