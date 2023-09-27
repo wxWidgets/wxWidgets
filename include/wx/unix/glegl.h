@@ -142,6 +142,7 @@ private:
     wl_subsurface *m_wlSubsurface;
 
     bool m_readyToDraw;
+    bool m_swapIntervalSet = false;
 
     // the global/default versions of the above
     static EGLConfig *ms_glEGLConfig;

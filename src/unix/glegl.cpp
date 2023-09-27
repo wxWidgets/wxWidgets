@@ -389,6 +389,24 @@ void wxGLCanvasEGL::OnWLFrameCallback()
 #ifdef GDK_WINDOWING_WAYLAND
     wxLogTrace(TRACE_EGL, "In frame callback handler");
 
+    if ( !m_swapIntervalSet )
+    {
+        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
+        // callback to know when we should draw ourselves already.
+        if ( eglSwapInterval(m_display, 0) )
+        {
+            wxLogTrace(TRACE_EGL, "Set EGL swap interval to 0 for %p", this);
+
+            // It shouldn't be necessary to set it again.
+            m_swapIntervalSet = true;
+        }
+        else
+        {
+            wxLogTrace(TRACE_EGL, "eglSwapInterval(0) failed for %p: %#x",
+                       this, eglGetError());
+        }
+    }
+
     m_readyToDraw = true;
     g_clear_pointer(&m_wlFrameCallbackHandler, wl_callback_destroy);
     SendSizeEvent();
@@ -547,13 +565,6 @@ bool wxGLCanvasEGL::CreateSurface()
                          G_CALLBACK(gtk_glcanvas_unmap_callback), this);
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
-
-        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
-        // callback to know when we should draw ourselves already.
-        if ( !eglSwapInterval(m_display, 0) )
-        {
-            wxLogTrace(TRACE_EGL, "eglSwapInterval(0) failed: %#x", eglGetError());
-        }
     }
 #endif
 
