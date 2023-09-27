@@ -1680,6 +1680,8 @@ protected:
 
     // y coordinate of property that mouse hovering
     int                 m_propHoverY;
+    // y coordinate of expander that mouse hovering
+    int                 m_expHoverY;
 
     // Which column's editor is selected (usually 1)?
     unsigned int        m_selColumn;
@@ -1830,7 +1832,7 @@ protected:
 
     // Draws an expand/collapse (ie. +/-) button.
     virtual void DrawExpanderButton( wxDC& dc, const wxRect& rect,
-                                     wxPGProperty* property ) const;
+                                     wxPGProperty* property, bool hover ) const;
 
     // Draws items from topItemY to bottomItemY
     void DrawItems( wxDC& dc,

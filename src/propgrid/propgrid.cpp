@@ -330,6 +330,7 @@ void wxPropertyGrid::Init1()
     m_selColumn = 1;
     m_colHover = 1;
     m_propHover = NULL;
+    m_expHoverY = -1;
     m_labelEditor = NULL;
     m_labelEditorProperty = NULL;
     m_eventObject = this;
@@ -363,11 +364,15 @@ void wxPropertyGrid::Init1()
 
     m_doubleBuffer = NULL;
 
-#ifndef wxPG_ICON_WIDTH
+#if (wxPG_USE_RENDERER_NATIVE)
+    wxSize sz = wxRendererNative::Get().GetExpanderSize(this);
+    m_iconWidth = sz.x;
+    m_iconHeight = sz.y;
+#elif wxPG_ICON_WIDTH
+    m_iconWidth = wxPG_ICON_WIDTH;
+#else
     m_iconWidth = 11;
     m_iconHeight = 11;
-#else
-    m_iconWidth = wxPG_ICON_WIDTH;
 #endif
 
     if (m_windowStyle & wxPG_NO_GUTTER) m_gutterWidth = 0;
@@ -1929,7 +1934,7 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 // -----------------------------------------------------------------------
 
 void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
-                                         wxPGProperty* property ) const
+                                         wxPGProperty* property, bool hover ) const
 {
     // Prepare rectangle to be used
     wxRect r(rect);
@@ -1963,7 +1968,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
                 const_cast<wxPropertyGrid*>(this),
                 dc,
                 r,
-                wxCONTROL_EXPANDED
+                (hover ? wxCONTROL_CURRENT : wxCONTROL_NONE) | wxCONTROL_EXPANDED
             );
     #elif wxPG_ICON_WIDTH
         //
@@ -1979,7 +1984,7 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
                 const_cast<wxPropertyGrid*>(this),
                 dc,
                 r,
-                0
+                hover ? wxCONTROL_CURRENT : wxCONTROL_NONE
             );
     #elif wxPG_ICON_WIDTH
         int _x = r.x+(m_iconWidth/2);
@@ -2423,7 +2428,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
             // Tree Item Button (must be drawn before clipping is set up)
             if ( ci == 0 && !HasFlag(wxPG_HIDE_MARGIN) && p->HasVisibleChildren() )
-                DrawExpanderButton( dc, butRect, p );
+                DrawExpanderButton( dc, butRect, p, m_expHoverY == y );
 
             // Background
             if ( isSelected && (ci == 1 || ci == m_selColumn) )
@@ -2675,6 +2680,7 @@ void wxPropertyGrid::Clear()
     m_pState->DoClear();
 
     m_propHover = NULL;
+    m_expHoverY = -1;
 
     RecalculateVirtualSize();
 
@@ -2772,6 +2778,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
     }
 
     m_propHover = NULL;
+    m_expHoverY = -1;
 
     // If necessary, convert state to correct mode.
     if ( orig_mode != new_state_mode )
@@ -5044,22 +5051,34 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
         int curPropHoverY = y - (y % ih);
 
+        wxPGProperty* curProp = DoGetItemAtY(y);
+
+        int oldExpHoverY = m_expHoverY;
+
+        // Check if the mouse is hovering the expander
+        if (curProp)
+        {
+            wxRect expr((curProp->GetDepth() - 1) * m_subgroup_extramargin, curPropHoverY, m_marginWidth, ih);
+            if (expr.Contains(x,y)) m_expHoverY = curPropHoverY;
+            else                    m_expHoverY = -1;
+        } else m_expHoverY = -1;
+
+        bool changed = oldExpHoverY != m_expHoverY;
+
         // On which item it hovers
-        if ( !m_propHover
-             ||
-             ( sy < m_propHoverY || sy >= (m_propHoverY+ih) )
-           )
+        if (!m_propHover || (sy < m_propHoverY || sy >= (m_propHoverY+ih)))
         {
             // Mouse moves on another property
 
-            m_propHover = DoGetItemAtY(y);
+            m_propHover = curProp;
             m_propHoverY = curPropHoverY;
 
             // Send hover event
             SendEvent( wxEVT_PG_HIGHLIGHTED, m_propHover );
 
-            if (m_windowStyle & wxPG_HOVER_HIGHLIGHT) Refresh();
+            changed = true;
         }
+        if ((m_windowStyle & wxPG_HOVER_HIGHLIGHT) && changed) Refresh();
 
 #if wxUSE_TOOLTIPS
         //
@@ -5443,6 +5462,7 @@ void wxPropertyGrid::OnMouseEntry( wxMouseEvent &event )
             }
         }
         m_propHover = nullptr;
+        m_expHoverY = -1;
     }
     if (m_windowStyle & wxPG_HOVER_HIGHLIGHT) Refresh();
 

@@ -298,6 +298,10 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     }
 
     int imageOffset = property->GetImageOffset(imageWidth);
+    // If we're drawing column 0 rollback the wxPG_XBEFORETEXT value
+    // that will be added inside the next call, to make it look more
+    // similar to a tree control
+    if (column == 0) imageOffset -= wxPG_XBEFORETEXT;
 
     DrawEditorValue( dc, rect, imageOffset, text, property, editor );
 
