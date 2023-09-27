@@ -302,7 +302,8 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    EnableSystemThemeByDefault();
+    if (style & wxLC_HOVER_HIGHLIGHT)
+        EnableSystemThemeByDefault();
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA)

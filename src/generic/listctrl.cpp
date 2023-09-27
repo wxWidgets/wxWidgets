@@ -698,7 +698,8 @@ void wxListLineData::SetGeometry(const GeometryInfo& gi)
 void wxListLineData::ApplyAttributes(wxDC *dc,
                                      const wxRect& rectHL,
                                      bool highlighted,
-                                     bool current)
+                                     bool current,
+                                     bool hover)
 {
     const wxItemAttr * const attr = GetAttr();
 
@@ -771,6 +772,10 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
             dc->DrawRectangle(rectHL);
         }
     }
+    else if ( hover )
+    {
+        wxRendererNative::Get().DrawTreeItemBackground( m_owner, *dc, rectHL, wxCONTROL_CURRENT );
+    }
     else if ( attr && attr->HasBackgroundColour() )
     {
         // Draw the background using the items custom background colour.
@@ -789,12 +794,12 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
 #endif
 }
 
-void wxListLineData::Draw(wxDC *dc, bool current, bool highlighted)
+void wxListLineData::Draw(wxDC *dc, bool current, bool highlighted, bool hover)
 {
     wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
     wxCHECK_RET( node, wxT("no subitems at all??") );
 
-    ApplyAttributes(dc, m_gi->m_rectHighlight, highlighted, current);
+    ApplyAttributes(dc, m_gi->m_rectHighlight, highlighted, current, hover);
 
     wxListItemData *item = node->GetData();
     if (item->HasImage())
@@ -819,7 +824,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rect,
                                        const wxRect& rectHL,
                                        bool highlighted,
-                                       bool current )
+                                       bool current,
+                                       bool hover )
 {
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
@@ -827,7 +833,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 
     // Note: GetSubItemRect() needs to be modified if the layout here changes.
 
-    ApplyAttributes(dc, rectHL, highlighted, current);
+    ApplyAttributes(dc, rectHL, highlighted, current, hover);
 
     wxCoord x = rect.x + HEADER_OFFSET_X + ICON_OFFSET_X,
             yMid = rect.y + rect.height/2;
@@ -1633,7 +1639,9 @@ void wxListMainWindow::Init()
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked =
-    m_anchor  = (size_t)-1;
+    m_anchor =
+    m_hover = (size_t)-1;
+
 
     m_hasCheckBoxes = false;
     m_extendRulesAndAlternateColour = false;
@@ -1893,6 +1901,12 @@ long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
 
         if ( rect.Contains(x, y) )
             return wxLIST_HITTEST_ONITEMLABEL;
+        else
+        {
+            rect = GetLine(line)->m_gi->m_rectAll;
+            if ( rect.Contains(x,y) )
+                return wxLIST_HITTEST_ONITEM;
+        }
     }
 
     return 0;
@@ -2098,8 +2112,6 @@ void wxListMainWindow::RefreshSelected()
     }
 }
 
-#include <wx/log.h>
-
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     // Note: a wxPaintDC must be constructed even if no drawing is
@@ -2203,7 +2215,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                              rectLine,
                                              GetLineHighlightRect(line),
                                              IsHighlighted(line),
-                                             line == m_current );
+                                             line == m_current,
+                                             line == m_hover );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2269,7 +2282,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         GetVisibleLinesRange(NULL, NULL);
         for ( size_t i = m_lineFrom; i <= m_lineTo; i++ )
         {
-            GetLine(i)->Draw( &dc, i == m_current, IsHighlighted(i) );
+            GetLine(i)->Draw( &dc, i == m_current, IsHighlighted(i), i == m_hover );
         }
     }
 
@@ -2577,7 +2590,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         return;
 
     if ( !(event.Dragging() || event.ButtonDown() || event.LeftUp() ||
-        event.ButtonDClick()) )
+        event.ButtonDClick() || event.Moving() || event.Leaving()) )
         return;
 
     int x = event.GetX();
@@ -2588,7 +2601,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     long hitResult = 0;
 
     size_t count = GetItemCount(),
-           current;
+           current = -1;
 
     if ( InReportView() )
     {
@@ -2606,6 +2619,26 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             if ( hitResult )
                 break;
         }
+    }
+
+    if (event.Moving() || event.Leaving())
+    {
+        if (((event.Moving() && (current != m_hover)) || event.Leaving()) &&
+            (GetListCtrl()->GetWindowStyleFlag() & wxLC_HOVER_HIGHLIGHT))
+        {
+            if (m_hover != (size_t)-1)
+            {
+                size_t temp = m_hover;
+                m_hover = (size_t)-1;
+                RefreshLine(temp);
+            }
+            if ((hitResult != 0) && event.Moving())
+            {
+                m_hover = current;
+                RefreshLine(m_hover);
+            }
+        }
+        return;
     }
 
     // Update drag events counter first as we must do it even if the mouse is

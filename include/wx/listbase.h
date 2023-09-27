@@ -52,6 +52,8 @@ int (wxCALLBACK *wxListCtrlCompare)(wxIntPtr item1, wxIntPtr item2, wxIntPtr sor
 #define wxLC_SORT_ASCENDING  0x4000
 #define wxLC_SORT_DESCENDING 0x8000
 
+#define wxLC_HOVER_HIGHLIGHT 0x10000
+
 #define wxLC_MASK_TYPE       (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
 #define wxLC_MASK_ALIGN      (wxLC_ALIGN_TOP | wxLC_ALIGN_LEFT)
 #define wxLC_MASK_SORT       (wxLC_SORT_ASCENDING | wxLC_SORT_DESCENDING)

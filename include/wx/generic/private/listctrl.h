@@ -282,7 +282,7 @@ public:
     }
 
     // draw the line on the given DC in icon/list mode
-    void Draw( wxDC *dc, bool current, bool highlighted );
+    void Draw( wxDC *dc, bool current, bool highlighted, bool hover );
 
     // the same in report mode: it needs more parameters as we don't store
     // everything in the item in report mode
@@ -290,7 +290,8 @@ public:
                            const wxRect& rect,
                            const wxRect& rectHL,
                            bool highlighted,
-                           bool current );
+                           bool current,
+                           bool hover );
 
 private:
     // set the line to contain num items (only can be > 1 in report mode)
@@ -304,7 +305,8 @@ private:
     void ApplyAttributes(wxDC *dc,
                          const wxRect& rectHL,
                          bool highlighted,
-                         bool current);
+                         bool current,
+                         bool hover);
 
     // draw the text on the DC with the correct justification; also add an
     // ellipsis if the text is too large to fit in the current width
@@ -964,6 +966,9 @@ private:
     // tells whether or not to paint empty rows with alternate colour and draw
     // rulers on empty rows
     bool m_extendRulesAndAlternateColour;
+
+    // cell hovered on
+    size_t m_hover;
 
     wxDECLARE_EVENT_TABLE();
 
