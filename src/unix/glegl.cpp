@@ -543,7 +543,10 @@ bool wxGLCanvasEGL::CreateSurface()
 
         // Ensure that eglSwapBuffers() doesn't block, as we use the surface
         // callback to know when we should draw ourselves already.
-        eglSwapInterval(m_display, 0);
+        if ( !eglSwapInterval(m_display, 0) )
+        {
+            wxLogTrace(TRACE_EGL, "eglSwapInterval(0) failed: %#x", eglGetError());
+        }
     }
 #endif
 
