@@ -968,34 +968,39 @@ void wxSplitterWindow::UpdateSize()
 
 wxSize wxSplitterWindow::DoGetBestSize() const
 {
+    wxSize sizeBest;
+    int *pSash = 0;
     // get best sizes of subwindows
     wxSize size1, size2;
     if ( m_windowOne )
         size1 = m_windowOne->GetEffectiveMinSize();
     if ( m_windowTwo )
+    {
         size2 = m_windowTwo->GetEffectiveMinSize();
+        // sum them
+        //
+        // pSash points to the size component to which sash size must be added
+        if ( m_splitMode == wxSPLIT_VERTICAL )
+        {
+            sizeBest.y = wxMax(size1.y, size2.y);
+            sizeBest.x = wxMax(size1.x, m_windowOne ? m_minimumPaneSize : 0) +
+                         wxMax(size2.x, m_minimumPaneSize);
 
-    // sum them
-    //
-    // pSash points to the size component to which sash size must be added
-    int *pSash;
-    wxSize sizeBest;
-    if ( m_splitMode == wxSPLIT_VERTICAL )
-    {
-        sizeBest.y = wxMax(size1.y, size2.y);
-        sizeBest.x = wxMax(size1.x, m_minimumPaneSize) +
-                        wxMax(size2.x, m_minimumPaneSize);
+            pSash = &sizeBest.x;
+        }
+        else // wxSPLIT_HORIZONTAL
+        {
+            sizeBest.x = wxMax(size1.x, size2.x);
+            sizeBest.y = wxMax(size1.y, m_windowOne ? m_minimumPaneSize : 0) +
+                         wxMax(size2.y, m_minimumPaneSize);
 
-        pSash = &sizeBest.x;
+            pSash = &sizeBest.y;
+        }
     }
-    else // wxSPLIT_HORIZONTAL
-    {
-        sizeBest.x = wxMax(size1.x, size2.x);
-        sizeBest.y = wxMax(size1.y, m_minimumPaneSize) +
-                        wxMax(size2.y, m_minimumPaneSize);
-
-        pSash = &sizeBest.y;
-    }
+    // if there's no second window then use only
+    // the best size of window one, if set
+    else
+        sizeBest = size1;
 
     // account for the sash if the window is actually split
     if ( m_windowOne && m_windowTwo )
