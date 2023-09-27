@@ -254,18 +254,6 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     {
         int customBorder = m_widthCustomBorder;
 
-        // Set border colour
-#ifdef __WXMAC__
-        wxPen pen1( wxColour(133,133,133),
-                    customBorder,
-                    wxPENSTYLE_SOLID );
-#else
-        wxPen pen1( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT),
-                    customBorder,
-                    wxPENSTYLE_SOLID);
-#endif
-        dc.SetPen( pen1 );
-
         // area around both controls
         wxRect rect2(fullRect);
         if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
@@ -289,8 +277,10 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
             }
         }
 
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-        dc.DrawRectangle(rect2);
+        int state = 0;
+        if (HasFocus()) state = wxCONTROL_FOCUSED;
+        if (!IsEnabled()) state |= wxCONTROL_DISABLED;
+        wxRendererNative::Get().DrawTextCtrl(this, dc, rect2, state);
     }
 
     // Clear the main background if the system doesn't do it by itself
@@ -421,7 +411,9 @@ void wxGenericComboCtrl::SetCustomPaintWidth( int width )
         // Common textctrl re-creation code
         if ( tcCreateStyle != -1 )
         {
+            bool focused = tc->HasFocus();
             CreateTextCtrl( tcCreateStyle );
+            if (focused) GetTextCtrl()->SetFocus();
         }
     }
 #endif // UNRELIABLE_TEXTCTRL_BORDER
@@ -445,7 +437,7 @@ bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
     else
     {
         if ( (keycode == WXK_DOWN && event.AltDown()) ||
-             (keycode == WXK_F4) )
+             (keycode == WXK_F4) || (keycode == WXK_SPACE) )
             return true;
     }
 
