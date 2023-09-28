@@ -195,9 +195,17 @@ protected:
     virtual void DoShowPage(wxWindow* page, bool show) override
     {
         if ( show )
+        {
             page->ShowWithEffect(m_showEffect, m_showTimeout);
+
+            // Unlike simple Show(), ShowWithEffect() doesn't necessarily give
+            // focus to the window, but we do expect the new page to have focus.
+            page->SetFocus();
+        }
         else
+        {
             page->HideWithEffect(m_hideEffect, m_hideTimeout);
+        }
     }
 
 private:
