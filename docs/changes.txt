@@ -332,6 +332,7 @@ wxOSX:
 - Recognize macOS 14 Sonoma in wxGetOsDescription() (Tobias Taschner, #23615).
 - Fix setting Chinese locales (#23209).
 - Wrap wxStaticText contents (#23341).
+- Fix invisible wxStaticLine under macOS >= 13 (#23913).
 
 wxUniv:
 
