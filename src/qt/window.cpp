@@ -1098,6 +1098,12 @@ void wxWindowQt::DoSetClientSize(int width, int height)
     geometry.setWidth( width );
     geometry.setHeight( height );
     qtWidget->setGeometry( geometry );
+
+    if ( qtWidget != GetHandle() )
+    {
+        // Resize the window to be as small as the client size but no smaller
+        wxQtSetClientSize(GetHandle(), width, height);
+    }
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
