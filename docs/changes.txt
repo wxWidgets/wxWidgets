@@ -276,6 +276,7 @@ All (GUI):
 - Fix wxFileHistory formatting after calling Load() (Hartwig Wiesmann, #23799).
 - Fix wxRichTextCtrl layout in high DPI (mbc-one, Maarten Bent, #23828).
 - Ensure current cell stays valid when wxGrid table changes (CookieLau, #23751).
+- Always give focus to the currently shown wxSimplebook page (#23914).
 
 wxGTK:
 
