@@ -28,6 +28,11 @@
 #include "wx/dir.h"
 
 #include "wx/msw/private.h"
+#include <shlwapi.h>
+
+#ifdef __VISUALC__
+    #pragma comment(lib, "shlwapi")
+#endif
 
 // ----------------------------------------------------------------------------
 // define the types and functions used for file searching
@@ -71,23 +76,7 @@ CheckFoundMatch(const FIND_STRUCT* finddata, const wxString& filter)
     if ( filter.empty() )
         return true;
 
-    // Otherwise do check the match validity. Notice that we must do it
-    // case-insensitively because the case of the file names is not supposed to
-    // matter under Windows.
-    wxString fn(finddata.cFileName);
-
-    // However if the filter contains only special characters (which is a
-    // common case), we can skip the case conversion.
-    if ( filter.find_first_not_of(wxS("*?.")) == wxString::npos )
-    {
-        // And maybe even skip the check entirely if we have a filter that we
-        // know matches everything. This is more than just an optimization, as
-        // "*.*" it wouldn't match the files without extension according to
-        // wxString::Matches(), but it should.
-        return filter == wxS("*.*") || filter == wxS("*") || fn.Matches(filter);
-    }
-
-    return fn.MakeUpper().Matches(filter.Upper());
+    return ::PathMatchSpecEx(finddata->cFileName, filter, PMSF_NORMAL) == S_OK;
 }
 
 inline bool
