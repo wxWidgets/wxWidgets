@@ -159,7 +159,16 @@ TEST_CASE_METHOD(DirTestCase, "Dir::Traverse", "[dir]")
     CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, WILDCARD_ALL) == 4);
 
     // enum all files using an explicit wildcard different from WILDCARD_ALL
-    CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4);
+    //
+    // broken under Wine, see https://bugs.winehq.org/show_bug.cgi?id=55677
+    if ( !wxIsRunningUnderWine() )
+    {
+        CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4);
+    }
+    else if (wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4)
+    {
+        WARN("PathMatchSpecEx() seems to work under Wine now");
+    }
 
     // enum all files according to the filter
     CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo") == 1 );
