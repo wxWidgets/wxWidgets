@@ -136,6 +136,10 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour) override;
     virtual bool SetForegroundColour(const wxColour& colour) override;
 
+    // Min/max sizes
+    virtual void SetMinSize(const wxSize& minSize) override;
+    virtual void SetMaxSize(const wxSize& maxSize) override;
+
     QWidget *GetHandle() const override;
 
 #if wxUSE_DRAG_AND_DROP
@@ -224,6 +228,11 @@ protected:
     // overridden in wxFrame to use its central widget rather than the frame
     // itself.
     virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
+
+    // Set{Min,Max}Size() and DoSetSizeHints() overrides call these functions
+    // to transfer min/max size information to Qt.
+    void QtSetMinSize(const wxSize& minSize);
+    void QtSetMaxSize(const wxSize& maxSize);
 
     QWidget *m_qtWindow;
 

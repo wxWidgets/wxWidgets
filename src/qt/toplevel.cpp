@@ -245,3 +245,22 @@ long wxTopLevelWindowQt::GetWindowStyleFlag() const
 
     return winStyle;
 }
+
+void wxTopLevelWindowQt::QtSetSizeIncrement(int width, int height)
+{
+    const int w = wxMax(0, width);
+    const int h = wxMax(0, height);
+
+    GetHandle()->setSizeIncrement(w, h);
+}
+
+void wxTopLevelWindowQt::DoSetSizeHints( int minW, int minH,
+                                         int maxW, int maxH,
+                                         int incW, int incH)
+{
+    QtSetMinSize(wxSize(minW, minH));
+    QtSetMaxSize(wxSize(maxW, maxH));
+    QtSetSizeIncrement(incW, incH);
+
+    wxTopLevelWindowBase::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+}
