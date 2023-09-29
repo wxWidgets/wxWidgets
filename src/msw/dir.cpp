@@ -27,9 +27,7 @@
 
 #include "wx/dir.h"
 
-#ifdef __WINDOWS__
-    #include "wx/msw/private.h"
-#endif
+#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // define the types and functions used for file searching
