@@ -283,6 +283,7 @@ wxGTK:
 
 - Fix key codes with Shift on non-US keyboards (Ivan Sorokin, #17643, #23379).
 - Fix possible crash when using IME under Wayland (#23760).
+- Avoid catastrophic slowdown when hiding wxGLCanvas under Wayland (#23512).
 - Fix hiding wxGLCanvas under Wayland (Joan Bruguera, #22580).
 - Fix page origin when printing in landscape (Alex Shvartzkop, #23860).
 - Dramatically optimize adding many items to wxChoice (Ian McInerney, #23443).

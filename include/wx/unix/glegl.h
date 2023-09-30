@@ -120,6 +120,8 @@ public:
 #if wxABI_VERSION >= 30203
     void CreateWaylandSubsurface();
     void DestroyWaylandSubsurface();
+
+    void OnWLFrameCallback();
 #endif // wxABI_VERSION >= 3.2.3
 
     bool m_readyToDraw;
