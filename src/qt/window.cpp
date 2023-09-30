@@ -488,7 +488,8 @@ void wxWindowQt::SetFocus()
 
 void wxWindowQt::QtSetMinSize(const wxSize& minSize)
 {
-    if ( !GetHandle() ) return;
+    if ( !GetHandle() )
+        return;
 
     if ( minSize.x >= 0 )
         GetHandle()->setMinimumWidth(minSize.x);
@@ -499,7 +500,8 @@ void wxWindowQt::QtSetMinSize(const wxSize& minSize)
 
 void wxWindowQt::QtSetMaxSize(const wxSize& maxSize)
 {
-    if ( !GetHandle() ) return;
+    if ( !GetHandle() )
+        return;
 
     if ( maxSize.x >= 0 )
         GetHandle()->setMaximumWidth(maxSize.x);
