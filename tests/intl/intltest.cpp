@@ -239,6 +239,39 @@ void IntlTestCase::IsAvailable()
     CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, nullptr) );
 }
 
+TEST_CASE("wxTranslations::Available", "[translations]")
+{
+    // We currently have translations for French and Japanese in this test
+    // directory, check that loading those succeeds but loading others doesn't.
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+
+    const wxString domain("internat");
+
+    wxTranslations trans;
+
+    SECTION("All")
+    {
+        auto available = trans.GetAvailableTranslations(domain);
+        REQUIRE( available.size() == 2 );
+
+        available.Sort();
+        CHECK( available[0] == "fr" );
+        CHECK( available[1] == "ja" );
+    }
+
+    SECTION("French")
+    {
+        trans.SetLanguage(wxLANGUAGE_FRENCH);
+        CHECK( trans.AddAvailableCatalog(domain) );
+    }
+
+    SECTION("Italian")
+    {
+        trans.SetLanguage(wxLANGUAGE_ITALIAN);
+        CHECK_FALSE( trans.AddAvailableCatalog(domain) );
+    }
+}
+
 TEST_CASE("wxLocale::Default", "[locale]")
 {
     const int langDef = wxUILocale::GetSystemLanguage();
