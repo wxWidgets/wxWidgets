@@ -612,17 +612,13 @@ void wxGLCanvasEGL::CreateWaylandSubsurface()
     m_wlSubsurface = wl_subcompositor_get_subsurface(m_wlSubcompositor,
                                                      m_wlSurface,
                                                      surface);
+    wxCHECK_RET( m_wlSubsurface, "Unable to get EGL subsurface" );
+
     wl_subsurface_set_desync(m_wlSubsurface);
     wxEGLUpdatePosition(this);
     m_wlFrameCallbackHandler = wl_surface_frame(surface);
     wl_callback_add_listener(m_wlFrameCallbackHandler,
                              &wl_frame_listener, this);
-
-    if ( m_surface == EGL_NO_SURFACE )
-    {
-        wxFAIL_MSG("Unable to create EGL surface");
-        return;
-    }
 #endif
 }
 
@@ -807,10 +803,12 @@ bool wxGLCanvasEGL::IsShownOnScreen() const
         case wxDisplayX11:
             return GetXWindow() && wxGLCanvasBase::IsShownOnScreen();
         case wxDisplayWayland:
-            return m_readyToDraw && wxGLCanvasBase::IsShownOnScreen();
-        default:
-            return false;
+            return m_wlSubsurface && wxGLCanvasBase::IsShownOnScreen();
+        case wxDisplayNone:
+            break;
     }
+
+    return false;
 }
 
 #endif // wxUSE_GLCANVAS && wxUSE_GLCANVAS_EGL
