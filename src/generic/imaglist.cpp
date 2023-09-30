@@ -106,6 +106,10 @@ wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 #endif // wxUSE_IMAGE
     }
 
+#ifdef __WXQT__
+    bmpResized.QtBlendMaskWithAlpha();
+#endif
+
     return bmpResized;
 }
 

@@ -26,15 +26,18 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
-
+#if wxUSE_IMAGE
 static wxImage ConvertImage( QImage qtImage )
 {
-    bool hasAlpha = qtImage.hasAlphaChannel();
+    const bool hasAlpha = qtImage.hasAlphaChannel();
 
-    int numPixels = qtImage.height() * qtImage.width();
+    const int numPixels = qtImage.height() * qtImage.width();
 
-    //Convert to ARGB32 for scanLine
-    qtImage = qtImage.convertToFormat(QImage::Format_ARGB32);
+    // Convert monochrome bitmaps to RGB32 so we don't have to do any
+    // bit twiddling to get at pixels, and the same code below should
+    // work for any image format we support.
+    if ( qtImage.depth() == 1 )
+        qtImage = qtImage.convertToFormat(QImage::Format_RGB32);
 
     unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
     unsigned char *startData = data;
@@ -45,75 +48,92 @@ static wxImage ConvertImage( QImage qtImage )
 
     unsigned char *startAlpha = alpha;
 
-    for (int y = 0; y < qtImage.height(); y++)
+    for (int y = 0; y < qtImage.height(); ++y)
     {
         QRgb *line = (QRgb*)qtImage.scanLine(y);
 
-        for (int x = 0; x < qtImage.width(); x++)
+        for (int x = 0; x < qtImage.width(); ++x)
         {
             QRgb colour = line[x];
+
+            if (hasAlpha)
+            {
+                colour = qUnpremultiply(colour);
+                alpha[0] = qAlpha(colour);
+                alpha++;
+            }
 
             data[0] = qRed(colour);
             data[1] = qGreen(colour);
             data[2] = qBlue(colour);
 
-            if (hasAlpha)
-            {
-                alpha[0] = qAlpha(colour);
-                alpha++;
-            }
             data += 3;
         }
     }
-    if (hasAlpha)
-        return wxImage(wxQtConvertSize(qtImage.size()), startData, startAlpha);
-    else
-        return wxImage(wxQtConvertSize(qtImage.size()), startData);
+
+    return wxImage(wxQtConvertSize(qtImage.size()), startData, startAlpha);
 }
 
-static QImage ConvertImage( const wxImage &image )
+static QImage ConvertImage( const wxImage &image, wxMask** mask = nullptr  )
 {
-    bool hasAlpha = image.HasAlpha();
-    bool hasMask = image.HasMask();
+    const bool hasAlpha = image.HasAlpha();
+    const bool hasMask = image.HasMask() && mask;
     QImage qtImage( wxQtConvertSize( image.GetSize() ),
-                   ( (hasAlpha || hasMask ) ? QImage::Format_ARGB32 : QImage::Format_RGB32 ) );
+                   ( hasAlpha ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32 ) );
 
     unsigned char *data = image.GetData();
     unsigned char *alpha = hasAlpha ? image.GetAlpha() : nullptr;
     QRgb colour;
 
+    QImage qtMask;
     QRgb maskedColour;
     if ( hasMask )
     {
         unsigned char r, g, b;
         image.GetOrFindMaskColour( &r, &g, &b );
-        maskedColour = ( r << 16 ) + ( g << 8 ) + b;
+        maskedColour = qRgb(r, g, b);
+
+        qtMask = QImage(image.GetWidth(), image.GetHeight(), QImage::Format_Mono);
+        qtMask.fill(Qt::color0); // filled with 0s
     }
 
-    for (int y = 0; y < image.GetHeight(); y++)
+    for (int y = 0; y < image.GetHeight(); ++y)
     {
-        for (int x = 0; x < image.GetWidth(); x++)
+        for (int x = 0; x < image.GetWidth(); ++x)
         {
+            const unsigned char a = hasAlpha ? alpha[0] : 255;
+            const unsigned char r = data[0];
+            const unsigned char g = data[1];
+            const unsigned char b = data[2];
+
+            colour = qRgba(r, g, b, a);
+
+            if ( !qtMask.isNull() )
+            {
+                if ( qRgb(r, g, b) == maskedColour )
+                    qtMask.setPixel(x, y, Qt::color1); // set to 1
+            }
+
             if (hasAlpha)
             {
-                colour = alpha[0] << 24;
+                colour = qPremultiply(colour);
                 alpha++;
             }
-            else
-                colour = 0;
-
-            colour += (data[0] << 16) + (data[1] << 8) + data[2];
-
-            if ( hasMask && colour != maskedColour )
-                colour += 0xFF000000; // 255 << 24
 
             qtImage.setPixel(x, y, colour);
 
             data += 3;
         }
     }
+
+    if ( hasMask )
+    {
+        *mask = new wxMask(new QBitmap{QBitmap::fromImage(qtMask)});
+    }
+
     return qtImage;
 }
+#endif // wxUSE_IMAGE
 
 //-----------------------------------------------------------------------------
 // wxBitmapRefData
@@ -133,10 +153,10 @@ class wxBitmapRefData: public wxGDIRefData
             m_mask = nullptr;
         }
 
-        wxBitmapRefData( QPixmap pix )
+        wxBitmapRefData( QPixmap pix, wxMask* mask = nullptr )
             : m_qtPixmap(pix)
         {
-            m_mask = nullptr;
+            m_mask = mask;
         }
 
         virtual ~wxBitmapRefData() { delete m_mask; }
@@ -201,8 +221,7 @@ wxBitmap::wxBitmap(int width, int height, const wxDC& dc)
 // Create a wxBitmap from xpm data
 wxBitmap::wxBitmap(const char* const* bits)
 {
-    m_refData = new wxBitmapRefData();
-    M_PIXDATA = QPixmap( bits );
+    m_refData = new wxBitmapRefData(QPixmap( bits ));
 }
 
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
@@ -210,12 +229,15 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
+#if wxUSE_IMAGE
 void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale) )
 {
-    Qt::ImageConversionFlags flags;
-    if (depth == 1)
-        flags = Qt::MonoOnly;
-    m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image), flags));
+    wxMask* mask = nullptr;
+    auto qtImage = depth == 1
+                 ? QBitmap::fromImage(ConvertImage(image), Qt::ThresholdDither)
+                 : QPixmap::fromImage(ConvertImage(image, &mask));
+
+    m_refData = new wxBitmapRefData(qtImage, mask);
 }
 
 wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
@@ -227,6 +249,7 @@ wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
 {
     InitFromImage(image, -1, dc.GetContentScaleFactor());
 }
+#endif // wxUSE_IMAGE
 
 wxBitmap::wxBitmap(const wxCursor& cursor)
 {
@@ -255,16 +278,22 @@ bool wxBitmap::Create(int width, int height, const wxDC& WXUNUSED(dc))
 
 int wxBitmap::GetHeight() const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
+
     return M_PIXDATA.height();
 }
 
 int wxBitmap::GetWidth() const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
+
     return M_PIXDATA.width();
 }
 
 int wxBitmap::GetDepth() const
 {
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
+
     return M_PIXDATA.depth();
 }
 
@@ -272,10 +301,67 @@ int wxBitmap::GetDepth() const
 #if wxUSE_IMAGE
 wxImage wxBitmap::ConvertToImage() const
 {
-    QPixmap pixmap(M_PIXDATA);
+    wxImage image;
+
+    wxCHECK_MSG(IsOk(), image, "invalid bitmap");
+
+    image = ConvertImage(M_PIXDATA.toImage());
+
+    // now handle the mask, if we have any
     if ( M_MASK && M_MASK->GetHandle() )
-        pixmap.setMask(*M_MASK->GetHandle());
-    return ConvertImage(pixmap.toImage());
+    {
+        // we hard code the mask colour for now but we could also make an
+        // effort (and waste time) to choose a colour not present in the
+        // image already to avoid having to fudge the pixels below --
+        // whether it's worth to do it is unclear however
+        static const int MASK_RED = 1;
+        static const int MASK_GREEN = 2;
+        static const int MASK_BLUE = 3;
+        static const int MASK_BLUE_REPLACEMENT = 2;
+
+        wxBitmap bmpMask(M_MASK->GetBitmap());
+        wxMonoPixelData dataMask(bmpMask);
+        const int h = dataMask.GetHeight();
+        const int w = dataMask.GetWidth();
+        unsigned char* data = image.GetData();
+
+        wxMonoPixelData::Iterator rowStart(dataMask);
+        for ( int y = 0; y < h; ++y )
+        {
+            // traverse one mask line
+            wxMonoPixelData::Iterator p = rowStart;
+            for ( int x = 0; x < w; ++x )
+            {
+                // should this pixel be transparent?
+                if ( p.Pixel() )
+                {
+                    // no, check that it isn't transparent by accident
+                    if ( (data[0] == MASK_RED) &&
+                            (data[1] == MASK_GREEN) &&
+                                (data[2] == MASK_BLUE) )
+                    {
+                        // we have to fudge the colour a bit to prevent
+                        // this pixel from appearing transparent
+                        data[2] = MASK_BLUE_REPLACEMENT;
+                    }
+
+                    data += 3;
+                }
+                else // yes, transparent pixel
+                {
+                    *data++ = MASK_RED;
+                    *data++ = MASK_GREEN;
+                    *data++ = MASK_BLUE;
+                }
+                ++p;
+            }
+            rowStart.OffsetY(dataMask, 1);
+        }
+
+        image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
+    }
+
+    return image;
 }
 
 #endif // wxUSE_IMAGE
@@ -294,33 +380,32 @@ void wxBitmap::SetMask(wxMask *mask)
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 {
-    return wxBitmap(M_PIXDATA.copy(wxQtConvertRect(rect)));
+    wxBitmap bmp = wxBitmap(M_PIXDATA.copy(wxQtConvertRect(rect)));
+
+    if ( M_MASK && M_MASK->GetHandle() )
+    {
+        QBitmap* qtMask = M_MASK->GetHandle();
+        bmp.SetMask(new wxMask(new QBitmap{qtMask->copy(wxQtConvertRect(rect))}));
+    }
+
+    return bmp;
 }
 
-
-bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
-              const wxPalette *WXUNUSED(palette) ) const
+namespace
 {
-    #if wxUSE_IMAGE
-    //Try to save using wx
-    wxImage image = ConvertToImage();
-    if (image.IsOk() && image.SaveFile(name, type))
-        return true;
-    #endif
-
-    //Try to save using Qt
-    const char* type_name = nullptr;
+inline const char* wxQtConvertBitmapType(wxBitmapType type)
+{
     switch (type)
     {
-        case wxBITMAP_TYPE_BMP:  type_name = "bmp";  break;
-        case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
-        case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
-        case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
-        case wxBITMAP_TYPE_GIF:  type_name = "gif";  break;
-        case wxBITMAP_TYPE_CUR:  type_name = "cur";  break;
-        case wxBITMAP_TYPE_TIFF: type_name = "tif";  break;
-        case wxBITMAP_TYPE_XBM:  type_name = "xbm";  break;
-        case wxBITMAP_TYPE_PCX:  type_name = "pcx";  break;
+        case wxBITMAP_TYPE_BMP:  return "bmp";
+        case wxBITMAP_TYPE_ICO:  return "ico";
+        case wxBITMAP_TYPE_JPEG: return "jpeg";
+        case wxBITMAP_TYPE_PNG:  return "png";
+        case wxBITMAP_TYPE_GIF:  return "gif";
+        case wxBITMAP_TYPE_CUR:  return "cur";
+        case wxBITMAP_TYPE_TIFF: return "tif";
+        case wxBITMAP_TYPE_XBM:  return "xbm";
+        case wxBITMAP_TYPE_PCX:  return "pcx";
         case wxBITMAP_TYPE_BMP_RESOURCE:
         case wxBITMAP_TYPE_ICO_RESOURCE:
         case wxBITMAP_TYPE_CUR_RESOURCE:
@@ -346,31 +431,59 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
         case wxBITMAP_TYPE_MAX:
         case wxBITMAP_TYPE_ANY:
         default:
-            break;
+            return nullptr;
     }
-    return type_name &&
-        M_PIXDATA.save(wxQtConvertString(name), type_name);
+}
+} // anonymous namespace
+
+bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
+              const wxPalette *WXUNUSED(palette) ) const
+{
+    wxCHECK_MSG( IsOk(), false, "invalid bitmap" );
+
+    //Try to save using Qt
+
+    if ( M_PIXDATA.save(wxQtConvertString(name), wxQtConvertBitmapType(type)) )
+    {
+        return true;
+    }
+
+#if wxUSE_IMAGE
+    //Try to save using wx
+    return ConvertToImage().SaveFile(name, type);
+#else
+    return false;
+#endif
 }
 
 bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
 {
-#if wxUSE_IMAGE
-    //Try to load using wx
-    wxImage image;
-    if (image.LoadFile(name, type) && image.IsOk())
+    //Try to load using Qt
+    AllocExclusive();
+
+    QImage img;
+    if ( img.load(wxQtConvertString(name), wxQtConvertBitmapType(type)) )
     {
-        *this = wxBitmap(image);
+        M_PIXDATA = (img.colorCount() > 0 && img.colorCount() <= 2)
+                  ? QBitmap::fromImage(img, Qt::ThresholdDither)
+                  : QPixmap::fromImage(img);
+
         return true;
     }
+#if wxUSE_IMAGE
     else
-#endif
     {
-        //Try to load using Qt
-        AllocExclusive();
-
-        //TODO: Use passed image type instead of auto-detection
-        return M_PIXDATA.load(wxQtConvertString(name));
+        //Try to load using wx
+        wxImage image;
+        if (image.LoadFile(name, type) && image.IsOk())
+        {
+            *this = wxBitmap(image);
+            return true;
+        }
     }
+#endif
+
+    return false;
 }
 
 
@@ -415,24 +528,42 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     wxBitmapRefData *refData = static_cast<wxBitmapRefData *>(m_refData);
 
     // allow access if bpp is valid
-    if ( !refData->m_qtPixmap.isNull() )
+    if ( !refData->m_qtPixmap.isNull() && (bpp == 32 || bpp == 24 || bpp == 1) )
     {
-        if ( bpp == 32 )
+        if ( bpp == 1 )
         {
-            refData->m_rawPixelSource = refData->m_qtPixmap.toImage().convertToFormat(QImage::Format_RGBA8888);
-            data.m_height = refData->m_rawPixelSource.height();
-            data.m_width = refData->m_rawPixelSource.width();
-            data.m_stride = refData->m_rawPixelSource.bytesPerLine();
-            bits = refData->m_rawPixelSource.bits();
+            // Iterator::Pixel() actually returns an index into the colour table
+            // of the bitmap when accessing pixels via wxMonoPixelData. So make
+            // sure the entries are in the correct order in the table to provide
+            // one-to-one correspondence between pixel state (on/off) and its
+            // colour (white/black)
+            const QVector<QRgb> colorTable {qRgb(0, 0, 0), qRgb(255, 255, 255)};
+
+            refData->m_rawPixelSource =
+                refData->m_qtPixmap.toImage().convertToFormat(QImage::Format_Mono, colorTable);
         }
+        else
+        {
+            refData->m_rawPixelSource =
+                refData->m_qtPixmap.toImage().convertToFormat(bpp == 32 ? QImage::Format_RGBA8888_Premultiplied
+                                                                        : QImage::Format_RGB888);
+        }
+
+        data.m_height = refData->m_rawPixelSource.height();
+        data.m_width = refData->m_rawPixelSource.width();
+        data.m_stride = refData->m_rawPixelSource.bytesPerLine();
+        bits = refData->m_rawPixelSource.bits();
     }
+
     return bits;
 }
 
 void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
     wxBitmapRefData *refData = static_cast<wxBitmapRefData *>(m_refData);
-    refData->m_qtPixmap = QPixmap::fromImage(refData->m_rawPixelSource);
+    refData->m_qtPixmap = GetDepth() == 1
+                        ? QBitmap::fromImage(refData->m_rawPixelSource)
+                        : QPixmap::fromImage(refData->m_rawPixelSource);
     refData->m_rawPixelSource = QImage();
 }
 
@@ -458,6 +589,20 @@ wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 bool wxBitmap::HasAlpha() const
 {
     return M_PIXDATA.hasAlphaChannel();
+}
+
+void wxBitmap::QtBlendMaskWithAlpha()
+{
+    // For performance reasons, permanently merge the mask with pixmap's
+    // alpha channel, if it has any. Notice that the bitmap can still be
+    // converted to wxImage, but without mask information.
+
+    if ( IsOk() && HasAlpha() && M_MASK && M_MASK->GetHandle() )
+    {
+        AllocExclusive();
+        M_PIXDATA.setMask(*M_MASK->GetHandle());
+        wxDELETE(M_MASK);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -486,6 +631,11 @@ wxMask& wxMask::operator=(const wxMask &mask)
         m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : nullptr;
     }
     return *this;
+}
+
+wxMask::wxMask(QBitmap* qtBitmap)
+{
+    m_qtBitmap = qtBitmap;
 }
 
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
@@ -536,14 +686,21 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
         return false;
 
     delete m_qtBitmap;
-    m_qtBitmap = new QBitmap(*bitmap.GetHandle());
+
+    // Notice that under Qt masked/unmasked areas are reversed. Inverting the mask here
+    // to obtain the correct result according to wx when the mask get applied to bitmap.
+    QImage qtImage = bitmap.GetHandle()->toImage();
+    qtImage.invertPixels();
+    m_qtBitmap = new QBitmap{QBitmap::fromImage(qtImage)};
 
     return true;
 }
 
 wxBitmap wxMask::GetBitmap() const
 {
-    return wxBitmap(*m_qtBitmap);
+    QImage qtImage = m_qtBitmap->toImage();
+    qtImage.invertPixels();
+    return wxBitmap(QBitmap::fromImage(qtImage));
 }
 
 QBitmap *wxMask::GetHandle() const
