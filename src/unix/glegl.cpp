@@ -367,8 +367,41 @@ bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
 /* static */
 EGLDisplay wxGLCanvasEGL::GetDisplay()
 {
-    wxDisplayInfo info = wxGetDisplayInfo();
-    EGLenum platform;
+    typedef EGLDisplay (*GetPlatformDisplayFunc)(EGLenum platform,
+                                                 void* native_display,
+                                                 const EGLAttrib* attrib_list);
+
+    // Try loading the appropriate EGL function on first use.
+    static GetPlatformDisplayFunc s_eglGetPlatformDisplay = nullptr;
+    static bool s_eglGetPlatformDisplayInitialized = false;
+    if ( !s_eglGetPlatformDisplayInitialized )
+    {
+        s_eglGetPlatformDisplayInitialized = true;
+
+        if ( wxGLCanvasBase::IsExtensionInList(
+                eglQueryString(nullptr, EGL_EXTENSIONS),
+                "EGL_EXT_platform_base") )
+        {
+            s_eglGetPlatformDisplay = reinterpret_cast<GetPlatformDisplayFunc>(
+                    eglGetProcAddress("eglGetPlatformDisplay"));
+            if ( !s_eglGetPlatformDisplay )
+            {
+                // Try the fallback if not available.
+                s_eglGetPlatformDisplay = reinterpret_cast<GetPlatformDisplayFunc>(
+                    eglGetProcAddress("eglGetPlatformDisplayEXT"));
+            }
+        }
+    }
+
+    const wxDisplayInfo info = wxGetDisplayInfo();
+
+    if ( !s_eglGetPlatformDisplay )
+    {
+        // Use the last fallback for backward compatibility.
+        return eglGetDisplay(static_cast<EGLNativeDisplayType>(info.dpy));
+    }
+
+    EGLenum platform = 0;
     switch ( info.type )
     {
         case wxDisplayX11:
@@ -377,11 +410,13 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
         case wxDisplayWayland:
             platform = EGL_PLATFORM_WAYLAND_EXT;
             break;
-        default:
-            return EGL_NO_DISPLAY;
+        case wxDisplayNone:
+            break;
     }
 
-    return eglGetPlatformDisplay(platform, info.dpy, nullptr);
+    wxCHECK_MSG( platform, EGL_NO_DISPLAY, "unknown display type" );
+
+    return s_eglGetPlatformDisplay(platform, info.dpy, nullptr);
 }
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -607,7 +642,7 @@ void wxGLCanvasEGL::DestroyWaylandSubsurface()
 /* static */
 bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
 {
-    EGLDisplay dpy = eglGetDisplay(static_cast<EGLNativeDisplayType>(wxGetDisplay()));
+    EGLDisplay dpy = wxGLCanvasEGL::GetDisplay();
 
     return IsExtensionInList(eglQueryString(dpy, EGL_EXTENSIONS), extension);
 }
@@ -628,11 +663,26 @@ EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         wxFAIL_MSG("Unable to get EGL Display");
         return nullptr;
     }
-    if ( !eglInitialize(dpy, nullptr, nullptr) )
+
+    EGLint eglMajor = 0;
+    EGLint eglMinor = 0;
+    if ( !eglInitialize(dpy, &eglMajor, &eglMinor) )
     {
         wxFAIL_MSG("eglInitialize failed");
         return nullptr;
     }
+
+    // The runtime EGL version cannot be known until EGL has been initialized.
+    if ( eglMajor < 1 || (eglMajor == 1 && eglMinor < 5) )
+    {
+        // Ignore the return value here, we cannot recover at this point.
+        eglTerminate(dpy);
+        wxLogError(wxString::Format(
+            "EGL version is %d.%d. EGL version 1.5 or greater is required.",
+            eglMajor, eglMinor));
+        return nullptr;
+    }
+
     if ( !eglBindAPI(EGL_OPENGL_API) ) {
         wxFAIL_MSG("eglBindAPI failed");
         return nullptr;
