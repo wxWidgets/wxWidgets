@@ -1,0 +1,1 @@
+wxQt: Make wxTopLevelWindow::SetSizeHints() works (AliKet, #23917).
