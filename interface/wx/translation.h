@@ -113,25 +113,7 @@ public:
     wxString GetBestTranslation(const wxString& domain, wxLanguage msgIdLanguage);
 
     /**
-        Returns the best UI language for the @a domain.
-
-        The language is determined from the preferred UI language or languages
-        list the user configured in the OS. Notice that this may or may not
-        correspond to the default @em locale as obtained from
-        wxLocale::GetSystemLanguage() as operating systems have separate
-        language and regional (i.e. locale) settings.
-
-        @param domain
-            The catalog domain to look for.
-
-        @param msgIdLanguage
-            Specifies the language of "msgid" strings in source code
-            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
-
-        @return Language code if a suitable match was found, empty string
-                otherwise.
-
-        @since 2.9.5
+        @overload
      */
     wxString GetBestTranslation(const wxString& domain,
                                 const wxString& msgIdLanguage = "en");
