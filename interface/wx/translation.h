@@ -180,34 +180,6 @@ public:
                     wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
     /**
-        Same as AddCatalog(const wxString&, wxLanguage), but takes two
-        additional arguments, @a msgIdLanguage and @a msgIdCharset.
-
-        This overload is only available in non-Unicode build.
-
-        @param domain
-            The catalog domain to add.
-
-        @param msgIdLanguage
-            Specifies the language of "msgid" strings in source code
-            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
-            It is used if AddCatalog() cannot find any catalog for current language:
-            if the language is same as source code language, then strings from source
-            code are used instead.
-
-        @param msgIdCharset
-            Lets you specify the charset used for msgids in sources
-            in case they use 8-bit characters (e.g. German or French strings).
-
-        @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
-     */
-    bool AddCatalog(const wxString& domain,
-                    wxLanguage msgIdLanguage,
-                    const wxString& msgIdCharset);
-
-    /**
         Check if the given catalog is loaded, and returns @true if it is.
 
         According to GNU gettext tradition, each catalog normally corresponds to
