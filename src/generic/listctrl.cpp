@@ -737,7 +737,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rect,
                                        const wxRect& rectHL,
                                        bool highlighted,
-                                       bool current )
+                                       bool current,
+                                       bool checked )
 {
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
@@ -758,7 +759,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         rr.x += MARGIN_AROUND_CHECKBOX;
 
         int flags = 0;
-        if (m_checked)
+        if (checked)
             flags |= wxCONTROL_CHECKED;
         wxRendererNative::Get().DrawCheckBox(m_owner, *dc, rr, flags);
 
@@ -2095,7 +2096,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                              rectLine,
                                              GetLineHighlightRect(line),
                                              IsHighlighted(line),
-                                             line == m_current );
+                                             line == m_current,
+                                             IsItemChecked(line) );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -3904,10 +3906,15 @@ bool wxListMainWindow::EnableCheckBoxes(bool enable)
 
 void wxListMainWindow::CheckItem(long item, bool state)
 {
-    wxListLineData *line = GetLine((size_t)item);
-    line->Check(state);
+    wxCHECK_RET( HasCheckBoxes(), "checkboxes are disabled" );
 
-    RefreshLine(item);
+    if ( !IsVirtual() )
+    {
+        wxListLineData* line = GetLine((size_t)item);
+        line->Check(state);
+
+        RefreshLine(item);
+    }
 
     SendNotify(item, state ? wxEVT_LIST_ITEM_CHECKED
         : wxEVT_LIST_ITEM_UNCHECKED);
@@ -3915,8 +3922,19 @@ void wxListMainWindow::CheckItem(long item, bool state)
 
 bool wxListMainWindow::IsItemChecked(long item) const
 {
-    wxListLineData *line = GetLine((size_t)item);
-    return line->IsChecked();
+    if ( !HasCheckBoxes() )
+        return false;
+
+    if ( !IsVirtual() )
+    {
+        wxListLineData* line = GetLine((size_t)item);
+        return line->IsChecked();
+    }
+    else
+    {
+        wxGenericListCtrl* listctrl = GetListCtrl();
+        return listctrl->OnGetItemIsChecked(item);
+    }
 }
 
 bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y)

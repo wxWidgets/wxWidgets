@@ -74,9 +74,6 @@ public:
 
     void OnRightClick(wxMouseEvent& event);
 
-    virtual void CheckItem(long item, bool check) override;
-    virtual bool IsItemChecked(long item) const override;
-
 private:
     void ShowContextMenu(const wxPoint& pos, long item);
     void SetColumnImage(int col, int image);

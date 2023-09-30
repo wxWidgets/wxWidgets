@@ -257,6 +257,11 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
+    // LISTVIEW generates and endless stream of LVN_ODCACHEHINT event for a
+    // virtual wxListCtrl, so disable WS_EX_COMPOSITED.
+    if ( IsVirtual() )
+        MSWDisableComposited();
+
     const wxVisualAttributes& defAttrs = GetDefaultAttributes();
 
     if ( wxMSWDarkMode::IsActive() )
@@ -1494,12 +1499,32 @@ bool wxListCtrl::EnableCheckBoxes(bool enable)
 
 void wxListCtrl::CheckItem(long item, bool state)
 {
-    ListView_SetCheckState(GetHwnd(), (UINT)item, (BOOL)state);
+    wxCHECK_RET( HasCheckBoxes(), "checkboxes are disabled" );
+
+    if ( IsVirtual() )
+    {
+        // ListView_SetCheckState does nothing for a virtual control, so generate
+        // the event that would normally be generated in the LVN_ITEMCHANGED callback.
+        wxListEvent le(state ? wxEVT_LIST_ITEM_CHECKED : wxEVT_LIST_ITEM_UNCHECKED, GetId());
+        le.SetEventObject(this);
+        le.m_itemIndex = item;
+        GetEventHandler()->ProcessEvent(le);
+    }
+    else
+    {
+        ListView_SetCheckState(GetHwnd(), (UINT)item, (BOOL)state);
+    }
 }
 
 bool wxListCtrl::IsItemChecked(long item) const
 {
-    return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
+    if ( !HasCheckBoxes() )
+        return false;
+
+    if ( IsVirtual() )
+        return OnGetItemIsChecked(item);
+    else
+        return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
 void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
