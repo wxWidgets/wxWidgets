@@ -797,16 +797,11 @@ bool wxLocale::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
     return t->AddCatalog(domain, msgIdLanguage);
 }
 
-// add a catalog to our linked list
-bool wxLocale::AddCatalog(const wxString& szDomain,
+bool wxLocale::AddCatalog(const wxString& domain,
                         wxLanguage      msgIdLanguage,
-                        const wxString& msgIdCharset)
+                        const wxString& WXUNUSED(msgIdCharset))
 {
-    wxTranslations *t = wxTranslations::Get();
-    if ( !t )
-        return false;
-    wxUnusedVar(msgIdCharset);
-    return t->AddCatalog(szDomain, msgIdLanguage);
+    return AddCatalog(domain, msgIdLanguage);
 }
 
 bool wxLocale::IsLoaded(const wxString& domain) const
