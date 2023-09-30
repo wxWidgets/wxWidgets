@@ -257,3 +257,45 @@ TEST_CASE_METHOD(DirTestCase, "Dir::GetName", "[dir]")
     CHECK( d.GetNameWithSep() == "/" );
 #endif
 }
+
+// Disabled by default test allowing to check the result of matching against
+// the given filter.
+#ifdef __WXMSW__
+
+#include "wx/msw/wrapwin.h"
+#include <shlwapi.h>
+#ifdef __VISUALC__
+    #pragma comment(lib, "shlwapi")
+#endif
+
+#include "wx/crt.h"
+#include "wx/filefn.h"
+
+TEST_CASE("Dir::Match", "[.]")
+{
+    wxString filter;
+    REQUIRE( wxGetEnv("WX_TEST_DIR_FILTER", &filter) );
+
+    static const wxString filenames[] =
+    {
+        "foo",
+        "foo.bar",
+        "foo.bar.baz",
+        ".hidden",
+        ".hidden.ext",
+    };
+
+    // Show the results of matching the pattern using various functions.
+    wxPrintf("%-15s %20s %20s %20s\n",
+             "File", "wxString::Matches", "wxMatchWild", "PathMatchSpecEx");
+    for ( const auto& fn : filenames )
+    {
+        wxPrintf("%-15s %20d %20d %20d\n",
+                 fn,
+                 fn.Matches(filter),
+                 wxMatchWild(filter, fn),
+                 PathMatchSpecEx(fn.wc_str(), filter.wc_str(), PMSF_NORMAL) == S_OK);
+    }
+}
+
+#endif // __WXMSW__
