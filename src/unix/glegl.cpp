@@ -419,6 +419,36 @@ EGLDisplay wxGLCanvasEGL::GetDisplay()
     return s_eglGetPlatformDisplay(platform, info.dpy, nullptr);
 }
 
+void wxGLCanvasEGL::OnWLFrameCallback()
+{
+#ifdef GDK_WINDOWING_WAYLAND
+    wxLogTrace(TRACE_EGL, "In frame callback handler for %p", this);
+
+    if ( !m_swapIntervalSet )
+    {
+        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
+        // callback to know when we should draw ourselves already.
+        if ( eglSwapInterval(m_display, 0) )
+        {
+            wxLogTrace(TRACE_EGL, "Set EGL swap interval to 0 for %p", this);
+
+            // It shouldn't be necessary to set it again.
+            m_swapIntervalSet = true;
+        }
+        else
+        {
+            wxLogTrace(TRACE_EGL, "eglSwapInterval(0) failed for %p: %#x",
+                       this, eglGetError());
+        }
+    }
+
+    m_readyToDraw = true;
+    g_clear_pointer(&m_wlFrameCallbackHandler, wl_callback_destroy);
+    SendSizeEvent();
+    gtk_widget_queue_draw(m_wxwindow);
+#endif // GDK_WINDOWING_WAYLAND
+}
+
 #ifdef GDK_WINDOWING_WAYLAND
 
 // Helper declared as friend in the header and so can access m_wlSubsurface.
@@ -469,13 +499,8 @@ static void wl_frame_callback_handler(void* data,
                                       struct wl_callback *,
                                       uint32_t)
 {
-    wxLogTrace(TRACE_EGL, "In frame callback handler for window %p", data);
-
     wxGLCanvasEGL *glc = static_cast<wxGLCanvasEGL *>(data);
-    glc->m_readyToDraw = true;
-    g_clear_pointer(&glc->m_wlFrameCallbackHandler, wl_callback_destroy);
-    glc->SendSizeEvent();
-    gtk_widget_queue_draw(glc->m_wxwindow);
+    glc->OnWLFrameCallback();
 }
 
 static const struct wl_callback_listener wl_frame_listener = {
@@ -575,10 +600,6 @@ bool wxGLCanvasEGL::CreateSurface()
                          G_CALLBACK(gtk_glcanvas_unmap_callback), this);
         g_signal_connect(m_widget, "size-allocate",
                          G_CALLBACK(gtk_glcanvas_size_callback), this);
-
-        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
-        // callback to know when we should draw ourselves already.
-        eglSwapInterval(m_display, 0);
     }
 #endif
 

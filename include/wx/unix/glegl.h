@@ -122,7 +122,9 @@ public:
     // is responsible for freeing the pointer
     static EGLConfig *InitConfig(const wxGLAttributes& dispAttrs);
 
-    bool m_readyToDraw;
+    // Only called when using Wayland to indicate that we should be redrawn.
+    void OnWLFrameCallback();
+
     wl_compositor *m_wlCompositor;
     wl_subcompositor *m_wlSubcompositor;
     wl_callback *m_wlFrameCallbackHandler;
@@ -138,6 +140,9 @@ private:
     wl_surface *m_wlSurface;
     wl_region *m_wlRegion;
     wl_subsurface *m_wlSubsurface;
+
+    bool m_readyToDraw;
+    bool m_swapIntervalSet = false;
 
     // the global/default versions of the above
     static EGLConfig *ms_glEGLConfig;
