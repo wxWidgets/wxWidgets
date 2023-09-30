@@ -1379,6 +1379,8 @@ public:
 
         Always returns false if checkboxes support hadn't been enabled.
 
+        For a control with @c wxLC_VIRTUAL style, this uses OnGetItemIsChecked().
+
         @param item Item (zero-based) index.
 
         @since 3.1.0
@@ -1390,6 +1392,10 @@ public:
 
         This method only works if checkboxes support had been successfully
         enabled using EnableCheckBoxes().
+
+        For a control with @c wxLC_VIRTUAL style, this will only generate the
+        @c EVT_LIST_ITEM_CHECKED and @c EVT_LIST_ITEM_UNCHECKED events. See
+        OnGetItemIsChecked() for information on how to update the checkbox state.
 
         @param item Item (zero-based) index.
         @param check If @true, check the item, otherwise uncheck.

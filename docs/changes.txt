@@ -254,6 +254,7 @@ All (GUI):
 
 - Don't allow pasting characters forbidden by wxTextValidator (#10281).
 - Fix wxFLEX_GROWMODE_ALL in wxFlexGridSizer with proportions (#23253).
+- Make wxListCtrl checkboxes behaviour more consistent (Maarten Bent, #23869).
 - Fix wxEditorDialogProperty in wxPropertyGrid (#23272).
 - Fix entering dates in wxGenericDatePicker in nb_NO and other locales
   using names for the months in short date format (#23310).
