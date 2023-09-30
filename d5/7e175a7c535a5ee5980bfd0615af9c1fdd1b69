@@ -1,0 +1,1 @@
+wxQt: Use premultiplied ARGB32 format for wxBitmap (AliKet, #23872).
