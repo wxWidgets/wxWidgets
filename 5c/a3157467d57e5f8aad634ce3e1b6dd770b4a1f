@@ -1,0 +1,1 @@
+wxMSW: Return bool from wxBitmap::UseAlpha() (PB, #23919).
