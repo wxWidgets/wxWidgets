@@ -76,7 +76,7 @@ CheckFoundMatch(const FIND_STRUCT* finddata, const wxString& filter)
     if ( filter.empty() )
         return true;
 
-    return ::PathMatchSpecEx(finddata->cFileName, filter, PMSF_NORMAL) == S_OK;
+    return ::PathMatchSpec(finddata->cFileName, filter) == TRUE;
 }
 
 inline bool

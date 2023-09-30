@@ -167,7 +167,7 @@ TEST_CASE_METHOD(DirTestCase, "Dir::Traverse", "[dir]")
     }
     else if (wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4)
     {
-        WARN("PathMatchSpecEx() seems to work under Wine now");
+        WARN("PathMatchSpec() seems to work under Wine now");
     }
 
     // enum all files according to the filter
@@ -287,14 +287,14 @@ TEST_CASE("Dir::Match", "[.]")
 
     // Show the results of matching the pattern using various functions.
     wxPrintf("%-15s %20s %20s %20s\n",
-             "File", "wxString::Matches", "wxMatchWild", "PathMatchSpecEx");
+             "File", "wxString::Matches", "wxMatchWild", "PathMatchSpec");
     for ( const auto& fn : filenames )
     {
         wxPrintf("%-15s %20d %20d %20d\n",
                  fn,
                  fn.Matches(filter),
                  wxMatchWild(filter, fn),
-                 PathMatchSpecEx(fn.wc_str(), filter.wc_str(), PMSF_NORMAL) == S_OK);
+                 PathMatchSpec(fn.wc_str(), filter.wc_str()) == TRUE);
     }
 }
 
