@@ -177,7 +177,7 @@ public:
     void SetMask(wxMask *mask);
 
     bool HasAlpha() const;
-    void UseAlpha(bool use = true);
+    bool UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
 
     // old synonyms for CreateWithDIPSize() and GetLogicalXXX() functions
