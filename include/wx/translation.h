@@ -154,16 +154,28 @@ public:
     // get languages available for this app
     wxArrayString GetAvailableTranslations(const wxString& domain) const;
 
-    // find best translation language for given domain
+#if wxABI_VERSION >= 30203
+    // find best available translation language for given domain
+    wxString GetBestAvailableTranslation(const wxString& domain);
+#endif // wxABI_VERSION >= 3.2.3
+
     wxString GetBestTranslation(const wxString& domain, wxLanguage msgIdLanguage);
     wxString GetBestTranslation(const wxString& domain,
                                 const wxString& msgIdLanguage = wxASCII_STR("en"));
+
+#if wxABI_VERSION >= 30203
+    // add catalog for the given domain returning true if it could be found by
+    // wxTranslationsLoader
+    bool AddAvailableCatalog(const wxString& domain);
+#endif // wxABI_VERSION >= 3.2.3
 
     // add standard wxWidgets catalog ("wxstd")
     bool AddStdCatalog();
 
     // add catalog with given domain name and language, looking it up via
-    // wxTranslationsLoader
+    // wxTranslationsLoader -- unlike AddAvailableCatalog(), this function also
+    // returns true if this catalog is not needed at all because msgIdLanguage
+    // is an acceptable language to use directly
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 #if !wxUSE_UNICODE

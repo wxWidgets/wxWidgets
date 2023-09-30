@@ -31,6 +31,8 @@
     extern "C++" {
         "wxGLCanvasEGL::CreateWaylandSubsurface";
         "wxGLCanvasEGL::DestroyWaylandSubsurface";
+        "wxTranslations::AddAvailableCatalog";
+        "wxTranslations::GetBestAvailableTranslation";
         "wxUILocale::GetMonthName";
         "wxUILocale::GetWeekDayName";
     };

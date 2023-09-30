@@ -90,6 +90,18 @@ public:
     wxArrayString GetAvailableTranslations(const wxString& domain) const;
 
     /**
+        Returns the best available translation for the required language.
+
+        For wxLANGUAGE_DEFAULT, this function returns the available translation
+        best matching one of wxUILocale::GetPreferredUILanguages(). Otherwise
+        it simply returns the language set with SetLanguage() if it's available
+        or empty string otherwise.
+
+        @since 3.2.3
+     */
+    wxString GetBestAvailableTranslation(const wxString& domain);
+
+    /**
         Returns the best UI language for the @a domain.
 
         The language is determined from the preferred UI language or languages
@@ -97,6 +109,13 @@ public:
         correspond to the default @em locale as obtained from
         wxLocale::GetSystemLanguage(); modern operation systems (Windows
         Vista+, macOS) have separate language and regional (= locale) settings.
+
+        Please note that that this function may return the language
+        corresponding to @a msgIdLanguage if this language is considered to be
+        acceptable, i.e. is part of wxUILocale::GetPreferredUILanguages(),
+        indicating that it is fine not to use translations at all on this
+        system. If this is undesirable, GetBestAvailableTranslation() should be
+        used which doesn't consider the messages ID language as being available.
 
         @param domain
             The catalog domain to look for.
@@ -142,20 +161,42 @@ public:
 
         @return @true if a suitable catalog was found, @false otherwise
 
-        @see AddCatalog()
+        @see AddAvailableCatalog()
      */
     bool AddStdCatalog();
 
     /**
         Add a catalog for use with the current locale.
 
-        By default, it is searched for in standard places (see
+        By default, the catalog is searched for in standard places (see
         wxFileTranslationsLoader), but you may also prepend additional
         directories to the search path with
         wxFileTranslationsLoader::AddCatalogLookupPathPrefix().
 
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
+
+        @return
+            @true if catalog was successfully loaded, @false otherwise, usually
+            because it wasn't found. Note that unlike AddCatalog() this
+            function returns @false even if the language of the original
+            strings (usually English) can be used directly, i.e. its return
+            value only indicates that there are no catalogs available for the
+            selected or system-default languages, but is not necessarily an
+            error if no translations are needed in the first place.
+
+        @since 3.2.3
+     */
+    bool AddAvailableCatalog(const wxString& domain);
+
+    /**
+        Add a catalog for use with the current locale or fall back to the
+        original messages language.
+
+        This function behaves like AddAvailableCatalog() but also checks if the
+        strings used in the program, written in @a msgIdLanguage, can be used
+        without any translations on the current system and also returns @true
+        in this case, unlike AddAvailableCatalog().
 
         By default, i.e. if @a msgIdLanguage is not given, @c msgid strings are assumed
         to be in English and written only using 7-bit ASCII characters.
@@ -173,8 +214,10 @@ public:
             code are used instead.
 
         @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
+            @true if catalog was successfully loaded or loading it is
+            unnecessary because the original messages can be used directly,
+            @false otherwise (which might mean that the catalog is not found or
+            that it isn't in the correct format).
      */
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
@@ -213,7 +256,7 @@ public:
         According to GNU gettext tradition, each catalog normally corresponds to
         'domain' which is more or less the application name.
 
-        @see AddCatalog()
+        @see AddAvailableCatalog()
      */
     bool IsLoaded(const wxString& domain) const;
 
@@ -348,7 +391,7 @@ public:
         (in this order).
 
         This only applies to subsequent invocations of
-        wxTranslations::AddCatalog().
+        wxTranslations::AddAvailableCatalog().
     */
     static void AddCatalogLookupPathPrefix(const wxString& prefix);
 };
@@ -358,8 +401,7 @@ public:
     resources.
 
     If you wish to store translation MO files in resources, you have to
-    enable this loader before calling wxTranslations::AddCatalog() or
-    wxLocale::AddCatalog():
+    enable this loader before calling wxTranslations::AddAvailableCatalog():
 
     @code
     wxTranslations::Get()->SetLoader(new wxResourceTranslationsLoader);
