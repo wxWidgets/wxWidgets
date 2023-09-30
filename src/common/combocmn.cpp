@@ -157,6 +157,11 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #undef COMBO_MARGIN
 #define COMBO_MARGIN                  FOCUS_RING
 
+#elif defined(__WXQT__)
+
+#include "wx/nonownedwnd.h"
+#define wxComboCtrlGenericTLW   wxNonOwnedWindow
+
 #else
 
 #include "wx/dialog.h"
