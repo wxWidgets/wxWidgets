@@ -293,6 +293,7 @@ wxGTK:
 - Ensure wxListBox best size is at least the minimum required by GTK3.
 - Support setting thickness when creating wxGauge with GTK >= 3.20 (#24107).
 - Fix handling binary data in wxSecretStore (Martin Corino, #24351).
+- Make GTKSuppressDiagnostics(), broken since 3.2.1, work again (#24432).
 
 wxMSW:
 
