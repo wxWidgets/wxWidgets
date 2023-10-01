@@ -392,6 +392,19 @@ bool wxApp::OnInitGui()
     }
 #endif
 
+    // Suppress GTK diagnostics if requested: this is convenient if the program
+    // doesn't use GTKAllowDiagnosticsControl() itself.
+    wxString suppress;
+    if ( wxGetEnv("WXSUPPRESS_GTK_DIAGNOSTICS", &suppress) )
+    {
+        long flags;
+        if ( !suppress.ToLong(&flags) )
+            flags = -1; // Suppress everything by default.
+
+        if ( flags != 0 )
+            GTKSuppressDiagnostics(flags);
+    }
+
     return true;
 }
 
