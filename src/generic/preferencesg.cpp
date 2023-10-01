@@ -29,9 +29,7 @@
 #include "wx/dialog.h"
 #include "wx/notebook.h"
 #include "wx/sizer.h"
-#include "wx/sharedptr.h"
 #include "wx/scopeguard.h"
-#include "wx/vector.h"
 
 #include <memory>
 
@@ -99,7 +97,7 @@ public:
 
     virtual void AddPage(wxPreferencesPage* page) override
     {
-        m_pages.push_back(wxSharedPtr<wxPreferencesPage>(page));
+        m_pages.emplace_back(page);
     }
 
 protected:
@@ -122,11 +120,9 @@ protected:
         //       can determine its best size. We'll need to extend
         //       wxPreferencesPage with a GetBestSize() virtual method to make
         //       it possible to defer the creation.
-        for ( Pages::const_iterator i = m_pages.begin();
-              i != m_pages.end();
-              ++i )
+        for ( const auto& page : m_pages )
         {
-            dlg->AddPage(i->get());
+            dlg->AddPage(page.get());
         }
 
         dlg->Fit();
@@ -134,8 +130,7 @@ protected:
         return dlg;
     }
 
-    typedef wxVector< wxSharedPtr<wxPreferencesPage> > Pages;
-    Pages m_pages;
+    std::vector<std::unique_ptr<wxPreferencesPage>> m_pages;
 
 private:
     wxString m_title;
