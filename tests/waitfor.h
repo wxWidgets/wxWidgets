@@ -37,6 +37,21 @@ WaitFor(const char* what, const std::function<bool ()>& pred, int timeout = 500)
     return true;
 }
 
+// An even simpler version which doesn't wait for anything but just calls
+// wxYield() until the given timeout expires.
+inline void
+YieldForAWhile(int timeout = 50)
+{
+    wxStopWatch sw;
+    for ( ;; )
+    {
+        wxYield();
+
+        if ( sw.Time() > timeout )
+            break;
+    }
+}
+
 // Class used to check if we received the (first) paint event: this is
 // currently used under GTK only, as MSW doesn't seem to need to wait for the
 // things to work, while under Mac nothing works anyhow.

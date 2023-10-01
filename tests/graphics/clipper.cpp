@@ -751,11 +751,7 @@ TEST_CASE("ClipperTestCase::wxPaintDC", "[clipper][dc][paintdc]")
     testWin->Refresh();
     testWin->Update();
     // Wait for update to be done
-    wxStopWatch sw;
-    while( sw.Time() < 50 )
-    {
-         wxYield();
-    }
+    YieldForAWhile();
 
     CHECK(paintExecuted == true);
 }

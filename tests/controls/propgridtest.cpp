@@ -16,11 +16,12 @@
 #if wxUSE_DATEPICKCTRL
 #include "wx/datectrl.h"
 #endif
-#include "wx/stopwatch.h"
 
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/advprops.h"
+
+#include "waitfor.h"
 
 #include <random>
 #include <vector>
@@ -450,11 +451,7 @@ static wxPropertyGridManager* CreateGrid(int style, int extraStyle)
     pgManager->Refresh();
     pgManager->Update();
     // Wait for update to be done
-    wxStopWatch sw;
-    while ( sw.Time() < 100 )
-    {
-        wxYield();
-    }
+    YieldForAWhile(100);
 
     return pgManager;
 }
@@ -722,11 +719,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         pgManager->Refresh();
         pgManager->Update();
         // Wait for update to be done
-        wxStopWatch sw;
-        while ( sw.Time() < 100 )
-        {
-            wxYield();
-        }
+        YieldForAWhile(100);
     }
 
     SECTION("Default_Values")

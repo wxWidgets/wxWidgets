@@ -19,12 +19,12 @@
 #include "asserthelper.h"
 #include "testableframe.h"
 #include "testwindow.h"
+#include "waitfor.h"
 
 #include "wx/uiaction.h"
 #include "wx/caret.h"
 #include "wx/cshelp.h"
 #include "wx/dcclient.h"
-#include "wx/stopwatch.h"
 #include "wx/tooltip.h"
 #include "wx/wupdlock.h"
 
@@ -40,8 +40,7 @@ public:
         // Without this, when running this test suite solo it succeeds,
         // but not when running it together with the other tests !!
         // Not needed when run under Xvfb display.
-        for ( wxStopWatch sw; sw.Time() < 50; )
-            wxYield();
+        YieldForAWhile();
     #endif
     }
 
@@ -510,13 +509,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Refresh", "[window]")
 
     parent->RefreshRect(wxRect(150, 10, 300, 80));
 
-    for ( wxStopWatch sw; sw.Time() < 100; )
-    {
-        if ( isParentPainted )
-            break;
-
-        wxYield();
-    }
+    WaitFor("parent repaint", [&]() { return isParentPainted; }, 100);
 
     // child1 should be the only window not to receive the wxEVT_PAINT event
     // because it does not intersect with the refreshed rectangle.
