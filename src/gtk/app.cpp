@@ -273,6 +273,9 @@ LogFilterByMessage::~LogFilterByMessage()
 /* static */
 void wxApp::GTKSuppressDiagnostics(int flags)
 {
+    // Allow Install() to actually do something.
+    GTKAllowDiagnosticsControl();
+
     static wxGTKImpl::LogFilterByLevel s_logFilter;
     s_logFilter.SetLevelToIgnore(flags);
     s_logFilter.Install();
