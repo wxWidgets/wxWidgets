@@ -510,18 +510,6 @@ void wxWindowQt::QtSetMaxSize(const wxSize& maxSize)
         GetHandle()->setMaximumHeight(maxSize.y);
 }
 
-void wxWindowQt::SetMinSize(const wxSize& minSize)
-{
-    QtSetMinSize(minSize);
-    wxWindowBase::SetMinSize(minSize);
-}
-
-void wxWindowQt::SetMaxSize(const wxSize& maxSize)
-{
-    QtSetMaxSize(maxSize);
-    wxWindowBase::SetMaxSize(maxSize);
-}
-
 /* static */ void wxWindowQt::QtReparent( QWidget *child, QWidget *parent )
 {
     // Backup the attributes which will be changed during the reparenting:
