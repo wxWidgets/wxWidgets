@@ -225,11 +225,6 @@ protected:
     // itself.
     virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
 
-    // wxTopLevelWindowQt::DoSetSizeHints() override calls these functions to
-    // set min/max size information at Qt level.
-    void QtSetMinSize(const wxSize& minSize);
-    void QtSetMaxSize(const wxSize& maxSize);
-
     QWidget *m_qtWindow;
 
 private:

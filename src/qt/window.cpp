@@ -486,30 +486,6 @@ void wxWindowQt::SetFocus()
     GetHandle()->setFocus();
 }
 
-void wxWindowQt::QtSetMinSize(const wxSize& minSize)
-{
-    if ( !GetHandle() )
-        return;
-
-    if ( minSize.x >= 0 )
-        GetHandle()->setMinimumWidth(minSize.x);
-
-    if ( minSize.y >= 0 )
-        GetHandle()->setMinimumHeight(minSize.y);
-}
-
-void wxWindowQt::QtSetMaxSize(const wxSize& maxSize)
-{
-    if ( !GetHandle() )
-        return;
-
-    if ( maxSize.x >= 0 )
-        GetHandle()->setMaximumWidth(maxSize.x);
-
-    if ( maxSize.y >= 0 )
-        GetHandle()->setMaximumHeight(maxSize.y);
-}
-
 /* static */ void wxWindowQt::QtReparent( QWidget *child, QWidget *parent )
 {
     // Backup the attributes which will be changed during the reparenting:
