@@ -83,6 +83,11 @@ public:
          return false;
      }
 
+     void FitPages()
+     {
+        SetClientSize(GetSizer()->GetMinSize());
+     }
+
 private:
     wxNotebook *m_notebook;
 };
@@ -128,7 +133,7 @@ protected:
             dlg->AddPage(i->get());
         }
 
-        dlg->Fit();
+        dlg->FitPages();
 
         return dlg;
     }

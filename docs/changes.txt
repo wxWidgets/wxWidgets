@@ -297,6 +297,7 @@ wxGTK:
 - Allow using libwebkit2gtk-4.1 and libsoup-3.0 (Scott Talbert, #23630).
 - Support Numpad Enter for ending wxListCtrl editing (Scott Talbert, #23762).
 - Improve dark mode detection (Colin Kinloch and Paul Cornett, #23764).
+- Fix wxPreferencesEditor size under Wayland (#23924).
 
 wxMSW:
 
