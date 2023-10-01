@@ -548,9 +548,9 @@ void wxWindowQt::Update()
     // send the paint event to the inner widget in scroll areas:
     if ( QtGetScrollBarsContainer() )
     {
-        QtGetScrollBarsContainer()->viewport()->update();
+        QtGetScrollBarsContainer()->viewport()->repaint();
     } else {
-        GetHandle()->update();
+        GetHandle()->repaint();
     }
 }
 
