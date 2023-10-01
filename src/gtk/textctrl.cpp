@@ -61,6 +61,37 @@ static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
 }
 }
 
+extern "C"
+{
+static void maxlen_handler(GtkTextBuffer *buffer, GtkTextIter *location, gchar *WXUNUSED(text), gint len, wxTextCtrl *win)
+{
+    auto count = gtk_text_buffer_get_char_count( buffer );
+    auto maxlen = win->GetMaxLength();
+    if( count > maxlen )
+    {
+        GtkTextIter offset, end;
+        auto startPos = gtk_text_iter_get_offset( location );
+        gtk_text_buffer_get_iter_at_offset( buffer, &offset, startPos - 1 );
+        gtk_text_buffer_get_iter_at_offset( buffer, &end, ( startPos - 1 ) + len );
+        // This function is connected using g_signal_connect_after() call, therefore
+        // direct buffer modification is required.
+        // Using g_signal_connect() doesn't work as the text is still being entered
+        // probably because the signal is documented as "Run Last". For exactly same
+        // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
+        // the handler that does not connected after
+        gtk_text_buffer_delete( buffer, &offset, &end );
+        // Without following line GTK3 produces warning
+#if GTK_CHECK_VERSION( 3, 0, 0 )
+        gtk_text_iter_assign( location, &offset );
+#endif
+        wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
+        event.SetEventObject( win );
+        event.SetString( win->GetValue() );
+        win->HandleWindowEvent( event );
+    }
+}
+}
+
 // remove all tags starting with the given prefix from the start..end range
 static void
 wxGtkTextRemoveTagsWithPrefix(GtkTextBuffer *text_buffer,
@@ -684,7 +715,7 @@ void wxTextCtrl::Init()
 {
     m_dontMarkDirty =
     m_modified = false;
-
+    m_maxlen = INT_MAX;
     m_countUpdatesToIgnore = 0;
 
     SetUpdateFont(false);
@@ -911,9 +942,19 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
 GtkEditable *wxTextCtrl::GetEditable() const
 {
-    wxCHECK_MSG( IsSingleLine(), nullptr, "shouldn't be called for multiline" );
+    if( IsSingleLine() )
+        return GTK_EDITABLE(m_text);
+    else
+        return NULL;
+}
 
-    return GTK_EDITABLE(m_text);
+void wxTextCtrl::SetMaxLength(unsigned long length)
+{
+    if( HasFlag( wxTE_MULTILINE ) )
+    {
+        m_maxlen = length;
+        g_signal_connect_after( m_buffer, "insert-text", G_CALLBACK( maxlen_handler ), gpointer( this ) );
+    }
 }
 
 GtkEntry *wxTextCtrl::GetEntry() const

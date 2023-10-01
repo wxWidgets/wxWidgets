@@ -141,7 +141,7 @@ public:
     MyTextCtrl    *m_tab;
     MyTextCtrl    *m_readonly;
     MyTextCtrl    *m_limited;
-
+    MyTextCtrl    *m_limitedMultiline;
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_horizontal;
 
@@ -1142,6 +1142,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxSize size2 = m_limited->GetSizeFromTextSize(m_limited->GetTextExtent("WWWWWWWW"));
     m_limited->SetSizeHints(size2, size2);
 
+    m_limitedMultiline = new MyTextCtrl( this, wxID_ANY, "",  wxPoint( 10, 110 ), wxDefaultSize, wxTE_MULTILINE );
+    m_limitedMultiline->SetHint( "Max 20 characters" );
+    m_limitedMultiline->SetMaxLength( 20 );
+
     wxTextCtrl* upperOnly = new MyTextCtrl(this, wxID_ANY, "Only upper case",
                                            wxDefaultPosition, wxDefaultSize);
     upperOnly->ForceUpper();
@@ -1278,6 +1282,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     column1->Add( m_password, 0, wxALL | wxEXPAND, 10 );
     column1->Add( m_readonly, 0, wxALL, 10 );
     column1->Add( m_limited, 0, wxALL, 10 );
+    column1->Add( m_limitedMultiline, 0, wxALL, 10 );
     column1->Add( upperOnly, 0, wxALL, 10 );
     column1->Add( m_horizontal, 1, wxALL | wxEXPAND, 10 );
 
