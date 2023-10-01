@@ -356,6 +356,8 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
 #ifdef __WXGTK__
     treeStyle |= wxTR_NO_LINES;
+#elif defined(__WXMSW__)
+    treeStyle |= wxTR_NO_LINES | wxTR_TWIST_BUTTONS | wxTR_FULL_ROW_HIGHLIGHT;
 #endif
 
     if (style & wxDIRCTRL_EDIT_LABELS)
