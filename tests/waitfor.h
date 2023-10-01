@@ -57,23 +57,10 @@ public:
     // event to come and logs a warning if we didn't get it.
     void YieldUntilPainted(int timeoutInMS = 250)
     {
-        wxStopWatch sw;
-        for ( ;; )
+        if ( WaitFor("repaint", [this]() { return m_painted; }, timeoutInMS) )
         {
-            wxYield();
-
-            if ( m_painted )
-            {
-                // Reset it in case YieldUntilPainted() is called again.
-                m_painted = false;
-                break;
-            }
-
-            if ( sw.Time() > timeoutInMS )
-            {
-                WARN("Didn't get a paint event until timeout expiration");
-                break;
-            }
+            // Reset it in case YieldUntilPainted() is called again.
+            m_painted = false;
         }
     }
 
