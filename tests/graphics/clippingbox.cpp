@@ -22,7 +22,7 @@
 #include "wx/dcclient.h"
 
 #include "testfile.h"
-#include "waitforpaint.h"
+#include "waitfor.h"
 
 #include <memory>
 

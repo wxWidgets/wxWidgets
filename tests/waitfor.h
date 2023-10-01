@@ -1,13 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tests/waitforpaint.h
+// Name:        tests/waitfor.h
 // Purpose:     Helper WaitForPaint class
 // Author:      Vadim Zeitlin
 // Created:     2019-10-17 (extracted from tests/window/setsize.cpp)
 // Copyright:   (c) 2019 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TESTS_WAITFORPAINT_H_
-#define _WX_TESTS_WAITFORPAINT_H_
+#ifndef _WX_TESTS_WAITFOR_H_
+#define _WX_TESTS_WAITFOR_H_
 
 #include "wx/stopwatch.h"
 #include "wx/window.h"
@@ -99,4 +99,4 @@ public:
 
 #endif // __WXGTK__/!__WXGTK__
 
-#endif // _WX_TESTS_WAITFORPAINT_H_
+#endif // _WX_TESTS_WAITFOR_H_

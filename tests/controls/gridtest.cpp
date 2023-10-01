@@ -26,7 +26,7 @@
     #include "wx/stopwatch.h"
 #endif // __WXGTK__
 
-#include "waitforpaint.h"
+#include "waitfor.h"
 
 // To disable tests which work locally, but not when run on GitHub CI.
 #if defined(__WXGTK__) && !defined(__WXGTK3__)

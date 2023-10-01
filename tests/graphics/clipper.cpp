@@ -23,7 +23,7 @@
 #include "wx/window.h"
 
 #include "testfile.h"
-#include "waitforpaint.h"
+#include "waitfor.h"
 
 static const wxSize s_dcSize(260, 300);
 
