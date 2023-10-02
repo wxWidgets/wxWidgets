@@ -93,29 +93,27 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxPrinterDC *dc wxDUMMY_INITIALIZE(nullptr);
+    std::unique_ptr<wxPrinterDC> dc;
     if (prompt)
     {
-        dc = wxDynamicCast(PrintDialog(parent), wxPrinterDC);
+        dc.reset(wxDynamicCast(PrintDialog(parent), wxPrinterDC));
         if (!dc)
             return false;
     }
     else
     {
-        dc = new wxPrinterDC(m_printDialogData.GetPrintData());
+        dc.reset(new wxPrinterDC(m_printDialogData.GetPrintData()));
     }
 
     // May have pressed cancel.
     if (!dc || !dc->IsOk())
     {
-        if (dc) delete dc;
         return false;
     }
 
     // Set printout parameters
     if (!printout->SetUp(*dc))
     {
-        delete dc;
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
@@ -151,7 +149,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         wxLogDebug(wxT("Could not create an abort dialog."));
         sm_lastError = wxPRINTER_ERROR;
 
-        delete dc;
         return false;
     }
     sm_abortWindow = win;
@@ -238,8 +235,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         sm_abortWindow->Show(false);
         wxDELETE(sm_abortWindow);
     }
-
-    delete dc;
 
     return sm_lastError == wxPRINTER_NO_ERROR;
 }
