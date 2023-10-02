@@ -797,13 +797,6 @@ bool wxLocale::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
     return t->AddCatalog(domain, msgIdLanguage);
 }
 
-bool wxLocale::AddCatalog(const wxString& domain,
-                        wxLanguage      msgIdLanguage,
-                        const wxString& WXUNUSED(msgIdCharset))
-{
-    return AddCatalog(domain, msgIdLanguage);
-}
-
 bool wxLocale::IsLoaded(const wxString& domain) const
 {
     wxTranslations *t = wxTranslations::Get();

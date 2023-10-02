@@ -392,8 +392,8 @@ public:
     /**
         Calls wxTranslations::AddCatalog(const wxString&, const wxString&).
 
-        This overload shouldn't be used any longer as @a msgIdCharset is
-        just ignored.
+        @deprecated This overload shouldn't be used any longer as @a
+        msgIdCharset is just ignored, please omit it.
     */
     bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage,
                     const wxString& msgIdCharset);
