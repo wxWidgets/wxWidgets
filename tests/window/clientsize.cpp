@@ -21,7 +21,7 @@
 #include <memory>
 
 #include "asserthelper.h"
-#include "waitforpaint.h"
+#include "waitfor.h"
 
 // ----------------------------------------------------------------------------
 // tests themselves

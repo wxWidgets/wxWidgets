@@ -20,7 +20,7 @@
 #include "wx/uiaction.h"
 
 #ifdef __WXGTK__
-    #include "wx/stopwatch.h"
+    #include "waitfor.h"
 #endif // __WXGTK__
 
 #include "testableframe.h"
@@ -366,31 +366,23 @@ protected:
 #ifdef __WXGTK__
         // Unfortunately it's not enough to call wxYield() once, so wait up to
         // 0.5 sec.
-        wxStopWatch sw;
-        while ( true )
-        {
-            wxYield();
-
+        WaitFor("wxDataViewCtrl upder", [this, item, existence]() {
             const bool isItemRectEmpty = m_dvc->GetItemRect(item).IsEmpty();
             switch ( existence )
             {
                 case wxITEM_APPEAR:
                     if ( !isItemRectEmpty )
-                        return;
+                        return true;
                     break;
 
                 case wxITEM_DISAPPEAR:
                     if ( isItemRectEmpty )
-                        return;
+                        return true;
                     break;
             }
 
-            if ( sw.Time() > 500 )
-            {
-                WARN("Timed out waiting for wxDataViewCtrl");
-                break;
-            }
-        }
+            return false;
+        });
 #else // !__WXGTK__
         wxUnusedVar(item);
         wxUnusedVar(existence);
@@ -810,16 +802,9 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
 
 #ifdef __WXGTK__
     // Wait for the list control to be relaid out.
-    wxStopWatch sw;
-    while ( m_dvc->GetTopItem() == m_root )
-    {
-        if ( sw.Time() > 500 )
-        {
-            WARN("Timed out waiting for wxDataViewCtrl layout");
-            break;
-        }
-        wxYield();
-    }
+    WaitFor("wxDataViewCtrl layout", [this]() {
+        return m_dvc->GetTopItem() != m_root;
+    });
 #endif // __WXGTK__
 
     // Check that this was indeed the case.
@@ -858,16 +843,9 @@ TEST_CASE_METHOD(MultiColumnsDataViewCtrlTestCase,
 {
 #ifdef __WXGTK__
     // Wait for the list control to be realized.
-    wxStopWatch sw;
-    while ( m_firstColumn->GetWidth() == 0 )
-    {
-        if ( sw.Time() > 500 )
-        {
-            WARN("Timed out waiting for wxDataViewListCtrl to be realized");
-            break;
-        }
-        wxYield();
-    }
+    WaitFor("wxDataViewCtrl to be realized", [this]() {
+        return m_firstColumn->GetWidth() != 0;
+    });
 #endif
 
     // Check the width of the first column.

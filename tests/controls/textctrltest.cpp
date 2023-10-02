@@ -29,7 +29,7 @@
 #endif // wxUSE_CLIPBOARD
 
 #ifdef __WXGTK__
-    #include "wx/stopwatch.h"
+    #include "waitfor.h"
 #endif
 
 #include "wx/private/localeset.h"
@@ -397,8 +397,7 @@ void TextCtrlTestCase::HitTestSingleLine()
 
     #ifdef __WXGTK__
         // wxGTK must be given an opportunity to lay the text out.
-        for ( wxStopWatch sw; sw.Time() < 50; )
-            wxYield();
+        YieldForAWhile();
     #endif
 
         REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
@@ -757,18 +756,10 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
 
     // wxGTK needs to yield here to update the text control.
 #ifdef __WXGTK__
-    wxStopWatch sw;
-    while ( m_text->PositionToCoords(0).y == 0 ||
-                m_text->PositionToCoords(pos).y > TEXT_HEIGHT )
-    {
-        if ( sw.Time() > 1000 )
-        {
-            FAIL("Timed out waiting for wxTextCtrl update.");
-            break;
-        }
-
-        wxYield();
-    }
+    WaitFor("wxTextCtrl update", [this, pos]() {
+        return m_text->PositionToCoords(0).y != 0 &&
+                m_text->PositionToCoords(pos).y <= TEXT_HEIGHT;
+    }, 1000);
 #endif // __WXGTK__
 
     wxPoint coords = m_text->PositionToCoords(0);

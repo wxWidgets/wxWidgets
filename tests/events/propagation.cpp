@@ -26,9 +26,12 @@
 #include "wx/scopeguard.h"
 #include "wx/toolbar.h"
 #include "wx/uiaction.h"
-#include "wx/stopwatch.h"
 
 #include <memory>
+
+#ifdef __WXGTK__
+    #include "waitfor.h"
+#endif
 
 // FIXME: Currently under OS X testing paint event doesn't work because neither
 //        calling Refresh()+Update() nor even sending wxPaintEvent directly to
@@ -174,8 +177,7 @@ public:
 #ifdef __WXGTK__
         // We need to map the window, otherwise we're not going to get any
         // paint events for it.
-        for ( wxStopWatch sw; sw.Time() < 50; )
-            wxYield();
+        YieldForAWhile();
 
         // Ignore events generated during the initial mapping.
         g_str.clear();
