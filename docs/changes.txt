@@ -287,6 +287,7 @@ wxGTK:
 - Give better error if EGL version is < 1.5 (Fabrice de Gans, #22325, #23855).
 - Fix hiding wxGLCanvas under Wayland (Joan Bruguera, #22580).
 - Fix page origin when printing in landscape (Alex Shvartzkop, #23860).
+- Fix wxComboCtrl popup behaviour under Wayland (Alex Shvartzkop, #23908).
 - Dramatically optimize adding many items to wxChoice (Ian McInerney, #23443).
 - Improve and document wxGLCanvas::CreateSurface() (Dan Gudmundsson, #23366).
 - Fix loading WebKit2 extension when using wxWebView (Scott Talbert, #23497).
