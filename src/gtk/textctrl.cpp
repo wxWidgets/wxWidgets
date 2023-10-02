@@ -945,7 +945,7 @@ GtkEditable *wxTextCtrl::GetEditable() const
     if( IsSingleLine() )
         return GTK_EDITABLE(m_text);
     else
-        return NULL;
+        return nullptr;
 }
 
 void wxTextCtrl::SetMaxLength(unsigned long length)
