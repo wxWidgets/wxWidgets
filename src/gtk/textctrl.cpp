@@ -955,6 +955,8 @@ void wxTextCtrl::SetMaxLength(unsigned long length)
         m_maxlen = length;
         g_signal_connect_after( m_buffer, "insert-text", G_CALLBACK( maxlen_handler ), gpointer( this ) );
     }
+    else
+        wxTextEntry::SetMaxLength( length );
 }
 
 GtkEntry *wxTextCtrl::GetEntry() const
