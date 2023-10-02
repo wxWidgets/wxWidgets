@@ -425,12 +425,24 @@ BOOL CALLBACK wxAbortProc(HDC WXUNUSED(hdc), int WXUNUSED(error))
         return(TRUE);
 
     /* Process messages intended for the abort dialog box */
+    const HWND hwnd = GetHwndOf(wxPrinterBase::sm_abortWindow);
 
     while (!wxPrinterBase::sm_abortIt && ::PeekMessage(&msg, 0, 0, 0, TRUE))
-        if (!IsDialogMessage((HWND) wxPrinterBase::sm_abortWindow->GetHWND(), &msg)) {
+    {
+        // Apparently handling the message may, somehow, result in
+        // sm_abortWindow being destroyed, so guard against this happening.
+        if (!wxPrinterBase::sm_abortWindow)
+        {
+            wxLogDebug(wxS("Print abort dialog unexpected disappeared."));
+            return TRUE;
+        }
+
+        if (!IsDialogMessage(hwnd, &msg))
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+    }
 
     /* bAbort is TRUE (return is FALSE) if the user has aborted */
 
