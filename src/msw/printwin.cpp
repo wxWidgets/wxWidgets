@@ -87,6 +87,32 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         return false;
     }
 
+    // Small helper ensuring that we destroy sm_abortWindow if it was created.
+    class AbortWindowCloser
+    {
+    public:
+        AbortWindowCloser() = default;
+
+        void Initialize(wxWindow* win)
+        {
+            wxPrinterBase::sm_abortWindow = win;
+            win->Show();
+            wxSafeYield();
+        }
+
+        ~AbortWindowCloser()
+        {
+            if ( wxPrinterBase::sm_abortWindow )
+            {
+                wxPrinterBase::sm_abortWindow->Show(false);
+                wxDELETE(wxPrinterBase::sm_abortWindow);
+            }
+        }
+
+        AbortWindowCloser(const AbortWindowCloser&) = delete;
+        AbortWindowCloser& operator=(const AbortWindowCloser&) = delete;
+    } abortWindowCloser;
+
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
     if (m_printDialogData.GetMaxPage() < 1)
@@ -151,9 +177,8 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
         return false;
     }
-    sm_abortWindow = win;
-    sm_abortWindow->Show();
-    wxSafeYield();
+
+    abortWindowCloser.Initialize(win);
 
     printout->OnBeginPrinting();
 
@@ -229,12 +254,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     }
 
     printout->OnEndPrinting();
-
-    if (sm_abortWindow)
-    {
-        sm_abortWindow->Show(false);
-        wxDELETE(sm_abortWindow);
-    }
 
     return sm_lastError == wxPRINTER_NO_ERROR;
 }
