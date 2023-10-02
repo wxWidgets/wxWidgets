@@ -769,20 +769,28 @@ void wxTextCtrl::WriteText( const wxString &text )
 
 void wxTextCtrl::DoSetValue( const wxString &text, int flags )
 {
-    // do not fire qt signals for certain methods (i.e. ChangeText)
-    if ( !(flags & SetValue_SendEvent) )
+    if ( text != DoGetValue() )
     {
-        m_qtEdit->blockSignals(true);
+        // do not fire qt signals for certain methods (i.e. ChangeText)
+        if ( !(flags & SetValue_SendEvent) )
+        {
+            m_qtEdit->blockSignals(true);
+        }
+
+        m_qtEdit->SetValue( text );
+
+        // re-enable qt signals
+        if ( !(flags & SetValue_SendEvent) )
+        {
+            m_qtEdit->blockSignals(false);
+        }
+        SetInsertionPoint(0);
     }
-
-    m_qtEdit->SetValue( text );
-
-    // re-enable qt signals
-    if ( !(flags & SetValue_SendEvent) )
+    else
     {
-        m_qtEdit->blockSignals(false);
+        if ( flags & SetValue_SendEvent )
+            SendTextUpdatedEventIfAllowed();
     }
-    SetInsertionPoint(0);
 }
 
 QWidget *wxTextCtrl::GetHandle() const
