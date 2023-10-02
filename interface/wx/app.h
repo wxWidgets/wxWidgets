@@ -1042,6 +1042,11 @@ public:
         This function can be called to suppress GTK diagnostic messages that
         are output on the standard error stream by default.
 
+        If @c WXSUPPRESS_GTK_DIAGNOSTICS environment variable is set to a
+        non-zero value, wxWidgets automatically calls this function on program
+        startup with the value of this variable as @a flags if it's a number or
+        with the default flags value otherwise.
+
         The default value of the argument disables all messages, but you
         can pass in a mask flag to specifically disable only particular
         categories of messages.

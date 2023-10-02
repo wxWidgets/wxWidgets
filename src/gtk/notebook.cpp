@@ -431,7 +431,7 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     // Suppress bogus assertion failures happening deep inside ATK (used by
     // GTK) that can't be avoided in any other way, see #22176.
     wxGTKImpl::LogFilterByMessage filterLog(
-        "gtk_notebook_get_tab_label: assertion 'list != nullptr' failed"
+        "gtk_notebook_get_tab_label: assertion 'list != NULL' failed"
     );
 
     // we don't need to unparent the client->m_widget; GTK+ will do
