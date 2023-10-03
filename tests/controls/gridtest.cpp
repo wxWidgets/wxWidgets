@@ -608,7 +608,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
+    WaitFor("mouse click to be processed", [&]() {
+        return sort.GetCount() != 0;
+    });
 
     CHECK(sort.GetCount() == 1);
 #endif
@@ -642,7 +644,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
     wxYield();
 
     sim.MouseUp();
-    wxYield();
+    WaitFor("mouse release to be processed", [&]() {
+        return colsize.GetCount() != 0;
+    });
 
     CHECK(colsize.GetCount() == 1);
 
@@ -651,7 +655,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
 
     sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
 
-    wxYield();
+    WaitFor("mouse drag to be processed", [&]() {
+        return rowsize.GetCount() != 0;
+    });
 
     CHECK(rowsize.GetCount() == 1);
 #endif
