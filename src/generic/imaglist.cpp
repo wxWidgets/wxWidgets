@@ -107,6 +107,13 @@ wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
     }
 
 #ifdef __WXQT__
+    // In wxQt the returned bitmap is used with native list/tree controls which require
+    // the bitmap to already have its mask applied to it, as it's used directly by Qt
+    // and not via our wxDC::DrawBitmap() which would apply the mask itself, so we must
+    // take it into account here -- the only alternative would be for the controls to do
+    // it themselves, but then this would happen every time the bitmap is drawn, which
+    // would be less efficient than doing it just once here.
+
     bmpResized.QtBlendMaskWithAlpha();
 #endif
 
