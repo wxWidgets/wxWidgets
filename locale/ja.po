@@ -4,9 +4,8 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2011-03-02 18:30+0900\n"
-"Last-Translator: Suzumizaki-Kimitaka(鈴見咲君高) <suzumizaki@free."
-"japandesign.ne.jp>\n"
+"PO-Revision-Date: 2023-10-03 22:56+0900\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <wx-translators@wxwidgets.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -104,14 +103,12 @@ msgid "Printout"
 msgstr "印刷出力"
 
 #: ../include/wx/richmsgdlg.h:29
-#, fuzzy
 msgid "&See details"
-msgstr "詳細 (&D)"
+msgstr "詳細を表示 (&S)"
 
 #: ../include/wx/richmsgdlg.h:30
-#, fuzzy
 msgid "&Hide details"
-msgstr "詳細 (&D)"
+msgstr "詳細を非表示 (&H)"
 
 #: ../include/wx/richtext/richtextbuffer.h:3865
 #, fuzzy
@@ -133,9 +130,8 @@ msgid "&Table"
 msgstr "タブ"
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
-#, fuzzy
 msgid "Object Properties"
-msgstr "プロパティー (&P)"
+msgstr "オブジェクトのプロパティー"
 
 #: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
@@ -152,11 +148,11 @@ msgstr "パイプを作成できませんでした"
 
 #: ../include/wx/unix/private/displayx11.h:65
 msgid "Failed to enumerate video modes"
-msgstr "画面モードを列挙できませんでした。"
+msgstr "画面モードを列挙できませんでした"
 
 #: ../include/wx/unix/private/displayx11.h:89
 msgid "Failed to change video mode"
-msgstr "画面モード変更に失敗しました。"
+msgstr "画面モード変更に失敗しました"
 
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
@@ -174,7 +170,7 @@ msgstr "SetProperty が適切なsetterなしで呼び出されました"
 
 #: ../include/wx/xtiprop.h:184
 msgid "GetProperty called w/o valid getter"
-msgstr "適切な getter なしに GetPropertyが呼び出されました。"
+msgstr "適切な getter なしに GetPropertyが呼び出されました"
 
 #: ../include/wx/xtiprop.h:193
 msgid "AddToPropertyCollection called w/o valid adder"
@@ -183,7 +179,7 @@ msgstr "不適切な adder から AddToPropertyCollection が呼び出されま�
 #: ../include/wx/xtiprop.h:202
 msgid "GetPropertyCollection called w/o valid collection getter"
 msgstr ""
-"適切なコレクション getter なしに GetPropertyCollection が呼び出されました。"
+"適切なコレクション getter なしに GetPropertyCollection が呼び出されました"
 
 #: ../include/wx/xtiprop.h:255
 msgid "AddToPropertyCollection called on a generic accessor"
@@ -191,7 +187,7 @@ msgstr "非特殊化アクセサーの AddToPropertyCollection が呼び出さ�
 
 #: ../include/wx/xtiprop.h:262
 msgid "GetPropertyCollection called on a generic accessor"
-msgstr "汎用アクセサーに対して GetPropertyCollection が呼び出されました。"
+msgstr "汎用アクセサーに対して GetPropertyCollection が呼び出されました"
 
 #: ../src/aui/tabmdi.cpp:106 ../src/generic/mdig.cpp:94
 msgid "Cl&ose"
@@ -785,7 +781,7 @@ msgstr "このヘルプメッセージを表示します"
 
 #: ../src/common/appbase.cpp:743
 msgid "generate verbose log messages"
-msgstr "冗長なログメッセージを生成します。"
+msgstr "冗長なログメッセージを生成します"
 
 #: ../src/common/appcmn.cpp:243
 msgid "specify the theme to use"
@@ -1174,7 +1170,7 @@ msgstr ""
 #: ../src/common/docview.cpp:680
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
-msgstr "ファイル '%s' に書き込もうとしましたが開くことができません"
+msgstr "ファイル '%s' を書き込み用に開けませんでした。"
 
 #: ../src/common/docview.cpp:686
 #, c-format
@@ -1184,7 +1180,7 @@ msgstr "文書をファイル \"%s\" に保存できませんでした。"
 #: ../src/common/docview.cpp:703
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
-msgstr "ファイル '%s' を読み取ろうとしましたが開くことができません"
+msgstr "ファイル '%s' を読み取り用に開けませんでした。"
 
 #: ../src/common/docview.cpp:715
 #, c-format
@@ -1304,7 +1300,7 @@ msgstr "ファイル '%s' の現在位置を見つけられません"
 
 #: ../src/common/ffile.cpp:350 ../src/common/file.cpp:570
 msgid "Failed to set temporary file permissions"
-msgstr "一時ファイルのパーミッションを設定できませんでした。"
+msgstr "一時ファイルのパーミッションを設定できませんでした"
 
 #: ../src/common/ffile.cpp:372 ../src/common/file.cpp:592
 #, c-format
@@ -1339,7 +1335,7 @@ msgstr "記述子 %d のファイルから読み取ることができません"
 #: ../src/common/file.cpp:352
 #, c-format
 msgid "can't write to file descriptor %d"
-msgstr "記述子 %d のファイルへ書き出すことができません。"
+msgstr "記述子 %d のファイルへ書き出すことができません"
 
 #: ../src/common/file.cpp:391
 #, c-format
@@ -1383,7 +1379,7 @@ msgstr "ファイル \"%s\" への上書きが拒否されたため変更内容�
 
 #: ../src/common/fileconf.cpp:421
 msgid "Error reading config options."
-msgstr "設定オプションの読み取りエラー"
+msgstr "設定オプションの読み取りエラー。"
 
 #: ../src/common/fileconf.cpp:431
 msgid "Failed to read config options."
@@ -1521,7 +1517,7 @@ msgstr "ファイルを列挙できません '%s'"
 
 #: ../src/common/filefn.cpp:765
 msgid "Failed to get the working directory"
-msgstr "作業ディレクトリーを取得できませんでした。"
+msgstr "作業ディレクトリーを取得できませんでした"
 
 #: ../src/common/filefn.cpp:810
 #, fuzzy
@@ -1545,11 +1541,11 @@ msgstr "ファイル '%s' を書き込み用に開くことができません"
 
 #: ../src/common/filename.cpp:200
 msgid "Failed to close file handle"
-msgstr "ファイルハンドルを閉じることができませんでした。"
+msgstr "ファイルハンドルを閉じることができませんでした"
 
 #: ../src/common/filename.cpp:1033
 msgid "Failed to create a temporary file name"
-msgstr "一時ファイルの名前を作成できませんでした。"
+msgstr "一時ファイルの名前を作成できませんでした"
 
 #: ../src/common/filename.cpp:1068
 msgid "Failed to open temporary file."
@@ -2161,7 +2157,7 @@ msgstr "GIF フレームの大きさ (%u, %d) が不適切です (フレーム #
 
 #: ../src/common/glcmn.cpp:108
 msgid "Failed to allocate colour for OpenGL"
-msgstr "OpenGL に色を割り当てることができませんでした。"
+msgstr "OpenGL に色を割り当てることができませんでした"
 
 #: ../src/common/headerctrlcmn.cpp:57
 msgid "Please select the columns to show and define their order:"
@@ -2425,7 +2421,7 @@ msgstr "PNG画像を読み出せませんでした。ファイルが壊れてい
 #: ../src/common/imagpng.cpp:511 ../src/common/imagpng.cpp:522
 #: ../src/common/imagpng.cpp:532
 msgid "Couldn't save PNG image."
-msgstr "PNG画像を保存できませんでした"
+msgstr "PNG画像を保存できませんでした。"
 
 #: ../src/common/imagpnm.cpp:71
 msgid "PNM: File format is not recognized."
@@ -2443,7 +2439,7 @@ msgstr "PNM: ファイルが欠けているようです。"
 #: ../src/common/imagtiff.cpp:69
 #, c-format
 msgid " (in module \"%s\")"
-msgstr "(モジュール \"%s\")"
+msgstr " (モジュール \"%s\")"
 
 #: ../src/common/imagtiff.cpp:304
 msgid "TIFF: Error loading image."
@@ -2497,11 +2493,11 @@ msgstr "ロケールを言語 \"%s\" に設定できません。"
 
 #: ../src/common/log.cpp:240
 msgid "Error: "
-msgstr "エラー:"
+msgstr "エラー: "
 
 #: ../src/common/log.cpp:244
 msgid "Warning: "
-msgstr "警告:"
+msgstr "警告: "
 
 #: ../src/common/log.cpp:292
 #, fuzzy
@@ -3245,7 +3241,7 @@ msgstr "'%s' を '%s' に展開できませんでした。"
 
 #: ../src/common/selectdispatcher.cpp:255
 msgid "Failed to monitor I/O channels"
-msgstr "I/O チャンネルの監視に失敗しました。"
+msgstr "I/O チャンネルの監視に失敗しました"
 
 #: ../src/common/sizer.cpp:3016 ../src/common/stockitem.cpp:196
 msgid "Save"
@@ -3257,7 +3253,7 @@ msgstr "保存しない"
 
 #: ../src/common/socket.cpp:850
 msgid "Cannot initialize sockets"
-msgstr "socket を初期化できません"
+msgstr "ソケットを初期化できません"
 
 #: ../src/common/stockitem.cpp:128
 #, fuzzy
@@ -3819,7 +3815,7 @@ msgstr "縮小(&O)"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Show about dialog"
-msgstr "詳細ダイアログを表示します。"
+msgstr "情報ダイアログを表示します"
 
 #: ../src/common/stockitem.cpp:264
 msgid "Copy selection"
@@ -3941,7 +3937,7 @@ msgstr "バッファー '%s' をディスクに書き出すことができませ
 
 #: ../src/common/time.cpp:209
 msgid "Failed to get the local system time"
-msgstr "ローカルのシステム時刻を取得できませんでした。"
+msgstr "ローカルのシステム時刻を取得できませんでした"
 
 #: ../src/common/time.cpp:278
 msgid "wxGetTimeOfDay failed."
@@ -4038,7 +4034,7 @@ msgstr ""
 
 #: ../src/common/wincmn.cpp:2111
 msgid "Could not transfer data to window"
-msgstr "ウィンドウへデータを転送できませんでした。"
+msgstr "ウィンドウへデータを転送できませんでした"
 
 #: ../src/common/windowid.cpp:237
 msgid "Out of window IDs.  Recommend shutting down application."
@@ -4093,12 +4089,12 @@ msgstr "wxEvtHandler ではないオブジェクトクラスがイベントソ�
 #: ../src/common/xtistrm.cpp:315 ../src/common/xtixml.cpp:347
 #: ../src/common/xtixml.cpp:500
 msgid "Type must have enum - long conversion"
-msgstr "型は列挙からlongへの変換が可能でなくてはなりません。"
+msgstr "型は列挙からlongへの変換が可能でなくてはなりません"
 
 #: ../src/common/xtistrm.cpp:402 ../src/common/xtistrm.cpp:417
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
 msgstr ""
-"Null または不正なオブジェクト識別子が GetObjectClassInfo に渡されました。"
+"Null または不正なオブジェクト識別子が GetObjectClassInfo に渡されました"
 
 #: ../src/common/xtistrm.cpp:407
 msgid "Unknown Object passed to GetObjectClassInfo"
@@ -4111,7 +4107,7 @@ msgstr "登録済みのオブジェクトが SetObjectClassInfo に渡されま�
 #: ../src/common/xtistrm.cpp:432
 msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
 msgstr ""
-"Null または不正なオブジェクト識別子が HasObjectClassInfo に渡されました。"
+"Null または不正なオブジェクト識別子が HasObjectClassInfo に渡されました"
 
 #: ../src/common/xtistrm.cpp:462
 msgid "Passing a already registered object to SetObject"
@@ -4136,7 +4132,7 @@ msgstr "オブジェクトは XML テキストノードを持つことができ�
 
 #: ../src/common/xtixml.cpp:260
 msgid "Objects must have an id attribute"
-msgstr "オブジェクトには id 属性が必須です。"
+msgstr "オブジェクトには id 属性が必須です"
 
 #: ../src/common/xtixml.cpp:269
 #, c-format
@@ -4178,7 +4174,7 @@ msgstr "不完全なzipファイルです"
 
 #: ../src/common/zipstrm.cpp:1733
 msgid "can't find central directory in zip"
-msgstr "zip内にセントラルディレクトリー部が見つかりません。"
+msgstr "zip内にセントラルディレクトリー部が見つかりません"
 
 #: ../src/common/zipstrm.cpp:1822
 msgid "error reading zip central directory"
@@ -4186,7 +4182,7 @@ msgstr "zipのセントラルディレクトリーを読み取り中にエラー
 
 #: ../src/common/zipstrm.cpp:1926
 msgid "error reading zip local header"
-msgstr "zipのローカルヘッダーを読み取り中にエラーを検出しました。"
+msgstr "zipのローカルヘッダーを読み取り中にエラーを検出しました"
 
 #: ../src/common/zipstrm.cpp:1974
 msgid "bad zipfile offset to entry"
@@ -4260,7 +4256,7 @@ msgstr "'%d' 型のイメージハンドラは定義されていません。"
 
 #: ../src/dfb/evtloop.cpp:99
 msgid "Failed to read event from DirectFB pipe"
-msgstr "DirectFB パイプからのイベント読み取りに失敗しました。"
+msgstr "DirectFB パイプからのイベント読み取りに失敗しました"
 
 #: ../src/dfb/evtloop.cpp:171
 msgid "Failed to switch DirectFB pipe to non-blocking mode"
@@ -4288,19 +4284,19 @@ msgstr "DirectFB エラー %d が発生しました。"
 
 #: ../src/generic/aboutdlgg.cpp:67
 msgid "Developed by "
-msgstr "開発 : "
+msgstr "開発担当 "
 
 #: ../src/generic/aboutdlgg.cpp:70
 msgid "Documentation by "
-msgstr "説明書 : "
+msgstr "ドキュメント担当 "
 
 #: ../src/generic/aboutdlgg.cpp:73
 msgid "Graphics art by "
-msgstr "デザイナー"
+msgstr "デザイン担当 "
 
 #: ../src/generic/aboutdlgg.cpp:76
 msgid "Translations by "
-msgstr "翻訳 : "
+msgstr "翻訳担当 "
 
 #: ../src/generic/aboutdlgg.cpp:123 ../src/osx/cocoa/aboutdlg.mm:83
 msgid "Version "
@@ -4313,7 +4309,7 @@ msgstr "%s について"
 
 #: ../src/generic/aboutdlgg.cpp:167
 msgid "License"
-msgstr "許諾"
+msgstr "ライセンス"
 
 #: ../src/generic/aboutdlgg.cpp:170
 msgid "Developers"
@@ -4321,11 +4317,11 @@ msgstr "開発者"
 
 #: ../src/generic/aboutdlgg.cpp:174
 msgid "Documentation writers"
-msgstr "説明書の著者"
+msgstr "ドキュメントの著者"
 
 #: ../src/generic/aboutdlgg.cpp:178
 msgid "Artists"
-msgstr "デザイン"
+msgstr "デザイナー"
 
 #: ../src/generic/aboutdlgg.cpp:182
 msgid "Translators"
@@ -4351,20 +4347,19 @@ msgstr "色を選んでください"
 
 #: ../src/generic/colrdlgg.cpp:358
 msgid "Red:"
-msgstr ""
+msgstr "赤:"
 
 #: ../src/generic/colrdlgg.cpp:361
-#, fuzzy
 msgid "Green:"
-msgstr "MacGreek"
+msgstr "緑:"
 
 #: ../src/generic/colrdlgg.cpp:364
 msgid "Blue:"
-msgstr ""
+msgstr "青:"
 
 #: ../src/generic/colrdlgg.cpp:373
 msgid "Opacity:"
-msgstr ""
+msgstr "不透明度:"
 
 #: ../src/generic/colrdlgg.cpp:385
 msgid "Add to custom colours"
@@ -4959,20 +4954,20 @@ msgstr ""
 
 #: ../src/generic/logg.cpp:1013
 msgid "Question"
-msgstr "お尋ねします"
+msgstr "確認"
 
 #: ../src/generic/logg.cpp:1027
 msgid "invalid message box return value"
-msgstr "メッセージボックスの戻り値は不正なものになります。"
+msgstr "メッセージボックスの戻り値が不正です"
 
 #: ../src/generic/notifmsgg.cpp:129
 msgid "Notice"
 msgstr "お知らせ"
 
 #: ../src/generic/preferencesg.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "設定 (&P)"
+msgstr "%s の設定"
 
 #: ../src/generic/printps.cpp:143
 msgid "Printing..."
@@ -5125,15 +5120,15 @@ msgstr "検索"
 
 #: ../src/generic/tabg.cpp:1027
 msgid "Could not find tab for id"
-msgstr "識別子に対応したタブが見つかりませんでした。"
+msgstr "識別子に対応したタブが見つかりませんでした"
 
 #: ../src/generic/tipdlg.cpp:137
 msgid "Tips not available, sorry!"
-msgstr "チップが使えません、ごめんね!"
+msgstr "ヒントは利用できません、申し訳ありません。"
 
 #: ../src/generic/tipdlg.cpp:198
 msgid "Tip of the Day"
-msgstr "今日のチップ"
+msgstr "今日のヒント"
 
 #: ../src/generic/tipdlg.cpp:208
 msgid "Did you know..."
@@ -5141,11 +5136,11 @@ msgstr "ご存じですか?"
 
 #: ../src/generic/tipdlg.cpp:233
 msgid "&Show tips at startup"
-msgstr "チップを起動時に表示 (&S)"
+msgstr "ヒントを起動時に表示 (&S)"
 
 #: ../src/generic/tipdlg.cpp:237
 msgid "&Next Tip"
-msgstr "次のチップ (&N)"
+msgstr "次のヒント (&N)"
 
 #: ../src/generic/wizard.cpp:431
 msgid "&Next >"
@@ -5161,7 +5156,14 @@ msgstr "< 戻る (&B)"
 
 #: ../src/gtk/aboutdlg.cpp:204
 msgid "translator-credits"
-msgstr "翻訳者-謝辞"
+msgstr ""
+"James Bishop\n"
+"Hiroshi Saito\n"
+"Taishin Kin\n"
+"かばだんなさん\n"
+"kaba\n"
+"Suzumizaki-Kimitaka(鈴見咲君高)\n"
+"Ryo Nakano"
 
 #: ../src/gtk/app.cpp:468
 msgid ""
@@ -5461,7 +5463,7 @@ msgstr "検索中..."
 
 #: ../src/html/helpwnd.cpp:850
 msgid "No matching page found yet"
-msgstr "一致するページがまだありません。"
+msgstr "一致するページがまだありません"
 
 #: ../src/html/helpwnd.cpp:867
 #, c-format
@@ -5660,15 +5662,15 @@ msgstr "クリップボードデータを設定できませんでした。"
 
 #: ../src/msw/clipbrd.cpp:610
 msgid "Failed to put data on the clipboard"
-msgstr "データをクリップボードに置けませんでした。"
+msgstr "データをクリップボードに置けませんでした"
 
 #: ../src/msw/clipbrd.cpp:731
 msgid "Failed to get data from the clipboard"
-msgstr "クリップボードからデータを取得できませんでした。"
+msgstr "クリップボードからデータを取得できませんでした"
 
 #: ../src/msw/clipbrd.cpp:768
 msgid "Failed to retrieve the supported clipboard formats"
-msgstr "対応しているクリップボードの様式を取得できませんでした。"
+msgstr "対応しているクリップボードの様式を取得できませんでした"
 
 #: ../src/msw/colordlg.cpp:229
 #, c-format
@@ -5700,19 +5702,19 @@ msgstr "DDE の poke 要求が失敗しました"
 
 #: ../src/msw/dde.cpp:674
 msgid "Failed to establish an advise loop with DDE server"
-msgstr "DDE サーバーとのアドバイスループを確立できませんでした。"
+msgstr "DDE サーバーとのアドバイスループを確立できませんでした"
 
 #: ../src/msw/dde.cpp:693
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr "DDE サーバ他とのアドバイスループを終了できませんでした。"
+msgstr "DDE サーバーとのアドバイスループを終了できませんでした"
 
 #: ../src/msw/dde.cpp:768
 msgid "Failed to send DDE advise notification"
-msgstr "DDE アドバイス通知を送信できませんでした。"
+msgstr "DDE アドバイス通知を送信できませんでした"
 
 #: ../src/msw/dde.cpp:1085
 msgid "Failed to create DDE string"
-msgstr "DDE文字列を作成できませんでした。"
+msgstr "DDE文字列を作成できませんでした"
 
 #: ../src/msw/dde.cpp:1131
 msgid "no DDE error."
@@ -5841,7 +5843,7 @@ msgstr ""
 
 #: ../src/msw/dialup.cpp:438
 msgid "Failed to retrieve text of RAS error message"
-msgstr "RAS エラーメッセージのテキストを取得できませんでした。"
+msgstr "RAS エラーメッセージのテキストを取得できませんでした"
 
 #: ../src/msw/dialup.cpp:441
 #, c-format
@@ -5890,7 +5892,7 @@ msgstr "住所録の位置を特定できません"
 #: ../src/msw/dialup.cpp:828
 #, c-format
 msgid "Failed to initiate dialup connection: %s"
-msgstr "ダイヤルアップ接続の初期化に失敗しました: %s "
+msgstr "ダイヤルアップ接続の初期化に失敗しました: %s"
 
 #: ../src/msw/dialup.cpp:898
 msgid "Cannot hang up - no active dialup connection."
@@ -5994,7 +5996,7 @@ msgstr "タイマーを作成できませんでした"
 
 #: ../src/msw/glcanvas.cpp:1312
 msgid "Failed to initialize OpenGL"
-msgstr "OpenGLを初期化できませんでした。"
+msgstr "OpenGLを初期化できませんでした"
 
 #: ../src/msw/graphicsd2d.cpp:605
 msgid "Could not register custom DirectWrite font loader."
@@ -6182,7 +6184,7 @@ msgstr "レジストリーの値を '%s' から '%s' に改名できませんで
 #: ../src/msw/registry.cpp:573
 #, c-format
 msgid "Can't copy values of unsupported type %d."
-msgstr "未対応型 %d の値はコピーできません"
+msgstr "未対応型 %d の値はコピーできません。"
 
 #: ../src/msw/registry.cpp:584
 #, c-format
@@ -6335,7 +6337,7 @@ msgstr "スレッド %x のリジュームができません"
 
 #: ../src/msw/thread.cpp:929
 msgid "Couldn't get the current thread pointer"
-msgstr "現在のスレッドを示すポインタを取得できませんでした。"
+msgstr "現在のスレッドを示すポインタを取得できませんでした"
 
 #: ../src/msw/thread.cpp:1332
 msgid ""
@@ -6387,16 +6389,16 @@ msgstr ", 64ビットエディション"
 
 #: ../src/msw/utilsexc.cpp:225
 msgid "Failed to create an anonymous pipe"
-msgstr "匿名パイプを作成できませんでした。"
+msgstr "匿名パイプを作成できませんでした"
 
 #: ../src/msw/utilsexc.cpp:698
 msgid "Failed to redirect the child process IO"
-msgstr "子プロセスの入出力をリダイレクトできませんでした。"
+msgstr "子プロセスの入出力をリダイレクトできませんでした"
 
 #: ../src/msw/utilsexc.cpp:871
 #, c-format
 msgid "Execution of command '%s' failed"
-msgstr "コマンド '%s' を実行できませんでした。"
+msgstr "コマンド '%s' を実行できませんでした"
 
 #: ../src/msw/volume.cpp:333
 msgid "Failed to load mpr.dll."
@@ -6652,7 +6654,7 @@ msgstr "列の記述を初期化できませんでした。"
 #. TRANSLATORS: Label of font point size
 #: ../src/propgrid/advprops.cpp:571
 msgid "Point Size"
-msgstr "大きさ(ポイント):"
+msgstr "大きさ(ポイント)"
 
 #. TRANSLATORS: Label of font face name
 #: ../src/propgrid/advprops.cpp:581
@@ -8016,7 +8018,7 @@ msgstr "下線 (&U):"
 #: ../src/richtext/richtextfontpage.cpp:239
 #: ../src/richtext/richtextfontpage.cpp:241
 msgid "Select underlining or no underlining."
-msgstr "下線を付けるか付けないかを選んでください"
+msgstr "下線を付けるか付けないかを選んでください。"
 
 #: ../src/richtext/richtextfontpage.cpp:249
 msgid "&Colour:"
@@ -8893,7 +8895,7 @@ msgstr "連番の初期化を指示する場合にチェックしてください
 
 #: ../src/richtext/richtextstyledlg.cpp:602
 msgid "Enter a character style name"
-msgstr "文字スタイル名を入力してください。"
+msgstr "文字スタイル名を入力してください"
 
 #: ../src/richtext/richtextstyledlg.cpp:602
 #: ../src/richtext/richtextstyledlg.cpp:607
@@ -8918,7 +8920,7 @@ msgstr "その名前はすでに使われています。他の名前を選んで
 
 #: ../src/richtext/richtextstyledlg.cpp:650
 msgid "Enter a paragraph style name"
-msgstr "段落スタイル名を指定してください。"
+msgstr "段落スタイル名を指定してください"
 
 #: ../src/richtext/richtextstyledlg.cpp:778
 #, c-format
@@ -8931,11 +8933,11 @@ msgstr "スタイルの削除"
 
 #: ../src/richtext/richtextstyledlg.cpp:816
 msgid "Enter a list style name"
-msgstr "リストスタイル名を入力してください。"
+msgstr "リストスタイル名を入力してください"
 
 #: ../src/richtext/richtextstyledlg.cpp:889
 msgid "Enter a new style name"
-msgstr "新しいスタイル名を入力してください。"
+msgstr "新しいスタイル名を入力してください"
 
 #: ../src/richtext/richtextstyledlg.cpp:930
 #, fuzzy
@@ -9114,7 +9116,7 @@ msgstr "Alt+"
 
 #: ../src/unix/appunix.cpp:179
 msgid "Failed to install signal handler"
-msgstr "シグナルハンドラーのインストールに失敗しました。"
+msgstr "シグナルハンドラーのインストールに失敗しました"
 
 #: ../src/unix/dialup.cpp:352
 msgid "Already dialling ISP."
@@ -9150,7 +9152,7 @@ msgstr "記述子 %d の変更が epoll 記述子 %d 内でできませんでし
 #: ../src/unix/epolldispatcher.cpp:155
 #, c-format
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
-msgstr "記述子 %d を epoll記述子 %d から削除できませんでした。"
+msgstr "記述子 %d を epoll記述子 %d から削除できませんでした"
 
 #: ../src/unix/epolldispatcher.cpp:213
 #, c-format
@@ -9163,7 +9165,7 @@ msgstr "inotify 実体を作成できません"
 
 #: ../src/unix/fswatcher_inotify.cpp:94
 msgid "Unable to close inotify instance"
-msgstr "inotify 実体を閉じることができませんでした。"
+msgstr "inotify 実体を閉じることができませんでした"
 
 #: ../src/unix/fswatcher_inotify.cpp:106
 msgid "Unable to add inotify watch"
@@ -9273,7 +9275,7 @@ msgstr "無効なロックファイル '%s' を削除しました。"
 #: ../src/unix/snglinst.cpp:309
 #, c-format
 msgid "Invalid lock file '%s'."
-msgstr "不正なロックファイルです: '%s'"
+msgstr "不正なロックファイル'%s'です。"
 
 #: ../src/unix/snglinst.cpp:325
 #, c-format
@@ -9358,7 +9360,7 @@ msgstr "スレッドモジュールの初期化に失敗: スレッドキーを�
 
 #: ../src/unix/utilsunx.cpp:336
 msgid "Impossible to get child process input"
-msgstr "子プロセスの入力は取得不可能です。"
+msgstr "子プロセスの入力は取得不可能です"
 
 #: ../src/unix/utilsunx.cpp:386
 #, fuzzy
@@ -9381,7 +9383,7 @@ msgstr "スレッド優先度を %d に設定できませんでした。"
 
 #: ../src/unix/utilsunx.cpp:708
 msgid "Failed to redirect child process input/output"
-msgstr "子プロセスの入出力をリダイレクトできませんでした。"
+msgstr "子プロセスの入出力をリダイレクトできませんでした"
 
 #: ../src/unix/utilsunx.cpp:812
 msgid "Failed to set up non-blocking pipe, the program might hang."
@@ -9405,7 +9407,7 @@ msgstr "起動パイプをnon-blockingモードに切り替えることができ
 
 #: ../src/unix/wakeuppipe.cpp:117
 msgid "Failed to read from wake-up pipe"
-msgstr "起動パイプからの読み取りに失敗しました。"
+msgstr "起動パイプからの読み取りに失敗しました"
 
 #: ../src/x11/app.cpp:126
 #, c-format
