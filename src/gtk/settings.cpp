@@ -229,8 +229,12 @@ proxy_g_signal(GDBusProxy*, const char*, const char* signal_name, GVariant* para
             for (int i = wxSYS_COLOUR_MAX; i--;)
                 gs_systemColorCache[i].UnRef();
 
-            for (auto* win: wxTopLevelWindows)
+            for ( wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
+                  node;
+                  node = node->GetNext() )
             {
+                wxWindow* const win = node->GetData();
+
                 wxSysColourChangedEvent event;
                 event.SetEventObject(win);
                 win->HandleWindowEvent(event);
