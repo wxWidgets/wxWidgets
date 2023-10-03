@@ -597,7 +597,7 @@ void wxBitmap::QtBlendMaskWithAlpha()
     // alpha channel, if it has any. Notice that the bitmap can still be
     // converted to wxImage, but without mask information.
 
-    if ( IsOk() && HasAlpha() && M_MASK && M_MASK->GetHandle() )
+    if ( IsOk() && M_MASK && M_MASK->GetHandle() )
     {
         AllocExclusive();
         M_PIXDATA.setMask(*M_MASK->GetHandle());
