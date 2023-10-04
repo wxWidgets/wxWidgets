@@ -87,35 +87,59 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         return false;
     }
 
+    // Small helper ensuring that we destroy sm_abortWindow if it was created.
+    class AbortWindowCloser
+    {
+    public:
+        AbortWindowCloser() = default;
+
+        void Initialize(wxWindow* win)
+        {
+            wxPrinterBase::sm_abortWindow = win;
+            win->Show();
+            wxSafeYield();
+        }
+
+        ~AbortWindowCloser()
+        {
+            if ( wxPrinterBase::sm_abortWindow )
+            {
+                wxPrinterBase::sm_abortWindow->Show(false);
+                wxDELETE(wxPrinterBase::sm_abortWindow);
+            }
+        }
+
+        AbortWindowCloser(const AbortWindowCloser&) = delete;
+        AbortWindowCloser& operator=(const AbortWindowCloser&) = delete;
+    } abortWindowCloser;
+
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
     if (m_printDialogData.GetMaxPage() < 1)
         m_printDialogData.SetMaxPage(9999);
 
     // Create a suitable device context
-    wxPrinterDC *dc wxDUMMY_INITIALIZE(nullptr);
+    std::unique_ptr<wxPrinterDC> dc;
     if (prompt)
     {
-        dc = wxDynamicCast(PrintDialog(parent), wxPrinterDC);
+        dc.reset(wxDynamicCast(PrintDialog(parent), wxPrinterDC));
         if (!dc)
             return false;
     }
     else
     {
-        dc = new wxPrinterDC(m_printDialogData.GetPrintData());
+        dc.reset(new wxPrinterDC(m_printDialogData.GetPrintData()));
     }
 
     // May have pressed cancel.
     if (!dc || !dc->IsOk())
     {
-        if (dc) delete dc;
         return false;
     }
 
     // Set printout parameters
     if (!printout->SetUp(*dc))
     {
-        delete dc;
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
@@ -151,12 +175,10 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         wxLogDebug(wxT("Could not create an abort dialog."));
         sm_lastError = wxPRINTER_ERROR;
 
-        delete dc;
         return false;
     }
-    sm_abortWindow = win;
-    sm_abortWindow->Show();
-    wxSafeYield();
+
+    abortWindowCloser.Initialize(win);
 
     printout->OnBeginPrinting();
 
@@ -232,14 +254,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     }
 
     printout->OnEndPrinting();
-
-    if (sm_abortWindow)
-    {
-        sm_abortWindow->Show(false);
-        wxDELETE(sm_abortWindow);
-    }
-
-    delete dc;
 
     return sm_lastError == wxPRINTER_NO_ERROR;
 }
@@ -434,12 +448,24 @@ BOOL CALLBACK wxAbortProc(HDC WXUNUSED(hdc), int WXUNUSED(error))
         return(TRUE);
 
     /* Process messages intended for the abort dialog box */
+    const HWND hwnd = GetHwndOf(wxPrinterBase::sm_abortWindow);
 
     while (!wxPrinterBase::sm_abortIt && ::PeekMessage(&msg, 0, 0, 0, TRUE))
-        if (!IsDialogMessage((HWND) wxPrinterBase::sm_abortWindow->GetHWND(), &msg)) {
+    {
+        // Apparently handling the message may, somehow, result in
+        // sm_abortWindow being destroyed, so guard against this happening.
+        if (!wxPrinterBase::sm_abortWindow)
+        {
+            wxLogDebug(wxS("Print abort dialog unexpected disappeared."));
+            return TRUE;
+        }
+
+        if (!IsDialogMessage(hwnd, &msg))
+        {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+    }
 
     /* bAbort is TRUE (return is FALSE) if the user has aborted */
 
