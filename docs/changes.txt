@@ -249,6 +249,7 @@ All:
 - Use /etc/os-release if lsb_release isn't available (Scott Talbert, #23712).
 - Add wxUILocale::GetMonthName() and GetWeekDayName() (Ulrich Telle, #23556).
 - Support WAV files with LIST chunks under Unix (A. Jiang, #23859).
+- Fix CMake build if wxWidgets directory contained "++" (Maarten Bent, #22738).
 
 All (GUI):
 
