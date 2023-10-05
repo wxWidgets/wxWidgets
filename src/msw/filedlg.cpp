@@ -111,6 +111,33 @@ DWORD gs_oldExceptionPolicyFlags = 0;
 bool gs_changedPolicy = false;
 
 /*
+    This function removes any remaining mouse messages from the input queue in
+    order to prevent them from being passed to controls positioned underneath
+    the wxFileDialog after it has been destroyed, see #10924.
+*/
+void DrainMouseMessages()
+{
+    // Note that we have to use this struct as PeekMessage() wouldn't remove
+    // the messages from the input queue, even with PM_REMOVE, if we pass it a
+    // null pointer.
+    MSG msg;
+
+    // This loop is used just to ensure that we don't loop indefinitely in case
+    // there is something generating an endless stream of mouse messages in the
+    // system (1000 is an arbitrary but "sufficiently large" number), the real
+    // loop termination condition is inside it.
+    for ( int i = 0; i < 1000; ++i )
+    {
+        if ( !::PeekMessage(&msg, nullptr, WM_MOUSEFIRST, WM_MOUSELAST,
+                            PM_REMOVE | PM_QS_INPUT) )
+        {
+            // No more mouse messages left.
+            break;
+        }
+    }
+}
+
+/*
 Since Windows 7 by default (callback) exceptions aren't swallowed anymore
 with native x64 applications. Exceptions can occur in a file dialog when
 using the hook procedure in combination with third-party utilities.
@@ -1476,6 +1503,8 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
 
+    DrainMouseMessages();
+
     // When using a hook, our HWND was set from MSWOnInitDialogHook() called
     // above, but it's not valid any longer once the dialog was destroyed, so
     // reset it now.
@@ -1683,6 +1712,9 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
 
     // Finally do show the dialog.
     const int rc = fileDialog.Show(hWndParent, options, &m_fileNames, &m_path);
+
+    DrainMouseMessages();
+
     if ( rc == wxID_OK )
     {
         // As with the common dialog, the index is 1-based here, but don't make
