@@ -111,6 +111,21 @@ DWORD gs_oldExceptionPolicyFlags = 0;
 bool gs_changedPolicy = false;
 
 /*
+Fixes issue #10924
+Removes all mouse messages from the input queue. Prevents bogus mouse
+messages from being passed to controls positioned underneath the
+FileDialog after it has been destroyed.
+*/
+void DrainMouseMessages()
+{
+    MSG msg;
+    for(int i = 0;
+        i < 1000 && // avoid risk of infinite loop
+        PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE|PM_QS_INPUT); // returns 1 if messages are found
+        ++i) { }
+}
+
+/*
 Since Windows 7 by default (callback) exceptions aren't swallowed anymore
 with native x64 applications. Exceptions can occur in a file dialog when
 using the hook procedure in combination with third-party utilities.
@@ -1475,8 +1490,7 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
 
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
-    MSG msg;
-    while(PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE|PM_QS_INPUT)) { } // fixes issue #10924
+    DrainMouseMessages();
 
     // When using a hook, our HWND was set from MSWOnInitDialogHook() called
     // above, but it's not valid any longer once the dialog was destroyed, so
@@ -1685,8 +1699,7 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
 
     // Finally do show the dialog.
     const int rc = fileDialog.Show(hWndParent, options, &m_fileNames, &m_path);
-    MSG msg;
-    while(PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE|PM_QS_INPUT)) { } // fixes issue #10924
+    DrainMouseMessages();
     if ( rc == wxID_OK )
     {
         // As with the common dialog, the index is 1-based here, but don't make
