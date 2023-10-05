@@ -1475,6 +1475,8 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
 
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
+    MSG msg;
+    while(PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE|PM_QS_INPUT)) { } // fixes issue #10924
 
     // When using a hook, our HWND was set from MSWOnInitDialogHook() called
     // above, but it's not valid any longer once the dialog was destroyed, so
@@ -1683,6 +1685,8 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
 
     // Finally do show the dialog.
     const int rc = fileDialog.Show(hWndParent, options, &m_fileNames, &m_path);
+    MSG msg;
+    while(PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE|PM_QS_INPUT)) { } // fixes issue #10924
     if ( rc == wxID_OK )
     {
         // As with the common dialog, the index is 1-based here, but don't make
