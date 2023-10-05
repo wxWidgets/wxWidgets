@@ -133,8 +133,8 @@ TEST_CASE_METHOD(WindowTestCase, "Window::FocusEvent", "[window]")
 
     wxButton* button = new wxButton(wxTheApp->GetTopWindow(), wxID_ANY);
 
-    wxYield();
     button->SetFocus();
+    wxYield();
 
     CHECK( killfocus.GetCount() == 1 );
     CHECK(!m_window->HasFocus());
