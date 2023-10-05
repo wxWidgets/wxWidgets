@@ -1923,6 +1923,20 @@ public:
     virtual void SetValue( int /*row*/, int /*col*/, const wxString& /*value*/ ) override { }
 };
 
+// Under wxQt, we get spurious paint events if we call Refresh+Update.
+// So just call Refresh+wxYield which seems to fix the failures in the
+// test below.
+inline void UpdateGrid(wxGrid* grid)
+{
+#ifndef __WXQT__
+    grid->Refresh();
+    grid->Update();
+#else
+    grid->Refresh();
+    wxYield();
+#endif
+}
+
 } // namespace SetTable_ClearAttrCache
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SetTable_ClearAttrCache", "[grid]")
@@ -1941,15 +1955,13 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SetTable_ClearAttrCache", "[grid]")
 
     drawCount1 = drawCount2 = 0;
     m_grid->SetTable(&table2);
-    m_grid->Refresh();
-    m_grid->Update();
+    UpdateGrid(m_grid);
     CHECK(drawCount1 == 0);
     CHECK(drawCount2 == 2*2);
 
     drawCount1 = drawCount2 = 0;
     m_grid->SetTable(&table1);
-    m_grid->Refresh();
-    m_grid->Update();
+    UpdateGrid(m_grid);
     CHECK(drawCount1 == 1*1);
     CHECK(drawCount2 == 0);
 
