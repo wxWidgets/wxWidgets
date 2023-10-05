@@ -158,8 +158,15 @@ public:
     // Returns 'true' if it was successfully loaded
     bool AddCatalog(const wxString& domain);
     bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Remove unused msgIdCharset argument")
     bool AddCatalog(const wxString& domain,
-                    wxLanguage msgIdLanguage, const wxString& msgIdCharset);
+                    wxLanguage msgIdLanguage, const wxString& WXUNUSED(msgIdCharset))
+    {
+        return AddCatalog(domain, msgIdLanguage);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     // check if the given locale is provided by OS and C run time
     static bool IsAvailable(int lang);
