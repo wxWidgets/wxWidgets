@@ -1938,13 +1938,16 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
 {
     if ( InReportView() )
     {
-        size_t visibleFrom, visibleTo;
-        GetVisibleLinesRange(&visibleFrom, &visibleTo);
+        // Note that we don't compare lineFrom with the last visible line
+        // because we refresh the entire rectangle below it anyhow, so it
+        // doesn't matter if it's bigger than it. And we must still refresh
+        // even if lineFrom is invalid because it may have been (just) deleted
+        // when we're called from DeleteItem().
+        size_t visibleFrom;
+        GetVisibleLinesRange(&visibleFrom, nullptr);
 
         if ( lineFrom < visibleFrom )
             lineFrom = visibleFrom;
-        else if ( lineFrom > visibleTo )
-            return;
 
         wxRect rect;
         rect.x = 0;
