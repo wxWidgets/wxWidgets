@@ -774,13 +774,11 @@ public:
 /**
     @class wxLogInterposerTemp
 
-    A special version of wxLogChain which uses itself as the new log target.
-    It forwards log messages to the previously installed one in addition to
-    processing them itself. Unlike wxLogInterposer, it doesn't delete the old
-    target which means it can be used to temporarily redirect log output.
+    Legacy class which should not be used any longer.
 
-    As per wxLogInterposer, this class must be derived from to implement
-    wxLog::DoLog and/or wxLog::DoLogString methods.
+    @deprecated
+    This class is only preserved for compatibility, but using it can result in
+    unexpected behaviour and memory leaks.
 
     @library{wxbase}
     @category{logging}
