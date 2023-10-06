@@ -306,6 +306,7 @@ wxGTK:
 - Fix wxPreferencesEditor size under Wayland (#23924).
 - Fix not showing text in wxBusyInfo (#23936).
 - Make wxRB_SINGLE really work (Stefan Hansson, #23652).
+- Fix (not) refreshing virtual wxListCtrl after deleting its last item.
 
 wxMSW:
 
