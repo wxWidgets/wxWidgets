@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_FWD_CORE wxListBoxBase;
 
 // ----------------------------------------------------------------------------
-// constants that are no longer used, here for compatability
+// constants that are no longer used, here for compatibility
 // ----------------------------------------------------------------------------
 
 #define wxCHOICE_HEIGHT 200
