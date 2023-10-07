@@ -1,56 +1,48 @@
-February 08, 2023 -- The wxWidgets team is pleased to announce a new
+October 10, 2023 -- The wxWidgets team is pleased to announce a new
 stable release of our open source framework for the development of native
 cross-platform applications in C++.
 
-wxWidgets 3.2.2 is part of the API and ABI-stable 3.2.x release series and is
+wxWidgets 3.2.3 is part of the API and ABI-stable 3.2.x release series and is
 now available from
 
     https://www.wxwidgets.org/downloads/
 
 and
 
-    https://github.com/wxWidgets/wxWidgets/releases/v3.2.2
+    https://github.com/wxWidgets/wxWidgets/releases/v3.2.3
 
-This release comes only a few months after the previous 3.2.1, but contains
-an important number of bug fixes and enhancements, further improving high DPI
-support, including:
+This release contains many important bug fixes, including fixing some
+regressions in the previous 3.2.x releases:
 
-- Better window resizing on DPI change in wxMSW.
-- Fix using native icons returned by wxArtProvider.
-- Fix menu items using custom font in high DPI.
-- High resolution icons support in wxGenericTreeCtrl and wxGenericListCtrl.
+- Fix some key codes when using non-US keyboard layout in wxGTK and
+  generate ket events for Command+Alt+Letter combination in wxOSX.
+- Fix wxTranslations::AddStdCatalog().
+- Fix setting Chinese and some other locales in wxOSX and setting
+  Ukrainian locale in wxMSW.
 
-and also improving locale-related code under Mac and Unix systems:
+In particular, a number of Wayland-specific bugs were fixed in wxGTK:
 
-- wxUILocale::UseDefault() works for locales using different language and
-  region under Mac and fails when used for unsupported locale under Unix.
-- New wxUILocale::GetSystemLocaleId() allows to retrieve such locales IDs.
-- wxUILocale::GetCurrent() works currently for "C" locale under Mac.
+- Fix possible crash when using IME.
+- Make hiding wxGLCanvas work and avoid catastrophically slowing down
+  the entire program when it is hidden.
+- Fix wxComboCtrl popup behaviour.
+- Fix showing popup menu without active event.
+- Fix wxPreferencesEditor size under Wayland.
 
-Some other user-visible enhancements made in this release:
+Last but not least, there are also some user-visible enhancements in
+this release:
 
-- Allow selecting and copying text in wxMessageDialog in wxGTK.
-- Improve size and behaviour of in-place editor in wxGenericTreeCtrl.
-- Fix sometimes missing overwrite prompt in "Save" file dialog in wxMSW.
-- Fix glitch in drawing wxStaticBox with a control as label in wxMSW.
+- Don't allow pasting characters forbidden by wxTextValidator.
+- Do allow entering temporary invalid value when using numeric validators.
+- Fix entering dates in wxGenericDatePicker in nb_NO and other locales
+  using names for the months in short date format.
+- Keep wxProgressDialog size unchanged when updating the message.
 
-There are also some important bug fixes:
 
-- Fix regression in saving TIFF images that could end up truncated.
-- Fix long standing bug in parsing wxHTTP responses.
-- Fix data race when processing events generated in a worker thread.
-- Avoid appending extraneous NUL bytes to wxTextDataObject text in wxMSW.
-- Fix handling of fonts with fractional sizes in wxOSX.
-- Fix resizing wxGLCanvas with EGL and Wayland in wxGTK.
-- Fix display artefacts when using AUI without compositor under X11.
-- Work around crashes when using wxTextCtrl with MinGW TDM 64.
-- Fix for a possible crash when handling menu events under Mac.
-- Third-party libraries have been updated to the latest versions.
+All in all, this release includes more than 200 fixes from almost 50
+contributors, please see the full change log for more details:
 
-All in all, this release includes ~150 fixes from 27 unique contributors,
-please see the full change log for more details:
-
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.2/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.3/docs/changes.txt
 
 This release is API and ABI-compatible with the previous 3.2.x, so
 the existing applications don't even need to be rebuilt to profit from all the

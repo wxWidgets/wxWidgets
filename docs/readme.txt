@@ -32,47 +32,34 @@ installation instructions.
 
 
 
-Changes since 3.2.1
+Changes since 3.2.2
 -------------------
 
-This release comes only a few months after the previous 3.2.1, but contains
-an important number of bug fixes and enhancements, further improving high DPI
-support, including:
+This release contains many important bug fixes, including for some
+regressions in the previous 3.2.x releases, as well as build system
+improvements and a few optimizations.
 
-- Better window resizing on DPI change in wxMSW.
-- Fix using native icons returned by wxArtProvider.
-- Fix menu items using custom font in high DPI.
-- High resolution icons support in wxGenericTreeCtrl and wxGenericListCtrl.
+Without listing all of them, areas with the most improvements were:
 
-and also improving locale-related code under Mac and Unix systems:
+- Internationalization support: fix setting Chinese and some other
+  locales in wxOSX and setting Ukrainian locale in wxMSW and fix loading
+  wxWidgets translations with wxTranslations::AddStdCatalog().
 
-- wxUILocale::UseDefault() works for locales using different language and
-  region under Mac and fails when used for unsupported locale under Unix.
-- New wxUILocale::GetSystemLocaleId() allows to retrieve such locales IDs.
-- wxUILocale::GetCurrent() works currently for "C" locale under Mac.
+- Wayland support in wxGTK and, in particular, OpenGL support under
+  Wayland: fix hiding wxGLCanvas and avoid catastrophically slowing
+  down the entire program when it is hidden; fix crash when using IME;
+  fixes to popup windows, menus and wxPreferencesEditor behaviour.
 
-Some other user-visible enhancements made in this release:
+- Validators and input: don't allow pasting characters forbidden by
+  wxTextValidator; do allow entering temporary invalid value when using
+  numeric validators. Also fix entering dates in wxGenericDatePicker in
+  nb_NO and other locales using months names in short date format.
 
-- Allow selecting and copying text in wxMessageDialog in wxGTK.
-- Improve size and behaviour of in-place editor in wxGenericTreeCtrl.
-- Fix sometimes missing overwrite prompt in "Save" file dialog in wxMSW.
-- Fix glitch in drawing wxStaticBox with a control as label in wxMSW.
+- Key event generation: more fixes for non-US keyboard layout in wxGTK
+  and also generate events for Command+Alt+Letter combination in wxOSX.
 
-There are also some important bug fixes:
-
-- Fix regression in saving TIFF images that could end up truncated.
-- Fix long standing bug in parsing wxHTTP responses.
-- Fix data race when processing events generated in a worker thread.
-- Avoid appending extraneous NUL bytes to wxTextDataObject text in wxMSW.
-- Fix handling of fonts with fractional sizes in wxOSX.
-- Fix resizing wxGLCanvas with EGL and Wayland in wxGTK.
-- Fix display artefacts when using AUI without compositor under X11.
-- Work around crashes when using wxTextCtrl with MinGW TDM 64.
-- Fix for a possible crash when handling menu events under Mac.
-- Third-party libraries have been updated to the latest versions.
-
-All in all, this release includes ~150 fixes from 27 unique contributors,
-please see the full change log for more details:
+All in all, this release includes more than 200 fixes from almost 50
+contributors, please see the full change log for more details:
 
 https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.2.3/docs/changes.txt
 
@@ -174,4 +161,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, February 2023
+The wxWidgets Team, October 2023
