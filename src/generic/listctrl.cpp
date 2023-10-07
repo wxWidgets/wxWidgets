@@ -1998,7 +1998,7 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
         // even if lineFrom is invalid because it may have been (just) deleted
         // when we're called from DeleteItem().
         size_t visibleFrom;
-        GetVisibleLinesRange(&visibleFrom, nullptr);
+        GetVisibleLinesRange(&visibleFrom, NULL);
 
         if ( lineFrom < visibleFrom )
             lineFrom = visibleFrom;
