@@ -20,8 +20,8 @@ class WXDLLIMPEXP_FWD_CORE wxListBoxBase;
 // constants that are no longer used, here for compatibility
 // ----------------------------------------------------------------------------
 
-#define wxCHOICE_HEIGHT 200
-#define wxCHOICE_WIDTH 150
+#define wxCHOICE_HEIGHT 150
+#define wxCHOICE_WIDTH 200
 
 #define wxCHOICEDLG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)
