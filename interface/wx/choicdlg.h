@@ -6,16 +6,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    Default width of the choice dialog.
-*/
-#define wxCHOICE_WIDTH 150
-
-/**
-    Default height of the choice dialog.
-*/
-#define wxCHOICE_HEIGHT 200
-
-/**
     Default style of the choice dialog.
 */
 #define wxCHOICEDLG_STYLE (wxDEFAULT_DIALOG_STYLE | wxOK | wxCANCEL | wxCENTRE | wxRESIZE_BORDER)
@@ -328,6 +318,8 @@ int wxGetSingleChoiceIndex(const wxString& message,
 
     If @c centre is @true, the message text (which may include new line
     characters) is centred; if @false, the message is left-justified.
+
+    Note that the @c width and @c height parameters are ignored for these functions.
 
     @header{wx/choicdlg.h}
 
