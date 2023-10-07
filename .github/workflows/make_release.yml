@@ -85,6 +85,7 @@ jobs:
       - name: Install Prerequisites
         run: |
             choco install -y --no-progress graphviz html-help-workshop
+            choco install -y doxygen.install --version=1.9.1
 
       - name: Create MSW Installer and Help File
         shell: cmd
@@ -92,7 +93,7 @@ jobs:
             md distrib\release
             md distrib\release\${{ inputs.version }}
             move wxWidgets-${{ inputs.version }}.zip distrib\release\${{ inputs.version }}
-            set "PATH=C:\Program Files (x86)\HTML Help Workshop;%PATH%"
+            set "PATH=C:\Program Files\doxygen\bin;C:\Program Files (x86)\HTML Help Workshop;%PATH%"
             build\tools\release.bat ${{ inputs.version }}
 
       # This doesn't really decrease the file size but .chm files can't be
