@@ -11,33 +11,28 @@ and
 
     https://github.com/wxWidgets/wxWidgets/releases/v3.2.3
 
-This release contains many important bug fixes, including fixing some
-regressions in the previous 3.2.x releases:
+This release contains many important bug fixes, including for some
+regressions in the previous 3.2.x releases, as well as build system
+improvements and a few optimizations.
 
-- Fix some key codes when using non-US keyboard layout in wxGTK and
-  generate ket events for Command+Alt+Letter combination in wxOSX.
-- Fix wxTranslations::AddStdCatalog().
-- Fix setting Chinese and some other locales in wxOSX and setting
-  Ukrainian locale in wxMSW.
+Without listing all of them, areas with the most improvements were:
 
-In particular, a number of Wayland-specific bugs were fixed in wxGTK:
+- Internationalization support: fix setting Chinese and some other
+  locales in wxOSX and setting Ukrainian locale in wxMSW and fix loading
+  wxWidgets translations with wxTranslations::AddStdCatalog().
 
-- Fix possible crash when using IME.
-- Make hiding wxGLCanvas work and avoid catastrophically slowing down
-  the entire program when it is hidden.
-- Fix wxComboCtrl popup behaviour.
-- Fix showing popup menu without active event.
-- Fix wxPreferencesEditor size under Wayland.
+- Wayland support in wxGTK and, in particular, OpenGL support under
+  Wayland: fix hiding wxGLCanvas and avoid catastrophically slowing
+  down the entire program when it is hidden; fix crash when using IME;
+  fixes to popup windows, menus and wxPreferencesEditor behaviour.
 
-Last but not least, there are also some user-visible enhancements in
-this release:
+- Validators and input: don't allow pasting characters forbidden by
+  wxTextValidator; do allow entering temporary invalid value when using
+  numeric validators. Also fix entering dates in wxGenericDatePicker in
+  nb_NO and other locales using months names in short date format.
 
-- Don't allow pasting characters forbidden by wxTextValidator.
-- Do allow entering temporary invalid value when using numeric validators.
-- Fix entering dates in wxGenericDatePicker in nb_NO and other locales
-  using names for the months in short date format.
-- Keep wxProgressDialog size unchanged when updating the message.
-
+- Key event generation: more fixes for non-US keyboard layout in wxGTK
+  and also generate events for Command+Alt+Letter combination in wxOSX.
 
 All in all, this release includes more than 200 fixes from almost 50
 contributors, please see the full change log for more details:
