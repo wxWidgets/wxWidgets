@@ -319,7 +319,9 @@ int wxGetSingleChoiceIndex(const wxString& message,
     If @c centre is @true, the message text (which may include new line
     characters) is centred; if @false, the message is left-justified.
 
-    Note that the @c width and @c height parameters are ignored for these functions.
+    Note that the @c width and @c height parameters are ignored.
+    To change the dialog's size, create a @c wxSingleChoiceDialog object instead
+    of calling @c wxGetSingleChoice() and change its size before presenting it.
 
     @header{wx/choicdlg.h}
 
