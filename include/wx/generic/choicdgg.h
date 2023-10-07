@@ -17,12 +17,14 @@
 class WXDLLIMPEXP_FWD_CORE wxListBoxBase;
 
 // ----------------------------------------------------------------------------
-// some (ugly...) constants
+// some constants
 // ----------------------------------------------------------------------------
 
+// These constants are no longer used and only remain here for compatibility.
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200
 
+// Default style for choice dialogs.
 #define wxCHOICEDLG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)
 
