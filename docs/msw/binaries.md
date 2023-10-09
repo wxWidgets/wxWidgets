@@ -11,7 +11,7 @@ We provide pre-built binary files for the following compilers:
   (corresponding to marketing product names of Microsoft Visual Studio 2008, 2010, 2012, 2013, 2015, 2017, 2019 and 2022 respectively). Please note that MSVC 14.x versions are ABI-compatible and the same set of binaries is used for all of them.
 * MinGW-w64 versions 7.3 and 8.1 (32-bit binaries use SJLJ exceptions, 64-bit ones use SEH, and all binaries use Win32 threads).
 * [TDM-GCC](https://jmeubank.github.io/tdm-gcc/) 10.3.0.
-* [MSYS2](https://www.msys2.org/) MinGW 12.2.0.
+* [MSYS2](https://www.msys2.org/) MinGW 12.2.0 and 13.2.0.
 
 Getting the files
 -----------------
