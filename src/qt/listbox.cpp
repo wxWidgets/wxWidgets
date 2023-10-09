@@ -315,7 +315,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
 
 int wxListBox::DoInsertOneItem(const wxString& text, unsigned int pos)
 {
-    QListWidgetItem* item = new QListWidgetItem();
+    QListWidgetItem* item = new wxQtListWidgetItem();
     item->setText(wxQtConvertString( text ));
     if ( m_hasCheckBoxes )
     {
