@@ -104,7 +104,7 @@ public:
 
     // retrieve a copy of our string - caller must SysFreeString() it later!
     wxDEPRECATED_MSG("use Copy() instead")
-    wxNODISCARD BSTR Get() const { return Copy(); }
+    BSTR Get() const { return Copy(); }
 private:
     // actual string
     BSTR m_bstrBuf;
