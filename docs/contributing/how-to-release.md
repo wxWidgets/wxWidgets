@@ -74,8 +74,10 @@ Commit the changes and tag the release using your GPG key:
 
     git tag -s -m 'Tag X.Y.Z release' vX.Y.Z
 
-   Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
-   instead of `X.Y.Z`.
+Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
+instead of `X.Y.Z`, but make sure to use just `vX.Y.Z` tag for the release
+when publishing it as the web site update script depends on being able to
+find the release with this tag.
 
 ## Creating Release On GitHub
 
