@@ -69,6 +69,10 @@ Here is the list of the files, for reference:
 * Update `docs/readme.txt`: version needs to be changed, content updated.
 * Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
 * Update `docs/changes.txt`: update the date on the release line.
+  For the development releases the list of changes is maintained in Git
+  notes as explained in that file itself. Replace these notes with the
+  actual changes following the instructions there (and don't forget to
+  restore them later).
 * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
 * Update the release announcement post in `docs/publicity/announce.txt`.
 * Update `docs/msw/binaries.md`: at least the version, but possibly also
@@ -173,8 +177,9 @@ and from the root directory run
 
         autoconf -B build/autoconf_prepend-include
 
-* Restore the description of the Git notes use and create a skeleton section
-  for the next release in `docs/changes.txt`.
+* Update `docs/changes.txt`: for the stable releases, just create a new section
+  for the next release. For the other ones, restore the description of the Git
+  notes use removed in the pre-release step.
 
 
 ## MSW Visual Studio Official Builds
