@@ -54,6 +54,10 @@ the micro version of this release. If this release represents a major
 or minor release, these changes will have to be performed manually at
 this point.
 
+Also review the version information in `build/bakefiles/version.bkl`: if any
+new APIs have been added in this release, the "current" and "age" fields must
+be incremented and "revision" reset to 0.
+
 Note that the best order depends on the release being prepared: for a
 development release, `docs/publicity/announce.txt` contains the list of the
 major changes since the last stable release and should be updated first, as
