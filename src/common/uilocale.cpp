@@ -520,7 +520,14 @@ const wxUILocale& wxUILocale::GetCurrent()
     // We initialize it on demand.
     if ( !ms_current.m_impl )
     {
-        ms_current = wxUILocale(wxUILocaleImpl::CreateStdC());
+        // Instantiate standard C locale (should never fail) ...
+        wxUILocaleImpl* impl = wxUILocaleImpl::CreateStdC();
+        if (impl)
+        {
+            // ... and Use() it
+            impl->Use();
+        }
+        ms_current = wxUILocale(impl);
     }
 
     return ms_current;

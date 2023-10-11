@@ -35,6 +35,14 @@
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
 
+// Helper function to retrieve a pointer to the NSLocale of the current wxUILocale
+static NSLocale* gs_nsloc = nullptr;
+
+void* wxGetCurrentNSLocale()
+{
+  return gs_nsloc;
+}
+
 // ----------------------------------------------------------------------------
 // wxLocaleIdent::GetName() implementation using Foundation
 // ----------------------------------------------------------------------------
@@ -168,6 +176,8 @@ wxUILocaleImplCF::Use()
 {
     // There is no way to start using a locale other than default, so there is
     // nothing to do here.
+    // However, make the associated NSLocale instance accessible for internal use
+    gs_nsloc = m_nsloc;
 }
 
 wxString

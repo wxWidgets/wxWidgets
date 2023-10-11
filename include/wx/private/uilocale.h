@@ -23,6 +23,11 @@ const wxLanguageInfos& wxGetLanguageInfos();
 // Function returning hard-coded values for the "C" locale.
 wxString wxGetStdCLocaleInfo(wxLocaleInfo index, wxLocaleCategory cat);
 
+#ifdef __WXOSX_COCOA__
+// Function returning a pointer to the current NSLocale
+WXDLLIMPEXP_BASE void* wxGetCurrentNSLocale();
+#endif
+
 // ----------------------------------------------------------------------------
 // wxUILocaleImpl provides the implementation of public wxUILocale functions
 // ----------------------------------------------------------------------------
