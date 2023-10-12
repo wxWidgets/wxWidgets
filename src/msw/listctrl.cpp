@@ -3408,7 +3408,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
 
-    if ( needToErase )
+    if ( needToErase && itemCount )
     {
         wxRect lastRect;
         GetItemRect(bottom, lastRect);
