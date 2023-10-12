@@ -3378,9 +3378,9 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     // don't align with the separators drawn by the header control.
     bool needToDraw = false,
          needToErase = false;
-    if ( InReportView() )
+    if ( InReportView() && itemCount )
     {
-        if ( (drawHRules || drawVRules) && itemCount )
+        if ( (drawHRules || drawVRules) )
             needToDraw = true;
         else if ( wxMSWDarkMode::IsActive() && wxGetWinVersion() >= wxWinVersion_11 )
             needToErase = true;
