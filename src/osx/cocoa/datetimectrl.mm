@@ -24,11 +24,11 @@
 #include "wx/datetimectrl.h"
 #include "wx/datectrl.h"
 #include "wx/uilocale.h"
-#include "wx/private/uilocale.h"
 
 #include "wx/osx/core/private/datetimectrl.h"
 #include "wx/osx/cocoa/private/date.h"
 #include "wx/osx/private/available.h"
+#include "wx/osx/private/uilocale.h"
 
 using namespace wxOSXImpl;
 
@@ -190,14 +190,16 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
 
     [v setDatePickerStyle: NSTextFieldAndStepperDatePickerStyle];
 
+#if wxUSE_INTL
     if ( wxUILocale::GetCurrent().IsSupported() )
     {
-        NSLocale* nsloc = (NSLocale*) wxGetCurrentNSLocale();
+        NSLocale* nsloc = wxGetCurrentNSLocale();
         if (nsloc)
         {
             [v setLocale: nsloc];
         }
     }
+#endif
 
     if ( style & wxDP_DROPDOWN )
     {
