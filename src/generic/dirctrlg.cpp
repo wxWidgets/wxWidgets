@@ -233,13 +233,6 @@ bool wxIsDriveAvailable(const wxString& dirName)
 
 #if wxUSE_DIRDLG
 
-// Function which is called by quick sort. We want to override the default wxArrayString behaviour,
-// and sort regardless of case.
-static int wxCMPFUNC_CONV wxDirCtrlStringCompareFunction(const wxString& strFirst, const wxString& strSecond)
-{
-    return strFirst.CmpNoCase(strSecond);
-}
-
 //-----------------------------------------------------------------------------
 // wxDirItemData
 //-----------------------------------------------------------------------------
@@ -712,7 +705,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
             while (d.GetNext(&eachFilename));
         }
     }
-    dirs.Sort(wxDirCtrlStringCompareFunction);
+    dirs.Sort(wxCmpNatural);
 
     // Now do the filenames -- but only if we're allowed to
     if (!HasFlag(wxDIRCTRL_DIR_ONLY))
@@ -743,7 +736,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
                 }
             }
         }
-        filenames.Sort(wxDirCtrlStringCompareFunction);
+        filenames.Sort(wxCmpNatural);
     }
 
     // Now we really know whether we have any children so tell the tree control
