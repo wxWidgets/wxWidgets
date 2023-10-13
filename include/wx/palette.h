@@ -31,12 +31,10 @@ public:
     #include "wx/msw/palette.h"
 #elif defined(__WXX11__)
     #include "wx/x11/palette.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK__) || defined(__WXQT__)
     #include "wx/generic/paletteg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/palette.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/palette.h"
 #endif
 
 #endif // wxUSE_PALETTE

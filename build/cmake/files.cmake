@@ -255,7 +255,6 @@ set(QT_HDR
     wx/qt/msgdlg.h
     wx/qt/nonownedwnd.h
     wx/qt/notebook.h
-    wx/qt/palette.h
     wx/qt/pen.h
     wx/qt/popupwin.h
     wx/qt/printdlg.h
@@ -288,6 +287,7 @@ set(QT_HDR
     wx/generic/activityindicator.h
     ${QT_PLATFORM_HDR}
     wx/qt/treectrl.h
+    wx/generic/paletteg.h
 )
 
 set(QT_SRC
@@ -346,7 +346,6 @@ set(QT_SRC
     src/qt/msgdlg.cpp
     src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
-    src/qt/palette.cpp
     src/qt/pen.cpp
     src/qt/popupwin.cpp
     src/qt/printdlg.cpp
@@ -386,6 +385,7 @@ set(QT_SRC
     src/qt/taskbar.cpp
     ${QT_PLATFORM_SRC}
     src/qt/treectrl.cpp
+    src/generic/paletteg.cpp
 )
 
 set(MEDIA_QT_SRC

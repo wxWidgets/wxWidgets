@@ -3489,7 +3489,6 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/msgdlg.h \
 	wx/qt/nonownedwnd.h \
 	wx/qt/notebook.h \
-	wx/qt/palette.h \
 	wx/qt/pen.h \
 	wx/qt/popupwin.h \
 	wx/qt/printdlg.h \
@@ -3526,7 +3525,8 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/dataview.h \
 	wx/qt/dvrenderers.h \
 	$(QT_PLATFORM_HDR) \
-	wx/qt/treectrl.h
+	wx/qt/treectrl.h \
+	wx/generic/paletteg.h
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
@@ -5497,7 +5497,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_minifram.o \
 	monodll_qt_msgdlg.o \
 	monodll_qt_notebook.o \
-	monodll_qt_palette.o \
 	monodll_qt_nonownedwnd.o \
 	monodll_qt_pen.o \
 	monodll_qt_popupwin.o \
@@ -5529,7 +5528,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_utils.o \
 	monodll_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS) \
-	monodll_qt_treectrl.o
+	monodll_qt_treectrl.o \
+	monodll_paletteg.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_UNIX_1@	monodll_unix_dialup.o monodll_unix_joystick.o \
@@ -7257,7 +7257,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_minifram.o \
 	monolib_qt_msgdlg.o \
 	monolib_qt_notebook.o \
-	monolib_qt_palette.o \
 	monolib_qt_nonownedwnd.o \
 	monolib_qt_pen.o \
 	monolib_qt_popupwin.o \
@@ -7289,7 +7288,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_utils.o \
 	monolib_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS_1) \
-	monolib_qt_treectrl.o
+	monolib_qt_treectrl.o \
+	monolib_paletteg.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_1 = \
 @COND_PLATFORM_UNIX_1@	monolib_unix_dialup.o monolib_unix_joystick.o \
@@ -9169,7 +9169,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_minifram.o \
 	coredll_qt_msgdlg.o \
 	coredll_qt_notebook.o \
-	coredll_qt_palette.o \
 	coredll_qt_nonownedwnd.o \
 	coredll_qt_pen.o \
 	coredll_qt_popupwin.o \
@@ -9201,7 +9200,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_utils.o \
 	coredll_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS_2) \
-	coredll_qt_treectrl.o
+	coredll_qt_treectrl.o \
+	coredll_paletteg.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_2 = \
 @COND_PLATFORM_UNIX_1@	coredll_unix_dialup.o coredll_unix_joystick.o \
@@ -10657,7 +10657,6 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_minifram.o \
 	corelib_qt_msgdlg.o \
 	corelib_qt_notebook.o \
-	corelib_qt_palette.o \
 	corelib_qt_nonownedwnd.o \
 	corelib_qt_pen.o \
 	corelib_qt_popupwin.o \
@@ -10689,7 +10688,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_utils.o \
 	corelib_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS_3) \
-	corelib_qt_treectrl.o
+	corelib_qt_treectrl.o \
+	corelib_paletteg.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_3 = \
 @COND_PLATFORM_UNIX_1@	corelib_unix_dialup.o corelib_unix_joystick.o \
@@ -15687,9 +15687,6 @@ monodll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONODLL_ODEP)
 monodll_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
 
-monodll_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
-
 monodll_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
 
@@ -16934,6 +16931,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
@@ -20427,9 +20427,6 @@ monolib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONOLIB_ODEP)
 monolib_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
 
-monolib_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
-
 monolib_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
 
@@ -21674,6 +21671,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
@@ -25845,9 +25845,6 @@ coredll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(COREDLL_ODEP)
 coredll_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
 
-coredll_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
-
 coredll_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
 
@@ -26510,6 +26507,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
@@ -29559,9 +29559,6 @@ corelib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(CORELIB_ODEP)
 corelib_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
 
-corelib_qt_palette.o: $(srcdir)/src/qt/palette.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/palette.cpp
-
 corelib_qt_nonownedwnd.o: $(srcdir)/src/qt/nonownedwnd.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/nonownedwnd.cpp
 
@@ -30224,6 +30221,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
