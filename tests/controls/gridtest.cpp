@@ -553,23 +553,29 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
-
+    WaitFor("mouse click to be processed", [&]() {
+        return lclick.GetCount() != 0;
+    });
     CHECK(lclick.GetCount() == 1);
 
     sim.MouseDblClick();
-    wxYield();
-
+    WaitFor("mouse double click to be processed", [&]() {
+        return ldclick.GetCount() != 0;
+    });
     CHECK(ldclick.GetCount() == 1);
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
+    WaitFor("mouse right click to be processed", [&]() {
+        return rclick.GetCount() != 0;
+    });
 
     CHECK(rclick.GetCount() == 1);
     rclick.Clear();
 
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
+    WaitFor("mouse right double click to be processed", [&]() {
+        return rclick.GetCount() != 0;
+    });
 
     if ( m_grid->IsUsingNativeHeader() )
     {
@@ -708,7 +714,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
     wxYield();
 
     sim.MouseUp();
-    wxYield();
+    WaitFor("mouse up to be processed", [&]() {
+        return select.GetCount() != 0;
+    });
 
     CHECK(select.GetCount() == 1);
 #endif
