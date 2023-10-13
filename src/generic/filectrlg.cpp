@@ -60,7 +60,7 @@ int wxCALLBACK wxFileDataNameCompare( wxIntPtr data1, wxIntPtr data2, wxIntPtr s
      if (fd2->IsDir() && !fd1->IsDir())
          return sortOrder;
 
-     return sortOrder*wxStrcmp( fd1->GetFileName(), fd2->GetFileName() );
+     return sortOrder*wxCmpNatural( fd1->GetFileName(), fd2->GetFileName() );
 }
 
 static
@@ -104,7 +104,7 @@ int wxCALLBACK wxFileDataTypeCompare(wxIntPtr data1, wxIntPtr data2, wxIntPtr so
      if (fd2->IsLink() && !fd1->IsLink())
          return sortOrder;
 
-     return sortOrder*wxStrcmp( fd1->GetFileType(), fd2->GetFileType() );
+     return sortOrder*wxStricmp( fd1->GetFileType(), fd2->GetFileType() );
 }
 
 static
