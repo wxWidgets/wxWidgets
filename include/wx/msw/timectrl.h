@@ -10,6 +10,8 @@
 #ifndef _WX_MSW_TIMECTRL_H_
 #define _WX_MSW_TIMECTRL_H_
 
+#include "wx/uilocale.h"
+
 // ----------------------------------------------------------------------------
 // wxTimePickerCtrl
 // ----------------------------------------------------------------------------
@@ -39,12 +41,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTP_DEFAULT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxTimePickerCtrlNameStr)
-    {
-        return MSWCreateDateTimePicker(parent, id, dt,
-                                       pos, size, style,
-                                       validator, name);
-    }
+                const wxString& name = wxTimePickerCtrlNameStr);
 
     // Override MSW-specific functions used during control creation.
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
