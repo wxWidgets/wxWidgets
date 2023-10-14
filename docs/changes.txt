@@ -235,6 +235,10 @@ Changes in behaviour which may result in build errors
 3.2.4: (released 2024-??-??)
 ----------------------------
 
+All:
+
+- Allow creating wxArrays from std::initialized_list (Lotendan, #23966).
+
 All (GUI):
 
 - Fix refreshing multiple selection items in generic wxListCtrl.

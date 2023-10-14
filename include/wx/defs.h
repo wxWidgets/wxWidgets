@@ -505,6 +505,14 @@ typedef short int WXTYPE;
     #endif
 #endif /* HAVE_WOSTREAM */
 
+#ifndef wxHAVE_INITIALIZER_LIST
+    #if __cplusplus >= 201103L
+        #define wxHAVE_INITIALIZER_LIST
+    #elif wxCHECK_VISUALC_VERSION(11)
+        #define wxHAVE_INITIALIZER_LIST
+    #endif
+#endif /* wxHAVE_INITIALIZER_LIST */
+
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
 /*  ---------------------------------------------------------------------------- */

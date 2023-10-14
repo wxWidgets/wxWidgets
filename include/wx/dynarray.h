@@ -15,6 +15,10 @@
 
 #include "wx/vector.h"
 
+#ifdef wxHAVE_INITIALIZER_LIST
+    #include <initializer_list>
+#endif
+
 /*
   This header defines legacy dynamic arrays and object arrays (i.e. arrays
   which own their elements) classes.
@@ -104,6 +108,11 @@ public:
     wxBaseArray(InputIterator first, InputIterator last)
         : base_vec(first, last)
     { }
+
+#ifdef wxHAVE_INITIALIZER_LIST
+    template<typename U>
+    wxBaseArray(std::initializer_list<U> list) : base_vec(list.begin(), list.end()) {}
+#endif
 
     void Empty() { this->clear(); }
     void Clear() { this->clear(); }
@@ -495,6 +504,14 @@ private:
 #define WX_DEFINE_USER_EXPORTED_TYPEARRAY_PTR(T, name, base, expdecl) \
     WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class expdecl)
 
+#ifdef wxHAVE_INITIALIZER_LIST
+    #define WX_DEFINE_CTOR_FROM_INIT_LIST(T, name, base, classdecl)                     \
+        template<typename U>                                                            \
+            name(std::initializer_list<U> list) : Base(list.begin(), list.end()) { }
+#else
+    #define WX_DEFINE_CTOR_FROM_INIT_LIST(T, name, base, classdecl)     // No support for initializer_list
+#endif
+
 // This is the only non-trivial macro, which actually defines the array class
 // with the given name containing the elements of the specified type.
 //
@@ -519,6 +536,7 @@ private:
         name(size_t n, Base::const_reference v) : Base(n, v) { }              \
         template <class InputIterator>                                        \
         name(InputIterator first, InputIterator last) : Base(first, last) { } \
+        WX_DEFINE_CTOR_FROM_INIT_LIST(T, name, base, classdecl)               \
     }
 
 
