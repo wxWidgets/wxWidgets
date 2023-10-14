@@ -148,8 +148,10 @@ public:
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags) const wxOVERRIDE;
 
+#if wxUSE_DATETIME
     wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const;
     wxString DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const;
+#endif // wxUSE_DATETIME
 
 private:
     NSLocale* const m_nsloc;
@@ -227,6 +229,7 @@ wxUILocaleImplCF::GetLocalizedName(wxLocaleName name, wxLocaleForm form) const
     return wxCFStringRef::AsString(str);
 }
 
+#if wxUSE_DATETIME
 wxString
 wxUILocaleImplCF::DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const
 {
@@ -272,6 +275,7 @@ wxUILocaleImplCF::DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::Name
     NSString* weekdayName = [weekdayNames objectAtIndex:(weekday)];
     return wxCFStringRef::AsString(weekdayName);
 }
+#endif // wxUSE_DATETIME
 
 wxLayoutDirection
 wxUILocaleImplCF::GetLayoutDirection() const
@@ -320,6 +324,7 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
     return preferred;
 }
 
+#if wxUSE_DATETIME
 wxString
 wxUILocaleImpl::GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const
 {
@@ -331,6 +336,7 @@ wxUILocaleImpl::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlag
 {
     return static_cast<const wxUILocaleImplCF*>(this)->DoGetWeekDayName(weekday, flags);
 }
+#endif // wxUSE_DATETIME
 
 int
 wxUILocaleImplCF::CompareStrings(const wxString& lhs, const wxString& rhs,

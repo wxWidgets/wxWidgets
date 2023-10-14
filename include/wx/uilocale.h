@@ -155,6 +155,7 @@ public:
     int CompareStrings(const wxString& lhs, const wxString& rhs,
                        int flags = wxCompare_CaseSensitive) const;
 
+#if wxUSE_DATETIME
 #if wxABI_VERSION >= 30203
     // Get the full (default) or abbreviated localized month name
     // returns empty string on error
@@ -166,6 +167,7 @@ public:
     wxString GetWeekDayName(wxDateTime::WeekDay weekday,
                             wxDateTime::NameFlags flags = wxDateTime::Name_Full) const;
 #endif // wxABI_VERSION >= 3.2.3
+#endif // wxUSE_DATETIME
 
     // Note that this class is not supposed to be used polymorphically, hence
     // its dtor is not virtual.

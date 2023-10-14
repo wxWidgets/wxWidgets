@@ -68,6 +68,7 @@ public:
     // The entries contain platform-dependent identifiers.
     static wxVector<wxString> GetPreferredUILanguages();
 
+#if wxUSE_DATETIME
     // Helper function used by GetMonthName/GetWeekDayName(): returns 0 if flags is
     // wxDateTime::Name_Full and 1 if it is wxDateTime::Name_Abbr
     // or -1 if the flags is incorrect (and asserts in this case)
@@ -75,6 +76,7 @@ public:
     // the return value of this function is used as an index into 2D array
     // containing full names in its first row and abbreviated ones in the 2nd one
     static int ArrayIndexFromFlag(wxDateTime::NameFlags flags);
+#endif // wxUSE_DATETIME
 
     // Use this locale in the UI.
     //
@@ -92,11 +94,13 @@ public:
     virtual int CompareStrings(const wxString& lhs, const wxString& rhs,
                                int flags) const = 0;
 
+#if wxUSE_DATETIME
     // These functions ought to be (pure) virtual, but aren't for
     // ABI-compatibility reasons. Instead they are implemented in
     // platform-specific concrete classes.
     wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const;
     wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const;
+#endif // wxUSE_DATETIME
 
     virtual ~wxUILocaleImpl() { }
 };

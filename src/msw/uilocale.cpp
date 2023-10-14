@@ -163,8 +163,10 @@ wxString wxLocaleIdent::GetName() const
 class wxUILocaleImplMSW : public wxUILocaleImpl
 {
 public:
+#if wxUSE_DATETIME
     virtual wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const = 0;
     virtual wxString DoGetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlags flags) const = 0;
+#endif // wxUSE_DATETIME
 };
 
 // ----------------------------------------------------------------------------
@@ -225,6 +227,7 @@ public:
         return str;
     }
 
+#if wxUSE_DATETIME
     wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const wxOVERRIDE
     {
         return wxDateTime::GetEnglishMonthName(month, flags);
@@ -235,6 +238,7 @@ public:
     {
         return wxDateTime::GetEnglishWeekDayName(weekday, flags);
     }
+#endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
@@ -367,6 +371,7 @@ public:
         return str;
     }
 
+#if wxUSE_DATETIME
     wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const wxOVERRIDE
     {
         static LCTYPE monthNameIndex[2][12] =
@@ -412,6 +417,7 @@ public:
 
         return DoGetInfo(lctype);
     }
+#endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
@@ -763,6 +769,7 @@ public:
         return str;
     }
 
+#if wxUSE_DATETIME
     wxString DoGetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const wxOVERRIDE
     {
         static LCTYPE monthNameIndex[2][12] =
@@ -808,6 +815,7 @@ public:
 
         return DoGetInfo(lctype);
     }
+#endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const wxOVERRIDE
     {
@@ -974,6 +982,7 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
     return wxUILocaleImplName::GetPreferredUILanguages();
 }
 
+#if wxUSE_DATETIME
 wxString
 wxUILocaleImpl::GetMonthName(wxDateTime::Month month, wxDateTime::NameFlags flags) const
 {
@@ -985,5 +994,6 @@ wxUILocaleImpl::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameFlag
 {
     return static_cast<const wxUILocaleImplMSW*>(this)->DoGetWeekDayName(weekday, flags);
 }
+#endif // wxUSE_DATETIME
 
 #endif // wxUSE_INTL
