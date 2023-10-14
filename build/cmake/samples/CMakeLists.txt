@@ -279,8 +279,7 @@ if(WIN32)
 
     if(WXMSW)
         wx_add_sample(nativdlg nativdlg.cpp nativdlg.h resource.h RES nativdlg.rc)
-        #TODO: reenable when sample is fixed
-        #wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
+        wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
         wx_add_sample(taskbarbutton DEPENDS wxUSE_TASKBARBUTTON)
     endif()
 endif()
