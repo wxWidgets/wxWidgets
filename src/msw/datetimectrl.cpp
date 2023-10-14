@@ -32,6 +32,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/msw/private/datecontrols.h"
+#include "wx/msw/private/uilocale.h"
 
 // apparently some versions of mingw define these macros erroneously
 #ifndef DateTime_GetSystemtime
@@ -120,6 +121,16 @@ wxDateTimePickerCtrl::MSWCreateDateTimePicker(wxWindow *parent,
     }
 
     return true;
+}
+
+void wxDateTimePickerCtrl::MSWSetTimeFormat(wxLocaleInfo index)
+{
+    wxString formatStr = wxGetMSWDateTimeFormat(index);
+    if (!formatStr.empty())
+    {
+        const TCHAR* format = formatStr.t_str();
+        DateTime_SetFormat(GetHwnd(), format);
+    }
 }
 
 void wxDateTimePickerCtrl::SetValue(const wxDateTime& dt)
