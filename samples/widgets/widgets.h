@@ -172,18 +172,21 @@ protected:
     // create a sizer containing a label and a text ctrl
     wxSizer *CreateSizerWithTextAndLabel(const wxString& label,
                                          wxWindowID id = wxID_ANY,
-                                         wxTextCtrl **ppText = nullptr);
+                                         wxTextCtrl **ppText = nullptr,
+                                         wxWindow* statBoxParent = nullptr);
 
     // create a sizer containing a button and a text ctrl
     wxSizer *CreateSizerWithTextAndButton(wxWindowID idBtn,
                                           const wxString& labelBtn,
                                           wxWindowID id = wxID_ANY,
-                                          wxTextCtrl **ppText = nullptr);
+                                          wxTextCtrl **ppText = nullptr,
+                                          wxWindow* statBoxParent = nullptr);
 
     // create a checkbox and add it to the sizer
     wxCheckBox *CreateCheckBoxAndAddToSizer(wxSizer *sizer,
                                             const wxString& label,
-                                            wxWindowID id = wxID_ANY);
+                                            wxWindowID id = wxID_ANY,
+                                            wxWindow* statBoxParent = nullptr);
 
 public:
     // the head of the linked list containinginfo about all pages

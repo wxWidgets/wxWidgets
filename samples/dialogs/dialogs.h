@@ -201,7 +201,7 @@ protected:
     void PrepareMessageDialog(wxMessageDialogBase &dlg);
 
     virtual void AddAdditionalTextOptions(wxSizer *WXUNUSED(sizer)) { }
-    virtual void AddAdditionalFlags(wxSizer *WXUNUSED(sizer)) { }
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *WXUNUSED(sizer)) { }
 
     void ShowResult(int res);
 
@@ -268,7 +268,7 @@ public:
 protected:
     // overrides method in base class
     virtual void AddAdditionalTextOptions(wxSizer *sizer) override;
-    virtual void AddAdditionalFlags(wxSizer *sizer) override;
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *sizer) override;
 
     void OnApply(wxCommandEvent& event);
 

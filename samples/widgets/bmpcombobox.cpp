@@ -155,7 +155,8 @@ protected:
 
     wxSizer *CreateSizerWithSmallTextAndLabel(const wxString& label,
                                               wxWindowID id,
-                                              wxTextCtrl **ppText);
+                                              wxTextCtrl **ppText,
+                                              wxWindow* parent = nullptr);
 
 #if wxUSE_IMAGE
     void RescaleImage(wxImage& image, int w, int h);
@@ -266,11 +267,12 @@ BitmapComboBoxWidgetsPage::BitmapComboBoxWidgetsPage(WidgetsBookCtrl *book,
 // create a sizer containing a label and a small text ctrl
 wxSizer *BitmapComboBoxWidgetsPage::CreateSizerWithSmallTextAndLabel(const wxString& label,
                                                                     wxWindowID id,
-                                                                    wxTextCtrl **ppText)
+                                                                    wxTextCtrl **ppText,
+                                                                    wxWindow* parent)
 {
-    wxControl* control = new wxStaticText(this, wxID_ANY, label);
+    wxControl* control = new wxStaticText(parent ? parent : this, wxID_ANY, label);
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    wxTextCtrl *text = new wxTextCtrl(this, id, wxEmptyString,
+    wxTextCtrl *text = new wxTextCtrl(parent ? parent : this, id, wxEmptyString,
         wxDefaultPosition, wxSize(50,wxDefaultCoord), wxTE_PROCESS_ENTER);
 
     sizerRow->Add(control, 0, wxRIGHT | wxALIGN_CENTRE_VERTICAL, 5);
@@ -296,8 +298,9 @@ void BitmapComboBoxWidgetsPage::CreateContent()
 
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
 
-    // left pane - style box
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "&Set style");
+    // left pane - style
+    wxStaticBoxSizer *sizerStyle = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    wxStaticBox* const sizerStyleBox = sizerStyle->GetStaticBox();
 
 
     // should be in sync with ComboKind_XXX values
@@ -313,69 +316,66 @@ void BitmapComboBoxWidgetsPage::CreateContent()
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
 
-    wxSizer *sizerStyle = new wxStaticBoxSizer(box, wxVERTICAL);
+    m_chkSort = CreateCheckBoxAndAddToSizer(sizerStyle, "&Sort items", wxID_ANY, sizerStyleBox);
+    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerStyle, "Process &Enter",wxID_ANY, sizerStyleBox);
+    m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerStyle, "&Read only", wxID_ANY, sizerStyleBox);
 
-    m_chkSort = CreateCheckBoxAndAddToSizer(sizerStyle, "&Sort items");
-    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerStyle, "Process &Enter");
-    m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerStyle, "&Read only");
-
-    wxButton *btn = new wxButton(this, BitmapComboBoxPage_Reset, "&Reset");
+    wxButton *btn = new wxButton(sizerStyleBox, BitmapComboBoxPage_Reset, "&Reset");
     sizerStyle->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 3);
 
     sizerLeft->Add(sizerStyle, wxSizerFlags().Expand());
     sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
 
-    // left pane - other options box
-    box = new wxStaticBox(this, wxID_ANY, "Demo options");
-
-    wxSizer *sizerOptions = new wxStaticBoxSizer(box, wxVERTICAL);
+    // left pane - other options
+    wxStaticBoxSizer *sizerOptions = new wxStaticBoxSizer(wxVERTICAL, this, "Demo options");
 
     sizerRow = CreateSizerWithSmallTextAndLabel("Control &height:",
                                                 BitmapComboBoxPage_ChangeHeight,
-                                                &m_textChangeHeight);
+                                                &m_textChangeHeight,
+                                                sizerOptions->GetStaticBox());
     m_textChangeHeight->SetSize(20, wxDefaultCoord);
     sizerOptions->Add(sizerRow, 0, wxALL | wxFIXED_MINSIZE /*| wxGROW*/, 5);
 
     sizerLeft->Add( sizerOptions, wxSizerFlags().Expand().Border(wxTOP, 2));
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
-        "&Change wxBitmapComboBox contents");
-    wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change wxBitmapComboBox contents");
+    wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
-    btn = new wxButton(this, BitmapComboBoxPage_ContainerTests, "Run &tests");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_ContainerTests, "Run &tests");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
 #if wxUSE_IMAGE
-    btn = new wxButton(this, BitmapComboBoxPage_AddWidgetIcons, "Add &widget icons");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_AddWidgetIcons, "Add &widget icons");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, BitmapComboBoxPage_LoadFromFile, "Insert image from &file");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_LoadFromFile, "Insert image from &file");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, BitmapComboBoxPage_SetFromFile, "&Set image from file");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_SetFromFile, "&Set image from file");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 #endif
 
-    btn = new wxButton(this, BitmapComboBoxPage_AddSeveralWithImages, "A&ppend a few strings with images");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_AddSeveralWithImages, "A&ppend a few strings with images");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, BitmapComboBoxPage_AddSeveral, "Append a &few strings");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_AddSeveral, "Append a &few strings");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, BitmapComboBoxPage_AddMany, "Append &many strings");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_AddMany, "Append &many strings");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(BitmapComboBoxPage_Delete,
                                             "&Delete this item",
                                             BitmapComboBoxPage_DeleteText,
-                                            &m_textDelete);
+                                            &m_textDelete,
+                                            sizerMiddleBox);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, BitmapComboBoxPage_DeleteSel, "Delete &selection");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_DeleteSel, "Delete &selection");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, BitmapComboBoxPage_Clear, "&Clear");
+    btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_Clear, "&Clear");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
 #if wxUSE_IMAGE
