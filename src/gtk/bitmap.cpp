@@ -390,13 +390,13 @@ wxBitmapRefData::~wxBitmapRefData()
     if (m_surface)
         cairo_surface_destroy(m_surface);
 #else
-    if (m_pixbufMask)
-        g_object_unref(m_pixbufMask);
     if (m_pixmap)
         g_object_unref (m_pixmap);
     if (m_pixbuf)
         g_object_unref (m_pixbuf);
 #endif
+    if (m_pixbufMask)
+        g_object_unref(m_pixbufMask);
     delete m_mask;
 }
 
