@@ -90,6 +90,14 @@ public:
     wxArrayString(size_t sz, const wxString* arr);
 
     /**
+        Constructs the container with the contents of the initializer_list @a list.
+
+        @since 3.2.3
+    */
+    template<typename T>
+    wxArrayString(std::initializer_list<T> list);
+
+    /**
         Destructor frees memory occupied by the array strings. For performance
         reasons it is not virtual, so this class should not be derived from.
     */
