@@ -641,6 +641,21 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
 void wxGLCanvasEGL::CreateWaylandSubsurface()
 {
 #ifdef GDK_WINDOWING_WAYLAND
+    // It's possible that we get in here unnecessarily in two ways:
+    // (1) If the canvas widget is shown, and then immediately hidden, we will
+    //     still receive a map-event signal, but by that point, the subsurface
+    //     does not need to be created anymore as the canvas is hidden
+    // (2) If the canvas widget is shown, and then immediately hidden, and then
+    //     immediately shown again, we will receive two map-event signals.
+    //     By the second time we get it, the subsurface will already be created
+    // Not ignoring either of the two scenarios will likely cause the subsurface
+    // to be created twice, leading to a crash due to a Wayland protocol error
+    // See https://github.com/wxWidgets/wxWidgets/issues/23961
+    if ( !gtk_widget_get_mapped(m_widget) || m_wlSubsurface )
+    {
+        return;
+    }
+
     GdkWindow *window = GTKGetDrawingWindow();
     struct wl_surface *surface = gdk_wayland_window_get_wl_surface(window);
 
