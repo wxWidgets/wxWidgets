@@ -3527,7 +3527,8 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	$(QT_PLATFORM_HDR) \
 	wx/qt/treectrl.h \
 	wx/generic/paletteg.h \
-	wx/qt/datectrl.h
+	wx/qt/datectrl.h \
+	wx/qt/timectrl.h
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
@@ -5345,7 +5346,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_calctrl.o \
 	monodll_msw_datectrl.o \
 	monodll_msw_datetimectrl.o \
-	monodll_timectrl.o \
+	monodll_msw_timectrl.o \
 	monodll_datecontrols.o \
 	monodll_generic_activityindicator.o \
 	monodll_msw_imaglist.o \
@@ -5531,7 +5532,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	$(__QT_PLATFORM_SRC_OBJECTS) \
 	monodll_qt_treectrl.o \
 	monodll_paletteg.o \
-	monodll_qt_datectrl.o
+	monodll_qt_datectrl.o \
+	monodll_qt_timectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_UNIX_1@	monodll_unix_dialup.o monodll_unix_joystick.o \
@@ -7106,7 +7108,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_calctrl.o \
 	monolib_msw_datectrl.o \
 	monolib_msw_datetimectrl.o \
-	monolib_timectrl.o \
+	monolib_msw_timectrl.o \
 	monolib_datecontrols.o \
 	monolib_generic_activityindicator.o \
 	monolib_msw_imaglist.o \
@@ -7292,7 +7294,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	$(__QT_PLATFORM_SRC_OBJECTS_1) \
 	monolib_qt_treectrl.o \
 	monolib_paletteg.o \
-	monolib_qt_datectrl.o
+	monolib_qt_datectrl.o \
+	monolib_qt_timectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_1 = \
 @COND_PLATFORM_UNIX_1@	monolib_unix_dialup.o monolib_unix_joystick.o \
@@ -9019,7 +9022,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_calctrl.o \
 	coredll_msw_datectrl.o \
 	coredll_msw_datetimectrl.o \
-	coredll_timectrl.o \
+	coredll_msw_timectrl.o \
 	coredll_datecontrols.o \
 	coredll_generic_activityindicator.o \
 	coredll_msw_imaglist.o \
@@ -9205,7 +9208,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	$(__QT_PLATFORM_SRC_OBJECTS_2) \
 	coredll_qt_treectrl.o \
 	coredll_paletteg.o \
-	coredll_qt_datectrl.o
+	coredll_qt_datectrl.o \
+	coredll_qt_timectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_2 = \
 @COND_PLATFORM_UNIX_1@	coredll_unix_dialup.o coredll_unix_joystick.o \
@@ -10508,7 +10512,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_calctrl.o \
 	corelib_msw_datectrl.o \
 	corelib_msw_datetimectrl.o \
-	corelib_timectrl.o \
+	corelib_msw_timectrl.o \
 	corelib_datecontrols.o \
 	corelib_generic_activityindicator.o \
 	corelib_msw_imaglist.o \
@@ -10694,7 +10698,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	$(__QT_PLATFORM_SRC_OBJECTS_3) \
 	corelib_qt_treectrl.o \
 	corelib_paletteg.o \
-	corelib_qt_datectrl.o
+	corelib_qt_datectrl.o \
+	corelib_qt_timectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_3 = \
 @COND_PLATFORM_UNIX_1@	corelib_unix_dialup.o corelib_unix_joystick.o \
@@ -15311,7 +15316,7 @@ monodll_msw_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
 monodll_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-monodll_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONODLL_ODEP)
+monodll_msw_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/timectrl.cpp
 
 monodll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONODLL_ODEP)
@@ -15790,6 +15795,9 @@ monodll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONODLL_ODEP)
 
 monodll_qt_datectrl.o: $(srcdir)/src/qt/datectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/datectrl.cpp
+
+monodll_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/timectrl.cpp
 
 monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -20054,7 +20062,7 @@ monolib_msw_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
 monolib_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-monolib_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONOLIB_ODEP)
+monolib_msw_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/timectrl.cpp
 
 monolib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONOLIB_ODEP)
@@ -20533,6 +20541,9 @@ monolib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONOLIB_ODEP)
 
 monolib_qt_datectrl.o: $(srcdir)/src/qt/datectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/datectrl.cpp
+
+monolib_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/timectrl.cpp
 
 monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -25475,7 +25486,7 @@ coredll_msw_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(COREDLL_ODEP)
 coredll_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-coredll_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(COREDLL_ODEP)
+coredll_msw_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/timectrl.cpp
 
 coredll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(COREDLL_ODEP)
@@ -25954,6 +25965,9 @@ coredll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(COREDLL_ODEP)
 
 coredll_qt_datectrl.o: $(srcdir)/src/qt/datectrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/datectrl.cpp
+
+coredll_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/timectrl.cpp
 
 coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -29192,7 +29206,7 @@ corelib_msw_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(CORELIB_ODEP)
 corelib_msw_datetimectrl.o: $(srcdir)/src/msw/datetimectrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/datetimectrl.cpp
 
-corelib_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(CORELIB_ODEP)
+corelib_msw_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/timectrl.cpp
 
 corelib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(CORELIB_ODEP)
@@ -29671,6 +29685,9 @@ corelib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(CORELIB_ODEP)
 
 corelib_qt_datectrl.o: $(srcdir)/src/qt/datectrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/datectrl.cpp
+
+corelib_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/timectrl.cpp
 
 corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp

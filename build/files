@@ -305,6 +305,7 @@ QT_HDR =
     wx/qt/textctrl.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
+    wx/qt/timectrl.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
@@ -400,6 +401,7 @@ QT_SRC=
     src/qt/textctrl.cpp
     src/qt/textentry.cpp
     src/qt/tglbtn.cpp
+    src/qt/timectrl.cpp
     src/qt/timer.cpp
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp

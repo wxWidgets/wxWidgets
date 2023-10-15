@@ -289,6 +289,7 @@ set(QT_HDR
     wx/qt/treectrl.h
     wx/generic/paletteg.h
     wx/qt/datectrl.h
+    wx/qt/timectrl.h
 )
 
 set(QT_SRC
@@ -388,6 +389,7 @@ set(QT_SRC
     src/qt/treectrl.cpp
     src/generic/paletteg.cpp
     src/qt/datectrl.cpp
+    src/qt/timectrl.cpp
 )
 
 set(MEDIA_QT_SRC
