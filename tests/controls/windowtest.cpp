@@ -213,10 +213,10 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     CHECK( resCursor1.IsOk() );
 #endif
 #ifdef __WXOSX__
-//    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.png" );
+    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.png" );
     wxCursor resCursor3( "horse" );
     CHECK( resCursor3.IsOk() );
-//    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "horse.cur" );
+    wxCopyFile( "../tests/horse.png", wxStandardPaths::Get().GetResourcesDir() );
 #endif
 #if wxUSE_CARET
     CHECK(!m_window->GetCaret());
