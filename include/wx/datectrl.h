@@ -90,6 +90,10 @@ typedef wxDatePickerCtrlCommonBase<wxDateTimePickerCtrl> wxDatePickerCtrlBase;
     #include "wx/osx/datectrl.h"
 
     #define wxHAS_NATIVE_DATEPICKCTRL
+#elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)
+    #include "wx/qt/datectrl.h"
+
+    #define wxHAS_NATIVE_DATEPICKCTRL
 #else
     #include "wx/generic/datectrl.h"
 

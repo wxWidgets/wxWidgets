@@ -258,6 +258,7 @@ QT_HDR =
     wx/qt/dataobj.h
     wx/qt/dataobj2.h
     wx/qt/dataview.h
+    wx/qt/datectrl.h
     wx/qt/dc.h
     wx/qt/dcclient.h
     wx/qt/dcmemory.h
@@ -348,6 +349,7 @@ QT_SRC=
     src/qt/cursor.cpp
     src/qt/dataobj.cpp
     src/qt/dataview.cpp
+    src/qt/datectrl.cpp
     src/qt/dc.cpp
     src/qt/dcclient.cpp
     src/qt/dcmemory.cpp
