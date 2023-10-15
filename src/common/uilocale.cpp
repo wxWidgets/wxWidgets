@@ -520,17 +520,7 @@ const wxUILocale& wxUILocale::GetCurrent()
     // We initialize it on demand.
     if ( !ms_current.m_impl )
     {
-        // Instantiate standard C locale (should never fail) ...
-        wxUILocaleImpl* impl = wxUILocaleImpl::CreateStdC();
-#ifdef __WXOSX__
-        if (impl)
-        {
-            // ... and Use() it
-            // (Required to set the global NSLocale pointer)
-            impl->Use();
-        }
-#endif
-        ms_current = wxUILocale(impl);
+        ms_current = wxUILocale(wxUILocaleImpl::CreateStdC());
     }
 
     return ms_current;
