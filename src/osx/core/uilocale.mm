@@ -42,9 +42,9 @@ static NSLocale* gs_currentNSLocale = nullptr;
 
 NSLocale* wxGetCurrentNSLocale()
 {
-    static NSLocale* stdCLocale([[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain]);
     if (!gs_currentNSLocale)
     {
+        static wxCFRef<NSLocale*> stdCLocale([[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain]);
         gs_currentNSLocale = stdCLocale;
     }
     return gs_currentNSLocale;
