@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 wxMSW:
 
 - Fix MSVS warning about redundant "const" in wx/itemid.h (#23590).
+- Fix spurious memory leak reports when using static CRT.
 
 
 3.2.3: (released 2023-10-10)

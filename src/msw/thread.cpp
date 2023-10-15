@@ -201,7 +201,12 @@ public:
 
     static void CleanUp()
     {
+        // To avoid bogus memory leaks reports when using debug version of
+        // static MSVC CRT we need to free memory ourselves even when it would
+        // have been done by FlsAlloc() callback because it does it too late.
+#if !defined(_MSC_VER) || !defined(_DEBUG) || defined(_DLL)
         if (!Instance().AllocCallback)
+#endif
         {
             // FLS API was not available, which means that objects will not be freed automatically.
             delete Get();
@@ -1465,6 +1470,9 @@ bool wxThreadModule::OnInit()
 
 void wxThreadModule::OnExit()
 {
+    // Delete thread-specific info object for the main thread too, if any.
+    wxThreadSpecificInfoTLS::CleanUp();
+
     if ( !::TlsFree(gs_tlsThisThread) )
     {
         wxLogLastError(wxT("TlsFree failed."));
