@@ -5132,6 +5132,19 @@ void wxQueueEvent(wxEvtHandler* dest, wxEvent *event);
 
 #if wxUSE_GUI
 
+/**
+    Find a window with the focus, that is also a descendant of the given window.
+    This is used to determine the window to initially send commands to.
+
+    @header{wx/event.h}
+
+    @param ancestor
+        The ancestor window for the focused window to find.
+    @return
+        The window found or NULL.
+*/
+wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
+
 wxEventType wxEVT_BUTTON;
 wxEventType wxEVT_CHECKBOX;
 wxEventType wxEVT_CHOICE;
