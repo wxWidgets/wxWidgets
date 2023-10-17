@@ -292,8 +292,8 @@ int wxQtConvertKeyCode( int key, int WXUNUSED(modifiers), Qt::KeyboardModifiers 
             return Qt::Key_Escape;
         case WXK_CANCEL:
             return Qt::Key_Cancel;
-        case Qt::Key_Clear:
-            return WXK_CLEAR;
+        case WXK_CLEAR:
+            return Qt::Key_Clear;
         case WXK_SHIFT:
             return Qt::Key_Shift;
         case WXK_ALT:
