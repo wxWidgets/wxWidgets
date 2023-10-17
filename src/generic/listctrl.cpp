@@ -3730,6 +3730,10 @@ void wxListMainWindow::SetItemCount(long count)
     if ( HasCurrent() && m_current >= (size_t)count )
         ChangeCurrent(count - 1);
 
+    // And do the same thing for the multiple selection anchor.
+    if ( m_anchor != (size_t)-1 && m_anchor >= (size_t)count )
+        m_anchor = count - 1;
+
     m_selStore.SetItemCount(count);
     m_countVirt = count;
 
