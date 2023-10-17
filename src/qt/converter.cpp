@@ -179,6 +179,8 @@ wxKeyCode wxQtConvertKeyCode( int key, Qt::KeyboardModifiers modifiers )
             return WXK_EXECUTE;
         case Qt::Key_Insert:
             return WXK_INSERT;
+        case Qt::Key_Delete:
+            return WXK_DELETE;
         case Qt::Key_Help:
             return WXK_HELP;
         case Qt::Key_NumLock:
@@ -318,6 +320,8 @@ int wxQtConvertKeyCode( int key, int WXUNUSED(modifiers), Qt::KeyboardModifiers 
             return Qt::Key_Execute;
         case WXK_INSERT:
             return Qt::Key_Insert;
+        case WXK_DELETE:
+            return Qt::Key_Delete;
         case WXK_HELP:
             return Qt::Key_Help;
         case WXK_NUMLOCK:
