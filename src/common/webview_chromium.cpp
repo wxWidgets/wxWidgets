@@ -1505,6 +1505,20 @@ private:
             }
         }
 
+#ifdef __WXGTK__
+        // We must ensure that we use thread-safe versions of X functions
+        // because CEF calls XInitThreads() during initialization and any X
+        // objects created before thread support is initialized can't be used
+        // after initializing it and doing this results in mysterious crashes
+        // (which is why X documentation states that XInitThreads() must be the
+        // first function called by the application).
+        //
+        // It's a bit wasteful to initialize threads if we're not going to use
+        // CEF in this run of the application, but it's a much better
+        // alternative than crashing, so do it now, before it is too late.
+        XInitThreads();
+#endif // !__WXGTK__
+
         // Continue normal execution.
         return -1;
     }
