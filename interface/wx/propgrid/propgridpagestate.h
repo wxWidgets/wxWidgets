@@ -6,6 +6,50 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+enum class wxPGSelectPropertyFlags : int
+{
+    /**
+      No flags
+    */
+    Null          = 0,
+    /**
+      Focuses to created editor
+    */
+    Focus         = 0x0001,
+    /**
+     Forces deletion and recreation of editor
+    */
+    Force         = 0x0002,
+    /**
+     For example, doesn't cause EnsureVisible
+    */
+    Nonvisible    = 0x0004,
+    /**
+     Do not validate editor's value before selecting
+    */
+    NoValidate    = 0x0008,
+    /**
+     Property being deselected is about to be deleted
+    */
+    Deleting      = 0x0010,
+    /**
+     Property's values was set to unspecified by the user
+    */
+    SetUnspec     = 0x0020,
+    /**
+     Property's event handler changed the value
+    */
+    DialogVal     = 0x0040,
+    /**
+     Set to disable sending of wxEVT_PG_SELECTED event
+    */
+    DontSendEvent = 0x0080,
+    /**
+     Don't make any graphics updates
+    */
+    NoRefresh     = 0x0100
+};
+
 /**
     @section propgrid_hittestresult wxPropertyGridHitTestResult
 
