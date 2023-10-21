@@ -13,6 +13,7 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/toplevel.h"
     #include "wx/module.h"
 #endif
@@ -1209,6 +1210,10 @@ bool wxSystemSettingsModule::OnInit()
     // 'gtk-application-prefer-dark-theme' property to get a dark theme.
 
     m_proxy = NULL;
+
+    wxAppConsole* app = wxAppConsole::GetInstance();
+    if (!app || !app->IsGUI())
+        return true;
 
     // GTK_THEME environment variable overrides other settings
     if (getenv("GTK_THEME") == NULL)
