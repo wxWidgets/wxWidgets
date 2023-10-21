@@ -2,7 +2,6 @@
 // Name:        wx/treebase.h
 // Purpose:     wxTreeCtrl base classes and types
 // Author:      Julian Smart et al
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) 1997,1998 Robert Roebling
 // Licence:     wxWindows licence

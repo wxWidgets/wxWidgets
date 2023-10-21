@@ -2,7 +2,6 @@
 // Name:        wx/cshelp.h
 // Purpose:     Context-sensitive help support classes
 // Author:      Julian Smart, Vadim Zeitlin
-// Modified by:
 // Created:     08/09/2000
 // Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/msw/graphics.cpp
 // Purpose:     wxGCDC class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2006-09-30
 // Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence

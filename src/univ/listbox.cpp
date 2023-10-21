@@ -2,7 +2,6 @@
 // Name:        src/univ/listbox.cpp
 // Purpose:     wxListBox implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     30.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/dragimag.h
 // Purpose:     wxDragImage base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

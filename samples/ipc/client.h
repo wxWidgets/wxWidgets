@@ -2,7 +2,6 @@
 // Name:        client.h
 // Purpose:     DDE sample: client
 // Author:      Julian Smart
-// Modified by:
 // Created:     25/01/99
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

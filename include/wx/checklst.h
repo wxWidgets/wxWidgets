@@ -2,7 +2,6 @@
 // Name:        wx/checklst.h
 // Purpose:     wxCheckListBox class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.09.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

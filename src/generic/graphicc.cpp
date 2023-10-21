@@ -2,7 +2,6 @@
 // Name:        src/generic/graphicc.cpp
 // Purpose:     cairo device context class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2006-10-03
 // Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence

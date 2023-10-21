@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextuicustomization.h
 // Purpose:     UI customization base class for wxRTC
 // Author:      Julian Smart
-// Modified by:
 // Created:     2010-11-14
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

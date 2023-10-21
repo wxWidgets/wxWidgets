@@ -2,7 +2,6 @@
 // Name:        src/gtk/spinctrl.cpp
 // Purpose:     wxSpinCtrl
 // Author:      Robert
-// Modified by:
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

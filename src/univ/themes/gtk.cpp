@@ -2,7 +2,6 @@
 // Name:        src/univ/themes/gtk.cpp
 // Purpose:     wxUniversal theme implementing GTK-like LNF
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

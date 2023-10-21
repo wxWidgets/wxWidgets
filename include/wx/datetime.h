@@ -3,7 +3,6 @@
 // Purpose:     declarations of time/date related classes (wxDateTime,
 //              wxTimeSpan)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.02.99
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/statbarma.cpp
 // Purpose:     native implementation of wxStatusBar (optional)
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) 1998 Stefan Csomor
 // Licence:     wxWindows licence

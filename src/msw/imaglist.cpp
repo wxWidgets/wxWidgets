@@ -2,7 +2,6 @@
 // Name:        src/msw/imaglist.cpp
 // Purpose:     wxImageList implementation for Win32
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

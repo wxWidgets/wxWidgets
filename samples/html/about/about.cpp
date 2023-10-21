@@ -2,7 +2,6 @@
 // Name:        about.cpp
 // Purpose:     wxHtml sample: about dialog test
 // Author:      ?
-// Modified by:
 // Created:     ?
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

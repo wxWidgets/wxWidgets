@@ -2,7 +2,6 @@
 // Name:        wx/osx/dataobj.h
 // Purpose:     declaration of the wxDataObject
 // Author:      Stefan Csomor (adapted from Robert Roebling's gtk port)
-// Modified by:
 // Created:     10/21/99
 // Copyright:   (c) 1998, 1999 Vadim Zeitlin, Robert Roebling
 // Licence:     wxWindows licence

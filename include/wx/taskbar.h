@@ -2,7 +2,6 @@
 // Name:        wx/taskbar.h
 // Purpose:     wxTaskBarIcon base header and class
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

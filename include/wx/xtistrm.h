@@ -2,7 +2,6 @@
 // Name:        wx/xtistrm.h
 // Purpose:     streaming runtime metadata information (extended class info)
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     27/07/03
 // Copyright:   (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence

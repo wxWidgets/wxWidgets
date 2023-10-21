@@ -2,7 +2,6 @@
 // Name:        src/generic/tabg.cpp
 // Purpose:     Generic tabbed dialogs; used by generic wxNotebook
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c)
 // Licence:     wxWindows licence

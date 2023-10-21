@@ -2,7 +2,6 @@
 // Name:        wx/popupwin.h
 // Purpose:     wxPopupWindow interface declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.01.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

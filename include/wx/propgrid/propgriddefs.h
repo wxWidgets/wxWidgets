@@ -2,7 +2,6 @@
 // Name:        wx/propgrid/propgriddefs.h
 // Purpose:     wxPropertyGrid miscellaneous definitions
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2008-08-31
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

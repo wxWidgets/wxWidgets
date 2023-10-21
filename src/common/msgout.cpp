@@ -2,7 +2,6 @@
 // Name:        src/common/msgout.cpp
 // Purpose:     wxMessageOutput implementation
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     17.07.02
 // Copyright:   (c) the wxWidgets team
 // Licence:     wxWindows licence

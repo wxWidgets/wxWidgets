@@ -2,7 +2,6 @@
 // Name:        src/common/wfstream.cpp
 // Purpose:     "File stream" classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     11/07/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

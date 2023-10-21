@@ -2,7 +2,6 @@
 // Name:        src/univ/radiobox.cpp
 // Purpose:     wxRadioBox implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.09.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

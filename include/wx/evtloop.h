@@ -2,7 +2,6 @@
 // Name:        wx/evtloop.h
 // Purpose:     declares wxEventLoop class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.06.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

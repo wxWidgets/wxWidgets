@@ -2,7 +2,6 @@
 // Name:        src/common/utilscmn.cpp
 // Purpose:     Miscellaneous utility functions and classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence

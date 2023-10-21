@@ -2,7 +2,6 @@
 // Name:        src/x11/utilsx.cpp
 // Purpose:     Private functions for X11
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     05/04/03
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence

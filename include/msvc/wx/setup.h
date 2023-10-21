@@ -2,7 +2,6 @@
 // Name:        msvc/wx/setup.h
 // Purpose:     wrapper around the real wx/setup.h for Visual C++
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-12-12
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

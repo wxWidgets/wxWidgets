@@ -4,7 +4,6 @@
 //              wxUniv port controls, it supports the customization of the
 //              window drawing and input processing.
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/msw/crashrpt.cpp
 // Purpose:     code to generate crash dumps (minidumps)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     13.07.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

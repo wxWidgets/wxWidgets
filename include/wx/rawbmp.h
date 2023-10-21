@@ -2,7 +2,6 @@
 // Name:        wx/rawbmp.h
 // Purpose:     macros for fast, raw bitmap data access
 // Author:      Eric Kidd, Vadim Zeitlin
-// Modified by:
 // Created:     10.03.03
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

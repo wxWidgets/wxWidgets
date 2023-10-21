@@ -2,7 +2,6 @@
 // Name:        include/wx/qt/winevent_qt.h
 // Purpose:     QWidget to wxWindow event handler
 // Author:      Javier Torres, Peter Most
-// Modified by:
 // Created:     21.06.10
 // Copyright:   (c) Javier Torres
 // Licence:     wxWindows licence

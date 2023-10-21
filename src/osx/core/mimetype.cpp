@@ -2,7 +2,6 @@
 // Name:        src/osx/core/mimetype.cpp
 // Purpose:     Mac OS X implementation for wx MIME-related classes
 // Author:      Neil Perkins
-// Modified by:
 // Created:     2010-05-15
 // Copyright:   (C) 2010 Neil Perkins
 // Licence:     wxWindows licence

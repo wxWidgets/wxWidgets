@@ -2,7 +2,6 @@
 // Name:        conftest.cpp
 // Purpose:     demo of wxConfig and related classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.08.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/msgdlg.h
 // Purpose:     common header and base class for wxMessageDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

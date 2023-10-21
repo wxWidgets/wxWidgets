@@ -2,7 +2,6 @@
 // Name:        wx/osx/spinbutt.h
 // Purpose:     wxSpinButton class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

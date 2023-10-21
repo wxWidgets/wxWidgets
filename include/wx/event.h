@@ -2,7 +2,6 @@
 // Name:        wx/event.h
 // Purpose:     Event classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

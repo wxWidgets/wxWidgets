@@ -2,7 +2,6 @@
 // Name:        src/common/string.cpp
 // Purpose:     wxString class
 // Author:      Vadim Zeitlin, Ryan Norton
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              (c) 2004 Ryan Norton <wxprojects@comcast.net>

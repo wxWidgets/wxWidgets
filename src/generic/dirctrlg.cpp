@@ -2,7 +2,6 @@
 // Name:        src/generic/dirctrlg.cpp
 // Purpose:     wxGenericDirCtrl
 // Author:      Harm van der Heijden, Robert Roebling, Julian Smart
-// Modified by:
 // Created:     12/12/98
 // Copyright:   (c) Harm van der Heijden, Robert Roebling and Julian Smart
 // Licence:     wxWindows licence

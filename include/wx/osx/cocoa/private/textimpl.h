@@ -2,7 +2,6 @@
 // Name:        wx/osx/cocoa/private/textimpl.h
 // Purpose:     textcontrol implementation classes that have to be exposed
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     03/02/99
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

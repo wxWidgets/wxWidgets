@@ -2,7 +2,6 @@
 // Name:        wx/sysopt.h
 // Purpose:     wxSystemOptions
 // Author:      Julian Smart
-// Modified by:
 // Created:     2001-07-10
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

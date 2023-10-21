@@ -2,7 +2,6 @@
 // Name:        wx/variant.h
 // Purpose:     wxVariant class, container for any type
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

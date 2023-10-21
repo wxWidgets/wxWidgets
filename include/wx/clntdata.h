@@ -2,7 +2,6 @@
 // Name:        wx/clntdata.h
 // Purpose:     A mixin class for holding a wxClientData or void pointer
 // Author:      Robin Dunn
-// Modified by:
 // Created:     9-Oct-2001
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/evtloop.h
 // Purpose:     CoreFoundation-based event loop
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-01-12
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

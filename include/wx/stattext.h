@@ -2,7 +2,6 @@
 // Name:        wx/stattext.h
 // Purpose:     wxStaticText base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

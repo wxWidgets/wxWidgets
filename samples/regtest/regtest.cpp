@@ -2,7 +2,6 @@
 // Name:        regtest.cpp
 // Purpose:     wxRegKey class demo
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.04.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

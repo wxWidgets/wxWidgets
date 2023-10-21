@@ -2,7 +2,6 @@
 // Name:        wx/msw/glcanvas.h
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under Windows
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

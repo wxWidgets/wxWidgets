@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextformatdlg.h
 // Purpose:     Formatting dialog for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2006-10-01
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

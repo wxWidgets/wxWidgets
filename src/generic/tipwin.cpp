@@ -2,7 +2,6 @@
 // Name:        src/generic/tipwin.cpp
 // Purpose:     implementation of wxTipWindow
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.09.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

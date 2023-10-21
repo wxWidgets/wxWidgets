@@ -3,7 +3,6 @@
 // Purpose:     Header for wxFileCtrlBase and other common functions used by
 //              platform-specific wxFileCtrl's
 // Author:      Diaa M. Sami
-// Modified by:
 // Created:     Jul-07-2007
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence

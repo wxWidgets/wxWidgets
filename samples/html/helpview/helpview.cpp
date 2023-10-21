@@ -2,7 +2,6 @@
 // Name:        helpview.cpp
 // Purpose:     wxHtml sample: help browser
 // Author:      ?
-// Modified by:
 // Created:     ?
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

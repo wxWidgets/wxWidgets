@@ -2,7 +2,6 @@
 // Name:        wx/generic/combo.h
 // Purpose:     Generic wxComboCtrl
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

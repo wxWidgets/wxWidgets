@@ -3,7 +3,6 @@
 // Purpose:     second part of platform specific wxDataObject header -
 //              declarations of predefined wxDataObjectSimple-derived classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.10.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

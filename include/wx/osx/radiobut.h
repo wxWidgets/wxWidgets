@@ -2,7 +2,6 @@
 // Name:        wx/osx/radiobut.h
 // Purpose:     wxRadioButton class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

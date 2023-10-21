@@ -2,7 +2,6 @@
 // Name:        splash.cpp
 // Purpose:     wxSplashScreen sample
 // Author:      Wlodzimierz ABX Skiba
-// Modified by:
 // Created:     04/08/2004
 // Copyright:   (c) Wlodzimierz Skiba
 // Licence:     wxWindows licence

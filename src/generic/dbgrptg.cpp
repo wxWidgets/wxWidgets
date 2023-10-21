@@ -2,7 +2,6 @@
 // Name:        src/generic/dbgrptg.cpp
 // Purpose:     implementation of wxDebugReportPreviewStd
 // Author:      Vadim Zeitlin, Andrej Putrin
-// Modified by:
 // Created:     2005-01-21
 // Copyright:   (c) 2005 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

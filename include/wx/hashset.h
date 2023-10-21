@@ -2,7 +2,6 @@
 // Name:        wx/hashset.h
 // Purpose:     wxHashSet class
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     11/08/2003
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence

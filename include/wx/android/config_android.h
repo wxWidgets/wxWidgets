@@ -2,7 +2,6 @@
 // Name:        wx/android/config_android.h
 // Purpose:     configurations for Android builds
 // Author:      Zsolt Bakcsi
-// Modified by:
 // Created:     2011-12-02
 // RCS-ID:
 // Copyright:   (c) wxWidgets team

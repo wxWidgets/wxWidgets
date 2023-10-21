@@ -2,7 +2,6 @@
 // Name:        wx/scopeguard.h
 // Purpose:     declares wxScopeGuard and related macros
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.07.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

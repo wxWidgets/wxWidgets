@@ -2,7 +2,6 @@
 // Name:        wx/dynarray.h
 // Purpose:     auto-resizable (i.e. dynamic) array support
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.09.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

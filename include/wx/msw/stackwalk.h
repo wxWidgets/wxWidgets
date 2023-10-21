@@ -2,7 +2,6 @@
 // Name:        wx/msw/stackwalk.h
 // Purpose:     wxStackWalker for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-08
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

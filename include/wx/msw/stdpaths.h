@@ -2,7 +2,6 @@
 // Name:        wx/msw/stdpaths.h
 // Purpose:     wxStandardPaths for Win32
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

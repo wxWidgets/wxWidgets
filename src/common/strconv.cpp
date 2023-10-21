@@ -3,7 +3,6 @@
 // Purpose:     Unicode conversion classes
 // Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin, Vaclav Slavik,
 //              Ryan Norton, Fredrik Roubert (UTF7)
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1999 Ove Kaaven, Robert Roebling, Vaclav Slavik
 //              (c) 2000-2003 Vadim Zeitlin

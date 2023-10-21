@@ -2,7 +2,6 @@
 // Name:        wx/power.h
 // Purpose:     functions and classes for system power management
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-05-27
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

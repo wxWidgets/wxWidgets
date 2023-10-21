@@ -2,7 +2,6 @@
 // Name:        wx/statbmp.h
 // Purpose:     wxStaticBitmap class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) 2000 Vadim Zeitlin
 // Licence:     wxWindows licence

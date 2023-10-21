@@ -2,7 +2,6 @@
 // Name:        wx/x11/reparent.h
 // Purpose:     Reparenting classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     2002-03-09
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

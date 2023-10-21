@@ -2,7 +2,6 @@
 // Name:        wx/dnd.h
 // Purpose:     Drag and drop classes declarations
 // Author:      Vadim Zeitlin, Robert Roebling
-// Modified by:
 // Created:     26.05.99
 // Copyright:   (c) wxWidgets Team
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/univ/ctrlrend.cpp
 // Purpose:     wxControlRenderer implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

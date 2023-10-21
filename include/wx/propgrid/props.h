@@ -2,7 +2,6 @@
 // Name:        wx/propgrid/props.h
 // Purpose:     wxPropertyGrid Property Classes
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2007-03-28
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/msw/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     24.09.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

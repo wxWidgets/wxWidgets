@@ -2,7 +2,6 @@
 // Name:        wx/stream.h
 // Purpose:     stream classes
 // Author:      Guilhem Lavaux, Guillermo Rodriguez Garcia, Vadim Zeitlin
-// Modified by:
 // Created:     11/07/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/generic/filedlgg.h
 // Purpose:     wxGenericFileDialog
 // Author:      Robert Roebling
-// Modified by:
 // Created:     8/17/99
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/dcsvg.h
 // Purpose:     wxSVGFileDC
 // Author:      Chris Elliott
-// Modified by:
 // Created:
 // Copyright:   (c) Chris Elliott
 // Licence:     wxWindows licence

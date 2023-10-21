@@ -2,7 +2,6 @@
 // Name:        wx/gtk/hyperlink.h
 // Purpose:     Hyperlink control
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/2/2007
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence

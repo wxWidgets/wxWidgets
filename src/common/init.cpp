@@ -2,7 +2,6 @@
 // Name:        src/common/init.cpp
 // Purpose:     initialisation for the library
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.10.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

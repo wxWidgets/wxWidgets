@@ -2,7 +2,6 @@
 // Name:        wx/vlbox.h
 // Purpose:     wxVListBox is a virtual listbox with lines of variable height
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.05.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

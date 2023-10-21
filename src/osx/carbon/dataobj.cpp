@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/dataobj.cpp
 // Purpose:     implementation of wxDataObject class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     10/21/99
 // Copyright:   (c) 1999 Stefan Csomor
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/generic/filectrlg.h
 // Purpose:     wxGenericFileCtrl Header
 // Author:      Diaa M. Sami
-// Modified by:
 // Created:     Jul-07-2007
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence

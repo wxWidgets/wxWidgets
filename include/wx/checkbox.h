@@ -2,7 +2,6 @@
 // Name:        wx/checkbox.h
 // Purpose:     wxCheckBox class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.09.00
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

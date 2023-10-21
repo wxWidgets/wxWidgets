@@ -2,7 +2,6 @@
 // Name:        src/generic/helpext.cpp
 // Purpose:     an external help controller for wxWidgets
 // Author:      Karsten Ballueder
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence

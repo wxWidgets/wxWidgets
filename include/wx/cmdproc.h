@@ -2,7 +2,6 @@
 // Name:        wx/cmdproc.h
 // Purpose:     undo/redo capable command processing framework
 // Author:      Julian Smart (extracted from docview.h by VZ)
-// Modified by:
 // Created:     05.11.00
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

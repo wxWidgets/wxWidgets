@@ -3,7 +3,6 @@
 // Purpose:     declaration of the base class of all config implementations
 //              (see also: fileconf.h and msw/regconf.h and iniconf.h)
 // Author:      Karsten Ballueder & Vadim Zeitlin
-// Modified by:
 // Created:     07.04.98 (adapted from appconf.h)
 // Copyright:   (c) 1997 Karsten Ballueder   Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>

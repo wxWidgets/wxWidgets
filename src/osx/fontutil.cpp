@@ -2,7 +2,6 @@
 // Name:        src/osx/fontutil.cpp
 // Purpose:     font-related helper functions for OS X
 // Author:      Vadim Zeitlin, Stefan Csomor
-// Modified by:
 // Created:     05.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

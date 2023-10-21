@@ -2,7 +2,6 @@
 // Name:        wx/strconv.h
 // Purpose:     conversion routines for char sets any Unicode
 // Author:      Ove Kaaven, Robert Roebling, Vadim Zeitlin
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Ove Kaaven, Robert Roebling
 //              (c) 1998-2006 Vadim Zeitlin

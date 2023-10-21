@@ -2,7 +2,6 @@
 // Name:        wx/collpane.h
 // Purpose:     wxCollapsiblePane
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     8/10/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence

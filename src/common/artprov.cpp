@@ -2,7 +2,6 @@
 // Name:        src/common/artprov.cpp
 // Purpose:     wxArtProvider class
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     18/03/2002
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence

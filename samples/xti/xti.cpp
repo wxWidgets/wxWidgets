@@ -2,7 +2,6 @@
 // Name:        xti.cpp
 // Purpose:     eXtended RTTI support sample
 // Author:      Stefan Csomor, Francesco Montorsi
-// Modified by:
 // Created:     13/5/2007
 // Copyright:   (c) Stefan Csomor, Francesco Montorsi
 // Licence:     wxWindows licence

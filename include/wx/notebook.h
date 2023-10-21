@@ -2,7 +2,6 @@
 // Name:        wx/notebook.h
 // Purpose:     wxNotebook interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.02.01
 // Copyright:   (c) 1996-2000 Vadim Zeitlin
 // Licence:     wxWindows licence

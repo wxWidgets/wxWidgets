@@ -2,7 +2,6 @@
 // Name:        wx/qt/datectrl.h
 // Purpose:     wxDatePickerCtrl for Qt
 // Author:      Ali Kettab
-// Modified by:
 // Created:     2023-10-12
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

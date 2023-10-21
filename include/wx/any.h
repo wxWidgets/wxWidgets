@@ -2,7 +2,6 @@
 // Name:        wx/any.h
 // Purpose:     wxAny class
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     07/05/2009
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

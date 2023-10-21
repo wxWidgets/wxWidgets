@@ -2,7 +2,6 @@
 // Name:        src/propgrid/propgridpagestate.cpp
 // Purpose:     wxPropertyGridPageState class
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2008-08-24
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

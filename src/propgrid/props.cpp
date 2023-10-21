@@ -2,7 +2,6 @@
 // Name:        src/propgrid/props.cpp
 // Purpose:     Basic Property Classes
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2005-05-14
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

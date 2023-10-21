@@ -2,7 +2,6 @@
 // Name:        src/propgrid/advprops.cpp
 // Purpose:     wxPropertyGrid Advanced Properties (font, colour, etc.)
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2004-09-25
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

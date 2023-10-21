@@ -3,7 +3,6 @@
 // Purpose:     Declaration of the wxToggleButton class, which implements a
 //              toggle button under wxGTK.
 // Author:      John Norris, minor changes by Axel Schlueter
-// Modified by:
 // Created:     08.02.01
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows licence

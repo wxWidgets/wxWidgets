@@ -2,7 +2,6 @@
 // Name:        wx/osx/popupwin.h
 // Purpose:     wxPopupWindow class for wxMac
 // Author:      Stefan Csomor
-// Modified by:
 // Created:
 // Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/activex.h
 // Purpose:     wxActiveXContainer class
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by:
 // Created:     8/18/05
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

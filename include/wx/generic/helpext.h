@@ -2,7 +2,6 @@
 // Name:        wx/generic/helpext.h
 // Purpose:     an external help controller for wxWidgets
 // Author:      Karsten Ballueder (Ballueder@usa.net)
-// Modified by:
 // Copyright:   (c) Karsten Ballueder 1998
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

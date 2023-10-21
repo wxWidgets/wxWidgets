@@ -2,7 +2,6 @@
 // Name:        wx/univ/colschem.h
 // Purpose:     wxColourScheme class provides the colours to use for drawing
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
