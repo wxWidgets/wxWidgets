@@ -20,7 +20,7 @@ class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlBase
 {
 public:
     // ctors
-    wxDatePickerCtrl() { }
+    wxDatePickerCtrl() = default;
 
     wxDatePickerCtrl(wxWindow *parent,
                      wxWindowID id,
@@ -52,8 +52,6 @@ public:
     virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const override;
 
     virtual QWidget *GetHandle() const override;
-
-protected:
 
 private:
     QDateEdit* m_qtDateEdit;

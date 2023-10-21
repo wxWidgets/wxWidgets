@@ -40,7 +40,6 @@ public:
 
 private:
     void dateChanged(const QDate& date);
-
 };
 
 wxQtDateEdit::wxQtDateEdit( wxWindow* parent, wxDatePickerCtrl* handler )
