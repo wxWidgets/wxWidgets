@@ -233,6 +233,7 @@ QT_HDR =
     wx/generic/fontpickerg.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/generic/paletteg.h
     wx/generic/prntdlgg.h
     wx/qt/accel.h
     wx/qt/anybutton.h
@@ -257,6 +258,7 @@ QT_HDR =
     wx/qt/dataobj.h
     wx/qt/dataobj2.h
     wx/qt/dataview.h
+    wx/qt/datectrl.h
     wx/qt/dc.h
     wx/qt/dcclient.h
     wx/qt/dcmemory.h
@@ -283,7 +285,6 @@ QT_HDR =
     wx/qt/msgdlg.h
     wx/qt/nonownedwnd.h
     wx/qt/notebook.h
-    wx/qt/palette.h
     wx/qt/pen.h
     wx/qt/popupwin.h
     wx/qt/printdlg.h
@@ -304,6 +305,7 @@ QT_HDR =
     wx/qt/textctrl.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
+    wx/qt/timectrl.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
@@ -322,6 +324,7 @@ QT_SRC=
     src/generic/fontpickerg.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
+    src/generic/paletteg.cpp
     src/generic/prntdlgg.cpp
     src/generic/textmeasure.cpp
     src/qt/accel.cpp
@@ -347,6 +350,7 @@ QT_SRC=
     src/qt/cursor.cpp
     src/qt/dataobj.cpp
     src/qt/dataview.cpp
+    src/qt/datectrl.cpp
     src/qt/dc.cpp
     src/qt/dcclient.cpp
     src/qt/dcmemory.cpp
@@ -375,7 +379,6 @@ QT_SRC=
     src/qt/msgdlg.cpp
     src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
-    src/qt/palette.cpp
     src/qt/pen.cpp
     src/qt/popupwin.cpp
     src/qt/printdlg.cpp
@@ -398,6 +401,7 @@ QT_SRC=
     src/qt/textctrl.cpp
     src/qt/textentry.cpp
     src/qt/tglbtn.cpp
+    src/qt/timectrl.cpp
     src/qt/timer.cpp
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp

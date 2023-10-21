@@ -15,6 +15,7 @@
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
     #include <QtCore/QDate>
+    #include <QtCore/QTime>
 #endif // wxUSE_DATETIME
 
 #include "wx/qt/private/converter.h"
@@ -38,6 +39,22 @@ QDate wxQtConvertDate(const wxDateTime& date)
         return QDate(date.GetYear(), date.GetMonth() + 1, date.GetDay());
     else
         return QDate();
+}
+
+wxDateTime wxQtConvertTime(const QTime& time)
+{
+    if ( !time.isNull() )
+        return wxDateTime(time.hour(), time.minute(), time.second(), time.msec());
+    else
+        return wxDateTime();
+}
+
+QTime wxQtConvertTime(const wxDateTime& time)
+{
+    if ( time.IsValid() )
+        return QTime(time.GetHour(), time.GetMinute(), time.GetSecond(), time.GetMillisecond());
+    else
+        return QTime();
 }
 
 #endif // wxUSE_DATETIME

@@ -38,10 +38,11 @@ public:
     }
 
     // Convert hyphenated shortcuts to use the plus sign (+) which Qt understands.
+    // Example: [ Ctrl-Shift-- ] should be converted to [ Ctrl+Shift+- ]
     static wxString Normalize(const wxString& text)
     {
         QString normalized = wxQtConvertString( text );
-        normalized.replace(QRegExp("([^+-])[-]"), "\\1+");
+        normalized.replace(QRegExp("([^+-])[-](.)"), "\\1+\\2");
         return wxQtConvertString( normalized );
     }
 

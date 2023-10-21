@@ -350,6 +350,8 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     // that a generic control, like wxPanel, is being created, so we need a very
     // simple control as a base:
 
+    wxSize initialSize = size;
+
     if ( GetHandle() == nullptr )
     {
         if ( style & (wxHSCROLL | wxVSCROLL) )
@@ -364,6 +366,13 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
         }
         else
             m_qtWindow = new wxQtWidget( parent, this );
+
+        // The default size of a generic control (e.g. wxPanel) is (0, 0) when created and
+        // is ignored by Qt unless the widget is already assigned a valid size or is added
+        // to a QLayout to be managed with. The value 20 seems to be the default under wxMSW.
+        // Do not pass 'initialSize' to CreateBase() below, as it will be taken as the minimum
+        // size of the control, which is not the intention here.
+        initialSize.SetDefaults(wxSize(20, 20));
     }
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -375,11 +384,11 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     if ( pos != wxDefaultPosition )
         p = pos;
 
-    DoMoveWindow( p.x, p.y, size.GetWidth(), size.GetHeight() );
+    DoMoveWindow( p.x, p.y, initialSize.GetWidth(), initialSize.GetHeight() );
 
     PostCreation();
 
-    return ( true );
+    return true;
 }
 
 void wxWindowQt::PostCreation(bool generic)
@@ -486,42 +495,6 @@ void wxWindowQt::SetFocus()
     GetHandle()->setFocus();
 }
 
-void wxWindowQt::QtSetMinSize(const wxSize& minSize)
-{
-    if ( !GetHandle() )
-        return;
-
-    if ( minSize.x >= 0 )
-        GetHandle()->setMinimumWidth(minSize.x);
-
-    if ( minSize.y >= 0 )
-        GetHandle()->setMinimumHeight(minSize.y);
-}
-
-void wxWindowQt::QtSetMaxSize(const wxSize& maxSize)
-{
-    if ( !GetHandle() )
-        return;
-
-    if ( maxSize.x >= 0 )
-        GetHandle()->setMaximumWidth(maxSize.x);
-
-    if ( maxSize.y >= 0 )
-        GetHandle()->setMaximumHeight(maxSize.y);
-}
-
-void wxWindowQt::SetMinSize(const wxSize& minSize)
-{
-    QtSetMinSize(minSize);
-    wxWindowBase::SetMinSize(minSize);
-}
-
-void wxWindowQt::SetMaxSize(const wxSize& maxSize)
-{
-    QtSetMaxSize(maxSize);
-    wxWindowBase::SetMaxSize(maxSize);
-}
-
 /* static */ void wxWindowQt::QtReparent( QWidget *child, QWidget *parent )
 {
     // Backup the attributes which will be changed during the reparenting:
@@ -575,9 +548,9 @@ void wxWindowQt::Update()
     // send the paint event to the inner widget in scroll areas:
     if ( QtGetScrollBarsContainer() )
     {
-        QtGetScrollBarsContainer()->viewport()->update();
+        QtGetScrollBarsContainer()->viewport()->repaint();
     } else {
-        GetHandle()->update();
+        GetHandle()->repaint();
     }
 }
 

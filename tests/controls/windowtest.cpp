@@ -133,8 +133,8 @@ TEST_CASE_METHOD(WindowTestCase, "Window::FocusEvent", "[window]")
 
     wxButton* button = new wxButton(wxTheApp->GetTopWindow(), wxID_ANY);
 
-    wxYield();
     button->SetFocus();
+    wxYield();
 
     CHECK( killfocus.GetCount() == 1 );
     CHECK(!m_window->HasFocus());
@@ -143,7 +143,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::FocusEvent", "[window]")
 
 TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 {
-    wxCursor cursor(wxCURSOR_CHAR);
+    wxCursor cursor(wxCURSOR_HAND);
     m_window->SetCursor(cursor);
 
     CHECK(m_window->GetCursor().IsOk());

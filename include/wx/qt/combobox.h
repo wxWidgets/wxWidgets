@@ -91,7 +91,6 @@ protected:
     virtual wxString DoGetValue() const override;
 
 private:
-    void SetActualValue(const wxString& value);
     bool IsReadOnly() const;
 
     // From wxTextEntry:
