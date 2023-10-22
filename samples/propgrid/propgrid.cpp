@@ -1005,8 +1005,7 @@ void FormMain::OnEnableCommonValues(wxCommandEvent& WXUNUSED(event))
 
 void FormMain::PopulateWithStandardItems ()
 {
-    wxPropertyGridManager* pgman = m_pPropGridManager;
-    wxPropertyGridPage* pg = pgman->GetPage("Standard Items");
+    wxPropertyGridPage* pg = m_pPropGridManager->GetPage("Standard Items");
 
     // Append is ideal way to add items to wxPropertyGrid.
     pg->Append( new wxPropertyCategory("Appearance",wxPG_LABEL) );
@@ -1155,8 +1154,7 @@ void FormMain::PopulateWithStandardItems ()
 
 void FormMain::PopulateWithExamples ()
 {
-    wxPropertyGridManager* pgman = m_pPropGridManager;
-    wxPropertyGridPage* pg = pgman->GetPage("Examples");
+    wxPropertyGridPage* pg = m_pPropGridManager->GetPage("Examples");
     wxPGProperty* pid;
     wxPGProperty* prop;
 
@@ -1596,13 +1594,12 @@ void FormMain::PopulateWithExamples ()
 
 void FormMain::PopulateWithLibraryConfig ()
 {
-    wxPropertyGridManager* pgman = m_pPropGridManager;
-    wxPropertyGridPage* pg = pgman->GetPage("wxWidgets Library Config");
+    wxPropertyGridPage* pg = m_pPropGridManager->GetPage("wxWidgets Library Config");
 
     // Set custom column proportions (here in the sample app we need
     // to check if the grid has wxPG_SPLITTER_AUTO_CENTER style. You usually
     // need not to do it in your application).
-    if ( pgman->HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
+    if ( m_pPropGridManager->HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
     {
         pg->SetColumnProportion(0, 3);
         pg->SetColumnProportion(1, 1);
@@ -1614,7 +1611,7 @@ void FormMain::PopulateWithLibraryConfig ()
 
     wxPGProperty* pid;
 
-    wxFont italicFont = pgman->GetGrid()->GetCaptionFont();
+    wxFont italicFont = m_pPropGridManager->GetGrid()->GetCaptionFont();
     italicFont.SetStyle(wxFONTSTYLE_ITALIC);
 
     wxString italicFontHelp = "Font of this property's wxPGCell has "
@@ -1840,12 +1837,11 @@ wxEND_EVENT_TABLE()
 
 void FormMain::PopulateGrid()
 {
-    wxPropertyGridManager* pgman = m_pPropGridManager;
-    pgman->AddPage("Standard Items");
+    m_pPropGridManager->AddPage("Standard Items");
 
     PopulateWithStandardItems();
 
-    pgman->AddPage("wxWidgets Library Config");
+    m_pPropGridManager->AddPage("wxWidgets Library Config");
 
     PopulateWithLibraryConfig();
 
@@ -1854,7 +1850,7 @@ void FormMain::PopulateGrid()
 
     // Use wxMyPropertyGridPage (see above) to test the
     // custom wxPropertyGridPage feature.
-    pgman->AddPage("Examples", wxBitmapBundle(), myPage);
+    m_pPropGridManager->AddPage("Examples", wxBitmapBundle(), myPage);
 
     PopulateWithExamples();
 }
@@ -1893,8 +1889,7 @@ void FormMain::CreateGrid( int style, int extraStyle )
     m_combinedFlags.Add( WXSIZEOF(_fs_windowstyle_labels), _fs_windowstyle_labels, _fs_windowstyle_values );
     m_combinedFlags.Add( WXSIZEOF(_fs_framestyle_labels), _fs_framestyle_labels, _fs_framestyle_values );
 
-    wxPropertyGridManager* pgman = m_pPropGridManager =
-        new wxPropertyGridManager(m_panel,
+    m_pPropGridManager = new wxPropertyGridManager(m_panel,
                                   // Don't change this into wxID_ANY in the sample, or the
                                   // event handling will obviously be broken.
                                   PGID, /*wxID_ANY*/
@@ -1902,9 +1897,9 @@ void FormMain::CreateGrid( int style, int extraStyle )
                                   wxDefaultSize,
                                   style );
 
-    m_propGrid = pgman->GetGrid();
+    m_propGrid = m_pPropGridManager->GetGrid();
 
-    pgman->SetExtraStyle(extraStyle);
+    m_pPropGridManager->SetExtraStyle(extraStyle);
 
     // This is the default validation failure behaviour
     m_pPropGridManager->SetValidationFailureBehavior( wxPGVFBFlags::MarkCell |
@@ -1929,7 +1924,7 @@ void FormMain::CreateGrid( int style, int extraStyle )
     }
 
     // Change some attributes in all properties
-    //pgman->SetPropertyAttributeAll(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,true);
+    //m_pPropGridManager->SetPropertyAttributeAll(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,true);
 
     //m_pPropGridManager->SetSplitterLeft(true);
     //m_pPropGridManager->SetSplitterPosition(137);
