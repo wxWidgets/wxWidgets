@@ -37,6 +37,7 @@ public:
     virtual bool GetSelection(long *from, long *to) const = 0;
     virtual long XYToPosition(long x, long y) const = 0;
     virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const = 0;
     virtual QScrollArea *ScrollBarsContainer() const = 0;
     virtual void WriteText( const wxString &text ) = 0;
     virtual void MarkDirty() = 0;
@@ -95,6 +96,10 @@ public:
     {
         return GetHandler()->GetValue();
     }
+
+    // cursorRect() is protected in base class. Make it public
+    // so it can be accessed by wxQtSingleLineEdit::HitTest()
+    using QLineEdit::cursorRect;
 
 private:
     void textChanged();
@@ -241,6 +246,27 @@ public:
 
         return true;
     }
+
+    virtual wxTextCtrlHitTestResult
+    HitTest(const wxPoint& pt, long* pos) const override
+    {
+        auto qtEdit = static_cast<wxQtTextEdit* const>(m_edit);
+
+        auto cursor  = qtEdit->cursorForPosition( wxQtConvertPoint(pt) );
+        auto curRect = qtEdit->cursorRect(cursor);
+
+        if ( pos )
+            *pos = cursor.position();
+
+        if ( pt.y > curRect.y() + qtEdit->fontMetrics().height() )
+            return wxTE_HT_BELOW;
+
+        if ( pt.x > curRect.x() + qtEdit->fontMetrics().averageCharWidth() )
+            return wxTE_HT_BEYOND;
+
+        return wxTE_HT_ON_TEXT;
+    }
+
     virtual void WriteText( const wxString &text ) override
     {
         m_edit->insertPlainText(wxQtConvertString( text ));
@@ -489,6 +515,25 @@ public:
         return true;
     }
 
+    virtual wxTextCtrlHitTestResult
+    HitTest(const wxPoint& pt, long *pos) const override
+    {
+        auto qtEdit  = static_cast<wxQtLineEdit* const>(m_edit);
+        auto curPos  = qtEdit->cursorPositionAt( wxQtConvertPoint(pt) );
+        auto curRect = qtEdit->cursorRect();
+
+        if ( pos )
+            *pos = curPos;
+
+        if ( pt.y > curRect.y() + qtEdit->fontMetrics().height() )
+            return wxTE_HT_BELOW;
+
+        if ( pt.x > curRect.x() + qtEdit->fontMetrics().averageCharWidth() )
+            return wxTE_HT_BEYOND;
+
+        return wxTE_HT_ON_TEXT;
+    }
+
     virtual QScrollArea *ScrollBarsContainer() const override
     {
         return nullptr;
@@ -674,6 +719,12 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 
 void wxTextCtrl::ShowPosition(long WXUNUSED(pos))
 {
+}
+
+wxTextCtrlHitTestResult
+wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
+{
+    return m_qtEdit->HitTest(pt, pos);
 }
 
 bool wxTextCtrl::DoLoadFile(const wxString& WXUNUSED(file), int WXUNUSED(fileType))

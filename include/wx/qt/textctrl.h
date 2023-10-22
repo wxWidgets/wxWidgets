@@ -52,6 +52,14 @@ public:
 
     virtual void ShowPosition(long pos) override;
 
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const override
+    {
+        return wxTextCtrlBase::HitTest(pt, col, row);
+    }
+
     virtual void SetInsertionPoint(long pos) override;
     virtual long GetInsertionPoint() const override;
     virtual void SetSelection( long from, long to ) override;
