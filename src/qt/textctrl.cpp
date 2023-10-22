@@ -816,6 +816,24 @@ void wxTextCtrl::EmptyUndoBuffer()
     m_qtEdit->EmptyUndoBuffer();
 }
 
+bool wxTextCtrl::IsEditable() const
+{
+    return HasFlag(wxTE_READONLY);
+}
+
+void wxTextCtrl::SetEditable(bool editable)
+{
+    long flags = GetWindowStyle();
+
+    if ( editable )
+        flags &= ~wxTE_READONLY;
+    else
+        flags |= wxTE_READONLY;
+
+    SetWindowStyle(flags);
+    m_qtEdit->SetStyleFlags(flags);
+}
+
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
     m_qtEdit->SetInsertionPoint(pos);
