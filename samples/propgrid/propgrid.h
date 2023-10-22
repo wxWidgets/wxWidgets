@@ -100,7 +100,7 @@ public:
     FormMain(const wxString& title);
     ~FormMain();
 
-    wxPropertyGridManager*  m_pPropGridManager;
+    wxPropertyGridManager*  m_propGridManager;
     wxPropertyGrid*     m_propGrid;
 
     wxTextCtrl*     m_tcPropLabel;
