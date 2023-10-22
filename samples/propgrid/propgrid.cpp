@@ -1541,7 +1541,7 @@ void FormMain::PopulateWithExamples ()
     //
     // Test wxSampleMultiButtonEditor
     pg->Append( new wxLongStringProperty("MultipleButtons", wxPG_LABEL) );
-    pg->SetPropertyEditor("MultipleButtons", m_pSampleMultiButtonEditor );
+    pg->SetPropertyEditor("MultipleButtons", m_sampleMultiButtonEditor );
 
     // Test SingleChoiceProperty
     pg->Append( new SingleChoiceProperty("SingleChoiceProperty") );
@@ -2103,7 +2103,7 @@ FormMain::FormMain(const wxString& title)
     wxPropertyGridInterface::RegisterAdditionalEditors();
 
     // Register our sample custom editors
-    m_pSampleMultiButtonEditor =
+    m_sampleMultiButtonEditor =
         wxPropertyGrid::RegisterEditorClass(new wxSampleMultiButtonEditor());
 
     m_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);

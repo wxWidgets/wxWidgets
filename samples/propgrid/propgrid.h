@@ -111,7 +111,7 @@ public:
     wxLogWindow*    m_logWindow;
 #endif
 
-    wxPGEditor*     m_pSampleMultiButtonEditor;
+    wxPGEditor*     m_sampleMultiButtonEditor;
     wxPGChoices     m_combinedFlags;
 
     wxMenuItem*     m_itemCatColours;
