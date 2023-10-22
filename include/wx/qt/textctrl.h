@@ -80,6 +80,8 @@ public:
     virtual void DoSetValue(const wxString &text, int flags = 0) override;
     virtual void WriteText(const wxString& text) override;
 
+    virtual void SetMaxLength(unsigned long len) override;
+
     virtual QWidget *GetHandle() const override;
 
 protected:

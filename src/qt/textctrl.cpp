@@ -17,6 +17,12 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTextEdit>
 
+#include <limits>
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+#define wxHAS_QT_INPUTREJECTED
+#endif
+
 /*
  * Abstract base class for wxQtSingleLineEdit and wxQtMultiLineEdit.
  * This splits the polymorphic behaviour into two separate classes, avoiding
@@ -40,6 +46,7 @@ public:
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const = 0;
     virtual QScrollArea *ScrollBarsContainer() const = 0;
     virtual void WriteText( const wxString &text ) = 0;
+    virtual void SetMaxLength(unsigned long len) = 0;
     virtual void MarkDirty() = 0;
     virtual void DiscardEdits() = 0;
     virtual void blockSignals(bool block) = 0;
@@ -103,6 +110,10 @@ public:
 
 private:
     void textChanged();
+
+#ifdef wxHAS_QT_INPUTREJECTED
+    void inputRejected();
+#endif
 };
 
 class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
@@ -272,6 +283,11 @@ public:
         m_edit->insertPlainText(wxQtConvertString( text ));
         // the cursor is moved to the end, ensure it is shown
         m_edit->ensureCursorVisible();
+    }
+
+    virtual void SetMaxLength(unsigned long WXUNUSED(len)) override
+    {
+        wxMISSING_IMPLEMENTATION("not implemented for multiline control");
     }
 
     virtual void MarkDirty() override
@@ -448,6 +464,15 @@ public:
         m_edit->insert(wxQtConvertString( text ));
     }
 
+    virtual void SetMaxLength(unsigned long len) override
+    {
+        // Notice that setMaxLength() takes an int and not an unsigned int
+        m_edit->setMaxLength(
+            len > std::numeric_limits<int>::max()
+                ? std::numeric_limits<int>::max() : len
+        );
+    }
+
     virtual void MarkDirty() override
     {
         return m_edit->setModified( true );
@@ -560,6 +585,11 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
 {
     connect(this, &QLineEdit::textChanged,
             this, &wxQtLineEdit::textChanged);
+
+#ifdef wxHAS_QT_INPUTREJECTED
+    connect(this, &QLineEdit::inputRejected,
+            this, &wxQtLineEdit::inputRejected);
+#endif
 }
 
 void wxQtLineEdit::textChanged()
@@ -570,6 +600,15 @@ void wxQtLineEdit::textChanged()
         handler->SendTextUpdatedEventIfAllowed();
     }
 }
+
+#ifdef wxHAS_QT_INPUTREJECTED
+void wxQtLineEdit::inputRejected()
+{
+    wxCommandEvent event(wxEVT_TEXT_MAXLEN, GetHandler()->GetId());
+    event.SetString( GetHandler()->GetValue() );
+    EmitEvent( event );
+}
+#endif // wxHAS_QT_INPUTREJECTED
 
 wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
     : wxQtEventSignalHandler< QTextEdit, wxTextCtrl >( parent, handler )
@@ -816,6 +855,11 @@ void wxTextCtrl::WriteText( const wxString &text )
 {
     // Insert the text
     m_qtEdit->WriteText(text);
+}
+
+void wxTextCtrl::SetMaxLength(unsigned long len)
+{
+    m_qtEdit->SetMaxLength(len);
 }
 
 void wxTextCtrl::DoSetValue( const wxString &text, int flags )
