@@ -590,11 +590,16 @@ void wxClipboard::Clear()
     else
     {
         // We need to free our data directly to avoid leaking memory.
-        delete m_dataPrimary;
-        m_dataPrimary = nullptr;
-
-        delete m_dataClipboard;
-        m_dataClipboard = nullptr;
+        if ( m_usePrimary )
+        {
+            delete m_dataPrimary;
+            m_dataPrimary = nullptr;
+        }
+        else
+        {
+            delete m_dataClipboard;
+            m_dataClipboard = nullptr;
+        }
     }
 
     m_targetRequested = nullptr;
