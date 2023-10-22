@@ -239,6 +239,10 @@ All (GUI):
 
 - Fix refreshing multiple selection items in generic wxListCtrl.
 
+wxGTK:
+
+- Fix losing clipboard contents due to a regression in 3.2.3.
+
 wxMSW:
 
 - Fix MSVS warning about redundant "const" in wx/itemid.h (#23590).
