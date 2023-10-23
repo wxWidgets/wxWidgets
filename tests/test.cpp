@@ -340,6 +340,9 @@ public:
 
     virtual int OnRun() override
     {
+        if ( !IsGUIEnabled() )
+            return 0;
+
         if ( TestAppBase::OnRun() != 0 )
             m_exitcode = EXIT_FAILURE;
 
@@ -351,6 +354,35 @@ public:
         return RunTests();
     }
 #endif // wxUSE_GUI/!wxUSE_GUI
+
+    // Hack to test that GUI applications not using GUI at all work: this was
+    // broken in the past (see #23981), so now the test suite checks that
+    // running this test with WX_TEST_DISABLE_GUI works.
+#if wxUSE_GUI
+    bool IsGUIEnabled() const
+    {
+        return !wxGetEnv(wxASCII_STR("WX_TEST_DISABLE_GUI"), nullptr);
+    }
+
+    virtual bool Initialize(int& argc, wxChar **argv) override
+    {
+        return IsGUIEnabled() ? wxApp::Initialize(argc, argv)
+                              : wxAppConsole::Initialize(argc, argv);
+    }
+
+    virtual bool OnInitGui() override
+    {
+        return !IsGUIEnabled() || wxApp::OnInitGui();
+    }
+
+    virtual void CleanUp() override
+    {
+        if ( IsGUIEnabled() )
+            wxApp::CleanUp();
+        else
+            wxAppConsole::CleanUp();
+    }
+#endif // wxUSE_GUI
 
 private:
     int RunTests();
@@ -592,6 +624,14 @@ TestApp::TestApp()
 //
 bool TestApp::OnInit()
 {
+#if wxUSE_GUI
+    if ( !IsGUIEnabled() )
+    {
+        wxFputs(wxASCII_STR("Not running tests because GUI is disabled.\n"), stderr);
+        return true;
+    }
+#endif // wxUSE_GUI
+
     // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
 
     // Output some important information about the test environment.
@@ -688,6 +728,9 @@ int TestApp::RunTests()
 int TestApp::OnExit()
 {
 #if wxUSE_GUI
+    if ( !IsGUIEnabled() )
+        return wxAppConsole::OnExit();
+
     delete GetTopWindow();
 #endif // wxUSE_GUI
 
