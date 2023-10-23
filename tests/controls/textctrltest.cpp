@@ -28,7 +28,7 @@
     #include "wx/dataobj.h"
 #endif // wxUSE_CLIPBOARD
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXQT__)
     #include "waitfor.h"
 #endif
 
@@ -353,9 +353,6 @@ void TextCtrlTestCase::Redirector()
 
 void TextCtrlTestCase::HitTestSingleLine()
 {
-#ifdef __WXQT__
-    WARN("Does not work under WxQt");
-#else
     m_text->ChangeValue("Hit me");
 
     // We don't know the size of the text borders, so we can't really do any
@@ -366,6 +363,21 @@ void TextCtrlTestCase::HitTestSingleLine()
 
     long pos = -1;
 
+#ifdef __WXQT__
+    // Although it works fine interactively, testing HitTest() is not
+    // straightforward under wxQt: We have to call SetInsertionPoint()
+    // explicitly with the position returned by HitTest() before we call
+    // it a second time (in the test below) to get the correct result.
+    auto SetCursorPositionHack = [&](int n)
+    {
+        m_text->HitTest(wxPoint(n*sizeChar.x, yMid), &pos);
+        m_text->SetInsertionPoint(pos);
+        wxYield();
+    };
+#else
+    #define SetCursorPositionHack(n) // do nothing under the other ports
+#endif
+
 #ifdef __WXGTK__
     wxYield();
 #endif
@@ -374,6 +386,7 @@ void TextCtrlTestCase::HitTestSingleLine()
     // first few characters under it.
     SECTION("Normal")
     {
+        SetCursorPositionHack(2);
         REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos >= 0 );
         CHECK( pos < 3 );
@@ -383,6 +396,7 @@ void TextCtrlTestCase::HitTestSingleLine()
     // character.
     SECTION("Beyond")
     {
+        SetCursorPositionHack(20);
         REQUIRE( m_text->HitTest(wxPoint(20*sizeChar.x, yMid), &pos) == wxTE_HT_BEYOND );
         CHECK( pos == m_text->GetLastPosition() );
     }
@@ -395,8 +409,8 @@ void TextCtrlTestCase::HitTestSingleLine()
         m_text->ChangeValue(wxString(200, 'X'));
         m_text->SetInsertionPointEnd();
 
-    #ifdef __WXGTK__
-        // wxGTK must be given an opportunity to lay the text out.
+    #if defined(__WXGTK__) || defined(__WXQT__)
+        // wxGTK and wxQt must be given an opportunity to lay the text out.
         YieldForAWhile();
     #endif
 
@@ -404,13 +418,12 @@ void TextCtrlTestCase::HitTestSingleLine()
         CHECK( pos > 3 );
 
         // Using negative coordinates works even under Xvfb, so test at least
-        // for this -- however this only works in wxGTK, not wxMSW.
-#ifdef __WXGTK__
+        // for this -- however this only works in wxGTK and wxQt, not wxMSW.
+#if defined(__WXGTK__) || defined(__WXQT__)
         REQUIRE( m_text->HitTest(wxPoint(-2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos > 3 );
-#endif // __WXGTK__
+#endif // __WXGTK__ || __WXQT__
     }
-#endif
 }
 
 #if 0
