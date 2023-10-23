@@ -241,7 +241,9 @@ All (GUI):
 
 wxGTK:
 
-- Fix losing clipboard contents due to a regression in 3.2.3.
+- Fix some regressions introduced in 3.2.3:
+  * Don't crash in console apps linked with GUI libraries (#23981).
+  * Fix losing clipboard contents when clearing a different selection (#23988).
 
 wxMSW:
 
