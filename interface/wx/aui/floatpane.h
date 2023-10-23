@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/aui/floatpane.h
 // Purpose:     wxaui: wx advanced user interface - docking window manager

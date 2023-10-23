@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        docmdi.h
 // Purpose:     interface of wxDocMDIParentFrame and wxDocMDIChildFrame

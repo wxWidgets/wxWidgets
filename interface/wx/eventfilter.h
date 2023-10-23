@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/eventfilter.h
 // Purpose:     wxEventFilter class documentation

@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/windowptr.h
 // Purpose:     wxWindowPtr<T> class documentation.

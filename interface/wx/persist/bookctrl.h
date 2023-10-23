@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/persist/bookctrl.h
 // Purpose:     interface of wxPersistentBookCtrl

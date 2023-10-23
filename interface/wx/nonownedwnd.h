@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/nonownedwnd.h
 // Purpose:     wxNonOwnedWindow class documentation

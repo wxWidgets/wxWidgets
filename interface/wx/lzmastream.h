@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/lzmastream.h
 // Purpose:     LZMA [de]compression classes documentation

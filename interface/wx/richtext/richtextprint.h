@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextprint.h
 // Purpose:     interface of wxRichTextHeaderFooterData

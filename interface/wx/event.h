@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        event.h
 // Purpose:     interface of wxEvtHandler, wxEventBlocker and many

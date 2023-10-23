@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/modalhook.h
 // Purpose:     Public interface of wxModalDialogHook class.

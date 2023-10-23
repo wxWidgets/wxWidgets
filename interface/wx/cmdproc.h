@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cmdproc.h
 // Purpose:     interface of wxCommandProcessor and wxCommand

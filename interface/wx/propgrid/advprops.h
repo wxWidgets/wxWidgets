@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        advprops.h
 // Purpose:     interfaces of wxPropertyGrid Advanced Properties (font,

@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/richtooltip.h
 // Purpose:     wxRichToolTip class documentation

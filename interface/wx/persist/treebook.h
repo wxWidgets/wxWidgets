@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/persist/treebook.h
 // Purpose:     interface of wxPersistentTreeBook

@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mstream.h
 // Purpose:     interface of wxMemoryOutputStream, wxMemoryInputStream

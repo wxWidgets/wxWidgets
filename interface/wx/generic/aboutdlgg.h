@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/aboutdlgg.h
 // Purpose:     generic wxAboutBox() implementation

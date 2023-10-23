@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/aui/toolbar.h
 // Purpose:     Documentation of wxAuiToolBar and related classes.

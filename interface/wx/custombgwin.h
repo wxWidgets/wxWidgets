@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/custombgwin.h
 // Purpose:     Documentation of wxCustomBackgroundWindow.

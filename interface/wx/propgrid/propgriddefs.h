@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        propgriddefs.h
 // Purpose:     various constants, etc. used in documented propgrid API

@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/bannerwindow.h
 // Purpose:     wxBannerWindow class documentation

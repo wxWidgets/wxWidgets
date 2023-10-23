@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xml/xml.h
 // Purpose:     interface of wxXmlNode, wxXmlAttribute, wxXmlDocument

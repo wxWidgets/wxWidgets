@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        datstrm.h
 // Purpose:     interface of wxDataInputStream and wxDataOutputStream

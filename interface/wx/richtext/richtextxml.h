@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextxml.h
 // Purpose:     interface of wxRichTextXMLHandler

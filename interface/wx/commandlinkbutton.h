@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/commandlinkbutton.h
 // Purpose:     interface of wxCommandLinkButton

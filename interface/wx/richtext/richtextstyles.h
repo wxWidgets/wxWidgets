@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextstyles.h
 // Purpose:     interface of wxRichTextStyleListCtrl

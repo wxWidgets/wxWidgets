@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/wxcrt.h
 // Purpose:     interface of global wx wrappers for CRT functions

@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        webviewarchivehandler.h
 // Purpose:     interface of wxWebViewArchiveHandler

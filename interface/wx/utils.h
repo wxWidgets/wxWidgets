@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        utils.h
 // Purpose:     interface of various utility classes and functions

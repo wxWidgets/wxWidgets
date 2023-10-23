@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextstyledlg.h
 // Purpose:     interface of wxRichTextStyleOrganiserDialog

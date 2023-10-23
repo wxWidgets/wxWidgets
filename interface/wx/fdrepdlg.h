@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fdrepdlg.h
 // Purpose:     interface of wxFindDialogEvent, wxFindReplaceDialog

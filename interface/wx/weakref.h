@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        weakref.h
 // Purpose:     interface of wxWeakRefDynamic<T>, wxWeakRef<T>

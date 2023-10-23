@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        thread.h
 // Purpose:     interface of all thread-related wxWidgets classes

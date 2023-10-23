@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/gifdecod.h
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation

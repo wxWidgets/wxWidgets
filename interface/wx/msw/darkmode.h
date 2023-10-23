@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/darkmode.h
 // Purpose:     Documentation for MSW-specific dark mode functionality.

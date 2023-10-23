@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/activityindicator.h
 // Purpose:     wxActivityIndicator documentation.

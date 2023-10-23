@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filesys.h
 // Purpose:     interface of wxFileSystem, wxFileSystemHandler, wxFSFile

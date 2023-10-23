@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msgout.h
 // Purpose:     interface of wxMessageOutput and derived classes

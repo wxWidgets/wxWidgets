@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/textwrapper.h
 // Purpose:     documentation of wxTextWrapper interface

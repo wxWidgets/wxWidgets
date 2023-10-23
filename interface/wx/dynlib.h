@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dynlib.h
 // Purpose:     interface of wxDynamicLibrary and wxDynamicLibraryDetails

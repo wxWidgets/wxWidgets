@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/secretstore.h
 // Purpose:     wxSecretStore and related classes documentation

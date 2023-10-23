@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stdstream.h
 // Purpose:     interface of wxStdInputStream, wxStdInputStreamBuffer,

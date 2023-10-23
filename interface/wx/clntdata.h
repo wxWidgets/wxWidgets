@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        clntdata.h
 // Purpose:     interface of wxClientData[Container] and wxStringClientData

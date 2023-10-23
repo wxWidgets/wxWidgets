@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/treelist.h
 // Purpose:     wxTreeListCtrl class documentation

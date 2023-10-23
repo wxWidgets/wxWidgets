@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/anidecod.h
 // Purpose:     wxANIDecoder, ANI reader for wxImage and wxAnimation

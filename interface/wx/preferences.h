@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/preferences.h
 // Purpose:     wxPreferencesEditor class documentation.

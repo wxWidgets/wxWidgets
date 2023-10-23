@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/persist.h
 // Purpose:     interface of wxPersistenceManager and related classes

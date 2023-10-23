@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/simplebook.h
 // Purpose:     wxSimplebook public API documentation.

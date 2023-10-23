@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/appprogress.h
 // Purpose:     interface of wxAppProgressIndicator

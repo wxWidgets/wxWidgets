@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextbuffer.h
 // Purpose:     Buffer for wxRichTextCtrl

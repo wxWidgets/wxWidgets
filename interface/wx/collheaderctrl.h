@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        interface/collheaderctrl.h
 // Purpose:     wxCollapsibleHeaderCtrl documentation

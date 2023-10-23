@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/mousemanager.h
 // Purpose:     documentation of wxMouseEventsManager class

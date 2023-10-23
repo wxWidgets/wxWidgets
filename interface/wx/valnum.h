@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/valnum.h
 // Purpose:     Documentation of numeric validator classes.

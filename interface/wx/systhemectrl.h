@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/systhemectrl.h
 // Purpose:     Documentation for wxSystemThemedControl

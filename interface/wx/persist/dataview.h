@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/persist/dataview.h
 // Purpose:     interface of wxPersistentDataViewCtrl

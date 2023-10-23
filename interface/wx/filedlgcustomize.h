@@ -1,3 +1,5 @@
+#pragma once
+
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        interface/wx/filedlgcustomize.h
 // Purpose:     Documentation of classes used for wxFileDialog customization.

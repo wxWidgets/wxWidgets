@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tglbtn.h
 // Purpose:     interface of wxBitmapToggleButton, wxToggleButton

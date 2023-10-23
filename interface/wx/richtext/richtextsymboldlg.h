@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextsymboldlg.h
 // Purpose:     interface of wxSymbolPickerDialog

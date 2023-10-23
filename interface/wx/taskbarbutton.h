@@ -1,3 +1,5 @@
+#pragma once
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        taskbarbutton.h
 // Purpose:     Interface of taskbar buttons features.
