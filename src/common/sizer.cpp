@@ -3112,6 +3112,7 @@ void wxStdDialogButtonSizer::Realize()
 
         if (m_buttonAffirmative){
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonAffirmative->ConvertDialogToPixels(wxSize(2, 0)).x);
+            m_buttonAffirmative->SetDefault();
             tabOrder.Add(m_buttonAffirmative);
         }
 
@@ -3157,7 +3158,6 @@ void wxStdDialogButtonSizer::Realize()
 
         if (m_buttonAffirmative){
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, m_buttonAffirmative->ConvertDialogToPixels(wxSize(4, 0)).x);
-            m_buttonAffirmative->SetDefault();
             tabOrder.Add(m_buttonAffirmative);
         }
 
