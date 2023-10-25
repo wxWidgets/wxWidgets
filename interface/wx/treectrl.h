@@ -30,9 +30,11 @@
     In addition to normal images, handled with the methods mentioned above,
     wxTreeCtrl also provides optional state images that may be used to indicate
     some additional state of the item, e.g. checked or unchecked status. These
-    images can be set using SetStateImageList() and AssignStateImageList()
-    functions that behave in the same way as the corresponding methods of
-    wxWithImages.
+    images can be set using SetStateImages() (preferred, as they allow to
+    specify high resolution versions of the state images too) or legacy
+    SetStateImageList() and AssignStateImageList() functions that behave in the
+    same way as the corresponding methods of wxWithImages. Note that state
+    images are currently not supported in the native wxQt version.
 
     Finally, in the generic version of this control (wxGenericTreeCtrl), also
     provides SetButtonsImageList() and AssignButtonsImageList(), which can be
@@ -280,6 +282,8 @@ public:
         Sets the state image list. Image list assigned with this method will be
         automatically deleted by wxTreeCtrl as appropriate (i.e. it takes
         ownership of the list).
+
+        @note Prefer using SetStateImages() in the new code.
 
         @see SetStateImageList().
     */
@@ -976,9 +980,23 @@ public:
         by @ref wxTreeCtrl "wxTreeCtrl"'s destructor, you must delete it
         yourself.
 
-        @see AssignStateImageList().
+        @note Prefer using SetStateImages() in the new code.
+
+        @see AssignStateImageList()
     */
     virtual void SetStateImageList(wxImageList* imageList);
+
+    /**
+        Sets the images to use for the application-defined item states.
+
+        This function takes a vector of wxBitmapBundle objects which can
+        specify multiple versions of the same icon for different display
+        resolutions for each state. If the vector is empty, no state images are
+        shown.
+
+        @since 3.3.0
+     */
+    virtual void SetStateImages(const wxVector<wxBitmapBundle>& images);
 
     /**
         Sets the mode flags associated with the display of the tree control. The

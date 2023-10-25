@@ -2481,6 +2481,16 @@ void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
     UpdateAfterImageListChange();
 }
 
+void wxGenericTreeCtrl::SetStateImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesState.SetImages(images);
+
+    // As above, only call it for the side effect of updating the image list.
+    m_imagesState.GetUpdatedImageListFor(this);
+
+    UpdateAfterImageListChange();
+}
+
 void wxGenericTreeCtrl::SetStateImageList(wxImageList *imageList)
 {
     m_imagesState.SetImageList(imageList);
