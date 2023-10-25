@@ -955,6 +955,42 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
     AddTestItemsToTree(NUM_CHILDREN_PER_LEVEL, NUM_LEVELS);
 }
 
+namespace
+{
+    class FixedSizeImpl : public wxBitmapBundleImpl
+    {
+    public:
+        FixedSizeImpl(const wxSize& sizeDef, const wxIcon& icon)
+            : m_sizeDef(sizeDef),
+              m_icon(icon)
+        {
+        }
+
+        wxSize GetDefaultSize() const override
+        {
+            return m_sizeDef;
+        }
+
+        wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+        {
+            return m_sizeDef*scale;
+        }
+
+        wxBitmap GetBitmap(const wxSize& size) override
+        {
+            wxBitmap bmp(m_icon);
+            if ( size != bmp.GetSize() )
+                wxBitmap::Rescale(bmp, size);
+
+            return bmp;
+        }
+
+    private:
+        const wxSize m_sizeDef;
+        const wxIcon m_icon;
+    };
+} // anonymous namespace
+
 void MyTreeCtrl::CreateImages(int size)
 {
     if ( size == -1 )
@@ -993,39 +1029,6 @@ void MyTreeCtrl::CreateImages(int size)
     // bundle implementation here as we always scale the icons, even at 100%
     // DPI, to ensure they are of the desired size.
     wxVector<wxBitmapBundle> images;
-
-    class FixedSizeImpl : public wxBitmapBundleImpl
-    {
-    public:
-        FixedSizeImpl(const wxSize& sizeDef, const wxIcon& icon)
-            : m_sizeDef(sizeDef),
-              m_icon(icon)
-        {
-        }
-
-        wxSize GetDefaultSize() const override
-        {
-            return m_sizeDef;
-        }
-
-        wxSize GetPreferredBitmapSizeAtScale(double scale) const override
-        {
-            return m_sizeDef*scale;
-        }
-
-        wxBitmap GetBitmap(const wxSize& size) override
-        {
-            wxBitmap bmp(m_icon);
-            if ( size != bmp.GetSize() )
-                wxBitmap::Rescale(bmp, size);
-
-            return bmp;
-        }
-
-    private:
-        const wxSize m_sizeDef;
-        const wxIcon m_icon;
-    };
 
     for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
     {
