@@ -1288,7 +1288,7 @@ void MyTreeCtrl::DoToggleState(const wxTreeItemId& item)
 
         srand (time(nullptr));
         do {
-            nState = rand() % GetStateImageList()->GetImageCount();
+            nState = rand() % GetStateImageCount();
         } while (nState == state);
 
         SetItemState(item, nState);

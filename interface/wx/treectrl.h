@@ -700,10 +700,36 @@ public:
     virtual size_t GetSelections(wxArrayTreeItemIds& selection) const;
 
     /**
+        Returns the number of state images used by the control.
+
+        Returns the number of images passed to the last call to
+        SetStateImages() or 0 if it had been never called.
+
+        @see HasImages()
+
+        @since 3.3.0
+     */
+    int GetStateImageCount() const;
+
+    /**
         Returns the state image list (from which application-defined state
         images are taken).
+
+        @see HasStateImages(), GetStateImageCount()
     */
     wxImageList* GetStateImageList() const;
+
+    /**
+        Returns true if the control uses any state images.
+
+        This is equivalent to comparing GetStateImageCount() return value with
+        0 but more clear.
+
+        @see SetStateImages(), GetStateImageCount()
+
+        @since 3.3.0
+     */
+    bool HasStateImages() const;
 
     /**
         Calculates which (if any) item is under the given @a point, returning
@@ -993,6 +1019,8 @@ public:
         specify multiple versions of the same icon for different display
         resolutions for each state. If the vector is empty, no state images are
         shown.
+
+        @see HasStateImages(), GetStateImageCount()
 
         @since 3.3.0
      */
