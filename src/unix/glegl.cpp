@@ -799,6 +799,12 @@ bool wxGLCanvasEGL::SwapBuffers()
         if ( !m_readyToDraw )
         {
             wxLogTrace(TRACE_EGL, "Window %p is not not ready to draw yet", this);
+
+            // When the application draws the window from a timer or idle event
+            // handler, we need to ensure that it's going to be called again if
+            // we didn't do anything this time, so request another repaint.
+            Refresh();
+
             return false;
         }
 
