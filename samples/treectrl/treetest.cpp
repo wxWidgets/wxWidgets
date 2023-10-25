@@ -193,7 +193,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame("wxTreeCtrl Test", 50, 50, 450, 600);
+    MyFrame *frame = new MyFrame();
 
     // Show the frame
     frame->Show(true);
@@ -203,8 +203,9 @@ bool MyApp::OnInit()
 
 
 // My frame constructor
-MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
-       : wxFrame(nullptr, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
+MyFrame::MyFrame()
+       : wxFrame(nullptr, wxID_ANY, "wxTreeCtrl test",
+                 wxDefaultPosition, FromDIP(wxSize(450, 600), nullptr)),
          m_treeCtrl(nullptr)
 #if wxUSE_LOG
          , m_textCtrl(nullptr)

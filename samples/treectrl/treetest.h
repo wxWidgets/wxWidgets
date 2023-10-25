@@ -181,7 +181,7 @@ class MyFrame: public wxFrame
 {
 public:
     // ctor and dtor
-    MyFrame(const wxString& title, int x, int y, int w, int h);
+    MyFrame();
     virtual ~MyFrame();
 
     // menu callbacks
