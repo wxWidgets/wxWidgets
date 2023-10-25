@@ -40,11 +40,15 @@
 #include "icon4.xpm"
 #include "icon5.xpm"
 
-#include "state1.xpm"
-#include "state2.xpm"
-#include "state3.xpm"
-#include "state4.xpm"
-#include "state5.xpm"
+// Please note that these headers were generated from the original PNG icons
+// made by Aleksandr Zyrianov and licensed under CC-BY-SA 4.0 and so are
+// covered by this licence and not wxWindows licence itself.
+#include "state0_png.h"
+#include "state0_2x_png.h"
+#include "state1_png.h"
+#include "state1_2x_png.h"
+#include "state2_png.h"
+#include "state2_2x_png.h"
 
 #include "unchecked.xpm"
 #include "checked.xpm"
@@ -191,6 +195,10 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+
+    // We use PNG images here, so we could just add PNG image handler but this
+    // is simpler.
+    wxInitAllImageHandlers();
 
     // Create the main frame window
     MyFrame *frame = new MyFrame();
@@ -1041,28 +1049,33 @@ void MyTreeCtrl::CreateImages(int size)
 
 void MyTreeCtrl::CreateStateImages()
 {
-    std::vector<wxIcon> icons;
+    std::vector<wxBitmapBundle> images;
 
     if (m_alternateStates)
     {
-        icons.push_back(wxIcon(state1_xpm));  // yellow
-        icons.push_back(wxIcon(state2_xpm));  // green
-        icons.push_back(wxIcon(state3_xpm));  // red
-        icons.push_back(wxIcon(state4_xpm));  // blue
-        icons.push_back(wxIcon(state5_xpm));  // black
+        // Macro similar to wxBITMAP_BUNDLE_2 but not using resources even
+        // under the platforms supporting them.
+        #define myBITMAP_BUNDLE_FROM_DATA_2(name) \
+            wxBitmapBundle::FromBitmaps(wxBITMAP_PNG_FROM_DATA(name), \
+                                        wxBITMAP_PNG_FROM_DATA(name##_2x))
+
+        images.push_back(myBITMAP_BUNDLE_FROM_DATA_2(state0));
+        images.push_back(myBITMAP_BUNDLE_FROM_DATA_2(state1));
+        images.push_back(myBITMAP_BUNDLE_FROM_DATA_2(state2));
+
+        #undef myBITMAP_BUNDLE_FROM_DATA_2
     }
     else
     {
+        std::vector<wxIcon> icons;
         icons.push_back(wxIcon(unchecked_xpm));
         icons.push_back(wxIcon(checked_xpm));
-    }
 
-    std::vector<wxBitmapBundle> images;
-
-    const wxSize iconSize(icons[0].GetWidth(), icons[0].GetHeight());
-    for ( const wxIcon& icon : icons )
-    {
-        images.push_back(wxBitmapBundle::FromImpl(new FixedSizeImpl(iconSize, icon)));
+        const wxSize iconSize(icons[0].GetWidth(), icons[0].GetHeight());
+        for ( const wxIcon& icon : icons )
+        {
+            images.push_back(wxBitmapBundle::FromImpl(new FixedSizeImpl(iconSize, icon)));
+        }
     }
 
     SetStateImages(images);
