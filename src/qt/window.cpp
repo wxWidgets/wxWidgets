@@ -1490,6 +1490,22 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
         }
 #endif // wxUSE_ACCEL
 
+        // For compatibility with wxMSW, don't generate wxEVT_CHAR event for
+        // the following keys: SHIFT, CONTROL, MENU, CAPITAL, NUMLOCK and SCROLL.
+        switch ( event->key() )
+        {
+            case Qt::Key_Shift:
+            case Qt::Key_Control:
+            case Qt::Key_Meta:
+            case Qt::Key_Alt:
+            case Qt::Key_AltGr:
+            case Qt::Key_CapsLock:
+            case Qt::Key_NumLock:
+            case Qt::Key_ScrollLock:
+                // Skip event generation.
+                return handled;
+        }
+
         e.SetEventType( wxEVT_CHAR );
         e.SetEventObject(this);
 
