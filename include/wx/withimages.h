@@ -76,6 +76,15 @@ public:
     {
         m_images = images;
 
+        // Setting the images overrides any image list set before, especially
+        // because we may have set it ourselves if GetUpdatedImageListFor() was
+        // called and we don't want to remain with the outdated image list now
+        // (if the new images are not empty, this would happen only slightly
+        // later when the image list is updated again, but if they are empty,
+        // it's not going to happen at all).
+        FreeIfNeeded();
+        m_imageList = nullptr;
+
         OnImagesChanged();
     }
 
