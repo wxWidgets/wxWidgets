@@ -2457,13 +2457,10 @@ void wxGenericTreeCtrl::CalculateLineHeight()
 
 void wxGenericTreeCtrl::OnImagesChanged()
 {
-    if ( HasImages() )
-    {
-        // We call it solely for the side effect of updating the image list.
-        GetUpdatedImageListFor(this);
+    // We call it solely for the side effect of updating the image list.
+    GetUpdatedImageListFor(this);
 
-        UpdateAfterImageListChange();
-    }
+    UpdateAfterImageListChange();
 }
 
 void wxGenericTreeCtrl::UpdateAfterImageListChange()
