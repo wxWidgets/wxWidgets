@@ -17,6 +17,7 @@
 
 #include "wx/wxprec.h"
 
+#include <memory>
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
