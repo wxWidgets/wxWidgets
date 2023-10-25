@@ -8,6 +8,8 @@
 
 #include "wx/wxprec.h"
 
+#include <memory>
+
 #if wxUSE_FS_ARCHIVE
 
 #include "wx/fs_arc.h"
