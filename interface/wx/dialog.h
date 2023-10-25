@@ -291,6 +291,12 @@ public:
         wxCLOSE, wxHELP, wxNO_DEFAULT.
 
         The sizer lays out the buttons in a manner appropriate to the platform.
+
+        @note Unlike when using wxStdDialogButtonSizer directly, creating the sizer
+              with this method usually results in one of its buttons being default
+              (and having initial focus): @a wxNO_DEFAULT will make the No button
+              the default, otherwise the OK or Yes button will be set as the default
+              when present.
     */
     wxStdDialogButtonSizer* CreateStdDialogButtonSizer(long flags);
 
