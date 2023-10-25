@@ -62,6 +62,11 @@ public:
         // (for example, checked/unchecked).
     virtual void SetStateImages(const wxVector<wxBitmapBundle>& images) = 0;
 
+        // Simple accessors similar to the inherited from wxWithImages
+        // HasImages() and GetImageCount() for normal images.
+    bool HasStateImages() const { return m_imagesState.HasImages(); }
+    int GetStateImageCount() const { return m_imagesState.GetImageCount(); }
+
         // These functions parallel {Set,Get,Assign}ImageList() methods
         // inherited from wxWithImages, but correspond to SetStateImages().
         // As with the other functions using wxImageList, they still work but
