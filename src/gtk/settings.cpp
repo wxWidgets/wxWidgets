@@ -186,15 +186,23 @@ static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
 
 static bool UpdatePreferDark(GVariant* value)
 {
+    GtkSettings* const settings = gtk_settings_get_default();
+    // This shouldn't happen, but don't bother doing anything else if it does.
+    if (!settings)
+        return false;
+
     // 0: No preference, 1: Prefer dark appearance, 2: Prefer light appearance
     gboolean preferDark = g_variant_get_uint32(value) == 1;
 
-    GtkSettings* settings = gtk_settings_get_default();
-    char* themeName;
-    gboolean preferDarkPrev;
+    char* themeName = nullptr;
+    gboolean preferDarkPrev = false;
     g_object_get(settings,
         "gtk-theme-name", &themeName,
         "gtk-application-prefer-dark-theme", &preferDarkPrev, nullptr);
+
+    // This is not supposed to happen neither, but don't crash if it does.
+    if (!themeName)
+        return false;
 
     // We don't need to enable prefer-dark if the theme is already dark
     if (strstr(themeName, "-dark") || strstr(themeName, "-Dark"))

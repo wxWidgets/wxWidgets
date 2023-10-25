@@ -344,6 +344,11 @@ jobs:
             exit $rc
           fi
 
+      - name: Testing launching GUI test
+        working-directory: tests
+        run: |
+          WX_TEST_DISABLE_GUI=1 ./test_gui
+
       - name: Testing GUI using Xvfb
         if: matrix.use_xvfb
         working-directory: tests

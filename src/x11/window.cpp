@@ -1767,6 +1767,6 @@ bool wxWinModule::OnInit()
 
 void wxWinModule::OnExit()
 {
-    Display *xdisplay = wxGlobalDisplay();
-    XFreeGC( xdisplay, g_eraseGC );
+    if (Display *xdisplay = wxGlobalDisplay())
+        XFreeGC( xdisplay, g_eraseGC );
 }
