@@ -113,7 +113,7 @@ public:
     void CreateImages(int size);
 
     void CreateButtonsImageList(int size = 11);
-    void CreateStateImageList(bool del = false);
+    void CreateStateImageList();
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 

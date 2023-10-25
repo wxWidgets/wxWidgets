@@ -703,12 +703,12 @@ void MyFrame::OnToggleStates(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxGetApp().ShowStates() )
     {
-        m_treeCtrl->CreateStateImageList(true);
+        m_treeCtrl->SetStateImageList(nullptr);
         wxGetApp().SetShowStates(false);
     }
     else
     {
-        m_treeCtrl->CreateStateImageList(false);
+        m_treeCtrl->CreateStateImageList();
         wxGetApp().SetShowStates(true);
     }
 }
@@ -1035,14 +1035,8 @@ void MyTreeCtrl::CreateImages(int size)
     SetImages(images);
 }
 
-void MyTreeCtrl::CreateStateImageList(bool del)
+void MyTreeCtrl::CreateStateImageList()
 {
-    if ( del )
-    {
-        SetStateImageList(nullptr);
-        return;
-    }
-
     wxImageList *states;
     wxBusyCursor wait;
 
