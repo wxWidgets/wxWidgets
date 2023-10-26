@@ -2848,6 +2848,7 @@ set(PROPGRID_SRC
     src/propgrid/propgridiface.cpp
     src/propgrid/propgridpagestate.cpp
     src/propgrid/props.cpp
+    src/xrc/xh_propgrid.cpp
 )
 
 set(PROPGRID_HDR
@@ -2861,6 +2862,7 @@ set(PROPGRID_HDR
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
     wx/propgrid/private.h
+    wx/xrc/xh_propgrid.h
 )
 
 set(RICHTEXT_SRC

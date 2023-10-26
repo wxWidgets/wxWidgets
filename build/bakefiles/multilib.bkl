@@ -339,7 +339,9 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_PROPGRID</define>
         <sources>$(PROPGRID_SRC)</sources>
+        <library>xrcdll</library>
         <library>coredll</library>
+        <library>xmldll</library>
         <library>basedll</library>
         <msvc-headers>$(PROPGRID_HDR)</msvc-headers>
     </dll>

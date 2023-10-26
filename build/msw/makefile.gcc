@@ -1534,7 +1534,8 @@ PROPGRIDDLL_OBJECTS =  \
 	$(OBJS)\propgriddll_propgrid.o \
 	$(OBJS)\propgriddll_propgridiface.o \
 	$(OBJS)\propgriddll_propgridpagestate.o \
-	$(OBJS)\propgriddll_props.o
+	$(OBJS)\propgriddll_props.o \
+	$(OBJS)\propgriddll_xh_propgrid.o
 PROPGRIDLIB_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\3rdparty\pcre\src\wx \
 	-I..\..\src\expat\expat\lib $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
@@ -1552,7 +1553,8 @@ PROPGRIDLIB_OBJECTS =  \
 	$(OBJS)\propgridlib_propgrid.o \
 	$(OBJS)\propgridlib_propgridiface.o \
 	$(OBJS)\propgridlib_propgridpagestate.o \
-	$(OBJS)\propgridlib_props.o
+	$(OBJS)\propgridlib_props.o \
+	$(OBJS)\propgridlib_xh_propgrid.o
 RICHTEXTDLL_CXXFLAGS = -I..\..\src\tiff\libtiff -I..\..\src\jpeg \
 	-I..\..\src\png -I..\..\src\zlib -I..\..\3rdparty\pcre\src\wx \
 	-I..\..\src\expat\expat\lib $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
@@ -1850,6 +1852,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_propgridiface.o \
 	$(OBJS)\monodll_propgridpagestate.o \
 	$(OBJS)\monodll_props.o \
+	$(OBJS)\monodll_xh_propgrid.o \
 	$(OBJS)\monodll_art_internal.o \
 	$(OBJS)\monodll_art_msw.o \
 	$(OBJS)\monodll_art_aui.o \
@@ -2706,6 +2709,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_propgridiface.o \
 	$(OBJS)\monolib_propgridpagestate.o \
 	$(OBJS)\monolib_props.o \
+	$(OBJS)\monolib_xh_propgrid.o \
 	$(OBJS)\monolib_art_internal.o \
 	$(OBJS)\monolib_art_msw.o \
 	$(OBJS)\monolib_art_aui.o \
@@ -5862,10 +5866,10 @@ endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_PROPGRID),1)
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG).dll: $(PROPGRIDDLL_OBJECTS) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregexu$(WXDEBUGFLAG).a $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(__wxlexilla) $(OBJS)\propgriddll_version_rc.o $(__coredll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG).dll: $(PROPGRIDDLL_OBJECTS) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregexu$(WXDEBUGFLAG).a $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(__wxlexilla) $(OBJS)\propgriddll_version_rc.o $(__xrcdll___depname) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
 	$(foreach f,$(subst \,/,$(PROPGRIDDLL_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
-	$(CXX) $(LINK_DLL_FLAGS) -fPIC -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib=$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid.a $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.a $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
+	$(CXX) $(LINK_DLL_FLAGS) -fPIC -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib=$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid.a $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.a $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.a $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.a $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
 	@-del $@.rsp
 endif
 endif
@@ -8094,6 +8098,9 @@ $(OBJS)\monodll_propgridpagestate.o: ../../src/propgrid/propgridpagestate.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_props.o: ../../src/propgrid/props.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_xh_propgrid.o: ../../src/xrc/xh_propgrid.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_art_internal.o: ../../src/ribbon/art_internal.cpp
@@ -10691,6 +10698,9 @@ $(OBJS)\monolib_propgridpagestate.o: ../../src/propgrid/propgridpagestate.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_props.o: ../../src/propgrid/props.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_xh_propgrid.o: ../../src/xrc/xh_propgrid.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_art_internal.o: ../../src/ribbon/art_internal.cpp
@@ -17395,6 +17405,9 @@ $(OBJS)\propgriddll_propgridpagestate.o: ../../src/propgrid/propgridpagestate.cp
 $(OBJS)\propgriddll_props.o: ../../src/propgrid/props.cpp
 	$(CXX) -c -o $@ $(PROPGRIDDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\propgriddll_xh_propgrid.o: ../../src/xrc/xh_propgrid.cpp
+	$(CXX) -c -o $@ $(PROPGRIDDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\propgridlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -17420,6 +17433,9 @@ $(OBJS)\propgridlib_propgridpagestate.o: ../../src/propgrid/propgridpagestate.cp
 	$(CXX) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\propgridlib_props.o: ../../src/propgrid/props.cpp
+	$(CXX) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\propgridlib_xh_propgrid.o: ../../src/xrc/xh_propgrid.cpp
 	$(CXX) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\richtextdll_dummy.o: ../../src/common/dummy.cpp
