@@ -1953,10 +1953,7 @@ FormMain::FormMain(const wxString& title)
     , m_labelEditingEnabled(false)
 {
     SetIcon(wxICON(sample));
-    wxSize frameSize((wxSystemSettings::GetMetric(wxSYS_SCREEN_X) / 10) * 4,
-                     (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) / 10) * 8);
-    frameSize.x = wxMin(frameSize.x, FromDIP(500));
-    SetSize(frameSize);
+    SetClientSize(FromDIP(wxSize(600, 800)));
     Centre();
 
 #ifdef __WXMAC__

@@ -54,7 +54,7 @@ MyFrame::MyFrame(wxWindow* parent)
     pg->Append( new wxIntProperty("Int Property", wxPG_LABEL) );
     pg->Append( new wxBoolProperty("Bool Property", wxPG_LABEL) );
 
-    SetSize(400, 600);
+    SetClientSize(FromDIP(wxSize(400, 300)));
 }
 
 void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
