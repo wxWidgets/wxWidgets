@@ -514,11 +514,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     // the lower one only has the log listbox and a button to clear it
 #if USE_LOG
-    wxStaticBoxSizer *sizerDown = new wxStaticBoxSizer(
-        new wxStaticBox( m_panel, wxID_ANY, "&Log window" ),
-        wxVERTICAL);
+    wxStaticBoxSizer *sizerDown = new wxStaticBoxSizer(wxVERTICAL, m_panel, "&Log window");
+    wxStaticBox* const sizerDownBox = sizerDown->GetStaticBox();
 
-    m_lboxLog = new wxListBox(sizerDown->GetStaticBox(), wxID_ANY);
+    m_lboxLog = new wxListBox(sizerDownBox, wxID_ANY);
     sizerDown->Add(m_lboxLog, wxSizerFlags(1).Expand().Border());
     sizerDown->SetMinSize(100, 150);
 #else
@@ -528,11 +527,11 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     wxButton *btn;
 #if USE_LOG
-    btn = new wxButton(m_panel, Widgets_ClearLog, "Clear &log");
+    btn = new wxButton(sizerDownBox, Widgets_ClearLog, "Clear &log");
     sizerBtns->Add(btn);
     sizerBtns->AddSpacer(10);
 #endif // USE_LOG
-    btn = new wxButton(m_panel, Widgets_Quit, "E&xit");
+    btn = new wxButton(sizerDownBox, Widgets_Quit, "E&xit");
     sizerBtns->Add(btn);
     sizerDown->Add(sizerBtns, wxSizerFlags().Border().Right());
 
