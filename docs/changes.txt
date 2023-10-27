@@ -250,6 +250,10 @@ wxMSW:
 - Fix MSVS warning about redundant "const" in wx/itemid.h (#23590).
 - Fix spurious memory leak reports when using static CRT.
 
+wxOSX:
+
+- Fix showing windows for background apps under macOS Sonoma (#23893).
+
 
 3.2.3: (released 2023-10-10)
 ----------------------------
