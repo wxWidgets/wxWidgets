@@ -1842,7 +1842,7 @@ TEST_CASE("wxBitmap::GetSubBitmap", "[bitmap]")
 
     // Extracting sub-bitmap of the entire bitmap size should return the bitmap
     // of the same size.
-#if wxHAS_DPI_INDEPENDENT_PIXELS
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     const wxRect rectAll(wxPoint(0, 0), sizeLog);
 #else
     const wxRect rectAll(wxPoint(0, 0), sizePhy);
@@ -1852,6 +1852,11 @@ TEST_CASE("wxBitmap::GetSubBitmap", "[bitmap]")
     CHECK( sub.GetDIPSize() == sizeLog );
     CHECK( sub.GetSize() == sizePhy );
     CHECK( sub.GetScaleFactor() == scale );
+
+    // Using incorrect bounds should assert.
+    wxRect rectInvalid = rectAll;
+    rectInvalid.Offset(1, 0);
+    WX_ASSERT_FAILS_WITH_ASSERT( bmp.GetSubBitmap(rectInvalid) );
 }
 
 #endif // ports with scaled bitmaps support
