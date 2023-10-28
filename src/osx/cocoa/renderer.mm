@@ -155,12 +155,27 @@ private:
                             int flags,
                             NSControlStateValue state);
 
+   void DrawMacHeaderCell(wxWindow *win,
+                            wxDC& dc,
+                            NSTableHeaderCell* cell,
+                            const wxRect& rect,
+                            int flags,
+                            wxHeaderSortIconType ascending,
+                            wxHeaderButtonParams* params);
+
+    void ApplyMacControlFlags(wxWindow* win, NSCell* cell, int flags);
+
     // the tree buttons
     wxBitmap m_bmpTreeExpanded;
     wxBitmap m_bmpTreeCollapsed;
 
+    NSButtonCell* m_nsPushButtonCell;
     NSButtonCell* m_nsCheckBoxCell;
+    NSButtonCell* m_nsRadioButtonCell;
     NSButtonCell* m_nsDisclosureButtonCell;
+    NSPopUpButtonCell* m_nsPopupbuttonCell;
+    NSComboBoxCell* m_nsComboBoxCell;
+    NSTableHeaderCell* m_nsTableHeaderCell;
 };
 
 // ============================================================================
@@ -177,20 +192,43 @@ wxRendererNative& wxRendererNative::GetDefault()
 
 wxRendererMac::wxRendererMac()
 {
+    m_nsPushButtonCell = [[NSButtonCell alloc] initTextCell:@""];
+    m_nsPushButtonCell.buttonType = NSButtonTypeMomentaryPushIn;
+    m_nsPushButtonCell.highlightsBy = NSPushInCellMask;
+    m_nsPushButtonCell.bezelStyle = NSBezelStyleShadowlessSquare;
+
     m_nsCheckBoxCell = [[NSButtonCell alloc] initTextCell:@""];
     m_nsCheckBoxCell.buttonType = NSButtonTypeSwitch;
     m_nsCheckBoxCell.allowsMixedState = YES;
+
+    m_nsRadioButtonCell = [[NSButtonCell alloc] initTextCell:@""];
+    m_nsRadioButtonCell.buttonType = NSButtonTypeRadio;
+    m_nsRadioButtonCell.allowsMixedState = YES;
 
     m_nsDisclosureButtonCell = [[NSButtonCell alloc] initTextCell:@""];
     m_nsDisclosureButtonCell.bezelStyle = NSBezelStyleDisclosure;
     m_nsDisclosureButtonCell.buttonType = NSButtonTypePushOnPushOff;
     m_nsDisclosureButtonCell.highlightsBy = NSPushInCellMask;
+
+    m_nsPopupbuttonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
+
+    m_nsComboBoxCell = [[NSComboBoxCell alloc] initTextCell:@""];
+
+    m_nsTableHeaderCell = [[NSTableHeaderCell alloc] init];
+    m_nsTableHeaderCell.bezeled = NO;
+    m_nsTableHeaderCell.bezelStyle = NSTextFieldSquareBezel;
+    m_nsTableHeaderCell.bordered = NO;
 }
 
 wxRendererMac::~wxRendererMac()
 {
+    [m_nsPushButtonCell release];
     [m_nsCheckBoxCell release];
+    [m_nsRadioButtonCell release];
     [m_nsDisclosureButtonCell release];
+    [m_nsPopupbuttonCell release];
+    [m_nsComboBoxCell release];
+    [m_nsTableHeaderCell release];
 }
 
 int wxRendererMac::DrawHeaderButton( wxWindow *win,
@@ -200,85 +238,14 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
-    if ( wxSystemSettings::GetAppearance().IsDark() )
-        return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
-
-    const wxCoord x = rect.x;
-    const wxCoord y = rect.y;
-    const wxCoord w = rect.width;
-    const wxCoord h = rect.height;
-
-    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
-
-    HIRect headerRect = CGRectMake( x, y, w, h );
-    if ( !wxHasCGContext(win, dc) )
-    {
-        win->RefreshRect(rect);
-    }
-    else
-    {
-        CGContextRef cgContext;
-        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
-
-        cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
-
-        {
-            HIThemeButtonDrawInfo drawInfo;
-            HIRect labelRect;
-
-            memset( &drawInfo, 0, sizeof(drawInfo) );
-            drawInfo.version = 0;
-            drawInfo.kind = kThemeListHeaderButton;
-            drawInfo.adornment = kThemeAdornmentNone;
-            drawInfo.value = kThemeButtonOff;
-            if ( flags & wxCONTROL_DISABLED )
-                drawInfo.state = kThemeStateInactive;
-            else if ( flags & wxCONTROL_PRESSED )
-                drawInfo.state = kThemeStatePressed;
-            else
-                drawInfo.state = kThemeStateActive;
-
-            // The down arrow is drawn automatically (if value is kThemeButtonOn)
-            // change it to an up arrow if needed.
-            if ( sortArrow == wxHDR_SORT_ICON_UP )
-            {
-                drawInfo.adornment = kThemeAdornmentHeaderButtonSortUp;
-                drawInfo.value = kThemeButtonOn;
-            }
-            else if (sortArrow == wxHDR_SORT_ICON_DOWN )
-            {
-                drawInfo.value = kThemeButtonOn;
-            }
-
-            HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
-        }
-    }
-
-    // Reserve room for the arrows before writing the label, and turn off the
-    // flags we've already handled
-    wxRect newRect(rect);
-    if ( sortArrow != wxHDR_SORT_ICON_NONE )
-    {
-        newRect.width -= 12;
-        sortArrow = wxHDR_SORT_ICON_NONE;
-    }
-    flags &= ~wxCONTROL_PRESSED;
-
-    return DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
+    DrawMacHeaderCell(win, dc, m_nsTableHeaderCell, rect, flags, sortArrow, params);
 }
 
 
-int wxRendererMac::GetHeaderButtonHeight(wxWindow* WXUNUSED(win))
+int wxRendererMac::GetHeaderButtonHeight(wxWindow* win)
 {
-    SInt32      standardHeight;
-    OSStatus        errStatus;
-
-    errStatus = GetThemeMetric( kThemeMetricListHeaderHeight, &standardHeight );
-    if (errStatus == noErr)
-    {
-        return standardHeight;
-    }
-    return -1;
+    ApplyMacControlFlags( win, m_nsTableHeaderCell, 0);
+    return m_nsTableHeaderCell.cellSize.height;;
 }
 
 int wxRendererMac::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
@@ -291,15 +258,12 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     const wxRect& rect,
     int flags )
 {
-    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
-
     if ( !wxHasCGContext(win, dc) )
     {
         win->RefreshRect(rect);
     }
     else
     {
-
         NSControlStateValue stateValue = (flags & wxCONTROL_EXPANDED) ? NSControlStateValueOn : NSControlStateValueOff;
 
         DrawMacCell(win, dc, m_nsDisclosureButtonCell, rect, flags, stateValue);
@@ -475,6 +439,27 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     }
 }
 
+void wxRendererMac::ApplyMacControlFlags(wxWindow* win, NSCell* cell, int flags)
+{
+    NSControlSize size = NSRegularControlSize;
+    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
+        size = NSSmallControlSize;
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
+        size = NSMiniControlSize;
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_11_0
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_LARGE|| (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_LARGE))
+        size = WX_IS_MACOS_AVAILABLE(11, 0) ? NSControlSizeLarge : NSControlSizeRegular;
+#endif
+    else
+        size = NSRegularControlSize;
+    cell.controlSize = size;
+
+    cell.enabled = !(flags & wxCONTROL_DISABLED);
+    cell.highlighted = (flags & wxCONTROL_PRESSED);
+    cell.controlTint = (flags & wxCONTROL_FOCUSED) ? NSColor.currentControlTint : NSClearControlTint;
+}
+
+
 void wxRendererMac::DrawMacCell(wxWindow *win,
                             wxDC& dc,
                             NSCell* cell,
@@ -496,23 +481,9 @@ void wxRendererMac::DrawMacCell(wxWindow *win,
         const wxCoord h = rect.height;
 
         NSRect controlRect = NSMakeRect( x, y, w, h );
-
-        // not used yet
-        NSControlSize size = NSControlSizeRegular;
-        if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-            size = NSControlSizeSmall;
-        else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
-            size = NSControlSizeMini;
-        else if (win->GetWindowVariant() == wxWINDOW_VARIANT_LARGE|| (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_LARGE))
-            size = NSControlSizeLarge;
-        else
-            size = NSControlSizeRegular;
-        wxUnusedVar(size);
-
-        cell.enabled = !(flags & wxCONTROL_DISABLED);
-        cell.highlighted = (flags & wxCONTROL_PRESSED);
+        ApplyMacControlFlags(win, cell, flags);
         cell.state = state;
-        cell.controlTint = (flags & wxCONTROL_FOCUSED) ? NSColor.currentControlTint : NSClearControlTint;
+
 
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
@@ -531,6 +502,78 @@ void wxRendererMac::DrawMacCell(wxWindow *win,
     }
 }
 
+void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
+                            wxDC& dc,
+                            NSTableHeaderCell* cell,
+                            const wxRect& rect,
+                            int flags,
+                            wxHeaderSortIconType sortArrow,
+                            wxHeaderButtonParams* params)
+{
+    wxDCBrushChanger setBrush(dc, *wxTRANSPARENT_BRUSH);
+
+    if ( !wxHasCGContext(win, dc) )
+    {
+        win->RefreshRect(rect);
+    }
+    else
+    {
+        wxCoord x = rect.x;
+        wxCoord y = rect.y;
+        wxCoord w = rect.width;
+        wxCoord h = rect.height;
+
+        NSRect controlRect = NSMakeRect( x, y, w, h );
+
+        ApplyMacControlFlags(win, cell, flags);
+
+        NSString* title = @("");
+        NSTextAlignment alignment = NSTextAlignmentLeft;
+
+        if ( params )
+        {
+            title = wxCFStringRef(params->m_labelText).AsNSString();
+            switch( params->m_labelAlignment )
+            {
+                case wxALIGN_CENTER:
+                    cell.alignment = NSTextAlignmentCenter;
+                    break;
+                case wxALIGN_RIGHT:
+                    cell.alignment = NSTextAlignmentRight;
+                    break;
+                case wxALIGN_LEFT:
+                default:
+                    cell.alignment = NSTextAlignmentLeft;
+            }
+
+        }
+
+        cell.title = title;
+        cell.alignment = alignment;
+
+        wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+        CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
+
+        CGContextSaveGState(cgContext);
+
+        NSGraphicsContext* formerContext = NSGraphicsContext.currentContext;
+        NSGraphicsContext.currentContext = [NSGraphicsContext graphicsContextWithCGContext:cgContext
+                                                   flipped:YES];
+
+        [cell drawWithFrame:controlRect inView:(NSView*) win->GetHandle()];
+
+        if ( sortArrow == wxHDR_SORT_ICON_UP || sortArrow == wxHDR_SORT_ICON_DOWN )
+        {
+            BOOL ascending = sortArrow == wxHDR_SORT_ICON_UP;
+            [cell drawSortIndicatorWithFrame:controlRect inView:(NSView*) win->GetHandle()
+                ascending:ascending priority:0];
+        }
+
+        NSGraphicsContext.currentContext = formerContext;
+
+        CGContextRestoreGState(cgContext);
+    }
+}
 
 void
 wxRendererMac::DrawCheckBox(wxWindow *win,
@@ -548,30 +591,16 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
     DrawMacCell(win, dc, m_nsCheckBoxCell, rect, flags, stateValue);
 }
 
-wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int WXUNUSED(flags))
+wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int flags)
 {
     // Even though we don't use the window in this implementation, still check
     // that it's valid to avoid surprises when running the same code under the
     // other platforms.
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    wxSize size;
-    SInt32 width, height;
-    OSStatus errStatus;
-
-    errStatus = GetThemeMetric(kThemeMetricCheckBoxWidth, &width);
-    if (errStatus == noErr)
-    {
-        size.SetWidth(width);
-    }
-
-    errStatus = GetThemeMetric(kThemeMetricCheckBoxHeight, &height);
-    if (errStatus == noErr)
-    {
-        size.SetHeight(height);
-    }
-
-    return size;
+    ApplyMacControlFlags( win, m_nsCheckBoxCell, flags);
+    NSSize sz = m_nsCheckBoxCell.cellSize;
+    return wxSize(sz.width, sz.height);
 }
 
 void
@@ -598,17 +627,9 @@ wxRendererMac::DrawPushButton(wxWindow *win,
                               const wxRect& rect,
                               int flags)
 {
-    int kind;
-    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-        kind = kThemeBevelButtonSmall;
-    // There is no kThemeBevelButtonMini, but in this case, use Small
-    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
-        kind = kThemeBevelButtonSmall;
-    else
-        kind = kThemeBevelButton;
+    NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
 
-    DrawMacThemeButton(win, dc, rect, flags,
-                       kind, kThemeAdornmentNone);
+    DrawMacCell(win, dc, m_nsPushButtonCell, rect, flags, stateValue);
 }
 
 void wxRendererMac::DrawCollapseButton(wxWindow *win,
@@ -677,57 +698,30 @@ wxRendererMac::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int fl
 void wxRendererMac::DrawChoice(wxWindow* win, wxDC& dc,
                            const wxRect& rect, int flags)
 {
-    int kind;
-
-    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
-        (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-        kind = kThemePopupButtonSmall;
-    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
-             (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
-        kind = kThemePopupButtonMini;
-    else
-        kind = kThemePopupButton;
-
-    DrawMacThemeButton(win, dc, rect, flags, kind, kThemeAdornmentNone);
+    NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
+    DrawMacCell(win, dc, m_nsPopupbuttonCell, rect, flags, stateValue);
 }
 
 
 void wxRendererMac::DrawComboBox(wxWindow* win, wxDC& dc,
                              const wxRect& rect, int flags)
 {
-    int kind;
-
-    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
-        (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-        kind = kThemeComboBoxSmall;
-    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
-             (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
-        kind = kThemeComboBoxMini;
-    else
-        kind = kThemeComboBox;
-
-    DrawMacThemeButton(win, dc, rect, flags, kind, kThemeAdornmentNone);
+    NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
+    DrawMacCell(win, dc, m_nsComboBoxCell, rect, flags, stateValue);
 }
 
 void wxRendererMac::DrawRadioBitmap(wxWindow* win, wxDC& dc,
                                 const wxRect& rect, int flags)
 {
-    int kind;
-
-    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
-        (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
-        kind = kThemeRadioButtonSmall;
-    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
-             (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
-        kind = kThemeRadioButtonMini;
-    else
-        kind = kThemeRadioButton;
-
     if (flags & wxCONTROL_CHECKED)
         flags |= wxCONTROL_PRESSED;
 
-    DrawMacThemeButton(win, dc, rect, flags,
-                          kind, kThemeAdornmentNone);
+    NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
+
+    if (flags & wxCONTROL_UNDETERMINED)
+            stateValue = NSControlStateValueMixed;
+
+    DrawMacCell(win, dc, m_nsRadioButtonCell, rect, flags, stateValue);
 }
 
 void wxRendererMac::DrawTextCtrl(wxWindow* win, wxDC& dc,
