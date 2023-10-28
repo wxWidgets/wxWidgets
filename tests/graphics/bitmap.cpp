@@ -1826,4 +1826,32 @@ TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
     CHECK( bmp3.GetSize() == wxSize(16, 16) );
 }
 
+TEST_CASE("wxBitmap::GetSubBitmap", "[bitmap]")
+{
+    // Make the logical size odd to test correct rounding.
+    const double scale = 1.5;
+    const wxSize sizeLog(15, 15);
+    const wxSize sizePhy(23, 23);
+
+    // Prepare the main bitmap.
+    wxBitmap bmp;
+    bmp.CreateWithDIPSize(sizeLog, scale);
+    CHECK( bmp.GetDIPSize() == sizeLog );
+    CHECK( bmp.GetSize() == sizePhy );
+    CHECK( bmp.GetScaleFactor() == scale );
+
+    // Extracting sub-bitmap of the entire bitmap size should return the bitmap
+    // of the same size.
+#if wxHAS_DPI_INDEPENDENT_PIXELS
+    const wxRect rectAll(wxPoint(0, 0), sizeLog);
+#else
+    const wxRect rectAll(wxPoint(0, 0), sizePhy);
+#endif
+
+    const wxBitmap sub = bmp.GetSubBitmap(rectAll);
+    CHECK( sub.GetDIPSize() == sizeLog );
+    CHECK( sub.GetSize() == sizePhy );
+    CHECK( sub.GetScaleFactor() == scale );
+}
+
 #endif // ports with scaled bitmaps support

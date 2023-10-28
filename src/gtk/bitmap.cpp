@@ -1062,7 +1062,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& r) const
     const wxBitmapRefData* bmpData = M_BMPDATA;
 #ifdef __WXGTK3__
     const double s = bmpData->m_scaleFactor;
-    const wxRect rect(int(r.x * s), int(r.y * s), int(r.width * s), int(r.height * s));
+    const wxRect rect(wxRound(r.x * s), wxRound(r.y * s), wxRound(r.width * s), wxRound(r.height * s));
 #else
     const wxRect& rect = r;
 #endif
