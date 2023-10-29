@@ -810,27 +810,13 @@ bool wxGLCanvasEGL::SwapBuffers()
 #ifdef GDK_WINDOWING_WAYLAND
     if (wxGTKImpl::IsWayland(window))
     {
-        // Under Wayland, we must not draw before we're actually ready to, as
-        // this would be inefficient at best and could result in a deadlock at
-        // worst if we're called before the window is realized.
+        // Under Wayland, we must not draw before the window has been realized,
+        // as this could result in a deadlock inside eglSwapBuffers()
         if ( !m_readyToDraw )
         {
             wxLogTrace(TRACE_EGL, "Window %p is not not ready to draw yet", this);
-
-            // When the application draws the window from a timer or idle event
-            // handler, we need to ensure that it's going to be called again if
-            // we didn't do anything this time, so request another repaint.
-            Refresh();
-
             return false;
         }
-
-        // Ensure that we redraw again when the frame becomes ready.
-        m_readyToDraw = false;
-        wl_surface* surface = gdk_wayland_window_get_wl_surface(window);
-        m_wlFrameCallbackHandler = wl_surface_frame(surface);
-        wl_callback_add_listener(m_wlFrameCallbackHandler,
-                                 &wl_frame_listener, this);
     }
 #endif // GDK_WINDOWING_WAYLAND
 
