@@ -630,6 +630,7 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
     if ( m_surface )
         eglDestroySurface(m_display, m_surface);
 #ifdef GDK_WINDOWING_WAYLAND
+    DestroyWaylandSubsurface();
     g_clear_pointer(&m_wlEGLWindow, wl_egl_window_destroy);
     g_clear_pointer(&m_wlSurface, wl_surface_destroy);
 
