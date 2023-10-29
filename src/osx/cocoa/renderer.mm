@@ -495,6 +495,15 @@ void wxRendererMac::DrawMacCell(wxWindow *win,
                                                    flipped:YES];
 
         [cell drawWithFrame:controlRect inView:(NSView*) win->GetHandle()];
+        if (flags & wxCONTROL_FOCUSED)
+        {
+            NSSetFocusRingStyle(NSFocusRingOnly);
+            // we must draw into a separate layer, otherwise every single subcell eg in a combobox
+            // will have its own focus rect drawn
+            CGContextBeginTransparencyLayerWithRect(cgContext, NSRectToCGRect(controlRect), 0);
+            [cell drawFocusRingMaskWithFrame:controlRect inView:(NSView*) win->GetHandle()];
+            CGContextEndTransparencyLayer(cgContext);
+        }
 
         NSGraphicsContext.currentContext = formerContext;
 
