@@ -424,24 +424,6 @@ void wxGLCanvasEGL::OnWLFrameCallback()
 #ifdef GDK_WINDOWING_WAYLAND
     wxLogTrace(TRACE_EGL, "In frame callback handler for %p", this);
 
-    if ( !m_swapIntervalSet )
-    {
-        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
-        // callback to know when we should draw ourselves already.
-        if ( eglSwapInterval(m_display, 0) )
-        {
-            wxLogTrace(TRACE_EGL, "Set EGL swap interval to 0 for %p", this);
-
-            // It shouldn't be necessary to set it again.
-            m_swapIntervalSet = true;
-        }
-        else
-        {
-            wxLogTrace(TRACE_EGL, "eglSwapInterval(0) failed for %p: %#x",
-                       this, eglGetError());
-        }
-    }
-
     m_readyToDraw = true;
     g_clear_pointer(&m_wlFrameCallbackHandler, wl_callback_destroy);
     SendSizeEvent();
@@ -768,6 +750,33 @@ void wxGLCanvasEGL::FreeDefaultConfig()
 
 bool wxGLCanvasEGL::SwapBuffers()
 {
+    // Before doing anything else, ensure that eglSwapBuffers() doesn't block:
+    // under Wayland we don't want it to because we use the surface callback to
+    // know when we should draw anyhow and with X11 it blocks for up to a
+    // second when the window is entirely occluded and because we can't detect
+    // this currently (our IsShownOnScreen() doesn't account for all cases in
+    // which this happens) we must prevent it from blocking to avoid making the
+    // entire application completely unusable just because one of its windows
+    // using wxGLCanvas got occluded or unmapped (e.g. due to a move to another
+    // workspace).
+    if ( !m_swapIntervalSet )
+    {
+        // Ensure that eglSwapBuffers() doesn't block, as we use the surface
+        // callback to know when we should draw ourselves already.
+        if ( eglSwapInterval(m_display, 0) )
+        {
+            wxLogTrace(TRACE_EGL, "Set EGL swap interval to 0 for %p", this);
+
+            // It shouldn't be necessary to set it again.
+            m_swapIntervalSet = true;
+        }
+        else
+        {
+            wxLogTrace(TRACE_EGL, "eglSwapInterval(0) failed for %p: %#x",
+                       this, eglGetError());
+        }
+    }
+
     GdkWindow* const window = GTKGetDrawingWindow();
 #ifdef GDK_WINDOWING_X11
     if (wxGTKImpl::IsX11(window))
@@ -776,18 +785,10 @@ bool wxGLCanvasEGL::SwapBuffers()
         // not completely occluded even if it hadn't been explicitly hidden.
         if ( !IsShownOnScreen() )
         {
-            // Trying to draw on a hidden window is useless and can actually be
-            // harmful if the compositor blocks in eglSwapBuffers() in this
-            // case, so avoid it.
+            // Trying to draw on a hidden window is useless.
             wxLogTrace(TRACE_EGL, "Window %p is hidden, not drawing", this);
             return false;
         }
-
-        // As long as the TODO comment above is not resolved, we must disable
-        // blocking in eglSwapBuffers(), as it would make all the other, not
-        // occluded, application windows impossible to use. This is clearly not
-        // ideal, but better than making the application unusable.
-        eglSwapInterval(m_display, 0);
     }
 #endif // GDK_WINDOWING_X11
 #ifdef GDK_WINDOWING_WAYLAND
