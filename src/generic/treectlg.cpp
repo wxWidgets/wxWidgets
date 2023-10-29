@@ -2457,9 +2457,6 @@ void wxGenericTreeCtrl::CalculateLineHeight()
 
 void wxGenericTreeCtrl::OnImagesChanged()
 {
-    // We call it solely for the side effect of updating the image list.
-    GetUpdatedImageListFor(this);
-
     UpdateAfterImageListChange();
 }
 
@@ -2484,9 +2481,6 @@ void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
 void wxGenericTreeCtrl::SetStateImages(const wxVector<wxBitmapBundle>& images)
 {
     m_imagesState.SetImages(images);
-
-    // As above, only call it for the side effect of updating the image list.
-    m_imagesState.GetUpdatedImageListFor(this);
 
     UpdateAfterImageListChange();
 }
