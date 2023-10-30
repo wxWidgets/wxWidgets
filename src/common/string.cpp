@@ -1577,18 +1577,19 @@ bool wxString::ToDouble(double *pVal) const
 // to if the compiler claims to support C++17, but it doesn't hurt to check).
 #ifdef __cpp_lib_to_chars
 
-bool wxString::ToCLong(long *pVal, int base) const
+namespace
 {
-    wxCHECK_MSG( pVal, false, "null output pointer" );
 
-    const wxScopedCharBuffer& buf = utf8_str();
-    auto start = buf.data();
-    const auto end = start + buf.length();
-
-    // from_chars() doesn't recognize base==0 and doesn't recognize "0x" prefix
-    // even if base 16 is explicitly specified, so adjust the input to use the
-    // form it supports.
-    if ( buf.length() > 1 && *start == '0' )
+// Helper of ToCLong() and ToCULong() taking care of base-related stuff:
+// because from_chars() doesn't recognize base==0 and doesn't recognize "0x"
+// prefix even if base 16 is explicitly specified, we need to skip the prefix
+// indicating the base to use if it's present and adjust "base" itself instead.
+//
+// Return false if base is already specified but is incompatible with the
+// prefix used.
+bool SetBaseAndSkipPrefix(int& base, const char*& start, const char* end)
+{
+    if ( end - start > 1 && *start == '0' )
     {
         ++start;
         if ( *start == 'x' || *start == 'X' )
@@ -1608,6 +1609,22 @@ bool wxString::ToCLong(long *pVal, int base) const
 
     if ( base == 0 )
         base = 10;
+
+    return true;
+}
+
+} // anonymous namespace
+
+bool wxString::ToCLong(long *pVal, int base) const
+{
+    wxCHECK_MSG( pVal, false, "null output pointer" );
+
+    const wxScopedCharBuffer& buf = utf8_str();
+    auto start = buf.data();
+    const auto end = start + buf.length();
+
+    if ( !SetBaseAndSkipPrefix(base, start, end) )
+        return false;
 
     const auto res = std::from_chars(start, end, *pVal, base);
 
