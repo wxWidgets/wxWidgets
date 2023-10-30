@@ -1580,15 +1580,25 @@ bool wxString::ToDouble(double *pVal) const
 namespace
 {
 
-// Helper of ToCLong() and ToCULong() taking care of base-related stuff:
-// because from_chars() doesn't recognize base==0 and doesn't recognize "0x"
-// prefix even if base 16 is explicitly specified, we need to skip the prefix
-// indicating the base to use if it's present and adjust "base" itself instead.
+// Helper of ToCLong() and ToCULong() taking care of prefix and base-related
+// stuff: because from_chars() doesn't skip leading whitespace and doesn't
+// recognize base==0 nor "0x" prefix even if base 16 is explicitly specified,
+// we need to skip the leading space and prefix indicating the base to use if
+// it's present and adjust "base" itself instead.
 //
 // Return false if base is already specified but is incompatible with the
 // prefix used.
-bool SetBaseAndSkipPrefix(int& base, const char*& start, const char* end)
+bool SkipOptPrefixAndSetBase(int& base, const char*& start, const char* end)
 {
+    // Start by skipping whitespace.
+    while ( wxSafeIsspace(*start) )
+        ++start;
+
+    // Also skip optional "+" which std::from_chars() doesn't accept neither.
+    if ( *start == '+' )
+        ++start;
+
+    // Then check for the base prefix.
     if ( end - start > 1 && *start == '0' )
     {
         ++start;
@@ -1623,7 +1633,7 @@ bool wxString::ToCLong(long *pVal, int base) const
     auto start = buf.data();
     const auto end = start + buf.length();
 
-    if ( !SetBaseAndSkipPrefix(base, start, end) )
+    if ( !SkipOptPrefixAndSetBase(base, start, end) )
         return false;
 
     const auto res = std::from_chars(start, end, *pVal, base);
@@ -1639,7 +1649,7 @@ bool wxString::ToCULong(unsigned long *pVal, int base) const
     auto start = buf.data();
     const auto end = start + buf.length();
 
-    if ( !SetBaseAndSkipPrefix(base, start, end) )
+    if ( !SkipOptPrefixAndSetBase(base, start, end) )
         return false;
 
     // Extra complication: for compatibility reasons, this function does accept
