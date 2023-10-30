@@ -1633,20 +1633,34 @@ bool wxString::ToCLong(long *pVal, int base) const
 
 bool wxString::ToCULong(unsigned long *pVal, int base) const
 {
-    // We intentionally don't use std::from_chars() here because this function
-    // is supposed to be compatible with strtoul() and so _succeed_ for "-1",
-    // for example, instead of returning an error as from_chars() (much more
-    // logically) does.
-
     wxCHECK_MSG( pVal, false, "null output pointer" );
 
-    long l;
-    if ( !ToCLong(&l, base) )
+    const wxScopedCharBuffer& buf = utf8_str();
+    auto start = buf.data();
+    const auto end = start + buf.length();
+
+    if ( !SetBaseAndSkipPrefix(base, start, end) )
         return false;
 
-    *pVal = static_cast<unsigned long>(l);
+    // Extra complication: for compatibility reasons, this function does accept
+    // "-1" as valid input (as strtoul() does!), but from_chars() doesn't, for
+    // unsigned values, so check for this separately.
+    if ( *start == '-' )
+    {
+        long l;
+        const auto res = std::from_chars(start, end, l, base);
 
-    return true;
+        if ( res.ec != std::errc{} || res.ptr != end )
+            return false;
+
+        *pVal = static_cast<unsigned long>(l);
+
+        return true;
+    }
+
+    const auto res = std::from_chars(start, end, *pVal, base);
+
+    return res.ec == std::errc{} && res.ptr == end;
 }
 
 bool wxString::ToCDouble(double *pVal) const
