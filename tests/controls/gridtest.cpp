@@ -1481,8 +1481,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 {
-    // TODO this test currently works only under Windows and GTK unfortunately
-#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__))
+    // TODO this test currently works only under Windows, GTK and Qt unfortunately
+#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__))
     if ( !EnableUITests() )
         return;
 
@@ -1528,8 +1528,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
 {
-    // TODO this test currently works only under Windows and GTK unfortunately
-#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__))
+    // TODO this test currently works only under Windows, GTK and Qt unfortunately
+#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__))
     if ( !EnableUITests() )
         return;
 

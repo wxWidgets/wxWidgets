@@ -221,7 +221,7 @@ void SliderTestCase::Thumb()
 
     CPPUNIT_ASSERT(track.GetCount() != 0);
     CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
     CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif
