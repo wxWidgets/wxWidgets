@@ -164,16 +164,32 @@ static bool SimulateMouseButton( MouseAction mouseAction,
     return true;
 }
 
-static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
+static bool SimulateKeyboardKey( KeyAction keyAction, Key key, int modifiers )
 {
     QWidget *widget = QApplication::focusWidget();
 
     if ( !widget )
         return false;
 
+    // I don't know if this is a bug in QTest or not, but simulating Shift+Char
+    // always produces a lowercase of that char! (which must be in uppercase)
+    if ( modifiers == wxMOD_SHIFT && key < 256 )
+    {
+        const QChar qChar(key);
+        if ( qChar.isLetter() )
+        {
+            widget->windowHandle() != nullptr ?
+                sendKeyEvent( keyAction, widget->windowHandle(), key,
+                              QString(qChar.toUpper()), Qt::ShiftModifier ) :
+                sendKeyEvent( keyAction, widget, key,
+                              QString(qChar.toUpper()), Qt::ShiftModifier );
+            return true;
+        }
+    }
+
     widget->windowHandle() != nullptr ?
-        keyEvent( keyAction, widget->windowHandle(), key ) :
-        keyEvent( keyAction, widget, key );
+        keyEvent( keyAction, widget->windowHandle(), key, ConvertToQtModifiers(modifiers) ) :
+        keyEvent( keyAction, widget, key, ConvertToQtModifiers(modifiers) );
 
     // If we found a widget then we successfully simulated an event:
 
@@ -215,13 +231,11 @@ bool wxUIActionSimulatorQtImpl::DoKey(int keyCode, int modifiers, bool isDown)
     SaveModifierForMouseClicks(keyCode, isDown);
 
     Qt::KeyboardModifiers qtmodifiers;
-    enum Key key;
-
-    key = (enum Key) wxQtConvertKeyCode( keyCode, modifiers, qtmodifiers );
+    enum Key key = (enum Key) wxQtConvertKeyCode( keyCode, modifiers, qtmodifiers );
 
     wxCHECK_MSG(key, false, wxT("No current key conversion equivalent in Qt"));
     KeyAction keyAction = isDown ? Press : Release;
-    return SimulateKeyboardKey( keyAction, key );
+    return SimulateKeyboardKey( keyAction, key, modifiers );
 }
 
 
