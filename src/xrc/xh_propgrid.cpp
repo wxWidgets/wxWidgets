@@ -268,7 +268,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
     }
     else
     {
-        wxASSERT( false );
+        wxFAIL_MSG( "unreachable" );
     }
 
     return nullptr;
