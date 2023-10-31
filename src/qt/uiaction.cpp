@@ -56,10 +56,56 @@ private:
     // This class has no public ctors, use Get() instead.
     wxUIActionSimulatorQtImpl() { m_mousePosition = QCursor::pos(); }
 
+    // Simulating mouse clicks with one or more modifiers only works if the modifier(s)
+    // is/are passed along with the mouse click. We just put SaveModifierForMouseClicks()
+    // inside DoKey() to remember which modifier(s) is/are currently pressed and pass that
+    // information to SimulateMouseButton() so code like the following works as expected:
+    //
+    //    sim.KeyDown(WXK_SHIFT);
+    //    sim.MouseClick();
+    //    sim.KeyUp(WXK_SHIFT);
+    //
+    void SaveModifierForMouseClicks(int keycode, bool isDown)
+    {
+        switch ( keycode )
+        {
+            default:
+                wxFALLTHROUGH;
+
+            case WXK_SHIFT:
+                isDown ? m_modifiers |= wxMOD_SHIFT
+                       : m_modifiers &= ~wxMOD_SHIFT;
+                break;
+            case WXK_ALT:
+                isDown ? m_modifiers |= wxMOD_ALT
+                       : m_modifiers &= ~wxMOD_ALT;
+                break;
+            case WXK_CONTROL:
+                isDown ? m_modifiers |= wxMOD_CONTROL
+                       : m_modifiers &= ~wxMOD_CONTROL;
+                break;
+        }
+    }
+
+    int m_modifiers = wxMOD_NONE; // for mouse clicks only
     QPoint m_mousePosition;
 
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorQtImpl);
 };
+
+static Qt::KeyboardModifiers ConvertToQtModifiers(int modifiers)
+{
+    Qt::KeyboardModifiers qtmodifiers = Qt::NoModifier;
+
+    if ( modifiers & wxMOD_SHIFT )
+        qtmodifiers |= Qt::ShiftModifier;
+    if ( modifiers & wxMOD_ALT )
+        qtmodifiers |= Qt::AltModifier;
+    if ( modifiers & wxMOD_CONTROL )
+        qtmodifiers |= Qt::ControlModifier;
+
+    return qtmodifiers;
+}
 
 static MouseButton ConvertMouseButton( int button )
 {
@@ -136,12 +182,14 @@ static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
 
 bool wxUIActionSimulatorQtImpl::MouseDown(int button)
 {
-    return SimulateMouseButton( MousePress, ConvertMouseButton( button ), m_mousePosition );
+    return SimulateMouseButton( MousePress, ConvertMouseButton( button ),
+                                m_mousePosition, ConvertToQtModifiers( m_modifiers ) );
 }
 
 bool wxUIActionSimulatorQtImpl::MouseUp(int button)
 {
-    return SimulateMouseButton( MouseRelease, ConvertMouseButton( button ), m_mousePosition );
+    return SimulateMouseButton( MouseRelease, ConvertMouseButton( button ),
+                                m_mousePosition, ConvertToQtModifiers( m_modifiers ) );
 }
 
 bool wxUIActionSimulatorQtImpl::MouseMove(long x, long y)
@@ -153,7 +201,8 @@ bool wxUIActionSimulatorQtImpl::MouseMove(long x, long y)
 
 bool wxUIActionSimulatorQtImpl::MouseClick(int button)
 {
-    return SimulateMouseButton( QTest::MouseClick, ConvertMouseButton( button ), m_mousePosition );
+    return SimulateMouseButton( QTest::MouseClick, ConvertMouseButton( button ),
+                                m_mousePosition, ConvertToQtModifiers( m_modifiers ) );
 }
 
 bool wxUIActionSimulatorQtImpl::MouseDblClick(int button)
@@ -163,6 +212,8 @@ bool wxUIActionSimulatorQtImpl::MouseDblClick(int button)
 
 bool wxUIActionSimulatorQtImpl::DoKey(int keyCode, int modifiers, bool isDown)
 {
+    SaveModifierForMouseClicks(keyCode, isDown);
+
     Qt::KeyboardModifiers qtmodifiers;
     enum Key key;
 
