@@ -973,6 +973,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::MoveGridCursorUsingEndKey", "[grid]")
     m_grid->SetColPos(10, 5);
 
     m_grid->SetFocus();
+    wxYield();
 
     sim.KeyDown(WXK_END, wxMOD_CONTROL);
     sim.KeyUp(WXK_END, wxMOD_CONTROL);
@@ -999,6 +1000,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectUsingEndKey", "[grid]")
     REQUIRE( m_grid->IsVisible(0, 0) );
 
     m_grid->SetFocus();
+    wxYield();
 
     sim.KeyDown(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
     sim.KeyUp(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
@@ -1373,6 +1375,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Editable", "[grid]")
     m_grid->SetFocus();
     m_grid->SetGridCursor(1, 1);
 
+    wxYield();
+
     sim.Text("abab");
     wxYield();
 
@@ -1403,6 +1407,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ReadOnly", "[grid]")
     m_grid->SetFocus();
 
     m_grid->SetGridCursor(1, 1);
+
+    wxYield();
 
     CHECK(m_grid->IsCurrentCellReadOnly());
 

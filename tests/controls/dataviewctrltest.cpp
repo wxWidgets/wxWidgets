@@ -873,6 +873,7 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     EventCounter keyEvents(m_dvc, wxEVT_KEY_DOWN);
 
     m_dvc->SetFocus();
+    wxYield();
 
     wxUIActionSimulator sim;
     sim.Char(WXK_DOWN);
