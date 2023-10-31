@@ -467,6 +467,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridPageState
     friend class wxPGProperty;
     friend class wxFlagsProperty;
     friend class wxPropertyGridIteratorBase;
+    friend class wxPropertyGridXmlHandler;
 public:
 
     // Default constructor.

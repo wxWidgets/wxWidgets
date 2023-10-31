@@ -66,9 +66,6 @@ wxPropertyGridXmlHandler::wxPropertyGridXmlHandler()
     XRC_ADD_STYLE(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES);
     XRC_ADD_STYLE(wxPG_EX_NO_FLAT_TOOLBAR);
     XRC_ADD_STYLE(wxPG_EX_MODE_BUTTONS);
-#if wxPG_COMPATIBILITY_1_2_0
-    XRC_ADD_STYLE(wxPG_EX_TRADITIONAL_VALIDATORS);
-#endif
 
     AddWindowStyles();
 }
@@ -106,7 +103,7 @@ void wxPropertyGridXmlHandler::InitPopulator()
     m_populator = populator;
 }
 
-void wxPropertyGridXmlHandler::PopulatePage( wxPropertyGridState* state )
+void wxPropertyGridXmlHandler::PopulatePage( wxPropertyGridPageState* state )
 {
     wxString sColumns(wxT("columns"));
     if ( HasParam(sColumns) )
@@ -253,7 +250,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         if ( wxPropertyGridPopulator::ToLongPCT(s, &pos, m_pg->GetClientSize().x) )
             m_populator->GetState()->DoSetSplitterPosition( pos, index, false );
     }
-#if wxPG_INCLUDE_MANAGER
     else if ( nodeName == wxT("page") )
     {
         // page
@@ -267,7 +263,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
             label = wxString::Format(_("Page %i"),(int)(m_manager->GetPageCount()+1));
 
         m_manager->AddPage(label);
-        wxPropertyGridState* state = m_manager->GetPage(m_manager->GetPageCount()-1);
+        wxPropertyGridPageState* state = m_manager->GetPage(m_manager->GetPageCount()-1);
         PopulatePage(state);
     }
     else if( m_class == wxT("wxPropertyGridManager"))
@@ -294,7 +290,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
         return control;
     }
-#endif
     else
     {
         wxASSERT( false );
@@ -318,11 +313,8 @@ bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
                             )
             ) ||
             (m_manager && name == wxT("page")) ||
-            (!m_populator && fOurClass(wxT("wxPropertyGrid")))
-#if wxPG_INCLUDE_MANAGER
-            ||
+            (!m_populator && fOurClass(wxT("wxPropertyGrid"))) ||
             (!m_populator && fOurClass(wxT("wxPropertyGridManager")))
-#endif
            );
 }
 

@@ -39,7 +39,7 @@ public:
     bool CanHandle(wxXmlNode *node) override;
 
     void InitPopulator();
-    void PopulatePage( wxPropertyGridState* state );
+    void PopulatePage( wxPropertyGridPageState* state );
     void DonePopulator();
 
     void HandlePropertyGridParams();
