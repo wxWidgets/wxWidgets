@@ -199,8 +199,8 @@ void ListBoxTestCase::ClickEvents()
 
     m_list->Append(testitems);
 
-    m_list->Update();
     m_list->Refresh();
+    m_list->Update();
 
     sim.MouseMove(m_list->ClientToScreen(wxPoint(10, 10)));
     wxYield();
@@ -242,8 +242,8 @@ void ListBoxTestCase::ClickNotOnItem()
     // simply avoid it by starting with a valid selection.
     m_list->SetSelection(0);
 
-    m_list->Update();
     m_list->Refresh();
+    m_list->Update();
 
     sim.MouseMove(m_list->ClientToScreen(wxPoint(m_list->GetSize().x - 10, m_list->GetSize().y - 10)));
     wxYield();
