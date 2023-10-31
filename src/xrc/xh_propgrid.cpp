@@ -2,31 +2,13 @@
 // Name:        xh_propgrid.cpp
 // Purpose:     XRC resource for wxPropertyGrid
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     May-16-2007
-// RCS-ID:      $Id:
-// Copyright:   (c) Jaakko Salli
+// Copyright:   (c) 2007 Jaakko Salli
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
-/*
-
-  NOTE: This source file is *not* included in the wxPropertyGrid library
-    (to prevent xrc-lib dependency). To use this code, you will need to
-    separately add src/xh_propgrid.cpp to your application.
-
-*/
 
 #if wxUSE_XRC && wxUSE_PROPGRID
 
