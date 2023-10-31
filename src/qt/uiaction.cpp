@@ -51,7 +51,9 @@ public:
 
 private:
     // This class has no public ctors, use Get() instead.
-    wxUIActionSimulatorQtImpl() { }
+    wxUIActionSimulatorQtImpl() { m_mousePosition = QCursor::pos(); }
+
+    QPoint m_mousePosition;
 
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorQtImpl);
 };
@@ -91,18 +93,22 @@ static MouseButton ConvertMouseButton( int button )
 }
 
 
-static bool SimulateMouseButton( MouseAction mouseAction, MouseButton mouseButton )
+static bool SimulateMouseButton( MouseAction mouseAction,
+                                 MouseButton mouseButton,
+                                 QPoint mousePosition,
+                                 Qt::KeyboardModifiers modifiers = Qt::NoModifier )
 {
-    QPoint mousePosition = QCursor::pos();
     QWidget *widget = QApplication::widgetAt( mousePosition );
 
     if ( !widget )
         return false;
 
+    const QPoint pos = widget->mapFromGlobal(mousePosition);
+
     // Notice that windowHandle() returns a valid handle for native widgets only.
     widget->windowHandle() != nullptr ?
-        mouseEvent( mouseAction, widget->windowHandle(), mouseButton, NoModifier, mousePosition ) :
-        mouseEvent( mouseAction, widget, mouseButton, NoModifier, mousePosition );
+        mouseEvent( mouseAction, widget->windowHandle(), mouseButton, modifiers, pos ) :
+        mouseEvent( mouseAction, widget, mouseButton, modifiers, pos );
 
     // If we found a widget then we successfully simulated an event:
 
@@ -125,21 +131,21 @@ static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
     return true;
 }
 
-bool wxUIActionSimulatorQtImpl::MouseDown( int button )
+bool wxUIActionSimulatorQtImpl::MouseDown(int button)
 {
-    return SimulateMouseButton( MousePress, ConvertMouseButton( button ));
+    return SimulateMouseButton( MousePress, ConvertMouseButton( button ), m_mousePosition );
 }
 
 bool wxUIActionSimulatorQtImpl::MouseUp(int button)
 {
-    return SimulateMouseButton( MouseRelease, ConvertMouseButton( button ));
+    return SimulateMouseButton( MouseRelease, ConvertMouseButton( button ), m_mousePosition );
 }
 
 bool wxUIActionSimulatorQtImpl::MouseMove(long x, long y)
 {
-    QCursor::setPos( x, y );
+    m_mousePosition = QPoint(x, y);
 
-    return true;
+    return SimulateMouseButton( QTest::MouseMove, NoButton, m_mousePosition );
 }
 
 bool wxUIActionSimulatorQtImpl::DoKey(int keyCode, int modifiers, bool isDown)
