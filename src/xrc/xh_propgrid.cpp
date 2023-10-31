@@ -163,12 +163,9 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
         if ( property->GetChildCount() )
         {
-            wxPGProperty* pwc = property;
-
-            // FIXME
             wxString sExpanded(wxT("expanded"));
             if ( HasParam(sExpanded) )
-                pwc->SetExpanded(GetBool(sExpanded));
+                property->SetExpanded(GetBool(sExpanded));
         }
 
         // Need to call AddChildren even for non-parent properties for attributes and such
@@ -279,8 +276,6 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
 bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
 {
-    #define fOurClass(A) IsOfClass(node, A)
-
     wxString name = node->GetName();
 
     return (
@@ -292,8 +287,8 @@ bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
                             )
             ) ||
             (m_manager && name == wxT("page")) ||
-            (!m_populator && fOurClass(wxT("wxPropertyGrid"))) ||
-            (!m_populator && fOurClass(wxT("wxPropertyGridManager")))
+            (!m_populator && IsOfClass(node, wxT("wxPropertyGrid"))) ||
+            (!m_populator && IsOfClass(node, wxT("wxPropertyGridManager")))
            );
 }
 
