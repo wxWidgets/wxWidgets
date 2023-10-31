@@ -14,6 +14,11 @@
 #include "wx/uiaction.h"
 #include "wx/private/uiaction.h"
 
+// Apparently {mouse,key}Event() functions signature has changed from QWidget to
+// QWindow at some time during Qt5.  Fortunately, we can continue to use the API
+// taking QWidget by defining QT_WIDGETS_LIB before including the test headers.
+#define QT_WIDGETS_LIB
+
 #include <QtTest/QtTestGui>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
@@ -25,16 +30,6 @@
 
 using namespace Qt;
 using namespace QTest;
-
-// Apparently {mouse,key}Event() functions signature has changed from QWidget
-// to QWindow at some time during Qt5, but we don't know when exactly. We do
-// know that they take QWindow for 5.2 and, presumably, later versions (but not
-// for whichever version this code was originally written for).
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
-inline QWindow* argForEvents(QWidget* w) { return w->windowHandle(); }
-#else
-inline QWidget* argForEvents(QWidget* w) { return w; }
-#endif
 
 class wxUIActionSimulatorQtImpl : public wxUIActionSimulatorImpl
 {
@@ -100,23 +95,34 @@ static bool SimulateMouseButton( MouseAction mouseAction, MouseButton mouseButto
 {
     QPoint mousePosition = QCursor::pos();
     QWidget *widget = QApplication::widgetAt( mousePosition );
-    if ( widget != nullptr )
-        mouseEvent( mouseAction, argForEvents(widget), mouseButton, NoModifier, mousePosition );
+
+    if ( !widget )
+        return false;
+
+    // Notice that windowHandle() returns a valid handle for native widgets only.
+    widget->windowHandle() != nullptr ?
+        mouseEvent( mouseAction, widget->windowHandle(), mouseButton, NoModifier, mousePosition ) :
+        mouseEvent( mouseAction, widget, mouseButton, NoModifier, mousePosition );
 
     // If we found a widget then we successfully simulated an event:
 
-    return widget != nullptr;
+    return true;
 }
 
 static bool SimulateKeyboardKey( KeyAction keyAction, Key key )
 {
     QWidget *widget = QApplication::focusWidget();
-    if ( widget != nullptr )
-        keyEvent( keyAction, argForEvents(widget), key );
+
+    if ( !widget )
+        return false;
+
+    widget->windowHandle() != nullptr ?
+        keyEvent( keyAction, widget->windowHandle(), key ) :
+        keyEvent( keyAction, widget, key );
 
     // If we found a widget then we successfully simulated an event:
 
-    return widget != nullptr;
+    return true;
 }
 
 bool wxUIActionSimulatorQtImpl::MouseDown( int button )
