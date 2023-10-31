@@ -639,7 +639,11 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
     wxUIActionSimulator sim;
 
     wxPoint pt = m_grid->ClientToScreen(wxPoint(m_grid->GetRowLabelSize() +
-                                        m_grid->GetColSize(0), 5));
+                                                m_grid->GetColSize(0), 5));
+#ifdef __WXQT__
+    pt += wxPoint(1, 0); // FIXME: why this is needed?
+#endif
+
     sim.MouseMove(pt);
     wxYield();
 
@@ -658,6 +662,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
 
     pt = m_grid->ClientToScreen(wxPoint(5, m_grid->GetColLabelSize() +
                                         m_grid->GetRowSize(0)));
+
+#ifdef __WXQT__
+    pt += wxPoint(0, 1); // FIXME: why this is needed?
+#endif
 
     sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
 
@@ -1512,6 +1520,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
                                              m_grid->GetColLabelSize())
                                    - wxPoint(0, 5));
 
+#ifdef __WXQT__
+    point += wxPoint(1, 0); // FIXME: why this is needed?
+#endif
+
     wxUIActionSimulator sim;
 
     wxYield();
@@ -1566,6 +1578,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
                                    + wxPoint(m_grid->GetRowLabelSize(),
                                              m_grid->GetColLabelSize())
                                    - wxPoint(0, 5));
+
+#ifdef __WXQT__
+    point += wxPoint(1, 0); // FIXME: why this is needed?
+#endif
 
     wxUIActionSimulator sim;
 
