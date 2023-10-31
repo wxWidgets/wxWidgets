@@ -23,12 +23,6 @@
     #include "wx/intl.h"
 #endif
 
-#if wxCHECK_VERSION(3, 0, 0)
-    #define wxXML_GetAttribute(A,B,C)   (A->GetAttribute(B,C))
-#else
-    #define wxXML_GetAttribute(A,B,C)   (A->GetPropVal(B,C))
-#endif
-
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyGridXmlHandler, wxXmlResourceHandler)
 
 wxPropertyGridXmlHandler::wxPropertyGridXmlHandler()
@@ -122,7 +116,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
     if ( nodeName == wxT("property") )
     {
         // property
-        wxString clas = wxXML_GetAttribute(node, wxT("class"), emptyString);
+        wxString clas = node->GetAttribute(wxT("class"), emptyString);
 
         wxString label;
         wxString sLabel(wxT("label"));
@@ -150,7 +144,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         if ( choicesNode )
         {
             choices = m_populator->ParseChoices( choicesNode->GetNodeContent(),
-                                                 wxXML_GetAttribute(choicesNode, wxT("id"), emptyString));
+                                                 choicesNode->GetAttribute(wxT("id"), emptyString));
         }
 
         wxPGProperty* property = m_populator->Add( clas, label, name, pValue, &choices );
@@ -183,10 +177,10 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
     else if ( nodeName == wxT("attribute") )
     {
         // attribute
-        wxString s1 = wxXML_GetAttribute(node, wxT("name"), emptyString);
+        wxString s1 = node->GetAttribute(wxT("name"), emptyString);
         if ( s1.length() )
         {
-            m_populator->AddAttribute( s1, wxXML_GetAttribute(node, wxT("type"), emptyString),
+            m_populator->AddAttribute( s1, node->GetAttribute(wxT("type"), emptyString),
                                        node->GetNodeContent() );
         }
     }
@@ -218,13 +212,13 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         //
         // Add choices list outside of a property
         m_populator->ParseChoices( node->GetNodeContent(),
-                                   wxXML_GetAttribute(node, wxT("id"), emptyString));
+                                   node->GetAttribute(wxT("id"), emptyString));
     }
     else if ( nodeName == wxT("splitterpos") )
     {
         // splitterpos
         wxASSERT(m_populator);
-        wxString sIndex = wxXML_GetAttribute(node, wxT("index"), emptyString);
+        wxString sIndex = node->GetAttribute(wxT("index"), emptyString);
 
         long index;
         if ( !sIndex.ToLong(&index, 10) )
