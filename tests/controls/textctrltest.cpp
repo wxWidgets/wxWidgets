@@ -32,6 +32,10 @@
     #include "waitfor.h"
 #endif
 
+#ifdef __WXQT__
+#include <QtGlobal>
+#endif
+
 #include "wx/private/localeset.h"
 
 #include "textentrytest.h"
@@ -241,6 +245,10 @@ void TextCtrlTestCase::ReadOnly()
     m_text->SetFocus();
 #endif
 
+    // We get spurious update under wxQt. get rid of it before doing
+    // the next simulation.
+    updated.Clear();
+
     sim.Text("abcdef");
     wxYield();
 
@@ -252,6 +260,13 @@ void TextCtrlTestCase::ReadOnly()
 void TextCtrlTestCase::MaxLength()
 {
 #if wxUSE_UIACTIONSIMULATOR
+#ifdef __WXQT__
+    #if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+        WARN("wxEVT_TEXT_MAXLEN event is only generated if Qt version is 5.12 or greater");
+        return;
+    #endif
+#endif
+
     EventCounter updated(m_text, wxEVT_TEXT);
     EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
 
