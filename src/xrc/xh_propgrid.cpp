@@ -26,7 +26,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyGridXmlHandler, wxXmlResourceHandler)
 
 wxPropertyGridXmlHandler::wxPropertyGridXmlHandler()
-                     :wxXmlResourceHandler(), m_manager(NULL), m_populator(NULL)
+                     :wxXmlResourceHandler(), m_manager(nullptr), m_populator(nullptr)
 {
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxPG_AUTO_SORT);
@@ -66,7 +66,7 @@ public:
 
     void DoScanForChildren() override
     {
-        m_xrcHandler->CreateChildrenPrivately(m_pg, NULL);
+        m_xrcHandler->CreateChildrenPrivately(m_pg, nullptr);
     }
 
 protected:
@@ -132,7 +132,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
         wxString sValue(wxT("value"));
         wxString value;
-        wxString* pValue = NULL;
+        wxString* pValue = nullptr;
         if ( HasParam(sValue) )
         {
             value = GetText(sValue);
@@ -150,7 +150,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         wxPGProperty* property = m_populator->Add( clas, label, name, pValue, &choices );
 
         if ( !property )
-            return NULL;
+            return nullptr;
 
         wxString sFlags(wxT("flags"));
         wxString flags;
@@ -258,7 +258,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         HandlePropertyGridParams();
 
         InitPopulator();
-        CreateChildrenPrivately(control, NULL);
+        CreateChildrenPrivately(control, nullptr);
         DonePopulator();
 
         m_manager = oldManager;
@@ -271,7 +271,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         wxASSERT( false );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
