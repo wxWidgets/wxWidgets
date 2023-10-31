@@ -30,9 +30,12 @@
 
 #if wxUSE_XRC && wxUSE_PROPGRID
 
-#include <wx/propgrid/propgrid.h>
+#include "wx/xrc/xh_propgrid.h"
 
-#include <wx/propgrid/xh_propgrid.h>
+#include "wx/propgrid/manager.h"
+#include "wx/propgrid/propgrid.h"
+
+#include "wx/xml/xml.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"

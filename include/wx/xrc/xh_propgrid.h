@@ -23,10 +23,12 @@
 
 #include "wx/xrc/xmlres.h"
 
-#include "wx/propgrid/propgrid.h"
-#include "wx/propgrid/manager.h"
-
 #if wxUSE_XRC && wxUSE_PROPGRID
+
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridManager;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPageState;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPopulator;
 
 class wxPropertyGridXmlHandler : public wxXmlResourceHandler
 {
