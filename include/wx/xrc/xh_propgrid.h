@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_XH_PROPGRID_H_
-#define _WX_XH_PROPGRID_H_
+#ifndef _WX_XRC_XH_PROPGRID_H_
+#define _WX_XRC_XH_PROPGRID_H_
 
 /*
 
@@ -52,4 +52,4 @@ private:
 
 #endif // wxUSE_XRC && wxUSE_PROPGRID
 
-#endif // _WX_XH_PROPGRID_H_
+#endif // _WX_XRC_XH_PROPGRID_H_
