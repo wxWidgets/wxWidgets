@@ -47,9 +47,9 @@ public:
     void HandlePropertyGridParams();
 
 private:
-    wxPropertyGridManager*      m_manager;
-    wxPropertyGrid*             m_pg;
-    wxPropertyGridPopulator*    m_populator;
+    wxPropertyGridManager*      m_manager = nullptr;
+    wxPropertyGrid*             m_pg = nullptr;
+    wxPropertyGridPopulator*    m_populator = nullptr;
 };
 
 #endif // wxUSE_XRC && wxUSE_PROPGRID
