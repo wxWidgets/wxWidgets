@@ -102,8 +102,7 @@ void wxPropertyGridXmlHandler::HandlePropertyGridParams()
     wxString sVW(wxT("virtualwidth"));
     if ( HasParam(sVW) )
     {
-        int vw = GetLong(sVW);
-        m_pg->SetVirtualWidth(vw);
+        m_pg->SetVirtualWidth(GetDimension(sVW));
     }
 }
 
