@@ -47,6 +47,9 @@ public:
     virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
 
+    virtual bool MouseClick(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) override;
+
     virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
 private:
@@ -146,6 +149,16 @@ bool wxUIActionSimulatorQtImpl::MouseMove(long x, long y)
     m_mousePosition = QPoint(x, y);
 
     return SimulateMouseButton( QTest::MouseMove, NoButton, m_mousePosition );
+}
+
+bool wxUIActionSimulatorQtImpl::MouseClick(int button)
+{
+    return SimulateMouseButton( QTest::MouseClick, ConvertMouseButton( button ), m_mousePosition );
+}
+
+bool wxUIActionSimulatorQtImpl::MouseDblClick(int button)
+{
+    return SimulateMouseButton( QTest::MouseDClick, ConvertMouseButton( button ), m_mousePosition );
 }
 
 bool wxUIActionSimulatorQtImpl::DoKey(int keyCode, int modifiers, bool isDown)
