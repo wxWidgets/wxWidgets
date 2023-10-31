@@ -227,7 +227,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         wxString s = node->GetNodeContent();
         long pos;
         if ( wxPropertyGridPopulator::ToLongPCT(s, &pos, m_pg->GetClientSize().x) )
-            m_populator->GetState()->DoSetSplitterPosition( pos, index, false );
+            m_populator->GetState()->DoSetSplitter( pos, index );
     }
     else if ( nodeName == wxT("page") )
     {
