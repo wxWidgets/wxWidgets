@@ -28,7 +28,7 @@
 
 */
 
-#if wxUSE_XRC
+#if wxUSE_XRC && wxUSE_PROPGRID
 
 #include <wx/propgrid/propgrid.h>
 
@@ -318,4 +318,4 @@ bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
            );
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XRC && wxUSE_PROPGRID
