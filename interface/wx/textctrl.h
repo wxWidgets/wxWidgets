@@ -1015,7 +1015,7 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
 
        The returned object enables spelling checks and disables grammar checks.
      */
-    static wxTextProofOptions Default()
+    static wxTextProofOptions Default();
 
     /**
        Create an object disabling all checks.
@@ -1023,12 +1023,12 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
        The returned object can be passed to wxTextCtrl::EnableProofCheck() to
        disable all checks in the text control.
      */
-    static wxTextProofOptions Disable()
+    static wxTextProofOptions Disable();
 
     /**
        Enable / disable spell checking for this control.
      */
-    wxTextProofOptions& SpellCheck(bool enable = true)
+    wxTextProofOptions& SpellCheck(bool enable = true);
 
     /**
        Enable / disable grammar checking for this control.
@@ -1036,7 +1036,13 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
        This option is currently only supported under macOS and is ignored under
        the other platforms.
      */
-    wxTextProofOptions& GrammarCheck(bool enable = true)
+    wxTextProofOptions& GrammarCheck(bool enable = true);
+
+    /**
+       Sets the language for the spell checker (and grammar checker on macOS)
+       from a canonical name (e.g., "fr" or "en").
+     */
+    wxTextProofOptions& Language(const wxString& lang);
 
     /// Return true if spell checking is enabled.
     bool IsSpellCheckEnabled() const;
@@ -1045,7 +1051,7 @@ class WXDLLIMPEXP_CORE wxTextProofOptions
     bool IsGrammarCheckEnabled() const;
 
     /// Returns true if any checks are enabled.
-    bool AnyChecksEnabled() const
+    bool AnyChecksEnabled() const;
 };
 
 /**
@@ -1844,7 +1850,7 @@ public:
     GtkTextBuffer *GTKGetTextBuffer();
 
     /**
-        Gets the underlying text control that can be uses with GTK’s API.
+        Gets the underlying text control that can be used with GTK’s API.
 
         This function can only be called for single-line text controls, i.e.
         those without wxTE_MULTILINE style.
@@ -1960,4 +1966,3 @@ public:
     */
     ~wxStreamToTextRedirector();
 };
-
