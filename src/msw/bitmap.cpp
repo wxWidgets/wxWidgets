@@ -1142,14 +1142,19 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect ) const
 
 wxBitmap wxBitmap::GetSubBitmapOfHDC( const wxRect& rect, WXHDC hdc ) const
 {
-    wxCHECK_MSG( IsOk() &&
-                 (rect.x >= 0) && (rect.y >= 0) &&
+    wxCHECK_MSG( IsOk(), wxNullBitmap, wxT("invalid bitmap") );
+
+    wxCHECK_MSG( (rect.x >= 0) && (rect.y >= 0) &&
                  (rect.x+rect.width <= GetWidth()) &&
                  (rect.y+rect.height <= GetHeight()),
-                 wxNullBitmap, wxT("Invalid bitmap or bitmap region") );
+                 wxNullBitmap, wxT("invalid bitmap region") );
 
     wxBitmap ret( rect.width, rect.height, GetDepth() );
     wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
+
+    // For consistency with the other ports, preserve this bitmap scale factor
+    // for the returned bitmap, even if it's not really used in wxMSW.
+    ret.SetScaleFactor(GetScaleFactor());
 
     // handle alpha channel, if any
     if (HasAlpha())

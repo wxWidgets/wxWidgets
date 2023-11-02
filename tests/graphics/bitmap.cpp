@@ -1705,36 +1705,6 @@ TEST_CASE("Bitmap::DC", "[bitmap][dc]")
 #endif // wxUSE_SVG
 }
 
-#if defined(wxHAS_DPI_INDEPENDENT_PIXELS) || defined(__WXMSW__)
-
-TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
-{
-    // Create a bitmap with scale factor != 1.
-    wxBitmap bmp;
-    bmp.CreateWithDIPSize(8, 8, 2);
-    REQUIRE( bmp.GetScaleFactor() == 2 );
-    CHECK( bmp.GetSize() == wxSize(16, 16) );
-
-    // wxMemoryDC should use the same scale factor as the bitmap.
-    wxMemoryDC dc(bmp);
-    CHECK( dc.GetContentScaleFactor() == 2 );
-
-    // A bitmap "compatible" with this DC should also use the same scale factor.
-    wxBitmap bmp2(4, 4, dc);
-    CHECK( bmp2.GetScaleFactor() == 2 );
-    CHECK( bmp2.GetSize() == wxSize(8, 8) );
-
-    // A compatible bitmap created from wxImage and this DC should also inherit
-    // the same scale factor, but its size should be still the same as that of
-    // the image.
-    wxImage img(16, 16);
-    wxBitmap bmp3(img, dc);
-    CHECK( bmp3.GetScaleFactor() == 2 );
-    CHECK( bmp3.GetSize() == wxSize(16, 16) );
-}
-
-#endif // ports with scaled bitmaps support
-
 #if wxUSE_GRAPHICS_CONTEXT
 
 inline void DrawScaledBmp(wxBitmap& bmp, float scale, wxGraphicsRenderer* renderer)
@@ -1827,3 +1797,66 @@ TEST_CASE("GC::DrawBitmap", "[bitmap][drawbitmap]")
 #endif //wxUSE_GRAPHICS_CONTEXT
 
 #endif //wxHAS_RAW_BITMAP
+
+#if defined(wxHAS_DPI_INDEPENDENT_PIXELS) || defined(__WXMSW__)
+
+TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
+{
+    // Create a bitmap with scale factor != 1.
+    wxBitmap bmp;
+    bmp.CreateWithDIPSize(8, 8, 2);
+    REQUIRE( bmp.GetScaleFactor() == 2 );
+    CHECK( bmp.GetSize() == wxSize(16, 16) );
+
+    // wxMemoryDC should use the same scale factor as the bitmap.
+    wxMemoryDC dc(bmp);
+    CHECK( dc.GetContentScaleFactor() == 2 );
+
+    // A bitmap "compatible" with this DC should also use the same scale factor.
+    wxBitmap bmp2(4, 4, dc);
+    CHECK( bmp2.GetScaleFactor() == 2 );
+    CHECK( bmp2.GetSize() == wxSize(8, 8) );
+
+    // A compatible bitmap created from wxImage and this DC should also inherit
+    // the same scale factor, but its size should be still the same as that of
+    // the image.
+    wxImage img(16, 16);
+    wxBitmap bmp3(img, dc);
+    CHECK( bmp3.GetScaleFactor() == 2 );
+    CHECK( bmp3.GetSize() == wxSize(16, 16) );
+}
+
+TEST_CASE("wxBitmap::GetSubBitmap", "[bitmap]")
+{
+    // Make the logical size odd to test correct rounding.
+    const double scale = 1.5;
+    const wxSize sizeLog(15, 15);
+    const wxSize sizePhy(23, 23);
+
+    // Prepare the main bitmap.
+    wxBitmap bmp;
+    bmp.CreateWithDIPSize(sizeLog, scale);
+    CHECK( bmp.GetDIPSize() == sizeLog );
+    CHECK( bmp.GetSize() == sizePhy );
+    CHECK( bmp.GetScaleFactor() == scale );
+
+    // Extracting sub-bitmap of the entire bitmap size should return the bitmap
+    // of the same size.
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    const wxRect rectAll(wxPoint(0, 0), sizeLog);
+#else
+    const wxRect rectAll(wxPoint(0, 0), sizePhy);
+#endif
+
+    const wxBitmap sub = bmp.GetSubBitmap(rectAll);
+    CHECK( sub.GetDIPSize() == sizeLog );
+    CHECK( sub.GetSize() == sizePhy );
+    CHECK( sub.GetScaleFactor() == scale );
+
+    // Using incorrect bounds should assert.
+    wxRect rectInvalid = rectAll;
+    rectInvalid.Offset(1, 0);
+    WX_ASSERT_FAILS_WITH_ASSERT( bmp.GetSubBitmap(rectInvalid) );
+}
+
+#endif // ports with scaled bitmaps support
