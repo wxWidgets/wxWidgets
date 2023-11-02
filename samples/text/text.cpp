@@ -1208,7 +1208,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_tab->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("tab"))));
 
     m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2 );
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2 | wxTE_NOHIDESEL);
     m_enter->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("enter"))));
 
 #if wxUSE_SPELLCHECK
@@ -1238,7 +1238,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "\nAnd here is a link in quotation marks to "
                                 "test wxTE_AUTO_URL: \"http://www.wxwidgets.org\"",
                                 wxPoint(450, 10), wxSize(200, 230),
-                                wxTE_RICH | wxTE_MULTILINE | wxTE_AUTO_URL);
+                                wxTE_RICH | wxTE_MULTILINE | wxTE_AUTO_URL | wxTE_NOHIDESEL);
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
