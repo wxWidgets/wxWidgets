@@ -12,10 +12,6 @@
 
 #include "wx/bitmap.h"
 
-// Eventually we'll make this a reference-counted wxGDIObject. For
-// now, the app must take care of ownership issues. That is, the
-// image lists must be explicitly deleted after the control(s) that uses them
-// is (are) deleted, or when the app exits.
 class WXDLLIMPEXP_CORE wxImageList : public wxObject
 {
 public:
