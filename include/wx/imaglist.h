@@ -86,7 +86,7 @@ public:
     virtual wxIcon GetIcon(int index) const = 0;
 
 protected:
-    // Size of a single bitmap in the list in logical pixels.
+    // Size of a single bitmap in the list in physical pixels.
     wxSize m_size;
 
     bool m_useMask = false;

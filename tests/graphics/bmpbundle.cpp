@@ -16,6 +16,7 @@
 
 #include "wx/artprov.h"
 #include "wx/dcmemory.h"
+#include "wx/imaglist.h"
 
 #include "asserthelper.h"
 
@@ -468,6 +469,37 @@ TEST_CASE("BitmapBundle::Scale", "[bmpbundle][scale]")
     // works as expected.
     wxBitmapBundle b = bmp2;
     CHECK( b.GetDefaultSize() == wxSize(8, 8) );
+}
+
+TEST_CASE("BitmapBundle::ImageList", "[bmpbundle][imagelist]")
+{
+    wxVector<wxBitmapBundle> images;
+    images.push_back(wxBitmapBundle::FromBitmaps(wxBitmap(16, 16), wxBitmap(32, 32)));
+    images.push_back(wxBitmapBundle::FromBitmap(wxBitmap(24, 24)));
+    images.push_back(wxBitmapBundle::FromBitmaps(wxBitmap(16, 16), wxBitmap(32, 32)));
+
+    // There are 2 bundles with preferred size of 32x32, so they should win.
+    const wxSize size = wxBitmapBundle::GetConsensusSizeFor(2.0, images);
+    CHECK( size == wxSize(32, 32) );
+
+    wxImageList iml(size.x, size.y);
+    for ( const auto& bundle : images )
+    {
+        wxBitmap bmp = bundle.GetBitmap(size);
+        REQUIRE( bmp.IsOk() );
+        CHECK( bmp.GetSize() == size );
+        REQUIRE( iml.Add(bmp) != -1 );
+    }
+
+    CHECK( iml.GetBitmap(0).GetSize() == size );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( iml.GetBitmap(0).GetScaleFactor() == 2 );
+#endif
+
+    CHECK( iml.GetBitmap(1).GetSize() == size );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( iml.GetBitmap(1).GetScaleFactor() == Approx(1.3333333333) );
+#endif
 }
 
 #endif // ports with scaled bitmaps support

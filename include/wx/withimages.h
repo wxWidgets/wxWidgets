@@ -143,7 +143,7 @@ public:
             else if ( m_imageList )
             {
                 // All images in the image list are of the same size.
-                size = m_imageList->GetSize();
+                size = window->FromPhys(m_imageList->GetSize());
             }
         }
 
