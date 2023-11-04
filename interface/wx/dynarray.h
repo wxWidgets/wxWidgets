@@ -274,7 +274,7 @@ public:
     /**
         Constructs the container with the contents of the initializer_list @a list.
 
-        @since 3.2.3
+        @since 3.2.4
     */
     template<typename T>
     wxArray(std::initializer_list<T> list);

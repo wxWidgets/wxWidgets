@@ -15,7 +15,9 @@
 
 #include "wx/vector.h"
 
-#include <initializer_list>
+#ifdef wxHAVE_INITIALIZER_LIST
+    #include <initializer_list>
+#endif
 
 /*
   This header defines legacy dynamic arrays and object arrays (i.e. arrays
@@ -107,8 +109,10 @@ public:
         : base_vec(first, last)
     { }
 
+#ifdef wxHAVE_INITIALIZER_LIST
     template<typename U>
     wxBaseArray(std::initializer_list<U> list) : base_vec(list.begin(), list.end()) {}
+#endif
 
     void Empty() { this->clear(); }
     void Clear() { this->clear(); }
@@ -500,6 +504,14 @@ private:
 #define WX_DEFINE_USER_EXPORTED_TYPEARRAY_PTR(T, name, base, expdecl) \
     WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class expdecl)
 
+#ifdef wxHAVE_INITIALIZER_LIST
+    #define WX_DEFINE_CTOR_FROM_INIT_LIST(T, name, base, classdecl)                     \
+        template<typename U>                                                            \
+            name(std::initializer_list<U> list) : Base(list.begin(), list.end()) { }
+#else
+    #define WX_DEFINE_CTOR_FROM_INIT_LIST(T, name, base, classdecl)     // No support for initializer_list
+#endif
+
 // This is the only non-trivial macro, which actually defines the array class
 // with the given name containing the elements of the specified type.
 //
@@ -513,20 +525,19 @@ private:
 // avoid clashes between T and symbols defined in wxBaseArray<> scope, e.g. if
 // we didn't do this, we would have compilation problems with arrays of type
 // "Item" (which is also the name of a method in wxBaseArray<>).
-#define WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, classdecl)               \
-    typedef wxBaseArray<T> wxBaseArrayFor##name;                              \
-    class name : public wxBaseArrayFor##name                                  \
-    {                                                                         \
-        typedef wxBaseArrayFor##name Base;                                    \
-    public:                                                                   \
-        name() : Base() { }                                                   \
-        explicit name(size_t n) : Base(n) { }                                 \
-        name(size_t n, Base::const_reference v) : Base(n, v) { }              \
-        template <class InputIterator>                                        \
-        name(InputIterator first, InputIterator last) : Base(first, last) { } \
-        template<typename U>                                                  \
-        name(std::initializer_list<U> list) : Base(list.begin(), list.end()) { } \
-    }
+#define WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, classdecl)                   \
+        typedef wxBaseArray<T> wxBaseArrayFor##name;                              \
+        class name : public wxBaseArrayFor##name                                  \
+        {                                                                         \
+            typedef wxBaseArrayFor##name Base;                                    \
+        public:                                                                   \
+            name() : Base() { }                                                   \
+            explicit name(size_t n) : Base(n) { }                                 \
+            name(size_t n, Base::const_reference v) : Base(n, v) { }              \
+            template <class InputIterator>                                        \
+            name(InputIterator first, InputIterator last) : Base(first, last) { } \
+            WX_DEFINE_CTOR_FROM_INIT_LIST(T, name, base, classdecl)               \
+        }
 
 
 #define WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, classdecl) \
