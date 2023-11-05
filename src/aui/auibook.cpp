@@ -2607,6 +2607,8 @@ void wxAuiNotebook::OnTabDragMotion(wxAuiNotebookEvent& evt)
         if (dest_tabs->TabHitTest(pt.x, pt.y, &dest_location_tab))
         {
             int src_idx = evt.GetSelection();
+            wxCHECK_RET( src_idx != -1, "Invalid source tab?" );
+
             int dest_idx = dest_tabs->GetIdxFromWindow(dest_location_tab);
 
             // prevent jumpy drag
