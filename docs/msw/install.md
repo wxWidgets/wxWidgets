@@ -455,18 +455,22 @@ Here is what you need to do:
   - compiler
   - resource compiler
   include paths.
-* If using MSVC, prepend `$WXWIN\include\msvc` to the include paths too.
-  Otherwise, append `<wx-lib-dir>\mswu[d]` to the include paths, where "d" should
+* Append `<wx-lib-dir>\mswu[d]` to the include paths, where "d" should
   be used for debug builds only.
+  When using MSVC, there is a simpler alternative which allows to use the
+  same compiler options for debug and release builds: just prepend
+  `$WXWIN\include\msvc` to the include paths **instead** of the paths above.
 * Define the following symbols for the preprocessor:
   - `__WXMSW__` to ensure you use the correct wxWidgets port.
   - `NDEBUG` if you want to build in release mode, i.e. disable asserts.
   - `WXUSINGDLL` if you are using DLL build of wxWidgets.
 * Add `<wx-lib-dir>` directory described above to the libraries path.
 
-When using MSVC, the libraries are linked automatically using "#pragma
-comment(lib)" feature of this compiler. With all the other compilers you also
-need to:
+When using MSVC, using `include\msvc` in the compiler include path has another
+advantage: the header found in this directory ensures that all the required
+libraries are linked automatically using `#pragma comment(lib)` feature of this
+compiler. With the other compilers, or if you don't use `include\msvc` with
+MSVC, you also need to:
 
 * Add the list of libraries to link with to the linker input. The exact list
   depends on which libraries you use and whether you built wxWidgets in
