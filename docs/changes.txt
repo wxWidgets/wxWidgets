@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Allow creating wxArrays from std::initialized_list (Lotendan, #23966).
+- Fix regression in wxTranslations::AddCatalog() return value (#24019).
 
 All (GUI):
 
