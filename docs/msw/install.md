@@ -470,11 +470,11 @@ need to:
 
 * Add the list of libraries to link with to the linker input. The exact list
   depends on which libraries you use and whether you built wxWidgets in
-  monolithic or default multlib mode and basically should include all the
-  relevant libraries from the directory above, e.g. `wxmsw31ud_core.lib
-  wxbase31ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
-  wxexpatd.lib` for a debug build of an application using the core library only
-  (all wxWidgets applications use the base library).
+  monolithic or default multi-lib mode and basically should include all the
+  relevant libraries from the directory above, e.g. `wxmsw34ud_core.lib
+  wxbase34ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
+  wxexpatd.lib` for a debug build of an application using the core library of
+  wxWidgets 3.4 only (all wxWidgets applications use the base library).
 
 
 For example, to compile your program with gcc using debug wxWidgets DLLs
