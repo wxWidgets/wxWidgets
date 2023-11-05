@@ -1019,6 +1019,13 @@ wxAuiTabCtrl::~wxAuiTabCtrl()
 {
 }
 
+void wxAuiTabCtrl::DoEndDragging()
+{
+    m_clickPt = wxDefaultPosition;
+    m_isDragging = false;
+    m_clickTab = nullptr;
+}
+
 void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 {
     wxPaintDC dc(this);
@@ -1053,9 +1060,9 @@ void wxAuiTabCtrl::OnSize(wxSizeEvent& evt)
 void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
 {
     CaptureMouse();
-    m_clickPt = wxDefaultPosition;
-    m_isDragging = false;
-    m_clickTab = nullptr;
+
+    // Reset any previous values first.
+    DoEndDragging();
     m_pressedButton = nullptr;
 
 
@@ -1095,11 +1102,12 @@ void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 {
     if (m_isDragging)
     {
-        m_clickPt = wxDefaultPosition;
-        m_isDragging = false;
+        const auto clickTab = m_clickTab;
+
+        DoEndDragging();
 
         wxAuiNotebookEvent evt(wxEVT_AUINOTEBOOK_CANCEL_DRAG, m_windowId);
-        evt.SetSelection(GetIdxFromWindow(m_clickTab));
+        evt.SetSelection(GetIdxFromWindow(clickTab));
         evt.SetOldSelection(evt.GetSelection());
         evt.SetEventObject(this);
         GetEventHandler()->ProcessEvent(evt);
@@ -1113,11 +1121,12 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 
     if (m_isDragging)
     {
-        m_clickPt = wxDefaultPosition;
-        m_isDragging = false;
+        const auto clickTab = m_clickTab;
+
+        DoEndDragging();
 
         wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_END_DRAG, m_windowId);
-        e.SetSelection(GetIdxFromWindow(m_clickTab));
+        e.SetSelection(GetIdxFromWindow(clickTab));
         e.SetOldSelection(e.GetSelection());
         e.SetEventObject(this);
         GetEventHandler()->ProcessEvent(e);
@@ -1154,9 +1163,7 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
         m_pressedButton = nullptr;
     }
 
-    m_clickPt = wxDefaultPosition;
-    m_isDragging = false;
-    m_clickTab = nullptr;
+    DoEndDragging();
 }
 
 void wxAuiTabCtrl::OnMiddleUp(wxMouseEvent& evt)
