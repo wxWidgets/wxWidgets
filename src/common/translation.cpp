@@ -1346,9 +1346,27 @@ bool wxTranslations::AddCatalog(const wxString& domain,
         return true;
 
     const wxString msgIdLang = wxUILocale::GetLanguageCanonicalName(msgIdLanguage);
-    const wxString domain_lang = GetBestTranslation(domain, msgIdLang);
 
-    if ( msgIdLang == domain_lang )
+    // Check if the original strings can be used directly.
+    bool canUseUntranslated = false;
+    if ( m_lang.empty() )
+    {
+        // If we are using the default language, check if the message ID
+        // language is acceptable for this system.
+        const wxString domain_lang = GetBestTranslation(domain, msgIdLang);
+
+        if ( msgIdLang == domain_lang )
+            canUseUntranslated = true;
+    }
+    else // But if we have a fixed language, we should just check it instead.
+    {
+        // Consider message IDs for another region using the same language
+        // acceptable.
+        if ( msgIdLang.BeforeFirst('_') == m_lang.BeforeFirst('_') )
+            canUseUntranslated = true;
+    }
+
+    if ( canUseUntranslated )
     {
         wxLogTrace(TRACE_I18N,
                     wxS("not using translations for domain '%s' with msgid language '%s'"),
