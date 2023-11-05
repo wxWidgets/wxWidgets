@@ -236,11 +236,11 @@ protected:
 
 protected:
 
-    wxPoint m_clickPt;
-    wxWindow* m_clickTab;
-    bool m_isDragging;
-    wxAuiTabContainerButton* m_hoverButton;
-    wxAuiTabContainerButton* m_pressedButton;
+    wxPoint m_clickPt = wxDefaultPosition;
+    wxWindow* m_clickTab = nullptr;
+    bool m_isDragging = false;
+    wxAuiTabContainerButton* m_hoverButton = nullptr;
+    wxAuiTabContainerButton* m_pressedButton = nullptr;
 
     void SetHoverTab(wxWindow* wnd);
 

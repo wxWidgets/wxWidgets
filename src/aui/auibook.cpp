@@ -1013,10 +1013,6 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
                            long style) : wxControl(parent, id, pos, size, style)
 {
     SetName(wxT("wxAuiTabCtrl"));
-    m_clickPt = wxDefaultPosition;
-    m_isDragging = false;
-    m_hoverButton = nullptr;
-    m_pressedButton = nullptr;
 }
 
 wxAuiTabCtrl::~wxAuiTabCtrl()
