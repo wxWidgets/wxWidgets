@@ -1099,6 +1099,7 @@ void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 {
     if (m_isDragging)
     {
+        m_clickPt = wxDefaultPosition;
         m_isDragging = false;
 
         wxAuiNotebookEvent evt(wxEVT_AUINOTEBOOK_CANCEL_DRAG, m_windowId);
@@ -1116,6 +1117,7 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 
     if (m_isDragging)
     {
+        m_clickPt = wxDefaultPosition;
         m_isDragging = false;
 
         wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_END_DRAG, m_windowId);

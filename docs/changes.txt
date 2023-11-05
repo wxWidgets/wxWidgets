@@ -242,6 +242,7 @@ All:
 
 All (GUI):
 
+- Fix possible crash when dragging pages in wxAuiNotebook (#24027).
 - Fix refreshing multiple selection items in generic wxListCtrl.
 
 wxGTK:
