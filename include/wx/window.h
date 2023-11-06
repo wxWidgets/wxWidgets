@@ -1675,6 +1675,10 @@ public:
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     // Return the DPI corresponding to the given scale factor.
     static wxSize MakeDPIFromScaleFactor(double scaleFactor);
+
+    // Notify all non-top-level children of the given (typically top-level
+    // itself) window about the DPI change.
+    void WXNotifyDPIChange(double oldScaleFactor, double newScaleFactor);
 #endif // wxHAS_DPI_INDEPENDENT_PIXELS
 
 protected:

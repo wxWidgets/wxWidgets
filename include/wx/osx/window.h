@@ -151,7 +151,6 @@ public:
     // --------------
 
     void OnMouseEvent( wxMouseEvent &event );
-    void OnDPIChanged( wxDPIChangedEvent& event );
 
     void MacOnScroll( wxScrollEvent&event );
 
