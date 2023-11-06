@@ -243,6 +243,7 @@ wxGTK:
 
 - Fix some regressions introduced in 3.2.3:
   * Don't crash in console apps linked with GUI libraries (#23981).
+  * Fix possible crash and too high CPU use when using EGL (#24018).
   * Fix losing clipboard contents when clearing a different selection (#23988).
 
 wxMSW:
