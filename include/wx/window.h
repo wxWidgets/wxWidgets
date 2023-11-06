@@ -1669,6 +1669,14 @@ public:
     // This is an internal helper function implemented by text-like controls.
     virtual const wxTextEntry* WXGetTextEntry() const { return nullptr; }
 
+
+    // DPI-related helpers for ports using DIPs.
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    // Return the DPI corresponding to the given scale factor.
+    static wxSize MakeDPIFromScaleFactor(double scaleFactor);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+
 protected:
     // helper for the derived class Create() methods: the first overload, with
     // validator parameter, should be used for child windows while the second

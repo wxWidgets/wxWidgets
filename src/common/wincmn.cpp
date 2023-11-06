@@ -2829,6 +2829,12 @@ wxSize wxWindowBase::GetDPI() const
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
 
+/* static */
+wxSize wxWindowBase::MakeDPIFromScaleFactor(double scaleFactor)
+{
+    return wxDisplay::GetStdPPI()*scaleFactor;
+}
+
 // In this case logical pixels are DIPs, so we don't need to define conversion
 // to/from them (or, rather, they are already defined as trivial inline
 // functions in the header), but we do need to define conversions to/from

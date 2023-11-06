@@ -2586,17 +2586,9 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     return false;
 }
 
-/* static */
-wxSize wxWindowMac::OSXMakeDPIFromScaleFactor(double scaleFactor)
-{
-    const int dpi = wxRound(scaleFactor*72.0);
-
-    return wxSize(dpi, dpi);
-}
-
 wxSize wxWindowMac::GetDPI() const
 {
-    return OSXMakeDPIFromScaleFactor(GetDPIScaleFactor());
+    return MakeDPIFromScaleFactor(GetDPIScaleFactor());
 }
 
 // on mac ContentScale and DPIScale are identical

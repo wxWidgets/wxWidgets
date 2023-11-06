@@ -292,9 +292,6 @@ public:
     // internal response to size events
     virtual void MacOnInternalSize() {}
 
-    // Return the DPI corresponding to the given scale factor.
-    static wxSize       OSXMakeDPIFromScaleFactor(double scaleFactor);
-
 #if wxUSE_MENUS
     // Called on the invoking window after handling the menu event.
     virtual void        OSXAfterMenuEvent() { }
