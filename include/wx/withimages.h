@@ -129,6 +129,25 @@ public:
         return m_imageList;
     }
 
+    // Return logical bitmap size that should be used for all images.
+    //
+    // Returns (0, 0) if we don't have any images.
+    wxSize GetImageLogicalSize(const wxWindow* window) const
+    {
+        wxSize size;
+
+        // Prefer to use the image list here if we have it because we must have
+        // already decided for the best size to use when creating it.
+        //
+        // Otherwise we need to compute the best size here ourselves.
+        if ( m_imageList )
+            size = m_imageList->GetSize();
+        else if ( !m_images.empty() )
+            size = wxBitmapBundle::GetConsensusSizeFor(window, m_images);
+
+        return window->FromPhys(size);
+    }
+
     // Return logical size of the image to use or (0, 0) if there are none.
     wxSize GetImageLogicalSize(const wxWindow* window, int iconIndex) const
     {
