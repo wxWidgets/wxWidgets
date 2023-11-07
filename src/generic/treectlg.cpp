@@ -3389,7 +3389,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
                 // Notice that we should start the timer even if we didn't find
                 // anything to make sure we reset the search state later.
-                m_findTimer->Start(wxTreeFindTimer::DELAY, wxTIMER_ONE_SHOT);
+                m_findTimer->StartOnce(wxTreeFindTimer::DELAY);
 
                 if ( id.IsOk() )
                 {
