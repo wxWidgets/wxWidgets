@@ -2420,7 +2420,7 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 void wxListMainWindow::OnFindTimer()
 {
     m_findPrefix.clear();
-    if ( m_findBell )
+    if ( m_findBell == -1 )
         m_findBell = 1;
 }
 
@@ -3182,7 +3182,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
                     // Reset the bell flag if it had been temporarily disabled
                     // before.
-                    if ( m_findBell )
+                    if ( m_findBell == -1 )
                         m_findBell = 1;
                 }
                 else // No such item

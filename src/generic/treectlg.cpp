@@ -1594,7 +1594,7 @@ void wxGenericTreeCtrl::ResetTextControl()
 void wxGenericTreeCtrl::ResetFindState()
 {
     m_findPrefix.clear();
-    if ( m_findBell )
+    if ( m_findBell == -1 )
         m_findBell = 1;
 }
 
@@ -3397,7 +3397,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
                     // Reset the bell flag if it had been temporarily disabled
                     // before.
-                    if ( m_findBell )
+                    if ( m_findBell == -1 )
                         m_findBell = 1;
                 }
                 else // No such item
