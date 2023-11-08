@@ -328,6 +328,9 @@ public:
     /**
         Returns the alignment flags.
         See ::wxTextAttrAlignment for a list of available styles.
+
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxGTK. Also implemented in wxRichTextCtrl.
     */
     wxTextAttrAlignment GetAlignment() const;
 
@@ -570,6 +573,9 @@ public:
 
     /**
         Returns @true if the attribute object specifies alignment.
+
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxGTK. Also implemented in wxRichTextCtrl.
     */
     bool HasAlignment() const;
 
@@ -781,6 +787,9 @@ public:
 
         Of these, wxTEXT_ALIGNMENT_JUSTIFIED is unimplemented.
         In future justification may be supported when printing or previewing, only.
+
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxGTK. Also implemented in wxRichTextCtrl.
     */
     void SetAlignment(wxTextAttrAlignment alignment);
 
