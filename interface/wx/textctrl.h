@@ -105,7 +105,7 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_ALIGNMENT            = 0x00000080,
     wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
     wxTEXT_ATTR_RIGHT_INDENT         = 0x00000200,
-    wxTEXT_ATTR_TABS                 = 0x00000400,
+    wxTEXT_ATTR_                 = 0x00000400,
     wxTEXT_ATTR_PARA_SPACING_AFTER   = 0x00000800,
     wxTEXT_ATTR_PARA_SPACING_BEFORE  = 0x00001000,
     wxTEXT_ATTR_LINE_SPACING         = 0x00002000,
@@ -146,7 +146,7 @@ enum wxTextAttrFlags
         Combines all the styles regarding text paragraphs.
     */
     wxTEXT_ATTR_PARAGRAPH = \
-        (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
+        (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_|\
             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
             wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL|\
             wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE|wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER),
@@ -520,6 +520,9 @@ public:
 
         Each stop is measured from the left margin and therefore each value must
         be larger than the last.
+
+        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style), wxGTK and wxRichTextCtrl.
     */
     const wxArrayInt& GetTabs() const;
 
@@ -721,6 +724,9 @@ public:
 
     /**
         Returns @true if the attribute object specifies tab stops.
+
+        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style), wxGTK and wxRichTextCtrl.
     */
     bool HasTabs() const;
 
@@ -989,6 +995,9 @@ public:
         Sets the tab stops, expressed in tenths of a millimetre.
         Each stop is measured from the left margin and therefore each value must be
         larger than the last.
+
+        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style), wxGTK and wxRichTextCtrl.
     */
     void SetTabs(const wxArrayInt& tabs);
 
