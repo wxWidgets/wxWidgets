@@ -339,6 +339,8 @@ public:
     /**
         Returns a string containing the name of the font associated with the bullet symbol.
         Only valid for attributes with wxTEXT_ATTR_BULLET_SYMBOL.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetBulletFont() const;
 
@@ -352,6 +354,8 @@ public:
          - @c standard/diamond
          - @c standard/triangle
 
+        Currently only implemented in wxRichTextCtrl.
+
         @note
         For wxRichTextCtrl users only: if you wish your rich text controls to support
         further bullet graphics, you can derive a class from wxRichTextRenderer or
@@ -362,18 +366,24 @@ public:
 
     /**
         Returns the bullet number.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     int GetBulletNumber() const;
 
     /**
         Returns the bullet style.
         See ::wxTextAttrBulletStyle for a list of available styles.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     int GetBulletStyle() const;
 
     /**
         Returns the bullet text, which could be a symbol, or (for example) cached
         outline text.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetBulletText() const;
 
@@ -557,22 +567,30 @@ public:
 
     /**
         Returns @true if the attribute object specifies a standard bullet name.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletName() const;
 
     /**
         Returns @true if the attribute object specifies a bullet number.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletNumber() const;
 
     /**
         Returns @true if the attribute object specifies a bullet style.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletStyle() const;
 
     /**
         Returns @true if the attribute object specifies bullet text (usually
         specifying a symbol).
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletText() const;
 
@@ -748,6 +766,8 @@ public:
     /**
         Sets the name of the font associated with the bullet symbol.
         Only valid for attributes with wxTEXT_ATTR_BULLET_SYMBOL.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletFont(const wxString& font);
 
@@ -757,11 +777,15 @@ public:
 
         See GetBulletName() for a list of supported names, and how
         to expand the range of supported types.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletName(const wxString& name);
 
     /**
         Sets the bullet number.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletNumber(int n);
 
@@ -770,12 +794,16 @@ public:
 
         The ::wxTextAttrBulletStyle enumeration values are all supported,
         except for wxTEXT_ATTR_BULLET_STYLE_BITMAP.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletStyle(int style);
 
     /**
         Sets the bullet text, which could be a symbol, or (for example) cached
         outline text.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletText(const wxString& text);
 
