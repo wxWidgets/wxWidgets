@@ -476,8 +476,8 @@ public:
     /**
         Returns the line spacing value, one of ::wxTextAttrLineSpacing values.
 
-        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxRichTextCtrl.
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style). Also implemented in wxRichTextCtrl.
     */
     int GetLineSpacing() const;
 
@@ -521,8 +521,8 @@ public:
         Each stop is measured from the left margin and therefore each value must
         be larger than the last.
 
-        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style), wxGTK and wxRichTextCtrl.
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxGTK. Also implemented in wxRichTextCtrl.
     */
     const wxArrayInt& GetTabs() const;
 
@@ -725,8 +725,8 @@ public:
     /**
         Returns @true if the attribute object specifies tab stops.
 
-        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style), wxGTK and wxRichTextCtrl.
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxGTK. Also implemented in wxRichTextCtrl.
     */
     bool HasTabs() const;
 
@@ -942,8 +942,8 @@ public:
         15 means 1.5 spacing, and 20 means double spacing.
         The ::wxTextAttrLineSpacing values are defined for convenience.
 
-        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxRichTextCtrl.
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style). Also implemented in wxRichTextCtrl.
     */
     void SetLineSpacing(int spacing);
 
@@ -996,8 +996,8 @@ public:
         Each stop is measured from the left margin and therefore each value must be
         larger than the last.
 
-        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style), wxGTK and wxRichTextCtrl.
+        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxGTK. Also implemented in wxRichTextCtrl.
     */
     void SetTabs(const wxArrayInt& tabs);
 
