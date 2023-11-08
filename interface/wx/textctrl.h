@@ -787,10 +787,7 @@ public:
     /**
         Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
 
-        Of these, wxTEXT_ALIGNMENT_JUSTIFIED is only implemented for
-        wxTextCtrl under wxMSW and wxGTK.
-
-        It is not implemented for wxRichTextCtrl. In the future, wxRichTextCtrl
+        wxTEXT_ALIGNMENT_JUSTIFIED is not implemented for wxRichTextCtrl. In the future, wxRichTextCtrl
         justification may be supported when printing or previewing only.
 
         For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
