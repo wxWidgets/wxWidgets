@@ -483,6 +483,8 @@ public:
 
     /**
         Returns the name of the list style.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetListStyleName() const;
 
@@ -673,6 +675,8 @@ public:
 
     /**
         Returns @true if the attribute object specifies a list style name.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasListStyleName() const;
 
@@ -933,6 +937,8 @@ public:
 
     /**
         Sets the list style name.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetListStyleName(const wxString& name);
 
