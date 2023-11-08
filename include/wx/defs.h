@@ -508,7 +508,7 @@ typedef short int WXTYPE;
 #ifndef wxHAVE_INITIALIZER_LIST
     #if __cplusplus >= 201103L
         #define wxHAVE_INITIALIZER_LIST
-    #elif wxCHECK_VISUALC_VERSION(11)
+    #elif wxCHECK_VISUALC_VERSION(12)
         #define wxHAVE_INITIALIZER_LIST
     #endif
 #endif /* wxHAVE_INITIALIZER_LIST */
