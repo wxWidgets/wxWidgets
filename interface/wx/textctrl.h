@@ -266,6 +266,9 @@ enum wxTextCtrlHitTestResult
     wxTextAttr represents the character and paragraph attributes, or style,
     for a range of text in a wxTextCtrl or wxRichTextCtrl.
 
+    Unless explicitly mentioned, the attributes are only implemented in wxRichTextCtrl,
+    and not wxTextCtrl.
+
     When setting up a wxTextAttr object, pass a bitlist mask to
     wxTextAttr::SetFlags() to indicate which style elements should be changed.
     As a convenience, when you call a setter such as SetFont, the relevant bit
@@ -344,8 +347,6 @@ public:
     /**
         Returns a string containing the name of the font associated with the bullet symbol.
         Only valid for attributes with wxTEXT_ATTR_BULLET_SYMBOL.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetBulletFont() const;
 
@@ -359,8 +360,6 @@ public:
          - @c standard/diamond
          - @c standard/triangle
 
-        Currently only implemented in wxRichTextCtrl.
-
         @note
         For wxRichTextCtrl users only: if you wish your rich text controls to support
         further bullet graphics, you can derive a class from wxRichTextRenderer or
@@ -371,24 +370,18 @@ public:
 
     /**
         Returns the bullet number.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     int GetBulletNumber() const;
 
     /**
         Returns the bullet style.
         See ::wxTextAttrBulletStyle for a list of available styles.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     int GetBulletStyle() const;
 
     /**
         Returns the bullet text, which could be a symbol, or (for example) cached
         outline text.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetBulletText() const;
 
@@ -488,15 +481,11 @@ public:
 
     /**
         Returns the name of the list style.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetListStyleName() const;
 
     /**
         Returns the outline level.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     int GetOutlineLevel() const;
 
@@ -539,16 +528,12 @@ public:
     /**
         Returns the text effect bits of interest.
         See SetFlags() for further information.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     int GetTextEffectFlags() const;
 
     /**
         Returns the text effects, a bit list of styles.
         See SetTextEffects() for details.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     int GetTextEffects() const;
 
@@ -558,8 +543,6 @@ public:
         Content with @a wxTEXT_ATTR_URL style causes wxRichTextCtrl to show a
         hand cursor over it, and wxRichTextCtrl generates a wxTextUrlEvent
         when the content is clicked.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetURL() const;
 
@@ -588,30 +571,22 @@ public:
 
     /**
         Returns @true if the attribute object specifies a standard bullet name.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletName() const;
 
     /**
         Returns @true if the attribute object specifies a bullet number.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletNumber() const;
 
     /**
         Returns @true if the attribute object specifies a bullet style.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletStyle() const;
 
     /**
         Returns @true if the attribute object specifies bullet text (usually
         specifying a symbol).
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasBulletText() const;
 
@@ -690,23 +665,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies a list style name.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasListStyleName() const;
 
     /**
         Returns @true if the attribute object specifies an outline level.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasOutlineLevel() const;
 
     /**
         Returns @true if the attribute object specifies a page break before this
         paragraph.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasPageBreak() const;
 
@@ -745,15 +714,11 @@ public:
 
     /**
         Returns @true if the attribute object specifies text effects.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasTextEffects() const;
 
     /**
         Returns @true if the attribute object specifies a URL.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     bool HasURL() const;
 
@@ -803,8 +768,6 @@ public:
     /**
         Sets the name of the font associated with the bullet symbol.
         Only valid for attributes with wxTEXT_ATTR_BULLET_SYMBOL.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletFont(const wxString& font);
 
@@ -814,15 +777,11 @@ public:
 
         See GetBulletName() for a list of supported names, and how
         to expand the range of supported types.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletName(const wxString& name);
 
     /**
         Sets the bullet number.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletNumber(int n);
 
@@ -831,16 +790,12 @@ public:
 
         The ::wxTextAttrBulletStyle enumeration values are all supported,
         except for wxTEXT_ATTR_BULLET_STYLE_BITMAP.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletStyle(int style);
 
     /**
         Sets the bullet text, which could be a symbol, or (for example) cached
         outline text.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetBulletText(const wxString& text);
 
@@ -960,8 +915,6 @@ public:
 
     /**
         Sets the list style name.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetListStyleName(const wxString& name);
 
@@ -970,15 +923,11 @@ public:
         At present, the outline level is not used, but may be used in future for
         determining list levels and for applications that need to store document
         structure information.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetOutlineLevel(int level);
 
     /**
         Specifies a page break before this paragraph.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetPageBreak(bool pageBreak = true);
 
@@ -1022,8 +971,6 @@ public:
 
         You should also pass wxTEXT_ATTR_EFFECTS to SetFlags().
         See SetFlags() for further information.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetTextEffectFlags(int flags);
 
@@ -1041,8 +988,6 @@ public:
         To set effects, you should also pass wxTEXT_ATTR_EFFECTS to SetFlags(), and call
         SetTextEffectFlags() with the styles (taken from the above set) that you
         are interested in setting.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetTextEffects(int effects);
 
@@ -1050,8 +995,6 @@ public:
         Sets the URL for the content. Sets the wxTEXT_ATTR_URL style; content with this
         style causes wxRichTextCtrl to show a hand cursor over it, and wxRichTextCtrl
         generates a wxTextUrlEvent when the content is clicked.
-
-        Currently only implemented in wxRichTextCtrl.
     */
     void SetURL(const wxString& url);
 
