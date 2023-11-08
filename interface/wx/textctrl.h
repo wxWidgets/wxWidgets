@@ -531,12 +531,16 @@ public:
     /**
         Returns the text effect bits of interest.
         See SetFlags() for further information.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     int GetTextEffectFlags() const;
 
     /**
         Returns the text effects, a bit list of styles.
         See SetTextEffects() for details.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     int GetTextEffects() const;
 
@@ -727,6 +731,8 @@ public:
 
     /**
         Returns @true if the attribute object specifies text effects.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasTextEffects() const;
 
@@ -996,6 +1002,8 @@ public:
 
         You should also pass wxTEXT_ATTR_EFFECTS to SetFlags().
         See SetFlags() for further information.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetTextEffectFlags(int flags);
 
@@ -1013,6 +1021,8 @@ public:
         To set effects, you should also pass wxTEXT_ATTR_EFFECTS to SetFlags(), and call
         SetTextEffectFlags() with the styles (taken from the above set) that you
         are interested in setting.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetTextEffects(int effects);
 
