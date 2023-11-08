@@ -232,12 +232,12 @@ Changes in behaviour which may result in build errors
   minimum required version is now 2005.
 
 
-3.2.4: (released 2024-??-??)
+3.2.4: (released 2024-11-11)
 ----------------------------
 
 All:
 
-- Allow creating wxArrays from std::initialized_list (Lotendan, #23966).
+- Allow creating wxArrays from std::initializer_list (Lotendan, #23966).
 - Fix regression in wxTranslations::AddCatalog() return value (#24019).
 
 All (GUI):
