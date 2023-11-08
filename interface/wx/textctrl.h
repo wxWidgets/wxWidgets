@@ -542,6 +542,8 @@ public:
         Content with @a wxTEXT_ATTR_URL style causes wxRichTextCtrl to show a
         hand cursor over it, and wxRichTextCtrl generates a wxTextUrlEvent
         when the content is clicked.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     const wxString& GetURL() const;
 
@@ -722,6 +724,8 @@ public:
 
     /**
         Returns @true if the attribute object specifies a URL.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasURL() const;
 
@@ -1004,6 +1008,8 @@ public:
         Sets the URL for the content. Sets the wxTEXT_ATTR_URL style; content with this
         style causes wxRichTextCtrl to show a hand cursor over it, and wxRichTextCtrl
         generates a wxTextUrlEvent when the content is clicked.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetURL(const wxString& url);
 
