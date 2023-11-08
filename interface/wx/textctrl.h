@@ -71,8 +71,8 @@ enum wxTextAttrAlignment
 
     /** wxTEXT_ALIGNMENT_JUSTIFIED is only implemented for wxTextCtrl under wxMSW.
         It is not implemented for wxRichTextCtrl.
-        In the future, wxRichTextCtrljustification may be supported when
-        printing or previewing. */
+        In the future, wxRichTextCtrl justification may be supported when
+        printing or previewing only. */
     wxTEXT_ALIGNMENT_JUSTIFIED
 };
 
