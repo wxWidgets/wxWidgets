@@ -69,7 +69,7 @@ enum wxTextAttrAlignment
     wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
     wxTEXT_ALIGNMENT_RIGHT,
 
-    /** wxTEXT_ALIGNMENT_JUSTIFIED is only implemented for wxTextCtrl under wxMSW and wxGTK.
+    /** wxTEXT_ALIGNMENT_JUSTIFIED is implemented for wxTextCtrl under wxMSW, wxOSX and wxGTK.
         It is not implemented for wxRichTextCtrl.
         In the future, wxRichTextCtrl justification may be supported when
         printing or previewing only. */
@@ -334,13 +334,16 @@ public:
         Returns the alignment flags.
         See ::wxTextAttrAlignment for a list of available styles.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxGTK. Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     wxTextAttrAlignment GetAlignment() const;
 
     /**
         Returns the background colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     const wxColour& GetBackgroundColour() const;
 
@@ -402,6 +405,9 @@ public:
         a temporary font.
 
         For greater efficiency, access the font attributes directly.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     wxFont GetFont() const;
 
@@ -445,12 +451,18 @@ public:
     /**
         Returns the underline type, which is one of the wxTextAttrUnderlineType values.
 
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
+
         @since 3.1.3
     */
     wxTextAttrUnderlineType GetUnderlineType() const;
 
     /**
         Returns the underline color used. wxNullColour when the text colour is used.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
 
         @since 3.1.3
     */
@@ -463,19 +475,25 @@ public:
 
     /**
         Returns the left indent in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     long GetLeftIndent() const;
 
     /**
         Returns the left sub-indent in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     long GetLeftSubIndent() const;
 
     /**
         Returns the line spacing value, one of ::wxTextAttrLineSpacing values.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style). Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetLineSpacing() const;
 
@@ -491,11 +509,17 @@ public:
 
     /**
         Returns the space in tenths of a millimeter after the paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetParagraphSpacingAfter() const;
 
     /**
         Returns the space in tenths of a millimeter before the paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetParagraphSpacingBefore() const;
 
@@ -506,6 +530,9 @@ public:
 
     /**
         Returns the right indent in tenths of a millimeter.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     long GetRightIndent() const;
 
@@ -515,13 +542,16 @@ public:
         Each stop is measured from the left margin and therefore each value must
         be larger than the last.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxGTK. Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     const wxArrayInt& GetTabs() const;
 
     /**
         Returns the text foreground colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     const wxColour& GetTextColour() const;
 
@@ -559,13 +589,16 @@ public:
     /**
         Returns @true if the attribute object specifies alignment.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxGTK. Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasAlignment() const;
 
     /**
         Returns @true if the attribute object specifies a background colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasBackgroundColour() const;
 
@@ -603,6 +636,9 @@ public:
 
     /**
         Returns @true if the attribute object specifies any font attributes.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasFont() const;
 
@@ -655,11 +691,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies a left indent.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasLeftIndent() const;
 
     /**
         Returns @true if the attribute object specifies line spacing.
+
+        For wxTextCtrl, is implemented under wxMSW and wxOSX.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasLineSpacing() const;
 
@@ -681,11 +723,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies spacing after a paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasParagraphSpacingAfter() const;
 
     /**
         Returns @true if the attribute object specifies spacing before a paragraph.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasParagraphSpacingBefore() const;
 
@@ -702,13 +750,16 @@ public:
     /**
         Returns @true if the attribute object specifies tab stops.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxGTK. Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasTabs() const;
 
     /**
         Returns @true if the attribute object specifies a text foreground colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasTextColour() const;
 
@@ -755,13 +806,16 @@ public:
         wxTEXT_ALIGNMENT_JUSTIFIED is not implemented for wxRichTextCtrl. In the future, wxRichTextCtrl
         justification may be supported when printing or previewing only.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxGTK. Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetAlignment(wxTextAttrAlignment alignment);
 
     /**
         Sets the background colour.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetBackgroundColour(const wxColour& colBack);
 
@@ -813,6 +867,9 @@ public:
     /**
         Sets the attributes for the given font.
         Note that wxTextAttr does not store an actual wxFont object.
+
+        For wxTextCtrl, is implemented under wxMSW, wxOSX and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT & ~wxTEXT_ATTR_FONT_PIXEL_SIZE);
 
@@ -900,6 +957,9 @@ public:
         at leftMargin + leftSubIndent.
         So the distance between the left edge of the bullet and the
         left of the actual paragraph is leftSubIndent.
+
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetLeftIndent(int indent, int subIndent = 0);
 
@@ -908,8 +968,8 @@ public:
         15 means 1.5 spacing, and 20 means double spacing.
         The ::wxTextAttrLineSpacing values are defined for convenience.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style). Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetLineSpacing(int spacing);
 
@@ -933,11 +993,17 @@ public:
 
     /**
         Sets the spacing after a paragraph, in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetParagraphSpacingAfter(int spacing);
 
     /**
         Sets the spacing before a paragraph, in tenths of a millimetre.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetParagraphSpacingBefore(int spacing);
 
@@ -956,8 +1022,8 @@ public:
         Each stop is measured from the left margin and therefore each value must be
         larger than the last.
 
-        For wxTextCtrl, currently only implemented in wxMSW (for controls using the wxTE_RICH2
-        style) and wxGTK. Also implemented in wxRichTextCtrl.
+        For wxTextCtrl, is implemented under wxMSW and wxGTK.
+        Also implemented in wxRichTextCtrl.
     */
     void SetTabs(const wxArrayInt& tabs);
 
