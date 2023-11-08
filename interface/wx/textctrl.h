@@ -465,6 +465,9 @@ public:
 
     /**
         Returns the line spacing value, one of ::wxTextAttrLineSpacing values.
+
+        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxRichTextCtrl.
     */
     int GetLineSpacing() const;
 
@@ -884,6 +887,9 @@ public:
         Sets the line spacing. @a spacing is a multiple, where 10 means single-spacing,
         15 means 1.5 spacing, and 20 means double spacing.
         The ::wxTextAttrLineSpacing values are defined for convenience.
+
+        Currently only implemented in wxMSW (for controls using the wxTE_RICH2
+        style) and wxRichTextCtrl.
     */
     void SetLineSpacing(int spacing);
 
