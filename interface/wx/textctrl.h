@@ -680,6 +680,8 @@ public:
     /**
         Returns @true if the attribute object specifies a page break before this
         paragraph.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasPageBreak() const;
 
@@ -936,6 +938,8 @@ public:
 
     /**
         Specifies a page break before this paragraph.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetPageBreak(bool pageBreak = true);
 
