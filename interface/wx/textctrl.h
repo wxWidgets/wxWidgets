@@ -488,6 +488,8 @@ public:
 
     /**
         Returns the outline level.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     int GetOutlineLevel() const;
 
@@ -676,6 +678,8 @@ public:
 
     /**
         Returns @true if the attribute object specifies an outline level.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     bool HasOutlineLevel() const;
 
@@ -937,6 +941,8 @@ public:
         At present, the outline level is not used, but may be used in future for
         determining list levels and for applications that need to store document
         structure information.
+
+        Currently only implemented in wxRichTextCtrl.
     */
     void SetOutlineLevel(int level);
 
