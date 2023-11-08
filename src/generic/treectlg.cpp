@@ -1612,13 +1612,13 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
     wxTreeItemId itemid = idParent;
     if ( prefix.length() == 1 )
     {
-        itemid = GetNext(itemid);
+        itemid = DoGetNext(itemid, Next_Visible);
     }
 
     // look for the item starting with the given prefix after it
     while ( itemid.IsOk() && !GetItemText(itemid).Lower().StartsWith(prefix) )
     {
-        itemid = GetNext(itemid);
+        itemid = DoGetNext(itemid, Next_Visible);
     }
 
     // if we haven't found anything...
@@ -1629,14 +1629,14 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
         if ( HasFlag(wxTR_HIDE_ROOT) )
         {
             // can't select virtual root
-            itemid = GetNext(itemid);
+            itemid = DoGetNext(itemid, Next_Visible);
         }
 
         // and try all the items (stop when we get to the one we started from)
         while ( itemid.IsOk() && itemid != idParent &&
                     !GetItemText(itemid).Lower().StartsWith(prefix) )
         {
-            itemid = GetNext(itemid);
+            itemid = DoGetNext(itemid, Next_Visible);
         }
         // If we haven't found the item but wrapped back to the one we started
         // from, id.IsOk() must be false
