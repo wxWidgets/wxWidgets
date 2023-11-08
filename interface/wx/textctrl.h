@@ -69,7 +69,7 @@ enum wxTextAttrAlignment
     wxTEXT_ALIGNMENT_CENTER = wxTEXT_ALIGNMENT_CENTRE,
     wxTEXT_ALIGNMENT_RIGHT,
 
-    /** wxTEXT_ALIGNMENT_JUSTIFIED is only implemented for wxTextCtrl under wxMSW.
+    /** wxTEXT_ALIGNMENT_JUSTIFIED is only implemented for wxTextCtrl under wxMSW and wxGTK.
         It is not implemented for wxRichTextCtrl.
         In the future, wxRichTextCtrl justification may be supported when
         printing or previewing only. */
@@ -788,7 +788,7 @@ public:
         Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
 
         Of these, wxTEXT_ALIGNMENT_JUSTIFIED is only implemented for
-        wxTextCtrl under wxMSW.
+        wxTextCtrl under wxMSW and wxGTK.
 
         It is not implemented for wxRichTextCtrl. In the future, wxRichTextCtrl
         justification may be supported when printing or previewing only.
