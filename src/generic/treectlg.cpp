@@ -1492,28 +1492,35 @@ wxTreeItemId wxGenericTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
 // Only for internal use right now, but should probably be public
 wxTreeItemId wxGenericTreeCtrl::GetNext(const wxTreeItemId& item) const
 {
+    return DoGetNext(item, Next_Any);
+}
+
+wxTreeItemId
+wxGenericTreeCtrl::DoGetNext(const wxTreeItemId& item, int flags) const
+{
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
     // First see if there are any children.
-    wxArrayGenericTreeItems& children = i->GetChildren();
-    if (children.GetCount() > 0)
+    if ( !(flags & Next_Visible) || i->IsExpanded() )
     {
-         return children.Item(0);
+        wxArrayGenericTreeItems& children = i->GetChildren();
+        if (children.GetCount() > 0)
+        {
+             return children.Item(0);
+        }
     }
-    else
-    {
-         // Try a sibling of this or ancestor instead
-         wxTreeItemId p = item;
-         wxTreeItemId toFind;
-         do
-         {
-              toFind = GetNextSibling(p);
-              p = GetItemParent(p);
-         } while (p.IsOk() && !toFind.IsOk());
-         return toFind;
-    }
+
+     // Try a sibling of this or ancestor instead
+     wxTreeItemId p = item;
+     wxTreeItemId toFind;
+     do
+     {
+          toFind = GetNextSibling(p);
+          p = GetItemParent(p);
+     } while (p.IsOk() && !toFind.IsOk());
+     return toFind;
 }
 
 wxTreeItemId wxGenericTreeCtrl::GetFirstVisibleItem() const
@@ -1537,16 +1544,7 @@ wxTreeItemId wxGenericTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
     wxASSERT_MSG( IsVisible(item), wxT("this item itself should be visible") );
 
-    wxTreeItemId id = item;
-    if (id.IsOk())
-    {
-        while (id = GetNext(id), id.IsOk())
-        {
-            if (IsVisible(id))
-                return id;
-        }
-    }
-    return wxTreeItemId();
+    return DoGetNext(item, Next_Visible);
 }
 
 wxTreeItemId wxGenericTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
