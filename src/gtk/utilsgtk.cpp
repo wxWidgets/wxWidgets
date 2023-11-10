@@ -184,7 +184,11 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 #endif // wxUSE_TIMER
 
 #if wxUSE_DETECT_SM
-static wxString GetSM()
+#if defined(__GNUC__) && !(__GNUC_PREREQ(7, 0))
+[[gnu::unused]] static wxString GetSM()
+#else
+[[maybe_unused]] static wxString GetSM()
+#endif
 {
     wxX11Display dpy;
     if ( !dpy )
@@ -385,19 +389,21 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
-    wxString de = wxSystemOptions::GetOption(wxT("gtk.desktop"));
-#if wxUSE_DETECT_SM
-    if ( de.empty() )
-    {
-        static const wxString s_SM = GetSM().Upper();
-
-        if (s_SM.Contains(wxT("GNOME")))
-            de = wxT("GNOME");
-        else if (s_SM.Contains(wxT("KDE")))
-            de = wxT("KDE");
+    wxString de;
+    // Environment variables can used to detect desktop environments independent of the underlying
+    // display protocol:
+    // https://wiki.archlinux.org/title/Environment_variables#Examples
+    if (wxGetenv("XDG_CURRENT_DESKTOP")) {
+        de = wxGetenv("XDG_CURRENT_DESKTOP");
+    } else if (wxGetenv("XDG_SESSION_DESKTOP")) {
+        de = wxGetenv("XDG_SESSION_DESKTOP");
+    } else if (wxGetenv("DESKTOP_SESSION")) {
+        de = wxGetenv("DESKTOP_SESSION");
+    } else if (wxGetenv("GDMSESSION")) {
+        de = wxGetenv("GDMSESSION");
+    } else {
+        de = "";
     }
-#endif // wxUSE_DETECT_SM
-
     return de;
 }
 
