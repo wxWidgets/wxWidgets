@@ -408,6 +408,17 @@ public:
     virtual wxString GetUserLocalDataDir() const;
 
     /**
+        Return OS specific directory where proect shared liraries are
+
+        - Windows: @c C:\Programs\AppFolder\
+        - Unix:    @c either /usr/lib/ or /usr/local/lib/
+        - OSX:     @c /Applications/exename.app/Contents/Frameworks/
+
+        @since 3.3.0
+    */
+    virtual wxString GetSharedLibrariesDir() const;
+
+    /**
         MSW-specific function to customize application directory detection.
 
         This class supposes that data, plugins &c files are located under the
