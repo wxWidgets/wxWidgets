@@ -31,7 +31,7 @@ public:
     virtual wxString MakeConfigFileName(const wxString& basename,
                                         ConfigFileConv conv = ConfigFileConv_Ext
                                         ) const override;
-
+    virtual wxString GetSharedLibrariesDir() const override;
 
     // MSW-specific methods
 

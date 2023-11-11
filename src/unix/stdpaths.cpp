@@ -365,4 +365,17 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
     return fn.GetFullName();
 }
 
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    char c;
+    wxFileName::GetPathSeparator().GetAsChar( &c );
+    // While debugging libraries usually goes to "/usr/local/lib"
+    // while in production the usual place is "/usr/lib"
+#ifdef DEBUG
+    return "/usr/local/lib" + c;
+#else
+    return "/usr/lib" + c;
+#endif
+}
+
 #endif // wxUSE_STDPATHS

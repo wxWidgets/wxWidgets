@@ -35,7 +35,7 @@ public:
     virtual wxString MakeConfigFileName(const wxString& basename,
                                         ConfigFileConv conv = ConfigFileConv_Ext
                                         ) const override;
-
+    virtual wxString GetSharedLibrariesDir() const override;
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating
     // objects of this class directly.

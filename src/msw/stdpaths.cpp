@@ -367,4 +367,10 @@ wxString wxStandardPathsWin16::GetUserConfigDir() const
     return wxGetHomeDir();
 }
 
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    wxFileName fn( GetExecutablePath() );
+    return fn.GetPath() + wxFileName::GetPathSeparator();
+}
+
 #endif // wxUSE_STDPATHS

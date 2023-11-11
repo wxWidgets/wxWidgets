@@ -166,7 +166,7 @@ public:
 
     // return the temporary directory for the current user
     virtual wxString GetTempDir() const;
-
+    virtual wxString GetSharedLibrariesDir() const;
     virtual wxString GetUserDir(Dir userDir) const;
 
     virtual wxString
@@ -257,7 +257,7 @@ public:
     {
         return m_prefix + wxS("/") + basename;
     }
-
+    virtual wxString GetSharedLibraroesPath() const { return m_prefix; }
 protected:
     // Ctor is protected because wxStandardPaths::Get() should always be used
     // to access the global wxStandardPaths object of the correct type instead

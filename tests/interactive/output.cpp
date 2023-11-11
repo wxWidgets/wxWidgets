@@ -403,6 +403,7 @@ void InteractiveOutputTestCase::TestStandardPaths()
     wxPrintf(wxT("Executable path:\t%s\n"), stdp.GetExecutablePath());
     wxPrintf(wxT("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir());
     wxPrintf(wxT("Resources dir:\t\t%s\n"), stdp.GetResourcesDir());
+    wxPrintf( "Shared Libraries dir:\t\t%s\n", stdp.GetSharedLibrariesDir() );
     wxPrintf(wxT("Localized res. dir:\t%s\n"),
              stdp.GetLocalizedResourcesDir(wxT("fr")));
     wxPrintf(wxT("Message catalogs dir:\t%s\n"),
