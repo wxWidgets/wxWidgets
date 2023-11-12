@@ -54,6 +54,9 @@
 // This defines wxPropertyGridManager.
 #include "wx/propgrid/manager.h"
 
+// XRC handler for wxPropertyGrid.
+#include "wx/xrc/xh_propgrid.h"
+
 #include "propgrid.h"
 #include "sampleprops.h"
 
@@ -991,7 +994,37 @@ static const long _fs_framestyle_values[] = {
 };
 void FormMain::OnTestXRC(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("Sorry, not yet implemented");
+#if wxUSE_XRC
+    auto& xml = *wxXmlResource::Get();
+
+    static bool s_added = false;
+    if ( !s_added )
+    {
+        s_added = true;
+        xml.InitAllHandlers();
+
+        // This needs to be done in addition to initializing all the standard
+        // handlers above.
+        xml.AddHandler(new wxPropertyGridXmlHandler);
+    }
+
+    if ( !xml.Load("propgrid.xrc") )
+    {
+        wxLogError("XRC file couldn't be loaded.");
+        return;
+    }
+
+    auto const frame = xml.LoadFrame(this, "propgrid");
+    if ( !frame )
+    {
+        wxLogError("Property grid frame couldn't be loaded from XRC");
+        return;
+    }
+
+    frame->Show();
+#else
+    wxMessageBox("Sorry, XRC support is not available in this build.");
+#endif
 }
 
 void FormMain::OnEnableCommonValues(wxCommandEvent& WXUNUSED(event))
@@ -2072,10 +2105,9 @@ FormMain::FormMain(const wxString& title)
     menuTry->Append(ID_SETCOLUMNS, "Set Number of Columns" );
     menuTry->Append(ID_SETVIRTWIDTH, "Set Virtual Width");
     menuTry->AppendCheckItem(ID_SETPGDISABLED, "Disable Grid");
-    menuTry->AppendSeparator();
-    menuTry->Append(ID_TESTXRC, "Display XRC sample" );
 
     menuFile->Append(ID_RUNMINIMAL, "Run Minimal Sample" );
+    menuFile->Append(ID_TESTXRC, "Load from XRC\tCtrl-R" );
     menuFile->AppendSeparator();
     menuFile->Append(ID_QUIT, "E&xit\tAlt-X", "Quit this program" );
 
