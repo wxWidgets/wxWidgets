@@ -190,6 +190,9 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)flag;
 
+- (BOOL)clipsToBounds;
+- (void)setClipsToBounds:(BOOL)clipsToBounds;
+
 - (void)setImage:(NSImage *)image;
 - (void)setControlSize:(NSControlSize)size;
 
@@ -2568,6 +2571,7 @@ wxWidgetImpl( peer, flags )
     if ( m_osxView )
         CFRetain(m_osxView);
     [m_osxView release];
+    m_osxView.clipsToBounds = YES;
 }
 
 
