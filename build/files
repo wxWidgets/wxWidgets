@@ -2022,7 +2022,6 @@ OSX_COMMON_SRC =
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
     src/osx/carbon/popupwin.cpp
-    src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
     src/osx/carbon/region.cpp
     # cocoa bridge
@@ -2173,6 +2172,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/radiobut.mm
+    src/osx/cocoa/renderer.mm
     src/osx/cocoa/scrolbar.mm
     src/osx/cocoa/settings.mm
     src/osx/cocoa/slider.mm
