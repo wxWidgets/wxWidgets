@@ -410,9 +410,9 @@ public:
     /**
         Return OS specific directory where proect shared liraries are
 
-        - Windows: @c C:\Programs\AppFolder\
+        - Windows: @c "C:\Programs\AppFolder\"
         - Unix:    @c either /usr/lib/ or /usr/local/lib/
-        - OSX:     @c /Applications/exename.app/Contents/Frameworks/
+        - OSX:     @c "/Applications/exename.app/Contents/Frameworks/"
 
         @since 3.3.0
     */
