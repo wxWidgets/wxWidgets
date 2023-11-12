@@ -190,6 +190,9 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)flag;
 
+- (BOOL)clipsToBounds;
+- (void)setClipsToBounds:(BOOL)clipsToBounds;
+
 - (void)setImage:(NSImage *)image;
 - (void)setControlSize:(NSControlSize)size;
 
