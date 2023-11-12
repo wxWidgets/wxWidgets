@@ -244,6 +244,10 @@ wxMSW:
 
 - Add line spacing attribute support to wxTextCtrl (Blake-Madden, #24046).
 
+wxOSX:
+
+- Fix clipping behaviour when using Sonoma/Xcode 15 SDK (#23916, #24054).
+
 
 3.2.4: (released 2023-11-11)
 ----------------------------
