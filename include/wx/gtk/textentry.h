@@ -62,7 +62,7 @@ public:
     void SendMaxLenEvent();
     bool GTKEntryOnInsertText(const char* text);
     bool GTKIsUpperCase() const { return m_isUpperCase; }
-
+    int GetMaxLength() const { return m_maxlen; }
     // Called from "changed" signal handler (or, possibly, slightly later, when
     // coalescing several "changed" signals into a single event) for GtkEntry.
     //
@@ -99,7 +99,7 @@ protected:
     // Call this from the overridden wxWindow::GTKIMFilterKeypress() to use
     // GtkEntry IM context.
     int GTKEntryIMFilterKeypress(GdkEventKey* event) const;
-
+    int m_maxlen;
     // If GTKEntryIMFilterKeypress() is not called (as multiline wxTextCtrl
     // uses its own IM), call this method instead to still notify wxTextEntry
     // about the key press events in the given widget.

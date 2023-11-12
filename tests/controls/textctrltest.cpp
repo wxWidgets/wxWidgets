@@ -650,7 +650,7 @@ void TextCtrlTestCase::LongText()
 {
     // This test is only possible under MSW as in the other ports
     // SetMaxLength() can't be used with multi line text controls.
-#ifdef __WXMSW__
+#ifdef __WXMSW__ || defined __WXGTK__
     delete m_text;
     CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
 
