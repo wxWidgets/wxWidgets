@@ -286,7 +286,7 @@ public:
     /**
         Return the program installation prefix, e.g.\ @c /usr, @c /opt or @c /home/zeitlin.
 
-        If the prefix had been previously by SetInstallPrefix(), returns that
+        If the prefix had been previously set by SetInstallPrefix(), returns that
         value, otherwise tries to determine it automatically (Linux only right now)
         and finally returns the default @c /usr/local value if it failed.
 
@@ -408,7 +408,7 @@ public:
     virtual wxString GetUserLocalDataDir() const;
 
     /**
-        Return OS specific directory where proect shared liraries are
+        Return OS specific directory where project shared liraries are
 
         - Windows: @c "C:\Programs\AppFolder\"
         - Unix:    @c either /usr/lib/ or /usr/local/lib/
