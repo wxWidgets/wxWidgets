@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridManager;
 class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPageState;
 class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPopulator;
 
-class wxPropertyGridXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_PROPGRID wxPropertyGridXmlHandler : public wxXmlResourceHandler
 {
     friend class wxPropertyGridXrcPopulator;
     DECLARE_DYNAMIC_CLASS(wxPropertyGridXmlHandler)
