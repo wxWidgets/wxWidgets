@@ -2,7 +2,6 @@
 // Name:        wx/dirdlg.h
 // Purpose:     wxDirDialog base class
 // Author:      Robert Roebling
-// Modified by:
 // Created:
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows Licence

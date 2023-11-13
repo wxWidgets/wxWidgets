@@ -14,8 +14,13 @@
 #include "wx/gdicmn.h"
 #include "wx/vidmode.h"
 
+// "register" is removed in C++17 but used inside these headers.
+#define register
+
 #include <directfb.h>
 #include <directfb_version.h>
+
+#undef register
 
 // DFB < 1.0 didn't have u8 type, only __u8
 #if DIRECTFB_MAJOR_VERSION == 0

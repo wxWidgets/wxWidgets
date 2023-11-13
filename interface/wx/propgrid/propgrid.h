@@ -396,38 +396,34 @@ public:
     @{
 */
 
-enum wxPG_KEYBOARD_ACTIONS
+enum class wxPGKeyboardActions
 {
-    /**
-        @hideinitializer
-    */
-    wxPG_ACTION_INVALID = 0,
+    Invalid,
 
     /** Select the next property. */
-    wxPG_ACTION_NEXT_PROPERTY,
+    NextProperty,
 
     /** Select the previous property. */
-    wxPG_ACTION_PREV_PROPERTY,
+    PrevProperty,
 
     /** Expand the selected property, if it has child items. */
-    wxPG_ACTION_EXPAND_PROPERTY,
+    ExpandProperty,
 
     /** Collapse the selected property, if it has child items. */
-    wxPG_ACTION_COLLAPSE_PROPERTY,
+    CollapseProperty,
 
-    // Cancel and undo any editing done in the currently active property
-    // editor.
-    wxPG_ACTION_CANCEL_EDIT,
+    /** Cancel and undo any editing done in the currently active property
+        editor.
+    */
+    CancelEdit,
 
     /** Move focus to the editor control of the currently selected
         property.
     */
-    wxPG_ACTION_EDIT,
+    Edit,
 
     /** Causes editor's button (if any) to be pressed. */
-    wxPG_ACTION_PRESS_BUTTON,
-
-    wxPG_ACTION_MAX
+    PressButton,
 };
 
 /** @}
@@ -521,7 +517,7 @@ public:
         the next property.
 
         @code
-            propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+            propGrid->AddActionTrigger(wxPGKeyboardActions::NextProperty,
                                        WXK_RETURN);
             propGrid->DedicateKey(WXK_RETURN);
         @endcode
@@ -534,7 +530,7 @@ public:
             Which key event modifiers, in addition to keycode, are needed to
             trigger the action.
     */
-    void AddActionTrigger( int action, int keycode, int modifiers = 0 );
+    void AddActionTrigger(wxPGKeyboardActions action, int keycode, int modifiers = 0);
 
     /**
         Adds given property into selection. If ::wxPG_EX_MULTIPLE_SELECTION
@@ -604,9 +600,9 @@ public:
         Clears action triggers for given action.
 
         @param action
-            Which action to trigger. @ref propgrid_keyboard_actions.
+            Which action to clear. @ref propgrid_keyboard_actions.
     */
-    void ClearActionTriggers( int action );
+    void ClearActionTriggers(wxPGKeyboardActions action);
 
     /**
         Forces updating the value of property from the editor control.

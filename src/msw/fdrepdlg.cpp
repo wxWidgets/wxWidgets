@@ -2,7 +2,6 @@
 // Name:        src/msw/fdrepdlg.cpp
 // Purpose:     wxFindReplaceDialog class
 // Author:      Markus Greither and Vadim Zeitlin
-// Modified by:
 // Created:     23/03/2001
 // Copyright:   (c) Markus Greither
 // Licence:     wxWindows licence

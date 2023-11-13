@@ -2,7 +2,6 @@
 // Name:        src/generic/odcombo.cpp
 // Purpose:     wxOwnerDrawnComboBox, wxVListBoxComboPopup
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence

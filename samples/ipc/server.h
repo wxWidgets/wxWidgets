@@ -2,7 +2,6 @@
 // Name:        server.h
 // Purpose:     DDE sample: server
 // Author:      Julian Smart
-// Modified by:
 // Created:     25/01/99
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

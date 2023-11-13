@@ -148,6 +148,7 @@ public:
     // Query the locale for the specified localized name.
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const;
 
+#if wxUSE_DATETIME
     // Get the full (default) or abbreviated localized month name
     // returns empty string on error
     wxString GetMonthName(wxDateTime::Month month,
@@ -157,6 +158,7 @@ public:
     // returns empty string on error
     wxString GetWeekDayName(wxDateTime::WeekDay weekday,
                             wxDateTime::NameForm form = {}) const;
+#endif // wxUSE_DATETIME
 
     // Query the layout direction of the current locale.
     wxLayoutDirection GetLayoutDirection() const;

@@ -2,7 +2,6 @@
 // Name:        src/common/appcmn.cpp
 // Purpose:     wxAppBase methods common to all platforms
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     18.10.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

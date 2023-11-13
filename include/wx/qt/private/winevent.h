@@ -2,7 +2,6 @@
 // Name:        include/wx/qt/winevent_qt.h
 // Purpose:     QWidget to wxWindow event handler
 // Author:      Javier Torres, Peter Most
-// Modified by:
 // Created:     21.06.10
 // Copyright:   (c) Javier Torres
 // Licence:     wxWindows licence
@@ -149,10 +148,20 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        if ( !this->GetHandler()->QtHandleContextMenuEvent(this, event) )
-            Widget::contextMenuEvent(event);
-        else
-            event->accept();
+        this->GetHandler()->QtHandleContextMenuEvent(this, event);
+
+        // Notice that we are simply accepting the event and deliberately not
+        // calling Widget::contextMenuEvent(event); here because the context menu
+        // is supposed to be shown from a wxEVT_CONTEXT_MENU handler and not from
+        // QWidget::contextMenuEvent() overrides (and we are already in one of
+        // these overrides to perform QContextMenuEvent --> wxContextMenuEvent
+        // translation).
+        // More importantly, the default implementation of contextMenuEvent() simply
+        // ignores the context event, which means that the event will be propagated
+        // to the parent widget again which is undesirable here because the event may
+        // have already been propagated at the wxWidgets level.
+
+        event->accept();
     }
 
     //wxDropFilesEvent

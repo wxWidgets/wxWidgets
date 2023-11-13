@@ -2,7 +2,6 @@
 // Name:        caret.cpp
 // Purpose:     wxCaret sample
 // Author:      Robert Roebling
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) wxWindows team
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/filename.h
 // Purpose:     wxFileName - encapsulates a file path
 // Author:      Robert Roebling, Vadim Zeitlin
-// Modified by:
 // Created:     28.12.00
 // Copyright:   (c) 2000 Robert Roebling
 // Licence:     wxWindows licence

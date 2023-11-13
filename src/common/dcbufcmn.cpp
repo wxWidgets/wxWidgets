@@ -2,7 +2,6 @@
 // Name:        src/common/dcbufcmn.cpp
 // Purpose:     Buffered DC implementation
 // Author:      Ron Lee, Jaakko Salli
-// Modified by:
 // Created:     Sep-20-2006
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

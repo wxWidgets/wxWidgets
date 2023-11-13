@@ -2,7 +2,6 @@
 // Name:        src/common/clipcmn.cpp
 // Purpose:     common (to all ports) wxClipboard functions
 // Author:      Robert Roebling
-// Modified by:
 // Created:     28.06.99
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence

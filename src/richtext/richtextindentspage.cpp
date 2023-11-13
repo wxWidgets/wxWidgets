@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextindentspage.cpp
 // Purpose:     Implements the rich text formatting dialog indents page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/3/2006 2:28:21 PM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

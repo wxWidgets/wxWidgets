@@ -2,7 +2,6 @@
 // Name:        wx/ffile.h
 // Purpose:     wxFFile - encapsulates "FILE *" stream
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.07.99
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

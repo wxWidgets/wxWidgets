@@ -177,32 +177,34 @@ void DirCtrlWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Dir control details");
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "Dir control details");
+    wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
-
-    sizerLeft->Add( CreateSizerWithTextAndButton( DirCtrlPage_SetPath , "Set &path", wxID_ANY, &m_path ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( DirCtrlPage_SetPath , "Set &path", wxID_ANY, &m_path, sizerLeftBox),
                     0, wxALL | wxALIGN_RIGHT , 5 );
 
-    wxSizer *sizerUseFlags =
-        new wxStaticBoxSizer(wxVERTICAL, this, "&Flags");
-    m_chkDirOnly = CreateCheckBoxAndAddToSizer(sizerUseFlags, "wxDIRCTRL_DIR_ONLY");
-    m_chk3D      = CreateCheckBoxAndAddToSizer(sizerUseFlags, "wxDIRCTRL_3D_INTERNAL");
-    m_chkFirst   = CreateCheckBoxAndAddToSizer(sizerUseFlags, "wxDIRCTRL_SELECT_FIRST");
-    m_chkFilters = CreateCheckBoxAndAddToSizer(sizerUseFlags, "wxDIRCTRL_SHOW_FILTERS");
-    m_chkLabels  = CreateCheckBoxAndAddToSizer(sizerUseFlags, "wxDIRCTRL_EDIT_LABELS");
-    m_chkMulti   = CreateCheckBoxAndAddToSizer(sizerUseFlags, "wxDIRCTRL_MULTIPLE");
-    sizerLeft->Add(sizerUseFlags, wxSizerFlags().Expand().Border());
+    wxStaticBoxSizer *sizerFlags = new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox, "&Flags");
+    wxStaticBox* const sizerFlagsBox = sizerFlags->GetStaticBox();
 
-    wxSizer *sizerFilters =
-        new wxStaticBoxSizer(wxVERTICAL, this, "&Filters");
+    m_chkDirOnly = CreateCheckBoxAndAddToSizer(sizerFlags, "wxDIRCTRL_DIR_ONLY", wxID_ANY, sizerFlagsBox);
+    m_chk3D      = CreateCheckBoxAndAddToSizer(sizerFlags, "wxDIRCTRL_3D_INTERNAL", wxID_ANY, sizerFlagsBox);
+    m_chkFirst   = CreateCheckBoxAndAddToSizer(sizerFlags, "wxDIRCTRL_SELECT_FIRST", wxID_ANY, sizerFlagsBox);
+    m_chkFilters = CreateCheckBoxAndAddToSizer(sizerFlags, "wxDIRCTRL_SHOW_FILTERS", wxID_ANY, sizerFlagsBox);
+    m_chkLabels  = CreateCheckBoxAndAddToSizer(sizerFlags, "wxDIRCTRL_EDIT_LABELS", wxID_ANY, sizerFlagsBox);
+    m_chkMulti   = CreateCheckBoxAndAddToSizer(sizerFlags, "wxDIRCTRL_MULTIPLE", wxID_ANY, sizerFlagsBox);
+    sizerLeft->Add(sizerFlags, wxSizerFlags().Expand().Border());
+
+    wxStaticBoxSizer *sizerFilters = new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox, "&Filters");
+    wxStaticBox* const sizerFiltersBox = sizerFilters->GetStaticBox();
+
     m_fltr[0] = CreateCheckBoxAndAddToSizer(sizerFilters, wxString::Format("all files (%s)|%s",
-                            wxFileSelectorDefaultWildcardStr, wxFileSelectorDefaultWildcardStr));
-    m_fltr[1] = CreateCheckBoxAndAddToSizer(sizerFilters, "C++ files (*.cpp; *.h)|*.cpp;*.h");
-    m_fltr[2] = CreateCheckBoxAndAddToSizer(sizerFilters, "PNG images (*.png)|*.png");
+                            wxFileSelectorDefaultWildcardStr, wxFileSelectorDefaultWildcardStr),
+                            wxID_ANY, sizerFiltersBox);
+    m_fltr[1] = CreateCheckBoxAndAddToSizer(sizerFilters, "C++ files (*.cpp; *.h)|*.cpp;*.h", wxID_ANY, sizerFiltersBox);
+    m_fltr[2] = CreateCheckBoxAndAddToSizer(sizerFilters, "PNG images (*.png)|*.png", wxID_ANY, sizerFiltersBox);
     sizerLeft->Add(sizerFilters, wxSizerFlags().Expand().Border());
 
-    wxButton *btn = new wxButton(this, DirCtrlPage_Reset, "&Reset");
+    wxButton *btn = new wxButton(sizerFiltersBox, DirCtrlPage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // keep consistency between enum and labels of radiobox

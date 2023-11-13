@@ -2,7 +2,6 @@
 // Name:        wx/univ/frame.h
 // Purpose:     wxFrame class for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.05.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

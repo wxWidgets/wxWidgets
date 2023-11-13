@@ -2,7 +2,6 @@
 // Name:        wx/gtk/spinctrl.h
 // Purpose:     wxSpinCtrl class
 // Author:      Robert Roebling
-// Modified by:
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

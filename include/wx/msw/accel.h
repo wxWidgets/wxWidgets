@@ -2,7 +2,6 @@
 // Name:        wx/msw/accel.h
 // Purpose:     wxAcceleratorTable class
 // Author:      Julian Smart
-// Modified by:
 // Created:     31/7/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

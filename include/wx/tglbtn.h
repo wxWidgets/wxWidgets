@@ -3,7 +3,6 @@
 // Purpose:     This dummy header includes the proper header file for the
 //              system we're compiling under.
 // Author:      John Norris, minor changes by Axel Schlueter
-// Modified by:
 // Created:     08.02.01
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows Licence

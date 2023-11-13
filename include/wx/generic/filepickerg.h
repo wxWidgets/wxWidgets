@@ -2,7 +2,6 @@
 // Name:        wx/generic/filepickerg.h
 // Purpose:     wxGenericFileDirButton, wxGenericFileButton, wxGenericDirButton
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence

@@ -2,7 +2,6 @@
 // Name:        wx/bmpcbox.h
 // Purpose:     wxBitmapComboBox base header
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Aug-31-2006
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

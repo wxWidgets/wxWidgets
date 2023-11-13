@@ -3,7 +3,6 @@
 // Purpose:     declares wxTopLevelWindow class, the base class for all
 //              top level windows (such as frames and dialogs)
 // Author:      Vadim Zeitlin, Vaclav Slavik
-// Modified by:
 // Created:     06.08.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //                       Vaclav Slavik <vaclav@wxwidgets.org>

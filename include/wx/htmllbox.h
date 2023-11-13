@@ -2,7 +2,6 @@
 // Name:        wx/htmllbox.h
 // Purpose:     wxHtmlListBox is a listbox whose items are wxHtmlCells
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.05.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

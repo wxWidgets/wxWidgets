@@ -2,7 +2,6 @@
 // Name:        src/osx/core/printmac.cpp
 // Purpose:     wxMacPrinter framework
 // Author:      Julian Smart, Stefan Csomor
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart, Stefan Csomor
 // Licence:     wxWindows licence

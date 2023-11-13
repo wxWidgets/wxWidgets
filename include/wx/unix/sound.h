@@ -2,7 +2,6 @@
 // Name:        wx/unix/sound.h
 // Purpose:     wxSound class
 // Author:      Julian Smart, Vaclav Slavik
-// Modified by:
 // Created:     25/10/98
 // Copyright:   (c) Julian Smart, Vaclav Slavik
 // Licence:     wxWindows licence

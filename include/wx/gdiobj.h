@@ -2,7 +2,6 @@
 // Name:        wx/gdiobj.h
 // Purpose:     wxGDIObject base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

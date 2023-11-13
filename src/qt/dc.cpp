@@ -358,14 +358,16 @@ void wxQtDCImpl::ApplyRasterColourOp()
 
 wxCoord wxQtDCImpl::GetCharHeight() const
 {
-    QFontMetrics metrics(m_qtPainter->font());
+    QFontMetrics metrics(m_qtPainter->isActive() ?
+        m_qtPainter->font() : QApplication::font());
     return wxCoord( metrics.height() );
 }
 
 wxCoord wxQtDCImpl::GetCharWidth() const
 {
     //FIXME: Returning max width, instead of average
-    QFontMetrics metrics(m_qtPainter->font());
+    QFontMetrics metrics(m_qtPainter->isActive() ?
+        m_qtPainter->font() : QApplication::font());
     return wxCoord( metrics.maxWidth() );
 }
 

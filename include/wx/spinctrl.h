@@ -2,7 +2,6 @@
 // Name:        wx/spinctrl.h
 // Purpose:     wxSpinCtrlBase class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

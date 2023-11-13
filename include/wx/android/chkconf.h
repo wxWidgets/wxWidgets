@@ -2,7 +2,6 @@
 // Name:        wx/android/chkconf.h
 // Purpose:     Android-specific configuration options checks
 // Author:      Zsolt Bakcsi
-// Modified by:
 // Created:     2011-12-08
 // RCS-ID:
 // Copyright:   (c) wxWidgets team

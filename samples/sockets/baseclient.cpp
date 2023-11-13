@@ -2,7 +2,6 @@
 // Name:        samples/sockbase/client.cpp
 // Purpose:     Sockets sample for wxBase
 // Author:      Lukasz Michalski
-// Modified by:
 // Created:     27.06.2005
 // Copyright:   (c) 2005 Lukasz Michalski <lmichalski@sf.net>
 // Licence:     wxWindows licence

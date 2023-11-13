@@ -2,7 +2,6 @@
 // Name:        auidemo.cpp
 // Purpose:     wxaui: wx advanced user interface - sample/test program
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2005-10-03
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1

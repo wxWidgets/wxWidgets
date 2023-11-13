@@ -2,7 +2,6 @@
 // Name:        wx/dialog.h
 // Purpose:     wxDialogBase class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29.06.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/ctrlsub.h (read: "wxConTRoL with SUBitems")
 // Purpose:     wxControlWithItems interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.10.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

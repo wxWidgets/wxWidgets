@@ -2,7 +2,6 @@
 // Name:        wx/univ/scrthumb.h
 // Purpose:     wxScrollThumb class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.02.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

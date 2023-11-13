@@ -2,7 +2,6 @@
 // Name:        wx/textctrl.h
 // Purpose:     wxTextAttr and wxTextCtrlBase class - the interface of wxTextCtrl
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     13.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

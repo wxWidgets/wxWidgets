@@ -2,7 +2,6 @@
 // Name:        src/x11/utils.cpp
 // Purpose:     Various utilities
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 //              (c) 2013 Rob Bresalier

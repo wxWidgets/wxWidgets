@@ -3,7 +3,6 @@
 // Purpose:     wxLog-derived classes which need GUI support (the rest is in
 //              src/common/log.cpp)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.99 (extracted from src/common/log.cpp)
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

@@ -135,8 +135,9 @@ jobs:
           - name: Ubuntu 18.04 wxQt
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --with-qt --enable-pch --without-opengl
+            configure_flags: --with-qt --enable-pch --without-opengl --disable-uiactionsim
             skip_samples: true
+            use_xvfb: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -342,6 +343,11 @@ jobs:
             httpbin_show_log
             exit $rc
           fi
+
+      - name: Testing launching GUI test
+        working-directory: tests
+        run: |
+          WX_TEST_DISABLE_GUI=1 ./test_gui
 
       - name: Testing GUI using Xvfb
         if: matrix.use_xvfb

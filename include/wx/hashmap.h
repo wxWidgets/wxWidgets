@@ -2,7 +2,6 @@
 // Name:        wx/hashmap.h
 // Purpose:     wxHashMap class
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     29/01/2002
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence

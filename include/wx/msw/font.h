@@ -2,7 +2,6 @@
 // Name:        wx/msw/font.h
 // Purpose:     wxFont class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

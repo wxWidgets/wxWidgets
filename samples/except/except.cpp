@@ -2,7 +2,6 @@
 // Name:        samples/except/except.cpp
 // Purpose:     shows how C++ exceptions can be used in wxWidgets
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2003-09-17
 // Copyright:   (c) 2003-2005 Vadim Zeitlin
 // Licence:     wxWindows licence

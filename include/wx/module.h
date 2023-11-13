@@ -2,7 +2,6 @@
 // Name:        wx/module.h
 // Purpose:     Modules handling
 // Author:      Wolfram Gloger/adapted by Guilhem Lavaux
-// Modified by:
 // Created:     04/11/98
 // Copyright:   (c) Wolfram Gloger and Guilhem Lavaux
 // Licence:     wxWindows licence

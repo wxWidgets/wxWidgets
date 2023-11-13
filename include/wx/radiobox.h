@@ -2,7 +2,6 @@
 // Name:        wx/radiobox.h
 // Purpose:     wxRadioBox declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.09.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

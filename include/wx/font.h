@@ -2,7 +2,6 @@
 // Name:        wx/font.h
 // Purpose:     wxFontBase class: the interface of wxFont
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/msw/tooltip.cpp
 // Purpose:     wxToolTip class implementation for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.99
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence

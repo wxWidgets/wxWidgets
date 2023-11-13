@@ -2,7 +2,6 @@
 // Name:        wx/unix/pipe.h
 // Purpose:     wxPipe class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     24.06.2003 (extracted from src/unix/utilsunx.cpp)
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

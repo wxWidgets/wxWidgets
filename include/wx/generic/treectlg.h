@@ -2,7 +2,6 @@
 // Name:        wx/generic/treectlg.h
 // Purpose:     wxTreeCtrl class
 // Author:      Robert Roebling
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) 1997,1998 Robert Roebling
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/treebase.h
 // Purpose:     wxTreeCtrl base classes and types
 // Author:      Julian Smart et al
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) 1997,1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -138,6 +137,9 @@ static const int wxTREE_ITEMSTATE_PREV  = -3;   // cycle to the previous state
 #elif defined(__WXMAC__)
     #define wxTR_DEFAULT_STYLE \
         (wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxTR_FULL_ROW_HIGHLIGHT)
+#elif defined(__WXMSW__)
+    #define wxTR_DEFAULT_STYLE \
+        (wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxTR_LINES_AT_ROOT | wxTR_TWIST_BUTTONS | wxTR_FULL_ROW_HIGHLIGHT)
 #else
     #define wxTR_DEFAULT_STYLE       (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
 #endif

@@ -2,7 +2,6 @@
 // Name:        collpane.cpp
 // Purpose:     wxCollapsiblePane sample
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/10/06
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence

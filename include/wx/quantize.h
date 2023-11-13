@@ -2,7 +2,6 @@
 // Name:        wx/quantize.h
 // Purpose:     wxQuantizer class
 // Author:      Julian Smart
-// Modified by:
 // Created:     22/6/2000
 // Copyright:   (c) Julian Smart
 // Licence:

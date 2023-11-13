@@ -2,7 +2,6 @@
 // Name:        wx/printdlg.h
 // Purpose:     Base header and class for print dialogs
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

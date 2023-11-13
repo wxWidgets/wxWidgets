@@ -2,7 +2,6 @@
 // Name:        wx/graphics.h
 // Purpose:     graphics context header
 // Author:      Stefan Csomor
-// Modified by:
 // Created:
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

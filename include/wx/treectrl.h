@@ -2,7 +2,6 @@
 // Name:        wx/treectrl.h
 // Purpose:     wxTreeCtrl base header
 // Author:      Karsten Ballueder
-// Modified by:
 // Created:
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence

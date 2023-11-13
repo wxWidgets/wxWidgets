@@ -2,7 +2,6 @@
 // Name:        wx/listbook.h
 // Purpose:     wxListbook: wxListCtrl and wxNotebook combination
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.08.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

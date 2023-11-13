@@ -2,7 +2,6 @@
 // Name:        wx/dir.h
 // Purpose:     wxDir is a class for enumerating the files in a directory
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     08.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/univ/scrarrow.cpp
 // Purpose:     wxScrollArrows class implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.01.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

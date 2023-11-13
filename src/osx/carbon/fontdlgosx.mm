@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/fontdlgosx.mm
 // Purpose:     wxFontDialog class.
 // Author:      Ryan Norton
-// Modified by:
 // Created:     2004-10-03
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

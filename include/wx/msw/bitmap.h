@@ -2,7 +2,6 @@
 // Name:        wx/msw/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -177,7 +176,7 @@ public:
     void SetMask(wxMask *mask);
 
     bool HasAlpha() const;
-    void UseAlpha(bool use = true);
+    bool UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
 
     // old synonyms for CreateWithDIPSize() and GetLogicalXXX() functions

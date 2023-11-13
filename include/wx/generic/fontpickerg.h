@@ -2,7 +2,6 @@
 // Name:        wx/generic/fontpickerg.h
 // Purpose:     wxGenericFontButton header
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence

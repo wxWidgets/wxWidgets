@@ -2,7 +2,6 @@
 // Name:        artbrows.cpp
 // Purpose:     wxArtProvider demo - art browser dialog
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2002/04/05
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence

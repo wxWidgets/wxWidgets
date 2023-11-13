@@ -26,7 +26,7 @@
     #include "wx/stopwatch.h"
 #endif // __WXGTK__
 
-#include "waitforpaint.h"
+#include "waitfor.h"
 
 // To disable tests which work locally, but not when run on GitHub CI.
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
@@ -553,23 +553,29 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
-
+    WaitFor("mouse click to be processed", [&]() {
+        return lclick.GetCount() != 0;
+    });
     CHECK(lclick.GetCount() == 1);
 
     sim.MouseDblClick();
-    wxYield();
-
+    WaitFor("mouse double click to be processed", [&]() {
+        return ldclick.GetCount() != 0;
+    });
     CHECK(ldclick.GetCount() == 1);
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
+    WaitFor("mouse right click to be processed", [&]() {
+        return rclick.GetCount() != 0;
+    });
 
     CHECK(rclick.GetCount() == 1);
     rclick.Clear();
 
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
+    WaitFor("mouse right double click to be processed", [&]() {
+        return rclick.GetCount() != 0;
+    });
 
     if ( m_grid->IsUsingNativeHeader() )
     {
@@ -608,7 +614,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
+    WaitFor("mouse click to be processed", [&]() {
+        return sort.GetCount() != 0;
+    });
 
     CHECK(sort.GetCount() == 1);
 #endif
@@ -642,7 +650,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
     wxYield();
 
     sim.MouseUp();
-    wxYield();
+    WaitFor("mouse release to be processed", [&]() {
+        return colsize.GetCount() != 0;
+    });
 
     CHECK(colsize.GetCount() == 1);
 
@@ -651,7 +661,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
 
     sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
 
-    wxYield();
+    WaitFor("mouse drag to be processed", [&]() {
+        return rowsize.GetCount() != 0;
+    });
 
     CHECK(rowsize.GetCount() == 1);
 #endif
@@ -702,7 +714,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
     wxYield();
 
     sim.MouseUp();
-    wxYield();
+    WaitFor("mouse up to be processed", [&]() {
+        return select.GetCount() != 0;
+    });
 
     CHECK(select.GetCount() == 1);
 #endif
@@ -1917,6 +1931,20 @@ public:
     virtual void SetValue( int /*row*/, int /*col*/, const wxString& /*value*/ ) override { }
 };
 
+// Under wxQt, we get spurious paint events if we call Refresh+Update.
+// So just call Refresh+wxYield which seems to fix the failures in the
+// test below.
+inline void UpdateGrid(wxGrid* grid)
+{
+#ifndef __WXQT__
+    grid->Refresh();
+    grid->Update();
+#else
+    grid->Refresh();
+    wxYield();
+#endif
+}
+
 } // namespace SetTable_ClearAttrCache
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SetTable_ClearAttrCache", "[grid]")
@@ -1935,15 +1963,13 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SetTable_ClearAttrCache", "[grid]")
 
     drawCount1 = drawCount2 = 0;
     m_grid->SetTable(&table2);
-    m_grid->Refresh();
-    m_grid->Update();
+    UpdateGrid(m_grid);
     CHECK(drawCount1 == 0);
     CHECK(drawCount2 == 2*2);
 
     drawCount1 = drawCount2 = 0;
     m_grid->SetTable(&table1);
-    m_grid->Refresh();
-    m_grid->Update();
+    UpdateGrid(m_grid);
     CHECK(drawCount1 == 1*1);
     CHECK(drawCount2 == 0);
 

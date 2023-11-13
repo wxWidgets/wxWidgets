@@ -2,7 +2,6 @@
 // Name:        wx/filefn.h
 // Purpose:     File- and directory-related functions
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence

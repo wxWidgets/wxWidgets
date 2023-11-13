@@ -2,7 +2,6 @@
 // Name:        wx/thrimpl.cpp
 // Purpose:     common part of wxThread Implementations
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.06.02 (extracted from src/*/thread.cpp files)
 // Copyright:   (c) Vadim Zeitlin (2002)
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/gtk/spinbutt.cpp
 // Purpose:     wxSpinButton
 // Author:      Robert
-// Modified by:
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        wx/brush.h
 // Purpose:     Includes platform-specific wxBrush file
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   Julian Smart
 // Licence:     wxWindows Licence

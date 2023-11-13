@@ -2,7 +2,6 @@
 // Name:        penguin.h
 // Purpose:     wxGLCanvas demo program
 // Author:      Robert Roebling
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence

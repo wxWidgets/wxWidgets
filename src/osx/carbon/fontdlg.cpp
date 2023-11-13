@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/fontdlg.cpp
 // Purpose:     wxFontDialog class for carbon 10.2+.
 // Author:      Ryan Norton
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

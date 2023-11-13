@@ -2,7 +2,6 @@
 // Name:        src/univ/theme.cpp
 // Purpose:     implementation of wxTheme
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

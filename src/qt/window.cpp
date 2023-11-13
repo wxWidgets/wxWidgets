@@ -350,6 +350,8 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     // that a generic control, like wxPanel, is being created, so we need a very
     // simple control as a base:
 
+    wxSize initialSize = size;
+
     if ( GetHandle() == nullptr )
     {
         if ( style & (wxHSCROLL | wxVSCROLL) )
@@ -364,6 +366,13 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
         }
         else
             m_qtWindow = new wxQtWidget( parent, this );
+
+        // The default size of a generic control (e.g. wxPanel) is (0, 0) when created and
+        // is ignored by Qt unless the widget is already assigned a valid size or is added
+        // to a QLayout to be managed with. The value 20 seems to be the default under wxMSW.
+        // Do not pass 'initialSize' to CreateBase() below, as it will be taken as the minimum
+        // size of the control, which is not the intention here.
+        initialSize.SetDefaults(wxSize(20, 20));
     }
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -375,11 +384,11 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     if ( pos != wxDefaultPosition )
         p = pos;
 
-    DoMoveWindow( p.x, p.y, size.GetWidth(), size.GetHeight() );
+    DoMoveWindow( p.x, p.y, initialSize.GetWidth(), initialSize.GetHeight() );
 
     PostCreation();
 
-    return ( true );
+    return true;
 }
 
 void wxWindowQt::PostCreation(bool generic)
@@ -539,9 +548,9 @@ void wxWindowQt::Update()
     // send the paint event to the inner widget in scroll areas:
     if ( QtGetScrollBarsContainer() )
     {
-        QtGetScrollBarsContainer()->viewport()->update();
+        QtGetScrollBarsContainer()->viewport()->repaint();
     } else {
-        GetHandle()->update();
+        GetHandle()->repaint();
     }
 }
 
@@ -1008,6 +1017,23 @@ void wxWindowQt::DoGetPosition(int *x, int *y) const
     *y = qtWidget->y();
 }
 
+namespace
+{
+inline void wxQtSetClientSize(QWidget* qtWidget, int width, int height)
+{
+    // There doesn't seem to be any way to change Qt frame size directly, so
+    // change the widget size, but take into account the extra margins
+    // corresponding to the frame decorations.
+    const QSize frameSize = qtWidget->frameSize();
+    const QSize innerSize = qtWidget->geometry().size();
+    const QSize frameSizeDiff = frameSize - innerSize;
+
+    const int clientWidth = std::max(width - frameSizeDiff.width(), 0);
+    const int clientHeight = std::max(height - frameSizeDiff.height(), 0);
+
+    qtWidget->resize(clientWidth, clientHeight);
+}
+}
 
 void wxWindowQt::DoGetSize(int *width, int *height) const
 {
@@ -1081,6 +1107,12 @@ void wxWindowQt::DoSetClientSize(int width, int height)
     geometry.setWidth( width );
     geometry.setHeight( height );
     qtWidget->setGeometry( geometry );
+
+    if ( qtWidget != GetHandle() )
+    {
+        // Resize the window to be as small as the client size but no smaller
+        wxQtSetClientSize(GetHandle(), width, height);
+    }
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
@@ -1089,17 +1121,7 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 
     qtWidget->move( x, y );
 
-    // There doesn't seem to be any way to change Qt frame size directly, so
-    // change the widget size, but take into account the extra margins
-    // corresponding to the frame decorations.
-    const QSize frameSize = qtWidget->frameSize();
-    const QSize innerSize = qtWidget->geometry().size();
-    const QSize frameSizeDiff = frameSize - innerSize;
-
-    const int clientWidth = std::max(width - frameSizeDiff.width(), 0);
-    const int clientHeight = std::max(height - frameSizeDiff.height(), 0);
-
-    qtWidget->resize(clientWidth, clientHeight);
+    wxQtSetClientSize(qtWidget, width, height);
 }
 
 #if wxUSE_TOOLTIPS
@@ -1467,6 +1489,22 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
                 return true;
         }
 #endif // wxUSE_ACCEL
+
+        // For compatibility with wxMSW, don't generate wxEVT_CHAR event for
+        // the following keys: SHIFT, CONTROL, MENU, CAPITAL, NUMLOCK and SCROLL.
+        switch ( event->key() )
+        {
+            case Qt::Key_Shift:
+            case Qt::Key_Control:
+            case Qt::Key_Meta:
+            case Qt::Key_Alt:
+            case Qt::Key_AltGr:
+            case Qt::Key_CapsLock:
+            case Qt::Key_NumLock:
+            case Qt::Key_ScrollLock:
+                // Skip event generation.
+                return handled;
+        }
 
         e.SetEventType( wxEVT_CHAR );
         e.SetEventObject(this);

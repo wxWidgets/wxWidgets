@@ -4,7 +4,6 @@
 //              If there is no equivalent on your platform, just make it a
 //              normal frame.
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

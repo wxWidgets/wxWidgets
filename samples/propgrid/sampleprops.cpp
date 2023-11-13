@@ -2,7 +2,6 @@
 // Name:        samples/propgrid/sampleprops.cpp
 // Purpose:     wxPropertyGrid Sample Properties
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2006-03-05
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

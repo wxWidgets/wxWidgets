@@ -2,7 +2,6 @@
 // Name:        wx/dc.h
 // Purpose:     wxDC class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05/25/99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

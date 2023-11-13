@@ -2,7 +2,6 @@
 // Name:        wx/pickerbase.h
 // Purpose:     wxPickerBase definition
 // Author:      Francesco Montorsi (based on Vadim Zeitlin's code)
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Vadim Zeitlin, Francesco Montorsi
 // Licence:     wxWindows Licence

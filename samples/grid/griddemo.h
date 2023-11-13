@@ -2,7 +2,6 @@
 // Name:        griddemo.h
 // Purpose:     Grid control wxWidgets sample
 // Author:      Michael Bedward
-// Modified by:
 // Copyright:   (c) Michael Bedward, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

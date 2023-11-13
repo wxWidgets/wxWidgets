@@ -2,7 +2,6 @@
 // Name:        wx/dateevt.h
 // Purpose:     declares wxDateEvent class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-10
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

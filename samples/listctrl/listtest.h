@@ -2,7 +2,6 @@
 // Name:        listctrl.h
 // Purpose:     wxListCtrl sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -73,9 +72,6 @@ public:
 #endif
 
     void OnRightClick(wxMouseEvent& event);
-
-    virtual void CheckItem(long item, bool check) override;
-    virtual bool IsItemChecked(long item) const override;
 
 private:
     void ShowContextMenu(const wxPoint& pos, long item);

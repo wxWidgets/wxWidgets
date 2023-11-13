@@ -2,7 +2,6 @@
 // Name:        wx/gtk/checklst.h
 // Purpose:     wxCheckListBox class
 // Author:      Robert Roebling
-// Modified by:
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

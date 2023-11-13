@@ -2,7 +2,6 @@
 // Name:        src/ribbon/gallery.cpp
 // Purpose:     Ribbon control which displays a gallery of items to choose from
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-07-22
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence

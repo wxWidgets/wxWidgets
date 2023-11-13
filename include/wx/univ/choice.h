@@ -2,7 +2,6 @@
 // Name:        wx/univ/choice.h
 // Purpose:     the universal choice
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     30.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

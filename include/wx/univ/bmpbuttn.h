@@ -2,7 +2,6 @@
 // Name:        wx/univ/bmpbuttn.h
 // Purpose:     wxBitmapButton class for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

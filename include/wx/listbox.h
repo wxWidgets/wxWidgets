@@ -2,7 +2,6 @@
 // Name:        wx/listbox.h
 // Purpose:     wxListBox class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.10.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

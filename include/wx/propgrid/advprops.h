@@ -2,7 +2,6 @@
 // Name:        wx/propgrid/advprops.h
 // Purpose:     wxPropertyGrid Advanced Properties (font, colour, etc.)
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2004-09-25
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -149,10 +148,11 @@ protected:
 
 // -----------------------------------------------------------------------
 
-
+#if WXWIN_COMPATIBILITY_3_2
 // If set, then match from list is searched for a custom colour.
-constexpr wxPGPropertyFlags wxPG_PROP_TRANSLATE_CUSTOM = wxPG_PROP_CLASS_SPECIFIC_1;
-
+wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_TRANSLATE_CUSTOM is intended for internal use.")
+constexpr wxPGPropertyFlags wxPG_PROP_TRANSLATE_CUSTOM = wxPG_PROP_RESERVED_1;
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // Has dropdown list of wxWidgets system colours. Value used is
 // of wxColourPropertyValue type.

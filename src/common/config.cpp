@@ -2,7 +2,6 @@
 // Name:        src/common/config.cpp
 // Purpose:     implementation of wxConfigBase class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.04.98
 // Copyright:   (c) 1997 Karsten Ballueder  Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>

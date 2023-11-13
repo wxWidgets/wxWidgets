@@ -2,7 +2,6 @@
 // Name:        src/common/radiocmn.cpp
 // Purpose:     wxRadioBox methods common to all ports
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.06.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

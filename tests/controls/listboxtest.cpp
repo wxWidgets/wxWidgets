@@ -109,12 +109,21 @@ void ListBoxTestCase::Sort()
 
     m_list->Append(testitems);
 
+#ifndef __WXQT__
     CPPUNIT_ASSERT_EQUAL("AAA", m_list->GetString(0));
     CPPUNIT_ASSERT_EQUAL("Aaa", m_list->GetString(1));
     CPPUNIT_ASSERT_EQUAL("aaa", m_list->GetString(2));
     CPPUNIT_ASSERT_EQUAL("aaab", m_list->GetString(3));
     CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
     CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
+#else
+    CPPUNIT_ASSERT_EQUAL("aaa", m_list->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("Aaa", m_list->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("AAA", m_list->GetString(2));
+    CPPUNIT_ASSERT_EQUAL("aaab", m_list->GetString(3));
+    CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
+    CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
+#endif
 
     m_list->Append("a", wxUIntToPtr(1));
 

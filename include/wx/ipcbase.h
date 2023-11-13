@@ -2,7 +2,6 @@
 // Name:        wx/ipcbase.h
 // Purpose:     Base classes for IPC
 // Author:      Julian Smart
-// Modified by:
 // Created:     4/1/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

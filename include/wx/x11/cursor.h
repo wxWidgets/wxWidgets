@@ -2,7 +2,6 @@
 // Name:        wx/x11/cursor.h
 // Purpose:     wxCursor class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

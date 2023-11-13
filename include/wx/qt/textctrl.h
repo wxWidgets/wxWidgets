@@ -52,6 +52,14 @@ public:
 
     virtual void ShowPosition(long pos) override;
 
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const override
+    {
+        return wxTextCtrlBase::HitTest(pt, col, row);
+    }
+
     virtual void SetInsertionPoint(long pos) override;
     virtual long GetInsertionPoint() const override;
     virtual void SetSelection( long from, long to ) override;
@@ -68,9 +76,14 @@ public:
 
     virtual void EmptyUndoBuffer() override;
 
+    virtual bool IsEditable() const override;
+    virtual void SetEditable(bool editable) override;
+
     virtual wxString DoGetValue() const override;
     virtual void DoSetValue(const wxString &text, int flags = 0) override;
     virtual void WriteText(const wxString& text) override;
+
+    virtual void SetMaxLength(unsigned long len) override;
 
     virtual QWidget *GetHandle() const override;
 

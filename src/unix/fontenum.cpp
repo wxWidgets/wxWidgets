@@ -2,7 +2,6 @@
 // Name:        src/unix/fontenum.cpp
 // Purpose:     wxFontEnumerator class for X11/GDK
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.10.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

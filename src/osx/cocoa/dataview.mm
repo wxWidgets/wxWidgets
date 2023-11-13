@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/dataview.mm
 // Purpose:     wxDataView
 // Author:
-// Modified by:
 // Created:     2009-01-31
 // Copyright:
 // Licence:     wxWindows licence

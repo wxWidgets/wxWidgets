@@ -2,7 +2,6 @@
 // Name:        wx/listctrl.h
 // Purpose:     wxListCtrl class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.12.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

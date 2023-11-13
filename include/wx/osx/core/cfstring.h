@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/cfstring.h
 // Purpose:     wxCFStringRef and other string functions
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2004-10-29 (from code in wx/mac/carbon/private.h)
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

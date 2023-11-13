@@ -2,7 +2,6 @@
 // Name:        src/common/string.cpp
 // Purpose:     wxString class
 // Author:      Vadim Zeitlin, Ryan Norton
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              (c) 2004 Ryan Norton <wxprojects@comcast.net>
@@ -1578,18 +1577,29 @@ bool wxString::ToDouble(double *pVal) const
 // to if the compiler claims to support C++17, but it doesn't hurt to check).
 #ifdef __cpp_lib_to_chars
 
-bool wxString::ToCLong(long *pVal, int base) const
+namespace
 {
-    wxCHECK_MSG( pVal, false, "null output pointer" );
 
-    const wxScopedCharBuffer& buf = utf8_str();
-    auto start = buf.data();
-    const auto end = start + buf.length();
+// Helper of ToCLong() and ToCULong() taking care of prefix and base-related
+// stuff: because from_chars() doesn't skip leading whitespace and doesn't
+// recognize base==0 nor "0x" prefix even if base 16 is explicitly specified,
+// we need to skip the leading space and prefix indicating the base to use if
+// it's present and adjust "base" itself instead.
+//
+// Return false if base is already specified but is incompatible with the
+// prefix used.
+bool SkipOptPrefixAndSetBase(int& base, const char*& start, const char* end)
+{
+    // Start by skipping whitespace.
+    while ( wxSafeIsspace(*start) )
+        ++start;
 
-    // from_chars() doesn't recognize base==0 and doesn't recognize "0x" prefix
-    // even if base 16 is explicitly specified, so adjust the input to use the
-    // form it supports.
-    if ( buf.length() > 1 && *start == '0' )
+    // Also skip optional "+" which std::from_chars() doesn't accept neither.
+    if ( *start == '+' )
+        ++start;
+
+    // Then check for the base prefix.
+    if ( end - start > 1 && *start == '0' )
     {
         ++start;
         if ( *start == 'x' || *start == 'X' )
@@ -1610,6 +1620,22 @@ bool wxString::ToCLong(long *pVal, int base) const
     if ( base == 0 )
         base = 10;
 
+    return true;
+}
+
+} // anonymous namespace
+
+bool wxString::ToCLong(long *pVal, int base) const
+{
+    wxCHECK_MSG( pVal, false, "null output pointer" );
+
+    const wxScopedCharBuffer& buf = utf8_str();
+    auto start = buf.data();
+    const auto end = start + buf.length();
+
+    if ( !SkipOptPrefixAndSetBase(base, start, end) )
+        return false;
+
     const auto res = std::from_chars(start, end, *pVal, base);
 
     return res.ec == std::errc{} && res.ptr == end;
@@ -1617,20 +1643,34 @@ bool wxString::ToCLong(long *pVal, int base) const
 
 bool wxString::ToCULong(unsigned long *pVal, int base) const
 {
-    // We intentionally don't use std::from_chars() here because this function
-    // is supposed to be compatible with strtoul() and so _succeed_ for "-1",
-    // for example, instead of returning an error as from_chars() (much more
-    // logically) does.
-
     wxCHECK_MSG( pVal, false, "null output pointer" );
 
-    long l;
-    if ( !ToCLong(&l, base) )
+    const wxScopedCharBuffer& buf = utf8_str();
+    auto start = buf.data();
+    const auto end = start + buf.length();
+
+    if ( !SkipOptPrefixAndSetBase(base, start, end) )
         return false;
 
-    *pVal = static_cast<unsigned long>(l);
+    // Extra complication: for compatibility reasons, this function does accept
+    // "-1" as valid input (as strtoul() does!), but from_chars() doesn't, for
+    // unsigned values, so check for this separately.
+    if ( *start == '-' )
+    {
+        long l;
+        const auto res = std::from_chars(start, end, l, base);
 
-    return true;
+        if ( res.ec != std::errc{} || res.ptr != end )
+            return false;
+
+        *pVal = static_cast<unsigned long>(l);
+
+        return true;
+    }
+
+    const auto res = std::from_chars(start, end, *pVal, base);
+
+    return res.ec == std::errc{} && res.ptr == end;
 }
 
 bool wxString::ToCDouble(double *pVal) const

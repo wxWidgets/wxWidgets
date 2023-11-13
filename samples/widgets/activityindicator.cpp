@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/sizer.h"
+    #include "wx/statbox.h"
     #include "wx/stattext.h"
 #endif
 
@@ -80,7 +81,7 @@ protected:
 
     // the indicator itself and the sizer it is in
     wxActivityIndicator *m_indicator;
-    wxSizer *m_sizerIndicator;
+    wxStaticBoxSizer *m_sizerIndicator;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -110,15 +111,16 @@ IMPLEMENT_WIDGETS_PAGE(ActivityIndicatorWidgetsPage,
 
 void ActivityIndicatorWidgetsPage::CreateContent()
 {
-    wxSizer* const sizerOper = new wxStaticBoxSizer(wxVERTICAL, this,
+    wxStaticBoxSizer* const sizerOper = new wxStaticBoxSizer(wxVERTICAL, this,
                                                     "&Operations");
+    wxStaticBox* const sizerOperBox = sizerOper->GetStaticBox();
 
-    sizerOper->Add(new wxButton(this, ActivityIndicator_Start, "&Start"),
+    sizerOper->Add(new wxButton(sizerOperBox, ActivityIndicator_Start, "&Start"),
                    wxSizerFlags().Expand().Border());
-    sizerOper->Add(new wxButton(this, ActivityIndicator_Stop, "&Stop"),
+    sizerOper->Add(new wxButton(sizerOperBox, ActivityIndicator_Stop, "&Stop"),
                    wxSizerFlags().Expand().Border());
 
-    sizerOper->Add(new wxStaticText(this, ActivityIndicator_IsRunning,
+    sizerOper->Add(new wxStaticText(sizerOperBox, ActivityIndicator_IsRunning,
                                     "Indicator is initializing..."),
                    wxSizerFlags().Expand().Border());
 
@@ -139,7 +141,7 @@ void ActivityIndicatorWidgetsPage::RecreateWidget()
 {
     m_sizerIndicator->Clear(true /* delete windows */);
 
-    m_indicator = new wxActivityIndicator(this, wxID_ANY,
+    m_indicator = new wxActivityIndicator(m_sizerIndicator->GetStaticBox(), wxID_ANY,
                                           wxDefaultPosition, wxDefaultSize,
                                           GetAttrs().m_defaultFlags);
 

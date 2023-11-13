@@ -2,7 +2,6 @@
 // Name:        wx/region.h
 // Purpose:     Base header for wxRegion
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

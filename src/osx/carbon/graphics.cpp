@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/graphics.cpp
 // Purpose:     wxDC class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

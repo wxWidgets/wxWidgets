@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/dcclient.cpp
 // Purpose:     wxClientDCImpl class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

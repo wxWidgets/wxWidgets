@@ -2,7 +2,6 @@
 // Name:        wx/radiobut.h
 // Purpose:     wxRadioButton declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.09.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

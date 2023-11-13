@@ -2,7 +2,6 @@
 // Name:        src/common/lboxcmn.cpp
 // Purpose:     wxListBox class methods common to all platforms
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.10.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

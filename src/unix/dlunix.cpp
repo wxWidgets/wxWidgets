@@ -2,7 +2,6 @@
 // Name:        src/unix/dlunix.cpp
 // Purpose:     Unix-specific part of wxDynamicLibrary and related classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-16 (extracted from common/dynlib.cpp)
 // Copyright:   (c) 2000-2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

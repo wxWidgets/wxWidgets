@@ -27,12 +27,6 @@
         : public wxCompositeWindow< wxNavigationEnabled<wxControl> >,
           public wxTextEntry
     {
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-    private:
-        // implement this to return the HWND of the EDIT control
-        // can return nullptr here as this TextEntry is just a proxy
-        virtual WXHWND GetEditHWND() const override  { wxFAIL_MSG("unreachable"); return nullptr; }
-#endif
     };
 #elif defined(__WXMAC__)
     // search control was introduced in Mac OS X 10.3 Panther

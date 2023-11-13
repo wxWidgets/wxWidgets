@@ -2,7 +2,6 @@
 // Name:        wx/settings.h
 // Purpose:     wxSystemSettings class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

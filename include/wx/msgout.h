@@ -2,7 +2,6 @@
 // Name:        wx/msgout.h
 // Purpose:     wxMessageOutput class. Shows a message to the user
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     17.07.02
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence

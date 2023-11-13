@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/cfdataref.h
 // Purpose:     wxCFDataRef class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2007/05/10
 // Copyright:   (c) 2007 Stefan Csomor
 // Licence:     wxWindows licence

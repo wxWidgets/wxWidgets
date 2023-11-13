@@ -2,7 +2,6 @@
 // Name:        wx/msw/datectrl.h
 // Purpose:     wxDatePickerCtrl for Windows
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-09
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

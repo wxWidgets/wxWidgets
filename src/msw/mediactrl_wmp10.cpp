@@ -2,7 +2,6 @@
 // Name:        src/msw/mediactrl_wmp10.cpp
 // Purpose:     Windows Media Player 9/10 Media Backend for Windows
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by:
 // Created:     11/07/04
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

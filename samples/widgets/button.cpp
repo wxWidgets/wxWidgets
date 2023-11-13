@@ -249,41 +249,42 @@ void ButtonWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "&Set style");
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
-
-    m_chkBitmapOnly = CreateCheckBoxAndAddToSizer(sizerLeft, "&Bitmap only");
-    m_chkTextAndBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, "Text &and bitmap");
-    m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit exactly");
-    m_chkAuthNeeded = CreateCheckBoxAndAddToSizer(sizerLeft, "Require a&uth");
+    m_chkBitmapOnly = CreateCheckBoxAndAddToSizer(sizerLeft, "&Bitmap only", wxID_ANY, sizerLeftBox);
+    m_chkTextAndBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, "Text &and bitmap", wxID_ANY, sizerLeftBox);
+    m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit exactly", wxID_ANY, sizerLeftBox);
+    m_chkAuthNeeded = CreateCheckBoxAndAddToSizer(sizerLeft, "Require a&uth", wxID_ANY, sizerLeftBox);
 #if wxUSE_COMMANDLINKBUTTON
-    m_chkCommandLink = CreateCheckBoxAndAddToSizer(sizerLeft, "Use command &link button");
+    m_chkCommandLink = CreateCheckBoxAndAddToSizer(sizerLeft, "Use command &link button", wxID_ANY, sizerLeftBox);
 #endif
 #if wxUSE_MARKUP
-    m_chkUseMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Interpret &markup");
+    m_chkUseMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Interpret &markup", wxID_ANY, sizerLeftBox);
 #endif // wxUSE_MARKUP
-    m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, "&Default");
+    m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, "&Default", wxID_ANY, sizerLeftBox);
 
     m_chkUseBitmapClass = CreateCheckBoxAndAddToSizer(sizerLeft,
-        "Use wxBitmapButton");
+        "Use wxBitmapButton", wxID_ANY, sizerLeftBox);
     m_chkUseBitmapClass->SetValue(true);
 
-    m_chkDisable = CreateCheckBoxAndAddToSizer(sizerLeft, "Disable");
+    m_chkDisable = CreateCheckBoxAndAddToSizer(sizerLeft, "Disable", wxID_ANY, sizerLeftBox);
 
     sizerLeft->AddSpacer(5);
 
-    wxSizer *sizerUseLabels =
-        new wxStaticBoxSizer(wxVERTICAL, this,
+    wxStaticBoxSizer *sizerUseLabels =
+        new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox,
                 "&Use the following bitmaps in addition to the normal one?");
+    wxStaticBox* const sizerUseLabelsBox = sizerUseLabels->GetStaticBox();
+
     m_chkUsePressed = CreateCheckBoxAndAddToSizer(sizerUseLabels,
-        "&Pressed (small help icon)");
+        "&Pressed (small help icon)", wxID_ANY, sizerUseLabelsBox);
     m_chkUseFocused = CreateCheckBoxAndAddToSizer(sizerUseLabels,
-        "&Focused (small error icon)");
+        "&Focused (small error icon)", wxID_ANY, sizerUseLabelsBox);
     m_chkUseCurrent = CreateCheckBoxAndAddToSizer(sizerUseLabels,
-        "&Current (small warning icon)");
+        "&Current (small warning icon)", wxID_ANY, sizerUseLabelsBox);
     m_chkUseDisabled = CreateCheckBoxAndAddToSizer(sizerUseLabels,
-        "&Disabled (broken image icon)");
+        "&Disabled (broken image icon)", wxID_ANY, sizerUseLabelsBox);
     sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
 
     sizerLeft->AddSpacer(10);
@@ -292,26 +293,28 @@ void ButtonWidgetsPage::CreateContent()
     {
         "left", "right", "top", "bottom",
     };
-    m_radioImagePos = new wxRadioBox(this, wxID_ANY, "Image &position",
+    m_radioImagePos = new wxRadioBox(sizerLeftBox, wxID_ANY, "Image &position",
                                      wxDefaultPosition, wxDefaultSize,
                                      WXSIZEOF(dirs), dirs);
     sizerLeft->Add(m_radioImagePos, wxSizerFlags().Expand().Border());
 
+    wxStaticBoxSizer* sizerImageMargins = new wxStaticBoxSizer(wxVERTICAL, sizerLeftBox, "Image margins");
+    wxStaticBox* const sizerImageMarginsBox = sizerImageMargins->GetStaticBox();
     wxSizer* sizerImageMarginsRow = CreateSizerWithTextAndButton(ButtonPage_ChangeImageMargins,
-                                           "Horizontal and vertical", wxID_ANY, &m_textImageMarginH);
+                                           "Horizontal and vertical", wxID_ANY, &m_textImageMarginH,
+                                            sizerImageMarginsBox);
     wxIntegerValidator<int> validatorMargH;
     validatorMargH.SetRange(0, 100);
     m_textImageMarginH->SetValidator(validatorMargH);
 
     wxIntegerValidator<int> validatorMargV;
     validatorMargV.SetRange(0, 100);
-    m_textImageMarginV = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validatorMargV);
+    m_textImageMarginV = new wxTextCtrl(sizerImageMarginsBox, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, validatorMargV);
     sizerImageMarginsRow->Add(m_textImageMarginV, wxSizerFlags(1).CentreVertical().Border(wxLEFT));
 
     m_textImageMarginH->SetValue(wxString::Format("%d", m_imageMarginH));
     m_textImageMarginV->SetValue(wxString::Format("%d", m_imageMarginV));
 
-    wxSizer* sizerImageMargins = new wxStaticBoxSizer(wxVERTICAL, this, "Image margins");
     sizerImageMargins->Add(sizerImageMarginsRow, wxSizerFlags().Border().Centre());
     sizerLeft->Add(sizerImageMargins, wxSizerFlags().Expand().Border());
 
@@ -332,10 +335,10 @@ void ButtonWidgetsPage::CreateContent()
         "bottom",
     };
 
-    m_radioHAlign = new wxRadioBox(this, wxID_ANY, "&Horz alignment",
+    m_radioHAlign = new wxRadioBox(sizerLeftBox, wxID_ANY, "&Horz alignment",
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(halign), halign);
-    m_radioVAlign = new wxRadioBox(this, wxID_ANY, "&Vert alignment",
+    m_radioVAlign = new wxRadioBox(sizerLeftBox, wxID_ANY, "&Vert alignment",
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(valign), valign);
 
@@ -344,17 +347,18 @@ void ButtonWidgetsPage::CreateContent()
 
     sizerLeft->AddSpacer(5);
 
-    wxButton *btn = new wxButton(this, ButtonPage_Reset, "&Reset");
+    wxButton *btn = new wxButton(sizerLeftBox, ButtonPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder(wxALL));
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Operations");
-    wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Operations");
+    wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     wxSizer *sizerRow = CreateSizerWithTextAndButton(ButtonPage_ChangeLabel,
                                                      "Change label",
                                                      wxID_ANY,
-                                                     &m_textLabel);
+                                                     &m_textLabel,
+                                                     sizerMiddleBox);
     m_textLabel->SetValue("&Press me!");
     sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
@@ -362,7 +366,8 @@ void ButtonWidgetsPage::CreateContent()
     m_sizerNote = CreateSizerWithTextAndButton(ButtonPage_ChangeNote,
                                                "Change note",
                                                wxID_ANY,
-                                               &m_textNote);
+                                               &m_textNote,
+                                               sizerMiddleBox);
     m_textNote->SetValue("Writes down button clicks in the log.");
 
     sizerMiddle->Add(m_sizerNote, wxSizerFlags().Expand().Border());

@@ -2,7 +2,6 @@
 // Name:        wx/txtstrm.h
 // Purpose:     Text stream classes
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     28/06/1998
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

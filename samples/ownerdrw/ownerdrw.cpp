@@ -2,7 +2,6 @@
 // Name:        ownerdrw.cpp
 // Purpose:     Owner-draw sample, for Windows
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     13.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
