@@ -109,7 +109,12 @@ void wxBell()
         }
 
         if ( activate ) {
-            [[NSRunningApplication currentApplication] activateWithOptions: NSApplicationActivateIgnoringOtherApps];
+            if ( [NSApp activationPolicy] == NSApplicationActivationPolicyAccessory ) {
+                [[NSRunningApplication currentApplication] activateWithOptions: NSApplicationActivateIgnoringOtherApps];
+            }
+            else {
+                [NSApp activateIgnoringOtherApps: YES];
+            }
         }
     }
 }
