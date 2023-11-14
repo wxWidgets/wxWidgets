@@ -939,10 +939,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
 GtkEditable *wxTextCtrl::GetEditable() const
 {
-    if( IsSingleLine() )
-        return GTK_EDITABLE( m_text );
-    else
-        return nullptr;
+    wxCHECK_MSG( IsSingleLine(), nullptr, "shouldn't be called for multiline" );
+
+    return GTK_EDITABLE(m_text);
 }
 
 void wxTextCtrl::SetMaxLength(unsigned long length)
