@@ -247,6 +247,7 @@ wxMSW:
 wxOSX:
 
 - Fix clipping behaviour when using Sonoma/Xcode 15 SDK (#23916, #24054).
+- Restore activation for non-bundled applications (#24056, #24062).
 
 
 3.2.4: (released 2023-11-11)
