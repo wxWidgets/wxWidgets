@@ -86,7 +86,7 @@ static void maxlen_handler(GtkTextBuffer *buffer, GtkTextIter *location, gchar *
         wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
         event.SetEventObject( win );
         event.SetString( win->GetValue() );
-        win->HandleWindowEvent( event );                
+        win->HandleWindowEvent( event );              
     }
 }
 }
