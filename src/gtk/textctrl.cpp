@@ -80,6 +80,7 @@ static void maxlen_handler(GtkTextBuffer *buffer, GtkTextIter *location, gchar *
         // reason, ("Run Last") it won't work in GTKOnInsertText() as it called from
         // the handler that does not connected after
         gtk_text_buffer_delete( buffer, &offset, &end );
+        gtk_text_iter_assign( location, &offset );
         wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
         event.SetEventObject( win );
         event.SetString( win->GetValue() );
@@ -951,6 +952,8 @@ void wxTextCtrl::SetMaxLength(unsigned long length)
         m_maxlen = length;
         g_signal_connect_after( m_buffer, "insert-text", G_CALLBACK( maxlen_handler ), gpointer( this ) );
     }
+    else
+        wxTextEntry::SetMaxLength( length );
 }
 
 GtkEntry *wxTextCtrl::GetEntry() const
