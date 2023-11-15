@@ -566,7 +566,12 @@ void wxRendererMac::ApplyMacControlFlags(wxWindow* win, NSCell* cell, int flags)
         size = NSMiniControlSize;
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_11_0
     else if (win->GetWindowVariant() == wxWINDOW_VARIANT_LARGE|| (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_LARGE))
-        size = WX_IS_MACOS_AVAILABLE(11, 0) ? NSControlSizeLarge : NSControlSizeRegular;
+    {
+        if (WX_IS_MACOS_AVAILABLE(11, 0))
+            size = NSControlSizeLarge;
+        else
+            size = NSControlSizeRegular;
+    }
 #endif
     else
         size = NSRegularControlSize;
