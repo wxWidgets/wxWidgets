@@ -169,14 +169,100 @@ private:
     // the tree buttons
     wxBitmap m_bmpTreeExpanded;
     wxBitmap m_bmpTreeCollapsed;
+
+    NSButtonCell* GetPushButtonCell()
+    {
+        if ( !m_nsPushButtonCell )
+        {
+            m_nsPushButtonCell = [[NSButtonCell alloc] initTextCell:@""];
+            m_nsPushButtonCell.buttonType = NSButtonTypeMomentaryPushIn;
+            m_nsPushButtonCell.highlightsBy = NSPushInCellMask;
+            m_nsPushButtonCell.bezelStyle = NSBezelStyleShadowlessSquare;
+        }
+
+        return m_nsPushButtonCell;
+    }
+
+    NSButtonCell* GetCheckBoxCell()
+    {
+        if ( !m_nsCheckBoxCell )
+        {
+            m_nsCheckBoxCell = [[NSButtonCell alloc] initTextCell:@""];
+            m_nsCheckBoxCell.buttonType = NSButtonTypeSwitch;
+            m_nsCheckBoxCell.allowsMixedState = YES;
+        }
+
+        return m_nsCheckBoxCell;
+    }
+
+    NSButtonCell* GetRadioButtonCell()
+    {
+        if ( !m_nsRadioButtonCell )
+        {
+            m_nsRadioButtonCell = [[NSButtonCell alloc] initTextCell:@""];
+            m_nsRadioButtonCell.buttonType = NSButtonTypeRadio;
+            m_nsRadioButtonCell.allowsMixedState = YES;
+        }
+
+        return m_nsRadioButtonCell;
+    }
+
+    NSButtonCell* GetDisclosureButtonCell()
+    {
+        if ( !m_nsDisclosureButtonCell )
+        {
+            m_nsDisclosureButtonCell = [[NSButtonCell alloc] initTextCell:@""];
+            m_nsDisclosureButtonCell.bezelStyle = NSBezelStyleDisclosure;
+            m_nsDisclosureButtonCell.buttonType = NSButtonTypePushOnPushOff;
+            m_nsDisclosureButtonCell.highlightsBy = NSPushInCellMask;
+        }
+
+        return m_nsDisclosureButtonCell;
+    }
+
+    NSPopUpButtonCell* GetPopupbuttonCell()
+    {
+        if ( !m_nsPopupbuttonCell )
+        {
+            m_nsPopupbuttonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
+        }
+
+        return m_nsPopupbuttonCell;
+    }
+
+    NSComboBoxCell* GetComboBoxCell()
+    {
+        if ( !m_nsComboBoxCell )
+        {
+            m_nsComboBoxCell = [[NSComboBoxCell alloc] initTextCell:@""];
+        }
+
+        return m_nsComboBoxCell;
+    }
+
+    NSTableHeaderCell* GetTableHeaderCell()
+    {
+        if ( !m_nsTableHeaderCell )
+        {
+            m_nsTableHeaderCell = [[NSTableHeaderCell alloc] init];
+            m_nsTableHeaderCell.bezeled = NO;
+            m_nsTableHeaderCell.bezelStyle = NSTextFieldSquareBezel;
+            m_nsTableHeaderCell.bordered = NO;
+        }
+
+        return m_nsTableHeaderCell;
+    }
+
+    // These variables shouldn't be accessed directly as they're allocated on
+    // demand, use the getters above.
 #if wxOSX_USE_NSCELL_RENDERER
-    NSButtonCell* m_nsPushButtonCell;
-    NSButtonCell* m_nsCheckBoxCell;
-    NSButtonCell* m_nsRadioButtonCell;
-    NSButtonCell* m_nsDisclosureButtonCell;
-    NSPopUpButtonCell* m_nsPopupbuttonCell;
-    NSComboBoxCell* m_nsComboBoxCell;
-    NSTableHeaderCell* m_nsTableHeaderCell;
+    NSButtonCell* m_nsPushButtonCell = nil;
+    NSButtonCell* m_nsCheckBoxCell = nil;
+    NSButtonCell* m_nsRadioButtonCell = nil;
+    NSButtonCell* m_nsDisclosureButtonCell = nil;
+    NSPopUpButtonCell* m_nsPopupbuttonCell = nil;
+    NSComboBoxCell* m_nsComboBoxCell = nil;
+    NSTableHeaderCell* m_nsTableHeaderCell = nil;
 #endif
 };
 
@@ -195,32 +281,6 @@ wxRendererNative& wxRendererNative::GetDefault()
 wxRendererMac::wxRendererMac()
 {
 #if wxOSX_USE_NSCELL_RENDERER
-    m_nsPushButtonCell = [[NSButtonCell alloc] initTextCell:@""];
-    m_nsPushButtonCell.buttonType = NSButtonTypeMomentaryPushIn;
-    m_nsPushButtonCell.highlightsBy = NSPushInCellMask;
-    m_nsPushButtonCell.bezelStyle = NSBezelStyleShadowlessSquare;
-
-    m_nsCheckBoxCell = [[NSButtonCell alloc] initTextCell:@""];
-    m_nsCheckBoxCell.buttonType = NSButtonTypeSwitch;
-    m_nsCheckBoxCell.allowsMixedState = YES;
-
-    m_nsRadioButtonCell = [[NSButtonCell alloc] initTextCell:@""];
-    m_nsRadioButtonCell.buttonType = NSButtonTypeRadio;
-    m_nsRadioButtonCell.allowsMixedState = YES;
-
-    m_nsDisclosureButtonCell = [[NSButtonCell alloc] initTextCell:@""];
-    m_nsDisclosureButtonCell.bezelStyle = NSBezelStyleDisclosure;
-    m_nsDisclosureButtonCell.buttonType = NSButtonTypePushOnPushOff;
-    m_nsDisclosureButtonCell.highlightsBy = NSPushInCellMask;
-
-    m_nsPopupbuttonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
-
-    m_nsComboBoxCell = [[NSComboBoxCell alloc] initTextCell:@""];
-
-    m_nsTableHeaderCell = [[NSTableHeaderCell alloc] init];
-    m_nsTableHeaderCell.bezeled = NO;
-    m_nsTableHeaderCell.bezelStyle = NSTextFieldSquareBezel;
-    m_nsTableHeaderCell.bordered = NO;
 #endif
 }
 
@@ -245,8 +305,8 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderButtonParams* params )
 {
 #if wxOSX_USE_NSCELL_RENDERER
-    DrawMacHeaderCell(win, dc, m_nsTableHeaderCell, rect, flags, sortArrow, params);
-    return m_nsTableHeaderCell.cellSize.width;
+    DrawMacHeaderCell(win, dc, GetTableHeaderCell(), rect, flags, sortArrow, params);
+    return GetTableHeaderCell().cellSize.width;
 #else
     if ( wxSystemSettings::GetAppearance().IsDark() )
         return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
@@ -320,8 +380,8 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
 int wxRendererMac::GetHeaderButtonHeight(wxWindow* win)
 {
 #if wxOSX_USE_NSCELL_RENDERER
-    ApplyMacControlFlags( win, m_nsTableHeaderCell, 0);
-    return m_nsTableHeaderCell.cellSize.height;
+    ApplyMacControlFlags( win, GetTableHeaderCell(), 0);
+    return GetTableHeaderCell().cellSize.height;
 #else
     SInt32      standardHeight;
     OSStatus        errStatus;
@@ -353,7 +413,7 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     {
 #if wxOSX_USE_NSCELL_RENDERER
         NSControlStateValue stateValue = (flags & wxCONTROL_EXPANDED) ? NSControlStateValueOn : NSControlStateValueOff;
-        DrawMacCell(win, dc, m_nsDisclosureButtonCell, rect, flags, stateValue);
+        DrawMacCell(win, dc, GetDisclosureButtonCell(), rect, flags, stateValue);
 #else
         // now the wxGCDC is using native transformations
         const wxCoord x = rect.x;
@@ -721,7 +781,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
     if (flags & wxCONTROL_UNDETERMINED)
             stateValue = NSControlStateValueMixed;
 
-    DrawMacCell(win, dc, m_nsCheckBoxCell, rect, flags, stateValue);
+    DrawMacCell(win, dc, GetCheckBoxCell(), rect, flags, stateValue);
 #else
     int kind;
 
@@ -747,8 +807,8 @@ wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win, int flags)
     // other platforms.
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 #if wxOSX_USE_NSCELL_RENDERER
-    ApplyMacControlFlags( win, m_nsCheckBoxCell, flags);
-    NSSize sz = m_nsCheckBoxCell.cellSize;
+    ApplyMacControlFlags( win, GetCheckBoxCell(), flags);
+    NSSize sz = GetCheckBoxCell().cellSize;
     return wxSize(sz.width, sz.height);
 #else
     wxSize size;
@@ -797,7 +857,7 @@ wxRendererMac::DrawPushButton(wxWindow *win,
 {
 #if wxOSX_USE_NSCELL_RENDERER
     NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
-    DrawMacCell(win, dc, m_nsPushButtonCell, rect, flags, stateValue);
+    DrawMacCell(win, dc, GetPushButtonCell(), rect, flags, stateValue);
 #else
         int kind;
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
@@ -881,7 +941,7 @@ void wxRendererMac::DrawChoice(wxWindow* win, wxDC& dc,
 {
 #if wxOSX_USE_NSCELL_RENDERER
     NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
-    DrawMacCell(win, dc, m_nsPopupbuttonCell, rect, flags, stateValue);
+    DrawMacCell(win, dc, GetPopupbuttonCell(), rect, flags, stateValue);
 #else
     int kind;
 
@@ -904,7 +964,7 @@ void wxRendererMac::DrawComboBox(wxWindow* win, wxDC& dc,
 {
 #if wxOSX_USE_NSCELL_RENDERER
     NSControlStateValue stateValue = (flags & wxCONTROL_PRESSED) ? NSControlStateValueOn : NSControlStateValueOff;
-    DrawMacCell(win, dc, m_nsComboBoxCell, rect, flags, stateValue);
+    DrawMacCell(win, dc, GetComboBoxCell(), rect, flags, stateValue);
 #else
     int kind;
 
@@ -932,7 +992,7 @@ void wxRendererMac::DrawRadioBitmap(wxWindow* win, wxDC& dc,
     if (flags & wxCONTROL_UNDETERMINED)
             stateValue = NSControlStateValueMixed;
 
-    DrawMacCell(win, dc, m_nsRadioButtonCell, rect, flags, stateValue);
+    DrawMacCell(win, dc, GetRadioButtonCell(), rect, flags, stateValue);
 #else
     int kind;
 
