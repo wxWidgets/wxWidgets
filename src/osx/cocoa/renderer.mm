@@ -170,6 +170,7 @@ private:
     wxBitmap m_bmpTreeExpanded;
     wxBitmap m_bmpTreeCollapsed;
 
+#if wxOSX_USE_NSCELL_RENDERER
     NSButtonCell* GetPushButtonCell()
     {
         if ( !m_nsPushButtonCell )
@@ -255,7 +256,6 @@ private:
 
     // These variables shouldn't be accessed directly as they're allocated on
     // demand, use the getters above.
-#if wxOSX_USE_NSCELL_RENDERER
     NSButtonCell* m_nsPushButtonCell = nil;
     NSButtonCell* m_nsCheckBoxCell = nil;
     NSButtonCell* m_nsRadioButtonCell = nil;
@@ -280,8 +280,6 @@ wxRendererNative& wxRendererNative::GetDefault()
 
 wxRendererMac::wxRendererMac()
 {
-#if wxOSX_USE_NSCELL_RENDERER
-#endif
 }
 
 wxRendererMac::~wxRendererMac()
