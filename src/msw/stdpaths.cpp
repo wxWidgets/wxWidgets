@@ -369,8 +369,9 @@ wxString wxStandardPathsWin16::GetUserConfigDir() const
 
 wxString wxStandardPaths::GetSharedLibrariesDir() const
 {
-    wxFileName fn( GetExecutablePath() );
-    return fn.GetPathWithSep();
+    // there is no standard location for shared libraries, suppose they're in the same
+    // directory as the .exe
+    return GetAppDir();
 }
 
 #endif // wxUSE_STDPATHS
