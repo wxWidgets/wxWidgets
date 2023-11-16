@@ -238,6 +238,7 @@ Changes in behaviour which may result in build errors
 wxGTK:
 
 - Improve desktop environment detection, notably under Wayland (#24050).
+- Fix wxSystemSettings::GetMetric() scrollbar width calculation for GTK3 (#24057).
 
 
 3.2.4: (released 2023-11-11)
