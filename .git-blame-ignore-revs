@@ -25,6 +25,9 @@ e43190ea796ac3c1d15c18a88bcf7f3f745bd4bc
 # Get rid of commented out code, 2022-10-26
 db31a0161503c6ea4cc461f4e10b67830b7d6b52
 
+# Use nullptr instead of NULL in the code and documentation, 2022-10-18
+4f4c5fcfdfe7d1eadce22a68929c82b6cb324075
+
 # Fix comment typos in sources, 2021-10-02
 668a2186cd89fd4576bed224df3624811eebeca1
 
