@@ -410,8 +410,8 @@ public:
     /**
         Return OS specific directory where project shared liraries are
 
-        - Windows: @c it returns the folder wher the application binary is located
-        - Unix:    @c it rturns the libraies installation path
+        - Windows: @c it returns the folder where the application binary is located
+        - Unix:    @c it returns the libraries installation path
         - Mac:     @c "/Applications/exename.app/Contents/Frameworks/"
 
         @since 3.3.0
