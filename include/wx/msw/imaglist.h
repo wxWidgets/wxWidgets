@@ -10,20 +10,14 @@
 #ifndef _WX_IMAGLIST_H_
 #define _WX_IMAGLIST_H_
 
-#include "wx/bitmap.h"
-
-// Eventually we'll make this a reference-counted wxGDIObject. For
-// now, the app must take care of ownership issues. That is, the
-// image lists must be explicitly deleted after the control(s) that uses them
-// is (are) deleted, or when the app exits.
-class WXDLLIMPEXP_CORE wxImageList : public wxObject
+class WXDLLIMPEXP_CORE wxImageList : public wxImageListBase
 {
 public:
   /*
    * Public interface
    */
 
-  wxImageList() { Init(); }
+  wxImageList() = default;
 
   // Creates an image list.
   // Specify the width and height of the images in the list,
@@ -31,7 +25,6 @@ public:
   // from icons), and the initial size of the list.
   wxImageList(int width, int height, bool mask = true, int initialCount = 1)
   {
-    Init();
     Create(width, height, mask, initialCount);
   }
   virtual ~wxImageList();
@@ -41,13 +34,12 @@ public:
   ////////////////////////////////////////////////////////////////////////////
 
   // Returns the number of images in the image list.
-  int GetImageCount() const;
+  virtual int GetImageCount() const override;
 
   // Returns the size (same for all images) of the images in the list
-  bool GetSize(int index, int &width, int &height) const;
+  virtual bool GetSize(int index, int &width, int &height) const override;
 
-  // Returns the overall size
-  wxSize GetSize() const { return m_size; }
+  using wxImageListBase::GetSize;
 
   // Operations
   ////////////////////////////////////////////////////////////////////////////
@@ -59,17 +51,21 @@ public:
   bool Create(int width, int height, bool mask = true, int initialNumber = 1);
 
   // Destroys the image list, Create() may then be called again later.
-  void Destroy();
+  virtual void Destroy() override;
 
   // Adds a bitmap, and optionally a mask bitmap.
   // Note that wxImageList creates *new* bitmaps, so you may delete
   // 'bitmap' and 'mask' after calling Add.
-  int Add(const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
+  virtual int Add(const wxBitmap& bitmap, const wxBitmap& mask) override;
+  virtual int Add(const wxBitmap& bitmap) override
+  {
+      return Add(bitmap, wxNullBitmap);
+  }
 
   // Adds a bitmap, using the specified colour to create the mask bitmap
   // Note that wxImageList creates *new* bitmaps, so you may delete
   // 'bitmap' after calling Add.
-  int Add(const wxBitmap& bitmap, const wxColour& maskColour);
+  virtual int Add(const wxBitmap& bitmap, const wxColour& maskColour) override;
 
   // Adds a bitmap and mask from an icon.
   int Add(const wxIcon& icon);
@@ -77,31 +73,31 @@ public:
   // Replaces a bitmap, optionally passing a mask bitmap.
   // Note that wxImageList creates new bitmaps, so you may delete
   // 'bitmap' and 'mask' after calling Replace.
-  bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap);
+  virtual bool Replace(int index, const wxBitmap& bitmap, const wxBitmap& mask = wxNullBitmap) override;
 
   // Replaces a bitmap and mask from an icon.
   // You can delete 'icon' after calling Replace.
   bool Replace(int index, const wxIcon& icon);
 
   // Removes the image at the given index.
-  bool Remove(int index);
+  virtual bool Remove(int index) override;
 
   // Remove all images
-  bool RemoveAll();
+  virtual bool RemoveAll() override;
 
   // Draws the given image on a dc at the specified position.
   // If 'solidBackground' is true, Draw sets the image list background
   // colour to the background colour of the wxDC, to speed up
   // drawing by eliminating masked drawing where possible.
-  bool Draw(int index, wxDC& dc, int x, int y,
+  virtual bool Draw(int index, wxDC& dc, int x, int y,
             int flags = wxIMAGELIST_DRAW_NORMAL,
-            bool solidBackground = false);
+            bool solidBackground = false) override;
 
   // Get a bitmap
-  wxBitmap GetBitmap(int index) const;
+  virtual wxBitmap GetBitmap(int index) const override;
 
   // Get an icon
-  wxIcon GetIcon(int index) const;
+  virtual wxIcon GetIcon(int index) const override;
 
   // TODO: miscellaneous functionality
 /*
@@ -195,8 +191,7 @@ public:
   WXHIMAGELIST GetHIMAGELIST() const { return m_hImageList; }
 
 protected:
-  WXHIMAGELIST m_hImageList;
-  wxSize m_size;
+  WXHIMAGELIST m_hImageList = nullptr;
 
 private:
   // Private helper used by GetImageListBitmaps().
@@ -206,14 +201,6 @@ private:
   // to use with the native control.
   void GetImageListBitmaps(wxMSWBitmaps& bitmaps,
                            const wxBitmap& bitmap, const wxBitmap& mask);
-
-  bool m_useMask;
-
-  void Init()
-  {
-    m_hImageList = nullptr;
-    m_useMask = false;
-  }
 
   wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxImageList);
 };

@@ -113,7 +113,7 @@ public:
     void CreateImages(int size);
 
     void CreateButtonsImageList(int size = 11);
-    void CreateStateImageList(bool del = false);
+    void CreateStateImages();
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 
@@ -181,7 +181,7 @@ class MyFrame: public wxFrame
 {
 public:
     // ctor and dtor
-    MyFrame(const wxString& title, int x, int y, int w, int h);
+    MyFrame();
     virtual ~MyFrame();
 
     // menu callbacks

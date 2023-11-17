@@ -40,11 +40,15 @@
 #include "icon4.xpm"
 #include "icon5.xpm"
 
-#include "state1.xpm"
-#include "state2.xpm"
-#include "state3.xpm"
-#include "state4.xpm"
-#include "state5.xpm"
+// Please note that these headers were generated from the original PNG icons
+// made by Aleksandr Zyrianov and licensed under CC-BY-SA 4.0 and so are
+// covered by this licence and not wxWindows licence itself.
+#include "state0_png.h"
+#include "state0_2x_png.h"
+#include "state1_png.h"
+#include "state1_2x_png.h"
+#include "state2_png.h"
+#include "state2_2x_png.h"
 
 #include "unchecked.xpm"
 #include "checked.xpm"
@@ -192,8 +196,12 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    // We use PNG images here, so we could just add PNG image handler but this
+    // is simpler.
+    wxInitAllImageHandlers();
+
     // Create the main frame window
-    MyFrame *frame = new MyFrame("wxTreeCtrl Test", 50, 50, 450, 600);
+    MyFrame *frame = new MyFrame();
 
     // Show the frame
     frame->Show(true);
@@ -203,8 +211,9 @@ bool MyApp::OnInit()
 
 
 // My frame constructor
-MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
-       : wxFrame(nullptr, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
+MyFrame::MyFrame()
+       : wxFrame(nullptr, wxID_ANY, "wxTreeCtrl test",
+                 wxDefaultPosition, FromDIP(wxSize(450, 600), nullptr)),
          m_treeCtrl(nullptr)
 #if wxUSE_LOG
          , m_textCtrl(nullptr)
@@ -703,12 +712,12 @@ void MyFrame::OnToggleStates(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxGetApp().ShowStates() )
     {
-        m_treeCtrl->CreateStateImageList(true);
+        m_treeCtrl->SetStateImages({});
         wxGetApp().SetShowStates(false);
     }
     else
     {
-        m_treeCtrl->CreateStateImageList(false);
+        m_treeCtrl->CreateStateImages();
         wxGetApp().SetShowStates(true);
     }
 }
@@ -731,7 +740,7 @@ void MyFrame::OnToggleAlternateStates(wxCommandEvent& WXUNUSED(event))
     bool alternateStates = m_treeCtrl->AlternateStates();
 
     m_treeCtrl->SetAlternateStates(!alternateStates);
-    m_treeCtrl->CreateStateImageList();
+    m_treeCtrl->CreateStateImages();
 
     // normal states < alternate states
     // so we must reset broken states
@@ -949,11 +958,47 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
     m_reverseSort = false;
 
     CreateImages(16);
-    CreateStateImageList();
+    CreateStateImages();
 
     // Add some items to the tree
     AddTestItemsToTree(NUM_CHILDREN_PER_LEVEL, NUM_LEVELS);
 }
+
+namespace
+{
+    class FixedSizeImpl : public wxBitmapBundleImpl
+    {
+    public:
+        FixedSizeImpl(const wxSize& sizeDef, const wxIcon& icon)
+            : m_sizeDef(sizeDef),
+              m_icon(icon)
+        {
+        }
+
+        wxSize GetDefaultSize() const override
+        {
+            return m_sizeDef;
+        }
+
+        wxSize GetPreferredBitmapSizeAtScale(double scale) const override
+        {
+            return m_sizeDef*scale;
+        }
+
+        wxBitmap GetBitmap(const wxSize& size) override
+        {
+            wxBitmap bmp(m_icon);
+            if ( size != bmp.GetSize() )
+                wxBitmap::Rescale(bmp, size);
+
+            return bmp;
+        }
+
+    private:
+        const wxSize m_sizeDef;
+        const wxIcon m_icon;
+    };
+} // anonymous namespace
 
 void MyTreeCtrl::CreateImages(int size)
 {
@@ -994,39 +1039,6 @@ void MyTreeCtrl::CreateImages(int size)
     // DPI, to ensure they are of the desired size.
     wxVector<wxBitmapBundle> images;
 
-    class FixedSizeImpl : public wxBitmapBundleImpl
-    {
-    public:
-        FixedSizeImpl(const wxSize& sizeDef, const wxIcon& icon)
-            : m_sizeDef(sizeDef),
-              m_icon(icon)
-        {
-        }
-
-        wxSize GetDefaultSize() const override
-        {
-            return m_sizeDef;
-        }
-
-        wxSize GetPreferredBitmapSizeAtScale(double scale) const override
-        {
-            return m_sizeDef*scale;
-        }
-
-        wxBitmap GetBitmap(const wxSize& size) override
-        {
-            wxBitmap bmp(m_icon);
-            if ( size != bmp.GetSize() )
-                wxBitmap::Rescale(bmp, size);
-
-            return bmp;
-        }
-
-    private:
-        const wxSize m_sizeDef;
-        const wxIcon m_icon;
-    };
-
     for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
     {
         images.push_back(wxBitmapBundle::FromImpl(new FixedSizeImpl(iconSize, icons[i])));
@@ -1035,52 +1047,38 @@ void MyTreeCtrl::CreateImages(int size)
     SetImages(images);
 }
 
-void MyTreeCtrl::CreateStateImageList(bool del)
+void MyTreeCtrl::CreateStateImages()
 {
-    if ( del )
-    {
-        SetStateImageList(nullptr);
-        return;
-    }
-
-    wxImageList *states;
-    wxBusyCursor wait;
+    std::vector<wxBitmapBundle> images;
 
     if (m_alternateStates)
     {
-        wxIcon icons[5];
-        icons[0] = wxIcon(state1_xpm);  // yellow
-        icons[1] = wxIcon(state2_xpm);  // green
-        icons[2] = wxIcon(state3_xpm);  // red
-        icons[3] = wxIcon(state4_xpm);  // blue
-        icons[4] = wxIcon(state5_xpm);  // black
+        // Macro similar to wxBITMAP_BUNDLE_2 but not using resources even
+        // under the platforms supporting them.
+        #define myBITMAP_BUNDLE_FROM_DATA_2(name) \
+            wxBitmapBundle::FromBitmaps(wxBITMAP_PNG_FROM_DATA(name), \
+                                        wxBITMAP_PNG_FROM_DATA(name##_2x))
 
-        int width  = icons[0].GetWidth(),
-            height = icons[0].GetHeight();
+        images.push_back(myBITMAP_BUNDLE_FROM_DATA_2(state0));
+        images.push_back(myBITMAP_BUNDLE_FROM_DATA_2(state1));
+        images.push_back(myBITMAP_BUNDLE_FROM_DATA_2(state2));
 
-        // Make a state image list containing small icons
-        states = new wxImageList(width, height, true);
-
-        for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
-            states->Add(icons[i]);
+        #undef myBITMAP_BUNDLE_FROM_DATA_2
     }
     else
     {
-        wxIcon icons[2];
-        icons[0] = wxIcon(unchecked_xpm);
-        icons[1] = wxIcon(checked_xpm);
+        std::vector<wxIcon> icons;
+        icons.push_back(wxIcon(unchecked_xpm));
+        icons.push_back(wxIcon(checked_xpm));
 
-        int width  = icons[0].GetWidth(),
-            height = icons[0].GetHeight();
-
-        // Make an state image list containing small icons
-        states = new wxImageList(width, height, true);
-
-        for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
-            states->Add(icons[i]);
+        const wxSize iconSize(icons[0].GetWidth(), icons[0].GetHeight());
+        for ( const wxIcon& icon : icons )
+        {
+            images.push_back(wxBitmapBundle::FromImpl(new FixedSizeImpl(iconSize, icon)));
+        }
     }
 
-    AssignStateImageList(states);
+    SetStateImages(images);
 }
 
 void MyTreeCtrl::CreateButtonsImageList(int size)
@@ -1290,7 +1288,7 @@ void MyTreeCtrl::DoToggleState(const wxTreeItemId& item)
 
         srand (time(nullptr));
         do {
-            nState = rand() % GetStateImageList()->GetImageCount();
+            nState = rand() % GetStateImageCount();
         } while (nState == state);
 
         SetItemState(item, nState);

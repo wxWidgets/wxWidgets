@@ -56,10 +56,22 @@ public:
     unsigned int GetSpacing() const { return m_spacing; }
     void SetSpacing(unsigned int spacing) { m_spacing = spacing; }
 
-        // In addition to {Set,Get,Assign}ImageList() methods inherited from
-        // wxWithImages, this control has similar functions for the state image
-        // list that can be used to show a state icon corresponding to an
-        // app-defined item state (for example, checked/unchecked).
+        // In addition to SetImages() inherited from wxWithImages, this class
+        // also provides SetStateImages() function which can be used to set the
+        // images showing an icon corresponding to an app-defined item state
+        // (for example, checked/unchecked).
+    virtual void SetStateImages(const wxVector<wxBitmapBundle>& images) = 0;
+
+        // Simple accessors similar to the inherited from wxWithImages
+        // HasImages() and GetImageCount() for normal images.
+    bool HasStateImages() const { return m_imagesState.HasImages(); }
+    int GetStateImageCount() const { return m_imagesState.GetImageCount(); }
+
+        // These functions parallel {Set,Get,Assign}ImageList() methods
+        // inherited from wxWithImages, but correspond to SetStateImages().
+        // As with the other functions using wxImageList, they still work but
+        // don't allow to define high resolution icons for high DPI screens, so
+        // SetStateImages() above should be preferred.
     wxImageList *GetStateImageList() const
     {
         return m_imagesState.GetImageList();
