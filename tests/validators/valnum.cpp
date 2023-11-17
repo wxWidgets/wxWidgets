@@ -281,6 +281,7 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
 
     // Entering '-' in a control with positive range is not allowed.
     m_text->SetFocus();
+    wxYield();
     sim.Char('-');
     wxYield();
     CHECK( m_text->GetValue() == "" );

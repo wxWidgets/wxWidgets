@@ -135,7 +135,7 @@ jobs:
           - name: Ubuntu 18.04 wxQt
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --with-qt --enable-pch --without-opengl --disable-uiactionsim
+            configure_flags: --with-qt --enable-pch --without-opengl
             skip_samples: true
             use_xvfb: true
 
@@ -369,6 +369,9 @@ jobs:
             # RichTextCtrlTestCase whose Table sub-test seems to be problematic.
             wx_tests_selection='~[.] ~RichTextCtrlTestCase'
           fi
+
+          # The tests only work reliably with native windows
+          export QT_USE_NATIVE_WINDOWS=1
 
           # Configure the system to create core files and create them in the
           # current directory instead of using apport to handle them, as

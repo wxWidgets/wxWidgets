@@ -139,6 +139,9 @@ protected:
 
     virtual void OnImagesChanged() override;
 
+    // For wxEVT_TREE_KEY_DOWN generation
+    void OnKeyDown(wxKeyEvent &event);
+
 private:
     void SendDeleteEvent(const wxTreeItemId &item);
     wxTreeItemId GetNext(const wxTreeItemId &item) const;

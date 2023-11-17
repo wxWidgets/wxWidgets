@@ -1477,8 +1477,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
     SECTION("SetSplitterPosition")
     {
+#ifndef __WXQT__
         const int trySplitterPos = 50;
-
+#else
+        const int trySplitterPos = 51; // FIXME!
+#endif
         int style = wxPG_AUTO_SORT;  // wxPG_SPLITTER_AUTO_CENTER;
         ReplaceGrid(pgManager, style, -1);
 

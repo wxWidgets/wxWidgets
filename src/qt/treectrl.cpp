@@ -578,6 +578,8 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 
     SetWindowStyleFlag(style);
 
+    Bind(wxEVT_KEY_DOWN, &wxTreeCtrl::OnKeyDown, this);
+
     return QtCreateControl(parent, id, pos, size, style, validator, name);
 }
 
@@ -1425,4 +1427,15 @@ wxTreeItemId wxTreeCtrl::GetNext(const wxTreeItemId &item) const
         p = GetItemParent(p);
     } while ( p.IsOk() && !toFind.IsOk() );
     return toFind;
+}
+
+void wxTreeCtrl::OnKeyDown(wxKeyEvent& event)
+{
+    // send a tree event
+    wxTreeEvent te( wxEVT_TREE_KEY_DOWN, this);
+    te.m_evtKey = event;
+    if ( GetEventHandler()->ProcessEvent( te ) )
+        return;
+
+    event.Skip();
 }

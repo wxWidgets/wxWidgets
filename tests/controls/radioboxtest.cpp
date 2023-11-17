@@ -145,7 +145,7 @@ TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::HelpText", "[radiobox][help]")
 
 TEST_CASE_METHOD(RadioBoxTestCase, "RadioBox::ToolTip", "[radiobox][tooltip]")
 {
-#if defined (__WXMSW__) || defined(__WXGTK__)
+#if defined (__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
     //GetItemToolTip returns null if there is no tooltip set
     CHECK(!m_radio->GetItemToolTip(0));
 
