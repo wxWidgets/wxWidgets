@@ -1298,8 +1298,17 @@ void wxTextCtrl::WriteText( const wxString &text )
         wxTextEntry::WriteText(text);
         return;
     }
-
-    const wxScopedCharBuffer buffer(text.utf8_str());
+    auto temp = text;
+    auto count = gtk_text_buffer_get_char_count( m_buffer );
+    if( count == m_maxlen )
+        return;
+    if( count + text.length() > m_maxlen )
+    {
+        auto newlen = m_maxlen - count;
+        temp = text.Left( newlen );
+    }
+    
+    const wxScopedCharBuffer buffer(temp.utf8_str());
 
     // First remove the selection if there is one
     gtk_text_buffer_delete_selection(m_buffer, false, true);
