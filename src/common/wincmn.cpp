@@ -2829,6 +2829,40 @@ wxSize wxWindowBase::GetDPI() const
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
 
+/* static */
+wxSize wxWindowBase::MakeDPIFromScaleFactor(double scaleFactor)
+{
+    return wxDisplay::GetStdPPI()*scaleFactor;
+}
+
+namespace
+{
+
+// Send the DPI change event to all children recursively.
+void NotifyAboutDPIChange(wxWindow* win, wxDPIChangedEvent& event)
+{
+    for ( const auto child : win->GetChildren() )
+    {
+        // Top level windows will get their own WXNotifyDPIChange().
+        if ( child->IsTopLevel() )
+            continue;
+
+        NotifyAboutDPIChange(child, event);
+    }
+
+    event.SetEventObject(win);
+    win->HandleWindowEvent(event);
+}
+
+} // anonymous namespace
+void wxWindowBase::WXNotifyDPIChange(double oldScaleFactor, double newScaleFactor)
+{
+    wxDPIChangedEvent event(MakeDPIFromScaleFactor(oldScaleFactor),
+                            MakeDPIFromScaleFactor(newScaleFactor));
+
+    NotifyAboutDPIChange(static_cast<wxWindow*>(this), event);
+}
+
 // In this case logical pixels are DIPs, so we don't need to define conversion
 // to/from them (or, rather, they are already defined as trivial inline
 // functions in the header), but we do need to define conversions to/from

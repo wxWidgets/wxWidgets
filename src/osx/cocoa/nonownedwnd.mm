@@ -674,13 +674,7 @@ static void SendFullScreenWindowEvent(NSNotification* notification, bool fullscr
                                          doubleValue];
         if (newBackingScaleFactor != oldBackingScaleFactor)
         {
-            const wxSize oldDPI = wxWindow::OSXMakeDPIFromScaleFactor(oldBackingScaleFactor);
-            const wxSize newDPI = wxWindow::OSXMakeDPIFromScaleFactor(newBackingScaleFactor);
-
-            wxDPIChangedEvent event(oldDPI, newDPI);
-            event.SetEventObject(wxpeer);
-            wxpeer->HandleWindowEvent(event);
-
+            wxpeer->WXNotifyDPIChange(oldBackingScaleFactor, newBackingScaleFactor);
         }
 
         NSColorSpace *newColorSpace = [theWindow colorSpace];

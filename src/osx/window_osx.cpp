@@ -79,7 +79,6 @@
 
 wxBEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
-    EVT_DPI_CHANGED(wxWindowMac::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 #define wxMAC_DEBUG_REDRAW 0
@@ -2321,25 +2320,6 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
     }
 }
 
-// propagate the dpi changed event to the subwindows
-void wxWindowMac::OnDPIChanged(wxDPIChangedEvent& event)
-{
-    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-    while ( node )
-    {
-        // Only propagate to non-top-level windows
-        wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel() )
-        {
-            wxDPIChangedEvent event2( event.GetOldDPI(), event.GetNewDPI() );
-            event2.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event2);
-        }
-
-        node = node->GetNext();
-    }
-}
-
 void wxWindowMac::TriggerScrollEvent( wxEventType WXUNUSED(scrollEvent) )
 {
 }
@@ -2586,17 +2566,9 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     return false;
 }
 
-/* static */
-wxSize wxWindowMac::OSXMakeDPIFromScaleFactor(double scaleFactor)
-{
-    const int dpi = wxRound(scaleFactor*72.0);
-
-    return wxSize(dpi, dpi);
-}
-
 wxSize wxWindowMac::GetDPI() const
 {
-    return OSXMakeDPIFromScaleFactor(GetDPIScaleFactor());
+    return MakeDPIFromScaleFactor(GetDPIScaleFactor());
 }
 
 // on mac ContentScale and DPIScale are identical
