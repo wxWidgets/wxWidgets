@@ -370,6 +370,13 @@ private:
     // operation.
     void ResetFindState();
 
+    // Find the next item, either looking inside the collapsed items or not.
+    enum
+    {
+        Next_Any     = 0,
+        Next_Visible = 1
+    };
+    wxTreeItemId DoGetNext(const wxTreeItemId& item, int flags = 0) const;
 
     // True if we're using custom colours/font, respectively, or false if we're
     // using the default colours and should update them whenever system colours

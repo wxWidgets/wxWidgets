@@ -126,8 +126,8 @@ public:
 
         To make your code more readable you may also use the following symbolic constants:
         - wxTIMER_CONTINUOUS: Start a normal, continuously running, timer
-        - wxTIMER_ONE_SHOT: Start a one shot timer
-        Alternatively, use StartOnce().
+        - wxTIMER_ONE_SHOT: Start a one shot timer. Alternatively, and
+        preferably, call StartOnce() instead of this function.
 
         If the timer was already running, it will be stopped by this method before
         restarting it.
