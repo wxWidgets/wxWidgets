@@ -86,7 +86,7 @@ static void maxlen_handler(GtkTextBuffer *buffer, GtkTextIter *location, gchar *
         wxCommandEvent event( wxEVT_TEXT_MAXLEN, win->GetId() );
         event.SetEventObject( win );
         event.SetString( win->GetValue() );
-        win->HandleWindowEvent( event );              
+        win->HandleWindowEvent( event );
     }
 }
 }
@@ -1307,7 +1307,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         auto newlen = m_maxlen - count;
         temp = text.Left( newlen );
     }
-    
+
     const wxScopedCharBuffer buffer(temp.utf8_str());
 
     // First remove the selection if there is one
