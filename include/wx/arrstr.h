@@ -72,7 +72,7 @@ public:
     typedef int (wxCMPFUNC_CONV *CompareFunction)(const wxString& first,
                                                   const wxString& second);
 
-    wxArrayString() { }
+    wxArrayString() = default;
     wxArrayString(size_t sz, const char** a);
     wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);

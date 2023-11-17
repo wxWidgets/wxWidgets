@@ -27,7 +27,7 @@
 class WXDLLIMPEXP_CORE wxPrintDialogBase : public wxDialog
 {
 public:
-    wxPrintDialogBase() { }
+    wxPrintDialogBase() = default;
     wxPrintDialogBase(wxWindow *parent,
                       wxWindowID id = wxID_ANY,
                       const wxString &title = wxEmptyString,
@@ -76,7 +76,7 @@ private:
 class WXDLLIMPEXP_CORE wxPageSetupDialogBase: public wxDialog
 {
 public:
-    wxPageSetupDialogBase() { }
+    wxPageSetupDialogBase() = default;
     wxPageSetupDialogBase(wxWindow *parent,
                       wxWindowID id = wxID_ANY,
                       const wxString &title = wxEmptyString,

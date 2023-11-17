@@ -37,7 +37,7 @@ class WXDLLIMPEXP_CORE wxStaticLineBase : public wxControl
 {
 public:
     // constructor
-    wxStaticLineBase() { }
+    wxStaticLineBase() = default;
 
     // is the line vertical?
     bool IsVertical() const { return (GetWindowStyle() & wxLI_VERTICAL) != 0; }

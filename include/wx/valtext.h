@@ -51,7 +51,7 @@ public:
     wxTextValidator(long style = wxFILTER_NONE, wxString *val = nullptr);
     wxTextValidator(const wxTextValidator& val);
 
-    virtual ~wxTextValidator(){}
+    virtual ~wxTextValidator() = default;
 
     // Make a clone of this validator (or return nullptr) - currently necessary
     // if you're passing a reference to a validator.

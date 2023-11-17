@@ -39,7 +39,7 @@ class WXDLLIMPEXP_BASE wxAppTraitsBase
 {
 public:
     // needed since this class declares virtual members
-    virtual ~wxAppTraitsBase() { }
+    virtual ~wxAppTraitsBase() = default;
 
     // hooks for working with the global objects, may be overridden by the user
     // ------------------------------------------------------------------------

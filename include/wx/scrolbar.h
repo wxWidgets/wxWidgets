@@ -25,7 +25,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxScrollBarNameStr[];
 class WXDLLIMPEXP_CORE wxScrollBarBase : public wxControl
 {
 public:
-    wxScrollBarBase() { }
+    wxScrollBarBase() = default;
 
     /*
         Derived classes should provide the following method and ctor with the

@@ -59,7 +59,7 @@ public:
     // creation/destruction
     // --------------------
         // default ctor
-    wxTreeItemData() { }
+    wxTreeItemData() = default;
 
         // default copy ctor/assignment operator are ok
 

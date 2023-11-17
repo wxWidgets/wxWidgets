@@ -62,7 +62,7 @@ public:
           m_cursorMove(cursorMove),
           m_cursorStop(cursorStop)
         { m_data = nullptr; }
-    virtual ~wxDropSourceBase() { }
+    virtual ~wxDropSourceBase() = default;
 
     // set the data which is transferred by drag and drop
     void SetData(wxDataObject& data)

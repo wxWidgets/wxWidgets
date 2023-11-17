@@ -19,7 +19,7 @@ class WXDLLIMPEXP_CORE wxMiniFrame: public wxFrame {
   wxDECLARE_DYNAMIC_CLASS(wxMiniFrame);
 
 public:
-  wxMiniFrame() {}
+  wxMiniFrame() = default;
   wxMiniFrame(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
@@ -32,7 +32,7 @@ public:
       Create(parent, id, title, pos, size, style | wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT , name);
   }
 
-  virtual ~wxMiniFrame() {}
+  virtual ~wxMiniFrame() = default;
 protected:
 };
 

@@ -27,7 +27,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
 class WXDLLIMPEXP_CORE wxPanel : public wxNavigationEnabled<wxWindow>
 {
 public:
-    wxPanel() { }
+    wxPanel() = default;
 
     wxPanel(wxWindow *parent,
                 wxWindowID winid = wxID_ANY,

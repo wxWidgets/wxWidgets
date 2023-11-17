@@ -37,7 +37,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxDirSelectorPromptStr[];
 class WXDLLIMPEXP_CORE wxFileDirPickerEvent : public wxCommandEvent
 {
 public:
-    wxFileDirPickerEvent() {}
+    wxFileDirPickerEvent() = default;
     wxFileDirPickerEvent(wxEventType type, wxObject *generator, int id, const wxString &path)
         : wxCommandEvent(type, id),
           m_path(path)
@@ -82,8 +82,8 @@ typedef void (wxEvtHandler::*wxFileDirPickerEventFunction)(wxFileDirPickerEvent&
 class WXDLLIMPEXP_CORE wxFileDirPickerWidgetBase
 {
 public:
-    wxFileDirPickerWidgetBase() {  }
-    virtual ~wxFileDirPickerWidgetBase() {  }
+    wxFileDirPickerWidgetBase() = default;
+    virtual ~wxFileDirPickerWidgetBase() = default;
 
     // Path here is the name of the selected file or directory.
     wxString GetPath() const { return m_path; }
@@ -232,7 +232,7 @@ protected:
 class WXDLLIMPEXP_CORE wxFilePickerCtrl : public wxFileDirPickerCtrlBase
 {
 public:
-    wxFilePickerCtrl() {}
+    wxFilePickerCtrl() = default;
 
     wxFilePickerCtrl(wxWindow *parent,
                      wxWindowID id,
@@ -337,7 +337,7 @@ private:
 class WXDLLIMPEXP_CORE wxDirPickerCtrl : public wxFileDirPickerCtrlBase
 {
 public:
-    wxDirPickerCtrl() {}
+    wxDirPickerCtrl() = default;
 
     wxDirPickerCtrl(wxWindow *parent, wxWindowID id,
                     const wxString& path = wxEmptyString,

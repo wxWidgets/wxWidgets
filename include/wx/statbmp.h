@@ -32,7 +32,7 @@ public:
         Scale_AspectFill
     };
 
-    wxStaticBitmapBase() { }
+    wxStaticBitmapBase() = default;
     virtual ~wxStaticBitmapBase();
 
     // our interface

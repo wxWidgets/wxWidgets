@@ -46,7 +46,7 @@ public:
                                wxCoord x, wxCoord y,
                                wxOutputStream& stream) const = 0;
 
-    virtual ~wxSVGBitmapHandler() {}
+    virtual ~wxSVGBitmapHandler() = default;
 };
 
 // Predefined standard bitmap handler: creates a file, stores the bitmap in

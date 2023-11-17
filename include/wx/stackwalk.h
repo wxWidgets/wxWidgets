@@ -93,7 +93,7 @@ public:
 
     // although this class is not supposed to be used polymorphically, give it
     // a virtual dtor to silence compiler warnings
-    virtual ~wxStackFrameBase() { }
+    virtual ~wxStackFrameBase() = default;
 
 protected:
     // hooks for derived classes to initialize some fields on demand
@@ -123,10 +123,10 @@ class WXDLLIMPEXP_BASE wxStackWalkerBase
 {
 public:
     // ctor does nothing, use Walk() to walk the stack
-    wxStackWalkerBase() { }
+    wxStackWalkerBase() = default;
 
     // dtor does nothing either but should be virtual
-    virtual ~wxStackWalkerBase() { }
+    virtual ~wxStackWalkerBase() = default;
 
     // enumerate stack frames from the current location, skipping the initial
     // number of them (this can be useful when Walk() is called from some known

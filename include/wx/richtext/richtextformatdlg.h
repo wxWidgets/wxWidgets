@@ -84,8 +84,8 @@ enum {
 class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialogFactory: public wxObject
 {
 public:
-    wxRichTextFormattingDialogFactory() {}
-    virtual ~wxRichTextFormattingDialogFactory() {}
+    wxRichTextFormattingDialogFactory() = default;
+    virtual ~wxRichTextFormattingDialogFactory() = default;
 
 // Overridables
 

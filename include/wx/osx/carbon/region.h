@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionWithCombine
 {
 public:
-    wxRegion() { }
+    wxRegion() = default;
     wxRegion(long x, long y, long w, long h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);

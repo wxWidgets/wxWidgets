@@ -34,7 +34,7 @@ class WXDLLIMPEXP_CORE wxHelpControllerBase: public wxObject
 {
 public:
     inline wxHelpControllerBase(wxWindow* parentWindow = nullptr) { m_parentWindow = parentWindow; }
-    inline ~wxHelpControllerBase() {}
+    inline ~wxHelpControllerBase() = default;
 
     // Must call this to set the filename and server name.
     // server is only required when implementing TCP/IP-based

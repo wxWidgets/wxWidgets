@@ -38,7 +38,7 @@ class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage,
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later
-    wxBitmap() { }
+    wxBitmap() = default;
 
     // Initialize with raw data
     wxBitmap(const char bits[], int width, int height, int depth = 1);
@@ -292,7 +292,7 @@ protected:
 class WXDLLIMPEXP_CORE wxBitmapHandler : public wxGDIImageHandler
 {
 public:
-    wxBitmapHandler() { }
+    wxBitmapHandler() = default;
     wxBitmapHandler(const wxString& name, const wxString& ext, wxBitmapType type)
         : wxGDIImageHandler(name, ext, type) { }
 

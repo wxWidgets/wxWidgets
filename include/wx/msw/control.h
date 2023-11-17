@@ -16,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxControl : public wxControlBase
 {
 public:
-    wxControl() { }
+    wxControl() = default;
 
     wxControl(wxWindow *parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,

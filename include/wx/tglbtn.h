@@ -29,7 +29,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TOGGLEBUTTON, wxCommandEvent )
 class WXDLLIMPEXP_CORE wxToggleButtonBase : public wxAnyButton
 {
 public:
-    wxToggleButtonBase() { }
+    wxToggleButtonBase() = default;
 
     // Get/set the value
     virtual void SetValue(bool state) = 0;

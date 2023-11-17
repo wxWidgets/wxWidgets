@@ -816,7 +816,7 @@ public:
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
-      iterator() {}
+      iterator() = default;
       iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
       iterator& operator=(const iterator& i)
@@ -865,7 +865,7 @@ public:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
 
   public:
-      const_iterator() {}
+      const_iterator() = default;
       const_iterator(const const_iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
       const_iterator(const iterator& i)
@@ -925,7 +925,7 @@ public:
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
-      iterator() {}
+      iterator() = default;
       reference operator*()
         { return wxUniCharRef::CreateForString(m_cur); }
 
@@ -958,7 +958,7 @@ public:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
 
   public:
-      const_iterator() {}
+      const_iterator() = default;
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
       const_reference operator*() const
@@ -1038,7 +1038,7 @@ public:
       typedef typename T::reference reference;
       typedef typename T::pointer *pointer;
 
-      reverse_iterator_impl() {}
+      reverse_iterator_impl() = default;
       reverse_iterator_impl(iterator_type i) : m_cur(i) {}
 
       iterator_type base() const { return m_cur; }
@@ -1126,7 +1126,7 @@ private:
 public:
   // constructors and destructor
     // ctor for an empty string
-  wxString() {}
+  wxString() = default;
 
     // copy ctor
   wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }

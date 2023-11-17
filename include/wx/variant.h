@@ -56,7 +56,7 @@ class WXDLLIMPEXP_BASE wxVariantData : public wxObjectRefData
 {
     friend class wxVariant;
 public:
-    wxVariantData() { }
+    wxVariantData() = default;
 
     // Override these to provide common functionality
     virtual bool Eq(wxVariantData& data) const = 0;
@@ -87,7 +87,7 @@ protected:
     // Protected dtor should make some incompatible code
     // break more louder. That is, they should do data->DecRef()
     // instead of delete data.
-    virtual ~wxVariantData() { }
+    virtual ~wxVariantData() = default;
 };
 
 /*
@@ -485,7 +485,7 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &object );
 class classname##VariantData: public wxVariantData \
 { \
 public:\
-    classname##VariantData() {} \
+    classname##VariantData() = default; \
     classname##VariantData( const classname &value ) : m_value(value) { } \
 \
     classname &GetValue() { return m_value; } \

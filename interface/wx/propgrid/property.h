@@ -797,7 +797,7 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
         {
         public:
             // Default constructor
-            MyProperty() { }
+            MyProperty() = default;
 
             // All arguments of this ctor must have a default value -
             // use wxPG_LABEL for label and name
@@ -810,7 +810,7 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
                 m_value = value;
             }
 
-            virtual ~MyProperty() { }
+            virtual ~MyProperty() = default;
 
             const wxPGEditor* DoGetEditorClass() const
             {

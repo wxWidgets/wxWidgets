@@ -16,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
  public:
-  wxGauge() { }
+  wxGauge() = default;
 
   wxGauge(wxWindow *parent, wxWindowID id,
            int range,

@@ -60,7 +60,7 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxSliderNameStr);
     */
-    wxSliderBase() { }
+    wxSliderBase() = default;
 
     // get/set the current slider value (should be in range)
     virtual int GetValue() const = 0;

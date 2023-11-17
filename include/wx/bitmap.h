@@ -117,7 +117,7 @@ class WXDLLIMPEXP_CORE wxBitmapHandler : public wxObject
 {
 public:
     wxBitmapHandler() { m_type = wxBITMAP_TYPE_INVALID; }
-    virtual ~wxBitmapHandler() { }
+    virtual ~wxBitmapHandler() = default;
 
     // NOTE: the following functions should be pure virtuals, but they aren't
     //       because otherwise almost all ports would have to implement

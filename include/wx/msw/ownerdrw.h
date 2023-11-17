@@ -15,8 +15,8 @@
 class WXDLLIMPEXP_CORE wxOwnerDrawn : public wxOwnerDrawnBase
 {
 public:
-    wxOwnerDrawn() {}
-    virtual ~wxOwnerDrawn() {}
+    wxOwnerDrawn() = default;
+    virtual ~wxOwnerDrawn() = default;
 
     virtual bool OnDrawItem(wxDC& dc, const wxRect& rc,
                             wxODAction act, wxODStatus stat) override;

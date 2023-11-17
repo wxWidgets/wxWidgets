@@ -25,7 +25,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 class WXDLLIMPEXP_CORE wxButtonBase : public wxAnyButton
 {
 public:
-    wxButtonBase() { }
+    wxButtonBase() = default;
 
     // show the authentication needed symbol on the button: this is currently
     // only implemented in wxMSW where it shows the UAC shield symbol

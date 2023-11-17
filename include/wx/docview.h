@@ -674,7 +674,7 @@ public:
     typedef ChildFrame BaseClass;
 
     // default ctor, use Create after it
-    wxDocChildFrameAny() { }
+    wxDocChildFrameAny() = default;
 
     // ctor for a frame showing the given view of the specified document
     wxDocChildFrameAny(wxDocument *doc,

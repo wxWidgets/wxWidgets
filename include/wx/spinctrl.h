@@ -31,7 +31,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SPINCTRLDOUBLE, wxSpinDoubleEve
 class WXDLLIMPEXP_CORE wxSpinCtrlBase : public wxControl
 {
 public:
-    wxSpinCtrlBase() {}
+    wxSpinCtrlBase() = default;
 
     // accessor functions that derived classes are expected to have
     virtual wxString GetTextValue() const = 0;

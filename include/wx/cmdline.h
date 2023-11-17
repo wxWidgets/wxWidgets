@@ -101,7 +101,7 @@ struct wxCmdLineEntryDesc
 class WXDLLIMPEXP_BASE wxCmdLineArg
 {
 public:
-    virtual ~wxCmdLineArg() {}
+    virtual ~wxCmdLineArg() = default;
 
     virtual double GetDoubleVal() const = 0;
     virtual long GetLongVal() const = 0;

@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxPalette : public wxPaletteBase
 {
 public:
-    wxPalette() { }
+    wxPalette() = default;
     wxPalette(int n,
               const unsigned char *red, const unsigned char *green, const unsigned char *blue)
     {

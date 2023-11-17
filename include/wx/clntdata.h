@@ -24,7 +24,7 @@ using wxShadowObjectFields = std::unordered_map<wxString, void*>;
 class WXDLLIMPEXP_BASE wxShadowObject
 {
 public:
-    wxShadowObject() { }
+    wxShadowObject() = default;
 
     void AddMethod( const wxString &name, wxShadowObjectMethod method )
     {
@@ -91,8 +91,8 @@ enum wxClientDataType
 class WXDLLIMPEXP_BASE wxClientData
 {
 public:
-    wxClientData() { }
-    virtual ~wxClientData() { }
+    wxClientData() = default;
+    virtual ~wxClientData() = default;
 };
 
 class WXDLLIMPEXP_BASE wxStringClientData : public wxClientData

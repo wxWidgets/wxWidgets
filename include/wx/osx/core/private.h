@@ -615,14 +615,14 @@ protected :
 class WXDLLIMPEXP_CORE wxListWidgetColumn
 {
 public :
-    virtual ~wxListWidgetColumn() {}
+    virtual ~wxListWidgetColumn() = default;
 } ;
 
 class WXDLLIMPEXP_CORE wxListWidgetCellValue
 {
 public :
-    wxListWidgetCellValue() {}
-    virtual ~wxListWidgetCellValue() {}
+    wxListWidgetCellValue() = default;
+    virtual ~wxListWidgetCellValue() = default;
 
    virtual void Set( CFStringRef value ) = 0;
     virtual void Set( const wxString& value ) = 0;
@@ -637,8 +637,8 @@ public :
 class WXDLLIMPEXP_CORE wxListWidgetImpl
 {
 public:
-    wxListWidgetImpl() {}
-    virtual ~wxListWidgetImpl() { }
+    wxListWidgetImpl() = default;
+    virtual ~wxListWidgetImpl() = default;
 
     virtual wxListWidgetColumn*     InsertTextColumn( unsigned pos, const wxString& title, bool editable = false,
                                 wxAlignment just = wxALIGN_LEFT , int defaultWidth = -1) = 0 ;
@@ -693,7 +693,7 @@ public :
     // our ctor and implement GetTextEntry() ourselves.
     wxTextWidgetImpl(wxTextEntry *entry) : m_entry(entry) {}
 
-    virtual ~wxTextWidgetImpl() {}
+    virtual ~wxTextWidgetImpl() = default;
 
     wxTextEntry *GetTextEntry() const { return m_entry; }
 
@@ -765,9 +765,9 @@ class WXDLLIMPEXP_CORE wxComboWidgetImpl
 
 {
 public :
-    wxComboWidgetImpl() {}
+    wxComboWidgetImpl() = default;
 
-    virtual ~wxComboWidgetImpl() {}
+    virtual ~wxComboWidgetImpl() = default;
 
     virtual int GetSelectedItem() const { return -1; }
     virtual void SetSelectedItem(int WXUNUSED(item)) {}
@@ -795,9 +795,9 @@ class WXDLLIMPEXP_CORE wxChoiceWidgetImpl
 
 {
 public :
-    wxChoiceWidgetImpl() {}
+    wxChoiceWidgetImpl() = default;
 
-    virtual ~wxChoiceWidgetImpl() {}
+    virtual ~wxChoiceWidgetImpl() = default;
 
     virtual int GetSelectedItem() const { return -1; }
 
@@ -829,8 +829,8 @@ public :
 class wxButtonImpl
 {
     public :
-    wxButtonImpl(){}
-    virtual ~wxButtonImpl(){}
+    wxButtonImpl() = default;
+    virtual ~wxButtonImpl() = default;
 
     virtual void SetPressedBitmap( const wxBitmapBundle& bitmap ) = 0;
 } ;
@@ -842,8 +842,8 @@ class wxButtonImpl
 class wxSearchWidgetImpl
 {
 public :
-    wxSearchWidgetImpl(){}
-    virtual ~wxSearchWidgetImpl(){}
+    wxSearchWidgetImpl() = default;
+    virtual ~wxSearchWidgetImpl() = default;
 
     // search field options
     virtual void ShowSearchButton( bool show ) = 0;

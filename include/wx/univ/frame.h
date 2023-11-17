@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
-    wxFrame() {}
+    wxFrame() = default;
     wxFrame(wxWindow *parent,
             wxWindowID id,
             const wxString& title,

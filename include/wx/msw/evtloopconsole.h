@@ -53,7 +53,7 @@ private:
 class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxMSWEventLoopBase
 {
 public:
-    wxConsoleEventLoop() { }
+    wxConsoleEventLoop() = default;
 
     // override/implement base class virtuals
     virtual bool Dispatch() override;

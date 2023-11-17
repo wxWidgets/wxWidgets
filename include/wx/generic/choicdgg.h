@@ -163,7 +163,7 @@ private:
 class WXDLLIMPEXP_CORE wxMultiChoiceDialog : public wxAnyChoiceDialog
 {
 public:
-    wxMultiChoiceDialog() { }
+    wxMultiChoiceDialog() = default;
 
     wxMultiChoiceDialog(wxWindow *parent,
                         const wxString& message,

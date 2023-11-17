@@ -31,8 +31,8 @@ class WXDLLIMPEXP_AUI wxAuiDockArt
 {
 public:
 
-    wxAuiDockArt() { }
-    virtual ~wxAuiDockArt() { }
+    wxAuiDockArt() = default;
+    virtual ~wxAuiDockArt() = default;
 
     virtual wxAuiDockArt* Clone() = 0;
     virtual int GetMetric(int id) = 0;

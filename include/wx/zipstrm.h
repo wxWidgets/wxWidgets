@@ -133,7 +133,7 @@ class WXDLLIMPEXP_FWD_BASE wxZipInputStream;
 class WXDLLIMPEXP_BASE wxZipNotifier
 {
 public:
-    virtual ~wxZipNotifier() { }
+    virtual ~wxZipNotifier() = default;
 
     virtual void OnEntryUpdated(wxZipEntry& entry) = 0;
 };

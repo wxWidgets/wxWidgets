@@ -72,7 +72,7 @@ public:
 class WXDLLIMPEXP_BASE wxMimeTypeCommands
 {
 public:
-    wxMimeTypeCommands() {}
+    wxMimeTypeCommands() = default;
 
     wxMimeTypeCommands(const wxArrayString& verbs,
                        const wxArrayString& commands)
@@ -160,7 +160,7 @@ public:
 
         // invalid item - use this to terminate the array passed to
         // wxMimeTypesManager::AddFallbacks
-    wxFileTypeInfo() { }
+    wxFileTypeInfo() = default;
 
     // test if this object can be used
     bool IsValid() const { return !m_mimeType.empty(); }
@@ -252,7 +252,7 @@ public:
     {
     public:
         // ctors
-        MessageParameters() { }
+        MessageParameters() = default;
         MessageParameters(const wxString& filename,
                           const wxString& mimetype = wxEmptyString)
             : m_filename(filename), m_mimetype(mimetype) { }
@@ -268,7 +268,7 @@ public:
             { return wxEmptyString; }
 
         // virtual dtor as in any base class
-        virtual ~MessageParameters() { }
+        virtual ~MessageParameters() = default;
 
     protected:
         wxString m_filename, m_mimetype;
@@ -359,8 +359,8 @@ private:
 class WXDLLIMPEXP_BASE wxMimeTypesManagerFactory
 {
 public:
-    wxMimeTypesManagerFactory() {}
-    virtual ~wxMimeTypesManagerFactory() {}
+    wxMimeTypesManagerFactory() = default;
+    virtual ~wxMimeTypesManagerFactory() = default;
 
     virtual wxMimeTypesManagerImpl *CreateMimeTypesManagerImpl();
 

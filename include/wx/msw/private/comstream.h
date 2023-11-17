@@ -19,7 +19,7 @@ public:
         m_stream(stream)
     { }
 
-    virtual ~wxCOMBaseStreamAdapter() { }
+    virtual ~wxCOMBaseStreamAdapter() = default;
 
     // IUnknown
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv) override

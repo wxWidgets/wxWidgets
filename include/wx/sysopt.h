@@ -23,7 +23,7 @@ WXDLLIMPEXP_BASE
 wxSystemOptions : public wxObject
 {
 public:
-    wxSystemOptions() { }
+    wxSystemOptions() = default;
 
     // User-customizable hints to wxWidgets or associated libraries
     // These could also be used to influence GetSystem... calls, indeed

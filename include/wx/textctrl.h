@@ -605,8 +605,8 @@ private:
 class WXDLLIMPEXP_CORE wxTextAreaBase
 {
 public:
-    wxTextAreaBase() { }
-    virtual ~wxTextAreaBase() { }
+    wxTextAreaBase() = default;
+    virtual ~wxTextAreaBase() = default;
 
     // lines access
     // ------------
@@ -713,7 +713,7 @@ class WXDLLIMPEXP_CORE wxTextCtrlIface : public wxTextAreaBase,
                                          public wxTextEntryBase
 {
 public:
-    wxTextCtrlIface() { }
+    wxTextCtrlIface() = default;
 
     // wxTextAreaBase overrides
     virtual wxString GetValue() const override
@@ -750,8 +750,8 @@ public:
     // creation
     // --------
 
-    wxTextCtrlBase() { }
-    virtual ~wxTextCtrlBase() { }
+    wxTextCtrlBase() = default;
+    virtual ~wxTextCtrlBase() = default;
 
 
     // more readable flag testing methods

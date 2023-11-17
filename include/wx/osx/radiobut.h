@@ -15,7 +15,7 @@ class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
     wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 
 public:
-    wxRadioButton() {}
+    wxRadioButton() = default;
     wxRadioButton(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,

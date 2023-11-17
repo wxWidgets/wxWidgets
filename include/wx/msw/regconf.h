@@ -35,7 +35,7 @@ public:
               long style = wxCONFIG_USE_GLOBAL_FILE);
 
     // dtor will save unsaved data
-  virtual ~wxRegConfig(){}
+  virtual ~wxRegConfig() = default;
 
   // implement inherited pure virtual functions
   // ------------------------------------------

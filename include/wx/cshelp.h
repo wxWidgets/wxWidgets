@@ -67,7 +67,7 @@ private:
 class WXDLLIMPEXP_CORE wxContextHelpButton : public wxBitmapButton
 {
 public:
-    wxContextHelpButton() {}
+    wxContextHelpButton() = default;
 
     wxContextHelpButton(wxWindow* parent,
                         wxWindowID id = wxID_CONTEXT_HELP,

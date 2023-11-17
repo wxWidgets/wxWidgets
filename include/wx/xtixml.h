@@ -97,7 +97,7 @@ class WXDLLIMPEXP_XML wxObjectXmlReader: public wxObjectReader
 {
 public:
     wxObjectXmlReader(wxXmlNode *parent) { m_parent = parent; }
-    virtual ~wxObjectXmlReader() {}
+    virtual ~wxObjectXmlReader() = default;
 
     // Reads a component from XML.  The return value is the root object ID, which can
     // then be used to ask the readercallback about that object

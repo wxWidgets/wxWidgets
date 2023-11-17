@@ -46,7 +46,7 @@ public:
         m_inSetFocus = false;
         m_winLastFocused = nullptr;
     }
-    virtual ~wxControlContainerBase() {}
+    virtual ~wxControlContainerBase() = default;
 
     void SetContainerWindow(wxWindow *winParent)
     {

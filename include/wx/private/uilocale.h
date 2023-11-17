@@ -99,7 +99,7 @@ public:
     virtual int CompareStrings(const wxString& lhs, const wxString& rhs,
                                int flags) const = 0;
 
-    virtual ~wxUILocaleImpl() { }
+    virtual ~wxUILocaleImpl() = default;
 };
 
 #endif // _WX_PRIVATE_UILOCALE_H_

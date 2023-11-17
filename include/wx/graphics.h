@@ -147,8 +147,8 @@ protected:
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
 {
 public:
-    wxGraphicsPen() {}
-    virtual ~wxGraphicsPen() {}
+    wxGraphicsPen() = default;
+    virtual ~wxGraphicsPen() = default;
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsPen);
 };
@@ -158,8 +158,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
 class WXDLLIMPEXP_CORE wxGraphicsBrush : public wxGraphicsObject
 {
 public:
-    wxGraphicsBrush() {}
-    virtual ~wxGraphicsBrush() {}
+    wxGraphicsBrush() = default;
+    virtual ~wxGraphicsBrush() = default;
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsBrush);
 };
@@ -169,8 +169,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
 class WXDLLIMPEXP_CORE wxGraphicsFont : public wxGraphicsObject
 {
 public:
-    wxGraphicsFont() {}
-    virtual ~wxGraphicsFont() {}
+    wxGraphicsFont() = default;
+    virtual ~wxGraphicsFont() = default;
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsFont);
 };
@@ -180,8 +180,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
 class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
 {
 public:
-    wxGraphicsBitmap() {}
-    virtual ~wxGraphicsBitmap() {}
+    wxGraphicsBitmap() = default;
+    virtual ~wxGraphicsBitmap() = default;
 
     // Convert bitmap to wxImage: this is more efficient than converting to
     // wxBitmap first and then to wxImage and also works without X server
@@ -206,9 +206,9 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
 class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
 {
 public:
-    wxGraphicsMatrix() {}
+    wxGraphicsMatrix() = default;
 
-    virtual ~wxGraphicsMatrix() {}
+    virtual ~wxGraphicsMatrix() = default;
 
     // concatenates the matrix
     virtual void Concat( const wxGraphicsMatrix *t );
@@ -477,8 +477,8 @@ private:
 class WXDLLIMPEXP_CORE wxGraphicsPath : public wxGraphicsObject
 {
 public:
-    wxGraphicsPath()  {}
-    virtual ~wxGraphicsPath() {}
+    wxGraphicsPath()  = default;
+    virtual ~wxGraphicsPath() = default;
 
     //
     // These are the path primitives from which everything else can be constructed
@@ -992,9 +992,9 @@ private:
 class WXDLLIMPEXP_CORE wxGraphicsRenderer : public wxObject
 {
 public:
-    wxGraphicsRenderer() {}
+    wxGraphicsRenderer() = default;
 
-    virtual ~wxGraphicsRenderer() {}
+    virtual ~wxGraphicsRenderer() = default;
 
     static wxGraphicsRenderer* GetDefaultRenderer();
 

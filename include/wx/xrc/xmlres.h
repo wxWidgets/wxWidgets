@@ -488,7 +488,7 @@ public:
     wxXmlResourceHandlerImpl(wxXmlResourceHandler *handler);
 
     // Destructor.
-    virtual ~wxXmlResourceHandlerImpl() {}
+    virtual ~wxXmlResourceHandlerImpl() = default;
 
     // Creates an object (menu, dialog, control, ...) from an XML node.
     // Should check for validity.
@@ -702,7 +702,7 @@ public:
     // Try to create instance of given class and return it, return nullptr on
     // failure:
     virtual wxObject *Create(const wxString& className) = 0;
-    virtual ~wxXmlSubclassFactory() {}
+    virtual ~wxXmlSubclassFactory() = default;
 };
 
 

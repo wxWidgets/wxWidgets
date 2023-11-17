@@ -13,7 +13,7 @@
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
-    wxStaticBox() { }
+    wxStaticBox() = default;
 
     wxStaticBox(wxWindow *parent,
                 const wxString& label,

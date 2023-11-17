@@ -114,8 +114,8 @@ class WXDLLIMPEXP_FWD_CORE wxDCImpl;
 class WXDLLIMPEXP_CORE wxDCFactory
 {
 public:
-    wxDCFactory() {}
-    virtual ~wxDCFactory() {}
+    wxDCFactory() = default;
+    virtual ~wxDCFactory() = default;
 
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) = 0;
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) = 0;
@@ -142,7 +142,7 @@ private:
 class WXDLLIMPEXP_CORE wxNativeDCFactory: public wxDCFactory
 {
 public:
-    wxNativeDCFactory() {}
+    wxNativeDCFactory() = default;
 
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) override;
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) override;

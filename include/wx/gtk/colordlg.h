@@ -15,10 +15,10 @@
 class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {
 public:
-    wxColourDialog() {}
+    wxColourDialog() = default;
     wxColourDialog(wxWindow *parent,
                    const wxColourData *data = nullptr);
-    virtual ~wxColourDialog() {}
+    virtual ~wxColourDialog() = default;
 
     bool Create(wxWindow *parent, const wxColourData *data = nullptr);
 

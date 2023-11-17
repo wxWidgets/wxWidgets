@@ -37,7 +37,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxListBoxNameStr[];
 class WXDLLIMPEXP_CORE wxListBoxBase : public wxControlWithItems
 {
 public:
-    wxListBoxBase() { }
+    wxListBoxBase() = default;
     virtual ~wxListBoxBase();
 
     void InsertItems(unsigned int nItems, const wxString *items, unsigned int pos)

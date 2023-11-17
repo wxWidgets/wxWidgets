@@ -21,7 +21,7 @@
 class WXDLLIMPEXP_ADV wxDateEvent : public wxCommandEvent
 {
 public:
-    wxDateEvent() { }
+    wxDateEvent() = default;
     wxDateEvent(wxWindow *win, const wxDateTime& dt, wxEventType type)
         : wxCommandEvent(type, win->GetId()),
           m_date(dt)

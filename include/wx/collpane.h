@@ -30,7 +30,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsiblePaneNameStr[];
 class WXDLLIMPEXP_CORE wxCollapsiblePaneBase : public wxControl
 {
 public:
-    wxCollapsiblePaneBase() {}
+    wxCollapsiblePaneBase() = default;
 
     virtual void Collapse(bool collapse = true) = 0;
     void Expand() { Collapse(false); }
@@ -73,7 +73,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLLAPSIBLEPANE_CHANGED, wxCol
 class WXDLLIMPEXP_CORE wxCollapsiblePaneEvent : public wxCommandEvent
 {
 public:
-    wxCollapsiblePaneEvent() {}
+    wxCollapsiblePaneEvent() = default;
     wxCollapsiblePaneEvent(wxObject *generator, int id, bool collapsed)
         : wxCommandEvent(wxEVT_COLLAPSIBLEPANE_CHANGED, id),
         m_bCollapsed(collapsed)

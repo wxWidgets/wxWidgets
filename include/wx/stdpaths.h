@@ -262,7 +262,7 @@ protected:
     // Ctor is protected because wxStandardPaths::Get() should always be used
     // to access the global wxStandardPaths object of the correct type instead
     // of creating one of a possibly wrong type yourself.
-    wxStandardPaths() { }
+    wxStandardPaths() = default;
 
 private:
     wxString m_prefix;

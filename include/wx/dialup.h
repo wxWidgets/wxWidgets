@@ -56,7 +56,7 @@ public:
     virtual bool IsOk() const = 0;
 
     // virtual dtor for any base class
-    virtual ~wxDialUpManager() { }
+    virtual ~wxDialUpManager() = default;
 
     // operations
     // ----------

@@ -24,7 +24,7 @@ class WXDLLIMPEXP_CORE wxCommand : public wxObject
 {
 public:
     wxCommand(bool canUndoIt = false, const wxString& name = wxEmptyString);
-    virtual ~wxCommand(){}
+    virtual ~wxCommand() = default;
 
     // Override this to perform a command
     virtual bool Do() = 0;

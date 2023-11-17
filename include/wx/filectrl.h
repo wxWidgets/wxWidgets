@@ -32,7 +32,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxFileCtrlNameStr[]; // in filectrlcmn.
 class WXDLLIMPEXP_CORE wxFileCtrlBase
 {
 public:
-    virtual ~wxFileCtrlBase() {}
+    virtual ~wxFileCtrlBase() = default;
 
     virtual void SetWildcard( const wxString& wildCard ) = 0;
     virtual void SetFilterIndex( int filterindex ) = 0;
@@ -89,7 +89,7 @@ void wxGenerateFileActivatedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd, cons
 class WXDLLIMPEXP_CORE wxFileCtrlEvent : public wxCommandEvent
 {
 public:
-    wxFileCtrlEvent() {}
+    wxFileCtrlEvent() = default;
     wxFileCtrlEvent( wxEventType type, wxObject *evtObject, int id )
             : wxCommandEvent( type, id )
     {

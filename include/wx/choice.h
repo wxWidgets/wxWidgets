@@ -33,7 +33,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxChoiceNameStr[];
 class WXDLLIMPEXP_CORE wxChoiceBase : public wxControlWithItems
 {
 public:
-    wxChoiceBase() { }
+    wxChoiceBase() = default;
     virtual ~wxChoiceBase();
 
     // all generic methods are in wxControlWithItems

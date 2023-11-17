@@ -264,8 +264,8 @@ class WXDLLIMPEXP_AUI wxAuiToolBarArt
 {
 public:
 
-    wxAuiToolBarArt() { }
-    virtual ~wxAuiToolBarArt() { }
+    wxAuiToolBarArt() = default;
+    virtual ~wxAuiToolBarArt() = default;
 
     virtual wxAuiToolBarArt* Clone() = 0;
     virtual void SetFlags(unsigned int flags) = 0;

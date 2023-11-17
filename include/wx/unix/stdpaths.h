@@ -55,7 +55,7 @@ public:
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating
     // objects of this class directly.
-    wxStandardPaths() { }
+    wxStandardPaths() = default;
 
 private:
     wxString m_prefix;

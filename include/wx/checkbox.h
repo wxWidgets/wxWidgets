@@ -48,7 +48,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 class WXDLLIMPEXP_CORE wxCheckBoxBase : public wxControl
 {
 public:
-    wxCheckBoxBase() { }
+    wxCheckBoxBase() = default;
 
     // set/get the checked status of the listbox
     virtual void SetValue(bool value) = 0;

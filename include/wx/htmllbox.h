@@ -209,7 +209,7 @@ public:
     // wxListbox-compatible constructors
     // ---------------------------------
 
-    wxSimpleHtmlListBox() { }
+    wxSimpleHtmlListBox() = default;
 
     wxSimpleHtmlListBox(wxWindow *parent,
                         wxWindowID id,

@@ -25,7 +25,7 @@
 class WXDLLIMPEXP_BASE wxMessageOutput
 {
 public:
-    virtual ~wxMessageOutput() { }
+    virtual ~wxMessageOutput() = default;
 
     // gets the current wxMessageOutput object (may be null during
     // initialization or shutdown)
@@ -129,7 +129,7 @@ private:
 class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 {
 public:
-    wxMessageOutputMessageBox() { }
+    wxMessageOutputMessageBox() = default;
 
     virtual void Output(const wxString& str) override;
 };
@@ -143,7 +143,7 @@ public:
 class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutputStderr
 {
 public:
-    wxMessageOutputDebug() { }
+    wxMessageOutputDebug() = default;
 
     virtual void Output(const wxString& str) override;
 };
@@ -155,7 +155,7 @@ public:
 class WXDLLIMPEXP_BASE wxMessageOutputLog : public wxMessageOutput
 {
 public:
-    wxMessageOutputLog() { }
+    wxMessageOutputLog() = default;
 
     virtual void Output(const wxString& str) override;
 };

@@ -19,7 +19,7 @@
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
 public:
-    wxRegion() { }
+    wxRegion() = default;
 
     wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
     {

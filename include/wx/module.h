@@ -24,8 +24,8 @@ typedef wxVector<wxModule*> wxModuleList;
 class WXDLLIMPEXP_BASE wxModule : public wxObject
 {
 public:
-    wxModule() {}
-    virtual ~wxModule() {}
+    wxModule() = default;
+    virtual ~wxModule() = default;
 
     // if module init routine returns false the application
     // will fail to startup

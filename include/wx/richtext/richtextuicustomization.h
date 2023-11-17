@@ -33,8 +33,8 @@
 class WXDLLIMPEXP_RICHTEXT wxRichTextUICustomization
 {
 public:
-    wxRichTextUICustomization() {}
-    virtual ~wxRichTextUICustomization() {}
+    wxRichTextUICustomization() = default;
+    virtual ~wxRichTextUICustomization() = default;
 
     /// Show the help given the current active window, and a help topic id.
     virtual bool ShowHelp(wxWindow* win, long id) = 0;
@@ -54,7 +54,7 @@ public:
         m_helpTopic = -1;
         m_uiCustomization = nullptr;
     }
-    virtual ~wxRichTextHelpInfo() {}
+    virtual ~wxRichTextHelpInfo() = default;
 
     virtual bool ShowHelp(wxWindow* win)
     {

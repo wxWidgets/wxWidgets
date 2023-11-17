@@ -63,7 +63,7 @@ CLASSEXP CLASSNAME                                                           \
     typedef const key_type const_key_type;                                   \
     typedef const_key_type& const_key_reference;                             \
 public:                                                                      \
-    CLASSNAME() { }                                                          \
+    CLASSNAME() = default;                                                          \
     const_key_reference operator()( const_key_reference key ) const          \
         { return key; }                                                      \
 };

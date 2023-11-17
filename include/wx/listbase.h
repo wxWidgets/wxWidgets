@@ -331,7 +331,7 @@ private:
 class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 {
 public:
-    wxListCtrlBase() { }
+    wxListCtrlBase() = default;
 
     // Image-related methods.
     // ----------------------

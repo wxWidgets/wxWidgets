@@ -100,7 +100,7 @@ private:
 class WXDLLIMPEXP_CORE wxGenericFileButton : public wxGenericFileDirButton
 {
 public:
-    wxGenericFileButton() {}
+    wxGenericFileButton() = default;
     wxGenericFileButton(wxWindow *parent,
                         wxWindowID id,
                         const wxString& label = wxASCII_STR(wxFilePickerWidgetLabel),
@@ -168,7 +168,7 @@ private:
 class WXDLLIMPEXP_CORE wxGenericDirButton : public wxGenericFileDirButton
 {
 public:
-    wxGenericDirButton() {}
+    wxGenericDirButton() = default;
     wxGenericDirButton(wxWindow *parent,
                        wxWindowID id,
                        const wxString& label = wxASCII_STR(wxDirPickerWidgetLabel),

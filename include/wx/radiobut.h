@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxRadioButton;
 class WXDLLIMPEXP_CORE wxRadioButtonBase : public wxRadioButtonBaseBase
 {
 public:
-    wxRadioButtonBase() { }
+    wxRadioButtonBase() = default;
 
     // Methods to be implemented by the derived classes:
     virtual void SetValue(bool value) = 0;

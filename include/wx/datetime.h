@@ -1226,7 +1226,7 @@ public:
     static wxTimeSpan Week() { return Weeks(1); }
 
         // default ctor constructs the 0 time span
-    wxTimeSpan() { }
+    wxTimeSpan() = default;
 
         // from separate values for each component, date set to 0 (hours are
         // not restricted to 0..24 range, neither are minutes, seconds or

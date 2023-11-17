@@ -35,10 +35,10 @@ public:
 
     virtual void ShowFor(wxWindow* win, const wxRect* rect = nullptr) = 0;
 
-    virtual ~wxRichToolTipImpl() { }
+    virtual ~wxRichToolTipImpl() = default;
 
 protected:
-    wxRichToolTipImpl() { }
+    wxRichToolTipImpl() = default;
 };
 
 #endif // _WX_PRIVATE_RICHTOOLTIP_H_

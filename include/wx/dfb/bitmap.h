@@ -23,7 +23,7 @@ wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 {
 public:
-    wxBitmap() {}
+    wxBitmap() = default;
     wxBitmap(const wxIDirectFBSurfacePtr& surface) { Create(surface); }
     wxBitmap(int width, int height, int depth = -1) { Create(width, height, depth); }
     wxBitmap(const wxSize& sz, int depth = -1) { Create(sz, depth); }

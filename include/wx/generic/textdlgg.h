@@ -95,7 +95,7 @@ private:
 class WXDLLIMPEXP_CORE wxPasswordEntryDialog : public wxTextEntryDialog
 {
 public:
-    wxPasswordEntryDialog() { }
+    wxPasswordEntryDialog() = default;
     wxPasswordEntryDialog(wxWindow *parent,
                       const wxString& message,
                       const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),

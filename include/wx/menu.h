@@ -417,7 +417,7 @@ class WXDLLEXPORT wxMenuInfoHelper : public wxObject
 {
 public:
     wxMenuInfoHelper() { m_menu = nullptr; }
-    virtual ~wxMenuInfoHelper() { }
+    virtual ~wxMenuInfoHelper() = default;
 
     bool Create( wxMenu *menu, const wxString &title )
     {

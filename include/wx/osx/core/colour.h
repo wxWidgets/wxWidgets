@@ -83,8 +83,8 @@ private:
 class wxColourRefData : public wxGDIRefData
 {
 public:
-    wxColourRefData() {}
-    virtual ~wxColourRefData() {}
+    wxColourRefData() = default;
+    virtual ~wxColourRefData() = default;
 
     virtual double Red() const = 0;
     virtual double Green() const = 0;

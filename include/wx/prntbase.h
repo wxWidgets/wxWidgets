@@ -74,8 +74,8 @@ enum wxPreviewFrameModalityKind
 class WXDLLIMPEXP_CORE wxPrintFactory
 {
 public:
-    wxPrintFactory() {}
-    virtual ~wxPrintFactory() {}
+    wxPrintFactory() = default;
+    virtual ~wxPrintFactory() = default;
 
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData* data ) = 0;
 

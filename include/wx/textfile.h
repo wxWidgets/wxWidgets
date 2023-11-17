@@ -28,7 +28,7 @@ class WXDLLIMPEXP_BASE wxTextFile : public wxTextBuffer
 {
 public:
     // constructors
-    wxTextFile() { }
+    wxTextFile() = default;
     wxTextFile(const wxString& strFileName);
 
 protected:

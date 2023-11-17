@@ -81,7 +81,7 @@ private:
 class WXDLLIMPEXP_CORE wxControlWithArrows
 {
 public:
-    virtual ~wxControlWithArrows() {}
+    virtual ~wxControlWithArrows() = default;
 
     // get the renderer to use for drawing the arrows
     virtual wxRenderer *GetRenderer() const = 0;

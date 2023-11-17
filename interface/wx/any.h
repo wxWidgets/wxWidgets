@@ -284,7 +284,7 @@ union wxAnyValueBuffer
         public:
             wxAnyValueTypeImpl() :
                 wxAnyValueTypeImplBase<MyClass>() { }
-            virtual ~wxAnyValueTypeImpl() { }
+            virtual ~wxAnyValueTypeImpl() = default;
 
             virtual bool ConvertValue(const wxAnyValueBuffer& src,
                                       wxAnyValueType* dstType,

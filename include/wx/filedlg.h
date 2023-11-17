@@ -89,7 +89,7 @@ public:
         Create(parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name);
     }
 
-    virtual ~wxFileDialogBase() {}
+    virtual ~wxFileDialogBase() = default;
 
 
     bool Create(wxWindow *parent,

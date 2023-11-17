@@ -37,7 +37,7 @@ class WXDLLIMPEXP_CORE wxInputConsumer
 {
 public:
     wxInputConsumer() { m_inputHandler = nullptr; }
-    virtual ~wxInputConsumer() { }
+    virtual ~wxInputConsumer() = default;
 
     // get the input handler
     wxInputHandler *GetInputHandler() const { return m_inputHandler; }

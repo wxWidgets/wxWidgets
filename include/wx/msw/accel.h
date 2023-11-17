@@ -20,7 +20,7 @@ class WXDLLIMPEXP_CORE wxAcceleratorTable : public wxObject
 {
 public:
     // default ctor
-    wxAcceleratorTable() { }
+    wxAcceleratorTable() = default;
 
     // load from .rc resource (Windows specific)
     wxAcceleratorTable(const wxString& resource);

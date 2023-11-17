@@ -40,8 +40,8 @@ class WXDLLIMPEXP_AUI wxAuiTabArt
 {
 public:
 
-    wxAuiTabArt() { }
-    virtual ~wxAuiTabArt() { }
+    wxAuiTabArt() = default;
+    virtual ~wxAuiTabArt() = default;
 
     virtual wxAuiTabArt* Clone() = 0;
     virtual void SetFlags(unsigned int flags) = 0;

@@ -207,7 +207,7 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_CORE wxLayoutAlgorithm: public wxObject
 {
 public:
-    wxLayoutAlgorithm() {}
+    wxLayoutAlgorithm() = default;
 
 #if wxUSE_MDI_ARCHITECTURE
     // The MDI client window is sized to whatever's left over.

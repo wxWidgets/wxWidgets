@@ -403,7 +403,7 @@ class WXDLLIMPEXP_CORE wxTreeCtrl: public wxGenericTreeCtrl
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 
 public:
-    wxTreeCtrl() {}
+    wxTreeCtrl() = default;
 
     wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,

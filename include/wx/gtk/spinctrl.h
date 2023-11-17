@@ -202,7 +202,7 @@ private:
 class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxSpinCtrlGTKBase
 {
 public:
-    wxSpinCtrlDouble() {}
+    wxSpinCtrlDouble() = default;
     wxSpinCtrlDouble(wxWindow *parent,
                      wxWindowID id = wxID_ANY,
                      const wxString& value = wxEmptyString,

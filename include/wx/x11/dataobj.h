@@ -19,7 +19,7 @@ public:
     wxDataObject();
 
 #ifdef __DARWIN__
-    virtual ~wxDataObject() { }
+    virtual ~wxDataObject() = default;
 #endif
 
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;

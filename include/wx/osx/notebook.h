@@ -32,7 +32,7 @@ public:
   // ctors
   // -----
     // default for dynamic class
-  wxNotebook() { }
+  wxNotebook() = default;
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
              wxWindowID id,
