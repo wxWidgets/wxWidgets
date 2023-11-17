@@ -3426,6 +3426,24 @@ bool wxTextCtrl::MSWSetParaFormat(const wxTextAttr& style, long start, long end)
     }
 
 #if wxUSE_RICHEDIT2
+    if ( style.HasLineSpacing() )
+    {
+        pf.dwMask |= PFM_LINESPACING;
+
+        switch ( style.GetLineSpacing() )
+            {
+        case wxTEXT_ATTR_LINE_SPACING_NORMAL:
+            pf.bLineSpacingRule = 0;
+            break;
+        case wxTEXT_ATTR_LINE_SPACING_HALF:
+            pf.bLineSpacingRule = 1;
+            break;
+        case wxTEXT_ATTR_LINE_SPACING_TWICE:
+            pf.bLineSpacingRule = 2;
+            break;
+            };
+    }
+
     if ( style.HasParagraphSpacingAfter() )
     {
         pf.dwMask |= PFM_SPACEAFTER;
