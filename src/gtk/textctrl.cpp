@@ -1302,12 +1302,15 @@ void wxTextCtrl::WriteText( const wxString &text )
     auto count = gtk_text_buffer_get_char_count( m_buffer );
     if( count == m_maxlen )
         return;
-    if( count + text.length() > m_maxlen )
+    auto fullsize = count + text.length();
+    if( fullsize >= 0 )
     {
-        auto newlen = m_maxlen - count;
-        temp = text.Left( newlen );
+        if( (unsigned int) fullsize > (unsigned int) m_maxlen )
+        {
+            auto newlen = m_maxlen - count;
+            temp = text.Left( newlen );
+        }
     }
-
     const wxScopedCharBuffer buffer(temp.utf8_str());
 
     // First remove the selection if there is one
