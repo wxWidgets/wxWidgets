@@ -373,12 +373,18 @@ public:
 
     /**
         Returns the bullet number.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetBulletNumber() const;
 
     /**
         Returns the bullet style.
         See ::wxTextAttrBulletStyle for a list of available styles.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     int GetBulletStyle() const;
 
@@ -609,11 +615,17 @@ public:
 
     /**
         Returns @true if the attribute object specifies a bullet number.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasBulletNumber() const;
 
     /**
         Returns @true if the attribute object specifies a bullet style.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     bool HasBulletStyle() const;
 
@@ -836,14 +848,25 @@ public:
 
     /**
         Sets the bullet number.
+
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
     */
     void SetBulletNumber(int n);
 
     /**
         Sets the bullet style.
 
-        The ::wxTextAttrBulletStyle enumeration values are all supported,
+        For wxTextCtrl, is implemented under wxMSW.
+        Also implemented in wxRichTextCtrl.
+
+        For wxRichTextCtrl, the ::wxTextAttrBulletStyle enumeration values are all supported,
         except for wxTEXT_ATTR_BULLET_STYLE_BITMAP.
+
+        For wxTextCtrl under wxMSW, the ::wxTextAttrBulletStyle enumeration values are all supported,
+        except for wxTEXT_ATTR_BULLET_STYLE_BITMAP, wxTEXT_ATTR_BULLET_STYLE_OUTLINE,
+        wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT, wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT,
+        wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE, and wxTEXT_ATTR_BULLET_STYLE_CONTINUATION.
     */
     void SetBulletStyle(int style);
 
