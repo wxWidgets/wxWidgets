@@ -3459,6 +3459,44 @@ bool wxTextCtrl::MSWSetParaFormat(const wxTextAttr& style, long start, long end)
         // Convert from 1/10 mm to TWIPS
         pf.dySpaceBefore = (int) (((double) style.GetParagraphSpacingBefore()) * mm2twips / 10.0) ;
     }
+
+    if ( style.HasBulletStyle() )
+    {
+        pf.dwMask |= PFM_NUMBERINGSTYLE;
+        pf.dwMask |= PFM_NUMBERING;
+
+        // number/bullet formats
+        if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_NONE) != 0)
+            pf.wNumbering = 0;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_STANDARD) != 0)
+            pf.wNumbering = PFN_BULLET;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_ARABIC) != 0)
+            pf.wNumbering = PFN_ARABIC;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_LETTERS_LOWER) != 0)
+            pf.wNumbering = PFN_LCLETTER;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_LETTERS_UPPER) != 0)
+            pf.wNumbering = PFN_UCLETTER;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_ROMAN_LOWER) != 0)
+            pf.wNumbering = PFN_LCROMAN;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_ROMAN_UPPER) != 0)
+            pf.wNumbering = PFN_UCROMAN;
+
+        // number display
+        if ( style.HasBulletNumber() )
+        {
+            pf.dwMask |= PFM_NUMBERINGSTART;
+            pf.wNumberingStart = style.GetBulletNumber();
+            pf.wNumberingStyle = PFNS_NEWNUMBER;
+        }
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS) != 0)
+            pf.wNumberingStyle = PFNS_PAREN;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_PARENTHESES) != 0)
+            pf.wNumberingStyle = PFNS_PARENS;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_PERIOD) != 0)
+            pf.wNumberingStyle = PFNS_PERIOD;
+        else if ((style.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_STANDARD) != 0)
+            pf.wNumberingStyle = PFNS_PLAIN;
+    }
 #endif // wxUSE_RICHEDIT2
 
 #if wxUSE_RICHEDIT2

@@ -254,7 +254,8 @@ wxGTK:
 
 wxMSW:
 
-- Add line spacing attribute support to wxTextCtrl (Blake-Madden, #24046).
+- Add support for line spacing and bullet style attributes to wxTextCtrl
+  (Blake-Madden, #24046, #24069).
 
 wxOSX:
 
