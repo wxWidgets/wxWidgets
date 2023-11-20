@@ -31,16 +31,10 @@ wxQtStatusBar::wxQtStatusBar( wxWindow *parent, wxStatusBar *handler )
 //==============================================================================
 
 
-wxStatusBar::wxStatusBar()
-{
-    Init();
-}
-
 wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
             long style,
             const wxString& name)
 {
-    Init();
     Create( parent, winid, style, name );
 }
 
@@ -92,11 +86,6 @@ void wxStatusBar::DoUpdateStatusText(int number)
         UpdateFields();
 
     m_qtPanes[number]->setText( wxQtConvertString( m_panes[number].GetText() ) );
-}
-
-void wxStatusBar::Init()
-{
-    m_qtStatusBar = nullptr;
 }
 
 void wxStatusBar::UpdateFields()

@@ -16,7 +16,7 @@ class QStatusBar;
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
-    wxStatusBar();
+    wxStatusBar() = default;
     wxStatusBar(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxASCII_STR(wxStatusBarNameStr));
@@ -37,10 +37,9 @@ protected:
     virtual void DoUpdateStatusText(int number) override;
 
 private:
-    void Init();
     void UpdateFields();
 
-    QStatusBar *m_qtStatusBar;
+    QStatusBar *m_qtStatusBar = nullptr;
     wxVector<QLabel*> m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);
