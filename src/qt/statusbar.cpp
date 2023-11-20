@@ -38,10 +38,14 @@ wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
     Create( parent, winid, style, name );
 }
 
-bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
-                         long style, const wxString& WXUNUSED(name))
+bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
+                         long style, const wxString& name)
 {
     m_qtStatusBar = new wxQtStatusBar( parent, this );
+
+    if ( !QtCreateControl( parent, id, wxDefaultPosition, wxDefaultSize,
+                           style, wxDefaultValidator, name ) )
+        return false;
 
     if ( style & wxSTB_SIZEGRIP )
         m_qtStatusBar->setSizeGripEnabled(true);
