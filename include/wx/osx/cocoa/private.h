@@ -102,6 +102,7 @@ public :
 
     virtual WXWidget    GetWXWidget() const override { return m_osxView; }
 
+
     virtual void        SetBackgroundColour(const wxColour&) override;
     virtual bool        SetBackgroundStyle(wxBackgroundStyle style) override;
     virtual void        SetForegroundColour(const wxColour& col) override;
@@ -220,9 +221,13 @@ public :
     // from the same pimpl class.
     virtual void                controlTextDidChange();
 
+    virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) override;
+    virtual void                UseClippingView(bool clip) override;
+    virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView;} 
 protected:
     WXWidget m_osxView;
-    
+    WXWidget m_osxClipView;
+
     // begins processing of native key down event, storing the native event for later wx event generation
     void BeginNativeKeyDownEvent( NSEvent* event );
     // done with the current native key down event
@@ -345,6 +350,8 @@ public :
 
     static WX_NSResponder GetNextFirstResponder() ;
     static WX_NSResponder GetFormerFirstResponder() ;
+
+
 protected :
     CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
