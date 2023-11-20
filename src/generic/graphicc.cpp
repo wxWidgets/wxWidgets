@@ -450,14 +450,9 @@ public:
         if (width <= 0)
             return true;
 
-        // no offset if overall scale is not odd integer
-        double x = GetContentScaleFactor(), y = x;
-        cairo_user_to_device_distance(m_context, &x, &y);
-        if (!wxIsSameDouble(fmod(wxMin(fabs(x), fabs(y)), 2.0), 1.0))
-            return false;
-
         // offset if pen width is odd integer
-        return wxIsSameDouble(fmod(width, 2.0), 1.0);
+        const int w = int(width);
+        return (w & 1) && wxIsSameDouble(width, w);
     }
 
     virtual void Clip( const wxRegion &region ) override;
@@ -585,6 +580,8 @@ protected:
 #ifdef __WXMAC__
     CGContextRef m_cgContext;
 #endif // __WXMAC__
+
+    class OffsetHelper;
 
 private:
     cairo_t* m_context;
@@ -1044,7 +1041,11 @@ void wxCairoPenData::Apply( wxGraphicsContext* context )
     double width = m_width;
     if (width <= 0)
     {
-        double x = context->GetContentScaleFactor(), y = x;
+        double x = 1, y = x;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,14,0)
+        if (cairo_version() >= CAIRO_VERSION_ENCODE(1,14,0))
+            cairo_surface_get_device_scale(cairo_get_target(ctext), &x, &y);
+#endif
         cairo_user_to_device_distance(ctext, &x, &y);
         width = 1 / wxMin(fabs(x), fabs(y));
     }
@@ -1954,29 +1955,45 @@ wxCairoBitmapData::~wxCairoBitmapData()
 // wxCairoContext implementation
 //-----------------------------------------------------------------------------
 
-class wxCairoOffsetHelper
+class wxCairoContext::OffsetHelper
 {
 public :
-    wxCairoOffsetHelper(cairo_t* ctx, double scaleFactor, bool offset)
+    OffsetHelper(bool shouldOffset, cairo_t* cr, const wxGraphicsPen& pen)
     {
-        m_ctx = ctx;
-        m_offset = 0;
-        if (offset)
+        m_shouldOffset = shouldOffset;
+        if (!shouldOffset)
+            return;
+
+        m_cr = cr;
+        m_offsetX = m_offsetY = 0.5;
+
+        const double width = static_cast<wxCairoPenData*>(pen.GetRefData())->GetWidth();
+        if (width <= 0)
         {
-             double x = scaleFactor, y = x;
-             cairo_user_to_device_distance(ctx, &x, &y);
-             m_offset = 0.5 / wxMin(fabs(x), fabs(y));
-             cairo_translate(m_ctx, m_offset, m_offset);
+            // For 1-pixel pen width, offset by half a device pixel
+
+            double sx = 1, sy = sx;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,14,0)
+            if (cairo_version() >= CAIRO_VERSION_ENCODE(1,14,0))
+                cairo_surface_get_device_scale(cairo_get_target(cr), &sx, &sy);
+#endif
+            cairo_user_to_device_distance(cr, &sx, &sy);
+
+            m_offsetX /= sx;
+            m_offsetY /= sy;
         }
+
+        cairo_translate(cr, m_offsetX, m_offsetY);
     }
-    ~wxCairoOffsetHelper( )
+    ~OffsetHelper()
     {
-        if (m_offset > 0)
-            cairo_translate(m_ctx, -m_offset, -m_offset);
+        if (m_shouldOffset)
+            cairo_translate(m_cr, -m_offsetX, -m_offsetY);
     }
 private:
-    cairo_t* m_ctx;
-    double m_offset;
+    cairo_t* m_cr;
+    double m_offsetX, m_offsetY;
+    bool m_shouldOffset;
 } ;
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -2741,7 +2758,7 @@ void wxCairoContext::StrokePath( const wxGraphicsPath& path )
 {
     if ( !m_pen.IsNull() )
     {
-        wxCairoOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(ShouldOffset(), m_context, m_pen);
         cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
@@ -2754,7 +2771,7 @@ void wxCairoContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fi
 {
     if ( !m_brush.IsNull() )
     {
-        wxCairoOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(ShouldOffset(), m_context, m_pen);
         cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
         cairo_append_path(m_context,cp);
         ((wxCairoBrushData*)m_brush.GetRefData())->Apply(this);
@@ -2783,7 +2800,7 @@ void wxCairoContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble
     }
     if ( !m_pen.IsNull() )
     {
-        wxCairoOffsetHelper helper(m_context, GetContentScaleFactor(), ShouldOffset());
+        OffsetHelper helper(ShouldOffset(), m_context, m_pen);
         ((wxCairoPenData*)m_pen.GetRefData())->Apply(this);
         cairo_rectangle(m_context, x, y, w, h);
         cairo_stroke(m_context);

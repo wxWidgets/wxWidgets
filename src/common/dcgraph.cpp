@@ -70,27 +70,6 @@ static wxCompositionMode TranslateRasterOp(wxRasterOperationMode function)
     return wxCOMPOSITION_INVALID;
 }
 
-namespace {
-
-class OffsetDisabler
-{
-    wxGraphicsContext* const m_gc;
-    const bool m_enable;
-public:
-    explicit OffsetDisabler(wxGraphicsContext* gc)
-        : m_gc(gc)
-        , m_enable(gc->OffsetEnabled())
-    {
-        gc->EnableOffset(false);
-    }
-    ~OffsetDisabler()
-    {
-        m_gc->EnableOffset(m_enable);
-    }
-};
-
-} // anonymous namespace
-
 //-----------------------------------------------------------------------------
 // wxDC bridge class
 //-----------------------------------------------------------------------------
@@ -991,17 +970,14 @@ void wxGCDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 
     CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
-    if (m_pen.IsNonTransparent() && m_pen.GetWidth() == 1)
+    if (m_pen.IsNonTransparent())
     {
-        // Match raster-based wxDC implementations, which draw the line
-        // along the inside edge of the solid rectangle
-        OffsetDisabler offsetDisabler(m_graphicContext);
         if (w < 0) { w = -w; x -= w; }
         if (h < 0) { h = -h; y -= h; }
-        m_graphicContext->DrawRectangle(x + 0.5, y + 0.5, w - 1, h - 1);
+        w--;
+        h--;
     }
-    else
-        m_graphicContext->DrawRectangle(x, y, w, h);
+    m_graphicContext->DrawRectangle(x, y, w, h);
 }
 
 void wxGCDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
@@ -1022,15 +998,14 @@ void wxGCDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 
     CalcBoundingBox(wxPoint(x, y), wxSize(w, h));
 
-    if (m_pen.IsNonTransparent() && m_pen.GetWidth() == 1)
+    if (m_pen.IsNonTransparent())
     {
-        OffsetDisabler offsetDisabler(m_graphicContext);
         if (w < 0) { w = -w; x -= w; }
         if (h < 0) { h = -h; y -= h; }
-        m_graphicContext->DrawRoundedRectangle(x + 0.5, y + 0.5, w - 1, h - 1, radius);
+        w--;
+        h--;
     }
-    else
-        m_graphicContext->DrawRoundedRectangle(x, y, w, h, radius);
+    m_graphicContext->DrawRoundedRectangle(x, y, w, h, radius);
 }
 
 void wxGCDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h)

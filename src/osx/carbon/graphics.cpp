@@ -1481,15 +1481,9 @@ public:
         if (width <= 0)
             return true;
 
-        // no offset if overall scale is not odd integer
-        const wxGraphicsMatrix matrix(GetTransform());
-        double x = GetContentScaleFactor(), y = x;
-        matrix.TransformDistance(&x, &y);
-        if (!wxIsSameDouble(fmod(wxMin(fabs(x), fabs(y)), 2.0), 1.0))
-            return false;
-
         // offset if pen width is odd integer
-        return wxIsSameDouble(fmod(width, 2.0), 1.0);
+        const int w = int(width);
+        return (w & 1) && wxIsSameDouble(width, w);
     }
     //
     // text
@@ -1516,6 +1510,8 @@ public:
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) override;
 
     void SetNativeContext( CGContextRef cg );
+
+    class OffsetHelper;
 
     wxDECLARE_NO_COPY_CLASS(wxMacCoreGraphicsContext);
 
@@ -1560,34 +1556,35 @@ private:
 // wxMacCoreGraphicsContext implementation
 //-----------------------------------------------------------------------------
 
-class wxQuartzOffsetHelper
+class wxMacCoreGraphicsContext::OffsetHelper
 {
 public :
-    wxQuartzOffsetHelper( CGContextRef cg, double scaleFactor, bool offset )
+    OffsetHelper(bool shouldOffset, CGContextRef cg, const wxGraphicsPen& pen)
     {
+        m_shouldOffset = shouldOffset;
+        if (!shouldOffset)
+            return;
+
+        m_offset = CGSizeMake(0.5, 0.5);
         m_cg = cg;
-        m_offset = offset;
-        if ( m_offset )
+        double width = static_cast<wxMacCoreGraphicsPenData*>(pen.GetRefData())->GetWidth();
+        if (width <= 0)
         {
-            const double f = 0.5 / scaleFactor;
-            m_userOffset = CGSizeMake(f, f);
-            CGContextTranslateCTM( m_cg, m_userOffset.width , m_userOffset.height );
-        }
-        else
-        {
-            m_userOffset = CGSizeMake(0.0, 0.0);
+            // For 1-pixel pen width, offset by half a device pixel
+            m_offset = CGContextConvertSizeToUserSpace(cg, m_offset);
         }
 
+        CGContextTranslateCTM(cg, m_offset.width, m_offset.height);
     }
-    ~wxQuartzOffsetHelper( )
+    ~OffsetHelper()
     {
-        if ( m_offset )
-            CGContextTranslateCTM( m_cg, -m_userOffset.width , -m_userOffset.height );
+        if (m_shouldOffset)
+            CGContextTranslateCTM(m_cg, -m_offset.width, -m_offset.height);
     }
 public :
-    CGSize m_userOffset;
+    CGSize m_offset;
     CGContextRef m_cg;
-    bool m_offset;
+    bool m_shouldOffset;
 } ;
 
 void wxMacCoreGraphicsContext::Init()
@@ -2253,7 +2250,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    wxQuartzOffsetHelper helper( m_cgContext, GetContentScaleFactor(), ShouldOffset() );
+    OffsetHelper helper(ShouldOffset(), m_cgContext, m_pen);
     wxMacCoreGraphicsPenData* penData = (wxMacCoreGraphicsPenData*)m_pen.GetRefData();
 
     penData->Apply(this);
@@ -2333,7 +2330,7 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
     if ( !m_pen.IsNull() )
         ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
 
-    wxQuartzOffsetHelper helper( m_cgContext, GetContentScaleFactor(), ShouldOffset() );
+    OffsetHelper helper(ShouldOffset(), m_cgContext, m_pen);
 
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextDrawPath( m_cgContext , mode );
@@ -2747,7 +2744,7 @@ void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w
 
     if ( !m_pen.IsNull() )
     {
-        wxQuartzOffsetHelper helper( m_cgContext, GetContentScaleFactor(), ShouldOffset() );
+        OffsetHelper helper(ShouldOffset(), m_cgContext, m_pen);
         ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
         CGContextStrokeRect(m_cgContext, rect);
     }
