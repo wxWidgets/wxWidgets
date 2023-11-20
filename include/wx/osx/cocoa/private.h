@@ -223,7 +223,7 @@ public :
 
     virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) override;
     virtual void                UseClippingView(bool clip) override;
-    virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView;} 
+    virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
 protected:
     WXWidget m_osxView;
     WXWidget m_osxClipView;

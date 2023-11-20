@@ -2751,4 +2751,3 @@ WXWidget wxWidgetImpl::GetContainer() const
 {
     return GetWXWidget();
 }
-
