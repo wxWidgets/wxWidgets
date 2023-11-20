@@ -16,6 +16,7 @@
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
     #include "wx/radiobut.h"
+    #include "wx/scrolbar.h"
 #endif
 
 #ifdef __WXMAC__
