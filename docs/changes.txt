@@ -240,6 +240,10 @@ All:
 - Fix division-by-zero in wxRichTextCtrl (#23763).
 - Make wxGraphicsContext offsetting consistent across scales (#23485).
 
+All (GUI):
+
+- Improve error checking when saving TIFF images (Brian Delalex, #23214).
+
 wxGTK:
 
 - Improve desktop environment detection, notably under Wayland (#24050).
