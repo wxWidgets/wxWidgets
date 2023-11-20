@@ -227,9 +227,14 @@ public :
     // from the same pimpl class.
     virtual void                controlTextDidChange();
 
+    virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) wxOVERRIDE;
+    virtual void                UseClippingView(bool clip) wxOVERRIDE;
+    virtual WXWidget            GetContainer() const wxOVERRIDE { return m_osxClipView ? m_osxClipView : m_osxView; }
+
 protected:
     WXWidget m_osxView;
-    
+    WXWidget m_osxClipView;
+
     // begins processing of native key down event, storing the native event for later wx event generation
     void BeginNativeKeyDownEvent( NSEvent* event );
     // done with the current native key down event

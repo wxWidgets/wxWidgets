@@ -229,7 +229,7 @@ public:
     // returns true if children have to clipped to the content area
     // (e.g., scrolled windows)
     bool                MacClipChildren() const { return m_clipChildren ; }
-    void                MacSetClipChildren( bool clip ) { m_clipChildren = clip ; }
+    void                MacSetClipChildren( bool clip );
 
     // returns true if the grandchildren need to be clipped to the children's content area
     // (e.g., splitter windows)
