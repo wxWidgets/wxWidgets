@@ -327,8 +327,7 @@ wxRect wxDisplayImplGTK::GetClientArea() const
 
 int wxDisplayImplGTK::GetDepth() const
 {
-    // TODO: How to get the depth of the specific display?
-    return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
+    return gdk_visual_get_depth(gdk_screen_get_system_visual(m_screen));
 }
 
 #if GTK_CHECK_VERSION(3,10,0)
