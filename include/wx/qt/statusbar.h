@@ -10,7 +10,6 @@
 
 #include "wx/statusbr.h"
 
-class QLabel;
 class QStatusBar;
 
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
@@ -25,6 +24,7 @@ public:
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxASCII_STR(wxStatusBarNameStr));
 
+    virtual void SetStatusWidths(int n, const int widths_field[]) override;
     virtual bool GetFieldRect(int i, wxRect& rect) const override;
     virtual void SetMinHeight(int height) override;
     virtual int GetBorderX() const override;
@@ -40,7 +40,7 @@ private:
     void UpdateFields();
 
     QStatusBar *m_qtStatusBar = nullptr;
-    wxVector<QLabel*> m_qtPanes;
+    std::vector<QWidget*> m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);
 };
