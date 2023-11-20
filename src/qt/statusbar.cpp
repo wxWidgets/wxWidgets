@@ -94,14 +94,6 @@ void wxStatusBar::DoUpdateStatusText(int number)
     m_qtPanes[number]->setText( wxQtConvertString( m_panes[number].GetText() ) );
 }
 
-// Called each time number/size of panes changes
-void wxStatusBar::Refresh( bool eraseBackground, const wxRect *rect )
-{
-    UpdateFields();
-
-    wxWindow::Refresh( eraseBackground, rect );
-}
-
 void wxStatusBar::Init()
 {
     m_qtStatusBar = nullptr;

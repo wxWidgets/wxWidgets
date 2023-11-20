@@ -13,8 +13,6 @@
 class QLabel;
 class QStatusBar;
 
-template < class T > class QList;
-
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
@@ -31,8 +29,6 @@ public:
     virtual void SetMinHeight(int height) override;
     virtual int GetBorderX() const override;
     virtual int GetBorderY() const override;
-    virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = nullptr ) override;
 
     QStatusBar *GetQStatusBar() const { return m_qtStatusBar; }
     QWidget *GetHandle() const override;
