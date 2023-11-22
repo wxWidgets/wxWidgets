@@ -22,9 +22,6 @@ public:
 
     ~wxWindowDCImpl();
 
-protected:
-    wxWindow *m_window;
-
 private:
     wxDECLARE_CLASS(wxWindowDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);
