@@ -371,11 +371,31 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     // a GtkEntry for wxComboBox and a GtkCellView for wxChoice
     GtkWidget* childPart = gtk_bin_get_child(GTK_BIN(m_widget));
 
+#ifdef __WXGTK3__
+    // Preferred size for wxChoice can be incorrect when control is empty,
+    // work around this by temporarily adding an item.
+    GtkTreeModel* model = nullptr;
+    if (GTK_IS_CELL_VIEW(childPart))
+    {
+        model = gtk_combo_box_get_model(GTK_COMBO_BOX(m_widget));
+        GtkTreeIter iter;
+        if (gtk_tree_model_get_iter_first(model, &iter))
+            model = nullptr;
+        else
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(m_widget), "Gg");
+    }
+#endif
+
     // We are interested in the difference of sizes between the whole contol
     // and its child part. I.e. arrow, separators, etc.
     GtkRequisition req;
     gtk_widget_get_preferred_size(childPart, nullptr, &req);
     wxSize totalS = GTKGetPreferredSize(m_widget);
+
+#ifdef __WXGTK3__
+    if (model)
+        gtk_list_store_clear(GTK_LIST_STORE(model));
+#endif
 
     wxSize tsize(xlen + totalS.x - req.width, totalS.y);
 
