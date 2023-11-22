@@ -25,6 +25,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/backend.h"
 
 //----------------------------------------------------------------------------
 // global data
@@ -914,8 +915,16 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     PrepareIcon( allowed_actions, context );
 
-    while (m_waiting)
+    for (;;)
+    {
         gtk_main_iteration();
+        if (!m_waiting)
+            break;
+#ifdef __WXGTK3__
+        if (!wxGTKImpl::IsX11(gtk_widget_get_display(m_iconWindow)))
+            GiveFeedback(ConvertFromGTK(gdk_drag_context_get_selected_action(context)));
+#endif
+    }
 
     g_signal_handlers_disconnect_by_func (m_iconWindow,
                                           (gpointer) gtk_dnd_window_configure_callback, this);
