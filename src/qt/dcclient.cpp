@@ -18,35 +18,12 @@
 
 #include "wx/dcclient.h"
 #include "wx/qt/dcclient.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtWidgets/QScrollArea>
 #include <QtGui/QPainter>
 
 //##############################################################################
-
-namespace
-{
-class QtPictureSetter
-{
-public:
-    QtPictureSetter(wxWindow *window, QPicture *pict)
-        : m_window( window )
-    {
-        m_window->QtSetPicture( pict );
-    }
-
-    ~QtPictureSetter()
-    {
-        m_window->QtSetPicture( nullptr );
-    }
-
-private:
-    wxWindow* const m_window;
-
-    wxDECLARE_NO_COPY_CLASS(QtPictureSetter);
-};
-}
-
 
 wxIMPLEMENT_CLASS(wxWindowDCImpl,wxQtDCImpl);
 
@@ -110,30 +87,24 @@ wxClientDCImpl::~wxClientDCImpl()
         m_qtPainter->end();
         m_ok = false;
 
-        if ( m_window != nullptr )
+        if ( m_window )
         {
-            QtPictureSetter pictureSetter(m_window, m_pict.get());
-
-            // get the inner widget in scroll areas:
-            QWidget *widget;
-            if ( m_window->QtGetScrollBarsContainer() )
+            if ( m_pict && !m_pict->isNull() )
             {
-                widget = m_window->QtGetScrollBarsContainer()->viewport();
-            } else {
-                widget = m_window->GetHandle();
-            }
-            // force paint event if there is something to replay and
-            // if not currently inside a paint event (to avoid recursion)
-            QRect rect = m_pict->boundingRect();
-            if ( !m_pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
-            {
-                // only force the update of the rect affected by the DC
-                widget->update( rect );
-            }
-            else
-            {
-                // Not drawing anything, reset picture to avoid issues in handler
-                m_pict->setData( nullptr, 0 );
+                // force paint event if there is something to replay and
+                // if not currently inside a paint event (to avoid recursion)
+                wxRect rect = wxQtConvertRect(m_pict->boundingRect());
+                if ( !m_window->GetHandle()->paintingActive() && !rect.IsEmpty() )
+                {
+                    m_window->QtSetPicture( m_pict.release() );
+                    // only force the update of the rect affected by the DC
+                    m_window->Refresh(true, &rect);
+                }
+                else // Do we really need the else branch? we are in the dtor anyhow!
+                {
+                    // Not drawing anything, reset picture to avoid issues in handler
+                    m_pict.reset();
+                }
             }
 
             // let destroy the m_qtPainter (see inherited classes destructors)
