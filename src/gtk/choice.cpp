@@ -390,14 +390,17 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     // and its child part. I.e. arrow, separators, etc.
     GtkRequisition req;
     gtk_widget_get_preferred_size(childPart, nullptr, &req);
-    wxSize totalS = GTKGetPreferredSize(m_widget);
+    wxSize tsize(GTKGetPreferredSize(m_widget));
 
 #ifdef __WXGTK3__
     if (model)
         gtk_list_store_clear(GTK_LIST_STORE(model));
 #endif
 
-    wxSize tsize(xlen + totalS.x - req.width, totalS.y);
+    tsize.x -= req.width;
+    if (tsize.x < 0)
+        tsize.x = 0;
+    tsize.x += xlen;
 
     // For a wxChoice, not for wxComboBox, add some margins
     if ( !GTK_IS_ENTRY(childPart) )
