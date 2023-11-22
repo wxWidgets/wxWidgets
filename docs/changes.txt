@@ -247,6 +247,7 @@ All (GUI):
 
 wxGTK:
 
+- Fix alpha in bitmaps created from SVG (Tim Eliseo, #24064).
 - Improve desktop environment detection, notably under Wayland (#24050).
 - Fix wxSystemSettings::GetMetric() scrollbar width calculation for GTK3 (#24057).
 - Minimal wxVideoMode support for Wayland (#24021).

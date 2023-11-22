@@ -195,11 +195,25 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
         for ( int x = 0; x < size.x; ++x )
         {
             const unsigned char a = src[3];
+#if defined (__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
+            // MSW, OSX, and Qt bitmaps require premultiplication by alpha.
             dst.Red()   = src[0] * a / 255;
             dst.Green() = src[1] * a / 255;
             dst.Blue()  = src[2] * a / 255;
             dst.Alpha() = a;
-
+#else
+            // Other platforms (esp. GTK) store bitmaps with straight alpha.
+            dst.Alpha() = a;
+            if ( a )
+            {
+                dst.Red()   = src[0];
+                dst.Green() = src[1];
+                dst.Blue()  = src[2];
+            }
+            else
+                // A more canonical form for completely transparent pixels
+                dst.Red() = dst.Green() = dst.Blue() = 0;
+#endif
             ++dst;
             src += 4;
         }
