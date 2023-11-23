@@ -1352,7 +1352,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                                 dc.Clear();
                             }
                         }
-                        // fall through
+                        wxFALLTHROUGH;
                     case wxBG_STYLE_SYSTEM:
                         if ( GetThemeEnabled() )
                         {

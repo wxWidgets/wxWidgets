@@ -307,12 +307,13 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             {
             default:
                 wxFAIL_MSG("unknown toolbar child type");
-                // fall through
+                wxFALLTHROUGH;
             case wxITEM_RADIO:
                 GetActionGroup(pos)->addAction(action);
-                // fall-through
+                wxFALLTHROUGH;
             case wxITEM_CHECK:
                 tool->m_qtToolButton->setCheckable(true);
+                break;
             case wxITEM_DROPDOWN:
             case wxITEM_NORMAL:
                 break;
