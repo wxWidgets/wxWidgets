@@ -191,11 +191,14 @@ void wxCheckBox::SetValue( bool state )
 {
     wxCHECK_RET( m_widgetCheckbox != NULL, wxT("invalid checkbox") );
 
-    if (state == GetValue())
+    GtkToggleButton* tglbtn = GTK_TOGGLE_BUTTON(m_widgetCheckbox);
+
+    if (state == GetValue() && !gtk_toggle_button_get_inconsistent(tglbtn))
         return;
 
     wxGtkEventsDisabler<wxCheckBox> noEvents(this);
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
+    gtk_toggle_button_set_active(tglbtn, state);
+    gtk_toggle_button_set_inconsistent(tglbtn, false);
 }
 
 bool wxCheckBox::GetValue() const
