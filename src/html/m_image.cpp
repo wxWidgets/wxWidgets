@@ -589,7 +589,8 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.SetPen(*wxBLACK_PEN);
         dc.DrawRectangle(x + m_PosX, y + m_PosY, m_Width, m_Height);
-        x++, y++;
+        x++;
+        y++;
     }
     if ( m_bitmap && m_Width && m_Height )
     {

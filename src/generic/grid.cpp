@@ -4939,9 +4939,15 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             DisableCellEditControl();
 
             if ( event.LeftDown() )
-                handled = (DoGridCellLeftDown(event, coords, pos), true);
+            {
+                DoGridCellLeftDown(event, coords, pos);
+                handled = true;
+            }
             else if ( event.LeftDClick() )
-                handled = (DoGridCellLeftDClick(event, coords, pos), true);
+            {
+                DoGridCellLeftDClick(event, coords, pos);
+                handled = true;
+            }
             else if ( event.RightDown() )
                 handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event) != Event_Unhandled;
             else if ( event.RightDClick() )

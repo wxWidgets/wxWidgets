@@ -376,7 +376,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     {
         const wxString& item = items[i];
         idx = IsSorted() ? m_strings.sorted->Add(item)
-                         : (m_strings.unsorted->Insert(item, pos), pos++);
+                         : ((void)m_strings.unsorted->Insert(item, pos), pos++);
 
         m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);

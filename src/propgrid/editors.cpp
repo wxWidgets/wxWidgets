@@ -678,7 +678,7 @@ public:
     {
     #ifdef wxPG_TEXTCTRLXADJUST
         textCtrlXAdjust = wxPG_TEXTCTRLXADJUST -
-                          (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
+                          (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1;
     #endif
         wxOwnerDrawnComboBox::PositionTextCtrl(
             textCtrlXAdjust + wxPG_TEXTCTRLXADJUST3,

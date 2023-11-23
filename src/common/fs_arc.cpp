@@ -438,9 +438,9 @@ wxString wxArchiveFSHandler::FindFirst(const wxString& spec, int flags)
     switch (flags)
     {
         case wxFILE:
-            m_AllowDirs = false, m_AllowFiles = true; break;
+            m_AllowDirs = false; m_AllowFiles = true; break;
         case wxDIR:
-            m_AllowDirs = true, m_AllowFiles = false; break;
+            m_AllowDirs = true; m_AllowFiles = false; break;
         default:
             m_AllowDirs = m_AllowFiles = true; break;
     }

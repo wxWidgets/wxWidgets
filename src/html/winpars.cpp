@@ -342,7 +342,8 @@ void wxHtmlWinParser::AddText(const wxString& txt)
             const wxChar d = temp[templen++] = *i;
             if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
             {
-                ++i, ++x;
+                ++i;
+                ++x;
                 while ( (i < end) &&
                         (*i == wxT('\n') || *i == wxT('\r') ||
                          *i == wxT(' ') || *i == wxT('\t')) )

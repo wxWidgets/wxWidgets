@@ -652,7 +652,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     // find if the event is over a column at all
     bool onSeparator;
     const unsigned col = mevent.Leaving()
-                            ? (onSeparator = false, COL_NONE)
+                            ? ((void)(onSeparator = false), COL_NONE)
                             : FindColumnAtPoint(xPhysical, &onSeparator);
 
 
