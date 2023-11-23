@@ -13,7 +13,6 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
     #include "wx/toplevel.h"
     #include "wx/module.h"
 #endif
@@ -1227,8 +1226,8 @@ bool wxSystemSettingsModule::OnInit()
 
     m_proxy = nullptr;
 
-    wxAppConsole* app = wxAppConsole::GetInstance();
-    if (!app || !app->IsGUI())
+    // If this is not a GUI app
+    if (!g_type_class_peek(GTK_TYPE_WIDGET))
         return true;
 
     // GTK_THEME environment variable overrides other settings
