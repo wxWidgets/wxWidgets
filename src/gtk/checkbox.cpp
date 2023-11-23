@@ -50,12 +50,12 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
             if (!active && !inconsistent)
             {
                 // checked -> undetermined
-                gtk_toggle_button_set_active(toggle, true);
                 gtk_toggle_button_set_inconsistent(toggle, true);
             }
-            else if (!active && inconsistent)
+            else if (active && inconsistent)
             {
                 // undetermined -> unchecked
+                gtk_toggle_button_set_active(toggle, false);
                 gtk_toggle_button_set_inconsistent(toggle, false);
             }
             else if (active && !inconsistent)
@@ -210,7 +210,7 @@ bool wxCheckBox::GetValue() const
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
 {
-    SetValue(state != wxCHK_UNCHECKED);
+    SetValue(state == wxCHK_CHECKED);
     gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_widgetCheckbox),
                                        state == wxCHK_UNDETERMINED);
 }
