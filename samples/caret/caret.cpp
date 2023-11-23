@@ -419,7 +419,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxChar ch = CharAt(x, y);
             if ( !ch )
                 ch = ' ';
-#ifdef __WXOSX__
+#if defined(__WXOSX__) || defined(__WXQT__)
             dc.DrawText(ch, m_xMargin + x * m_widthChar,
                         m_yMargin + y * m_heightChar );
 #else
@@ -427,9 +427,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 #endif
         }
 
-#ifndef __WXOSX__
-        dc.DrawText( line, m_xMargin, m_yMargin + y * m_heightChar );
-#endif
+        if ( !line.empty() )
+            dc.DrawText( line, m_xMargin, m_yMargin + y * m_heightChar );
     }
 }
 
