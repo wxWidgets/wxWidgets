@@ -39,53 +39,32 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
     m_window = win;
-    m_qtPainter = m_window->QtGetPainter();
-    // if we're not inside a Paint event, painter will invalid
-    m_ok = m_qtPainter != nullptr;
+    m_qtPainter = m_window->QtGetPainter(); // guaranteed to be non-null
+
+    if ( m_qtPainter->isActive() )
+    {
+        m_isWindowPainter = true;
+    }
+    else
+    {
+        m_qtPainter = new QPainter();
+        m_pict.reset( new QPicture() );
+        m_ok = m_qtPainter->begin( m_pict.get() );
+        QtPreparePainter();
+    }
 }
 
 wxWindowDCImpl::~wxWindowDCImpl()
-{
-    if ( m_ok )
-    {
-        m_ok = false;
-    }
-    if ( m_window )
-    {
-        // do not destroy in base class as it is owned by the window
-        m_qtPainter = nullptr;
-    }
-}
-
-//##############################################################################
-
-wxIMPLEMENT_CLASS(wxClientDCImpl,wxWindowDCImpl);
-
-wxClientDCImpl::wxClientDCImpl( wxDC *owner )
-    : wxWindowDCImpl( owner )
-{
-}
-
-wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
-    : wxWindowDCImpl( owner )
-{
-    m_window = win;
-
-    m_pict.reset(new QPicture());
-    m_ok = m_qtPainter->begin( m_pict.get() );
-
-    QtPreparePainter();
-}
-
-wxClientDCImpl::~wxClientDCImpl()
 {
     /* Paint to a QPicture that will then be painted in the next
      * paint event of that window (a paint event will be generated
      * when this wxClientDC is done). */
     if ( m_ok )
     {
-        m_qtPainter->end();
-        m_ok = false;
+        if ( m_isWindowPainter )
+            m_qtPainter = nullptr; // do not destroy in base class as it is owned by the window
+        else
+            m_qtPainter->end();
 
         if ( m_window )
         {
@@ -112,28 +91,42 @@ wxClientDCImpl::~wxClientDCImpl()
         }
     }
 
-    // Painter will be deleted by base class
+    // Painter will be deleted by base class if we own it
 }
+
+//##############################################################################
+
+wxIMPLEMENT_CLASS(wxClientDCImpl,wxWindowDCImpl);
+
+wxClientDCImpl::wxClientDCImpl( wxDC *owner )
+    : wxWindowDCImpl( owner )
+{
+}
+
+wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
+    : wxWindowDCImpl( owner, win )
+{
+     if ( m_ok )
+     {
+        m_qtPainter->setClipRect( wxQtConvertRect(win->GetClientRect()),
+                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+    }
+}
+
 
 //##############################################################################
 
 wxIMPLEMENT_CLASS(wxPaintDCImpl,wxClientDCImpl);
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
-    : wxWindowDCImpl( owner )
+    : wxClientDCImpl( owner )
 {
-    if ( m_ok )
-    {
-        QtPreparePainter();
-    }
 }
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
-    : wxWindowDCImpl( owner, win )
+    : wxClientDCImpl( owner, win )
 {
-    if ( m_ok )
-    {
-        QtPreparePainter();
-    }
+    wxCHECK_RET( m_isWindowPainter,
+                 "wxPaintDC can't be created outside wxEVT_PAINT handler" );
 }
 

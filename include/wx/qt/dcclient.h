@@ -22,6 +22,12 @@ public:
 
     ~wxWindowDCImpl();
 
+protected:
+    std::unique_ptr<QPicture> m_pict;
+
+    // @true if m_qtPainter is owned by the window, @false otherwise (default).
+    bool m_isWindowPainter = false;
+
 private:
     wxDECLARE_CLASS(wxWindowDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);
@@ -34,20 +40,18 @@ public:
     wxClientDCImpl( wxDC *owner );
     wxClientDCImpl( wxDC *owner, wxWindow *win );
 
-    ~wxClientDCImpl();
 private:
-    std::unique_ptr<QPicture> m_pict;
-
     wxDECLARE_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 };
 
 
-class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxWindowDCImpl
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
 {
 public:
     wxPaintDCImpl( wxDC *owner );
     wxPaintDCImpl( wxDC *owner, wxWindow *win );
+
 private:
     wxDECLARE_CLASS(wxPaintDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxPaintDCImpl);
