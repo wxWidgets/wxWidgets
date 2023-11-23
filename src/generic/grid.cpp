@@ -3063,7 +3063,7 @@ void wxGrid::InitRowHeights()
 
     for ( int i = 0; i < m_numRows; i++ )
     {
-        int rowBottom = ( GetRowPos( i ) + 1 ) * m_defaultRowHeight;;
+        int rowBottom = ( GetRowPos( i ) + 1 ) * m_defaultRowHeight;
         m_rowBottoms.Add( rowBottom );
     }
 }

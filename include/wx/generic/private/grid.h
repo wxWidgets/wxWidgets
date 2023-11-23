@@ -787,7 +787,7 @@ public:
         }
 
     virtual void SelectLine(wxGrid *grid, int line, wxMouseEvent &event) const override
-        { grid->m_selection->SelectRow(line, event); };
+        { grid->m_selection->SelectRow(line, event); }
     virtual void DeselectLine(wxGrid * grid, int line) const override
         { grid->DeselectRow(line); }
 
@@ -929,7 +929,7 @@ public:
         }
 
     virtual void SelectLine(wxGrid *grid, int line, wxMouseEvent &event) const override
-        { grid->m_selection->SelectCol(line, event); };
+        { grid->m_selection->SelectCol(line, event); }
     virtual void DeselectLine(wxGrid * grid, int line) const override
         { grid->DeselectCol(line); }
 

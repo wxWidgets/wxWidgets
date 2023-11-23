@@ -165,7 +165,7 @@ private:
         #define wxLOAD_FUNC(dll, name)                    \
         name = (name##_t)dll.RawGetSymbol(#name);         \
             if ( !name )                                  \
-            return false;
+            return false
 
         wxLOAD_FUNC(m_dllDirect2d, D2D1CreateFactory);
         wxLOAD_FUNC(m_dllDirect2d, D2D1MakeRotateMatrix);
@@ -3810,8 +3810,8 @@ public:
     void PushState() override {}
     void PopState() override {}
     void Flush() override {}
-    WXHDC GetNativeHDC() override { return nullptr; };
-    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) override {};
+    WXHDC GetNativeHDC() override { return nullptr; }
+    void ReleaseNativeHDC(WXHDC WXUNUSED(hdc)) override {}
 
 protected:
     void DoDrawText(const wxString&, wxDouble, wxDouble) override {}
