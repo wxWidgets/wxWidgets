@@ -781,7 +781,7 @@ wxVariant &wxActiveXEvent::operator [](size_t idx)
         {
             // copy the _real_ parameter into this one
             // NOTE: m_params stores the parameters in *reverse* order.
-            // Whyever, but this was the case in the original implementation of
+            // Whatever, but this was the case in the original implementation of
             // wxActiveXEvents::Invoke
             // Keep this convention.
             VARIANTARG& va = native->pDispParams->rgvarg[ native->pDispParams->cArgs - idx - 1 ];
