@@ -99,6 +99,9 @@ struct ImplData
 #ifdef __WXGTK__
     // Due to delayed creation of the browser in wxGTK we need to remember the
     // URL passed to Create() as we can't use it there directly.
+    //
+    // We also use this as a flag: it will be non-empty if the browser needs to
+    // be created.
     wxString m_initialURL;
 #endif // __WXGTK__
 
@@ -407,6 +410,26 @@ bool wxWebViewChromium::Create(wxWindow* parent,
         return false;
 
     style |= wxHSCROLL | wxVSCROLL;
+
+    // Hide the window while creating it, so that its GTKHandleRealized() is
+    // not called immediately, but only later, once we show it when exiting
+    // this function.
+    class DelayedShow
+    {
+    public:
+        explicit DelayedShow(wxWindow& self) : self_{self}
+        {
+            self_.wxWindowBase::Hide();
+        }
+
+        ~DelayedShow()
+        {
+            self_.Show();
+        }
+
+    private:
+        wxWindowBase& self_;
+    } delayedShow{*this};
 #endif
 
     if ( !wxControl::Create(parent, id, pos, size, style,
@@ -460,7 +483,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     // Under wxGTK we need to wait until the window becomes realized in order
     // to get the X11 window handle, so postpone calling DoCreateBrowser()
     // until GTKHandleRealized().
-    m_implData->m_initialURL = url;
+    m_implData->m_initialURL = url.empty() ? wxString(" ") : url;
 #else
     // Under the other platforms we can call it immediately.
     if ( !DoCreateBrowser(url) )
@@ -478,9 +501,17 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
 void wxWebViewChromium::GTKHandleRealized()
 {
+    auto& initialURL = m_implData->m_initialURL;
+
+    if ( initialURL.empty() )
+        return;
+
     // Unfortunately there is nothing we can do here if it fails, so just
     // ignore the return value.
-    DoCreateBrowser(m_implData->m_initialURL);
+    DoCreateBrowser(initialURL);
+
+    // Ensure we don't call it any more.
+    initialURL.clear();
 }
 
 #endif // __WXGTK__
@@ -551,6 +582,7 @@ bool wxWebViewChromium::DoCreateBrowser(const wxString& url)
         return false;
     }
 
+    wxLogTrace(TRACE_CEF, "Browser created");
     return true;
 }
 
