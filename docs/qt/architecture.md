@@ -54,7 +54,7 @@ Qt objects needs to be sub-classed to re-implement events and connect signals (m
 
 The approach chosen was to use templates to help inherit QObject's (QWidget), providing a common base to handle events and signal infrastructure:
 
-* `wxQtSignalHandler< wxWindow >`: allows emitting wx events for Qt events & signals. This should be used used for all QObjects derivatives that are not widgets, for example QAction (used for shortcut / accelerators).
+* `wxQtSignalHandler< wxWindow >`: allows emitting wx events for Qt events & signals. This should be used for all QObjects derivatives that are not widgets, for example QAction (used for shortcut / accelerators).
 * `wxQtEventSignalHandler< QWidget, wxWindow >`: derived from `wxQtSignalHandler`, also handles basic events (change, focus, mouse, keyboard, paint, close, etc.). This should be used for all QWidget derivatives (controls, top level windows, etc.)
 
 ### Delete later
