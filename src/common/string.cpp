@@ -1594,7 +1594,7 @@ bool SkipOptPrefixAndSetBase(int& base, const char*& start, const char* end)
     while ( wxSafeIsspace(*start) )
         ++start;
 
-    // Also skip optional "+" which std::from_chars() doesn't accept neither.
+    // Also skip optional "+" which std::from_chars() doesn't accept either.
     if ( *start == '+' )
         ++start;
 
