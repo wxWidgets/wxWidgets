@@ -267,7 +267,7 @@ wxLogGui::DoShowMultipleLogMessages(const wxArrayString& messages,
     const size_t nMsgCount = messages.size();
     message.reserve(nMsgCount*100);
     for ( size_t n = nMsgCount; n > 0; n-- ) {
-        message << m_aMessages[n - 1] << wxT("\n");
+        message << messages[n - 1] << wxT("\n");
     }
 
     DoShowSingleLogMessage(message, title, style);
