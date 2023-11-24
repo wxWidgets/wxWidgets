@@ -168,7 +168,7 @@ private :
     wxMenu  *m_privateContextMenu;
 
     unsigned long m_maxlen;
-    
+
     wxDECLARE_EVENT_TABLE();
 };
 

@@ -587,7 +587,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     NSString *pbItem = [pb readObjectsForClasses: @[[NSString class],[NSAttributedString class]] options:nil].lastObject;
     if ([pbItem isKindOfClass:[NSAttributedString class]])
         pbItem = [(NSAttributedString *)pbItem string];
-    
+
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {

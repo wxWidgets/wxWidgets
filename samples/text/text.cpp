@@ -1144,7 +1144,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_limitedMultiline = new MyTextCtrl( this, wxID_ANY, "", wxPoint( 10, 100 ), wxDefaultSize, wxTE_MULTILINE );
     m_limitedMultiline->SetHint( "Maximum 20 character" );
     m_limitedMultiline->SetMaxLength( 20 );
-    
+
     wxTextCtrl* upperOnly = new MyTextCtrl(this, wxID_ANY, "Only upper case",
                                            wxDefaultPosition, wxDefaultSize);
     upperOnly->ForceUpper();
