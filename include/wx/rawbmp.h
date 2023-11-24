@@ -146,12 +146,19 @@ struct wxPixelFormat
 // wxImage format is common to all platforms
 typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 
+// wxPIXEL_FORMAT_ALPHA is the offset of alpha (defined if the format has
+// alpha).
+
+// wxHAS_PREMULTIPLIED_ALPHA is defined if R, G, and B are stored premultiplied
+// (scaled) by alpha, otherwise they have full value ("straight alpha").
+
 // the (most common) native bitmap format without alpha support
 #if defined(__WXMSW__)
     // under MSW the RGB components are reversed, they're in BGR order
     typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+    #define wxHAS_PREMULTIPLIED_ALPHA
 
     template<>
     struct wxPixelFormat<void, 1, -1, -1, -1, -1, bool>
@@ -170,12 +177,13 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
         enum { HasAlpha = false };
     };
     typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxMonoPixelFormat;
-#elif defined(__WXMAC__)
+#elif defined(__WXOSX__)
     // under Mac, first component is unused but still present, hence we use
     // 32bpp, not 24
     typedef wxPixelFormat<unsigned char, 32, 1, 2, 3> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 0
+    #define wxHAS_PREMULTIPLIED_ALPHA
 #elif defined(__WXGTK__)
     // Under GTK+ 2.X we use GdkPixbuf, which is standard RGB or RGBA
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
@@ -190,6 +198,7 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+    #define wxHAS_PREMULTIPLIED_ALPHA
 
     template<>
     struct wxPixelFormat<void, 1, -1, -1, -1, -1, bool>

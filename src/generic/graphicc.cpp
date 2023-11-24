@@ -1659,11 +1659,11 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                     // with alpha in the upper 8 bits, then red, then green, then
                     // blue. The 32-bit quantities are stored native-endian.
                     // Pre-multiplied alpha is used.
-#if defined (__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
+#ifdef wxHAS_PREMULTIPLIED_ALPHA
                     unsigned char alpha = hasAlpha ? p.Alpha() : wxALPHA_OPAQUE;
-                    // MSW, OSX and Qt bitmap pixel bits are already premultiplied.
+                    // Bitmap pixel bits are already premultiplied.
                     *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
-#else // !__WXMSW__ , !__WXOSX__ , !__WXQT__
+#else // !wxHAS_PREMULTIPLIED_ALPHA
                     // We always have alpha, but we need to premultiply it.
                     unsigned char alpha = p.Alpha();
                     if (alpha == wxALPHA_TRANSPARENT)
@@ -1673,7 +1673,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
                             | Premultiply(alpha, p.Red()) << 16
                             | Premultiply(alpha, p.Green()) << 8
                             | Premultiply(alpha, p.Blue()));
-#endif // __WXMSW__, __WXOSX__, __WXQT__ / !__WXMSW__, !__WXOSX__, !__WXQT__
+#endif // wxHAS_PREMULTIPLIED_ALPHA / !wxHAS_PREMULTIPLIED_ALPHA
                     ++data;
                     ++p;
                 }

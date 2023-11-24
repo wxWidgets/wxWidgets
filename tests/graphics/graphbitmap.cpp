@@ -101,12 +101,12 @@ wxBitmap CreateBitmapRGBA(int w, int h, bool withMask)
         const wxColour clrBg(*wxGREEN);
         const unsigned char alpha = 51;
 
-#if defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__)
+#ifdef wxHAS_PREMULTIPLIED_ALPHA
         // premultiplied values
         const wxColour clrFgAlpha(((clrFg.Red() * alpha) + 127) / 255, ((clrFg.Green() * alpha) + 127) / 255, ((clrFg.Blue() * alpha) + 127) / 255);
 #else
         const wxColour clrFgAlpha(clrFg);
-#endif // __WXMSW__ || __WXOSX__ || __WXQT__
+#endif // wxHAS_PREMULTIPLIED_ALPHA
 
         wxAlphaPixelData data(bmp);
         REQUIRE(data);
