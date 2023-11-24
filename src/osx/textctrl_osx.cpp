@@ -107,7 +107,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         SetEditable( false ) ;
 
     SetCursor( wxCursor( wxCURSOR_IBEAM ) ) ;
-
+    m_maxlen = UINT_MAX;
     return true;
 }
 
@@ -842,5 +842,11 @@ wxTextProofOptions wxTextWidgetImpl::GetCheckingOptions() const
 
 void wxTextWidgetImpl::SetJustification()
 {
+}
+
+void wxTextCtrl::SetMaxLength(unsigned long length)
+{
+    if( HasFlag( wxTE_MULTILINE ) )
+        m_maxlen = length;
 }
 #endif // wxUSE_TEXTCTRL

@@ -472,6 +472,27 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 }
 
 
+- (BOOL)shouldChangeTextInRange:(NSRange)affectedCharRange
+              replacementString:(NSString *)replacementString
+{
+    BOOL ret = YES;
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+    {
+        wxTextCtrl *textCtrl = (wxTextCtrl *) impl->GetWXPeer();
+        if( textCtrl && textCtrl->GetTextPeer() )
+        {
+            if( textCtrl->HasFlag( wxTE_MULTILINE ) )
+            {
+                auto maxlen = textCtrl->GetMaxLen();
+                ret = [super shouldChangeTextInRange:affectedCharRange replacementString:replacementString] &&
+                      (self.string.length + (replacementString.length - affectedCharRange.length) <= maxlen);
+            }
+        }
+    }
+    return ret;
+}
+
 - (void)changeColor:(id)sender
 {
     wxUnusedVar(sender);
@@ -562,6 +583,29 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (void)paste:(id)sender
 {
+    NSPasteboard *pb = [NSPasteboard generalPasteboard];
+    NSString *pbItem = [pb readObjectsForClasses: @[[NSString class],[NSAttributedString class]] options:nil].lastObject;
+    if ([pbItem isKindOfClass:[NSAttributedString class]])
+        pbItem = [(NSAttributedString *)pbItem string];
+    
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+    {
+        wxTextCtrl *textCtrl = (wxTextCtrl *) impl->GetWXPeer();
+        if( textCtrl && textCtrl->GetTextPeer() )
+        {
+            if( textCtrl->HasFlag( wxTE_MULTILINE ) )
+            {
+                auto maxlen = textCtrl->GetMaxLen();
+                if( textCtrl->GetValue().length() + pbItem.length > maxlen )
+                {
+                    auto range = maxlen - textCtrl->GetValue().length();
+                    pbItem = [pbItem substringToIndex:range];
+                    [self insertText:pbItem];
+                }
+            }
+        }
+    }
     if ( ![self _handleClipboardEvent:wxEVT_TEXT_PASTE] )
         [super paste:sender];
 }
@@ -1018,6 +1062,25 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     wxString st(wxMacConvertNewlines10To13(str));
     wxMacEditHelper helper(m_textView);
     wxWidgetCocoaNativeKeyDownSuspender suspend(this);
+
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( m_textView );
+    if ( impl )
+    {
+        wxTextCtrl *textCtrl = (wxTextCtrl *) impl->GetWXPeer();
+        if( textCtrl && textCtrl->GetTextPeer() )
+        {
+            if( textCtrl->HasFlag( wxTE_MULTILINE ) )
+            {
+                auto maxlen = textCtrl->GetMaxLen();
+                if( textCtrl->GetValue().length() + st.length() > maxlen )
+                {
+                    auto range = maxlen - textCtrl->GetValue().length();
+                    st = st.Left( range );
+                }
+            }
+        }
+    }
+
     [m_textView insertText:wxCFStringRef( st ).AsNSString()];
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
