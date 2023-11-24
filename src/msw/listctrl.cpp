@@ -270,7 +270,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
         // We also need to explicitly set the background colour as the value
         // returned by GetBackgroundColour() by default doesn't match the
-        // actually used colour neither when using dark mode.
+        // actually used colour either when using dark mode.
         SetBackgroundColour(defAttrs.colBg);
     }
     else

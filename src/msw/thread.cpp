@@ -737,7 +737,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 
         case STATE_EXITED:
             // We don't need to wait for the thread to exit if it already did,
-            // but doing it does no harm neither and it's a rare case not worth
+            // but doing it does no harm either and it's a rare case not worth
             // optimizing for.
             //
             // Just ensure we don't call OnDelete() again as we may have
