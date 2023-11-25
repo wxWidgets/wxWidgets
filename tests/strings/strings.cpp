@@ -829,16 +829,16 @@ TEST_CASE("StringToDouble", "[wxString]")
     }
 
     CHECK( wxString("inf").ToCDouble(&d) );
-    CHECK( isinf(d) );
-    
+    CHECK( std::isinf(d) );
+
     CHECK( wxString("INFINITY").ToCDouble(&d) );
-    CHECK( isinf(d) );
+    CHECK( std::isinf(d) );
 
     CHECK( wxString("nan").ToCDouble(&d) );
-    CHECK( isnan(d) );
-    
+    CHECK( std::isnan(d) );
+
     CHECK( wxString("NAN").ToCDouble(&d) );
-    CHECK( isnan(d) );
+    CHECK( std::isnan(d) );
 
 
     // test ToDouble() now:
@@ -888,16 +888,16 @@ TEST_CASE("StringToDouble", "[wxString]")
     }
 
     CHECK( wxString("inf").ToDouble(&d) );
-    CHECK( isinf(d) );
-    
+    CHECK( std::isinf(d) );
+
     CHECK( wxString("INFINITY").ToDouble(&d) );
-    CHECK( isinf(d) );
+    CHECK( std::isinf(d) );
 
     CHECK( wxString("nan").ToDouble(&d) );
-    CHECK( isnan(d) );
-    
+    CHECK( std::isnan(d) );
+
     CHECK( wxString("NAN").ToDouble(&d) );
-    CHECK( isnan(d) );
+    CHECK( std::isnan(d) );
 }
 
 TEST_CASE("StringFromDouble", "[wxString]")
