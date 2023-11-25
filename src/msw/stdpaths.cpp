@@ -344,6 +344,12 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
     return fn.GetFullName();
 }
 
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    wxFileName fn( GetExecutablePath() );
+    return fn.GetPathWithSep();
+}
+
 // ============================================================================
 // wxStandardPathsWin16 implementation
 // ============================================================================
@@ -365,12 +371,6 @@ wxString wxStandardPathsWin16::GetUserConfigDir() const
 {
     // again, for wxFileConfig which uses $HOME for its user config file
     return wxGetHomeDir();
-}
-
-wxString wxStandardPaths::GetSharedLibrariesDir() const
-{
-    wxFileName fn( GetExecutablePath() );
-    return fn.GetPathWithSep();
 }
 
 #endif // wxUSE_STDPATHS
