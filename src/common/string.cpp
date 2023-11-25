@@ -1678,9 +1678,20 @@ bool wxString::ToCDouble(double *pVal) const
     wxCHECK_MSG( pVal, false, "null output pointer" );
 
     const wxScopedCharBuffer& buf = utf8_str();
-    const auto start = buf.data();
+    auto start = buf.data();
     const auto end = start + buf.length();
-    const auto res = std::from_chars(start, end, *pVal);
+
+    // Retain compatibility with the strtod() function by allowing starting spaces
+    // and a leading + sign, which from_chars() does not accept.
+    int base = 0;
+    SkipOptPrefixAndSetBase(base, start, end);
+
+    std::chars_format flags = std::chars_format::general;
+
+    if ( base == 16 )
+        flags = std::chars_format::hex;
+
+    const auto res = std::from_chars(start, end, *pVal, flags);
 
     return res.ec == std::errc{} && res.ptr == end;
 }
