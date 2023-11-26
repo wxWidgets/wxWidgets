@@ -936,6 +936,7 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
 #if wxUSE_CHECKBOX
     m_checkbox = new wxCheckBox(this, StatusBar_Checkbox, "&Toggle clock");
     m_checkbox->SetValue(true);
+    AddFieldControl(Field_Checkbox, m_checkbox);
 #endif
 
     m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxIcon(green_xpm));
@@ -966,24 +967,7 @@ MyStatusBar::~MyStatusBar()
 
 void MyStatusBar::OnSize(wxSizeEvent& event)
 {
-#if wxUSE_CHECKBOX
-    if ( !m_checkbox )
-        return;
-#endif
-
     wxRect rect;
-    if (!GetFieldRect(Field_Checkbox, rect))
-    {
-        event.Skip();
-        return;
-    }
-
-#if wxUSE_CHECKBOX
-    wxRect rectCheck = rect;
-    rectCheck.Deflate(2);
-    m_checkbox->SetSize(rectCheck);
-#endif
-
     GetFieldRect(Field_Bitmap, rect);
     wxSize size = m_statbmp->GetSize();
 
