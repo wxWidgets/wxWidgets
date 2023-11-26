@@ -17,6 +17,7 @@
 #include "wx/control.h"
 #include "wx/list.h"
 #include "wx/dynarray.h"
+#include "wx/weakref.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusBarNameStr[];
 
@@ -84,6 +85,11 @@ public:
     // really restored anything
     bool PopText();
 
+    // set/get the control (child of the wxStatusBar) that will be shown in
+    // this pane.
+    void SetFieldControl(wxWindow* win) { m_control = win; }
+    wxWindow* GetFieldControl() const { return m_control; }
+
 private:
     int m_nStyle;
     int m_nWidth;     // may be negative, indicating a variable-width field
@@ -97,6 +103,9 @@ private:
 
     // is the currently shown value shown with ellipsis in the status bar?
     bool m_bEllipsized;
+
+    // remember the control that will be shown in this pane. Updated by SetFieldControl().
+    wxWindowRef m_control;
 };
 
 // This is preserved for compatibility, but is not supposed to be used by the
@@ -173,6 +182,14 @@ public:
     wxSize GetBorders() const
         { return wxSize(GetBorderX(), GetBorderY()); }
 
+    // controls
+    // --------
+
+    // Add a control (child of the wxStatusBar) to be shown at the specified
+    // field position #n. Note that you must delete the control to remove it
+    // from the status bar, as simply passing _nullptr_ will not do that.
+    bool AddFieldControl(int n, wxWindow* win);
+
     // miscellaneous
     // -------------
 
@@ -192,6 +209,9 @@ protected:
     // display
     virtual void DoUpdateStatusText(int number) = 0;
 
+    // Position the added controls (added by AddFieldControl()), if any, in
+    // their corresponding destination.
+    void OnSize(wxSizeEvent& event);
 
     // wxWindow overrides:
 

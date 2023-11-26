@@ -223,7 +223,6 @@ enum
     StatusBar_SetStyleShowTips
 };
 
-static const int BITMAP_SIZE_X = 32;
 
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWidgets
@@ -925,7 +924,7 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
     int widths[Field_Max];
     widths[Field_Text] = -1; // growable
     widths[Field_Checkbox] = 150;
-    widths[Field_Bitmap] = BITMAP_SIZE_X;
+    widths[Field_Bitmap] = -1; // growable
     widths[Field_NumLockIndicator] = sizeNumLock.x;
     widths[Field_Clock] = 100;
     widths[Field_CapsLockIndicator] = dc.GetTextExtent(capslockIndicators[1]).x;
@@ -936,6 +935,7 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
 #if wxUSE_CHECKBOX
     m_checkbox = new wxCheckBox(this, StatusBar_Checkbox, "&Toggle clock");
     m_checkbox->SetValue(true);
+    AddFieldControl(Field_Checkbox, m_checkbox);
 #endif
 
     m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxIcon(green_xpm));
@@ -966,24 +966,7 @@ MyStatusBar::~MyStatusBar()
 
 void MyStatusBar::OnSize(wxSizeEvent& event)
 {
-#if wxUSE_CHECKBOX
-    if ( !m_checkbox )
-        return;
-#endif
-
     wxRect rect;
-    if (!GetFieldRect(Field_Checkbox, rect))
-    {
-        event.Skip();
-        return;
-    }
-
-#if wxUSE_CHECKBOX
-    wxRect rectCheck = rect;
-    rectCheck.Deflate(2);
-    m_checkbox->SetSize(rectCheck);
-#endif
-
     GetFieldRect(Field_Bitmap, rect);
     wxSize size = m_statbmp->GetSize();
 
