@@ -74,6 +74,7 @@
 #include "wx/tokenzr.h"
 
 #include <ctype.h>
+#include <cmath>
 
 #ifdef __WINDOWS__
     #include <winnls.h>
