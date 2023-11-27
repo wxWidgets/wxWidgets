@@ -1755,6 +1755,35 @@ protected:
 };
 
 /**
+    @class wxDateTimeChristianHolidays
+
+    Holiday authority that returns holidays common to all Christian religions.
+    This includes:
+
+    - Easter (moveable feast)
+    - Christmas
+
+    @library{wxbase}
+    @category{data}
+
+    @since 3.3.0
+*/
+class WXDLLIMPEXP_BASE wxDateTimeChristianHolidays : public wxDateTimeUSCatholicFeasts
+{
+protected:
+    /**
+        Override which returns @true if provided date is Easter or Christmas.
+    */
+    bool DoIsHoliday(const wxDateTime& dt) const override;
+    /**
+        Override to determine the holidays within a date range.
+    */
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
+};
+
+/**
     @class wxDateSpan
 
     This class is a "logical time span" and is useful for implementing program

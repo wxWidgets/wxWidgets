@@ -1693,6 +1693,25 @@ private:
     static std::vector<wxDateTime> m_holyDaysOfObligation;
 };
 
+// Christmas and Easter
+class WXDLLIMPEXP_BASE wxDateTimeChristianHolidays : public wxDateTimeUSCatholicFeasts
+{
+protected:
+    bool DoIsHoliday(const wxDateTime& dt) const override
+    {
+        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+            (dt.GetMonth() == 12 && dt.GetDay() == 25))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
+};
+
 // ============================================================================
 // inline functions implementation
 // ============================================================================

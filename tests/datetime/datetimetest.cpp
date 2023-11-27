@@ -2542,13 +2542,13 @@ TEST_CASE("US Catholic Holidays", "[datetime][holiday]")
 {
     SECTION("Ascension")
     {
-        wxDateTime easter = wxDateTimeUSCatholicFeasts::GetThursdayAscension(2023);
-        CHECK(easter.GetMonth() == wxDateTime::Month::May);
-        CHECK(easter.GetDay() == 18);
+        wxDateTime ascension = wxDateTimeUSCatholicFeasts::GetThursdayAscension(2023);
+        CHECK(ascension.GetMonth() == wxDateTime::Month::May);
+        CHECK(ascension.GetDay() == 18);
 
-        easter = wxDateTimeUSCatholicFeasts::GetSundayAscension(2023);
-        CHECK(easter.GetMonth() == wxDateTime::Month::May);
-        CHECK(easter.GetDay() == 21);
+        ascension = wxDateTimeUSCatholicFeasts::GetSundayAscension(2023);
+        CHECK(ascension.GetMonth() == wxDateTime::Month::May);
+        CHECK(ascension.GetDay() == 21);
     }
     SECTION("Fixed date feasts")
     {
@@ -2562,6 +2562,30 @@ TEST_CASE("US Catholic Holidays", "[datetime][holiday]")
         CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(1, wxDateTime::Month::Dec, 2023)));
         CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(31, wxDateTime::Month::Oct, 2023)));
         CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(14, wxDateTime::Month::Feb, 2023)));
+    }
+}
+
+TEST_CASE("Christian Holidays", "[datetime][holiday][christian]")
+{
+    SECTION("Easter")
+    {
+        wxDateTime easter = wxDateTimeChristianHolidays::GetEaster(2023);
+        CHECK(easter.GetMonth() == wxDateTime::Month::Apr);
+        CHECK(easter.GetDay() == 9);
+
+        easter = wxDateTimeChristianHolidays::GetEaster(2010);
+        CHECK(easter.GetMonth() == wxDateTime::Month::Apr);
+        CHECK(easter.GetDay() == 4);
+    }
+    SECTION("Christmas")
+    {
+        wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeChristianHolidays);
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 1990)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 1700)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 2023)));
+        // random days that are not Christmas or weekends
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(1, wxDateTime::Month::Dec, 2023)));
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(29, wxDateTime::Month::Dec, 2023)));
     }
 }
 

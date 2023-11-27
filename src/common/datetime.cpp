@@ -2385,6 +2385,29 @@ size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStar
     return holidays.size();
 }
 
+// ----------------------------------------------------------------------------
+// wxDateTimeChristianHolidays
+// ----------------------------------------------------------------------------
+
+size_t wxDateTimeChristianHolidays::DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                                         const wxDateTime& dtEnd,
+                                                         wxDateTimeArray& holidays) const
+{
+    holidays.Clear();
+
+    for (wxDateTime dt = dtStart; dt <= dtEnd; dt += wxDateSpan::Day())
+    {
+        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+            (dt.GetMonth() == 12 && dt.GetDay() == 25))
+        {
+            holidays.Add(dt);
+            continue;
+        }
+    }
+
+    return holidays.size();
+}
+
 // ============================================================================
 // other helper functions
 // ============================================================================
