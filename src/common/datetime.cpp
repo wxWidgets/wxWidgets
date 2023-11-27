@@ -2316,7 +2316,8 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
 
     // A corner case,
     // when D is 29
-    if ((D == 29) && (E == 6)) {
+    if ((D == 29) && (E == 6))
+    {
         wxASSERT_MSG(
             wxDateTime(19, wxDateTime::Apr, year).GetWeekDay() ==
             wxDateTime::WeekDay::Sun,
@@ -2325,7 +2326,8 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
     }
     // Another corner case,
     // when D is 28
-    else if ((D == 28) && (E == 6)) {
+    else if ((D == 28) && (E == 6))
+    {
         wxASSERT_MSG(
             wxDateTime(18, wxDateTime::Apr, year).GetWeekDay() ==
             wxDateTime::WeekDay::Sun,
@@ -2335,14 +2337,16 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
     else {
         // If days > 31, move to April
         // April = 4th Month
-        if (days > 31) {
+        if (days > 31)
+        {
             wxASSERT_MSG(
                 wxDateTime((days - 31), wxDateTime::Apr, year).GetWeekDay() ==
                 wxDateTime::WeekDay::Sun,
                 "Error in Easter calculation!");
             return wxDateTime((days - 31), wxDateTime::Apr, year);
         }
-        else {
+        else
+        {
             // Otherwise, stay on March
             // March = 3rd Month
             wxASSERT_MSG(
