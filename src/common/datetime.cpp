@@ -2276,14 +2276,14 @@ size_t wxDateTimeWorkDays::DoGetHolidaysInRange(const wxDateTime& dtStart,
 // wxDateTimeUSCatholicFeasts
 // ----------------------------------------------------------------------------
 
-std::map<wxDateTime, wxString, wxHolidayLess> wxDateTimeUSCatholicFeasts::m_holyDaysOfObligation =
+std::vector<wxDateTime> wxDateTimeUSCatholicFeasts::m_holyDaysOfObligation =
 {
     // Feasts with fixed dates
-    { wxDateTime(1, wxDateTime::Month::Jan, 0), _T("Solemnity of Mary, Mother of God") },
-    { wxDateTime(15, wxDateTime::Month::Aug, 0), _T("Assumption of the Blessed Virgin Mary") },
-    { wxDateTime(1, wxDateTime::Month::Nov, 0), _T("All Saints Day") },
-    { wxDateTime(8, wxDateTime::Month::Dec, 0), _T("Immaculate Conception of the Blessed Virgin Mary") },
-    { wxDateTime(25, wxDateTime::Month::Dec, 0), _T("Christmas") }
+    { wxDateTime(1, wxDateTime::Month::Jan, 0) },  // Solemnity of Mary, Mother of God
+    { wxDateTime(15, wxDateTime::Month::Aug, 0) }, // Assumption of the Blessed Virgin Mary
+    { wxDateTime(1, wxDateTime::Month::Nov, 0) },  // All Saints Day
+    { wxDateTime(8, wxDateTime::Month::Dec, 0) },  // Immaculate Conception of the Blessed Virgin Mary
+    { wxDateTime(25, wxDateTime::Month::Dec, 0) }  // Christmas
 };
 
 wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
@@ -2374,8 +2374,8 @@ size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStar
         }
         for (const auto& holiday : m_holyDaysOfObligation)
         {
-            if (holiday.first.GetMonth() == dt.GetMonth() &&
-                holiday.first.GetDay() == dt.GetDay())
+            if (holiday.GetMonth() == dt.GetMonth() &&
+                holiday.GetDay() == dt.GetDay())
             {
                 holidays.Add(dt);
             }

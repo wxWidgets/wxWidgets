@@ -17,7 +17,7 @@
 
 #include <time.h>
 
-#include <map>
+#include <vector>
 
 #include <limits.h>             // for INT_MIN
 
@@ -1670,16 +1670,27 @@ public:
 protected:
     bool DoIsHoliday(const wxDateTime& dt) const override
     {
-        return m_holyDaysOfObligation.find(dt) != m_holyDaysOfObligation.cend() ||
-            dt.IsSameDate(GetEaster(dt.GetYear())) ||
-            dt.IsSameDate(GetThursdayAscension(dt.GetYear()));
+        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+            dt.IsSameDate(GetThursdayAscension(dt.GetYear())) )
+        {
+            return true;
+        }
+        for (const auto& feast : m_holyDaysOfObligation)
+        {
+            if (feast.GetMonth() == dt.GetMonth() &&
+                feast.GetDay() == dt.GetDay())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
                                 const wxDateTime& dtEnd,
                                 wxDateTimeArray& holidays) const override;
 private:
-    static std::map<wxDateTime, wxString, wxHolidayLess> m_holyDaysOfObligation;
+    static std::vector<wxDateTime> m_holyDaysOfObligation;
 };
 
 // ============================================================================
