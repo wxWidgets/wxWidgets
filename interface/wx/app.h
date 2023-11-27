@@ -936,7 +936,7 @@ public:
         Works like SafeYield() with @e onlyIfNeeded == @true except that
         it allows the caller to specify a mask of events to be processed.
 
-        See wxAppConsole::YieldFor for more info.
+        See wxEventLoopBase::YieldFor() for more info.
     */
     virtual bool SafeYieldFor(wxWindow *win, long eventsToProcess);
 
