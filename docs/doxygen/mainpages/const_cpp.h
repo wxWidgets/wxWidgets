@@ -210,6 +210,10 @@ Currently the following symbols exist:
     Windows resource files</a> resource files are available on the current platform.
     Usually wxHAS_IMAGE_RESOURCES should be used instead.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
+@itemdef{wxHAS_PREMULTIPLIED_ALPHA, Defined if wxBitmap stores raw pixel color
+    values premultiplied (scaled) by alpha. This is generally used to switch
+    whether to premultiply before storing pixels via wxAlphaPixelData converted
+    from a straight alpha source.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
         Defined if the current port supports radio menu items (see wxMenu::AppendRadioItem).}
 @itemdef{wxHAS_RAW_BITMAP, Defined if direct access to bitmap data using the classes in @c wx/rawbmp.h is supported.}
