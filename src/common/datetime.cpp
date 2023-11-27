@@ -2288,7 +2288,7 @@ std::map<wxDateTime, wxString, wxHolidayLess> wxDateTimeUSCatholicFeasts::m_holy
 
 wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
 {
-    // Adjust for miscalculation in Guass formula
+    // Adjust for miscalculation in Gauss formula
     if (year == 1734 || year == 1886)
     {
         return wxDateTime(25, wxDateTime::Apr, year);
