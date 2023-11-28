@@ -492,7 +492,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
     Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
-    Bind(wxEVT_IDLE, [](wxIdleEvent&) { CefDoMessageLoopWork(); });
+    Bind(wxEVT_IDLE, &wxWebViewChromium::OnIdle, this);
 
     return true;
 }
@@ -791,6 +791,13 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 #elif defined(__WXOSX__)
     wxWebViewChromium_Resize(handle, size);
 #endif
+}
+
+void wxWebViewChromium::OnIdle(wxIdleEvent& event)
+{
+    event.Skip();
+
+    CefDoMessageLoopWork();
 }
 
 void wxWebViewChromium::SetPageSource(const wxString& pageSource)

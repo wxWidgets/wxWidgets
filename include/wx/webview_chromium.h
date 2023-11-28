@@ -135,6 +135,7 @@ private:
     void Init();
 
     void OnSize(wxSizeEvent& event);
+    void OnIdle(wxIdleEvent& event);
 
     // Actually create the browser: this can only be done once the window is
     // created in wxGTK.
