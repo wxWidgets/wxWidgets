@@ -43,8 +43,6 @@ public:
 
     ~wxWebViewChromium();
 
-    void OnSize(wxSizeEvent &event);
-
     void SetPageSource(const wxString& pageSource);
 
     void SetPageText(const wxString& pageText);
@@ -135,6 +133,8 @@ protected:
 private:
     // Common part of all ctors.
     void Init();
+
+    void OnSize(wxSizeEvent& event);
 
     // Actually create the browser: this can only be done once the window is
     // created in wxGTK.

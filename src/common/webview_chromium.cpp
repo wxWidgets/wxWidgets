@@ -490,7 +490,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
         return false;
 #endif
 
-    this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
+    Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
     Bind(wxEVT_IDLE, [](wxIdleEvent&) { CefDoMessageLoopWork(); });
 
