@@ -247,6 +247,7 @@ wxGTK:
 - Minimal wxVideoMode support for Wayland (#24021).
 - Fix wxCheckBox::SetValue() when in undetermined state (#24074).
 - Fix for incorrect preferred size from empty wxChoice with GTK3 (#23382).
+- wxDropSource::GiveFeedback() fixes (#24051).
 
 wxMSW:
 
