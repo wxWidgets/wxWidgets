@@ -1716,12 +1716,12 @@ public:
                                         wxFRAME_NO_TASKBAR |
                                         wxNO_BORDER );
             new wxBitmapCanvas( m_hint, ib, ib.GetSize() );
+            m_hint->SetTransparent(128);
             m_hint->Show();
         }
         else
         {
             m_hint->Move( pos.x - m_dist_x, pos.y + 5  );
-            m_hint->SetTransparent( 128 );
         }
 
         return false;
