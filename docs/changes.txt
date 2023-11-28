@@ -248,6 +248,7 @@ wxGTK:
 - Fix wxCheckBox::SetValue() when in undetermined state (#24074).
 - Fix for incorrect preferred size from empty wxChoice with GTK3 (#23382).
 - wxDropSource::GiveFeedback() fixes (#24051).
+- Fix wxCheckBox undetermined state showing as checked with some themes (#24074).
 
 wxMSW:
 
