@@ -249,6 +249,8 @@ wxGTK:
 - Fix for incorrect preferred size from empty wxChoice with GTK3 (#23382).
 - wxDropSource::GiveFeedback() fixes (#24051).
 - Fix wxCheckBox undetermined state showing as checked with some themes (#24074).
+- Fix crash with GTK3 if console program is using a GUI wxApp class (#24081).
+- Generic wxDataViewCtrl drag hint fixes (#24084).
 
 wxMSW:
 
