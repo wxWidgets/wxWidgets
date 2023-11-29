@@ -240,7 +240,9 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
 
     for ( int i = 0; i < argc; i++ )
     {
-        argvA[i] = wxStrdup(wxConvUTF8.cWC2MB(argv[i]));
+        // Try to use the current encoding, but if it fails, it's better to
+        // fall back to UTF-8 than lose an argument entirely.
+        argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
     }
 #endif // __WINDOWS__/!__WINDOWS__
 }
