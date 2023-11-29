@@ -25,9 +25,14 @@ struct WXDLLIMPEXP_BASE wxInitData
     // static, i.e. remain valid until the end of the program.
     void Initialize(int argc, char** argv);
 
-    // Initialize from wide command line arguments: here we currently make a
-    // copy of the arguments internally, so they don't need to be static.
-    void InitializeFromWide(int argc, wchar_t** argv);
+    // Initialize from wide command line arguments if we hadn't been
+    // initialized in some other way: this allows to call this function
+    // unconditionally, even when these wide arguments were themselves
+    // synthesized from ANSI ones by our own code.
+    //
+    // Note that here we currently make a copy of the arguments internally, so
+    // they don't need to be static.
+    void InitIfNecessary(int argc, wchar_t** argv);
 
     // This function is used instead of the dtor because the global object can
     // be initialized multiple times.

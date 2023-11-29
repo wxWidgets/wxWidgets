@@ -204,8 +204,18 @@ void wxInitData::MSWInitialize()
 
 #endif // __WINDOWS__
 
-void wxInitData::InitializeFromWide(int argcIn, wchar_t** argvIn)
+void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
 {
+    // Usually, arguments are initialized from "char**" passed to main()
+    // elsewhere, but it is also possible to call a wide-char initialization
+    // function (wxInitialize(), wxEntryStart() or wxEntry() itself) directly,
+    // so we need to support this case too.
+    if ( argc )
+    {
+        // Already initialized, nothing to do.
+        return;
+    }
+
     // For simplicity, make a copy of the arguments, even though we could avoid
     // it -- but this would complicate the cleanup.
     argc = argcIn;
@@ -338,9 +348,7 @@ bool wxEntryStart(int& argc, wxChar **argv)
     // the MSW one, using the entire (wide) string command line do it, but if
     // this function is called directly from the application initialization
     // code this wouldn't be the case, and we need to handle this too
-    auto& initData = wxInitData::Get();
-    if ( !initData.argc )
-        initData.InitializeFromWide(argc, argv);
+    wxInitData::Get().InitIfNecessary(argc, argv);
 
     // initialize wxRTTI
     if ( !DoCommonPreInit() )
