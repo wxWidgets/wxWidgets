@@ -582,7 +582,7 @@ bool wxWebViewChromium::DoCreateBrowser(const wxString& url)
         return false;
     }
 
-    wxLogTrace(TRACE_CEF, "Browser created");
+    wxLogTrace(TRACE_CEF, "Browser created as child of %lx", handle);
     return true;
 }
 
@@ -618,6 +618,8 @@ wxWebViewChromium::~wxWebViewChromium()
         while ( !m_implData->m_calledOnBeforeClose )
             CefDoMessageLoopWork();
 #elif defined(__WXGTK__)
+        wxLogTrace(TRACE_CEF, "Destroying %lx", handle);
+
         // This doesn't seem to be necessary, the window gets destroyed on its
         // own when dispatching the events, but still do it as it might speed
         // up the shutdown and we can also do this if there is no active event
