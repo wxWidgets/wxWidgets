@@ -35,7 +35,7 @@ All binaries are available at:
 https://www.wxwidgets.org/downloads#v3.2.4_msw
 
 Once you have the files you need, unzip all of them into the same directory, for
-example `c:\wx\3.2.4`. You should have only include and lib subdirectories under
+example `c:\wx\3.2.4`. You should have the file `wxidgets.props` plus include, lib and build subdirectories under
 it, nothing else. To avoid hard-coding this path into your projects, define
 `wxwin` environment variable containing it: although it's a little known fact,
 all versions of MSVC support environment variable expansion in the C++ projects
