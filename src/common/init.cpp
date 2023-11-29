@@ -216,11 +216,17 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
         return;
     }
 
+    argc = argcIn;
+
     // For simplicity, make a copy of the arguments, even though we could avoid
     // it -- but this would complicate the cleanup.
-    argc = argcIn;
     argv = new wchar_t*[argc + 1];
     argv[argc] = nullptr;
+
+    for ( int i = 0; i < argc; i++ )
+    {
+        argv[i] = wxCRT_StrdupW(argvIn[i]);
+    }
 
 #ifdef __WINDOWS__
     // Not used in this case and shouldn't be passed to LocalFree().
@@ -231,16 +237,12 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
     argvA[argc] = nullptr;
 
     ownsArgvA = true;
-#endif // __WINDOWS__/!__WINDOWS__
 
     for ( int i = 0; i < argc; i++ )
     {
-        argv[i] = wxCRT_StrdupW(argvIn[i]);
-
-#ifndef __WINDOWS__
         argvA[i] = wxStrdup(wxConvUTF8.cWC2MB(argv[i]));
-#endif // !__WINDOWS__
     }
+#endif // __WINDOWS__/!__WINDOWS__
 }
 
 void wxInitData::Free()
