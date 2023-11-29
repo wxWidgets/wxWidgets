@@ -31,9 +31,6 @@
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM64'">
     <wxArchSuffix>_arm64</wxArchSuffix>
   </PropertyGroup>
-  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Itanium'">
-    <wxArchSuffix>_ia64</wxArchSuffix>
-  </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Debug' or '$(Configuration)'=='DLL Debug')">
     <wxSuffixDebug>d</wxSuffixDebug>
   </PropertyGroup>
@@ -80,7 +77,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalOptions Condition="'$(PlatformToolset)' == 'v140_xp'">/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="('$(Configuration)'=='Release' or '$(Configuration)'=='DLL Release') and '$(VisualStudioVersion)' >= '14.0'">/Zc:throwingNew %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
