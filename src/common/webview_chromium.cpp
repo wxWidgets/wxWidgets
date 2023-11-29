@@ -103,6 +103,9 @@ struct ImplData
     // We also use this as a flag: it will be non-empty if the browser needs to
     // be created.
     wxString m_initialURL;
+
+    // Thread context we're dispatching the events for, if non-null.
+    GMainContext* m_threadContext = nullptr;
 #endif // __WXGTK__
 
     // We also remember the proxy passed to wxWebView::SetProxy() as we can
@@ -626,17 +629,18 @@ wxWebViewChromium::~wxWebViewChromium()
         // loop (which should never happen, of course).
         ::XDestroyWindow(wxGetX11Display(), handle);
 
-        if ( const auto eventLoop = wxEventLoop::GetActive() )
+        const auto threadContext = m_implData->m_threadContext;
+        while ( !m_implData->m_calledOnBeforeClose )
         {
-            while ( !m_implData->m_calledOnBeforeClose )
-            {
-                // Under GTK just calling CefDoMessageLoopWork() isn't enough,
-                // we need to dispatch the lower level (e.g. X11) events
-                // notifying CEF about the window destruction.
-                eventLoop->DispatchTimeout(10);
-            }
+            // Under GTK just calling CefDoMessageLoopWork() isn't enough,
+            // we need to dispatch the lower level (e.g. X11) events
+            // notifying CEF about the window destruction.
+            //
+            // Note that we do it whether or not thread context is null: if it
+            // is, the main application context is used, which is what we need
+            // when running in the main thread.
+            g_main_context_iteration(threadContext, TRUE /* block */);
         }
-        //else: we're going to crash on shutdown, but what else can we do?
 #elif defined(__WXOSX__)
         // There doesn't seem to be any way to force OnBeforeClose() to be
         // called from here under Mac as it's referenced by an autorelease pool
@@ -796,6 +800,44 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 void wxWebViewChromium::OnIdle(wxIdleEvent& event)
 {
     event.Skip();
+
+#ifdef __WXGTK__
+    // Chrome may/will create its own GMainContext when it's used from the
+    // non-main thread and normal GTK message loop run by gtk_main() doesn't
+    // dispatch the events for it, as it only uses the default application
+    // context. So check for this case and do it ourselves if necessary.
+    auto& threadContext = m_implData->m_threadContext;
+    auto const threadContextNew = g_main_context_get_thread_default();
+    if ( threadContextNew != threadContext )
+    {
+        if ( threadContextNew )
+        {
+            if ( !g_main_context_acquire(threadContextNew) )
+            {
+                // This really shouldn't happen, no idea what to do if it does.
+                wxLogDebug("Failed to acquire thread-specific context.");
+                return;
+            }
+
+            wxLogTrace(TRACE_CEF, "Acquired thread-specific context");
+            threadContext = threadContextNew;
+        }
+        else
+        {
+            // This actually doesn't seem to ever happen but it shouldn't harm
+            // to stop using the old thread context if it does.
+            g_main_context_release(threadContext);
+            threadContext = nullptr;
+            wxLogTrace(TRACE_CEF, "Released thread-specific context");
+        }
+    }
+
+    while ( threadContext )
+    {
+        if ( !g_main_context_iteration(threadContext, FALSE /* don't block */) )
+            break;
+    }
+#endif // __WXGTK__
 
     CefDoMessageLoopWork();
 }
