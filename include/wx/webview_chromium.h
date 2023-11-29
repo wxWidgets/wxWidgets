@@ -127,6 +127,8 @@ public:
     virtual void GTKHandleRealized() override;
 #endif
 
+    virtual void OnInternalIdle() override;
+
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) override;
 
@@ -135,7 +137,6 @@ private:
     void Init();
 
     void OnSize(wxSizeEvent& event);
-    void OnIdle(wxIdleEvent& event);
 
     // Actually create the browser: this can only be done once the window is
     // created in wxGTK.

@@ -495,8 +495,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
     Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
-    Bind(wxEVT_IDLE, &wxWebViewChromium::OnIdle, this);
-
     return true;
 }
 
@@ -797,10 +795,8 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 #endif
 }
 
-void wxWebViewChromium::OnIdle(wxIdleEvent& event)
+void wxWebViewChromium::OnInternalIdle()
 {
-    event.Skip();
-
 #ifdef __WXGTK__
     // Chrome may/will create its own GMainContext when it's used from the
     // non-main thread and normal GTK message loop run by gtk_main() doesn't
