@@ -6,6 +6,22 @@ Note: This file contains the list of changes since wxWidgets 3.x, please see
       docs/changes_30.txt for the changes in the previous versions.
 
 
+INCOMPATIBLE CHANGES SINCE 3.2.0
+================================
+
+While 3.2.x versions are not supposed to have any incompatible changes in
+theory, this section describes such changes as they exist in practice:
+
+- wxWidgets 3.2.4 added possibility to initialize wxArrayString and similar
+  classes from std::initializer_list<>, which may introduce ambiguities in the
+  existing code overloading some functions to take multiple classes implicitly
+  constructible from initializer lists, e.g. std::vector<std::wxString> and
+  wxArrayString. Such problems can be fixed by explicitly specifying the class
+  to use but it is also possible to predefine wxNO_INITIALIZER_LIST to disable
+  support for std::initializer_list<> in wxWidgets and fix compilation without
+  modifying the application code.
+
+
 INCOMPATIBLE CHANGES SINCE 3.0.x:
 =================================
 

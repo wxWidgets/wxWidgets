@@ -458,13 +458,15 @@ typedef short int WXTYPE;
     #endif /* defined(__has_include) */
 #endif /* !__WX_SETUP_H__ */
 
-#ifndef wxHAVE_INITIALIZER_LIST
+// Allow disabling the use of std::initializer_list<> in case it creates
+// overload ambiguities for the existing code.
+#if !defined(wxHAVE_INITIALIZER_LIST) && !defined(wxNO_INITIALIZER_LIST)
     #if __cplusplus >= 201103L
         #define wxHAVE_INITIALIZER_LIST
     #elif wxCHECK_VISUALC_VERSION(12)
         #define wxHAVE_INITIALIZER_LIST
     #endif
-#endif /* wxHAVE_INITIALIZER_LIST */
+#endif /* !wxHAVE_INITIALIZER_LIST && !wxNO_INITIALIZER_LIST */
 
 #endif /* __cplusplus */
 
