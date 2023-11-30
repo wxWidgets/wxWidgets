@@ -43,8 +43,9 @@
 
 static const char* TRACE_EGL = "glegl";
 
-#ifdef GDK_WINDOWING_WAYLAND
-
+// We can't add a member variable to wxGLCanvasEGL in 3.2 branch, so emulate it
+// by encoding the corresponding boolean value via the presence of "this"
+// pointer in the given hash set.
 #include "wx/hashset.h"
 
 namespace
@@ -57,8 +58,6 @@ WX_DECLARE_HASH_SET(wxGLCanvasEGL*, wxPointerHash, wxPointerEqual, wxGLCanvasSet
 wxGLCanvasSet gs_alreadySetSwapInterval;
 
 } // anonymous namespace
-
-#endif // GDK_WINDOWING_WAYLAND
 
 // ----------------------------------------------------------------------------
 // wxGLContextAttrs: OpenGL rendering context attributes
@@ -633,9 +632,9 @@ wxGLCanvasEGL::~wxGLCanvasEGL()
     DestroyWaylandSubsurface();
     g_clear_pointer(&m_wlEGLWindow, wl_egl_window_destroy);
     g_clear_pointer(&m_wlSurface, wl_surface_destroy);
+#endif
 
     gs_alreadySetSwapInterval.erase(this);
-#endif
 }
 
 void wxGLCanvasEGL::CreateWaylandSubsurface()
