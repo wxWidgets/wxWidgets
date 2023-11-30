@@ -458,6 +458,14 @@ typedef short int WXTYPE;
     #endif /* defined(__has_include) */
 #endif /* !__WX_SETUP_H__ */
 
+#ifndef wxHAVE_INITIALIZER_LIST
+    #if __cplusplus >= 201103L
+        #define wxHAVE_INITIALIZER_LIST
+    #elif wxCHECK_VISUALC_VERSION(12)
+        #define wxHAVE_INITIALIZER_LIST
+    #endif
+#endif /* wxHAVE_INITIALIZER_LIST */
+
 #endif /* __cplusplus */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
@@ -504,14 +512,6 @@ typedef short int WXTYPE;
         #define HAVE_WOSTREAM
     #endif
 #endif /* HAVE_WOSTREAM */
-
-#ifndef wxHAVE_INITIALIZER_LIST
-    #if __cplusplus >= 201103L
-        #define wxHAVE_INITIALIZER_LIST
-    #elif wxCHECK_VISUALC_VERSION(12)
-        #define wxHAVE_INITIALIZER_LIST
-    #endif
-#endif /* wxHAVE_INITIALIZER_LIST */
 
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
