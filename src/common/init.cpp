@@ -204,13 +204,29 @@ void wxInitData::MSWInitialize()
 
 #endif // __WINDOWS__
 
-void wxInitData::InitializeFromWide(int argcIn, wchar_t** argvIn)
+void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
 {
+    // Usually, arguments are initialized from "char**" passed to main()
+    // elsewhere, but it is also possible to call a wide-char initialization
+    // function (wxInitialize(), wxEntryStart() or wxEntry() itself) directly,
+    // so we need to support this case too.
+    if ( argc )
+    {
+        // Already initialized, nothing to do.
+        return;
+    }
+
+    argc = argcIn;
+
     // For simplicity, make a copy of the arguments, even though we could avoid
     // it -- but this would complicate the cleanup.
-    argc = argcIn;
     argv = new wchar_t*[argc + 1];
     argv[argc] = nullptr;
+
+    for ( int i = 0; i < argc; i++ )
+    {
+        argv[i] = wxCRT_StrdupW(argvIn[i]);
+    }
 
 #ifdef __WINDOWS__
     // Not used in this case and shouldn't be passed to LocalFree().
@@ -221,16 +237,14 @@ void wxInitData::InitializeFromWide(int argcIn, wchar_t** argvIn)
     argvA[argc] = nullptr;
 
     ownsArgvA = true;
-#endif // __WINDOWS__/!__WINDOWS__
 
     for ( int i = 0; i < argc; i++ )
     {
-        argv[i] = wxCRT_StrdupW(argvIn[i]);
-
-#ifndef __WINDOWS__
-        argvA[i] = wxStrdup(wxConvUTF8.cWC2MB(argv[i]));
-#endif // !__WINDOWS__
+        // Try to use the current encoding, but if it fails, it's better to
+        // fall back to UTF-8 than lose an argument entirely.
+        argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
     }
+#endif // __WINDOWS__/!__WINDOWS__
 }
 
 void wxInitData::Free()
@@ -338,9 +352,7 @@ bool wxEntryStart(int& argc, wxChar **argv)
     // the MSW one, using the entire (wide) string command line do it, but if
     // this function is called directly from the application initialization
     // code this wouldn't be the case, and we need to handle this too
-    auto& initData = wxInitData::Get();
-    if ( !initData.argc )
-        initData.InitializeFromWide(argc, argv);
+    wxInitData::Get().InitIfNecessary(argc, argv);
 
     // initialize wxRTTI
     if ( !DoCommonPreInit() )
