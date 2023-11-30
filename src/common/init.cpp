@@ -542,6 +542,9 @@ void wxAddEntryHook(wxEntryHook hook)
 
 int wxEntryReal(int& argc, wxChar **argv)
 {
+    // Do this before trying the hooks as they may use command line arguments.
+    wxInitData::Get().InitIfNecessary(argc, argv);
+
     // Check if we have any hooks that can hijack the application execution.
     for ( auto& hook : GetEntryHooks() )
     {
