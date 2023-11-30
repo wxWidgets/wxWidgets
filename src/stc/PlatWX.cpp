@@ -392,7 +392,7 @@ void SurfaceImpl::RoundedRectangle(PRectangle rc, ColourDesired fore, ColourDesi
     hdc->DrawRoundedRectangle(wxRectFromPRectangle(rc), 4);
 }
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
+#ifdef wxHAS_PREMULTIPLIED_ALPHA
 #define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
 #else
 #define wxPy_premultiply(p, a)   (p)

@@ -675,12 +675,23 @@ public:
 
             for ( int x = 0; x < REAL_SIZE; ++x )
             {
-                // note that RGB must be premultiplied by alpha
                 unsigned a = (wxAlphaPixelData::Iterator::ChannelType)((x*255.)/REAL_SIZE);
+                p.Alpha() = a;
+#ifdef wxHAS_PREMULTIPLIED_ALPHA
+                // RGB must be premultiplied by alpha on some platforms
                 p.Red() = r * a / 256;
                 p.Green() = g * a / 256;
                 p.Blue() = b * a / 256;
-                p.Alpha() = a;
+#else
+                if ( a )
+                {
+                    p.Red() = r;
+                    p.Green() = g;
+                    p.Blue() = b;
+                }
+                else
+                    p.Red() = p.Green() = p.Blue() = 0;
+#endif // wxHAS_PREMULTIPLIED_ALPHA
 
                 ++p; // same as p.OffsetX(1)
             }

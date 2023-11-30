@@ -378,6 +378,29 @@ TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")
     CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
 }
 
+TEST_CASE("BitmapBundle::FromSVG-alpha", "[bmpbundle][svg][alpha]")
+{
+    static const char svg_data[] =
+        "<svg viewBox=\"0 0 100 100\">"
+        "<line x1=\"0\" y1=\"0\" x2=\"100%\" y2=\"100%\" stroke=\"#3f7fff\" stroke-width=\"71%\"/>"
+        "</svg>"
+        ;
+
+    wxBitmapBundle b = wxBitmapBundle::FromSVG(svg_data, wxSize(2, 2));
+    REQUIRE( b.IsOk() );
+
+    wxImage img = b.GetBitmap(wxDefaultSize).ConvertToImage();
+    REQUIRE( img.HasAlpha() );
+    // Check that anti-aliased edge at 50% alpha round-trips (after possibly
+    // premultiplied storage in wxBitmap) to substantially original straight
+    // alpha pixel values in wxImage, allowing for roundoff error.
+    CHECK( (int)img.GetRed(0, 1) >= 0x3c );
+    CHECK( (int)img.GetRed(0, 1) <= 0x3f );
+    CHECK( (int)img.GetGreen(0, 1) >= 0x7c );
+    CHECK( (int)img.GetGreen(0, 1) <= 0x7f);
+    CHECK( (int)img.GetBlue(0, 1) == 0xff );
+}
+
 TEST_CASE("BitmapBundle::FromSVGFile", "[bmpbundle][svg][file]")
 {
     const wxSize size(20, 20); // completely arbitrary
