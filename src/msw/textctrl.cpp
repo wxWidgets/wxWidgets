@@ -99,6 +99,28 @@
     #endif // wxUSE_SPELLCHECK
 #endif // wxUSE_RICHEDIT
 
+#if wxUSE_RICHEDIT2
+    // Note that some MinGW headers define PFN_BULLET but not the rest of them,
+    // so test for something else.
+    #ifndef PFN_ARABIC
+        #define PFN_BULLET      1
+        #define PFN_ARABIC      2
+        #define PFN_LCLETTER    3
+        #define PFN_UCLETTER    4
+        #define PFN_LCROMAN     5
+        #define PFN_UCROMAN     6
+    #endif
+
+    #ifndef PFNS_PAREN
+        #define PFNS_PAREN      0x0000
+        #define PFNS_PARENS     0x0100
+        #define PFNS_PERIOD     0x0200
+        #define PFNS_PLAIN      0x0300
+        #define PFNS_NONUMBER   0x0400
+        #define PFNS_NEWNUMBER  0x8000
+    #endif
+#endif // wxUSE_RICHEDIT2
+
 #if wxUSE_INKEDIT
     #include <wx/dynlib.h>
 #endif
