@@ -113,6 +113,10 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     m_style = style;
 
+    // wxEL_ALLOW_NEW requires ability to edit labels so implicitly add wxEL_ALLOW_EDIT
+    if ( m_style & wxEL_ALLOW_NEW )
+      m_style |= wxEL_ALLOW_EDIT;
+
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
     wxPanel *subp = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -167,7 +171,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     sizer->Add(subp, wxSizerFlags().Expand());
 
     long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxSUNKEN_BORDER;
-    if ( style & wxEL_ALLOW_EDIT )
+    if ( m_style & wxEL_ALLOW_EDIT )
          st |= wxLC_EDIT_LABELS;
     m_listCtrl = new CleverListCtrl(this, wxID_ELB_LISTCTRL,
                                     wxDefaultPosition, wxDefaultSize, st);
