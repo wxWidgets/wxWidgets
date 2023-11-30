@@ -195,69 +195,78 @@ void RadioWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "&Set style");
-
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    wxStaticBox* const sizerleftBox = sizerLeft->GetStaticBox();
 
     m_chkSpecifyRows = CreateCheckBoxAndAddToSizer
                        (
                         sizerLeft,
-                        "Major specifies &rows count"
+                        "Major specifies &rows count",
+                        wxID_ANY,
+                        sizerleftBox
                        );
 
     wxSizer *sizerRow;
     sizerRow = CreateSizerWithTextAndLabel("&Major dimension:",
                                            wxID_ANY,
-                                           &m_textMajorDim);
+                                           &m_textMajorDim,
+                                           sizerleftBox);
     sizerLeft->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndLabel("&Number of buttons:",
                                            wxID_ANY,
-                                           &m_textNumBtns);
+                                           &m_textNumBtns,
+                                           sizerleftBox);
     sizerLeft->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     wxButton *btn;
-    btn = new wxButton(this, RadioPage_Update, "&Update");
+    btn = new wxButton(sizerleftBox, RadioPage_Update, "&Update");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border());
 
     sizerLeft->AddSpacer(5);
 
-    btn = new wxButton(this, RadioPage_Reset, "&Reset");
+    btn = new wxButton(sizerleftBox, RadioPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, 15));
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Change parameters");
-    wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change parameters");
+    wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     sizerRow = CreateSizerWithTextAndLabel("Current selection:",
                                            wxID_ANY,
-                                           &m_textCurSel);
+                                           &m_textCurSel,
+                                           sizerMiddleBox);
     sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Selection,
                                             "&Change selection:",
-                                           wxID_ANY,
-                                           &m_textSel);
+                                             wxID_ANY,
+                                             &m_textSel,
+                                             sizerMiddleBox);
     sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Label,
                                             "&Label for box:",
                                             wxID_ANY,
-                                            &m_textLabel);
+                                            &m_textLabel,
+                                            sizerMiddleBox);
     sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_LabelBtn,
                                             "&Label for buttons:",
                                             wxID_ANY,
-                                            &m_textLabelBtns);
+                                            &m_textLabelBtns,
+                                            sizerMiddleBox);
     sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     m_chkEnableItem = CreateCheckBoxAndAddToSizer(sizerMiddle,
                                                   "Disable &2nd item",
-                                                  RadioPage_EnableItem);
+                                                  RadioPage_EnableItem,
+                                                  sizerMiddleBox);
     m_chkShowItem = CreateCheckBoxAndAddToSizer(sizerMiddle,
                                                 "Hide 2nd &item",
-                                                RadioPage_ShowItem);
+                                                RadioPage_ShowItem,
+                                                sizerMiddleBox);
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);

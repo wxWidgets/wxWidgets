@@ -24,7 +24,7 @@ class wxMarkupParserOutput;
 class WXDLLIMPEXP_CORE wxMarkupTextBase
 {
 public:
-    virtual ~wxMarkupTextBase() {}
+    virtual ~wxMarkupTextBase() = default;
 
     // Update the markup string.
     void SetMarkup(const wxString& markup) { m_markup = markup; }

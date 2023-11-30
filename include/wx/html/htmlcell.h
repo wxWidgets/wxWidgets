@@ -117,7 +117,7 @@ private:
 class WXDLLIMPEXP_HTML wxHtmlRenderingStyle
 {
 public:
-    virtual ~wxHtmlRenderingStyle() {}
+    virtual ~wxHtmlRenderingStyle() = default;
     virtual wxColour GetSelectedTextColour(const wxColour& clr) = 0;
     virtual wxColour GetSelectedTextBgColour(const wxColour& clr) = 0;
 };

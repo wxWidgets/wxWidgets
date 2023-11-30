@@ -2,7 +2,6 @@
 // Name:        wx/msw/statusbar.h
 // Purpose:     native implementation of wxStatusBar
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.04.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/gdicmn.h
 // Purpose:     Common GDI classes, types and declarations
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -949,7 +948,7 @@ wxDEPRECATED_MSG("Use wxList directly or just a standard container")
 wxResourceCache : public wxList
 {
 public:
-    wxResourceCache() { }
+    wxResourceCache() = default;
 #if !wxUSE_STD_CONTAINERS
     wxResourceCache(unsigned int keyType) : wxList(keyType) { }
 #endif

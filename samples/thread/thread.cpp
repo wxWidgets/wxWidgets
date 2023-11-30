@@ -2,7 +2,6 @@
 // Name:        thread.cpp
 // Purpose:     wxWidgets thread sample
 // Author:      Guilhem Lavaux, Vadim Zeitlin
-// Modified by:
 // Created:     06/16/98
 // Copyright:   (c) 1998-2009 wxWidgets team
 // Licence:     wxWindows licence

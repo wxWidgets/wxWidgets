@@ -27,6 +27,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/statbox.h"
     #include "wx/textctrl.h"
 #endif
 
@@ -159,24 +160,26 @@ FilePickerWidgetsPage::FilePickerWidgetsPage(WidgetsBookCtrl *book,
 void FilePickerWidgetsPage::CreateContent()
 {
     // left pane
-    wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
+    wxSizer *leftSizer = new wxBoxSizer(wxVERTICAL);
 
     static const wxString mode[] = { "open", "save" };
     m_radioFilePickerMode = new wxRadioBox(this, wxID_ANY, "wxFilePicker mode",
                                            wxDefaultPosition, wxDefaultSize,
                                            WXSIZEOF(mode), mode);
-    boxleft->Add(m_radioFilePickerMode, 0, wxALL|wxGROW, 5);
+    leftSizer->Add(m_radioFilePickerMode, 0, wxALL|wxGROW, 5);
 
-    wxStaticBoxSizer *filebox = new wxStaticBoxSizer(wxVERTICAL, this, "&FilePicker style");
-    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, "With textctrl");
-    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, "Overwrite prompt");
-    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(filebox, "File must exist");
-    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(filebox, "Change working dir");
-    m_chkSmall = CreateCheckBoxAndAddToSizer(filebox, "&Small version");
+    wxStaticBoxSizer *styleSizer = new wxStaticBoxSizer(wxVERTICAL, this, "&FilePicker style");
+    wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
 
-    boxleft->Add(filebox, 0, wxALL|wxGROW, 5);
+    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
+    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(styleSizer, "Overwrite prompt", wxID_ANY, styleSizerBox);
+    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(styleSizer, "File must exist", wxID_ANY, styleSizerBox);
+    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(styleSizer, "Change working dir", wxID_ANY, styleSizerBox);
+    m_chkSmall = CreateCheckBoxAndAddToSizer(styleSizer, "&Small version", wxID_ANY, styleSizerBox);
 
-    boxleft->Add(CreateSizerWithTextAndButton
+    leftSizer->Add(styleSizer, 0, wxALL|wxGROW, 5);
+
+    leftSizer->Add(CreateSizerWithTextAndButton
                  (
                     PickerPage_SetDir,
                     "&Initial directory",
@@ -184,9 +187,9 @@ void FilePickerWidgetsPage::CreateContent()
                     &m_textInitialDir
                  ), wxSizerFlags().Expand().Border());
 
-    boxleft->AddSpacer(10);
+    leftSizer->AddSpacer(10);
 
-    boxleft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
+    leftSizer->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     Reset();    // set checkboxes state
@@ -207,7 +210,7 @@ void FilePickerWidgetsPage::CreateContent()
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(boxleft, 0, wxGROW|wxALL, 5);
+    sz->Add(leftSizer, 0, wxGROW|wxALL, 5);
     sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
 
     SetSizer(sz);

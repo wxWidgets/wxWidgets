@@ -1534,6 +1534,12 @@ public:
     wxSizerFlags& DoubleBorder(int direction = wxALL);
 
     /**
+        Sets the border in left and right directions having the default
+        border size.
+    */
+    wxSizerFlags& HorzBorder();
+
+    /**
         Sets the border in left and right directions having twice the default
         border size.
     */

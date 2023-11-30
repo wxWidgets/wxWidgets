@@ -2,7 +2,6 @@
 // Name:        wx/numdlg.h
 // Purpose:     wxNumberEntryDialog class
 // Author:      John Labenski
-// Modified by:
 // Created:     07.02.04 (extracted from wx/textdlg.h)
 // Copyright:   (c) John Labenski
 // Licence:     wxWindows licence

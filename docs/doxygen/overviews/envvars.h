@@ -45,6 +45,12 @@ wxWidgets programs.
          This can be helpful when running older programs recompiled with
          wxWidgets 3.1 or later, as these asserts are mostly harmless and can
          be safely ignored if the code works as expected.}
+@itemdef{WXSUPPRESS_GTK_DIAGNOSTICS,
+         If set to a non-zero value, wxApp::GTKSuppressDiagnostics() is called
+         on program startup using the numeric value of this variable or the
+         default value if it's not a number, so that e.g. setting it to "yes"
+         suppresses all GTK diagnostics while setting it to 16 only suppresses
+         GTK warning messages.}
 */
 
 @see wxSystemOptions

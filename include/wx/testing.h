@@ -69,7 +69,7 @@ class wxModalExpectation
 {
 public:
     wxModalExpectation() : m_isOptional(false) {}
-    virtual ~wxModalExpectation() {}
+    virtual ~wxModalExpectation() = default;
 
     wxString GetDescription() const
     {

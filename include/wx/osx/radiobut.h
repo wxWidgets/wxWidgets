@@ -2,7 +2,6 @@
 // Name:        wx/osx/radiobut.h
 // Purpose:     wxRadioButton class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -16,7 +15,7 @@ class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
     wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 
 public:
-    wxRadioButton() {}
+    wxRadioButton() = default;
     wxRadioButton(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,

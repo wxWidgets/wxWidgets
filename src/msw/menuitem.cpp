@@ -2,7 +2,6 @@
 // Name:        src/msw/menuitem.cpp
 // Purpose:     wxMenuItem implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

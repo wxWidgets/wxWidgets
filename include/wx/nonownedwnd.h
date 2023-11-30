@@ -2,7 +2,6 @@
 // Name:        wx/nonownedwnd.h
 // Purpose:     declares wxNonTopLevelWindow class
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2006-12-24
 // Copyright:   (c) 2006 TT-Solutions
 // Licence:     wxWindows licence

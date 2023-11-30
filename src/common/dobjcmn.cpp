@@ -2,7 +2,6 @@
 // Name:        src/common/dobjcmn.cpp
 // Purpose:     implementation of data object methods common to all platforms
 // Author:      Vadim Zeitlin, Robert Roebling
-// Modified by:
 // Created:     19.10.99
 // Copyright:   (c) wxWidgets Team
 // Licence:     wxWindows licence

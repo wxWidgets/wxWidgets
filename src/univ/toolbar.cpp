@@ -2,7 +2,6 @@
 // Name:        src/univ/toolbar.cpp
 // Purpose:     implementation of wxToolBar for wxUniversal
 // Author:      Robert Roebling, Vadim Zeitlin (universalization)
-// Modified by:
 // Created:     20.02.02
 // Copyright:   (c) 2001 Robert Roebling,
 //              (c) 2002 SciTech Software, Inc. (www.scitechsoft.com)

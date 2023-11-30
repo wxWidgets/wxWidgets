@@ -2,7 +2,6 @@
 // Name:        wx/propgrid/propgriddefs.h
 // Purpose:     wxPropertyGrid miscellaneous definitions
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2008-08-31
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -418,7 +417,7 @@ const char* classname##_VariantType = #classname; \
 class classname##VariantData: public wxVariantData \
 { \
 public:\
-    classname##VariantData() {} \
+    classname##VariantData() = default; \
     classname##VariantData( const classname &value ) : m_value(value) { } \
 \
     classname &GetValue() { return m_value; } \

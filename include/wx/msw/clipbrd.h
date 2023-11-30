@@ -2,7 +2,6 @@
 // Name:        wx/msw/clipbrd.h
 // Purpose:     wxClipboard class and clipboard functions for MSW
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        samples/propgrid/propgrid.cpp
 // Purpose:     wxPropertyGrid sample
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2004-09-25
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -70,6 +69,11 @@
 #endif
 
 #include "wx/popupwin.h"
+
+#include <random>
+
+static std::random_device s_rd;
+static std::default_random_engine s_rng(s_rd());
 
 // -----------------------------------------------------------------------
 // wxSampleMultiButtonEditor
@@ -1398,12 +1402,11 @@ void FormMain::PopulateWithExamples ()
     myTestBitmap2x.SetScaleFactor(2);
     pg->SetPropertyImage( "StringPropertyWithBitmap", wxBitmapBundle::FromBitmaps(myTestBitmap1x, myTestBitmap2x));
 
-    // this value array would be optional if values matched string indexes
-    //long flags_prop_values[] = { wxICONIZE, wxCAPTION, wxMINIMIZE_BOX, wxMAXIMIZE_BOX };
-
-    //pg->Append( wxFlagsProperty("Example of FlagsProperty","FlagsProp",
-    //    flags_prop_labels, flags_prop_values, 0, GetWindowStyle() ) );
-
+    const wxString flagsPropLabels[] = { "Bit 0", "Bit 1", "Bit 2", "Bit 3"};
+    long flagsPropValues[] = { 0x01, 0x02, 0x04, 0x08 };
+    wxPGChoices flagsPropChoices(WXSIZEOF(flagsPropLabels), flagsPropLabels, flagsPropValues);
+    pg->Append( new wxFlagsProperty("FlagsProperty", wxPG_LABEL, flagsPropChoices, 0x03 ) );
+    pg->SetPropertyAttribute("FlagsProperty", wxPG_BOOL_USE_CHECKBOX, true);
 
     // Multi choice dialog.
     wxArrayString tchoices;
@@ -2301,13 +2304,14 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 {
     // Delete random property
     wxPGProperty* p = m_pPropGridManager->GetGrid()->GetRoot();
+    std::uniform_int_distribution<unsigned int> distrib(0, 1000);
 
     for (;;)
     {
         if ( !p->HasAnyChild() )
             break;
 
-        unsigned int n = static_cast<unsigned int>(rand()) % p->GetChildCount();
+        unsigned int n = distrib(s_rng) % p->GetChildCount();
         p = p->Item(n);
 
         if ( !p->IsCategory() )
@@ -2436,7 +2440,7 @@ void FormMain::OnExtendedKeyNav( wxCommandEvent& WXUNUSED(event) )
     // Up, and Down keys for navigating between properties.
     wxPropertyGrid* propGrid = m_pPropGridManager->GetGrid();
 
-    propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+    propGrid->AddActionTrigger(wxPGKeyboardActions::NextProperty,
                                WXK_RETURN);
     propGrid->DedicateKey(WXK_RETURN);
 

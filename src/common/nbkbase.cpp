@@ -2,7 +2,6 @@
 // Name:        src/common/nbkbase.cpp
 // Purpose:     common wxNotebook methods
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     02.07.01
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -46,19 +46,18 @@ public:
     mouse clicks, optionally with a tooltip above it to help provide information.
 
 
-    @section taskbaricon_xnote X Window System Note
+    @section taskbaricon_linux_note Linux Note
 
-    Under X Window System, the window manager must support either the
-    "System Tray Protocol" (see http://freedesktop.org/wiki/Specifications/systemtray-spec)
-    by freedesktop.org (WMs used by modern desktop environments such as GNOME >= 2,
-    KDE >= 3 and XFCE >= 4 all do) or the older methods used in GNOME 1.2 and KDE 1 and 2.
+    Taskbar is not supported by all window managers and desktop environments
+    under Linux and IsAvailable() function should be used to check whether it
+    is supported. In addition, even when the taskbar is supported, some
+    environments don't support showing the application-specified tooltip for
+    the icon in it.
 
-    If it doesn't, the icon will appear as a toplevel window on user's desktop.
-    Because not all window managers have system tray, there's no guarantee that
-    wxTaskBarIcon will work correctly under X Window System and so the applications
-    should use it only as an optional component of their user interface.
-    The user should be required to explicitly enable the taskbar icon on Unix,
-    it shouldn't be on by default.
+    Due to this, there's no guarantee that wxTaskBarIcon will work correctly
+    under Linux and so the applications should use it only as an optional
+    component of their user interface. The user should be required to
+    explicitly enable the taskbar icon on Unix, it shouldn't be on by default.
 
     @beginEventEmissionTable{wxTaskBarIconEvent}
     Note that not all ports are required to send these events and so it's better

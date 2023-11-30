@@ -29,7 +29,7 @@ public:
 
     // Even though this class is not supposed to be used polymorphically, give
     // it a virtual dtor to avoid compiler warnings.
-    virtual ~wxTextMeasureBase() { }
+    virtual ~wxTextMeasureBase() = default;
 
 
     // Return the extent of a single line string.

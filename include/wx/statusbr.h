@@ -2,7 +2,6 @@
 // Name:        wx/statusbr.h
 // Purpose:     wxStatusBar class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.02.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

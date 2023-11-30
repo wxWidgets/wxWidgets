@@ -2,7 +2,6 @@
 // Name:        src/common/cmdline.cpp
 // Purpose:     wxCmdLineParser implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.01.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

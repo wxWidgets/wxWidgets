@@ -2,7 +2,6 @@
 // Name:        wx/log.h
 // Purpose:     Assorted wxLogXXX functions, and wxLog (sink for logs)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -318,10 +317,10 @@ class WXDLLIMPEXP_BASE wxLogFormatter
 {
 public:
     // Default constructor.
-    wxLogFormatter() { }
+    wxLogFormatter() = default;
 
     // Trivial but virtual destructor for the base class.
-    virtual ~wxLogFormatter() { }
+    virtual ~wxLogFormatter() = default;
 
 
     // Override this method to implement custom formatting of the given log
@@ -661,7 +660,7 @@ private:
 class WXDLLIMPEXP_BASE wxLogBuffer : public wxLog
 {
 public:
-    wxLogBuffer() { }
+    wxLogBuffer() = default;
 
     // get the string contents with all messages logged
     const wxString& GetBuffer() const { return m_str; }
@@ -1226,7 +1225,7 @@ wxDEFINE_EMPTY_LOG_FUNCTION2(Generic, wxLogLevel);
 class WXDLLIMPEXP_BASE wxLogNull
 {
 public:
-    wxLogNull() { }
+    wxLogNull() = default;
 };
 
 // Dummy macros to replace some functions.

@@ -2,7 +2,6 @@
 // Name:        wx/msw/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -39,7 +38,7 @@ class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage,
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later
-    wxBitmap() { }
+    wxBitmap() = default;
 
     // Initialize with raw data
     wxBitmap(const char bits[], int width, int height, int depth = 1);
@@ -177,7 +176,7 @@ public:
     void SetMask(wxMask *mask);
 
     bool HasAlpha() const;
-    void UseAlpha(bool use = true);
+    bool UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
 
     // old synonyms for CreateWithDIPSize() and GetLogicalXXX() functions
@@ -293,7 +292,7 @@ protected:
 class WXDLLIMPEXP_CORE wxBitmapHandler : public wxGDIImageHandler
 {
 public:
-    wxBitmapHandler() { }
+    wxBitmapHandler() = default;
     wxBitmapHandler(const wxString& name, const wxString& ext, wxBitmapType type)
         : wxGDIImageHandler(name, ext, type) { }
 

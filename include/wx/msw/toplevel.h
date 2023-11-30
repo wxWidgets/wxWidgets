@@ -2,7 +2,6 @@
 // Name:        wx/msw/toplevel.h
 // Purpose:     wxTopLevelWindowMSW is the MSW implementation of wxTLW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/docview.h
 // Purpose:     Doc/View classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -675,7 +674,7 @@ public:
     typedef ChildFrame BaseClass;
 
     // default ctor, use Create after it
-    wxDocChildFrameAny() { }
+    wxDocChildFrameAny() = default;
 
     // ctor for a frame showing the given view of the specified document
     wxDocChildFrameAny(wxDocument *doc,

@@ -2,7 +2,6 @@
 // Name:        wx/osx/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -86,7 +85,7 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
     friend class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 
 public:
-    wxBitmap() {} // Platform-specific
+    wxBitmap() = default; // Platform-specific
 
     // Initialize with raw data.
     wxBitmap(const char bits[], int width, int height, int depth = 1);
@@ -124,7 +123,7 @@ public:
     wxBitmap(const wxCursor &cursor);
 #endif
 
-    virtual ~wxBitmap() {}
+    virtual ~wxBitmap() = default;
 
     wxImage ConvertToImage() const override;
 

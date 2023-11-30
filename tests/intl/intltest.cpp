@@ -239,6 +239,54 @@ void IntlTestCase::IsAvailable()
     CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, nullptr) );
 }
 
+TEST_CASE("wxTranslations::AddCatalog", "[translations]")
+{
+    // We currently have translations for French and Japanese in this test
+    // directory, check that loading those succeeds but loading others doesn't.
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+
+    const wxString domain("internat");
+
+    wxTranslations trans;
+
+    SECTION("All")
+    {
+        auto available = trans.GetAvailableTranslations(domain);
+        REQUIRE( available.size() == 2 );
+
+        available.Sort();
+        CHECK( available[0] == "fr" );
+        CHECK( available[1] == "ja" );
+    }
+
+    SECTION("French")
+    {
+        trans.SetLanguage(wxLANGUAGE_FRENCH);
+        CHECK( trans.AddAvailableCatalog(domain) );
+    }
+
+    SECTION("Italian")
+    {
+        trans.SetLanguage(wxLANGUAGE_ITALIAN);
+        CHECK_FALSE( trans.AddAvailableCatalog(domain) );
+    }
+
+    // And loading catalog using the same language as message IDs should
+    // "succeed" too, even if there is no such file, as in this case the
+    // message IDs themselves can be used directly.
+    SECTION("Untranslated")
+    {
+        trans.SetLanguage(wxLANGUAGE_GERMAN);
+        CHECK( trans.AddCatalog(domain, wxLANGUAGE_GERMAN) );
+
+        // Using a different region should still work.
+        CHECK( trans.AddCatalog(domain, wxLANGUAGE_GERMAN_SWISS) );
+
+        // But using a completely different language should not.
+        CHECK_FALSE( trans.AddCatalog(domain, wxLANGUAGE_DUTCH) );
+    }
+}
+
 TEST_CASE("wxLocale::Default", "[locale]")
 {
     const int langDef = wxUILocale::GetSystemLanguage();

@@ -88,14 +88,6 @@ protected:
 };
 
 
-
-
-/** If set, then match from list is searched for a custom colour in wxColourProperty.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_TRANSLATE_CUSTOM = wxPG_PROP_CLASS_SPECIFIC_1;
-
-
 /** @class wxSystemColourProperty
     @ingroup classes
     Has dropdown list of wxWidgets system colours. Value used is

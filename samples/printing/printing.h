@@ -2,7 +2,6 @@
 // Name:        samples/printing.h
 // Purpose:     Printing demo for wxWidgets
 // Author:      Julian Smart
-// Modified by:
 // Created:     1995
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

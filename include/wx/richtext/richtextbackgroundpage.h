@@ -3,7 +3,6 @@
 // Purpose:     Declares the rich text formatting dialog background
 //              properties page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     13/11/2010 11:17:25
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

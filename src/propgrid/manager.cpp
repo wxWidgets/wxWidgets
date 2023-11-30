@@ -2,7 +2,6 @@
 // Name:        src/propgrid/manager.cpp
 // Purpose:     wxPropertyGridManager
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2005-01-14
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence

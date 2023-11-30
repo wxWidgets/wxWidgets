@@ -2,7 +2,6 @@
 // Name:        src/cocoa/filedlg.mm
 // Purpose:     wxFileDialog for wxCocoa
 // Author:      Ryan Norton
-// Modified by:
 // Created:     2004-10-02
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/generic/filepickerg.h
 // Purpose:     wxGenericFileDirButton, wxGenericFileButton, wxGenericDirButton
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -101,7 +100,7 @@ private:
 class WXDLLIMPEXP_CORE wxGenericFileButton : public wxGenericFileDirButton
 {
 public:
-    wxGenericFileButton() {}
+    wxGenericFileButton() = default;
     wxGenericFileButton(wxWindow *parent,
                         wxWindowID id,
                         const wxString& label = wxASCII_STR(wxFilePickerWidgetLabel),
@@ -169,7 +168,7 @@ private:
 class WXDLLIMPEXP_CORE wxGenericDirButton : public wxGenericFileDirButton
 {
 public:
-    wxGenericDirButton() {}
+    wxGenericDirButton() = default;
     wxGenericDirButton(wxWindow *parent,
                        wxWindowID id,
                        const wxString& label = wxASCII_STR(wxDirPickerWidgetLabel),

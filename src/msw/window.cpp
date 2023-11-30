@@ -542,7 +542,7 @@ bool wxWindowMSW::CreateUsingMSWClass(const wxChar* classname,
         if ( exstyle & WS_EX_TOPMOST )
             break;
 
-        // Children of such windows as this doesn't work neither (see #23078).
+        // Children of such windows as this doesn't work either (see #23078).
         wxWindow* const tlw = wxGetTopLevelParent(this);
         if ( tlw && tlw->HasFlag(wxSTAY_ON_TOP) )
             break;

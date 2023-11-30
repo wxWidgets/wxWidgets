@@ -2,7 +2,6 @@
 // Name:        src/msw/datectrl.cpp
 // Purpose:     wxDatePickerCtrl implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-09
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

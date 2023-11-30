@@ -2,7 +2,6 @@
 // Name:        arttest.cpp
 // Purpose:     wxArtProvider sample
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2002/03/25
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence

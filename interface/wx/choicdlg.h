@@ -6,16 +6,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    Default width of the choice dialog.
-*/
-#define wxCHOICE_WIDTH 150
-
-/**
-    Default height of the choice dialog.
-*/
-#define wxCHOICE_HEIGHT 200
-
-/**
     Default style of the choice dialog.
 */
 #define wxCHOICEDLG_STYLE (wxDEFAULT_DIALOG_STYLE | wxOK | wxCANCEL | wxCENTRE | wxRESIZE_BORDER)
@@ -329,6 +319,11 @@ int wxGetSingleChoiceIndex(const wxString& message,
     If @c centre is @true, the message text (which may include new line
     characters) is centred; if @false, the message is left-justified.
 
+    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
+    all ignored. To change the dialog's position or size, create a @c
+    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
+    change its size before showing it.
+
     @header{wx/choicdlg.h}
 
     @beginWxPerlOnly
@@ -380,6 +375,11 @@ wxString wxGetSingleChoice(const wxString& message,
     corresponding to the strings, and returns one of these pointers or @NULL
     if Cancel was pressed. The @c client_data array must have the same number
     of elements as @c choices or @c aChoices!
+
+    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
+    all ignored. To change the dialog's position or size, create a @c
+    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
+    change its size before showing it.
 
     @header{wx/choicdlg.h}
 
@@ -443,8 +443,10 @@ void* wxGetSingleChoiceData(const wxString& message,
     which is an array of @a n strings for the listbox or by using a single
     @c aChoices parameter of type wxArrayString.
 
-    If @c centre is @true, the message text (which may include new line
-    characters) is centred; if @false, the message is left-justified.
+    Note that the @a x, @a y, @a centre, @a width and @a height parameters are
+    all ignored. To change the dialog's position or size, create a @c
+    wxSingleChoiceDialog object instead of calling @c wxGetSingleChoice() and
+    change its size before showing it.
 
     @header{wx/choicdlg.h}
 

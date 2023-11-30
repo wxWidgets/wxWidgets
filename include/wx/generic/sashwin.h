@@ -4,7 +4,6 @@
 //              sash on each edge, allowing it to be dragged. An event
 //              is generated when the sash is released.
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

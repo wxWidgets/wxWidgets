@@ -390,13 +390,13 @@ wxBitmapRefData::~wxBitmapRefData()
     if (m_surface)
         cairo_surface_destroy(m_surface);
 #else
-    if (m_pixbufMask)
-        g_object_unref(m_pixbufMask);
     if (m_pixmap)
         g_object_unref (m_pixmap);
     if (m_pixbuf)
         g_object_unref (m_pixbuf);
 #endif
+    if (m_pixbufMask)
+        g_object_unref(m_pixbufMask);
     delete m_mask;
 }
 
@@ -1062,7 +1062,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& r) const
     const wxBitmapRefData* bmpData = M_BMPDATA;
 #ifdef __WXGTK3__
     const double s = bmpData->m_scaleFactor;
-    const wxRect rect(int(r.x * s), int(r.y * s), int(r.width * s), int(r.height * s));
+    const wxRect rect(wxRound(r.x * s), wxRound(r.y * s), wxRound(r.width * s), wxRound(r.height * s));
 #else
     const wxRect& rect = r;
 #endif

@@ -2,7 +2,6 @@
 // Name:        src/osx/brush.cpp
 // Purpose:     wxBrush
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

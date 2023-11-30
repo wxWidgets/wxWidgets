@@ -2,7 +2,6 @@
 // Name:        wx/apptrait.h
 // Purpose:     declaration of wxAppTraits and derived classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.06.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -40,7 +39,7 @@ class WXDLLIMPEXP_BASE wxAppTraitsBase
 {
 public:
     // needed since this class declares virtual members
-    virtual ~wxAppTraitsBase() { }
+    virtual ~wxAppTraitsBase() = default;
 
     // hooks for working with the global objects, may be overridden by the user
     // ------------------------------------------------------------------------

@@ -2,7 +2,6 @@
 // Name:        wx/progdlg.h
 // Purpose:     Base header for wxProgressDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence

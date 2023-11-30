@@ -2,7 +2,6 @@
 // Name:        wx/stdpaths.h
 // Purpose:     declaration of wxStandardPaths class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-17
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -263,7 +262,7 @@ protected:
     // Ctor is protected because wxStandardPaths::Get() should always be used
     // to access the global wxStandardPaths object of the correct type instead
     // of creating one of a possibly wrong type yourself.
-    wxStandardPaths() { }
+    wxStandardPaths() = default;
 
 private:
     wxString m_prefix;

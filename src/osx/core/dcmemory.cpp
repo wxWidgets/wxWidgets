@@ -2,7 +2,6 @@
 // Name:        src/osx/core/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

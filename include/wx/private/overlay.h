@@ -2,7 +2,6 @@
 // Name:        wx/private/overlay.h
 // Purpose:     wxOverlayImpl declaration
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2006-10-20
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

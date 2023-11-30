@@ -281,7 +281,7 @@ public:
 
         @param doc A valid, i.e. non-null, document pointer ownership of which
             is passed to wxXmlResource, i.e. this pointer can't be used after
-            this function rteturns.
+            this function returns.
         @param name The name argument is optional, but may be provided if you
             plan to call Unload() later. It doesn't need to be an existing file
             or even conform to the usual form of file names as it is not

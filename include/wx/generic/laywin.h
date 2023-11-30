@@ -5,7 +5,6 @@
 //              layout-awareness (via event handlers). This is suited to
 //              IDE-style window layout.
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -208,7 +207,7 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_CORE wxLayoutAlgorithm: public wxObject
 {
 public:
-    wxLayoutAlgorithm() {}
+    wxLayoutAlgorithm() = default;
 
 #if wxUSE_MDI_ARCHITECTURE
     // The MDI client window is sized to whatever's left over.

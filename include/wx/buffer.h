@@ -2,7 +2,6 @@
 // Name:        wx/buffer.h
 // Purpose:     auto buffer classes: buffers which automatically free memory
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.04.99
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

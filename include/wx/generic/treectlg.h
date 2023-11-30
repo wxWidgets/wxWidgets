@@ -2,7 +2,6 @@
 // Name:        wx/generic/treectlg.h
 // Purpose:     wxTreeCtrl class
 // Author:      Robert Roebling
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) 1997,1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -72,6 +71,7 @@ public:
     virtual unsigned int GetIndent() const override { return m_indent; }
     virtual void SetIndent(unsigned int indent) override;
 
+    virtual void SetStateImages(const wxVector<wxBitmapBundle>& images) override;
 
     virtual void SetImageList(wxImageList *imageList) override;
     virtual void SetStateImageList(wxImageList *imageList) override;
@@ -370,6 +370,13 @@ private:
     // operation.
     void ResetFindState();
 
+    // Find the next item, either looking inside the collapsed items or not.
+    enum
+    {
+        Next_Any     = 0,
+        Next_Visible = 1
+    };
+    wxTreeItemId DoGetNext(const wxTreeItemId& item, int flags = 0) const;
 
     // True if we're using custom colours/font, respectively, or false if we're
     // using the default colours and should update them whenever system colours
@@ -396,7 +403,7 @@ class WXDLLIMPEXP_CORE wxTreeCtrl: public wxGenericTreeCtrl
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 
 public:
-    wxTreeCtrl() {}
+    wxTreeCtrl() = default;
 
     wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,

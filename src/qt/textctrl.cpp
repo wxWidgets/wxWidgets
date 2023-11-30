@@ -17,6 +17,12 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTextEdit>
 
+#include <limits>
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
+#define wxHAS_QT_INPUTREJECTED
+#endif
+
 /*
  * Abstract base class for wxQtSingleLineEdit and wxQtMultiLineEdit.
  * This splits the polymorphic behaviour into two separate classes, avoiding
@@ -37,8 +43,10 @@ public:
     virtual bool GetSelection(long *from, long *to) const = 0;
     virtual long XYToPosition(long x, long y) const = 0;
     virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const = 0;
     virtual QScrollArea *ScrollBarsContainer() const = 0;
     virtual void WriteText( const wxString &text ) = 0;
+    virtual void SetMaxLength(unsigned long len) = 0;
     virtual void MarkDirty() = 0;
     virtual void DiscardEdits() = 0;
     virtual void blockSignals(bool block) = 0;
@@ -96,8 +104,16 @@ public:
         return GetHandler()->GetValue();
     }
 
+    // cursorRect() is protected in base class. Make it public
+    // so it can be accessed by wxQtSingleLineEdit::HitTest()
+    using QLineEdit::cursorRect;
+
 private:
     void textChanged();
+
+#ifdef wxHAS_QT_INPUTREJECTED
+    void inputRejected();
+#endif
 };
 
 class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
@@ -241,11 +257,37 @@ public:
 
         return true;
     }
+
+    virtual wxTextCtrlHitTestResult
+    HitTest(const wxPoint& pt, long* pos) const override
+    {
+        auto qtEdit = static_cast<wxQtTextEdit* const>(m_edit);
+
+        auto cursor  = qtEdit->cursorForPosition( wxQtConvertPoint(pt) );
+        auto curRect = qtEdit->cursorRect(cursor);
+
+        if ( pos )
+            *pos = cursor.position();
+
+        if ( pt.y > curRect.y() + qtEdit->fontMetrics().height() )
+            return wxTE_HT_BELOW;
+
+        if ( pt.x > curRect.x() + qtEdit->fontMetrics().averageCharWidth() )
+            return wxTE_HT_BEYOND;
+
+        return wxTE_HT_ON_TEXT;
+    }
+
     virtual void WriteText( const wxString &text ) override
     {
         m_edit->insertPlainText(wxQtConvertString( text ));
         // the cursor is moved to the end, ensure it is shown
         m_edit->ensureCursorVisible();
+    }
+
+    virtual void SetMaxLength(unsigned long WXUNUSED(len)) override
+    {
+        wxMISSING_IMPLEMENTATION("not implemented for multiline control");
     }
 
     virtual void MarkDirty() override
@@ -422,6 +464,15 @@ public:
         m_edit->insert(wxQtConvertString( text ));
     }
 
+    virtual void SetMaxLength(unsigned long len) override
+    {
+        // Notice that setMaxLength() takes an int and not an unsigned int
+        m_edit->setMaxLength(
+            len > std::numeric_limits<int>::max()
+                ? std::numeric_limits<int>::max() : len
+        );
+    }
+
     virtual void MarkDirty() override
     {
         return m_edit->setModified( true );
@@ -489,6 +540,25 @@ public:
         return true;
     }
 
+    virtual wxTextCtrlHitTestResult
+    HitTest(const wxPoint& pt, long *pos) const override
+    {
+        auto qtEdit  = static_cast<wxQtLineEdit* const>(m_edit);
+        auto curPos  = qtEdit->cursorPositionAt( wxQtConvertPoint(pt) );
+        auto curRect = qtEdit->cursorRect();
+
+        if ( pos )
+            *pos = curPos;
+
+        if ( pt.y > curRect.y() + qtEdit->fontMetrics().height() )
+            return wxTE_HT_BELOW;
+
+        if ( pt.x > curRect.x() + qtEdit->fontMetrics().averageCharWidth() )
+            return wxTE_HT_BEYOND;
+
+        return wxTE_HT_ON_TEXT;
+    }
+
     virtual QScrollArea *ScrollBarsContainer() const override
     {
         return nullptr;
@@ -515,6 +585,11 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
 {
     connect(this, &QLineEdit::textChanged,
             this, &wxQtLineEdit::textChanged);
+
+#ifdef wxHAS_QT_INPUTREJECTED
+    connect(this, &QLineEdit::inputRejected,
+            this, &wxQtLineEdit::inputRejected);
+#endif
 }
 
 void wxQtLineEdit::textChanged()
@@ -525,6 +600,15 @@ void wxQtLineEdit::textChanged()
         handler->SendTextUpdatedEventIfAllowed();
     }
 }
+
+#ifdef wxHAS_QT_INPUTREJECTED
+void wxQtLineEdit::inputRejected()
+{
+    wxCommandEvent event(wxEVT_TEXT_MAXLEN, GetHandler()->GetId());
+    event.SetString( GetHandler()->GetValue() );
+    EmitEvent( event );
+}
+#endif // wxHAS_QT_INPUTREJECTED
 
 wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
     : wxQtEventSignalHandler< QTextEdit, wxTextCtrl >( parent, handler )
@@ -676,6 +760,12 @@ void wxTextCtrl::ShowPosition(long WXUNUSED(pos))
 {
 }
 
+wxTextCtrlHitTestResult
+wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
+{
+    return m_qtEdit->HitTest(pt, pos);
+}
+
 bool wxTextCtrl::DoLoadFile(const wxString& WXUNUSED(file), int WXUNUSED(fileType))
 {
     return false;
@@ -726,6 +816,24 @@ void wxTextCtrl::EmptyUndoBuffer()
     m_qtEdit->EmptyUndoBuffer();
 }
 
+bool wxTextCtrl::IsEditable() const
+{
+    return HasFlag(wxTE_READONLY);
+}
+
+void wxTextCtrl::SetEditable(bool editable)
+{
+    long flags = GetWindowStyle();
+
+    if ( editable )
+        flags &= ~wxTE_READONLY;
+    else
+        flags |= wxTE_READONLY;
+
+    SetWindowStyle(flags);
+    m_qtEdit->SetStyleFlags(flags);
+}
+
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
     m_qtEdit->SetInsertionPoint(pos);
@@ -767,22 +875,35 @@ void wxTextCtrl::WriteText( const wxString &text )
     m_qtEdit->WriteText(text);
 }
 
+void wxTextCtrl::SetMaxLength(unsigned long len)
+{
+    m_qtEdit->SetMaxLength(len);
+}
+
 void wxTextCtrl::DoSetValue( const wxString &text, int flags )
 {
-    // do not fire qt signals for certain methods (i.e. ChangeText)
-    if ( !(flags & SetValue_SendEvent) )
+    if ( text != DoGetValue() )
     {
-        m_qtEdit->blockSignals(true);
+        // do not fire qt signals for certain methods (i.e. ChangeText)
+        if ( !(flags & SetValue_SendEvent) )
+        {
+            m_qtEdit->blockSignals(true);
+        }
+
+        m_qtEdit->SetValue( text );
+
+        // re-enable qt signals
+        if ( !(flags & SetValue_SendEvent) )
+        {
+            m_qtEdit->blockSignals(false);
+        }
+        SetInsertionPoint(0);
     }
-
-    m_qtEdit->SetValue( text );
-
-    // re-enable qt signals
-    if ( !(flags & SetValue_SendEvent) )
+    else
     {
-        m_qtEdit->blockSignals(false);
+        if ( flags & SetValue_SendEvent )
+            SendTextUpdatedEventIfAllowed();
     }
-    SetInsertionPoint(0);
 }
 
 QWidget *wxTextCtrl::GetHandle() const

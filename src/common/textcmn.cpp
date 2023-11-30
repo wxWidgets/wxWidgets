@@ -2,7 +2,6 @@
 // Name:        src/common/textcmn.cpp
 // Purpose:     implementation of platform-independent functions of wxTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     13.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

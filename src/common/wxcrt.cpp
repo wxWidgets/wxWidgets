@@ -739,7 +739,10 @@ WXDLLIMPEXP_BASE int wxCRT_StrnicmpW(const wchar_t *s1, const wchar_t *s2, size_
 {
   // initialize the variables just to suppress stupid gcc warning
   wchar_t c1 = 0, c2 = 0;
-  while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1) n--, s1++, s2++;
+    while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1)
+    {
+        n--; s1++; s2++;
+    }
   if (n) {
     if (c1 < c2) return -1;
     if (c1 > c2) return 1;

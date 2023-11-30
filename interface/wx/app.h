@@ -936,7 +936,7 @@ public:
         Works like SafeYield() with @e onlyIfNeeded == @true except that
         it allows the caller to specify a mask of events to be processed.
 
-        See wxAppConsole::YieldFor for more info.
+        See wxEventLoopBase::YieldFor() for more info.
     */
     virtual bool SafeYieldFor(wxWindow *win, long eventsToProcess);
 
@@ -1041,6 +1041,11 @@ public:
 
         This function can be called to suppress GTK diagnostic messages that
         are output on the standard error stream by default.
+
+        If @c WXSUPPRESS_GTK_DIAGNOSTICS environment variable is set to a
+        non-zero value, wxWidgets automatically calls this function on program
+        startup with the value of this variable as @a flags if it's a number or
+        with the default flags value otherwise.
 
         The default value of the argument disables all messages, but you
         can pass in a mask flag to specifically disable only particular

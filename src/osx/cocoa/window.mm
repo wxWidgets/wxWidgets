@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/window.mm
 // Purpose:     widgets (non tlw) for cocoa
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-06-20
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -17,6 +16,7 @@
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
     #include "wx/radiobut.h"
+    #include "wx/scrolbar.h"
 #endif
 
 #ifdef __WXMAC__
@@ -190,6 +190,9 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)flag;
+
+- (BOOL)clipsToBounds;
+- (void)setClipsToBounds:(BOOL)clipsToBounds;
 
 - (void)setImage:(NSImage *)image;
 - (void)setControlSize:(NSControlSize)size;
@@ -2560,7 +2563,8 @@ wxWidgetImpl( peer, flags )
 {
     Init();
     m_osxView = w;
-    
+    m_osxClipView = nil;
+
     // check if the user wants to create the control initially hidden
     if ( !peer->IsShown() )
         SetVisibility(false);
@@ -2569,6 +2573,7 @@ wxWidgetImpl( peer, flags )
     if ( m_osxView )
         CFRetain(m_osxView);
     [m_osxView release];
+    m_osxView.clipsToBounds = YES;
 }
 
 
@@ -3212,6 +3217,21 @@ bool wxWidgetCocoaImpl::CanFocus() const
     return canFocus;
 }
 
+@interface wxNSClipView : NSClipView
+
+@end
+
+@implementation wxNSClipView
+
+#if wxOSX_USE_NATIVE_FLIPPED
+- (BOOL)isFlipped
+{
+    return YES;
+}
+#endif
+
+@end
+
 bool wxWidgetCocoaImpl::HasFocus() const
 {
     NSView* targetView = m_osxView;
@@ -3302,7 +3322,13 @@ void wxWidgetCocoaImpl::RemoveFromParent()
 
 void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
 {
-    NSView* container = parent->GetWXWidget() ;
+    NSView* container = nil;
+
+    if ( m_wxPeer->MacIsWindowScrollbar( parent->GetWXPeer()))
+        container = parent->GetWXWidget();
+    else
+        container = parent->GetContainer();
+
     wxASSERT_MSG( container != nullptr , wxT("No valid mac container control") ) ;
     [container addSubview:m_osxView];
     
@@ -4031,6 +4057,41 @@ void wxWidgetCocoaImpl::SetDrawingEnabled(bool enabled)
         [[m_osxView window] disableFlushWindow];
     }
 }
+
+void wxWidgetCocoaImpl::AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical)
+{
+    if( m_osxClipView )
+    {
+        NSRect bounds = m_osxView.bounds;
+        if( horizontal && horizontal->IsShown() )
+        {
+            int sz = horizontal->GetSize().y;
+            bounds.size.height -= sz;
+        }
+        if( vertical && vertical->IsShown() )
+        {
+            int sz = vertical->GetSize().x;
+            bounds.size.width -= sz;
+        }
+        m_osxClipView.frame = bounds;
+    }
+}
+
+void wxWidgetCocoaImpl::UseClippingView(bool clip)
+{
+   wxWindow* peer = m_wxPeer;
+
+    if ( peer && m_osxClipView == nil)
+    {
+        m_osxClipView = [[wxNSClipView alloc] initWithFrame: m_osxView.bounds];
+        [(NSClipView*)m_osxClipView setDrawsBackground: NO];
+        [m_osxView addSubview:m_osxClipView];
+
+        // TODO check for additional subwindows which might have to be moved to the clip view ?
+    }
+}
+
+
 //
 // Factory methods
 //

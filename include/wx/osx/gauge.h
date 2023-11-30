@@ -2,7 +2,6 @@
 // Name:        wx/osx/gauge.h
 // Purpose:     wxGauge class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -17,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
  public:
-  wxGauge() { }
+  wxGauge() = default;
 
   wxGauge(wxWindow *parent, wxWindowID id,
            int range,

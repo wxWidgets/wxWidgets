@@ -137,6 +137,7 @@ jobs:
             container: ubuntu:18.04
             configure_flags: --with-qt --enable-pch --without-opengl
             skip_samples: true
+            use_xvfb: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -343,6 +344,11 @@ jobs:
             exit $rc
           fi
 
+      - name: Testing launching GUI test
+        working-directory: tests
+        run: |
+          WX_TEST_DISABLE_GUI=1 ./test_gui
+
       - name: Testing GUI using Xvfb
         if: matrix.use_xvfb
         working-directory: tests
@@ -363,6 +369,9 @@ jobs:
             # RichTextCtrlTestCase whose Table sub-test seems to be problematic.
             wx_tests_selection='~[.] ~RichTextCtrlTestCase'
           fi
+
+          # The tests only work reliably with native windows
+          export QT_USE_NATIVE_WINDOWS=1
 
           # Configure the system to create core files and create them in the
           # current directory instead of using apport to handle them, as

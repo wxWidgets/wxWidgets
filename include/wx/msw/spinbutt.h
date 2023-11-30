@@ -2,7 +2,6 @@
 // Name:        wx/msw/spinbutt.h
 // Purpose:     wxSpinButton class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -20,7 +19,7 @@ class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
     // construction
-    wxSpinButton() { }
+    wxSpinButton() = default;
 
     wxSpinButton(wxWindow *parent,
                  wxWindowID id = wxID_ANY,

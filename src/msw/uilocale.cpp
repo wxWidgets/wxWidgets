@@ -205,6 +205,7 @@ public:
         return str;
     }
 
+#if wxUSE_DATETIME
     wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const override
     {
         return wxDateTime::GetEnglishMonthName(month, form);
@@ -214,6 +215,7 @@ public:
     {
         return wxDateTime::GetEnglishWeekDayName(weekday, form);
     }
+#endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const override
     {
@@ -471,6 +473,7 @@ public:
         return str;
     }
 
+#if wxUSE_DATETIME
     wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const override
     {
         static LCTYPE monthNameIndex[3][12] =
@@ -538,6 +541,7 @@ public:
 
         return DoGetInfo(lctype);
     }
+#endif // wxUSE_DATETIME
 
     wxLayoutDirection GetLayoutDirection() const override
     {

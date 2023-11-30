@@ -2,7 +2,6 @@
 // Name:        wx/fileconf.h
 // Purpose:     wxFileConfig derivation of wxConfigBase
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.04.98 (adapted from appconf.cpp)
 // Copyright:   (c) 1997 Karsten Ballueder   &  Vadim Zeitlin
 //                       Ballueder@usa.net     <zeitlin@dptmaths.ens-cachan.fr>

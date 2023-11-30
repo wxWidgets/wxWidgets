@@ -2,7 +2,6 @@
 // Name:        src/msw/helpbest.cpp
 // Purpose:     Tries to load MS HTML Help, falls back to wxHTML upon failure
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     02/04/2001
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence

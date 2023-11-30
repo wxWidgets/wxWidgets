@@ -88,8 +88,8 @@ public:
     // type of a single colour component
     typedef unsigned char ChannelType;
 
-    wxColourBase() {}
-    virtual ~wxColourBase() {}
+    wxColourBase() = default;
+    virtual ~wxColourBase() = default;
 
 
     // Set() functions

@@ -2,7 +2,6 @@
 // Name:        wx/msw/helpchm.h
 // Purpose:     Help system: MS HTML Help implementation
 // Author:      Julian Smart
-// Modified by:
 // Created:     16/04/2000
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

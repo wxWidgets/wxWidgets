@@ -2,7 +2,6 @@
 // Name:        dxfrenderer.h
 // Purpose:     DXF reader and renderer
 // Author:      Sandro Sigala
-// Modified by:
 // Created:     2005-11-10
 // Copyright:   (c) Sandro Sigala
 // Licence:     wxWindows licence

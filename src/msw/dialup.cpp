@@ -2,7 +2,6 @@
 // Name:        src/msw/dialup.cpp
 // Purpose:     MSW implementation of network/dialup classes and functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

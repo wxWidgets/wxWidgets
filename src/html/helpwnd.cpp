@@ -447,16 +447,19 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 #endif
                                        );
 
-        wxImageList *ContentsImageList = new wxImageList(16, 16);
+        wxSize iconSize(16, 16);
+        iconSize *= GetDPIScaleFactor();
+
+        wxImageList *ContentsImageList = new wxImageList(iconSize.x, iconSize.y);
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
 
         m_ContentsBox->AssignImageList(ContentsImageList);
 

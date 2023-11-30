@@ -2,7 +2,6 @@
 // Name:        wx/stattext.h
 // Purpose:     wxStaticText base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticTextNameStr[];
 class WXDLLIMPEXP_CORE wxStaticTextBase : public wxControl
 {
 public:
-    wxStaticTextBase() { }
+    wxStaticTextBase() = default;
 
     // wrap the text of the control so that no line is longer than the given
     // width (if possible: this function won't break words)

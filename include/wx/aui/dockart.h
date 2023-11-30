@@ -2,7 +2,6 @@
 // Name:        wx/aui/dockart.h
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2005-05-17
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
@@ -32,8 +31,8 @@ class WXDLLIMPEXP_AUI wxAuiDockArt
 {
 public:
 
-    wxAuiDockArt() { }
-    virtual ~wxAuiDockArt() { }
+    wxAuiDockArt() = default;
+    virtual ~wxAuiDockArt() = default;
 
     virtual wxAuiDockArt* Clone() = 0;
     virtual int GetMetric(int id) = 0;

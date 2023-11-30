@@ -54,9 +54,13 @@ TEST_CASE("StdString::Iterators", "[stdstring]")
 {
     // test compilation of default iterators ctors:
     wxString::iterator i1;
+    wxUnusedVar(i1);
     wxString::const_iterator i2;
+    wxUnusedVar(i2);
     wxString::reverse_iterator i3;
+    wxUnusedVar(i3);
     wxString::const_reverse_iterator i4;
+    wxUnusedVar(i4);
 }
 
 TEST_CASE("StdString::IteratorsCmp", "[stdstring]")

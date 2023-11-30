@@ -2,7 +2,6 @@
 // Name:        src/common/appbase.cpp
 // Purpose:     implements wxAppConsoleBase class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.06.2003 (extracted from common/appcmn.cpp)
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

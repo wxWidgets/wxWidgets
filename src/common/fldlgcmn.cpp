@@ -2,7 +2,6 @@
 // Name:        src/common/fldlgcmn.cpp
 // Purpose:     wxFileDialog common functions
 // Author:      John Labenski
-// Modified by:
 // Created:     14.06.03 (extracted from src/*/filedlg.cpp)
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence

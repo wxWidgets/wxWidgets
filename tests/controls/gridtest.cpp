@@ -26,7 +26,7 @@
     #include "wx/stopwatch.h"
 #endif // __WXGTK__
 
-#include "waitforpaint.h"
+#include "waitfor.h"
 
 // To disable tests which work locally, but not when run on GitHub CI.
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
@@ -360,6 +360,8 @@ GridTestCase::GridTestCase() : m_tempGrid(nullptr)
     m_grid->Refresh();
     m_grid->Update();
 
+    wxTheApp->GetTopWindow()->Raise();
+
     waitForPaint.YieldUntilPainted();
 }
 
@@ -553,23 +555,29 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
-
+    WaitFor("mouse click to be processed", [&]() {
+        return lclick.GetCount() != 0;
+    });
     CHECK(lclick.GetCount() == 1);
 
     sim.MouseDblClick();
-    wxYield();
-
+    WaitFor("mouse double click to be processed", [&]() {
+        return ldclick.GetCount() != 0;
+    });
     CHECK(ldclick.GetCount() == 1);
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
+    WaitFor("mouse right click to be processed", [&]() {
+        return rclick.GetCount() != 0;
+    });
 
     CHECK(rclick.GetCount() == 1);
     rclick.Clear();
 
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
+    WaitFor("mouse right double click to be processed", [&]() {
+        return rclick.GetCount() != 0;
+    });
 
     if ( m_grid->IsUsingNativeHeader() )
     {
@@ -608,7 +616,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
+    WaitFor("mouse click to be processed", [&]() {
+        return sort.GetCount() != 0;
+    });
 
     CHECK(sort.GetCount() == 1);
 #endif
@@ -631,7 +641,11 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
     wxUIActionSimulator sim;
 
     wxPoint pt = m_grid->ClientToScreen(wxPoint(m_grid->GetRowLabelSize() +
-                                        m_grid->GetColSize(0), 5));
+                                                m_grid->GetColSize(0), 5));
+#ifdef __WXQT__
+    pt += wxPoint(1, 0); // FIXME: why this is needed?
+#endif
+
     sim.MouseMove(pt);
     wxYield();
 
@@ -642,16 +656,24 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Size", "[grid]")
     wxYield();
 
     sim.MouseUp();
-    wxYield();
+    WaitFor("mouse release to be processed", [&]() {
+        return colsize.GetCount() != 0;
+    });
 
     CHECK(colsize.GetCount() == 1);
 
     pt = m_grid->ClientToScreen(wxPoint(5, m_grid->GetColLabelSize() +
                                         m_grid->GetRowSize(0)));
 
+#ifdef __WXQT__
+    pt += wxPoint(0, 1); // FIXME: why this is needed?
+#endif
+
     sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
 
-    wxYield();
+    WaitFor("mouse drag to be processed", [&]() {
+        return rowsize.GetCount() != 0;
+    });
 
     CHECK(rowsize.GetCount() == 1);
 #endif
@@ -702,7 +724,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::RangeSelect", "[grid]")
     wxYield();
 
     sim.MouseUp();
-    wxYield();
+    WaitFor("mouse up to be processed", [&]() {
+        return select.GetCount() != 0;
+    });
 
     CHECK(select.GetCount() == 1);
 #endif
@@ -959,6 +983,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::MoveGridCursorUsingEndKey", "[grid]")
     m_grid->SetColPos(10, 5);
 
     m_grid->SetFocus();
+    wxYield();
 
     sim.KeyDown(WXK_END, wxMOD_CONTROL);
     sim.KeyUp(WXK_END, wxMOD_CONTROL);
@@ -985,6 +1010,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectUsingEndKey", "[grid]")
     REQUIRE( m_grid->IsVisible(0, 0) );
 
     m_grid->SetFocus();
+    wxYield();
 
     sim.KeyDown(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
     sim.KeyUp(WXK_END, wxMOD_CONTROL | wxMOD_SHIFT);
@@ -1359,6 +1385,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::Editable", "[grid]")
     m_grid->SetFocus();
     m_grid->SetGridCursor(1, 1);
 
+    wxYield();
+
     sim.Text("abab");
     wxYield();
 
@@ -1389,6 +1417,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ReadOnly", "[grid]")
     m_grid->SetFocus();
 
     m_grid->SetGridCursor(1, 1);
+
+    wxYield();
 
     CHECK(m_grid->IsCurrentCellReadOnly());
 
@@ -1467,8 +1497,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::WindowAsEditorControl", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 {
-    // TODO this test currently works only under Windows and GTK unfortunately
-#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__))
+    // TODO this test currently works only under Windows, GTK and Qt unfortunately
+#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__))
     if ( !EnableUITests() )
         return;
 
@@ -1492,6 +1522,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
                                              m_grid->GetColLabelSize())
                                    - wxPoint(0, 5));
 
+#ifdef __WXQT__
+    point += wxPoint(1, 0); // FIXME: why this is needed?
+#endif
+
     wxUIActionSimulator sim;
 
     wxYield();
@@ -1514,8 +1548,8 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
 {
-    // TODO this test currently works only under Windows and GTK unfortunately
-#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__))
+    // TODO this test currently works only under Windows, GTK and Qt unfortunately
+#if wxUSE_UIACTIONSIMULATOR && (defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__))
     if ( !EnableUITests() )
         return;
 
@@ -1546,6 +1580,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
                                    + wxPoint(m_grid->GetRowLabelSize(),
                                              m_grid->GetColLabelSize())
                                    - wxPoint(0, 5));
+
+#ifdef __WXQT__
+    point += wxPoint(1, 0); // FIXME: why this is needed?
+#endif
 
     wxUIActionSimulator sim;
 
@@ -1917,6 +1955,20 @@ public:
     virtual void SetValue( int /*row*/, int /*col*/, const wxString& /*value*/ ) override { }
 };
 
+// Under wxQt, we get spurious paint events if we call Refresh+Update.
+// So just call Refresh+wxYield which seems to fix the failures in the
+// test below.
+inline void UpdateGrid(wxGrid* grid)
+{
+#ifndef __WXQT__
+    grid->Refresh();
+    grid->Update();
+#else
+    grid->Refresh();
+    wxYield();
+#endif
+}
+
 } // namespace SetTable_ClearAttrCache
 
 TEST_CASE_METHOD(GridTestCase, "Grid::SetTable_ClearAttrCache", "[grid]")
@@ -1935,15 +1987,13 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SetTable_ClearAttrCache", "[grid]")
 
     drawCount1 = drawCount2 = 0;
     m_grid->SetTable(&table2);
-    m_grid->Refresh();
-    m_grid->Update();
+    UpdateGrid(m_grid);
     CHECK(drawCount1 == 0);
     CHECK(drawCount2 == 2*2);
 
     drawCount1 = drawCount2 = 0;
     m_grid->SetTable(&table1);
-    m_grid->Refresh();
-    m_grid->Update();
+    UpdateGrid(m_grid);
     CHECK(drawCount1 == 1*1);
     CHECK(drawCount2 == 0);
 

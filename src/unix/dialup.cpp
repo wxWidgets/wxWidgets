@@ -2,7 +2,6 @@
 // Name:        src/unix/dialup.cpp
 // Purpose:     Network related wxWidgets classes and functions
 // Author:      Karsten Ballüder
-// Modified by:
 // Created:     03.10.99
 // Copyright:   (c) Karsten Ballüder
 // Licence:     wxWindows licence

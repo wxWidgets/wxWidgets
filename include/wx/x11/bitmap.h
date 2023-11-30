@@ -2,7 +2,6 @@
 // Name:        wx/x11/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -55,7 +54,7 @@ private:
 class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
-    wxBitmap() {}
+    wxBitmap() = default;
     wxBitmap( int width, int height, int depth = -1 ) { Create( width, height, depth ); }
     wxBitmap( const wxSize& sz, int depth = -1 ) { Create( sz, depth ); }
     wxBitmap( int width, int height, const wxDC& dc ) { Create(width, height, dc); }

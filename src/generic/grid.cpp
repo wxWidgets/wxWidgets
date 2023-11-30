@@ -2912,6 +2912,8 @@ wxGrid::SetTable(wxGridTableBase *table,
 
     InvalidateBestSize();
 
+    UpdateCurrentCellOnRedim();
+
     return m_created;
 }
 
@@ -3061,7 +3063,7 @@ void wxGrid::InitRowHeights()
 
     for ( int i = 0; i < m_numRows; i++ )
     {
-        int rowBottom = ( GetRowPos( i ) + 1 ) * m_defaultRowHeight;;
+        int rowBottom = ( GetRowPos( i ) + 1 ) * m_defaultRowHeight;
         m_rowBottoms.Add( rowBottom );
     }
 }
@@ -4937,9 +4939,15 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             DisableCellEditControl();
 
             if ( event.LeftDown() )
-                handled = (DoGridCellLeftDown(event, coords, pos), true);
+            {
+                DoGridCellLeftDown(event, coords, pos);
+                handled = true;
+            }
             else if ( event.LeftDClick() )
-                handled = (DoGridCellLeftDClick(event, coords, pos), true);
+            {
+                DoGridCellLeftDClick(event, coords, pos);
+                handled = true;
+            }
             else if ( event.RightDown() )
                 handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event) != Event_Unhandled;
             else if ( event.RightDClick() )

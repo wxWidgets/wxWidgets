@@ -2,7 +2,6 @@
 // Name:        src/univ/menu.cpp
 // Purpose:     wxMenuItem, wxMenu and wxMenuBar implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

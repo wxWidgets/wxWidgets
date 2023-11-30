@@ -2,7 +2,6 @@
 // Name:        listctrl.cpp
 // Purpose:     wxListCtrl sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -1276,7 +1275,8 @@ void MyListCtrl::OnChecked(wxListEvent& event)
 
     if ( IsVirtual() )
     {
-        CheckItem(event.GetIndex(), true);
+        m_checked.SelectItem(event.GetIndex(), true);
+        RefreshItem(event.GetIndex());
     }
 
     event.Skip();
@@ -1288,7 +1288,8 @@ void MyListCtrl::OnUnChecked(wxListEvent& event)
 
     if ( IsVirtual() )
     {
-        CheckItem(event.GetIndex(), false);
+        m_checked.SelectItem(event.GetIndex(), false);
+        RefreshItem(event.GetIndex());
     }
 
     event.Skip();
@@ -1513,34 +1514,9 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     }
 }
 
-void MyListCtrl::CheckItem(long item, bool check)
-{
-    if ( IsVirtual() )
-    {
-        m_checked.SelectItem(item, check);
-        RefreshItem(item);
-    }
-    else
-    {
-        wxListCtrl::CheckItem(item, check);
-    }
-}
-
-bool MyListCtrl::IsItemChecked(long item) const
-{
-    if ( IsVirtual() )
-    {
-        return m_checked.IsSelected(item);
-    }
-    else
-    {
-        return wxListCtrl::IsItemChecked(item);
-    }
-}
-
 bool MyListCtrl::OnGetItemIsChecked(long item) const
 {
-    return IsItemChecked(item);
+    return m_checked.IsSelected(item);
 }
 
 int MyListCtrl::OnGetItemColumnImage(long item, long column) const

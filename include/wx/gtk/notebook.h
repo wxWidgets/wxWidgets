@@ -2,7 +2,6 @@
 // Name:        wx/gtk/notebook.h
 // Purpose:     wxNotebook class
 // Author:      Robert Roebling
-// Modified by:
 // Copyright:   (c) Julian Smart and Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

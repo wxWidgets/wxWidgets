@@ -12,6 +12,7 @@ public:
     void OnQuit(wxCloseEvent& event);
 
 private:
+    wxLog *m_logOld;
     wxTextCtrl *m_logText;
 };
 

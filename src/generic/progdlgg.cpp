@@ -2,7 +2,6 @@
 // Name:        src/generic/progdlgg.cpp
 // Purpose:     wxGenericProgressDialog class
 // Author:      Karsten Ballueder
-// Modified by:
 // Created:     09.05.1999
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence

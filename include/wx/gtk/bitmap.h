@@ -63,7 +63,7 @@ private:
 class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
-    wxBitmap() { }
+    wxBitmap() = default;
     wxBitmap( int width, int height, int depth = wxBITMAP_SCREEN_DEPTH )
         { Create(width, height, depth); }
     wxBitmap( const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH )

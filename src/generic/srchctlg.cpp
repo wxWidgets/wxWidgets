@@ -530,6 +530,13 @@ void wxSearchCtrl::LayoutControls()
     }
 }
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+WXHWND wxSearchCtrl::GetEditHWND() const
+{
+    return m_text->GetHWND();
+}
+#endif // wxMSW
+
 wxWindowList wxSearchCtrl::GetCompositeWindowParts() const
 {
     wxWindowList parts;

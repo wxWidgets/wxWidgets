@@ -3,7 +3,6 @@
 // Purpose:     declaration of wxLongLong class - best implementation of a 64
 //              bit integer for the current platform.
 // Author:      Jeffrey C. Ollie <jeff@ollie.clive.ia.us>, Vadim Zeitlin
-// Modified by:
 // Created:     10.02.99
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

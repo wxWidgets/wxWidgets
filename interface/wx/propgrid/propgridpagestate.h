@@ -5,6 +5,65 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+    Flags affecting property selection.
+
+    Values of this enum are used with wxPropertyGrid::CommitChangesFromEditor(),
+    for example.
+ */
+enum class wxPGSelectPropertyFlags : int
+{
+    /**
+      No flags
+      @hideinitializer
+    */
+    Null          = 0,
+    /**
+      Focuses to created editor
+      @hideinitializer
+    */
+    Focus         = 0x0001,
+    /**
+      Forces deletion and recreation of editor
+      @hideinitializer
+    */
+    Force         = 0x0002,
+    /**
+      For example, doesn't cause EnsureVisible
+      @hideinitializer
+    */
+    Nonvisible    = 0x0004,
+    /**
+      Do not validate editor's value before selecting
+      @hideinitializer
+    */
+    NoValidate    = 0x0008,
+    /**
+      Property being deselected is about to be deleted
+      @hideinitializer
+    */
+    Deleting      = 0x0010,
+    /**
+      Property's values was set to unspecified by the user
+      @hideinitializer
+    */
+    SetUnspec     = 0x0020,
+    /**
+      Property's event handler changed the value
+      @hideinitializer
+    */
+    DialogVal     = 0x0040,
+    /**
+      Set to disable sending of wxEVT_PG_SELECTED event
+      @hideinitializer
+    */
+    DontSendEvent = 0x0080,
+    /**
+      Don't make any graphics updates
+      @hideinitializer
+    */
+    NoRefresh     = 0x0100
+};
 
 /**
     @section propgrid_hittestresult wxPropertyGridHitTestResult

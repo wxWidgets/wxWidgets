@@ -3215,7 +3215,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
         // Ignore the return value of PrepareForItem() here, if it returns
         // false because GetValue() didn't return anything, we still want to
         // keep this cell visible, as otherwise it wouldn't be possible to edit
-        // it neither, and we do want to allow editing empty cells.
+        // it either, and we do want to allow editing empty cells.
         cell->PrepareForItem(wx_model, item, column);
     }
 

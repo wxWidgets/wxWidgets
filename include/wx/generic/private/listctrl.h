@@ -282,7 +282,8 @@ public:
                            const wxRect& rect,
                            const wxRect& rectHL,
                            bool highlighted,
-                           bool current );
+                           bool current,
+                           bool checked );
 
 private:
     // set the line to contain num items (only can be > 1 in report mode)

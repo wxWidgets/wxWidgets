@@ -77,6 +77,11 @@ Changes in behaviour not resulting in compilation errors
   called any longer by default, you need to explicitly enable 3.0 compatibility
   or change your code to override the newer overload, taking a wxWindow pointer.
 
+- wxImageList size is now expressed in physical pixels, i.e. its size must be
+  the same as the size of bitmaps added to it, in pixels. This is inconvenient
+  but should be viewed as a hint not to use wxImageList (but wxBitmapBundle)
+  in the applications supporting high DPI.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

@@ -2,7 +2,6 @@
 // Name:        src/msw/main.cpp
 // Purpose:     WinMain/DllMain
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -99,7 +98,7 @@ void wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS *ep)
     {
         default:
             wxFAIL_MSG( wxT("unexpected wxGlobalSEHandler() return value") );
-            // fall through
+            wxFALLTHROUGH;
 
         case EXCEPTION_EXECUTE_HANDLER:
             // if wxApp::OnFatalException() had been called we should exit the

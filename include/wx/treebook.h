@@ -2,7 +2,6 @@
 // Name:        wx/treebook.h
 // Purpose:     wxTreebook: wxNotebook-like control presenting pages in a tree
 // Author:      Evgeniy Tarassov, Vadim Zeitlin
-// Modified by:
 // Created:     2005-09-15
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

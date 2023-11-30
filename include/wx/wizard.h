@@ -201,7 +201,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  long style = wxDEFAULT_DIALOG_STYLE);
     */
-    wxWizardBase() { }
+    wxWizardBase() = default;
 
     // executes the wizard starting from the given page, returns true if it was
     // successfully finished, false if user cancelled it

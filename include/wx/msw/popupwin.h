@@ -2,7 +2,6 @@
 // Name:        wx/msw/popupwin.h
 // Purpose:     wxPopupWindow class for wxMSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.01.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        wx/geometry.h
 // Purpose:     Common Geometry Classes
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     08/05/99
 // Copyright:   (c) 1999 Stefan Csomor
 // Licence:     wxWindows licence
@@ -742,7 +741,7 @@ inline bool wxRect2DInt::operator != (const wxRect2DInt& rect) const
 class WXDLLIMPEXP_CORE wxTransform2D
 {
 public :
-    virtual ~wxTransform2D() { }
+    virtual ~wxTransform2D() = default;
     virtual void                    Transform( wxPoint2DInt* pt )const  = 0;
     virtual void                    Transform( wxRect2DInt* r ) const;
     virtual wxPoint2DInt    Transform( const wxPoint2DInt &pt ) const;

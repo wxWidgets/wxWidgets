@@ -2,7 +2,6 @@
 // Name:        src/common/containr.cpp
 // Purpose:     implementation of wxControlContainer
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

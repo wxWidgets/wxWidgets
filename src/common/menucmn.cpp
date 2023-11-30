@@ -2,7 +2,6 @@
 // Name:        src/common/menucmn.cpp
 // Purpose:     wxMenu and wxMenuBar methods common to all ports
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     26.10.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

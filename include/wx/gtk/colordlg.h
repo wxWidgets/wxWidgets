@@ -2,7 +2,6 @@
 // Name:        wx/gtk/colordlg.h
 // Purpose:     wxColourDialog
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004/06/04
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence
@@ -16,10 +15,10 @@
 class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {
 public:
-    wxColourDialog() {}
+    wxColourDialog() = default;
     wxColourDialog(wxWindow *parent,
                    const wxColourData *data = nullptr);
-    virtual ~wxColourDialog() {}
+    virtual ~wxColourDialog() = default;
 
     bool Create(wxWindow *parent, const wxColourData *data = nullptr);
 

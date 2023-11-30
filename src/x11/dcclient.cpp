@@ -2,7 +2,6 @@
 // Name:        src/x11/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence

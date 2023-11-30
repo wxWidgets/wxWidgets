@@ -165,15 +165,15 @@ void CheckBoxWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "&Set style");
-
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
     m_chkRight = CreateCheckBoxAndAddToSizer
                  (
                     sizerLeft,
                     "&Right aligned",
-                    CheckboxPage_ChkRight
+                    CheckboxPage_ChkRight,
+                    sizerLeftBox
                  );
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
@@ -185,28 +185,29 @@ void CheckBoxWidgetsPage::CreateContent()
         "&user-settable 3rd state",
     };
 
-    m_radioKind = new wxRadioBox(this, wxID_ANY, "&Kind",
+    m_radioKind = new wxRadioBox(sizerLeftBox, wxID_ANY, "&Kind",
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(kinds), kinds,
                                  1);
     sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
-    wxButton *btn = new wxButton(this, CheckboxPage_Reset, "&Reset");
+    wxButton *btn = new wxButton(sizerLeftBox, CheckboxPage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Operations");
-    wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Operations");
+    wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     sizerMiddle->Add(CreateSizerWithTextAndButton(CheckboxPage_ChangeLabel,
                                                      "Change label",
                                                      wxID_ANY,
-                                                     &m_textLabel),
+                                                     &m_textLabel,
+                                                     sizerMiddleBox),
                      0, wxALL | wxGROW, 5);
-    sizerMiddle->Add(new wxButton(this, CheckboxPage_Check, "&Check it"),
+    sizerMiddle->Add(new wxButton(sizerMiddleBox, CheckboxPage_Check, "&Check it"),
                      0, wxALL | wxGROW, 5);
-    sizerMiddle->Add(new wxButton(this, CheckboxPage_Uncheck, "&Uncheck it"),
+    sizerMiddle->Add(new wxButton(sizerMiddleBox, CheckboxPage_Uncheck, "&Uncheck it"),
                      0, wxALL | wxGROW, 5);
-    sizerMiddle->Add(new wxButton(this, CheckboxPage_PartCheck,
+    sizerMiddle->Add(new wxButton(sizerMiddleBox, CheckboxPage_PartCheck,
                                   "Put in &3rd state"),
                      0, wxALL | wxGROW, 5);
 

@@ -2,7 +2,6 @@
 // Name:        src/osx/statbmp_osx.cpp
 // Purpose:     wxStaticBitmap
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

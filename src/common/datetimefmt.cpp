@@ -2,7 +2,6 @@
 // Name:        src/common/datetimefmt.cpp
 // Purpose:     wxDateTime formatting & parsing code
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.05.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              parts of code taken from sndcal library by Scott E. Lee:

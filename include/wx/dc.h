@@ -2,7 +2,6 @@
 // Name:        wx/dc.h
 // Purpose:     wxDC class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05/25/99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -115,8 +114,8 @@ class WXDLLIMPEXP_FWD_CORE wxDCImpl;
 class WXDLLIMPEXP_CORE wxDCFactory
 {
 public:
-    wxDCFactory() {}
-    virtual ~wxDCFactory() {}
+    wxDCFactory() = default;
+    virtual ~wxDCFactory() = default;
 
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) = 0;
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) = 0;
@@ -143,7 +142,7 @@ private:
 class WXDLLIMPEXP_CORE wxNativeDCFactory: public wxDCFactory
 {
 public:
-    wxNativeDCFactory() {}
+    wxNativeDCFactory() = default;
 
     virtual wxDCImpl* CreateWindowDC( wxWindowDC *owner, wxWindow *window ) override;
     virtual wxDCImpl* CreateClientDC( wxClientDC *owner, wxWindow *window ) override;

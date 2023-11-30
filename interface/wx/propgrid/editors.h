@@ -441,8 +441,8 @@ public:
         wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
 
     public:
-        wxSampleMultiButtonEditor() {}
-        virtual ~wxSampleMultiButtonEditor() {}
+        wxSampleMultiButtonEditor() = default;
+        virtual ~wxSampleMultiButtonEditor() = default;
 
         virtual wxString GetName() const { return "SampleMultiButtonEditor"; }
 
@@ -543,7 +543,7 @@ public:
     /**
         Destructor.
     */
-    virtual ~wxPGMultiButton() { }
+    virtual ~wxPGMultiButton() = default;
 
     /**
         Adds new button, with given label.

@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/oleutils.h
 // Purpose:     OLE helper routines, OLE debugging support &c
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.02.1998
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -104,7 +103,7 @@ public:
 
     // retrieve a copy of our string - caller must SysFreeString() it later!
     wxDEPRECATED_MSG("use Copy() instead")
-    wxNODISCARD BSTR Get() const { return Copy(); }
+    BSTR Get() const { return Copy(); }
 private:
     // actual string
     BSTR m_bstrBuf;

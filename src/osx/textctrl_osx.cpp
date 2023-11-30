@@ -399,6 +399,7 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
                     return;
                 }
                 // else fall through to Redo
+                wxFALLTHROUGH;
             case 'Y':
                 if ( CanRedo() )
                     Redo() ;

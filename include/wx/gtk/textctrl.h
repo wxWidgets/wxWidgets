@@ -105,6 +105,14 @@ public:
     virtual wxTextProofOptions GetProofCheckOptions() const override;
 #endif // wxUSE_SPELLCHECK && __WXGTK3__
 
+    // GTK-specific functions
+
+    // Get the underlying text buffer for multi-line controls.
+    GtkTextBuffer *GTKGetTextBuffer() { return IsMultiLine() ? m_buffer : nullptr; }
+    // Get the underlying text control.
+    GtkEditable *GTKGetEditable() const { return GetEditable(); }
+
+
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
     void OnChar( wxKeyEvent &event );
@@ -187,11 +195,6 @@ protected:
     void GTKSetActivatesDefault();
     void GTKSetWrapMode();
     void GTKSetJustification();
-
-    // get the underlying text buffer for multi-line controls, or null otherwise
-    GtkTextBuffer *GTKGetTextBuffer() { return IsMultiLine() ? m_buffer : nullptr; }
-    // get the underlying text control
-    GtkEditable *GTKGetEditable() const { return GetEditable(); }
 
 private:
     void Init();

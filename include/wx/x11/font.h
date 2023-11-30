@@ -2,7 +2,6 @@
 // Name:        wx/x11/font.h
 // Purpose:     wxFont class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -18,7 +17,7 @@ class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
     // ctors and such
-    wxFont() { }
+    wxFont() = default;
 
     wxFont(const wxFontInfo& info)
     {

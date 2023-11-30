@@ -273,6 +273,9 @@ LogFilterByMessage::~LogFilterByMessage()
 /* static */
 void wxApp::GTKSuppressDiagnostics(int flags)
 {
+    // Allow Install() to actually do something.
+    GTKAllowDiagnosticsControl();
+
     static wxGTKImpl::LogFilterByLevel s_logFilter;
     s_logFilter.SetLevelToIgnore(flags);
     s_logFilter.Install();
@@ -388,6 +391,19 @@ bool wxApp::OnInitGui()
         }
     }
 #endif
+
+    // Suppress GTK diagnostics if requested: this is convenient if the program
+    // doesn't use GTKAllowDiagnosticsControl() itself.
+    wxString suppress;
+    if ( wxGetEnv("WXSUPPRESS_GTK_DIAGNOSTICS", &suppress) )
+    {
+        long flags;
+        if ( !suppress.ToLong(&flags) )
+            flags = -1; // Suppress everything by default.
+
+        if ( flags != 0 )
+            GTKSuppressDiagnostics(flags);
+    }
 
     return true;
 }

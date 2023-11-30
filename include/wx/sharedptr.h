@@ -115,7 +115,7 @@ private:
     struct reftype
     {
         reftype(T* ptr) : m_ptr(ptr), m_count(1) {}
-        virtual ~reftype() {}
+        virtual ~reftype() = default;
         virtual void delete_ptr() { delete m_ptr; }
 
         T*          m_ptr;

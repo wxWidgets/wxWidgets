@@ -85,7 +85,7 @@ extern WXDLLIMPEXP_DATA_CORE(const wxTreeListItem) wxTLI_LAST;
 class wxTreeListItemComparator
 {
 public:
-    wxTreeListItemComparator() { }
+    wxTreeListItemComparator() = default;
 
     // The comparison function should return negative, null or positive value
     // depending on whether the first item is less than, equal to or greater
@@ -99,7 +99,7 @@ public:
 
     // Although this class is not used polymorphically by wxWidgets itself,
     // provide virtual dtor in case it's used like this in the user code.
-    virtual ~wxTreeListItemComparator() { }
+    virtual ~wxTreeListItemComparator() = default;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTreeListItemComparator);

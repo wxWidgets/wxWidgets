@@ -2,7 +2,6 @@
 // Name:        wx/setup_inc.h
 // Purpose:     setup.h settings
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

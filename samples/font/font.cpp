@@ -2,7 +2,6 @@
 // Name:        font.cpp
 // Purpose:     wxFont demo
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     30.09.99
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence

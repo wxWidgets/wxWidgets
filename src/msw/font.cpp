@@ -2,7 +2,6 @@
 // Name:        src/msw/font.cpp
 // Purpose:     wxFont class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

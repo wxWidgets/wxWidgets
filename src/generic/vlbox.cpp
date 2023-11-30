@@ -2,7 +2,6 @@
 // Name:        src/generic/vlbox.cpp
 // Purpose:     implementation of wxVListBox
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.05.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

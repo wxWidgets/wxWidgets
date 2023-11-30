@@ -2,7 +2,6 @@
 // Name:        wx/qt/frame.h
 // Purpose:     wxFrame class interface
 // Author:      Peter Most
-// Modified by:
 // Created:     09.08.09
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence

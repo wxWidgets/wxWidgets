@@ -2,7 +2,6 @@
 // Name:        wx/aui/toolbar.h
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2008-08-04
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
@@ -265,8 +264,8 @@ class WXDLLIMPEXP_AUI wxAuiToolBarArt
 {
 public:
 
-    wxAuiToolBarArt() { }
-    virtual ~wxAuiToolBarArt() { }
+    wxAuiToolBarArt() = default;
+    virtual ~wxAuiToolBarArt() = default;
 
     virtual wxAuiToolBarArt* Clone() = 0;
     virtual void SetFlags(unsigned int flags) = 0;

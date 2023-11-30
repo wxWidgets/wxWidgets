@@ -2,7 +2,6 @@
 // Name:        wx/x11/private.h
 // Purpose:     Private declarations for X11 port
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

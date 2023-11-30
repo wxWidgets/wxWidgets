@@ -2,7 +2,6 @@
 // Name:        src/common/valgen.cpp
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
-// Modified by:
 // Created:     Jan 22 1999
 // Copyright:   (c) 1999 Kevin Smith
 // Licence:     wxWindows licence

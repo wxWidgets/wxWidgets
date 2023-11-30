@@ -245,3 +245,28 @@ long wxTopLevelWindowQt::GetWindowStyleFlag() const
 
     return winStyle;
 }
+
+void wxTopLevelWindowQt::DoSetSizeHints( int minW, int minH,
+                                         int maxW, int maxH,
+                                         int incW, int incH )
+{
+    // The value -1 is special which means no constraints will be used.
+    // In other words, use the Qt defaults if -1 was specified.
+
+    if ( maxW == wxDefaultCoord )
+        maxW = QWIDGETSIZE_MAX;
+    if ( maxH == wxDefaultCoord )
+        maxH = QWIDGETSIZE_MAX;
+
+    minW = wxMax(0, minW);
+    minH = wxMax(0, minH);
+
+    incW = wxMax(0, incW);
+    incH = wxMax(0, incH);
+
+    GetHandle()->setMinimumSize(minW, minH);
+    GetHandle()->setMaximumSize(maxW, maxH);
+    GetHandle()->setSizeIncrement(incW, incH);
+
+    wxTopLevelWindowBase::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+}

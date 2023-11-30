@@ -190,6 +190,11 @@ private:
 
     bool m_updateDecorSize;
     bool m_deferShowAllowed;
+
+#ifdef __WXGTK3__
+    // last known scale factor value
+    double m_scaleFactor;
+#endif // __WXGTK3__
 };
 
 #endif // _WX_GTK_TOPLEVEL_H_

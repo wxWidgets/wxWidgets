@@ -78,7 +78,7 @@ void StatBmpWidgetsPage::CreateContent()
 {
 
     static const wxString choices[] = { "native", "generic" };
-    m_radio = new wxRadioBox(this, wxID_ANY, "implementation",
+    m_radio = new wxRadioBox(this, wxID_ANY, "Implementation",
                              wxDefaultPosition, wxDefaultSize,
                              WXSIZEOF(choices), choices);
     static const wxString scaleChoices[] = { "None", "Fill", "Aspect Fit", "Aspect Fill" };
@@ -150,13 +150,13 @@ void StatBmpWidgetsPage::RecreateWidget()
 
     if (m_radio->GetSelection() == 0)
     {
-        m_statbmp = new wxStaticBitmap(this, wxID_ANY, bmp,
+        m_statbmp = new wxStaticBitmap(m_sbsizer->GetStaticBox(), wxID_ANY, bmp,
                                        wxDefaultPosition, wxDefaultSize,
                                        style);
     }
     else
     {
-        m_statbmp = new wxGenericStaticBitmap(this, wxID_ANY, bmp,
+        m_statbmp = new wxGenericStaticBitmap(m_sbsizer->GetStaticBox(), wxID_ANY, bmp,
                                               wxDefaultPosition, wxDefaultSize,
                                               style);
     }

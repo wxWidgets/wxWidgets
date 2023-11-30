@@ -2,7 +2,6 @@
 // Name:        wx/univ/menuitem.h
 // Purpose:     wxMenuItem class for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.05.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

@@ -5309,9 +5309,9 @@ void wxWindowGTK::Update()
     if (m_widget && gtk_widget_get_mapped(m_widget) && m_width > 0 && m_height > 0)
     {
         GdkDisplay* display = gtk_widget_get_display(m_widget);
-        // Flush everything out to the server, and wait for it to finish.
-        // This ensures nothing will overwrite the drawing we are about to do.
-        gdk_display_sync(display);
+        // If window has just been shown, drawing may not work unless pending
+        // requests queued for the windowing system are flushed first.
+        gdk_display_flush(display);
 
         GdkWindow* window = GTKGetDrawingWindow();
         if (window == nullptr)
@@ -5321,7 +5321,6 @@ void wxWindowGTK::Update()
         gdk_window_process_updates(window, true);
         wxGCC_WARNING_RESTORE(deprecated-declarations)
 
-        // Flush again, but no need to wait for it to finish
         gdk_display_flush(display);
     }
 }
@@ -6084,14 +6083,34 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     GdkWindow* window = gtk_widget_get_window(m_wxwindow ? m_wxwindow : m_widget);
     if (wxGTKImpl::IsWayland(window) && wx_is_at_least_gtk3(22))
     {
-        if (x == -1 && y == -1)
-            gtk_menu_popup_at_pointer(GTK_MENU(menu->m_menu), nullptr);
-        else
+        GdkEvent* currentEvent = gtk_get_current_event();
+        GdkEvent* event = currentEvent;
+        GdkDevice* device = event ? gdk_event_get_device(event) : nullptr;
+        if (device == nullptr)
         {
-            const GdkRectangle rect = { x, y, 1, 1 };
-            gtk_menu_popup_at_rect(GTK_MENU(menu->m_menu),
-                window, &rect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, nullptr);
+            GdkSeat* seat = gdk_display_get_default_seat(gdk_window_get_display(window));
+            device = gdk_seat_get_pointer(seat);
         }
+        GdkEventButton eventTmp = { };
+        if (event == nullptr)
+        {
+            // An event is needed to avoid a Gtk-WARNING "no trigger event for menu popup".
+            // If a real one is not available, use a temporary with the fields
+            // set that GTK is going to use.
+            eventTmp.type = GDK_BUTTON_RELEASE;
+            eventTmp.time = GDK_CURRENT_TIME;
+            eventTmp.device = device;
+            event = (GdkEvent*)&eventTmp;
+        }
+        if (x == -1 && y == -1)
+            gdk_window_get_device_position(window, device, &x, &y, nullptr);
+
+        const GdkRectangle rect = { x, y, 1, 1 };
+        gtk_menu_popup_at_rect(GTK_MENU(menu->m_menu),
+            window, &rect, GDK_GRAVITY_NORTH_WEST, GDK_GRAVITY_NORTH_WEST, event);
+
+        if (currentEvent)
+            gdk_event_free(currentEvent);
     }
     else
 #endif // GTK_CHECK_VERSION(3,22,0)

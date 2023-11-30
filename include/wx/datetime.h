@@ -3,7 +3,6 @@
 // Purpose:     declarations of time/date related classes (wxDateTime,
 //              wxTimeSpan)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.02.99
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -1227,7 +1226,7 @@ public:
     static wxTimeSpan Week() { return Weeks(1); }
 
         // default ctor constructs the 0 time span
-    wxTimeSpan() { }
+    wxTimeSpan() = default;
 
         // from separate values for each component, date set to 0 (hours are
         // not restricted to 0..24 range, neither are minutes, seconds or

@@ -85,7 +85,7 @@ protected:
 
     // the control itself and the sizer it is in
     wxHeaderCtrlSimple *m_header;
-    wxSizer *m_sizerHeader;
+    wxStaticBoxSizer *m_sizerHeader;
     // the check boxes for header styles
     wxCheckBox *m_chkAllowReorder;
     wxCheckBox *m_chkAllowHide;
@@ -129,27 +129,31 @@ void HeaderCtrlWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // header style
-    wxSizer *sizerHeader = new wxStaticBoxSizer(wxVERTICAL, this, "&Header style");
-    m_chkAllowReorder = CreateCheckBoxAndAddToSizer(sizerHeader, "Allow &reorder");
-    m_chkAllowHide = CreateCheckBoxAndAddToSizer(sizerHeader, "Alow &hide");
-    m_chkBitmapOnRight = CreateCheckBoxAndAddToSizer(sizerHeader, "&Bitmap on right");
+    wxStaticBoxSizer *styleSizer = new wxStaticBoxSizer(wxVERTICAL, this, "&Header style");
+    wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
+
+    m_chkAllowReorder = CreateCheckBoxAndAddToSizer(styleSizer, "Allow &reorder", wxID_ANY, styleSizerBox);
+    m_chkAllowHide = CreateCheckBoxAndAddToSizer(styleSizer, "Alow &hide", wxID_ANY, styleSizerBox);
+    m_chkBitmapOnRight = CreateCheckBoxAndAddToSizer(styleSizer, "&Bitmap on right", wxID_ANY, styleSizerBox);
     ResetHeaderStyle();
 
-    sizerHeader->AddStretchSpacer();
-    wxButton* btnReset = new wxButton(this, wxID_ANY, "&Reset");
-    sizerHeader->Add(btnReset, wxSizerFlags().CenterHorizontal().Border());
-    sizerTop->Add(sizerHeader, wxSizerFlags().Expand());
+    styleSizer->AddStretchSpacer();
+    wxButton* btnReset = new wxButton(styleSizerBox, wxID_ANY, "&Reset");
+    styleSizer->Add(btnReset, wxSizerFlags().CenterHorizontal().Border());
+    sizerTop->Add(styleSizer, wxSizerFlags().Expand());
 
     // column flags
     for ( int i = 0; i < (int)WXSIZEOF(m_colSettings); i++ )
     {
-        wxSizer* sizerCol = new wxStaticBoxSizer(wxVERTICAL, this, wxString::Format("Column %i style", i+1));
-        m_colSettings[i].chkAllowResize = CreateCheckBoxAndAddToSizer(sizerCol, "Allow resize");
-        m_colSettings[i].chkAllowReorder = CreateCheckBoxAndAddToSizer(sizerCol, "Allow reorder");
-        m_colSettings[i].chkAllowSort = CreateCheckBoxAndAddToSizer(sizerCol, "Allow sort");
-        m_colSettings[i].chkAllowHide = CreateCheckBoxAndAddToSizer(sizerCol, "Hidden");
-        m_colSettings[i].chkWithBitmap = CreateCheckBoxAndAddToSizer(sizerCol, "With bitmap");
-        m_colSettings[i].rbAlignments = new wxRadioBox(this, wxID_ANY, "Alignment",
+        wxStaticBoxSizer* sizerCol = new wxStaticBoxSizer(wxVERTICAL, this, wxString::Format("Column %i style", i+1));
+        wxStaticBox* const sizerColBox = sizerCol->GetStaticBox();
+
+        m_colSettings[i].chkAllowResize = CreateCheckBoxAndAddToSizer(sizerCol, "Allow resize", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkAllowReorder = CreateCheckBoxAndAddToSizer(sizerCol, "Allow reorder", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkAllowSort = CreateCheckBoxAndAddToSizer(sizerCol, "Allow sort", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkAllowHide = CreateCheckBoxAndAddToSizer(sizerCol, "Hidden", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkWithBitmap = CreateCheckBoxAndAddToSizer(sizerCol, "With bitmap", wxID_ANY, sizerColBox);
+        m_colSettings[i].rbAlignments = new wxRadioBox(sizerColBox, wxID_ANY, "Alignment",
                wxDefaultPosition, wxDefaultSize, WXSIZEOF(gs_colAlignments), gs_colAlignments,
                2, wxRA_SPECIFY_COLS);
         sizerCol->Add(m_colSettings[i].rbAlignments, wxSizerFlags().Expand().Border());
@@ -192,7 +196,7 @@ void HeaderCtrlWidgetsPage::RecreateWidget()
 
     long flags = GetAttrs().m_defaultFlags | GetHeaderStyleFlags();
 
-    m_header = new wxHeaderCtrlSimple(this, wxID_ANY,
+    m_header = new wxHeaderCtrlSimple(m_sizerHeader->GetStaticBox(), wxID_ANY,
                                       wxDefaultPosition, wxDefaultSize,
                                       flags);
 

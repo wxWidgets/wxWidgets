@@ -3,7 +3,6 @@
 // Purpose:     wxAppBase class and macros used for declaration of wxApp
 //              derived class in the user code
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

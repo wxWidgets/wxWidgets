@@ -2,7 +2,6 @@
 // Name:        src/propgrid/editors.cpp
 // Purpose:     wxPropertyGrid editors
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2007-04-14
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -679,7 +678,7 @@ public:
     {
     #ifdef wxPG_TEXTCTRLXADJUST
         textCtrlXAdjust = wxPG_TEXTCTRLXADJUST -
-                          (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
+                          (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1;
     #endif
         wxOwnerDrawnComboBox::PositionTextCtrl(
             textCtrlXAdjust + wxPG_TEXTCTRLXADJUST3,

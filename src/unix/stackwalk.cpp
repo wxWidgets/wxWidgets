@@ -2,7 +2,6 @@
 // Name:        src/unix/stackwalk.cpp
 // Purpose:     wxStackWalker implementation for Unix/glibc
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-18
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

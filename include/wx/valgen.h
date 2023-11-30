@@ -51,7 +51,7 @@ public:
 
     wxGenericValidator(const wxGenericValidator& copyFrom);
 
-    virtual ~wxGenericValidator(){}
+    virtual ~wxGenericValidator() = default;
 
     // Make a clone of this validator (or return nullptr) - currently necessary
     // if you're passing a reference to a validator.

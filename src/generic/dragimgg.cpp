@@ -2,7 +2,6 @@
 // Name:        src/generic/dragimgg.cpp
 // Purpose:     Generic wxDragImage implementation
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/2/2000
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

@@ -62,7 +62,7 @@ typedef
 class WXDLLIMPEXP_CORE wxDocMDIChildFrame : public wxDocMDIChildFrameBase
 {
 public:
-    wxDocMDIChildFrame() { }
+    wxDocMDIChildFrame() = default;
 
     wxDocMDIChildFrame(wxDocument *doc,
                        wxView *view,

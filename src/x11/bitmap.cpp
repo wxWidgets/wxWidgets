@@ -2,7 +2,6 @@
 // Name:        src/x11/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence

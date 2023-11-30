@@ -2,7 +2,6 @@
 // Name:        wx/arrstr.h
 // Purpose:     wxArrayString class
 // Author:      Mattia Barbon and Vadim Zeitlin
-// Modified by:
 // Created:     07/07/03
 // Copyright:   (c) 2003 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -73,7 +72,7 @@ public:
     typedef int (wxCMPFUNC_CONV *CompareFunction)(const wxString& first,
                                                   const wxString& second);
 
-    wxArrayString() { }
+    wxArrayString() = default;
     wxArrayString(size_t sz, const char** a);
     wxArrayString(size_t sz, const wchar_t** a);
     wxArrayString(size_t sz, const wxString* a);

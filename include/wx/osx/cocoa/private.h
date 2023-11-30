@@ -4,7 +4,6 @@
 //              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -221,9 +220,14 @@ public :
     // from the same pimpl class.
     virtual void                controlTextDidChange();
 
+    virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) override;
+    virtual void                UseClippingView(bool clip) override;
+    virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
+
 protected:
     WXWidget m_osxView;
-    
+    WXWidget m_osxClipView;
+
     // begins processing of native key down event, storing the native event for later wx event generation
     void BeginNativeKeyDownEvent( NSEvent* event );
     // done with the current native key down event

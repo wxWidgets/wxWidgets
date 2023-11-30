@@ -9,6 +9,10 @@
 #ifndef _WX_PROPGRID_PRIVATE_H_
 #define _WX_PROPGRID_PRIVATE_H_
 
+#if !defined(WXBUILDING)
+#error This header is intended for internal use
+#endif // !WXBUILDING
+
 #include "wx/defs.h"
 
 // -----------------------------------------------------------------------
@@ -184,11 +188,31 @@ wxDECLARE_EVENT(wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 // Flags used only internally
 
 // wxBoolProperty, wxFlagsProperty specific flags
-constexpr wxPGPropertyFlags wxPG_PROP_USE_CHECKBOX = wxPG_PROP_CLASS_SPECIFIC_1;
+constexpr wxPGPropertyFlags wxPG_PROP_USE_CHECKBOX = wxPG_PROP_RESERVED_1;
 // DCC = Double Click Cycles
-constexpr wxPGPropertyFlags wxPG_PROP_USE_DCC = wxPG_PROP_CLASS_SPECIFIC_2;
+constexpr wxPGPropertyFlags wxPG_PROP_USE_DCC = wxPG_PROP_RESERVED_2;
 
 // wxStringProperty flag
-constexpr wxPGPropertyFlags wxPG_PROP_PASSWORD = wxPG_PROP_CLASS_SPECIFIC_2;
+constexpr wxPGPropertyFlags wxPG_PROP_PASSWORD = wxPG_PROP_RESERVED_2;
+
+#if !WXWIN_COMPATIBILITY_3_2
+// wxColourProperty flag - if set, then match from list is searched for a custom colour.
+constexpr wxPGPropertyFlags wxPG_PROP_TRANSLATE_CUSTOM = wxPG_PROP_RESERVED_1;
+
+// wxCursorProperty, wxSystemColourProperty - If set, then selection of choices is static
+// and should not be changed (i.e. returns nullptr in GetPropertyChoices).
+constexpr wxPGPropertyFlags wxPG_PROP_STATIC_CHOICES = wxPG_PROP_RESERVED_1;
+
+// wxSystemColourProperty - wxEnumProperty based classes cannot use wxPG_PROP_RESERVED_1
+constexpr wxPGPropertyFlags wxPG_PROP_HIDE_CUSTOM_COLOUR = wxPG_PROP_RESERVED_2;
+constexpr wxPGPropertyFlags wxPG_PROP_COLOUR_HAS_ALPHA = wxPG_PROP_RESERVED_3;
+
+// wxFileProperty - if set, full path is shown in wxFileProperty.
+constexpr wxPGPropertyFlags wxPG_PROP_SHOW_FULL_FILENAME = wxPG_PROP_RESERVED_1;
+
+// wxLongStringProperty - flag used to mark that edit button
+// should be enabled even in the read-only mode.
+constexpr wxPGPropertyFlags wxPG_PROP_ACTIVE_BTN = wxPG_PROP_RESERVED_3;
+#endif // !WXWIN_COMPATIBILITY_3_2
 
 #endif // _WX_PROPGRID_PRIVATE_H_

@@ -25,6 +25,11 @@
     #include "wx/mstream.h"
 #endif
 
+extern bool wxDumpBitmap(const wxBitmap& bitmap, const char* path)
+{
+    return bitmap.SaveFile(path, wxBITMAP_TYPE_BMP);
+}
+
 // ----------------------------------------------------------------------------
 // wxVariant support
 // ----------------------------------------------------------------------------

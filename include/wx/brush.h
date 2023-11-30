@@ -2,7 +2,6 @@
 // Name:        wx/brush.h
 // Purpose:     Includes platform-specific wxBrush file
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   Julian Smart
 // Licence:     wxWindows Licence
@@ -41,7 +40,7 @@ enum wxBrushStyle
 class WXDLLIMPEXP_CORE wxBrushBase: public wxGDIObject
 {
 public:
-    virtual ~wxBrushBase() { }
+    virtual ~wxBrushBase() = default;
 
     virtual void SetColour(const wxColour& col) = 0;
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) = 0;

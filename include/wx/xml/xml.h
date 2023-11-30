@@ -67,7 +67,7 @@ public:
     wxXmlAttribute(const wxString& name, const wxString& value,
                   wxXmlAttribute *next = nullptr)
             : m_name(name), m_value(value), m_next(next) {}
-    virtual ~wxXmlAttribute() {}
+    virtual ~wxXmlAttribute() = default;
 
     const wxString& GetName() const { return m_name; }
     const wxString& GetValue() const { return m_value; }

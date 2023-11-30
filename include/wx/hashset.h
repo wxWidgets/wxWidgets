@@ -2,7 +2,6 @@
 // Name:        wx/hashset.h
 // Purpose:     wxHashSet class
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     11/08/2003
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence
@@ -64,7 +63,7 @@ CLASSEXP CLASSNAME                                                           \
     typedef const key_type const_key_type;                                   \
     typedef const_key_type& const_key_reference;                             \
 public:                                                                      \
-    CLASSNAME() { }                                                          \
+    CLASSNAME() = default;                                                          \
     const_key_reference operator()( const_key_reference key ) const          \
         { return key; }                                                      \
 };

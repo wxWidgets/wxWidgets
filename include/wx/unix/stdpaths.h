@@ -2,7 +2,6 @@
 // Name:        wx/unix/stdpaths.h
 // Purpose:     wxStandardPaths for Unix systems
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -56,7 +55,7 @@ public:
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating
     // objects of this class directly.
-    wxStandardPaths() { }
+    wxStandardPaths() = default;
 
 private:
     wxString m_prefix;

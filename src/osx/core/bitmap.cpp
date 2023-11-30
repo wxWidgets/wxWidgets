@@ -6,7 +6,6 @@
 // Name:        src/osx/core/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -965,11 +964,12 @@ WXImage wxBitmap::OSXGetImage() const
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {
-    wxCHECK_MSG( IsOk() &&
-                (rect.x >= 0) && (rect.y >= 0) &&
-                (rect.x+rect.width <= GetWidth()) &&
-                (rect.y+rect.height <= GetHeight()),
-                wxNullBitmap, wxT("invalid bitmap or bitmap region") );
+    wxCHECK_MSG( IsOk(), wxNullBitmap, wxT("invalid bitmap") );
+
+    wxCHECK_MSG((rect.x >= 0) && (rect.y >= 0) &&
+                (rect.x+rect.width <= GetLogicalWidth()) &&
+                (rect.y+rect.height <= GetLogicalHeight()),
+                wxNullBitmap, wxT("invalid bitmap region") );
 
     wxBitmap ret;
     double scale = GetScaleFactor();

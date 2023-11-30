@@ -18,7 +18,7 @@ class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
 public:
     // constructors and pseudo-constructors
-    wxStaticLine() { }
+    wxStaticLine() = default;
 
     wxStaticLine( wxWindow *parent,
                   wxWindowID id = wxID_ANY,

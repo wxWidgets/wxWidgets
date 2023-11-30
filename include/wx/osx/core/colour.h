@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/colour.h
 // Purpose:     wxColour class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -84,8 +83,8 @@ private:
 class wxColourRefData : public wxGDIRefData
 {
 public:
-    wxColourRefData() {}
-    virtual ~wxColourRefData() {}
+    wxColourRefData() = default;
+    virtual ~wxColourRefData() = default;
 
     virtual double Red() const = 0;
     virtual double Green() const = 0;

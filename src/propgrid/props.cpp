@@ -2,7 +2,6 @@
 // Name:        src/propgrid/props.cpp
 // Purpose:     Basic Property Classes
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2005-05-14
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -1477,102 +1476,62 @@ bool wxEditEnumProperty::ValidateValue(
 
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxFlagsProperty, wxPGProperty, TextCtrl)
 
-void wxFlagsProperty::Init()
+void wxFlagsProperty::Init(long value)
 {
-    long value = m_value;
-
-    //
-    // Generate children
-    //
-
-    size_t prevChildCount = m_children.size();
-
-    int oldSel = -1;
-    if ( prevChildCount )
-    {
-        wxPropertyGridPageState* state = GetParentState();
-
-        // State safety check (it may be null in immediate parent)
-        wxASSERT( state );
-
-        if ( state )
-        {
-            wxPGProperty* selected = state->GetSelection();
-            if ( selected )
-            {
-                if ( selected->GetParent() == this )
-                    oldSel = selected->GetIndexInParent();
-                else if ( selected == this )
-                    oldSel = -2;
-            }
-        }
-        state->DoClearSelection();
-    }
-
-    // Delete old children
-    for ( size_t i=0; i<prevChildCount; i++ )
-        delete m_children[i];
-
-    m_children.clear();
-
-    // Relay wxPG_BOOL_USE_CHECKBOX and wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING
-    // to child bool property controls.
-    bool attrUseCheckBox = (m_flags & wxPG_PROP_USE_CHECKBOX) != 0;
-    bool attrUseDCC = (m_flags & wxPG_PROP_USE_DCC) != 0;
+    m_allValueFlags = 0;
 
     if ( m_choices.IsOk() )
     {
-        const wxPGChoices& choices = m_choices;
-
-        for ( unsigned int i=0; i<GetItemCount(); i++ )
+        for ( unsigned int i = 0; i < GetItemCount(); i++ )
         {
-            bool child_val;
-            child_val = ( value & choices.GetValue(i) )?true:false;
+            m_allValueFlags |= m_choices.GetValue(i);
+        }
 
-            wxPGProperty* boolProp;
+        // Relay wxPG_BOOL_USE_CHECKBOX and wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING
+        // to child bool property controls.
+        bool attrUseCheckBox = (m_flags & wxPG_PROP_USE_CHECKBOX) != 0;
+        bool attrUseDCC = (m_flags & wxPG_PROP_USE_DCC) != 0;
+        for ( unsigned int i = 0; i < GetItemCount(); i++ )
+        {
+            bool child_val = (value & m_choices.GetValue(i)) != 0;
+
             wxString label = GetLabel(i);
-
-        #if wxUSE_INTL
+            wxString name = label;
+#if wxUSE_INTL
             if ( wxPGGlobalVars->m_autoGetTranslation )
             {
-                boolProp = new wxBoolProperty( ::wxGetTranslation(label), label, child_val );
+                label = ::wxGetTranslation(label);
             }
-            else
-        #endif
-            {
-                boolProp = new wxBoolProperty( label, label, child_val );
-            }
+#endif
+
+            wxPGProperty* boolProp = new wxBoolProperty(label, name, child_val);
             boolProp->SetAttribute(wxPG_BOOL_USE_CHECKBOX, attrUseCheckBox);
             boolProp->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, attrUseDCC);
             AddPrivateChild(boolProp);
         }
-
-        m_oldChoicesData = m_choices.GetDataPtr();
     }
 
-    m_oldValue = m_value;
-
-    if ( prevChildCount )
-        SubPropsChanged(oldSel);
+    m_oldValue = value;
 }
 
 wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     const wxChar* const* labels, const long* values, long value ) : wxPGProperty(label,name)
 {
-    m_oldChoicesData = nullptr;
     m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( labels )
     {
         m_choices.Set(labels,values);
 
-        wxASSERT( GetItemCount() );
+        wxASSERT( GetItemCount() > 0 );
+        Init(value);
 
         SetValue( value );
     }
     else
     {
-        m_value = wxVariant(0L);
+        m_value = m_oldValue = wxVariant(0L);
+        m_allValueFlags = 0;
     }
 }
 
@@ -1580,20 +1539,21 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
         const wxArrayString& labels, const wxArrayInt& values, int value )
     : wxPGProperty(label,name)
 {
-    m_oldChoicesData = nullptr;
     m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( !labels.empty() )
     {
         m_choices.Set(labels,values);
 
-        wxASSERT( GetItemCount() );
+        wxASSERT( GetItemCount() > 0 );
+        Init(value);
 
         SetValue( (long)value );
     }
     else
     {
-        m_value = wxVariant(0L);
+        m_value = m_oldValue = wxVariant(0L);
+        m_allValueFlags = 0;
     }
 }
 
@@ -1601,52 +1561,35 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     wxPGChoices& choices, long value )
     : wxPGProperty(label,name)
 {
-    m_oldChoicesData = nullptr;
     m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( choices.IsOk() )
     {
         m_choices.Assign(choices);
 
-        wxASSERT( GetItemCount() );
+        wxASSERT( GetItemCount() > 0 );
+        Init(value);
 
         SetValue( value );
     }
     else
     {
-        m_value = wxVariant(0L);
+        m_value = m_oldValue = wxVariant(0L);
+        m_allValueFlags = 0;
     }
 }
 
 void wxFlagsProperty::OnSetValue()
 {
-    if ( !m_choices.IsOk() || !GetItemCount() )
+    if ( !m_choices.IsOk() || GetItemCount() == 0 )
     {
         m_value = wxVariant(0L);
     }
     else
     {
-        long val = m_value.GetLong();
-
-        long fullFlags = 0;
-
         // normalize the value (i.e. remove extra flags)
-        const wxPGChoices& choices = m_choices;
-        for ( unsigned int i = 0; i < GetItemCount(); i++ )
-        {
-            fullFlags |= choices.GetValue(i);
-        }
-
-        val &= fullFlags;
-
-        m_value = val;
-
-        // Need to (re)init now?
-        if ( GetChildCount() != GetItemCount() ||
-             m_choices.GetDataPtr() != m_oldChoicesData )
-        {
-            Init();
-        }
+        long val = m_value.GetLong();
+        m_value = val & m_allValueFlags;
     }
 
     long newFlags = m_value;
@@ -1654,12 +1597,9 @@ void wxFlagsProperty::OnSetValue()
     if ( newFlags != m_oldValue )
     {
         // Set child modified states
-        const wxPGChoices& choices = m_choices;
         for ( unsigned int i = 0; i < GetItemCount(); i++ )
         {
-            int flag;
-
-            flag = choices.GetValue(i);
+            long flag = m_choices.GetValue(i);
 
             if ( (newFlags & flag) != (m_oldValue & flag) )
                 Item(i)->ChangeFlag( wxPG_PROP_MODIFIED, true );
@@ -1726,9 +1666,9 @@ bool wxFlagsProperty::StringToValue( wxVariant& variant, const wxString& text, i
 
     WX_PG_TOKENIZER1_END()
 
-    if ( variant != (long)newFlags )
+    if ( variant != newFlags )
     {
-        variant = (long)newFlags;
+        variant = newFlags;
         return true;
     }
 
@@ -1757,9 +1697,7 @@ void wxFlagsProperty::RefreshChildren()
     const wxPGChoices& choices = m_choices;
     for ( unsigned int i = 0; i < GetItemCount(); i++ )
     {
-        long flag;
-
-        flag = choices.GetValue(i);
+        long flag = choices.GetValue(i);
 
         long subVal = flags & flag;
         wxPGProperty* p = Item(i);
@@ -1793,9 +1731,9 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     {
         ChangeFlag(wxPG_PROP_USE_CHECKBOX, value.GetBool());
 
-        for ( size_t i = 0; i < GetChildCount(); i++ )
+        for ( wxPGProperty* child : m_children )
         {
-            Item(i)->SetAttribute(name, value);
+            child->SetAttribute(name, value);
         }
         return true;
     }
@@ -1803,9 +1741,9 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     {
         ChangeFlag(wxPG_PROP_USE_DCC, value.GetBool());
 
-        for ( size_t i = 0; i < GetChildCount(); i++ )
+        for ( wxPGProperty* child : m_children )
         {
-            Item(i)->SetAttribute(name, value);
+            child->SetAttribute(name, value);
         }
         return true;
     }

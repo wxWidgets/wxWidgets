@@ -41,7 +41,7 @@ typedef wxScopedCharTypeBuffer<wxChar32> wxScopedU32CharBuffer;
 class WXDLLIMPEXP_BASE wxUString: public std::basic_string<wxChar32>
 {
 public:
-    wxUString() { }
+    wxUString() = default;
 
     wxUString( const wxChar32 *str )                            { assign(str); }
     wxUString( const wxScopedU32CharBuffer &buf )                     { assign(buf); }

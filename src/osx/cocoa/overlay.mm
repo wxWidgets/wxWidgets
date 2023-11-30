@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/overlay.mm
 // Purpose:     common wxOverlay code
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2006-10-20
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

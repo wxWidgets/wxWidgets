@@ -2,7 +2,6 @@
 // Name:        src/msw/ole/oleutils.cpp
 // Purpose:     implementation of OLE helper functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.02.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

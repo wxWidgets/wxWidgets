@@ -2,7 +2,6 @@
 // Name:        wx/generic/calctrlg.h
 // Purpose:     generic implementation of date-picker control
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
