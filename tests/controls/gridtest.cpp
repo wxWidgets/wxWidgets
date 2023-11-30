@@ -360,6 +360,8 @@ GridTestCase::GridTestCase() : m_tempGrid(nullptr)
     m_grid->Refresh();
     m_grid->Update();
 
+    wxTheApp->GetTopWindow()->Raise();
+
     waitForPaint.YieldUntilPainted();
 }
 
