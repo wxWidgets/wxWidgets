@@ -456,9 +456,9 @@ typedef short int WXTYPE;
             #define HAVE_TR1_UNORDERED_SET
         #endif
     #endif /* defined(__has_include) */
+#endif /* !__WX_SETUP_H__ */
 
-    #endif /* __cplusplus */
-#endif /* __WX_SETUP_H__ */
+#endif /* __cplusplus */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
