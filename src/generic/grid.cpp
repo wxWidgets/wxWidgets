@@ -9905,8 +9905,11 @@ void wxGrid::DoSetRowSize( int row, int height )
         int cw, ch;
         GetClientSize(&cw, &ch);
 
-        const wxRect updateRect(0, y, cw, ch - y);
-        Refresh(true, &updateRect);
+        if (ch > y)
+        {
+            const wxRect updateRect(0, y, cw, ch - y);
+            Refresh(true, &updateRect);
+        }
     }
 }
 
@@ -10046,8 +10049,11 @@ void wxGrid::DoSetColSize( int col, int width )
         int cw, ch;
         GetClientSize(&cw, &ch);
 
-        const wxRect updateRect(x, 0, cw - x, ch);
-        Refresh(true, &updateRect);
+        if (cw > x)
+        {
+            const wxRect updateRect(x, 0, cw - x, ch);
+            Refresh(true, &updateRect);
+        }
     }
 }
 
