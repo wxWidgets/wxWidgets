@@ -2360,26 +2360,17 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
 }
 
 size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStart,
-                                                          const wxDateTime& dtEnd,
-                                                          wxDateTimeArray& holidays) const
+                                                        const wxDateTime& dtEnd,
+                                                        wxDateTimeArray& holidays) const
 {
     holidays.Clear();
 
     for (wxDateTime dt = dtStart; dt <= dtEnd; dt += wxDateSpan::Day())
     {
-        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
-            dt.IsSameDate(GetThursdayAscension(dt.GetYear())))
+        if (DoIsHoliday(dt) )
         {
             holidays.Add(dt);
             continue;
-        }
-        for (const auto& holiday : m_holyDaysOfObligation)
-        {
-            if (holiday.GetMonth() == dt.GetMonth() &&
-                holiday.GetDay() == dt.GetDay())
-            {
-                holidays.Add(dt);
-            }
         }
     }
 
@@ -2398,8 +2389,7 @@ size_t wxDateTimeChristianHolidays::DoGetHolidaysInRange(const wxDateTime& dtSta
 
     for (wxDateTime dt = dtStart; dt <= dtEnd; dt += wxDateSpan::Day())
     {
-        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
-            (dt.GetMonth() == 12 && dt.GetDay() == 25))
+        if (DoIsHoliday(dt) )
         {
             holidays.Add(dt);
             continue;
