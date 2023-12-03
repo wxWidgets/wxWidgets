@@ -299,7 +299,12 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         oleVariant.vt = VT_I8;
         oleVariant.llVal = variant.GetLongLong().GetValue();
     }
-#endif
+    else if (type == wxT("ulonglong"))
+    {
+        oleVariant.vt = VT_UI8;
+        oleVariant.ullVal = variant.GetULongLong().GetValue();
+    }
+#endif // wxUSE_LONGLONG
     else if (type == wxT("char"))
     {
         oleVariant.vt=VT_I1;            // Signed Char
@@ -468,6 +473,9 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
 #if wxUSE_LONGLONG
             case VT_I8:
                 variant = wxLongLong(oleVariant.llVal);
+                break;
+            case VT_UI8:
+                variant = wxULongLong(oleVariant.ullVal);
                 break;
 #endif // wxUSE_LONGLONG
 
