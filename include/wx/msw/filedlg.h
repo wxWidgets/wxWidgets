@@ -19,6 +19,7 @@ class wxFileDialogMSWData;
 class WXDLLIMPEXP_CORE wxFileDialog: public wxFileDialogBase
 {
 public:
+    wxFileDialog() = default;
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),
                  const wxString& defaultDir = wxEmptyString,
