@@ -2334,7 +2334,8 @@ wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
             "Error in Easter calculation!");
         return wxDateTime(18, wxDateTime::Apr, year);
     }
-    else {
+    else
+    {
         // If days > 31, move to April
         // April = 4th Month
         if (days > 31)
