@@ -18,35 +18,12 @@
 
 #include "wx/dcclient.h"
 #include "wx/qt/dcclient.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtWidgets/QScrollArea>
 #include <QtGui/QPainter>
 
 //##############################################################################
-
-namespace
-{
-class QtPictureSetter
-{
-public:
-    QtPictureSetter(wxWindow *window, QPicture *pict)
-        : m_window( window )
-    {
-        m_window->QtSetPicture( pict );
-    }
-
-    ~QtPictureSetter()
-    {
-        m_window->QtSetPicture( nullptr );
-    }
-
-private:
-    wxWindow* const m_window;
-
-    wxDECLARE_NO_COPY_CLASS(QtPictureSetter);
-};
-}
-
 
 wxIMPLEMENT_CLASS(wxWindowDCImpl,wxQtDCImpl);
 
@@ -62,22 +39,59 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
     m_window = win;
-    m_qtPainter = m_window->QtGetPainter();
-    // if we're not inside a Paint event, painter will invalid
-    m_ok = m_qtPainter != nullptr;
+    m_qtPainter = m_window->QtGetPainter(); // guaranteed to be non-null
+
+    if ( m_qtPainter->isActive() )
+    {
+        m_isWindowPainter = true;
+    }
+    else
+    {
+        m_qtPainter = new QPainter();
+        m_pict.reset( new QPicture() );
+        m_ok = m_qtPainter->begin( m_pict.get() );
+        QtPreparePainter();
+    }
 }
 
 wxWindowDCImpl::~wxWindowDCImpl()
 {
+    /* Paint to a QPicture that will then be painted in the next
+     * paint event of that window (a paint event will be generated
+     * when this wxClientDC is done). */
     if ( m_ok )
     {
-        m_ok = false;
+        if ( m_isWindowPainter )
+            m_qtPainter = nullptr; // do not destroy in base class as it is owned by the window
+        else
+            m_qtPainter->end();
+
+        if ( m_window )
+        {
+            if ( m_pict && !m_pict->isNull() )
+            {
+                // force paint event if there is something to replay and
+                // if not currently inside a paint event (to avoid recursion)
+                wxRect rect = wxQtConvertRect(m_pict->boundingRect());
+                if ( !m_window->GetHandle()->paintingActive() && !rect.IsEmpty() )
+                {
+                    m_window->QtSetPicture( m_pict.release() );
+                    // only force the update of the rect affected by the DC
+                    m_window->Refresh(true, &rect);
+                }
+                else // Do we really need the else branch? we are in the dtor anyhow!
+                {
+                    // Not drawing anything, reset picture to avoid issues in handler
+                    m_pict.reset();
+                }
+            }
+
+            // let destroy the m_qtPainter (see inherited classes destructors)
+            m_window = nullptr;
+        }
     }
-    if ( m_window )
-    {
-        // do not destroy in base class as it is owned by the window
-        m_qtPainter = nullptr;
-    }
+
+    // Painter will be deleted by base class if we own it
 }
 
 //##############################################################################
@@ -90,79 +104,29 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner )
 }
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
-    : wxWindowDCImpl( owner )
+    : wxWindowDCImpl( owner, win )
 {
-    m_window = win;
-
-    m_pict.reset(new QPicture());
-    m_ok = m_qtPainter->begin( m_pict.get() );
-
-    QtPreparePainter();
-}
-
-wxClientDCImpl::~wxClientDCImpl()
-{
-    /* Paint to a QPicture that will then be painted in the next
-     * paint event of that window (a paint event will be generated
-     * when this wxClientDC is done). */
-    if ( m_ok )
-    {
-        m_qtPainter->end();
-        m_ok = false;
-
-        if ( m_window != nullptr )
-        {
-            QtPictureSetter pictureSetter(m_window, m_pict.get());
-
-            // get the inner widget in scroll areas:
-            QWidget *widget;
-            if ( m_window->QtGetScrollBarsContainer() )
-            {
-                widget = m_window->QtGetScrollBarsContainer()->viewport();
-            } else {
-                widget = m_window->GetHandle();
-            }
-            // force paint event if there is something to replay and
-            // if not currently inside a paint event (to avoid recursion)
-            QRect rect = m_pict->boundingRect();
-            if ( !m_pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
-            {
-                // only force the update of the rect affected by the DC
-                widget->update( rect );
-            }
-            else
-            {
-                // Not drawing anything, reset picture to avoid issues in handler
-                m_pict->setData( nullptr, 0 );
-            }
-
-            // let destroy the m_qtPainter (see inherited classes destructors)
-            m_window = nullptr;
-        }
+     if ( m_ok )
+     {
+        m_qtPainter->setClipRect( wxQtConvertRect(win->GetClientRect()),
+                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
     }
-
-    // Painter will be deleted by base class
 }
+
 
 //##############################################################################
 
 wxIMPLEMENT_CLASS(wxPaintDCImpl,wxClientDCImpl);
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
-    : wxWindowDCImpl( owner )
+    : wxClientDCImpl( owner )
 {
-    if ( m_ok )
-    {
-        QtPreparePainter();
-    }
 }
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
-    : wxWindowDCImpl( owner, win )
+    : wxClientDCImpl( owner, win )
 {
-    if ( m_ok )
-    {
-        QtPreparePainter();
-    }
+    wxCHECK_RET( m_isWindowPainter,
+                 "wxPaintDC can't be created outside wxEVT_PAINT handler" );
 }
 

@@ -379,6 +379,7 @@ QT_SRC=
     src/qt/msgdlg.cpp
     src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
+    src/qt/overlay.cpp
     src/qt/pen.cpp
     src/qt/popupwin.cpp
     src/qt/printdlg.cpp

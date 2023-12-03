@@ -390,6 +390,7 @@ set(QT_SRC
     src/generic/paletteg.cpp
     src/qt/datectrl.cpp
     src/qt/timectrl.cpp
+    src/qt/overlay.cpp
 )
 
 set(MEDIA_QT_SRC

@@ -152,7 +152,7 @@ public:
 
     // wxQt implementation internals:
 
-    // Caller maintains ownership of pict - window will NOT delete it
+    // Takes ownership of pict - window will delete it
     void QtSetPicture( QPicture* pict );
 
     QPainter *QtGetPainter();
@@ -244,7 +244,7 @@ private:
 
     bool QtSetBackgroundStyle();
 
-    QPicture *m_qtPicture;                                   // not owned
+    std::unique_ptr<QPicture> m_qtPicture;                   // owned by this window
     std::unique_ptr<QPainter> m_qtPainter;                   // always allocated
 
     bool m_mouseInside;
