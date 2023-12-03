@@ -1454,8 +1454,8 @@ void wxPropertyGridManager::RepaintDescBoxDecorations( wxDC& dc,
 
 void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_width, int new_height )
 {
-    int use_hei = new_height-1;
-    int use_width = new_width-6;
+    int use_hei = wxMax(1, new_height - 1);
+    int use_width = wxMax(1, new_width - 6);
 
     // Fix help control positions.
     int cap_y = new_splittery+m_splitterHeight+5;
