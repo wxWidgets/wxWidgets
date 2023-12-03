@@ -1567,18 +1567,6 @@ using wxDateTimeArray = wxBaseArray<wxDateTime>;
 //     virtual methods to work with the holidays they correspond to.
 // ----------------------------------------------------------------------------
 
-// Compares dates only on day and month.
-// Useful for finding dates within a map of holidays.
-class wxHolidayLess
-{
-public:
-    bool operator()(const wxDateTime& lhv, const wxDateTime& rhv) const
-    {
-        return wxDateTime(lhv.GetDay(), lhv.GetMonth()).IsEarlierThan(
-            wxDateTime(rhv.GetDay(), rhv.GetMonth()));
-    }
-};
-
 class WXDLLIMPEXP_FWD_BASE wxDateTimeHolidayAuthority;
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxDateTimeHolidayAuthority *,
                               wxHolidayAuthoritiesArray,
