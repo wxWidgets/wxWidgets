@@ -1,0 +1,1 @@
+wxAll (GUI): Make wxEL_ALLOW_NEW without wxEL_ALLOW_EDIT work (Martin Corino, #24099).
