@@ -925,7 +925,7 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
     int widths[Field_Max];
     widths[Field_Text] = -1; // growable
     widths[Field_Checkbox] = 150;
-    widths[Field_Bitmap] = BITMAP_SIZE_X;
+    widths[Field_Bitmap] = -1; // growable
     widths[Field_NumLockIndicator] = sizeNumLock.x;
     widths[Field_Clock] = 100;
     widths[Field_CapsLockIndicator] = dc.GetTextExtent(capslockIndicators[1]).x;
