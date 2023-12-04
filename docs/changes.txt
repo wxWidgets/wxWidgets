@@ -278,6 +278,7 @@ wxMSW:
 
 - Add support for line spacing and bullet style attributes to wxTextCtrl
   (Blake-Madden, #24046, #24069).
+- Fix restoring hidden top level windows (Christian Walther, #24117).
 - Add support for VT_UI8 OLE VARIANT type (Miguel Gimenez, #24115).
 
 wxOSX:
