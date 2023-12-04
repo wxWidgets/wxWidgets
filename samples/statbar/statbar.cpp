@@ -223,7 +223,6 @@ enum
     StatusBar_SetStyleShowTips
 };
 
-static const int BITMAP_SIZE_X = 32;
 
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWidgets
