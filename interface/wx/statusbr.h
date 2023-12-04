@@ -260,7 +260,7 @@ public:
         @note You must delete the control to remove it from the status bar, as
             simply passing @NULL will not do that.
 
-        @since 3.2.5
+        @since 3.3.0
     */
     bool AddFieldControl(int i, wxWindow* win);
 
