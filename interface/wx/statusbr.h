@@ -255,7 +255,7 @@ public:
         @param i
             The field index where the control will be shown.
         @param win
-            The control in question. Normally a child of the wxStatusBar itself.
+            The control in question. Must be a child of the wxStatusBar itself.
 
         @note You must delete the control to remove it from the status bar, as
             simply passing @NULL will not do that.
