@@ -459,7 +459,9 @@ public:
                 }
                 else
                 {
-                    wxLogTrace(TRACE_CEF, "work already scheduled");
+                    wxLogTrace(TRACE_CEF,
+                               "work already scheduled before %lldms",
+                               delay_ms);
                     return;
                 }
             }
