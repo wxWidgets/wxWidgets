@@ -100,10 +100,40 @@ struct AppImplData
     void DoMessageLoopWork();
 
 #ifdef __WXGTK__
+    // Called from DoMessageLoopWork() if the thread context is allocated.
+    void StartThreadDispatch(GMainContext* threadContext);
+
+    // Called from DoMessageLoopWork() when the thread context is freed.
+    void StopThreadDispatch();
+
+
     // Thread context we're dispatching the events for, if non-null.
     GMainContext* m_threadContext = nullptr;
 #endif // __WXGTK__
 };
+
+#ifdef __WXGTK__
+void AppImplData::StartThreadDispatch(GMainContext* threadContext)
+{
+    if ( !g_main_context_acquire(threadContext) )
+    {
+        // This really shouldn't happen, no idea what to do if it does.
+        wxLogDebug("Failed to acquire thread-specific context.");
+        return;
+    }
+
+    wxLogTrace(TRACE_CEF, "Acquired thread-specific context");
+    m_threadContext = threadContext;
+}
+
+void AppImplData::StopThreadDispatch()
+{
+    g_main_context_release(m_threadContext);
+    m_threadContext = nullptr;
+    wxLogTrace(TRACE_CEF, "Released thread-specific context");
+}
+
+#endif // __WXGTK__
 
 AppImplData gs_appData;
 
@@ -114,30 +144,13 @@ void AppImplData::DoMessageLoopWork()
     // non-main thread and normal GTK message loop run by gtk_main() doesn't
     // dispatch the events for it, as it only uses the default application
     // context. So check for this case and do it ourselves if necessary.
-    auto& threadContext = m_threadContext;
-    auto const threadContextNew = g_main_context_get_thread_default();
-    if ( threadContextNew != threadContext )
+    auto const threadContext = g_main_context_get_thread_default();
+    if ( threadContext != m_threadContext )
     {
-        if ( threadContextNew )
-        {
-            if ( !g_main_context_acquire(threadContextNew) )
-            {
-                // This really shouldn't happen, no idea what to do if it does.
-                wxLogDebug("Failed to acquire thread-specific context.");
-                return;
-            }
-
-            wxLogTrace(TRACE_CEF, "Acquired thread-specific context");
-            threadContext = threadContextNew;
-        }
+        if ( threadContext )
+            StartThreadDispatch(threadContext);
         else
-        {
-            // This actually doesn't seem to ever happen but it shouldn't harm
-            // to stop using the old thread context if it does.
-            g_main_context_release(threadContext);
-            threadContext = nullptr;
-            wxLogTrace(TRACE_CEF, "Released thread-specific context");
-        }
+            StopThreadDispatch();
     }
 
     while ( threadContext )
