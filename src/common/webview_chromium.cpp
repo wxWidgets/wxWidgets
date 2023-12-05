@@ -109,10 +109,50 @@ struct AppImplData
 
     // Thread context we're dispatching the events for, if non-null.
     GMainContext* m_threadContext = nullptr;
+
+    // The special source used to wake us up.
+    GSource* m_wakeupSource = nullptr;
 #endif // __WXGTK__
 };
 
 #ifdef __WXGTK__
+
+extern "C"
+{
+
+gboolean WakeupSourcePrepare(GSource*, gint* timeout)
+{
+    if ( timeout )
+    {
+        // No need to call us again sooner than necessary, so don't set any
+        // timeout for the poll.
+        *timeout = -1;
+    }
+
+    // Always poll, don't dispatch right now.
+    return FALSE;
+}
+
+gboolean WakeupSourceCheck(GSource*)
+{
+    // We can't dispatch events from check function, but we can wake up our
+    // idle handler to do it next.
+    wxWakeUpIdle();
+
+    // Still don't dispatch.
+    return FALSE;
+}
+
+} // extern "C"
+
+GSourceFuncs wakeupSourceVtbl =
+{
+    WakeupSourcePrepare,
+    WakeupSourceCheck,
+    nullptr, // No WakeupSourceDispatch as it should never be called.
+    nullptr, // No WakeupSourceFinalize because we don't have anything to free.
+};
+
 void AppImplData::StartThreadDispatch(GMainContext* threadContext)
 {
     if ( !g_main_context_acquire(threadContext) )
@@ -124,10 +164,25 @@ void AppImplData::StartThreadDispatch(GMainContext* threadContext)
 
     wxLogTrace(TRACE_CEF, "Acquired thread-specific context");
     m_threadContext = threadContext;
+
+    // Create the special source which will wake us up whenever there
+    // are any events to dispatch: otherwise our main message loop could be
+    // woken up due to the events for Chrome being received from X server, but
+    // would do nothing with them as it doesn't know how to process them, and
+    // not even wake us up to do it.
+    m_wakeupSource = g_source_new(&wakeupSourceVtbl, sizeof(GSource));
+
+    // Note that we need to attach it to the main context, not the thread one
+    // (otherwise this source itself would be never used neither).
+    g_source_attach(m_wakeupSource, NULL /* main context */);
 }
 
 void AppImplData::StopThreadDispatch()
 {
+    g_source_destroy(m_wakeupSource);
+    g_source_unref(m_wakeupSource);
+    m_wakeupSource = nullptr;
+
     g_main_context_release(m_threadContext);
     m_threadContext = nullptr;
     wxLogTrace(TRACE_CEF, "Released thread-specific context");
