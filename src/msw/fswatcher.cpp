@@ -349,6 +349,8 @@ void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
             }
             wxFileSystemWatcherEvent event(flags, oldpath, newpath);
             SendEvent(event);
+            if ( it == events.end() )
+                break;
         }
         // all other events
         else
