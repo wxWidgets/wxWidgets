@@ -94,7 +94,6 @@ public:
 #if wxUSE_TIMER
     void OnTimer(wxTimerEvent& WXUNUSED(event)) { UpdateClock(); }
 #endif
-    void OnSize(wxSizeEvent& event);
     void OnToggleClock(wxCommandEvent& event);
     void OnIdle(wxIdleEvent& event);
 
@@ -270,7 +269,6 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
-    EVT_SIZE(MyStatusBar::OnSize)
 #if wxUSE_CHECKBOX
     EVT_CHECKBOX(StatusBar_Checkbox, MyStatusBar::OnToggleClock)
 #endif
@@ -939,6 +937,7 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
 #endif
 
     m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxIcon(green_xpm));
+    AddFieldControl(Field_Bitmap, m_statbmp);
 
 #if wxUSE_TIMER
     m_timer.Start(1000);
@@ -962,18 +961,6 @@ MyStatusBar::~MyStatusBar()
         m_timer.Stop();
     }
 #endif
-}
-
-void MyStatusBar::OnSize(wxSizeEvent& event)
-{
-    wxRect rect;
-    GetFieldRect(Field_Bitmap, rect);
-    wxSize size = m_statbmp->GetSize();
-
-    m_statbmp->Move(rect.x + (rect.width - size.x) / 2,
-                    rect.y + (rect.height - size.y) / 2);
-
-    event.Skip();
 }
 
 void MyStatusBar::OnToggleClock(wxCommandEvent& WXUNUSED(event))

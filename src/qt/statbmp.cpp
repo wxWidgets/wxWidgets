@@ -17,7 +17,11 @@ class wxQtStaticBmp : public wxQtEventSignalHandler< QLabel, wxStaticBitmap >
 {
 public:
     wxQtStaticBmp( wxWindow *parent, wxStaticBitmap *handler ):
-        wxQtEventSignalHandler< QLabel, wxStaticBitmap >( parent, handler ){}
+        wxQtEventSignalHandler< QLabel, wxStaticBitmap >( parent, handler )
+    {
+        // For compatibility with wxMSW and wxGTK3 ports.
+        setAlignment( Qt::AlignCenter );
+    }
 };
 
 
