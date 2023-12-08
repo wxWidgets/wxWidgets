@@ -4998,6 +4998,16 @@ public:
     void ClearSelection();
 
     /**
+        Copies all cells that are currently selected.
+
+        Note that the cells most be contiguously selected;
+        otherwise, nothing will be copied.
+
+        @since 3.3.0
+     */
+    void CopySelection();
+
+    /**
         Deselects a row of cells.
     */
     void DeselectRow( int row );
