@@ -4077,7 +4077,7 @@ void wxWidgetCocoaImpl::AdjustClippingView(wxScrollBar* horizontal, wxScrollBar*
     }
 }
 
-void wxWidgetCocoaImpl::UseClippingView(bool clip)
+void wxWidgetCocoaImpl::UseClippingView()
 {
    wxWindow* peer = m_wxPeer;
 

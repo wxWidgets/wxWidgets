@@ -221,7 +221,7 @@ public :
     virtual void                controlTextDidChange();
 
     virtual void                AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical) override;
-    virtual void                UseClippingView(bool clip) override;
+    virtual void                UseClippingView() override;
     virtual WXWidget            GetContainer() const override { return m_osxClipView ? m_osxClipView : m_osxView; }
 
 protected:
