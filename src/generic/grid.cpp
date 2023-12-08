@@ -6095,7 +6095,12 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             case 'C':
                 if ( event.GetModifiers() == wxMOD_CONTROL )
                 {
-                    CopySelection();
+                    if ( !CopySelection() )
+                    {
+                        wxLogWarning(_("Error copying grid to the clipboard. "
+                            "Either selected cells were not contiguous or "
+                            "no cell was selected."));
+                    }
                     break;
                 }
                 wxFALLTHROUGH;
@@ -10826,8 +10831,6 @@ bool wxGrid::CopySelection()
     wxClipboardLocker lockClipboard;
     if (!lockClipboard)
     {
-        // Error message should have been already given and we
-        // don't have much to add.
         return false;
     }
 
