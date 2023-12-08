@@ -10787,7 +10787,7 @@ void wxGrid::ClearSelection()
         m_selection->ClearSelection();
 }
 
-void wxGrid::CopySelection()
+bool wxGrid::CopySelection()
 {
 #if wxUSE_CLIPBOARD
     // Coordinates of the selected block to copy to clipboard.
@@ -10803,7 +10803,7 @@ void wxGrid::CopySelection()
         if (m_currentCellCoords == wxGridNoCellCoords)
         {
             // But we don't even have it -- nothing to do then.
-            return;
+            return false;
         }
 
         sel = wxGridBlockCoords(GetGridCursorRow(),
@@ -10819,12 +10819,7 @@ void wxGrid::CopySelection()
         {
             // As we use simple text format, we can't copy more
             // than one block to clipboard.
-            wxLogWarning
-            (
-                _("Copying more than one selected block "
-                    "to clipboard is not supported.")
-            );
-            return;
+            return false;
         }
     }
 
@@ -10833,7 +10828,7 @@ void wxGrid::CopySelection()
     {
         // Error message should have been already given and we
         // don't have much to add.
-        return;
+        return false;
     }
 
     wxString buf;
@@ -10856,6 +10851,8 @@ void wxGrid::CopySelection()
 
     wxTheClipboard->SetData(new wxTextDataObject(buf));
 #endif // wxUSE_CLIPBOARD
+
+    return true;
 }
 
 // This function returns the rectangle that encloses the given block

@@ -5003,9 +5003,14 @@ public:
         Note that the cells most be contiguously selected;
         otherwise, nothing will be copied.
 
+        Returns @c true if content is successfully copied,
+        @c false otherwise. @c false will be returned if
+        nothing was selected, the selected cells weren't contiguous,
+        or a clipboard error occurred.
+
         @since 3.3.0
      */
-    void CopySelection();
+    bool CopySelection();
 
     /**
         Deselects a row of cells.

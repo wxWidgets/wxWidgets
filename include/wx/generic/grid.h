@@ -2284,7 +2284,7 @@ public:
 
     void ClearSelection();
 
-    void CopySelection();
+    bool CopySelection();
 
     bool IsInSelection( int row, int col ) const;
 
