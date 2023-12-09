@@ -1903,7 +1903,7 @@ long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
             return wxLIST_HITTEST_ONITEMLABEL;
         else
         {
-            rect = GetLine(line)->m_gi->m_rectAll;
+            rect = GetLineRect(line);
             if ( rect.Contains(x,y) )
                 return wxLIST_HITTEST_ONITEM;
         }
