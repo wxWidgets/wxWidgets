@@ -437,7 +437,7 @@ bool wxGenericComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
     else
     {
         if ( (keycode == WXK_DOWN && event.AltDown()) ||
-             (keycode == WXK_F4) || (keycode == WXK_SPACE) )
+             (keycode == WXK_F4) )
             return true;
     }
 
