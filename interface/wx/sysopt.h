@@ -81,6 +81,12 @@
         using it, i.e. this has the same effect as calling
         wxApp::MSWEnableDarkMode(). If set to 2, use dark mode unconditionally,
         as if this function were called with wxApp::DarkMode_Always argument.
+    @flag{msw.native-dialogs-pmdpi}
+        Some native win32 dialogs (like the font and colour pickers) are not
+        per-monitor DPI aware, and wxWidgets will forcefully show them as
+        system DPI aware when there are monitors with different DPI connected.
+        If set to 1, these dialogs will always be shown as per-monitor DPI
+        aware (when enabled in the manifest).
     @endFlagTable
 
 
