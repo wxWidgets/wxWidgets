@@ -4913,10 +4913,19 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
     return true;
 }
 
+void wxWindowGTK::GTKRemoveBorder()
+{
+}
+
 void wxWindowGTK::DoAddChild(wxWindowGTK *child)
 {
     wxASSERT_MSG( (m_widget != nullptr), wxT("invalid window") );
     wxASSERT_MSG( (child != nullptr), wxT("invalid child window") );
+
+    // If parent is already showing, changing CSS after adding child
+    // can cause transitory visual glitches, so change it here
+    if (HasFlag(wxBORDER_NONE))
+        GTKRemoveBorder();
 
     /* add to list */
     AddChild( child );

@@ -466,6 +466,7 @@ protected:
 
 private:
     void Init();
+    virtual void GTKRemoveBorder();
 
     // return true if this window must have a non-null parent, false if it can
     // be created without parent (normally only top level windows but in wxGTK

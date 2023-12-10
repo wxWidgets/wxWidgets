@@ -92,11 +92,6 @@ void wxControl::PostCreation(const wxSize& size)
 {
     wxWindow::PostCreation();
 
-#ifdef __WXGTK3__
-    if (HasFlag(wxNO_BORDER))
-        GTKApplyCssStyle("*{ border:none; border-radius:0; padding:0 }");
-#endif
-
 #ifndef __WXGTK3__
     // NB: GetBestSize needs to know the style, otherwise it will assume
     //     default font and if the user uses a different font, determined
@@ -107,6 +102,13 @@ void wxControl::PostCreation(const wxSize& size)
 #endif
 
     SetInitialSize(size);
+}
+
+void wxControl::GTKRemoveBorder()
+{
+#ifdef __WXGTK3__
+    GTKApplyCssStyle("*{ border:none; border-radius:0; padding:0 }");
+#endif
 }
 
 // ----------------------------------------------------------------------------
