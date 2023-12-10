@@ -226,8 +226,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(nullptr, wxID_ANY, "wxSplitterWindow sample",
-                 wxDefaultPosition, wxSize(420, 300))
+       : wxFrame(nullptr, wxID_ANY, "wxSplitterWindow sample")
 {
     SetIcon(wxICON(sample));
 
@@ -331,12 +330,14 @@ MyFrame::MyFrame()
     m_splitter->Initialize(m_left);
 #else
     // you can also try -100
-    m_splitter->SplitVertically(m_left, m_right, 100);
+    m_splitter->SplitVertically(m_left, m_right, FromDIP(100));
 #endif
 
 #if wxUSE_STATUSBAR
     SetStatusText("Min pane size = 0", 1);
 #endif // wxUSE_STATUSBAR
+
+    SetInitialSize(FromDIP(wxSize(420, 300)));
 }
 
 MyFrame::~MyFrame()
@@ -620,13 +621,13 @@ void MyCanvas::OnDraw(wxDC& dcOrig)
     wxMirrorDC dc(dcOrig, m_mirror);
 
     dc.SetPen(*wxBLACK_PEN);
-    dc.DrawLine(0, 0, 100, 200);
+    dc.DrawLine(wxPoint(0, 0), dc.FromDIP(wxPoint(100, 200)));
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    dc.DrawText("Testing", 50, 50);
+    dc.DrawText("Testing", dc.FromDIP(wxPoint(50, 50)));
 
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush(*wxGREEN_BRUSH);
-    dc.DrawRectangle(120, 120, 100, 80);
+    dc.DrawRectangle(dc.FromDIP(wxPoint(120, 120)), dc.FromDIP(wxSize(100, 80)));
 }
 
