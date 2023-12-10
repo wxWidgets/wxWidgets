@@ -126,13 +126,14 @@ public:
     int GetSashPos() const { return m_sashPos; }
 
 private:
-    wxWindow *m_left, *m_right;
+    wxWindow *m_left = nullptr,
+             *m_right = nullptr;
 
-    wxSplitterWindow* m_splitter;
-    wxWindow *m_replacewindow;
-    int m_sashPos;
-    bool m_lockSash;
-    bool m_allowDClick;
+    wxSplitterWindow* m_splitter = nullptr;
+    wxWindow *m_replacewindow = nullptr;
+    int m_sashPos = 0;
+    bool m_lockSash = false;
+    bool m_allowDClick = true;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyFrame);
@@ -228,10 +229,6 @@ MyFrame::MyFrame()
        : wxFrame(nullptr, wxID_ANY, "wxSplitterWindow sample",
                  wxDefaultPosition, wxSize(420, 300))
 {
-    m_lockSash = false;
-    m_sashPos = 0;
-    m_allowDClick = true;
-
     SetIcon(wxICON(sample));
 
 #if wxUSE_STATUSBAR
@@ -340,8 +337,6 @@ MyFrame::MyFrame()
 #if wxUSE_STATUSBAR
     SetStatusText("Min pane size = 0", 1);
 #endif // wxUSE_STATUSBAR
-
-    m_replacewindow = nullptr;
 }
 
 MyFrame::~MyFrame()
