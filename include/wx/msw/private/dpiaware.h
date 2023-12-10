@@ -15,6 +15,7 @@
 #endif
 
 #include "wx/dynlib.h"
+#include "wx/display.h"
 
 namespace wxMSWImpl
 {
@@ -35,6 +36,9 @@ public:
     AutoSystemDpiAware()
         : m_prevContext(WXDPI_AWARENESS_CONTEXT_UNAWARE)
     {
+        if ( !Needed() )
+            return;
+
         if ( ms_pfnSetThreadDpiAwarenessContext == (SetThreadDpiAwarenessContext_t)-1)
         {
             wxLoadedDLL dllUser32("user32.dll");
@@ -60,6 +64,15 @@ public:
         {
             ms_pfnSetThreadDpiAwarenessContext(m_prevContext);
         }
+    }
+
+    static bool Needed()
+    {
+        // use system-dpi-aware context when there are displays with different DPI
+        bool diferentDPI = false;
+        for ( unsigned i = 1; i < wxDisplay::GetCount() && !diferentDPI; ++i )
+            diferentDPI = wxDisplay(0u).GetPPI() != wxDisplay(i).GetPPI();
+        return diferentDPI;
     }
 
 private:
