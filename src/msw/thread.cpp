@@ -1340,7 +1340,7 @@ bool wxThreadModule::OnInit()
 
     // main thread doesn't have associated wxThread object, so store 0 in the
     // TLS instead
-    if ( !::TlsSetValue(gs_tlsThisThread, (LPVOID)0) )
+    if ( !::TlsSetValue(gs_tlsThisThread, nullptr) )
     {
         ::TlsFree(gs_tlsThisThread);
         gs_tlsThisThread = TLS_OUT_OF_INDEXES;

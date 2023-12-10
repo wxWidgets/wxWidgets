@@ -153,7 +153,7 @@ void wxStackFrame::OnGetParam()
                         (
                             ::GetCurrentProcess(),
                             &imagehlpStackFrame,
-                            0           // unused
+                            nullptr // unused
                         ) )
     {
         // for symbols from kernel DLL we might not have access to their

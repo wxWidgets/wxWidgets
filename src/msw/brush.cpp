@@ -282,7 +282,7 @@ wxBitmap *wxBrush::GetStipple() const
 
 WXHANDLE wxBrush::GetResourceHandle() const
 {
-    wxCHECK_MSG( IsOk(), FALSE, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid brush") );
 
     return (WXHANDLE)M_BRUSHDATA->GetHBRUSH();
 }

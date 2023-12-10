@@ -4503,7 +4503,7 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
                             (
                                 (HDROP)hFilesInfo,
                                 (UINT)-1,
-                                (LPTSTR)0,
+                                nullptr,
                                 (UINT)0
                             );
 

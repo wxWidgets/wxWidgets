@@ -62,7 +62,7 @@ wxFSWatcherImplMSW::~wxFSWatcherImplMSW()
 {
     // order the worker thread to finish & wait
     m_workerThread.Finish();
-    if (m_workerThread.Wait() != 0)
+    if (m_workerThread.Wait())
     {
         wxLogError(_("Ungraceful worker thread termination"));
     }
@@ -210,7 +210,7 @@ wxThread::ExitCode wxIOCPThread::Entry()
     while ( ReadEvents() );
 
     wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Ended IOCP thread");
-    return (ExitCode)0;
+    return nullptr;
 }
 
 // wait for events to occur, read them and send to interested parties

@@ -2593,7 +2593,7 @@ public:
 protected:
     void DoAcquireResource() override
     {
-        HRESULT hr = GetContext()->CreateBitmapFromWicBitmap(m_srcBitmap, 0, &m_nativeResource);
+        HRESULT hr = GetContext()->CreateBitmapFromWicBitmap(m_srcBitmap, nullptr, &m_nativeResource);
         wxCHECK_HRESULT_RET(hr);
     }
 

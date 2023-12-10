@@ -129,7 +129,7 @@ void wxCrashReportImpl::Output(const wxChar *format, ...)
     wxString s = wxString::FormatV(format, argptr);
 
     wxCharBuffer buf(s.mb_str(wxConvUTF8));
-    ::WriteFile(m_hFile, buf.data(), strlen(buf.data()), &cbWritten, 0);
+    ::WriteFile(m_hFile, buf.data(), strlen(buf.data()), &cbWritten, nullptr);
 
     va_end(argptr);
 }
