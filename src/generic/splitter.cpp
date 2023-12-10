@@ -531,9 +531,14 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
 
 void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
 {
+    // On platforms requiring scaling by DPI factor we need to do it whenever
+    // DPI changes, but elsewhere we shouldn't do it as the same logical
+    // coordinates are used irrespectively of the current DPI value.
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
     m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
     m_sashPosition = event.ScaleX(m_sashPosition);
     m_lastSize = event.Scale(m_lastSize);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
 
     event.Skip();
 }
