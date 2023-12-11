@@ -960,8 +960,8 @@ void wxGenericTreeCtrl::Init()
     m_dirty = false;
 
     m_lineHeight = 10;
-    m_indent = 15;
-    m_spacing = 18;
+    m_indent = 10;
+    m_spacing = 10;
 
     m_dragCount = 0;
     m_isDragging = false;
@@ -995,15 +995,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
                              validator,
                              name ) )
         return false;
-
-    // If the tree display has no buttons, but does have
-    // connecting lines, we can use a narrower layout.
-    // It may not be a good idea to force this...
-    if (!HasButtons() && !HasFlag(wxTR_NO_LINES))
-    {
-        m_indent= 10;
-        m_spacing = 10;
-    }
 
     m_hasExplicitFgCol = m_hasFgCol;
     m_hasExplicitBgCol = m_hasBgCol;
