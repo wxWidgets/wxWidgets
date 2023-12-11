@@ -1088,7 +1088,7 @@ unsigned int wxGenericTreeCtrl::GetCount() const
 
 void wxGenericTreeCtrl::SetIndent(unsigned int indent)
 {
-    m_indent = (unsigned short) indent;
+    m_indent = indent;
     m_dirty = true;
 }
 
@@ -2836,7 +2836,7 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
         {
             // draw the horizontal line here
             int x_start = x;
-            if (x > (signed)m_indent)
+            if (x > (int)m_indent)
                 x_start -= m_indent;
             else if (HasFlag(wxTR_LINES_AT_ROOT))
                 x_start = 3;

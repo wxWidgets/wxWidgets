@@ -243,7 +243,7 @@ protected:
                         *m_key_current,
                         // A hint to select a parent item after deleting a child
                         *m_select_me;
-    unsigned short       m_indent;
+    unsigned int         m_indent;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
     wxBrush              m_hilightBrush,
