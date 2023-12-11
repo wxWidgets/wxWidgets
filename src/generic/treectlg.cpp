@@ -963,8 +963,8 @@ void wxGenericTreeCtrl::Init()
     m_dirty = false;
 
     m_lineHeight = 10;
-    m_indent = 10;
-    m_spacing = 10;
+    m_indent = 0;
+    m_spacing = 0;
 
     m_dragCount = 0;
     m_isDragging = false;
@@ -1062,6 +1062,9 @@ void wxGenericTreeCtrl::InitVisualAttributes()
     m_normalFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 #endif
     m_boldFont = m_normalFont.Bold();
+
+    m_indent = FromDIP(10);
+    m_spacing = FromDIP(10);
 }
 
 // -----------------------------------------------------------------------------
