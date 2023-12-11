@@ -947,6 +947,7 @@ wxBEGIN_EVENT_TABLE(wxGenericTreeCtrl, wxTreeCtrlBase)
     EVT_KILL_FOCUS     (wxGenericTreeCtrl::OnKillFocus)
     EVT_TREE_ITEM_GETTOOLTIP(wxID_ANY, wxGenericTreeCtrl::OnGetToolTip)
     EVT_SYS_COLOUR_CHANGED(wxGenericTreeCtrl::OnSysColourChanged)
+    EVT_DPI_CHANGED(wxGenericTreeCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // -----------------------------------------------------------------------------
@@ -4206,6 +4207,18 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
         size.y += PIXELS_PER_UNIT - dy;
 
     return size;
+}
+
+void wxGenericTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // For the platforms using DPI-dependent pixels we need to adjust various
+    // metrics after the DPI change.
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    m_indent = event.ScaleX(m_indent);
+    m_spacing = event.ScaleX(m_spacing);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
+    event.Skip();
 }
 
 #endif // wxUSE_TREECTRL
