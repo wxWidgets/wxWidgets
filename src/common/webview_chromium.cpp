@@ -174,7 +174,7 @@ void AppImplData::StartThreadDispatch(GMainContext* threadContext)
 
     // Note that we need to attach it to the main context, not the thread one
     // (otherwise this source itself would be never used neither).
-    g_source_attach(m_wakeupSource, NULL /* main context */);
+    g_source_attach(m_wakeupSource, nullptr /* main context */);
 }
 
 void AppImplData::StopThreadDispatch()
