@@ -737,7 +737,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     wxWindow *topParent = wxGetTopLevelParent(m_parent);
     if (topParent && (((GTK_IS_WINDOW(topParent->m_widget)) &&
                        (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)) ||
-                       (style & wxFRAME_FLOAT_ON_PARENT)))
+                       (style & wxFRAME_FLOAT_ON_PARENT) ||
+                       (style & wxSTAY_ON_TOP)))
     {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget),
                                       GTK_WINDOW(topParent->m_widget) );
