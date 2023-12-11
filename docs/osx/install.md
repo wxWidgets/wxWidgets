@@ -31,22 +31,18 @@ build on modern systems. So in practice you should use a command like this:
 You may also prefer to add `-s` option to avoid normal output from make and/or
 redirect it you to a log file for further inspection.
 
-Build the samples and demos
+You should build at least the smallest possible wxWidgets sample to verify that
+everything is working as intended, by doing
+
+    cd samples/minimal
+    make
+
+and then running `minimal.app` from this directory from Finder.
+
+If you'd like to, you can also build all the other samples and demos
 
     cd samples; make;cd ..
     cd demos;   make;cd ..
-
-After the compilation completes, use Finder to run the samples and demos
-* Go to build-cocoa-debug/samples to experiment with the Cocoa samples.
-* Go to build-cocoa-debug/demos to experiment with the Cocoa demos.
-* Double-click on the executables which have an icon showing three small squares.
-* The source code for the samples is in wxWidgets/samples
-* The source code for the demos is in wxWidgets/demos
-
-More information about building on macOS is available in the wxWiki.
-Here are two useful links
-  * https://wiki.wxwidgets.org/Guides_%26_Tutorials
-  * https://wiki.wxwidgets.org/Development:_wxMac
 
 
 Advanced topics                        {#osx_advanced}

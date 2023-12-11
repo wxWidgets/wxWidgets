@@ -29,8 +29,15 @@ on modern systems. So in practice you should use a command like this:
 You may also prefer to add `-s` option to avoid normal output from make and/or
 redirect it you to a log file for further inspection.
 
+You should build at least the smallest possible wxWidgets sample to verify that
+everything is working as intended, by doing
 
-If you want to install wxWidgets, please also run
+    $ cd samples/minimal
+    $ make
+
+and try running it using `./minimal` command from the same directory.
+
+After confirming that it works, you may want to install wxWidgets by running
 
     $ sudo make install
     $ sudo ldconfig
