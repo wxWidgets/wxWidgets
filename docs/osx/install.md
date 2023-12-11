@@ -9,17 +9,27 @@ Most OS X developers should start by downloading and installing Xcode
 from the App Store.  It is a free IDE from Apple that provides
 all of the tools you need for working with wxWidgets.
 
-After Xcode is installed, download wxWidgets-{version}.tar.bz2 and then
+After Xcode is installed, download `wxWidgets-{version}.tar.bz2` and then
 double-click on it to unpack it to create a wxWidgets directory.
 
 Next use Terminal (under Applications, Utilities, Terminal) to access a command
-prompt.  Use cd to change directories to your wxWidgets directory and execute
+prompt.  Use `cd` to change directories to your wxWidgets directory and execute
 the following sets of commands from the wxWidgets directory.
 
     mkdir build-cocoa-debug
     cd build-cocoa-debug
     ../configure --enable-debug
     make
+
+It is recommended to use `-jN` option with the last command, where `N` is a
+number of the processors in your system (which can be checked using `sysctl -n
+hw.ncpu` command if you are not sure), as this will dramatically speed up the
+build on modern systems. So in practice you should use a command like this:
+
+    make -j16
+
+You may also prefer to add `-s` option to avoid normal output from make and/or
+redirect it you to a log file for further inspection.
 
 Build the samples and demos
 

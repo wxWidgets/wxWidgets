@@ -18,13 +18,28 @@ the following in wxWidgets directory:
     $ cd buildgtk
     $ ../configure --with-gtk
     $ make
+
+It is recommended to use `-jN` option with the last command, where `N` is a
+number of the processors in your system (which can be checked using `nproc`
+command if you are not sure), as this will dramatically speed up the build
+on modern systems. So in practice you should use a command like this:
+
+    $ make -j16
+
+You may also prefer to add `-s` option to avoid normal output from make and/or
+redirect it you to a log file for further inspection.
+
+
+If you want to install wxWidgets, please also run
+
     $ sudo make install
     $ sudo ldconfig
 
 (if you get "ldconfig: command not found", try using `/sbin/ldconfig`)
 
-If you don't do the `make install` part, you can still use the libraries from
-the `buildgtk` directory, but they may not be available to other users.
+but note that this part is optional and you can use the libraries from
+the `buildgtk` directory by running `.../buildgtk/wx-config` script using its
+full path instead of just using `wx-config`.
 
 Note that by default, GTK 3 is used. GTK 2 can be specified
 with `--with-gtk=2` configure option.
