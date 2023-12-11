@@ -1160,11 +1160,9 @@ if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
 
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
-    else dnl Use all architectures supported
-        OSX_ARCH_OPTS="i386"
-        if test "$wxUSE_OSX_COCOA" = 1; then
-            OSX_ARCH_OPTS="$OSX_ARCH_OPTS,x86_64"
-        fi
+    else
+        dnl Default architectures for the universal binaries.
+        OSX_ARCH_OPTS=arm64,x86_64
     fi
 
     AC_MSG_CHECKING([for architectures to use in universal binary])
