@@ -48,6 +48,24 @@ If you'd like to, you can also build all the other samples and demos
 Advanced topics                        {#osx_advanced}
 ===============
 
+Building library for distribution
+---------------------------------
+
+When building library for the distribution with your application, you shouldn't
+use `--enable-debug` option above but you may want to use `--disable-sys-libs`
+option to ensure that it has no dependencies on the other libraries available
+on the current system as they might not be present on all systems where the
+application is used.
+
+It is also often desirable to build the final version of the application as
+"universal binary", i.e. a combination of binaries for several different
+architectures. In this case, you should build wxWidgets as universal binary
+too, using `--enable-universal_binary` option. By default, this option enables
+building for the usually wanted set of architectures (currently ARM and Intel)
+but you may override this by listing the architectures you want to use
+explicitly, separating them with commas.
+
+
 Installing library                     {#osx_install}
 ------------------
 
