@@ -898,10 +898,7 @@ wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
     int img_h = wxMax(state_h, image_h);
     m_height = wxMax(img_h, text_h);
 
-    if (m_height < 30)
-        m_height += 2;            // at least 2 pixels
-    else
-        m_height += m_height / 10;   // otherwise 10% extra spacing
+    m_height += control->FromDIP(2); // See CalculateLineHeight().
 
     if (m_height > control->m_lineHeight)
         control->m_lineHeight = m_height;
@@ -2392,7 +2389,7 @@ void wxGenericTreeCtrl::SortChildren(const wxTreeItemId& itemId)
 void wxGenericTreeCtrl::CalculateLineHeight()
 {
     wxClientDC dc(this);
-    m_lineHeight = (int)(dc.GetCharHeight() + 4);
+    m_lineHeight = dc.GetCharHeight() + FromDIP(4);
 
     if ( HasImages() )
     {
@@ -2428,10 +2425,7 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         }
     }
 
-    if (m_lineHeight < 30)
-        m_lineHeight += 2;                 // at least 2 pixels
-    else
-        m_lineHeight += m_lineHeight/10;   // otherwise 10% extra spacing
+    m_lineHeight += FromDIP(2); // Add some extra interline space.
 }
 
 void wxGenericTreeCtrl::OnImagesChanged()
