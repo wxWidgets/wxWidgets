@@ -158,7 +158,7 @@ wxAnyButton::State wxAnyButton::QtGetCurrentState() const
         return State_Pressed;
     }
 
-    if ( HasCapture() || m_qtPushButton->hasMouseTracking() || m_qtPushButton->underMouse() )
+    if ( HasCapture() || m_qtPushButton->underMouse() )
     {
         return State_Current;
     }
