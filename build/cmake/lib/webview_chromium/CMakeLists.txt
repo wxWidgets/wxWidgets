@@ -12,19 +12,19 @@ include(../../source_groups.cmake)
 include(cef_version_info.cmake)
 
 find_path(CEF_ROOT
-    NAMES cef_paths.gypi
+    NAMES libcef_dll
     HINTS
         $ENV{CEF_ROOT}
         ${wxSOURCE_DIR}/3rdparty/cef
     DOC "CEF Binary Root directory"
     )
 
+set(CEF_DOWNLOAD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-download)
+set(CEF_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-source)
+set(CEF_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-build)
+
 if(NOT CEF_ROOT)
     message("Downloading CEF binary distribution...")
-
-    set(CEF_DOWNLOAD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-download)
-    set(CEF_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-source)
-    set(CEF_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-build)
 
     configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cef_download.cmake.in
@@ -56,12 +56,16 @@ endif()
 set(USE_ATL OFF)        # Disable usage of ATL in CEF
 set(USE_SANDBOX OFF)    # Disable usage of sandbox on windows
 
-add_subdirectory(${CEF_ROOT} cef EXCLUDE_FROM_ALL)
-set_target_properties(libcef_dll_wrapper PROPERTIES FOLDER "Third Party Libraries")
-if (MSVC)
+add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
+set_target_properties(libcef_dll_wrapper PROPERTIES
+    FOLDER "Third Party Libraries"
+    OUTPUT_NAME "libcef_dll_wrapper"
+)
+
+if(MSVC)
     # Modify CEF compiler options to match VC runtime
     get_target_property(cef_compile_options libcef_dll_wrapper COMPILE_OPTIONS)
-    string(REGEX REPLACE "/MTd?" "" cef_compile_options "${cef_compile_options}")
+    string(REGEX REPLACE "/MTd?;" "" cef_compile_options "${cef_compile_options}")
     set_target_properties(libcef_dll_wrapper PROPERTIES COMPILE_OPTIONS "${cef_compile_options}")
 endif()
 
@@ -81,30 +85,18 @@ else()
     )
 endif()
 
-wx_append_sources(WEBVIEW_CHROMIUM_FILES WEBVIEWCHROMIUM)
-if(APPLE)
-    wx_append_sources(WEBVIEW_CHROMIUM_FILES WEBVIEWCHROMIUM_OSX_SHARED)
-endif()
+wx_install(TARGETS libcef_dll_wrapper
+    EXPORT wxWidgetsTargets
+    ARCHIVE DESTINATION "lib${GEN_EXPR_DIR}${wxPLATFORM_LIB_DIR}"
+)
 
-wx_add_library(webview_chromium ${WEBVIEW_CHROMIUM_FILES})
-# CEF headers always need C++11
-set_target_properties(webview_chromium PROPERTIES CXX_STANDARD 11)
-wx_lib_include_directories(webview_chromium PRIVATE ${CEF_ROOT})
-wx_lib_link_libraries(webview_chromium PUBLIC webview PRIVATE libcef libcef_dll_wrapper)
+wx_lib_include_directories(wxwebview PRIVATE ${CEF_ROOT})
+wx_add_dependencies(wxwebview libcef_dll_wrapper)
+wx_lib_link_libraries(wxwebview PUBLIC libcef libcef_dll_wrapper)
 
-# Add NDEBUG definition required by CEF headers for release build
-set_property(TARGET webview_chromium APPEND PROPERTY
-    COMPILE_DEFINITIONS "$<$<NOT:$<CONFIG:Debug>>:NDEBUG>")
-
-if(APPLE AND wxBUILD_SHARED)
-    add_custom_command(
-        TARGET webview_chromium
-        POST_BUILD
-        # Copy the CEF framework into the Frameworks directory.
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "${CEF_ROOT}/$<CONFIG>/Chromium Embedded Framework.framework"
-                "$<TARGET_FILE_DIR:webview_chromium>/Frameworks/Chromium Embedded Framework.framework"
-    )
-endif()
-
-wx_finalize_lib(webview)
+mark_as_advanced(USE_ATL)
+mark_as_advanced(USE_SANDBOX)
+mark_as_advanced(OPTION_USE_ARC)
+mark_as_advanced(CEF_ROOT)
+mark_as_advanced(CEF_DEBUG_INFO_FLAG)
+mark_as_advanced(CEF_RUNTIME_LIBRARY_FLAG)
