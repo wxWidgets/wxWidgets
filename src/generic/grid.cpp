@@ -10852,6 +10852,9 @@ bool wxGrid::CopySelection()
         buf += wxTextFile::GetEOL();
     }
 
+    // Trim trailing newline after the last cell.
+    buf.Trim(true);
+
     wxTheClipboard->SetData(new wxTextDataObject(buf));
 #endif // wxUSE_CLIPBOARD
 
