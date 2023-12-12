@@ -24,7 +24,10 @@ number of the processors in your system (which can be checked using `nproc`
 command if you are not sure), as this will dramatically speed up the build
 on modern systems. So in practice you should use a command like this:
 
-    $ make -j16
+    $ make -j8
+
+(but don't use it unless you actually have 8 CPUs and enough memory for that
+many parallel compiler invocations).
 
 You may also prefer to add `-s` option to avoid normal output from make and/or
 redirect it you to a log file for further inspection.
