@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxGrid::CopySelection() (Blake Madden, #24124).
