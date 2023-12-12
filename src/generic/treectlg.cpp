@@ -297,7 +297,8 @@ public:
         // set them
     void SetAttributes(wxItemAttr *attr)
     {
-        if ( m_ownsAttr ) delete m_attr;
+        if ( m_ownsAttr )
+            delete m_attr;
         m_attr = attr;
         m_ownsAttr = false;
         m_width = 0;
@@ -642,7 +643,8 @@ wxGenericTreeItem::~wxGenericTreeItem()
 {
     delete m_data;
 
-    if (m_ownsAttr) delete m_attr;
+    if (m_ownsAttr)
+        delete m_attr;
 
     wxASSERT_MSG( m_children.IsEmpty(),
                   "must call DeleteChildren() before deleting the item" );
@@ -684,9 +686,11 @@ void wxGenericTreeItem::GetSize( int &x, int &y,
                                  const wxGenericTreeCtrl *theButton )
 {
     int bottomY=m_y+theButton->GetLineHeight(this);
-    if ( y < bottomY ) y = bottomY;
+    if ( y < bottomY )
+        y = bottomY;
     int width = m_x +  m_width;
-    if ( x < width ) x = width;
+    if ( x < width )
+        x = width;
 
     if (IsExpanded())
     {
@@ -781,7 +785,8 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
         }
 
         // if children are expanded, fall through to evaluate them
-        if (m_isCollapsed) return nullptr;
+        if (m_isCollapsed)
+            return nullptr;
     }
 
     // evaluate children
@@ -824,7 +829,8 @@ int wxGenericTreeItem::GetCurrentImage() const
 
     // maybe it doesn't have the specific image we want,
     // try the default one instead
-    if ( image == NO_IMAGE ) image = GetImage();
+    if ( image == NO_IMAGE )
+        image = GetImage();
 
     return image;
 }
@@ -898,10 +904,7 @@ wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
     int img_h = wxMax(state_h, image_h);
     m_height = wxMax(img_h, text_h);
 
-    if (m_height < 30)
-        m_height += 2;            // at least 2 pixels
-    else
-        m_height += m_height / 10;   // otherwise 10% extra spacing
+    m_height += control->FromDIP(2); // See CalculateLineHeight().
 
     if (m_height > control->m_lineHeight)
         control->m_lineHeight = m_height;
@@ -944,6 +947,7 @@ wxBEGIN_EVENT_TABLE(wxGenericTreeCtrl, wxTreeCtrlBase)
     EVT_KILL_FOCUS     (wxGenericTreeCtrl::OnKillFocus)
     EVT_TREE_ITEM_GETTOOLTIP(wxID_ANY, wxGenericTreeCtrl::OnGetToolTip)
     EVT_SYS_COLOUR_CHANGED(wxGenericTreeCtrl::OnSysColourChanged)
+    EVT_DPI_CHANGED(wxGenericTreeCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // -----------------------------------------------------------------------------
@@ -960,8 +964,8 @@ void wxGenericTreeCtrl::Init()
     m_dirty = false;
 
     m_lineHeight = 10;
-    m_indent = 15;
-    m_spacing = 18;
+    m_indent = 0;
+    m_spacing = 0;
 
     m_dragCount = 0;
     m_isDragging = false;
@@ -995,15 +999,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
                              validator,
                              name ) )
         return false;
-
-    // If the tree display has no buttons, but does have
-    // connecting lines, we can use a narrower layout.
-    // It may not be a good idea to force this...
-    if (!HasButtons() && !HasFlag(wxTR_NO_LINES))
-    {
-        m_indent= 10;
-        m_spacing = 10;
-    }
 
     m_hasExplicitFgCol = m_hasFgCol;
     m_hasExplicitBgCol = m_hasBgCol;
@@ -1068,6 +1063,9 @@ void wxGenericTreeCtrl::InitVisualAttributes()
     m_normalFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 #endif
     m_boldFont = m_normalFont.Bold();
+
+    m_indent = FromDIP(10);
+    m_spacing = FromDIP(10);
 }
 
 // -----------------------------------------------------------------------------
@@ -1094,7 +1092,7 @@ unsigned int wxGenericTreeCtrl::GetCount() const
 
 void wxGenericTreeCtrl::SetIndent(unsigned int indent)
 {
-    m_indent = (unsigned short) indent;
+    m_indent = indent;
     m_dirty = true;
 }
 
@@ -2191,7 +2189,8 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
     // ctrl press
     if (unselect_others)
     {
-        if (is_single) Unselect(); // to speed up thing
+        if (is_single)
+            Unselect(); // to speed up thing
         else UnselectAll();
     }
 
@@ -2286,7 +2285,8 @@ void wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    if (!item.IsOk()) return;
+    if (!item.IsOk())
+        return;
 
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
@@ -2309,8 +2309,6 @@ void wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId& item)
             parent = parent->GetParent();
         }
     }
-
-    //if (parent) CalculatePositions();
 
     ScrollTo(item);
 }
@@ -2401,7 +2399,7 @@ void wxGenericTreeCtrl::SortChildren(const wxTreeItemId& itemId)
 void wxGenericTreeCtrl::CalculateLineHeight()
 {
     wxClientDC dc(this);
-    m_lineHeight = (int)(dc.GetCharHeight() + 4);
+    m_lineHeight = dc.GetCharHeight() + FromDIP(4);
 
     if ( HasImages() )
     {
@@ -2419,7 +2417,8 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         {
             int width = 0, height = 0;
             m_imagesState.GetImageLogicalSize(this, i, width, height);
-            if (height > m_lineHeight) m_lineHeight = height;
+            if (height > m_lineHeight)
+                m_lineHeight = height;
         }
     }
 
@@ -2433,14 +2432,12 @@ void wxGenericTreeCtrl::CalculateLineHeight()
         {
             int width = 0, height = 0;
             m_imagesButtons.GetImageLogicalSize(this, i, width, height);
-            if (height > m_lineHeight) m_lineHeight = height;
+            if (height > m_lineHeight)
+                m_lineHeight = height;
         }
     }
 
-    if (m_lineHeight < 30)
-        m_lineHeight += 2;                 // at least 2 pixels
-    else
-        m_lineHeight += m_lineHeight/10;   // otherwise 10% extra spacing
+    m_lineHeight += FromDIP(2); // Add some extra interline space.
 }
 
 void wxGenericTreeCtrl::OnImagesChanged()
@@ -2843,7 +2840,7 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
         {
             // draw the horizontal line here
             int x_start = x;
-            if (x > (signed)m_indent)
+            if (x > (int)m_indent)
                 x_start -= m_indent;
             else if (HasFlag(wxTR_LINES_AT_ROOT))
                 x_start = 3;
@@ -2910,7 +2907,8 @@ wxGenericTreeCtrl::PaintLevel(wxGenericTreeItem *item,
             {
                 // draw line down to last child
                 oldY += GetLineHeight(children[n-1])>>1;
-                if (HasButtons()) y_mid += 5;
+                if (HasButtons())
+                    y_mid += 5;
 
                 // Only draw the portion of the line that is visible, in case
                 // it is huge
@@ -3294,7 +3292,8 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                         while (current.IsOk() && !next)
                         {
                             current = GetItemParent( current );
-                            if (current) next = GetNextSibling( current );
+                            if (current)
+                                next = GetNextSibling( current );
                         }
                     }
                     if (next)
@@ -3426,11 +3425,16 @@ wxGenericTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
     int w, h;
     GetSize(&w, &h);
     flags=0;
-    if (point.x<0) flags |= wxTREE_HITTEST_TOLEFT;
-    if (point.x>w) flags |= wxTREE_HITTEST_TORIGHT;
-    if (point.y<0) flags |= wxTREE_HITTEST_ABOVE;
-    if (point.y>h) flags |= wxTREE_HITTEST_BELOW;
-    if (flags) return wxTreeItemId();
+    if (point.x<0)
+        flags |= wxTREE_HITTEST_TOLEFT;
+    if (point.x>w)
+        flags |= wxTREE_HITTEST_TORIGHT;
+    if (point.y<0)
+        flags |= wxTREE_HITTEST_ABOVE;
+    if (point.y>h)
+        flags |= wxTREE_HITTEST_BELOW;
+    if (flags)
+        return wxTreeItemId();
 
     if (m_anchor == nullptr)
     {
@@ -3568,7 +3572,8 @@ void wxGenericTreeCtrl::OnRenameTimer()
 
 void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 {
-    if ( !m_anchor )return;
+    if ( !m_anchor )
+        return;
 
     wxPoint pt = CalcUnscrolledPosition(event.GetPosition());
 
@@ -4004,7 +4009,8 @@ wxGenericTreeCtrl::CalculateLevel(wxGenericTreeItem *item,
 
 void wxGenericTreeCtrl::CalculatePositions()
 {
-    if ( !m_anchor ) return;
+    if ( !m_anchor )
+        return;
 
     wxClientDC dc(this);
     PrepareDC( dc );
@@ -4201,6 +4207,18 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
         size.y += PIXELS_PER_UNIT - dy;
 
     return size;
+}
+
+void wxGenericTreeCtrl::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // For the platforms using DPI-dependent pixels we need to adjust various
+    // metrics after the DPI change.
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    m_indent = event.ScaleX(m_indent);
+    m_spacing = event.ScaleX(m_spacing);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
+    event.Skip();
 }
 
 #endif // wxUSE_TREECTRL

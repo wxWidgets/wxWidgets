@@ -145,14 +145,32 @@ public:
     {
         wxSize size;
 
-        // Prefer to use the image list here if we have it because we must have
-        // already decided for the best size to use when creating it.
-        //
-        // Otherwise we need to compute the best size here ourselves.
-        if ( m_imageList )
-            size = m_imageList->GetSize();
-        else if ( !m_images.empty() )
-            size = wxBitmapBundle::GetConsensusSizeFor(window, m_images);
+        if ( !m_images.empty() )
+        {
+            // This is a micro-optimization: if we have an image list here, we
+            // must have created it ourselves, as e.g. wxGenericTreeCtrl does,
+            // and then we must already have determined the correct size to use
+            // for the current window DPI and can just return it.
+            if ( m_imageList )
+            {
+                // Note that we shouldn't scale it by DPI factor here because
+                // we had already taken it into account when (re)creating it.
+                size = m_imageList->GetSize();
+            }
+            else
+            {
+                // Otherwise we need to compute the best size here ourselves.
+                size = wxBitmapBundle::GetConsensusSizeFor(window, m_images);
+            }
+        }
+        else if ( m_imageList )
+        {
+            // But if we have just the user-provided image list, we need to
+            // scale its size by the DPI scale because the bitmaps from it will
+            // be scaled when they are drawn (they should have scaling factor
+            // of 1, as for anything else wxBitmapBundle must be used).
+            size = m_imageList->GetSize() * window->GetDPIScaleFactor();
+        }
 
         return size;
     }
