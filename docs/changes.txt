@@ -287,6 +287,10 @@ wxOSX:
 - Fix clipping when using Sonoma/Xcode 15 SDK (#23916, #24054, #24067, #24073).
 - Restore activation for non-bundled applications (#24056, #24062).
 
+wxQt:
+
+- Fix wxAnyButton Current/Normal state confusing (David Karoly, #24129).
+
 
 3.2.4: (released 2023-11-11)
 ----------------------------
