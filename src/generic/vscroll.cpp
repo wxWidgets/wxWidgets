@@ -435,7 +435,7 @@ void wxVarScrollHelperBase::DoSetTargetWindow(wxWindow *target)
 {
     m_targetWindow = target;
 #ifdef __WXMAC__
-    target->MacSetClipChildren( true ) ;
+    target->MacSetClipChildren() ;
 #endif
 
     // install the event handler which will intercept the events we're

@@ -5641,7 +5641,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
 #ifdef __WXMAC__
-    MacSetClipChildren( true );
+    MacSetClipChildren();
 #endif
 
     m_clientArea = new wxDataViewMainWindow( this, wxID_ANY );

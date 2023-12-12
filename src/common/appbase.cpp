@@ -1023,19 +1023,18 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
 
             if ( !name.empty() )
             {
-                m_stackTrace << wxString::Format(wxT("%-40s"), name.c_str());
+                m_stackTrace << wxString::Format("%-80s", name);
             }
             else
             {
-                m_stackTrace << wxString::Format(wxT("%p"), frame.GetAddress());
+                m_stackTrace << wxString::Format("%-80p", frame.GetAddress());
             }
 
             if ( frame.HasSourceLocation() )
             {
-                m_stackTrace << wxT('\t')
-                             << frame.GetFileName()
-                             << wxT(':')
-                             << frame.GetLine();
+                m_stackTrace << wxString::Format("%s:%zu",
+                                                 frame.GetFileName(),
+                                                 frame.GetLine());
             }
 
             m_stackTrace << wxT('\n');
