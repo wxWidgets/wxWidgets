@@ -35,8 +35,6 @@
 #include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 
-#define VERT_SCROLLBAR_POSITION 0, 1
-#define HORZ_SCROLLBAR_POSITION 1, 0
 
 #define TRACE_QT_WINDOW "qtwindow"
 
