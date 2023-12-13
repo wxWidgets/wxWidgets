@@ -116,15 +116,15 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
 
 //##############################################################################
 
-wxIMPLEMENT_CLASS(wxPaintDCImpl,wxClientDCImpl);
+wxIMPLEMENT_CLASS(wxPaintDCImpl,wxWindowDCImpl);
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
-    : wxClientDCImpl( owner )
+    : wxWindowDCImpl( owner )
 {
 }
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
-    : wxClientDCImpl( owner, win )
+    : wxWindowDCImpl( owner, win )
 {
     wxCHECK_RET( m_isWindowPainter,
                  "wxPaintDC can't be created outside wxEVT_PAINT handler" );

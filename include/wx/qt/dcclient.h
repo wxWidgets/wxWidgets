@@ -46,7 +46,7 @@ private:
 };
 
 
-class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxWindowDCImpl
 {
 public:
     wxPaintDCImpl( wxDC *owner );
