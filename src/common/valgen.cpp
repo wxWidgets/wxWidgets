@@ -380,7 +380,7 @@ bool wxGenericValidator::TransferToWindow()
         else if (m_pInt)
         {
             wxCHECK_MSG(
-                !(pControl->GetWindowStyle() & (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                !pControl->HasMultipleSelection(),
                 false,
                 "multi-select control requires wxArrayInt"
             );
@@ -414,7 +414,7 @@ bool wxGenericValidator::TransferToWindow()
         else if (m_pInt)
         {
             wxCHECK_MSG(
-                !(pControl->GetWindowStyle() & (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                !pControl->HasMultipleSelection(),
                 false,
                 "multi-select control requires wxArrayInt"
             );
@@ -679,7 +679,7 @@ bool wxGenericValidator::TransferFromWindow()
         else if (m_pInt)
         {
             wxCHECK_MSG(
-                !(pControl->GetWindowStyle()& (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                !pControl->HasMultipleSelection(),
                 false,
                 "multi-select control requires wxArrayInt"
             );
@@ -723,7 +723,7 @@ bool wxGenericValidator::TransferFromWindow()
         else if (m_pInt)
         {
             wxCHECK_MSG(
-                !(pControl->GetWindowStyle() & (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                !pControl->HasMultipleSelection(),
                 false,
                 "multi-select control requires wxArrayInt"
             );
