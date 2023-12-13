@@ -371,7 +371,7 @@ protected:
     virtual bool winEvent ( MSG * message, long * result ) { }
     virtual bool x11Event ( XEvent * event ) { } */
 
-    virtual bool event(QEvent *event)
+    virtual bool event(QEvent *event) override
     {
         if (event->type() == QEvent::Gesture)
         {
