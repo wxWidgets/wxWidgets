@@ -1291,110 +1291,108 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     {
         return false;
     }
-    else
+
+    // use the Qt event region:
+    m_updateRegion.QtSetRegion( event->region() );
+
+    // Prepare the Qt painter for wxWindowDC:
+    bool ok = false;
+    if ( QtGetScrollBarsContainer() )
     {
-        // use the Qt event region:
-        m_updateRegion.QtSetRegion( event->region() );
+        // QScrollArea can only draw in the viewport:
+        ok = m_qtPainter->begin( QtGetScrollBarsContainer()->viewport() );
+    }
+    if ( !ok )
+    {
+        // Start the paint in the widget itself
+        ok =  m_qtPainter->begin( GetHandle() );
+    }
 
-        // Prepare the Qt painter for wxWindowDC:
-        bool ok = false;
-        if ( QtGetScrollBarsContainer() )
-        {
-            // QScrollArea can only draw in the viewport:
-            ok = m_qtPainter->begin( QtGetScrollBarsContainer()->viewport() );
-        }
-        if ( !ok )
-        {
-            // Start the paint in the widget itself
-            ok =  m_qtPainter->begin( GetHandle() );
-        }
+    if ( ok )
+    {
+        bool handled;
 
-        if ( ok )
+        if ( !m_qtPicture )
         {
-            bool handled;
-
-            if ( !m_qtPicture )
+            // Real paint event (not for wxClientDC), prepare the background
+            switch ( GetBackgroundStyle() )
             {
-                // Real paint event (not for wxClientDC), prepare the background
-                switch ( GetBackgroundStyle() )
-                {
-                    case wxBG_STYLE_TRANSPARENT:
-                        if (IsTransparentBackgroundSupported())
-                        {
-                            // Set a transparent background, so that overlaying in parent
-                            // might indeed let see through where this child did not
-                            // explicitly paint. See wxBG_STYLE_SYSTEM for more comment
-                        }
-                        break;
-                    case wxBG_STYLE_ERASE:
-                        {
-                            // the background should be cleared by qt auto fill
-                            // send the erase event (properly creating a DC for it)
-                            wxPaintDC dc( this );
-                            dc.SetDeviceClippingRegion( m_updateRegion );
+                case wxBG_STYLE_TRANSPARENT:
+                    if (IsTransparentBackgroundSupported())
+                    {
+                        // Set a transparent background, so that overlaying in parent
+                        // might indeed let see through where this child did not
+                        // explicitly paint. See wxBG_STYLE_SYSTEM for more comment
+                    }
+                    break;
+                case wxBG_STYLE_ERASE:
+                    {
+                        // the background should be cleared by qt auto fill
+                        // send the erase event (properly creating a DC for it)
+                        wxPaintDC dc( this );
+                        dc.SetDeviceClippingRegion( m_updateRegion );
 
-                            wxEraseEvent erase( GetId(), &dc );
-                            erase.SetEventObject(this);
-                            if ( ProcessWindowEvent(erase) )
-                            {
-                                // background erased, don't do it again
-                                break;
-                            }
-                            // Ensure DC is cleared if handler didn't and Qt will not do it
-                            if ( UseBgCol() && !GetHandle()->autoFillBackground() )
-                            {
-                                wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
-                                           GetName(), GetBackgroundColour().GetAsString()
-                                           );
-                                dc.SetBackground(GetBackgroundColour());
-                                dc.Clear();
-                            }
-                        }
-                        wxFALLTHROUGH;
-                    case wxBG_STYLE_SYSTEM:
-                        if ( GetThemeEnabled() )
+                        wxEraseEvent erase( GetId(), &dc );
+                        erase.SetEventObject(this);
+                        if ( ProcessWindowEvent(erase) )
                         {
-                            // let qt render the background:
-                            // commented out as this will cause recursive painting
-                            // this should be done outside using setBackgroundRole
-                            // setAutoFillBackground or setAttribute
-                            //wxWindowDC dc( (wxWindow*)this );
-                            //widget->render(m_qtPainter);
+                            // background erased, don't do it again
+                            break;
                         }
-                        break;
-                    case wxBG_STYLE_PAINT:
-                        // nothing to do: window will be painted over in EVT_PAINT
-                        break;
+                        // Ensure DC is cleared if handler didn't and Qt will not do it
+                        if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                        {
+                            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
+                                       GetName(), GetBackgroundColour().GetAsString()
+                                       );
+                            dc.SetBackground(GetBackgroundColour());
+                            dc.Clear();
+                        }
+                    }
+                    wxFALLTHROUGH;
+                case wxBG_STYLE_SYSTEM:
+                    if ( GetThemeEnabled() )
+                    {
+                        // let qt render the background:
+                        // commented out as this will cause recursive painting
+                        // this should be done outside using setBackgroundRole
+                        // setAutoFillBackground or setAttribute
+                        //wxWindowDC dc( (wxWindow*)this );
+                        //widget->render(m_qtPainter);
+                    }
+                    break;
+                case wxBG_STYLE_PAINT:
+                    // nothing to do: window will be painted over in EVT_PAINT
+                    break;
 
-                    case wxBG_STYLE_COLOUR:
-                        wxFAIL_MSG( "unsupported background style" );
-                }
-
-                // send the paint event (wxWindowDC will draw directly):
-                wxPaintEvent paint( this );
-                handled = ProcessWindowEvent(paint);
-                m_updateRegion.Clear();
-            }
-            else
-            {
-                // Data from wxClientDC, paint it
-                m_qtPicture->play( m_qtPainter.get() );
-                // Reset picture
-                m_qtPicture.reset();
-                handled = true;
+                case wxBG_STYLE_COLOUR:
+                    wxFAIL_MSG( "unsupported background style" );
             }
 
-            // commit changes of the painter to the widget
-            m_qtPainter->end();
-
-            return handled;
+            // send the paint event (wxWindowDC will draw directly):
+            wxPaintEvent paint( this );
+            handled = ProcessWindowEvent(paint);
+            m_updateRegion.Clear();
         }
         else
         {
-            // Painter didn't begun, not handled by wxWidgets:
-            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s Qt widget painter begin failed"), GetName() );
-            return false;
+            // Data from wxClientDC, paint it
+            m_qtPicture->play( m_qtPainter.get() );
+            // Reset picture
+            m_qtPicture.reset();
+            handled = true;
         }
+
+        // commit changes of the painter to the widget
+        m_qtPainter->end();
+
+        return handled;
+    }
+    else
+    {
+        // Painter didn't begun, not handled by wxWidgets:
+        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s Qt widget painter begin failed"), GetName() );
+        return false;
     }
 }
 
