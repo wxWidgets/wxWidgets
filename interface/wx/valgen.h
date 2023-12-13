@@ -21,6 +21,9 @@
     For example, wxButton and wxTextCtrl transfer data to and from a
     wxString variable; wxListBox uses a wxArrayInt; wxCheckBox uses a boolean.
 
+    @since 3.2.5
+    A wxLB_SINGLE wxListBox can also use an int.
+
     For more information, please see @ref overview_validator.
 
     @library{wxcore}

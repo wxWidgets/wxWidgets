@@ -377,6 +377,17 @@ bool wxGenericValidator::TransferToWindow()
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !(pControl->GetWindowStyle() & (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+            pControl->Check(*m_pInt);
+
+            return true;
+        }
         else
             return false;
     } else
@@ -397,6 +408,17 @@ bool wxGenericValidator::TransferToWindow()
             count = m_pArrayInt->GetCount();
             for ( i = 0 ; i < count; i++ )
                 pControl->SetSelection(m_pArrayInt->Item(i));
+
+            return true;
+        }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !(pControl->GetWindowStyle() & (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+            pControl->SetSelection(*m_pInt);
 
             return true;
         }
@@ -654,6 +676,26 @@ bool wxGenericValidator::TransferFromWindow()
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !(pControl->GetWindowStyle()& (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+
+            size_t i,
+                count = pControl->GetCount();
+            for ( i = 0; i < count; i++ )
+            {
+                if (pControl->IsChecked(i))
+                {
+                    *m_pInt = i;
+                }
+            }
+
+            return true;
+        }
         else
             return false;
     } else
@@ -675,6 +717,18 @@ bool wxGenericValidator::TransferFromWindow()
                 if (pControl->IsSelected(i))
                     m_pArrayInt->Add(i);
             }
+
+            return true;
+        }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !(pControl->GetWindowStyle() & (wxLB_MULTIPLE || wxLB_EXTENDED)),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+
+            *m_pInt = pControl->GetSelection();
 
             return true;
         }
