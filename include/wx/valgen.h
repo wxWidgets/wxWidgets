@@ -33,6 +33,7 @@ public:
         // wxCheckBox, wxRadioButton, wx(Bitmap)ToggleButton
     wxGenericValidator(bool* val);
         // wxChoice, wxGauge, wxRadioBox, wxScrollBar, wxSlider, wxSpinButton
+        // single-selection wxListBox
     wxGenericValidator(int* val);
         // wxComboBox, wxTextCtrl, wxButton, wxStaticText (read-only)
     wxGenericValidator(wxString* val);
