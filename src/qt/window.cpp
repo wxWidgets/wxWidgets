@@ -1253,6 +1253,30 @@ bool wxWindowQt::SetForegroundColour(const wxColour& colour)
     return true;
 }
 
+void wxWindowQt::SetDoubleBuffered(bool on)
+{
+    wxCHECK_RET( GetHandle(), "invalid window" );
+
+    // Quoting from the Qt docs:
+    // ---------------------------
+    // Indicates that the widget wants to draw directly onto the screen. Widgets
+    // with this attribute set do not participate in composition management, i.e.
+    // they cannot be semi-transparent or shine through semi-transparent overlapping
+    // widgets. Note: This flag is only supported on X11 and it disables double buffering.
+    // On Qt for Embedded Linux, the flag only works when set on a top-level widget and it
+    // relies on support from the active screen driver. This flag is set or cleared by the
+    // widget's author. To render outside of Qt's paint system, e.g., if you require native
+    // painting primitives, you need to reimplement QWidget::paintEngine() to return 0 and
+    // set this flag.
+
+    GetHandle()->setAttribute(Qt::WA_PaintOnScreen, !on);
+}
+
+bool wxWindowQt::IsDoubleBuffered() const
+{
+    return !GetHandle()->testAttribute(Qt::WA_PaintOnScreen);
+}
+
 bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 {
     /* If this window has scrollbars, only let wx handle the event if it is

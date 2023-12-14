@@ -136,6 +136,9 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour) override;
     virtual bool SetForegroundColour(const wxColour& colour) override;
 
+    virtual void SetDoubleBuffered(bool on) override;
+    virtual bool IsDoubleBuffered() const override;
+
     QWidget *GetHandle() const override;
 
 #if wxUSE_DRAG_AND_DROP
