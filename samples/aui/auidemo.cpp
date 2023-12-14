@@ -18,6 +18,7 @@
 #include "wx/artprov.h"
 #include "wx/clipbrd.h"
 #include "wx/image.h"
+#include "wx/choice.h"
 #include "wx/colordlg.h"
 #include "wx/wxhtml.h"
 #include "wx/imaglist.h"
@@ -29,6 +30,7 @@
 #include "wx/statusbr.h"
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
+#include "wx/stattext.h"
 
 #include "wx/aui/aui.h"
 #include "../sample.xpm"
@@ -1261,7 +1263,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
         case ID_NotebookNoCloseButton:
-            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) != 0);
+            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) == 0);
             break;
         case ID_NotebookCloseButton:
             event.Check((m_notebook_style & wxAUI_NB_CLOSE_BUTTON) != 0);
