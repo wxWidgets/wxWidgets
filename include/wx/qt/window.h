@@ -231,16 +231,12 @@ private:
     void Init();
     QScrollArea *m_qtContainer;  // either nullptr or the same as m_qtWindow pointer
 
-    QScrollBar *m_horzScrollBar; // owned by m_qtWindow when allocated
-    QScrollBar *m_vertScrollBar; // owned by m_qtWindow when allocated
-
     // Return the viewport of m_qtContainer, if it's used, or just m_qtWindow.
     //
     // Always returns non-null pointer if the window has been already created.
     QWidget *QtGetClientWidget() const;
 
     QScrollBar *QtGetScrollBar( int orientation ) const;
-    QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=nullptr );
 
     bool QtSetBackgroundStyle();
 
