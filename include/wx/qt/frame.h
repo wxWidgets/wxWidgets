@@ -51,7 +51,6 @@ public:
     virtual void RemoveChild( wxWindowBase *child ) override;
 
     QMainWindow *GetQMainWindow() const;
-    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const override;
 
 protected:
     virtual wxPoint GetClientAreaOrigin() const override;

@@ -87,8 +87,6 @@ protected:
 
     virtual int DoListHitTest(const wxPoint& point) const override;
 
-    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const override;
-
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX

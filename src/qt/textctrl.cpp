@@ -676,6 +676,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     m_qtEdit->SetStyleFlags(style);
 
+    m_qtWindow =
+    m_qtContainer = m_qtEdit->ScrollBarsContainer();
+
     if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
     {
         // set the initial text value without sending the event:
@@ -909,9 +912,4 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
 QWidget *wxTextCtrl::GetHandle() const
 {
     return (QWidget *) m_qtEdit->GetHandle();
-}
-
-QAbstractScrollArea *wxTextCtrl::QtGetScrollBarsContainer() const
-{
-    return m_qtEdit->ScrollBarsContainer();
 }

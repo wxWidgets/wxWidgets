@@ -93,8 +93,6 @@ protected:
     virtual bool DoLoadFile(const wxString& file, int fileType) override;
     virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
-    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const override;
-
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() override { return this; }
 

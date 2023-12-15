@@ -181,8 +181,6 @@ public:
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
 
-    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
-
 #if wxUSE_TOOLTIPS
     // applies tooltip to the widget.
     virtual void QtApplyToolTip(const wxString& text);
@@ -228,11 +226,13 @@ protected:
     // itself.
     virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
 
-    QWidget *m_qtWindow;
+    QWidget             *m_qtWindow;
+    QAbstractScrollArea *m_qtContainer;  // either nullptr or the same as m_qtWindow pointer
+                                         // if m_qtWindow derives from QAbstractScrollArea,
+                                         // e.g. QListWidget and QTextEdit.
 
 private:
     void Init();
-    QAbstractScrollArea *m_qtContainer;  // either nullptr or the same as m_qtWindow pointer
 
     // Return the viewport of m_qtContainer, if it's used, or just m_qtWindow.
     //

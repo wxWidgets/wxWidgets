@@ -209,11 +209,6 @@ void wxFrame::RemoveChild( wxWindowBase *child )
     wxFrameBase::RemoveChild( child );
 }
 
-QAbstractScrollArea *wxFrame::QtGetScrollBarsContainer() const
-{
-    return nullptr;
-}
-
 // get the origin of the client area in the client coordinates
 // excluding any menubar and toolbar if any.
 wxPoint wxFrame::GetClientAreaOrigin() const

@@ -178,6 +178,7 @@ void wxListBox::DoCreate(wxWindow* parent, long style)
     Init();
 
     m_qtWindow =
+    m_qtContainer =
     m_qtListWidget = new wxQtListWidget( parent, this );
 
     if ( style & wxLB_SORT )
@@ -366,11 +367,6 @@ QWidget *wxListBox::GetHandle() const
 void wxListBox::QtSendEvent(wxEventType evtType, int rowIndex, bool selected)
 {
     SendEvent(evtType, rowIndex, selected);
-}
-
-QAbstractScrollArea *wxListBox::QtGetScrollBarsContainer() const
-{
-    return static_cast<QAbstractScrollArea*>(m_qtListWidget);
 }
 
 void wxListBox::UnSelectAll()
