@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/filesys/filesys.cpp
 // Purpose:     wxFileSystem unit test
-// Author:      Vaclav Slavik
+// Author:      Vaclav Slavik, Vyacheslav Lisovski
 // Created:     2004-03-28
 // Copyright:   (c) 2004 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,9 @@
 
 #if wxUSE_FILESYSTEM
 
+#include "wx/fs_data.h"
 #include "wx/fs_mem.h"
+#include "wx/sstream.h"
 
 #include <memory>
 
@@ -175,6 +177,52 @@ TEST_CASE("wxFileSystem::UnicodeFileNameToUrlConversion", "[filesys][url][filena
     wxString url = wxFileSystem::FileNameToURL(filename);
 
     CHECK( filename.SameAs(wxFileName::URLToFileName(url)) );
+}
+
+TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][openfile]")
+{
+    // Install wxDataSchemeFSHandler just for the duration of this test.
+    class AutoDataSchemeFSHandler
+    {
+    public:
+        AutoDataSchemeFSHandler() : m_handler(new wxDataSchemeFSHandler())
+        {
+            wxFileSystem::AddHandler(m_handler.get());
+        }
+        ~AutoDataSchemeFSHandler()
+        {
+            wxFileSystem::RemoveHandler(m_handler.get());
+        }
+    private:
+        std::unique_ptr<wxDataSchemeFSHandler> const m_handler;
+    } autoDataSchemeFSHandler;
+
+    wxFileSystem fs;
+    wxStringOutputStream sos;
+    wxFSFile* file = nullptr;
+
+    INFO("Testing minimal URI with data");
+    file = fs.OpenFile("data:,the%20data");
+    sos.Write(*file->GetStream());
+    CHECK( file.GetMimeType() == "text/plain" );
+    CHECK( sos.GetString () == "the data" );
+    delete file;
+    sos.SeekO(0);
+
+    INFO("Testing base64 encoded");
+    file = fs.OpenFile("data:x-text/x-plain;base64,SGVsbG8sIFdvcmxkIQ==");
+    sos.Write(*file->GetStream());
+    CHECK( file.GetMimeType() == "x-text/x-plain" );
+    CHECK( sos.GetString () == "Hello, World!" );
+    delete file;
+    sos.SeekO(0);
+
+    INFO("Testing complex media type");
+    file = fs.OpenFile("data:image/svg+xml;utf8,<svg width='10'... </svg>");
+    sos.Write(*file->GetStream());
+    CHECK( file.GetMimeType() == "image/svg+xml;utf8" );
+    CHECK( sos.GetString () == "<svg width='10'... </svg>" );
+    delete file;
 }
 
 // Test that using FindFirst() after removing a previously found URL works:

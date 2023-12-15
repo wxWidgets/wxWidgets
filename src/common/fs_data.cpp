@@ -95,8 +95,10 @@ wxFSFile* wxDataSchemeFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     wxInputStream* stream = nullptr;
     if (isBase64)
     {
+#if wxUSE_BASE64
         stream = new wxBufferedMemoryInputStream(
             wxBase64Decode(location.Right(location.Len() - dataPos)));
+#endif // wxUSE_BASE64
     }
     else
     {
