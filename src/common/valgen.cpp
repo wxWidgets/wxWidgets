@@ -42,7 +42,7 @@
     #include "wx/tglbtn.h"
 #endif
 #if wxUSE_COLOURPICKERCTRL
-    #include <wx/clrpicker.h>
+    #include "wx/clrpicker.h"
 #endif
 #include "wx/filename.h"
 
