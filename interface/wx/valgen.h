@@ -15,14 +15,14 @@
     - wxButton, wxRadioButton, wxToggleButton, wxBitmapToggleButton, wxSpinButton
     - wxCheckBox, wxRadioBox, wxComboBox, wxListBox, wxCheckListBox
     - wxGauge, wxSlider, wxScrollBar, wxChoice, wxStaticText
-    - wxSpinCtrl, wxTextCtrl
+    - wxSpinCtrl, wxTextCtrl, wxColourPickerCtrl
 
     It checks the type of the window and uses an appropriate type for it.
     For example, wxButton and wxTextCtrl transfer data to and from a
     wxString variable; wxListBox uses a wxArrayInt; wxCheckBox uses a boolean.
 
     @since 3.2.5
-    A wxLB_SINGLE wxListBox can also use an int.
+    A wxLB_SINGLE wxListBox can also use an int.  wxColourPickerCtrl support.
 
     For more information, please see @ref overview_validator.
 

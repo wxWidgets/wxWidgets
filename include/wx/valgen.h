@@ -16,6 +16,7 @@
 
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class WXDLLIMPEXP_FWD_BASE wxFileName;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 // ----------------------------------------------------------------------------
 // wxGenericValidator performs data transfer between many standard controls and
@@ -49,6 +50,8 @@ public:
     wxGenericValidator(float* val);
         // wxTextCtrl
     wxGenericValidator(double* val);
+        // wxColourPickerCtrl
+    wxGenericValidator(wxColour* val);
 
     wxGenericValidator(const wxGenericValidator& copyFrom);
 
@@ -84,6 +87,7 @@ protected:
     wxFileName* m_pFileName;
     float*      m_pFloat;
     double*     m_pDouble;
+    wxColour*   m_pColour;
 
 private:
     wxDECLARE_CLASS(wxGenericValidator);

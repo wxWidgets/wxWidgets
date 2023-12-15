@@ -41,6 +41,9 @@
 #if wxUSE_TOGGLEBTN
     #include "wx/tglbtn.h"
 #endif
+#if wxUSE_COLOURPICKERCTRL
+    #include <wx/clrpicker.h>
+#endif
 #include "wx/filename.h"
 
 #include "wx/valgen.h"
@@ -99,6 +102,12 @@ wxGenericValidator::wxGenericValidator(double *val)
     m_pDouble = val;
 }
 
+wxGenericValidator::wxGenericValidator(wxColour* val)
+{
+    Initialize();
+    m_pColour = val;
+}
+
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
     : wxValidator()
 {
@@ -119,6 +128,7 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
     m_pFileName = val.m_pFileName;
     m_pFloat = val.m_pFloat;
     m_pDouble = val.m_pDouble;
+    m_pColour = val.m_pColour;
 
     return true;
 }
@@ -419,6 +429,20 @@ bool wxGenericValidator::TransferToWindow()
                 "multi-select control requires wxArrayInt"
             );
             pControl->SetSelection(*m_pInt);
+
+            return true;
+        }
+    } else
+#endif
+
+    // colour controls
+#if wxUSE_COLOURPICKERCTRL
+    if (wxDynamicCast(m_validatorWindow, wxColourPickerCtrl))
+    {
+        wxColourPickerCtrl* pControl = (wxColourPickerCtrl*)m_validatorWindow;
+        if (m_pColour)
+        {
+            pControl->SetColour(*m_pColour);
 
             return true;
         }
@@ -734,6 +758,19 @@ bool wxGenericValidator::TransferFromWindow()
         }
     } else
 #endif
+#if wxUSE_COLOURPICKERCTRL
+        if (wxDynamicCast(m_validatorWindow, wxColourPickerCtrl))
+        {
+            wxColourPickerCtrl* pControl = (wxColourPickerCtrl*)m_validatorWindow;
+            if (m_pColour)
+            {
+                *m_pColour = pControl->GetColour();
+
+                return true;
+            }
+        }
+        else
+#endif
 
     // unrecognized control, or bad pointer
         return false;
@@ -756,6 +793,7 @@ void wxGenericValidator::Initialize()
     m_pFileName = nullptr;
     m_pFloat = nullptr;
     m_pDouble = nullptr;
+    m_pColour = nullptr;
 }
 
 #endif // wxUSE_VALIDATORS
