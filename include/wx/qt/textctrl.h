@@ -8,7 +8,7 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-class QScrollArea;
+class QAbstractScrollArea;
 class wxQtEdit;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
@@ -93,7 +93,7 @@ protected:
     virtual bool DoLoadFile(const wxString& file, int fileType) override;
     virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const override;
+    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const override;
 
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() override { return this; }

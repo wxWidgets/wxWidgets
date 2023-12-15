@@ -15,7 +15,7 @@ class QShortcut;
 template < class T > class QList;
 
 class QWidget;
-class QScrollArea;
+class QAbstractScrollArea;
 class QScrollBar;
 class QPicture;
 class QPainter;
@@ -181,7 +181,7 @@ public:
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
 
 #if wxUSE_TOOLTIPS
     // applies tooltip to the widget.
@@ -232,7 +232,7 @@ protected:
 
 private:
     void Init();
-    QScrollArea *m_qtContainer;  // either nullptr or the same as m_qtWindow pointer
+    QAbstractScrollArea *m_qtContainer;  // either nullptr or the same as m_qtWindow pointer
 
     // Return the viewport of m_qtContainer, if it's used, or just m_qtWindow.
     //

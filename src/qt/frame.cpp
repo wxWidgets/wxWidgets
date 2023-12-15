@@ -19,7 +19,6 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
-#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 
@@ -210,7 +209,7 @@ void wxFrame::RemoveChild( wxWindowBase *child )
     wxFrameBase::RemoveChild( child );
 }
 
-QScrollArea *wxFrame::QtGetScrollBarsContainer() const
+QAbstractScrollArea *wxFrame::QtGetScrollBarsContainer() const
 {
     return nullptr;
 }

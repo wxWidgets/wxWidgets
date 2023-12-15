@@ -701,7 +701,7 @@ QWidget *wxWindowQt::QtGetClientWidget() const
 /* Returns a scrollbar for the given orientation */
 QScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
 {
-    QScrollArea *scrollArea = QtGetScrollBarsContainer();
+    QAbstractScrollArea *scrollArea = QtGetScrollBarsContainer();
     wxCHECK_MSG( scrollArea, nullptr, "Window without scrolling area" );
 
     if ( orientation == wxHORIZONTAL )
@@ -1774,7 +1774,7 @@ QWidget *wxWindowQt::GetHandle() const
     return m_qtWindow;
 }
 
-QScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
+QAbstractScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
 {
     return m_qtContainer;
 }

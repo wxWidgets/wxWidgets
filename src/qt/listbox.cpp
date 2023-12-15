@@ -368,9 +368,9 @@ void wxListBox::QtSendEvent(wxEventType evtType, int rowIndex, bool selected)
     SendEvent(evtType, rowIndex, selected);
 }
 
-QScrollArea *wxListBox::QtGetScrollBarsContainer() const
+QAbstractScrollArea *wxListBox::QtGetScrollBarsContainer() const
 {
-    return (QScrollArea *) m_qtListWidget;
+    return static_cast<QAbstractScrollArea*>(m_qtListWidget);
 }
 
 void wxListBox::UnSelectAll()

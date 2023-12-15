@@ -10,6 +10,7 @@
 
 
 #include <QtGui/QPicture>
+#include <QtWidgets/QWidget>
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -20,7 +21,6 @@
 #include "wx/qt/dcclient.h"
 #include "wx/qt/private/converter.h"
 
-#include <QtWidgets/QScrollArea>
 #include <QtGui/QPainter>
 
 //##############################################################################

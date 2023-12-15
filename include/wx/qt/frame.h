@@ -13,7 +13,7 @@
 #include "wx/frame.h"
 
 class QMainWindow;
-class QScrollArea;
+class QAbstractScrollArea;
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
@@ -51,7 +51,7 @@ public:
     virtual void RemoveChild( wxWindowBase *child ) override;
 
     QMainWindow *GetQMainWindow() const;
-    virtual QScrollArea *QtGetScrollBarsContainer() const override;
+    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const override;
 
 protected:
     virtual wxPoint GetClientAreaOrigin() const override;
