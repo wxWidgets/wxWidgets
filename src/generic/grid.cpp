@@ -10834,6 +10834,7 @@ bool wxGrid::CopySelection()
         return false;
     }
 
+    int selectedCellsCount = 0;
     wxString buf;
     for (int row = sel.GetTopRow(); row <= sel.GetBottomRow(); row++)
     {
@@ -10847,11 +10848,17 @@ bool wxGrid::CopySelection()
                 buf += '\t';
 
             buf += GetCellValue(row, col);
+            ++selectedCellsCount;
         }
 
         buf += wxTextFile::GetEOL();
     }
 
+    // Remove trailing newline if only one cell selected.
+    if (selectedCellsCount == 1)
+    {
+        buf.Trim(true);
+    }
     wxTheClipboard->SetData(new wxTextDataObject(buf));
 #endif // wxUSE_CLIPBOARD
 
