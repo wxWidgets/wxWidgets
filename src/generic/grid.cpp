@@ -10834,22 +10834,26 @@ bool wxGrid::CopySelection()
         return false;
     }
 
+    bool firstRow = true;
     wxString buf;
     for (int row = sel.GetTopRow(); row <= sel.GetBottomRow(); row++)
     {
-        bool first = true;
+        if (firstRow)
+            firstRow = false;
+        else
+            buf += wxTextFile::GetEOL();
+
+        bool firstColumn = true;
 
         for (int col = sel.GetLeftCol(); col <= sel.GetRightCol(); col++)
         {
-            if (first)
-                first = false;
+            if (firstColumn)
+                firstColumn = false;
             else
                 buf += '\t';
 
             buf += GetCellValue(row, col);
         }
-
-        buf += wxTextFile::GetEOL();
     }
 
     wxTheClipboard->SetData(new wxTextDataObject(buf));
