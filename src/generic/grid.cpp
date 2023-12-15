@@ -10834,31 +10834,28 @@ bool wxGrid::CopySelection()
         return false;
     }
 
-    int selectedCellsCount = 0;
+    bool firstRow = true;
     wxString buf;
     for (int row = sel.GetTopRow(); row <= sel.GetBottomRow(); row++)
     {
-        bool first = true;
+        if (firstRow)
+            firstRow = false;
+        else
+            buf += wxTextFile::GetEOL();
+
+        bool firstColumn = true;
 
         for (int col = sel.GetLeftCol(); col <= sel.GetRightCol(); col++)
         {
-            if (first)
-                first = false;
+            if (firstColumn)
+                firstColumn = false;
             else
                 buf += '\t';
 
             buf += GetCellValue(row, col);
-            ++selectedCellsCount;
         }
-
-        buf += wxTextFile::GetEOL();
     }
 
-    // Remove trailing newline if only one cell selected.
-    if (selectedCellsCount == 1)
-    {
-        buf.Trim(true);
-    }
     wxTheClipboard->SetData(new wxTextDataObject(buf));
 #endif // wxUSE_CLIPBOARD
 
