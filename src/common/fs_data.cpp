@@ -77,7 +77,7 @@ wxFSFile* wxDataSchemeFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 
     if (dataPos < 0)
         return nullptr;
-    
+
     if (mediatype.IsEmpty())
         mediatype = "text/plain";
 

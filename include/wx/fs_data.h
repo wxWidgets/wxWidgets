@@ -22,8 +22,8 @@
 class WXDLLIMPEXP_NET wxDataSchemeFSHandler : public wxFileSystemHandler
 {
 public:
-    virtual bool CanOpen(const wxString& location) wxOVERRIDE;
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) wxOVERRIDE;
+    virtual bool CanOpen(const wxString& location) override;
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) override;
 };
 
 #endif // wxUSE_FILESYSTEM
