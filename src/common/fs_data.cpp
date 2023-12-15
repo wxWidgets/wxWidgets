@@ -30,20 +30,30 @@ public:
 };
 
 // URL syntax: data:[<mediatype>][;base64],<data>
-static int GetMetadata(const wxString& location, wxString& mediatype, wxString& encoding)
+static int GetMetadata(const wxString& location, wxString& mediatype, bool& isBase64)
 {
-    int dataPos = location.Find(",");
+    int dataPos = location.Find(',');
     if (dataPos > 0)
     {
-        int hdrPos = location.Find(":");
+        int hdrPos = location.Find(':');
         if ((hdrPos > 0))
         {
             wxString metadata(location, hdrPos + 1, dataPos - hdrPos - 1);
 
-            int encPos = metadata.Find(";");
+            int encPos = metadata.Find(';', true);
 
             if (encPos > 0)
-                encoding = metadata.Right(metadata.Len() - encPos - 1);
+            {
+                auto encoding = metadata.Right(metadata.Len() - encPos - 1);
+                if (encoding.IsSameAs("base64", false))
+                {
+                    isBase64 = true;
+                }
+                else
+                {
+                    encPos = metadata.Len();
+                }
+            }
             else
                 encPos = metadata.Len();
 
@@ -61,7 +71,7 @@ static int GetMetadata(const wxString& location, wxString& mediatype, wxString& 
 bool wxDataSchemeFSHandler::CanOpen(const wxString& location)
 {
 #if wxUSE_URL
-    return GetProtocol(location) == "data";
+    return GetProtocol(location).IsSameAs("data", false);
 #endif
     return false;
 }
@@ -72,8 +82,9 @@ wxFSFile* wxDataSchemeFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 #if !wxUSE_URL
     return nullptr;
 #else
-    wxString mediatype, encoding;
-    int dataPos = GetMetadata(location, mediatype, encoding);
+    wxString mediatype;
+    bool isBase64 = false;
+    int dataPos = GetMetadata(location, mediatype, isBase64);
 
     if (dataPos < 0)
         return nullptr;
@@ -82,15 +93,15 @@ wxFSFile* wxDataSchemeFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
         mediatype = "text/plain";
 
     wxInputStream* stream = nullptr;
-    if (encoding.IsEmpty())
-    {
-        stream = new wxStringInputStream(
-            wxURL::Unescape(location.Right(location.Len() - dataPos)));
-    }
-    else if (encoding == "base64")
+    if (isBase64)
     {
         stream = new wxBufferedMemoryInputStream(
             wxBase64Decode(location.Right(location.Len() - dataPos)));
+    }
+    else
+    {
+        stream = new wxStringInputStream(
+            wxURL::Unescape(location.Right(location.Len() - dataPos)));
     }
 
     if (stream)
