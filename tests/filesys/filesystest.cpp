@@ -204,7 +204,7 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
     INFO("Testing minimal URI with data");
     file = fs.OpenFile("data:,the%20data");
     sos.Write(*file->GetStream());
-    CHECK( file.GetMimeType() == "text/plain" );
+    CHECK( file->GetMimeType() == "text/plain" );
     CHECK( sos.GetString () == "the data" );
     delete file;
     sos.SeekO(0);
@@ -212,7 +212,7 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
     INFO("Testing base64 encoded");
     file = fs.OpenFile("data:x-text/x-plain;base64,SGVsbG8sIFdvcmxkIQ==");
     sos.Write(*file->GetStream());
-    CHECK( file.GetMimeType() == "x-text/x-plain" );
+    CHECK( file->GetMimeType() == "x-text/x-plain" );
     CHECK( sos.GetString () == "Hello, World!" );
     delete file;
     sos.SeekO(0);
@@ -220,7 +220,7 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
     INFO("Testing complex media type");
     file = fs.OpenFile("data:image/svg+xml;utf8,<svg width='10'... </svg>");
     sos.Write(*file->GetStream());
-    CHECK( file.GetMimeType() == "image/svg+xml;utf8" );
+    CHECK( file->GetMimeType() == "image/svg+xml;utf8" );
     CHECK( sos.GetString () == "<svg width='10'... </svg>" );
     delete file;
 }
