@@ -14,26 +14,23 @@
 class QShortcut;
 template < class T > class QList;
 
-class QWidget;
 class QAbstractScrollArea;
-class QScrollBar;
-class QPicture;
 class QPainter;
+class QPicture;
+class QScrollBar;
+class QWidget;
 
+class QCloseEvent;
+class QContextMenuEvent;
+class QEvent;
+class QFocusEvent;
+class QKeyEvent;
 class QPaintEvent;
 class QResizeEvent;
 class QWheelEvent;
-class QKeyEvent;
 class QMouseEvent;
-class QEvent;
 class QMoveEvent;
-class QEvent;
-class QEvent;
-class QCloseEvent;
-class QContextMenuEvent;
-class QFocusEvent;
 
-class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
 
 /* wxQt specific notes:
