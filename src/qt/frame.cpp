@@ -60,13 +60,16 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     // QMainWindow takes ownership of the central widget pointer.
     // Not using QScrollArea or wxPanel is intentional here as it makes the
-    // implementation simpler and manageable.
+    // implementation simpler and more manageable.
     GetQMainWindow()->setCentralWidget( new wxQtCentralWidget( this, this ) );
 
     if ( !wxFrameBase::Create( parent, id, title, pos, size, style, name ) )
+    {
         return false;
+    }
 
-    PostCreation();
+    SetWindowStyleFlag(style);
+
     return true;
 }
 
@@ -97,8 +100,6 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
     if ( statusBar != nullptr )
     {
         GetQMainWindow()->setStatusBar( statusBar->GetQStatusBar() );
-        // Update statusbar sizes now that it has a size
-        statusBar->Refresh();
     }
     else
     {
@@ -213,35 +214,12 @@ void wxFrame::RemoveChild( wxWindowBase *child )
 // excluding any menubar and toolbar if any.
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-    wxPoint pt = wxFrameBase::GetClientAreaOrigin();
-
-#if wxUSE_MENUBAR
-    wxMenuBar * const menubar = GetMenuBar();
-    if ( menubar && menubar->IsAttached() )
-        pt.y += menubar->GetSize().y;
-#endif // wxUSE_MENUBAR
-
-    return pt;
+    return wxQtConvertPoint( GetQMainWindow()->centralWidget()->pos() );
 }
 
 void wxFrame::DoGetClientSize(int *width, int *height) const
 {
-    wxWindow::DoGetClientSize(width, height);
-
-    // Adjust the height, taking the status and menu bars into account, if any:
-    if ( height )
-    {
-        if ( wxStatusBar *sb = GetStatusBar() )
-        {
-            *height -= sb->GetSize().y;
-        }
-
-
-        if ( QWidget *qmb = GetQMainWindow()->menuWidget() )
-        {
-            *height -= qmb->geometry().height();
-        }
-    }
+    wxFrameBase::DoGetClientSize(width, height);
 }
 
 void wxFrame::DoSetClientSize(int width, int height)

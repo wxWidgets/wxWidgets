@@ -137,7 +137,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         }
         m_qtListWidget->addItem(item);
     }
-    return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
+    return wxListBoxBase::Create( parent, id, pos, size,
+                                  style | wxVSCROLL | wxHSCROLL,
+                                  validator, name );
 }
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
@@ -170,7 +172,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         m_qtListWidget->addItem(item);
     }
 
-    return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
+    return wxListBoxBase::Create( parent, id, pos, size,
+                                  style | wxVSCROLL | wxHSCROLL,
+                                  validator, name );
 }
 
 void wxListBox::DoCreate(wxWindow* parent, long style)
@@ -178,7 +182,6 @@ void wxListBox::DoCreate(wxWindow* parent, long style)
     Init();
 
     m_qtWindow =
-    m_qtContainer =
     m_qtListWidget = new wxQtListWidget( parent, this );
 
     if ( style & wxLB_SORT )

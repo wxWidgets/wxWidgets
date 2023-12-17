@@ -96,7 +96,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id, const wxDateTime& d
     if ( date.IsValid() )
         SetDate(date);
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    return wxCalendarCtrlBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 void wxCalendarCtrl::UpdateStyle()

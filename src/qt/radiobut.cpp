@@ -127,7 +127,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     m_qtRadioButton = new wxQtRadioButton( parent, this );
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
-    if ( !QtCreateControl(parent, id, pos, size, style, validator, name) )
+    if ( !wxRadioButtonBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
     // Check if we need to create a new button group: this must be done when

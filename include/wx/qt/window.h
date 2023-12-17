@@ -66,7 +66,8 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxPanelNameStr));
 
-    // Used by all window classes in the widget creation process.
+    // Derived classes have to call PostCreation() explicitly if they don't call
+    // our Create() method during widget creation process.
     void PostCreation( bool generic = true );
 
     void AddChild( wxWindowBase *child ) override;
@@ -201,6 +202,8 @@ protected:
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height) override;
     virtual void DoGetClientSize(int *width, int *height) const override;
+
+    virtual wxSize DoGetBestSize() const override;
 
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
 

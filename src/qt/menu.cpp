@@ -213,23 +213,25 @@ QMenu *wxMenu::GetHandle() const
 wxMenuBar::wxMenuBar()
 {
     m_qtMenuBar  = new QMenuBar();
-    PostCreation(false);
+
+    wxMenuBarBase::Create(nullptr, wxID_ANY);
 }
 
-wxMenuBar::wxMenuBar( long WXUNUSED( style ))
+wxMenuBar::wxMenuBar( long style )
 {
     m_qtMenuBar = new QMenuBar();
-    PostCreation(false);
+
+    wxMenuBarBase::Create(nullptr, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
 }
 
-wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long WXUNUSED( style ))
+wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long style)
 {
     m_qtMenuBar = new QMenuBar();
 
     for ( size_t i = 0; i < count; ++i )
         Append( menus[ i ], titles[ i ] );
 
-    PostCreation(false);
+    wxMenuBarBase::Create(nullptr, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
 }
 
 

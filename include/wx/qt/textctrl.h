@@ -8,7 +8,6 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-class QAbstractScrollArea;
 class wxQtEdit;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase

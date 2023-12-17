@@ -13,7 +13,6 @@
 #include "wx/frame.h"
 
 class QMainWindow;
-class QAbstractScrollArea;
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {

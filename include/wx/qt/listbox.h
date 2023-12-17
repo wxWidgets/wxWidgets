@@ -10,7 +10,6 @@
 
 class QListWidget;
 class QModelIndex;
-class QAbstractScrollArea;
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {

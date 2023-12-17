@@ -16,6 +16,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QShortcut>
 
@@ -48,6 +49,15 @@ inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
 
     return qtWidget;
 }
+
+inline wxSize wxQtGetBestSize(QWidget* qtWidget)
+{
+    auto size = qtWidget->sizeHint();
+    // best effort to ensure a correct size (note that some qt controls
+    // implement just one or both size hints)
+    size = size.expandedTo(qtWidget->minimumSizeHint());
+    return wxQtConvertSize(size);
+}
 }
 
 // Base Widget helper (no scrollbar, used by wxWindow)
@@ -56,6 +66,19 @@ class wxQtWidget : public wxQtEventSignalHandler< QWidget, wxWindowQt >
 {
     public:
         wxQtWidget( wxWindowQt *parent, wxWindowQt *handler );
+
+        virtual QSize sizeHint() const override
+        {
+            // Make sure the window has a valid initial size because the default size of a
+            // generic control (e.g. wxPanel) is (0, 0) when created. Quoting the Qt docs:
+            //
+            //   "Setting the size to QSize(0, 0) will cause the widget
+            //    to not appear on screen. This also applies to windows."
+            //
+            // The value 20 seems to be the default for wxPanel under wxMSW.
+            return QSize(20, 20);
+        }
+
 };
 
 wxQtWidget::wxQtWidget( wxWindowQt *parent, wxWindowQt *handler )
@@ -361,55 +384,64 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     // that a generic control, like wxPanel, is being created, so we need a very
     // simple control as a base:
 
-    wxSize initialSize = size;
+    bool isGeneric = false;
 
     if ( GetHandle() == nullptr )
     {
+        isGeneric = true;
+
         if ( style & (wxHSCROLL | wxVSCROLL) )
         {
             m_qtWindow =
             m_qtContainer = new wxQtScrollArea( parent, this );
-
-            // If wx[HV]SCROLL is not given, the corresponding scrollbar is not shown
-            // at all. Otherwise it may be shown only on demand (default) or always, if
-            // the wxALWAYS_SHOW_SB is specified.
-            Qt::ScrollBarPolicy horzPolicy = (style & wxHSCROLL)
-                                              ? HasFlag(wxALWAYS_SHOW_SB)
-                                                  ? Qt::ScrollBarAlwaysOn
-                                                  : Qt::ScrollBarAsNeeded
-                                              : Qt::ScrollBarAlwaysOff;
-            Qt::ScrollBarPolicy vertPolicy = (style & wxVSCROLL)
-                                              ? HasFlag(wxALWAYS_SHOW_SB)
-                                                  ? Qt::ScrollBarAlwaysOn
-                                                  : Qt::ScrollBarAsNeeded
-                                              : Qt::ScrollBarAlwaysOff;
-
-            m_qtContainer->setHorizontalScrollBarPolicy( horzPolicy );
-            m_qtContainer->setVerticalScrollBarPolicy( vertPolicy );
         }
         else
+        {
             m_qtWindow = new wxQtWidget( parent, this );
+        }
+    }
+    else
+    {
+        m_qtContainer = dynamic_cast<QAbstractScrollArea*>(m_qtWindow);
+    }
 
-        // The default size of a generic control (e.g. wxPanel) is (0, 0) when created and
-        // is ignored by Qt unless the widget is already assigned a valid size or is added
-        // to a QLayout to be managed with. The value 20 seems to be the default under wxMSW.
-        // Do not pass 'initialSize' to CreateBase() below, as it will be taken as the minimum
-        // size of the control, which is not the intention here.
-        initialSize.SetDefaults(wxSize(20, 20));
+    if ( m_qtContainer )
+    {
+        // If wx[HV]SCROLL is not given, the corresponding scrollbar is not shown
+        // at all. Otherwise it may be shown only on demand (default) or always, if
+        // the wxALWAYS_SHOW_SB is specified.
+        Qt::ScrollBarPolicy horzPolicy = (style & wxHSCROLL)
+                                          ? HasFlag(wxALWAYS_SHOW_SB)
+                                              ? Qt::ScrollBarAlwaysOn
+                                              : Qt::ScrollBarAsNeeded
+                                          : Qt::ScrollBarAlwaysOff;
+        Qt::ScrollBarPolicy vertPolicy = (style & wxVSCROLL)
+                                          ? HasFlag(wxALWAYS_SHOW_SB)
+                                              ? Qt::ScrollBarAlwaysOn
+                                              : Qt::ScrollBarAsNeeded
+                                          : Qt::ScrollBarAlwaysOff;
+
+        m_qtContainer->setHorizontalScrollBarPolicy( horzPolicy );
+        m_qtContainer->setVerticalScrollBarPolicy( vertPolicy );
     }
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
 
-    parent->AddChild( this );
+    if ( parent )
+        parent->AddChild( this );
 
     wxPoint p;
     if ( pos != wxDefaultPosition )
         p = pos;
 
+    wxSize initialSize = size;
+    initialSize.SetDefaults( IsTopLevel() ? wxTopLevelWindowBase::GetDefaultSize()
+                                          : wxQtGetBestSize( GetHandle() ) );
+
     DoMoveWindow( p.x, p.y, initialSize.GetWidth(), initialSize.GetHeight() );
 
-    PostCreation();
+    PostCreation( isGeneric );
 
     return true;
 }
@@ -644,7 +676,6 @@ bool wxWindowQt::SetFont( const wxFont &font )
     if (GetHandle())
     {
         GetHandle()->setFont( font.GetHandle() );
-        return true;
     }
 
     return wxWindowBase::SetFont(font);
@@ -697,6 +728,10 @@ void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *de
 
 QWidget *wxWindowQt::QtGetClientWidget() const
 {
+    auto frame = wxDynamicCast(this, wxFrame);
+    if ( frame )
+        return frame->GetQMainWindow()->centralWidget();
+
     return wxQtGetDrawingWidget(m_qtContainer, GetHandle());
 }
 
@@ -1084,6 +1119,24 @@ void wxWindowQt::DoSetClientSize(int width, int height)
         // Resize the window to be as small as the client size but no smaller
         wxQtSetClientSize(GetHandle(), width, height);
     }
+}
+
+wxSize wxWindowQt::DoGetBestSize() const
+{
+    const wxSize size = wxWindowBase::DoGetBestSize();
+
+    if ( dynamic_cast<wxQtWidget*>(GetHandle()) )
+    {
+        return size;
+    }
+
+    wxSize bestSize = wxQtGetBestSize( GetHandle() );
+    if ( size.IsFullySpecified() )
+    {
+        bestSize.IncTo(size);
+    }
+
+    return bestSize;
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)

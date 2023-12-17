@@ -676,19 +676,12 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     m_qtEdit->SetStyleFlags(style);
 
-    m_qtWindow =
-    m_qtContainer = m_qtEdit->ScrollBarsContainer();
+    m_qtWindow = m_qtEdit->ScrollBarsContainer();
 
-    if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
-    {
-        // set the initial text value without sending the event:
-        // (done here as needs CreateBase called to set flags for IsMultiLine)
-        ChangeValue( value );
-        // set the default inner color (white), as it is replaced by PostCreation
-        SetBackgroundColour( wxSystemSettingsNative::GetColour( wxSYS_COLOUR_LISTBOX ) );
-        return true;
-    }
-    return false;
+    // set the initial text value without sending the event
+    ChangeValue( value );
+
+    return wxTextCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 wxTextCtrl::~wxTextCtrl()
