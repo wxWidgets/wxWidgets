@@ -564,6 +564,7 @@ public:
     wxPGComboBox()
         : wxOwnerDrawnComboBox()
         , m_dclickProcessor(nullptr)
+        , m_selProp(nullptr)
     {
     }
 
