@@ -811,6 +811,21 @@ public:
         }
     }
 
+    // explicity unlock in case we need to unlock before the DTOR is called
+    void Unlock()
+    {
+        if (m_hGlobal && !GlobalUnlock(m_hGlobal))
+        {
+            DWORD dwLastError = ::GetLastError();
+            if (dwLastError != NO_ERROR)
+            {
+                wxLogApiError(wxT("GlobalUnlock"), dwLastError);
+            }
+        }
+        m_hGlobal = nullptr;
+        m_ptr = nullptr;
+    }
+
     void *Get() const { return m_ptr; }
     operator void *() const { return m_ptr; }
 
