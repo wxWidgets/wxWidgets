@@ -38,6 +38,18 @@
 
 #define TRACE_QT_WINDOW "qtwindow"
 
+namespace
+{
+inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
+                                     QWidget* qtWidget)
+{
+    if ( qtContainer && qtContainer->viewport() )
+        return qtContainer->viewport();
+
+    return qtWidget;
+}
+}
+
 // Base Widget helper (no scrollbar, used by wxWindow)
 
 class wxQtWidget : public wxQtEventSignalHandler< QWidget, wxWindowQt >
@@ -560,25 +572,15 @@ void wxWindowQt::Update()
 {
     wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Update %s"), GetName());
     // send the paint event to the inner widget in scroll areas:
-    if ( m_qtContainer )
-    {
-        m_qtContainer->viewport()->repaint();
-    } else {
-        GetHandle()->repaint();
-    }
+
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
+    widget->repaint();
 }
 
 void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 {
-    QWidget *widget;
-
-    // get the inner widget in scroll areas:
-    if ( m_qtContainer )
-    {
-        widget = m_qtContainer->viewport();
-    } else {
-        widget = GetHandle();
-    }
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
 
     if ( widget != nullptr )
     {
@@ -695,19 +697,7 @@ void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *de
 
 QWidget *wxWindowQt::QtGetClientWidget() const
 {
-    QWidget *qtWidget = nullptr;
-    if ( m_qtContainer != nullptr )
-    {
-        qtWidget = m_qtContainer->viewport();
-    }
-
-    if ( qtWidget == nullptr )
-    {
-        // We don't have scrollbars or the QScrollArea has no children
-        qtWidget = GetHandle();
-    }
-
-    return qtWidget;
+    return wxQtGetDrawingWidget(m_qtContainer, GetHandle());
 }
 
 /* Returns a scrollbar for the given orientation */
@@ -790,11 +780,8 @@ int wxWindowQt::GetScrollRange( int orientation ) const
 void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
     // check if this is a scroll area (scroll only inner viewport)
-    QWidget *widget;
-    if ( m_qtContainer )
-        widget = m_qtContainer->viewport();
-    else
-        widget = GetHandle();
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
     // scroll the widget or the specified rect (not children)
     if ( rect != nullptr )
         widget->scroll( dx, dy, wxQtConvertRect( *rect ));
@@ -1175,12 +1162,9 @@ bool wxWindowQt::SetBackgroundStyle(wxBackgroundStyle style)
 
 bool wxWindowQt::QtSetBackgroundStyle()
 {
-    QWidget *widget;
     // if it is a scroll area, don't make transparent (invisible) scroll bars:
-    if ( m_qtContainer )
-        widget = m_qtContainer->viewport();
-    else
-        widget = GetHandle();
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
     // check if the control is created (wxGTK requires calling it before):
     if ( widget != nullptr )
     {
@@ -1303,18 +1287,13 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     // use the Qt event region:
     m_updateRegion.QtSetRegion( event->region() );
 
-    // Prepare the Qt painter for wxWindowDC:
-    bool ok = false;
-    if ( m_qtContainer )
-    {
-        // QScrollArea can only draw in the viewport:
-        ok = m_qtPainter->begin( m_qtContainer->viewport() );
-    }
-    if ( !ok )
-    {
-        // Start the paint in the widget itself
-        ok =  m_qtPainter->begin( GetHandle() );
-    }
+    // Prepare the Qt painter:
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
+    // Start the paint in the viewport if _widget_ is a scroll area, because
+    // QAbstractScrollArea can only draw in it. Start the paint in the widget
+    // itself otherwise.
+    const bool ok = m_qtPainter->begin( widget );
 
     if ( ok )
     {
