@@ -3086,8 +3086,7 @@ int wxPGChoices::Index( int val ) const
     {
         for ( unsigned int i = 0; i < m_data->GetCount(); i++ )
         {
-            const wxPGChoiceEntry& entry = m_data->Item(i);
-            if ( entry.GetValue() == val )
+            if ( GetValue(i) == val )
                 return i;
         }
     }
