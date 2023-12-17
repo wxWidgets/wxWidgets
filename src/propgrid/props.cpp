@@ -963,7 +963,7 @@ bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, i
         return true;
     }
 
-    bool res = text.ToDouble(&value);
+    const bool res = wxNumberFormatter::FromString(text, &value);
     if ( res )
     {
         if ( variant != value )
