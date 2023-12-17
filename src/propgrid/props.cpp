@@ -165,7 +165,7 @@ wxNumericPropertyValidator::
         allowedChars += wxS("-+eE");
 
         // Use locale-specific decimal point
-        allowedChars += wxString::Format(wxS("%g"), 1.1)[1];
+        allowedChars.append(wxNumberFormatter::GetDecimalSeparator());
     }
 
     SetStyle(style);
@@ -253,7 +253,7 @@ namespace {
         // Round value to the required precision.
         wxVariant variant = value;
         wxString strVal = prop->ValueToString(variant, wxPG_FULL_VALUE);
-        strVal.ToDouble(&value);
+        wxNumberFormatter::FromString(strVal, &value);
         return value;
     }
 } // namespace
@@ -973,15 +973,14 @@ wxString wxFloatProperty::ValueToString( wxVariant& value,
 
 bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
-    double value;
-
     if ( text.empty() )
     {
         variant.MakeNull();
         return true;
     }
 
-    bool res = text.ToDouble(&value);
+    double value;
+    bool res = wxNumberFormatter::FromString(text, &value);
     if ( res )
     {
         if ( variant != value )

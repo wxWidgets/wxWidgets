@@ -260,6 +260,7 @@ All (GUI):
 
 - Improve error checking when saving TIFF images (Brian Delalex, #23214).
 - Fix crash in wxLogGui when wxUSE_LOG_DIALOG==0 (Randalphwa, #24087).
+- Use wxUILocale in wxFloatProperty (Miguel Gimenez, Artur Wieczorek, #24140).
 
 wxGTK:
 
