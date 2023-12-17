@@ -553,6 +553,9 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                     {
                         memcpy(newDevMode, pDevMode, devModeSize);
 
+                        // need to unlock here instead of relying on RAII because
+                        // we are about to GlobalFree the devmod
+                        lockDevMode.Unlock();
                         ::GlobalFree(m_devMode);
                         m_devMode = newDevMode.Release();
                     }
