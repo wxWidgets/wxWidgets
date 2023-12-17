@@ -52,6 +52,8 @@ public:
     wxGenericValidator(double* val);
         // wxColourPickerCtrl
     wxGenericValidator(wxColour* val);
+        // wxCheckBox
+    wxGenericValidator(wxCheckBoxState* val);
 
     wxGenericValidator(const wxGenericValidator& copyFrom);
 
@@ -88,6 +90,7 @@ protected:
     float*      m_pFloat;
     double*     m_pDouble;
     wxColour*   m_pColour;
+    wxCheckBoxState* m_pCheckBoxState;
 
 private:
     wxDECLARE_CLASS(wxGenericValidator);

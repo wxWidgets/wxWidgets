@@ -108,6 +108,12 @@ wxGenericValidator::wxGenericValidator(wxColour* val)
     m_pColour = val;
 }
 
+wxGenericValidator::wxGenericValidator(wxCheckBoxState* val)
+{
+    Initialize();
+    m_pCheckBoxState = val;
+}
+
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
     : wxValidator()
 {
@@ -129,6 +135,7 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
     m_pFloat = val.m_pFloat;
     m_pDouble = val.m_pDouble;
     m_pColour = val.m_pColour;
+    m_pCheckBoxState = val.m_pCheckBoxState;
 
     return true;
 }
@@ -147,6 +154,11 @@ bool wxGenericValidator::TransferToWindow()
         if (m_pBool)
         {
             pControl->SetValue(*m_pBool);
+            return true;
+        }
+        else if (m_pCheckBoxState && pControl->Is3State())
+        {
+            pControl->Set3StateValue(*m_pCheckBoxState);
             return true;
         }
     } else
@@ -469,6 +481,11 @@ bool wxGenericValidator::TransferFromWindow()
         if (m_pBool)
         {
             *m_pBool = pControl->GetValue() ;
+            return true;
+        }
+        else if (m_pCheckBoxState && pControl->Is3State())
+        {
+            *m_pCheckBoxState = pControl->Get3StateValue();
             return true;
         }
     } else
@@ -794,6 +811,7 @@ void wxGenericValidator::Initialize()
     m_pFloat = nullptr;
     m_pDouble = nullptr;
     m_pColour = nullptr;
+    m_pCheckBoxState = nullptr;
 }
 
 #endif // wxUSE_VALIDATORS

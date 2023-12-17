@@ -23,6 +23,7 @@
 
     @since 3.2.5
     A wxLB_SINGLE wxListBox can also use an int.  wxColourPickerCtrl support.
+    A 3-state wxCheckBox can use wxCheckBoxState.
 
     For more information, please see @ref overview_validator.
 
