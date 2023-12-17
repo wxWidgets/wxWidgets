@@ -786,13 +786,20 @@ void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
                 default:
                     cell.alignment = NSTextAlignmentLeft;
             }
-
         }
         else
         {
             cell.title = @("");
             cell.alignment = NSTextAlignmentLeft;
         }
+
+        // In its default "off" state NSTableHeaderCell draws an opaque
+        // plate behind the label (white in light mode, black in dark mode)
+        // instead of the plain header appearance, making the header cells
+        // look highlighted. Use the "mixed" state, which draws the label
+        // with the standard transparent header background ("on" currently
+        // draws the same, but "mixed" is the neutral choice between them).
+        cell.state = NSControlStateValueMixed;
 
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
