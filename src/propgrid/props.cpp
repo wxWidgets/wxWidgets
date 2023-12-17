@@ -29,6 +29,7 @@
 #include "wx/propgrid/private.h"
 
 #include <limits>
+#include <utility>
 
 constexpr double wxPG_DBL_MIN = std::numeric_limits<double>::min();
 constexpr double wxPG_DBL_MAX = std::numeric_limits<double>::max();
@@ -2509,7 +2510,7 @@ void wxPGArrayStringEditorDialog::ArrayRemoveAt( int index )
 
 void wxPGArrayStringEditorDialog::ArraySwap( size_t first, size_t second )
 {
-    wxSwap(m_array[first], m_array[second]);
+    std::swap(m_array[first], m_array[second]);
 }
 
 wxPGArrayStringEditorDialog::wxPGArrayStringEditorDialog()
