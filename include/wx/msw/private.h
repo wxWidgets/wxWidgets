@@ -803,7 +803,7 @@ public:
         Unlock();
     }
 
-    // explicity unlock in case we need to unlock before the DTOR is called
+    // explicitly unlock in case we need to unlock before the DTOR is called
     void Unlock()
     {
         if (m_hGlobal && !GlobalUnlock(m_hGlobal))
