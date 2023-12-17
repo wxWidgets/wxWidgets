@@ -788,7 +788,7 @@ public:
         m_ptr = GlobalLock(hGlobal);
         if ( !m_ptr )
         {
-            wxLogLastError(wxT("GlobalLock"));
+            wxLogLastError("GlobalLock");
         }
     }
 
@@ -800,15 +800,7 @@ public:
 
     ~GlobalPtrLock()
     {
-        if ( m_hGlobal && !GlobalUnlock(m_hGlobal) )
-        {
-            // this might happen simply because the block became unlocked
-            DWORD dwLastError = ::GetLastError();
-            if ( dwLastError != NO_ERROR )
-            {
-                wxLogApiError(wxT("GlobalUnlock"), dwLastError);
-            }
-        }
+        Unlock();
     }
 
     // explicity unlock in case we need to unlock before the DTOR is called
@@ -819,7 +811,7 @@ public:
             DWORD dwLastError = ::GetLastError();
             if (dwLastError != NO_ERROR)
             {
-                wxLogApiError(wxT("GlobalUnlock"), dwLastError);
+                wxLogApiError("GlobalUnlock", dwLastError);
             }
         }
         m_hGlobal = nullptr;
@@ -833,7 +825,7 @@ public:
     {
         const size_t size = ::GlobalSize(m_hGlobal);
         if ( !size )
-            wxLogLastError(wxT("GlobalSize"));
+            wxLogLastError("GlobalSize");
 
         return size;
     }
