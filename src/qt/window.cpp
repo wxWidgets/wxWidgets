@@ -355,13 +355,25 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     {
         if ( style & (wxHSCROLL | wxVSCROLL) )
         {
+            m_qtWindow =
             m_qtContainer = new wxQtScrollArea( parent, this );
-            m_qtWindow = m_qtContainer;
-            // Create the scroll bars if needed:
-            if ( !(style & wxHSCROLL) )
-                m_qtContainer->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-            if ( !(style & wxVSCROLL) )
-                m_qtContainer->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+
+            // If wx[HV]SCROLL is not given, the corresponding scrollbar is not shown
+            // at all. Otherwise it may be shown only on demand (default) or always, if
+            // the wxALWAYS_SHOW_SB is specified.
+            Qt::ScrollBarPolicy horzPolicy = (style & wxHSCROLL)
+                                              ? HasFlag(wxALWAYS_SHOW_SB)
+                                                  ? Qt::ScrollBarAlwaysOn
+                                                  : Qt::ScrollBarAsNeeded
+                                              : Qt::ScrollBarAlwaysOff;
+            Qt::ScrollBarPolicy vertPolicy = (style & wxVSCROLL)
+                                              ? HasFlag(wxALWAYS_SHOW_SB)
+                                                  ? Qt::ScrollBarAlwaysOn
+                                                  : Qt::ScrollBarAsNeeded
+                                              : Qt::ScrollBarAlwaysOff;
+
+            m_qtContainer->setHorizontalScrollBarPolicy( horzPolicy );
+            m_qtContainer->setVerticalScrollBarPolicy( vertPolicy );
         }
         else
             m_qtWindow = new wxQtWidget( parent, this );
