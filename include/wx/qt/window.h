@@ -37,20 +37,14 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
  *
  * Remember to implement the Qt object getters on all subclasses:
  *  - GetHandle() returns the Qt object
- *  - QtGetScrollBarsContainer() returns the widget where scrollbars are placed
- * For example, for wxFrame, GetHandle() is the QMainWindow,
- * QtGetScrollBarsContainer() is the central widget and QtGetContainer() is a widget
- * in a layout inside the central widget that also contains the scrollbars.
- * Return 0 from QtGetScrollBarsContainer() to disable SetScrollBar() and friends
- * for wxWindow subclasses.
  *
  *
- * Event handling is achieved by using the template class wxQtEventForwarder
- * found in winevent_qt.(h|cpp) to send all Qt events here to QtHandleXXXEvent()
- * methods. All these methods receive the Qt event and the handler. This is
- * done because events of the containers (the scrolled part of the window) are
- * sent to the same wxWindow instance, that must be able to differentiate them
- * as some events need different handling (paintEvent) depending on that.
+ * Event handling is achieved by using the template class wxQtEventSignalHandler
+ * found in winevent.h to send all Qt events here to QtHandleXXXEvent() methods.
+ * All these methods receive the Qt event and the handler. This is done because
+ * events of the containers (the scrolled part of the window) are sent to the
+ * same wxWindow instance, that must be able to differentiate them as some events
+ * need different handling (paintEvent) depending on that.
  * We pass the QWidget pointer to all event handlers for consistency.
  */
 class WXDLLIMPEXP_CORE wxWindowQt : public wxWindowBase
