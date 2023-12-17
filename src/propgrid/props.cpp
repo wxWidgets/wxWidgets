@@ -470,17 +470,6 @@ bool wxIntProperty::DoValidation( const wxNumericProperty* property,
                                            pValidationInfo,
                                            mode, wxLongLong(wxPG_LLONG_MIN), wxLongLong(wxPG_LLONG_MAX));
 }
-
-#if defined(wxLongLong_t)
-bool wxIntProperty::DoValidation( const wxNumericProperty* property,
-                                  wxLongLong_t& value,
-                                  wxPGValidationInfo* pValidationInfo,
-                                  int mode )
-{
-    return property->DoNumericValidation<wxLongLong_t>(value, pValidationInfo,
-                                             mode, wxPG_LLONG_MIN, wxPG_LLONG_MAX);
-}
-#endif // wxLongLong_t
 #endif // wxUSE_LONGLONG
 
 bool wxIntProperty::DoValidation(const wxNumericProperty* property,
@@ -743,17 +732,6 @@ bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
     return property->DoNumericValidation<wxULongLong>(value, pValidationInfo,
                                             mode, wxULongLong(0), wxULongLong(wxPG_ULLONG_MAX));
 }
-
-#if defined(wxULongLong_t)
-bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
-                                  wxULongLong_t& value,
-                                  wxPGValidationInfo* pValidationInfo,
-                                  int mode )
-{
-    return property->DoNumericValidation<wxULongLong_t>(value, pValidationInfo,
-                                              mode, 0, wxPG_ULLONG_MAX);
-}
-#endif // wxULongLong_t
 #endif // wxUSE_LONGLONG
 
 bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
