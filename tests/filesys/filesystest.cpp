@@ -199,7 +199,10 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
 
     wxFileSystem fs;
 
-    const struct wxTestCaseData { const char *info, *input, *result1, *result2; } testData[] =
+    const struct wxTestCaseData
+    {
+        const char *info, *input, *result1, *result2;
+    } testData[] =
     {
         { "Testing minimal URI with data",
             "data:,the%20data", "text/plain", "the data" },
@@ -209,15 +212,15 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
             "data:image/svg+xml;utf8,<svg width='10'... </svg>", "image/svg+xml;utf8", "<svg width='10'... </svg>" }
     };
 
-    for (auto dataItem : testData)
+    for ( const auto& dataItem : testData )
     {
         INFO(dataItem.info);
-        wxFSFile* file = fs.OpenFile(dataItem.input);
+        std::unique_ptr<wxFSFile> file(fs.OpenFile(dataItem.input));
         CHECK(file->GetMimeType() == dataItem.result1);
+
         wxStringOutputStream sos;
         sos.Write(*file->GetStream());
         CHECK(sos.GetString () == dataItem.result2);
-        delete file;
     }
 }
 
