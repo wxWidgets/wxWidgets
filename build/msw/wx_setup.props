@@ -11,6 +11,7 @@
     <wxCompilerPrefix>vc</wxCompilerPrefix>
     <wxCfg>
     </wxCfg>
+    <wxSuffix>u</wxSuffix>
     <wxVendor>custom</wxVendor>
     <wxRuntimeLibs>dynamic</wxRuntimeLibs>
     <wxReleaseRuntimeLibrary>MultiThreadedDLL</wxReleaseRuntimeLibrary>
