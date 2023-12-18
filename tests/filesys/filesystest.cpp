@@ -198,31 +198,27 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
     } autoDataSchemeFSHandler;
 
     wxFileSystem fs;
-    wxStringOutputStream sos;
-    wxFSFile* file = nullptr;
 
-    INFO("Testing minimal URI with data");
-    file = fs.OpenFile("data:,the%20data");
-    sos.Write(*file->GetStream());
-    CHECK( file->GetMimeType() == "text/plain" );
-    CHECK( sos.GetString () == "the data" );
-    delete file;
-    sos = wxStringOutputStream();
+    const struct wxTestCaseData { char *info, *input, *result1, *result2; } testData[] =
+    {
+        { "Testing minimal URI with data",
+            "data:,the%20data", "text/plain", "the data" },
+        { "Testing base64 encoded",
+            "data:x-t1/x-s1;base64,SGVsbG8sIFdvcmxkIQ==", "x-t1/x-s1", "Hello, World!" },
+        { "Testing complex media type",
+            "data:image/svg+xml;utf8,<svg width='10'... </svg>", "image/svg+xml;utf8", "<svg width='10'... </svg>" }
+    };
 
-    INFO("Testing base64 encoded");
-    file = fs.OpenFile("data:x-text/x-plain;base64,SGVsbG8sIFdvcmxkIQ==");
-    sos.Write(*file->GetStream());
-    CHECK( file->GetMimeType() == "x-text/x-plain" );
-    CHECK( sos.GetString () == "Hello, World!" );
-    delete file;
-    sos = wxStringOutputStream();
-
-    INFO("Testing complex media type");
-    file = fs.OpenFile("data:image/svg+xml;utf8,<svg width='10'... </svg>");
-    sos.Write(*file->GetStream());
-    CHECK( file->GetMimeType() == "image/svg+xml;utf8" );
-    CHECK( sos.GetString () == "<svg width='10'... </svg>" );
-    delete file;
+    for (auto dataItem : testData)
+    {
+        INFO(dataItem.info);
+        wxFSFile* file = fs.OpenFile(dataItem.input);
+        CHECK(file->GetMimeType() == dataItem.result1);
+        wxStringOutputStream sos;
+        sos.Write(*file->GetStream());
+        CHECK(sos.GetString () == dataItem.result2);
+        delete file;
+    }
 }
 
 // Test that using FindFirst() after removing a previously found URL works:
