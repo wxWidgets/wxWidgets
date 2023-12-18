@@ -800,12 +800,6 @@ public:
 
     ~GlobalPtrLock()
     {
-        Unlock();
-    }
-
-    // explicitly unlock in case we need to unlock before the DTOR is called
-    void Unlock()
-    {
         if (m_hGlobal && !GlobalUnlock(m_hGlobal))
         {
             // this might happen simply because the block became unlocked
@@ -815,8 +809,27 @@ public:
                 wxLogApiError("GlobalUnlock", dwLastError);
             }
         }
-        m_hGlobal = nullptr;
-        m_ptr = nullptr;
+    }
+
+    // Unlocks existing HGLOBAL and frees it, then locks and returns
+    // the new HGLOBAL.
+    HGLOBAL Reset(HGLOBAL hGlobal)
+    {
+        if (m_hGlobal && !GlobalUnlock(m_hGlobal))
+        {
+            // this might happen simply because the block became unlocked
+            DWORD dwLastError = ::GetLastError();
+            if (dwLastError != NO_ERROR)
+            {
+                wxLogApiError("GlobalUnlock", dwLastError);
+                return nullptr;
+            }
+        }
+
+        ::GlobalFree(m_hGlobal);
+        Init(hGlobal);
+
+        return m_hGlobal;
     }
 
     void *Get() const { return m_ptr; }
