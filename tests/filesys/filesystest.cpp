@@ -207,7 +207,7 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
     CHECK( file->GetMimeType() == "text/plain" );
     CHECK( sos.GetString () == "the data" );
     delete file;
-    sos.SeekO(0);
+    sos();
 
     INFO("Testing base64 encoded");
     file = fs.OpenFile("data:x-text/x-plain;base64,SGVsbG8sIFdvcmxkIQ==");
@@ -215,7 +215,7 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
     CHECK( file->GetMimeType() == "x-text/x-plain" );
     CHECK( sos.GetString () == "Hello, World!" );
     delete file;
-    sos.SeekO(0);
+    sos();
 
     INFO("Testing complex media type");
     file = fs.OpenFile("data:image/svg+xml;utf8,<svg width='10'... </svg>");
