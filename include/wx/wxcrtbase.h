@@ -509,7 +509,12 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
 #endif
 
 
+#ifdef __cplusplus
+#include <cstdlib>
+#define wxCRT_SystemA               std::system
+#else /* !C++ */
 #define wxCRT_SystemA               system
+#endif /* C++ */
 #ifdef wxHAVE_TCHAR_SUPPORT
     #define  wxCRT_SystemW          _wsystem
 #endif
