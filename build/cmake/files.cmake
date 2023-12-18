@@ -492,6 +492,7 @@ set(BASE_CMN_SRC
     src/generic/fswatcherg.cpp
     src/common/lzmastream.cpp
     src/common/uilocale.cpp
+    src/common/fs_data.cpp
 )
 
 set(BASE_AND_GUI_CMN_SRC
@@ -669,6 +670,7 @@ set(BASE_CMN_HDR
     wx/lzmastream.h
     wx/localedefs.h
     wx/uilocale.h
+    wx/fs_data.h
 )
 
 set(NET_UNIX_SRC

@@ -622,6 +622,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)common_%(Filename).obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)common_%(Filename).obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\fs_data.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -841,6 +842,7 @@
     <ClInclude Include="..\..\include\wx\lzmastream.h" />
     <ClInclude Include="..\..\include\wx\localedefs.h" />
     <ClInclude Include="..\..\include\wx\uilocale.h" />
+    <ClInclude Include="..\..\include\wx\fs_data.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
