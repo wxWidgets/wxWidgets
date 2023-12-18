@@ -18,26 +18,31 @@
 #include "wx/sstream.h"
 #include "wx/uri.h"
 
+namespace
+{
+
 // This stream holds the buffer and deletes when destroyed
 class wxBufferedMemoryInputStream : public wxMemoryInputStream
 {
-    wxMemoryBuffer m_buffer;
 public:
     wxBufferedMemoryInputStream(const wxMemoryBuffer& buffer) :
-        wxMemoryInputStream(buffer.GetData(), buffer.GetDataLen())
+        wxMemoryInputStream(buffer.GetData(), buffer.GetDataLen()),
+        m_buffer{buffer}
     {
-        m_buffer = buffer;
     }
+
+private:
+    wxMemoryBuffer m_buffer;
 };
 
 // URL syntax: data:[<mediatype>][;base64],<data>
-static int GetMetadata(const wxString& location, wxString& mediatype, bool& isBase64)
+int GetMetadata(const wxString& location, wxString& mediatype, bool& isBase64)
 {
     int dataPos = location.Find(',');
     if (dataPos > 0)
     {
-        int hdrPos = location.Find(':');
-        if ((hdrPos > 0))
+        const int hdrPos = location.Find(':');
+        if (hdrPos > 0)
         {
             wxString metadata(location, hdrPos + 1, dataPos - hdrPos - 1);
 
@@ -64,6 +69,8 @@ static int GetMetadata(const wxString& location, wxString& mediatype, bool& isBa
     }
     return dataPos;
 }
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // wxDataSchemeFSHandler
