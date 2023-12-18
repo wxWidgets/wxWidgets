@@ -22,7 +22,7 @@ class wxBufferedMemoryInputStream : public wxMemoryInputStream
 {
     wxMemoryBuffer m_buffer;
 public:
-    wxBufferedMemoryInputStream(wxMemoryBuffer& buffer) :
+    wxBufferedMemoryInputStream(const wxMemoryBuffer& buffer) :
         wxMemoryInputStream(buffer.GetData(), buffer.GetDataLen())
     {
         m_buffer = buffer;
