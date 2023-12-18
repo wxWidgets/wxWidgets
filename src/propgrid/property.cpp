@@ -2220,7 +2220,7 @@ bool wxPGProperty::HasVisibleChildren() const
 bool wxPGProperty::RecreateEditor()
 {
     wxPropertyGrid* pg = GetGrid();
-    wxASSERT(pg);
+    wxCHECK_MSG(pg, false, "Cannot recreate editor for detached property");
 
     wxPGProperty* selected = pg->GetSelection();
     if ( this == selected )
@@ -3086,8 +3086,7 @@ int wxPGChoices::Index( int val ) const
     {
         for ( unsigned int i = 0; i < m_data->GetCount(); i++ )
         {
-            const wxPGChoiceEntry& entry = m_data->Item(i);
-            if ( entry.GetValue() == val )
+            if ( GetValue(i) == val )
                 return i;
         }
     }

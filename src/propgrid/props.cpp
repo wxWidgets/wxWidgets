@@ -29,6 +29,7 @@
 #include "wx/propgrid/private.h"
 
 #include <limits>
+#include <utility>
 
 constexpr double wxPG_DBL_MIN = std::numeric_limits<double>::min();
 constexpr double wxPG_DBL_MAX = std::numeric_limits<double>::max();
@@ -167,7 +168,7 @@ wxNumericPropertyValidator::
         allowedChars += wxS("-+eE");
 
         // Use locale-specific decimal point
-        allowedChars += wxString::Format(wxS("%g"), 1.1)[1];
+        allowedChars.append(wxNumberFormatter::GetDecimalSeparator());
     }
 
     SetStyle(style);
@@ -251,7 +252,7 @@ namespace {
         // Round value to the required precision.
         wxVariant variant = value;
         wxString strVal = prop->ValueToString(variant, wxPG_FULL_VALUE);
-        strVal.ToDouble(&value);
+        wxNumberFormatter::FromString(strVal, &value);
         return value;
     }
 } // namespace
@@ -470,17 +471,6 @@ bool wxIntProperty::DoValidation( const wxNumericProperty* property,
                                            pValidationInfo,
                                            mode, wxLongLong(wxPG_LLONG_MIN), wxLongLong(wxPG_LLONG_MAX));
 }
-
-#if defined(wxLongLong_t)
-bool wxIntProperty::DoValidation( const wxNumericProperty* property,
-                                  wxLongLong_t& value,
-                                  wxPGValidationInfo* pValidationInfo,
-                                  int mode )
-{
-    return property->DoNumericValidation<wxLongLong_t>(value, pValidationInfo,
-                                             mode, wxPG_LLONG_MIN, wxPG_LLONG_MAX);
-}
-#endif // wxLongLong_t
 #endif // wxUSE_LONGLONG
 
 bool wxIntProperty::DoValidation(const wxNumericProperty* property,
@@ -743,17 +733,6 @@ bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
     return property->DoNumericValidation<wxULongLong>(value, pValidationInfo,
                                             mode, wxULongLong(0), wxULongLong(wxPG_ULLONG_MAX));
 }
-
-#if defined(wxULongLong_t)
-bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
-                                  wxULongLong_t& value,
-                                  wxPGValidationInfo* pValidationInfo,
-                                  int mode )
-{
-    return property->DoNumericValidation<wxULongLong_t>(value, pValidationInfo,
-                                              mode, 0, wxPG_ULLONG_MAX);
-}
-#endif // wxULongLong_t
 #endif // wxUSE_LONGLONG
 
 bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
@@ -955,15 +934,14 @@ wxString wxFloatProperty::ValueToString( wxVariant& value,
 
 bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
-    double value;
-
     if ( text.empty() )
     {
         variant.MakeNull();
         return true;
     }
 
-    bool res = text.ToDouble(&value);
+    double value;
+    bool res = wxNumberFormatter::FromString(text, &value);
     if ( res )
     {
         if ( variant != value )
@@ -2532,7 +2510,7 @@ void wxPGArrayStringEditorDialog::ArrayRemoveAt( int index )
 
 void wxPGArrayStringEditorDialog::ArraySwap( size_t first, size_t second )
 {
-    wxSwap(m_array[first], m_array[second]);
+    std::swap(m_array[first], m_array[second]);
 }
 
 wxPGArrayStringEditorDialog::wxPGArrayStringEditorDialog()

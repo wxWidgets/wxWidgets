@@ -729,10 +729,10 @@ public:
 
     // Simple interface constructor.
     wxPGChoices( wxPGChoicesData* data )
+        : m_data(data)
     {
         wxCHECK_RET(data, "Data pointer cannot be null");
-        m_data = data;
-        data->IncRef();
+        m_data->IncRef();
     }
 
     // Destructor.
