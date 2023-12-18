@@ -16,7 +16,7 @@
 #include "wx/filesys.h"
 #include "wx/mstream.h"
 #include "wx/sstream.h"
-#include "wx/url.h"
+#include "wx/uri.h"
 
 // This stream holds the buffer and deletes when destroyed
 class wxBufferedMemoryInputStream : public wxMemoryInputStream
@@ -104,7 +104,7 @@ wxFSFile* wxDataSchemeFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     else
     {
         stream = new wxStringInputStream(
-            wxURL::Unescape(location.Right(location.Len() - dataPos)));
+            wxURI::Unescape(location.Right(location.Len() - dataPos)));
     }
 
     if (stream)
