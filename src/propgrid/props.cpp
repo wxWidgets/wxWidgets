@@ -165,7 +165,11 @@ wxNumericPropertyValidator::
         allowedChars += wxS("-+eE");
 
         // Use locale-specific decimal point
-        allowedChars.append(wxNumberFormatter::GetDecimalSeparator());
+
+        // Don't optimize away this "useless" string, it avoids bogus ABI
+        // breakage error, see the commit adding it.
+        wxString s(wxNumberFormatter::GetDecimalSeparator());
+        allowedChars.append(s.at(0));
     }
 
     SetStyle(style);
