@@ -19,7 +19,7 @@
 // wxDataSchemeFSHandler
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_NET wxDataSchemeFSHandler : public wxFileSystemHandler
+class WXDLLIMPEXP_BASE wxDataSchemeFSHandler : public wxFileSystemHandler
 {
 public:
     virtual bool CanOpen(const wxString& location) override;
