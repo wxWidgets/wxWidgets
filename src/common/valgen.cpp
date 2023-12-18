@@ -41,6 +41,9 @@
 #if wxUSE_TOGGLEBTN
     #include "wx/tglbtn.h"
 #endif
+#if wxUSE_COLOURPICKERCTRL
+    #include "wx/clrpicker.h"
+#endif
 #include "wx/filename.h"
 
 #include "wx/valgen.h"
@@ -99,6 +102,18 @@ wxGenericValidator::wxGenericValidator(double *val)
     m_pDouble = val;
 }
 
+wxGenericValidator::wxGenericValidator(wxColour* val)
+{
+    Initialize();
+    m_pColour = val;
+}
+
+wxGenericValidator::wxGenericValidator(wxCheckBoxState* val)
+{
+    Initialize();
+    m_pCheckBoxState = val;
+}
+
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
     : wxValidator()
 {
@@ -119,6 +134,8 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
     m_pFileName = val.m_pFileName;
     m_pFloat = val.m_pFloat;
     m_pDouble = val.m_pDouble;
+    m_pColour = val.m_pColour;
+    m_pCheckBoxState = val.m_pCheckBoxState;
 
     return true;
 }
@@ -137,6 +154,11 @@ bool wxGenericValidator::TransferToWindow()
         if (m_pBool)
         {
             pControl->SetValue(*m_pBool);
+            return true;
+        }
+        else if (m_pCheckBoxState && pControl->Is3State())
+        {
+            pControl->Set3StateValue(*m_pCheckBoxState);
             return true;
         }
     } else
@@ -377,6 +399,17 @@ bool wxGenericValidator::TransferToWindow()
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+            pControl->Check(*m_pInt);
+
+            return true;
+        }
         else
             return false;
     } else
@@ -397,6 +430,31 @@ bool wxGenericValidator::TransferToWindow()
             count = m_pArrayInt->GetCount();
             for ( i = 0 ; i < count; i++ )
                 pControl->SetSelection(m_pArrayInt->Item(i));
+
+            return true;
+        }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+            pControl->SetSelection(*m_pInt);
+
+            return true;
+        }
+    } else
+#endif
+
+    // colour controls
+#if wxUSE_COLOURPICKERCTRL
+    if (wxDynamicCast(m_validatorWindow, wxColourPickerCtrl))
+    {
+        wxColourPickerCtrl* pControl = (wxColourPickerCtrl*)m_validatorWindow;
+        if (m_pColour)
+        {
+            pControl->SetColour(*m_pColour);
 
             return true;
         }
@@ -423,6 +481,11 @@ bool wxGenericValidator::TransferFromWindow()
         if (m_pBool)
         {
             *m_pBool = pControl->GetValue() ;
+            return true;
+        }
+        else if (m_pCheckBoxState && pControl->Is3State())
+        {
+            *m_pCheckBoxState = pControl->Get3StateValue();
             return true;
         }
     } else
@@ -654,6 +717,26 @@ bool wxGenericValidator::TransferFromWindow()
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+
+            size_t i,
+                count = pControl->GetCount();
+            for ( i = 0; i < count; i++ )
+            {
+                if (pControl->IsChecked(i))
+                {
+                    *m_pInt = i;
+                }
+            }
+
+            return true;
+        }
         else
             return false;
     } else
@@ -678,7 +761,32 @@ bool wxGenericValidator::TransferFromWindow()
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+
+            *m_pInt = pControl->GetSelection();
+
+            return true;
+        }
     } else
+#endif
+#if wxUSE_COLOURPICKERCTRL
+        if (wxDynamicCast(m_validatorWindow, wxColourPickerCtrl))
+        {
+            wxColourPickerCtrl* pControl = (wxColourPickerCtrl*)m_validatorWindow;
+            if (m_pColour)
+            {
+                *m_pColour = pControl->GetColour();
+
+                return true;
+            }
+        }
+        else
 #endif
 
     // unrecognized control, or bad pointer
@@ -702,6 +810,8 @@ void wxGenericValidator::Initialize()
     m_pFileName = nullptr;
     m_pFloat = nullptr;
     m_pDouble = nullptr;
+    m_pColour = nullptr;
+    m_pCheckBoxState = nullptr;
 }
 
 #endif // wxUSE_VALIDATORS

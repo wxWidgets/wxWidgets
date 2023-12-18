@@ -16,6 +16,7 @@
 
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class WXDLLIMPEXP_FWD_BASE wxFileName;
+class WXDLLIMPEXP_FWD_CORE wxColour;
 
 // ----------------------------------------------------------------------------
 // wxGenericValidator performs data transfer between many standard controls and
@@ -33,6 +34,7 @@ public:
         // wxCheckBox, wxRadioButton, wx(Bitmap)ToggleButton
     wxGenericValidator(bool* val);
         // wxChoice, wxGauge, wxRadioBox, wxScrollBar, wxSlider, wxSpinButton
+        // single-selection wxListBox
     wxGenericValidator(int* val);
         // wxComboBox, wxTextCtrl, wxButton, wxStaticText (read-only)
     wxGenericValidator(wxString* val);
@@ -48,6 +50,10 @@ public:
     wxGenericValidator(float* val);
         // wxTextCtrl
     wxGenericValidator(double* val);
+        // wxColourPickerCtrl
+    wxGenericValidator(wxColour* val);
+        // wxCheckBox
+    wxGenericValidator(wxCheckBoxState* val);
 
     wxGenericValidator(const wxGenericValidator& copyFrom);
 
@@ -83,6 +89,8 @@ protected:
     wxFileName* m_pFileName;
     float*      m_pFloat;
     double*     m_pDouble;
+    wxColour*   m_pColour;
+    wxCheckBoxState* m_pCheckBoxState;
 
 private:
     wxDECLARE_CLASS(wxGenericValidator);
