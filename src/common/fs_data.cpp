@@ -71,18 +71,12 @@ static int GetMetadata(const wxString& location, wxString& mediatype, bool& isBa
 
 bool wxDataSchemeFSHandler::CanOpen(const wxString& location)
 {
-#if wxUSE_URL
     return GetProtocol(location).IsSameAs("data", false);
-#endif
-    return false;
 }
 
 wxFSFile* wxDataSchemeFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
                                           const wxString& location)
 {
-#if !wxUSE_URL
-    return nullptr;
-#else
     wxString mediatype;
     bool isBase64 = false;
     int dataPos = GetMetadata(location, mediatype, isBase64);
@@ -120,7 +114,6 @@ wxFSFile* wxDataSchemeFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     }
 
     return nullptr;
-#endif
 }
 
 #endif // wxUSE_FILESYSTEM
