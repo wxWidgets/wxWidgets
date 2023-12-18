@@ -79,7 +79,7 @@ private:
 
     // Extra data, possibly null if not needed, use MSWData() to access it if
     // it should be created on demand.
-    wxFileDialogMSWData* m_data;
+    wxFileDialogMSWData* m_data = nullptr;
 
 
     wxDECLARE_DYNAMIC_CLASS(wxFileDialog);
