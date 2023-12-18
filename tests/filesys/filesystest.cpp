@@ -199,7 +199,7 @@ TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][o
 
     wxFileSystem fs;
 
-    const struct wxTestCaseData { char *info, *input, *result1, *result2; } testData[] =
+    const struct wxTestCaseData { const char *info, *input, *result1, *result2; } testData[] =
     {
         { "Testing minimal URI with data",
             "data:,the%20data", "text/plain", "the data" },
