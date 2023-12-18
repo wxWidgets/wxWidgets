@@ -15,7 +15,7 @@
     - wxButton, wxRadioButton, wxToggleButton, wxBitmapToggleButton, wxSpinButton
     - wxCheckBox, wxRadioBox, wxComboBox, wxListBox, wxCheckListBox
     - wxGauge, wxSlider, wxScrollBar, wxChoice, wxStaticText
-    - wxSpinCtrl, wxTextCtrl, wxColourPickerCtrl
+    - wxSpinCtrl, wxTextCtrl, wxColourPickerCtrl (since wxWidgets 3.3.0 or later).
 
     It checks the type of the window and uses an appropriate type for it.
     For example, wxButton and wxTextCtrl transfer data to and from a
