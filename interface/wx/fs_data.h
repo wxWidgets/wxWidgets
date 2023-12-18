@@ -17,7 +17,11 @@
 
     To make available for usage it should be registered somewhere within an
     initialization procedure:
-    @code wxFileSystem::AddHandler(new wxDataSchemeFSHandler); @endcode .
+    @code
+    wxFileSystem::AddHandler(new wxDataSchemeFSHandler);
+    @endcode
+
+    @since 3.3.0
 */
 
 class wxDataSchemeFSHandler : public wxFileSystemHandler
