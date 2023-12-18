@@ -10,12 +10,13 @@
 
 #if wxUSE_FILESYSTEM
 
-#include "wx/url.h"
-#include "wx/filesys.h"
-#include <wx/sstream.h>
-#include <wx/base64.h>
-#include <wx/mstream.h>
 #include "wx/fs_data.h"
+
+#include "wx/base64.h"
+#include "wx/filesys.h"
+#include "wx/mstream.h"
+#include "wx/sstream.h"
+#include "wx/url.h"
 
 // This stream holds the buffer and deletes when destroyed
 class wxBufferedMemoryInputStream : public wxMemoryInputStream
@@ -26,7 +27,7 @@ public:
         wxMemoryInputStream(buffer.GetData(), buffer.GetDataLen())
     {
         m_buffer = buffer;
-    };
+    }
 };
 
 // URL syntax: data:[<mediatype>][;base64],<data>
