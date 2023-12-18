@@ -215,14 +215,6 @@ private:
                               wxPGValidationInfo* pValidationInfo,
                               int mode =
                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
-
-#if defined(wxLongLong_t)
-    static bool DoValidation( const wxNumericProperty* property,
-                              wxLongLong_t& value,
-                              wxPGValidationInfo* pValidationInfo,
-                              int mode =
-                                wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
-#endif // wxLongLong_t
 #endif // wxUSE_LONGLONG
     static bool DoValidation(const wxNumericProperty* property,
                              long& value,
@@ -274,12 +266,6 @@ private:
                              wxULongLong& value,
                              wxPGValidationInfo* pValidationInfo,
                              int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
-#if defined(wxULongLong_t)
-    static bool DoValidation(const wxNumericProperty* property,
-                             wxULongLong_t& value,
-                             wxPGValidationInfo* pValidationInfo,
-                             int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
-#endif // wxULongLong_t
 #endif // wxUSE_LONGLONG
     static bool DoValidation(const wxNumericProperty* property,
                              long& value,
