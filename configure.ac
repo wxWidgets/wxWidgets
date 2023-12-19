@@ -1161,8 +1161,14 @@ if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
     else
-        dnl Default architectures for the universal binaries.
-        OSX_ARCH_OPTS=arm64,x86_64
+        dnl Use default architectures for the universal binaries: x86_64 is
+        dnl currently supported everywhere...
+        OSX_ARCH_OPTS=x86_64
+
+        dnl ... and non-ancient macOS versions also support ARM.
+        if [ `sw_vers -productVersion | sed 's/\..*//'` -gt 10 ]; then
+            OSX_ARCH_OPTS=arm64,$OSX_ARCH_OPTS
+        fi
     fi
 
     AC_MSG_CHECKING([for architectures to use in universal binary])
