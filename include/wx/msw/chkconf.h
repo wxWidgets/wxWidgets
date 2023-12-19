@@ -339,12 +339,12 @@
 #           define wxUSE_MEDIACTRL 0
 #       endif
 #   endif
-#    if wxUSE_WEBVIEW
+#    if wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxWebView requires wxActiveXContainer under MSW"
+#           error "wxWebViewIE requires wxActiveXContainer under MSW"
 #       else
-#           undef wxUSE_WEBVIEW
-#           define wxUSE_WEBVIEW 0
+#           undef wxUSE_WEBVIEW_IE
+#           define wxUSE_WEBVIEW_IE 0
 #       endif
 #   endif
 #endif /* !wxUSE_ACTIVEX */
