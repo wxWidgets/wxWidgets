@@ -49,6 +49,8 @@ public:
           m_colBg(colBg)
     {
     }
+    CustomColumnHeaderRenderer(const CustomColumnHeaderRenderer&) = delete;
+    CustomColumnHeaderRenderer& operator=(const CustomColumnHeaderRenderer&) = delete;
 
     virtual void DrawLabel(const wxGrid& WXUNUSED(grid),
                            wxDC& dc,
@@ -74,8 +76,6 @@ public:
 
 private:
     const wxColour m_colFg, m_colBg;
-
-    wxDECLARE_NO_COPY_CLASS(CustomColumnHeaderRenderer);
 };
 
 // And a custom attributes provider which uses custom column header renderer
@@ -91,6 +91,8 @@ public:
           m_useCustom(false)
     {
     }
+    CustomColumnHeadersProvider(const CustomColumnHeadersProvider&) = delete;
+    CustomColumnHeadersProvider& operator=(const CustomColumnHeadersProvider&) = delete;
 
     // enable or disable the use of custom renderer for column headers
     void UseCustomColHeaders(bool use = true) { m_useCustom = use; }
@@ -114,8 +116,6 @@ private:
                                m_customEvenRenderer;
 
     bool m_useCustom;
-
-    wxDECLARE_NO_COPY_CLASS(CustomColumnHeadersProvider);
 };
 
 // ----------------------------------------------------------------------------
@@ -2437,6 +2437,8 @@ class TabularGridFrame : public wxFrame
 {
 public:
     TabularGridFrame();
+    TabularGridFrame(const TabularGridFrame&) = delete;
+    TabularGridFrame& operator=(const TabularGridFrame&) = delete;
 
 private:
     enum // control ids
@@ -2626,7 +2628,6 @@ private:
     bool m_shouldUpdateRowOrder,
          m_shouldUpdateColOrder;
 
-    wxDECLARE_NO_COPY_CLASS(TabularGridFrame);
     wxDECLARE_EVENT_TABLE();
 };
 

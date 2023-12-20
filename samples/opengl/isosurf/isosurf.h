@@ -47,6 +47,8 @@ public:
     TestGLCanvas(wxWindow *parent,
                  wxWindowID id = wxID_ANY,
                  int *gl_attrib = nullptr);
+    TestGLCanvas(const TestGLCanvas&) = delete;
+    TestGLCanvas& operator=(const TestGLCanvas&) = delete;
 
     virtual ~TestGLCanvas();
 
@@ -69,7 +71,6 @@ private:
     GLfloat m_xrot;
     GLfloat m_yrot;
 
-    wxDECLARE_NO_COPY_CLASS(TestGLCanvas);
     wxDECLARE_EVENT_TABLE();
 };
 

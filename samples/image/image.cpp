@@ -1261,6 +1261,8 @@ public:
 
         Show();
     }
+    MySVGFrame(const MySVGFrame&) = delete;
+    MySVGFrame& operator=(const MySVGFrame&) = delete;
 
 private:
     void OnPaint(wxPaintEvent&)
@@ -1290,8 +1292,6 @@ private:
 
     const wxBitmapBundle m_bundle;
     wxBitmap m_bitmap;
-
-    wxDECLARE_NO_COPY_CLASS(MySVGFrame);
 };
 
 void MyFrame::OnNewSVGFrame(wxCommandEvent&)
@@ -1413,6 +1413,8 @@ public:
 
         Show();
     }
+    MyGraphicsFrame(const MyGraphicsFrame&) = delete;
+    MyGraphicsFrame& operator=(const MyGraphicsFrame&) = delete;
 
 private:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -1433,8 +1435,6 @@ private:
 
     wxImage m_image;
     wxBitmap m_bitmap;
-
-    wxDECLARE_NO_COPY_CLASS(MyGraphicsFrame);
 };
 
 void MyFrame::OnTestGraphics(wxCommandEvent& WXUNUSED(event))

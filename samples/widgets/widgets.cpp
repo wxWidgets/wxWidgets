@@ -142,6 +142,8 @@ public:
         m_logTarget = nullptr;
 #endif // USE_LOG
     }
+    WidgetsApp(const WidgetsApp&) = delete;
+    WidgetsApp& operator=(const WidgetsApp&) = delete;
 
     // override base class virtuals
     // ----------------------------
@@ -158,8 +160,6 @@ private:
 #if USE_LOG
     wxLog* m_logTarget;
 #endif // USE_LOG
-
-    wxDECLARE_NO_COPY_CLASS(WidgetsApp);
 };
 
 wxDECLARE_APP(WidgetsApp); // This provides a convenient wxGetApp() accessor.
