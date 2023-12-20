@@ -14,6 +14,8 @@
 #include "wx/webview.h"
 #include "wx/timer.h"
 
+class WXDLLIMPEXP_FWD_BASE wxFileName;
+
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[];
 
 // Private namespace containing classes used only in the implementation.
@@ -122,6 +124,9 @@ public:
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) override;
+
+    // Chromium-specific functions.
+    void SetRoot(const wxFileName& rootDir);
 
 #ifdef __WXGTK__
     virtual void GTKHandleRealized() override;

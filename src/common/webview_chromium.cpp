@@ -57,6 +57,7 @@ wxGCC_WARNING_SUPPRESS(unused-parameter)
 #include "include/cef_string_visitor.h"
 #include "include/cef_version.h"
 #include "include/base/cef_lock.h"
+#include "include/wrapper/cef_resource_manager.h"
 
 wxGCC_WARNING_RESTORE(unused-parameter)
 
@@ -251,17 +252,21 @@ class ClientHandler : public CefClient,
     public CefContextMenuHandler,
     public CefDisplayHandler,
     public CefLifeSpanHandler,
-    public CefLoadHandler
+    public CefLoadHandler,
+    public CefRequestHandler,
+    public CefResourceRequestHandler
 {
 public:
     // Ctor must be given a backpointer to wxWebView which must remain valid
     // for the entire lifetime of this object.
     explicit ClientHandler(wxWebViewChromium& webview) : m_webview{webview} {}
 
+    // Overridden CefClient methods
     virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() override { return this; }
+    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() override  { return this; }
     virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override  { return this; }
     virtual CefRefPtr<CefLoadHandler> GetLoadHandler() override  { return this; }
-    virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() override  { return this; }
+    virtual CefRefPtr<CefRequestHandler> GetRequestHandler() override { return this; }
 
     // CefDisplayHandler methods
     virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
@@ -321,6 +326,43 @@ public:
         const CefString& errorText,
         const CefString& failedUrl) override;
 
+    // CefRequestHandler methods
+    virtual CefRefPtr<CefResourceRequestHandler> GetResourceRequestHandler(
+        CefRefPtr<CefBrowser> WXUNUSED(browser),
+        CefRefPtr<CefFrame> WXUNUSED(frame),
+        CefRefPtr<CefRequest> WXUNUSED(request),
+        bool WXUNUSED(is_navigation),
+        bool WXUNUSED(is_download),
+        const CefString& WXUNUSED(request_initiator),
+        bool& WXUNUSED(disable_default_handling)) override
+    {
+        return this;
+    }
+
+    // CefResourceRequestHandler methods
+    virtual cef_return_value_t OnBeforeResourceLoad(
+        CefRefPtr<CefBrowser> browser,
+        CefRefPtr<CefFrame> frame,
+        CefRefPtr<CefRequest> request,
+        CefRefPtr<CefCallback> callback) override;
+    virtual CefRefPtr<CefResourceHandler> GetResourceHandler(
+        CefRefPtr<CefBrowser> browser,
+        CefRefPtr<CefFrame> frame,
+        CefRefPtr<CefRequest> request) override;
+
+
+    // Our own functions.
+
+    // Initialize the resource manager, creating it if necessary (so don't call
+    // this if you don't want it to be created).
+    CefRefPtr<CefResourceManager> GetResourceManager()
+    {
+        if ( !m_resourceManager )
+            m_resourceManager = new CefResourceManager{};
+
+        return m_resourceManager;
+    }
+
     CefRefPtr<CefBrowser> GetBrowser() const { return m_browser; }
 
     // Return the main frame. May be null.
@@ -361,6 +403,9 @@ private:
     // Record the load error code: enum wxWebViewNavigationError
     // -1 means no error.
     int m_loadErrorCode = -1;
+
+    CefRefPtr<CefResourceManager> m_resourceManager;
+
     IMPLEMENT_REFCOUNTING(ClientHandler);
 };
 
@@ -1272,6 +1317,39 @@ void wxWebViewChromium::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
                                      new SchemeHandlerFactory(handler) );
 }
 
+namespace
+{
+
+// Called only by wxWebViewChromium::SetRoot() which ensures that it's called
+// on the appropriate thread.
+void
+SetResourceRoot(
+    const CefRefPtr<CefResourceManager>& resourceManager,
+    const wxFileName& rootDir
+)
+{
+    resourceManager->AddDirectoryProvider(
+        "file:///",
+        rootDir.GetFullPath().utf8_string(),
+        0,
+        "wxRootProvider"
+    );
+}
+
+} // anonymous namespace
+
+void wxWebViewChromium::SetRoot(const wxFileName& rootDir)
+{
+    CefPostTask(
+        TID_IO,
+        base::BindOnce(
+            &SetResourceRoot,
+            m_clientHandler->GetResourceManager(),
+            rootDir
+        )
+    );
+}
+
 // CefDisplayHandler methods
 void ClientHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> WXUNUSED(browser),
                                          bool WXUNUSED(isLoading),
@@ -1526,6 +1604,30 @@ void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> WXUNUSED(browser),
         default:
             m_loadErrorCode = wxWEBVIEW_NAV_ERR_OTHER;
     }
+}
+
+// CefResourceRequestHandler methods
+cef_return_value_t ClientHandler::OnBeforeResourceLoad(
+        CefRefPtr<CefBrowser> browser,
+        CefRefPtr<CefFrame> frame,
+        CefRefPtr<CefRequest> request,
+        CefRefPtr<CefCallback> callback)
+{
+    if ( !m_resourceManager )
+        return RV_CONTINUE;
+
+    return m_resourceManager->OnBeforeResourceLoad(browser, frame, request, callback);
+}
+
+CefRefPtr<CefResourceHandler> ClientHandler::GetResourceHandler(
+        CefRefPtr<CefBrowser> browser,
+        CefRefPtr<CefFrame> frame,
+        CefRefPtr<CefRequest> request)
+{
+    if ( !m_resourceManager )
+        return {};
+
+    return m_resourceManager->GetResourceHandler(browser, frame, request);
 }
 
 bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,

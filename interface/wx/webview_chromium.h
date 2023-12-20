@@ -250,6 +250,10 @@
     - RunScript: Retrieving the result of JavaScript execution is not supported and
       if the @a output parameter is non-null, the function will always return false.
 
+    wxWebView also provides some functions not available in the base class:
+
+    - SetRoot() allows to use the given directory for all application files.
+
     @since 3.3.0
     @library{wxwebview}
     @category{webview}
@@ -279,4 +283,12 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = 0,
                         const wxString& name = wxWebViewNameStr);
+
+    /**
+        Use the specified directory as root for the file:// URLs.
+
+        After calling this function, all file paths will be resolved relatively
+        to the given @a rootDir rather than to the actual file system root.
+     */
+    void SetRoot(const wxFileName& rootDir);
 };
