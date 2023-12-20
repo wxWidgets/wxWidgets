@@ -164,8 +164,8 @@ class wxTextDocument : public wxDocument
 {
 public:
     wxTextDocument() : wxDocument() { }
-      wxTextDocument(const wxTextDocument&) = delete;
-      wxTextDocument &operator=(const wxTextDocument&) = delete;
+    wxTextDocument(const wxTextDocument&) = delete;
+    wxTextDocument &operator=(const wxTextDocument&) = delete;
 
     virtual bool OnCreate(const wxString& path, long flags) override;
 

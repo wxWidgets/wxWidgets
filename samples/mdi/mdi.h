@@ -155,8 +155,8 @@ private:
     {
     public:
         EventHandler(unsigned numChild) : m_numChild(numChild) { }
-          EventHandler(const EventHandler&) = delete;
-          EventHandler &operator=(const EventHandler&) = delete;
+        EventHandler(const EventHandler&) = delete;
+        EventHandler &operator=(const EventHandler&) = delete;
 
     private:
         void OnRefresh(wxCommandEvent& event)
