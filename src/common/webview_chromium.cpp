@@ -543,10 +543,11 @@ private:
     IMPLEMENT_REFCOUNTING(wxBrowserProcessHandler);
 };
 
-class wxCefApp : public CefApp
+// Application class used in the browser process.
+class wxCefBrowserApp : public CefApp
 {
 public:
-    wxCefApp()
+    wxCefBrowserApp()
         : m_browserProcessHandler(new wxBrowserProcessHandler{})
     {
     }
@@ -559,7 +560,7 @@ public:
 private:
     CefRefPtr<CefBrowserProcessHandler> m_browserProcessHandler;
 
-    IMPLEMENT_REFCOUNTING(wxCefApp);
+    IMPLEMENT_REFCOUNTING(wxCefBrowserApp);
 };
 
 } // namespace wxCEF
@@ -924,7 +925,7 @@ bool wxWebViewChromium::InitCEF()
     CefMainArgs args(app->argc, app->argv);
 #endif
 
-    CefRefPtr<CefApp> cefApp{new wxCefApp{}};
+    CefRefPtr<CefApp> cefApp{new wxCefBrowserApp{}};
     if (CefInitialize(args, settings, cefApp, nullptr))
     {
         ms_cefInitialized = true;
