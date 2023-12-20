@@ -190,6 +190,8 @@ class TestMessageBoxDialog : public wxDialog
 {
 public:
     TestMessageBoxDialog(wxWindow *parent);
+    TestMessageBoxDialog(const TestMessageBoxDialog&) = delete;
+    TestMessageBoxDialog& operator=(const TestMessageBoxDialog&) = delete;
 
     bool Create();
 
@@ -256,7 +258,6 @@ private:
     wxStaticText *m_labelResult;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
 
 #if wxUSE_RICHMSGDLG

@@ -71,16 +71,19 @@ class MyApp: public wxApp
 {
 public:
     MyApp() { }
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
     virtual bool OnInit() override;
-
-    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 class MyFrame: public wxFrame
 {
 public:
     MyFrame();
+    MyFrame(const MyFrame&) = delete;
+    MyFrame& operator=(const MyFrame&) = delete;
+
     virtual ~MyFrame();
 
     void ToggleFlag(int flag, bool enable);
@@ -136,13 +139,14 @@ private:
     bool m_allowDClick = true;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
 class MySplitterWindow : public wxSplitterWindow
 {
 public:
     MySplitterWindow(MyFrame *parent);
+    MySplitterWindow(const MySplitterWindow&) = delete;
+    MySplitterWindow &operator=(const MySplitterWindow &) = delete;
 
     // event handlers
     void OnPositionChanged(wxSplitterEvent& event);
@@ -155,21 +159,21 @@ private:
     MyFrame *m_frame;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MySplitterWindow);
 };
 
 class MyCanvas: public wxScrolledWindow
 {
 public:
     MyCanvas(wxWindow* parent, bool mirror);
+    MyCanvas(const MyCanvas&) = delete;
+    MyCanvas &operator=(const MyCanvas &) = delete;
+
     virtual ~MyCanvas(){}
 
     virtual void OnDraw(wxDC& dc) override;
 
 private:
     bool m_mirror;
-
-    wxDECLARE_NO_COPY_CLASS(MyCanvas);
 };
 
 // ============================================================================

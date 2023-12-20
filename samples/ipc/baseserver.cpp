@@ -78,6 +78,8 @@ class BenchConnection : public wxConnection
 {
 public:
     BenchConnection() { m_advise = false; }
+    BenchConnection(const BenchConnection&) = delete;
+    BenchConnection& operator=(const BenchConnection&) = delete;
 
     virtual bool OnPoke(const wxString& topic,
                         const wxString& item,
@@ -99,8 +101,6 @@ private:
 
     // should we notify the client about changes to m_item?
     bool m_advise;
-
-    wxDECLARE_NO_COPY_CLASS(BenchConnection);
 };
 
 // a simple server accepting connections to IPC_TOPIC and IPC_BENCHMARK_TOPIC

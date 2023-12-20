@@ -245,6 +245,8 @@ class MyIndexListModel : public wxDataViewIndexListModel
 {
 public:
     MyIndexListModel() { }
+    MyIndexListModel(const MyIndexListModel&) = delete;
+    MyIndexListModel& operator=(const MyIndexListModel&) = delete;
 
     void Fill(const wxArrayString& strings)
     {
@@ -266,8 +268,6 @@ public:
 
 private:
     wxArrayString m_strings;
-
-    wxDECLARE_NO_COPY_CLASS(MyIndexListModel);
 };
 
 enum ModelFlags

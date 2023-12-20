@@ -71,16 +71,19 @@ class MyApp: public wxApp
 {
 public:
     MyApp() { }
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
     virtual bool OnInit() override;
-
-    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 class MyFrame: public wxFrame
 {
 public:
     MyFrame();
+    MyFrame(const MyFrame&) = delete;
+    MyFrame& operator=(const MyFrame&) = delete;
+
     virtual ~MyFrame();
 
     // Menu commands
@@ -103,13 +106,15 @@ private:
     wxBoxSizer *m_paneSizer;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
 class MyDialog : public wxDialog
 {
 public:
     MyDialog(wxFrame *parent);
+    MyDialog(const MyDialog&) = delete;
+    MyDialog& operator=(const MyDialog&) = delete;
+
     void OnToggleStatus(wxCommandEvent& WXUNUSED(ev));
     void OnAlignButton(wxCommandEvent& WXUNUSED(ev));
     void OnPaneChanged(wxCollapsiblePaneEvent& event);
@@ -119,7 +124,6 @@ private:
     wxGridSizer *m_paneSizer;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyDialog);
 };
 
 
