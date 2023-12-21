@@ -771,7 +771,8 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
     {
         wxWindowUpdateLocker noUpdates(curPage);
         curPage->CreateContent();
-        curPage->Layout();
+        curPage->SetScrollRate(10, 10);
+        curPage->FitInside();
 
         ConnectToWidgetEvents();
     }
@@ -1321,10 +1322,9 @@ WidgetsPageInfo *WidgetsPage::ms_widgetPages = nullptr;
 WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          wxImageList *imaglist,
                          const char *const icon[])
-           : wxPanel(book, wxID_ANY,
+           : wxScrolledWindow(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
-                     wxCLIP_CHILDREN |
-                     wxTAB_TRAVERSAL)
+                     wxCLIP_CHILDREN | wxTAB_TRAVERSAL)
 {
     imaglist->Add(wxBitmap(wxImage(icon).Scale(ICON_SIZE, ICON_SIZE)));
 }

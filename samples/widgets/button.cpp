@@ -374,7 +374,7 @@ void ButtonWidgetsPage::CreateContent()
 #endif
 
     // right pane
-    m_sizerButton = new wxBoxSizer(wxHORIZONTAL);
+    m_sizerButton = new wxBoxSizer(wxVERTICAL);
     m_sizerButton->SetMinSize(FromDIP(150), 0);
 
     // the 3 panes panes compose the window
@@ -612,7 +612,7 @@ void ButtonWidgetsPage::CreateButton()
 
     m_sizerButton->AddStretchSpacer();
     m_sizerButton->Add(m_button, wxSizerFlags().Centre().Border());
-    m_sizerButton->AddStretchSpacer();
+    m_sizerButton->AddStretchSpacer(2);
 
     m_sizerButton->Layout();
 }

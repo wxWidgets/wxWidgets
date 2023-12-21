@@ -46,7 +46,7 @@ class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 
 class WidgetsPageInfo;
 
-#include "wx/panel.h"
+#include "wx/scrolwin.h"
 #include "wx/vector.h"
 
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
@@ -119,7 +119,7 @@ struct WidgetAttributes
     long m_defaultFlags;
 };
 
-class WidgetsPage : public wxPanel
+class WidgetsPage : public wxScrolledWindow
 {
 public:
     WidgetsPage(WidgetsBookCtrl *book,

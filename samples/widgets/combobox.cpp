@@ -259,6 +259,15 @@ void ComboboxWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // upper left pane
+    wxStaticBoxSizer *sizerLeftTop = new wxStaticBoxSizer(wxVERTICAL, this, "&Popup");
+    wxStaticBox* const sizerLeftTopBox = sizerLeftTop->GetStaticBox();
+
+    sizerLeftTop->Add(new wxButton(sizerLeftTopBox, ComboPage_Popup, "&Show"),
+                         wxSizerFlags().Border().Centre());
+    sizerLeftTop->Add(new wxButton(sizerLeftTopBox, ComboPage_Dismiss, "&Hide"),
+                         wxSizerFlags().Border().Centre());
+
+    // lower left pane
 
     // should be in sync with ComboKind_XXX values
     static const wxString kinds[] =
@@ -268,32 +277,23 @@ void ComboboxWidgetsPage::CreateContent()
         "drop down",
     };
 
-    wxStaticBoxSizer *sizerLeftTop = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
-    wxStaticBox* const sizerLeftTopBox = sizerLeftTop->GetStaticBox();
+    wxStaticBoxSizer *sizerLeftBottom = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    wxStaticBox* const sizerLeftBottomBox = sizerLeftBottom->GetStaticBox();
 
-    m_radioKind = new wxRadioBox(sizerLeftTopBox, wxID_ANY, "Combobox &kind:",
+    m_radioKind = new wxRadioBox(sizerLeftBottomBox, wxID_ANY, "Combobox &kind:",
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
 
-    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeftTop, "&Sort items", wxID_ANY, sizerLeftTopBox);
-    m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeftTop, "&Read only", wxID_ANY, sizerLeftTopBox);
-    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeftTop, "Process &Enter", wxID_ANY, sizerLeftTopBox);
+    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeftBottom, "&Sort items", wxID_ANY, sizerLeftBottomBox);
+    m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeftBottom, "&Read only", wxID_ANY, sizerLeftBottomBox);
+    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeftBottom, "Process &Enter", wxID_ANY, sizerLeftBottomBox);
 
-    sizerLeftTop->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
-    sizerLeftTop->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeftBottom->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeftBottom->Add(m_radioKind, 0, wxGROW | wxALL, 5);
 
-    wxButton *btn = new wxButton(sizerLeftTopBox, ComboPage_Reset, "&Reset");
-    sizerLeftTop->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
-
-    // lower left pane
-    wxStaticBoxSizer *sizerLeftBottom = new wxStaticBoxSizer(wxVERTICAL, this, "&Popup");
-    wxStaticBox* const sizerLeftBottomBox = sizerLeftBottom->GetStaticBox();
-
-    sizerLeftBottom->Add(new wxButton(sizerLeftBottomBox, ComboPage_Popup, "&Show"),
-                         wxSizerFlags().Border().Centre());
-    sizerLeftBottom->Add(new wxButton(sizerLeftBottomBox, ComboPage_Dismiss, "&Hide"),
-                         wxSizerFlags().Border().Centre());
+    wxButton *btn = new wxButton(sizerLeftBottomBox, ComboPage_Reset, "&Reset");
+    sizerLeftBottom->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
 
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
