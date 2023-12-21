@@ -36,6 +36,7 @@
     #include "wx/msgdlg.h"
 #endif
 
+#include "wx/scrolwin.h"
 #include "wx/sizer.h"
 
 #include "widgets.h"
@@ -295,7 +296,7 @@ private:
 
             case wxTE_HT_UNKNOWN:
                 x = y = -1;
-                where = "nowhere near";
+                where = "nowhere near, wxDefaultPosition, wxSize(120, -1)";
                 break;
 
             case wxTE_HT_BEFORE:
@@ -417,7 +418,8 @@ void TextWidgetsPage::CreateContent()
         "multi line",
     };
 
-    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set textctrl parameters");
+    auto scrolLeft = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(260, -1));
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "&Set textctrl parameters");
     wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
     m_radioTextLines = new wxRadioBox(sizerLeftBox, wxID_ANY, "&Number of lines:",
@@ -496,9 +498,12 @@ void TextWidgetsPage::CreateContent()
     wxButton *btn = new wxButton(sizerLeftBox, TextPage_Reset, "&Reset");
     sizerLeft->Add(2, 2, 0, wxGROW | wxALL, 1); // spacer
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    scrolLeft->SetSizer(sizerLeft);
+    scrolLeft->SetScrollRate(10, 10);
 
     // middle pane
-    wxStaticBoxSizer *sizerMiddleUp = new wxStaticBoxSizer(wxVERTICAL, this, "&Change contents:");
+    auto scrolMidl = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(420, -1));
+    wxStaticBoxSizer *sizerMiddleUp = new wxStaticBoxSizer(wxVERTICAL, scrolMidl, "&Change contents:");
     wxStaticBox* const sizerMiddleUpBox = sizerMiddleUp->GetStaticBox();
 
     btn = new wxButton(sizerMiddleUpBox, TextPage_Set, "&Set text value");
@@ -519,7 +524,7 @@ void TextWidgetsPage::CreateContent()
     btn = new wxButton(sizerMiddleUpBox, TextPage_StreamRedirector, "St&ream redirection");
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    wxStaticBoxSizer *sizerMiddleDown = new wxStaticBoxSizer(wxVERTICAL, this, "&Info:");
+    wxStaticBoxSizer *sizerMiddleDown = new wxStaticBoxSizer(wxVERTICAL, scrolMidl, "&Info:");
     wxStaticBox* const sizerMiddleDownBox = sizerMiddleDown->GetStaticBox();
 
     m_textPosCur = CreateInfoText(sizerMiddleDownBox);
@@ -605,6 +610,8 @@ void TextWidgetsPage::CreateContent()
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
     sizerMiddle->Add(sizerMiddleUp, 0, wxGROW);
     sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
+    scrolMidl->SetSizer(sizerMiddle);
+    scrolMidl->SetScrollRate(10, 10);
 
     // right pane
     m_sizerText = new wxStaticBoxSizer(wxHORIZONTAL, this, "&Text:");
@@ -614,8 +621,8 @@ void TextWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the upper part of the window
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
+    sizerTop->Add(scrolLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
+    sizerTop->Add(scrolMidl, 0, wxGROW | wxALL, 10);
     sizerTop->Add(m_sizerText, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     SetSizer(sizerTop);

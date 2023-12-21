@@ -29,6 +29,7 @@
 
 #include "wx/filectrl.h"
 
+#include "wx/scrolwin.h"
 #include "wx/wupdlock.h"
 #include "wx/filename.h"
 
@@ -158,29 +159,31 @@ void FileCtrlWidgetsPage::CreateContent()
     // left pane
     wxSizer *sizerLeft = new wxBoxSizer( wxVERTICAL );
 
+    auto scrolLeft = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(300, -1));
+
     static const wxString mode[] = { "open", "save" };
-    m_radioFileCtrlMode = new wxRadioBox( this, wxID_ANY, "wxFileCtrl mode",
+    m_radioFileCtrlMode = new wxRadioBox( scrolLeft, wxID_ANY, "wxFileCtrl mode",
                                           wxDefaultPosition, wxDefaultSize,
                                           WXSIZEOF( mode ), mode );
 
     sizerLeft->Add( m_radioFileCtrlMode,
                     0, wxALL | wxEXPAND , 5 );
 
-    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetDirectory , "Set &directory", wxID_ANY, &m_dir ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetDirectory , "Set &directory", wxID_ANY, &m_dir, scrolLeft ),
                     0, wxALL | wxEXPAND , 5 );
-    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetPath , "Set &path", wxID_ANY, &m_path ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetPath , "Set &path", wxID_ANY, &m_path, scrolLeft ),
                     0, wxALL | wxEXPAND , 5 );
-    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetFilename , "Set &filename", wxID_ANY, &m_filename ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( FileCtrlPage_SetFilename , "Set &filename", wxID_ANY, &m_filename, scrolLeft ),
                     0, wxALL | wxEXPAND , 5 );
 
-    wxStaticBoxSizer *sizerFlags = new wxStaticBoxSizer( wxVERTICAL, this, "&Flags");
+    wxStaticBoxSizer *sizerFlags = new wxStaticBoxSizer( wxVERTICAL, scrolLeft, "&Flags");
     wxStaticBox* const sizerFlagsBox = sizerFlags->GetStaticBox();
 
     m_chkMultiple   = CreateCheckBoxAndAddToSizer( sizerFlags, "wxFC_MULTIPLE", wxID_ANY, sizerFlagsBox );
     m_chkNoShowHidden   = CreateCheckBoxAndAddToSizer( sizerFlags, "wxFC_NOSHOWHIDDEN", wxID_ANY, sizerFlagsBox );
     sizerLeft->Add( sizerFlags, wxSizerFlags().Expand().Border() );
 
-    wxStaticBoxSizer *sizerFilters = new wxStaticBoxSizer( wxVERTICAL, this, "&Filters");
+    wxStaticBoxSizer *sizerFilters = new wxStaticBoxSizer( wxVERTICAL, scrolLeft, "&Filters");
     wxStaticBox* const sizerFiltersBox = sizerFilters->GetStaticBox();
 
     m_fltr[0] = CreateCheckBoxAndAddToSizer( sizerFilters, wxString::Format("all files (%s)|%s",
@@ -189,8 +192,10 @@ void FileCtrlWidgetsPage::CreateContent()
     m_fltr[2] = CreateCheckBoxAndAddToSizer( sizerFilters, "PNG images (*.png)|*.png", wxID_ANY, sizerFiltersBox );
     sizerLeft->Add( sizerFilters, wxSizerFlags().Expand().Border() );
 
-    wxButton *btn = new wxButton( this, FileCtrlPage_Reset, "&Reset" );
+    wxButton *btn = new wxButton( scrolLeft, FileCtrlPage_Reset, "&Reset" );
     sizerLeft->Add( btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15 );
+    scrolLeft->SetSizer(sizerLeft);
+    scrolLeft->SetScrollRate(10, 10);
 
     // right pane
     m_fileCtrl = new wxFileCtrl(
@@ -204,8 +209,8 @@ void FileCtrlWidgetsPage::CreateContent()
                      wxDefaultSize
                  );
 
-    // the 3 panes panes compose the window
-    sizerTop->Add( sizerLeft, 0, ( wxALL & ~wxLEFT ), 10 );
+    // the 2 panes compose the window
+    sizerTop->Add( scrolLeft, 0, wxGROW | ( wxALL & ~wxLEFT ), 10 );
     sizerTop->Add( m_fileCtrl, 1, wxGROW | ( wxALL & ~wxRIGHT ), 10 );
 
     // final initializations

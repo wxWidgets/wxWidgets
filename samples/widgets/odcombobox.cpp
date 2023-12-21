@@ -37,6 +37,7 @@
 
 #include "wx/dc.h"
 #include "wx/dcmemory.h"
+#include "wx/scrolwin.h"
 #include "wx/sizer.h"
 #include "wx/odcombo.h"
 
@@ -329,7 +330,8 @@ void ODComboboxWidgetsPage::CreateContent()
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
 
     // left pane - style box
-    wxStaticBoxSizer *sizerStyle = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    auto scrolLeft = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1));
+    wxStaticBoxSizer *sizerStyle = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "&Set style");
     wxStaticBox* const sizerStyleBox = sizerStyle->GetStaticBox();
 
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerStyle, "&Sort items", wxID_ANY, sizerStyleBox);
@@ -347,7 +349,7 @@ void ODComboboxWidgetsPage::CreateContent()
     sizerLeft->Add(sizerStyle, wxSizerFlags().Expand());
 
     // left pane - popup adjustment box
-    wxStaticBoxSizer *sizerPopupPos = new wxStaticBoxSizer(wxVERTICAL, this, "Adjust &popup");
+    wxStaticBoxSizer *sizerPopupPos = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "Adjust &popup");
     wxStaticBox* const sizerPopupPosBox = sizerPopupPos->GetStaticBox();
 
     sizerRow = CreateSizerWithTextAndLabel("Min. Width:",
@@ -369,7 +371,7 @@ void ODComboboxWidgetsPage::CreateContent()
     sizerLeft->Add(sizerPopupPos, wxSizerFlags().Expand().Border(wxTOP, 2));
 
     // left pane - button adjustment box
-    wxStaticBoxSizer *sizerButtonPos = new wxStaticBoxSizer(wxVERTICAL, this, "Adjust &button");
+    wxStaticBoxSizer *sizerButtonPos = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "Adjust &button");
     wxStaticBox* const sizerButtonPosBox = sizerButtonPos->GetStaticBox();
 
     sizerRow = CreateSizerWithTextAndLabel("Width:",
@@ -396,9 +398,12 @@ void ODComboboxWidgetsPage::CreateContent()
     m_chkAlignbutleft = CreateCheckBoxAndAddToSizer(sizerButtonPos, "Align Left", wxID_ANY, sizerButtonPosBox);
 
     sizerLeft->Add(sizerButtonPos, wxSizerFlags().Expand().Border(wxTOP, 2));
+    scrolLeft->SetSizer(sizerLeft);
+    scrolLeft->SetScrollRate(10, 10);
 
     // middle pane
-    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change combobox contents");
+    auto scrolMidl = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(420, -1));
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, scrolMidl, "&Change combobox contents");
     wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     btn = new wxButton(sizerMiddleBox, ODComboPage_ContainerTests, "Run &tests");
@@ -459,6 +464,8 @@ void ODComboboxWidgetsPage::CreateContent()
 
     btn = new wxButton(sizerMiddleBox, ODComboPage_Clear, "&Clear");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    scrolMidl->SetSizer(sizerMiddle);
+    scrolMidl->SetScrollRate(10, 10);
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
@@ -472,8 +479,8 @@ void ODComboboxWidgetsPage::CreateContent()
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 4, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 5, wxGROW | wxALL, 10);
+    sizerTop->Add(scrolLeft, 4, wxGROW | (wxALL & ~wxLEFT), 10);
+    sizerTop->Add(scrolMidl, 5, wxGROW | wxALL, 10);
     sizerTop->Add(sizerRight, 4, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations

@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/artprov.h"
+#include "wx/scrolwin.h"
 #include "wx/sizer.h"
 #include "wx/dcmemory.h"
 #include "wx/commandlinkbutton.h"
@@ -249,7 +250,8 @@ void ButtonWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    auto scrolLeft = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(580, -1));
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "&Set style");
     wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
     m_chkBitmapOnly = CreateCheckBoxAndAddToSizer(sizerLeft, "&Bitmap only", wxID_ANY, sizerLeftBox);
@@ -349,6 +351,8 @@ void ButtonWidgetsPage::CreateContent()
 
     wxButton *btn = new wxButton(sizerLeftBox, ButtonPage_Reset, "&Reset");
     sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().TripleBorder(wxALL));
+    scrolLeft->SetSizer(sizerLeft);
+    scrolLeft->SetScrollRate(10, 10);
 
     // middle pane
     wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Operations");
@@ -378,7 +382,7 @@ void ButtonWidgetsPage::CreateContent()
     m_sizerButton->SetMinSize(FromDIP(150), 0);
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft,
+    sizerTop->Add(scrolLeft,
                   wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxLEFT));
     sizerTop->Add(sizerMiddle,
                   wxSizerFlags(1).Expand().DoubleBorder(wxALL));

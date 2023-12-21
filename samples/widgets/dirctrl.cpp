@@ -34,6 +34,7 @@
     #include "wx/filedlg.h"
 #endif
 
+#include "wx/scrolwin.h"
 #include "wx/generic/dirctrlg.h"
 
 #include "wx/wupdlock.h"
@@ -177,7 +178,8 @@ void DirCtrlWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "Dir control details");
+    auto scrolLeft = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(300, -1));
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "Dir control details");
     wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
     sizerLeft->Add( CreateSizerWithTextAndButton( DirCtrlPage_SetPath , "Set &path", wxID_ANY, &m_path, sizerLeftBox),
@@ -206,6 +208,8 @@ void DirCtrlWidgetsPage::CreateContent()
 
     wxButton *btn = new wxButton(sizerFiltersBox, DirCtrlPage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    scrolLeft->SetSizer(sizerLeft);
+    scrolLeft->SetScrollRate(10, 10);
 
     // keep consistency between enum and labels of radiobox
     wxCOMPILE_TIME_ASSERT( stdPathMax == WXSIZEOF(stdPaths), EnumForRadioBoxMismatch);
@@ -226,7 +230,7 @@ void DirCtrlWidgetsPage::CreateContent()
     );
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, (wxALL & ~wxLEFT), 10);
+    sizerTop->Add(scrolLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
     sizerTop->Add(m_radioStdPath, 0, wxGROW | wxALL , 10);
     sizerTop->Add(m_dirCtrl, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 

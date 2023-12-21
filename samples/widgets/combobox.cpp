@@ -35,6 +35,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/scrolwin.h"
 #include "wx/sizer.h"
 
 #include "itemcontainer.h"
@@ -268,7 +269,8 @@ void ComboboxWidgetsPage::CreateContent()
         "drop down",
     };
 
-    wxStaticBoxSizer *sizerLeftTop = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    auto scrolLeft = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(200, -1));
+    wxStaticBoxSizer *sizerLeftTop = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "&Set style");
     wxStaticBox* const sizerLeftTopBox = sizerLeftTop->GetStaticBox();
 
     m_radioKind = new wxRadioBox(sizerLeftTopBox, wxID_ANY, "Combobox &kind:",
@@ -287,7 +289,7 @@ void ComboboxWidgetsPage::CreateContent()
     sizerLeftTop->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // lower left pane
-    wxStaticBoxSizer *sizerLeftBottom = new wxStaticBoxSizer(wxVERTICAL, this, "&Popup");
+    wxStaticBoxSizer *sizerLeftBottom = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "&Popup");
     wxStaticBox* const sizerLeftBottomBox = sizerLeftBottom->GetStaticBox();
 
     sizerLeftBottom->Add(new wxButton(sizerLeftBottomBox, ComboPage_Popup, "&Show"),
@@ -297,12 +299,15 @@ void ComboboxWidgetsPage::CreateContent()
 
 
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
-    sizerLeft->Add(sizerLeftTop);
+    sizerLeft->Add(sizerLeftTop, wxSizerFlags().Centre());
     sizerLeft->AddSpacer(10);
     sizerLeft->Add(sizerLeftBottom, wxSizerFlags().Expand());
+    scrolLeft->SetSizer(sizerLeft);
+    scrolLeft->SetScrollRate(10, 10);
 
     // middle pane
-    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change combobox contents");
+    auto scrolMidl = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(420, -1));
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, scrolMidl, "&Change combobox contents");
     wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     wxSizer *sizerRow;
@@ -380,7 +385,8 @@ void ComboboxWidgetsPage::CreateContent()
 
     btn = new wxButton(sizerMiddleBox, ComboPage_ContainerTests, "Run &tests");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
-
+    scrolMidl->SetSizer(sizerMiddle);
+    scrolMidl->SetScrollRate(10, 10);
 
 
     // right pane
@@ -401,8 +407,8 @@ void ComboboxWidgetsPage::CreateContent()
     m_sizerCombo = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
+    sizerTop->Add(scrolLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
+    sizerTop->Add(scrolMidl, 1, wxGROW | wxALL, 10);
     sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations

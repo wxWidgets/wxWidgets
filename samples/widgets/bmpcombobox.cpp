@@ -39,6 +39,7 @@
 #include "wx/stattext.h"
 #include "wx/dc.h"
 #include "wx/dcmemory.h"
+#include "wx/scrolwin.h"
 #include "wx/sizer.h"
 #include "wx/icon.h"
 #include "wx/dir.h"
@@ -339,7 +340,8 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     sizerLeft->Add( sizerOptions, wxSizerFlags().Expand().Border(wxTOP, 2));
 
     // middle pane
-    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change wxBitmapComboBox contents");
+    auto scrolMidl = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(420, -1));
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, scrolMidl, "&Change wxBitmapComboBox contents");
     wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_ContainerTests, "Run &tests");
@@ -377,6 +379,8 @@ void BitmapComboBoxWidgetsPage::CreateContent()
 
     btn = new wxButton(sizerMiddleBox, BitmapComboBoxPage_Clear, "&Clear");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    scrolMidl->SetSizer(sizerMiddle);
+    scrolMidl->SetScrollRate(10, 10);
 
 #if wxUSE_IMAGE
     wxInitAllImageHandlers();
@@ -402,7 +406,7 @@ void BitmapComboBoxWidgetsPage::CreateContent()
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 5, wxGROW | wxALL, 10);
+    sizerTop->Add(scrolMidl, 5, wxGROW | wxALL, 10);
     sizerTop->Add(sizerRight, 4, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations

@@ -36,6 +36,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/scrolwin.h"
 #include "wx/sizer.h"
 
 #include "wx/checklst.h"
@@ -274,7 +275,8 @@ void ListboxWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set listbox parameters");
+    auto scrolLeft = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(260, -1));
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, scrolLeft, "&Set listbox parameters");
     wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
     m_chkVScroll = CreateCheckBoxAndAddToSizer
@@ -327,9 +329,12 @@ void ListboxWidgetsPage::CreateContent()
 
     wxButton *btn = new wxButton(sizerLeftBox, ListboxPage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    scrolLeft->SetSizer(sizerLeft);
+    scrolLeft->SetScrollRate(10, 10);
 
     // middle pane
-    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change listbox contents");
+    auto scrolMidl = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(420, -1));
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, scrolMidl, "&Change listbox contents");
     wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
@@ -386,6 +391,8 @@ void ListboxWidgetsPage::CreateContent()
 
     btn = new wxButton(sizerMiddleBox, ListboxPage_ContainerTests, "Run &tests");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
+    scrolMidl->SetSizer(sizerMiddle);
+    scrolMidl->SetScrollRate(10, 10);
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
@@ -398,8 +405,8 @@ void ListboxWidgetsPage::CreateContent()
     m_sizerLbox = sizerRight; // save it to modify it later
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
+    sizerTop->Add(scrolLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
+    sizerTop->Add(scrolMidl, 1, wxGROW | wxALL, 10);
     sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     // final initializations
