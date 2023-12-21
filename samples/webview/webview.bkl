@@ -39,6 +39,7 @@
                     ln -fs "../../../webview Helper.app/Contents/MacOS/webview Helper" "$$helper_contents/MacOS/$$helper_name"; \
                     sed -e "s/\$${PRODUCT_NAME}/$$helper_name/"  \
                         -e "s/\$${EXECUTABLE_NAME}/$$helper_name/" \
+                        -e "s/\$${BUNDLE_ID_SUFFIX}/.$$helper_name/" \
                         $(TOP_SRCDIR)/samples/webview/cef_helper_info.plist.in > "$$helper_contents/Info.plist"; \
                     cp webview_helper.app/Contents/PkgInfo "$$helper_contents"; \
                     cp -Rf webview_helper.app/Contents/Resources "$$helper_contents"; \
@@ -89,6 +90,7 @@
                 mkdir -p webview_helper.app/Contents/Resources
                 sed -e "s/\$${PRODUCT_NAME}/webview Helper/"  \
                     -e "s/\$${EXECUTABLE_NAME}/webview Helper/" \
+                    -e "s/\$${BUNDLE_ID_SUFFIX}//" \
                     $(TOP_SRCDIR)/samples/webview/cef_helper_info.plist.in >webview_helper.app/Contents/Info.plist
                 /bin/echo "APPL????" >webview_helper.app/Contents/PkgInfo
                 <!--Fix CEF link path -->
