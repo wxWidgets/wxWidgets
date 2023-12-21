@@ -837,13 +837,13 @@ bool wxWebViewChromium::InitCEF()
 
     CefSettings settings;
 
+    const auto app = wxApp::GetInstance();
+    wxCHECK_MSG(app, false, "Can't use wxWebViewChromium without wxApp");
+
     // Check for the presence of a separate helper application under non-macOS
     // platforms (under the latter the helper process must always be present
     // inside the application bundle).
 #ifndef __WXOSX__
-    const auto app = wxApp::GetInstance();
-    wxCHECK_MSG( app, false, "Can't use wxWebViewChromium without wxApp" );
-
     wxFileName helperApp(wxStandardPaths::Get().GetExecutablePath());
     helperApp.SetName(app->GetAppName() + "_cef_helper");
     if ( helperApp.FileExists() )
