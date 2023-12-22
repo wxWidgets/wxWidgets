@@ -1143,6 +1143,7 @@ GUI_CMN_HDR =
     wx/peninfobase.h
     wx/persist.h
     wx/persist/bookctrl.h
+    wx/persist/combobox.h
     wx/persist/dataview.h
     wx/persist/splitter.h
     wx/persist/toplevel.h
