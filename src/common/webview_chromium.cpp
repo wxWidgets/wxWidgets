@@ -925,16 +925,14 @@ bool wxWebViewChromium::InitCEF()
 #endif
 
     CefRefPtr<CefApp> cefApp{new wxCefBrowserApp{}};
-    if (CefInitialize(args, settings, cefApp, nullptr))
-    {
-        ms_cefInitialized = true;
-        return true;
-    }
-    else
+    if ( !CefInitialize(args, settings, cefApp, nullptr) )
     {
         wxLogError("Could not initialize CEF");
         return false;
     }
+
+    ms_cefInitialized = true;
+    return true;
 }
 
 void wxWebViewChromium::ShutdownCEF()
