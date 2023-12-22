@@ -10,7 +10,6 @@
 
 #include "wx/webview.h"
 #include "wx/webview_chromium.h"
-#include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/filesys.h"
 #include "wx/rtti.h"
