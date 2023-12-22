@@ -10,6 +10,7 @@
 
 #include "wx/webview.h"
 #include "wx/webview_chromium.h"
+#include "wx/eventfilter.h"
 #include "wx/filename.h"
 #include "wx/filesys.h"
 #include "wx/rtti.h"
@@ -94,10 +95,25 @@ namespace wxCEF
 // AppImplData contains data shared by all wxWebViewChromium objects
 // ----------------------------------------------------------------------------
 
-struct AppImplData
+struct AppImplData : wxEventFilter
 {
     // This function is called to dispatch events to the browser.
     void DoMessageLoopWork();
+
+    // Call the function above before processing every event.
+    //
+    // This is a bit brutal, but DoMessageLoopWork() should return pretty
+    // quickly if it has nothing to do and not doing this results in weird
+    // bugs, e.g. clicking embedded text boxes doesn't give focus to them.
+    virtual int FilterEvent(wxEvent& event) override
+    {
+        // But we can at least skip doing it for the idle events, as they don't
+        // correspond to anything CEF is interested in.
+        if ( event.GetEventType() != wxEVT_IDLE )
+            DoMessageLoopWork();
+
+        return Event_Skip;
+    }
 
 #ifdef __WXGTK__
     // Called from DoMessageLoopWork() if the thread context is allocated.
@@ -931,6 +947,8 @@ bool wxWebViewChromium::InitCEF()
         return false;
     }
 
+    wxEvtHandler::AddFilter(&gs_appData);
+
     ms_cefInitialized = true;
     return true;
 }
@@ -939,6 +957,8 @@ void wxWebViewChromium::ShutdownCEF()
 {
     if (ms_cefInitialized)
     {
+        wxEvtHandler::RemoveFilter(&gs_appData);
+
         CefShutdown();
     }
 }
@@ -963,11 +983,6 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
 #elif defined(__WXOSX__)
     wxWebViewChromium_Resize(handle, size);
 #endif
-}
-
-void wxWebViewChromium::OnInternalIdle()
-{
-    gs_appData.DoMessageLoopWork();
 }
 
 void wxWebViewChromium::SetPageSource(const wxString& pageSource)

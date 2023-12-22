@@ -132,8 +132,6 @@ public:
     virtual void GTKHandleRealized() override;
 #endif
 
-    virtual void OnInternalIdle() override;
-
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl) override;
 
