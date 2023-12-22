@@ -165,7 +165,7 @@ public:
     /**
         return true if the listbox allows multiple selection
     */
-    bool HasMultipleSelection() const
+    bool HasMultipleSelection() const;
 
     /**
         Deselects an item in the list box.
