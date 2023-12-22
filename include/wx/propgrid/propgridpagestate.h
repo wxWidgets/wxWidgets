@@ -813,7 +813,6 @@ protected:
     bool                        m_dontCenterSplitter;
 
 private:
-    // Only inits arrays, doesn't migrate things or such.
     void InitNonCatMode();
 };
 

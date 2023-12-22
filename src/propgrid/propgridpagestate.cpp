@@ -219,12 +219,14 @@ wxPropertyGridPageState::~wxPropertyGridPageState()
 
 void wxPropertyGridPageState::InitNonCatMode()
 {
-    if ( !m_abcArray )
-    {
-        m_abcArray = new wxPGRootProperty(wxS("<Root_NonCat>"));
-        m_abcArray->SetParentState(this);
-        m_abcArray->SetFlag(wxPG_PROP_CHILDREN_ARE_COPIES);
-    }
+    // Initialize and populate array holding properties in alphabetic (non-categoric)
+    // mode only once.
+    if (m_abcArray)
+        return;
+
+    m_abcArray = new wxPGRootProperty(wxS("<Root_NonCat>"));
+    m_abcArray->SetParentState(this);
+    m_abcArray->SetFlag(wxPG_PROP_CHILDREN_ARE_COPIES);
 
     // Must be called when state::m_properties still points to regularArray.
     wxPGProperty* oldProperties = m_properties;
