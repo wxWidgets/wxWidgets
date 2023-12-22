@@ -21,10 +21,10 @@ public:
     /**
         Constructor.
 
-        @param book
+        @param topwin
             The associated window.
      */
-    wxPersistentTLW(wxTopLevelWindow *book);
+    wxPersistentTLW(wxTopLevelWindow *topwin);
 
     /**
         Save the current window geometry.
