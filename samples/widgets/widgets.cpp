@@ -506,8 +506,9 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
+    // Give it some reasonably big minimal size by default.
     m_book = new WidgetsBookCtrl(m_panel, Widgets_BookCtrl,
-                                 wxDefaultPosition, wxDefaultSize,
+                                 wxDefaultPosition, FromDIP(wxSize(900, 500)),
                                  style, "Widgets");
 
     InitBook();
