@@ -248,7 +248,8 @@ void wxPropertyGridPageState::InitNonCatMode()
             if ( parent->IsCategory() || parent->IsRoot() )
             {
                 m_abcArray->DoAddChild(p);
-                p->m_parent = &m_regularArray;
+                // Restore parent modified in AddChild()
+                p->m_parent = parent;
             }
         }
     }
