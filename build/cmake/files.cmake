@@ -1225,6 +1225,7 @@ set(GUI_CMN_HDR
     wx/bmpbndl.h
     wx/filedlgcustomize.h
     wx/compositebookctrl.h
+    wx/persist/combobox.h
 )
 
 set(UNIX_SRC
