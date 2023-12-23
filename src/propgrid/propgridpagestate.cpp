@@ -47,7 +47,7 @@ void wxPropertyGridIteratorBase::Init( wxPropertyGridPageState* state, int flags
 
     m_property = property;
 
-    wxPG_ITERATOR_CREATE_MASKS(flags, m_itemExMask, m_parentExMask)
+    wxPGCreateIteratorMasks(flags, m_itemExMask, m_parentExMask);
 
     // Need to skip first?
     if ( property && property->HasFlag(m_itemExMask) )
@@ -401,7 +401,9 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
     if ( !m_properties->HasAnyChild() )
         return nullptr;
 
-    wxPG_ITERATOR_CREATE_MASKS(flags, wxPGPropertyFlags itemExMask, wxPGPropertyFlags parentExMask)
+    wxPGPropertyFlags itemExMask;
+    wxPGPropertyFlags parentExMask;
+    wxPGCreateIteratorMasks(flags, itemExMask, parentExMask);
 
     // First, get last child of last parent if children of 'pwc' should be iterated through
     wxPGProperty* pwc = m_properties->Last();

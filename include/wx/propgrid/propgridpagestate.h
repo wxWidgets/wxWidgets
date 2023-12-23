@@ -276,12 +276,21 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
 
 };
 
-
-#define wxPG_ITERATOR_CREATE_MASKS(FLAGS, A, B) \
-    A = static_cast<wxPGPropertyFlags>((FLAGS ^ wxPG_ITERATOR_MASK_OP_ITEM) & \
-        wxPG_ITERATOR_MASK_OP_ITEM & 0xFFFF); \
-    B = static_cast<wxPGPropertyFlags>(((FLAGS>>16) ^ wxPG_ITERATOR_MASK_OP_PARENT) & \
+inline void wxPGCreateIteratorMasks(int flags, wxPGPropertyFlags& itemExMask, wxPGPropertyFlags& parentExMask)
+{
+    itemExMask = static_cast<wxPGPropertyFlags>((flags ^ wxPG_ITERATOR_MASK_OP_ITEM) &
+        wxPG_ITERATOR_MASK_OP_ITEM & 0xFFFF);
+    parentExMask = static_cast<wxPGPropertyFlags>(((flags >> 16) ^ wxPG_ITERATOR_MASK_OP_PARENT) &
         wxPG_ITERATOR_MASK_OP_PARENT & 0xFFFF);
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
+#pragma deprecated(wxPG_ITERATOR_CREATE_MASKS)
+#endif
+#define wxPG_ITERATOR_CREATE_MASKS wxPG_DEPRECATED_MACRO_VALUE(wxPGCreateIteratorMasks,\
+                 "wxPG_ITERATOR_CREATE_MASKS is deprecated. Call wxPGCreateIteratorMasks instead.")
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // Base for wxPropertyGridIterator classes.
 class WXDLLIMPEXP_PROPGRID wxPropertyGridIteratorBase
