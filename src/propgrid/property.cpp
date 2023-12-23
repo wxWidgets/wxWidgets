@@ -582,7 +582,7 @@ void wxPGProperty::Init()
 
     m_maxLen = 0; // infinite maximum length
 
-    m_flags = wxPG_PROP_PROPERTY;
+    m_flags = wxPGPropertyFlags::Property;
 
     m_depth = 1;
 
@@ -634,24 +634,24 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // If in hideable adding mode, or if assigned parent is hideable, then
     // make this one hideable.
     if (
-         ( !parentIsRoot && parent->HasFlag(wxPG_PROP_HIDDEN) ) ||
+         ( !parentIsRoot && parent->HasFlag(wxPGPropertyFlags::Hidden) ) ||
          ( propgrid && (propgrid->HasInternalFlag(wxPropertyGrid::wxPG_FL_ADDING_HIDEABLES)) )
        )
-        SetFlag( wxPG_PROP_HIDDEN );
+        SetFlag(wxPGPropertyFlags::Hidden);
 
     // Set custom image flag.
     int custImgHeight = OnMeasureImage().y;
     if ( custImgHeight == wxDefaultCoord )
     {
-        SetFlag(wxPG_PROP_CUSTOMIMAGE);
+        SetFlag(wxPGPropertyFlags::CustomImage);
     }
 
     if ( propgrid && (propgrid->HasFlag(wxPG_LIMITED_EDITING)) )
-        SetFlag(wxPG_PROP_NOEDITOR);
+        SetFlag(wxPGPropertyFlags::NoEditor);
 
     // Make sure parent has some parental flags
-    if ( !parent->HasFlag(wxPG_PROP_PARENTAL_FLAGS) )
-        parent->SetParentalType(wxPG_PROP_MISC_PARENT);
+    if ( !parent->HasFlag(wxPGPropertyFlags::ParentalFlags) )
+        parent->SetParentalType(wxPGPropertyFlags::MiscParent);
 
     if ( !IsCategory() )
     {
@@ -707,14 +707,14 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     if ( HasAnyChild() )
     {
         // Check parental flags
-        wxASSERT_MSG( ((m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
-                            wxPG_PROP_AGGREGATE) ||
-                      ((m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
-                            wxPG_PROP_MISC_PARENT),
+        wxASSERT_MSG( ((m_flags & wxPGPropertyFlags::ParentalFlags) ==
+                            wxPGPropertyFlags::Aggregate) ||
+                      ((m_flags & wxPGPropertyFlags::ParentalFlags) ==
+                            wxPGPropertyFlags::MiscParent),
                       wxS("wxPGProperty parental flags set incorrectly at ")
                       wxS("this time") );
 
-        if ( HasFlag(wxPG_PROP_AGGREGATE) )
+        if ( HasFlag(wxPGPropertyFlags::Aggregate) )
         {
             // Properties with private children are not expanded by default.
             SetExpanded(false);
@@ -734,7 +734,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         }
 
         if ( propgrid && propgrid->HasExtraStyle(wxPG_EX_AUTO_UNSPECIFIED_VALUES) )
-            SetFlagRecursively(wxPG_PROP_AUTO_UNSPECIFIED, true);
+            SetFlagRecursively(wxPGPropertyFlags::AutoUnspecified, true);
     }
 }
 
@@ -1042,7 +1042,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
         if ( !childValue.IsNull() )
         {
             if ( overridesLeft &&
-                 curChild->HasFlag(wxPG_PROP_COMPOSED_VALUE) &&
+                 curChild->HasFlag(wxPGPropertyFlags::ComposedValue) &&
                  childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
             {
                 wxVariantList& childList = childValue.GetList();
@@ -1217,8 +1217,8 @@ bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFla
 
                     // Add only if editable or setting programmatically
                     if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
-                         (!child->HasFlag(wxPG_PROP_DISABLED) &&
-                          !child->HasFlag(wxPG_PROP_READONLY)) )
+                         (!child->HasFlag(wxPGPropertyFlags::Disabled) &&
+                          !child->HasFlag(wxPGPropertyFlags::ReadOnly)) )
                     {
                         if ( len > 0 )
                         {
@@ -1296,8 +1296,8 @@ bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFla
                     wxVariant variant(oldChildValue);
 
                     if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
-                         (!child->HasFlag(wxPG_PROP_DISABLED) &&
-                          !child->HasFlag(wxPG_PROP_READONLY)) )
+                         (!child->HasFlag(wxPGPropertyFlags::Disabled) &&
+                          !child->HasFlag(wxPGPropertyFlags::ReadOnly)) )
                     {
                         wxString childName = child->GetBaseName();
 
@@ -1474,7 +1474,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, wxPGSetValueFlag
         {
             //
             // However, situation is different for composed string properties
-            if ( HasFlag(wxPG_PROP_COMPOSED_VALUE) )
+            if ( HasFlag(wxPGPropertyFlags::ComposedValue) )
             {
                 tempListVariant = value;
                 pList = &tempListVariant;
@@ -1486,7 +1486,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, wxPGSetValueFlag
             //wxLogDebug(wxS(">> %s.SetValue() adapted list value to type '%s'"),GetName(),value.GetType());
         }
 
-        if ( HasFlag( wxPG_PROP_AGGREGATE) )
+        if ( HasFlag(wxPGPropertyFlags::Aggregate) )
             flags |= wxPGSetValueFlags::Aggregated;
 
         if ( pList && !pList->IsNull() )
@@ -1511,7 +1511,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, wxPGSetValueFlag
                     //wxLogDebug(wxS("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName(),childValue.GetType());
                     if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
                     {
-                        if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPGSetValueFlags::Aggregated) )
+                        if ( child->HasFlag(wxPGPropertyFlags::Aggregate) && !(flags & wxPGSetValueFlags::Aggregated) )
                         {
                             wxVariant listRefCopy = childValue;
                             child->SetValue(childValue, &listRefCopy, flags| wxPGSetValueFlags::FromParent);
@@ -1526,10 +1526,10 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, wxPGSetValueFlag
                     {
                         // For aggregate properties, we will trust RefreshChildren()
                         // to update child values.
-                        if ( !HasFlag(wxPG_PROP_AGGREGATE) )
+                        if ( !HasFlag(wxPGPropertyFlags::Aggregate) )
                             child->SetValue(childValue, nullptr, flags| wxPGSetValueFlags::FromParent);
                         if ( !!(flags & wxPGSetValueFlags::ByUser) )
-                            child->SetFlag(wxPG_PROP_MODIFIED);
+                            child->SetFlag(wxPGPropertyFlags::Modified);
                     }
                 }
                 i++;
@@ -1549,9 +1549,9 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, wxPGSetValueFlag
         }
 
         if ( !!(flags & wxPGSetValueFlags::ByUser) )
-            SetFlag(wxPG_PROP_MODIFIED);
+            SetFlag(wxPGPropertyFlags::Modified);
 
-        if ( HasFlag(wxPG_PROP_AGGREGATE) )
+        if ( HasFlag(wxPGPropertyFlags::Aggregate) )
             RefreshChildren();
     }
     else
@@ -1683,7 +1683,7 @@ void wxPGProperty::Enable( bool enable )
 
 void wxPGProperty::DoEnable( bool enable )
 {
-    ChangeFlag(wxPG_PROP_DISABLED, !enable);
+    ChangeFlag(wxPGPropertyFlags::Disabled, !enable);
 
     // Apply same to sub-properties as well
     for ( wxPGProperty* child : m_children )
@@ -1722,7 +1722,7 @@ void wxPGProperty::AdaptiveSetCell( unsigned int firstCol,
                                     const wxPGCell& cell,
                                     const wxPGCell& srcData,
                                     wxPGCellData* unmodCellData,
-                                    FlagType ignoreWithFlags,
+                                    wxPGPropertyFlags ignoreWithFlags,
                                     bool recursively )
 {
     //
@@ -1764,7 +1764,7 @@ void wxPGProperty::AdaptiveSetCell( unsigned int firstCol,
     }
 }
 
-void wxPGProperty::ClearCells(FlagType ignoreWithFlags, bool recursively)
+void wxPGProperty::ClearCells(wxPGPropertyFlags ignoreWithFlags, bool recursively)
 {
     if ( !(m_flags & ignoreWithFlags) && !IsRoot() )
     {
@@ -1835,7 +1835,7 @@ void wxPGProperty::SetBackgroundColour(const wxColour& colour, wxPGPropertyValue
                      newCell,
                      srcCell,
                      firstCellData,
-                     recursively ? wxPG_PROP_CATEGORY : 0,
+                     recursively ? wxPGPropertyFlags::Category : wxPGPropertyFlags::Null,
                      recursively );
 }
 
@@ -1870,7 +1870,7 @@ void wxPGProperty::SetTextColour(const wxColour& colour, wxPGPropertyValuesFlags
                      newCell,
                      srcCell,
                      firstCellData,
-                     recursively ? wxPG_PROP_CATEGORY : 0,
+                     recursively ? wxPGPropertyFlags::Category : wxPGPropertyFlags::Null,
                      recursively );
 }
 
@@ -1891,7 +1891,7 @@ void wxPGProperty::SetDefaultColours(wxPGPropertyValuesFlags flags)
         }
     }
 
-    ClearCells(recursively ? wxPG_PROP_CATEGORY : 0,
+    ClearCells(recursively ? wxPGPropertyFlags::Category : wxPGPropertyFlags::Null,
                recursively);
 }
 
@@ -1980,22 +1980,22 @@ wxVariant wxPGProperty::GetAttributesAsList() const
 
 // Utility flags are excluded.
 // Store the literals in the internal representation for better performance.
-static const std::array<std::pair<wxPGProperty::FlagType, const wxStringCharType*>, 4> gs_propFlagToString
+static const std::array<std::pair<wxPGPropertyFlags, const wxStringCharType*>, 4> gs_propFlagToString
 { {
-  { wxPG_PROP_DISABLED,  wxS("DISABLED")  },
-  { wxPG_PROP_HIDDEN,    wxS("HIDDEN")    },
-  { wxPG_PROP_NOEDITOR,  wxS("NOEDITOR")  },
-  { wxPG_PROP_COLLAPSED, wxS("COLLAPSED") }
+  { wxPGPropertyFlags::Disabled,  wxS("DISABLED")  },
+  { wxPGPropertyFlags::Hidden,    wxS("HIDDEN")    },
+  { wxPGPropertyFlags::NoEditor,  wxS("NOEDITOR")  },
+  { wxPGPropertyFlags::Collapsed, wxS("COLLAPSED") }
 } };
 
-wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
+wxString wxPGProperty::GetFlagsAsString(wxPGPropertyFlags flagsMask) const
 {
     wxString s;
-    const FlagType relevantFlags = m_flags & flagsMask & wxPG_STRING_STORED_FLAGS;
+    const wxPGPropertyFlags relevantFlags = m_flags & flagsMask & wxPGPropertyFlags::StringStoredFlags;
 
     for ( auto& item : gs_propFlagToString )
     {
-        if ( relevantFlags & item.first )
+        if ( !!(relevantFlags & item.first) )
         {
             if ( !s.empty() )
             {
@@ -2010,7 +2010,7 @@ wxString wxPGProperty::GetFlagsAsString( FlagType flagsMask ) const
 
 void wxPGProperty::SetFlagsFromString( const wxString& str )
 {
-    FlagType flags = 0;
+    wxPGPropertyFlags flags = wxPGPropertyFlags::Null;
 
     WX_PG_TOKENIZER1_BEGIN(str, wxS('|'))
         for ( auto& item : gs_propFlagToString )
@@ -2023,7 +2023,7 @@ void wxPGProperty::SetFlagsFromString( const wxString& str )
         }
     WX_PG_TOKENIZER1_END()
 
-    m_flags = (m_flags & ~wxPG_STRING_STORED_FLAGS) | flags;
+    m_flags = (m_flags & ~wxPGPropertyFlags::StringStoredFlags) | flags;
 }
 
 wxValidator* wxPGProperty::DoGetValidator() const
@@ -2195,7 +2195,7 @@ bool wxPGProperty::Hide( bool hide, wxPGPropertyValuesFlags flags )
 
 bool wxPGProperty::DoHide( bool hide, wxPGPropertyValuesFlags flags )
 {
-    ChangeFlag(wxPG_PROP_HIDDEN, hide);
+    ChangeFlag(wxPGPropertyFlags::Hidden, hide);
 
     if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
     {
@@ -2210,7 +2210,7 @@ bool wxPGProperty::HasVisibleChildren() const
 {
     for ( wxPGProperty* child : m_children )
     {
-        if ( !child->HasFlag(wxPG_PROP_HIDDEN) )
+        if ( !child->HasFlag(wxPGPropertyFlags::Hidden) )
             return true;
     }
 
@@ -2240,12 +2240,12 @@ void wxPGProperty::SetValueImage( const wxBitmapBundle& bmp )
     if ( bmp.IsOk() )
     {
         m_valueBitmapBundle = bmp;
-        m_flags |= wxPG_PROP_CUSTOMIMAGE;
+        m_flags |= wxPGPropertyFlags::CustomImage;
     }
     else
     {
         m_valueBitmapBundle = wxBitmapBundle();
-        m_flags &= ~(wxPG_PROP_CUSTOMIMAGE);
+        m_flags &= ~(wxPGPropertyFlags::CustomImage);
     }
 }
 
@@ -2278,12 +2278,12 @@ const wxPGProperty* wxPGProperty::GetLastVisibleSubItem() const
 
 bool wxPGProperty::IsVisible() const
 {
-    if ( HasFlag(wxPG_PROP_HIDDEN) )
+    if ( HasFlag(wxPGPropertyFlags::Hidden) )
         return false;
 
     for (const wxPGProperty* parent = GetParent(); parent != nullptr; parent = parent->GetParent() )
     {
-        if ( !parent->IsExpanded() || parent->HasFlag(wxPG_PROP_HIDDEN) )
+        if ( !parent->IsExpanded() || parent->HasFlag(wxPGPropertyFlags::Hidden) )
             return false;
     }
 
@@ -2359,18 +2359,17 @@ void wxPGProperty::DoPreAddChild( int index, wxPGProperty* prop )
 
     int custImgHeight = prop->OnMeasureImage().y;
     if ( custImgHeight == wxDefaultCoord /*|| custImgHeight > 1*/ )
-        prop->m_flags |= wxPG_PROP_CUSTOMIMAGE;
+        prop->m_flags |= wxPGPropertyFlags::CustomImage;
 
     prop->m_parent = this;
 }
 
 void wxPGProperty::AddPrivateChild( wxPGProperty* prop )
 {
-    if ( !(m_flags & wxPG_PROP_PARENTAL_FLAGS) )
-        SetParentalType(wxPG_PROP_AGGREGATE);
+    if ( !(m_flags & wxPGPropertyFlags::ParentalFlags) )
+        SetParentalType(wxPGPropertyFlags::Aggregate);
 
-    wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
-                    wxPG_PROP_AGGREGATE,
+    wxASSERT_MSG( (m_flags & wxPGPropertyFlags::ParentalFlags) == wxPGPropertyFlags::Aggregate,
                   wxS("Do not mix up AddPrivateChild() calls with other ")
                   wxS("property adders.") );
 
@@ -2389,11 +2388,10 @@ wxPGProperty* wxPGProperty::InsertChild( int index,
     }
     else
     {
-        if ( !(m_flags & wxPG_PROP_PARENTAL_FLAGS) )
-            SetParentalType(wxPG_PROP_MISC_PARENT);
+        if ( !(m_flags & wxPGPropertyFlags::ParentalFlags) )
+            SetParentalType(wxPGPropertyFlags::MiscParent);
 
-        wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
-                        wxPG_PROP_MISC_PARENT,
+        wxASSERT_MSG( (m_flags & wxPGPropertyFlags::ParentalFlags) == wxPGPropertyFlags::MiscParent,
                       wxS("Do not mix up AddPrivateChild() calls with other ")
                       wxS("property adders.") );
 
@@ -2446,7 +2444,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
 
     // Don't fully update aggregate properties unless all children have
     // specified value
-    if ( HasFlag(wxPG_PROP_AGGREGATE) )
+    if ( HasFlag(wxPGPropertyFlags::Aggregate) )
         allChildrenSpecified = AreAllChildrenSpecified(&list);
     else
         allChildrenSpecified = true;
@@ -2557,7 +2555,7 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax ) const
     {
         wxPGProperty* pwc = Item(i);
 
-        if ( !pwc->HasFlag(wxPG_PROP_HIDDEN) )
+        if ( !pwc->HasFlag(wxPGPropertyFlags::Hidden) )
         {
             if ( !pwc->IsExpanded() ||
                  !pwc->HasAnyChild() )
@@ -2585,7 +2583,7 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
 
     for ( wxPGProperty* pwc : m_children )
     {
-        if ( !pwc->HasFlag(wxPG_PROP_HIDDEN) )
+        if ( !pwc->HasFlag(wxPGPropertyFlags::Hidden) )
         {
             // Found?
             if ( y < iy )
@@ -2630,7 +2628,7 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
 
 void wxPGProperty::Empty()
 {
-    if ( !HasFlag(wxPG_PROP_CHILDREN_ARE_COPIES) )
+    if ( !HasFlag(wxPGPropertyFlags::ChildrenAreCopies) )
     {
         for ( wxPGProperty* child : m_children )
         {
@@ -2748,7 +2746,7 @@ bool wxPGProperty::AreAllChildrenSpecified( const wxVariant* pendingList ) const
 wxPGProperty* wxPGProperty::UpdateParentValues()
 {
     wxPGProperty* parent = m_parent;
-    if ( parent && parent->HasFlag(wxPG_PROP_COMPOSED_VALUE) &&
+    if ( parent && parent->HasFlag(wxPGPropertyFlags::ComposedValue) &&
          !parent->IsCategory() && !parent->IsRoot() )
     {
         wxString s;
@@ -2761,10 +2759,10 @@ wxPGProperty* wxPGProperty::UpdateParentValues()
 
 bool wxPGProperty::IsTextEditable() const
 {
-    if ( HasFlag(wxPG_PROP_READONLY) )
+    if ( HasFlag(wxPGPropertyFlags::ReadOnly) )
         return false;
 
-    if ( HasFlag(wxPG_PROP_NOEDITOR) &&
+    if ( HasFlag(wxPGPropertyFlags::NoEditor) &&
          (HasAnyChild() ||
           wxString(GetEditorClass()->GetClassInfo()->GetClassName()).EndsWith(wxS("Button")))
        )
@@ -2816,7 +2814,7 @@ wxString wxPGProperty::GetHintText() const
 
 int wxPGProperty::GetDisplayedCommonValueCount() const
 {
-    if ( HasFlag(wxPG_PROP_USES_COMMON_VALUE) )
+    if ( HasFlag(wxPGPropertyFlags::UsesCommonValue) )
     {
         wxPropertyGrid* pg = GetGrid();
         if ( pg )
@@ -2871,7 +2869,7 @@ wxPGRootProperty::wxPGRootProperty( const wxString& name )
 {
     m_name = name;
     m_label = m_name;
-    SetParentalType(0);
+    SetParentalType(wxPGPropertyFlags::Null);
     m_depth = 0;
 }
 
@@ -2884,7 +2882,7 @@ wxPG_IMPLEMENT_PROPERTY_CLASS(wxPropertyCategory, wxPGProperty, TextCtrl)
 void wxPropertyCategory::Init()
 {
     // don't set colour - prepareadditem method should do this
-    SetParentalType(wxPG_PROP_CATEGORY);
+    SetParentalType(wxPGPropertyFlags::Category);
     m_capFgColIndex = 1;
     m_textExtent = -1;
 }

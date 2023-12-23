@@ -235,156 +235,162 @@ struct wxPGPaintData
     @{
 */
 
-enum wxPGPropertyFlags
+enum class wxPGPropertyFlags : int
 {
+    /** No flags.
+        @hideinitializer
+    */
+    Null = 0,
 
-/** Indicates bold font.
-    @hideinitializer
-*/
-wxPG_PROP_MODIFIED                  = 0x0001,
+    /** Indicates bold font.
+        @hideinitializer
+    */
+    Modified = 0x0001,
 
-/** Disables ('greyed' text and editor does not activate) property.
-    @hideinitializer
-*/
-wxPG_PROP_DISABLED                  = 0x0002,
+    /** Disables ('greyed' text and editor does not activate) property.
+        @hideinitializer
+    */
+    Disabled = 0x0002,
 
-/** Hider button will hide this property.
-    @hideinitializer
-*/
-wxPG_PROP_HIDDEN                    = 0x0004,
+    /** Hider button will hide this property.
+        @hideinitializer
+    */
+    Hidden = 0x0004,
 
-/** This property has custom paint image just in front of its value.
-    If property only draws custom images into a popup list, then this
-    flag should not be set.
-    @hideinitializer
-*/
-wxPG_PROP_CUSTOMIMAGE               = 0x0008,
+    /** This property has custom paint image just in front of its value.
+        If property only draws custom images into a popup list, then this
+        flag should not be set.
+        @hideinitializer
+    */
+    CustomImage = 0x0008,
 
-/** Do not create text based editor for this property (but button-triggered
-    dialog and choice are ok).
-    @hideinitializer
-*/
-wxPG_PROP_NOEDITOR                  = 0x0010,
+    /** Do not create text based editor for this property (but button-triggered
+        dialog and choice are ok).
+        @hideinitializer
+    */
+    NoEditor = 0x0010,
 
-/** Property is collapsed, ie. it's children are hidden.
-    @hideinitializer
-*/
-wxPG_PROP_COLLAPSED                 = 0x0020,
+    /** Property is collapsed, ie. it's children are hidden.
+        @hideinitializer
+    */
+    Collapsed = 0x0020,
 
-/**
-    If property is selected, then indicates that validation failed for pending
-    value.
+    /** If property is selected, then indicates that validation failed for pending
+        value.
 
-    If property is not selected, then indicates that the actual property
-    value has failed validation (NB: this behaviour is not currently supported,
-    but may be used in the future).
-    @hideinitializer
-*/
-wxPG_PROP_INVALID_VALUE             = 0x0040,
+        If property is not selected, then indicates that the actual property
+        value has failed validation (NB: this behaviour is not currently supported,
+        but may be used in the future).
+        @hideinitializer
+    */
+    InvalidValue = 0x0040,
 
-/** Switched via SetWasModified(). Temporary flag - only used when
-    setting/changing property value.
-    @hideinitializer
-*/
-wxPG_PROP_WAS_MODIFIED              = 0x0200,
+    /** Switched via SetWasModified(). Temporary flag - only used when
+        setting/changing property value.
+        @hideinitializer
+    */
+    WasModified = 0x0200,
 
-/**
-    If set, then child properties (if any) are private, and should be
-    "invisible" to the application.
-    @hideinitializer
-*/
-wxPG_PROP_AGGREGATE                 = 0x0400,
+    /** If set, then child properties (if any) are private, and should be
+        "invisible" to the application.
+        @hideinitializer
+    */
+    Aggregate = 0x0400,
 
-/** If set, then child properties (if any) are copies and should not
-    be deleted in dtor.
-    @hideinitializer
-*/
-wxPG_PROP_CHILDREN_ARE_COPIES       = 0x0800,
+    /** If set, then child properties (if any) are copies and should not
+        be deleted in dtor.
+        @hideinitializer
+    */
+    ChildrenAreCopies = 0x0800,
 
-/**
-    Classifies this item as a non-category.
+    /** Classifies this item as a non-category.
+        Used for faster item type identification.
+        @hideinitializer
+    */
+    Property = 0x1000,
 
-    Used for faster item type identification.
-    @hideinitializer
-*/
-wxPG_PROP_PROPERTY                  = 0x1000,
 
-/**
-    Classifies this item as a category.
+    /** Classifies this item as a category.
+        Used for faster item type identification.
+        @hideinitializer
+    */
+    Category = 0x2000,
 
-    Used for faster item type identification.
-    @hideinitializer
-*/
-wxPG_PROP_CATEGORY                  = 0x2000,
+    /** Classifies this item as a property that has children, but is not aggregate
+        (i.e. children are not private).
+        @hideinitializer
+    */
+    MiscParent = 0x4000,
 
-/** Classifies this item as a property that has children, but is not aggregate
-    (i.e. children are not private).
-    @hideinitializer
-*/
-wxPG_PROP_MISC_PARENT               = 0x4000,
 
-/** Property is read-only. Editor is still created for wxTextCtrl-based
-    property editors. For others, editor is not usually created because
-    they do implement wxTE_READONLY style or equivalent.
-    @hideinitializer
-*/
-wxPG_PROP_READONLY                  = 0x8000,
+    /** Property is read-only. Editor is still created for wxTextCtrl-based
+        property editors. For others, editor is not usually created because
+        they do implement wxTE_READONLY style or equivalent.
+        @hideinitializer
+    */
+    ReadOnly = 0x8000,
 
-//
-// NB: FLAGS ABOVE 0x8000 CANNOT BE USED WITH PROPERTY ITERATORS
-//
+    //
+    // NB: FLAGS ABOVE 0x8000 CANNOT BE USED WITH PROPERTY ITERATORS
+    //
 
-/** Property's value is composed from values of child properties.
-    @remarks
-    This flag cannot be used with property iterators.
-    @hideinitializer
-*/
-wxPG_PROP_COMPOSED_VALUE            = 0x00010000,
+    /** Property's value is composed from values of child properties.
+        @remarks
+        This flag cannot be used with property iterators.
+        @hideinitializer
+    */
+    ComposedValue = 0x00010000,
 
-/** Common value of property is selectable in editor.
-    @remarks
-    This flag cannot be used with property iterators.
-    @hideinitializer
-*/
-wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
+    /** Common value of property is selectable in editor.
+        @remarks
+        This flag cannot be used with property iterators.
+        @hideinitializer
+    */
+    UsesCommonValue = 0x00020000,
 
-/** Property can be set to unspecified value via editor.
-    Currently, this applies to following properties:
-    - wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty:
-      Clear the text field
+    /** Property can be set to unspecified value via editor.
+        Currently, this applies to following properties:
+        - wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty:
+        Clear the text field
 
-    @remarks
-    This flag cannot be used with property iterators.
+        @remarks
+        This flag cannot be used with property iterators.
 
-    @see wxPGProperty::SetAutoUnspecified()
-    @hideinitializer
-*/
-wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
+        @see wxPGProperty::SetAutoUnspecified()
+        @hideinitializer
+    */
 
-/** Indicates that the property is being deleted and should be ignored.
-    @hideinitializer
-*/
-wxPG_PROP_BEING_DELETED             = 0x00200000
+    /** Indicates that the property is being deleted and should be ignored.
+        @remarks
+        This flag cannot be used with property iterators.
+        @hideinitializer
+    */
+    BeingDeleted = 0x00080000,
+
+    /** If set, full path is shown in wxFileProperty.
+        @remarks
+        This flag cannot be used with property iterators.
+        @hideinitializer
+    */
+    ShowFullFileName = 0x00100000,
+
+    /** Topmost flag.
+        @hideinitializer
+    */
+    Max = ShowFullFileName,
+
+    /** Property with children must have one of these set, otherwise iterators
+        will not work correctly.
+        Code should automatically take care of this, however.
+        @hideinitializer
+    */
+    ParentalFlags = Aggregate | Category | MiscParent,
+
+    /** Combination of flags that can be stored by GetFlagsAsString().
+        @hideinitializer
+    */
+    StringStoredFlags = Disabled | Hidden | NoEditor | Collapsed
 };
-
-/** Topmost flag.
-    @hideinitializer
-*/
-constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
-
-/** Property with children must have one of these set, otherwise iterators
-    will not work correctly.
-    Code should automatically take care of this, however.
-*/
-#define wxPG_PROP_PARENTAL_FLAGS \
-    ((wxPGPropertyFlags)(wxPG_PROP_AGGREGATE | \
-                         wxPG_PROP_CATEGORY | \
-                         wxPG_PROP_MISC_PARENT))
-
-/** Combination of flags that can be stored by GetFlagsAsString().
-*/
-#define wxPG_STRING_STORED_FLAGS \
-    (wxPG_PROP_DISABLED|wxPG_PROP_HIDDEN|wxPG_PROP_NOEDITOR|wxPG_PROP_COLLAPSED)
 
 /** @}
 */
@@ -589,13 +595,6 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
             }
             return false;
         }
-    @endcode
-
-    Also, if you wish not to have line breaks and tabs translated to
-    escape sequences, then do following in constructor of your subclass:
-
-    @code
-        m_flags |= wxPG_PROP_NO_ESCAPE;
     @endcode
 
     Supported special attributes:
@@ -867,8 +866,6 @@ constexpr wxPGPropertyFlags wxPG_PROP_MAX = wxPG_PROP_AUTO_UNSPECIFIED;
 class wxPGProperty : public wxObject
 {
 public:
-    typedef wxUint32 FlagType;
-
     /**
         Virtual destructor. It is customary for derived properties to implement this.
     */
@@ -1285,8 +1282,8 @@ public:
         Adds a private child property. If you use this instead of
         wxPropertyGridInterface::Insert() or
         wxPropertyGridInterface::AppendIn(), then property's parental
-        type will automatically be set up to ::wxPG_PROP_AGGREGATE. In other
-        words, all properties of this property will become private.
+        type will automatically be set up to wxPGPropertyFlags::Aggregate.
+        In other words, all properties of this property will become private.
     */
     void AddPrivateChild( wxPGProperty* prop );
 
@@ -1331,7 +1328,7 @@ public:
                  intended almost exclusively for internal use. So, for
                  example, if you want to disable a property, call
                  @code Enable(false) @endcode instead of setting
-                 ::wxPG_PROP_DISABLED flag.
+                 wxPGPropertyFlags::Disabled flag.
 
         @see HasFlag(), GetFlags()
     */
@@ -1549,12 +1546,12 @@ public:
     const wxString& GetHelpString() const;
 
     /** Gets flags as a'|' delimited string. Note that flag names are not
-        prepended with 'wxPG_PROP_'.
+        prepended with 'wxPGPropertyFlags'.
 
         @param flagsMask
         String will only be made to include flags combined by this parameter.
     */
-    wxString GetFlagsAsString( FlagType flagsMask ) const;
+    wxString GetFlagsAsString(wxPGPropertyFlags flagsMask) const;
 
     /**
         Returns position in parent's array.
@@ -1668,14 +1665,9 @@ public:
     bool HasFlag(wxPGPropertyFlags flag) const;
 
     /**
-        Returns @true if property has given flag set.
-    */
-    bool HasFlag(FlagType flag) const;
-
-    /**
         Returns @true if property has all given flags set.
     */
-    bool HasFlagsExact(FlagType flags) const;
+    bool HasFlagsExact(wxPGPropertyFlags flags) const;
 
     /**
         Returns @true if property has even one visible child.
@@ -1912,7 +1904,7 @@ public:
     void SetExpanded( bool expanded );
 
     /** Sets flags from a '|' delimited string. Note that flag names are not
-        prepended with 'wxPG_PROP_'.
+        prepended with 'wxPGPropertyFlags'.
     */
     void SetFlagsFromString( const wxString& str );
 
@@ -1971,14 +1963,14 @@ public:
         Changes what sort of parent this property is for its children.
 
         @param flag
-            Use one of the following values: ::wxPG_PROP_MISC_PARENT (for generic
-            parents), ::wxPG_PROP_CATEGORY (for categories), or
-            ::wxPG_PROP_AGGREGATE (for derived property classes with private
-            children).
+            Use one of the following values: wxPGPropertyFlags::MiscParent (for
+            generic parents), wxPGPropertyFlags::Category (for categories), or
+            wxPGPropertyFlags::Aggregate (for derived property classes with
+            private children).
 
         @remarks You generally do not need to call this function.
     */
-    void SetParentalType( int flag );
+    void SetParentalType(wxPGPropertyFlags flag);
 
     /**
         Sets property's text colour.
@@ -2157,7 +2149,7 @@ protected:
                           const wxPGCell& preparedCell,
                           const wxPGCell& srcData,
                           wxPGCellData* unmodCellData,
-                          FlagType ignoreWithFlags,
+                          wxPGPropertyFlags ignoreWithFlags,
                           bool recursively );
 
     /**
@@ -2171,7 +2163,7 @@ protected:
 
         @since 3.1.0
     */
-    void ClearCells(FlagType ignoreWithFlags, bool recursively);
+    void ClearCells(wxPGPropertyFlags ignoreWithFlags, bool recursively);
 
     /**
         Makes sure m_cells has size of column+1 (or more).

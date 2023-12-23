@@ -331,7 +331,7 @@ public:
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
 
-        if ( !p->HasAnyChild() || p->HasFlag(wxPG_PROP_AGGREGATE) )
+        if ( !p->HasAnyChild() || p->HasFlag(wxPGPropertyFlags::Aggregate) )
             return wxNullProperty;
 
         return p->Item(0);
@@ -410,12 +410,24 @@ public:
     // only properties without given flags are stored.
     // flags - Property flags to use.
     // iterFlags - Iterator flags to use. Default is everything expect private children.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use GetPropertiesWithFlag() with 'flags' argument as wxPGPropertyFlags")
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
-                                wxPGProperty::FlagType flags,
+                                int flags,
                                 bool inverse = false,
                                 int iterFlags = wxPG_ITERATE_PROPERTIES |
                                                 wxPG_ITERATE_HIDDEN |
-                                                wxPG_ITERATE_CATEGORIES) const;
+                                                wxPG_ITERATE_CATEGORIES) const
+    {
+        GetPropertiesWithFlag(targetArr, static_cast<wxPGPropertyFlags>(flags), inverse, iterFlags);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void GetPropertiesWithFlag(wxArrayPGProperty* targetArr,
+                               wxPGPropertyFlags flags,
+                               bool inverse = false,
+                               int iterFlags = wxPG_ITERATE_PROPERTIES |
+                                               wxPG_ITERATE_HIDDEN |
+                                               wxPG_ITERATE_CATEGORIES) const;
 
     // Returns value of given attribute. If none found, returns null wxVariant.
     wxVariant GetPropertyAttribute( wxPGPropArg id,
@@ -652,7 +664,7 @@ public:
     bool IsPropertyEnabled( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return !p->HasFlag(wxPG_PROP_DISABLED);
+        return !p->HasFlag(wxPGPropertyFlags::Disabled);
     }
 
     // Returns true if given property is expanded.
@@ -664,11 +676,7 @@ public:
     bool IsPropertyModified( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-#if WXWIN_COMPATIBILITY_3_0
-        return p->HasFlag(wxPG_PROP_MODIFIED)?true:false;
-#else
-        return p->HasFlag(wxPG_PROP_MODIFIED);
-#endif
+        return p->HasFlag(wxPGPropertyFlags::Modified);
     }
 
     // Returns true if property is selected.
@@ -683,7 +691,7 @@ public:
     bool IsPropertyShown( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return !p->HasFlag(wxPG_PROP_HIDDEN);
+        return !p->HasFlag(wxPGPropertyFlags::Hidden);
     }
 
     // Returns true if property value is set to unspecified.
