@@ -283,15 +283,6 @@ wxPG_ITERATE_DEFAULT = wxPG_ITERATE_NORMAL
     B = static_cast<wxPGPropertyFlags>(((FLAGS>>16) ^ wxPG_ITERATOR_MASK_OP_PARENT) & \
         wxPG_ITERATOR_MASK_OP_PARENT & 0xFFFF);
 
-
-// Macro to test if children of PWC should be iterated through
-#define wxPG_ITERATOR_PARENTEXMASK_TEST(PWC, PARENTMASK) \
-        ( \
-        !PWC->HasFlag(PARENTMASK) && \
-        PWC->HasAnyChild() \
-        )
-
-
 // Base for wxPropertyGridIterator classes.
 class WXDLLIMPEXP_PROPGRID wxPropertyGridIteratorBase
 {

@@ -108,9 +108,8 @@ void wxPropertyGridIteratorBase::Prev()
 
         property = parent->Item(index);
 
-        // Go to last children?
-        if ( property->HasAnyChild() &&
-             wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) )
+        // Go to last child if children of property should be iterated through)
+        if ( property->HasAnyChild() && !property->HasFlag(m_parentExMask) )
         {
             // First child
             property = property->Last();
@@ -143,8 +142,8 @@ void wxPropertyGridIteratorBase::Next( bool iterateChildren )
     if ( !property )
         return;
 
-    if ( property->HasAnyChild() &&
-         wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) &&
+    // Go to first child if children of property should be iterated through
+    if ( property->HasAnyChild() && !property->HasFlag(m_parentExMask) &&
          iterateChildren )
     {
         // First child
@@ -404,10 +403,9 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
 
     wxPG_ITERATOR_CREATE_MASKS(flags, wxPGPropertyFlags itemExMask, wxPGPropertyFlags parentExMask)
 
-    // First, get last child of last parent
+    // First, get last child of last parent if children of 'pwc' should be iterated through
     wxPGProperty* pwc = m_properties->Last();
-    while ( pwc->HasAnyChild() &&
-            wxPG_ITERATOR_PARENTEXMASK_TEST(pwc, parentExMask) )
+    while ( pwc->HasAnyChild() && !pwc->HasFlag(parentExMask) )
         pwc = pwc->Last();
 
     // Then, if it doesn't fit our criteria, back up until we find something that does
