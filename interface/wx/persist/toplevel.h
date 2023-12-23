@@ -21,10 +21,10 @@ public:
     /**
         Constructor.
 
-        @param topwin
+        @param tlw
             The associated window.
      */
-    wxPersistentTLW(wxTopLevelWindow *topwin);
+    wxPersistentTLW(wxTopLevelWindow *tlw);
 
     /**
         Save the current window geometry.
@@ -39,4 +39,4 @@ public:
 
 /// Overload allowing persistence adapter creation for wxTopLevelWindow-derived
 /// objects.
-wxPersistentObject *wxCreatePersistentObject(wxTopLevelWindow *book);
+wxPersistentObject *wxCreatePersistentObject(wxTopLevelWindow *tlw);
