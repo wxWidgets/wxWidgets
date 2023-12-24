@@ -852,7 +852,7 @@ void wxAuiManager::UpdateHintWindowConfig()
                                          wxFRAME_NO_TASKBAR |
                                          wxNO_BORDER);
 
-            m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
+            m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
         #elif defined(__WXMAC__)
             // Using a miniframe with float and tool styles keeps the parent
             // frame activated and highlighted as such...
