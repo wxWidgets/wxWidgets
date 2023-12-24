@@ -3298,7 +3298,7 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
         return;
     }
 
-    m_hintFadeAmt += 4;
+    m_hintFadeAmt++;
     m_hintWnd->SetTransparent(m_hintFadeAmt);
 }
 
@@ -3339,7 +3339,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         {
             // start fade in timer
             m_hintFadeTimer.SetOwner(this);
-            m_hintFadeTimer.Start(5);
+            m_hintFadeTimer.Start(15);
             Bind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
                  m_hintFadeTimer.GetId());
         }
