@@ -796,7 +796,6 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     for (i = tabOffset; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
-        wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
 
         rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
 
@@ -809,7 +808,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
                             page.caption,
                             page.bitmap,
                             page.active,
-                            tab_button.curState,
+                            GetCloseButtonState(page),
                             &x_extent);
 
         offset += x_extent;
