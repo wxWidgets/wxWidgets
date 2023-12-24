@@ -485,8 +485,6 @@ public:
     virtual void ShowHint(const wxRect& rect);
     virtual void HideHint();
 
-    void OnHintActivate(wxActivateEvent& event);
-
 public:
 
     // deprecated -- please use SetManagedWindow()

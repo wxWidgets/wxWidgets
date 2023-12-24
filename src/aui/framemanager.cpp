@@ -851,7 +851,14 @@ void wxAuiManager::UpdateHintWindowConfig()
                                      wxFRAME_NO_TASKBAR |
                                      wxNO_BORDER);
         #ifdef __WXMAC__
-            m_hintWnd->Bind(wxEVT_ACTIVATE, &wxAuiManager::OnHintActivate, this);
+            // Do nothing so this event isn't handled in the base handlers.
+
+            // Letting the hint window activate without this handler can lead to
+            // weird behaviour on Mac where the menu is switched out to the top
+            // window's menu in MDI applications when it shouldn't be. So since
+            // we don't want user interaction with the hint window anyway, we just
+            // prevent it from activating here.
+            m_hintWnd->Bind(wxEVT_ACTIVATE, [](wxActivateEvent&) {});
         #endif
 
         m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
@@ -3413,18 +3420,6 @@ void wxAuiManager::HideHint()
         m_lastHint = wxRect();
     }
 }
-
-void wxAuiManager::OnHintActivate(wxActivateEvent& WXUNUSED(event))
-{
-    // Do nothing so this event isn't handled in the base handlers.
-
-    // Letting the hint window activate without this handler can lead to
-    // weird behaviour on Mac where the menu is switched out to the top
-    // window's menu in MDI applications when it shouldn't be. So since
-    // we don't want user interaction with the hint window anyway, we just
-    // prevent it from activating here.
-}
-
 
 
 void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
