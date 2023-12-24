@@ -134,7 +134,9 @@ enum wxAuiManagerOption
            appearing partially transparent hint.
     @style{wxAUI_MGR_RECTANGLE_HINT}
            The possible location for docking is indicated by a rectangular
-           outline.
+           outline. Note that this flag doesn't work, i.e. doesn't show any
+           hint in wxGTK and wxOSX, please use one of the hint flags above
+           instead.
     @style{wxAUI_MGR_HINT_FADE}
            The translucent area where the pane could be docked appears gradually.
     @style{wxAUI_MGR_NO_VENETIAN_BLINDS_FADE}
