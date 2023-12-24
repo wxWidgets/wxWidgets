@@ -3314,7 +3314,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         m_hintFadeAmt = m_hintFadeMax;
 
         if ((m_flags & wxAUI_MGR_HINT_FADE)
-            && !((wxDynamicCast(m_hintWnd, wxPseudoTransparentFrame)) &&
+            && !((m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) &&
                  (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
             )
             m_hintFadeAmt = 0;
