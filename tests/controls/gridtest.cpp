@@ -537,9 +537,13 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     if ( !EnableUITests() )
         return;
 
-    SECTION("Default") {}
-    SECTION("Native header") { m_grid->UseNativeColHeader(); }
-    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+    wxString desc;
+
+    SECTION("Default") { desc = "default header"; }
+    SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
+
+    INFO("Using " << desc);
 
     EventCounter lclick(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
     EventCounter ldclick(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
@@ -599,9 +603,13 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
     if ( !EnableUITests() )
         return;
 
-    SECTION("Default") {}
-    SECTION("Native header") { m_grid->UseNativeColHeader(); }
-    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+    wxString desc;
+
+    SECTION("Default") { desc = "default header"; }
+    SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
+
+    INFO("Using " << desc);
 
     m_grid->SetSortingColumn(0);
 
@@ -1057,8 +1065,12 @@ TEST_CASE_METHOD(GridTestCase, "Grid::AddRowCol", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::DeleteAndAddRowCol", "[grid]")
 {
-    SECTION("Default") {}
-    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+    wxString desc;
+
+    SECTION("Default") { desc = "default header"; }
+    SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
+
+    INFO("Using " << desc);
 
     CHECK(m_grid->GetNumberRows() == 10);
     CHECK(m_grid->GetNumberCols() == 2);
@@ -1089,9 +1101,13 @@ TEST_CASE_METHOD(GridTestCase, "Grid::DeleteAndAddRowCol", "[grid]")
 
 TEST_CASE_METHOD(GridTestCase, "Grid::ColumnOrder", "[grid]")
 {
-    SECTION("Default") {}
-    SECTION("Native header") { m_grid->UseNativeColHeader(); }
-    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+    wxString desc;
+
+    SECTION("Default") { desc = "default header"; }
+    SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
+
+    INFO("Using " << desc);
 
     m_grid->AppendCols(2);
 
@@ -1504,8 +1520,12 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ResizeScrolledHeader", "[grid]")
 
     wxSKIP_AUTOMATIC_TEST_IF_GTK2();
 
-    SECTION("Default") {}
-    SECTION("Native header") { m_grid->UseNativeColHeader(); }
+    wxString desc;
+
+    SECTION("Default") { desc = "default header"; }
+    SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
+
+    INFO("Using " << desc);
 
     int const startwidth = m_grid->GetColSize(0);
     int const draglength = 100;
@@ -1555,7 +1575,9 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
 
     wxSKIP_AUTOMATIC_TEST_IF_GTK2();
 
-    SECTION("Default") {}
+    wxString desc;
+
+    SECTION("Default") { desc = "default header"; }
     SECTION("Native header")
     {
         // For some unknown reason, this test fails under AppVeyor even though
@@ -1564,8 +1586,11 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ColumnMinWidth", "[grid]")
         if ( IsAutomaticTest() )
             return;
 
+        desc = "native header";
         m_grid->UseNativeColHeader();
     }
+
+    INFO("Using " << desc);
 
     int const startminwidth = m_grid->GetColMinimalAcceptableWidth();
     m_grid->SetColMinimalAcceptableWidth(startminwidth*2);
@@ -1612,9 +1637,13 @@ void GridTestCase::CheckFirstColAutoSize(int expected)
 
 TEST_CASE_METHOD(GridTestCase, "Grid::AutoSizeColumn", "[grid]")
 {
-    SECTION("Default") {}
-    SECTION("Native header") { m_grid->UseNativeColHeader(); }
-    SECTION("Native labels") { m_grid->SetUseNativeColLabels(); }
+    wxString desc;
+
+    SECTION("Default") { desc = "default header"; }
+    SECTION("Native header") { desc = "native header"; m_grid->UseNativeColHeader(); }
+    SECTION("Native labels") { desc = "native labels"; m_grid->SetUseNativeColLabels(); }
+
+    INFO("Using " << desc);
 
     // Hardcoded extra margin for the columns used in grid.cpp.
     const int margin = m_grid->FromDIP(10);
