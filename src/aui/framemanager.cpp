@@ -3311,13 +3311,15 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             return;
         m_lastHint = rect;
 
-        m_hintFadeAmt = m_hintFadeMax;
-
+        // Decide if we want to fade in the hint and set it to the end value if
+        // we don't.
         if ((m_flags & wxAUI_MGR_HINT_FADE)
             && !((m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) &&
                  (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
             )
             m_hintFadeAmt = 0;
+        else
+            m_hintFadeAmt = m_hintFadeMax;
 
         m_hintWnd->SetSize(rect);
         m_hintWnd->SetTransparent(m_hintFadeAmt);
