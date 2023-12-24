@@ -194,6 +194,41 @@ void FitGridToMulticell(TestableGrid* grid, const Multicell& multi)
     }
 }
 
+// Function used to wait until the given predicate becomes true or timeout
+// expires or the mouse moves away, in which case the test is abandoned.
+bool
+WaitForEventAt(
+    const wxPoint& pos,
+    const char* what,
+    const std::function<bool ()>& pred,
+    int timeout = 500
+)
+{
+    wxStopWatch sw;
+    for ( ;; )
+    {
+        wxYield();
+
+        if ( pred() )
+            break;
+
+        if ( wxGetMousePosition() != pos )
+        {
+            WARN("Mouse unexpectedly moved to " << wxGetMousePosition()
+                    << " from the expected " << pos << "; skipping test");
+            return false;
+        }
+
+        if ( sw.Time() > timeout )
+        {
+            FAIL("Timed out waiting for " << what);
+            break; // unreachable
+        }
+    }
+
+    return true;
+}
+
 } // anonymous namespace
 
 namespace Catch
@@ -559,29 +594,32 @@ TEST_CASE_METHOD(GridTestCase, "Grid::LabelClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    WaitFor("mouse click to be processed", [&]() {
-        return lclick.GetCount() != 0;
-    });
+    if ( !WaitForEventAt(pos, "mouse click to be processed", [&]() {
+            return lclick.GetCount() != 0;
+        }) )
+        return;
     CHECK(lclick.GetCount() == 1);
 
     sim.MouseDblClick();
-    WaitFor("mouse double click to be processed", [&]() {
-        return ldclick.GetCount() != 0;
-    });
+    if ( !WaitForEventAt(pos, "mouse double click to be processed", [&]() {
+            return ldclick.GetCount() != 0;
+        }) )
+        return;
     CHECK(ldclick.GetCount() == 1);
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
-    WaitFor("mouse right click to be processed", [&]() {
-        return rclick.GetCount() != 0;
-    });
-
+    if ( !WaitForEventAt(pos, "mouse right click to be processed", [&]() {
+            return rclick.GetCount() != 0;
+        }) )
+        return;
     CHECK(rclick.GetCount() == 1);
     rclick.Clear();
 
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
-    WaitFor("mouse right double click to be processed", [&]() {
-        return rclick.GetCount() != 0;
-    });
+    if ( !WaitForEventAt(pos, "mouse right double click to be processed", [&]() {
+            return rclick.GetCount() != 0;
+        }) )
+        return;
 
     if ( m_grid->IsUsingNativeHeader() )
     {
