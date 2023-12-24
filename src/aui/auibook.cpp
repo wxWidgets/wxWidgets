@@ -400,6 +400,15 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 
 
 
+int wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
+{
+    // determine if a close button is on this tab
+    return ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
+            ? wxAUI_BUTTON_STATE_NORMAL
+            : wxAUI_BUTTON_STATE_HIDDEN;
+}
+
 
 // Render() renders the tab catalog to the specified DC
 // It is a virtual function and can be overridden to
@@ -446,24 +455,13 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
 
-        // determine if a close button is on this tab
-        bool close_button = false;
-        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
-        {
-            close_button = true;
-        }
-
-
         int x_extent = 0;
         wxSize size = m_art->GetTabSize(dc,
                             wnd,
                             page.caption,
                             page.bitmap,
                             page.active,
-                            close_button ?
-                              wxAUI_BUTTON_STATE_NORMAL :
-                              wxAUI_BUTTON_STATE_HIDDEN,
+                            GetCloseButtonState(page),
                             &x_extent);
 
         if (i+1 < page_count)

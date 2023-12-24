@@ -189,6 +189,9 @@ protected:
     wxRect m_rect;
     size_t m_tabOffset;
     unsigned int m_flags;
+
+private:
+    int GetCloseButtonState(const wxAuiNotebookPage& page) const;
 };
 
 
