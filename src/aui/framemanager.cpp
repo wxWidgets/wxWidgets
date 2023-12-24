@@ -852,7 +852,8 @@ void wxAuiManager::UpdateHintWindowConfig()
                                          wxFRAME_NO_TASKBAR |
                                          wxNO_BORDER);
 
-            m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
+            // We can set the background of the frame itself directly.
+            auto bgWnd = m_hintWnd;
         #elif defined(__WXMAC__)
             // Using a miniframe with float and tool styles keeps the parent
             // frame activated and highlighted as such...
@@ -863,15 +864,10 @@ void wxAuiManager::UpdateHintWindowConfig()
             m_hintWnd->Bind(wxEVT_ACTIVATE, &wxAuiManager::OnHintActivate, this);
 
             // Can't set the bg colour of a Frame in wxMac
-            wxPanel* p = new wxPanel(m_hintWnd);
-
-            // The default wxSYS_COLOUR_ACTIVECAPTION colour is a light silver
-            // color that is really hard to see, especially transparent.
-            // Until a better system color is decided upon we'll just use
-            // blue.
-            p->SetBackgroundColour(*wxBLUE);
+            wxPanel* bgWnd = new wxPanel(m_hintWnd);
         #endif
 
+        bgWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
     }
     else
     {
