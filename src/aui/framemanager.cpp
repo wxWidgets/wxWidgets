@@ -851,9 +851,6 @@ void wxAuiManager::UpdateHintWindowConfig()
                                          wxFRAME_FLOAT_ON_PARENT |
                                          wxFRAME_NO_TASKBAR |
                                          wxNO_BORDER);
-
-            // We can set the background of the frame itself directly.
-            auto bgWnd = m_hintWnd;
         #else // Mac
             // Using a miniframe with float and tool styles keeps the parent
             // frame activated and highlighted as such...
@@ -862,12 +859,9 @@ void wxAuiManager::UpdateHintWindowConfig()
                                          wxFRAME_FLOAT_ON_PARENT
                                          | wxFRAME_TOOL_WINDOW );
             m_hintWnd->Bind(wxEVT_ACTIVATE, &wxAuiManager::OnHintActivate, this);
-
-            // Can't set the bg colour of a Frame in wxMac
-            wxPanel* bgWnd = new wxPanel(m_hintWnd);
         #endif
 
-        bgWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
+        m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
     }
     else
     {
