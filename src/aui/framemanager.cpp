@@ -844,20 +844,13 @@ void wxAuiManager::UpdateHintWindowConfig()
     if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) && can_do_transparent)
     {
         // Make a window to use for a transparent hint
-        #ifndef __WXMAC__
-            m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
-                                     wxDefaultPosition, wxSize(1,1),
-                                         wxFRAME_TOOL_WINDOW |
-                                         wxFRAME_FLOAT_ON_PARENT |
-                                         wxFRAME_NO_TASKBAR |
-                                         wxNO_BORDER);
-        #else // Mac
-            // Using a miniframe with float and tool styles keeps the parent
-            // frame activated and highlighted as such...
-            m_hintWnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString,
-                                         wxDefaultPosition, wxSize(1,1),
-                                         wxFRAME_FLOAT_ON_PARENT
-                                         | wxFRAME_TOOL_WINDOW );
+        m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
+                                 wxDefaultPosition, wxSize(1,1),
+                                     wxFRAME_TOOL_WINDOW |
+                                     wxFRAME_FLOAT_ON_PARENT |
+                                     wxFRAME_NO_TASKBAR |
+                                     wxNO_BORDER);
+        #ifdef __WXMAC__
             m_hintWnd->Bind(wxEVT_ACTIVATE, &wxAuiManager::OnHintActivate, this);
         #endif
 
