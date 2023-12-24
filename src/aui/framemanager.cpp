@@ -844,7 +844,7 @@ void wxAuiManager::UpdateHintWindowConfig()
     if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) && can_do_transparent)
     {
         // Make a window to use for a transparent hint
-        #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
+        #ifndef __WXMAC__
             m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
                                      wxDefaultPosition, wxSize(1,1),
                                          wxFRAME_TOOL_WINDOW |
@@ -854,7 +854,7 @@ void wxAuiManager::UpdateHintWindowConfig()
 
             // We can set the background of the frame itself directly.
             auto bgWnd = m_hintWnd;
-        #elif defined(__WXMAC__)
+        #else // Mac
             // Using a miniframe with float and tool styles keeps the parent
             // frame activated and highlighted as such...
             m_hintWnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString,
