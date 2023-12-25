@@ -1907,10 +1907,8 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     int gripperSize = m_art->GetElementSize(wxAUI_TBART_GRIPPER_SIZE);
     if (gripperSize > 0 && m_gripperVisible)
     {
-        if (horizontal)
-            m_gripperSizerItem = sizer->Add(gripperSize, 1, 0, wxEXPAND);
-        else
-            m_gripperSizerItem = sizer->Add(1, gripperSize, 0, wxEXPAND);
+        m_gripperSizerItem = sizer->AddSpacer(gripperSize);
+        m_gripperSizerItem->SetFlag(wxEXPAND);
     }
     else
     {
@@ -1920,10 +1918,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add "left" padding
     if (m_leftPadding > 0)
     {
-        if (horizontal)
-            sizer->Add(m_leftPadding, 1);
-        else
-            sizer->Add(1, m_leftPadding);
+        sizer->AddSpacer(m_leftPadding);
     }
 
     size_t i, count;
@@ -1969,10 +1964,8 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
             case wxITEM_SEPARATOR:
             {
-                if (horizontal)
-                    sizerItem = sizer->Add(separatorSize, 1, 0, wxEXPAND);
-                else
-                    sizerItem = sizer->Add(1, separatorSize, 0, wxEXPAND);
+                sizerItem = sizer->AddSpacer(separatorSize);
+                sizerItem->SetFlag(wxEXPAND);
 
                 // add tool packing
                 if (i+1 < count)
@@ -2039,10 +2032,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add "right" padding
     if (m_rightPadding > 0)
     {
-        if (horizontal)
-            sizer->Add(m_rightPadding, 1);
-        else
-            sizer->Add(1, m_rightPadding);
+        sizer->AddSpacer(m_rightPadding);
     }
 
     // add drop down area
@@ -2053,10 +2043,8 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
         int overflow_size = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
         if (overflow_size > 0 && m_overflowVisible)
         {
-            if (horizontal)
-                m_overflowSizerItem = sizer->Add(overflow_size, 1, 0, wxEXPAND);
-            else
-                m_overflowSizerItem = sizer->Add(1, overflow_size, 0, wxEXPAND);
+            m_overflowSizerItem = sizer->AddSpacer(overflow_size);
+            m_overflowSizerItem->SetFlag(wxEXPAND);
             m_overflowSizerItem->SetMinSize(m_overflowSizerItem->GetSize());
         }
         else
@@ -2072,10 +2060,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add "top" padding
     if (m_topPadding > 0)
     {
-        if (horizontal)
-            outside_sizer->Add(1, m_topPadding);
-        else
-            outside_sizer->Add(m_topPadding, 1);
+        outside_sizer->AddSpacer(m_topPadding);
     }
 
     // add the sizer that contains all of the toolbar elements
@@ -2084,10 +2069,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add "bottom" padding
     if (m_bottomPadding > 0)
     {
-        if (horizontal)
-            outside_sizer->Add(1, m_bottomPadding);
-        else
-            outside_sizer->Add(m_bottomPadding, 1);
+        outside_sizer->AddSpacer(m_bottomPadding);
     }
 
     m_sizer = outside_sizer;
