@@ -1893,24 +1893,19 @@ bool wxAuiToolBar::Realize()
         size = m_vertHintSize;
     }
 
-    // set control size
+    // Remember our minimum size.
     m_minWidth = size.x;
     m_minHeight = size.y;
 
+    // And set control size if we are not forbidden from doing it by the use of
+    // a special flag and if it did actually change.
     wxSize curSize = GetClientSize();
 
-    if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0)
+    if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0 && (size != curSize))
     {
-        if (size != curSize)
-        {
-            SetClientSize(size);
-        }
-        else
-        {
-            m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
-        }
+        SetClientSize(size);
     }
-    else
+    else // Don't change the size but let the sizer know about available size.
     {
         m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
     }
