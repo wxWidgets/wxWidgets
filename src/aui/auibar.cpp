@@ -1875,19 +1875,24 @@ bool wxAuiToolBar::Realize()
     if (!dc.IsOk())
         return false;
 
-    // calculate hint sizes for both horizontal and vertical orientations and
+    // calculate hint sizes for both horizontal and vertical orientations if we
+    // can use them, i.e. if the toolbar isn't locked into just one of them, and
     // store the size appropriate for the current orientation in this variable.
     wxSize size;
     if (m_orientation == wxHORIZONTAL)
     {
-        m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
+        if (!HasFlag(wxAUI_TB_HORIZONTAL))
+            m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
+
         m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
 
         size = m_horzHintSize;
     }
     else
     {
-        m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
+        if (!HasFlag(wxAUI_TB_VERTICAL))
+            m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
+
         m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
 
         size = m_vertHintSize;
