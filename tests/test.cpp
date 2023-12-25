@@ -364,10 +364,10 @@ public:
         return !wxGetEnv(wxASCII_STR("WX_TEST_DISABLE_GUI"), nullptr);
     }
 
-    virtual bool Initialize(int& argc, wxChar **argv) override
+    virtual bool Initialize(int& argcIn, wxChar **argvIn) override
     {
-        return IsGUIEnabled() ? wxApp::Initialize(argc, argv)
-                              : wxAppConsole::Initialize(argc, argv);
+        return IsGUIEnabled() ? wxApp::Initialize(argcIn, argvIn)
+                              : wxAppConsole::Initialize(argcIn, argvIn);
     }
 
     virtual bool OnInitGui() override
