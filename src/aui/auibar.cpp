@@ -1879,20 +1879,20 @@ bool wxAuiToolBar::Realize()
     // in the order that leaves toolbar in correct final state
     if (m_orientation == wxHORIZONTAL)
     {
-        m_vertHintSize = RealizeHelper(dc, false);
-        m_horzHintSize = RealizeHelper(dc, true);
+        m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
+        m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
     }
     else
     {
-        m_horzHintSize = RealizeHelper(dc, true);
-        m_vertHintSize = RealizeHelper(dc, false);
+        m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
+        m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
     }
 
     Refresh(false);
     return true;
 }
 
-wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
+wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, wxOrientation orientation)
 {
     // Remove old sizer before adding any controls in this tool bar, which are
     // elements of this sizer, to the new sizer below.
@@ -1900,7 +1900,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     m_sizer = nullptr;
 
     // create the new sizer to add toolbar elements to
-    wxBoxSizer* sizer = new wxBoxSizer(horizontal ? wxHORIZONTAL : wxVERTICAL);
+    wxBoxSizer* sizer = new wxBoxSizer(orientation);
 
     // add gripper area
     int separatorSize = m_art->GetElementSize(wxAUI_TBART_SEPARATOR_SIZE);
@@ -2055,7 +2055,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
 
     // the outside sizer helps us apply the "top" and "bottom" padding
-    wxBoxSizer* outside_sizer = new wxBoxSizer(horizontal ? wxVERTICAL : wxHORIZONTAL);
+    wxBoxSizer* outside_sizer = new wxBoxSizer(orientation ^ wxBOTH);
 
     // add "top" padding
     if (m_topPadding > 0)

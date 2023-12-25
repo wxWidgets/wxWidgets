@@ -704,7 +704,7 @@ private:
     // Common part of OnLeaveWindow() and OnCaptureLost().
     void DoResetMouseState();
 
-    wxSize RealizeHelper(wxClientDC& dc, bool horizontal);
+    wxSize RealizeHelper(wxClientDC& dc, wxOrientation orientation);
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);
