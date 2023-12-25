@@ -1877,37 +1877,22 @@ bool wxAuiToolBar::Realize()
 
     // calculate hint sizes for both horizontal and vertical
     // in the order that leaves toolbar in correct final state
-    bool retval = false;
     if (m_orientation == wxHORIZONTAL)
     {
-        if (RealizeHelper(dc, false))
-        {
-            m_vertHintSize = GetSize();
-            if (RealizeHelper(dc, true))
-            {
-                m_horzHintSize = GetSize();
-                retval = true;
-            }
-        }
+        m_vertHintSize = RealizeHelper(dc, false);
+        m_horzHintSize = RealizeHelper(dc, true);
     }
     else
     {
-        if (RealizeHelper(dc, true))
-        {
-            m_horzHintSize = GetSize();
-            if (RealizeHelper(dc, false))
-            {
-                m_vertHintSize = GetSize();
-                retval = true;
-            }
-        }
+        m_horzHintSize = RealizeHelper(dc, true);
+        m_vertHintSize = RealizeHelper(dc, false);
     }
 
     Refresh(false);
-    return retval;
+    return true;
 }
 
-bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
+wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 {
     // Remove old sizer before adding any controls in this tool bar, which are
     // elements of this sizer, to the new sizer below.
@@ -2149,7 +2134,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
         m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
     }
 
-    return true;
+    return GetSize();
 }
 
 int wxAuiToolBar::GetOverflowState() const
