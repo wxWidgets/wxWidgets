@@ -2097,9 +2097,10 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, wxOrientation orientation)
     m_minWidth = size.x;
     m_minHeight = size.y;
 
+    wxSize curSize = GetClientSize();
+
     if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0)
     {
-        wxSize curSize = GetClientSize();
         wxSize new_size = GetMinSize();
         if (new_size != curSize)
         {
@@ -2112,7 +2113,6 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, wxOrientation orientation)
     }
     else
     {
-        wxSize curSize = GetClientSize();
         m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
     }
 
