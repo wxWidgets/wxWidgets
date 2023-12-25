@@ -474,13 +474,18 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
-
+    if ( !WaitForEventAt(point, "mouse click to be processed", [&]() {
+            return lclick.GetCount() != 0;
+        }) )
+        return;
     CHECK(lclick.GetCount() == 1);
     lclick.Clear();
 
     sim.MouseDblClick();
-    wxYield();
+    if ( !WaitForEventAt(point, "double click to be processed", [&]() {
+            return lclick.GetCount() != 0 || ldclick.GetCount() != 0;
+        }) )
+        return;
 
     //A double click event sends a single click event first
     //test to ensure this still happens in the future
@@ -488,13 +493,18 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellClick", "[grid]")
     CHECK(ldclick.GetCount() == 1);
 
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
-
+    if ( !WaitForEventAt(point, "right click to be processed", [&]() {
+            return rclick.GetCount() != 0;
+        }) )
+        return;
     CHECK(rclick.GetCount() == 1);
     rclick.Clear();
 
     sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
+    if ( !WaitForEventAt(point, "right double click to be processed", [&]() {
+            return rclick.GetCount() != 0 || rdclick.GetCount() != 0;
+        }) )
+        return;
 
     CHECK(rclick.GetCount() == 1);
     CHECK(rdclick.GetCount() == 1);
