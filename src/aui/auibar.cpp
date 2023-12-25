@@ -1875,17 +1875,44 @@ bool wxAuiToolBar::Realize()
     if (!dc.IsOk())
         return false;
 
-    // calculate hint sizes for both horizontal and vertical
-    // in the order that leaves toolbar in correct final state
+    // calculate hint sizes for both horizontal and vertical orientations and
+    // store the size appropriate for the current orientation in this variable.
+    wxSize size;
     if (m_orientation == wxHORIZONTAL)
     {
         m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
         m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
+
+        size = m_horzHintSize;
     }
     else
     {
         m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
         m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
+
+        size = m_vertHintSize;
+    }
+
+    // set control size
+    m_minWidth = size.x;
+    m_minHeight = size.y;
+
+    wxSize curSize = GetClientSize();
+
+    if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0)
+    {
+        if (size != curSize)
+        {
+            SetClientSize(size);
+        }
+        else
+        {
+            m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
+        }
+    }
+    else
+    {
+        m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
     }
 
     Refresh(false);
@@ -2092,31 +2119,7 @@ wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, wxOrientation orientation)
             item.m_sizerItem->SetMinSize(item.m_minSize);
     }
 
-    // set control size
-    wxSize size = m_sizer->GetMinSize();
-    m_minWidth = size.x;
-    m_minHeight = size.y;
-
-    wxSize curSize = GetClientSize();
-
-    if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0)
-    {
-        wxSize new_size = GetMinSize();
-        if (new_size != curSize)
-        {
-            SetClientSize(new_size);
-        }
-        else
-        {
-            m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
-        }
-    }
-    else
-    {
-        m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
-    }
-
-    return GetSize();
+    return m_sizer->GetMinSize();
 }
 
 int wxAuiToolBar::GetOverflowState() const
