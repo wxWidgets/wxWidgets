@@ -662,10 +662,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SortClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    WaitFor("mouse click to be processed", [&]() {
-        return sort.GetCount() != 0;
-    });
-
+    if ( !WaitForEventAt(pos, "mouse click to be processed", [&]() {
+            return sort.GetCount() != 0;
+        }) )
+        return;
     CHECK(sort.GetCount() == 1);
 #endif
 }
