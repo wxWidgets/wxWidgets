@@ -1412,6 +1412,8 @@ void wxAuiToolBar::SetOrientation(int orientation)
     {
         m_orientation = wxOrientation(orientation);
         SetArtFlags();
+
+        Realize();
     }
 }
 
@@ -2374,7 +2376,7 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
             if (newOrientation != m_orientation)
             {
                 SetOrientation(newOrientation);
-                Realize();
+
                 if (newOrientation == wxHORIZONTAL)
                 {
                     pane.best_size = GetHintSize(wxAUI_DOCK_TOP);
