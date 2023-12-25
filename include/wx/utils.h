@@ -763,19 +763,24 @@ void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
         wxDisplayType type;
     };
     WXDLLIMPEXP_CORE wxDisplayInfo wxGetDisplayInfo();
+
+    inline struct _XDisplay *wxGetX11Display()
+    {
+        const auto& info = wxGetDisplayInfo();
+        return info.type == wxDisplayX11 ? (_XDisplay*)info.dpy : nullptr;
+    }
 #endif
 
 #ifdef __X__
     WXDLLIMPEXP_CORE WXDisplay *wxGetDisplay();
     WXDLLIMPEXP_CORE bool wxSetDisplay(const wxString& display_name);
     WXDLLIMPEXP_CORE wxString wxGetDisplayName();
-#endif // X or GTK+
 
-// use this function instead of the functions above in implementation code
-inline struct _XDisplay *wxGetX11Display()
-{
-    return (_XDisplay *)wxGetDisplay();
-}
+    inline struct _XDisplay *wxGetX11Display()
+    {
+        return (_XDisplay *)wxGetDisplay();
+    }
+#endif // X
 
 #endif // X11 || wxGTK
 
