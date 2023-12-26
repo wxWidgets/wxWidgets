@@ -174,6 +174,11 @@ wxDCImpl *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *owner, const wxPrintD
 }
 #endif
 
+bool wxNativeDCFactory::CanDrawUsingClientDC(const wxWindow* window) const
+{
+    return wxClientDCImpl::CanBeUsedForDrawing(window);
+}
+
 //-----------------------------------------------------------------------------
 // wxWindowDC
 //-----------------------------------------------------------------------------
@@ -194,6 +199,12 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxClientDC, wxWindowDC);
 wxClientDC::wxClientDC(wxWindow *win)
           : wxWindowDC(wxDCFactory::Get()->CreateClientDC(this, win))
 {
+}
+
+/* static */
+bool wxClientDC::CanBeUsedForDrawing(const wxWindow* window)
+{
+    return wxDCFactory::Get()->CanDrawUsingClientDC(window);
 }
 
 //-----------------------------------------------------------------------------

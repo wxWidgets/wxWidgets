@@ -54,6 +54,9 @@ public:
     wxClientDCImpl( wxDC *owner, wxWindow *window );
     virtual ~wxClientDCImpl();
 
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return false; }
+
 private:
     wxDECLARE_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
