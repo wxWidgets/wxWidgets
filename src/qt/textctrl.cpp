@@ -367,6 +367,9 @@ public:
 
         if ( flags & wxTE_RICH || flags & wxTE_RICH2 )
             m_edit->setAcceptRichText(true);
+
+        if ( flags & wxTE_DONTWRAP )
+            m_edit->setLineWrapMode(QTextEdit::NoWrap);
     }
 
 private:
@@ -668,6 +671,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( style & wxTE_MULTILINE )
     {
         m_qtEdit = new wxQtMultiLineEdit(new wxQtTextEdit(parent, this));
+
+        if ( style & wxTE_NO_VSCROLL )
+            style &= ~wxVSCROLL;
+        else
+            style |= wxVSCROLL;
     }
     else
     {
