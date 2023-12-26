@@ -64,6 +64,8 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
     #include "wx/msw/dc.h"
 #endif
 
+#include <memory>
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
 wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 
@@ -3911,7 +3913,7 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-    wxClientDC* client_dc = nullptr;
+    std::unique_ptr<wxClientDC> client_dc;
 
     // figure out which dc to use; if one
     // has been specified, use it, otherwise
@@ -3924,8 +3926,8 @@ void wxAuiManager::Repaint(wxDC* dc)
         m_frame->Update() ;
         return ;
 #else
-        client_dc = new wxClientDC(m_frame);
-        dc = client_dc;
+        client_dc.reset(new wxClientDC(m_frame));
+        dc = client_dc.get();
 #endif
     }
 
@@ -3940,10 +3942,6 @@ void wxAuiManager::Repaint(wxDC* dc)
 
     // render all the items
     Render(dc);
-
-    // if we created a client_dc, delete it
-    if (client_dc)
-        delete client_dc;
 }
 
 void wxAuiManager::OnDestroy(wxWindowDestroyEvent& event)
