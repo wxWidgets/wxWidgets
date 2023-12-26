@@ -69,6 +69,11 @@ wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
 #endif // wxMSW
 wxEND_EVENT_TABLE()
 
+bool wxSplitterWindow::AlwaysUsesLiveUpdate() const
+{
+    return !wxClientDC::CanBeUsedForDrawing(this);
+}
+
 static bool IsLive(wxSplitterWindow* wnd)
 {
     // with wxSP_LIVE_UPDATE style the splitter windows are always resized
@@ -76,10 +81,7 @@ static bool IsLive(wxSplitterWindow* wnd)
     // draw the sash at the new position but only resize the windows when the
     // dragging is finished -- but drawing the sash is done using wxClientDC,
     // so check if we can use it and always use live resizing if we can't
-    if ( !wxClientDC::CanBeUsedForDrawing(wnd) )
-        return true;
-
-    return wnd->HasFlag(wxSP_LIVE_UPDATE);
+    return wnd->AlwaysUsesLiveUpdate() || wnd->HasFlag(wxSP_LIVE_UPDATE);
 }
 
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
