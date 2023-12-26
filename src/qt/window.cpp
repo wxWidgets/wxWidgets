@@ -1284,7 +1284,7 @@ bool wxWindowQt::SetBackgroundColour(const wxColour& colour)
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
-    QWidget *widget = GetHandle();
+    QWidget *widget = QtGetParentWidget();
     wxQtChangeRoleColour(widget->backgroundRole(), widget, colour);
 
     return true;
@@ -1295,7 +1295,7 @@ bool wxWindowQt::SetForegroundColour(const wxColour& colour)
     if (!wxWindowBase::SetForegroundColour(colour))
         return false;
 
-    QWidget *widget = GetHandle();
+    QWidget *widget = QtGetParentWidget();
     wxQtChangeRoleColour(widget->foregroundRole(), widget, colour);
 
     return true;
