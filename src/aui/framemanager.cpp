@@ -3911,27 +3911,26 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
-    // We can't use wxClientDC in these ports.
-    if ( dc == nullptr )
-    {
-        m_frame->Refresh() ;
-        m_frame->Update() ;
-        return ;
-    }
-#endif
-    int w, h;
-    m_frame->GetClientSize(&w, &h);
+    wxClientDC* client_dc = nullptr;
 
     // figure out which dc to use; if one
     // has been specified, use it, otherwise
     // make a client dc
-    wxClientDC* client_dc = nullptr;
     if (!dc)
     {
+#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
+        // We can't use wxClientDC in these ports.
+        m_frame->Refresh() ;
+        m_frame->Update() ;
+        return ;
+#else
         client_dc = new wxClientDC(m_frame);
         dc = client_dc;
+#endif
     }
+
+    int w, h;
+    m_frame->GetClientSize(&w, &h);
 
     // if the frame has a toolbar, the client area
     // origin will not be (0,0).
