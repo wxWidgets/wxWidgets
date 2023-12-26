@@ -45,12 +45,14 @@ enum wxAuiManagerOption
     wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
     /// When a docked pane is resized, its content is refreshed in live (instead of moving
     /// the border alone and refreshing the content at the end).
+    /// Since wxWidgets 3.3.0 this flag is included in the default flags.
     wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
     /// Default behaviour.
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
                         wxAUI_MGR_HINT_FADE |
-                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE
+                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE |
+                        wxAUI_MGR_LIVE_RESIZE
 };
 
 /**
@@ -142,7 +144,11 @@ enum wxAuiManagerOption
            docking hint immediately.
     @style{wxAUI_MGR_LIVE_RESIZE}
            When a docked pane is resized, its content is refreshed in live (instead of moving
-           the border alone and refreshing the content at the end).
+           the border alone and refreshing the content at the end). Note that
+           this flag is included in wxAUI_MGR_DEFAULT and so needs to be
+           explicitly turned off if you don't need. Also note that it is
+           always enabled in wxGTK3 and wxOSX ports as non-live resizing is not
+           implemented in them.
     @style{wxAUI_MGR_DEFAULT}
            Default behaviour, combines: wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT |
            wxAUI_MGR_HINT_FADE | wxAUI_MGR_NO_VENETIAN_BLINDS_FADE.

@@ -51,7 +51,8 @@ enum wxAuiManagerOption
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
                         wxAUI_MGR_HINT_FADE |
-                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE
+                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE |
+                        wxAUI_MGR_LIVE_RESIZE
 };
 
 
