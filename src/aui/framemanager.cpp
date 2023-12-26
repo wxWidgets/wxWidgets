@@ -4084,7 +4084,14 @@ void wxAuiManager::UpdateButtonOnScreen(wxAuiDockUIPart* button_ui_part,
             state = wxAUI_BUTTON_STATE_HOVER;
     }
 
-    // now repaint the button with hover state
+    // now repaint the button with hover state -- or everything if we can't
+    // repaint just it
+    if ( !wxClientDC::CanBeUsedForDrawing(m_frame) )
+    {
+        m_frame->Refresh();
+        m_frame->Update();
+    }
+
     wxClientDC cdc(m_frame);
 
     // if the frame has a toolbar, the client area
