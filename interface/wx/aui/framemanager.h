@@ -219,12 +219,16 @@ public:
         If this function returns true, ::wxAUI_MGR_LIVE_RESIZE flag is ignored
         and live resize is always used, whether it's specified or not.
 
-        Currently this is the case for wxOSX and wxGTK3 ports, as live resizing
-        is the only implemented method there.
+        Currently this is the case for wxOSX and wxGTK3 when using Wayland, as
+        live resizing is the only implemented method there. See
+        wxClientDC::CanBeUsedForDrawing() for more details.
+
+        @param window The associated window, may be null (this parameter was
+            added in wxWidgets 3.3.0)
 
         @since 3.1.4
      */
-    static bool AlwaysUsesLiveResize();
+    static bool AlwaysUsesLiveResize(const wxWindow* window);
 
     /**
         This function is used by controls to calculate the drop hint rectangle.

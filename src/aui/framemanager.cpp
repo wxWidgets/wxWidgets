@@ -767,26 +767,17 @@ unsigned int wxAuiManager::GetFlags() const
     return m_flags;
 }
 
-// With Core Graphics on Mac or GTK 3, it's not possible to show sash feedback,
-// so we'll always use live update instead.
-#if defined(__WXMAC__) || defined(__WXGTK3__)
-    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 1
-#else
-    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 0
-#endif
-
-/* static */ bool wxAuiManager::AlwaysUsesLiveResize()
+/* static */ bool wxAuiManager::AlwaysUsesLiveResize(const wxWindow* window)
 {
-    return wxUSE_AUI_LIVE_RESIZE_ALWAYS;
+    // Not using live resize relies on wxClientDC being usable for drawing, so
+    // we have to use live resize if it can't be used on the current platform.
+    return !wxClientDC::CanBeUsedForDrawing(window);
 }
 
 bool wxAuiManager::HasLiveResize() const
 {
-#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
-    return true;
-#else
-    return (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
-#endif
+    return AlwaysUsesLiveResize(m_frame) ||
+            (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
 }
 
 // don't use these anymore as they are deprecated
@@ -3925,15 +3916,16 @@ void wxAuiManager::Repaint(wxDC* dc)
     // make a client dc
     if (!dc)
     {
-#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
-        // We can't use wxClientDC in these ports.
-        m_frame->Refresh() ;
-        m_frame->Update() ;
-        return ;
-#else
+        if ( AlwaysUsesLiveResize(m_frame) )
+        {
+            // We can't use wxClientDC in these ports.
+            m_frame->Refresh() ;
+            m_frame->Update() ;
+            return ;
+        }
+
         client_dc.reset(new wxClientDC(m_frame));
         dc = client_dc.get();
-#endif
     }
 
     int w, h;
