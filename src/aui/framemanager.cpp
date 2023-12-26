@@ -279,16 +279,21 @@ static wxBitmap wxPaneCreateStippleBitmap()
 
 static void DrawResizeHint(wxDC& dc, const wxRect& rect)
 {
+#ifdef __WXMSW__
     wxBitmap stipple = wxPaneCreateStippleBitmap();
     wxBrush brush(stipple);
     dc.SetBrush(brush);
-#ifdef __WXMSW__
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     PatBlt(GetHdcOf(*impl), rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight(), PATINVERT);
 #else
-    dc.SetPen(*wxTRANSPARENT_PEN);
+    // Note that we have to use white colour for wxINVERT to work with
+    // wxGraphicsContext-based wxDC implementations, such as used by wxGTK3
+    // (and wxOSX, but this code is never used for the latter because it always
+    // uses live resize).
+    dc.SetPen(*wxWHITE_PEN);
+    dc.SetBrush(*wxWHITE_BRUSH);
 
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(wxINVERT);
     dc.DrawRectangle(rect);
 #endif
 }
@@ -4469,7 +4474,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         if (!HasLiveResize())
         {
             // get rid of the hint rectangle
-            wxScreenDC dc;
+            wxClientDC dc{m_frame};
             DrawResizeHint(dc, m_actionHintRect);
         }
         if (m_currentDragItem != -1 && HasLiveResize())
@@ -4584,9 +4589,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             }
             else
             {
-                wxRect rect(m_frame->ClientToScreen(pos),
-                    m_actionPart->rect.GetSize());
-                wxScreenDC dc;
+                wxRect rect(pos, m_actionPart->rect.GetSize());
+                wxClientDC dc{m_frame};
 
                 if (!m_actionHintRect.IsEmpty())
                 {
@@ -4595,13 +4599,9 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     m_actionHintRect = wxRect();
                 }
 
-                // draw new resize hint, if it's inside the managed frame
-                wxRect frameScreenRect = m_frame->GetScreenRect();
-                if (frameScreenRect.Contains(rect))
-                {
-                    DrawResizeHint(dc, rect);
-                    m_actionHintRect = rect;
-                }
+                // draw new resize hint
+                DrawResizeHint(dc, rect);
+                m_actionHintRect = rect;
             }
         }
     }
