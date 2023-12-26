@@ -7960,6 +7960,7 @@ dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
 dnl itself (this macro is required if SUBDIRS variable is used in Makefile.am
 dnl - and we do use it)
 AC_PROG_MAKE_SET
+AC_PROG_EGREP
 
 
 AC_CONFIG_HEADERS([lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in])
