@@ -3911,7 +3911,7 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#if defined(__WXMAC__) || defined(__WXGTK3__)
+#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
     // We can't use wxClientDC in these ports.
     if ( dc == nullptr )
     {
