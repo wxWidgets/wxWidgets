@@ -74,7 +74,7 @@ wxDatePickerCtrl::Create(wxWindow *parent,
     m_qtDateEdit->setCalendarPopup(style & wxDP_DROPDOWN);
     m_qtDateEdit->setDisplayFormat(QLocale::system().dateFormat(QLocale::ShortFormat));
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return wxDatePickerCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 // ----------------------------------------------------------------------------

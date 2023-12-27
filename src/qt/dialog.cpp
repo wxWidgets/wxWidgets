@@ -70,12 +70,7 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         m_qtWindow->setWindowFlags(qtFlags);
     }
 
-    if ( !wxTopLevelWindow::Create( parent, id, title, pos, size, style, name ) )
-        return false;
-
-    PostCreation();
-
-    return true;
+    return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
 
 int wxDialog::ShowModal()

@@ -10,7 +10,6 @@
 
 class QListWidget;
 class QModelIndex;
-class QScrollArea;
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
@@ -86,8 +85,6 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos) override;
 
     virtual int DoListHitTest(const wxPoint& point) const override;
-
-    virtual QScrollArea *QtGetScrollBarsContainer() const override;
 
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;

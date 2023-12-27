@@ -174,10 +174,10 @@ bool wxSlider::Create(wxWindow *parent,
     SetValue( value );
     SetPageSize(wxMax(1, (maxValue - minValue) / 10));
 
-    if ( !QtCreateControl( parent, id, pos, size, style, validator, name ) )
+    if ( !wxSliderBase::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 
-    // SetTick() needs the window style which is normally set after QtCreateControl()
+    // SetTick() needs the window style which is normally set after wxSliderBase::Create()
     // is called. Pass 0 as tickPos parameter is not used by Qt anyhow.
     SetTick( 0 );
 

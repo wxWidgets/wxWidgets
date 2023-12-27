@@ -75,7 +75,7 @@ wxTimePickerCtrl::Create(wxWindow *parent,
                                           wxQtConvertTime(wxDateTime::Now()) );
     m_qtTimeEdit->setDisplayFormat(QLocale::system().timeFormat(QLocale::ShortFormat));
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return wxTimePickerCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 // ----------------------------------------------------------------------------

@@ -762,7 +762,7 @@ unsigned int wxAuiManager::GetFlags() const
 
 // With Core Graphics on Mac or GTK 3, it's not possible to show sash feedback,
 // so we'll always use live update instead.
-#if defined(__WXMAC__) || defined(__WXGTK3__)
+#if defined(__WXMAC__) || defined(__WXGTK3__) || defined(__WXQT__)
     #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 1
 #else
     #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 0
@@ -3911,7 +3911,7 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#if defined(__WXMAC__) || defined(__WXGTK3__)
+#if defined(__WXMAC__) || defined(__WXGTK3__) || defined(__WXQT__)
     // We can't use wxClientDC in these ports.
     if ( dc == nullptr )
     {

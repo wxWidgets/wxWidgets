@@ -149,7 +149,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
     m_qtComboBox->setCurrentText( wxQtConvertString( value ));
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return wxChoiceBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 bool wxComboBox::IsReadOnly() const

@@ -44,7 +44,7 @@ public:
     virtual long XYToPosition(long x, long y) const = 0;
     virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const = 0;
-    virtual QScrollArea *ScrollBarsContainer() const = 0;
+    virtual QAbstractScrollArea *ScrollBarsContainer() const = 0;
     virtual void WriteText( const wxString &text ) = 0;
     virtual void SetMaxLength(unsigned long len) = 0;
     virtual void MarkDirty() = 0;
@@ -353,9 +353,9 @@ public:
         m_edit->ensureCursorVisible();
     }
 
-    QScrollArea *ScrollBarsContainer() const override
+    QAbstractScrollArea *ScrollBarsContainer() const override
     {
-        return (QScrollArea *) m_edit;
+        return static_cast<QAbstractScrollArea*>(m_edit);
     }
 
     virtual void SetStyleFlags(long flags) override
@@ -367,6 +367,9 @@ public:
 
         if ( flags & wxTE_RICH || flags & wxTE_RICH2 )
             m_edit->setAcceptRichText(true);
+
+        if ( flags & wxTE_DONTWRAP )
+            m_edit->setLineWrapMode(QTextEdit::NoWrap);
     }
 
 private:
@@ -559,7 +562,7 @@ public:
         return wxTE_HT_ON_TEXT;
     }
 
-    virtual QScrollArea *ScrollBarsContainer() const override
+    virtual QAbstractScrollArea *ScrollBarsContainer() const override
     {
         return nullptr;
     }
@@ -668,6 +671,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if ( style & wxTE_MULTILINE )
     {
         m_qtEdit = new wxQtMultiLineEdit(new wxQtTextEdit(parent, this));
+
+        if ( style & wxTE_NO_VSCROLL )
+            style &= ~wxVSCROLL;
+        else
+            style |= wxVSCROLL;
     }
     else
     {
@@ -676,16 +684,12 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     m_qtEdit->SetStyleFlags(style);
 
-    if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
-    {
-        // set the initial text value without sending the event:
-        // (done here as needs CreateBase called to set flags for IsMultiLine)
-        ChangeValue( value );
-        // set the default inner color (white), as it is replaced by PostCreation
-        SetBackgroundColour( wxSystemSettingsNative::GetColour( wxSYS_COLOUR_LISTBOX ) );
-        return true;
-    }
-    return false;
+    m_qtWindow = m_qtEdit->ScrollBarsContainer();
+
+    // set the initial text value without sending the event
+    ChangeValue( value );
+
+    return wxTextCtrlBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -909,9 +913,4 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
 QWidget *wxTextCtrl::GetHandle() const
 {
     return (QWidget *) m_qtEdit->GetHandle();
-}
-
-QScrollArea *wxTextCtrl::QtGetScrollBarsContainer() const
-{
-    return m_qtEdit->ScrollBarsContainer();
 }

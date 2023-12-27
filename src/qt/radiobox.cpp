@@ -196,7 +196,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     m_qtGroupBox->setLayout(horzLayout);
 
     SetMajorDim(majorDim == 0 ? n : majorDim, style);
-    return QtCreateControl( parent, id, pos, size, style, val, name );
+    return wxControl::Create( parent, id, pos, size, style, val, name );
 }
 
 static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )

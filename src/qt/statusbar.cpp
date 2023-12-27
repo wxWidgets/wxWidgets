@@ -43,14 +43,12 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
 {
     m_qtStatusBar = new wxQtStatusBar( parent, this );
 
-    if ( !QtCreateControl( parent, id, wxDefaultPosition, wxDefaultSize,
+    if ( !wxStatusBarBase::Create( parent, id, wxDefaultPosition, wxDefaultSize,
                            style, wxDefaultValidator, name ) )
         return false;
 
     if ( style & wxSTB_SIZEGRIP )
         m_qtStatusBar->setSizeGripEnabled(true);
-
-    PostCreation();
 
     SetFieldsCount(1);
 
