@@ -42,9 +42,9 @@ wxPopupWindow::wxPopupWindow(wxWindow *parent, int flags)
    Create(parent, flags);
 }
 
-bool wxPopupWindow::Create( wxWindow *WXUNUSED(parent), int style )
+bool wxPopupWindow::Create( wxWindow *parent, int style )
 {
-    m_qtWindow = new wxQtPopupWindow(nullptr, this);
+    m_qtWindow = new wxQtPopupWindow(parent, this);
 
     m_qtWindow->setWindowFlag(Qt::Popup);
     m_qtWindow->setFocusPolicy(Qt::NoFocus);
@@ -55,7 +55,6 @@ bool wxPopupWindow::Create( wxWindow *WXUNUSED(parent), int style )
     // Unlike windows, top level windows are created hidden by default.
     m_isShown = false;
 
-    // Under wxQt, popups should be created without parent. Otherwise, the
-    // application would crash (caused by double deletion) when it's shut down.
-    return wxPopupWindowBase::Create( nullptr, style );
+    return wxPopupWindowBase::Create(parent, style) &&
+            wxWindow::Create( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
 }
