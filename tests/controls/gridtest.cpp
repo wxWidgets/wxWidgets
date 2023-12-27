@@ -557,22 +557,32 @@ TEST_CASE_METHOD(GridTestCase, "Grid::CellSelect", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
-
+    if ( !WaitForEventAt(point, "mouse click to be processed", [&]() {
+            return cell.GetCount() != 0;
+        }) )
+        return;
     CHECK(cell.GetCount() == 1);
-
     cell.Clear();
 
     m_grid->SetGridCursor(1, 1);
+
+    CHECK(cell.GetCount() == 1);
+    cell.Clear();
+
     m_grid->GoToCell(1, 0);
+
+    CHECK(cell.GetCount() == 1);
+    cell.Clear();
 
     sim.MouseMove(point);
     wxYield();
 
     sim.MouseDblClick();
-    wxYield();
-
-    CHECK(cell.GetCount() == 3);
+    if ( !WaitForEventAt(point, "mouse double click to be processed", [&]() {
+            return cell.GetCount() != 0;
+        }) )
+        return;
+    CHECK(cell.GetCount() == 1);
 #endif
 }
 
