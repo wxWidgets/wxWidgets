@@ -127,7 +127,7 @@ public:
 
     void OnData(wxWebRequestEvent& evt)
     {
-        // Count all bytes recieved via data event for Storage_None
+        // Count all bytes received via data event for Storage_None
         dataSize += evt.GetDataSize();
     }
 
