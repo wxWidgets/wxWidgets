@@ -8048,12 +8048,7 @@ for subdir in $SUBDIRS; do
                 done
             else
                 dnl assume that everything compiles for utils &c
-                dnl any that shouldn't be built can be added to
-                dnl DISABLED_UTILS, DISABLED_DEMOS
-                disabled_var=DISABLED_`echo $subdir | tr '[[a-z]]' '[[A-Z]]'`
-                eval "disabled=\$$disabled_var"
-                disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         else
             dnl we build wxBase only
