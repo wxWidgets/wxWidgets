@@ -16,11 +16,11 @@ if(NOT DEFINED CEF_VERSION)
     message(FATAL_ERROR "CEF_VERSION not defined")
 endif()
 
-set(CEF_BASE_URL "http://opensource.spotify.com/cefbuilds/cef_binary_")
+set(CEF_BASE_URL "https://cef-builds.spotifycdn.com/cef_binary_")
 set(CEF_FILE_EXT ".tar.bz2")
 
 set(sha_file ${CMAKE_BINARY_DIR}/__info_sha.txt)
-foreach(platform macosx64 linux32 linux64 windows32 windows64)
+foreach(platform windows64 windowsarm64 windows32 macosx64 macosarm64 linux64 linuxarm64 linuxarm)
     file(DOWNLOAD "${CEF_BASE_URL}${CEF_VERSION}_${platform}${CEF_FILE_EXT}.sha1" "${sha_file}")
     file(READ "${sha_file}" CEF_SHA1_${platform})
 endforeach()
@@ -30,5 +30,5 @@ file(REMOVE ${sha_file})
 configure_file(
     cef_version_info.cmake.in
     cef_version_info.cmake
-    @ONLY
+    @ONLY NEWLINE_STYLE LF
 )
