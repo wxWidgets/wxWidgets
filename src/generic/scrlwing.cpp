@@ -955,12 +955,12 @@ void wxScrollHelperBase::HandleOnMouseLeave(wxMouseEvent& event)
         else // we're lower or to the right of the window
         {
             wxSize size = m_targetWindow->GetClientSize();
-            if ( pt.x > size.x )
+            if ( pt.x >= size.x )
             {
                 orient = wxHORIZONTAL;
                 pos = m_xScrollLines;
             }
-            else if ( pt.y > size.y )
+            else if ( pt.y >= size.y )
             {
                 orient = wxVERTICAL;
                 pos = m_yScrollLines;
