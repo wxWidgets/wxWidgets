@@ -274,6 +274,7 @@ wxGTK:
 - Fix crash with GTK3 if console program is using a GUI wxApp class (#24081).
 - Generic wxDataViewCtrl drag hint fixes (#24084).
 - Ensure wxListBox best size is at least the minimum required by GTK3.
+- Support setting thickness when creating wxGauge with GTK >= 3.20 (#24107).
 
 wxMSW:
 
