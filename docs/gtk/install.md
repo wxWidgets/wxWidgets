@@ -47,8 +47,8 @@ Debian and Debian-based distribution these libraries are part of `libgtk-3-dev`
 package, while in Fedora and other RPM-based distributions the same package is
 known as `gtk3-devel`.
 
-For OpenGL support, you need `libgl1-mesa-dev` and `libglu1-mesa-dev` packages
-under Debian and `mesa-libGL-devel` and `mesa-libGLU-devel` under Fedora. For
+For OpenGL support, you need `libgl1-mesa-dev` packages
+under Debian and `mesa-libGL-devel` and under Fedora. For
 EGL support, `libegl1-mesa-dev` or `mesa-libEGL-devel` is needed.
 
 wxMediaCtrl implementation requires GStreamer and its plugins development
