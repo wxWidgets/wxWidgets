@@ -161,6 +161,10 @@ gboolean WakeupSourceCheck(GSource*)
 
 } // extern "C"
 
+// We don't want to initialize private fields of GSourceFuncs, but not doing
+// this results in this warning.
+wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
 GSourceFuncs wakeupSourceVtbl =
 {
     WakeupSourcePrepare,
@@ -168,6 +172,8 @@ GSourceFuncs wakeupSourceVtbl =
     nullptr, // No WakeupSourceDispatch as it should never be called.
     nullptr, // No WakeupSourceFinalize because we don't have anything to free.
 };
+
+wxGCC_WARNING_RESTORE(missing-field-initializers)
 
 void AppImplData::StartThreadDispatch(GMainContext* threadContext)
 {
