@@ -125,6 +125,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     // Cannot add image to invalid list
     wxCHECK_MSG( m_size != wxSize(0, 0), -1, "Invalid image list" );
 
+    const int index = GetImageCount();
     const wxSize bitmapSize = bitmap.GetSize();
 
     // There is a special case: a bitmap may contain more than one image,
@@ -155,7 +156,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         return -1;
     }
 
-    return GetImageCount() - 1;
+    return index;
 }
 
 int wxGenericImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )
