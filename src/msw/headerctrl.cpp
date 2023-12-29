@@ -990,7 +990,17 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // internal column indices array if this is allowed to go ahead as
             // the native control is going to reorder its columns now
             if ( evtType == wxEVT_HEADER_END_REORDER )
-                m_header.MoveColumnInOrderArray(m_colIndices, idx, order);
+            {
+                // If the event handler didn't process the event, call the
+                // virtual function callback.
+                wxArrayInt colIndices = m_header.GetColumnsOrder();
+                m_header.MoveColumnInOrderArray(colIndices, idx, order);
+                if ( !processed )
+                  m_header.UpdateColumnsOrder(colIndices);
+
+                // And update internally columns indices in any case.
+                m_colIndices = colIndices;
+            }
 
             if ( processed )
             {
