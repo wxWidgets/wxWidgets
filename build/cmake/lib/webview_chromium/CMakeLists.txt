@@ -65,6 +65,7 @@ endif()
 add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
 set_target_properties(libcef_dll_wrapper PROPERTIES
     FOLDER "Third Party Libraries"
+    COMPILE_FLAGS     "-Wno-extra"
     OUTPUT_NAME       "libcef_dll_wrapper${lib_rls}"
     OUTPUT_NAME_DEBUG "libcef_dll_wrapper${lib_dbg}"
 )
