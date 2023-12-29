@@ -473,10 +473,12 @@ wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
 }
 
 void
-wxHeaderCtrlSimple::UpdateColumnVisibility(unsigned int WXUNUSED(idx),
-                                    bool WXUNUSED(show))
+wxHeaderCtrlSimple::UpdateColumnVisibility(unsigned int idx, bool show)
 {
-    // no asserts needed here
+  if ( show != m_cols[idx].IsShown() )
+  {
+      m_cols[idx].SetHidden(!show);
+  }
 }
 
 void
