@@ -472,6 +472,19 @@ wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
     return true;
 }
 
+void
+wxHeaderCtrlSimple::UpdateColumnVisibility(unsigned int WXUNUSED(idx),
+                                    bool WXUNUSED(show))
+{
+    // no asserts needed here
+}
+
+void
+wxHeaderCtrlSimple::UpdateColumnsOrder(const wxArrayInt& WXUNUSED(order))
+{
+    // no asserts needed here
+}
+
 void wxHeaderCtrlSimple::OnHeaderResizing(wxHeaderCtrlEvent& evt)
 {
     m_cols[evt.GetColumn()].SetWidth(evt.GetWidth());
