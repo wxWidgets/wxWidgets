@@ -997,7 +997,7 @@ bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 if ( !processed )
                 {
                   // callback
-                  UpdateColumnsOrder(colIndices);
+                  m_header.UpdateColumnsOrder(colIndices);
                 }
                 // update columns indices
                 m_colIndices = colIndices;
