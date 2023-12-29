@@ -317,6 +317,7 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
     {
         const int columnIndex = rc - wxID_COLUMNS_BASE;
         UpdateColumnVisibility(columnIndex, !GetColumn(columnIndex).IsShown());
+        UpdateColumn(columnIndex);
     }
 
     return true;
@@ -368,7 +369,9 @@ bool wxHeaderCtrlBase::ShowCustomizeDialog()
             }
 
             if ( show != GetColumn(idx).IsShown() )
+            {
                 UpdateColumnVisibility(idx, show);
+            }
         }
 
         UpdateColumnsOrder(order);
