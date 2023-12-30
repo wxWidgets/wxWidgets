@@ -253,11 +253,12 @@ Changes in behaviour which may result in build errors
 
 All:
 
-- Fix division-by-zero in wxRichTextCtrl (#23763).
-- Make wxGraphicsContext offsetting consistent across scales (#23485).
+- Add support for "%F" format specifier to wxDateTime (#24173).
 
 All (GUI):
 
+- Fix division-by-zero in wxRichTextCtrl (#23763).
+- Make wxGraphicsContext offsetting consistent across scales (#23485).
 - Improve error checking when saving TIFF images (Brian Delalex, #23214).
 - Fix crash in wxLogGui when wxUSE_LOG_DIALOG==0 (Randalphwa, #24087).
 - Use wxUILocale in wxFloatProperty (Miguel Gimenez, Artur Wieczorek, #24140).

@@ -579,6 +579,10 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                     res += wxString::Format(fmt, tm.mday);
                     break;
 
+                case wxT('F'):      // ISO 8601 date
+                    res += wxString::Format(wxT("%04d-%02d-%02d"), tm.year, tm.mon + 1, tm.mday);
+                    break;
+
                 case wxT('g'):      // 2-digit week-based year
                     res += wxString::Format(fmt, GetWeekBasedYear() % 100);
                     break;
@@ -1226,6 +1230,22 @@ wxDateTime::ParseFormat(const wxString& date,
                 // do it later - assume ok for now
                 haveDay = true;
                 mday = (wxDateTime_t)num;
+                break;
+
+            case wxT('F'):       // ISO 8601 date
+                {
+                    wxDateTime dt = ParseFormatAt(input, end, wxS("%Y-%m-%d"));
+                    if ( !dt.IsValid() )
+                        return false;
+
+                    const Tm tm = dt.GetTm();
+
+                    year = tm.year;
+                    mon = tm.mon;
+                    mday = tm.mday;
+
+                    haveDay = haveMon = haveYear = true;
+                }
                 break;
 
             case wxT('H'):       // hour in 24h format (00-23)
