@@ -487,8 +487,11 @@ if(wxUSE_GUI)
             message(WARNING "WebviewChromium libcef_dll_wrapper can only be built with MSVC... disabled")
             wx_option_force_value(wxUSE_WEBVIEW_CHROMIUM OFF)
         endif()
-        if(wxUSE_WEBVIEW_CHROMIUM AND CMAKE_CXX_STANDARD LESS 17)
-            message(WARNING "WebviewChromium requires at least c++17")
+        if(wxUSE_WEBVIEW_CHROMIUM AND CMAKE_CXX_STANDARD LESS 14)
+            # We shouldn't disable this option as it's disabled by default and
+            # if it is on, it means that CEF is meant to be used, but we can't
+            # continue neither as libcef_dll_wrapper will fail to build.
+            message(FATAL_ERROR "WebviewChromium requires at least C++14 but configured to use C++${CMAKE_CXX_STANDARD}")
         endif()
     endif()
 
