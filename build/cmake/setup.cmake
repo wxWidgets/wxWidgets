@@ -613,6 +613,13 @@ check_type_size(ssize_t SSIZE_T)
 
 test_big_endian(WORDS_BIGENDIAN)
 
+if(wxUSE_WEBVIEW_CHROMIUM)
+    string(TOUPPER ${CMAKE_BUILD_TYPE} build_type)
+    if(${build_type} STREQUAL DEBUG)
+        set(wxHAVE_CEF_DEBUG ON)
+    endif()
+endif()
+
 configure_file(build/cmake/setup.h.in ${wxSETUP_HEADER_FILE})
 if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     # The debug version may be configured with different values in the future
