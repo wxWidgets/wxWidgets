@@ -337,8 +337,8 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     bool isPercent = false;
 
     // We also can't use strftime() if we use non standard specifier: either
-    // our own extension "%l" or one of "%g", "%G", "%V", "%z" which are POSIX
-    // but not supported under Windows.
+    // our own extension "%l" or one of POSIX specifiers not supported when
+    // using MinGW, see https://sourceforge.net/p/mingw-w64/bugs/793/
     for ( wxString::const_iterator p = format.begin();
           canUseStrftime && p != format.end();
           ++p )
@@ -354,12 +354,12 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
         switch ( (*p).GetValue() )
         {
             case 'l':
-#ifdef __WINDOWS__
+#ifdef __MINGW32__
             case 'g':
             case 'G':
             case 'V':
             case 'z':
-#endif // __WINDOWS__
+#endif // __MINGW32__
                 canUseStrftime = false;
                 break;
         }
