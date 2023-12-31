@@ -3565,6 +3565,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\persist\combobox.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\commandlinkbutton.h"
 				>
 			</File>

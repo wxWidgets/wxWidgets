@@ -260,6 +260,7 @@ All (GUI):
 
 - Improve error checking when saving TIFF images (Brian Delalex, #23214).
 - Fix crash in wxLogGui when wxUSE_LOG_DIALOG==0 (Randalphwa, #24087).
+- Use wxUILocale in wxFloatProperty (Miguel Gimenez, Artur Wieczorek, #24140).
 
 wxGTK:
 
@@ -280,6 +281,7 @@ wxMSW:
 
 - Add support for line spacing and bullet style attributes to wxTextCtrl
   (Blake-Madden, #24046, #24069).
+- Fix possible crash in wxFileSystemWatcher (Rick van der Sluijs, #24119).
 - Fix restoring hidden top level windows (Christian Walther, #24117).
 - Add support for VT_UI8 OLE VARIANT type (Miguel Gimenez, #24115).
 
@@ -287,6 +289,10 @@ wxOSX:
 
 - Fix clipping when using Sonoma/Xcode 15 SDK (#23916, #24054, #24067, #24073).
 - Restore activation for non-bundled applications (#24056, #24062).
+
+wxQt:
+
+- Fix wxAnyButton Current/Normal state confusing (David Karoly, #24129).
 
 
 3.2.4: (released 2023-11-11)
