@@ -336,8 +336,8 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
     bool isPercent = false;
 
     // We also can't use strftime() if we use non standard specifier: either
-    // our own extension "%l" or one of "%g", "%G", "%V", "%z" which are POSIX
-    // but not supported under Windows.
+    // our own extension "%l" or one of C99/POSIX specifiers not always
+    // supported under Windows.
     for ( wxString::const_iterator p = format.begin();
           canUseStrftime && p != format.end();
           ++p )
@@ -354,6 +354,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
         {
             case 'l':
 #ifdef __WINDOWS__
+            case 'F':
             case 'g':
             case 'G':
             case 'V':
