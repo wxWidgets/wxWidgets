@@ -534,8 +534,10 @@ TEST_CASE_METHOD(GridTestCase, "Grid::ReorderedColumnsCellClick", "[grid]")
     wxYield();
 
     sim.MouseClick();
-    wxYield();
-
+    if ( !WaitForEventAt(point, "mouse click to be processed", [&]() {
+            return click.GetCount() != 0;
+        }) )
+        return;
     CHECK(click.GetCount() == 1);
 #endif
 }
