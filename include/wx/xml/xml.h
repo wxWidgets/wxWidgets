@@ -21,6 +21,8 @@
 #include "wx/textbuf.h"
 #include "wx/versioninfo.h"
 
+#include <memory>
+
 #ifdef WXMAKINGDLL_XML
     #define WXDLLIMPEXP_XML WXEXPORT
 #elif defined(WXUSINGDLL)
@@ -231,7 +233,7 @@ public:
                   const wxString& encoding = wxT("UTF-8"));
     wxXmlDocument(wxInputStream& stream,
                   const wxString& encoding = wxT("UTF-8"));
-    virtual ~wxXmlDocument() { delete m_docNode; }
+    ~wxXmlDocument() = default;
 
     wxXmlDocument(const wxXmlDocument& doc);
     wxXmlDocument& operator=(const wxXmlDocument& doc);
@@ -252,7 +254,7 @@ public:
     // Returns root node of the document.
     wxXmlNode *GetRoot() const;
     // Returns the document node.
-    wxXmlNode *GetDocumentNode() const { return m_docNode; }
+    wxXmlNode *GetDocumentNode() const { return m_docNode.get(); }
 
 
     // Returns version of document (may be empty).
@@ -267,8 +269,8 @@ public:
     wxString GetEOL() const { return m_eol; }
 
     // Write-access methods:
-    wxXmlNode *DetachDocumentNode() { wxXmlNode *old=m_docNode; m_docNode=nullptr; return old; }
-    void SetDocumentNode(wxXmlNode *node) { delete m_docNode; m_docNode = node; }
+    wxXmlNode *DetachDocumentNode() { return m_docNode.release(); }
+    void SetDocumentNode(wxXmlNode *node) { m_docNode.reset(node); }
     wxXmlNode *DetachRoot();
     void SetRoot(wxXmlNode *node);
     void SetVersion(const wxString& version) { m_version = version; }
@@ -283,7 +285,7 @@ private:
     wxString   m_version;
     wxString   m_fileEncoding;
     wxXmlDoctype m_doctype;
-    wxXmlNode *m_docNode = nullptr;
+    std::unique_ptr<wxXmlNode> m_docNode;
     wxTextFileType m_fileType = wxTextFileType_Unix;
     wxString m_eol = wxS("\n");
 

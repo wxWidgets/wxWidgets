@@ -464,8 +464,6 @@ wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
 
 wxXmlDocument& wxXmlDocument::operator=(const wxXmlDocument& doc)
 {
-    delete m_docNode;
-
     DoCopy(doc);
     return *this;
 }
@@ -479,9 +477,9 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
     m_eol = doc.m_eol;
 
     if (doc.m_docNode)
-        m_docNode = new wxXmlNode(*doc.m_docNode);
+        m_docNode.reset(new wxXmlNode(*doc.m_docNode));
     else
-        m_docNode = nullptr;
+        m_docNode.reset();
 }
 
 bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding, int flags)
@@ -502,7 +500,7 @@ bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
 
 wxXmlNode *wxXmlDocument::GetRoot() const
 {
-    wxXmlNode *node = m_docNode;
+    wxXmlNode *node = m_docNode.get();
     if (node)
     {
         node = m_docNode->GetChildren();
@@ -514,7 +512,7 @@ wxXmlNode *wxXmlDocument::GetRoot() const
 
 wxXmlNode *wxXmlDocument::DetachRoot()
 {
-    wxXmlNode *node = m_docNode;
+    wxXmlNode *node = m_docNode.get();
     if (node)
     {
         node = m_docNode->GetChildren();
@@ -547,7 +545,7 @@ void wxXmlDocument::SetRoot(wxXmlNode *root)
                       "Can only set an element type node as root" );
     }
 
-    wxXmlNode *node = m_docNode;
+    wxXmlNode *node = m_docNode.get();
     if (node)
     {
         node = m_docNode->GetChildren();
@@ -569,11 +567,11 @@ void wxXmlDocument::SetRoot(wxXmlNode *root)
     }
     else
     {
-        m_docNode = new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString);
+        m_docNode.reset(new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString));
         m_docNode->SetChildren(root);
     }
     if (root)
-        root->SetParent(m_docNode);
+        root->SetParent(m_docNode.get());
 }
 
 void wxXmlDocument::SetFileType(wxTextFileType fileType)
@@ -585,7 +583,7 @@ void wxXmlDocument::SetFileType(wxTextFileType fileType)
 void wxXmlDocument::AppendToProlog(wxXmlNode *node)
 {
     if (!m_docNode)
-        m_docNode = new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString);
+        m_docNode.reset(new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString));
     if (IsOk())
         m_docNode->InsertChild( node, GetRoot() );
     else
