@@ -247,8 +247,6 @@ wxString wxFileConfig::GetGlobalDir()
 
 wxString wxFileConfig::GetLocalDir(int style)
 {
-    wxUnusedVar(style);
-
     wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
     // it so happens that user data directory is a subdirectory of user config
