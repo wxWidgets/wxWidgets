@@ -606,12 +606,9 @@ void wxXmlDocument::AppendToProlog(wxXmlNode *node)
 //  wxXmlDocument loading routines
 //-----------------------------------------------------------------------------
 
-// converts Expat-produced string in UTF-8 into wxString using the specified
-// conv or keep in UTF-8 if conv is null
-static wxString CharToString(wxMBConv *conv,
-                             const char *s, size_t len = wxString::npos)
+// converts Expat-produced string in UTF-8 into wxString: this is trivial now
+static wxString CharToString(const char *s, size_t len = wxString::npos)
 {
-    wxUnusedVar(conv);
     return wxString::FromUTF8Unchecked(s, len);
 }
 
@@ -631,8 +628,7 @@ bool wxIsWhiteOnly(const wxString& buf)
 struct wxXmlParsingContext
 {
     wxXmlParsingContext()
-        : conv(nullptr),
-          node(nullptr),
+        : node(nullptr),
           lastChild(nullptr),
           lastAsText(nullptr),
           doctype(nullptr),
@@ -640,7 +636,6 @@ struct wxXmlParsingContext
     {}
 
     XML_Parser parser;
-    wxMBConv  *conv;
     wxXmlNode *node;                    // the node being parsed
     wxXmlNode *lastChild;               // the last child of "node"
     wxXmlNode *lastAsText;              // the last _text_ child of "node"
@@ -662,7 +657,7 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
     wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE,
-                                    CharToString(ctx->conv, name),
+                                    CharToString(name),
                                     wxEmptyString,
                                     XML_GetCurrentLineNumber(ctx->parser));
     const char **a = atts;
@@ -670,7 +665,7 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
     // add node attributes
     while (*a)
     {
-        node->AddAttribute(CharToString(ctx->conv, a[0]), CharToString(ctx->conv, a[1]));
+        node->AddAttribute(CharToString(a[0]), CharToString(a[1]));
         a += 2;
     }
 
@@ -698,7 +693,7 @@ static void EndElementHnd(void *userData, const char* WXUNUSED(name))
 static void TextHnd(void *userData, const char *s, int len)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
-    wxString str = CharToString(ctx->conv, s, len);
+    wxString str = CharToString(s, len);
 
     if (ctx->lastAsText)
     {
@@ -753,7 +748,7 @@ static void CommentHnd(void *userData, const char *data)
 
     wxXmlNode *commentnode =
         new wxXmlNode(wxXML_COMMENT_NODE,
-                      wxS("comment"), CharToString(ctx->conv, data),
+                      wxS("comment"), CharToString(data),
                       XML_GetCurrentLineNumber(ctx->parser));
 
     ASSERT_LAST_CHILD_OK(ctx);
@@ -767,8 +762,8 @@ static void PIHnd(void *userData, const char *target, const char *data)
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
     wxXmlNode *pinode =
-        new wxXmlNode(wxXML_PI_NODE, CharToString(ctx->conv, target),
-                      CharToString(ctx->conv, data),
+        new wxXmlNode(wxXML_PI_NODE, CharToString(target),
+                      CharToString(data),
                       XML_GetCurrentLineNumber(ctx->parser));
 
     ASSERT_LAST_CHILD_OK(ctx);
@@ -783,9 +778,9 @@ static void StartDoctypeHnd(void *userData, const char *doctypeName,
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-    *ctx->doctype = wxXmlDoctype(CharToString(ctx->conv, doctypeName),
-                                 CharToString(ctx->conv, sysid),
-                                 CharToString(ctx->conv, pubid));
+    *ctx->doctype = wxXmlDoctype(CharToString(doctypeName),
+                                 CharToString(sysid),
+                                 CharToString(pubid));
 }
 
 static void EndDoctypeHnd(void *WXUNUSED(userData))
@@ -799,7 +794,7 @@ static void DefaultHnd(void *userData, const char *s, int len)
     {
         wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-        wxString buf = CharToString(ctx->conv, s, (size_t)len);
+        wxString buf = CharToString(s, (size_t)len);
         int pos;
         pos = buf.Find(wxS("encoding="));
         if (pos != wxNOT_FOUND)
@@ -855,7 +850,6 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
     wxXmlNode *root = new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString);
 
     ctx.encoding = wxS("UTF-8"); // default in absence of encoding=""
-    ctx.conv = nullptr;
     ctx.doctype = &m_doctype;
     ctx.removeWhiteOnlyNodes = (flags & wxXMLDOC_KEEP_WHITESPACE_NODES) == 0;
     ctx.parser = parser;
