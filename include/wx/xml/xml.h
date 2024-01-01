@@ -229,10 +229,8 @@ class WXDLLIMPEXP_XML wxXmlDocument : public wxObject
 {
 public:
     wxXmlDocument();
-    wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = wxT("UTF-8"));
-    wxXmlDocument(wxInputStream& stream,
-                  const wxString& encoding = wxT("UTF-8"));
+    wxXmlDocument(const wxString& filename);
+    wxXmlDocument(wxInputStream& stream);
     ~wxXmlDocument() = default;
 
     wxXmlDocument(const wxXmlDocument& doc);
@@ -240,10 +238,8 @@ public:
 
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
-    virtual bool Load(const wxString& filename,
-                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
-    virtual bool Load(wxInputStream& stream,
-                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
+    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE);
+    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE);
 
     // Saves document as .xml file.
     virtual bool Save(const wxString& filename, int indentstep = 2) const;
@@ -280,6 +276,36 @@ public:
     void AppendToProlog(wxXmlNode *node);
 
     static wxVersionInfo GetLibraryVersionInfo();
+
+#ifdef WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    wxXmlDocument(const wxString& filename,
+                  const wxString& WXUNUSED(encoding))
+        : wxXmlDocument(filename)
+    {
+    }
+
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    wxXmlDocument(wxInputStream& stream,
+                  const wxString& WXUNUSED(encoding))
+        : wxXmlDocument(stream)
+    {
+    }
+
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    bool Load(const wxString& filename,
+              const wxString& WXUNUSED(encoding), int flags = wxXMLDOC_NONE)
+    {
+        return Load(filename, flags);
+    }
+
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    bool Load(wxInputStream& stream,
+              const wxString& WXUNUSED(encoding), int flags = wxXMLDOC_NONE)
+    {
+        return Load(stream, flags);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
 private:
     wxString   m_version;

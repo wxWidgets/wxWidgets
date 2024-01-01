@@ -444,16 +444,16 @@ wxXmlDocument::wxXmlDocument()
 {
 }
 
-wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
+wxXmlDocument::wxXmlDocument(const wxString& filename)
               :wxObject()
 {
-    Load(filename, encoding);
+    Load(filename);
 }
 
-wxXmlDocument::wxXmlDocument(wxInputStream& stream, const wxString& encoding)
+wxXmlDocument::wxXmlDocument(wxInputStream& stream)
               :wxObject()
 {
-    Load(stream, encoding);
+    Load(stream);
 }
 
 wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
@@ -482,12 +482,12 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
         m_docNode.reset();
 }
 
-bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding, int flags)
+bool wxXmlDocument::Load(const wxString& filename, int flags)
 {
     wxFileInputStream stream(filename);
     if (!stream.IsOk())
         return false;
-    return Load(stream, encoding, flags);
+    return Load(stream, flags);
 }
 
 bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
@@ -820,10 +820,8 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
 
 } // extern "C"
 
-bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int flags)
+bool wxXmlDocument::Load(wxInputStream& stream, int flags)
 {
-    (void)encoding;
-
     const size_t BUFSIZE = 1024;
     char buf[BUFSIZE];
     wxXmlParsingContext ctx;
