@@ -442,14 +442,11 @@ bool wxXmlDoctype::IsValid() const
 wxXmlDocument::wxXmlDocument()
     : m_version(wxS("1.0")), m_fileEncoding(wxS("UTF-8")), m_docNode(nullptr)
 {
-    SetFileType(wxTextFileType_Unix);
 }
 
 wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
               :wxObject(), m_docNode(nullptr)
 {
-    SetFileType(wxTextFileType_Unix);
-
     if ( !Load(filename, encoding) )
     {
         wxDELETE(m_docNode);
@@ -459,8 +456,6 @@ wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
 wxXmlDocument::wxXmlDocument(wxInputStream& stream, const wxString& encoding)
               :wxObject(), m_docNode(nullptr)
 {
-    SetFileType(wxTextFileType_Unix);
-
     if ( !Load(stream, encoding) )
     {
         wxDELETE(m_docNode);

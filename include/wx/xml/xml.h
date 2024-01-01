@@ -284,8 +284,8 @@ private:
     wxString   m_fileEncoding;
     wxXmlDoctype m_doctype;
     wxXmlNode *m_docNode;
-    wxTextFileType m_fileType;
-    wxString m_eol;
+    wxTextFileType m_fileType = wxTextFileType_Unix;
+    wxString m_eol = wxS("\n");
 
     void DoCopy(const wxXmlDocument& doc);
 
