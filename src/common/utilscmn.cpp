@@ -1437,7 +1437,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxString::Format(wxS("Copyright %s 1992-2023 wxWidgets team"),
+                         wxString::Format(wxS("Copyright %s 1992-2024 wxWidgets team"),
                                           copyrightSign));
 }
 
