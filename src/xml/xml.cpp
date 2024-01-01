@@ -822,7 +822,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
 
 bool wxXmlDocument::Load(wxInputStream& stream, int flags)
 {
-    const size_t BUFSIZE = 1024;
+    const size_t BUFSIZE = 16384;
     char buf[BUFSIZE];
     wxXmlParsingContext ctx;
     bool done;
