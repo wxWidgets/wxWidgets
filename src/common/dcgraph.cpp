@@ -212,9 +212,6 @@ wxGCDCImpl::wxGCDCImpl(wxDC* owner, int)
 
 void wxGCDCImpl::CommonInit()
 {
-    m_mm_to_pix_x = mm2pt;
-    m_mm_to_pix_y = mm2pt;
-
     m_isClipBoxValid = false;
 
     m_logicalFunctionSupported = true;
