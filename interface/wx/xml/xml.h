@@ -761,14 +761,6 @@ public:
     wxXmlNode* DetachRoot();
 
     /**
-        Returns encoding of in-memory representation of the document
-        (same as passed to Load() or constructor, defaults to UTF-8).
-
-        @note this is meaningless in Unicode build where data are stored as @c wchar_t*.
-    */
-    wxString GetEncoding() const;
-
-    /**
         Returns encoding of document (may be empty).
 
         @note This is the encoding original file was saved in, @b not the
