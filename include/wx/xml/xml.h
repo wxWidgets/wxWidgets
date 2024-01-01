@@ -283,7 +283,7 @@ private:
     wxString   m_version;
     wxString   m_fileEncoding;
     wxXmlDoctype m_doctype;
-    wxXmlNode *m_docNode;
+    wxXmlNode *m_docNode = nullptr;
     wxTextFileType m_fileType = wxTextFileType_Unix;
     wxString m_eol = wxS("\n");
 
