@@ -231,7 +231,7 @@ public:
                   const wxString& encoding = wxT("UTF-8"));
     wxXmlDocument(wxInputStream& stream,
                   const wxString& encoding = wxT("UTF-8"));
-    virtual ~wxXmlDocument() { wxDELETE(m_docNode); }
+    virtual ~wxXmlDocument() { delete m_docNode; }
 
     wxXmlDocument(const wxXmlDocument& doc);
     wxXmlDocument& operator=(const wxXmlDocument& doc);
@@ -268,7 +268,7 @@ public:
 
     // Write-access methods:
     wxXmlNode *DetachDocumentNode() { wxXmlNode *old=m_docNode; m_docNode=nullptr; return old; }
-    void SetDocumentNode(wxXmlNode *node) { wxDELETE(m_docNode); m_docNode = node; }
+    void SetDocumentNode(wxXmlNode *node) { delete m_docNode; m_docNode = node; }
     wxXmlNode *DetachRoot();
     void SetRoot(wxXmlNode *node);
     void SetVersion(const wxString& version) { m_version = version; }

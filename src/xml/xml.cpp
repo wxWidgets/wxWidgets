@@ -447,19 +447,13 @@ wxXmlDocument::wxXmlDocument()
 wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
               :wxObject()
 {
-    if ( !Load(filename, encoding) )
-    {
-        wxDELETE(m_docNode);
-    }
+    Load(filename, encoding);
 }
 
 wxXmlDocument::wxXmlDocument(wxInputStream& stream, const wxString& encoding)
               :wxObject()
 {
-    if ( !Load(stream, encoding) )
-    {
-        wxDELETE(m_docNode);
-    }
+    Load(stream, encoding);
 }
 
 wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
@@ -470,7 +464,8 @@ wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
 
 wxXmlDocument& wxXmlDocument::operator=(const wxXmlDocument& doc)
 {
-    wxDELETE(m_docNode);
+    delete m_docNode;
+
     DoCopy(doc);
     return *this;
 }
