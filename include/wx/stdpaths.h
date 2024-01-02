@@ -186,6 +186,7 @@ public:
     bool UsesAppInfo(int info) const { return (m_usedAppInfo & info) != 0; }
 
     // append application information determined by m_usedAppInfo to dir
+    wxNODISCARD
     wxString AppendAppInfo(const wxString& dir) const;
 
 
