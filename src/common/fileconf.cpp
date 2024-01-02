@@ -247,7 +247,7 @@ wxString wxFileConfig::GetGlobalDir()
 
 wxString wxFileConfig::GetLocalDir(int style)
 {
-    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+    const wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
     if ( style & wxCONFIG_USE_XDG )
     {
@@ -271,14 +271,14 @@ wxString wxFileConfig::GetLocalDir(int style)
 
 wxFileName wxFileConfig::GetGlobalFile(const wxString& szFile)
 {
-    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+    const wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
     return wxFileName(GetGlobalDir(), stdp.MakeConfigFileName(szFile));
 }
 
 wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
 {
-    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+    const wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
     // If the config file is located in a subdirectory, we always use an
     // extension for it, but we use just the leading dot if it is located
