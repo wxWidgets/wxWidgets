@@ -18,6 +18,24 @@
     used explicitly if you want to use files and not the registry even under
     Windows.
 
+    @section fileconf_paths Configuration Files Paths
+
+    The default path for local (or user) configuration file is `~/.appname`,
+    i.e. it is stored directly in the user home directory. This default
+    path is backwards-compatible but not recommended any more and it is advised
+    to call wxStandardPaths::SetFileLayout() with
+    wxStandardPaths::FileLayout_XDG parameter to change the default path to
+    `~/.config/appname.conf`.
+
+    Alternatively, it is possible to specify ::wxCONFIG_USE_XDG flag in the
+    style parameter of the constructor to use this XDG-compliant path without
+    changing the global file layout.
+
+    And for the programs using multiple configuration files it is recommended
+    to use both ::wxCONFIG_USE_XDG and ::wxCONFIG_USE_SUBDIR which change the
+    default file path to `~/.config/appname/appname.conf` -- and allow the
+    program to store other files in the same `~/.config/appname` directory.
+
     @library{wxbase}
     @category{cfg}
 
@@ -71,8 +89,8 @@ public:
         parameter in the constructor.
 
         @a style has the same meaning as in @ref wxConfigBase::wxConfigBase "wxConfig constructor"
-        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR bit is
-        examined by this function.
+        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR
+        and wxCONFIG_USE_XDG are really used by this function.
 
         Notice that this function cannot be used if @a basename is already a full path name.
     */

@@ -249,8 +249,22 @@ wxString wxFileConfig::GetLocalDir(int style)
 {
     wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
-    // it so happens that user data directory is a subdirectory of user config
-    // directory on all supported platforms, which explains why we use it here
+    if ( style & wxCONFIG_USE_XDG )
+    {
+        // When XDG-compliant layout is requested, we need to use this function
+        // as GetUserDataDir() doesn't support it.
+        wxString dir = stdp.GetUserDir(wxStandardPaths::Dir_Config);
+
+        if ( style & wxCONFIG_USE_SUBDIR )
+            dir = stdp.AppendAppInfo(dir);
+
+        return dir;
+    }
+
+    // Normally we'd like to use GetUserConfigDir() and just append app info
+    // subdirectories to it, but we can't do it for compatibility reasons:
+    // there are existing configuration files in the locations returned by
+    // these functions already, so return the same values as we always did.
     return style & wxCONFIG_USE_SUBDIR ? stdp.GetUserDataDir()
                                        : stdp.GetUserConfigDir();
 }
@@ -271,10 +285,11 @@ wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
     // directly in the home directory. Note that if wxStandardPaths is
     // configured to follow XDG specification, all config files go to a
     // subdirectory of XDG_CONFIG_HOME anyhow, so in this case we'll still end
-    // up using the extension even if wxCONFIG_USE_SUBDIR is not set, but this
-    // is the correct and expected (if a little confusing) behaviour.
+    // up using the extension even if neither wxCONFIG_USE_SUBDIR nor
+    // wxCONFIG_USE_XDG is set, but this is the correct and expected (if a
+    // little confusing) behaviour.
     const wxStandardPaths::ConfigFileConv
-        conv = style & wxCONFIG_USE_SUBDIR
+        conv = style & (wxCONFIG_USE_SUBDIR | wxCONFIG_USE_XDG)
                 ? wxStandardPaths::ConfigFileConv_Ext
                 : wxStandardPaths::ConfigFileConv_Dot;
 
