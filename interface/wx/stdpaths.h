@@ -196,6 +196,20 @@ public:
     };
 
     /**
+        Append application and/or vendor name to the given directory.
+
+        By default, appends the subdirectory with the application name, as
+        returned by wxApp::GetAppName(), to the given directory.
+
+        This behaviour is affected by UseAppInfo(), e.g. if this function is
+        called with `AppInfo_VendorName` then the vendor name would be appended
+        instead of the application name.
+
+        @since 3.3.0
+    */
+    wxString AppendAppInfo(const wxString& dir) const;
+
+    /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
 
         After a call to this function the program directory will be exactly the
@@ -512,6 +526,8 @@ public:
             `AppInfo_AppName | AppInfo_VendorName`.
 
         By default, only the application name is used.
+
+        @see AppendAppInfo()
 
         @since 2.9.0
     */
