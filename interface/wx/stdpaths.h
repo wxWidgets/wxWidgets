@@ -80,6 +80,18 @@ public:
         Dir_Cache,
 
         /**
+            Directory containing configuration information.
+
+            Example return values:
+            - Unix: `~/.config`
+            - Windows: `C:\Users\username\AppData\Roaming`
+            - Mac: @c `~/Library/Preferences`
+
+            @since 3.3.0
+        */
+        Dir_Config,
+
+        /**
             Directory containing user documents.
 
             Example return values:
@@ -384,8 +396,8 @@ public:
         - Mac: @c ~/Library/Preferences
 
         Only use this method if you have a single configuration file to put in this
-        directory, otherwise GetUserDataDir() is more appropriate as the latter
-        adds @c appinfo to the path, unlike this function.
+        directory, otherwise calling AppendAppInfo() with the value returned by
+        GetDir() with wxStandardPaths::Dir_Config is more appropriate.
     */
     virtual wxString GetUserConfigDir() const;
 

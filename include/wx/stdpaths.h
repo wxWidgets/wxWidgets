@@ -51,6 +51,7 @@ public:
     enum Dir
     {
         Dir_Cache,
+        Dir_Config,
         Dir_Documents,
         Dir_Desktop,
         Dir_Downloads,

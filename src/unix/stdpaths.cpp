@@ -274,7 +274,11 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
         return cacheDir;
     }
 
-    const wxFileName dirsFile(GetXDGConfigHome(), wxS("user-dirs.dirs"));
+    const wxString configDir = GetXDGConfigHome();
+    if (userDir == Dir_Config)
+        return configDir;
+
+    const wxFileName dirsFile(configDir, wxS("user-dirs.dirs"));
     if ( dirsFile.FileExists() )
     {
         wxString userDirId;
