@@ -376,11 +376,19 @@ public:
     virtual wxString GetUserConfigDir() const;
 
     /**
-        Return the directory for the user-dependent application data files:
+        Return the directory for the user-dependent application data files.
+
+        The returned path is:
+
         - Unix: @c ~/.appinfo
         - Windows: @c "C:\Users\username\AppData\Roaming\appinfo" or
                    @c "C:\Documents and Settings\username\Application Data\appinfo"
         - Mac: @c "~/Library/Application Support/appinfo"
+
+        Please note that under Unix this function return value doesn't depend
+        on the file layout, and so returns a possibly unexpected value when
+        wxStandardPaths::FileLayout_XDG is used. Consider using GetUserDir()
+        instead if you use XDG layout, as this function does respect it.
     */
     virtual wxString GetUserDataDir() const;
 
