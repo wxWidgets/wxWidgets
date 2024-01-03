@@ -227,11 +227,11 @@ public:
     wxRealPoint& operator +=(const wxSize& sz);
     wxRealPoint& operator -=(const wxSize& sz);
 
-    wxSize operator /(const wxRealPoint& sz, int factor);
-    wxSize operator *(const wxRealPoint& sz, int factor);
-    wxSize operator *(int factor, const wxSize& sz);
-    wxSize& operator /=(int factor);
-    wxSize& operator *=(int factor);
+    wxRealPoint operator /(const wxRealPoint& sz, int factor);
+    wxRealPoint operator *(const wxRealPoint& sz, int factor);
+    wxRealPoint operator *(int factor, const wxRealPoint& sz);
+    wxRealPoint& operator /=(int factor);
+    wxRealPoint& operator *=(int factor);
     ///@}
 
     /**
@@ -715,11 +715,11 @@ public:
     wxPoint& operator +=(const wxSize& sz);
     wxPoint& operator -=(const wxSize& sz);
 
-    wxSize operator /(const wxPoint& sz, int factor);
-    wxSize operator *(const wxPoint& sz, int factor);
-    wxSize operator *(int factor, const wxSize& sz);
-    wxSize& operator /=(int factor);
-    wxSize& operator *=(int factor);
+    wxPoint operator /(const wxPoint& sz, int factor);
+    wxPoint operator *(const wxPoint& sz, int factor);
+    wxPoint operator *(int factor, const wxPoint& sz);
+    wxPoint& operator /=(int factor);
+    wxPoint& operator *=(int factor);
     ///@}
 
 
