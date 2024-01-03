@@ -22833,10 +22833,8 @@ $as_echo "$as_me: WARNING: --enable-macosx_arch is ignored when --enable-univers
 
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
-    else         OSX_ARCH_OPTS="i386"
-        if test "$wxUSE_OSX_COCOA" = 1; then
-            OSX_ARCH_OPTS="$OSX_ARCH_OPTS,x86_64"
-        fi
+    else
+                OSX_ARCH_OPTS=arm64,x86_64
     fi
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for architectures to use in universal binary" >&5

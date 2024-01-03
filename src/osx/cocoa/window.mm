@@ -917,7 +917,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
     [super viewDidMoveToWindow];
 }
 
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101200
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
 - (void) viewWillDraw
 {
     if ( WX_IS_MACOS_AVAILABLE(11, 0) )
