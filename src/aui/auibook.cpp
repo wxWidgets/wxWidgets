@@ -2119,12 +2119,12 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
 
     if (is_active_in_split)
     {
-        int ctrl_new_page_count = (int)ctrl->GetPageCount();
+        const int ctrl_new_page_count = (int)ctrl->GetPageCount();
 
         if (ctrl_idx >= ctrl_new_page_count)
             ctrl_idx = ctrl_new_page_count-1;
 
-        if (ctrl_idx >= 0 && ctrl_idx < (int)ctrl->GetPageCount())
+        if (ctrl_idx >= 0 && ctrl_idx < ctrl_new_page_count)
         {
             // set new page as active in the tab split
             ctrl->SetActivePage(ctrl_idx);
