@@ -232,6 +232,8 @@ public:
     wxRealPoint operator *(int factor, const wxRealPoint& sz);
     wxRealPoint& operator /=(int factor);
     wxRealPoint& operator *=(int factor);
+
+    wxRealPoint operator /(const wxRealPoint& pt, double factor);
     ///@}
 
     /**
@@ -736,6 +738,8 @@ public:
     wxPoint operator *(int factor, const wxPoint& sz);
     wxPoint& operator /=(int factor);
     wxPoint& operator *=(int factor);
+
+    wxPoint operator /(const wxPoint& pt, double factor);
     ///@}
 
 

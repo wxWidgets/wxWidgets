@@ -564,6 +564,11 @@ inline wxRealPoint operator*(double i, const wxRealPoint& s)
     return wxRealPoint(s.x * i, s.y * i);
 }
 
+inline wxRealPoint operator/(const wxRealPoint& p, double f)
+{
+    return wxRealPoint(p.x / f, p.y / f);
+}
+
 
 // ----------------------------------------------------------------------------
 // wxPoint: 2D point with integer coordinates
@@ -717,6 +722,11 @@ inline wxPoint operator*(const wxPoint& s, double i)
 inline wxPoint operator*(double i, const wxPoint& s)
 {
     return wxPoint(int(s.x * i), int(s.y * i));
+}
+
+inline wxPoint operator/(const wxPoint& p, double f)
+{
+    return wxPoint(wxRound(p.x / f), wxRound(p.y / f));
 }
 
 WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);
