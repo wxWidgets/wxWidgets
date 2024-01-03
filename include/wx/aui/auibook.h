@@ -210,6 +210,9 @@ public:
 
     void SetRect(const wxRect& rect) { wxAuiTabContainer::SetRect(rect, this); }
 
+    // Internal helper.
+    void DoShowTab(int idx);
+
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }

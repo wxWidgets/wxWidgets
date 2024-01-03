@@ -1019,6 +1019,12 @@ wxAuiTabCtrl::~wxAuiTabCtrl()
 {
 }
 
+void wxAuiTabCtrl::DoShowTab(int idx)
+{
+    DoShowHide();
+    MakeTabVisible(idx, this);
+}
+
 void wxAuiTabCtrl::DoEndDragging()
 {
     m_clickPt = wxDefaultPosition;
@@ -2143,8 +2149,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
 
                 // but we still need to show the new active page in this
                 // control, otherwise it wouldn't be updated
-                ctrl->DoShowHide();
-                ctrl->MakeTabVisible(ctrl_idx, ctrl);
+                ctrl->DoShowTab(ctrl_idx);
             }
         }
     }
@@ -3659,9 +3664,7 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
 
             ctrl->SetActivePage(ctrl_idx);
             DoSizing();
-            ctrl->DoShowHide();
-
-            ctrl->MakeTabVisible(ctrl_idx, ctrl);
+            ctrl->DoShowTab(ctrl_idx);
 
             // set fonts
             wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
