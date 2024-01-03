@@ -2136,6 +2136,16 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
             {
                 new_active = ctrl->GetWindowFromIdx(ctrl_idx);
             }
+            else // not deleting the globally active page
+            {
+                // so don't change the current one
+                new_active = active_wnd;
+
+                // but we still need to show the new active page in this
+                // control, otherwise it wouldn't be updated
+                ctrl->DoShowHide();
+                ctrl->MakeTabVisible(ctrl_idx, ctrl);
+            }
         }
     }
     else
