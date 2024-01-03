@@ -210,9 +210,9 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
     // elsewhere, but it is also possible to call a wide-char initialization
     // function (wxInitialize(), wxEntryStart() or wxEntry() itself) directly,
     // so we need to support this case too.
-    if ( argc )
+    if ( argc || !argcIn )
     {
-        // Already initialized, nothing to do.
+        // Already initialized or nothing to do.
         return;
     }
 
