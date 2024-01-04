@@ -494,74 +494,74 @@ inline wxRealPoint operator-(const wxRealPoint& p1, const wxRealPoint& p2)
 }
 
 
-inline wxRealPoint operator/(const wxRealPoint& s, int i)
+inline wxRealPoint operator/(const wxRealPoint& p, int i)
 {
-    return wxRealPoint(s.x / i, s.y / i);
+    return wxRealPoint(p.x / i, p.y / i);
 }
 
-inline wxRealPoint operator*(const wxRealPoint& s, int i)
+inline wxRealPoint operator*(const wxRealPoint& p, int i)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator*(int i, const wxRealPoint& s)
+inline wxRealPoint operator*(int i, const wxRealPoint& p)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator/(const wxRealPoint& s, unsigned int i)
+inline wxRealPoint operator/(const wxRealPoint& p, unsigned int i)
 {
-    return wxRealPoint(s.x / i, s.y / i);
+    return wxRealPoint(p.x / i, p.y / i);
 }
 
-inline wxRealPoint operator*(const wxRealPoint& s, unsigned int i)
+inline wxRealPoint operator*(const wxRealPoint& p, unsigned int i)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator*(unsigned int i, const wxRealPoint& s)
+inline wxRealPoint operator*(unsigned int i, const wxRealPoint& p)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator/(const wxRealPoint& s, long i)
+inline wxRealPoint operator/(const wxRealPoint& p, long i)
 {
-    return wxRealPoint(s.x / i, s.y / i);
+    return wxRealPoint(p.x / i, p.y / i);
 }
 
-inline wxRealPoint operator*(const wxRealPoint& s, long i)
+inline wxRealPoint operator*(const wxRealPoint& p, long i)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator*(long i, const wxRealPoint& s)
+inline wxRealPoint operator*(long i, const wxRealPoint& p)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator/(const wxRealPoint& s, unsigned long i)
+inline wxRealPoint operator/(const wxRealPoint& p, unsigned long i)
 {
-    return wxRealPoint(s.x / i, s.y / i);
+    return wxRealPoint(p.x / i, p.y / i);
 }
 
-inline wxRealPoint operator*(const wxRealPoint& s, unsigned long i)
+inline wxRealPoint operator*(const wxRealPoint& p, unsigned long i)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator*(unsigned long i, const wxRealPoint& s)
+inline wxRealPoint operator*(unsigned long i, const wxRealPoint& p)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * i, p.y * i);
 }
 
-inline wxRealPoint operator*(const wxRealPoint& s, double i)
+inline wxRealPoint operator*(const wxRealPoint& p, double f)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * f, p.y * f);
 }
 
-inline wxRealPoint operator*(double i, const wxRealPoint& s)
+inline wxRealPoint operator*(double f, const wxRealPoint& p)
 {
-    return wxRealPoint(s.x * i, s.y * i);
+    return wxRealPoint(p.x * f, p.y * f);
 }
 
 inline wxRealPoint operator/(const wxRealPoint& p, double f)
@@ -654,74 +654,74 @@ inline wxPoint operator-(const wxPoint& p)
     return wxPoint(-p.x, -p.y);
 }
 
-inline wxPoint operator/(const wxPoint& s, int i)
+inline wxPoint operator/(const wxPoint& p, int i)
 {
-    return wxPoint(s.x / i, s.y / i);
+    return wxPoint(p.x / i, p.y / i);
 }
 
-inline wxPoint operator*(const wxPoint& s, int i)
+inline wxPoint operator*(const wxPoint& p, int i)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(p.x * i, p.y * i);
 }
 
-inline wxPoint operator*(int i, const wxPoint& s)
+inline wxPoint operator*(int i, const wxPoint& p)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(p.x * i, p.y * i);
 }
 
-inline wxPoint operator/(const wxPoint& s, unsigned int i)
+inline wxPoint operator/(const wxPoint& p, unsigned int i)
 {
-    return wxPoint(s.x / i, s.y / i);
+    return wxPoint(p.x / i, p.y / i);
 }
 
-inline wxPoint operator*(const wxPoint& s, unsigned int i)
+inline wxPoint operator*(const wxPoint& p, unsigned int i)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(p.x * i, p.y * i);
 }
 
-inline wxPoint operator*(unsigned int i, const wxPoint& s)
+inline wxPoint operator*(unsigned int i, const wxPoint& p)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(p.x * i, p.y * i);
 }
 
-inline wxPoint operator/(const wxPoint& s, long i)
+inline wxPoint operator/(const wxPoint& p, long i)
 {
-    return wxPoint(s.x / i, s.y / i);
+    return wxPoint(p.x / i, p.y / i);
 }
 
-inline wxPoint operator*(const wxPoint& s, long i)
+inline wxPoint operator*(const wxPoint& p, long i)
 {
-    return wxPoint(int(s.x * i), int(s.y * i));
+    return wxPoint(int(p.x * i), int(p.y * i));
 }
 
-inline wxPoint operator*(long i, const wxPoint& s)
+inline wxPoint operator*(long i, const wxPoint& p)
 {
-    return wxPoint(int(s.x * i), int(s.y * i));
+    return wxPoint(int(p.x * i), int(p.y * i));
 }
 
-inline wxPoint operator/(const wxPoint& s, unsigned long i)
+inline wxPoint operator/(const wxPoint& p, unsigned long i)
 {
-    return wxPoint(s.x / i, s.y / i);
+    return wxPoint(p.x / i, p.y / i);
 }
 
-inline wxPoint operator*(const wxPoint& s, unsigned long i)
+inline wxPoint operator*(const wxPoint& p, unsigned long i)
 {
-    return wxPoint(int(s.x * i), int(s.y * i));
+    return wxPoint(int(p.x * i), int(p.y * i));
 }
 
-inline wxPoint operator*(unsigned long i, const wxPoint& s)
+inline wxPoint operator*(unsigned long i, const wxPoint& p)
 {
-    return wxPoint(int(s.x * i), int(s.y * i));
+    return wxPoint(int(p.x * i), int(p.y * i));
 }
 
-inline wxPoint operator*(const wxPoint& s, double i)
+inline wxPoint operator*(const wxPoint& p, double f)
 {
-    return wxPoint(int(s.x * i), int(s.y * i));
+    return wxPoint(int(p.x * f), int(p.y * f));
 }
 
-inline wxPoint operator*(double i, const wxPoint& s)
+inline wxPoint operator*(double f, const wxPoint& p)
 {
-    return wxPoint(int(s.x * i), int(s.y * i));
+    return wxPoint(int(p.x * f), int(p.y * f));
 }
 
 inline wxPoint operator/(const wxPoint& p, double f)
