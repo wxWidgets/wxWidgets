@@ -296,6 +296,105 @@ wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
     return wxFileName(GetLocalDir(style), stdp.MakeConfigFileName(szFile, conv));
 }
 
+wxFileConfig::MigrationResult
+wxFileConfig::MigrateLocalFile(const wxString& name, int newStyle, int oldStyle)
+{
+    MigrationResult res;
+
+    const auto oldPath = GetLocalFile(name, oldStyle);
+    if ( !oldPath.FileExists() )
+        return res;
+
+    const auto newPath = GetLocalFile(name, newStyle);
+    if ( newPath == oldPath )
+        return res;
+
+    res.oldPath = oldPath.GetFullPath();
+    res.newPath = newPath.GetFullPath();
+
+    // This class ensures that we (at least try to) rename the existing config
+    // file back to its original name if we fail with an error.
+    class RenameBackOnError
+    {
+    public:
+        explicit RenameBackOnError(wxFileConfig::MigrationResult& res)
+            : m_res(res)
+        {
+        }
+
+        void Init(const wxString& tempPath)
+        {
+            m_tempPath = tempPath;
+        }
+
+        void Dismiss()
+        {
+            m_tempPath.clear();
+        }
+
+        ~RenameBackOnError()
+        {
+            if ( !m_tempPath.empty() )
+            {
+                if ( !wxRenameFile(m_tempPath, m_res.oldPath) )
+                {
+                    // This should never happen, but if it does, do at least
+                    // let the user know that we moved their file to a wrong
+                    // place and couldn't put it back.
+                    m_res.error += wxString::Format(
+                        _(" and additionally, the existing configuration file"
+                          " was renamed to \"%s\" and couldn't be renamed back,"
+                          " please rename it to its original path \"%s\""),
+                        m_tempPath,
+                        m_res.oldPath
+                    );
+                }
+            }
+        }
+
+    private:
+        MigrationResult& m_res;
+
+        wxString m_tempPath;
+    } renameBackOnError{res};
+
+    wxString currentPath = res.oldPath;
+
+    const auto newDir = newPath.GetPath();
+    if ( !wxFileName::DirExists(newDir) )
+    {
+        // There is an annoying failure mode here when the new directory can't
+        // be created because its name is the same as the name of the existing
+        // file, e.g. when oldStyle==0 and newStyle==wxCONFIG_USE_SUBDIR and
+        // XDG layout is not used, so check for this specially.
+        if ( newDir == res.oldPath )
+        {
+            currentPath = wxFileName::CreateTempFileName(currentPath);
+            if ( !wxRenameFile(res.oldPath, currentPath) )
+            {
+                res.error = _("failed to rename the existing file");
+                return res;
+            }
+
+            renameBackOnError.Init(currentPath);
+        }
+
+        if ( !wxFileName::Mkdir(newDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+        {
+            res.error = _("failed to create the new file directory");
+            return res;
+        }
+    }
+
+    if ( !wxRenameFile(currentPath, res.newPath) )
+    {
+        res.error = _("failed to move the file to the new location");
+        return res;
+    }
+
+    return res;
+}
+
 // ----------------------------------------------------------------------------
 // ctor
 // ----------------------------------------------------------------------------
