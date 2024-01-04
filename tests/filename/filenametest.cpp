@@ -1040,9 +1040,11 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
     INFO( "size of /proc/kcore=" << size );
     CHECK( size > 0 );
 
+    if ( wxFile::Exists("/sys/power/state") ) {
     // All files in /sys are one page in size, irrespectively of the size of
     // their actual contents.
     CHECK( wxFileName::GetSize("/sys/power/state") == sysconf(_SC_PAGESIZE) );
+    }
 }
 
 #endif // __LINUX__

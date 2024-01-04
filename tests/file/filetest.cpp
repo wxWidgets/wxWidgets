@@ -153,6 +153,7 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     CHECK( fileProc.ReadAll(&s) );
     CHECK( !s.empty() );
 
+    if ( wxFile::Exists("/sys/power/state") ) {
     // All files in /sys have the size of one kernel page, even if they don't
     // have that much data in them.
     const long pageSize = sysconf(_SC_PAGESIZE);
@@ -163,6 +164,7 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     CHECK( fileSys.ReadAll(&s) );
     CHECK( !s.empty() );
     CHECK( s.length() < pageSize );
+    }
 }
 
 #endif // __LINUX__

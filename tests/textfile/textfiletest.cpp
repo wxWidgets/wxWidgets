@@ -348,6 +348,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
         CHECK( f.GetLineCount() > 1 );
     }
 
+    if ( wxFile::Exists("/sys/power/state") ) {
     SECTION("/sys")
     {
         wxTextFile f;
@@ -355,6 +356,7 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
         REQUIRE( f.GetLineCount() == 1 );
         INFO( "/sys/power/state contains \"" << f[0] << "\"" );
         CHECK( (f[0].find("mem") != wxString::npos || f[0].find("disk") != wxString::npos) );
+    }
     }
 }
 
