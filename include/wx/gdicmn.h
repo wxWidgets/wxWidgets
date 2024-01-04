@@ -515,6 +515,11 @@ inline wxRealPoint operator-(const wxSize& sz, const wxRealPoint& pt)
     return wxRealPoint(sz.GetWidth() - pt.x, sz.GetHeight() - pt.y);
 }
 
+inline wxRealPoint operator-(const wxRealPoint& pt)
+{
+    return wxRealPoint(-pt.x, -pt.y);
+}
+
 inline wxRealPoint operator/(const wxRealPoint& p, int i)
 {
     return wxRealPoint(p.x / i, p.y / i);

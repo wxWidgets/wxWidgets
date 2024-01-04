@@ -227,6 +227,8 @@ public:
     wxRealPoint& operator +=(const wxSize& sz);
     wxRealPoint& operator -=(const wxSize& sz);
 
+    wxRealPoint operator -(const wxRealPoint& pt);
+
     wxRealPoint operator /(const wxRealPoint& sz, int divisor);
     wxRealPoint operator *(const wxRealPoint& sz, int factor);
     wxRealPoint operator *(int factor, const wxRealPoint& pt);
