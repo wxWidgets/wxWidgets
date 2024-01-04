@@ -235,9 +235,9 @@ public:
     wxRealPoint& operator /=(int divisor);
     wxRealPoint& operator *=(int factor);
 
+    wxRealPoint operator /(const wxRealPoint& pt, double divisor);
     wxRealPoint operator *(const wxRealPoint& pt, double factor);
     wxRealPoint operator *(double factor, const wxRealPoint& pt);
-    wxRealPoint operator /(const wxRealPoint& pt, double divisor);
     ///@}
 
     /**
