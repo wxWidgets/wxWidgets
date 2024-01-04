@@ -97,9 +97,6 @@ endif()
 
 project(wxWidgets VERSION ${wxVERSION} LANGUAGES ${wxLANGUAGES})
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 include(build/cmake/main.cmake)
 
 # Set the default startup project for Visual Studio
