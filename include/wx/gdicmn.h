@@ -490,12 +490,30 @@ inline wxRealPoint operator+(const wxRealPoint& p1, const wxRealPoint& p2)
     return wxRealPoint(p1.x + p2.x, p1.y + p2.y);
 }
 
-
 inline wxRealPoint operator-(const wxRealPoint& p1, const wxRealPoint& p2)
 {
     return wxRealPoint(p1.x - p2.x, p1.y - p2.y);
 }
 
+inline wxRealPoint operator+(const wxRealPoint& pt, const wxSize& sz)
+{
+    return wxRealPoint(pt.x + sz.GetWidth(), pt.y + sz.GetHeight());
+}
+
+inline wxRealPoint operator-(const wxRealPoint& pt, const wxSize& sz)
+{
+    return wxRealPoint(pt.x - sz.GetWidth(), pt.y - sz.GetHeight());
+}
+
+inline wxRealPoint operator+(const wxSize& sz, const wxRealPoint& pt)
+{
+    return wxRealPoint(sz.GetWidth() + pt.x, sz.GetHeight() + pt.y);
+}
+
+inline wxRealPoint operator-(const wxSize& sz, const wxRealPoint& pt)
+{
+    return wxRealPoint(sz.GetWidth() - pt.x, sz.GetHeight() - pt.y);
+}
 
 inline wxRealPoint operator/(const wxRealPoint& p, int i)
 {
