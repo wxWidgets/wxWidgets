@@ -56,12 +56,13 @@ bool          wxConfigBase::ms_bAutoCreate = true;
 
 wxConfigBase *wxAppTraitsBase::CreateConfig()
 {
-    return new
-    #if defined(__WINDOWS__) && wxUSE_CONFIG_NATIVE
-        wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-    #else // either we're under Unix or wish to use files even under Windows
-        wxFileConfig(wxTheApp->GetAppName());
-    #endif
+#if defined(wxHAS_CONFIG_AS_REGCONFIG)
+    return new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+#elif defined(wxHAS_CONFIG_AS_FILECONFIG)
+    return new wxFileConfig(wxTheApp->GetAppName());
+#else
+    #error No wxConfig implementation defined.
+#endif
 }
 
 // ----------------------------------------------------------------------------

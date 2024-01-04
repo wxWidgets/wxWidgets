@@ -57,7 +57,9 @@ enum
     with the registry under Windows or text-based config files under Unix.
     To make writing the portable code even easier, wxWidgets provides a typedef
     wxConfig which is mapped onto the native wxConfigBase implementation on the
-    given platform: i.e. wxRegConfig under Windows and wxFileConfig otherwise.
+    given platform: i.e. wxRegConfig under Windows (in this case
+    `wxHAS_CONFIG_AS_REGCONFIG` preprocessor symbol is defined) and
+    wxFileConfig otherwise (in this case `wxHAS_CONFIG_AS_FILECONFIG` is).
 
     See @ref overview_config for a description of all features of this class.
 
