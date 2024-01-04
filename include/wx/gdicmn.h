@@ -580,6 +580,11 @@ inline wxRealPoint operator*(unsigned long i, const wxRealPoint& p)
     return wxRealPoint(p.x * i, p.y * i);
 }
 
+inline wxRealPoint operator/(const wxRealPoint& p, double f)
+{
+    return wxRealPoint(p.x / f, p.y / f);
+}
+
 inline wxRealPoint operator*(const wxRealPoint& p, double f)
 {
     return wxRealPoint(p.x * f, p.y * f);
@@ -588,11 +593,6 @@ inline wxRealPoint operator*(const wxRealPoint& p, double f)
 inline wxRealPoint operator*(double f, const wxRealPoint& p)
 {
     return wxRealPoint(p.x * f, p.y * f);
-}
-
-inline wxRealPoint operator/(const wxRealPoint& p, double f)
-{
-    return wxRealPoint(p.x / f, p.y / f);
 }
 
 
