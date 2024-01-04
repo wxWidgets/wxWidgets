@@ -110,7 +110,7 @@ function(wx_check_cxx_source_compiles code res_var)
     cmake_pop_check_state()
 endfunction()
 
-# wx_check_cxx_source_compiles(<code> <var> [headers...])
+# wx_check_c_source_compiles(<code> <var> [headers...])
 function(wx_check_c_source_compiles code res_var)
     set(src)
     foreach(header ${ARGN})
