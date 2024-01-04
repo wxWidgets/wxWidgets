@@ -470,8 +470,12 @@ public:
     wxRealPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
     wxRealPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
 
+    wxRealPoint& operator+=(double f) { x += f; y += f; return *this; }
+    wxRealPoint& operator-=(double f) { x -= f; y -= f; return *this; }
     wxRealPoint& operator/=(int i) { x *= i; y *= i; return *this; }
     wxRealPoint& operator*=(int i) { x /= i; y /= i; return *this; }
+    wxRealPoint& operator/=(double f) { x /= f; y /= f; return *this; }
+    wxRealPoint& operator*=(double f) { x *= f; y *= f; return *this; }
 };
 
 
@@ -518,6 +522,26 @@ inline wxRealPoint operator-(const wxSize& sz, const wxRealPoint& pt)
 inline wxRealPoint operator-(const wxRealPoint& pt)
 {
     return wxRealPoint(-pt.x, -pt.y);
+}
+
+inline wxRealPoint operator+(const wxRealPoint& pt, double f)
+{
+  return wxRealPoint(pt.x + f, pt.y + f);
+}
+
+inline wxRealPoint operator-(const wxRealPoint& pt, double f)
+{
+  return wxRealPoint(pt.x - f, pt.y - f);
+}
+
+inline wxRealPoint operator+(double f, const wxRealPoint& pt)
+{
+  return wxRealPoint(f + pt.x, f + pt.y);
+}
+
+inline wxRealPoint operator-(double f, const wxRealPoint& pt)
+{
+  return wxRealPoint(f - pt.x, f - pt.y);
 }
 
 inline wxRealPoint operator/(const wxRealPoint& p, int i)
@@ -618,8 +642,12 @@ public:
     wxPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
     wxPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
 
+    wxPoint& operator+=(int i) { x += i; y += i; return *this; }
+    wxPoint& operator-=(int i) { x -= i; y -= i; return *this; }
     wxPoint& operator/=(int i) { x /= i, y /= i; return *this; }
     wxPoint& operator*=(int i) { x *= i, y *= i; return *this; }
+    wxPoint& operator*=(double f) { x = wxRound(x*f); y = wxRound(y*f); return *this; }
+    wxPoint& operator/=(double f) { x = wxRound(x/f); y = wxRound(y/f); return *this; }
 
     // check if both components are set/initialized
     bool IsFullySpecified() const { return x != wxDefaultCoord && y != wxDefaultCoord; }
@@ -681,6 +709,26 @@ inline wxPoint operator-(const wxSize& s, const wxPoint& p)
 inline wxPoint operator-(const wxPoint& p)
 {
     return wxPoint(-p.x, -p.y);
+}
+
+inline wxPoint operator+(const wxPoint& pt, int i)
+{
+  return wxPoint(pt.x + i, pt.y + i);
+}
+
+inline wxPoint operator-(const wxPoint& pt, int i)
+{
+  return wxPoint(pt.x - i, pt.y - i);
+}
+
+inline wxPoint operator+(int i, const wxPoint& pt)
+{
+  return wxPoint(i + pt.x, i + pt.y);
+}
+
+inline wxPoint operator-(int i, const wxPoint& pt)
+{
+  return wxPoint(i - pt.x, i - pt.y);
 }
 
 inline wxPoint operator/(const wxPoint& p, int i)

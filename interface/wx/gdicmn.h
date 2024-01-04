@@ -229,6 +229,13 @@ public:
 
     wxRealPoint operator -(const wxRealPoint& pt);
 
+    wxRealPoint operator +(const wxRealPoint& pt, double a);
+    wxRealPoint operator -(const wxRealPoint& pt, double a);
+    wxRealPoint operator +(double a, const wxRealPoint& pt);
+    wxRealPoint operator -(double a, const wxRealPoint& pt);
+    wxRealPoint& operator +=(double a);
+    wxRealPoint& operator -=(double a);
+
     wxRealPoint operator /(const wxRealPoint& sz, int divisor);
     wxRealPoint operator *(const wxRealPoint& sz, int factor);
     wxRealPoint operator *(int factor, const wxRealPoint& pt);
@@ -238,6 +245,8 @@ public:
     wxRealPoint operator /(const wxRealPoint& pt, double divisor);
     wxRealPoint operator *(const wxRealPoint& pt, double factor);
     wxRealPoint operator *(double factor, const wxRealPoint& pt);
+    wxRealPoint& operator /=(double divisor);
+    wxRealPoint& operator *=(double factor);
     ///@}
 
     /**
@@ -739,6 +748,13 @@ public:
 
     wxPoint operator -(const wxPoint& pt);
 
+    wxPoint operator +(const wxPoint& pt, int a);
+    wxPoint operator -(const wxPoint& pt, int a);
+    wxPoint operator +(int a, const wxPoint& pt);
+    wxPoint operator -(int a, const wxPoint& pt);
+    wxPoint& operator +=(int a);
+    wxPoint& operator -=(int a);
+
     wxPoint operator /(const wxPoint& sz, int divisor);
     wxPoint operator *(const wxPoint& sz, int factor);
     wxPoint operator *(int factor, const wxPoint& sz);
@@ -748,6 +764,8 @@ public:
     wxPoint operator /(const wxPoint& pt, double divisor);
     wxPoint operator *(const wxPoint& pt, double factor);
     wxPoint operator *(double factor, const wxPoint& pt);
+    wxPoint& operator /=(double divisor);
+    wxPoint& operator *=(double factor);
     ///@}
 
 
