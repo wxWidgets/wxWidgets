@@ -738,6 +738,11 @@ inline wxPoint operator*(unsigned long i, const wxPoint& p)
     return wxPoint(int(p.x * i), int(p.y * i));
 }
 
+inline wxPoint operator/(const wxPoint& p, double f)
+{
+    return wxPoint(wxRound(p.x / f), wxRound(p.y / f));
+}
+
 inline wxPoint operator*(const wxPoint& p, double f)
 {
     return wxPoint(int(p.x * f), int(p.y * f));
@@ -746,11 +751,6 @@ inline wxPoint operator*(const wxPoint& p, double f)
 inline wxPoint operator*(double f, const wxPoint& p)
 {
     return wxPoint(int(p.x * f), int(p.y * f));
-}
-
-inline wxPoint operator/(const wxPoint& p, double f)
-{
-    return wxPoint(wxRound(p.x / f), wxRound(p.y / f));
 }
 
 WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);
