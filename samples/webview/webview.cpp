@@ -65,13 +65,9 @@
 // This sample can be built with and without wxUSE_WEBVIEW_CHROMIUM, so we
 // can't put the libraries in the project linker options and have to link them
 // from here.
-#if defined(_MSC_VER) && wxUSE_WEBVIEW_CHROMIUM && !WXUSINGDLL
+#if defined(_MSC_VER) && wxUSE_WEBVIEW_CHROMIUM
     #pragma comment(lib, "libcef")
-#ifndef NDEBUG
-    #pragma comment(lib, "libcef_dll_wrapperd")
-#else
     #pragma comment(lib, "libcef_dll_wrapper")
-#endif
 #endif
 
 //We map menu items to their history items

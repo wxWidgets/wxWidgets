@@ -56,18 +56,11 @@ endif()
 set(USE_ATL OFF)        # Disable usage of ATL in CEF
 set(USE_SANDBOX OFF)    # Disable usage of sandbox on windows
 
-set(lib_rls)
-set(lib_dbg)
-if(WIN32_MSVC_NAMING)
-    set(lib_dbg "d")
-endif()
-
 add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
 set_target_properties(libcef_dll_wrapper PROPERTIES
     FOLDER "Third Party Libraries"
     COMPILE_FLAGS     "-Wno-extra"
-    OUTPUT_NAME       "libcef_dll_wrapper${lib_rls}"
-    OUTPUT_NAME_DEBUG "libcef_dll_wrapper${lib_dbg}"
+    OUTPUT_NAME "libcef_dll_wrapper"
 )
 
 if(MSVC)
