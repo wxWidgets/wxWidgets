@@ -735,8 +735,10 @@ bool wxWebViewChromium::DoCreateBrowser(const wxString& url)
     // need the underlying X11 window here.
 #ifdef __WXGTK__
     const auto handle = GDK_WINDOW_XID(GTKGetDrawingWindow());
+    const auto handleValue = static_cast<wxUIntPtr>(handle);
 #else
     const auto handle = GetHandle();
+    const auto handleValue = wxPtrToUInt(handle);
 #endif
 
     const wxSize sz = GetClientSize();
@@ -790,7 +792,7 @@ bool wxWebViewChromium::DoCreateBrowser(const wxString& url)
         return false;
     }
 
-    wxLogTrace(TRACE_CEF, "Browser created as child of %lx", handle);
+    wxLogTrace(TRACE_CEF, "Browser created as child of %zx", handleValue);
     return true;
 }
 
