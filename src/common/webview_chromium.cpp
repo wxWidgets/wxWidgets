@@ -23,6 +23,7 @@
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
 #endif
+#include "wx/private/webview.h"
 
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
@@ -249,11 +250,33 @@ void AppImplData::DoMessageLoopWork()
 }
 
 // ----------------------------------------------------------------------------
+// Chromium-specific configuration data
+// ----------------------------------------------------------------------------
+
+class wxWebViewConfigurationImplChromium : public wxWebViewConfigurationImpl
+{
+public:
+    static wxWebViewConfiguration MakeConfig()
+    {
+        return wxWebViewConfiguration(wxWebViewBackendChromium,
+                                      new wxWebViewConfigurationImplChromium);
+    }
+};
+
+// ----------------------------------------------------------------------------
 // ImplData contains data for a single wxWebViewChromium instance
 // ----------------------------------------------------------------------------
 
 struct ImplData
 {
+    explicit ImplData(const wxWebViewConfiguration& config =
+                        wxWebViewConfigurationImplChromium::MakeConfig())
+        : m_config{config}
+    {
+    }
+
+    wxWebViewConfiguration m_config;
+
 #ifdef __WXGTK__
     // Due to delayed creation of the browser in wxGTK we need to remember the
     // URL passed to Create() as we can't use it there directly.
@@ -604,6 +627,11 @@ using namespace wxCEF;
 void wxWebViewChromium::Init()
 {
     m_implData = new ImplData{};
+}
+
+wxWebViewChromium::wxWebViewChromium(const wxWebViewConfiguration& config)
+{
+    m_implData = new ImplData{config};
 }
 
 bool wxWebViewChromium::Create(wxWindow* parent,
@@ -1822,6 +1850,12 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryChromium : public wxWebViewFactory
 {
 public:
     virtual wxWebView* Create() override { return new wxWebViewChromium; }
+
+    virtual wxWebView* CreateWithConfig(const wxWebViewConfiguration& config) override
+    {
+        return new wxWebViewChromium(config);
+    }
+
     virtual wxWebView* Create(wxWindow* parent,
                               wxWindowID id,
                               const wxString& url = wxWebViewDefaultURLStr,
@@ -1852,6 +1886,11 @@ public:
             CEF_COMMIT_NUMBER,
             CEF_VERSION
         };
+    }
+
+    virtual wxWebViewConfiguration CreateConfiguration() override
+    {
+        return wxWebViewConfigurationImplChromium::MakeConfig();
     }
 };
 

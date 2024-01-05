@@ -30,6 +30,8 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewChromium : public wxWebView
 public:
     wxWebViewChromium() { Init(); }
 
+    explicit wxWebViewChromium(const wxWebViewConfiguration& config);
+
     wxWebViewChromium(wxWindow* parent,
            wxWindowID id,
            const wxString& url = wxWebViewDefaultURLStr,
