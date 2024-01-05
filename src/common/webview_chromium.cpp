@@ -289,6 +289,11 @@ public:
     virtual CefRefPtr<CefLoadHandler> GetLoadHandler() override  { return this; }
     virtual CefRefPtr<CefRequestHandler> GetRequestHandler() override { return this; }
 
+    virtual bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+        CefRefPtr<CefFrame> frame,
+        CefProcessId source_process,
+        CefRefPtr<CefProcessMessage> message) override;
+
     // CefDisplayHandler methods
     virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser,
         bool isLoading, bool canGoBack,
@@ -1369,6 +1374,24 @@ void wxWebViewChromium::SetRoot(const wxFileName& rootDir)
     );
 }
 
+bool
+ClientHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> WXUNUSED(browser),
+    CefRefPtr<CefFrame> frame,
+    CefProcessId WXUNUSED(source_process),
+    CefRefPtr<CefProcessMessage> message)
+{
+    // This is not supposed to happen, but test for it nevertheless.
+    if ( !frame || !message )
+    {
+        wxLogTrace(TRACE_CEF, "Ignoring null OnProcessMessageReceived() args");
+        return false;
+    }
+
+    wxWebViewChromiumEvent event(m_webview, *frame, *message);
+
+    return m_webview.HandleWindowEvent(event);
+}
+
 // CefDisplayHandler methods
 void ClientHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> WXUNUSED(browser),
                                          bool WXUNUSED(isLoading),
@@ -1846,5 +1869,31 @@ private:
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromiumModule, wxModule);
+
+// ----------------------------------------------------------------------------
+// wxWebViewChromiumEvent
+// ----------------------------------------------------------------------------
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromiumEvent, wxCommandEvent);
+
+wxDEFINE_EVENT( wxEVT_WEBVIEW_CHROMIUM_MESSAGE_RECEIVED, wxWebViewChromiumEvent );
+
+wxWebViewChromiumEvent::wxWebViewChromiumEvent(
+    wxWebViewChromium& webview,
+    CefFrame& frame,
+    CefProcessMessage& message
+) : wxCommandEvent(wxEVT_WEBVIEW_CHROMIUM_MESSAGE_RECEIVED, webview.GetId()),
+    m_frame(&frame),
+    m_message(&message)
+{
+    SetEventObject(&webview);
+}
+
+wxString wxWebViewChromiumEvent::GetMessageName() const
+{
+    wxCHECK_MSG( m_message, {}, "No message" );
+
+    return m_message->GetName().ToWString();
+}
 
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM

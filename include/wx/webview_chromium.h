@@ -178,6 +178,50 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromium);
 };
 
+class CefFrame;
+class CefProcessMessage;
+
+// Chrome-specific event sent when a message from renderer process is received.
+//
+// It provides the message received from another process and a frame that can
+// be used to send the reply back.
+class WXDLLIMPEXP_WEBVIEW wxWebViewChromiumEvent : public wxCommandEvent
+{
+public:
+    wxWebViewChromiumEvent() = default;
+
+    wxWebViewChromiumEvent(
+        wxWebViewChromium& webview,
+        CefFrame& frame,
+        CefProcessMessage& message
+    );
+
+    CefFrame& GetFrame() const { return *m_frame; }
+    CefProcessMessage& GetMessage() const { return *m_message; }
+
+    wxString GetMessageName() const;
+
+private:
+    CefFrame* const m_frame = nullptr;
+    CefProcessMessage* const m_message = nullptr;
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWebViewChromiumEvent);
+};
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW,
+                          wxEVT_WEBVIEW_CHROMIUM_MESSAGE_RECEIVED,
+                          wxWebViewChromiumEvent );
+
+typedef void (wxEvtHandler::*wxWebViewChromiumEventFunction)
+             (wxWebViewChromiumEvent&);
+
+#define wxWebViewChromiumEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxWebViewChromiumEventFunction, func)
+
+#define EVT_WEBVIEW_CHROMIUM_MESSAGE_RECEIVED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_CHROMIUM_MESSAGE_RECEIVED, id, \
+                     wxWebViewChromiumEventHandler(fn))
+
 #endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
 
 #endif // _WX_WEBVIEWCHROMIUM_H_
