@@ -29,6 +29,14 @@
 #include <gdk/gdkx.h>
 #endif
 
+// With MSVC we are always using debug CEF build in debug wx builds (i.e. when
+// _DEBUG is defined), as otherwise we'd be using incompatible variants of CRT.
+#ifdef _DEBUG
+    #ifndef wxHAVE_CEF_DEBUG
+        #define wxHAVE_CEF_DEBUG
+    #endif
+#endif
+
 // When not using debug version of CEF under Unix we need to make sure to
 // predefine NDEBUG before including its headers to avoid ODR violations.
 #ifndef wxHAVE_CEF_DEBUG
