@@ -834,7 +834,14 @@ public:
     class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxLongLongWx&);
     friend WXDLLIMPEXP_BASE
     class wxTextInputStream& operator>>(class wxTextInputStream&, wxLongLongWx&);
-#endif
+
+#if wxUSE_LONGLONG_NATIVE
+    friend WXDLLIMPEXP_BASE
+    class wxTextOutputStream &operator<<(class wxTextOutputStream &stream, wxLongLong_t value);
+    friend WXDLLIMPEXP_BASE
+    class wxTextInputStream &operator>>(class wxTextInputStream &stream, wxLongLong_t &value);
+#endif // wxUSE_LONGLONG_NATIVE
+#endif // wxUSE_STREAMS
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs
@@ -1066,7 +1073,14 @@ public:
     class wxTextOutputStream& operator<<(class wxTextOutputStream&, const wxULongLongWx&);
     friend WXDLLIMPEXP_BASE
     class wxTextInputStream& operator>>(class wxTextInputStream&, wxULongLongWx&);
-#endif
+
+#if wxUSE_LONGLONG_NATIVE
+    friend WXDLLIMPEXP_BASE
+    class wxTextOutputStream &operator<<(class wxTextOutputStream &stream, wxULongLong_t value);
+    friend WXDLLIMPEXP_BASE
+    class wxTextInputStream &operator>>(class wxTextInputStream &stream, wxULongLong_t &value);
+#endif // wxUSE_LONGLONG_NATIVE
+#endif // wxUSE_STREAMS
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs
@@ -1085,16 +1099,6 @@ private:
 };
 
 #endif // wxUSE_LONGLONG_WX
-
-#if wxUSE_LONGLONG_NATIVE && wxUSE_STREAMS
-
-WXDLLIMPEXP_BASE class wxTextOutputStream &operator<<(class wxTextOutputStream &stream, wxULongLong_t value);
-WXDLLIMPEXP_BASE class wxTextOutputStream &operator<<(class wxTextOutputStream &stream, wxLongLong_t value);
-
-WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &stream, wxULongLong_t &value);
-WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &stream, wxLongLong_t &value);
-
-#endif
 
 // ----------------------------------------------------------------------------
 // Specialize numeric_limits<> for our long long wrapper classes.
