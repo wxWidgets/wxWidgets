@@ -396,7 +396,7 @@ public:
     @{
 */
 
-enum class wxPGKeyboardActions
+enum class wxPGKeyboardAction
 {
     Invalid,
 
@@ -517,7 +517,7 @@ public:
         the next property.
 
         @code
-            propGrid->AddActionTrigger(wxPGKeyboardActions::NextProperty,
+            propGrid->AddActionTrigger(wxPGKeyboardAction::NextProperty,
                                        WXK_RETURN);
             propGrid->DedicateKey(WXK_RETURN);
         @endcode
@@ -530,7 +530,7 @@ public:
             Which key event modifiers, in addition to keycode, are needed to
             trigger the action.
     */
-    void AddActionTrigger(wxPGKeyboardActions action, int keycode, int modifiers = 0);
+    void AddActionTrigger(wxPGKeyboardAction action, int keycode, int modifiers = 0);
 
     /**
         Adds given property into selection. If ::wxPG_EX_MULTIPLE_SELECTION
@@ -602,7 +602,7 @@ public:
         @param action
             Which action to clear. @ref propgrid_keyboard_actions.
     */
-    void ClearActionTriggers(wxPGKeyboardActions action);
+    void ClearActionTriggers(wxPGKeyboardAction action);
 
     /**
         Forces updating the value of property from the editor control.
