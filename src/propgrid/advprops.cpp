@@ -491,35 +491,56 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
 // NB: Do not use wxS here since unlike wxT it doesn't translate to wxChar*
 //
 
-static const wxChar* const gs_fp_es_family_labels[] = {
+static constexpr std::array<const wxChar*, 8+1> gs_fp_es_family_labels
+{
     wxT("Default"), wxT("Decorative"),
     wxT("Roman"), wxT("Script"),
     wxT("Swiss"), wxT("Modern"),
     wxT("Teletype"), wxT("Unknown"),
-    (const wxChar*) nullptr
+    nullptr
 };
 
-static const long gs_fp_es_family_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_fp_es_family_labels[gs_fp_es_family_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >+ C++ 14
+
+static constexpr std::array<long, 8> gs_fp_es_family_values
+{
     wxFONTFAMILY_DEFAULT, wxFONTFAMILY_DECORATIVE,
     wxFONTFAMILY_ROMAN, wxFONTFAMILY_SCRIPT,
     wxFONTFAMILY_SWISS, wxFONTFAMILY_MODERN,
     wxFONTFAMILY_TELETYPE, wxFONTFAMILY_UNKNOWN
 };
 
-static const wxChar* const gs_fp_es_style_labels[] = {
+static_assert(gs_fp_es_family_values.size() == gs_fp_es_family_labels.size() - 1,
+    "Values table has to have one item less than labels table");
+
+static constexpr std::array<const wxChar*, 3+1> gs_fp_es_style_labels
+{
     wxT("Normal"),
     wxT("Slant"),
     wxT("Italic"),
-    (const wxChar*) nullptr
+    nullptr
 };
 
-static const long gs_fp_es_style_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_fp_es_style_labels[gs_fp_es_style_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long,3> gs_fp_es_style_values
+{
     wxFONTSTYLE_NORMAL,
     wxFONTSTYLE_SLANT,
     wxFONTSTYLE_ITALIC
 };
 
-static const wxChar* const gs_fp_es_weight_labels[] = {
+static_assert(gs_fp_es_style_values.size() == gs_fp_es_style_labels.size() - 1,
+    "Values table has to have one item less than labels table");
+
+static constexpr std::array<const wxChar*, 10+1> gs_fp_es_weight_labels
+{
     wxT("Thin"),
     wxT("ExtraLight"),
     wxT("Light"),
@@ -530,10 +551,16 @@ static const wxChar* const gs_fp_es_weight_labels[] = {
     wxT("ExtraBold"),
     wxT("Heavy"),
     wxT("ExtraHeavy"),
-    (const wxChar*) nullptr
+    nullptr
 };
 
-static const long gs_fp_es_weight_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_fp_es_weight_labels[gs_fp_es_weight_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 10> gs_fp_es_weight_values
+{
     wxFONTWEIGHT_THIN,
     wxFONTWEIGHT_EXTRALIGHT,
     wxFONTWEIGHT_LIGHT,
@@ -545,6 +572,9 @@ static const long gs_fp_es_weight_values[] = {
     wxFONTWEIGHT_HEAVY,
     wxFONTWEIGHT_EXTRAHEAVY
 };
+
+static_assert(gs_fp_es_weight_values.size() == gs_fp_es_weight_labels.size() - 1,
+    "Values table has to have one item less than labels table");
 
 // Class body is in advprops.h
 
@@ -591,12 +621,12 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     /* TRANSLATORS: Label of font style */
     AddPrivateChild( new wxEnumProperty(_("Style"), wxS("Style"),
-                     gs_fp_es_style_labels,gs_fp_es_style_values,
+                     gs_fp_es_style_labels.data(), gs_fp_es_style_values.data(),
                      font.GetStyle()) );
 
     /* TRANSLATORS: Label of font weight */
     AddPrivateChild( new wxEnumProperty(_("Weight"), wxS("Weight"),
-                     gs_fp_es_weight_labels,gs_fp_es_weight_values,
+                     gs_fp_es_weight_labels.data(), gs_fp_es_weight_values.data(),
                      font.GetWeight()) );
 
     /* TRANSLATORS: Label of underlined font */
@@ -605,7 +635,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     /* TRANSLATORS: Label of font family */
     AddPrivateChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
-                     gs_fp_es_family_labels,gs_fp_es_family_values,
+                     gs_fp_es_family_labels.data(), gs_fp_es_family_values.data(),
                      font.GetFamily()) );
 }
 
