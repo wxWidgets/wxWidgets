@@ -718,8 +718,8 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxMemoryDC memdc(&dc);
 
     const double scale = dc.GetContentScaleFactor();
-    wxBitmap bitmap;
-    bitmap.CreateWithDIPSize(rc.right / scale, rc.bottom / scale, scale);
+    wxBitmap bitmap(rc.right, rc.bottom);
+    bitmap.SetScaleFactor(scale);
     memdc.SelectObject(bitmap);
 
     PaintBackground(memdc, rc);
