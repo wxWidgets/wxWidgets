@@ -73,12 +73,11 @@
     wxObject itself. By default, wxWidgets already implements the shift
     operator conversion for a few of its drawing related classes:
 
-    @code
-    IMPLEMENT_VARIANT_OBJECT(wxColour)
-    IMPLEMENT_VARIANT_OBJECT(wxImage)
-    IMPLEMENT_VARIANT_OBJECT(wxIcon)
-    IMPLEMENT_VARIANT_OBJECT(wxBitmap)
-    @endcode
+    - wxColour
+    - wxImage
+    - wxIcon
+    - wxBitmap
+    - wxBitmapBundle
 
     Note that as of wxWidgets 2.9.0, wxVariantData no longer inherits from
     wxObject and wxVariant no longer uses the type-unsafe wxList class for list
