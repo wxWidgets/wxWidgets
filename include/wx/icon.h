@@ -11,7 +11,7 @@
 #define _WX_ICON_H_BASE_
 
 #include "wx/iconloc.h"
-
+#include "wx/variant.h"
 
 // a more readable way to tell
 #define wxICON_SCREEN_DEPTH     (-1)
@@ -56,16 +56,6 @@
 #ifndef wxICON_DIFFERENT_FROM_BITMAP
     #define wxICON_IS_BITMAP
 #endif
-
-//-----------------------------------------------------------------------------
-// wxVariant support
-//-----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLIMPEXP_CORE)
-#endif
-
 
 #endif
     // _WX_ICON_H_BASE_

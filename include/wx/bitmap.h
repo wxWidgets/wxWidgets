@@ -18,6 +18,7 @@
 #include "wx/gdicmn.h"  // for wxBitmapType
 #include "wx/colour.h"
 #include "wx/image.h"
+#include "wx/variant.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
@@ -27,15 +28,6 @@ class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
-
-// ----------------------------------------------------------------------------
-// wxVariant support
-// ----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLIMPEXP_CORE)
-#endif
 
 // ----------------------------------------------------------------------------
 // wxMask represents the transparent area of the bitmap
@@ -100,6 +92,9 @@ public:
 
     // Rescale the given bitmap to the requested size.
     static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
+
+    // wxVariant support
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap, WXDLLIMPEXP_CORE);
 };
 
 

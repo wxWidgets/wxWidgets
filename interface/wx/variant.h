@@ -42,21 +42,24 @@
     required.
 
     Note that as of wxWidgets 2.7.1, wxVariant is
-    @ref overview_refcount "reference counted". Additionally, the convenience
-    macros DECLARE_VARIANT_OBJECT() and IMPLEMENT_VARIANT_OBJECT() were added
-    so that adding (limited) support for conversion to and from wxVariant can
-    be very easily implemented without modifying either wxVariant or the class
-    to be stored by wxVariant. Since assignment operators cannot be declared
-    outside the class, the shift left operators are used like this:
+    @ref overview_refcount "reference counted".
+
+    Convenience macros wxDECLARE_VARIANT_OBJECT() and wxIMPLEMENT_VARIANT_OBJECT()
+    allow easily adding support for conversion to and from wxVariant to custom
+    classes. The first of these macros must be used inside the class declaration
+    and the second one outside of it in the implementation file, e.g.
 
     @code
     // in the header file
-    DECLARE_VARIANT_OBJECT(MyClass)
+    class MyClass : public wxObject {
+        ...
+        wxDECLARE_VARIANT_OBJECT(MyClass);
+    };
 
     // in the implementation file
-    IMPLEMENT_VARIANT_OBJECT(MyClass)
+    wxIMPLEMENT_VARIANT_OBJECT(MyClass);
 
-    // in the user code
+    // and then objects of MyClass can be used with wxVariant like this:
     wxVariant variant;
     MyClass value;
     variant << value;
@@ -78,6 +81,11 @@
     - wxIcon
     - wxBitmap
     - wxBitmapBundle
+
+    @note There also are legacy versions of the above macros without `wx`
+        prefix, working in a slightly different way. Please use the new
+        versions in the new code and consider replacing any existing use of
+        the legacy macros with the new ones.
 
     Note that as of wxWidgets 2.9.0, wxVariantData no longer inherits from
     wxObject and wxVariant no longer uses the type-unsafe wxList class for list
