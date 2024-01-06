@@ -1220,11 +1220,16 @@ bool wxPropertyGridPageState::DoSetPropertyValueString( wxPGProperty* p, const w
 {
     if ( p )
     {
-        int flags = wxPG_REPORT_ERROR|wxPG_FULL_VALUE|wxPG_PROGRAMMATIC_VALUE;
+        constexpr wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::ReportError|wxPGPropValFormatFlags::FullValue|wxPGPropValFormatFlags::ProgrammaticValue;
 
         wxVariant variant = p->GetValueRef();
 
+#if WXWIN_COMPATIBILITY_3_2
+        // Special implementation with check if user-overriden obsolete function is still in use
+        if ( p->StringToValueWithCheck(variant, value, flags) )
+#else
         if ( p->StringToValue(variant, value, flags) )
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
         {
             p->SetValue(variant);
             if ( p == m_pPropGrid->GetSelection() && IsDisplayed() )

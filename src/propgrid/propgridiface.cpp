@@ -424,16 +424,16 @@ wxPGProperty* wxPropertyGridInterface::GetPropertyByLabel( const wxString& label
 // ----------------------------------------------------------------------------
 
 void wxPropertyGridInterface::DoSetPropertyAttribute( wxPGPropArg id, const wxString& name,
-                                                      wxVariant& value, wxPGPropertyValuesFlags argFlags )
+                                                      wxVariant& value, wxPGPropertyValuesFlags flags )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
     p->SetAttribute( name, value ); // property is also refreshed here
 
-    if ( !!(argFlags & wxPGPropertyValuesFlags::Recurse) )
+    if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
     {
         for ( unsigned int i = 0; i < p->GetChildCount(); i++ )
-            DoSetPropertyAttribute(p->Item(i), name, value, argFlags);
+            DoSetPropertyAttribute(p->Item(i), name, value, flags);
     }
 }
 
@@ -748,7 +748,12 @@ wxVariant wxPropertyGridInterface::GetPropertyValue(wxPGPropArg id)
 wxString wxPropertyGridInterface::GetPropertyValueAsString( wxPGPropArg id ) const
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxString())
-    return p->GetValueAsString(wxPG_FULL_VALUE);
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    return p->GetValueAsStringWithCheck(wxPGPropValFormatFlags::FullValue);
+#else
+    return p->GetValueAsString(wxPGPropValFormatFlags::FullValue);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 }
 
 bool wxPropertyGridInterface::GetPropertyValueAsBool( wxPGPropArg id ) const

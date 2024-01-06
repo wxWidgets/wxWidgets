@@ -505,11 +505,11 @@ void wxArrayDoubleProperty::OnSetValue()
 }
 
 wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
-                                               int argFlags ) const
+                                               wxPGPropValFormatFlags flags ) const
 {
     wxString s;
 
-    if ( argFlags & wxPG_FULL_VALUE )
+    if ( !!(flags & wxPGPropValFormatFlags::FullValue) )
     {
         GenerateValueAsString(s,-1,false);
     }
@@ -571,7 +571,7 @@ bool wxArrayDoubleProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     return false;
 }
 
-bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
+bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& text, wxPGPropValFormatFlags ) const
 {
     // Add values to a temporary array so that in case
     // of error we can opt not to use them.
@@ -707,12 +707,12 @@ wxColour MyColourProperty::GetColour(int index) const
     return wxColour();
 }
 
-wxString MyColourProperty::ColourToString(const wxColour& col, int index, int argFlags) const
+wxString MyColourProperty::ColourToString(const wxColour& col, int index, wxPGPropValFormatFlags flags) const
 {
     if ( index == (int)(m_choices.GetCount() - 1) )
         return wxEmptyString;
 
-    return wxColourProperty::ColourToString(col, index, argFlags);
+    return wxColourProperty::ColourToString(col, index, flags);
 }
 
 int MyColourProperty::GetCustomColourIndex() const

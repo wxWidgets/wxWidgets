@@ -3485,7 +3485,12 @@ wxVariant wxPropertyGrid::GetUncommittedPropertyValue()
     if ( !tc || !IsEditorsValueModified() )
         return value;
 
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    if ( !prop->StringToValueWithCheck(value, tc->GetValue()) )
+#else
     if ( !prop->StringToValue(value, tc->GetValue()) )
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
         return value;
 
     if ( !PerformValidation(prop, value, IsStandaloneValidation) )
@@ -3865,13 +3870,13 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
 // -----------------------------------------------------------------------
 
 wxString
-wxPropertyGrid::GetUnspecifiedValueText( int argFlags ) const
+wxPropertyGrid::GetUnspecifiedValueText(wxPGPropValFormatFlags flags) const
 {
     const wxPGCell& ua = GetUnspecifiedValueAppearance();
 
     if ( ua.HasText() &&
-         !(argFlags & wxPG_FULL_VALUE) &&
-         !(argFlags & wxPG_EDITABLE_VALUE) )
+         !(flags & wxPGPropValFormatFlags::FullValue) &&
+         !(flags & wxPGPropValFormatFlags::EditableValue) )
         return ua.GetText();
 
     return wxString();
@@ -5098,7 +5103,12 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                             wxSize imageSize = GetImageSize(m_propHover, -1);
                             if ( imageSize.x > 0 )
                                 imageWidth = imageSize.x;
+#if WXWIN_COMPATIBILITY_3_2
+                            // Special implementation with check if user-overriden obsolete function is still in use
+                            tipString = m_propHover->GetValueAsStringWithCheck();
+#else
                             tipString = m_propHover->GetValueAsString();
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
                             if ( GetColumnCount() <= 2 )
                             {
                                 wxString unitsString = m_propHover->GetAttribute(wxPG_ATTR_UNITS, wxString());
@@ -6396,8 +6406,8 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
     m_state->DoInsert(parent, -1, property);
 
     if ( propValue )
-        property->SetValueFromString( *propValue, wxPG_FULL_VALUE|
-                                                  wxPG_PROGRAMMATIC_VALUE );
+        property->SetValueFromString( *propValue, wxPGPropValFormatFlags::FullValue|
+                                                  wxPGPropValFormatFlags::ProgrammaticValue );
 
     return property;
 }

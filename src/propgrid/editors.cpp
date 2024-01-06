@@ -191,8 +191,13 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
         }
         else if ( oCell.HasText() )
         {
+#if WXWIN_COMPATIBILITY_3_2
+            // Special implementation with check if user-overriden obsolete function is still in use
+            tcText = property->GetValueAsStringWithCheck(
+#else
             tcText = property->GetValueAsString(
-                property->HasFlag(wxPGPropertyFlags::ReadOnly)?0:wxPG_EDITABLE_VALUE);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
+                property->HasFlag(wxPGPropertyFlags::ReadOnly)?wxPGPropValFormatFlags::Null:wxPGPropValFormatFlags::EditableValue);
             changeText = true;
         }
 
@@ -284,11 +289,16 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
          property->HasAnyChild() )
         return nullptr;
 
-    int argFlags = 0;
+    wxPGPropValFormatFlags fmtFlags = wxPGPropValFormatFlags::Null;
     if ( !property->HasFlag(wxPGPropertyFlags::ReadOnly) &&
          !property->IsValueUnspecified() )
-        argFlags |= wxPG_EDITABLE_VALUE;
-    text = property->GetValueAsString(argFlags);
+        fmtFlags |= wxPGPropValFormatFlags::EditableValue;
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    text = property->GetValueAsStringWithCheck(fmtFlags);
+#else
+    text = property->GetValueAsString(fmtFlags);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
     int flags = 0;
     if ( property->HasFlag(wxPGPropertyFlags_Password) &&
@@ -330,7 +340,12 @@ void wxPGTextCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl )
     wxString s;
 
     if ( tc->HasFlag(wxTE_PASSWORD) )
-        s = property->GetValueAsString(wxPG_FULL_VALUE);
+#if WXWIN_COMPATIBILITY_3_2
+        // Special implementation with check if user-overriden obsolete function is still in use
+        s = property->GetValueAsStringWithCheck(wxPGPropValFormatFlags::FullValue);
+#else
+        s = property->GetValueAsString(wxPGPropValFormatFlags::FullValue);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
     else
         s = property->GetDisplayedString();
 
@@ -397,7 +412,12 @@ bool wxPGTextCtrlEditor::GetTextCtrlValueFromControl( wxVariant& variant, wxPGPr
         return true;
     }
 
-    bool res = property->StringToValue(variant, textVal, wxPG_EDITABLE_VALUE);
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    bool res = property->StringToValueWithCheck(variant, textVal, wxPGPropValFormatFlags::EditableValue);
+#else
+    bool res = property->StringToValue(variant, textVal, wxPGPropValFormatFlags::EditableValue);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
     // Changing unspecified always causes event (returning
     // true here should be enough to trigger it).
@@ -435,9 +455,14 @@ void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
 {
     // Make sure there is correct text (instead of unspecified value
     // indicator or hint text)
-    int flags = property->HasFlag(wxPGPropertyFlags::ReadOnly) ?
-        0 : wxPG_EDITABLE_VALUE;
-    wxString correctText = property->GetValueAsString(flags);
+    wxPGPropValFormatFlags fmtFlags = property->HasFlag(wxPGPropertyFlags::ReadOnly) ?
+        wxPGPropValFormatFlags::Null : wxPGPropValFormatFlags::EditableValue;
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    wxString correctText = property->GetValueAsStringWithCheck(fmtFlags);
+#else
+    wxString correctText = property->GetValueAsString(fmtFlags);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
     if ( tc->GetValue() != correctText )
     {
@@ -726,7 +751,12 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         else
         {
             if ( !p->IsValueUnspecified() )
-                text = p->GetValueAsString(0);
+#if WXWIN_COMPATIBILITY_3_2
+                // Special implementation with check if user-overriden obsolete function is still in use
+                text = p->GetValueAsStringWithCheck(wxPGPropValFormatFlags::Null);
+#else
+                text = p->GetValueAsString(wxPGPropValFormatFlags::Null);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
         }
     }
 
@@ -948,11 +978,16 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     wxString defString;
     int index = property->GetChoiceSelection();
 
-    int argFlags = 0;
+    wxPGPropValFormatFlags fmtFlags = wxPGPropValFormatFlags::Null;
     if ( !property->HasFlag(wxPGPropertyFlags::ReadOnly) &&
          !property->IsValueUnspecified() )
-        argFlags |= wxPG_EDITABLE_VALUE;
-    defString = property->GetValueAsString(argFlags);
+        fmtFlags |= wxPGPropValFormatFlags::EditableValue;
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    defString = property->GetValueAsStringWithCheck(fmtFlags);
+#else
+    defString = property->GetValueAsString(fmtFlags);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
     wxArrayString labels = choices.GetLabels();
 
@@ -1135,7 +1170,12 @@ bool wxPGChoiceEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* pr
          property->IsValueUnspecified()
        )
     {
-        return property->IntToValue(variant, index, wxPG_PROPERTY_SPECIFIC);
+#if WXWIN_COMPATIBILITY_3_2
+        // Special implementation with check if user-overriden obsolete function is still in use
+        return property->IntToValueWithCheck(variant, index, wxPGPropValFormatFlags::PropertySpecific);
+#else
+        return property->IntToValue(variant, index, wxPGPropValFormatFlags::PropertySpecific);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
     }
     return false;
 }
@@ -1199,7 +1239,12 @@ void wxPGComboBoxEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl )
 {
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
     const int index = property->GetChoiceSelection();
-    wxString s = property->GetValueAsString(wxPG_EDITABLE_VALUE);
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    wxString s = property->GetValueAsStringWithCheck(wxPGPropValFormatFlags::EditableValue);
+#else
+    wxString s = property->GetValueAsString(wxPGPropValFormatFlags::EditableValue);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
     cb->SetSelection(index);
     property->GetGrid()->SetupTextCtrlValue(s);
     cb->SetValue(s);
@@ -1247,7 +1292,12 @@ bool wxPGComboBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
         return true;
     }
 
-    bool res = property->StringToValue(variant, textVal, wxPG_EDITABLE_VALUE|wxPG_PROPERTY_SPECIFIC);
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    bool res = property->StringToValueWithCheck(variant, textVal, wxPGPropValFormatFlags::EditableValue|wxPGPropValFormatFlags::PropertySpecific);
+#else
+    bool res = property->StringToValue(variant, textVal, wxPGPropValFormatFlags::EditableValue | wxPGPropValFormatFlags::PropertySpecific);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
     // Changing unspecified always causes event (returning
     // true here should be enough to trigger it).
@@ -1724,7 +1774,12 @@ bool wxPGCheckBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
          property->IsValueUnspecified()
        )
     {
-        return property->IntToValue(variant, index, wxPG_PROPERTY_SPECIFIC);
+#if WXWIN_COMPATIBILITY_3_2
+        // Special implementation with check if user-overriden obsolete function is still in use
+        return property->IntToValueWithCheck(variant, index, wxPGPropValFormatFlags::PropertySpecific);
+#else
+        return property->IntToValue(variant, index, wxPGPropValFormatFlags::PropertySpecific);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
     }
     return false;
 }
@@ -2048,7 +2103,12 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
     wxString text;
 
     if ( !property->IsValueUnspecified() )
-        text = property->GetValueAsString(property->HasFlag(wxPGPropertyFlags::ReadOnly)?0:wxPG_EDITABLE_VALUE);
+#if WXWIN_COMPATIBILITY_3_2
+        // Special implementation with check if user-overriden obsolete function is still in use
+        text = property->GetValueAsStringWithCheck(property->HasFlag(wxPGPropertyFlags::ReadOnly)?wxPGPropValFormatFlags::Null : wxPGPropValFormatFlags::EditableValue);
+#else
+        text = property->GetValueAsString(property->HasFlag(wxPGPropertyFlags::ReadOnly) ? wxPGPropValFormatFlags::Null : wxPGPropValFormatFlags::EditableValue);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 
     return GenerateEditorTextCtrl(pos, sz, text, but, 0, property->GetMaxLength());
 }

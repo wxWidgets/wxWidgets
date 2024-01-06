@@ -334,7 +334,12 @@ bool wxPGSpinCtrlEditor::OnEvent(wxPropertyGrid* propgrid, wxPGProperty* propert
             stepScale *= spins;
 
             wxVariant v = prop->AddSpinStepValue(stepScale);
+#if WXWIN_COMPATIBILITY_3_2
+            // Special implementation with check if user-overriden obsolete function is still in use
+            SetControlStringValue(prop, propgrid->GetEditorControl(), prop->ValueToStringWithCheck(v));
+#else
             SetControlStringValue(prop, propgrid->GetEditorControl(), prop->ValueToString(v));
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
             return true;
         }
     }
@@ -579,7 +584,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
     wxPGProperty* p = new wxEnumProperty(_("Face Name"), wxS("Face Name"),
                                          *wxPGGlobalVars->m_fontFamilyChoices);
 
-    p->SetValueFromString(faceName, wxPG_FULL_VALUE);
+    p->SetValueFromString(faceName, wxPGPropValFormatFlags::FullValue);
 
     AddPrivateChild( p );
 
@@ -615,9 +620,9 @@ void wxFontProperty::OnSetValue()
 }
 
 wxString wxFontProperty::ValueToString( wxVariant& value,
-                                        int argFlags ) const
+                                        wxPGPropValFormatFlags flags ) const
 {
-    return wxEditorDialogProperty::ValueToString(value, argFlags);
+    return wxEditorDialogProperty::ValueToString(value, flags);
 }
 
 bool wxFontProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
@@ -652,7 +657,7 @@ void wxFontProperty::RefreshChildren()
     wxFont font;
     font << m_value;
     Item(0)->SetValue( (long)font.GetPointSize() );
-    Item(1)->SetValueFromString( font.GetFaceName(), wxPG_FULL_VALUE );
+    Item(1)->SetValueFromString( font.GetFaceName(), wxPGPropValFormatFlags::FullValue );
     Item(2)->SetValue( (long)font.GetStyle() );
     Item(3)->SetValue( (long)font.GetWeight() );
     Item(4)->SetValue( font.GetUnderlined() );
@@ -1054,15 +1059,35 @@ wxColour wxSystemColourProperty::GetColour( int index ) const
     return wxSystemSettings::GetColour( (wxSystemColour)index );
 }
 
+#if WXWIN_COMPATIBILITY_3_2
+// By call to obsolete function we want to check if user-overriden function is still in use
+wxString wxSystemColourProperty::ColourToStringWithCheck(const wxColour& col, int index,
+                                                         wxPGPropValFormatFlags flags) const
+{
+    m_oldColourToStringCalled = false;
+    wxString res = ColourToString(col, index, static_cast<int>(flags));
+    if ( m_oldColourToStringCalled )
+    {
+        // Our own function was called - this implies that call was forwarded to the new overriding
+        // function and there is no need to call it explicitly.
+    }
+    else
+    {   // User-overriden obsolete function was called
+        wxFAIL_MSG(wxString::Format("in %s use ColourToString with 'flags' argument as wxPGPropValFormatFlags", GetClassInfo()->GetClassName()));
+    }
+    return res;
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
 wxString wxSystemColourProperty::ColourToString( const wxColour& col,
                                                  int index,
-                                                 int argFlags ) const
+                                                 wxPGPropValFormatFlags flags ) const
 {
 
     if ( index == wxNOT_FOUND )
     {
 
-        if ( (argFlags & wxPG_FULL_VALUE) || !!(m_flags & wxPGPropertyFlags_ColourHasAlpha) )
+        if ( !!(flags & wxPGPropValFormatFlags::FullValue) || !!(m_flags & wxPGPropertyFlags_ColourHasAlpha) )
         {
             return wxString::Format(wxS("(%i,%i,%i,%i)"),
                                     (int)col.Red(),
@@ -1085,15 +1110,15 @@ wxString wxSystemColourProperty::ColourToString( const wxColour& col,
 }
 
 wxString wxSystemColourProperty::ValueToString( wxVariant& value,
-                                                int argFlags ) const
+                                                wxPGPropValFormatFlags flags ) const
 {
     wxColourPropertyValue val = GetVal(&value);
 
     int index;
 
-    if ( argFlags & wxPG_VALUE_IS_CURRENT )
+    if ( !!(flags & wxPGPropValFormatFlags::ValueIsCurrent) )
     {
-        // GetIndex() only works reliably if wxPG_VALUE_IS_CURRENT flag is set,
+        // GetIndex() only works reliably if wxPGPropValFormatFlags::ValueIsCurrent flag is set,
         // but we should use it whenever possible.
         index = GetIndex();
 
@@ -1108,7 +1133,12 @@ wxString wxSystemColourProperty::ValueToString( wxVariant& value,
         index = m_choices.Index(val.m_type);
     }
 
-    return ColourToString(val.m_colour, index, argFlags);
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    return ColourToStringWithCheck(val.m_colour, index, flags);
+#else
+    return ColourToString(val.m_colour, index, flags);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 }
 
 
@@ -1167,14 +1197,14 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 }
 
 
-bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int argFlags ) const
+bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, wxPGPropValFormatFlags flags ) const
 {
     int index = number;
     const int type = m_choices.GetValue(index);
 
     if ( type == wxPG_COLOUR_CUSTOM )
     {
-         if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
+         if ( !(flags & wxPGPropValFormatFlags::PropertySpecific) )
             return QueryColourFromUser(variant);
 
          // Call from event handler.
@@ -1341,7 +1371,7 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
 }
 
 
-bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& text, int argFlags ) const
+bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& text, wxPGPropValFormatFlags flags ) const
 {
     const int custIndex = GetCustomColourIndex();
     wxString custColName;
@@ -1391,7 +1421,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
          !(m_flags & wxPGPropertyFlags_HideCustomColour) &&
          isCustomColour )
     {
-        if ( !(argFlags & wxPG_EDITABLE_VALUE ))
+        if ( !(flags & wxPGPropValFormatFlags::EditableValue ))
         {
             // This really should not occur...
             // wxASSERT(false);
@@ -1400,7 +1430,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
 
         if ( !QueryColourFromUser(value) )
         {
-            if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
+            if ( !(flags & wxPGPropValFormatFlags::PropertySpecific) )
                 return false;
             // If query for value comes from the event handler
             // use current pending value to be processed later on in OnEvent().
@@ -1417,7 +1447,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
         {
             // Try predefined colour first
             int index;
-            bool res = ValueFromString_(value, &index, colStr, argFlags);
+            bool res = ValueFromString_(value, &index, colStr, flags);
             if ( res && index >= 0 )
             {
                 val.m_type = index;
@@ -1601,15 +1631,15 @@ void wxColourProperty::Init( wxColour colour )
 }
 
 wxString wxColourProperty::ValueToString( wxVariant& value,
-                                          int argFlags ) const
+                                          wxPGPropValFormatFlags flags ) const
 {
     const wxPGEditor* editor = GetEditorClass();
     if ( editor != wxPGEditor_Choice &&
          editor != wxPGEditor_ChoiceAndButton &&
          editor != wxPGEditor_ComboBox )
-        argFlags |= wxPG_PROPERTY_SPECIFIC;
+        flags |= wxPGPropValFormatFlags::PropertySpecific;
 
-    return wxSystemColourProperty::ValueToString(value, argFlags);
+    return wxSystemColourProperty::ValueToString(value, flags);
 }
 
 wxColour wxColourProperty::GetColour( int index ) const
@@ -1711,9 +1741,9 @@ wxCursorProperty::wxCursorProperty( const wxString& label, const wxString& name,
     m_flags |= wxPGPropertyFlags_StaticChoices; // Cursor selection cannot be changed.
 }
 
-wxString wxCursorProperty::ValueToString(wxVariant& value, int argFlags) const
+wxString wxCursorProperty::ValueToString(wxVariant& value, wxPGPropValFormatFlags flags) const
 {
-    return wxGetTranslation(wxEnumProperty::ValueToString(value, argFlags),
+    return wxGetTranslation(wxEnumProperty::ValueToString(value, flags),
                             wxString(), "system cursor name");
 }
 
@@ -1945,10 +1975,10 @@ void wxMultiChoiceProperty::OnSetValue()
 }
 
 wxString wxMultiChoiceProperty::ValueToString( wxVariant& value,
-                                               int argFlags ) const
+                                               wxPGPropValFormatFlags flags ) const
 {
     // If possible, use cached string
-    if ( argFlags & wxPG_VALUE_IS_CURRENT )
+    if ( !!(flags & wxPGPropValFormatFlags::ValueIsCurrent) )
         return m_display;
 
     return GenerateValueAsString(value);
@@ -2058,7 +2088,7 @@ bool wxMultiChoiceProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     return false;
 }
 
-bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
+bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& text, wxPGPropValFormatFlags ) const
 {
     wxArrayString arr;
 
@@ -2135,7 +2165,7 @@ void wxDateProperty::OnSetValue()
 }
 
 bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
-                                    int WXUNUSED(argFlags) ) const
+                                    wxPGPropValFormatFlags WXUNUSED(flags) ) const
 {
     wxDateTime dt;
 
@@ -2153,7 +2183,7 @@ bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
 }
 
 wxString wxDateProperty::ValueToString( wxVariant& value,
-                                        int argFlags ) const
+                                        wxPGPropValFormatFlags flags ) const
 {
     wxDateTime dateTime = value.GetDateTime();
 
@@ -2172,7 +2202,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
 
     wxString format;
     if ( !m_format.empty() &&
-         !(argFlags & wxPG_FULL_VALUE) )
+         !(flags & wxPGPropValFormatFlags::FullValue) )
             format = m_format;
 
     // Determine default from locale

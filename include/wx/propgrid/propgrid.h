@@ -1032,8 +1032,15 @@ public:
 
     // Returns (visual) text representation of the unspecified
     // property value.
-    // argFlags - For internal use only.
-    wxString GetUnspecifiedValueText( int argFlags = 0 ) const;
+    // flags - For internal use only.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use GetUnspecifiedValueText with 'flags' argument as wxPGPropValFormatFlags")
+    wxString GetUnspecifiedValueText(int flags) const
+    {
+        return GetUnspecifiedValueText(static_cast<wxPGPropValFormatFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    wxString GetUnspecifiedValueText(wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     // Set virtual width for this particular page. Width -1 indicates that the
     // virtual width should be disabled.

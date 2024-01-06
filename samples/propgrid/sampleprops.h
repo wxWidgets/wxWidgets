@@ -116,10 +116,16 @@ public:
     virtual ~wxArrayDoubleProperty() = default;
 
     virtual void OnSetValue() override;
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const override;
+#if WXWIN_COMPATIBILITY_3_2
+    // To prevent warnings that obsolete methods are hidden by overloads with new signature.
+    using wxEditorDialogProperty::ValueToString;
+    using wxEditorDialogProperty::StringToValue;
+#endif // WXWIN_COMPATIBILITY_3_2
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const override;
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
-                                int argFlags = 0 ) const override;
+                                wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null ) const override;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) override;
 
     // Generates cache for displayed text
@@ -150,8 +156,12 @@ public:
 
     virtual wxColour GetColour(int index) const override;
 
-    virtual wxString ColourToString(const wxColour& col,
-        int index, int argFlags = 0) const override;
+#if WXWIN_COMPATIBILITY_3_2
+    // To prevent warning that obsolete method is hidden by overload with new signature.
+    using wxColourProperty::ColourToString;
+#endif // WXWIN_COMPATIBILITY_3_2
+    virtual wxString ColourToString(const wxColour& col, int index,
+                                    wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const override;
 
     virtual int GetCustomColourIndex() const override;
 };

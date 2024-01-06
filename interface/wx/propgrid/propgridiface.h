@@ -844,7 +844,7 @@ public:
             Text identifier of attribute. See @ref propgrid_property_attributes.
         @param value
             Value of attribute.
-        @param argFlags
+        @param flags
             Optional.
             Use wxPGPropertyValuesFlags::Recurse to set the attribute to child
             properties recursively.
@@ -855,7 +855,7 @@ public:
         - Property is refreshed with new settings.
     */
     void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName, wxVariant value,
-                              wxPGPropertyValuesFlags argFlags = wxPGPropertyValuesFlags::DontRecurse);
+                              wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     /**
         Sets property attribute for all applicable properties.

@@ -851,9 +851,9 @@ public:
         Returns (visual) text representation of the unspecified
         property value.
 
-        @param argFlags For internal use only.
+        @param flags For internal use only.
     */
-    wxString GetUnspecifiedValueText( int argFlags = 0 ) const;
+    wxString GetUnspecifiedValueText(wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     /**
         Returns current vertical spacing.

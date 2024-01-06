@@ -797,22 +797,22 @@ public:
     // Sets an attribute for this property.
     // name - Text identifier of attribute. See @ref propgrid_property_attributes.
     // value - Value of attribute.
-    // argFlags - Optional. Use wxPGPropertyValuesFlags::Recurse to set the attribute to child
+    // flags - Optional. Use wxPGPropertyValuesFlags::Recurse to set the attribute to child
     //   properties recursively.
     // Setting attribute's value to null wxVariant will simply remove it
     // from property's set of attributes.
 #if WXWIN_COMPATIBILITY_3_2
-    wxDEPRECATED_MSG("use SetPropertyAttribute with argFlags argument as wxPGPropertyValuesFlags")
+    wxDEPRECATED_MSG("use SetPropertyAttribute with 'flags' argument as wxPGPropertyValuesFlags")
     void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName,
-                              wxVariant value, long argFlags)
+                              wxVariant value, long flags)
     {
-        DoSetPropertyAttribute(id, attrName, value, static_cast<wxPGPropertyValuesFlags>(argFlags));
+        DoSetPropertyAttribute(id, attrName, value, static_cast<wxPGPropertyValuesFlags>(flags));
     }
 #endif // WXWIN_COMPATIBILITY_3_2
     void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName, wxVariant value,
-                              wxPGPropertyValuesFlags argFlags = wxPGPropertyValuesFlags::DontRecurse)
+                              wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse)
     {
-        DoSetPropertyAttribute(id, attrName, value, argFlags);
+        DoSetPropertyAttribute(id, attrName, value, flags);
     }
     // Sets property attribute for all applicable properties.
     // Be sure to use this method only after all properties have been
@@ -1236,7 +1236,7 @@ protected:
     // Intermediate version needed due to wxVariant copying inefficiency
     void DoSetPropertyAttribute( wxPGPropArg id,
                                  const wxString& name,
-                                 wxVariant& value, wxPGPropertyValuesFlags argFlags );
+                                 wxVariant& value, wxPGPropertyValuesFlags flags );
 
     // Empty string object to return from member functions returning const
     // wxString&.
