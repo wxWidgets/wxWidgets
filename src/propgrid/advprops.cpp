@@ -31,6 +31,7 @@
 #include "wx/uilocale.h"
 
 #include <limits>
+#include <array>
 
 // Drawing ARGB on standard DC is supported by OSX and GTK3
 #if defined(__WXOSX__) || defined(__WXGTK3__)
@@ -1513,7 +1514,8 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 // wxColourProperty
 // -----------------------------------------------------------------------
 
-static const char* const gs_cp_es_normcolour_labels[] = {
+static constexpr std::array<const char*, 19+1> gs_cp_es_normcolour_labels
+{
     wxTRANSLATE("Black"),
     wxTRANSLATE("Maroon"),
     wxTRANSLATE("Navy"),
@@ -1536,7 +1538,13 @@ static const char* const gs_cp_es_normcolour_labels[] = {
     nullptr
 };
 
-static const long gs_cp_es_normcolour_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_cp_es_normcolour_labels[gs_cp_es_normcolour_labels.size() - 1] == nullptr,
+              "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 19> gs_cp_es_normcolour_values
+{
     0,
     1,
     2,
@@ -1558,7 +1566,8 @@ static const long gs_cp_es_normcolour_values[] = {
     wxPG_COLOUR_CUSTOM
 };
 
-static const unsigned long gs_cp_es_normcolour_colours[] = {
+static constexpr std::array<unsigned long, 19> gs_cp_es_normcolour_colours
+{
     wxPG_COLOUR(0,0,0),
     wxPG_COLOUR(128,0,0),
     wxPG_COLOUR(0,0,128),
@@ -1580,6 +1589,11 @@ static const unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0)
 };
 
+static_assert(gs_cp_es_normcolour_values.size() == gs_cp_es_normcolour_labels.size() - 1,
+    "Colour values table has to have one item less than colour labels table");
+static_assert(gs_cp_es_normcolour_colours.size() == gs_cp_es_normcolour_values.size(),
+    "Colours table and colour values table have to have the same size");
+
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxColourProperty, wxSystemColourProperty,
                               TextCtrlAndButton)
 
@@ -1588,16 +1602,16 @@ static wxPGChoices gs_wxColourProperty_choicesCache;
 wxColourProperty::wxColourProperty( const wxString& label,
                       const wxString& name,
                       const wxColour& value )
-    : wxSystemColourProperty(label, name, gs_cp_es_normcolour_labels,
-                             gs_cp_es_normcolour_values,
+    : wxSystemColourProperty(label, name, gs_cp_es_normcolour_labels.data(),
+                             gs_cp_es_normcolour_values.data(),
                              &gs_wxColourProperty_choicesCache, value )
 {
     wxASSERT_MSG( wxTheColourDatabase, wxS("No colour database") );
     if ( wxTheColourDatabase )
     {
         // Extend colour database with PG-specific colours.
-        const char* const* colourLabels = gs_cp_es_normcolour_labels;
-        for ( int i = 0; *colourLabels; colourLabels++, i++ )
+        auto colourLabels = gs_cp_es_normcolour_labels.begin();
+        for ( int i = 0; *colourLabels; ++colourLabels, i++ )
         {
             // Don't take into account user-defined custom colour.
             if (gs_cp_es_normcolour_values[i] != wxPG_COLOUR_CUSTOM)
