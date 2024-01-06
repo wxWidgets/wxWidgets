@@ -864,6 +864,8 @@ public:
 
       iterator operator+(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
+      friend iterator operator+(ptrdiff_t n, iterator i)
+        { return i + n; }
       iterator operator-(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -918,6 +920,8 @@ public:
 
       const_iterator operator+(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
+      friend const_iterator operator+(ptrdiff_t n, const_iterator i)
+        { return i + n; }
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -961,6 +965,8 @@ public:
 
       iterator operator+(ptrdiff_t n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, n)); }
+      friend iterator operator+(ptrdiff_t n, iterator i)
+        { return i + n; }
       iterator operator-(ptrdiff_t n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -996,6 +1002,8 @@ public:
 
       const_iterator operator+(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, n)); }
+      friend const_iterator operator+(ptrdiff_t n, const_iterator i)
+        { return i + n; }
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -1087,6 +1095,8 @@ public:
 
       reverse_iterator_impl operator+(ptrdiff_t n) const
         { return reverse_iterator_impl(m_cur - n); }
+      friend iterator operator+(ptrdiff_t n, reverse_iterator_impl i)
+        { return i + n; }
       reverse_iterator_impl operator-(ptrdiff_t n) const
         { return reverse_iterator_impl(m_cur + n); }
       reverse_iterator_impl operator+=(ptrdiff_t n)
@@ -3759,17 +3769,6 @@ private:
   friend class wxStringInternalBuffer;
   friend class wxStringInternalBufferLength;
 };
-
-// string iterator operators that satisfy STL Random Access Iterator
-// requirements:
-inline wxString::iterator operator+(ptrdiff_t n, wxString::iterator i)
-  { return i + n; }
-inline wxString::const_iterator operator+(ptrdiff_t n, wxString::const_iterator i)
-  { return i + n; }
-inline wxString::reverse_iterator operator+(ptrdiff_t n, wxString::reverse_iterator i)
-  { return i + n; }
-inline wxString::const_reverse_iterator operator+(ptrdiff_t n, wxString::const_reverse_iterator i)
-  { return i + n; }
 
 #define wxGetEmptyString() wxString()
 
