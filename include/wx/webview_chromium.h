@@ -173,7 +173,7 @@ private:
     friend class wxWebViewChromiumModule;
     static bool ms_cefInitialized;
 
-    static bool InitCEF();
+    static bool InitCEF(const wxWebViewConfiguration& config);
 
     static void ShutdownCEF();
 

@@ -261,6 +261,19 @@ public:
         return wxWebViewConfiguration(wxWebViewBackendChromium,
                                       new wxWebViewConfigurationImplChromium);
     }
+
+    virtual void SetDataPath(const wxString& path) override
+    {
+        m_dataPath = path;
+    }
+
+    virtual wxString GetDataPath() const override
+    {
+        return m_dataPath;
+    }
+
+private:
+    wxString m_dataPath;
 };
 
 // ----------------------------------------------------------------------------
@@ -675,7 +688,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     {
         return false;
     }
-    if ( !InitCEF() )
+    if ( !InitCEF(m_implData->m_config) )
         return false;
 
 #ifdef __WXMSW__
@@ -931,7 +944,7 @@ bool CheckCEFLoadOrder()
 
 #endif // __LINUX__
 
-bool wxWebViewChromium::InitCEF()
+bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
 {
     if (ms_cefInitialized)
         return true;
@@ -941,8 +954,19 @@ bool wxWebViewChromium::InitCEF()
         return false;
 #endif
 
-    wxFileName cefDataFolder(wxStandardPaths::Get().GetUserLocalDataDir(), "");
-    cefDataFolder.AppendDir("CEF");
+    wxFileName cefDataFolder;
+    const wxString& dataDir = config.GetDataPath();
+    if ( !dataDir.empty() )
+    {
+        cefDataFolder = wxFileName::DirName(dataDir);
+    }
+    else
+    {
+        cefDataFolder = wxFileName::DirName(
+                            wxStandardPaths::Get().GetUserLocalDataDir()
+                        );
+        cefDataFolder.AppendDir("CEF");
+    }
     cefDataFolder.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
 
     CefSettings settings;

@@ -339,7 +339,8 @@ public:
         local storage, etc.
         @param path The path to the data directory.
 
-        @note This is only used by the Edge and WebKit2GTK+ backend.
+        @note This is used by Edge, WebKit2GTK+ and Chromium backends (the
+            latter creates "UserData" subdirectory under the given path).
     */
     void SetDataPath(const wxString& path);
 
@@ -350,7 +351,8 @@ public:
         local storage, etc.
         @return The path to the data directory.
 
-        @note This is only used by the Edge and WebKit2GTK+ backend.
+        @note This is used by Edge, WebKit2GTK+ and Chromium backends and
+            always returns empty string for the other ones.
     */
     wxString GetDataPath() const;
 };
