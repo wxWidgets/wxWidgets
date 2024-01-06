@@ -490,7 +490,7 @@ wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
     // (i.e. can't use comma when comma acts as decimal point in float).
     wxChar use_delimiter = ',';
 
-    if (wxString::Format("%.2f",12.34).Find(use_delimiter) >= 0)
+    if ( wxNumberFormatter::GetDecimalSeparator() == use_delimiter )
         use_delimiter = ';';
 
     m_delimiter = use_delimiter;
