@@ -61,7 +61,6 @@ public:
     explicit wxMSWHeaderCtrl(wxHeaderCtrl& header) :
         m_header(header)
     {
-        Init();
     }
 
     bool Create(wxWindow *parent,
@@ -103,9 +102,6 @@ private:
     // override MSW-specific methods needed for new control
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
-
-    // common part of all ctors
-    void Init();
 
     // wrapper around Header_InsertItem(): insert the item using information
     // from the given column at the given index
@@ -190,11 +186,6 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxMSWHeaderCtrlNameStr[] = "wxMSWHeader
 // wxMSWHeaderCtrl construction/destruction
 // ----------------------------------------------------------------------------
 
-void wxMSWHeaderCtrl::Init()
-{
-    Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
-}
-
 bool wxMSWHeaderCtrl::Create(wxWindow *parent,
                              wxWindowID id,
                              const wxPoint& pos,
@@ -211,6 +202,8 @@ bool wxMSWHeaderCtrl::Create(wxWindow *parent,
 
     if ( !MSWCreateControl(WC_HEADER, wxT(""), pos, size) )
         return false;
+
+    Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
 
     if ( wxMSWDarkMode::IsActive() )
     {
