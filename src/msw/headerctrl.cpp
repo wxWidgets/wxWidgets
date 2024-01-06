@@ -221,7 +221,11 @@ bool wxMSWHeaderCtrl::Create(wxWindow *parent,
 
     if ( wxMSWDarkMode::IsActive() )
     {
-        m_customDraw = new wxMSWHeaderCtrlCustomDraw();
+        // Note that it may have been already allocated by MSWCreateControl()
+        // which calls SetFont() from InheritAttributes(), so don't recreate it
+        // in this case.
+        if ( !m_customDraw )
+            m_customDraw = new wxMSWHeaderCtrlCustomDraw();
         m_customDraw->UseHeaderThemeColors(GetHwnd());
     }
 
