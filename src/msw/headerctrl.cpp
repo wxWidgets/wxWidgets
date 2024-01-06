@@ -144,7 +144,7 @@ private:
 
     // the number of columns in the control, including the hidden ones (not
     // taken into account by the native control, see comment in DoGetCount())
-    unsigned int m_numColumns;
+    unsigned int m_numColumns = 0;
 
     // this is a lookup table allowing us to check whether the column with the
     // given index is currently shown in the native control, in which case the
@@ -167,13 +167,13 @@ private:
     std::unique_ptr<wxImageList> m_imageList;
 
     // the offset of the window used to emulate scrolling it
-    int m_scrollOffset;
+    int m_scrollOffset = 0;
 
     // actual column we are dragging or -1 if not dragging anything
-    int m_colBeingDragged;
+    int m_colBeingDragged = -1;
 
     // a column is currently being resized
-    bool m_isColBeingResized;
+    bool m_isColBeingResized = false;
 
     // the custom draw helper: initially nullptr, created on demand, use
     // GetCustomDraw() to do it
@@ -192,11 +192,6 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxMSWHeaderCtrlNameStr[] = "wxMSWHeader
 
 void wxMSWHeaderCtrl::Init()
 {
-    m_numColumns = 0;
-    m_scrollOffset = 0;
-    m_colBeingDragged = -1;
-    m_isColBeingResized = false;
-
     Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
 }
 
