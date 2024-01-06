@@ -197,6 +197,8 @@ public:
         { return wxLongLongNative(m_ll + ll.m_ll); }
     wxLongLongNative& operator+=(const wxLongLongNative& ll)
         { m_ll += ll.m_ll; return *this; }
+    friend wxLongLongNative operator+(long l, const wxLongLongNative& ll)
+        { return ll + l; }
 
     wxLongLongNative operator+(const wxLongLong_t ll) const
         { return wxLongLongNative(m_ll + ll); }
@@ -221,6 +223,10 @@ public:
         { return wxLongLongNative(m_ll - ll.m_ll); }
     wxLongLongNative& operator-=(const wxLongLongNative& ll)
         { m_ll -= ll.m_ll; return *this; }
+    friend wxLongLongNative operator-(long l, const wxLongLongNative& ll)
+    {
+        return wxLongLongNative(l) - ll;
+    }
 
     wxLongLongNative operator-(const wxLongLong_t ll) const
         { return wxLongLongNative(m_ll - ll); }
@@ -313,6 +319,13 @@ public:
         { return m_ll >= ll.m_ll; }
     bool operator>=(long l) const
         { return m_ll >= l; }
+
+    friend bool operator<(long l, const wxLongLongNative& ll) { return ll > l; }
+    friend bool operator>(long l, const wxLongLongNative& ll) { return ll < l; }
+    friend bool operator<=(long l, const wxLongLongNative& ll) { return ll >= l; }
+    friend bool operator>=(long l, const wxLongLongNative& ll) { return ll <= l; }
+    friend bool operator==(long l, const wxLongLongNative& ll) { return ll == l; }
+    friend bool operator!=(long l, const wxLongLongNative& ll) { return ll != l; }
 
     // miscellaneous
 
@@ -421,6 +434,8 @@ public:
         { return wxULongLongNative(m_ll + ll.m_ll); }
     wxULongLongNative& operator+=(const wxULongLongNative& ll)
         { m_ll += ll.m_ll; return *this; }
+    friend wxULongLongNative operator+(unsigned long l, const wxULongLongNative& ull)
+        { return ull + l; }
 
     wxULongLongNative operator+(const wxULongLong_t ll) const
         { return wxULongLongNative(m_ll + ll); }
@@ -440,6 +455,10 @@ public:
         { return wxULongLongNative(m_ll - ll.m_ll); }
     wxULongLongNative& operator-=(const wxULongLongNative& ll)
         { m_ll -= ll.m_ll; return *this; }
+    friend wxULongLongNative operator-(unsigned long l, const wxULongLongNative& ull)
+    {
+        return wxULongLongNative(l - ull.m_ll);
+    }
 
     wxULongLongNative operator-(const wxULongLong_t ll) const
         { return wxULongLongNative(m_ll - ll); }
@@ -532,6 +551,13 @@ public:
         { return m_ll >= ll.m_ll; }
     bool operator>=(unsigned long l) const
         { return m_ll >= l; }
+
+    friend bool operator<(unsigned long l, const wxULongLongNative& ull) { return ull > l; }
+    friend bool operator>(unsigned long l, const wxULongLongNative& ull) { return ull < l; }
+    friend bool operator<=(unsigned long l, const wxULongLongNative& ull) { return ull >= l; }
+    friend bool operator>=(unsigned long l, const wxULongLongNative& ull) { return ull <= l; }
+    friend bool operator==(unsigned long l, const wxULongLongNative& ull) { return ull == l; }
+    friend bool operator!=(unsigned long l, const wxULongLongNative& ull) { return ull != l; }
 
     // miscellaneous
 
@@ -696,6 +722,8 @@ public:
     wxLongLongWx operator+(long l) const;
     wxLongLongWx& operator+=(long l);
 
+    friend wxLongLongWx operator+(long l, const wxLongLongWx& ll) { return ll + l; }
+
         // pre increment operator
     wxLongLongWx& operator++();
 
@@ -709,6 +737,10 @@ public:
         // subtraction
     wxLongLongWx operator-(const wxLongLongWx& ll) const;
     wxLongLongWx& operator-=(const wxLongLongWx& ll);
+    friend wxLongLongWx operator-(long l, const wxLongLongWx& ll)
+    {
+        return wxLongLongWx(l) - ll;
+    }
 
         // pre decrement operator
     wxLongLongWx& operator--();
@@ -760,6 +792,13 @@ public:
 
     bool operator<=(long l) const { return *this < l || *this == l; }
     bool operator>=(long l) const { return *this > l || *this == l; }
+
+    friend bool operator<(long l, const wxLongLongWx& ll) { return ll > l; }
+    friend bool operator>(long l, const wxLongLongWx& ll) { return ll < l; }
+    friend bool operator<=(long l, const wxLongLongWx& ll) { return ll >= l; }
+    friend bool operator>=(long l, const wxLongLongWx& ll) { return ll <= l; }
+    friend bool operator==(long l, const wxLongLongWx& ll) { return ll == l; }
+    friend bool operator!=(long l, const wxLongLongWx& ll) { return ll != l; }
 
     // multiplication
     wxLongLongWx operator*(const wxLongLongWx& ll) const;
@@ -920,6 +959,8 @@ public:
     wxULongLongWx& operator+=(const wxULongLongWx& ll);
     wxULongLongWx operator+(unsigned long l) const;
     wxULongLongWx& operator+=(unsigned long l);
+    friend wxULongLongWx operator+(unsigned long l, const wxULongLongWx& ull)
+        { return ull + l; }
 
         // pre increment operator
     wxULongLongWx& operator++();
@@ -930,6 +971,13 @@ public:
         // subtraction
     wxLongLongWx operator-(const wxULongLongWx& ll) const;
     wxULongLongWx& operator-=(const wxULongLongWx& ll);
+
+    friend wxLongLongWx operator-(unsigned long l, const wxULongLongWx& ull)
+    {
+        const wxULongLongWx ret = wxULongLongWx(l) - ull;
+        return wxLongLongWx((wxInt32)ret.GetHi(),ret.GetLo());
+    }
+
 
         // pre decrement operator
     wxULongLongWx& operator--();
@@ -976,6 +1024,13 @@ public:
 
     bool operator<=(unsigned long l) const { return *this < l || *this == l; }
     bool operator>=(unsigned long l) const { return *this > l || *this == l; }
+
+    friend bool operator<(unsigned long l, const wxULongLongWx& ull) { return ull > l; }
+    friend bool operator>(unsigned long l, const wxULongLongWx& ull) { return ull < l; }
+    friend bool operator<=(unsigned long l, const wxULongLongWx& ull) { return ull >= l; }
+    friend bool operator>=(unsigned long l, const wxULongLongWx& ull) { return ull <= l; }
+    friend bool operator==(unsigned long l, const wxULongLongWx& ull) { return ull == l; }
+    friend bool operator!=(unsigned long l, const wxULongLongWx& ull) { return ull != l; }
 
     // multiplication
     wxULongLongWx operator*(const wxULongLongWx& ll) const;
@@ -1030,38 +1085,6 @@ private:
 };
 
 #endif // wxUSE_LONGLONG_WX
-
-// ----------------------------------------------------------------------------
-// binary operators
-// ----------------------------------------------------------------------------
-
-inline bool operator<(long l, const wxLongLong& ll) { return ll > l; }
-inline bool operator>(long l, const wxLongLong& ll) { return ll < l; }
-inline bool operator<=(long l, const wxLongLong& ll) { return ll >= l; }
-inline bool operator>=(long l, const wxLongLong& ll) { return ll <= l; }
-inline bool operator==(long l, const wxLongLong& ll) { return ll == l; }
-inline bool operator!=(long l, const wxLongLong& ll) { return ll != l; }
-
-inline wxLongLong operator+(long l, const wxLongLong& ll) { return ll + l; }
-inline wxLongLong operator-(long l, const wxLongLong& ll)
-{
-    return wxLongLong(l) - ll;
-}
-
-inline bool operator<(unsigned long l, const wxULongLong& ull) { return ull > l; }
-inline bool operator>(unsigned long l, const wxULongLong& ull) { return ull < l; }
-inline bool operator<=(unsigned long l, const wxULongLong& ull) { return ull >= l; }
-inline bool operator>=(unsigned long l, const wxULongLong& ull) { return ull <= l; }
-inline bool operator==(unsigned long l, const wxULongLong& ull) { return ull == l; }
-inline bool operator!=(unsigned long l, const wxULongLong& ull) { return ull != l; }
-
-inline wxULongLong operator+(unsigned long l, const wxULongLong& ull) { return ull + l; }
-
-inline wxLongLong operator-(unsigned long l, const wxULongLong& ull)
-{
-    const wxULongLong ret = wxULongLong(l) - ull;
-    return wxLongLong((wxInt32)ret.GetHi(),ret.GetLo());
-}
 
 #if wxUSE_LONGLONG_NATIVE && wxUSE_STREAMS
 
