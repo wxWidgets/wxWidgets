@@ -63,19 +63,19 @@ public:
 
 /** Constants used with NumericValidation<>().
 */
-enum wxPGNumericValidationConstants
+enum class wxPGNumericValidationMode
 {
     /** Instead of modifying the value, show an error message.
     */
-    wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE      = 0,
+    ErrorMessage,
 
     /** Modify value, but stick with the limitations.
     */
-    wxPG_PROPERTY_VALIDATION_SATURATE           = 1,
+    Saturate,
 
     /** Modify value, wrap around on overflow.
     */
-    wxPG_PROPERTY_VALIDATION_WRAP               = 2
+    Wrap
 };
 
 

@@ -133,17 +133,26 @@ protected:
 // -----------------------------------------------------------------------
 
 // Constants used with NumericValidation<>().
-enum wxPGNumericValidationConstants
+enum class wxPGNumericValidationMode
 {
     // Instead of modifying the value, show an error message.
-    wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE      = 0,
+    ErrorMessage,
 
     // Modify value, but stick with the limitations.
-    wxPG_PROPERTY_VALIDATION_SATURATE           = 1,
+    Saturate,
 
     // Modify value, wrap around on overflow.
-    wxPG_PROPERTY_VALIDATION_WRAP               = 2
+    Wrap
 };
+
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("use wxPGNumericValidationMode::ErrorMessage instead")
+constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE { wxPGNumericValidationMode::ErrorMessage };
+wxDEPRECATED_MSG("use wxPGNumericValidationMode::Saturate instead")
+constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_SATURATE { wxPGNumericValidationMode::Saturate };
+wxDEPRECATED_MSG("use wxPGNumericValidationMode::Wrap instead")
+constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_WRAP { wxPGNumericValidationMode::Wrap };
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
 
@@ -182,9 +191,16 @@ public:
     bool UseSpinMotion() const { return m_spinMotion; }
 
     // Common validation code - for internal use.
+#if WXWIN_COMPATIBILITY_3_2
     template<typename T>
+    wxDEPRECATED_MSG("use DoNumericValidation with 'mode' argument as wxPGNumericValidationMode")
     bool DoNumericValidation(T& value, wxPGValidationInfo* pValidationInfo,
                              int mode, T defMin, T defMax) const;
+#endif // WXWIN_COMPATIBILITY_3_2
+
+    template<typename T>
+    bool DoNumericValidation(T& value, wxPGValidationInfo* pValidationInfo,
+                             wxPGNumericValidationMode mode, T defMin, T defMax) const;
 
 protected:
     wxNumericProperty(const wxString& label, const wxString& name);
@@ -255,14 +271,12 @@ private:
     static bool DoValidation( const wxNumericProperty* property,
                               wxLongLong& value,
                               wxPGValidationInfo* pValidationInfo,
-                              int mode =
-                                wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
+                              wxPGNumericValidationMode = wxPGNumericValidationMode::ErrorMessage);
 #endif // wxUSE_LONGLONG
     static bool DoValidation(const wxNumericProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,
-                             int mode =
-                                wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+                             wxPGNumericValidationMode mode = wxPGNumericValidationMode::ErrorMessage);
 };
 
 // -----------------------------------------------------------------------
@@ -332,12 +346,12 @@ private:
     static bool DoValidation(const wxNumericProperty* property,
                              wxULongLong& value,
                              wxPGValidationInfo* pValidationInfo,
-                             int mode =wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+                             wxPGNumericValidationMode = wxPGNumericValidationMode::ErrorMessage);
 #endif // wxUSE_LONGLONG
     static bool DoValidation(const wxNumericProperty* property,
                              long& value,
                              wxPGValidationInfo* pValidationInfo,
-                             int mode = wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+                             wxPGNumericValidationMode mode = wxPGNumericValidationMode::ErrorMessage);
 };
 
 // -----------------------------------------------------------------------
@@ -390,7 +404,7 @@ private:
     static bool DoValidation(const wxNumericProperty* property,
                              double& value,
                              wxPGValidationInfo* pValidationInfo,
-                             int mode = wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+                             wxPGNumericValidationMode mode = wxPGNumericValidationMode::ErrorMessage);
 };
 
 // -----------------------------------------------------------------------

@@ -265,9 +265,19 @@ namespace {
 // Common validation code to be called in ValidateValue() implementations.
 // Note that 'value' is reference on purpose, so we can write
 // back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE or wxPG_PROPERTY_VALIDATION_WRAP.
+#if WXWIN_COMPATIBILITY_3_2
 template<typename T>
 bool wxNumericProperty::DoNumericValidation(T& value, wxPGValidationInfo* pValidationInfo,
                                             int mode, T defMin, T defMax) const
+{
+    return DoNumericValidation<T>(value, pValidationInfo,
+                                  static_cast<wxPGNumericValidationMode>(mode), defMin, defMax);
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
+template<typename T>
+bool wxNumericProperty::DoNumericValidation(T& value, wxPGValidationInfo* pValidationInfo,
+                                            wxPGNumericValidationMode mode, T defMin, T defMax) const
 {
     T min = defMin;
     T max = defMax;
@@ -304,7 +314,7 @@ bool wxNumericProperty::DoNumericValidation(T& value, wxPGValidationInfo* pValid
     {
         if ( value < min )
         {
-            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
+            if ( mode == wxPGNumericValidationMode::ErrorMessage )
             {
                 wxString msg;
                 wxVariant vmin = WXVARIANT(min);
@@ -319,7 +329,7 @@ bool wxNumericProperty::DoNumericValidation(T& value, wxPGValidationInfo* pValid
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
-            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
+            else if ( mode == wxPGNumericValidationMode::Saturate )
                 value = min;
             else
                 value = max - (min - value);
@@ -331,7 +341,7 @@ bool wxNumericProperty::DoNumericValidation(T& value, wxPGValidationInfo* pValid
     {
         if ( value > max )
         {
-            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
+            if ( mode == wxPGNumericValidationMode::ErrorMessage )
             {
                 wxString msg;
                 wxVariant vmax = WXVARIANT(max);
@@ -346,7 +356,7 @@ bool wxNumericProperty::DoNumericValidation(T& value, wxPGValidationInfo* pValid
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
-            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
+            else if ( mode == wxPGNumericValidationMode::Saturate )
                 value = max;
             else
                 value = min + (value - max);
@@ -470,7 +480,7 @@ bool wxIntProperty::IntToValue( wxVariant& variant, int value, wxPGPropValFormat
 bool wxIntProperty::DoValidation( const wxNumericProperty* property,
                                   wxLongLong& value,
                                   wxPGValidationInfo* pValidationInfo,
-                                  int mode )
+                                  wxPGNumericValidationMode mode )
 {
     return property->DoNumericValidation<wxLongLong>(value,
                                            pValidationInfo,
@@ -481,7 +491,7 @@ bool wxIntProperty::DoValidation( const wxNumericProperty* property,
 bool wxIntProperty::DoValidation(const wxNumericProperty* property,
                                  long& value,
                                  wxPGValidationInfo* pValidationInfo,
-                                 int mode)
+                                 wxPGNumericValidationMode mode)
 {
     return property->DoNumericValidation<long>(value, pValidationInfo,
                                      mode, wxPG_LONG_MIN, wxPG_LONG_MAX);
@@ -496,7 +506,7 @@ bool wxIntProperty::ValidateValue( wxVariant& value,
     long ll = value.GetLong();
 #endif
     return DoValidation(this, ll, &validationInfo,
-                        wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+                        wxPGNumericValidationMode::ErrorMessage);
 }
 
 wxValidator* wxIntProperty::GetClassValidator()
@@ -520,8 +530,8 @@ wxValidator* wxIntProperty::DoGetValidator() const
 
 wxVariant wxIntProperty::AddSpinStepValue(long stepScale) const
 {
-    int mode = m_spinWrap ? wxPG_PROPERTY_VALIDATION_WRAP
-        : wxPG_PROPERTY_VALIDATION_SATURATE;
+    wxPGNumericValidationMode mode = m_spinWrap ? wxPGNumericValidationMode::Wrap
+        : wxPGNumericValidationMode::Saturate;
     wxVariant value = GetValue();
     if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
     {
@@ -733,7 +743,7 @@ bool wxUIntProperty::IntToValue( wxVariant& variant, int number, wxPGPropValForm
 bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   wxULongLong& value,
                                   wxPGValidationInfo* pValidationInfo,
-                                  int mode )
+                                  wxPGNumericValidationMode mode )
 {
     return property->DoNumericValidation<wxULongLong>(value, pValidationInfo,
                                             mode, wxULongLong(0), wxULongLong(wxPG_ULLONG_MAX));
@@ -743,7 +753,7 @@ bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
 bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   long& value,
                                   wxPGValidationInfo* pValidationInfo,
-                                  int mode)
+                                  wxPGNumericValidationMode mode)
 {
     return property->DoNumericValidation<long>(value, pValidationInfo,
                                      mode, 0, wxPG_ULONG_MAX);
@@ -757,7 +767,7 @@ bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& valida
     long uul = value.GetLong();
 #endif
     return DoValidation(this, uul, &validationInfo,
-                        wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+                        wxPGNumericValidationMode::ErrorMessage);
 }
 
 wxValidator* wxUIntProperty::DoGetValidator() const
@@ -806,8 +816,8 @@ bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 wxVariant wxUIntProperty::AddSpinStepValue(long stepScale) const
 {
-    int mode = m_spinWrap ? wxPG_PROPERTY_VALIDATION_WRAP
-                          : wxPG_PROPERTY_VALIDATION_SATURATE;
+    wxPGNumericValidationMode mode = m_spinWrap ? wxPGNumericValidationMode::Wrap
+                          : wxPGNumericValidationMode::Saturate;
     wxVariant value = GetValue();
     if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
     {
@@ -964,7 +974,7 @@ bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, w
 bool wxFloatProperty::DoValidation( const wxNumericProperty* property,
                                     double& value,
                                     wxPGValidationInfo* pValidationInfo,
-                                    int mode )
+                                    wxPGNumericValidationMode mode )
 {
     return property->DoNumericValidation<double>(value, pValidationInfo,
                                        mode, wxPG_DBL_MIN, wxPG_DBL_MAX);
@@ -976,7 +986,7 @@ wxFloatProperty::ValidateValue( wxVariant& value,
 {
     double fpv = value.GetDouble();
     return DoValidation(this, fpv, &validationInfo,
-                        wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
+                        wxPGNumericValidationMode::ErrorMessage);
 }
 
 bool wxFloatProperty::DoSetAttribute( const wxString& name, wxVariant& value )
@@ -1011,8 +1021,8 @@ wxValidator* wxFloatProperty::DoGetValidator() const
 
 wxVariant wxFloatProperty::AddSpinStepValue(long stepScale) const
 {
-    int mode = m_spinWrap ? wxPG_PROPERTY_VALIDATION_WRAP
-                          : wxPG_PROPERTY_VALIDATION_SATURATE;
+    wxPGNumericValidationMode mode = m_spinWrap ? wxPGNumericValidationMode::Wrap
+                          : wxPGNumericValidationMode::Saturate;
     wxVariant value = GetValue();
     double v = value.GetDouble();
     double step = m_spinStep.GetDouble();
