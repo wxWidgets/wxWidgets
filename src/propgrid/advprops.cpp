@@ -1713,9 +1713,8 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 #define wxPG_CURSOR_IMAGE_WIDTH     32
 #endif
 
-#define NUM_CURSORS 28
-
-static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
+static constexpr std::array<const char*, 28+1> gs_cp_es_syscursors_labels
+{
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Default"),
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Arrow"),
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Right Arrow"),
@@ -1747,7 +1746,13 @@ static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
     nullptr
 };
 
-static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_cp_es_syscursors_labels[gs_cp_es_syscursors_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 28> gs_cp_es_syscursors_values
+{
     wxCURSOR_NONE,
     wxCURSOR_ARROW,
     wxCURSOR_RIGHT_ARROW,
@@ -1778,6 +1783,9 @@ static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
     wxCURSOR_ARROWWAIT
 };
 
+static_assert(gs_cp_es_syscursors_values.size() == gs_cp_es_syscursors_labels.size() - 1,
+    "Values table has to have one item less than labels table");
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxCursorProperty, wxEnumProperty);
 
 static wxPGChoices gs_wxCursorProperty_choicesCache;
@@ -1786,8 +1794,8 @@ wxCursorProperty::wxCursorProperty( const wxString& label, const wxString& name,
     int value )
     : wxEnumProperty( label,
                       name,
-                      gs_cp_es_syscursors_labels,
-                      gs_cp_es_syscursors_values,
+                      gs_cp_es_syscursors_labels.data(),
+                      gs_cp_es_syscursors_values.data(),
                       &gs_wxCursorProperty_choicesCache,
                       value )
 {
@@ -1803,7 +1811,7 @@ wxString wxCursorProperty::ValueToString(wxVariant& value, wxPGPropValFormatFlag
 wxSize wxCursorProperty::OnMeasureImage( int item ) const
 {
 #if wxPG_CAN_DRAW_CURSOR
-    if ( item != -1 && item < NUM_CURSORS )
+    if ( item != -1 && item < static_cast<int>(gs_cp_es_syscursors_values.size()) )
         return wxSize(wxPG_CURSOR_IMAGE_WIDTH,wxPG_CURSOR_IMAGE_WIDTH);
 #else
     wxUnusedVar(item);
@@ -1824,7 +1832,7 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
     {
         dc.DrawRectangle( rect );
 
-        if ( paintdata.m_choiceItem < NUM_CURSORS )
+        if ( paintdata.m_choiceItem < static_cast<int>(gs_cp_es_syscursors_values.size()) )
         {
             wxStockCursor cursorIndex =
                 (wxStockCursor) gs_cp_es_syscursors_values[paintdata.m_choiceItem];
