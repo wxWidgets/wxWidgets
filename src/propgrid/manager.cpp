@@ -634,6 +634,8 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
     Init2(style);
 
     SetInitialSize(size);
+    // Create controls
+    RecreateControls();
 
     return res;
 }
@@ -762,9 +764,6 @@ void wxPropertyGridManager::Init2( int style )
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
     //     (see wxPropertyGridManager::ProcessEvent).
     ReconnectEventHandlers(wxID_NONE, m_pPropGrid->GetId());
-
-    // Optional initial controls.
-    m_width = -12345;
 
     m_iFlags |= wxPG_MAN_FL_INITIALIZED;
 
@@ -2148,9 +2147,6 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
     int width, height;
 
     GetClientSize(&width, &height);
-
-    if ( m_width == -12345 )
-        RecreateControls();
 
     RecalculatePositions(width, height);
 
