@@ -38,6 +38,8 @@
 #include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/winstyle.h"
 
+#include <memory>
+
 #ifndef HDM_SETBITMAPMARGIN
     #define HDM_SETBITMAPMARGIN 0x1234
 #endif
@@ -177,7 +179,7 @@ private:
 
     // the custom draw helper: initially nullptr, created on demand, use
     // GetCustomDraw() to do it
-    wxMSWHeaderCtrlCustomDraw *m_customDraw;
+    std::unique_ptr<wxMSWHeaderCtrlCustomDraw> m_customDraw;
 };
 
 // ============================================================================
@@ -197,7 +199,6 @@ void wxMSWHeaderCtrl::Init()
     m_scrollOffset = 0;
     m_colBeingDragged = -1;
     m_isColBeingResized = false;
-    m_customDraw = nullptr;
 
     Bind(wxEVT_DPI_CHANGED, &wxMSWHeaderCtrl::WXHandleDPIChanged, this);
 }
@@ -225,7 +226,7 @@ bool wxMSWHeaderCtrl::Create(wxWindow *parent,
         // which calls SetFont() from InheritAttributes(), so don't recreate it
         // in this case.
         if ( !m_customDraw )
-            m_customDraw = new wxMSWHeaderCtrlCustomDraw();
+            m_customDraw.reset(new wxMSWHeaderCtrlCustomDraw());
         m_customDraw->UseHeaderThemeColors(GetHwnd());
     }
 
@@ -269,7 +270,6 @@ bool wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
 wxMSWHeaderCtrl::~wxMSWHeaderCtrl()
 {
     delete m_imageList;
-    delete m_customDraw;
 }
 
 // ----------------------------------------------------------------------------
@@ -666,20 +666,16 @@ wxMSWHeaderCtrlCustomDraw* wxMSWHeaderCtrl::GetCustomDraw()
     // any longer.
     if ( !m_hasBgCol && !m_hasFgCol && !wxMSWDarkMode::IsActive() )
     {
-        if ( m_customDraw )
-        {
-            delete m_customDraw;
-            m_customDraw = nullptr;
-        }
-
-        return nullptr;
+        m_customDraw.reset();
+    }
+    else
+    {
+        // We do have at least one custom colour, so enable custom drawing.
+        if ( !m_customDraw )
+            m_customDraw.reset(new wxMSWHeaderCtrlCustomDraw());
     }
 
-    // We do have at least one custom colour, so enable custom drawing.
-    if ( !m_customDraw )
-        m_customDraw = new wxMSWHeaderCtrlCustomDraw();
-
-    return m_customDraw;
+    return m_customDraw.get();
 }
 
 bool wxMSWHeaderCtrl::SetBackgroundColour(const wxColour& colour)
