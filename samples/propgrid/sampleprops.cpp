@@ -557,7 +557,7 @@ bool wxArrayDoubleProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     // Create editor dialog.
     wxArrayDoubleEditorDialog dlg;
     dlg.SetPrecision(m_precision);
-    dlg.Create(pg->GetPanel(), wxEmptyString,
+    dlg.Create(pg->GetPanel(), "",
                m_dlgTitle.empty() ? GetLabel() : m_dlgTitle, curValue, m_dlgStyle);
     dlg.Move( pg->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
 
@@ -710,7 +710,7 @@ wxColour MyColourProperty::GetColour(int index) const
 wxString MyColourProperty::ColourToString(const wxColour& col, int index, wxPGPropValFormatFlags flags) const
 {
     if ( index == (int)(m_choices.GetCount() - 1) )
-        return wxEmptyString;
+        return wxString();
 
     return wxColourProperty::ColourToString(col, index, flags);
 }

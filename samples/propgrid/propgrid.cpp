@@ -339,7 +339,7 @@ public:
 
     SingleChoiceProperty( const wxString& label,
                           const wxString& name = wxPG_LABEL,
-                          const wxString& value = wxEmptyString )
+                          const wxString& value = wxString() )
         : wxStringProperty(label, name, value)
     {
         // Prepare choices
@@ -812,7 +812,7 @@ void FormMain::OnPropertyGridItemRightClick( wxPropertyGridEvent& event )
     }
     else
     {
-        sb->SetStatusText( wxEmptyString );
+        sb->SetStatusText( wxString() );
     }
 #endif
 }
@@ -834,7 +834,7 @@ void FormMain::OnPropertyGridItemDoubleClick( wxPropertyGridEvent& event )
     }
     else
     {
-        sb->SetStatusText ( wxEmptyString );
+        sb->SetStatusText ( wxString() );
     }
 #endif
 }
@@ -1280,7 +1280,7 @@ void FormMain::PopulateWithExamples ()
     soc.Add( "Look, it continues", 200 );
     soc.Add( "Even More", 240 );
     soc.Add( "And More", 280 );
-    soc.Add( wxEmptyString, 300 );
+    soc.Add( "", 300);
     soc.Add( "True End of the List", 320 );
 
     // Test custom colours ([] operator of wxPGChoices returns
@@ -1331,8 +1331,7 @@ void FormMain::PopulateWithExamples ()
     pg->SetPropertyHelpString( "Password",
         "Has attribute wxPG_STRING_PASSWORD set to true" );
 
-    // String editor with dir selector button. Uses wxEmptyString as name, which
-    // is allowed (naturally, in this case property cannot be accessed by name).
+    // String editor with dir selector button.
     pg->Append( new wxDirProperty( "DirProperty", wxPG_LABEL, ::wxGetUserHome()) );
     pg->SetPropertyAttribute( "DirProperty",
                               wxPG_DIALOG_TITLE,
@@ -1978,7 +1977,7 @@ FormMain::FormMain(const wxString& title)
 
     //
     // Create menu bar
-    wxMenu *menuFile = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
     wxMenu *menuTry = new wxMenu;
     wxMenu *menuTools1 = new wxMenu;
     wxMenu *menuTools2 = new wxMenu;
@@ -2102,7 +2101,7 @@ FormMain::FormMain(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar
     CreateStatusBar(1);
-    SetStatusText(wxEmptyString);
+    SetStatusText(wxString());
 #endif // wxUSE_STATUSBAR
 
     // Register all editors (SpinCtrl etc.)
