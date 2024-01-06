@@ -61,7 +61,6 @@ public:
     wxOverlayImpl() = default;
     ~wxOverlayImpl() = default;
 
-    virtual bool IsNative() const override { return true; }
     virtual void Reset() override;
     virtual bool IsOk() override;
     virtual void Init(wxDC* dc, int x , int y , int width , int height) override;
