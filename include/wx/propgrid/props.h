@@ -162,12 +162,21 @@ constexpr wxPGNumericValidationMode wxPG_PROPERTY_VALIDATION_WRAP { wxPGNumericV
 class WXDLLIMPEXP_PROPGRID wxNumericPropertyValidator : public wxTextValidator
 {
 public:
-    enum NumericType
+    enum class NumericType
     {
-        Signed = 0,
+        Signed,
         Unsigned,
         Float
     };
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use NumericType::Signed instead")
+    static const NumericType Signed = NumericType::Signed;
+    wxDEPRECATED_MSG("use NumericType::Unsigned instead")
+    static const NumericType Unsigned = NumericType::Unsigned;
+    wxDEPRECATED_MSG("use NumericType::Float instead")
+    static const NumericType Float = NumericType::Float;
+#endif // WXWIN_COMPATIBILITY_3_2
 
     wxNumericPropertyValidator( NumericType numericType, int base = 10 );
     virtual ~wxNumericPropertyValidator() = default;

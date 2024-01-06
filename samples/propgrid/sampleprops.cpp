@@ -632,7 +632,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxTextValidator* validator =
-        new wxNumericPropertyValidator(wxNumericPropertyValidator::Float);
+        new wxNumericPropertyValidator(wxNumericPropertyValidator::NumericType::Float);
 
     // Accept also a delimiter and space character
     validator->AddCharIncludes(m_delimiter);
