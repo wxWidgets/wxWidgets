@@ -71,8 +71,6 @@ public:
                 long style,
                 const wxString& name);
 
-    virtual ~wxMSWHeaderCtrl();
-
     // Override to implement colours support via custom drawing.
     virtual bool SetBackgroundColour(const wxColour& colour) override;
     virtual bool SetForegroundColour(const wxColour& colour) override;
@@ -166,7 +164,7 @@ private:
     wxArrayInt m_colIndices;
 
     // the image list: initially nullptr, created on demand
-    wxImageList *m_imageList;
+    std::unique_ptr<wxImageList> m_imageList;
 
     // the offset of the window used to emulate scrolling it
     int m_scrollOffset;
@@ -195,7 +193,6 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxMSWHeaderCtrlNameStr[] = "wxMSWHeader
 void wxMSWHeaderCtrl::Init()
 {
     m_numColumns = 0;
-    m_imageList = nullptr;
     m_scrollOffset = 0;
     m_colBeingDragged = -1;
     m_isColBeingResized = false;
@@ -267,11 +264,6 @@ bool wxMSWHeaderCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
     return true;
 }
 
-wxMSWHeaderCtrl::~wxMSWHeaderCtrl()
-{
-    delete m_imageList;
-}
-
 // ----------------------------------------------------------------------------
 // wxMSWHeaderCtrl scrolling
 // ----------------------------------------------------------------------------
@@ -329,8 +321,7 @@ void wxMSWHeaderCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 
 void wxMSWHeaderCtrl::WXHandleDPIChanged(wxDPIChangedEvent& event)
 {
-    delete m_imageList;
-    m_imageList = nullptr;
+    m_imageList.reset();
     for (unsigned int i = 0; i < m_numColumns; ++i)
     {
         UpdateHeader(i);
@@ -462,7 +453,7 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
         if ( !m_imageList )
         {
             bmpSize = bb.GetPreferredBitmapSizeFor(this);
-            m_imageList = new wxImageList(bmpSize.x, bmpSize.y);
+            m_imageList.reset(new wxImageList(bmpSize.x, bmpSize.y));
             (void) // suppress mingw32 warning about unused computed value
             Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
         }
