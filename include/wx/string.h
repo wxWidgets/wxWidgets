@@ -291,6 +291,13 @@ public:
         return p - cs.AsWChar();
     }
 
+#if wxUSE_STD_IOSTREAM
+  friend WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxCStrData&);
+#if defined(HAVE_WOSTREAM)
+  friend WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxCStrData&);
+#endif  // defined(HAVE_WOSTREAM)
+#endif  // wxUSE_STD_IOSTREAM
+
 private:
     // the wxString this object was returned for
     const wxString *m_str;
@@ -3626,6 +3633,13 @@ public:
   wxString& operator+=(unsigned char ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
+#if wxUSE_STD_IOSTREAM
+  friend WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxString&);
+#if defined(HAVE_WOSTREAM)
+  friend WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxString&);
+#endif  // defined(HAVE_WOSTREAM)
+#endif  // wxUSE_STD_IOSTREAM
+
 private:
   #if !wxUSE_UTF8_LOCALE_ONLY
   int DoPrintfWchar(const wxChar *format, ...);
@@ -4157,27 +4171,6 @@ namespace std
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
 // ---------------------------------------------------------------------------
-
-#if wxUSE_STD_IOSTREAM
-
-#include "wx/iosfwrap.h"
-
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxString&);
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxCStrData&);
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxScopedCharBuffer&);
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxScopedWCharBuffer&);
-
-#if defined(HAVE_WOSTREAM)
-
-WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxString&);
-WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxCStrData&);
-WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxScopedWCharBuffer&);
-
-#endif  // defined(HAVE_WOSTREAM)
-
-#endif  // wxUSE_STD_IOSTREAM
 
 // ---------------------------------------------------------------------------
 // wxCStrData implementation

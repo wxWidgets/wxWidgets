@@ -13,6 +13,10 @@
 #include "wx/defs.h"
 #include "wx/wxcrtbase.h"
 
+#if wxUSE_STD_IOSTREAM
+    #include "wx/iosfwrap.h"
+#endif
+
 #include <stdlib.h>             // malloc() and free()
 
 class WXDLLIMPEXP_FWD_BASE wxCStrData;
@@ -55,7 +59,62 @@ struct UntypedBufferData
 // NB: this is defined in string.cpp and not the (non-existent) buffer.cpp
 WXDLLIMPEXP_BASE UntypedBufferData * GetUntypedNullData();
 
+// Implementation of stream insertion operators: they can't be inline because
+// we don't have full std::ostream declaration here.
+#if wxUSE_STD_IOSTREAM
+WXDLLIMPEXP_BASE std::ostream& OutputCharBuffer(std::ostream&, const char* s);
+WXDLLIMPEXP_BASE std::ostream& OutputWCharBuffer(std::ostream&, const wchar_t* ws);
+#if defined(HAVE_WOSTREAM)
+WXDLLIMPEXP_BASE std::wostream& OutputWCharBuffer(std::wostream&, const wchar_t* ws);
+#endif // defined(HAVE_WOSTREAM)
+#endif // wxUSE_STD_IOSTREAM
+
 } // namespace wxPrivate
+
+
+// Template used as CRTP base class for wxScopedCharTypeBuffer in order to
+// define overloaded operator<<() for it.
+//
+// By default we don't define any operators, but we do define them for the
+// usual char and wchar_t specializations below.
+template <typename T, typename Buffer>
+struct wxScopedCharTypeBufferStreamSupport
+{
+};
+
+// Suppress the warning about declaring a non-template friend because this is
+// exactly what we want to do here.
+wxGCC_ONLY_WARNING_SUPPRESS(non-template-friend)
+
+template <typename Buffer>
+struct wxScopedCharTypeBufferStreamSupport<char, Buffer>
+{
+#if wxUSE_STD_IOSTREAM
+  friend std::ostream& operator<<(std::ostream& oss, const Buffer& buf)
+  {
+      return wxPrivate::OutputCharBuffer(oss, buf.data());
+  }
+#endif // wxUSE_STD_IOSTREAM
+};
+
+template <typename Buffer>
+struct wxScopedCharTypeBufferStreamSupport<wchar_t, Buffer>
+{
+#if wxUSE_STD_IOSTREAM
+  friend std::ostream& operator<<(std::ostream& oss, const Buffer& buf)
+  {
+      return wxPrivate::OutputWCharBuffer(oss, buf.data());
+  }
+#if defined(HAVE_WOSTREAM)
+  friend std::wostream& operator<<(std::wostream& woss, const Buffer& buf)
+  {
+      return wxPrivate::OutputWCharBuffer(woss, buf.data());
+  }
+#endif // defined(HAVE_WOSTREAM)
+#endif // wxUSE_STD_IOSTREAM
+};
+
+wxGCC_ONLY_WARNING_RESTORE(non-template-friend)
 
 
 // Reference-counted character buffer for storing string data. The buffer
@@ -63,6 +122,7 @@ WXDLLIMPEXP_BASE UntypedBufferData * GetUntypedNullData();
 // is valid; see wxCharTypeBuffer<T> for persistent variant.
 template <typename T>
 class wxScopedCharTypeBuffer
+    : wxScopedCharTypeBufferStreamSupport<T, wxScopedCharTypeBuffer<T>>
 {
 public:
     typedef T CharType;
@@ -368,6 +428,13 @@ public:
     wxCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
     wxCharBuffer(const wxCStrData& cstr);
+
+#if wxUSE_STD_IOSTREAM
+    // Define this to disambiguate between converting to the base class or to
+    // wxString when using operator<<() with the objects of this class.
+    friend WXDLLIMPEXP_BASE
+    std::ostream& operator<<(std::ostream& oss, const wxCharBuffer& buf);
+#endif // wxUSE_STD_IOSTREAM
 };
 
 class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
@@ -385,6 +452,16 @@ public:
     wxWCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
     wxWCharBuffer(const wxCStrData& cstr);
+
+#if wxUSE_STD_IOSTREAM
+    // See wxCharBuffer for why this is needed.
+    friend WXDLLIMPEXP_BASE
+    std::ostream& operator<<(std::ostream& oss, const wxWCharBuffer& buf);
+#if defined(HAVE_WOSTREAM)
+    friend WXDLLIMPEXP_BASE
+    std::wostream& operator<<(std::wostream& woss, const wxWCharBuffer& buf);
+#endif // defined(HAVE_WOSTREAM)
+#endif // wxUSE_STD_IOSTREAM
 };
 
 // wxCharTypeBuffer<T> implicitly convertible to T*, for char and wchar_t,
