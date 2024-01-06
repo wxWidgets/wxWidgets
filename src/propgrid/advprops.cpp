@@ -766,7 +766,8 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 
 #include "wx/colordlg.h"
 
-static const char* const gs_cp_es_syscolour_labels[] = {
+static constexpr std::array<const char*, 25+1> gs_cp_es_syscolour_labels
+{
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("AppWorkspace"),
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveBorder"),
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveCaption"),
@@ -795,7 +796,13 @@ static const char* const gs_cp_es_syscolour_labels[] = {
     nullptr
 };
 
-static const long gs_cp_es_syscolour_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_cp_es_syscolour_labels[gs_cp_es_syscolour_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 25> gs_cp_es_syscolour_values
+{
     wxSYS_COLOUR_APPWORKSPACE,
     wxSYS_COLOUR_ACTIVEBORDER,
     wxSYS_COLOUR_ACTIVECAPTION,
@@ -823,6 +830,8 @@ static const long gs_cp_es_syscolour_values[] = {
     wxPG_COLOUR_CUSTOM
 };
 
+static_assert(gs_cp_es_syscolour_values.size() == gs_cp_es_syscolour_labels.size() - 1,
+    "Colour values table has to have one item less than colour labels table");
 
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
@@ -859,8 +868,8 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
     const wxColourPropertyValue& value )
     : wxEnumProperty( label,
                       name,
-                      gs_cp_es_syscolour_labels,
-                      gs_cp_es_syscolour_values,
+                      gs_cp_es_syscolour_labels.data(),
+                      gs_cp_es_syscolour_values.data(),
                       &gs_wxSystemColourProperty_choicesCache )
 {
         Init( value.m_type, value.m_colour );
