@@ -30,6 +30,7 @@
 
 #include <limits>
 #include <utility>
+#include <array>
 
 constexpr double wxPG_DBL_MIN = std::numeric_limits<double>::min();
 constexpr double wxPG_DBL_MAX = std::numeric_limits<double>::max();
@@ -603,7 +604,7 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
 
 wxString wxUIntProperty::ValueToString(wxVariant& value, wxPGPropValFormatFlags flags) const
 {
-    static const wxStringCharType* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] =
+    static constexpr std::array<const wxStringCharType*, wxPG_UINT_TEMPLATE_MAX> gs_uintTemplates32
     {
         wxS("%lx"), wxS("0x%lx"), wxS("$%lx"),
         wxS("%lX"), wxS("0x%lX"), wxS("$%lX"),
@@ -612,7 +613,7 @@ wxString wxUIntProperty::ValueToString(wxVariant& value, wxPGPropValFormatFlags 
 
     // In the edit mode we want to display just the numeric value,
     // without prefixes.
-    static const wxStringCharType* const gs_uintEditTemplates32[wxPG_UINT_TEMPLATE_MAX] =
+    static constexpr std::array<const wxStringCharType*, wxPG_UINT_TEMPLATE_MAX> gs_uintEditTemplates32
     {
         wxS("%lx"), wxS("%lx"), wxS("%lx"),
         wxS("%lX"), wxS("%lX"), wxS("%lX"),
@@ -620,7 +621,7 @@ wxString wxUIntProperty::ValueToString(wxVariant& value, wxPGPropValFormatFlags 
     };
 
 #if wxUSE_LONGLONG
-    static const wxStringCharType* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] =
+    static constexpr std::array<const wxStringCharType*, wxPG_UINT_TEMPLATE_MAX> gs_uintTemplates64
     {
         wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
         wxS("0x%") wxS(wxLongLongFmtSpec) wxS("x"),
@@ -634,7 +635,7 @@ wxString wxUIntProperty::ValueToString(wxVariant& value, wxPGPropValFormatFlags 
 
     // In the edit mode we want to display just the numeric value,
     // without prefixes.
-    static const wxStringCharType* const gs_uintEditTemplates64[wxPG_UINT_TEMPLATE_MAX] =
+    static constexpr std::array<const wxStringCharType*, wxPG_UINT_TEMPLATE_MAX> gs_uintEditTemplates64
     {
         wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
         wxS("%") wxS(wxLongLongFmtSpec) wxS("x"),
