@@ -901,6 +901,18 @@ public:
     wxLogBuffer();
 
     /**
+        Clear all the messages in the buffer.
+
+        This can be done to prevent them from being flushed by the next call to
+        Flush(), which happens implicitly if this logger ceases to be the
+        active logger after a call to wxLog::SetActiveTarget() with a different
+        log target.
+
+        @since 3.3.0
+    */
+    void Clear();
+
+    /**
         Shows all the messages collected so far to the user (using a message box in the
         GUI applications or by printing them out to the console in text mode) and
         clears the internal buffer.

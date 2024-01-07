@@ -665,6 +665,10 @@ public:
     // get the string contents with all messages logged
     const wxString& GetBuffer() const { return m_str; }
 
+    // clear all the messages, this, in particular, prevents them from being
+    // flushed
+    void Clear() { m_str.clear(); }
+
     // show the buffer contents to the user in the best possible way (this uses
     // wxMessageOutputMessageBox) and clear it
     virtual void Flush() override;
