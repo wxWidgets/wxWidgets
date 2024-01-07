@@ -360,6 +360,36 @@ wxFileConfig::MigrateLocalFile(const wxString& name, int newStyle, int oldStyle)
 
     wxString currentPath = res.oldPath;
 
+    class AppendLogToError
+    {
+    public:
+        explicit AppendLogToError(MigrationResult& res)
+            : m_res(res)
+        {
+        }
+
+        ~AppendLogToError()
+        {
+            if ( !m_res.error.empty() )
+            {
+                wxString msg = m_logCollect.GetMessages();
+                if ( !msg.empty() )
+                {
+                    // Normally the messages are separated with new lines, but
+                    // we don't need the trailing one after the last one.
+                    if ( msg.Last() == '\n' )
+                        msg.RemoveLast();
+                    m_res.error << _(" due to the following error:\n") << msg;
+                }
+            }
+        }
+
+    private:
+        MigrationResult& m_res;
+
+        wxLogCollector m_logCollect;
+    } appendLogToError{res};
+
     const auto newDir = newPath.GetPath();
     if ( !wxFileName::DirExists(newDir) )
     {
