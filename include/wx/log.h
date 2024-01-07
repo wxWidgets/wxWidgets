@@ -766,6 +766,41 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// Collect all logged messages into a (multiline) string.
+// ----------------------------------------------------------------------------
+
+// This class is supposed to be used as a local variable and collects, without
+// showing them, all the messages logged during its lifetime.
+class wxLogCollector
+{
+public:
+    wxLogCollector()
+        : m_logOrig{wxLog::SetActiveTarget(&m_logBuf)}
+    {
+        delete m_logBuf.SetFormatter(new wxLogFormatterNone{});
+    }
+
+    ~wxLogCollector()
+    {
+        // Don't flush the messages in the buffer.
+        m_logBuf.Clear();
+
+        wxLog::SetActiveTarget(m_logOrig);
+    }
+
+    const wxString& GetMessages() const
+    {
+        return m_logBuf.GetBuffer();
+    }
+
+private:
+    wxLogBuffer m_logBuf;
+    wxLog* const m_logOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxLogCollector);
+};
+
+// ----------------------------------------------------------------------------
 // chaining log target: installs itself as a log target and passes all
 // messages to the real log target given to it in the ctor but also forwards
 // them to the previously active one

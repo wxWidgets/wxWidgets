@@ -957,6 +957,65 @@ public:
 };
 
 
+/**
+    @class wxLogCollector
+
+    Allows to collect all log messages into a string instead of showing them.
+
+    This class is supposed to be used as a local variable and collects all the
+    messages logged during its lifetime instead of showing them as usual, e.g.
+
+    @code
+    void Foo()
+    {
+        wxLogCollector collectLogs;
+
+        // Call some function that can log error messages, e.g. try to create a
+        // new directory. Without wxLogCollector a failure here would show
+        // errors to the user.
+        if ( !wxFileName::Mkdir("/some/path", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+        {
+            // Instead, we can report them here as we see fit, e.g. write them
+            // to a log file or process them in some other way.
+            wxFprintf(logFile, "Creating directory failed: %s",
+                      collectLogs.GetMessages());
+        }
+    }
+    @endcode
+
+    Note that because this class uses wxLog::SetActiveTarget() to temporarily
+    switch the active log target to wxLogBuffer, you need to ensure that the
+    log target doesn't change while it is alive (in the simplest case by just
+    avoiding to change it at all).
+
+    @since 3.3.0
+*/
+class wxLogCollector
+{
+public:
+    /**
+        Constructor overrides active log target to collect messages.
+    */
+    wxLogCollector();
+
+    /**
+        Get all the collected messages.
+
+        The returned string may be empty but if it isn't, it contains the
+        trailing new line (and may also contain more new lines inside it if
+        multiple messages were logged).
+
+        Note that the messages here contain just the messages, without any time
+        stamps or log level prefixes.
+    */
+    const wxString& GetMessages() const;
+
+    /**
+        Destructor restores the previously active log target.
+    */
+    ~wxLogCollector();
+};
+
 
 /**
     @class wxLogNull
@@ -1004,6 +1063,8 @@ public:
 
     This class is thread-safe and can be used from both the main and the
     backgrounds threads.
+
+    @see wxLogCollector
 
     @library{wxbase}
     @category{logging}
