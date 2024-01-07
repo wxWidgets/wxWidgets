@@ -28,7 +28,7 @@ enum
     wxCONFIG_USE_SUBDIR = 16,
 
     /**
-        Use XDG-compliant file location on Unix systems.
+        Always use XDG-compliant file location on Unix systems.
 
         If wxCONFIG_USE_SUBDIR is not specified, using this flag has the same
         effect as calling wxStandardPaths::SetFileLayout() with
@@ -38,9 +38,29 @@ enum
         In combination with wxCONFIG_USE_SUBDIR, this flag changes the default
         configuration file location to ~/.config/appname/appname.conf`.
 
+        If neither this flag nor wxCONFIG_USE_HOME is specified, XDG-compliant
+        configuration file path will be used by default, but if there is an
+        existing file in the home directory, then it will continue to be used
+        instead.
+
         @since 3.3.0
      */
-    wxCONFIG_USE_XDG = 32
+    wxCONFIG_USE_XDG = 32,
+
+    /**
+        Use home directory for the local file location on Unix systems.
+
+        Using this flag is not recommended, it exists only for compatibility
+        with the previous wxWidgets versions which created configuration files
+        in the home directory (i.e. `~/.appname`) by default.
+
+        Note that any already existing files in the home directory will still
+        be used, even if this file is not specified, unless wxCONFIG_USE_XDG is
+        used.
+
+        @since 3.3.0
+     */
+    wxCONFIG_USE_HOME = 64
 };
 
 

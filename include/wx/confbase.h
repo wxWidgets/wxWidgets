@@ -63,7 +63,8 @@ enum
     wxCONFIG_USE_RELATIVE_PATH = 4,
     wxCONFIG_USE_NO_ESCAPE_CHARACTERS = 8,
     wxCONFIG_USE_SUBDIR = 16,
-    wxCONFIG_USE_XDG = 32
+    wxCONFIG_USE_XDG = 32,
+    wxCONFIG_USE_HOME = 64
 };
 
 // ----------------------------------------------------------------------------

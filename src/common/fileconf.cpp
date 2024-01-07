@@ -261,6 +261,18 @@ wxString wxFileConfig::GetLocalDir(int style)
         return dir;
     }
 
+    if ( style & wxCONFIG_USE_HOME )
+    {
+        // When traditional layout is requested, don't use wxStandardPaths as
+        // it could be using XDG layout.
+        wxString dir = wxGetHomeDir();
+
+        if ( style & wxCONFIG_USE_HOME )
+            dir = stdp.AppendAppInfo(dir);
+
+        return dir;
+    }
+
     // Normally we'd like to use GetUserConfigDir() and just append app info
     // subdirectories to it, but we can't do it for compatibility reasons:
     // there are existing configuration files in the locations returned by
@@ -469,7 +481,21 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 {
     // Make up names for files if empty
     if ( !m_fnLocalFile.IsOk() && (style & wxCONFIG_USE_LOCAL_FILE) )
+    {
         m_fnLocalFile = GetLocalFile(GetAppName(), style);
+
+        // If none of the styles explicitly selecting the location to use is
+        // specified, default to XDG unless the file already exists in the
+        // traditional location in the home directory:
+        if ( !(style & (wxCONFIG_USE_XDG | wxCONFIG_USE_HOME)) )
+        {
+            if ( !m_fnLocalFile.FileExists() )
+            {
+                style |= wxCONFIG_USE_XDG;
+                m_fnLocalFile = GetLocalFile(GetAppName(), style);
+            }
+        }
+    }
 
     if ( !m_fnGlobalFile.IsOk() && (style & wxCONFIG_USE_GLOBAL_FILE) )
         m_fnGlobalFile = GetGlobalFile(GetAppName());
