@@ -37,6 +37,9 @@
     #include "wx/msgdlg.h"
 #endif
 
+#include "wx/config.h"
+#include "wx/stdpaths.h"
+
 #include "wx/sysopt.h"
 #include "wx/bookctrl.h"
 #include "wx/treebook.h"
@@ -141,6 +144,30 @@ public:
 #if USE_LOG
         m_logTarget = nullptr;
 #endif // USE_LOG
+
+#ifdef wxHAS_CONFIG_AS_FILECONFIG
+        // We want to put our config file (implicitly created for persistent
+        // controls settings) in XDG-compliant location, so we want to change
+        // the default file layout, but before doing this migrate any existing
+        // config files to the new location as the previous versions of this
+        // sample didn't use XDG layout.
+        const auto
+            res = wxFileConfig::MigrateLocalFile("widgets", wxCONFIG_USE_XDG);
+        if ( !res.oldPath.empty() )
+        {
+            if ( res.error.empty() )
+            {
+                wxLogMessage("Config file was migrated from \"%s\" to \"%s\"",
+                             res.oldPath, res.newPath);
+            }
+            else
+            {
+                wxLogWarning("Migrating old config failed: %s.", res.error);
+            }
+        }
+
+        wxStandardPaths::Get().SetFileLayout(wxStandardPaths::FileLayout_XDG);
+#endif // wxHAS_CONFIG_AS_FILECONFIG
     }
     WidgetsApp(const WidgetsApp&) = delete;
     WidgetsApp& operator=(const WidgetsApp&) = delete;

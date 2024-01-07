@@ -101,11 +101,17 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxString& lang,
 
 wxString wxStandardPaths::GetUserDir(Dir userDir) const
 {
+    wxString subdir;
+
     NSSearchPathDirectory dirType;
     switch (userDir)
     {
         case Dir_Cache:
             dirType = NSCachesDirectory;
+            break;
+        case Dir_Config:
+            dirType = NSLibraryDirectory;
+            subdir = "/Preferences";
             break;
         case Dir_Desktop:
             dirType = NSDesktopDirectory;
@@ -127,7 +133,7 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
             break;
     }
     
-    return GetFMDirectory(dirType, NSUserDomainMask);
+    return GetFMDirectory(dirType, NSUserDomainMask) + subdir;
 }
 
 wxString

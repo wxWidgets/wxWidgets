@@ -168,6 +168,10 @@ Currently the following symbols exist:
     implemented in a generic way, using a critical section.}
 @itemdef{wxHAS_BITMAPTOGGLEBUTTON, Defined in @c wx/tglbtn.h if
     wxBitmapToggleButton class is available in addition to wxToggleButton.}
+@itemdef{wxHAS_CONFIG_AS_FILECONFIG, Defined if wxConfig is defined as
+    wxFileConfig. This constant is available since wxWidgets 3.3.0.}
+@itemdef{wxHAS_CONFIG_AS_REGCONFIG, Defined if wxConfig is defined as
+    wxRegConfig. This constant is available since wxWidgets 3.3.0.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
 @itemdef{wxHAS_DEPRECATED_ATTR, Defined if C++14 @c [[deprecated]] attribute is
