@@ -115,6 +115,9 @@ public:
         [7872] d:\testApp\src\testApp.cpp(85) : *** Application started ***
     @endverbatim
 
+    See wxLogFormatterNone for a trivial version of this class not doing any
+    formatting,
+
     @library{wxbase}
     @category{logging}
 
@@ -194,6 +197,31 @@ protected:
     virtual wxString FormatTime(time_t time) const;
 };
 
+
+/**
+    Specialized formatter not formatting the messages at all.
+
+    This class can be used to make wxLog log just the messages themselves,
+    without any time stamps or prefixes indicating their severity.
+
+    Example of using it:
+
+    @code
+    wxLog* logger = wxLog::GetActiveTarget();
+    delete logger->SetFormatter(new wxLogFormatterNone{});
+
+    // Log messages won't have time stamps or "Error:", "Warning:" etc
+    // prefixes any more.
+    @endcode
+
+    @since 3.3.0
+*/
+class wxLogFormatterNone : public wxLogFormatter
+{
+public:
+    /// Trivial default constructor.
+    wxLogFormatterNone();
+};
 
 /**
     @class wxLog

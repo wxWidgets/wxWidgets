@@ -341,6 +341,19 @@ protected:
 #endif // WXWIN_COMPATIBILITY_3_0
 };
 
+// Special kind of trivial formatter which simply uses the message unchanged.
+class wxLogFormatterNone : public wxLogFormatter
+{
+public:
+    wxLogFormatterNone() = default;
+
+    virtual wxString Format(wxLogLevel WXUNUSED(level),
+                            const wxString& msg,
+                            const wxLogRecordInfo& WXUNUSED(info)) const override
+    {
+        return msg;
+    }
+};
 
 // ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
