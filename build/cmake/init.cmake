@@ -10,6 +10,25 @@
 
 if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
     set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+else()
+    # If the standard is not set explicitly, check whether we can use C++11
+    # without any special options.
+    include(CheckCXXSourceCompiles)
+    check_cxx_source_compiles("
+        #include <vector>
+        int main() {
+            std::vector<int> v{1,2,3};
+            for (auto& n : v)
+                --n;
+            return v[0];
+        }"
+        wxHAVE_CXX11)
+    if(NOT wxHAVE_CXX11)
+        # If not, request it explicitly and let CMake check if it's supported.
+        set(CMAKE_CXX_STANDARD 11)
+        set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    endif()
 endif()
 
 if(MSVC)
