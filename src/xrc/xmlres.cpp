@@ -800,10 +800,8 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
         return nullptr;
     }
 
-    wxString encoding(wxT("UTF-8"));
-
     std::unique_ptr<wxXmlDocument> doc(new wxXmlDocument);
-    if (!doc->Load(*stream, encoding))
+    if (!doc->Load(*stream))
     {
         wxLogError(_("Cannot load resources from file '%s'."), filename);
         return nullptr;

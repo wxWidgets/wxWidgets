@@ -637,7 +637,7 @@ enum wxXmlDocumentLoadFlag
 
     @code
     wxXmlDocument doc;
-    doc.Load("myfile.xml", "UTF-8", wxXMLDOC_KEEP_WHITESPACE_NODES);
+    doc.Load("myfile.xml", wxXMLDOC_KEEP_WHITESPACE_NODES);
 
     // myfile2.xml will be identical to myfile.xml saving it this way:
     doc.Save("myfile2.xml", wxXML_NO_INDENTATION);
@@ -711,14 +711,12 @@ public:
     /**
         Loads the given filename using the given encoding. See Load().
     */
-    wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8");
+    wxXmlDocument(const wxString& filename);
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().
     */
-    wxXmlDocument(wxInputStream& stream,
-                  const wxString& encoding = "UTF-8");
+    wxXmlDocument(wxInputStream& stream);
 
     /**
         Virtual destructor. Frees the document root node.
@@ -759,14 +757,6 @@ public:
         to avoid memory leaks.
     */
     wxXmlNode* DetachRoot();
-
-    /**
-        Returns encoding of in-memory representation of the document
-        (same as passed to Load() or constructor, defaults to UTF-8).
-
-        @note this is meaningless in Unicode build where data are stored as @c wchar_t*.
-    */
-    wxString GetEncoding() const;
 
     /**
         Returns encoding of document (may be empty).
@@ -839,15 +829,13 @@ public:
 
         Returns true on success, false otherwise.
     */
-    virtual bool Load(const wxString& filename,
-                      const wxString& encoding = "UTF-8", int flags = wxXMLDOC_NONE);
+    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE);
 
     /**
-        Like Load(const wxString&, const wxString&, int) but takes the data from
-        given input stream.
+        Like Load(const wxString&, int) but takes the data from given input
+        stream.
     */
-    virtual bool Load(wxInputStream& stream,
-                      const wxString& encoding = "UTF-8", int flags = wxXMLDOC_NONE);
+    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE);
 
     /**
         Saves XML tree creating a file named with given string.

@@ -440,31 +440,20 @@ bool wxXmlDoctype::IsValid() const
 //-----------------------------------------------------------------------------
 
 wxXmlDocument::wxXmlDocument()
-    : m_version(wxS("1.0")), m_fileEncoding(wxS("UTF-8")), m_docNode(nullptr)
+    : m_version(wxS("1.0")), m_fileEncoding(wxS("UTF-8"))
 {
-    SetFileType(wxTextFileType_Unix);
 }
 
-wxXmlDocument::wxXmlDocument(const wxString& filename, const wxString& encoding)
-              :wxObject(), m_docNode(nullptr)
+wxXmlDocument::wxXmlDocument(const wxString& filename)
+              :wxObject()
 {
-    SetFileType(wxTextFileType_Unix);
-
-    if ( !Load(filename, encoding) )
-    {
-        wxDELETE(m_docNode);
-    }
+    Load(filename);
 }
 
-wxXmlDocument::wxXmlDocument(wxInputStream& stream, const wxString& encoding)
-              :wxObject(), m_docNode(nullptr)
+wxXmlDocument::wxXmlDocument(wxInputStream& stream)
+              :wxObject()
 {
-    SetFileType(wxTextFileType_Unix);
-
-    if ( !Load(stream, encoding) )
-    {
-        wxDELETE(m_docNode);
-    }
+    Load(stream);
 }
 
 wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
@@ -475,7 +464,6 @@ wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
 
 wxXmlDocument& wxXmlDocument::operator=(const wxXmlDocument& doc)
 {
-    wxDELETE(m_docNode);
     DoCopy(doc);
     return *this;
 }
@@ -489,17 +477,17 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
     m_eol = doc.m_eol;
 
     if (doc.m_docNode)
-        m_docNode = new wxXmlNode(*doc.m_docNode);
+        m_docNode.reset(new wxXmlNode(*doc.m_docNode));
     else
-        m_docNode = nullptr;
+        m_docNode.reset();
 }
 
-bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding, int flags)
+bool wxXmlDocument::Load(const wxString& filename, int flags)
 {
     wxFileInputStream stream(filename);
     if (!stream.IsOk())
         return false;
-    return Load(stream, encoding, flags);
+    return Load(stream, flags);
 }
 
 bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
@@ -512,7 +500,7 @@ bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
 
 wxXmlNode *wxXmlDocument::GetRoot() const
 {
-    wxXmlNode *node = m_docNode;
+    wxXmlNode *node = m_docNode.get();
     if (node)
     {
         node = m_docNode->GetChildren();
@@ -524,7 +512,7 @@ wxXmlNode *wxXmlDocument::GetRoot() const
 
 wxXmlNode *wxXmlDocument::DetachRoot()
 {
-    wxXmlNode *node = m_docNode;
+    wxXmlNode *node = m_docNode.get();
     if (node)
     {
         node = m_docNode->GetChildren();
@@ -557,7 +545,7 @@ void wxXmlDocument::SetRoot(wxXmlNode *root)
                       "Can only set an element type node as root" );
     }
 
-    wxXmlNode *node = m_docNode;
+    wxXmlNode *node = m_docNode.get();
     if (node)
     {
         node = m_docNode->GetChildren();
@@ -579,11 +567,11 @@ void wxXmlDocument::SetRoot(wxXmlNode *root)
     }
     else
     {
-        m_docNode = new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString);
+        m_docNode.reset(new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString));
         m_docNode->SetChildren(root);
     }
     if (root)
-        root->SetParent(m_docNode);
+        root->SetParent(m_docNode.get());
 }
 
 void wxXmlDocument::SetFileType(wxTextFileType fileType)
@@ -595,7 +583,7 @@ void wxXmlDocument::SetFileType(wxTextFileType fileType)
 void wxXmlDocument::AppendToProlog(wxXmlNode *node)
 {
     if (!m_docNode)
-        m_docNode = new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString);
+        m_docNode.reset(new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString));
     if (IsOk())
         m_docNode->InsertChild( node, GetRoot() );
     else
@@ -605,15 +593,6 @@ void wxXmlDocument::AppendToProlog(wxXmlNode *node)
 //-----------------------------------------------------------------------------
 //  wxXmlDocument loading routines
 //-----------------------------------------------------------------------------
-
-// converts Expat-produced string in UTF-8 into wxString using the specified
-// conv or keep in UTF-8 if conv is null
-static wxString CharToString(wxMBConv *conv,
-                             const char *s, size_t len = wxString::npos)
-{
-    wxUnusedVar(conv);
-    return wxString::FromUTF8Unchecked(s, len);
-}
 
 // returns true if the given string contains only whitespaces
 bool wxIsWhiteOnly(const wxString& buf)
@@ -631,8 +610,7 @@ bool wxIsWhiteOnly(const wxString& buf)
 struct wxXmlParsingContext
 {
     wxXmlParsingContext()
-        : conv(nullptr),
-          node(nullptr),
+        : node(nullptr),
           lastChild(nullptr),
           lastAsText(nullptr),
           doctype(nullptr),
@@ -640,7 +618,6 @@ struct wxXmlParsingContext
     {}
 
     XML_Parser parser;
-    wxMBConv  *conv;
     wxXmlNode *node;                    // the node being parsed
     wxXmlNode *lastChild;               // the last child of "node"
     wxXmlNode *lastAsText;              // the last _text_ child of "node"
@@ -662,7 +639,7 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
     wxXmlNode *node = new wxXmlNode(wxXML_ELEMENT_NODE,
-                                    CharToString(ctx->conv, name),
+                                    wxString::FromUTF8Unchecked(name),
                                     wxEmptyString,
                                     XML_GetCurrentLineNumber(ctx->parser));
     const char **a = atts;
@@ -670,7 +647,7 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
     // add node attributes
     while (*a)
     {
-        node->AddAttribute(CharToString(ctx->conv, a[0]), CharToString(ctx->conv, a[1]));
+        node->AddAttribute(wxString::FromUTF8Unchecked(a[0]), wxString::FromUTF8Unchecked(a[1]));
         a += 2;
     }
 
@@ -698,7 +675,7 @@ static void EndElementHnd(void *userData, const char* WXUNUSED(name))
 static void TextHnd(void *userData, const char *s, int len)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
-    wxString str = CharToString(ctx->conv, s, len);
+    wxString str = wxString::FromUTF8Unchecked(s, len);
 
     if (ctx->lastAsText)
     {
@@ -753,7 +730,7 @@ static void CommentHnd(void *userData, const char *data)
 
     wxXmlNode *commentnode =
         new wxXmlNode(wxXML_COMMENT_NODE,
-                      wxS("comment"), CharToString(ctx->conv, data),
+                      wxS("comment"), wxString::FromUTF8Unchecked(data),
                       XML_GetCurrentLineNumber(ctx->parser));
 
     ASSERT_LAST_CHILD_OK(ctx);
@@ -767,8 +744,8 @@ static void PIHnd(void *userData, const char *target, const char *data)
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
     wxXmlNode *pinode =
-        new wxXmlNode(wxXML_PI_NODE, CharToString(ctx->conv, target),
-                      CharToString(ctx->conv, data),
+        new wxXmlNode(wxXML_PI_NODE, wxString::FromUTF8Unchecked(target),
+                      wxString::FromUTF8Unchecked(data),
                       XML_GetCurrentLineNumber(ctx->parser));
 
     ASSERT_LAST_CHILD_OK(ctx);
@@ -783,9 +760,9 @@ static void StartDoctypeHnd(void *userData, const char *doctypeName,
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-    *ctx->doctype = wxXmlDoctype(CharToString(ctx->conv, doctypeName),
-                                 CharToString(ctx->conv, sysid),
-                                 CharToString(ctx->conv, pubid));
+    *ctx->doctype = wxXmlDoctype(wxString::FromUTF8Unchecked(doctypeName),
+                                 wxString::FromUTF8Unchecked(sysid),
+                                 wxString::FromUTF8Unchecked(pubid));
 }
 
 static void EndDoctypeHnd(void *WXUNUSED(userData))
@@ -799,7 +776,7 @@ static void DefaultHnd(void *userData, const char *s, int len)
     {
         wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-        wxString buf = CharToString(ctx->conv, s, (size_t)len);
+        wxString buf = wxString::FromUTF8Unchecked(s, (size_t)len);
         int pos;
         pos = buf.Find(wxS("encoding="));
         if (pos != wxNOT_FOUND)
@@ -843,11 +820,9 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
 
 } // extern "C"
 
-bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int flags)
+bool wxXmlDocument::Load(wxInputStream& stream, int flags)
 {
-    (void)encoding;
-
-    const size_t BUFSIZE = 1024;
+    const size_t BUFSIZE = 16384;
     char buf[BUFSIZE];
     wxXmlParsingContext ctx;
     bool done;
@@ -855,7 +830,6 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
     wxXmlNode *root = new wxXmlNode(wxXML_DOCUMENT_NODE, wxEmptyString);
 
     ctx.encoding = wxS("UTF-8"); // default in absence of encoding=""
-    ctx.conv = nullptr;
     ctx.doctype = &m_doctype;
     ctx.removeWhiteOnlyNodes = (flags & wxXMLDOC_KEEP_WHITESPACE_NODES) == 0;
     ctx.parser = parser;
