@@ -1108,6 +1108,21 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   if ( !IsDirty() || !m_fnLocalFile.GetFullPath() )
     return true;
 
+  // Create the directory containing the file if it doesn't exist. Although we
+  // don't always use XDG, it seems sensible to follow the XDG specification
+  // and create it with permissions 700 if it doesn't exist.
+  const wxString& outPath = m_fnLocalFile.GetPath();
+  if ( !wxFileName::DirExists(outPath) )
+  {
+      if ( !wxFileName::Mkdir(outPath,
+                              wxS_IRUSR | wxS_IWUSR | wxS_IXUSR,
+                              wxPATH_MKDIR_FULL) )
+      {
+          wxLogWarning(_("Failed to create configuration file directory."));
+          return false;
+      }
+  }
+
   // set the umask if needed
   wxCHANGE_UMASK(m_umask);
 
