@@ -115,6 +115,9 @@ public:
         [7872] d:\testApp\src\testApp.cpp(85) : *** Application started ***
     @endverbatim
 
+    See wxLogFormatterNone for a trivial version of this class not doing any
+    formatting,
+
     @library{wxbase}
     @category{logging}
 
@@ -194,6 +197,31 @@ protected:
     virtual wxString FormatTime(time_t time) const;
 };
 
+
+/**
+    Specialized formatter not formatting the messages at all.
+
+    This class can be used to make wxLog log just the messages themselves,
+    without any time stamps or prefixes indicating their severity.
+
+    Example of using it:
+
+    @code
+    wxLog* logger = wxLog::GetActiveTarget();
+    delete logger->SetFormatter(new wxLogFormatterNone{});
+
+    // Log messages won't have time stamps or "Error:", "Warning:" etc
+    // prefixes any more.
+    @endcode
+
+    @since 3.3.0
+*/
+class wxLogFormatterNone : public wxLogFormatter
+{
+public:
+    /// Trivial default constructor.
+    wxLogFormatterNone();
+};
 
 /**
     @class wxLog
@@ -901,6 +929,18 @@ public:
     wxLogBuffer();
 
     /**
+        Clear all the messages in the buffer.
+
+        This can be done to prevent them from being flushed by the next call to
+        Flush(), which happens implicitly if this logger ceases to be the
+        active logger after a call to wxLog::SetActiveTarget() with a different
+        log target.
+
+        @since 3.3.0
+    */
+    void Clear();
+
+    /**
         Shows all the messages collected so far to the user (using a message box in the
         GUI applications or by printing them out to the console in text mode) and
         clears the internal buffer.
@@ -916,6 +956,65 @@ public:
     const wxString& GetBuffer() const;
 };
 
+
+/**
+    @class wxLogCollector
+
+    Allows to collect all log messages into a string instead of showing them.
+
+    This class is supposed to be used as a local variable and collects all the
+    messages logged during its lifetime instead of showing them as usual, e.g.
+
+    @code
+    void Foo()
+    {
+        wxLogCollector collectLogs;
+
+        // Call some function that can log error messages, e.g. try to create a
+        // new directory. Without wxLogCollector a failure here would show
+        // errors to the user.
+        if ( !wxFileName::Mkdir("/some/path", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+        {
+            // Instead, we can report them here as we see fit, e.g. write them
+            // to a log file or process them in some other way.
+            wxFprintf(logFile, "Creating directory failed: %s",
+                      collectLogs.GetMessages());
+        }
+    }
+    @endcode
+
+    Note that because this class uses wxLog::SetActiveTarget() to temporarily
+    switch the active log target to wxLogBuffer, you need to ensure that the
+    log target doesn't change while it is alive (in the simplest case by just
+    avoiding to change it at all).
+
+    @since 3.3.0
+*/
+class wxLogCollector
+{
+public:
+    /**
+        Constructor overrides active log target to collect messages.
+    */
+    wxLogCollector();
+
+    /**
+        Get all the collected messages.
+
+        The returned string may be empty but if it isn't, it contains the
+        trailing new line (and may also contain more new lines inside it if
+        multiple messages were logged).
+
+        Note that the messages here contain just the messages, without any time
+        stamps or log level prefixes.
+    */
+    const wxString& GetMessages() const;
+
+    /**
+        Destructor restores the previously active log target.
+    */
+    ~wxLogCollector();
+};
 
 
 /**
@@ -964,6 +1063,8 @@ public:
 
     This class is thread-safe and can be used from both the main and the
     backgrounds threads.
+
+    @see wxLogCollector
 
     @library{wxbase}
     @category{logging}
