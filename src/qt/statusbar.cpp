@@ -53,7 +53,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
     SetFieldsCount(1);
 
     // Notice that child controls, if any, will be added using addWidget() in
-    // UpdateFields() function. So Unbind the base class handler which is not
+    // CreateFieldsIfNeeded() function. So Unbind the base class handler which is not
     // needed here. And more importantely, it won't work properly either.
     Unbind(wxEVT_SIZE, &wxStatusBar::OnSize, static_cast<wxStatusBarBase*>(this));
 
@@ -102,6 +102,8 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
     wxCHECK_MSG( (i >= 0) && ((size_t)i < m_panes.GetCount()), false,
                  "invalid statusbar field index" );
 
+    const_cast<wxStatusBar *>(this)->CreateFieldsIfNeeded();
+
     rect = wxQtConvertRect(m_qtPanes[i]->geometry());
     return true;
 }
@@ -123,7 +125,7 @@ int wxStatusBar::GetBorderY() const
 
 void wxStatusBar::DoUpdateStatusText(int number)
 {
-    UpdateFields();
+    CreateFieldsIfNeeded();
 
     const auto pane = dynamic_cast<QLabel*>(m_qtPanes[number]);
 
@@ -157,7 +159,7 @@ void wxStatusBar::DoUpdateStatusText(int number)
     pane->setText(text);
 }
 
-void wxStatusBar::UpdateFields()
+void wxStatusBar::CreateFieldsIfNeeded()
 {
     if ( !m_qtPanes.empty() )
         return;
