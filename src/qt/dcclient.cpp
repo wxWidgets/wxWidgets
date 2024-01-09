@@ -126,7 +126,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
     : wxWindowDCImpl( owner, win )
 {
-    wxCHECK_RET( m_isWindowPainter,
+    wxCHECK_RET( m_isWindowPainter || win->QtCanPaintWithoutActivePainter(),
                  "wxPaintDC can't be created outside wxEVT_PAINT handler" );
 }
 

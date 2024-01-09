@@ -151,6 +151,7 @@ public:
     void QtSetPicture( QPicture* pict );
 
     QPainter *QtGetPainter();
+    virtual bool QtCanPaintWithoutActivePainter() const;
 
     virtual bool QtHandlePaintEvent  ( QWidget *handler, QPaintEvent *event );
     virtual bool QtHandleResizeEvent ( QWidget *handler, QResizeEvent *event );
