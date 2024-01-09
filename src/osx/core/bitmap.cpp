@@ -973,7 +973,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 
     wxBitmap ret;
     double scale = GetScaleFactor();
-    ret.CreateWithDIPSize( rect.GetSize(), scale, GetDepth() );
+    ret.CreateWithLogicalSize( rect.GetSize(), scale, GetDepth() );
     wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
     if ( HasAlpha() )
         ret.UseAlpha() ;
