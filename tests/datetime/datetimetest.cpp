@@ -684,6 +684,7 @@ void DateTimeTestCase::TestTimeFormat()
        { CompareYear, "Date is %x, time is %X" }, // %x could use 2 digits
        { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
        { CompareNone, "The day of year: %j, the week of year: %W" },
+       { CompareDate, "ISO date using short form: %F" },
        { CompareDate, "ISO date without separators: %Y%m%d" },
        { CompareBoth, "RFC 2822 string: %Y-%m-%d %H:%M:%S.%l %z" },
 
