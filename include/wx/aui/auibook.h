@@ -189,6 +189,9 @@ protected:
     wxRect m_rect;
     size_t m_tabOffset;
     unsigned int m_flags;
+
+private:
+    int GetCloseButtonState(const wxAuiNotebookPage& page) const;
 };
 
 
@@ -209,6 +212,9 @@ public:
     bool IsDragging() const { return m_isDragging; }
 
     void SetRect(const wxRect& rect) { wxAuiTabContainer::SetRect(rect, this); }
+
+    // Internal helper.
+    void DoShowTab(int idx);
 
 protected:
     // choose the default border for this window

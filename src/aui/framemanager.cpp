@@ -844,34 +844,24 @@ void wxAuiManager::UpdateHintWindowConfig()
     if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) && can_do_transparent)
     {
         // Make a window to use for a transparent hint
-        #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
-            m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
-                                     wxDefaultPosition, wxSize(1,1),
-                                         wxFRAME_TOOL_WINDOW |
-                                         wxFRAME_FLOAT_ON_PARENT |
-                                         wxFRAME_NO_TASKBAR |
-                                         wxNO_BORDER);
+        m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
+                                 wxDefaultPosition, wxSize(1,1),
+                                     wxFRAME_TOOL_WINDOW |
+                                     wxFRAME_FLOAT_ON_PARENT |
+                                     wxFRAME_NO_TASKBAR |
+                                     wxNO_BORDER);
+        #ifdef __WXMAC__
+            // Do nothing so this event isn't handled in the base handlers.
 
-            m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
-        #elif defined(__WXMAC__)
-            // Using a miniframe with float and tool styles keeps the parent
-            // frame activated and highlighted as such...
-            m_hintWnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString,
-                                         wxDefaultPosition, wxSize(1,1),
-                                         wxFRAME_FLOAT_ON_PARENT
-                                         | wxFRAME_TOOL_WINDOW );
-            m_hintWnd->Bind(wxEVT_ACTIVATE, &wxAuiManager::OnHintActivate, this);
-
-            // Can't set the bg colour of a Frame in wxMac
-            wxPanel* p = new wxPanel(m_hintWnd);
-
-            // The default wxSYS_COLOUR_ACTIVECAPTION colour is a light silver
-            // color that is really hard to see, especially transparent.
-            // Until a better system color is decided upon we'll just use
-            // blue.
-            p->SetBackgroundColour(*wxBLUE);
+            // Letting the hint window activate without this handler can lead to
+            // weird behaviour on Mac where the menu is switched out to the top
+            // window's menu in MDI applications when it shouldn't be. So since
+            // we don't want user interaction with the hint window anyway, we just
+            // prevent it from activating here.
+            m_hintWnd->Bind(wxEVT_ACTIVATE, [](wxActivateEvent&) {});
         #endif
 
+        m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
     }
     else
     {
@@ -3302,7 +3292,7 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
         return;
     }
 
-    m_hintFadeAmt += 4;
+    m_hintFadeAmt++;
     m_hintWnd->SetTransparent(m_hintFadeAmt);
 }
 
@@ -3315,13 +3305,15 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             return;
         m_lastHint = rect;
 
-        m_hintFadeAmt = m_hintFadeMax;
-
+        // Decide if we want to fade in the hint and set it to the end value if
+        // we don't.
         if ((m_flags & wxAUI_MGR_HINT_FADE)
-            && !((wxDynamicCast(m_hintWnd, wxPseudoTransparentFrame)) &&
+            && !((m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) &&
                  (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
             )
             m_hintFadeAmt = 0;
+        else
+            m_hintFadeAmt = m_hintFadeMax;
 
         m_hintWnd->SetSize(rect);
         m_hintWnd->SetTransparent(m_hintFadeAmt);
@@ -3341,7 +3333,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         {
             // start fade in timer
             m_hintFadeTimer.SetOwner(this);
-            m_hintFadeTimer.Start(5);
+            m_hintFadeTimer.Start(15);
             Bind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
                  m_hintFadeTimer.GetId());
         }
@@ -3428,18 +3420,6 @@ void wxAuiManager::HideHint()
         m_lastHint = wxRect();
     }
 }
-
-void wxAuiManager::OnHintActivate(wxActivateEvent& WXUNUSED(event))
-{
-    // Do nothing so this event isn't handled in the base handlers.
-
-    // Letting the hint window activate without this handler can lead to
-    // weird behaviour on Mac where the menu is switched out to the top
-    // window's menu in MDI applications when it shouldn't be. So since
-    // we don't want user interaction with the hint window anyway, we just
-    // prevent it from activating here.
-}
-
 
 
 void wxAuiManager::StartPaneDrag(wxWindow* pane_window,

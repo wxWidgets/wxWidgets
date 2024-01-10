@@ -1412,6 +1412,8 @@ void wxAuiToolBar::SetOrientation(int orientation)
     {
         m_orientation = wxOrientation(orientation);
         SetArtFlags();
+
+        Realize();
     }
 }
 
@@ -1873,39 +1875,51 @@ bool wxAuiToolBar::Realize()
     if (!dc.IsOk())
         return false;
 
-    // calculate hint sizes for both horizontal and vertical
-    // in the order that leaves toolbar in correct final state
-    bool retval = false;
+    // calculate hint sizes for both horizontal and vertical orientations if we
+    // can use them, i.e. if the toolbar isn't locked into just one of them, and
+    // store the size appropriate for the current orientation in this variable.
+    wxSize size;
     if (m_orientation == wxHORIZONTAL)
     {
-        if (RealizeHelper(dc, false))
-        {
-            m_vertHintSize = GetSize();
-            if (RealizeHelper(dc, true))
-            {
-                m_horzHintSize = GetSize();
-                retval = true;
-            }
-        }
+        if (!HasFlag(wxAUI_TB_HORIZONTAL))
+            m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
+
+        m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
+
+        size = m_horzHintSize;
     }
     else
     {
-        if (RealizeHelper(dc, true))
-        {
-            m_horzHintSize = GetSize();
-            if (RealizeHelper(dc, false))
-            {
-                m_vertHintSize = GetSize();
-                retval = true;
-            }
-        }
+        if (!HasFlag(wxAUI_TB_VERTICAL))
+            m_horzHintSize = RealizeHelper(dc, wxHORIZONTAL);
+
+        m_vertHintSize = RealizeHelper(dc, wxVERTICAL);
+
+        size = m_vertHintSize;
+    }
+
+    // Remember our minimum size.
+    m_minWidth = size.x;
+    m_minHeight = size.y;
+
+    // And set control size if we are not forbidden from doing it by the use of
+    // a special flag and if it did actually change.
+    wxSize curSize = GetClientSize();
+
+    if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0 && (size != curSize))
+    {
+        SetClientSize(size);
+    }
+    else // Don't change the size but let the sizer know about available size.
+    {
+        m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
     }
 
     Refresh(false);
-    return retval;
+    return true;
 }
 
-bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
+wxSize wxAuiToolBar::RealizeHelper(wxClientDC& dc, wxOrientation orientation)
 {
     // Remove old sizer before adding any controls in this tool bar, which are
     // elements of this sizer, to the new sizer below.
@@ -1913,17 +1927,15 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     m_sizer = nullptr;
 
     // create the new sizer to add toolbar elements to
-    wxBoxSizer* sizer = new wxBoxSizer(horizontal ? wxHORIZONTAL : wxVERTICAL);
+    wxBoxSizer* sizer = new wxBoxSizer(orientation);
 
     // add gripper area
     int separatorSize = m_art->GetElementSize(wxAUI_TBART_SEPARATOR_SIZE);
     int gripperSize = m_art->GetElementSize(wxAUI_TBART_GRIPPER_SIZE);
     if (gripperSize > 0 && m_gripperVisible)
     {
-        if (horizontal)
-            m_gripperSizerItem = sizer->Add(gripperSize, 1, 0, wxEXPAND);
-        else
-            m_gripperSizerItem = sizer->Add(1, gripperSize, 0, wxEXPAND);
+        m_gripperSizerItem = sizer->AddSpacer(gripperSize);
+        m_gripperSizerItem->SetFlag(wxEXPAND);
     }
     else
     {
@@ -1933,10 +1945,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add "left" padding
     if (m_leftPadding > 0)
     {
-        if (horizontal)
-            sizer->Add(m_leftPadding, 1);
-        else
-            sizer->Add(1, m_leftPadding);
+        sizer->AddSpacer(m_leftPadding);
     }
 
     size_t i, count;
@@ -1982,10 +1991,8 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
             case wxITEM_SEPARATOR:
             {
-                if (horizontal)
-                    sizerItem = sizer->Add(separatorSize, 1, 0, wxEXPAND);
-                else
-                    sizerItem = sizer->Add(1, separatorSize, 0, wxEXPAND);
+                sizerItem = sizer->AddSpacer(separatorSize);
+                sizerItem->SetFlag(wxEXPAND);
 
                 // add tool packing
                 if (i+1 < count)
@@ -2052,10 +2059,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add "right" padding
     if (m_rightPadding > 0)
     {
-        if (horizontal)
-            sizer->Add(m_rightPadding, 1);
-        else
-            sizer->Add(1, m_rightPadding);
+        sizer->AddSpacer(m_rightPadding);
     }
 
     // add drop down area
@@ -2066,10 +2070,8 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
         int overflow_size = m_art->GetElementSize(wxAUI_TBART_OVERFLOW_SIZE);
         if (overflow_size > 0 && m_overflowVisible)
         {
-            if (horizontal)
-                m_overflowSizerItem = sizer->Add(overflow_size, 1, 0, wxEXPAND);
-            else
-                m_overflowSizerItem = sizer->Add(1, overflow_size, 0, wxEXPAND);
+            m_overflowSizerItem = sizer->AddSpacer(overflow_size);
+            m_overflowSizerItem->SetFlag(wxEXPAND);
             m_overflowSizerItem->SetMinSize(m_overflowSizerItem->GetSize());
         }
         else
@@ -2080,15 +2082,12 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
 
 
     // the outside sizer helps us apply the "top" and "bottom" padding
-    wxBoxSizer* outside_sizer = new wxBoxSizer(horizontal ? wxVERTICAL : wxHORIZONTAL);
+    wxBoxSizer* outside_sizer = new wxBoxSizer(orientation ^ wxBOTH);
 
     // add "top" padding
     if (m_topPadding > 0)
     {
-        if (horizontal)
-            outside_sizer->Add(1, m_topPadding);
-        else
-            outside_sizer->Add(m_topPadding, 1);
+        outside_sizer->AddSpacer(m_topPadding);
     }
 
     // add the sizer that contains all of the toolbar elements
@@ -2097,10 +2096,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     // add "bottom" padding
     if (m_bottomPadding > 0)
     {
-        if (horizontal)
-            outside_sizer->Add(1, m_bottomPadding);
-        else
-            outside_sizer->Add(m_bottomPadding, 1);
+        outside_sizer->AddSpacer(m_bottomPadding);
     }
 
     m_sizer = outside_sizer;
@@ -2123,31 +2119,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
             item.m_sizerItem->SetMinSize(item.m_minSize);
     }
 
-    // set control size
-    wxSize size = m_sizer->GetMinSize();
-    m_minWidth = size.x;
-    m_minHeight = size.y;
-
-    if ((m_windowStyle & wxAUI_TB_NO_AUTORESIZE) == 0)
-    {
-        wxSize curSize = GetClientSize();
-        wxSize new_size = GetMinSize();
-        if (new_size != curSize)
-        {
-            SetClientSize(new_size);
-        }
-        else
-        {
-            m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
-        }
-    }
-    else
-    {
-        wxSize curSize = GetClientSize();
-        m_sizer->SetDimension(0, 0, curSize.x, curSize.y);
-    }
-
-    return true;
+    return m_sizer->GetMinSize();
 }
 
 int wxAuiToolBar::GetOverflowState() const
@@ -2374,7 +2346,7 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
             if (newOrientation != m_orientation)
             {
                 SetOrientation(newOrientation);
-                Realize();
+
                 if (newOrientation == wxHORIZONTAL)
                 {
                     pane.best_size = GetHintSize(wxAUI_DOCK_TOP);

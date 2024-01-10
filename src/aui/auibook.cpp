@@ -400,6 +400,15 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 
 
 
+int wxAuiTabContainer::GetCloseButtonState(const wxAuiNotebookPage& page) const
+{
+    // determine if a close button is on this tab
+    return ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
+            ? wxAUI_BUTTON_STATE_NORMAL
+            : wxAUI_BUTTON_STATE_HIDDEN;
+}
+
 
 // Render() renders the tab catalog to the specified DC
 // It is a virtual function and can be overridden to
@@ -446,24 +455,13 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
 
-        // determine if a close button is on this tab
-        bool close_button = false;
-        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
-        {
-            close_button = true;
-        }
-
-
         int x_extent = 0;
         wxSize size = m_art->GetTabSize(dc,
                             wnd,
                             page.caption,
                             page.bitmap,
                             page.active,
-                            close_button ?
-                              wxAUI_BUTTON_STATE_NORMAL :
-                              wxAUI_BUTTON_STATE_HIDDEN,
+                            GetCloseButtonState(page),
                             &x_extent);
 
         if (i+1 < page_count)
@@ -798,7 +796,6 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     for (i = tabOffset; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
-        wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
 
         rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
 
@@ -811,7 +808,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
                             page.caption,
                             page.bitmap,
                             page.active,
-                            tab_button.curState,
+                            GetCloseButtonState(page),
                             &x_extent);
 
         offset += x_extent;
@@ -1017,6 +1014,12 @@ wxAuiTabCtrl::wxAuiTabCtrl(wxWindow* parent,
 
 wxAuiTabCtrl::~wxAuiTabCtrl()
 {
+}
+
+void wxAuiTabCtrl::DoShowTab(int idx)
+{
+    DoShowHide();
+    MakeTabVisible(idx, this);
 }
 
 void wxAuiTabCtrl::DoEndDragging()
@@ -2119,12 +2122,12 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
 
     if (is_active_in_split)
     {
-        int ctrl_new_page_count = (int)ctrl->GetPageCount();
+        const int ctrl_new_page_count = (int)ctrl->GetPageCount();
 
         if (ctrl_idx >= ctrl_new_page_count)
             ctrl_idx = ctrl_new_page_count-1;
 
-        if (ctrl_idx >= 0 && ctrl_idx < (int)ctrl->GetPageCount())
+        if (ctrl_idx >= 0 && ctrl_idx < ctrl_new_page_count)
         {
             // set new page as active in the tab split
             ctrl->SetActivePage(ctrl_idx);
@@ -2135,6 +2138,15 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
             if (is_curpage)
             {
                 new_active = ctrl->GetWindowFromIdx(ctrl_idx);
+            }
+            else // not deleting the globally active page
+            {
+                // so don't change the current one
+                new_active = active_wnd;
+
+                // but we still need to show the new active page in this
+                // control, otherwise it wouldn't be updated
+                ctrl->DoShowTab(ctrl_idx);
             }
         }
     }
@@ -2726,10 +2738,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
     wxPoint mouse_screen_pt = ::wxGetMousePosition();
     wxPoint mouse_client_pt = ScreenToClient(mouse_screen_pt);
 
-    // Update our selection (it may be updated again below but the code below
-    // can also return without doing anything else and this ensures that the
-    // selection is updated even then).
-    m_curPage = src_tabs->GetActivePage();
+
 
     // check for an external move
     if (m_flags & wxAUI_NB_TAB_EXTERNAL_MOVE)
@@ -3649,9 +3658,7 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
 
             ctrl->SetActivePage(ctrl_idx);
             DoSizing();
-            ctrl->DoShowHide();
-
-            ctrl->MakeTabVisible(ctrl_idx, ctrl);
+            ctrl->DoShowTab(ctrl_idx);
 
             // set fonts
             wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
