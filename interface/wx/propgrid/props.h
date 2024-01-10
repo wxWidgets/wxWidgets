@@ -218,7 +218,7 @@ public:
     virtual wxString ValueToString(wxVariant& value,
                                    wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool StringToValue(wxVariant& variant, const wxString& text,
-                               wxPGPropValFormatFlagsflags = wxPGPropValFormatFlags::Null) const;
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
     virtual bool IntToValue(wxVariant& variant, int number,
