@@ -69,30 +69,19 @@ wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
 #endif // wxMSW
 wxEND_EVENT_TABLE()
 
+bool wxSplitterWindow::AlwaysUsesLiveUpdate() const
+{
+    return !wxClientDC::CanBeUsedForDrawing(this);
+}
+
 static bool IsLive(wxSplitterWindow* wnd)
 {
     // with wxSP_LIVE_UPDATE style the splitter windows are always resized
     // following the mouse movement while it drags the sash, without it we only
     // draw the sash at the new position but only resize the windows when the
-    // dragging is finished
-#if defined( __WXMAC__ ) && defined(TARGET_API_MAC_OSX) && TARGET_API_MAC_OSX == 1
-    return true; // Mac can't paint outside paint event - always need live mode
-#else
-    // wxClientDC doesn't work with Wayland either, so check if we're using it.
-    #if defined(__WXGTK3__) && defined(__UNIX__)
-        switch ( wxGetDisplayInfo().type )
-        {
-            case wxDisplayNone:
-            case wxDisplayX11:
-                break;
-
-            case wxDisplayWayland:
-                return true;
-        }
-    #endif // wxGTK3
-
-    return wnd->HasFlag(wxSP_LIVE_UPDATE);
-#endif
+    // dragging is finished -- but drawing the sash is done using wxClientDC,
+    // so check if we can use it and always use live resizing if we can't
+    return wnd->AlwaysUsesLiveUpdate() || wnd->HasFlag(wxSP_LIVE_UPDATE);
 }
 
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,

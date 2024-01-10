@@ -131,6 +131,9 @@ public:
     // Is the window split?
     bool IsSplit() const { return (m_windowTwo != nullptr); }
 
+    // Return true if wxSP_LIVE_UPDATE is always used.
+    bool AlwaysUsesLiveUpdate() const;
+
     // Sets the border size
     void SetBorderSize(int WXUNUSED(width)) { }
 
