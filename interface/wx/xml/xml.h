@@ -709,12 +709,12 @@ public:
     wxXmlDocument(const wxXmlDocument& doc);
 
     /**
-        Loads the given filename using the given encoding. See Load().
+        Loads the given filename. See Load().
     */
     wxXmlDocument(const wxString& filename);
 
     /**
-        Loads the XML document from given stream using the given encoding. See Load().
+        Loads the XML document from given stream. See Load().
     */
     wxXmlDocument(wxInputStream& stream);
 
