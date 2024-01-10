@@ -620,8 +620,8 @@ public:
     wxPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
     wxPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
 
-    wxPoint& operator/=(int i) { x /= i, y /= i; return *this; }
-    wxPoint& operator*=(int i) { x *= i, y *= i; return *this; }
+    wxPoint& operator/=(int i) { x /= i; y /= i; return *this; }
+    wxPoint& operator*=(int i) { x *= i; y *= i; return *this; }
     wxPoint& operator/=(double f) { x = wxRound(x/f); y = wxRound(y/f); return *this; }
     wxPoint& operator*=(double f) { x = wxRound(x*f); y = wxRound(y*f); return *this; }
 
