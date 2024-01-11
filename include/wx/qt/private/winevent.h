@@ -30,21 +30,17 @@ class QPaintEvent;
 class wxQtSignalHandler
 {
 protected:
-    wxQtSignalHandler( wxEvtHandler *handler )
+    explicit wxQtSignalHandler( wxWindow *handler ) : m_handler(handler)
     {
-        m_handler = handler;
     }
 
     bool EmitEvent( wxEvent &event ) const
     {
-        // We're only called with the objects of class (or derived from)
-        // wxWindow, so the cast is safe.
-        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
-        event.SetEventObject( handler );
-        return handler->HandleWindowEvent( event );
+        event.SetEventObject( m_handler );
+        return m_handler->HandleWindowEvent( event );
     }
 
-    virtual wxEvtHandler *GetHandler() const
+    virtual wxWindow *GetHandler() const
     {
         return m_handler;
     }
@@ -54,22 +50,18 @@ protected:
     // event if the control has wxTE_PROCESS_ENTER flag.
     bool HandleKeyPressEvent(QWidget* widget, QKeyEvent* e)
     {
-        // We're only called with the objects of class (or derived from)
-        // wxWindow, so the cast is safe.
-        wxWindow* const handler = static_cast<wxWindow *>(GetHandler());
-
-        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
+        if ( m_handler->HasFlag(wxTE_PROCESS_ENTER) )
         {
             if ( e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter )
             {
-                wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
+                wxCommandEvent event( wxEVT_TEXT_ENTER, m_handler->GetId() );
                 event.SetString( GetValueForProcessEnter() );
-                event.SetEventObject( handler );
-                return handler->HandleWindowEvent( event );
+                event.SetEventObject( m_handler );
+                return m_handler->HandleWindowEvent( event );
             }
         }
 
-        return handler->QtHandleKeyEvent(widget, e);
+        return m_handler->QtHandleKeyEvent(widget, e);
     }
 
     // Controls supporting wxTE_PROCESS_ENTER flag (e.g. wxTextCtrl, wxComboBox and wxSpinCtrl)
@@ -77,7 +69,7 @@ protected:
     virtual wxString GetValueForProcessEnter() { return wxString(); }
 
 private:
-    wxEvtHandler *m_handler;
+    wxWindow* const m_handler;
 };
 
 template < typename Widget, typename Handler >
