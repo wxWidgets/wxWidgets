@@ -25,13 +25,12 @@ static void ApplyStyle( QMenu *qtMenu, long style )
 
 // wxQtActionGroup: an exclusive group which synchronizes QActions in
 // QActionGroup with their wx wrappers.
-class wxQtActionGroup : public QActionGroup, public wxQtSignalHandler
+class wxQtActionGroup : public QActionGroup
 {
 
 public:
     explicit wxQtActionGroup( wxMenu* handler )
-        : QActionGroup( handler->GetHandle() ),
-          wxQtSignalHandler( handler )
+        : QActionGroup( handler->GetHandle() )
     {
         setExclusive(true);
 
@@ -44,7 +43,16 @@ public:
     }
 
 private:
-    void triggered ( QAction* action );
+    void triggered ( QAction* action )
+    {
+        if ( action != m_activeAction )
+        {
+            if ( m_activeAction->isCheckable() )
+                m_activeAction->setChecked(false);
+
+            m_activeAction = action;
+        }
+    }
 
     QAction* m_activeAction;
 };
@@ -341,15 +349,4 @@ void wxMenuBar::Detach()
 QWidget *wxMenuBar::GetHandle() const
 {
     return m_qtMenuBar;
-}
-
-void wxQtActionGroup::triggered( QAction* action )
-{
-    if ( action != m_activeAction )
-    {
-        if ( m_activeAction->isCheckable() )
-            m_activeAction->setChecked(false);
-
-        m_activeAction = action;
-    }
 }

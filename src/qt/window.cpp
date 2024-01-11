@@ -218,27 +218,24 @@ void wxQtScrollArea::OnSliderReleased()
 }
 
 #if wxUSE_ACCEL || defined( Q_MOC_RUN )
-class wxQtShortcutHandler : public QObject, public wxQtSignalHandler
+
+class wxQtShortcutHandler : public QObject
 {
-
 public:
-    wxQtShortcutHandler( wxWindowQt *window );
+    explicit wxQtShortcutHandler( wxWindow *handler ) : m_handler(handler) { }
 
-public:
-    void activated();
+    void activated()
+    {
+        const int command = sender()->property("wxQt_Command").toInt();
+
+        m_handler->QtHandleShortcut( command );
+    }
+
+private:
+
+    wxWindow* const m_handler;
 };
 
-wxQtShortcutHandler::wxQtShortcutHandler( wxWindowQt *window )
-    : wxQtSignalHandler( window )
-{
-}
-
-void wxQtShortcutHandler::activated()
-{
-    int command = sender()->property("wxQt_Command").toInt();
-
-    static_cast<wxWindowQt*>(GetHandler())->QtHandleShortcut( command );
-}
 #endif // wxUSE_ACCEL
 
 //##############################################################################

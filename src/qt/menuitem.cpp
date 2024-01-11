@@ -18,12 +18,12 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QMenuBar>
 
-class wxQtAction : public QAction, public wxQtSignalHandler
+class wxQtAction : public QAction
 {
 
 public:
     wxQtAction( wxMenu *handler, int id, const wxString &text, const wxString &help,
-        wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem );
+                wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem );
 
     // Set the action shortcut to correspond to the accelerator specified by
     // the given label. They set the primary shortcut the first time they are
@@ -31,11 +31,6 @@ public:
     // text is empty, any axtra accelerators will be removed.
     void UpdateShortcuts(const wxString& text);
     void UpdateShortcutsFromLabel(const wxString& text);
-
-    wxMenu* GetMenu() const
-    {
-        return static_cast<wxMenu*>(wxQtSignalHandler::GetHandler());
-    }
 
     // Convert hyphenated shortcuts to use the plus sign (+) which Qt understands.
     // Example: [ Ctrl-Shift-- ] should be converted to [ Ctrl+Shift+- ]
@@ -47,9 +42,17 @@ public:
     }
 
 private:
-    void onActionToggled( bool checked );
-    void onActionTriggered( bool checked );
+    void onActionToggled( bool checked )
+    {
+        m_handler->Check(m_mitemId, checked);
+    }
 
+    void onActionTriggered( bool checked )
+    {
+        m_handler->SendEvent(m_mitemId, m_isCheckable ? checked : -1 );
+    }
+
+    wxMenu* m_handler;
     const wxWindowID m_mitemId;
     const bool m_isCheckable;
 };
@@ -182,9 +185,9 @@ void wxMenuItem::ClearExtraAccels()
 //=============================================================================
 
 wxQtAction::wxQtAction( wxMenu *handler, int id, const wxString &text, const wxString &help,
-        wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem )
+                        wxItemKind kind, wxMenu *subMenu, wxMenuItem *menuItem )
     : QAction( wxQtConvertString( text ), handler->GetHandle() ),
-      wxQtSignalHandler( handler ),
+      m_handler(handler),
       m_mitemId(menuItem->GetId()), m_isCheckable(menuItem->IsCheckable())
 {
     setStatusTip( wxQtConvertString( help ));
@@ -258,14 +261,4 @@ void wxQtAction::UpdateShortcuts(const wxString& text)
 #else
     wxUnusedVar(text);
 #endif // wxUSE_ACCEL
-}
-
-void wxQtAction::onActionToggled( bool checked )
-{
-    GetMenu()->Check(m_mitemId, checked);
-}
-
-void wxQtAction::onActionTriggered( bool checked )
-{
-    GetMenu()->SendEvent(m_mitemId, m_isCheckable ? checked : -1 );
 }
