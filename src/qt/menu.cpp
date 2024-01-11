@@ -176,6 +176,8 @@ wxMenuItem *wxMenu::DoAppend(wxMenuItem *item)
     if ( wxMenuBase::DoAppend( item ) == nullptr )
         return nullptr;
 
+    item->QtCreateAction( this );
+
     InsertMenuItemAction( this, previousItem, item, successiveItem );
 
     return item;
@@ -192,6 +194,8 @@ wxMenuItem *wxMenu::DoInsert(size_t insertPosition, wxMenuItem *item)
 
     if ( wxMenuBase::DoInsert( insertPosition, item ) == nullptr )
         return nullptr;
+
+    item->QtCreateAction( this );
 
     InsertMenuItemAction( this, previousItem, item, successiveItem );
 
