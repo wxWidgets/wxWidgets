@@ -25,19 +25,28 @@ class wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageD
 
 
 wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
-        const wxString& caption, long style, const wxPoint& pos )
+        const wxString& caption, long style, const wxPoint& WXUNUSED(pos) )
     : wxMessageDialogBase( parent, message, caption, style )
 {
-    wxQtMessageDialog *dlg = new wxQtMessageDialog( parent, this );
+}
+
+wxIMPLEMENT_CLASS(wxMessageDialog,wxDialog);
+
+void wxMessageDialog::QtCreateMsgDialog(){
+
+    wxQtMessageDialog *dlg = new wxQtMessageDialog( m_parent, this );
     m_qtWindow = dlg;
 
-    // Set properties
-    Move( pos );
-    dlg->setText( wxQtConvertString( message ) );
-    dlg->setWindowTitle( wxQtConvertString( caption ) );
+    const long style = GetMessageDialogStyle();
 
-    // Apply the style
-    SetWindowStyleFlag( style );
+    // Set properties
+    dlg->setText( wxQtConvertString( m_message ) );
+    dlg->setWindowTitle( wxQtConvertString( m_caption ) );
+
+    if ( !m_extendedMessage.IsEmpty() )
+    {
+        dlg->setInformativeText( wxQtConvertString( m_extendedMessage ) );
+    }
 
     // Buttons
     if ( style & wxOK )
@@ -108,17 +117,14 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
 
     if ( style & wxSTAY_ON_TOP )
         dlg->setWindowModality( Qt::ApplicationModal );
-
-    PostCreation(false);
-
-    Centre(wxBOTH | wxCENTER_FRAME);
 }
-
-wxIMPLEMENT_CLASS(wxMessageDialog,wxDialog);
 
 int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
+
+    QtCreateMsgDialog();
+
     wxCHECK_MSG( m_qtWindow, -1, "Invalid dialog" );
 
     // Exec may return a wx identifier if a close event is generated

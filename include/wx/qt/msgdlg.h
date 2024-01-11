@@ -25,6 +25,10 @@ public:
     virtual int ShowModal() override;
 
 private:
+
+    // Creates the Qt message box widget
+    void QtCreateMsgDialog();
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMessageDialog);
 };
 
