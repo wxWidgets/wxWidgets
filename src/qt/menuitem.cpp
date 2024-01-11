@@ -83,9 +83,10 @@ void wxMenuItem::SetItemLabel( const wxString &label )
 
     wxMenuItemBase::SetItemLabel( qtlabel );
 
-    m_qtAction->UpdateShortcutsFromLabel( qtlabel );
+    auto qtAction = static_cast<wxQtAction *>(m_qtAction);
 
-    m_qtAction->setText( wxQtConvertString( qtlabel ));
+    qtAction->UpdateShortcutsFromLabel( qtlabel );
+    qtAction->setText( wxQtConvertString( qtlabel ));
 }
 
 
@@ -171,14 +172,14 @@ void wxMenuItem::AddExtraAccel(const wxAcceleratorEntry& accel)
 {
     wxMenuItemBase::AddExtraAccel(accel);
 
-    m_qtAction->UpdateShortcuts( accel.ToRawString() );
+    static_cast<wxQtAction *>(m_qtAction)->UpdateShortcuts( accel.ToRawString() );
 }
 
 void wxMenuItem::ClearExtraAccels()
 {
     wxMenuItemBase::ClearExtraAccels();
 
-    m_qtAction->UpdateShortcuts( wxString() );
+    static_cast<wxQtAction *>(m_qtAction)->UpdateShortcuts( wxString() );
 }
 #endif // wxUSE_ACCEL
 

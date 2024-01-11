@@ -12,7 +12,6 @@
 #include "wx/bitmap.h"
 
 class QAction;
-class wxQtAction;
 
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
@@ -48,7 +47,7 @@ public:
 
 private:
     // Qt is using an action instead of a menu item.
-    wxQtAction *m_qtAction;
+    QAction *m_qtAction;
 
     wxDECLARE_DYNAMIC_CLASS( wxMenuItem );
 };
