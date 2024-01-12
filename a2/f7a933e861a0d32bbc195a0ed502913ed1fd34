@@ -1,0 +1,1 @@
+wxAll: Operators on wx types are not defined in global scope any more (#24190).
