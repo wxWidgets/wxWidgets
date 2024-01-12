@@ -1278,6 +1278,8 @@ public:
         return wxTimeSpan(*this).Multiply(n);
     }
 
+    friend WXDLLIMPEXP_BASE wxTimeSpan operator*(int n, const wxTimeSpan& ts);
+
         // return this timespan with opposite sign
     wxTimeSpan Negate() const { return wxTimeSpan(-GetValue()); }
         // negate the value of the timespan
@@ -1531,6 +1533,7 @@ public:
     {
         return wxDateSpan(*this).Multiply(n);
     }
+    friend WXDLLIMPEXP_BASE wxDateSpan operator*(int n, const wxDateSpan& ds);
 
     // ds1 == d2 if and only if for every wxDateTime t t + ds1 == t + ds2
     inline bool operator==(const wxDateSpan& ds) const
@@ -2242,22 +2245,6 @@ inline wxDateSpan wxDateSpan::Subtract(const wxDateSpan& other) const
 #undef MILLISECONDS_PER_DAY
 
 #undef MODIFY_AND_RETURN
-
-// ============================================================================
-// binary operators
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxTimeSpan operators
-// ----------------------------------------------------------------------------
-
-wxTimeSpan WXDLLIMPEXP_BASE operator*(int n, const wxTimeSpan& ts);
-
-// ----------------------------------------------------------------------------
-// wxDateSpan
-// ----------------------------------------------------------------------------
-
-wxDateSpan WXDLLIMPEXP_BASE operator*(int n, const wxDateSpan& ds);
 
 // ============================================================================
 // other helper functions

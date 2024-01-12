@@ -261,6 +261,43 @@ public:
     // "*(c_str() + 2)" work
     inline wxUniChar operator*() const;
 
+    // we also need to provide the operators for comparison with wxCStrData to
+    // resolve ambiguity between operator(const wxChar *,const wxString &) and
+    // operator(const wxChar *, const wxChar *) for "p == s.c_str()"
+    //
+    // notice that these are (shallow) pointer comparisons, not (deep) string ones
+#define wxCMP_CHAR_CSTRDATA(p, s, op) p op s.AsChar()
+#define wxCMP_WCHAR_CSTRDATA(p, s, op) p op s.AsWChar()
+
+    wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxCStrData&, wxCMP_WCHAR_CSTRDATA)
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+#undef wxCMP_CHAR_CSTRDATA
+#undef wxCMP_WCHAR_CSTRDATA
+
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+    // we need to define those to allow "size_t pos = p - s.c_str()" where p is
+    // some pointer into the string
+    friend size_t operator-(const char *p, const wxCStrData& cs)
+    {
+        return p - cs.AsChar();
+    }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+    friend size_t operator-(const wchar_t *p, const wxCStrData& cs)
+    {
+        return p - cs.AsWChar();
+    }
+
+#if wxUSE_STD_IOSTREAM
+  friend WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxCStrData&);
+#if defined(HAVE_WOSTREAM)
+  friend WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxCStrData&);
+#endif  // defined(HAVE_WOSTREAM)
+#endif  // wxUSE_STD_IOSTREAM
+
 private:
     // the wxString this object was returned for
     const wxString *m_str;
@@ -834,6 +871,8 @@ public:
 
       iterator operator+(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
+      friend iterator operator+(ptrdiff_t n, iterator i)
+        { return i + n; }
       iterator operator-(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -888,6 +927,8 @@ public:
 
       const_iterator operator+(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
+      friend const_iterator operator+(ptrdiff_t n, const_iterator i)
+        { return i + n; }
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -931,6 +972,8 @@ public:
 
       iterator operator+(ptrdiff_t n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, n)); }
+      friend iterator operator+(ptrdiff_t n, iterator i)
+        { return i + n; }
       iterator operator-(ptrdiff_t n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -966,6 +1009,8 @@ public:
 
       const_iterator operator+(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, n)); }
+      friend const_iterator operator+(ptrdiff_t n, const_iterator i)
+        { return i + n; }
       const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, -n)); }
 
@@ -1057,6 +1102,8 @@ public:
 
       reverse_iterator_impl operator+(ptrdiff_t n) const
         { return reverse_iterator_impl(m_cur - n); }
+      friend iterator operator+(ptrdiff_t n, reverse_iterator_impl i)
+        { return i + n; }
       reverse_iterator_impl operator-(ptrdiff_t n) const
         { return reverse_iterator_impl(m_cur + n); }
       reverse_iterator_impl operator+=(ptrdiff_t n)
@@ -2019,6 +2066,33 @@ public:
   friend wxString WXDLLIMPEXP_BASE operator+(const wchar_t *pwz,
                                              const wxString& string);
 
+  friend wxString operator+(const wxString& string, wxUniCharRef ch)
+      { return string + (wxUniChar)ch; }
+  friend wxString operator+(const wxString& string, char ch)
+      { return string + wxUniChar(ch); }
+  friend wxString operator+(const wxString& string, wchar_t ch)
+      { return string + wxUniChar(ch); }
+  friend wxString operator+(wxUniCharRef ch, const wxString& string)
+      { return (wxUniChar)ch + string; }
+  friend wxString operator+(char ch, const wxString& string)
+      { return wxUniChar(ch) + string; }
+  friend wxString operator+(wchar_t ch, const wxString& string)
+      { return wxUniChar(ch) + string; }
+
+
+  friend wxString operator+(const wxString& string, const wxScopedWCharBuffer& buf)
+      { return string + (const wchar_t *)buf; }
+  friend wxString operator+(const wxScopedWCharBuffer& buf, const wxString& string)
+      { return (const wchar_t *)buf + string; }
+
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+  friend wxString operator+(const wxString& string, const wxScopedCharBuffer& buf)
+      { return string + (const char *)buf; }
+  friend wxString operator+(const wxScopedCharBuffer& buf, const wxString& string)
+      { return (const char *)buf + string; }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+
   // stream-like functions
       // insert an int into string
   wxString& operator<<(int i)
@@ -2113,6 +2187,83 @@ public:
     { return IsSameAs(wxUniChar(c), compareWithCase); }
   bool IsSameAs(int c, bool compareWithCase = true) const
     { return IsSameAs(wxUniChar(c), compareWithCase); }
+
+    // comparison operators: these are always case sensitive
+
+    // With C strings (narrow and wide):
+
+  #define wxCMP_WXCHAR_STRING(p, s, op) 0 op s.Cmp(p)
+
+  wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxString&, wxCMP_WXCHAR_STRING)
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+  wxDEFINE_ALL_COMPARISONS(const char *, const wxString&, wxCMP_WXCHAR_STRING)
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+  #undef wxCMP_WXCHAR_STRING
+
+    // With wxString itself and related types.
+  friend bool operator==(const wxString& s1, const wxString& s2)
+      { return s1.IsSameAs(s2); }
+  friend bool operator!=(const wxString& s1, const wxString& s2)
+      { return !s1.IsSameAs(s2); }
+  friend bool operator< (const wxString& s1, const wxString& s2)
+      { return s1.Cmp(s2) < 0; }
+  friend bool operator> (const wxString& s1, const wxString& s2)
+      { return s1.Cmp(s2) >  0; }
+  friend bool operator<=(const wxString& s1, const wxString& s2)
+      { return s1.Cmp(s2) <= 0; }
+  friend bool operator>=(const wxString& s1, const wxString& s2)
+      { return s1.Cmp(s2) >= 0; }
+
+  friend bool operator==(const wxString& s1, const wxCStrData& s2)
+      { return s1 == s2.AsString(); }
+  friend bool operator==(const wxCStrData& s1, const wxString& s2)
+      { return s1.AsString() == s2; }
+  friend bool operator!=(const wxString& s1, const wxCStrData& s2)
+      { return s1 != s2.AsString(); }
+  friend bool operator!=(const wxCStrData& s1, const wxString& s2)
+      { return s1.AsString() != s2; }
+
+  friend bool operator==(const wxString& s1, const wxScopedWCharBuffer& s2)
+      { return (s1.Cmp((const wchar_t *)s2) == 0); }
+  friend bool operator==(const wxScopedWCharBuffer& s1, const wxString& s2)
+      { return (s2.Cmp((const wchar_t *)s1) == 0); }
+  friend bool operator!=(const wxString& s1, const wxScopedWCharBuffer& s2)
+      { return (s1.Cmp((const wchar_t *)s2) != 0); }
+  friend bool operator!=(const wxScopedWCharBuffer& s1, const wxString& s2)
+      { return (s2.Cmp((const wchar_t *)s1) != 0); }
+
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
+  friend bool operator==(const wxString& s1, const wxScopedCharBuffer& s2)
+      { return (s1.Cmp((const char *)s2) == 0); }
+  friend bool operator==(const wxScopedCharBuffer& s1, const wxString& s2)
+      { return (s2.Cmp((const char *)s1) == 0); }
+  friend bool operator!=(const wxString& s1, const wxScopedCharBuffer& s2)
+      { return (s1.Cmp((const char *)s2) != 0); }
+  friend bool operator!=(const wxScopedCharBuffer& s1, const wxString& s2)
+      { return (s2.Cmp((const char *)s1) != 0); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
+
+    // comparison with char
+  friend bool operator==(const wxUniChar& c, const wxString& s) { return s.IsSameAs(c); }
+  friend bool operator==(const wxUniCharRef& c, const wxString& s) { return s.IsSameAs(c); }
+  friend bool operator==(char c, const wxString& s) { return s.IsSameAs(c); }
+  friend bool operator==(wchar_t c, const wxString& s) { return s.IsSameAs(c); }
+  friend bool operator==(int c, const wxString& s) { return s.IsSameAs(c); }
+  friend bool operator==(const wxString& s, const wxUniChar& c) { return s.IsSameAs(c); }
+  friend bool operator==(const wxString& s, const wxUniCharRef& c) { return s.IsSameAs(c); }
+  friend bool operator==(const wxString& s, char c) { return s.IsSameAs(c); }
+  friend bool operator==(const wxString& s, wchar_t c) { return s.IsSameAs(c); }
+  friend bool operator!=(const wxUniChar& c, const wxString& s) { return !s.IsSameAs(c); }
+  friend bool operator!=(const wxUniCharRef& c, const wxString& s) { return !s.IsSameAs(c); }
+  friend bool operator!=(char c, const wxString& s) { return !s.IsSameAs(c); }
+  friend bool operator!=(wchar_t c, const wxString& s) { return !s.IsSameAs(c); }
+  friend bool operator!=(int c, const wxString& s) { return !s.IsSameAs(c); }
+  friend bool operator!=(const wxString& s, const wxUniChar& c) { return !s.IsSameAs(c); }
+  friend bool operator!=(const wxString& s, const wxUniCharRef& c) { return !s.IsSameAs(c); }
+  friend bool operator!=(const wxString& s, char c) { return !s.IsSameAs(c); }
+  friend bool operator!=(const wxString& s, wchar_t c) { return !s.IsSameAs(c); }
+
 
   // simple sub-string extraction
       // return substring starting at nFirst of length nCount (or till the end
@@ -3482,6 +3633,13 @@ public:
   wxString& operator+=(unsigned char ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
+#if wxUSE_STD_IOSTREAM
+  friend WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxString&);
+#if defined(HAVE_WOSTREAM)
+  friend WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxString&);
+#endif  // defined(HAVE_WOSTREAM)
+#endif  // wxUSE_STD_IOSTREAM
+
 private:
   #if !wxUSE_UTF8_LOCALE_ONLY
   int DoPrintfWchar(const wxChar *format, ...);
@@ -3625,48 +3783,6 @@ private:
   friend class wxStringInternalBuffer;
   friend class wxStringInternalBufferLength;
 };
-
-// string iterator operators that satisfy STL Random Access Iterator
-// requirements:
-inline wxString::iterator operator+(ptrdiff_t n, wxString::iterator i)
-  { return i + n; }
-inline wxString::const_iterator operator+(ptrdiff_t n, wxString::const_iterator i)
-  { return i + n; }
-inline wxString::reverse_iterator operator+(ptrdiff_t n, wxString::reverse_iterator i)
-  { return i + n; }
-inline wxString::const_reverse_iterator operator+(ptrdiff_t n, wxString::const_reverse_iterator i)
-  { return i + n; }
-
-// notice that even though for many compilers the friend declarations above are
-// enough, from the point of view of C++ standard we must have the declarations
-// here as friend ones are not injected in the enclosing namespace and without
-// them the code fails to compile with conforming compilers such as xlC or g++4
-wxString WXDLLIMPEXP_BASE operator+(const wxString& string1, const wxString& string2);
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const char *psz);
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const wchar_t *pwz);
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-wxString WXDLLIMPEXP_BASE operator+(const char *psz, const wxString& string);
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-wxString WXDLLIMPEXP_BASE operator+(const wchar_t *pwz, const wxString& string);
-
-wxString WXDLLIMPEXP_BASE operator+(const wxString& string, wxUniChar ch);
-wxString WXDLLIMPEXP_BASE operator+(wxUniChar ch, const wxString& string);
-
-inline wxString operator+(const wxString& string, wxUniCharRef ch)
-    { return string + (wxUniChar)ch; }
-inline wxString operator+(const wxString& string, char ch)
-    { return string + wxUniChar(ch); }
-inline wxString operator+(const wxString& string, wchar_t ch)
-    { return string + wxUniChar(ch); }
-inline wxString operator+(wxUniCharRef ch, const wxString& string)
-    { return (wxUniChar)ch + string; }
-inline wxString operator+(char ch, const wxString& string)
-    { return wxUniChar(ch) + string; }
-inline wxString operator+(wchar_t ch, const wxString& string)
-    { return wxUniChar(ch) + string; }
-
 
 #define wxGetEmptyString() wxString()
 
@@ -4005,95 +4121,9 @@ public:
 
 
 // ---------------------------------------------------------------------------
-// wxString comparison functions: operator versions are always case sensitive
+// wxString iterators comparisons
 // ---------------------------------------------------------------------------
 
-// comparison with C-style narrow and wide strings.
-#define wxCMP_WXCHAR_STRING(p, s, op) 0 op s.Cmp(p)
-
-wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxString&, wxCMP_WXCHAR_STRING)
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-wxDEFINE_ALL_COMPARISONS(const char *, const wxString&, wxCMP_WXCHAR_STRING)
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-
-#undef wxCMP_WXCHAR_STRING
-
-inline bool operator==(const wxString& s1, const wxString& s2)
-    { return s1.IsSameAs(s2); }
-inline bool operator!=(const wxString& s1, const wxString& s2)
-    { return !s1.IsSameAs(s2); }
-inline bool operator< (const wxString& s1, const wxString& s2)
-    { return s1.Cmp(s2) < 0; }
-inline bool operator> (const wxString& s1, const wxString& s2)
-    { return s1.Cmp(s2) >  0; }
-inline bool operator<=(const wxString& s1, const wxString& s2)
-    { return s1.Cmp(s2) <= 0; }
-inline bool operator>=(const wxString& s1, const wxString& s2)
-    { return s1.Cmp(s2) >= 0; }
-
-inline bool operator==(const wxString& s1, const wxCStrData& s2)
-    { return s1 == s2.AsString(); }
-inline bool operator==(const wxCStrData& s1, const wxString& s2)
-    { return s1.AsString() == s2; }
-inline bool operator!=(const wxString& s1, const wxCStrData& s2)
-    { return s1 != s2.AsString(); }
-inline bool operator!=(const wxCStrData& s1, const wxString& s2)
-    { return s1.AsString() != s2; }
-
-inline bool operator==(const wxString& s1, const wxScopedWCharBuffer& s2)
-    { return (s1.Cmp((const wchar_t *)s2) == 0); }
-inline bool operator==(const wxScopedWCharBuffer& s1, const wxString& s2)
-    { return (s2.Cmp((const wchar_t *)s1) == 0); }
-inline bool operator!=(const wxString& s1, const wxScopedWCharBuffer& s2)
-    { return (s1.Cmp((const wchar_t *)s2) != 0); }
-inline bool operator!=(const wxScopedWCharBuffer& s1, const wxString& s2)
-    { return (s2.Cmp((const wchar_t *)s1) != 0); }
-
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-inline bool operator==(const wxString& s1, const wxScopedCharBuffer& s2)
-    { return (s1.Cmp((const char *)s2) == 0); }
-inline bool operator==(const wxScopedCharBuffer& s1, const wxString& s2)
-    { return (s2.Cmp((const char *)s1) == 0); }
-inline bool operator!=(const wxString& s1, const wxScopedCharBuffer& s2)
-    { return (s1.Cmp((const char *)s2) != 0); }
-inline bool operator!=(const wxScopedCharBuffer& s1, const wxString& s2)
-    { return (s2.Cmp((const char *)s1) != 0); }
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-
-inline wxString operator+(const wxString& string, const wxScopedWCharBuffer& buf)
-    { return string + (const wchar_t *)buf; }
-inline wxString operator+(const wxScopedWCharBuffer& buf, const wxString& string)
-    { return (const wchar_t *)buf + string; }
-
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-inline wxString operator+(const wxString& string, const wxScopedCharBuffer& buf)
-    { return string + (const char *)buf; }
-inline wxString operator+(const wxScopedCharBuffer& buf, const wxString& string)
-    { return (const char *)buf + string; }
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-
-// comparison with char
-inline bool operator==(const wxUniChar& c, const wxString& s) { return s.IsSameAs(c); }
-inline bool operator==(const wxUniCharRef& c, const wxString& s) { return s.IsSameAs(c); }
-inline bool operator==(char c, const wxString& s) { return s.IsSameAs(c); }
-inline bool operator==(wchar_t c, const wxString& s) { return s.IsSameAs(c); }
-inline bool operator==(int c, const wxString& s) { return s.IsSameAs(c); }
-inline bool operator==(const wxString& s, const wxUniChar& c) { return s.IsSameAs(c); }
-inline bool operator==(const wxString& s, const wxUniCharRef& c) { return s.IsSameAs(c); }
-inline bool operator==(const wxString& s, char c) { return s.IsSameAs(c); }
-inline bool operator==(const wxString& s, wchar_t c) { return s.IsSameAs(c); }
-inline bool operator!=(const wxUniChar& c, const wxString& s) { return !s.IsSameAs(c); }
-inline bool operator!=(const wxUniCharRef& c, const wxString& s) { return !s.IsSameAs(c); }
-inline bool operator!=(char c, const wxString& s) { return !s.IsSameAs(c); }
-inline bool operator!=(wchar_t c, const wxString& s) { return !s.IsSameAs(c); }
-inline bool operator!=(int c, const wxString& s) { return !s.IsSameAs(c); }
-inline bool operator!=(const wxString& s, const wxUniChar& c) { return !s.IsSameAs(c); }
-inline bool operator!=(const wxString& s, const wxUniCharRef& c) { return !s.IsSameAs(c); }
-inline bool operator!=(const wxString& s, char c) { return !s.IsSameAs(c); }
-inline bool operator!=(const wxString& s, wchar_t c) { return !s.IsSameAs(c); }
-
-
-// wxString iterators comparisons
 inline bool wxString::const_iterator::operator==(const iterator& i) const
     { return *this == const_iterator(i); }
 inline bool wxString::const_iterator::operator!=(const iterator& i) const
@@ -4120,22 +4150,6 @@ inline bool wxString::iterator::operator<=(const const_iterator& i) const
 inline bool wxString::iterator::operator>=(const const_iterator& i) const
     { return i <= *this; }
 
-// we also need to provide the operators for comparison with wxCStrData to
-// resolve ambiguity between operator(const wxChar *,const wxString &) and
-// operator(const wxChar *, const wxChar *) for "p == s.c_str()"
-//
-// notice that these are (shallow) pointer comparisons, not (deep) string ones
-#define wxCMP_CHAR_CSTRDATA(p, s, op) p op s.AsChar()
-#define wxCMP_WCHAR_CSTRDATA(p, s, op) p op s.AsWChar()
-
-wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxCStrData&, wxCMP_WCHAR_CSTRDATA)
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-
-#undef wxCMP_CHAR_CSTRDATA
-#undef wxCMP_WCHAR_CSTRDATA
-
 // ----------------------------------------------------------------------------
 // Implement hashing using C++11 std::hash<>.
 // ----------------------------------------------------------------------------
@@ -4157,27 +4171,6 @@ namespace std
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
 // ---------------------------------------------------------------------------
-
-#if wxUSE_STD_IOSTREAM
-
-#include "wx/iosfwrap.h"
-
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxString&);
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxCStrData&);
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxScopedCharBuffer&);
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-WXDLLIMPEXP_BASE std::ostream& operator<<(std::ostream&, const wxScopedWCharBuffer&);
-
-#if defined(HAVE_WOSTREAM)
-
-WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxString&);
-WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxCStrData&);
-WXDLLIMPEXP_BASE std::wostream& operator<<(std::wostream&, const wxScopedWCharBuffer&);
-
-#endif  // defined(HAVE_WOSTREAM)
-
-#endif  // wxUSE_STD_IOSTREAM
 
 // ---------------------------------------------------------------------------
 // wxCStrData implementation
@@ -4262,24 +4255,6 @@ inline wxUniChar wxCStrData::operator[](size_t n) const
     // NB: we intentionally use operator[] and not at() here because the former
     //     works for the terminating NUL while the latter does not
     return (*m_str)[m_offset + n];
-}
-
-// ----------------------------------------------------------------------------
-// more wxCStrData operators
-// ----------------------------------------------------------------------------
-
-#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
-// we need to define those to allow "size_t pos = p - s.c_str()" where p is
-// some pointer into the string
-inline size_t operator-(const char *p, const wxCStrData& cs)
-{
-    return p - cs.AsChar();
-}
-#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
-
-inline size_t operator-(const wchar_t *p, const wxCStrData& cs)
-{
-    return p - cs.AsWChar();
 }
 
 // ----------------------------------------------------------------------------

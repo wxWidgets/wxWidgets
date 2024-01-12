@@ -169,17 +169,29 @@ std::ostream& operator<<(std::ostream& os, const wxString& str)
     return os << str.c_str();
 }
 
-std::ostream& operator<<(std::ostream& os, const wxScopedCharBuffer& str)
+std::ostream&
+wxPrivate::OutputCharBuffer(std::ostream& os, const char* str)
+{
+    return os << str;
+}
+
+std::ostream& operator<<(std::ostream& os, const wxCharBuffer& str)
 {
     return os << str.data();
 }
 
-std::ostream& operator<<(std::ostream& os, const wxScopedWCharBuffer& str)
+std::ostream&
+wxPrivate::OutputWCharBuffer(std::ostream& os, const wchar_t* wstr)
 {
     // There is no way to write wide character data to std::ostream directly,
     // but we need to define this operator for compatibility, as we provided it
     // since basically always, even if it never worked correctly before. So do
     // the only reasonable thing and output it as UTF-8.
+    return os << wxConvWhateverWorks.cWC2MB(wstr);
+}
+
+std::ostream& operator<<(std::ostream& os, const wxWCharBuffer& str)
+{
     return os << wxConvWhateverWorks.cWC2MB(str.data());
 }
 
@@ -195,7 +207,13 @@ std::wostream& operator<<(std::wostream& wos, const wxCStrData& str)
     return wos << str.AsWChar();
 }
 
-std::wostream& operator<<(std::wostream& wos, const wxScopedWCharBuffer& str)
+std::wostream&
+wxPrivate::OutputWCharBuffer(std::wostream& wos, const wchar_t* wstr)
+{
+    return wos << wstr;
+}
+
+std::wostream& operator<<(std::wostream& wos, const wxWCharBuffer& str)
 {
     return wos << str.data();
 }

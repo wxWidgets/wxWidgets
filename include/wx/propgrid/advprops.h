@@ -113,6 +113,8 @@ public:
             Init( cpv.m_type, cpv.m_colour );
     }
 
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID);
+
 private:
     wxDECLARE_DYNAMIC_CLASS(wxColourPropertyValue);
 };
@@ -120,8 +122,6 @@ private:
 
 bool WXDLLIMPEXP_PROPGRID
 operator==(const wxColourPropertyValue&, const wxColourPropertyValue&);
-
-DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
 // -----------------------------------------------------------------------
 

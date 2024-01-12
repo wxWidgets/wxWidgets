@@ -77,6 +77,8 @@ public:
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
 
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxIcon, WXDLLIMPEXP_CORE);
+
 protected:
     virtual wxGDIImageRefData *CreateData() const override
     {
