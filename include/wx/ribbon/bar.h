@@ -125,6 +125,7 @@ public:
     bool SetActivePage(wxRibbonPage* page);
     int GetActivePage() const;
     wxRibbonPage* GetPage(int n);
+    wxRibbonPage* GetPageById(wxWindowID id);
     size_t GetPageCount() const;
     bool DismissExpandedPanel();
     int GetPageNumber(wxRibbonPage* page) const;
