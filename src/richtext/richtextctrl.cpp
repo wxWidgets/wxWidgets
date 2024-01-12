@@ -3029,7 +3029,7 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 #if defined(__WXMSW__)
         depth = 24;
 #endif
-        m_bufferBitmap.CreateWithDIPSize(sz, GetDPIScaleFactor(), depth);
+        m_bufferBitmap.CreateWithLogicalSize(sz, GetDPIScaleFactor(), depth);
     }
     return m_bufferBitmap.IsOk();
 }

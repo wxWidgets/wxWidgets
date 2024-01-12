@@ -173,7 +173,7 @@ void wxAnimationCtrlBase::UpdateStaticImage()
             m_bmpStaticReal.GetLogicalHeight() != sz.GetHeight())
         {
             // need to (re)create m_bmpStaticReal
-            if (!m_bmpStaticReal.CreateWithDIPSize(sz,
+            if (!m_bmpStaticReal.CreateWithLogicalSize(sz,
                                           bmpCurrent.GetScaleFactor(),
                                           bmpCurrent.GetDepth()))
             {

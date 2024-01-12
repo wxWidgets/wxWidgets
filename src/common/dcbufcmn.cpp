@@ -84,7 +84,7 @@ private:
 
         // we must always return a valid bitmap but creating a bitmap of
         // size 0 would fail, so create a 1*1 bitmap in this case
-        buffer->CreateWithDIPSize(wxMax(w, 1), wxMax(h, 1), scale);
+        buffer->CreateWithLogicalSize(wxMax(w, 1), wxMax(h, 1), scale);
 
         return buffer;
     }

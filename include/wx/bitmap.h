@@ -178,6 +178,11 @@ public:
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
 
+    // DIP size and logical size are the same thing for ports using scaling,
+    // i.e. where physical and logical sizes are different (e.g. wxGTK and
+    // wxOSX), but we want to have both sets of functions to use them in the
+    // ports where physical and logical sizes are the same (wxMSW).
+
     bool CreateWithDIPSize(const wxSize& sz,
                            double scale,
                            int depth = wxBITMAP_SCREEN_DEPTH)
@@ -185,6 +190,15 @@ public:
     bool CreateWithDIPSize(int width, int height,
                            double scale,
                            int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(wxSize(width, height), scale, depth); }
+
+    bool CreateWithLogicalSize(const wxSize& sz,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(sz, scale, depth); }
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
         { return DoCreate(wxSize(width, height), scale, depth); }
 
     virtual int GetHeight() const = 0;

@@ -1848,6 +1848,20 @@ TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
     wxBitmap bmp3(img, dc);
     CHECK( bmp3.GetScaleFactor() == 2 );
     CHECK( bmp3.GetSize() == wxSize(16, 16) );
+
+    // And another way to create a bitmap with specified scale factor.
+    const wxSize sizeLog(10, 10);
+
+    wxBitmap bmp4;
+    bmp4.CreateWithLogicalSize(sizeLog, 2);
+    CHECK( bmp4.GetScaleFactor() == 2 );
+    CHECK( bmp4.GetLogicalSize() == sizeLog );
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( bmp4.GetSize() == 2*sizeLog );
+#else
+    CHECK( bmp4.GetSize() == sizeLog );
+#endif
 }
 
 TEST_CASE("wxBitmap::GetSubBitmap", "[bitmap]")

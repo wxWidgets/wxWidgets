@@ -4607,10 +4607,10 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         if ( !m_doubleBuffer )
         {
             // Create double buffer bitmap to draw on, if none
-            int w = wxMax(width, 250);
-            int h = wxMax(height + dblh, 400);
+            int w = wxMax(width, FromDIP(250));
+            int h = wxMax(height + dblh, FromDIP(400));
             m_doubleBuffer = new wxBitmap;
-            m_doubleBuffer->CreateWithDIPSize( w, h, scaleFactor );
+            m_doubleBuffer->CreateWithLogicalSize( w, h, scaleFactor );
         }
         else
         {
@@ -4624,7 +4624,7 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
                 if ( h < (height+dblh) ) h = height + dblh;
                 delete m_doubleBuffer;
                 m_doubleBuffer = new wxBitmap;
-                m_doubleBuffer->CreateWithDIPSize( w, h, scaleFactor );
+                m_doubleBuffer->CreateWithLogicalSize( w, h, scaleFactor );
             }
         }
     }
