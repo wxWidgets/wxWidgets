@@ -316,6 +316,16 @@ wxRibbonPage* wxRibbonBar::GetPage(int n)
     return m_pages.Item(n).page;
 }
 
+wxRibbonPage* wxRibbonBar::GetPageById(wxWindowID id)
+{
+    for (const auto& page : m_pages)
+    {
+        if (page.page->GetId() == id)
+            return page.page;
+    }
+    return nullptr;
+}
+
 size_t wxRibbonBar::GetPageCount() const
 {
     return m_pages.GetCount();
