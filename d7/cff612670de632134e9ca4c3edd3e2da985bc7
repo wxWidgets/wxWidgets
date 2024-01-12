@@ -1,0 +1,1 @@
+wxAll (Unix): Use XDG-compliant location by default in wxFileConfig (#24195).
