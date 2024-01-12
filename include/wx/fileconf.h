@@ -137,7 +137,9 @@ public:
       wxString error;
   };
   static MigrationResult
-  MigrateLocalFile(const wxString& name, int newStyle, int oldStyle = 0);
+  MigrateLocalFile(const wxString& name,
+                   int newStyle,
+                   int oldStyle = wxCONFIG_USE_HOME);
 
   // ctor & dtor
     // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or

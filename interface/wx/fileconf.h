@@ -90,8 +90,8 @@ public:
         parameter in the constructor.
 
         @a style has the same meaning as in @ref wxConfigBase::wxConfigBase "wxConfig constructor"
-        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR
-        and wxCONFIG_USE_XDG are really used by this function.
+        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR,
+        wxCONFIG_USE_XDG and wxCONFIG_USE_HOME are really used by this function.
 
         Notice that this function cannot be used if @a basename is already a full path name.
     */
@@ -146,9 +146,8 @@ public:
             }
         }
 
-        // Note that this must be done after calling MigrateLocalFile(),
-        // otherwise the old style would use XDG layout already and the actual
-        // file at non-XDG-compliant location wouldn't be migrated.
+        // Prefer doing it only after successfully calling MigrateLocalFile(),
+        // otherwise, i.e. if it failed, the old config file wouldn't be used.
         wxStandardPaths::Get().SetFileLayout(wxStandardPaths::FileLayout_XDG);
         @endcode
 
@@ -157,12 +156,15 @@ public:
             program, typically including ::wxCONFIG_USE_XDG and possibly also
             including ::wxCONFIG_USE_SUBDIR.
         @param oldStyle Style which was used by the previous versions of the
-            program, possibly including ::wxCONFIG_USE_SUBDIR.
+            program, possibly including ::wxCONFIG_USE_SUBDIR and typically
+            including ::wxCONFIG_USE_HOME.
 
         @since 3.3.0
     */
     static MigrationResult
-    MigrateLocalFile(const wxString& name, int newStyle, int oldStyle = 0);
+    MigrateLocalFile(const wxString& name,
+                     int newStyle,
+                     int oldStyle = wxCONFIG_USE_HOME);
 
     /**
         Saves all config data to the given stream, returns @true if data was saved
