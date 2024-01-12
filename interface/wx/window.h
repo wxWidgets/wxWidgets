@@ -3469,7 +3469,7 @@ public:
 
     /**
         Returns the accessible object, calling CreateAccessible if necessary.
-        May return NULL, in which case system-provide accessible is used.
+        May return @NULL, in which case system-provide accessible is used.
     */
     wxAccessible* GetOrCreateAccessible();
 
