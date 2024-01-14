@@ -287,7 +287,7 @@ public:
 
     static wxVersionInfo GetLibraryVersionInfo();
 
-#ifdef WXWIN_COMPATIBILITY_3_2
+#if WXWIN_COMPATIBILITY_3_2
     wxDEPRECATED_MSG("Remove encoding parameter from the call")
     wxXmlDocument(const wxString& filename,
                   const wxString& WXUNUSED(encoding))
