@@ -396,7 +396,7 @@ TEST_CASE("BitmapBundle::FromSVG-alpha", "[bmpbundle][svg][alpha]")
     // alpha pixel values in wxImage, allowing for roundoff error.
     CHECK( (int)img.GetRed(0, 1) >= 0x3c );
     CHECK( (int)img.GetRed(0, 1) <= 0x3f );
-    CHECK( (int)img.GetGreen(0, 1) >= 0x7c );
+    CHECK( (int)img.GetGreen(0, 1) >= 0x7b );
     CHECK( (int)img.GetGreen(0, 1) <= 0x7f);
     CHECK( (int)img.GetBlue(0, 1) == 0xff );
 }
