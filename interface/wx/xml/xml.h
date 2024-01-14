@@ -849,19 +849,19 @@ public:
 
         Returns true on success, false otherwise.
 
-       @since 3.3.0
+        @since 3.3.0
     */
     bool Load(const wxString& filename, int flags = wxXMLDOC_NONE,
-              wxXmlParseError* err_details = nullptr);
+              wxXmlParseError* err = nullptr);
 
     /**
         Like Load(const wxString&, int) but takes the data from given input
         stream.
 
-       @since 3.3.0
+        @since 3.3.0
 */
     bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE,
-              wxXmlParseError* err_details = nullptr);
+              wxXmlParseError* err = nullptr);
 
     /**
         Saves XML tree creating a file named with given string.

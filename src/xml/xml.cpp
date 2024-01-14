@@ -483,12 +483,12 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
 }
 
 bool wxXmlDocument::Load(const wxString& filename, int flags,
-                         wxXmlParseError* err_details)
+                         wxXmlParseError* err)
 {
     wxFileInputStream stream(filename);
     if (!stream.IsOk())
         return false;
-    return Load(stream, flags, err_details);
+    return Load(stream, flags, err);
 }
 
 bool wxXmlDocument::Save(const wxString& filename, int indentstep) const
@@ -822,7 +822,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
 } // extern "C"
 
 bool wxXmlDocument::Load(wxInputStream& stream, int flags,
-                         wxXmlParseError* err_details)
+                         wxXmlParseError* err)
 {
     const size_t BUFSIZE = 16384;
     char buf[BUFSIZE];
@@ -854,27 +854,23 @@ bool wxXmlDocument::Load(wxInputStream& stream, int flags,
         done = (len < BUFSIZE);
         if (!XML_Parse(parser, buf, len, done))
         {
-            wxString error(XML_ErrorString(XML_GetErrorCode(parser)),
-                           *wxConvCurrent);
-            wxLogError(_("XML parsing error: '%s' at line %d"),
-                       error.c_str(),
-                       (int)XML_GetCurrentLineNumber(parser));
-            if (err_details)
+            if (err)
             {
-                err_details->message = error;
-                err_details->line = (int)XML_GetCurrentLineNumber(parser);
-                err_details->column = (int)XML_GetCurrentColumnNumber(parser);
-                err_details->byte_offset = (int)XML_GetCurrentByteIndex(parser);
+                err->message = XML_ErrorString(XML_GetErrorCode(parser));
+                err->line = (int)XML_GetCurrentLineNumber(parser);
+                err->column = (int)XML_GetCurrentColumnNumber(parser);
+                err->offset = XML_GetCurrentByteIndex(parser);
+            }
+            else
+            {
+                wxString error(XML_ErrorString(XML_GetErrorCode(parser)),
+                               *wxConvCurrent);
+                wxLogError(_("XML parsing error: '%s' at line %d"),
+                           error.c_str(),
+                           (int)XML_GetCurrentLineNumber(parser));
             }
             ok = false;
             break;
-        }
-        else if (err_details)
-        {
-            err_details->message.clear();
-            err_details->line = -1;
-            err_details->column = -1;
-            err_details->byte_offset = -1;
         }
     } while (!done);
 

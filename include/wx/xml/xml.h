@@ -223,14 +223,13 @@ enum wxXmlDocumentLoadFlag
 };
 
 // Create an instance of this and pass it to wxXmlDocument::Load()
-// to get detailed error information in case of failure. Values
-// are set to -1 if no error occurred.
+// to get detailed error information in case of failure.
 struct wxXmlParseError
 {
     wxString message;
-    int line;
-    int column;
-    int byte_offset;
+    int line = 0;
+    int column = 0;
+    wxFileOffset offset = 0;
 };
 
 // This class holds XML data/document as parsed by XML parser.
@@ -248,8 +247,8 @@ public:
 
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
-    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE, wxXmlParseError* err_details = nullptr);
-    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE, wxXmlParseError* err_details = nullptr);
+    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE, wxXmlParseError* err = nullptr);
+    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE, wxXmlParseError* err = nullptr);
 
     // Saves document as .xml file.
     virtual bool Save(const wxString& filename, int indentstep = 2) const;
