@@ -20,6 +20,7 @@
 #include "wx/list.h"
 #include "wx/textbuf.h"
 #include "wx/versioninfo.h"
+#include "wx/filefn.h"
 
 #include <memory>
 
@@ -222,6 +223,15 @@ enum wxXmlDocumentLoadFlag
     wxXMLDOC_KEEP_WHITESPACE_NODES = 1
 };
 
+// Create an instance of this and pass it to wxXmlDocument::Load()
+// to get detailed error information in case of failure.
+struct wxXmlParseError
+{
+    wxString message;
+    int line = 0;
+    int column = 0;
+    wxFileOffset offset = 0;
+};
 
 // This class holds XML data/document as parsed by XML parser.
 
@@ -238,8 +248,8 @@ public:
 
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
-    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE);
-    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE);
+    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE, wxXmlParseError* err = nullptr);
+    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE, wxXmlParseError* err = nullptr);
 
     // Saves document as .xml file.
     virtual bool Save(const wxString& filename, int indentstep = 2) const;
