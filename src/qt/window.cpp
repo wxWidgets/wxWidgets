@@ -271,27 +271,33 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
 }
 
 /* static */
-void wxWindowQt::QtSendSetCursorEvent(wxWindowQt* win, wxPoint posScreen)
+void wxWindowQt::QtSendSetCursorEvent(wxWindowQt* win, const wxPoint& posClient)
 {
-    wxWindowQt* w = win;
-    for ( ;; )
-    {
-        const wxPoint posClient = w->ScreenToClient(posScreen);
-        wxSetCursorEvent event(posClient.x, posClient.y);
-        event.SetEventObject(w);
+    const wxRect rect(win->GetClientAreaOrigin(), win->GetClientSize());
 
-        const bool processedEvtSetCursor = w->ProcessWindowEvent(event);
+    if ( rect.Contains(posClient) )
+    {
+        wxSetCursorEvent event( posClient.x , posClient.y );
+        event.SetId(win->GetId());
+        event.SetEventObject(win);
+
+        const bool processedEvtSetCursor = win->HandleWindowEvent(event);
         if ( processedEvtSetCursor && event.HasCursor() )
         {
             win->SetCursor(event.GetCursor());
-            return;
         }
+        else
+        {
+            // Notice that GetCursor() can return an invalid cursor even if the window already
+            // has a valid cursor set at the Qt level. Don't override it if this is the case.
+            const bool hasCursor = win->GetHandle()->testAttribute(Qt::WA_SetCursor);
 
-        w = w->GetParent();
-        if ( w == nullptr )
-            break;
+            if ( !hasCursor || (!wxIsBusy() && !win->GetParent()) )
+            {
+                win->SetCursor( *wxSTANDARD_CURSOR );
+            }
+        }
     }
-    win->SetCursor(wxCursor(wxCURSOR_ARROW));
 }
 
 static wxWindowQt *s_capturedWindow = nullptr;
@@ -1686,7 +1692,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
             ProcessWindowEvent( e );
         }
 
-        QtSendSetCursorEvent(this, wxQtConvertPoint( event->globalPos()));
+        QtSendSetCursorEvent(this, mousePos);
     }
 
     m_mouseInside = mouseInside;

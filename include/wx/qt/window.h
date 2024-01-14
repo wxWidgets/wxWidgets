@@ -167,7 +167,7 @@ public:
 
     static void QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window );
     static wxWindowQt *QtRetrieveWindowPointer( const QWidget *widget );
-    static void QtSendSetCursorEvent(wxWindowQt* win, wxPoint posClient);
+    static void QtSendSetCursorEvent(wxWindowQt* win, const wxPoint& posClient);
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
