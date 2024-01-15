@@ -29,6 +29,9 @@
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='x64'">
     <wxArchSuffix>_x64</wxArchSuffix>
   </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM'">
+    <wxArchSuffix>_arm</wxArchSuffix>
+  </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM64'">
     <wxArchSuffix>_arm64</wxArchSuffix>
   </PropertyGroup>

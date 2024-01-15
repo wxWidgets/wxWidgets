@@ -261,6 +261,7 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
 #else // __WIN32__
     IgnoreAppSubDir("Win32");
     IgnoreAppSubDir("x86");
+    IgnoreAppSubDir("ARM");
 #endif // __WIN64__/__WIN32__
 
     wxString compilerPrefix;

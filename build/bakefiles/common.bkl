@@ -37,6 +37,8 @@
         <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORM=='win64'">_x64</if>
         <if cond="TARGET_CPU=='amd64'">_x64</if>
         <if cond="TARGET_CPU=='AMD64'">_x64</if>
+        <if cond="TARGET_CPU=='arm'">_arm</if>
+        <if cond="TARGET_CPU=='ARM'">_arm</if>
         <if cond="TARGET_CPU=='arm64'">_arm64</if>
         <if cond="TARGET_CPU=='ARM64'">_arm64</if>
         <if cond="TARGET_CPU=='ia64'">_ia64</if>
@@ -315,6 +317,8 @@
     <set var="LINK_TARGET_CPU">
         <if cond="TARGET_CPU=='amd64'">/MACHINE:X64</if>
         <if cond="TARGET_CPU=='AMD64'">/MACHINE:X64</if>
+        <if cond="TARGET_CPU=='arm'">/MACHINE:ARM</if>
+        <if cond="TARGET_CPU=='ARM'">/MACHINE:ARM</if>
         <if cond="TARGET_CPU=='arm64'">/MACHINE:ARM64</if>
         <if cond="TARGET_CPU=='ARM64'">/MACHINE:ARM64</if>
         <if cond="TARGET_CPU=='ia64'">/MACHINE:IA64</if>

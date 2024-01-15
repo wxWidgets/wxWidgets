@@ -367,7 +367,7 @@ The full list of the build settings follows:
   usable .pdb files with debug information) and this setting makes it
   possible.
 
-* `TARGET_CPU=X64|ARM64|IA64`
+* `TARGET_CPU=X64|ARM|ARM64|IA64`
 
   (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86
   build is performed.

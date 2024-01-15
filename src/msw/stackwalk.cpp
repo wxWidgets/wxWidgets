@@ -230,6 +230,16 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
     sf.AddrFrame.Mode      = AddrModeFlat;
 
     dwMachineType = IMAGE_FILE_MACHINE_AMD64;
+#elif defined(_M_ARM)
+    // TODO: Verify this code on ARM
+    sf.AddrPC.Offset       = ctx.Pc;
+    sf.AddrPC.Mode         = AddrModeFlat;
+    sf.AddrStack.Offset    = ctx.Sp;
+    sf.AddrStack.Mode      = AddrModeFlat;
+    sf.AddrFrame.Offset    = ctx.R11;
+    sf.AddrFrame.Mode      = AddrModeFlat;
+
+    dwMachineType = IMAGE_FILE_MACHINE_ARM;
 #elif defined(_M_ARM64)
     // TODO: Verify this code once Windows 10 for ARM64 is commercially available
     sf.AddrPC.Offset       = ctx.Pc;
@@ -332,7 +342,7 @@ void wxStackWalker::Walk(size_t skip, size_t maxDepth)
     // Software License.
 
     CONTEXT ctx;
-#ifdef __WIN64__
+#if defined(__WIN64__) || defined(_M_ARM)
     RtlCaptureContext(&ctx);
 #else // Win32
     // RtlCaptureContext() is not implemented correctly for x86 and can even
