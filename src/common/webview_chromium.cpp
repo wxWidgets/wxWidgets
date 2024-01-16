@@ -978,7 +978,12 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
                         );
         cefDataFolder.AppendDir("CEF");
     }
-    cefDataFolder.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+
+    if ( !cefDataFolder.Mkdir(wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+    {
+        wxLogTrace(TRACE_CEF, "Failed to create CEF directory \"%s\"",
+                   cefDataFolder.GetFullPath());
+    }
 
     CefSettings settings;
 
