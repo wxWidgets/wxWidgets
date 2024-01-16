@@ -95,28 +95,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPaintDCInfoOur);
 };
 
-// This subclass contains information for the HDCs we receive from outside, as
-// WPARAM of WM_PAINT itself.
-class wxPaintDCInfoExternal : public wxPaintDCInfo
-{
-public:
-    wxPaintDCInfoExternal(HDC hdc)
-        : wxPaintDCInfo(hdc),
-          m_state(::SaveDC(hdc))
-    {
-    }
-
-    virtual ~wxPaintDCInfoExternal()
-    {
-        ::RestoreDC(m_hdc, m_state);
-    }
-
-private:
-    const int m_state;
-
-    wxDECLARE_NO_COPY_CLASS(wxPaintDCInfoExternal);
-};
-
 // The global map containing HDC to use for the given window. The entries in
 // this map only exist during WM_PAINT processing and are destroyed when it is
 // over.

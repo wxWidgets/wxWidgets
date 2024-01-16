@@ -212,9 +212,6 @@ wxGCDCImpl::wxGCDCImpl(wxDC* owner, int)
 
 void wxGCDCImpl::CommonInit()
 {
-    m_mm_to_pix_x = mm2pt;
-    m_mm_to_pix_y = mm2pt;
-
     m_isClipBoxValid = false;
 
     m_logicalFunctionSupported = true;
@@ -1051,7 +1048,7 @@ bool wxGCDCImpl::DoStretchBlit(
     wxCompositionMode mode = TranslateRasterOp(logical_func);
     if ( mode == wxCOMPOSITION_INVALID )
     {
-        // Do *not* assert here, this function is often call from wxEVT_PAINT
+        // Do *not* assert here, this function is often called from wxEVT_PAINT
         // handler and asserting will just result in a reentrant call to the
         // same handler and a crash.
         return false;

@@ -23,9 +23,11 @@
 #if defined(__WINDOWS__) && wxUSE_CONFIG_NATIVE
     #include "wx/msw/regconf.h"
     #define wxConfig  wxRegConfig
+    #define wxHAS_CONFIG_AS_REGCONFIG
 #else // either we're under Unix or wish to always use config files
     #include "wx/fileconf.h"
     #define wxConfig wxFileConfig
+    #define wxHAS_CONFIG_AS_FILECONFIG
 #endif
 
 #endif // wxUSE_CONFIG

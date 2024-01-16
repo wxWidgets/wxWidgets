@@ -18,6 +18,7 @@
 #include "wx/gdicmn.h"
 #include "wx/hashmap.h"
 #include "wx/arrstr.h"
+#include "wx/variant.h"
 
 #if wxUSE_STREAMS
 #  include "wx/stream.h"
@@ -97,15 +98,6 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 class WXDLLIMPEXP_FWD_CORE wxImageHandler;
 class WXDLLIMPEXP_FWD_CORE wxImage;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
-
-//-----------------------------------------------------------------------------
-// wxVariant support
-//-----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxImage,WXDLLIMPEXP_CORE)
-#endif
 
 //-----------------------------------------------------------------------------
 // wxImageHandler
@@ -593,6 +585,9 @@ public:
 
     static HSVValue RGBtoHSV(const RGBValue& rgb);
     static RGBValue HSVtoRGB(const HSVValue& hsv);
+
+    // wxVariant support
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxImage, WXDLLIMPEXP_CORE);
 
 protected:
     static wxList   sm_handlers;

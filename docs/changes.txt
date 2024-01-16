@@ -31,6 +31,12 @@ Changes in behaviour not resulting in compilation errors
   wxGLAttributes::Samplers(1).SampleBuffers(4) explicitly if you need to keep
   using the same attributes that were previously used by default.
 
+- Default location of file used by wxFileConfig under Unix has changed to
+  XDG-compliant ~/.config/appname.conf instead of ~/.appname but note that
+  any existing files at the old location will still continue to be used.
+  See wxCONFIG_USE_XDG and wxCONFIG_USE_HOME for how to customize this
+  behaviour. You may also find wxFileConfig::MigrateLocalFile() useful.
+
 - As first mentioned in 3.0 release notes, the value of wxTHREAD_WAIT_DEFAULT,
   used by wxThread::Delete() and Wait() by default, has changed from
   wxTHREAD_WAIT_YIELD to wxTHREAD_WAIT_BLOCK for safety and consistency.
@@ -112,6 +118,12 @@ Changes in behaviour which may result in build errors
   are now similar to std::vector<> containing the objects -- they remain mostly
   compatible with the previous wxWidgets versions, but now compare values, and
   not pointers, in their Index() member function.
+
+- All operators (e.g. "==", "+", etc) on wx types are not defined in global
+  scope any more, resulting in much better error messages but also preventing
+  them from implicitly being used with types convertible to wx types. If you
+  really need to use these operators with your own types, please use explicit
+  conversions.
 
 - Due to the possibility to construct wxString from std::string_view some
   previously valid code, such as "wxstr = {"Hello", 2}", is now ambiguous.

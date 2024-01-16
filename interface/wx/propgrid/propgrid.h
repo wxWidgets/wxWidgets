@@ -166,8 +166,8 @@ wxPG_EX_NATIVE_DOUBLE_BUFFERING         = 0x00080000,
 
 /**
     Set this style to let user have ability to set values of properties to
-    unspecified state. Same as setting wxPG_PROP_AUTO_UNSPECIFIED for
-    all properties.
+    unspecified state. Same as setting wxPGPropertyFlags::AutoUnspecified
+    for all properties.
     @hideinitializer
 */
 wxPG_EX_AUTO_UNSPECIFIED_VALUES         = 0x00200000,
@@ -396,7 +396,7 @@ public:
     @{
 */
 
-enum class wxPGKeyboardActions
+enum class wxPGKeyboardAction
 {
     Invalid,
 
@@ -517,7 +517,7 @@ public:
         the next property.
 
         @code
-            propGrid->AddActionTrigger(wxPGKeyboardActions::NextProperty,
+            propGrid->AddActionTrigger(wxPGKeyboardAction::NextProperty,
                                        WXK_RETURN);
             propGrid->DedicateKey(WXK_RETURN);
         @endcode
@@ -530,7 +530,7 @@ public:
             Which key event modifiers, in addition to keycode, are needed to
             trigger the action.
     */
-    void AddActionTrigger(wxPGKeyboardActions action, int keycode, int modifiers = 0);
+    void AddActionTrigger(wxPGKeyboardAction action, int keycode, int modifiers = 0);
 
     /**
         Adds given property into selection. If ::wxPG_EX_MULTIPLE_SELECTION
@@ -602,7 +602,7 @@ public:
         @param action
             Which action to clear. @ref propgrid_keyboard_actions.
     */
-    void ClearActionTriggers(wxPGKeyboardActions action);
+    void ClearActionTriggers(wxPGKeyboardAction action);
 
     /**
         Forces updating the value of property from the editor control.
@@ -851,9 +851,9 @@ public:
         Returns (visual) text representation of the unspecified
         property value.
 
-        @param argFlags For internal use only.
+        @param flags For internal use only.
     */
-    wxString GetUnspecifiedValueText( int argFlags = 0 ) const;
+    wxString GetUnspecifiedValueText(wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     /**
         Returns current vertical spacing.
@@ -897,7 +897,8 @@ public:
 
         Note that @a column must not be equal to 1, as the second column is
         always editable and can be made read-only only on cell-by-cell basis
-        using @code wxPGProperty::ChangeFlag(wxPG_PROP_READONLY, true) @endcode
+        using
+        @code wxPGProperty::ChangeFlag(wxPGPropertyFlags::ReadOnly, true) @endcode
 
         @see BeginLabelEdit(), EndLabelEdit()
     */
@@ -1200,7 +1201,7 @@ public:
 
     /** Override to customize resetting of property validation failure status.
         @remarks
-        Property is guaranteed to have flag ::wxPG_PROP_INVALID_VALUE set.
+        Property is guaranteed to have flag wxPGPropertyFlags::InvalidValue set.
     */
     virtual void DoOnValidationFailureReset( wxPGProperty* property );
 

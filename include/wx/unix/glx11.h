@@ -99,6 +99,8 @@ public:
 private:
     GLXFBConfig *m_fbc;
     void* m_vi;
+
+    bool m_swapIntervalSet = false;
 };
 
 // ----------------------------------------------------------------------------

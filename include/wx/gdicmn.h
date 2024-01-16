@@ -295,6 +295,102 @@ public:
     wxSize& operator/=(double i) { x = wxRound(x/i); y = wxRound(y/i); return *this; }
     wxSize& operator*=(double i) { x = wxRound(x*i); y = wxRound(y*i); return *this; }
 
+    friend bool operator==(const wxSize& s1, const wxSize& s2)
+    {
+        return s1.x == s2.x && s1.y == s2.y;
+    }
+
+    friend bool operator!=(const wxSize& s1, const wxSize& s2)
+    {
+        return s1.x != s2.x || s1.y != s2.y;
+    }
+
+    friend wxSize operator+(const wxSize& s1, const wxSize& s2)
+    {
+        return wxSize(s1.x + s2.x, s1.y + s2.y);
+    }
+
+    friend wxSize operator-(const wxSize& s1, const wxSize& s2)
+    {
+        return wxSize(s1.x - s2.x, s1.y - s2.y);
+    }
+
+    friend wxSize operator/(const wxSize& s, int i)
+    {
+        return wxSize(s.x / i, s.y / i);
+    }
+
+    friend wxSize operator*(const wxSize& s, int i)
+    {
+        return wxSize(s.x * i, s.y * i);
+    }
+
+    friend wxSize operator*(int i, const wxSize& s)
+    {
+        return wxSize(s.x * i, s.y * i);
+    }
+
+    friend wxSize operator/(const wxSize& s, unsigned int i)
+    {
+        return wxSize(s.x / i, s.y / i);
+    }
+
+    friend wxSize operator*(const wxSize& s, unsigned int i)
+    {
+        return wxSize(s.x * i, s.y * i);
+    }
+
+    friend wxSize operator*(unsigned int i, const wxSize& s)
+    {
+        return wxSize(s.x * i, s.y * i);
+    }
+
+    friend wxSize operator/(const wxSize& s, long i)
+    {
+        return wxSize(s.x / i, s.y / i);
+    }
+
+    friend wxSize operator*(const wxSize& s, long i)
+    {
+        return wxSize(int(s.x * i), int(s.y * i));
+    }
+
+    friend wxSize operator*(long i, const wxSize& s)
+    {
+        return wxSize(int(s.x * i), int(s.y * i));
+    }
+
+    friend wxSize operator/(const wxSize& s, unsigned long i)
+    {
+        return wxSize(int(s.x / i), int(s.y / i));
+    }
+
+    friend wxSize operator*(const wxSize& s, unsigned long i)
+    {
+        return wxSize(int(s.x * i), int(s.y * i));
+    }
+
+    friend wxSize operator*(unsigned long i, const wxSize& s)
+    {
+        return wxSize(int(s.x * i), int(s.y * i));
+    }
+
+    friend wxSize operator/(const wxSize& s, double i)
+    {
+        return wxSize(wxRound(s.x / i), wxRound(s.y / i));
+    }
+
+    friend wxSize operator*(const wxSize& s, double i)
+    {
+        return wxSize(wxRound(s.x * i), wxRound(s.y * i));
+    }
+
+    friend wxSize operator*(double i, const wxSize& s)
+    {
+        return wxSize(wxRound(s.x * i), wxRound(s.y * i));
+    }
+
+
     void IncTo(const wxSize& sz)
         { if ( sz.x > x ) x = sz.x; if ( sz.y > y ) y = sz.y; }
     void DecTo(const wxSize& sz)
@@ -350,103 +446,6 @@ public:
     int GetY() const { return y; }
 };
 
-inline bool operator==(const wxSize& s1, const wxSize& s2)
-{
-    return s1.x == s2.x && s1.y == s2.y;
-}
-
-inline bool operator!=(const wxSize& s1, const wxSize& s2)
-{
-    return s1.x != s2.x || s1.y != s2.y;
-}
-
-inline wxSize operator+(const wxSize& s1, const wxSize& s2)
-{
-    return wxSize(s1.x + s2.x, s1.y + s2.y);
-}
-
-inline wxSize operator-(const wxSize& s1, const wxSize& s2)
-{
-    return wxSize(s1.x - s2.x, s1.y - s2.y);
-}
-
-inline wxSize operator/(const wxSize& s, int i)
-{
-    return wxSize(s.x / i, s.y / i);
-}
-
-inline wxSize operator*(const wxSize& s, int i)
-{
-    return wxSize(s.x * i, s.y * i);
-}
-
-inline wxSize operator*(int i, const wxSize& s)
-{
-    return wxSize(s.x * i, s.y * i);
-}
-
-inline wxSize operator/(const wxSize& s, unsigned int i)
-{
-    return wxSize(s.x / i, s.y / i);
-}
-
-inline wxSize operator*(const wxSize& s, unsigned int i)
-{
-    return wxSize(s.x * i, s.y * i);
-}
-
-inline wxSize operator*(unsigned int i, const wxSize& s)
-{
-    return wxSize(s.x * i, s.y * i);
-}
-
-inline wxSize operator/(const wxSize& s, long i)
-{
-    return wxSize(s.x / i, s.y / i);
-}
-
-inline wxSize operator*(const wxSize& s, long i)
-{
-    return wxSize(int(s.x * i), int(s.y * i));
-}
-
-inline wxSize operator*(long i, const wxSize& s)
-{
-    return wxSize(int(s.x * i), int(s.y * i));
-}
-
-inline wxSize operator/(const wxSize& s, unsigned long i)
-{
-    return wxSize(int(s.x / i), int(s.y / i));
-}
-
-inline wxSize operator*(const wxSize& s, unsigned long i)
-{
-    return wxSize(int(s.x * i), int(s.y * i));
-}
-
-inline wxSize operator*(unsigned long i, const wxSize& s)
-{
-    return wxSize(int(s.x * i), int(s.y * i));
-}
-
-inline wxSize operator/(const wxSize& s, double i)
-{
-    return wxSize(wxRound(s.x / i), wxRound(s.y / i));
-}
-
-inline wxSize operator*(const wxSize& s, double i)
-{
-    return wxSize(wxRound(s.x * i), wxRound(s.y * i));
-}
-
-inline wxSize operator*(double i, const wxSize& s)
-{
-    return wxSize(wxRound(s.x * i), wxRound(s.y * i));
-}
-
-
-
 // ---------------------------------------------------------------------------
 // Point classes: with real or integer coordinates
 // ---------------------------------------------------------------------------
@@ -469,100 +468,132 @@ public:
 
     wxRealPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
     wxRealPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
+
+    wxRealPoint& operator/=(int i) { x *= i; y *= i; return *this; }
+    wxRealPoint& operator*=(int i) { x /= i; y /= i; return *this; }
+    wxRealPoint& operator/=(double f) { x /= f; y /= f; return *this; }
+    wxRealPoint& operator*=(double f) { x *= f; y *= f; return *this; }
+
+    friend bool operator==(const wxRealPoint& p1, const wxRealPoint& p2)
+    {
+        return wxIsSameDouble(p1.x, p2.x) && wxIsSameDouble(p1.y, p2.y);
+    }
+
+    friend bool operator!=(const wxRealPoint& p1, const wxRealPoint& p2)
+    {
+        return !(p1 == p2);
+    }
+
+    friend wxRealPoint operator+(const wxRealPoint& p1, const wxRealPoint& p2)
+    {
+        return wxRealPoint(p1.x + p2.x, p1.y + p2.y);
+    }
+
+    friend wxRealPoint operator-(const wxRealPoint& p1, const wxRealPoint& p2)
+    {
+        return wxRealPoint(p1.x - p2.x, p1.y - p2.y);
+    }
+
+    friend wxRealPoint operator+(const wxRealPoint& pt, const wxSize& sz)
+    {
+        return wxRealPoint(pt.x + sz.GetWidth(), pt.y + sz.GetHeight());
+    }
+
+    friend wxRealPoint operator-(const wxRealPoint& pt, const wxSize& sz)
+    {
+        return wxRealPoint(pt.x - sz.GetWidth(), pt.y - sz.GetHeight());
+    }
+
+    friend wxRealPoint operator+(const wxSize& sz, const wxRealPoint& pt)
+    {
+        return wxRealPoint(sz.GetWidth() + pt.x, sz.GetHeight() + pt.y);
+    }
+
+    friend wxRealPoint operator-(const wxSize& sz, const wxRealPoint& pt)
+    {
+        return wxRealPoint(sz.GetWidth() - pt.x, sz.GetHeight() - pt.y);
+    }
+
+    friend wxRealPoint operator-(const wxRealPoint& pt)
+    {
+        return wxRealPoint(-pt.x, -pt.y);
+    }
+
+    friend wxRealPoint operator/(const wxRealPoint& p, int i)
+    {
+        return wxRealPoint(p.x / i, p.y / i);
+    }
+
+    friend wxRealPoint operator*(const wxRealPoint& p, int i)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator*(int i, const wxRealPoint& p)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator/(const wxRealPoint& p, unsigned int i)
+    {
+        return wxRealPoint(p.x / i, p.y / i);
+    }
+
+    friend wxRealPoint operator*(const wxRealPoint& p, unsigned int i)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator*(unsigned int i, const wxRealPoint& p)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator/(const wxRealPoint& p, long i)
+    {
+        return wxRealPoint(p.x / i, p.y / i);
+    }
+
+    friend wxRealPoint operator*(const wxRealPoint& p, long i)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator*(long i, const wxRealPoint& p)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator/(const wxRealPoint& p, unsigned long i)
+    {
+        return wxRealPoint(p.x / i, p.y / i);
+    }
+
+    friend wxRealPoint operator*(const wxRealPoint& p, unsigned long i)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator*(unsigned long i, const wxRealPoint& p)
+    {
+        return wxRealPoint(p.x * i, p.y * i);
+    }
+
+    friend wxRealPoint operator/(const wxRealPoint& p, double f)
+    {
+        return wxRealPoint(p.x / f, p.y / f);
+    }
+
+    friend wxRealPoint operator*(const wxRealPoint& p, double f)
+    {
+        return wxRealPoint(p.x * f, p.y * f);
+    }
+
+    friend wxRealPoint operator*(double f, const wxRealPoint& p)
+    {
+        return wxRealPoint(p.x * f, p.y * f);
+    }
 };
-
-
-inline bool operator==(const wxRealPoint& p1, const wxRealPoint& p2)
-{
-    return wxIsSameDouble(p1.x, p2.x) && wxIsSameDouble(p1.y, p2.y);
-}
-
-inline bool operator!=(const wxRealPoint& p1, const wxRealPoint& p2)
-{
-    return !(p1 == p2);
-}
-
-inline wxRealPoint operator+(const wxRealPoint& p1, const wxRealPoint& p2)
-{
-    return wxRealPoint(p1.x + p2.x, p1.y + p2.y);
-}
-
-
-inline wxRealPoint operator-(const wxRealPoint& p1, const wxRealPoint& p2)
-{
-    return wxRealPoint(p1.x - p2.x, p1.y - p2.y);
-}
-
-
-inline wxRealPoint operator/(const wxRealPoint& s, int i)
-{
-    return wxRealPoint(s.x / i, s.y / i);
-}
-
-inline wxRealPoint operator*(const wxRealPoint& s, int i)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator*(int i, const wxRealPoint& s)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator/(const wxRealPoint& s, unsigned int i)
-{
-    return wxRealPoint(s.x / i, s.y / i);
-}
-
-inline wxRealPoint operator*(const wxRealPoint& s, unsigned int i)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator*(unsigned int i, const wxRealPoint& s)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator/(const wxRealPoint& s, long i)
-{
-    return wxRealPoint(s.x / i, s.y / i);
-}
-
-inline wxRealPoint operator*(const wxRealPoint& s, long i)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator*(long i, const wxRealPoint& s)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator/(const wxRealPoint& s, unsigned long i)
-{
-    return wxRealPoint(s.x / i, s.y / i);
-}
-
-inline wxRealPoint operator*(const wxRealPoint& s, unsigned long i)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator*(unsigned long i, const wxRealPoint& s)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator*(const wxRealPoint& s, double i)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
-
-inline wxRealPoint operator*(double i, const wxRealPoint& s)
-{
-    return wxRealPoint(s.x * i, s.y * i);
-}
 
 
 // ----------------------------------------------------------------------------
@@ -587,6 +618,134 @@ public:
     wxPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
     wxPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
 
+    wxPoint& operator/=(int i) { x /= i; y /= i; return *this; }
+    wxPoint& operator*=(int i) { x *= i; y *= i; return *this; }
+    wxPoint& operator/=(double f) { x = wxRound(x/f); y = wxRound(y/f); return *this; }
+    wxPoint& operator*=(double f) { x = wxRound(x*f); y = wxRound(y*f); return *this; }
+
+    // comparison
+    friend bool operator==(const wxPoint& p1, const wxPoint& p2)
+    {
+        return p1.x == p2.x && p1.y == p2.y;
+    }
+
+    friend bool operator!=(const wxPoint& p1, const wxPoint& p2)
+    {
+        return !(p1 == p2);
+    }
+
+
+    // arithmetic operations (component wise)
+    friend wxPoint operator+(const wxPoint& p1, const wxPoint& p2)
+    {
+        return wxPoint(p1.x + p2.x, p1.y + p2.y);
+    }
+
+    friend wxPoint operator-(const wxPoint& p1, const wxPoint& p2)
+    {
+        return wxPoint(p1.x - p2.x, p1.y - p2.y);
+    }
+
+    friend wxPoint operator+(const wxPoint& p, const wxSize& s)
+    {
+        return wxPoint(p.x + s.x, p.y + s.y);
+    }
+
+    friend wxPoint operator-(const wxPoint& p, const wxSize& s)
+    {
+        return wxPoint(p.x - s.x, p.y - s.y);
+    }
+
+    friend wxPoint operator+(const wxSize& s, const wxPoint& p)
+    {
+        return wxPoint(p.x + s.x, p.y + s.y);
+    }
+
+    friend wxPoint operator-(const wxSize& s, const wxPoint& p)
+    {
+        return wxPoint(s.x - p.x, s.y - p.y);
+    }
+
+    friend wxPoint operator-(const wxPoint& p)
+    {
+        return wxPoint(-p.x, -p.y);
+    }
+
+    friend wxPoint operator/(const wxPoint& p, int i)
+    {
+        return wxPoint(p.x / i, p.y / i);
+    }
+
+    friend wxPoint operator*(const wxPoint& p, int i)
+    {
+        return wxPoint(p.x * i, p.y * i);
+    }
+
+    friend wxPoint operator*(int i, const wxPoint& p)
+    {
+        return wxPoint(p.x * i, p.y * i);
+    }
+
+    friend wxPoint operator/(const wxPoint& p, unsigned int i)
+    {
+        return wxPoint(p.x / i, p.y / i);
+    }
+
+    friend wxPoint operator*(const wxPoint& p, unsigned int i)
+    {
+        return wxPoint(p.x * i, p.y * i);
+    }
+
+    friend wxPoint operator*(unsigned int i, const wxPoint& p)
+    {
+        return wxPoint(p.x * i, p.y * i);
+    }
+
+    friend wxPoint operator/(const wxPoint& p, long i)
+    {
+        return wxPoint(p.x / i, p.y / i);
+    }
+
+    friend wxPoint operator*(const wxPoint& p, long i)
+    {
+        return wxPoint(int(p.x * i), int(p.y * i));
+    }
+
+    friend wxPoint operator*(long i, const wxPoint& p)
+    {
+        return wxPoint(int(p.x * i), int(p.y * i));
+    }
+
+    friend wxPoint operator/(const wxPoint& p, unsigned long i)
+    {
+        return wxPoint(p.x / i, p.y / i);
+    }
+
+    friend wxPoint operator*(const wxPoint& p, unsigned long i)
+    {
+        return wxPoint(int(p.x * i), int(p.y * i));
+    }
+
+    friend wxPoint operator*(unsigned long i, const wxPoint& p)
+    {
+        return wxPoint(int(p.x * i), int(p.y * i));
+    }
+
+    friend wxPoint operator/(const wxPoint& p, double f)
+    {
+        return wxPoint(wxRound(p.x / f), wxRound(p.y / f));
+    }
+
+    friend wxPoint operator*(const wxPoint& p, double f)
+    {
+        return wxPoint(int(p.x * f), int(p.y * f));
+    }
+
+    friend wxPoint operator*(double f, const wxPoint& p)
+    {
+        return wxPoint(int(p.x * f), int(p.y * f));
+    }
+
     // check if both components are set/initialized
     bool IsFullySpecified() const { return x != wxDefaultCoord && y != wxDefaultCoord; }
 
@@ -600,124 +759,6 @@ public:
     }
 };
 
-
-// comparison
-inline bool operator==(const wxPoint& p1, const wxPoint& p2)
-{
-    return p1.x == p2.x && p1.y == p2.y;
-}
-
-inline bool operator!=(const wxPoint& p1, const wxPoint& p2)
-{
-    return !(p1 == p2);
-}
-
-
-// arithmetic operations (component wise)
-inline wxPoint operator+(const wxPoint& p1, const wxPoint& p2)
-{
-    return wxPoint(p1.x + p2.x, p1.y + p2.y);
-}
-
-inline wxPoint operator-(const wxPoint& p1, const wxPoint& p2)
-{
-    return wxPoint(p1.x - p2.x, p1.y - p2.y);
-}
-
-inline wxPoint operator+(const wxPoint& p, const wxSize& s)
-{
-    return wxPoint(p.x + s.x, p.y + s.y);
-}
-
-inline wxPoint operator-(const wxPoint& p, const wxSize& s)
-{
-    return wxPoint(p.x - s.x, p.y - s.y);
-}
-
-inline wxPoint operator+(const wxSize& s, const wxPoint& p)
-{
-    return wxPoint(p.x + s.x, p.y + s.y);
-}
-
-inline wxPoint operator-(const wxSize& s, const wxPoint& p)
-{
-    return wxPoint(s.x - p.x, s.y - p.y);
-}
-
-inline wxPoint operator-(const wxPoint& p)
-{
-    return wxPoint(-p.x, -p.y);
-}
-
-inline wxPoint operator/(const wxPoint& s, int i)
-{
-    return wxPoint(s.x / i, s.y / i);
-}
-
-inline wxPoint operator*(const wxPoint& s, int i)
-{
-    return wxPoint(s.x * i, s.y * i);
-}
-
-inline wxPoint operator*(int i, const wxPoint& s)
-{
-    return wxPoint(s.x * i, s.y * i);
-}
-
-inline wxPoint operator/(const wxPoint& s, unsigned int i)
-{
-    return wxPoint(s.x / i, s.y / i);
-}
-
-inline wxPoint operator*(const wxPoint& s, unsigned int i)
-{
-    return wxPoint(s.x * i, s.y * i);
-}
-
-inline wxPoint operator*(unsigned int i, const wxPoint& s)
-{
-    return wxPoint(s.x * i, s.y * i);
-}
-
-inline wxPoint operator/(const wxPoint& s, long i)
-{
-    return wxPoint(s.x / i, s.y / i);
-}
-
-inline wxPoint operator*(const wxPoint& s, long i)
-{
-    return wxPoint(int(s.x * i), int(s.y * i));
-}
-
-inline wxPoint operator*(long i, const wxPoint& s)
-{
-    return wxPoint(int(s.x * i), int(s.y * i));
-}
-
-inline wxPoint operator/(const wxPoint& s, unsigned long i)
-{
-    return wxPoint(s.x / i, s.y / i);
-}
-
-inline wxPoint operator*(const wxPoint& s, unsigned long i)
-{
-    return wxPoint(int(s.x * i), int(s.y * i));
-}
-
-inline wxPoint operator*(unsigned long i, const wxPoint& s)
-{
-    return wxPoint(int(s.x * i), int(s.y * i));
-}
-
-inline wxPoint operator*(const wxPoint& s, double i)
-{
-    return wxPoint(int(s.x * i), int(s.y * i));
-}
-
-inline wxPoint operator*(double i, const wxPoint& s)
-{
-    return wxPoint(int(s.x * i), int(s.y * i));
-}
 
 WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);
 
@@ -845,9 +886,24 @@ public:
 
     // like Union() but don't ignore empty rectangles
     wxRect& operator+=(const wxRect& rect);
+    friend WXDLLIMPEXP_CORE wxRect operator+(const wxRect& r1, const wxRect& r2);
 
     // intersections of two rectangles not testing for empty rectangles
     wxRect& operator*=(const wxRect& rect);
+    friend WXDLLIMPEXP_CORE wxRect operator*(const wxRect& r1, const wxRect& r2);
+
+    // compare rectangles
+    friend bool operator==(const wxRect& r1, const wxRect& r2)
+    {
+        return (r1.x == r2.x) && (r1.y == r2.y) &&
+               (r1.width == r2.width) && (r1.height == r2.height);
+    }
+
+    friend bool operator!=(const wxRect& r1, const wxRect& r2)
+    {
+        return !(r1 == r2);
+    }
+
 
     // centre this rectangle in the given (usually, but not necessarily,
     // larger) one
@@ -876,24 +932,6 @@ public:
     int x, y, width, height;
 };
 
-
-// compare rectangles
-inline bool operator==(const wxRect& r1, const wxRect& r2)
-{
-    return (r1.x == r2.x) && (r1.y == r2.y) &&
-           (r1.width == r2.width) && (r1.height == r2.height);
-}
-
-inline bool operator!=(const wxRect& r1, const wxRect& r2)
-{
-    return !(r1 == r2);
-}
-
-// like Union() but don't treat empty rectangles specially
-WXDLLIMPEXP_CORE wxRect operator+(const wxRect& r1, const wxRect& r2);
-
-// intersections of two rectangles
-WXDLLIMPEXP_CORE wxRect operator*(const wxRect& r1, const wxRect& r2);
 
 // define functions which couldn't be defined above because of declarations
 // order

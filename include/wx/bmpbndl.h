@@ -17,6 +17,7 @@
 class wxBitmapBundleImpl;
 class WXDLLIMPEXP_FWD_CORE wxIconBundle;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
+class WXDLLIMPEXP_FWD_BASE wxVariant;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // ----------------------------------------------------------------------------
@@ -155,6 +156,15 @@ public:
         return GetImpl() == other.GetImpl();
     }
 
+    // Allow using wxBitmapBundle with wxVariant
+#if wxUSE_VARIANT
+    friend WXDLLIMPEXP_CORE
+    wxBitmapBundle& operator<<(wxBitmapBundle& value, const wxVariant& variant);
+    friend WXDLLIMPEXP_CORE
+    wxVariant& operator<<(wxVariant& variant, const wxBitmapBundle& value);
+#endif // wxUSE_VARIANT
+
+
     // Implementation only from now on.
 
     // Get the bitmap size preferred by the majority of the elements of the
@@ -273,20 +283,5 @@ public:
     // on demand and cache it.
     virtual wxBitmap GetBitmap(const wxSize& size) = 0;
 };
-
-// ----------------------------------------------------------------------------
-// Allow using wxBitmapBundle in wxVariant
-// ----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-
-class WXDLLIMPEXP_FWD_BASE wxVariant;
-
-WXDLLIMPEXP_CORE
-wxBitmapBundle& operator<<(wxBitmapBundle& value, const wxVariant& variant);
-WXDLLIMPEXP_CORE
-wxVariant& operator<<(wxVariant& variant, const wxBitmapBundle& value);
-
-#endif // wxUSE_VARIANT
 
 #endif // _WX_BMPBNDL_H_

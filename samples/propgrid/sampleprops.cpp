@@ -490,7 +490,7 @@ wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
     // (i.e. can't use comma when comma acts as decimal point in float).
     wxChar use_delimiter = ',';
 
-    if (wxString::Format("%.2f",12.34).Find(use_delimiter) >= 0)
+    if ( wxNumberFormatter::GetDecimalSeparator() == use_delimiter )
         use_delimiter = ';';
 
     m_delimiter = use_delimiter;
@@ -505,11 +505,11 @@ void wxArrayDoubleProperty::OnSetValue()
 }
 
 wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
-                                               int argFlags ) const
+                                               wxPGPropValFormatFlags flags ) const
 {
     wxString s;
 
-    if ( argFlags & wxPG_FULL_VALUE )
+    if ( !!(flags & wxPGPropValFormatFlags::FullValue) )
     {
         GenerateValueAsString(s,-1,false);
     }
@@ -557,7 +557,7 @@ bool wxArrayDoubleProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     // Create editor dialog.
     wxArrayDoubleEditorDialog dlg;
     dlg.SetPrecision(m_precision);
-    dlg.Create(pg->GetPanel(), wxEmptyString,
+    dlg.Create(pg->GetPanel(), "",
                m_dlgTitle.empty() ? GetLabel() : m_dlgTitle, curValue, m_dlgStyle);
     dlg.Move( pg->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
 
@@ -571,7 +571,7 @@ bool wxArrayDoubleProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     return false;
 }
 
-bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
+bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& text, wxPGPropValFormatFlags ) const
 {
     // Add values to a temporary array so that in case
     // of error we can opt not to use them.
@@ -632,7 +632,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxTextValidator* validator =
-        new wxNumericPropertyValidator(wxNumericPropertyValidator::Float);
+        new wxNumericPropertyValidator(wxNumericPropertyValidator::NumericType::Float);
 
     // Accept also a delimiter and space character
     validator->AddCharIncludes(m_delimiter);
@@ -707,12 +707,12 @@ wxColour MyColourProperty::GetColour(int index) const
     return wxColour();
 }
 
-wxString MyColourProperty::ColourToString(const wxColour& col, int index, int argFlags) const
+wxString MyColourProperty::ColourToString(const wxColour& col, int index, wxPGPropValFormatFlags flags) const
 {
     if ( index == (int)(m_choices.GetCount() - 1) )
-        return wxEmptyString;
+        return wxString();
 
-    return wxColourProperty::ColourToString(col, index, argFlags);
+    return wxColourProperty::ColourToString(col, index, flags);
 }
 
 int MyColourProperty::GetCustomColourIndex() const

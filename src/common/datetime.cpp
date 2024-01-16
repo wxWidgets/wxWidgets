@@ -74,6 +74,7 @@
 #include "wx/tokenzr.h"
 
 #include <ctype.h>
+#include <cmath>
 
 #ifdef __WINDOWS__
     #include <winnls.h>
@@ -2269,6 +2270,133 @@ size_t wxDateTimeWorkDays::DoGetHolidaysInRange(const wxDateTime& dtStart,
     }
 
     return holidays.GetCount();
+}
+
+// ----------------------------------------------------------------------------
+// wxDateTimeUSCatholicFeasts
+// ----------------------------------------------------------------------------
+
+std::vector<wxDateTime> wxDateTimeUSCatholicFeasts::m_holyDaysOfObligation =
+{
+    // Feasts with fixed dates
+    { wxDateTime(1, wxDateTime::Month::Jan, 0) },  // Solemnity of Mary, Mother of God
+    { wxDateTime(15, wxDateTime::Month::Aug, 0) }, // Assumption of the Blessed Virgin Mary
+    { wxDateTime(1, wxDateTime::Month::Nov, 0) },  // All Saints Day
+    { wxDateTime(8, wxDateTime::Month::Dec, 0) },  // Immaculate Conception of the Blessed Virgin Mary
+    { wxDateTime(25, wxDateTime::Month::Dec, 0) }  // Christmas
+};
+
+wxDateTime wxDateTimeUSCatholicFeasts::GetEaster(int year)
+{
+    // Adjust for miscalculation in Gauss formula
+    if (year == 1734 || year == 1886)
+    {
+        return wxDateTime(25, wxDateTime::Apr, year);
+    }
+
+    // All calculations done
+    // on the basis of
+    // Gauss Easter Algorithm
+    const float A = year % 19;
+    const float B = year % 4;
+    const float C = year % 7;
+    const float P = std::floor((float)year / 100.0);
+
+    const float Q = std::floor((float)(13 + 8 * P) / 25.0);
+
+    const float M = (int)(15 - Q + P - std::floor((float)P / 4)) % 30;
+
+    const float N = (int)(4 + P - std::floor((float)P / 4)) % 7;
+
+    const float D = (int)(19 * A + M) % 30;
+
+    const float E = (int)(2 * B + 4 * C + 6 * D + N) % 7;
+
+    const int days = (int)(22 + D + E);
+
+    // A corner case,
+    // when D is 29
+    if ((D == 29) && (E == 6))
+    {
+        wxASSERT_MSG(
+            wxDateTime(19, wxDateTime::Apr, year).GetWeekDay() ==
+            wxDateTime::WeekDay::Sun,
+            "Error in Easter calculation!");
+        return wxDateTime(19, wxDateTime::Apr, year);
+    }
+    // Another corner case,
+    // when D is 28
+    else if ((D == 28) && (E == 6))
+    {
+        wxASSERT_MSG(
+            wxDateTime(18, wxDateTime::Apr, year).GetWeekDay() ==
+            wxDateTime::WeekDay::Sun,
+            "Error in Easter calculation!");
+        return wxDateTime(18, wxDateTime::Apr, year);
+    }
+    else
+    {
+        // If days > 31, move to April
+        // April = 4th Month
+        if (days > 31)
+        {
+            wxASSERT_MSG(
+                wxDateTime((days - 31), wxDateTime::Apr, year).GetWeekDay() ==
+                wxDateTime::WeekDay::Sun,
+                "Error in Easter calculation!");
+            return wxDateTime((days - 31), wxDateTime::Apr, year);
+        }
+        else
+        {
+            // Otherwise, stay on March
+            // March = 3rd Month
+            wxASSERT_MSG(
+                wxDateTime(days, wxDateTime::Mar, year).GetWeekDay() ==
+                wxDateTime::WeekDay::Sun,
+                "Error in Easter calculation!");
+            return wxDateTime(days, wxDateTime::Mar, year);
+        }
+    }
+}
+
+size_t wxDateTimeUSCatholicFeasts::DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                                        const wxDateTime& dtEnd,
+                                                        wxDateTimeArray& holidays) const
+{
+    holidays.Clear();
+
+    for (wxDateTime dt = dtStart; dt <= dtEnd; dt += wxDateSpan::Day())
+    {
+        if (DoIsHoliday(dt) )
+        {
+            holidays.Add(dt);
+            continue;
+        }
+    }
+
+    return holidays.size();
+}
+
+// ----------------------------------------------------------------------------
+// wxDateTimeChristianHolidays
+// ----------------------------------------------------------------------------
+
+size_t wxDateTimeChristianHolidays::DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                                         const wxDateTime& dtEnd,
+                                                         wxDateTimeArray& holidays) const
+{
+    holidays.Clear();
+
+    for (wxDateTime dt = dtStart; dt <= dtEnd; dt += wxDateSpan::Day())
+    {
+        if (DoIsHoliday(dt) )
+        {
+            holidays.Add(dt);
+            continue;
+        }
+    }
+
+    return holidays.size();
 }
 
 // ============================================================================

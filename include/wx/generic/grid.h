@@ -2284,6 +2284,8 @@ public:
 
     void ClearSelection();
 
+    bool CopySelection();
+
     bool IsInSelection( int row, int col ) const;
 
     bool IsInSelection( const wxGridCellCoords& coords ) const

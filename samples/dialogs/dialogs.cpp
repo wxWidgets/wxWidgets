@@ -1318,6 +1318,8 @@ public:
         sizerBtns->Add(new wxButton(this, wxID_RESET, "&Reset all"),
                        wxSizerFlags().Border(wxLEFT));
     }
+    MyRearrangeDialog(const MyRearrangeDialog&) = delete;
+    MyRearrangeDialog& operator=(const MyRearrangeDialog&) = delete;
 
     // call this instead of ShowModal() to update order and labels array in
     // case the dialog was not cancelled
@@ -1409,7 +1411,6 @@ private:
     wxTextCtrl *m_text;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyRearrangeDialog);
 };
 
 wxBEGIN_EVENT_TABLE(MyRearrangeDialog, wxRearrangeDialog)
@@ -1731,6 +1732,8 @@ public:
         : m_dialog(&dialog)
     {
     }
+    MyCustomizeHook(const MyCustomizeHook&) = delete;
+    MyCustomizeHook& operator=(const MyCustomizeHook&) = delete;
 
     // Override pure virtual base class method to add our custom controls.
     virtual void AddCustomControls(wxFileDialogCustomize& customizer) override
@@ -1804,8 +1807,6 @@ private:
     wxFileDialogStaticText* m_label;
 
     wxString m_info;
-
-    wxDECLARE_NO_COPY_CLASS(MyCustomizeHook);
 };
 
 void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )

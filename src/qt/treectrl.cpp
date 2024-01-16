@@ -573,14 +573,20 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
+    m_qtWindow =
     m_qtTreeWidget = new wxQTreeWidget(parent, this);
     m_qtTreeWidget->header()->hide();
 
-    SetWindowStyleFlag(style);
-
     Bind(wxEVT_KEY_DOWN, &wxTreeCtrl::OnKeyDown, this);
 
-    return QtCreateControl(parent, id, pos, size, style, validator, name);
+    if ( !wxTreeCtrlBase::Create(parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, validator, name) )
+    {
+        return false;
+    }
+
+    SetWindowStyleFlag(style);
+
+    return true;
 }
 
 wxTreeCtrl::~wxTreeCtrl()

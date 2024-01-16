@@ -170,7 +170,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(600, 500))
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     m_listCtrl = nullptr;
     m_logWindow = nullptr;
@@ -292,6 +292,9 @@ MyFrame::MyFrame(const wxString& title)
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
     RecreateList(wxLC_REPORT | wxLC_SINGLE_SEL);
+
+    // Make the list control big enough to show its initial contents.
+    m_listCtrl->SetInitialSize(FromDIP(wxSize(600, 300)));
 
 #ifdef __WXMSW__
     // this is useful to know specially when debugging :)

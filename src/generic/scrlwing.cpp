@@ -444,7 +444,7 @@ void wxScrollHelperBase::DoSetTargetWindow(wxWindow *target)
 {
     m_targetWindow = target;
 #ifdef __WXMAC__
-    target->MacSetClipChildren( true ) ;
+    target->MacSetClipChildren() ;
 #endif
 
     // install the event handler which will intercept the events we're
@@ -955,12 +955,12 @@ void wxScrollHelperBase::HandleOnMouseLeave(wxMouseEvent& event)
         else // we're lower or to the right of the window
         {
             wxSize size = m_targetWindow->GetClientSize();
-            if ( pt.x > size.x )
+            if ( pt.x >= size.x )
             {
                 orient = wxHORIZONTAL;
                 pos = m_xScrollLines;
             }
-            else if ( pt.y > size.y )
+            else if ( pt.y >= size.y )
             {
                 orient = wxVERTICAL;
                 pos = m_yScrollLines;

@@ -56,6 +56,9 @@ public:
 
     virtual void DoGetSize(int *width, int *height) const override;
 
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return true; }
+
 protected:
     void InitDC();
 

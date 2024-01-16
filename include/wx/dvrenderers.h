@@ -67,14 +67,14 @@ public:
         return !IsSameAs(other);
     }
 
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_CORE);
+
 private:
     wxString    m_text;
     wxBitmapBundle m_bitmap;
 
     wxDECLARE_DYNAMIC_CLASS(wxDataViewIconText);
 };
-
-DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_CORE)
 
 // ----------------------------------------------------------------------------
 // wxDataViewCheckIconText: value class used by wxDataViewCheckIconTextRenderer
@@ -94,13 +94,13 @@ public:
     wxCheckBoxState GetCheckedState() const { return m_checkedState; }
     void SetCheckedState(wxCheckBoxState state) { m_checkedState = state; }
 
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_CORE);
+
 private:
     wxCheckBoxState m_checkedState;
 
     wxDECLARE_DYNAMIC_CLASS(wxDataViewCheckIconText);
 };
-
-DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewCheckIconText, WXDLLIMPEXP_CORE)
 
 // ----------------------------------------------------------------------------
 // wxDataViewRendererBase

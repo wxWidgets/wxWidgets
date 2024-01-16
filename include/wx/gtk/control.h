@@ -87,6 +87,8 @@ protected:
     wxSize GTKGetEntryMargins(GtkEntry* entry) const;
 
 private:
+    virtual void GTKRemoveBorder() override;
+
     wxDECLARE_DYNAMIC_CLASS(wxControl);
 };
 

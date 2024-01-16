@@ -962,8 +962,6 @@ WAYLAND_EGL_LIBS
 WAYLAND_EGL_CFLAGS
 EGL_LIBS
 EGL_CFLAGS
-GLU_LIBS
-GLU_CFLAGS
 GL_LIBS
 GL_CFLAGS
 SM_LIBS
@@ -1421,8 +1419,6 @@ SM_CFLAGS
 SM_LIBS
 GL_CFLAGS
 GL_LIBS
-GLU_CFLAGS
-GLU_LIBS
 EGL_CFLAGS
 EGL_LIBS
 WAYLAND_EGL_CFLAGS
@@ -2458,8 +2454,6 @@ Some influential environment variables:
   SM_LIBS     linker flags for SM, overriding pkg-config
   GL_CFLAGS   C compiler flags for GL, overriding pkg-config
   GL_LIBS     linker flags for GL, overriding pkg-config
-  GLU_CFLAGS  C compiler flags for GLU, overriding pkg-config
-  GLU_LIBS    linker flags for GLU, overriding pkg-config
   EGL_CFLAGS  C compiler flags for EGL, overriding pkg-config
   EGL_LIBS    linker flags for EGL, overriding pkg-config
   WAYLAND_EGL_CFLAGS
@@ -22922,10 +22916,8 @@ $as_echo "$as_me: WARNING: --enable-macosx_arch is ignored when --enable-univers
 
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
-    else         OSX_ARCH_OPTS="i386"
-        if test "$wxUSE_OSX_COCOA" = 1; then
-            OSX_ARCH_OPTS="$OSX_ARCH_OPTS,x86_64"
-        fi
+    else
+                OSX_ARCH_OPTS=arm64,x86_64
     fi
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for architectures to use in universal binary" >&5
@@ -30212,7 +30204,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
     if test "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
-        OPENGL_LIBS="-lopengl32 -lglu32"
+        OPENGL_LIBS="-lopengl32"
     elif test "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenGL headers" >&5
@@ -30252,10 +30244,6 @@ $as_echo "not found" >&6; }
         ac_fn_c_check_header_compile "$LINENO" "GL/gl.h" "ac_cv_header_GL_gl_h" "
 "
 if test "x$ac_cv_header_GL_gl_h" = xyes; then :
-
-            ac_fn_c_check_header_compile "$LINENO" "GL/glu.h" "ac_cv_header_GL_glu_h" "
-"
-if test "x$ac_cv_header_GL_glu_h" = xyes; then :
 
                 found_gl=0
 
@@ -30619,369 +30607,8 @@ fi
                       fi
                     fi
 
-
-  ac_find_libraries=
-
-    fl_pkgname=`echo "GLU" | tr [:upper:] [:lower:]`
-
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
-$as_echo "$PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
-fi 6> /dev/null
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GLU" >&5
-$as_echo_n "checking for GLU... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GLU_CFLAGS"; then
-        pkg_cv_GLU_CFLAGS="$GLU_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_GLU_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GLU_LIBS"; then
-        pkg_cv_GLU_LIBS="$GLU_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_GLU_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        GLU_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
-        else
-	        GLU_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GLU_PKG_ERRORS" >&5
-
-
-      if test "x$ac_find_libraries" = "x"; then
-                if test "xgluBeginCurve" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluBeginCurve in -lGLU" >&5
-$as_echo_n "checking for gluBeginCurve in -lGLU... " >&6; }
-if ${ac_cv_lib_GLU_gluBeginCurve+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGLU  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gluBeginCurve ();
-int
-main ()
-{
-return gluBeginCurve ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GLU_gluBeginCurve=yes
-else
-  ac_cv_lib_GLU_gluBeginCurve=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLU_gluBeginCurve" >&5
-$as_echo "$ac_cv_lib_GLU_gluBeginCurve" >&6; }
-if test "x$ac_cv_lib_GLU_gluBeginCurve" = xyes; then :
-  ac_find_libraries="std"
-fi
-
-        fi
-      fi
-
-      if test "x$ac_find_libraries" = "x"; then
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking elsewhere" >&5
-$as_echo_n "checking elsewhere... " >&6; }
-
-  ac_find_libraries=
-  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libGLU.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-        if test "x$ac_find_libraries" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-        else
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-        fi
-      fi
-
-elif test $pkg_failed = untried; then
-
-      if test "x$ac_find_libraries" = "x"; then
-                if test "xgluBeginCurve" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluBeginCurve in -lGLU" >&5
-$as_echo_n "checking for gluBeginCurve in -lGLU... " >&6; }
-if ${ac_cv_lib_GLU_gluBeginCurve+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGLU  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gluBeginCurve ();
-int
-main ()
-{
-return gluBeginCurve ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GLU_gluBeginCurve=yes
-else
-  ac_cv_lib_GLU_gluBeginCurve=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLU_gluBeginCurve" >&5
-$as_echo "$ac_cv_lib_GLU_gluBeginCurve" >&6; }
-if test "x$ac_cv_lib_GLU_gluBeginCurve" = xyes; then :
-  ac_find_libraries="std"
-fi
-
-        fi
-      fi
-
-      if test "x$ac_find_libraries" = "x"; then
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking elsewhere" >&5
-$as_echo_n "checking elsewhere... " >&6; }
-
-  ac_find_libraries=
-  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libGLU.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-        if test "x$ac_find_libraries" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-        else
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-        fi
-      fi
-
-else
-	GLU_CFLAGS=$pkg_cv_GLU_CFLAGS
-	GLU_LIBS=$pkg_cv_GLU_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-            ac_find_libraries="std"
-
-                                                eval ac_find_cflags=\$GLU_CFLAGS
-      eval fl_libs=\$GLU_LIBS
-
-                  for fl_path in $fl_libs
-      do
-        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
-                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
-        fi
-      done
-
-fi
-
-                    if test "$ac_find_libraries" != "" ; then
-                      if test "$ac_find_libraries" != "std" ; then
-
-    if test "$ac_find_libraries" = "default location"; then
-    ac_path_to_link=""
-  else
-    echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
-    result=$?
-    if test $result = 0; then
-      ac_path_to_link=""
-    else
-      ac_path_to_link=" -L$ac_find_libraries"
-    fi
-  fi
-
-                        if test "$ac_path_to_link" != " -L/usr/lib" -a \
-                                "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
-                        fi
-                      fi
-
                         found_gl=1
-                        OPENGL_LIBS="-lGL -lGLU"
+                        OPENGL_LIBS="-lGL"
 
                         if test "$WXGTK3" = 1; then
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
@@ -31148,7 +30775,6 @@ $as_echo "$as_me: wxGLCanvas will not have Wayland support" >&6;}
                                 fi
                             fi
                         fi
-                    fi
                 fi
 
                 if test "$found_gl" != 1; then
@@ -31511,13 +31137,9 @@ fi
                           LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
-                      OPENGL_LIBS="-lMesaGL -lMesaGLU"
+                      OPENGL_LIBS="-lMesaGL"
                     fi
                 fi
-
-fi
-
-
 
 fi
 
@@ -43580,10 +43202,7 @@ for subdir in $SUBDIRS; do
                     makefiles="samples/$subtree/Makefile.in $makefiles"
                 done
             else
-                                                                disabled_var=DISABLED_`echo $subdir | tr '[a-z]' '[A-Z]'`
-                eval "disabled=\$$disabled_var"
-                disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
+                                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         else
                                     if test ${subdir} = "samples"; then

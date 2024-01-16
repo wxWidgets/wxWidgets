@@ -21,6 +21,8 @@
 #include "wx/textbuf.h"
 #include "wx/versioninfo.h"
 
+#include <memory>
+
 #ifdef WXMAKINGDLL_XML
     #define WXDLLIMPEXP_XML WXEXPORT
 #elif defined(WXUSINGDLL)
@@ -227,21 +229,17 @@ class WXDLLIMPEXP_XML wxXmlDocument : public wxObject
 {
 public:
     wxXmlDocument();
-    wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = wxT("UTF-8"));
-    wxXmlDocument(wxInputStream& stream,
-                  const wxString& encoding = wxT("UTF-8"));
-    virtual ~wxXmlDocument() { wxDELETE(m_docNode); }
+    wxXmlDocument(const wxString& filename);
+    wxXmlDocument(wxInputStream& stream);
+    ~wxXmlDocument() = default;
 
     wxXmlDocument(const wxXmlDocument& doc);
     wxXmlDocument& operator=(const wxXmlDocument& doc);
 
     // Parses .xml file and loads data. Returns TRUE on success, FALSE
     // otherwise.
-    virtual bool Load(const wxString& filename,
-                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
-    virtual bool Load(wxInputStream& stream,
-                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
+    bool Load(const wxString& filename, int flags = wxXMLDOC_NONE);
+    bool Load(wxInputStream& stream, int flags = wxXMLDOC_NONE);
 
     // Saves document as .xml file.
     virtual bool Save(const wxString& filename, int indentstep = 2) const;
@@ -252,7 +250,7 @@ public:
     // Returns root node of the document.
     wxXmlNode *GetRoot() const;
     // Returns the document node.
-    wxXmlNode *GetDocumentNode() const { return m_docNode; }
+    wxXmlNode *GetDocumentNode() const { return m_docNode.get(); }
 
 
     // Returns version of document (may be empty).
@@ -267,8 +265,8 @@ public:
     wxString GetEOL() const { return m_eol; }
 
     // Write-access methods:
-    wxXmlNode *DetachDocumentNode() { wxXmlNode *old=m_docNode; m_docNode=nullptr; return old; }
-    void SetDocumentNode(wxXmlNode *node) { wxDELETE(m_docNode); m_docNode = node; }
+    wxXmlNode *DetachDocumentNode() { return m_docNode.release(); }
+    void SetDocumentNode(wxXmlNode *node) { m_docNode.reset(node); }
     wxXmlNode *DetachRoot();
     void SetRoot(wxXmlNode *node);
     void SetVersion(const wxString& version) { m_version = version; }
@@ -279,13 +277,43 @@ public:
 
     static wxVersionInfo GetLibraryVersionInfo();
 
+#ifdef WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    wxXmlDocument(const wxString& filename,
+                  const wxString& WXUNUSED(encoding))
+        : wxXmlDocument(filename)
+    {
+    }
+
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    wxXmlDocument(wxInputStream& stream,
+                  const wxString& WXUNUSED(encoding))
+        : wxXmlDocument(stream)
+    {
+    }
+
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    bool Load(const wxString& filename,
+              const wxString& WXUNUSED(encoding), int flags = wxXMLDOC_NONE)
+    {
+        return Load(filename, flags);
+    }
+
+    wxDEPRECATED_MSG("Remove encoding parameter from the call")
+    bool Load(wxInputStream& stream,
+              const wxString& WXUNUSED(encoding), int flags = wxXMLDOC_NONE)
+    {
+        return Load(stream, flags);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+
 private:
     wxString   m_version;
     wxString   m_fileEncoding;
     wxXmlDoctype m_doctype;
-    wxXmlNode *m_docNode;
-    wxTextFileType m_fileType;
-    wxString m_eol;
+    std::unique_ptr<wxXmlNode> m_docNode;
+    wxTextFileType m_fileType = wxTextFileType_Unix;
+    wxString m_eol = wxS("\n");
 
     void DoCopy(const wxXmlDocument& doc);
 

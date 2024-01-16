@@ -210,9 +210,9 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
     // elsewhere, but it is also possible to call a wide-char initialization
     // function (wxInitialize(), wxEntryStart() or wxEntry() itself) directly,
     // so we need to support this case too.
-    if ( argc )
+    if ( argc || !argcIn )
     {
-        // Already initialized, nothing to do.
+        // Already initialized or nothing to do.
         return;
     }
 
@@ -488,14 +488,18 @@ static void DoCommonPostCleanup()
 
 void wxEntryCleanup()
 {
-    DoCommonPreCleanup();
-
-
     // delete the application object
     if ( wxTheApp )
     {
         wxTheApp->CleanUp();
+    }
 
+    // It's important to call this after wxApp::CleanUp() as it can log some
+    // messages that will be flushed inside DoCommonPreCleanup().
+    DoCommonPreCleanup();
+
+    if ( wxTheApp )
+    {
         // reset the global pointer to it to nullptr before destroying it as in
         // some circumstances this can result in executing the code using
         // wxTheApp and using half-destroyed object is no good

@@ -113,7 +113,7 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor)
     else
         flags = ILC_COLOR32;
 
-    bool mask = (image.GetMask() != 0);
+    bool mask = image.GetMask() != nullptr;
 
     // Curiously, even if the image doesn't have a mask,
     // we still have to use ILC_MASK or the image won't show

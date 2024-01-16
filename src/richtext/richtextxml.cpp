@@ -76,10 +76,7 @@ bool wxRichTextXMLHandler::DoLoadFile(wxRichTextBuffer *buffer, wxInputStream& s
     wxXmlDocument* xmlDoc = new wxXmlDocument;
     bool success = true;
 
-    // This is the encoding to convert to (memory encoding rather than file encoding)
-    wxString encoding(wxT("UTF-8"));
-
-    if (!xmlDoc->Load(stream, encoding))
+    if (!xmlDoc->Load(stream))
     {
         buffer->ResetAndClearCommands();
         success = false;

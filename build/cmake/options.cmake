@@ -46,8 +46,6 @@ endif()
 # support setting the C++ standard, present it an option to the user
 if(DEFINED CMAKE_CXX_STANDARD)
     set(wxCXX_STANDARD_DEFAULT ${CMAKE_CXX_STANDARD})
-elseif(APPLE)
-    set(wxCXX_STANDARD_DEFAULT 11)
 else()
     set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
 endif()

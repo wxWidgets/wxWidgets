@@ -3462,6 +3462,17 @@ public:
     */
     void SetAccessible(wxAccessible* accessible);
 
+    /**
+        Override to create a specific accessible object.
+    */
+    virtual wxAccessible* CreateAccessible();
+
+    /**
+        Returns the accessible object, calling CreateAccessible if necessary.
+        May return @NULL, in which case system-provide accessible is used.
+    */
+    wxAccessible* GetOrCreateAccessible();
+
     ///@}
 
 

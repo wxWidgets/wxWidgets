@@ -18,17 +18,20 @@
 #include "wx/artprov.h"
 #include "wx/clipbrd.h"
 #include "wx/image.h"
+#include "wx/choice.h"
 #include "wx/colordlg.h"
 #include "wx/wxhtml.h"
 #include "wx/imaglist.h"
 #include "wx/dataobj.h"
 #include "wx/dcclient.h"
 #include "wx/bmpbuttn.h"
+#include "wx/log.h"
 #include "wx/menu.h"
 #include "wx/toolbar.h"
 #include "wx/statusbr.h"
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
+#include "wx/stattext.h"
 
 #include "wx/aui/aui.h"
 #include "../sample.xpm"
@@ -98,6 +101,8 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
+        ID_NotebookNewTab,
+        ID_NotebookDeleteTab,
 
         ID_SampleItem,
 
@@ -157,6 +162,9 @@ private:
     void OnManagerFlag(wxCommandEvent& evt);
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
+
+    void OnNotebookNewTab(wxCommandEvent& evt);
+    void OnNotebookDeleteTab(wxCommandEvent& evt);
 
     void OnPaneClose(wxAuiManagerEvent& evt);
 
@@ -605,6 +613,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
+    EVT_MENU(ID_NotebookNewTab, MyFrame::OnNotebookNewTab)
+    EVT_MENU(ID_NotebookDeleteTab, MyFrame::OnNotebookDeleteTab)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -733,6 +743,9 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
+    notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
 
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
@@ -1261,7 +1274,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
         case ID_NotebookNoCloseButton:
-            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) != 0);
+            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) == 0);
             break;
         case ID_NotebookCloseButton:
             event.Check((m_notebook_style & wxAUI_NB_CLOSE_BUTTON) != 0);
@@ -1299,6 +1312,36 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
 
     }
 }
+
+
+void MyFrame::OnNotebookNewTab(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    book->AddPage(new wxTextCtrl(book, wxID_ANY, "New Tab",
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE | wxNO_BORDER),
+                  wxString::Format("Tab %zu", book->GetPageCount() + 1),
+                  true /* select */);
+}
+
+
+void MyFrame::OnNotebookDeleteTab(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    auto numPages = book->GetPageCount();
+    if ( !numPages )
+    {
+        wxLogWarning("No pages to delete.");
+        return;
+    }
+
+    book->DeletePage(numPages - 1);
+}
+
 
 void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 {

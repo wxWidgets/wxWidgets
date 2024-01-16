@@ -1334,7 +1334,7 @@
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
-// set to 1 and, under Windows, also to add opengl32.lib and glu32.lib to the
+// set to 1 and, under Windows, also to add opengl32.lib to the
 // list of libraries used to link your application when linking to wxWidgets
 // statically (although this is done implicitly for Microsoft Visual C++ users).
 //

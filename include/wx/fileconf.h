@@ -123,6 +123,24 @@ public:
       return GetLocalFile(szFile, style).GetFullPath();
   }
 
+  // Function to migrate, i.e. move, an existing local config file to another
+  // location. Old and new style determine the existing and new file paths.
+  struct MigrationResult
+  {
+      // If empty, it means the old file wasn't found and nothing was done.
+      wxString oldPath;
+
+      // The name of the new file.
+      wxString newPath;
+
+      // If empty, means the file was successfully migrated.
+      wxString error;
+  };
+  static MigrationResult
+  MigrateLocalFile(const wxString& name,
+                   int newStyle,
+                   int oldStyle = wxCONFIG_USE_HOME);
+
   // ctor & dtor
     // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or
     // wxCONFIG_USE_GLOBAL_FILE to say which files should be used.

@@ -153,6 +153,9 @@ public:
     wxClientDCImpl( wxDC *owner ) : wxWindowDCImpl( owner ) { }
     wxClientDCImpl( wxDC *owner, wxWindow *win );
 
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return true; }
+
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 

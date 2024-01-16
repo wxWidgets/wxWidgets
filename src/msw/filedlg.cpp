@@ -1023,19 +1023,17 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
 {
     // NB: all style checks are done by wxFileDialogBase::Create
+}
 
-    m_data = nullptr;
+wxFileDialog::~wxFileDialog()
+{
+    delete m_data;
 
     // Must set to zero, otherwise the wx routines won't size the window
     // the second time you call the file dialog, because it thinks it is
     // already at the requested size.. (when centering)
     gs_rectDialog.x =
     gs_rectDialog.y = 0;
-}
-
-wxFileDialog::~wxFileDialog()
-{
-    delete m_data;
 }
 
 wxFileDialogMSWData& wxFileDialog::MSWData()

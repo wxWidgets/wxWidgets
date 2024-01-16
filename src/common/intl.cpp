@@ -1248,7 +1248,7 @@ wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
-    CFStringRef cfstr = 0;
+    CFStringRef cfstr = nullptr;
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:

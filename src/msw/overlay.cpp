@@ -103,7 +103,7 @@ void wxOverlayImpl::Init(wxDC* dc, int , int , int , int )
     m_rect.SetSize(m_window->GetClientSize());
     m_rect.SetPosition(m_window->GetScreenPosition());
 
-    m_bitmap.CreateWithDIPSize(m_rect.GetSize(), m_window->GetDPIScaleFactor());
+    m_bitmap.CreateWithLogicalSize(m_rect.GetSize(), m_window->GetDPIScaleFactor());
 
     m_overlayWindow = wxCreateOverlayWindow(m_rect);
 }

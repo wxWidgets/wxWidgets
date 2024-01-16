@@ -31,6 +31,7 @@
 #include "wx/uilocale.h"
 
 #include <limits>
+#include <array>
 
 // Drawing ARGB on standard DC is supported by OSX and GTK3
 #if defined(__WXOSX__) || defined(__WXGTK3__)
@@ -334,7 +335,12 @@ bool wxPGSpinCtrlEditor::OnEvent(wxPropertyGrid* propgrid, wxPGProperty* propert
             stepScale *= spins;
 
             wxVariant v = prop->AddSpinStepValue(stepScale);
+#if WXWIN_COMPATIBILITY_3_2
+            // Special implementation with check if user-overriden obsolete function is still in use
+            SetControlStringValue(prop, propgrid->GetEditorControl(), prop->ValueToStringWithCheck(v));
+#else
             SetControlStringValue(prop, propgrid->GetEditorControl(), prop->ValueToString(v));
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
             return true;
         }
     }
@@ -485,35 +491,56 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
 // NB: Do not use wxS here since unlike wxT it doesn't translate to wxChar*
 //
 
-static const wxChar* const gs_fp_es_family_labels[] = {
+static constexpr std::array<const wxChar*, 8+1> gs_fp_es_family_labels
+{
     wxT("Default"), wxT("Decorative"),
     wxT("Roman"), wxT("Script"),
     wxT("Swiss"), wxT("Modern"),
     wxT("Teletype"), wxT("Unknown"),
-    (const wxChar*) nullptr
+    nullptr
 };
 
-static const long gs_fp_es_family_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_fp_es_family_labels[gs_fp_es_family_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >+ C++ 14
+
+static constexpr std::array<long, 8> gs_fp_es_family_values
+{
     wxFONTFAMILY_DEFAULT, wxFONTFAMILY_DECORATIVE,
     wxFONTFAMILY_ROMAN, wxFONTFAMILY_SCRIPT,
     wxFONTFAMILY_SWISS, wxFONTFAMILY_MODERN,
     wxFONTFAMILY_TELETYPE, wxFONTFAMILY_UNKNOWN
 };
 
-static const wxChar* const gs_fp_es_style_labels[] = {
+static_assert(gs_fp_es_family_values.size() == gs_fp_es_family_labels.size() - 1,
+    "Values table has to have one item less than labels table");
+
+static constexpr std::array<const wxChar*, 3+1> gs_fp_es_style_labels
+{
     wxT("Normal"),
     wxT("Slant"),
     wxT("Italic"),
-    (const wxChar*) nullptr
+    nullptr
 };
 
-static const long gs_fp_es_style_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_fp_es_style_labels[gs_fp_es_style_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long,3> gs_fp_es_style_values
+{
     wxFONTSTYLE_NORMAL,
     wxFONTSTYLE_SLANT,
     wxFONTSTYLE_ITALIC
 };
 
-static const wxChar* const gs_fp_es_weight_labels[] = {
+static_assert(gs_fp_es_style_values.size() == gs_fp_es_style_labels.size() - 1,
+    "Values table has to have one item less than labels table");
+
+static constexpr std::array<const wxChar*, 10+1> gs_fp_es_weight_labels
+{
     wxT("Thin"),
     wxT("ExtraLight"),
     wxT("Light"),
@@ -524,10 +551,16 @@ static const wxChar* const gs_fp_es_weight_labels[] = {
     wxT("ExtraBold"),
     wxT("Heavy"),
     wxT("ExtraHeavy"),
-    (const wxChar*) nullptr
+    nullptr
 };
 
-static const long gs_fp_es_weight_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_fp_es_weight_labels[gs_fp_es_weight_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 10> gs_fp_es_weight_values
+{
     wxFONTWEIGHT_THIN,
     wxFONTWEIGHT_EXTRALIGHT,
     wxFONTWEIGHT_LIGHT,
@@ -539,6 +572,9 @@ static const long gs_fp_es_weight_values[] = {
     wxFONTWEIGHT_HEAVY,
     wxFONTWEIGHT_EXTRAHEAVY
 };
+
+static_assert(gs_fp_es_weight_values.size() == gs_fp_es_weight_labels.size() - 1,
+    "Values table has to have one item less than labels table");
 
 // Class body is in advprops.h
 
@@ -579,18 +615,18 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
     wxPGProperty* p = new wxEnumProperty(_("Face Name"), wxS("Face Name"),
                                          *wxPGGlobalVars->m_fontFamilyChoices);
 
-    p->SetValueFromString(faceName, wxPG_FULL_VALUE);
+    p->SetValueFromString(faceName, wxPGPropValFormatFlags::FullValue);
 
     AddPrivateChild( p );
 
     /* TRANSLATORS: Label of font style */
     AddPrivateChild( new wxEnumProperty(_("Style"), wxS("Style"),
-                     gs_fp_es_style_labels,gs_fp_es_style_values,
+                     gs_fp_es_style_labels.data(), gs_fp_es_style_values.data(),
                      font.GetStyle()) );
 
     /* TRANSLATORS: Label of font weight */
     AddPrivateChild( new wxEnumProperty(_("Weight"), wxS("Weight"),
-                     gs_fp_es_weight_labels,gs_fp_es_weight_values,
+                     gs_fp_es_weight_labels.data(), gs_fp_es_weight_values.data(),
                      font.GetWeight()) );
 
     /* TRANSLATORS: Label of underlined font */
@@ -599,7 +635,7 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     /* TRANSLATORS: Label of font family */
     AddPrivateChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
-                     gs_fp_es_family_labels,gs_fp_es_family_values,
+                     gs_fp_es_family_labels.data(), gs_fp_es_family_values.data(),
                      font.GetFamily()) );
 }
 
@@ -615,9 +651,9 @@ void wxFontProperty::OnSetValue()
 }
 
 wxString wxFontProperty::ValueToString( wxVariant& value,
-                                        int argFlags ) const
+                                        wxPGPropValFormatFlags flags ) const
 {
-    return wxEditorDialogProperty::ValueToString(value, argFlags);
+    return wxEditorDialogProperty::ValueToString(value, flags);
 }
 
 bool wxFontProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
@@ -652,7 +688,7 @@ void wxFontProperty::RefreshChildren()
     wxFont font;
     font << m_value;
     Item(0)->SetValue( (long)font.GetPointSize() );
-    Item(1)->SetValueFromString( font.GetFaceName(), wxPG_FULL_VALUE );
+    Item(1)->SetValueFromString( font.GetFaceName(), wxPGPropValFormatFlags::FullValue );
     Item(2)->SetValue( (long)font.GetStyle() );
     Item(3)->SetValue( (long)font.GetWeight() );
     Item(4)->SetValue( font.GetUnderlined() );
@@ -758,17 +794,10 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 // wxSystemColourProperty
 // -----------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_3_2
-// wxEnumProperty based classes cannot use wxPG_PROP_RESERVED_1
-wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_HIDE_CUSTOM_COLOUR is intended for internal use.")
-constexpr wxPGPropertyFlags wxPG_PROP_HIDE_CUSTOM_COLOUR = wxPG_PROP_RESERVED_2;
-wxDEPRECATED_BUT_USED_INTERNALLY_MSG("wxPG_PROP_COLOUR_HAS_ALPHA is intended for internal use.")
-constexpr wxPGPropertyFlags wxPG_PROP_COLOUR_HAS_ALPHA = wxPG_PROP_RESERVED_3;
-#endif // if WXWIN_COMPATIBILITY_3_2
-
 #include "wx/colordlg.h"
 
-static const char* const gs_cp_es_syscolour_labels[] = {
+static constexpr std::array<const char*, 25+1> gs_cp_es_syscolour_labels
+{
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("AppWorkspace"),
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveBorder"),
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveCaption"),
@@ -797,7 +826,13 @@ static const char* const gs_cp_es_syscolour_labels[] = {
     nullptr
 };
 
-static const long gs_cp_es_syscolour_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_cp_es_syscolour_labels[gs_cp_es_syscolour_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 25> gs_cp_es_syscolour_values
+{
     wxSYS_COLOUR_APPWORKSPACE,
     wxSYS_COLOUR_ACTIVEBORDER,
     wxSYS_COLOUR_ACTIVECAPTION,
@@ -825,6 +860,8 @@ static const long gs_cp_es_syscolour_values[] = {
     wxPG_COLOUR_CUSTOM
 };
 
+static_assert(gs_cp_es_syscolour_values.size() == gs_cp_es_syscolour_labels.size() - 1,
+    "Colour values table has to have one item less than colour labels table");
 
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
@@ -846,7 +883,7 @@ void wxSystemColourProperty::Init( int type, const wxColour& colour )
 
     cpv.Init(type, colour.IsOk() ? colour : *wxWHITE);
 
-    m_flags |= wxPG_PROP_STATIC_CHOICES; // Colour selection cannot be changed.
+    m_flags |= wxPGPropertyFlags_StaticChoices; // Colour selection cannot be changed.
 
     m_value = WXVARIANT(cpv);
 
@@ -861,8 +898,8 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
     const wxColourPropertyValue& value )
     : wxEnumProperty( label,
                       name,
-                      gs_cp_es_syscolour_labels,
-                      gs_cp_es_syscolour_values,
+                      gs_cp_es_syscolour_labels.data(),
+                      gs_cp_es_syscolour_values.data(),
                       &gs_wxSystemColourProperty_choicesCache )
 {
         Init( value.m_type, value.m_colour );
@@ -1024,7 +1061,7 @@ void wxSystemColourProperty::OnSetValue()
         }
 
         if ( cpv.m_type < wxPG_COLOUR_WEB_BASE ||
-             (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+             !!(m_flags & wxPGPropertyFlags_HideCustomColour) )
         {
             ind = GetIndexForValue(cpv.m_type);
         }
@@ -1049,7 +1086,7 @@ void wxSystemColourProperty::OnSetValue()
         ind = ColToInd(col);
 
         if ( ind == wxNOT_FOUND &&
-             !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+             !(m_flags & wxPGPropertyFlags_HideCustomColour) )
             ind = GetCustomColourIndex();
     }
 
@@ -1062,15 +1099,35 @@ wxColour wxSystemColourProperty::GetColour( int index ) const
     return wxSystemSettings::GetColour( (wxSystemColour)index );
 }
 
+#if WXWIN_COMPATIBILITY_3_2
+// By call to obsolete function we want to check if user-overriden function is still in use
+wxString wxSystemColourProperty::ColourToStringWithCheck(const wxColour& col, int index,
+                                                         wxPGPropValFormatFlags flags) const
+{
+    m_oldColourToStringCalled = false;
+    wxString res = ColourToString(col, index, static_cast<int>(flags));
+    if ( m_oldColourToStringCalled )
+    {
+        // Our own function was called - this implies that call was forwarded to the new overriding
+        // function and there is no need to call it explicitly.
+    }
+    else
+    {   // User-overriden obsolete function was called
+        wxFAIL_MSG(wxString::Format("in %s use ColourToString with 'flags' argument as wxPGPropValFormatFlags", GetClassInfo()->GetClassName()));
+    }
+    return res;
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
 wxString wxSystemColourProperty::ColourToString( const wxColour& col,
                                                  int index,
-                                                 int argFlags ) const
+                                                 wxPGPropValFormatFlags flags ) const
 {
 
     if ( index == wxNOT_FOUND )
     {
 
-        if ( (argFlags & wxPG_FULL_VALUE) || (m_flags & wxPG_PROP_COLOUR_HAS_ALPHA) )
+        if ( !!(flags & wxPGPropValFormatFlags::FullValue) || !!(m_flags & wxPGPropertyFlags_ColourHasAlpha) )
         {
             return wxString::Format(wxS("(%i,%i,%i,%i)"),
                                     (int)col.Red(),
@@ -1093,22 +1150,22 @@ wxString wxSystemColourProperty::ColourToString( const wxColour& col,
 }
 
 wxString wxSystemColourProperty::ValueToString( wxVariant& value,
-                                                int argFlags ) const
+                                                wxPGPropValFormatFlags flags ) const
 {
     wxColourPropertyValue val = GetVal(&value);
 
     int index;
 
-    if ( argFlags & wxPG_VALUE_IS_CURRENT )
+    if ( !!(flags & wxPGPropValFormatFlags::ValueIsCurrent) )
     {
-        // GetIndex() only works reliably if wxPG_VALUE_IS_CURRENT flag is set,
+        // GetIndex() only works reliably if wxPGPropValFormatFlags::ValueIsCurrent flag is set,
         // but we should use it whenever possible.
         index = GetIndex();
 
         // If custom colour was selected, use invalid index, so that
         // ColourToString() will return properly formatted colour text.
         if ( index == GetCustomColourIndex() &&
-             !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+             !(m_flags & wxPGPropertyFlags_HideCustomColour) )
             index = wxNOT_FOUND;
     }
     else
@@ -1116,7 +1173,12 @@ wxString wxSystemColourProperty::ValueToString( wxVariant& value,
         index = m_choices.Index(val.m_type);
     }
 
-    return ColourToString(val.m_colour, index, argFlags);
+#if WXWIN_COMPATIBILITY_3_2
+    // Special implementation with check if user-overriden obsolete function is still in use
+    return ColourToStringWithCheck(val.m_colour, index, flags);
+#else
+    return ColourToString(val.m_colour, index, flags);
+#endif // WXWIN_COMPATIBILITY_3_2 | !WXWIN_COMPATIBILITY_3_2
 }
 
 
@@ -1150,7 +1212,7 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 
     wxColourData data;
     data.SetChooseFull(true);
-    data.SetChooseAlpha((m_flags & wxPG_PROP_COLOUR_HAS_ALPHA) != 0);
+    data.SetChooseAlpha(!!(m_flags & wxPGPropertyFlags_ColourHasAlpha));
     data.SetColour(val.m_colour);
     for ( int i = 0; i < wxColourData::NUM_CUSTOM; i++ )
     {
@@ -1175,14 +1237,14 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 }
 
 
-bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int argFlags ) const
+bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, wxPGPropValFormatFlags flags ) const
 {
     int index = number;
     const int type = m_choices.GetValue(index);
 
     if ( type == wxPG_COLOUR_CUSTOM )
     {
-         if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
+         if ( !(flags & wxPGPropValFormatFlags::PropertySpecific) )
             return QueryColourFromUser(variant);
 
          // Call from event handler.
@@ -1223,7 +1285,7 @@ bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
             int index = cb->GetSelection();
 
             if ( index == GetCustomColourIndex() &&
-                    !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+                    !(m_flags & wxPGPropertyFlags_HideCustomColour) )
                 askColour = true;
         }
     }
@@ -1249,7 +1311,7 @@ public:
 
         dc.SetPen(*wxBLACK_PEN);
         if ( item >= 0 &&
-             ( item < (int)(GetCustomColourIndex) || (prop->HasFlag(wxPG_PROP_HIDE_CUSTOM_COLOUR)))
+             ( item < (int)(GetCustomColourIndex) || (prop->HasFlag(wxPGPropertyFlags_HideCustomColour)))
            )
         {
             int colInd;
@@ -1297,7 +1359,7 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
     if ( paintdata.m_choiceItem >= 0 &&
          paintdata.m_choiceItem < (int)m_choices.GetCount() &&
          (paintdata.m_choiceItem != GetCustomColourIndex() ||
-          m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+          !!(m_flags & wxPGPropertyFlags_HideCustomColour)) )
     {
         int colInd = m_choices[paintdata.m_choiceItem].GetValue();
         col = GetColour( colInd );
@@ -1349,7 +1411,7 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
 }
 
 
-bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& text, int argFlags ) const
+bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& text, wxPGPropValFormatFlags flags ) const
 {
     const int custIndex = GetCustomColourIndex();
     wxString custColName;
@@ -1396,10 +1458,10 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
     }
 
     if ( !conversionSuccess && m_choices.GetCount() &&
-         !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) &&
+         !(m_flags & wxPGPropertyFlags_HideCustomColour) &&
          isCustomColour )
     {
-        if ( !(argFlags & wxPG_EDITABLE_VALUE ))
+        if ( !(flags & wxPGPropValFormatFlags::EditableValue ))
         {
             // This really should not occur...
             // wxASSERT(false);
@@ -1408,7 +1470,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
 
         if ( !QueryColourFromUser(value) )
         {
-            if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
+            if ( !(flags & wxPGPropValFormatFlags::PropertySpecific) )
                 return false;
             // If query for value comes from the event handler
             // use current pending value to be processed later on in OnEvent().
@@ -1425,7 +1487,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
         {
             // Try predefined colour first
             int index;
-            bool res = ValueFromString_(value, &index, colStr, argFlags);
+            bool res = ValueFromString_(value, &index, colStr, flags);
             if ( res && index >= 0 )
             {
                 val.m_type = index;
@@ -1463,24 +1525,24 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
     {
         bool allow = value.GetBool();
 
-        if ( allow && (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+        if ( allow && !!(m_flags & wxPGPropertyFlags_HideCustomColour) )
         {
             // Show custom choice
             /* TRANSLATORS: Custom colour choice entry */
             m_choices.Add(_("Custom"), wxPG_COLOUR_CUSTOM);
-            m_flags &= ~(wxPG_PROP_HIDE_CUSTOM_COLOUR);
+            m_flags &= ~(wxPGPropertyFlags_HideCustomColour);
         }
-        else if ( !allow && !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+        else if ( !allow && !(m_flags & wxPGPropertyFlags_HideCustomColour) )
         {
             // Hide custom choice
             m_choices.RemoveAt(GetCustomColourIndex());
-            m_flags |= wxPG_PROP_HIDE_CUSTOM_COLOUR;
+            m_flags |= wxPGPropertyFlags_HideCustomColour;
         }
         return true;
     }
     else if ( name == wxPG_COLOUR_HAS_ALPHA )
     {
-        ChangeFlag(wxPG_PROP_COLOUR_HAS_ALPHA, value.GetBool());
+        ChangeFlag(wxPGPropertyFlags_ColourHasAlpha, value.GetBool());
         return true;
     }
     return wxEnumProperty::DoSetAttribute(name, value);
@@ -1491,7 +1553,8 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 // wxColourProperty
 // -----------------------------------------------------------------------
 
-static const char* const gs_cp_es_normcolour_labels[] = {
+static constexpr std::array<const char*, 19+1> gs_cp_es_normcolour_labels
+{
     wxTRANSLATE("Black"),
     wxTRANSLATE("Maroon"),
     wxTRANSLATE("Navy"),
@@ -1514,7 +1577,13 @@ static const char* const gs_cp_es_normcolour_labels[] = {
     nullptr
 };
 
-static const long gs_cp_es_normcolour_values[] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_cp_es_normcolour_labels[gs_cp_es_normcolour_labels.size() - 1] == nullptr,
+              "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 19> gs_cp_es_normcolour_values
+{
     0,
     1,
     2,
@@ -1536,7 +1605,8 @@ static const long gs_cp_es_normcolour_values[] = {
     wxPG_COLOUR_CUSTOM
 };
 
-static const unsigned long gs_cp_es_normcolour_colours[] = {
+static constexpr std::array<unsigned long, 19> gs_cp_es_normcolour_colours
+{
     wxPG_COLOUR(0,0,0),
     wxPG_COLOUR(128,0,0),
     wxPG_COLOUR(0,0,128),
@@ -1558,6 +1628,11 @@ static const unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0)
 };
 
+static_assert(gs_cp_es_normcolour_values.size() == gs_cp_es_normcolour_labels.size() - 1,
+    "Colour values table has to have one item less than colour labels table");
+static_assert(gs_cp_es_normcolour_colours.size() == gs_cp_es_normcolour_values.size(),
+    "Colours table and colour values table have to have the same size");
+
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxColourProperty, wxSystemColourProperty,
                               TextCtrlAndButton)
 
@@ -1566,16 +1641,16 @@ static wxPGChoices gs_wxColourProperty_choicesCache;
 wxColourProperty::wxColourProperty( const wxString& label,
                       const wxString& name,
                       const wxColour& value )
-    : wxSystemColourProperty(label, name, gs_cp_es_normcolour_labels,
-                             gs_cp_es_normcolour_values,
+    : wxSystemColourProperty(label, name, gs_cp_es_normcolour_labels.data(),
+                             gs_cp_es_normcolour_values.data(),
                              &gs_wxColourProperty_choicesCache, value )
 {
     wxASSERT_MSG( wxTheColourDatabase, wxS("No colour database") );
     if ( wxTheColourDatabase )
     {
         // Extend colour database with PG-specific colours.
-        const char* const* colourLabels = gs_cp_es_normcolour_labels;
-        for ( int i = 0; *colourLabels; colourLabels++, i++ )
+        auto colourLabels = gs_cp_es_normcolour_labels.begin();
+        for ( int i = 0; *colourLabels; ++colourLabels, i++ )
         {
             // Don't take into account user-defined custom colour.
             if (gs_cp_es_normcolour_values[i] != wxPG_COLOUR_CUSTOM)
@@ -1594,7 +1669,7 @@ wxColourProperty::wxColourProperty( const wxString& label,
 
     Init( value );
 
-    m_flags |= wxPG_PROP_TRANSLATE_CUSTOM;
+    m_flags |= wxPGPropertyFlags_TranslateCustom;
 }
 
 void wxColourProperty::Init( wxColour colour )
@@ -1609,15 +1684,15 @@ void wxColourProperty::Init( wxColour colour )
 }
 
 wxString wxColourProperty::ValueToString( wxVariant& value,
-                                          int argFlags ) const
+                                          wxPGPropValFormatFlags flags ) const
 {
     const wxPGEditor* editor = GetEditorClass();
     if ( editor != wxPGEditor_Choice &&
          editor != wxPGEditor_ChoiceAndButton &&
          editor != wxPGEditor_ComboBox )
-        argFlags |= wxPG_PROPERTY_SPECIFIC;
+        flags |= wxPGPropValFormatFlags::PropertySpecific;
 
-    return wxSystemColourProperty::ValueToString(value, argFlags);
+    return wxSystemColourProperty::ValueToString(value, flags);
 }
 
 wxColour wxColourProperty::GetColour( int index ) const
@@ -1638,9 +1713,8 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 #define wxPG_CURSOR_IMAGE_WIDTH     32
 #endif
 
-#define NUM_CURSORS 28
-
-static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
+static constexpr std::array<const char*, 28+1> gs_cp_es_syscursors_labels
+{
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Default"),
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Arrow"),
     wxTRANSLATE_IN_CONTEXT("system cursor name", "Right Arrow"),
@@ -1672,7 +1746,13 @@ static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
     nullptr
 };
 
-static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
+#if wxCHECK_CXX_STD(201402L) // [] is constexpr since C++14
+static_assert(gs_cp_es_syscursors_labels[gs_cp_es_syscursors_labels.size() - 1] == nullptr,
+    "nullptr has to mark the end of table");
+#endif // >= C++ 14
+
+static constexpr std::array<long, 28> gs_cp_es_syscursors_values
+{
     wxCURSOR_NONE,
     wxCURSOR_ARROW,
     wxCURSOR_RIGHT_ARROW,
@@ -1703,6 +1783,9 @@ static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
     wxCURSOR_ARROWWAIT
 };
 
+static_assert(gs_cp_es_syscursors_values.size() == gs_cp_es_syscursors_labels.size() - 1,
+    "Values table has to have one item less than labels table");
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxCursorProperty, wxEnumProperty);
 
 static wxPGChoices gs_wxCursorProperty_choicesCache;
@@ -1711,24 +1794,24 @@ wxCursorProperty::wxCursorProperty( const wxString& label, const wxString& name,
     int value )
     : wxEnumProperty( label,
                       name,
-                      gs_cp_es_syscursors_labels,
-                      gs_cp_es_syscursors_values,
+                      gs_cp_es_syscursors_labels.data(),
+                      gs_cp_es_syscursors_values.data(),
                       &gs_wxCursorProperty_choicesCache,
                       value )
 {
-    m_flags |= wxPG_PROP_STATIC_CHOICES; // Cursor selection cannot be changed.
+    m_flags |= wxPGPropertyFlags_StaticChoices; // Cursor selection cannot be changed.
 }
 
-wxString wxCursorProperty::ValueToString(wxVariant& value, int argFlags) const
+wxString wxCursorProperty::ValueToString(wxVariant& value, wxPGPropValFormatFlags flags) const
 {
-    return wxGetTranslation(wxEnumProperty::ValueToString(value, argFlags),
+    return wxGetTranslation(wxEnumProperty::ValueToString(value, flags),
                             wxString(), "system cursor name");
 }
 
 wxSize wxCursorProperty::OnMeasureImage( int item ) const
 {
 #if wxPG_CAN_DRAW_CURSOR
-    if ( item != -1 && item < NUM_CURSORS )
+    if ( item != -1 && item < static_cast<int>(gs_cp_es_syscursors_values.size()) )
         return wxSize(wxPG_CURSOR_IMAGE_WIDTH,wxPG_CURSOR_IMAGE_WIDTH);
 #else
     wxUnusedVar(item);
@@ -1749,7 +1832,7 @@ void wxCursorProperty::OnCustomPaint( wxDC& dc,
     {
         dc.DrawRectangle( rect );
 
-        if ( paintdata.m_choiceItem < NUM_CURSORS )
+        if ( paintdata.m_choiceItem < static_cast<int>(gs_cp_es_syscursors_values.size()) )
         {
             wxStockCursor cursorIndex =
                 (wxStockCursor) gs_cp_es_syscursors_values[paintdata.m_choiceItem];
@@ -1953,10 +2036,10 @@ void wxMultiChoiceProperty::OnSetValue()
 }
 
 wxString wxMultiChoiceProperty::ValueToString( wxVariant& value,
-                                               int argFlags ) const
+                                               wxPGPropValFormatFlags flags ) const
 {
     // If possible, use cached string
-    if ( argFlags & wxPG_VALUE_IS_CURRENT )
+    if ( !!(flags & wxPGPropValFormatFlags::ValueIsCurrent) )
         return m_display;
 
     return GenerateValueAsString(value);
@@ -2066,7 +2149,7 @@ bool wxMultiChoiceProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     return false;
 }
 
-bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
+bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& text, wxPGPropValFormatFlags ) const
 {
     wxArrayString arr;
 
@@ -2143,7 +2226,7 @@ void wxDateProperty::OnSetValue()
 }
 
 bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
-                                    int WXUNUSED(argFlags) ) const
+                                    wxPGPropValFormatFlags WXUNUSED(flags) ) const
 {
     wxDateTime dt;
 
@@ -2161,7 +2244,7 @@ bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
 }
 
 wxString wxDateProperty::ValueToString( wxVariant& value,
-                                        int argFlags ) const
+                                        wxPGPropValFormatFlags flags ) const
 {
     wxDateTime dateTime = value.GetDateTime();
 
@@ -2180,7 +2263,7 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
 
     wxString format;
     if ( !m_format.empty() &&
-         !(argFlags & wxPG_FULL_VALUE) )
+         !(flags & wxPGPropValFormatFlags::FullValue) )
             format = m_format;
 
     // Determine default from locale

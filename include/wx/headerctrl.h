@@ -343,6 +343,9 @@ protected:
     virtual const wxHeaderColumn& GetColumn(unsigned int idx) const override;
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) override;
 
+    virtual void UpdateColumnVisibility(unsigned int idx, bool show) override;
+    virtual void UpdateColumnsOrder(const wxArrayInt& order) override;
+
     // and define another one to be overridden in the derived classes: it
     // should return the best width for the given column contents or -1 if not
     // implemented, we use it to implement UpdateColumnWidthToFit()

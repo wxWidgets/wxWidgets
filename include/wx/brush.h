@@ -102,6 +102,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxBrushList*)   wxTheBrushList;
 // to compile without warnings which it would otherwise provoke from some
 // compilers as it compares elements of different enums
 
+#if WXWIN_COMPATIBILITY_3_2
+
 wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants only")
 inline bool operator==(wxBrushStyle s, wxDeprecatedGUIConstants t)
 {
@@ -113,5 +115,7 @@ inline bool operator!=(wxBrushStyle s, wxDeprecatedGUIConstants t)
 {
     return static_cast<int>(s) != static_cast<int>(t);
 }
+
+#endif // WXWIN_COMPATIBILITY_3_2
 
 #endif // _WX_BRUSH_H_BASE_

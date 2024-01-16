@@ -29,35 +29,23 @@ wxTopLevelWindowQt::wxTopLevelWindowQt(wxWindow *parent,
 }
 
 bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
-    const wxString &title, const wxPoint &pos, const wxSize &sizeOrig,
+    const wxString &title, const wxPoint &pos, const wxSize &size,
     long style, const wxString &name )
 {
-    wxSize size(sizeOrig);
-    if ( !size.IsFullySpecified() )
-        size.SetDefaults( GetDefaultSize() );
-
     wxTopLevelWindows.Append( this );
 
-    if (!CreateBase( parent, winId, pos, size, style, wxDefaultValidator, name ))
+    if (!wxWindow::Create( parent, winId, pos, size, style, name ))
     {
         wxFAIL_MSG( wxT("wxTopLevelWindowNative creation failed") );
         return false;
     }
 
-    SetTitle( title );
-    SetWindowStyleFlag( style );
-
-    if (pos != wxDefaultPosition)
-        m_qtWindow->move( pos.x, pos.y );
-
-    m_qtWindow->resize( wxQtConvertSize( size ) );
-
     // Prevent automatic deletion of Qt main window on close
     // (this should be the default, but left just fo enforce it)
     GetHandle()->setAttribute(Qt::WA_DeleteOnClose, false);
 
-    // not calling to wxWindow::Create, so do the rest of initialization:
-    if (parent) parent->AddChild( this );
+    SetTitle( title );
+    SetWindowStyleFlag( style );
 
     return true;
 }

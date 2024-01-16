@@ -341,6 +341,19 @@ protected:
 #endif // WXWIN_COMPATIBILITY_3_0
 };
 
+// Special kind of trivial formatter which simply uses the message unchanged.
+class wxLogFormatterNone : public wxLogFormatter
+{
+public:
+    wxLogFormatterNone() = default;
+
+    virtual wxString Format(wxLogLevel WXUNUSED(level),
+                            const wxString& msg,
+                            const wxLogRecordInfo& WXUNUSED(info)) const override
+    {
+        return msg;
+    }
+};
 
 // ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
@@ -665,6 +678,10 @@ public:
     // get the string contents with all messages logged
     const wxString& GetBuffer() const { return m_str; }
 
+    // clear all the messages, this, in particular, prevents them from being
+    // flushed
+    void Clear() { m_str.clear(); }
+
     // show the buffer contents to the user in the best possible way (this uses
     // wxMessageOutputMessageBox) and clear it
     virtual void Flush() override;
@@ -746,6 +763,41 @@ public:
 
 private:
     bool m_flagOld; // the previous value of the wxLog::ms_doLog
+};
+
+// ----------------------------------------------------------------------------
+// Collect all logged messages into a (multiline) string.
+// ----------------------------------------------------------------------------
+
+// This class is supposed to be used as a local variable and collects, without
+// showing them, all the messages logged during its lifetime.
+class wxLogCollector
+{
+public:
+    wxLogCollector()
+        : m_logOrig{wxLog::SetActiveTarget(&m_logBuf)}
+    {
+        delete m_logBuf.SetFormatter(new wxLogFormatterNone{});
+    }
+
+    ~wxLogCollector()
+    {
+        // Don't flush the messages in the buffer.
+        m_logBuf.Clear();
+
+        wxLog::SetActiveTarget(m_logOrig);
+    }
+
+    const wxString& GetMessages() const
+    {
+        return m_logBuf.GetBuffer();
+    }
+
+private:
+    wxLogBuffer m_logBuf;
+    wxLog* const m_logOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxLogCollector);
 };
 
 // ----------------------------------------------------------------------------

@@ -25,6 +25,8 @@ public:
           m_frame(frame)
     {
     }
+    MenuEventLogger(const MenuEventLogger&) = delete;
+    MenuEventLogger& operator=(const MenuEventLogger&) = delete;
 
 protected:
     void LogMenuOpenClose(wxMenuEvent& event, const char *action)
@@ -52,8 +54,6 @@ protected:
 
     const wxString m_label;
     wxFrame* const m_frame;
-
-    wxDECLARE_NO_COPY_CLASS(MenuEventLogger);
 };
 
 class MyCanvas : public wxScrolledWindow,
@@ -155,6 +155,8 @@ private:
     {
     public:
         EventHandler(unsigned numChild) : m_numChild(numChild) { }
+        EventHandler(const EventHandler&) = delete;
+        EventHandler &operator=(const EventHandler&) = delete;
 
     private:
         void OnRefresh(wxCommandEvent& event)
@@ -166,8 +168,6 @@ private:
         const unsigned m_numChild;
 
         wxDECLARE_EVENT_TABLE();
-
-        wxDECLARE_NO_COPY_CLASS(EventHandler);
     };
 
     wxDECLARE_EVENT_TABLE();

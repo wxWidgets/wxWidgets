@@ -51,6 +51,7 @@ public:
     enum Dir
     {
         Dir_Cache,
+        Dir_Config,
         Dir_Documents,
         Dir_Desktop,
         Dir_Downloads,
@@ -184,6 +185,11 @@ public:
 
     bool UsesAppInfo(int info) const { return (m_usedAppInfo & info) != 0; }
 
+    // append application information determined by m_usedAppInfo to dir
+    wxNODISCARD
+    wxString AppendAppInfo(const wxString& dir) const;
+
+
     void SetFileLayout(FileLayout layout)
     {
         m_fileLayout = layout;
@@ -202,10 +208,6 @@ protected:
     // append the path component, with a leading path separator if a
     // path separator or dot (.) is not already at the end of dir
     static wxString AppendPathComponent(const wxString& dir, const wxString& component);
-
-    // append application information determined by m_usedAppInfo to dir
-    wxString AppendAppInfo(const wxString& dir) const;
-
 
     // combination of AppInfo_XXX flags used by AppendAppInfo()
     int m_usedAppInfo;

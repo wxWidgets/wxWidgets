@@ -200,38 +200,43 @@ public:
     /**
         @name Miscellaneous operators
 
-        Note that these operators are documented as class members
-        (to make them easier to find) but, as their prototype shows,
-        they are implemented as global operators; note that this is
-        transparent to the user but it helps to understand why the
-        following functions are documented to take the wxPoint they
-        operate on as an explicit argument.
+        Note that binary operators are defined as friend functions inside this
+        class, making them accessible via argument-dependent lookup, but hidden
+        otherwise.
     */
     ///@{
     wxRealPoint& operator=(const wxRealPoint& pt);
 
-    bool operator ==(const wxRealPoint& p1, const wxRealPoint& p2);
-    bool operator !=(const wxRealPoint& p1, const wxRealPoint& p2);
+    friend bool operator ==(const wxRealPoint& p1, const wxRealPoint& p2);
+    friend bool operator !=(const wxRealPoint& p1, const wxRealPoint& p2);
 
-    wxRealPoint operator +(const wxRealPoint& p1, const wxRealPoint& p2);
-    wxRealPoint operator -(const wxRealPoint& p1, const wxRealPoint& p2);
+    friend wxRealPoint operator +(const wxRealPoint& p1, const wxRealPoint& p2);
+    friend wxRealPoint operator -(const wxRealPoint& p1, const wxRealPoint& p2);
 
     wxRealPoint& operator +=(const wxRealPoint& pt);
     wxRealPoint& operator -=(const wxRealPoint& pt);
 
-    wxRealPoint operator +(const wxRealPoint& pt, const wxSize& sz);
-    wxRealPoint operator -(const wxRealPoint& pt, const wxSize& sz);
-    wxRealPoint operator +(const wxSize& sz, const wxRealPoint& pt);
-    wxRealPoint operator -(const wxSize& sz, const wxRealPoint& pt);
+    friend wxRealPoint operator +(const wxRealPoint& pt, const wxSize& sz);
+    friend wxRealPoint operator -(const wxRealPoint& pt, const wxSize& sz);
+    friend wxRealPoint operator +(const wxSize& sz, const wxRealPoint& pt);
+    friend wxRealPoint operator -(const wxSize& sz, const wxRealPoint& pt);
 
     wxRealPoint& operator +=(const wxSize& sz);
     wxRealPoint& operator -=(const wxSize& sz);
 
-    wxSize operator /(const wxRealPoint& sz, int factor);
-    wxSize operator *(const wxRealPoint& sz, int factor);
-    wxSize operator *(int factor, const wxSize& sz);
-    wxSize& operator /=(int factor);
-    wxSize& operator *=(int factor);
+    friend wxRealPoint operator -(const wxRealPoint& pt);
+
+    friend wxRealPoint operator /(const wxRealPoint& sz, int divisor);
+    friend wxRealPoint operator *(const wxRealPoint& sz, int factor);
+    friend wxRealPoint operator *(int factor, const wxRealPoint& pt);
+    wxRealPoint& operator /=(int divisor);
+    wxRealPoint& operator *=(int factor);
+
+    friend wxRealPoint operator /(const wxRealPoint& pt, double divisor);
+    friend wxRealPoint operator *(const wxRealPoint& pt, double factor);
+    friend wxRealPoint operator *(double factor, const wxRealPoint& pt);
+    wxRealPoint& operator /=(double divisor);
+    wxRealPoint& operator *=(double factor);
     ///@}
 
     /**
@@ -600,13 +605,13 @@ public:
     /**
         Inequality operator.
     */
-    bool operator !=(const wxRect& r1, const wxRect& r2);
+    friend bool operator !=(const wxRect& r1, const wxRect& r2);
 
     ///@{
     /**
         Like Union(), but doesn't treat empty rectangles specially.
     */
-    wxRect operator +(const wxRect& r1, const wxRect& r2);
+    friend wxRect operator +(const wxRect& r1, const wxRect& r2);
     wxRect& operator +=(const wxRect& r);
     ///@}
 
@@ -614,7 +619,7 @@ public:
     /**
         Returns the intersection of two rectangles (which may be empty).
     */
-    wxRect operator *(const wxRect& r1, const wxRect& r2);
+    friend wxRect operator *(const wxRect& r1, const wxRect& r2);
     wxRect& operator *=(const wxRect& r);
     ///@}
 
@@ -626,7 +631,7 @@ public:
     /**
         Equality operator.
     */
-    bool operator ==(const wxRect& r1, const wxRect& r2);
+    friend bool operator ==(const wxRect& r1, const wxRect& r2);
 
     /**
         Height member.
@@ -704,38 +709,43 @@ public:
     /**
         @name Miscellaneous operators
 
-        Note that these operators are documented as class members
-        (to make them easier to find) but, as their prototype shows,
-        they are implemented as global operators; note that this is
-        transparent to the user but it helps to understand why the
-        following functions are documented to take the wxPoint they
-        operate on as an explicit argument.
+        Note that binary operators are defined as friend functions inside this
+        class, making them accessible via argument-dependent lookup, but hidden
+        otherwise.
     */
     ///@{
     wxPoint& operator=(const wxPoint& pt);
 
-    bool operator ==(const wxPoint& p1, const wxPoint& p2);
-    bool operator !=(const wxPoint& p1, const wxPoint& p2);
+    friend bool operator ==(const wxPoint& p1, const wxPoint& p2);
+    friend bool operator !=(const wxPoint& p1, const wxPoint& p2);
 
-    wxPoint operator +(const wxPoint& p1, const wxPoint& p2);
-    wxPoint operator -(const wxPoint& p1, const wxPoint& p2);
+    friend wxPoint operator +(const wxPoint& p1, const wxPoint& p2);
+    friend wxPoint operator -(const wxPoint& p1, const wxPoint& p2);
 
     wxPoint& operator +=(const wxPoint& pt);
     wxPoint& operator -=(const wxPoint& pt);
 
-    wxPoint operator +(const wxPoint& pt, const wxSize& sz);
-    wxPoint operator -(const wxPoint& pt, const wxSize& sz);
-    wxPoint operator +(const wxSize& sz, const wxPoint& pt);
-    wxPoint operator -(const wxSize& sz, const wxPoint& pt);
+    friend wxPoint operator +(const wxPoint& pt, const wxSize& sz);
+    friend wxPoint operator -(const wxPoint& pt, const wxSize& sz);
+    friend wxPoint operator +(const wxSize& sz, const wxPoint& pt);
+    friend wxPoint operator -(const wxSize& sz, const wxPoint& pt);
 
     wxPoint& operator +=(const wxSize& sz);
     wxPoint& operator -=(const wxSize& sz);
 
-    wxSize operator /(const wxPoint& sz, int factor);
-    wxSize operator *(const wxPoint& sz, int factor);
-    wxSize operator *(int factor, const wxSize& sz);
-    wxSize& operator /=(int factor);
-    wxSize& operator *=(int factor);
+    wxPoint operator -(const wxPoint& pt);
+
+    friend wxPoint operator /(const wxPoint& sz, int divisor);
+    friend wxPoint operator *(const wxPoint& sz, int factor);
+    friend wxPoint operator *(int factor, const wxPoint& sz);
+    wxPoint& operator /=(int divisor);
+    wxPoint& operator *=(int factor);
+
+    friend wxPoint operator /(const wxPoint& pt, double divisor);
+    friend wxPoint operator *(const wxPoint& pt, double factor);
+    friend wxPoint operator *(double factor, const wxPoint& pt);
+    wxPoint& operator /=(double divisor);
+    wxPoint& operator *=(double factor);
     ///@}
 
 
@@ -1101,12 +1111,9 @@ public:
         Sizes can be added to or subtracted from each other or divided or
         multiplied by a number.
 
-        Note that these operators are documented as class members
-        (to make them easier to find) but, as their prototype shows,
-        they are implemented as global operators; note that this is
-        transparent to the user but it helps to understand why the
-        following functions are documented to take the wxSize they
-        operate on as an explicit argument.
+        Note that binary operators are defined as friend functions inside this
+        class, making them accessible via argument-dependent lookup, but hidden
+        otherwise.
 
         Also note that using @c double factor may result in rounding errors,
         as wxSize always stores @c int coordinates and the result is always
@@ -1115,20 +1122,20 @@ public:
     ///@{
     wxSize& operator=(const wxSize& sz);
 
-    bool operator ==(const wxSize& s1, const wxSize& s2);
-    bool operator !=(const wxSize& s1, const wxSize& s2);
+    friend bool operator ==(const wxSize& s1, const wxSize& s2);
+    friend bool operator !=(const wxSize& s1, const wxSize& s2);
 
-    wxSize operator +(const wxSize& s1, const wxSize& s2);
-    wxSize operator -(const wxSize& s1, const wxSize& s2);
+    friend wxSize operator +(const wxSize& s1, const wxSize& s2);
+    friend wxSize operator -(const wxSize& s1, const wxSize& s2);
     wxSize& operator +=(const wxSize& sz);
     wxSize& operator -=(const wxSize& sz);
 
-    wxSize operator /(const wxSize& sz, int factor);
-    wxSize operator /(const wxSize& sz, double factor);
-    wxSize operator *(const wxSize& sz, int factor);
-    wxSize operator *(const wxSize& sz, double factor);
-    wxSize operator *(int factor, const wxSize& sz);
-    wxSize operator *(double factor, const wxSize& sz);
+    friend wxSize operator /(const wxSize& sz, int factor);
+    friend wxSize operator /(const wxSize& sz, double factor);
+    friend wxSize operator *(const wxSize& sz, int factor);
+    friend wxSize operator *(const wxSize& sz, double factor);
+    friend wxSize operator *(int factor, const wxSize& sz);
+    friend wxSize operator *(double factor, const wxSize& sz);
     wxSize& operator /=(int factor);
     wxSize& operator /=(double factor);
     wxSize& operator *=(int factor);

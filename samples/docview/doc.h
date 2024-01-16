@@ -164,6 +164,8 @@ class wxTextDocument : public wxDocument
 {
 public:
     wxTextDocument() : wxDocument() { }
+    wxTextDocument(const wxTextDocument&) = delete;
+    wxTextDocument &operator=(const wxTextDocument&) = delete;
 
     virtual bool OnCreate(const wxString& path, long flags) override;
 
@@ -178,7 +180,6 @@ protected:
 
     void OnTextChange(wxCommandEvent& event);
 
-    wxDECLARE_NO_COPY_CLASS(wxTextDocument);
     wxDECLARE_ABSTRACT_CLASS(wxTextDocument);
 };
 
@@ -190,9 +191,11 @@ class TextEditDocument : public wxTextDocument
 {
 public:
     TextEditDocument() : wxTextDocument() { }
+    TextEditDocument(const TextEditDocument&) = delete;
+    TextEditDocument &operator=(const TextEditDocument&) = delete;
+
     virtual wxTextCtrl* GetTextCtrl() const override;
 
-    wxDECLARE_NO_COPY_CLASS(TextEditDocument);
     wxDECLARE_DYNAMIC_CLASS(TextEditDocument);
 };
 
@@ -207,6 +210,8 @@ class ImageDocument : public wxDocument
 {
 public:
     ImageDocument() : wxDocument() { }
+    ImageDocument(const ImageDocument&) = delete;
+    ImageDocument &operator=(const ImageDocument&) = delete;
 
     virtual bool OnOpenDocument(const wxString& file) override;
 
@@ -218,7 +223,6 @@ protected:
 private:
     wxImage m_image;
 
-    wxDECLARE_NO_COPY_CLASS(ImageDocument);
     wxDECLARE_DYNAMIC_CLASS(ImageDocument);
 };
 
@@ -229,6 +233,8 @@ class ImageDetailsDocument : public wxDocument
 {
 public:
     ImageDetailsDocument(ImageDocument *parent);
+    ImageDetailsDocument(const ImageDetailsDocument&) = delete;
+    ImageDetailsDocument &operator=(const ImageDetailsDocument&) = delete;
 
     // accessors for ImageDetailsView
     wxSize GetSize() const { return m_size; }
@@ -242,8 +248,6 @@ private:
     unsigned long m_numColours;
     wxBitmapType m_type;
     bool m_hasAlpha;
-
-    wxDECLARE_NO_COPY_CLASS(ImageDetailsDocument);
 };
 
 #endif // _WX_SAMPLES_DOCVIEW_DOC_H_

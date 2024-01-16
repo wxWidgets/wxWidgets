@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/qt/winevent_qt.h
+// Name:        include/wx/qt/private/winevent.h
 // Purpose:     QWidget to wxWindow event handler
 // Author:      Javier Torres, Peter Most
 // Created:     21.06.10
@@ -371,7 +371,7 @@ protected:
     virtual bool winEvent ( MSG * message, long * result ) { }
     virtual bool x11Event ( XEvent * event ) { } */
 
-    virtual bool event(QEvent *event)
+    virtual bool event(QEvent *event) override
     {
         if (event->type() == QEvent::Gesture)
         {

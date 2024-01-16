@@ -797,11 +797,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // new, empty control, see https://github.com/wxWidgets/wxWidgets/issues/11409
         gtk_entry_get_text((GtkEntry*)m_text);
 
-#ifndef __WXGTK3__
         if (style & wxNO_BORDER)
             gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
-#endif
-
     }
     g_object_ref(m_widget);
 
@@ -2156,24 +2153,13 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     //multiline
     else
     {
-        // add space for vertical scrollbar
-        if ( m_scrollBar[1] && !(m_windowStyle & wxTE_NO_VSCROLL) )
-            tsize.IncBy(GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[1])).x + 3, 0);
-
         // height
         if ( ylen <= 0 )
-        {
             tsize.y = 1 + cHeight * wxMax(wxMin(GetNumberOfLines(), 10), 2);
-            // add space for horizontal scrollbar
-            if ( m_scrollBar[0] && (m_windowStyle & wxHSCROLL) )
-                tsize.IncBy(0, GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[0])).y + 3);
-        }
 
-        if ( !HasFlag(wxBORDER_NONE) )
-        {
-            // hardcode borders, margins, etc
-            tsize.IncBy(5, 4);
-        }
+        GtkRequisition req;
+        gtk_widget_get_preferred_size(m_widget, &req, nullptr);
+        tsize.IncTo(wxSize(req.width, req.height));
     }
 
     // We should always use at least the specified height if it's valid.

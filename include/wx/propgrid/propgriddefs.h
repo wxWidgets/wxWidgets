@@ -212,35 +212,92 @@ constexpr bool operator!=(wxPGPropertyValuesFlags a, int b)
 
 // -----------------------------------------------------------------------
 
-// Misc. argument flags.
-enum wxPG_MISC_ARG_FLAGS
+// Miscellaneous property value format flags
+enum class wxPGPropValFormatFlags : int
 {
+    // No flags.
+    Null = 0,
+
     // Get/Store full value instead of displayed value.
-    wxPG_FULL_VALUE                     = 0x00000001,
+    FullValue                   = 0x00000001,
 
     // Perform special action in case of unsuccessful conversion.
-    wxPG_REPORT_ERROR                   = 0x00000002,
+    ReportError                 = 0x00000002,
 
-    wxPG_PROPERTY_SPECIFIC              = 0x00000004,
+    PropertySpecific            = 0x00000004,
 
     // Get/Store editable value instead of displayed one (should only be
     // different in the case of common values)
-    wxPG_EDITABLE_VALUE                 = 0x00000008,
+    EditableValue               = 0x00000008,
 
     // Used when dealing with fragments of composite string value
-    wxPG_COMPOSITE_FRAGMENT             = 0x00000010,
+    CompositeFragment           = 0x00000010,
 
     // Means property for which final string value is for cannot really be
     // edited.
-    wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = 0x00000020,
+    UneditableCompositeFragment = 0x00000020,
 
     // ValueToString() called from GetValueAsString()
     // (guarantees that input wxVariant value is current own value)
-    wxPG_VALUE_IS_CURRENT               = 0x00000040,
+    ValueIsCurrent              = 0x00000040,
 
     // Value is being set programmatically (i.e. not by user)
-    wxPG_PROGRAMMATIC_VALUE             = 0x00000080
+    ProgrammaticValue           = 0x00000080
 };
+
+constexpr wxPGPropValFormatFlags operator&(wxPGPropValFormatFlags a, wxPGPropValFormatFlags b)
+{
+    return static_cast<wxPGPropValFormatFlags>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+constexpr wxPGPropValFormatFlags operator|(wxPGPropValFormatFlags a, wxPGPropValFormatFlags b)
+{
+    return static_cast<wxPGPropValFormatFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+inline wxPGPropValFormatFlags operator|=(wxPGPropValFormatFlags& a, wxPGPropValFormatFlags b)
+{
+    return a = a | b;
+}
+
+constexpr bool operator!(wxPGPropValFormatFlags a)
+{
+    return static_cast<int>(a) == 0;
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+constexpr int operator&(int a, wxPGPropValFormatFlags b)
+{
+    return a & static_cast<int>(b);
+}
+
+constexpr int operator|(int a, wxPGPropValFormatFlags b)
+{
+    return a | static_cast<int>(b);
+}
+
+inline int operator|=(int& a, wxPGPropValFormatFlags b)
+{
+    return a = a | static_cast<int>(b);
+}
+
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::FullValue instead")
+constexpr wxPGPropValFormatFlags wxPG_FULL_VALUE { wxPGPropValFormatFlags::FullValue };
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::ReportError instead")
+constexpr wxPGPropValFormatFlags wxPG_REPORT_ERROR { wxPGPropValFormatFlags::ReportError };
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::PropertySpecific instead")
+constexpr wxPGPropValFormatFlags wxPG_PROPERTY_SPECIFIC { wxPGPropValFormatFlags::PropertySpecific };
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::EditableValue instead")
+constexpr wxPGPropValFormatFlags wxPG_EDITABLE_VALUE { wxPGPropValFormatFlags::EditableValue };
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::CompositeFragment instead")
+constexpr wxPGPropValFormatFlags wxPG_COMPOSITE_FRAGMENT { wxPGPropValFormatFlags::CompositeFragment };
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::UneditableCompositeFragment instead")
+constexpr wxPGPropValFormatFlags wxPG_UNEDITABLE_COMPOSITE_FRAGMENT { wxPGPropValFormatFlags::UneditableCompositeFragment };
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::ValueIsCurrent instead")
+constexpr wxPGPropValFormatFlags wxPG_VALUE_IS_CURRENT { wxPGPropValFormatFlags::ValueIsCurrent };
+wxDEPRECATED_MSG("use wxPGPropValFormatFlags::ProgrammaticValue instead")
+constexpr wxPGPropValFormatFlags wxPG_PROGRAMMATIC_VALUE { wxPGPropValFormatFlags::ProgrammaticValue };
+#endif // WXWIN_COMPATIBILITY_3_2
 
 // -----------------------------------------------------------------------
 

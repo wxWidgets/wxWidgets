@@ -1188,10 +1188,14 @@ if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
 
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
-    else dnl Use all architectures supported
-        OSX_ARCH_OPTS="i386"
-        if test "$wxUSE_OSX_COCOA" = 1; then
-            OSX_ARCH_OPTS="$OSX_ARCH_OPTS,x86_64"
+    else
+        dnl Use default architectures for the universal binaries: x86_64 is
+        dnl currently supported everywhere...
+        OSX_ARCH_OPTS=x86_64
+
+        dnl ... and non-ancient macOS versions also support ARM.
+        if [ `sw_vers -productVersion | sed 's/\..*//'` -gt 10 ]; then
+            OSX_ARCH_OPTS=arm64,$OSX_ARCH_OPTS
         fi
     fi
 
@@ -3313,7 +3317,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
     if test "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
-        OPENGL_LIBS="-lopengl32 -lglu32"
+        OPENGL_LIBS="-lopengl32"
     elif test "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then
 
         dnl adjust CPPFLAGS to include GL/gl.h location if necessary
@@ -3329,7 +3333,6 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         fi
 
         AC_CHECK_HEADER(GL/gl.h, [
-            AC_CHECK_HEADER(GL/glu.h, [
                 found_gl=0
 
                 WX_FIND_LIB(GL, glBegin, [/opt/graphics/OpenGL/lib])
@@ -3341,21 +3344,8 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                       fi
                     fi
 
-                    dnl don't suppose that libGL and libGLU are always in the
-                    dnl same directory -- this is not true for some common
-                    dnl distributions
-                    WX_FIND_LIB(GLU, gluBeginCurve, [/opt/graphics/OpenGL/lib])
-                    if test "$ac_find_libraries" != "" ; then
-                      if test "$ac_find_libraries" != "std" ; then
-                        WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
-                        if test "$ac_path_to_link" != " -L/usr/lib" -a \
-                                "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
-                        fi
-                      fi
-
                         found_gl=1
-                        OPENGL_LIBS="-lGL -lGLU"
+                        OPENGL_LIBS="-lGL"
 
                         if test "$WXGTK3" = 1; then
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
@@ -3382,7 +3372,6 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                                 fi
                             fi
                         fi
-                    fi
                 fi
 
                 if test "$found_gl" != 1; then
@@ -3394,10 +3383,9 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                           LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
-                      OPENGL_LIBS="-lMesaGL -lMesaGLU"
+                      OPENGL_LIBS="-lMesaGL"
                     fi
                 fi
-            ],, [ ])
         ],
         [],
         [ ])
@@ -8186,12 +8174,7 @@ for subdir in $SUBDIRS; do
                 done
             else
                 dnl assume that everything compiles for utils &c
-                dnl any that shouldn't be built can be added to
-                dnl DISABLED_UTILS, DISABLED_DEMOS
-                disabled_var=DISABLED_`echo $subdir | tr '[[a-z]]' '[[A-Z]]'`
-                eval "disabled=\$$disabled_var"
-                disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         else
             dnl we build wxBase only

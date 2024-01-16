@@ -64,6 +64,8 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
     #include "wx/msw/dc.h"
 #endif
 
+#include <memory>
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
 wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 
@@ -277,16 +279,21 @@ static wxBitmap wxPaneCreateStippleBitmap()
 
 static void DrawResizeHint(wxDC& dc, const wxRect& rect)
 {
+#ifdef __WXMSW__
     wxBitmap stipple = wxPaneCreateStippleBitmap();
     wxBrush brush(stipple);
     dc.SetBrush(brush);
-#ifdef __WXMSW__
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     PatBlt(GetHdcOf(*impl), rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight(), PATINVERT);
 #else
-    dc.SetPen(*wxTRANSPARENT_PEN);
+    // Note that we have to use white colour for wxINVERT to work with
+    // wxGraphicsContext-based wxDC implementations, such as used by wxGTK3
+    // (and wxOSX, but this code is never used for the latter because it always
+    // uses live resize).
+    dc.SetPen(*wxWHITE_PEN);
+    dc.SetBrush(*wxWHITE_BRUSH);
 
-    dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(wxINVERT);
     dc.DrawRectangle(rect);
 #endif
 }
@@ -760,26 +767,17 @@ unsigned int wxAuiManager::GetFlags() const
     return m_flags;
 }
 
-// With Core Graphics on Mac or GTK 3, it's not possible to show sash feedback,
-// so we'll always use live update instead.
-#if defined(__WXMAC__) || defined(__WXGTK3__)
-    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 1
-#else
-    #define wxUSE_AUI_LIVE_RESIZE_ALWAYS 0
-#endif
-
-/* static */ bool wxAuiManager::AlwaysUsesLiveResize()
+/* static */ bool wxAuiManager::AlwaysUsesLiveResize(const wxWindow* window)
 {
-    return wxUSE_AUI_LIVE_RESIZE_ALWAYS;
+    // Not using live resize relies on wxClientDC being usable for drawing, so
+    // we have to use live resize if it can't be used on the current platform.
+    return !wxClientDC::CanBeUsedForDrawing(window);
 }
 
 bool wxAuiManager::HasLiveResize() const
 {
-#if wxUSE_AUI_LIVE_RESIZE_ALWAYS
-    return true;
-#else
-    return (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
-#endif
+    return AlwaysUsesLiveResize(m_frame) ||
+            (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
 }
 
 // don't use these anymore as they are deprecated
@@ -844,34 +842,24 @@ void wxAuiManager::UpdateHintWindowConfig()
     if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) && can_do_transparent)
     {
         // Make a window to use for a transparent hint
-        #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
-            m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
-                                     wxDefaultPosition, wxSize(1,1),
-                                         wxFRAME_TOOL_WINDOW |
-                                         wxFRAME_FLOAT_ON_PARENT |
-                                         wxFRAME_NO_TASKBAR |
-                                         wxNO_BORDER);
+        m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
+                                 wxDefaultPosition, wxSize(1,1),
+                                     wxFRAME_TOOL_WINDOW |
+                                     wxFRAME_FLOAT_ON_PARENT |
+                                     wxFRAME_NO_TASKBAR |
+                                     wxNO_BORDER);
+        #ifdef __WXMAC__
+            // Do nothing so this event isn't handled in the base handlers.
 
-            m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
-        #elif defined(__WXMAC__)
-            // Using a miniframe with float and tool styles keeps the parent
-            // frame activated and highlighted as such...
-            m_hintWnd = new wxMiniFrame(m_frame, wxID_ANY, wxEmptyString,
-                                         wxDefaultPosition, wxSize(1,1),
-                                         wxFRAME_FLOAT_ON_PARENT
-                                         | wxFRAME_TOOL_WINDOW );
-            m_hintWnd->Bind(wxEVT_ACTIVATE, &wxAuiManager::OnHintActivate, this);
-
-            // Can't set the bg colour of a Frame in wxMac
-            wxPanel* p = new wxPanel(m_hintWnd);
-
-            // The default wxSYS_COLOUR_ACTIVECAPTION colour is a light silver
-            // color that is really hard to see, especially transparent.
-            // Until a better system color is decided upon we'll just use
-            // blue.
-            p->SetBackgroundColour(*wxBLUE);
+            // Letting the hint window activate without this handler can lead to
+            // weird behaviour on Mac where the menu is switched out to the top
+            // window's menu in MDI applications when it shouldn't be. So since
+            // we don't want user interaction with the hint window anyway, we just
+            // prevent it from activating here.
+            m_hintWnd->Bind(wxEVT_ACTIVATE, [](wxActivateEvent&) {});
         #endif
 
+        m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
     }
     else
     {
@@ -3302,7 +3290,7 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
         return;
     }
 
-    m_hintFadeAmt += 4;
+    m_hintFadeAmt++;
     m_hintWnd->SetTransparent(m_hintFadeAmt);
 }
 
@@ -3315,13 +3303,15 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             return;
         m_lastHint = rect;
 
-        m_hintFadeAmt = m_hintFadeMax;
-
+        // Decide if we want to fade in the hint and set it to the end value if
+        // we don't.
         if ((m_flags & wxAUI_MGR_HINT_FADE)
-            && !((wxDynamicCast(m_hintWnd, wxPseudoTransparentFrame)) &&
+            && !((m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) &&
                  (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
             )
             m_hintFadeAmt = 0;
+        else
+            m_hintFadeAmt = m_hintFadeMax;
 
         m_hintWnd->SetSize(rect);
         m_hintWnd->SetTransparent(m_hintFadeAmt);
@@ -3341,7 +3331,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         {
             // start fade in timer
             m_hintFadeTimer.SetOwner(this);
-            m_hintFadeTimer.Start(5);
+            m_hintFadeTimer.Start(15);
             Bind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
                  m_hintFadeTimer.GetId());
         }
@@ -3428,18 +3418,6 @@ void wxAuiManager::HideHint()
         m_lastHint = wxRect();
     }
 }
-
-void wxAuiManager::OnHintActivate(wxActivateEvent& WXUNUSED(event))
-{
-    // Do nothing so this event isn't handled in the base handlers.
-
-    // Letting the hint window activate without this handler can lead to
-    // weird behaviour on Mac where the menu is switched out to the top
-    // window's menu in MDI applications when it shouldn't be. So since
-    // we don't want user interaction with the hint window anyway, we just
-    // prevent it from activating here.
-}
-
 
 
 void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
@@ -3911,27 +3889,27 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#if defined(__WXMAC__) || defined(__WXGTK3__)
-    // We can't use wxClientDC in these ports.
-    if ( dc == nullptr )
-    {
-        m_frame->Refresh() ;
-        m_frame->Update() ;
-        return ;
-    }
-#endif
-    int w, h;
-    m_frame->GetClientSize(&w, &h);
+    std::unique_ptr<wxClientDC> client_dc;
 
     // figure out which dc to use; if one
     // has been specified, use it, otherwise
     // make a client dc
-    wxClientDC* client_dc = nullptr;
     if (!dc)
     {
-        client_dc = new wxClientDC(m_frame);
-        dc = client_dc;
+        if ( AlwaysUsesLiveResize(m_frame) )
+        {
+            // We can't use wxClientDC in these ports.
+            m_frame->Refresh() ;
+            m_frame->Update() ;
+            return ;
+        }
+
+        client_dc.reset(new wxClientDC(m_frame));
+        dc = client_dc.get();
     }
+
+    int w, h;
+    m_frame->GetClientSize(&w, &h);
 
     // if the frame has a toolbar, the client area
     // origin will not be (0,0).
@@ -3941,10 +3919,6 @@ void wxAuiManager::Repaint(wxDC* dc)
 
     // render all the items
     Render(dc);
-
-    // if we created a client_dc, delete it
-    if (client_dc)
-        delete client_dc;
 }
 
 void wxAuiManager::OnDestroy(wxWindowDestroyEvent& event)
@@ -4090,7 +4064,14 @@ void wxAuiManager::UpdateButtonOnScreen(wxAuiDockUIPart* button_ui_part,
             state = wxAUI_BUTTON_STATE_HOVER;
     }
 
-    // now repaint the button with hover state
+    // now repaint the button with hover state -- or everything if we can't
+    // repaint just it
+    if ( !wxClientDC::CanBeUsedForDrawing(m_frame) )
+    {
+        m_frame->Refresh();
+        m_frame->Update();
+    }
+
     wxClientDC cdc(m_frame);
 
     // if the frame has a toolbar, the client area
@@ -4472,7 +4453,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         if (!HasLiveResize())
         {
             // get rid of the hint rectangle
-            wxScreenDC dc;
+            wxClientDC dc{m_frame};
             DrawResizeHint(dc, m_actionHintRect);
         }
         if (m_currentDragItem != -1 && HasLiveResize())
@@ -4587,9 +4568,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             }
             else
             {
-                wxRect rect(m_frame->ClientToScreen(pos),
-                    m_actionPart->rect.GetSize());
-                wxScreenDC dc;
+                wxRect rect(pos, m_actionPart->rect.GetSize());
+                wxClientDC dc{m_frame};
 
                 if (!m_actionHintRect.IsEmpty())
                 {
@@ -4598,13 +4578,9 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     m_actionHintRect = wxRect();
                 }
 
-                // draw new resize hint, if it's inside the managed frame
-                wxRect frameScreenRect = m_frame->GetScreenRect();
-                if (frameScreenRect.Contains(rect))
-                {
-                    DrawResizeHint(dc, rect);
-                    m_actionHintRect = rect;
-                }
+                // draw new resize hint
+                DrawResizeHint(dc, rect);
+                m_actionHintRect = rect;
             }
         }
     }

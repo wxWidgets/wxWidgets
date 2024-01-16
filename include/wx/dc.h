@@ -128,6 +128,8 @@ public:
     virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) = 0;
 #endif
 
+    virtual bool CanDrawUsingClientDC(const wxWindow* window) const = 0;
+
     static void Set(wxDCFactory *factory);
     static wxDCFactory *Get();
 
@@ -154,6 +156,8 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual wxDCImpl* CreatePrinterDC( wxPrinterDC *owner, const wxPrintData &data  ) override;
 #endif
+
+    virtual bool CanDrawUsingClientDC(const wxWindow* window) const override;
 };
 
 //-----------------------------------------------------------------------------

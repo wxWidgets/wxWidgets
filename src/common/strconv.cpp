@@ -1753,10 +1753,6 @@ wxMBConvUTF16swap::FromWChar(char *dst, size_t dstLen,
     #define wxMBConvUTF32straight  wxMBConvUTF32LE
 #endif
 
-
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF32LE) wxConvUTF32LE;
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF32BE) wxConvUTF32BE;
-
 /* static */
 size_t wxMBConvUTF32Base::GetLength(const char *src, size_t srcLen)
 {

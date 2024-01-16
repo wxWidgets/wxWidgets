@@ -71,16 +71,19 @@ class MyApp: public wxApp
 {
 public:
     MyApp() { }
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
     virtual bool OnInit() override;
-
-    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 class MyFrame: public wxFrame
 {
 public:
     MyFrame();
+    MyFrame(const MyFrame&) = delete;
+    MyFrame& operator=(const MyFrame&) = delete;
+
     virtual ~MyFrame();
 
     void ToggleFlag(int flag, bool enable);
@@ -126,22 +129,24 @@ public:
     int GetSashPos() const { return m_sashPos; }
 
 private:
-    wxWindow *m_left, *m_right;
+    wxWindow *m_left = nullptr,
+             *m_right = nullptr;
 
-    wxSplitterWindow* m_splitter;
-    wxWindow *m_replacewindow;
-    int m_sashPos;
-    bool m_lockSash;
-    bool m_allowDClick;
+    wxSplitterWindow* m_splitter = nullptr;
+    wxWindow *m_replacewindow = nullptr;
+    int m_sashPos = 0;
+    bool m_lockSash = false;
+    bool m_allowDClick = true;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
 class MySplitterWindow : public wxSplitterWindow
 {
 public:
     MySplitterWindow(MyFrame *parent);
+    MySplitterWindow(const MySplitterWindow&) = delete;
+    MySplitterWindow &operator=(const MySplitterWindow &) = delete;
 
     // event handlers
     void OnPositionChanged(wxSplitterEvent& event);
@@ -154,21 +159,21 @@ private:
     MyFrame *m_frame;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MySplitterWindow);
 };
 
 class MyCanvas: public wxScrolledWindow
 {
 public:
     MyCanvas(wxWindow* parent, bool mirror);
+    MyCanvas(const MyCanvas&) = delete;
+    MyCanvas &operator=(const MyCanvas &) = delete;
+
     virtual ~MyCanvas(){}
 
     virtual void OnDraw(wxDC& dc) override;
 
 private:
     bool m_mirror;
-
-    wxDECLARE_NO_COPY_CLASS(MyCanvas);
 };
 
 // ============================================================================
@@ -225,13 +230,8 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(nullptr, wxID_ANY, "wxSplitterWindow sample",
-                 wxDefaultPosition, wxSize(420, 300))
+       : wxFrame(nullptr, wxID_ANY, "wxSplitterWindow sample")
 {
-    m_lockSash = false;
-    m_sashPos = 0;
-    m_allowDClick = true;
-
     SetIcon(wxICON(sample));
 
 #if wxUSE_STATUSBAR
@@ -254,7 +254,7 @@ MyFrame::MyFrame()
                       "Toggle sash invisibility");
     splitMenu->AppendSeparator();
 
-    splitMenu->AppendCheckItem(SPLIT_LIVE,
+    auto itemLive = splitMenu->AppendCheckItem(SPLIT_LIVE,
                                "&Live update\tCtrl-L",
                                "Toggle live update mode");
     splitMenu->AppendCheckItem(SPLIT_BORDER,
@@ -306,6 +306,12 @@ MyFrame::MyFrame()
     menuBar->Check(SPLIT_LIVE, true);
     m_splitter = new MySplitterWindow(this);
 
+    if ( m_splitter->AlwaysUsesLiveUpdate() )
+    {
+        // Only live update mode is supported, so this menu item can't be used.
+        itemLive->Enable(false);
+    }
+
     // If you use non-zero gravity you must initialize the splitter with its
     // correct initial size, otherwise it will change the sash position by a
     // huge amount when it's resized from its initial default size to its real
@@ -334,14 +340,14 @@ MyFrame::MyFrame()
     m_splitter->Initialize(m_left);
 #else
     // you can also try -100
-    m_splitter->SplitVertically(m_left, m_right, 100);
+    m_splitter->SplitVertically(m_left, m_right, FromDIP(100));
 #endif
 
 #if wxUSE_STATUSBAR
     SetStatusText("Min pane size = 0", 1);
 #endif // wxUSE_STATUSBAR
 
-    m_replacewindow = nullptr;
+    SetInitialSize(FromDIP(wxSize(420, 300)));
 }
 
 MyFrame::~MyFrame()
@@ -625,13 +631,13 @@ void MyCanvas::OnDraw(wxDC& dcOrig)
     wxMirrorDC dc(dcOrig, m_mirror);
 
     dc.SetPen(*wxBLACK_PEN);
-    dc.DrawLine(0, 0, 100, 200);
+    dc.DrawLine(wxPoint(0, 0), dc.FromDIP(wxPoint(100, 200)));
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    dc.DrawText("Testing", 50, 50);
+    dc.DrawText("Testing", dc.FromDIP(wxPoint(50, 50)));
 
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush(*wxGREEN_BRUSH);
-    dc.DrawRectangle(120, 120, 100, 80);
+    dc.DrawRectangle(dc.FromDIP(wxPoint(120, 120)), dc.FromDIP(wxSize(100, 80)));
 }
 

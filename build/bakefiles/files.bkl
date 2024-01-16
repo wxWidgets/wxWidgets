@@ -477,6 +477,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/paletteg.cpp
     src/qt/datectrl.cpp
     src/qt/timectrl.cpp
+    src/qt/overlay.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -579,6 +580,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/secretstore.cpp
     src/common/lzmastream.cpp
     src/common/uilocale.cpp
+    src/common/fs_data.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
     src/common/event.cpp
@@ -754,6 +756,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/lzmastream.h
     wx/localedefs.h
     wx/uilocale.h
+    wx/fs_data.h
 </set>
 
 
@@ -1321,6 +1324,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/bmpbndl.h
     wx/filedlgcustomize.h
     wx/compositebookctrl.h
+    wx/persist/combobox.h
 </set>
 
 <!-- ====================================================================== -->

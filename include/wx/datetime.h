@@ -17,6 +17,8 @@
 
 #include <time.h>
 
+#include <vector>
+
 #include <limits.h>             // for INT_MIN
 
 #include "wx/longlong.h"
@@ -44,7 +46,7 @@ struct _SYSTEMTIME;
  * ? 2. getdate() function like under Solaris
  * + 3. text conversion for wxDateSpan
  * + 4. pluggable modules for the workdays calculations
- *   5. wxDateTimeHolidayAuthority for Easter and other christian feasts
+ *   5. wxDateTimeHolidayAuthority Christian feasts outside of US
  */
 
 /*
@@ -1276,6 +1278,8 @@ public:
         return wxTimeSpan(*this).Multiply(n);
     }
 
+    friend WXDLLIMPEXP_BASE wxTimeSpan operator*(int n, const wxTimeSpan& ts);
+
         // return this timespan with opposite sign
     wxTimeSpan Negate() const { return wxTimeSpan(-GetValue()); }
         // negate the value of the timespan
@@ -1529,6 +1533,7 @@ public:
     {
         return wxDateSpan(*this).Multiply(n);
     }
+    friend WXDLLIMPEXP_BASE wxDateSpan operator*(int n, const wxDateSpan& ds);
 
     // ds1 == d2 if and only if for every wxDateTime t t + ds1 == t + ds2
     inline bool operator==(const wxDateSpan& ds) const
@@ -1599,13 +1604,7 @@ protected:
     virtual bool DoIsHoliday(const wxDateTime& dt) const = 0;
 
     // this function should fill the array with all holidays between the two
-    // given dates - it is implemented in the base class, but in a very
-    // inefficient way (it just iterates over all days and uses IsHoliday() for
-    // each of them), so it must be overridden in the derived class where the
-    // base class version may be explicitly used if needed
-    //
-    // returns the number of holidays in the given range and fills holidays
-    // array
+    // given dates
     virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
                                         const wxDateTime& dtEnd,
                                         wxDateTimeArray& holidays) const = 0;
@@ -1623,6 +1622,85 @@ protected:
     virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
                                         const wxDateTime& dtEnd,
                                         wxDateTimeArray& holidays) const override;
+};
+
+// https://marian.org/mary/feast-days
+// https://www.omvusa.org/blog/catholic-holy-days-of-obligation/
+class WXDLLIMPEXP_BASE wxDateTimeUSCatholicFeasts : public wxDateTimeHolidayAuthority
+{
+public:
+    // Easter for a given year.
+    // Based on https://www.geeksforgeeks.org/how-to-calculate-the-easter-date-for-a-given-year-using-gauss-algorithm/
+    // Validated against 1600 to 2099, using data from:
+    // https://www.assa.org.au/edm (Astronomical Society of South Australia)
+    // https://www.census.gov/data/software/x13as/genhol/easter-dates.html (US Census Bureau)
+    static wxDateTime GetEaster(int year);
+
+    // Ascension for a given year.
+    // Celebrated on the 40th day of Easter/
+    // the sixth Thursday after Easter Sunday.
+    static wxDateTime GetThursdayAscension(int year)
+    {
+        const wxDateTime ascension = GetEaster(year) + wxDateSpan::Days(39);
+        wxASSERT_MSG(
+            ascension.GetWeekDay() == wxDateTime::WeekDay::Thu,
+            "Error in Ascension calculation!");
+        return ascension;
+    }
+
+    // Ascension for a given year.
+    // Same as traditional Ascension, but moved to the following Sunday.
+    static wxDateTime GetSundayAscension(int year)
+    {
+        const wxDateTime ascension = GetEaster(year) + wxDateSpan::Weeks(6);
+        wxASSERT_MSG(
+            ascension.GetWeekDay() == wxDateTime::WeekDay::Sun,
+            "Error in Ascension calculation!");
+        return ascension;
+    }
+protected:
+    bool DoIsHoliday(const wxDateTime& dt) const override
+    {
+        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+            dt.IsSameDate(GetThursdayAscension(dt.GetYear())) )
+        {
+            return true;
+        }
+        for (const auto& feast : m_holyDaysOfObligation)
+        {
+            if (feast.GetMonth() == dt.GetMonth() &&
+                feast.GetDay() == dt.GetDay())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
+private:
+    static std::vector<wxDateTime> m_holyDaysOfObligation;
+};
+
+// Christmas and Easter
+class WXDLLIMPEXP_BASE wxDateTimeChristianHolidays : public wxDateTimeUSCatholicFeasts
+{
+protected:
+    bool DoIsHoliday(const wxDateTime& dt) const override
+    {
+        if (dt.IsSameDate(GetEaster(dt.GetYear())) ||
+            (dt.GetMonth() == 12 && dt.GetDay() == 25))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
 };
 
 // ============================================================================
@@ -2167,22 +2245,6 @@ inline wxDateSpan wxDateSpan::Subtract(const wxDateSpan& other) const
 #undef MILLISECONDS_PER_DAY
 
 #undef MODIFY_AND_RETURN
-
-// ============================================================================
-// binary operators
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxTimeSpan operators
-// ----------------------------------------------------------------------------
-
-wxTimeSpan WXDLLIMPEXP_BASE operator*(int n, const wxTimeSpan& ts);
-
-// ----------------------------------------------------------------------------
-// wxDateSpan
-// ----------------------------------------------------------------------------
-
-wxDateSpan WXDLLIMPEXP_BASE operator*(int n, const wxDateSpan& ds);
 
 // ============================================================================
 // other helper functions

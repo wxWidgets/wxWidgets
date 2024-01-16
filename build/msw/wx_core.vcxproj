@@ -1518,6 +1518,7 @@
     <ClInclude Include="..\..\include\wx\filedlgcustomize.h" />
     <ClInclude Include="..\..\include\wx\compositebookctrl.h" />
     <ClInclude Include="..\..\include\wx\msw\darkmode.h" />
+    <ClInclude Include="..\..\include\wx\persist\combobox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

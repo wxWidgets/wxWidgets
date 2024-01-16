@@ -815,7 +815,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
                    &rasDialParams,
                    0,                       // use callback for notifications
                    async ? (void *)wxRasDialFunc  // cast needed for gcc 3.1
-                         : 0,               // no notifications, sync operation
+                         : nullptr,         // no notifications, sync operation
                    &ms_hRasConnection
                   );
 

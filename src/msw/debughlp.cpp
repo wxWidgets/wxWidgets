@@ -105,7 +105,7 @@ static wxString gs_errMsg;
 // ----------------------------------------------------------------------------
 
 #define DEFINE_SYM_FUNCTION(func, name) \
-    wxDbgHelpDLL::func ## _t wxDbgHelpDLL::func = 0
+    wxDbgHelpDLL::func ## _t wxDbgHelpDLL::func = nullptr
 
 wxDO_FOR_ALL_SYM_FUNCS(DEFINE_SYM_FUNCTION);
 

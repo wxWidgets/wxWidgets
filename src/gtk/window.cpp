@@ -1968,27 +1968,54 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     if ( g_captureWindow )
     {
         // synthesise a mouse enter or leave event if needed
-        GdkWindow* winUnderMouse =
-            wx_gdk_device_get_window_at_position(gdk_event->device, nullptr, nullptr);
+        GdkWindow* winUnderMouse = nullptr;
+        bool isOut = true;
 
-        GdkDisplay* display = winUnderMouse
-            ? gdk_window_get_display(winUnderMouse)
-            : nullptr;
-        if ( !display )
-            display = gdk_display_get_default();
+        if (gdk_event->x >= 0 && gdk_event->y >= 0)
+        {
+            const wxSize size(win->GetClientSize());
+            if (gdk_event->x < size.x && gdk_event->y < size.y)
+            {
+                isOut = false;
+                winUnderMouse =
+                    wx_gdk_device_get_window_at_position(
+                        gdk_event->device, nullptr, nullptr);
+            }
+        }
 
-        // This seems to be necessary and actually been added to
-        // GDK itself in version 2.0.X
-        gdk_display_flush(display);
+        const bool hadMouse = g_captureWindowHasMouse;
+        g_captureWindowHasMouse = false;
 
-        bool hasMouse = winUnderMouse == gdk_event->window;
-        if ( hasMouse != g_captureWindowHasMouse )
+        if (winUnderMouse == gdk_event->window)
+            g_captureWindowHasMouse = true;
+#ifdef __WXGTK3__
+        else if (winUnderMouse)
+        {
+            // Avoid treating overlay scrollbar as a different window
+            void* widgetUnderMouse;
+            gdk_window_get_user_data(winUnderMouse, &widgetUnderMouse);
+            if (GTK_IS_SCROLLBAR(widgetUnderMouse))
+            {
+                GtkWidget* parent = gtk_widget_get_parent(GTK_WIDGET(widgetUnderMouse));
+                if (parent == win->m_widget && GTK_IS_SCROLLED_WINDOW(parent))
+                    g_captureWindowHasMouse = true;
+            }
+        }
+#endif
+
+        if (g_captureWindowHasMouse != hadMouse)
         {
             // the mouse changed window
-            g_captureWindowHasMouse = hasMouse;
-
             wxMouseEvent eventM(g_captureWindowHasMouse ? wxEVT_ENTER_WINDOW
                                                         : wxEVT_LEAVE_WINDOW);
+            if (!g_captureWindowHasMouse && isOut)
+            {
+                // Ensure fractional coordinate is outside window when converted to int
+                if (gdk_event->x < 0)
+                    gdk_event->x = floor(gdk_event->x);
+                if (gdk_event->y < 0)
+                    gdk_event->y = floor(gdk_event->y);
+            }
             InitMouseEvent(win, eventM, gdk_event);
             eventM.SetEventObject(win);
             win->GTKProcessEvent(eventM);
@@ -2001,10 +2028,9 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
         // reset the event object and id in case win changed.
         event.SetEventObject( win );
         event.SetId( win->GetId() );
-    }
 
-    if ( !g_captureWindow )
         SendSetCursorEvent(win, event.m_x, event.m_y);
+    }
 
     bool ret = win->GTKProcessEvent(event);
 
@@ -4913,10 +4939,19 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
     return true;
 }
 
+void wxWindowGTK::GTKRemoveBorder()
+{
+}
+
 void wxWindowGTK::DoAddChild(wxWindowGTK *child)
 {
     wxASSERT_MSG( (m_widget != nullptr), wxT("invalid window") );
     wxASSERT_MSG( (child != nullptr), wxT("invalid child window") );
+
+    // If parent is already showing, changing CSS after adding child
+    // can cause transitory visual glitches, so change it here
+    if (HasFlag(wxBORDER_NONE))
+        GTKRemoveBorder();
 
     /* add to list */
     AddChild( child );

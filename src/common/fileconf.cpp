@@ -247,40 +247,194 @@ wxString wxFileConfig::GetGlobalDir()
 
 wxString wxFileConfig::GetLocalDir(int style)
 {
-    wxUnusedVar(style);
+    const wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
-    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+    if ( style & wxCONFIG_USE_XDG )
+    {
+        // When XDG-compliant layout is requested, we need to use this function
+        // as GetUserDataDir() doesn't support it.
+        wxString dir = stdp.GetUserDir(wxStandardPaths::Dir_Config);
 
-    // it so happens that user data directory is a subdirectory of user config
-    // directory on all supported platforms, which explains why we use it here
+        if ( style & wxCONFIG_USE_SUBDIR )
+            dir = stdp.AppendAppInfo(dir);
+
+        return dir;
+    }
+
+    if ( style & wxCONFIG_USE_HOME )
+    {
+        // When traditional layout is requested, don't use wxStandardPaths as
+        // it could be using XDG layout.
+        wxString dir = wxGetHomeDir();
+
+        if ( style & wxCONFIG_USE_HOME )
+            dir = stdp.AppendAppInfo(dir);
+
+        return dir;
+    }
+
+    // Normally we'd like to use GetUserConfigDir() and just append app info
+    // subdirectories to it, but we can't do it for compatibility reasons:
+    // there are existing configuration files in the locations returned by
+    // these functions already, so return the same values as we always did.
     return style & wxCONFIG_USE_SUBDIR ? stdp.GetUserDataDir()
                                        : stdp.GetUserConfigDir();
 }
 
 wxFileName wxFileConfig::GetGlobalFile(const wxString& szFile)
 {
-    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+    const wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
     return wxFileName(GetGlobalDir(), stdp.MakeConfigFileName(szFile));
 }
 
 wxFileName wxFileConfig::GetLocalFile(const wxString& szFile, int style)
 {
-    wxStandardPathsBase& stdp = wxStandardPaths::Get();
+    const wxStandardPathsBase& stdp = wxStandardPaths::Get();
 
     // If the config file is located in a subdirectory, we always use an
     // extension for it, but we use just the leading dot if it is located
     // directly in the home directory. Note that if wxStandardPaths is
     // configured to follow XDG specification, all config files go to a
     // subdirectory of XDG_CONFIG_HOME anyhow, so in this case we'll still end
-    // up using the extension even if wxCONFIG_USE_SUBDIR is not set, but this
-    // is the correct and expected (if a little confusing) behaviour.
+    // up using the extension even if neither wxCONFIG_USE_SUBDIR nor
+    // wxCONFIG_USE_XDG is set, but this is the correct and expected (if a
+    // little confusing) behaviour.
     const wxStandardPaths::ConfigFileConv
-        conv = style & wxCONFIG_USE_SUBDIR
+        conv = style & (wxCONFIG_USE_SUBDIR | wxCONFIG_USE_XDG)
                 ? wxStandardPaths::ConfigFileConv_Ext
                 : wxStandardPaths::ConfigFileConv_Dot;
 
     return wxFileName(GetLocalDir(style), stdp.MakeConfigFileName(szFile, conv));
+}
+
+wxFileConfig::MigrationResult
+wxFileConfig::MigrateLocalFile(const wxString& name, int newStyle, int oldStyle)
+{
+    MigrationResult res;
+
+    const auto oldPath = GetLocalFile(name, oldStyle);
+    if ( !oldPath.FileExists() )
+        return res;
+
+    const auto newPath = GetLocalFile(name, newStyle);
+    if ( newPath == oldPath )
+        return res;
+
+    res.oldPath = oldPath.GetFullPath();
+    res.newPath = newPath.GetFullPath();
+
+    // This class ensures that we (at least try to) rename the existing config
+    // file back to its original name if we fail with an error.
+    class RenameBackOnError
+    {
+    public:
+        explicit RenameBackOnError(wxFileConfig::MigrationResult& res)
+            : m_res(res)
+        {
+        }
+
+        void Init(const wxString& tempPath)
+        {
+            m_tempPath = tempPath;
+        }
+
+        void Dismiss()
+        {
+            m_tempPath.clear();
+        }
+
+        ~RenameBackOnError()
+        {
+            if ( !m_tempPath.empty() )
+            {
+                if ( !wxRenameFile(m_tempPath, m_res.oldPath) )
+                {
+                    // This should never happen, but if it does, do at least
+                    // let the user know that we moved their file to a wrong
+                    // place and couldn't put it back.
+                    m_res.error += wxString::Format(
+                        _(" and additionally, the existing configuration file"
+                          " was renamed to \"%s\" and couldn't be renamed back,"
+                          " please rename it to its original path \"%s\""),
+                        m_tempPath,
+                        m_res.oldPath
+                    );
+                }
+            }
+        }
+
+    private:
+        MigrationResult& m_res;
+
+        wxString m_tempPath;
+    } renameBackOnError{res};
+
+    wxString currentPath = res.oldPath;
+
+    class AppendLogToError
+    {
+    public:
+        explicit AppendLogToError(MigrationResult& res)
+            : m_res(res)
+        {
+        }
+
+        ~AppendLogToError()
+        {
+            if ( !m_res.error.empty() )
+            {
+                wxString msg = m_logCollect.GetMessages();
+                if ( !msg.empty() )
+                {
+                    // Normally the messages are separated with new lines, but
+                    // we don't need the trailing one after the last one.
+                    if ( msg.Last() == '\n' )
+                        msg.RemoveLast();
+                    m_res.error << _(" due to the following error:\n") << msg;
+                }
+            }
+        }
+
+    private:
+        MigrationResult& m_res;
+
+        wxLogCollector m_logCollect;
+    } appendLogToError{res};
+
+    const auto newDir = newPath.GetPath();
+    if ( !wxFileName::DirExists(newDir) )
+    {
+        // There is an annoying failure mode here when the new directory can't
+        // be created because its name is the same as the name of the existing
+        // file, e.g. when oldStyle==0 and newStyle==wxCONFIG_USE_SUBDIR and
+        // XDG layout is not used, so check for this specially.
+        if ( newDir == res.oldPath )
+        {
+            currentPath = wxFileName::CreateTempFileName(currentPath);
+            if ( !wxRenameFile(res.oldPath, currentPath) )
+            {
+                res.error = _("failed to rename the existing file");
+                return res;
+            }
+
+            renameBackOnError.Init(currentPath);
+        }
+
+        if ( !wxFileName::Mkdir(newDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+        {
+            res.error = _("failed to create the new file directory");
+            return res;
+        }
+    }
+
+    if ( !wxRenameFile(currentPath, res.newPath) )
+    {
+        res.error = _("failed to move the file to the new location");
+        return res;
+    }
+
+    return res;
 }
 
 // ----------------------------------------------------------------------------
@@ -357,7 +511,21 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 {
     // Make up names for files if empty
     if ( !m_fnLocalFile.IsOk() && (style & wxCONFIG_USE_LOCAL_FILE) )
+    {
         m_fnLocalFile = GetLocalFile(GetAppName(), style);
+
+        // If none of the styles explicitly selecting the location to use is
+        // specified, default to XDG unless the file already exists in the
+        // traditional location in the home directory:
+        if ( !(style & (wxCONFIG_USE_XDG | wxCONFIG_USE_HOME)) )
+        {
+            if ( !m_fnLocalFile.FileExists() )
+            {
+                style |= wxCONFIG_USE_XDG;
+                m_fnLocalFile = GetLocalFile(GetAppName(), style);
+            }
+        }
+    }
 
     if ( !m_fnGlobalFile.IsOk() && (style & wxCONFIG_USE_GLOBAL_FILE) )
         m_fnGlobalFile = GetGlobalFile(GetAppName());
@@ -969,6 +1137,21 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 {
   if ( !IsDirty() || !m_fnLocalFile.GetFullPath() )
     return true;
+
+  // Create the directory containing the file if it doesn't exist. Although we
+  // don't always use XDG, it seems sensible to follow the XDG specification
+  // and create it with permissions 700 if it doesn't exist.
+  const wxString& outPath = m_fnLocalFile.GetPath();
+  if ( !wxFileName::DirExists(outPath) )
+  {
+      if ( !wxFileName::Mkdir(outPath,
+                              wxS_IRUSR | wxS_IWUSR | wxS_IXUSR,
+                              wxPATH_MKDIR_FULL) )
+      {
+          wxLogWarning(_("Failed to create configuration file directory."));
+          return false;
+      }
+  }
 
   // set the umask if needed
   wxCHANGE_UMASK(m_umask);

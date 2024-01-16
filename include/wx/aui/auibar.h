@@ -693,7 +693,6 @@ protected:
     bool m_gripperVisible;
     bool m_overflowVisible;
 
-    bool RealizeHelper(wxClientDC& dc, bool horizontal);
     static bool IsPaneValid(long style, const wxAuiPaneInfo& pane);
     bool IsPaneValid(long style) const;
     void SetArtFlags() const;
@@ -704,6 +703,8 @@ protected:
 private:
     // Common part of OnLeaveWindow() and OnCaptureLost().
     void DoResetMouseState();
+
+    wxSize RealizeHelper(wxClientDC& dc, wxOrientation orientation);
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);

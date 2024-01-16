@@ -170,7 +170,6 @@ inline T wxWGLProcCast(PROC proc)
 // compilers (e.g. MinGW) this needs to be done at makefiles level.
 #ifdef _MSC_VER
 #  pragma comment( lib, "opengl32" )
-#  pragma comment( lib, "glu32" )
 #endif
 
 //-----------------------------------------------------------------------------

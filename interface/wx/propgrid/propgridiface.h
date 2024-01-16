@@ -368,7 +368,7 @@ public:
             See @ref propgrid_iterator_flags.
     */
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
-                                wxPGProperty::FlagType flags,
+                                wxPGPropertyFlags flags,
                                 bool inverse = false,
                                 int iterFlags = (wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES) ) const;
 
@@ -844,7 +844,7 @@ public:
             Text identifier of attribute. See @ref propgrid_property_attributes.
         @param value
             Value of attribute.
-        @param argFlags
+        @param flags
             Optional.
             Use wxPGPropertyValuesFlags::Recurse to set the attribute to child
             properties recursively.
@@ -855,7 +855,7 @@ public:
         - Property is refreshed with new settings.
     */
     void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName, wxVariant value,
-                              wxPGPropertyValuesFlags argFlags = wxPGPropertyValuesFlags::DontRecurse);
+                              wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     /**
         Sets property attribute for all applicable properties.

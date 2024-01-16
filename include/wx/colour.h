@@ -13,6 +13,7 @@
 
 #include "wx/defs.h"
 #include "wx/gdiobj.h"
+#include "wx/variant.h"
 
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
@@ -52,15 +53,6 @@ const unsigned char wxALPHA_OPAQUE = 0xff;
 // a valid but fully transparent colour
 #define wxTransparentColour wxColour(0, 0, 0, wxALPHA_TRANSPARENT)
 #define wxTransparentColor wxTransparentColour
-
-// ----------------------------------------------------------------------------
-// wxVariant support
-// ----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLIMPEXP_CORE)
-#endif
 
 //-----------------------------------------------------------------------------
 // wxColourBase: this class has no data members, just some functions to avoid
@@ -187,6 +179,8 @@ public:
 
     wxColour ChangeLightness(int ialpha) const;
     wxColour& MakeDisabled(unsigned char brightness = 255);
+
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxColour, WXDLLIMPEXP_CORE);
 
 protected:
     // Some ports need Init() and while we don't, provide a stub so that the

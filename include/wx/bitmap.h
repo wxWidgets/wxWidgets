@@ -18,6 +18,7 @@
 #include "wx/gdicmn.h"  // for wxBitmapType
 #include "wx/colour.h"
 #include "wx/image.h"
+#include "wx/variant.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
@@ -27,15 +28,6 @@ class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
-
-// ----------------------------------------------------------------------------
-// wxVariant support
-// ----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLIMPEXP_CORE)
-#endif
 
 // ----------------------------------------------------------------------------
 // wxMask represents the transparent area of the bitmap
@@ -100,6 +92,9 @@ public:
 
     // Rescale the given bitmap to the requested size.
     static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
+
+    // wxVariant support
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap, WXDLLIMPEXP_CORE);
 };
 
 
@@ -178,6 +173,11 @@ public:
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
 
+    // DIP size and logical size are the same thing for ports using scaling,
+    // i.e. where physical and logical sizes are different (e.g. wxGTK and
+    // wxOSX), but we want to have both sets of functions to use them in the
+    // ports where physical and logical sizes are the same (wxMSW).
+
     bool CreateWithDIPSize(const wxSize& sz,
                            double scale,
                            int depth = wxBITMAP_SCREEN_DEPTH)
@@ -185,6 +185,15 @@ public:
     bool CreateWithDIPSize(int width, int height,
                            double scale,
                            int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(wxSize(width, height), scale, depth); }
+
+    bool CreateWithLogicalSize(const wxSize& sz,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(sz, scale, depth); }
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
         { return DoCreate(wxSize(width, height), scale, depth); }
 
     virtual int GetHeight() const = 0;
