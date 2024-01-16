@@ -338,29 +338,41 @@ TEST_CASE_METHOD(NumValidatorTestCase, "ValNum::Interactive", "[valnum]")
 
 
     // Also test the range constraint.
+    valFloat.SetRange(10., 20.);
+    text2->SetValidator(valFloat);
     text2->Clear();
 
+    // Entering a value which is out of range but within
+    // the extended input range is allowed.
     sim.Char('9');
     wxYield();
     CHECK( text2->GetValue() == "9" );
 
-    // Entering a value which is out of range is allowed.
+    // Entering a value greater than the positive range maximum
+    // is not allowed.
     sim.Char('9');
     wxYield();
-    CHECK( text2->GetValue() == "99" );
+    CHECK( text2->GetValue() == "9" );
 
-    // But it must be clamped to the valid range on focus loss.
+    // A value that is out of range but within the extended input
+    // range must be clamped to the valid range on focus loss.
     m_text->SetFocus();
     wxYield();
     CHECK( text2->GetValue() == "10.000" );
 
-    // Repeat the test with a too small invalid value.
+    // Repeat the test with a negative invalid value.
+    valFloat.SetRange(-20., -10.);
+    text2->SetValidator(valFloat);
     text2->Clear();
     text2->SetFocus();
 
-    sim.Text("-22");
+    sim.Text("-2");
     wxYield();
-    CHECK( text2->GetValue() == "-22" );
+    CHECK( text2->GetValue() == "-2" );
+
+    sim.Char('2');
+    wxYield();
+    CHECK( text2->GetValue() == "-2" );
 
     m_text->SetFocus();
     wxYield();
