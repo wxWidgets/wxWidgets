@@ -954,6 +954,17 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
         return false;
 #endif
 
+    // Construct the path to the confusingly named "root cache" CEF directory
+    // which is actually called "user data" directory in Chrome. It is the
+    // directory containing "cache" CEF directories (more clearly called
+    // "profile" directories in Chrome) and this is the only directory which we
+    // can set.
+    //
+    // It contains both "config" and "cache" files, but as it doesn't contain
+    // only the latter, don't put it under GetUserDir(Dir_Cache) by default,
+    // although applications that know that they are not going to have any
+    // important data there should probably change this by specifying a
+    // different directory to use via wxWebViewConfiguration.
     wxFileName cefDataFolder;
     const wxString& dataDir = config.GetDataPath();
     if ( !dataDir.empty() )
@@ -989,9 +1000,6 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
     }
 #endif // !__WXOSX__
 
-    // According to b5386249b (alloy: Remove CefSettings.user_data_path (fixes
-    // #3511), 2023-06-06) in CEF sources, root_cache_path should be used for
-    // all files now.
     wxFileName userDataPath(cefDataFolder.GetFullPath(), "UserData");
     CefString(&settings.root_cache_path).FromWString(userDataPath.GetFullPath().ToStdWstring());
 
