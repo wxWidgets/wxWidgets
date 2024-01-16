@@ -1868,6 +1868,9 @@ BUILD_CFG_FILE = $(SETUPHDIR)\build.cfg
 !if "$(TARGET_CPU)" == "AMD64"
 ARCH_SUFFIX = _x64
 !endif
+!if "$(TARGET_CPU)" == "ARM"
+ARCH_SUFFIX = _arm
+!endif
 !if "$(TARGET_CPU)" == "ARM64"
 ARCH_SUFFIX = _arm64
 !endif
@@ -1888,6 +1891,9 @@ ARCH_SUFFIX = _x64
 !endif
 !if "$(TARGET_CPU)" == "arm64"
 ARCH_SUFFIX = _arm64
+!endif
+!if "$(TARGET_CPU)" == "arm"
+ARCH_SUFFIX = _arm
 !endif
 !if "$(TARGET_CPU)" == "ia64"
 ARCH_SUFFIX = _ia64
@@ -1937,6 +1943,9 @@ LIBTYPE_SUFFIX = dll
 !if "$(TARGET_CPU)" == "AMD64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
+!if "$(TARGET_CPU)" == "ARM"
+LINK_TARGET_CPU = /MACHINE:ARM
+!endif
 !if "$(TARGET_CPU)" == "ARM64"
 LINK_TARGET_CPU = /MACHINE:ARM64
 !endif
@@ -1954,6 +1963,9 @@ LINK_TARGET_CPU = /MACHINE:X64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:X64
+!endif
+!if "$(TARGET_CPU)" == "arm"
+LINK_TARGET_CPU = /MACHINE:ARM
 !endif
 !if "$(TARGET_CPU)" == "arm64"
 LINK_TARGET_CPU = /MACHINE:ARM64
@@ -5742,6 +5754,9 @@ __webview_additional_libdirs_arch_FILENAMES = x86
 !if "$(TARGET_CPU)" == "AMD64"
 __webview_additional_libdirs_arch_FILENAMES = x64
 !endif
+!if "$(TARGET_CPU)" == "ARM"
+__webview_additional_libdirs_arch_FILENAMES = arm
+!endif
 !if "$(TARGET_CPU)" == "ARM64"
 __webview_additional_libdirs_arch_FILENAMES = arm64
 !endif
@@ -5753,6 +5768,9 @@ __webview_additional_libdirs_arch_FILENAMES = x86
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 __webview_additional_libdirs_arch_FILENAMES = x64
+!endif
+!if "$(TARGET_CPU)" == "arm"
+__webview_additional_libdirs_arch_FILENAMES = arm
 !endif
 !if "$(TARGET_CPU)" == "arm64"
 __webview_additional_libdirs_arch_FILENAMES = arm64
