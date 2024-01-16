@@ -1029,7 +1029,7 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
     CefRefPtr<CefApp> cefApp{new wxCefBrowserApp{}};
     if ( !CefInitialize(args, settings, cefApp, nullptr) )
     {
-        wxLogError("Could not initialize CEF");
+        wxLogError(_("Could not initialize Chromium"));
         return false;
     }
 
