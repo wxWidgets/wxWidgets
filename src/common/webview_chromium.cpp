@@ -1014,11 +1014,9 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
 
     settings.no_sandbox = true;
 
-#ifdef __WXDEBUG__
     wxFileName logFileName(cefDataFolder.GetFullPath(), "debug.log");
     settings.log_severity = LOGSEVERITY_INFO;
     CefString(&settings.log_file).FromWString(logFileName.GetFullPath().ToStdWstring());
-#endif
 
 #ifdef __WXMSW__
     CefMainArgs args(wxGetInstance());
