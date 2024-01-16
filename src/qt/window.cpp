@@ -287,7 +287,7 @@ void wxWindowQt::QtSendSetCursorEvent(wxWindowQt* win, const wxPoint& posClient)
         const bool processedEvtSetCursor = win->HandleWindowEvent(event);
         if ( processedEvtSetCursor && event.HasCursor() )
         {
-            win->SetCursor( event.GetCursor() );
+            win->SetCursor(event.GetCursor());
         }
         else
         {
