@@ -269,8 +269,8 @@ wxIntegerValidatorBase::FromString(const wxString& s,
 }
 
 bool
-wxIntegerValidatorBase::IsCharOk(const wxString& WXUNUSED(val),
-                                 int WXUNUSED(pos),
+wxIntegerValidatorBase::IsCharOk(const wxString& val,
+                                 int pos,
                                  wxChar ch) const
 {
     // We only accept digits here (remember that '-' is taken care of by the
@@ -278,10 +278,13 @@ wxIntegerValidatorBase::IsCharOk(const wxString& WXUNUSED(val),
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // Accept anything that looks like a number here, notably do _not_ call
-    // IsInRange() because this would prevent entering any digits in an
-    // initially empty control limited to the values between "10" and "20".
-    return true;
+    // And the value after insertion needs to be at least in the range
+    // allowed on input.
+    LongestValueType value;
+    if ( !FromString(GetValueAfterInsertingChar(val, pos, ch), &value) )
+        return false;
+
+    return IsInInputRange(value);
 }
 
 // ============================================================================
@@ -360,9 +363,8 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
         return false;
 
-    // Note that we do _not_ check if it's in range here, see the comment in
-    // wxIntegerValidatorBase::IsCharOk().
-    return true;
+    // Finally check whether it is at least in the range allowed on input.
+    return IsInInputRange(value);
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL
