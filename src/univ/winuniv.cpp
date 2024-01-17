@@ -557,7 +557,7 @@ bool wxWindow::IsCurrent() const
     return m_isCurrent;
 }
 
-bool wxWindow::SetCurrent(bool doit)
+bool wxWindow::WXMakeCurrent(bool doit)
 {
     if ( doit == m_isCurrent )
         return false;

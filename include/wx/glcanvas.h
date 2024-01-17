@@ -258,11 +258,6 @@ public:
     // as a parameter
     wxGLContextAttrs& GetGLCTXAttrs() { return m_GLCTXAttrs; }
 
-#ifdef __WXUNIVERSAL__
-    // resolve the conflict with wxWindowUniv::SetCurrent()
-    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); }
-#endif
-
 protected:
     // override this to implement SetColour() in GL_INDEX_MODE
     // (currently only implemented in wxX11)

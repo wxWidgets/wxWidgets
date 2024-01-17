@@ -50,7 +50,7 @@ public:
 
     virtual bool Enable(bool enable = true) override;
 
-    virtual bool SetCurrent(bool doit = true) override;
+    virtual bool WXMakeCurrent(bool doit = true) override;
 
     virtual void Press() override;
     virtual void Release() override;
