@@ -391,6 +391,7 @@ set(QT_SRC
     src/qt/datectrl.cpp
     src/qt/timectrl.cpp
     src/qt/overlay.cpp
+    src/qt/renderer.cpp
 )
 
 set(MEDIA_QT_SRC

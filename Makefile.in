@@ -5551,7 +5551,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_paletteg.o \
 	monodll_qt_datectrl.o \
 	monodll_qt_timectrl.o \
-	monodll_qt_overlay.o
+	monodll_qt_overlay.o \
+	monodll_qt_renderer.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_UNIX_1@	monodll_unix_dialup.o monodll_unix_joystick.o \
@@ -7317,7 +7318,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_paletteg.o \
 	monolib_qt_datectrl.o \
 	monolib_qt_timectrl.o \
-	monolib_qt_overlay.o
+	monolib_qt_overlay.o \
+	monolib_qt_renderer.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_1 = \
 @COND_PLATFORM_UNIX_1@	monolib_unix_dialup.o monolib_unix_joystick.o \
@@ -9234,7 +9236,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_paletteg.o \
 	coredll_qt_datectrl.o \
 	coredll_qt_timectrl.o \
-	coredll_qt_overlay.o
+	coredll_qt_overlay.o \
+	coredll_qt_renderer.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_2 = \
 @COND_PLATFORM_UNIX_1@	coredll_unix_dialup.o coredll_unix_joystick.o \
@@ -10726,7 +10729,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_paletteg.o \
 	corelib_qt_datectrl.o \
 	corelib_qt_timectrl.o \
-	corelib_qt_overlay.o
+	corelib_qt_overlay.o \
+	corelib_qt_renderer.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_3 = \
 @COND_PLATFORM_UNIX_1@	corelib_unix_dialup.o corelib_unix_joystick.o \
@@ -15833,6 +15837,9 @@ monodll_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(MONODLL_ODEP)
 monodll_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/overlay.cpp
 
+monodll_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
+
 monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
 
@@ -20587,6 +20594,9 @@ monolib_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(MONOLIB_ODEP)
 
 monolib_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/overlay.cpp
+
+monolib_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
 
 monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -26024,6 +26034,9 @@ coredll_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(COREDLL_ODEP)
 coredll_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/overlay.cpp
 
+coredll_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
+
 coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
 
@@ -29743,6 +29756,9 @@ corelib_qt_timectrl.o: $(srcdir)/src/qt/timectrl.cpp $(CORELIB_ODEP)
 
 corelib_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/overlay.cpp
+
+corelib_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
 
 corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
