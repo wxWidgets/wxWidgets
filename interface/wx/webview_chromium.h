@@ -274,6 +274,37 @@ class wxWebViewChromium : public wxWebView
 {
 public:
     /**
+        Default constructor.
+
+        Use Create() to actually create the web view object later.
+     */
+    wxWebViewChromium();
+
+    /**
+        Constructor allowing to specify extra configuration parameters.
+
+        You must use Create() to really initialize the object created with this
+        constructor.
+
+        Chromium-specific configuration parameters can be specified by setting
+        wxWebViewConfigurationChromium fields before passing @a config to this
+        function, e.g.
+
+        @code
+        wxWebViewConfiguration config =
+            wxWebView::NewConfiguration(wxWebViewBackendChromium);
+
+        auto configChrome =
+            static_cast<wxWebViewConfigurationChromium*>(config.GetNativeConfiguration());
+        configChrome->m_logFile = "/my/custom/CEF/log/file/path.txt";
+
+        auto webview = new wxWebViewChromium(config);
+        webview->Create(this, wxID_ANY, url);
+        @endcode
+    */
+    explicit wxWebViewChromium(const wxWebViewConfiguration& config);
+
+    /**
         wxWebViewChromium constructor, arguments as per wxWebView::New.
     */
     wxWebViewChromium(wxWindow* parent,
@@ -304,6 +335,53 @@ public:
     void SetRoot(const wxFileName& rootDir);
 };
 
+
+/**
+    Chromium-specific configuration parameters.
+
+    This simple class contains parameters that can be passed to the function
+    initializing CEF when wxWebView is used for the first time.
+
+    To use this struct you need to cast the value returned from
+    wxWebViewConfiguration::GetNativeConfiguration() to this type:
+    @code
+    wxWebViewConfiguration config =
+        wxWebView::NewConfiguration(wxWebViewBackendChromium);
+
+    auto configChrome =
+        static_cast<wxWebViewConfigurationChromium*>(config.GetNativeConfiguration());
+    configChrome->m_logLevel = 99; // Disable all logging.
+    @endcode
+
+    @since 3.3.0
+ */
+class wxWebViewConfigurationChromium
+{
+public:
+    /**
+        Default constructor initializes the object to default parameters.
+     */
+    wxWebViewConfigurationChromium();
+
+    /**
+        CEF log file location.
+
+        Should be an absolute path if specified.
+
+        If this variable is empty, `debug.log` under the data directory is
+        used.
+     */
+    wxString m_logFile;
+
+    /**
+        Logging level to use for CEF.
+
+        This must be one of `cef_log_severity_t` values.
+
+        Default value 0 means to use default "INFO" log level.
+     */
+    int m_logLevel = 0;
+};
 
 /**
     Event class for events generated exclusively by wxWebViewChromium.

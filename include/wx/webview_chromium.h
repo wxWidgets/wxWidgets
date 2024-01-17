@@ -180,6 +180,27 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxWebViewChromium);
 };
 
+
+// Chrome-specific configuration class: a pointer to this object can be
+// retrieved using wxWebViewConfiguration::GetNativeConfiguration() and used to
+// configure some CEF-specific initialization options.
+//
+// Note that, contrary to the name of the accessor, this class is not native in
+// this backend, although it contains data found in native (i.e. defined in
+// Chrome) structs.
+class wxWebViewConfigurationChromium
+{
+public:
+    wxWebViewConfigurationChromium() = default;
+
+    // Log file location: by default debug.log under data path is used.
+    wxString m_logFile;
+
+    // Logging level must be one of cef_log_severity_t values (0 means default).
+    int m_logLevel = 0;
+};
+
+
 class CefFrame;
 class CefProcessMessage;
 

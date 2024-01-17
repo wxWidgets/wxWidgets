@@ -253,13 +253,22 @@ void AppImplData::DoMessageLoopWork()
 // Chromium-specific configuration data
 // ----------------------------------------------------------------------------
 
-class wxWebViewConfigurationImplChromium : public wxWebViewConfigurationImpl
+class wxWebViewConfigurationImplChromium : public wxWebViewConfigurationImpl,
+                                           public wxWebViewConfigurationChromium
 {
 public:
     static wxWebViewConfiguration MakeConfig()
     {
         return wxWebViewConfiguration(wxWebViewBackendChromium,
                                       new wxWebViewConfigurationImplChromium);
+    }
+
+    virtual void* GetNativeConfiguration() const
+    {
+        // Our "native" configuration is our own Chromium-specific class from
+        // which we inherit.
+        const wxWebViewConfigurationChromium* self = this;
+        return const_cast<wxWebViewConfigurationChromium*>(self);
     }
 
     virtual void SetDataPath(const wxString& path) override
@@ -1005,7 +1014,9 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
     }
 #endif // !__WXOSX__
 
-    wxFileName userDataPath(cefDataFolder.GetFullPath(), "UserData");
+    const wxString cefPath = cefDataFolder.GetFullPath();
+
+    wxFileName userDataPath(cefPath, "UserData");
     CefString(&settings.root_cache_path).FromWString(userDataPath.GetFullPath().ToStdWstring());
 
     // Set up CEF for use inside another application, as is the case for us.
@@ -1014,9 +1025,19 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
 
     settings.no_sandbox = true;
 
-    wxFileName logFileName(cefDataFolder.GetFullPath(), "debug.log");
-    settings.log_severity = LOGSEVERITY_INFO;
-    CefString(&settings.log_file).FromWString(logFileName.GetFullPath().ToStdWstring());
+    // Configure logging.
+    const auto configChrome =
+        static_cast<wxWebViewConfigurationChromium*>(config.GetNativeConfiguration());
+    wxCHECK_MSG( configChrome, false, "Should have Chromium-specific config" );
+
+    settings.log_severity = static_cast<cef_log_severity_t>(configChrome->m_logLevel);
+    wxString logFile = configChrome->m_logFile;
+    if ( logFile.empty() )
+    {
+        logFile = wxFileName(cefPath, "debug.log").GetFullPath();
+    }
+
+    CefString(&settings.log_file).FromWString(logFile.ToStdWstring());
 
 #ifdef __WXMSW__
     CefMainArgs args(wxGetInstance());
