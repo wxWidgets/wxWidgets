@@ -478,6 +478,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/datectrl.cpp
     src/qt/timectrl.cpp
     src/qt/overlay.cpp
+    src/qt/renderer.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">

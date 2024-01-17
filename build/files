@@ -387,6 +387,7 @@ QT_SRC=
     src/qt/radiobox.cpp
     src/qt/radiobut.cpp
     src/qt/region.cpp
+    src/qt/renderer.cpp
     src/qt/scrolbar.cpp
     src/qt/settings.cpp
     src/qt/slider.cpp

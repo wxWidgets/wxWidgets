@@ -383,6 +383,12 @@ private:
         else
             renderer.DrawChoice(this, dc,
                                 wxRect(x2, y, width, GetCharHeight() * 3 / 2), m_flags);
+
+        y += lineHeight + heightGauge;
+
+        dc.DrawText("DrawTextCtrl()", x1, y);
+        renderer.DrawTextCtrl(this, dc,
+            wxRect(x2, y, width, GetCharHeight() * 3 / 2), m_flags);
     }
 
     int m_flags;
