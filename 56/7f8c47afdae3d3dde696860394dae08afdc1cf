@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxRibbonBar::GetPageById() (Blake Madden, #24211).
