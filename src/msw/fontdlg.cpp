@@ -126,21 +126,22 @@ int wxFontDialog::ShowModal()
         chooseFontStruct.lpfnHook = wxFontDialogHookProc;
     }
 
+    // The native font dialog does not support moving between displays with
+    // different DPIs. Check if it will be shown system-dpi-aware.
+    const bool useSystemDPI = wxMSWImpl::AutoSystemDpiAware::Needed();
+
+    // When the font dialog is system-dpi-aware, it expects the font at 96DPI/100% scaling.
+    // When the font dialog is per-monitor-dpi-aware, it expects a font with the system DPI.
+    const int fontdlgDPI = useSystemDPI ? wxDisplay::GetStdPPIValue() : wxGetDPIofHDC(ScreenHDC()).y;
+
     if ( m_fontData.m_initialFont.IsOk() )
     {
         flags |= CF_INITTOLOGFONTSTRUCT;
         logFont = m_fontData.m_initialFont.GetNativeFontInfo()->lf;
 
-        // The standard dialog seems to always use the default DPI for
-        // converting LOGFONT height to the value in points shown in the
-        // dialog (and this happens even when not using AutoSystemDpiAware),
-        // so we need to convert it to standard (not even system, because the
-        // dialog doesn't take it into account either) DPI.
-        logFont.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI
-                           (
-                                m_fontData.m_initialFont.GetFractionalPointSize(),
-                                wxDisplay::GetStdPPIValue()
-                           );
+        // Convert the DPI of the font to the DPI of the font dialog.
+        const double fPointSize = m_fontData.m_initialFont.GetFractionalPointSize();
+        logFont.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(fPointSize, fontdlgDPI);
     }
 
     if ( m_fontData.m_fontColour.IsOk() )
@@ -180,33 +181,21 @@ int wxFontDialog::ShowModal()
         // Don't trust the LOGFONT height returned by the native dialog because
         // it doesn't use the correct DPI.
         //
-        // Note that we must use our parent and not this window itself, as it
-        // doesn't have any valid HWND and so its DPI can't be determined.
-        if ( parent )
-        {
-            // We can't just adjust lfHeight directly to the correct DPI here
-            // as doing this would introduce rounding problems, e.g. 8pt font
-            // corresponds to lfHeight == 11px and scaling this up for 150% DPI
-            // would result in 17px height which would then map to 8.5pt at
-            // 150% DPI and end up being rounded to 9pt, which would be wrong.
-            //
-            // So find the point size itself first:
-            const int pointSize = wxRound(wxNativeFontInfo::GetPointSizeAtPPI
-                                          (
-                                            logFont.lfHeight,
-                                            wxDisplay::GetStdPPIValue()
-                                          ));
+        // We can't just adjust lfHeight directly to the correct DPI here
+        // as doing this would introduce rounding problems, e.g. 8pt font
+        // corresponds to lfHeight == 11px and scaling this up for 150% DPI
+        // would result in 17px height which would then map to 8.5pt at
+        // 150% DPI and end up being rounded to 9pt, which would be wrong.
+        //
+        // Convert from the DPI of the font dialog to the DPI the
+        // wxNativeFontInfo constructor will use to determine the font size.
+        const double fPointSize = wxNativeFontInfo::GetPointSizeAtPPI(logFont.lfHeight, fontdlgDPI);
+        const int fontDPI = wxGetDPIofHDC(ScreenHDC()).y;
+        logFont.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(wxRound(fPointSize), fontDPI);
 
-            // And then compute the pixel height that results in this point
-            // size at the actual DPI being used.
-            logFont.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI
-                               (
-                                    pointSize,
-                                    parent->GetDPI().y
-                               );
-        }
-
-        wxFont f(wxNativeFontInfo(logFont, parent));
+        // Use nullptr, so the pointSize calculation in wxNativeFontInfo will
+        // use the same fontDPI as is used above for lfHeight.
+        wxFont f(wxNativeFontInfo(logFont, nullptr));
 
         // The native dialog allows selecting only integer font sizes in
         // points, but converting them to pixel height loses precision and so
