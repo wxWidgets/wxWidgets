@@ -72,6 +72,12 @@
         appearance but not all fonts are available in this quality,
         e.g. the Terminal font in small sizes is not and this option may be
         used if wider fonts selection is more important than higher quality.
+    @flag{msw.native-dialogs-pmdpi}
+        Some native win32 dialogs (like the font and colour pickers) are not
+        per-monitor DPI aware, and wxWidgets will forcefully show them as
+        system DPI aware when there are monitors with different DPI connected.
+        If set to 1, these dialogs will always be shown as per-monitor DPI
+        aware (when enabled in the manifest).
     @endFlagTable
 
 
