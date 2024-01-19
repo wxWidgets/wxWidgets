@@ -2518,6 +2518,7 @@ set(WEBVIEW_CMN_SRC
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
+    src/common/webview_chromium.cpp
 )
 
 set(WEBVIEW_MSW_HDR
@@ -2530,6 +2531,7 @@ set(WEBVIEW_CMN_HDR
     wx/webview.h
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
+    wx/webview_chromium.h
 )
 
 set(WEBVIEW_OSX_SHARED_HDR
@@ -2539,6 +2541,7 @@ set(WEBVIEW_OSX_SHARED_HDR
 
 set(WEBVIEW_OSX_SHARED_SRC
     src/osx/webview_webkit.mm
+    src/osx/webview_chromium.mm
 )
 
 set(WEBVIEW_GTK_HDR
@@ -2556,6 +2559,17 @@ set(WEBVIEW2_GTK_SRC
 
 set(WEBVIEW_WEBKIT2_EXTENSION_SRC
     src/gtk/webview_webkit2_extension.cpp
+)
+
+set(WEBVIEWCHROMIUM_HDR
+    wx/webview.h
+    wx/webview_chromium.h
+)
+set(WEBVIEWCHROMIUM_SRC
+    src/common/webview_chromium.cpp
+)
+set(WEBVIEWCHROMIUM_OSX_SHARED_SRC
+    src/osx/webview_chromium.mm
 )
 
 set(XRC_SRC

@@ -1049,6 +1049,8 @@ bool wxWebViewEdge::Create(wxWindow* parent,
     if (topLevelParent)
         topLevelParent->Bind(wxEVT_ICONIZE, &wxWebViewEdge::OnTopLevelParentIconized, this);
 
+    NotifyWebViewCreated();
+
     LoadURL(url);
     return true;
 }

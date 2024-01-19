@@ -229,6 +229,11 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_WEBVIEW_CHROMIUM">
+        <values>0,1</values>
+        <default-value>0</default-value>
+    </option>
+
     <option name="USE_MEDIA">
         <values>0,1</values>
         <default-value>1</default-value>
@@ -404,6 +409,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="EXTRALIBS_SDL"/>
         <option name="EXTRALIBS_STC"/>
         <option name="EXTRALIBS_WEBVIEW"/>
+        <option name="EXTRALDFLAGS_WEBVIEW"/>
         <option name="WX_CPPFLAGS"/>
         <option name="WX_CFLAGS"/>
         <option name="WX_CXXFLAGS"/>
@@ -490,6 +496,7 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc' and TOOLKIT=='MSW'">-limm32</if>
         </set>
         <set var="EXTRALIBS_WEBVIEW"/>
+        <set var="EXTRALDFLAGS_WEBVIEW"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
 
@@ -524,6 +531,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
         <set var="USE_WEBVIEW">1</set>
+        <set var="USE_WEBVIEW_CHROMIUM">0</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XML">1</set>
         <set var="USE_XRC">1</set>
@@ -553,4 +561,8 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_OPENGL">0</set>
     </if>
 
+    <!-- Directory where CEF should be available -->
+    <set var="CEF_DIR">
+        $(TOP_SRCDIR)/3rdparty/cef
+    </set>
 </makefile>

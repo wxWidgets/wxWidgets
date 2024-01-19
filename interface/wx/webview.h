@@ -339,7 +339,8 @@ public:
         local storage, etc.
         @param path The path to the data directory.
 
-        @note This is only used by the Edge and WebKit2GTK+ backend.
+        @note This is used by Edge, WebKit2GTK+ and Chromium backends (the
+            latter creates "UserData" subdirectory under the given path).
     */
     void SetDataPath(const wxString& path);
 
@@ -350,7 +351,8 @@ public:
         local storage, etc.
         @return The path to the data directory.
 
-        @note This is only used by the Edge and WebKit2GTK+ backend.
+        @note This is used by Edge, WebKit2GTK+ and Chromium backends and
+            always returns empty string for the other ones.
     */
     wxString GetDataPath() const;
 };
@@ -871,6 +873,11 @@ public:
     The predefined @c wxWebViewBackendWebKit constant contains the name of this
     backend.
 
+    @par wxWEBVIEW_CHROMIUM (MSW, OSX, GTK)
+
+    The Chromium Embedded Framework backend has to be enabled when building wxWidgets,
+    see wxWebViewChromium for additional usage and build instructions.
+
     @section async Asynchronous Notifications
 
     Many of the methods in wxWebView are asynchronous, i.e. they return
@@ -899,6 +906,11 @@ public:
     @c scheme:///C:/example/docs.zip;protocol=zip/main.htm
 
     @beginEventEmissionTable{wxWebViewEvent}
+    @event{EVT_WEBVIEW_CREATED(id, func)}
+       Process a @c wxEVT_WEBVIEW_CREATED event, generated when the object is
+       fully initialized. For the backends using asynchronous initialization,
+       such as wxWebViewChromium, most of this class member functions can be
+       only used once this event is received.
     @event{EVT_WEBVIEW_NAVIGATING(id, func)}
        Process a @c wxEVT_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
@@ -962,6 +974,12 @@ public:
 
     /**
         Creation function for two-step creation.
+
+        Please note that the object creation may be asynchronous when using
+        some backends (currently this is the case only for wxWebViewChromium)
+        and the object is not really created until wxEVT_WEBVIEW_CREATED event
+        is received, so any non-trivial calls to its member functions should be
+        delayed until then.
     */
     virtual bool Create(wxWindow* parent,
                         wxWindowID id,
@@ -994,6 +1012,10 @@ public:
 
     /**
         Factory function to create a new wxWebView using a wxWebViewFactory.
+
+        Note that the returned object may not be immediately usable yet, see
+        Create() and wxEVT_WEBVIEW_CREATED.
+
         @param parent Parent window for the control
         @param id ID of this control
         @param url Initial URL to load
@@ -1217,8 +1239,17 @@ public:
         The @a proxy string must be a valid proxy specification, e.g. @c
         http://my.local.proxy.corp:8080
 
-        @note Currently this function is only implemented in WebKit2 and Edge
-            backends and must be called before Create() for the latter one.
+        Currently this function is only implemented in WebKit2, Edge and
+        Chromium backends and only WebKit2 backend allows to set the proxy
+        after creating the webview, so it is recommended to call it before
+        Create():
+        @code
+            auto webview = wxWebView::New();
+            if ( !webview->SetProxy("http://127.0.0.1:8080") ) {
+                wxLogWarning("Setting proxy failed!");
+            }
+            webview->Create(parent, wxID_ANY);
+        @endcode
 
         @return @true if proxy was set successfully or @false if it failed,
             e.g. because this is not supported by the currently used backend.
@@ -1270,6 +1301,10 @@ public:
 
         - When using WebKit under macOS, code execution is limited to at most
           10MiB of memory and 10 seconds of execution time.
+
+        - When using Chromium backend, retrieving the result of JavaScript
+          execution is unsupported and this function will always return false
+          if @a output is non-null to indicate this.
 
         - When using IE backend under MSW, scripts can only be executed when
           the current page is fully loaded (i.e. @c wxEVT_WEBVIEW_LOADED event
@@ -1790,6 +1825,11 @@ public:
     wxWebView objects.
 
     @beginEventEmissionTable{wxWebViewEvent}
+    @event{EVT_WEBVIEW_CREATED(id, func)}
+       Process a @c wxEVT_WEBVIEW_CREATED event, generated when the object is
+       fully initialized. For the backends using asynchronous initialization,
+       such as wxWebViewChromium, most of this class member functions can be
+       only used once this event is received.
     @event{EVT_WEBVIEW_NAVIGATING(id, func)}
        Process a @c wxEVT_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
@@ -1916,6 +1956,7 @@ public:
 };
 
 
+wxEventType wxEVT_WEBVIEW_CREATED;
 wxEventType wxEVT_WEBVIEW_NAVIGATING;
 wxEventType wxEVT_WEBVIEW_NAVIGATED;
 wxEventType wxEVT_WEBVIEW_LOADED;

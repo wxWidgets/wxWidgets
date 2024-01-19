@@ -283,6 +283,8 @@
 
 #cmakedefine01 wxUSE_WEBVIEW
 
+#cmakedefine01 wxUSE_WEBVIEW_CHROMIUM
+
 #ifdef __WXMSW__
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #else
@@ -595,6 +597,11 @@
  */
 #cmakedefine01 wxUSE_SELECT_DISPATCHER
 #cmakedefine01 wxUSE_EPOLL_DISPATCHER
+
+/*
+   Use debug version of CEF in wxWebViewChromium.
+ */
+#cmakedefine wxHAVE_CEF_DEBUG
 
 /*
    Use GStreamer for Unix.

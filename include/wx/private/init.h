@@ -66,4 +66,19 @@ struct WXDLLIMPEXP_BASE wxInitData
     wxDECLARE_NO_COPY_CLASS(wxInitData);
 };
 
+// Type of the hook function, see wxAddEntryHook(). If this function returns
+// a value different from -1, the process exits using it as error code.
+using wxEntryHook = int (*)();
+
+// Set a special hook function which will be called before performing any
+// normal initialization. Note that this hook can't use any wxWidgets
+// functionality because nothing has been initialized yet, but can use
+// wxInitData to examine the command line arguments and determine if it should
+// be applied.
+//
+// This is currently used only by wxWebViewChromium to allow running Chromium
+// helper applications without initializing GTK under Linux but could, in
+// principle, be used for any other similar purpose.
+WXDLLIMPEXP_BASE void wxAddEntryHook(wxEntryHook hook);
+
 #endif // _WX_PRIVATE_INIT_H_

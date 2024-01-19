@@ -907,6 +907,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     PostCreation(size);
 
+    NotifyWebViewCreated();
+
     /* Open a webpage */
     if (!isChildWebView)
         webkit_web_view_load_uri(m_web_view, url.utf8_str());

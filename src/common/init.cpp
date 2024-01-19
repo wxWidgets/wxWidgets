@@ -513,6 +513,29 @@ void wxEntryCleanup()
 }
 
 // ----------------------------------------------------------------------------
+// Entry hook support
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// All registered entry hooks.
+std::vector<wxEntryHook>& GetEntryHooks()
+{
+    static std::vector<wxEntryHook> s_entryHooks;
+    return s_entryHooks;
+}
+
+} // anonymous namespace
+
+void wxAddEntryHook(wxEntryHook hook)
+{
+    // Order doesn't really matter, we suppose that we're never going to have
+    // more than one hook that would apply to the same program run.
+    GetEntryHooks().push_back(hook);
+}
+
+// ----------------------------------------------------------------------------
 // wxEntry
 // ----------------------------------------------------------------------------
 
@@ -523,6 +546,17 @@ void wxEntryCleanup()
 
 int wxEntryReal(int& argc, wxChar **argv)
 {
+    // Do this before trying the hooks as they may use command line arguments.
+    wxInitData::Get().InitIfNecessary(argc, argv);
+
+    // Check if we have any hooks that can hijack the application execution.
+    for ( auto& hook : GetEntryHooks() )
+    {
+        const int rc = (*hook)();
+        if ( rc != -1 )
+            return rc;
+    }
+
     // library initialization
     wxInitializer initializer(argc, argv);
 

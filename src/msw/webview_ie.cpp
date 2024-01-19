@@ -109,6 +109,8 @@ bool wxWebViewIE::Create(wxWindow* parent,
     // pages without any physical network connection.
     SetOfflineMode(false);
 
+    NotifyWebViewCreated();
+
     LoadURL(url);
     return true;
 }
