@@ -52,8 +52,14 @@ private:
 class WXDLLIMPEXP_CORE wxLogGui : public wxLog
 {
 public:
-    // ctor
+    // ctor has a side effect of installing a custom modal hook flushing the
+    // logs before showing any modal dialog: we do this to avoid showing the
+    // log dialog while another modal dialog is showing or, even worse, only
+    // after it is dismissed
     wxLogGui();
+
+    // dtor removes the modal hook
+    virtual ~wxLogGui();
 
     // show all messages that were logged since the last Flush()
     virtual void Flush() override;
