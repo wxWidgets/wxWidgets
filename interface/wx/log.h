@@ -372,6 +372,10 @@ public:
         When it is called from the other threads it simply calls Flush() on the
         currently active log target, so it mostly makes sense to do this if a
         thread has its own logger set with SetThreadActiveTarget().
+
+        Note that when using the default log target, this method is called
+        automatically before showing any modal dialog, in order to prevent
+        showing several modal dialogs one after another.
     */
     static void FlushActive();
 

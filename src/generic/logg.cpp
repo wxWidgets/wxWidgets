@@ -46,6 +46,7 @@
 #include "wx/artprov.h"
 #include "wx/collpane.h"
 #include "wx/arrstr.h"
+#include "wx/modalhook.h"
 #include "wx/msgout.h"
 #include "wx/scopeguard.h"
 
@@ -188,9 +189,38 @@ static int OpenLogFile(wxFile& file, wxString *filename = nullptr, wxWindow *par
 
 #if wxUSE_LOGGUI
 
+namespace
+{
+
+class LogFlushHook : public wxModalDialogHook
+{
+public:
+    LogFlushHook() = default;
+
+    virtual int Enter(wxDialog* WXUNUSED(dialog)) override
+    {
+        wxLog::FlushActive();
+
+        return wxID_NONE;
+    }
+};
+
+// We can have a static object of this class because it doesn't have any
+// members and so its constructor and destructor are trivial.
+LogFlushHook gs_logFlushHook;
+
+} // anonymous namespace
+
 wxLogGui::wxLogGui()
 {
+    gs_logFlushHook.Register();
+
     Clear();
+}
+
+wxLogGui::~wxLogGui()
+{
+    gs_logFlushHook.Unregister();
 }
 
 void wxLogGui::Clear()
