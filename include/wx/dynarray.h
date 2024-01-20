@@ -436,6 +436,35 @@ public:
 
     void Sort(CMPFUNC fCmp) { base::Sort(fCmp); }
 
+    // Provide a way to iterate over the stored objects using range-based for.
+    class ObjectIterator
+    {
+    public:
+        using base_iter = typename base::const_iterator;
+
+        using value_type = T;
+        using reference = T&;
+        using pointer = T*;
+        using difference_type = typename std::iterator_traits<base_iter>::difference_type;
+        using iterator_category = std::random_access_iterator_tag;
+
+        ObjectIterator() = default;
+        ObjectIterator(base_iter const& it) : m_it(it) { }
+
+        bool operator==(ObjectIterator const& other) const { return m_it == other.m_it; }
+        bool operator!=(ObjectIterator const& other) const { return m_it != other.m_it; }
+
+        reference operator*() const { return **m_it; }
+        ObjectIterator& operator++() { ++m_it; return *this; }
+        ObjectIterator& operator--() { --m_it; return *this; }
+
+    private:
+        typename base::const_iterator m_it;
+    };
+
+    wxNODISCARD ObjectIterator begin() const { return base::begin(); }
+    wxNODISCARD ObjectIterator end() const { return base::end(); }
+
 private:
     void DoEmpty()
     {
