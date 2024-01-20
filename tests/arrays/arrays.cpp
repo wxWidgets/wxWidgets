@@ -616,6 +616,15 @@ TEST_CASE("wxObjArray", "[dynarray]")
         CHECK( bars.GetCount() == 3 );
         CHECK( Bar::GetNumber() == 4 );
 
+        ArrayBars tmp;
+        bars.swap(tmp);
+        CHECK( bars.size() == 0 );
+        CHECK( Bar::GetNumber() == 4 );
+
+        bars.swap(tmp);
+        CHECK( bars.size() == 3 );
+        CHECK( Bar::GetNumber() == 4 );
+
         bars.RemoveAt(1, bars.GetCount() - 1);
 
         CHECK( bars.GetCount() == 1 );

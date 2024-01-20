@@ -436,6 +436,8 @@ public:
 
     void Sort(CMPFUNC fCmp) { base::Sort(fCmp); }
 
+    void swap(wxBaseObjectArray& other) { base::swap(other); }
+
     // Provide a way to iterate over the stored objects using range-based for.
     class ObjectIterator
     {
