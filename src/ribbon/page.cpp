@@ -918,7 +918,7 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
                   node = node->GetNext(), ++panel_size )
         {
             wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-            if(panel == nullptr)
+            if(panel == nullptr || !panel->IsShown())
             {
                 continue;
             }
@@ -1018,7 +1018,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                       node = node->GetNext(), ++panel_size )
             {
                 wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-                if(panel == largest_panel)
+                if(panel == largest_panel && panel->IsShown())
                 {
                     largest_panel_size = panel_size;
                     break;
@@ -1033,7 +1033,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                       node = node->GetNext(), ++panel_size )
             {
                 wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-                if(panel == nullptr)
+                if(panel == nullptr || !panel->IsShown())
                 {
                     continue;
                 }
@@ -1109,7 +1109,7 @@ bool wxRibbonPage::DismissExpandedPanel()
               node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if(panel == nullptr)
+        if(panel == nullptr || !panel->IsShown())
         {
             continue;
         }
