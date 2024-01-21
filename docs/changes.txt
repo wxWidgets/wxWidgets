@@ -265,6 +265,7 @@ All (GUI):
 - Fix crash in wxImage::InitAlpha() if image is invalid (Randalphwa, #24260).
 - Fix wxLogStatus() when wxNO_IMPLICIT_WXSTRING_ENCODING is defined (#24267).
 - Don't let exceptions escape from event handlers called during idle processing.
+- Fix reading some previously not loaded GIF images (Mark Wagner, #22799).
 
 wxGTK:
 
