@@ -381,7 +381,7 @@ public:
 
         const size_t nOldSize = size();
         if ( pItem != nullptr )
-            base::insert(this->end(), nInsert, pItem);
+            base::insert(base::end(), nInsert, pItem);
 
         for ( size_t i = 1; i < nInsert; i++ )
             base::operator[](nOldSize + i) = Traits::Clone(item);
@@ -402,7 +402,7 @@ public:
 
         T* const pItem = Traits::Clone(item);
         if ( pItem != nullptr )
-            base::insert(this->begin() + uiIndex, nInsert, pItem);
+            base::insert(base::begin() + uiIndex, nInsert, pItem);
 
         for ( size_t i = 1; i < nInsert; ++i )
             base::operator[](uiIndex + i) = Traits::Clone(item);
@@ -410,7 +410,7 @@ public:
 
     void Insert(const T* pItem, size_t uiIndex)
     {
-        base::insert(this->begin() + uiIndex, const_cast<T*>(pItem));
+        base::insert(base::begin() + uiIndex, const_cast<T*>(pItem));
     }
 
     void Empty() { DoEmpty(); base::clear(); }
@@ -420,7 +420,7 @@ public:
     {
         T* const p = base::operator[](uiIndex);
 
-        base::erase(this->begin() + uiIndex);
+        base::erase(base::begin() + uiIndex);
         return p;
     }
 
@@ -431,10 +431,41 @@ public:
         for ( size_t i = 0; i < nRemove; ++i )
             Traits::Free(base::operator[](uiIndex + i));
 
-        base::erase(this->begin() + uiIndex, this->begin() + uiIndex + nRemove);
+        base::erase(base::begin() + uiIndex, base::begin() + uiIndex + nRemove);
     }
 
     void Sort(CMPFUNC fCmp) { base::Sort(fCmp); }
+
+    void swap(wxBaseObjectArray& other) { base::swap(other); }
+
+    // Provide a way to iterate over the stored objects using range-based for.
+    class ObjectIterator
+    {
+    public:
+        using base_iter = typename base::const_iterator;
+
+        using value_type = T;
+        using reference = T&;
+        using pointer = T*;
+        using difference_type = typename std::iterator_traits<base_iter>::difference_type;
+        using iterator_category = std::random_access_iterator_tag;
+
+        ObjectIterator() = default;
+        ObjectIterator(base_iter const& it) : m_it(it) { }
+
+        bool operator==(ObjectIterator const& other) const { return m_it == other.m_it; }
+        bool operator!=(ObjectIterator const& other) const { return m_it != other.m_it; }
+
+        reference operator*() const { return **m_it; }
+        ObjectIterator& operator++() { ++m_it; return *this; }
+        ObjectIterator& operator--() { --m_it; return *this; }
+
+    private:
+        typename base::const_iterator m_it;
+    };
+
+    wxNODISCARD ObjectIterator begin() const { return base::begin(); }
+    wxNODISCARD ObjectIterator end() const { return base::end(); }
 
 private:
     void DoEmpty()
