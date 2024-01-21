@@ -25,6 +25,7 @@
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
+#include "wx/aui/serializer.h"
 #include "wx/mdi.h"
 #include "wx/wupdlock.h"
 
@@ -1338,6 +1339,105 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
         Update();
 
     return true;
+}
+
+void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
+{
+    serializer.BeforeSave();
+
+    if ( !m_panes.empty() )
+    {
+        serializer.BeforeSavePanes();
+
+        for ( const auto& pane : m_panes )
+            serializer.SavePane(pane);
+
+        serializer.AfterSavePanes();
+    }
+
+    if ( !m_docks.empty() )
+    {
+        serializer.BeforeSaveDocks();
+
+        for ( const auto& dock : m_docks )
+            serializer.SaveDock(dock);
+
+        serializer.AfterSaveDocks();
+    }
+
+    serializer.AfterSave();
+}
+
+void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
+{
+    deserializer.BeforeLoad();
+
+    // Note that we don't reset m_hasMaximized here but use a local variable so
+    // as to avoid modifying m_hasMaximized in case one of the deserializer
+    // functions called below throws an exception.
+    bool hasMaximized = false;
+
+    // Also keep local variables for the existing (and possibly updated) panes
+    // and the new ones for the same reason.
+    wxAuiPaneInfoArray panes = m_panes;
+
+    struct NewPane
+    {
+        // In C++11 this ctor is required.
+        NewPane(wxWindow* window_, const wxAuiPaneInfo& info_)
+            : window(window_), info(info_)
+        {
+        }
+
+        wxWindow* window = nullptr;
+        wxAuiPaneInfo info;
+    };
+    std::vector<NewPane> newPanes;
+
+    for ( const auto& pane : deserializer.LoadPanes() )
+    {
+        if ( pane.IsMaximized() )
+            hasMaximized = true;
+
+        // Find the pane with the same name in the existing layout.
+        bool found = false;
+        for ( auto& existingPane : panes )
+        {
+            if ( existingPane.name == pane.name )
+            {
+                // Update the existing pane with the restored layout.
+                existingPane.SafeSet(pane);
+
+                found = true;
+                break;
+            }
+        }
+
+        // This pane couldn't be found in the existing layout, let deserializer
+        // create a new window for it if desired, otherwise just ignore it.
+        if ( !found )
+        {
+            if ( const auto w = deserializer.CreatePaneWindow(pane) )
+                newPanes.emplace_back(w, pane);
+        }
+    }
+
+    wxAuiDockInfoArray docks;
+    for ( const auto& dock : deserializer.LoadDocks() )
+    {
+        docks.push_back(dock);
+    }
+
+    // After loading everything successfully, do update the internal variables.
+    m_hasMaximized = hasMaximized;
+    m_panes.swap(panes);
+
+    for ( const auto& newPane : newPanes )
+        AddPane(newPane.window, newPane.info);
+
+    m_docks.swap(docks);
+
+    deserializer.AfterLoad();
 }
 
 void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,

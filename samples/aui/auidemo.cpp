@@ -28,6 +28,7 @@
 #include "wx/log.h"
 #include "wx/menu.h"
 #include "wx/toolbar.h"
+#include "wx/sstream.h"
 #include "wx/statusbr.h"
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
@@ -35,6 +36,10 @@
 #include "wx/checkbox.h"
 
 #include "wx/aui/aui.h"
+#include "wx/aui/serializer.h"
+
+#include "wx/xml/xml.h"
+
 #include "../sample.xpm"
 
 // -- application --
@@ -70,7 +75,8 @@ class MyFrame : public wxFrame
         ID_NotebookContent,
         ID_SizeReportContent,
         ID_CreatePerspective,
-        ID_CopyPerspectiveCode,
+        ID_CopyLayout,
+        ID_PasteLayout,
         ID_AllowFloating,
         ID_AllowActivePane,
         ID_TransparentHint,
@@ -149,7 +155,8 @@ private:
     void OnChangeContentPane(wxCommandEvent& evt);
     void OnDropDownToolbarItem(wxAuiToolBarEvent& evt);
     void OnCreatePerspective(wxCommandEvent& evt);
-    void OnCopyPerspectiveCode(wxCommandEvent& evt);
+    void OnCopyLayout(wxCommandEvent& evt);
+    void OnPasteLayout(wxCommandEvent& evt);
     void OnRestorePerspective(wxCommandEvent& evt);
     void OnSettings(wxCommandEvent& evt);
     void OnCustomizeToolbar(wxCommandEvent& evt);
@@ -602,7 +609,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MyFrame::ID_CreateSizeReport, MyFrame::OnCreateSizeReport)
     EVT_MENU(MyFrame::ID_CreateNotebook, MyFrame::OnCreateNotebook)
     EVT_MENU(MyFrame::ID_CreatePerspective, MyFrame::OnCreatePerspective)
-    EVT_MENU(MyFrame::ID_CopyPerspectiveCode, MyFrame::OnCopyPerspectiveCode)
+    EVT_MENU(MyFrame::ID_CopyLayout, MyFrame::OnCopyLayout)
+    EVT_MENU(MyFrame::ID_PasteLayout, MyFrame::OnPasteLayout)
     EVT_MENU(ID_AllowFloating, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentHint, MyFrame::OnManagerFlag)
     EVT_MENU(ID_VenetianBlindsHint, MyFrame::OnManagerFlag)
@@ -764,7 +772,8 @@ MyFrame::MyFrame(wxWindow* parent,
 
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
-    m_perspectives_menu->Append(ID_CopyPerspectiveCode, _("Copy Perspective Data To Clipboard"));
+    m_perspectives_menu->Append(ID_CopyLayout, _("Copy Layout to Clipboard as XML\tCtrl-C"));
+    m_perspectives_menu->Append(ID_PasteLayout, _("Paste XML Layout from Clipboard\tCtrl-V"));
     m_perspectives_menu->AppendSeparator();
     m_perspectives_menu->Append(ID_FirstPerspective+0, _("Default Startup"));
     m_perspectives_menu->Append(ID_FirstPerspective+1, _("All Panes"));
@@ -1452,16 +1461,384 @@ void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
     m_perspectives.Add(m_mgr.SavePerspective());
 }
 
-void MyFrame::OnCopyPerspectiveCode(wxCommandEvent& WXUNUSED(evt))
+// Sample serializer and deserializer implementations for saving and loading layouts.
+class MyXmlSerializer : public wxAuiSerializer
 {
-    wxString s = m_mgr.SavePerspective();
+public:
+    MyXmlSerializer() = default;
+
+    wxString GetXML() const
+    {
+        wxStringOutputStream oss;
+        if ( !m_doc.Save(oss) )
+        {
+            wxLogError("Failed to save XML document.");
+        }
+
+        return oss.GetString();
+    }
+
+    // Implement wxAuiSerializer methods.
+    virtual void BeforeSave() override
+    {
+        m_root = new wxXmlNode(wxXML_ELEMENT_NODE, "aui-layout");
+        m_root->AddAttribute("version", "3.3.0");
+
+        m_doc.SetRoot(m_root);
+    }
+
+    virtual void BeforeSavePanes() override
+    {
+        m_panes = new wxXmlNode(wxXML_ELEMENT_NODE, "panes");
+    }
+
+    virtual void SavePane(const wxAuiPaneInfo& pane) override
+    {
+        auto node = new wxXmlNode(m_panes, wxXML_ELEMENT_NODE, "pane");
+        node->AddAttribute("name", pane.name);
+
+        AddChild(node, "caption", pane.caption);
+        AddChild(node, "state", pane.state);
+        AddChild(node, "direction", pane.dock_direction);
+        AddChild(node, "layer", pane.dock_layer);
+        AddChild(node, "row", pane.dock_row);
+        AddChild(node, "position", pane.dock_pos);
+        AddChild(node, "proportion", pane.dock_proportion);
+        AddChild(node, "best-size", pane.best_size);
+        AddChild(node, "min-size", pane.min_size);
+        AddChild(node, "max-size", pane.max_size);
+        AddChild(node, "floating-rect",
+                 wxRect(pane.floating_pos, pane.floating_size));
+    }
+
+    virtual void AfterSavePanes() override
+    {
+        m_root->AddChild(m_panes);
+    }
+
+    virtual void BeforeSaveDocks() override
+    {
+        m_docks = new wxXmlNode(wxXML_ELEMENT_NODE, "docks");
+    }
+
+    virtual void SaveDock(const wxAuiDockInfo& dock) override
+    {
+        auto node = new wxXmlNode(m_docks, wxXML_ELEMENT_NODE, "dock");
+        node->AddAttribute("resizable", dock.resizable ? "1" : "0");
+
+        AddChild(node, "direction", dock.dock_direction);
+        AddChild(node, "layer", dock.dock_layer);
+        AddChild(node, "row", dock.dock_row);
+        AddChild(node, "size", dock.size);
+        if ( dock.min_size )
+            AddChild(node, "min-size", dock.min_size);
+    }
+
+    virtual void AfterSaveDocks() override
+    {
+        m_root->AddChild(m_docks);
+    }
+
+    virtual void AfterSave() override {}
+
+private:
+    void AddChild(wxXmlNode* parent, const wxString& name, const wxString& value)
+    {
+        auto node = new wxXmlNode(parent, wxXML_ELEMENT_NODE, name);
+        node->AddChild(new wxXmlNode(wxXML_TEXT_NODE, {}, value));
+    }
+
+    void AddChild(wxXmlNode* parent, const wxString& name, int value)
+    {
+        AddChild(parent, name, wxString::Format("%u", value));
+    }
+
+    void AddChild(wxXmlNode* parent, const wxString& name, const wxSize& size)
+    {
+        if ( size != wxDefaultSize )
+            AddChild(parent, name, wxString::Format("%dx%d", size.x, size.y));
+    }
+
+    void AddChild(wxXmlNode* parent, const wxString& name, const wxRect& rect)
+    {
+        if ( rect.GetPosition() != wxDefaultPosition ||
+                rect.GetSize() != wxDefaultSize )
+        {
+            AddChild(parent, name,
+                     wxString::Format("%d,%d %dx%d",
+                                      rect.x, rect.y, rect.width, rect.height));
+        }
+    }
+
+    wxXmlDocument m_doc;
+    wxXmlNode* m_root = nullptr;
+    wxXmlNode* m_panes = nullptr;
+    wxXmlNode* m_docks = nullptr;
+};
+
+class MyXmlDeserializer : public wxAuiDeserializer
+{
+public:
+    explicit MyXmlDeserializer(wxAuiManager& manager, const wxString& xml)
+        : wxAuiDeserializer(manager)
+    {
+        wxStringInputStream iss(xml);
+        if ( !m_doc.Load(iss) )
+            throw std::runtime_error("Failed to load XML document.");
+
+        const auto root = m_doc.GetDocumentNode();
+        const auto layout = root->GetChildren();
+        if ( !layout )
+            throw std::runtime_error("Missing layout node");
+        if ( layout->GetName() != "aui-layout" )
+            throw std::runtime_error("Unexpected XML node name");
+        if ( layout->GetAttribute("version") != "3.3.0" )
+            throw std::runtime_error("Unexpected XML version");
+        if ( layout->GetNext() )
+            throw std::runtime_error("Unexpected multiple layout nodes");
+
+        for ( wxXmlNode* node = layout->GetChildren(); node; node = node->GetNext() )
+        {
+            if ( node->GetName() == "panes" )
+            {
+                if ( m_panes )
+                    throw std::runtime_error("Unexpected multiple panes nodes");
+
+                m_panes = node;
+            }
+            else if ( node->GetName() == "docks" )
+            {
+                if ( m_docks )
+                    throw std::runtime_error("Unexpected multiple docks nodes");
+
+                m_docks = node;
+            }
+            else
+            {
+                throw std::runtime_error("Unexpected node name");
+            }
+        }
+
+        if ( !m_panes )
+            throw std::runtime_error("Missing panes node");
+
+        if ( !m_docks )
+            throw std::runtime_error("Missing docks node");
+    }
+
+    // Implement wxAuiDeserializer methods.
+    virtual std::vector<wxAuiPaneInfo> LoadPanes() override
+    {
+        std::vector<wxAuiPaneInfo> panes;
+
+        for ( wxXmlNode* node = m_panes->GetChildren(); node; node = node->GetNext() )
+        {
+            if ( node->GetName() != "pane" )
+                throw std::runtime_error("Unexpected pane node name");
+
+            {
+                wxAuiPaneInfo pane;
+                pane.name = node->GetAttribute("name");
+
+                for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
+                {
+                    const wxString& name = child->GetName();
+                    const wxString& content = child->GetNodeContent();
+
+                    if ( name == "caption" )
+                    {
+                        pane.caption = content;
+                    }
+                    else if ( name == "state" )
+                    {
+                        pane.state = wxAuiPaneInfo::wxAuiPaneState(GetInt(content));
+                    }
+                    else if ( name == "direction" )
+                    {
+                        pane.dock_direction = GetInt(content);
+                    }
+                    else if ( name == "layer" )
+                    {
+                        pane.dock_layer = GetInt(content);
+                    }
+                    else if ( name == "row" )
+                    {
+                        pane.dock_row = GetInt(content);
+                    }
+                    else if ( name == "position" )
+                    {
+                        pane.dock_pos = GetInt(content);
+                    }
+                    else if ( name == "proportion" )
+                    {
+                        pane.dock_proportion = GetInt(content);
+                    }
+                    else if ( name == "best-size" )
+                    {
+                        pane.best_size = GetSize(content);
+                    }
+                    else if ( name == "min-size" )
+                    {
+                        pane.min_size = GetSize(content);
+                    }
+                    else if ( name == "max-size" )
+                    {
+                        pane.max_size = GetSize(content);
+                    }
+                    else if ( name == "floating-rect" )
+                    {
+                        auto rect = GetRect(content);
+
+                        pane.floating_pos = rect.GetPosition();
+                        pane.floating_size = rect.GetSize();
+                    }
+                    else
+                    {
+                        throw std::runtime_error("Unexpected pane child node name");
+                    }
+                }
+
+                panes.push_back(pane);
+            }
+        }
+
+        return panes;
+    }
+
+    virtual wxWindow* CreatePaneWindow(const wxAuiPaneInfo& pane) override
+    {
+        wxLogWarning("Unknown pane \"%s\"", pane.name);
+        return nullptr;
+    }
+
+    virtual std::vector<wxAuiDockInfo> LoadDocks() override
+    {
+        std::vector<wxAuiDockInfo> docks;
+
+        for ( wxXmlNode* node = m_docks->GetChildren(); node; node = node->GetNext() )
+        {
+            if ( node->GetName() != "dock" )
+                throw std::runtime_error("Unexpected dock node name");
+
+            wxAuiDockInfo dock;
+            if ( node->GetAttribute("resizable") == "1" )
+                dock.resizable = true;
+
+            for ( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
+            {
+                const wxString& name = child->GetName();
+                const wxString& content = child->GetNodeContent();
+
+                if ( name == "direction" )
+                {
+                    dock.dock_direction = GetInt(content);
+                }
+                else if ( name == "layer" )
+                {
+                    dock.dock_layer = GetInt(content);
+                }
+                else if ( name == "row" )
+                {
+                    dock.dock_row = GetInt(content);
+                }
+                else if ( name == "size" )
+                {
+                    dock.size = GetInt(content);
+                }
+                else if ( name == "min-size" )
+                {
+                    dock.min_size = GetInt(content);
+                }
+                else
+                {
+                    throw std::runtime_error("Unexpected dock child node name");
+                }
+            }
+
+            docks.push_back(dock);
+        }
+
+        return docks;
+    }
+
+private:
+    int GetInt(const wxString& str)
+    {
+        int value;
+        if ( !str.ToInt(&value) )
+            throw std::runtime_error("Failed to parse integer");
+
+        return value;
+    }
+
+    wxSize GetSize(const wxString& str)
+    {
+        wxString strH;
+        const wxString strW = str.BeforeFirst('x', &strH);
+
+        unsigned int w, h;
+        if ( !strW.ToUInt(&w) || !strH.ToUInt(&h) )
+            throw std::runtime_error("Failed to parse size");
+
+        return wxSize(w, h);
+    }
+
+    wxRect GetRect(const wxString& str)
+    {
+        wxString strWH;
+        const wxString strXY = str.BeforeFirst(' ', &strWH);
+
+        wxString strY;
+        const wxString strX = strXY.BeforeFirst(',', &strY);
+
+        unsigned int x, y;
+        if ( !strX.ToUInt(&x) || !strY.ToUInt(&y) )
+            throw std::runtime_error("Failed to parse position");
+
+        return wxRect(wxPoint(x, y), GetSize(strWH));
+    }
+
+
+    wxXmlDocument m_doc;
+    wxXmlNode* m_panes = nullptr;
+    wxXmlNode* m_docks = nullptr;
+};
+
+void MyFrame::OnCopyLayout(wxCommandEvent& WXUNUSED(evt))
+{
+    MyXmlSerializer ser;
+    m_mgr.SaveLayout(ser);
 
 #if wxUSE_CLIPBOARD
-    if (wxTheClipboard->Open())
+    wxClipboardLocker clipLock;
+
+    wxTheClipboard->SetData(new wxTextDataObject(ser.GetXML()));
+#endif // wxUSE_CLIPBOARD
+}
+
+void MyFrame::OnPasteLayout(wxCommandEvent& WXUNUSED(evt))
+{
+#if wxUSE_CLIPBOARD
+    wxClipboardLocker clipLock;
+
+    wxTextDataObject data;
+    if ( !wxTheClipboard->GetData(data) )
     {
-        wxTheClipboard->SetData(new wxTextDataObject(s));
-        wxTheClipboard->Close();
+        wxLogError("Failed to get XML data from clipboard.");
+        return;
     }
+
+    try
+    {
+        MyXmlDeserializer deser(m_mgr, data.GetText());
+        m_mgr.LoadLayout(deser);
+    }
+    catch ( const std::exception& e )
+    {
+        wxLogError("Failed to load layout: %s", e.what());
+    }
+#else
+    wxLogError("This menu command requires wxUSE_CLIPBOARD.");
 #endif
 }
 

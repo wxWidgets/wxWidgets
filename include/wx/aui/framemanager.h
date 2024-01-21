@@ -128,6 +128,8 @@ class wxAuiPaneInfo;
 class wxAuiDockInfo;
 class wxAuiDockArt;
 class wxAuiManagerEvent;
+class wxAuiSerializer;
+class wxAuiDeserializer;
 
 using wxAuiDockUIPartArray = wxBaseArray<wxAuiDockUIPart>;
 using wxAuiDockInfoArray = wxBaseArray<wxAuiDockInfo>;
@@ -452,6 +454,12 @@ public:
 
     void Update();
 
+    // Serialize or restore the whole layout using the provided serializer.
+    void SaveLayout(wxAuiSerializer& serializer) const;
+    void LoadLayout(wxAuiDeserializer& deserializer);
+
+    // Older functions using bespoke text format, prefer using the ones using
+    // wxAuiSerializer and wxAuiDeserializer above instead in the new code.
     wxString SavePaneInfo(const wxAuiPaneInfo& pane);
     void LoadPaneInfo(wxString panePart, wxAuiPaneInfo &pane);
     wxString SavePerspective();
