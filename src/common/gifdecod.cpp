@@ -443,28 +443,26 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
         // make new entry in alphabet (only if NOT just cleared)
         if (lastcode != -1)
         {
-            // Normally, after the alphabet is full and can't grow any
-            // further (ab_free == 4096), encoder should (must?) emit CLEAR
-            // to reset it. This checks whether we really got it, otherwise
-            // the GIF is damaged.
-            if (ab_free > ab_max)
-                return wxGIF_INVFORMAT;
-
-            // This assert seems unnecessary since the condition above
-            // eliminates the only case in which it went false. But I really
-            // don't like being forced to ask "Who in .text could have
-            // written there?!" And I wouldn't have been forced to ask if
-            // this line had already been here.
-            wxASSERT(ab_free < allocSize);
-
-            ab_prefix[ab_free] = lastcode;
-            ab_tail[ab_free]   = code;
-            ab_free++;
-
-            if ((ab_free > ab_max) && (ab_bits < 12))
+            // The GIF specification does not require sending a CLEAR code
+            // once the alphabet is full.  Instead, the encoder can continue
+            // with the alphabet as-is, making no further updates until a
+            // CLEAR code is emitted.
+            if (ab_free <= ab_max)
             {
-                ab_bits++;
-                ab_max = (1 << ab_bits) - 1;
+                // It should be impossible to trigger this assert, since the
+                // above check should prevent the alphabet from growing
+                // beyond 4096 entries.
+                wxASSERT(ab_free < allocSize);
+
+                ab_prefix[ab_free] = lastcode;
+                ab_tail[ab_free]   = code;
+                ab_free++;
+
+                if ((ab_free > ab_max) && (ab_bits < 12))
+                {
+                    ab_bits++;
+                    ab_max = (1 << ab_bits) - 1;
+                }
             }
         }
 
