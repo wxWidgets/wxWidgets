@@ -2587,11 +2587,11 @@ bool wxGTKInputHandler::HandleMouseMove(wxInputConsumer *control,
 {
     if ( event.Entering() )
     {
-        control->GetInputWindow()->SetCurrent(true);
+        control->GetInputWindow()->WXMakeCurrent(true);
     }
     else if ( event.Leaving() )
     {
-        control->GetInputWindow()->SetCurrent(false);
+        control->GetInputWindow()->WXMakeCurrent(false);
     }
     else
     {
