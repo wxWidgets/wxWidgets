@@ -43,27 +43,27 @@ struct wxMaskedEditColours
 };
 
 /**
-    @class wxEditFieldFlags
+    @class wxMaskedEditFieldFlags
 
     Container for flags used in a field of a masked edit control.
 
     There are three flags: alignment, fill char and padding char.
 
-    You can create wxEditFieldFlags objects which can be reused for several
+    You can create wxMaskedEditFieldFlags objects which can be reused for several
     masked controls.
 
     @code
-    wxEditFieldFlags fieldflags;
+    wxMaskedEditFieldFlags fieldflags;
     maskedCtrlA->SetFieldFlags(n, fieldflags);
     maskedCtrlB->SetAllFieldFlags(fieldflags);
     @endcode
 
-    By specification, all methods of wxEditFieldFlags return the
-    wxEditFieldFlags object itself to allow chaining multiple method calls,
+    By specification, all methods of wxMaskedEditFieldFlags return the
+    wxMaskedEditFieldFlags object itself to allow chaining multiple method calls,
     like in this example:
 
     @code
-    maskedCtrl->SetFieldFlags(n, wxEditFieldFlags().SetFillChar('_'));
+    maskedCtrl->SetFieldFlags(n, wxMaskedEditFieldFlags().SetFillChar('_'));
     @endcode
 
     @library{wxcore}
@@ -78,7 +78,7 @@ class wxMaskedEditFieldFlags
 public:
     /**
         Constructor.
-        Sets the alignment of this wxEditFieldFlags to @a alignment.
+        Sets the alignment of this wxMaskedEditFieldFlags to @a alignment.
 
         Also, by default, sets the fill char to ' ' (space) and the
         padding char to '\0' (null).
@@ -90,7 +90,7 @@ public:
     wxMaskedEditFieldFlags(wxAlignment alignment = wxALIGN_LEFT);
 
     /**
-        Sets the alignment of this wxEditFieldFlags to @a alignment.
+        Sets the alignment of this wxMaskedEditFieldFlags to @a alignment.
 
         @param alignment
             @c wxALIGN_LEFT (default) or @c wxALIGN_RIGHT.
@@ -99,7 +99,7 @@ public:
     wxMaskedEditFieldFlags& SetAlignment(wxAlignment alignment);
 
     /**
-        Sets the fill char of this wxEditFieldFlags to @a fillchar.
+        Sets the fill char of this wxMaskedEditFieldFlags to @a fillchar.
 
         The fill char is used to fill the empty (i.e. not typed yet)
         positions in the field for showing them. Typically it is a space.
@@ -111,7 +111,7 @@ public:
     wxMaskedEditFieldFlags& SetFillChar(wxChar fillchar);
 
     /**
-        Sets the padding char of this wxEditFieldFlags to @a paddingchar.
+        Sets the padding char of this wxMaskedEditFieldFlags to @a paddingchar.
 
         The padding char is used to fill the empty (i.e. not typed yet)
         positions in the field for the return of wxMaskedEdit::GetAllFieldsValue()

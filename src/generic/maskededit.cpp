@@ -421,7 +421,7 @@ void wxMaskedEdit::SetMaskedColours(const wxMaskedEditColours& colours)
 }
 
 //Default colours. We need them if not all of the six colours have been set.
-void wxMaskedEdit::GetDefaultColours(wxColour* defFgCol, wxColour* defBgCol)
+void wxMaskedEdit::GetDefaultColours(wxColour* defFgCol, wxColour* defBgCol) const
 {
 #if wxUSE_TEXTCTRL
     if ( wxTextCtrl *text = wxDynamicCast(msk_control, wxTextCtrl) )

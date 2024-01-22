@@ -314,13 +314,13 @@ protected:
     }
 
     //Default colours
-    void GetDefaultColours(wxColour* defFgCol, wxColour* defBgCol);
+    void GetDefaultColours(wxColour* defFgCol, wxColour* defBgCol) const;
 
     //Handle the selection, returning the new possible control's value
     wxString HandleSelection(long *pos, bool *changed);
 
     //Our control derives from wxTextEntry, but not this class. Get a pointer to it
-    wxTextEntry* GetTextEntry() const;
+    wxTextEntry* TextEntry() const;
 
     //Update colours, depending on empty/valid/invalid cases
     void UpdateMaskedColours();
