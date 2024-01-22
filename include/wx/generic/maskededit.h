@@ -320,7 +320,7 @@ protected:
     wxString HandleSelection(long *pos, bool *changed);
 
     //Our control derives from wxTextEntry, but not this class. Get a pointer to it
-    wxTextEntry* TextEntry() const;
+    wxTextEntry* GetTextEntry() const;
 
     //Update colours, depending on empty/valid/invalid cases
     void UpdateMaskedColours();
