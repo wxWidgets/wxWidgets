@@ -46,6 +46,9 @@
 #   include <sys/types.h>
 #endif
 
+#include <wx/dynlib.h>
+#include <lm.h>
+
 // Doesn't work with Cygwin at present
 #if wxUSE_SOCKETS && (defined(__CYGWIN32__))
     // apparently we need to include winsock.h to get WSADATA and other stuff
@@ -66,16 +69,6 @@
     // and cygwin_conv_to_full_win32_path()
     #include <cygwin/version.h>
 #endif  //GNUWIN32
-
-// VZ: there is some code using NetXXX() functions to get the full user name:
-//     I don't think it's a good idea because they don't work under Win95 and
-//     seem to return the same as wxGetUserId() under NT. If you really want
-//     to use them, just #define USE_NET_API
-#undef USE_NET_API
-
-#ifdef USE_NET_API
-    #include <lm.h>
-#endif // USE_NET_API
 
 #ifndef __UNIX__
     #include <io.h>
@@ -122,20 +115,43 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// In the WIN.INI file
-#if !defined(USE_NET_API)
-static const wxChar WX_SECTION[] = wxT("wxWindows");
-#endif
-
-#if !defined(USE_NET_API)
-static const wxChar eUSERNAME[]  = wxT("UserName");
-#endif
-
 WXDLLIMPEXP_DATA_BASE(const wxChar *) wxUserResourceStr = wxT("TEXT");
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+using NetGetAnyDCName_t = NET_API_STATUS(NET_API_FUNCTION*)(
+    LPCWSTR ServerName,
+    LPCWSTR DomainName,
+    LPBYTE* Buffer);
+using NetUserGetInfo_t = NET_API_STATUS(NET_API_FUNCTION*)(
+    LPCWSTR servername,
+    LPCWSTR username,
+    DWORD   level,
+    LPBYTE* bufptr);
+using NetApiBufferFree_t = NET_API_STATUS(NET_API_FUNCTION*)(
+    LPVOID Buffer);
+
+// Calls NetApiBufferFree on a buffer created from NetApiBufferAllocate()
+struct NetApiBufferAutoFree
+{
+    // the buffer and a pointer to ::NetApiBufferFree
+    // (which was dynamically loaded) to call on the buffer
+    NetApiBufferAutoFree(LPVOID buf, NetApiBufferFree_t netFree) :
+        m_buffer(buf), m_netFree(netFree)
+    {}
+    ~NetApiBufferAutoFree()
+    {
+        if (m_netFree != nullptr &&
+            m_buffer != nullptr)
+        {
+            m_netFree(m_buffer);
+        }
+    }
+    LPVOID m_buffer{ nullptr };
+    NetApiBufferFree_t m_netFree{ nullptr };
+};
 
 // ----------------------------------------------------------------------------
 // get host name and related
@@ -258,93 +274,116 @@ bool wxGetUserId(wxChar *buf,
     return true;
 }
 
-// Get user name e.g. Julian Smart
-bool wxGetUserName(wxChar *buf, int maxSize)
+// Get user name (e.g., Julian Smart)
+bool wxGetUserName(wxChar* buf, int maxSize)
 {
-    wxCHECK_MSG( buf && ( maxSize > 0 ), false,
-                    wxT("empty buffer in wxGetUserName") );
-#if defined(USE_NET_API)
-    CHAR szUserName[256];
-    if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
+    wxCHECK_MSG(buf && (maxSize > 0), false,
+        "Empty buffer in wxGetUserName");
+
+    if (!wxGetUserId(buf, maxSize))
         return false;
 
-    // TODO how to get the domain name?
-    CHAR *szDomain = "";
+    /* This code is based on Microsoft Learn's ::NetUserGetInfo example code.
+       Attempt to get the full user name; if any of this fails,
+       then we can still return true as we got the login name already
+       from wxGetUserId().
 
-    // the code is based on the MSDN example (also see KB article Q119670)
-    WCHAR wszUserName[256];          // Unicode user name
-    WCHAR wszDomain[256];
-    LPBYTE ComputerName;
+       Note that there is a ::GetUserNameEx function, but that requires
+       defining SECURITY_WIN32 to use, which may have other side effects.
+       Instead, use the NetAPI functions.*/
 
-    USER_INFO_2 *ui2;         // User structure
+    LPBYTE ComputerName{ nullptr };
+    USER_INFO_2* ui2{ nullptr };
 
-    // Convert ANSI user name and domain to Unicode
-    MultiByteToWideChar( CP_ACP, 0, szUserName, strlen(szUserName)+1,
-            wszUserName, WXSIZEOF(wszUserName) );
-    MultiByteToWideChar( CP_ACP, 0, szDomain, strlen(szDomain)+1,
-            wszDomain, WXSIZEOF(wszDomain) );
-
-    // Get the computer name of a DC for the domain.
-    if ( NetGetDCName( nullptr, wszDomain, &ComputerName ) != NERR_Success )
+    wxDynamicLibrary netapi32("netapi32");
+    if (!netapi32.IsLoaded())
     {
-        wxLogError(wxT("Cannot find domain controller"));
-
-        goto error;
+        wxLogTrace("utils", _("Failed to load netapi32.dll"));
     }
 
-    // Look up the user on the DC
-    NET_API_STATUS status = NetUserGetInfo( (LPWSTR)ComputerName,
-            (LPWSTR)&wszUserName,
-            2, // level - we want USER_INFO_2
-            (LPBYTE *) &ui2 );
-    switch ( status )
+    const NetGetAnyDCName_t netGetAnyDCName =
+        static_cast<NetGetAnyDCName_t>(netapi32.GetSymbol("NetGetAnyDCName"));
+    const NetUserGetInfo_t netUserGetInfo =
+        static_cast<NetUserGetInfo_t>(netapi32.GetSymbol("NetUserGetInfo"));
+    const NetApiBufferFree_t netApiBufferFree =
+        static_cast<NetApiBufferFree_t>(netapi32.GetSymbol("NetApiBufferFree"));
+
+    if (netGetAnyDCName == nullptr ||
+        netUserGetInfo == nullptr ||
+        netApiBufferFree == nullptr)
     {
-        case NERR_Success:
-            // ok
-            break;
-
-        case NERR_InvalidComputer:
-            wxLogError(wxT("Invalid domain controller name."));
-
-            goto error;
-
-        case NERR_UserNotFound:
-            wxLogError(wxT("Invalid user name '%s'."), szUserName);
-
-            goto error;
-
-        default:
-            wxLogSysError(wxT("Can't get information about user"));
-
-            goto error;
+        return true;
     }
 
-    // Convert the Unicode full name to ANSI
-    WideCharToMultiByte( CP_ACP, 0, ui2->usri2_full_name, -1,
-            buf, maxSize, nullptr, nullptr );
+    // Get the computer name of a DC for any domain.
+    if (netGetAnyDCName(nullptr, nullptr, &ComputerName) != NERR_Success)
+    {
+        wxLogWarning(_("Cannot find domain controller"));
+        return true;
+    }
+
+    // Look up the user on the DC.
+    const NET_API_STATUS status = netUserGetInfo((LPWSTR)ComputerName,
+        (LPWSTR)buf,
+        2, // level - we want USER_INFO_2
+        (LPBYTE*)&ui2);
+    const NetApiBufferAutoFree netFree{ ui2, netApiBufferFree };
+
+    switch (status)
+    {
+    case NERR_Success:
+        // ok
+        break;
+    // Log a warning and return with the user name buffer
+    // filled with the login name.
+    case NERR_InvalidComputer:
+        wxLogWarning(_("Invalid domain controller name."));
+        wxFALLTHROUGH;
+
+    case NERR_UserNotFound:
+        wxLogWarning(_("Invalid user name '%s'."), buf);
+        wxFALLTHROUGH;
+
+    case ERROR_ACCESS_DENIED:
+        wxLogWarning(_("The user does not have access to the "
+                       "requested information."));
+        wxFALLTHROUGH;
+
+    case ERROR_BAD_NETPATH:
+        wxLogWarning(_("The network path specified in the "
+                       "servername parameter was not found."));
+        wxFALLTHROUGH;
+
+    case ERROR_INVALID_LEVEL:
+        wxLogWarning(_("The value specified for the "
+                       "level parameter is invalid."));
+        wxFALLTHROUGH;
+
+    default:
+        return true;
+    }
+
+    if (ui2 != nullptr &&
+        ui2->usri2_full_name != nullptr)
+    {
+        wxString fullUserName(ui2->usri2_full_name);
+        if (fullUserName.empty())
+        {
+            return true;
+        }
+        // In the case of full name being in the format of "[LAST_NAME], [FIRST_NAME]",
+        // reformat it to a more readable "[FIRST_NAME] [LAST_NAME]".
+        const size_t commaPosition = fullUserName.find(", ");
+        if (commaPosition != wxString::npos)
+            {
+            const wxString firstName = fullUserName.substr(commaPosition + 2);
+            fullUserName.erase(commaPosition);
+            fullUserName.insert(0, firstName + ' ');
+            }
+        wxStrncpy(buf, fullUserName.t_str(), maxSize);
+    }
 
     return true;
-
-error:
-    wxLogError(wxT("Couldn't look up full user name."));
-
-    return false;
-#else  // !USE_NET_API
-    // Could use NIS, MS-Mail or other site specific programs
-    // Use wxWidgets configuration data
-    bool ok = GetProfileString(WX_SECTION, eUSERNAME, wxEmptyString, buf, maxSize - 1) != 0;
-    if ( !ok )
-    {
-        ok = wxGetUserId(buf, maxSize);
-    }
-
-    if ( !ok )
-    {
-        wxStrlcpy(buf, wxT("Unknown User"), maxSize);
-    }
-
-    return true;
-#endif // Win32/16
 }
 
 const wxChar* wxGetHomeDir(wxString *pstr)
