@@ -302,11 +302,11 @@ bool wxGetUserName(wxChar* buf, int maxSize)
     }
 
     const NetGetAnyDCName_t netGetAnyDCName =
-        static_cast<NetGetAnyDCName_t>(netapi32.GetSymbol("NetGetAnyDCName"));
+        reinterpret_cast<NetGetAnyDCName_t>(netapi32.GetSymbol("NetGetAnyDCName"));
     const NetUserGetInfo_t netUserGetInfo =
-        static_cast<NetUserGetInfo_t>(netapi32.GetSymbol("NetUserGetInfo"));
+        reinterpret_cast<NetUserGetInfo_t>(netapi32.GetSymbol("NetUserGetInfo"));
     const NetApiBufferFree_t netApiBufferFree =
-        static_cast<NetApiBufferFree_t>(netapi32.GetSymbol("NetApiBufferFree"));
+        reinterpret_cast<NetApiBufferFree_t>(netapi32.GetSymbol("NetApiBufferFree"));
 
     if (netGetAnyDCName == nullptr ||
         netUserGetInfo == nullptr ||
