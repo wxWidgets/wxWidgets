@@ -533,8 +533,18 @@ if(wxUSE_GUI)
             if (NOT wxHAVE_CXX17)
                 # We shouldn't disable this option as it's disabled by default and
                 # if it is on, it means that CEF is meant to be used, but we can't
-                # continue neither as libcef_dll_wrapper will fail to build.
-                message(FATAL_ERROR "WebviewChromium requires at least C++17 but configured to use C++${CMAKE_CXX_STANDARD}")
+                # continue neither as libcef_dll_wrapper will fail to build
+                # (actually it may still succeed with CEF v116 which provided
+                # its own stand-in for std::in_place used in CEF headers, but
+                # not with the later versions, so just fail instead of trying
+                # to detect CEF version here, as even v116 officially only
+                # supports C++17 anyhow).
+                if (DEFINED CMAKE_CXX_STANDARD)
+                    set(cxx17_error_details "configured to use C++${CMAKE_CXX_STANDARD}")
+                else()
+                    set(cxx17_error_details "the compiler doesn't support C++17 by default and CMAKE_CXX_STANDARD is not set")
+                endif()
+                message(FATAL_ERROR "WebviewChromium requires at least C++17 but ${cxx17_error_details}")
             endif()
         endif()
     endif()
