@@ -257,7 +257,7 @@ public:
     {
         return m_prefix + wxS("/") + basename;
     }
-    virtual wxString GetSharedLibraresDir() const { return m_prefix; }
+    virtual wxString GetSharedLibrariesDir() overrde const { return m_prefix; }
 protected:
     // Ctor is protected because wxStandardPaths::Get() should always be used
     // to access the global wxStandardPaths object of the correct type instead
