@@ -510,11 +510,46 @@ if(wxUSE_GUI)
             message(WARNING "WebviewChromium libcef_dll_wrapper can only be built with MSVC... disabled")
             wx_option_force_value(wxUSE_WEBVIEW_CHROMIUM OFF)
         endif()
-        if(wxUSE_WEBVIEW_CHROMIUM AND CMAKE_CXX_STANDARD LESS 14)
-            # We shouldn't disable this option as it's disabled by default and
-            # if it is on, it means that CEF is meant to be used, but we can't
-            # continue neither as libcef_dll_wrapper will fail to build.
-            message(FATAL_ERROR "WebviewChromium requires at least C++14 but configured to use C++${CMAKE_CXX_STANDARD}")
+        if(wxUSE_WEBVIEW_CHROMIUM)
+            # Check for C++17 support as it's required by CEF: we trust
+            # CMAKE_CXX_STANDARD if it is defined, but we need to compile a
+            # test program if it is not because the compiler could be
+            # supporting C++17 anyway.
+            if (DEFINED CMAKE_CXX_STANDARD)
+                if (CMAKE_CXX_STANDARD GREATER_EQUAL 17)
+                    set(wxHAVE_CXX17 ON)
+                endif()
+            else()
+                check_cxx_source_compiles("
+                    #if defined(_MSVC_LANG)
+                        #if _MSVC_LANG < 201703L
+                            #error C++17 support is required
+                        #endif
+                    #elif __cplusplus < 201703L
+                        #error C++17 support is required
+                    #endif
+                    int main() {
+                        [[maybe_unused]] auto unused = 17;
+                    }"
+                    wxHAVE_CXX17)
+            endif()
+
+            if (NOT wxHAVE_CXX17)
+                # We shouldn't disable this option as it's disabled by default and
+                # if it is on, it means that CEF is meant to be used, but we can't
+                # continue neither as libcef_dll_wrapper will fail to build
+                # (actually it may still succeed with CEF v116 which provided
+                # its own stand-in for std::in_place used in CEF headers, but
+                # not with the later versions, so just fail instead of trying
+                # to detect CEF version here, as even v116 officially only
+                # supports C++17 anyhow).
+                if (DEFINED CMAKE_CXX_STANDARD)
+                    set(cxx17_error_details "configured to use C++${CMAKE_CXX_STANDARD}")
+                else()
+                    set(cxx17_error_details "the compiler doesn't support C++17 by default and CMAKE_CXX_STANDARD is not set")
+                endif()
+                message(FATAL_ERROR "WebviewChromium requires at least C++17 but ${cxx17_error_details}")
+            endif()
         endif()
     endif()
 

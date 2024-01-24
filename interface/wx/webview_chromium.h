@@ -47,11 +47,16 @@
     2. Unpack the archive into `3rdparty/cef` directory under wxWidgets source
     directory.
     3. Build `libcef_dll_wrapper` using the instructions provided in the CEF
-    distribution, but, in short, just by using `cmake` to do it. Please note
-    that if you use `-DCMAKE_BUILD_TYPE=Debug` under Unix when building it, you
-    need to pass `--enable-cef_debug` option to wxWidgets configure to avoid
-    mismatches between various definitions in the wrapper itself and in
-    wxWidgets.
+    distribution, which basically means using `cmake` to do it. Please note:
+        * Under Windows you must use `-DCEF_RUNTIME_LIBRARY_FLAG=/MD` option
+          to match the default wxWidgets build configuration.
+        * Under Unix remember that if you use `-DCMAKE_BUILD_TYPE=Debug` when
+          building it, you need to pass `--enable-cef_debug` option to
+          wxWidgets configure to avoid mismatches between various definitions
+          in the wrapper itself and in wxWidgets.
+        * Under all platforms you may want to use `-DCEF_USE_SANDBOX=OFF`
+          option to avoid linking with the sandbox library which is not
+          provided in the "Minimal Distribution" if you don't use this feature.
     4. Copy the static library binary in the platform-dependent location:
       - Under MSW, copy `libcefl_dll_wrapper.lib` file to either
       `3rdparty/cef/Release` or `3rdparty/cef/Debug` depending on the build

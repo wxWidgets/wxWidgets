@@ -613,7 +613,8 @@ check_type_size(ssize_t SSIZE_T)
 
 test_big_endian(WORDS_BIGENDIAN)
 
-if(wxUSE_WEBVIEW_CHROMIUM)
+# For generators using build type, ensure that wxHAVE_CEF_DEBUG matches it.
+if(wxUSE_WEBVIEW_CHROMIUM AND DEFINED CMAKE_BUILD_TYPE)
     string(TOUPPER ${CMAKE_BUILD_TYPE} build_type)
     if(${build_type} STREQUAL DEBUG)
         set(wxHAVE_CEF_DEBUG ON)
