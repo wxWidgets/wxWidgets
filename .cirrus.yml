@@ -12,7 +12,7 @@ task:
   matrix:
     - name: Cirrus CI / FreeBSD 13 wxGTK 3
       freebsd_instance:
-        image_family: freebsd-13-0
+        image_family: freebsd-13-2
       env:
         osname: FreeBSD
     - name: Cirrus CI / Debian ARM wxGTK 3
