@@ -6117,9 +6117,12 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
     }
 }
 
-void wxGrid::OnKeyUp( wxKeyEvent& WXUNUSED(event) )
+void wxGrid::OnKeyUp( wxKeyEvent& event )
 {
-    // try local handlers
+    // try local handlers for anything except pure ALT key
+    // MenuBar needs ALT to enable navigation via arrow keys
+    if ( event.GetKeyCode() == WXK_ALT && !event.GetModifiers() )
+        event.Skip();
 }
 
 void wxGrid::OnChar( wxKeyEvent& event )
