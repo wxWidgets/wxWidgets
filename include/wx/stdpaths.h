@@ -258,8 +258,8 @@ public:
         return m_prefix + wxS("/") + basename;
     }
     virtual wxString GetSharedLibrariesDir() const override { return m_prefix; }
-#ifdef __WXMSW__
-    static wxString MSWGetShellDir(int csidl) { return wxEmptyString; }
+#if defined(__WINDOWS__)
+    static wxString MSWGetShellDir(int WXUNUSED(csidl)) { return wxEmptyString; }
 #endif
 protected:
     // Ctor is protected because wxStandardPaths::Get() should always be used
