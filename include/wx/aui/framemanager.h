@@ -24,6 +24,7 @@
 #include "wx/timer.h"
 #include "wx/sizer.h"
 #include "wx/bmpbndl.h"
+#include "wx/overlay.h"
 
 enum wxAuiManagerDock
 {
@@ -614,6 +615,8 @@ protected:
     wxTimer m_hintFadeTimer;    // transparent fade timer
     wxByte m_hintFadeAmt;       // transparent fade amount
     wxByte m_hintFadeMax;       // maximum value of hint fade
+
+    wxOverlay m_overlay;
 
     void* m_reserved;
 

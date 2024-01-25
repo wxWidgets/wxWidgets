@@ -271,31 +271,23 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPseudoTransparentFrame, wxFrame);
 
 static wxBitmap wxPaneCreateStippleBitmap()
 {
-    // TODO: Provide x1.5 and x2.0 versions.
-    unsigned char data[] = { 0,0,0,192,192,192, 192,192,192,0,0,0 };
+    // Notice that wxOverlay, under wxMSW, uses the wxBLACK colour i.e.(0,0,0)
+    // as the key colour for transparency. and using it for the stipple bitmap
+    // will make the sash feedback totaly invisible if the window's background
+    // colour is (192,192,192) or so. (1,1,1) is used instead.
+    unsigned char data[] = { 1,1,1,192,192,192, 192,192,192,1,1,1 };
     wxImage img(2,2,data,true);
     return wxBitmap(img);
 }
 
 static void DrawResizeHint(wxDC& dc, const wxRect& rect)
 {
-#ifdef __WXMSW__
     wxBitmap stipple = wxPaneCreateStippleBitmap();
     wxBrush brush(stipple);
     dc.SetBrush(brush);
-    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    PatBlt(GetHdcOf(*impl), rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight(), PATINVERT);
-#else
-    // Note that we have to use white colour for wxINVERT to work with
-    // wxGraphicsContext-based wxDC implementations, such as used by wxGTK3
-    // (and wxOSX, but this code is never used for the latter because it always
-    // uses live resize).
-    dc.SetPen(*wxWHITE_PEN);
-    dc.SetBrush(*wxWHITE_BRUSH);
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
-    dc.SetLogicalFunction(wxINVERT);
     dc.DrawRectangle(rect);
-#endif
 }
 
 
@@ -767,11 +759,9 @@ unsigned int wxAuiManager::GetFlags() const
     return m_flags;
 }
 
-/* static */ bool wxAuiManager::AlwaysUsesLiveResize(const wxWindow* window)
+/* static */ bool wxAuiManager::AlwaysUsesLiveResize(const wxWindow* WXUNUSED(window))
 {
-    // Not using live resize relies on wxClientDC being usable for drawing, so
-    // we have to use live resize if it can't be used on the current platform.
-    return !wxClientDC::CanBeUsedForDrawing(window);
+    return false;
 }
 
 bool wxAuiManager::HasLiveResize() const
@@ -4453,8 +4443,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         if (!HasLiveResize())
         {
             // get rid of the hint rectangle
-            wxClientDC dc{m_frame};
-            DrawResizeHint(dc, m_actionHintRect);
+            m_overlay.Reset();
         }
         if (m_currentDragItem != -1 && HasLiveResize())
             m_actionPart = & (m_uiParts.Item(m_currentDragItem));
@@ -4569,18 +4558,20 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             else
             {
                 wxRect rect(pos, m_actionPart->rect.GetSize());
-                wxClientDC dc{m_frame};
 
                 if (!m_actionHintRect.IsEmpty())
                 {
-                    // remove old resize hint
-                    DrawResizeHint(dc, m_actionHintRect);
                     m_actionHintRect = wxRect();
                 }
 
-                // draw new resize hint
-                DrawResizeHint(dc, rect);
+                wxClientDC dc{m_frame};
+                wxDCOverlay overlaydc(m_overlay, &dc);
+                overlaydc.Clear();
+
+                // draw resize hint
                 m_actionHintRect = rect;
+                rect.SetPosition(rect.GetPosition() + m_frame->GetClientAreaOrigin());
+                DrawResizeHint(dc, rect);
             }
         }
     }
