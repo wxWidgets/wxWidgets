@@ -146,6 +146,10 @@ void wxDCOverlay::Clear()
 
 #include "wx/window.h"
 
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+#include "wx/gtk/dcclient.h"
+#endif
+
 namespace {
 class wxOverlayImpl: public wxOverlay::Impl
 {
@@ -191,6 +195,14 @@ bool wxOverlayImpl::IsOk()
 
 void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
 {
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    // Workaround! to include sub-windows in the final drawing (on the overlay)
+    // as drawing on a DC under wxGTK2 clips children by default.
+    const auto dcimpl = static_cast<wxWindowDCImpl *>(dc->GetImpl());
+    if ( dcimpl )
+        dcimpl->DontClipSubWindows();
+#endif
+
     if (m_bmpSaved.IsOk())
     {
         if (x != m_x || y != m_y || width != m_width || height != m_height)
@@ -241,6 +253,9 @@ void wxOverlayImpl::Clear(wxDC* dc)
 void wxOverlayImpl::Reset()
 {
     m_bmpSaved.UnRef();
+
+    if ( m_window )
+        m_window->Refresh();
 }
 
 void wxOverlayImpl::BeginDrawing(wxDC* dc)
