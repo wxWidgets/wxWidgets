@@ -133,26 +133,6 @@ using NetUserGetInfo_t = NET_API_STATUS(NET_API_FUNCTION*)(
 using NetApiBufferFree_t = NET_API_STATUS(NET_API_FUNCTION*)(
     LPVOID Buffer);
 
-// Calls NetApiBufferFree on a buffer created from NetApiBufferAllocate()
-struct NetApiBufferAutoFree
-{
-    // the buffer and a pointer to ::NetApiBufferFree
-    // (which was dynamically loaded) to call on the buffer
-    NetApiBufferAutoFree(LPVOID buf, NetApiBufferFree_t netFree) :
-        m_buffer(buf), m_netFree(netFree)
-    {}
-    ~NetApiBufferAutoFree()
-    {
-        if (m_netFree != nullptr &&
-            m_buffer != nullptr)
-        {
-            m_netFree(m_buffer);
-        }
-    }
-    LPVOID m_buffer{ nullptr };
-    NetApiBufferFree_t m_netFree{ nullptr };
-};
-
 // ----------------------------------------------------------------------------
 // get host name and related
 // ----------------------------------------------------------------------------
@@ -280,107 +260,84 @@ bool wxGetUserName(wxChar* buf, int maxSize)
     wxCHECK_MSG(buf && (maxSize > 0), false,
         "Empty buffer in wxGetUserName");
 
-    if (!wxGetUserId(buf, maxSize))
+    if ( !wxGetUserId(buf, maxSize) )
         return false;
 
     /* This code is based on Microsoft Learn's ::NetUserGetInfo example code.
        Attempt to get the full user name; if any of this fails,
-       then we can still return true as we got the login name already
+       return false, but with the buffer at least filled with the login name
        from wxGetUserId().
 
        Note that there is a ::GetUserNameEx function, but that requires
-       defining SECURITY_WIN32 to use, which may have other side effects.
+       defining SECURITY_WIN32, which may have other side effects.
        Instead, use the NetAPI functions.*/
 
-    LPBYTE ComputerName{ nullptr };
-    USER_INFO_2* ui2{ nullptr };
-
-    wxDynamicLibrary netapi32("netapi32");
-    if (!netapi32.IsLoaded())
+    const static wxDynamicLibrary netapi32("netapi32", wxDL_VERBATIM | wxDL_QUIET);
+    if ( !netapi32.IsLoaded() )
     {
         wxLogTrace("utils", _("Failed to load netapi32.dll"));
+        return false;
     }
 
-    const NetGetAnyDCName_t netGetAnyDCName =
+    const static NetGetAnyDCName_t netGetAnyDCName =
         reinterpret_cast<NetGetAnyDCName_t>(netapi32.GetSymbol("NetGetAnyDCName"));
-    const NetUserGetInfo_t netUserGetInfo =
+    const static NetUserGetInfo_t netUserGetInfo =
         reinterpret_cast<NetUserGetInfo_t>(netapi32.GetSymbol("NetUserGetInfo"));
-    const NetApiBufferFree_t netApiBufferFree =
+    const static NetApiBufferFree_t netApiBufferFree =
         reinterpret_cast<NetApiBufferFree_t>(netapi32.GetSymbol("NetApiBufferFree"));
 
-    if (netGetAnyDCName == nullptr ||
-        netUserGetInfo == nullptr ||
-        netApiBufferFree == nullptr)
+    if ( netGetAnyDCName == nullptr ||
+         netUserGetInfo == nullptr ||
+         netApiBufferFree == nullptr )
     {
-        return true;
+        return false;
     }
 
-    // Get the computer name of a DC for any domain.
-    if (netGetAnyDCName(nullptr, nullptr, &ComputerName) != NERR_Success)
+    LPBYTE computerName{ nullptr };
+    USER_INFO_2* ui2{ nullptr };
+
+    // Get the domain controller for any domain.
+    if ( netGetAnyDCName(nullptr, nullptr, &computerName) != NERR_Success )
     {
-        wxLogWarning(_("Cannot find domain controller"));
-        return true;
+        // May not be networked, so use the local machine.
+        computerName = nullptr;
     }
 
     // Look up the user on the DC.
-    const NET_API_STATUS status = netUserGetInfo((LPWSTR)ComputerName,
+    const NET_API_STATUS status = netUserGetInfo((LPWSTR)computerName,
         (LPWSTR)buf,
         2, // level - we want USER_INFO_2
         (LPBYTE*)&ui2);
-    const NetApiBufferAutoFree netFree{ ui2, netApiBufferFree };
+    // ::NetUserGetInfo calls ::NetApiBufferAlloc to create the
+    // USER_INFO_2 structure, so need to free that upon exit.
+    auto bufferFree = std::unique_ptr<USER_INFO_2, void(*)(USER_INFO_2*)>
+        { ui2, [](USER_INFO_2* ui2) { netApiBufferFree(ui2); } };
 
-    switch (status)
+    if ( status != NERR_Success )
     {
-    case NERR_Success:
-        // ok
-        break;
-    // Log a warning and return with the user name buffer
-    // filled with the login name.
-    case NERR_InvalidComputer:
-        wxLogWarning(_("Invalid domain controller name."));
-        wxFALLTHROUGH;
-
-    case NERR_UserNotFound:
-        wxLogWarning(_("Invalid user name '%s'."), buf);
-        wxFALLTHROUGH;
-
-    case ERROR_ACCESS_DENIED:
-        wxLogWarning(_("The user does not have access to the "
-                       "requested information."));
-        wxFALLTHROUGH;
-
-    case ERROR_BAD_NETPATH:
-        wxLogWarning(_("The network path specified in the "
-                       "servername parameter was not found."));
-        wxFALLTHROUGH;
-
-    case ERROR_INVALID_LEVEL:
-        wxLogWarning(_("The value specified for the "
-                       "level parameter is invalid."));
-        wxFALLTHROUGH;
-
-    default:
-        return true;
+        wxLogWarning(_("Failed to retrieve user information: %s"),
+                     wxSysErrorMsgStr());
+        return false;
     }
 
-    if (ui2 != nullptr &&
-        ui2->usri2_full_name != nullptr)
+    if ( ui2 != nullptr &&
+         ui2->usri2_full_name != nullptr )
     {
         wxString fullUserName(ui2->usri2_full_name);
-        if (fullUserName.empty())
+        if ( fullUserName.empty() )
         {
-            return true;
+            return false;
         }
         // In the case of full name being in the format of "[LAST_NAME], [FIRST_NAME]",
         // reformat it to a more readable "[FIRST_NAME] [LAST_NAME]".
         const size_t commaPosition = fullUserName.find(", ");
-        if (commaPosition != wxString::npos)
+        if ( commaPosition != wxString::npos )
             {
             const wxString firstName = fullUserName.substr(commaPosition + 2);
             fullUserName.erase(commaPosition);
             fullUserName.insert(0, firstName + ' ');
             }
-        wxStrncpy(buf, fullUserName.t_str(), maxSize);
+        wxStrlcpy(buf, fullUserName.t_str(), maxSize);
     }
 
     return true;
