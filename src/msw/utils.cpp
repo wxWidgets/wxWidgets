@@ -302,6 +302,17 @@ bool wxGetUserName(wxChar* buf, int maxSize)
         // May not be networked, so use the local machine.
         computerName = nullptr;
     }
+    // ::NetGetAnyDCName calls ::NetApiBufferAlloc to fill the
+    // domain controller name, so need to free that upon exit.
+    auto dcBufferFree = std::unique_ptr<BYTE, void(*)(LPBYTE)>
+        {
+        computerName,
+        [](LPBYTE computerName)
+            {
+                if ( computerName != nullptr )
+                    netApiBufferFree(computerName);
+            }
+        };
 
     // Look up the user on the DC.
     const NET_API_STATUS status = netUserGetInfo((LPWSTR)computerName,
@@ -310,8 +321,15 @@ bool wxGetUserName(wxChar* buf, int maxSize)
         (LPBYTE*)&ui2);
     // ::NetUserGetInfo calls ::NetApiBufferAlloc to create the
     // USER_INFO_2 structure, so need to free that upon exit.
-    auto bufferFree = std::unique_ptr<USER_INFO_2, void(*)(USER_INFO_2*)>
-        { ui2, [](USER_INFO_2* ui2) { netApiBufferFree(ui2); } };
+    auto uiBufferFree = std::unique_ptr<USER_INFO_2, void(*)(USER_INFO_2*)>
+        {
+        ui2,
+        [](USER_INFO_2* ui2)
+            {
+                if ( ui2 != nullptr )
+                    netApiBufferFree(ui2);
+            }
+        };
 
     if ( status != NERR_Success )
     {
