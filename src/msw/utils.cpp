@@ -275,7 +275,7 @@ bool wxGetUserName(wxChar* buf, int maxSize)
     const static wxDynamicLibrary netapi32("netapi32", wxDL_VERBATIM | wxDL_QUIET);
     if ( !netapi32.IsLoaded() )
     {
-        wxLogTrace("utils", _("Failed to load netapi32.dll"));
+        wxLogTrace("utils", "Failed to load netapi32.dll");
         return false;
     }
 
