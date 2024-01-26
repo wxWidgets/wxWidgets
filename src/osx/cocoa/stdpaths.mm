@@ -143,9 +143,7 @@ wxString wxStandardPaths::GetSharedLibrariesDir() const
 {
     // Shared libraries on OSX should be stored inside the
     // <Bundle.app>/Contents/Frameworks
-    wxFileName fn( GetExecutablePath() );
-    fn.RemoveLastDir();
-    return fn.GetPathWithSep() + "Frameworks/";
+    return wxCFStringRef::AsString((CFStringRef)[NSBundle mainBundle].privateFrameworksPath) + "/";
 }
 
 #endif // wxUSE_STDPATHS
