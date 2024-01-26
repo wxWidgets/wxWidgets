@@ -411,7 +411,7 @@ public:
         Return OS specific directory where project shared liraries are
 
         - Windows: @c it returns the folder where the application binary is located
-        - Unix:    @c it returns the libraries installation path
+        - Unix:    @c it returns the libraries installation path, i.e. /usr/lib
         - Mac:     @c "/Applications/exename.app/Contents/Frameworks/"
 
         @since 3.3.0
