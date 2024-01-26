@@ -347,7 +347,7 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
 wxString wxStandardPaths::GetSharedLibrariesDir() const
 {
     wxFileName fn( GetExecutablePath() );
-    return fn.GetPathWithSep();
+    return fn.GetPat();
 }
 
 // ============================================================================

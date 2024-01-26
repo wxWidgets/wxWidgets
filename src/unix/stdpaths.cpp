@@ -367,7 +367,7 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
 
 wxString wxStandardPaths::GetSharedLibrariesDir() const
 {
-    return GetInstallPrefix() + "/lib/";
+    return GetInstallPrefix() + "/lib";
 }
 
 #endif // wxUSE_STDPATHS
