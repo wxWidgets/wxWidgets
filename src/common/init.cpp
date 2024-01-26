@@ -488,16 +488,10 @@ static void DoCommonPostCleanup()
 
 void wxEntryCleanup()
 {
-    // delete the application object
-    if ( wxTheApp )
-    {
-        wxTheApp->CleanUp();
-    }
-
-    // It's important to call this after wxApp::CleanUp() as it can log some
-    // messages that will be flushed inside DoCommonPreCleanup().
     DoCommonPreCleanup();
 
+
+    // delete the application object
     if ( wxTheApp )
     {
         // reset the global pointer to it to nullptr before destroying it as in
@@ -505,6 +499,9 @@ void wxEntryCleanup()
         // wxTheApp and using half-destroyed object is no good
         wxAppConsole * const app = wxApp::GetInstance();
         wxApp::SetInstance(nullptr);
+
+        app->CleanUp();
+
         delete app;
     }
 
