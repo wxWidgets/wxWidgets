@@ -2,7 +2,6 @@
 // File:        wx/unix/taskbarx11.h
 // Purpose:     Defines wxTaskBarIcon class for most common X11 desktops
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     04/04/2003
 // Copyright:   (c) Vaclav Slavik, 2003
 // Licence:     wxWindows licence
@@ -24,9 +23,9 @@ public:
     bool IsIconInstalled() const;
 
     // Operations:
-    bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
-    bool RemoveIcon() wxOVERRIDE;
-    bool PopupMenu(wxMenu *menu) wxOVERRIDE;
+    bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) override;
+    bool RemoveIcon() override;
+    bool PopupMenu(wxMenu *menu) override;
 
 protected:
     wxTaskBarIconArea *m_iconWnd;

@@ -20,6 +20,8 @@
 #include "wx/intl.h"
 #include "wx/uilocale.h"
 
+#include "wx/private/glibc.h"
+
 #if wxUSE_INTL
 
 // ----------------------------------------------------------------------------
@@ -29,10 +31,10 @@
 class IntlTestCase : public CppUnit::TestCase
 {
 public:
-    IntlTestCase() { m_locale=NULL; }
+    IntlTestCase() { m_locale=nullptr; }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( IntlTestCase );
@@ -68,7 +70,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( IntlTestCase, "IntlTestCase" );
 void IntlTestCase::setUp()
 {
     // Check that French locale is supported, this test doesn't work without it
-    // and all the other function need to check whether m_locale is non-NULL
+    // and all the other function need to check whether m_locale is non-null
     // before continuing
     if ( !wxLocale::IsAvailable(wxLANGUAGE_FRENCH) )
         return;
@@ -90,7 +92,7 @@ void IntlTestCase::tearDown()
     if (m_locale)
     {
         delete m_locale;
-        m_locale = NULL;
+        m_locale = nullptr;
     }
 }
 
@@ -175,13 +177,21 @@ void IntlTestCase::DateTimeFmtFrench()
 #ifdef __GLIBC__
     // Versions of glibc up to 2.7 wrongly used periods for French locale
     // separator.
-#if __GLIBC__ > 2 || __GLIBC_MINOR__ >= 8
+#if wxCHECK_GLIBC_VERSION(2, 8)
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
 #else
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
 #endif
     static const char *FRENCH_LONG_DATE_FMT = "%a %d %b %Y";
     static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %H:%M:%S";
+#elif defined(__FREEBSD__)
+    static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
+    static const char *FRENCH_LONG_DATE_FMT = "%a %e %b %Y";
+    static const char *FRENCH_DATE_TIME_FMT = "%a %e %b %X %Y";
+#elif defined(__CYGWIN__)
+    static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
+    static const char *FRENCH_LONG_DATE_FMT = "%a %e %b %Y";
+    static const char *FRENCH_DATE_TIME_FMT = "%a %e %b %Y %H:%M:%S";
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
@@ -202,6 +212,8 @@ void IntlTestCase::DateTimeFmtFrench()
     // its middle, so test it piece-wise and hope it doesn't change too much.
     CHECK( fmtDT.StartsWith("%A %d %B %Y") );
     CHECK( fmtDT.EndsWith("%H:%M:%S") );
+
+    wxUnusedVar(FRENCH_DATE_TIME_FMT);
 #else
     // Some glic versions have " %Z" at the end of the locale and some don't.
     // The test is still useful if we just ignore this difference.
@@ -219,26 +231,72 @@ void IntlTestCase::DateTimeFmtFrench()
 
 void IntlTestCase::IsAvailable()
 {
-    const wxString origLocale(setlocale(LC_ALL, NULL));
+    const wxString origLocale(setlocale(LC_ALL, nullptr));
 
     // Calling IsAvailable() shouldn't change the locale.
     wxLocale::IsAvailable(wxLANGUAGE_ENGLISH);
 
-    CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, NULL) );
+    CPPUNIT_ASSERT_EQUAL( origLocale, setlocale(LC_ALL, nullptr) );
 }
 
-// The test may fail in ANSI builds because of unsupported encoding, but we
-// don't really care about this build anyhow, so just skip it there.
-#if wxUSE_UNICODE
+TEST_CASE("wxTranslations::AddCatalog", "[translations]")
+{
+    // We currently have translations for French and Japanese in this test
+    // directory, check that loading those succeeds but loading others doesn't.
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+
+    const wxString domain("internat");
+
+    wxTranslations trans;
+
+    SECTION("All")
+    {
+        auto available = trans.GetAvailableTranslations(domain);
+        REQUIRE( available.size() == 2 );
+
+        available.Sort();
+        CHECK( available[0] == "fr" );
+        CHECK( available[1] == "ja" );
+    }
+
+    SECTION("French")
+    {
+        trans.SetLanguage(wxLANGUAGE_FRENCH);
+        CHECK( trans.AddAvailableCatalog(domain) );
+    }
+
+    SECTION("Italian")
+    {
+        trans.SetLanguage(wxLANGUAGE_ITALIAN);
+        CHECK_FALSE( trans.AddAvailableCatalog(domain) );
+    }
+
+    // And loading catalog using the same language as message IDs should
+    // "succeed" too, even if there is no such file, as in this case the
+    // message IDs themselves can be used directly.
+    SECTION("Untranslated")
+    {
+        trans.SetLanguage(wxLANGUAGE_GERMAN);
+        CHECK( trans.AddCatalog(domain, wxLANGUAGE_GERMAN) );
+
+        // Using a different region should still work.
+        CHECK( trans.AddCatalog(domain, wxLANGUAGE_GERMAN_SWISS) );
+
+        // But using a completely different language should not.
+        CHECK_FALSE( trans.AddCatalog(domain, wxLANGUAGE_DUTCH) );
+    }
+}
 
 TEST_CASE("wxLocale::Default", "[locale]")
 {
+    const int langDef = wxUILocale::GetSystemLanguage();
+    INFO("System language: " << wxUILocale::GetLanguageName(langDef));
+    CHECK( wxLocale::IsAvailable(langDef) );
+
     wxLocale loc;
 
-    REQUIRE( loc.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
+    REQUIRE( loc.Init(langDef, wxLOCALE_DONT_LOAD_DEFAULT) );
 }
-
-#endif // wxUSE_UNICODE
 
 // Under MSW and macOS all the locales used below should be supported, but
 // under Linux some locales may be unavailable.
@@ -262,7 +320,8 @@ TEST_CASE("wxUILocale::IsSupported", "[uilocale]")
 {
     CheckSupported(wxUILocale::FromTag("en"), "English");
     CheckSupported(wxUILocale(wxLocaleIdent().Language("fr").Region("FR")), "French");
-    CHECK( !wxUILocale::FromTag("bloordyblop").IsSupported() );
+    CHECK_FALSE( wxUILocale::FromTag("bloordyblop").IsSupported() );
+    CHECK_FALSE( wxUILocale::FromTag("xyz").IsSupported() );
 }
 
 TEST_CASE("wxUILocale::GetInfo", "[uilocale]")
@@ -315,8 +374,6 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 #endif
     }
 
-    // UTF-8 strings are not supported in ASCII build.
-#if wxUSE_UNICODE
     SECTION("German")
     {
         const wxUILocale l(wxLocaleIdent().Language("de").Region("DE"));
@@ -330,9 +387,9 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         CHECK( l.CompareStrings(u8("ä"), "ae") == -1 );
 
 #if defined(__WINDOWS__) || defined(__WXOSX__)
-        // Unfortunately CompareStringsEx() doesn't seem to work correctly
-        // under Wine.
-        if ( wxIsRunningUnderWine() )
+        // CompareStringsEx() was only implemented correctly in Wine 7.10.
+        wxVersionInfo wineVer;
+        if ( wxIsRunningUnderWine(&wineVer) && !wineVer.AtLeast(7, 10) )
             return;
 
         CHECK( l.CompareStrings(u8("ß"), "ss", wxCompare_CaseInsensitive) == 0 );
@@ -341,7 +398,8 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
 
     SECTION("Swedish")
     {
-        if ( wxIsRunningUnderWine() )
+        wxVersionInfo wineVer;
+        if ( wxIsRunningUnderWine(&wineVer) && !wineVer.AtLeast(7, 10) )
             return;
 
         const wxUILocale l(wxUILocale::FromTag("sv"));
@@ -353,11 +411,69 @@ TEST_CASE("wxUILocale::CompareStrings", "[uilocale]")
         CHECK( l.CompareStrings(u8("ä"), "ae") == 1 );
         CHECK( l.CompareStrings(u8("ö"), "z" ) == 1 );
     }
-#endif // wxUSE_UNICODE
+}
+
+// Small helper for making the test below more concise.
+static void CheckTag(const wxString& tag)
+{
+    CHECK( wxLocaleIdent::FromTag(tag).GetTag() == tag );
+}
+
+TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
+{
+    CheckTag("");
+    CheckTag("en");
+    CheckTag("en_US");
+    CheckTag("en_US.utf8");
+    CheckTag("English");
+    CheckTag("English_United States");
+    CheckTag("English_United States.utf8");
+}
+
+// Yet another helper for the test below.
+static void CheckFindLanguage(const wxString& tag, const char* expected)
+{
+    const wxLanguageInfo* const
+        info = wxUILocale::FindLanguageInfo(wxLocaleIdent::FromTag(tag));
+    if ( !expected )
+    {
+        if ( info )
+            FAIL_CHECK("Found " << info->CanonicalName << " for " << tag);
+
+        return;
+    }
+    else
+    {
+        if ( !info )
+        {
+            FAIL_CHECK("Not found for " << tag);
+            return;
+        }
+    }
+
+    CHECK( info->CanonicalName == expected );
+}
+
+TEST_CASE("wxUILocale::FindLanguageInfo", "[uilocale]")
+{
+    CheckFindLanguage("", nullptr);
+    CheckFindLanguage("en", "en");
+    CheckFindLanguage("en_US", "en_US");
+    CheckFindLanguage("en_US.utf8", "en_US");
+    CheckFindLanguage("English", "en");
+    CheckFindLanguage("English_United States", "en_US");
+    CheckFindLanguage("English_United States.utf8", "en_US");
+    // Test tag that includes an explicit script
+    CheckFindLanguage("sr-Latn-RS", "sr_RS@latin");
+
+    // Test mixed locales: we should still detect the language correctly, even
+    // if we don't recognize the full locale.
+    CheckFindLanguage("en_FR", "en");
+    CheckFindLanguage("fr_DE", "fr");
 }
 
 // Test which can be used to check if the given locale tag is supported.
-TEST_CASE("wxUILocale::FromTag", "[uilocale][.]")
+TEST_CASE("wxUILocale::FromTag", "[.]")
 {
     wxString tag;
     if ( !wxGetEnv("WX_TEST_LOCALE_TAG", &tag) )
@@ -369,7 +485,88 @@ TEST_CASE("wxUILocale::FromTag", "[uilocale][.]")
     REQUIRE( !locId.IsEmpty() );
 
     const wxUILocale loc(locId);
-    WARN("Locale \"" << tag << "\" supported: " << loc.IsSupported() );
+    WARN("Locale \"" << tag << "\":\n"
+         "language:\t" << locId.GetLanguage() << "\n"
+         "region:\t" << locId.GetRegion() << "\n"
+         "script:\t" << locId.GetScript() << "\n"
+         "charset:\t" << locId.GetCharset() << "\n"
+         "modifier:\t" << locId.GetModifier() << "\n"
+         "extension:\t" << locId.GetExtension() << "\n"
+         "sort order:\t" << locId.GetSortorder() << "\n"
+         "supported:\t" << (loc.IsSupported() ? "yes" : "no"));
+}
+
+namespace
+{
+
+const wxString GetLangName(int lang)
+{
+    switch ( lang )
+    {
+        case wxLANGUAGE_DEFAULT:
+            return "DEFAULT";
+
+        case wxLANGUAGE_UNKNOWN:
+            return "UNKNOWN";
+
+        default:
+            return wxUILocale::GetLanguageName(lang);
+    }
+}
+
+wxString GetLocaleDesc(const char* when)
+{
+    const wxUILocale& curloc = wxUILocale::GetCurrent();
+    const wxLocaleIdent locid = curloc.GetLocaleId();
+
+    // Make the output slightly more readable.
+    wxString decsep = curloc.GetInfo(wxLOCALE_DECIMAL_POINT);
+    if ( decsep == "." )
+        decsep = "point";
+    else if ( decsep == "," )
+        decsep = "comma";
+    else
+        decsep = wxString::Format("UNKNOWN (%s)", decsep);
+
+    return wxString::Format("%s\ncurrent locale:\t%s "
+                            "(decimal separator: %s, date format=%s)",
+                            when,
+                            locid.IsEmpty() ? wxString("NONE") : locid.GetTag(),
+                            decsep,
+                            curloc.GetInfo(wxLOCALE_SHORT_DATE_FMT));
+}
+
+} // anonymous namespace
+
+// Test to show information about the system locale and the effects of various
+// ways to change the current locale.
+TEST_CASE("wxUILocale::ShowSystem", "[.]")
+{
+    WARN("System locale identifier:\t"
+            << wxUILocale::GetSystemLocaleId().GetTag() << "\n"
+         "System locale as language:\t"
+            << GetLangName(wxUILocale::GetSystemLocale()) << "\n"
+         "System language identifier:\t"
+            << GetLangName(wxUILocale::GetSystemLanguage()));
+
+    WARN(GetLocaleDesc("Before calling any locale functions"));
+
+    wxLocale locDef;
+    CHECK( locDef.Init(wxLANGUAGE_DEFAULT, wxLOCALE_DONT_LOAD_DEFAULT) );
+    WARN(GetLocaleDesc("After wxLocale::Init(wxLANGUAGE_DEFAULT)"));
+
+    CHECK( wxUILocale::UseDefault() );
+    WARN(GetLocaleDesc("After wxUILocale::UseDefault()"));
+
+    wxString preferredLangsStr;
+    const auto preferredLangs = wxUILocale::GetPreferredUILanguages();
+    for (const auto& lang: preferredLangs)
+    {
+        if ( !preferredLangsStr.empty() )
+            preferredLangsStr += ", ";
+        preferredLangsStr += lang;
+    }
+    WARN("Preferred UI languages:\n" << preferredLangsStr);
 }
 
 #endif // wxUSE_INTL

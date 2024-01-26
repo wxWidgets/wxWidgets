@@ -2,7 +2,6 @@
 // Name:        wx/encinfo.h
 // Purpose:     declares wxNativeEncodingInfo struct
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.09.2003 (extracted from wx/fontenc.h)
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -47,9 +46,6 @@ struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
     { }
 
     int      charset;
-#elif defined(_WX_X_FONTLIKE)
-    wxString xregistry,
-             xencoding;
 #elif defined(wxHAS_UTF8_FONTS)
     // ports using UTF-8 for text don't need encoding information for fonts
 #else

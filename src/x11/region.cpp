@@ -35,10 +35,11 @@ class wxRegionRefData : public wxGDIRefData
 public:
     wxRegionRefData()
     {
-        m_region = NULL;
+        m_region = nullptr;
     }
 
     wxRegionRefData(const wxRegionRefData& refData)
+        : wxGDIRefData()
     {
         m_region = XCreateRegion();
         XUnionRegion( refData.m_region, m_region, m_region );
@@ -326,7 +327,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
 WXRegion *wxRegion::GetX11Region() const
 {
     if (!m_refData)
-        return NULL;
+        return nullptr;
 
     return (WXRegion*) M_REGIONDATA->m_region;
 }
@@ -354,7 +355,7 @@ class wxRIRefData: public wxGDIRefData
 {
 public:
 
-    wxRIRefData() : m_rects(0), m_numRects(0){}
+    wxRIRefData() : m_rects(nullptr), m_numRects(0){}
    virtual ~wxRIRefData();
 
     wxRect *m_rects;
@@ -373,7 +374,7 @@ void wxRIRefData::CreateRects( const wxRegion& region )
     if (m_rects)
       delete [] m_rects;
 
-    m_rects = 0;
+    m_rects = nullptr;
     m_numRects = 0;
 
     if (region.IsEmpty()) return;

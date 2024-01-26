@@ -2,7 +2,6 @@
 // Name:        wx/accel.h
 // Purpose:     wxAcceleratorEntry and wxAcceleratorTable classes
 // Author:      Julian Smart, Robert Roebling, Vadim Zeitlin
-// Modified by:
 // Created:     31.05.01 (extracted from other files)
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -16,6 +15,7 @@
 #if wxUSE_ACCEL
 
 #include "wx/object.h"
+#include "wx/string.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
 class WXDLLIMPEXP_FWD_CORE wxMenuItem;
@@ -48,18 +48,18 @@ class WXDLLIMPEXP_CORE wxAcceleratorEntry
 {
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0,
-                       wxMenuItem *item = NULL)
+                       wxMenuItem *item = nullptr)
         : m_flags(flags)
         , m_keyCode(keyCode)
         , m_command(cmd)
         , m_item(item)
         { }
 
-    // create accelerator corresponding to the specified string, return NULL if
+    // create accelerator corresponding to the specified string, return nullptr if
     // string couldn't be parsed or a pointer to be deleted by the caller
     static wxAcceleratorEntry *Create(const wxString& str);
 
-    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
+    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = nullptr)
     {
         m_flags = flags;
         m_keyCode = keyCode;
@@ -85,11 +85,6 @@ public:
 
     bool operator!=(const wxAcceleratorEntry& entry) const
         { return !(*this == entry); }
-
-#if defined(__WXMOTIF__)
-    // Implementation use only
-    bool MatchesEvent(const wxKeyEvent& event) const;
-#endif
 
     bool IsOk() const
     {
@@ -126,7 +121,7 @@ private:
     int m_keyCode;  // ASCII or virtual keycode
     int m_command;  // Command id to generate
 
-    // the menu item this entry corresponds to, may be NULL
+    // the menu item this entry corresponds to, may be null
     wxMenuItem *m_item;
 
     // for compatibility with old code, use accessors now!
@@ -142,12 +137,8 @@ private:
     #include "wx/generic/accel.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/accel.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/accel.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/accel.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/accel.h"
+    #include "wx/gtk/accel.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/accel.h"
 #elif defined(__WXQT__)

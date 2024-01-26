@@ -30,13 +30,13 @@
 #ifdef __UNIX__
     #define COMMAND "echo hi"
     #define COMMAND_STDERR "cat nonexistentfile"
-    #define ASYNC_COMMAND "xclock"
+    #define ASYNC_COMMAND "sleep 86400"
     #define SHELL_COMMAND "echo hi from shell>/dev/null"
     #define COMMAND_NO_OUTPUT "echo -n"
 #elif defined(__WINDOWS__)
     #define COMMAND "cmd.exe /c \"echo hi\""
     #define COMMAND_STDERR "cmd.exe /c \"type nonexistentfile\""
-    #define ASYNC_COMMAND "notepad"
+    #define ASYNC_COMMAND "mspaint"
     #define SHELL_COMMAND "echo hi > nul:"
     #define COMMAND_NO_OUTPUT COMMAND " > nul:"
 #else
@@ -113,7 +113,7 @@ private:
         long DoExecute(AsyncExecLoopExitEnum forceExitLoop_,
                      const wxString& command_,
                      int flags_ = wxEXEC_ASYNC,
-                     wxProcess* callback_ = NULL)
+                     wxProcess* callback_ = nullptr)
         {
             forceExitLoop = forceExitLoop_;
 
@@ -138,7 +138,7 @@ private:
             return wxExecuteReturnCode;
         }
 
-        void Notify() wxOVERRIDE
+        void Notify() override
         {
             // Run wxExecute inside the event loop.
             wxExecuteReturnCode = wxExecute(command, flags, callback);
@@ -326,7 +326,7 @@ public:
     }
 
     // may be overridden to be notified about process termination
-    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) wxOVERRIDE
+    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) override
     {
         wxEventLoop::GetActive()->ScheduleExit();
     }
@@ -363,7 +363,7 @@ ExecTestCase::DoTestAsyncRedirect(const wxString& command,
                                // to trigger the exit of the event loop.
                        command, wxEXEC_ASYNC, &proc) != 0 );
 
-    wxInputStream *streamToCheck = NULL;
+    wxInputStream *streamToCheck = nullptr;
     switch ( check )
     {
         case Check_Stdout:
@@ -472,7 +472,7 @@ void ExecTestCase::TestOverlappedSyncExecute()
             StartOnce(10);
         }
 
-        virtual void Notify() wxOVERRIDE
+        virtual void Notify() override
         {
             wxExecute(m_command, m_outputArray);
         }

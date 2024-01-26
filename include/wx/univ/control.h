@@ -2,7 +2,6 @@
 // Name:        wx/univ/control.h
 // Purpose:     universal wxControl: adds handling of mnemonics
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -63,10 +62,10 @@ public:
 
     // this function will filter out '&' characters and will put the
     // accelerator char (the one immediately after '&') into m_chAccel
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
 
     // return the current label
-    virtual wxString GetLabel() const wxOVERRIDE { return wxControlBase::GetLabel(); }
+    virtual wxString GetLabel() const override { return wxControlBase::GetLabel(); }
 
     // wxUniversal-specific methods
 
@@ -79,7 +78,7 @@ public:
         return m_indexAccel == -1 ? wxT('\0') : (wxChar)m_label[m_indexAccel];
     }
 
-    virtual wxWindow *GetInputWindow() const wxOVERRIDE
+    virtual wxWindow *GetInputWindow() const override
     {
         return const_cast<wxControl*>(this);
     }

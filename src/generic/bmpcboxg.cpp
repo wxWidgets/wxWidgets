@@ -2,7 +2,6 @@
 // Name:        src/generic/bmpcboxg.cpp
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Aug-31-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
@@ -350,7 +349,7 @@ wxCoord wxBitmapComboBox::OnMeasureItem(size_t item) const
 wxCoord wxBitmapComboBox::OnMeasureItemWidth(size_t item) const
 {
     wxCoord x, y;
-    GetTextExtent(GetString(item), &x, &y, 0, 0);
+    GetTextExtent(GetString(item), &x, &y, nullptr, nullptr);
     x += m_imgAreaWidth;
     return x;
 }

@@ -2,7 +2,6 @@
 // Name:        wx/msw/toolbar.h
 // Purpose:     wxToolBar class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -44,46 +43,46 @@ public:
     virtual ~wxToolBar();
 
     // override/implement base class virtuals
-    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const override;
 
-    virtual bool Realize() wxOVERRIDE;
+    virtual bool Realize() override;
 
-    virtual wxSize GetToolSize() const wxOVERRIDE;
+    virtual wxSize GetToolSize() const override;
 
-    virtual void SetRows(int nRows) wxOVERRIDE;
+    virtual void SetRows(int nRows) override;
 
-    virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
-    virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap) wxOVERRIDE;
+    virtual void SetToolNormalBitmap(int id, const wxBitmapBundle& bitmap) override;
+    virtual void SetToolDisabledBitmap(int id, const wxBitmapBundle& bitmap) override;
 
-    virtual void SetToolPacking(int packing) wxOVERRIDE;
+    virtual void SetToolPacking(int packing) override;
 
     // implementation only from now on
     // -------------------------------
 
-    virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
+    virtual void SetWindowStyleFlag(long style) override;
 
-    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
 
     void OnMouseEvent(wxMouseEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
 
-    void SetFocus() wxOVERRIDE {}
+    void SetFocus() override {}
 
     static WXHBITMAP MapBitmap(WXHBITMAP bitmap, int width, int height);
 
     // override WndProc mainly to process WM_SIZE
-    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE;
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam) override;
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
 
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
-    virtual bool MSWEraseBgHook(WXHDC hDC) wxOVERRIDE;
-    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child) wxOVERRIDE;
+    virtual bool MSWEraseBgHook(WXHDC hDC) override;
+    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child) override;
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
     virtual wxToolBarToolBase *CreateTool(int id,
@@ -91,15 +90,18 @@ public:
                                           const wxBitmapBundle& bmpNormal,
                                           const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
-                                          wxObject *clientData = NULL,
+                                          wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
-                                          const wxString& longHelp = wxEmptyString) wxOVERRIDE;
+                                          const wxString& longHelp = wxEmptyString) override;
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
-                                          const wxString& label) wxOVERRIDE;
+                                          const wxString& label) override;
 protected:
     // common part of all ctors
     void Init();
+
+    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
+    virtual int MSWGetToolTipMessage() const override;
 
     // create the native toolbar control
     bool MSWCreateToolbar(const wxPoint& pos, const wxSize& size);
@@ -108,17 +110,17 @@ protected:
     void Recreate();
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
-    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) override;
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) override;
 
-    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) wxOVERRIDE;
-    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
-    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) override;
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) override;
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) override;
 
-    virtual void DoSetToolBitmapSize(const wxSize& size) wxOVERRIDE;
+    virtual void DoSetToolBitmapSize(const wxSize& size) override;
 
     // return the appropriate size and flags for the toolbar control
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     // handlers for various events
     bool HandleSize(WXWPARAM wParam, WXLPARAM lParam);
@@ -130,7 +132,7 @@ protected:
     // should be called whenever the toolbar size changes
     void UpdateSize();
 
-    // create m_disabledImgList (but doesn't fill it), set it to NULL if it is
+    // create m_disabledImgList (but doesn't fill it), set it to nullptr if it is
     // unneeded
     void CreateDisabledImageList();
 
@@ -146,7 +148,7 @@ protected:
     // the big bitmap containing all bitmaps of the toolbar buttons
     WXHBITMAP m_hBitmap;
 
-    // the image list with disabled images, may be NULL if we use
+    // the image list with disabled images, may be null if we use
     // system-provided versions of them
     wxImageList *m_disabledImgList;
 

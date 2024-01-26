@@ -134,7 +134,7 @@ public:
         Detach the existing logger without deleting it.
 
         The caller is responsible for deleting the returned pointer if it's
-        non-@c NULL.
+        non-null.
      */
     wxProtocolLog *DetachLog();
 

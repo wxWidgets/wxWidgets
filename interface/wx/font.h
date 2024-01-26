@@ -569,7 +569,6 @@ public:
             One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
-            At present this has an effect on Windows and Motif 2.x only.
         @param faceName
             An optional string specifying the face name to be used.
             If it is an empty string, a default face name will be chosen based on the family.
@@ -607,7 +606,6 @@ public:
             One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
-            At present this has an effect on Windows and Motif 2.x only.
         @param faceName
             An optional string specifying the face name to be used.
             If it is an empty string, a default face name will be chosen based on the family.
@@ -657,7 +655,7 @@ public:
     /**
         @name Getters
     */
-    //@{
+    ///@{
 
     /**
        Returns a font with the same face/size as the given one but with normal
@@ -740,11 +738,11 @@ public:
         the given file even if it is not globally installed on the system.
 
         Under macOS this method actually doesn't do anything other than check
-        for the existence of the file in the "Fonts" subdirectory of the
-        application bundle "Resources" directory. You are responsible for
-        actually making the font file available in this directory and setting
-        @c ATSApplicationFontsPath to @c Fonts value in your @c Info.plist
-        file. See also wxStandardPaths::GetResourcesDir().
+        for the existence of the file and that it is located inside the "Fonts"
+        subdirectory of the application bundle "Resources" directory. You are
+        responsible for actually making the font file available in this
+        directory and setting @c ATSApplicationFontsPath to @c Fonts value in
+        your @c Info.plist file. See also wxStandardPaths::GetResourcesDir().
 
         Under MSW this method must be called before any wxGraphicsContext
         objects have been created, otherwise the private font won't be usable
@@ -759,6 +757,7 @@ public:
         @c wxUSE_PRIVATE_FONTS is always set to 0 under the other platforms,
         making this function unavailable at compile-time.
 
+        @param filename Absolute path of the font file.
         @return @true if the font was added and can now be used.
 
         @since 3.1.1
@@ -853,7 +852,7 @@ public:
     */
     virtual bool IsOk() const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -863,7 +862,7 @@ public:
         a new font similar to the given one but with its weight, style or size
         changed.
      */
-    //@{
+    ///@{
 
     /**
         Returns a bold version of this font.
@@ -1013,7 +1012,7 @@ public:
      */
     wxFont Scaled(float x) const;
 
-    //@}
+    ///@}
 
     /**
         @name Setters
@@ -1021,7 +1020,7 @@ public:
         These functions internally recreate the native font object with the new
         specified property.
     */
-    //@{
+    ///@{
 
     /**
         Sets the encoding for this font.
@@ -1231,7 +1230,7 @@ public:
     */
     virtual void SetNumericWeight(int weight);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1288,7 +1287,7 @@ public:
      */
     static int GetNumericWeightOf(wxFontWeight weight);
 
-    //@{
+    ///@{
     /**
         This function takes the same parameters as the relative
         @ref wxFont::wxFont "wxFont constructor" and returns a new font
@@ -1323,7 +1322,7 @@ public:
     static wxFont *New(const wxNativeFontInfo& nativeInfo);
     static wxFont *New(const wxString& nativeInfoString);
 
-    //@}
+    ///@}
 };
 
 
@@ -1389,6 +1388,12 @@ public:
     /**
         Finds a font of the given specification, or creates one and adds it to the
         list. See the @ref wxFont "wxFont constructor" for details of the arguments.
+
+        Note that in the new code it's preferable to use FindOrCreateFont()
+        overload taking wxFontInfo, as it can be used for the fonts with
+        fractional point sizes or fonts with sizes specified in pixels, unlike
+        this overload which can only be used with the fonts using integer size
+        in points.
     */
     wxFont* FindOrCreateFont(int point_size, wxFontFamily family, wxFontStyle style,
                              wxFontWeight weight, bool underline = false,
@@ -1398,6 +1403,16 @@ public:
     /**
         Finds a font of the given specification, or creates one and adds it to the
         list. See the @ref wxFont "wxFont constructor" for details of the arguments.
+
+        Example of using this function to retrieve (creating it if necessary) a
+        bold font of size 20:
+
+        @code
+            wxFont* font = wxTheFontList->FindOrCreateFont(wxFontInfo(20).Bold());
+        @endcode
+
+        @return Font pointer which must @e not be deleted by the caller. The
+            pointer is normally always valid, i.e. non-null.
 
         @since 3.1.1
     */
@@ -1416,7 +1431,7 @@ wxFontList* wxTheFontList;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Converts string to a wxFont best represented by the given string. Returns
@@ -1437,5 +1452,5 @@ bool wxFromString(const wxString& string, wxFont* font);
 */
 wxString wxToString(const wxFont& font);
 
-//@}
+///@}
 

@@ -46,7 +46,7 @@ public:
     // --------------
 
     // default ctor, call Create() later
-    wxRearrangeList() { }
+    wxRearrangeList() = default;
 
     // ctor creating the control, the arguments are the same as for
     // wxCheckListBox except for the extra order array which defines the
@@ -97,12 +97,12 @@ public:
 
 
     // Override this to keep our m_order array in sync with the real item state.
-    virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
+    virtual void Check(unsigned int item, bool check = true) override;
 
     int DoInsertItems(const wxArrayStringsAdapter& items, unsigned int pos,
-                      void **clientData, wxClientDataType type) wxOVERRIDE;
-    void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
-    void DoClear() wxOVERRIDE;
+                      void **clientData, wxClientDataType type) override;
+    void DoDeleteOneItem(unsigned int n) override;
+    void DoClear() override;
 
 private:
     // swap two items at the given positions in the listbox
@@ -228,7 +228,7 @@ public:
 
 private:
     // common part of all ctors
-    void Init() { m_ctrl = NULL; }
+    void Init() { m_ctrl = nullptr; }
 
     wxRearrangeCtrl *m_ctrl;
 

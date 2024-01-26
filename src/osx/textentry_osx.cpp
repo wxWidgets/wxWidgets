@@ -33,10 +33,6 @@
     #include <stat.h>
 #endif
 
-#if wxUSE_STD_IOSTREAM
-    #include <fstream>
-#endif
-
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 #include "wx/thread.h"
@@ -46,7 +42,7 @@
 
 wxTextEntry::wxTextEntry()
 {
-    m_completer = NULL;
+    m_completer = nullptr;
     m_editable = true;
     m_maxLength = 0;
 }
@@ -297,7 +293,7 @@ wxTextWidgetImpl * wxTextEntry::GetTextPeer() const
 {
     wxWindow * const win = const_cast<wxTextEntry *>(this)->GetEditableWindow();
 
-    return win ? dynamic_cast<wxTextWidgetImpl *>(win->GetPeer()) : NULL;
+    return win ? dynamic_cast<wxTextWidgetImpl *>(win->GetPeer()) : nullptr;
 }
 
 bool wxTextEntry::SetHint(const wxString& hint)

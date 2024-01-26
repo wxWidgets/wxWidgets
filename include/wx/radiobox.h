@@ -2,7 +2,6 @@
 // Name:        wx/radiobox.h
 // Purpose:     wxRadioBox declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.09.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -58,9 +57,9 @@ public:
     // set the tooltip text for a radio item, empty string unsets any tooltip
     void SetItemToolTip(unsigned int item, const wxString& text);
 
-    // get the individual items tooltip; returns NULL if none
+    // get the individual items tooltip; returns nullptr if none
     wxToolTip *GetItemToolTip(unsigned int item) const
-        { return m_itemsTooltips ? (*m_itemsTooltips)[item] : NULL; }
+        { return m_itemsTooltips ? (*m_itemsTooltips)[item] : nullptr; }
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_HELP
@@ -94,7 +93,7 @@ protected:
         m_majorDim = 0;
 
 #if wxUSE_TOOLTIPS
-        m_itemsTooltips = NULL;
+        m_itemsTooltips = nullptr;
 #endif // wxUSE_TOOLTIPS
     }
 
@@ -111,7 +110,7 @@ protected:
 
 #if wxUSE_TOOLTIPS
     // called from SetItemToolTip() to really set the tooltip for the specified
-    // item in the box (or, if tooltip is NULL, to remove any existing one).
+    // item in the box (or, if tooltip is null, to remove any existing one).
     //
     // NB: this function should really be pure virtual but to avoid breaking
     //     the build of the ports for which it's not implemented yet we provide
@@ -119,7 +118,7 @@ protected:
     virtual void DoSetItemToolTip(unsigned int item, wxToolTip *tooltip);
 
     // returns true if we have any item tooltips
-    bool HasItemToolTips() const { return m_itemsTooltips != NULL; }
+    bool HasItemToolTips() const { return m_itemsTooltips != nullptr; }
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_HELP
@@ -141,7 +140,7 @@ private:
 #if wxUSE_TOOLTIPS
     // array of tooltips for the individual items
     //
-    // this array is initially NULL and initialized on first use
+    // this array is initially null and initialized on first use
     wxToolTipArray *m_itemsTooltips;
 #endif
 
@@ -155,12 +154,8 @@ private:
     #include "wx/univ/radiobox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/radiobox.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/radiobox.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/radiobox.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/radiobox.h"
+    #include "wx/gtk/radiobox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/radiobox.h"
 #elif defined(__WXQT__)

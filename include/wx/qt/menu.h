@@ -20,9 +20,9 @@ public:
     virtual QMenu *GetHandle() const;
 
 protected:
-    virtual wxMenuItem *DoAppend(wxMenuItem *item) wxOVERRIDE;
-    virtual wxMenuItem *DoInsert(size_t pos, wxMenuItem *item) wxOVERRIDE;
-    virtual wxMenuItem *DoRemove(wxMenuItem *item) wxOVERRIDE;
+    virtual wxMenuItem *DoAppend(wxMenuItem *item) override;
+    virtual wxMenuItem *DoInsert(size_t pos, wxMenuItem *item) override;
+    virtual wxMenuItem *DoRemove(wxMenuItem *item) override;
 
 private:
     QMenu *m_qtMenu;
@@ -39,21 +39,21 @@ public:
     wxMenuBar(long style);
     wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
 
-    virtual bool Append(wxMenu *menu, const wxString& title) wxOVERRIDE;
-    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
-    virtual wxMenu *Remove(size_t pos) wxOVERRIDE;
+    virtual bool Append(wxMenu *menu, const wxString& title) override;
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) override;
+    virtual wxMenu *Remove(size_t pos) override;
 
-    virtual void EnableTop(size_t pos, bool enable) wxOVERRIDE;
-    virtual bool IsEnabledTop(size_t pos) const wxOVERRIDE;
+    virtual void EnableTop(size_t pos, bool enable) override;
+    virtual bool IsEnabledTop(size_t pos) const override;
 
-    virtual void SetMenuLabel(size_t pos, const wxString& label) wxOVERRIDE;
-    virtual wxString GetMenuLabel(size_t pos) const wxOVERRIDE;
+    virtual void SetMenuLabel(size_t pos, const wxString& label) override;
+    virtual wxString GetMenuLabel(size_t pos) const override;
 
     QMenuBar *GetQMenuBar() const { return m_qtMenuBar; }
-    virtual QWidget *GetHandle() const wxOVERRIDE;
+    virtual QWidget *GetHandle() const override;
 
-    virtual void Attach(wxFrame *frame) wxOVERRIDE;
-    virtual void Detach() wxOVERRIDE;
+    virtual void Attach(wxFrame *frame) override;
+    virtual void Detach() override;
 
 private:
     QMenuBar *m_qtMenuBar;

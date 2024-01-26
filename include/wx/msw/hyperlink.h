@@ -20,7 +20,7 @@ class WXDLLIMPEXP_ADV wxHyperlinkCtrl : public wxGenericHyperlinkCtrl
 {
 public:
     // Default constructor (for two-step construction).
-    wxHyperlinkCtrl() { }
+    wxHyperlinkCtrl() = default;
 
     // Constructor.
     wxHyperlinkCtrl(wxWindow *parent,
@@ -43,20 +43,39 @@ public:
                 long style = wxHL_DEFAULT_STYLE,
                 const wxString& name = wxASCII_STR(wxHyperlinkCtrlNameStr));
 
+    virtual ~wxHyperlinkCtrl();
 
     // overridden base class methods
     // -----------------------------
 
-    virtual void SetURL(const wxString &url) wxOVERRIDE;
+    virtual void SetURL(const wxString &url) override;
 
-    virtual void SetLabel(const wxString &label) wxOVERRIDE;
+    virtual void SetLabel(const wxString &label) override;
+
+    // Native control doesn't change appearance on hover, so we don't support
+    // changing hover colour.
+    virtual wxColour GetHoverColour() const override;
+
+    virtual wxColour GetNormalColour() const override;
+    virtual void SetNormalColour(const wxColour &colour) override;
+
+    virtual wxColour GetVisitedColour() const override;
+    virtual void SetVisitedColour(const wxColour &colour) override;
+
+    // overridden/inherited wxWindow methods
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
+    virtual wxSize DoGetBestClientSize() const override;
 
 private:
-    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) override;
+
+    bool MSWAreCustomColoursEnabled() const;
+    void MSWEnableCustomColours();
 
     wxDECLARE_DYNAMIC_CLASS( wxHyperlinkCtrl );
 };

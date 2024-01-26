@@ -86,9 +86,9 @@ struct IncompleteClass;
 void WeakRefTestCase::DeclareTest()
 {
     {
-        // Not initializing or initializing with NULL should work too
+        // Not initializing or initializing with nullptr should work too
         wxWeakRef<wxEvtHandler> wroDef;
-        wxWeakRef<wxEvtHandler> wro0(NULL);
+        wxWeakRef<wxEvtHandler> wro0(nullptr);
 
         wxObject o; // Should not work
         wxEvtHandler eh;
@@ -170,8 +170,8 @@ void WeakRefTestCase::AssignTest()
     wro1 = &eh;
     wro2 = &ot;
 
-    wro1 = NULL;
-    wro2 = NULL;
+    wro1 = nullptr;
+    wro2 = nullptr;
 
     CPPUNIT_ASSERT( !wro1 );
     CPPUNIT_ASSERT( !wro2 );

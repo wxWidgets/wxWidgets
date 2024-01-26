@@ -126,14 +126,14 @@ wxEND_EVENT_TABLE()
 wxVector<wxNotificationMessageWindow*> wxNotificationMessageWindow::ms_visibleNotifications;
 
 wxNotificationMessageWindow::wxNotificationMessageWindow(wxGenericNotificationMessageImpl* notificationImpl)
-                           : wxFrame(NULL, wxID_ANY, _("Notice"),
+                           : wxFrame(nullptr, wxID_ANY, _("Notice"),
                                       wxDefaultPosition, wxDefaultSize,
                                       wxBORDER_NONE | wxFRAME_TOOL_WINDOW | wxSTAY_ON_TOP /* no caption, no border styles */),
                              m_timer(this),
                              m_mouseActiveCount(0),
                              m_notificationImpl(notificationImpl)
 {
-    m_buttonSizer = NULL;
+    m_buttonSizer = nullptr;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
 
@@ -215,7 +215,7 @@ void wxNotificationMessageWindow::SetMessageIcon(const wxIcon& icon)
 bool wxNotificationMessageWindow::AddAction(wxWindowID actionid, const wxString &label)
 {
     wxSizer* msgSizer = m_messagePanel->GetSizer();
-    if ( m_buttonSizer == NULL )
+    if ( m_buttonSizer == nullptr )
     {
         msgSizer->Detach(m_closeBtn);
         m_closeBtn->Hide();
@@ -470,7 +470,6 @@ bool wxGenericNotificationMessageImpl::Show(int timeout)
         timeout = GetDefaultTimeout();
     }
 
-    SetActive(true);
     m_window->Set(timeout);
 
     m_window->ShowWithEffect(wxSHOW_EFFECT_BLEND);
@@ -484,8 +483,6 @@ bool wxGenericNotificationMessageImpl::Close()
         return false;
 
     m_window->Hide();
-
-    SetActive(false);
 
     return true;
 }

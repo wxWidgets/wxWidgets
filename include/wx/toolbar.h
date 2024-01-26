@@ -2,7 +2,6 @@
 // Name:        wx/toolbar.h
 // Purpose:     wxToolBar interface declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.11.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -70,12 +69,8 @@ wxALLOW_COMBINING_ENUMS(wxToolBarStyleFlags, wxBorder)
        #include "wx/univ/toolbar.h"
     #elif defined(__WXMSW__)
        #include "wx/msw/toolbar.h"
-    #elif defined(__WXMOTIF__)
-       #include "wx/motif/toolbar.h"
-    #elif defined(__WXGTK20__)
-        #include "wx/gtk/toolbar.h"
     #elif defined(__WXGTK__)
-        #include "wx/gtk1/toolbar.h"
+        #include "wx/gtk/toolbar.h"
     #elif defined(__WXMAC__)
        #include "wx/osx/toolbar.h"
     #elif defined(__WXQT__)

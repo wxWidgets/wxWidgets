@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/filesys/filesys.cpp
 // Purpose:     wxFileSystem unit test
-// Author:      Vaclav Slavik
+// Author:      Vaclav Slavik, Vyacheslav Lisovski
 // Created:     2004-03-28
 // Copyright:   (c) 2004 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,8 +21,11 @@
 
 #if wxUSE_FILESYSTEM
 
+#include "wx/fs_data.h"
 #include "wx/fs_mem.h"
-#include "wx/scopedptr.h"
+#include "wx/sstream.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -39,9 +42,9 @@ public:
     wxString RightLocation(const wxString& p) { return GetRightLocation(p); }
     wxString Anchor(const wxString& p) { return GetAnchor(p); }
 
-    bool CanOpen(const wxString& WXUNUSED(url)) wxOVERRIDE { return false; }
+    bool CanOpen(const wxString& WXUNUSED(url)) override { return false; }
     wxFSFile *OpenFile(wxFileSystem& WXUNUSED(fs),
-                       const wxString& WXUNUSED(url)) wxOVERRIDE { return NULL; }
+                       const wxString& WXUNUSED(url)) override { return nullptr; }
 
 
 };
@@ -176,6 +179,51 @@ TEST_CASE("wxFileSystem::UnicodeFileNameToUrlConversion", "[filesys][url][filena
     CHECK( filename.SameAs(wxFileName::URLToFileName(url)) );
 }
 
+TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][openfile]")
+{
+    // Install wxDataSchemeFSHandler just for the duration of this test.
+    class AutoDataSchemeFSHandler
+    {
+    public:
+        AutoDataSchemeFSHandler() : m_handler(new wxDataSchemeFSHandler())
+        {
+            wxFileSystem::AddHandler(m_handler.get());
+        }
+        ~AutoDataSchemeFSHandler()
+        {
+            wxFileSystem::RemoveHandler(m_handler.get());
+        }
+    private:
+        std::unique_ptr<wxDataSchemeFSHandler> const m_handler;
+    } autoDataSchemeFSHandler;
+
+    wxFileSystem fs;
+
+    const struct wxTestCaseData
+    {
+        const char *info, *input, *result1, *result2;
+    } testData[] =
+    {
+        { "Testing minimal URI with data",
+            "data:,the%20data", "text/plain", "the data" },
+        { "Testing base64 encoded",
+            "data:x-t1/x-s1;base64,SGVsbG8sIFdvcmxkIQ==", "x-t1/x-s1", "Hello, World!" },
+        { "Testing complex media type",
+            "data:image/svg+xml;utf8,<svg width='10'... </svg>", "image/svg+xml;utf8", "<svg width='10'... </svg>" }
+    };
+
+    for ( const auto& dataItem : testData )
+    {
+        INFO(dataItem.info);
+        std::unique_ptr<wxFSFile> file(fs.OpenFile(dataItem.input));
+        CHECK(file->GetMimeType() == dataItem.result1);
+
+        wxStringOutputStream sos;
+        sos.Write(*file->GetStream());
+        CHECK(sos.GetString () == dataItem.result2);
+    }
+}
+
 // Test that using FindFirst() after removing a previously found URL works:
 // this used to be broken, see https://github.com/wxWidgets/wxWidgets/issues/18744
 TEST_CASE("wxFileSystem::MemoryFSHandler", "[filesys][memoryfshandler][find]")
@@ -196,7 +244,7 @@ TEST_CASE("wxFileSystem::MemoryFSHandler", "[filesys][memoryfshandler][find]")
         }
 
     private:
-        wxScopedPtr<wxMemoryFSHandler> const m_handler;
+        std::unique_ptr<wxMemoryFSHandler> const m_handler;
     } autoMemoryFSHandler;
 
     wxMemoryFSHandler::AddFile("foo.txt", "foo contents");

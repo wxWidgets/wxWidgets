@@ -58,7 +58,7 @@ wxEventType wxEVT_TOOLBOOK_PAGE_CHANGING;
 class wxToolbook : public wxBookCtrlBase
 {
 public:
-    //@{
+    ///@{
     /**
         Constructs a choicebook control.
     */
@@ -68,7 +68,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxEmptyString);
-    //@}
+    ///@}
 
     /**
        Create the tool book control that has already been constructed with

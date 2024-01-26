@@ -36,7 +36,7 @@ class WXDLLIMPEXP_BASE wxSecretValue
 {
 public:
     // Creates an empty secret value (not the same as an empty password).
-    wxSecretValue() : m_impl(NULL) { }
+    wxSecretValue() : m_impl(nullptr) { }
 
     // Creates a secret value from the given data.
     wxSecretValue(size_t size, const void *data)
@@ -57,7 +57,7 @@ public:
     ~wxSecretValue();
 
     // Check if a secret is not empty.
-    bool IsOk() const { return m_impl != NULL; }
+    bool IsOk() const { return m_impl != nullptr; }
 
     // Compare with another secret.
     bool operator==(const wxSecretValue& other) const;
@@ -128,7 +128,7 @@ public:
 
     // Check if this object is valid, i.e. can be used, and optionally fill in
     // the provided error message string if it isn't.
-    bool IsOk(wxString* errmsg = NULL) const;
+    bool IsOk(wxString* errmsg = nullptr) const;
 
 
     // Store a username/password combination.
@@ -169,6 +169,8 @@ private:
 };
 
 #else // !wxUSE_SECRETSTORE
+
+#include "wx/utils.h"
 
 // Provide stand in for wxSecretValue allowing to use it without having #if
 // wxUSE_SECRETSTORE checks everywhere. Unlike the real version, this class
@@ -211,7 +213,7 @@ public:
         return m_data;
     }
 
-    static void Wipe(size_t size, void *data) { memset(data, 0, size); }
+    static void Wipe(size_t size, void *data) { wxSecureZeroMemory(data, size); }
     static void WipeString(wxString& str)
     {
         str.assign(str.length(), '*');

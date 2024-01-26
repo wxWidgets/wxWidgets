@@ -2,7 +2,6 @@
 // Name:        src/common/gdicmn.cpp
 // Purpose:     Common GDI classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -32,6 +31,7 @@
     #include "wx/math.h"
 #endif
 
+#include <unordered_map>
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGDIObject, wxObject);
 
@@ -259,6 +259,27 @@ wxRealPoint::wxRealPoint(const wxPoint& pt)
 // wxColourDatabase
 // ============================================================================
 
+// Due to a bug mentioned in wx/hashmap.h we have to use aggregation here and
+// define a simple accessor function below.
+//
+// FIXME-GCC-4.8: Remove this and just inherit from std::unordered_map<>.
+class wxStringToColourHashMap
+{
+public:
+    std::unordered_map<wxString, wxColour> m_colours;
+};
+
+namespace
+{
+
+inline std::unordered_map<wxString, wxColour>&
+GetColours(wxStringToColourHashMap* map)
+{
+    return map->m_colours;
+}
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxColourDatabase ctor/dtor
 // ----------------------------------------------------------------------------
@@ -266,17 +287,12 @@ wxRealPoint::wxRealPoint(const wxPoint& pt)
 wxColourDatabase::wxColourDatabase ()
 {
     // will be created on demand in Initialize()
-    m_map = NULL;
+    m_map = nullptr;
 }
 
 wxColourDatabase::~wxColourDatabase ()
 {
-    if ( m_map )
-    {
-        WX_CLEAR_HASH_MAP(wxStringToColourHashMap, *m_map);
-
-        delete m_map;
-    }
+    delete m_map;
 }
 
 // Colour database stuff
@@ -375,7 +391,7 @@ void wxColourDatabase::Initialize()
     for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
     {
         const wxColourDesc& cc = wxColourTable[n];
-        (*m_map)[cc.name] = new wxColour(cc.r, cc.g, cc.b);
+        GetColours(m_map)[cc.name] = wxColour(cc.r, cc.g, cc.b);
     }
 }
 
@@ -400,16 +416,17 @@ void wxColourDatabase::AddColour(const wxString& name, const wxColour& colour)
         colNameAlt.clear();
     }
 
-    wxStringToColourHashMap::iterator it = m_map->find(colName);
-    if ( it == m_map->end() && !colNameAlt.empty() )
-        it = m_map->find(colNameAlt);
-    if ( it != m_map->end() )
+    auto& map = GetColours(m_map);
+    auto it = map.find(colName);
+    if ( it == map.end() && !colNameAlt.empty() )
+        it = map.find(colNameAlt);
+    if ( it != map.end() )
     {
-        *(it->second) = colour;
+        it->second = colour;
     }
     else // new colour
     {
-        (*m_map)[colName] = new wxColour(colour);
+        map[colName] = wxColour(colour);
     }
 }
 
@@ -425,11 +442,12 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     if ( !colNameAlt.Replace(wxT("GRAY"), wxT("GREY")) )
         colNameAlt.clear();
 
-    wxStringToColourHashMap::iterator it = m_map->find(colName);
-    if ( it == m_map->end() && !colNameAlt.empty() )
-        it = m_map->find(colNameAlt);
-    if ( it != m_map->end() )
-        return *(it->second);
+    const auto& map = GetColours(m_map);
+    auto it = map.find(colName);
+    if ( it == map.end() && !colNameAlt.empty() )
+        it = map.find(colNameAlt);
+    if ( it != map.end() )
+        return it->second;
 
     // we did not find any result in existing colours:
     // we won't use wxString -> wxColour conversion because the
@@ -444,15 +462,29 @@ wxString wxColourDatabase::FindName(const wxColour& colour) const
     wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
     self->Initialize();
 
-    typedef wxStringToColourHashMap::iterator iterator;
-
-    for ( iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
+    for ( const auto& kv : GetColours(m_map) )
     {
-        if ( *(it->second) == colour )
-            return it->first;
+        if ( kv.second == colour )
+            return kv.first;
     }
 
     return wxEmptyString;
+}
+
+wxVector<wxString> wxColourDatabase::GetAllNames() const
+{
+    wxColourDatabase * const self = wxConstCast(this, wxColourDatabase);
+    self->Initialize();
+
+    const auto& map = GetColours(m_map);
+
+    wxVector<wxString> names;
+    names.reserve(map.size());
+
+    for ( const auto& kv : map )
+        names.push_back(kv.first);
+
+    return names;
 }
 
 // ============================================================================
@@ -482,7 +514,7 @@ void wxStockGDI::DeleteAll()
 const wxBrush* wxStockGDI::GetBrush(Item item)
 {
     wxBrush* brush = static_cast<wxBrush*>(ms_stockObject[item]);
-    if (brush == NULL)
+    if (brush == nullptr)
     {
         switch (item)
         {
@@ -530,7 +562,7 @@ const wxBrush* wxStockGDI::GetBrush(Item item)
 const wxColour* wxStockGDI::GetColour(Item item)
 {
     wxColour* colour = static_cast<wxColour*>(ms_stockObject[item]);
-    if (colour == NULL)
+    if (colour == nullptr)
     {
         switch (item)
         {
@@ -569,7 +601,7 @@ const wxColour* wxStockGDI::GetColour(Item item)
 const wxCursor* wxStockGDI::GetCursor(Item item)
 {
     wxCursor* cursor = static_cast<wxCursor*>(ms_stockObject[item]);
-    if (cursor == NULL)
+    if (cursor == nullptr)
     {
         switch (item)
         {
@@ -593,7 +625,7 @@ const wxCursor* wxStockGDI::GetCursor(Item item)
 const wxFont* wxStockGDI::GetFont(Item item)
 {
     wxFont* font = static_cast<wxFont*>(ms_stockObject[item]);
-    if (font == NULL)
+    if (font == nullptr)
     {
         switch (item)
         {
@@ -634,7 +666,7 @@ const wxFont* wxStockGDI::GetFont(Item item)
 const wxPen* wxStockGDI::GetPen(Item item)
 {
     wxPen* pen = static_cast<wxPen*>(ms_stockObject[item]);
-    if (pen == NULL)
+    if (pen == nullptr)
     {
         switch (item)
         {
@@ -729,7 +761,7 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, wxPenStyle
             return pen;
     }
 
-    wxPen* pen = NULL;
+    wxPen* pen = nullptr;
     wxPen penTmp(colour, width, style);
     if (penTmp.IsOk())
     {
@@ -751,7 +783,7 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, wxBrushStyle st
             return brush;
     }
 
-    wxBrush* brush = NULL;
+    wxBrush* brush = nullptr;
     wxBrush brushTmp(colour, style);
     if (brushTmp.IsOk())
     {
@@ -762,24 +794,18 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, wxBrushStyle st
     return brush;
 }
 
-wxFont *wxFontList::FindOrCreateFont(int pointSize,
-                                     wxFontFamily family,
-                                     wxFontStyle style,
-                                     wxFontWeight weight,
-                                     bool underline,
-                                     const wxString& facename,
-                                     wxFontEncoding encoding)
+wxFont *wxFontList::FindOrCreateFont(const wxFontInfo& fontInfo)
 {
+    // info is fontInfo adjusted for platform oddities
+    wxFontInfo info(fontInfo);
+
     // In all ports but wxOSX, the effective family of a font created using
     // wxFONTFAMILY_DEFAULT is wxFONTFAMILY_SWISS so this is what we need to
     // use for comparison.
     //
-    // In wxOSX the original wxFONTFAMILY_DEFAULT seems to be kept and it uses
-    // a different font than wxFONTFAMILY_SWISS anyhow so we just preserve it.
-#ifndef __WXOSX__
-    if ( family == wxFONTFAMILY_DEFAULT )
-        family = wxFONTFAMILY_SWISS;
-#endif // !__WXOSX__
+    // wxOSX is handled specifically below, see there.
+    if ( info.GetFamily() == wxFONTFAMILY_DEFAULT )
+        info.Family(wxFONTFAMILY_SWISS);
 
     // In wxMSW, creating a font with wxFONTSTYLE_SLANT creates the same font
     // as wxFONTSTYLE_ITALIC and its GetStyle() returns the latter, so we must
@@ -789,38 +815,69 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     // between ports here which it would be nice to fix in one way or another
     // (wxGTK supports both as separate styles, so it doesn't suffer from it).
  #ifdef __WXMSW__
-    if ( style == wxFONTSTYLE_SLANT )
-        style = wxFONTSTYLE_ITALIC;
+    if ( info.GetStyle() == wxFONTSTYLE_SLANT )
+        info.Style(wxFONTSTYLE_ITALIC);
  #endif // __WXMSW__
 
     wxFont *font;
     wxList::compatibility_iterator node;
     for (node = list.GetFirst(); node; node = node->GetNext())
     {
+        bool same;
+
         font = (wxFont *)node->GetData();
-        if (
-             font->GetPointSize () == pointSize &&
-             font->GetStyle () == style &&
-             font->GetWeight () == weight &&
-             font->GetUnderlined () == underline )
+
+        if ( info.IsUsingSizeInPixels() )
+        {
+            // When the width is 0, it means that we don't care about it.
+            if ( info.GetPixelSize().x == 0 )
+                same = font->GetPixelSize().y == info.GetPixelSize().y;
+            else
+                same = font->GetPixelSize() == info.GetPixelSize();
+        }
+        else
+        {
+            same = font->GetFractionalPointSize() == info.GetFractionalPointSize();
+        }
+
+        if ( same &&
+             font->GetStyle () == info.GetStyle() &&
+             font->GetWeight () == info.GetWeight() &&
+             font->GetUnderlined () == info.IsUnderlined() )
         {
             // empty facename matches anything at all: this is bad because
             // depending on which fonts are already created, we might get back
             // a different font if we create it with empty facename, but it is
             // still better than never matching anything in the cache at all
             // in this case
-            bool same;
             const wxString fontFaceName(font->GetFaceName());
 
-            if (facename.empty() || fontFaceName.empty())
-                same = font->GetFamily() == family;
-            else
-                same = fontFaceName == facename;
+            if (info.GetFaceName().empty() || fontFaceName.empty())
+            {
+                same = font->GetFamily() == info.GetFamily();
 
-            if ( same && (encoding != wxFONTENCODING_DEFAULT) )
+                // In wxOSX fonts created using wxFONTFAMILY_DEFAULT can return
+                // either it or wxFONTFAMILY_SWISS from GetFamily(), which is a
+                // bug and needs to be fixed (see #23144), but for now work
+                // around it here.
+#ifdef __WXOSX__
+                if ( !same &&
+                     fontInfo.GetFamily() == wxFONTFAMILY_DEFAULT &&
+                     font->GetFamily() == wxFONTFAMILY_DEFAULT )
+                {
+                    same = true;
+                }
+#endif // __WXOSX__
+            }
+            else
+            {
+                same = fontFaceName == info.GetFaceName();
+            }
+
+            if ( same && (info.GetEncoding() != wxFONTENCODING_DEFAULT) )
             {
                 // have to match the encoding too
-                same = font->GetEncoding() == encoding;
+                same = font->GetEncoding() == info.GetEncoding();
             }
 
             if ( same )
@@ -831,12 +888,15 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     }
 
     // font not found, create the new one
-    font = NULL;
-    wxFont fontTmp(pointSize, family, style, weight, underline, facename, encoding);
-    if (fontTmp.IsOk())
+    font = new wxFont(info);
+    if (font->IsOk())
     {
-        font = new wxFont(fontTmp);
         list.Append(font);
+    }
+    else
+    {
+        delete font;
+        font = nullptr;
     }
 
     return font;
@@ -909,15 +969,4 @@ wxSize wxGetDisplaySizeMM()
 wxSize wxGetDisplayPPI()
 {
     return wxDisplay().GetPPI();
-}
-
-wxResourceCache::~wxResourceCache ()
-{
-    wxList::compatibility_iterator node = GetFirst ();
-    while (node) {
-        wxObject *item = (wxObject *)node->GetData();
-        delete item;
-
-        node = node->GetNext ();
-    }
 }

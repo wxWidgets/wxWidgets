@@ -2,7 +2,6 @@
 // Name:        src/msw/fontutil.cpp
 // Purpose:     font-related helper functions for wxMSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -275,7 +274,7 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
 
 wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 {
-    return wxFont(wxNativeFontInfo(*logFont, NULL));
+    return wxFont(wxNativeFontInfo(*logFont, nullptr));
 }
 
 #endif // WXWIN_COMPATIBILITY_3_0

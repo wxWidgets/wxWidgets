@@ -39,7 +39,9 @@
 #include "wx/vector.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/uxtheme.h"
 #include "wx/msw/private/customdraw.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/msw/private/keyboard.h"
 
 // Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
@@ -123,31 +125,16 @@ wxGetListCtrlItemRect(HWND hwnd, int item, int flags, RECT& rect)
 
 // We have to handle both fooW and fooA notifications in several cases
 // because of broken comctl32.dll and/or unicows.dll. This class is used to
-// convert LV_ITEMA and LV_ITEMW to LV_ITEM (which is either LV_ITEMA or
-// LV_ITEMW depending on wxUSE_UNICODE setting), so that it can be processed
-// by wxConvertToMSWListItem().
-#if wxUSE_UNICODE
-    #define LV_ITEM_NATIVE  LV_ITEMW
-    #define LV_ITEM_OTHER   LV_ITEMA
-
-    #define LV_CONV_TO_WX   cMB2WX
-    #define LV_CONV_BUF     wxMB2WXbuf
-#else // ANSI
-    #define LV_ITEM_NATIVE  LV_ITEMA
-    #define LV_ITEM_OTHER   LV_ITEMW
-
-    #define LV_CONV_TO_WX   cWC2WX
-    #define LV_CONV_BUF     wxWC2WXbuf
-#endif // Unicode/ANSI
-
+// convert LV_ITEMA to LV_ITEMW, so that it can be processed by
+// wxConvertToMSWListItem().
 class wxLV_ITEM
 {
 public:
     // default ctor, use Init() later
-    wxLV_ITEM() { m_buf = NULL; m_pItem = NULL; }
+    wxLV_ITEM() { m_pItem = nullptr; }
 
     // init without conversion
-    void Init(LV_ITEM_NATIVE& item)
+    void Init(LV_ITEMW& item)
     {
         wxASSERT_MSG( !m_pItem, wxT("Init() called twice?") );
 
@@ -155,44 +142,42 @@ public:
     }
 
     // init with conversion
-    void Init(const LV_ITEM_OTHER& item)
+    void Init(const LV_ITEMA& item)
     {
         // avoid unnecessary dynamic memory allocation, jjust make m_pItem
         // point to our own m_item
 
         // memcpy() can't work if the struct sizes are different
-        wxCOMPILE_TIME_ASSERT( sizeof(LV_ITEM_OTHER) == sizeof(LV_ITEM_NATIVE),
+        wxCOMPILE_TIME_ASSERT( sizeof(LV_ITEMA) == sizeof(LV_ITEMW),
                                CodeCantWorkIfDiffSizes);
 
-        memcpy(&m_item, &item, sizeof(LV_ITEM_NATIVE));
+        memcpy(&m_item, &item, sizeof(LV_ITEMW));
 
         // convert text from ANSI to Unicod if necessary
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
-            m_buf = new LV_CONV_BUF(wxConvLocal.LV_CONV_TO_WX(item.pszText));
-            m_item.pszText = (wxChar *)m_buf->data();
+            m_buf = wxConvLocal.cMB2WC(item.pszText);
+            m_item.pszText = m_buf.data();
         }
     }
 
     // ctor without conversion
-    wxLV_ITEM(LV_ITEM_NATIVE& item) : m_buf(NULL), m_pItem(&item) { }
+    wxLV_ITEM(LV_ITEMW& item) : m_pItem(&item) { }
 
     // ctor with conversion
-    wxLV_ITEM(LV_ITEM_OTHER& item) : m_buf(NULL)
+    wxLV_ITEM(LV_ITEMA& item)
     {
         Init(item);
     }
 
-    ~wxLV_ITEM() { delete m_buf; }
-
     // conversion to the real LV_ITEM
-    operator LV_ITEM_NATIVE&() const { return *m_pItem; }
+    operator LV_ITEMW&() const { return *m_pItem; }
 
 private:
-    LV_CONV_BUF *m_buf;
+    wxWCharBuffer m_buf;
 
-    LV_ITEM_NATIVE *m_pItem;
-    LV_ITEM_NATIVE m_item;
+    LV_ITEMW *m_pItem;
+    LV_ITEMW m_item;
 
     wxDECLARE_NO_COPY_CLASS(wxLV_ITEM);
 };
@@ -222,7 +207,7 @@ private:
 class wxMSWListItemData
 {
 public:
-   wxMSWListItemData() : attr(NULL), lParam(0) {}
+   wxMSWListItemData() : attr(nullptr), lParam(0) {}
    ~wxMSWListItemData() { delete attr; }
 
     wxItemAttr *attr;
@@ -230,34 +215,6 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
-
-// wxMSWListHeaderCustomDraw: custom draw helper for the header
-class wxMSWListHeaderCustomDraw : public wxMSWImpl::CustomDraw
-{
-public:
-    wxMSWListHeaderCustomDraw()
-    {
-    }
-
-    // Make this field public to let wxListCtrl update it directly when its
-    // header attributes change.
-    wxItemAttr m_attr;
-
-private:
-    virtual bool HasCustomDrawnItems() const wxOVERRIDE
-    {
-        // We only exist if the header does need to be custom drawn.
-        return true;
-    }
-
-    virtual const wxItemAttr*
-    GetItemAttr(DWORD_PTR WXUNUSED(dwItemSpec)) const wxOVERRIDE
-    {
-        // We use the same attribute for all items for now.
-        return &m_attr;
-    }
-};
-
 
 wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
@@ -276,14 +233,14 @@ wxEND_EVENT_TABLE()
 void wxListCtrl::Init()
 {
     m_colCount = 0;
-    m_textCtrl = NULL;
+    m_textCtrl = nullptr;
 
     m_sortAsc = true;
     m_sortCol = -1;
 
     m_hasAnyAttr = false;
 
-    m_headerCustomDraw = NULL;
+    m_headerCustomDraw = nullptr;
 }
 
 bool wxListCtrl::Create(wxWindow *parent,
@@ -300,15 +257,35 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_LISTVIEW, wxEmptyString, pos, size) )
         return false;
 
-    EnableSystemThemeByDefault();
+    // LISTVIEW generates and endless stream of LVN_ODCACHEHINT event for a
+    // virtual wxListCtrl, so disable WS_EX_COMPOSITED.
+    if ( IsVirtual() )
+        MSWDisableComposited();
+
+    const wxVisualAttributes& defAttrs = GetDefaultAttributes();
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        MSWInitHeader();
+
+        // We also need to explicitly set the background colour as the value
+        // returned by GetBackgroundColour() by default doesn't match the
+        // actually used colour either when using dark mode.
+        SetBackgroundColour(defAttrs.colBg);
+    }
+    else
+    {
+        EnableSystemThemeByDefault();
+    }
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
     // versions of _some_ messages (notably LVN_GETDISPINFOA)
     wxSetCCUnicodeFormat(GetHwnd());
 
     // We must set the default text colour to the system/theme color, otherwise
-    // GetTextColour will always return black
-    SetTextColour(GetDefaultAttributes().colFg);
+    // GetTextColour will always return black even if this is not what is used
+    // by default.
+    SetTextColour(defAttrs.colFg);
 
     if ( InReportView() )
         MSWSetExListStyles();
@@ -369,6 +346,28 @@ void wxListCtrl::MSWSetExListStyles()
     }
 
     ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, exStyle);
+}
+
+void wxListCtrl::MSWInitHeader()
+{
+    // Currently we only need to do something here in dark mode.
+    if ( !wxMSWDarkMode::IsActive() )
+        return;
+
+    // It's not an error if the header doesn't exist.
+    HWND hwndHdr = ListView_GetHeader(GetHwnd());
+    if ( !hwndHdr )
+        return;
+
+    // But if it does, configure it to use dark mode.
+    wxMSWDarkMode::AllowForWindow(hwndHdr, L"ItemsView");
+
+    // It's not clear why do we have to do it, but without using custom drawing
+    // the header text is drawn in black, making it unreadable, so do use it.
+    if ( !m_headerCustomDraw )
+        m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
+
+    m_headerCustomDraw->UseHeaderThemeColors(hwndHdr);
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -489,7 +488,7 @@ void wxListCtrl::UpdateStyle()
     if ( GetHwnd() )
     {
         // The new window view style
-        DWORD dwStyleNew = MSWGetStyle(m_windowStyle, NULL);
+        DWORD dwStyleNew = MSWGetStyle(m_windowStyle, nullptr);
 
         // some styles are not returned by MSWGetStyle()
         if ( IsShown() )
@@ -529,8 +528,7 @@ void wxListCtrl::DeleteEditControl()
 {
     if ( m_textCtrl )
     {
-        m_textCtrl->UnsubclassWin();
-        m_textCtrl->SetHWND(0);
+        m_textCtrl->DissociateHandle();
         wxDELETE(m_textCtrl);
     }
 }
@@ -592,9 +590,13 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
         m_windowStyle &= ~(wxHSCROLL | wxVSCROLL);
 
         // if we switched to the report view, set the extended styles for
-        // it too
+        // it too and configure the header which hadn't existed before
         if ( !wasInReportView && InReportView() )
+        {
             MSWSetExListStyles();
+
+            MSWInitHeader();
+        }
 
         Refresh();
     }
@@ -603,6 +605,54 @@ void wxListCtrl::SetWindowStyleFlag(long flag)
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
+
+bool wxListCtrl::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // There doesn't seem to be any theme that works well out of the box:
+    //
+    //  - "Explorer" draws bluish hover highlight rectangle which is not at
+    //    all like the greyish one used by the actual Explorer in dark mode.
+    //    It also draws vertical separator lines, unlike the Explorer itself,
+    //    which wouldn't be too bad if they were not misaligned with the
+    //    separators drawn in the header, when it is used, which looks ugly.
+    //  - "DarkMode_Explorer" uses the same selection colours as the light mode
+    //    and doesn't draw hover rectangle at all.
+    //  - "ItemsView" draws the selection and hover as expected, but uses light
+    //    mode scrollbars and also misaligned vertical separators.
+    //
+    // We currently use DarkMode_Explorer and override selection drawing.
+    support.themeName = L"DarkMode_Explorer";
+
+    return true;
+}
+
+int wxListCtrl::MSWGetToolTipMessage() const
+{
+    return LVM_GETTOOLTIPS;
+}
+
+wxVisualAttributes wxListCtrl::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs = GetClassDefaultAttributes(GetWindowVariant());
+
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // Note that we intentionally do not use this window HWND for the
+        // theme, as it doesn't have dark values for it -- but does have them
+        // when we use null window.
+        auto theme = wxUxThemeHandle::NewAtStdDPI(L"ItemsView");
+
+        wxColour col = theme.GetColour(0, TMT_TEXTCOLOR);
+        if ( col.IsOk() )
+            attrs.colFg = col;
+
+        col = theme.GetColour(0, TMT_FILLCOLOR);
+        if ( col.IsOk() )
+            attrs.colBg = col;
+    }
+
+    return attrs;
+}
 
 /* static */ wxVisualAttributes
 wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
@@ -661,12 +711,12 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
         fontChanged = m_headerCustomDraw->m_attr.HasFont();
 
         delete m_headerCustomDraw;
-        m_headerCustomDraw = NULL;
+        m_headerCustomDraw = nullptr;
     }
     else // We do have custom attributes.
     {
         if ( !m_headerCustomDraw )
-            m_headerCustomDraw = new wxMSWListHeaderCustomDraw();
+            m_headerCustomDraw = new wxMSWHeaderCtrlCustomDraw();
 
         if ( m_headerCustomDraw->m_attr == attr )
         {
@@ -924,7 +974,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     }
     else
     {
-        lvItem.pszText = NULL;
+        lvItem.pszText = nullptr;
     }
 
     if ( mask & wxLIST_MASK_DATA )
@@ -947,8 +997,8 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     }
     else
     {
-        // give NULL as hwnd as we already have everything we need
-        wxConvertFromMSWListItem(NULL, info, lvItem);
+        // give nullptr as hwnd as we already have everything we need
+        wxConvertFromMSWListItem(nullptr, info, lvItem);
     }
 
     if (lvItem.pszText)
@@ -1203,7 +1253,7 @@ wxMSWListItemData *wxListCtrl::MSWGetItemData(long itemId) const
     it.iItem = itemId;
 
     if ( !ListView_GetItem(GetHwnd(), &it) )
-        return NULL;
+        return nullptr;
 
     return (wxMSWListItemData *) it.lParam;
 }
@@ -1449,12 +1499,32 @@ bool wxListCtrl::EnableCheckBoxes(bool enable)
 
 void wxListCtrl::CheckItem(long item, bool state)
 {
-    ListView_SetCheckState(GetHwnd(), (UINT)item, (BOOL)state);
+    wxCHECK_RET( HasCheckBoxes(), "checkboxes are disabled" );
+
+    if ( IsVirtual() )
+    {
+        // ListView_SetCheckState does nothing for a virtual control, so generate
+        // the event that would normally be generated in the LVN_ITEMCHANGED callback.
+        wxListEvent le(state ? wxEVT_LIST_ITEM_CHECKED : wxEVT_LIST_ITEM_UNCHECKED, GetId());
+        le.SetEventObject(this);
+        le.m_itemIndex = item;
+        GetEventHandler()->ProcessEvent(le);
+    }
+    else
+    {
+        ListView_SetCheckState(GetHwnd(), (UINT)item, (BOOL)state);
+    }
 }
 
 bool wxListCtrl::IsItemChecked(long item) const
 {
-    return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
+    if ( !HasCheckBoxes() )
+        return false;
+
+    if ( IsVirtual() )
+        return OnGetItemIsChecked(item);
+    else
+        return ListView_GetCheckState(GetHwnd(), (UINT)item) != 0;
 }
 
 void wxListCtrl::ShowSortIndicator(int idx, bool ascending)
@@ -1601,20 +1671,29 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
 
     wxSize size(LOWORD(rc), HIWORD(rc));
 
-    // We have to add space for the scrollbars ourselves, they're not taken
-    // into account by ListView_ApproximateViewRect(), at least not with
-    // commctrl32.dll v6.
+    // We have to account for the scrollbars ourselves, as the control itself
+    // seems to always reserve space for the horizontal scrollbar, even when it
+    // is not needed, but does not reserve space for the vertical scrollbar,
+    // even when it is used. This doesn't make any sense, but using this logic
+    // results in correct result, i.e. just enough space, in all cases.
     const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
-    if ( mswStyle & WS_HSCROLL )
-        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+    if ( !(mswStyle & WS_HSCROLL) )
+        size.y -= wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
+
     if ( mswStyle & WS_VSCROLL )
         size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
 
-    // OTOH we have to subtract the size of our borders because the base class
-    // public method already adds them, but ListView_ApproximateViewRect()
-    // already takes the borders into account, so this would be superfluous.
-    return size - GetWindowBorderSize();
+    // This is a dirty hack, but while the size returned by the control does
+    // fit its contents, it results in asymmetric horizontal margins around it,
+    // with 3px on one side and just 1px on the other one. Adding these 2px
+    // makes it looks nicely symmetrical, at least under Windows 7 and 10.
+    // Vertical margins are even more asymmetric, but they're too big and not
+    // too small and it might be a bad idea to allocate size smaller than what
+    // the control thinks it needs, so leave them be.
+    size.IncBy(2, 0);
+
+    return size;
 }
 
 // ----------------------------------------------------------------------------
@@ -1743,7 +1822,12 @@ void wxListCtrl::InitEditControl(WXHWND hWnd)
 
 wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
-    wxCHECK_MSG( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)), NULL,
+    // This function will fail to edit labels if the wxLC_EDIT_LABELS flag
+    // is not already set on the control.
+    wxASSERT_MSG( HasFlag(wxLC_EDIT_LABELS),
+                 "should only be called if wxLC_EDIT_LABELS flag is set");
+
+    wxCHECK_MSG( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)), nullptr,
                   "control used for label editing must be a wxTextCtrl" );
 
     // ListView_EditLabel requires that the list has focus.
@@ -1763,7 +1847,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
         // failed to start editing
         wxDELETE(m_textCtrl);
 
-        return NULL;
+        return nullptr;
     }
 
     // if GetEditControl() hasn't been called, we need to initialize the edit
@@ -2041,7 +2125,7 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& item)
 
     // LVSCW_AUTOSIZE_USEHEADER is not supported when inserting new column,
     // we'll deal with it below instead. Plain LVSCW_AUTOSIZE is not supported
-    // neither but it doesn't need any special handling as we use fixed value
+    // either but it doesn't need any special handling as we use fixed value
     // for it here, both because we can't do anything else (there are no items
     // with values in this column to compute the size from yet) and for
     // compatibility as wxLIST_AUTOSIZE == -1 and -1 as InsertColumn() width
@@ -2122,8 +2206,8 @@ int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM l
     wxMSWListItemData *data1 = (wxMSWListItemData *) lParam1;
     wxMSWListItemData *data2 = (wxMSWListItemData *) lParam2;
 
-    wxIntPtr d1 = (data1 == NULL ? 0 : data1->lParam);
-    wxIntPtr d2 = (data2 == NULL ? 0 : data2->lParam);
+    wxIntPtr d1 = (data1 == nullptr ? 0 : data1->lParam);
+    wxIntPtr d2 = (data2 == nullptr ? 0 : data2->lParam);
 
     return internalData->user_fn(d1, d2, internalData->data);
 
@@ -2333,17 +2417,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-            case HDN_GETDISPINFOW:
-                // letting Windows XP handle this message results in mysterious
-                // crashes in comctl32.dll seemingly because of bad message
-                // parameters
-                //
-                // I have no idea what is the real cause of the bug (which is,
-                // just to make things interesting, impossible to reproduce
-                // reliably) but ignoring all these messages does fix it and
-                // doesn't seem to have any negative consequences
-                return true;
-
             case NM_CUSTOMDRAW:
                 if ( m_headerCustomDraw )
                 {
@@ -2444,7 +2517,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     }
 
                     eventType = wxEVT_LIST_END_LABEL_EDIT;
-                    wxConvertFromMSWListItem(NULL, event.m_item, item);
+                    wxConvertFromMSWListItem(nullptr, event.m_item, item);
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
                 break;
@@ -2956,7 +3029,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 // custom draw stuff
 // ----------------------------------------------------------------------------
 
-static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
+namespace
+{
+
+RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
     RECT rc;
     wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_BOUNDS, rc);
@@ -2971,7 +3047,6 @@ static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
     return rc;
 }
 
-static
 bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
@@ -2995,12 +3070,12 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
         RECT rc2;
         wxGetListCtrlSubItemRect(hwndList, item, 1, LVIR_BOUNDS, rc2);
         rc.right = rc2.left;
-        rc.left += 4;
     }
-    else // not first subitem
-    {
-        rc.left += 6;
-    }
+
+    // This mysterious offset is necessary for the owner drawn items to align
+    // with the non-owner-drawn ones. Note that it's intentionally *not* scaled
+    // by DPI factor because it doesn't seem to depend on the resolution.
+    rc.left += 6;
 
     // get the image and text to draw
     wxChar text[512];
@@ -3071,19 +3146,28 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
     return true;
 }
 
-static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
+void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 {
+    // The control seems to always draw its own focus rectangle when not using
+    // dark mode, so don't draw another one.
+    if ( !wxMSWDarkMode::IsActive() )
+        return;
+
     if ( nmcd.uItemState & CDIS_FOCUS )
     {
         RECT rc = GetCustomDrawnItemRect(nmcd);
 
-        // don't use the provided HDC, it's in some strange state by now
-        ::DrawFocusRect(WindowHDC(nmcd.hdr.hwndFrom), &rc);
+        ::DrawFocusRect(nmcd.hdc, &rc);
     }
 }
 
+// This function is normally called only if we use custom colours, but it's
+// also called when using dark mode as we have to draw the selected item
+// ourselves when using it, and if we do this, we have to paint all the items
+// for consistency.
+//
 // pLVCD->clrText and clrTextBk should contain the colours to use
-static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3124,30 +3208,30 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     if ( nmcd.uItemState & CDIS_SELECTED )
     {
-        int syscolFg, syscolBg;
+        wxSystemColour syscolFg, syscolBg;
         if ( ::GetFocus() == hwndList )
         {
-            syscolFg = COLOR_HIGHLIGHTTEXT;
-            syscolBg = COLOR_HIGHLIGHT;
+            syscolFg = wxSYS_COLOUR_HIGHLIGHTTEXT;
+            syscolBg = wxSYS_COLOUR_HIGHLIGHT;
         }
         else // selected but unfocused
         {
-            syscolFg = COLOR_WINDOWTEXT;
-            syscolBg = COLOR_BTNFACE;
+            syscolFg = wxSYS_COLOUR_WINDOWTEXT;
+            syscolBg = wxSYS_COLOUR_BTNFACE;
 
-            // don't grey out the icon in this case neither
+            // don't grey out the icon in this case either
             nmcd.uItemState &= ~CDIS_SELECTED;
         }
 
-        pLVCD->clrText = ::GetSysColor(syscolFg);
-        pLVCD->clrTextBk = ::GetSysColor(syscolBg);
+        pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(syscolFg));
+        pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(syscolBg));
     }
     //else: not selected, use normal colours from pLVCD
 
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
 
-    ::SetTextColor(hdc, pLVCD->clrText);
+    COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
     ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
 
     // we could use CDRF_NOTIFYSUBITEMDRAW here but it results in weird repaint
@@ -3159,13 +3243,31 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
         HandleSubItemPrepaint(pLVCD, hfont, colCount);
     }
 
+    ::SetTextColor(hdc, colTextOld);
+
     HandleItemPostpaint(nmcd);
 }
 
-static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
-                                   LPNMLVCUSTOMDRAW pLVCD,
-                                   wxItemAttr *attr)
+WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
+                            LPNMLVCUSTOMDRAW pLVCD,
+                            wxItemAttr *attr)
 {
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        // We need to always paint selected items ourselves as they come
+        // out completely wrong in DarkMode_Explorer theme, see the comment
+        // before MSWGetDarkModeSupport().
+        pLVCD->clrText = attr && attr->HasTextColour()
+                            ? wxColourToRGB(attr->GetTextColour())
+                            : wxColourToRGB(listctrl->GetTextColour());
+        pLVCD->clrTextBk = attr && attr->HasBackgroundColour()
+                            ? wxColourToRGB(attr->GetBackgroundColour())
+                            : wxColourToRGB(listctrl->GetBackgroundColour());
+
+        HandleItemPaint(pLVCD, nullptr);
+        return CDRF_SKIPDEFAULT;
+    }
+
     if ( !attr )
     {
         // nothing to do for this item
@@ -3213,12 +3315,14 @@ static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
     if ( listctrl->IsSystemThemeDisabled() &&
             pLVCD->clrTextBk == ::GetSysColor(COLOR_BTNFACE) )
     {
-        HandleItemPaint(pLVCD, NULL);
+        HandleItemPaint(pLVCD, nullptr);
         return CDRF_SKIPDEFAULT;
     }
 
     return CDRF_DODEFAULT;
 }
+
+} // anonymous namespace
 
 WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 {
@@ -3232,7 +3336,7 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             //
             // for virtual controls, always suppose that we have attributes as
             // there is no way to check for this
-            if ( IsVirtual() || m_hasAnyAttr )
+            if ( IsVirtual() || m_hasAnyAttr || wxMSWDarkMode::IsActive() )
                 return CDRF_NOTIFYITEMDRAW;
             break;
 
@@ -3258,29 +3362,39 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
     return CDRF_DODEFAULT;
 }
 
-// Necessary for drawing hrules and vrules, if specified
+// We need to draw the control ourselves to make it work with WS_EX_COMPOSITED:
+// by default, it's not redrawn correctly, apparently due to some optimizations
+// used internally, but creating wxPaintDC ourselves seems to be sufficient to
+// avoid them, so we do it even if we don't draw anything on it ourselves.
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
     const int itemCount = GetItemCount();
     const bool drawHRules = HasFlag(wxLC_HRULES);
     const bool drawVRules = HasFlag(wxLC_VRULES);
 
-    if (!InReportView() || !(drawHRules || drawVRules) || !itemCount)
+    // Check if we need to do anything ourselves: either draw the rules or, in
+    // case of using dark mode under Windows 11, erase the unwanted separator
+    // lines drawn below the items by default, which are ugly because they
+    // don't align with the separators drawn by the header control.
+    bool needToDraw = false,
+         needToErase = false;
+    if ( InReportView() && itemCount )
     {
-        event.Skip();
-        return;
+        if ( (drawHRules || drawVRules) )
+            needToDraw = true;
+        else if ( wxMSWDarkMode::IsActive() && wxGetWinVersion() >= wxWinVersion_11 )
+            needToErase = true;
     }
 
     wxPaintDC dc(this);
 
     wxListCtrlBase::OnPaint(event);
 
+    if ( !needToDraw && !needToErase )
+        return;
+
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
-
-    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
-    dc.SetPen(pen);
-    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     wxSize clientSize = GetClientSize();
 
@@ -3293,6 +3407,21 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
     const long top = GetTopItem();
     const long bottom = wxMin(top + countPerPage, itemCount - 1);
+
+    if ( needToErase )
+    {
+        wxRect lastRect;
+        GetItemRect(bottom, lastRect);
+
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(GetBackgroundColour());
+        dc.DrawRectangle(0, lastRect.y, clientSize.x, clientSize.y - lastRect.y);
+        return;
+    }
+
+    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+    dc.SetPen(pen);
+    dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
     if (drawHRules)
     {
@@ -3459,7 +3588,7 @@ wxItemAttr *wxListCtrl::DoGetItemColumnAttr(long item, long column) const
         return OnGetItemColumnAttr(item, column);
 
     wxMSWListItemData * const data = MSWGetItemData(item);
-    return data ? data->attr : NULL;
+    return data ? data->attr : nullptr;
 }
 
 void wxListCtrl::SetItemCount(long count)

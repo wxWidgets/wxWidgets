@@ -65,7 +65,7 @@ enum
 class wxTreeListItem : public wxItemId<wxTreeListModelNode*>
 {
 public:
-    wxTreeListItem(wxTreeListModelNode* item = NULL)
+    wxTreeListItem(wxTreeListModelNode* item = nullptr)
         : wxItemId<wxTreeListModelNode*>(item)
     {
     }
@@ -85,7 +85,7 @@ extern WXDLLIMPEXP_DATA_CORE(const wxTreeListItem) wxTLI_LAST;
 class wxTreeListItemComparator
 {
 public:
-    wxTreeListItemComparator() { }
+    wxTreeListItemComparator() = default;
 
     // The comparison function should return negative, null or positive value
     // depending on whether the first item is less than, equal to or greater
@@ -99,7 +99,7 @@ public:
 
     // Although this class is not used polymorphically by wxWidgets itself,
     // provide virtual dtor in case it's used like this in the user code.
-    virtual ~wxTreeListItemComparator() { }
+    virtual ~wxTreeListItemComparator() = default;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTreeListItemComparator);
@@ -202,7 +202,7 @@ public:
                               const wxString& text,
                               int imageClosed = NO_IMAGE,
                               int imageOpened = NO_IMAGE,
-                              wxClientData* data = NULL)
+                              wxClientData* data = nullptr)
     {
         return DoInsertItem(parent, wxTLI_LAST, text,
                             imageClosed, imageOpened, data);
@@ -213,7 +213,7 @@ public:
                               const wxString& text,
                               int imageClosed = NO_IMAGE,
                               int imageOpened = NO_IMAGE,
-                              wxClientData* data = NULL)
+                              wxClientData* data = nullptr)
     {
         return DoInsertItem(parent, previous, text,
                             imageClosed, imageOpened, data);
@@ -223,7 +223,7 @@ public:
                                const wxString& text,
                                int imageClosed = NO_IMAGE,
                                int imageOpened = NO_IMAGE,
-                               wxClientData* data = NULL)
+                               wxClientData* data = nullptr)
     {
         return DoInsertItem(parent, wxTLI_FIRST, text,
                             imageClosed, imageOpened, data);
@@ -367,7 +367,7 @@ public:
     // parameters with the column which is currently used for sorting and
     // whether we sort using ascending or descending order. Otherwise, i.e. if
     // the control contents is unsorted, simply return false.
-    bool GetSortColumn(unsigned* col, bool* ascendingOrder = NULL);
+    bool GetSortColumn(unsigned* col, bool* ascendingOrder = nullptr);
 
     // Set the object to use for comparing the items. It will be called when
     // the control is being sorted because the user clicked on a sortable
@@ -375,7 +375,7 @@ public:
     //
     // The provided pointer is stored by the control so the object it points to
     // must have a life-time equal or greater to that of the control itself. In
-    // addition, the pointer can be NULL to stop using custom comparator and
+    // addition, the pointer can be null to stop using custom comparator and
     // revert to the default alphabetical comparison.
     void SetItemComparator(wxTreeListItemComparator* comparator);
 
@@ -396,7 +396,7 @@ private:
     void Init();
 
     // Pure virtual method inherited from wxCompositeWindow.
-    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+    virtual wxWindowList GetCompositeWindowParts() const override;
 
     // Implementation of AppendColumn().
     int DoInsertColumn(const wxString& title,
@@ -471,7 +471,7 @@ public:
     // COLUMN_SORTED event.
     unsigned GetColumn() const { return m_column; }
 
-    virtual wxEvent* Clone() const wxOVERRIDE { return new wxTreeListEvent(*this); }
+    virtual wxEvent* Clone() const override { return new wxTreeListEvent(*this); }
 
 private:
     // Common part of all ctors.

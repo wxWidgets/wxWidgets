@@ -2,7 +2,6 @@
 // Name:        wx/stream.h
 // Purpose:     stream classes
 // Author:      Guilhem Lavaux, Guillermo Rodriguez Garcia, Vadim Zeitlin
-// Modified by:
 // Created:     11/07/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -210,7 +209,7 @@ protected:
     // bytes read
     size_t GetWBack(void *buf, size_t size);
 
-    // write back buffer or NULL if none
+    // write back buffer or nullptr if none
     char *m_wback;
 
     // the size of the buffer
@@ -280,14 +279,14 @@ class WXDLLIMPEXP_BASE wxCountingOutputStream : public wxOutputStream
 public:
     wxCountingOutputStream();
 
-    virtual wxFileOffset GetLength() const wxOVERRIDE;
+    virtual wxFileOffset GetLength() const override;
     bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const wxOVERRIDE { return true; }
+    virtual bool IsOk() const override { return true; }
 
 protected:
-    virtual size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
-    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
+    virtual size_t OnSysWrite(const void *buffer, size_t size) override;
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) override;
+    virtual wxFileOffset OnSysTell() const override;
 
     size_t m_currentPos,
            m_lastPos;
@@ -308,9 +307,9 @@ public:
     wxFilterInputStream(wxInputStream *stream);
     virtual ~wxFilterInputStream();
 
-    virtual char Peek() wxOVERRIDE { return m_parent_i_stream->Peek(); }
+    virtual char Peek() override { return m_parent_i_stream->Peek(); }
 
-    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_parent_i_stream->GetLength(); }
+    virtual wxFileOffset GetLength() const override { return m_parent_i_stream->GetLength(); }
 
     wxInputStream *GetFilterInputStream() const { return m_parent_i_stream; }
 
@@ -330,11 +329,11 @@ public:
     wxFilterOutputStream(wxOutputStream *stream);
     virtual ~wxFilterOutputStream();
 
-    virtual wxFileOffset GetLength() const wxOVERRIDE { return m_parent_o_stream->GetLength(); }
+    virtual wxFileOffset GetLength() const override { return m_parent_o_stream->GetLength(); }
 
     wxOutputStream *GetFilterOutputStream() const { return m_parent_o_stream; }
 
-    bool Close() wxOVERRIDE;
+    bool Close() override;
 
 protected:
     wxOutputStream *m_parent_o_stream;
@@ -357,7 +356,7 @@ void WXDLLIMPEXP_BASE wxUseFilterClasses();
 class WXDLLIMPEXP_BASE wxFilterClassFactoryBase : public wxObject
 {
 public:
-    virtual ~wxFilterClassFactoryBase() { }
+    virtual ~wxFilterClassFactoryBase() = default;
 
     wxString GetProtocol() const { return wxString(*GetProtocols()); }
     wxString PopExtension(const wxString& location) const;
@@ -378,7 +377,7 @@ protected:
 class WXDLLIMPEXP_BASE wxFilterClassFactory : public wxFilterClassFactoryBase
 {
 public:
-    virtual ~wxFilterClassFactory() { }
+    virtual ~wxFilterClassFactory() = default;
 
     virtual wxFilterInputStream  *NewStream(wxInputStream& stream)  const = 0;
     virtual wxFilterOutputStream *NewStream(wxOutputStream& stream) const = 0;
@@ -496,7 +495,7 @@ public:
     bool IsFixed() const { return m_fixed; }
     bool IsFlushable() const { return m_flushable; }
 
-    // only for input/output buffers respectively, returns NULL otherwise
+    // only for input/output buffers respectively, returns nullptr otherwise
     wxInputStream *GetInputStream() const;
     wxOutputStream *GetOutputStream() const;
 
@@ -553,10 +552,10 @@ class WXDLLIMPEXP_BASE wxBufferedInputStream : public wxFilterInputStream
 public:
     // create a buffered stream on top of the specified low-level stream
     //
-    // if a non NULL buffer is given to the stream, it will be deleted by it,
+    // if a non null buffer is given to the stream, it will be deleted by it,
     // otherwise a default 1KB buffer will be used
     wxBufferedInputStream(wxInputStream& stream,
-                          wxStreamBuffer *buffer = NULL);
+                          wxStreamBuffer *buffer = nullptr);
 
     // ctor allowing to specify the buffer size, it's just a more convenient
     // alternative to creating wxStreamBuffer, calling its SetBufferIO(bufsize)
@@ -566,22 +565,22 @@ public:
 
     virtual ~wxBufferedInputStream();
 
-    virtual char Peek() wxOVERRIDE;
-    virtual wxInputStream& Read(void *buffer, size_t size) wxOVERRIDE;
+    virtual char Peek() override;
+    virtual wxInputStream& Read(void *buffer, size_t size) override;
 
     // Position functions
-    virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart) wxOVERRIDE;
-    virtual wxFileOffset TellI() const wxOVERRIDE;
-    virtual bool IsSeekable() const wxOVERRIDE { return m_parent_i_stream->IsSeekable(); }
+    virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart) override;
+    virtual wxFileOffset TellI() const override;
+    virtual bool IsSeekable() const override { return m_parent_i_stream->IsSeekable(); }
 
     // the buffer given to the stream will be deleted by it
     void SetInputStreamBuffer(wxStreamBuffer *buffer);
     wxStreamBuffer *GetInputStreamBuffer() const { return m_i_streambuf; }
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t bufsize) wxOVERRIDE;
-    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
+    virtual size_t OnSysRead(void *buffer, size_t bufsize) override;
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) override;
+    virtual wxFileOffset OnSysTell() const override;
 
     wxStreamBuffer *m_i_streambuf;
 
@@ -597,10 +596,10 @@ class WXDLLIMPEXP_BASE wxBufferedOutputStream : public wxFilterOutputStream
 public:
     // create a buffered stream on top of the specified low-level stream
     //
-    // if a non NULL buffer is given to the stream, it will be deleted by it,
+    // if a non null buffer is given to the stream, it will be deleted by it,
     // otherwise a default 1KB buffer will be used
     wxBufferedOutputStream(wxOutputStream& stream,
-                           wxStreamBuffer *buffer = NULL);
+                           wxStreamBuffer *buffer = nullptr);
 
     // ctor allowing to specify the buffer size, it's just a more convenient
     // alternative to creating wxStreamBuffer, calling its SetBufferIO(bufsize)
@@ -609,26 +608,26 @@ public:
 
     virtual ~wxBufferedOutputStream();
 
-    virtual wxOutputStream& Write(const void *buffer, size_t size) wxOVERRIDE;
+    virtual wxOutputStream& Write(const void *buffer, size_t size) override;
 
     // Position functions
-    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart) wxOVERRIDE;
-    virtual wxFileOffset TellO() const wxOVERRIDE;
-    virtual bool IsSeekable() const wxOVERRIDE { return m_parent_o_stream->IsSeekable(); }
+    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart) override;
+    virtual wxFileOffset TellO() const override;
+    virtual bool IsSeekable() const override { return m_parent_o_stream->IsSeekable(); }
 
-    void Sync() wxOVERRIDE;
-    bool Close() wxOVERRIDE;
+    void Sync() override;
+    bool Close() override;
 
-    virtual wxFileOffset GetLength() const wxOVERRIDE;
+    virtual wxFileOffset GetLength() const override;
 
     // the buffer given to the stream will be deleted by it
     void SetOutputStreamBuffer(wxStreamBuffer *buffer);
     wxStreamBuffer *GetOutputStreamBuffer() const { return m_o_streambuf; }
 
 protected:
-    virtual size_t OnSysWrite(const void *buffer, size_t bufsize) wxOVERRIDE;
-    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
+    virtual size_t OnSysWrite(const void *buffer, size_t bufsize) override;
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) override;
+    virtual wxFileOffset OnSysTell() const override;
 
     wxStreamBuffer *m_o_streambuf;
 
@@ -652,13 +651,13 @@ public:
     wxWrapperInputStream(wxInputStream* stream);
 
     // Override the base class methods to forward to the wrapped stream.
-    virtual wxFileOffset GetLength() const wxOVERRIDE;
-    virtual bool IsSeekable() const wxOVERRIDE;
+    virtual wxFileOffset GetLength() const override;
+    virtual bool IsSeekable() const override;
 
 protected:
-    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
-    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
+    virtual size_t OnSysRead(void *buffer, size_t size) override;
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) override;
+    virtual wxFileOffset OnSysTell() const override;
 
     // Ensure that our own last error is the same as that of the real stream.
     //

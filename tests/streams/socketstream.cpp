@@ -63,7 +63,7 @@ public:
     }
 
 protected:
-    virtual void *Entry() wxOVERRIDE
+    virtual void *Entry() override
     {
         wxSocketServer srv(LocalAddress(m_port), wxSOCKET_REUSEADDR);
         CPPUNIT_ASSERT( srv.IsOk() );
@@ -83,7 +83,7 @@ protected:
             delete socket;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     int m_port;
@@ -98,10 +98,9 @@ class socketStream :
 {
 public:
     socketStream();
-    virtual ~socketStream();
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     // repeat all socket tests several times with different socket flags, so we
     // define this macro which is used several times in the test suite
@@ -134,9 +133,9 @@ public:
 
 private:
     // Implement base class functions.
-    virtual wxSocketInputStream  *DoCreateInStream() wxOVERRIDE;
-    virtual wxSocketOutputStream *DoCreateOutStream() wxOVERRIDE;
-    virtual void DoCheckInputStream(wxSocketInputStream& stream_in) wxOVERRIDE;
+    virtual wxSocketInputStream  *DoCreateInStream() override;
+    virtual wxSocketOutputStream *DoCreateOutStream() override;
+    virtual void DoCheckInputStream(wxSocketInputStream& stream_in) override;
 
     // socket thread functions
     static void WriteSocket(wxSocketBase& socket)
@@ -159,6 +158,8 @@ private:
     wxThread *m_writeThread,
              *m_readThread;
 
+    wxSocketInitializer m_socketInit;
+
     static wxSocketFlags ms_flags;
 };
 
@@ -167,17 +168,10 @@ wxSocketFlags socketStream::ms_flags = wxSOCKET_NONE;
 socketStream::socketStream()
 {
     m_readSocket =
-    m_writeSocket = NULL;
+    m_writeSocket = nullptr;
 
     m_writeThread =
-    m_readThread = NULL;
-
-    wxSocketBase::Initialize();
-}
-
-socketStream::~socketStream()
-{
-    wxSocketBase::Shutdown();
+    m_readThread = nullptr;
 }
 
 void socketStream::setUp()
@@ -233,7 +227,7 @@ void socketStream::DoCheckInputStream(wxSocketInputStream& stream_in)
 {
     // This check sometimes fails in the AppVeyor CI environment for unknown
     // reason, so just log it there but don't fail the entire test suite run.
-    if ( wxGetEnv("APPVEYOR", NULL) )
+    if ( wxGetEnv("APPVEYOR", nullptr) )
     {
         if ( !stream_in.IsOk() )
         {

@@ -184,7 +184,7 @@ public:
     /**
         After using default constructor Create() must be called.
 
-        The @a parent and @a data parameters must be non-@NULL.
+        The @a parent and @a data parameters must be non-null.
     */
     wxFindReplaceDialog(wxWindow* parent,
                         wxFindReplaceData* data,
@@ -199,7 +199,7 @@ public:
     /**
         Creates the dialog; use wxWindow::Show to show it on screen.
 
-        The @a parent and @a data parameters must be non-@NULL.
+        The @a parent and @a data parameters must be non-null.
     */
     bool Create(wxWindow* parent, wxFindReplaceData* data,
                 const wxString& title, int style = 0);

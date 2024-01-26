@@ -72,11 +72,11 @@ public:
     GaugeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~GaugeWidgetsPage();
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_gauge; }
-    virtual void RecreateWidget() wxOVERRIDE { CreateGauge(); }
+    virtual wxWindow *GetWidget() const override { return m_gauge; }
+    virtual void RecreateWidget() override { CreateGauge(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -181,14 +181,14 @@ GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_range = 100;
 
-    m_timer = (wxTimer *)NULL;
+    m_timer = nullptr;
 
     m_chkVert =
     m_chkSmooth =
-    m_chkProgress = (wxCheckBox *)NULL;
+    m_chkProgress = nullptr;
 
-    m_gauge = (wxGauge *)NULL;
-    m_sizerGauge = (wxSizer *)NULL;
+    m_gauge = nullptr;
+    m_sizerGauge = nullptr;
 }
 
 void GaugeWidgetsPage::CreateContent()
@@ -196,27 +196,27 @@ void GaugeWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "&Set style");
+    wxStaticBoxSizer *sizerLeft = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
+    wxStaticBox* const sizerLeftBox = sizerLeft->GetStaticBox();
 
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
-
-    m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, "&Vertical");
-    m_chkSmooth = CreateCheckBoxAndAddToSizer(sizerLeft, "&Smooth");
-    m_chkProgress = CreateCheckBoxAndAddToSizer(sizerLeft, "&Progress");
+    m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, "&Vertical", wxID_ANY, sizerLeftBox);
+    m_chkSmooth = CreateCheckBoxAndAddToSizer(sizerLeft, "&Smooth", wxID_ANY, sizerLeftBox);
+    m_chkProgress = CreateCheckBoxAndAddToSizer(sizerLeft, "&Progress", wxID_ANY, sizerLeftBox);
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
-    wxButton *btn = new wxButton(this, GaugePage_Reset, "&Reset");
+    wxButton *btn = new wxButton(sizerLeftBox, GaugePage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Change gauge value");
-    wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
+    wxStaticBoxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this, "&Change gauge value");
+    wxStaticBox* const sizerMiddleBox = sizerMiddle->GetStaticBox();
 
     wxTextCtrl *text;
     wxSizer *sizerRow = CreateSizerWithTextAndLabel("Current value",
                                                     GaugePage_CurValueText,
-                                                    &text);
+                                                    &text,
+                                                    sizerMiddleBox);
     text->SetEditable(false);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
@@ -224,24 +224,26 @@ void GaugeWidgetsPage::CreateContent()
     sizerRow = CreateSizerWithTextAndButton(GaugePage_SetValue,
                                             "Set &value",
                                             GaugePage_ValueText,
-                                            &m_textValue);
+                                            &m_textValue,
+                                            sizerMiddleBox);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(GaugePage_SetRange,
                                             "Set &range",
                                             GaugePage_RangeText,
-                                            &m_textRange);
+                                            &m_textRange,
+                                            sizerMiddleBox);
     m_textRange->SetValue( wxString::Format("%lu", m_range) );
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, GaugePage_Progress, "Simulate &progress");
+    btn = new wxButton(sizerMiddleBox, GaugePage_Progress, "Simulate &progress");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, GaugePage_IndeterminateProgress,
+    btn = new wxButton(sizerMiddleBox, GaugePage_IndeterminateProgress,
                        "Simulate &indeterminate job");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, GaugePage_Clear, "&Clear");
+    btn = new wxButton(sizerMiddleBox, GaugePage_Clear, "&Clear");
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     // right pane

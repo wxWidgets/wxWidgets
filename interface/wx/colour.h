@@ -10,14 +10,14 @@
 /**
     Flags for wxColour -> wxString conversion (see wxColour::GetAsString).
 */
-//@{
+///@{
 enum {
     wxC2S_NAME             = 1,   // return colour name, when possible
     wxC2S_CSS_SYNTAX       = 2,   // return colour in rgb(r,g,b) syntax
     wxC2S_HTML_SYNTAX      = 4    // return colour in #rrggbb syntax
 };
 
-//@}
+///@}
 
 const unsigned char wxALPHA_TRANSPARENT = 0;
 const unsigned char wxALPHA_OPAQUE = 0xff;
@@ -172,7 +172,7 @@ public:
     */
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;
 
-    //@{
+    ///@{
     /**
         Sets the RGB or RGBA colour values from a single 32 bit value.
 
@@ -188,9 +188,9 @@ public:
     */
     void SetRGB(wxUint32 colRGB);
     void SetRGBA(wxUint32 colRGBA);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         Gets the RGB or RGBA colour values as a single 32 bit value.
 
@@ -206,7 +206,7 @@ public:
     */
     wxUint32 GetRGB() const;
     wxUint32 GetRGBA() const;
-    //@}
+    ///@}
 
     /**
         Return the perceived brightness of the colour.
@@ -256,7 +256,7 @@ public:
         @since 3.1.2
     */
     virtual bool IsSolid() const;
-    //@{
+    ///@{
     /**
         Sets the RGB intensity values using the given values (first overload),
         extracting them from the packed long (second overload), using the given
@@ -276,7 +276,7 @@ public:
              unsigned char alpha = wxALPHA_OPAQUE);
     void Set(unsigned long RGB);
     bool Set(const wxString& str);
-    //@}
+    ///@}
 
     /**
         Tests the inequality of two colours by comparing individual red, green, blue
@@ -356,7 +356,7 @@ public:
 
 
 /** @name Predefined colors. */
-//@{
+///@{
 wxColour wxNullColour;
 wxColour wxTransparentColour;
 wxColour* wxBLACK;
@@ -367,7 +367,7 @@ wxColour* wxYELLOW;
 wxColour* wxLIGHT_GREY;
 wxColour* wxRED;
 wxColour* wxWHITE;
-//@}
+///@}
 
 
 
@@ -376,7 +376,7 @@ wxColour* wxWHITE;
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     Converts string to a wxColour best represented by the given string. Returns
@@ -397,5 +397,5 @@ bool wxFromString(const wxString& string, wxColour* colour);
 */
 wxString wxToString(const wxColour& colour);
 
-//@}
+///@}
 

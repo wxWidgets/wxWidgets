@@ -2,7 +2,6 @@
 // Name:        wx/fontmap.h
 // Purpose:     wxFontMapper class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.11.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -140,7 +139,7 @@ protected:
     const wxString& GetConfigPath();
 
     // change to the given (relative) path in the config, return true if ok
-    // (then GetConfig() will return something !NULL), false if no config
+    // (then GetConfig() will return something non-null), false if no config
     // object
     //
     // caller should provide a pointer to the string variable which should be
@@ -164,7 +163,7 @@ protected:
     int NonInteractiveCharsetToEncoding(const wxString& charset);
 
 private:
-    // the global fontmapper object or NULL
+    // the global fontmapper object or nullptr
     static wxFontMapper *sm_instance;
 
     friend class wxFontMapperPathChanger;
@@ -202,7 +201,7 @@ public:
     // returns the encoding for the given charset (in the form of RFC 2046) or
     // wxFONTENCODING_SYSTEM if couldn't decode it
     virtual wxFontEncoding CharsetToEncoding(const wxString& charset,
-                                             bool interactive = true) wxOVERRIDE;
+                                             bool interactive = true) override;
 
     // find an alternative for the given encoding (which is supposed to not be
     // available on this system). If successful, return true and fill info
@@ -242,7 +241,7 @@ public:
     static wxFontMapper *Get();
 
     // pseudo-RTTI since we aren't a wxObject.
-    virtual bool IsDummy() wxOVERRIDE { return false; }
+    virtual bool IsDummy() override { return false; }
 
 protected:
     // GetAltForEncoding() helper: tests for the existence of the given

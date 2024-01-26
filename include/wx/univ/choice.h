@@ -2,7 +2,6 @@
 // Name:        wx/univ/choice.h
 // Purpose:     the universal choice
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     30.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -18,11 +17,11 @@
 class WXDLLIMPEXP_CORE wxChoice : public wxComboBox
 {
 public:
-    wxChoice() {}
+    wxChoice() = default;
     wxChoice(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = (const wxString *) NULL,
+            int n = 0, const wxString choices[] = nullptr,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxChoiceNameStr))
@@ -40,7 +39,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxChoiceNameStr));

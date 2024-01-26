@@ -2,7 +2,6 @@
 // Name:        src/generic/treebkg.cpp
 // Purpose:     generic implementation of wxTreebook
 // Author:      Evgeniy Tarassov, Vadim Zeitlin
-// Modified by:
 // Created:     2005-09-15
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -268,7 +267,7 @@ bool wxTreebook::DeletePage(size_t pagePos)
 wxTreebookPage *wxTreebook::DoRemovePage(size_t pagePos)
 {
     wxTreeItemId pageId = DoInternalGetPage(pagePos);
-    wxCHECK_MSG( pageId.IsOk(), NULL, wxT("Invalid tree index") );
+    wxCHECK_MSG( pageId.IsOk(), nullptr, wxT("Invalid tree index") );
 
     wxTreebookPage * oldPage = GetPage(pagePos);
     wxTreeCtrl *tree = GetTreeCtrl();
@@ -546,7 +545,7 @@ wxWindow *wxTreebook::TryGetNonNullPage(size_t n)
     if ( !page )
     {
         // Find the next suitable page, i.e. the first (grand)child
-        // of this one with a non-NULL associated page
+        // of this one with a non-null associated page
         wxTreeCtrl* const tree = GetTreeCtrl();
         for ( wxTreeItemId childId = m_treeIds[n]; childId.IsOk(); )
         {

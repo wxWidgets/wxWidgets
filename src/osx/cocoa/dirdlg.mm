@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/dirdlg.mm
 // Purpose:     wxDirDialog
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-08-30
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -98,7 +97,7 @@ WX_NSOpenPanel wxDirDialog::OSXCreatePanel() const
 
 void wxDirDialog::ShowWindowModal()
 {
-    wxNonOwnedWindow* parentWindow = NULL;
+    wxNonOwnedWindow* parentWindow = nullptr;
 
     if (GetParent())
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));

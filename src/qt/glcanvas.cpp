@@ -34,13 +34,13 @@ public:
         }
 
 protected:
-    virtual void showEvent ( QShowEvent * event ) wxOVERRIDE;
-    virtual void hideEvent ( QHideEvent * event ) wxOVERRIDE;
-    virtual void resizeEvent ( QResizeEvent * event ) wxOVERRIDE;
-    virtual void paintEvent ( QPaintEvent * event ) wxOVERRIDE;
+    virtual void showEvent ( QShowEvent * event ) override;
+    virtual void hideEvent ( QHideEvent * event ) override;
+    virtual void resizeEvent ( QResizeEvent * event ) override;
+    virtual void paintEvent ( QPaintEvent * event ) override;
 
-    virtual void resizeGL(int w, int h) wxOVERRIDE;
-    virtual void paintGL() wxOVERRIDE;
+    virtual void resizeGL(int w, int h) override;
+    virtual void paintGL() override;
 };
 
 void wxQtGLWidget::showEvent ( QShowEvent * event )
@@ -317,20 +317,6 @@ wxGLAttributes& wxGLAttributes::PlatformDefaults()
     return *this;
 }
 
-wxGLAttributes& wxGLAttributes::Defaults()
-{
-    RGBA().DoubleBuffer();
-//    if ( wxGLCanvasX11::GetGLXVersion() < 13 )
-//        Depth(1).MinRGBA(1, 1, 1, 0);
-//    else
-        Depth(16).SampleBuffers(1).Samplers(4);
-    return *this;
-}
-
-void wxGLAttributes::AddDefaultsForWXBefore31()
-{
-    Defaults();
-}
 
 //---------------------------------------------------------------------------
 // wxGlContext

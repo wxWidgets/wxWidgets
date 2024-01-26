@@ -2,7 +2,6 @@
 // Name:        wx/msw/radiobut.h
 // Purpose:     wxRadioButton class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -43,27 +42,29 @@ public:
                 const wxString& name = wxASCII_STR(wxRadioButtonNameStr));
 
     // implement the radio button interface
-    virtual void SetValue(bool value) wxOVERRIDE;
-    virtual bool GetValue() const wxOVERRIDE;
+    virtual void SetValue(bool value) override;
+    virtual bool GetValue() const override;
 
     // implementation only from now on
-    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
-    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
+    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
+    virtual void Command(wxCommandEvent& event) override;
 
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool HasTransparentBackground() override { return true; }
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
+    virtual wxSize DoGetBestSize() const override;
+
+    virtual bool MSWGetDarkModeSupport(MSWDarkModeSupport& support) const override;
 
     // Implement wxMSWOwnerDrawnButtonBase methods.
-    virtual int MSWGetButtonStyle() const wxOVERRIDE;
-    virtual void MSWOnButtonResetOwnerDrawn() wxOVERRIDE;
-    virtual int MSWGetButtonCheckedFlag() const wxOVERRIDE;
+    virtual int MSWGetButtonStyle() const override;
+    virtual void MSWOnButtonResetOwnerDrawn() override;
+    virtual int MSWGetButtonCheckedFlag() const override;
     virtual void
-        MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags) wxOVERRIDE;
+        MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags) override;
 
 
 private:

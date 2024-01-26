@@ -2,7 +2,6 @@
 // Name:        wx/helpbase.h
 // Purpose:     Help system base classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -34,8 +33,8 @@ enum wxHelpSearchMode
 class WXDLLIMPEXP_CORE wxHelpControllerBase: public wxObject
 {
 public:
-    inline wxHelpControllerBase(wxWindow* parentWindow = NULL) { m_parentWindow = parentWindow; }
-    inline ~wxHelpControllerBase() {}
+    inline wxHelpControllerBase(wxWindow* parentWindow = nullptr) { m_parentWindow = parentWindow; }
+    inline ~wxHelpControllerBase() = default;
 
     // Must call this to set the filename and server name.
     // server is only required when implementing TCP/IP-based
@@ -77,11 +76,11 @@ public:
     }
     /// Obtains the latest settings used by the help frame and the help
     /// frame.
-    virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = NULL,
-        wxPoint *WXUNUSED(pos) = NULL,
-        bool *WXUNUSED(newFrameEachTime) = NULL)
+    virtual wxFrame *GetFrameParameters(wxSize *WXUNUSED(size) = nullptr,
+        wxPoint *WXUNUSED(pos) = nullptr,
+        bool *WXUNUSED(newFrameEachTime) = nullptr)
     {
-        return NULL; // does nothing by default
+        return nullptr; // does nothing by default
     }
 
     virtual bool Quit() = 0;

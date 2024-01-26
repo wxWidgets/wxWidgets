@@ -55,6 +55,12 @@
 #ifndef WINVER
     #define WINVER 0x0600
 #endif
+#ifndef _UNICODE
+#    define _UNICODE
+#endif
+#ifndef UNICODE
+#    define UNICODE
+#endif
 
 #include "stdafx.h"
 
@@ -89,7 +95,7 @@ SampleMFCWinApp theApp;
 class MyApp: public wxAppWithMFC
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     wxFrame *CreateFrame();
 };
@@ -159,7 +165,6 @@ wxDECLARE_APP(MyApp);
 // Notice use of wxIMPLEMENT_APP_NO_MAIN() instead of the usual wxIMPLEMENT_APP!
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
-#ifdef _UNICODE
 // In Unicode build MFC normally requires to manually change the entry point to
 // wWinMainCRTStartup() but to avoid having to modify the project options to do
 // it we provide an adapter for it.
@@ -169,13 +174,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, char *, int)
 {
     wWinMainCRTStartup();
 }
-#endif // _UNICODE
 
 CMainWindow::CMainWindow()
 {
-    LoadAccelTable( "MainAccelTable" );
-    Create( NULL, "Hello Foundation Application",
-        WS_OVERLAPPEDWINDOW, rectDefault, NULL, "MainMenu" );
+    LoadAccelTable( L"MainAccelTable" );
+    Create( nullptr, L"Hello Foundation Application",
+        WS_OVERLAPPEDWINDOW, rectDefault, nullptr, L"MainMenu" );
 
     // Create a container representing the MFC window in wxWidgets window
     // hierarchy.
@@ -206,7 +210,7 @@ void CMainWindow::OnPaint()
 
 void CMainWindow::OnAbout()
 {
-    CDialog about( "AboutBox", this );
+    CDialog about( L"AboutBox", this );
     about.DoModal();
 }
 
@@ -251,7 +255,7 @@ bool MyApp::OnInit()
 
 wxFrame *MyApp::CreateFrame()
 {
-    MyChild *subframe = new MyChild(NULL, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
+    MyChild *subframe = new MyChild(nullptr, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
         wxDEFAULT_FRAME_STYLE);
 
     subframe->SetTitle("wxWidgets canvas frame");
@@ -293,6 +297,7 @@ wxEND_EVENT_TABLE()
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
         : wxScrolledWindow(parent, -1, pos, size)
 {
+    MSWDisableComposited();
 }
 
 // Define the repainting behaviour
@@ -343,7 +348,7 @@ wxEND_EVENT_TABLE()
 MyChild::MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style)
        : wxFrame(frame, -1, title, pos, size, style)
 {
-    canvas = NULL;
+    canvas = nullptr;
 }
 
 MyChild::~MyChild()

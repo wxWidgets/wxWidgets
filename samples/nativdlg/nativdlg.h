@@ -2,7 +2,6 @@
 // Name:        nativdlg.h
 // Purpose:     Native Windows dialog sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -13,7 +12,7 @@ class MyApp : public wxApp
 {
 public:
     MyApp(void) {}
-    bool OnInit(void) wxOVERRIDE;
+    bool OnInit(void) override;
 };
 
 class MyFrame : public wxFrame

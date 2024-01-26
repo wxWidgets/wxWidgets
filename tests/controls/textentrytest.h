@@ -88,7 +88,7 @@ public:
     // Return another creator similar to this one, but creating multiline
     // version of the control. If the returned pointer is non-null, it must be
     // deleted by the caller.
-    virtual TextLikeControlCreator* CloneAsMultiLine() const { return NULL; }
+    virtual TextLikeControlCreator* CloneAsMultiLine() const { return nullptr; }
 
     // Give it a virtual dtor to avoid warnings even though this class is not
     // supposed to be used polymorphically.

@@ -44,7 +44,7 @@ class WXDLLIMPEXP_HTML wxHtmlHelpController : public wxHelpControllerBase // wxE
     wxDECLARE_DYNAMIC_CLASS(wxHtmlHelpController);
 
 public:
-    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = NULL);
+    wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE, wxWindow* parentWindow = nullptr);
     wxHtmlHelpController(wxWindow* parentWindow, int style = wxHF_DEFAULT_STYLE);
 
     virtual ~wxHtmlHelpController();
@@ -58,10 +58,10 @@ public:
 
     bool Display(const wxString& x);
     bool Display(int id);
-    bool DisplayContents() wxOVERRIDE;
+    bool DisplayContents() override;
     bool DisplayIndex();
     bool KeywordSearch(const wxString& keyword,
-                       wxHelpSearchMode mode = wxHELP_SEARCH_ALL) wxOVERRIDE;
+                       wxHelpSearchMode mode = wxHELP_SEARCH_ALL) override;
 
     wxHtmlHelpWindow* GetHelpWindow() { return m_helpWindow; }
     void SetHelpWindow(wxHtmlHelpWindow* helpWindow);
@@ -81,30 +81,30 @@ public:
 
     //// Backward compatibility with wxHelpController API
 
-    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) wxOVERRIDE { return Initialize(file); }
-    virtual bool Initialize(const wxString& file) wxOVERRIDE;
-    virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) wxOVERRIDE {}
-    virtual bool LoadFile(const wxString& file = wxT("")) wxOVERRIDE;
-    virtual bool DisplaySection(int sectionNo) wxOVERRIDE;
-    virtual bool DisplaySection(const wxString& section) wxOVERRIDE { return Display(section); }
-    virtual bool DisplayBlock(long blockNo) wxOVERRIDE { return DisplaySection(blockNo); }
-    virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos) wxOVERRIDE;
+    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) override { return Initialize(file); }
+    virtual bool Initialize(const wxString& file) override;
+    virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) override {}
+    virtual bool LoadFile(const wxString& file = wxT("")) override;
+    virtual bool DisplaySection(int sectionNo) override;
+    virtual bool DisplaySection(const wxString& section) override { return Display(section); }
+    virtual bool DisplayBlock(long blockNo) override { return DisplaySection(static_cast<int>(blockNo)); }
+    virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos) override;
 
     virtual void SetFrameParameters(const wxString& titleFormat,
                                const wxSize& size,
                                const wxPoint& pos = wxDefaultPosition,
-                               bool newFrameEachTime = false) wxOVERRIDE;
+                               bool newFrameEachTime = false) override;
     /// Obtains the latest settings used by the help frame and the help
     /// frame.
-    virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
-                               wxPoint *pos = NULL,
-                               bool *newFrameEachTime = NULL) wxOVERRIDE;
+    virtual wxFrame *GetFrameParameters(wxSize *size = nullptr,
+                               wxPoint *pos = nullptr,
+                               bool *newFrameEachTime = nullptr) override;
 
     // Get direct access to help data:
     wxHtmlHelpData *GetHelpData() { return &m_helpData; }
 
-    virtual bool Quit() wxOVERRIDE ;
-    virtual void OnQuit() wxOVERRIDE {}
+    virtual bool Quit() override ;
+    virtual void OnQuit() override {}
 
     void OnCloseFrame(wxCloseEvent& evt);
 

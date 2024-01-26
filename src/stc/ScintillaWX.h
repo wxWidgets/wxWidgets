@@ -19,60 +19,59 @@
 
 //----------------------------------------------------------------------
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <stdexcept>
+#include <new>
+#include <string>
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <stdexcept>
+#include <memory>
 
 // These are all Scintilla headers
+#define INCLUDE_DEPRECATED_FEATURES
 #include "Platform.h"
+
+#include "ILoader.h"
+#include "ILexer.h"
+#include "Scintilla.h"
+
+#include "CharacterCategory.h"
+#include "Position.h"
+#include "UniqueString.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
-#ifdef SCI_LEXER
-#include "SciLexer.h"
-#include "PropSetSimple.h"
-#include "ILexer.h"
-#include "LexerModule.h"
-#include "LexAccessor.h"
-#include "Accessor.h"
-#include "WordList.h"
-#endif
 #include "ContractionState.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
 #include "Indicator.h"
-#include "XPM.h"
 #include "LineMarker.h"
 #include "Style.h"
-#include "AutoComplete.h"
 #include "ViewStyle.h"
 #include "CharClassify.h"
 #include "Decoration.h"
 #include "CaseFolder.h"
 #include "Document.h"
+#include "CaseConvert.h"
+#include "UniConversion.h"
 #include "Selection.h"
 #include "PositionCache.h"
 #include "EditModel.h"
 #include "MarginView.h"
 #include "EditView.h"
 #include "Editor.h"
-#include "PropSetSimple.h"
+
+#include "AutoComplete.h"
 #include "ScintillaBase.h"
 
+#include "wx/dnd.h"
+#include "wx/event.h"
 #ifdef __WXMSW__
 #include "wx/msw/wrapwin.h"                     // HBITMAP
 #endif
-#if wxUSE_DRAG_AND_DROP
-#include "wx/timer.h"
-#endif
+
+using namespace Scintilla;
 
 // Define this if there is a standard clipboard format for rectangular
 // text selection under the current platform.
@@ -99,10 +98,10 @@ public:
         m_swx = swx;
     }
 
-    bool OnDropText(wxCoord x, wxCoord y, const wxString& data) wxOVERRIDE;
-    wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
-    wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
-    void OnLeave() wxOVERRIDE;
+    bool OnDropText(wxCoord x, wxCoord y, const wxString& data) override;
+    wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def) override;
+    wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) override;
+    void OnLeave() override;
 
 private:
     ScintillaWX* m_swx;
@@ -118,41 +117,40 @@ public:
     ~ScintillaWX();
 
     // base class virtuals
-    virtual void Initialise() wxOVERRIDE;
-    virtual void Finalise() wxOVERRIDE;
-    virtual void StartDrag() wxOVERRIDE;
-    virtual bool SetIdle(bool on) wxOVERRIDE;
-    virtual void SetMouseCapture(bool on) wxOVERRIDE;
-    virtual bool HaveMouseCapture() wxOVERRIDE;
-    virtual void ScrollText(int linesToMove) wxOVERRIDE;
-    virtual void SetVerticalScrollPos() wxOVERRIDE;
-    virtual void SetHorizontalScrollPos() wxOVERRIDE;
-    virtual bool ModifyScrollBars(int nMax, int nPage) wxOVERRIDE;
-    virtual void Copy() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
-    virtual void CopyToClipboard(const SelectionText &selectedText) wxOVERRIDE;
+    virtual void Initialise() override;
+    virtual void Finalise() override;
+    virtual void StartDrag() override;
+    virtual bool SetIdle(bool on) override;
+    virtual void SetMouseCapture(bool on) override;
+    virtual bool HaveMouseCapture() override;
+    virtual void ScrollText(Sci::Line linesToMove) override;
+    virtual void SetVerticalScrollPos() override;
+    virtual void SetHorizontalScrollPos() override;
+    virtual bool ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) override;
+    virtual void Copy() override;
+    virtual void Paste() override;
+    virtual void CopyToClipboard(const SelectionText &selectedText) override;
 
-    virtual void CreateCallTipWindow(PRectangle rc) wxOVERRIDE;
-    virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true) wxOVERRIDE;
-    virtual void ClaimSelection() wxOVERRIDE;
+    virtual void CreateCallTipWindow(PRectangle rc) override;
+    virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true) override;
+    virtual void ClaimSelection() override;
 
     virtual sptr_t DefWndProc(unsigned int iMessage,
                               uptr_t wParam,
-                              sptr_t lParam) wxOVERRIDE;
+                              sptr_t lParam) override;
     virtual sptr_t WndProc(unsigned int iMessage,
                            uptr_t wParam,
-                           sptr_t lParam) wxOVERRIDE;
+                           sptr_t lParam) override;
 
-    virtual void NotifyChange() wxOVERRIDE;
-    virtual void NotifyParent(SCNotification scn) wxOVERRIDE;
+    virtual void NotifyChange() override;
+    virtual void NotifyParent(SCNotification scn) override;
 
-    virtual void CancelModes() wxOVERRIDE;
+    virtual void CancelModes() override;
 
-    virtual void UpdateSystemCaret() wxOVERRIDE;
-    virtual bool FineTickerAvailable() wxOVERRIDE;
-    virtual bool FineTickerRunning(TickReason reason) wxOVERRIDE;
-    virtual void FineTickerStart(TickReason reason, int millis, int tolerance) wxOVERRIDE;
-    virtual void FineTickerCancel(TickReason reason) wxOVERRIDE;
+    virtual void UpdateSystemCaret() override;
+    virtual bool FineTickerRunning(TickReason reason) override;
+    virtual void FineTickerStart(TickReason reason, int millis, int tolerance) override;
+    virtual void FineTickerCancel(TickReason reason) override;
 
     // Event delegates
     void DoPaint(wxDC* dc, wxRect rect);
@@ -162,15 +160,15 @@ public:
     void DoLoseFocus();
     void DoGainFocus();
     void DoInvalidateStyleData();
-    void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
-    void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
-    void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
-    void DoLeftButtonMove(Point pt);
+    void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
+    void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
+    void DoLeftButtonUp(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
+    void DoLeftButtonMove(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt, bool meta);
     void DoMiddleButtonUp(Point pt);
     void DoMouseWheel(wxMouseWheelAxis axis, int rotation, int delta,
                       int linesPerAction, int columnsPerAction,
                       bool ctrlDown, bool isPageScroll);
-    void DoAddChar(int key);
+    void DoAddChar(wxChar key);
     int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
     void DoOnIdle(wxIdleEvent& evt);
 
@@ -190,7 +188,7 @@ public:
     // helpers
     void FullPaint();
     void FullPaintDC(wxDC* dc);
-    bool CanPaste() wxOVERRIDE;
+    bool CanPaste() override;
     bool GetHideSelection() { return view.hideSelection; }
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
@@ -240,7 +238,7 @@ private:
 
 #ifdef __WXMSW__
     // ScintillaWin
-    HWND MainHWND() const wxNOEXCEPT;
+    HWND MainHWND() const noexcept;
 
     // DBCS
     void ImeStartComposition();

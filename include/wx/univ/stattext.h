@@ -2,7 +2,6 @@
 // Name:        wx/univ/stattext.h
 // Purpose:     wxStaticText
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -16,7 +15,7 @@
 class WXDLLIMPEXP_CORE wxStaticText : public wxGenericStaticText
 {
 public:
-    wxStaticText() { }
+    wxStaticText() = default;
 
     // usual ctor
     wxStaticText(wxWindow *parent,
@@ -50,16 +49,16 @@ public:
 
     // implementation only from now on
 
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
 
-    virtual bool IsFocused() const wxOVERRIDE { return false; }
+    virtual bool IsFocused() const override { return false; }
 
 protected:
     // draw the control
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
 
-    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
-    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) override;
+    virtual wxString WXGetVisibleLabel() const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };

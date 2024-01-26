@@ -64,9 +64,18 @@
         request.Start();
     @endcode
 
+    The location of where files are downloaded can also be defined prior to any request
+    by passing unique IDs to `wxWebSession::GetDefault().CreateRequest()` and processing
+    them in your @c wxEVT_WEBREQUEST_STATE handler. For example, create a map of IDs with
+    their respective download paths prior to creating any requests. For each call to
+    `wxWebSession::GetDefault().CreateRequest()`, pass in the webpath to download and an ID
+    from your map. Then, in your @c wxEVT_WEBREQUEST_STATE handler, get the ID from the
+    @c wxWebRequestEvent object and look it up from your ID map. Here, you can access the
+    download path that you assigned to this ID and proceed to save the file to that location.
+
     @section apple_http macOS and iOS App Transport Security
 
-    Starting with macOS 10.11 and iOS 9 an application cannot create unsecure
+    Starting with macOS 10.11 and iOS 9 an application cannot create insecure
     connections (this includes HTTP and unverified HTTPS). You have to include
     additional fields in your Info.plist to enable such connections.
     For further details see the documentation on NSAppTransportSecurity
@@ -280,7 +289,7 @@ public:
 
         Before sending a request or after a failed request this will return
         an invalid response object, i.e. such that wxWebResponse::IsOk()
-        returns @NULL.
+        returns @c false.
     */
     wxWebResponse GetResponse() const;
 
@@ -582,15 +591,28 @@ public:
     /**
         Get the length of returned data if available.
 
-        Returns the value specified in the @c Content-Length: response header
-        of @c -1 if not available.
+        Returns the value specified in the @c Content-Length response header
+        or @c -1 if not available.
      */
     wxFileOffset GetContentLength() const;
 
     /**
         Returns the MIME type of the response (if available).
+
+        This is just the MIME type part (e.g., "text/html") of the value returned
+        by GetContentType().
     */
     wxString GetMimeType() const;
+
+    /**
+        Returns the content type of the response (if available).
+
+        This is the full value of the @c Content-Type header of the response,
+        (e.g., a value such as "text/html; charset=utf-8").
+
+        @since 3.3.0
+    */
+    wxString GetContentType() const;
 
     /**
         Returns the status code returned by the server.
@@ -666,7 +688,7 @@ public:
         and destroyed.
 
         @param handler
-            The handler object to notify, must be non-@NULL.
+            The handler object to notify, must be non-null.
         @param url
             The URL of the HTTP resource for this request
         @param id
@@ -788,7 +810,7 @@ public:
     @since 3.1.5
 
     @library{wxnet}
-    @category{net}
+    @category{net,events}
 
     @see wxWebRequest
 */

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 4 March 2020                                                        *
+# Date : 16 March 2022                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -59,7 +59,7 @@ OBJECTS=xh_bmp.obj,xh_bmpbt.obj,xh_bttn.obj,xh_cald.obj,xh_chckb.obj,\
 	xh_filectrl.obj,xh_cmdlinkbn.obj,xh_toolbk.obj,xh_bannerwindow.obj,\
 	xh_timectrl.obj,xmlreshandler.obj,xh_ribbon.obj,xh_auitoolb.obj,\
 	xh_aui.obj,xh_simplebook.obj,xh_activityindicator.obj,\
-	xh_dataview.obj,xh_infobar.obj
+	xh_dataview.obj,xh_infobar.obj,xh_bookctrlbase.obj
 
 SOURCES =xh_bmp.cpp,xh_bmpbt.cpp,xh_bttn.cpp,xh_cald.cpp,xh_chckb.cpp,\
 	xh_chckl.cpp,xh_choic.cpp,xh_combo.cpp,xh_dlg.cpp,xh_frame.cpp,\
@@ -77,7 +77,7 @@ SOURCES =xh_bmp.cpp,xh_bmpbt.cpp,xh_bttn.cpp,xh_cald.cpp,xh_chckb.cpp,\
 	xh_filectrl.cpp,xh_cmdlinkbn.cpp,xh_toolbk.cpp,xh_bannerwindow.cpp,\
 	xh_timectrl.cpp,xmlreshandler.cpp,xh_ribbon.cpp,xh_auitoolb.cpp,\
 	xh_aui.cpp,xh_simplebook.cpp,xh_activityindicator.cpp,\
-	xh_dataview.cpp,xh_infobar.cpp
+	xh_dataview.cpp,xh_infobar.cpp,xh_bookctrlbase.cpp
   
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -171,3 +171,4 @@ xh_aui.obj : xh_aui.cpp
 xh_simplebook.obj : xh_simplebook.cpp
 xh_activityindicator.obj : xh_activityindicator.cpp
 xh_dataview.obj : xh_dataview.cpp
+xh_bookctrlbase.obj : xh_bookctrlbase.cpp

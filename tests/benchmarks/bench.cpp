@@ -15,9 +15,12 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include <float.h>
+
 #include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/stopwatch.h"
+#include "wx/uilocale.h"
 
 #if wxUSE_GUI
     #include "wx/frame.h"
@@ -85,7 +88,7 @@ wxIMPLEMENT_APP_CONSOLE(BenchApp);
 // Bench namespace symbols implementation
 // ============================================================================
 
-Bench::Function *Bench::Function::ms_head = NULL;
+Bench::Function *Bench::Function::ms_head = nullptr;
 
 long Bench::GetNumericParameter(long defVal)
 {
@@ -115,12 +118,15 @@ bool BenchApp::OnInit()
     if ( !BenchAppBase::OnInit() )
         return false;
 
+    // Some benchmarks are locale-sensitive, so use the current locale.
+    wxUILocale::UseDefault();
+
     wxPrintf("wxWidgets benchmarking program\n"
              "Build: %s\n", WX_BUILD_OPTIONS_SIGNATURE);
 
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
-    new wxFrame(NULL, wxID_ANY, "Hidden wx benchmark frame");
+    new wxFrame(nullptr, wxID_ANY, "Hidden wx benchmark frame");
 #endif // wxUSE_GUI
 
     return true;

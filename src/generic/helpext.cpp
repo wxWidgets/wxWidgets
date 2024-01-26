@@ -2,7 +2,6 @@
 // Name:        src/generic/helpext.cpp
 // Purpose:     an external help controller for wxWidgets
 // Author:      Karsten Ballueder
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence
@@ -26,6 +25,7 @@
 #include "wx/filename.h"
 #include "wx/textfile.h"
 #include "wx/generic/helpext.h"
+#include "wx/uilocale.h"
 
 #include <stdio.h>
 #include <ctype.h>
@@ -64,7 +64,7 @@ wxIMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase);
 wxExtHelpController::wxExtHelpController(wxWindow* parentWindow)
                    : wxHelpControllerBase(parentWindow)
 {
-    m_MapList = NULL;
+    m_MapList = nullptr;
     m_NumOfEntries = 0;
     m_BrowserIsNetscape = false;
 
@@ -81,14 +81,6 @@ wxExtHelpController::~wxExtHelpController()
 {
     DeleteList();
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-void wxExtHelpController::SetBrowser(const wxString& browsername, bool isNetscape)
-{
-    m_BrowserName = browsername;
-    m_BrowserIsNetscape = isNetscape;
-}
-#endif
 
 void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
 {
@@ -220,10 +212,10 @@ bool wxExtHelpController::LoadFile(const wxString& file)
     // "/usr/local/myapp/help" and the current wxLocale is set to be "de", then
     // look in "/usr/local/myapp/help/de/" first and fall back to
     // "/usr/local/myapp/help" if that doesn't exist.
-    const wxLocale * const loc = wxGetLocale();
-    if ( loc )
+    wxLocaleIdent locId = wxUILocale::GetCurrent().GetLocaleId();
+    if ( !locId.IsEmpty() )
     {
-        wxString locName = loc->GetName();
+        wxString locName = locId.GetTag(wxLOCALE_TAGTYPE_POSIX);
 
         // the locale is in general of the form xx_YY.zzzz, try the full firm
         // first and then also more general ones
@@ -398,7 +390,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
         if (! showAll)
         {
             compA = k;
-            compA.LowerCase();
+            compA.MakeLower();
         }
 
         while (node)
@@ -409,7 +401,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
             bool testTarget = ! compB.empty();
             if (testTarget && ! showAll)
             {
-                compB.LowerCase();
+                compB.MakeLower();
                 testTarget = compB.Contains(compA);
             }
 

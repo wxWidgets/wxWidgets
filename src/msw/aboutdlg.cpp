@@ -45,18 +45,15 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         wxString msg;
         msg << name;
         if ( info.HasVersion() )
-        {
-            msg << wxT('\n');
-            msg << info.GetLongVersion();
-        }
+            msg << wxT(' ') << info.GetVersion();
 
+        // Separate the title from the rest with an extra blank line.
         msg << wxT("\n\n");
 
-        if ( info.HasCopyright() )
-            msg << info.GetCopyrightToDisplay() << wxT('\n');
-
-        // add everything remaining
         msg << info.GetDescriptionAndCredits();
+
+        if ( info.HasCopyright() )
+            msg << wxT('\n') << info.GetCopyrightToDisplay();
 
         wxMessageBox(msg, wxString::Format(_("About %s"), name), wxOK | wxCENTRE, parent);
     }

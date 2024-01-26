@@ -2,7 +2,6 @@
 // Name:        src/common/artstd.cpp
 // Purpose:     stock wxArtProvider instance with default wxWin art
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     18/03/2002
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
@@ -32,10 +31,10 @@ class wxDefaultArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
     virtual wxBitmapBundle CreateBitmapBundle(const wxArtID& id,
                                               const wxArtClient& client,
-                                              const wxSize& size) wxOVERRIDE;
+                                              const wxSize& size) override;
 };
 
 // ----------------------------------------------------------------------------
@@ -65,11 +64,6 @@ protected:
         #include "../../art/gtk/error.xpm"
         #include "../../art/gtk/warning.xpm"
         #include "../../art/gtk/question.xpm"
-    #elif defined(__WXMOTIF__)
-        #include "../../art/motif/info.xpm"
-        #include "../../art/motif/error.xpm"
-        #include "../../art/motif/warning.xpm"
-        #include "../../art/motif/question.xpm"
     #endif
 #endif // !__WXUNIVERSAL__
 
@@ -135,7 +129,7 @@ protected:
 
 wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
 {
-#if !defined(__WXUNIVERSAL__) && (defined(__WXGTK__) || defined(__WXMOTIF__))
+#if !defined(__WXUNIVERSAL__) && defined(__WXGTK__)
     // wxMessageBox icons:
     ART(wxART_ERROR,                               error)
     ART(wxART_INFORMATION,                         info)
@@ -237,7 +231,7 @@ wxDefaultArtProvider::CreateBitmapBundle(const wxArtID& id,
     // We currently handle just a single SVG here.
     if ( id == wxART_WX_LOGO )
     {
-        wxSize sizeDef = size != wxDefaultSize ? size : GetSizeHint(client);
+        wxSize sizeDef = size != wxDefaultSize ? size : GetDIPSizeHint(client);
         if ( sizeDef == wxDefaultSize )
         {
             // We really need some default size here.

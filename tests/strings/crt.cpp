@@ -48,13 +48,12 @@ TEST_CASE("CRT::SetGetEnv", "[crt][getenv][setenv]")
     CHECK( wxString(wxGetenv(TESTVAR_NAME)) == "something else" );
 
     CHECK( wxUnsetEnv(TESTVAR_NAME) );
-    CHECK( !wxGetEnv(TESTVAR_NAME, NULL) );
+    CHECK( !wxGetEnv(TESTVAR_NAME, nullptr) );
     CHECK( !wxGetenv(TESTVAR_NAME) );
 
 #undef TESTVAR_NAME
 }
 
-#if wxUSE_UNICODE
 TEST_CASE("CRT::Strchr", "[crt][strchr]")
 {
     // test that searching for a wide character in a narrow string simply
@@ -67,7 +66,6 @@ TEST_CASE("CRT::Strchr", "[crt][strchr]")
     CHECK( wxStrchr(wxString::FromUTF8(":-) == \xe2\x98\xba"),
                     static_cast<wchar_t>(smiley)) );
 }
-#endif // wxUSE_UNICODE
 
 TEST_CASE("CRT::Strcmp", "[crt][strcmp]")
 {
@@ -226,7 +224,7 @@ TEST_CASE("CRT::Strnlen", "[crt][strnlen]")
     CHECK( wxStrnlen(L"123456789", 8) == 8 );
     CHECK( wxStrnlen(L"123456789", 12) == 9 );
 
-    // wxStrlen() is only for NULL-terminated strings:
+    // wxStrlen() is only for null-terminated strings:
     CHECK( wxStrnlen("1234" "\0" "78", 12) == 4 );
     CHECK( wxStrnlen(L"1234" L"\0" L"5678", 12) == 4 );
 }
@@ -239,7 +237,7 @@ TEST_CASE("CRT::Strtox", "[crt][strtod][strtol]")
 
     SECTION("char")
     {
-        char* end = NULL;
+        char* end = nullptr;
         CHECK( wxStrtod(s, &end) == d );
         REQUIRE( end );
         CHECK( *end == '@' );
@@ -251,7 +249,7 @@ TEST_CASE("CRT::Strtox", "[crt][strtod][strtol]")
 
     SECTION("wchar_t")
     {
-        wchar_t* end = NULL;
+        wchar_t* end = nullptr;
         CHECK( wxStrtod(s, &end) == d );
         REQUIRE( end );
         CHECK( *end == L'@' );

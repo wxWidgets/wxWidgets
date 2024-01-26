@@ -75,11 +75,11 @@ public:
         return true;
     }
 
-    // Get the current time components. All pointers must be non-NULL.
+    // Get the current time components. All pointers must be non-null.
     bool GetTime(int* hour, int* min, int* sec) const
     {
         wxCHECK_MSG( hour && min && sec, false,
-                     wxS("Time component pointers must be non-NULL") );
+                     wxS("Time component pointers must be non-null") );
 
         const wxDateTime::Tm tm = this->GetValue().GetTm();
         *hour = tm.hour;
@@ -102,13 +102,17 @@ typedef wxTimePickerCtrlCommonBase<wxDateTimePickerCtrl> wxTimePickerCtrlBase;
     #include "wx/osx/timectrl.h"
 
     #define wxHAS_NATIVE_TIMEPICKERCTRL
+#elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)
+    #include "wx/qt/timectrl.h"
+
+    #define wxHAS_NATIVE_TIMEPICKERCTRL
 #else
     #include "wx/generic/timectrl.h"
 
     class WXDLLIMPEXP_ADV wxTimePickerCtrl : public wxTimePickerCtrlGeneric
     {
     public:
-        wxTimePickerCtrl() { }
+        wxTimePickerCtrl() = default;
         wxTimePickerCtrl(wxWindow *parent,
                          wxWindowID id,
                          const wxDateTime& date = wxDefaultDateTime,

@@ -20,6 +20,7 @@
 #include "wx/aui/auibook.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
+#include "wx/msw/private/darkmode.h"
 #include "wx/renderer.h"
 
 wxAuiMSWTabArt::wxAuiMSWTabArt()
@@ -27,7 +28,7 @@ wxAuiMSWTabArt::wxAuiMSWTabArt()
     m_closeBtnSize = wxDefaultSize;
     m_maxTabHeight = 0;
 
-    m_themed = wxUxThemeIsActive();
+    m_themed = wxUxThemeIsActive() && !wxMSWDarkMode::IsActive();
 }
 
 wxAuiMSWTabArt::~wxAuiMSWTabArt()
@@ -58,18 +59,13 @@ void wxAuiMSWTabArt::DrawBorder(wxDC& dc, wxWindow* wnd, const wxRect& rect)
     dc.SetPen(wxPen(wnd->GetBackgroundColour(), GetBorderWidth(wnd)));
     dc.DrawRectangle(topDrawRect);
 
-    RECT r;
-    wxCopyRectToRECT(drawRect, r);
-
     wxUxThemeHandle hTheme(wnd, L"TAB");
 
-    ::DrawThemeBackground(
-        hTheme,
+    hTheme.DrawBackground(
         GetHdcOf(dc.GetTempHDC()),
-        TABP_PANE,
-        0,
-        &r,
-        NULL);
+        drawRect,
+        TABP_PANE
+    );
 }
 
 void wxAuiMSWTabArt::DrawBackground(wxDC& dc,
@@ -98,18 +94,13 @@ void wxAuiMSWTabArt::DrawBackground(wxDC& dc,
 
     drawRect.Inflate(1, 0);
 
-    RECT r;
-    wxCopyRectToRECT(drawRect, r);
-
     wxUxThemeHandle hTheme(wnd, L"TAB");
 
-    ::DrawThemeBackground(
-        hTheme,
+    hTheme.DrawBackground(
         GetHdcOf(dc.GetTempHDC()),
-        TABP_PANE,
-        0,
-        &r,
-        NULL);
+        drawRect,
+        TABP_PANE
+    );
 }
 
 void wxAuiMSWTabArt::DrawTab(wxDC& dc,
@@ -174,25 +165,23 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         tabState = TIS_NORMAL;
 
     wxUxThemeHandle hTabTheme(wnd, L"Tab");
-    RECT tabR;
-    wxCopyRectToRECT(tabRect, tabR);
-    ::DrawThemeBackground(hTabTheme, GetHdcOf(dc.GetTempHDC()), TABP_TABITEM,
-        tabState,
-        &tabR, NULL);
+    hTabTheme.DrawBackground(
+        GetHdcOf(dc.GetTempHDC()),
+        tabRect,
+        TABP_TABITEM,
+        tabState
+    );
 
     // Apparently, in at least some Windows 10 installations the call above
     // does not draw the left edge of the first tab and it needs to be drawn
     // separately, or it wouldn't be drawn at all.
     if ( tabX == GetIndentSize() )
     {
-        ::DrawThemeBackground
-            (
-                hTabTheme,
+        hTabTheme.DrawBackground(
                 GetHdcOf(dc.GetTempHDC()),
+                tabRect,
                 TABP_TABITEMLEFTEDGE,
-                tabState,
-                &tabR,
-                NULL
+                tabState
             );
     }
 
@@ -228,18 +217,17 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
         else
             btnState = TTCS_NORMAL;
 
-        int offsetY = tabY;
-        if ( wxGetWinVersion() < wxWinVersion_Vista )
-            offsetY++; // WinXP theme needs a little more padding
-
         wxRect rect(tabX + tabWidth - m_closeBtnSize.x - wnd->FromDIP(4),
-            offsetY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
+            tabY + (tabHeight / 2) - (m_closeBtnSize.y / 2),
             m_closeBtnSize.x,
             m_closeBtnSize.y);
 
-        RECT btnR;
-        wxCopyRectToRECT(rect, btnR);
-        ::DrawThemeBackground(hToolTipTheme, GetHdcOf(dc.GetTempHDC()), TTP_CLOSE, btnState, &btnR, NULL);
+        hToolTipTheme.DrawBackground(
+            GetHdcOf(dc.GetTempHDC()),
+            rect,
+            TTP_CLOSE,
+            btnState
+        );
 
         if ( out_button_rect )
             *out_button_rect = rect;
@@ -253,7 +241,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
 int wxAuiMSWTabArt::GetIndentSize()
 {
     if ( IsThemed() )
-        return wxWindow::FromDIP(3, NULL); // This should be 1 but we can't draw into the border from DrawTab
+        return wxWindow::FromDIP(3, nullptr); // This should be 1 but we can't draw into the border from DrawTab
     else
         return wxAuiGenericTabArt::GetIndentSize();
 }
@@ -267,7 +255,7 @@ int wxAuiMSWTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
 {
     if ( IsThemed() )
     {
-        return wnd->FromDIP(4, NULL);
+        return wnd->FromDIP(4, nullptr);
     }
     else
         return wxAuiGenericTabArt::GetAdditionalBorderSpace(wnd);
@@ -350,7 +338,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
         return;
     }
 
-    const wchar_t* themeId = NULL;
+    const wchar_t* themeId = nullptr;
     int part = 0;
 
     switch (bitmap_id)
@@ -415,9 +403,12 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
     wxRect btnRect(rect);
     btnRect.width -= wnd->FromDIP(1);
 
-    RECT btnR;
-    wxCopyRectToRECT(btnRect, btnR);
-    ::DrawThemeBackground(hTheme, GetHdcOf(dc.GetTempHDC()), part, btnState, &btnR, NULL);
+    hTheme.DrawBackground(
+        GetHdcOf(dc.GetTempHDC()),
+        rect,
+        part,
+        btnState
+    );
 
     if ( out_rect )
         *out_rect = rect;
@@ -437,21 +428,14 @@ int wxAuiMSWTabArt::GetBestTabCtrlSize(wxWindow* wnd,
     return wxAuiGenericTabArt::GetBestTabCtrlSize(wnd, pages, requiredBmp_size);
 }
 
-void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxDC& dc)
+void wxAuiMSWTabArt::InitSizes(wxWindow* wnd, wxDC& WXUNUSED(dc))
 {
-    SIZE uxSize;
-
     // Borrow close button from tooltip (best fit on various backgrounds)
     wxUxThemeHandle hTooltipTheme(wnd, L"Tooltip");
-
-    ::GetThemePartSize(hTooltipTheme, GetHdcOf(dc.GetTempHDC()),
-        TTP_CLOSE, 0, NULL, TS_TRUE, &uxSize);
-    m_closeBtnSize.Set(uxSize.cx, uxSize.cy);
+    m_closeBtnSize = hTooltipTheme.GetTrueSize(TTP_CLOSE);
 
     wxUxThemeHandle hTabTheme(wnd, L"Tab");
-    ::GetThemePartSize(hTabTheme, GetHdcOf(dc.GetTempHDC()),
-        TABP_TABITEM, 0, NULL, TS_TRUE, &uxSize);
-    m_tabSize.Set(uxSize.cx, uxSize.cy);
+    m_tabSize = hTabTheme.GetTrueSize(TABP_TABITEM);
 }
 
 bool wxAuiMSWTabArt::IsThemed() const
@@ -461,5 +445,9 @@ bool wxAuiMSWTabArt::IsThemed() const
         !(m_flags & wxAUI_NB_BOTTOM); // Native theme does not support bottom tabs
 }
 
+void wxAuiMSWTabArt::UpdateDpi()
+{
+    m_closeBtnSize = wxDefaultSize;
+}
 
 #endif // wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)

@@ -41,18 +41,18 @@ public:
                  const wxString& name = wxASCII_STR(wxGaugeNameStr) );
 
     // implement base class virtual methods
-    void SetRange(int range) wxOVERRIDE;
-    int GetRange() const wxOVERRIDE;
+    void SetRange(int range) override;
+    int GetRange() const override;
 
-    void SetValue(int pos) wxOVERRIDE;
-    int GetValue() const wxOVERRIDE;
+    void SetValue(int pos) override;
+    int GetValue() const override;
 
-    virtual void Pulse() wxOVERRIDE;
+    virtual void Pulse() override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE;
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
 
     // implementation
     // -------------

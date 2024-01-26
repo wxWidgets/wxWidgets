@@ -2,7 +2,6 @@
 // Name:        wx/msw/registry.h
 // Purpose:     Registry classes and functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.04.1998
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -131,13 +130,13 @@ public:
     WOW64ViewMode GetView() const { return m_viewMode; }
     // return true if the key exists
   bool  Exists() const;
-    // get the info about key (any number of these pointers may be NULL)
+    // get the info about key (any number of these pointers may be null)
   bool  GetKeyInfo(size_t *pnSubKeys,      // number of subkeys
                    size_t *pnMaxKeyLen,    // max length of subkey name
                    size_t *pnValues,       // number of values
                    size_t *pnMaxValueLen) const;
     // return true if the key is opened
-  bool  IsOpened() const { return m_hKey != NULL; }
+  bool  IsOpened() const { return m_hKey != nullptr; }
     // for "if ( !key ) wxLogError(...)" kind of expressions
   operator bool()  const { return m_dwLastError == 0; }
 
@@ -248,7 +247,7 @@ private:
   // common part of all ctors
   void Init()
   {
-    m_hKey = (WXHKEY) NULL;
+    m_hKey = (WXHKEY) nullptr;
     m_dwLastError = 0;
   }
 

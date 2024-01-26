@@ -13,7 +13,7 @@
 #include <QtWidgets/QFrame>
 
 wxStaticLine::wxStaticLine() :
-    m_qtFrame(NULL)
+    m_qtFrame(nullptr)
 {
 }
 
@@ -40,7 +40,7 @@ bool wxStaticLine::Create( wxWindow *parent,
     else if ( style & wxLI_VERTICAL )
         m_qtFrame->setFrameStyle( QFrame::VLine );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    return wxStaticLineBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 QWidget *wxStaticLine::GetHandle() const

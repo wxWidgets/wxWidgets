@@ -45,7 +45,7 @@ public:
     wxAuiCommandCapture() { m_lastId = 0; }
     int GetCommandId() const { return m_lastId; }
 
-    bool ProcessEvent(wxEvent& evt) wxOVERRIDE
+    bool ProcessEvent(wxEvent& evt) override
     {
         if (evt.GetEventType() == wxEVT_MENU)
         {
@@ -177,7 +177,7 @@ wxAuiGenericTabArt::wxAuiGenericTabArt()
     m_selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
     m_measuringFont = m_selectedFont;
 
-    m_fixedTabWidth = wxWindow::FromDIP(100, NULL);
+    m_fixedTabWidth = wxWindow::FromDIP(100, nullptr);
     m_tabCtrlHeight = 0;
     m_flags = 0;
 
@@ -618,7 +618,8 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
                 text_offset,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
 
-    // draw focus rectangle
+    // draw focus rectangle except under macOS where it looks out of place
+#ifndef __WXOSX__
     if (page.active && (wnd->FindFocus() == wnd))
     {
         wxRect focusRectText(text_offset, (drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1),
@@ -646,6 +647,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
 
         wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
     }
+#endif // !__WXOSX__
 
     *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
 
@@ -654,7 +656,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
 
 int wxAuiGenericTabArt::GetIndentSize()
 {
-    return wxWindow::FromDIP(5, NULL);
+    return wxWindow::FromDIP(5, nullptr);
 }
 
 int wxAuiGenericTabArt::GetBorderWidth(wxWindow* wnd)
@@ -815,7 +817,7 @@ int wxAuiGenericTabArt::ShowDropDown(wxWindow* wnd,
         if (caption.IsEmpty())
             caption = wxT(" ");
 
-        wxMenuItem* item = new wxMenuItem(NULL, 1000+i, caption);
+        wxMenuItem* item = new wxMenuItem(nullptr, 1000+i, caption);
         if (page.bitmap.IsOk())
             item->SetBitmap(page.bitmap.GetBitmapFor(wnd));
         menuPopup.Append(item);
@@ -936,7 +938,7 @@ wxAuiSimpleTabArt::wxAuiSimpleTabArt()
     m_measuringFont = m_selectedFont;
 
     m_flags = 0;
-    m_fixedTabWidth = wxWindow::FromDIP(100, NULL);
+    m_fixedTabWidth = wxWindow::FromDIP(100, nullptr);
 
     wxColour baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
@@ -1180,7 +1182,8 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                  (tab_y + tab_height)/2 - (texty/2) + 1);
 
 
-    // draw focus rectangle
+    // draw focus rectangle except under macOS where it looks out of place
+#ifndef __WXOSX__
     if (page.active && (wnd->FindFocus() == wnd))
     {
         wxRect focusRect(text_offset, ((tab_y + tab_height)/2 - (texty/2) + 1),
@@ -1190,6 +1193,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 
         wxRendererNative::Get().DrawFocusRect(wnd, dc, focusRect, 0);
     }
+#endif // !__WXOSX__
 
     *out_tab_rect = wxRect(tab_x, tab_y, tab_width, tab_height);
 

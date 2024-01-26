@@ -25,6 +25,11 @@
     #include "wx/mstream.h"
 #endif
 
+extern bool wxDumpBitmap(const wxBitmap& bitmap, const char* path)
+{
+    return bitmap.SaveFile(path, wxBITMAP_TYPE_BMP);
+}
+
 // ----------------------------------------------------------------------------
 // wxVariant support
 // ----------------------------------------------------------------------------
@@ -145,7 +150,7 @@ wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& name)
             return handler;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& extension, wxBitmapType bitmapType)
@@ -159,7 +164,7 @@ wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& extension, wxBitmapTy
             return handler;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 wxBitmapHandler *wxBitmapBase::FindHandler(wxBitmapType bitmapType)
@@ -172,7 +177,7 @@ wxBitmapHandler *wxBitmapBase::FindHandler(wxBitmapType bitmapType)
             return handler;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 void wxBitmapBase::CleanUpHandlers()
@@ -193,8 +198,8 @@ class wxBitmapBaseModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxBitmapBaseModule);
 public:
     wxBitmapBaseModule() {}
-    bool OnInit() wxOVERRIDE { wxBitmap::InitStandardHandlers(); return true; }
-    void OnExit() wxOVERRIDE { wxBitmap::CleanUpHandlers(); }
+    bool OnInit() override { wxBitmap::InitStandardHandlers(); return true; }
+    void OnExit() override { wxBitmap::CleanUpHandlers(); }
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule);
@@ -264,17 +269,37 @@ wxSize wxBitmapBase::GetLogicalSize() const
 
 #endif // wxHAS_DPI_INDEPENDENT_PIXELS/!wxHAS_DPI_INDEPENDENT_PIXELS
 
+// ----------------------------------------------------------------------------
+// Alpha support
+// ----------------------------------------------------------------------------
+
+bool wxBitmapBase::HasAlpha() const
+{
+    // We assume that only 32bpp bitmaps use alpha (which is always true) and
+    // that all 32bpp bitmaps do use it (which is not necessarily always the
+    // case, but the ports where it isn't need to override this function to
+    // deal with it as we can't do it here).
+    return GetDepth() == 32;
+}
+
+bool wxBitmapBase::UseAlpha(bool WXUNUSED(use))
+{
+    // This function is not implemented in the case class, we don't have any
+    // generic way to make a bitmap use, or prevent it from using, alpha.
+    return false;
+}
+
 #endif // wxUSE_BITMAP_BASE
 
 // ----------------------------------------------------------------------------
 // wxBitmap common
 // ----------------------------------------------------------------------------
 
-#if !(defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) || defined(__WXQT__))
+#if !(defined(__WXGTK__) || defined(__WXX11__) || defined(__WXQT__))
 
 wxBitmap::wxBitmap(const char* const* bits)
 {
-    wxCHECK2_MSG(bits != NULL, return, wxT("invalid bitmap data"));
+    wxCHECK2_MSG(bits != nullptr, return, wxT("invalid bitmap data"));
 
 #if wxUSE_IMAGE && wxUSE_XPM
     wxImage image(bits);
@@ -285,7 +310,7 @@ wxBitmap::wxBitmap(const char* const* bits)
     wxFAIL_MSG(wxT("creating bitmaps from XPMs not supported"));
 #endif // wxUSE_IMAGE && wxUSE_XPM
 }
-#endif // !(defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__))
+#endif // !(defined(__WXGTK__) || defined(__WXX11__))
 
 // ----------------------------------------------------------------------------
 // wxMaskBase

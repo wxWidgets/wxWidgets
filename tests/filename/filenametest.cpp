@@ -466,7 +466,16 @@ TEST_CASE("wxFileName::Replace", "[filename]")
 
     // now test ReplaceHomeDir
 
-    wxFileName fn = wxFileName::DirName(wxGetHomeDir());
+    const wxString& homedir = wxGetHomeDir();
+    if ( homedir == "/" )
+    {
+        // These tests assume that HOME is a non-root directory, but this may
+        // not be the case.
+        WARN("Skipping wxFileName::ReplaceHomeDir() tests because HOME=/");
+        return;
+    }
+
+    wxFileName fn = wxFileName::DirName(homedir);
     fn.AppendDir("test1");
     fn.AppendDir("test2");
     fn.AppendDir("test3");
@@ -479,6 +488,16 @@ TEST_CASE("wxFileName::Replace", "[filename]")
     );
 
     CHECK( fn.GetFullPath(wxPATH_UNIX) == "~/test1/test2/test3/some file" );
+
+    // Check that home directory appearing in the middle of the path doesn't
+    // get replaced (this only works under Unix where there are no volumes).
+#ifdef __UNIX__
+    wxFileName fn2(homedir + "/subdir" + homedir + "/subsubdir", "filename");
+    INFO("fn2=" << fn2.GetFullPath());
+
+    fn2.ReplaceHomeDir();
+    CHECK( fn2.GetFullPath() == "~/subdir" + homedir + "/subsubdir/filename" );
+#endif // __UNIX__
 }
 
 TEST_CASE("wxFileName::GetHumanReadable", "[filename]")
@@ -545,15 +564,29 @@ TEST_CASE("wxFileName::ShortLongPath", "[filename]")
 
 #endif // __WINDOWS__
 
+// Small helper to make things slightly less verbose in the tests below.
+static wxString GetDOSPath(const wxFileName& fn)
+{
+    return fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS);
+}
+
 TEST_CASE("wxFileName::UNC", "[filename]")
 {
     wxFileName fn("//share/path/name.ext", wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\share" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path" );
+    CHECK( GetDOSPath(fn) == "\\path" );
 
     fn.Assign("\\\\share2\\path2\\name.ext", wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\share2" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\path2" );
+    CHECK( GetDOSPath(fn) == "\\path2" );
+
+    fn.SetPath("\\\\server\\volume\\path", wxPATH_DOS);
+    fn.AppendDir("subdir");
+    CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\server\\volume\\path\\subdir\\name.ext" );
+
+    // Check for a bug with normalization breaking the path (#22275).
+    fn.Normalize(wxPATH_NORM_LONG);
+    CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\server\\volume\\path\\subdir\\name.ext" );
 
 #ifdef __WINDOWS__
     // Check that doubled backslashes in the beginning of the path are not
@@ -574,13 +607,13 @@ TEST_CASE("wxFileName::VolumeUniqueName", "[filename]")
     wxFileName fn("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
                   wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\" );
+    CHECK( GetDOSPath(fn) == "\\" );
     CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\" );
 
     fn.Assign("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
               "Program Files\\setup.exe", wxPATH_DOS);
     CHECK( fn.GetVolume() == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}" );
-    CHECK( fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) == "\\Program Files" );
+    CHECK( GetDOSPath(fn) == "\\Program Files" );
     CHECK( fn.GetFullPath(wxPATH_DOS) == "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe" );
 }
 
@@ -759,9 +792,9 @@ TEST_CASE("wxFileName::SameAs", "[filename]")
 
 #if defined(__UNIX__)
     // We need to create a temporary directory and a temporary link.
-    // Unfortunately we can't use wxFileName::CreateTempFileName() for neither
+    // Unfortunately we can't use wxFileName::CreateTempFileName() for either
     // as it creates plain files, so use tempnam() explicitly instead.
-    char* tn = tempnam(NULL, "wxfn1");
+    char* tn = tempnam(nullptr, "wxfn1");
     const wxString tempdir1 = wxString::From8BitData(tn);
     free(tn);
 
@@ -770,7 +803,7 @@ TEST_CASE("wxFileName::SameAs", "[filename]")
     wxON_BLOCK_EXIT2( static_cast<bool (*)(const wxString&, int)>(wxFileName::Rmdir),
                       tempdir1, static_cast<int>(wxPATH_RMDIR_RECURSIVE) );
 
-    tn = tempnam(NULL, "wxfn2");
+    tn = tempnam(nullptr, "wxfn2");
     const wxString tempdir2 = wxString::From8BitData(tn);
     free(tn);
     CHECK( symlink(tempdir1.c_str(), tempdir2.c_str()) == 0 );
@@ -960,7 +993,7 @@ void CreateShortcut(const wxString& pathFile, const wxString& pathLink)
    HRESULT hr;
 
    wxCOMPtr<IShellLink> sl;
-   hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+   hr = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
                          IID_IShellLink, (void **)&sl);
    REQUIRE( SUCCEEDED(hr) );
 
@@ -1006,6 +1039,12 @@ TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
     wxULongLong size = wxFileName::GetSize("/proc/kcore");
     INFO( "size of /proc/kcore=" << size );
     CHECK( size > 0 );
+
+    if ( !wxFile::Exists("/sys/power/state") )
+    {
+        WARN("/sys/power/state doesn't exist, skipping test");
+        return;
+    }
 
     // All files in /sys are one page in size, irrespectively of the size of
     // their actual contents.

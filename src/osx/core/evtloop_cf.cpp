@@ -397,10 +397,10 @@ static bool gs_bGuiOwnedByMainThread = true;
 // critical section which controls access to all GUI functions: any secondary
 // thread (i.e. except the main one) must enter this crit section before doing
 // any GUI calls
-static wxCriticalSection *gs_critsectGui = NULL;
+static wxCriticalSection *gs_critsectGui = nullptr;
 
 // critical section which protects gs_nWaitingForGui variable
-static wxCriticalSection *gs_critsectWaitingForGui = NULL;
+static wxCriticalSection *gs_critsectWaitingForGui = nullptr;
 
 // number of threads waiting for GUI in wxMutexGuiEnter()
 static size_t gs_nWaitingForGui = 0;

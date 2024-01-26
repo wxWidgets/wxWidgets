@@ -2,7 +2,6 @@
 // Name:        src/generic/dirdlgg.cpp
 // Purpose:     wxDirDialog
 // Author:      Harm van der Heijden, Robert Roebling & Julian Smart
-// Modified by:
 // Created:     12/12/98
 // Copyright:   (c) Harm van der Heijden, Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
@@ -116,7 +115,7 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
     topsizer->Add( buttonsizer, 0, wxTOP | wxALIGN_RIGHT, 10 );
 
     // 1) dir ctrl
-    m_dirCtrl = NULL; // this is necessary, event handler called from
+    m_dirCtrl = nullptr; // this is necessary, event handler called from
                       // wxGenericDirCtrl would crash otherwise!
     long dirStyle = wxDIRCTRL_DIR_ONLY | wxDEFAULT_CONTROL_BORDER;
 
@@ -157,11 +156,9 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
 
     m_input->SetFocus();
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
 
     Centre( wxBOTH );
 
@@ -248,7 +245,7 @@ void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
 
     wxTreeItemId item = event.GetItem();
 
-    wxDirItemData *data = NULL;
+    wxDirItemData *data = nullptr;
 
     if(item.IsOk())
         data = (wxDirItemData*)m_dirCtrl->GetTreeCtrl()->GetItemData(item);

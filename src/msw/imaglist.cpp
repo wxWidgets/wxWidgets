@@ -2,7 +2,6 @@
 // Name:        src/msw/imaglist.cpp
 // Purpose:     wxImageList implementation for Win32
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -36,7 +35,6 @@
 
 #include "wx/imaglist.h"
 #include "wx/dc.h"
-#include "wx/scopedptr.h"
 #include "wx/msw/dc.h"
 #include "wx/msw/dib.h"
 #include "wx/msw/private.h"
@@ -53,9 +51,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject);
 // private functions
 // ----------------------------------------------------------------------------
 
-// returns the mask if it's valid, otherwise the bitmap mask and, if it's not
-// valid neither, a "solid" mask (no transparent zones at all)
-static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
+// returns the default transparent colour to use for creating the mask
+static wxColour GetDefaultMaskColour();
 
 // ============================================================================
 // implementation
@@ -68,7 +65,7 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask);
 // Creates an image list
 bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
-    wxASSERT_MSG( m_hImageList == NULL, "Recreating existing wxImageList?" );
+    wxASSERT_MSG( m_hImageList == nullptr, "Recreating existing wxImageList?" );
 
     // Prevent from storing negative dimensions
     m_size = wxSize(wxMax(width, 0), wxMax(height, 0));
@@ -81,12 +78,16 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
     // (e.g. ILC_COLOR16) shows completely broken bitmaps
     flags |= ILC_COLOR32;
 
+    m_useMask = mask;
+
     // For comctl32.dll < 6 always use masks as it doesn't support alpha.
-    if ( mask || wxApp::GetComCtl32Version() < 600 )
-    {
-        m_useMask = true;
+    //
+    // We also have to use masks when we don't have wxImage and wxDIB that are
+    // needed to handle alpha.
+#if wxUSE_WXDIB && wxUSE_IMAGE
+    if ( wxApp::GetComCtl32Version() < 600 )
+#endif
         flags |= ILC_MASK;
-    }
 
     // Grow by 1, I guess this is reasonable behaviour most of the time
     m_hImageList = (WXHIMAGELIST) ImageList_Create(width, height, flags,
@@ -137,29 +138,69 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 // wxImageList operations
 // ----------------------------------------------------------------------------
 
-namespace
+class wxImageList::wxMSWBitmaps
 {
-void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useMask,
-                         AutoHBITMAP& hbmpRelease, AutoHBITMAP& hbmpMask, HBITMAP& hbmp)
-{
+public:
+    wxMSWBitmaps() : hbmp(nullptr) { }
+
 #if wxUSE_WXDIB && wxUSE_IMAGE
-    // We can only use directly bitmaps without alpha and without mask unless
-    // the image list uses masks and need to modify bitmap in all the other
-    // cases, so check if this is necessary.
-    if ( bitmap.HasAlpha() || (!useMask && (mask.IsOk() || bitmap.GetMask())) )
+    void InitFromImageWithAlpha(const wxImage& img)
+    {
+        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        hbmpRelease.Init(hbmp);
+    }
+#endif // wxUSE_WXDIB && wxUSE_IMAGE
+
+    // These fields are filled by GetImageListBitmaps().
+    HBITMAP hbmp;
+    AutoHBITMAP hbmpMask;
+
+private:
+    // This one is only used to delete a temporary bitmap, if necessary, and
+    // shouldn't be used otherwise, so it's private.
+    AutoHBITMAP hbmpRelease;
+
+    wxDECLARE_NO_COPY_CLASS(wxMSWBitmaps);
+};
+
+void
+wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
+                                 const wxBitmap& bitmap, const wxBitmap& mask)
+{
+    // This can be overwritten below if we need to modify the bitmap, but it
+    // doesn't cost anything to initialize the bitmap with this HBITMAP.
+    bitmaps.hbmp = GetHbitmapOf(bitmap);
+
+#if wxUSE_WXDIB && wxUSE_IMAGE
+    if ( wxApp::GetComCtl32Version() >= 600 )
     {
         wxBitmap bmp(bitmap);
 
-        if ( mask.IsOk() || bmp.GetMask() )
+        if ( mask.IsOk() )
         {
             // Explicitly specified mask overrides the mask associated with the
             // bitmap, if any.
-            if ( mask.IsOk() )
-                bmp.SetMask(new wxMask(mask));
+            bmp.SetMask(new wxMask(mask));
+        }
 
+        if ( bmp.GetMask() )
+        {
             // Get rid of the mask by converting it to alpha.
             if ( bmp.HasAlpha() )
                 bmp.MSWBlendMaskWithAlpha();
+        }
+        else if ( m_useMask )
+        {
+            // Create the mask from the default transparent colour if we have
+            // nothing else.
+            if ( !bmp.HasAlpha() )
+                bmp.SetMask(new wxMask(bmp, GetDefaultMaskColour()));
+        }
+        else if ( !bmp.HasAlpha() )
+        {
+            // We actually don't have to do anything at all and can just use
+            // the original bitmap as is.
+            return;
         }
 
         // wxBitmap normally stores alpha in pre-multiplied format but
@@ -170,8 +211,32 @@ void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useM
         wxImage img = bmp.ConvertToImage();
         if ( !img.HasAlpha() )
             img.InitAlpha();
-        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
-        hbmpRelease.Init(hbmp);
+
+        // There is a very special, but important in practice, case of fully
+        // transparent bitmaps: they're used to allow not specifying any image
+        // for some items. Unfortunately the native image list simply ignores
+        // alpha channel if it only contains 0 values, apparently considering
+        // the bitmap to be 24bpp in this case. And there doesn't seem to be
+        // any way to avoid this, i.e. tell it to really not draw anything, so
+        // we use this horrible hack to force it to take alpha into account by
+        // setting at least one pixel to a non-0 value.
+        unsigned char* alpha = img.GetAlpha();
+        unsigned char* const end = alpha + img.GetWidth()*img.GetHeight();
+        for ( ; alpha < end; ++alpha )
+        {
+            if ( *alpha != wxALPHA_TRANSPARENT )
+                break;
+        }
+
+        if ( alpha == end )
+        {
+            // We haven't found any non-transparent pixels, so make one of them
+            // (we arbitrarily choose the bottom right one) almost, but not
+            // quite, transparent.
+            alpha[-1] = 1; // As transparent as possible, but not transparent.
+        }
+
+        bitmaps.InitFromImageWithAlpha(img);
 
         // In any case we'll never use mask at the native image list level as
         // it's incompatible with alpha and we need to use alpha.
@@ -179,24 +244,60 @@ void GetImageListBitmaps(const wxBitmap& bitmap, const wxBitmap& mask, bool useM
     else
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
     {
-        hbmp = GetHbitmapOf(bitmap);
-        if ( useMask )
-            hbmpMask.Init(GetMaskForImage(bitmap, mask));
+        wxMask maskToUse;
+
+        HBITMAP hbmpMask = nullptr;
+
+        // Always use mask if it is specified.
+        if ( mask.IsOk() )
+        {
+            hbmpMask = GetHbitmapOf(mask);
+        }
+        else if ( bitmap.GetMask() )
+        {
+            hbmpMask = bitmap.GetMask()->GetMaskBitmap();
+        }
+#if wxUSE_WXDIB && wxUSE_IMAGE
+        // We can also use alpha, but we have to convert it to a mask as it is
+        // not supported by this comctl32.dll version.
+        else if ( bitmap.HasAlpha() )
+        {
+            wxImage img = bitmap.ConvertToImage();
+            img.ConvertAlphaToMask();
+            bitmaps.InitFromImageWithAlpha(img);
+
+            maskToUse.MSWCreateFromImageMask(img);
+        }
+#endif // wxUSE_WXDIB && wxUSE_IMAGE
+        // We don't have either mask nor alpha, only force creating the
+        // mask from colour if requested to do it.
+        else if ( m_useMask )
+        {
+            maskToUse.Create(bitmap, GetDefaultMaskColour());
+        }
+
+        if ( !hbmpMask )
+            hbmpMask = maskToUse.GetMaskBitmap();
+
+        if ( hbmpMask )
+        {
+            // windows mask convention is opposite to the wxWidgets one
+            bitmaps.hbmpMask.Init(wxInvertMask(hbmpMask));
+        }
     }
 }
-} // anonymous namespace
 
 // Adds a bitmap, and optionally a mask bitmap.
 // Note that wxImageList creates new bitmaps, so you may delete
 // 'bitmap' and 'mask'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 {
-    HBITMAP hbmp = NULL;
-    AutoHBITMAP hbmpRelease;
-    AutoHBITMAP hbmpMask;
-    GetImageListBitmaps(bitmap, mask, m_useMask, hbmpRelease, hbmpMask, hbmp);
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
 
-    int index = ImageList_Add(GetHImageList(), hbmp, hbmpMask);
+    wxMSWBitmaps bitmaps;
+    GetImageListBitmaps(bitmaps, bitmap, mask);
+
+    int index = ImageList_Add(GetHImageList(), bitmaps.hbmp, bitmaps.hbmpMask);
     if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
@@ -210,14 +311,14 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 // 'bitmap'.
 int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 {
-    HBITMAP hbmp = NULL;
-    AutoHBITMAP hbmpRelease;
-    AutoHBITMAP hbmpMask;
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
+    wxMSWBitmaps bitmaps;
     wxMask mask(bitmap, maskColour);
-    GetImageListBitmaps(bitmap, mask.GetBitmap(), m_useMask, hbmpRelease, hbmpMask, hbmp);
+    GetImageListBitmaps(bitmaps, bitmap, mask.GetBitmap());
 
     int index = ImageList_AddMasked(GetHImageList(),
-                                    hbmp,
+                                    bitmaps.hbmp,
                                     wxColourToRGB(maskColour));
     if ( index == -1 )
     {
@@ -230,26 +331,11 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
 // Adds a bitmap and mask from an icon.
 int wxImageList::Add(const wxIcon& icon)
 {
-    // ComCtl32 prior 6.0 doesn't support images with alpha
-    // channel so if we have 32-bit icon with transparency
-    // we need to add it as a wxBitmap via dedicated method
-    // where alpha channel will be converted to the mask.
-    if ( wxApp::GetComCtl32Version() < 600 )
-    {
-        wxBitmap bmp(icon);
-        if ( bmp.HasAlpha() )
-        {
-            return Add(bmp);
-        }
-    }
-
-    int index = ImageList_AddIcon(GetHImageList(), GetHiconOf(icon));
-    if ( index == -1 )
-    {
-        wxLogError(_("Couldn't add an image to the image list."));
-    }
-
-    return index;
+    // We don't use ImageList_AddIcon() here as this only works for icons with
+    // masks when using ILC_MASK, which we usually don't do, so reuse the
+    // bitmap function instead -- even if it's slightly less efficient due to
+    // extra conversions, it's simpler than handling all the various cases here.
+    return Add(wxBitmap(icon));
 }
 
 // Replaces a bitmap, optionally passing a mask bitmap.
@@ -259,12 +345,12 @@ bool wxImageList::Replace(int index,
                           const wxBitmap& bitmap,
                           const wxBitmap& mask)
 {
-    HBITMAP hbmp = NULL;
-    AutoHBITMAP hbmpRelease;
-    AutoHBITMAP hbmpMask;
-    GetImageListBitmaps(bitmap, mask, m_useMask, hbmpRelease, hbmpMask, hbmp);
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
 
-    if ( !ImageList_Replace(GetHImageList(), index, hbmp, hbmpMask) )
+    wxMSWBitmaps bitmaps;
+    GetImageListBitmaps(bitmaps, bitmap, mask);
+
+    if ( !ImageList_Replace(GetHImageList(), index, bitmaps.hbmp, bitmaps.hbmpMask) )
     {
         wxLogLastError(wxT("ImageList_Replace()"));
         return false;
@@ -276,31 +362,16 @@ bool wxImageList::Replace(int index,
 // Replaces a bitmap and mask from an icon.
 bool wxImageList::Replace(int i, const wxIcon& icon)
 {
-    // ComCtl32 prior 6.0 doesn't support images with alpha
-    // channel so if we have 32-bit icon with transparency
-    // we need to replace it as a wxBitmap via dedicated method
-    // where alpha channel will be converted to the mask.
-    if ( wxApp::GetComCtl32Version() < 600 )
-    {
-        wxBitmap bmp(icon);
-        if ( bmp.HasAlpha() )
-        {
-            return Replace(i, bmp);
-        }
-    }
-
-    bool ok = ImageList_ReplaceIcon(GetHImageList(), i, GetHiconOf(icon)) != -1;
-    if ( !ok )
-    {
-        wxLogLastError(wxT("ImageList_ReplaceIcon()"));
-    }
-
-    return ok;
+    // Same as in Add() above, just reuse the existing function for simplicity
+    // even if it means an extra conversion.
+    return Replace(i, wxBitmap(icon));
 }
 
 // Removes the image at the given index.
 bool wxImageList::Remove(int index)
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     bool ok = index >= 0 && ImageList_Remove(GetHImageList(), index) != FALSE;
     if ( !ok )
     {
@@ -313,6 +384,8 @@ bool wxImageList::Remove(int index)
 // Remove all images
 bool wxImageList::RemoveAll()
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     // don't use ImageList_RemoveAll() because mingw32 headers don't have it
     bool ok = ImageList_Remove(GetHImageList(), -1) != FALSE;
     if ( !ok )
@@ -333,6 +406,8 @@ bool wxImageList::Draw(int index,
                        int flags,
                        bool solidBackground)
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     wxDCImpl *impl = dc.GetImpl();
     wxMSWDCImpl *msw_impl = wxDynamicCast( impl, wxMSWDCImpl );
     if (!msw_impl)
@@ -363,6 +438,12 @@ bool wxImageList::Draw(int index,
     if ( flags & wxIMAGELIST_DRAW_FOCUSED )
         style |= ILD_FOCUS;
 
+    // We need to handle the origin offset manually as we don't use Windows
+    // support for this, see wxDC code.
+    const wxPoint origin = dc.GetDeviceOrigin();
+    x += origin.x;
+    y += origin.y;
+
     bool ok = ImageList_Draw(GetHImageList(), index, hDC, x, y, style) != 0;
     if ( !ok )
     {
@@ -375,6 +456,8 @@ bool wxImageList::Draw(int index,
 // Get the bitmap
 wxBitmap wxImageList::GetBitmap(int index) const
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     int bmp_width = 0, bmp_height = 0;
     GetSize(index, bmp_width, bmp_height);
 
@@ -438,6 +521,8 @@ wxBitmap wxImageList::GetBitmap(int index) const
 // Get the icon
 wxIcon wxImageList::GetIcon(int index) const
 {
+    wxASSERT_MSG( m_hImageList, wxT("invalid image list") );
+
     HICON hIcon = ImageList_ExtractIcon(0, GetHImageList(), index);
     if (hIcon)
     {
@@ -457,35 +542,14 @@ wxIcon wxImageList::GetIcon(int index) const
 // helpers
 // ----------------------------------------------------------------------------
 
-static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
+static wxColour GetDefaultMaskColour()
 {
-    HBITMAP hbmpMask;
-    wxScopedPtr<wxMask> maskDeleter;
+    // use the light grey count as transparent: the trouble here is
+    // that the light grey might have been changed by Windows behind
+    // our back, so use the standard colour map to get its real value
+    wxCOLORMAP *cmap = wxGetStdColourMap();
+    wxColour col;
+    wxRGBToColour(col, cmap[wxSTD_COL_BTNFACE].from);
 
-    if ( mask.IsOk() )
-    {
-        hbmpMask = GetHbitmapOf(mask);
-    }
-    else
-    {
-        wxMask* pMask = bitmap.GetMask();
-        if ( !pMask )
-        {
-            // use the light grey count as transparent: the trouble here is
-            // that the light grey might have been changed by Windows behind
-            // our back, so use the standard colour map to get its real value
-            wxCOLORMAP *cmap = wxGetStdColourMap();
-            wxColour col;
-            wxRGBToColour(col, cmap[wxSTD_COL_BTNFACE].from);
-
-            pMask = new wxMask(bitmap, col);
-
-            maskDeleter.reset(pMask);
-        }
-
-        hbmpMask = (HBITMAP)pMask->GetMaskBitmap();
-    }
-
-    // windows mask convention is opposite to the wxWidgets one
-    return wxInvertMask(hbmpMask);
+    return col;
 }

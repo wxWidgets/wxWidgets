@@ -2,7 +2,6 @@
 // Name:        wx/dcprint.h
 // Purpose:     wxPrinterDC base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
@@ -28,7 +27,7 @@ public:
     wxPrinterDC(const wxPrintData& data);
 
     wxRect GetPaperRect() const;
-    int GetResolution() const wxOVERRIDE;
+    int GetResolution() const override;
 
 protected:
     wxPrinterDC(wxDCImpl *impl) : wxDC(impl) { }

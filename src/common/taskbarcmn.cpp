@@ -2,7 +2,6 @@
 // File:        src/common/taskbarcmn.cpp
 // Purpose:     Common parts of wxTaskBarIcon class
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/04/2003
 // Copyright:   (c) Julian Smart, 2003
 // Licence:     wxWindows licence
@@ -22,7 +21,7 @@
     #include "wx/menu.h"
 #endif
 
-#include "wx/scopedptr.h"
+#include <memory>
 
 extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
 
@@ -46,7 +45,7 @@ wxEND_EVENT_TABLE()
 
 void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
 {
-    wxScopedPtr<wxMenu> menuDeleter;
+    std::unique_ptr<wxMenu> menuDeleter;
     wxMenu *menu = GetPopupMenu();
     if ( !menu )
     {

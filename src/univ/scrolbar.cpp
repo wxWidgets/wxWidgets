@@ -2,7 +2,6 @@
 // Name:        src/univ/scrolbar.cpp
 // Purpose:     wxScrollBar implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -872,14 +871,14 @@ wxStdScrollBarInputHandler::wxStdScrollBarInputHandler(wxRenderer *renderer,
                           : wxStdInputHandler(handler)
 {
     m_renderer = renderer;
-    m_winCapture = NULL;
+    m_winCapture = nullptr;
     m_htLast = wxHT_NOWHERE;
-    m_timerScroll = NULL;
+    m_timerScroll = nullptr;
 }
 
 wxStdScrollBarInputHandler::~wxStdScrollBarInputHandler()
 {
-    // normally, it's NULL by now but just in case the user somehow managed to
+    // normally, it's null by now but just in case the user somehow managed to
     // keep the mouse captured until now...
     delete m_timerScroll;
 }
@@ -922,7 +921,7 @@ void wxStdScrollBarInputHandler::StopScrolling(wxScrollBar *control)
     if ( m_winCapture )
     {
         m_winCapture->ReleaseMouse();
-        m_winCapture = NULL;
+        m_winCapture = nullptr;
     }
 
     m_btnCapture = -1;

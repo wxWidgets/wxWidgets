@@ -2,7 +2,6 @@
 // Name:        wx/msw/msgdlg.h
 // Purpose:     wxMessageDialog class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -21,12 +20,12 @@ public:
                     const wxPoint& WXUNUSED(pos) = wxDefaultPosition)
         : wxMessageDialogBase(parent, message, caption, style)
     {
-        m_hook = NULL;
+        m_hook = nullptr;
     }
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
-    virtual long GetEffectiveIcon() const wxOVERRIDE;
+    virtual long GetEffectiveIcon() const override;
 
     // implementation-specific
 
@@ -35,7 +34,7 @@ public:
 
 protected:
     // Override this as task dialogs are always centered on parent.
-    virtual void DoCentre(int dir) wxOVERRIDE;
+    virtual void DoCentre(int dir) override;
 
 private:
     // hook procedure used to adjust the message box beyond what the standard

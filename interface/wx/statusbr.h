@@ -124,9 +124,7 @@ public:
         @param style
             The window style. See wxStatusBar.
         @param name
-            The name of the window. This parameter is used to associate a name with the
-            item, allowing the application user to set Motif resource values for
-            individual windows.
+            The name of the window.
 
         @see Create()
     */
@@ -248,7 +246,23 @@ public:
         Use SetStatusWidths to set the field widths.
         @endWxPerlOnly
     */
-    virtual void SetFieldsCount(int number = 1, const int* widths = NULL);
+    virtual void SetFieldsCount(int number = 1, const int* widths = nullptr);
+
+    /**
+        Add a control (child of the wxStatusBar) to be shown at the specified
+        field position in the status bar.
+
+        @param i
+            The field index where the control will be shown.
+        @param win
+            The control in question. Must be a child of the wxStatusBar itself.
+
+        @note You must delete the control to remove it from the status bar, as
+            simply passing @NULL will not do that.
+
+        @since 3.3.0
+    */
+    bool AddFieldControl(int i, wxWindow* win);
 
     /**
         Sets the minimal possible height for the status bar.

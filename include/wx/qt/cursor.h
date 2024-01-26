@@ -15,11 +15,8 @@ class QCursor;
 class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 {
 public:
-    wxCursor() { }
+    wxCursor() = default;
     wxCursor(wxStockCursor id) { InitFromStock(id); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
-#endif
 #if wxUSE_IMAGE
     wxCursor( const wxImage & image );
     wxCursor(const char* const* xpmData);
@@ -28,7 +25,7 @@ public:
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
 
-    virtual wxPoint GetHotSpot() const wxOVERRIDE;
+    virtual wxPoint GetHotSpot() const override;
     QCursor &GetHandle() const;
 
 protected:
@@ -39,8 +36,8 @@ protected:
 
 private:
     void Init();
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };

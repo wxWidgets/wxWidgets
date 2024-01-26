@@ -2,7 +2,6 @@
 // Name:        classlist.cpp
 // Purpose:     ClassListDialog implementation
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     03/06/2007 14:49:55
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence
@@ -80,11 +79,11 @@ ClassListDialog::~ClassListDialog()
 
 void ClassListDialog::Init()
 {
-    m_pClassCountText = NULL;
-    m_pRawListBox = NULL;
-    m_pParentTreeCtrl = NULL;
-    m_pSizeListBox = NULL;
-    m_pTextCtrl = NULL;
+    m_pClassCountText = nullptr;
+    m_pRawListBox = nullptr;
+    m_pParentTreeCtrl = nullptr;
+    m_pSizeListBox = nullptr;
+    m_pTextCtrl = nullptr;
 }
 
 void ClassListDialog::CreateControls()
@@ -267,7 +266,7 @@ bool ClassListDialog::IsToDiscard(const wxString &classname) const
     wxClassInfo *info = wxClassInfo::FindClass(classname);
     if (!info)
         return false;
-    if (info->GetFirstProperty() != NULL || info->GetFirstHandler() != NULL)
+    if (info->GetFirstProperty() != nullptr || info->GetFirstHandler() != nullptr)
         return false;       // has XTI info
     return true;            // no XTI info
 }
@@ -440,7 +439,7 @@ wxString DumpHandlerInfo(const wxHandlerInfo *phdlr, int indent)
         return ind + "none";
 
     infostr << ind << "event class: " <<
-        (phdlr->GetEventClassInfo() ? phdlr->GetEventClassInfo()->GetClassName() : "none");
+        (phdlr->GetEventClassInfo() ? wxString(phdlr->GetEventClassInfo()->GetClassName()) : "none");
 
     return infostr;
 }
@@ -465,7 +464,7 @@ int DumpProperties(const wxClassInfo *info, wxString& infostr, bool recursive)
         const wxClassInfo **parent = info->GetParents();
         wxString str;
 
-        for (int i=0; parent[i] != NULL; i++)
+        for (int i=0; parent[i] != nullptr; i++)
         {
             int ppcount = DumpProperties(parent[i], str, recursive);
             if (ppcount)
@@ -500,7 +499,7 @@ int DumpHandlers(const wxClassInfo *info, wxString& infostr, bool recursive)
         const wxClassInfo **parent = info->GetParents();
         wxString str;
 
-        for (int i=0; parent[i] != NULL; i++)
+        for (int i=0; parent[i] != nullptr; i++)
         {
             int hhcount = DumpHandlers(parent[i], str, recursive);
             if (hhcount)

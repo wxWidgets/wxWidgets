@@ -39,6 +39,9 @@
 #include "wx/private/webrequest_curl.h"
 #endif
 
+#include <memory>
+#include <unordered_map>
+
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[] = "WinHTTP";
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[] = "URLSession";
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "CURL";
@@ -113,13 +116,13 @@ void wxWebRequestImpl::SetData(const wxString& text, const wxString& contentType
 {
     m_dataText = text.mb_str(conv);
 
-    wxScopedPtr<wxInputStream>
+    std::unique_ptr<wxInputStream>
         stream(new wxMemoryInputStream(m_dataText, m_dataText.length()));
     SetData(stream, contentType);
 }
 
 bool
-wxWebRequestImpl::SetData(wxScopedPtr<wxInputStream>& dataStream,
+wxWebRequestImpl::SetData(std::unique_ptr<wxInputStream>& dataStream,
                           const wxString& contentType,
                           wxFileOffset dataSize)
 {
@@ -164,28 +167,6 @@ wxFileOffset wxWebRequestImpl::GetBytesExpectedToReceive() const
 
 namespace
 {
-
-// Functor used with CallAfter() below.
-//
-// TODO-C++11: Replace with a lambda.
-struct StateEventProcessor
-{
-    StateEventProcessor(wxWebRequestImpl& request,
-                        wxWebRequest::State state,
-                        const wxString& failMsg)
-        : m_request(request), m_state(state), m_failMsg(failMsg)
-    {
-    }
-
-    void operator()()
-    {
-        m_request.ProcessStateEvent(m_state, m_failMsg);
-    }
-
-    wxWebRequestImpl& m_request;
-    const wxWebRequest::State m_state;
-    const wxString m_failMsg;
-};
 
 #if wxUSE_LOG_TRACE
 
@@ -242,7 +223,10 @@ void wxWebRequestImpl::SetState(wxWebRequest::State state, const wxString & fail
     }
     else
     {
-        m_handler->CallAfter(StateEventProcessor(*this, state, failMsg));
+        m_handler->CallAfter([this, state, failMsg]()
+            {
+                ProcessStateEvent(state, failMsg);
+            });
     }
 }
 
@@ -450,7 +434,7 @@ wxWebRequest::SetData(wxInputStream* dataStream,
                       wxFileOffset dataSize)
 {
     // Ensure that the stream is destroyed even we return below.
-    wxScopedPtr<wxInputStream> streamPtr(dataStream);
+    std::unique_ptr<wxInputStream> streamPtr(dataStream);
 
     wxCHECK_IMPL( false );
 
@@ -556,7 +540,7 @@ wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
 
 wxWebRequestHandle wxWebRequest::GetNativeHandle() const
 {
-    return m_impl ? m_impl->GetNativeHandle() : NULL;
+    return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
 void wxWebRequest::DisablePeerVerify(bool disable)
@@ -641,7 +625,7 @@ void wxWebResponseImpl::Init()
         {
             // Check available disk space
             wxLongLong freeSpace;
-            if ( wxGetDiskSpace(tmpPrefix.GetFullPath(), NULL, &freeSpace) &&
+            if ( wxGetDiskSpace(tmpPrefix.GetFullPath(), nullptr, &freeSpace) &&
                 GetContentLength() > freeSpace )
             {
                 m_request.SetState(wxWebRequest::State_Failed, _("Not enough free disk space for download."));
@@ -656,7 +640,12 @@ void wxWebResponseImpl::Init()
 
 wxString wxWebResponseImpl::GetMimeType() const
 {
-    return GetHeader("Mime-Type");
+    return GetContentType().BeforeFirst(';');
+}
+
+wxString wxWebResponseImpl::GetContentType() const
+{
+    return GetHeader("Content-Type");
 }
 
 wxInputStream * wxWebResponseImpl::GetStream() const
@@ -837,6 +826,13 @@ wxString wxWebResponse::GetMimeType() const
     return m_impl->GetMimeType();
 }
 
+wxString wxWebResponse::GetContentType() const
+{
+    wxCHECK_IMPL( wxString() );
+
+    return m_impl->GetContentType();
+}
+
 int wxWebResponse::GetStatus() const
 {
     wxCHECK_IMPL( -1 );
@@ -853,7 +849,7 @@ wxString wxWebResponse::GetStatusText() const
 
 wxInputStream* wxWebResponse::GetStream() const
 {
-    wxCHECK_IMPL( NULL );
+    wxCHECK_IMPL( nullptr );
 
     return m_impl->GetStream();
 }
@@ -884,13 +880,11 @@ wxString wxWebResponse::GetDataFile() const
 // wxWebSessionImpl
 //
 
-WX_DECLARE_STRING_HASH_MAP(wxWebSessionFactory*, wxStringWebSessionFactoryMap);
-
 namespace
 {
 
 wxWebSession gs_defaultSession;
-wxStringWebSessionFactoryMap gs_factoryMap;
+std::unordered_map<wxString, std::unique_ptr<wxWebSessionFactory>> gs_factoryMap;
 
 } // anonymous namespace
 
@@ -968,7 +962,7 @@ wxWebSession wxWebSession::New(const wxString& backendOrig)
         }
     }
 
-    wxStringWebSessionFactoryMap::iterator factory = gs_factoryMap.find(backend);
+    const auto factory = gs_factoryMap.find(backend);
 
     wxWebSessionImplPtr impl;
     if ( factory != gs_factoryMap.end() )
@@ -982,18 +976,13 @@ void
 wxWebSession::RegisterFactory(const wxString& backend,
                               wxWebSessionFactory* factory)
 {
-    if ( !factory->Initialize() )
-    {
-        delete factory;
-        factory = NULL;
-        return;
-    }
+    // Ensure that the pointer is always freed.
+    std::unique_ptr<wxWebSessionFactory> ptr{factory};
 
-    // Note that we don't have to check here that there is no registered
-    // backend with the same name yet because we're only called from
-    // InitFactoryMap() below. If this function becomes public, we'd need to
-    // free the previous pointer stored for this backend first here.
-    gs_factoryMap[backend] = factory;
+    if ( !factory->Initialize() )
+        return;
+
+    gs_factoryMap[backend] = std::move(ptr);
 }
 
 // static
@@ -1016,7 +1005,7 @@ bool wxWebSession::IsBackendAvailable(const wxString& backend)
     if ( gs_factoryMap.empty() )
         InitFactoryMap();
 
-    wxStringWebSessionFactoryMap::iterator factory = gs_factoryMap.find(backend);
+    const auto factory = gs_factoryMap.find(backend);
     return factory != gs_factoryMap.end();
 }
 
@@ -1058,17 +1047,17 @@ wxString wxWebSession::GetTempDir() const
 
 bool wxWebSession::IsOpened() const
 {
-    return m_impl.get() != NULL;
+    return m_impl.get() != nullptr;
 }
 
 void wxWebSession::Close()
 {
-    m_impl.reset(NULL);
+    m_impl.reset(nullptr);
 }
 
 wxWebSessionHandle wxWebSession::GetNativeHandle() const
 {
-    return m_impl ? m_impl->GetNativeHandle() : NULL;
+    return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -1082,20 +1071,13 @@ public:
     {
     }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
-        for ( wxStringWebSessionFactoryMap::iterator it = gs_factoryMap.begin();
-              it != gs_factoryMap.end();
-              ++it )
-        {
-            delete it->second;
-        }
-
         gs_factoryMap.clear();
         gs_defaultSession.Close();
     }

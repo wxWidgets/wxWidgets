@@ -2,7 +2,6 @@
 // Name:        src/common/clntdata.cpp
 // Purpose:     A mixin class for holding a wxClientData or void pointer
 // Author:      Robin Dunn
-// Modified by:
 // Created:     9-Oct-2001
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -21,7 +20,7 @@
 wxClientDataContainer::wxClientDataContainer()
 {
     // no client data (yet)
-    m_clientData = NULL;
+    m_clientData = nullptr;
     m_clientDataType = wxClientData_None;
 }
 
@@ -45,7 +44,7 @@ void wxClientDataContainer::DoSetClientObject( wxClientData *data )
 wxClientData *wxClientDataContainer::DoGetClientObject() const
 {
     // it's not an error to call GetClientObject() on a window which doesn't
-    // have client data at all - NULL will be returned
+    // have client data at all - nullptr will be returned
     wxASSERT_MSG( m_clientDataType != wxClientData_Void,
                   wxT("this window doesn't have object client data") );
 
@@ -64,13 +63,42 @@ void wxClientDataContainer::DoSetClientData( void *data )
 void *wxClientDataContainer::DoGetClientData() const
 {
     // it's not an error to call GetClientData() on a window which doesn't have
-    // client data at all - NULL will be returned
+    // client data at all - nullptr will be returned
     wxASSERT_MSG( m_clientDataType != wxClientData_Object,
                   wxT("this window doesn't have void client data") );
 
     return m_clientData;
 }
 
+
+void wxSharedClientDataContainer::SetClientObject(wxClientData *data)
+{
+    GetValidClientData()->SetClientObject(data);
+}
+
+wxClientData *wxSharedClientDataContainer::GetClientObject() const
+{
+    return HasClientDataContainer() ? m_data->GetClientObject() : nullptr;
+}
+
+void wxSharedClientDataContainer::SetClientData(void *data)
+{
+    GetValidClientData()->SetClientData(data);
+}
+
+void *wxSharedClientDataContainer::GetClientData() const
+{
+    return HasClientDataContainer() ? m_data->GetClientData() : nullptr;
+}
+
+wxClientDataContainer *wxSharedClientDataContainer::GetValidClientData()
+{
+    if ( !HasClientDataContainer() )
+    {
+        m_data = new wxRefCountedClientDataContainer;
+    }
+    return m_data.get();
+}
 
 // ----------------------------------------------------------------------------
 

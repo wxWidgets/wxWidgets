@@ -2,7 +2,6 @@
 // Name:        wx/msw/statbmp.h
 // Purpose:     wxStaticBitmap class for wxMSW
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -77,18 +76,18 @@ public:
 
     virtual ~wxStaticBitmap() { Free(); }
 
-    virtual void SetIcon(const wxIcon& icon) wxOVERRIDE;
-    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
-    virtual wxBitmap GetBitmap() const wxOVERRIDE;
-    virtual wxIcon GetIcon() const wxOVERRIDE;
+    virtual void SetIcon(const wxIcon& icon) override;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) override;
+    virtual wxBitmap GetBitmap() const override;
+    virtual wxIcon GetIcon() const override;
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
 
 protected:
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
 private:
     // ctor/dtor helpers

@@ -15,6 +15,7 @@
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
     #include <QtCore/QDate>
+    #include <QtCore/QTime>
 #endif // wxUSE_DATETIME
 
 #include "wx/qt/private/converter.h"
@@ -38,6 +39,22 @@ QDate wxQtConvertDate(const wxDateTime& date)
         return QDate(date.GetYear(), date.GetMonth() + 1, date.GetDay());
     else
         return QDate();
+}
+
+wxDateTime wxQtConvertTime(const QTime& time)
+{
+    if ( !time.isNull() )
+        return wxDateTime(time.hour(), time.minute(), time.second(), time.msec());
+    else
+        return wxDateTime();
+}
+
+QTime wxQtConvertTime(const wxDateTime& time)
+{
+    if ( time.IsValid() )
+        return QTime(time.GetHour(), time.GetMinute(), time.GetSecond(), time.GetMillisecond());
+    else
+        return QTime();
 }
 
 #endif // wxUSE_DATETIME
@@ -179,6 +196,8 @@ wxKeyCode wxQtConvertKeyCode( int key, Qt::KeyboardModifiers modifiers )
             return WXK_EXECUTE;
         case Qt::Key_Insert:
             return WXK_INSERT;
+        case Qt::Key_Delete:
+            return WXK_DELETE;
         case Qt::Key_Help:
             return WXK_HELP;
         case Qt::Key_NumLock:
@@ -292,8 +311,8 @@ int wxQtConvertKeyCode( int key, int WXUNUSED(modifiers), Qt::KeyboardModifiers 
             return Qt::Key_Escape;
         case WXK_CANCEL:
             return Qt::Key_Cancel;
-        case Qt::Key_Clear:
-            return WXK_CLEAR;
+        case WXK_CLEAR:
+            return Qt::Key_Clear;
         case WXK_SHIFT:
             return Qt::Key_Shift;
         case WXK_ALT:
@@ -318,6 +337,8 @@ int wxQtConvertKeyCode( int key, int WXUNUSED(modifiers), Qt::KeyboardModifiers 
             return Qt::Key_Execute;
         case WXK_INSERT:
             return Qt::Key_Insert;
+        case WXK_DELETE:
+            return Qt::Key_Delete;
         case WXK_HELP:
             return Qt::Key_Help;
         case WXK_NUMLOCK:

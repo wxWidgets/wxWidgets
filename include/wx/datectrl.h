@@ -2,7 +2,6 @@
 // Name:        wx/datectrl.h
 // Purpose:     implements wxDatePickerCtrl
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-09
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -28,7 +27,7 @@ enum
     // a spin control-like date picker (not supported in generic version)
     wxDP_SPIN = 1,
 
-    // a combobox-like date picker (not supported in mac version)
+    // a combobox-like date picker (not supported on macOS <10.15.4)
     wxDP_DROPDOWN = 2,
 
     // always show century in the default date display (otherwise it depends on
@@ -90,13 +89,17 @@ typedef wxDatePickerCtrlCommonBase<wxDateTimePickerCtrl> wxDatePickerCtrlBase;
     #include "wx/osx/datectrl.h"
 
     #define wxHAS_NATIVE_DATEPICKCTRL
+#elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)
+    #include "wx/qt/datectrl.h"
+
+    #define wxHAS_NATIVE_DATEPICKCTRL
 #else
     #include "wx/generic/datectrl.h"
 
     class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlGeneric
     {
     public:
-        wxDatePickerCtrl() { }
+        wxDatePickerCtrl() = default;
         wxDatePickerCtrl(wxWindow *parent,
                          wxWindowID id,
                          const wxDateTime& date = wxDefaultDateTime,

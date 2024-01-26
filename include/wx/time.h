@@ -48,7 +48,7 @@ wxLongLong WXDLLIMPEXP_BASE wxGetUTCTimeUSec();
     #ifdef WX_GETTIMEOFDAY_NO_TZ
         #define wxGetTimeOfDay(tv)      gettimeofday(tv)
     #else
-        #define wxGetTimeOfDay(tv)      gettimeofday((tv), NULL)
+        #define wxGetTimeOfDay(tv)      gettimeofday((tv), nullptr)
     #endif
 #endif // HAVE_GETTIMEOFDAY
 

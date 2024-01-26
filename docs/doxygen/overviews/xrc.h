@@ -57,6 +57,8 @@ specialised tool. Examples of these include:
     can output C++, XRC or python.
 @li wxCrafter (free version) <http://www.codelite.org/wxcrafter/>, a C++-based
     form designer that can output C++ or XRC.
+@li wxUiEditor <https://github.com/KeyWorksRW/wxUiEditor>, a C++-based
+    form designer that can output C++ or XRC.
 
 There's a more complete list at <https://wiki.wxwidgets.org/Tools>
 
@@ -140,7 +142,7 @@ This is how you would use the above simple dialog in your code.
 void MyClass::ShowDialog()
 {
     wxDialog dlg;
-    if (wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+    if (wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "SimpleDialog"))
         dlg.ShowModal();
 }
 @endcode
@@ -163,7 +165,7 @@ the XRCCTRL macro to get a pointer to the child. To expand the previous code:
 void MyClass::ShowDialog()
 {
     wxDialog dlg;
-    if (!wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+    if (!wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "SimpleDialog"))
         return;
 
     wxTextCtrl* pText = XRCCTRL(dlg, "text", wxTextCtrl);
@@ -193,7 +195,7 @@ control to the XRCID macro:
 void MyClass::ShowDialog()
 {
     wxDialog dlg;
-    if (!wxXmlResource::Get()->LoadDialog(&dlg, NULL, "SimpleDialog"))
+    if (!wxXmlResource::Get()->LoadDialog(&dlg, nullptr, "SimpleDialog"))
         return;
 
     XRCCTRL(dlg, "text", wxTextCtrl)->Bind(wxEVT_TEXT,
@@ -365,7 +367,7 @@ protected:
 private:
     void InitWidgetsFromXRC()
     {
-        wxXmlResource::Get()->LoadObject(this, NULL, "TestWnd", "wxFrame");
+        wxXmlResource::Get()->LoadObject(this, nullptr, "TestWnd", "wxFrame");
         A = XRCCTRL(*this, "A", wxTextCtrl);
         B = XRCCTRL(*this, "B", wxButton);
     }
@@ -491,7 +493,7 @@ wxObject *MyControlXmlHandler::DoCreateResource()
     //                        const wxString &theTitle, const wxFont &titleFont,
     //                        const wxPoint &pos, const wxSize &size,
     //                        long style = MYCONTROL_DEFAULT_STYLE,
-    //                        const wxString &name = wxT("MyControl"));
+    //                        const wxString &name = "MyControl");
     //
     // Then the XRC for your component should look like:
     //
@@ -510,12 +512,12 @@ wxObject *MyControlXmlHandler::DoCreateResource()
     //
     // And the code to read your custom tags from the XRC file is just:
     control->Create(m_parentAsWindow, GetID(),
-                    GetBitmap(wxT("first-bitmap")),
-                    GetPosition(wxT("first-pos")),
-                    GetBitmap(wxT("second-bitmap")),
-                    GetPosition(wxT("second-pos")),
-                    GetText(wxT("the-title")),
-                    GetFont(wxT("title-font")),
+                    GetBitmap("first-bitmap"),
+                    GetPosition("first-pos"),
+                    GetBitmap("second-bitmap"),
+                    GetPosition("second-pos"),
+                    GetText("the-title"),
+                    GetFont("title-font"),
                     GetPosition(), GetSize(), GetStyle(), GetName());
 
     SetupWindow(control);
@@ -527,7 +529,7 @@ bool MyControlXmlHandler::CanHandle(wxXmlNode *node)
 {
     // this function tells XRC system that this handler can parse
     // the <object class="MyControl"> tags
-    return IsOfClass(node, wxT("MyControl"));
+    return IsOfClass(node, "MyControl");
 }
 @endcode
 

@@ -2,7 +2,6 @@
 // Name:        src/generic/fdrepdlg.cpp
 // Purpose:     Find/Replace dialogs
 // Author:      Markus Greither and Vadim Zeitlin
-// Modified by:
 // Created:     05/25/01
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -67,15 +66,15 @@ wxEND_EVENT_TABLE()
 
 void wxGenericFindReplaceDialog::Init()
 {
-    m_FindReplaceData = NULL;
+    m_FindReplaceData = nullptr;
 
     m_chkWord =
-    m_chkCase = NULL;
+    m_chkCase = nullptr;
 
-    m_radioDir = NULL;
+    m_radioDir = nullptr;
 
     m_textFind =
-    m_textRepl = NULL;
+    m_textRepl = nullptr;
 }
 
 bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
@@ -204,11 +203,9 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
     if ( style & wxFR_NOUPDOWN)
         m_radioDir->Enable(false);
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
 
     Centre( wxBOTH );
 

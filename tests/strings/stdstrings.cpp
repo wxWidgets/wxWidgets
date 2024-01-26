@@ -43,15 +43,24 @@ TEST_CASE("StdString::Constructors", "[stdstring]")
 
     const wchar_t *pw = s2.c_str();
     CHECK( wxString(pw, pw + 1) == "a" );
+
+    wxString s9(std::move(s1));
+    CHECK( s9 == wxT("abcdefgh"));
+    wxString s10(std::move(s3), 8);
+    CHECK( s10 == wxT("abcdefgh"));
 }
 
 TEST_CASE("StdString::Iterators", "[stdstring]")
 {
     // test compilation of default iterators ctors:
     wxString::iterator i1;
+    wxUnusedVar(i1);
     wxString::const_iterator i2;
+    wxUnusedVar(i2);
     wxString::reverse_iterator i3;
+    wxUnusedVar(i3);
     wxString::const_reverse_iterator i4;
+    wxUnusedVar(i4);
 }
 
 TEST_CASE("StdString::IteratorsCmp", "[stdstring]")
@@ -118,9 +127,9 @@ TEST_CASE("StdString::Append", "[stdstring]")
 
 TEST_CASE("StdString::Assign", "[stdstring]")
 {
-    wxString s1, s2, s3, s4, s5, s6, s7, s8;
+    wxString s1, s2, s3, s4, s5, s6, s7, s8, s9;
 
-    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = wxT("abc");
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = s9 = wxT("abc");
     s1.assign(wxT("def"));
     s2.assign(wxT("defgh"), 3);
     s3.assign(wxString(wxT("abcdef")), 3, 6);
@@ -145,6 +154,76 @@ TEST_CASE("StdString::Assign", "[stdstring]")
 
     s1.assign(s1, 1, 1);
     CHECK( s1 == "e" );
+
+    s9.assign(std::move(s2));
+    CHECK(s9 == wxT("def"));
+    s2 = wxT("qwerty");
+    CHECK(s2 == wxT("qwerty"));
+
+    // Self-assignment
+    wxString& s9ref = s9;
+    s9ref.assign(s9);
+    CHECK(s9 == wxT("def"));
+    // Self-move may change the value, but shouldn't crash
+    // and reassignment should work
+    s9ref.assign(std::move(s9));
+    s9 = "qwerty";
+    CHECK(s9 == wxT("qwerty"));
+}
+
+TEST_CASE("StdString::AssignOp", "[stdstring]")
+{
+    wxString s1, s2, s3, s4, s5, s6, s7, s8;
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = wxT("abc");
+
+    // operator=
+    s1 = wxT("def");
+    CHECK(s1 == wxT("def"));
+
+    s2 = s1;
+    CHECK(s2 == wxT("def"));
+
+    const char* pc = s1.c_str();
+    s3 = pc;
+    CHECK(s3 == wxT("def"));
+
+    const wchar_t* pw = s1.c_str();
+    s4 = pw;
+    CHECK(s4 == wxT("def"));
+
+    s5 = std::move(s1);
+    CHECK(s5 == wxT("def"));
+    s1 = wxT("qwerty");
+    CHECK(s1 == wxT("qwerty"));
+
+    // swap
+    s6 = wxT("def");
+    std::swap(s6, s7);
+    CHECK(s6 == wxT("abc"));
+    CHECK(s7 == wxT("def"));
+    swap(s6, s7);
+    CHECK(s6 == wxT("def"));
+    CHECK(s7 == wxT("abc"));
+    s6.swap(s7);
+    CHECK(s6 == wxT("abc"));
+    CHECK(s7 == wxT("def"));
+
+    // Self-assignment
+    wxString& s8ref = s8;
+    s8ref = s8;
+    CHECK(s8 == wxT("abc"));
+    // Self-move may change the value, but shouldn't crash
+    // and reassignment should work
+    s8ref = std::move(s8);
+    s8 = "qwerty";
+    CHECK(s8 == wxT("qwerty"));
+    // Self-swap
+    std::swap(s8, s8ref);
+    CHECK(s8 == wxT("qwerty"));
+    swap(s8, s8ref);
+    CHECK(s8 == wxT("qwerty"));
+    s8.swap(s8ref);
+    CHECK(s8 == wxT("qwerty"));
 }
 
 TEST_CASE("StdString::Compare", "[stdstring]")
@@ -470,12 +549,10 @@ TEST_CASE("StdString::Resize", "[stdstring]")
     CHECK( s3 == wxT("abcABCdefDEF  ") );
     CHECK( s4 == wxT("abcABCdefDEFWW") );
 
-#if wxUSE_UNICODE
     wxString s =
         wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8\xd0\xb2\xd0\xb5\xd1\x82");
     s.resize(3);
     CHECK( s == wxString::FromUTF8("\xd0\x9f\xd1\x80\xd0\xb8") );
-#endif // wxUSE_UNICODE
 }
 
 TEST_CASE("StdString::Riter", "[stdstring]")
@@ -522,11 +599,10 @@ TEST_CASE("StdString::Substr", "[stdstring]")
     CHECK( s1.substr( 17, 30 ) == wxT("") );
 }
 
-#if wxUSE_STD_STRING
 TEST_CASE("StdString::Conversion", "[stdstring]")
 {
     std::string strStd("std::string value");
-    wxStdWideString strStdWide(L"std::wstring value");
+    std::wstring strStdWide(L"std::wstring value");
 
     wxString s1(strStd);
     CHECK( s1 == "std::string value" );
@@ -542,44 +618,42 @@ TEST_CASE("StdString::Conversion", "[stdstring]")
 
     wxString s4("hello");
 
-    // notice that implicit wxString -> std::string conversion is only
-    // available in wxUSE_STL case, because it conflicts with conversion to
-    // const char*/wchar_t*
-#if wxUSE_STL && wxUSE_UNSAFE_WXSTRING_CONV
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING && !defined(wxNO_UNSAFE_WXSTRING_CONV)
     std::string s5 = s4;
 #else
     std::string s5 = s4.ToStdString();
 #endif
     CHECK( s5 == "hello" );
 
-#if wxUSE_STL
-    wxStdWideString s6 = s4;
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING
+    std::wstring s6 = s4;
 #else
-    wxStdWideString s6 = s4.ToStdWstring();
+    std::wstring s6 = s4.ToStdWstring();
 #endif
-    CHECK( s6 == "hello" );
+    CHECK( s6 == L"hello" );
 
-#if wxUSE_UNSAFE_WXSTRING_CONV
+    CHECK( s4.wc_string() == L"hello" );
+
+#if wxUSE_STD_STRING_CONV_IN_WXSTRING
+#if !defined(wxNO_UNSAFE_WXSTRING_CONV)
     std::string s7(s4);
     CHECK( s7 == "hello" );
 #endif
 
-    wxStdWideString s8(s4);
-    CHECK( s8 == "hello" );
+    std::wstring s8(s4);
+    CHECK( s8 == L"hello" );
+#endif // wxUSE_STD_STRING_CONV_IN_WXSTRING
 
-#if wxUSE_UNICODE
     std::string s9("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
     wxString s10 = wxString::FromUTF8(s9);
     CHECK( s10.ToStdString(wxConvUTF8) == s9 );
     CHECK( s10.utf8_string() == s9 );
-#endif // wxUSE_UNICODE
 
     std::string s11("xyz\0\xFF", 5); /* an invalid UTF-8 sequence */
     CHECK( "" == wxString::FromUTF8(s11) );
 
     CHECK( wxString("bye").utf8_string() == std::string("bye") );
 }
-#endif // wxUSE_STD_STRING
 
 TEST_CASE("StdString::Algo", "[stdstring]")
 {
@@ -587,3 +661,47 @@ TEST_CASE("StdString::Algo", "[stdstring]")
     std::reverse(s.begin(), s.end());
     CHECK( s == "BA" );
 }
+
+#ifdef wxHAS_STD_STRING_VIEW
+TEST_CASE("StdString::View", "[stdstring]")
+{
+    std::string strStd("std::string value");
+    std::wstring strStdWide(L"std::wstring value");
+
+    std::string_view strStdView(strStd);
+    std::wstring_view strStdWideView(strStdWide);
+
+    wxString s1(strStdView);
+    CHECK( s1 == "std::string value" );
+
+    wxString s2(strStdWideView);
+    CHECK( s2 == "std::wstring value" );
+
+    wxString s3;
+    s3 = strStdView;
+    CHECK( s3 == "std::string value" );
+    s3 = strStdWideView;
+    CHECK( s3 == "std::wstring value" );
+
+    std::string strUTF("\xF0\x9F\x90\xB1\0\xE7\x8C\xAB", 9); /* U+1F431 U+0000 U+732B */
+    std::string_view strViewUTF(strUTF);
+
+    wxString wxstrUTF = wxString::FromUTF8(strViewUTF);
+    CHECK( wxstrUTF.ToStdString(wxConvUTF8) == strUTF );
+    CHECK( wxstrUTF.utf8_string() == strUTF );
+
+    std::string strInvalidUTF("xyz\0\xFF", 5); /* an invalid UTF-8 sequence */
+    std::string_view strViewInvalidUTF(strInvalidUTF);
+
+    CHECK( "" == wxString::FromUTF8(strViewInvalidUTF) );
+
+    /* Ensure we don't clobber comparisons on base types */
+    std::string_view view = "abc";
+    const char *str = "abc";
+    CHECK( view == str );
+
+    std::wstring_view wview = L"abc";
+    const wchar_t *wstr = L"abc";
+    CHECK( wview == wstr );
+}
+#endif // wxHAS_STD_STRING_VIEW

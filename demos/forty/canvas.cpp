@@ -2,7 +2,6 @@
 // Name:        canvas.cpp
 // Purpose:     Forty Thieves patience game
 // Author:      Chris Breeze
-// Modified by:
 // Created:     21/07/97
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:     wxWindows licence
@@ -35,6 +34,15 @@ FortyCanvas::FortyCanvas(wxWindow* parent, const wxPoint& pos, const wxSize& siz
              m_playerDialog(0),
              m_leftBtnDown(false)
 {
+#ifdef __WXMSW__
+    // Unfortunately the redraw logic here is incompatible with double
+    // buffering under MSW, so we have to disable it. The proper solution would
+    // be to rewrite this logic, as this is also required to make it work under
+    // GTK/Wayland and macOS, where the game currently doesn't update its
+    // display at all.
+    MSWDisableComposited();
+#endif
+
     SetScrollbars(0, 0, 0, 0);
 
 #ifdef __WXGTK__

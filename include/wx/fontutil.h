@@ -2,7 +2,6 @@
 // Name:        wx/fontutil.h
 // Purpose:     font-related helper functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.11.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -10,7 +9,7 @@
 
 // General note: this header is private to wxWidgets and is not supposed to be
 // included by user code. The functions declared here are implemented in
-// msw/fontutil.cpp for Windows, unix/fontutil.cpp for GTK/Motif &c.
+// msw/fontutil.cpp for Windows, unix/fontutil.cpp for GTK &c.
 
 #ifndef _WX_FONTUTIL_H_
 #define _WX_FONTUTIL_H_
@@ -37,33 +36,6 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 struct WXDLLIMPEXP_FWD_CORE wxNativeEncodingInfo;
 
-#if defined(_WX_X_FONTLIKE)
-
-// the symbolic names for the XLFD fields (with examples for their value)
-//
-// NB: we suppose that the font always starts with the empty token (font name
-//     registry field) as we never use nor generate it anyhow
-enum wxXLFDField
-{
-    wxXLFD_FOUNDRY,     // adobe
-    wxXLFD_FAMILY,      // courier, times, ...
-    wxXLFD_WEIGHT,      // black, bold, demibold, medium, regular, light
-    wxXLFD_SLANT,       // r/i/o (roman/italique/oblique)
-    wxXLFD_SETWIDTH,    // condensed, expanded, ...
-    wxXLFD_ADDSTYLE,    // whatever - usually nothing
-    wxXLFD_PIXELSIZE,   // size in pixels
-    wxXLFD_POINTSIZE,   // size in points
-    wxXLFD_RESX,        // 72, 75, 100, ...
-    wxXLFD_RESY,
-    wxXLFD_SPACING,     // m/p/c (monospaced/proportional/character cell)
-    wxXLFD_AVGWIDTH,    // average width in 1/10 pixels
-    wxXLFD_REGISTRY,    // iso8859, rawin, koi8, ...
-    wxXLFD_ENCODING,    // 1, r, r, ...
-    wxXLFD_MAX
-};
-
-#endif // _WX_X_FONTLIKE
-
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
@@ -84,40 +56,6 @@ public:
     // separately and handle them ourselves in {To,From}String() methods.
     bool m_underlined;
     bool m_strikethrough;
-#elif defined(_WX_X_FONTLIKE)
-    // the members can't be accessed directly as we only parse the
-    // xFontName on demand
-private:
-    // the components of the XLFD
-    wxString     fontElements[wxXLFD_MAX];
-
-    // the full XLFD
-    wxString     xFontName;
-
-    // true until SetXFontName() is called
-    bool         m_isDefault;
-
-    // return true if we have already initialized fontElements
-    inline bool HasElements() const;
-
-public:
-    // init the elements from an XLFD, return true if ok
-    bool FromXFontName(const wxString& xFontName);
-
-    // return false if we were never initialized with a valid XLFD
-    bool IsDefault() const { return m_isDefault; }
-
-    // return the XLFD (using the fontElements if necessary)
-    wxString GetXFontName() const;
-
-    // get the given XFLD component
-    wxString GetXFontComponent(wxXLFDField field) const;
-
-    // change the font component
-    void SetXFontComponent(wxXLFDField field, const wxString& value);
-
-    // set the XFLD
-    void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
     // Preserve compatibility in the semi-public (i.e. private, but still
     // unfortunately used by some existing code outside of the library) API
@@ -126,7 +64,7 @@ public:
     // fonts inside the library itself.
     wxNativeFontInfo(const LOGFONT& lf_, const wxWindow* win
 #ifndef WXBUILDING
-        = NULL
+        = nullptr
 #endif
     );
 
@@ -171,10 +109,10 @@ public:
     wxString GetPostScriptName() const;
     bool SetPostScriptName(const wxString& postScriptName);
 
-    static CGFloat GetCTWeight( CTFontRef font );
-    static CGFloat GetCTWeight( CTFontDescriptorRef font );
-    static CGFloat GetCTwidth( CTFontDescriptorRef font );
-    static CGFloat GetCTSlant( CTFontDescriptorRef font );
+    static double GetCTWeight( CTFontRef font );
+    static double GetCTWeight( CTFontDescriptorRef font );
+    static double GetCTwidth( CTFontDescriptorRef font );
+    static double GetCTSlant( CTFontDescriptorRef font );
 
     CTFontDescriptorRef GetCTFontDescriptor() const;
     
@@ -182,10 +120,10 @@ public:
 private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values
     // for better roundtrip fidelity
-    CGFloat       m_ctWeight;
-    CGFloat       m_ctWidth;
+    double        m_ctWeight;
+    double        m_ctWidth;
     wxFontStyle   m_style;
-    CGFloat       m_ctSize;
+    double        m_ctSize;
     wxFontFamily  m_family;
 
     wxString      m_familyName;
@@ -329,7 +267,7 @@ public:
     wxString ToString() const;
 
     // we also want to present the native font descriptions to the user in some
-    // human-readable form (it is not platform independent neither, but can
+    // human-readable form (it is not platform independent either, but can
     // hopefully be understood by the user)
     bool FromUserString(const wxString& s);
     wxString ToUserString() const;
@@ -348,13 +286,5 @@ WXDLLIMPEXP_CORE bool wxGetNativeFontEncoding(wxFontEncoding encoding,
 // test for the existence of the font described by this facename/encoding,
 // return true if such font(s) exist, false otherwise
 WXDLLIMPEXP_CORE bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
-
-// ----------------------------------------------------------------------------
-// font-related functions (X and GTK)
-// ----------------------------------------------------------------------------
-
-#ifdef _WX_X_FONTLIKE
-    #include "wx/unix/fontutil.h"
-#endif // X || GDK
 
 #endif // _WX_FONTUTIL_H_

@@ -3,7 +3,6 @@
 // Purpose:     wxCmdLineParser and related classes for parsing the command
 //              line options
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.01.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -93,7 +92,7 @@ struct wxCmdLineEntryDesc
 
 // the list of wxCmdLineEntryDesc objects should be terminated with this one
 #define wxCMD_LINE_DESC_END \
-        { wxCMD_LINE_NONE, NULL, NULL, NULL, wxCMD_LINE_VAL_NONE, 0x0 }
+        { wxCMD_LINE_NONE, nullptr, nullptr, nullptr, wxCMD_LINE_VAL_NONE, 0x0 }
 
 // ----------------------------------------------------------------------------
 // wxCmdLineArg contains the value for one command line argument
@@ -102,7 +101,7 @@ struct wxCmdLineEntryDesc
 class WXDLLIMPEXP_BASE wxCmdLineArg
 {
 public:
-    virtual ~wxCmdLineArg() {}
+    virtual ~wxCmdLineArg() = default;
 
     virtual double GetDoubleVal() const = 0;
     virtual long GetLongVal() const = 0;
@@ -134,14 +133,9 @@ public:
         typedef wxCmdLineArg value_type;
         typedef const wxCmdLineArg* pointer;
         typedef const wxCmdLineArg& reference;
-
-// We avoid dependency on standard library by default but if we do use
-// std::string, then it's ok to use iterator tags as well.
-#if wxUSE_STD_STRING
         typedef std::bidirectional_iterator_tag iterator_category;
-#endif // wx_USE_STD_STRING
 
-        const_iterator() : m_parser(NULL), m_index(0) {}
+        const_iterator() : m_parser(nullptr), m_index(0) {}
         reference operator *() const;
         pointer operator ->() const;
         const_iterator &operator ++ ();
@@ -206,11 +200,9 @@ public:
     // default ctor or ctor giving the cmd line in either Unix or Win form
     wxCmdLineParser() { Init(); }
     wxCmdLineParser(int argc, char **argv) { Init(); SetCmdLine(argc, argv); }
-#if wxUSE_UNICODE
     wxCmdLineParser(int argc, wxChar **argv) { Init(); SetCmdLine(argc, argv); }
     wxCmdLineParser(int argc, const wxCmdLineArgsArray& argv)
         { Init(); SetCmdLine(argc, argv); }
-#endif // wxUSE_UNICODE
     wxCmdLineParser(const wxString& cmdline) { Init(); SetCmdLine(cmdline); }
 
     // the same as above, but also gives the cmd line description - otherwise,
@@ -219,23 +211,19 @@ public:
         { Init(); SetDesc(desc); }
     wxCmdLineParser(const wxCmdLineEntryDesc *desc, int argc, char **argv)
         { Init(); SetCmdLine(argc, argv); SetDesc(desc); }
-#if wxUSE_UNICODE
     wxCmdLineParser(const wxCmdLineEntryDesc *desc, int argc, wxChar **argv)
         { Init(); SetCmdLine(argc, argv); SetDesc(desc); }
     wxCmdLineParser(const wxCmdLineEntryDesc *desc,
                     int argc,
                     const wxCmdLineArgsArray& argv)
         { Init(); SetCmdLine(argc, argv); SetDesc(desc); }
-#endif // wxUSE_UNICODE
     wxCmdLineParser(const wxCmdLineEntryDesc *desc, const wxString& cmdline)
         { Init(); SetCmdLine(cmdline); SetDesc(desc); }
 
     // set cmd line to parse after using one of the ctors which don't do it
     void SetCmdLine(int argc, char **argv);
-#if wxUSE_UNICODE
     void SetCmdLine(int argc, wxChar **argv);
     void SetCmdLine(int argc, const wxCmdLineArgsArray& argv);
-#endif // wxUSE_UNICODE
     void SetCmdLine(const wxString& cmdline);
 
     // not virtual, don't use this class polymorphically

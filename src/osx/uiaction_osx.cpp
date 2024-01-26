@@ -2,7 +2,6 @@
 // Name:        src/osx/uiaction_osx.cpp
 // Purpose:     wxUIActionSimulatorOSXImpl implementation
 // Author:      Kevin Ollivier, Steven Lamerton, Vadim Zeitlin
-// Modified by:
 // Created:     2010-03-06
 // Copyright:   (c) Kevin Ollivier
 //              (c) 2010 Steven Lamerton
@@ -121,19 +120,27 @@ public:
         return &s_impl;
     }
 
-    virtual bool MouseMove(long x, long y) wxOVERRIDE;
-    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
-    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseMove(long x, long y) override;
+    virtual bool MouseDown(int button = wxMOUSE_BTN_LEFT) override;
+    virtual bool MouseUp(int button = wxMOUSE_BTN_LEFT) override;
 
-    virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+    virtual bool MouseDblClick(int button = wxMOUSE_BTN_LEFT) override;
     virtual bool MouseDragDrop(long x1, long y1, long x2, long y2,
-                               int button = wxMOUSE_BTN_LEFT) wxOVERRIDE;
+                               int button = wxMOUSE_BTN_LEFT) override;
 
-    virtual bool DoKey(int keycode, int modifiers, bool isDown) wxOVERRIDE;
+    virtual bool DoKey(int keycode, int modifiers, bool isDown) override;
 
 private:
     // This class has no public ctors, use Get() instead.
     wxUIActionSimulatorOSXImpl() { }
+
+    const useconds_t delay_ = 10 * 1000;
+
+    // give the system some time to process (it seems to need it)
+    void wait_for_events()
+    {
+       ::usleep(delay_);
+    }
 
     wxDECLARE_NO_COPY_CLASS(wxUIActionSimulatorOSXImpl);
 };
@@ -144,7 +151,7 @@ bool wxUIActionSimulatorOSXImpl::MouseDown(int button)
 {
     CGEventType type = CGEventTypeForMouseButton(button, true);
     wxCFRef<CGEventRef> event(
-            CGEventCreateMouseEvent(NULL, type, GetMousePosition(), CGButtonForMouseButton(button)));
+            CGEventCreateMouseEvent(nullptr, type, GetMousePosition(), CGButtonForMouseButton(button)));
 
     if ( !event )
         return false;
@@ -154,6 +161,8 @@ bool wxUIActionSimulatorOSXImpl::MouseDown(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -166,7 +175,7 @@ bool wxUIActionSimulatorOSXImpl::MouseMove(long x, long y)
 
     CGEventType type = kCGEventMouseMoved;
     wxCFRef<CGEventRef> event(
-            CGEventCreateMouseEvent(NULL, type, pos, kCGMouseButtonLeft));
+            CGEventCreateMouseEvent(nullptr, type, pos, kCGMouseButtonLeft));
 
     if ( !event )
         return false;
@@ -177,6 +186,8 @@ bool wxUIActionSimulatorOSXImpl::MouseMove(long x, long y)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -185,7 +196,7 @@ bool wxUIActionSimulatorOSXImpl::MouseUp(int button)
 {
     CGEventType type = CGEventTypeForMouseButton(button, false);
     wxCFRef<CGEventRef> event(
-            CGEventCreateMouseEvent(NULL, type, GetMousePosition(), CGButtonForMouseButton(button)));
+            CGEventCreateMouseEvent(nullptr, type, GetMousePosition(), CGButtonForMouseButton(button)));
 
     if ( !event )
         return false;
@@ -195,6 +206,8 @@ bool wxUIActionSimulatorOSXImpl::MouseUp(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -204,7 +217,7 @@ bool wxUIActionSimulatorOSXImpl::MouseDblClick(int button)
     CGEventType downtype = CGEventTypeForMouseButton(button, true);
     CGEventType uptype = CGEventTypeForMouseButton(button, false);
     wxCFRef<CGEventRef> event(
-                              CGEventCreateMouseEvent(NULL, downtype, GetMousePosition(), CGButtonForMouseButton(button)));
+                              CGEventCreateMouseEvent(nullptr, downtype, GetMousePosition(), CGButtonForMouseButton(button)));
     
     if ( !event )
         return false;
@@ -224,6 +237,8 @@ bool wxUIActionSimulatorOSXImpl::MouseDblClick(int button)
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
     
     return true;
 }
@@ -242,7 +257,7 @@ bool wxUIActionSimulatorOSXImpl::MouseDragDrop(long x1, long y1, long x2, long y
     CGEventType dragtype = CGEventTypeForMouseDrag(button) ;
 
     wxCFRef<CGEventRef> event(
-                              CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, pos1, CGButtonForMouseButton(button)));
+                              CGEventCreateMouseEvent(nullptr, kCGEventMouseMoved, pos1, CGButtonForMouseButton(button)));
     
     if ( !event )
         return false;
@@ -264,6 +279,9 @@ bool wxUIActionSimulatorOSXImpl::MouseDragDrop(long x1, long y1, long x2, long y
     if (loop)
         loop->SetShouldWaitForEvent(true);
     
+
+    wait_for_events();
+
     return true;
 }
 
@@ -273,7 +291,7 @@ wxUIActionSimulatorOSXImpl::DoKey(int keycode, int WXUNUSED(modifiers), bool isD
     CGKeyCode cgcode = wxCharCodeWXToOSX((wxKeyCode)keycode);
 
     wxCFRef<CGEventRef>
-        event(CGEventCreateKeyboardEvent(NULL, cgcode, isDown));
+        event(CGEventCreateKeyboardEvent(nullptr, cgcode, isDown));
     if ( !event )
         return false;
 
@@ -281,6 +299,8 @@ wxUIActionSimulatorOSXImpl::DoKey(int keycode, int WXUNUSED(modifiers), bool isD
     wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
     if (loop)
         loop->SetShouldWaitForEvent(true);
+
+    wait_for_events();
 
     return true;
 }

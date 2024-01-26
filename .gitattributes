@@ -25,7 +25,6 @@
 *.h.in       eol=lf
 *.m4         eol=lf
 *.sh         eol=lf
-configure.in eol=lf
 Makefile.am  eol=lf
 Makefile.in  eol=lf
 makefile.unx eol=lf
@@ -33,14 +32,18 @@ makefile.unx eol=lf
 config.guess eol=lf
 config.sub   eol=lf
 configure    eol=lf
-configure.in eol=lf
+configure.ac eol=lf
 
 # Ignore changes in the generated files.
 build/upmake    -diff
 
-# Don't include stuff which is only used with Git in the archives.
+# Don't include stuff which is only useful when using Git and CI (which is only
+# used with the actual repository and never the archives).
+.circleci/                      export-ignore
+.cirrus.yml                     export-ignore
 .github/                        export-ignore
 .gitattributes                  export-ignore
 .gitignore                      export-ignore
 .gitmodules                     export-ignore
+.mailmap                        export-ignore
 appveyor.yml                    export-ignore

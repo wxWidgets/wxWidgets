@@ -99,7 +99,7 @@ public:
     */
     static bool IsPlaying();
 
-    //@{
+    ///@{
     /**
         Plays the sound file. If another sound is playing, it will be interrupted.
 
@@ -123,7 +123,7 @@ public:
     bool Play(unsigned flags = wxSOUND_ASYNC) const;
     static bool Play(const wxString& filename,
                      unsigned flags = wxSOUND_ASYNC);
-    //@}
+    ///@}
 
     /**
         If a sound is played, this function stops it.

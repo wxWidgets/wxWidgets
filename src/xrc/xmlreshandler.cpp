@@ -14,6 +14,10 @@
 
 #include "wx/xrc/xmlreshandler.h"
 
+#if wxUSE_ANIMATIONCTRL
+    #include "wx/animate.h"
+#endif
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxXmlResourceHandler, wxObject);
 
 wxXmlResourceHandlerImplBase* wxXmlResourceHandler::GetImpl() const
@@ -46,10 +50,13 @@ void wxXmlResourceHandler::AddWindowStyles()
     XRC_ADD_STYLE(wxNO_BORDER);     XRC_ADD_STYLE(wxBORDER_NONE);
     XRC_ADD_STYLE(wxBORDER_DEFAULT);
 
+    // These styles are still recognized for compatibility but don't do
+    // anything any longer.
     XRC_ADD_STYLE(wxTRANSPARENT_WINDOW);
+    XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
+
     XRC_ADD_STYLE(wxWANTS_CHARS);
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
-    XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
     XRC_ADD_STYLE(wxFULL_REPAINT_ON_RESIZE);
     XRC_ADD_STYLE(wxVSCROLL);
     XRC_ADD_STYLE(wxHSCROLL);
@@ -61,5 +68,25 @@ void wxXmlResourceHandler::AddWindowStyles()
     XRC_ADD_STYLE(wxWS_EX_PROCESS_IDLE);
     XRC_ADD_STYLE(wxWS_EX_PROCESS_UI_UPDATES);
 }
+
+#if wxUSE_ANIMATIONCTRL
+
+wxAnimationBundle
+wxXmlResourceHandler::GetAnimations(const wxString& param,
+                                    wxAnimationCtrlBase* ctrl)
+{
+    return GetImpl()->GetAnimations(param, ctrl);
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+wxAnimation*
+wxXmlResourceHandler::GetAnimation(const wxString& param,
+                                   wxAnimationCtrlBase* ctrl)
+{
+    return GetImpl()->GetAnimation(param, ctrl);
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
+#endif // wxUSE_ANIMATIONCTRL
 
 #endif // wxUSE_XRC

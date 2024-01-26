@@ -2,7 +2,6 @@
 // Name:        src/msw/scrolbar.cpp
 // Purpose:     wxScrollBar
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -235,7 +234,7 @@ WXHBRUSH wxScrollBar::MSWControlColor(WXHDC pDC, WXHWND hWnd)
     // XP) brush instead of GetBackgroundColour() one as the base class would
     //
     // note that fg colour isn't used for a scrollbar
-    return UseBgCol() ? wxControl::MSWControlColor(pDC, hWnd) : NULL;
+    return UseBgCol() ? wxControl::MSWControlColor(pDC, hWnd) : nullptr;
 }
 
 #endif // wxUSE_SCROLLBAR

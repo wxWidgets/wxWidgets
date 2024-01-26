@@ -2,7 +2,6 @@
 // Name:        wx/txtstrm.h
 // Purpose:     Text stream classes
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     28/06/1998
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -36,13 +35,9 @@ WXDLLIMPEXP_BASE wxTextOutputStream &endl( wxTextOutputStream &stream );
 class WXDLLIMPEXP_BASE wxTextInputStream
 {
 public:
-#if wxUSE_UNICODE
     wxTextInputStream(wxInputStream& s,
                       const wxString &sep=wxT(" \t"),
                       const wxMBConv& conv = wxConvAuto());
-#else
-    wxTextInputStream(wxInputStream& s, const wxString &sep=wxT(" \t"));
-#endif
     ~wxTextInputStream();
 
     const wxInputStream& GetInputStream() const { return m_input; }
@@ -67,9 +62,9 @@ public:
     // Operators
     wxTextInputStream& operator>>(wxString& word);
     wxTextInputStream& operator>>(char& c);
-#if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
     wxTextInputStream& operator>>(wchar_t& wc);
-#endif // wxUSE_UNICODE
+#endif
     wxTextInputStream& operator>>(wxInt16& i);
     wxTextInputStream& operator>>(wxInt32& i);
     wxTextInputStream& operator>>(wxInt64& i);
@@ -101,18 +96,16 @@ protected:
     size_t m_validBegin,
            m_validEnd;
 
-#if wxUSE_UNICODE
     wxMBConv *m_conv;
 
     // The second half of a surrogate character when using UTF-16 for wchar_t:
     // we can't return it immediately from GetChar() when we read a Unicode
     // code point outside of the BMP, but we can't keep it in m_lastBytes
-    // neither because it can't separately decoded, so we have a separate 1
+    // either because it can't separately decoded, so we have a separate 1
     // wchar_t buffer just for this case.
 #if SIZEOF_WCHAR_T == 2
     wchar_t m_lastWChar;
 #endif // SIZEOF_WCHAR_T == 2
-#endif // wxUSE_UNICODE
 
     bool   EatEOL(const wxChar &c);
     void   UngetLast(); // should be used instead of wxInputStream::Ungetch() because of Unicode issues
@@ -132,13 +125,9 @@ enum wxEOL
 class WXDLLIMPEXP_BASE wxTextOutputStream
 {
 public:
-#if wxUSE_UNICODE
     wxTextOutputStream(wxOutputStream& s,
                        wxEOL mode = wxEOL_NATIVE,
                        const wxMBConv& conv = wxConvAuto());
-#else
-    wxTextOutputStream(wxOutputStream& s, wxEOL mode = wxEOL_NATIVE);
-#endif
     virtual ~wxTextOutputStream();
 
     const wxOutputStream& GetOutputStream() const { return m_output; }
@@ -168,9 +157,9 @@ public:
 
     wxTextOutputStream& operator<<(const wxString& string);
     wxTextOutputStream& operator<<(char c);
-#if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
     wxTextOutputStream& operator<<(wchar_t wc);
-#endif // wxUSE_UNICODE
+#endif
     wxTextOutputStream& operator<<(wxInt16 c);
     wxTextOutputStream& operator<<(wxInt32 c);
     wxTextOutputStream& operator<<(wxInt64 c);
@@ -186,7 +175,6 @@ protected:
     wxOutputStream &m_output;
     wxEOL           m_mode;
 
-#if wxUSE_UNICODE
     wxMBConv *m_conv;
 
 #if SIZEOF_WCHAR_T == 2
@@ -194,7 +182,6 @@ protected:
     // and couldn't be output when it was called the last time.
     wchar_t m_lastWChar;
 #endif // SIZEOF_WCHAR_T == 2
-#endif // wxUSE_UNICODE
 
     wxDECLARE_NO_COPY_CLASS(wxTextOutputStream);
 };

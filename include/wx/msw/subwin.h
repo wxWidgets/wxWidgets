@@ -2,7 +2,6 @@
 // Name:        wx/msw/subwin.h
 // Purpose:     helper for implementing the controls with subwindows
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-12-11
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -120,7 +119,7 @@ public:
                 wxSetWindowFont(m_hwnds[n], font);
 
                 // otherwise the window might not be redrawn correctly
-                ::InvalidateRect(m_hwnds[n], NULL, FALSE /* don't erase bg */);
+                ::InvalidateRect(m_hwnds[n], nullptr, FALSE /* don't erase bg */);
             }
         }
     }
@@ -132,7 +131,7 @@ public:
         {
             if ( m_hwnds[n] )
             {
-                ::InvalidateRect(m_hwnds[n], NULL, FALSE /* don't erase bg */);
+                ::InvalidateRect(m_hwnds[n], nullptr, FALSE /* don't erase bg */);
             }
         }
     }
@@ -160,8 +159,8 @@ private:
     void Init()
     {
         m_count = 0;
-        m_hwnds = NULL;
-        m_ids = NULL;
+        m_hwnds = nullptr;
+        m_ids = nullptr;
     }
 
     // number of elements in m_hwnds array

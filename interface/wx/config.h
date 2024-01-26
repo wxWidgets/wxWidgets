@@ -6,14 +6,61 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-// Flags for constructor style parameter
+/// Flags for wxConfig constructor style parameter.
 enum
 {
     wxCONFIG_USE_LOCAL_FILE = 1,
     wxCONFIG_USE_GLOBAL_FILE = 2,
     wxCONFIG_USE_RELATIVE_PATH = 4,
     wxCONFIG_USE_NO_ESCAPE_CHARACTERS = 8,
-    wxCONFIG_USE_SUBDIR = 16
+
+    /**
+        Use subdirectory for the local configuration file location.
+
+        Specifying this flag changes the default local configuration file
+        location to `~/.appname/appname.conf`. Please note that this path is
+        _not_ affected by layout set using wxStandardPaths::SetFileLayout() and
+        it is recommended to use wxCONFIG_USE_XDG flag in addition to this file
+        on contemporary Linux systems.
+
+        @since 2.8.2
+     */
+    wxCONFIG_USE_SUBDIR = 16,
+
+    /**
+        Always use XDG-compliant file location on Unix systems.
+
+        If wxCONFIG_USE_SUBDIR is not specified, using this flag has the same
+        effect as calling wxStandardPaths::SetFileLayout() with
+        wxStandardPaths::FileLayout_XDG, i.e. it changes the default local
+        configuration file location to `~/.config/appname.conf`.
+
+        In combination with wxCONFIG_USE_SUBDIR, this flag changes the default
+        configuration file location to ~/.config/appname/appname.conf`.
+
+        If neither this flag nor wxCONFIG_USE_HOME is specified, XDG-compliant
+        configuration file path will be used by default, but if there is an
+        existing file in the home directory, then it will continue to be used
+        instead.
+
+        @since 3.3.0
+     */
+    wxCONFIG_USE_XDG = 32,
+
+    /**
+        Use home directory for the local file location on Unix systems.
+
+        Using this flag is not recommended, it exists only for compatibility
+        with the previous wxWidgets versions which created configuration files
+        in the home directory (i.e. `~/.appname`) by default.
+
+        Note that any already existing files in the home directory will still
+        be used, even if this file is not specified, unless wxCONFIG_USE_XDG is
+        used.
+
+        @since 3.3.0
+     */
+    wxCONFIG_USE_HOME = 64
 };
 
 
@@ -30,7 +77,9 @@ enum
     with the registry under Windows or text-based config files under Unix.
     To make writing the portable code even easier, wxWidgets provides a typedef
     wxConfig which is mapped onto the native wxConfigBase implementation on the
-    given platform: i.e. wxRegConfig under Windows and wxFileConfig otherwise.
+    given platform: i.e. wxRegConfig under Windows (in this case
+    `wxHAS_CONFIG_AS_REGCONFIG` preprocessor symbol is defined) and
+    wxFileConfig otherwise (in this case `wxHAS_CONFIG_AS_FILECONFIG` is).
 
     See @ref overview_config for a description of all features of this class.
 
@@ -296,14 +345,16 @@ public:
             @n For wxFileConfig you can also add @c wxCONFIG_USE_RELATIVE_PATH by
             logically or'ing it to either of the _FILE options to tell
             wxFileConfig to use relative instead of absolute paths.
-            @n On non-VMS Unix systems, the default local configuration file is
-            "~/.appname". However, this path may be also used as user data
+            @n On Unix-like systems, the default local configuration file is
+            `~/.appname` unless wxStandardPaths::SetFileLayout() is called with
+            wxStandardPaths::FileLayout_XDG parameter in which case the default
+            becomes `~/.config/appname.conf`.
+            @n Note that this default path may be also used as user data
             directory (see wxStandardPaths::GetUserDataDir()) if the
-            application has several data files. In this case
-            @c wxCONFIG_USE_SUBDIR flag, which changes the default local
-            configuration file to "~/.appname/appname" should be used. Notice
-            that this flag is ignored if @a localFilename is provided.
-            @c wxCONFIG_USE_SUBDIR is new since wxWidgets version 2.8.2.
+            application has several data files. In this case it is recommended
+            to use ::wxCONFIG_USE_XDG flag (available since wxWidgets 3.3.0)
+            and/or older ::wxCONFIG_USE_SUBDIR (available since 2.8.2) to
+            change the default local configuration file location.
             @n For wxFileConfig, you can also add
             @c wxCONFIG_USE_NO_ESCAPE_CHARACTERS which will turn off character
             escaping for the values of entries stored in the config file: for
@@ -342,7 +393,7 @@ public:
 
         See @ref configbase_paths
     */
-    //@{
+    ///@{
 
     /**
         Retrieve the current path (always as absolute path).
@@ -358,7 +409,7 @@ public:
     */
     virtual void SetPath(const wxString& strPath) = 0;
 
-    //@}
+    ///@}
 
 
     /**
@@ -366,7 +417,7 @@ public:
 
         See @ref configbase_enumeration
     */
-    //@{
+    ///@{
 
     /**
         Gets the first entry.
@@ -421,7 +472,7 @@ public:
     */
     virtual size_t GetNumberOfGroups(bool bRecursive = false) const = 0;
 
-    //@}
+    ///@}
 
 
     enum EntryType
@@ -436,7 +487,7 @@ public:
     /**
         @name Tests of Existence
     */
-    //@{
+    ///@{
 
     /**
         @return @true if either a group or an entry with a given name exists.
@@ -462,13 +513,13 @@ public:
     */
     virtual bool HasGroup(const wxString& strName) const = 0;
 
-    //@}
+    ///@}
 
 
     /**
         @name Miscellaneous Functions
     */
-    //@{
+    ///@{
 
     /**
         Returns the application name.
@@ -480,7 +531,7 @@ public:
     */
     wxString GetVendorName() const;
 
-    //@}
+    ///@}
 
 
     /**
@@ -488,7 +539,7 @@ public:
 
         See @ref configbase_keyaccess
     */
-    //@{
+    ///@{
 
     /**
         Permanently writes all changes (otherwise, they're only written from
@@ -767,7 +818,7 @@ public:
     */
     bool Write(const wxString& key, T const& buf);
 
-    //@}
+    ///@}
 
 
     /**
@@ -779,7 +830,7 @@ public:
         entry/group with the new name already exists or because the function is
         not supported in this wxConfig implementation.
     */
-    //@{
+    ///@{
 
     /**
         Renames an entry in the current group. The entries names (both the old
@@ -803,7 +854,7 @@ public:
     virtual bool RenameGroup(const wxString& oldName,
                              const wxString& newName) = 0;
 
-    //@}
+    ///@}
 
 
     /**
@@ -813,7 +864,7 @@ public:
         file. DeleteAll() is especially useful if you want to erase all traces
         of your program presence: for example, when you uninstall it.
     */
-    //@{
+    ///@{
 
     /**
         Delete the whole underlying object (disk file, registry key, ...).
@@ -836,7 +887,7 @@ public:
     */
     virtual bool DeleteGroup(const wxString& key) = 0;
 
-    //@}
+    ///@}
 
 
     /**
@@ -866,7 +917,7 @@ public:
         SetExpandEnvVars(@true) just after. Another solution would be to prefix
         the offending symbols with a backslash.
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if we are expanding environment variables in key values.
@@ -895,7 +946,7 @@ public:
     */
     void SetRecordDefaults(bool bDoIt = true);
 
-    //@}
+    ///@}
 
 
     /**

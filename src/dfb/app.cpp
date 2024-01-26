@@ -26,6 +26,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 wxApp::wxApp()
 {
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()
@@ -41,7 +42,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     //             is just a temporary fix to make wxDFB compile in Unicode
     //             build, the real fix is to change Initialize()'s signature
     //             to use char* on Unix.
-#if wxUSE_UNICODE
     // DirectFBInit() wants UTF-8, not wchar_t, so convert
     int i;
     char **argvDFB = new char *[argc + 1];
@@ -50,7 +50,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         argvDFB[i] = strdup(wxConvUTF8.cWX2MB(argv[i]));
     }
 
-    argvDFB[argc] = NULL;
+    argvDFB[argc] = nullptr;
 
     int argcDFB = argc;
 
@@ -80,20 +80,9 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     delete [] argvDFB;
 
-#else // ANSI
-
-    if ( !wxDfbCheckReturn(DirectFBInit(&argc, &argv)) )
-        return false;
-
-#endif // Unicode/ANSI
-
     // update internal arg[cv] as DFB may have removed processed options:
     this->argc = argc;
-#if wxUSE_UNICODE
     this->argv.Init(argc, argv);
-#else
-    this->argv = argv;
-#endif
 
     if ( !wxIDirectFB::Get() )
         return false;

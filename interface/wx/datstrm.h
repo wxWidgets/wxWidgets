@@ -41,13 +41,11 @@ public:
         Constructs a datastream object from an output stream.
         Only write methods will be available.
 
-        Note that the @a conv parameter is only available in Unicode builds of wxWidgets.
-
         @param stream
             The output stream.
         @param conv
-            Charset conversion object used to encoding Unicode strings
-            before writing them to the stream in Unicode mode (see
+            Charset conversion object used to encoding strings
+            before writing them to the stream (see
             WriteString() for a detailed description). Note that you must not
             destroy @a conv before you destroy this wxDataOutputStream
             instance! It is recommended to use the default value (UTF-8).
@@ -192,13 +190,9 @@ public:
         Writes @a string to the stream. Actually, this method writes the size
         of the string before writing @a string itself.
 
-        In ANSI build of wxWidgets, the string is written to the stream in
-        exactly same way it is represented in memory. In Unicode build,
-        however, the string is first converted to multibyte representation with
-        @e conv object passed to stream's constructor (consequently, ANSI
-        applications can read data written by Unicode application, as long as
-        they agree on encoding) and this representation is written to the
-        stream. UTF-8 is used by default.
+        The string is converted to multibyte representation with @e conv object
+        passed to stream's constructor and this representation is written to
+        the stream. UTF-8 is used by default.
     */
     void WriteString(const wxString& string);
 };
@@ -250,13 +244,11 @@ public:
         Constructs a datastream object from an input stream.
         Only read methods will be available.
 
-        Note that the @a conv parameter is only available in Unicode builds of wxWidgets.
-
         @param stream
             The input stream.
         @param conv
-            Charset conversion object used to decode strings in Unicode
-            mode (see ReadString() for a detailed description). Note that you
+            Charset conversion object used to decode strings
+            (see ReadString() for a detailed description). Note that you
             must not destroy @a conv before you destroy this wxDataInputStream
             instance!
     */
@@ -366,11 +358,11 @@ public:
         long integer specifying the length of the string (without the last null
         character) and then reads the string.
 
-        In Unicode build of wxWidgets, the function first reads multibyte
-        (char*) string from the stream and then converts it to Unicode using
-        the @e conv object passed to constructor and returns the result as
-        wxString. You are responsible for using the same converter as when
-        writing the stream.
+        The function reads all bytes until the next `NUL` one from the stream
+        and uses the @e conv object passed to constructor to convert them to
+        text, which is then returned as wxString. You are responsible for using
+        the same converter as when writing the stream, as the information about
+        the encoding is not stored in the stream itself.
 
         @see wxDataOutputStream::WriteString()
     */

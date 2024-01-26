@@ -18,7 +18,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/list.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 // --------------------------------------------------------------------------
 // test class
@@ -114,7 +115,8 @@ void ListsTestCase::wxStdListTest()
     wxListInt list1;
     wxListInt::iterator it, en;
     wxListInt::reverse_iterator rit, ren;
-    int i;
+    int buf[4];
+    int& i = buf[0];
     for ( i = 0; i < 5; ++i )
         list1.push_back(i + &i);
 
@@ -198,7 +200,7 @@ void ListsTestCase::wxListCtorTest()
         CPPUNIT_ASSERT( list2.GetCount() == 2 );
         CPPUNIT_ASSERT( Baz::GetNumber() == 2 );
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
         list1.DeleteContents(true);
 #else
         WX_CLEAR_LIST(wxListBazs, list1);
@@ -242,7 +244,7 @@ void ElementsListNode::DeleteData()
 TEST_CASE("wxWindowList::Find", "[list]")
 {
     ListElement* const el = new ListElement(17);
-    wxScopedPtr<ListElementBase> elb(el);
+    std::unique_ptr<ListElementBase> elb(el);
 
     ElementsList l;
     l.Append(el);
@@ -251,8 +253,6 @@ TEST_CASE("wxWindowList::Find", "[list]")
     ElementsList::compatibility_iterator it = l.Find(elb.get());
     CHECK( it == l.GetFirst() );
 }
-
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
 
 #include <list>
 
@@ -274,5 +274,3 @@ TEST_CASE("wxList::iterator", "[list][std][iterator]")
     const wxListBazs cli;
     CHECK( std::list<Baz*>(cli.begin(), cli.end()).empty() );
 }
-
-#endif // wxUSE_STD_CONTAINERS_COMPATIBLY

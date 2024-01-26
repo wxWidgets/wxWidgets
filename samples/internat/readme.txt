@@ -44,7 +44,7 @@ A. First of all, you will need the GNU gettext tools (see the next questions).
 
    # generate the .po file for the program itself
    # see `xgettext --help' for options, "-C" is important!
-   xgettext -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -o internat.po ../internat.cpp
+   xgettext -C -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxTRANSLATE_IN_CONTEXT:1c,2 -kwxGetTranslation -o internat.po ../internat.cpp
 
    # .po file for wxWidgets might be generated in the same way. An already
    # generated wxstd.pot as well as translations for some languages can be
@@ -75,7 +75,7 @@ A. First of all, you will need the GNU gettext tools (see the next question).
    cd <language>
 
    # the -j flag tells xgettext to merge and not simply overwrite the output file
-   xgettext -j -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -o internat.po ../internat.cpp
+   xgettext -j -C -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxTRANSLATE_IN_CONTEXT:1c,2 -kwxGetTranslation -o internat.po ../internat.cpp
 
    # now edit the files and do translate the new strings (this isn't done by gettext)
    vi internat.po

@@ -101,9 +101,9 @@ wxChmTools::wxChmTools(const wxFileName &archive)
 
     wxASSERT_MSG( !m_chmFileName.empty(), wxT("empty archive name") );
 
-    m_archive = NULL;
-    m_decompressor = NULL;
-    m_fileNames = NULL;
+    m_archive = nullptr;
+    m_decompressor = nullptr;
+    m_fileNames = nullptr;
     m_lasterror = 0;
 
     struct mschmd_header *chmh;
@@ -111,7 +111,7 @@ wxChmTools::wxChmTools(const wxFileName &archive)
     struct mschmd_file *file;
 
     // Create decompressor
-    chmd =  mspack_create_chm_decompressor(NULL);
+    chmd =  mspack_create_chm_decompressor(nullptr);
     m_decompressor = (struct mschm_decompressor *) chmd;
 
     // NB: we must make a copy of the string because chmd->open won't call
@@ -308,7 +308,7 @@ struct mschmd_file *wxChmTools::GetMschmdFile(const wxString& pattern_orig)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 const wxString wxChmTools::GetLastErrorMessage()
@@ -363,19 +363,19 @@ public:
     virtual ~wxChmInputStream();
 
     /// Return the size of the accessed file in archive
-    virtual size_t GetSize() const wxOVERRIDE { return m_size; }
+    virtual size_t GetSize() const override { return m_size; }
     /// End of Stream?
-    virtual bool Eof() const wxOVERRIDE;
+    virtual bool Eof() const override;
     /// Set simulation-mode of HHP-File (if non is found)
     void SimulateHHP(bool sim) { m_simulateHHP = sim; }
 
 protected:
     /// See wxInputStream
-    virtual size_t OnSysRead(void *buffer, size_t bufsize) wxOVERRIDE;
+    virtual size_t OnSysRead(void *buffer, size_t bufsize) override;
     /// See wxInputStream
-    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) wxOVERRIDE;
+    virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode) override;
     /// See wxInputStream
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE { return m_pos; }
+    virtual wxFileOffset OnSysTell() const override { return m_pos; }
 
 private:
     size_t m_size;
@@ -414,11 +414,11 @@ wxChmInputStream::wxChmInputStream(const wxString& archive,
 {
     m_pos = 0;
     m_size = 0;
-    m_content = NULL;
-    m_contentStream = NULL;
+    m_content = nullptr;
+    m_contentStream = nullptr;
     m_lasterror = wxSTREAM_NO_ERROR;
     m_chm = new wxChmTools (wxFileName(archive));
-    m_file = NULL;
+    m_file = nullptr;
     m_fileName = wxString(filename).MakeLower();
     m_simulateHHP = simulate;
 
@@ -455,14 +455,14 @@ wxChmInputStream::~wxChmInputStream()
     if (m_content)
     {
         free (m_content);
-        m_content=NULL;
+        m_content=nullptr;
     }
 }
 
 bool wxChmInputStream::Eof() const
 {
-    return (m_content==NULL ||
-            m_contentStream==NULL ||
+    return (m_content==nullptr ||
+            m_contentStream==nullptr ||
             m_contentStream->Eof() ||
             (size_t)m_pos>m_size);
 }
@@ -632,10 +632,10 @@ wxChmInputStream::CreateHHPStream()
                 case 7: // COMPILED_FILE
                     tmp = "Binary Index=YES\r\n";
                     out->Write( (const void *) tmp, strlen(tmp));
-                    tmp = NULL;
+                    tmp = nullptr;
                     break;
                 case 4: // STRUCT SYSTEM INFO
-                    tmp = NULL ;
+                    tmp = nullptr ;
                     if ( len >= 28 )
                     {
                         char *structptr = (char*) buf ;
@@ -649,7 +649,7 @@ wxChmInputStream::CreateHHPStream()
                     }
                     break ;
                 default:
-                    tmp=NULL;
+                    tmp=nullptr;
             }
 
             if (tmp)
@@ -660,7 +660,7 @@ wxChmInputStream::CreateHHPStream()
             }
 
             free(buf);
-            buf=NULL;
+            buf=nullptr;
         }
 
 
@@ -754,16 +754,16 @@ class wxChmFSHandler : public wxFileSystemHandler
 public:
     /// Constructor and Destructor
     wxChmFSHandler();
-    virtual ~wxChmFSHandler() wxOVERRIDE;
+    virtual ~wxChmFSHandler() override;
 
     /// Is able to open location?
-    virtual bool CanOpen(const wxString& location) wxOVERRIDE;
+    virtual bool CanOpen(const wxString& location) override;
     /// Open a file
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) wxOVERRIDE;
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) override;
     /// Find first occurrence of spec
-    virtual wxString FindFirst(const wxString& spec, int flags = 0) wxOVERRIDE;
+    virtual wxString FindFirst(const wxString& spec, int flags = 0) override;
     /// Find next occurrence of spec
-    virtual wxString FindNext() wxOVERRIDE;
+    virtual wxString FindNext() override;
 
 private:
     int m_lasterror;
@@ -775,7 +775,7 @@ private:
 wxChmFSHandler::wxChmFSHandler() : wxFileSystemHandler()
 {
     m_lasterror=0;
-    m_chm=NULL;
+    m_chm=nullptr;
 }
 
 wxChmFSHandler::~wxChmFSHandler()
@@ -804,7 +804,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     if ( GetProtocol(left) != wxT("file") )
     {
         wxLogError(_("CHM handler currently supports only local files!"));
-        return NULL;
+        return nullptr;
     }
 
     // Work around javascript
@@ -829,7 +829,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 
     wxFileName leftFilename = wxFileSystem::URLToFileName(left);
     if (!leftFilename.FileExists())
-        return NULL;
+        return nullptr;
 
     // Open a stream to read the content of the chm-file
     s = new wxChmInputStream(leftFilename.GetFullPath(), right, true);
@@ -844,7 +844,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     }
 
     delete s;
-    return NULL;
+    return nullptr;
 }
 
 
@@ -901,12 +901,12 @@ class wxChmSupportModule : public wxModule
     wxDECLARE_DYNAMIC_CLASS(wxChmSupportModule);
 
 public:
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         wxFileSystem::AddHandler(new wxChmFSHandler);
         return true;
     }
-    virtual void OnExit() wxOVERRIDE {}
+    virtual void OnExit() override {}
 }
 ;
 

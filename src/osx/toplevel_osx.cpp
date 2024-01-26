@@ -2,7 +2,6 @@
 // Name:        src/osx/toplevel_osx.cpp
 // Purpose:     implements wxTopLevelWindow for Mac
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     24.09.01
 // Copyright:   (c) 2001-2004 Stefan Csomor
 // Licence:     wxWindows licence
@@ -73,7 +72,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
         return false;
 
     wxWindow::SetLabel( title ) ;
-    m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
+    m_nowpeer->SetTitle(title);
     wxTopLevelWindows.Append(this);
 
     return true;
@@ -118,7 +117,7 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return false;
 
     return m_nowpeer->IsMaximized();
@@ -132,7 +131,7 @@ void wxTopLevelWindowMac::Iconize(bool iconize)
 
 bool wxTopLevelWindowMac::IsIconized() const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return false;
 
     return m_nowpeer->IsIconized();
@@ -160,7 +159,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
     m_label = title ;
 
     if ( m_nowpeer )
-        m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
+        m_nowpeer->SetTitle(title);
 }
 
 wxString wxTopLevelWindowMac::GetTitle() const
@@ -181,9 +180,9 @@ void wxTopLevelWindowMac::ShowWithoutActivating()
     SendSizeEvent();
 }
 
-bool wxTopLevelWindowMac::EnableFullScreenView(bool enable)
+bool wxTopLevelWindowMac::EnableFullScreenView(bool enable, long style)
 {
-    return m_nowpeer->EnableFullScreenView(enable);
+    return m_nowpeer->EnableFullScreenView(enable, style);
 }
 
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)

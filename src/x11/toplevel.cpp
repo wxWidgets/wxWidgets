@@ -2,7 +2,6 @@
 // Name:        src/x11/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for X11
 // Author:      Julian Smart
-// Modified by:
 // Created:     24.09.01
 // Copyright:   (c) 2002 Julian Smart
 // Licence:     wxWindows licence
@@ -243,7 +242,7 @@ wxTopLevelWindowX11::~wxTopLevelWindowX11()
     // If this is the last top-level window, exit.
     if ( wxTheApp && (wxTopLevelWindows.GetCount() == 0) )
     {
-        wxTheApp->SetTopWindow(NULL);
+        wxTheApp->SetTopWindow(nullptr);
 
         if (wxTheApp->GetExitOnFrameDelete())
         {
@@ -415,18 +414,11 @@ void wxTopLevelWindowX11::SetTitle(const wxString& title)
 
     if (X11GetMainWindow())
     {
-#if wxUSE_UNICODE
         //  I wonder of e.g. Metacity takes UTF-8 here
         XStoreName(wxGlobalDisplay(), (Window) X11GetMainWindow(),
             (const char*) title.ToAscii() );
         XSetIconName(wxGlobalDisplay(), (Window) X11GetMainWindow(),
             (const char*) title.ToAscii() );
-#else
-        XStoreName(wxGlobalDisplay(), (Window) X11GetMainWindow(),
-            (const char*) title);
-        XSetIconName(wxGlobalDisplay(), (Window) X11GetMainWindow(),
-            (const char*) title);
-#endif
     }
 }
 

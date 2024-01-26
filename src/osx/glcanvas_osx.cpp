@@ -2,7 +2,6 @@
 // Name:        src/osx/glcanvas_osx.cpp
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under Macintosh
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -350,21 +349,6 @@ wxGLAttributes& wxGLAttributes::PlatformDefaults()
     return *this;
 }
 
-wxGLAttributes& wxGLAttributes::Defaults()
-{
-    RGBA().Depth(16).DoubleBuffer().SampleBuffers(1).Samplers(4);
-    return *this;
-}
-
-void wxGLAttributes::AddDefaultsForWXBefore31()
-{
-    // ParseAttribList() will add EndList(), don't do it now
-    DoubleBuffer();
-    // Negative value will keep its buffer untouched
-    BufferSize(8).Depth(8).MinRGBA(-1, -1, -1, 0);
-}
-
-
 // ----------------------------------------------------------------------------
 // wxGLContext
 // ----------------------------------------------------------------------------
@@ -372,9 +356,9 @@ void wxGLAttributes::AddDefaultsForWXBefore31()
 wxGLContext::wxGLContext(wxGLCanvas *win,
                          const wxGLContext *other,
                          const wxGLContextAttrs *ctxAttrs)
-    : m_glContext(NULL)
+    : m_glContext(nullptr)
 {
-    const int* contextAttribs = NULL;
+    const int* contextAttribs = nullptr;
     int ctxSize = 0;
 
     if ( ctxAttrs )
@@ -399,7 +383,7 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     if ( pf )
     {
-        m_glContext = WXGLCreateContext(pf, other ? other->m_glContext : NULL);
+        m_glContext = WXGLCreateContext(pf, other ? other->m_glContext : nullptr);
         if ( m_glContext )
         {
             m_isOk = true;
@@ -424,9 +408,6 @@ wxGLContext::~wxGLContext()
 // ----------------------------------------------------------------------------
 
 wxIMPLEMENT_CLASS(wxGLCanvas, wxWindow);
-
-wxBEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
-wxEND_EVENT_TABLE()
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxGLAttributes& dispAttrs,
@@ -463,7 +444,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 {
     // Separate 'pixel format' attributes.
     // Also store context attributes for wxGLContext ctor
-    // If 'attribList' is NULL, ParseAttribList() will set defaults.
+    // If 'attribList' is null, ParseAttribList() will set defaults.
     wxGLAttributes dispAttrs;
     if ( ! ParseAttribList(attribList, dispAttrs, &m_GLCTXAttrs) )
         return false;
@@ -480,7 +461,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const wxString& name,
                         const wxPalette& WXUNUSED(palette))
 {
-    m_glFormat = NULL;
     // Don't allow an empty list
     if ( !dispAttrs.GetGLAttrs() )
     {
@@ -503,51 +483,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     
     return true;
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLContext *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-                       const wxGLCanvas *shared,
-                       wxWindowID id,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxString& name,
-                       const int *attribList,
-                       const wxPalette& palette)
-{
-    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
-        m_glContext = new wxGLContext(this, shared ? shared->m_glContext : NULL);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
 
 /* static */
 bool wxGLCanvas::IsAGLMultiSampleAvailable()
@@ -587,9 +522,9 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
 {
     // We need a valid context to query for extensions. Use a default one.
     wxGLAttributes dispAttrs;
-    ParseAttribList(NULL, dispAttrs); // Sets defaults
+    ParseAttribList(nullptr, dispAttrs); // Sets defaults
     WXGLPixelFormat fmt = WXGLChoosePixelFormat(dispAttrs.GetGLAttrs(), dispAttrs.GetSize());
-    WXGLContext ctx = WXGLCreateContext(fmt, NULL);
+    WXGLContext ctx = WXGLCreateContext(fmt, nullptr);
     if ( !ctx )
         return false;
 

@@ -2,7 +2,6 @@
 // Name:        src/msw/ole/uuid.cpp
 // Purpose:     implements Uuid class, see uuid.h for details
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.09.96
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -42,11 +41,7 @@ Uuid::Uuid(const Uuid& uuid)
 
   // force the string to be allocated by RPC
   // (we free it later with RpcStringFree)
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // allocate new buffer
   m_pszCForm = new wxChar[UUID_CSTRLEN];
@@ -61,11 +56,7 @@ Uuid& Uuid::operator=(const Uuid& uuid)
 
   // force the string to be allocated by RPC
   // (we free it later with RpcStringFree)
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // allocate new buffer if not done yet
   if ( !m_pszCForm )
@@ -90,11 +81,7 @@ Uuid::~Uuid()
   // this string must be allocated by RPC!
   // (otherwise you get a debug breakpoint deep inside RPC DLL)
   if ( m_pszUuid )
-#ifdef _UNICODE
     RpcStringFree((unsigned short **)&m_pszUuid);
-#else
-    RpcStringFree(&m_pszUuid);
-#endif
 
   // perhaps we should just use a static buffer and not bother
   // with new and delete?
@@ -108,11 +95,7 @@ void Uuid::Set(const UUID &uuid)
   m_uuid = uuid;
 
   // get string representation
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // cache UUID in C format
   UuidToCForm();
@@ -133,20 +116,12 @@ void Uuid::Create()
 bool Uuid::Set(const wxChar *pc)
 {
   // get UUID from string
-#ifdef _UNICODE
   if ( UuidFromString(reinterpret_cast<unsigned short *>(const_cast<wxChar*>(pc)), &m_uuid) != RPC_S_OK )
-#else
-  if ( UuidFromString((wxUChar *)pc, &m_uuid) != RPC_S_OK)
-#endif
     // failed: probably invalid string
     return false;
 
   // transform it back to string to normalize it
-#ifdef _UNICODE
   UuidToString(&m_uuid, (unsigned short **)&m_pszUuid);
-#else
-  UuidToString(&m_uuid, &m_pszUuid);
-#endif
 
   // update m_pszCForm
   UuidToCForm();
@@ -161,7 +136,7 @@ bool Uuid::Set(const wxChar *pc)
 //  6aadc650-67b0-11d0-bac8-0000c018ba27
 void Uuid::UuidToCForm()
 {
-  if ( m_pszCForm == NULL )
+  if ( m_pszCForm == nullptr )
     m_pszCForm = new wxChar[UUID_CSTRLEN];
 
   wsprintf(m_pszCForm, wxT("0x%8.8X,0x%4.4X,0x%4.4X,0x%2.2X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X,0x2.2%X"),

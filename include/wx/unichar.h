@@ -12,14 +12,9 @@
 
 #include "wx/defs.h"
 #include "wx/chartype.h"
-#include "wx/stringimpl.h"
 
-// We need to get std::swap() declaration in order to specialize it below and
-// it is declared in different headers for C++98 and C++11. Instead of testing
-// which one is being used, just include both of them as it's simpler and less
-// error-prone.
-#include <algorithm>        // std::swap() for C++98
-#include <utility>          // std::swap() for C++11
+#include <string>
+#include <utility>          // std::swap() which we specialize below
 
 class WXDLLIMPEXP_FWD_BASE wxUniCharRef;
 class WXDLLIMPEXP_FWD_BASE wxString;
@@ -69,10 +64,9 @@ public:
 
     // Returns true if the character is representable as a single byte in the
     // current locale encoding and return this byte in output argument c (which
-    // must be non-NULL)
+    // must be non-null)
     bool GetAsChar(char *c) const
     {
-#if wxUSE_UNICODE
         if ( !IsAscii() )
         {
 #if !wxUSE_UTF8_LOCALE_ONLY
@@ -82,7 +76,6 @@ public:
 
             return false;
         }
-#endif // wxUSE_UNICODE
 
         *c = wx_truncate_cast(char, m_value);
         return true;
@@ -169,6 +162,9 @@ public:
 #undef wxDEFINE_UNICHAR_OPERATOR
 #undef wxDEFINE_UNCHAR_CMP_WITH_INT
 
+    wxDEFINE_COMPARISONS_BY_REV(char, const wxUniChar&)
+    wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniChar&)
+
     // this is needed for expressions like 'Z'-c
     int operator-(const wxUniChar& c) const { return m_value - c.m_value; }
     int operator-(char c) const { return m_value - From8bit(c); }
@@ -181,26 +177,18 @@ private:
     // characters purely for performance reasons
     static value_type From8bit(char c)
     {
-#if wxUSE_UNICODE
         if ( (unsigned char)c < 0x80 )
             return c;
 
         return FromHi8bit(c);
-#else
-        return c;
-#endif
     }
 
     static char To8bit(value_type c)
     {
-#if wxUSE_UNICODE
         if ( c < 0x80 )
             return wx_truncate_cast(char, c);
 
         return ToHi8bit(c);
-#else
-        return wx_truncate_cast(char, c);
-#endif
     }
 
     // helpers of the functions above called to deal with non-ASCII chars
@@ -220,7 +208,11 @@ private:
 class WXDLLIMPEXP_BASE wxUniCharRef
 {
 private:
-    typedef wxStringImpl::iterator iterator;
+#if wxUSE_UNICODE_UTF8
+    typedef std::string::iterator iterator;
+#else
+    typedef std::wstring::iterator iterator;
+#endif
 
     // create the reference
 #if wxUSE_UNICODE_UTF8
@@ -301,12 +293,23 @@ public:
 #undef wxDEFINE_UNICHARREF_OPERATOR
 #undef wxDEFINE_UNICHARREF_CMP_WITH_INT
 
+    // Comparison operators for the case when wxUniChar(Ref) is the second
+    // operand implemented in terms of member comparison functions
+    wxDEFINE_COMPARISONS_BY_REV(char, const wxUniCharRef&)
+    wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniCharRef&)
+
+    wxDEFINE_COMPARISONS_BY_REV(const wxUniChar&, const wxUniCharRef&)
+
     // for expressions like c-'A':
     int operator-(const wxUniCharRef& c) const { return UniChar() - c.UniChar(); }
     int operator-(const wxUniChar& c) const { return UniChar() - c; }
     int operator-(char c) const { return UniChar() - c; }
     int operator-(unsigned char c) const { return UniChar() - c; }
     int operator-(wchar_t c) const { return UniChar() - c; }
+    friend int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+    friend int operator-(const wxUniChar& c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+    friend int operator-(wchar_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+
 
 private:
 #if wxUSE_UNICODE_UTF8
@@ -363,8 +366,6 @@ void swap<wxUniCharRef>(wxUniCharRef& lhs, wxUniCharRef& rhs)
 
 } // namespace std
 
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
-
 // For std::iter_swap() to work with wxString::iterator, which uses
 // wxUniCharRef as its reference type, we need to ensure that swap() works with
 // wxUniCharRef objects by defining this overload.
@@ -377,24 +378,5 @@ void swap(wxUniCharRef&& lhs, wxUniCharRef&& rhs)
     lhs = rhs;
     rhs = tmp;
 }
-
-#endif // C++11
-
-
-// Comparison operators for the case when wxUniChar(Ref) is the second operand
-// implemented in terms of member comparison functions
-
-wxDEFINE_COMPARISONS_BY_REV(char, const wxUniChar&)
-wxDEFINE_COMPARISONS_BY_REV(char, const wxUniCharRef&)
-
-wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniChar&)
-wxDEFINE_COMPARISONS_BY_REV(wchar_t, const wxUniCharRef&)
-
-wxDEFINE_COMPARISONS_BY_REV(const wxUniChar&, const wxUniCharRef&)
-
-// for expressions like c-'A':
-inline int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
-inline int operator-(const wxUniChar& c1, const wxUniCharRef& c2) { return -(c2 - c1); }
-inline int operator-(wchar_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
 
 #endif /* _WX_UNICHAR_H_ */

@@ -2,7 +2,6 @@
 // Name:        wx/osx/button.h
 // Purpose:     wxButton class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -18,7 +17,7 @@
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
-    wxButton() {}
+    wxButton() = default;
     wxButton(wxWindow *parent,
              wxWindowID id,
              const wxString& label = wxEmptyString,
@@ -40,13 +39,13 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxButtonNameStr));
 
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
-    virtual wxWindow *SetDefault() wxOVERRIDE;
-    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
+    virtual wxWindow *SetDefault() override;
+    virtual void Command(wxCommandEvent& event) override;
 
     // osx specific event handling common for all osx-ports
 
-    virtual bool OSXHandleClicked(double timestampsec) wxOVERRIDE;
+    virtual bool OSXHandleClicked(double timestampsec) override;
 
 #if wxOSX_USE_COCOA
     void OSXUpdateAfterLabelChange(const wxString& label);

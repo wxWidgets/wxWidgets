@@ -2,7 +2,6 @@
 // Name:        wx/gtk/filectrl.h
 // Purpose:     wxGtkFileCtrl Header
 // Author:      Diaa M. Sami
-// Modified by:
 // Created:     Aug-10-2007
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
@@ -99,22 +98,22 @@ public:
                  const wxSize& size = wxDefaultSize,
                  const wxString& name = wxASCII_STR(wxFileCtrlNameStr) );
 
-    virtual void SetWildcard( const wxString& wildCard ) wxOVERRIDE;
-    virtual void SetFilterIndex( int filterIndex ) wxOVERRIDE;
-    virtual bool SetDirectory( const wxString& dir ) wxOVERRIDE;
-    virtual bool SetFilename( const wxString& name ) wxOVERRIDE;
-    virtual bool SetPath( const wxString& path ) wxOVERRIDE;
+    virtual void SetWildcard( const wxString& wildCard ) override;
+    virtual void SetFilterIndex( int filterIndex ) override;
+    virtual bool SetDirectory( const wxString& dir ) override;
+    virtual bool SetFilename( const wxString& name ) override;
+    virtual bool SetPath( const wxString& path ) override;
 
-    virtual wxString GetFilename() const wxOVERRIDE;
-    virtual wxString GetDirectory() const wxOVERRIDE;
-    virtual wxString GetWildcard() const wxOVERRIDE { return this->m_wildCard; }
-    virtual wxString GetPath() const wxOVERRIDE;
-    virtual void GetPaths( wxArrayString& paths ) const wxOVERRIDE;
-    virtual void GetFilenames( wxArrayString& files ) const wxOVERRIDE;
-    virtual int GetFilterIndex() const wxOVERRIDE { return m_fc.GetFilterIndex(); }
+    virtual wxString GetFilename() const override;
+    virtual wxString GetDirectory() const override;
+    virtual wxString GetWildcard() const override { return this->m_wildCard; }
+    virtual wxString GetPath() const override;
+    virtual void GetPaths( wxArrayString& paths ) const override;
+    virtual void GetFilenames( wxArrayString& files ) const override;
+    virtual int GetFilterIndex() const override { return m_fc.GetFilterIndex(); }
 
-    virtual bool HasMultipleFileSelection() const wxOVERRIDE { return HasFlag( wxFC_MULTIPLE ); }
-    virtual void ShowHidden(bool show) wxOVERRIDE;
+    virtual bool HasMultipleFileSelection() const override { return HasFlag( wxFC_MULTIPLE ); }
+    virtual void ShowHidden(bool show) override;
 
     virtual bool HasFilterChoice() const
         { return m_fc.HasFilterChoice(); }

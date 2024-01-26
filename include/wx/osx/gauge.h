@@ -2,7 +2,6 @@
 // Name:        wx/osx/gauge.h
 // Purpose:     wxGauge class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -17,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
  public:
-  wxGauge() { }
+  wxGauge() = default;
 
   wxGauge(wxWindow *parent, wxWindowID id,
            int range,
@@ -39,11 +38,11 @@ class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
            const wxString& name = wxASCII_STR(wxGaugeNameStr));
 
     // set gauge range/value
-    virtual void SetRange(int range) wxOVERRIDE;
-    virtual void SetValue(int pos) wxOVERRIDE;
-    virtual int  GetValue() const  wxOVERRIDE;
+    virtual void SetRange(int range) override;
+    virtual void SetValue(int pos) override;
+    virtual int  GetValue() const  override;
 
-    void Pulse() wxOVERRIDE;
+    void Pulse() override;
 
  protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge);

@@ -2,7 +2,6 @@
 // Name:        src/univ/inpcons.cpp
 // Purpose:     wxInputConsumer: mix-in class for input handling
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -58,7 +57,7 @@ void wxInputConsumer::OnActivate(wxActivateEvent& event)
 wxInputHandler *
 wxInputConsumer::DoGetStdInputHandler(wxInputHandler * WXUNUSED(handlerDef))
 {
-    return NULL;
+    return nullptr;
 }
 
 void wxInputConsumer::CreateInputHandler(const wxString& inphandler)

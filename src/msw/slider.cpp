@@ -2,7 +2,6 @@
 // Name:        src/msw/slider.cpp
 // Purpose:     wxSlider, using trackbar control
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart 1998
 //                  Vadim Zeitlin 2004
@@ -66,9 +65,9 @@ const int TICK = 8;
 
 void wxSlider::Init()
 {
-    m_labels = NULL;
+    m_labels = nullptr;
 
-    m_hBrushBg = NULL;
+    m_hBrushBg = nullptr;
 
     m_pageSize = 1;
     m_lineSize = 1;
@@ -149,13 +148,13 @@ bool wxSlider::Create(wxWindow *parent,
             HWND wnd = ::CreateWindow
                          (
                             wxT("STATIC"),
-                            NULL,
+                            nullptr,
                             WS_CHILD | WS_VISIBLE | SS_CENTER,
                             0, 0, 0, 0,
                             hwndParent,
                             (HMENU)wxUIntToPtr(lblid.GetValue()),
                             wxGetInstance(),
-                            NULL
+                            nullptr
                          );
 
             m_labels->Set(n, wnd, lblid);
@@ -183,8 +182,6 @@ bool wxSlider::Create(wxWindow *parent,
     {
         SetSize(size);
     }
-
-    Bind(wxEVT_DPI_CHANGED, &wxSlider::OnDPIChanged, this);
 
     return true;
 }
@@ -649,13 +646,14 @@ void wxSlider::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
     }
 }
 
-void wxSlider::OnDPIChanged(wxDPIChangedEvent& event)
+void wxSlider::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& event)
 {
+    // We need to update the thumb before processing wxEVT_DPI_CHANGED in the
+    // user code, as it may update the slider size, which wouldn't work
+    // correctly if it still used the old thumb length.
     int thumbLen = GetThumbLength();
 
     SetThumbLength(event.ScaleX(thumbLen));
-
-    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -793,17 +791,17 @@ void wxSlider::SetTick(int tickPos)
 
 WXHWND wxSlider::GetStaticMin() const
 {
-    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Min] : NULL;
+    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Min] : nullptr;
 }
 
 WXHWND wxSlider::GetStaticMax() const
 {
-    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Max] : NULL;
+    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Max] : nullptr;
 }
 
 WXHWND wxSlider::GetEditValue() const
 {
-    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Value] : NULL;
+    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Value] : nullptr;
 }
 
 WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxSlider, wxSliderBase, m_labels)

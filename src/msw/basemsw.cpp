@@ -2,7 +2,6 @@
 // Name:        src/msw/basemsw.cpp
 // Purpose:     misc stuff only used in console applications under MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.06.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -52,7 +51,7 @@ bool wxAppTraits::SafeMessageBox(const wxString& text,
     // anything and it has a useful side effect of disabling any existing TLWs
     // if there are any.
     //
-    // Note that we also might have chosen to always use MB_TASKMODAL and NULL
+    // Note that we also might have chosen to always use MB_TASKMODAL and null
     // parent. This would have the advantage of always disabling all the window
     // which, but at the cost of the behaviour mentioned above and other
     // related problems, e.g. showing ugly default icon in Alt-Tab list and an
@@ -82,7 +81,7 @@ WXDWORD wxAppTraits::DoSimpleWaitForThread(WXHANDLE hThread)
 void *wxConsoleAppTraits::BeforeChildWaitLoop()
 {
     // nothing to do here
-    return NULL;
+    return nullptr;
 }
 
 void wxConsoleAppTraits::AfterChildWaitLoop(void * WXUNUSED(data))
@@ -118,7 +117,7 @@ wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 #if wxUSE_CONSOLE_EVENTLOOP
     return new wxEventLoop();
 #else // !wxUSE_CONSOLE_EVENTLOOP
-    return NULL;
+    return nullptr;
 #endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
 }
 

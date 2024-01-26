@@ -3,7 +3,6 @@
 // Purpose:     wxTipWindow is a window like the one typically used for
 //              showing the tooltips
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.09.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -11,6 +10,8 @@
 
 #ifndef _WX_TIPWIN_H_
 #define _WX_TIPWIN_H_
+
+#include "wx/defs.h"
 
 #if wxUSE_TIPWINDOW
 
@@ -36,16 +37,16 @@ public:
     wxTipWindow(wxWindow *parent,
                 const wxString& text,
                 wxCoord maxLength = 100,
-                wxTipWindow** windowPtr = NULL,
-                wxRect *rectBound = NULL);
+                wxTipWindow** windowPtr = nullptr,
+                wxRect *rectBound = nullptr);
 
     virtual ~wxTipWindow();
 
-    // If windowPtr is not NULL the given address will be NULLed when the
+    // If windowPtr is not null the given address will be nulled when the
     // window has closed
     void SetTipWindowPtr(wxTipWindow** windowPtr) { m_windowPtr = windowPtr; }
 
-    // If rectBound is not NULL, the window will disappear automatically when
+    // If rectBound is not null, the window will disappear automatically when
     // the mouse leave the specified rect: note that rectBound should be in the
     // screen coordinates!
     void SetBoundingRect(const wxRect& rectBound);
@@ -60,7 +61,7 @@ protected:
     // event handlers
     void OnMouseClick(wxMouseEvent& event);
 
-    virtual void OnDismiss() wxOVERRIDE;
+    virtual void OnDismiss() override;
 
 private:
     wxTipWindowView *m_view;

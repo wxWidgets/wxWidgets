@@ -2,7 +2,6 @@
 // Name:        src/common/dirctrlcmn.cpp
 // Purpose:     wxGenericDirCtrl common code
 // Author:      Harm van der Heijden, Robert Roebling, Julian Smart
-// Modified by:
 // Created:     12/12/98
 // Copyright:   (c) Harm van der Heijden, Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
@@ -46,7 +45,6 @@ wxBEGIN_FLAGS( wxGenericDirCtrlStyle )
     // standard window styles
     wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
     wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
     wxFLAGS_MEMBER(wxWANTS_CHARS)
     wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )

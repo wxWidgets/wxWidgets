@@ -2,7 +2,6 @@
 // Name:        wx/gtk/clrpicker.h
 // Purpose:     wxColourButton header
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -21,7 +20,7 @@ class WXDLLIMPEXP_CORE wxColourButton : public wxButton,
                                         public wxColourPickerWidgetBase
 {
 public:
-    wxColourButton() : m_topParent(NULL) {}
+    wxColourButton() : m_topParent(nullptr) {}
     wxColourButton(wxWindow *parent,
                    wxWindowID id,
                    const wxColour& initial = *wxBLACK,
@@ -30,7 +29,7 @@ public:
                    long style = wxCLRBTN_DEFAULT_STYLE,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxASCII_STR(wxColourPickerWidgetNameStr))
-        : m_topParent(NULL)
+        : m_topParent(nullptr)
     {
         Create(parent, id, initial, pos, size, style, validator, name);
     }
@@ -47,7 +46,7 @@ public:
     virtual ~wxColourButton();
 
 protected:
-    void UpdateColour() wxOVERRIDE;
+    void UpdateColour() override;
 
 public:     // used by the GTK callback only
 

@@ -2,7 +2,6 @@
 // Name:        src/common/dpycmn.cpp
 // Purpose:     wxDisplay and wxDisplayImplSingle implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.03.03
 // Copyright:   (c) 2003-2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -32,9 +31,6 @@
 
 #if wxUSE_DISPLAY
 
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayVideoModes)
-
 const wxVideoMode wxDefaultVideoMode;
 
 #endif // wxUSE_DISPLAY
@@ -46,7 +42,7 @@ const wxVideoMode wxDefaultVideoMode;
 // the factory object used by wxDisplay
 //
 // created on demand and destroyed by wxDisplayModule
-static wxDisplayFactory *gs_factory = NULL;
+static wxDisplayFactory *gs_factory = nullptr;
 
 // ----------------------------------------------------------------------------
 // wxDisplayModule is used to cleanup gs_factory
@@ -55,8 +51,8 @@ static wxDisplayFactory *gs_factory = NULL;
 class wxDisplayModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override
     {
         wxDELETE(gs_factory);
     }
@@ -107,6 +103,11 @@ wxDisplay::wxDisplay(const wxWindow* window)
 /* static */ int wxDisplay::GetFromPoint(const wxPoint& pt)
 {
     return Factory().GetFromPoint(pt);
+}
+
+/* static */ int wxDisplay::GetFromRect(const wxRect& rect)
+{
+    return Factory().GetFromRect(rect);
 }
 
 /* static */ int wxDisplay::GetFromWindow(const wxWindow *window)
@@ -241,12 +242,40 @@ wxDisplayImpl* wxDisplayFactory::GetPrimaryDisplay()
 
     // This is not supposed to happen, but what else can we do if it
     // somehow does?
-    return NULL;
+    return nullptr;
+}
+
+int wxDisplayFactory::GetFromRect(const wxRect& r)
+{
+    int display = wxNOT_FOUND;
+
+    // Find the display with the biggest intersection with the given window.
+    //
+    // Note that just using GetFromPoint() with the center of the rectangle is
+    // not correct in general, as the center might lie outside of the visible
+    // area, while the rectangle itself could be partially visible. Moreover,
+    // in some exotic (L-shaped) display layouts, the center might not actually
+    // be on the display containing the biggest part of the rectangle even if
+    // it is visible.
+    int biggestOverlapArea = 0;
+    const unsigned count = GetCount();
+    for ( unsigned n = 0; n < count; ++n )
+    {
+        const auto overlap = GetDisplay(n)->GetGeometry().Intersect(r);
+        const int overlapArea = overlap.width * overlap.height;
+        if ( overlapArea > biggestOverlapArea )
+        {
+            biggestOverlapArea = overlapArea;
+            display = n;
+        }
+    }
+
+    return display;
 }
 
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
-    wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
+    wxCHECK_MSG( window, wxNOT_FOUND, "window can't be null" );
 
     // Check if the window is created: we can't find its display before this is
     // done anyhow, as we simply don't know on which display will it appear,
@@ -255,9 +284,7 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
     if ( !window->GetHandle() )
         return wxNOT_FOUND;
 
-    // consider that the window belongs to the display containing its centre
-    const wxRect r(window->GetScreenRect());
-    return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));
+    return GetFromRect(window->GetScreenRect());
 }
 
 // ============================================================================
@@ -267,7 +294,7 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 wxDisplayImpl *wxDisplayFactorySingle::CreateDisplay(unsigned n)
 {
     // we recognize the main display only
-    return n != 0 ? NULL : CreateSingleDisplay();
+    return n != 0 ? nullptr : CreateSingleDisplay();
 }
 
 int wxDisplayFactorySingle::GetFromPoint(const wxPoint& pt)

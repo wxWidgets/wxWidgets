@@ -2,7 +2,6 @@
 // Name:        wx/x11/cursor.h
 // Purpose:     wxCursor class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -24,9 +23,6 @@ class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 public:
     wxCursor();
     wxCursor(wxStockCursor id) { InitFromStock(id); }
-#if WXWIN_COMPATIBILITY_2_8
-    wxCursor(int id) { InitFromStock((wxStockCursor)id); }
-#endif
 #if wxUSE_IMAGE
     wxCursor( const wxImage & image );
     wxCursor(const char* const* xpmData);

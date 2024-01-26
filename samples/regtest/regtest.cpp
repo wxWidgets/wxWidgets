@@ -2,7 +2,6 @@
 // Name:        regtest.cpp
 // Purpose:     wxRegKey class demo
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.04.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -38,7 +37,7 @@
 class RegApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // ----------------------------------------------------------------------------
@@ -106,20 +105,20 @@ private:
     // structure describing a registry key/value
     class TreeNode : public wxTreeItemData
     {
-        WX_DEFINE_ARRAY_PTR(TreeNode *, TreeChildren);
+        using TreeChildren = std::vector<TreeNode*>;
     public:
-        RegTreeCtrl  *m_pTree;     // must be !NULL
-        TreeNode     *m_pParent;    // NULL only for the root node
+        RegTreeCtrl  *m_pTree;      // must be non-null
+        TreeNode     *m_pParent;    // nullptr only for the root node
         wxTreeItemId  m_id;         // the id of the tree control item
         wxString      m_strName;    // name of the key/value
         TreeChildren  m_aChildren;  // array of subkeys/values
         bool          m_bKey;       // key or value?
-        wxRegKey     *m_pKey;       // only may be !NULL if m_bKey == true
+        wxRegKey     *m_pKey;       // only may be non-null if m_bKey == true
         wxRegKey::WOW64ViewMode m_viewMode; // How to view the registry.
 
         // trivial accessors
         wxTreeItemId  Id()     const { return m_id;              }
-        bool          IsRoot() const { return m_pParent == NULL; }
+        bool          IsRoot() const { return m_pParent == nullptr; }
         bool          IsKey()  const { return m_bKey;            }
         TreeNode     *Parent() const { return m_pParent;         }
 
@@ -134,7 +133,7 @@ private:
         const wxString FullName() const;
         void SetRegistryView(wxRegKey::WOW64ViewMode viewMode);
 
-        // get the associated key: make sure the pointer is !NULL
+        // get the associated key: make sure the pointer is not null
         wxRegKey& Key() { if ( !m_pKey ) OnExpand(); return *m_pKey; }
 
         // dtor deletes all children
@@ -163,7 +162,7 @@ public:
     TreeNode *InsertNewTreeNode(TreeNode *pParent,
         const wxString& strName,
         int idImage = RegImageList::ClosedKey,
-        const wxString *pstrValue = NULL,
+        const wxString *pstrValue = nullptr,
         wxRegKey::WOW64ViewMode viewMode = wxRegKey::WOW64ViewMode_Default);
 
     // add standard registry keys
@@ -348,7 +347,7 @@ bool RegApp::OnInit()
         return false;
 
     // create the main frame window and show it
-    RegFrame *frame = new RegFrame(NULL, "wxRegTest", 50, 50, 600, 350);
+    RegFrame *frame = new RegFrame(nullptr, "wxRegTest", 50, 50, 600, 350);
     frame->Show(true);
 
     return true;
@@ -579,8 +578,8 @@ RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(
     pNewNode->m_pTree  = this;
     pNewNode->m_pParent = pParent;
     pNewNode->m_strName = strName;
-    pNewNode->m_bKey    = pstrValue == NULL;
-    pNewNode->m_pKey    = NULL;
+    pNewNode->m_bKey    = pstrValue == nullptr;
+    pNewNode->m_pKey    = nullptr;
     pNewNode->m_viewMode = viewMode;
     if (pParent)
     {
@@ -599,9 +598,9 @@ RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(
     SetItemData(pNewNode->m_id, pNewNode);
 
     // add it to the list of parent's children
-    if ( pParent != NULL )
+    if ( pParent != nullptr )
     {
-        pParent->m_aChildren.Add(pNewNode);
+        pParent->m_aChildren.push_back(pNewNode);
     }
 
     if ( pNewNode->IsKey() )
@@ -625,7 +624,7 @@ RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
         wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS | wxSUNKEN_BORDER)
 {
     // initialize members
-    m_draggedItem = NULL;
+    m_draggedItem = nullptr;
     m_restoreStatus = false;
     m_viewMode = wxRegKey::WOW64ViewMode_Default;
 
@@ -638,10 +637,10 @@ RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
     // ----------------
     m_pRoot =
         InsertNewTreeNode(
-            NULL,
+            nullptr,
             "Registry Root",
             RegImageList::Root,
-            NULL,
+            nullptr,
             m_viewMode);
 
     // create popup menu
@@ -664,7 +663,7 @@ void RegTreeCtrl::AddStdKeys()
             m_pRoot,
             wxRegKey::GetStdKeyName(ui),
             RegImageList::ClosedKey,
-            NULL,
+            nullptr,
             m_viewMode);
     }
 }
@@ -710,7 +709,7 @@ void RegTreeCtrl::OnMenuTest()
     wxTreeItemId lId = GetSelection();
     TreeNode *pNode = (TreeNode *)GetItemData(lId);
 
-    wxCHECK_RET( pNode != NULL, "tree item without data?" );
+    wxCHECK_RET( pNode != nullptr, "tree item without data?" );
 
     if ( pNode->IsRoot() )
     {
@@ -879,7 +878,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
 
     // clear the pointer anyhow
     TreeNode *src = m_draggedItem;
-    m_draggedItem = NULL;
+    m_draggedItem = nullptr;
 
     // where are we going to drop it?
     TreeNode *dst = GetNode(event);
@@ -979,7 +978,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
 bool RegTreeCtrl::TreeNode::OnExpand()
 {
     // we add children only once
-    if ( !m_aChildren.IsEmpty() )
+    if ( !m_aChildren.empty() )
     {
         // we've been already expanded
         return true;
@@ -1025,7 +1024,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
             this,
             str,
             RegImageList::ClosedKey,
-            NULL,
+            nullptr,
             m_viewMode);
         bCont = m_pKey->GetNextKey(str, l);
 
@@ -1124,11 +1123,11 @@ void RegTreeCtrl::TreeNode::Refresh()
 
 bool RegTreeCtrl::TreeNode::DeleteChild(TreeNode *child)
 {
-    int index = m_aChildren.Index(child);
-    wxCHECK_MSG( index != wxNOT_FOUND, false,
+    const auto iter = std::find(m_aChildren.begin(), m_aChildren.end(), child);
+    wxCHECK_MSG( iter != m_aChildren.end(), false,
                  "our child in tree should be in m_aChildren" );
 
-    m_aChildren.RemoveAt((size_t)index);
+    m_aChildren.erase(iter);
 
     bool ok;
     if ( child->IsKey() )
@@ -1157,14 +1156,12 @@ bool RegTreeCtrl::TreeNode::DeleteChild(TreeNode *child)
 void RegTreeCtrl::TreeNode::DestroyChildren()
 {
     // destroy all children
-    size_t nCount = m_aChildren.GetCount();
-    for ( size_t n = 0; n < nCount; n++ )
+    for ( auto child : m_aChildren )
     {
-        wxTreeItemId lId = m_aChildren[n]->Id();
-        m_pTree->Delete(lId);
+        m_pTree->Delete(child->Id());
     }
 
-    m_aChildren.Empty();
+    m_aChildren.clear();
 }
 
 RegTreeCtrl::TreeNode::~TreeNode()
@@ -1196,9 +1193,8 @@ void RegTreeCtrl::TreeNode::SetRegistryView(wxRegKey::WOW64ViewMode viewMode)
     m_viewMode = viewMode;
 
     // Update children with new view.
-    size_t nCount = m_aChildren.GetCount();
-    for (size_t n = 0; n < nCount; n++)
-        m_aChildren[n]->SetRegistryView(viewMode);
+    for ( auto child : m_aChildren )
+        child->SetRegistryView(viewMode);
 }
 
 // ----------------------------------------------------------------------------
@@ -1302,7 +1298,7 @@ void RegTreeCtrl::CreateNewKey(const wxString& strName)
     wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-    wxCHECK_RET( pCurrent != NULL, "node without data?" );
+    wxCHECK_RET( pCurrent != nullptr, "node without data?" );
 
     wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
@@ -1322,7 +1318,7 @@ void RegTreeCtrl::CreateNewTextValue(const wxString& strName)
     wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-    wxCHECK_RET( pCurrent != NULL, "node without data?" );
+    wxCHECK_RET( pCurrent != nullptr, "node without data?" );
 
     wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
@@ -1341,7 +1337,7 @@ void RegTreeCtrl::CreateNewBinaryValue(const wxString& strName)
     wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-    wxCHECK_RET( pCurrent != NULL, "node without data?" );
+    wxCHECK_RET( pCurrent != nullptr, "node without data?" );
 
     wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
@@ -1378,7 +1374,7 @@ void RegTreeCtrl::ShowProperties()
     {
         const wxRegKey& key = pCurrent->Key();
         size_t nSubKeys, nValues;
-        if ( !key.GetKeyInfo(&nSubKeys, NULL, &nValues, NULL) )
+        if ( !key.GetKeyInfo(&nSubKeys, nullptr, &nValues, nullptr) )
         {
             wxLogError("Couldn't get key info");
         }
@@ -1410,7 +1406,7 @@ bool RegTreeCtrl::IsKeySelected() const
     wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *) GetItemData(lCurrent);
 
-    wxCHECK( pCurrent != NULL, false );
+    wxCHECK( pCurrent != nullptr, false );
 
     return pCurrent->IsKey();
 }
@@ -1423,7 +1419,7 @@ void RegTreeCtrl::DoRefresh()
 
     TreeNode *pNode = (TreeNode *) GetItemData(lId);
 
-    wxCHECK_RET( pNode != NULL, "tree item without data?" );
+    wxCHECK_RET( pNode != nullptr, "tree item without data?" );
 
     pNode->Refresh();
 }

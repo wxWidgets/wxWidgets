@@ -16,7 +16,7 @@ On all variants of Unix except Linux (and maybe except *BSD), shared libraries
 are not supported out of the box due to the utter stupidity of libtool, so you'll
 have to do this to get shared library support:
 
-> ./configure --with-wine --disable-unicode --disable-static --enable-shared
+> ./configure --with-wine --disable-static --enable-shared
 
 Then you'll have to edit the wrongly created libtool script. There are two
 important entries with respect to shared library creation, which are
@@ -48,7 +48,7 @@ If you want to remove wxWidgets on Unix you can do this:
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWidgets,
-such as for GTK and Motif, you can now build two complete libraries and use
+such as for GTK and X11, you can now build two complete libraries and use
 them concurrently. For this end, you have to create a directory for each build
 of wxWidgets - you may also want to create different versions of wxWidgets
 and test them concurrently. Most typically, this would be a version configured
@@ -57,9 +57,9 @@ be installed, so you'd have to use local version of the library for that purpose
 For building three versions (one GTK, one WINE and a debug version of the WINE
 source) you'd do this:
 
-md buildmotif
-cd buildmotif
-../configure --with-motif
+md buildx11
+cd buildx11
+../configure --with-x11
 make
 cd ..
 
@@ -378,8 +378,3 @@ and compile options to use. It's probable that the
 wxWINE library will need recompiling with different options.
 
 Any progress on this front will be very welcome.
-
-Note that while wxWINE builds with --enable-unicode, samples
-don't run. Some samples will run when built with
---disable-unicode, and others (such as auidemo) fail.
-

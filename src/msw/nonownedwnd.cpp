@@ -23,6 +23,7 @@
     #include "wx/dcclient.h"
     #include "wx/frame.h"       // Only for wxFRAME_SHAPED.
     #include "wx/region.h"
+    #include "wx/sizer.h"
     #include "wx/msw/private.h"
 #endif // WX_PRECOMP
 
@@ -34,8 +35,9 @@
 #endif // wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/dynlib.h"
-#include "wx/scopedptr.h"
 #include "wx/msw/missing.h"
+
+#include <memory>
 
 // ============================================================================
 // wxNonOwnedWindow implementation
@@ -43,7 +45,7 @@
 
 bool wxNonOwnedWindow::DoClearShape()
 {
-    if (::SetWindowRgn(GetHwnd(), NULL, TRUE) == 0)
+    if (::SetWindowRgn(GetHwnd(), nullptr, TRUE) == 0)
     {
         wxLogLastError(wxT("SetWindowRgn"));
         return false;
@@ -56,10 +58,10 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
     // Windows takes ownership of the region, so
     // we'll have to make a copy of the region to give to it.
-    DWORD noBytes = ::GetRegionData(GetHrgnOf(region), 0, NULL);
+    DWORD noBytes = ::GetRegionData(GetHrgnOf(region), 0, nullptr);
     RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
     ::GetRegionData(GetHrgnOf(region), noBytes, rgnData);
-    HRGN hrgn = ::ExtCreateRegion(NULL, noBytes, rgnData);
+    HRGN hrgn = ::ExtCreateRegion(nullptr, noBytes, rgnData);
     delete[] (char*) rgnData;
 
     // SetWindowRgn expects the region to be in coordinates
@@ -90,7 +92,7 @@ public:
     {
         // Create the region corresponding to this path and set it as windows
         // shape.
-        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(win));
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(win));
         Region gr(static_cast<GraphicsPath*>(m_path.GetNativePath()));
         win->SetShape(
             wxRegion(
@@ -116,7 +118,7 @@ private:
         event.Skip();
 
         wxPaintDC dc(m_win);
-        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
         context->SetPen(wxPen(*wxLIGHT_GREY, 2));
         context->StrokePath(m_path);
     }
@@ -140,7 +142,7 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 wxNonOwnedWindow::wxNonOwnedWindow()
 {
 #if wxUSE_GRAPHICS_CONTEXT
-    m_shapeImpl = NULL;
+    m_shapeImpl = nullptr;
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     m_activeDPI = wxDefaultSize;
@@ -181,12 +183,11 @@ static bool IsPerMonitorDPIAware(HWND hwnd)
 
     // Determine if 'Per Monitor v2' DPI awareness is enabled in the
     // applications manifest.
-#if wxUSE_DYNLIB_CLASS
     #define WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((WXDPI_AWARENESS_CONTEXT)-4)
     typedef WXDPI_AWARENESS_CONTEXT(WINAPI * GetWindowDpiAwarenessContext_t)(HWND hwnd);
     typedef BOOL(WINAPI * AreDpiAwarenessContextsEqual_t)(WXDPI_AWARENESS_CONTEXT dpiContextA, WXDPI_AWARENESS_CONTEXT dpiContextB);
-    static GetWindowDpiAwarenessContext_t s_pfnGetWindowDpiAwarenessContext = NULL;
-    static AreDpiAwarenessContextsEqual_t s_pfnAreDpiAwarenessContextsEqual = NULL;
+    static GetWindowDpiAwarenessContext_t s_pfnGetWindowDpiAwarenessContext = nullptr;
+    static AreDpiAwarenessContextsEqual_t s_pfnAreDpiAwarenessContextsEqual = nullptr;
     static bool s_initDone = false;
 
     if ( !s_initDone )
@@ -206,7 +207,6 @@ static bool IsPerMonitorDPIAware(HWND hwnd)
             dpiAware = true;
         }
     }
-#endif // wxUSE_DYNLIB_CLASS
 
     return dpiAware;
 }
@@ -270,13 +270,51 @@ bool wxNonOwnedWindow::HandleDPIChange(const wxSize& newDPI, const wxRect& newRe
         return false;
     }
 
-    if ( newDPI != m_activeDPI )
-    {
-        MSWUpdateOnDPIChange(m_activeDPI, newDPI);
-        m_activeDPI = newDPI;
-    }
+    // Update the window decoration size to the new DPI: this seems to be the
+    // call with the least amount of side effects that is sufficient to do it
+    // and we need to do this in order for the size calculations, either in the
+    // user-defined wxEVT_DPI_CHANGED handler or in our own GetBestSize() call
+    // below, to work correctly.
+    ::SetWindowPos(GetHwnd(),
+                   0, 0, 0, 0, 0,
+                   SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW |
+                   SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING |
+                   SWP_FRAMECHANGED);
 
-    SetSize(newRect);
+    const bool processed = MSWUpdateOnDPIChange(m_activeDPI, newDPI);
+    m_activeDPI = newDPI;
+
+    // We consider that if the event was processed, the application resized the
+    // window on its own already, but otherwise do it ourselves.
+    if ( !processed )
+    {
+        // The best size doesn't scale exactly with the DPI, so while the new
+        // size is usually a decent guess, it's typically not exactly correct.
+        // We can't always do much better, but at least ensure that the window
+        // is still big enough to show its contents if it uses a sizer.
+        //
+        // Note that if it doesn't use a sizer, we can't do anything here as
+        // using the best size wouldn't be the right thing to do: some controls
+        // (e.g. multiline wxTextCtrl) can have best size much bigger than
+        // their current, or minimal, size and we don't want to expand them
+        // significantly just because the DPI has changed, see #23091.
+        wxRect actualNewRect = newRect;
+        if ( wxSizer* sizer = GetSizer() )
+        {
+            const wxSize minSize = ClientToWindowSize(sizer->GetMinSize());
+            wxSize diff = minSize - newRect.GetSize();
+            diff.IncTo(wxSize(0, 0));
+
+            // Use wxRect::Inflate() to ensure that the center of the bigger
+            // rectangle is at the same position as the center of the proposed
+            // one, to prevent moving the window back to the old display from
+            // which it might have been just moved to this one, as doing this
+            // would result in an infinite stream of WM_DPICHANGED messages.
+            actualNewRect.Inflate(diff);
+        }
+
+        SetSize(actualNewRect);
+    }
 
     Refresh();
 

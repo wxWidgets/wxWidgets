@@ -2,7 +2,6 @@
 // Name:        helpview.cpp
 // Purpose:     wxHtml sample: help browser
 // Author:      ?
-// Modified by:
 // Created:     ?
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -43,8 +42,8 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
 
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
 private:
     wxHtmlHelpController *help;
@@ -56,10 +55,6 @@ wxIMPLEMENT_APP(MyApp);
 
 bool MyApp::OnInit()
 {
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
-#endif
-
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
@@ -78,10 +73,6 @@ bool MyApp::OnInit()
     for (int i = 1; i < argc; i++)
         help->AddBook(wxFileName(argv[i]));
 
-#ifdef __WXMOTIF__
-    delete wxLog::SetActiveTarget(new wxLogGui);
-#endif
-
     help->SetShouldPreventAppExit(true);
 
     help -> DisplayContents();
@@ -92,7 +83,7 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
     delete help;
-    delete wxConfig::Set(NULL);
+    delete wxConfig::Set(nullptr);
 
     return 0;
 }

@@ -134,27 +134,6 @@
 #endif  /* wxUSE_WINSOCK2 */
 
 /*
- * Unfortunately we can't use compiler TLS support if the library can be used
- * inside a dynamically loaded DLL under Windows XP, as this can result in hard
- * to diagnose crashes due to the bugs in Windows TLS support, see #13116.
- *
- * So we disable it unless we can be certain that the code will never run under
- * XP, as is the case if we're using a compiler which doesn't support XP such
- * as MSVC 11+, unless it's used with the special "_xp" toolset, in which case
- * _USING_V110_SDK71_ is defined.
- *
- * However defining wxUSE_COMPILER_TLS as 2 overrides this safety check, see
- * the comments in wx/setup.h.
- */
-#if wxUSE_COMPILER_TLS == 1
-    #if !wxCHECK_VISUALC_VERSION(11) || defined(_USING_V110_SDK71_)
-        #undef wxUSE_COMPILER_TLS
-        #define wxUSE_COMPILER_TLS 0
-    #endif
-#endif
-
-
-/*
  * disable the settings which don't work for some compilers
  */
 
@@ -169,19 +148,6 @@
 #    undef wxUSE_CRASHREPORT
 #    define wxUSE_CRASHREPORT 0
 #endif /* compiler doesn't support SEH */
-
-#if defined(__GNUWIN32__)
-    /* These don't work as expected for mingw32 and cygwin32 */
-#   undef  wxUSE_MEMORY_TRACING
-#   define wxUSE_MEMORY_TRACING            0
-
-#   undef  wxUSE_GLOBAL_MEMORY_OPERATORS
-#   define wxUSE_GLOBAL_MEMORY_OPERATORS   0
-
-#   undef  wxUSE_DEBUG_NEW_ALWAYS
-#   define wxUSE_DEBUG_NEW_ALWAYS          0
-
-#endif /* __GNUWIN32__ */
 
 /* MinGW32 doesn't provide wincred.h defining the API needed by this */
 #ifdef __MINGW32_TOOLCHAIN__
@@ -214,6 +180,12 @@
 #   endif
 #endif
 
+/* wxMSW implementation requires wxDynamicLibrary. */
+#if defined(__WXMSW__) && !wxUSE_DYNLIB_CLASS
+#   undef wxUSE_DYNLIB_CLASS
+#   define wxUSE_DYNLIB_CLASS 1
+#endif  /* !wxUSE_DYNLIB_CLASS */
+
 /*
    un/redefine the options which we can't compile (after checking that they're
    defined
@@ -236,7 +208,7 @@
 #endif /* !wxUSE_ACTIVITYINDICATOR && !_MSC_VER */
 
 /* MinGW-w64 (32 and 64 bit) has winhttp.h available, legacy MinGW does not. */
-#if (!defined(_MSC_VER) && !defined(__MINGW64_VERSION_MAJOR)) || !wxUSE_DYNLIB_CLASS
+#if (!defined(_MSC_VER) && !defined(__MINGW64_VERSION_MAJOR))
     #undef wxUSE_WEBREQUEST_WINHTTP
     #define wxUSE_WEBREQUEST_WINHTTP 0
 #endif
@@ -311,49 +283,6 @@
 #    endif
 #endif  /* !wxUSE_DYNAMIC_LOADER */
 
-#if !wxUSE_DYNLIB_CLASS
-#   if wxUSE_DBGHELP
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_DBGHELP requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_DBGHELP
-#           define wxUSE_DBGHELP 0
-#       endif
-#   endif
-#   if wxUSE_DC_TRANSFORM_MATRIX
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_DC_TRANSFORM_MATRIX requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_DC_TRANSFORM_MATRIX
-#           define wxUSE_DC_TRANSFORM_MATRIX 0
-#       endif
-#   endif
-#   if wxUSE_UXTHEME
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_UXTHEME requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_UXTHEME
-#           define wxUSE_UXTHEME 0
-#       endif
-#   endif
-#   if wxUSE_MEDIACTRL
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_MEDIACTRL requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_MEDIACTRL
-#           define wxUSE_MEDIACTRL 0
-#       endif
-#   endif
-#   if wxUSE_INKEDIT
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_INKEDIT requires wxUSE_DYNLIB_CLASS"
-#       else
-#           undef wxUSE_INKEDIT
-#           define wxUSE_INKEDIT 0
-#       endif
-#   endif
-#endif  /* !wxUSE_DYNLIB_CLASS */
-
 #if !wxUSE_OLE
 #   if wxUSE_ACTIVEX
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -370,6 +299,15 @@
 #       else
 #           undef wxUSE_OLE_AUTOMATION
 #           define wxUSE_OLE_AUTOMATION 0
+#       endif
+#   endif
+
+#   if wxUSE_CLIPBOARD
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_CLIPBOARD requires wxUSE_OLE"
+#       else
+#           undef wxUSE_CLIPBOARD
+#           define wxUSE_CLIPBOARD 0
 #       endif
 #   endif
 
@@ -401,12 +339,12 @@
 #           define wxUSE_MEDIACTRL 0
 #       endif
 #   endif
-#    if wxUSE_WEBVIEW
+#    if wxUSE_WEBVIEW && wxUSE_WEBVIEW_IE
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxWebView requires wxActiveXContainer under MSW"
+#           error "wxWebViewIE requires wxActiveXContainer under MSW"
 #       else
-#           undef wxUSE_WEBVIEW
-#           define wxUSE_WEBVIEW 0
+#           undef wxUSE_WEBVIEW_IE
+#           define wxUSE_WEBVIEW_IE 0
 #       endif
 #   endif
 #endif /* !wxUSE_ACTIVEX */
@@ -430,7 +368,7 @@
         and explicitly disabling wxUSE_DBGHELP (which would ideally result in
         an error if wxUSE_STACKWALKER is not disabled too), but it's better to
         avoid giving a compiler error in the former case even if it means not
-        giving it neither in the latter one.
+        giving it either in the latter one.
      */
     #undef wxUSE_STACKWALKER
     #define wxUSE_STACKWALKER 0

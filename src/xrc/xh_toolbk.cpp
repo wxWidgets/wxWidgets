@@ -28,7 +28,7 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxToolbookXmlHandler, wxXmlResourceHandler);
 
 wxToolbookXmlHandler::wxToolbookXmlHandler()
-                    : m_toolbook(NULL)
+                    : m_toolbook(nullptr)
 {
     XRC_ADD_STYLE(wxBK_DEFAULT);
     XRC_ADD_STYLE(wxBK_TOP);

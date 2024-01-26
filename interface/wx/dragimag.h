@@ -109,14 +109,14 @@ public:
             screen, or over as much of the screen as is specified by rect. Note
             that the mouse will still be captured in window.
         @param rect
-            If non-@NULL, specifies the rectangle (in screen coordinates) that
+            If non-null, specifies the rectangle (in screen coordinates) that
             bounds the dragging operation. Specifying this can make the
             operation more efficient by cutting down on the area under
             consideration, and it can also make a visual difference since the
             drag is clipped to this area.
     */
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
-                   bool fullScreen = false, wxRect* rect = NULL);
+                   bool fullScreen = false, wxRect* rect = nullptr);
     /**
         Start dragging the image, using the first window to capture the mouse
         and the second to specify the bounding area. This form is equivalent to

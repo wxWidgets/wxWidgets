@@ -26,6 +26,7 @@
 
 #include "wx/osx/core/private/datetimectrl.h"
 #include "wx/osx/cocoa/private/date.h"
+#include "wx/osx/private/available.h"
 
 using namespace wxOSXImpl;
 
@@ -72,7 +73,7 @@ public:
     {
     }
 
-    virtual void SetDateTime(const wxDateTime& dt) wxOVERRIDE
+    virtual void SetDateTime(const wxDateTime& dt) override
     {
         wxDateTime dtFrom, dtTo;
         
@@ -82,12 +83,12 @@ public:
             [View() setDateValue: NSDateFromWX(dt)];
     }
 
-    virtual wxDateTime GetDateTime() const wxOVERRIDE
+    virtual wxDateTime GetDateTime() const override
     {
         return NSDateToWX([View() dateValue]);
     }
 
-    virtual void SetDateRange(const wxDateTime& dt1, const wxDateTime& dt2) wxOVERRIDE
+    virtual void SetDateRange(const wxDateTime& dt1, const wxDateTime& dt2) override
     {
         // Note that passing nil is ok here so we don't need to test for the
         // dates validity.
@@ -95,7 +96,7 @@ public:
         [View() setMaxDate: NSDateFromWX(dt2)];
     }
 
-    virtual bool GetDateRange(wxDateTime* dt1, wxDateTime* dt2) wxOVERRIDE
+    virtual bool GetDateRange(wxDateTime* dt1, wxDateTime* dt2) override
     {
         bool hasLimits = false;
         if ( dt1 )
@@ -115,7 +116,7 @@ public:
 
     virtual void controlAction(WXWidget WXUNUSED(slf),
                                void* WXUNUSED(cmd),
-                               void* WXUNUSED(sender)) wxOVERRIDE
+                               void* WXUNUSED(sender)) override
     {
         wxWindow* const wxpeer = GetWXPeer();
         if ( wxpeer )
@@ -125,7 +126,7 @@ public:
         }
     }
 
-    virtual void Enable(bool enable = true) wxOVERRIDE
+    virtual void Enable(bool enable = true) override
     {
         wxNSDatePicker* const nsdatePicker = View();
 
@@ -164,7 +165,7 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
                                            const wxDateTime& dt,
                                            const wxPoint& pos,
                                            const wxSize& size,
-                                           long WXUNUSED(style),
+                                           long style,
                                            wxDateTimeWidgetKind kind)
 {
     NSRect r = wxOSXGetFrameForControl(wxpeer, pos, size);
@@ -186,6 +187,16 @@ wxDateTimeWidgetImpl::CreateDateTimePicker(wxDateTimePickerCtrl* wxpeer,
     [v setDatePickerElements: elements];
 
     [v setDatePickerStyle: NSTextFieldAndStepperDatePickerStyle];
+
+    if ( style & wxDP_DROPDOWN )
+    {
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101504
+        if ( WX_IS_MACOS_AVAILABLE_FULL(10, 15, 4) )
+        {
+            v.presentsCalendarOverlay = YES;
+        }
+#endif
+    }
 
     // Avoid a disabled looking transparent background for the text cells.
     [v setDrawsBackground: YES];

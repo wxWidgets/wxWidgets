@@ -184,7 +184,7 @@ public:
         this window, i.e. wxAddRemoveAdaptor::GetItemsCtrl() must return a
         pointer to an existing child of this control.
 
-        The @a adaptor pointer must be non-NULL and heap-allocated as the
+        The @a adaptor pointer must be non-null and heap-allocated as the
         control takes ownership of it and will delete it later.
      */
     void SetAdaptor(wxAddRemoveAdaptor* adaptor);

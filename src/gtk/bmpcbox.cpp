@@ -197,7 +197,7 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmapBundle& bitma
         GtkTreeModel *model = gtk_combo_box_get_model( combobox );
         GtkTreeIter iter;
 
-        if ( gtk_tree_model_iter_nth_child( model, &iter, NULL, n ) )
+        if ( gtk_tree_model_iter_nth_child( model, &iter, nullptr, n ) )
         {
             wxGtkValue value0( G_TYPE_OBJECT );
             g_value_set_object( value0, bmp.GetPixbuf() );
@@ -215,7 +215,7 @@ wxBitmap wxBitmapComboBox::GetItemBitmap(unsigned int n) const
     GtkTreeModel *model = gtk_combo_box_get_model( combobox );
     GtkTreeIter iter;
 
-    if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
+    if (gtk_tree_model_iter_nth_child (model, &iter, nullptr, n))
     {
         wxGtkValue value;
         gtk_tree_model_get_value( model, &iter,
@@ -283,20 +283,6 @@ int wxBitmapComboBox::Insert(const wxString& item, const wxBitmapBundle& bitmap,
     if ( n != wxNOT_FOUND )
         SetItemBitmap(n, bitmap);
     return n;
-}
-
-void wxBitmapComboBox::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
-{
-    GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
-    GtkTreeModel *model = gtk_combo_box_get_model( combobox );
-    GtkListStore *store = GTK_LIST_STORE( model );
-    GtkTreeIter iter;
-
-    gtk_list_store_insert( store, &iter, n );
-
-    wxGtkValue value( G_TYPE_STRING );
-    g_value_set_string( value, wxGTK_CONV( text ) );
-    gtk_list_store_set_value( store, &iter, m_stringCellIndex, value );
 }
 
 // ----------------------------------------------------------------------------

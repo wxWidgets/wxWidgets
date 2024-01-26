@@ -102,15 +102,15 @@ public:
  //
  // inherited methods from wxDataViewModelNotifier
  //
-  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item) wxOVERRIDE;
-  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ItemChanged (wxDataViewItem const& item) wxOVERRIDE;
-  virtual bool ItemsChanged(wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item) wxOVERRIDE;
-  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
-  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col) wxOVERRIDE;
-  virtual bool Cleared() wxOVERRIDE;
-  virtual void Resort() wxOVERRIDE;
+  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item) override;
+  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items) override;
+  virtual bool ItemChanged (wxDataViewItem const& item) override;
+  virtual bool ItemsChanged(wxDataViewItemArray const& items) override;
+  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item) override;
+  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items) override;
+  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col) override;
+  virtual bool Cleared() override;
+  virtual void Resort() override;
 
   // adjust wxCOL_WIDTH_AUTOSIZE columns to fit the data, does nothing if the
   // control is frozen but remember it for later
@@ -158,8 +158,8 @@ private:
 wxOSXDataViewModelNotifier::wxOSXDataViewModelNotifier(wxDataViewCtrl* initDataViewCtrlPtr)
                            :m_DataViewCtrlPtr(initDataViewCtrlPtr)
 {
-  if (initDataViewCtrlPtr == NULL)
-    wxFAIL_MSG("Pointer to dataview control must not be NULL");
+  if (initDataViewCtrlPtr == nullptr)
+    wxFAIL_MSG("Pointer to dataview control must not be null");
 
   m_needsAdjustmentOnThaw = false;
 }
@@ -193,7 +193,7 @@ bool wxOSXDataViewModelNotifier::ItemsAdded(wxDataViewItem const& parent, wxData
 bool wxOSXDataViewModelNotifier::ItemChanged(wxDataViewItem const& item)
 {
   wxCHECK_MSG(item.IsOk(),             false,"Changed item is invalid.");
-  wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
+  wxCHECK_MSG(GetOwner() != nullptr,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
    // send the equivalent wxWidgets event:
@@ -263,7 +263,7 @@ bool wxOSXDataViewModelNotifier::ItemsDeleted(wxDataViewItem const& parent, wxDa
 bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsigned int col)
 {
   wxCHECK_MSG(item.IsOk(),             false,"Passed item is invalid.");
-  wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
+  wxCHECK_MSG(GetOwner() != nullptr,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
     wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_DataViewCtrlPtr, m_DataViewCtrlPtr->GetColumn(col), item);
@@ -382,7 +382,7 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
 
 wxDC* wxDataViewCustomRenderer::GetDC()
 {
-  if ((m_DCPtr == NULL) && (GetOwner() != NULL) && (GetOwner()->GetOwner() != NULL))
+  if ((m_DCPtr == nullptr) && (GetOwner() != nullptr) && (GetOwner()->GetOwner() != nullptr))
     m_DCPtr = new wxClientDC(GetOwner()->GetOwner());
   return m_DCPtr;
 }
@@ -408,28 +408,28 @@ wxDataViewCtrl::~wxDataViewCtrl()
 
   // Ensure that the already destructed controls is not notified about changes
   // in the model any more.
-  if (m_ModelNotifier != NULL)
+  if (m_ModelNotifier != nullptr)
     m_ModelNotifier->GetOwner()->RemoveNotifier(m_ModelNotifier);
 }
 
 void wxDataViewCtrl::Init()
 {
-  m_CustomRendererPtr = NULL;
-  m_Deleting          = NULL;
-  m_cgContext         = NULL;
-  m_ModelNotifier     = NULL;
+  m_CustomRendererPtr = nullptr;
+  m_Deleting          = nullptr;
+  m_cgContext         = nullptr;
+  m_ModelNotifier     = nullptr;
 }
 
 bool wxDataViewCtrl::IsDeleting() const
 {
-    return m_Deleting != NULL;
+    return m_Deleting != nullptr;
 }
 
 bool wxDataViewCtrl::IsClearing() const
 {
     // We only set the item being deleted to an invalid item when we're
     // clearing the entire model.
-    return m_Deleting != NULL && !m_Deleting->m_parent.IsOk();
+    return m_Deleting != nullptr && !m_Deleting->m_parent.IsOk();
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent,
@@ -459,19 +459,19 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
   wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
 
 
-  wxCHECK_MSG(dataViewWidgetPtr != NULL,false,"Pointer to native control must not be NULL.");
+  wxCHECK_MSG(dataViewWidgetPtr != nullptr,false,"Pointer to native control must not be null.");
 
   // We could have been associated with another model previously, break the
   // association in this case.
   if ( m_ModelNotifier )
   {
       m_ModelNotifier->GetOwner()->RemoveNotifier(m_ModelNotifier);
-      m_ModelNotifier = NULL;
+      m_ModelNotifier = nullptr;
   }
 
   if (wxDataViewCtrlBase::AssociateModel(model) && dataViewWidgetPtr->AssociateModel(model))
   {
-    if (model != NULL)
+    if (model != nullptr)
     {
       m_ModelNotifier = new wxOSXDataViewModelNotifier(this);
       model->AddNotifier(m_ModelNotifier);
@@ -497,9 +497,9 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
   wxDataViewWidgetImpl* dataViewWidgetPtr(GetDataViewPeer());
 
  // first, some error checking:
-  wxCHECK_MSG(dataViewWidgetPtr != NULL,                                         false,"Pointer to native control must not be NULL.");
-  wxCHECK_MSG(columnPtr != NULL,                                                 false,"Column pointer must not be NULL.");
-  wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,"Column does not have a renderer.");
+  wxCHECK_MSG(dataViewWidgetPtr != nullptr,                                         false,"Pointer to native control must not be null.");
+  wxCHECK_MSG(columnPtr != nullptr,                                                 false,"Column pointer must not be null.");
+  wxCHECK_MSG(columnPtr->GetRenderer() != nullptr,                                  false,"Column does not have a renderer.");
 
  // add column to wxWidget's internal structure:
   if (wxDataViewCtrlBase::InsertColumn(pos,columnPtr))
@@ -749,7 +749,7 @@ void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
 {
   wxDataViewItemArray items;
 
-  wxCHECK_RET(GetModel() != NULL,"Model pointer not initialized.");
+  wxCHECK_RET(GetModel() != nullptr,"Model pointer not initialized.");
   GetModel()->GetChildren(parentItem,items);
   (void) GetModel()->ItemsAdded(parentItem,items);
 }
@@ -763,7 +763,7 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
 
 bool wxDataViewCtrl::DoEnableDropTarget(const wxVector<wxDataFormat> &formats)
 {
-    wxDropTarget* dt = NULL;
+    wxDropTarget* dt = nullptr;
     if (wxDataObject* dataObject = CreateDataObject(formats))
     {
         dt = new wxDropTarget(dataObject);
@@ -782,7 +782,7 @@ void wxDataViewCtrl::FinishCustomItemEditing()
   {
     GetCustomRendererPtr()->FinishEditing();
     SetCustomRendererItem(wxDataViewItem());
-    SetCustomRendererPtr (NULL);
+    SetCustomRendererPtr (nullptr);
   }
 }
 
@@ -817,7 +817,7 @@ wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 // inherited methods from wxDataViewCtrlBase
 void wxDataViewCtrl::DoSetExpanderColumn()
 {
-  if (GetExpanderColumn() != NULL)
+  if (GetExpanderColumn() != nullptr)
     GetDataViewPeer()->DoSetExpanderColumn(GetExpanderColumn());
 }
 
@@ -837,12 +837,12 @@ void wxDataViewCtrl::OnSize(wxSizeEvent& event)
   {
     wxDataViewColumn* dataViewColumnPtr(GetColumn(i));
 
-    if (dataViewColumnPtr != NULL)
+    if (dataViewColumnPtr != nullptr)
     {
       wxDataViewCustomRenderer* dataViewCustomRendererPtr(dynamic_cast<wxDataViewCustomRenderer*>(dataViewColumnPtr->GetRenderer()));
 
-      if (dataViewCustomRendererPtr != NULL)
-        dataViewCustomRendererPtr->SetDC(NULL);
+      if (dataViewCustomRendererPtr != nullptr)
+        dataViewCustomRendererPtr->SetDC(nullptr);
     }
   }
 

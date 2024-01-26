@@ -2,7 +2,6 @@
 // Name:        src/common/checklstcmn.cpp
 // Purpose:     wxCheckListBox common code
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     16.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -62,7 +61,6 @@ wxBEGIN_FLAGS( wxCheckListBoxStyle )
     // standard window styles
     wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
     wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
     wxFLAGS_MEMBER(wxWANTS_CHARS)
     wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )

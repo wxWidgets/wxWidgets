@@ -288,7 +288,7 @@ void wxSlider::Init()
     m_needThumbRelease = false;
     m_blockScrollEvent = false;
     m_tickFreq = 0;
-    m_scale = NULL;
+    m_scale = nullptr;
 }
 
 bool wxSlider::Create(wxWindow *parent,
@@ -313,7 +313,7 @@ bool wxSlider::Create(wxWindow *parent,
     }
 
     const bool isVertical = (style & wxSL_VERTICAL) != 0;
-    m_scale = gtk_scale_new(GtkOrientation(isVertical), NULL);
+    m_scale = gtk_scale_new(GtkOrientation(isVertical), nullptr);
 
     if (style & wxSL_MIN_MAX_LABELS)
     {
@@ -326,24 +326,24 @@ bool wxSlider::Create(wxWindow *parent,
         gtk_widget_show(box);
         gtk_box_pack_start(GTK_BOX(m_widget), box, true, true, 0);
 
-        m_minLabel = gtk_label_new(NULL);
+        m_minLabel = gtk_label_new(nullptr);
         gtk_widget_show( m_minLabel );
         gtk_box_pack_start(GTK_BOX(box), m_minLabel, false, false, 0);
 
         // expanding empty space between the min/max labels
-        GtkWidget *space = gtk_label_new(NULL);
+        GtkWidget *space = gtk_label_new(nullptr);
         gtk_widget_show( space );
         gtk_box_pack_start(GTK_BOX(box), space, true, false, 0);
 
-        m_maxLabel = gtk_label_new(NULL);
+        m_maxLabel = gtk_label_new(nullptr);
         gtk_widget_show( m_maxLabel );
         gtk_box_pack_end(GTK_BOX(box), m_maxLabel, false, false, 0);
     }
     else
     {
         m_widget = m_scale;
-        m_maxLabel = NULL;
-        m_minLabel = NULL;
+        m_maxLabel = nullptr;
+        m_minLabel = nullptr;
     }
     g_object_ref(m_widget);
 
@@ -382,7 +382,7 @@ bool wxSlider::Create(wxWindow *parent,
     g_signal_connect(m_scale, "button_press_event", G_CALLBACK(gtk_button_press_event), this);
     g_signal_connect(m_scale, "button_release_event", G_CALLBACK(gtk_button_release_event), this);
     g_signal_connect(m_scale, "move_slider", G_CALLBACK(gtk_move_slider), this);
-    g_signal_connect(m_scale, "format_value", G_CALLBACK(gtk_format_value), NULL);
+    g_signal_connect(m_scale, "format_value", G_CALLBACK(gtk_format_value), nullptr);
     g_signal_connect(m_scale, "value_changed", G_CALLBACK(gtk_value_changed), this);
     gulong handler_id = g_signal_connect(m_scale, "event_after", G_CALLBACK(gtk_event_after), this);
     g_signal_handler_block(m_scale, handler_id);
@@ -539,7 +539,7 @@ void wxSlider::SetTick(int tickPos)
                 posTicks = GTK_POS_BOTTOM;
         }
 
-        gtk_scale_add_mark(GTK_SCALE (m_scale), (double)tickPos, posTicks, NULL);
+        gtk_scale_add_mark(GTK_SCALE (m_scale), (double)tickPos, posTicks, nullptr);
     }
 #else
     wxUnusedVar(tickPos);
@@ -594,7 +594,7 @@ GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 wxVisualAttributes
 wxSlider::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_scale_new(GTK_ORIENTATION_VERTICAL, NULL));
+    return GetDefaultAttributesFromGTKWidget(gtk_scale_new(GTK_ORIENTATION_VERTICAL, nullptr));
 }
 
 #endif // wxUSE_SLIDER

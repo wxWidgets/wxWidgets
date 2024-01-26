@@ -184,7 +184,7 @@ public:
         differences between the timestamps and not their absolute values usually make sense).
 
         @warning
-        wxWidgets returns a non-NULL timestamp only for mouse and key events
+        wxWidgets returns a valid timestamp only for mouse and key events
         (see wxMouseEvent and wxKeyEvent).
     */
     long GetTimestamp() const;
@@ -398,7 +398,7 @@ public:
     /**
         @name Event queuing and processing
     */
-    //@{
+    ///@{
 
     /**
         Queue event for a later processing.
@@ -458,7 +458,7 @@ public:
 
         @param event
             A heap-allocated event to be queued, QueueEvent() takes ownership
-            of it. This parameter shouldn't be @c NULL.
+            of it. This parameter shouldn't be @NULL.
      */
     virtual void QueueEvent(wxEvent *event);
 
@@ -526,10 +526,6 @@ public:
             more than 2 arguments, you can use the CallAfter<T>(const T& fn)
             overload that can call any functor.
 
-         @note This method is not available with Visual C++ before version 8
-               (Visual Studio 2005) as earlier versions of the compiler don't
-               have the required support for C++ templates to implement it.
-
          @since 2.9.5
      */
     template<typename T, typename T1, ...>
@@ -550,7 +546,7 @@ public:
          threads, but that the method will be always called in the main, GUI,
          thread context.
 
-         This overload is particularly useful in combination with C++11 lambdas:
+         This overload is particularly useful in combination with lambdas:
          @code
          wxGetApp().CallAfter([]{
              wxBell();
@@ -695,13 +691,13 @@ public:
     */
     void DeletePendingEvents();
 
-    //@}
+    ///@}
 
 
     /**
         @name Connecting and disconnecting
     */
-    //@{
+    ///@{
 
     /**
         Connects the given function dynamically with the event handler, id and
@@ -771,8 +767,8 @@ public:
     */
     void Connect(int id, int lastId, wxEventType eventType,
                  wxObjectEventFunction function,
-                 wxObject* userData = NULL,
-                 wxEvtHandler* eventSink = NULL);
+                 wxObject* userData = nullptr,
+                 wxEvtHandler* eventSink = nullptr);
 
     /**
         See the Connect(int, int, wxEventType, wxObjectEventFunction, wxObject*, wxEvtHandler*)
@@ -793,8 +789,8 @@ public:
     */
     void Connect(int id, wxEventType eventType,
                  wxObjectEventFunction function,
-                 wxObject* userData = NULL,
-                 wxEvtHandler* eventSink = NULL);
+                 wxObject* userData = nullptr,
+                 wxEvtHandler* eventSink = nullptr);
 
     /**
         See the Connect(int, int, wxEventType, wxObjectEventFunction, wxObject*, wxEvtHandler*)
@@ -809,8 +805,8 @@ public:
     */
     void Connect(wxEventType eventType,
                  wxObjectEventFunction function,
-                 wxObject* userData = NULL,
-                 wxEvtHandler* eventSink = NULL);
+                 wxObject* userData = nullptr,
+                 wxEvtHandler* eventSink = nullptr);
 
     /**
         Disconnects the given function dynamically from the event handler, using the
@@ -836,8 +832,8 @@ public:
     */
     bool Disconnect(wxEventType eventType,
                     wxObjectEventFunction function,
-                    wxObject* userData = NULL,
-                    wxEvtHandler* eventSink = NULL);
+                    wxObject* userData = nullptr,
+                    wxEvtHandler* eventSink = nullptr);
 
     /**
         See the Disconnect(wxEventType, wxObjectEventFunction, wxObject*, wxEvtHandler*)
@@ -851,9 +847,9 @@ public:
     */
     bool Disconnect(int id = wxID_ANY,
                     wxEventType eventType = wxEVT_NULL,
-                    wxObjectEventFunction function = NULL,
-                    wxObject* userData = NULL,
-                    wxEvtHandler* eventSink = NULL);
+                    wxObjectEventFunction function = nullptr,
+                    wxObject* userData = nullptr,
+                    wxEvtHandler* eventSink = nullptr);
 
     /**
         See the Disconnect(wxEventType, wxObjectEventFunction, wxObject*, wxEvtHandler*)
@@ -868,16 +864,16 @@ public:
     */
     bool Disconnect(int id, int lastId,
                     wxEventType eventType,
-                    wxObjectEventFunction function = NULL,
-                    wxObject* userData = NULL,
-                    wxEvtHandler* eventSink = NULL);
-    //@}
+                    wxObjectEventFunction function = nullptr,
+                    wxObject* userData = nullptr,
+                    wxEvtHandler* eventSink = nullptr);
+    ///@}
 
 
     /**
         @name Binding and Unbinding
     */
-    //@{
+    ///@{
 
     /**
         Binds the given function, functor or method dynamically with the event.
@@ -919,7 +915,7 @@ public:
               Functor functor,
               int id = wxID_ANY,
               int lastId = wxID_ANY,
-              wxObject *userData = NULL);
+              wxObject *userData = nullptr);
 
     /**
         See the Bind<>(const EventTag&, Functor, int, int, wxObject*) overload for
@@ -959,7 +955,7 @@ public:
               EventHandler *handler,
               int id = wxID_ANY,
               int lastId = wxID_ANY,
-              wxObject *userData = NULL);
+              wxObject *userData = nullptr);
     /**
         Unbinds the given function, functor or method dynamically from the
         event handler, using the specified parameters as search criteria and
@@ -998,7 +994,7 @@ public:
                 Functor functor,
                 int id = wxID_ANY,
                 int lastId = wxID_ANY,
-                wxObject *userData = NULL);
+                wxObject *userData = nullptr);
 
     /**
         See the Unbind<>(const EventTag&, Functor, int, int, wxObject*)
@@ -1031,12 +1027,12 @@ public:
                 EventHandler *handler,
                 int id = wxID_ANY,
                 int lastId = wxID_ANY,
-                wxObject *userData = NULL );
-    //@}
+                wxObject *userData = nullptr );
+    ///@}
     /**
         @name User-supplied data
     */
-    //@{
+    ///@{
 
     /**
         Returns user-supplied client data.
@@ -1078,7 +1074,7 @@ public:
     */
     void SetClientObject(wxClientData* data);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1087,7 +1083,7 @@ public:
         wxEvtHandler can be arranged in a double-linked list of handlers
         which is automatically iterated by ProcessEvent() if needed.
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if the event handler is enabled, @false otherwise.
@@ -1184,7 +1180,7 @@ public:
     */
     bool IsUnlinked() const;
 
-    //@}
+    ///@}
 
     /**
         @name Global event filters.
@@ -1194,7 +1190,7 @@ public:
         Event filters can be defined to pre-process all the events that happen
         in an application, see wxEventFilter documentation for more information.
      */
-    //@{
+    ///@{
 
     /**
         Add an event filter whose FilterEvent() method will be called for each
@@ -1218,7 +1214,7 @@ public:
      */
     static void RemoveFilter(wxEventFilter* filter);
 
-    //@}
+    ///@}
 
 protected:
     /**
@@ -1394,7 +1390,7 @@ enum wxKeyCategoryFlags
     Another difference between key and char events is that another kind of
     translation is done for the latter ones when the Control key is pressed:
     char events for ASCII letters in this case carry codes corresponding to the
-    ASCII value of Ctrl-Latter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until
+    ASCII value of Ctrl-Letter, i.e. 1 for Ctrl-A, 2 for Ctrl-B and so on until
     26 for Ctrl-Z. This is convenient for terminal-like applications and can be
     completely ignored by all the other ones (if you need to handle Ctrl-A it
     is probably a better idea to use the key event rather than the char one).
@@ -1572,7 +1568,7 @@ public:
     */
     bool IsAutoRepeat() const;
 
-    //@{
+    ///@{
     /**
         Obtains the position (in client coordinates) at which the key was pressed.
 
@@ -1585,7 +1581,7 @@ public:
     */
     wxPoint GetPosition() const;
     void GetPosition(wxCoord* x, wxCoord* y) const;
-    //@}
+    ///@}
 
     /**
         Returns the raw key code for this event.
@@ -1632,9 +1628,6 @@ public:
         If the key pressed doesn't have any character value (e.g. a cursor key)
         this method will return @c WXK_NONE. In this case you should use
         GetKeyCode() to retrieve the value of the key.
-
-        This function is only available in Unicode build, i.e. when
-        @c wxUSE_UNICODE is 1.
     */
     wxChar GetUnicodeKey() const;
 
@@ -1902,7 +1895,7 @@ public:
 
     This class is used for system colour change events, which are generated
     when the user changes the colour settings or when the system theme changes
-    (e.g. automatic dark mode switching on macOS).
+    (e.g.\ automatic dark mode switching on macOS).
 
     Event handlers for this event can access the new system colour settings through
     wxSystemSettings::GetColour().
@@ -2158,7 +2151,7 @@ public:
     /**
         Constructor.
     */
-    wxWindowCreateEvent(wxWindow* win = NULL);
+    wxWindowCreateEvent(wxWindow* win = nullptr);
 
     /// Return the window being created.
     wxWindow *GetWindow() const;
@@ -3052,7 +3045,7 @@ public:
         Constructor.
     */
     wxDropFilesEvent(wxEventType id = 0, int noFiles = 0,
-                     wxString* files = NULL);
+                     wxString* files = nullptr);
 
     /**
         Returns an array of filenames.
@@ -3242,7 +3235,7 @@ public:
     /**
         Constructor.
     */
-    wxEraseEvent(int id = 0, wxDC* dc = NULL);
+    wxEraseEvent(int id = 0, wxDC* dc = nullptr);
 
     /**
         Returns the device context associated with the erase event to draw on.
@@ -3336,7 +3329,7 @@ public:
             The direct child which is (or which contains the window which is) receiving
             the focus.
     */
-    wxChildFocusEvent(wxWindow* win = NULL);
+    wxChildFocusEvent(wxWindow* win = nullptr);
 
     /**
         Returns the direct child which receives the focus, or a (grand-)parent of the
@@ -3429,7 +3422,15 @@ public:
     If you define an event handler for this event, you should almost always
     call @c event.Skip() in it in order to allow the base class handler to
     execute, as many controls rely on processing this event in order to update
-    their appearance when the DPI changes.
+    their appearance when the DPI changes. However the default handler for the
+    top level window itself only sets the new window size, by scaling the
+    current size by the DPI ratio -- e.g. doubling it if the DPI has changed
+    from normal to "high", i.e. 200%, one -- and also ensuring that the window
+    is still bigger than its best size, as returned by wxWindow::GetBestSize().
+    Note that in some cases this may cause the window size to grow unexpectedly
+    and you may prefer to call wxWindow::SetSize() in your handler of this
+    event for the top level window and @e not call @c event.Skip() to prevent
+    the default handler from resizing the window.
 
     Currently this event is generated by wxMSW port if only and only if the
     MSW application runs under Windows 10 Creators Update (v1703) or later and
@@ -3438,8 +3439,8 @@ public:
     <a href="https://docs.microsoft.com/en-us/windows/desktop/sbscs/application-manifests">"Application Manifests" documentation</a>
     for more details).
 
-    @note Per-monitor DPI support is an experimental feature that is still in
-    development. It might not work correctly for some controls.
+    This event is generated by wxGTK when using GTK 3.10 or later and only
+    since wxWidgets version 3.3.0.
 
     @beginEventTable{wxDPIChangedEvent}
     @event{EVT_DPI_CHANGED(func)}
@@ -3477,9 +3478,18 @@ public:
         For example, the returned value will be twice bigger than the original
         one when switching from normal (96) DPI to high (2x, 192) DPI.
 
+        The overloads taking wxPoint and wxRect are only available in wxWidgets
+        3.3.0 and later.
+
         @since 3.1.6
      */
     wxSize Scale(wxSize sz) const;
+
+    /// @overload
+    wxPoint Scale(wxPoint pt) const;
+
+    /// @overload
+    wxRect Scale(wxRect rect) const;
 
     /**
         Rescale horizontal component to match the new DPI.
@@ -4317,7 +4327,7 @@ public:
     /**
         Constructor.
     */
-    wxWindowDestroyEvent(wxWindow* win = NULL);
+    wxWindowDestroyEvent(wxWindow* win = nullptr);
 
     /// Return the window being destroyed.
     wxWindow *GetWindow() const;
@@ -4444,7 +4454,7 @@ public:
         Constructor.
     */
     wxMouseCaptureChangedEvent(wxWindowID windowId = 0,
-                               wxWindow* gainedCapture = NULL);
+                               wxWindow* gainedCapture = nullptr);
 
     /**
         Returns the window that gained the capture, or @NULL if it was a
@@ -4628,7 +4638,7 @@ public:
     /**
         Constructor.
     */
-    wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0, wxMenu* menu = NULL);
+    wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0, wxMenu* menu = nullptr);
 
     /**
         Returns the menu which is being opened or closed, or the menu containing
@@ -4914,7 +4924,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_events */
-//@{
+///@{
 
 #if wxUSE_BASE
 
@@ -4923,7 +4933,7 @@ public:
 
     The values of this type should only be created using wxNewEventType().
 
-    See the macro wxDEFINE_EVENT_TYPE() for more information.
+    See the macro wxDEFINE_EVENT() for more information.
 
     @see @ref overview_events
 */
@@ -5114,9 +5124,9 @@ void wxPostEvent(wxEvtHandler* dest, const wxEvent& event);
     @header{wx/event.h}
 
     @param dest
-        The object to queue the event on, can't be @c NULL.
+        The object to queue the event on, can't be @NULL.
     @param event
-        The heap-allocated and non-@c NULL event to queue, the function takes
+        The heap-allocated and non-null event to queue, the function takes
         ownership of it.
  */
 void wxQueueEvent(wxEvtHandler* dest, wxEvent *event);
@@ -5212,6 +5222,7 @@ wxEventType wxEVT_DESTROY;
 wxEventType wxEVT_SHOW;
 wxEventType wxEVT_ICONIZE;
 wxEventType wxEVT_MAXIMIZE;
+wxEventType wxEVT_FULLSCREEN;
 wxEventType wxEVT_MOUSE_CAPTURE_CHANGED;
 wxEventType wxEVT_MOUSE_CAPTURE_LOST;
 wxEventType wxEVT_PAINT;
@@ -5256,4 +5267,4 @@ wxEventType wxEVT_WINDOW_MODAL_DIALOG_CLOSED;
 
 #endif // wxUSE_GUI
 
-//@}
+///@}

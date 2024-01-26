@@ -95,6 +95,24 @@ public:
     static int GetFromPoint(const wxPoint& pt);
 
     /**
+        Returns the index of the display with biggest intersection with the
+        given rectangle or @c wxNOT_FOUND if the rectangle doesn't intersect
+        any display.
+
+        Note that usually the returned display will be the same display which
+        contains the center of the rectangle, but this is not always the case,
+        as rectangle might be partly visible even if its center is off screen,
+        and in this case GetFromPoint() would returns @c wxNOT_FOUND, but this
+        function would return a valid display.
+
+        @param rect
+            The rectangle to check.
+
+        @since 3.3.0
+    */
+    static int GetFromRect(const wxRect& rect);
+
+    /**
         Returns the index of the display on which the given window lies.
 
         If the window is on more than one display it gets the display that
@@ -131,13 +149,19 @@ public:
     wxString GetName() const;
 
     /**
+        Returns display depth, i.e. number of bits per pixel (0 if unknown)
+
+        @since 3.1.2
+    */
+    int GetDepth() const;
+
+    /**
         Returns display resolution in pixels per inch.
 
         Horizontal and vertical resolution are returned in @c x and @c y
         components of the wxSize object respectively.
 
-        If the resolution information is not available, returns @code wxSize(0,
-        0) @endcode.
+        If the resolution information is not available, returns `wxSize(0, 0)`.
 
         @since 3.1.2
      */

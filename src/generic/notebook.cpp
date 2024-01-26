@@ -2,7 +2,6 @@
 // Name:        src/generic/notebook.cpp
 // Purpose:     generic implementation of wxNotebook
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -106,7 +105,7 @@ static int GetPageId(wxTabView *tabview, wxNotebookPage *page)
 // common part of all ctors
 void wxNotebook::Init()
 {
-    m_tabView = NULL;
+    m_tabView = nullptr;
     m_selection = -1;
 }
 
@@ -312,13 +311,13 @@ bool wxNotebook::DeletePage(wxNotebookPage* page)
 
 bool wxNotebook::RemovePage(size_t nPage)
 {
-    return DoRemovePage(nPage) != NULL;
+    return DoRemovePage(nPage) != nullptr;
 }
 
 // remove one page from the notebook
 wxWindow* wxNotebook::DoRemovePage(size_t nPage)
 {
-    wxCHECK( IS_VALID_PAGE(nPage), NULL );
+    wxCHECK( IS_VALID_PAGE(nPage), nullptr );
 
     m_pages[nPage]->Show(false);
     //    m_pages[nPage]->Lower();
@@ -401,7 +400,7 @@ bool wxNotebook::InsertPage(size_t nPage,
                             bool bSelect,
                             int WXUNUSED(imageId))
 {
-    wxASSERT( pPage != NULL );
+    wxASSERT( pPage != nullptr );
     wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), false );
 
     m_tabView->AddTab(GetPageId(m_tabView, pPage), strText);

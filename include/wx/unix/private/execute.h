@@ -11,13 +11,14 @@
 #define _WX_UNIX_EXECUTE_H
 
 #include "wx/app.h"
-#include "wx/hashmap.h"
 #include "wx/process.h"
 
 #if wxUSE_STREAMS
     #include "wx/unix/pipe.h"
     #include "wx/private/streamtempinput.h"
 #endif
+
+#include <unordered_map>
 
 class wxEventLoopBase;
 
@@ -31,9 +32,9 @@ public:
         m_pid = 0;
         m_exitcode = -1;
 
-        m_process = NULL;
+        m_process = nullptr;
 
-        m_syncEventLoop = NULL;
+        m_syncEventLoop = nullptr;
 
 #if wxUSE_STREAMS
         m_fdOut =
@@ -63,7 +64,7 @@ public:
     // The exit code of the process, set once the child terminates.
     int m_exitcode;
 
-    // the associated process object or NULL
+    // the associated process object or nullptr
     wxProcess *m_process;
 
     // Local event loop used to wait for the child process termination in
@@ -92,8 +93,7 @@ private:
     // All currently running child processes indexed by their PID.
     //
     // Notice that the container doesn't own its elements.
-    WX_DECLARE_HASH_MAP(int, wxExecuteData*, wxIntegerHash, wxIntegerEqual,
-                        ChildProcessesData);
+    using ChildProcessesData = std::unordered_map<int, wxExecuteData*>;
     static ChildProcessesData ms_childProcesses;
 
     wxDECLARE_NO_COPY_CLASS(wxExecuteData);

@@ -331,7 +331,7 @@ public:
     /**
         Constructor initializes the object to @a value.
     */
-    explicit wxVariantDataSafeArray(SAFEARRAY* value = NULL);
+    explicit wxVariantDataSafeArray(SAFEARRAY* value = nullptr);
 
     /**
         Returns the stored array.

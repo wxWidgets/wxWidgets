@@ -92,23 +92,6 @@
         </option>
     </if>
 
-    <!-- don't include ANSI configuration in project files, it's going to be
-         eventually removed anyway and it only doubles the number of build
-         configs in projects: -->
-    <if cond="IS_MSVC_PRJ=='1'">
-        <set var="UNICODE">1</set>
-    </if>
-    <if cond="IS_MSVC_PRJ=='0'">
-        <option name="UNICODE">
-            <values>0,1</values>
-            <values-description>,Unicode</values-description>
-            <default-value>1</default-value>
-            <description>
-                Compile Unicode build of wxWidgets?
-            </description>
-        </option>
-    </if>
-
     <option name="BUILD">
         <values>debug,release</values>
         <values-description>Debug,Release</values-description>
@@ -244,6 +227,11 @@ Default is to use debug CRT if and only if BUILD==debug.
         <description>
             Build wxWebView library (USE_GUI must be 1)?
         </description>
+    </option>
+
+    <option name="USE_WEBVIEW_CHROMIUM">
+        <values>0,1</values>
+        <default-value>0</default-value>
     </option>
 
     <option name="USE_MEDIA">
@@ -421,6 +409,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="EXTRALIBS_SDL"/>
         <option name="EXTRALIBS_STC"/>
         <option name="EXTRALIBS_WEBVIEW"/>
+        <option name="EXTRALDFLAGS_WEBVIEW"/>
         <option name="WX_CPPFLAGS"/>
         <option name="WX_CFLAGS"/>
         <option name="WX_CXXFLAGS"/>
@@ -432,7 +421,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="SAMPLES_CXXFLAGS"/>
         <option name="USE_WEBVIEW_WEBKIT2"/>
 
-        <!-- see configure.in; it's required by some samples on Mac OS X -->
+        <!-- see configure.ac; it's required by some samples on Mac OS X -->
         <option name="HEADER_PAD_OPTION"/>
 
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
@@ -496,9 +485,9 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS_MEDIA"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
-            <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib glu32.lib</if>
-            <if cond="COMPILER=='vc'">opengl32.lib glu32.lib</if>
-            <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
+            <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib</if>
+            <if cond="COMPILER=='vc'">opengl32.lib</if>
+            <if cond="COMPILER=='gcc'">-lopengl32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
         <set var="EXTRALIBS_STC">
@@ -507,6 +496,7 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc' and TOOLKIT=='MSW'">-limm32</if>
         </set>
         <set var="EXTRALIBS_WEBVIEW"/>
+        <set var="EXTRALDFLAGS_WEBVIEW"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
 
@@ -541,6 +531,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
         <set var="USE_WEBVIEW">1</set>
+        <set var="USE_WEBVIEW_CHROMIUM">0</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XML">1</set>
         <set var="USE_XRC">1</set>
@@ -565,10 +556,13 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="BUILD">debug</set>
         <set var="SHARED">0</set>
         <set var="WXUNIV">0</set>
-        <set var="UNICODE">1</set>
         <!-- Free version does not distribute OpenGL,
              in commercial distribution better use dmars_smake format -->
         <set var="USE_OPENGL">0</set>
     </if>
 
+    <!-- Directory where CEF should be available -->
+    <set var="CEF_DIR">
+        $(TOP_SRCDIR)/3rdparty/cef
+    </set>
 </makefile>

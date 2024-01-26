@@ -3,7 +3,6 @@
 // Purpose:     wxWindows resource definitions. ALWAYS include
 //              this in your application resource file.
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
@@ -106,22 +105,11 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 #endif
 
 #if !defined(wxUSE_DPI_AWARE_MANIFEST) || wxUSE_DPI_AWARE_MANIFEST == 0
-    #define wxMANIFEST_DPI .manifest
+    #define wxMANIFEST_FILE "wx/msw/wx.manifest"
 #elif wxUSE_DPI_AWARE_MANIFEST == 1
-    #define wxMANIFEST_DPI _dpi_aware.manifest
+    #define wxMANIFEST_FILE "wx/msw/wx_dpi_aware.manifest"
 #elif wxUSE_DPI_AWARE_MANIFEST == 2
-    #define wxMANIFEST_DPI _dpi_aware_pmv2.manifest
-#endif
-
-#define wxRC_STR(text) wxRC_STR2(text)
-#define wxRC_STR2(text) #text
-#define wxRC_CONCAT(a, b) wxRC_CONCAT2(a, b)
-#define wxRC_CONCAT2(a, b) a ## b
-
-#ifdef __GNUC__
-    #define wxMANIFEST_FILE "wx/msw/wx" wxRC_STR(wxMANIFEST_DPI)
-#else
-    #define wxMANIFEST_FILE wxRC_CONCAT(wx/msw/wx, wxMANIFEST_DPI)
+    #define wxMANIFEST_FILE "wx/msw/wx_dpi_aware_pmv2.manifest"
 #endif
 wxMANIFEST_ID RT_MANIFEST wxMANIFEST_FILE
 

@@ -2,7 +2,6 @@
 // Name:        wx/clntdata.h
 // Purpose:     A mixin class for holding a wxClientData or void pointer
 // Author:      Robin Dunn
-// Modified by:
 // Created:     9-Oct-2001
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -13,28 +12,23 @@
 
 #include "wx/defs.h"
 #include "wx/string.h"
-#include "wx/hashmap.h"
+#include "wx/object.h"
+
+#include <unordered_map>
 
 typedef int (*wxShadowObjectMethod)(void*, void*);
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
-    wxShadowObjectMethod,
-    wxShadowObjectMethods,
-    class WXDLLIMPEXP_BASE
-);
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL(
-    void *,
-    wxShadowObjectFields,
-    class WXDLLIMPEXP_BASE
-);
+
+using wxShadowObjectMethods = std::unordered_map<wxString, wxShadowObjectMethod>;
+using wxShadowObjectFields = std::unordered_map<wxString, void*>;
 
 class WXDLLIMPEXP_BASE wxShadowObject
 {
 public:
-    wxShadowObject() { }
+    wxShadowObject() = default;
 
     void AddMethod( const wxString &name, wxShadowObjectMethod method )
     {
-        wxShadowObjectMethods::iterator it = m_methods.find( name );
+        const auto it = m_methods.find( name );
         if (it == m_methods.end())
             m_methods[ name ] = method;
         else
@@ -43,7 +37,7 @@ public:
 
     bool InvokeMethod( const wxString &name, void* window, void* param, int* returnValue )
     {
-        wxShadowObjectMethods::iterator it = m_methods.find( name );
+        const auto it = m_methods.find( name );
         if (it == m_methods.end())
             return false;
         wxShadowObjectMethod method = it->second;
@@ -53,9 +47,9 @@ public:
         return true;
     }
 
-    void AddField( const wxString &name, void* initialValue = NULL )
+    void AddField( const wxString &name, void* initialValue = nullptr )
     {
-        wxShadowObjectFields::iterator it = m_fields.find( name );
+        const auto it = m_fields.find( name );
         if (it == m_fields.end())
             m_fields[ name ] = initialValue;
         else
@@ -64,15 +58,15 @@ public:
 
     void SetField( const wxString &name, void* value )
     {
-        wxShadowObjectFields::iterator it = m_fields.find( name );
+        const auto it = m_fields.find( name );
         if (it == m_fields.end())
             return;
         it->second = value;
     }
 
-    void* GetField( const wxString &name, void *defaultValue = NULL )
+    void* GetField( const wxString &name, void *defaultValue = nullptr )
     {
-        wxShadowObjectFields::iterator it = m_fields.find( name );
+        const auto it = m_fields.find( name );
         if (it == m_fields.end())
             return defaultValue;
         return it->second;
@@ -97,8 +91,8 @@ enum wxClientDataType
 class WXDLLIMPEXP_BASE wxClientData
 {
 public:
-    wxClientData() { }
-    virtual ~wxClientData() { }
+    wxClientData() = default;
+    virtual ~wxClientData() = default;
 };
 
 class WXDLLIMPEXP_BASE wxStringClientData : public wxClientData
@@ -156,6 +150,48 @@ protected:
     // what kind of data do we have?
     wxClientDataType m_clientDataType;
 
+};
+
+// This class is a replacement for wxClientDataContainer, and unlike
+// wxClientDataContainer the wxSharedClientDataContainer client data is
+// copiable, so it can be copied when objects containing it are cloned.
+// Like wxClientDataContainer, wxSharedClientDataContainer is a mixin
+// that provides storage and management of "client data.". The client data
+// is reference counted and managed by the container.
+//
+// NOTE:  If your class has a clone function and needs to store client data,
+//        use wxSharedClientDataContainer and not wxClientDataContainer!
+
+class WXDLLIMPEXP_BASE wxSharedClientDataContainer
+{
+public:
+    // Provide the same functions as in wxClientDataContainer, so that objects
+    // using it and this class could be used in exactly the same way.
+    void SetClientObject(wxClientData *data);
+    wxClientData *GetClientObject() const;
+    void SetClientData(void *data);
+    void *GetClientData() const;
+
+protected:
+    bool HasClientDataContainer() const { return m_data.get() != nullptr; }
+    void CopyClientDataContainer(const wxSharedClientDataContainer& other)
+    {
+        m_data = other.m_data;
+    }
+
+private:
+    class wxRefCountedClientDataContainer : public wxClientDataContainer,
+                                            public wxRefCounter
+    {
+    };
+
+    // Helper function that will create m_data if it is currently null
+    wxClientDataContainer *GetValidClientData();
+
+    // m_data is shared, not deep copied, when cloned. If you make changes to
+    // the data in one instance of your class, you change it for all cloned
+    // instances!
+    wxObjectDataPtr<wxRefCountedClientDataContainer> m_data;
 };
 
 #endif // _WX_CLNTDATAH__

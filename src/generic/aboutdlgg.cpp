@@ -22,6 +22,8 @@
 #if wxUSE_ABOUTDLG
 
 #ifndef WX_PRECOMP
+    #include "wx/panel.h"
+    #include "wx/settings.h"
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
@@ -96,11 +98,17 @@ wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
 {
     wxString ret = m_copyright;
 
-#if wxUSE_UNICODE
     const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
     ret.Replace("(c)", copyrightSign);
     ret.Replace("(C)", copyrightSign);
-#endif // wxUSE_UNICODE
+
+#ifdef __WXMSW__
+    // Under MSW the dialogs typically show only "(C)" and "Copyright (C)", but
+    // under other platforms dialogs do use the word "Copyright" too, so to
+    // make it simpler to do the right thing under all platforms, remove the
+    // extra word here.
+    ret.Replace("Copyright " + copyrightSign, copyrightSign);
+#endif // __WXMSW__
 
     return ret;
 }
@@ -138,26 +146,28 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
                            wxDefaultPosition, wxDefaultSize, wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE) )
         return false;
 
+    m_contents = new wxPanel(this);
+    m_contents->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX));
+
     m_sizerText = new wxBoxSizer(wxVERTICAL);
     wxString nameAndVersion = info.GetName();
     if ( info.HasVersion() )
         nameAndVersion << wxT(' ') << info.GetVersion();
-    wxStaticText *label = new wxStaticText(this, wxID_ANY, nameAndVersion);
+    wxStaticText *label = new wxStaticText(m_contents, wxID_ANY, nameAndVersion);
     wxFont fontBig(*wxNORMAL_FONT);
     fontBig.SetFractionalPointSize(fontBig.GetFractionalPointSize() + 2.0);
     fontBig.SetWeight(wxFONTWEIGHT_BOLD);
     label->SetFont(fontBig);
 
-    m_sizerText->Add(label, wxSizerFlags().Centre().Border());
-    m_sizerText->AddSpacer(5);
+    m_sizerText->Add(label, wxSizerFlags().Border(wxTOP|wxDOWN));
+    m_sizerText->AddSpacer(wxSizerFlags::GetDefaultBorder());
 
-    AddText(info.GetCopyrightToDisplay());
     AddText(info.GetDescription());
 
     if ( info.HasWebSite() )
     {
 #if wxUSE_HYPERLINKCTRL
-        AddControl(new wxHyperlinkCtrl(this, wxID_ANY,
+        AddControl(new wxHyperlinkCtrl(m_contents, wxID_ANY,
                                        info.GetWebSiteDescription(),
                                        info.GetWebSiteURL()));
 #else
@@ -188,27 +198,60 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 
     DoAddCustomControls();
 
+    // Separate the copyright from all the rest and use smaller font for it as
+    // is custom.
+    const wxString& copyrightText = info.GetCopyrightToDisplay();
+    if ( !copyrightText.empty() )
+    {
+        m_sizerText->AddSpacer(wxSizerFlags::GetDefaultBorder());
+
+        wxFont fontSmall(*wxNORMAL_FONT);
+        fontSmall.SetFractionalPointSize(fontSmall.GetFractionalPointSize() - 1.0);
+        AddText(copyrightText)->SetFont(fontSmall);
+    }
+
 
     wxSizer *sizerIconAndText = new wxBoxSizer(wxHORIZONTAL);
+
+    int horzBorder = 2*wxSizerFlags::GetDefaultBorder();
+    sizerIconAndText->AddSpacer(horzBorder);
+
 #if wxUSE_STATBMP
     wxIcon icon = info.GetIcon();
     if ( icon.IsOk() )
     {
-        sizerIconAndText->Add(new wxStaticBitmap(this, wxID_ANY, icon),
-                                wxSizerFlags().Border(wxRIGHT));
+        sizerIconAndText->Add(new wxStaticBitmap(m_contents, wxID_ANY, icon),
+                                wxSizerFlags().DoubleBorder(wxTOP));
+
+        sizerIconAndText->AddSpacer(horzBorder);
+
+        // Add a border to the right of the text to make the layout slightly
+        // more symmetrical.
+        horzBorder *= 2;
     }
 #endif // wxUSE_STATBMP
-    sizerIconAndText->Add(m_sizerText, wxSizerFlags(1).Expand());
+    sizerIconAndText->Add(m_sizerText, wxSizerFlags(1).Expand().DoubleBorder(wxTOP));
+    sizerIconAndText->AddSpacer(horzBorder);
+
+    m_contents->SetSizer(sizerIconAndText);
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-    sizerTop->Add(sizerIconAndText, wxSizerFlags(1).Expand().Border());
+    sizerTop->Add(m_contents, wxSizerFlags(1).Expand());
 
 // Mac typically doesn't use OK buttons just for dismissing dialogs.
 #if !defined(__WXMAC__)
     wxSizer *sizerBtns = CreateButtonSizer(wxOK);
     if ( sizerBtns )
     {
-        sizerTop->Add(sizerBtns, wxSizerFlags().Expand().Border());
+        // A wxStaticLine would be too heavy here, but a single line of
+        // slightly different colour separates the contents from the buttons
+        // better and is similar to how the native MSW message box looks.
+        wxWindow* const separator = new wxWindow(this, wxID_ANY);
+        separator->SetInitialSize(wxSize(1, 1));
+        separator->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+        sizerTop->Add(separator, wxSizerFlags().Expand());
+
+        sizerTop->Add(sizerBtns, wxSizerFlags().Expand().DoubleBorder());
     }
 #endif
 
@@ -227,27 +270,38 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 void wxGenericAboutDialog::AddControl(wxWindow *win, const wxSizerFlags& flags)
 {
     wxCHECK_RET( m_sizerText, wxT("can only be called after Create()") );
-    wxASSERT_MSG( win, wxT("can't add NULL window to about dialog") );
+    wxASSERT_MSG( win, wxT("can't add null window to about dialog") );
+
+    // Reparent the windows created with the dialog itself as parent under
+    // m_contents to keep the existing code written before m_contents
+    // introduction working.
+    if ( win->GetParent() == this )
+        win->Reparent(m_contents);
 
     m_sizerText->Add(win, flags);
 }
 
 void wxGenericAboutDialog::AddControl(wxWindow *win)
 {
-    AddControl(win, wxSizerFlags().Border(wxDOWN).Centre());
+    AddControl(win, wxSizerFlags().Border(wxDOWN));
 }
 
-void wxGenericAboutDialog::AddText(const wxString& text)
+wxStaticText* wxGenericAboutDialog::AddText(const wxString& text)
 {
-    if ( !text.empty() )
-        AddControl(new wxStaticText(this, wxID_ANY, text));
+    if ( text.empty() )
+        return nullptr;
+
+    auto *win = new wxStaticText(m_contents, wxID_ANY, text);
+    AddControl(win);
+
+    return win;
 }
 
 #if wxUSE_COLLPANE
 void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
                                               const wxString& text)
 {
-    wxCollapsiblePane *pane = new wxCollapsiblePane(this, wxID_ANY, title);
+    wxCollapsiblePane *pane = new wxCollapsiblePane(m_contents, wxID_ANY, title);
     wxWindow * const paneContents = pane->GetPane();
     wxStaticText *txt = new wxStaticText(paneContents, wxID_ANY, text,
                                          wxDefaultPosition, wxDefaultSize,
@@ -312,7 +366,7 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 // currently wxAboutBox is implemented natively only under these platforms, for
 // the others we provide a generic fallback here
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && \
-        (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__))
+        (!defined(__WXGTK__) || defined(__WXUNIVERSAL__))
 
 void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {

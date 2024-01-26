@@ -140,9 +140,12 @@ public:
     wxBitmapBundleImplRC(const ResourceInfos& resourceInfos,
                          const wxBitmap& bitmap);
 
-    virtual wxSize GetDefaultSize() const wxOVERRIDE;
-    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const wxOVERRIDE;
-    virtual wxBitmap GetBitmap(const wxSize& size) wxOVERRIDE;
+    virtual wxSize GetDefaultSize() const override;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override;
+    virtual wxBitmap GetBitmap(const wxSize& size) override;
+
+protected:
+    virtual double GetNextAvailableScale(size_t& i) const override;
 
 private:
     // Load the bitmap from the given resource and add it m_bitmaps, after
@@ -189,50 +192,21 @@ wxSize wxBitmapBundleImplRC::GetDefaultSize() const
     return m_bitmaps[0].GetSize();
 }
 
+double wxBitmapBundleImplRC::GetNextAvailableScale(size_t& i) const
+{
+    return i < m_resourceInfos.size() ? m_resourceInfos[i++].scale : 0.0;
+}
+
 wxSize wxBitmapBundleImplRC::GetPreferredBitmapSizeAtScale(double scale) const
 {
-    // Optimistically assume we're going to use this exact scale by default.
-    double scalePreferred = scale;
-
-    for ( size_t i = 0; ; ++i )
+    const size_t n = m_resourceInfos.size();
+    wxVector<double> scales(n);
+    for ( size_t i = 0; i < n; ++i )
     {
-        if ( i == m_resourceInfos.size() )
-        {
-            // The requested scale is bigger than anything we have, so use the
-            // biggest available one.
-            scalePreferred = m_resourceInfos[i - 1].scale;
-            break;
-        }
-
-        const double scaleThis = m_resourceInfos[i].scale;
-
-        // Keep looking for the exact match which we still can hope to find
-        // while the current scale is smaller.
-        if ( scaleThis < scale )
-            continue;
-
-        // If we've found the exact match, just use it.
-        if ( scaleThis == scale )
-            break;
-
-        // We've found the closest bigger scale.
-
-        // If there is no smaller one, we have no choice but to use this one.
-        if ( i == 0 )
-            break;
-
-        // Decide whether we should use this one or the previous smaller one
-        // depending on which of them is closer to the target scale, breaking
-        // the tie in favour of the bigger one.
-        const double scaleLast = m_resourceInfos[i - 1].scale;
-
-        scalePreferred = scaleThis - scale <= scale - scaleLast
-                            ? scaleThis
-                            : scaleLast;
-        break;
+        scales[i] = m_resourceInfos[i].scale;
     }
 
-    return GetDefaultSize()*scalePreferred;
+    return DoGetPreferredSize(scale);
 }
 
 wxBitmap
@@ -249,8 +223,13 @@ wxBitmapBundleImplRC::AddBitmap(const ResourceInfo& info,
     wxASSERT_MSG
     (
         bitmap.GetSize() == sizeExpected,
-        wxString::Format(wxS("Bitmap \"%s\" should have size %d*%d."),
-                         sizeExpected.x, sizeExpected.y)
+        wxString::Format
+        (
+            wxS("Bitmap \"%s\" is of size %d*%d but should be %d*%d."),
+            info.name,
+            bitmap.GetWidth(), bitmap.GetHeight(),
+            sizeExpected.x, sizeExpected.y
+        )
     );
 
     if ( sizeNeeded != sizeExpected )
@@ -303,17 +282,19 @@ wxBitmap wxBitmapBundleImplRC::GetBitmap(const wxSize& size)
 
         const wxSize sizeThis = sizeDef*info.scale;
 
-        // Use this bitmap if it's the first one bigger than the requested size
-        // or if it's the last item as in this case we're not going to find any
-        // bitmap bigger than the given one anyhow and we don't have any choice
-        // but to upscale the largest one we have.
-        if ( sizeThis.y >= size.y || i + 1 == m_resourceInfos.size() )
+        // Use this bitmap if it's the first one bigger than the requested size.
+        if ( sizeThis.y >= size.y )
             return AddBitmap(info, sizeThis, size);
     }
 
-    wxFAIL_MSG( wxS("unreachable") );
+    // We have to upscale some bitmap because we don't have any bitmaps larger
+    // than the requested size. Try to find one which can be upscaled using an
+    // integer factor.
+    const size_t i = GetIndexToUpscale(size);
 
-    return wxBitmap();
+    const ResourceInfo& info = m_resourceInfos[i];
+
+    return AddBitmap(info, sizeDef*info.scale, size);
 }
 
 // ============================================================================
@@ -326,7 +307,7 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
     // First of all, find all resources starting with this name.
     RCEnumCallbackData data(name);
 
-    if ( !::EnumResourceNames(NULL, // this HMODULE
+    if ( !::EnumResourceNames(nullptr, // this HMODULE
                               RT_RCDATA,
                               EnumRCBitmaps,
                               reinterpret_cast<LONG_PTR>(&data)) )
@@ -349,6 +330,24 @@ wxBitmapBundle wxBitmapBundle::FromResources(const wxString& name)
     if ( !bitmap.IsOk() )
         return wxBitmapBundle();
 
+    // It's not an error to not have any other bitmaps, but it's rather useless
+    // to use this class if there is only one version of the bitmap in the
+    // resources, so try to warn the developer about it because it could be
+    // just due to a typo in the name in the resource file or something similar.
+    if ( resourceInfos.size() == 1 )
+    {
+        // If you get this message and want to avoid it, you can either:
+        //
+        // - Add name_2x RCDATA resource containing the PNG to your resources.
+        // - Stop using wxBitmapBundle::FromResources() and use FromBitmap()
+        //   instead, e.g. use wxBITMAP_PNG() rather than wxBITMAP_BUNDLE_2().
+        wxLogDebug
+        (
+            wxS("No higher resolution bitmaps for \"%s\" found in the resources."),
+            name
+        );
+    }
+
     // Sort the resources in the order of increasing sizes to simplify the code
     // of wxBitmapBundleImplRC::GetBitmap().
     std::sort(resourceInfos.begin(), resourceInfos.end(), ScaleComparator());
@@ -365,7 +364,7 @@ wxBitmapBundle wxBitmapBundle::FromSVGResource(const wxString& name, const wxSiz
     // used for the embedded images. We could allow specifying the type as part
     // of the name in the future (e.g. "type:name" or something like this) if
     // really needed.
-    wxCharBuffer svgData = wxCharBuffer::CreateOwned(wxLoadUserResource(name, RT_RCDATA, NULL, wxGetInstance()));
+    wxCharBuffer svgData = wxCharBuffer::CreateOwned(wxLoadUserResource(name, RT_RCDATA, nullptr, wxGetInstance()));
 
     if ( !svgData.data() )
     {

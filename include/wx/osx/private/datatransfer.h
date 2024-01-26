@@ -88,19 +88,19 @@ public:
 
     // sink methods
 
-    virtual wxOSXDataSinkItem* CreateItem() wxOVERRIDE;
+    virtual wxOSXDataSinkItem* CreateItem() override;
 
-    void Clear() wxOVERRIDE;
+    void Clear() override;
 
-    void Flush() wxOVERRIDE;
+    void Flush() override;
 
     // source methods
 
-    virtual size_t GetItemCount() const wxOVERRIDE;
+    virtual size_t GetItemCount() const override;
 
-    virtual const wxOSXDataSourceItem* GetItem(size_t pos) const wxOVERRIDE;
+    virtual const wxOSXDataSourceItem* GetItem(size_t pos) const override;
 
-    virtual bool HasData(CFArrayRef types) const wxOVERRIDE;
+    virtual bool HasData(CFArrayRef types) const override;
 
     static wxOSXPasteboard* GetGeneralClipboard();
 private:

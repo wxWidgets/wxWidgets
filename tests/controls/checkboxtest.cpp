@@ -23,8 +23,8 @@ class CheckBoxTestCase : public CppUnit::TestCase
 public:
     CheckBoxTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( CheckBoxTestCase );
@@ -138,6 +138,9 @@ void CheckBoxTestCase::ThirdStateUser()
     m_check->Set3StateValue(wxCHK_UNDETERMINED);
 
     CPPUNIT_ASSERT_EQUAL(wxCHK_UNDETERMINED, m_check->Get3StateValue());
+
+    m_check->SetValue(true);
+    CPPUNIT_ASSERT_EQUAL(wxCHK_CHECKED, m_check->Get3StateValue());
 }
 
 void CheckBoxTestCase::InvalidStyles()

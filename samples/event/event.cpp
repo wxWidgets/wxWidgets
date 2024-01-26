@@ -2,7 +2,6 @@
 // Name:        event.cpp
 // Purpose:     wxWidgets sample demonstrating different event usage
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.01
 // Copyright:   (c) 2001-2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -48,7 +47,7 @@ wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent);
     DECLARE_EVENT_TABLE_ENTRY( \
         wxEVT_MY_CUSTOM_COMMAND, id, wxID_ANY, \
         wxCommandEventHandler(fn), \
-        (wxObject *) NULL \
+        nullptr \
     ),
 
 // ----------------------------------------------------------------------------
@@ -65,7 +64,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // these are regular event handlers used to highlight the events handling
     // order
@@ -74,7 +73,7 @@ public:
 
     // we override wxAppConsole::FilterEvent used to highlight the events
     // handling order
-    virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
+    virtual int FilterEvent(wxEvent& event) override;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -359,13 +358,13 @@ void MyApp::OnClickStaticHandlerApp(wxCommandEvent& event)
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame(NULL, wxID_ANY, title, pos, size)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     SetIcon(wxICON(sample));
 
     // init members
     m_nPush = 0;
-    m_btnDynamic = NULL;
+    m_btnDynamic = nullptr;
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;

@@ -139,10 +139,10 @@ wxIDirectFBSurface::CreateCompatible(const wxSize& sz, int flags)
     if ( size == wxDefaultSize )
     {
         if ( !GetSize(&size.x, &size.y) )
-            return NULL;
+            return nullptr;
     }
 
-    wxCHECK_MSG( size.x > 0 && size.y > 0, NULL, "invalid size" );
+    wxCHECK_MSG( size.x > 0 && size.y > 0, nullptr, "invalid size" );
 
     DFBSurfaceDescription desc;
     desc.flags = (DFBSurfaceDescriptionFlags)(
@@ -165,7 +165,7 @@ wxIDirectFBSurface::CreateCompatible(const wxSize& sz, int flags)
 
     wxIDirectFBSurfacePtr snew(wxIDirectFB::Get()->CreateSurface(&desc));
     if ( !snew )
-        return NULL;
+        return nullptr;
 
     if ( desc.pixelformat == DSPF_LUT8 )
     {
@@ -173,7 +173,7 @@ wxIDirectFBSurface::CreateCompatible(const wxSize& sz, int flags)
         if ( pal )
         {
             if ( !snew->SetPalette(pal) )
-                return NULL;
+                return nullptr;
         }
     }
 
@@ -184,13 +184,13 @@ wxIDirectFBSurfacePtr wxIDirectFBSurface::Clone()
 {
     wxIDirectFBSurfacePtr snew(CreateCompatible());
     if ( !snew )
-        return NULL;
+        return nullptr;
 
     if ( !snew->SetBlittingFlags(DSBLIT_NOFX) )
-        return NULL;
+        return nullptr;
 
-    if ( !snew->Blit(GetRaw(), NULL, 0, 0) )
-        return NULL;
+    if ( !snew->Blit(GetRaw(), nullptr, 0, 0) )
+        return nullptr;
 
     return snew;
 }

@@ -2,7 +2,6 @@
 // Name:        src/osx/iphone/toolbar.mm
 // Purpose:     wxToolBar
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -91,7 +90,7 @@ private:
     
     void Init()
     {
-        m_toolbarItem = NULL;
+        m_toolbarItem = nullptr;
         m_index = -1;
     }
     
@@ -206,7 +205,7 @@ void wxToolBar::Init()
     m_maxWidth = -1;
     m_maxHeight = -1;
     
-    m_macToolbar = NULL;
+    m_macToolbar = nullptr;
 }
 
 // also for the toolbar we have the dual implementation:
@@ -256,7 +255,7 @@ bool wxToolBar::Create(
 
 wxToolBar::~wxToolBar()
 {
-    m_macToolbar = NULL;
+    m_macToolbar = nullptr;
 }
 
 bool wxToolBar::Realize()
@@ -325,13 +324,13 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmapBundle& bitmap )
 
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
-    return NULL;
+    return nullptr;
 }
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
 {
     /*
-    if ( t != NULL )
+    if ( t != nullptr )
         ((wxToolBarTool*)t)->DoEnable( enable );
      */
 }
@@ -340,7 +339,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 {
     /*
     wxToolBarTool *tool = (wxToolBarTool *)t;
-    if ( ( tool != NULL ) && tool->IsButton() )
+    if ( ( tool != nullptr ) && tool->IsButton() )
         tool->UpdateToggleImage( toggle );
      */
 }
@@ -348,7 +347,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = static_cast< wxToolBarTool*>(toolBase );
-    if (tool == NULL)
+    if (tool == nullptr)
         return false;
     
     wxSize toolSize = GetToolSize();

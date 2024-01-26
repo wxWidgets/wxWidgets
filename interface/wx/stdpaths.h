@@ -80,6 +80,18 @@ public:
         Dir_Cache,
 
         /**
+            Directory containing configuration information.
+
+            Example return values:
+            - Unix: `~/.config`
+            - Windows: `C:\Users\username\AppData\Roaming`
+            - Mac: @c `~/Library/Preferences`
+
+            @since 3.3.0
+        */
+        Dir_Config,
+
+        /**
             Directory containing user documents.
 
             Example return values:
@@ -102,7 +114,7 @@ public:
 
             Example return values:
             - Unix/Mac: @c ~/Downloads
-            - Windows: @c "C:\Users\username\Downloads" (Only available on Vista and newer)
+            - Windows: @c "C:\Users\username\Downloads"
         */
         Dir_Downloads,
 
@@ -194,6 +206,20 @@ public:
          */
         ConfigFileConv_Ext
     };
+
+    /**
+        Append application and/or vendor name to the given directory.
+
+        By default, appends the subdirectory with the application name, as
+        returned by wxApp::GetAppName(), to the given directory.
+
+        This behaviour is affected by UseAppInfo(), e.g. if this function is
+        called with `AppInfo_VendorName` then the vendor name would be appended
+        instead of the application name.
+
+        @since 3.3.0
+    */
+    wxString AppendAppInfo(const wxString& dir) const;
 
     /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
@@ -370,17 +396,25 @@ public:
         - Mac: @c ~/Library/Preferences
 
         Only use this method if you have a single configuration file to put in this
-        directory, otherwise GetUserDataDir() is more appropriate as the latter
-        adds @c appinfo to the path, unlike this function.
+        directory, otherwise calling AppendAppInfo() with the value returned by
+        GetDir() with wxStandardPaths::Dir_Config is more appropriate.
     */
     virtual wxString GetUserConfigDir() const;
 
     /**
-        Return the directory for the user-dependent application data files:
+        Return the directory for the user-dependent application data files.
+
+        The returned path is:
+
         - Unix: @c ~/.appinfo
         - Windows: @c "C:\Users\username\AppData\Roaming\appinfo" or
                    @c "C:\Documents and Settings\username\Application Data\appinfo"
         - Mac: @c "~/Library/Application Support/appinfo"
+
+        Please note that under Unix this function return value doesn't depend
+        on the file layout, and so returns a possibly unexpected value when
+        wxStandardPaths::FileLayout_XDG is used. Consider using GetUserDir()
+        instead if you use XDG layout, as this function does respect it.
     */
     virtual wxString GetUserDataDir() const;
 
@@ -496,14 +530,16 @@ public:
         plugins directory on Unix, etc.
 
         Valid values for @a info are:
-            - @c AppInfo_None: don't use neither application nor vendor name in
+            - `AppInfo_None`: use neither application nor vendor name in
             the paths.
-            - @c AppInfo_AppName: use the application name in the paths.
-            - @c AppInfo_VendorName: use the vendor name in the paths, usually
-            used combined with AppInfo_AppName, i.e. as @code AppInfo_AppName |
-            AppInfo_VendorName @endcode
+            - `AppInfo_AppName`: use the application name in the paths.
+            - `AppInfo_VendorName`: use the vendor name in the paths, usually
+            used combined with `AppInfo_AppName`, i.e. as
+            `AppInfo_AppName | AppInfo_VendorName`.
 
         By default, only the application name is used.
+
+        @see AppendAppInfo()
 
         @since 2.9.0
     */

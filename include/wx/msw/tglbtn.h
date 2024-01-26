@@ -3,7 +3,6 @@
 // Purpose:     Declaration of the wxToggleButton class, which implements a
 //              toggle button under wxMSW.
 // Author:      John Norris, minor changes by Axel Schlueter
-// Modified by:
 // Created:     08.02.01
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows licence
@@ -40,21 +39,21 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
-    virtual void SetValue(bool value) wxOVERRIDE;
-    virtual bool GetValue() const wxOVERRIDE;
+    virtual void SetValue(bool value) override;
+    virtual bool GetValue() const override;
 
-    virtual bool MSWCommand(WXUINT param, WXWORD id) wxOVERRIDE;
-    virtual void Command(wxCommandEvent& event) wxOVERRIDE;
+    virtual bool MSWCommand(WXUINT param, WXWORD id) override;
+    virtual void Command(wxCommandEvent& event) override;
 
     // returns true if the platform should explicitly apply a theme border
-    virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
+    virtual bool CanApplyThemeBorder() const override { return false; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
-    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = nullptr) const override;
 
-    virtual bool MSWIsPushed() const wxOVERRIDE;
+    virtual bool MSWIsPushed() const override;
 
     void Init();
 
@@ -74,7 +73,7 @@ class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButton
 {
 public:
     // construction/destruction
-    wxBitmapToggleButton() {}
+    wxBitmapToggleButton() = default;
     wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmapBundle& label,
@@ -100,7 +99,7 @@ public:
     wxDEPRECATED_INLINE( void SetLabel(const wxBitmap& bitmap),
        SetBitmapLabel(bitmap); )
     // prevent virtual function hiding
-    virtual void SetLabel(const wxString& label) wxOVERRIDE { wxToggleButton::SetLabel(label); }
+    virtual void SetLabel(const wxString& label) override { wxToggleButton::SetLabel(label); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);

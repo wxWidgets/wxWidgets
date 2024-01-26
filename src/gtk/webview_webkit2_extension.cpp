@@ -65,7 +65,7 @@ wxgtk_webview_dbus_connection_created_cb(GObject *source_object,
                                          void* user_data);
 } // extern "C"
 
-static wxWebViewWebKitExtension *gs_extension = NULL;
+static wxWebViewWebKitExtension *gs_extension = nullptr;
 
 class wxWebViewWebKitExtension
 {
@@ -100,7 +100,7 @@ wxWebViewWebKitExtension::wxWebViewWebKitExtension(WebKitWebExtension *extension
     g_dbus_connection_new_for_address(server_address,
                                       G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
                                       observer,
-                                      NULL,
+                                      nullptr,
                                       wxgtk_webview_dbus_connection_created_cb,
                                       this);
     g_object_unref(observer);
@@ -136,21 +136,21 @@ void wxWebViewWebKitExtension::GetSelectedSource(GVariant *parameters,
     g_object_unref(win);
     if (!sel)
     {
-        ReturnDBusStringValue(invocation, NULL);
+        ReturnDBusStringValue(invocation, nullptr);
         return;
     }
-    WebKitDOMRange *range = webkit_dom_dom_selection_get_range_at(sel, 0, NULL);
+    WebKitDOMRange *range = webkit_dom_dom_selection_get_range_at(sel, 0, nullptr);
     if (!range)
     {
-        ReturnDBusStringValue(invocation, NULL);
+        ReturnDBusStringValue(invocation, nullptr);
         return;
     }
     WebKitDOMElement *div = webkit_dom_document_create_element(doc, "div",
-                                                               NULL);
+                                                               nullptr);
     WebKitDOMDocumentFragment *clone = webkit_dom_range_clone_contents(range,
-                                                                       NULL);
+                                                                       nullptr);
     webkit_dom_node_append_child(&div->parent_instance,
-                                 &clone->parent_instance, NULL);
+                                 &clone->parent_instance, nullptr);
     WebKitDOMElement *html = (WebKitDOMElement*)div;
 #if WEBKIT_CHECK_VERSION(2, 8, 0)
     gchar *text = webkit_dom_element_get_inner_html(html);
@@ -214,13 +214,13 @@ void wxWebViewWebKitExtension::GetSelectedText(GVariant *parameters,
     g_object_unref(win);
     if (!sel)
     {
-        ReturnDBusStringValue(invocation, NULL);
+        ReturnDBusStringValue(invocation, nullptr);
         return;
     }
-    WebKitDOMRange *range = webkit_dom_dom_selection_get_range_at(sel, 0, NULL);
+    WebKitDOMRange *range = webkit_dom_dom_selection_get_range_at(sel, 0, nullptr);
     if (!range)
     {
-        ReturnDBusStringValue(invocation, NULL);
+        ReturnDBusStringValue(invocation, nullptr);
         return;
     }
     gchar *text = webkit_dom_range_get_text(range);
@@ -247,7 +247,7 @@ void wxWebViewWebKitExtension::ClearSelection(GVariant *parameters,
         webkit_dom_dom_selection_remove_all_ranges(sel);
     }
 
-    g_dbus_method_invocation_return_value(invocation, NULL);
+    g_dbus_method_invocation_return_value(invocation, nullptr);
 }
 
 void wxWebViewWebKitExtension::HasSelection(GVariant *parameters,
@@ -293,7 +293,7 @@ void wxWebViewWebKitExtension::DeleteSelection(GVariant *parameters,
         webkit_dom_dom_selection_delete_from_document(sel);
     }
 
-    g_dbus_method_invocation_return_value(invocation, NULL);
+    g_dbus_method_invocation_return_value(invocation, nullptr);
 }
 
 void wxWebViewWebKitExtension::ReturnDBusStringValue(GDBusMethodInvocation *invocation, gchar *value)
@@ -356,18 +356,22 @@ wxgtk_webview_handle_method_call(GDBusConnection*,
 }
 } // extern "C"
 
+wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
 static const GDBusInterfaceVTable interface_vtable = {
     wxgtk_webview_handle_method_call,
-    NULL,
-    NULL
+    nullptr,
+    nullptr
 };
+
+wxGCC_WARNING_RESTORE(missing-field-initializers)
 
 static
 gboolean
 wxgtk_webview_dbus_peer_is_authorized(GCredentials *peer_credentials)
 {
     static GCredentials *own_credentials = g_credentials_new();
-    GError *error = NULL;
+    GError *error = nullptr;
 
     if (peer_credentials && g_credentials_is_same_user(peer_credentials, own_credentials, &error))
     {
@@ -398,9 +402,9 @@ wxgtk_webview_dbus_connection_created_cb(GObject*,
                                          void* user_data)
 {
     static GDBusNodeInfo *introspection_data =
-        g_dbus_node_info_new_for_xml(introspection_xml, NULL);
+        g_dbus_node_info_new_for_xml(introspection_xml, nullptr);
 
-    GError *error = NULL;
+    GError *error = nullptr;
     GDBusConnection *connection =
         g_dbus_connection_new_for_address_finish(result, &error);
     if (error)
@@ -418,7 +422,7 @@ wxgtk_webview_dbus_connection_created_cb(GObject*,
                                           introspection_data->interfaces[0],
                                           &interface_vtable,
                                           extension,
-                                          NULL,
+                                          nullptr,
                                           &error);
     if (!registration_id)
     {

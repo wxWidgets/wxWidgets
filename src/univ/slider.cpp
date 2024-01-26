@@ -2,7 +2,6 @@
 // Name:        src/univ/slider.cpp
 // Purpose:     implementation of the universal version of wxSlider
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     09.02.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -487,6 +486,15 @@ void wxSlider::CalcGeometry()
 
     // initialize to the full client rect
     wxRect rectTotal = GetClientRect();
+    wxSize bestClientSize = DoGetBestClientSize();
+    if ( !IsVert() && rectTotal.height > bestClientSize.y )
+    {
+        rectTotal.height = bestClientSize.y;
+    }
+    else if ( IsVert() && rectTotal.width > bestClientSize.x )
+    {
+        rectTotal.width = bestClientSize.x;
+    }
     m_rectSlider = rectTotal;
     wxSize sizeThumb = GetThumbSize();
 
@@ -846,7 +854,7 @@ wxScrollThumb::Shaft wxSlider::HitTest(const wxPoint& pt) const
 {
     wxRect rectShaft = GetShaftRect();
     wxRect rectThumb;
-    CalcThumbRect(&rectShaft, &rectThumb, NULL);
+    CalcThumbRect(&rectShaft, &rectThumb, nullptr);
 
     // check for possible shaft or thumb hit
     if (!rectShaft.Contains(pt) && !rectThumb.Contains(pt))
@@ -890,7 +898,7 @@ wxScrollThumb::Shaft wxSlider::HitTest(const wxPoint& pt) const
 wxCoord wxSlider::ThumbPosToPixel() const
 {
     wxRect rectThumb;
-    CalcThumbRect(NULL, &rectThumb, NULL);
+    CalcThumbRect(nullptr, &rectThumb, nullptr);
 
     return IsVert() ? rectThumb.y : rectThumb.x;
 }

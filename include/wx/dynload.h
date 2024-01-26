@@ -3,7 +3,6 @@
 // Purpose:      Dynamic loading framework
 // Author:       Ron Lee, David Falkinder, Vadim Zeitlin and a cast of 1000's
 //               (derived in part from dynlib.cpp (c) 1998 Guilhem Lavaux)
-// Modified by:
 // Created:      03/12/01
 // Copyright:    (c) 2001 Ron Lee <ron@debian.org>
 // Licence:      wxWindows licence
@@ -21,14 +20,14 @@
 #if wxUSE_DYNAMIC_LOADER
 
 #include "wx/dynlib.h"
-#include "wx/hashmap.h"
 #include "wx/module.h"
+
+#include <unordered_map>
 
 class WXDLLIMPEXP_FWD_BASE wxPluginLibrary;
 
+using wxDLManifest = std::unordered_map<wxString, wxPluginLibrary*>;
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxPluginLibrary *, wxDLManifest,
-                                     class WXDLLIMPEXP_BASE);
 typedef wxDLManifest wxDLImports;
 
 // ---------------------------------------------------------------------------
@@ -81,7 +80,7 @@ public:
 
 private:
 
-    // These pointers may be NULL but if they are not, then m_ourLast follows
+    // These pointers may be null but if they are not, then m_ourLast follows
     // m_ourFirst in the linked list, i.e. can be found by calling GetNext() a
     // sufficient number of times.
     const wxClassInfo    *m_ourFirst; // first class info in this plugin
@@ -112,7 +111,7 @@ public:
 
         // Instance methods.
 
-    wxPluginManager() : m_entry(NULL) {}
+    wxPluginManager() : m_entry(nullptr) {}
     wxPluginManager(const wxString &libname, int flags = wxDL_DEFAULT)
     {
         Load(libname, flags);
@@ -123,22 +122,22 @@ public:
     void   Unload();
 
     bool   IsLoaded() const { return m_entry && m_entry->IsLoaded(); }
-    void* GetSymbol(const wxString& symbol, bool* success = NULL)
+    void* GetSymbol(const wxString& symbol, bool* success = nullptr)
     {
         return m_entry->GetSymbol( symbol, success );
     }
 
-    static void CreateManifest() { ms_manifest = new wxDLManifest(wxKEY_STRING); }
-    static void ClearManifest() { delete ms_manifest; ms_manifest = NULL; }
+    static void CreateManifest() { ms_manifest = new wxDLManifest(); }
+    static void ClearManifest() { delete ms_manifest; ms_manifest = nullptr; }
 
 private:
     // return the pointer to the entry for the library with given name in
-    // ms_manifest or NULL if none
+    // ms_manifest or nullptr if none
     static wxPluginLibrary *FindByName(const wxString& name)
     {
         const wxDLManifest::iterator i = ms_manifest->find(name);
 
-        return i == ms_manifest->end() ? NULL : i->second;
+        return i == ms_manifest->end() ? nullptr : i->second;
     }
 
     static wxDLManifest* ms_manifest;  // Static hash of loaded libs.

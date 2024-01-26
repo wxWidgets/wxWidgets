@@ -2,7 +2,6 @@
 // Name:        wx/font.h
 // Purpose:     wxFontBase class: the interface of wxFont
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -476,12 +475,6 @@ public:
     // account as well.
     static int GetNumericWeightOf(wxFontWeight weight);
 
-    // this doesn't do anything and is kept for compatibility only
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no);)
-    wxDEPRECATED_INLINE(bool GetNoAntiAliasing() const, return false;)
-#endif // WXWIN_COMPATIBILITY_2_8
-
     wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants instead of raw values")
     void SetWeight(int weight)
         { SetWeight(static_cast<wxFontWeight>(weight)); }
@@ -625,12 +618,8 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
 // include the real class declaration
 #if defined(__WXMSW__)
     #include "wx/msw/font.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/font.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/font.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/font.h"
+    #include "wx/gtk/font.h"
 #elif defined(__WXX11__)
     #include "wx/x11/font.h"
 #elif defined(__WXDFB__)
@@ -644,13 +633,24 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
 class WXDLLIMPEXP_CORE wxFontList: public wxGDIObjListBase
 {
 public:
+    // Preferred function that works for any kind of fonts.
+    wxFont *FindOrCreateFont(const wxFontInfo& fontInfo);
+
+    // Non-deprecated but limited older function only working for the fonts
+    // with the integer sizes.
     wxFont *FindOrCreateFont(int pointSize,
                              wxFontFamily family,
                              wxFontStyle style,
                              wxFontWeight weight,
                              bool underline = false,
                              const wxString& face = wxEmptyString,
-                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+        {
+            return FindOrCreateFont(wxFontInfo(pointSize)
+                                    .Family(family)
+                                    .Style(style).Weight(weight).Underlined(underline)
+                                    .FaceName(face).Encoding(encoding));
+        }
 
     wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants")
     wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
@@ -659,12 +659,6 @@ public:
                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
         { return FindOrCreateFont(pointSize, (wxFontFamily)family, (wxFontStyle)style,
                                   (wxFontWeight)weight, underline, face, encoding); }
-
-    wxFont *FindOrCreateFont(const wxFontInfo& fontInfo)
-        { return FindOrCreateFont(fontInfo.GetPointSize(), fontInfo.GetFamily(),
-                                  fontInfo.GetStyle(), fontInfo.GetWeight(),
-                                  fontInfo.IsUnderlined(), fontInfo.GetFaceName(),
-                                  fontInfo.GetEncoding()); }
 };
 
 extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
@@ -676,6 +670,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
 //
 // to compile without warnings which it would otherwise provoke from some
 // compilers as it compares elements of different enums
+
+#if WXWIN_COMPATIBILITY_3_2
 
 wxDEPRECATED_MSG("use wxFONTFAMILY_XXX constants") \
 inline bool operator==(wxFontFamily s, wxDeprecatedGUIConstants t)
@@ -695,5 +691,7 @@ inline bool operator==(wxFontWeight s, wxDeprecatedGUIConstants t)
 wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants") \
 inline bool operator!=(wxFontWeight s, wxDeprecatedGUIConstants t)
     { return static_cast<int>(s) != static_cast<int>(t); }
+
+#endif // WXWIN_COMPATIBILITY_3_2
 
 #endif // _WX_FONT_H_BASE_

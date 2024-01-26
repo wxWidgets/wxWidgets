@@ -9,22 +9,19 @@
 // -----------------------------------------------------------------------
 
 /** Used to tell wxPGProperty to use label as name as well
+    @hideinitializer
 */
-#define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
-
-/** This is the value placed in wxPGProperty::sm_wxPG_LABEL
-*/
-#define wxPG_LABEL_STRING       wxS("@!")
-#define wxPG_NULL_BITMAP        wxNullBitmap
-#define wxPG_COLOUR_BLACK       (*wxBLACK)
+#define wxPG_LABEL              (*wxPGProperty::sm_labelItem)
 
 /** Convert Red, Green and Blue to a single 32-bit value.
+    @hideinitializer
 */
 #define wxPG_COLOUR(R,G,B) ((wxUint32)(R+(G<<8)+(B<<16)))
 
 
 /** If property is supposed to have custom-painted image, then returning
     this in wxPGProperty::OnMeasureImage() will usually be enough.
+    @hideinitializer
 */
 #define wxPG_DEFAULT_IMAGE_SIZE             wxDefaultSize
 
@@ -54,146 +51,170 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
 /** Used to indicate wxPGChoices::Add() etc that the value is actually not given
     by the caller.
+    @hideinitializer
 */
-#define wxPG_INVALID_VALUE      INT_MAX
+constexpr int wxPG_INVALID_VALUE = std::numeric_limits<int>::max();
 
 // -----------------------------------------------------------------------
 
-enum wxPG_GETPROPERTYVALUES_FLAGS
+enum class wxPGPropertyValuesFlags : int
 {
-/** Flag for wxPropertyGridInterface::SetProperty* functions,
-    wxPropertyGridInterface::HideProperty(), etc.
-    Apply changes only for the property in question.
-    @hideinitializer
-*/
-wxPG_DONT_RECURSE                 = 0x00000000,
+    /** Flag for wxPropertyGridInterface::SetProperty* functions,
+        wxPropertyGridInterface::HideProperty(), etc.
+        Apply changes only for the property in question.
+        @hideinitializer
+    */
+    DontRecurse      = 0x00000000,
 
-/** Flag for wxPropertyGridInterface::GetPropertyValues().
-    Use this flag to retain category structure; each sub-category
-    will be its own wxVariantList of wxVariant.
-    @hideinitializer
-*/
-wxPG_KEEP_STRUCTURE               = 0x00000010,
+    /** Flag for wxPropertyGridInterface::GetPropertyValues().
+        Use this flag to retain category structure; each sub-category
+        will be its own wxVariantList of wxVariant.
+        @hideinitializer
+    */
+    KeepStructure    = 0x00000010,
 
-/** Flag for wxPropertyGridInterface::SetProperty* functions,
-    wxPropertyGridInterface::HideProperty(), etc.
-    Apply changes recursively for the property and all its children.
-    @hideinitializer
-*/
-wxPG_RECURSE                      = 0x00000020,
+    /** Flag for wxPropertyGridInterface::SetProperty* functions,
+        wxPropertyGridInterface::HideProperty(), etc.
+        Apply changes recursively for the property and all its children.
+        @hideinitializer
+    */
+    Recurse          = 0x00000020,
 
-/** Flag for wxPropertyGridInterface::GetPropertyValues().
-    Use this flag to include property attributes as well.
-    @hideinitializer
-*/
-wxPG_INC_ATTRIBUTES               = 0x00000040,
+    /** Flag for wxPropertyGridInterface::GetPropertyValues().
+        Use this flag to include property attributes as well.
+        @hideinitializer
+    */
+    IncAttributes    = 0x00000040,
 
-/** Used when first starting recursion.
-    @hideinitializer
-*/
-wxPG_RECURSE_STARTS               = 0x00000080,
+    /** Used when first starting recursion.
+        @hideinitializer
+    */
+    RecurseStarts    = 0x00000080,
 
-/** Force value change.
-    @hideinitializer
-*/
-wxPG_FORCE                        = 0x00000100,
+    /** Force value change.
+        @hideinitializer
+    */
+    Force            = 0x00000100,
 
-/** Only sort categories and their immediate children.
-    Sorting done by ::wxPG_AUTO_SORT option uses this.
-    @hideinitializer
-*/
-wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
+    /** Only sort categories and their immediate children.
+        Sorting done by ::wxPG_AUTO_SORT option uses this.
+        @hideinitializer
+    */
+    SortTopLevelOnly = 0x00000200
 };
 
 // -----------------------------------------------------------------------
 
-/** Misc argument flags.
+/** Miscellaneous property value format flags.
 */
-enum wxPG_MISC_ARG_FLAGS
+enum class wxPGPropValFormatFlags : int
 {
+    /** No flags.
+        @hideinitializer
+    */
+    Null                        = 0,
+
     /** Get/Store full value instead of displayed value.
         @hideinitializer
     */
-    wxPG_FULL_VALUE                     = 0x00000001,
+    FullValue                   = 0x00000001,
 
     /** Perform special action in case of unsuccessful conversion.
         @hideinitializer
     */
-    wxPG_REPORT_ERROR                   = 0x00000002,
+    ReportError                 = 0x00000002,
 
     /**
         @hideinitializer
     */
-    wxPG_PROPERTY_SPECIFIC              = 0x00000004,
+    PropertySpecific            = 0x00000004,
 
     /** Get/Store editable value instead of displayed one (should only be
         different in the case of common values).
         @hideinitializer
     */
-    wxPG_EDITABLE_VALUE                 = 0x00000008,
+    EditableValue               = 0x00000008,
 
     /** Used when dealing with fragments of composite string value
         @hideinitializer
     */
-    wxPG_COMPOSITE_FRAGMENT             = 0x00000010,
+    CompositeFragment           = 0x00000010,
 
     /** Means property for which final string value is for cannot really be
         edited.
         @hideinitializer
     */
-    wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = 0x00000020,
+    UneditableCompositeFragment = 0x00000020,
 
     /** wxPGProperty::ValueToString() called from wxPGProperty::GetValueAsString()
         (guarantees that input wxVariant value is current own value)
         @hideinitializer
     */
-    wxPG_VALUE_IS_CURRENT               = 0x00000040,
+    ValueIsCurrent              = 0x00000040,
 
     /** Value is being set programmatically (i.e. not by user)
         @hideinitializer
     */
-    wxPG_PROGRAMMATIC_VALUE             = 0x00000080
+    ProgrammaticValue           = 0x00000080
 };
 
 // -----------------------------------------------------------------------
 
 /** wxPGProperty::SetValue() flags
 */
-enum wxPG_SETVALUE_FLAGS
+enum class wxPGSetValueFlags : int
 {
     /**
         @hideinitializer
     */
-    wxPG_SETVAL_REFRESH_EDITOR      = 0x0001,
+    RefreshEditor = 0x0001,
+
     /**
         @hideinitializer
     */
-    wxPG_SETVAL_AGGREGATED          = 0x0002,
+    Aggregated    = 0x0002,
+
     /**
         @hideinitializer
     */
-    wxPG_SETVAL_FROM_PARENT         = 0x0004,
+    FromParent    = 0x0004,
+
     /** Set if value changed by user
         @hideinitializer
     */
-    wxPG_SETVAL_BY_USER             = 0x0008
+    ByUser        = 0x0008
 };
 
 // -----------------------------------------------------------------------
 
-//
-/** Valid constants for ::wxPG_UINT_BASE attribute
-    (@c long because of wxVariant constructor)
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
 */
-#define wxPG_BASE_OCT                       8L
-#define wxPG_BASE_DEC                       10L
-#define wxPG_BASE_HEX                       16L
-#define wxPG_BASE_HEXL                      32L
+constexpr long wxPG_BASE_OCT =   8L;
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
+*/
+constexpr long wxPG_BASE_DEC =  10L;
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
+*/
+constexpr long wxPG_BASE_HEX =  16L;
+/** Constant for ::wxPG_UINT_BASE attribute
+    @hideinitializer
+*/
+constexpr long wxPG_BASE_HEXL = 32L;
 
-/** Valid constants for ::wxPG_UINT_PREFIX attribute
+/** Constant for ::wxPG_UINT_PREFIX attribute
+    @hideinitializer
 */
-#define wxPG_PREFIX_NONE                    0L
-#define wxPG_PREFIX_0x                      1L
-#define wxPG_PREFIX_DOLLAR_SIGN             2L
+constexpr long wxPG_PREFIX_NONE        = 0L;
+/** Constant for ::wxPG_UINT_PREFIX attribute
+    @hideinitializer
+*/
+constexpr long wxPG_PREFIX_0x          = 1L;
+/** Constant for ::wxPG_UINT_PREFIX attribute
+    @hideinitializer
+*/
+constexpr long wxPG_PREFIX_DOLLAR_SIGN = 2L;
 
 // -----------------------------------------------------------------------

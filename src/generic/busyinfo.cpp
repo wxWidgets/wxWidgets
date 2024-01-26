@@ -59,6 +59,21 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
                                                   wxDefaultSize,
                                                   wxALIGN_CENTRE);
         title->SetFont(title->GetFont().Scaled(2));
+
+#ifdef __WXGTK__
+        // This bad hack is needed to fix layout under GTK: the font sent above
+        // is not taken into account for the size calculation until the window
+        // is shown but we need the correct size when computing the best size
+        // below, as otherwise we would make the entire frame too small and
+        // when the correct size is used for the actual layout later, the title
+        // control would take too much space pushing the text below it outside
+        // of the window bounds.
+        //
+        // So preemptively make it about as big as it's going to be to prevent
+        // this from happening.
+        title->SetMinSize(2*title->GetBestSize());
+#endif // __WXGTK__
+
 #if wxUSE_MARKUP
         title->SetLabelMarkup(flags.m_title);
 #else
@@ -69,7 +84,7 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     }
     else
     {
-        title = NULL;
+        title = nullptr;
     }
 
     // Vertically center the text in the window.

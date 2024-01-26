@@ -2,7 +2,6 @@
 // Name:        wx/bmpbuttn.h
 // Purpose:     wxBitmapButton class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) 2000 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -18,9 +17,9 @@
 #include "wx/button.h"
 
 // FIXME: right now only wxMSW, wxGTK and wxOSX implement bitmap support in wxButton
-//        itself, this shouldn't be used for the other platforms neither
+//        itself, this shouldn't be used for the other platforms either
 //        when all of them do it
-#if (defined(__WXMSW__) || defined(__WXGTK20__) || defined(__WXOSX__) || defined(__WXQT__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__) || defined(__WXQT__)) && !defined(__WXUNIVERSAL__)
     #define wxHAS_BUTTON_BITMAP
 #endif
 
@@ -130,12 +129,8 @@ protected:
     #include "wx/univ/bmpbuttn.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/bmpbuttn.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/bmpbuttn.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/bmpbuttn.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/bmpbuttn.h"
+    #include "wx/gtk/bmpbuttn.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/bmpbuttn.h"
 #elif defined(__WXQT__)

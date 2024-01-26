@@ -2,7 +2,6 @@
 // Name:        wx/vidmode.h
 // Purpose:     declares wxVideoMode class used by both wxDisplay and wxApp
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     27.09.2003 (extracted from wx/display.h)
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -15,7 +14,7 @@
 // wxVideoMode: a simple struct containing video mode parameters for a display
 // ----------------------------------------------------------------------------
 
-struct WXDLLIMPEXP_CORE wxVideoMode
+struct wxVideoMode
 {
     wxVideoMode(int width = 0, int height = 0, int depth = 0, int freq = 0)
     {

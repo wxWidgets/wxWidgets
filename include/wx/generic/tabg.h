@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/tabg.h
-// Purpose:     Generic tabbed dialogs; used by wxMotif's wxNotebook
+// Purpose:     Generic tabbed dialogs; used by generic wxNotebook
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -30,7 +29,7 @@ class WXDLLIMPEXP_CORE wxTabControl: public wxObject
 {
     wxDECLARE_DYNAMIC_CLASS(wxTabControl);
 public:
-    wxTabControl(wxTabView *v = NULL);
+    wxTabControl(wxTabView *v = nullptr);
     virtual ~wxTabControl(void);
 
     virtual void OnDraw(wxDC& dc, bool lastInRow);
@@ -107,7 +106,7 @@ public:
   inline wxWindow* GetWindow(void) const { return m_window; }
 
   // Automatically positions tabs
-  wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = NULL);
+  wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = nullptr);
 
   // Remove the tab without deleting the window
   bool RemoveTab(int id);

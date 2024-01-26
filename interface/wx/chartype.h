@@ -6,24 +6,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
-    This macro can be used with character and string literals (in other words,
-    @c 'x' or @c "foo") to automatically convert them to wide strings in Unicode
-    builds of wxWidgets. This macro simply returns the value passed to it
-    without changes in ASCII build. In fact, its definition is:
+    Macro taking a literal string and expanding into a wide string.
+
+    This macro should not be used in the new code any more as it is simply
+    equivalent to using `L` string prefix now, i.e. its simplified definition
+    could be just
 
     @code
-    #ifdef UNICODE
-    #   define wxT(x)  L##x
-    #else // !Unicode
-    #   define wxT(x)  x
-    #endif
+    #define wxT(x)  L##x
     @endcode
 
-    Note that since wxWidgets 2.9.0 you shouldn't use wxT() anymore in your
-    program sources (it was previously required if you wanted to support Unicode).
+    It used to be required when converting literal strings to wxString in
+    wxWidgets versions prior to 2.9.0, and so can be found in a lot of existing
+    code, but can be simply removed in any code using more recent versions of
+    wxWidgets.
 
     @see @ref overview_unicode, wxS()
 
@@ -32,25 +31,11 @@
 #define wxT(string)
 
 /**
-    Compatibility macro which expands to wxT() in wxWidgets 2 only.
+    Obsolete macro which simply expands to its argument.
 
-    This macro can be used in code which needs to compile with both
-    wxWidgets 2 and 3 versions, in places where the wx2 API requires a Unicode string
-    (in Unicode build) but the wx3 API only accepts a standard narrow
-    string, as in e.g. wxCmdLineEntryDesc structure objects initializers.
-
-    Example of use:
-    @code
-    const wxCmdLineEntryDesc cmdLineDesc[] =
-    {
-        { wxCMD_LINE_SWITCH, wxT_2("q"), wxT_2("quiet"),
-          wxT_2("Don't output verbose messages") },
-        wxCMD_LINE_DESC_END
-    };
-    @endcode
-
-    Without @c wxT_2 the code above wouldn't compile with wxWidgets 2, but using @c
-    wxT instead, it wouldn't compile with wxWidgets 3.
+    This macro could be used in the code which needed to compile with both
+    wxWidgets 2 and 3 versions in some rare circumstances. It is still provided
+    for compatibility but serves no purpose any longer.
 
     @see wxT()
 
@@ -98,40 +83,33 @@
 #define _T(string)
 
 /**
-    wxChar is defined to be
-    \- @c char when <tt>wxUSE_UNICODE==0</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    wxChar is a compatibility typedef always defined as @c wchar_t now.
+
+    Note that it is not affected by @c wxUSE_UNICODE_UTF8 option.
 */
-typedef wxUSE_UNICODE_dependent wxChar;
+typedef wchar_t wxChar;
 
 /**
-    wxSChar is defined to be
-    \- <tt>signed char</tt> when <tt>wxUSE_UNICODE==0</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    wxSChar is a compatibility typedef always defined as @c wchar_t now.
 */
-typedef wxUSE_UNICODE_dependent wxSChar;
+typedef wchar_t wxSChar;
 
 /**
-    wxUChar is defined to be
-    \- <tt>unsigned char</tt> when <tt>wxUSE_UNICODE==0</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    wxUChar is a compatibility typedef always defined as @c wchar_t now.
 */
-typedef wxUSE_UNICODE_dependent wxUChar;
+typedef wchar_t wxUChar;
 
 /**
     wxStringCharType is defined to be:
-    \- @c char when <tt>wxUSE_UNICODE==0</tt>
-    \- @c char when <tt>wxUSE_UNICODE_WCHAR==0</tt> and <tt>wxUSE_UNICODE==1</tt>
-    \- @c wchar_t when <tt>wxUSE_UNICODE_WCHAR==1</tt> and <tt>wxUSE_UNICODE==1</tt>
+    \- @c char when <tt>wxUSE_UNICODE_WCHAR==0</tt>
+    \- @c wchar_t when <tt>wxUSE_UNICODE_WCHAR==1</tt>
 
-    The @c wxUSE_UNICODE_WCHAR symbol is defined to @c 1 when building on
-    Windows while it's defined to @c 0 when building on Unix, Linux or macOS.
-    (Note that @c wxUSE_UNICODE_UTF8 symbol is defined as the opposite of
-    @c wxUSE_UNICODE_WCHAR.)
+    The @c wxUSE_UNICODE_WCHAR symbol is defined by default, but may be turned
+    off in which case @c wxUSE_UNICODE_UTF8 is turned on.
 
     Note that wxStringCharType (as the name says) is the type used by wxString
     for internal storage of the characters.
 */
 typedef wxUSE_UNICODE_WCHAR_dependent wxStringCharType;
 
-//@}
+///@}

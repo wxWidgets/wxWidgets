@@ -447,13 +447,15 @@ protected:
 
     /**
         Method called when the columns order is changed in the customization
-        dialog.
+        dialog @em or when the EVT_HEADER_END_REORDER event is not handled after
+        dragging a single column.
 
-        This method is only called from ShowCustomizeDialog() when the user
-        changes the order of columns. In particular it is @em not called if a
-        single column changes place because the user dragged it to the new
-        location, the EVT_HEADER_END_REORDER event handler should be used to
-        react to this.
+        This method is always called from ShowCustomizeDialog() when the user
+        changes the order of columns. In case a single column changes place
+        because the user dragged it to a new location, the EVT_HEADER_END_REORDER
+        event handler can be used to react to this. If this event
+        handler is not defined though UpdateColumnsOrder() will be called
+        instead.
 
         A typical implementation in a derived class will update the display
         order of the columns in the associated control, if any. Notice that

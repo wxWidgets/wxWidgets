@@ -25,14 +25,14 @@ class WXDLLIMPEXP_CORE wxDFBDCImpl : public wxDCImpl
 {
 public:
     // ctors
-    wxDFBDCImpl(wxDC *owner) : wxDCImpl(owner) { m_surface = NULL; }
+    wxDFBDCImpl(wxDC *owner) : wxDCImpl(owner) { m_surface = nullptr; }
     wxDFBDCImpl(wxDC *owner, const wxIDirectFBSurfacePtr& surface)
         : wxDCImpl(owner)
     {
         DFBInit(surface);
     }
 
-    bool IsOk() const { return m_surface != NULL; }
+    bool IsOk() const { return m_surface != nullptr; }
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -62,9 +62,9 @@ public:
     virtual wxCoord GetCharWidth() const;
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 const wxFont *theFont = NULL) const;
+                                 wxCoord *descent = nullptr,
+                                 wxCoord *externalLeading = nullptr,
+                                 const wxFont *theFont = nullptr) const;
 
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }

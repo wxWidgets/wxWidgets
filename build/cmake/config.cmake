@@ -12,12 +12,16 @@ file(MAKE_DIRECTORY ${wxCONFIG_DIR})
 set(TOOLCHAIN_FULLNAME ${wxBUILD_FILE_ID})
 
 macro(wx_configure_script input output)
+    # variables used in wx-config-inplace.in
+    set(abs_top_srcdir ${wxSOURCE_DIR})
+    set(abs_top_builddir ${wxBINARY_DIR})
+
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/${input}
-        ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
+        ${wxSOURCE_DIR}/${input}
+        ${wxBINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
         ESCAPE_QUOTES @ONLY NEWLINE_STYLE UNIX)
     file(COPY
-        ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
+        ${wxBINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
         DESTINATION ${wxCONFIG_DIR}
         FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
             GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
@@ -35,6 +39,26 @@ macro(wx_get_dependencies var lib)
                     get_target_property(dep_name ${dep} INTERFACE_OUTPUT_NAME)
                 else()
                     get_target_property(dep_name ${dep} OUTPUT_NAME)
+                endif()
+
+                # imported target
+                if(CMAKE_VERSION VERSION_GREATER "3.18")
+                    # CMake <= 3.18 only allows a few properties to be checked, not LOCATION, see
+                    # https://cmake.org/cmake/help/v3.18/manual/cmake-buildsystem.7.html#interface-libraries
+                    set(prop_suffix)
+                    if (CMAKE_BUILD_TYPE)
+                        string(TOUPPER "${CMAKE_BUILD_TYPE}" prop_suffix)
+                        set(prop_suffix "_${prop_suffix}")
+                    endif()
+                    if(NOT dep_name AND prop_suffix)
+                        get_target_property(dep_name ${dep} LOCATION${prop_suffix})
+                    endif()
+                    if(NOT dep_name)
+                        get_target_property(dep_name ${dep} LOCATION)
+                    endif()
+                endif()
+                if(NOT dep_name)
+                    get_target_property(dep_name ${dep} IMPORTED_LIBNAME)
                 endif()
             else()
                 # For the value like $<$<CONFIG:DEBUG>:LIB_PATH>
@@ -75,9 +99,9 @@ function(wx_write_config_inplace)
     endif()
     execute_process(
         COMMAND
-        ${CMAKE_COMMAND} -E ${COPY_CMD}
-        "lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
-        "${CMAKE_CURRENT_BINARY_DIR}/wx-config"
+        "${CMAKE_COMMAND}" -E ${COPY_CMD}
+        "${wxBINARY_DIR}/lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
+        "${wxBINARY_DIR}/wx-config"
         )
 endfunction()
 
@@ -89,9 +113,6 @@ function(wx_write_config)
     set(libdir "\${exec_prefix}/lib")
     set(bindir "\${exec_prefix}/bin")
 
-    find_program(EGREP egrep)
-    mark_as_advanced(EGREP)
-
     if(wxBUILD_MONOLITHIC)
         set(MONOLITHIC 1)
     else()
@@ -102,13 +123,7 @@ function(wx_write_config)
     else()
         set(SHARED 0)
     endif()
-    if(wxUSE_UNICODE)
-        set(WX_CHARTYPE unicode)
-        set(lib_unicode_suffix u)
-    else()
-        set(WX_CHARTYPE ansi)
-        set(lib_unicode_suffix)
-    endif()
+    set(lib_unicode_suffix u)
     if(CMAKE_CROSSCOMPILING)
         set(cross_compiling yes)
         set(host_alias ${CMAKE_SYSTEM_NAME})
@@ -179,6 +194,9 @@ function(wx_write_config)
     foreach(flag IN LISTS wxTOOLKIT_DEFINITIONS)
         wx_string_append(WXCONFIG_CPPFLAGS " -D${flag}")
     endforeach()
+    if(wxBUILD_LARGEFILE_SUPPORT)
+        wx_string_append(WXCONFIG_CPPFLAGS " -D_FILE_OFFSET_BITS=64")
+    endif()
     string(STRIP "${WXCONFIG_CPPFLAGS}" WXCONFIG_CPPFLAGS)
     set(WXCONFIG_CXXFLAGS ${WXCONFIG_CFLAGS})
     set(WXCONFIG_LDFLAGS_GUI)

@@ -2,7 +2,6 @@
 // Name:        src/unix/stackwalk.cpp
 // Purpose:     wxStackWalker implementation for Unix/glibc
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-18
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -37,6 +36,21 @@
     #include <cxxabi.h>
 #endif // HAVE_CXA_DEMANGLE
 
+// We don't test for this function in configure because it's present in glibc
+// versions dating back to at least 2.3, i.e. in practice it's always available.
+#if defined(__LINUX__) && defined(__GLIBC__)
+    #include <dlfcn.h>
+    #include <link.h>
+
+    #include <unordered_map>
+    #include <vector>
+
+    #define HAVE_DLADDR1
+#endif
+
+namespace
+{
+
 // ----------------------------------------------------------------------------
 // tiny helper wrapper around popen/pclose()
 // ----------------------------------------------------------------------------
@@ -65,6 +79,8 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxStdioPipe);
 };
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation
@@ -106,8 +122,8 @@ void wxStackFrame::OnGetName()
                     char *cppfunc = __cxxabiv1::__cxa_demangle
                                     (
                                         m_name.mb_str(),
-                                        NULL, // output buffer (none, alloc it)
-                                        NULL, // [out] len of output buffer
+                                        nullptr, // output buffer (none, alloc it)
+                                        nullptr, // [out] len of output buffer
                                         &rc
                                     );
                     if ( rc == 0 )
@@ -154,7 +170,7 @@ void wxStackFrame::OnGetName()
 
 // static data
 void *wxStackWalker::ms_addresses[MAX_FRAMES];
-char **wxStackWalker::ms_symbols = NULL;
+char **wxStackWalker::ms_symbols = nullptr;
 int wxStackWalker::m_depth = 0;
 wxString wxStackWalker::ms_exepath;
 static char g_buf[BUFSIZE];
@@ -199,7 +215,7 @@ void wxStackWalker::FreeStack()
     // of the caller, i.e. us, to free that pointer
     if (ms_symbols)
         free( ms_symbols );
-    ms_symbols = NULL;
+    ms_symbols = nullptr;
     m_depth = 0;
 }
 
@@ -220,12 +236,170 @@ bool ReadLine(FILE* fp, unsigned long num, wxString* line)
     }
 
     *line = wxString::FromAscii(g_buf);
-    line->RemoveLast();
+    line->RemoveLast(); // trailing newline
 
     return true;
 }
 
+#ifndef __WXOSX__
+
+// Parse a single unit of addr2line output, which spans 2 lines.
+bool
+ReadSingleResult(FILE* fp, unsigned long i,
+                 wxString& name, wxString& filename, unsigned long& line)
+{
+    // 1st line has function name
+    if ( !ReadLine(fp, i, &name) )
+        return false;
+
+    if ( name == wxT("??") )
+        name.clear();
+
+    // 2nd one -- the file/line info
+    if ( !ReadLine(fp, i, &filename) )
+        return false;
+
+    const size_t posColon = filename.find(wxT(':'));
+    if ( posColon != wxString::npos )
+    {
+        // parse line number: note that there can be more stuff following it in
+        // addr2line output, e.g. "(discriminator N)", see
+        // http://wiki.dwarfstd.org/index.php?title=Path_Discriminators
+        wxString afterColon(filename, posColon + 1, wxString::npos);
+        const size_t posSpace = afterColon.find(' ');
+        if ( posSpace != wxString::npos )
+            afterColon.erase(posSpace);
+
+        if ( !afterColon.ToULong(&line) )
+            line = 0;
+
+        // remove line number from 'filename'
+        filename.erase(posColon);
+        if ( filename == wxT("??") )
+            filename.clear();
+    }
+    else
+    {
+        wxLogDebug("Unexpected addr2line format: \"%s\" - the colon is missing",
+                   filename);
+    }
+
+    return true;
+}
+
+#endif // !__WXOSX__
+
 } // anonymous namespace
+
+// When we have dladdr1() (which is always the case under Linux), we can do
+// better as we can find the correct path for addr2line, allowing it to find
+// the symbols in the shared libraries too.
+#ifdef HAVE_DLADDR1
+
+namespace
+{
+
+struct ModuleInfo
+{
+    explicit ModuleInfo(const char* name, ptrdiff_t diff)
+        : name(name),
+          diff(diff)
+    {
+    }
+
+    // Name of the file containing this address, may be null.
+    const char* name;
+
+    // Difference between the address in the file and in memory.
+    ptrdiff_t diff;
+};
+
+ModuleInfo GetModuleInfoFromAddr(void* addr)
+{
+    Dl_info info;
+    link_map* lm;
+    if ( !dladdr1(addr, &info, (void**)&lm, RTLD_DL_LINKMAP) )
+    {
+        // Probably not worth spamming the user with even debug errors.
+        return ModuleInfo(nullptr, 0);
+    }
+
+    return ModuleInfo(info.dli_fname, lm->l_addr);
+}
+
+} // anonymous namespace
+
+int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, char **syminfo)
+{
+    // We want to optimize the number of addr2line invocations, but we have to
+    // run it separately for each file, so find all the files first.
+    //
+    // Note that we could avoid doing all this and still use a single command
+    // if we could rely on having eu-addr2line which has a "-p <PID>"
+    // parameter, but it's not usually available, unfortunately.
+
+    struct ModuleData
+    {
+        // The command we run to get information about the addresses, starting
+        // with addr2line and containing addresses at the end.
+        wxString command;
+
+        // Indices of addresses corresponding to the subsequent lines of output
+        // of the command above.
+        std::vector<size_t> indices;
+    };
+
+    // The key of this map is the path of the module.
+    std::unordered_map<const char*, ModuleData> modulesData;
+
+    // First pass: construct all commands to run.
+    for ( size_t i = 0; i < n; ++i )
+    {
+        void* const addr = addresses[i];
+
+        const ModuleInfo modInfo = GetModuleInfoFromAddr(addr);
+
+        // We can't do anything if we failed to find the file name.
+        if ( !modInfo.name )
+        {
+            arr[i].Set(wxString(), wxString(), syminfo[i], i, 0, addr);
+            continue;
+        }
+
+        ModuleData& modData = modulesData[modInfo.name];
+        if ( modData.command.empty() )
+            modData.command.Printf("addr2line -C -f -e \"%s\"", modInfo.name);
+
+        modData.command +=
+            wxString::Format(" %zx", wxPtrToUInt(addr) - modInfo.diff);
+        modData.indices.push_back(i);
+    }
+
+    // Second pass: do run them.
+    wxString name, filename;
+    unsigned long line = 0;
+
+    for ( const auto& it: modulesData )
+    {
+        const ModuleData& modData = it.second;
+
+        wxStdioPipe fp(modData.command.utf8_str(), "r");
+        if ( !fp )
+            return 0;
+
+        for ( const size_t i: modData.indices )
+        {
+            if ( !ReadSingleResult(fp, i, name, filename, line) )
+                return 0;
+
+            arr[i].Set(name, filename, syminfo[i], i, line, addresses[i]);
+        }
+    }
+
+    return n;
+}
+
+#else // !HAVE_DLADDR1
 
 int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, char **syminfo)
 {
@@ -303,38 +477,8 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
             }
         }
 #else // !__WXOSX__
-        // 1st line has function name
-        if ( !ReadLine(fp, i, &name) )
-            return false;
-
-        name = wxString::FromAscii(g_buf);
-        name.RemoveLast(); // trailing newline
-
-        if ( name == wxT("??") )
-            name.clear();
-
-        // 2nd one -- the file/line info
-        if ( !ReadLine(fp, i, &filename) )
-            return false;
-
-        const size_t posColon = filename.find(wxT(':'));
-        if ( posColon != wxString::npos )
-        {
-            // parse line number (it's ok if it fails, this will just leave
-            // line at its current, invalid, 0 value)
-            wxString(filename, posColon + 1, wxString::npos).ToULong(&line);
-
-            // remove line number from 'filename'
-            filename.erase(posColon);
-            if ( filename == wxT("??") )
-                filename.clear();
-        }
-        else
-        {
-            wxLogDebug(wxT("Unexpected addr2line format: \"%s\" - ")
-                       wxT("the semicolon is missing"),
-                       filename.c_str());
-        }
+        if ( !ReadSingleResult(fp, i, name, filename, line) )
+            return 0;
 #endif // __WXOSX__/!__WXOSX__
 
         // now we've got enough info to initialize curr-th stack frame
@@ -345,6 +489,8 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
 
     return curr;
 }
+
+#endif // HAVE_DLADDR1/!HAVE_DLADDR1
 
 void wxStackWalker::Walk(size_t skip, size_t maxDepth)
 {

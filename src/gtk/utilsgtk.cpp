@@ -42,6 +42,7 @@
     #if wxUSE_STACKWALKER
         #include "wx/stackwalk.h"
     #endif // wxUSE_STACKWALKER
+    #include "wx/gtk/private/gtk3-compat.h"
 #endif // wxDEBUG_LEVEL
 
 #include <stdarg.h>
@@ -66,7 +67,7 @@ GdkWindow* wxGetTopLevelGDK();
 
 void wxBell()
 {
-    gdk_beep();
+    gdk_display_beep(gdk_display_get_default());
 }
 
 // ----------------------------------------------------------------------------
@@ -82,7 +83,7 @@ void *wxGetDisplay()
 
 wxDisplayInfo wxGetDisplayInfo()
 {
-    wxDisplayInfo info = { NULL, wxDisplayNone };
+    wxDisplayInfo info = { nullptr, wxDisplayNone };
 #if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
     GdkDisplay *display = gdk_window_get_display(wxGetTopLevelGDK());
 #endif
@@ -115,53 +116,7 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
     return wxGenericFindWindowAtPoint(pt);
 }
 
-#if !wxUSE_UNICODE
-
-WXDLLIMPEXP_CORE wxCharBuffer
-wxConvertToGTK(const wxString& s, wxFontEncoding enc)
-{
-    if (s.empty())
-        return wxCharBuffer("");
-
-    wxWCharBuffer wbuf;
-    if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
-    {
-        wbuf = wxConvUI->cMB2WC(s.c_str());
-    }
-    else // another encoding, use generic conversion class
-    {
-        wbuf = wxCSConv(enc).cMB2WC(s.c_str());
-    }
-
-    if (wbuf.length() == 0)
-    {
-        // conversion failed, but we still want to show something to the user
-        // even if it's going to be wrong it is better than nothing
-        //
-        // we choose ISO8859-1 here arbitrarily, it's just the most common
-        // encoding probably and, also importantly here, conversion from it
-        // never fails as it's done internally by wxCSConv
-        wbuf = wxCSConv(wxFONTENCODING_ISO8859_1).cMB2WC(s.c_str());
-    }
-
-    return wxConvUTF8.cWC2MB(wbuf);
-}
-
-WXDLLIMPEXP_CORE wxCharBuffer
-wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
-{
-    // this conversion should never fail as GTK+ always uses UTF-8 internally
-    // so there are no complications here
-    const wxWCharBuffer wbuf(wxConvUTF8.cMB2WC(s.c_str()));
-    if ( enc == wxFONTENCODING_SYSTEM )
-        return wxConvUI->cWC2MB(wbuf);
-
-    return wxCSConv(enc).cWC2MB(wbuf);
-}
-
-#endif // !wxUSE_UNICODE
-
-// Returns NULL if version is certainly greater or equal than major.minor.micro
+// Returns nullptr if version is certainly greater or equal than major.minor.micro
 // Returns string describing the error if version is lower than
 // major.minor.micro OR it cannot be determined and one should not rely on the
 // availability of pango version major.minor.micro, nor the non-availability
@@ -237,10 +192,10 @@ static wxString GetSM()
 
     char smerr[256];
     char *client_id;
-    SmcConn smc_conn = SmcOpenConnection(NULL, NULL,
+    SmcConn smc_conn = SmcOpenConnection(nullptr, nullptr,
                                          999, 999,
-                                         0 /* mask */, NULL /* callbacks */,
-                                         NULL, &client_id,
+                                         0 /* mask */, nullptr /* callbacks */,
+                                         nullptr, &client_id,
                                          WXSIZEOF(smerr), smerr);
 
     if ( !smc_conn )
@@ -257,7 +212,7 @@ static wxString GetSM()
     wxString ret = wxString::FromAscii( vendor );
     free(vendor);
 
-    SmcCloseConnection(smc_conn, 0, NULL);
+    SmcCloseConnection(smc_conn, 0, nullptr);
     free(client_id);
 
     return ret;
@@ -303,7 +258,7 @@ public:
     }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
+    virtual void OnStackFrame(const wxStackFrame& frame) override
     {
         const wxString name = frame.GetName();
         if ( name.StartsWith("wxOnAssert") )
@@ -314,7 +269,7 @@ protected:
             return;
         }
 
-        // Also ignore frames which don't have neither the function name nor
+        // Also ignore frames which have neither the function name nor
         // the file name, showing them in the dialog wouldn't provide any
         // useful information.
         if ( name.empty() && frame.GetFileName().empty() )
@@ -368,9 +323,9 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 #ifdef __WXGTK4__
         gdk_seat_ungrab(gdk_display_get_default_seat(display));
 #elif defined(__WXGTK3__)
+        GdkDevice* const device = wx_get_gdk_device_from_display(display);
+
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        GdkDeviceManager* manager = gdk_display_get_device_manager(display);
-        GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
         gdk_device_ungrab(device, unsigned(GDK_CURRENT_TIME));
         wxGCC_WARNING_RESTORE()
 #else
@@ -431,17 +386,32 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
     wxString de = wxSystemOptions::GetOption(wxT("gtk.desktop"));
+    if (!de.empty())
+        return de;
+
+    de = wxGetenv(wxS("XDG_CURRENT_DESKTOP"));
+    if (!de.empty())
+    {
+        // Can be a colon separated list according to
+        // https://wiki.archlinux.org/title/Environment_variables#Examples
+        de = de.BeforeFirst(':');
+    }
 #if wxUSE_DETECT_SM
     if ( de.empty() )
     {
-        static const wxString s_SM = GetSM();
-
-        if (s_SM == wxT("GnomeSM"))
-            de = wxT("GNOME");
-        else if (s_SM == wxT("KDE"))
-            de = wxT("KDE");
+        static const wxString s_SM(GetSM());
+        de = s_SM;
+        de.Replace(wxS("-session"), wxString());
     }
 #endif // wxUSE_DETECT_SM
+
+    de.MakeUpper();
+    if (de.Contains(wxS("GNOME")))
+        de = wxS("GNOME");
+    else if (de.Contains(wxS("KDE")))
+        de = wxS("KDE");
+    else if (de.Contains(wxS("XFCE")))
+        de = wxS("XFCE");
 
     return de;
 }

@@ -31,20 +31,16 @@ public:
 private:
     CPPUNIT_TEST_SUITE( FileTestCase );
         CPPUNIT_TEST( ReadAll );
-#if wxUSE_UNICODE
         CPPUNIT_TEST( RoundTripUTF8 );
         CPPUNIT_TEST( RoundTripUTF16 );
         CPPUNIT_TEST( RoundTripUTF32 );
-#endif // wxUSE_UNICODE
         CPPUNIT_TEST( TempFile );
     CPPUNIT_TEST_SUITE_END();
 
     void ReadAll();
-#if wxUSE_UNICODE
     void RoundTripUTF8() { DoRoundTripTest(wxConvUTF8); }
     void RoundTripUTF16() { DoRoundTripTest(wxMBConvUTF16()); }
     void RoundTripUTF32() { DoRoundTripTest(wxMBConvUTF32()); }
-#endif // wxUSE_UNICODE
 
     void DoRoundTripTest(const wxMBConv& conv);
     void TempFile();
@@ -86,8 +82,6 @@ void FileTestCase::ReadAll()
     }
 }
 
-#if wxUSE_UNICODE
-
 void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
 {
     TestFile tf;
@@ -125,8 +119,6 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
     }
 }
 
-#endif // wxUSE_UNICODE
-
 void FileTestCase::TempFile()
 {
     wxTempFile tmpFile;
@@ -158,11 +150,16 @@ TEST_CASE("wxFile::Special", "[file][linux][special-file]")
     const long pageSize = sysconf(_SC_PAGESIZE);
 
     wxFile fileSys("/sys/power/state");
+    if ( !fileSys.IsOpened() )
+    {
+        WARN("/sys/power/state can't be opened, skipping test");
+        return;
+    }
+
     CHECK( fileSys.Length() == pageSize );
-    CHECK( fileSys.IsOpened() );
     CHECK( fileSys.ReadAll(&s) );
     CHECK( !s.empty() );
-    CHECK( s.length() < pageSize );
+    CHECK( s.length() < static_cast<unsigned long>(pageSize) );
 }
 
 #endif // __LINUX__

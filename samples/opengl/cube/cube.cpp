@@ -41,7 +41,7 @@
 // control ids
 enum
 {
-    SpinTimer = wxID_HIGHEST + 1
+    SpinTimer = wxID_HIGHEST
 };
 
 // ----------------------------------------------------------------------------
@@ -309,29 +309,27 @@ wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_TIMER(SpinTimer, TestGLCanvas::OnSpinTimer)
 wxEND_EVENT_TABLE()
 
-TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
+TestGLCanvas::TestGLCanvas(wxWindow *parent, bool useStereo)
     // With perspective OpenGL graphics, the wxFULL_REPAINT_ON_RESIZE style
     // flag should always be set, because even making the canvas smaller should
     // be followed by a paint event that updates the entire canvas with new
     // viewport settings.
-    : wxGLCanvas(parent, wxID_ANY, attribList,
-                 wxDefaultPosition, wxDefaultSize,
-                 wxFULL_REPAINT_ON_RESIZE),
-      m_xangle(30.0),
+    : m_xangle(30.0),
       m_yangle(30.0),
       m_spinTimer(this,SpinTimer),
-      m_useStereo(false),
+      m_useStereo(useStereo),
       m_stereoWarningAlreadyDisplayed(false)
 {
-    if ( attribList )
+    wxGLAttributes attribs = wxGLAttributes().Defaults();
+    if ( useStereo )
+        attribs.Stereo();
+    attribs.EndList();
+
+    if ( !wxGLCanvas::Create(parent, attribs, wxID_ANY,
+                             wxDefaultPosition, wxDefaultSize,
+                             wxFULL_REPAINT_ON_RESIZE) )
     {
-        int i = 0;
-        while ( attribList[i] != 0 )
-        {
-            if ( attribList[i] == WX_GL_STEREO )
-                m_useStereo = true;
-            ++i;
-        }
+        wxLogError("Creating OpenGL window failed.");
     }
 }
 
@@ -456,11 +454,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame( bool stereoWindow )
-       : wxFrame(NULL, wxID_ANY, "wxWidgets OpenGL Cube Sample")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets OpenGL Cube Sample")
 {
-    int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO, 0 };
-
-    new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
+    new TestGLCanvas(this, stereoWindow);
 
     SetIcon(wxICON(sample));
 
@@ -481,7 +477,8 @@ MyFrame::MyFrame( bool stereoWindow )
     Show();
 
     // test IsDisplaySupported() function:
-    static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
+    wxGLAttributes attribs;
+    attribs.RGBA().DoubleBuffer().EndList();
     wxLogStatus("Double-buffered display %s supported",
                 wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
 
@@ -508,5 +505,14 @@ void MyFrame::OnNewWindow( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnNewStereoWindow( wxCommandEvent& WXUNUSED(event) )
 {
-    new MyFrame(true);
+    wxGLAttributes attribs;
+    attribs.RGBA().DoubleBuffer().Stereo().EndList();
+    if ( wxGLCanvas::IsDisplaySupported(attribs) )
+    {
+        new MyFrame(true);
+    }
+    else
+    {
+        wxLogError("Stereo not supported by OpenGL on this system, sorry.");
+    }
 }

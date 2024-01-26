@@ -171,15 +171,15 @@ public:
     wxTimer& GetTimer() const { return *m_timer; }
 
     // implement the base class pure virtual
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxTimerEvent(*this); }
-    virtual wxEventCategory GetEventCategory() const wxOVERRIDE { return wxEVT_CATEGORY_TIMER; }
+    virtual wxEvent *Clone() const override { return new wxTimerEvent(*this); }
+    virtual wxEventCategory GetEventCategory() const override { return wxEVT_CATEGORY_TIMER; }
 
     // default ctor creates an unusable event object and should not be used (in
     // fact, no code outside wxWidgets is supposed to create event objects)
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("wxTimerEvent not supposed to be created by user code")
     wxTimerEvent()
-        : wxEvent(wxID_ANY, wxEVT_TIMER) { m_timer=NULL; }
+        : wxEvent(wxID_ANY, wxEVT_TIMER) { m_timer=nullptr; }
 #endif // WXWIN_COMPATIBILITY_3_0
 
 private:

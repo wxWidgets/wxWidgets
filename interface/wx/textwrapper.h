@@ -73,7 +73,7 @@ public:
         less than @a widthMax).
 
         @param win
-            A non-@NULL window used for measuring the text extents.
+            A non-null window used for measuring the text extents.
         @param text
             The text to wrap.
         @param widthMax

@@ -2,7 +2,6 @@
 // Name:        wx/rawbmp.h
 // Purpose:     macros for fast, raw bitmap data access
 // Author:      Eric Kidd, Vadim Zeitlin
-// Modified by:
 // Created:     10.03.03
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -147,12 +146,19 @@ struct wxPixelFormat
 // wxImage format is common to all platforms
 typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 
+// wxPIXEL_FORMAT_ALPHA is the offset of alpha (defined if the format has
+// alpha).
+
+// wxHAS_PREMULTIPLIED_ALPHA is defined if R, G, and B are stored premultiplied
+// (scaled) by alpha, otherwise they have full value ("straight alpha").
+
 // the (most common) native bitmap format without alpha support
 #if defined(__WXMSW__)
     // under MSW the RGB components are reversed, they're in BGR order
     typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+    #define wxHAS_PREMULTIPLIED_ALPHA
 
     template<>
     struct wxPixelFormat<void, 1, -1, -1, -1, -1, bool>
@@ -171,12 +177,13 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
         enum { HasAlpha = false };
     };
     typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxMonoPixelFormat;
-#elif defined(__WXMAC__)
+#elif defined(__WXOSX__)
     // under Mac, first component is unused but still present, hence we use
     // 32bpp, not 24
     typedef wxPixelFormat<unsigned char, 32, 1, 2, 3> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 0
+    #define wxHAS_PREMULTIPLIED_ALPHA
 #elif defined(__WXGTK__)
     // Under GTK+ 2.X we use GdkPixbuf, which is standard RGB or RGBA
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
@@ -191,6 +198,25 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+    #define wxHAS_PREMULTIPLIED_ALPHA
+
+    template<>
+    struct wxPixelFormat<void, 1, -1, -1, -1, -1, bool>
+    {
+        // the type which may hold the entire pixel value
+        typedef bool PixelType;
+
+        // size of one pixel in bits
+        static const int BitsPerPixel = 1;
+
+        // size of one pixel in ChannelType units (usually bytes)
+        static const int SizePixel = 1;
+
+        // true if we have an alpha channel (together with the other channels, this
+        // doesn't cover the case of wxImage which stores alpha separately)
+        enum { HasAlpha = false };
+    };
+    typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxMonoPixelFormat;
 #endif
 
 // the (most common) native format for bitmaps with alpha channel
@@ -353,12 +379,12 @@ struct wxPixelDataOut<wxImage>
                 }
                 else // alpha is not used at all
                 {
-                    m_pAlpha = NULL;
+                    m_pAlpha = nullptr;
                 }
             }
 
             // true if the iterator is valid
-            bool IsOk() const { return m_pRGB != NULL; }
+            bool IsOk() const { return m_pRGB != nullptr; }
 
 
             // navigation
@@ -439,7 +465,7 @@ struct wxPixelDataOut<wxImage>
             // pointer into RGB buffer
             unsigned char *m_pRGB;
 
-            // pointer into alpha buffer or NULL if alpha isn't used
+            // pointer into alpha buffer or nullptr if alpha isn't used
             unsigned char *m_pAlpha;
         };
 
@@ -551,11 +577,11 @@ struct wxPixelDataOut<wxBitmap>
             // default constructor
             Iterator()
             {
-                m_ptr = NULL;
+                m_ptr = nullptr;
             }
 
             // return true if this iterator is valid
-            bool IsOk() const { return m_ptr != NULL; }
+            bool IsOk() const { return m_ptr != nullptr; }
 
 
             // navigation
@@ -675,11 +701,6 @@ struct wxPixelDataOut<wxBitmap>
             // else: don't call UngetRawData() if GetRawData() failed
         }
 
-#if WXWIN_COMPATIBILITY_2_8
-        // not needed anymore, calls to it should be simply removed
-        wxDEPRECATED_INLINE( void UseAlpha(), wxEMPTY_PARAMETER_VALUE )
-#endif
-
     // private: -- see comment in the beginning of the file
 
         // the bitmap we're associated with
@@ -700,7 +721,7 @@ struct wxPixelDataOut<wxBitmap>
     };
 };
 
-    #if defined(__WXMSW__)
+    #if defined(__WXMSW__) || defined(__WXQT__)
         template <>
         struct wxPixelDataOut<wxBitmap>::wxPixelDataIn<wxMonoPixelFormat> : public wxPixelDataBase
         {
@@ -717,7 +738,11 @@ struct wxPixelDataOut<wxBitmap>
                 {
                     wxByte mask = static_cast<wxByte>(1 << m_bit);
                     wxByte value = static_cast<wxByte>(b << m_bit);
-                    (*m_ptr &= ~mask) |= value;
+                    wxByte& val_m_ptr = *m_ptr;
+
+                    val_m_ptr = static_cast<wxByte>(val_m_ptr & ~mask);
+                    val_m_ptr |= value;
+
                     return *this;
                 }
                 operator bool() const
@@ -781,12 +806,12 @@ struct wxPixelDataOut<wxBitmap>
                 // default constructor
                 Iterator()
                 {
-                    m_ptr = NULL;
-                    // m_bit doesn't need to be set until m_ptr != NULL
+                    m_ptr = nullptr;
+                    // m_bit doesn't need to be set until m_ptr != nullptr
                 }
 
                 // return true if this iterator is valid
-                bool IsOk() const { return m_ptr != NULL; }
+                bool IsOk() const { return m_ptr != nullptr; }
 
 
                 // navigation
@@ -944,7 +969,7 @@ typedef wxPixelData<wxImage> wxImagePixelData;
 typedef wxPixelData<wxBitmap, wxNativePixelFormat> wxNativePixelData;
 typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> wxAlphaPixelData;
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXQT__)
 typedef wxPixelData<wxBitmap, wxMonoPixelFormat> wxMonoPixelData;
 #endif
 

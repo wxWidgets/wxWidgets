@@ -2,7 +2,6 @@
 // Name:        src/common/stringops.cpp
 // Purpose:     implementation of wxString primitive operations
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2007-04-16
 // Copyright:   (c) 2007 REA Elektronik GmbH
 // Licence:     wxWindows licence
@@ -26,7 +25,7 @@
 // implementation
 // ===========================================================================
 
-#if wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF16
 
@@ -75,9 +74,9 @@ wxWCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& c
 
 #else
 
-wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
+wxWCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& ch)
 {
-    wxWxCharBuffer buf(n);
+    wxWCharBuffer buf(n);
 #if wxUSE_UNICODE_WCHAR
     wmemset(buf.data(), (wchar_t)ch, n);
 #else // ANSI
@@ -88,7 +87,7 @@ wxWxCharBuffer wxStringOperationsWchar::EncodeNChars(size_t n, const wxUniChar& 
 
 #endif // wxUSE_UNICODE_UTF16
 
-#endif // wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#endif // wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF8
 
@@ -128,15 +127,15 @@ bool wxStringOperationsUtf8::IsValidUtf8String(const char *str, size_t len)
         return true; // empty string is UTF8 string
 
     const unsigned char *c = (const unsigned char*)str;
-    const unsigned char * const end = (len == wxStringImpl::npos) ? NULL : c + len;
+    const unsigned char * const end = (len == std::string::npos) ? nullptr : c + len;
 
-    for ( ; end != NULL ? c != end : *c; ++c )
+    for ( ; end != nullptr ? c != end : *c; ++c )
     {
         unsigned char b = *c;
 
-        if ( end != NULL )
+        if ( end != nullptr )
         {
-            // if the string is not NULL-terminated, verify we have enough
+            // if the string is not null-terminated, verify we have enough
             // bytes in it left for current character's encoding:
             if ( c + GetUTF8IterOffset(*c) > end )
                 return false;
@@ -285,7 +284,7 @@ wxUniChar::Utf8CharBuffer wxUniChar::AsUTF8() const
 }
 
 wxUniChar
-wxStringOperationsUtf8::DecodeNonAsciiChar(wxStringImpl::const_iterator i)
+wxStringOperationsUtf8::DecodeNonAsciiChar(std::string::const_iterator i)
 {
     wxASSERT( IsValidUtf8LeadByte(*i) );
 

@@ -9,49 +9,42 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
+#include <memory>
+
 class QShortcut;
 template < class T > class QList;
 
-class QWidget;
-class QScrollArea;
-class QScrollBar;
-class QPicture;
+class QAbstractScrollArea;
 class QPainter;
+class QPicture;
+class QScrollBar;
+class QWidget;
 
+class QCloseEvent;
+class QContextMenuEvent;
+class QEvent;
+class QFocusEvent;
+class QKeyEvent;
 class QPaintEvent;
 class QResizeEvent;
 class QWheelEvent;
-class QKeyEvent;
 class QMouseEvent;
-class QEvent;
 class QMoveEvent;
-class QEvent;
-class QEvent;
-class QCloseEvent;
-class QContextMenuEvent;
-class QFocusEvent;
 
-class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
 
 /* wxQt specific notes:
  *
  * Remember to implement the Qt object getters on all subclasses:
  *  - GetHandle() returns the Qt object
- *  - QtGetScrollBarsContainer() returns the widget where scrollbars are placed
- * For example, for wxFrame, GetHandle() is the QMainWindow,
- * QtGetScrollBarsContainer() is the central widget and QtGetContainer() is a widget
- * in a layout inside the central widget that also contains the scrollbars.
- * Return 0 from QtGetScrollBarsContainer() to disable SetScrollBar() and friends
- * for wxWindow subclasses.
  *
  *
- * Event handling is achieved by using the template class wxQtEventForwarder
- * found in winevent_qt.(h|cpp) to send all Qt events here to QtHandleXXXEvent()
- * methods. All these methods receive the Qt event and the handler. This is
- * done because events of the containers (the scrolled part of the window) are
- * sent to the same wxWindow instance, that must be able to differentiate them
- * as some events need different handling (paintEvent) depending on that.
+ * Event handling is achieved by using the template class wxQtEventSignalHandler
+ * found in winevent.h to send all Qt events here to QtHandleXXXEvent() methods.
+ * All these methods receive the Qt event and the handler. This is done because
+ * events of the containers (the scrolled part of the window) are sent to the
+ * same wxWindow instance, that must be able to differentiate them as some events
+ * need different handling (paintEvent) depending on that.
  * We pass the QWidget pointer to all event handlers for consistency.
  */
 class WXDLLIMPEXP_CORE wxWindowQt : public wxWindowBase
@@ -73,82 +66,88 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxPanelNameStr));
 
-    // Used by all window classes in the widget creation process.
+    // Derived classes have to call PostCreation() explicitly if they don't call
+    // our Create() method during widget creation process.
     void PostCreation( bool generic = true );
 
-    void AddChild( wxWindowBase *child ) wxOVERRIDE;
+    void AddChild( wxWindowBase *child ) override;
 
-    virtual bool Show( bool show = true ) wxOVERRIDE;
+    virtual bool Show( bool show = true ) override;
 
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
-    virtual wxString GetLabel() const wxOVERRIDE;
+    virtual void SetLabel(const wxString& label) override;
+    virtual wxString GetLabel() const override;
 
-    virtual void DoEnable( bool enable ) wxOVERRIDE;
-    virtual void SetFocus() wxOVERRIDE;
+    virtual void DoEnable( bool enable ) override;
+    virtual void SetFocus() override;
 
     // Parent/Child:
     static void QtReparent( QWidget *child, QWidget *parent );
-    virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
+    virtual bool Reparent( wxWindowBase *newParent ) override;
 
     // Z-order
-    virtual void Raise() wxOVERRIDE;
-    virtual void Lower() wxOVERRIDE;
+    virtual void Raise() override;
+    virtual void Lower() override;
 
     // move the mouse to the specified position
-    virtual void WarpPointer(int x, int y) wxOVERRIDE;
+    virtual void WarpPointer(int x, int y) override;
 
-    virtual void Update() wxOVERRIDE;
+    virtual void Update() override;
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
+                          const wxRect *rect = nullptr ) override;
 
-    virtual bool SetCursor( const wxCursor &cursor ) wxOVERRIDE;
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+    virtual bool SetCursor( const wxCursor &cursor ) override;
+    virtual bool SetFont(const wxFont& font) override;
 
     // get the (average) character size for the current font
-    virtual int GetCharHeight() const wxOVERRIDE;
-    virtual int GetCharWidth() const wxOVERRIDE;
+    virtual int GetCharHeight() const override;
+    virtual int GetCharWidth() const override;
 
     virtual void SetScrollbar( int orient,
                                int pos,
                                int thumbvisible,
                                int range,
-                               bool refresh = true ) wxOVERRIDE;
-    virtual void SetScrollPos( int orient, int pos, bool refresh = true ) wxOVERRIDE;
-    virtual int GetScrollPos( int orient ) const wxOVERRIDE;
-    virtual int GetScrollThumb( int orient ) const wxOVERRIDE;
-    virtual int GetScrollRange( int orient ) const wxOVERRIDE;
+                               bool refresh = true ) override;
+    virtual void SetScrollPos( int orient, int pos, bool refresh = true ) override;
+    virtual int GetScrollPos( int orient ) const override;
+    virtual int GetScrollThumb( int orient ) const override;
+    virtual int GetScrollRange( int orient ) const override;
 
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = NULL ) wxOVERRIDE;
+                               const wxRect* rect = nullptr ) override;
 
     // Styles
-    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
-    virtual void SetExtraStyle( long exStyle ) wxOVERRIDE;
+    virtual void SetWindowStyleFlag( long style ) override;
+    virtual void SetExtraStyle( long exStyle ) override;
 
-    virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
-    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const wxOVERRIDE;
-    virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
-    virtual bool CanSetTransparent() wxOVERRIDE { return true; }
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style) override;
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = nullptr) const override;
+    virtual bool SetTransparent(wxByte alpha) override;
+    virtual bool CanSetTransparent() override { return true; }
 
-    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
-    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetBackgroundColour(const wxColour& colour) override;
+    virtual bool SetForegroundColour(const wxColour& colour) override;
 
-    QWidget *GetHandle() const wxOVERRIDE;
+    virtual void SetDoubleBuffered(bool on) override;
+    virtual bool IsDoubleBuffered() const override;
+
+    QWidget *GetHandle() const override;
 
 #if wxUSE_DRAG_AND_DROP
-    virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
+    virtual void SetDropTarget( wxDropTarget *dropTarget ) override;
 #endif
 
 #if wxUSE_ACCEL
     // accelerators
     // ------------
-    virtual void SetAcceleratorTable( const wxAcceleratorTable& accel ) wxOVERRIDE;
+    virtual void SetAcceleratorTable( const wxAcceleratorTable& accel ) override;
 #endif // wxUSE_ACCEL
+
+    virtual bool EnableTouchEvents(int eventsMask) override;
 
     // wxQt implementation internals:
 
-    // Caller maintains ownership of pict - window will NOT delete it
+    // Takes ownership of pict - window will delete it
     void QtSetPicture( QPicture* pict );
 
     QPainter *QtGetPainter();
@@ -168,13 +167,11 @@ public:
 
     static void QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window );
     static wxWindowQt *QtRetrieveWindowPointer( const QWidget *widget );
-    static void QtSendSetCursorEvent(wxWindowQt* win, wxPoint posClient);
+    static void QtSendSetCursorEvent(wxWindowQt* win, const wxPoint& posClient);
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
-
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 #if wxUSE_TOOLTIPS
     // applies tooltip to the widget.
@@ -184,36 +181,38 @@ public:
 protected:
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *font = NULL) const wxOVERRIDE;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *font = nullptr) const override;
 
     // coordinates translation
-    virtual void DoClientToScreen( int *x, int *y ) const wxOVERRIDE;
-    virtual void DoScreenToClient( int *x, int *y ) const wxOVERRIDE;
+    virtual void DoClientToScreen( int *x, int *y ) const override;
+    virtual void DoScreenToClient( int *x, int *y ) const override;
 
     // capture/release the mouse, used by Capture/ReleaseMouse()
-    virtual void DoCaptureMouse() wxOVERRIDE;
-    virtual void DoReleaseMouse() wxOVERRIDE;
+    virtual void DoCaptureMouse() override;
+    virtual void DoReleaseMouse() override;
 
     // retrieve the position/size of the window
-    virtual void DoGetPosition(int *x, int *y) const wxOVERRIDE;
+    virtual void DoGetPosition(int *x, int *y) const override;
 
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO) override;
+    virtual void DoGetSize(int *width, int *height) const override;
 
     // same as DoSetSize() for the client size
-    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
-    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoSetClientSize(int width, int height) override;
+    virtual void DoGetClientSize(int *width, int *height) const override;
 
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
 
 #if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE;
+    virtual void DoSetToolTip( wxToolTip *tip ) override;
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_MENUS
-    virtual bool DoPopupMenu(wxMenu *menu, int x, int y) wxOVERRIDE;
+    virtual bool DoPopupMenu(wxMenu *menu, int x, int y) override;
 #endif // wxUSE_MENUS
 
     // Return the parent to use for children being reparented to us: this is
@@ -221,16 +220,13 @@ protected:
     // itself.
     virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
 
-    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
-
-    QWidget *m_qtWindow;
+    QWidget             *m_qtWindow;
+    QAbstractScrollArea *m_qtContainer;  // either nullptr or the same as m_qtWindow pointer
+                                         // if m_qtWindow derives from QAbstractScrollArea,
+                                         // e.g. QListWidget and QTextEdit.
 
 private:
     void Init();
-    QScrollArea *m_qtContainer;  // either NULL or the same as m_qtWindow pointer
-
-    QScrollBar *m_horzScrollBar; // owned by m_qtWindow when allocated
-    QScrollBar *m_vertScrollBar; // owned by m_qtWindow when allocated
 
     // Return the viewport of m_qtContainer, if it's used, or just m_qtWindow.
     //
@@ -238,18 +234,17 @@ private:
     QWidget *QtGetClientWidget() const;
 
     QScrollBar *QtGetScrollBar( int orientation ) const;
-    QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=NULL );
 
     bool QtSetBackgroundStyle();
 
-    QPicture *m_qtPicture;                                   // not owned
-    wxScopedPtr<QPainter> m_qtPainter;                       // always allocated
+    std::unique_ptr<QPicture> m_qtPicture;                   // owned by this window
+    std::unique_ptr<QPainter> m_qtPainter;                   // always allocated
 
     bool m_mouseInside;
 
 #if wxUSE_ACCEL
     wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns
-    wxScopedPtr<wxQtShortcutHandler> m_qtShortcutHandler;    // always allocated
+    std::unique_ptr<wxQtShortcutHandler> m_qtShortcutHandler; // always allocated
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL
 

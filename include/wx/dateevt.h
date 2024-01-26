@@ -2,7 +2,6 @@
 // Name:        wx/dateevt.h
 // Purpose:     declares wxDateEvent class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-10
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -22,7 +21,7 @@
 class WXDLLIMPEXP_ADV wxDateEvent : public wxCommandEvent
 {
 public:
-    wxDateEvent() { }
+    wxDateEvent() = default;
     wxDateEvent(wxWindow *win, const wxDateTime& dt, wxEventType type)
         : wxCommandEvent(type, win->GetId()),
           m_date(dt)
@@ -34,7 +33,7 @@ public:
     void SetDate(const wxDateTime &date) { m_date = date; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxDateEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxDateEvent(*this); }
 
 private:
     wxDateTime m_date;

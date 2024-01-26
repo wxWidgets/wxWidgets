@@ -2,7 +2,6 @@
 // Name:        src/msw/checkbox.cpp
 // Purpose:     wxCheckBox
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -86,6 +85,18 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     }
 
     return msStyle;
+}
+
+bool wxCheckBox::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // Just as radio buttons, check boxes have some dark theme support, but we
+    // still need to change their foreground manually to make it readable in
+    // dark mode.
+    wxCheckBoxBase::MSWGetDarkModeSupport(support);
+
+    support.setForeground = true;
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------

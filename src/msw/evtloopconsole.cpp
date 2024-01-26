@@ -2,7 +2,6 @@
 // Name:        src/msw/evtloopconsole.cpp
 // Purpose:     wxConsoleEventLoop class for Windows
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.06.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -41,7 +40,7 @@ wxMSWEventLoopBase::wxMSWEventLoopBase()
     m_exitcode = 0;
 
     // Create initially not signalled auto-reset event object.
-    m_heventWake = ::CreateEvent(NULL, FALSE, FALSE, NULL);
+    m_heventWake = ::CreateEvent(nullptr, FALSE, FALSE, nullptr);
     if ( !m_heventWake )
         wxLogLastError(wxS("CreateEvent(wake)"));
 }

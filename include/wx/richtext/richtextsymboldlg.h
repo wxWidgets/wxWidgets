@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextsymboldlg.h
 // Purpose:     Declares the symbol picker dialog.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/5/2006 3:11:58 PM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -31,13 +30,6 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class wxSymbolListCtrl;
 class wxStdDialogButtonSizer;
 ////@end forward declarations
-
-// __UNICODE__ is a symbol used by DialogBlocks-generated code.
-#ifndef __UNICODE__
-#if wxUSE_UNICODE
-#define __UNICODE__
-#endif
-#endif
 
 /*!
  * Symbols
@@ -103,26 +95,22 @@ public:
     static void SetShowToolTips(bool show) { sm_showToolTips = show; }
 
     /// Data transfer
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataToWindow() override;
 
 ////@begin wxSymbolPickerDialog event handler declarations
 
     /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_FONT
     void OnFontCtrlSelected( wxCommandEvent& event );
 
-#if defined(__UNICODE__)
     /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_SUBSET
     void OnSubsetSelected( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_SYMBOLPICKERDIALOG_SUBSET
     void OnSymbolpickerdialogSubsetUpdate( wxUpdateUIEvent& event );
 
-#endif
-#if defined(__UNICODE__)
     /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_FROM
     void OnFromUnicodeSelected( wxCommandEvent& event );
 
-#endif
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
@@ -157,15 +145,11 @@ public:
 
 ////@begin wxSymbolPickerDialog member variables
     wxComboBox* m_fontCtrl;
-#if defined(__UNICODE__)
     wxComboBox* m_subsetCtrl;
-#endif
     wxSymbolListCtrl* m_symbolsCtrl;
     wxStaticText* m_symbolStaticCtrl;
     wxTextCtrl* m_characterCodeCtrl;
-#if defined(__UNICODE__)
     wxComboBox* m_fromUnicodeCtrl;
-#endif
     wxStdDialogButtonSizer* m_stdButtonSizer;
     wxString m_fontName;
     bool m_fromUnicode;
@@ -231,7 +215,7 @@ public:
     // ---------
 
     // set the current font
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) override;
 
     // set Unicode/ASCII mode
     void SetUnicodeMode(bool unicodeMode);
@@ -276,7 +260,7 @@ public:
     // change the background colour of the selected cells
     void SetSelectionBackground(const wxColour& col);
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
+    virtual wxVisualAttributes GetDefaultAttributes() const override
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -297,7 +281,7 @@ protected:
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
 
     // gets the line height
-    virtual wxCoord OnGetRowHeight(size_t line) const wxOVERRIDE;
+    virtual wxCoord OnGetRowHeight(size_t line) const override;
 
     // event handlers
     void OnPaint(wxPaintEvent& event);

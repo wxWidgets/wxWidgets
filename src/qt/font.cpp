@@ -349,7 +349,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
-    SetFractionalPointSize(info.GetPointSize());
+    SetFractionalPointSize(info.GetFractionalPointSize());
     SetFamily(info.GetFamily());
     SetStyle(info.GetStyle());
     SetNumericWeight(info.GetWeight());
@@ -394,7 +394,19 @@ double wxNativeFontInfo::GetFractionalPointSize() const
 
 wxSize wxNativeFontInfo::GetPixelSize() const
 {
-    return wxSize(0, m_qtFont.pixelSize());
+    // Note that QFont::pixelSize() returns -1 if the size was set with setPointSize().
+    // If so, fall back to QFontInfo::pixelSize() which returns the pixel size of the
+    // matched window system font.
+
+    int pixelSize = m_qtFont.pixelSize();
+
+    if ( pixelSize < 0 )
+    {
+        QFontInfo fontInfo(m_qtFont);
+        pixelSize = fontInfo.pixelSize();
+    }
+
+    return wxSize(0, pixelSize);
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const

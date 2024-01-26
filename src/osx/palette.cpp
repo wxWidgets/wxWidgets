@@ -2,7 +2,6 @@
 // Name:        src/osx/palette.cpp
 // Purpose:     wxPalette
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -28,7 +27,7 @@ public:
     wxPaletteRefData(const wxPaletteRefData& data);
     virtual ~wxPaletteRefData();
 
-    virtual bool IsOk() const wxOVERRIDE { return m_count > 0; }
+    virtual bool IsOk() const override { return m_count > 0; }
 
 protected:
     wxColour* m_palette;
@@ -41,7 +40,7 @@ protected:
 
 wxPaletteRefData::wxPaletteRefData()
 {
-    m_palette = NULL;
+    m_palette = nullptr;
     m_count = 0;
 }
 

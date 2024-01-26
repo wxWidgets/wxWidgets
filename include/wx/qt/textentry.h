@@ -13,34 +13,37 @@ class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 public:
     wxTextEntry();
 
-    virtual void WriteText(const wxString& text) wxOVERRIDE;
+    virtual void WriteText(const wxString& text) override;
 
-    virtual void Remove(long from, long to) wxOVERRIDE;
+    virtual void Remove(long from, long to) override;
 
-    virtual void Copy() wxOVERRIDE;
-    virtual void Cut() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
 
-    virtual void Undo() wxOVERRIDE;
-    virtual void Redo() wxOVERRIDE;
-    virtual bool CanUndo() const wxOVERRIDE;
-    virtual bool CanRedo() const wxOVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
 
-    virtual void SetInsertionPoint(long pos) wxOVERRIDE;
-    virtual long GetInsertionPoint() const wxOVERRIDE;
-    virtual long GetLastPosition() const wxOVERRIDE;
+    virtual void SetInsertionPoint(long pos) override;
+    virtual long GetInsertionPoint() const override;
+    virtual long GetLastPosition() const override;
 
-    virtual void SetSelection(long from, long to) wxOVERRIDE;
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
+    virtual void SetSelection(long from, long to) override;
+    virtual void GetSelection(long *from, long *to) const override;
 
-    virtual bool IsEditable() const wxOVERRIDE;
-    virtual void SetEditable(bool editable) wxOVERRIDE;
+    virtual bool IsEditable() const override;
+    virtual void SetEditable(bool editable) override;
 
 protected:
-    virtual wxString DoGetValue() const wxOVERRIDE;
-    virtual void DoSetValue(const wxString& value, int flags=0) wxOVERRIDE;
+    virtual wxString DoGetValue() const override;
+    virtual void DoSetValue(const wxString& value, int flags=0) override;
 
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE;
+    virtual wxWindow *GetEditableWindow() override;
+
+    // Block/unblock the corresponding Qt signal.
+    virtual void EnableTextChangedEvents(bool enable) override;
 };
 
 #endif // _WX_QT_TEXTENTRY_H_

@@ -92,7 +92,7 @@
 
 #if defined(__WINDOWS__)
     /* Select wxMSW under Windows if no other port is specified. */
-#   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
+#   if !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
 #       define __WXMSW__
 #   endif
 
@@ -183,44 +183,27 @@
     #endif
 #endif /* ia64 */
 
-#if defined(_M_MPPC) || defined(__PPC__) || defined(__ppc__)
-    #ifndef __POWERPC__
-        #define __POWERPC__
-    #endif
-#endif /* alpha */
-
-#if defined(_M_ALPHA) || defined(__AXP__)
-    #ifndef __ALPHA__
-        #define __ALPHA__
-    #endif
-#endif /* alpha */
-
-
 /*
-   adjust the Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
-   and is used by wxWidgets, _UNICODE and/or UNICODE may be defined or used by
-   the system headers so bring these settings in sync
+   Always define wxUSE_UNICODE as 1 for compatibility.
+
+   Additionally, define _UNICODE and UNICODE too: this is used by MSW SDK/CRT
+   headers and also may be used by wx applications code.
  */
 
-/* set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined */
-#if defined(_UNICODE) || defined(UNICODE)
-#   undef wxUSE_UNICODE
+#ifdef wxUSE_UNICODE
+#   if wxUSE_UNICODE != 1
+#       error "wxUSE_UNICODE may be only defined as 1"
+#   endif
+#else
 #   define wxUSE_UNICODE 1
-#else /* !UNICODE */
-#   ifndef wxUSE_UNICODE
-#       define wxUSE_UNICODE 0
-#   endif
-#endif /* UNICODE/!UNICODE */
+#endif
 
-/* and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1 */
-#if wxUSE_UNICODE
-#   ifndef _UNICODE
-#       define _UNICODE
-#   endif
-#   ifndef UNICODE
-#       define UNICODE
-#   endif
-#endif /* wxUSE_UNICODE */
+#ifndef _UNICODE
+#    define _UNICODE
+#endif
+#ifndef UNICODE
+#    define UNICODE
+#endif
 
 
 
@@ -315,7 +298,7 @@
 #    define __UNIX__
 #endif /* Unix */
 
-#if defined(__WXMOTIF__) || defined(__WXX11__)
+#if defined(__WXX11__)
 #    define __X__
 #endif
 
@@ -338,7 +321,6 @@
  */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) ) && \
-    !defined(__WXMOTIF__) && \
     !defined(__WXX11__)
 #    include "wx/msw/gccpriv.h"
 #else
@@ -473,6 +455,9 @@
 #        ifndef MAC_OS_X_VERSION_10_16
 #           define MAC_OS_X_VERSION_10_16 101600
 #        endif
+         /*
+            Note that since macOS 11 there is no more "X" in the names.
+          */
 #        ifndef MAC_OS_VERSION_11_0
 #           define MAC_OS_VERSION_11_0 110000
 #        endif
@@ -498,8 +483,7 @@
 
 /*
    check the consistency of the settings in setup.h: note that this must be
-   done after setting wxUSE_UNICODE correctly as it is used in wx/chkconf.h
-   and after defining the compiler macros which are used in it too
+   done after defining the compiler macros used in wx/chkconf.h
  */
 #include "wx/chkconf.h"
 
@@ -519,11 +503,6 @@
 
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
-#ifdef __WXMOTIF__
-#define XtParent XTPARENT
-#define XtScreen XTSCREEN
-#define XtWindow XTWINDOW
-#endif
 #endif
 
 /* Choose which method we will use for updating menus
@@ -578,7 +557,7 @@
 #       if !__has_feature(cxx_rtti)
 #           define wxNO_RTTI
 #       endif
-#   elif wxCHECK_GCC_VERSION(4, 3)
+#   elif defined(__GNUG__)
 #       ifndef __GXX_RTTI
 #           define wxNO_RTTI
 #       endif

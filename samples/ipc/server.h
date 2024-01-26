@@ -2,7 +2,6 @@
 // Name:        server.h
 // Purpose:     DDE sample: server
 // Author:      Julian Smart
-// Modified by:
 // Created:     25/01/99
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -25,7 +24,7 @@ class MyFrame;
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
     MyFrame *GetFrame() { return m_frame; }
 
 protected:
@@ -65,13 +64,13 @@ protected:
 class MyConnection : public MyConnectionBase
 {
 public:
-    virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format) wxOVERRIDE;
-    virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format) wxOVERRIDE;
-    virtual bool OnPoke(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format) wxOVERRIDE;
-    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
-    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
-    virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format) wxOVERRIDE;
-    virtual bool OnDisconnect() wxOVERRIDE;
+    virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format) override;
+    virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format) override;
+    virtual bool OnPoke(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format) override;
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) override;
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) override;
+    virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format) override;
+    virtual bool OnDisconnect() override;
 
     // topic for which we advise the client or empty if none
     wxString m_advise;
@@ -89,13 +88,13 @@ public:
     virtual ~MyServer();
 
     void Disconnect();
-    bool IsConnected() { return m_connection != NULL; }
+    bool IsConnected() { return m_connection != nullptr; }
     MyConnection *GetConnection() { return m_connection; }
 
     void Advise();
     bool CanAdvise() { return m_connection && !m_connection->m_advise.empty(); }
 
-    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) wxOVERRIDE;
+    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) override;
 
 protected:
     MyConnection *m_connection;

@@ -22,7 +22,6 @@
 
 #include "wx/buffer.h"
 #include "wx/datetime.h"
-#include "wx/scopedptr.h"
 #include "wx/filename.h"
 #include "wx/thread.h"
 
@@ -33,6 +32,7 @@
 #include <grp.h>
 #endif
 
+#include <memory>
 
 /////////////////////////////////////////////////////////////////////////////
 // constants
@@ -98,10 +98,10 @@ wxTarClassFactory::wxTarClassFactory()
 const wxChar * const *
 wxTarClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *protocols[] = { wxT("tar"), NULL };
-    static const wxChar *mimetypes[] = { wxT("application/x-tar"), NULL };
-    static const wxChar *fileexts[]  = { wxT(".tar"), NULL };
-    static const wxChar *empty[]     = { NULL };
+    static const wxChar *protocols[] = { wxT("tar"), nullptr };
+    static const wxChar *mimetypes[] = { wxT("application/x-tar"), nullptr };
+    static const wxChar *fileexts[]  = { wxT(".tar"), nullptr };
+    static const wxChar *empty[]     = { nullptr };
 
     switch (type) {
         case wxSTREAM_PROTOCOL: return protocols;
@@ -170,7 +170,7 @@ const wxTarField wxTarHeaderBlock::fields[] =
     { wxT("devminor"), 337 }, // 8
     { wxT("prefix"), 345 },   // 155
     { wxT("unused"), 500 },   // 12
-    { NULL, TAR_BLOCKSIZE }
+    { nullptr, TAR_BLOCKSIZE }
 };
 
 void wxTarHeaderBlock::check()
@@ -274,7 +274,6 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
 {
     bool badconv = false;
 
-#if wxUSE_UNICODE
     wxCharBuffer nameBuf = name.mb_str(conv);
 
     // if the conversion fails make an approximation
@@ -291,10 +290,6 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
     }
 
     const char *mbName = nameBuf;
-#else
-    const char *mbName = name.c_str();
-    (void)conv;
-#endif
 
     bool fits;
     bool notGoingToFit = false;
@@ -358,7 +353,7 @@ static wxString wxTarUserName(int uid)
     if (getpwuid_r(uid, &pw, buf.data(), bufsize, &ppw) == 0 && pw.pw_name)
         return wxString(pw.pw_name, wxConvLibc);
 #else
-    if ((ppw = getpwuid(uid)) != NULL)
+    if ((ppw = getpwuid(uid)) != nullptr)
         return wxString(ppw->pw_name, wxConvLibc);
 #endif
     return _("unknown");
@@ -381,7 +376,7 @@ static wxString wxTarGroupName(int gid)
     if (getgrgid_r(gid, &gr, buf.data(), bufsize, &pgr) == 0 && gr.gr_name)
         return wxString(gr.gr_name, wxConvLibc);
 #else
-    if ((pgr = getgrgid(gid)) != NULL)
+    if ((pgr = getgrgid(gid)) != nullptr)
         return wxString(pgr->gr_name, wxConvLibc);
 #endif
     return _("unknown");
@@ -569,7 +564,7 @@ void wxTarEntry::SetName(const wxString& name, wxPathFormat format)
 //
 wxString wxTarEntry::GetInternalName(const wxString& name,
                                      wxPathFormat format /*=wxPATH_NATIVE*/,
-                                     bool *pIsDir        /*=NULL*/)
+                                     bool *pIsDir        /*=nullptr*/)
 {
     wxString internal;
 
@@ -634,8 +629,6 @@ void wxTarEntry::SetMode(int mode)
 /////////////////////////////////////////////////////////////////////////////
 // Input stream
 
-wxDEFINE_SCOPED_PTR_TYPE(wxTarEntry)
-
 wxTarInputStream::wxTarInputStream(wxInputStream& stream,
                                    wxMBConv& conv /*=wxConvLocal*/)
  :  wxArchiveInputStream(stream, conv)
@@ -658,8 +651,8 @@ void wxTarInputStream::Init()
     m_sumType = SUM_UNKNOWN;
     m_tarType = TYPE_USTAR;
     m_hdr = new wxTarHeaderBlock;
-    m_HeaderRecs = NULL;
-    m_GlobalHeaderRecs = NULL;
+    m_HeaderRecs = nullptr;
+    m_GlobalHeaderRecs = nullptr;
     m_lasterror = m_parent_i_stream->GetLastError();
 }
 
@@ -675,9 +668,9 @@ wxTarEntry *wxTarInputStream::GetNextEntry()
     m_lasterror = ReadHeaders();
 
     if (!IsOk())
-        return NULL;
+        return nullptr;
 
-    wxTarEntryPtr entry(new wxTarEntry);
+    std::unique_ptr<wxTarEntry> entry(new wxTarEntry);
 
     entry->SetMode(GetHeaderNumber(TAR_MODE));
     entry->SetUserId(GetHeaderNumber(TAR_UID));
@@ -842,14 +835,14 @@ wxString wxTarInputStream::GetExtendedHeader(const wxString& key) const
     if (m_HeaderRecs) {
         it = m_HeaderRecs->find(key);
         if (it != m_HeaderRecs->end())
-            return wxString(it->second.wc_str(wxConvUTF8), GetConv());
+            return it->second;
     }
 
     // if not found, look at the global header records
     if (m_GlobalHeaderRecs) {
         it = m_GlobalHeaderRecs->find(key);
         if (it != m_GlobalHeaderRecs->end())
-            return wxString(it->second.wc_str(wxConvUTF8), GetConv());
+            return it->second;
     }
 
     return wxEmptyString;
@@ -971,8 +964,8 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
         // replace the '=' with a nul, to terminate the key
         *p++ = 0;
 
-        wxString key(wxConvUTF8.cMB2WC(pKey), GetConv());
-        wxString value(wxConvUTF8.cMB2WC(p), GetConv());
+        wxString key = wxString::FromUTF8(pKey);
+        wxString value = wxString::FromUTF8(p);
 
         // an empty value unsets a previously given value
         if (value.empty())
@@ -1076,8 +1069,8 @@ void wxTarOutputStream::Init(wxTarFormat format)
     m_chksum = 0;
     m_large = false;
     m_hdr = new wxTarHeaderBlock;
-    m_hdr2 = NULL;
-    m_extendedHdr = NULL;
+    m_hdr2 = nullptr;
+    m_extendedHdr = nullptr;
     m_extendedSize = 0;
     m_lasterror = m_parent_o_stream->GetLastError();
     m_endrecWritten = false;
@@ -1093,7 +1086,7 @@ wxTarOutputStream::~wxTarOutputStream()
 
 bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
 {
-    wxTarEntryPtr e(entry);
+    std::unique_ptr<wxTarEntry> e(entry);
 
     if (!CloseEntry())
         return false;
@@ -1122,7 +1115,7 @@ bool wxTarOutputStream::PutNextEntry(wxTarEntry *entry)
 
         // pax does now allow data for wxTAR_LNKTYPE
         if (!m_pax || typeflag != wxTAR_LNKTYPE)
-            if (strchr(nodata, typeflag) != NULL)
+            if (strchr(nodata, typeflag) != nullptr)
                 CloseEntry();
     }
 
@@ -1434,16 +1427,8 @@ void wxTarOutputStream::SetExtendedHeader(const wxString& key,
                                           const wxString& value)
 {
     if (m_pax) {
-#if wxUSE_UNICODE
         const wxCharBuffer utf_key = key.utf8_str();
         const wxCharBuffer utf_value = value.utf8_str();
-#else
-        const wxWX2WCbuf wide_key = key.wc_str(GetConv());
-        const wxCharBuffer utf_key = wxConvUTF8.cWC2MB(wide_key);
-
-        const wxWX2WCbuf wide_value = value.wc_str(GetConv());
-        const wxCharBuffer utf_value = wxConvUTF8.cWC2MB(wide_value);
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
         // a small buffer to format the length field in
         char buf[32];

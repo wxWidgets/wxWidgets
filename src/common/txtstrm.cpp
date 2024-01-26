@@ -2,7 +2,6 @@
 // Name:        src/common/txtstrm.cpp
 // Purpose:     Text stream classes
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     28/06/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -26,7 +25,6 @@
 // wxTextInputStream
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
 wxTextInputStream::wxTextInputStream(wxInputStream &s,
                                      const wxString &sep,
                                      const wxMBConv& conv)
@@ -39,22 +37,10 @@ wxTextInputStream::wxTextInputStream(wxInputStream &s,
     m_lastWChar = 0;
 #endif // SIZEOF_WCHAR_T == 2
 }
-#else
-wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep)
-  : m_input(s), m_separators(sep)
-{
-    m_validBegin =
-    m_validEnd = 0;
-
-    m_lastBytes[0] = 0;
-}
-#endif
 
 wxTextInputStream::~wxTextInputStream()
 {
-#if wxUSE_UNICODE
     delete m_conv;
-#endif // wxUSE_UNICODE
 }
 
 void wxTextInputStream::UngetLast()
@@ -70,7 +56,6 @@ void wxTextInputStream::UngetLast()
 
 wxChar wxTextInputStream::GetChar()
 {
-#if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
     // Return the already raed character remaining from the last call to this
     // function, if any.
@@ -169,20 +154,6 @@ wxChar wxTextInputStream::GetChar()
     m_validEnd = sizeof(m_lastBytes);
 
     return 0;
-#else
-    m_lastBytes[0] = m_input.GetC();
-
-    if(m_input.LastRead() <= 0)
-    {
-        m_validEnd = 0;
-        return 0;
-    }
-
-    m_validEnd = 1;
-
-    return m_lastBytes[0];
-#endif
-
 }
 
 wxChar wxTextInputStream::NextNonSeparators()
@@ -377,7 +348,7 @@ wxTextInputStream& wxTextInputStream::operator>>(char& c)
     return *this;
 }
 
-#if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
 
 wxTextInputStream& wxTextInputStream::operator>>(wchar_t& wc)
 {
@@ -386,7 +357,7 @@ wxTextInputStream& wxTextInputStream::operator>>(wchar_t& wc)
     return *this;
 }
 
-#endif // wxUSE_UNICODE
+#endif // wxWCHAR_T_IS_REAL_TYPE
 
 wxTextInputStream& wxTextInputStream::operator>>(wxInt16& i)
 {
@@ -438,15 +409,10 @@ wxTextInputStream& wxTextInputStream::operator>>(float& f)
 
 
 
-#if wxUSE_UNICODE
 wxTextOutputStream::wxTextOutputStream(wxOutputStream& s,
                                        wxEOL mode,
                                        const wxMBConv& conv)
   : m_output(s), m_conv(conv.Clone())
-#else
-wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
-  : m_output(s)
-#endif
 {
     m_mode = mode;
     if (m_mode == wxEOL_NATIVE)
@@ -458,16 +424,14 @@ wxTextOutputStream::wxTextOutputStream(wxOutputStream& s, wxEOL mode)
 #endif
     }
 
-#if wxUSE_UNICODE && SIZEOF_WCHAR_T == 2
+#if SIZEOF_WCHAR_T == 2
     m_lastWChar = 0;
 #endif // SIZEOF_WCHAR_T == 2
 }
 
 wxTextOutputStream::~wxTextOutputStream()
 {
-#if wxUSE_UNICODE
     delete m_conv;
-#endif // wxUSE_UNICODE
 }
 
 void wxTextOutputStream::SetMode(wxEOL mode)
@@ -555,18 +519,14 @@ void wxTextOutputStream::WriteString(const wxString& string)
         out << c;
     }
 
-#if wxUSE_UNICODE
-    // FIXME-UTF8: use wxCharBufferWithLength if/when we have it
+    // Note that we have to use the length returned by cWC2MB() here to handle
+    // string with the embedded NULs correctly.
     wxCharBuffer buffer = m_conv->cWC2MB(out.wc_str(), out.length(), &len);
     m_output.Write(buffer, len);
-#else
-    m_output.Write(out.c_str(), out.length() );
-#endif
 }
 
 wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
 {
-#if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
     wxCharBuffer buffer;
     size_t len;
@@ -625,25 +585,20 @@ wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
         }
     }
 #else // SIZEOF_WCHAR_T == 4
-    WriteString( wxString(&c, *m_conv, 1) );
+    WriteString( wxString(&c, 1) );
 #endif // SIZEOF_WCHAR_T == 2 or 4
-#else
-    WriteString( wxString(&c, wxConvLocal, 1) );
-#endif
     return *this;
 }
 
 void wxTextOutputStream::Flush()
 {
-#if wxUSE_UNICODE
-    const size_t len = m_conv->FromWChar(NULL, 0, L"", 1);
+    const size_t len = m_conv->FromWChar(nullptr, 0, L"", 1);
     if ( len > m_conv->GetMBNulLen() )
     {
         wxCharBuffer buf(len);
         m_conv->FromWChar(buf.data(), len, L"", 1);
         m_output.Write(buf, len - m_conv->GetMBNulLen());
     }
-#endif // wxUSE_UNICODE
 }
 
 wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
@@ -659,7 +614,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(char c)
     return *this;
 }
 
-#if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE
+#if wxWCHAR_T_IS_REAL_TYPE
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wchar_t wc)
 {
@@ -668,7 +623,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(wchar_t wc)
     return *this;
 }
 
-#endif // wxUSE_UNICODE
+#endif // wxWCHAR_T_IS_REAL_TYPE
 
 wxTextOutputStream& wxTextOutputStream::operator<<(wxInt16 c)
 {

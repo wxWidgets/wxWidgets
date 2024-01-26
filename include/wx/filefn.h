@@ -2,7 +2,6 @@
 // Name:        wx/filefn.h
 // Purpose:     File- and directory-related functions
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
@@ -138,7 +137,7 @@ enum wxPosixPermissions
     #endif
 
     // detect compilers which have support for huge stdio files
-    #if wxCHECK_VISUALC_VERSION(8)
+    #if defined(__VISUALC__)
         #define wxHAS_HUGE_STDIO_FILES
         #define wxFseek _fseeki64
         #define wxFtell _ftelli64
@@ -246,65 +245,24 @@ enum wxPosixPermissions
     #define   wxEof        wxPOSIX_IDENT(eof)
 
     // then the functions taking strings
+    #define wxCRT_Open          _wopen
 
-    // first the ANSI versions
-    #define   wxCRT_OpenA       wxPOSIX_IDENT(open)
-    #define   wxCRT_AccessA     wxPOSIX_IDENT(access)
-    #define   wxCRT_ChmodA      wxPOSIX_IDENT(chmod)
-    #define   wxCRT_MkDirA      wxPOSIX_IDENT(mkdir)
-    #define   wxCRT_RmDirA      wxPOSIX_IDENT(rmdir)
+    wxDECL_FOR_STRICT_MINGW32(int, _wopen, (const wchar_t*, int, ...))
+    wxDECL_FOR_STRICT_MINGW32(int, _waccess, (const wchar_t*, int))
+    wxDECL_FOR_STRICT_MINGW32(int, _wchmod, (const wchar_t*, int))
+    wxDECL_FOR_STRICT_MINGW32(int, _wmkdir, (const wchar_t*))
+    wxDECL_FOR_STRICT_MINGW32(int, _wrmdir, (const wchar_t*))
+    wxDECL_FOR_STRICT_MINGW32(int, _wstati64, (const wchar_t*, struct _stati64*))
+
+    #define   wxCRT_Access      _waccess
+    #define   wxCRT_Chmod       _wchmod
+    #define   wxCRT_MkDir       _wmkdir
+    #define   wxCRT_RmDir       _wrmdir
     #ifdef wxHAS_HUGE_FILES
-        // MinGW-64 provides underscore-less versions of all file functions
-        // except for this one.
-        #ifdef __MINGW64_TOOLCHAIN__
-            #define   wxCRT_StatA       _stati64
-        #else
-            #define   wxCRT_StatA       wxPOSIX_IDENT(stati64)
-        #endif
+        #define   wxCRT_Stat        _wstati64
     #else
-        #define   wxCRT_StatA       wxPOSIX_IDENT(stat)
+        #define   wxCRT_Stat        _wstat
     #endif
-
-    // then wide char ones
-    #if wxUSE_UNICODE
-
-        #define wxCRT_OpenW         _wopen
-
-        wxDECL_FOR_STRICT_MINGW32(int, _wopen, (const wchar_t*, int, ...))
-        wxDECL_FOR_STRICT_MINGW32(int, _waccess, (const wchar_t*, int))
-        wxDECL_FOR_STRICT_MINGW32(int, _wchmod, (const wchar_t*, int))
-        wxDECL_FOR_STRICT_MINGW32(int, _wmkdir, (const wchar_t*))
-        wxDECL_FOR_STRICT_MINGW32(int, _wrmdir, (const wchar_t*))
-        wxDECL_FOR_STRICT_MINGW32(int, _wstati64, (const wchar_t*, struct _stati64*))
-
-        #define   wxCRT_AccessW     _waccess
-        #define   wxCRT_ChmodW      _wchmod
-        #define   wxCRT_MkDirW      _wmkdir
-        #define   wxCRT_RmDirW      _wrmdir
-        #ifdef wxHAS_HUGE_FILES
-            #define   wxCRT_StatW       _wstati64
-        #else
-            #define   wxCRT_StatW       _wstat
-        #endif
-    #endif // wxUSE_UNICODE
-
-
-    // finally the default char-type versions
-    #if wxUSE_UNICODE
-        #define wxCRT_Open      wxCRT_OpenW
-        #define wxCRT_Access    wxCRT_AccessW
-        #define wxCRT_Chmod     wxCRT_ChmodW
-        #define wxCRT_MkDir     wxCRT_MkDirW
-        #define wxCRT_RmDir     wxCRT_RmDirW
-        #define wxCRT_Stat      wxCRT_StatW
-    #else // !wxUSE_UNICODE
-        #define wxCRT_Open      wxCRT_OpenA
-        #define wxCRT_Access    wxCRT_AccessA
-        #define wxCRT_Chmod     wxCRT_ChmodA
-        #define wxCRT_MkDir     wxCRT_MkDirA
-        #define wxCRT_RmDir     wxCRT_RmDirA
-        #define wxCRT_Stat      wxCRT_StatA
-    #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 
     // constants (unless already defined by the user code)
@@ -453,53 +411,6 @@ WXDLLIMPEXP_BASE wxString wxFileNameFromPath(const wxString& path);
 // Get directory
 WXDLLIMPEXP_BASE wxString wxPathOnly(const wxString& path);
 
-// all deprecated functions below are deprecated in favour of wxFileName's methods
-#if WXWIN_COMPATIBILITY_2_8
-
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxDos2UnixFilename(char *s) );
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxDos2UnixFilename(wchar_t *s) );
-
-wxDEPRECATED_BUT_USED_INTERNALLY(
-    WXDLLIMPEXP_BASE void wxUnix2DosFilename(char *s) );
-wxDEPRECATED_BUT_USED_INTERNALLY(
-    WXDLLIMPEXP_BASE void wxUnix2DosFilename(wchar_t *s) );
-
-// Strip the extension, in situ
-// Deprecated in favour of wxFileName::StripExtension() but notice that their
-// behaviour is slightly different, see the manual
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(char *buffer) );
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wchar_t *buffer) );
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wxString& buffer) );
-
-// Get a temporary filename
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = NULL) );
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf) );
-
-// Expand file name (~/ and ${OPENWINHOME}/ stuff)
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE char* wxExpandPath(char *dest, const wxString& path) );
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wchar_t* wxExpandPath(wchar_t *dest, const wxString& path) );
-    // DEPRECATED: use wxFileName::Normalize(wxPATH_NORM_ENV_VARS)
-
-// Contract w.r.t environment (</usr/openwin/lib, OPENWHOME> -> ${OPENWINHOME}/lib)
-// and make (if under the home tree) relative to home
-// [caller must copy-- volatile]
-wxDEPRECATED(
-WXDLLIMPEXP_BASE wxChar* wxContractPath(const wxString& filename,
-                                   const wxString& envname = wxEmptyString,
-                                   const wxString& user = wxEmptyString) );
-    // DEPRECATED: use wxFileName::ReplaceEnvVariable and wxFileName::ReplaceHomeDir
-
-// Destructive removal of /./ and /../ stuff
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE char* wxRealPath(char *path) );
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wchar_t* wxRealPath(wchar_t *path) );
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wxString wxRealPath(const wxString& path) );
-    // DEPRECATED: use wxFileName::Normalize instead
-
-// Allocate a copy of the full absolute path
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* wxCopyAbsolutePath(const wxString& path) );
-    // DEPRECATED: use wxFileName::MakeAbsolute instead
-#endif
-
 // Get first file name matching given wild card.
 // Flags are reserved for future use.
 #define wxFILE  1
@@ -608,16 +519,6 @@ inline bool wxIsPathSeparator(wxChar c)
 // does the string ends with path separator?
 WXDLLIMPEXP_BASE bool wxEndsWithPathSeparator(const wxString& filename);
 
-#if WXWIN_COMPATIBILITY_2_8
-// split the full path into path (including drive for DOS), name and extension
-// (understands both '/' and '\\')
-// Deprecated in favour of wxFileName::SplitPath
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxSplitPath(const wxString& fileName,
-                                                wxString *pstrPath,
-                                                wxString *pstrName,
-                                                wxString *pstrExt) );
-#endif
-
 // find a file in a list of directories, returns false if not found
 WXDLLIMPEXP_BASE bool wxFindFileInPath(wxString *pStr, const wxString& szPath, const wxString& szFile);
 
@@ -682,7 +583,7 @@ private:
 class WXDLLIMPEXP_BASE wxPathList : public wxArrayString
 {
 public:
-    wxPathList() {}
+    wxPathList() = default;
     wxPathList(const wxArrayString &arr)
         { Add(arr); }
 

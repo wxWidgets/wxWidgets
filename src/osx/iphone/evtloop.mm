@@ -2,7 +2,6 @@
 // Name:        src/osx/iphone/evtloop.mm
 // Purpose:     implementation of wxEventLoop for OS X
 // Author:      Vadim Zeitlin, Stefan Csomor
-// Modified by:
 // Created:     2006-01-12
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -118,14 +117,14 @@ void wxGUIEventLoop::WakeUp()
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
 {
     m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
-    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    wxASSERT_MSG( m_modalWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = m_modalWindow->GetWXWindow();
 }
 
 wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 {
-    m_modalWindow = NULL;
-    wxASSERT_MSG( modalNativeWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalWindow = nullptr;
+    wxASSERT_MSG( modalNativeWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = modalNativeWindow;
 }
 

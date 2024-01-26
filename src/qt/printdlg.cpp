@@ -56,7 +56,7 @@ wxPrintData& wxQtPrintDialog::GetPrintData()
 
 wxDC *wxQtPrintDialog::GetPrintDC()
 {
-    return NULL;
+    return nullptr;
 }
 
 //##############################################################################

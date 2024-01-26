@@ -37,7 +37,7 @@ wxGBSizerItem::wxGBSizerItem( int width,
     : wxSizerItem(width, height, 0, flag, border, userData),
       m_pos(pos),
       m_span(span),
-      m_gbsizer(NULL)
+      m_gbsizer(nullptr)
 {
 }
 
@@ -51,7 +51,7 @@ wxGBSizerItem::wxGBSizerItem( wxWindow *window,
     : wxSizerItem(window, 0, flag, border, userData),
       m_pos(pos),
       m_span(span),
-      m_gbsizer(NULL)
+      m_gbsizer(nullptr)
 {
 }
 
@@ -65,14 +65,14 @@ wxGBSizerItem::wxGBSizerItem( wxSizer *sizer,
     : wxSizerItem(sizer, 0, flag, border, userData),
       m_pos(pos),
       m_span(span),
-      m_gbsizer(NULL)
+      m_gbsizer(nullptr)
 {
 }
 
 wxGBSizerItem::wxGBSizerItem()
     : wxSizerItem(),
       m_pos(-1,-1),
-      m_gbsizer(NULL)
+      m_gbsizer(nullptr)
 {
 }
 
@@ -181,7 +181,7 @@ wxSizerItem* wxGridBagSizer::Add( wxWindow *window,
         return item;
 
     delete item;
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Add( wxSizer *sizer,
@@ -193,7 +193,7 @@ wxSizerItem* wxGridBagSizer::Add( wxSizer *sizer,
         return item;
 
     delete item;
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Add( int width, int height,
@@ -205,12 +205,12 @@ wxSizerItem* wxGridBagSizer::Add( int width, int height,
         return item;
 
     delete item;
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Add( wxGBSizerItem *item )
 {
-    wxCHECK_MSG( !CheckForIntersection(item), NULL,
+    wxCHECK_MSG( !CheckForIntersection(item), nullptr,
                  wxT("An item is already at that position") );
     m_children.Append(item);
     item->SetGBSizer(this);
@@ -363,7 +363,7 @@ wxGBSizerItem* wxGridBagSizer::FindItem(wxWindow* window)
             return item;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -377,7 +377,7 @@ wxGBSizerItem* wxGridBagSizer::FindItem(wxSizer* sizer)
             return item;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -393,7 +393,7 @@ wxGBSizerItem* wxGridBagSizer::FindItemAtPosition(const wxGBPosition& pos)
             return item;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -411,7 +411,7 @@ wxGBSizerItem* wxGridBagSizer::FindItemAtPoint(const wxPoint& pt)
             return item;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -427,7 +427,7 @@ wxGBSizerItem* wxGridBagSizer::FindItemWithData(const wxObject* userData)
             return item;
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -730,56 +730,56 @@ wxSizerItem* wxGridBagSizer::Add( int width, int height, int, int flag, int bord
 wxSizerItem* wxGridBagSizer::Add( wxSizerItem * )
 {
     wxFAIL_MSG(wxT("Invalid Add form called."));
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Prepend( wxWindow *, int, int, int, wxObject*  )
 {
     wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Prepend( wxSizer *, int, int, int, wxObject*  )
 {
     wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Prepend( int, int, int, int, int, wxObject*  )
 {
     wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Prepend( wxSizerItem * )
 {
     wxFAIL_MSG(wxT("Prepend should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 
 wxSizerItem* wxGridBagSizer::Insert( size_t, wxWindow *, int, int, int, wxObject*  )
 {
     wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Insert( size_t, wxSizer *, int, int, int, wxObject*  )
 {
     wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Insert( size_t, int, int, int, int, int, wxObject*  )
 {
     wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 wxSizerItem* wxGridBagSizer::Insert( size_t, wxSizerItem * )
 {
     wxFAIL_MSG(wxT("Insert should not be used with wxGridBagSizer."));
-    return NULL;
+    return nullptr;
 }
 
 

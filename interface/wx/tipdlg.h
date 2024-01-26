@@ -59,7 +59,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     This function creates a wxTipProvider which may be used with wxShowTip().
@@ -99,5 +99,5 @@ bool wxShowTip(wxWindow *parent,
                wxTipProvider *tipProvider,
                bool showAtStartup = true);
 
-//@}
+///@}
 

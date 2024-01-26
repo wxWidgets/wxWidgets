@@ -2,7 +2,6 @@
 // Name:        src/osx/notebook_osx.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -169,7 +168,7 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 // remove one page from the notebook, without deleting the window
 wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 {
-    wxCHECK_MSG( IS_VALID_PAGE(nPage), NULL,
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), nullptr,
         wxT("DoRemovePage: invalid notebook page") );
 
     wxNotebookPage* page = m_pages[nPage] ;

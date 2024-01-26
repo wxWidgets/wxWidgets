@@ -2,7 +2,6 @@
 // Name:        wx/msw/setup.h
 // Purpose:     Configuration for the library
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -26,25 +25,26 @@
 // compatibility settings
 // ----------------------------------------------------------------------------
 
-// This setting determines the compatibility with 2.8 API: set it to 0 to
-// flag all cases of using deprecated functions.
-//
-// Default is 1 but please try building your code with 0 as the default will
-// change to 0 in the next version and the deprecated functions will disappear
-// in the version after it completely.
-//
-// Recommended setting: 0 (please update your code)
-#define WXWIN_COMPATIBILITY_2_8 0
-
 // This setting determines the compatibility with 3.0 API: set it to 0 to
 // flag all cases of using deprecated functions.
 //
+// Default is 0, but you may still set it to 1 if you can't update the existing
+// code relying on the deprecated functions. Please do consider updating it if
+// at all possible instead of changing this to 1, however, as these functions
+// will completely disappear in the next wxWidgets release.
+//
+// Recommended setting: 0 (please update your code)
+#define WXWIN_COMPATIBILITY_3_0 0
+
+// This setting determines the compatibility with 3.2 API: set it to 0 to
+// flag all cases of using deprecated functions.
+//
 // Default is 1 but please try building your code with 0 as the default will
 // change to 0 in the next version and the deprecated functions will disappear
 // in the version after it completely.
 //
 // Recommended setting: 0 (please update your code)
-#define WXWIN_COMPATIBILITY_3_0 1
+#define WXWIN_COMPATIBILITY_3_2 1
 
 // MSW-only: Set to 0 for accurate dialog units, else 1 for old behaviour when
 // default system font is used for wxWindow::GetCharWidth/Height() instead of
@@ -55,18 +55,6 @@
 // Recommended setting: 0
 #define wxDIALOG_UNIT_COMPATIBILITY   0
 
-// Provide unsafe implicit conversions in wxString to "const char*" or
-// "std::string" (depending on wxUSE_STD_STRING_CONV_IN_WXSTRING value).
-//
-// Default is 1 but only for compatibility reasons, it is recommended to set
-// this to 0 because converting wxString to a narrow (non-Unicode) string may
-// fail unless a locale using UTF-8 encoding is used, which is never the case
-// under MSW, for example, hence such conversions can result in silent data
-// loss.
-//
-// Recommended setting: 0
-#define wxUSE_UNSAFE_WXSTRING_CONV 1
-
 // If set to 1, enables "reproducible builds", i.e. build output should be
 // exactly the same if the same build is redone again. As using __DATE__ and
 // __TIME__ macros clearly makes the build irreproducible, setting this option
@@ -76,6 +64,54 @@
 //
 // Recommended setting: 0
 #define wxUSE_REPRODUCIBLE_BUILD 0
+
+// ----------------------------------------------------------------------------
+// wxString encoding settings
+// ----------------------------------------------------------------------------
+
+// If set to 1, wxString uses UTF-8 internally instead of UTF-32 (Unix) or
+// UTF-16 (MSW).
+//
+// This option can be set to 1 if you want to avoid the overhead of converting
+// between wchar_t encoding (UTF-32 or UTF-16) used by wxString by default and
+// UTF-8, i.e. it makes functions such as wxString::FromUTF8() and utf8_str()
+// much more efficient and constant time, as they don't perform any conversion
+// any longer, which is especially interesting in wxGTK where these functions
+// are used every time a GTK function is called. But this is compensated by
+// making all the non-UTF-8 functions less efficient, notably requiring a
+// conversion when passing any string to Win32 API.
+//
+// Moreover, accessing strings by character index becomes, in general, a O(N)
+// iteration, where N is the index, so only enable this option if you don't use
+// index access for arbitrary characters (unless it is done inside a loop
+// consecutively for all characters as this special access pattern is optimized
+// by caching the last accessed index -- but using iterate, or range for loop,
+// is still better even in this case), as otherwise you may observe significant
+// slowdown in your program performance.
+//
+// Default is 0
+//
+// Recommended setting: 0 but can be set to 1 for optimization purposes and if
+// you're sure that you're not using loops using indices to iterate over
+// strings in your code.
+#define wxUSE_UNICODE_UTF8 0
+
+// If set to 1, assume that all narrow strings use UTF-8.
+//
+// By default, wxWidgets assumes that all "char*" strings use the encoding of
+// the current locale, which is commonly, but not always, UTF-8 under Unix but
+// rarely UTF-8 under MSW. This option tells the library that all strings
+// always use UTF-8, avoiding the need to perform any conversions between them
+// and wxString internal representation when wxUSE_UNICODE_UTF8 is set to 1.
+//
+// In fact, using this option only makes sense when wxUSE_UNICODE_UTF8==1 and
+// it must not be enabled without the other option.
+//
+// Default is 0
+//
+// Recommended setting: 0 but can be set to 1 if your program is always run in
+// an UTF-8 locale.
+#define wxUSE_UTF8_LOCALE_ONLY 0
 
 // ----------------------------------------------------------------------------
 // debugging settings
@@ -125,72 +161,6 @@
 //                         is no overhead if you don't use it
 #define wxUSE_DEBUGREPORT 1
 
-// Generic comment about debugging settings: they are very useful if you don't
-// use any other memory leak detection tools such as Purify/BoundsChecker, but
-// are probably redundant otherwise. Also, Visual C++ CRT has the same features
-// as wxWidgets memory debugging subsystem built in since version 5.0 and you
-// may prefer to use it instead of built in memory debugging code because it is
-// faster and more fool proof.
-//
-// Using VC++ CRT memory debugging is enabled by default in debug build (_DEBUG
-// is defined) if wxUSE_GLOBAL_MEMORY_OPERATORS is *not* enabled (i.e. is 0)
-// and if __NO_VC_CRTDBG__ is not defined.
-
-// The rest of the options in this section are obsolete and not supported,
-// enable them at your own risk.
-
-// If 1, enables wxDebugContext, for writing error messages to file, etc. If
-// __WXDEBUG__ is not defined, will still use the normal memory operators.
-//
-// Default is 0
-//
-// Recommended setting: 0
-#define wxUSE_DEBUG_CONTEXT 0
-
-// If 1, enables debugging versions of wxObject::new and wxObject::delete *IF*
-// __WXDEBUG__ is also defined.
-//
-// WARNING: this code may not work with all architectures, especially if
-// alignment is an issue. This switch is currently ignored for mingw / cygwin
-//
-// Default is 0
-//
-// Recommended setting: 1 if you are not using a memory debugging tool, else 0
-#define wxUSE_MEMORY_TRACING 0
-
-// In debug mode, cause new and delete to be redefined globally.
-// If this causes problems (e.g. link errors which is a common problem
-// especially if you use another library which also redefines the global new
-// and delete), set this to 0.
-// This switch is currently ignored for mingw / cygwin
-//
-// Default is 0
-//
-// Recommended setting: 0
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-// In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
-// this causes problems (e.g. link errors), set this to 0. You may need to set
-// this to 0 if using templates (at least for VC++). This switch is currently
-// ignored for MinGW/Cygwin.
-//
-// Default is 0
-//
-// Recommended setting: 0
-#define wxUSE_DEBUG_NEW_ALWAYS 0
-
-
-// ----------------------------------------------------------------------------
-// Unicode support
-// ----------------------------------------------------------------------------
-
-// This option is deprecated: the library should be always built in Unicode mode
-// now, only set wxUSE_UNICODE to 0 to compile legacy code in ANSI mode if
-// absolutely necessary -- updating it is strongly recommended as the ANSI mode
-// will disappear completely in future wxWidgets releases.
-#ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 1
-#endif
 
 // ----------------------------------------------------------------------------
 // global features
@@ -214,9 +184,10 @@
 
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
-// Default is 0
+// This feature is incomplete and experimental, please only enable it if
+// you want to participate in its development.
 //
-// Recommended setting: 0 (this is still work in progress...)
+// Recommended setting: 0 (unless you wish to try working on it).
 #define wxUSE_EXTENDED_RTTI 0
 
 // Support for message/error logging. This includes wxLogXXX() functions and
@@ -285,109 +256,67 @@
 // Recommended setting: 1 if you want to support multiple languages
 #define wxUSE_PRINTF_POS_PARAMS      1
 
-// Enable the use of compiler-specific thread local storage keyword, if any.
-// This is used for wxTLS_XXX() macros implementation and normally should use
-// the compiler-provided support as it's simpler and more efficient, but is
-// disabled under Windows in wx/msw/chkconf.h as it can't be used if wxWidgets
-// is used in a dynamically loaded Win32 DLL (i.e. using LoadLibrary()) under
-// XP as this triggers a bug in compiler TLS support that results in crashes
-// when any TLS variables are used.
-//
-// If you're absolutely sure that your build of wxWidgets is never going to be
-// used in such situation, either because it's not going to be linked from any
-// kind of plugin or because you only target Vista or later systems, you can
-// set this to 2 to force the use of compiler TLS even under MSW.
-//
-// Default is 1 meaning that compiler TLS is used only if it's 100% safe.
-//
-// Recommended setting: 2 if you want to have maximal performance and don't
-// care about the scenario described above.
-#define wxUSE_COMPILER_TLS 1
-
 // ----------------------------------------------------------------------------
 // Interoperability with the standard library.
 // ----------------------------------------------------------------------------
 
-// Set wxUSE_STL to 1 to enable maximal interoperability with the standard
-// library, even at the cost of backwards compatibility.
-//
-// Default is 0
-//
-// Recommended setting: 0 as the options below already provide a relatively
-// good level of interoperability and changing this option arguably isn't worth
-// diverging from the official builds of the library.
-#define wxUSE_STL 0
-
-// This is not a real option but is used as the default value for
-// wxUSE_STD_IOSTREAM, wxUSE_STD_STRING and wxUSE_STD_CONTAINERS_COMPATIBLY.
-//
-// Set it to 0 if you want to disable the use of all standard classes
-// completely for some reason.
-#define wxUSE_STD_DEFAULT  1
-
-// Use standard C++ containers where it can be done without breaking backwards
-// compatibility.
-//
-// This provides better interoperability with the standard library, e.g. with
-// this option on it's possible to insert std::vector<> into many wxWidgets
-// containers directly.
+// Use standard C++ containers to implement all wx container classes.
 //
 // Default is 1.
 //
-// Recommended setting is 1 unless you want to avoid all dependencies on the
-// standard library.
-#define wxUSE_STD_CONTAINERS_COMPATIBLY wxUSE_STD_DEFAULT
-
-// Use standard C++ containers to implement wxVector<>, wxStack<>, wxDList<>
-// and wxHashXXX<> classes. If disabled, wxWidgets own (mostly compatible but
-// usually more limited) implementations are used which allows to avoid the
-// dependency on the C++ run-time library.
-//
-// Default is 0 for compatibility reasons.
-//
-// Recommended setting: 1 unless compatibility with the official wxWidgets
-// build and/or the existing code is a concern.
-#define wxUSE_STD_CONTAINERS 0
+// Recommended setting: 1 unless you really need to set it to 0 to preserve
+// compatibility with the existing code.
+#define wxUSE_STD_CONTAINERS 1
 
 // Use standard C++ streams if 1 instead of wx streams in some places. If
-// disabled, wx streams are used everywhere and wxWidgets doesn't depend on the
-// standard streams library.
+// disabled, wx streams are used instead.
 //
 // Notice that enabling this does not replace wx streams with std streams
-// everywhere, in a lot of places wx streams are used no matter what.
+// everywhere, in a lot of places wx streams are used no matter what and in
+// other places this option enables the use of standard streams in _addition_
+// to the wx ones. The only exception is wxDocument which defines functions
+// working with standard streams only when this option is on, and only
+// functions working with wx streams when it's off.
 //
-// Default is 1 if compiler supports it.
+// Default is 1.
 //
-// Recommended setting: 1 if you use the standard streams anyhow and so
-//                      dependency on the standard streams library is not a
-//                      problem
-#define wxUSE_STD_IOSTREAM  wxUSE_STD_DEFAULT
+// Recommended setting: 1, there should be no reason to disable it.
+#define wxUSE_STD_IOSTREAM  1
 
-// Enable minimal interoperability with the standard C++ string class if 1.
-// "Minimal" means that wxString can be constructed from std::string or
-// std::wstring but can't be implicitly converted to them. You need to enable
-// the option below for the latter.
-//
-// Default is 1 for most compilers.
-//
-// Recommended setting: 1 unless you want to ensure your program doesn't use
-//                      the standard C++ library at all.
-#define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
+// ----------------------------------------------------------------------------
+// wxString-related options
+// ----------------------------------------------------------------------------
 
-// Make wxString as much interchangeable with std::[w]string as possible, in
-// particular allow implicit conversion of wxString to either of these classes.
-// This comes at a price (or a benefit, depending on your point of view) of not
-// allowing implicit conversion to "const char *" and "const wchar_t *".
+// Provide unsafe implicit conversions in wxString to "const char*" or
+// "std::string" (only if implicit conversions are not disabled entirely).
 //
-// Because a lot of existing code relies on these conversions, this option is
-// disabled by default but can be enabled for your build if you don't care
-// about compatibility.
+// Default is 1 for compatibility reasons, it is recommended to set
+// this to 0 because converting wxString to a narrow (non-Unicode) string may
+// fail unless a locale using UTF-8 encoding is used, which is never the case
+// under MSW, for example, hence such conversions can result in silent data
+// loss.
 //
-// Default is 0 if wxUSE_STL has its default value or 1 if it is enabled.
+// Recommended setting: 1 to remain compatible with the official builds of
+// wxWidgets, but define wxNO_UNSAFE_WXSTRING_CONV when compiling the
+// application code to effectively disallow using these conversions.
+#define wxUSE_UNSAFE_WXSTRING_CONV 1
+
+// Define implicit conversions of wxString to std::wstring and std::string if
+// wxUSE_UNSAFE_WXSTRING_CONV is also enabled.
 //
-// Recommended setting: 0 to remain compatible with the official builds of
-// wxWidgets.
-#define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
+// Note that wxString can always be constructed from std::[w]string, whether
+// this option is turned on or off, it only enables implicit conversion in the
+// other direction.
+//
+// If this setting is changed to 1, implicit conversions to pointer types are
+// disabled as defining both kinds of implicit conversions would result in
+// ambiguities.
+//
+// Default is 0.
+//
+// Recommended setting: 0, use wxString::ToStdWstring() and ToStdString() or,
+// preferably, utf8_string() explicitly instead.
+#define wxUSE_STD_STRING_CONV_IN_WXSTRING 0
 
 // ----------------------------------------------------------------------------
 // non GUI features selection
@@ -471,7 +400,7 @@
 // wxFileConfig
 #define wxUSE_TEXTFILE      1
 
-// i18n support: _() macro, wxLocale class. Requires wxTextFile.
+// i18n support: _() macro, wxLocale class.
 #define wxUSE_INTL          1
 
 // Provide wxFoo_l() functions similar to standard foo() functions but taking
@@ -510,7 +439,7 @@
 //
 // Default is 1
 //
-// Recommended setting: 1 (needed by wxSocket)
+// Recommended setting: 1
 #define wxUSE_STOPWATCH     1
 
 // Set wxUSE_FSWATCHER to 1 if you want to enable wxFileSystemWatcher
@@ -531,9 +460,8 @@
 #define wxUSE_CONFIG        1
 
 // If wxUSE_CONFIG is 1, you may choose to use either the native config
-// classes under Windows (using .INI files under Win16 and the registry under
-// Win32) or the portable text file format used by the config classes under
-// Unix.
+// classes under Windows (using the registry) or the portable text file
+// format used by the config classes under Unix.
 //
 // Default is 1 to use native classes. Note that you may still use
 // wxFileConfig even if you set this to 1 - just the config object created by
@@ -553,9 +481,11 @@
 #define wxUSE_DIALUP_MANAGER   1
 
 // Compile in classes for run-time DLL loading and function calling.
-// Required by wxUSE_DIALUP_MANAGER.
 //
-// This setting is for Win32 only
+// This is required by wxMSW implementation and so is always enabled there,
+// regardless of the value here. For the other ports this option can be
+// disabled to save a tiny amount of code, but there is typically no reason to
+// do it.
 //
 // Default is 1.
 //
@@ -712,14 +642,11 @@
 // or your compiler cannot for some reason cope with complexity of templates used.
 #define wxUSE_ANY 1
 
-// Support for regular expression matching via wxRegEx class: enable this to
-// use POSIX regular expressions in your code. You need to compile regex
-// library from src/regex to use it under Windows.
+// Support for regular expression matching via wxRegEx class.
 //
-// Default is 0
+// Default is 1.
 //
-// Recommended setting: 1 if your compiler supports it, if it doesn't please
-// contribute us a makefile for src/regex for it
+// Recommended setting: 1
 #define wxUSE_REGEX       1
 
 // wxSystemOptions class
@@ -742,8 +669,7 @@
 // Recommended setting: 1 (requires wxUSE_XML)
 #define wxUSE_XRC       1
 
-// XML parsing classes. Note that their API will change in the future, so
-// using wxXmlDocument and wxXmlNode in your app is not recommended.
+// XML parsing classes.
 //
 // Default is 1
 //
@@ -771,7 +697,7 @@
 // Recommended setting: 1
 #define wxUSE_PROPGRID  1
 
-// Use wxStyledTextCtrl, a wxWidgets implementation of Scintilla.
+// Use wxStyledTextCtrl, a wxWidgets Scintilla wrapper.
 //
 // Default is 1
 //
@@ -784,6 +710,13 @@
 //
 // Recommended setting: 1
 #define wxUSE_WEBVIEW 1
+
+// Use the Chromium Embedded Framework wxWebview backend
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_WEBVIEW_CHROMIUM 0
 
 // Use the IE wxWebView backend
 //
@@ -802,6 +735,13 @@
 //
 // Recommended setting: 1 when building for Windows with WebView2 SDK
 #define wxUSE_WEBVIEW_EDGE 0
+
+// Use the Edge (Chromium) wxWebView backend without loader DLL
+//
+// Default is 0, set it to 1 if you don't want to depend on WebView2Loader.dll.
+//
+// Recommended setting: 0
+#define wxUSE_WEBVIEW_EDGE_STATIC 0
 
 // Use the WebKit wxWebView backend
 //
@@ -827,27 +767,10 @@
 
 // Enable wxGraphicsContext and related classes for a modern 2D drawing API.
 //
-// Default is 1 except if you're using a compiler without support for GDI+
-// under MSW, i.e. gdiplus.h and related headers (MSVC and MinGW >= 4.8 are
-// known to have them). For other compilers (e.g. older mingw32) you may need
-// to install the headers (and just the headers) yourself. If you do, change
-// the setting below manually.
+// Default is 1.
 //
-// Recommended setting: 1 if supported by the compilation environment
-
-// Notice that we can't use wxCHECK_VISUALC_VERSION() nor wxCHECK_GCC_VERSION()
-// here as this file is included from wx/platform.h before they're defined.
-#if defined(_MSC_VER) || \
-    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
+// Recommended setting: 1, setting it to 0 disables a lot of functionality.
 #define wxUSE_GRAPHICS_CONTEXT 1
-#else
-// Disable support for other Windows compilers, enable it if your compiler
-// comes with new enough SDK or you installed the headers manually.
-//
-// Notice that this will be set by configure under non-Windows platforms
-// anyhow so the value there is not important.
-#define wxUSE_GRAPHICS_CONTEXT 0
-#endif
 
 // Enable wxGraphicsContext implementation using Cairo library.
 //
@@ -1125,8 +1048,8 @@
 #define wxUSE_ARTPROVIDER_STD 1
 
 // Use art provider providing Tango icons: this art provider has higher quality
-// icons than the default ones using smaller size XPM icons without
-// transparency but the embedded PNG icons add to the library size.
+// icons than the default one. It uses SVG format which allows much better scaling
+// then when bitmaps are used, at the expense of somewhat larger library size.
 //
 // Default is 1 under non-GTK ports. Under wxGTK the native art provider using
 // the GTK+ stock icons replaces it so it is normally not necessary.
@@ -1134,7 +1057,7 @@
 // Recommended setting: 1 but can be turned off to reduce the library size.
 #define wxUSE_ARTPROVIDER_TANGO 1
 
-// Hotkey support (currently Windows only)
+// Hotkey support (currently Windows and macOS only)
 #define wxUSE_HOTKEY 1
 
 // Use wxCaret: a class implementing a "cursor" in a text control (called caret
@@ -1269,13 +1192,12 @@
 // common dialogs
 // ----------------------------------------------------------------------------
 
-// On rare occasions (e.g. using DJGPP) may want to omit common dialogs (e.g.
-// file selector, printer dialog). Switching this off also switches off the
-// printing architecture and interactive wxPrinterDC.
+// Use common dialogs (e.g. file selector, printer dialog). Switching this off
+// also switches off the printing architecture and interactive wxPrinterDC.
 //
 // Default is 1
 //
-// Recommended setting: 1 (unless it really doesn't work)
+// Recommended setting: 1
 #define wxUSE_COMMON_DIALOGS 1
 
 // wxBusyInfo displays window with message when app is busy. Works in same way
@@ -1298,8 +1220,6 @@
 
 // wxDirDlg class for getting a directory name from user
 #define wxUSE_DIRDLG 1
-
-// TODO: setting to choose the generic or native one
 
 // Use file open/save dialogs.
 //
@@ -1413,20 +1333,18 @@
 // Set to 0 to disable print/preview architecture code
 #define wxUSE_PRINTING_ARCHITECTURE  1
 
-// wxHTML sublibrary allows to display HTML in wxWindow programs and much,
-// much more.
+// wxHTML allows displaying simple HTML.
 //
 // Default is 1.
 //
-// Recommended setting: 1 (wxHTML is great!), set to 0 if you want compile a
-// smaller library.
+// Recommended setting: 1
 #define wxUSE_HTML          1
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
-// set to 1 and, under Windows, also to add opengl32.lib and glu32.lib to the
-// list of libraries used to link your application (although this is done
-// implicitly for Microsoft Visual C++ users).
+// set to 1 and, under Windows, also to add opengl32.lib to the
+// list of libraries used to link your application when linking to wxWidgets
+// statically (although this is done implicitly for Microsoft Visual C++ users).
 //
 // Default is 1.
 //
@@ -1568,9 +1486,10 @@
 // disabled if you don't plan to use images in such format sometimes saving
 // substantial amount of code in the final library.
 //
-// Some formats require an extra library which is included in wxWin sources
-// which is mentioned if it is the case.
-
+// Some formats require an extra library (e.g. libpng) which is always included in
+// wxWidgets sources but some build systems (cmake, configure) can be configured to
+// to use the system or user-provided version.
+//
 // Set to 1 for wxImage support (recommended).
 #define wxUSE_IMAGE         1
 
@@ -1582,6 +1501,12 @@
 
 // Set to 1 for TIFF format support (requires libtiff)
 #define wxUSE_LIBTIFF       1
+
+// Set to 1 for SVG rasterizing support using nanosvg
+#define wxUSE_NANOSVG       1
+
+// Set to 1 to use external nanosvg library when wxUSE_NANOSVG is enabled
+#define wxUSE_NANOSVG_EXTERNAL 0
 
 // Set to 1 for TGA format support (loading only)
 #define wxUSE_TGA           1
@@ -1635,20 +1560,17 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 if you need to support XP, as Direct2D is not
-// available there.
+// Recommended setting: 1, GDI+ is always available.
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
 // Enable support for Direct2D-based implementation of wxGraphicsContext.
 //
-// Default is 1 for compilers which support it, i.e. VC10+ currently. If you
-// use an earlier MSVC version or another compiler and installed the necessary
-// SDK components manually, you need to change this setting.
+// Default is 1 for MSVS. MinGW-w64 supports Direct2D as well, but if you use
+// it, you need to change this setting manually as other MinGW distributions
+// may not support it.
 //
-// Recommended setting: 1 for faster and better quality graphics under Windows
-// 7 and later systems (if wxUSE_GRAPHICS_GDIPLUS is also enabled, earlier
-// systems will fall back on using GDI+).
-#if defined(_MSC_VER) && _MSC_VER >= 1600
+// Recommended setting: 1 for faster and better quality graphics.
+#if defined(_MSC_VER)
     #define wxUSE_GRAPHICS_DIRECT2D wxUSE_GRAPHICS_CONTEXT
 #else
     #define wxUSE_GRAPHICS_DIRECT2D 0
@@ -1695,12 +1617,10 @@
 
 // Enable WinRT support
 //
-// Default is 1 for compilers which support it, i.e. VS2012+ currently. If you
-// use an earlier MSVC version or another compiler and installed the necessary
-// SDK components manually, you need to change this setting.
+// Default is 1 for compilers which support it, i.e. MSVS currently.
 //
 // Recommended setting: 1
-#if defined(_MSC_VER) && _MSC_VER >= 1700 && !defined(_USING_V110_SDK71_)
+#if defined(_MSC_VER)
     #define wxUSE_WINRT 1
 #else
     #define wxUSE_WINRT 0
@@ -1712,7 +1632,7 @@
 // Set this to 1 to enable wxDIB class used internally for manipulating
 // wxBitmap data.
 //
-// Default is 1, set it to 0 only if you don't use wxImage neither
+// Default is 1, set it to 0 only if you don't use wxImage either
 //
 // Recommended setting: 1 (without it conversion to/from wxImage won't work)
 #define wxUSE_WXDIB 1

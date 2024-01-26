@@ -24,16 +24,16 @@ class SimplebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 public:
     SimplebookTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxBookCtrlBase *GetBase() const wxOVERRIDE { return m_simplebook; }
+    virtual wxBookCtrlBase *GetBase() const override { return m_simplebook; }
 
-    virtual wxEventType GetChangedEvent() const wxOVERRIDE
+    virtual wxEventType GetChangedEvent() const override
         { return wxEVT_BOOKCTRL_PAGE_CHANGED; }
 
-    virtual wxEventType GetChangingEvent() const wxOVERRIDE
+    virtual wxEventType GetChangingEvent() const override
         { return wxEVT_BOOKCTRL_PAGE_CHANGING; }
 
     CPPUNIT_TEST_SUITE( SimplebookTestCase );

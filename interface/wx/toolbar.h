@@ -80,13 +80,13 @@ enum
 class wxToolBarToolBase : public wxObject
 {
 public:
-    wxToolBarToolBase(wxToolBarBase *tbar = NULL,
+    wxToolBarToolBase(wxToolBarBase *tbar = nullptr,
                       int toolid = wxID_SEPARATOR,
                       const wxString& label = wxEmptyString,
                       const wxBitmapBundle& bmpNormal = wxNullBitmap,
                       const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                       wxItemKind kind = wxITEM_NORMAL,
-                      wxObject *clientData = NULL,
+                      wxObject *clientData = nullptr,
                       const wxString& shortHelpString = wxEmptyString,
                       const wxString& longHelpString = wxEmptyString);
 
@@ -171,10 +171,8 @@ public:
     the menu bar in a wxFrame.
 
     You may create a toolbar that is managed by a frame calling
-    wxFrame::CreateToolBar(). Under Pocket PC, you should always use this
-    function for creating the toolbar to be managed by the frame, so that
-    wxWidgets can use a combined menubar and toolbar. Where you manage your
-    own toolbars, create wxToolBar as usual.
+    wxFrame::CreateToolBar(). Where you manage your own toolbars,
+    create wxToolBar as usual.
 
     There are several different types of tools you can add to a toolbar.
     These types are controlled by the ::wxItemKind enumeration.
@@ -342,7 +340,7 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject* clientData = NULL);
+                                    wxObject* clientData = nullptr);
 
     /**
         Adds any control to the toolbar, typically e.g.\ a wxComboBox.
@@ -354,7 +352,7 @@ public:
 
         @remarks
             wxMac: labels are only displayed if wxWidgets is built with @c
-            wxMAC_USE_NATIVE_TOOLBAR set to 1
+            wxOSX_USE_NATIVE_TOOLBAR set to 1 (which is the default).
     */
     virtual wxToolBarToolBase* AddControl(wxControl* control,
                                           const wxString& label = wxEmptyString);
@@ -378,7 +376,7 @@ public:
                                     const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject* clientData = NULL);
+                                    wxObject* clientData = nullptr);
 
     /**
         Adds a separator for spacing groups of tools.
@@ -408,7 +406,7 @@ public:
      */
     wxToolBarToolBase *AddStretchableSpace();
 
-    //@{
+    ///@{
     /**
         Adds a tool to the toolbar.
 
@@ -503,8 +501,8 @@ public:
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString,
-                               wxObject* clientData = NULL);
-    //@}
+                               wxObject* clientData = nullptr);
+    ///@}
 
     /**
         Deletes all the tools in the toolbar.
@@ -591,8 +589,13 @@ public:
         you should use @c wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR) but
         in any case, as the bitmap size is deduced automatically from the size
         of the bitmaps associated with the tools added to the toolbar, it is
-        usually unnecessary to call neither this function nor
+        usually unnecessary to call either this function or
         SetToolBitmapSize() at all.
+
+        This function returns the size in logical pixels, for consistency with
+        SetToolBitmapSize() which takes size in logical pixels. See @ref
+        overview_high_dpi for more information about the different pixel types
+        and how to convert between them.
 
         @remarks Note that this is the size of the bitmap you pass to AddTool(),
             and not the eventual size of the tool button.
@@ -732,7 +735,7 @@ public:
      */
     wxToolBarToolBase *InsertStretchableSpace(size_t pos);
 
-    //@{
+    ///@{
     /**
         Inserts the tool with the specified attributes into the toolbar at the
         given position.
@@ -753,11 +756,11 @@ public:
                                     wxItemKind kind = wxITEM_NORMAL,
                                     const wxString& shortHelp = wxEmptyString,
                                     const wxString& longHelp = wxEmptyString,
-                                    wxObject *clientData = NULL);
+                                    wxObject *clientData = nullptr);
 
     wxToolBarToolBase* InsertTool(size_t pos,
                                   wxToolBarToolBase* tool);
-    //@}
+    ///@}
 
     /**
         Called when the user clicks on a tool with the left mouse button. This
@@ -838,14 +841,14 @@ public:
     /**
         Sets the dropdown menu for the tool given by its @e id. The tool itself
         will delete the menu when it's no longer needed. Only supported under
-        GTK+ und MSW.
+        GTK+ and MSW.
 
         If you define a EVT_TOOL_DROPDOWN() handler in your program, you must
         call wxEvent::Skip() from it or the menu won't be displayed.
     */
     bool SetDropdownMenu(int id, wxMenu* menu);
 
-    //@{
+    ///@{
     /**
         Set the values to be used as margins for the toolbar.
 
@@ -875,22 +878,31 @@ public:
         @see GetMargins(), wxSize
     */
     void SetMargins(const wxSize& size);
-    //@}
+    ///@}
 
     /**
-        Sets the default size of each tool bitmap. The default bitmap size is 16
-        by 15 pixels.
+        Sets the default size of each tool bitmap.
 
         It is usually unnecessary to call this function, as the tools will
         always be made big enough to fit the size of the bitmaps used in them.
+        Moreover, calling it forces wxToolBar to scale its images in high DPI
+        using the provided size, instead of letting wxBitmapBundle used for the
+        tool bitmaps determine the best suitable bitmap size, which may result
+        in suboptimal appearance.
 
-        If you do call it, note that @a size does @e not need to be multiplied
-        by the DPI-dependent factor even under MSW, where it would normally be
-        necessary, as the toolbar adjusts this size to the current DPI
-        automatically.
+        If you do call it, it must be done before toolbar is Realize()'d.
+
+        Example of using this function to force the bitmaps to be at least
+        32 pixels wide and tall (at normal DPI):
+        @code
+            toolbar->SetToolBitmapSize(FromDIP(wxSize(32, 32)));
+            toolbar->AddTool(wxID_NEW, "New", wxBitmapBundle::FromXXX(...));
+            ...
+            toolbar->Realize();
+        @endcode
 
         @param size
-            The size of the bitmaps in the toolbar.
+            The size of the bitmaps in the toolbar in logical pixels.
 
         @see GetToolBitmapSize(), GetToolSize()
     */
@@ -1011,7 +1023,7 @@ public:
                                           const wxBitmapBundle& bmpNormal,
                                           const wxBitmapBundle& bmpDisabled = wxNullBitmap,
                                           wxItemKind kind = wxITEM_NORMAL,
-                                          wxObject *clientData = NULL,
+                                          wxObject *clientData = nullptr,
                                           const wxString& shortHelp = wxEmptyString,
                                           const wxString& longHelp = wxEmptyString);
     /**

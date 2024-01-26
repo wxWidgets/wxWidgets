@@ -2,7 +2,6 @@
 // Name:        src/msw/combo.cpp
 // Purpose:     wxMSW wxComboCtrl
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
@@ -105,17 +104,11 @@ bool wxComboCtrl::Create(wxWindow *parent,
                            name) )
         return false;
 
-    if ( wxUxThemeIsActive() && ::wxGetWinVersion() >= wxWinVersion_Vista )
-            m_iFlags |= wxCC_BUTTON_STAYS_DOWN |wxCC_BUTTON_COVERS_BORDER;
+    if ( wxUxThemeIsActive() )
+        m_iFlags |= wxCC_BUTTON_STAYS_DOWN |wxCC_BUTTON_COVERS_BORDER;
 
     if ( style & wxCC_STD_BUTTON )
         m_iFlags |= wxCC_POPUP_ON_MOUSE_UP;
-
-    // Prepare background for double-buffering or better background theme
-    // support, whichever is possible.
-    SetDoubleBuffered(true);
-    if ( !IsDoubleBuffered() )
-        SetBackgroundStyle( wxBG_STYLE_PAINT );
 
     // Create textctrl, if necessary
     CreateTextCtrl( wxNO_BORDER );
@@ -352,8 +345,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 #if wxUSE_UXTHEME
     if ( hTheme )
     {
-        const bool useVistaComboBox = ::wxGetWinVersion() >= wxWinVersion_Vista;
-
         RECT rFull;
         wxCopyRectToRECT(borderRect, rFull);
 
@@ -374,10 +365,8 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         {
             butState = CBXS_DISABLED;
         }
-        // Vista will display the drop-button as depressed always
-        // when the popup window is visilbe
         else if ( (m_btnState & wxCONTROL_PRESSED) ||
-                  (useVistaComboBox && !IsPopupWindowState(Hidden)) )
+                  !IsPopupWindowState(Hidden) )
         {
             butState = CBXS_PRESSED;
         }
@@ -390,45 +379,42 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
             butState = CBXS_NORMAL;
         }
 
-        int comboBoxPart = 0;  // For XP, use the 'default' part
+        int comboBoxPart wxDUMMY_INITIALIZE(0);
         RECT* rUseForBg = &rBorder;
 
         bool drawFullButton = false;
         int bgState = butState;
         const bool isFocused = (FindFocus() == GetMainWindowOfCompositeControl()) ? true : false;
 
-        if ( useVistaComboBox )
+        // Draw the entire control as a single button?
+        if ( !isNonStdButton )
         {
-            // Draw the entire control as a single button?
-            if ( !isNonStdButton )
-            {
-                if ( HasFlag(wxCB_READONLY) )
-                    drawFullButton = true;
-            }
+            if ( HasFlag(wxCB_READONLY) )
+                drawFullButton = true;
+        }
 
-            if ( drawFullButton )
-            {
-                comboBoxPart = CP_READONLY;
-                rUseForBg = &rFull;
+        if ( drawFullButton )
+        {
+            comboBoxPart = CP_READONLY;
+            rUseForBg = &rFull;
 
-                // It should be safe enough to update this flag here.
-                m_iFlags |= wxCC_FULL_BUTTON;
-            }
+            // It should be safe enough to update this flag here.
+            m_iFlags |= wxCC_FULL_BUTTON;
+        }
+        else
+        {
+            comboBoxPart = CP_BORDER;
+            m_iFlags &= ~wxCC_FULL_BUTTON;
+
+            if ( isFocused )
+                bgState = CBB_FOCUSED;
             else
-            {
-                comboBoxPart = CP_BORDER;
-                m_iFlags &= ~wxCC_FULL_BUTTON;
-
-                if ( isFocused )
-                    bgState = CBB_FOCUSED;
-                else
-                    bgState = CBB_NORMAL;
-            }
+                bgState = CBB_NORMAL;
         }
 
         //
         // Draw parent's background, if necessary
-        RECT* rUseForTb = NULL;
+        RECT* rUseForTb = nullptr;
 
         if ( ::IsThemeBackgroundPartiallyTransparent( hTheme, comboBoxPart, bgState ) )
             rUseForTb = &rFull;
@@ -442,7 +428,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         // Draw the control background (including the border)
         if ( m_widthCustomBorder > 0 )
         {
-            ::DrawThemeBackground( hTheme, hDc, comboBoxPart, bgState, rUseForBg, NULL );
+            hTheme.DrawBackground(hDc, *rUseForBg, comboBoxPart, bgState);
         }
         else
         {
@@ -461,27 +447,23 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
             int butPart = CP_DROPDOWNBUTTON;
 
-            if ( useVistaComboBox )
+            if ( drawFullButton )
             {
-                if ( drawFullButton )
-                {
-                    // We need to alter the button style slightly before
-                    // drawing the actual button (but it was good above
-                    // when background etc was done).
-                    if ( butState == CBXS_HOT || butState == CBXS_PRESSED )
-                        butState = CBXS_NORMAL;
-                }
-
-                if ( m_btnSide == wxRIGHT )
-                    butPart = CP_DROPDOWNBUTTONRIGHT;
-                else
-                    butPart = CP_DROPDOWNBUTTONLEFT;
-
+                // We need to alter the button style slightly before
+                // drawing the actual button (but it was good above
+                // when background etc was done).
+                if ( butState == CBXS_HOT || butState == CBXS_PRESSED )
+                    butState = CBXS_NORMAL;
             }
-            ::DrawThemeBackground( hTheme, hDc, butPart, butState, &rButton, NULL );
+
+            if ( m_btnSide == wxRIGHT )
+                butPart = CP_DROPDOWNBUTTONRIGHT;
+            else
+                butPart = CP_DROPDOWNBUTTONLEFT;
+
+            hTheme.DrawBackground(hDc, rButton, butPart, butState);
         }
-        else if ( useVistaComboBox &&
-                  (m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) )
+        else if ( m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE )
         {
             // We'll do this, because DrawThemeParentBackground
             // doesn't seem to be reliable on Vista.
@@ -575,7 +557,7 @@ static wxUint32 GetUserPreferencesMask()
     if ( valueSet )
         return userPreferencesMask;
 
-    wxRegKey* pKey = NULL;
+    wxRegKey* pKey = nullptr;
     wxRegKey key1(wxRegKey::HKCU, wxT("Software\\Policies\\Microsoft\\Control Panel"));
     wxRegKey key2(wxRegKey::HKCU, wxT("Software\\Policies\\Microsoft\\Windows\\Control Panel"));
     wxRegKey key3(wxRegKey::HKCU, wxT("Control Panel\\Desktop"));

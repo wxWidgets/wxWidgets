@@ -2,7 +2,6 @@
 // Name:        mediaplayer.cpp
 // Purpose:     wxMediaCtrl sample
 // Author:      Ryan Norton
-// Modified by:
 // Created:     11/10/04
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
@@ -138,18 +137,18 @@ class wxMediaPlayerApp : public wxApp
 {
 public:
 #ifdef __WXMAC__
-    virtual void MacOpenFiles(const wxArrayString & fileNames ) wxOVERRIDE;
+    virtual void MacOpenFiles(const wxArrayString & fileNames ) override;
 #endif
 
 #if wxUSE_CMDLINE_PARSER
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
     // Files specified on the command line, if any.
     wxVector<wxString> m_params;
 #endif // wxUSE_CMDLINE_PARSER
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
 protected:
     class wxMediaPlayerFrame* m_frame;
@@ -282,7 +281,7 @@ public:
     wxMediaPlayerTimer(wxMediaPlayerFrame* frame) {m_frame = frame;}
 
     // Called each time the timer's timeout expires
-    void Notify() wxOVERRIDE;
+    void Notify() override;
 
     wxMediaPlayerFrame* m_frame;       // The wxMediaPlayerFrame
 };
@@ -348,7 +347,7 @@ public:
     wxPlayListDropTarget(wxMediaPlayerListCtrl& list) : m_list(list) {}
     ~wxPlayListDropTarget(){}
         virtual bool OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                         const wxArrayString& files) wxOVERRIDE
+                         const wxArrayString& files) override
     {
         for (size_t i = 0; i < files.GetCount(); ++i)
         {
@@ -500,7 +499,7 @@ void wxMediaPlayerApp::MacOpenFiles(const wxArrayString & fileNames )
 // ----------------------------------------------------------------------------
 
 wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(1366,768))
+       : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(1366,768))
 {
     SetIcon(wxICON(sample));
 

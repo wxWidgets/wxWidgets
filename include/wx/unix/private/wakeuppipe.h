@@ -44,9 +44,9 @@ public:
 
 
     // Implement wxEventLoopSourceHandler pure virtual methods
-    virtual void OnReadWaiting() wxOVERRIDE;
-    virtual void OnWriteWaiting() wxOVERRIDE { }
-    virtual void OnExceptionWaiting() wxOVERRIDE { }
+    virtual void OnReadWaiting() override;
+    virtual void OnWriteWaiting() override { }
+    virtual void OnExceptionWaiting() override { }
 
 private:
     wxPipe m_pipe;
@@ -69,7 +69,7 @@ class wxWakeUpPipeMT : public wxWakeUpPipe
 {
 #if wxUSE_THREADS
 public:
-    wxWakeUpPipeMT() { }
+    wxWakeUpPipeMT() = default;
 
     // Thread-safe wrapper around WakeUpNoLock(): can be called from another
     // thread to wake up the main one.
@@ -80,7 +80,7 @@ public:
         WakeUpNoLock();
     }
 
-    virtual void OnReadWaiting() wxOVERRIDE
+    virtual void OnReadWaiting() override
     {
         wxCriticalSectionLocker lock(m_pipeLock);
 

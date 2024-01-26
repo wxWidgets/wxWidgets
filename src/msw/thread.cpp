@@ -105,10 +105,10 @@ static bool gs_bGuiOwnedByMainThread = true;
 // critical section which controls access to all GUI functions: any secondary
 // thread (i.e. except the main one) must enter this crit section before doing
 // any GUI calls
-static wxCriticalSection *gs_critsectGui = NULL;
+static wxCriticalSection *gs_critsectGui = nullptr;
 
 // critical section which protects gs_nWaitingForGui variable
-static wxCriticalSection *gs_critsectWaitingForGui = NULL;
+static wxCriticalSection *gs_critsectWaitingForGui = nullptr;
 
 // number of threads waiting for GUI in wxMutexGuiEnter()
 static size_t gs_nWaitingForGui = 0;
@@ -162,7 +162,7 @@ public:
     wxMutexInternal(wxMutexType mutexType);
     ~wxMutexInternal();
 
-    bool IsOk() const { return m_mutex != NULL; }
+    bool IsOk() const { return m_mutex != nullptr; }
 
     wxMutexError Lock() { return LockTimeout(INFINITE); }
     wxMutexError Lock(unsigned long ms) { return LockTimeout(ms); }
@@ -186,9 +186,9 @@ wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
     // create a nameless (hence intra process and always private) mutex
     m_mutex = ::CreateMutex
                 (
-                    NULL,       // default secutiry attributes
+                    nullptr,    // default secutiry attributes
                     FALSE,      // not initially locked
-                    NULL        // no name
+                    nullptr     // no name
                 );
 
     m_type = mutexType;
@@ -292,7 +292,7 @@ public:
     wxSemaphoreInternal(int initialcount, int maxcount);
     ~wxSemaphoreInternal();
 
-    bool IsOk() const { return m_semaphore != NULL; }
+    bool IsOk() const { return m_semaphore != nullptr; }
 
     wxSemaError Wait() { return WaitTimeout(INFINITE); }
 
@@ -325,10 +325,10 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
 
     m_semaphore = ::CreateSemaphore
                     (
-                        NULL,           // default security attributes
+                        nullptr,           // default security attributes
                         initialcount,
                         maxcount,
-                        NULL            // no name
+                        nullptr            // no name
                     );
     if ( !m_semaphore )
     {
@@ -368,7 +368,7 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
 
 wxSemaError wxSemaphoreInternal::Post()
 {
-    if ( !::ReleaseSemaphore(m_semaphore, 1, NULL /* ptr to previous count */) )
+    if ( !::ReleaseSemaphore(m_semaphore, 1, nullptr /* ptr to previous count */) )
     {
         if ( GetLastError() == ERROR_TOO_MANY_POSTS )
         {
@@ -405,11 +405,6 @@ public:
 
     ~wxThreadInternal()
     {
-        Free();
-    }
-
-    void Free()
-    {
         if ( m_hThread )
         {
             if ( !::CloseHandle(m_hThread) )
@@ -429,7 +424,7 @@ public:
     wxThreadError WaitForTerminate(wxCriticalSection& cs,
                                    wxThread::ExitCode *pRc,
                                    wxThreadWait waitMode,
-                                   wxThread *threadToDelete = NULL);
+                                   wxThread *threadToDelete = nullptr);
 
     // kill the thread unconditionally
     wxThreadError Kill();
@@ -532,7 +527,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
             return THREAD_ERROR_EXIT;
         }
 
-        rc = wxPtrToUInt(thread->CallEntry());
+        rc = wxPtrToUInt(thread->Entry());
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 
@@ -633,7 +628,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 #ifdef wxUSE_BEGIN_THREAD
     m_hThread = (HANDLE)_beginthreadex
                         (
-                          NULL,                             // default security
+                          nullptr,                          // default security
                           stackSize,
                           wxThreadInternal::WinThreadStart, // entry point
                           thread,
@@ -643,7 +638,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 #else // compiler doesn't have _beginthreadex
     m_hThread = ::CreateThread
                   (
-                    NULL,                               // default security
+                    nullptr,                            // default security
                     stackSize,                          // stack size
                     wxThreadInternal::WinThreadStart,   // thread entry point
                     (LPVOID)thread,                     // parameter
@@ -652,7 +647,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
                   );
 #endif // _beginthreadex/CreateThread
 
-    if ( m_hThread == NULL )
+    if ( m_hThread == nullptr )
     {
         wxLogSysError(_("Can't create thread"));
 
@@ -678,8 +673,6 @@ wxThreadError wxThreadInternal::Kill()
         return wxTHREAD_MISC_ERROR;
     }
 
-    Free();
-
     return wxTHREAD_NO_ERROR;
 }
 
@@ -696,7 +689,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 
     // we may either wait passively for the thread to terminate (when called
     // from Wait()) or ask it to terminate (when called from Delete())
-    bool shouldDelete = threadToDelete != NULL;
+    bool shouldDelete = threadToDelete != nullptr;
 
     DWORD rc = 0;
 
@@ -706,10 +699,11 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     // as Delete() (which calls us) is always safe to call we need to consider
     // all possible states
     {
-        wxCriticalSectionLocker lock(cs);
+    wxCriticalSectionLocker lock(cs);
 
-        if ( m_state == STATE_NEW )
-        {
+    switch ( m_state )
+    {
+        case STATE_NEW:
             if ( shouldDelete )
             {
                 // WinThreadStart() will see it and terminate immediately, no
@@ -726,12 +720,34 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
             }
             //else: shouldResume is correctly set to false here, wait until
             //      someone else runs the thread and it finishes
-        }
-        else // running, paused, cancelled or even exited
-        {
-            shouldResume = m_state == STATE_PAUSED;
-        }
+            break;
+
+        case STATE_RUNNING:
+            // Nothing special to do, just wait for the thread to exit.
+            break;
+
+        case STATE_PAUSED:
+            shouldResume = true;
+            break;
+
+        case STATE_CANCELED:
+            // No need to cancel it again.
+            shouldDelete = false;
+            break;
+
+        case STATE_EXITED:
+            // We don't need to wait for the thread to exit if it already did,
+            // but doing it does no harm either and it's a rare case not worth
+            // optimizing for.
+            //
+            // Just ensure we don't call OnDelete() again as we may have
+            // already done it (unfortunately we have no way of knowing if we
+            // did, but it seems better not to do it at all rather than do it
+            // twice).
+            threadToDelete = nullptr;
+            break;
     }
+    } // release cs
 
     // resume the thread if it is paused
     if ( shouldResume )
@@ -849,10 +865,6 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     if ( pRc )
         *pRc = wxUIntToPtr(rc);
 
-    // we don't need the thread handle any more in any case
-    Free();
-
-
     return rc == THREAD_ERROR_EXIT ? wxTHREAD_MISC_ERROR : wxTHREAD_NO_ERROR;
 }
 
@@ -922,7 +934,7 @@ wxThread *wxThread::This()
     {
         wxLogSysError(_("Couldn't get the current thread pointer"));
 
-        // return NULL...
+        // return nullptr...
     }
 
     return thread;
@@ -1129,7 +1141,7 @@ wxThreadError wxThread::Kill()
 static bool wxSetThreadNameOnWindows10(const WCHAR *threadName)
 {
     typedef HRESULT(WINAPI* SetThreadDescription_t)(HANDLE, PCWSTR);
-    static SetThreadDescription_t s_pfnSetThreadDescription = NULL;
+    static SetThreadDescription_t s_pfnSetThreadDescription = nullptr;
 
     static bool s_initDone = false;
     if ( !s_initDone )
@@ -1215,8 +1227,6 @@ bool wxThread::SetNameForCurrent(const wxString &name)
 void wxThread::Exit(ExitCode status)
 {
     wxThreadInternal::DoThreadOnExit(this);
-
-    m_internal->Free();
 
     if ( IsDetached() )
     {
@@ -1305,8 +1315,8 @@ bool wxThread::TestDestroy()
 class wxThreadModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
-    virtual void OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual void OnExit() override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxThreadModule);
@@ -1330,7 +1340,7 @@ bool wxThreadModule::OnInit()
 
     // main thread doesn't have associated wxThread object, so store 0 in the
     // TLS instead
-    if ( !::TlsSetValue(gs_tlsThisThread, (LPVOID)0) )
+    if ( !::TlsSetValue(gs_tlsThisThread, nullptr) )
     {
         ::TlsFree(gs_tlsThisThread);
         gs_tlsThisThread = TLS_OUT_OF_INDEXES;

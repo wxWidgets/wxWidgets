@@ -3,7 +3,6 @@
 // Purpose:     declaration of the base class of all config implementations
 //              (see also: fileconf.h and msw/regconf.h and iniconf.h)
 // Author:      Karsten Ballueder & Vadim Zeitlin
-// Modified by:
 // Created:     07.04.98 (adapted from appconf.h)
 // Copyright:   (c) 1997 Karsten Ballueder   Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>
@@ -63,7 +62,9 @@ enum
     wxCONFIG_USE_GLOBAL_FILE = 2,
     wxCONFIG_USE_RELATIVE_PATH = 4,
     wxCONFIG_USE_NO_ESCAPE_CHARACTERS = 8,
-    wxCONFIG_USE_SUBDIR = 16
+    wxCONFIG_USE_SUBDIR = 16,
+    wxCONFIG_USE_XDG = 32,
+    wxCONFIG_USE_HOME = 64
 };
 
 // ----------------------------------------------------------------------------
@@ -104,7 +105,7 @@ public:
     // comments near definition wxUSE_CONFIG_NATIVE for details. It returns
     // the created object and also sets it as ms_pConfig.
   static wxConfigBase *Create();
-    // should Get() try to create a new log object if the current one is NULL?
+    // should Get() try to create a new log object if the current one is null?
   static void DontCreateOnDemand() { ms_bAutoCreate = false; }
 
   // ctor & virtual dtor
@@ -139,7 +140,7 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex) const = 0;
   virtual bool GetNextEntry (wxString& str, long& lIndex) const = 0;
     // get number of entries/subgroups in the current group, with or without
-    // it's subgroups
+    // its subgroups
   virtual size_t GetNumberOfEntries(bool bRecursive = false) const = 0;
   virtual size_t GetNumberOfGroups(bool bRecursive = false) const = 0;
 

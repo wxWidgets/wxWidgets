@@ -16,7 +16,7 @@
 
 #include "wx/textctrl.h"
 
-#if (!defined(__WXMAC__) && !defined(__WXGTK20__)) || defined(__WXUNIVERSAL__)
+#if (!defined(__WXMAC__) && !defined(__WXGTK__)) || defined(__WXUNIVERSAL__)
     // no native version, use the generic one
     #define wxUSE_NATIVE_SEARCH_CONTROL 0
 
@@ -25,7 +25,7 @@
 
     class WXDLLIMPEXP_CORE wxSearchCtrlBaseBaseClass
         : public wxCompositeWindow< wxNavigationEnabled<wxControl> >,
-          public wxTextCtrlIface
+          public wxTextEntry
     {
     };
 #elif defined(__WXMAC__)
@@ -33,7 +33,7 @@
     #define wxUSE_NATIVE_SEARCH_CONTROL 1
 
     #define wxSearchCtrlBaseBaseClass wxTextCtrl
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     // Use GtkSearchEntry if available, construct a similar one using GtkEntry
     // otherwise.
     #define wxUSE_NATIVE_SEARCH_CONTROL 1
@@ -63,8 +63,8 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SEARCH, wxCommandEvent);
 class WXDLLIMPEXP_CORE wxSearchCtrlBase : public wxSearchCtrlBaseBaseClass
 {
 public:
-    wxSearchCtrlBase() { }
-    virtual ~wxSearchCtrlBase() { }
+    wxSearchCtrlBase() = default;
+    virtual ~wxSearchCtrlBase() = default;
 
     // search control
 #if wxUSE_MENUS
@@ -83,12 +83,12 @@ public:
     virtual wxString GetDescriptiveText() const = 0;
 
 #if wxUSE_NATIVE_SEARCH_CONTROL
-    virtual const wxTextEntry* WXGetTextEntry() const wxOVERRIDE { return this; }
+    virtual const wxTextEntry* WXGetTextEntry() const override { return this; }
 #endif // wxUSE_NATIVE_SEARCH_CONTROL
 
 private:
     // implement wxTextEntry pure virtual method
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
+    virtual wxWindow *GetEditableWindow() override { return this; }
 };
 
 

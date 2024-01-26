@@ -2,7 +2,6 @@
 // Name:        forty.h
 // Purpose:     Forty Thieves patience game
 // Author:      Chris Breeze
-// Modified by:
 // Created:     21/07/97
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:     wxWindows licence
@@ -17,7 +16,7 @@ class FortyApp: public wxApp
 public:
     FortyApp(){}
     virtual ~FortyApp();
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 
     static const wxColour& BackgroundColour();
     static const wxColour& TextColour();

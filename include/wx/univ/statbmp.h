@@ -2,7 +2,6 @@
 // Name:        wx/univ/statbmp.h
 // Purpose:     wxStaticBitmap class for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -52,12 +51,12 @@ public:
                 long style = 0,
                 const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap(const wxBitmapBundle& bitmap) wxOVERRIDE;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) override;
 
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool HasTransparentBackground() override { return true; }
 
 protected:
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxStaticBitmap);

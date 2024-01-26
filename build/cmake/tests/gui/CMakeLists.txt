@@ -21,6 +21,7 @@ set(TEST_GUI_SRC
     graphics/measuring.cpp
     graphics/affinematrix.cpp
     graphics/boundingbox.cpp
+    graphics/clipper.cpp
     graphics/clippingbox.cpp
     graphics/coords.cpp
     graphics/graphbitmap.cpp
@@ -58,6 +59,7 @@ set(TEST_GUI_SRC
     controls/ownerdrawncomboboxtest.cpp
     controls/pickerbasetest.cpp
     controls/pickertest.cpp
+    controls/propgridtest.cpp
     controls/radioboxtest.cpp
     controls/radiobuttontest.cpp
     controls/rearrangelisttest.cpp
@@ -145,6 +147,8 @@ set(TEST_GUI_DATA
     horse.tga
     horse.tif
     horse.xpm
+    image/bitfields.bmp
+    image/bitfields-alpha.bmp
     image/8bpp-colorsused-large.bmp
     image/8bpp-colorsused-negative.bmp
     image/rle4-delta-320x240.bmp
@@ -182,7 +186,6 @@ set(TEST_GUI_DATA
     image/paste_result_background_plus_overlay_transparent_border_semitransparent_square.png
     image/paste_result_no_background_square_over_circle.png
     image/wx.png
-    image/wx.ico
     image/toucan.png
     image/toucan_hue_0.538.png
     image/toucan_sat_-0.41.png
@@ -194,6 +197,7 @@ set(TEST_GUI_DATA
     image/toucan_mono_255_255_255.png
     image/width-times-height-overflow.bmp
     image/width_height_32_bit_overflow.pgm
+    image/bad_truncated.gif
     intl/ja/internat.mo
     intl/ja/internat.po
     )
@@ -227,4 +231,7 @@ if(wxUSE_SOCKETS)
 endif()
 if(wxUSE_WEBVIEW)
     wx_exe_link_libraries(test_gui wxwebview)
+endif()
+if(wxUSE_PROPGRID)
+    wx_exe_link_libraries(test_gui wxpropgrid)
 endif()

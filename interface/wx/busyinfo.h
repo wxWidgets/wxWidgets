@@ -40,8 +40,9 @@
             (
                 wxBusyInfoFlags()
                     .Parent(this)
-                    .Icon(wxArtProvider::GetIcon(wxART_PRINT,
-                                                 wxART_OTHER, wxSize(128, 128)))
+                    .Icon(wxArtProvider::GetBitmapBundle(wxART_PRINT,
+                                                         wxART_OTHER,
+                                                         wxSize(128, 128)))
                     .Title("<b>Printing your document</b>")
                     .Text("Please wait...")
                     .Foreground(*wxWHITE)
@@ -109,7 +110,7 @@ public:
         @note If @a parent is not @NULL you must ensure that it is not
               closed while the busy info is shown.
     */
-    wxBusyInfo(const wxString& msg, wxWindow* parent = NULL);
+    wxBusyInfo(const wxString& msg, wxWindow* parent = nullptr);
 
     /**
         Update the information text.
@@ -173,8 +174,14 @@ public:
     /// Sets the parent for wxBusyInfo.
     wxBusyInfoFlags& Parent(wxWindow* parent);
 
-    /// Sets the icon to show in wxBusyInfo.
-    wxBusyInfoFlags& Icon(const wxIcon& icon);
+    /**
+        Sets the icon to show in wxBusyInfo.
+
+        @a icon can contain multiple versions of the bitmap in different
+        resolutions since wxWidgets 3.3.0, in the earlier versions this
+        parameter was just a single wxIcon.
+     */
+    wxBusyInfoFlags& Icon(const wxBitmapBundle& icon);
 
     /**
         Sets the title, shown prominently in wxBusyInfo window.

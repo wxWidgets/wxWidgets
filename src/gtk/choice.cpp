@@ -41,7 +41,7 @@ gtk_choice_changed_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 
 void wxChoice::Init()
 {
-    m_strings = NULL;
+    m_strings = nullptr;
     m_stringCellIndex = 0;
 }
 
@@ -72,7 +72,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     if ( IsSorted() )
     {
-        // if our m_strings != NULL, Append() will check for it and insert
+        // if our m_strings != nullptr, Append() will check for it and insert
         // items in the correct order
         m_strings = new wxGtkCollatedArrayString;
     }
@@ -89,7 +89,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     // any ill effects from having it on if everything does fit.
     const wxGtkList cells(gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_widget)));
     if (GTK_IS_CELL_RENDERER_TEXT(cells->data))
-        g_object_set(G_OBJECT(cells->data), "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+        g_object_set(G_OBJECT(cells->data), "ellipsize", PANGO_ELLIPSIZE_END, nullptr);
 #else
     m_widget = gtk_combo_box_new_text();
 #endif
@@ -117,7 +117,7 @@ wxChoice::~wxChoice()
     // a Gtk-CRITICAL debug message when the assertion fails inside a signal
     // handler called from gtk_widget_unrealize(), which is annoying, so avoid
     // it by hiding the widget before destroying it -- this doesn't look right,
-    // but shouldn't do any harm neither.
+    // but shouldn't do any harm either.
     Hide();
  #endif // __WXGTK3__
 }
@@ -127,7 +127,7 @@ bool wxChoice::GTKHandleFocusOut()
     if ( wx_is_at_least_gtk2(10) )
     {
         gboolean isShown;
-        g_object_get( m_widget, "popup-shown", &isShown, NULL );
+        g_object_get( m_widget, "popup-shown", &isShown, nullptr );
 
         // Don't send "focus lost" events if the focus is grabbed by our own
         // popup, it counts as part of this window, even though wx doesn't know
@@ -139,20 +139,11 @@ bool wxChoice::GTKHandleFocusOut()
     return wxChoiceBase::GTKHandleFocusOut();
 }
 
-void wxChoice::GTKInsertComboBoxTextItem( unsigned int n, const wxString& text )
-{
-#ifdef __WXGTK3__
-    gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(m_widget), n, wxGTK_CONV(text));
-#else
-    gtk_combo_box_insert_text( GTK_COMBO_BOX( m_widget ), n, wxGTK_CONV( text ) );
-#endif
-}
-
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
                             unsigned int pos,
                             void **clientData, wxClientDataType type)
 {
-    wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid control") );
+    wxCHECK_MSG( m_widget != nullptr, -1, wxT("invalid control") );
 
     wxASSERT_MSG( !IsSorted() || (pos == GetCount()),
                  wxT("In a sorted choice data could only be appended"));
@@ -160,6 +151,12 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
     const int count = items.GetCount();
 
     int n = wxNOT_FOUND;
+
+    GtkTreeIter iter;
+    GtkTreeModel *model = gtk_combo_box_get_model( GTK_COMBO_BOX( m_widget ) );
+    GtkListStore *store = GTK_LIST_STORE( model );
+
+    gtk_widget_freeze_child_notify(m_widget);
 
     for ( int i = 0; i < count; ++i )
     {
@@ -169,11 +166,15 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         if (m_strings)
             n = m_strings->Add(items[i]);
 
-        GTKInsertComboBoxTextItem( n, items[i] );
+        gtk_list_store_insert_with_values(store, &iter, n, m_stringCellIndex,
+                                          items[i].utf8_str().data(), -1);
 
-        m_clientData.Insert( NULL, n );
+        m_clientData.Insert( nullptr, n );
         AssignNewItemClientData(n, clientData, i, type);
     }
+
+    gtk_widget_thaw_child_notify(m_widget);
+
 
     InvalidateBestSize();
 
@@ -192,7 +193,7 @@ void* wxChoice::DoGetItemClientData(unsigned int n) const
 
 void wxChoice::DoClear()
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid control") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid control") );
 
     wxGtkEventsDisabler<wxChoice> noEvents(this);
 
@@ -211,14 +212,14 @@ void wxChoice::DoClear()
 
 void wxChoice::DoDeleteOneItem(unsigned int n)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid control") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid control") );
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxChoice::Delete") );
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     GtkTreeModel* model = gtk_combo_box_get_model( combobox );
     GtkListStore* store = GTK_LIST_STORE(model);
     GtkTreeIter iter;
-    if ( !gtk_tree_model_iter_nth_child(model, &iter, NULL, n) )
+    if ( !gtk_tree_model_iter_nth_child(model, &iter, nullptr, n) )
     {
         // This is really not supposed to happen for a valid index.
         wxFAIL_MSG(wxS("Item unexpectedly not found."));
@@ -235,7 +236,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
 int wxChoice::FindString( const wxString &item, bool bCase ) const
 {
-    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid control") );
+    wxCHECK_MSG( m_widget != nullptr, wxNOT_FOUND, wxT("invalid control") );
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     GtkTreeModel* model = gtk_combo_box_get_model( combobox );
@@ -248,7 +249,7 @@ int wxChoice::FindString( const wxString &item, bool bCase ) const
     {
         wxGtkValue value;
         gtk_tree_model_get_value( model, &iter, m_stringCellIndex, value );
-        wxString str = wxGTK_CONV_BACK( g_value_get_string( value ) );
+        wxString str = wxString::FromUTF8Unchecked( g_value_get_string( value ) );
 
         if (item.IsSameAs( str, bCase ) )
             return count;
@@ -267,17 +268,17 @@ int wxChoice::GetSelection() const
 
 void wxChoice::SetString(unsigned int n, const wxString &text)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid control") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid control") );
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     wxCHECK_RET( IsValid(n), wxT("invalid index") );
 
     GtkTreeModel *model = gtk_combo_box_get_model( combobox );
     GtkTreeIter iter;
-    if (gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
+    if (gtk_tree_model_iter_nth_child (model, &iter, nullptr, n))
     {
         wxGtkValue value(G_TYPE_STRING);
-        g_value_set_string( value, wxGTK_CONV( text ) );
+        g_value_set_string( value, text.utf8_str() );
         gtk_list_store_set_value( GTK_LIST_STORE(model), &iter, m_stringCellIndex, value );
     }
 
@@ -286,12 +287,12 @@ void wxChoice::SetString(unsigned int n, const wxString &text)
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid control") );
+    wxCHECK_MSG( m_widget != nullptr, wxEmptyString, wxT("invalid control") );
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     GtkTreeModel *model = gtk_combo_box_get_model( combobox );
     GtkTreeIter iter;
-    if (!gtk_tree_model_iter_nth_child (model, &iter, NULL, n))
+    if (!gtk_tree_model_iter_nth_child (model, &iter, nullptr, n))
     {
         wxFAIL_MSG( "invalid index" );
         return wxString();
@@ -299,12 +300,12 @@ wxString wxChoice::GetString(unsigned int n) const
 
     wxGtkValue value;
     gtk_tree_model_get_value( model, &iter, m_stringCellIndex, value );
-    return wxGTK_CONV_BACK( g_value_get_string( value ) );
+    return wxString::FromUTF8Unchecked( g_value_get_string( value ) );
 }
 
 unsigned int wxChoice::GetCount() const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid control") );
+    wxCHECK_MSG( m_widget != nullptr, 0, wxT("invalid control") );
 
     GtkComboBox* combobox = GTK_COMBO_BOX( m_widget );
     GtkTreeModel* model = gtk_combo_box_get_model( combobox );
@@ -320,7 +321,7 @@ unsigned int wxChoice::GetCount() const
 
 void wxChoice::SetSelection( int n )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid control") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid control") );
 
     wxGtkEventsDisabler<wxChoice> noEvents(this);
 
@@ -370,13 +371,36 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     // a GtkEntry for wxComboBox and a GtkCellView for wxChoice
     GtkWidget* childPart = gtk_bin_get_child(GTK_BIN(m_widget));
 
+#ifdef __WXGTK3__
+    // Preferred size for wxChoice can be incorrect when control is empty,
+    // work around this by temporarily adding an item.
+    GtkTreeModel* model = nullptr;
+    if (GTK_IS_CELL_VIEW(childPart))
+    {
+        model = gtk_combo_box_get_model(GTK_COMBO_BOX(m_widget));
+        GtkTreeIter iter;
+        if (gtk_tree_model_get_iter_first(model, &iter))
+            model = nullptr;
+        else
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(m_widget), "Gg");
+    }
+#endif
+
     // We are interested in the difference of sizes between the whole contol
     // and its child part. I.e. arrow, separators, etc.
     GtkRequisition req;
-    gtk_widget_get_preferred_size(childPart, NULL, &req);
-    wxSize totalS = GTKGetPreferredSize(m_widget);
+    gtk_widget_get_preferred_size(childPart, nullptr, &req);
+    wxSize tsize(GTKGetPreferredSize(m_widget));
 
-    wxSize tsize(xlen + totalS.x - req.width, totalS.y);
+#ifdef __WXGTK3__
+    if (model)
+        gtk_list_store_clear(GTK_LIST_STORE(model));
+#endif
+
+    tsize.x -= req.width;
+    if (tsize.x < 0)
+        tsize.x = 0;
+    tsize.x += xlen;
 
     // For a wxChoice, not for wxComboBox, add some margins
     if ( !GTK_IS_ENTRY(childPart) )

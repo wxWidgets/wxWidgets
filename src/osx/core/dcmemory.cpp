@@ -2,7 +2,6 @@
 // Name:        src/osx/core/dcmemory.cpp
 // Purpose:     wxMemoryDC class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -56,7 +55,7 @@ wxMemoryDCImpl::~wxMemoryDCImpl()
 {
     if ( m_selected.IsOk() )
     {
-        m_selected.SetSelectedInto(NULL);
+        m_selected.SetSelectedInto(nullptr);
         wxDELETE(m_graphicContext);
     }
 }
@@ -65,7 +64,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     if ( m_selected.IsOk() )
     {
-        m_selected.SetSelectedInto(NULL);
+        m_selected.SetSelectedInto(nullptr);
         wxDELETE(m_graphicContext);
     }
 
@@ -74,7 +73,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     {
         wxASSERT_MSG( !bitmap.GetSelectedInto() ||
                      (bitmap.GetSelectedInto() == GetOwner()),
-                     "Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(NULL)" );
+                     "Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(nullptr)" );
 
         m_selected.SetSelectedInto(GetOwner());
         m_width = bitmap.GetLogicalWidth();
@@ -93,7 +92,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
                 m_graphicContext->SetContentScaleFactor(m_contentScaleFactor);
             }
         }
-        m_ok = (m_graphicContext != NULL) ;
+        m_ok = (m_graphicContext != nullptr) ;
     }
     else
     {

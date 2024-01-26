@@ -3,7 +3,6 @@
 // Purpose:     Declaration of the wxToggleButton class, which implements a
 //              toggle button under wxGTK.
 // Author:      John Norris, minor changes by Axel Schlueter
-// Modified by:
 // Created:     08.02.01
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows licence
@@ -22,7 +21,7 @@ class WXDLLIMPEXP_CORE wxToggleButton: public wxToggleButtonBase
 {
 public:
     // construction/destruction
-    wxToggleButton() {}
+    wxToggleButton() = default;
     wxToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,
@@ -45,11 +44,11 @@ public:
                 const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     // Get/set the value
-    void SetValue(bool state) wxOVERRIDE;
-    bool GetValue() const wxOVERRIDE;
+    void SetValue(bool state) override;
+    bool GetValue() const override;
 
     // Set the label
-    void SetLabel(const wxString& label) wxOVERRIDE;
+    void SetLabel(const wxString& label) override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -58,11 +57,11 @@ public:
     void GTKEnableEvents();
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) override;
 
 #if wxUSE_MARKUP
-    virtual bool DoSetLabelMarkup(const wxString& markup) wxOVERRIDE;
+    virtual bool DoSetLabelMarkup(const wxString& markup) override;
 #endif // wxUSE_MARKUP
 
 private:
@@ -82,7 +81,7 @@ class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButton
 {
 public:
     // construction/destruction
-    wxBitmapToggleButton() {}
+    wxBitmapToggleButton() = default;
     wxBitmapToggleButton(wxWindow *parent,
                    wxWindowID id,
                    const wxBitmapBundle& label,
@@ -108,7 +107,7 @@ public:
     wxDEPRECATED_INLINE( void SetLabel(const wxBitmap& bitmap),
        SetBitmapLabel(bitmap); )
     // prevent virtual function hiding
-    virtual void SetLabel(const wxString& label) wxOVERRIDE { wxToggleButton::SetLabel(label); }
+    virtual void SetLabel(const wxString& label) override { wxToggleButton::SetLabel(label); }
 
 private:
     typedef wxToggleButtonBase base_type;

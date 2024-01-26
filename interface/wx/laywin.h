@@ -124,14 +124,14 @@ public:
         Lays out the children of a normal frame. @a mainWindow is set to occupy the
         remaining space. This function simply calls LayoutWindow().
     */
-    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = NULL);
+    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = nullptr);
 
     /**
-        Lays out the children of an MDI parent frame. If @a rect is non-@NULL, the
+        Lays out the children of an MDI parent frame. If @a rect is non-null, the
         given rectangle will be used as a starting point instead of the frame's client
         area. The MDI client window is set to occupy the remaining space.
     */
-    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = NULL);
+    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = nullptr);
 
     /**
         Lays out the children of a normal frame or other window.
@@ -141,7 +141,7 @@ public:
         get the remaining space (that is, a non-query OnCalculateLayout event will
         not be sent to this window and the window will be set to the remaining size).
     */
-    bool LayoutWindow(wxWindow* parent, wxWindow* mainWindow = NULL);
+    bool LayoutWindow(wxWindow* parent, wxWindow* mainWindow = nullptr);
 };
 
 

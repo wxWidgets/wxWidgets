@@ -3,7 +3,6 @@
 // Purpose:     wxColourDialog class. NOTE: you can use the generic class
 //              if you wish, instead of implementing this.
 // Author:      Ryan Norton
-// Modified by:
 // Created:     2004-11-16
 // Copyright:   (c) Ryan Norton
 // Licence:       wxWindows licence
@@ -87,7 +86,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 
 wxColourDialog::wxColourDialog()
 {
-    m_dialogParent = NULL;
+    m_dialogParent = nullptr;
 }
 
 wxColourDialog::wxColourDialog(wxWindow *parent, const wxColourData *data)

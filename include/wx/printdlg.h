@@ -2,7 +2,6 @@
 // Name:        wx/printdlg.h
 // Purpose:     Base header and class for print dialogs
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
@@ -28,7 +27,7 @@
 class WXDLLIMPEXP_CORE wxPrintDialogBase : public wxDialog
 {
 public:
-    wxPrintDialogBase() { }
+    wxPrintDialogBase() = default;
     wxPrintDialogBase(wxWindow *parent,
                       wxWindowID id = wxID_ANY,
                       const wxString &title = wxEmptyString,
@@ -52,7 +51,7 @@ private:
 class WXDLLIMPEXP_CORE wxPrintDialog : public wxObject
 {
 public:
-    wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
+    wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = nullptr);
     wxPrintDialog(wxWindow *parent, wxPrintData* data);
     virtual ~wxPrintDialog();
 
@@ -77,7 +76,7 @@ private:
 class WXDLLIMPEXP_CORE wxPageSetupDialogBase: public wxDialog
 {
 public:
-    wxPageSetupDialogBase() { }
+    wxPageSetupDialogBase() = default;
     wxPageSetupDialogBase(wxWindow *parent,
                       wxWindowID id = wxID_ANY,
                       const wxString &title = wxEmptyString,
@@ -99,7 +98,7 @@ private:
 class WXDLLIMPEXP_CORE wxPageSetupDialog: public wxObject
 {
 public:
-    wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = nullptr);
     virtual ~wxPageSetupDialog();
 
     int ShowModal();

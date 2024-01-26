@@ -276,7 +276,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
         return wxTGA_INVFORMAT;
     }
 
-    unsigned char* alpha = NULL;
+    unsigned char* alpha = nullptr;
     if ((colorType != wxTGA_MAPPED && (bpp == 16 || bpp == 32)) ||
         (colorType == wxTGA_MAPPED && (palettebpp == 16 || palettebpp == 32)))
     {

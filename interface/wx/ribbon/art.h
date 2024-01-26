@@ -318,11 +318,11 @@ public:
         as described above.
 
         @param[out] primary
-            Pointer to a location to store the primary colour, or NULL.
+            Pointer to a location to store the primary colour, or @NULL.
         @param[out] secondary
-            Pointer to a location to store the secondary colour, or NULL.
+            Pointer to a location to store the secondary colour, or @NULL.
         @param[out] tertiary
-            Pointer to a location to store the tertiary colour, or NULL.
+            Pointer to a location to store the tertiary colour, or @NULL.
     */
     virtual void GetColourScheme(wxColour* primary,
                         wxColour* secondary,
@@ -410,7 +410,7 @@ public:
         @param rect
             The rectangle within which to draw.
 
-        @sa GetPageBackgroundRedrawArea
+        @see GetPageBackgroundRedrawArea
     */
     virtual void DrawPageBackground(
                         wxDC& dc,
@@ -798,9 +798,9 @@ public:
             The client size.
         @param[out] client_offset
             The offset where the client rectangle begins within the panel (may
-            be NULL).
+            be @NULL).
 
-        @sa GetPanelClientSize()
+        @see GetPanelClientSize()
     */
     virtual wxSize GetPanelSize(
                         wxDC& dc,
@@ -821,9 +821,9 @@ public:
             The overall size to calculate client size for.
         @param[out] client_offset
             The offset where the returned client size begins within the given
-            @a size (may be NULL).
+            @a size (may be @NULL).
 
-        @sa GetPanelSize()
+        @see GetPanelSize()
     */
     virtual wxSize GetPanelClientSize(
                         wxDC& dc,
@@ -860,7 +860,7 @@ public:
         @param client_size
             The client size.
 
-        @sa GetGalleryClientSize()
+        @see GetGalleryClientSize()
     */
     virtual wxSize GetGallerySize(
                         wxDC& dc,
@@ -985,7 +985,7 @@ public:
             The size-class to calculate the size for. Buttons on a button bar
             can have three distinct sizes: wxRIBBON_BUTTONBAR_BUTTON_SMALL,
             wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, and wxRIBBON_BUTTONBAR_BUTTON_LARGE.
-            If the requested size-class is not applicable, then NULL should
+            If the requested size-class is not applicable, then @NULL should
             be returned.
 
         @return Width of the given label text in pixel.

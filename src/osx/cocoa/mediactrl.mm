@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/mediactrl.mm
 // Purpose:     Built-in Media Backends for Cocoa
 // Author:      Ryan Norton <wxprojects@comcast.net>, Stefan Csomor
-// Modified by:
 // Created:     02/03/05
 // Copyright:   (c) 2004-2005 Ryan Norton, (c) 2005 David Elliot, (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -30,10 +29,8 @@
 #include "wx/osx/private.h"
 #include "wx/osx/private/available.h"
 
-#if wxOSX_USE_COCOA && defined(__LP64__)
+#if wxOSX_USE_COCOA
     #define wxOSX_USE_AVKIT 1
-#else
-    #define wxOSX_USE_AVKIT 0
 #endif
 
 //===========================================================================
@@ -83,34 +80,34 @@ public:
                                const wxSize& size,
                                long style,
                                const wxValidator& validator,
-                               const wxString& name) wxOVERRIDE;
+                               const wxString& name) override;
 
-    virtual bool Play() wxOVERRIDE;
-    virtual bool Pause() wxOVERRIDE;
-    virtual bool Stop() wxOVERRIDE;
+    virtual bool Play() override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
 
-    virtual bool Load(const wxString& fileName) wxOVERRIDE;
-    virtual bool Load(const wxURI& location) wxOVERRIDE;
+    virtual bool Load(const wxString& fileName) override;
+    virtual bool Load(const wxURI& location) override;
 
-    virtual wxMediaState GetState() wxOVERRIDE;
+    virtual wxMediaState GetState() override;
 
-    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
-    virtual wxLongLong GetPosition() wxOVERRIDE;
-    virtual wxLongLong GetDuration() wxOVERRIDE;
+    virtual bool SetPosition(wxLongLong where) override;
+    virtual wxLongLong GetPosition() override;
+    virtual wxLongLong GetDuration() override;
 
-    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize GetVideoSize() const wxOVERRIDE;
+    virtual void Move(int x, int y, int w, int h) override;
+    wxSize GetVideoSize() const override;
 
-    virtual double GetPlaybackRate() wxOVERRIDE;
-    virtual bool SetPlaybackRate(double dRate) wxOVERRIDE;
+    virtual double GetPlaybackRate() override;
+    virtual bool SetPlaybackRate(double dRate) override;
 
-    virtual double GetVolume() wxOVERRIDE;
-    virtual bool SetVolume(double dVolume) wxOVERRIDE;
+    virtual double GetVolume() override;
+    virtual bool SetVolume(double dVolume) override;
 
     void Cleanup();
     void FinishLoad();
 
-    virtual bool   ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
+    virtual bool   ShowPlayerControls(wxMediaCtrlPlayerControls flags) override;
 private:
     void DoShowPlayerControls(wxMediaCtrlPlayerControls flags);
 
@@ -392,7 +389,7 @@ bool wxAVMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
 
     WXRect r = wxOSXGetFrameForControl( mediactrl, pos , size ) ;
 
-    WXWidget view = NULL;
+    WXWidget view = nullptr;
 #if wxOSX_USE_AVKIT
     view = [[wxAVPlayerView alloc] initWithFrame: r player:m_player];
     [(wxAVPlayerView*) view setControlsStyle:AVPlayerViewControlsStyleNone];

@@ -684,6 +684,7 @@ void DateTimeTestCase::TestTimeFormat()
        { CompareYear, "Date is %x, time is %X" }, // %x could use 2 digits
        { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
        { CompareNone, "The day of year: %j, the week of year: %W" },
+       { CompareDate, "ISO date using short form: %F" },
        { CompareDate, "ISO date without separators: %Y%m%d" },
        { CompareBoth, "RFC 2822 string: %Y-%m-%d %H:%M:%S.%l %z" },
 
@@ -737,7 +738,7 @@ void DateTimeTestCase::TestTimeFormat()
                 // for those locales it's impossible to pass the test with %p...
                 wxString am, pm;
                 wxDateTime::GetAmPmStrings(&am, &pm);
-                if (am.empty() && pm.empty() && wxStrstr(fmt, "%p") != NULL)
+                if (am.empty() && pm.empty() && wxStrstr(fmt, "%p") != nullptr)
                     continue;
 
                 // what can we recover?
@@ -780,16 +781,19 @@ void DateTimeTestCase::TestTimeFormat()
                 if ( s != dt.ToTimezone(tz).Format(fmt) )
                     continue;
 
+                INFO("Test #" << n << " using format \"" << fmt << "\""
+                     << ", format result=\"" << s << "\"");
+
                 // convert back
                 wxDateTime dt2;
                 const char *result = dt2.ParseFormat(s, fmt);
                 if ( !result )
                 {
                     // conversion failed - should it have?
-                    WX_ASSERT_MESSAGE(
-                        ("Test #%u failed: failed to parse \"%s\"", n, s),
-                        kind == CompareNone
-                    );
+                    if ( kind != CompareNone )
+                    {
+                        FAIL_CHECK("Parsing formatted string failed");
+                    }
                 }
                 else // conversion succeeded
                 {
@@ -800,11 +804,12 @@ void DateTimeTestCase::TestTimeFormat()
                     while ( *result && (*result >= 'A' && *result <= 'Z') )
                         result++;
 
-                    WX_ASSERT_MESSAGE(
-                        ("Test #%u failed: \"%s\" was left unparsed in \"%s\"",
-                         n, result, s),
-                        !*result
-                    );
+                    if ( *result )
+                    {
+                        INFO("Left unparsed: \"" << result << "\"");
+                        FAIL_CHECK("Parsing didn't consume the entire string");
+                        continue;
+                    }
 
                     // Without "%z" we can't recover the time zone used in the
                     // call to Format() so we need to call MakeFromTimezone()
@@ -913,13 +918,33 @@ void DateTimeTestCase::TestTimeParse()
     wxDateTime dt;
 
     // Parsing standard formats should work.
-    CPPUNIT_ASSERT( dt.ParseTime("12:34:56") );
-    CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
+    const char* end = dt.ParseTime("12:34:56");
+    CPPUNIT_ASSERT( end );
+    if ( end )
+    {
+        CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
+        CPPUNIT_ASSERT_EQUAL( "", wxString(end) );
+    }
+    dt.ResetTime();
+
+    // Valid, but followed by something.
+    end = dt.ParseTime("12:34:56 0123 something");
+    CPPUNIT_ASSERT( end );
+    if ( end )
+    {
+        CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
+        CPPUNIT_ASSERT_EQUAL( " 0123 something", wxString(end) );
+    }
+    dt.ResetTime();
 
     // Parsing just hours should work too.
-    dt.ResetTime();
-    CPPUNIT_ASSERT( dt.ParseTime("17") );
-    CPPUNIT_ASSERT_EQUAL( "17:00:00", dt.FormatISOTime() );
+    end = dt.ParseTime("17");
+    CPPUNIT_ASSERT( end );
+    if ( end )
+    {
+        CPPUNIT_ASSERT_EQUAL( "17:00:00", dt.FormatISOTime() );
+        CPPUNIT_ASSERT_EQUAL( "", wxString(end) );
+    }
 
     // Parsing gibberish shouldn't work.
     CPPUNIT_ASSERT( !dt.ParseTime("bloordyblop") );
@@ -955,10 +980,8 @@ void DateTimeTestCase::TestTimeZoneParse()
         { "09:07-04:30", true },
         { "19:22+05:45", true },
 
-#if wxUSE_UNICODE
         // Containing minus sign (U+2212) as separator between time and tz.
         { "09:37" "\xe2\x88\x92" "0400", true },
-#endif
 
         // Some invalid ones too.
 
@@ -1086,6 +1109,18 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        {
+            "Sat, 18 Dec 1999 10:48:30 G", // military time zone
+            { 18, wxDateTime::Dec, 1999, 17, 48, 30 },
+            true
+        },
+
+        {
+            "Sat, 18 Dec 1999 10:48:30 Q", // military time zone
+            { 18, wxDateTime::Dec, 1999,  6, 48, 30 },
+            true
+        },
+
         // seconds are optional according to the RFC
         {
             "Sun, 01 Jun 2008 16:30 +0200",
@@ -1093,9 +1128,108 @@ void DateTimeTestCase::TestParseRFC822()
             true
         },
 
+        // day of week is optional according to the RFC
+        {
+            "18 Dec 1999 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
+        // 2-digit year is accepted by the RFC822
+        {
+            "Sat, 18 Dec 99 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
+        // years 00..29 are considered to mean 20xx
+        {
+            "Tue, 18 Dec 29 10:48:30 -0500",
+            { 18, wxDateTime::Dec, 2029, 15, 48, 30 },
+            true
+        },
+
         // try some bogus ones too
         {
             "Sun, 01 Jun 2008 16:30: +0200",
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Und 2008 16:30:10 +0200", // month: Undecimber
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:3:10 +0200", // missing digit
+            { 0 },
+            false
+        },
+
+        {
+            "Sun 01 Jun 2008 16:39:10 +0200", // missing comma
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +020", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +02", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +0", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 +", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sun, 01 Jun 2008 16:39:10 GM", // truncated time zone
+            { 0 },
+            false
+        },
+
+        {
+            "Sat, 18 Dec 1999 10:48:30", // TZ missing
+            { 0 },
+            false
+        },
+
+        {
+            "Sat, 18 Dec 1999", // time missing
+            { 0 },
+            false
+        },
+
+        {
+            "Sat, 18 Dec 2", // most of year missing
+            { 0 },
+            false
+        },
+
+        {
+            "Sun,", // missing date and time
+            { 0 },
+            false
+        },
+
+        {
+            "", // empty input
             { 0 },
             false
         },
@@ -1138,19 +1272,30 @@ void DateTimeTestCase::TestDateParse()
         const char *str;
         Date date;              // NB: this should be in UTC
         bool good;
+        const char* beyondEnd;  // what remains unprocessed of the input
     } parseTestDates[] =
     {
-        { "21 Mar 2006", { 21, wxDateTime::Mar, 2006 }, true },
-        { "29 Feb 1976", { 29, wxDateTime::Feb, 1976 }, true },
-        { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true },
-        { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true },
-        { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true },
+        { "21 Mar 2006", { 21, wxDateTime::Mar, 2006 }, true, ""},
+        { "29 Feb 1976", { 29, wxDateTime::Feb, 1976 }, true, "" },
+        { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true, "" },
+        { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true, "" },
+        { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true, "" },
+        { "Thu 20 Jun 2019", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "20 Jun 2019 Thu", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "Dec sixth 2017",  {  6, wxDateTime::Dec, 2017 }, true, "" },
+
+        // valid, but followed by something
+        { "Dec 31 1979 was the end of 70s",
+             { 31, wxDateTime::Dec, 1979 }, true, " was the end of 70s" },
 
         // some invalid ones too
         { "29 Feb 2006" },
         { "31/04/06" },
+        { "Sat 20 Jun 2019" }, // it was not a Saturday
+        { "20 Jun 2019 Sat" }, // it was not a Saturday
         { "bloordyblop" },
         { "2 .  .    " },
+        { "14:30:15" },
     };
 
     wxGCC_WARNING_RESTORE(missing-field-initializers)
@@ -1165,7 +1310,7 @@ void DateTimeTestCase::TestDateParse()
         const wxString datestr = TranslateDate(parseTestDates[n].str);
 
         const char * const end = dt.ParseDate(datestr);
-        if ( end && !*end )
+        if ( end )
         {
             WX_ASSERT_MESSAGE(
                 ("Erroneously parsed \"%s\"", datestr),
@@ -1173,6 +1318,7 @@ void DateTimeTestCase::TestDateParse()
             );
 
             CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+            CPPUNIT_ASSERT_EQUAL( wxString(parseTestDates[n].beyondEnd), wxString(end) );
         }
         else // failed to parse
         {
@@ -1273,33 +1419,154 @@ void DateTimeTestCase::TestDateTimeParse()
     static const struct ParseTestData
     {
         const char *str;
-        Date date;              // NB: this should be in UTC
+        Date date;      // either local time or UTC
         bool good;
+        const char *beyondEnd;  // what remains unprocessed of the input
+        bool dateIsUTC; // true when timezone is specified
     } parseTestDates[] =
     {
         {
             "Thu 22 Nov 2007 07:40:00 PM",
             { 22, wxDateTime::Nov, 2007, 19, 40,  0 },
-            true
+            true,
+            "",
+            false
         },
 
         {
             "2010-01-04 14:30",
             {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
-            true
+            true,
+            "",
+            false
+        },
+
+        {
+            // with 'T' separator
+            "2010-01-04T14:30",
+            {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
+            true,
+            "",
+            false
+        },
+
+        {
+            // date after time
+            "14:30:00 2020-01-04",
+            {  4, wxDateTime::Jan, 2020, 14, 30,  0 },
+            true,
+            "",
+            false
         },
 
         {
             "bloordyblop",
             {  1, wxDateTime::Jan, 9999,  0,  0,  0},
+            false,
+            "bloordyblop",
             false
         },
 
         {
-            "2012-01-01 10:12:05 +0100",
-            {  1, wxDateTime::Jan, 2012,  10,  12,  5, -1 },
-            false // ParseDateTime does know yet +0100
+            "2022-03-09 19:12:05 and some text after space",
+            {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
+            true,
+            " and some text after space",
+            false
         },
+
+        {
+            "2022-03-09 19:12:05 ", // just a trailing space
+            {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
+            true,
+            " ",
+            false
+        },
+
+        // something other than a space right after time
+        {
+            "2022-03-09 19:12:05AAaaaa",
+            {  9, wxDateTime::Mar, 2022,  19,  12,  5, -1 },
+            true,
+            "AAaaaa",
+            false
+        },
+
+        // the rest have a time zone specified, and when the
+        // time zone is valid, the date to compare to is in UTC
+        {
+            "2012-01-01 10:12:05 +0100",
+            {  1, wxDateTime::Jan, 2012,   9,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 -0700",
+            { 10, wxDateTime::Mar, 2022,   2,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 +0615",
+            {  9, wxDateTime::Mar, 2022,  12,  57,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 19:12:05 +0615 and some text",
+            {  9, wxDateTime::Mar, 2022,  12,  57,  5, -1 },
+            true,
+            " and some text",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 UTC",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 UTC and some text",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " and some text",
+            true
+        },
+
+        {
+            // date after time
+            "15:12:05 2022-03-09 UTC",
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            "",
+            true
+        },
+
+        {
+            "2022-03-09 15:12:05 +010", // truncated time zone
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " +010",
+            false
+        },
+
+        {
+            "2022-03-09 15:12:05 GM", // truncated time zone
+            {  9, wxDateTime::Mar, 2022,  15,  12,  5, -1 },
+            true,
+            " GM",
+            false
+        },
+
     };
 
     wxGCC_WARNING_RESTORE(missing-field-initializers)
@@ -1314,14 +1581,18 @@ void DateTimeTestCase::TestDateTimeParse()
         const wxString datestr = TranslateDate(parseTestDates[n].str);
 
         const char * const end = dt.ParseDateTime(datestr);
-        if ( end && !*end )
+        if ( end )
         {
             WX_ASSERT_MESSAGE(
                 ("Erroneously parsed \"%s\"", datestr),
                 parseTestDates[n].good
             );
 
-            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+            wxDateTime dtReal = parseTestDates[n].dateIsUTC ?
+                parseTestDates[n].date.DT().FromUTC() :
+                parseTestDates[n].date.DT();
+            CPPUNIT_ASSERT_EQUAL( dtReal, dt );
+            CPPUNIT_ASSERT_EQUAL( wxString(parseTestDates[n].beyondEnd), wxString(end) );
         }
         else // failed to parse
         {
@@ -1753,6 +2024,570 @@ TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
     }
 
     CHECK( gotMS );
+}
+
+TEST_CASE("Easter", "[datetime][holiday][easter]")
+{
+    std::vector<wxDateTime> easters =
+    {
+        wxDateTime( 2, wxDateTime::Apr, 1600),
+        wxDateTime(22, wxDateTime::Apr, 1601),
+        wxDateTime( 7, wxDateTime::Apr, 1602),
+        wxDateTime(30, wxDateTime::Mar, 1603),
+        wxDateTime(18, wxDateTime::Apr, 1604),
+        wxDateTime(10, wxDateTime::Apr, 1605),
+        wxDateTime(26, wxDateTime::Mar, 1606),
+        wxDateTime(15, wxDateTime::Apr, 1607),
+        wxDateTime( 6, wxDateTime::Apr, 1608),
+        wxDateTime(19, wxDateTime::Apr, 1609),
+        wxDateTime(11, wxDateTime::Apr, 1610),
+        wxDateTime( 3, wxDateTime::Apr, 1611),
+        wxDateTime(22, wxDateTime::Apr, 1612),
+        wxDateTime( 7, wxDateTime::Apr, 1613),
+        wxDateTime(30, wxDateTime::Mar, 1614),
+        wxDateTime(19, wxDateTime::Apr, 1615),
+        wxDateTime( 3, wxDateTime::Apr, 1616),
+        wxDateTime(26, wxDateTime::Mar, 1617),
+        wxDateTime(15, wxDateTime::Apr, 1618),
+        wxDateTime(31, wxDateTime::Mar, 1619),
+        wxDateTime(19, wxDateTime::Apr, 1620),
+        wxDateTime(11, wxDateTime::Apr, 1621),
+        wxDateTime(27, wxDateTime::Mar, 1622),
+        wxDateTime(16, wxDateTime::Apr, 1623),
+        wxDateTime( 7, wxDateTime::Apr, 1624),
+        wxDateTime(30, wxDateTime::Mar, 1625),
+        wxDateTime(12, wxDateTime::Apr, 1626),
+        wxDateTime( 4, wxDateTime::Apr, 1627),
+        wxDateTime(23, wxDateTime::Apr, 1628),
+        wxDateTime(15, wxDateTime::Apr, 1629),
+        wxDateTime(31, wxDateTime::Mar, 1630),
+        wxDateTime(20, wxDateTime::Apr, 1631),
+        wxDateTime(11, wxDateTime::Apr, 1632),
+        wxDateTime(27, wxDateTime::Mar, 1633),
+        wxDateTime(16, wxDateTime::Apr, 1634),
+        wxDateTime( 8, wxDateTime::Apr, 1635),
+        wxDateTime(23, wxDateTime::Mar, 1636),
+        wxDateTime(12, wxDateTime::Apr, 1637),
+        wxDateTime( 4, wxDateTime::Apr, 1638),
+        wxDateTime(24, wxDateTime::Apr, 1639),
+        wxDateTime( 8, wxDateTime::Apr, 1640),
+        wxDateTime(31, wxDateTime::Mar, 1641),
+        wxDateTime(20, wxDateTime::Apr, 1642),
+        wxDateTime( 5, wxDateTime::Apr, 1643),
+        wxDateTime(27, wxDateTime::Mar, 1644),
+        wxDateTime(16, wxDateTime::Apr, 1645),
+        wxDateTime( 1, wxDateTime::Apr, 1646),
+        wxDateTime(21, wxDateTime::Apr, 1647),
+        wxDateTime(12, wxDateTime::Apr, 1648),
+        wxDateTime( 4, wxDateTime::Apr, 1649),
+        wxDateTime(17, wxDateTime::Apr, 1650),
+        wxDateTime( 9, wxDateTime::Apr, 1651),
+        wxDateTime(31, wxDateTime::Mar, 1652),
+        wxDateTime(13, wxDateTime::Apr, 1653),
+        wxDateTime( 5, wxDateTime::Apr, 1654),
+        wxDateTime(28, wxDateTime::Mar, 1655),
+        wxDateTime(16, wxDateTime::Apr, 1656),
+        wxDateTime( 1, wxDateTime::Apr, 1657),
+        wxDateTime(21, wxDateTime::Apr, 1658),
+        wxDateTime(13, wxDateTime::Apr, 1659),
+        wxDateTime(28, wxDateTime::Mar, 1660),
+        wxDateTime(17, wxDateTime::Apr, 1661),
+        wxDateTime( 9, wxDateTime::Apr, 1662),
+        wxDateTime(25, wxDateTime::Mar, 1663),
+        wxDateTime(13, wxDateTime::Apr, 1664),
+        wxDateTime( 5, wxDateTime::Apr, 1665),
+        wxDateTime(25, wxDateTime::Apr, 1666),
+        wxDateTime(10, wxDateTime::Apr, 1667),
+        wxDateTime( 1, wxDateTime::Apr, 1668),
+        wxDateTime(21, wxDateTime::Apr, 1669),
+        wxDateTime( 6, wxDateTime::Apr, 1670),
+        wxDateTime(29, wxDateTime::Mar, 1671),
+        wxDateTime(17, wxDateTime::Apr, 1672),
+        wxDateTime( 2, wxDateTime::Apr, 1673),
+        wxDateTime(25, wxDateTime::Mar, 1674),
+        wxDateTime(14, wxDateTime::Apr, 1675),
+        wxDateTime( 5, wxDateTime::Apr, 1676),
+        wxDateTime(18, wxDateTime::Apr, 1677),
+        wxDateTime(10, wxDateTime::Apr, 1678),
+        wxDateTime( 2, wxDateTime::Apr, 1679),
+        wxDateTime(21, wxDateTime::Apr, 1680),
+        wxDateTime( 6, wxDateTime::Apr, 1681),
+        wxDateTime(29, wxDateTime::Mar, 1682),
+        wxDateTime(18, wxDateTime::Apr, 1683),
+        wxDateTime( 2, wxDateTime::Apr, 1684),
+        wxDateTime(22, wxDateTime::Apr, 1685),
+        wxDateTime(14, wxDateTime::Apr, 1686),
+        wxDateTime(30, wxDateTime::Mar, 1687),
+        wxDateTime(18, wxDateTime::Apr, 1688),
+        wxDateTime(10, wxDateTime::Apr, 1689),
+        wxDateTime(26, wxDateTime::Mar, 1690),
+        wxDateTime(15, wxDateTime::Apr, 1691),
+        wxDateTime( 6, wxDateTime::Apr, 1692),
+        wxDateTime(22, wxDateTime::Mar, 1693),
+        wxDateTime(11, wxDateTime::Apr, 1694),
+        wxDateTime( 3, wxDateTime::Apr, 1695),
+        wxDateTime(22, wxDateTime::Apr, 1696),
+        wxDateTime( 7, wxDateTime::Apr, 1697),
+        wxDateTime(30, wxDateTime::Mar, 1698),
+        wxDateTime(19, wxDateTime::Apr, 1699),
+        wxDateTime(11, wxDateTime::Apr, 1700),
+        wxDateTime(27, wxDateTime::Mar, 1701),
+        wxDateTime(16, wxDateTime::Apr, 1702),
+        wxDateTime( 8, wxDateTime::Apr, 1703),
+        wxDateTime(23, wxDateTime::Mar, 1704),
+        wxDateTime(12, wxDateTime::Apr, 1705),
+        wxDateTime( 4, wxDateTime::Apr, 1706),
+        wxDateTime(24, wxDateTime::Apr, 1707),
+        wxDateTime( 8, wxDateTime::Apr, 1708),
+        wxDateTime(31, wxDateTime::Mar, 1709),
+        wxDateTime(20, wxDateTime::Apr, 1710),
+        wxDateTime( 5, wxDateTime::Apr, 1711),
+        wxDateTime(27, wxDateTime::Mar, 1712),
+        wxDateTime(16, wxDateTime::Apr, 1713),
+        wxDateTime( 1, wxDateTime::Apr, 1714),
+        wxDateTime(21, wxDateTime::Apr, 1715),
+        wxDateTime(12, wxDateTime::Apr, 1716),
+        wxDateTime(28, wxDateTime::Mar, 1717),
+        wxDateTime(17, wxDateTime::Apr, 1718),
+        wxDateTime( 9, wxDateTime::Apr, 1719),
+        wxDateTime(31, wxDateTime::Mar, 1720),
+        wxDateTime(13, wxDateTime::Apr, 1721),
+        wxDateTime( 5, wxDateTime::Apr, 1722),
+        wxDateTime(28, wxDateTime::Mar, 1723),
+        wxDateTime(16, wxDateTime::Apr, 1724),
+        wxDateTime( 1, wxDateTime::Apr, 1725),
+        wxDateTime(21, wxDateTime::Apr, 1726),
+        wxDateTime(13, wxDateTime::Apr, 1727),
+        wxDateTime(28, wxDateTime::Mar, 1728),
+        wxDateTime(17, wxDateTime::Apr, 1729),
+        wxDateTime( 9, wxDateTime::Apr, 1730),
+        wxDateTime(25, wxDateTime::Mar, 1731),
+        wxDateTime(13, wxDateTime::Apr, 1732),
+        wxDateTime( 5, wxDateTime::Apr, 1733),
+        wxDateTime(25, wxDateTime::Apr, 1734),
+        wxDateTime(10, wxDateTime::Apr, 1735),
+        wxDateTime( 1, wxDateTime::Apr, 1736),
+        wxDateTime(21, wxDateTime::Apr, 1737),
+        wxDateTime( 6, wxDateTime::Apr, 1738),
+        wxDateTime(29, wxDateTime::Mar, 1739),
+        wxDateTime(17, wxDateTime::Apr, 1740),
+        wxDateTime( 2, wxDateTime::Apr, 1741),
+        wxDateTime(25, wxDateTime::Mar, 1742),
+        wxDateTime(14, wxDateTime::Apr, 1743),
+        wxDateTime( 5, wxDateTime::Apr, 1744),
+        wxDateTime(18, wxDateTime::Apr, 1745),
+        wxDateTime(10, wxDateTime::Apr, 1746),
+        wxDateTime( 2, wxDateTime::Apr, 1747),
+        wxDateTime(14, wxDateTime::Apr, 1748),
+        wxDateTime( 6, wxDateTime::Apr, 1749),
+        wxDateTime(29, wxDateTime::Mar, 1750),
+        wxDateTime(11, wxDateTime::Apr, 1751),
+        wxDateTime( 2, wxDateTime::Apr, 1752),
+        wxDateTime(22, wxDateTime::Apr, 1753),
+        wxDateTime(14, wxDateTime::Apr, 1754),
+        wxDateTime(30, wxDateTime::Mar, 1755),
+        wxDateTime(18, wxDateTime::Apr, 1756),
+        wxDateTime(10, wxDateTime::Apr, 1757),
+        wxDateTime(26, wxDateTime::Mar, 1758),
+        wxDateTime(15, wxDateTime::Apr, 1759),
+        wxDateTime( 6, wxDateTime::Apr, 1760),
+        wxDateTime(22, wxDateTime::Mar, 1761),
+        wxDateTime(11, wxDateTime::Apr, 1762),
+        wxDateTime( 3, wxDateTime::Apr, 1763),
+        wxDateTime(22, wxDateTime::Apr, 1764),
+        wxDateTime( 7, wxDateTime::Apr, 1765),
+        wxDateTime(30, wxDateTime::Mar, 1766),
+        wxDateTime(19, wxDateTime::Apr, 1767),
+        wxDateTime( 3, wxDateTime::Apr, 1768),
+        wxDateTime(26, wxDateTime::Mar, 1769),
+        wxDateTime(15, wxDateTime::Apr, 1770),
+        wxDateTime(31, wxDateTime::Mar, 1771),
+        wxDateTime(19, wxDateTime::Apr, 1772),
+        wxDateTime(11, wxDateTime::Apr, 1773),
+        wxDateTime( 3, wxDateTime::Apr, 1774),
+        wxDateTime(16, wxDateTime::Apr, 1775),
+        wxDateTime( 7, wxDateTime::Apr, 1776),
+        wxDateTime(30, wxDateTime::Mar, 1777),
+        wxDateTime(19, wxDateTime::Apr, 1778),
+        wxDateTime( 4, wxDateTime::Apr, 1779),
+        wxDateTime(26, wxDateTime::Mar, 1780),
+        wxDateTime(15, wxDateTime::Apr, 1781),
+        wxDateTime(31, wxDateTime::Mar, 1782),
+        wxDateTime(20, wxDateTime::Apr, 1783),
+        wxDateTime(11, wxDateTime::Apr, 1784),
+        wxDateTime(27, wxDateTime::Mar, 1785),
+        wxDateTime(16, wxDateTime::Apr, 1786),
+        wxDateTime( 8, wxDateTime::Apr, 1787),
+        wxDateTime(23, wxDateTime::Mar, 1788),
+        wxDateTime(12, wxDateTime::Apr, 1789),
+        wxDateTime( 4, wxDateTime::Apr, 1790),
+        wxDateTime(24, wxDateTime::Apr, 1791),
+        wxDateTime( 8, wxDateTime::Apr, 1792),
+        wxDateTime(31, wxDateTime::Mar, 1793),
+        wxDateTime(20, wxDateTime::Apr, 1794),
+        wxDateTime( 5, wxDateTime::Apr, 1795),
+        wxDateTime(27, wxDateTime::Mar, 1796),
+        wxDateTime(16, wxDateTime::Apr, 1797),
+        wxDateTime( 8, wxDateTime::Apr, 1798),
+        wxDateTime(24, wxDateTime::Mar, 1799),
+        wxDateTime(13, wxDateTime::Apr, 1800),
+        wxDateTime( 5, wxDateTime::Apr, 1801),
+        wxDateTime(18, wxDateTime::Apr, 1802),
+        wxDateTime(10, wxDateTime::Apr, 1803),
+        wxDateTime( 1, wxDateTime::Apr, 1804),
+        wxDateTime(14, wxDateTime::Apr, 1805),
+        wxDateTime( 6, wxDateTime::Apr, 1806),
+        wxDateTime(29, wxDateTime::Mar, 1807),
+        wxDateTime(17, wxDateTime::Apr, 1808),
+        wxDateTime( 2, wxDateTime::Apr, 1809),
+        wxDateTime(22, wxDateTime::Apr, 1810),
+        wxDateTime(14, wxDateTime::Apr, 1811),
+        wxDateTime(29, wxDateTime::Mar, 1812),
+        wxDateTime(18, wxDateTime::Apr, 1813),
+        wxDateTime(10, wxDateTime::Apr, 1814),
+        wxDateTime(26, wxDateTime::Mar, 1815),
+        wxDateTime(14, wxDateTime::Apr, 1816),
+        wxDateTime( 6, wxDateTime::Apr, 1817),
+        wxDateTime(22, wxDateTime::Mar, 1818),
+        wxDateTime(11, wxDateTime::Apr, 1819),
+        wxDateTime( 2, wxDateTime::Apr, 1820),
+        wxDateTime(22, wxDateTime::Apr, 1821),
+        wxDateTime( 7, wxDateTime::Apr, 1822),
+        wxDateTime(30, wxDateTime::Mar, 1823),
+        wxDateTime(18, wxDateTime::Apr, 1824),
+        wxDateTime( 3, wxDateTime::Apr, 1825),
+        wxDateTime(26, wxDateTime::Mar, 1826),
+        wxDateTime(15, wxDateTime::Apr, 1827),
+        wxDateTime( 6, wxDateTime::Apr, 1828),
+        wxDateTime(19, wxDateTime::Apr, 1829),
+        wxDateTime(11, wxDateTime::Apr, 1830),
+        wxDateTime( 3, wxDateTime::Apr, 1831),
+        wxDateTime(22, wxDateTime::Apr, 1832),
+        wxDateTime( 7, wxDateTime::Apr, 1833),
+        wxDateTime(30, wxDateTime::Mar, 1834),
+        wxDateTime(19, wxDateTime::Apr, 1835),
+        wxDateTime( 3, wxDateTime::Apr, 1836),
+        wxDateTime(26, wxDateTime::Mar, 1837),
+        wxDateTime(15, wxDateTime::Apr, 1838),
+        wxDateTime(31, wxDateTime::Mar, 1839),
+        wxDateTime(19, wxDateTime::Apr, 1840),
+        wxDateTime(11, wxDateTime::Apr, 1841),
+        wxDateTime(27, wxDateTime::Mar, 1842),
+        wxDateTime(16, wxDateTime::Apr, 1843),
+        wxDateTime( 7, wxDateTime::Apr, 1844),
+        wxDateTime(23, wxDateTime::Mar, 1845),
+        wxDateTime(12, wxDateTime::Apr, 1846),
+        wxDateTime( 4, wxDateTime::Apr, 1847),
+        wxDateTime(23, wxDateTime::Apr, 1848),
+        wxDateTime( 8, wxDateTime::Apr, 1849),
+        wxDateTime(31, wxDateTime::Mar, 1850),
+        wxDateTime(20, wxDateTime::Apr, 1851),
+        wxDateTime(11, wxDateTime::Apr, 1852),
+        wxDateTime(27, wxDateTime::Mar, 1853),
+        wxDateTime(16, wxDateTime::Apr, 1854),
+        wxDateTime( 8, wxDateTime::Apr, 1855),
+        wxDateTime(23, wxDateTime::Mar, 1856),
+        wxDateTime(12, wxDateTime::Apr, 1857),
+        wxDateTime( 4, wxDateTime::Apr, 1858),
+        wxDateTime(24, wxDateTime::Apr, 1859),
+        wxDateTime( 8, wxDateTime::Apr, 1860),
+        wxDateTime(31, wxDateTime::Mar, 1861),
+        wxDateTime(20, wxDateTime::Apr, 1862),
+        wxDateTime( 5, wxDateTime::Apr, 1863),
+        wxDateTime(27, wxDateTime::Mar, 1864),
+        wxDateTime(16, wxDateTime::Apr, 1865),
+        wxDateTime( 1, wxDateTime::Apr, 1866),
+        wxDateTime(21, wxDateTime::Apr, 1867),
+        wxDateTime(12, wxDateTime::Apr, 1868),
+        wxDateTime(28, wxDateTime::Mar, 1869),
+        wxDateTime(17, wxDateTime::Apr, 1870),
+        wxDateTime( 9, wxDateTime::Apr, 1871),
+        wxDateTime(31, wxDateTime::Mar, 1872),
+        wxDateTime(13, wxDateTime::Apr, 1873),
+        wxDateTime( 5, wxDateTime::Apr, 1874),
+        wxDateTime(28, wxDateTime::Mar, 1875),
+        wxDateTime(16, wxDateTime::Apr, 1876),
+        wxDateTime( 1, wxDateTime::Apr, 1877),
+        wxDateTime(21, wxDateTime::Apr, 1878),
+        wxDateTime(13, wxDateTime::Apr, 1879),
+        wxDateTime(28, wxDateTime::Mar, 1880),
+        wxDateTime(17, wxDateTime::Apr, 1881),
+        wxDateTime( 9, wxDateTime::Apr, 1882),
+        wxDateTime(25, wxDateTime::Mar, 1883),
+        wxDateTime(13, wxDateTime::Apr, 1884),
+        wxDateTime( 5, wxDateTime::Apr, 1885),
+        wxDateTime(25, wxDateTime::Apr, 1886),
+        wxDateTime(10, wxDateTime::Apr, 1887),
+        wxDateTime( 1, wxDateTime::Apr, 1888),
+        wxDateTime(21, wxDateTime::Apr, 1889),
+        wxDateTime( 6, wxDateTime::Apr, 1890),
+        wxDateTime(29, wxDateTime::Mar, 1891),
+        wxDateTime(17, wxDateTime::Apr, 1892),
+        wxDateTime( 2, wxDateTime::Apr, 1893),
+        wxDateTime(25, wxDateTime::Mar, 1894),
+        wxDateTime(14, wxDateTime::Apr, 1895),
+        wxDateTime( 5, wxDateTime::Apr, 1896),
+        wxDateTime(18, wxDateTime::Apr, 1897),
+        wxDateTime(10, wxDateTime::Apr, 1898),
+        wxDateTime( 2, wxDateTime::Apr, 1899),
+        wxDateTime(15, wxDateTime::Apr, 1900),
+        wxDateTime( 7, wxDateTime::Apr, 1901),
+        wxDateTime(30, wxDateTime::Mar, 1902),
+        wxDateTime(12, wxDateTime::Apr, 1903),
+        wxDateTime( 3, wxDateTime::Apr, 1904),
+        wxDateTime(23, wxDateTime::Apr, 1905),
+        wxDateTime(15, wxDateTime::Apr, 1906),
+        wxDateTime(31, wxDateTime::Mar, 1907),
+        wxDateTime(19, wxDateTime::Apr, 1908),
+        wxDateTime(11, wxDateTime::Apr, 1909),
+        wxDateTime(27, wxDateTime::Mar, 1910),
+        wxDateTime(16, wxDateTime::Apr, 1911),
+        wxDateTime( 7, wxDateTime::Apr, 1912),
+        wxDateTime(23, wxDateTime::Mar, 1913),
+        wxDateTime(12, wxDateTime::Apr, 1914),
+        wxDateTime( 4, wxDateTime::Apr, 1915),
+        wxDateTime(23, wxDateTime::Apr, 1916),
+        wxDateTime( 8, wxDateTime::Apr, 1917),
+        wxDateTime(31, wxDateTime::Mar, 1918),
+        wxDateTime(20, wxDateTime::Apr, 1919),
+        wxDateTime( 4, wxDateTime::Apr, 1920),
+        wxDateTime(27, wxDateTime::Mar, 1921),
+        wxDateTime(16, wxDateTime::Apr, 1922),
+        wxDateTime( 1, wxDateTime::Apr, 1923),
+        wxDateTime(20, wxDateTime::Apr, 1924),
+        wxDateTime(12, wxDateTime::Apr, 1925),
+        wxDateTime( 4, wxDateTime::Apr, 1926),
+        wxDateTime(17, wxDateTime::Apr, 1927),
+        wxDateTime( 8, wxDateTime::Apr, 1928),
+        wxDateTime(31, wxDateTime::Mar, 1929),
+        wxDateTime(20, wxDateTime::Apr, 1930),
+        wxDateTime( 5, wxDateTime::Apr, 1931),
+        wxDateTime(27, wxDateTime::Mar, 1932),
+        wxDateTime(16, wxDateTime::Apr, 1933),
+        wxDateTime( 1, wxDateTime::Apr, 1934),
+        wxDateTime(21, wxDateTime::Apr, 1935),
+        wxDateTime(12, wxDateTime::Apr, 1936),
+        wxDateTime(28, wxDateTime::Mar, 1937),
+        wxDateTime(17, wxDateTime::Apr, 1938),
+        wxDateTime( 9, wxDateTime::Apr, 1939),
+        wxDateTime(24, wxDateTime::Mar, 1940),
+        wxDateTime(13, wxDateTime::Apr, 1941),
+        wxDateTime( 5, wxDateTime::Apr, 1942),
+        wxDateTime(25, wxDateTime::Apr, 1943),
+        wxDateTime( 9, wxDateTime::Apr, 1944),
+        wxDateTime( 1, wxDateTime::Apr, 1945),
+        wxDateTime(21, wxDateTime::Apr, 1946),
+        wxDateTime( 6, wxDateTime::Apr, 1947),
+        wxDateTime(28, wxDateTime::Mar, 1948),
+        wxDateTime(17, wxDateTime::Apr, 1949),
+        wxDateTime( 9, wxDateTime::Apr, 1950),
+        wxDateTime(25, wxDateTime::Mar, 1951),
+        wxDateTime(13, wxDateTime::Apr, 1952),
+        wxDateTime( 5, wxDateTime::Apr, 1953),
+        wxDateTime(18, wxDateTime::Apr, 1954),
+        wxDateTime(10, wxDateTime::Apr, 1955),
+        wxDateTime( 1, wxDateTime::Apr, 1956),
+        wxDateTime(21, wxDateTime::Apr, 1957),
+        wxDateTime( 6, wxDateTime::Apr, 1958),
+        wxDateTime(29, wxDateTime::Mar, 1959),
+        wxDateTime(17, wxDateTime::Apr, 1960),
+        wxDateTime( 2, wxDateTime::Apr, 1961),
+        wxDateTime(22, wxDateTime::Apr, 1962),
+        wxDateTime(14, wxDateTime::Apr, 1963),
+        wxDateTime(29, wxDateTime::Mar, 1964),
+        wxDateTime(18, wxDateTime::Apr, 1965),
+        wxDateTime(10, wxDateTime::Apr, 1966),
+        wxDateTime(26, wxDateTime::Mar, 1967),
+        wxDateTime(14, wxDateTime::Apr, 1968),
+        wxDateTime( 6, wxDateTime::Apr, 1969),
+        wxDateTime(29, wxDateTime::Mar, 1970),
+        wxDateTime(11, wxDateTime::Apr, 1971),
+        wxDateTime( 2, wxDateTime::Apr, 1972),
+        wxDateTime(22, wxDateTime::Apr, 1973),
+        wxDateTime(14, wxDateTime::Apr, 1974),
+        wxDateTime(30, wxDateTime::Mar, 1975),
+        wxDateTime(18, wxDateTime::Apr, 1976),
+        wxDateTime(10, wxDateTime::Apr, 1977),
+        wxDateTime(26, wxDateTime::Mar, 1978),
+        wxDateTime(15, wxDateTime::Apr, 1979),
+        wxDateTime( 6, wxDateTime::Apr, 1980),
+        wxDateTime(19, wxDateTime::Apr, 1981),
+        wxDateTime(11, wxDateTime::Apr, 1982),
+        wxDateTime( 3, wxDateTime::Apr, 1983),
+        wxDateTime(22, wxDateTime::Apr, 1984),
+        wxDateTime( 7, wxDateTime::Apr, 1985),
+        wxDateTime(30, wxDateTime::Mar, 1986),
+        wxDateTime(19, wxDateTime::Apr, 1987),
+        wxDateTime( 3, wxDateTime::Apr, 1988),
+        wxDateTime(26, wxDateTime::Mar, 1989),
+        wxDateTime(15, wxDateTime::Apr, 1990),
+        wxDateTime(31, wxDateTime::Mar, 1991),
+        wxDateTime(19, wxDateTime::Apr, 1992),
+        wxDateTime(11, wxDateTime::Apr, 1993),
+        wxDateTime( 3, wxDateTime::Apr, 1994),
+        wxDateTime(16, wxDateTime::Apr, 1995),
+        wxDateTime( 7, wxDateTime::Apr, 1996),
+        wxDateTime(30, wxDateTime::Mar, 1997),
+        wxDateTime(12, wxDateTime::Apr, 1998),
+        wxDateTime( 4, wxDateTime::Apr, 1999),
+        wxDateTime(23, wxDateTime::Apr, 2000),
+        wxDateTime(15, wxDateTime::Apr, 2001),
+        wxDateTime(31, wxDateTime::Mar, 2002),
+        wxDateTime(20, wxDateTime::Apr, 2003),
+        wxDateTime(11, wxDateTime::Apr, 2004),
+        wxDateTime(27, wxDateTime::Mar, 2005),
+        wxDateTime(16, wxDateTime::Apr, 2006),
+        wxDateTime( 8, wxDateTime::Apr, 2007),
+        wxDateTime(23, wxDateTime::Mar, 2008),
+        wxDateTime(12, wxDateTime::Apr, 2009),
+        wxDateTime( 4, wxDateTime::Apr, 2010),
+        wxDateTime(24, wxDateTime::Apr, 2011),
+        wxDateTime( 8, wxDateTime::Apr, 2012),
+        wxDateTime(31, wxDateTime::Mar, 2013),
+        wxDateTime(20, wxDateTime::Apr, 2014),
+        wxDateTime( 5, wxDateTime::Apr, 2015),
+        wxDateTime(27, wxDateTime::Mar, 2016),
+        wxDateTime(16, wxDateTime::Apr, 2017),
+        wxDateTime( 1, wxDateTime::Apr, 2018),
+        wxDateTime(21, wxDateTime::Apr, 2019),
+        wxDateTime(12, wxDateTime::Apr, 2020),
+        wxDateTime( 4, wxDateTime::Apr, 2021),
+        wxDateTime(17, wxDateTime::Apr, 2022),
+        wxDateTime( 9, wxDateTime::Apr, 2023),
+        wxDateTime(31, wxDateTime::Mar, 2024),
+        wxDateTime(20, wxDateTime::Apr, 2025),
+        wxDateTime( 5, wxDateTime::Apr, 2026),
+        wxDateTime(28, wxDateTime::Mar, 2027),
+        wxDateTime(16, wxDateTime::Apr, 2028),
+        wxDateTime( 1, wxDateTime::Apr, 2029),
+        wxDateTime(21, wxDateTime::Apr, 2030),
+        wxDateTime(13, wxDateTime::Apr, 2031),
+        wxDateTime(28, wxDateTime::Mar, 2032),
+        wxDateTime(17, wxDateTime::Apr, 2033),
+        wxDateTime( 9, wxDateTime::Apr, 2034),
+        wxDateTime(25, wxDateTime::Mar, 2035),
+        wxDateTime(13, wxDateTime::Apr, 2036),
+        wxDateTime( 5, wxDateTime::Apr, 2037),
+        wxDateTime(25, wxDateTime::Apr, 2038),
+        wxDateTime(10, wxDateTime::Apr, 2039),
+        wxDateTime( 1, wxDateTime::Apr, 2040),
+        wxDateTime(21, wxDateTime::Apr, 2041),
+        wxDateTime( 6, wxDateTime::Apr, 2042),
+        wxDateTime(29, wxDateTime::Mar, 2043),
+        wxDateTime(17, wxDateTime::Apr, 2044),
+        wxDateTime( 9, wxDateTime::Apr, 2045),
+        wxDateTime(25, wxDateTime::Mar, 2046),
+        wxDateTime(14, wxDateTime::Apr, 2047),
+        wxDateTime( 5, wxDateTime::Apr, 2048),
+        wxDateTime(18, wxDateTime::Apr, 2049),
+        wxDateTime(10, wxDateTime::Apr, 2050),
+        wxDateTime( 2, wxDateTime::Apr, 2051),
+        wxDateTime(21, wxDateTime::Apr, 2052),
+        wxDateTime( 6, wxDateTime::Apr, 2053),
+        wxDateTime(29, wxDateTime::Mar, 2054),
+        wxDateTime(18, wxDateTime::Apr, 2055),
+        wxDateTime( 2, wxDateTime::Apr, 2056),
+        wxDateTime(22, wxDateTime::Apr, 2057),
+        wxDateTime(14, wxDateTime::Apr, 2058),
+        wxDateTime(30, wxDateTime::Mar, 2059),
+        wxDateTime(18, wxDateTime::Apr, 2060),
+        wxDateTime(10, wxDateTime::Apr, 2061),
+        wxDateTime(26, wxDateTime::Mar, 2062),
+        wxDateTime(15, wxDateTime::Apr, 2063),
+        wxDateTime( 6, wxDateTime::Apr, 2064),
+        wxDateTime(29, wxDateTime::Mar, 2065),
+        wxDateTime(11, wxDateTime::Apr, 2066),
+        wxDateTime( 3, wxDateTime::Apr, 2067),
+        wxDateTime(22, wxDateTime::Apr, 2068),
+        wxDateTime(14, wxDateTime::Apr, 2069),
+        wxDateTime(30, wxDateTime::Mar, 2070),
+        wxDateTime(19, wxDateTime::Apr, 2071),
+        wxDateTime(10, wxDateTime::Apr, 2072),
+        wxDateTime(26, wxDateTime::Mar, 2073),
+        wxDateTime(15, wxDateTime::Apr, 2074),
+        wxDateTime( 7, wxDateTime::Apr, 2075),
+        wxDateTime(19, wxDateTime::Apr, 2076),
+        wxDateTime(11, wxDateTime::Apr, 2077),
+        wxDateTime( 3, wxDateTime::Apr, 2078),
+        wxDateTime(23, wxDateTime::Apr, 2079),
+        wxDateTime( 7, wxDateTime::Apr, 2080),
+        wxDateTime(30, wxDateTime::Mar, 2081),
+        wxDateTime(19, wxDateTime::Apr, 2082),
+        wxDateTime( 4, wxDateTime::Apr, 2083),
+        wxDateTime(26, wxDateTime::Mar, 2084),
+        wxDateTime(15, wxDateTime::Apr, 2085),
+        wxDateTime(31, wxDateTime::Mar, 2086),
+        wxDateTime(20, wxDateTime::Apr, 2087),
+        wxDateTime(11, wxDateTime::Apr, 2088),
+        wxDateTime( 3, wxDateTime::Apr, 2089),
+        wxDateTime(16, wxDateTime::Apr, 2090),
+        wxDateTime( 8, wxDateTime::Apr, 2091),
+        wxDateTime(30, wxDateTime::Mar, 2092),
+        wxDateTime(12, wxDateTime::Apr, 2093),
+        wxDateTime( 4, wxDateTime::Apr, 2094),
+        wxDateTime(24, wxDateTime::Apr, 2095),
+        wxDateTime(15, wxDateTime::Apr, 2096),
+        wxDateTime(31, wxDateTime::Mar, 2097),
+        wxDateTime(20, wxDateTime::Apr, 2098),
+        wxDateTime(12, wxDateTime::Apr, 2099)
+    };
+
+    for (const auto& easter : easters)
+    {
+        INFO("Checking year " << easter.GetYear());
+        CHECK(wxDateTimeUSCatholicFeasts::GetEaster(easter.GetYear()).IsSameDate(easter));
+    }
+}
+
+TEST_CASE("US Catholic Holidays", "[datetime][holiday]")
+{
+    SECTION("Ascension")
+    {
+        wxDateTime ascension = wxDateTimeUSCatholicFeasts::GetThursdayAscension(2023);
+        CHECK(ascension.GetMonth() == wxDateTime::Month::May);
+        CHECK(ascension.GetDay() == 18);
+
+        ascension = wxDateTimeUSCatholicFeasts::GetSundayAscension(2023);
+        CHECK(ascension.GetMonth() == wxDateTime::Month::May);
+        CHECK(ascension.GetDay() == 21);
+    }
+    SECTION("Fixed date feasts")
+    {
+        wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeUSCatholicFeasts);
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 1, wxDateTime::Month::Jan, 2024)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(15, wxDateTime::Month::Aug, 2023)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 1, wxDateTime::Month::Nov, 2023)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 8, wxDateTime::Month::Dec, 2023)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 2023)));
+        // random days that should not be feasts of obligation
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime( 1, wxDateTime::Month::Dec, 2023)));
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(31, wxDateTime::Month::Oct, 2023)));
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(14, wxDateTime::Month::Feb, 2023)));
+    }
+}
+
+TEST_CASE("Christian Holidays", "[datetime][holiday][christian]")
+{
+    SECTION("Easter")
+    {
+        wxDateTime easter = wxDateTimeChristianHolidays::GetEaster(2023);
+        CHECK(easter.GetMonth() == wxDateTime::Month::Apr);
+        CHECK(easter.GetDay() == 9);
+
+        easter = wxDateTimeChristianHolidays::GetEaster(2010);
+        CHECK(easter.GetMonth() == wxDateTime::Month::Apr);
+        CHECK(easter.GetDay() == 4);
+    }
+    SECTION("Christmas")
+    {
+        wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeChristianHolidays);
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 1990)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 1700)));
+        CHECK(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(25, wxDateTime::Month::Dec, 2023)));
+        // random days that are not Christmas or weekends
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(1, wxDateTime::Month::Dec, 2023)));
+        CHECK_FALSE(wxDateTimeHolidayAuthority::IsHoliday(wxDateTime(29, wxDateTime::Month::Dec, 2023)));
+    }
 }
 
 #endif // wxUSE_DATETIME

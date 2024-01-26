@@ -16,7 +16,6 @@
 #include "wx/app.h"
 #include "wx/config.h"
 #include "wx/panel.h"
-#include "wx/scopedptr.h"
 #include "wx/menu.h"
 #include "wx/checkbox.h"
 #include "wx/listbox.h"
@@ -24,6 +23,8 @@
 #include "wx/sizer.h"
 #include "wx/artprov.h"
 #include "wx/frame.h"
+
+#include <memory>
 
 // This struct combines the settings edited in the preferences dialog.
 struct MySettings
@@ -47,7 +48,7 @@ struct MySettings
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     void ShowPreferencesEditor(wxWindow* parent);
     void DismissPreferencesEditor();
@@ -57,7 +58,7 @@ public:
 
 private:
     class MyFrame* m_frame;
-    wxScopedPtr<wxPreferencesEditor> m_prefEditor;
+    std::unique_ptr<wxPreferencesEditor> m_prefEditor;
     MySettings m_settings;
 };
 
@@ -67,7 +68,7 @@ wxIMPLEMENT_APP(MyApp);
 class MyFrame : public wxFrame
 {
 public:
-    MyFrame() : wxFrame(NULL, wxID_ANY, "Preferences sample")
+    MyFrame() : wxFrame(nullptr, wxID_ANY, "Preferences sample")
     {
         wxMenu *fileMenu = new wxMenu;
         fileMenu->Append(wxID_PREFERENCES);
@@ -153,7 +154,7 @@ public:
                            this);
     }
 
-    virtual bool TransferDataToWindow() wxOVERRIDE
+    virtual bool TransferDataToWindow() override
     {
         m_settingsCurrent = wxGetApp().GetSettings();
         m_useMarkdown->SetValue(m_settingsCurrent.m_useMarkdown);
@@ -161,7 +162,7 @@ public:
         return true;
     }
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE
+    virtual bool TransferDataFromWindow() override
     {
         // Called on platforms with modal preferences dialog to save and apply
         // the changes.
@@ -208,7 +209,7 @@ class PrefsPageGeneral : public wxStockPreferencesPage
 {
 public:
     PrefsPageGeneral() : wxStockPreferencesPage(Kind_General) {}
-    virtual wxWindow *CreateWindow(wxWindow *parent) wxOVERRIDE
+    virtual wxWindow *CreateWindow(wxWindow *parent) override
         { return new PrefsPageGeneralPanel(parent); }
 };
 
@@ -236,7 +237,7 @@ public:
         }
     }
 
-    virtual bool TransferDataToWindow() wxOVERRIDE
+    virtual bool TransferDataToWindow() override
     {
         // This is the place where you can initialize values, e.g. from wxConfig.
         // For demonstration purposes, we just set hardcoded values.
@@ -245,7 +246,7 @@ public:
         return true;
     }
 
-    virtual bool TransferDataFromWindow() wxOVERRIDE
+    virtual bool TransferDataFromWindow() override
     {
         // Called on platforms with modal preferences dialog to save and apply
         // the changes.
@@ -267,10 +268,10 @@ private:
 class PrefsPageTopics : public wxPreferencesPage
 {
 public:
-    virtual wxString GetName() const wxOVERRIDE { return "Topics"; }
-    virtual wxBitmap GetLargeIcon() const wxOVERRIDE
-        { return wxArtProvider::GetBitmap(wxART_HELP, wxART_TOOLBAR); }
-    virtual wxWindow *CreateWindow(wxWindow *parent) wxOVERRIDE
+    virtual wxString GetName() const override { return "Topics"; }
+    virtual wxBitmapBundle GetIcon() const override
+        { return wxArtProvider::GetBitmapBundle(wxART_HELP, wxART_TOOLBAR); }
+    virtual wxWindow *CreateWindow(wxWindow *parent) override
         { return new PrefsPageTopicsPanel(parent); }
 };
 
@@ -280,6 +281,13 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+
+#ifdef __WXGTK__
+    // Many version of wxGTK generate spurious diagnostic messages when
+    // destroying wxNotebook (or removing pages from it), allow wxWidgets to
+    // suppress them.
+    GTKAllowDiagnosticsControl();
+#endif // __WXGTK__
 
     // This will be used in the title of the preferences dialog under some
     // platforms, don't leave it as default "Preferences" because this would

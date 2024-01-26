@@ -20,6 +20,16 @@
 #define DIRTEST_FOLDER      wxString("dirTest_folder")
 #define SEP                 wxFileName::GetPathSeparator()
 
+// We can't use wxFileSelectorDefaultWildcardStr from wxCore here, so define
+// our own.
+const wxString WILDCARD_ALL =
+#if defined(__WXMSW__)
+"*.*"
+#else // Unix/Mac
+"*"
+#endif
+;
+
 // ----------------------------------------------------------------------------
 // test fixture
 // ----------------------------------------------------------------------------
@@ -127,12 +137,12 @@ class TestDirTraverser : public wxDirTraverser
 public:
     wxArrayString dirs;
 
-    virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename)) wxOVERRIDE
+    virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename)) override
     {
         return wxDIR_CONTINUE;
     }
 
-    virtual wxDirTraverseResult OnDir(const wxString& dirname) wxOVERRIDE
+    virtual wxDirTraverseResult OnDir(const wxString& dirname) override
     {
         dirs.push_back(dirname);
         return wxDIR_CONTINUE;
@@ -144,6 +154,21 @@ TEST_CASE_METHOD(DirTestCase, "Dir::Traverse", "[dir]")
     // enum all files
     wxArrayString files;
     CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files) == 4 );
+
+    // enum all files using an explicit wildcard
+    CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, WILDCARD_ALL) == 4);
+
+    // enum all files using an explicit wildcard different from WILDCARD_ALL
+    //
+    // broken under Wine, see https://bugs.winehq.org/show_bug.cgi?id=55677
+    if ( !wxIsRunningUnderWine() )
+    {
+        CHECK(wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4);
+    }
+    else if (wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "d" + WILDCARD_ALL) == 4)
+    {
+        WARN("PathMatchSpec() seems to work under Wine now");
+    }
 
     // enum all files according to the filter
     CHECK( wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo") == 1 );
@@ -232,3 +257,45 @@ TEST_CASE_METHOD(DirTestCase, "Dir::GetName", "[dir]")
     CHECK( d.GetNameWithSep() == "/" );
 #endif
 }
+
+// Disabled by default test allowing to check the result of matching against
+// the given filter.
+#ifdef __WXMSW__
+
+#include "wx/msw/wrapwin.h"
+#include <shlwapi.h>
+#ifdef __VISUALC__
+    #pragma comment(lib, "shlwapi")
+#endif
+
+#include "wx/crt.h"
+#include "wx/filefn.h"
+
+TEST_CASE("Dir::Match", "[.]")
+{
+    wxString filter;
+    REQUIRE( wxGetEnv("WX_TEST_DIR_FILTER", &filter) );
+
+    static const wxString filenames[] =
+    {
+        "foo",
+        "foo.bar",
+        "foo.bar.baz",
+        ".hidden",
+        ".hidden.ext",
+    };
+
+    // Show the results of matching the pattern using various functions.
+    wxPrintf("%-15s %20s %20s %20s\n",
+             "File", "wxString::Matches", "wxMatchWild", "PathMatchSpec");
+    for ( const auto& fn : filenames )
+    {
+        wxPrintf("%-15s %20d %20d %20d\n",
+                 fn,
+                 fn.Matches(filter),
+                 wxMatchWild(filter, fn),
+                 PathMatchSpec(fn.wc_str(), filter.wc_str()) == TRUE);
+    }
+}
+
+#endif // __WXMSW__

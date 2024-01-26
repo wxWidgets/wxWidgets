@@ -263,14 +263,13 @@ TEST_CASE("wxFont::GetSet", "[font][getters]")
         static const char *knownGoodFaceName = "Monospace";
 #endif
 
-        WX_ASSERT_MESSAGE
-        (
-            ("failed to set face name \"%s\" for test font #%u\n"
-             "(this failure is harmless if this face name is not "
-             "available on this system)", knownGoodFaceName, n),
-            test.SetFaceName(knownGoodFaceName)
-        );
-        CHECK( test.IsOk() );
+        INFO("Testing font #" << n);
+
+        {
+            INFO("setting face name to " << knownGoodFaceName);
+            CHECK( test.SetFaceName(knownGoodFaceName) );
+            CHECK( test.IsOk() );
+        }
 
 
         // test Get/SetFamily()
@@ -364,10 +363,12 @@ TEST_CASE("wxFont::NativeFontInfo", "[font][fontinfo]")
         wxFont temp;
         CHECK( temp.SetNativeFontInfo(nid) );
         CHECK( temp.IsOk() );
-        WX_ASSERT_MESSAGE(
-            ("Test #%u failed\ndump of test font: \"%s\"\ndump of temp font: \"%s\"", \
-             n, DumpFont(&test), DumpFont(&temp)),
-            temp == test );
+
+        INFO("Testing font #" << n);
+        INFO("original font user description: " << DumpFont(&test));
+        INFO("the other font description: " << DumpFont(&temp));
+
+        CHECK( temp == test );
     }
 
     // test that clearly invalid font info strings do not work
@@ -409,22 +410,25 @@ TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
     const wxFont *pf = GetTestFonts(numFonts);
     for ( unsigned n = 0; n < numFonts; n++ )
     {
+        INFO("Testing font #" << n);
+
         wxFont test(*pf++);
 
         const wxString& niud = test.GetNativeFontInfoUserDesc();
         CHECK( !niud.empty() );
             // documented to be never empty
 
+        INFO("original font user description: " << niud);
+
         wxFont temp2;
         CHECK( temp2.SetNativeFontInfoUserDesc(niud) );
         CHECK( temp2.IsOk() );
 
+        INFO("the other font description: " << niud);
+
 #ifdef __WXGTK__
         // Pango saves/restores all font info in the user-friendly string:
-        WX_ASSERT_MESSAGE(
-            ("Test #%u failed; native info user desc was \"%s\" for test and \"%s\" for temp2", \
-             n, niud, temp2.GetNativeFontInfoUserDesc()),
-            temp2 == test );
+        CHECK( temp2 == test );
 #else
         // NOTE: as documented GetNativeFontInfoUserDesc/SetNativeFontInfoUserDesc
         //       are not granted to save/restore all font info.
@@ -470,4 +474,29 @@ TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
         // a differently rounded size to be used.
         CHECK( font.GetFractionalPointSize() == sizeUsed );
     }
+}
+
+TEST_CASE("wxFontList::FindOrCreate", "[font][fontinfo][fontlist]")
+{
+    const double pointSize = 10.5;
+    const wxSize pixelSize(0, 32);
+
+    wxFontInfo info;
+    SECTION("From point size") { info = wxFontInfo{pointSize}; }
+    SECTION("From pixel size") { info = wxFontInfo{pixelSize}; }
+
+    wxFont* const font1 = wxTheFontList->FindOrCreateFont(info);
+    REQUIRE(font1);
+    REQUIRE(font1->IsOk());
+
+    INFO("Font from font list:" << DumpFont(font1));
+
+    if ( info.IsUsingSizeInPixels() )
+        CHECK(font1->GetPixelSize().y == pixelSize.y);
+    else
+        CHECK(font1->GetFractionalPointSize() == pointSize);
+
+    // font 2 should be font1 from the font list "cache"
+    wxFont* const font2 = wxTheFontList->FindOrCreateFont(info);
+    CHECK(font2 == font1);
 }

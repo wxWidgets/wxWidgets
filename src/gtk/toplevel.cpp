@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/recguard.h"
 #include "wx/sysopt.h"
 
 #include "wx/gtk/private.h"
@@ -38,12 +39,18 @@
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/backend.h"
+#include "wx/gtk/private/threads.h"
 
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
     #include <X11/Xatom.h>  // XA_CARDINAL
     #include "wx/unix/utilsx11.h"
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+    #include <gdk/gdkwayland.h>
+#endif
+
+#define TRACE_TLWSIZE "tlwsize"
 
 // ----------------------------------------------------------------------------
 // data
@@ -54,11 +61,11 @@ int wxOpenModalDialogsCount = 0;
 
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
-static wxTopLevelWindowGTK *g_activeFrame = NULL;
+static wxTopLevelWindowGTK *g_activeFrame = nullptr;
 
 extern wxCursor g_globalCursor;
 extern wxCursor g_busyCursor;
-extern bool g_inSizeAllocate;
+extern wxRecursionGuardFlag g_inSizeAllocate;
 
 #ifdef GDK_WINDOWING_X11
 // Whether _NET_REQUEST_FRAME_EXTENTS support is working
@@ -72,19 +79,25 @@ static bool gs_decorCacheValid;
 #ifdef __WXGTK3__
 static bool HasClientDecor(GtkWidget* widget)
 {
-    static bool has;
-    static bool once;
-    if (!once)
+    if (!gtk_window_get_decorated(GTK_WINDOW(widget)))
+        return false;
+
+    GdkDisplay* display = gtk_widget_get_display(widget);
+    if (wxGTKImpl::IsX11(display))
+        return false;
+
+    // Contrary to the annotation in the header, this function has become
+    // available only in 3.22.25 and not 3.22.0.
+#if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,22,25)
+    if (wxGTKImpl::IsWayland(display))
     {
-        once = true;
-        GdkDisplay* display = gtk_widget_get_display(widget);
-        const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
-        has =
-            wxGTKImpl::IsWayland(display) ||
-            strcmp(name, "GdkMirDisplay") == 0 ||
-            strcmp(name, "GdkBroadwayDisplay") == 0;
+#ifndef __WXGTK4__
+        if (gtk_check_version(3, 22, 25) == nullptr)
+#endif
+            return !gdk_wayland_display_prefers_ssd(display);
     }
-    return has;
+#endif
+    return true;
 }
 #else
 static inline bool HasClientDecor(GtkWidget*)
@@ -191,7 +204,7 @@ gboolean gtk_frame_focus_out_callback(GtkWidget * WXUNUSED(widget),
         event.SetEventObject(g_activeFrame);
         g_activeFrame->HandleWindowEvent(event);
 
-        g_activeFrame = NULL;
+        g_activeFrame = nullptr;
     }
 
     return FALSE;
@@ -239,30 +252,39 @@ static void
 size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
 {
     win->m_useCachedClientSize = true;
+    GtkAllocation a;
+    gtk_widget_get_allocation(win->m_widget, &a);
+    const bool hasClientDecor = HasClientDecor(win->m_widget);
+    if (hasClientDecor)
+    {
+        GtkAllocation a2;
+        gtk_widget_get_allocation(win->m_mainWidget, &a2);
+        wxTopLevelWindowGTK::DecorSize decorSize;
+        decorSize.left = a2.x;
+        decorSize.right = a.width - a2.width - a2.x;
+        decorSize.top = a2.y;
+        decorSize.bottom = a.height - a2.height - a2.y;
+        if (memcmp(&win->m_decorSize, &decorSize, sizeof(decorSize)) != 0)
+        {
+            win->GTKUpdateDecorSize(decorSize);
+            win->m_clientWidth = 0;
+        }
+    }
     if (win->m_clientWidth  != alloc->width ||
         win->m_clientHeight != alloc->height)
     {
-        const bool save_inSizeAllocate = g_inSizeAllocate;
-        g_inSizeAllocate = true;
+        wxLogTrace(TRACE_TLWSIZE, "Size changed for %s (%d, %d) -> (%d, %d)",
+                   wxDumpWindow(win),
+                   win->m_clientWidth, win->m_clientHeight,
+                   alloc->width, alloc->height);
+
+        wxRecursionGuard setInSizeAllocate(g_inSizeAllocate);
 
         win->m_clientWidth  = alloc->width;
         win->m_clientHeight = alloc->height;
 
-        GtkAllocation a;
-        gtk_widget_get_allocation(win->m_widget, &a);
         wxSize size(a.width, a.height);
-        if (HasClientDecor(win->m_widget))
-        {
-            GtkAllocation a2;
-            gtk_widget_get_allocation(win->m_mainWidget, &a2);
-            wxTopLevelWindowGTK::DecorSize decorSize;
-            decorSize.left = a2.x;
-            decorSize.right = a.width - a2.width - a2.x;
-            decorSize.top = a2.y;
-            decorSize.bottom = a.height - a2.height - a2.y;
-            win->GTKUpdateDecorSize(decorSize);
-        }
-        else
+        if (!hasClientDecor)
         {
             size.x += win->m_decorSize.left + win->m_decorSize.right;
             size.y += win->m_decorSize.top + win->m_decorSize.bottom;
@@ -277,8 +299,6 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
             win->HandleWindowEvent(event);
         }
         // else the window is currently unmapped, don't generate size events
-
-        g_inSizeAllocate = save_inSizeAllocate;
     }
 }
 }
@@ -319,6 +339,21 @@ gtk_frame_configure_callback( GtkWidget*,
 
 void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
 {
+#ifdef __WXGTK3__
+    // First of all check if our DPI has changed.
+    const auto newScaleFactor = GetContentScaleFactor();
+    if ( newScaleFactor != m_scaleFactor )
+    {
+        const auto oldScaleFactor = m_scaleFactor;
+
+        // It seems safer to change it before generating the events to avoid
+        // any chance of reentrancy.
+        m_scaleFactor = newScaleFactor;
+
+        WXNotifyDPIChange(oldScaleFactor, newScaleFactor);
+    }
+#endif // __WXGTK3__
+
     wxPoint point;
 #ifdef GDK_WINDOWING_X11
     if (gs_decorCacheValid)
@@ -328,6 +363,9 @@ void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
         point.y = y - decorSize.top;
     }
     else
+#else
+    wxUnusedVar(x);
+    wxUnusedVar(y);
 #endif
     {
         gtk_window_get_position(GTK_WINDOW(m_widget), &point.x, &point.y);
@@ -371,7 +409,7 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
 #if GTK_CHECK_VERSION(3,10,0)
     if (wx_is_at_least_gtk3(10))
     {
-        GtkWidget* titlebar = NULL;
+        GtkWidget* titlebar = nullptr;
         gtk_container_forall(GTK_CONTAINER(m_widget), findTitlebar, &titlebar);
         if (titlebar)
         {
@@ -514,7 +552,7 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     Atom type;
     int format;
     gulong nitems, bytes_after;
-    guchar* data = NULL;
+    guchar* data = nullptr;
     Status status = XGetWindowProperty(
         GDK_DISPLAY_XDISPLAY(display),
         GDK_WINDOW_XID(window),
@@ -540,6 +578,11 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
         XFree(data);
     return success;
 #else
+    wxUnusedVar(window);
+    wxUnusedVar(left);
+    wxUnusedVar(right);
+    wxUnusedVar(top);
+    wxUnusedVar(bottom);
     return false;
 #endif
 }
@@ -580,14 +623,14 @@ static gboolean request_frame_extents_timeout(void* data)
 {
     // WM support for _NET_REQUEST_FRAME_EXTENTS is broken
     gs_requestFrameExtentsStatus = RFE_STATUS_BROKEN;
-    gdk_threads_enter();
+
+    wxGDKThreadsLock threadsLock;
     wxTopLevelWindowGTK* win = static_cast<wxTopLevelWindowGTK*>(data);
     win->m_netFrameExtentsTimerId = 0;
     wxTopLevelWindowGTK::DecorSize decorSize = win->m_decorSize;
     wxGetFrameExtents(gtk_widget_get_window(win->m_widget),
         &decorSize.left, &decorSize.right, &decorSize.top, &decorSize.bottom);
     win->GTKUpdateDecorSize(decorSize);
-    gdk_threads_leave();
     return false;
 }
 }
@@ -599,13 +642,13 @@ static gboolean request_frame_extents_timeout(void* data)
 
 void wxTopLevelWindowGTK::Init()
 {
-    m_mainWidget = NULL;
+    m_mainWidget = nullptr;
     m_isIconized = false;
     m_fsIsShowing = false;
     m_themeEnabled = true;
     m_gdkDecor =
     m_gdkFunc = 0;
-    m_grabbedEventLoop = NULL;
+    m_grabbedEventLoop = nullptr;
     m_deferShow = true;
     m_deferShowAllowed = true;
     m_updateDecorSize = true;
@@ -647,9 +690,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     gdk_set_program_class(wxTheApp->GetAppDisplayName().utf8_str());
 #endif
 
-    // NB: m_widget may be !=NULL if it was created by derived class' Create,
+    // NB: m_widget may be !=nullptr if it was created by derived class' Create,
     //     e.g. in wxTaskBarIconAreaGTK
-    if (m_widget == NULL)
+    if (m_widget == nullptr)
     {
         m_widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
@@ -681,10 +724,21 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         g_object_ref(m_widget);
     }
 
+#ifdef __WXGTK3__
+    // This value may be incorrect as here it's just set to the scale factor of
+    // the primary monitor because the widget is not realized yet, but it's
+    // better than setting it to 1, as chances are that the window will be
+    // created on the primary monitor or, maybe, the other monitors use the
+    // same scale factor anyhow. And if this isn't the case, we will set it to
+    // the correct value when we get "configure-event" from GTK later.
+    m_scaleFactor = GetContentScaleFactor();
+#endif // __WXGTK3__
+
     wxWindow *topParent = wxGetTopLevelParent(m_parent);
     if (topParent && (((GTK_IS_WINDOW(topParent->m_widget)) &&
                        (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)) ||
-                       (style & wxFRAME_FLOAT_ON_PARENT)))
+                       (style & wxFRAME_FLOAT_ON_PARENT) ||
+                       (style & wxSTAY_ON_TOP)))
     {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget),
                                       GTK_WINDOW(topParent->m_widget) );
@@ -704,10 +758,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
 #if 0
     if (!name.empty())
-        gtk_window_set_role( GTK_WINDOW(m_widget), wxGTK_CONV( name ) );
+        gtk_window_set_role( GTK_WINDOW(m_widget), name.utf8_str() );
 #endif
 
-    gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
+    gtk_window_set_title( GTK_WINDOW(m_widget), title.utf8_str() );
     gtk_widget_set_can_focus(m_widget, false);
 
     g_signal_connect (m_widget, "delete_event",
@@ -739,7 +793,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     {
 #ifdef __WXGTK3__
         GtkWindowPosition windowPos;
-        g_object_get(m_widget, "window-position", &windowPos, NULL);
+        g_object_get(m_widget, "window-position", &windowPos, nullptr);
         if (windowPos == GTK_WIN_POS_NONE)
             gtk_window_move(GTK_WINDOW(m_widget), m_x, m_y);
 #else
@@ -769,7 +823,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // We need to customize the default GTK+ logic for key processing to make
     // it conforming to wxWidgets event processing order.
     g_signal_connect (m_widget, "key_press_event",
-                      G_CALLBACK (wxgtk_tlw_key_press_event), NULL);
+                      G_CALLBACK (wxgtk_tlw_key_press_event), nullptr);
 
 #ifdef __WXGTK3__
     GdkDisplay* display = gtk_widget_get_display(m_widget);
@@ -785,8 +839,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 #endif // GDK_WINDOWING_X11
 
-    // translate wx decorations styles into Motif WM hints (they are recognized
-    // by other WMs as well)
+    // translate wx decorations styles into WM hints
 
     // always enable moving the window as we have no separate flag for enabling
     // it
@@ -815,7 +868,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 #if GTK_CHECK_VERSION(3,10,0)
         else if (
             wxGTKImpl::IsWayland(display) &&
-            gtk_check_version(3,10,0) == NULL)
+            gtk_check_version(3,10,0) == nullptr)
         {
             gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
         }
@@ -838,11 +891,12 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 
     m_decorSize = GetCachedDecorSize();
-    int w, h;
-    GTKDoGetSize(&w, &h);
+    int w = m_width;
+    int h = m_height;
 
     if (style & wxRESIZE_BORDER)
     {
+        GTKDoGetSize(&w, &h);
         gtk_window_set_default_size(GTK_WINDOW(m_widget), w, h);
 #ifndef __WXGTK3__
         gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
@@ -854,6 +908,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         // gtk_window_set_default_size() does not work for un-resizable windows,
         // unless you set the size hints, but that causes Ubuntu's WM to make
         // the window resizable even though GDK_FUNC_RESIZE is not set.
+        if (!HasClientDecor(m_widget))
+            GTKDoGetSize(&w, &h);
         gtk_widget_set_size_request(m_widget, w, h);
     }
 
@@ -889,11 +945,11 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
     // it may also be GtkScrolledWindow in the case of an MDI child
     if (GTK_IS_WINDOW(m_widget))
     {
-        gtk_window_set_focus( GTK_WINDOW(m_widget), NULL );
+        gtk_window_set_focus( GTK_WINDOW(m_widget), nullptr );
     }
 
     if (g_activeFrame == this)
-        g_activeFrame = NULL;
+        g_activeFrame = nullptr;
 
     g_signal_handlers_disconnect_by_func(
         gtk_settings_get_default(), (void*)notify_gtk_theme_name, this);
@@ -928,7 +984,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
 #if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
     GdkScreen* screen = gtk_widget_get_screen(m_widget);
     GdkDisplay* display = gdk_screen_get_display(screen);
-    Display* xdpy = NULL;
+    Display* xdpy = nullptr;
     Window xroot = None;
     wxX11FullScreenMethod method = wxX11_FS_WMSPEC;
 
@@ -954,7 +1010,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
             gtk_window_unfullscreen( GTK_WINDOW( m_widget ) );
     }
 #if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
-    else if (xdpy != NULL)
+    else if (xdpy != nullptr)
     {
         GdkWindow* window = gtk_widget_get_window(m_widget);
         Window xid = GDK_WINDOW_XID(window);
@@ -1020,11 +1076,11 @@ void wxTopLevelWindowGTK::Refresh( bool WXUNUSED(eraseBackground), const wxRect 
 
     gtk_widget_queue_draw( m_widget );
 
-    GdkWindow* window = NULL;
+    GdkWindow* window = nullptr;
     if (m_wxwindow)
         window = gtk_widget_get_window(m_wxwindow);
     if (window)
-        gdk_window_invalidate_rect(window, NULL, true);
+        gdk_window_invalidate_rect(window, nullptr, true);
 }
 
 #if defined(__WXGTK3__) && defined(GDK_WINDOWING_X11)
@@ -1032,7 +1088,7 @@ void wxTopLevelWindowGTK::Refresh( bool WXUNUSED(eraseBackground), const wxRect 
 static bool isUsingCSD(GtkWidget* widget)
 {
     const char* csd = getenv("GTK_CSD");
-    if (csd == NULL || strcmp(csd, "1") != 0)
+    if (csd == nullptr || strcmp(csd, "1") != 0)
         return false;
 
     GdkScreen* screen = gtk_widget_get_screen(widget);
@@ -1043,7 +1099,7 @@ static bool isUsingCSD(GtkWidget* widget)
     if (!gdk_x11_screen_supports_net_wm_hint(screen, atom))
         return false;
 
-    if (gdk_screen_get_rgba_visual(screen) == NULL)
+    if (gdk_screen_get_rgba_visual(screen) == nullptr)
         return false;
 
     return true;
@@ -1073,7 +1129,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
             g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
                 g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
-                0, NULL, NULL, this);
+                0, nullptr, nullptr, this);
 #ifdef __WXGTK3__
         // Don't defer with CSD, it isn't needed and causes pixman errors
         if (deferShow)
@@ -1183,7 +1239,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         // by then because the wxTLW will have been half-destroyed by then.
         if (GTK_IS_WINDOW(m_widget))
         {
-            gtk_window_set_focus( GTK_WINDOW(m_widget), NULL );
+            gtk_window_set_focus( GTK_WINDOW(m_widget), nullptr );
         }
 
         // make sure window has a non-default position, so when it is shown
@@ -1221,11 +1277,8 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
 void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
 {
     wxSize size(m_width, m_height);
-    if (!HasClientDecor(m_widget))
-    {
-        size.x -= m_decorSize.left + m_decorSize.right;
-        size.y -= m_decorSize.top + m_decorSize.bottom;
-    }
+    size.x -= m_decorSize.left + m_decorSize.right;
+    size.y -= m_decorSize.top + m_decorSize.bottom;
     if (size.x < 0) size.x = 0;
     if (size.y < 0) size.y = 0;
     if (width)  *width  = size.x;
@@ -1273,6 +1326,9 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 
     if (m_width != oldSize.x || m_height != oldSize.y)
     {
+        wxLogTrace(TRACE_TLWSIZE, "Size set for %s (%d, %d) -> (%d, %d)",
+                   wxDumpWindow(this), oldSize.x, oldSize.y, m_width, m_height);
+
         m_deferShowAllowed = true;
         m_useCachedClientSize = false;
 
@@ -1289,11 +1345,19 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
         m_pendingFittingClientSizeFlags &= ~wxSIZE_SET_CURRENT;
 #endif // __WXGTK3__
 
-        int w, h;
-        GTKDoGetSize(&w, &h);
-        gtk_window_resize(GTK_WINDOW(m_widget), w, h);
-        if (!gtk_window_get_resizable(GTK_WINDOW(m_widget)))
+        int w = m_width;
+        int h = m_height;
+        if (gtk_window_get_resizable(GTK_WINDOW(m_widget)))
+        {
+            GTKDoGetSize(&w, &h);
+            gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+        }
+        else
+        {
+            if (!HasClientDecor(m_widget))
+                GTKDoGetSize(&w, &h);
             gtk_widget_set_size_request(GTK_WIDGET(m_widget), w, h);
+        }
 
         DoGetClientSize(&m_clientWidth, &m_clientHeight);
         wxSizeEvent event(GetSize(), GetId());
@@ -1313,6 +1377,9 @@ static gboolean reset_size_request(void* data)
 
 void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
 {
+    wxLogTrace(TRACE_TLWSIZE, "Client size set for %s: (%d, %d)",
+               wxDumpWindow(this), width, height);
+
     base_type::DoSetClientSize(width, height);
 
     // Since client size is being explicitly set, don't change it later
@@ -1335,7 +1402,7 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
         {
             gtk_widget_set_size_request(m_wxwindow, m_clientWidth, m_clientHeight);
             // Cancel size request at next idle to allow resizing
-            g_idle_add_full(G_PRIORITY_LOW - 1, reset_size_request, m_wxwindow, NULL);
+            g_idle_add_full(G_PRIORITY_LOW - 1, reset_size_request, m_wxwindow, nullptr);
             g_object_ref(m_wxwindow);
         }
     }
@@ -1371,6 +1438,9 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int maxW, int maxH,
                                           int incW, int incH )
 {
+    wxLogTrace(TRACE_TLWSIZE, "Size hints for %s set to (%d, %d)",
+               wxDumpWindow(this), minW, minH);
+
     base_type::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
 
     if (!HasFlag(wxRESIZE_BORDER))
@@ -1432,7 +1502,7 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
         hints.height_inc = incH > 0 ? incH : 1;
     }
     gtk_window_set_geometry_hints(
-        (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
+        (GtkWindow*)m_widget, nullptr, &hints, (GdkWindowHints)hints_mask);
 }
 
 void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
@@ -1442,6 +1512,16 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
 
     if (HasClientDecor(m_widget))
     {
+        if (m_decorSize.top == 0 && !gtk_widget_get_realized(m_widget) && m_deferShowAllowed)
+        {
+            // shrink m_widget by decoration size before initial show,
+            // so that overall size remains correct
+            const int w = wxMax(m_width  - decorSize.left - decorSize.right,  m_minWidth);
+            const int h = wxMax(m_height - decorSize.top  - decorSize.bottom, m_minHeight);
+            gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+            if (!gtk_window_get_resizable(GTK_WINDOW(m_widget)))
+                gtk_widget_set_size_request(GTK_WIDGET(m_widget), w, h);
+        }
         m_decorSize = decorSize;
         return;
     }
@@ -1551,6 +1631,9 @@ void wxTopLevelWindowGTK::GTKDoAfterShow()
 
 void wxTopLevelWindowGTK::GTKUpdateClientSizeIfNecessary()
 {
+    wxLogTrace(TRACE_TLWSIZE, "GTKUpdateClientSizeIfNecessary() for %s, pending=%d",
+               wxDumpWindow(this), m_pendingFittingClientSizeFlags);
+
     if ( m_pendingFittingClientSizeFlags )
     {
         WXSetInitialFittingClientSize(m_pendingFittingClientSizeFlags);
@@ -1561,6 +1644,8 @@ void wxTopLevelWindowGTK::GTKUpdateClientSizeIfNecessary()
 
 void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
 {
+    wxLogTrace(TRACE_TLWSIZE, "SetMinSize() for %s", wxDumpWindow(this));
+
     wxTopLevelWindowBase::SetMinSize(minSize);
 
     // Explicitly set minimum size should override the pending size, if any.
@@ -1570,6 +1655,9 @@ void wxTopLevelWindowGTK::SetMinSize(const wxSize& minSize)
 void
 wxTopLevelWindowGTK::WXSetInitialFittingClientSize(int flags, wxSizer* sizer)
 {
+    wxLogTrace(TRACE_TLWSIZE, "WXSetInitialFittingClientSize(%d) for %s (%s)",
+               flags, wxDumpWindow(this), IsShown() ? "shown" : "hidden");
+
     // In any case, update the size immediately.
     wxTopLevelWindowBase::WXSetInitialFittingClientSize(flags, sizer);
 
@@ -1596,7 +1684,7 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 
     m_title = title;
 
-    gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
+    gtk_window_set_title( GTK_WINDOW(m_widget), title.utf8_str() );
 }
 
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
@@ -1608,7 +1696,7 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
     // transient parent. The life demo exibits this problem.
     if (m_widget && gtk_widget_get_realized(m_widget))
     {
-        GList* list = NULL;
+        GList* list = nullptr;
         for (size_t i = icons.GetIconCount(); i--;)
             list = g_list_prepend(list, icons.GetIconByIndex(i).GetPixbuf());
         gtk_window_set_icon_list(GTK_WINDOW(m_widget), list);
@@ -1630,7 +1718,7 @@ void wxTopLevelWindowGTK::Maximize(bool maximize)
 
 bool wxTopLevelWindowGTK::IsMaximized() const
 {
-    GdkWindow* window = NULL;
+    GdkWindow* window = nullptr;
     if (m_widget)
         window = gtk_widget_get_window(m_widget);
     return window && (gdk_window_get_state(window) & GDK_WINDOW_STATE_MAXIMIZED);
@@ -1729,7 +1817,7 @@ void wxTopLevelWindowGTK::AddGrab()
         gtk_grab_add( m_widget );
         eventLoop.Run();
         gtk_grab_remove( m_widget );
-        m_grabbedEventLoop = NULL;
+        m_grabbedEventLoop = nullptr;
     }
 }
 
@@ -1738,13 +1826,13 @@ void wxTopLevelWindowGTK::RemoveGrab()
     if (m_grabbedEventLoop)
     {
         m_grabbedEventLoop->Exit();
-        m_grabbedEventLoop = NULL;
+        m_grabbedEventLoop = nullptr;
     }
 }
 
 bool wxTopLevelWindowGTK::IsGrabbed() const
 {
-    return m_grabbedEventLoop != NULL;
+    return m_grabbedEventLoop != nullptr;
 }
 
 bool wxTopLevelWindowGTK::IsActive()
@@ -1811,10 +1899,22 @@ void wxTopLevelWindowGTK::SetWindowStyleFlag( long style )
 
 bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 {
-    if (m_widget == NULL)
-        return false;
+    wxCHECK_MSG(m_widget, false, "invalid window");
 
 #ifdef __WXGTK3__
+    // RGBA visual is required
+    GdkScreen* screen = gtk_widget_get_screen(m_widget);
+    GdkVisual* visual = gdk_screen_get_rgba_visual(screen);
+    if (visual == nullptr)
+        return false;
+    if (gtk_widget_get_visual(m_widget) != visual)
+    {
+        if (gtk_widget_get_realized(m_widget))
+        {
+            wxLogDebug("SetTransparent() must be called before Show()");
+        }
+        gtk_widget_set_visual(m_widget, visual);
+    }
 #if GTK_CHECK_VERSION(3,8,0)
     if (wx_is_at_least_gtk3(8))
     {
@@ -1842,7 +1942,7 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 #endif // GTK_CHECK_VERSION(2,12,0)
 #ifdef GDK_WINDOWING_X11
     GdkWindow* window = gtk_widget_get_window(m_widget);
-    if (window == NULL)
+    if (window == nullptr)
         return false;
 
     Display* dpy = GDK_WINDOW_XDISPLAY(window);

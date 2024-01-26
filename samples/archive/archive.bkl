@@ -4,7 +4,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="archive" template="wx_sample_console" template_append="wx_append">
+    <exe id="archive" template="wx_sample_console" template_append="wx_append_base">
         <sources>archive.cpp</sources>
         <wx-lib>base</wx-lib>
         <uid type="creatorid">wx06</uid>

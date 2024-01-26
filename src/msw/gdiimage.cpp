@@ -2,7 +2,6 @@
 // Name:        src/msw/gdiimage.cpp
 // Purpose:     wxGDIImage implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -69,10 +68,10 @@ public:
 
     virtual bool LoadFile(wxBitmap *bitmap,
                           const wxString& name, wxBitmapType flags,
-                          int desiredWidth, int desiredHeight) wxOVERRIDE;
+                          int desiredWidth, int desiredHeight) override;
     virtual bool SaveFile(const wxBitmap *bitmap,
                           const wxString& name, wxBitmapType type,
-                          const wxPalette *palette = NULL) const wxOVERRIDE;
+                          const wxPalette *palette = nullptr) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBMPFileHandler);
@@ -89,7 +88,7 @@ public:
 
     virtual bool LoadFile(wxBitmap *bitmap,
                           const wxString& name, wxBitmapType flags,
-                          int desiredWidth, int desiredHeight) wxOVERRIDE;
+                          int desiredWidth, int desiredHeight) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBMPResourceHandler);
@@ -109,14 +108,14 @@ public:
                         wxBitmapType WXUNUSED(flags),
                         int WXUNUSED(width),
                         int WXUNUSED(height),
-                        int WXUNUSED(depth) = 1) wxOVERRIDE
+                        int WXUNUSED(depth) = 1) override
     {
         return false;
     }
 
     virtual bool Save(const wxGDIImage *WXUNUSED(image),
                       const wxString& WXUNUSED(name),
-                      wxBitmapType WXUNUSED(type)) const wxOVERRIDE
+                      wxBitmapType WXUNUSED(type)) const override
     {
         return false;
     }
@@ -124,7 +123,7 @@ public:
     virtual bool Load(wxGDIImage *image,
                       const wxString& name,
                       wxBitmapType flags,
-                      int desiredWidth, int desiredHeight) wxOVERRIDE
+                      int desiredWidth, int desiredHeight) override
     {
         wxIcon *icon = wxDynamicCast(image, wxIcon);
         wxCHECK_MSG( icon, false, wxT("wxIconHandler only works with icons") );
@@ -150,7 +149,7 @@ public:
 protected:
     virtual bool LoadIcon(wxIcon *icon,
                           const wxString& name, wxBitmapType flags,
-                          int desiredWidth = -1, int desiredHeight = -1) wxOVERRIDE;
+                          int desiredWidth = -1, int desiredHeight = -1) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxICOFileHandler);
@@ -168,7 +167,7 @@ public:
 protected:
     virtual bool LoadIcon(wxIcon *icon,
                           const wxString& name, wxBitmapType flags,
-                          int desiredWidth = -1, int desiredHeight = -1) wxOVERRIDE;
+                          int desiredWidth = -1, int desiredHeight = -1) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxICOResourceHandler);
@@ -187,7 +186,7 @@ public:
 
     virtual bool LoadFile(wxBitmap *bitmap,
                           const wxString& name, wxBitmapType flags,
-                          int desiredWidth, int desiredHeight) wxOVERRIDE;
+                          int desiredWidth, int desiredHeight) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPNGResourceHandler);
@@ -275,7 +274,7 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& name)
         node = node->GetNext();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
@@ -293,7 +292,7 @@ wxGDIImageHandler *wxGDIImage::FindHandler(const wxString& extension,
 
         node = node->GetNext();
     }
-    return NULL;
+    return nullptr;
 }
 
 wxGDIImageHandler *wxGDIImage::FindHandler(long type)
@@ -308,7 +307,7 @@ wxGDIImageHandler *wxGDIImage::FindHandler(long type)
         node = node->GetNext();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void wxGDIImage::CleanUpHandlers()
@@ -394,7 +393,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
 {
     // TODO: load colourmap.
     HBITMAP hbmp = ::LoadBitmap(wxGetInstance(), name.t_str());
-    if ( hbmp == NULL )
+    if ( hbmp == nullptr )
     {
         // it's probably not found
         wxLogError(wxT("Can't load bitmap '%s' from resources! Check .rc file."),
@@ -430,7 +429,7 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
                                 int WXUNUSED(desiredWidth),
                                 int WXUNUSED(desiredHeight))
 {
-    wxCHECK_MSG( bitmap, false, wxT("NULL bitmap in LoadFile") );
+    wxCHECK_MSG( bitmap, false, wxT("null bitmap in LoadFile") );
 
 #if wxUSE_WXDIB
     // Try loading using native Windows LoadImage() first.
@@ -460,7 +459,7 @@ bool wxBMPFileHandler::SaveFile(const wxBitmap *bitmap,
                                 const wxPalette * WXUNUSED(pal)) const
 {
 #if wxUSE_WXDIB
-    wxCHECK_MSG( bitmap, false, wxT("NULL bitmap in SaveFile") );
+    wxCHECK_MSG( bitmap, false, wxT("null bitmap in SaveFile") );
 
     wxDIB dib(*bitmap);
 
@@ -481,7 +480,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 {
     icon->UnRef();
 
-    HICON hicon = NULL;
+    HICON hicon = nullptr;
 
     // Parse the filename: it may be of the form "filename;n" in order to
     // specify the nth icon in the file.
@@ -508,11 +507,11 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
          desiredHeight == -1)
     {
         // Try loading a large icon first
-        if ( ::ExtractIconEx(nameReal, iconIndex, &hicon, NULL, 1) == 1)
+        if ( ::ExtractIconEx(nameReal, iconIndex, &hicon, nullptr, 1) == 1)
         {
         }
         // Then try loading a small icon
-        else if ( ::ExtractIconEx(nameReal, iconIndex, NULL, &hicon, 1) == 1)
+        else if ( ::ExtractIconEx(nameReal, iconIndex, nullptr, &hicon, 1) == 1)
         {
         }
     }
@@ -524,7 +523,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
          desiredHeight == wxGetSystemMetrics(SM_CYICON, win) )
     {
         // get the specified large icon from file
-        if ( !::ExtractIconEx(nameReal.t_str(), iconIndex, &hicon, NULL, 1) )
+        if ( !::ExtractIconEx(nameReal.t_str(), iconIndex, &hicon, nullptr, 1) )
         {
             // it is not an error, but it might still be useful to be informed
             // about it optionally
@@ -537,7 +536,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
               desiredHeight == wxGetSystemMetrics(SM_CYSMICON, win) )
     {
         // get the specified small icon from file
-        if ( !::ExtractIconEx(nameReal.t_str(), iconIndex, NULL, &hicon, 1) )
+        if ( !::ExtractIconEx(nameReal.t_str(), iconIndex, nullptr, &hicon, 1) )
         {
             wxLogTrace(wxT("iconload"),
                        wxT("No small icons found in the file '%s'."),
@@ -628,7 +627,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         {
             if ( name == stdIcons[nIcon].name )
             {
-                hicon = ::LoadIcon((HINSTANCE)NULL, stdIcons[nIcon].id);
+                hicon = ::LoadIcon((HINSTANCE)nullptr, stdIcons[nIcon].id);
                 break;
             }
         }
@@ -668,7 +667,7 @@ bool wxPNGResourceHandler::LoadFile(wxBitmap *bitmap,
                                     int WXUNUSED(desiredWidth),
                                     int WXUNUSED(desiredHeight))
 {
-    const void* pngData = NULL;
+    const void* pngData = nullptr;
     size_t pngSize = 0;
 
     // Currently we hardcode RCDATA resource type as this is what is usually
@@ -729,7 +728,7 @@ wxSize wxGetHiconSize(HICON hicon)
             }
             // For monochrome icon reported height is doubled
             // because it contains both AND and XOR masks.
-            if ( info.hbmColor == NULL )
+            if ( info.hbmColor == nullptr )
             {
                 size.y /= 2;
             }

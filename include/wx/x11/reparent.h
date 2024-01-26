@@ -2,7 +2,6 @@
 // Name:        wx/x11/reparent.h
 // Purpose:     Reparenting classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     2002-03-09
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -21,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxAdoptedWindow;
 class WXDLLIMPEXP_CORE wxReparenter: public wxObject
 {
 public:
-    wxReparenter() {}
+    wxReparenter() = default;
 
     // We assume that toReparent has had its X window set
     // appropriately. toReparent is typically a wxAdoptedWindow.

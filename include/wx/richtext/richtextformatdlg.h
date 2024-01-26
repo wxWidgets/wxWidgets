@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextformatdlg.h
 // Purpose:     Formatting dialog for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2006-10-01
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -85,8 +84,8 @@ enum {
 class WXDLLIMPEXP_RICHTEXT wxRichTextFormattingDialogFactory: public wxObject
 {
 public:
-    wxRichTextFormattingDialogFactory() {}
-    virtual ~wxRichTextFormattingDialogFactory() {}
+    wxRichTextFormattingDialogFactory() = default;
+    virtual ~wxRichTextFormattingDialogFactory() = default;
 
 // Overridables
 
@@ -192,8 +191,8 @@ public:
     void SetObject(wxRichTextObject* obj) { m_object = obj; }
 
     /// Transfers the data and from to the window
-    virtual bool TransferDataToWindow() wxOVERRIDE;
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
+    virtual bool TransferDataToWindow() override;
+    virtual bool TransferDataFromWindow() override;
 
     /// Apply the styles when a different tab is selected, so the previews are
     /// up to date
@@ -227,11 +226,11 @@ public:
 
     /// Set the dimension into the value and units controls. Optionally pass units to
     /// specify the ordering of units in the combobox.
-    static void SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = NULL);
+    static void SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = nullptr);
 
     /// Get the dimension from the value and units controls Optionally pass units to
     /// specify the ordering of units in the combobox.
-    static void GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = NULL);
+    static void GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units = nullptr);
 
     /// Convert from a string to a dimension integer.
     static bool ConvertFromString(const wxString& str, int& ret, int unit);
@@ -312,7 +311,7 @@ public:
 
     wxColour& GetColour() { return m_colour; }
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE { return GetSize(); }
+    virtual wxSize DoGetBestSize() const override { return GetSize(); }
 
 protected:
     wxColour    m_colour;
@@ -366,7 +365,7 @@ public:
 
 protected:
     /// Returns the HTML for this item
-    virtual wxString OnGetItem(size_t n) const wxOVERRIDE;
+    virtual wxString OnGetItem(size_t n) const override;
 
 private:
 

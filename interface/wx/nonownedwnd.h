@@ -62,8 +62,8 @@ public:
         resized using SetSize().
 
         As the overload above, this method is not guaranteed to work on all
-        platforms but currently does work in wxMSW, wxOSX/Cocoa and wxGTK (with
-        the appropriate but almost always present X11 extensions) ports.
+        platforms but currently does work in wxMSW, wxOSX/Cocoa, wxGTK (with
+        the appropriate but almost always present X11 extensions) and wxQt ports.
 
         @since 2.9.3
      */

@@ -14,7 +14,7 @@ class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
 public:
     // constructors and pseudo-constructors
-    wxStaticLine() { }
+    wxStaticLine() = default;
 
     wxStaticLine(wxWindow *parent,
                  const wxPoint &pos,
@@ -45,7 +45,7 @@ public:
                 const wxString &name = wxASCII_STR(wxStaticLineNameStr) );
 
 protected:
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxStaticLine);

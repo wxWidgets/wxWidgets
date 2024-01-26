@@ -2,7 +2,6 @@
 // Name:        wx/pen.h
 // Purpose:     Base header for wxPen
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
@@ -63,7 +62,7 @@ private:
 class WXDLLIMPEXP_CORE wxPenBase : public wxGDIObject
 {
 public:
-    virtual ~wxPenBase() { }
+    virtual ~wxPenBase() = default;
 
     virtual void SetColour(const wxColour& col) = 0;
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) = 0;
@@ -101,12 +100,10 @@ public:
 
 #if defined(__WXMSW__)
     #include "wx/msw/pen.h"
-#elif defined(__WXMOTIF__) || defined(__WXX11__)
+#elif defined(__WXX11__)
     #include "wx/x11/pen.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/pen.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/pen.h"
+    #include "wx/gtk/pen.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/pen.h"
 #elif defined(__WXMAC__)
@@ -136,6 +133,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxPenList*)   wxThePenList;
 // to compile without warnings which it would otherwise provoke from some
 // compilers as it compares elements of different enums
 
+#if WXWIN_COMPATIBILITY_3_2
+
 wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
 inline bool operator==(wxPenStyle s, wxDeprecatedGUIConstants t)
 {
@@ -147,5 +146,7 @@ inline bool operator!=(wxPenStyle s, wxDeprecatedGUIConstants t)
 {
     return static_cast<int>(s) != static_cast<int>(t);
 }
+
+#endif // WXWIN_COMPATIBILITY_3_2
 
 #endif // _WX_PEN_H_BASE_

@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/app.cpp
 // Purpose:     wxApp
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -29,7 +28,6 @@
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
-    #include "wx/memory.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
 #endif
@@ -62,7 +60,7 @@ wxBEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 wxEND_EVENT_TABLE()
 
 
-wxWindow* wxApp::s_captureWindow = NULL ;
+wxWindow* wxApp::s_captureWindow = nullptr ;
 long      wxApp::s_lastModifiers = 0 ;
 
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
@@ -163,7 +161,7 @@ void wxApp::MacReopenApp()
     // as hidden TLWs, so do preferences and some classes like wxTaskBarIconWindow use placeholder TLWs.
     // We don't want to reshow those, so let's just reopen the minimized a.k.a. iconized TLWs.
 
-    wxTopLevelWindow* firstIconized = NULL;
+    wxTopLevelWindow* firstIconized = nullptr;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
 
     while (node)
@@ -171,7 +169,7 @@ void wxApp::MacReopenApp()
         wxTopLevelWindow* win = (wxTopLevelWindow*) node->GetData();
         if ( win->IsIconized() )
         {
-            if ( firstIconized == NULL )
+            if ( firstIconized == nullptr )
                 firstIconized = win;
         }
         else if ( win->IsShown() )
@@ -241,17 +239,10 @@ wxMacAssertOutputHandler(const char *WXUNUSED(componentName),
     wxString exceptionStr ;
     wxString errorStr ;
 
-#if wxUSE_UNICODE
     fileNameStr = wxString(fileName, wxConvLocal);
     assertionStr = wxString(assertionString, wxConvLocal);
-    exceptionStr = wxString((exceptionLabelString!=0) ? exceptionLabelString : "", wxConvLocal) ;
-    errorStr = wxString((errorString!=0) ? errorString : "", wxConvLocal) ;
-#else
-    fileNameStr = fileName;
-    assertionStr = assertionString;
-    exceptionStr = (exceptionLabelString!=0) ? exceptionLabelString : "" ;
-    errorStr = (errorString!=0) ? errorString : "" ;
-#endif
+    exceptionStr = wxString((exceptionLabelString!=nullptr) ? exceptionLabelString : "", wxConvLocal) ;
+    errorStr = wxString((errorString!=nullptr) ? errorString : "", wxConvLocal) ;
 
     // turn this on, if you want the macOS asserts to flow into log, otherwise they are handled via wxOnAssert
 #if 0
@@ -318,7 +309,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         CFRelease( url ) ;
         CFStringRef path = CFURLCopyFileSystemPath ( urlParent , kCFURLPOSIXPathStyle ) ;
         CFRelease( urlParent ) ;
-        wxString cwd = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
+        wxString cwd = wxCFStringRef(path).AsString();
         wxSetWorkingDirectory( cwd ) ;
     }
 
@@ -346,7 +337,7 @@ bool wxApp::OnInitGui()
         return false;
 
 #ifdef __WXOSX_COCOA__
-    CGDisplayRegisterReconfigurationCallback(wxCGDisplayReconfigurationCallBack, NULL);
+    CGDisplayRegisterReconfigurationCallback(wxCGDisplayReconfigurationCallBack, nullptr);
 #endif
 
     return true ;
@@ -384,9 +375,11 @@ wxApp::wxApp()
 {
     m_printMode = wxPRINT_WINDOWS;
 
-    m_macCurrentEvent = NULL ;
-    m_macCurrentEventHandlerCallRef = NULL ;
-    m_macPool = sm_isEmbedded ? NULL : new wxMacAutoreleasePool();
+    m_macCurrentEvent = nullptr ;
+    m_macCurrentEventHandlerCallRef = nullptr ;
+    m_macPool = sm_isEmbedded ? nullptr : new wxMacAutoreleasePool();
+
+    WXAppConstructed();
 }
 
 wxApp::~wxApp()
@@ -397,8 +390,8 @@ wxApp::~wxApp()
 
 CFMutableArrayRef GetAutoReleaseArray()
 {
-    static CFMutableArrayRef array = 0;
-    if ( array == 0)
+    static CFMutableArrayRef array = nullptr;
+    if ( array == nullptr)
         array= CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
     return array;
 }
@@ -828,13 +821,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
-#ifdef __LP64__
         // TODO new implementation using TextInputSources
-#else
-        UInt32 state = 0;
-        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey | shiftKey | optionKey))) | keycode, &state);
-        keychar = short(keyInfo & charCodeMask);
-#endif
     }
 
     long keyval = wxMacTranslateKey(keychar, keycode) ;
@@ -892,9 +879,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     event.m_altDown = modifiers & optionKey;
     event.m_controlDown = modifiers & cmdKey;
     event.m_keyCode = keyval ;
-#if wxUSE_UNICODE
     event.m_uniChar = uniChar ;
-#endif
 
     event.m_rawCode = keymessage;
     event.m_rawFlags = modifiers;

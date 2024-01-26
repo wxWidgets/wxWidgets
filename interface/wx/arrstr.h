@@ -8,42 +8,55 @@
 /**
     @class wxArrayString
 
-    wxArrayString is an efficient container for storing wxString objects.
+    wxArrayString is a legacy class similar to std::vector<wxString>.
 
-    It has the same features as all wxArray classes, i.e. it dynamically expands
-    when new items are added to it (so it is as easy to use as a linked list),
-    but the access time to the elements is constant, instead of being linear in
-    number of elements as in the case of linked lists. It is also very size
-    efficient and doesn't take more space than a C array @e wxString[] type
-    (wxArrayString uses its knowledge of internals of wxString class to achieve this).
-
-    This class is used in the same way as other dynamic arrays(), except that no
-    ::WX_DEFINE_ARRAY declaration is needed for it.
-    When a string is added or inserted in the array, a copy of the string is created,
-    so the original string may be safely deleted (e.g. if it was a @e wxChar *
-    pointer the memory it was using can be freed immediately after this).
-    In general, there is no need to worry about string memory deallocation when using
-    this class - it will always free the memory it uses itself.
-
-    The references returned by wxArrayString::Item, wxArrayString::Last or
-    wxArrayString::operator[] are not constant, so the array elements may
-    be modified in place like this:
+    As all the other legacy @ref overview_container "container classes",
+    this class shouldn't normally be used in the new code, but is still needed
+    when passing multiple items to various functions in wxWidgets API, notably
+    the constructors of various GUI control classes. Usually, even in this case
+    it doesn't need to be used explicitly, as wxArrayString will be implicitly
+    created if you use either an initializer list or a vector of strings, e.g.
+    you can just pass either of those instead of wxArrayString, for example
 
     @code
-    array.Last().MakeUpper();
+        // wxListBox ctor is documented as taking wxArrayString but you can
+        // pass an initializer_list to it directly:
+        auto listbox = new wxListBox(parent, wxID_ANY,
+                                     wxDefaultPosition, wxDefaultSize,
+                                     { "some", "items", "for", "the", "listbox" });
+
+        // Similarly, if you already have a vector filled with strings
+        // elsewhere in your program, you can just pass it instead:
+        std::vector<std::string> countries = GetListOfCountries();
+        auto choices = new wxChoice(parent, wxID_ANY,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    countries);
     @endcode
 
-    @note None of the methods of wxArrayString is virtual including its
-          destructor, so this class should not be used as a base class.
+    When using a wxWidgets function returning an object of this class, you can
+    either use it as if it were a `std::vector<wxString>`, as this class has
+    all vector methods, or actually convert it to such vector using its
+    AsVector(), e.g.
 
-    Although this is not true strictly speaking, this class may be considered as
-    a specialization of wxArray class for the wxString member data: it is not
-    implemented like this, but it does have all of the wxArray functions.
+    @code
+    wxArrayString files;
+    wxDir::GetAllFiles("/some/path", &files);
 
-    It also has the full set of <tt>std::vector<wxString></tt> compatible
-    methods, including nested @c iterator and @c const_iterator classes which
-    should be used in the new code for forward compatibility with the future
-    wxWidgets versions.
+    // Can use the usual accessors:
+    if ( !files.empty() ) {
+        auto first = files[0];
+        auto total = files.size();
+        ...
+    }
+
+    // Can iterate over it like over a vector, too.
+    for ( const wxString& file: files ) {
+        ...
+    }
+
+    // Or can just convert it to the "real" vector:
+    const std::vector<wxString>& vec = files.AsVector();
+    @endcode
 
     @library{wxbase}
     @category{containers}
@@ -76,18 +89,52 @@ public:
     */
     wxArrayString(const wxArrayString& array);
 
-    //@{
+    ///@{
     /**
         Constructor from a C string array. Pass a size @a sz and an array @a arr.
     **/
     wxArrayString(size_t sz, const char** arr);
     wxArrayString(size_t sz, const wchar_t** arr);
-    //@}
+    ///@}
 
     /**
         Constructor from a wxString array. Pass a size @a sz and array @a arr.
     */
     wxArrayString(size_t sz, const wxString* arr);
+
+    /**
+        Constructs the container with the contents of the initializer_list @a list.
+
+        @since 3.2.3
+    */
+    template<typename T>
+    wxArrayString(std::initializer_list<T> list);
+
+    /**
+        Constructs the container with the contents of the vector @a vec.
+
+        Template parameter `T` must be convertible to wxString, i.e. it can be
+        wxString itself or `std::string`, `std::wstring` etc.
+
+        @since 3.3.0
+    */
+    template<typename T>
+    wxArrayString(const std::vector<T>& vec);
+
+    /**
+        Constructs the container with the contents of the vector @a vec.
+
+        In the default build, in which wxArrayString is implemented using
+        `std::vector<>` internally, this constructor is more efficient than the
+        overload taking const reference to the vector, as it reuses the
+        existing vector data instead of copying it.
+        Otherwise it is identical to the other overload, see its documentation
+        for more details.
+
+        @since 3.3.0
+    */
+    template<typename T>
+    wxArrayString(std::vector<T>&& vec);
 
     /**
         Destructor frees memory occupied by the array strings. For performance
@@ -110,6 +157,26 @@ public:
         adding a known number of items consecutively.
     */
     void Alloc(size_t nCount);
+
+    /**
+        Constructs a std::vector containing the same strings as this array.
+
+        In the default build configuration, this function returns a const
+        reference to this object itself, without making a copy. But when using
+        the legacy implementation of wxArrayString not based on `std::vector`,
+        it has to copy all the strings, making it expensive to call for big
+        arrays.
+
+        Note that using it like this:
+        @code
+        const std::vector<wxString>& vec = array.AsVector();
+        @endcode
+        works in all build variants as long as you don't need to modify the
+        returned vector and doesn't impose any extra overhead.
+
+        @since 3.3.0
+    */
+    std::vector<wxString> AsVector() const;
 
     /**
         Clears the array contents and frees memory.
@@ -167,20 +234,20 @@ public:
 
         @see operator[] for the operator version.
     */
-    //@{
+    ///@{
     wxString& Item(size_t nIndex);
     const wxString& Item(size_t nIndex) const;
-    //@}
+    ///@}
 
     /**
         Returns the last element of the array. Attempt to access the last element of
         an empty array will result in assert failure in debug build, however no checks
         are done in release mode.
     */
-    //@{
+    ///@{
     wxString& Last();
     const wxString& Last() const;
-    //@}
+    ///@}
 
     /**
         Removes the first item matching this value. An assert failure is provoked by
@@ -343,7 +410,7 @@ public:
     void Insert(const wxString& str, size_t nIndex,
                 size_t copies = 1);
 
-    //@{
+    ///@{
     /**
         @warning This function should not be used with sorted array because it could
                  break the order of items and, for example, subsequent calls to Index()
@@ -354,7 +421,7 @@ public:
     */
     void Sort(bool reverseOrder = false);
     void Sort(CompareFunction compareFunction);
-    //@}
+    ///@}
 };
 
 /**
@@ -498,13 +565,13 @@ int wxCmpNaturalGeneric(const wxString& s1, const wxString& s2);
 // ============================================================================
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     Splits the given wxString object using the separator @a sep and returns the
     result as a wxArrayString.
 
-    If the @a escape character is non-@NULL, then the occurrences of @a sep
+    If the @a escape character is non-null, then the occurrences of @a sep
     immediately prefixed with @a escape are not considered as separators.
     Note that empty tokens will be generated if there are two or more adjacent
     separators.
@@ -520,7 +587,7 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
     Concatenate all lines of the given wxArrayString object using the separator
     @a sep and returns the result as a wxString.
 
-    If the @a escape character is non-@NULL, then it's used as prefix for each
+    If the @a escape character is non-null, then it's used as prefix for each
     occurrence of @a sep in the strings contained in @a arr before joining them
     which is necessary in order to be able to recover the original array
     contents from the string later using wxSplit(). The @a escape characters
@@ -543,5 +610,5 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
 wxString wxJoin(const wxArrayString& arr, const wxChar sep,
                 const wxChar escape = '\\');
 
-//@}
+///@}
 

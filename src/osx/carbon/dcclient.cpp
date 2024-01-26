@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/dcclient.cpp
 // Purpose:     wxClientDCImpl class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -54,7 +53,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
 
     m_release = false;
-    if ( cg == NULL )
+    if ( cg == nullptr )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
         m_contentScaleFactor = window->GetContentScaleFactor();
@@ -105,10 +104,21 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
         *height = m_height;
 }
 
+void wxWindowDCImpl::DestroyClippingRegion()
+{
+    wxGCDCImpl::DestroyClippingRegion();
+
+    wxPoint clipPos = DeviceToLogical(m_origin.x, m_origin.y);
+    wxSize clipDim = DeviceToLogicalRel(m_width, m_height);
+    DoSetClippingRegion(clipPos.x, clipPos.y, clipDim.x, clipDim.y);
+}
+
+#if WXWIN_COMPATIBILITY_3_2
 wxPoint wxWindowDCImpl::OSXGetOrigin() const
 {
     return m_origin;
 }
+#endif // WXWIN_COMPATIBILITY_3_2
 
 /*
  * wxClientDCImpl

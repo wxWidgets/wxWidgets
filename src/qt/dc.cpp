@@ -23,6 +23,7 @@
 #include "wx/qt/dc.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
+#include "wx/qt/private/compat.h"
 
 #include <QtGui/QScreen>
 #include <QtWidgets/QApplication>
@@ -46,8 +47,8 @@ wxIMPLEMENT_CLASS(wxQtDCImpl,wxDCImpl);
 wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
-    m_qtPixmap = NULL;
-    m_qtPainter = NULL;
+    m_qtPixmap = nullptr;
+    m_qtPainter = nullptr;
     m_rasterColourOp = wxQtNONE;
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
@@ -72,9 +73,9 @@ wxQtDCImpl::~wxQtDCImpl()
 void wxQtDCImpl::QtPreparePainter( )
 {
     //Do here all QPainter initialization (called after each begin())
-    if ( m_qtPainter == NULL )
+    if ( m_qtPainter == nullptr )
     {
-        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter is NULL!!!"));
+        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter is null!!!"));
     }
     else if ( m_qtPainter->isActive() )
     {
@@ -84,16 +85,7 @@ void wxQtDCImpl::QtPreparePainter( )
 
         if (m_clipping)
         {
-            wxRegionIterator ri(m_clippingRegion);
-            bool append = false;
-            while (ri.HaveRects())
-            {
-                wxRect r = ri.GetRect();
-                m_qtPainter->setClipRect( r.x, r.y, r.width, r.height,
-                                          append ? Qt::IntersectClip : Qt::ReplaceClip );
-                append = true;
-                ++ri;
-            }
+            m_qtPainter->setClipRegion( m_clippingRegion.GetHandle() );
         }
     }
     else
@@ -186,6 +178,8 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 {
     m_pen = pen;
 
+    if ( !m_pen.IsOk() ) return;
+
     m_qtPainter->setPen(pen.GetHandle());
 
     ApplyRasterColourOp();
@@ -194,6 +188,8 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
     m_brush = brush;
+
+    if ( !m_brush.IsOk() ) return;
 
     if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE)
     {
@@ -227,7 +223,14 @@ void wxQtDCImpl::SetBackground(const wxBrush& brush)
     m_backgroundBrush = brush;
 
     if (m_qtPainter->isActive())
-        m_qtPainter->setBackground(brush.GetHandle());
+    {
+        // For consistency with the other ports: clearing the dc with
+        // invalid brush (Qt::NoBrush) should use white colour (which
+        // happens to be the default colour in Qt too) instead of no
+        // colour at all.
+        m_qtPainter->setBackground(
+            brush.IsOk() ? brush.GetHandle() : Qt::white);
+    }
 }
 
 void wxQtDCImpl::SetBackgroundMode(int mode)
@@ -355,14 +358,16 @@ void wxQtDCImpl::ApplyRasterColourOp()
 
 wxCoord wxQtDCImpl::GetCharHeight() const
 {
-    QFontMetrics metrics(m_qtPainter->font());
+    QFontMetrics metrics(m_qtPainter->isActive() ?
+        m_qtPainter->font() : QApplication::font());
     return wxCoord( metrics.height() );
 }
 
 wxCoord wxQtDCImpl::GetCharWidth() const
 {
     //FIXME: Returning max width, instead of average
-    QFontMetrics metrics(m_qtPainter->font());
+    QFontMetrics metrics(m_qtPainter->isActive() ?
+        m_qtPainter->font() : QApplication::font());
     return wxCoord( metrics.maxWidth() );
 }
 
@@ -372,26 +377,41 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              wxCoord *externalLeading,
                              const wxFont *theFont ) const
 {
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+    if ( descent )
+        *descent = 0;
+    if ( externalLeading )
+        *externalLeading = 0;
+
+    // We can skip computing the string width and height if it is empty, but
+    // not its descent and/or external leading, which still needs to be
+    // returned even for an empty string.
+    if ( string.empty() && !descent && !externalLeading )
+        return;
+
     QFont f;
-    if (theFont != NULL)
+    if (theFont != nullptr)
         f = theFont->GetHandle();
     else
         f = m_font.GetHandle();
 
     QFontMetrics metrics(f);
-    if (x != NULL || y != NULL)
+    if (x != nullptr || y != nullptr)
     {
         // note that boundingRect doesn't return "advance width" for spaces
-        if (x != NULL)
-            *x = metrics.width( wxQtConvertString(string) );
-        if (y != NULL)
+        if (x != nullptr)
+            *x = wxQtGetWidthFromMetrics(metrics, wxQtConvertString(string));
+        if (y != nullptr)
             *y = metrics.height();
     }
 
-    if (descent != NULL)
+    if (descent != nullptr)
         *descent = metrics.descent();
 
-    if (externalLeading != NULL)
+    if (externalLeading != nullptr)
         *externalLeading = metrics.leading();
 }
 
@@ -400,95 +420,107 @@ void wxQtDCImpl::Clear()
     int width, height;
     DoGetSize(&width, &height);
 
-    m_qtPainter->eraseRect(QRect(0, 0, width, height));
+    m_qtPainter->eraseRect( DeviceToLogicalX(0),
+                            DeviceToLogicalY(0),
+                            DeviceToLogicalXRel(width),
+                            DeviceToLogicalYRel(height) );
+}
+
+void wxQtDCImpl::UpdateClipBox()
+{
+    if ( !m_qtPainter->isActive() )
+        return;
+
+    if ( m_clippingRegion.IsEmpty() )
+    {
+        int dcwidth, dcheight;
+        DoGetSize(&dcwidth, &dcheight);
+
+        m_qtPainter->setClipRect(DeviceToLogicalX(0),
+                                 DeviceToLogicalY(0),
+                                 DeviceToLogicalXRel(dcwidth),
+                                 DeviceToLogicalYRel(dcheight),
+                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip);
+    }
+
+    /* Note: Qt states that QPainter::clipRegion() may be slow, so we
+     *       keep the region manually, which should be faster. A comment in
+     *       QPainter::clipBoundingRect() source says: This is not 100% precise,
+     *       but it fits within the guarantee and it is reasonably fast.
+     */
+    m_clippingRegion.QtSetRegion(
+        QRegion(m_qtPainter->clipBoundingRect().toRect()) );
+
+    wxRect clipRect = m_clippingRegion.GetBox();
+
+    m_clipX1 = clipRect.GetLeft();
+    m_clipX2 = clipRect.GetRight() + 1;
+    m_clipY1 = clipRect.GetTop();
+    m_clipY2 = clipRect.GetBottom() + 1;
+
+    m_isClipBoxValid = true;
+}
+
+bool wxQtDCImpl::DoGetClippingRect(wxRect& rect) const
+{
+    // Check if we should try to retrieve the clipping region possibly not set
+    // by our SetClippingRegion() but preset or modified by application: this
+    // can happen when wxDC logical coordinates are transformed with
+    // SetDeviceOrigin(), SetLogicalOrigin(), SetUserScale(), SetLogicalScale().
+    if ( !m_isClipBoxValid )
+    {
+        wxQtDCImpl *self = wxConstCast(this, wxQtDCImpl);
+        self->UpdateClipBox();
+    }
+
+    return wxDCImpl::DoGetClippingRect(rect);
 }
 
 void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
                                  wxCoord width, wxCoord height)
 {
-    // Special case: Empty region -> DestroyClippingRegion()
-    if ( width == 0 && height == 0 )
+    if ( width < 0 )
     {
-        DestroyClippingRegion();
+        width = -width;
+        x -= width - 1;
     }
-    else
+    if ( height < 0 )
     {
-        if ( width < 0 )
-        {
-            width = -width;
-            x -= width - 1;
-        }
-        if ( height < 0 )
-        {
-            height = -height;
-            y -= height - 1;
-        }
+        height = -height;
+        y -= height - 1;
+    }
 
-        if (m_qtPainter->isActive())
-        {
-            // Set QPainter clipping (intersection if not the first one)
-            m_qtPainter->setClipRect( x, y, width, height,
-                                      m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
-        }
+    if ( m_qtPainter->isActive() )
+    {
+        // Set QPainter clipping (intersection if not the first one)
+        m_qtPainter->setClipRect( x, y, width, height,
+                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
 
-        // Set internal state for getters
-        /* Note: Qt states that QPainter::clipRegion() may be slow, so we
-         * keep the region manually, which should be faster */
-        if ( !m_clipping || m_clippingRegion.IsEmpty() )
-        {
-            int dcwidth, dcheight;
-            DoGetSize(&dcwidth, &dcheight);
-
-            m_clippingRegion = wxRegion(0, 0, dcwidth, dcheight);
-        }
-        m_clippingRegion.Intersect( wxRect(x, y, width, height) );
-
-        wxRect clipRect = m_clippingRegion.GetBox();
-
-        m_clipX1 = clipRect.GetLeft();
-        m_clipX2 = clipRect.GetRight() + 1;
-        m_clipY1 = clipRect.GetTop();
-        m_clipY2 = clipRect.GetBottom() + 1;
         m_clipping = true;
     }
+
+    UpdateClipBox();
 }
 
 void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
-    if ( region.IsEmpty() )
+    if ( m_qtPainter->isActive() )
     {
-        DestroyClippingRegion();
-    }
-    else
-    {
-        QRegion qregion = region.GetHandle();
-        // Save current origin / scale (logical coordinates)
-        QTransform qtrans = m_qtPainter->worldTransform();
-        // Reset transofrmation to match device coordinates
-        m_qtPainter->setWorldTransform( QTransform() );
+        // Disable the matrix transformations to match device coordinates
+        m_qtPainter->setWorldMatrixEnabled(false);
+        // Enable clipping explicitly as QPainter::setClipRegion() doesn't
+        // do that for us
+        m_qtPainter->setClipping( true );
         // Set QPainter clipping (intersection if not the first one)
-        m_qtPainter->setClipRegion( qregion,
-                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+        m_qtPainter->setClipRegion( region.GetHandle(),
+                                    m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
 
-        // Restore the transformation (translation / scale):
-        m_qtPainter->setWorldTransform( qtrans );
+        m_qtPainter->setWorldMatrixEnabled(true);
 
-        // Set internal state for getters
-        /* Note: Qt states that QPainter::clipRegion() may be slow, so we
-        * keep the region manually, which should be faster */
-        if ( m_clipping )
-            m_clippingRegion.Union( region );
-        else
-            m_clippingRegion.Intersect( region );
-
-        wxRect clipRect = m_clippingRegion.GetBox();
-
-        m_clipX1 = clipRect.GetLeft();
-        m_clipX2 = clipRect.GetRight() + 1;
-        m_clipY1 = clipRect.GetTop();
-        m_clipY2 = clipRect.GetBottom() + 1;
         m_clipping = true;
     }
+
+    UpdateClipBox();
 }
 
 void wxQtDCImpl::DestroyClippingRegion()
@@ -498,6 +530,8 @@ void wxQtDCImpl::DestroyClippingRegion()
 
     if (m_qtPainter->isActive())
         m_qtPainter->setClipping( false );
+
+    m_isClipBoxValid = false;
 }
 
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -524,7 +558,7 @@ bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
     if ( col )
     {
-        wxCHECK_MSG( m_qtPixmap != NULL, false, "This DC doesn't support GetPixel()" );
+        wxCHECK_MSG( m_qtPixmap != nullptr, false, "This DC doesn't support GetPixel()" );
         QPixmap pixmap1px = m_qtPixmap->copy( x, y, 1, 1 );
         QImage image = pixmap1px.toImage();
         QColor pixel = image.pixel( 0, 0 );
@@ -861,8 +895,10 @@ void wxQtDCImpl::ComputeScaleAndOrigin()
     t.scale( m_scaleX * m_signX, m_scaleY * m_signY );
 
     // Finally, logical origin
-    t.translate( m_logicalOriginX, m_logicalOriginY );
+    t.translate( -m_logicalOriginX, -m_logicalOriginY );
 
     // Apply transform to QPainter, overwriting the previous one
     m_qtPainter->setWorldTransform(t, false);
+
+    m_isClipBoxValid = false;
 }

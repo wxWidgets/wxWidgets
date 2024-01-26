@@ -2,7 +2,6 @@
 // Name:        wx/artprov.h
 // Purpose:     wxArtProvider class
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     18/03/2002
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
@@ -17,8 +16,10 @@
 #include "wx/iconbndl.h"
 #include "wx/bmpbndl.h"
 
-class WXDLLIMPEXP_FWD_CORE wxArtProvidersList;
-class WXDLLIMPEXP_FWD_CORE wxArtProviderCache;
+class wxArtProvidersList;
+class wxArtProviderCache;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 class wxArtProviderModule;
 
 // ----------------------------------------------------------------------------
@@ -142,11 +143,6 @@ public:
     // will be queried as the last one).
     static void PushBack(wxArtProvider *provider);
 
-#if WXWIN_COMPATIBILITY_2_8
-    // use PushBack(), it's the same thing
-    wxDEPRECATED( static void Insert(wxArtProvider *provider) );
-#endif
-
     // Remove latest added provider and delete it.
     static bool Pop();
 
@@ -196,14 +192,20 @@ public:
                                       const wxArtClient& client = wxASCII_STR(wxART_OTHER));
 
     // Gets native size for given 'client' or wxDefaultSize if it doesn't
-    // have native equivalent
-    static wxSize GetNativeSizeHint(const wxArtClient& client);
+    // have native equivalent. The first version returns the size in logical
+    // pixels while the second one returns it in DIPs.
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
+    static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
 
-    // Get the size hint of an icon from a specific wxArtClient, queries
-    // the topmost provider if platform_dependent = false
-    static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
+    // Get the size hint of an icon from a specific wxArtClient from the
+    // topmost (i.e. first used) provider.
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
+    static wxSize GetDIPSizeHint(const wxArtClient& client);
 
 #if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("use GetSizeHint() without bool argument or GetNativeSizeHint()")
+    static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent);
+
     wxDEPRECATED_MSG("use wxBitmap::Rescale() instead.")
     static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded);
 #endif // WXWIN_COMPATIBILITY_3_0
@@ -223,11 +225,11 @@ protected:
     // Destroy caches & all providers
     static void CleanUpProviders();
 
-    // Get the default size of an icon for a specific client
-    virtual wxSize DoGetSizeHint(const wxArtClient& client)
-    {
-        return GetSizeHint(client, true);
-    }
+    // Get the default size of an icon for a specific client.
+    //
+    // Although this function doesn't have "DIP" in its name, it should return
+    // the size in DIPs.
+    virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
     // Derived classes must override at least one of the CreateXXX() functions
     // below to create requested art resource. Overriding more than one of them
@@ -278,8 +280,7 @@ private:
 
 
 #if !defined(__WXUNIVERSAL__) && \
-    ((defined(__WXGTK__) && defined(__WXGTK20__)) || defined(__WXMSW__) || \
-     defined(__WXMAC__))
+    (defined(__WXGTK__) || defined(__WXMSW__) || defined(__WXMAC__))
   // *some* (partial) native implementation of wxArtProvider exists; this is
   // not the same as wxArtProvider::HasNativeProvider()!
   #define wxHAS_NATIVE_ART_PROVIDER_IMPL

@@ -2,7 +2,6 @@
 // Name:        src/generic/splitter.cpp
 // Purpose:     wxSplitterWindow implementation
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -61,6 +60,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSplitterEvent, wxNotifyEvent);
 wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_PAINT(wxSplitterWindow::OnPaint)
     EVT_SIZE(wxSplitterWindow::OnSize)
+    EVT_DPI_CHANGED(wxSplitterWindow::OnDPIChanged)
     EVT_MOUSE_EVENTS(wxSplitterWindow::OnMouseEvent)
     EVT_MOUSE_CAPTURE_LOST(wxSplitterWindow::OnMouseCaptureLost)
 
@@ -69,17 +69,19 @@ wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
 #endif // wxMSW
 wxEND_EVENT_TABLE()
 
+bool wxSplitterWindow::AlwaysUsesLiveUpdate() const
+{
+    return !wxClientDC::CanBeUsedForDrawing(this);
+}
+
 static bool IsLive(wxSplitterWindow* wnd)
 {
     // with wxSP_LIVE_UPDATE style the splitter windows are always resized
     // following the mouse movement while it drags the sash, without it we only
     // draw the sash at the new position but only resize the windows when the
-    // dragging is finished
-#if defined( __WXMAC__ ) && defined(TARGET_API_MAC_OSX) && TARGET_API_MAC_OSX == 1
-    return true; // Mac can't paint outside paint event - always need live mode
-#else
-    return wnd->HasFlag(wxSP_LIVE_UPDATE);
-#endif
+    // dragging is finished -- but drawing the sash is done using wxClientDC,
+    // so check if we can use it and always use live resizing if we can't
+    return wnd->AlwaysUsesLiveUpdate() || wnd->HasFlag(wxSP_LIVE_UPDATE);
 }
 
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
@@ -108,13 +110,9 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
   #endif
 #endif
     {
-        // FIXME: with this line the background is not erased at all under GTK1,
-        //        so temporary avoid it there
-#if !defined(__WXGTK__) || defined(__WXGTK20__)
         // don't erase the splitter background, it's pointless as we overwrite it
         // anyhow
         SetBackgroundStyle(wxBG_STYLE_PAINT);
-#endif
     }
 
     return true;
@@ -124,8 +122,8 @@ void wxSplitterWindow::Init()
 {
     m_splitMode = wxSPLIT_VERTICAL;
     m_permitUnsplitAlways = true;
-    m_windowOne = NULL;
-    m_windowTwo = NULL;
+    m_windowOne = nullptr;
+    m_windowTwo = nullptr;
     m_dragMode = wxSPLIT_DRAG_NONE;
     m_oldX = 0;
     m_oldY = 0;
@@ -308,7 +306,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 // We remove the first window from the view
                 wxWindow *removedWindow = m_windowOne;
                 m_windowOne = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = nullptr;
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
@@ -319,7 +317,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             {
                 // We remove the second window from the view
                 wxWindow *removedWindow = m_windowTwo;
-                m_windowTwo = NULL;
+                m_windowTwo = nullptr;
                 OnUnsplit(removedWindow);
                 wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
@@ -520,6 +518,20 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
     SizeWindows();
 }
 
+void wxSplitterWindow::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    // On platforms requiring scaling by DPI factor we need to do it whenever
+    // DPI changes, but elsewhere we shouldn't do it as the same logical
+    // coordinates are used irrespectively of the current DPI value.
+#ifndef wxHAS_DPI_INDEPENDENT_PIXELS
+    m_minimumPaneSize = event.ScaleX(m_minimumPaneSize);
+    m_sashPosition = event.ScaleX(m_sashPosition);
+    m_lastSize = event.Scale(m_lastSize);
+#endif // !wxHAS_DPI_INDEPENDENT_PIXELS
+
+    event.Skip();
+}
+
 void wxSplitterWindow::SetSashGravity(double gravity)
 {
     wxCHECK_RET( gravity >= 0. && gravity <= 1.,
@@ -530,7 +542,7 @@ void wxSplitterWindow::SetSashGravity(double gravity)
 
 bool wxSplitterWindow::SashHitTest(int x, int y)
 {
-    if ( m_windowTwo == NULL || m_sashPosition == 0)
+    if ( m_windowTwo == nullptr || m_sashPosition == 0)
         return false; // No sash
 
     int z = m_splitMode == wxSPLIT_VERTICAL ? x : y;
@@ -597,7 +609,6 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     int w, h;
     GetClientSize(&w, &h);
 
-    wxScreenDC screenDC;
     int x1, y1;
     int x2, y2;
 
@@ -614,16 +625,30 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
         x2 = w-2;
     }
 
+#if defined(__WXGTK3__)
+    wxClientDC dc(this);
+
+    // In the ports with wxGraphicsContext-based wxDC, such as wxGTK3 or wxOSX,
+    // wxINVERT only works for inverting the background when using white
+    // foreground (note that this code is not used anyhow for __WXMAC__ due to
+    // always using live-resizing there, see IsLive()).
+    dc.SetPen(*wxWHITE_PEN);
+#else
+    // We need to use wxScreenDC and not wxClientDC at least for wxMSW where
+    // drawing in this window itself would be hidden by its children windows,
+    // that cover it almost entirely.
+    wxScreenDC dc;
     ClientToScreen(&x1, &y1);
     ClientToScreen(&x2, &y2);
 
-    screenDC.SetLogicalFunction(wxINVERT);
-    screenDC.SetPen(*m_sashTrackerPen);
-    screenDC.SetBrush(*wxTRANSPARENT_BRUSH);
+    dc.SetPen(*m_sashTrackerPen);
+#endif
 
-    screenDC.DrawLine(x1, y1, x2, y2);
+    dc.SetLogicalFunction(wxINVERT);
 
-    screenDC.SetLogicalFunction(wxCOPY);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    dc.DrawLine(x1, y1, x2, y2);
 }
 
 int wxSplitterWindow::GetWindowSize() const
@@ -786,7 +811,7 @@ void wxSplitterWindow::Initialize(wxWindow *window)
         window->Show();
 
     m_windowOne = window;
-    m_windowTwo = NULL;
+    m_windowTwo = nullptr;
     DoSetSashPosition(0);
 }
 
@@ -801,7 +826,7 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
         return false;
 
     wxCHECK_MSG( window1 && window2, false,
-                 wxT("cannot split with NULL window(s)") );
+                 wxT("cannot split with null window(s)") );
 
     wxCHECK_MSG( window1->GetParent() == this && window2->GetParent() == this, false,
                   wxT("windows in the splitter should have it as parent!") );
@@ -846,16 +871,16 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         return false;
 
     wxWindow *win;
-    if ( toRemove == NULL || toRemove == m_windowTwo)
+    if ( toRemove == nullptr || toRemove == m_windowTwo)
     {
         win = m_windowTwo ;
-        m_windowTwo = NULL;
+        m_windowTwo = nullptr;
     }
     else if ( toRemove == m_windowOne )
     {
         win = m_windowOne ;
         m_windowOne = m_windowTwo;
-        m_windowTwo = NULL;
+        m_windowTwo = nullptr;
     }
     else
     {

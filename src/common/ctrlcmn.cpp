@@ -2,7 +2,6 @@
 // Name:        src/common/ctrlcmn.cpp
 // Purpose:     wxControl common interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     26.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -325,10 +324,9 @@ struct EllipsizeCalculator
                     else // Last character is an ampersand.
                     {
                         // This ampersand is removed by RemoveMnemonics() and
-                        // won't be displayed when this string is drawn
-                        // neither, so we intentionally don't use it for our
-                        // calculations neither -- just account for this in the
-                        // assert below.
+                        // won't be displayed when this string is drawn, so we
+                        // intentionally don't use it for our calculations --
+                        // just account for this in the assert below.
                         expectedOffsetsCount--;
                     }
                 }

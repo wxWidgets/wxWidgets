@@ -2,7 +2,6 @@
 // Name:        src/common/bookctrl.cpp
 // Purpose:     wxBookCtrlBase implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.08.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -22,9 +21,9 @@
 
 #if wxUSE_BOOKCTRL
 
-#include "wx/imaglist.h"
+#include "wx/compositebookctrl.h"
 
-#include "wx/bookctrl.h"
+#include "wx/imaglist.h"
 
 // ============================================================================
 // implementation
@@ -50,13 +49,13 @@ wxEND_EVENT_TABLE()
 void wxBookCtrlBase::Init()
 {
     m_selection = wxNOT_FOUND;
-    m_bookctrl = NULL;
+    m_bookctrl = nullptr;
     m_fitToCurrentPage = false;
 
     m_internalBorder = 5;
 
     m_controlMargin = 0;
-    m_controlSizer = NULL;
+    m_controlSizer = nullptr;
 
     Bind(wxEVT_DPI_CHANGED, &wxBookCtrlBase::WXHandleDPIChanged, this);
 }
@@ -300,20 +299,43 @@ void wxBookCtrlBase::OnHelp(wxHelpEvent& event)
     // determine where does this even originate from to avoid redirecting it
     // back to the page which generated it (resulting in an infinite loop)
 
-    // notice that we have to check in the hard(er) way instead of just testing
-    // if the event object == this because the book control can have other
-    // subcontrols inside it (e.g. wxSpinButton in case of a notebook in wxUniv)
     wxWindow *source = wxStaticCast(event.GetEventObject(), wxWindow);
-    while ( source && source != this && source->GetParent() != this )
-    {
-        source = source->GetParent();
-    }
 
-    if ( source && FindPage(source) == wxNOT_FOUND )
+    // In all ports but wxUniv it's sufficient to compare the event object with
+    // the book control itself to check if the event came to it directly, but
+    // in wxUniv we may have other controls inside it (e.g. wxSpinButton inside
+    // wxNotebook), so we need more involved checks there.
+#ifdef __WXUNIVERSAL__
+    while ( source )
+    {
+        wxWindow* const parent = source->GetParent();
+        if ( parent == this )
+        {
+            if ( FindPage(source) != wxNOT_FOUND )
+            {
+                // The event comes from our own page, don't send it back to it.
+                source = nullptr;
+            }
+            else
+            {
+                // Must be one of internal sub-controls such as the
+                // wxSpinButton mentioned above, consider the book control
+                // itself as the source of this event.
+                source = this;
+            }
+
+            break;
+        }
+
+        source = parent;
+    }
+#endif // __WXUNIVERSAL__
+
+    if ( source == this )
     {
         // this event is for the book control itself, redirect it to the
         // corresponding page
-        wxWindow *page = NULL;
+        wxWindow *page = nullptr;
 
         if ( event.GetOrigin() == wxHelpEvent::Origin_HelpButton )
         {
@@ -363,7 +385,7 @@ wxBookCtrlBase::InsertPage(size_t nPage,
                            int WXUNUSED(imageId))
 {
     wxCHECK_MSG( page || AllowNullPage(), false,
-                 wxT("NULL page in wxBookCtrlBase::InsertPage()") );
+                 wxT("null page in wxBookCtrlBase::InsertPage()") );
     wxCHECK_MSG( nPage <= m_pages.size(), false,
                  wxT("invalid page index in wxBookCtrlBase::InsertPage()") );
 
@@ -382,7 +404,7 @@ bool wxBookCtrlBase::DeletePage(size_t nPage)
     if ( !(page || AllowNullPage()) )
         return false;
 
-    // delete NULL is harmless
+    // deleting null pointer is harmless
     delete page;
 
     return true;
@@ -390,7 +412,7 @@ bool wxBookCtrlBase::DeletePage(size_t nPage)
 
 wxWindow *wxBookCtrlBase::DoRemovePage(size_t nPage)
 {
-    wxCHECK_MSG( nPage < m_pages.size(), NULL,
+    wxCHECK_MSG( nPage < m_pages.size(), nullptr,
                  wxT("invalid page index in wxBookCtrlBase::DoRemovePage()") );
 
     wxWindow *pageRemoved = m_pages[nPage];
@@ -533,5 +555,11 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBookCtrlEvent, wxNotifyEvent);
+
+// Implement the trivial ctor here to ensure it's emitted here and exported
+// from the DLL instead of having an inline version of it which may result in
+// link errors if it happens to be instantiated both inside and outside of the
+// DLL, see #22805.
+wxCompositeBookCtrlBase::wxCompositeBookCtrlBase() = default;
 
 #endif // wxUSE_BOOKCTRL

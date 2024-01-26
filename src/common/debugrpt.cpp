@@ -2,7 +2,6 @@
 // Name:        src/common/debugrpt.cpp
 // Purpose:     wxDebugReport and related classes implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-17
 // Copyright:   (c) 2005 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -74,7 +73,7 @@ public:
     bool IsOk() const { return m_isOk; }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE;
+    virtual void OnStackFrame(const wxStackFrame& frame) override;
 
     wxXmlNode *m_nodeStack;
     bool m_isOk;
@@ -380,7 +379,7 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
         if ( !path.empty() )
             nodeModule->AddAttribute(wxT("path"), path);
 
-        void *addr = NULL;
+        void *addr = nullptr;
         size_t len = 0;
         if ( info.GetAddress(&addr, &len) )
         {

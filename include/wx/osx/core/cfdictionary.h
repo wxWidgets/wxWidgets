@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/cfdictionaryref.h
 // Purpose:     wxCFDictionaryRef class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2018/07/27
 // Copyright:   (c) 2018 Stefan Csomor
 // Licence:     wxWindows licence
@@ -36,7 +35,7 @@ public:
 
     /*! @method     wxCFDictionaryRef
      @abstract   Assumes ownership of r and creates a reference to it.
-     @param r        The dictionary reference to assume ownership of.  May be NULL.
+     @param r        The dictionary reference to assume ownership of.  May be null.
      @discussion Like shared_ptr, it is assumed that the caller has a strong reference to r and intends
      to transfer ownership of that reference to this ref holder.  If the object comes from
      a Create or Copy method then this is the correct behaviour.  If the object comes from
@@ -57,6 +56,14 @@ public:
      the object will be explicitly retained by this new ref.
      */
     wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon&) = default;
+
+    /*! @method     operator=
+        @abstract   Assigns the other ref's pointer to us when the otherRef is the same type.
+        @param otherRef The other ref holder to copy.
+        @discussion The incoming pointer is retained, the original pointer is released, and this object
+                    is made to point to the new pointer.
+    */
+    wxCFDictionaryRefCommon& operator=(const wxCFDictionaryRefCommon&) = default;
 
     wxCFTypeRef GetValue(const void* key)
     {

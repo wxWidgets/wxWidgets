@@ -2,7 +2,6 @@
 // Name:        wx/osx/glcanvas.h
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under Macintosh
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -32,9 +31,9 @@ WXDLLIMPEXP_GL void WXGLDestroyContext( WXGLContext context );
 WXDLLIMPEXP_GL WXGLContext WXGLGetCurrentContext();
 WXDLLIMPEXP_GL bool WXGLSetCurrentContext(WXGLContext context);
 
-WXDLLIMPEXP_GL WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs = NULL,
+WXDLLIMPEXP_GL WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs = nullptr,
                                                      int n1 = 0,
-                                                     const int *ctxAttrs = NULL,
+                                                     const int *ctxAttrs = nullptr,
                                                      int n2 = 0);
 WXDLLIMPEXP_GL void WXGLDestroyPixelFormat( WXGLPixelFormat pixelFormat );
 
@@ -42,11 +41,11 @@ class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win,
-                const wxGLContext *other = NULL,
-                const wxGLContextAttrs *ctxAttrs = NULL);
+                const wxGLContext *other = nullptr,
+                const wxGLContextAttrs *ctxAttrs = nullptr);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
+    virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
     // Mac-specific
     WXGLContext GetWXGLContext() const { return m_glContext; }
@@ -60,6 +59,8 @@ private:
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasBase
 {
 public:
+    wxGLCanvas() = default;
+
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
                wxWindowID id = wxID_ANY,
@@ -71,7 +72,7 @@ public:
 
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
-               const int *attribList = NULL,
+               const int *attribList = nullptr,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -93,13 +94,13 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxGLCanvasName,
-                const int *attribList = NULL,
+                const int *attribList = nullptr,
                 const wxPalette& palette = wxNullPalette);
 
     virtual ~wxGLCanvas();
 
     // implement wxGLCanvasBase methods
-    virtual bool SwapBuffers() wxOVERRIDE;
+    virtual bool SwapBuffers() override;
 
     // Mac-specific functions
     // ----------------------
@@ -116,47 +117,6 @@ public:
     // update the view port of the current context to match this window
     void SetViewport();
 
-
-    // deprecated methods
-    // ------------------
-
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED(
-    wxGLCanvas(wxWindow *parent,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const int *attribList = NULL,
-               const wxPalette& palette = wxNullPalette)
-    );
-
-    wxDEPRECATED(
-    wxGLCanvas(wxWindow *parent,
-               const wxGLContext *shared,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const int *attribList = NULL,
-               const wxPalette& palette = wxNullPalette)
-    );
-
-    wxDEPRECATED(
-    wxGLCanvas(wxWindow *parent,
-               const wxGLCanvas *shared,
-               wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const int *attribList = NULL,
-               const wxPalette& palette = wxNullPalette)
-    );
-#endif // WXWIN_COMPATIBILITY_2_8
-
     // implementation-only from now on
 
 protected:
@@ -167,10 +127,9 @@ protected:
                               long style,
                   const wxString& name);
 
-    WXGLPixelFormat m_glFormat;
+    WXGLPixelFormat m_glFormat = nullptr;
     wxGLAttributes m_GLAttrs;
 
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxGLCanvas);
 };
 

@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 22 September 2021                                                  *
+ * Date : 30 May 2022                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -46,26 +46,17 @@
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
 
-/* Define this if you want to use GPE features */
-#undef __WXGPE__
-
-/* Define this if your version of Motif is greater than 2.0 */
-#undef __WXMOTIF20__
-
-/* Define this if you are using Lesstif */
-#undef __WXLESSTIF__
-
 #ifdef __WXGTK__
 
 #ifndef VMS_GTK2
 #define GDK_WINDOWING_X11
 #endif
 
-/* Define this if your version of GTK+ is greater than 1.2.7 */
-#define __WXGTK127__ 1
-
 /* Define this if your version of GTK+ is greater than 2.0 */
 #ifdef VMS_GTK2
+
+/* Define if using GTK. */
+#define __WXGTK__ 1
 
 /* Define this if your version of GTK+ is >= 3.0 */
 #if 0
@@ -132,19 +123,9 @@ typedef pid_t GPid;
 #define __VMS__
 
 #undef __IA64__
-#define __ALPHA__
 
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0
-
-/* PowerPC Darwin & Mac OS X */
-#undef __POWERPC__
-
-/* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
-#undef __Point__
-
-/* MS-DOS with DJGPP */
-#undef __DOS__
 
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
@@ -166,29 +147,19 @@ typedef pid_t GPid;
 
 /* --- start common options --- */
 
-#define wxUSE_COMPILER_TLS 1
-
 #ifndef wxUSE_GUI
     #define wxUSE_GUI            1
 #endif
 
-#define WXWIN_COMPATIBILITY_2_8 0
-
 #define WXWIN_COMPATIBILITY_3_0 0
+
+#define WXWIN_COMPATIBILITY_3_2 0
 
 #define wxEVENTS_COMPATIBILITY_2_8 0
 
 #define wxDIALOG_UNIT_COMPATIBILITY   1
 
-#define wxUSE_DEBUG_CONTEXT 1
-
 #define wxUSE_DEBUGREPORT 1
-
-#define wxUSE_MEMORY_TRACING 0
-
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
-
-#define wxUSE_DEBUG_NEW_ALWAYS 1
 
 #define wxUSE_ON_FATAL_EXCEPTION 1
 
@@ -198,14 +169,9 @@ typedef pid_t GPid;
 
 #define wxUSE_REPRODUCIBLE_BUILD 1
 
-#ifndef wxUSE_UNICODE
-#if defined( __WXX11__ )
-    #define wxUSE_UNICODE 0
-#else
-    #define wxUSE_UNICODE 1
-#endif
-#endif
+#define wxUSE_UNICODE_UTF8 0
 
+#define wxUSE_UTF8_LOCALE_ONLY 0
 
 #define wxUSE_EXCEPTIONS 1
 
@@ -227,24 +193,9 @@ typedef pid_t GPid;
 
 #define wxUSE_PRINTF_POS_PARAMS      0
 
-#define wxUSE_STL 0
+#define wxUSE_STD_CONTAINERS 0
 
-#if defined(__DMC__) \
-        || (defined(_MSC_VER) && _MSC_VER < 1200)
-    #define wxUSE_STD_DEFAULT  0
-#else
-    #define wxUSE_STD_DEFAULT  1
-#endif
-
-#define wxUSE_STD_CONTAINERS_COMPATIBLY wxUSE_STD_DEFAULT
-
-#define wxUSE_STD_CONTAINERS wxUSE_STD_DEFAULT
-
-#define wxUSE_STD_IOSTREAM  wxUSE_STD_DEFAULT
-
-#define wxUSE_STD_STRING  wxUSE_STD_DEFAULT
-
-#define wxUSE_STD_STRING_CONV_IN_WXSTRING wxUSE_STL
+#define wxUSE_STD_STRING_CONV_IN_WXSTRING 0
 
 #define wxUSE_LONGLONG      1
 
@@ -498,7 +449,7 @@ typedef pid_t GPid;
 
 #define wxUSE_ARTPROVIDER_STD 1
 
-#define wxUSE_ARTPROVIDER_TANGO 1
+#define wxUSE_ARTPROVIDER_TANGO 0
 
 #define wxUSE_HOTKEY 1
 
@@ -659,6 +610,10 @@ typedef pid_t GPid;
 
 #define wxUSE_LIBTIFF       1
 
+#define wxUSE_NANOSVG       1
+
+#define wxUSE_NANOSVG_EXTERNAL 0
+
 #define wxUSE_TGA           1
 
 #define wxUSE_GIF           1
@@ -698,9 +653,6 @@ typedef pid_t GPid;
  */
 #define wxUSE_SELECT_DISPATCHER 1
 #define wxUSE_EPOLL_DISPATCHER 0
-
-#define wxUSE_UNICODE_UTF8 0
-#define wxUSE_UTF8_LOCALE_ONLY 0
 
 /*
    Use GStreamer for Unix.
@@ -803,73 +755,6 @@ typedef pid_t GPid;
  */
 #undef VA_LIST_IS_ARRAY
 
-#if defined(__NAMESPACE_STD) && !defined(__NAMESPACE_STD_ONLY)
-/*
- * Define if your compiler has std::wstring
- */
-#define HAVE_STD_WSTRING 1
-/*
- * Define if your compiler has compliant std::string::compare
- */
-#define HAVE_STD_STRING_COMPARE 1
-#else
-/*
- * Define if your compiler has std::wstring
- */
-/* #unfine HAVE_STD_WSTRING */
-/*
- * Define if your compiler has compliant std::string::compare
- */
-#undef HAVE_STD_STRING_COMPARE
-#endif
-
-/*
- * Define if your compiler has <hash_map>
- */
-#undef HAVE_HASH_MAP
-/*
- * Define if your compiler has <ext/hash_map>
- */
-#undef HAVE_EXT_HASH_MAP
-/*
- * Define if your compiler has std::hash_map/hash_set
- */
-#undef HAVE_STD_HASH_MAP
-/*
- * Define if your compiler has __gnu_cxx::hash_map/hash_set
- */
-#undef HAVE_GNU_CXX_HASH_MAP
-
-/*
- * Define if your compiler has std::unordered_map
- */
-#undef HAVE_STD_UNORDERED_MAP
-
-/*
- * Define if your compiler has std::unordered_set
- */
-#undef HAVE_STD_UNORDERED_SET
-
-/*
- * Define if your compiler has std::tr1::unordered_map
- */
-#undef HAVE_TR1_UNORDERED_MAP
-
-/*
- * Define if your compiler has std::tr1::unordered_set
- */
-#undef HAVE_TR1_UNORDERED_SET
-
-/*
- * Define if your compiler has <tr1/type_traits>
- */
-#undef HAVE_TR1_TYPE_TRAITS
-
-/*
- * Define if your compiler has <type_traits>
- */
-#undef HAVE_TYPE_TRAITS
-
 /*
  * Define if the compiler supports simple visibility declarations.
  */
@@ -885,11 +770,6 @@ typedef pid_t GPid;
  */
 #undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
-/*
- * On GNU systems use re_search instead of regexec, since the latter does a
- * strlen on the search text affecting the performance of some operations.
- */
-#undef HAVE_RE_SEARCH
 /*
  * Use SDL for audio (Unix)
  */
@@ -930,11 +810,6 @@ typedef pid_t GPid;
 #define wxHAVE_PTHREAD_CLEANUP 1
 
 /*
- * Define if compiler has __thread keyword.
- */
-#undef HAVE___THREAD_KEYWORD
-
-/*
  * Define if large (64 bit file offsets) files are supported.
  */
 #undef HAVE_LARGEFILE_SUPPORT
@@ -973,17 +848,6 @@ typedef pid_t GPid;
 #define wxUSE_WEBKIT 1
 
 /*
- * The const keyword is being introduced more in wxWindows.
- * You can use this setting to maintain backward compatibility.
- * If 0: will use const wherever possible.
- * If 1: will use const only where necessary
- *       for precompiled headers to work.
- * If 2: will be totally backward compatible, but precompiled
- *       headers may not work and program size will be larger.
- */
-#define CONST_COMPATIBILITY 0
-
-/*
  * use the session manager to detect KDE/GNOME
  */
 #define wxUSE_DETECT_SM     0
@@ -999,9 +863,6 @@ typedef pid_t GPid;
 
 /* The type of statvfs(2) argument */
 #undef WX_STATFS_T
-
-/* The signal handler prototype */
-#define wxTYPE_SA_HANDLER int
 
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
@@ -1076,15 +937,9 @@ typedef pid_t GPid;
 #if __CRTL_VER >= 70312000
 /* Define if you have snprintf() */
 #define HAVE_SNPRINTF 1
-
-/* Define if you have snprintf() declaration in the header */
-#define HAVE_SNPRINTF_DECL 1
 #else
 /* Define if you have snprintf() */
 #undef HAVE_SNPRINTF
-
-/* Define if you have snprintf() declaration in the header */
-#undef HAVE_SNPRINTF_DECL
 #endif
 
 /* Define if you have a snprintf() which supports positional arguments
@@ -1100,24 +955,15 @@ typedef pid_t GPid;
 /* define if you have statvfs function */
 #undef HAVE_STATVFS
 
-/* Define if you have strtoull() and strtoll() */
-#define HAVE_STRTOULL 1
-
 /* Define if you have all functions to set thread priority */
 #define HAVE_THREAD_PRIORITY_FUNCTIONS 1
 
 #if __CRTL_VER >= 70312000
 /* Define if you have vsnprintf() */
 #define HAVE_VSNPRINTF 1
-
-/* Define if you have vsnprintf() declaration in the header */
-#define HAVE_VSNPRINTF_DECL 1
 #else
 /* Define if you have vsnprintf() */
 #undef HAVE_VSNPRINTF
-
-/* Define if you have vsnprintf() declaration in the header */
-#undef HAVE_VSNPRINTF_DECL
 #endif
 
 /* Define if you have a _broken_ vsnprintf() declaration in the header,
@@ -1130,9 +976,6 @@ typedef pid_t GPid;
 
 /* Define if you have vsscanf() */
 #define HAVE_VSSCANF 1
-
-/* Define if you have vsscanf() declaration in the header */
-#define HAVE_VSSCANF_DECL 1
 
 /* Define if you have usleep() */
 #define HAVE_USLEEP 1
@@ -1157,9 +1000,6 @@ typedef pid_t GPid;
 
 /* Define if you have wcsnlen() function */
 #undef HAVE_WCSNLEN
-
-/* Define if you have wcstoull() and wcstoll() */
-#undef HAVE_WCSTOULL
 
 /* The number of bytes in a wchar_t.  */
 #define SIZEOF_WCHAR_T 4
@@ -1316,7 +1156,7 @@ typedef pid_t GPid;
 #undef ICONV_CONST
 
 /* Define if you have the <langinfo.h> header file.  */
-#define HAVE_LANGINFO_H 1
+#undef HAVE_LANGINFO_H
 
 /* Define if you have the <esd.h> header file.  */
 /* #undef HAVE_ESD_H */
@@ -1398,9 +1238,6 @@ typedef pid_t GPid;
 #ifdef __WIN32__
 
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
-
-/* Define if the header pbt.h is missing.  */
-#undef NEED_PBT_H
 
 #endif /* __WIN32__ */
 

@@ -27,6 +27,9 @@
 #ifndef _WX_SCOPED_PTR_H_
 #define _WX_SCOPED_PTR_H_
 
+// Everything in this file is deprecated and must not be used any longer,
+// simply use std::unique_ptr<> instead.
+
 #include "wx/defs.h"
 #include "wx/checkeddelete.h"
 
@@ -40,7 +43,7 @@ class wxScopedPtr
 public:
     typedef T element_type;
 
-    explicit wxScopedPtr(T * ptr = NULL) : m_ptr(ptr) { }
+    explicit wxScopedPtr(T * ptr = nullptr) : m_ptr(ptr) { }
 
     ~wxScopedPtr() { wxCHECKED_DELETE(m_ptr); }
 
@@ -50,10 +53,10 @@ public:
 
     operator unspecified_bool_type() const
     {
-        return m_ptr ? &wxScopedPtr<T>::get : NULL;
+        return m_ptr ? &wxScopedPtr<T>::get : nullptr;
     }
 
-    void reset(T * ptr = NULL)
+    void reset(T * ptr = nullptr)
     {
         if ( ptr != m_ptr )
         {
@@ -65,19 +68,19 @@ public:
     T *release()
     {
         T *ptr = m_ptr;
-        m_ptr = NULL;
+        m_ptr = nullptr;
         return ptr;
     }
 
     T & operator*() const
     {
-        wxASSERT(m_ptr != NULL);
+        wxASSERT(m_ptr != nullptr);
         return *m_ptr;
     }
 
     T * operator->() const
     {
-        wxASSERT(m_ptr != NULL);
+        wxASSERT(m_ptr != nullptr);
         return m_ptr;
     }
 
@@ -118,29 +121,29 @@ private:                            \
     name & operator=(name const &); \
                                     \
 public:                             \
-    explicit name(T * ptr = NULL)   \
+    explicit name(T * ptr = nullptr)   \
     : m_ptr(ptr) { }                \
                                     \
     ~name();                        \
                                     \
-    void reset(T * ptr = NULL);     \
+    void reset(T * ptr = nullptr);     \
                                     \
     T *release()                    \
     {                               \
         T *ptr = m_ptr;             \
-        m_ptr = NULL;               \
+        m_ptr = nullptr;               \
         return ptr;                 \
     }                               \
                                     \
     T & operator*() const           \
     {                               \
-        wxASSERT(m_ptr != NULL);    \
+        wxASSERT(m_ptr != nullptr);    \
         return *m_ptr;              \
     }                               \
                                     \
     T * operator->() const          \
     {                               \
-        wxASSERT(m_ptr != NULL);    \
+        wxASSERT(m_ptr != nullptr);    \
         return m_ptr;               \
     }                               \
                                     \

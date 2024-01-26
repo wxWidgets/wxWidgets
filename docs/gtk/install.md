@@ -11,19 +11,45 @@ The simplest case                      {#gtk_simple}
 -------------------
 
 If you compile wxWidgets on Linux for the first time and don't like to read
-install instructions just do the following in wxWidgets directory:
+install instructions just [get the sources](@ref install_get_sources) and do
+the following in wxWidgets directory:
 
     $ mkdir buildgtk
     $ cd buildgtk
     $ ../configure --with-gtk
     $ make
+
+It is recommended to use `-jN` option with the last command, where `N` is a
+number of the processors in your system (which can be checked using `nproc`
+command if you are not sure), as this will dramatically speed up the build
+on modern systems. So in practice you should use a command like this:
+
+    $ make -j8
+
+(but don't use it unless you actually have 8 CPUs and enough memory for that
+many parallel compiler invocations).
+
+You may also prefer to add `-s` option to avoid normal output from make and/or
+redirect it you to a log file for further inspection.
+
+You should build at least the smallest possible wxWidgets sample to verify that
+everything is working as intended, by doing
+
+    $ cd samples/minimal
+    $ make
+
+and try running it using `./minimal` command from the same directory.
+
+After confirming that it works, you may want to install wxWidgets by running
+
     $ sudo make install
     $ sudo ldconfig
 
 (if you get "ldconfig: command not found", try using `/sbin/ldconfig`)
 
-If you don't do the `make install` part, you can still use the libraries from
-the `buildgtk` directory, but they may not be available to other users.
+but note that this part is optional and you can use the libraries from
+the `buildgtk` directory by running `.../buildgtk/wx-config` script using its
+full path instead of just using `wx-config`.
 
 Note that by default, GTK 3 is used. GTK 2 can be specified
 with `--with-gtk=2` configure option.
@@ -46,8 +72,8 @@ Debian and Debian-based distribution these libraries are part of `libgtk-3-dev`
 package, while in Fedora and other RPM-based distributions the same package is
 known as `gtk3-devel`.
 
-For OpenGL support, you need `libgl1-mesa-dev` and `libglu1-mesa-dev` packages
-under Debian and `mesa-libGL-devel` and `mesa-libGLU-devel` under Fedora. For
+For OpenGL support, you need `libgl1-mesa-dev` packages
+under Debian and `mesa-libGL-devel` and under Fedora. For
 EGL support, `libegl1-mesa-dev` or `mesa-libEGL-devel` is needed.
 
 wxMediaCtrl implementation requires GStreamer and its plugins development
@@ -150,7 +176,7 @@ used to override this.
    typically will, still be used if found.
 
  * `--without-libpng` \n
-   Disables PNG image format code. Don't use neither the system nor the builtin
+   Disables PNG image format code. Use neither the system nor the builtin
    libpng (although GTK itself still uses it).
 
  * `--without-libjpeg` \n
@@ -193,9 +219,6 @@ Some other general compilation options:
  * `--disable-optimise` \n
    Do not optimise the code. Can be useful for debugging but shouldn't be used
    for production builds.
-
- * `--disable-unicode` \n
-   Disable Unicode support. Not recommended.
 
  * `--enable-no_rtti` \n
    Enable compilation without creation of C++ RTTI information in object files.

@@ -28,8 +28,8 @@ class BitmapToggleButtonTestCase : public CppUnit::TestCase
 public:
     BitmapToggleButtonTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( BitmapToggleButtonTestCase );
@@ -74,8 +74,10 @@ void BitmapToggleButtonTestCase::Click()
 
     wxUIActionSimulator sim;
 
+    const wxPoint pos = m_button->GetScreenPosition();
+
     //We move in slightly to account for window decorations
-    sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
+    sim.MouseMove(pos + wxPoint(10, 10));
     wxYield();
 
     sim.MouseClick();
@@ -86,9 +88,10 @@ void BitmapToggleButtonTestCase::Click()
 
     clicked.Clear();
 
-#ifdef __WXMSW__
-    wxMilliSleep(1000);
-#endif
+    // Change the mouse position to prevent the second click from being
+    // recognized as double click.
+    sim.MouseMove(pos + wxPoint(20, 20));
+    wxYield();
 
     sim.MouseClick();
     wxYield();

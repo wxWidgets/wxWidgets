@@ -39,7 +39,7 @@ public:
     virtual void OnExceptionWaiting() = 0;
 
     // virtual dtor for the base class
-    virtual ~wxEventLoopSourceHandler() { }
+    virtual ~wxEventLoopSourceHandler() = default;
 };
 
 // flags describing which kind of IO events we're interested in
@@ -88,7 +88,7 @@ inline wxEventLoopSource::~wxEventLoopSource() { }
     #include "wx/unix/evtloopsrc.h"
 #endif // __UNIX__
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     #include "wx/gtk/evtloopsrc.h"
 #endif
 

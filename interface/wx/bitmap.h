@@ -95,7 +95,7 @@ public:
             wxBITMAP_TYPE_BMP_RESOURCE as @a type), the light grey colour is
             considered to be transparent, for historical reasons. If you want
             to handle the light grey pixels normally instead, call
-            SetMask(NULL) after loading the bitmap.
+            `SetMask(nullptr)` after loading the bitmap.
 
         @param bitmap
             The bitmap object which is to be affected by this operation.
@@ -133,7 +133,7 @@ public:
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, LoadFile()
     */
     virtual bool SaveFile(const wxBitmap* bitmap, const wxString& name, wxBitmapType type,
-                          const wxPalette* palette = NULL) const;
+                          const wxPalette* palette = nullptr) const;
 
     /**
         Sets the handler extension.
@@ -307,6 +307,20 @@ public:
     wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
+        Create a bitmap compatible with the given DC, inheriting its magnification factor
+
+        @param width
+            The width of the bitmap in pixels, must be strictly positive.
+        @param height
+            The height of the bitmap in pixels, must be strictly positive.
+        @param dc
+            DC from which the scaling factor is inherited
+
+        @since 3.1.7 (previously available only in wxMSW and wxOSX ports).
+     */
+    wxBitmap(int width, int height, const wxDC& dc);
+
+    /**
         Creates a bitmap from XPM data.
 
         @beginWxPerlOnly
@@ -352,6 +366,23 @@ public:
             If this is omitted, the display depth of the screen is used.
     */
     wxBitmap(const wxImage& img, int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /**
+        Creates a bitmap compatible with the given DC from the given image.
+
+        This constructor initializes the bitmap with the data of the given
+        image, which must be valid, but inherits the scaling factor from the
+        given device context instead of simply using the default factor of 1.
+
+        @param img
+            Platform-independent wxImage object.
+        @param dc
+            DC from which the scaling factor is inherited
+
+        @since 3.1.7 (previously this constructor overload was only available
+            in wxMSW port)
+     */
+    wxBitmap(const wxImage& img, const wxDC& dc);
 
     /**
         Creates bitmap corresponding to the given cursor.
@@ -463,6 +494,10 @@ public:
         Create a bitmap specifying its size in DPI-independent pixels and the
         scale factor to use.
 
+        This should be used when the bitmap size is fixed (e.g. at
+        compile-time) and not if it comes from wxWindow::GetSize() or other
+        similar functions -- use CreateWithLogicalSize() in the latter case.
+
         The physical size of the bitmap is obtained by multiplying the given
         @a size by @a scale and rounding it to the closest integer.
 
@@ -492,6 +527,43 @@ public:
     bool CreateWithDIPSize(int width, int height,
                            double scale,
                            int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /**
+        Create a bitmap specifying its size in logical pixels and the scale
+        factor to use.
+
+        This should be typically used when creating bitmaps associated to a
+        window area, e.g. to create a bitmap covering the entire window the
+        @a size parameter should be wxWindow::GetClientSize() and @a scale
+        should be the wxWindow::GetDPIScaleFactor().
+
+        The physical size of the bitmap created by this function depends on the
+        platform and will be the same as @a size on the platforms for which
+        `wxHAS_DPI_INDEPENDENT_PIXELS` is not defined (e.g. wxMSW) or @a size
+        multiplied by @a scale for those where it is (e.g. wxGTK3 and wxOSX).
+        In other words, this function is the same as CreateWithDIPSize() if
+        `wxHAS_DPI_INDEPENDENT_PIXELS` is defined, but not otherwise.
+
+        @param size
+            The size of the bitmap in logical pixels. Both width and
+            height must be strictly positive.
+        @param scale
+            Scale factor used by the bitmap, see SetScaleFactor().
+        @param depth
+            The number of bits used to represent each bitmap pixel.
+
+        @return @true if the creation was successful.
+
+        @since 3.3.0
+     */
+    bool CreateWithLogicalSize(const wxSize& size,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /// @overload
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Create a bitmap with a scale factor.
@@ -743,6 +815,16 @@ public:
     virtual int GetWidth() const;
 
     /**
+        Returns true if the bitmap has an alpha channel.
+
+        Note that the fact that a bitmap has an alpha channel doesn't
+        necessarily mean that it has any transparency, as all of its pixels
+        could be using wxALPHA_OPAQUE value. To actually examine the alpha
+        values, the bitmap can be converted to wxImage.
+     */
+    bool HasAlpha() const;
+
+    /**
         Adds the standard bitmap format handlers, which, depending on wxWidgets
         configuration, can be handlers for Windows bitmap, Windows bitmap resource,
         and XPM.
@@ -847,6 +929,13 @@ public:
     static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
 
     /**
+        Remove alpha channel from the bitmap.
+
+        This is the same as calling UseAlpha() with @false argument.
+     */
+    void ResetAlpha();
+
+    /**
         Saves a bitmap in the named file.
 
         @param name
@@ -865,7 +954,7 @@ public:
         @see LoadFile()
     */
     virtual bool SaveFile(const wxString& name, wxBitmapType type,
-                          const wxPalette* palette = NULL) const;
+                          const wxPalette* palette = nullptr) const;
 
     /**
          @deprecated This function is deprecated since version 3.1.2, dimensions
@@ -940,6 +1029,24 @@ public:
             Bitmap width in pixels.
     */
     virtual void SetWidth(int width);
+
+    /**
+        Enable or disable use of alpha channel in this bitmap.
+
+        This function is only useful for 32bpp bitmaps and changes their format
+        to use, or not use, the fourth byte of the pixel data for the alpha
+        channel.
+
+        It currently is only implemented in wxMSW and wxOSX and simply always
+        returns @false under the other platforms.
+
+        @return @true if the operation succeeded, @false otherwise, e.g. when
+            trying to enable alpha channel support for a non-32bpp bitmap or if
+            this operation is simply not supported by the current platform.
+
+        @see HasAlpha(), ResetAlpha()
+     */
+    bool UseAlpha(bool use = true);
 };
 
 /**

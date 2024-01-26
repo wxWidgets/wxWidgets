@@ -64,7 +64,7 @@ public:
                 long style = 0,
                 const wxString& name = wxHtmlListBoxNameStr);
 
-    //@{
+    ///@{
     /**
         Returns the wxFileSystem used by the HTML parser of this object.
 
@@ -75,7 +75,7 @@ public:
     */
     wxFileSystem& GetFileSystem() const;
     const wxFileSystem& GetFileSystem() const;
-    //@}
+    ///@}
 
 protected:
 
@@ -211,7 +211,7 @@ public:
         Constructor, creating and showing the HTML list box.
 
         @param parent
-            Parent window. Must not be NULL.
+            Parent window. Must not be @NULL.
         @param id
             Window identifier. A value of -1 indicates a default value.
         @param pos
@@ -235,7 +235,7 @@ public:
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
                         int n = 0,
-                        const wxString choices[] = NULL,
+                        const wxString choices[] = nullptr,
                         long style = wxHLB_DEFAULT_STYLE,
                         const wxValidator& validator = wxDefaultValidator,
                         const wxString& name = wxSimpleHtmlListBoxNameStr);
@@ -244,7 +244,7 @@ public:
         Constructor, creating and showing the HTML list box.
 
         @param parent
-            Parent window. Must not be NULL.
+            Parent window. Must not be @NULL.
         @param id
             Window identifier. A value of -1 indicates a default value.
         @param pos
@@ -278,7 +278,7 @@ public:
     */
     virtual ~wxSimpleHtmlListBox();
 
-    //@{
+    ///@{
     /**
         Creates the HTML listbox for two-step construction.
         See wxSimpleHtmlListBox() for further details.
@@ -286,7 +286,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSimpleHtmlListBoxNameStr);
@@ -297,6 +297,6 @@ public:
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSimpleHtmlListBoxNameStr);
-    //@}
+    ///@}
 };
 

@@ -2,7 +2,6 @@
 // Name:        wx/utils.h
 // Purpose:     Miscellaneous utilities
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
@@ -18,7 +17,6 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/filefn.h"
-#include "wx/hashmap.h"
 #include "wx/versioninfo.h"
 #include "wx/meta/implicitconversion.h"
 
@@ -38,12 +36,21 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 // needed for wxOperatingSystemId, wxLinuxDistributionInfo
 #include "wx/platinfo.h"
 
+// This is a hack, but this header used to include wx/hashmap.h which, in turn,
+// included wx/wxcrt.h and it turns out quite some existing code relied on it
+// by using the CRT wrapper functions declared there without explicitly
+// including that header, so keep including it from here to let it continue to
+// compile.
+#include "wx/wxcrt.h"
+
 #if defined(__X__)
     #include <dirent.h>
     #include <unistd.h>
 #endif
 
 #include <stdio.h>
+
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // Forward declaration
@@ -107,22 +114,6 @@ wxClip(T1 a, T2 b, T3 c)
 #endif
 
 // ----------------------------------------------------------------------------
-// String functions (deprecated, use wxString)
-// ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_8
-// A shorter way of using strcmp
-wxDEPRECATED_INLINE(inline bool wxStringEq(const char *s1, const char *s2),
-    return wxCRT_StrcmpA(s1, s2) == 0; )
-
-#if wxUSE_UNICODE
-wxDEPRECATED_INLINE(inline bool wxStringEq(const wchar_t *s1, const wchar_t *s2),
-    return wxCRT_StrcmpW(s1, s2) == 0; )
-#endif // wxUSE_UNICODE
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
-// ----------------------------------------------------------------------------
 // Miscellaneous functions
 // ----------------------------------------------------------------------------
 
@@ -140,9 +131,9 @@ WXDLLIMPEXP_CORE wxVersionInfo wxGetLibraryVersionInfo();
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();
 
 // Get OS version
-WXDLLIMPEXP_BASE wxOperatingSystemId wxGetOsVersion(int *verMaj = NULL,
-                                                    int *verMin = NULL,
-                                                    int *verMicro = NULL);
+WXDLLIMPEXP_BASE wxOperatingSystemId wxGetOsVersion(int *verMaj = nullptr,
+                                                    int *verMin = nullptr,
+                                                    int *verMicro = nullptr);
 
 // Check is OS version is at least the specified major and minor version
 WXDLLIMPEXP_BASE bool wxCheckOsVersion(int majorVsn, int minorVsn = 0, int microVsn = 0);
@@ -382,7 +373,7 @@ enum
 };
 
 // Map storing environment variables.
-typedef wxStringToStringHashMap wxEnvVariableHashMap;
+using wxEnvVariableHashMap = std::unordered_map<wxString, wxString>;
 
 // Used to pass additional parameters for child process to wxExecute(). Could
 // be extended with other fields later.
@@ -399,32 +390,30 @@ struct wxExecuteEnv
 // failure and the PID of the launched process if ok.
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 int flags = wxEXEC_ASYNC,
-                                wxProcess *process = NULL,
-                                const wxExecuteEnv *env = NULL);
+                                wxProcess *process = nullptr,
+                                const wxExecuteEnv *env = nullptr);
 WXDLLIMPEXP_BASE long wxExecute(const char* const* argv,
                                 int flags = wxEXEC_ASYNC,
-                                wxProcess *process = NULL,
-                                const wxExecuteEnv *env = NULL);
-#if wxUSE_UNICODE
+                                wxProcess *process = nullptr,
+                                const wxExecuteEnv *env = nullptr);
 WXDLLIMPEXP_BASE long wxExecute(const wchar_t* const* argv,
                                 int flags = wxEXEC_ASYNC,
-                                wxProcess *process = NULL,
-                                const wxExecuteEnv *env = NULL);
-#endif // wxUSE_UNICODE
+                                wxProcess *process = nullptr,
+                                const wxExecuteEnv *env = nullptr);
 
 // execute the command capturing its output into an array line by line, this is
 // always synchronous
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 wxArrayString& output,
                                 int flags = 0,
-                                const wxExecuteEnv *env = NULL);
+                                const wxExecuteEnv *env = nullptr);
 
 // also capture stderr (also synchronous)
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 wxArrayString& output,
                                 wxArrayString& error,
                                 int flags = 0,
-                                const wxExecuteEnv *env = NULL);
+                                const wxExecuteEnv *env = nullptr);
 
 #if defined(__WINDOWS__) && wxUSE_IPC
 // ask a DDE server to execute the DDE request with given parameters
@@ -485,10 +474,10 @@ WXDLLIMPEXP_BASE bool wxShutdown(int flags = wxSHUTDOWN_POWEROFF);
 // send the given signal to the process (only NONE and KILL are supported under
 // Windows, all others mean TERM), return 0 if ok and -1 on error
 //
-// return detailed error in rc if not NULL
+// return detailed error in rc is not null
 WXDLLIMPEXP_BASE int wxKill(long pid,
                        wxSignal sig = wxSIGTERM,
-                       wxKillError *rc = NULL,
+                       wxKillError *rc = nullptr,
                        int flags = wxKILL_NOCHILDREN);
 
 // Execute a command in an interactive shell window (always synchronously)
@@ -508,11 +497,6 @@ WXDLLIMPEXP_BASE void wxMilliSleep(unsigned long milliseconds);
 // Sleep for a given amount of microseconds
 WXDLLIMPEXP_BASE void wxMicroSleep(unsigned long microseconds);
 
-#if WXWIN_COMPATIBILITY_2_8
-// Sleep for a given amount of milliseconds (old, bad name), use wxMilliSleep
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds) );
-#endif
-
 // Get the process id of the current process
 WXDLLIMPEXP_BASE unsigned long wxGetProcessId();
 
@@ -530,7 +514,7 @@ WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);
 // Environment variables
 // ----------------------------------------------------------------------------
 
-// returns true if variable exists (value may be NULL if you just want to check
+// returns true if variable exists (value may be null if you just want to check
 // for this)
 WXDLLIMPEXP_BASE bool wxGetEnv(const wxString& var, wxString *value);
 
@@ -539,29 +523,6 @@ WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxString& value);
 
 // remove the env var from environment
 WXDLLIMPEXP_BASE bool wxUnsetEnv(const wxString& var);
-
-#if WXWIN_COMPATIBILITY_2_8
-inline bool wxSetEnv(const wxString& var, const char *value)
-    { return wxSetEnv(var, wxString(value)); }
-inline bool wxSetEnv(const wxString& var, const wchar_t *value)
-    { return wxSetEnv(var, wxString(value)); }
-template<typename T>
-inline bool wxSetEnv(const wxString& var, const wxScopedCharTypeBuffer<T>& value)
-    { return wxSetEnv(var, wxString(value)); }
-inline bool wxSetEnv(const wxString& var, const wxCStrData& value)
-    { return wxSetEnv(var, wxString(value)); }
-
-// this one is for passing NULL directly - don't use it, use wxUnsetEnv instead
-wxDEPRECATED( inline bool wxSetEnv(const wxString& var, int value) );
-inline bool wxSetEnv(const wxString& var, int value)
-{
-    wxASSERT_MSG( value == 0, "using non-NULL integer as string?" );
-
-    wxUnusedVar(value); // fix unused parameter warning in release build
-
-    return wxUnsetEnv(var);
-}
-#endif // WXWIN_COMPATIBILITY_2_8
 
 // Retrieve the complete environment by filling specified map.
 // Returns true on success or false if an error occurred.
@@ -610,27 +571,22 @@ WXDLLIMPEXP_BASE wxString wxGetUserHome(const wxString& user = wxEmptyString);
 
 // get number of total/free bytes on the disk where path belongs
 WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
-                                     wxDiskspaceSize_t *pTotal = NULL,
-                                     wxDiskspaceSize_t *pFree = NULL);
+                                     wxDiskspaceSize_t *pTotal = nullptr,
+                                     wxDiskspaceSize_t *pFree = nullptr);
 
 
-
-// See wx/vector.h for more about this hack.
-#ifndef wxQSORT_DECLARED
-
-#define wxQSORT_DECLARED
 
 typedef int (*wxSortCallback)(const void* pItem1,
                               const void* pItem2,
                               const void* user_data);
 
 
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("Use std::sort instead")
 WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
                               size_t size, wxSortCallback cmp,
                               const void* user_data);
-
-#endif // !wxQSORT_DECLARED
-
+#endif // WXWIN_COMPATIBILITY_3_2
 
 #if wxUSE_GUI // GUI only things from now on
 
@@ -697,21 +653,21 @@ WXDLLIMPEXP_CORE wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 // NB: this function is obsolete, use wxWindow::FindWindowByLabel() instead
 //
 // Find the window/widget with the given title or label.
-// Pass a parent to begin the search from, or NULL to look through
+// Pass a parent to begin the search from, or nullptr to look through
 // all windows.
-WXDLLIMPEXP_CORE wxWindow* wxFindWindowByLabel(const wxString& title, wxWindow *parent = NULL);
+WXDLLIMPEXP_CORE wxWindow* wxFindWindowByLabel(const wxString& title, wxWindow *parent = nullptr);
 
 // NB: this function is obsolete, use wxWindow::FindWindowByName() instead
 //
 // Find window by name, and if that fails, by label.
-WXDLLIMPEXP_CORE wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent = NULL);
+WXDLLIMPEXP_CORE wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent = nullptr);
 
 // ----------------------------------------------------------------------------
 // Message/event queue helpers
 // ----------------------------------------------------------------------------
 
 // Yield to other apps/messages and disable user input
-WXDLLIMPEXP_CORE bool wxSafeYield(wxWindow *win = NULL, bool onlyIfNeeded = false);
+WXDLLIMPEXP_CORE bool wxSafeYield(wxWindow *win = nullptr, bool onlyIfNeeded = false);
 
 // Enable or disable input to all top level windows
 WXDLLIMPEXP_CORE void wxEnableTopLevelWindows(bool enable = true);
@@ -730,25 +686,25 @@ class WXDLLIMPEXP_CORE wxWindowDisabler
 public:
     // this ctor conditionally disables all windows: if the argument is false,
     // it doesn't do anything
-    wxWindowDisabler(bool disable = true);
+    explicit wxWindowDisabler(bool disable = true);
 
-    // ctor disables all windows except winToSkip
-    wxWindowDisabler(wxWindow *winToSkip);
+    // ctor disables all windows except the given one(s)
+    explicit wxWindowDisabler(wxWindow *winToSkip, wxWindow *winToSkip2 = nullptr);
 
     // dtor enables back all windows disabled by the ctor
     ~wxWindowDisabler();
 
 private:
-    // disable all windows except the given one (used by both ctors)
-    void DoDisable(wxWindow *winToSkip = NULL);
+    // disable all windows not in m_windowsToSkip
+    void DoDisable();
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
     void AfterDisable(wxWindow* winToSkip);
     void BeforeEnable();
 
-    wxEventLoop* m_modalEventLoop = NULL;
+    wxEventLoop* m_modalEventLoop = nullptr;
 #endif
-    wxVector<wxWindow*> m_winDisabled;
+    wxVector<wxWindow*> m_windowsToSkip;
     bool m_disabled;
 
     wxDECLARE_NO_COPY_CLASS(wxWindowDisabler);
@@ -807,19 +763,24 @@ void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
         wxDisplayType type;
     };
     WXDLLIMPEXP_CORE wxDisplayInfo wxGetDisplayInfo();
+
+    inline struct _XDisplay *wxGetX11Display()
+    {
+        const auto& info = wxGetDisplayInfo();
+        return info.type == wxDisplayX11 ? (_XDisplay*)info.dpy : nullptr;
+    }
 #endif
 
 #ifdef __X__
     WXDLLIMPEXP_CORE WXDisplay *wxGetDisplay();
     WXDLLIMPEXP_CORE bool wxSetDisplay(const wxString& display_name);
     WXDLLIMPEXP_CORE wxString wxGetDisplayName();
-#endif // X or GTK+
 
-// use this function instead of the functions above in implementation code
-inline struct _XDisplay *wxGetX11Display()
-{
-    return (_XDisplay *)wxGetDisplay();
-}
+    inline struct _XDisplay *wxGetX11Display()
+    {
+        return (_XDisplay *)wxGetDisplay();
+    }
+#endif // X
 
 #endif // X11 || wxGTK
 
@@ -866,18 +827,18 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
                        size_t *outLen,
                        const wxString& resourceName,
                        const wxChar* resourceType = wxUserResourceStr,
-                       WXHINSTANCE module = NULL);
+                       WXHINSTANCE module = nullptr);
 
     // This function allocates a new buffer and makes a copy of the resource
     // data, remember to delete[] the buffer. And avoid using it entirely if
     // the overload above can be used.
     //
-    // Returns NULL on failure.
+    // Returns nullptr on failure.
     WXDLLIMPEXP_BASE char*
     wxLoadUserResource(const wxString& resourceName,
                        const wxChar* resourceType = wxUserResourceStr,
-                       int* pLen = NULL,
-                       WXHINSTANCE module = NULL);
+                       int* pLen = nullptr,
+                       WXHINSTANCE module = nullptr);
 #endif // __WINDOWS__
 
 #endif

@@ -2,7 +2,6 @@
 // Name:        game.cpp
 // Purpose:     Forty Thieves patience game
 // Author:      Chris Breeze
-// Modified by:
 // Created:     21/07/97
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:     wxWindows licence
@@ -179,7 +178,7 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
     if (HaveYouWon())
     {
         wxWindow *frame = wxTheApp->GetTopWindow();
-        wxWindow *canvas = (wxWindow *) NULL;
+        wxWindow *canvas = nullptr;
 
         if (frame)
         {

@@ -2,7 +2,6 @@
 // Name:        src/generic/fontpickerg.cpp
 // Purpose:     wxGenericFontButton class implementation
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     15/04/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
@@ -21,6 +20,10 @@
 
 
 #if wxUSE_FONTPICKERCTRL
+
+#ifndef WX_PRECOMP
+    #include "wx/settings.h"
+#endif // WX_PRECOMP
 
 #include "wx/fontpicker.h"
 
@@ -68,7 +71,7 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
 void wxGenericFontButton::InitFontData()
 {
     m_data.SetAllowSymbols(true);
-    m_data.SetColour(*wxBLACK);
+    m_data.SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT));
     m_data.EnableEffects(true);
 }
 

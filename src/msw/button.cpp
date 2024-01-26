@@ -2,7 +2,6 @@
 // Name:        src/msw/button.cpp
 // Purpose:     wxButton
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -232,7 +231,7 @@ wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
    one.
 
    We handle this by maintaining a permanent and a temporary default items in
-   wxControlContainer (both may be NULL). When a button becomes the current
+   wxControlContainer (both may be null). When a button becomes the current
    control (i.e. gets focus) it sets itself as the temporary default which
    ensures that it has the right appearance and that Enter will be redirected
    to it. When the button loses focus, it unsets the temporary default and so
@@ -254,7 +253,7 @@ wxWindow *wxButton::SetDefault()
 }
 
 // return the top level parent window if it's not being deleted yet, otherwise
-// return NULL
+// return nullptr
 static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
 {
     for ( ;; )
@@ -265,7 +264,7 @@ static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
         if ( !parent || win->IsTopLevel() )
         {
             if ( win->IsBeingDeleted() )
-                return NULL;
+                return nullptr;
 
             break;
         }
@@ -309,7 +308,7 @@ void wxButton::UnsetTmpDefault()
     if ( !tlw )
         return;
 
-    tlw->SetTmpDefaultItem(NULL);
+    tlw->SetTmpDefaultItem(nullptr);
 
     wxWindow *winOldDefault = tlw->GetDefaultItem();
 
@@ -325,7 +324,7 @@ void wxButton::UnsetTmpDefault()
 void
 wxButton::SetDefaultStyle(wxButton *btn, bool on)
 {
-    // we may be called with NULL pointer -- simpler to do the check here than
+    // we may be called with null pointer -- simpler to do the check here than
     // in the caller which does wxDynamicCast()
     if ( !btn )
         return;
@@ -461,13 +460,9 @@ bool wxButton::DoGetAuthNeeded() const
 
 void wxButton::DoSetAuthNeeded(bool show)
 {
-    // show/hide UAC symbol on Windows Vista and later
-    if ( wxGetWinVersion() >= wxWinVersion_6 )
-    {
-        m_authNeeded = show;
-        ::SendMessage(GetHwnd(), BCM_SETSHIELD, 0, show);
-        InvalidateBestSize();
-    }
+    m_authNeeded = show;
+    ::SendMessage(GetHwnd(), BCM_SETSHIELD, 0, show);
+    InvalidateBestSize();
 }
 
 #endif // wxUSE_BUTTON

@@ -2,7 +2,6 @@
 // Name:        src/msw/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -81,7 +80,7 @@ wxComboEditWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 // ---------------------------------------------------------------------------
 
 // the pointer to standard radio button wnd proc
-static WNDPROC gs_wndprocEdit = (WNDPROC)NULL;
+static WNDPROC gs_wndprocEdit = nullptr;
 
 // ============================================================================
 // implementation
@@ -412,7 +411,7 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
     }
 
     // we assume that the only child of the combobox is the edit window
-    return (WXHWND)::FindWindowEx(GetHwnd(), NULL, wxT("EDIT"), NULL);
+    return (WXHWND)::FindWindowEx(GetHwnd(), nullptr, wxT("EDIT"), nullptr);
 }
 
 WXHWND wxComboBox::GetEditHWND() const
@@ -439,6 +438,107 @@ wxWindow *wxComboBox::GetEditableWindow()
 // ----------------------------------------------------------------------------
 // wxComboBox creation
 // ----------------------------------------------------------------------------
+
+void wxComboBox::MSWRecreate()
+{
+    wxString value = GetValue();
+    int selection = GetSelection();
+    wxPoint pos = GetPosition();
+    wxSize size = GetSize();
+    size.y = GetBestSize().y;
+    const wxArrayString strings = GetStrings();
+    const unsigned numItems = strings.size();
+    unsigned i;
+
+    // Save the client data pointers before clearing the control, if any.
+    const wxClientDataType clientDataType = GetClientDataType();
+    wxVector<wxClientData*> objectClientData;
+    wxVector<void*> voidClientData;
+    switch ( clientDataType )
+    {
+        case wxClientData_None:
+            break;
+
+        case wxClientData_Object:
+            objectClientData.reserve(numItems);
+            for ( i = 0; i < numItems; ++i )
+                objectClientData.push_back(GetClientObject(i));
+            break;
+
+        case wxClientData_Void:
+            voidClientData.reserve(numItems);
+            for ( i = 0; i < numItems; ++i )
+                voidClientData.push_back(GetClientData(i));
+            break;
+    }
+
+    wxComboBox::DoClear();
+
+    HWND hwnd = GetHwnd();
+    DissociateHandle();
+    ::DestroyWindow(hwnd);
+
+    if ( !MSWCreateControl(wxT("COMBOBOX"), wxEmptyString, pos, size) )
+        return;
+
+    if ( !HasFlag(wxCB_READONLY) )
+    {
+        // A new EDIT control was created as well, we need to subclass it just
+        // as when creating the combobox, see Create(). However we don't need
+        // to assign to gs_wndprocEdit as it must have been already set.
+        wxSetWindowProc((HWND)GetEditHWND(), wxComboEditWndProc);
+    }
+
+    // initialize the controls contents
+    for ( i = 0; i < numItems; i++ )
+    {
+        wxComboBox::Append(strings[i]);
+
+        if ( !objectClientData.empty() )
+            SetClientObject(i, objectClientData[i]);
+        else if ( !voidClientData.empty() )
+            SetClientData(i, voidClientData[i]);
+    }
+
+    // and make sure it has the same attributes as before
+    if ( m_hasFont )
+    {
+        // calling SetFont(m_font) would do nothing as the code would
+        // notice that the font didn't change, so force it to believe
+        // that it did
+        wxFont font = m_font;
+        m_font = wxNullFont;
+        SetFont(font);
+    }
+
+    if ( m_hasFgCol )
+    {
+        wxColour colFg = m_foregroundColour;
+        m_foregroundColour = wxNullColour;
+        SetForegroundColour(colFg);
+    }
+
+    if ( m_hasBgCol )
+    {
+        wxColour colBg = m_backgroundColour;
+        m_backgroundColour = wxNullColour;
+        SetBackgroundColour(colBg);
+    }
+    else
+    {
+        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    }
+
+    // Revert the old string value
+    if ( !HasFlag(wxCB_READONLY) )
+        ChangeValue(value);
+    else if ( selection != wxNOT_FOUND )
+        SetSelection(selection);
+
+    // If disabled we'll have to disable it again after re-creating
+    if ( !IsThisEnabled() )
+        DoEnable(false);
+}
 
 bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,
@@ -659,24 +759,6 @@ void wxComboBox::DoSetToolTip(wxToolTip *tip)
 
 #endif // wxUSE_TOOLTIPS
 
-#if wxUSE_UXTHEME
-
-bool wxComboBox::SetHint(const wxString& hintOrig)
-{
-    wxString hint(hintOrig);
-    if ( wxUxThemeIsActive() )
-    {
-        // under XP (but not Vista) there is a bug in cue banners
-        // implementation for combobox edit control: the first character is
-        // partially chopped off, so prepend a space to make it fully visible
-        hint.insert(0, " ");
-    }
-
-    return wxTextEntry::SetHint(hint);
-}
-
-#endif // wxUSE_UXTHEME
-
 wxSize wxComboBox::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxSize tsize( wxChoice::DoGetSizeFromTextSize(xlen, ylen) );
@@ -705,7 +787,7 @@ wxWindow *wxComboBox::MSWFindItem(long id, WXHWND hWnd) const
     if ( id == GetId() && hWnd && hWnd != GetHWND() )
     {
         // Must be the case described above.
-        return NULL;
+        return nullptr;
     }
 
     return wxChoice::MSWFindItem(id, hWnd);

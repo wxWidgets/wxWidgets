@@ -3,7 +3,6 @@
 // Purpose:     wxGDIImage class: base class for wxBitmap, wxIcon, wxCursor
 //              under MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -38,7 +37,7 @@ public:
 
         m_scaleFactor = 1.0;
 
-        m_handle = NULL;
+        m_handle = nullptr;
     }
 
     wxGDIImageRefData(const wxGDIImageRefData& data) : wxGDIRefData()
@@ -50,11 +49,11 @@ public:
         m_scaleFactor = data.m_scaleFactor;
 
         // can't copy handles like this, derived class copy ctor must do it!
-        m_handle = NULL;
+        m_handle = nullptr;
     }
 
     // accessors
-    virtual bool IsOk() const wxOVERRIDE { return m_handle != NULL; }
+    virtual bool IsOk() const override { return m_handle != nullptr; }
 
     void SetSize(int w, int h) { m_width = w; m_height = h; }
 
@@ -111,7 +110,7 @@ public:
 
     // accessors
     WXHANDLE GetHandle() const
-        { return IsNull() ? NULL : GetGDIImageData()->m_handle; }
+        { return IsNull() ? nullptr : GetGDIImageData()->m_handle; }
     void SetHandle(WXHANDLE handle)
         { AllocExclusive(); GetGDIImageData()->m_handle = handle; }
 
@@ -148,23 +147,23 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_0
 
     // forward some of base class virtuals to wxGDIImageRefData
-    bool FreeResource(bool force = false) wxOVERRIDE;
-    virtual WXHANDLE GetResourceHandle() const wxOVERRIDE;
+    bool FreeResource(bool force = false) override;
+    virtual WXHANDLE GetResourceHandle() const override;
 
 protected:
     // create the data for the derived class here
     virtual wxGDIImageRefData *CreateData() const = 0;
 
     // implement the wxGDIObject method in terms of our, more specific, one
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE { return CreateData(); }
+    virtual wxGDIRefData *CreateGDIRefData() const override { return CreateData(); }
 
     // we can't [efficiently] clone objects of this class
     virtual wxGDIRefData *
-    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const wxOVERRIDE
+    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const override
     {
         wxFAIL_MSG( wxT("must be implemented if used") );
 
-        return NULL;
+        return nullptr;
     }
 
     static wxGDIImageHandlerList ms_handlers;

@@ -47,7 +47,7 @@ void wxQtCheckBox::clicked( bool checked )
 
 
 wxCheckBox::wxCheckBox() :
-    m_qtCheckBox(NULL)
+    m_qtCheckBox(nullptr)
 {
 }
 
@@ -66,7 +66,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_qtCheckBox->setText( wxQtConvertString( label ) );
 
     // Do the initialization here as WXValidateStyle may fail in unit tests
-    bool ok = QtCreateControl( parent, id, pos, size, style, validator, name );
+    bool ok = wxCheckBoxBase::Create( parent, id, pos, size, style, validator, name );
 
     WXValidateStyle(&style);
 

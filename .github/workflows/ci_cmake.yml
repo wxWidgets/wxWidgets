@@ -6,11 +6,13 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.circleci/**'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_msw.yml'
       - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -26,11 +28,13 @@ on:
     branches:
       - master
     paths-ignore:
+      - '.circleci/**'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ci.yml'
       - '.github/workflows/ci_mac.yml'
       - '.github/workflows/ci_msw.yml'
       - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
       - 'build/tools/appveyor*.bat'
       - 'distrib/**'
       - 'docs/**'
@@ -43,6 +47,13 @@ on:
       - '*.yml'
       - 'wxwidgets.props'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.runner }}
@@ -51,16 +62,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 18.04 wxGTK 3
-            runner: ubuntu-18.04
+          - name: Ubuntu 22.04 wxGTK 3
+            runner: ubuntu-22.04
             cmake_generator: Unix Makefiles
             cmake_samples: ALL
-          - name: macOS 10.15 wxOSX
-            runner: macos-10.15
+          - name: macOS 11 wxOSX
+            runner: macos-11
             cmake_generator: Xcode
-            cmake_defines: -DCMAKE_CXX_STANDARD=11
-          - name: macOS 10.15 wxIOS
-            runner: macos-10.15
+          - name: macOS 11 wxIOS
+            runner: macos-11
             cmake_generator: Xcode
             cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
             cmake_samples: OFF
@@ -83,7 +93,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -117,7 +127,7 @@ jobs:
       # required for CMake to find Ninja
       - name: "[Windows] Set up MSVC Developer Command Prompt"
         if: runner.os == 'Windows'
-        uses: seanmiddleditch/gha-setup-vsdevenv@v3
+        uses: wxWidgets/gha-setup-vsdevenv@ac61ecb4b05909261f8f375601c0e15aabdd9f10
 
       - name: Configuring
         run: |
@@ -139,6 +149,11 @@ jobs:
             else
                 cmake --build . --target install
             fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'

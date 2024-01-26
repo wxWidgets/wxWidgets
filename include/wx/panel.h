@@ -2,7 +2,6 @@
 // Name:        wx/panel.h
 // Purpose:     Base header for wxPanel
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 //              (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
@@ -19,28 +18,26 @@
 #include "wx/window.h"
 #include "wx/containr.h"
 
-class WXDLLIMPEXP_FWD_CORE wxControlContainer;
-
 extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxPanel contains other controls and implements TAB traversal between them
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPanelBase : public wxNavigationEnabled<wxWindow>
+class WXDLLIMPEXP_CORE wxPanel : public wxNavigationEnabled<wxWindow>
 {
 public:
-    wxPanelBase() { }
+    wxPanel() = default;
 
-    // Derived classes should also provide this constructor:
-    /*
-    wxPanelBase(wxWindow *parent,
+    wxPanel(wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-                const wxString& name = wxASCII_STR(wxPanelNameStr));
-    */
+                const wxString& name = wxASCII_STR(wxPanelNameStr))
+    {
+        Create(parent, winid, pos, size, style, name);
+    }
 
     // Pseudo ctor
     bool Create(wxWindow *parent,
@@ -54,19 +51,10 @@ public:
     // implementation from now on
     // --------------------------
 
-    virtual void InitDialog() wxOVERRIDE;
+    virtual void InitDialog() override;
 
 private:
-    wxDECLARE_NO_COPY_CLASS(wxPanelBase);
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
 };
-
-#if defined(__WXUNIVERSAL__)
-    #include "wx/univ/panel.h"
-#elif defined(__WXMSW__)
-    #include "wx/msw/panel.h"
-#else
-    #define wxHAS_GENERIC_PANEL
-    #include "wx/generic/panelg.h"
-#endif
 
 #endif // _WX_PANELH_BASE_

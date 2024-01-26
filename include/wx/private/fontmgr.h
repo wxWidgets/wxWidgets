@@ -32,7 +32,7 @@ class wxFontInstanceBase
 {
 protected:
     wxFontInstanceBase(float ptSize, bool aa) : m_ptSize(ptSize), m_aa(aa) {}
-    virtual ~wxFontInstanceBase() {}
+    virtual ~wxFontInstanceBase() = default;
 
 public:
     float GetPointSize() const { return m_ptSize; }
@@ -115,7 +115,7 @@ public:
     };
 
     /// Returns true if the given face is available
-    bool HasFace(FaceType type) const { return m_faces[type] != NULL; }
+    bool HasFace(FaceType type) const { return m_faces[type] != nullptr; }
 
     /**
         Returns font face object that can be used to render font of given type.

@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/stattext.mm
 // Purpose:     wxStaticText
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -91,11 +90,11 @@ public:
         m_lineBreak = lineBreak;
     }
 
-    virtual void SetLabel(const wxString& title, wxFontEncoding encoding) wxOVERRIDE
+    virtual void SetLabel(const wxString& title) override
     {
         wxMacAutoreleasePool autoreleasepool;
 
-        wxCFStringRef text( title , encoding );
+        wxCFStringRef text( title );
 
         NSMutableAttributedString *
             attrstring = [[NSMutableAttributedString alloc] initWithString:text.AsNSString()];
@@ -104,7 +103,7 @@ public:
     }
 
 #if wxUSE_MARKUP
-    virtual void SetLabelMarkup( const wxString& markup) wxOVERRIDE
+    virtual void SetLabelMarkup( const wxString& markup) override
     {
         wxMarkupToAttrString toAttr(GetWXPeer()->GetFont(), markup);
 
@@ -157,7 +156,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
     [v setBezeled:NO];
     [v setBordered:NO];
 
-    NSLineBreakMode linebreak = NSLineBreakByClipping;
+    NSLineBreakMode linebreak = NSLineBreakByWordWrapping;
     if ( style & wxST_ELLIPSIZE_MASK )
     {
         if ( style & wxST_ELLIPSIZE_MIDDLE )

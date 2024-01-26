@@ -468,6 +468,11 @@ Here are the steps you should follow:
 -# Send the finished translation to <a href="mailto:vadim@wxwidgets.org">Vadim Zeitlin</a>
    and it will be added to the next wxWidgets release or snapshot.
 
+In addition, please consider subscribing to the very low volume
+<a href="https://www.wxwidgets.org/support/mailing-lists/">
+wxWidgets translators mailing list</a> on which the news especially important
+for the translators are announced.
+
 Thank you in advance for your help!
 
 */

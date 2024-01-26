@@ -25,6 +25,7 @@
 #include "wx/fontmap.h"
 #include "wx/uri.h"
 
+#include "wx/private/hyperlink.h"
 
 //-----------------------------------------------------------------------------
 // wxHtmlWinParser
@@ -36,21 +37,15 @@ wxList wxHtmlWinParser::m_Modules;
 
 wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
 {
-    m_tmpStrBuf = NULL;
+    m_tmpStrBuf = nullptr;
     m_tmpStrBufSize = 0;
     m_windowInterface = wndIface;
-    m_Container = NULL;
-    m_DC = NULL;
+    m_Container = nullptr;
+    m_DC = nullptr;
     m_CharHeight = m_CharWidth = 0;
     m_UseLink = false;
-#if !wxUSE_UNICODE
-    m_nbsp = 0;
-    m_EncConv = NULL;
-    m_InputEnc = wxFONTENCODING_ISO8859_1;
-    m_OutputEnc = wxFONTENCODING_DEFAULT;
-#endif
     m_whitespaceMode = Whitespace_Normal;
-    m_lastWordCell = NULL;
+    m_lastWordCell = nullptr;
     m_posColumn = 0;
 
     {
@@ -61,13 +56,10 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
                     for (l = 0; l < 2; l++)
                         for (m = 0; m < 7; m++)
                         {
-                            m_FontsTable[i][j][k][l][m] = NULL;
-#if !wxUSE_UNICODE
-                            m_FontsEncTable[i][j][k][l][m] = wxFONTENCODING_DEFAULT;
-#endif
+                            m_FontsTable[i][j][k][l][m] = nullptr;
                         }
 
-        SetFonts(wxEmptyString, wxEmptyString, NULL);
+        SetFonts(wxEmptyString, wxEmptyString, nullptr);
     }
 
     // fill in wxHtmlParser's tables:
@@ -90,12 +82,9 @@ wxHtmlWinParser::~wxHtmlWinParser()
                 for (l = 0; l < 2; l++)
                     for (m = 0; m < 7; m++)
                     {
-                        if (m_FontsTable[i][j][k][l][m] != NULL)
+                        if (m_FontsTable[i][j][k][l][m] != nullptr)
                             delete m_FontsTable[i][j][k][l][m];
                     }
-#if !wxUSE_UNICODE
-    delete m_EncConv;
-#endif
     delete[] m_tmpStrBuf;
 }
 
@@ -156,19 +145,15 @@ void wxHtmlWinParser::SetFonts(const wxString& normal_face,
     m_FontFaceFixed = fixed_face;
     m_FontFaceNormal = normal_face;
 
-#if !wxUSE_UNICODE
-    SetInputEncoding(m_InputEnc);
-#endif
-
     for (i = 0; i < 2; i++)
         for (j = 0; j < 2; j++)
             for (k = 0; k < 2; k++)
                 for (l = 0; l < 2; l++)
                     for (m = 0; m < 7; m++) {
-                        if (m_FontsTable[i][j][k][l][m] != NULL)
+                        if (m_FontsTable[i][j][k][l][m] != nullptr)
                         {
                             delete m_FontsTable[i][j][k][l][m];
-                            m_FontsTable[i][j][k][l][m] = NULL;
+                            m_FontsTable[i][j][k][l][m] = nullptr;
                         }
                     }
 }
@@ -193,7 +178,7 @@ void wxHtmlWinParser::SetStandardFonts(int size,
 void wxHtmlWinParser::InitParser(const wxString& source)
 {
     wxHtmlParser::InitParser(source);
-    wxASSERT_MSG(m_DC != NULL, wxT("no DC assigned to wxHtmlWinParser!!"));
+    wxASSERT_MSG(m_DC != nullptr, wxT("no DC assigned to wxHtmlWinParser!!"));
 
     m_FontBold = m_FontItalic = m_FontUnderlined = m_FontFixed = FALSE;
     m_FontSize = 3; //default one
@@ -208,18 +193,17 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 
     m_UseLink = false;
     m_Link = wxHtmlLinkInfo( wxEmptyString );
-    m_LinkColor.Set(0, 0, 0xFF);
-    m_ActualColor.Set(0, 0, 0);
-    const wxColour windowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ;
+    m_LinkColor = wxPrivate::GetLinkColour();
+    m_ActualColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     m_ActualBackgroundColor = m_windowInterface
                             ? m_windowInterface->GetHTMLBackgroundColour()
-                            : windowColour;
+                            : wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
     m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
     m_Align = wxHTML_ALIGN_LEFT;
     m_ScriptMode = wxHTML_SCRIPT_NORMAL;
     m_ScriptBaseline = 0;
     m_tmpLastWasSpace = false;
-    m_lastWordCell = NULL;
+    m_lastWordCell = nullptr;
 
     // open the toplevel container that contains everything else and that
     // is never closed (this makes parser's life easier):
@@ -227,16 +211,6 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 
     // then open the first container into which page's content will go:
     OpenContainer();
-
-#if !wxUSE_UNICODE
-    wxString charset = ExtractCharsetInformation(source);
-    if (!charset.empty())
-    {
-        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charset);
-        if (enc != wxFONTENCODING_SYSTEM)
-          SetInputEncoding(enc);
-    }
-#endif
 
     m_Container->InsertCell(new wxHtmlColourCell(m_ActualColor));
 
@@ -254,10 +228,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 
 void wxHtmlWinParser::DoneParser()
 {
-    m_Container = NULL;
-#if !wxUSE_UNICODE
-    SetInputEncoding(wxFONTENCODING_ISO8859_1); // for next call
-#endif
+    m_Container = nullptr;
     wxHtmlParser::DoneParser();
 }
 
@@ -325,7 +296,7 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     }
 
     if ( status == wxHTML_BLOCK )
-        return NULL;
+        return nullptr;
 
     int flags = wxFS_READ;
     if (type == wxHTML_URL_IMAGE)
@@ -334,21 +305,11 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     return GetFS()->OpenFile(myurl, flags);
 }
 
-#if !wxUSE_UNICODE
-    #define NBSP_UNICODE_VALUE  (160U)
-    #define CUR_NBSP_VALUE m_nbsp
-#else
-    #define NBSP_UNICODE_VALUE  (wxChar(160))
-    #define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
-#endif
+#define NBSP_UNICODE_VALUE  (wxChar(160))
+#define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
 
 void wxHtmlWinParser::AddText(const wxString& txt)
 {
-#if !wxUSE_UNICODE
-    if ( m_nbsp == 0 )
-        m_nbsp = GetEntitiesParser()->GetCharForCode(NBSP_UNICODE_VALUE);
-#endif
-
     if ( m_whitespaceMode == Whitespace_Normal )
     {
         int templen = 0;
@@ -381,7 +342,8 @@ void wxHtmlWinParser::AddText(const wxString& txt)
             const wxChar d = temp[templen++] = *i;
             if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
             {
-                ++i, ++x;
+                ++i;
+                ++x;
                 while ( (i < end) &&
                         (*i == wxT('\n') || *i == wxT('\r') ||
                          *i == wxT(' ') || *i == wxT('\t')) )
@@ -438,11 +400,6 @@ void wxHtmlWinParser::FlushWordBuf(wxChar *buf, int& len)
         if ( buf[i] == CUR_NBSP_VALUE )
             buf[i] = ' ';
     }
-
-#if !wxUSE_UNICODE
-    if (m_EncConv)
-        m_EncConv->Convert(buf);
-#endif
 
     AddWord(wxString(buf, len));
 
@@ -590,20 +547,13 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
     wxString face = ff ? m_FontFaceFixed : m_FontFaceNormal;
     wxString *faceptr = &(m_FontsFacesTable[fb][fi][fu][ff][fs]);
     wxFont **fontptr = &(m_FontsTable[fb][fi][fu][ff][fs]);
-#if !wxUSE_UNICODE
-    wxFontEncoding *encptr = &(m_FontsEncTable[fb][fi][fu][ff][fs]);
-#endif
 
-    if (*fontptr != NULL && (*faceptr != face
-#if !wxUSE_UNICODE
-                             || *encptr != m_OutputEnc
-#endif
-                            ))
+    if (*fontptr != nullptr && (*faceptr != face))
     {
         wxDELETE(*fontptr);
     }
 
-    if (*fontptr == NULL)
+    if (*fontptr == nullptr)
     {
         *faceptr = face;
         *fontptr = new wxFont(
@@ -612,12 +562,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
                        fi ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL,
                        fb ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL,
                        fu ? true : false, face
-#if wxUSE_UNICODE
                        );
-#else
-                       , m_OutputEnc);
-        *encptr = m_OutputEnc;
-#endif
     }
     m_DC->SetFont(**fontptr);
     return (*fontptr);
@@ -637,11 +582,6 @@ void wxHtmlWinParser::SetFontFace(const wxString& face)
         m_FontFaceFixed = face;
     else
         m_FontFaceNormal = face;
-
-#if !wxUSE_UNICODE
-    if (m_InputEnc != wxFONTENCODING_DEFAULT)
-        SetInputEncoding(m_InputEnc);
-#endif
 }
 
 void wxHtmlWinParser::ApplyStateToCell(wxHtmlCell *cell)
@@ -653,86 +593,6 @@ void wxHtmlWinParser::ApplyStateToCell(wxHtmlCell *cell)
     // apply current script mode settings:
     cell->SetScriptMode(GetScriptMode(), GetScriptBaseline());
 }
-
-
-#if !wxUSE_UNICODE
-void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
-{
-    // the character used for non-breakable space may change:
-    m_nbsp = 0;
-
-    m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
-    wxDELETE(m_EncConv);
-
-    if (enc == wxFONTENCODING_DEFAULT)
-        return;
-
-    wxFontEncoding altfix, altnorm;
-    bool availfix, availnorm;
-
-    availnorm = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceNormal);
-    availfix = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceFixed);
-
-    if (availnorm && availfix)
-    {
-        // exact match?
-        m_OutputEnc = enc;
-    }
-
-    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, false) &&
-             wxFontMapper::Get()->GetAltForEncoding(enc, &altfix, m_FontFaceFixed, false) &&
-             altnorm == altfix)
-    {
-        // alternatives?
-        m_OutputEnc = altnorm;
-    }
-    else if (availnorm)
-    {
-        // at least normal face?
-        m_OutputEnc = enc;
-    }
-    else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, false))
-    {
-        m_OutputEnc = altnorm;
-    }
-    else
-    {
-#ifndef __WXMAC__
-        // okay, let's convert to ISO_8859-1, available always
-        m_OutputEnc = wxFONTENCODING_DEFAULT;
-#else
-        m_OutputEnc = wxLocale::GetSystemEncoding() ;
-#endif
-    }
-
-    m_InputEnc = enc;
-    if (m_OutputEnc == wxFONTENCODING_DEFAULT)
-    {
-        GetEntitiesParser()->SetEncoding(wxFONTENCODING_SYSTEM);
-    }
-    else
-    {
-        GetEntitiesParser()->SetEncoding(m_OutputEnc);
-    }
-
-    if (m_InputEnc == m_OutputEnc)
-        return;
-
-    m_EncConv = new wxEncodingConverter();
-    if (!m_EncConv->Init(m_InputEnc,
-                           (m_OutputEnc == wxFONTENCODING_DEFAULT) ?
-                                      wxFONTENCODING_ISO8859_1 : m_OutputEnc,
-                           wxCONVERT_SUBSTITUTE))
-    { // total failure :-(
-        wxLogError(_("Failed to display HTML document in %s encoding"),
-                   wxFontMapper::GetEncodingName(enc).c_str());
-        m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
-        wxDELETE(m_EncConv);
-    }
-}
-#endif
-
-
 
 
 //-----------------------------------------------------------------------------

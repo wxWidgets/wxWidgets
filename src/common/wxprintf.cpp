@@ -18,7 +18,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
-    #include "wx/hash.h"
     #include "wx/utils.h"     // for wxMin and wxMax
     #include "wx/log.h"
 #endif
@@ -193,7 +192,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
 
     // Don't do:
     //      wxASSERT(lenCur == wxStrlen(buf));
-    // in fact if we embedded NULLs in the output buffer (using %c with a '\0')
+    // in fact if we embedded NULs in the output buffer (using %c with a '\0')
     // such check would fail
 
     return lenCur;

@@ -2,7 +2,6 @@
 // Name:        wx/osx/menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -28,28 +27,25 @@ class WXDLLIMPEXP_CORE wxMenuItem: public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *parentMenu = NULL,
+    wxMenuItem(wxMenu *parentMenu = nullptr,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = NULL);
+               wxMenu *subMenu = nullptr);
     virtual ~wxMenuItem();
 
     // override base class virtuals
-    virtual void SetItemLabel(const wxString& strName) wxOVERRIDE;
+    virtual void SetItemLabel(const wxString& strName) override;
 
-    virtual void Enable(bool bDoEnable = true) wxOVERRIDE;
-    virtual void Check(bool bDoCheck = true) wxOVERRIDE;
+    virtual void Enable(bool bDoEnable = true) override;
+    virtual void Check(bool bDoCheck = true) override;
 
 #if wxUSE_ACCEL
-    virtual void AddExtraAccel(const wxAcceleratorEntry& accel) wxOVERRIDE;
-    virtual void ClearExtraAccels() wxOVERRIDE;
+    virtual void AddExtraAccel(const wxAcceleratorEntry& accel) override;
+    virtual void ClearExtraAccels() override;
     void RemoveHiddenItems();
 #endif // wxUSE_ACCEL
-
-    virtual void SetBitmap(const wxBitmapBundle& bitmap) ;
-    virtual wxBitmap GetBitmap() const;
 
 
     // Implementation only from now on.
@@ -62,8 +58,6 @@ public:
     wxMenuItemImpl* GetPeer() { return m_peer; }
 private:
     void UncheckRadio() ;
-
-    wxBitmapBundle m_bitmap; // Bitmap for menuitem, if any
 
     wxMenuItemImpl* m_peer;
 

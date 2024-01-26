@@ -37,6 +37,10 @@
     #endif
 #endif
 
+#ifdef WX_GMTOFF_IN_TM
+    #include <atomic>
+#endif
+
 #include <time.h>
 
 wxDECL_FOR_STRICT_MINGW32(void, tzset, (void));
@@ -89,7 +93,7 @@ struct tm *wxLocaltime_r(const time_t* ticks, struct tm* temp)
 
   const tm * const t = localtime(ticks);
   if ( !t )
-      return NULL;
+      return nullptr;
 
   memcpy(temp, t, sizeof(struct tm));
   return temp;
@@ -107,7 +111,7 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
 
   const tm * const t = gmtime(ticks);
   if ( !t )
-      return NULL;
+      return nullptr;
 
   memcpy(temp, gmtime(ticks), sizeof(struct tm));
   return temp;
@@ -119,33 +123,32 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
 int wxGetTimeZone()
 {
 #ifdef WX_GMTOFF_IN_TM
-    // set to true when the timezone is set
-    static bool s_timezoneSet = false;
-    static long gmtoffset = LONG_MAX; // invalid timezone
+    static std::atomic<int> s_gmtoffset{INT_MAX}; // invalid timezone
 
     // ensure that the timezone variable is set by calling wxLocaltime_r
-    if ( !s_timezoneSet )
+    if ( s_gmtoffset == INT_MAX )
     {
         // just call wxLocaltime_r() instead of figuring out whether this
         // system supports tzset(), _tzset() or something else
-        time_t t = time(NULL);
+        time_t t = time(nullptr);
         struct tm tm;
 
         wxLocaltime_r(&t, &tm);
-        s_timezoneSet = true;
 
         // note that GMT offset is the opposite of time zone and so to return
         // consistent results in both WX_GMTOFF_IN_TM and !WX_GMTOFF_IN_TM
         // cases we have to negate it
-        gmtoffset = -tm.tm_gmtoff;
+        int gmtoffset = static_cast<int>(-tm.tm_gmtoff);
 
         // this function is supposed to return the same value whether DST is
         // enabled or not, so we need to use an additional offset if DST is on
         // as tm_gmtoff already does include it
         if ( tm.tm_isdst )
             gmtoffset += 3600;
+
+        s_gmtoffset = gmtoffset;
     }
-    return (int)gmtoffset;
+    return s_gmtoffset;
 #elif defined(__WINE__)
     struct timeb tb;
     ftime(&tb);
@@ -157,16 +160,9 @@ int wxGetTimeZone()
     static bool s_tzSet = (_tzset(), true);
     wxUnusedVar(s_tzSet);
 
-    // Starting with VC++ 8 timezone variable is deprecated and is not even
-    // available in some standard library version so use the new function for
-    // accessing it instead.
-    #if wxCHECK_VISUALC_VERSION(8)
-        long t;
-        _get_timezone(&t);
-        return t;
-    #else // VC++ < 8
-        return timezone;
-    #endif
+    long t;
+    _get_timezone(&t);
+    return t;
 #else // Use some kind of time zone variable.
     // In any case we must initialize the time zone before using it.
     static bool s_tzSet = (tzset(), true);
@@ -220,7 +216,7 @@ long wxGetLocalTime()
 // Get UTC time as seconds since 00:00:00, Jan 1st 1970
 long wxGetUTCTime()
 {
-    return (long)time(NULL);
+    return (long)time(nullptr);
 }
 
 #if wxUSE_LONGLONG

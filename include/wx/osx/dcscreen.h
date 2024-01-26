@@ -2,7 +2,6 @@
 // Name:        wx/osx/dcscreen.h
 // Purpose:     wxScreenDC class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -20,7 +19,7 @@ public:
     wxScreenDCImpl( wxDC *owner );
     virtual ~wxScreenDCImpl();
 
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const wxOVERRIDE;
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const override;
 
 private:
     wxDECLARE_CLASS(wxScreenDCImpl);

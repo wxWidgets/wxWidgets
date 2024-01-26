@@ -2,7 +2,6 @@
 // Name:        wx/generic/caret.h
 // Purpose:     generic wxCaret class
 // Author:      Vadim Zeitlin (original code by Robert Roebling)
-// Modified by:
 // Created:     25.05.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -21,7 +20,7 @@ class WXDLLIMPEXP_CORE wxCaretTimer : public wxTimer
 {
 public:
     wxCaretTimer(wxCaret *caret);
-    virtual void Notify() wxOVERRIDE;
+    virtual void Notify() override;
 
 private:
     wxCaret *m_caret;
@@ -46,17 +45,17 @@ public:
     // --------------
 
     // called by wxWindow (not using the event tables)
-    virtual void OnSetFocus() wxOVERRIDE;
-    virtual void OnKillFocus() wxOVERRIDE;
+    virtual void OnSetFocus() override;
+    virtual void OnKillFocus() override;
 
     // called by wxCaretTimer
     void OnTimer();
 
 protected:
-    virtual void DoShow() wxOVERRIDE;
-    virtual void DoHide() wxOVERRIDE;
-    virtual void DoMove() wxOVERRIDE;
-    virtual void DoSize() wxOVERRIDE;
+    virtual void DoShow() override;
+    virtual void DoHide() override;
+    virtual void DoMove() override;
+    virtual void DoSize() override;
 
     // blink the caret once
     void Blink();

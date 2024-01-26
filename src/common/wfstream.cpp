@@ -2,7 +2,6 @@
 // Name:        src/common/wfstream.cpp
 // Purpose:     "File stream" classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     11/07/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -41,7 +40,7 @@ wxFileInputStream::wxFileInputStream()
   : wxInputStream()
 {
     m_file_destroy = false;
-    m_file = NULL;
+    m_file = nullptr;
 }
 
 wxFileInputStream::wxFileInputStream(wxFile& file)
@@ -131,7 +130,7 @@ wxFileOutputStream::wxFileOutputStream()
                   : wxOutputStream()
 {
     m_file_destroy = false;
-    m_file = NULL;
+    m_file = nullptr;
 }
 
 wxFileOutputStream::wxFileOutputStream(int fd)
@@ -282,7 +281,7 @@ wxFFileInputStream::wxFFileInputStream(const wxString& fileName,
 wxFFileInputStream::wxFFileInputStream()
                   : wxInputStream()
 {
-    m_file = NULL;
+    m_file = nullptr;
     m_file_destroy = false;
 }
 
@@ -370,7 +369,7 @@ wxFFileOutputStream::wxFFileOutputStream(wxFFile& file)
 wxFFileOutputStream::wxFFileOutputStream()
                    : wxOutputStream()
 {
-    m_file = NULL;
+    m_file = nullptr;
     m_file_destroy = false;
 }
 

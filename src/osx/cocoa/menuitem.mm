@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/menuitem.mm
 // Purpose:     wxMenuItem implementation
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -43,7 +42,7 @@ Mapping sActionToWXMapping[] =
     { wxID_PASTE, @selector(paste:) },
     { wxID_CLEAR, @selector(delete:) },
     { wxID_SELECTALL, @selector(selectAll:) },
-    { 0, NULL }
+    { 0, nullptr }
 };
 
 int wxOSXGetIdFromSelector(SEL action )
@@ -86,9 +85,11 @@ SEL wxOSXGetSelectorFromID(int menuId )
     wxUnusedVar(sender);
     if ( impl )
     {
-        wxMenuItem* menuitem = impl->GetWXPeer();
-        if ( menuitem->GetMenu()->HandleCommandProcess(menuitem) == false )
+        if ( wxMenuItem* menuitem = impl->GetWXPeer() )
         {
+            // Ignore the return value as there doesn't seem anything to do
+            // with it here.
+            menuitem->GetMenu()->HandleCommandProcess(menuitem);
         }
      }
 }
@@ -127,7 +128,7 @@ SEL wxOSXGetSelectorFromID(int menuId )
 
 void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry* entry )
 {
-    if ( entry == NULL )
+    if ( entry == nullptr )
     {
         [menuItem setKeyEquivalent:@""];
         return;
@@ -247,22 +248,22 @@ public :
 
     ~wxMenuItemCocoaImpl();
 
-    void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE
+    void SetBitmap( const wxBitmap& bitmap ) override
     {
         [m_osxMenuItem setImage:bitmap.GetNSImage()];
     }
 
-    void Enable( bool enable ) wxOVERRIDE
+    void Enable( bool enable ) override
     {
         [m_osxMenuItem setEnabled:enable];
     }
 
-    void Check( bool check ) wxOVERRIDE
+    void Check( bool check ) override
     {
         [m_osxMenuItem setState:( check ?  NSOnState :  NSOffState) ];
     }
 
-    void Hide( bool hide ) wxOVERRIDE
+    void Hide( bool hide ) override
     {
         // NB: setHidden is new as of 10.5 so we should not call it below there
         if ([m_osxMenuItem respondsToSelector:@selector(setHidden:)])
@@ -271,7 +272,7 @@ public :
             wxLogDebug("wxMenuItemCocoaImpl::Hide not yet supported under OS X < 10.5");
     }
 
-    void SetAllowsKeyEquivalentWhenHidden( bool allow ) wxOVERRIDE
+    void SetAllowsKeyEquivalentWhenHidden( bool allow ) override
     {
         // setAllowsKeyEquivalentWhenHidden is available since macOS 10.13
         if (WX_IS_MACOS_AVAILABLE(10, 13))
@@ -280,7 +281,7 @@ public :
             wxLogDebug("wxMenuItemCocoaImpl::setAllowsKeyEquivalentWhenHidden not supported under OS X < 10.13");
     }
 
-    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) wxOVERRIDE
+    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) override
     {
         wxCFStringRef cfText(text);
         [m_osxMenuItem setTitle:cfText.AsNSString()];
@@ -288,9 +289,9 @@ public :
         wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
     }
     
-    bool DoDefault() wxOVERRIDE;
+    bool DoDefault() override;
 
-    void * GetHMenuItem() wxOVERRIDE { return m_osxMenuItem; }
+    void * GetHMenuItem() override { return m_osxMenuItem; }
 
 protected :
     NSMenuItem* m_osxMenuItem ;
@@ -339,7 +340,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
                        wxItemKind kind,
                        wxMenu *pSubMenu )
 {
-    wxMenuItemImpl* c = NULL;
+    wxMenuItemImpl* c = nullptr;
     NSMenuItem* item = nil;
 
     if ( kind == wxITEM_SEPARATOR )
@@ -351,7 +352,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
         wxCFStringRef cfText(text);
         SEL selector = nil;
         bool targetSelf = false;
-        if ( (pParentMenu == NULL || !pParentMenu->GetNoEventsMode()) && pSubMenu == NULL )
+        if ( (pParentMenu == nullptr || !pParentMenu->GetNoEventsMode()) && pSubMenu == nullptr )
         {
             selector = wxOSXGetSelectorFromID(menuid);
             

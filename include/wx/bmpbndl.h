@@ -15,7 +15,9 @@
 #include "wx/vector.h"
 
 class wxBitmapBundleImpl;
+class WXDLLIMPEXP_FWD_CORE wxIconBundle;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
+class WXDLLIMPEXP_FWD_BASE wxVariant;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // ----------------------------------------------------------------------------
@@ -44,6 +46,12 @@ public:
     // wxBitmapBundle.
     wxBitmapBundle(const wxImage& image);
 
+    // And another one from XPM data, as it's relatively common to pass it to
+    // various functions that take wxBitmapBundle in the existing code. It is
+    // not formally deprecated, but should be avoided in any new code and can
+    // become deprecated in the future.
+    wxBitmapBundle(const char* const* xpm);
+
     // Default copy ctor and assignment operator and dtor would be ok, but need
     // to be defined out of line, where wxBitmapBundleImpl is fully declared.
 
@@ -55,14 +63,17 @@ public:
 
     // Create from the given collection of bitmaps (all of which must be valid,
     // but if the vector itself is empty, empty bundle is returned).
-    static wxBitmapBundle FromBitmaps(const wxVector<wxBitmap>& bitmaps);
-    static wxBitmapBundle FromBitmaps(const wxBitmap& bitmap1,
+    wxNODISCARD static wxBitmapBundle FromBitmaps(const wxVector<wxBitmap>& bitmaps);
+    wxNODISCARD static wxBitmapBundle FromBitmaps(const wxBitmap& bitmap1,
                                       const wxBitmap& bitmap2);
 
     // Create from a single bitmap (this is only useful for compatibility
     // with the existing code). Returns empty bundle if bitmap is invalid.
-    static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
-    static wxBitmapBundle FromImage(const wxImage& image);
+    wxNODISCARD static wxBitmapBundle FromBitmap(const wxBitmap& bitmap);
+    wxNODISCARD static wxBitmapBundle FromImage(const wxImage& image);
+
+    // Create from icon bundle.
+    wxNODISCARD static wxBitmapBundle FromIconBundle(const wxIconBundle& iconBundle);
 
     // It should be possible to implement SVG rasterizing without raw bitmap
     // support using wxDC::DrawSpline(), but currently we don't do it and so
@@ -71,90 +82,102 @@ public:
     // Create from the SVG data (data is supposed to be in UTF-8 encoding).
     // Notice that the data here is non-const because it can be temporarily
     // modified while parsing it.
-    static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 
     // This overload currently makes a copy of the data.
-    static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 
     // This overload works for data not terminated with 0
-    static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
 
     // Load SVG image from the given file (must be a local file, not an URL).
-    static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
 
     // Create from SVG image stored as an application resource.
     // On Windows, name must be a resource with RT_RCDATA type.
     // On MacOS, name must be a file with an extension "svg" placed in the
     // "Resources" subdirectory of the application bundle.
-    static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVGResource(const wxString& name, const wxSize& sizeDef);
 #endif // wxHAS_SVG
 
     // Create from the resources: all existing versions of the bitmap of the
     // form name_2x or name@2x (and also using other factors) will be used.
-    static wxBitmapBundle FromResources(const wxString& name);
+    wxNODISCARD static wxBitmapBundle FromResources(const wxString& name);
 
     // Create from files: all existing versions of the bitmap of the
     // form filename_2x or name@2x (and also using other factors) will be used.
-    static wxBitmapBundle FromFiles(const wxString& fullpathname);
-    static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = wxASCII_STR("png"));
+    wxNODISCARD static wxBitmapBundle FromFiles(const wxString& fullpathname);
+    wxNODISCARD static wxBitmapBundle FromFiles(const wxString& path, const wxString& filename, const wxString& extension = wxASCII_STR("png"));
 
     // Create from existing implementation
-    static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
+    wxNODISCARD static wxBitmapBundle FromImpl(wxBitmapBundleImpl* impl);
 
     // Check if bitmap bundle is non-empty.
-    bool IsOk() const { return m_impl.get() != NULL; }
+    wxNODISCARD bool IsOk() const { return m_impl.get() != nullptr; }
+
+    // Clear the bundle contents, IsOk() will return false after doing this.
+    void Clear();
 
     // Get the size of the bitmap represented by this bundle when using the
     // default DPI, i.e. 100% scaling. Returns invalid size for empty bundle.
-    wxSize GetDefaultSize() const;
+    wxNODISCARD wxSize GetDefaultSize() const;
 
     // Get the physical size of the preferred bitmap at the given scale.
-    wxSize GetPreferredBitmapSizeAtScale(double scale) const;
+    wxNODISCARD wxSize GetPreferredBitmapSizeAtScale(double scale) const;
 
     // Get preferred size, i.e. usually the closest size in which a bitmap is
     // available to the ideal size determined from the default size and the DPI
     // scaling, for the given window, in physical/logical pixels respectively.
-    wxSize GetPreferredBitmapSizeFor(const wxWindow* window) const;
-    wxSize GetPreferredLogicalSizeFor(const wxWindow* window) const;
+    wxNODISCARD wxSize GetPreferredBitmapSizeFor(const wxWindow* window) const;
+    wxNODISCARD wxSize GetPreferredLogicalSizeFor(const wxWindow* window) const;
 
     // Get bitmap of the specified size, creating a new bitmap from the closest
     // available size by rescaling it if necessary.
     //
     // If size == wxDefaultSize, GetDefaultSize() is used for it instead.
-    wxBitmap GetBitmap(const wxSize& size) const;
+    wxNODISCARD wxBitmap GetBitmap(const wxSize& size) const;
 
     // Get icon of the specified size, this is just a convenient wrapper for
     // GetBitmap() converting the returned bitmap to the icon.
-    wxIcon GetIcon(const wxSize& size) const;
+    wxNODISCARD wxIcon GetIcon(const wxSize& size) const;
 
     // Helpers combining GetPreferredBitmapSizeFor() and GetBitmap() or
     // GetIcon(): return the bitmap or icon of the size appropriate for the
     // current DPI scaling of the given window.
-    wxBitmap GetBitmapFor(const wxWindow* window) const;
-    wxIcon GetIconFor(const wxWindow* window) const;
+    wxNODISCARD wxBitmap GetBitmapFor(const wxWindow* window) const;
+    wxNODISCARD wxIcon GetIconFor(const wxWindow* window) const;
 
     // Access implementation
-    wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
+    wxNODISCARD wxBitmapBundleImpl* GetImpl() const { return m_impl.get(); }
 
     // Check if two objects refer to the same bundle.
-    bool IsSameAs(const wxBitmapBundle& other) const
+    wxNODISCARD bool IsSameAs(const wxBitmapBundle& other) const
     {
         return GetImpl() == other.GetImpl();
     }
 
+    // Allow using wxBitmapBundle with wxVariant
+#if wxUSE_VARIANT
+    friend WXDLLIMPEXP_CORE
+    wxBitmapBundle& operator<<(wxBitmapBundle& value, const wxVariant& variant);
+    friend WXDLLIMPEXP_CORE
+    wxVariant& operator<<(wxVariant& variant, const wxBitmapBundle& value);
+#endif // wxUSE_VARIANT
+
+
     // Implementation only from now on.
 
     // Get the bitmap size preferred by the majority of the elements of the
-    // bundles at the scale appropriate for the given scale.
-    static wxSize
-    GetConsensusSizeFor(wxWindow* win,
-                        const wxVector<wxBitmapBundle>& bundles,
-                        const wxSize& sizeDefault);
+    // bundles at the given scale or the scale appropriate for the given window.
+    wxNODISCARD static wxSize
+    GetConsensusSizeFor(double scale, const wxVector<wxBitmapBundle>& bundles);
+    wxNODISCARD static wxSize
+    GetConsensusSizeFor(const wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
 
     // Create wxImageList and fill it with the images from the given bundles in
     // the sizes appropriate for the DPI scaling used for the specified window.
-    static wxImageList*
-    CreateImageList(wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
+    wxNODISCARD static wxImageList*
+    CreateImageList(const wxWindow* win, const wxVector<wxBitmapBundle>& bundles);
 
 private:
     typedef wxObjectDataPtr<wxBitmapBundleImpl> wxBitmapBundleImplPtr;
@@ -217,6 +240,29 @@ wxBitmapBundle wxBitmapBundle::FromImage(const wxImage& image)
 class WXDLLIMPEXP_CORE wxBitmapBundleImpl : public wxRefCounter
 {
 protected:
+    // Standard implementation of GetPreferredBitmapSizeAtScale(): choose the
+    // scale closest to the given one from the available bitmap scales.
+    //
+    // If this function is used, GetNextAvailableScale() must be overridden!
+    wxSize DoGetPreferredSize(double scale) const;
+
+    // Helper for implementing GetBitmap(): if we need to upscale a bitmap,
+    // uses GetNextAvailableScale() to find the index of the best bitmap to
+    // use, where "best" is defined as "using scale which is a divisor of the
+    // given one", as upscaling by an integer factor is strongly preferable.
+    size_t GetIndexToUpscale(const wxSize& size) const;
+
+    // Override this function if DoGetPreferredSize() or GetIndexToUpscale() is
+    // used: it can use the provided parameter as an internal index, it's
+    // guaranteed to be 0 when calling this function for the first time. When
+    // there are no more scales, return 0.
+    //
+    // This function is not pure virtual because it doesn't need to be
+    // implemented if DoGetPreferredSize() is never used, but it will assert if
+    // it's called.
+    virtual double GetNextAvailableScale(size_t& i) const;
+
+
     virtual ~wxBitmapBundleImpl();
 
 public:

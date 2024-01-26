@@ -35,6 +35,9 @@ public:
         @param major The major version component.
         @param minor The minor version component.
         @param micro The micro version component, 0 by default.
+        @param revision The revision version component, also known as "build
+            number". This component is also 0 by default and is only available
+            since wxWidgets 3.2.0.
         @param description Free form description of this version, none by
             default.
         @param copyright Copyright string, none by default.
@@ -43,8 +46,21 @@ public:
                   int major = 0,
                   int minor = 0,
                   int micro = 0,
+                  int revision = 0,
                   const wxString& description = wxString(),
                   const wxString& copyright = wxString());
+
+    /**
+        Return true if the version is at least equal to the given one.
+
+        @param major Major version to compare with.
+        @param minor Optional minor version to compare with.
+        @param micro Optional micro version to compare with.
+        @return @true if this version is equal to or greater than the given one.
+
+        @since 3.3.0
+     */
+    bool AtLeast(int major, int minor = 0, int micro = 0) const;
 
     /**
         Get the name of the object (library).
@@ -70,9 +86,22 @@ public:
     /**
         Get the micro version, or release number.
 
+        This is the third component of the version.
+
         @return Micro version, or release number.
     */
     int GetMicro() const;
+
+    /**
+        Get the revision version, or build number.
+
+        This is the fourth component of the version.
+
+        @return Revision version, or build number.
+
+        @since 3.2.0
+    */
+    int GetRevision() const;
 
     /**
         Get the string representation of this version object.
@@ -87,9 +116,11 @@ public:
     /**
         Get the string representation.
 
-        The micro component of the version is ignored/not used if it is 0.
+        The micro and revision components of the version are ignored/not used
+        if they are both zero. If the revision component is non-zero all four
+        parts will be used even if the micro component is zero.
 
-        @return The version string in the form "name major.minor[.micro]".
+        @return The version string in the form "name major.minor[.micro[.revision]]".
     */
     wxString GetVersionString() const;
 
@@ -125,5 +156,3 @@ public:
     */
     const wxString& GetCopyright() const;
 };
-
-//@}

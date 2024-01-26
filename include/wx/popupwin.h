@@ -2,7 +2,6 @@
 // Name:        wx/popupwin.h
 // Purpose:     wxPopupWindow interface declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.01.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@
 class WXDLLIMPEXP_CORE wxPopupWindowBase : public wxNonOwnedWindow
 {
 public:
-    wxPopupWindowBase() { }
+    wxPopupWindowBase() = default;
     virtual ~wxPopupWindowBase();
 
     // create the popup window
@@ -53,7 +52,7 @@ public:
     virtual void Position(const wxPoint& ptOrigin,
                           const wxSize& size);
 
-    virtual bool IsTopLevel() const wxOVERRIDE { return true; }
+    virtual bool IsTopLevel() const override { return true; }
 
     wxDECLARE_NO_COPY_CLASS(wxPopupWindowBase);
 };
@@ -62,14 +61,10 @@ public:
 // include the real class declaration
 #if defined(__WXMSW__)
     #include "wx/msw/popupwin.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/popupwin.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/popupwin.h"
+    #include "wx/gtk/popupwin.h"
 #elif defined(__WXX11__)
     #include "wx/x11/popupwin.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/popupwin.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/popupwin.h"
 #elif defined(__WXMAC__)
@@ -90,8 +85,8 @@ class WXDLLIMPEXP_CORE wxPopupTransientWindowBase : public wxPopupWindow
 {
 public:
     // popup the window (this will show it too) and keep focus at winFocus
-    // (or itself if it's NULL), dismiss the popup if we lose focus
-    virtual void Popup(wxWindow *focus = NULL) = 0;
+    // (or itself if it's nullptr), dismiss the popup if we lose focus
+    virtual void Popup(wxWindow *focus = nullptr) = 0;
 
     // hide the window
     virtual void Dismiss() = 0;
@@ -109,7 +104,7 @@ public:
         { return false; }
 
     // Override to implement delayed destruction of this window.
-    virtual bool Destroy() wxOVERRIDE;
+    virtual bool Destroy() override;
 
 protected:
     // this is called when the popup is disappeared because of anything
@@ -130,22 +125,22 @@ class WXDLLIMPEXP_CORE wxPopupTransientWindow : public wxPopupTransientWindowBas
 {
 public:
     // ctors
-    wxPopupTransientWindow() { }
+    wxPopupTransientWindow() = default;
     wxPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE)
         { Create(parent, style); }
 
     // Implement base class pure virtuals.
-    virtual void Popup(wxWindow *focus = NULL) wxOVERRIDE;
-    virtual void Dismiss() wxOVERRIDE;
+    virtual void Popup(wxWindow *focus = nullptr) override;
+    virtual void Dismiss() override;
 
     // Override to handle WM_NCACTIVATE.
     virtual bool MSWHandleMessage(WXLRESULT *result,
                                   WXUINT message,
                                   WXWPARAM wParam,
-                                  WXLPARAM lParam) wxOVERRIDE;
+                                  WXLPARAM lParam) override;
 
     // Override to dismiss the popup.
-    virtual void MSWDismissUnfocusedPopup() wxOVERRIDE;
+    virtual void MSWDismissUnfocusedPopup() override;
 
 private:
     void DismissOnDeactivate();
@@ -169,11 +164,11 @@ public:
     virtual ~wxPopupTransientWindow();
 
     // Implement base class pure virtuals.
-    virtual void Popup(wxWindow *focus = NULL) wxOVERRIDE;
-    virtual void Dismiss() wxOVERRIDE;
+    virtual void Popup(wxWindow *focus = nullptr) override;
+    virtual void Dismiss() override;
 
     // Overridden to grab the input on some platforms
-    virtual bool Show( bool show = true ) wxOVERRIDE;
+    virtual bool Show( bool show = true ) override;
 
 protected:
     // common part of all ctors
@@ -201,7 +196,7 @@ protected:
     friend class wxPopupWindowHandler;
     friend class wxPopupFocusHandler;
 
-    // the handlers we created, may be NULL (if not, must be deleted)
+    // the handlers we created, may be null (if not, must be deleted)
     wxPopupWindowHandler *m_handlerPopup;
     wxPopupFocusHandler  *m_handlerFocus;
 
@@ -224,7 +219,7 @@ class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 class WXDLLIMPEXP_CORE wxPopupComboWindow : public wxPopupTransientWindow
 {
 public:
-    wxPopupComboWindow() { m_combo = NULL; }
+    wxPopupComboWindow() { m_combo = nullptr; }
     wxPopupComboWindow(wxComboCtrl *parent);
 
     bool Create(wxComboCtrl *parent);

@@ -5,7 +5,6 @@
 //              wxFile application, modified by Harm van der Heijden.
 //              Further modified for Windows.
 // Author:      Robert Roebling, Harm van der Heijden, Julian Smart et al
-// Modified by:
 // Created:     21/3/2000
 // Copyright:   (c) Robert Roebling, Harm van der Heijden, Julian Smart
 // Licence:     wxWindows licence
@@ -54,12 +53,12 @@ public:
                 const wxString& name = wxASCII_STR(wxDirDialogNameStr));
 
     //// Accessors
-    void SetPath(const wxString& path) wxOVERRIDE;
-    wxString GetPath() const wxOVERRIDE;
+    void SetPath(const wxString& path) override;
+    wxString GetPath() const override;
 
     //// Overrides
-    virtual int ShowModal() wxOVERRIDE;
-    virtual void EndModal(int retCode) wxOVERRIDE;
+    virtual int ShowModal() override;
+    virtual void EndModal(int retCode) override;
 
     // this one is specific to wxGenericDirDialog
     wxTextCtrl* GetInputCtrl() const { return m_input; }

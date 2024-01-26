@@ -2,7 +2,6 @@
 // Name:        src/univ/radiobox.cpp
 // Purpose:     wxRadioBox implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.09.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -162,8 +161,10 @@ bool wxRadioBox::Create(wxWindow *parent,
     wxSize actualSize = GetSize();
     DoMoveWindow(actualPos.x, actualPos.y, actualSize.x, actualSize.y);
 
-    // radiobox should already have selection so select at least one item
-    SetSelection(0);
+    // Select first radio button if we have any buttons at all, as the radiobox
+    // should always have some selection.
+    if ( n != 0 )
+        SetSelection(0);
 
     return true;
 }
@@ -358,7 +359,7 @@ void wxRadioBox::DoSetToolTip(wxToolTip *tooltip)
         if (tooltip)
             m_buttons[n]->SetToolTip(tooltip->GetTip());
         else
-            m_buttons[n]->SetToolTip(NULL);
+            m_buttons[n]->SetToolTip(nullptr);
     }
 }
 #endif // wxUSE_TOOLTIPS

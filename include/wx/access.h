@@ -2,7 +2,6 @@
 // Name:        wx/access.h
 // Purpose:     Accessibility classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     2003-02-12
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -234,7 +233,7 @@ class WXDLLIMPEXP_CORE wxAccessibleBase : public wxObject
 
 public:
     wxAccessibleBase(wxWindow* win): m_window(win) {}
-    virtual ~wxAccessibleBase() {}
+    virtual ~wxAccessibleBase() = default;
 
 // Overridables
 
@@ -263,13 +262,13 @@ public:
          { return wxACC_NOT_IMPLEMENTED; }
 
         // Gets the specified child (starting from 1).
-        // If *child is NULL and return value is wxACC_OK,
+        // If *child is null and return value is wxACC_OK,
         // this means that the child is a simple element and
         // not an accessible object.
     virtual wxAccStatus GetChild(int WXUNUSED(childId), wxAccessible** WXUNUSED(child))
          { return wxACC_NOT_IMPLEMENTED; }
 
-        // Gets the parent, or NULL.
+        // Gets the parent, or nullptr.
     virtual wxAccStatus GetParent(wxAccessible** WXUNUSED(parent))
          { return wxACC_NOT_IMPLEMENTED; }
 
@@ -320,7 +319,7 @@ public:
          { return wxACC_NOT_IMPLEMENTED; }
 
         // Gets the window with the keyboard focus.
-        // If childId is 0 and child is NULL, no object in
+        // If childId is 0 and child is null, no object in
         // this subhierarchy has the focus.
         // If this object has the focus, child should be 'this'.
     virtual wxAccStatus GetFocus(int* WXUNUSED(childId), wxAccessible** WXUNUSED(child))

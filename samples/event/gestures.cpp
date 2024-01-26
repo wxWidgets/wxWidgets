@@ -5,7 +5,7 @@
 #include "../image/horse.xpm"
 
 MyGestureFrame::MyGestureFrame()
-    : wxFrame(NULL, wxID_ANY, "Multi-touch Gestures", wxDefaultPosition, wxSize(800, 600))
+    : wxFrame(nullptr, wxID_ANY, "Multi-touch Gestures", wxDefaultPosition, wxSize(800, 600))
 {
     // Create controls
     MyGesturePanel *myPanel = new MyGesturePanel(this);
@@ -23,7 +23,7 @@ MyGestureFrame::MyGestureFrame()
     SetSizeHints(wxMin(800,dsplySz.GetWidth()), wxMin(600,dsplySz.GetHeight()));
 
     // Log to the text control
-    delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
+    m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logText));
 
     // Bind all gestures to the same event handler, which must run before
     // the other handlers, to clear the log window
@@ -64,6 +64,7 @@ MyGesturePanel::MyGesturePanel(MyGestureFrame *parent)
 
 void MyGestureFrame::OnQuit(wxCloseEvent& WXUNUSED(event))
 {
+    delete wxLog::SetActiveTarget(m_logOld);
     Destroy();
 }
 
@@ -101,7 +102,7 @@ void MyGesturePanel::OnPan(wxPanGestureEvent& event)
     // Transform the distance using the transpose of the matrix,
     // in order to translate the image to match the screen coordinates
     wxMatrix2D m;
-    m_affineMatrix.Get(&m, NULL);
+    m_affineMatrix.Get(&m, nullptr);
 
     wxPoint2DDouble deltaD(m.m_11 * delta.x + m.m_12 * delta.y,
                            m.m_21 * delta.x + m.m_22 * delta.y);

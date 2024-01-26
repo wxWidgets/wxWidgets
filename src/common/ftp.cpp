@@ -541,7 +541,7 @@ wxSocketBase *wxFTP::GetPort()
     if ( !socket )
     {
         m_bEncounteredError = true;
-        return NULL;
+        return nullptr;
     }
 
     // Now set the time for the new socket to the default or user selected
@@ -591,7 +591,7 @@ wxSocketBase *wxFTP::GetActivePort()
         // We use IsOk() here to see if everything is ok
         m_lastError = wxPROTO_PROTERR;
         delete sockSrv;
-        return NULL;
+        return nullptr;
     }
 
     //gets the new address, actually it is just the port number
@@ -606,7 +606,7 @@ wxSocketBase *wxFTP::GetActivePort()
         m_lastError = wxPROTO_PROTERR;
         delete sockSrv;
         wxLogError(_("The FTP server doesn't support the PORT command."));
-        return NULL;
+        return nullptr;
     }
 
     m_lastError = wxPROTO_NOERR;
@@ -620,7 +620,7 @@ wxSocketBase *wxFTP::GetPassivePort()
     {
         m_lastError = wxPROTO_PROTERR;
         wxLogError(_("The FTP server doesn't support passive mode."));
-        return NULL;
+        return nullptr;
     }
 
     size_t addrStart = m_lastResult.find(wxT('('));
@@ -631,7 +631,7 @@ wxSocketBase *wxFTP::GetPassivePort()
     if ( addrEnd == wxString::npos )
     {
         m_lastError = wxPROTO_PROTERR;
-        return NULL;
+        return nullptr;
     }
 
     // get the port number and address
@@ -659,7 +659,7 @@ wxSocketBase *wxFTP::GetPassivePort()
     {
         m_lastError = wxPROTO_CONNERR;
         delete client;
-        return NULL;
+        return nullptr;
     }
 
     client->Notify(false);
@@ -762,7 +762,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     if ( ( m_currentTransfermode == NONE ) && !SetTransferMode(BINARY) )
     {
         m_lastError = wxPROTO_CONNERR;
-        return NULL;
+        return nullptr;
     }
 
     wxSocketBase *sock = GetPort();
@@ -770,7 +770,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     if ( !sock )
     {
         m_lastError = wxPROTO_NETERR;
-        return NULL;
+        return nullptr;
     }
 
     wxString tmp_str = wxT("RETR ") + wxURI::Unescape(path);
@@ -778,14 +778,14 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     {
         delete sock;
 
-        return NULL;
+        return nullptr;
     }
 
     sock = AcceptIfActive(sock);
     if ( !sock )
     {
         m_lastError = wxPROTO_CONNERR;
-        return NULL;
+        return nullptr;
     }
 
     m_streaming = true;
@@ -801,7 +801,7 @@ wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
     if ( ( m_currentTransfermode == NONE ) && !SetTransferMode(BINARY) )
     {
         m_lastError = wxPROTO_CONNERR;
-        return NULL;
+        return nullptr;
     }
 
     wxSocketBase *sock = GetPort();
@@ -811,7 +811,7 @@ wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
     {
         delete sock;
 
-        return NULL;
+        return nullptr;
     }
 
     sock = AcceptIfActive(sock);

@@ -46,9 +46,9 @@ wxEND_EVENT_TABLE()
 
 void wxInfoBarGeneric::Init()
 {
-    m_icon = NULL;
-    m_text = NULL;
-    m_button = NULL;
+    m_icon = nullptr;
+    m_text = nullptr;
+    m_button = nullptr;
 
     m_showEffect =
     m_hideEffect = wxSHOW_EFFECT_MAX;
@@ -224,7 +224,7 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
     }
     else // do show an icon
     {
-        m_icon->SetBitmap(wxArtProvider::GetBitmap(
+        m_icon->SetBitmap(wxArtProvider::GetBitmapBundle(
                             wxArtProvider::GetMessageBoxIconId(flags),
                           wxART_BUTTON));
         m_icon->Show();

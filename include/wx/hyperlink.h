@@ -67,10 +67,10 @@ public:
     // NOTE: also wxWindow::Set/GetLabel, wxWindow::Set/GetBackgroundColour,
     //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool HasTransparentBackground() override { return true; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // checks for validity some of the ctor/Create() function parameters
     void CheckParams(const wxString& label, const wxString& url, long style);
@@ -99,7 +99,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_HYPERLINK, wxHyperlinkEvent );
 class WXDLLIMPEXP_CORE wxHyperlinkEvent : public wxCommandEvent
 {
 public:
-    wxHyperlinkEvent() {}
+    wxHyperlinkEvent() = default;
     wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString& url)
         : wxCommandEvent(wxEVT_HYPERLINK, id),
           m_url(url)
@@ -113,7 +113,7 @@ public:
     void SetURL(const wxString &url) { m_url=url; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxHyperlinkEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxHyperlinkEvent(*this); }
 
 private:
 
@@ -139,8 +139,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 
 #if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/hyperlink.h"
-// Note that the native control is only available in Unicode version under MSW.
-#elif defined(__WXMSW__) && wxUSE_UNICODE && !defined(__WXUNIVERSAL__)
+#elif defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/hyperlink.h"
 #else
     #include "wx/generic/hyperlink.h"
@@ -148,7 +147,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     class WXDLLIMPEXP_CORE wxHyperlinkCtrl : public wxGenericHyperlinkCtrl
     {
     public:
-        wxHyperlinkCtrl() { }
+        wxHyperlinkCtrl() = default;
 
         wxHyperlinkCtrl(wxWindow *parent,
                         wxWindowID id,

@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -16,6 +16,8 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
         set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
     endif()
 endif()
+
+file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" CMAKE_INSTALL_PREFIX)
 
 # https://blog.kitware.com/cmake-and-the-default-build-type/
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -42,7 +44,7 @@ include(build/cmake/policies.cmake NO_POLICY_SCOPE)
 
 # Initialize variables for quick access to wx root dir in sub dirs
 set(wxSOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(wxBINARY_DIR ${CMAKE_BINARY_DIR})
+set(wxBINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(wxOUTPUT_DIR ${wxBINARY_DIR}/lib)
 
 # parse the version number from wx/version.h and include in wxMAJOR_VERSION and wxMINOR_VERSION
@@ -86,9 +88,14 @@ math(EXPR wxSOVERSION_MAJOR "${WX_CURRENT} - ${WX_AGE}")
 set(wxSOVERSION ${wxSOVERSION_MAJOR}.${WX_AGE}.${WX_REVISION})
 
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
-set(wxCOPYRIGHT "2002-2022 wxWidgets")
+set(wxCOPYRIGHT "2002-2024 wxWidgets")
 
-project(wxWidgets VERSION ${wxVERSION})
+set(wxLANGUAGES C CXX)
+if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")
+    list(APPEND wxLANGUAGES OBJCXX)
+endif()
+
+project(wxWidgets VERSION ${wxVERSION} LANGUAGES ${wxLANGUAGES})
 
 include(build/cmake/main.cmake)
 

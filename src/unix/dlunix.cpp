@@ -2,7 +2,6 @@
 // Name:        src/unix/dlunix.cpp
 // Purpose:     Unix-specific part of wxDynamicLibrary and related classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-16 (extracted from common/dynlib.cpp)
 // Copyright:   (c) 2000-2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -33,6 +32,10 @@
     #include <dlfcn.h>
 #endif
 
+#ifdef HAVE_DL_ITERATE_PHDR
+    #include <link.h>
+#endif
+
 // if some flags are not supported, just ignore them
 #ifndef RTLD_LAZY
     #define RTLD_LAZY 0
@@ -61,7 +64,7 @@
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
-   return dlopen(0, RTLD_LAZY);
+   return dlopen(nullptr, RTLD_LAZY);
 }
 
 /* static */
@@ -125,20 +128,38 @@ void wxDynamicLibrary::ReportError(const wxString& message,
 // listing loaded modules
 // ----------------------------------------------------------------------------
 
+#ifdef HAVE_DL_ITERATE_PHDR
+
 // wxDynamicLibraryDetails declares this class as its friend, so put the code
 // initializing new details objects here
 class wxDynamicLibraryDetailsCreator
 {
 public:
-    // create a new wxDynamicLibraryDetails from the given data
-    static wxDynamicLibraryDetails *
-    New(void *start, void *end, const wxString& path)
+    static int Callback(dl_phdr_info* info, size_t /* size */, void* data)
     {
-        wxDynamicLibraryDetails *details = new wxDynamicLibraryDetails;
-        details->m_path = path;
-        details->m_name = path.AfterLast(wxT('/'));
-        details->m_address = start;
-        details->m_length = (char *)end - (char *)start;
+        const wxString path = wxString::FromUTF8(info->dlpi_name);
+
+        wxDynamicLibraryDetails details;
+        details.m_path = path;
+        details.m_name = path.AfterLast(wxT('/'));
+
+        // Find the first and last address belonging to this module.
+        decltype(info->dlpi_addr) start = 0, end = 0;
+        for ( decltype(info->dlpi_phnum) n = 0; n < info->dlpi_phnum; n++ )
+        {
+            const auto& segment = info->dlpi_phdr[n];
+            if ( !segment.p_vaddr || !segment.p_memsz )
+                continue;
+
+            if ( !start || segment.p_vaddr < start )
+                start = segment.p_vaddr;
+
+            if ( !end || segment.p_vaddr + segment.p_memsz > end )
+                end = segment.p_vaddr + segment.p_memsz;
+        }
+
+        details.m_address = wxUIntToPtr(info->dlpi_addr + start);
+        details.m_length = end - start;
 
         // try to extract the library version from its name
         const size_t posExt = path.rfind(wxT(".so"));
@@ -147,7 +168,7 @@ public:
             if ( path.c_str()[posExt + 3] == wxT('.') )
             {
                 // assume "libfoo.so.x.y.z" case
-                details->m_version.assign(path, posExt + 4, wxString::npos);
+                details.m_version.assign(path, posExt + 4, wxString::npos);
             }
             else
             {
@@ -156,83 +177,29 @@ public:
                 {
                     // assume "libbar-x.y.z.so" case
                     posDash++;
-                    details->m_version.assign(path, posDash, posExt - posDash);
+                    details.m_version.assign(path, posDash, posExt - posDash);
                 }
             }
         }
 
-        return details;
+        auto dlls = static_cast<wxDynamicLibraryDetailsArray*>(data);
+        dlls->push_back(std::move(details));
+
+        // Return 0 to keep iterating.
+        return 0;
     }
 };
+
+#endif // HAVE_DL_ITERATE_PHDR
 
 /* static */
 wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 {
     wxDynamicLibraryDetailsArray dlls;
 
-#ifdef __LINUX__
-    // examine /proc/self/maps to find out what is loaded in our address space
-    wxFFile file(wxT("/proc/self/maps"));
-    if ( file.IsOpened() )
-    {
-        // details of the module currently being parsed
-        wxString pathCur;
-        void *startCur = NULL,
-             *endCur = NULL;
-
-        char path[1024];
-        char buf[1024];
-        while ( fgets(buf, WXSIZEOF(buf), file.fp()) )
-        {
-            // format is: "start-end perm offset maj:min inode path", see proc(5)
-            void *start,
-                 *end;
-            switch ( sscanf(buf, "%p-%p %*4s %*p %*02x:%*02x %*d %1023s\n",
-                            &start, &end, path) )
-            {
-                case 2:
-                    // there may be no path column
-                    path[0] = '\0';
-                    break;
-
-                case 3:
-                    // nothing to do, read everything we wanted
-                    break;
-
-                default:
-                    // chop '\n'
-                    buf[strlen(buf) - 1] = '\0';
-                    wxLogDebug(wxT("Failed to parse line \"%s\" in /proc/self/maps."),
-                               buf);
-                    continue;
-            }
-
-            wxASSERT_MSG( start >= endCur,
-                          wxT("overlapping regions in /proc/self/maps?") );
-
-            wxString pathNew = wxString::FromAscii(path);
-            if ( pathCur.empty() )
-            {
-                // new module start
-                pathCur = pathNew;
-                startCur = start;
-                endCur = end;
-            }
-            else if ( pathCur == pathNew && endCur == end )
-            {
-                // continuation of the same module in the address space
-                endCur = end;
-            }
-            else // end of the current module
-            {
-                dlls.Add(wxDynamicLibraryDetailsCreator::New(startCur,
-                                                             endCur,
-                                                             pathCur));
-                pathCur.clear();
-            }
-        }
-    }
-#endif // __LINUX__
+#ifdef HAVE_DL_ITERATE_PHDR
+    dl_iterate_phdr(wxDynamicLibraryDetailsCreator::Callback, &dlls);
+#endif // HAVE_DL_ITERATE_PHDR
 
     return dlls;
 }
@@ -246,7 +213,7 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
 
     // At least under Solaris dladdr() takes non-const void*.
     if ( dladdr(const_cast<void*>(addr), &di) == 0 )
-        return NULL;
+        return nullptr;
 
     if ( path )
         *path = di.dli_fname;
@@ -257,7 +224,7 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
     wxUnusedVar(path);
 #endif // HAVE_DLADDR
 
-    return NULL;
+    return nullptr;
 }
 
 

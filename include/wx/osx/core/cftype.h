@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/cftype.h
 // Purpose:     wxCFDictionaryRef class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2018/07/27
 // Copyright:   (c) 2018 Stefan Csomor
 // Licence:     wxWindows licence
@@ -117,12 +116,12 @@ class wxCFNumberRef : public wxCFTypeRef
 {
 public:
     wxCFNumberRef(CGFloat v)
-        : wxCFTypeRef(CFNumberCreate(NULL, kCFNumberCGFloatType, &v))
+        : wxCFTypeRef(CFNumberCreate(nullptr, kCFNumberCGFloatType, &v))
     {
     }
 
     wxCFNumberRef(int v)
-        : wxCFTypeRef(CFNumberCreate(NULL, kCFNumberIntType, &v))
+        : wxCFTypeRef(CFNumberCreate(nullptr, kCFNumberIntType, &v))
     {
     }
 };

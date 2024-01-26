@@ -77,7 +77,7 @@ Building wxQT on Ubuntu                {#qt_build_ubuntu}
 Install latest Qt5 packages (qt5-default). To build unit tests, libcppunit-dev
 is required. You will need to install other dependencies to compile wxWidgets
 depending on the features you'll want to use (build-essential libjpeg-dev
-libtiff5-dev ubuntu-restricted-extras freeglut3 freeglut3-dev libsdl1.2-dev
+libtiff-dev ubuntu-restricted-extras freeglut3 freeglut3-dev libsdl1.2-dev
 libgstreamer-plugins-base0.10-dev)
 
 
@@ -118,7 +118,7 @@ for Windows (ran from Git Bash, or any other Unix-like shell):
 Building wxGT on Android               {#qt_android}
 --------------------------
 
-Download Android Native Development Kit (NDK), tandalone Android Software
+Download Android Native Development Kit (NDK), standalone Android Software
 Development Kit (SDK), install them and perform the following instructions to
 prepare the cross-compilation tool-chain to (change NDK and other paths):
 
@@ -146,7 +146,7 @@ Android (disable currently unsupported/unneeded features) and run make:
     mkdir bldqt5droid
     cd bldqt5droid
     ../configure --with-qt --enable-debug  --build=x86_64-unknown-linux-gnu \
-        --host=arm-linux-androideabi  --disable-compat28 --disable-shared \
+        --host=arm-linux-androideabi  --disable-compat30 --disable-shared \
         --disable-arttango --enable-image --disable-dragimage --disable-sockets \
         --with-libtiff=no --without-opengl --disable-baseevtloop --disable-utf8
     make
@@ -175,7 +175,7 @@ to see all the options please use:
 It is recommended to build wxWidgets in another directory (maybe a
 subdirectory of your wxWidgets installation) as this allows you to
 have multiple configurations (for example, debug and release or GTK
-and Motif) simultaneously.
+and X11) simultaneously.
 
 Feature Options                        {#qt_feature_options}
 -----------------

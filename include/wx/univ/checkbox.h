@@ -2,7 +2,6 @@
 // Name:        wx/univ/checkbox.h
 // Purpose:     wxCheckBox declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.09.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -75,8 +74,8 @@ public:
                 const wxString& name = wxASCII_STR(wxCheckBoxNameStr));
 
     // implement the checkbox interface
-    virtual void SetValue(bool value) wxOVERRIDE;
-    virtual bool GetValue() const wxOVERRIDE;
+    virtual void SetValue(bool value) override;
+    virtual bool GetValue() const override;
 
     // set/get the bitmaps to use for the checkbox indicator
     void SetBitmap(const wxBitmap& bmp, State state, Status status);
@@ -89,25 +88,25 @@ public:
     virtual void ChangeValue(bool value);
 
     // overridden base class virtuals
-    virtual bool IsPressed() const wxOVERRIDE { return m_isPressed; }
+    virtual bool IsPressed() const override { return m_isPressed; }
 
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1,
-                               const wxString& strArg = wxEmptyString) wxOVERRIDE;
+                               const wxString& strArg = wxEmptyString) override;
 
-    virtual bool CanBeHighlighted() const wxOVERRIDE { return true; }
+    virtual bool CanBeHighlighted() const override { return true; }
     virtual wxInputHandler *CreateStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) wxOVERRIDE
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) override
     {
         return CreateStdInputHandler(handlerDef);
     }
 
 protected:
-    virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) wxOVERRIDE;
-    virtual wxCheckBoxState DoGet3StateValue() const wxOVERRIDE;
+    virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) override;
+    virtual wxCheckBoxState DoGet3StateValue() const override;
 
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
+    virtual wxSize DoGetBestClientSize() const override;
 
     // get the size of the bitmap using either the current one or the default
     // one (query renderer then)

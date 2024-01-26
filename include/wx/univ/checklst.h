@@ -2,7 +2,6 @@
 // Name:        wx/univ/checklst.h
 // Purpose:     wxCheckListBox class for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.09.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -32,7 +31,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    int nStrings = 0,
-                   const wxString choices[] = NULL,
+                   const wxString choices[] = nullptr,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxASCII_STR(wxListBoxNameStr))
@@ -55,7 +54,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int nStrings = 0,
-                const wxString choices[] = (const wxString *) NULL,
+                const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxListBoxNameStr));
@@ -69,16 +68,16 @@ public:
                 const wxString& name = wxASCII_STR(wxListBoxNameStr));
 
     // implement check list box methods
-    virtual bool IsChecked(unsigned int item) const wxOVERRIDE;
-    virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
+    virtual bool IsChecked(unsigned int item) const override;
+    virtual void Check(unsigned int item, bool check = true) override;
 
     // and input handling
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = -1l,
-                               const wxString& strArg = wxEmptyString) wxOVERRIDE;
+                               const wxString& strArg = wxEmptyString) override;
 
     static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) wxOVERRIDE
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) override
     {
         return GetStdInputHandler(handlerDef);
     }
@@ -86,16 +85,16 @@ public:
 protected:
     // override all methods which add/delete items to update m_checks array as
     // well
-    virtual void OnItemInserted(unsigned int pos) wxOVERRIDE;
-    virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
-    virtual void DoClear() wxOVERRIDE;
+    virtual void OnItemInserted(unsigned int pos) override;
+    virtual void DoDeleteOneItem(unsigned int n) override;
+    virtual void DoClear() override;
 
     // draw the check items instead of the usual ones
     virtual void DoDrawRange(wxControlRenderer *renderer,
-                             int itemFirst, int itemLast) wxOVERRIDE;
+                             int itemFirst, int itemLast) override;
 
     // take them also into account for size calculation
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
     // common part of all ctors
     void Init();

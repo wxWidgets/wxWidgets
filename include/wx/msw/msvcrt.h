@@ -3,11 +3,20 @@
 // Purpose:     macros to use some non-standard features of MS Visual C++
 //              C run-time library
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.1999
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// Note that this file globally redefines "new" keyword breaking the use of
+// placement new in any code parsed after it. If you run into this problem, the
+// solutions are, in order of preference:
+//
+// 1. Don't include this header at all. Use better tools for memory debugging.
+// 2. Predefine __NO_VC_CRTDBG__ before including it (basically the same as 1).
+// 3. Do "#undef new" before and "#define new WXDEBUG_NEW" in your own code
+//    before/after using placement new or before/after including third part
+//    headers using it.
 
 // the goal of this file is to define wxCrtSetDbgFlag() macro which may be
 // used like this:
@@ -22,11 +31,8 @@
 // use debug CRT functions for memory leak detections in VC++ 5.0+ in debug
 // builds
 #undef wxUSE_VC_CRTDBG
-#if defined(_DEBUG) && defined(__VISUALC__)
-    // it doesn't combine well with wxWin own memory debugging methods
-    #if !wxUSE_GLOBAL_MEMORY_OPERATORS && !wxUSE_MEMORY_TRACING && !defined(__NO_VC_CRTDBG__)
-        #define wxUSE_VC_CRTDBG
-    #endif
+#if defined(_DEBUG) && defined(__VISUALC__) && !defined(__NO_VC_CRTDBG__)
+    #define wxUSE_VC_CRTDBG
 #endif
 
 #ifdef wxUSE_VC_CRTDBG
@@ -36,15 +42,6 @@
     #endif
 
     #include <stdlib.h>
-
-    // Defining _CRTBLD should never be necessary at all, but keep it for now
-    // as there is no time to retest all the compilers before 3.0 release.
-    // Definitely do not use it with MSVS 2013 as defining it results in errors
-    // if the standard <assert.h> is included afterwards.
-    #if !defined(_CRTBLD) && !wxCHECK_VISUALC_VERSION(12)
-        // Needed when building with pure MS SDK
-        #define _CRTBLD
-    #endif
 
     #include <crtdbg.h>
 

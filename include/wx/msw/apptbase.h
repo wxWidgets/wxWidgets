@@ -2,7 +2,6 @@
 // Name:        wx/msw/apptbase.h
 // Purpose:     declaration of wxAppTraits for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.06.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -63,7 +62,7 @@ public:
 
     // implement this base class function for both console and GUI applications
     virtual bool SafeMessageBox(const wxString& text,
-                                const wxString& title) wxOVERRIDE;
+                                const wxString& title) override;
 
 protected:
 #if wxUSE_THREADS

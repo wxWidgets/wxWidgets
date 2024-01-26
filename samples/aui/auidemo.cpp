@@ -2,7 +2,6 @@
 // Name:        auidemo.cpp
 // Purpose:     wxaui: wx advanced user interface - sample/test program
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2005-10-03
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
@@ -19,17 +18,20 @@
 #include "wx/artprov.h"
 #include "wx/clipbrd.h"
 #include "wx/image.h"
+#include "wx/choice.h"
 #include "wx/colordlg.h"
 #include "wx/wxhtml.h"
 #include "wx/imaglist.h"
 #include "wx/dataobj.h"
 #include "wx/dcclient.h"
 #include "wx/bmpbuttn.h"
+#include "wx/log.h"
 #include "wx/menu.h"
 #include "wx/toolbar.h"
 #include "wx/statusbr.h"
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
+#include "wx/stattext.h"
 
 #include "wx/aui/aui.h"
 #include "../sample.xpm"
@@ -39,7 +41,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxDECLARE_APP(MyApp);
@@ -54,7 +56,7 @@ class MyFrame : public wxFrame
 {
     enum
     {
-        ID_CreateTree = wxID_HIGHEST+1,
+        ID_CreateTree = wxID_HIGHEST,
         ID_CreateGrid,
         ID_CreateText,
         ID_CreateHTML,
@@ -99,6 +101,8 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
+        ID_NotebookNewTab,
+        ID_NotebookDeleteTab,
 
         ID_SampleItem,
 
@@ -120,9 +124,9 @@ private:
     wxTextCtrl* CreateTextCtrl(const wxString& text = wxEmptyString);
     wxGrid* CreateGrid();
     wxTreeCtrl* CreateTreeCtrl();
-    wxSizeReportCtrl* CreateSizeReportCtrl(const wxSize &size = wxWindow::FromDIP(wxSize(80, 80), NULL));
+    wxSizeReportCtrl* CreateSizeReportCtrl(const wxSize &size = wxWindow::FromDIP(wxSize(80, 80), nullptr));
     wxPoint GetStartPosition();
-    wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = NULL);
+    wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = nullptr);
     wxAuiNotebook* CreateNotebook();
 
     wxString GetIntroText();
@@ -159,6 +163,9 @@ private:
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
+    void OnNotebookNewTab(wxCommandEvent& evt);
+    void OnNotebookDeleteTab(wxCommandEvent& evt);
+
     void OnPaneClose(wxAuiManagerEvent& evt);
 
 private:
@@ -183,7 +190,7 @@ public:
     wxSizeReportCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     wxAuiManager* mgr = NULL)
+                     wxAuiManager* mgr = nullptr)
                      : wxControl(parent, id, pos, size, wxNO_BORDER)
     {
         m_mgr = mgr;
@@ -260,7 +267,7 @@ class SettingsPanel : public wxPanel
 {
     enum
     {
-        ID_PaneBorderSize = wxID_HIGHEST+1,
+        ID_PaneBorderSize = wxID_HIGHEST,
         ID_SashSize,
         ID_CaptionSize,
         ID_BackgroundColor,
@@ -561,11 +568,11 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    wxFrame* frame = new MyFrame(NULL,
+    wxFrame* frame = new MyFrame(nullptr,
                                  wxID_ANY,
                                  "wxAUI Sample Application",
                                  wxDefaultPosition,
-                                 wxWindow::FromDIP(wxSize(800, 600), NULL));
+                                 wxWindow::FromDIP(wxSize(800, 600), nullptr));
     frame->Show();
 
     return true;
@@ -606,6 +613,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
+    EVT_MENU(ID_NotebookNewTab, MyFrame::OnNotebookNewTab)
+    EVT_MENU(ID_NotebookDeleteTab, MyFrame::OnNotebookDeleteTab)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -734,6 +743,9 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
+    notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
 
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
@@ -1262,7 +1274,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
         case ID_NotebookNoCloseButton:
-            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) != 0);
+            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) == 0);
             break;
         case ID_NotebookCloseButton:
             event.Check((m_notebook_style & wxAUI_NB_CLOSE_BUTTON) != 0);
@@ -1300,6 +1312,36 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
 
     }
 }
+
+
+void MyFrame::OnNotebookNewTab(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    book->AddPage(new wxTextCtrl(book, wxID_ANY, "New Tab",
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE | wxNO_BORDER),
+                  wxString::Format("Tab %zu", book->GetPageCount() + 1),
+                  true /* select */);
+}
+
+
+void MyFrame::OnNotebookDeleteTab(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    auto numPages = book->GetPageCount();
+    if ( !numPages )
+    {
+        wxLogWarning("No pages to delete.");
+        return;
+    }
+
+    book->DeletePage(numPages - 1);
+}
+
 
 void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 {

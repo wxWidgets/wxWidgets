@@ -24,6 +24,8 @@
 #include "testableframe.h"
 #include "testwindow.h"
 
+#include <memory>
+
 class RadioButtonTestCase
 {
 public:
@@ -89,22 +91,22 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
     wxWindow* const parent = wxTheApp->GetTopWindow();
 
     // Create two different radio groups.
-    wxScopedPtr<wxRadioButton> g1radio0(new wxRadioButton(parent, wxID_ANY, "radio 1.0",
+    std::unique_ptr<wxRadioButton> g1radio0(new wxRadioButton(parent, wxID_ANY, "radio 1.0",
                                                 wxDefaultPosition, wxDefaultSize,
                                                 wxRB_GROUP));
 
-    wxScopedPtr<wxRadioButton> g1radio1(new wxRadioButton(parent, wxID_ANY, "radio 1.1"));
+    std::unique_ptr<wxRadioButton> g1radio1(new wxRadioButton(parent, wxID_ANY, "radio 1.1"));
 
-    wxScopedPtr<wxRadioButton> g2radio0(new wxRadioButton(parent, wxID_ANY, "radio 2.0",
+    std::unique_ptr<wxRadioButton> g2radio0(new wxRadioButton(parent, wxID_ANY, "radio 2.0",
                                                 wxDefaultPosition, wxDefaultSize,
                                                 wxRB_GROUP));
 
-    wxScopedPtr<wxRadioButton> g2radio1(new wxRadioButton(parent, wxID_ANY, "radio 2.1"));
+    std::unique_ptr<wxRadioButton> g2radio1(new wxRadioButton(parent, wxID_ANY, "radio 2.1"));
 
     // Check that having another control between radio buttons doesn't break
     // grouping.
-    wxScopedPtr<wxStaticText> text(new wxStaticText(parent, wxID_ANY, "Label"));
-    wxScopedPtr<wxRadioButton> g2radio2(new wxRadioButton(parent, wxID_ANY, "radio 2.2"));
+    std::unique_ptr<wxStaticText> text(new wxStaticText(parent, wxID_ANY, "Label"));
+    std::unique_ptr<wxRadioButton> g2radio2(new wxRadioButton(parent, wxID_ANY, "radio 2.2"));
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
@@ -156,17 +158,17 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
 
     // GetNextInGroup()
     CHECK_SAME_WINDOW(g1radio0->GetNextInGroup(), g1radio1);
-    CHECK_SAME_WINDOW(g1radio1->GetNextInGroup(), NULL);
+    CHECK_SAME_WINDOW(g1radio1->GetNextInGroup(), nullptr);
 
     CHECK_SAME_WINDOW(g2radio0->GetNextInGroup(), g2radio1);
     CHECK_SAME_WINDOW(g2radio1->GetNextInGroup(), g2radio2);
-    CHECK_SAME_WINDOW(g2radio2->GetNextInGroup(), NULL);
+    CHECK_SAME_WINDOW(g2radio2->GetNextInGroup(), nullptr);
 
     // GetPreviousInGroup()
-    CHECK_SAME_WINDOW(g1radio0->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(g1radio0->GetPreviousInGroup(), nullptr);
     CHECK_SAME_WINDOW(g1radio1->GetPreviousInGroup(), g1radio0);
 
-    CHECK_SAME_WINDOW(g2radio0->GetPreviousInGroup(), NULL);
+    CHECK_SAME_WINDOW(g2radio0->GetPreviousInGroup(), nullptr);
     CHECK_SAME_WINDOW(g2radio1->GetPreviousInGroup(), g2radio0);
     CHECK_SAME_WINDOW(g2radio2->GetPreviousInGroup(), g2radio1);
 }
@@ -174,24 +176,24 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Group", "[radiobutton]")
 TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Single", "[radiobutton]")
 {
     //Create a group of 2 buttons, having second button selected
-    wxScopedPtr<wxRadioButton> gradio0(new wxRadioButton(wxTheApp->GetTopWindow(),
+    std::unique_ptr<wxRadioButton> gradio0(new wxRadioButton(wxTheApp->GetTopWindow(),
         wxID_ANY, "wxRadioButton",
         wxDefaultPosition,
         wxDefaultSize, wxRB_GROUP));
 
-    wxScopedPtr<wxRadioButton> gradio1(new wxRadioButton(wxTheApp->GetTopWindow(),
+    std::unique_ptr<wxRadioButton> gradio1(new wxRadioButton(wxTheApp->GetTopWindow(),
         wxID_ANY, "wxRadioButton"));
 
     gradio1->SetValue(true);
 
     //Create a "single" button (by default it will not be selected)
-    wxScopedPtr<wxRadioButton> sradio(new wxRadioButton(wxTheApp->GetTopWindow(),
+    std::unique_ptr<wxRadioButton> sradio(new wxRadioButton(wxTheApp->GetTopWindow(),
         wxID_ANY, "wxRadioButton",
         wxDefaultPosition,
         wxDefaultSize, wxRB_SINGLE));
 
     //Create a non-grouped button and select it
-    wxScopedPtr<wxRadioButton> ngradio(new wxRadioButton(wxTheApp->GetTopWindow(),
+    std::unique_ptr<wxRadioButton> ngradio(new wxRadioButton(wxTheApp->GetTopWindow(),
         wxID_ANY, "wxRadioButton"));
 
     ngradio->SetValue(true);
@@ -205,8 +207,8 @@ TEST_CASE_METHOD(RadioButtonTestCase, "RadioButton::Single", "[radiobutton]")
     // Also check that navigation works as expected with "single" buttons.
     CHECK_SAME_WINDOW(sradio->GetFirstInGroup(), sradio);
     CHECK_SAME_WINDOW(sradio->GetLastInGroup(), sradio);
-    CHECK_SAME_WINDOW(sradio->GetPreviousInGroup(), NULL);
-    CHECK_SAME_WINDOW(sradio->GetNextInGroup(), NULL);
+    CHECK_SAME_WINDOW(sradio->GetPreviousInGroup(), nullptr);
+    CHECK_SAME_WINDOW(sradio->GetNextInGroup(), nullptr);
 }
 
 TEST_CASE("RadioButton::Focus", "[radiobutton][focus]")
@@ -214,7 +216,7 @@ TEST_CASE("RadioButton::Focus", "[radiobutton][focus]")
     // Create a container panel just to be able to destroy all the windows
     // created here at once by simply destroying it.
     wxWindow* const tlw = wxTheApp->GetTopWindow();
-    wxScopedPtr<wxPanel> parentPanel(new wxPanel(tlw));
+    std::unique_ptr<wxPanel> parentPanel(new wxPanel(tlw));
 
     // Create a panel containing 2 radio buttons and another control outside
     // this panel, so that we could give focus to something different and then

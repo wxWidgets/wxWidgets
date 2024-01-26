@@ -28,6 +28,7 @@
 #include "wx/protocol/http.h"
 #include "wx/sckstrm.h"
 #include "wx/thread.h"
+#include "wx/wxcrt.h"
 
 
 // ----------------------------------------------------------------------------
@@ -40,7 +41,7 @@ IMPLEMENT_PROTOCOL(wxHTTP, wxT("http"), wxT("80"), true)
 wxHTTP::wxHTTP()
   : wxProtocol()
 {
-    m_addr = NULL;
+    m_addr = nullptr;
     m_read = false;
     m_proxy_mode = false;
     m_http_response = 0;
@@ -211,14 +212,9 @@ wxHTTP::SetPostText(const wxString& contentType,
                     const wxString& data,
                     const wxMBConv& conv)
 {
-#if wxUSE_UNICODE
     wxScopedCharBuffer scb = data.mb_str(conv);
     const size_t len = scb.length();
     const char* const buf = scb.data();
-#else // !wxUSE_UNICODE
-    const size_t len = data.length();
-    const char* const buf = data.mb_str(conv);
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     if ( !len )
         return false;
@@ -232,12 +228,11 @@ wxHTTP::SetPostText(const wxString& contentType,
 
 void wxHTTP::SendHeaders()
 {
-    typedef wxStringToStringHashMap::iterator iterator;
     wxString buf;
 
-    for (iterator it = m_headers.begin(), en = m_headers.end(); it != en; ++it )
+    for ( const auto& kv : m_headers )
     {
-        buf.Printf(wxT("%s: %s\r\n"), it->first.c_str(), it->second.c_str());
+        buf.Printf("%s: %s\r\n", kv.first, kv.second);
 
         const wxWX2MBbuf cbuf = buf.mb_str();
         Write(cbuf, strlen(cbuf));
@@ -450,11 +445,11 @@ public:
         m_read_bytes = 0;
     }
 
-    size_t GetSize() const wxOVERRIDE { return m_httpsize; }
+    size_t GetSize() const override { return m_httpsize; }
     virtual ~wxHTTPStream() { m_http->Abort(); }
 
 protected:
-    size_t OnSysRead(void *buffer, size_t bufsize) wxOVERRIDE;
+    size_t OnSysRead(void *buffer, size_t bufsize) override;
 
     wxDECLARE_NO_COPY_CLASS(wxHTTPStream);
 };
@@ -490,7 +485,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 
     m_lastError = wxPROTO_CONNERR;  // all following returns share this type of error
     if (!m_addr)
-        return NULL;
+        return nullptr;
 
     // We set m_connected back to false so wxSocketBase will know what to do.
 #ifdef __WXMAC__
@@ -498,10 +493,10 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
     wxSocketClient::WaitOnConnect(10);
 
     if (!wxSocketClient::IsConnected())
-        return NULL;
+        return nullptr;
 #else
     if (!wxProtocol::Connect(*m_addr))
-        return NULL;
+        return nullptr;
 #endif
 
     // Use the user-specified method if any or determine the method to use
@@ -511,7 +506,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
         method = m_postBuffer.IsEmpty() ? wxS("GET"): wxS("POST");
 
     if (!BuildRequest(path, method))
-        return NULL;
+        return nullptr;
 
     inp_stream = new wxHTTPStream(this);
 

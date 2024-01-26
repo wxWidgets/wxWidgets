@@ -2,7 +2,6 @@
 // Name:        src/generic/printps.cpp
 // Purpose:     Postscript print/preview framework
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -38,6 +37,7 @@
 #include "wx/generic/prntdlgg.h"
 #include "wx/progdlg.h"
 #include "wx/paper.h"
+#include "wx/display.h"
 
 #include <stdlib.h>
 
@@ -68,7 +68,7 @@ wxPostScriptPrinter::~wxPostScriptPrinter()
 bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
     sm_abortIt = false;
-    sm_abortWindow = NULL;
+    sm_abortWindow = nullptr;
 
     if (!printout)
     {
@@ -210,7 +210,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 
 wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
 {
-    wxDC* dc = NULL;
+    wxDC* dc = nullptr;
 
     wxGenericPrintDialog dialog( parent, &m_printDialogData );
     if (dialog.ShowModal() == wxID_OK)
@@ -218,7 +218,7 @@ wxDC* wxPostScriptPrinter::PrintDialog(wxWindow *parent)
         dc = dialog.GetPrintDC();
         m_printDialogData = dialog.GetPrintDialogData();
 
-        if (dc == NULL)
+        if (dc == nullptr)
             sm_lastError = wxPRINTER_ERROR;
         else
             sm_lastError = wxPRINTER_NO_ERROR;
@@ -312,7 +312,7 @@ void wxPostScriptPrintPreview::DetermineScaling()
     {
         int resolution = 600;  // TODO, this is correct, but get this from wxPSDC somehow
 
-        const wxSize screenPPI = wxGetDisplayPPI();
+        const wxSize screenPPI = wxDisplay::GetStdPPI();
         int logPPIScreenX = screenPPI.GetWidth();
         int logPPIScreenY = screenPPI.GetHeight();
         int logPPIPrinterX = resolution;

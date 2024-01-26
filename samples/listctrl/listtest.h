@@ -2,7 +2,6 @@
 // Name:        listctrl.h
 // Purpose:     wxListCtrl sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -10,7 +9,7 @@
 
 // not all ports have support for EVT_CONTEXT_MENU yet, don't define
 // USE_CONTEXT_MENU for those which don't
-#if defined(__WXMOTIF__) || defined(__WXX11__)
+#if defined(__WXX11__)
     #define USE_CONTEXT_MENU 0
 #else
     #define USE_CONTEXT_MENU 1
@@ -21,11 +20,10 @@ class MyApp: public wxApp
 {
 public:
     MyApp() { }
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
-    virtual bool OnInit() wxOVERRIDE;
-
-private:
-    wxDECLARE_NO_COPY_CLASS(MyApp);
+    virtual bool OnInit() override;
 };
 
 class MyListCtrl: public wxListCtrl
@@ -41,6 +39,8 @@ public:
             m_updated = -1;
 
         }
+    MyListCtrl(const MyListCtrl&) = delete;
+    MyListCtrl &operator=(const MyListCtrl&) = delete;
 
     // add one item to the listctrl in report mode
     void InsertItemInReportView(int i);
@@ -74,9 +74,6 @@ public:
 
     void OnRightClick(wxMouseEvent& event);
 
-    virtual void CheckItem(long item, bool check) wxOVERRIDE;
-    virtual bool IsItemChecked(long item) const wxOVERRIDE;
-
 private:
     void ShowContextMenu(const wxPoint& pos, long item);
     void SetColumnImage(int col, int image);
@@ -84,17 +81,16 @@ private:
     void LogEvent(const wxListEvent& event, const wxString& eventName);
     void LogColEvent(const wxListEvent& event, const wxString& eventName);
 
-    virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
-    virtual bool OnGetItemIsChecked(long item) const wxOVERRIDE;
-    virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
-    virtual wxItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
+    virtual wxString OnGetItemText(long item, long column) const override;
+    virtual bool OnGetItemIsChecked(long item) const override;
+    virtual int OnGetItemColumnImage(long item, long column) const override;
+    virtual wxItemAttr *OnGetItemAttr(long item) const override;
 
     long m_updated;
 
     // checked boxes in virtual list
     wxSelectionStore m_checked;
 
-    wxDECLARE_NO_COPY_CLASS(MyListCtrl);
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -103,6 +99,9 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame(const wxString& title);
+    MyFrame(const MyFrame&) = delete;
+    MyFrame &operator=(const MyFrame&) = delete;
+
     virtual ~MyFrame();
 
 protected:
@@ -117,6 +116,7 @@ protected:
     void OnVirtualView(wxCommandEvent& event);
     void OnSmallVirtualView(wxCommandEvent& event);
     void OnCheckVisibility(wxCommandEvent& event);
+    void OnAutoResize(wxCommandEvent& event);
     void OnSetItemsCount(wxCommandEvent& event);
 
 
@@ -188,8 +188,6 @@ private:
     // number of items to initialize list/report view with
     int m_numListItems;
 
-
-    wxDECLARE_NO_COPY_CLASS(MyFrame);
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -243,5 +241,7 @@ enum
     LIST_THAW,
     LIST_TOGGLE_LINES,
     LIST_CHECKVISIBILITY,
+    LIST_AUTOSIZE,
+    LIST_AUTOSIZE_USEHEADER,
     LIST_CTRL                   = 1000
 };

@@ -2,7 +2,6 @@
 // Name:        wx/osx/dcprint.h
 // Purpose:     wxPrinterDC class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -25,18 +24,18 @@ public:
     wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printdata );
     virtual ~wxPrinterDCImpl();
 
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) wxOVERRIDE;
-    virtual void EndDoc() wxOVERRIDE;
-    virtual void StartPage() wxOVERRIDE;
-    virtual void EndPage() wxOVERRIDE;
+    virtual bool StartDoc( const wxString& WXUNUSED(message) ) override;
+    virtual void EndDoc() override;
+    virtual void StartPage() override;
+    virtual void EndPage() override;
 
-    wxRect GetPaperRect() const wxOVERRIDE;
+    wxRect GetPaperRect() const override;
 
     wxPrintData& GetPrintData() { return m_printData; }
-    virtual wxSize GetPPI() const wxOVERRIDE;
+    virtual wxSize GetPPI() const override;
 
 protected:
-    virtual void DoGetSize( int *width, int *height ) const wxOVERRIDE;
+    virtual void DoGetSize( int *width, int *height ) const override;
 
     wxPrintData        m_printData ;
     wxNativePrinterDC* m_nativePrinterDC ;

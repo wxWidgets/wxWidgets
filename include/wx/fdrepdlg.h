@@ -2,7 +2,6 @@
 // Name:        wx/fdrepdlg.h
 // Purpose:     wxFindReplaceDialog class
 // Author:      Markus Greither and Vadim Zeitlin
-// Modified by:
 // Created:     23/03/2001
 // Copyright:   (c) Markus Greither
 // Licence:     wxWindows licence
@@ -96,7 +95,7 @@ class WXDLLIMPEXP_CORE wxFindReplaceDialogBase : public wxDialog
 {
 public:
     // ctors and such
-    wxFindReplaceDialogBase() { m_FindReplaceData = NULL; }
+    wxFindReplaceDialogBase() { m_FindReplaceData = nullptr; }
     wxFindReplaceDialogBase(wxWindow * WXUNUSED(parent),
                             wxFindReplaceData *data,
                             const wxString& WXUNUSED(title),
@@ -156,7 +155,7 @@ public:
     void SetFindString(const wxString& str) { SetString(str); }
     void SetReplaceString(const wxString& str) { m_strReplace = str; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxFindDialogEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxFindDialogEvent(*this); }
 
 private:
     wxString m_strReplace;

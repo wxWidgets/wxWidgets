@@ -120,7 +120,7 @@ public:
         wxIcon icon(wxICON(sample));
 
         // Equivalent to:
-        #if defined(__WXGTK__) || defined(__WXMOTIF__)
+        #if defined(__WXGTK__)
         wxIcon icon(sample_xpm);
         #endif
 
@@ -244,7 +244,7 @@ public:
 
         @since 3.1.6
      */
-    double GetLogicalSize() const;
+    wxSize GetLogicalSize() const;
 
     /**
         Gets the width of the icon in logical pixels.

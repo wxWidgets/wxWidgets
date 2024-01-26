@@ -88,9 +88,6 @@ if (!$only_bkl) {
             xrc      => [qw(XRC)],
         );
 
-    # The versions of non-MSBuild projects (MSBuild ones all use version "10").
-    my @vcproj_versions = qw(8 9);
-
     # Return the "filter" to use for the given file.
     sub filter_cb
     {
@@ -179,12 +176,6 @@ if (!$only_bkl) {
         # are actually used as headers (i.e. they are #include'd).
         if ($proj eq 'base') {
             @headers = grep { $_ !~ /\.cpp$/ } @headers;
-        }
-
-        foreach my $ver (@vcproj_versions) {
-            next if defined $only_version && $ver != $only_version;
-
-            call_upmake("$Bin/msw/wx_vc${ver}_${proj}.vcproj", \&update_vcproj, @args);
         }
     }
 }

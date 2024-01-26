@@ -32,8 +32,8 @@ class VirtListCtrlTestCase : public CppUnit::TestCase
 public:
     VirtListCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( VirtListCtrlTestCase );
@@ -74,19 +74,20 @@ void VirtListCtrlTestCase::setUp()
         }
 
     protected:
-        virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE
+        virtual wxString OnGetItemText(long item, long column) const override
         {
             return wxString::Format("Row %ld, col %ld", item, column);
         }
     };
 
     m_list = new VirtListCtrl;
+    m_list->AppendColumn("Col0");
 }
 
 void VirtListCtrlTestCase::tearDown()
 {
     delete m_list;
-    m_list = NULL;
+    m_list = nullptr;
 }
 
 void VirtListCtrlTestCase::UpdateSelection()
@@ -101,15 +102,19 @@ void VirtListCtrlTestCase::UpdateSelection()
     CPPUNIT_ASSERT_EQUAL( 2, m_list->GetSelectedItemCount() );
 
     // The item 7 is now invalid and so shouldn't be counted as selected any
-    // more.
+    // more. Notice that under wxQt, the selection is lost/cleared when the
+    // model is reset
     m_list->SetItemCount(5);
+#ifndef __WXQT__
     CPPUNIT_ASSERT_EQUAL( 1, m_list->GetSelectedItemCount() );
+#else
+    CPPUNIT_ASSERT_EQUAL( 0, m_list->GetSelectedItemCount() );
+#endif
 }
 
 void VirtListCtrlTestCase::DeselectedEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    m_list->AppendColumn("Col0");
     m_list->SetItemCount(1);
     wxListCtrl* const list = m_list;
 

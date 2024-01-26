@@ -2,7 +2,6 @@
 // Name:        src/msw/dir.cpp
 // Purpose:     wxDir implementation for Win32
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     08.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -27,8 +26,11 @@
 
 #include "wx/dir.h"
 
-#ifdef __WINDOWS__
-    #include "wx/msw/private.h"
+#include "wx/msw/private.h"
+#include <shlwapi.h>
+
+#ifdef __VISUALC__
+    #pragma comment(lib, "shlwapi")
 #endif
 
 // ----------------------------------------------------------------------------
@@ -60,11 +62,6 @@ inline void FreeFindData(FIND_DATA fd)
     }
 }
 
-const wxChar *GetNameFromFindData(const FIND_STRUCT *finddata)
-{
-    return finddata->cFileName;
-}
-
 // Helper function checking that the contents of the given FIND_STRUCT really
 // match our filter. We need to do it ourselves as native Windows functions
 // apply the filter to both the long and the short names of the file, so
@@ -78,17 +75,7 @@ CheckFoundMatch(const FIND_STRUCT* finddata, const wxString& filter)
     if ( filter.empty() )
         return true;
 
-    // Otherwise do check the match validity. Notice that we must do it
-    // case-insensitively because the case of the file names is not supposed to
-    // matter under Windows.
-    wxString fn(GetNameFromFindData(finddata));
-
-    // However if the filter contains only special characters (which is a
-    // common case), we can skip the case conversion.
-    if ( filter.find_first_not_of(wxS("*?.")) == wxString::npos )
-        return fn.Matches(filter);
-
-    return fn.MakeUpper().Matches(filter.Upper());
+    return ::PathMatchSpec(finddata->cFileName, filter.t_str()) == TRUE;
 }
 
 inline bool
@@ -128,11 +115,6 @@ FindFirst(const wxString& spec,
     }
 
     return fd;
-}
-
-inline FIND_ATTR GetAttrFromFindData(FIND_STRUCT *finddata)
-{
-    return finddata->dwFileAttributes;
 }
 
 inline bool IsDir(FIND_ATTR attr)
@@ -231,7 +213,6 @@ bool wxDirData::Read(wxString *filename)
     bool first = false;
 
     WIN32_FIND_DATA finddata;
-    #define PTR_TO_FINDDATA (&finddata)
 
     if ( !IsFindDataOk(m_finddata) )
     {
@@ -246,7 +227,7 @@ bool wxDirData::Read(wxString *filename)
         else
             filespec += m_filespec;
 
-        m_finddata = FindFirst(filespec, m_filespec, PTR_TO_FINDDATA);
+        m_finddata = FindFirst(filespec, m_filespec, &finddata);
 
         first = true;
     }
@@ -265,9 +246,6 @@ bool wxDirData::Read(wxString *filename)
         return false;
     }
 
-    const wxChar *name;
-    FIND_ATTR attr;
-
     for ( ;; )
     {
         if ( first )
@@ -276,7 +254,7 @@ bool wxDirData::Read(wxString *filename)
         }
         else
         {
-            if ( !FindNext(m_finddata, m_filespec, PTR_TO_FINDDATA) )
+            if ( !FindNext(m_finddata, m_filespec, &finddata) )
             {
                 DWORD err = ::GetLastError();
 
@@ -290,8 +268,8 @@ bool wxDirData::Read(wxString *filename)
             }
         }
 
-        name = GetNameFromFindData(PTR_TO_FINDDATA);
-        attr = GetAttrFromFindData(PTR_TO_FINDDATA);
+        const wxChar* const name = finddata.cFileName;
+        const FIND_ATTR attr = finddata.dwFileAttributes;
 
         // don't return "." and ".." unless asked for
         if ( name[0] == wxT('.') &&
@@ -338,7 +316,7 @@ bool wxDirData::Read(wxString *filename)
 
 wxDir::wxDir(const wxString& dirname)
 {
-    m_data = NULL;
+    m_data = nullptr;
 
     (void)Open(dirname);
 }
@@ -356,7 +334,7 @@ bool wxDir::Open(const wxString& dirname)
     }
     else
     {
-        m_data = NULL;
+        m_data = nullptr;
 
         return false;
     }
@@ -364,7 +342,7 @@ bool wxDir::Open(const wxString& dirname)
 
 bool wxDir::IsOpened() const
 {
-    return m_data != NULL;
+    return m_data != nullptr;
 }
 
 wxString wxDir::GetName() const
@@ -394,7 +372,7 @@ void wxDir::Close()
     if ( m_data )
     {
         delete m_data;
-        m_data = NULL;
+        m_data = nullptr;
     }
 }
 

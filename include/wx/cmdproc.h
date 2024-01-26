@@ -2,7 +2,6 @@
 // Name:        wx/cmdproc.h
 // Purpose:     undo/redo capable command processing framework
 // Author:      Julian Smart (extracted from docview.h by VZ)
-// Modified by:
 // Created:     05.11.00
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -25,7 +24,7 @@ class WXDLLIMPEXP_CORE wxCommand : public wxObject
 {
 public:
     wxCommand(bool canUndoIt = false, const wxString& name = wxEmptyString);
-    virtual ~wxCommand(){}
+    virtual ~wxCommand() = default;
 
     // Override this to perform a command
     virtual bool Do() = 0;
@@ -90,7 +89,7 @@ public:
     const wxList& GetCommands() const { return m_commands; }
     wxCommand *GetCurrentCommand() const
     {
-        return (wxCommand *)(m_currentCommand ? m_currentCommand->GetData() : NULL);
+        return (wxCommand *)(m_currentCommand ? m_currentCommand->GetData() : nullptr);
     }
     int GetMaxCommands() const { return m_maxNoCommands; }
     virtual void ClearCommands();

@@ -28,6 +28,82 @@ enum wxAnimationType
 
 
 /**
+    Container for possible multiple versions of the same animation in different
+    resolutions.
+
+    This class is used to pass either one or multiple animations to use in
+    wxAnimationCtrl. If it contains multiple elements, they must be added to it
+    using its Add() function in ascending size order and, in particular, the
+    first element defines the size of the animation in standard DPI, with the
+    other elements containing versions of the animation to use in higher DPI.
+
+    Example of using this class to pass a normal and high DPI version of a
+    "throbbing" animation to the control and let it choose the one most
+    appropriate to the current resolution automatically:
+
+    @code
+    auto animationCtrl = new wxAnimationCtrl(parent, wxID_ANY);
+    wxAnimationBundle animations;
+    animations.Add("throbber.gif");
+    animations.Add("throbber_2x.gif");
+    if ( animationCtrl->SetAnimation(animations) )
+        animationCtrl->Play();
+    @endcode
+
+    @since 3.3.0
+ */
+class wxAnimationBundle
+{
+public:
+    /**
+        Default constructor creates an empty bundle.
+
+        Call Add() later.
+     */
+    wxAnimationBundle() = default;
+
+    /**
+        Implicit ctor from wxAnimation for backwards compatibility.
+     */
+    wxAnimationBundle(const wxAnimation& anim);
+
+    /**
+        Implicit ctor from animation file name for backwards compatibility.
+     */
+    wxAnimationBundle(const wxString& filename,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY);
+
+    wxAnimationBundle(const wxAnimationBundle&) = default;
+    wxAnimationBundle& operator=(const wxAnimationBundle&) = default;
+
+    ~wxAnimationBundle() = default;
+
+
+    /**
+        Add an animation in another, bigger, size.
+     */
+    void Add(const wxAnimation& anim);
+
+    /// @overload
+    void Add(const wxString& filename,
+             wxAnimationType type = wxANIMATION_TYPE_ANY);
+
+    /**
+        Get vector containing all animations in this bundle.
+
+        The vector can be empty.
+     */
+    const std::vector<wxAnimation>& GetAll() const;
+
+    /**
+        Return true if this animation bundle is not empty.
+
+        Notice that any elements of the bundle are always valid animations.
+     */
+    bool IsOk() const;
+};
+
+/**
     @class wxAnimationCtrl
 
     This is a static control which displays an animation.
@@ -83,7 +159,7 @@ public:
         of the animation is displayed.
 
         @param parent
-            Parent window, must be non-@NULL.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param anim
@@ -175,8 +251,24 @@ public:
         Until Play() isn't called, a static image, the first frame of the given
         animation or the background colour will be shown
         (see SetInactiveBitmap() for more info).
+
+        Note that while this function takes wxAnimationBundle parameter, it is
+        possible to pass just a single wxAnimation to it too, as it is
+        implicitly converted to a bundle. Moreover, is it also possible to call
+        this function with just the name of the animation file, e.g.
+
+        @code
+            animationCtrl->SetAnimation("progress.gif");
+        @endcode
+
+        due to the existence of another implicit constructor, however this
+        doesn't allow to check for errors when creating the animation and is
+        not recommended.
+
+        If the animation bundle contains more than one animation, the one
+        appropriate for the current display resolution is chosen.
     */
-    virtual void SetAnimation(const wxAnimation& anim);
+    virtual void SetAnimation(const wxAnimationBundle& animations);
 
     /**
         Sets the bitmap to show on the control when it's not playing an animation.
@@ -248,7 +340,7 @@ public:
         of the animation is displayed.
 
         @param parent
-            Parent window, must be non-@NULL.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param anim

@@ -2,7 +2,6 @@
 // Name:        src/common/mimecmn.cpp
 // Purpose:     classes and functions to manage MIME types
 // Author:      Vadim Zeitlin
-// Modified by:
 //  Chris Elliott (biol75@york.ac.uk) 5 Dec 00: write support for Win32
 // Created:     23.09.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -103,55 +102,6 @@ wxString wxMimeTypeCommands::GetVerbCmd(size_t n) const
 // wxFileTypeInfo
 // ----------------------------------------------------------------------------
 
-void wxFileTypeInfo::DoVarArgInit(const wxString& mimeType,
-                                  const wxString& openCmd,
-                                  const wxString& printCmd,
-                                  const wxString& desc,
-                                  va_list argptr)
-{
-    m_mimeType = mimeType;
-    m_openCmd = openCmd;
-    m_printCmd = printCmd;
-    m_desc = desc;
-
-    for ( ;; )
-    {
-        // icc gives this warning in its own va_arg() macro, argh
-#ifdef __INTELC__
-    #pragma warning(push)
-    #pragma warning(disable: 1684)
-#endif
-
-        wxArgNormalizedString ext(WX_VA_ARG_STRING(argptr));
-
-#ifdef __INTELC__
-    #pragma warning(pop)
-#endif
-        if ( !ext )
-        {
-            // NULL terminates the list
-            break;
-        }
-
-        m_exts.Add(ext.GetString());
-    }
-}
-
-void wxFileTypeInfo::VarArgInit(const wxString *mimeType,
-                                const wxString *openCmd,
-                                const wxString *printCmd,
-                                const wxString *desc,
-                                ...)
-{
-    va_list argptr;
-    va_start(argptr, desc);
-
-    DoVarArgInit(*mimeType, *openCmd, *printCmd, *desc, argptr);
-
-    va_end(argptr);
-}
-
-
 wxFileTypeInfo::wxFileTypeInfo(const wxArrayString& sArray)
     : m_mimeType(sArray[0u])
     , m_openCmd( sArray[1u])
@@ -164,9 +114,6 @@ wxFileTypeInfo::wxFileTypeInfo(const wxArrayString& sArray)
         m_exts.Add(sArray[i]);
     }
 }
-
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo)
 
 // ============================================================================
 // implementation of the wrapper classes
@@ -216,7 +163,7 @@ wxString wxFileType::ExpandCommand(const wxString& command,
                 case wxT('{'):
                     {
                         const wxChar *pEnd = wxStrchr(pc, wxT('}'));
-                        if ( pEnd == NULL ) {
+                        if ( pEnd == nullptr ) {
                             wxString mimetype;
                             wxLogWarning(_("Unmatched '{' in an entry for mime type %s."),
                                          params.GetMimeType().c_str());
@@ -276,12 +223,12 @@ wxString wxFileType::ExpandCommand(const wxString& command,
 wxFileType::wxFileType(const wxFileTypeInfo& info)
 {
     m_info = &info;
-    m_impl = NULL;
+    m_impl = nullptr;
 }
 
 wxFileType::wxFileType()
 {
-    m_info = NULL;
+    m_info = nullptr;
     m_impl = new wxFileTypeImpl;
 }
 
@@ -521,7 +468,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 // wxMimeTypesManagerFactory
 // ----------------------------------------------------------------------------
 
-wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::m_factory = NULL;
+wxMimeTypesManagerFactory *wxMimeTypesManagerFactory::m_factory = nullptr;
 
 /* static */
 void wxMimeTypesManagerFactory::Set(wxMimeTypesManagerFactory *factory)
@@ -580,7 +527,7 @@ bool wxMimeTypesManager::IsOfType(const wxString& mimeType,
 
 wxMimeTypesManager::wxMimeTypesManager()
 {
-    m_impl = NULL;
+    m_impl = nullptr;
 }
 
 wxMimeTypesManager::~wxMimeTypesManager()
@@ -610,7 +557,7 @@ wxMimeTypesManager::Associate(const wxFileTypeInfo& ftInfo)
 #else // other platforms
     wxUnusedVar(ftInfo);
     wxFAIL_MSG( wxT("not implemented") ); // TODO
-    return NULL;
+    return nullptr;
 #endif // platforms
 }
 
@@ -627,7 +574,7 @@ wxMimeTypesManager::GetFileTypeFromExtension(const wxString& ext)
     else
         extWithoutDot = ext;
 
-    wxCHECK_MSG( !ext.empty(), NULL, wxT("extension can't be empty") );
+    wxCHECK_MSG( !ext.empty(), nullptr, wxT("extension can't be empty") );
 
     wxFileType *ft = m_impl->GetFileTypeFromExtension(extWithoutDot);
 
@@ -636,10 +583,9 @@ wxMimeTypesManager::GetFileTypeFromExtension(const wxString& ext)
         //
         // TODO linear search is potentially slow, perhaps we should use a
         //       sorted array?
-        size_t count = m_fallbacks.GetCount();
-        for ( size_t n = 0; n < count; n++ ) {
-            if ( m_fallbacks[n].GetExtensions().Index(ext) != wxNOT_FOUND ) {
-                ft = new wxFileType(m_fallbacks[n]);
+        for ( const auto& fallback : m_fallbacks ) {
+            if ( fallback.GetExtensions().Index(ext) != wxNOT_FOUND ) {
+                ft = new wxFileType(fallback);
 
                 break;
             }
@@ -660,11 +606,10 @@ wxMimeTypesManager::GetFileTypeFromMimeType(const wxString& mimeType)
         //
         // TODO linear search is potentially slow, perhaps we should use a
         //      sorted array?
-        size_t count = m_fallbacks.GetCount();
-        for ( size_t n = 0; n < count; n++ ) {
+        for ( const auto& fallback : m_fallbacks ) {
             if ( wxMimeTypesManager::IsOfType(mimeType,
-                                              m_fallbacks[n].GetMimeType()) ) {
-                ft = new wxFileType(m_fallbacks[n]);
+                                              fallback.GetMimeType()) ) {
+                ft = new wxFileType(fallback);
 
                 break;
             }
@@ -688,10 +633,9 @@ size_t wxMimeTypesManager::EnumAllFileTypes(wxArrayString& mimetypes)
     size_t countAll = m_impl->EnumAllFileTypes(mimetypes);
 
     // add the fallback filetypes
-    size_t count = m_fallbacks.GetCount();
-    for ( size_t n = 0; n < count; n++ ) {
-        if ( mimetypes.Index(m_fallbacks[n].GetMimeType()) == wxNOT_FOUND ) {
-            mimetypes.Add(m_fallbacks[n].GetMimeType());
+    for ( const auto& fallback : m_fallbacks ) {
+        if ( mimetypes.Index(fallback.GetMimeType()) == wxNOT_FOUND ) {
+            mimetypes.Add(fallback.GetMimeType());
             countAll++;
         }
     }
@@ -737,15 +681,15 @@ class wxMimeTypeCmnModule: public wxModule
 public:
     wxMimeTypeCmnModule() : wxModule() { }
 
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override
     {
-        wxMimeTypesManagerFactory::Set(NULL);
+        wxMimeTypesManagerFactory::Set(nullptr);
 
-        if ( gs_mimeTypesManager.m_impl != NULL )
+        if ( gs_mimeTypesManager.m_impl != nullptr )
         {
             wxDELETE(gs_mimeTypesManager.m_impl);
-            gs_mimeTypesManager.m_fallbacks.Clear();
+            gs_mimeTypesManager.m_fallbacks.clear();
         }
     }
 

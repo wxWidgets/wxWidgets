@@ -2,7 +2,6 @@
 // Name:        wx/msw/combo.h
 // Purpose:     wxComboCtrl class
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -64,8 +63,8 @@ public:
 
     virtual ~wxComboCtrl();
 
-    virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const wxOVERRIDE;
-    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const wxOVERRIDE;
+    virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const override;
+    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const override;
 
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
@@ -75,23 +74,23 @@ public:
 protected:
     void DoTimerEvent();
 
-    virtual bool AnimateShow( const wxRect& rect, int flags ) wxOVERRIDE;
+    virtual bool AnimateShow( const wxRect& rect, int flags ) override;
 #endif // wxUSE_COMBOCTRL_POPUP_ANIMATION
 
 protected:
 
     // Dummy method - we override all functions that call this
-    virtual WXHWND GetEditHWND() const wxOVERRIDE { return NULL; }
+    virtual WXHWND GetEditHWND() const override { return nullptr; }
 
     // customization
-    virtual void OnResize() wxOVERRIDE;
-    virtual wxCoord GetNativeTextIndent() const wxOVERRIDE;
+    virtual void OnResize() override;
+    virtual wxCoord GetNativeTextIndent() const override;
 
     // event handlers
     void OnPaintEvent( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
 
-    virtual bool HasTransparentBackground() wxOVERRIDE { return IsDoubleBuffered(); }
+    virtual bool HasTransparentBackground() override { return IsDoubleBuffered(); }
 
 private:
     void Init();

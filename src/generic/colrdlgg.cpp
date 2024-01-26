@@ -2,7 +2,6 @@
 // Name:        src/generic/colrdlgg.cpp
 // Purpose:     Choice dialogs
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -16,7 +15,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/dialog.h"
     #include "wx/listbox.h"
@@ -160,9 +158,9 @@ bool wxGenericColourDialog::Create(wxWindow *parent, const wxColourData *data)
         m_colourData = *data;
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
-    m_customColourBmp = NULL;
+    m_customColourBmp = nullptr;
     for ( unsigned i = 0; i < WXSIZEOF(m_customColoursBmp); i++ )
-        m_customColoursBmp[i] = NULL;
+        m_customColoursBmp[i] = nullptr;
 #endif
 
     InitializeColours();
@@ -316,8 +314,6 @@ void wxGenericColourDialog::CalculateMeasurements()
 
 void wxGenericColourDialog::CreateWidgets()
 {
-    wxBeginBusyCursor();
-
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     CreateCustomBitmaps();
 #endif
@@ -345,7 +341,7 @@ void wxGenericColourDialog::CreateWidgets()
     }
     else
     {
-        m_alphaSlider = NULL;
+        m_alphaSlider = nullptr;
     }
 
     wxBoxSizer *sliderSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -395,15 +391,11 @@ void wxGenericColourDialog::CreateWidgets()
         topSizer->Add(buttonsizer, wxSizerFlags().Expand().DoubleBorder());
     }
 
-    SetAutoLayout( true );
     SetSizer( topSizer );
 
     topSizer->SetSizeHints( this );
-    topSizer->Fit( this );
 
     Centre( wxBOTH );
-
-    wxEndBusyCursor();
 }
 
 void wxGenericColourDialog::InitializeColours(void)

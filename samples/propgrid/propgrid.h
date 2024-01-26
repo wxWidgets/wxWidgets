@@ -2,7 +2,6 @@
 // Name:        samples/propgrid/propgrid.h
 // Purpose:     wxPropertyGrid sample
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2004-09-25
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -10,36 +9,6 @@
 
 #ifndef _WX_SAMPLES_PROPGRID_PROPGRID_H_
 #define _WX_SAMPLES_PROPGRID_PROPGRID_H_
-
-// -----------------------------------------------------------------------
-
-class wxAdvImageFileProperty : public wxFileProperty
-{
-    WX_PG_DECLARE_PROPERTY_CLASS(wxAdvImageFileProperty)
-public:
-
-    wxAdvImageFileProperty( const wxString& label = wxPG_LABEL,
-                            const wxString& name = wxPG_LABEL,
-                            const wxString& value = wxEmptyString );
-    virtual ~wxAdvImageFileProperty ();
-
-    virtual void OnSetValue() wxOVERRIDE;  // Override to allow image loading.
-
-    virtual bool IntToValue( wxVariant& variant, int number, int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ) wxOVERRIDE;
-    virtual wxSize OnMeasureImage( int item ) const wxOVERRIDE;
-    virtual void OnCustomPaint( wxDC& dc,
-                                const wxRect& rect, wxPGPaintData& paintdata ) wxOVERRIDE;
-
-    void LoadThumbnails( size_t n );
-
-protected:
-    wxImage*    m_pImage; // Temporary thumbnail data.
-
-    static wxPGChoices ms_choices;
-
-    int m_index; // Index required for choice behaviour.
-};
 
 // -----------------------------------------------------------------------
 
@@ -73,12 +42,12 @@ public:
     wxVectorProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
                     const wxVector3f& value = wxVector3f() );
-    virtual ~wxVectorProperty();
+    virtual ~wxVectorProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
-                                    wxVariant& childValue ) const wxOVERRIDE;
-    virtual void RefreshChildren() wxOVERRIDE;
+                                    wxVariant& childValue ) const override;
+    virtual void RefreshChildren() override;
 
 protected:
 };
@@ -106,12 +75,12 @@ public:
     wxTriangleProperty( const wxString& label = wxPG_LABEL,
                         const wxString& name = wxPG_LABEL,
                         const wxTriangle& value = wxTriangle() );
-    virtual ~wxTriangleProperty();
+    virtual ~wxTriangleProperty() = default;
 
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
-                                    wxVariant& childValue ) const wxOVERRIDE;
-    virtual void RefreshChildren() wxOVERRIDE;
+                                    wxVariant& childValue ) const override;
+    virtual void RefreshChildren() override;
 
 protected:
 };
@@ -128,7 +97,7 @@ enum
 class FormMain : public wxFrame
 {
 public:
-    FormMain(const wxString& title, const wxPoint& pos, const wxSize& size );
+    FormMain(const wxString& title);
     ~FormMain();
 
     wxPropertyGridManager*  m_pPropGridManager;
@@ -263,8 +232,6 @@ public:
 
     void AddTestProperties( wxPropertyGridPage* pg );
 
-    bool RunTests( bool fullTest, bool interactive = false );
-
 private:
     wxDECLARE_EVENT_TABLE();
 };
@@ -275,7 +242,7 @@ class cxApplication : public wxApp
 {
 public:
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 wxDECLARE_APP(cxApplication);

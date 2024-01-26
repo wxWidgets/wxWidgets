@@ -2,7 +2,6 @@
 // Name:        src/generic/dragimgg.cpp
 // Purpose:     Generic wxDragImage implementation
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/2/2000
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -62,10 +61,10 @@ void wxGenericDragImage::Init()
 {
     m_isDirty = false;
     m_isShown = false;
-    m_windowDC = NULL;
-    m_window = NULL;
+    m_windowDC = nullptr;
+    m_window = nullptr;
     m_fullScreen = false;
-    m_pBackingBitmap = NULL;
+    m_pBackingBitmap = nullptr;
 }
 
 // Attributes
@@ -306,10 +305,10 @@ bool wxGenericDragImage::EndDrag()
 }
 
 // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
-// is non-NULL, or in screen coordinates if NULL.
+// is non-null, or in screen coordinates if null.
 bool wxGenericDragImage::Move(const wxPoint& pt)
 {
-    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Move()") );
+    wxASSERT_MSG( (m_windowDC != nullptr), wxT("No window DC in wxGenericDragImage::Move()") );
 
     wxPoint pt2(pt);
     if (m_fullScreen)
@@ -333,7 +332,7 @@ bool wxGenericDragImage::Move(const wxPoint& pt)
 
 bool wxGenericDragImage::Show()
 {
-    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Show()") );
+    wxASSERT_MSG( (m_windowDC != nullptr), wxT("No window DC in wxGenericDragImage::Show()") );
 
     // Show at the current position
 
@@ -372,7 +371,7 @@ bool wxGenericDragImage::UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& des
 
 bool wxGenericDragImage::Hide()
 {
-    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Hide()") );
+    wxASSERT_MSG( (m_windowDC != nullptr), wxT("No window DC in wxGenericDragImage::Hide()") );
 
     // Repair the old position
 
@@ -480,7 +479,7 @@ bool wxGenericDragImage::DoDrawImage(wxDC& dc, const wxPoint& pos) const
 {
     if (m_bitmap.IsOk())
     {
-        dc.DrawBitmap(m_bitmap, pos.x, pos.y, (m_bitmap.GetMask() != 0));
+        dc.DrawBitmap(m_bitmap, pos.x, pos.y, (m_bitmap.GetMask() != nullptr));
         return true;
     }
     else if (m_icon.IsOk())

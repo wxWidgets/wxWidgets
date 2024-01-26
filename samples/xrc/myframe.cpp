@@ -104,10 +104,10 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame(wxWindow* parent)
 {
     // Load up this frame from XRC. [Note, instead of making a class's
-    // constructor take a wxWindow* parent with a default value of NULL,
+    // constructor take a wxWindow* parent with a default value of nullptr,
     // we could have just had designed MyFrame class with an empty
     // constructor and then written here:
-    // wxXmlResource::Get()->LoadFrame(this, (wxWindow* )NULL, "main_frame");
+    // wxXmlResource::Get()->LoadFrame(this, nullptr, "main_frame");
     // since this frame will always be the top window, and thus parentless.
     // However, the current approach has source code that can be recycled
     // for other frames that aren't the top level window.]
@@ -320,7 +320,7 @@ void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnObjRefToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     // The dialog redirects log messages, so save the old log target first
-    wxLog* oldlogtarget = wxLog::SetActiveTarget(NULL);
+    wxLog* oldlogtarget = wxLog::SetActiveTarget(nullptr);
 
     // Make an instance of the dialog
     ObjrefDialog* objrefDialog = new ObjrefDialog(this);
@@ -392,7 +392,7 @@ void MyFrame::OnRecursiveLoad(wxCommandEvent& WXUNUSED(event))
     // this is a slightly contrived example, please keep in mind that it's done
     // only to demonstrate LoadObjectRecursively() in action and is not the
     // recommended to do this
-    wxDialog dlg(NULL, wxID_ANY, "Recursive Load Example",
+    wxDialog dlg(nullptr, wxID_ANY, "Recursive Load Example",
                  wxDefaultPosition, wxDefaultSize,
                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     wxSizer * const sizer = new wxBoxSizer(wxVERTICAL);

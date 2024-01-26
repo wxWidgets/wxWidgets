@@ -7,8 +7,6 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../../source_groups.cmake)
-
 wx_append_sources(MEDIA_FILES MEDIA_CMN)
 
 if(WXMSW)
@@ -31,15 +29,15 @@ if(WXOSX)
         "-weak_framework AVKit"
         )
 elseif(WXGTK)
-    wx_lib_include_directories(wxmedia PUBLIC ${GSTREAMER_INCLUDE_DIRS})
+    wx_lib_include_directories(wxmedia ${GSTREAMER_INCLUDE_DIRS})
     if(GSTREAMER_INTERFACES_INCLUDE_DIRS)
-        wx_lib_include_directories(wxmedia PUBLIC ${GSTREAMER_INTERFACES_INCLUDE_DIRS})
+        wx_lib_include_directories(wxmedia ${GSTREAMER_INTERFACES_INCLUDE_DIRS})
     endif()
     if(GSTREAMER_VIDEO_INCLUDE_DIRS)
-        wx_lib_include_directories(wxmedia PUBLIC ${GSTREAMER_VIDEO_INCLUDE_DIRS})
+        wx_lib_include_directories(wxmedia ${GSTREAMER_VIDEO_INCLUDE_DIRS})
     endif()
     if(GSTREAMER_PLAYER_INCLUDE_DIRS)
-        wx_lib_include_directories(wxmedia PUBLIC ${GSTREAMER_PLAYER_INCLUDE_DIRS})
+        wx_lib_include_directories(wxmedia ${GSTREAMER_PLAYER_INCLUDE_DIRS})
     endif()
 
     wx_lib_link_libraries(wxmedia PUBLIC ${GSTREAMER_LIBRARIES})
@@ -53,5 +51,3 @@ elseif(WXGTK)
         wx_lib_link_libraries(wxmedia PUBLIC ${GSTREAMER_PLAYER_LIBRARIES})
     endif()
 endif()
-
-wx_finalize_lib(wxmedia)

@@ -7,16 +7,6 @@
         <dependency-of>all</dependency-of>
     </template>
 
-    <subproject id="emulator" template="sub">
-        <dir>emulator/src</dir>
-        <installable>no</installable>
-    </subproject>
-
-    <subproject id="execmon" template="sub">
-        <dir>execmon</dir>
-        <installable>yes</installable>
-    </subproject>
-
     <subproject id="helpview" template="sub">
         <dir>helpview/src</dir>
         <installable>no</installable>

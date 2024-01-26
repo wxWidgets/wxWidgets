@@ -2,7 +2,6 @@
 // Name:        src/unix/stdpaths.cpp
 // Purpose:     wxStandardPaths implementation for Unix & OpenVMS systems
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -275,7 +274,11 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
         return cacheDir;
     }
 
-    const wxFileName dirsFile(GetXDGConfigHome(), wxS("user-dirs.dirs"));
+    const wxString configDir = GetXDGConfigHome();
+    if (userDir == Dir_Config)
+        return configDir;
+
+    const wxFileName dirsFile(configDir, wxS("user-dirs.dirs"));
     if ( dirsFile.FileExists() )
     {
         wxString userDirId;

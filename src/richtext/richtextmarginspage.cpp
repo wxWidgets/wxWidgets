@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextmarginspage.cpp
 // Purpose:     Implements the rich text formatting dialog margins page.
 // Author:      Julian Smart
-// Modified by: 
 // Created:     20/10/2010 10:27:34
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -122,30 +121,30 @@ void wxRichTextMarginsPage::Init()
     m_ignoreUpdates = false;
 
 ////@begin wxRichTextMarginsPage member initialisation
-    m_leftMarginCheckbox = NULL;
-    m_marginLeft = NULL;
-    m_unitsMarginLeft = NULL;
-    m_rightMarginCheckbox = NULL;
-    m_marginRight = NULL;
-    m_unitsMarginRight = NULL;
-    m_topMarginCheckbox = NULL;
-    m_marginTop = NULL;
-    m_unitsMarginTop = NULL;
-    m_bottomMarginCheckbox = NULL;
-    m_marginBottom = NULL;
-    m_unitsMarginBottom = NULL;
-    m_leftPaddingCheckbox = NULL;
-    m_paddingLeft = NULL;
-    m_unitsPaddingLeft = NULL;
-    m_rightPaddingCheckbox = NULL;
-    m_paddingRight = NULL;
-    m_unitsPaddingRight = NULL;
-    m_topPaddingCheckbox = NULL;
-    m_paddingTop = NULL;
-    m_unitsPaddingTop = NULL;
-    m_bottomPaddingCheckbox = NULL;
-    m_paddingBottom = NULL;
-    m_unitsPaddingBottom = NULL;
+    m_leftMarginCheckbox = nullptr;
+    m_marginLeft = nullptr;
+    m_unitsMarginLeft = nullptr;
+    m_rightMarginCheckbox = nullptr;
+    m_marginRight = nullptr;
+    m_unitsMarginRight = nullptr;
+    m_topMarginCheckbox = nullptr;
+    m_marginTop = nullptr;
+    m_unitsMarginTop = nullptr;
+    m_bottomMarginCheckbox = nullptr;
+    m_marginBottom = nullptr;
+    m_unitsMarginBottom = nullptr;
+    m_leftPaddingCheckbox = nullptr;
+    m_paddingLeft = nullptr;
+    m_unitsPaddingLeft = nullptr;
+    m_rightPaddingCheckbox = nullptr;
+    m_paddingRight = nullptr;
+    m_unitsPaddingRight = nullptr;
+    m_topPaddingCheckbox = nullptr;
+    m_paddingTop = nullptr;
+    m_unitsPaddingTop = nullptr;
+    m_bottomPaddingCheckbox = nullptr;
+    m_paddingBottom = nullptr;
+    m_unitsPaddingBottom = nullptr;
 ////@end wxRichTextMarginsPage member initialisation
 }
 

@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextstyledlg.cpp
 // Purpose:
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/5/2006 12:05:31 PM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -81,32 +80,32 @@ wxRichTextStyleOrganiserDialog::wxRichTextStyleOrganiserDialog( int flags, wxRic
 
 void wxRichTextStyleOrganiserDialog::Init()
 {
-    m_richTextStyleSheet = NULL;
-    m_richTextCtrl = NULL;
+    m_richTextStyleSheet = nullptr;
+    m_richTextCtrl = nullptr;
     m_dontUpdate = false;
     m_flags = 0;
     m_restartNumbering = true;
 
 ////@begin wxRichTextStyleOrganiserDialog member initialisation
-    m_innerSizer = NULL;
-    m_buttonSizerParent = NULL;
-    m_stylesListBox = NULL;
-    m_previewCtrl = NULL;
-    m_buttonSizer = NULL;
-    m_newCharacter = NULL;
-    m_newParagraph = NULL;
-    m_newList = NULL;
-    m_newBox = NULL;
-    m_applyStyle = NULL;
-    m_renameStyle = NULL;
-    m_editStyle = NULL;
-    m_deleteStyle = NULL;
-    m_closeButton = NULL;
-    m_bottomButtonSizer = NULL;
-    m_restartNumberingCtrl = NULL;
-    m_stdButtonSizer = NULL;
-    m_okButton = NULL;
-    m_cancelButton = NULL;
+    m_innerSizer = nullptr;
+    m_buttonSizerParent = nullptr;
+    m_stylesListBox = nullptr;
+    m_previewCtrl = nullptr;
+    m_buttonSizer = nullptr;
+    m_newCharacter = nullptr;
+    m_newParagraph = nullptr;
+    m_newList = nullptr;
+    m_newBox = nullptr;
+    m_applyStyle = nullptr;
+    m_renameStyle = nullptr;
+    m_editStyle = nullptr;
+    m_deleteStyle = nullptr;
+    m_closeButton = nullptr;
+    m_bottomButtonSizer = nullptr;
+    m_restartNumberingCtrl = nullptr;
+    m_stdButtonSizer = nullptr;
+    m_okButton = nullptr;
+    m_cancelButton = nullptr;
 ////@end wxRichTextStyleOrganiserDialog member initialisation
 }
 
@@ -497,7 +496,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
         text.Replace(wxT("\n"), wxEmptyString);
         m_previewCtrl->WriteText(text);
         m_previewCtrl->EndStyle();
-        m_previewCtrl->SetFocusObject(NULL); // Set the focus back to the main buffer
+        m_previewCtrl->SetFocusObject(nullptr); // Set the focus back to the main buffer
         m_previewCtrl->SetInsertionPointEnd();
         m_previewCtrl->SetDefaultStyle(wxRichTextAttr());
     }

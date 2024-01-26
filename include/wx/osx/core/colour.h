@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/colour.h
 // Purpose:     wxColour class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -29,12 +28,12 @@ public:
     // default copy ctor and dtor are ok
 
     // accessors
-    virtual ChannelType Red() const wxOVERRIDE;
-    virtual ChannelType Green() const wxOVERRIDE;
-    virtual ChannelType Blue() const wxOVERRIDE;
-    virtual ChannelType Alpha() const wxOVERRIDE;
+    virtual ChannelType Red() const override;
+    virtual ChannelType Green() const override;
+    virtual ChannelType Blue() const override;
+    virtual ChannelType Alpha() const override;
 
-    virtual bool IsSolid() const wxOVERRIDE;
+    virtual bool IsSolid() const override;
 
     // comparison
     bool operator == (const wxColour& colour) const;
@@ -71,10 +70,10 @@ public:
 
 protected :
     virtual void
-    InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) wxOVERRIDE;
+    InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) override;
 
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
 
@@ -84,13 +83,13 @@ private:
 class wxColourRefData : public wxGDIRefData
 {
 public:
-    wxColourRefData() {}
-    virtual ~wxColourRefData() {}
+    wxColourRefData() = default;
+    virtual ~wxColourRefData() = default;
 
-    virtual CGFloat Red() const = 0;
-    virtual CGFloat Green() const = 0;
-    virtual CGFloat Blue() const = 0;
-    virtual CGFloat Alpha() const = 0;
+    virtual double Red() const = 0;
+    virtual double Green() const = 0;
+    virtual double Blue() const = 0;
+    virtual double Alpha() const = 0;
 
     virtual bool IsSolid() const
         { return true; }

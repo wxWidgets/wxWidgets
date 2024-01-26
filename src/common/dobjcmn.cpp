@@ -2,7 +2,6 @@
 // Name:        src/common/dobjcmn.cpp
 // Purpose:     implementation of data object methods common to all platforms
 // Author:      Vadim Zeitlin, Robert Roebling
-// Modified by:
 // Created:     19.10.99
 // Copyright:   (c) wxWidgets Team
 // Licence:     wxWindows licence
@@ -22,14 +21,6 @@
 
 #include "wx/mstream.h"
 #include "wx/textbuf.h"
-
-// ----------------------------------------------------------------------------
-// lists
-// ----------------------------------------------------------------------------
-
-#include "wx/listimpl.cpp"
-
-WX_DEFINE_LIST(wxSimpleDataObjectList)
 
 // ----------------------------------------------------------------------------
 // globals
@@ -87,33 +78,25 @@ wxDataObjectComposite::wxDataObjectComposite()
     m_receivedFormat = wxFormatInvalid;
 }
 
-wxDataObjectComposite::~wxDataObjectComposite()
-{
-    WX_CLEAR_LIST( wxSimpleDataObjectList, m_dataObjects );
-}
+wxDataObjectComposite::~wxDataObjectComposite() = default;
 
 wxDataObjectSimple *
 wxDataObjectComposite::GetObject(const wxDataFormat& format, wxDataObjectBase::Direction dir) const
 {
-    wxSimpleDataObjectList::compatibility_iterator node = m_dataObjects.GetFirst();
-
-    while ( node )
+    for ( const auto& dataObj : m_dataObjects )
     {
-        wxDataObjectSimple *dataObj = node->GetData();
-
         if (dataObj->IsSupported(format,dir))
-          return dataObj;
-        node = node->GetNext();
+          return dataObj.get();
     }
-    return NULL;
+    return nullptr;
 }
 
 void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
 {
     if ( preferred )
-        m_preferred = m_dataObjects.GetCount();
+        m_preferred = m_dataObjects.size();
 
-    m_dataObjects.Append( dataObject );
+    m_dataObjects.push_back(std::unique_ptr<wxDataObjectSimple>(dataObject));
 }
 
 wxDataFormat wxDataObjectComposite::GetReceivedFormat() const
@@ -124,13 +107,10 @@ wxDataFormat wxDataObjectComposite::GetReceivedFormat() const
 wxDataFormat
 wxDataObjectComposite::GetPreferredFormat(Direction WXUNUSED(dir)) const
 {
-    wxSimpleDataObjectList::compatibility_iterator node = m_dataObjects.Item( m_preferred );
+    wxCHECK_MSG( m_preferred < m_dataObjects.size(), wxFormatInvalid,
+                 wxT("no preferred format") );
 
-    wxCHECK_MSG( node, wxFormatInvalid, wxT("no preferred format") );
-
-    wxDataObjectSimple* dataObj = node->GetData();
-
-    return dataObj->GetFormat();
+    return m_dataObjects[m_preferred]->GetFormat();
 }
 
 #if defined(__WXMSW__)
@@ -152,7 +132,7 @@ const void* wxDataObjectComposite::GetSizeFromBuffer( const void* buffer,
 {
     wxDataObjectSimple *dataObj = GetObject(format);
 
-    wxCHECK_MSG( dataObj, NULL,
+    wxCHECK_MSG( dataObj, nullptr,
                  wxT("unsupported format in wxDataObjectComposite"));
 
     return dataObj->GetSizeFromBuffer( buffer, size, format );
@@ -164,7 +144,7 @@ void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
 {
     wxDataObjectSimple *dataObj = GetObject( format );
 
-    wxCHECK_MSG( dataObj, NULL,
+    wxCHECK_MSG( dataObj, nullptr,
                  wxT("unsupported format in wxDataObjectComposite"));
 
     return dataObj->SetSizeInBuffer( buffer, size, format );
@@ -179,9 +159,8 @@ size_t wxDataObjectComposite::GetFormatCount(Direction dir) const
     // NOTE: some wxDataObjectSimple objects may return a number greater than 1
     //       from GetFormatCount(): this is the case of e.g. wxTextDataObject
     //       under wxMac and wxGTK
-    wxSimpleDataObjectList::compatibility_iterator node;
-    for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
-        n += node->GetData()->GetFormatCount(dir);
+    for ( const auto& dataObj : m_dataObjects )
+        n += dataObj->GetFormatCount(dir);
 
     return n;
 }
@@ -190,15 +169,14 @@ void wxDataObjectComposite::GetAllFormats(wxDataFormat *formats,
                                           Direction dir) const
 {
     size_t index(0);
-    wxSimpleDataObjectList::compatibility_iterator node;
 
-    for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
+    for ( const auto& dataObj : m_dataObjects )
     {
         // NOTE: some wxDataObjectSimple objects may return more than 1 format
         //       from GetAllFormats(): this is the case of e.g. wxTextDataObject
         //       under wxMac and wxGTK
-        node->GetData()->GetAllFormats(formats+index, dir);
-        index += node->GetData()->GetFormatCount(dir);
+        dataObj->GetAllFormats(formats+index, dir);
+        index += dataObj->GetFormatCount(dir);
     }
 }
 
@@ -284,10 +262,10 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 bool wxTextDataObject::SetData(const wxDataFormat& format,
                                size_t len, const void *buf)
 {
-    if ( buf == NULL )
+    if ( buf == nullptr )
         return false;
 
-    wxWCharBuffer buffer = GetConv(format).cMB2WC((const char*)buf, len, NULL);
+    wxWCharBuffer buffer = GetConv(format).cMB2WC((const char*)buf, len, nullptr);
 
     SetText( buffer );
 
@@ -337,7 +315,7 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
 {
     const char * const buf = static_cast<const char *>(buf_);
 
-    if ( buf == NULL )
+    if ( buf == nullptr )
         return false;
 
     if ( format == wxDF_UNICODETEXT || wxLocaleIsUtf8 )
@@ -351,7 +329,7 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
     }
     else // wxDF_TEXT, convert from current (non-UTF8) locale
     {
-        SetText(wxConvLocal.cMB2WC(buf, len, NULL));
+        SetText(wxConvLocal.cMB2WC(buf, len, nullptr));
     }
 
     return true;
@@ -376,12 +354,12 @@ inline wxMBConv& GetConv(const wxDataFormat& format)
 
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
-    return GetConv(format).WC2MB(NULL, GetText().wc_str(), 0);
+    return GetConv(format).WC2MB(nullptr, GetText().wc_str(), 0);
 }
 
 bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
 {
-    if ( buf == NULL )
+    if ( buf == nullptr )
         return false;
 
     wxCharBuffer buffer(GetConv(format).cWX2MB(GetText().c_str()));
@@ -395,10 +373,10 @@ bool wxTextDataObject::SetData(const wxDataFormat& format,
                                size_t len,
                                const void *buf)
 {
-    if ( buf == NULL )
+    if ( buf == nullptr )
         return false;
 
-    SetText(GetConv(format).cMB2WC(static_cast<const char*>(buf), len, NULL));
+    SetText(GetConv(format).cMB2WC(static_cast<const char*>(buf), len, nullptr));
 
     return true;
 }
@@ -420,7 +398,7 @@ bool wxTextDataObject::GetDataHere(void *buf) const
     const wxString textNative = wxTextBuffer::Translate(GetText());
 
     // NOTE: use wxTmemcpy() instead of wxStrncpy() to allow
-    //       retrieval of strings with embedded NULLs
+    //       retrieval of strings with embedded NULs
     wxTmemcpy(static_cast<wxChar*>(buf),
               textNative.t_str(),
               textNative.length() + 1);
@@ -430,8 +408,15 @@ bool wxTextDataObject::GetDataHere(void *buf) const
 
 bool wxTextDataObject::SetData(size_t len, const void *buf)
 {
-    const wxString
-        text = wxString(static_cast<const wxChar*>(buf), len/sizeof(wxChar));
+    // Some sanity checks to avoid problems below.
+    wxCHECK_MSG( len, false, "data can't be empty" );
+    wxCHECK_MSG( !(len % sizeof(wxChar)), false, "wrong data size" );
+
+    // Input data is always NUL-terminated, but we don't want to make this NUL
+    // part of the string, so take everything up to but excluding it.
+    const size_t size = len/sizeof(wxChar) - 1;
+
+    const wxString text(static_cast<const wxChar*>(buf), size);
     SetText(wxTextBuffer::Translate(text, wxTextFileType_Unix));
 
     return true;
@@ -443,6 +428,141 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
 // wxHTMLDataObject
 // ----------------------------------------------------------------------------
 
+#ifdef __WXMSW__
+
+// Helper functions for MSW CF_HTML format, see MSDN for more information:
+//
+// https://learn.microsoft.com/en-us/windows/win32/dataxchg/html-clipboard-format
+namespace wxMSWClip
+{
+
+const char* const VERSION_HEADER = "Version:";
+const size_t VERSION_HEADER_LEN = strlen(VERSION_HEADER);
+
+const char* const START_HTML_HEADER = "StartHTML:";
+const size_t START_HTML_HEADER_LEN = strlen(START_HTML_HEADER);
+
+const char* const END_HTML_HEADER = "EndHTML:";
+const size_t END_HTML_HEADER_LEN = strlen(END_HTML_HEADER);
+
+const char* const START_FRAGMENT_HEADER = "StartFragment:";
+const size_t START_FRAGMENT_HEADER_LEN = strlen(START_FRAGMENT_HEADER);
+
+const char* const END_FRAGMENT_HEADER = "EndFragment:";
+const size_t END_FRAGMENT_HEADER_LEN = strlen(END_FRAGMENT_HEADER);
+
+const char* const CF_HTML_PREAMBLE =
+        "Version:0.9\r\n"
+        "StartHTML:00000000\r\n"
+        "EndHTML:00000000\r\n"
+        "StartFragment:00000000\r\n"
+        "EndFragment:00000000\r\n"
+        ;
+const size_t CF_HTML_PREAMBLE_LEN = strlen(CF_HTML_PREAMBLE);
+
+const char* const CF_HTML_WRAP_START =
+        "<html><body>\r\n"
+        "<!--StartFragment -->"
+        ;
+const size_t CF_HTML_WRAP_START_LEN = strlen(CF_HTML_WRAP_START);
+
+const char* const CF_HTML_WRAP_END =
+        "<!--EndFragment-->\r\n"
+        "</body>\r\n"
+        "</html>"
+        ;
+const size_t CF_HTML_WRAP_END_LEN = strlen(CF_HTML_WRAP_END);
+
+
+// Return the extra size needed by HTML data in addition to the length of the
+// HTML fragment itself.
+int GetExtraDataSize()
+{
+    // +1 is for the trailing NUL.
+    return CF_HTML_PREAMBLE_LEN + CF_HTML_WRAP_START_LEN + CF_HTML_WRAP_END_LEN + 1;
+}
+
+// Wrap HTML data with the extra information needed by CF_HTML and copy
+// everything into the provided buffer assumed to be of sufficient size.
+void FillFromHTML(char* buffer, const char* html, size_t lenHTML)
+{
+    // add the extra info that the MSW clipboard format requires.
+
+        // Create a template string for the HTML header...
+    strcpy(buffer, CF_HTML_PREAMBLE);
+    const size_t startHTML = CF_HTML_PREAMBLE_LEN;
+
+    strcat(buffer, CF_HTML_WRAP_START);
+    const size_t startFragment = startHTML + CF_HTML_WRAP_START_LEN;
+
+    // Append the HTML...
+    strncat(buffer, html, lenHTML);
+    const size_t endFragment = startFragment + lenHTML;
+
+    // Finish up the HTML format...
+    strcat(buffer, CF_HTML_WRAP_END);
+    const size_t endHTML = endFragment + CF_HTML_WRAP_END_LEN;
+
+    // Now go back and write out the necessary header information.
+    //
+    // Note, wsprintf() truncates the string when you overwrite it so you
+    // follow up with code to replace the 0 appended at the end with a '\r'.
+    const size_t OFFSET_LEN = 8; // All offsets are formatted using 8 digits.
+
+    char *ptr = strstr(buffer, START_HTML_HEADER);
+    sprintf(ptr+START_HTML_HEADER_LEN, "%08zu", startHTML);
+    *(ptr+START_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
+
+    ptr = strstr(buffer, END_HTML_HEADER);
+    sprintf(ptr+END_HTML_HEADER_LEN, "%08zu", endHTML);
+    *(ptr+END_HTML_HEADER_LEN+OFFSET_LEN) = '\r';
+
+    ptr = strstr(buffer, START_FRAGMENT_HEADER);
+    sprintf(ptr+START_FRAGMENT_HEADER_LEN, "%08zu", startFragment);
+    *(ptr+START_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
+
+    ptr = strstr(buffer, END_FRAGMENT_HEADER);
+    sprintf(ptr+END_FRAGMENT_HEADER_LEN, "%08zu", endFragment);
+    *(ptr+END_FRAGMENT_HEADER_LEN+OFFSET_LEN) = '\r';
+}
+
+// Extract just the HTML fragment part from CF_HTML data.
+wxString ExtractHTML(const char* buffer, size_t len)
+{
+    // Sanity check.
+    if ( len < VERSION_HEADER_LEN ||
+            wxCRT_StrnicmpA(buffer, VERSION_HEADER, VERSION_HEADER_LEN) != 0 )
+    {
+        // This doesn't look like CF_HTML at all, don't do anything.
+        return wxString();
+    }
+
+    const char* ptr = strstr(buffer, START_FRAGMENT_HEADER);
+    if ( !ptr )
+        return wxString();
+
+    ptr += START_FRAGMENT_HEADER_LEN;
+
+    const int start = atoi(ptr);
+    if ( start < 0 || (unsigned)start >= len )
+        return wxString();
+
+    ptr = strstr(ptr, END_FRAGMENT_HEADER);
+    if ( !ptr )
+        return wxString();
+
+    ptr += END_FRAGMENT_HEADER_LEN;
+    const int end = atoi(ptr);
+    if ( end < 0 || end < start || (unsigned)end >= len )
+        return wxString();
+
+    return wxString::FromUTF8(buffer + start, end - start);
+}
+
+} // anonymous namespace
+
+#endif // __WXMSW__
+
 size_t wxHTMLDataObject::GetDataSize() const
 {
     // Ensure that the temporary string returned by GetHTML() is kept alive for
@@ -453,9 +573,7 @@ size_t wxHTMLDataObject::GetDataSize() const
     size_t size = buffer.length();
 
 #ifdef __WXMSW__
-    // On Windows we need to add some stuff to the string to satisfy
-    // its clipboard format requirements.
-    size += 400;
+    size += wxMSWClip::GetExtraDataSize();
 #endif
 
     return size;
@@ -475,75 +593,27 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
     char* const buffer = static_cast<char*>(buf);
 
 #ifdef __WXMSW__
-    // add the extra info that the MSW clipboard format requires.
-
-        // Create a template string for the HTML header...
-    strcpy(buffer,
-        "Version:0.9\r\n"
-        "StartHTML:00000000\r\n"
-        "EndHTML:00000000\r\n"
-        "StartFragment:00000000\r\n"
-        "EndFragment:00000000\r\n"
-        "<html><body>\r\n"
-        "<!--StartFragment -->\r\n");
-
-    // Append the HTML...
-    strcat(buffer, html);
-    strcat(buffer, "\r\n");
-    // Finish up the HTML format...
-    strcat(buffer,
-        "<!--EndFragment-->\r\n"
-        "</body>\r\n"
-        "</html>");
-
-    // Now go back, calculate all the lengths, and write out the
-    // necessary header information. Note, wsprintf() truncates the
-    // string when you overwrite it so you follow up with code to replace
-    // the 0 appended at the end with a '\r'...
-    char *ptr = strstr(buffer, "StartHTML");
-    sprintf(ptr+10, "%08u", (unsigned)(strstr(buffer, "<html>") - buffer));
-    *(ptr+10+8) = '\r';
-
-    ptr = strstr(buffer, "EndHTML");
-    sprintf(ptr+8, "%08u", (unsigned)strlen(buffer));
-    *(ptr+8+8) = '\r';
-
-    ptr = strstr(buffer, "StartFragment");
-    sprintf(ptr+14, "%08u", (unsigned)(strstr(buffer, "<!--StartFrag") - buffer));
-    *(ptr+14+8) = '\r';
-
-    ptr = strstr(buffer, "EndFragment");
-    sprintf(ptr+12, "%08u", (unsigned)(strstr(buffer, "<!--EndFrag") - buffer));
-    *(ptr+12+8) = '\r';
+    wxMSWClip::FillFromHTML(buffer, html, html.length());
 #else
-    strcpy(buffer, html);
+    memcpy(buffer, html, html.length());
 #endif // __WXMSW__
 
     return true;
 }
 
-bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
+bool wxHTMLDataObject::SetData(size_t len, const void *buf)
 {
-    if ( buf == NULL )
+    if ( buf == nullptr )
         return false;
 
-    // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
-    wxString html = wxString::FromUTF8(static_cast<const char*>(buf));
+    const char* const buffer = static_cast<const char*>(buf);
 
 #ifdef __WXMSW__
     // To be consistent with other platforms, we only add the Fragment part
     // of the Windows HTML clipboard format to the data object.
-    int fragmentStart = html.rfind("StartFragment");
-    int fragmentEnd = html.rfind("EndFragment");
-
-    if (fragmentStart != wxNOT_FOUND && fragmentEnd != wxNOT_FOUND)
-    {
-        int startCommentEnd = html.find("-->", fragmentStart) + 3;
-        int endCommentStart = html.rfind("<!--", fragmentEnd);
-
-        if (startCommentEnd != wxNOT_FOUND && endCommentStart != wxNOT_FOUND)
-            html = html.Mid(startCommentEnd, endCommentStart - startCommentEnd);
-    }
+    wxString html = wxMSWClip::ExtractHTML(buffer, len);
+#else
+    wxString html = wxString::FromUTF8(buffer, len);
 #endif // __WXMSW__
 
     SetHTML( html );
@@ -559,7 +629,7 @@ bool wxHTMLDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 wxCustomDataObject::wxCustomDataObject(const wxDataFormat& format)
     : wxDataObjectSimple(format)
 {
-    m_data = NULL;
+    m_data = nullptr;
     m_size = 0;
 }
 
@@ -585,7 +655,7 @@ void wxCustomDataObject::Free()
 {
     delete [] (char*)m_data;
     m_size = 0;
-    m_data = NULL;
+    m_data = nullptr;
 }
 
 size_t wxCustomDataObject::GetDataSize() const
@@ -595,11 +665,11 @@ size_t wxCustomDataObject::GetDataSize() const
 
 bool wxCustomDataObject::GetDataHere(void *buf) const
 {
-    if ( buf == NULL )
+    if ( buf == nullptr )
         return false;
 
     void *data = GetData();
-    if ( data == NULL )
+    if ( data == nullptr )
         return false;
 
     memcpy( buf, data, GetSize() );
@@ -612,7 +682,7 @@ bool wxCustomDataObject::SetData(size_t size, const void *buf)
     Free();
 
     m_data = Alloc(size);
-    if ( m_data == NULL )
+    if ( m_data == nullptr )
         return false;
 
     m_size = size;
@@ -654,7 +724,7 @@ wxImageDataObject::wxImageDataObject(const wxImage& image)
 
 void wxImageDataObject::SetImage(const wxImage& image)
 {
-    wxCHECK_RET(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != NULL,
+    wxCHECK_RET(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != nullptr,
         wxIMAGE_FORMAT_NAME " image handler must be installed to use clipboard with image");
 
     wxMemoryOutputStream mem;
@@ -665,7 +735,7 @@ void wxImageDataObject::SetImage(const wxImage& image)
 
 wxImage wxImageDataObject::GetImage() const
 {
-    wxCHECK_MSG(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != NULL, wxNullImage,
+    wxCHECK_MSG(wxImage::FindHandler(wxIMAGE_FORMAT_BITMAP_TYPE) != nullptr, wxNullImage,
         wxIMAGE_FORMAT_NAME " image handler must be installed to use clipboard with image");
 
     wxMemoryInputStream mem(GetData(), GetSize());

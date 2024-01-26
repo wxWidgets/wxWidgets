@@ -23,6 +23,10 @@ public:
     /**
         Retrieves the load address and the size of this module.
 
+        Note that under ELF systems (such as Linux) the region defined by the
+        parameters of this function can be discontinuous and contain multiple
+        segments belonging to the module with holes between them.
+
         @param addr
             The pointer to the location to return load address in, may be
             @NULL.
@@ -38,6 +42,8 @@ public:
     /**
         Returns the base name of this module, e.g.\ @c "kernel32.dll" or
         @c "libc-2.3.2.so".
+
+        This name is empty for the main program itself.
     */
     wxString GetName() const;
 
@@ -56,6 +62,14 @@ public:
 };
 
 
+/**
+    A vector of wxDynamicLibraryDetails.
+
+    This class is actually a legacy container (see @ref overview_container for
+    more details), but it can, and should be, handled as just a vector of
+    wxDynamicLibraryDetails objects in the application code.
+*/
+using wxDynamicLibraryDetailsArray = std::vector<wxDynamicLibraryDetails>;
 
 /**
     Dynamic library category used with wxDynamicLibrary::CanonicalizeName().
@@ -209,13 +223,20 @@ public:
     bool IsLoaded() const;
 
     /**
-        This static method returns a wxArray containing the details of all
-        modules loaded into the address space of the current project. The array
-        elements are objects of the type: wxDynamicLibraryDetails. The array
-        will be empty if an error occurred.
+        This static method returns a vector-like object containing the details
+        of all modules loaded into the address space of the current project.
 
-        This method is currently implemented only under Win32 and Linux and is
-        useful mostly for diagnostics purposes.
+        The array elements are objects of the type wxDynamicLibraryDetails.
+        Under Unix systems they appear in the order in which they libraries
+        have been loaded, with the module corresponding to the main program
+        itself coming first.
+
+        The returned array will be empty if an error occurred or if the
+        function is not implemented for the current platform.
+
+        This method is currently implemented only under Win32 and Unix systems
+        providing `dl_iterate_phdr()` function (such as Linux) and is useful
+        mostly for diagnostics purposes.
     */
     static wxDynamicLibraryDetailsArray ListLoaded();
 
@@ -232,7 +253,7 @@ public:
 
         @since 3.1.0
     */
-    static void* GetModuleFromAddress(const void* addr, wxString* path = NULL);
+    static void* GetModuleFromAddress(const void* addr, wxString* path = nullptr);
 
     /**
         Loads DLL with the given @a name into memory. The @a flags argument can
@@ -268,7 +289,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_misc */
-//@{
+///@{
 
 /**
     When loading a function from a DLL you always have to cast the returned
@@ -293,5 +314,5 @@ public:
 */
 #define wxDYNLIB_FUNCTION(type, name, dynlib)
 
-//@}
+///@}
 

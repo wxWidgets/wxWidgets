@@ -2,7 +2,6 @@
 // Name:        wx/joystick.h
 // Purpose:     wxJoystick base header
 // Author:      wxWidgets Team
-// Modified by:
 // Created:
 // Copyright:   (c) wxWidgets Team
 // Licence:     wxWindows licence
@@ -17,8 +16,6 @@
 
 #if defined(__WINDOWS__)
 #include "wx/msw/joystick.h"
-#elif defined(__WXMOTIF__)
-#include "wx/unix/joystick.h"
 #elif defined(__WXGTK__)
 #include "wx/unix/joystick.h"
 #elif defined(__WXX11__)

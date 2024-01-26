@@ -1,53 +1,49 @@
 # Making a New wxWidgets Release
 
-Creating a new release requires a few things before getting started:
-
-* Linux (or another Unix but GNU tar is required).
-* Windows 7+ with HTML Help Workshop, and Inno Setup installed.
-* 7-Zip, Doxygen 1.8.8, and GraphViz installed on both machines.
-* [Bakefile 0.2.12](https://bakefile.org/) installed on the linux machine.
-
-Unless mentioned otherwise, all steps should be run on Linux or OSX so that the
-repository export used for the release is primarily using LF line endings. Files
-that require CRLF line endings will be converted appropriately.
-
-*Important:* Ensure that 7-Zip, HTML Help Workshop, Doxygen, GraphViz and Inno
-Setup have all been added to your Path in Windows. You can confirm this by
-running `7z`, `hhc`, `iscc`, `doxygen -v`, and `dot -V` in a command prompt.
-Add the missing installed folder locations of any executables to your Path.
-
 ## Checking ABI Compatibility
 
 For the stable (even) releases only, check that binary compatibility hasn't
 been broken since the last stable release.
 
-### Checking under Unix systems using `abi-compliance-checker` tool.
+### Checking under Unix systems using `libabigail`.
 
 Instructions:
 
-1. Get [the tool](https://lvc.github.io/abi-compliance-checker/).
-1. Build the old (vX.Y.Z-1) library with `-g -Og` options, i.e. configure it
-   with `--enable-debug` and `CXXFLAGS=-Og CFLAFS=-Og`. For convenience, let's
-   assume it's built in "$old" subdirectory.
+1. Get [the tools](https://sourceware.org/libabigail/). Under Debian and
+   derived systems `apt install abigail-tools` can be used.
+1. Build the old (vX.Y.Z-1) library with `-g` option, i.e. configure it
+   with `--enable-debug`. For convenience, let's assume it's built in "$old"
+   subdirectory.
 1. Build the new (vX.Y.Z) library with the same options in "$new".
 1. Create directories for temporary files containing the ABI dumps for the old
    and new libraries: `mkdir -p ../compat/{$old,$new}`.
-1. Run abi-dumper on all libraries: `for l in $old/lib/*.so; do abi-dumper $l
-   -lver $old -o ../compat/$old/$(basename $l).dump; done` and the same thing with
+1. Run `abidw` on all libraries: `for l in $old/lib/*.so; do abidw $l
+   --out-file ../compat/$old/$(basename $l).abi; done` and the same thing with
    the new libraries.
-1. Run abi-compliance-checker on each pair of produced dumps to generate HTML
-   reports: `for l in 3.0.2/*dump; do abi-compliance-checker -l $(basename $l
-   .dump) -old $l -new 3.0.3/$(basename $l); done`.
-1. Examine these reports, paying attention to the problem summary.
+1. Run `abidiff` on each pair of produced dumps to generate HTML
+   reports: `for l in $old/*.abi; do abidiff $l -new $new/$(basename $l); done`.
+1. If everything is good, update the ABI files in `$old` with the `$new` ones.
+
+See also `build/elfabi/check_all.sh` which checks the ABI of the newly built
+libraries and is simpler to use if there is no need to update the ABI files.
 
 ### Checking under MSW systems.
 
 Manually check compatibility by building the widgets samples from the old tree
 and then run it using the new DLLs.
 
+## Requesting to Update the Translations
+
+Post to wx-translators@googlegroups.com to ask to update the translations
+before the release. This needs to be done some time before making it, of
+course.
+
 ## Pre-Release Steps
 
-Perform the following steps. You can run `build/tools/pre-release.sh` to do
+Start by copying all the changes since the previous release to the change log
+file as explained in the comment there.
+
+Then update the files below. You can run `build/tools/pre-release.sh` to do
 the straightforward changes like updating the dates and checksums
 automatically, but please also review and update the contents of the README
 and announcement text.
@@ -67,8 +63,7 @@ update the README with the details of the changes first.
 Here is the list of the files, for reference:
 * Update `docs/readme.txt`: version needs to be changed, content updated.
 * Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
-* Update `docs/changes.txt`: put the date on the release line and copy the
-  actual changes from Git notes as instructed in the file.
+* Update `docs/changes.txt`: update the date on the release line.
 * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
 * Update the release announcement post in `docs/publicity/announce.txt`.
 * Update `docs/msw/binaries.md`: at least the version, but possibly also
@@ -81,88 +76,41 @@ Commit the changes and tag the release using your GPG key:
    Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
    instead of `X.Y.Z`.
 
-## Creating Release Files
+## Creating Release On GitHub
 
-The release scripts can be run from any working directory, and they will
-generate all release package files under `distrib/release/x.y.z`. The scripts
-mostly build the release packages based on the current HEAD commit, so always
-ensure you have the appropriate tag or commit checked out.
+Go to https://github.com/wxWidgets/wxWidgets/actions/workflows/make_release.yml
+and use the "Run workflow" button to manually run this workflow for the
+appropriate branch (either `master` or `3.2` currently). This will create a new
+draft release that can be found in the release list or you can see its exact
+URL in the output of the "Add Files to the Release" workflow step.
 
-1. Run `./build/tools/release.sh x.y.z` to create source archives
-   `wxWidgets-x.y.z.{7z,tar.bz2,zip}`, `wxWidgets-x.y.z-headers.7z`, and
-   `wxWidgets-x.y.z-docs-html.{tar.bz2,zip}` packages.
+On the release page, use the "Edit" button to manually move the checksums at
+the very end of the announcement text to their correct locations (i.e. replace
+the all zero checksums with the actual ones).
 
-2. Copy just the `wxWidgets-x.y.z.zip` package into the same
-   `distrib\release\x.y.z` folder on Windows.
+Also review the announcement for correctness.
 
-3. Run `build/tools/release.bat x.y.z` in a Windows command prompt. To avoid
-   confusion note that, unlike other generated files, the Windows installer is
-   created based on files as well as instructions (`build/tools/wxwidgets.iss`)
-   contained in the copied release ZIP and not from the current working wx
-   directory.
+Build and upload the binaries to the existing release.
 
-4. Copy `wxMSW-x.y.z-Setup.exe` back to your Linux or OSX `distrib/release/x.y.z`
-   directory so you can continue with the upload step with all packages
-   available. Also create a ZIP file from the CHM one:
-
-    zip wxWidgets-x.y.z-docs-chm.zip wxWidgets-x.y.z.chm
-
-   and copy/move it to the same directory.
-
-5. Run `./build/tools/post-release.sh` to update the SHA-1 sums in
-   `docs/release.md`, then commit the changes. Notice that when making an RC,
-   the version must be explicitly specified on this script command line.
-
-## Uploading
-
-Create a new release on GitHub using vX.Y.Z tag and title.
-
-Use the content of `docs/release.md` for the release description box.
-
-Attach the following files to it:
-
-    wxMSW-Setup-x.y.z.exe
-    wxWidgets-x.y.z.7z
-    wxWidgets-x.y.z.tar.bz2
-    wxWidgets-x.y.z.zip
-    wxWidgets-x.y.z-docs-chm.zip
-    wxWidgets-x.y.z-docs-html.tar.bz2
-    wxWidgets-x.y.z-docs-html.zip
-    wxWidgets-x.y.z-headers.7z
+Finally, publish it.
 
 ## Update documentation
 
 This requires being able to ssh to docs.wxwidgets.org, please ask Bryan if you
 think you should be able to do it, but can't.
 
-Once logged in, run `~/update-trunk-docs.sh` script to update files in
-`public_html/trunk` directory, copy its contents to `public_html/x.y.z`, switch
-any links, such as `3.1` to point to `x.y.z` by doing
+Once logged in, copy the contents of either `latest` or `stable` directory to
+`public_html/x.y.z`, switch any links, such as `3.1` to point to `x.y.z` by
+doing
 
     $ cd ~/public_html
     $ ln -sfn 3.y.z 3.y
 
 and edit `~/public_html/index.html` to add the link to the new release to it.
 
-If the docs must be generated from the tag itself, and not from master, note
-that you need to apply the special commit which is always the tip of master
-branch in `~/wxWidgets` git repository on this machine.
-
-E.g. to create documentation for `v3.0.z` release:
-
-    $ cd ~/wxWidgets
-    $ git fetch --tags
-    $ git checkout -b my-tmp-branch v3.0.z
-    $ git cherry-pick master
-    $ vi docs/doxygen/Doxyfile
-    ... edit HTML_OUTPUT to create files in ~/public_html/3.0.z
-    $ cd docs/doxygen
-    $ PATH="$HOME/doxygen/bin:$PATH" WX_SKIP_DOXYGEN_VERSION_CHECK=1 nice -n 15 ./regen.sh php
-
-    # Cleanup
-    $ git reset --hard master
-    $ git checkout master
-    $ git branch -d my-tmp-branch
+If the docs must be generated from the tag itself, run the documentation
+generation workflow on GitHub manually providing the tag before doing the
+above.
 
 Note that the docs web site currently uses Cloudflare for caching, which means
 that it won't update for several hours after the change, unless you purge the
@@ -177,7 +125,7 @@ Update https://www.wxwidgets.org:
   anything else, the page will dynamically show the release files with the
   specified prefixes).
 * Add a news item. Usually a news item is enough but something
-  more can be called for for major releases
+  more can be called for major releases
 * Push the changes (or create the PR with them) to GitHub. Note that this will
   trigger the site rebuild which will fail if the release statistics are not
   available yet, so make sure to publish the release on GitHub first (or wait
@@ -195,16 +143,19 @@ For major releases, submit the announcement to https://slashdot.org/submission
 
 ## Post-Release Steps
 
-* Trac: mark the milestone corresponding to the release as completed and
-add a new version for it to allow reporting bugs against it and create the
-next milestone (ask Vadim or Robin to do it or to get admin password).
+* Update the SHA-1 sums in `docs/release.md` using the checksums from the release
+  announcement, then commit the changes.
+
+* Mark the milestone corresponding to the release as completed at
+  https://github.com/wxWidgets/wxWidgets/milestones
 
 * Update the roadmap at https://wxwidgets.org/develop/roadmap/ to at
 least mention the new release there (the text of this page lives in
 wxWidgets/website repository).
 
 * Run `misc/scripts/inc_release` to increment micro version,
-i.e. replace x.y.z with x.y.z+1.
+i.e. replace x.y.z with x.y.z+1. When changing another version component,
+all the files updated by this script need to be changed manually.
 
 * Update the C:R:A settings in `build/bakefiles/version.bkl` to C:R+1:A.
 Then from the build/bakesfiles directory run
@@ -213,7 +164,11 @@ Then from the build/bakesfiles directory run
 
 and from the root directory run
 
-        autoconf -B build/autoconf_prepend-include
+        autoconf
+
+or, if you're not using Debian Stable version of autoconf, see the instructions
+in `build/tools/autoconf/README.md` for regenerating configure on a different
+system.
 
 * Restore the description of the Git notes use and create a skeleton section
   for the next release in `docs/changes.txt`.

@@ -20,7 +20,7 @@
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxInfoBarXmlHandler, wxXmlResourceHandler);
 
-#define XRC_ADD_SHOW_EFFECT(style) m_effectNames[style] = #style;
+#define XRC_ADD_SHOW_EFFECT(style) m_effectNames[style] = #style
 
 wxInfoBarXmlHandler::wxInfoBarXmlHandler()
     : wxXmlResourceHandler(), m_insideBar(false)
@@ -69,11 +69,11 @@ wxObject *wxInfoBarXmlHandler::DoCreateResource()
         // handle buttons
 
         wxInfoBar * const infoBar = wxDynamicCast(m_parentAsWindow, wxInfoBar);
-        wxCHECK_MSG(infoBar, NULL, "must have wxInfoBar parent");
+        wxCHECK_MSG(infoBar, nullptr, "must have wxInfoBar parent");
 
         infoBar->AddButton(GetID(), GetText("label"));
 
-        return NULL;
+        return nullptr;
     }
 }
 

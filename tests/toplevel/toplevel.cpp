@@ -87,7 +87,7 @@ TEST_CASE("wxTopLevel::Show", "[tlw][show]")
 {
     SECTION("Dialog")
     {
-        wxDialog* dialog = new wxDialog(NULL, -1, "Dialog Test");
+        wxDialog* dialog = new wxDialog(nullptr, -1, "Dialog Test");
         DestroyOnScopeExit destroy(dialog);
 
         TopLevelWindowShowTest(dialog);
@@ -95,7 +95,7 @@ TEST_CASE("wxTopLevel::Show", "[tlw][show]")
 
     SECTION("Frame")
     {
-        wxFrame* frame = new wxFrame(NULL, -1, "Frame test");
+        wxFrame* frame = new wxFrame(nullptr, -1, "Frame test");
         DestroyOnScopeExit destroy(frame);
 
         TopLevelWindowShowTest(frame);
@@ -105,7 +105,7 @@ TEST_CASE("wxTopLevel::Show", "[tlw][show]")
 // Check that we receive the expected event when showing the TLW.
 TEST_CASE("wxTopLevel::ShowEvent", "[tlw][show][event]")
 {
-    wxFrame* const frame = new wxFrame(NULL, wxID_ANY, "Maximized frame");
+    wxFrame* const frame = new wxFrame(nullptr, wxID_ANY, "Maximized frame");
     DestroyOnScopeExit destroy(frame);
 
     EventCounter countShow(frame, wxEVT_SHOW);

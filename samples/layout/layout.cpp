@@ -74,7 +74,7 @@ wxEND_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets Layout Demo")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets Layout Demo")
 {
     SetIcon(wxICON(sample));
 

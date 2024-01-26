@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/uuid.h
 // Purpose:     encapsulates an UUID with some added helper functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.07.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -37,7 +36,7 @@
 typedef unsigned char uchar;
 
 // ------------------------------------------------------------------
-// a class to store UUID and it's string representation
+// a class to store UUID and its string representation
 // ------------------------------------------------------------------
 
 // uses RPC functions to create/convert Universally Unique Identifiers
@@ -51,7 +50,7 @@ private:
   void  UuidToCForm();
 
   // function used to set initial state by all ctors
-  void  Init() { m_pszUuid = NULL; m_pszCForm = NULL; }
+  void  Init() { m_pszUuid = nullptr; m_pszCForm = nullptr; }
 
 public:
   // ctors & dtor

@@ -4,7 +4,6 @@
 //              wxWidgets itself, it may contain identifiers which don't start
 //              with "wx".
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -35,7 +34,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 #endif
 
 // Many MSW functions have parameters which are "reserved". Passing them this
-// constant is more clear than just using "0" or "NULL".
+// constant is more clear than just using "0" or "nullptr".
 #define wxRESERVED_PARAM    0
 
 // ---------------------------------------------------------------------------
@@ -386,6 +385,21 @@ inline RECT wxGetClientRect(HWND hwnd)
     return rect;
 }
 
+// Call MapWindowPoints() on a RECT: because a RECT is (intentionally) laid out
+// as 2 consecutive POINTs, the cast below is valid but we still prefer to hide
+// it in this function instead of writing it out in the rest of the code.
+inline void wxMapWindowPoints(HWND hwndFrom, HWND hwndTo, RECT* rc)
+{
+    ::MapWindowPoints(hwndFrom, hwndTo, reinterpret_cast<POINT *>(rc), 2);
+}
+
+// For consistency also provide an overload taking a POINT, even if this one is
+// even more trivial.
+inline void wxMapWindowPoints(HWND hwndFrom, HWND hwndTo, POINT* pt)
+{
+    ::MapWindowPoints(hwndFrom, hwndTo, pt, 1);
+}
+
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------
@@ -421,37 +435,46 @@ private:
 
 #endif // __WXMSW__
 
-// create an instance of this class and use it as the HDC for screen, will
-// automatically release the DC going out of scope
-class ScreenHDC
+// RAII helper for releasing an HDC in its dtor.
+class AutoHDC
 {
 public:
-    ScreenHDC() { m_hdc = ::GetDC(NULL);    }
-   ~ScreenHDC() { ::ReleaseDC(NULL, m_hdc); }
+    ~AutoHDC() { if ( m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
 
     operator HDC() const { return m_hdc; }
 
+protected:
+    AutoHDC(HWND hwnd, HDC hdc) : m_hwnd(hwnd), m_hdc(hdc) { }
+
 private:
+    HWND m_hwnd;
     HDC m_hdc;
 
-    wxDECLARE_NO_COPY_CLASS(ScreenHDC);
+    wxDECLARE_NO_COPY_CLASS(AutoHDC);
 };
 
-// the same as ScreenHDC but for window DCs
-class WindowHDC
+// create an instance of this class and use it as the HDC for screen, will
+// automatically release the DC going out of scope
+class ScreenHDC : public AutoHDC
 {
 public:
-    WindowHDC() : m_hwnd(NULL), m_hdc(NULL) { }
-    WindowHDC(HWND hwnd) { m_hdc = ::GetDC(m_hwnd = hwnd); }
-   ~WindowHDC() { if ( m_hwnd && m_hdc ) { ::ReleaseDC(m_hwnd, m_hdc); } }
+    ScreenHDC() : AutoHDC(nullptr, ::GetDC(nullptr)) { }
+};
 
-    operator HDC() const { return m_hdc; }
+// the same as ScreenHDC but for client part of the window (if HWND is null,
+// then it's exactly the same as ScreenHDC)
+class ClientHDC : public AutoHDC
+{
+public:
+    ClientHDC() : AutoHDC(nullptr, nullptr) { }
+    explicit ClientHDC(HWND hwnd) : AutoHDC(hwnd, ::GetDC(hwnd)) { }
+};
 
-private:
-   HWND m_hwnd;
-   HDC m_hdc;
-
-   wxDECLARE_NO_COPY_CLASS(WindowHDC);
+// same as ClientHDC but includes the non-client part of the window
+class WindowHDC : public AutoHDC
+{
+public:
+    explicit WindowHDC(HWND hwnd) : AutoHDC(hwnd, ::GetWindowDC(hwnd)) { }
 };
 
 // the same as ScreenHDC but for memory DCs: creates the HDC compatible with
@@ -459,7 +482,7 @@ private:
 class MemoryHDC
 {
 public:
-    MemoryHDC(HDC hdc = NULL) { m_hdc = ::CreateCompatibleDC(hdc); }
+    MemoryHDC(HDC hdc = nullptr) { m_hdc = ::CreateCompatibleDC(hdc); }
    ~MemoryHDC() { ::DeleteDC(m_hdc); }
 
     operator HDC() const { return m_hdc; }
@@ -470,6 +493,13 @@ private:
     wxDECLARE_NO_COPY_CLASS(MemoryHDC);
 };
 
+// Helper function returning the resolution of the given HDC.
+inline wxSize wxGetDPIofHDC(HDC hdc)
+{
+    return wxSize(::GetDeviceCaps(hdc, LOGPIXELSX),
+                  ::GetDeviceCaps(hdc, LOGPIXELSY));
+}
+
 // a class which selects a GDI object into a DC in its ctor and deselects in
 // dtor
 class SelectInHDC
@@ -478,7 +508,7 @@ private:
     void DoInit(HGDIOBJ hgdiobj) { m_hgdiobj = ::SelectObject(m_hdc, hgdiobj); }
 
 public:
-    SelectInHDC() : m_hdc(NULL), m_hgdiobj(NULL) { }
+    SelectInHDC() : m_hdc(nullptr), m_hgdiobj(nullptr) { }
     SelectInHDC(HDC hdc, HGDIOBJ hgdiobj) : m_hdc(hdc) { DoInit(hgdiobj); }
 
     void Init(HDC hdc, HGDIOBJ hgdiobj)
@@ -493,7 +523,7 @@ public:
     ~SelectInHDC() { if ( m_hdc ) ::SelectObject(m_hdc, m_hgdiobj); }
 
     // return true if the object was successfully selected
-    operator bool() const { return m_hgdiobj != NULL; }
+    operator bool() const { return m_hgdiobj != nullptr; }
 
 private:
     HDC m_hdc;
@@ -506,7 +536,7 @@ private:
 class AutoGDIObject
 {
 protected:
-    AutoGDIObject() { m_gdiobj = NULL; }
+    AutoGDIObject() { m_gdiobj = nullptr; }
     AutoGDIObject(HGDIOBJ gdiobj) : m_gdiobj(gdiobj) { }
     ~AutoGDIObject() { if ( m_gdiobj ) ::DeleteObject(m_gdiobj); }
 
@@ -588,7 +618,7 @@ class MonoBitmap : public AutoHBITMAP
 {
 public:
     MonoBitmap(int w, int h)
-        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, NULL))
+        : AutoHBITMAP(::CreateBitmap(w, h, 1, 1, nullptr))
     {
     }
 };
@@ -644,7 +674,7 @@ public:
 
     ~HDCClipper()
     {
-        ::SelectClipRgn(m_hdc, NULL);
+        ::SelectClipRgn(m_hdc, nullptr);
     }
 
 private:
@@ -690,7 +720,7 @@ public:
     // default ctor, call Init() later
     GlobalPtr()
     {
-        m_hGlobal = NULL;
+        m_hGlobal = nullptr;
     }
 
     // allocates a block of given size
@@ -720,7 +750,7 @@ public:
     HGLOBAL Release()
     {
         HGLOBAL h = m_hGlobal;
-        m_hGlobal = NULL;
+        m_hGlobal = nullptr;
         return h;
     }
 
@@ -740,15 +770,15 @@ class GlobalPtrLock
 {
 public:
     // default ctor, use Init() later -- should only be used if the HGLOBAL can
-    // be NULL (in which case Init() shouldn't be called)
+    // be null (in which case Init() shouldn't be called)
     GlobalPtrLock()
     {
-        m_hGlobal = NULL;
-        m_ptr = NULL;
+        m_hGlobal = nullptr;
+        m_ptr = nullptr;
     }
 
     // initialize the object, may be only called if we were created using the
-    // default ctor; HGLOBAL must not be NULL
+    // default ctor; HGLOBAL must not be null
     void Init(HGLOBAL hGlobal)
     {
         m_hGlobal = hGlobal;
@@ -762,7 +792,7 @@ public:
         }
     }
 
-    // initialize the object, HGLOBAL must not be NULL
+    // initialize the object, HGLOBAL must not be null
     GlobalPtrLock(HGLOBAL hGlobal)
     {
         Init(hGlobal);
@@ -976,6 +1006,7 @@ enum wxWinVersion
     wxWinVersion_8_1 = 0x603,
 
     wxWinVersion_10 = 0x1000,
+    wxWinVersion_11 = 0x1001,
 
     // Any version we can't recognize will be later than the last currently
     // known one, so give it a value greater than any in the known range.
@@ -1034,7 +1065,7 @@ extern WXDLLIMPEXP_CORE int wxGetWindowId(WXHWND hWnd);
 //
 // wndProc parameter is unused and only kept for compatibility
 extern WXDLLIMPEXP_CORE
-bool wxCheckWindowWndProc(WXHWND hWnd, WXWNDPROC wndProc = NULL);
+bool wxCheckWindowWndProc(WXHWND hWnd, WXWNDPROC wndProc = nullptr);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
@@ -1126,14 +1157,14 @@ inline wxLayoutDirection wxGetEditLayoutDirection(WXHWND hWnd)
 // ----------------------------------------------------------------------------
 
 // this function simply checks whether the given hwnd corresponds to a wxWindow
-// and returns either that window if it does or NULL otherwise
+// and returns either that window if it does or nullptr otherwise
 extern WXDLLIMPEXP_CORE wxWindow* wxFindWinFromHandle(HWND hwnd);
 
 // find the window for HWND which is part of some wxWindow, i.e. unlike
 // wxFindWinFromHandle() above it will also work for "sub controls" of a
 // wxWindow.
 //
-// returns the wxWindow corresponding to the given HWND or NULL.
+// returns the wxWindow corresponding to the given HWND or nullptr.
 extern WXDLLIMPEXP_CORE wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 
 // Get the size of an icon

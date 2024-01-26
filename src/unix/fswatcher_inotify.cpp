@@ -21,17 +21,17 @@
 #include <unistd.h>
 #include "wx/private/fswatcher.h"
 
+#include <unordered_map>
+
 // ============================================================================
 // wxFSWatcherImpl implementation & helper wxFSWSourceHandler implementation
 // ============================================================================
 
 // inotify watch descriptor => wxFSWatchEntry* map
-WX_DECLARE_HASH_MAP(int, wxFSWatchEntry*, wxIntegerHash, wxIntegerEqual,
-                                              wxFSWatchEntryDescriptors);
+using wxFSWatchEntryDescriptors = std::unordered_map<int, wxFSWatchEntry*>;
 
 // inotify event cookie => inotify_event* map
-WX_DECLARE_HASH_MAP(int, inotify_event*, wxIntegerHash, wxIntegerEqual,
-                                                      wxInotifyCookies);
+using wxInotifyCookies = std::unordered_map<int, inotify_event*>;
 
 /**
  * Helper class encapsulating inotify mechanism
@@ -41,7 +41,7 @@ class wxFSWatcherImplUnix : public wxFSWatcherImpl
 public:
     wxFSWatcherImplUnix(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_source(NULL),
+        m_source(nullptr),
         m_ifd(-1)
     {
         m_handler = new wxFSWSourceHandler(this);
@@ -58,7 +58,7 @@ public:
         delete m_handler;
     }
 
-    bool Init() wxOVERRIDE
+    bool Init() override
     {
         wxCHECK_MSG( !IsOk(), false, "Inotify already initialized" );
 
@@ -79,7 +79,7 @@ public:
                           wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION
                          );
 
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
     void Close()
@@ -95,7 +95,7 @@ public:
         }
     }
 
-    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch) override
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -118,7 +118,7 @@ public:
         return true;
     }
 
-    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch) override
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -154,7 +154,7 @@ public:
         return true;
     }
 
-    virtual bool RemoveAll() wxOVERRIDE
+    virtual bool RemoveAll() override
     {
         wxFSWatchEntries::iterator it = m_watches.begin();
         for ( ; it != m_watches.end(); ++it )
@@ -202,7 +202,7 @@ public:
 
     bool IsOk() const
     {
-        return m_source != NULL;
+        return m_source != nullptr;
     }
 
 protected:

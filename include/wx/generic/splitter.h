@@ -2,7 +2,6 @@
 // Name:        wx/generic/splitter.h
 // Purpose:     wxSplitterWindow class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -118,10 +117,10 @@ public:
 
     // Removes the specified (or second) window from the view
     // Doesn't actually delete the window.
-    bool Unsplit(wxWindow *toRemove = NULL);
+    bool Unsplit(wxWindow *toRemove = nullptr);
 
     // Replaces one of the windows with another one (neither old nor new
-    // parameter should be NULL)
+    // parameter should be null)
     bool ReplaceWindow(wxWindow *winOld, wxWindow *winNew);
 
     // Make sure the child window sizes are updated. This is useful
@@ -130,7 +129,10 @@ public:
     void UpdateSize();
 
     // Is the window split?
-    bool IsSplit() const { return (m_windowTwo != NULL); }
+    bool IsSplit() const { return (m_windowTwo != nullptr); }
+
+    // Return true if wxSP_LIVE_UPDATE is always used.
+    bool AlwaysUsesLiveUpdate() const;
 
     // Sets the border size
     void SetBorderSize(int WXUNUSED(width)) { }
@@ -201,8 +203,10 @@ public:
     // Adjusts the panes
     void OnSize(wxSizeEvent& event);
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // In live mode, resize child windows in idle time
-    void OnInternalIdle() wxOVERRIDE;
+    void OnInternalIdle() override;
 
     // Draws the sash
     virtual void DrawSash(wxDC& dc);
@@ -217,7 +221,7 @@ public:
     virtual void SizeWindows();
 
 #ifdef __WXMAC__
-    virtual bool MacClipGrandChildren() const wxOVERRIDE { return true ; }
+    virtual bool MacClipGrandChildren() const override { return true ; }
 #endif
 
     // Sets the sash size: this doesn't do anything and shouldn't be used at
@@ -270,7 +274,7 @@ protected:
 
     // return the best size of the splitter equal to best sizes of its
     // subwindows
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
 
     wxSplitMode m_splitMode;
@@ -314,7 +318,7 @@ class WXDLLIMPEXP_CORE wxSplitterEvent : public wxNotifyEvent
 {
 public:
     wxSplitterEvent(wxEventType type = wxEVT_NULL,
-                    wxSplitterWindow *splitter = NULL)
+                    wxSplitterWindow *splitter = nullptr)
         : wxNotifyEvent(type)
     {
         SetEventObject(splitter);
@@ -394,7 +398,7 @@ public:
         return m_data.pt.y;
     }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSplitterEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxSplitterEvent(*this); }
 
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxSplitterWindow;

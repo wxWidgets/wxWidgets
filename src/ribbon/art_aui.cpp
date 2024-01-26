@@ -2,7 +2,6 @@
 // Name:        src/ribbon/art_aui.cpp
 // Purpose:     AUI style art provider for ribbon interface
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-08-04
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -549,19 +548,19 @@ void wxRibbonAUIArtProvider::GetBarTabWidth(
         min += bitmap.GetLogicalWidth();
     }
 
-    if(ideal != NULL)
+    if(ideal != nullptr)
     {
         *ideal = width + 16;
     }
-    if(small_begin_need_separator != NULL)
+    if(small_begin_need_separator != nullptr)
     {
         *small_begin_need_separator = min;
     }
-    if(small_must_have_separator != NULL)
+    if(small_must_have_separator != nullptr)
     {
         *small_must_have_separator = min;
     }
-    if(minimum != NULL)
+    if(minimum != nullptr)
     {
         *minimum = min;
     }
@@ -897,12 +896,12 @@ void wxRibbonAUIArtProvider::DrawPartialPanelBackground(wxDC& dc,
 
     wxPoint offset(wnd->GetPosition());
     wxWindow* parent = wnd->GetParent();
-    wxRibbonPanel* panel = NULL;
+    wxRibbonPanel* panel = nullptr;
 
     for(; parent; parent = parent->GetParent())
     {
         panel = wxDynamicCast(parent, wxRibbonPanel);
-        if(panel != NULL)
+        if(panel != nullptr)
         {
             if(!panel->IsHovered())
                 return;
@@ -910,7 +909,7 @@ void wxRibbonAUIArtProvider::DrawPartialPanelBackground(wxDC& dc,
         }
         offset += parent->GetPosition();
     }
-    if(panel == NULL)
+    if(panel == nullptr)
         return;
 
     wxRect background(panel->GetSize());

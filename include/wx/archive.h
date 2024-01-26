@@ -23,7 +23,7 @@
 class WXDLLIMPEXP_BASE wxArchiveNotifier
 {
 public:
-    virtual ~wxArchiveNotifier() { }
+    virtual ~wxArchiveNotifier() = default;
 
     virtual void OnEntryUpdated(class wxArchiveEntry& entry) = 0;
 };
@@ -37,7 +37,7 @@ public:
 class WXDLLIMPEXP_BASE wxArchiveEntry : public wxObject
 {
 public:
-    virtual ~wxArchiveEntry() { }
+    virtual ~wxArchiveEntry() = default;
 
     virtual wxDateTime   GetDateTime() const = 0;
     virtual wxFileOffset GetSize() const = 0;
@@ -58,11 +58,11 @@ public:
     wxArchiveEntry *Clone() const { return DoClone(); }
 
     void SetNotifier(wxArchiveNotifier& notifier);
-    virtual void UnsetNotifier() { m_notifier = NULL; }
+    virtual void UnsetNotifier() { m_notifier = nullptr; }
 
 protected:
-    wxArchiveEntry() : m_notifier(NULL) { }
-    wxArchiveEntry(const wxArchiveEntry& e) : wxObject(e), m_notifier(NULL) { }
+    wxArchiveEntry() : m_notifier(nullptr) { }
+    wxArchiveEntry(const wxArchiveEntry& e) : wxObject(e), m_notifier(nullptr) { }
 
     virtual void SetOffset(wxFileOffset offset) = 0;
     virtual wxArchiveEntry* DoClone() const = 0;
@@ -85,21 +85,21 @@ private:
 // the wxArchiveInputStream then returns the entry's data. Eof() becomes true
 // after an attempt has been made to read past the end of the entry's data.
 //
-// When there are no more entries, GetNextEntry() returns NULL and sets Eof().
+// When there are no more entries, GetNextEntry() returns nullptr and sets Eof().
 
 class WXDLLIMPEXP_BASE wxArchiveInputStream : public wxFilterInputStream
 {
 public:
     typedef wxArchiveEntry entry_type;
 
-    virtual ~wxArchiveInputStream() { }
+    virtual ~wxArchiveInputStream() = default;
 
     virtual bool OpenEntry(wxArchiveEntry& entry) = 0;
     virtual bool CloseEntry() = 0;
 
     wxArchiveEntry *GetNextEntry()  { return DoGetNextEntry(); }
 
-    virtual char Peek() wxOVERRIDE  { return wxInputStream::Peek(); }
+    virtual char Peek() override  { return wxInputStream::Peek(); }
 
 protected:
     wxArchiveInputStream(wxInputStream& stream, wxMBConv& conv);
@@ -129,7 +129,7 @@ private:
 class WXDLLIMPEXP_BASE wxArchiveOutputStream : public wxFilterOutputStream
 {
 public:
-    virtual ~wxArchiveOutputStream() { }
+    virtual ~wxArchiveOutputStream() = default;
 
     virtual bool PutNextEntry(wxArchiveEntry *entry) = 0;
 
@@ -164,7 +164,6 @@ private:
 // An input iterator that can be used to transfer an archive's catalog to
 // a container.
 
-#if wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
 #include <iterator>
 #include <utility>
 
@@ -191,11 +190,11 @@ public:
     typedef T* pointer;
     typedef T& reference;
 
-    wxArchiveIterator() : m_rep(NULL) { }
+    wxArchiveIterator() : m_rep(nullptr) { }
 
     wxArchiveIterator(Arc& arc) {
         typename Arc::entry_type* entry = arc.GetNextEntry();
-        m_rep = entry ? new Rep(arc, entry) : NULL;
+        m_rep = entry ? new Rep(arc, entry) : nullptr;
     }
 
     wxArchiveIterator(const wxArchiveIterator& it) : m_rep(it.m_rep) {
@@ -270,7 +269,7 @@ private:
             typename Arc::entry_type* entry = m_arc.GetNextEntry();
             if (!entry) {
                 UnRef();
-                return NULL;
+                return nullptr;
             }
             if (m_ref > 1) {
                 m_ref--;
@@ -285,7 +284,7 @@ private:
         const T& GetValue() {
             if (m_entry) {
                 _wxSetArchiveIteratorValue(m_value, m_entry, m_entry);
-                m_entry = NULL;
+                m_entry = nullptr;
             }
             return m_value;
         }
@@ -295,8 +294,6 @@ private:
 typedef wxArchiveIterator<wxArchiveInputStream> wxArchiveIter;
 typedef wxArchiveIterator<wxArchiveInputStream,
         std::pair<wxString, wxArchiveEntry*> >  wxArchivePairIter;
-
-#endif // wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -314,12 +311,10 @@ public:
     typedef wxArchiveInputStream  instream_type;
     typedef wxArchiveOutputStream outstream_type;
     typedef wxArchiveNotifier     notifier_type;
-#if wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
     typedef wxArchiveIter         iter_type;
     typedef wxArchivePairIter     pairiter_type;
-#endif
 
-    virtual ~wxArchiveClassFactory() { }
+    virtual ~wxArchiveClassFactory() = default;
 
     wxArchiveEntry *NewEntry() const
         { return DoNewEntry(); }
@@ -336,8 +331,6 @@ public:
         const wxString& name,
         wxPathFormat format = wxPATH_NATIVE) const = 0;
 
-    // FIXME-UTF8: remove these from this file, they are used for ANSI
-    //             build only
     void SetConv(wxMBConv& conv) { m_pConv = &conv; }
     wxMBConv& GetConv() const
         { if (m_pConv) return *m_pConv; else return wxConvLocal; }
@@ -361,7 +354,7 @@ protected:
     virtual wxArchiveInputStream  *DoNewStream(wxInputStream *stream) const = 0;
     virtual wxArchiveOutputStream *DoNewStream(wxOutputStream *stream) const = 0;
 
-    wxArchiveClassFactory() : m_pConv(NULL), m_next(this) { }
+    wxArchiveClassFactory() : m_pConv(nullptr), m_next(this) { }
     wxArchiveClassFactory& operator=(const wxArchiveClassFactory& WXUNUSED(f))
         { return *this; }
 

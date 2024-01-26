@@ -2,7 +2,6 @@
 // Name:        src/univ/ctrlrend.cpp
 // Purpose:     wxControlRenderer implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -223,6 +222,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     wxRegion rgnUpdate = scrollbar->GetUpdateRegion();
 
     {
+#if wxUSE_LOG_TRACE
         wxRect rectUpdate = rgnUpdate.GetBox();
         wxLogTrace(wxT("scrollbar"),
                    wxT("%s redraw: update box is (%d, %d)-(%d, %d)"),
@@ -231,6 +231,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
                    rectUpdate.GetTop(),
                    rectUpdate.GetRight(),
                    rectUpdate.GetBottom());
+#endif // wxUSE_LOG_TRACE
 
 #if 0 //def WXDEBUG_SCROLLBAR
         static bool s_refreshDebug = false;

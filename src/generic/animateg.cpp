@@ -128,7 +128,7 @@ bool wxAnimationGenericImpl::Load(wxInputStream &stream, wxAnimationType type)
 
     handler = wxAnimation::FindHandler(type);
 
-    if (handler == NULL)
+    if (handler == nullptr)
     {
         wxLogWarning( _("No animation handler for type %ld defined."), type );
 
@@ -154,7 +154,7 @@ void wxAnimationGenericImpl::UnRef()
     if ( m_decoder )
     {
         m_decoder->DecRef();
-        m_decoder = NULL;
+        m_decoder = nullptr;
     }
 }
 
@@ -241,20 +241,32 @@ wxSize wxGenericAnimationCtrl::DoGetBestSize() const
     return FromDIP(wxSize(100, 100));
 }
 
-void wxGenericAnimationCtrl::SetAnimation(const wxAnimation& animation)
+void wxGenericAnimationCtrl::SetAnimation(const wxAnimationBundle& animations)
 {
     if (IsPlaying())
         Stop();
 
-    // set new animation even if it's wxNullAnimation
-    m_animation = animation;
-    if (!m_animation.IsOk())
+    m_animations = animations.GetAll();
+
+    // Reset animation if we don't have any valid ones.
+    if ( m_animations.empty() )
     {
+        m_animation.UnRef();
         DisplayStaticImage();
         return;
     }
 
-    wxCHECK_RET(animation.IsCompatibleWith(GetClassInfo()),
+    // Otherwise choose the animation of the size most appropriate for the
+    // current resolution.
+    const wxSize wantedSize = m_animations[0].GetSize()*GetDPIScaleFactor();
+    for ( const auto& anim: m_animations )
+    {
+        m_animation = anim;
+        if ( m_animation.GetSize().IsAtLeast(wantedSize) )
+            break;
+    }
+
+    wxCHECK_RET(m_animation.IsCompatibleWith(GetClassInfo()),
                 wxT("incompatible animation") );
 
     if (AnimationImplGetBackgroundColour() == wxNullColour)
@@ -272,7 +284,7 @@ void wxGenericAnimationCtrl::SetInactiveBitmap(const wxBitmapBundle &bmp)
     // (which uses the bitmap's mask), our background colour would be used for
     // transparent areas - and that's not what we want (at least for
     // consistency with the GTK version)
-    if ( bmp.IsOk() && bmp.GetBitmapFor(this).GetMask() != NULL && GetParent() != NULL )
+    if ( bmp.IsOk() && bmp.GetBitmapFor(this).GetMask() != nullptr && GetParent() != nullptr )
         SetBackgroundColour(GetParent()->GetBackgroundColour());
 
     wxAnimationCtrlBase::SetInactiveBitmap(bmp);
@@ -325,19 +337,9 @@ bool wxGenericAnimationCtrl::Play(bool looped)
 
     m_isPlaying = true;
 
-    // do a ClearBackground() to avoid that e.g. the custom static bitmap which
-    // was eventually shown previously remains partially drawn
-    ClearBackground();
+    m_needToShowNextFrame = true;
 
-    // DrawCurrentFrame() will use our updated backing store
-    wxClientDC clientDC(this);
-    DrawCurrentFrame(clientDC);
-
-    // start the timer
-    int delay = m_animation.GetDelay(0);
-    if (delay == 0)
-        delay = 1;      // 0 is invalid timeout for wxTimer.
-    m_timer.Start(delay, true);
+    Refresh();
 
     return true;
 }
@@ -385,7 +387,6 @@ bool wxGenericAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
 
     // finally draw this frame
     DrawFrame(dc, frame);
-    dc.SelectObject(wxNullBitmap);
 
     return true;
 }
@@ -439,7 +440,6 @@ void wxGenericAnimationCtrl::IncrementalUpdateBackingStore()
 
     // now just draw the current frame on the top of the backing store
     DrawFrame(dc, m_currentFrame);
-    dc.SelectObject(wxNullBitmap);
 }
 
 void wxGenericAnimationCtrl::DisplayStaticImage()
@@ -552,6 +552,17 @@ void wxGenericAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         // clear then our area to the background colour
         DisposeToBackground(dc);
     }
+
+    if ( m_needToShowNextFrame )
+    {
+        m_needToShowNextFrame = false;
+
+        // Set the timer for the next frame
+        int delay = m_animation.GetDelay(m_currentFrame);
+        if (delay == 0)
+            delay = 1;      // 0 is invalid timeout for wxTimer.
+        m_timer.StartOnce(delay);
+    }
 }
 
 void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
@@ -571,19 +582,9 @@ void wxGenericAnimationCtrl::OnTimer(wxTimerEvent &WXUNUSED(event))
 
     IncrementalUpdateBackingStore();
 
-    wxClientDC dc(this);
-    DrawCurrentFrame(dc);
+    m_needToShowNextFrame = true;
 
-#ifdef __WXMAC__
-    // without this, the animation currently doesn't redraw under Mac
     Refresh();
-#endif // __WXMAC__
-
-    // Set the timer for the next frame
-    int delay = m_animation.GetDelay(m_currentFrame);
-    if (delay == 0)
-        delay = 1;      // 0 is invalid timeout for wxTimer.
-    m_timer.Start(delay, true);
 }
 
 void wxGenericAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))

@@ -2,7 +2,6 @@
 // Name:        wx/propgrid/propgridiface.h
 // Purpose:     wxPropertyGridInterface class
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2008-08-24
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -19,6 +18,93 @@
 #include "wx/propgrid/propgridpagestate.h"
 
 // -----------------------------------------------------------------------
+// wxPropertyGrid Validation Failure behaviour Flags
+enum class wxPGVFBFlags : int
+{
+    // No flags
+    Null                   = 0,
+    // Prevents user from leaving property unless value is valid. If this
+    // behaviour flag is not used, then value change is instead cancelled.
+    StayInProperty         = 0x0001,
+    // Calls wxBell() on validation failure.
+    Beep                   = 0x0002,
+    // Cell with invalid value will be marked (with red colour).
+    MarkCell               = 0x0004,
+    // Display a text message explaining the situation.
+    // To customize the way the message is displayed, you need to
+    // reimplement wxPropertyGrid::DoShowPropertyError() in a
+    // derived class. Default behaviour is to display the text on
+    // the top-level frame's status bar, if present, and otherwise
+    // using wxMessageBox.
+    ShowMessage            = 0x0008,
+    // Similar to SHOW_MESSAGE, except always displays the
+    // message using wxMessageBox.
+    ShowMessageBox         = 0x0010,
+    // Similar to SHOW_MESSAGE, except always displays the
+    // message on the status bar (when present - you can reimplement
+    // wxPropertyGrid::GetStatusBar() in a derived class to specify
+    // this yourself).
+    ShowMessageOnStatusBar = 0x0020,
+    // Defaults.
+    Default = MarkCell | ShowMessageBox,
+    // Only used internally.
+    Undefined              = 0x0040
+};
+
+constexpr wxPGVFBFlags operator|(wxPGVFBFlags a, wxPGVFBFlags b)
+{
+    return static_cast<wxPGVFBFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+constexpr wxPGVFBFlags operator&(wxPGVFBFlags a, wxPGVFBFlags b)
+{
+    return static_cast<wxPGVFBFlags>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+constexpr wxPGVFBFlags operator~(wxPGVFBFlags a)
+{
+    return static_cast<wxPGVFBFlags>(~static_cast<int>(a));
+}
+
+constexpr bool operator!(wxPGVFBFlags a)
+{
+    return static_cast<int>(a) == 0;
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+wxDEPRECATED_MSG("use wxPGVFBFlags::Null instead")
+constexpr wxPGVFBFlags wxPG_VFB_NULL{ wxPGVFBFlags::Null };
+wxDEPRECATED_MSG("use wxPGVFBFlags::StayInProperty instead")
+constexpr wxPGVFBFlags wxPG_VFB_STAY_IN_PROPERTY{ wxPGVFBFlags::StayInProperty };
+wxDEPRECATED_MSG("use wxPGVFBFlags::Beep instead")
+constexpr wxPGVFBFlags wxPG_VFB_BEEP{ wxPGVFBFlags::Beep };
+wxDEPRECATED_MSG("use wxPGVFBFlags::MarkCell instead")
+constexpr wxPGVFBFlags wxPG_VFB_MARK_CELL{ wxPGVFBFlags::MarkCell };
+wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessage instead")
+constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGE{ wxPGVFBFlags::ShowMessage };
+wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessageBox instead")
+constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGEBOX{ wxPGVFBFlags::ShowMessageBox };
+wxDEPRECATED_MSG("use wxPGVFBFlags::ShowMessageOnStatusBar instead")
+constexpr wxPGVFBFlags wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR{ wxPGVFBFlags::ShowMessageOnStatusBar };
+wxDEPRECATED_MSG("use wxPGVFBFlags::Default instead")
+constexpr wxPGVFBFlags wxPG_VFB_DEFAULT{ wxPGVFBFlags::Default };
+wxDEPRECATED_MSG("use wxPGVFBFlags::Undefined instead")
+constexpr wxPGVFBFlags wxPG_VFB_UNDEFINED{ wxPGVFBFlags::Undefined };
+
+wxDEPRECATED_MSG("use wxPGVFBFlags instead")
+constexpr bool operator==(wxPGVFBFlags a, int b)
+{
+    return static_cast<int>(a) == b;
+}
+
+wxDEPRECATED_MSG("use wxPGVFBFlags instead")
+constexpr bool operator!=(wxPGVFBFlags a, int b)
+{
+    return static_cast<int>(a) != b;
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
+// -----------------------------------------------------------------------
 
 // Most property grid functions have this type as their argument, as it can
 // convey a property by either a pointer or name.
@@ -27,78 +113,67 @@ class WXDLLIMPEXP_PROPGRID wxPGPropArgCls
 public:
     wxPGPropArgCls( const wxPGProperty* property )
     {
-        m_ptr.property = const_cast<wxPGProperty*>(property);
-        m_flags = IsProperty;
+        m_property = const_cast<wxPGProperty*>(property);
+        m_isProperty = true;
     }
     wxPGPropArgCls( const wxString& str )
     {
-        m_ptr.stringName = &str;
-        m_flags = IsWxString;
+        m_name = str;
+        m_property = nullptr;
+        m_isProperty = false;
     }
     wxPGPropArgCls( const wxPGPropArgCls& id )
     {
-        m_ptr = id.m_ptr;
-        m_flags = id.m_flags;
+        m_isProperty = id.m_isProperty;
+        m_property = id.m_property;
+        m_name = id.m_name;
     }
     // This is only needed for wxPython bindings.
     wxPGPropArgCls( wxString* str, bool WXUNUSED(deallocPtr) )
     {
-        m_ptr.stringName = str;
-        m_flags = IsWxString | OwnsWxString;
-    }
-    ~wxPGPropArgCls()
-    {
-        if ( m_flags & OwnsWxString )
-            delete m_ptr.stringName;
+        m_name = *str;
+        delete str; // we own this string
+        m_property = nullptr;
+        m_isProperty = false;
     }
     wxPGProperty* GetPtr() const
     {
-        wxCHECK( m_flags == IsProperty, NULL );
-        return m_ptr.property;
+        wxCHECK( m_isProperty, nullptr );
+        return m_property;
     }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const char* str )
     {
-        m_ptr.charName = str;
-        m_flags = IsCharPtr;
+        m_name = str;
+        m_property = nullptr;
+        m_isProperty = false;
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
     wxPGPropArgCls( const wchar_t* str )
     {
-        m_ptr.wcharName = str;
-        m_flags = IsWCharPtr;
+        m_name = str;
+        m_property = nullptr;
+        m_isProperty = false;
     }
-    // This constructor is required for NULL.
+    // This constructor is required for null.
     wxPGPropArgCls( int )
     {
-        m_ptr.property = NULL;
-        m_flags = IsProperty;
+        m_property = nullptr;
+        m_isProperty = true;
     }
     wxPGProperty* GetPtr( wxPropertyGridInterface* iface ) const;
     wxPGProperty* GetPtr( const wxPropertyGridInterface* iface ) const
     {
         return GetPtr(const_cast<wxPropertyGridInterface*>(iface));
     }
-    wxPGProperty* GetPtr0() const { return m_ptr.property; }
-    bool HasName() const { return (m_flags != IsProperty); }
-    const wxString& GetName() const { return *m_ptr.stringName; }
+    wxPGProperty* GetPtr0() const { return m_property; }
+    bool HasName() const { return !m_isProperty; }
+    const wxString& GetName() const { return m_name; }
+
 private:
-
-    enum
-    {
-        IsProperty      = 0x00,
-        IsWxString      = 0x01,
-        IsCharPtr       = 0x02,
-        IsWCharPtr      = 0x04,
-        OwnsWxString    = 0x10
-    };
-
-    union
-    {
-        wxPGProperty* property;
-        const char* charName;
-        const wchar_t* wcharName;
-        const wxString* stringName;
-    } m_ptr;
-    unsigned char m_flags;
+    bool m_isProperty;
+    wxPGProperty* m_property;
+    wxString m_name;
 };
 
 typedef const wxPGPropArgCls& wxPGPropArg;
@@ -151,7 +226,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridInterface
 public:
 
     // Destructor.
-    virtual ~wxPropertyGridInterface() { }
+    virtual ~wxPropertyGridInterface() = default;
 
     // Appends property to the list.
     // wxPropertyGrid assumes ownership of the object.
@@ -166,7 +241,7 @@ public:
     // Refresh when calling this function after control has been shown for
     // the first time.
     // This functions deselects selected property, if any. Validation
-    // failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
+    // failure option wxPGVFBFlags::StayInProperty is not respected, ie.
     // selection is cleared even if editor had invalid value.
     wxPGProperty* Append( wxPGProperty* property );
 
@@ -212,7 +287,7 @@ public:
     // handler, the actual deletion is postponed until the next
     // idle event.
     // This functions deselects selected property, if any.
-    // Validation failure option wxPG_VFB_STAY_IN_PROPERTY is not
+    // Validation failure option wxPGVFBFlags::StayInProperty is not
     // respected, ie. selection is cleared even if editor had
     // invalid value.
     void DeleteProperty( wxPGPropArg id );
@@ -256,7 +331,7 @@ public:
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
 
-        if ( !p->GetChildCount() || p->HasFlag(wxPG_PROP_AGGREGATE) )
+        if ( !p->HasAnyChild() || p->HasFlag(wxPGPropertyFlags::Aggregate) )
             return wxNullProperty;
 
         return p->Item(0);
@@ -265,17 +340,17 @@ public:
     // Returns iterator class instance.
     // flags - See wxPG_ITERATOR_FLAGS. Value wxPG_ITERATE_DEFAULT causes
     //   iteration over everything except private child properties.
-    // firstProp - Property to start iteration from. If NULL, then first
+    // firstProp - Property to start iteration from. If nullptr, then first
     //   child of root is used.
     wxPropertyGridIterator GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                                        wxPGProperty* firstProp = NULL )
+                                        wxPGProperty* firstProp = nullptr )
     {
         return wxPropertyGridIterator( m_pState, flags, firstProp );
     }
 
     wxPropertyGridConstIterator
     GetIterator( int flags = wxPG_ITERATE_DEFAULT,
-                 wxPGProperty* firstProp = NULL ) const
+                 wxPGProperty* firstProp = nullptr ) const
     {
         return wxPropertyGridConstIterator( m_pState, flags, firstProp );
     }
@@ -309,7 +384,7 @@ public:
     }
 
     // Returns pointer to a property with given name (case-sensitive).
-    // If there is no property with such name, NULL pointer is returned.
+    // If there is no property with such name, null pointer is returned.
     // Properties which have non-category, non-root parent
     // cannot be accessed globally by their name. Instead, use
     // "<property>.<subproperty>" instead of "<subproperty>".
@@ -335,43 +410,55 @@ public:
     // only properties without given flags are stored.
     // flags - Property flags to use.
     // iterFlags - Iterator flags to use. Default is everything expect private children.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use GetPropertiesWithFlag() with 'flags' argument as wxPGPropertyFlags")
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
-                                wxPGProperty::FlagType flags,
+                                int flags,
                                 bool inverse = false,
                                 int iterFlags = wxPG_ITERATE_PROPERTIES |
                                                 wxPG_ITERATE_HIDDEN |
-                                                wxPG_ITERATE_CATEGORIES) const;
+                                                wxPG_ITERATE_CATEGORIES) const
+    {
+        GetPropertiesWithFlag(targetArr, static_cast<wxPGPropertyFlags>(flags), inverse, iterFlags);
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void GetPropertiesWithFlag(wxArrayPGProperty* targetArr,
+                               wxPGPropertyFlags flags,
+                               bool inverse = false,
+                               int iterFlags = wxPG_ITERATE_PROPERTIES |
+                                               wxPG_ITERATE_HIDDEN |
+                                               wxPG_ITERATE_CATEGORIES) const;
 
-    // Returns value of given attribute. If none found, returns wxNullVariant.
+    // Returns value of given attribute. If none found, returns null wxVariant.
     wxVariant GetPropertyAttribute( wxPGPropArg id,
                                     const wxString& attrName ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullVariant)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxVariant())
         return p->GetAttribute(attrName);
     }
 
     // Returns pointer of property's nearest parent category. If no category
-    // found, returns NULL.
+    // found, returns nullptr.
     wxPropertyCategory* GetPropertyCategory( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_CONST_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ID_CONST_CALL_PROLOG_RETVAL(nullptr)
         return m_pState->GetPropertyCategory(p);
     }
 
     // Returns client data (void*) of a property.
     void* GetPropertyClientData( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetClientData();
     }
 
     // Returns first property which label matches given string.
-    // NULL if none found. Note that this operation is extremely slow when
+    // nullptr if none found. Note that this operation is extremely slow when
     // compared to GetPropertyByName().
     wxPGProperty* GetPropertyByLabel( const wxString& label ) const;
 
     // Returns pointer to a property with given name (case-sensitive).
-    // If there is no property with such name, @NULL pointer is returned.
+    // If there is no property with such name, null pointer is returned.
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
 
     // Returns child property 'subname' of property 'name'. Same as
@@ -382,21 +469,21 @@ public:
     // Returns property's editor.
     const wxPGEditor* GetPropertyEditor( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetEditorClass();
     }
 
     // Returns help string associated with a property.
     wxString GetPropertyHelpString( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxString())
         return p->GetHelpString();
     }
 
-    // Returns property's custom value image (NULL of none).
+    // Returns property's custom value image (nullptr if none).
     wxBitmap* GetPropertyImage( wxPGPropArg id ) const
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetValueImage();
     }
 
@@ -425,19 +512,15 @@ public:
     // can pass to any number of SetPropertyValidator.
     wxValidator* GetPropertyValidator( wxPGPropArg id )
     {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(nullptr)
         return p->GetValidator();
     }
 #endif
 
     // Returns value as wxVariant. To get wxObject pointer from it,
     // you will have to use WX_PG_VARIANT_TO_WXOBJECT(VARIANT,CLASSNAME) macro.
-    // If property value is unspecified, wxNullVariant is returned.
-    wxVariant GetPropertyValue( wxPGPropArg id )
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxVariant())
-        return p->GetValue();
-    }
+    // If property value is unspecified, null wxVariant is returned.
+    wxVariant GetPropertyValue(wxPGPropArg id);
 
     wxString GetPropertyValueAsString( wxPGPropArg id ) const;
     long GetPropertyValueAsLong( wxPGPropArg id ) const;
@@ -450,74 +533,42 @@ public:
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
     double GetPropertyValueAsDouble( wxPGPropArg id ) const;
 
-#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(PGTypeName, DEFVAL) \
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
-    wxVariant value = p->GetValue(); \
-    if ( !value.IsType(PGTypeName) ) \
-    { \
-        wxPGGetFailed(p, PGTypeName); \
-        return DEFVAL; \
-    }
-
-#define wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK(PGTypeName, DEFVAL) \
-    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(DEFVAL) \
-    wxVariant value = p->GetValue(); \
-    if ( !value.IsType(PGTypeName) ) \
-        return DEFVAL; \
-
-    wxArrayString GetPropertyValueAsArrayString( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxPG_VARIANT_TYPE_ARRSTRING,
-                                                   wxArrayString())
-        return value.GetArrayString();
-    }
+    wxArrayString GetPropertyValueAsArrayString(wxPGPropArg id) const;
 
 #if defined(wxLongLong_t) && wxUSE_LONGLONG
-    wxLongLong_t GetPropertyValueAsLongLong( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
-        return p->GetValue().GetLongLong().GetValue();
-    }
+    wxLongLong_t GetPropertyValueAsLongLong(wxPGPropArg id) const;
 
-    wxULongLong_t GetPropertyValueAsULongLong( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
-        return p->GetValue().GetULongLong().GetValue();
-    }
+    wxULongLong_t GetPropertyValueAsULongLong(wxPGPropArg id) const;
 #endif
 
-    wxArrayInt GetPropertyValueAsArrayInt( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxArrayInt_VariantType,
-                                                   wxArrayInt())
-        wxArrayInt arr;
-        arr << value;
-        return arr;
-    }
+    wxArrayInt GetPropertyValueAsArrayInt(wxPGPropArg id) const;
 
 #if wxUSE_DATETIME
-    wxDateTime GetPropertyValueAsDateTime( wxPGPropArg id ) const
-    {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL(wxPG_VARIANT_TYPE_DATETIME,
-                                                   wxDateTime())
-        return value.GetDateTime();
-    }
+    wxDateTime GetPropertyValueAsDateTime(wxPGPropArg id) const;
 #endif
 
     // Returns a wxVariant list containing wxVariant versions of all
     // property values. Order is not guaranteed.
-    // flags - Use wxPG_KEEP_STRUCTURE to retain category structure; each sub
+    // flags - Use wxPGPropertyValuesFlags::KeepStructure to retain category structure; each sub
     // category will be its own wxVariantList of wxVariant.
-    // Use wxPG_INC_ATTRIBUTES to include property attributes as well.
+    // Use wxPGPropertyValuesFlags::IncAttributes to include property attributes as well.
     // Each attribute will be stored as list variant named
     // "@<propname>@attr."
-    wxVariant GetPropertyValues( const wxString& listname = wxEmptyString,
-        wxPGProperty* baseparent = NULL, long flags = 0 ) const
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use GetPropertyValues with flags argument as wxPGPropertyValuesFlags")
+    wxVariant GetPropertyValues(const wxString& listname, wxPGProperty* baseparent, long flags) const
+    {
+        return m_pState->DoGetPropertyValues(listname, baseparent, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    wxVariant GetPropertyValues(const wxString& listname = wxString(),
+                                wxPGProperty* baseparent = nullptr,
+                                wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse) const
     {
         return m_pState->DoGetPropertyValues(listname, baseparent, flags);
     }
 
-    // Returns currently selected property. NULL if none.
+    // Returns currently selected property. nullptr if none.
     // When wxPG_EX_MULTIPLE_SELECTION extra style is used, this
     // member function returns the focused property, that is the
     // one which can have active editor.
@@ -541,10 +592,16 @@ public:
     // Hides or reveals a property.
     // hide - If true, hides property, otherwise reveals it.
     // flags - By default changes are applied recursively. Set this parameter
-    //   wxPG_DONT_RECURSE to prevent this.
-    bool HideProperty( wxPGPropArg id,
-                       bool hide = true,
-                       int flags = wxPG_RECURSE );
+    //   wxPGPropertyValuesFlags::DontRecurse to prevent this.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use HideProperty with flags argument as wxPGPropertyValuesFlags")
+    bool HideProperty(wxPGPropArg id, bool hide, int flags)
+    {
+        return HideProperty(id, hide, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    bool HideProperty(wxPGPropArg id, bool hide = true,
+                      wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
 #if wxPG_INCLUDE_ADVPROPS
     // Initializes *all* property types. Causes references to most object
@@ -607,7 +664,7 @@ public:
     bool IsPropertyEnabled( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return !p->HasFlag(wxPG_PROP_DISABLED);
+        return !p->HasFlag(wxPGPropertyFlags::Disabled);
     }
 
     // Returns true if given property is expanded.
@@ -619,11 +676,7 @@ public:
     bool IsPropertyModified( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-#if WXWIN_COMPATIBILITY_3_0
-        return p->HasFlag(wxPG_PROP_MODIFIED)?true:false;
-#else
-        return p->HasFlag(wxPG_PROP_MODIFIED);
-#endif
+        return p->HasFlag(wxPGPropertyFlags::Modified);
     }
 
     // Returns true if property is selected.
@@ -638,7 +691,7 @@ public:
     bool IsPropertyShown( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
-        return !p->HasFlag(wxPG_PROP_HIDDEN);
+        return !p->HasFlag(wxPGPropertyFlags::Hidden);
     }
 
     // Returns true if property value is set to unspecified.
@@ -652,8 +705,8 @@ public:
     // of a property, if it is not the sole mean to edit the value.
     void LimitPropertyEditing( wxPGPropArg id, bool limit = true );
 
-    // If state is shown in it's grid, refresh it now.
-    virtual void RefreshGrid( wxPropertyGridPageState* state = NULL );
+    // If state is shown in its grid, refresh it now.
+    virtual void RefreshGrid( wxPropertyGridPageState* state = nullptr );
 
 #if wxPG_INCLUDE_ADVPROPS
     // Initializes additional property editors (SpinCtrl etc.). Causes
@@ -744,18 +797,23 @@ public:
     // Sets an attribute for this property.
     // name - Text identifier of attribute. See @ref propgrid_property_attributes.
     // value - Value of attribute.
-    // argFlags - Optional. Use wxPG_RECURSE to set the attribute to child
+    // flags - Optional. Use wxPGPropertyValuesFlags::Recurse to set the attribute to child
     //   properties recursively.
-    // Setting attribute's value to wxNullVariant will simply remove it
+    // Setting attribute's value to null wxVariant will simply remove it
     // from property's set of attributes.
-    void SetPropertyAttribute( wxPGPropArg id,
-                               const wxString& attrName,
-                               wxVariant value,
-                               long argFlags = 0 )
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetPropertyAttribute with 'flags' argument as wxPGPropertyValuesFlags")
+    void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName,
+                              wxVariant value, long flags)
     {
-        DoSetPropertyAttribute(id,attrName,value,argFlags);
+        DoSetPropertyAttribute(id, attrName, value, static_cast<wxPGPropertyValuesFlags>(flags));
     }
-
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName, wxVariant value,
+                              wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse)
+    {
+        DoSetPropertyAttribute(id, attrName, value, flags);
+    }
     // Sets property attribute for all applicable properties.
     // Be sure to use this method only after all properties have been
     // added to the grid.
@@ -764,33 +822,47 @@ public:
     // Sets background colour of a property.
     // id - Property name or pointer.
     // colour - New background colour.
-    // flags - Default is wxPG_RECURSE which causes colour to be set recursively.
+    // flags - Default is wxPGPropertyValuesFlags::Recurse which causes colour to be set recursively.
     //   Omit this flag to only set colour for the property in question
     //   and not any of its children.
-    void SetPropertyBackgroundColour( wxPGPropArg id,
-                                      const wxColour& colour,
-                                      int flags = wxPG_RECURSE );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetPropertyBackgroundColour with flags argument as wxPGPropertyValuesFlags")
+    void SetPropertyBackgroundColour(wxPGPropArg id, const wxColour& colour, int flags)
+    {
+        SetPropertyBackgroundColour(id, colour, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetPropertyBackgroundColour(wxPGPropArg id, const wxColour& colour,
+                                     wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     // Resets text and background colours of given property.
     // id - Property name or pointer.
-    // flags - Default is wxPG_DONT_RECURSE which causes colour to be reset
+    // flags - Default is wxPGPropertyValuesFlags::DontRecurse which causes colour to be reset
     //   only for the property in question (for backward compatibility).
-#if WXWIN_COMPATIBILITY_3_0
-    void SetPropertyColoursToDefault(wxPGPropArg id);
-    void SetPropertyColoursToDefault(wxPGPropArg id, int flags);
-#else
-    void SetPropertyColoursToDefault(wxPGPropArg id, int flags = wxPG_DONT_RECURSE);
-#endif // WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0 || WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetPropertyColoursToDefault with flags argument as wxPGPropertyValuesFlags")
+    void SetPropertyColoursToDefault(wxPGPropArg id, int flags)
+    {
+        SetPropertyColoursToDefault(id, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_0 || WXWIN_COMPATIBILITY_3_2
+    void SetPropertyColoursToDefault(wxPGPropArg id, wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     // Sets text colour of a property.
     // id - Property name or pointer.
     // colour - New background colour.
-    // flags - Default is wxPG_RECURSE which causes colour to be set recursively.
+    // flags - Default is wxPGPropertyValuesFlags::Recurse which causes colour to be set recursively.
     //   Omit this flag to only set colour for the property in question
     //   and not any of its children.
-    void SetPropertyTextColour( wxPGPropArg id,
-                                const wxColour& col,
-                                int flags = wxPG_RECURSE );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetPropertyTextColour with flags argument as wxPGPropertyValuesFlags")
+    void SetPropertyTextColour(wxPGPropArg id, const wxColour& col, int flags)
+    {
+        SetPropertyTextColour(id, col, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetPropertyTextColour(wxPGPropArg id, const wxColour& col,
+                               wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     // Returns background colour of first cell of a property.
     wxColour GetPropertyBackgroundColour( wxPGPropArg id ) const
@@ -811,7 +883,7 @@ public:
     // You can use wxPG_LABEL as text to use default text for column.
     void SetPropertyCell( wxPGPropArg id,
                           int column,
-                          const wxString& text = wxEmptyString,
+                          const wxString& text = wxString(),
                           const wxBitmapBundle& bitmap = wxBitmapBundle(),
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );
@@ -833,7 +905,7 @@ public:
     void SetPropertyEditor( wxPGPropArg id, const wxPGEditor* editor )
     {
         wxPG_PROP_ARG_CALL_PROLOG()
-        wxCHECK_RET( editor, wxS("unknown/NULL editor") );
+        wxCHECK_RET( editor, wxS("unknown/null editor") );
         p->SetEditor(editor);
         RefreshProperty(p);
     }
@@ -865,10 +937,16 @@ public:
     // This is mainly for use with textctrl editor. Not all other editors fully
     // support it.
     // By default changes are applied recursively. Set parameter "flags"
-    // to wxPG_DONT_RECURSE to prevent this.
-    void SetPropertyReadOnly( wxPGPropArg id,
-                              bool set = true,
-                              int flags = wxPG_RECURSE );
+    // to wxPGPropertyValuesFlags::DontRecurse to prevent this.
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetPropertyReadOnly with flags argument as wxPGPropertyValuesFlags")
+    void SetPropertyReadOnly(wxPGPropArg id, bool set, int flags)
+    {
+        SetPropertyReadOnly(id, set, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetPropertyReadOnly(wxPGPropArg id, bool set = true,
+                             wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::Recurse);
 
     // Sets property's value to unspecified.
     // If it has children (it may be category), then the same thing is done to
@@ -883,9 +961,8 @@ public:
     void SetPropertyValues( const wxVariantList& list,
                             wxPGPropArg defaultCategory = wxNullProperty )
     {
-        wxPGProperty *p;
-        if ( defaultCategory.HasName() ) p = defaultCategory.GetPtr(this);
-        else p = defaultCategory.GetPtr0();
+        wxPGProperty* p = defaultCategory.HasName() ?
+                          defaultCategory.GetPtr(this) : defaultCategory.GetPtr0();
         m_pState->DoSetPropertyValues(list, p);
     }
 
@@ -963,11 +1040,13 @@ public:
         SetPropertyValueString( id, wxString(value) );
     }
 
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     // Sets value (char*) of a property.
     void SetPropertyValue( wxPGPropArg id, const char* value )
     {
         SetPropertyValueString( id, wxString(value) );
     }
+#endif // !wxNO_IMPLICIT_WXSTRING_ENCODING
 
     // Sets value (string) of a property.
     void SetPropertyValue( wxPGPropArg id, const wxString& value )
@@ -1064,22 +1143,44 @@ public:
     // Adjusts how wxPropertyGrid behaves when invalid value is entered
     // in a property.
     // vfbFlags - See wxPG_VALIDATION_FAILURE_BEHAVIOR_FLAGS for possible values.
-    void SetValidationFailureBehavior( int vfbFlags );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SetValidationFailureBehavior with wxPGVFBFlags argument")
+    void SetValidationFailureBehavior(int vfbFlags)
+    {
+        SetValidationFailureBehavior(static_cast<wxPGVFBFlags>(vfbFlags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SetValidationFailureBehavior(wxPGVFBFlags vfbFlags);
 
     // Sorts all properties recursively.
     // flags - This can contain any of the following options:
-    //    wxPG_SORT_TOP_LEVEL_ONLY: Only sort categories and their
+    //    wxPGPropertyValuesFlags::SortTopLevelOnly: Only sort categories and their
     //    immediate children. Sorting done by wxPG_AUTO_SORT option
     //    uses this.
     // See SortChildren, wxPropertyGrid::SetSortFunction
-    void Sort( int flags = 0 );
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use Sort with wxPGPropertyValuesFlags argument")
+    void Sort(int flags)
+    {
+        Sort(static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void Sort(wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     // Sorts children of a property.
     // id - Name or pointer to a property.
     // flags - This can contain any of the following options:
-    //   wxPG_RECURSE: Sorts recursively.
+    //   wxPGPropertyValuesFlags::Recurse: Sorts recursively.
     // See Sort, wxPropertyGrid::SetSortFunction
-    void SortChildren( wxPGPropArg id, int flags = 0 )
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("use SortChildren with wxPGPropertyValuesFlags argument")
+    void SortChildren(wxPGPropArg id, int flags)
+    {
+        wxPG_PROP_ARG_CALL_PROLOG()
+        m_pState->DoSortChildren(p, static_cast<wxPGPropertyValuesFlags>(flags));
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
+    void SortChildren(wxPGPropArg id, wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse)
     {
         wxPG_PROP_ARG_CALL_PROLOG()
         m_pState->DoSortChildren(p, flags);
@@ -1099,7 +1200,7 @@ public:
 protected:
 
     bool DoClearSelection( bool validation = false,
-                           int selFlags = 0 );
+                           wxPGSelectPropertyFlags selFlags = wxPGSelectPropertyFlags::Null );
 
     // In derived class, implement to set editable state component with
     // given name to given value.
@@ -1115,15 +1216,13 @@ protected:
     virtual wxVariant GetEditableStateItem( const wxString& name ) const
     {
         wxUnusedVar(name);
-        return wxNullVariant;
+        return wxVariant();
     }
 
     // Returns page state data for given (sub) page (-1 means current page).
     virtual wxPropertyGridPageState* GetPageState( int pageIndex ) const
     {
-        if ( pageIndex <= 0 )
-            return m_pState;
-        return NULL;
+        return pageIndex <= 0 ? m_pState : nullptr;
     }
 
     virtual bool DoSelectPage( int WXUNUSED(index) ) { return true; }
@@ -1137,7 +1236,7 @@ protected:
     // Intermediate version needed due to wxVariant copying inefficiency
     void DoSetPropertyAttribute( wxPGPropArg id,
                                  const wxString& name,
-                                 wxVariant& value, long argFlags );
+                                 wxVariant& value, wxPGPropertyValuesFlags flags );
 
     // Empty string object to return from member functions returning const
     // wxString&.
@@ -1147,18 +1246,13 @@ private:
     // Cannot be GetGrid() due to ambiguity issues.
     wxPropertyGrid* GetPropertyGrid()
     {
-        if ( !m_pState )
-            return NULL;
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : nullptr;
     }
 
     // Cannot be GetGrid() due to ambiguity issues.
     const wxPropertyGrid* GetPropertyGrid() const
     {
-        if ( !m_pState )
-            return NULL;
-
-        return m_pState->GetGrid();
+        return m_pState ? m_pState->GetGrid() : nullptr;
     }
 };
 

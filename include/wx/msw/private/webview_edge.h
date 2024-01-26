@@ -15,10 +15,12 @@
 #endif
 #include "wx/msw/private/comptr.h"
 
+#include <unordered_map>
+
 #include <WebView2.h>
 
-#ifndef __ICoreWebView2_2_INTERFACE_DEFINED__
-    #error "WebView2 SDK version 1.0.705.50 or newer is required"
+#ifndef __ICoreWebView2Settings3_INTERFACE_DEFINED__
+    #error "WebView2 SDK version 1.0.864.35 or newer is required"
 #endif
 
 #ifndef __VISUALC__
@@ -36,37 +38,53 @@ __CRT_UUID_DECL(ICoreWebView2ExecuteScriptCompletedHandler, 0x49511172, 0xcc67, 
 __CRT_UUID_DECL(ICoreWebView2NavigationCompletedEventHandler, 0xd33a35bf, 0x1c49, 0x4f98, 0x93,0xab, 0x00,0x6e,0x05,0x33,0xfe,0x1c);
 __CRT_UUID_DECL(ICoreWebView2NavigationStartingEventHandler, 0x9adbe429, 0xf36d, 0x432b, 0x9d,0xdc, 0xf8,0x88,0x1f,0xbd,0x76,0xe3);
 __CRT_UUID_DECL(ICoreWebView2NewWindowRequestedEventHandler, 0xd4c185fe, 0xc81c, 0x4989, 0x97,0xaf, 0x2d,0x3f,0xa7,0xab,0x56,0x51);
+__CRT_UUID_DECL(ICoreWebView2Settings3, 0xfdb5ab74, 0xaf33, 0x4854, 0x84,0xf0,0x0a,0x63,0x1d,0xeb,0x5e,0xba);
 __CRT_UUID_DECL(ICoreWebView2SourceChangedEventHandler, 0x3c067f9f, 0x5388, 0x4772, 0x8b,0x48, 0x79,0xf7,0xef,0x1a,0xb3,0x7c);
 __CRT_UUID_DECL(ICoreWebView2WebMessageReceivedEventHandler, 0x57213f19, 0x00e6, 0x49fa, 0x8e,0x07, 0x89,0x8e,0xa0,0x1e,0xcb,0xd2);
+__CRT_UUID_DECL(ICoreWebView2WebResourceRequestedEventHandler, 0xab00b74c, 0x15f1, 0x4646, 0x80, 0xe8, 0xe7, 0x63, 0x41, 0xd2, 0x5d, 0x71);
+__CRT_UUID_DECL(ICoreWebView2WindowCloseRequestedEventHandler, 0x5c19e9e0,0x092f,0x486b, 0xaf,0xfa,0xca,0x82,0x31,0x91,0x30,0x39);
 #endif
+
+using wxStringToWebHandlerMap = std::unordered_map<wxString, wxSharedPtr<wxWebViewHandler>>;
+
+class wxWebViewWindowFeaturesEdge;
 
 class wxWebViewEdgeImpl
 {
 public:
+    explicit wxWebViewEdgeImpl(wxWebViewEdge* webview, const wxWebViewConfiguration& config);
     explicit wxWebViewEdgeImpl(wxWebViewEdge* webview);
     ~wxWebViewEdgeImpl();
 
     bool Create();
 
     wxWebViewEdge* m_ctrl;
+    wxWebViewConfiguration m_config;
 
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxCOMPtr<ICoreWebView2_2> m_webView;
     wxCOMPtr<ICoreWebView2Controller> m_webViewController;
 
+    wxCOMPtr<ICoreWebView2NewWindowRequestedEventArgs> m_newWindowArgs;
+    wxCOMPtr<ICoreWebView2Deferral> m_newWindowDeferral;
+
     bool m_initialized;
     bool m_isBusy;
+    bool m_inEventCallback;
     wxString m_pendingURL;
     wxString m_pendingPage;
     int m_pendingContextMenuEnabled;
     int m_pendingAccessToDevToolsEnabled;
+    int m_pendingEnableBrowserAcceleratorKeys;
     wxVector<wxString> m_pendingUserScripts;
     wxVector<wxString> m_userScriptIds;
     wxString m_scriptMsgHandlerName;
-    wxString m_customUserAgent;
+    wxString m_pendingUserAgent;
+    wxStringToWebHandlerMap m_handlers;
 
     // WebView Events tokens
     EventRegistrationToken m_navigationStartingToken = { };
+    EventRegistrationToken m_frameNavigationStartingToken = { };
     EventRegistrationToken m_sourceChangedToken = { };
     EventRegistrationToken m_navigationCompletedToken = { };
     EventRegistrationToken m_newWindowRequestedToken = { };
@@ -74,9 +92,12 @@ public:
     EventRegistrationToken m_DOMContentLoadedToken = { };
     EventRegistrationToken m_containsFullScreenElementChangedToken = { };
     EventRegistrationToken m_webMessageReceivedToken = { };
+    EventRegistrationToken m_webResourceRequestedToken = { };
+    EventRegistrationToken m_windowCloseRequestedToken = { };
 
     // WebView Event handlers
     HRESULT OnNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
+    HRESULT OnFrameNavigationStarting(ICoreWebView2* sender, ICoreWebView2NavigationStartingEventArgs* args);
     HRESULT OnSourceChanged(ICoreWebView2* sender, ICoreWebView2SourceChangedEventArgs* args);
     HRESULT OnNavigationCompleted(ICoreWebView2* sender, ICoreWebView2NavigationCompletedEventArgs* args);
     HRESULT OnNewWindowRequested(ICoreWebView2* sender, ICoreWebView2NewWindowRequestedEventArgs* args);
@@ -84,10 +105,16 @@ public:
     HRESULT OnDOMContentLoaded(ICoreWebView2* sender, ICoreWebView2DOMContentLoadedEventArgs* args);
     HRESULT OnContainsFullScreenElementChanged(ICoreWebView2* sender, IUnknown* args);
     HRESULT OnWebMessageReceived(ICoreWebView2* sender, ICoreWebView2WebMessageReceivedEventArgs* args);
+    HRESULT OnWebResourceRequested(ICoreWebView2* sender, ICoreWebView2WebResourceRequestedEventArgs* args);
     HRESULT OnAddScriptToExecuteOnDocumentedCreatedCompleted(HRESULT errorCode, LPCWSTR id);
+    HRESULT OnWindowCloseRequested(ICoreWebView2* sender, IUnknown* args);
 
-    HRESULT OnEnvironmentCreated(HRESULT result, ICoreWebView2Environment* environment);
+    void EnvironmentAvailable(ICoreWebView2Environment* environment);
     HRESULT OnWebViewCreated(HRESULT result, ICoreWebView2Controller* webViewController);
+
+    HRESULT HandleNavigationStarting(ICoreWebView2NavigationStartingEventArgs* args, bool mainFrame);
+
+    void SendErrorEventForAPI(const wxString& api, HRESULT errorCode);
 
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > m_historyList;
     int m_historyPosition;
@@ -97,14 +124,13 @@ public:
     void UpdateBounds();
 
     ICoreWebView2Settings* GetSettings();
+    ICoreWebView2Settings3* GetSettings3();
 
     void UpdateWebMessageHandler();
 
 #if !wxUSE_WEBVIEW_EDGE_STATIC
     static wxDynamicLibrary ms_loaderDll;
 #endif
-    static wxString ms_browserExecutableDir;
-
     static bool Initialize();
 
     static void Uninitialize();

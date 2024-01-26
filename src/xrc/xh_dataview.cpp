@@ -46,7 +46,7 @@ wxObject *wxDataViewXmlHandler::DoCreateResource()
     {
         return HandleTreeCtrl();
     }
-    return NULL;
+    return nullptr;
 }
 
 bool wxDataViewXmlHandler::CanHandle(wxXmlNode *node)

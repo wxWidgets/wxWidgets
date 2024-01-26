@@ -2,7 +2,6 @@
 // Name:        wx/scrolbar.h
 // Purpose:     wxScrollBar base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -26,7 +25,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxScrollBarNameStr[];
 class WXDLLIMPEXP_CORE wxScrollBarBase : public wxControl
 {
 public:
-    wxScrollBarBase() { }
+    wxScrollBarBase() = default;
 
     /*
         Derived classes should provide the following method and ctor with the
@@ -53,7 +52,7 @@ public:
     virtual void SetThumbPosition(int viewStart) = 0;
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
-                              bool refresh = true) wxOVERRIDE = 0;
+                              bool refresh = true) override = 0;
 
     // implementation-only
     bool IsNeeded() const { return GetRange() > GetThumbSize(); }
@@ -66,12 +65,8 @@ private:
     #include "wx/univ/scrolbar.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/scrolbar.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/scrolbar.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/scrolbar.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/scrolbar.h"
+    #include "wx/gtk/scrolbar.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/scrolbar.h"
 #elif defined(__WXQT__)

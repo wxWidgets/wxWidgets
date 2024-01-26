@@ -3,7 +3,6 @@
 // Purpose:     wxDragImage class: a kind of a cursor, that can cope
 //              with more sophisticated images
 // Author:      Julian Smart
-// Modified by:
 // Created:     08/04/99
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -80,7 +79,7 @@
     {
         m_dragImage->EndDrag(this);
         delete m_dragImage;
-        m_dragImage = NULL;
+        m_dragImage = nullptr;
     }
     ReleaseMouse();
  }
@@ -174,7 +173,7 @@ public:
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image.
-    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen = false, wxRect* rect = NULL);
+    bool BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen = false, wxRect* rect = nullptr);
 
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image. This is full screen only. fullScreenRect gives the
@@ -185,7 +184,7 @@ public:
     bool EndDrag();
 
     // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
-    // is non-NULL, or in screen coordinates if NULL.
+    // is non-null, or in screen coordinates if null.
     bool Move(const wxPoint& pt);
 
     // Show the image
@@ -207,16 +206,6 @@ public:
     // Returns the native image list handle for the cursor
     WXHIMAGELIST GetCursorHIMAGELIST() const { return m_hCursorImageList; }
 #endif
-
-    // don't use in new code, use versions without hot spot parameter
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_CONSTRUCTOR( wxDragImage(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED_CONSTRUCTOR( wxDragImage(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED_CONSTRUCTOR( wxDragImage(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED( bool Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED( bool Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-    wxDEPRECATED( bool Create(const wxString& str, const wxCursor& cursor, const wxPoint& cursorHotspot) );
-#endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
     WXHIMAGELIST    m_hImageList;

@@ -34,7 +34,7 @@ public:
                  long style = 0,
                  const wxString& name = wxASCII_STR(wxStaticBitmapNameStr));
 
-    virtual void SetBitmap( const wxBitmapBundle& bitmap ) wxOVERRIDE;
+    virtual void SetBitmap( const wxBitmapBundle& bitmap ) override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

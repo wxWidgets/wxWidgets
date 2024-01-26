@@ -2,7 +2,6 @@
 // Name:        src/common/layout.cpp
 // Purpose:     Constraint layout system classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -71,7 +70,7 @@ wxIndividualLayoutConstraint::wxIndividualLayoutConstraint()
     percent = 0;
     otherEdge = wxTop;
     done = false;
-    otherWin = NULL;
+    otherWin = nullptr;
 }
 
 void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val, int marg)
@@ -154,7 +153,7 @@ bool wxIndividualLayoutConstraint::ResetIfWin(wxWindowBase *otherW)
         value = 0;
         percent = 0;
         otherEdge = wxTop;
-        otherWin = NULL;
+        otherWin = nullptr;
         return true;
     }
 

@@ -166,7 +166,7 @@ public:
 
 
 /** @addtogroup group_funcmacro_string */
-//@{
+///@{
 
 /**
     This is a convenience function wrapping wxStringTokenizer which simply
@@ -184,4 +184,4 @@ wxStringTokenize(const wxString& str,
                  const wxString& delims = wxDEFAULT_DELIMITERS,
                  wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 
-//@}
+///@}

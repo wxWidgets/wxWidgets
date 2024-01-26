@@ -13,11 +13,19 @@ This section describes all environment variables that affect execution of
 wxWidgets programs.
 
 @beginDefList
+@itemdef{WXLOG_TIME_FORMAT,
+         If set, the contents of this variable is set as the initial timestamp
+         used for logging, i.e. passed to wxLog::SetTimestamp(), on program
+         startup. For example, this can be used to enable milliseconds in the
+         timestamps by setting `WXLOG_TIME_FORMAT=%H:%M:%S.%l` or it could also
+         be used to use ISO 8601 timestamp format instead of the default
+         locale-dependent format. This variable is only used since wxWidgets
+         3.3.0.}
 @itemdef{WXTRACE,
-        (Debug build only.)
         This variable can be set to a comma-separated list of trace masks used in
         wxLogTrace calls; wxLog::AddTraceMask is called for every mask
-        in the list during wxWidgets initialization.}
+        in the list during wxWidgets initialization. It only has an effect if
+        debug logging is enabled, see wxLogTrace().}
 @itemdef{WXPREFIX,
         (Unix only.)
         Overrides installation prefix. Normally, the prefix
@@ -37,5 +45,12 @@ wxWidgets programs.
          This can be helpful when running older programs recompiled with
          wxWidgets 3.1 or later, as these asserts are mostly harmless and can
          be safely ignored if the code works as expected.}
+@itemdef{WXSUPPRESS_GTK_DIAGNOSTICS,
+         If set to a non-zero value, wxApp::GTKSuppressDiagnostics() is called
+         on program startup using the numeric value of this variable or the
+         default value if it's not a number, so that e.g. setting it to "yes"
+         suppresses all GTK diagnostics while setting it to 16 only suppresses
+         GTK warning messages.}
 */
 
+@see wxSystemOptions

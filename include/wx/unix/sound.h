@@ -2,7 +2,6 @@
 // Name:        wx/unix/sound.h
 // Purpose:     wxSound class
 // Author:      Julian Smart, Vaclav Slavik
-// Modified by:
 // Created:     25/10/98
 // Copyright:   (c) Julian Smart, Vaclav Slavik
 // Licence:     wxWindows licence
@@ -67,7 +66,7 @@ public:
     // Create from data
     bool Create(size_t size, const void* data);
 
-    bool IsOk() const { return m_data != NULL; }
+    bool IsOk() const { return m_data != nullptr; }
 
     // Stop playing any sound
     static void Stop();
@@ -79,7 +78,7 @@ public:
     static void UnloadBackend();
 
 protected:
-    bool DoPlay(unsigned flags) const wxOVERRIDE;
+    bool DoPlay(unsigned flags) const override;
 
     static void EnsureBackend();
     void Free();
@@ -119,7 +118,7 @@ struct wxSoundPlaybackStatus
 class WXDLLIMPEXP_CORE wxSoundBackend
 {
 public:
-    virtual ~wxSoundBackend() {}
+    virtual ~wxSoundBackend() = default;
 
     // Returns the name of the backend (e.g. "Open Sound System")
     virtual wxString GetName() const = 0;

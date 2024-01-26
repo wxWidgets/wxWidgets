@@ -17,6 +17,12 @@ const char wxMessageBoxCaptionStr[] = "Message";
     This class represents a dialog that shows a single or multi-line message,
     with a choice of OK, Yes, No and Cancel buttons.
 
+    Note about icons: while this dialog defines a number of icon-related
+    styles, the actual icon may or not appear depending on the current platform
+    UI conventions. For example, default GTK theme doesn't use any icons at all
+    in the message dialogs while macOS does use an icon, but it uses the
+    application icon for the informational dialogs.
+
     @beginStyleTable
     @style{wxOK}
         Puts an Ok button in the message box. May be combined with @c wxCANCEL.
@@ -60,10 +66,9 @@ const char wxMessageBoxCaptionStr[] = "Message";
     @style{wxICON_QUESTION}
         Displays a question mark symbol. This icon is automatically used
         with @c wxYES_NO so it's usually unnecessary to specify it explicitly.
-        This style is not supported for message dialogs under wxMSW when a task
-        dialog is used to implement them (i.e. when running under Windows Vista
-        or later) because <a href="https://docs.microsoft.com/en-us/windows/desktop/uxguide/mess-confirm">Microsoft
-        guidelines</a> indicate that no icon should be used for routine
+        This style is not supported for message dialogs under wxMSW
+        because <a href="https://docs.microsoft.com/en-us/windows/desktop/uxguide/mess-confirm">Microsoft guidelines</a>
+        indicate that no icon should be used for routine
         confirmations. If it is specified, no icon will be displayed.
     @style{wxICON_INFORMATION}
         Displays an information symbol. This icon is used by default if
@@ -75,8 +80,7 @@ const char wxMessageBoxCaptionStr[] = "Message";
         Alias for @c wxICON_ERROR.
     @style{wxICON_AUTH_NEEDED}
         Displays an authentication needed symbol. This style is only supported
-        for message dialogs under wxMSW when a task dialog is used to implement
-        them (i.e. when running under Windows Vista or later). In other cases
+        for message dialogs under wxMSW. In other cases
         the default icon selection logic will be used. Note this can be
         combined with other styles to provide a fallback. For instance, using
         wxICON_AUTH_NEEDED | wxICON_QUESTION will show a shield symbol on
@@ -292,7 +296,7 @@ public:
 // ============================================================================
 
 /** @addtogroup group_funcmacro_dialog */
-//@{
+///@{
 
 /**
     Show a general purpose message dialog.
@@ -336,9 +340,9 @@ public:
 int wxMessageBox(const wxString& message,
                  const wxString& caption = wxMessageBoxCaptionStr,
                  int style = wxOK | wxCENTRE,
-                 wxWindow* parent = NULL,
+                 wxWindow* parent = nullptr,
                  int x = wxDefaultCoord,
                  int y = wxDefaultCoord);
 
-//@}
+///@}
 

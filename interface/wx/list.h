@@ -6,15 +6,20 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    The wxList<T> class provides linked list functionality.
+    wxList<T> is a legacy class similar to std::list<T*>.
 
-    This class has been rewritten to be type safe and to provide the full API of
-    the STL std::list container and should be used like it.
-    The exception is that wxList<T> actually stores pointers and therefore its
-    iterators return pointers and not references to the actual objects in the list
-    (see example below) and @e value_type is defined as @e T*.
-    wxList<T> destroys an object after removing it only if wxList<T>::DeleteContents
-    has been called.
+    @note As all the other legacy @ref overview_container "container classes",
+    this class shouldn't be used in the new code.
+
+    This class is similar to the other container classes in that it provides
+    all the usual functions of its standard library counterpart, `std::list`.
+    However, unlike the other classes, this class always stores pointers to the
+    objects and not the objects themselves, i.e. its @e value_type is defined
+    as @e T*.
+
+    Moreover, wxList<T> only destroys an object after removing it if
+    wxList<T>::DeleteContents has been called, i.e. it does _not_ manage its
+    items memory by default.
 
     wxList<T> is not a real template and it requires that you declare and define
     each wxList<T> class in your program. This is done with @e WX_DECLARE_LIST
@@ -22,15 +27,11 @@
     provide a proper template class providing both the STL @c std::list and the old
     wxList API in the future.
 
-    Please refer to the STL @c std::list documentation (see http://www.cppreference.com/wiki/stl/list/start)
+    Please refer to the STL @c std::list documentation (see https://en.cppreference.com/w/cpp/container/list)
     for further information on how to use the class.
     Below we documented both the supported STL and the legacy API
     that originated from the old wxList class and which can still be used alternatively
     for the same class.
-
-    Note that if you compile wxWidgets in STL mode (@c wxUSE_STL defined as 1)
-    then wxList<T> will actually derive from @c std::list and just add a legacy
-    compatibility layer for the old wxList class.
 
     @code
     // this part might be in a header or source (.cpp) file
@@ -458,3 +459,19 @@ public:
     void SetData(T* data);
 };
 
+/**
+    This macro declares a new legacy linked list container named @a name and
+    containing pointers to the objects of type @e T.
+
+    You must use the WX_DEFINE_LIST() macro to define the class declared by
+    this macro.
+*/
+#define WX_DECLARE_LIST(T, name)
+
+/**
+    This macro define a new legacy linked list container named @a name.
+
+    You must use WX_DECLARE_LIST() macro to declare the list class before
+    defining it.
+*/
+#define WX_DEFINE_LIST(T, name)

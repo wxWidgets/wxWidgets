@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextfontpage.cpp
 // Purpose:     Font page for wxRichTextFormattingDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     2006-10-02
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -77,30 +76,30 @@ void wxRichTextFontPage::Init()
     m_bgColourPresent = false;
 
 ////@begin wxRichTextFontPage member initialisation
-    m_innerSizer = NULL;
-    m_faceTextCtrl = NULL;
-    m_sizeTextCtrl = NULL;
-    m_fontSizeSpinButtons = NULL;
-    m_sizeUnitsCtrl = NULL;
-    m_fontListBoxParent = NULL;
-    m_faceListBox = NULL;
-    m_sizeListBox = NULL;
-    m_styleCtrl = NULL;
-    m_weightCtrl = NULL;
-    m_underliningCtrl = NULL;
-    m_textColourLabel = NULL;
-    m_colourCtrl = NULL;
-    m_bgColourLabel = NULL;
-    m_bgColourCtrl = NULL;
-    m_strikethroughCtrl = NULL;
-    m_capitalsCtrl = NULL;
-    m_smallCapitalsCtrl = NULL;
-    m_superscriptCtrl = NULL;
-    m_subscriptCtrl = NULL;
-    m_rtlParentSizer = NULL;
-    m_rtlCtrl = NULL;
-    m_suppressHyphenationCtrl = NULL;
-    m_previewCtrl = NULL;
+    m_innerSizer = nullptr;
+    m_faceTextCtrl = nullptr;
+    m_sizeTextCtrl = nullptr;
+    m_fontSizeSpinButtons = nullptr;
+    m_sizeUnitsCtrl = nullptr;
+    m_fontListBoxParent = nullptr;
+    m_faceListBox = nullptr;
+    m_sizeListBox = nullptr;
+    m_styleCtrl = nullptr;
+    m_weightCtrl = nullptr;
+    m_underliningCtrl = nullptr;
+    m_textColourLabel = nullptr;
+    m_colourCtrl = nullptr;
+    m_bgColourLabel = nullptr;
+    m_bgColourCtrl = nullptr;
+    m_strikethroughCtrl = nullptr;
+    m_capitalsCtrl = nullptr;
+    m_smallCapitalsCtrl = nullptr;
+    m_superscriptCtrl = nullptr;
+    m_subscriptCtrl = nullptr;
+    m_rtlParentSizer = nullptr;
+    m_rtlCtrl = nullptr;
+    m_suppressHyphenationCtrl = nullptr;
+    m_previewCtrl = nullptr;
 ////@end wxRichTextFontPage member initialisation
 }
 
@@ -934,7 +933,7 @@ void wxRichTextFontPage::OnFaceTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) 
             size_t i;
             for (i = 0; i < arr.GetCount(); i++)
             {
-                if (arr[i].Mid(0, facename.Length()).Lower() == facename.Lower())
+                if (arr[i].Mid(0, facename.length()).Lower() == facename.Lower())
                 {
                     m_faceListBox->ScrollToRow(i);
                     break;

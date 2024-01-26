@@ -1,0 +1,67 @@
+name: Update Documentation
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/docs_update.yml'
+      - 'docs/**'
+      - 'interface/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/docs_update.yml'
+      - 'docs/**'
+      - 'interface/**'
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    runs-on: ubuntu-22.04
+    name: Update Online Documentation
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install doxygen
+        run: |
+          sudo apt-get -q -o=Dpkg::Use-Pty=0 -y install doxygen graphviz
+
+      - name: Customize for online docs
+        working-directory: docs/doxygen
+        run: |
+          sed -i'' -e "s@<!--EXTRA FOOTER SCRIPT-->@<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-794025-2', 'auto');ga('send', 'pageview');</script>@" \
+            custom_footer.html
+
+      - name: Generate documentation
+        working-directory: docs/doxygen
+        run: |
+          ./regen.sh php
+          if [[ -s doxygen.log ]]; then
+            echo 'Contents of Doxygen log file follows:'
+            echo '-----------------------------------------------------------'
+            cat doxygen.log
+            echo '-----------------------------------------------------------'
+            exit 1
+          fi
+
+      - name: Upload
+        if: github.ref == 'refs/heads/master'
+        working-directory: docs/doxygen
+        env:
+          DOCS_WEBSITE_KEY: ${{secrets.DOCS_WEBSITE_KEY}}
+          DOCS_WEBSITE_SSH_CONFIG: ${{secrets.DOCS_WEBSITE_SSH_CONFIG}}
+        run: |
+          mkdir "$HOME/.ssh"
+          echo "$DOCS_WEBSITE_KEY" > "$HOME/.ssh/docs_website_key"
+          chmod 600 "$HOME/.ssh/docs_website_key"
+          echo "$DOCS_WEBSITE_SSH_CONFIG" > "$HOME/.ssh/config"
+          rsync --checksum --compress --delete --out-format='%n' --recursive out/html/ wxdocs:public_html/latest/ \
+            2> >(grep -v "Warning: Permanently added" 1>&2)

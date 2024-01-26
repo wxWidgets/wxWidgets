@@ -2,7 +2,6 @@
 // Name:        wx/msw/helpwin.h
 // Purpose:     Help system: WinHelp implementation
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -22,23 +21,23 @@ class WXDLLIMPEXP_CORE wxWinHelpController: public wxHelpControllerBase
     wxDECLARE_DYNAMIC_CLASS(wxWinHelpController);
 
 public:
-    wxWinHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}
-    virtual ~wxWinHelpController() {}
+    wxWinHelpController(wxWindow* parentWindow = nullptr): wxHelpControllerBase(parentWindow) {}
+    virtual ~wxWinHelpController() = default;
 
     // Must call this to set the filename
-    virtual bool Initialize(const wxString& file) wxOVERRIDE;
-    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) wxOVERRIDE { return Initialize( file ); }
+    virtual bool Initialize(const wxString& file) override;
+    virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) override { return Initialize( file ); }
 
     // If file is "", reloads file given in Initialize
-    virtual bool LoadFile(const wxString& file = wxEmptyString) wxOVERRIDE;
-    virtual bool DisplayContents() wxOVERRIDE;
-    virtual bool DisplaySection(int sectionNo) wxOVERRIDE;
-    virtual bool DisplaySection(const wxString& section) wxOVERRIDE { return KeywordSearch(section); }
-    virtual bool DisplayBlock(long blockNo) wxOVERRIDE;
-    virtual bool DisplayContextPopup(int contextId) wxOVERRIDE;
+    virtual bool LoadFile(const wxString& file = wxEmptyString) override;
+    virtual bool DisplayContents() override;
+    virtual bool DisplaySection(int sectionNo) override;
+    virtual bool DisplaySection(const wxString& section) override { return KeywordSearch(section); }
+    virtual bool DisplayBlock(long blockNo) override;
+    virtual bool DisplayContextPopup(int contextId) override;
     virtual bool KeywordSearch(const wxString& k,
-                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL) wxOVERRIDE;
-    virtual bool Quit() wxOVERRIDE;
+                               wxHelpSearchMode mode = wxHELP_SEARCH_ALL) override;
+    virtual bool Quit() override;
 
     inline wxString GetHelpFile() const { return m_helpFile; }
 

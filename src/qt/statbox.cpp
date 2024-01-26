@@ -24,7 +24,7 @@ public:
 
 
 wxStaticBox::wxStaticBox() :
-    m_qtGroupBox(NULL)
+    m_qtGroupBox(nullptr)
 {
 }
 
@@ -48,7 +48,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     m_qtGroupBox = new wxQtGroupBox( parent, this );
     m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    return wxStaticBoxBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 QWidget *wxStaticBox::GetHandle() const

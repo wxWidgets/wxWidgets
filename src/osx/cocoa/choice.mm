@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/choice.mm
 // Purpose:     wxChoice
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -73,59 +72,22 @@ public:
         delete m_popUpMenu;
     }
     
-    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const wxOVERRIDE
-    {
-        left = top = right = bottom = 0;
-        NSControlSize size = NSRegularControlSize;
-        if ( [m_osxView respondsToSelector:@selector(controlSize)] )
-            size = [m_osxView controlSize];
-        else if ([m_osxView respondsToSelector:@selector(cell)])
-        {
-            id cell = [(id)m_osxView cell];
-            if ([cell respondsToSelector:@selector(controlSize)])
-                size = [cell controlSize];
-        }
-        
-        switch( size )
-        {
-#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_16
-            case NSControlSizeLarge:
-#endif
-            case NSRegularControlSize:
-                left = right = 3;
-                top = 2;
-                bottom = 3;
-                break;
-            case NSSmallControlSize:
-                left = right = 3;
-                top = 1;
-                bottom = 3;
-                break;
-            case NSMiniControlSize:
-                left = 1;
-                right = 2;
-                top = 0;
-                bottom = 0;
-                break;
-        }
-    }
-
-    void InsertItem( size_t pos, int itemid, const wxString& text) wxOVERRIDE
+    void InsertItem( size_t pos, int itemid, const wxString& text) override
     {
         m_popUpMenu->Insert( pos, itemid, text );
     }
 
-    size_t GetNumberOfItems() const wxOVERRIDE
+    size_t GetNumberOfItems() const override
     {
         return m_popUpMenu->GetMenuItemCount();
     }
 
-    void RemoveItem( size_t pos ) wxOVERRIDE
+    void RemoveItem( size_t pos ) override
     {
         m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( pos ) );
     }
 
-    void SetItem(int pos, const wxString& s) wxOVERRIDE
+    void SetItem(int pos, const wxString& s) override
     {
         m_popUpMenu->FindItemByPosition( pos )->SetItemLabel( s ) ;
     }

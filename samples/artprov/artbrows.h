@@ -2,7 +2,6 @@
 // Name:        artbrows.h
 // Purpose:     wxArtProvider demo - art browser dialog
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2002/04/05
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
@@ -33,6 +32,8 @@ private:
     void OnChooseClient(wxCommandEvent &event);
 
     wxSize GetSelectedBitmapSize() const;
+
+    void DeleteListItemData();
 
     wxListCtrl *m_list;
     wxStaticBitmap *m_canvas;

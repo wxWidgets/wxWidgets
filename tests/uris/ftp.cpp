@@ -19,6 +19,8 @@
 
 #include <wx/protocol/ftp.h>
 
+#include <memory>
+
 // For this to run, the following environment variables need to be defined:
 //
 //  - WX_FTP_TEST_HOST: the host to use for testing (e.g. ftp.example.com)
@@ -44,12 +46,7 @@ TEST_CASE("FTP", "[net][.]")
     const wxString user = wxGetenv("WX_FTP_TEST_USER");
     const wxString password = wxGetenv("WX_FTP_TEST_PASS");
 
-    class SocketInit
-    {
-    public:
-        SocketInit() { wxSocketBase::Initialize(); }
-        ~SocketInit() { wxSocketBase::Shutdown(); }
-    } socketInit;
+    wxSocketInitializer socketInit;
 
     // wxFTP cannot be a static variable as its ctor needs to access
     // wxWidgets internals after it has been initialized
@@ -66,58 +63,56 @@ TEST_CASE("FTP", "[net][.]")
     SECTION("List")
     {
         // test CWD
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
+        REQUIRE( ftp.ChDir(directory) );
 
         // test NLIST and LIST
         wxArrayString files;
-        CPPUNIT_ASSERT( ftp.GetFilesList(files) );
-        CPPUNIT_ASSERT( ftp.GetDirList(files) );
+        CHECK( ftp.GetFilesList(files) );
 
-        CPPUNIT_ASSERT( ftp.ChDir(wxT("..")) );
+        wxArrayString dirs;
+        CHECK( ftp.GetDirList(dirs) );
+
+        CHECK( files.size() == dirs.size() );
     }
 
     SECTION("Download")
     {
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
+        REQUIRE( ftp.ChDir(directory) );
 
         // test RETR
-        wxInputStream *in1 = ftp.GetInputStream("bloordyblop");
-        CPPUNIT_ASSERT( in1 == NULL );
-        delete in1;
+        std::unique_ptr<wxInputStream> in1(ftp.GetInputStream("bloordyblop"));
+        CHECK( !in1 );
 
-        wxInputStream *in2 = ftp.GetInputStream(valid_filename);
-        CPPUNIT_ASSERT( in2 != NULL );
+        std::unique_ptr<wxInputStream> in2(ftp.GetInputStream(valid_filename));
+        CHECK( in2 );
 
         size_t size = in2->GetSize();
-        wxChar *data = new wxChar[size];
-        CPPUNIT_ASSERT( in2->Read(data, size).GetLastError() == wxSTREAM_NO_ERROR );
-
-        delete [] data;
-        delete in2;
+        std::vector<unsigned char> data(size);
+        CHECK( in2->Read(&data[0], size).GetLastError() == wxSTREAM_NO_ERROR );
     }
 
     SECTION("FileSize")
     {
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
+        REQUIRE( ftp.ChDir(directory) );
 
-        CPPUNIT_ASSERT( ftp.FileExists(valid_filename) );
+        REQUIRE( ftp.FileExists(valid_filename) );
 
         int size = ftp.GetFileSize(valid_filename);
-        CPPUNIT_ASSERT( size != -1 );
+        CHECK( size != -1 );
     }
 
     SECTION("Pwd")
     {
-        CPPUNIT_ASSERT_EQUAL( "/", ftp.Pwd() );
+        CHECK( ftp.Pwd()  == "/" );
 
-        CPPUNIT_ASSERT( ftp.ChDir(directory) );
-        CPPUNIT_ASSERT_EQUAL( directory, ftp.Pwd() );
+        REQUIRE( ftp.ChDir(directory) );
+        CHECK( ftp.Pwd()  == directory );
     }
 
     SECTION("Misc")
     {
-        CPPUNIT_ASSERT( ftp.SendCommand(wxT("STAT")) == '2' );
-        CPPUNIT_ASSERT( ftp.SendCommand(wxT("HELP SITE")) == '2' );
+        CHECK( ftp.SendCommand(wxT("STAT")) == '2' );
+        CHECK( ftp.SendCommand(wxT("HELP SITE")) == '2' );
     }
 
     SECTION("Upload")
@@ -130,13 +125,12 @@ TEST_CASE("FTP", "[net][.]")
 
         // upload a file
         static const wxChar *file1 = wxT("test1");
-        wxOutputStream *out = ftp.GetOutputStream(file1);
-        CPPUNIT_ASSERT( out != NULL );
-        CPPUNIT_ASSERT( out->Write("First hello", 11).GetLastError() == wxSTREAM_NO_ERROR );
-        delete out;
+        std::unique_ptr<wxOutputStream> out(ftp.GetOutputStream(file1));
+        REQUIRE( out );
+        CHECK( out->Write("First hello", 11).GetLastError() == wxSTREAM_NO_ERROR );
 
         // send a command to check the remote file
-        CPPUNIT_ASSERT( ftp.SendCommand(wxString(wxT("STAT ")) + file1) == '2' );
-        CPPUNIT_ASSERT( ftp.GetLastResult() == "11" );
+        REQUIRE( ftp.SendCommand(wxString(wxT("STAT ")) + file1) == '2' );
+        CHECK( ftp.GetLastResult() == "11" );
     }
 }

@@ -129,7 +129,7 @@ wxDropSource::wxDropSource( wxWindow *win )
 {
 #if 0
   m_window = win;
-  m_data = NULL;
+  m_data = nullptr;
   m_retValue = wxDragCancel;
 
   m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );

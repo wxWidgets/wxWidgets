@@ -2,7 +2,6 @@
 // Name:        wx/generic/collpaneg.h
 // Purpose:     wxGenericCollapsiblePane
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     8/10/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -52,16 +51,16 @@ public:
                 const wxString& name = wxASCII_STR(wxCollapsiblePaneNameStr));
 
     // public wxCollapsiblePane API
-    virtual void Collapse(bool collapse = true) wxOVERRIDE;
-    virtual void SetLabel(const wxString &label) wxOVERRIDE;
+    virtual void Collapse(bool collapse = true) override;
+    virtual void SetLabel(const wxString &label) override;
 
-    virtual bool IsCollapsed() const wxOVERRIDE
-        { return m_pPane==NULL || !m_pPane->IsShown(); }
-    virtual wxWindow *GetPane() const wxOVERRIDE
+    virtual bool IsCollapsed() const override
+        { return m_pPane==nullptr || !m_pPane->IsShown(); }
+    virtual wxWindow *GetPane() const override
         { return m_pPane; }
-    virtual wxString GetLabel() const wxOVERRIDE;
+    virtual wxString GetLabel() const override;
 
-    virtual bool Layout() wxOVERRIDE;
+    virtual bool Layout() override;
 
 
     // for the generic collapsible pane only:
@@ -73,7 +72,7 @@ public:
 
 protected:
     // overridden methods
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 
     int GetBorder() const;
 

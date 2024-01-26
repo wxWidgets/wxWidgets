@@ -2,7 +2,6 @@
 // Name:        wx/calctrl.h
 // Purpose:     date-picker control
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -39,7 +38,7 @@ enum
     // deprecated
     wxCAL_NO_YEAR_CHANGE             = 0x0004,
 
-    // don't allow changing neither month nor year (implies
+    // don't allow changing either month or year (implies
     // wxCAL_NO_YEAR_CHANGE)
     wxCAL_NO_MONTH_CHANGE            = 0x000c,
 
@@ -167,7 +166,7 @@ public:
     void SetWeekDay(wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxCalendarEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxCalendarEvent(*this); }
 
 private:
     wxDateTime::WeekDay m_wday;
@@ -204,7 +203,7 @@ public:
     }
 
     // retrieves the limits currently in use (wxDefaultDateTime if none) in the
-    // provided pointers (which may be NULL) and returns true if there are any
+    // provided pointers (which may be null) and returns true if there are any
     // limits or false if none
     virtual bool
     GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const
@@ -223,8 +222,8 @@ public:
     // notice that this is not implemented in all versions
     virtual wxCalendarHitTestResult
     HitTest(const wxPoint& WXUNUSED(pos),
-            wxDateTime* WXUNUSED(date) = NULL,
-            wxDateTime::WeekDay* WXUNUSED(wd) = NULL)
+            wxDateTime* WXUNUSED(date) = nullptr,
+            wxDateTime::WeekDay* WXUNUSED(wd) = nullptr)
     {
         return wxCAL_HITTEST_NOWHERE;
     }
@@ -253,7 +252,7 @@ public:
     virtual void Mark(size_t day, bool mark) = 0;
 
     virtual wxCalendarDateAttr *GetAttr(size_t WXUNUSED(day)) const
-        { return NULL; }
+        { return nullptr; }
     virtual void SetAttr(size_t WXUNUSED(day), wxCalendarDateAttr *attr)
         { delete attr; }
     virtual void ResetAttr(size_t WXUNUSED(day)) { }
@@ -344,7 +343,7 @@ protected:
 #define wxCalendarNameStr "CalendarCtrl"
 
 #ifndef __WXUNIVERSAL__
-    #if defined(__WXGTK20__)
+    #if defined(__WXGTK__)
         #define wxHAS_NATIVE_CALENDARCTRL
         #include "wx/gtk/calctrl.h"
         #define wxCalendarCtrl wxGtkCalendarCtrl

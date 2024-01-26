@@ -60,7 +60,8 @@ usage()
 
     NOTE:    Usage of --debug and --query-debugtype are only relevant if you
   have any  versions prior to 2.9 installed  and use the --version option to
-  select an earlier version.
+  select an earlier version.  Similarly, usage of --unicode is only relevant
+  if a version prior to 3.3 is used, as all later ones always use Unicode.
 
     If multiple builds of wxWidgets  are available,  you can use the options
   --prefix, --host, --toolkit,  --unicode, --static, --universal,  --version
@@ -88,10 +89,6 @@ EOF
 
 # Unfussy people are the easiest to deal with, get them out of the way now.
 [ $# -gt 0 ] || usage 1
-
-
-# Contentious tools determined by configure.
-EGREP="@EGREP@"
 
 
 # For the people who know what they want, or think they do:
@@ -144,6 +141,9 @@ wxconfig_input_options="prefix exec_prefix utility $wxconfig_schema"
 # Notice that this includes "debug" but it is done only for compatibility, this
 # options (i.e. --debug[=yes] or --debug=no) is completely ignored as there is
 # no distinction between debug and release builds in wx any more
+#
+# For "unicode", the situation is similar except that specifying --unicode=no
+# will always fail with this wxWidgets version.
 wxconfig_yesno_options="universal unicode debug static"
 
 # Boolean options that do something or not.
@@ -415,7 +415,7 @@ is_cross && target="@host_alias@"
 this_host="${target:+${target}}"
 this_toolkit="@TOOLKIT_DIR@@TOOLKIT_VERSION@"
 this_widgetset="@WIDGET_SET@"
-this_chartype="@WX_CHARTYPE@"
+this_chartype="unicode"
 this_debugtype="release"
 this_flavour="@WX_FLAVOUR@"
 this_version="@WX_RELEASE@"
@@ -520,11 +520,11 @@ fi
 # find_eligible_delegates _mask
 # Outputs all the config files installed which match the
 # (extended regex) _mask passed as an argument.
-find_eligible_delegates() { echo "$installed_configs" | $EGREP "$1" 2> /dev/null; }
+find_eligible_delegates() { echo "$installed_configs" | grep -E "$1" 2> /dev/null; }
 
 # user_mask_fits _config
 # Returns true if the string _config satisfies the user specified mask.
-user_mask_fits()          { echo "$1" | $EGREP "$configmask" > /dev/null 2>&1; }
+user_mask_fits()          { echo "$1" | grep -E "$configmask" > /dev/null 2>&1; }
 
 # count_fields _word
 # Returns the number of IFS split fields in _word
@@ -673,7 +673,7 @@ find_best_legacy_config()
     if [ -n "$_legacy_configs" ]; then
         _legacy_mask=`get_legacy_mask`
         for d in $_legacy_configs; do
-            if echo $d | $EGREP $_legacy_mask > /dev/null 2>&1 ; then
+            if echo $d | grep -E $_legacy_mask > /dev/null 2>&1 ; then
                 echo "$d"
                 return
             fi
@@ -1033,7 +1033,7 @@ ldlibs_gl="@OPENGL_LIBS@"
 ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_media="@EXTRALIBS_MEDIA@"
 ldlibs_xml="@EXTRALIBS_XML@"
-ldlibs_stc="@EXTRALIBS_STC@"
+ldlibs_stc="@WXCONFIG_STC_LIBS@ @EXTRALIBS_STC@"
 ldlibs_webview="@EXTRALIBS_WEBVIEW@"
 
 

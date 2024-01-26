@@ -123,97 +123,9 @@ void wxBitmapComboBox::RecreateControl()
     // Can't use CBS_OWNERDRAWVARIABLE because it has odd
     // mouse-wheel behaviour.
     //
-    wxString value = GetValue();
-    int selection = GetSelection();
-    wxPoint pos = GetPosition();
-    wxSize size = GetSize();
-    size.y = GetBestSize().y;
-    const wxArrayString strings = GetStrings();
-    const unsigned numItems = strings.size();
-    unsigned i;
-
-    // Save the client data pointers before clearing the control, if any.
-    const wxClientDataType clientDataType = GetClientDataType();
-    wxVector<wxClientData*> objectClientData;
-    wxVector<void*> voidClientData;
-    switch ( clientDataType )
-    {
-        case wxClientData_None:
-            break;
-
-        case wxClientData_Object:
-            objectClientData.reserve(numItems);
-            for ( i = 0; i < numItems; ++i )
-                objectClientData.push_back(GetClientObject(i));
-            break;
-
-        case wxClientData_Void:
-            voidClientData.reserve(numItems);
-            for ( i = 0; i < numItems; ++i )
-                voidClientData.push_back(GetClientData(i));
-            break;
-    }
-
-    wxComboBox::DoClear();
-
-    HWND hwnd = GetHwnd();
-    DissociateHandle();
-    ::DestroyWindow(hwnd);
-
-    if ( !MSWCreateControl(wxT("COMBOBOX"), wxEmptyString, pos, size) )
-        return;
-
-    // initialize the controls contents
-    for ( i = 0; i < numItems; i++ )
-    {
-        wxComboBox::Append(strings[i]);
-
-        if ( !objectClientData.empty() )
-            SetClientObject(i, objectClientData[i]);
-        else if ( !voidClientData.empty() )
-            SetClientData(i, voidClientData[i]);
-    }
-
-    // and make sure it has the same attributes as before
-    if ( m_hasFont )
-    {
-        // calling SetFont(m_font) would do nothing as the code would
-        // notice that the font didn't change, so force it to believe
-        // that it did
-        wxFont font = m_font;
-        m_font = wxNullFont;
-        SetFont(font);
-    }
-
-    if ( m_hasFgCol )
-    {
-        wxColour colFg = m_foregroundColour;
-        m_foregroundColour = wxNullColour;
-        SetForegroundColour(colFg);
-    }
-
-    if ( m_hasBgCol )
-    {
-        wxColour colBg = m_backgroundColour;
-        m_backgroundColour = wxNullColour;
-        SetBackgroundColour(colBg);
-    }
-    else
-    {
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    }
+    MSWRecreate();
 
     ::SendMessage(GetHwnd(), CB_SETITEMHEIGHT, 0, MeasureItem(0));
-
-    // Revert the old string value
-    if ( !HasFlag(wxCB_READONLY) )
-        ChangeValue(value);
-    else if ( selection != wxNOT_FOUND )
-        SetSelection(selection);
-
-    // If disabled we'll have to disable it again after re-creating
-    if ( !IsEnabled() )
-        DoEnable(false);
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()
@@ -323,7 +235,7 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
             if ( clientData )
                 index = wxComboBox::DoInsertItems(items[i], pos+i, clientData+i, type);
             else
-                index = wxComboBox::DoInsertItems(items[i], pos+i, NULL, wxClientData_None);
+                index = wxComboBox::DoInsertItems(items[i], pos+i, nullptr, wxClientData_None);
 
             wxASSERT_MSG( index != wxNOT_FOUND, wxS("Invalid wxBitmapComboBox state") );
             if ( index == wxNOT_FOUND )

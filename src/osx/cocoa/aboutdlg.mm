@@ -56,7 +56,7 @@ public:
     void SetAttributedString( CFStringRef key, const wxString& value )
     {
           wxCFRef<CFAttributedStringRef> attrString(
-            CFAttributedStringCreate(kCFAllocatorDefault, wxCFStringRef(value), NULL) );
+            CFAttributedStringCreate(kCFAllocatorDefault, wxCFStringRef(value), nullptr) );
         CFDictionarySetValue(*this, key, attrString);
     }
 };

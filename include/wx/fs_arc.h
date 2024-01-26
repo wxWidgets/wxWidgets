@@ -14,9 +14,10 @@
 #if wxUSE_FS_ARCHIVE
 
 #include "wx/filesys.h"
-#include "wx/hashmap.h"
 
-WX_DECLARE_STRING_HASH_MAP(int, wxArchiveFilenameHashMap);
+#include <unordered_map>
+
+using wxArchiveFilenameHashMap = std::unordered_map<wxString, int>;
 
 //---------------------------------------------------------------------------
 // wxArchiveFSHandler
@@ -26,10 +27,10 @@ class WXDLLIMPEXP_BASE wxArchiveFSHandler : public wxFileSystemHandler
 {
 public:
     wxArchiveFSHandler();
-    virtual bool CanOpen(const wxString& location) wxOVERRIDE;
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) wxOVERRIDE;
-    virtual wxString FindFirst(const wxString& spec, int flags = 0) wxOVERRIDE;
-    virtual wxString FindNext() wxOVERRIDE;
+    virtual bool CanOpen(const wxString& location) override;
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) override;
+    virtual wxString FindFirst(const wxString& spec, int flags = 0) override;
+    virtual wxString FindNext() override;
     void Cleanup();
     virtual ~wxArchiveFSHandler();
 

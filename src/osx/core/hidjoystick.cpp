@@ -2,7 +2,6 @@
 // Name:        src/osx/core/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Ryan Norton
-// Modified by:
 // Created:     2/13/2005
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
@@ -77,7 +76,7 @@ public:
     virtual ~wxHIDJoystick();
 
     bool Create(int nWhich);
-    virtual void BuildCookies(CFArrayRef Array) wxOVERRIDE;
+    virtual void BuildCookies(CFArrayRef Array) override;
     void MakeCookies(CFArrayRef Array);
     IOHIDElementCookie* GetCookies();
     IOHIDQueueInterface** GetQueue();
@@ -95,7 +94,7 @@ class wxJoystickThread : public wxThread
 {
 public:
     wxJoystickThread(wxHIDJoystick* hid, int joystick);
-    void* Entry() wxOVERRIDE;
+    void* Entry() override;
     static void HIDCallback(void* target, IOReturn res, void* context, void* sender);
 
 private:
@@ -140,11 +139,11 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject);
 //
 // 1) Initializes member variables
 // 2) Attempts to create the native HID joystick implementation - if none
-//    could be found (no joysticks, etc.) then it sets it to NULL
+//    could be found (no joysticks, etc.) then it sets it to nullptr
 //---------------------------------------------------------------------------
 wxJoystick::wxJoystick(int joystick)
     : m_joystick(joystick),
-      m_thread(NULL)
+      m_thread(nullptr)
 {
     m_hid = new wxHIDJoystick();
 
@@ -249,7 +248,7 @@ bool wxJoystick::GetButtonState(unsigned int id) const
 //---------------------------------------------------------------------------
 bool wxJoystick::IsOk() const
 {
-    return m_hid != NULL;
+    return m_hid != nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -350,7 +349,7 @@ bool wxJoystick::ReleaseCapture()
 {
     if (m_thread)
     {
-        m_thread->m_catchwin = NULL;
+        m_thread->m_catchwin = nullptr;
         m_thread->m_polling = 0;
         return true;
     }
@@ -603,7 +602,7 @@ void wxHIDJoystick::MakeCookies(CFArrayRef Array)
                 CFSTR(kIOHIDElementKey)
                                               );
 
-        if (ref != NULL)
+        if (ref != nullptr)
         {
             MakeCookies((CFArrayRef) ref);
     }
@@ -710,7 +709,7 @@ wxJoystickThread::wxJoystickThread(wxHIDJoystick* hid, int joystick)
       m_joystick(joystick),
       m_lastposition(127,127),
       m_buttons(0),
-      m_catchwin(NULL),
+      m_catchwin(nullptr),
       m_polling(0)
 {
     memset(m_axe, 0, sizeof(int) * wxJS_MAX_AXES);
@@ -729,16 +728,16 @@ wxJoystickThread::wxJoystickThread(wxHIDJoystick* hid, int joystick)
 //---------------------------------------------------------------------------
 void* wxJoystickThread::Entry()
 {
-    CFRunLoopSourceRef pRLSource = NULL;
+    CFRunLoopSourceRef pRLSource = nullptr;
 
     if ((*m_hid->GetQueue())->createAsyncEventSource(
                     m_hid->GetQueue(), &pRLSource) != kIOReturnSuccess )
     {
         wxLogSysError(wxT("Couldn't create async event source"));
-        return NULL;
+        return nullptr;
     }
 
-    wxASSERT(pRLSource != NULL);
+    wxASSERT(pRLSource != nullptr);
 
     //attach runloop source to main run loop in thread
     CFRunLoopRef pRL = CFRunLoopGetCurrent();
@@ -750,13 +749,13 @@ void* wxJoystickThread::Entry()
           wxJoystickThread::HIDCallback, this, this) != kIOReturnSuccess )
     {
         wxLogSysError(wxT("Could not set event callout for queue"));
-        return NULL;
+        return nullptr;
     }
 
     if( (*m_hid->GetQueue())->start(m_hid->GetQueue()) != kIOReturnSuccess )
     {
         wxLogSysError(wxT("Could not start queue"));
-        return NULL;
+        return nullptr;
     }
 
     double dTime;
@@ -776,7 +775,7 @@ void* wxJoystickThread::Entry()
 #if 1
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, dTime, true);
 #else
-        IOReturn ret = NULL;
+        IOReturn ret = nullptr;
         HIDCallback(this, ret, this, this);
         Sleep(3000);
 #endif
@@ -787,7 +786,7 @@ void* wxJoystickThread::Entry()
     CFRunLoopRemoveSource(pRL, pRLSource, kCFRunLoopDefaultMode);
     CFRelease(pRLSource);
 
-    return NULL;
+    return nullptr;
 }
 
 //---------------------------------------------------------------------------

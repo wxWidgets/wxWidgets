@@ -2,7 +2,6 @@
 // Name:        winundef.h
 // Purpose:     undefine the common symbols #define'd by <windows.h>
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     16.05.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -14,14 +13,6 @@
 #ifndef _WX_WINUNDEF_H_
 #define _WX_WINUNDEF_H_
  */
-
-#ifndef wxUSE_UNICODE_WINDOWS_H
-    #ifdef _UNICODE
-        #define wxUSE_UNICODE_WINDOWS_H 1
-    #else
-        #define wxUSE_UNICODE_WINDOWS_H 0
-    #endif
-#endif
 
 // ----------------------------------------------------------------------------
 // windows.h #defines the following identifiers which are also used in wxWin so
@@ -42,11 +33,7 @@
                              HWND hwndParent,
                              DLGPROC pDlgProc)
     {
-        #if wxUSE_UNICODE_WINDOWS_H
-            return CreateDialogW(hInstance, pTemplate, hwndParent, pDlgProc);
-        #else
-            return CreateDialogA(hInstance, pTemplate, hwndParent, pDlgProc);
-        #endif
+        return CreateDialogW(hInstance, pTemplate, hwndParent, pDlgProc);
     }
 #endif
 
@@ -70,17 +57,10 @@
                             DWORD family,
                             LPCTSTR facename)
     {
-        #if wxUSE_UNICODE_WINDOWS_H
-            return CreateFontW(height, width, escapement, orientation,
-                               weight, italic, underline, strikeout, charset,
-                               outprecision, clipprecision, quality,
-                               family, facename);
-        #else
-            return CreateFontA(height, width, escapement, orientation,
-                               weight, italic, underline, strikeout, charset,
-                               outprecision, clipprecision, quality,
-                               family, facename);
-        #endif
+        return CreateFontW(height, width, escapement, orientation,
+                           weight, italic, underline, strikeout, charset,
+                           outprecision, clipprecision, quality,
+                           family, facename);
     }
 #endif // CreateFont
 
@@ -98,13 +78,8 @@
                              HINSTANCE hInstance,
                              LPVOID lpParam)
     {
-        #if wxUSE_UNICODE_WINDOWS_H
-            return CreateWindowW(lpClassName, lpWndClass, dwStyle, x, y, w, h,
-                                 hWndParent, hMenu, hInstance, lpParam);
-        #else
-            return CreateWindowA(lpClassName, lpWndClass, dwStyle, x, y, w, h,
-                                 hWndParent, hMenu, hInstance, lpParam);
-        #endif
+        return CreateWindowW(lpClassName, lpWndClass, dwStyle, x, y, w, h,
+                             hWndParent, hMenu, hInstance, lpParam);
     }
 #endif
 
@@ -115,11 +90,7 @@
 
     inline HMENU LoadMenu(HINSTANCE instance, LPCTSTR name)
     {
-        #if wxUSE_UNICODE_WINDOWS_H
-            return LoadMenuW(instance, name);
-        #else
-            return LoadMenuA(instance, name);
-        #endif
+        return LoadMenuW(instance, name);
     }
 #endif
 
@@ -130,11 +101,7 @@
 
     inline HWND APIENTRY FindText(LPFINDREPLACE lpfindreplace)
     {
-        #if wxUSE_UNICODE_WINDOWS_H
-            return FindTextW(lpfindreplace);
-        #else
-            return FindTextA(lpfindreplace);
-        #endif
+        return FindTextW(lpfindreplace);
     }
 #endif
 
@@ -142,13 +109,10 @@
 
 #ifdef GetCharWidth
    #undef GetCharWidth
-   inline BOOL  GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
+
+   inline BOOL GetCharWidth(HDC dc, UINT first, UINT last, LPINT buffer)
    {
-   #if wxUSE_UNICODE_WINDOWS_H
       return GetCharWidthW(dc, first, last, buffer);
-   #else
-      return GetCharWidthA(dc, first, last, buffer);
-   #endif
    }
 #endif
 
@@ -156,102 +120,66 @@
 
 #ifdef FindWindow
    #undef FindWindow
-   #if wxUSE_UNICODE_WINDOWS_H
+
    inline HWND FindWindow(LPCWSTR classname, LPCWSTR windowname)
    {
       return FindWindowW(classname, windowname);
    }
-   #else
-   inline HWND FindWindow(LPCSTR classname, LPCSTR windowname)
-   {
-      return FindWindowA(classname, windowname);
-   }
-   #endif
 #endif
 
 // PlaySound
 
 #ifdef PlaySound
    #undef PlaySound
-   #if wxUSE_UNICODE_WINDOWS_H
+
    inline BOOL PlaySound(LPCWSTR pszSound, HMODULE hMod, DWORD fdwSound)
    {
       return PlaySoundW(pszSound, hMod, fdwSound);
    }
-   #else
-   inline BOOL PlaySound(LPCSTR pszSound, HMODULE hMod, DWORD fdwSound)
-   {
-      return PlaySoundA(pszSound, hMod, fdwSound);
-   }
-   #endif
 #endif
 
 // GetClassName
 
 #ifdef GetClassName
    #undef GetClassName
-   #if wxUSE_UNICODE_WINDOWS_H
+
    inline int GetClassName(HWND h, LPWSTR classname, int maxcount)
    {
       return GetClassNameW(h, classname, maxcount);
    }
-   #else
-   inline int GetClassName(HWND h, LPSTR classname, int maxcount)
-   {
-      return GetClassNameA(h, classname, maxcount);
-   }
-   #endif
 #endif
 
 // GetClassInfo
 
 #ifdef GetClassInfo
    #undef GetClassInfo
-   #if wxUSE_UNICODE_WINDOWS_H
+
    inline BOOL GetClassInfo(HINSTANCE h, LPCWSTR name, LPWNDCLASSW winclass)
    {
       return GetClassInfoW(h, name, winclass);
    }
-   #else
-   inline BOOL GetClassInfo(HINSTANCE h, LPCSTR name, LPWNDCLASSA winclass)
-   {
-      return GetClassInfoA(h, name, winclass);
-   }
-   #endif
 #endif
 
 // LoadAccelerators
 
 #ifdef LoadAccelerators
    #undef LoadAccelerators
-   #if wxUSE_UNICODE_WINDOWS_H
+
    inline HACCEL LoadAccelerators(HINSTANCE h, LPCWSTR name)
    {
       return LoadAcceleratorsW(h, name);
    }
-   #else
-   inline HACCEL LoadAccelerators(HINSTANCE h, LPCSTR name)
-   {
-      return LoadAcceleratorsA(h, name);
-   }
-   #endif
 #endif
 
 // DrawText
 
 #ifdef DrawText
    #undef DrawText
-   #if wxUSE_UNICODE_WINDOWS_H
+
    inline int DrawText(HDC h, LPCWSTR str, int count, LPRECT rect, UINT format)
    {
       return DrawTextW(h, str, count, rect, format);
    }
-   #else
-   inline int DrawText(HDC h, LPCSTR str, int count, LPRECT rect, UINT format)
-   {
-      return DrawTextA(h, str, count, rect, format);
-   }
-   #endif
 #endif
 
 
@@ -260,17 +188,10 @@
 #ifdef StartDoc
    #undef StartDoc
 
-   #if wxUSE_UNICODE_WINDOWS_H
    inline int StartDoc(HDC h, CONST DOCINFOW* info)
    {
       return StartDocW(h, const_cast<DOCINFOW*>(info));
    }
-   #else
-   inline int StartDoc(HDC h, CONST DOCINFOA* info)
-   {
-      return StartDocA(h, const_cast<DOCINFOA*>(info));
-   }
-   #endif
 #endif
 
 // GetObject
@@ -279,11 +200,7 @@
    #undef GetObject
    inline int GetObject(HGDIOBJ h, int i, LPVOID buffer)
    {
-   #if wxUSE_UNICODE_WINDOWS_H
       return GetObjectW(h, i, buffer);
-   #else
-      return GetObjectA(h, i, buffer);
-   #endif
    }
 #endif
 
@@ -293,11 +210,7 @@
    #undef GetMessage
    inline int GetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
    {
-   #if wxUSE_UNICODE_WINDOWS_H
       return GetMessageW(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
-   #else
-      return GetMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
-   #endif
    }
 #endif
 
@@ -306,11 +219,7 @@
     #undef LoadIcon
     inline HICON LoadIcon(HINSTANCE hInstance, LPCTSTR lpIconName)
     {
-        #if wxUSE_UNICODE_WINDOWS_H
-            return LoadIconW(hInstance, lpIconName);
-        #else // ANSI
-            return LoadIconA(hInstance, lpIconName);
-        #endif // Unicode/ANSI
+        return LoadIconW(hInstance, lpIconName);
     }
 #endif // LoadIcon
 
@@ -319,11 +228,7 @@
     #undef LoadBitmap
     inline HBITMAP LoadBitmap(HINSTANCE hInstance, LPCTSTR lpBitmapName)
     {
-        #if wxUSE_UNICODE_WINDOWS_H
-            return LoadBitmapW(hInstance, lpBitmapName);
-        #else // ANSI
-            return LoadBitmapA(hInstance, lpBitmapName);
-        #endif // Unicode/ANSI
+        return LoadBitmapW(hInstance, lpBitmapName);
     }
 #endif // LoadBitmap
 
@@ -331,33 +236,21 @@
 
 #ifdef LoadLibrary
     #undef LoadLibrary
-    #if wxUSE_UNICODE_WINDOWS_H
+
     inline HINSTANCE LoadLibrary(LPCWSTR lpLibFileName)
     {
         return LoadLibraryW(lpLibFileName);
     }
-    #else
-    inline HINSTANCE LoadLibrary(LPCSTR lpLibFileName)
-    {
-        return LoadLibraryA(lpLibFileName);
-    }
-    #endif
 #endif
 
 // FindResource
 #ifdef FindResource
     #undef FindResource
-    #if wxUSE_UNICODE_WINDOWS_H
+
     inline HRSRC FindResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
     {
         return FindResourceW(hModule, lpName, lpType);
     }
-    #else
-    inline HRSRC FindResource(HMODULE hModule, LPCSTR lpName, LPCSTR lpType)
-    {
-        return FindResourceA(hModule, lpName, lpType);
-    }
-    #endif
 #endif
 
 // IsMaximized

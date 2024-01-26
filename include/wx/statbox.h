@@ -2,7 +2,6 @@
 // Name:        wx/statbox.h
 // Purpose:     wxStaticBox base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -30,8 +29,8 @@ public:
     wxStaticBoxBase();
 
     // overridden base class virtuals
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual bool HasTransparentBackground() override { return true; }
+    virtual bool Enable(bool enable = true) override;
 
     // implementation only: this is used by wxStaticBoxSizer to account for the
     // need for extra space taken by the static box
@@ -48,7 +47,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // If non-null, the window used as our label. This window is owned by the
     // static box and will be deleted when it is.
@@ -68,12 +67,8 @@ protected:
     #include "wx/univ/statbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/statbox.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/statbox.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/statbox.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/statbox.h"
+    #include "wx/gtk/statbox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/statbox.h"
 #elif defined(__WXQT__)

@@ -2,7 +2,6 @@
 // Name:        src/univ/statusbr.cpp
 // Purpose:     wxStatusBar implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.10.01
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

@@ -133,6 +133,10 @@ const char* wxART_WX_LOGO;
       wxArtProvider::Push(new MyProvider);
     @endcode
 
+    Note that, as usual in wxWidgets API, wxArtProvider takes ownership of the
+    pointer and will destroy it on program shutdown. In particular, you should
+    not delete this pointer in your own code.
+
     If you need bitmap images (of the same artwork) that should be displayed at
     different sizes you should probably consider overriding wxArtProvider::CreateIconBundle
     and supplying icon bundles that contain different bitmap sizes.
@@ -333,7 +337,7 @@ public:
                           const wxSize& size = wxDefaultSize);
 
     /**
-        Returns native icon size for use specified by @a client hint.
+        Returns native icon size for use specified by @a client hint in DIPs.
 
         If the platform has no commonly used default for this use or if
         @a client is not recognized, returns wxDefaultSize.
@@ -343,22 +347,42 @@ public:
               In that case, this method returns only one of them, picked
               reasonably.
 
-        @since 2.9.0
+        @since 3.1.6
      */
-    static wxSize GetNativeSizeHint(const wxArtClient& client);
+    static wxSize GetNativeDIPSizeHint(const wxArtClient& client);
+
+    /**
+        Returns native icon size for use specified by @a client hint.
+
+        This function does the same thing as GetNativeDIPSizeHint(), but uses
+        @a win to convert the returned value to logical pixels. If @a win is
+        @NULL, default DPI scaling (i.e. that of the primary display) is used.
+
+        @since 2.9.0 (@a win parameter is available only since 3.1.6)
+     */
+    static wxSize GetNativeSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
+
+    /**
+        Returns a suitable size hint for the given @e wxArtClient in DIPs.
+
+        Return the size used by the topmost wxArtProvider for the given @a
+        client. @e wxDefaultSize may be returned if the client doesn't have a
+        specified size, like wxART_OTHER for example.
+
+        @see GetNativeDIPSizeHint()
+    */
+    static wxSize GetDIPSizeHint(const wxArtClient& client);
 
     /**
         Returns a suitable size hint for the given @e wxArtClient.
 
-        If @a platform_default is @true, return a size based on the current
-        platform using GetNativeSizeHint(), otherwise return the size from the
-        topmost wxArtProvider. @e wxDefaultSize may be returned if the client
-        doesn't have a specified size, like wxART_OTHER for example.
+        This function does the same thing as GetDIPSizeHint(), but uses @a win
+        to convert the returned value to logical pixels. If @a win is @NULL,
+        default DPI scaling (i.e. that of the primary display) is used.
 
-        @see GetNativeSizeHint()
-    */
-    static wxSize GetSizeHint(const wxArtClient& client,
-                              bool platform_default = false);
+        Note that @a win parameter is only available since wxWidgets 3.1.6.
+     */
+    static wxSize GetSizeHint(const wxArtClient& client, wxWindow* win = nullptr);
 
     /**
         Query registered providers for icon bundle with given ID.
@@ -403,6 +427,8 @@ public:
         Register new art provider and add it to the top of providers stack
         (i.e. it will be queried as the first provider).
 
+        @param provider A valid pointer that becomes owned by wxArtProvider.
+
         @see PushBack()
     */
     static void Push(wxArtProvider* provider);
@@ -411,6 +437,8 @@ public:
         Register new art provider and add it to the bottom of providers stack.
         In other words, it will be queried as the last one, after all others,
         including the default provider.
+
+        @param provider A valid pointer that becomes owned by wxArtProvider.
 
         @see Push()
 
@@ -440,6 +468,15 @@ public:
 
 
 protected:
+    /**
+        Derived art provider classes may override this method to return the
+        size of the images used by this provider.
+
+        Note that the returned size should be in DPI-independent pixels, i.e.
+        DIPs. The default implementation returns the result of
+        GetNativeDIPSizeHint().
+     */
+    virtual wxSize DoGetSizeHint(const wxArtClient& client);
 
     /**
         Derived art provider classes may override this method to create requested art

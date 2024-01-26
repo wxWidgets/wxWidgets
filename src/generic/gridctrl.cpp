@@ -2,7 +2,6 @@
 // Name:        src/generic/gridctrl.cpp
 // Purpose:     wxGrid controls
 // Author:      Paul Gammans, Roger Gammans
-// Modified by:
 // Created:     11/04/2001
 // Copyright:   (c) The Computer Surgery (paul@compsurg.co.uk)
 // Licence:     wxWindows licence
@@ -158,6 +157,7 @@ using namespace wxGridPrivate;
 // Enables a grid cell to display a formatted date
 
 wxGridCellDateRenderer::wxGridCellDateRenderer(const wxString& outformat)
+    : wxGridCellStringRenderer()
 {
     if ( outformat.empty() )
     {
@@ -168,11 +168,6 @@ wxGridCellDateRenderer::wxGridCellDateRenderer(const wxString& outformat)
         m_oformat = outformat;
     }
     m_tz = wxDateTime::Local;
-}
-
-wxGridCellRenderer *wxGridCellDateRenderer::Clone() const
-{
-    return new wxGridCellDateRenderer(*this);
 }
 
 wxString wxGridCellDateRenderer::GetString(const wxGrid& grid, int row, int col)
@@ -256,11 +251,6 @@ wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat
 {
 }
 
-wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
-{
-    return new wxGridCellDateTimeRenderer(*this);
-}
-
 void
 wxGridCellDateTimeRenderer::GetDateParseParams(DateParseParams& params) const
 {
@@ -272,6 +262,19 @@ wxGridCellDateTimeRenderer::GetDateParseParams(DateParseParams& params) const
 // ----------------------------------------------------------------------------
 // wxGridCellChoiceRenderer
 // ----------------------------------------------------------------------------
+
+wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxString& choices)
+    : wxGridCellStringRenderer()
+{
+    if (!choices.empty())
+        SetParameters(choices);
+}
+
+wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxGridCellChoiceRenderer& other)
+    : wxGridCellStringRenderer(other),
+      m_choices(other.m_choices)
+{
+}
 
 wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
                                                 wxGridCellAttr& attr,
@@ -307,19 +310,6 @@ void wxGridCellChoiceRenderer::SetParameters(const wxString& params)
 // Renders a number as a textual equivalent.
 // eg data in cell is 0,1,2 ... n the cell could be rendered as "John","Fred"..."Bob"
 
-
-wxGridCellEnumRenderer::wxGridCellEnumRenderer(const wxString& choices)
-{
-    if (!choices.empty())
-        SetParameters(choices);
-}
-
-wxGridCellRenderer *wxGridCellEnumRenderer::Clone() const
-{
-    wxGridCellEnumRenderer *renderer = new wxGridCellEnumRenderer;
-    renderer->m_choices = m_choices;
-    return renderer;
-}
 
 wxString wxGridCellEnumRenderer::GetString(const wxGrid& grid, int row, int col)
 {
@@ -809,21 +799,11 @@ void wxGridCellNumberRenderer::SetParameters(const wxString& params)
 wxGridCellFloatRenderer::wxGridCellFloatRenderer(int width,
                                                  int precision,
                                                  int format)
+    : wxGridCellStringRenderer()
 {
     SetWidth(width);
     SetPrecision(precision);
     SetFormat(format);
-}
-
-wxGridCellRenderer *wxGridCellFloatRenderer::Clone() const
-{
-    wxGridCellFloatRenderer *renderer = new wxGridCellFloatRenderer;
-    renderer->m_width = m_width;
-    renderer->m_precision = m_precision;
-    renderer->m_style = m_style;
-    renderer->m_format = m_format;
-
-    return renderer;
 }
 
 wxString wxGridCellFloatRenderer::GetString(const wxGrid& grid, int row, int col)

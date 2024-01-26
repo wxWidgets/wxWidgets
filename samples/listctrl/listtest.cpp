@@ -2,7 +2,6 @@
 // Name:        listctrl.cpp
 // Purpose:     wxListCtrl sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -151,6 +150,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_HEADER, MyFrame::OnToggleHeader)
     EVT_MENU(LIST_TOGGLE_BELL, MyFrame::OnToggleBell)
     EVT_MENU(LIST_CHECKVISIBILITY, MyFrame::OnCheckVisibility)
+    EVT_MENU(LIST_AUTOSIZE, MyFrame::OnAutoResize)
+    EVT_MENU(LIST_AUTOSIZE_USEHEADER, MyFrame::OnAutoResize)
     EVT_MENU(LIST_FIND, MyFrame::OnFind)
     EVT_MENU(LIST_TOGGLE_CHECKBOX, MyFrame::OnToggleItemCheckBox)
     EVT_MENU(LIST_GET_CHECKBOX, MyFrame::OnGetItemCheckBox)
@@ -169,10 +170,10 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600, 500))
+       : wxFrame(nullptr, wxID_ANY, title)
 {
-    m_listCtrl = NULL;
-    m_logWindow = NULL;
+    m_listCtrl = nullptr;
+    m_logWindow = nullptr;
     m_smallVirtual = false;
     m_numListItems = 10;
 
@@ -260,6 +261,9 @@ MyFrame::MyFrame(const wxString& title)
     menuList->AppendCheckItem(LIST_TOGGLE_BELL, "Toggle &bell on no match");
     menuList->Append( LIST_CHECKVISIBILITY, "Check if lines 2 and 9 are visible" );
     menuList->AppendSeparator();
+    menuList->Append( LIST_AUTOSIZE, "Auto resize column 2\tCtrl-R" );
+    menuList->Append( LIST_AUTOSIZE_USEHEADER, "Auto resize column 2 (use header)\tCtrl-Shift-R" );
+    menuList->AppendSeparator();
     menuList->AppendCheckItem(LIST_TOGGLE_CHECKBOXES,
                               "&Enable Checkboxes");
     menuList->Check(LIST_TOGGLE_CHECKBOXES, true);
@@ -288,6 +292,9 @@ MyFrame::MyFrame(const wxString& title)
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
     RecreateList(wxLC_REPORT | wxLC_SINGLE_SEL);
+
+    // Make the list control big enough to show its initial contents.
+    m_listCtrl->SetInitialSize(FromDIP(wxSize(600, 300)));
 
 #ifdef __WXMSW__
     // this is useful to know specially when debugging :)
@@ -377,6 +384,20 @@ void MyFrame::OnCheckVisibility(wxCommandEvent& WXUNUSED(event))
         wxLogMessage( "Line 9 is visible" );
     else
         wxLogMessage( "Line 9 is not visible" );
+}
+
+void MyFrame::OnAutoResize(wxCommandEvent& event)
+{
+    if ( event.GetId() == LIST_AUTOSIZE )
+    {
+        wxLogMessage( "Column 2 resized to content" );
+        m_listCtrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
+    }
+    else
+    {
+        wxLogMessage( "Column 2 resized to header" );
+        m_listCtrl->SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER);
+    }
 }
 
 void MyFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
@@ -1257,7 +1278,8 @@ void MyListCtrl::OnChecked(wxListEvent& event)
 
     if ( IsVirtual() )
     {
-        CheckItem(event.GetIndex(), true);
+        m_checked.SelectItem(event.GetIndex(), true);
+        RefreshItem(event.GetIndex());
     }
 
     event.Skip();
@@ -1269,7 +1291,8 @@ void MyListCtrl::OnUnChecked(wxListEvent& event)
 
     if ( IsVirtual() )
     {
-        CheckItem(event.GetIndex(), false);
+        m_checked.SelectItem(event.GetIndex(), false);
+        RefreshItem(event.GetIndex());
     }
 
     event.Skip();
@@ -1494,34 +1517,9 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     }
 }
 
-void MyListCtrl::CheckItem(long item, bool check)
-{
-    if ( IsVirtual() )
-    {
-        m_checked.SelectItem(item, check);
-        RefreshItem(item);
-    }
-    else
-    {
-        wxListCtrl::CheckItem(item, check);
-    }
-}
-
-bool MyListCtrl::IsItemChecked(long item) const
-{
-    if ( IsVirtual() )
-    {
-        return m_checked.IsSelected(item);
-    }
-    else
-    {
-        return wxListCtrl::IsItemChecked(item);
-    }
-}
-
 bool MyListCtrl::OnGetItemIsChecked(long item) const
 {
-    return IsItemChecked(item);
+    return m_checked.IsSelected(item);
 }
 
 int MyListCtrl::OnGetItemColumnImage(long item, long column) const
@@ -1565,7 +1563,7 @@ void MyListCtrl::InsertItemInReportView(int i)
 #if USE_CONTEXT_MENU
 void MyListCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
-    if (GetEditControl() == NULL)
+    if (GetEditControl() == nullptr)
     {
         wxPoint point = event.GetPosition();
         // If from keyboard

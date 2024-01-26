@@ -85,7 +85,7 @@ public:
     }
 
     // return true if this is a valid compiled regular expression
-    bool IsValid() const { return m_impl != NULL; }
+    bool IsValid() const { return m_impl != nullptr; }
 
     // compile the string into regular expression, return true if ok or false
     // if string has a syntax error

@@ -2,7 +2,6 @@
 // Name:        wx/generic/gridsel.h
 // Purpose:     wxGridSelection
 // Author:      Stefan Neis
-// Modified by:
 // Created:     20/02/2000
 // Copyright:   (c) Stefan Neis
 // Licence:     wxWindows licence
@@ -19,6 +18,7 @@
 
 #include "wx/vector.h"
 
+wxDEPRECATED_MSG("use wxGridBlockCoordsVector instead")
 typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
 
 // Note: for all eventType arguments of the methods of this class wxEVT_NULL
@@ -109,16 +109,17 @@ public:
     wxArrayInt GetRowSelection() const;
     wxArrayInt GetColSelection() const;
 
-    wxVectorGridBlockCoords& GetBlocks() { return m_selection; }
+    const wxGridBlockCoordsVector& GetBlocks() const { return m_selection; }
 
     void EndSelecting();
+    void CancelSelecting();
 
 private:
     void SelectBlockNoEvent(const wxGridBlockCoords& block)
     {
         SelectBlock(block.GetTopRow(), block.GetLeftCol(),
                     block.GetBottomRow(), block.GetRightCol(),
-                    wxKeyboardState(), false);
+                    wxKeyboardState(), wxEVT_NULL);
     }
 
     // Really select the block and don't check for the current selection mode.
@@ -135,7 +136,7 @@ private:
     // We don't currently check if the new block is contained by several
     // existing blocks, as this would be more difficult and doesn't seem to be
     // really needed in practice.
-    void MergeOrAddBlock(wxVectorGridBlockCoords& blocks,
+    void MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
                          const wxGridBlockCoords& block);
 
     // All currently selected blocks. We expect there to be a relatively small
@@ -145,7 +146,7 @@ private:
     // Selection may be empty, but if it isn't, the last block is special, as
     // it is the current block, which is affected by operations such as
     // extending the current selection from keyboard.
-    wxVectorGridBlockCoords             m_selection;
+    wxGridBlockCoordsVector             m_selection;
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;

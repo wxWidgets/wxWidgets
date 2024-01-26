@@ -37,7 +37,7 @@ class WXDLLIMPEXP_CORE wxStaticLineBase : public wxControl
 {
 public:
     // constructor
-    wxStaticLineBase() { }
+    wxStaticLineBase() = default;
 
     // is the line vertical?
     bool IsVertical() const { return (GetWindowStyle() & wxLI_VERTICAL) != 0; }
@@ -46,11 +46,11 @@ public:
     static int GetDefaultSize() { return 2; }
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // set the right size for the right dimension
     wxSize AdjustSize(const wxSize& size) const
@@ -70,7 +70,7 @@ protected:
         return sizeReal;
     }
 
-    virtual wxSize DoGetBestSize() const wxOVERRIDE
+    virtual wxSize DoGetBestSize() const override
     {
         return AdjustSize(wxDefaultSize);
     }
@@ -86,10 +86,8 @@ protected:
     #include "wx/univ/statline.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/statline.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/statline.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/statline.h"
+    #include "wx/gtk/statline.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/statline.h"
 #elif defined(__WXQT__)

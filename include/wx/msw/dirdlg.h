@@ -2,7 +2,6 @@
 // Name:        wx/msw/dirdlg.h
 // Purpose:     wxDirDialog class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -22,13 +21,13 @@ public:
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxASCII_STR(wxDirDialogNameStr));
 
-    void SetPath(const wxString& path) wxOVERRIDE;
+    void SetPath(const wxString& path) override;
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
 private:
-    // The real implementations of ShowModal(), used for Windows versions
-    // before and since Vista.
+    // The real implementations of ShowModal(), one using the traditional shell
+    // function and another one using IFileOpenDialog.
     int ShowSHBrowseForFolder(WXHWND owner);
     int ShowIFileOpenDialog(WXHWND owner);
 

@@ -42,7 +42,7 @@ private:
     void OnMouseLeftDown(wxMouseEvent& event);
     void OnMouseLeftUp(wxMouseEvent& event);
 
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const override;
 };
 
 ChessBoard::ChessBoard(wxWindow* parent)
@@ -72,7 +72,7 @@ ChessBoard::ChessBoard(wxWindow* parent)
         return false; // not on a square
     }
 
-    file = FileLetters[colIdx],
+    file = FileLetters[colIdx];
     // convert rowIdx (top to down 0 to 7) to rank (top to down 8 to 1)
     rank = static_cast<wxUint8>(SquaresPerSide - rowIdx);
 

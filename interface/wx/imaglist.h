@@ -28,11 +28,15 @@ enum
     @class wxImageList
 
     A wxImageList contains a list of images, which are stored in an unspecified
-    form. Images can have masks for transparent drawing, and can be made from a
-    variety of sources including bitmaps and icons.
+    form. Images can use alpha channel or masks for transparent drawing, and
+    can be made from a variety of sources including bitmaps and icons.
 
     wxImageList is used principally in conjunction with wxTreeCtrl and
     wxListCtrl classes.
+
+    Use of this class is not recommended in the new code as it doesn't support
+    showing DPI-dependent bitmaps. Please use wxWithImages::SetImages() instead
+    of wxWithImages::SetImageList().
 
     @library{wxcore}
     @category{gdi}
@@ -44,6 +48,10 @@ class wxImageList : public wxObject
 public:
     /**
         Default ctor.
+
+        Note that the object created using the default ctor is invalid and
+        calling any methods other than Create() on it will result in an
+        assertion failure.
     */
     wxImageList();
 
@@ -51,12 +59,20 @@ public:
         Constructor specifying the image size, whether image masks should be created,
         and the initial size of the list.
 
+        Note that the size is specified in physical pixels and must correspond
+        to the size of bitmaps, in pixels, that will be added to this list.
+
         @param width
             Width of the images in the list.
         @param height
             Height of the images in the list.
         @param mask
-            @true if masks should be created for all images.
+            If @true, all images will have masks, with the mask being created
+            from the light grey pixels if not specified otherwise, i.e. if the
+            image doesn't have neither alpha channel nor mask and no mask is
+            explicitly specified when adding it. Note that if an image does
+            have alpha channel or mask, it will always be used, whether this
+            parameter is @true or @false.
         @param initialCount
             The initial size of the list.
 
@@ -68,19 +84,17 @@ public:
     /**
         Adds a new image or images using a bitmap and optional mask bitmap.
 
+        The physical size of the bitmap should be the same as the size specified
+        when constructing wxImageList. If the width of the bitmap is greater
+        than the image list width, bitmap is split into smaller images of the
+        required width, allowing to add multiple images from a single bitmap.
+
         @param bitmap
             Bitmap representing the opaque areas of the image.
         @param mask
             Monochrome mask bitmap, representing the transparent areas of the image.
 
         @return The new zero-based image index.
-
-        @remarks The original bitmap or icon is not affected by the Add()
-                 operation, and can be deleted afterwards.
-                 If the bitmap is wider than the images in the list, then the
-                 bitmap will automatically be split into smaller images, each
-                 matching the dimensions of the image list.
-                 This does not apply when adding icons.
     */
     int Add(const wxBitmap& bitmap,
             const wxBitmap& mask = wxNullBitmap);
@@ -88,36 +102,30 @@ public:
     /**
         Adds a new image or images using a bitmap and mask colour.
 
+        The physical size of the bitmap should be the same as the size specified
+        when constructing wxImageList. If the width of the bitmap is greater
+        than the image list width, bitmap is split into smaller images of the
+        required width, allowing to add multiple images from a single bitmap.
+
         @param bitmap
             Bitmap representing the opaque areas of the image.
         @param maskColour
             Colour indicating which parts of the image are transparent.
 
         @return The new zero-based image index.
-
-        @remarks The original bitmap or icon is not affected by the Add()
-                 operation, and can be deleted afterwards.
-                 If the bitmap is wider than the images in the list, then the
-                 bitmap will automatically be split into smaller images, each
-                 matching the dimensions of the image list.
-                 This does not apply when adding icons.
     */
     int Add(const wxBitmap& bitmap, const wxColour& maskColour);
 
     /**
         Adds a new image using an icon.
 
+        The physical size of the icon should be the same as the size specified
+        when constructing wxImageList.
+
         @param icon
             Icon to use as the image.
 
         @return The new zero-based image index.
-
-        @remarks The original bitmap or icon is not affected by the Add()
-                 operation, and can be deleted afterwards.
-                 If the bitmap is wider than the images in the list, then the
-                 bitmap will automatically be split into smaller images, each
-                 matching the dimensions of the image list.
-                 This does not apply when adding icons.
 
         @onlyfor{wxmsw,wxosx}
     */
@@ -194,9 +202,9 @@ public:
         @param index
             currently unused, should be 0
         @param width
-            receives the width of the images in the list
+            receives the width of the images in the list in pixels
         @param height
-            receives the height of the images in the list
+            receives the height of the images in the list in pixels
 
         @return @true if the function succeeded, @false if it failed
                 (for example, if the image list was not yet initialized).

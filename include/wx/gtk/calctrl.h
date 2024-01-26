@@ -12,7 +12,7 @@
 class WXDLLIMPEXP_ADV wxGtkCalendarCtrl : public wxCalendarCtrlBase
 {
 public:
-    wxGtkCalendarCtrl() {}
+    wxGtkCalendarCtrl() = default;
     wxGtkCalendarCtrl(wxWindow *parent,
                           wxWindowID id,
                           const wxDateTime& date = wxDefaultDateTime,
@@ -32,18 +32,18 @@ public:
                 long style = wxCAL_SHOW_HOLIDAYS,
                 const wxString& name = wxASCII_STR(wxCalendarNameStr));
 
-    virtual ~wxGtkCalendarCtrl() {}
+    virtual ~wxGtkCalendarCtrl() = default;
 
-    virtual bool SetDate(const wxDateTime& date) wxOVERRIDE;
-    virtual wxDateTime GetDate() const wxOVERRIDE;
+    virtual bool SetDate(const wxDateTime& date) override;
+    virtual wxDateTime GetDate() const override;
 
     virtual bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
-                              const wxDateTime& upperdate = wxDefaultDateTime) wxOVERRIDE;
-    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const wxOVERRIDE;
+                              const wxDateTime& upperdate = wxDefaultDateTime) override;
+    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const override;
 
-    virtual bool EnableMonthChange(bool enable = true) wxOVERRIDE;
+    virtual bool EnableMonthChange(bool enable = true) override;
 
-    virtual void Mark(size_t day, bool mark) wxOVERRIDE;
+    virtual void Mark(size_t day, bool mark) override;
 
     // implementation
     // --------------

@@ -21,6 +21,8 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreServices/CoreServices.h>
 
+#include <unordered_map>
+
 // A small class that we will give the FSEvents
 // framework, which will be forwarded to the function
 // that gets called when files change.
@@ -275,12 +277,10 @@ static void wxDeleteContext(const void* context)
     delete watcherContext;
 }
 
-WX_DECLARE_STRING_HASH_MAP(FSEventStreamRef, FSEventStreamRefMap);
-
 struct wxFsEventsFileSystemWatcher::PrivateData
 {
     // map of path => FSEventStreamRef
-    FSEventStreamRefMap m_streams;
+    std::unordered_map<wxString, FSEventStreamRef> m_streams;
 };
 
 wxFsEventsFileSystemWatcher::wxFsEventsFileSystemWatcher()
@@ -345,9 +345,9 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
     );
     ctx.version = 0;
     ctx.info = watcherContext;
-    ctx.retain = NULL;
+    ctx.retain = nullptr;
     ctx.release = &wxDeleteContext;
-    ctx.copyDescription = NULL;
+    ctx.copyDescription = nullptr;
     CFTimeInterval latency = 0.2;
 
     wxMacUniCharBuffer pathChars(path.GetPath());
@@ -357,7 +357,7 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
         pathChars.GetChars()
     );
     CFArrayRef pathRefs = CFArrayCreate(
-        kCFAllocatorDefault, (const void**)&pathRef, 1, NULL
+        kCFAllocatorDefault, (const void**)&pathRef, 1, nullptr
     );
     FSEventStreamCreateFlags flags = kFSEventStreamCreateFlagWatchRoot
         | kFSEventStreamCreateFlagFileEvents;
@@ -408,7 +408,7 @@ bool wxFsEventsFileSystemWatcher::RemoveTree(const wxFileName& path)
         }
     }
 
-    FSEventStreamRefMap::iterator it = m_pImpl->m_streams.find(canonical);
+    const auto it = m_pImpl->m_streams.find(canonical);
     bool removed = false;
     if ( it != m_pImpl->m_streams.end() )
     {
@@ -425,17 +425,18 @@ bool wxFsEventsFileSystemWatcher::RemoveAll()
 {
     // remove all watches created with Add()
     bool ret = wxKqueueFileSystemWatcher::RemoveAll();
-    FSEventStreamRefMap::iterator it = m_pImpl->m_streams.begin();
-    while ( it != m_pImpl->m_streams.end() )
+    if ( m_pImpl->m_streams.empty() )
+        return ret;
+
+    for ( const auto& kv : m_pImpl->m_streams )
     {
-        FSEventStreamStop(it->second);
-        FSEventStreamInvalidate(it->second);
-        FSEventStreamRelease(it->second);
-        ++it;
-        ret = true;
+        FSEventStreamRef stream = kv.second;
+        FSEventStreamStop(stream);
+        FSEventStreamInvalidate(stream);
+        FSEventStreamRelease(stream);
     }
     m_pImpl->m_streams.clear();
-    return ret;
+    return true;
 }
 
 void wxFsEventsFileSystemWatcher::PostChange(const wxFileName& oldFileName,
@@ -504,16 +505,16 @@ int wxFsEventsFileSystemWatcher::GetWatchedPathsCount() const
 
 int wxFsEventsFileSystemWatcher::GetWatchedPaths(wxArrayString* paths) const
 {
-    wxCHECK_MSG( paths != NULL, -1, "Null array passed to retrieve paths");
+    wxCHECK_MSG( paths != nullptr, -1, "Null array passed to retrieve paths");
     if ( !paths )
     {
         return 0;
     }
     wxFileSystemWatcherBase::GetWatchedPaths(paths);
-    FSEventStreamRefMap::const_iterator it = m_pImpl->m_streams.begin();
-    for ( ; it != m_pImpl->m_streams.end(); ++it )
+
+    for ( const auto& kv : m_pImpl->m_streams )
     {
-        paths->push_back(it->first);
+        paths->push_back(kv.first);
     }
     return paths->size();
 }

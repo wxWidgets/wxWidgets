@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/private/strconv_cf.h
 // Purpose:     Unicode conversion classes
 // Author:      David Elliott, Ryan Norton
-// Modified by:
 // Created:     2007-07-06
 // Copyright:   (c) 2004 Ryan Norton
 //              (c) 2007 David Elliott
@@ -330,10 +329,10 @@ public:
         m_normalization = normalization;
     }
 
-    virtual size_t ToWChar(wchar_t * dst, size_t dstSize, const char * src, size_t srcSize = wxNO_LEN) const wxOVERRIDE;
-    virtual size_t FromWChar(char *dst, size_t dstSize, const wchar_t *src, size_t srcSize = wxNO_LEN) const wxOVERRIDE;
+    virtual size_t ToWChar(wchar_t * dst, size_t dstSize, const char * src, size_t srcSize = wxNO_LEN) const override;
+    virtual size_t FromWChar(char *dst, size_t dstSize, const wchar_t *src, size_t srcSize = wxNO_LEN) const override;
 
-    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConv_cf(*this); }
+    virtual wxMBConv *Clone() const override { return new wxMBConv_cf(*this); }
 
     bool IsOk() const
     {

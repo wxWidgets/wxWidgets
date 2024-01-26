@@ -2,7 +2,6 @@
 // Name:        src/msw/dib.cpp
 // Purpose:     implements wxDIB class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.03.03 (replaces the old file with the same name)
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -44,6 +43,8 @@
 #include <stdlib.h>
 
 #include <memory.h>
+
+#include <memory>
 
 #include "wx/msw/dib.h"
 
@@ -132,7 +133,7 @@ bool wxDIB::Create(int width, int height, int depth)
                     &info,          // bitmap description
                     DIB_RGB_COLORS, // use RGB, not palette
                     &m_data,        // [out] DIB bits
-                    NULL,           // don't use file mapping
+                    nullptr,        // don't use file mapping
                     0               // file mapping offset (not used here)
                  );
 
@@ -414,10 +415,14 @@ HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, const void *bits
         switch ( pbmih->biCompression )
         {
             case BI_BITFIELDS:
-                numColors = 3;
+                // with a classic BITMAPINFOHEADER, there are 3 colour-mask DWORDs
+                // after the header. Otherwise the masks are part of the header
+                numColors = pbmih->biSize == sizeof(BITMAPINFOHEADER) ? 3 : 0;
                 break;
 
             case BI_RGB:
+            case BI_RLE8:
+            case BI_RLE4:
                 // biClrUsed has the number of colors but it may be not initialized at
                 // all
                 numColors = pbmih->biClrUsed;
@@ -432,7 +437,10 @@ HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, const void *bits
                 numColors = 0;
         }
 
-        bits = reinterpret_cast<const char*>(pbmih + 1) + numColors * sizeof(RGBQUAD);
+        // pbmih->biSize might not be the same as sizeof(BITMAPINFOHEADER)
+        // (such as in the case of a BITMAPV4HEADER or BITMAPV5HEADER);
+        // we need to advance by the number of bytes actually present
+        bits = reinterpret_cast<const char*>(pbmih) + pbmih->biSize + numColors * sizeof(RGBQUAD);
     }
 
     HBITMAP hbmp = ::CreateDIBitmap
@@ -475,7 +483,7 @@ size_t wxDIB::ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp)
     // use this one
     BITMAPINFO bi2;
 
-    const bool wantSizeOnly = pbi == NULL;
+    const bool wantSizeOnly = pbi == nullptr;
     if ( wantSizeOnly )
         pbi = &bi2;
 
@@ -501,8 +509,8 @@ size_t wxDIB::ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp)
                 hbmp,                               // the source DDB
                 0,                                  // first scan line
                 h,                                  // number of lines to copy
-                wantSizeOnly ? NULL                 // pointer to the buffer or
-                             : (char *)pbi + dwLen, // NULL if we don't have it
+                wantSizeOnly ? nullptr              // pointer to the buffer or
+                             : (char *)pbi + dwLen, // nullptr if we don't have it
                 pbi,                                // bitmap header
                 DIB_RGB_COLORS                      // or DIB_PAL_COLORS
             ) )
@@ -520,11 +528,11 @@ size_t wxDIB::ConvertFromBitmap(BITMAPINFO *pbi, HBITMAP hbmp)
 HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
 {
     // first calculate the size needed
-    const size_t size = ConvertFromBitmap(NULL, hbmp);
+    const size_t size = ConvertFromBitmap(nullptr, hbmp);
     if ( !size )
     {
         // conversion to DDB failed?
-        return NULL;
+        return nullptr;
     }
 
     HGLOBAL hDIB = ::GlobalAlloc(GMEM_MOVEABLE, size);
@@ -535,7 +543,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
         wxLogError(_("Failed to allocate %luKb of memory for bitmap data."),
                    (unsigned long)(size / 1024));
 
-        return NULL;
+        return nullptr;
     }
 
     if ( !ConvertFromBitmap((BITMAPINFO *)(void *)GlobalPtrLock(hDIB), hbmp) )
@@ -544,7 +552,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
         // now?
         wxFAIL_MSG( wxT("wxDIB::ConvertFromBitmap() unexpectedly failed") );
 
-        return NULL;
+        return nullptr;
     }
 
     return hDIB;
@@ -558,7 +566,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
 
 wxPalette *wxDIB::CreatePalette() const
 {
-    wxCHECK_MSG( m_handle, NULL, wxT("wxDIB::CreatePalette(): invalid object") );
+    wxCHECK_MSG( m_handle, nullptr, wxT("wxDIB::CreatePalette(): invalid object") );
 
     DIBSECTION ds;
     if ( !GetDIBSection(m_handle, &ds) )
@@ -582,7 +590,7 @@ wxPalette *wxDIB::CreatePalette() const
         //
         // NB: another possibility would be to return
         //     GetStockObject(DEFAULT_PALETTE) or even CreateHalftonePalette()?
-        return NULL;
+        return nullptr;
     }
 
     MemoryHDC hDC;
@@ -591,7 +599,7 @@ wxPalette *wxDIB::CreatePalette() const
     // going to have biClrUsed of them so add necessary space
     LOGPALETTE *pPalette = (LOGPALETTE *)
         malloc(sizeof(LOGPALETTE) + (biClrUsed - 1)*sizeof(PALETTEENTRY));
-    wxCHECK_MSG( pPalette, NULL, wxT("out of memory") );
+    wxCHECK_MSG( pPalette, nullptr, wxT("out of memory") );
 
     // initialize the palette header
     pPalette->palVersion = 0x300;  // magic number, not in docs but works
@@ -618,7 +626,7 @@ wxPalette *wxDIB::CreatePalette() const
     {
         wxLogLastError(wxT("CreatePalette"));
 
-        return NULL;
+        return nullptr;
     }
 
     wxPalette *palette = new wxPalette;
@@ -675,7 +683,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
         {
             return false;
         }
-        wxScopedPtr<wxPalette> palette(tempPalette);
+        std::unique_ptr<wxPalette> palette(tempPalette);
         eightBitData.reset(tempEightBitData);
 
         // use palette's colors in result bitmap
@@ -709,7 +717,7 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
     const int dstBytesPerLine = GetLineSize(w, dstDepth);
     const unsigned char *src = (dstDepth != 1 ? image.GetData() : eightBitData.get()) + ((h - 1) * srcBytesPerLine);
     const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w
-                                          : NULL;
+                                          : nullptr;
     unsigned char *dstLineStart = (unsigned char *)m_data;
     for ( int y = 0; y < h; y++ )
     {
@@ -760,6 +768,13 @@ bool wxDIB::Create(const wxImage& image, PixelFormat pf, int dstDepth)
                     *dst++ = src[2];
                     *dst++ = src[1];
                     *dst++ = src[0];
+
+                    // If source has no alpha, but the DIB does have it, we
+                    // need to still fill it, even if there is no real
+                    // transparency.
+                    if ( dstDepth == 32 )
+                        *dst++ = wxALPHA_OPAQUE;
+
                     src += 3;
                 }
             }
@@ -823,7 +838,7 @@ wxImage wxDIB::ConvertToImage(ConversionFlags flags) const
     const int srcBytesPerLine = GetLineSize(w, bpp);
     unsigned char *dst = image.GetData() + ((h - 1) * dstBytesPerLine);
     unsigned char *alpha = image.HasAlpha() ? image.GetAlpha() + (h - 1)*w
-                                            : NULL;
+                                            : nullptr;
     const unsigned char *srcLineStart = (unsigned char *)GetData();
     for ( int y = 0; y < h; y++ )
     {

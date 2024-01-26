@@ -2,7 +2,6 @@
 // Name:        wx/msw/stackwalk.h
 // Purpose:     wxStackWalker for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-08
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -21,11 +20,7 @@ struct _EXCEPTION_POINTERS;
 struct _SYMBOL_INFO;
 struct _SYMBOL_INFOW;
 
-#if wxUSE_UNICODE
-    #define wxSYMBOL_INFO _SYMBOL_INFOW
-#else // !wxUSE_UNICODE
-    #define wxSYMBOL_INFO _SYMBOL_INFO
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+#define wxSYMBOL_INFO _SYMBOL_INFOW
 
 // ----------------------------------------------------------------------------
 // wxStackFrame
@@ -49,21 +44,21 @@ public:
         m_addrFrame = addrFrame;
     }
 
-    virtual size_t GetParamCount() const wxOVERRIDE
+    virtual size_t GetParamCount() const override
     {
         ConstCast()->OnGetParam();
         return DoGetParamCount();
     }
 
     virtual bool
-    GetParam(size_t n, wxString *type, wxString *name, wxString *value) const wxOVERRIDE;
+    GetParam(size_t n, wxString *type, wxString *name, wxString *value) const override;
 
     // callback used by OnGetParam(), don't call directly
     void OnParam(wxSYMBOL_INFO *pSymInfo);
 
 protected:
-    virtual void OnGetName() wxOVERRIDE;
-    virtual void OnGetLocation() wxOVERRIDE;
+    virtual void OnGetName() override;
+    virtual void OnGetLocation() override;
 
     void OnGetParam();
 
@@ -94,11 +89,11 @@ class WXDLLIMPEXP_BASE wxStackWalker : public wxStackWalkerBase
 public:
     // we don't use ctor argument, it is for compatibility with Unix version
     // only
-    wxStackWalker(const char * WXUNUSED(argv0) = NULL) { }
+    wxStackWalker(const char * WXUNUSED(argv0) = nullptr) {}
 
-    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE;
+    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) override;
 #if wxUSE_ON_FATAL_EXCEPTION
-    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE;
+    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) override;
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
 

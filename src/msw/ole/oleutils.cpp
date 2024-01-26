@@ -2,7 +2,6 @@
 // Name:        src/msw/ole/oleutils.cpp
 // Purpose:     implementation of OLE helper functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.02.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -40,28 +39,14 @@ WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str)
 
 WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 {
-    // NULL BSTR is equivalent to an empty string (this is the convention used
+    // null BSTR is equivalent to an empty string (this is the convention used
     // by VB and hence we must follow it)
     if ( !bStr )
         return wxString();
 
     const int len = SysStringLen(bStr);
 
-#if wxUSE_UNICODE
-    wxString str(bStr, len);
-#else
-    wxString str;
-    if (len)
-    {
-        wxStringBufferLength buf(str, len); // asserts if len == 0
-        buf.SetLength(WideCharToMultiByte(CP_ACP, 0 /* no flags */,
-                                  bStr, len /* not necessarily NUL-terminated */,
-                                  buf, len,
-                                  NULL, NULL /* no default char */));
-    }
-#endif
-
-    return str;
+    return wxString(bStr, len);
 }
 
 // ----------------------------------------------------------------------------
@@ -70,14 +55,14 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 void wxBasicString::AssignFromString(const wxString& str)
 {
     SysFreeString(m_bstrBuf);
-    m_bstrBuf = SysAllocString(str.wc_str(*wxConvCurrent));
+    m_bstrBuf = SysAllocString(str.wc_str());
 }
 
 BSTR wxBasicString::Detach()
 {
     BSTR bstr = m_bstrBuf;
 
-    m_bstrBuf = NULL;
+    m_bstrBuf = nullptr;
 
     return bstr;
 }
@@ -93,7 +78,7 @@ wxBasicString& wxBasicString::operator=(const wxBasicString& src)
 {
     if ( this != &src )
     {
-        wxCHECK_MSG(m_bstrBuf == NULL || m_bstrBuf != src.m_bstrBuf,
+        wxCHECK_MSG(m_bstrBuf == nullptr || m_bstrBuf != src.m_bstrBuf,
             *this, wxS("Attempting to assign already owned BSTR"));
         SysFreeString(m_bstrBuf);
         m_bstrBuf = src.Copy();
@@ -141,7 +126,7 @@ bool wxVariantDataCurrency::Eq(wxVariantData& data) const
 }
 
 #if wxUSE_STD_IOSTREAM
-bool wxVariantDataCurrency::Write(wxSTD ostream& str) const
+bool wxVariantDataCurrency::Write(std::ostream& str) const
 {
     wxString s;
     Write(s);
@@ -152,7 +137,7 @@ bool wxVariantDataCurrency::Write(wxSTD ostream& str) const
 
 bool wxVariantDataCurrency::Write(wxString& str) const
 {
-    BSTR bStr = NULL;
+    BSTR bStr = nullptr;
     if ( SUCCEEDED(VarBstrFromCy(m_value, LOCALE_USER_DEFAULT, 0, &bStr)) )
     {
         str = wxConvertStringFromOle(bStr);
@@ -194,7 +179,7 @@ bool wxVariantDataErrorCode::Eq(wxVariantData& data) const
 }
 
 #if wxUSE_STD_IOSTREAM
-bool wxVariantDataErrorCode::Write(wxSTD ostream& str) const
+bool wxVariantDataErrorCode::Write(std::ostream& str) const
 {
     wxString s;
     Write(s);
@@ -242,7 +227,7 @@ bool wxVariantDataSafeArray::Eq(wxVariantData& data) const
 }
 
 #if wxUSE_STD_IOSTREAM
-bool wxVariantDataSafeArray::Write(wxSTD ostream& str) const
+bool wxVariantDataSafeArray::Write(std::ostream& str) const
 {
     wxString s;
     Write(s);
@@ -314,7 +299,12 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         oleVariant.vt = VT_I8;
         oleVariant.llVal = variant.GetLongLong().GetValue();
     }
-#endif
+    else if (type == wxT("ulonglong"))
+    {
+        oleVariant.vt = VT_UI8;
+        oleVariant.ullVal = variant.GetULongLong().GetValue();
+    }
+#endif // wxUSE_LONGLONG
     else if (type == wxT("char"))
     {
         oleVariant.vt=VT_I1;            // Signed Char
@@ -483,6 +473,9 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
 #if wxUSE_LONGLONG
             case VT_I8:
                 variant = wxLongLong(oleVariant.llVal);
+                break;
+            case VT_UI8:
+                variant = wxULongLong(oleVariant.ullVal);
                 break;
 #endif // wxUSE_LONGLONG
 

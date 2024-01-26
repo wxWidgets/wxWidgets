@@ -2,7 +2,6 @@
 // Name:        validate.cpp
 // Purpose:     wxWidgets validator sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -134,7 +133,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create and display the main frame window.
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, "Validator Test",
+    MyFrame *frame = new MyFrame(nullptr, "Validator Test",
                                  50, 50, 300, 250);
     frame->Show(true);
 

@@ -55,8 +55,8 @@ public:
 class MainApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 };
 
 
@@ -73,7 +73,7 @@ wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MainFrame::MainFrame()
-    : wxFrame(NULL, wxID_ANY, "Main wx app",
+    : wxFrame(nullptr, wxID_ANY, "Main wx app",
               wxDefaultPosition, wxSize(400, 300))
 {
     wxPanel *p = new wxPanel(this, wxID_ANY);

@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/clipbrd.h
-// Purpose:     wxClipboad class and clipboard functions for MSW
+// Purpose:     wxClipboard class and clipboard functions for MSW
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -13,24 +12,20 @@
 
 #if wxUSE_CLIPBOARD
 
-// These functions superseded by wxClipboard, but retained in order to
-// implement wxClipboard, and for compatibility.
+// Deprecated wxMSW-only function superseded by wxClipboard, don't use them and
+// use that class instead.
+#if WXWIN_COMPATIBILITY_3_2
 
-// open/close the clipboard
-WXDLLIMPEXP_CORE bool wxOpenClipboard();
-WXDLLIMPEXP_CORE bool wxIsClipboardOpened();
-#define wxClipboardOpen wxIsClipboardOpened
-WXDLLIMPEXP_CORE bool wxCloseClipboard();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxOpenClipboard();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxIsClipboardOpened();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxClipboardOpen();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxCloseClipboard();
+wxDEPRECATED_MSG("Use wxClipboard") WXDLLIMPEXP_CORE bool wxEmptyClipboard();
 
-// get/set data
-WXDLLIMPEXP_CORE bool wxEmptyClipboard();
-#if !wxUSE_OLE
-WXDLLIMPEXP_CORE bool wxSetClipboardData(wxDataFormat dataFormat,
-                                    const void *data,
-                                    int width = 0, int height = 0);
-#endif // !wxUSE_OLE
+#endif // WXWIN_COMPATIBILITY_3_2
 
-// clipboard formats
+// Non-deprecated but still wxMSW-specific functions working with clipboard
+// formats -- don't use them neither.
 WXDLLIMPEXP_CORE bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat);
 WXDLLIMPEXP_CORE wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat);
 WXDLLIMPEXP_CORE int  wxRegisterClipboardFormat(wxChar *formatName);
@@ -49,33 +44,33 @@ public:
     virtual ~wxClipboard();
 
     // open the clipboard before SetData() and GetData()
-    virtual bool Open() wxOVERRIDE;
+    virtual bool Open() override;
 
     // close the clipboard after SetData() and GetData()
-    virtual void Close() wxOVERRIDE;
+    virtual void Close() override;
 
     // query whether the clipboard is opened
-    virtual bool IsOpened() const wxOVERRIDE;
+    virtual bool IsOpened() const override;
 
     // set the clipboard data. all other formats will be deleted.
-    virtual bool SetData( wxDataObject *data ) wxOVERRIDE;
+    virtual bool SetData( wxDataObject *data ) override;
 
     // add to the clipboard data.
-    virtual bool AddData( wxDataObject *data ) wxOVERRIDE;
+    virtual bool AddData( wxDataObject *data ) override;
 
     // ask if data in correct format is available
-    virtual bool IsSupported( const wxDataFormat& format ) wxOVERRIDE;
+    virtual bool IsSupported( const wxDataFormat& format ) override;
 
     // fill data with data on the clipboard (if available)
-    virtual bool GetData( wxDataObject& data ) wxOVERRIDE;
+    virtual bool GetData( wxDataObject& data ) override;
 
     // clears wxTheClipboard and the system's clipboard if possible
-    virtual void Clear() wxOVERRIDE;
+    virtual void Clear() override;
 
     // flushes the clipboard: this means that the data which is currently on
     // clipboard will stay available even after the application exits (possibly
     // eating memory), otherwise the clipboard will be emptied on exit
-    virtual bool Flush() wxOVERRIDE;
+    virtual bool Flush() override;
 
 private:
     IDataObject *m_lastDataObject;

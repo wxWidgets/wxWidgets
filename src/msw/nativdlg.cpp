@@ -2,7 +2,6 @@
 // Name:        src/msw/nativdlg.cpp
 // Purpose:     Native dialog loading code (part of wxWindow)
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -67,7 +66,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID id)
     if (hWndNext)
         CreateWindowFromHWND(this, (WXHWND) hWndNext);
 
-    while (hWndNext != (HWND) NULL)
+    while (hWndNext != (HWND) nullptr)
     {
         hWndNext = ::GetWindow(hWndNext, GW_HWNDNEXT);
         if (hWndNext)
@@ -104,7 +103,7 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
     if (hWndNext)
         CreateWindowFromHWND(this, (WXHWND) hWndNext);
 
-    while (hWndNext != (HWND) NULL)
+    while (hWndNext != (HWND) nullptr)
     {
         hWndNext = ::GetWindow(hWndNext, GW_HWNDNEXT);
         if (hWndNext)
@@ -134,7 +133,7 @@ wxWindow* wxWindow::GetWindowChild1(wxWindowID id)
         node = node->GetNext();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 wxWindow* wxWindow::GetWindowChild(wxWindowID id)
@@ -158,15 +157,15 @@ wxWindow* wxWindow::GetWindowChild(wxWindowID id)
 
 wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 {
-    wxCHECK_MSG( parent, NULL, wxT("must have valid parent for a control") );
+    wxCHECK_MSG( parent, nullptr, wxT("must have valid parent for a control") );
 
     wxString str(wxGetWindowClass(hWnd));
-    str.UpperCase();
+    str.MakeUpper();
 
     long id = wxGetWindowId(hWnd);
     long style = GetWindowLong((HWND) hWnd, GWL_STYLE);
 
-    wxWindow* win = NULL;
+    wxWindow* win = nullptr;
 
     if (str == wxT("BUTTON"))
     {

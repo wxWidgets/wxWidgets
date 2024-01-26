@@ -92,7 +92,7 @@ of MSW, MAC and OS2
 class MyAppTraits : public wxGUIAppTraits
 {
 public:
-    virtual wxLog *CreateLogTarget() wxOVERRIDE;
+    virtual wxLog *CreateLogTarget() override;
 };
 
 #endif // wxUSE_LOG
@@ -103,16 +103,16 @@ class MyApp: public wxApp
 public:
     MyApp() { m_startupProgressStyle = -1; }
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
 #if wxUSE_CMDLINE_PARSER
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 #endif // wxUSE_CMDLINE_PARSER
 
 protected:
 #if wxUSE_LOG
-    virtual wxAppTraits *CreateTraits() wxOVERRIDE { return new MyAppTraits; }
+    virtual wxAppTraits *CreateTraits() override { return new MyAppTraits; }
 #endif // wxUSE_LOG
 
 private:
@@ -190,6 +190,8 @@ class TestMessageBoxDialog : public wxDialog
 {
 public:
     TestMessageBoxDialog(wxWindow *parent);
+    TestMessageBoxDialog(const TestMessageBoxDialog&) = delete;
+    TestMessageBoxDialog& operator=(const TestMessageBoxDialog&) = delete;
 
     bool Create();
 
@@ -201,7 +203,7 @@ protected:
     void PrepareMessageDialog(wxMessageDialogBase &dlg);
 
     virtual void AddAdditionalTextOptions(wxSizer *WXUNUSED(sizer)) { }
-    virtual void AddAdditionalFlags(wxSizer *WXUNUSED(sizer)) { }
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *WXUNUSED(sizer)) { }
 
     void ShowResult(int res);
 
@@ -256,7 +258,6 @@ private:
     wxStaticText *m_labelResult;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
 
 #if wxUSE_RICHMSGDLG
@@ -267,8 +268,8 @@ public:
 
 protected:
     // overrides method in base class
-    virtual void AddAdditionalTextOptions(wxSizer *sizer) wxOVERRIDE;
-    virtual void AddAdditionalFlags(wxSizer *sizer) wxOVERRIDE;
+    virtual void AddAdditionalTextOptions(wxSizer *sizer) override;
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *sizer) override;
 
     void OnApply(wxCommandEvent& event);
 
@@ -620,6 +621,8 @@ enum
     DIALOGS_FILE_OPEN_GENERIC,
     DIALOGS_FILES_OPEN_GENERIC,
     DIALOGS_FILE_SAVE_GENERIC,
+    DIALOGS_FILE_USE_CUSTOMIZER,
+    DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR,
     DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,
     DIALOGS_DIR_CHOOSE,
     DIALOGS_DIR_CHOOSE_WINDOW_MODAL,

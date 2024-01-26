@@ -2,7 +2,6 @@
 // Name:        src/msw/urlmsw.cpp
 // Purpose:     MS-Windows native URL support based on WinINet
 // Author:      Hajo Kirchhoff
-// Modified by:
 // Created:     06/11/2003
 // Copyright:   (c) 2003 Hajo Kirchhoff
 // Licence:     wxWindows licence
@@ -15,7 +14,6 @@
 #if wxUSE_URL_NATIVE
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/module.h"
@@ -52,7 +50,7 @@ protected:
 // the only "reason for being" for this class is to tell
 // wxURL that there is someone dealing with the http protocol
 wxIMPLEMENT_DYNAMIC_CLASS(wxHTTPDummyProto, wxProtocol);
-IMPLEMENT_PROTOCOL(wxHTTPDummyProto, wxT("http"), NULL, false)
+IMPLEMENT_PROTOCOL(wxHTTPDummyProto, wxT("http"), nullptr, false)
 USE_PROTOCOL(wxHTTPDummyProto)
 
 #endif // !wxUSE_PROTOCOL_HTTP
@@ -96,8 +94,8 @@ HINTERNET wxWinINetURL::GetSessionHandle()
                        (
                         wxVERSION_STRING,
                         INTERNET_OPEN_TYPE_PRECONFIG,
-                        NULL,
-                        NULL,
+                        nullptr,
+                        nullptr,
                         rc == ERROR_SUCCESS ? 0 : INTERNET_FLAG_OFFLINE
                        );
         }
@@ -158,7 +156,7 @@ size_t wxWinINetInputStream::OnSysRead(void *buffer, size_t bufsize)
             SetError(wxSTREAM_READ_ERROR);
 
         DWORD iError, bLength;
-        InternetGetLastResponseInfo(&iError, NULL, &bLength);
+        InternetGetLastResponseInfo(&iError, nullptr, &bLength);
         if ( bLength > 0 )
         {
             wxString errorString;
@@ -189,10 +187,10 @@ wxWinINetInputStream::wxWinINetInputStream(HINTERNET hFile)
 
 void wxWinINetInputStream::Attach(HINTERNET newHFile)
 {
-    wxCHECK_RET(m_hFile==NULL,
+    wxCHECK_RET(m_hFile==nullptr,
         wxT("cannot attach new stream when stream already exists"));
     m_hFile=newHFile;
-    SetError(m_hFile!=NULL ? wxSTREAM_NO_ERROR : wxSTREAM_READ_ERROR);
+    SetError(m_hFile!=nullptr ? wxSTREAM_NO_ERROR : wxSTREAM_READ_ERROR);
 }
 
 wxWinINetInputStream::~wxWinINetInputStream()
@@ -231,7 +229,7 @@ wxInputStream *wxWinINetURL::GetInputStream(wxURL *owner)
                                 (
                                     GetSessionHandle(),
                                     owner->GetURL(),
-                                    NULL,
+                                    nullptr,
                                     0,
                                     INTERNET_FLAG_KEEP_CONNECTION |
                                     INTERNET_FLAG_PASSIVE,

@@ -2,7 +2,6 @@
 // Name:        wx/hashset.h
 // Purpose:     wxHashSet class
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     11/08/2003
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence
@@ -16,79 +15,40 @@
 // see comment in wx/hashmap.h which also applies to different standard hash
 // set classes
 
-#if wxUSE_STD_CONTAINERS && \
-    (defined(HAVE_STD_UNORDERED_SET) || defined(HAVE_TR1_UNORDERED_SET))
+#if wxUSE_STD_CONTAINERS
 
-#if defined(HAVE_STD_UNORDERED_SET)
-    #include <unordered_set>
-    #define WX_HASH_SET_BASE_TEMPLATE std::unordered_set
-#elif defined(HAVE_TR1_UNORDERED_SET)
-    #include <tr1/unordered_set>
-    #define WX_HASH_SET_BASE_TEMPLATE std::tr1::unordered_set
-#else
-    #error Update this code: unordered_set is available, but I do not know where.
-#endif
-
-#elif wxUSE_STD_CONTAINERS && defined(HAVE_STL_HASH_MAP)
-
-#if defined(HAVE_EXT_HASH_MAP)
-    #include <ext/hash_set>
-#elif defined(HAVE_HASH_MAP)
-    #include <hash_set>
-#endif
-
-#define WX_HASH_SET_BASE_TEMPLATE WX_HASH_MAP_NAMESPACE::hash_set
-
-#endif // different hash_set/unordered_set possibilities
-
-#ifdef WX_HASH_SET_BASE_TEMPLATE
+#include <unordered_set>
 
 // we need to define the class declared by _WX_DECLARE_HASH_SET as a class and
 // not a typedef to allow forward declaring it
 #define _WX_DECLARE_HASH_SET_IMPL( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )  \
 CLASSEXP CLASSNAME                                                            \
-    : public WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >             \
+    : public std::unordered_set< KEY_T, HASH_T, KEY_EQ_T >                    \
 {                                                                             \
 public:                                                                       \
     explicit CLASSNAME(size_type n = 3,                                       \
                        const hasher& h = hasher(),                            \
                        const key_equal& ke = key_equal(),                     \
                        const allocator_type& a = allocator_type())            \
-        : WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >(n, h, ke, a)   \
+        : std::unordered_set< KEY_T, HASH_T, KEY_EQ_T >(n, h, ke, a)          \
     {}                                                                        \
     template <class InputIterator>                                            \
     CLASSNAME(InputIterator f, InputIterator l,                               \
               const hasher& h = hasher(),                                     \
               const key_equal& ke = key_equal(),                              \
               const allocator_type& a = allocator_type())                     \
-        : WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >(f, l, h, ke, a)\
+        : std::unordered_set< KEY_T, HASH_T, KEY_EQ_T >(f, l, h, ke, a)       \
     {}                                                                        \
-    CLASSNAME(const WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >& s)  \
-        : WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >(s)             \
+    CLASSNAME(const std::unordered_set< KEY_T, HASH_T, KEY_EQ_T >& s)         \
+        : std::unordered_set< KEY_T, HASH_T, KEY_EQ_T >(s)                    \
     {}                                                                        \
 }
-
-// In some standard library implementations (in particular, the libstdc++ that
-// ships with g++ 4.7), std::unordered_set inherits privately from its hasher
-// and comparator template arguments for purposes of empty base optimization.
-// As a result, in the declaration of a class deriving from std::unordered_set
-// the names of the hasher and comparator classes are interpreted as naming
-// the base class which is inaccessible.
-// The workaround is to prefix the class names with 'struct'; however, don't
-// do this unconditionally, as with other compilers (both MSVC and clang)
-// doing it causes a warning if the class was declared as a 'class' rather than
-// a 'struct'.
-#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ == 7)
-#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) struct STRUCTNAME
-#else
-#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) STRUCTNAME
-#endif
 
 #define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )   \
     _WX_DECLARE_HASH_SET_IMPL(                                                \
         KEY_T,                                                                \
-        WX_MAYBE_PREFIX_WITH_STRUCT(HASH_T),                                  \
-        WX_MAYBE_PREFIX_WITH_STRUCT(KEY_EQ_T),                                \
+        HASH_T,                                                               \
+        KEY_EQ_T,                                                             \
         PTROP,                                                                \
         CLASSNAME,                                                            \
         CLASSEXP)
@@ -103,7 +63,7 @@ CLASSEXP CLASSNAME                                                           \
     typedef const key_type const_key_type;                                   \
     typedef const_key_type& const_key_reference;                             \
 public:                                                                      \
-    CLASSNAME() { }                                                          \
+    CLASSNAME() = default;                                                          \
     const_key_reference operator()( const_key_reference key ) const          \
         { return key; }                                                      \
 };

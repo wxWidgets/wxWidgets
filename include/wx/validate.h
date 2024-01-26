@@ -2,7 +2,6 @@
 // Name:        wx/validate.h
 // Purpose:     wxValidator class
 // Author:      Julian Smart
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
@@ -43,12 +42,12 @@ public:
     }
     virtual ~wxValidator();
 
-    // Make a clone of this validator (or return NULL) - currently necessary
+    // Make a clone of this validator (or return nullptr) - currently necessary
     // if you're passing a reference to a validator.
     // Another possibility is to always pass a pointer to a new validator
     // (so the calling code can use a copy constructor of the relevant class).
     virtual wxObject *Clone() const
-        { return NULL; }
+        { return nullptr; }
     bool Copy(const wxValidator& val)
         { m_validatorWindow = val.m_validatorWindow; return true; }
 
@@ -80,12 +79,6 @@ public:
     // this function is deprecated because it handled its parameter
     // unnaturally: it disabled the bell when it was true, not false as could
     // be expected; use SuppressBellOnError() instead
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE(static
-        void SetBellOnError(bool doIt = true),
-        ms_isSilent = doIt;
-    )
-#endif
 
 protected:
     wxWindow *m_validatorWindow;

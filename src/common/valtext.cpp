@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/clipbrd.h"
 #include "wx/combo.h"
 
 // ----------------------------------------------------------------------------
@@ -57,6 +58,7 @@ static bool wxIsNumeric(const wxString& val)
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
+    EVT_TEXT_PASTE(wxID_ANY, wxTextValidator::OnPaste)
 wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
@@ -119,7 +121,7 @@ wxTextEntry *wxTextValidator::GetTextEntry()
         "or wxComboCtrl"
     );
 
-    return NULL;
+    return nullptr;
 }
 
 // Called when the value in the window must be validated.
@@ -280,14 +282,8 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     if (!m_validatorWindow)
         return;
 
-#if wxUSE_UNICODE
     // We only filter normal, printable characters.
     int keyCode = event.GetUnicodeKey();
-#else // !wxUSE_UNICODE
-    int keyCode = event.GetKeyCode();
-    if ( keyCode > WXK_START )
-        return;
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // we don't filter special keys and delete
     if (keyCode < WXK_SPACE || keyCode == WXK_DELETE)
@@ -302,6 +298,69 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 
     // eat message
     event.Skip(false);
+}
+
+void wxTextValidator::OnPaste(wxClipboardTextEvent& event)
+{
+#if wxUSE_CLIPBOARD
+    // Filter out invalid characters from the clipboard contents as it
+    // shouldn't be possible to sneak them into the control in such a way.
+    //
+    // This seems better than not allowing to paste anything at all if there is
+    // anything invalid on the clipboard, e.g. it is more user-friendly to omit
+    // any trailing spaces in a control not allowing them than to refuse to
+    // paste a string with some spaces into it completely.
+    //
+    // Out of abundance of caution also prefer to let the control do its own
+    // thing if there are no invalid characters at all, as we can be sure it
+    // does the right thing in all cases, while our code might not deal with
+    // some edge cases correctly.
+    wxClipboardLocker lock;
+    wxTextDataObject data;
+    wxTheClipboard->GetData(data);
+    const wxString& text = data.GetText();
+
+    wxString valid;
+    valid.reserve(text.length());
+
+    bool hasInvalid = false;
+
+    // Examine all characters one by one.
+    for ( wxString::const_iterator i = text.begin(), end = text.end();
+          i != end; ++i )
+    {
+        const wxUniChar ch = *i;
+
+        if ( IsValidChar(ch) )
+        {
+            valid += ch;
+        }
+        else // Invalid character.
+        {
+            // Only beep once per paste, not for every invalid character.
+            if ( !hasInvalid && !wxValidator::IsSilent() )
+                wxBell();
+
+            hasInvalid = true;
+        }
+    }
+
+    // If we can't let the control paste everything, do it ourselves.
+    if ( hasInvalid )
+    {
+        wxTextEntry * const entry = GetTextEntry();
+        if ( entry )
+        {
+            entry->WriteText(valid);
+
+            // Skip the call to wxEvent::Skip() below, preventing the normal
+            // paste from happening.
+            return;
+        }
+    }
+#endif // wxUSE_CLIPBOARD
+
+    event.Skip();
 }
 
 bool wxTextValidator::IsValidChar(const wxUniChar& c) const

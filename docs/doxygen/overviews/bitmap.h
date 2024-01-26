@@ -23,67 +23,79 @@ as a drawing surface.
 
 See wxMemoryDC for an example of drawing onto a bitmap.
 
-All wxWidgets platforms support XPMs for small bitmaps and icons. You may
-include the XPM inline as below, since it's C code, or you can load it at
-run-time.
+
+@section overview_bitmap_embedding Including Bitmaps in Your Program
+
+It is common to need to embed some small bitmaps to be used for bitmaps or
+icons in the program itself, instead of loading them from external files as
+would be done for larger images. wxWidgets provides a few helper macros hiding
+the differences between the platforms for doing this: wxBITMAP_PNG(), which
+loads images from embedded PNG files and resources, or wxICON() and wxBITMAP()
+which load images from a Windows resource of the corresponding type or from
+XPM file included in the program.
+
+wxBITMAP_PNG() is generally better because PNG images support full alpha
+channel, unlike the XPM ones, but requires converting PNG files to a C array
+before including it into your program, see its documentation. If you do not
+need alpha channel support, XPM images, which can be directly included into the
+program are simpler to use as you only need to do the following:
 
 @code
 #include "sample.xpm"
+
+MyFrame::MyFrame()
+{
+    wxIcon icon(wxICON(sample));
+}
 @endcode
 
-Sometimes you wish to use a .ico resource on Windows, and XPMs on other
-platforms (for example to take advantage of Windows' support for multiple icon
-resolutions).
-
-A macro, wxICON(), is available which creates an icon using an XPM on the
-appropriate platform, or an icon resource on Windows:
+which is equivalent to
 
 @code
-wxIcon icon(wxICON(sample));
+#include "sample.xpm"
 
-// The above line is equivalent to this:
-
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+MyFrame::MyFrame()
+{
+#if defined(__WXGTK__)
     wxIcon icon(sample_xpm);
 #endif
 
+// ... similar checks for other platforms ...
+
 #if defined(__WXMSW__)
-    wxIcon icon("sample");
+    wxIcon icon("sample"); // loaded from Windows resources (.rc file)
 #endif
+}
 @endcode
 
-There is also a corresponding wxBITMAP() macro which allows to create the
-bitmaps in much the same way as wxICON() creates icons. It assumes that bitmaps
-live in resources under Windows and XPM files under all other platforms
-(for XPMs, the corresponding file must be included before this macro is used,
-of course, and the name of the bitmap should be the same as the resource name
-under Windows with @c _xpm suffix). For example:
+but is, of course, much simpler and more clear. There is also a corresponding
+wxBITMAP() macro which works in the same way but
+creates a wxBitmap rather than wxIcon.
+
+Note that including XPM files under Windows is harmless, but not really
+necessary, as they are not used there and can be avoided by testing for
+`wxHAS_IMAGES_IN_RESOURCES` symbol, i.e. you would typically do
 
 @code
-// an easy and portable way to create a bitmap
-wxBitmap bmp(wxBITMAP(bmpname));
-
-// which is roughly equivalent to the following
-#if defined(__WXMSW__)
-    wxBitmap bmp("bmpname", wxBITMAP_TYPE_BMP_RESOURCE);
-#else // Unix
-    wxBitmap bmp(bmpname_xpm, wxBITMAP_TYPE_XPM);
+#ifndef wxHAS_IMAGES_IN_RESOURCES
+    #include "bitmaps/north.xpm"
+    #include "bitmaps/south.xpm"
+    #include "bitmaps/east.xpm"
+    #include "bitmaps/west.xpm"
 #endif
+
+MyFrame::MyFrame()
+{
+    wxBitmap bmpN = wxBITMAP(north);
+    ...
+}
 @endcode
 
-You should always use wxICON() and wxBITMAP() macros because they work for any
-platform (unlike the code above which doesn't deal with wxMac, wxX11, ...) and
-are shorter and more clear than versions with many @ifdef_ blocks.
-Alternatively, you could use the same XPMs on all platforms and avoid dealing
-with Windows resource files.
-
-If you'd like to embed bitmaps with alpha transparency in your program, neither
-XPM nor BMP formats are appropriate as they don't have support for alpha and
-another format, typically PNG, should be used. wxWidgets provides a similar
-helper for PNG bitmaps called wxBITMAP_PNG() that can be used to either load
-PNG files embedded in resources (meaning either Windows resource section of the
-executable file or macOS "Resource" subdirectory of the application bundle) or
-arrays containing PNG data included into the program code itself.
+Finally note that you may also want to use XPMs under all platforms, including
+Windows, for simplicity, and to avoid having to deal with Windows resource
+files (however you still need to define the application icon there). In this
+case you should _not_ use wxICON() and wxBITMAP() macros as they expect to find
+the images in Windows resources when building Windows programs.
 
 @see @ref group_class_gdi
 
@@ -116,7 +128,7 @@ Under wxGTK, wxBitmap may load the following formats:
 @li XPM data and file (wxBITMAP_TYPE_XPM)
 @li All formats that are supported by the wxImage class.
 
-Under wxMotif and wxX11, wxBitmap may load the following formats:
+Under wxX11, wxBitmap may load the following formats:
 
 @li XBM data and file (wxBITMAP_TYPE_XBM)
 @li XPM data and file (wxBITMAP_TYPE_XPM)
@@ -135,7 +147,7 @@ Under wxGTK, wxIcon may load the following formats:
 @li XPM data and file (wxBITMAP_TYPE_XPM)
 @li All formats that are supported by the wxImage class.
 
-Under wxMotif and wxX11, wxIcon may load the following formats:
+Under wxX11, wxIcon may load the following formats:
 
 @li XBM data and file (wxBITMAP_TYPE_XBM)
 @li XPM data and file (wxBITMAP_TYPE_XPM)
@@ -155,7 +167,7 @@ cursors):
 
 @li None (stock cursors only).
 
-Under wxMotif and wxX11, wxCursor may load the following formats:
+Under wxX11, wxCursor may load the following formats:
 
 @li XBM data and file (wxBITMAP_TYPE_XBM).
 

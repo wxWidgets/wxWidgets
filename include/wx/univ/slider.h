@@ -2,7 +2,6 @@
 // Name:        wx/univ/slider.h
 // Purpose:     wxSlider control for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     09.02.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -61,22 +60,22 @@ public:
                 const wxString& name = wxASCII_STR(wxSliderNameStr));
 
     // implement base class pure virtuals
-    virtual int GetValue() const wxOVERRIDE;
-    virtual void SetValue(int value) wxOVERRIDE;
+    virtual int GetValue() const override;
+    virtual void SetValue(int value) override;
 
-    virtual void SetRange(int minValue, int maxValue) wxOVERRIDE;
-    virtual int GetMin() const wxOVERRIDE;
-    virtual int GetMax() const wxOVERRIDE;
+    virtual void SetRange(int minValue, int maxValue) override;
+    virtual int GetMin() const override;
+    virtual int GetMax() const override;
 
-    virtual void SetLineSize(int lineSize) wxOVERRIDE;
-    virtual void SetPageSize(int pageSize) wxOVERRIDE;
-    virtual int GetLineSize() const wxOVERRIDE;
-    virtual int GetPageSize() const wxOVERRIDE;
+    virtual void SetLineSize(int lineSize) override;
+    virtual void SetPageSize(int pageSize) override;
+    virtual int GetLineSize() const override;
+    virtual int GetPageSize() const override;
 
-    virtual void SetThumbLength(int lenPixels) wxOVERRIDE;
-    virtual int GetThumbLength() const wxOVERRIDE;
+    virtual void SetThumbLength(int lenPixels) override;
+    virtual int GetThumbLength() const override;
 
-    virtual int GetTickFreq() const wxOVERRIDE { return m_tickFreq; }
+    virtual int GetTickFreq() const override { return m_tickFreq; }
 
     // wxUniv-specific methods
     // -----------------------
@@ -99,32 +98,32 @@ public:
                  ((GetWindowStyle() & (wxSL_TOP|wxSL_BOTTOM|wxSL_LEFT|wxSL_RIGHT|wxSL_BOTH)) != 0); }
 
     // implement wxControlWithThumb interface
-    virtual wxWindow *GetWindow() wxOVERRIDE { return this; }
-    virtual bool IsVertical() const wxOVERRIDE { return IsVert(); }
+    virtual wxWindow *GetWindow() override { return this; }
+    virtual bool IsVertical() const override { return IsVert(); }
 
-    virtual wxScrollThumb::Shaft HitTest(const wxPoint& pt) const wxOVERRIDE;
-    virtual wxCoord ThumbPosToPixel() const wxOVERRIDE;
-    virtual int PixelToThumbPos(wxCoord x) const wxOVERRIDE;
+    virtual wxScrollThumb::Shaft HitTest(const wxPoint& pt) const override;
+    virtual wxCoord ThumbPosToPixel() const override;
+    virtual int PixelToThumbPos(wxCoord x) const override;
 
     virtual void SetShaftPartState(wxScrollThumb::Shaft shaftPart,
                                    int flag,
-                                   bool set = true) wxOVERRIDE;
+                                   bool set = true) override;
 
-    virtual void OnThumbDragStart(int pos) wxOVERRIDE;
-    virtual void OnThumbDrag(int pos) wxOVERRIDE;
-    virtual void OnThumbDragEnd(int pos) wxOVERRIDE;
-    virtual void OnPageScrollStart() wxOVERRIDE;
-    virtual bool OnPageScroll(int pageInc) wxOVERRIDE;
+    virtual void OnThumbDragStart(int pos) override;
+    virtual void OnThumbDrag(int pos) override;
+    virtual void OnThumbDragEnd(int pos) override;
+    virtual void OnPageScrollStart() override;
+    virtual bool OnPageScroll(int pageInc) override;
 
     // for wxStdSliderInputHandler
     wxScrollThumb& GetThumb() { return m_thumb; }
 
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0,
-                               const wxString& strArg = wxEmptyString) wxOVERRIDE;
+                               const wxString& strArg = wxEmptyString) override;
 
     static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) wxOVERRIDE
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) override
     {
         return GetStdInputHandler(handlerDef);
     }
@@ -136,12 +135,12 @@ protected:
     };
 
     // Platform-specific implementation of SetTickFreq
-    virtual void DoSetTickFreq(int freq) wxOVERRIDE;
+    virtual void DoSetTickFreq(int freq) override;
 
     // overridden base class virtuals
-    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxSize DoGetBestClientSize() const override;
+    virtual void DoDraw(wxControlRenderer *renderer) override;
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // event handlers
     void OnSize(wxSizeEvent& event);
@@ -177,7 +176,7 @@ protected:
     wxRect GetShaftRect() const;
 
     // calc the current thumb position using the shaft rect (if the pointer is
-    // NULL, we calculate it here too)
+    // null, we calculate it here too)
     void CalcThumbRect(const wxRect *rectShaft,
                        wxRect *rectThumbOut,
                        wxRect *rectLabelOut,

@@ -25,12 +25,12 @@ class ListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 public:
     ListBoxTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_list; }
-    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_list; }
+    virtual wxItemContainer *GetContainer() const override { return m_list; }
+    virtual wxWindow *GetContainerWindow() const override { return m_list; }
 
     CPPUNIT_TEST_SUITE( ListBoxTestCase );
         wxITEM_CONTAINER_TESTS();
@@ -76,7 +76,7 @@ void ListBoxTestCase::setUp()
     if( ms_ownerdrawn )
     {
         m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
-                               wxDefaultPosition, wxSize(300, 200), 0, NULL,
+                               wxDefaultPosition, wxSize(300, 200), 0, nullptr,
                                wxLB_OWNERDRAW);
     }
     else
@@ -96,7 +96,7 @@ void ListBoxTestCase::Sort()
 #ifndef __WXOSX__
     wxDELETE(m_list);
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, 0,
+                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
                             wxLB_SORT);
 
     wxArrayString testitems;
@@ -109,12 +109,21 @@ void ListBoxTestCase::Sort()
 
     m_list->Append(testitems);
 
+#ifndef __WXQT__
     CPPUNIT_ASSERT_EQUAL("AAA", m_list->GetString(0));
     CPPUNIT_ASSERT_EQUAL("Aaa", m_list->GetString(1));
     CPPUNIT_ASSERT_EQUAL("aaa", m_list->GetString(2));
     CPPUNIT_ASSERT_EQUAL("aaab", m_list->GetString(3));
     CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
     CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
+#else
+    CPPUNIT_ASSERT_EQUAL("aaa", m_list->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("Aaa", m_list->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("AAA", m_list->GetString(2));
+    CPPUNIT_ASSERT_EQUAL("aaab", m_list->GetString(3));
+    CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
+    CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
+#endif
 
     m_list->Append("a", wxUIntToPtr(1));
 
@@ -127,7 +136,7 @@ void ListBoxTestCase::MultipleSelect()
 {
     wxDELETE(m_list);
     m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY,
-                            wxDefaultPosition, wxDefaultSize, 0, 0,
+                            wxDefaultPosition, wxDefaultSize, 0, nullptr,
                             wxLB_MULTIPLE);
 
     wxArrayString testitems;
@@ -190,8 +199,8 @@ void ListBoxTestCase::ClickEvents()
 
     m_list->Append(testitems);
 
-    m_list->Update();
     m_list->Refresh();
+    m_list->Update();
 
     sim.MouseMove(m_list->ClientToScreen(wxPoint(10, 10)));
     wxYield();
@@ -233,8 +242,8 @@ void ListBoxTestCase::ClickNotOnItem()
     // simply avoid it by starting with a valid selection.
     m_list->SetSelection(0);
 
-    m_list->Update();
     m_list->Refresh();
+    m_list->Update();
 
     sim.MouseMove(m_list->ClientToScreen(wxPoint(m_list->GetSize().x - 10, m_list->GetSize().y - 10)));
     wxYield();

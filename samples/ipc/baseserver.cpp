@@ -42,28 +42,28 @@
 class MyConnection : public MyConnectionBase, public wxTimer
 {
 public:
-    virtual bool Disconnect() wxOVERRIDE { return wxConnection::Disconnect(); }
+    virtual bool Disconnect() override { return wxConnection::Disconnect(); }
     virtual bool OnExecute(const wxString& topic,
                            const void *data,
                            size_t size,
-                           wxIPCFormat format) wxOVERRIDE;
+                           wxIPCFormat format) override;
     virtual const void *OnRequest(const wxString& topic,
                                   const wxString& item,
                                   size_t *size,
-                                  wxIPCFormat format) wxOVERRIDE;
+                                  wxIPCFormat format) override;
     virtual bool OnPoke(const wxString& topic,
                         const wxString& item,
                         const void *data,
                         size_t size,
-                        wxIPCFormat format) wxOVERRIDE;
-    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
-    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
+                        wxIPCFormat format) override;
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) override;
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) override;
     virtual bool DoAdvise(const wxString& item,
                           const void *data,
                           size_t size,
-                          wxIPCFormat format) wxOVERRIDE;
-    virtual bool OnDisconnect() wxOVERRIDE;
-    virtual void Notify() wxOVERRIDE;
+                          wxIPCFormat format) override;
+    virtual bool OnDisconnect() override;
+    virtual void Notify() override;
 
 private:
     wxString        m_sAdvise;
@@ -78,14 +78,16 @@ class BenchConnection : public wxConnection
 {
 public:
     BenchConnection() { m_advise = false; }
+    BenchConnection(const BenchConnection&) = delete;
+    BenchConnection& operator=(const BenchConnection&) = delete;
 
     virtual bool OnPoke(const wxString& topic,
                         const wxString& item,
                         const void *data,
                         size_t size,
-                        wxIPCFormat format) wxOVERRIDE;
-    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
-    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
+                        wxIPCFormat format) override;
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) override;
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) override;
 
 private:
     // return true if this is the supported topic+item combination, log an
@@ -99,8 +101,6 @@ private:
 
     // should we notify the client about changes to m_item?
     bool m_advise;
-
-    wxDECLARE_NO_COPY_CLASS(BenchConnection);
 };
 
 // a simple server accepting connections to IPC_TOPIC and IPC_BENCHMARK_TOPIC
@@ -110,9 +110,9 @@ public:
     MyServer();
     virtual ~MyServer();
     void Disconnect();
-    bool IsConnected() { return m_connection != NULL; }
+    bool IsConnected() { return m_connection != nullptr; }
 
-    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) wxOVERRIDE;
+    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) override;
 
 private:
     wxConnection *m_connection;
@@ -122,7 +122,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
 protected:
     MyServer m_server;
@@ -172,7 +172,7 @@ bool MyApp::OnInit()
 
 MyServer::MyServer()
 {
-    m_connection = NULL;
+    m_connection = nullptr;
 }
 
 MyServer::~MyServer()
@@ -195,7 +195,7 @@ wxConnectionBase *MyServer::OnAcceptConnection(const wxString& topic)
     else // unknown topic
     {
         wxLogMessage("Unknown topic");
-        return NULL;
+        return nullptr;
     }
 
     wxLogMessage("Connection accepted");
@@ -255,7 +255,7 @@ MyConnection::OnRequest(const wxString& topic,
         m_sRequestDate = wxDateTime::Now().FormatTime() +
                             " " + wxDateTime::Now().FormatDate();
         data = m_sRequestDate.c_str();
-        *size = m_sRequestDate.Length() + 1;
+        *size = m_sRequestDate.length() + 1;
     }
     else if (item == "bytes[3]")
     {
@@ -267,7 +267,7 @@ MyConnection::OnRequest(const wxString& topic,
     }
     else
     {
-        data = NULL;
+        data = nullptr;
         *size = 0;
     }
     Log("OnRequest", topic, item, data, *size, format);

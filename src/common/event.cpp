@@ -2,7 +2,6 @@
 // Name:        src/common/event.cpp
 // Purpose:     Event classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -45,10 +44,7 @@
 #include "wx/thread.h"
 
 #if wxUSE_BASE
-    #include "wx/scopedptr.h"
-
-    wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
-    wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
+    #include <memory>
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
@@ -120,7 +116,7 @@ const wxEventTable *wxEvtHandler::GetEventTable() const
     { return &wxEvtHandler::sm_eventTable; }
 
 const wxEventTable wxEvtHandler::sm_eventTable =
-    { (const wxEventTable *)NULL, &wxEvtHandler::sm_eventTableEntries[0] };
+    { (const wxEventTable *)nullptr, &wxEvtHandler::sm_eventTableEntries[0] };
 
 wxEventHashTable &wxEvtHandler::GetEventHashTable() const
     { return wxEvtHandler::sm_eventHashTable; }
@@ -130,27 +126,6 @@ wxEventHashTable wxEvtHandler::sm_eventHashTable(wxEvtHandler::sm_eventTable);
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
     { wxDECLARE_EVENT_TABLE_TERMINATOR() };
 
-
-// wxUSE_MEMORY_TRACING considers memory freed from the static objects dtors
-// leaked, so we need to manually clean up all event tables before checking for
-// the memory leaks when using it, however this breaks re-initializing the
-// library (i.e. repeated calls to wxInitialize/wxUninitialize) because the
-// event tables won't be rebuilt the next time, so disable this by default
-#if wxUSE_MEMORY_TRACING
-
-class wxEventTableEntryModule: public wxModule
-{
-public:
-    wxEventTableEntryModule() { }
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxEventHashTable::ClearAll(); }
-
-    wxDECLARE_DYNAMIC_CLASS(wxEventTableEntryModule);
-};
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule);
-
-#endif // wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -379,15 +354,15 @@ wxEventFunctor::~wxEventFunctor()
 wxEvent::wxEvent(int theId, wxEventType commandType)
     : m_eventType(commandType)
 {
-    m_eventObject = NULL;
+    m_eventObject = nullptr;
     m_timeStamp = 0;
     m_id = theId;
     m_skipped = false;
-    m_callbackUserData = NULL;
-    m_handlerToProcessOnlyIn = NULL;
+    m_callbackUserData = nullptr;
+    m_handlerToProcessOnlyIn = nullptr;
     m_isCommandEvent = false;
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
-    m_propagatedFrom = NULL;
+    m_propagatedFrom = nullptr;
     m_wasProcessed = false;
     m_willBeProcessedAgain = false;
 }
@@ -399,9 +374,9 @@ wxEvent::wxEvent(const wxEvent& src)
     , m_timeStamp(src.m_timeStamp)
     , m_id(src.m_id)
     , m_callbackUserData(src.m_callbackUserData)
-    , m_handlerToProcessOnlyIn(NULL)
+    , m_handlerToProcessOnlyIn(nullptr)
     , m_propagationLevel(src.m_propagationLevel)
-    , m_propagatedFrom(NULL)
+    , m_propagatedFrom(nullptr)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
     , m_wasProcessed(false)
@@ -418,9 +393,9 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
     m_timeStamp = src.m_timeStamp;
     m_id = src.m_id;
     m_callbackUserData = src.m_callbackUserData;
-    m_handlerToProcessOnlyIn = NULL;
+    m_handlerToProcessOnlyIn = nullptr;
     m_propagationLevel = src.m_propagationLevel;
-    m_propagatedFrom = NULL;
+    m_propagatedFrom = nullptr;
     m_skipped = src.m_skipped;
     m_isCommandEvent = src.m_isCommandEvent;
 
@@ -768,16 +743,13 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 // ----------------------------------------------------------------------------
 
 wxKeyEvent::wxKeyEvent(wxEventType type)
-#if wxUSE_UNICODE
     : m_uniChar(WXK_NONE)
-#endif
 {
     m_eventType = type;
     m_keyCode = WXK_NONE;
 
     m_x =
     m_y = wxDefaultCoord;
-    m_hasPosition = false;
 
     InitPropagation();
 }
@@ -941,6 +913,11 @@ wxHelpEvent::Origin wxHelpEvent::GuessOrigin(Origin origin)
 // wxDPIChangedEvent
 // ----------------------------------------------------------------------------
 
+wxPoint wxDPIChangedEvent::Scale(wxPoint pt) const
+{
+    return wxRescaleCoord(pt).From(m_oldDPI).To(m_newDPI);
+}
+
 wxSize wxDPIChangedEvent::Scale(wxSize sz) const
 {
     return wxRescaleCoord(sz).From(m_oldDPI).To(m_newDPI);
@@ -957,7 +934,7 @@ wxSize wxDPIChangedEvent::Scale(wxSize sz) const
 
 static const int EVENT_TYPE_TABLE_INIT_SIZE = 31; // Not too big not too small...
 
-wxEventHashTable* wxEventHashTable::sm_first = NULL;
+wxEventHashTable* wxEventHashTable::sm_first = nullptr;
 
 wxEventHashTable::wxEventHashTable(const wxEventTable &table)
                 : m_table(table),
@@ -995,21 +972,6 @@ void wxEventHashTable::Clear()
 
     m_size = 0;
 }
-
-#if wxUSE_MEMORY_TRACING
-
-// Clear all tables
-void wxEventHashTable::ClearAll()
-{
-    wxEventHashTable* table = sm_first;
-    while (table)
-    {
-        table->Clear();
-        table = table->m_next;
-    }
-}
-
-#endif // wxUSE_MEMORY_TRACING
 
 bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
 {
@@ -1052,7 +1014,7 @@ void wxEventHashTable::InitHashTable()
     {
         // Retrieve all valid event handler entries
         const wxEventTableEntry *entry = table->entries;
-        while (entry->m_fn != 0)
+        while (entry->m_fn != nullptr)
         {
             // Add the event entry in the Hash.
             AddEntry(*entry);
@@ -1155,14 +1117,14 @@ void wxEventHashTable::GrowEventTypeTable()
 
 wxEvtHandler::wxEvtHandler()
 {
-    m_nextHandler = NULL;
-    m_previousHandler = NULL;
+    m_nextHandler = nullptr;
+    m_previousHandler = nullptr;
     m_enabled = true;
-    m_dynamicEvents = NULL;
-    m_pendingEvents = NULL;
+    m_dynamicEvents = nullptr;
+    m_pendingEvents = nullptr;
 
     // no client data (yet)
-    m_clientData = NULL;
+    m_clientData = nullptr;
     m_clientDataType = wxClientData_None;
 }
 
@@ -1218,21 +1180,21 @@ void wxEvtHandler::Unlink()
     if (m_nextHandler)
         m_nextHandler->SetPreviousHandler(m_previousHandler);
 
-    m_nextHandler = NULL;
-    m_previousHandler = NULL;
+    m_nextHandler = nullptr;
+    m_previousHandler = nullptr;
 }
 
 bool wxEvtHandler::IsUnlinked() const
 {
-    return m_previousHandler == NULL &&
-           m_nextHandler == NULL;
+    return m_previousHandler == nullptr &&
+           m_nextHandler == nullptr;
 }
 
-wxEventFilter* wxEvtHandler::ms_filterList = NULL;
+wxEventFilter* wxEvtHandler::ms_filterList = nullptr;
 
 /* static */ void wxEvtHandler::AddFilter(wxEventFilter* filter)
 {
-    wxCHECK_RET( filter, "NULL filter" );
+    wxCHECK_RET( filter, "null filter" );
 
     filter->m_next = ms_filterList;
     ms_filterList = filter;
@@ -1240,7 +1202,7 @@ wxEventFilter* wxEvtHandler::ms_filterList = NULL;
 
 /* static */ void wxEvtHandler::RemoveFilter(wxEventFilter* filter)
 {
-    wxEventFilter* prev = NULL;
+    wxEventFilter* prev = nullptr;
     for ( wxEventFilter* f = ms_filterList; f; f = f->m_next )
     {
         if ( f == filter )
@@ -1255,7 +1217,7 @@ wxEventFilter* wxEvtHandler::ms_filterList = NULL;
             // Also reset the next pointer in the filter itself just to avoid
             // having possibly dangling pointers, even though it's not strictly
             // necessary.
-            f->m_next = NULL;
+            f->m_next = nullptr;
 
             // Skip the assert below.
             return;
@@ -1284,7 +1246,7 @@ bool wxEvtHandler::ProcessThreadEvent(const wxEvent& event)
 
 void wxEvtHandler::QueueEvent(wxEvent *event)
 {
-    wxCHECK_RET( event, "NULL event can't be posted" );
+    wxCHECK_RET( event, "null event can't be posted" );
 
     if (!wxTheApp)
     {
@@ -1362,7 +1324,7 @@ void wxEvtHandler::ProcessPendingEvents()
         while (node && pEvent && !evtLoop->IsEventAllowedInsideYield(pEvent->GetEventCategory()))
         {
             node = node->GetNext();
-            pEvent = node ? static_cast<wxEvent *>(node->GetData()) : NULL;
+            pEvent = node ? static_cast<wxEvent *>(node->GetData()) : nullptr;
         }
 
         if (!node)
@@ -1379,7 +1341,7 @@ void wxEvtHandler::ProcessPendingEvents()
         }
     }
 
-    wxEventPtr event(pEvent);
+    std::unique_ptr<wxEvent> event(pEvent);
 
     // it's important we remove event from list before processing it, else a
     // nested event loop, for example from a modal dialog, might process the
@@ -1462,13 +1424,8 @@ bool wxEvtHandler::DoTryApp(wxEvent& event)
 
 bool wxEvtHandler::TryBefore(wxEvent& event)
 {
-#if WXWIN_COMPATIBILITY_2_8
-    // call the old virtual function to keep the code overriding it working
-    return TryValidator(event);
-#else
     wxUnusedVar(event);
     return false;
-#endif
 }
 
 bool wxEvtHandler::TryAfter(wxEvent& event)
@@ -1491,12 +1448,7 @@ bool wxEvtHandler::TryAfter(wxEvent& event)
     if ( event.WillBeProcessedAgain() )
         return false;
 
-#if WXWIN_COMPATIBILITY_2_8
-    // as above, call the old virtual function for compatibility
-    return TryParent(event);
-#else
     return DoTryApp(event);
-#endif
 }
 
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
@@ -1741,7 +1693,7 @@ void wxEvtHandler::WXConsumeException()
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {
     const wxEventType eventType = event.GetEventType();
-    for ( int i = 0; table.entries[i].m_fn != 0; i++ )
+    for ( int i = 0; table.entries[i].m_fn != nullptr; i++ )
     {
         const wxEventTableEntry& entry = table.entries[i];
         if ( eventType == entry.m_eventType )
@@ -1830,7 +1782,7 @@ wxEvtHandler::DoUnbind(int id,
             // Notice that we rely on "cookie" being just the index into the
             // vector, which is not guaranteed by our API, but here we can use
             // this implementation detail.
-            (*m_dynamicEvents)[cookie] = NULL;
+            (*m_dynamicEvents)[cookie] = nullptr;
 
             delete entry;
             return true;
@@ -1843,7 +1795,7 @@ wxDynamicEventTableEntry*
 wxEvtHandler::GetFirstDynamicEntry(size_t& cookie) const
 {
     if ( !m_dynamicEvents )
-        return NULL;
+        return nullptr;
 
     // The handlers are in LIFO order, so we must start at the end.
     cookie = m_dynamicEvents->size();
@@ -1864,7 +1816,7 @@ wxEvtHandler::GetNextDynamicEntry(size_t& cookie) const
             return entry;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
@@ -1948,7 +1900,7 @@ void wxEvtHandler::DoSetClientObject( wxClientData *data )
 wxClientData *wxEvtHandler::DoGetClientObject() const
 {
     // it's not an error to call GetClientObject() on a window which doesn't
-    // have client data at all - NULL will be returned
+    // have client data at all - nullptr will be returned
     wxASSERT_MSG( m_clientDataType != wxClientData_Void,
                   wxT("this window doesn't have object client data") );
 
@@ -1967,7 +1919,7 @@ void wxEvtHandler::DoSetClientData( void *data )
 void *wxEvtHandler::DoGetClientData() const
 {
     // it's not an error to call GetClientData() on a window which doesn't have
-    // client data at all - NULL will be returned
+    // client data at all - nullptr will be returned
     wxASSERT_MSG( m_clientDataType != wxClientData_Object,
                   wxT("this window doesn't have void client data") );
 
@@ -1989,7 +1941,7 @@ wxEvtHandler::FindRefInTrackerList(wxEvtHandler *eventSink)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
@@ -2009,7 +1961,7 @@ void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
 
             // Just as in DoUnbind(), we use our knowledge of
             // GetNextDynamicEntry() implementation here.
-            (*m_dynamicEvents)[cookie] = NULL;
+            (*m_dynamicEvents)[cookie] = nullptr;
         }
     }
 }
@@ -2027,7 +1979,7 @@ wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
     wxWindow* win = focusWin;
 
     // Check if this is a descendant of this frame.
-    // If not, win will be set to NULL.
+    // If not, win will be set to nullptr.
     while (win)
     {
         if (win == ancestor)
@@ -2035,8 +1987,8 @@ wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
         else
             win = win->GetParent();
     }
-    if (win == NULL)
-        focusWin = NULL;
+    if (win == nullptr)
+        focusWin = nullptr;
 
     return focusWin;
 }

@@ -39,8 +39,8 @@ class WXDLLIMPEXP_FWD_CORE wxVarScrollHelperEvtHandler;
 //       |            V               V             |           |
 //       |           wxVarHVScrollHelper            |           |
 //       |                      |                   |           |
-//       |                      |                   V           |
-//       |         wxPanel      |    wxVarVScrollLegacyAdaptor  |
+//       |                      |                   |           |
+//       |         wxPanel      |                   |           |
 //       |         /  \  \      |                   |           |
 //       |        /    \  `-----|----------.        |           |
 //       |       /      \       |           \       |           |
@@ -124,7 +124,7 @@ public:
     // change the DC origin according to the scroll position. To properly
     // forward calls to wxWindow::Layout use WX_FORWARD_TO_SCROLL_HELPER()
     // derived class
-    virtual void DoPrepareDC(wxDC& dc) wxOVERRIDE;
+    virtual void DoPrepareDC(wxDC& dc) override;
 
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
@@ -326,23 +326,23 @@ public:
     size_t GetVisibleRowsEnd() const            { return GetVisibleEnd(); }
     bool IsRowVisible(size_t row) const         { return IsVisible(row); }
 
-    virtual int GetOrientationTargetSize() const wxOVERRIDE
+    virtual int GetOrientationTargetSize() const override
         { return GetTargetWindow()->GetClientSize().y; }
-    virtual int GetNonOrientationTargetSize() const wxOVERRIDE
+    virtual int GetNonOrientationTargetSize() const override
         { return GetTargetWindow()->GetClientSize().x; }
-    virtual wxOrientation GetOrientation() const wxOVERRIDE { return wxVERTICAL; }
+    virtual wxOrientation GetOrientation() const override { return wxVERTICAL; }
 
 protected:
     // this function must be overridden in the derived class and it should
     // return the size of the given row in pixels
     virtual wxCoord OnGetRowHeight(size_t n) const = 0;
-    wxCoord OnGetUnitSize(size_t n) const wxOVERRIDE       { return OnGetRowHeight(n); }
+    wxCoord OnGetUnitSize(size_t n) const override       { return OnGetRowHeight(n); }
 
     virtual void OnGetRowsHeightHint(size_t WXUNUSED(rowMin),
                                      size_t WXUNUSED(rowMax)) const { }
 
     // forward calls to OnGetRowsHeightHint()
-    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const wxOVERRIDE
+    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const override
         { OnGetRowsHeightHint(unitMin, unitMax); }
 
     // again, if not overridden, it will fall back on default method
@@ -350,7 +350,7 @@ protected:
         { return DoEstimateTotalSize(); }
 
     // forward calls to EstimateTotalHeight()
-    virtual wxCoord EstimateTotalSize() const wxOVERRIDE { return EstimateTotalHeight(); }
+    virtual wxCoord EstimateTotalSize() const override { return EstimateTotalHeight(); }
 
     wxCoord GetRowsHeight(size_t rowMin, size_t rowMax) const
         { return GetUnitsSize(rowMin, rowMax); }
@@ -406,31 +406,31 @@ public:
         { return IsVisible(column); }
 
 
-    virtual int GetOrientationTargetSize() const wxOVERRIDE
+    virtual int GetOrientationTargetSize() const override
         { return GetTargetWindow()->GetClientSize().x; }
-    virtual int GetNonOrientationTargetSize() const wxOVERRIDE
+    virtual int GetNonOrientationTargetSize() const override
         { return GetTargetWindow()->GetClientSize().y; }
-    virtual wxOrientation GetOrientation() const wxOVERRIDE   { return wxHORIZONTAL; }
+    virtual wxOrientation GetOrientation() const override   { return wxHORIZONTAL; }
 
 protected:
     // this function must be overridden in the derived class and it should
     // return the size of the given column in pixels
     virtual wxCoord OnGetColumnWidth(size_t n) const = 0;
-    wxCoord OnGetUnitSize(size_t n) const wxOVERRIDE { return OnGetColumnWidth(n); }
+    wxCoord OnGetUnitSize(size_t n) const override { return OnGetColumnWidth(n); }
 
     virtual void OnGetColumnsWidthHint(size_t WXUNUSED(columnMin),
                                         size_t WXUNUSED(columnMax)) const
         { }
 
     // forward calls to OnGetColumnsWidthHint()
-    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const wxOVERRIDE
+    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const override
         { OnGetColumnsWidthHint(unitMin, unitMax); }
 
     // again, if not overridden, it will fall back on default method
     virtual wxCoord EstimateTotalWidth() const { return DoEstimateTotalSize(); }
 
     // forward calls to EstimateTotalWidth()
-    virtual wxCoord EstimateTotalSize() const wxOVERRIDE { return EstimateTotalWidth(); }
+    virtual wxCoord EstimateTotalSize() const override { return EstimateTotalWidth(); }
 
     wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const
         { return GetUnitsSize(columnMin, columnMax); }
@@ -513,7 +513,7 @@ public:
     // forward calls to wxWindow::Layout use WX_FORWARD_TO_SCROLL_HELPER()
     // derived class. We use this version to call both base classes'
     // DoPrepareDC()
-    virtual void DoPrepareDC(wxDC& dc) wxOVERRIDE;
+    virtual void DoPrepareDC(wxDC& dc) override;
 
     // replacement implementation of wxWindow::Layout virtual method.  To
     // properly forward calls to wxWindow::Layout use
@@ -539,124 +539,12 @@ public:
 };
 
 
-
-#if WXWIN_COMPATIBILITY_2_8
-
-// ===========================================================================
-// wxVarVScrollLegacyAdaptor
-// ===========================================================================
-
-// Provides backwards compatible API for applications originally built using
-// wxVScrolledWindow in 2.6 or 2.8. Originally, wxVScrolledWindow referred
-// to scrolling "lines". We use "units" in wxVarScrollHelperBase to avoid
-// implying any orientation (since the functions are used for both horizontal
-// and vertical scrolling in derived classes). And in the new
-// wxVScrolledWindow and wxHScrolledWindow classes, we refer to them as
-// "rows" and "columns", respectively. This is to help clear some confusion
-// in not only those classes, but also in wxHVScrolledWindow where functions
-// are inherited from both.
-
-class WXDLLIMPEXP_CORE wxVarVScrollLegacyAdaptor : public wxVarVScrollHelper
-{
-public:
-    // constructors and such
-    // ---------------------
-    wxVarVScrollLegacyAdaptor(wxWindow *winToScroll)
-        : wxVarVScrollHelper(winToScroll)
-    {
-    }
-
-    // accessors
-    // ---------
-
-    // this is the same as GetVisibleRowsBegin(), exists to match
-    // GetLastVisibleLine() and for backwards compatibility only
-    wxDEPRECATED( size_t GetFirstVisibleLine() const );
-
-    // get the last currently visible line
-    //
-    // this function is unsafe as it returns (size_t)-1 (i.e. a huge positive
-    // number) if the control is empty, use GetVisibleRowsEnd() instead, this
-    // one is kept for backwards compatibility
-    wxDEPRECATED( size_t GetLastVisibleLine() const );
-
-    // "line" to "unit" compatibility functions
-    // ----------------------------------------
-
-    // get the number of lines this window contains (set by SetLineCount())
-    wxDEPRECATED( size_t GetLineCount() const );
-
-    // set the number of lines the helper contains: the derived class must
-    // provide the sizes for all lines with indices up to the one given here
-    // in its OnGetLineHeight()
-    wxDEPRECATED( void SetLineCount(size_t count) );
-
-    // redraw the specified line
-    wxDEPRECATED( virtual void RefreshLine(size_t line) );
-
-    // redraw all lines in the specified range (inclusive)
-    wxDEPRECATED( virtual void RefreshLines(size_t from, size_t to) );
-
-    // scroll to the specified line: it will become the first visible line in
-    // the window
-    //
-    // return true if we scrolled the window, false if nothing was done
-    wxDEPRECATED( bool ScrollToLine(size_t line) );
-
-    // scroll by the specified number of lines/pages
-    wxDEPRECATED( virtual bool ScrollLines(int lines) );
-    wxDEPRECATED( virtual bool ScrollPages(int pages) );
-
-protected:
-    // unless the code has been updated to override OnGetRowHeight() instead,
-    // this function must be overridden in the derived class and it should
-    // return the height of the given row in pixels
-    wxDEPRECATED_BUT_USED_INTERNALLY(
-        virtual wxCoord OnGetLineHeight(size_t n) const );
-
-    // forwards the calls from base class pure virtual function to pure virtual
-    // OnGetLineHeight instead (backwards compatible name)
-    // note that we don't need to forward OnGetUnitSize() as it is already
-    // forwarded to OnGetRowHeight() in wxVarVScrollHelper
-    virtual wxCoord OnGetRowHeight(size_t n) const;
-
-    // this function doesn't have to be overridden but it may be useful to do
-    // it if calculating the lines heights is a relatively expensive operation
-    // as it gives the user code a possibility to calculate several of them at
-    // once
-    //
-    // OnGetLinesHint() is normally called just before OnGetLineHeight() but you
-    // shouldn't rely on the latter being called for all lines in the interval
-    // specified here. It is also possible that OnGetLineHeight() will be
-    // called for the lines outside of this interval, so this is really just a
-    // hint, not a promise.
-    //
-    // finally note that lineMin is inclusive, while lineMax is exclusive, as
-    // usual
-    wxDEPRECATED_BUT_USED_INTERNALLY( virtual void OnGetLinesHint(
-        size_t lineMin, size_t lineMax) const );
-
-    // forwards the calls from base class pure virtual function to pure virtual
-    // OnGetLinesHint instead (backwards compatible name)
-    void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const;
-};
-
-#else // !WXWIN_COMPATIBILITY_2_8
-
-// shortcut to avoid checking compatibility modes later
-// remove this and all references to wxVarVScrollLegacyAdaptor once
-// wxWidgets 2.6 and 2.8 compatibility is removed
-typedef wxVarVScrollHelper wxVarVScrollLegacyAdaptor;
-
-#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
-
-
 // this macro must be used in declaration of wxVarScrollHelperBase-derived
 // classes
 #define WX_FORWARD_TO_VAR_SCROLL_HELPER()                                     \
 public:                                                                       \
-    virtual void PrepareDC(wxDC& dc) wxOVERRIDE { DoPrepareDC(dc); }                     \
-    virtual bool Layout() wxOVERRIDE { return ScrollLayout(); }
+    virtual void PrepareDC(wxDC& dc) override { DoPrepareDC(dc); }                     \
+    virtual bool Layout() override { return ScrollLayout(); }
 
 
 
@@ -676,14 +564,14 @@ public:                                                                       \
 // of the window and not its entire client area.
 
 class WXDLLIMPEXP_CORE wxVScrolledWindow : public wxPanel,
-                                      public wxVarVScrollLegacyAdaptor
+                                      public wxVarVScrollHelper
 {
 public:
     // constructors and such
     // ---------------------
 
     // default ctor, you must call Create() later
-    wxVScrolledWindow() : wxVarVScrollLegacyAdaptor(this) { }
+    wxVScrolledWindow() : wxVarVScrollHelper(this) { }
 
     // normal ctor, no need to call Create() after this one
     //
@@ -695,7 +583,7 @@ public:
                       const wxSize& size = wxDefaultSize,
                       long style = 0,
                       const wxString& name = wxASCII_STR(wxPanelNameStr))
-    : wxVarVScrollLegacyAdaptor(this)
+    : wxVarVScrollHelper(this)
     {
         (void)Create(parent, id, pos, size, style, name);
     }
@@ -714,20 +602,11 @@ public:
         return wxPanel::Create(parent, id, pos, size, style | wxVSCROLL, name);
     }
 
-#if WXWIN_COMPATIBILITY_2_8
-    // Make sure we prefer our version of HitTest rather than wxWindow's
-    // These functions should no longer be masked in favor of VirtualHitTest()
-    int HitTest(wxCoord WXUNUSED(x), wxCoord y) const
-        { return wxVarVScrollHelper::VirtualHitTest(y); }
-    int HitTest(const wxPoint& pt) const
-        { return HitTest(pt.x, pt.y); }
-#endif // WXWIN_COMPATIBILITY_2_8
-
     WX_FORWARD_TO_VAR_SCROLL_HELPER()
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
+    virtual void UpdateMacScrollWindow() override { Update(); }
 #endif // __WXMAC__
 
 private:
@@ -794,7 +673,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
+    virtual void UpdateMacScrollWindow() override { Update(); }
 #endif // __WXMAC__
 
 private:
@@ -859,7 +738,7 @@ public:
 
 #ifdef __WXMAC__
 protected:
-    virtual void UpdateMacScrollWindow() wxOVERRIDE { Update(); }
+    virtual void UpdateMacScrollWindow() override { Update(); }
 #endif // __WXMAC__
 
 private:

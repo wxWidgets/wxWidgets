@@ -2,7 +2,6 @@
 // Name:        wx/msw/menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -32,20 +31,20 @@ class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *parentMenu = NULL,
+    wxMenuItem(wxMenu *parentMenu = nullptr,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = NULL);
+               wxMenu *subMenu = nullptr);
     virtual ~wxMenuItem();
 
     // override base class virtuals
-    virtual void SetItemLabel(const wxString& strName) wxOVERRIDE;
+    virtual void SetItemLabel(const wxString& strName) override;
 
-    virtual void Enable(bool bDoEnable = true) wxOVERRIDE;
-    virtual void Check(bool bDoCheck = true) wxOVERRIDE;
-    virtual bool IsChecked() const wxOVERRIDE;
+    virtual void Enable(bool bDoEnable = true) override;
+    virtual void Check(bool bDoCheck = true) override;
+    virtual bool IsChecked() const override;
 
     // unfortunately needed to resolve ambiguity between
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
@@ -59,18 +58,6 @@ public:
     // Win32 API
     WXWPARAM GetMSWId() const;
 
-#if WXWIN_COMPATIBILITY_2_8
-    // compatibility only, don't use in new code
-    wxDEPRECATED(
-    wxMenuItem(wxMenu *parentMenu,
-               int id,
-               const wxString& text,
-               const wxString& help,
-               bool isCheckable,
-               wxMenu *subMenu = NULL)
-    );
-#endif
-
     void SetBitmaps(const wxBitmapBundle& bmpChecked,
                     const wxBitmapBundle& bmpUnchecked = wxNullBitmap)
     {
@@ -78,14 +65,25 @@ public:
         DoSetBitmap(bmpUnchecked, false);
     }
 
-    void SetBitmap(const wxBitmapBundle& bmp, bool bChecked = true)
+    virtual void SetBitmap(const wxBitmapBundle& bmp) override
     {
-        DoSetBitmap(bmp, bChecked);
+        DoSetBitmap(bmp, true);
+    }
+
+    virtual wxBitmap GetBitmap() const override
+    {
+        return GetBitmap(true);
     }
 
     void SetupBitmaps();
 
-    wxBitmap GetBitmap(bool bChecked = true) const;
+    // The functions taking bChecked are wxMSW-specific.
+    void SetBitmap(const wxBitmapBundle& bmp, bool bChecked)
+    {
+        DoSetBitmap(bmp, bChecked);
+    }
+
+    wxBitmap GetBitmap(bool bChecked) const;
 
 #if wxUSE_OWNER_DRAWN
     void SetDisabledBitmap(const wxBitmapBundle& bmpDisabled)
@@ -99,13 +97,13 @@ public:
     int MeasureAccelWidth() const;
 
     // override wxOwnerDrawn base class virtuals
-    virtual wxString GetName() const wxOVERRIDE;
-    virtual bool OnMeasureItem(size_t *pwidth, size_t *pheight) wxOVERRIDE;
-    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) wxOVERRIDE;
+    virtual wxString GetName() const override;
+    virtual bool OnMeasureItem(size_t *pwidth, size_t *pheight) override;
+    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) override;
 
 protected:
-    virtual void GetFontToUse(wxFont& font) const wxOVERRIDE;
-    virtual void GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const wxOVERRIDE;
+    virtual void GetFontToUse(wxFont& font) const override;
+    virtual void GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const override;
 
 private:
     // helper function for draw std menu check mark
@@ -138,9 +136,11 @@ private:
     // position (which is not really supposed to ever happen).
     int MSGetMenuItemPos() const;
 
+    // Get the extent of the given text using the correct font.
+    wxSize GetMenuTextExtent(const wxString& text) const;
+
     // item bitmaps
-    wxBitmapBundle m_bmpChecked,     // bitmap to put near the item
-                   m_bmpUnchecked;   // (checked is used also for 'uncheckable' items)
+    wxBitmapBundle m_bmpUnchecked;   // (used only for checkable items)
 #if wxUSE_OWNER_DRAWN
     wxBitmapBundle m_bmpDisabled;
 #endif // wxUSE_OWNER_DRAWN

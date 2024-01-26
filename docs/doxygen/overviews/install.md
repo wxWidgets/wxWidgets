@@ -20,7 +20,7 @@ Using Binaries
 How to install binaries depends on your platform:
 
 - For Microsoft Windows (MSW), wxWidgets project provides official binaries
-  on the [Downloads page](http://www.wxwidgets.org/downloads/), please see
+  on the [Downloads page][], please see
   the [instructions for using them](@ref plat_msw_binaries).
 
 - For Linux, and other free Unix-like systems, wxWidgets packages are available
@@ -31,24 +31,25 @@ How to install binaries depends on your platform:
   Ubuntu, you need to run `apt get libwxgtkX.Y-dev`.
 
 - For macOS, wxWidgets is available in third-party package managers such as
-  [brew][1] or [MacPorts][2], and you can install them in the usual way.
+  [brew][] or [MacPorts][], and you can install them in the usual way.
 
-[1]: https://brew.sh/
-[2]: https://www.macports.org/
+[downloads page]: https://www.wxwidgets.org/downloads/
+[brew]: https://brew.sh/
+[MacPorts]: https://www.macports.org/
 
 
 Additionally, some third-party C++ package managers also provide wxWidgets
-binaries. For example, please see [this post][3] for the instructions about
-using [vcpkg][4] C++ package manager for installing wxWidgets.
+binaries. For example, please see [this post][vcpkg-post] for the instructions
+about using [vcpkg][] C++ package manager for installing wxWidgets.
 
-[3]: https://www.wxwidgets.org/blog/2019/01/wxwidgets-and-vcpkg/
-[4]: https://github.com/microsoft/vcpkg
+[vcpkg-post]: https://www.wxwidgets.org/blog/2019/01/wxwidgets-and-vcpkg/
+[vcpkg]: https://github.com/microsoft/vcpkg
 
 
 Building from Source
 --------------------
 
-### Getting the sources
+### Getting the sources                {#install_get_sources}
 
 To build the library you need to get its sources first. The recommended way to
 do it is to use Git to check them out from the official wxWidgets repository
@@ -56,14 +57,13 @@ using the following command:
 
     $ git clone --recurse-submodules https://github.com/wxWidgets/wxWidgets.git
 
-Alternatively, you can download the sources from the [downloads page][1].
+Alternatively, you can download the sources from the [downloads page][].
 Please note that all the source archives in different formats (ZIP, 7z,
 tar.bz2) contain the same files, but use different line ending formats: Unix
 ("LF") for the latter one and DOS ("CR LF") for the two other ones, and it is
 usually preferable to choose the format corresponding to the current platform.
 When downloading the sources with DOS ends of lines, prefer 7z format for much
 smaller file size.
-
 
 ### Selecting the build system
 
@@ -187,7 +187,17 @@ e.g. if you use `AC_CONFIG_MACRO_DIRS([m4])`).
 
 For applications using Microsoft Visual Studio IDE, simply add the provided
 `wxwidgets.props` property sheet file to your project as explained in the
-[instructions](@ref msw_build_apps) and build the project as usual.
+[instructions](@ref msw_build_apps_msvc) and build the project as usual.
+
+
+### MSW, with MinGW
+
+If you use MinGW in any Unix-like environment (Cygwin, MSYS2 etc), please
+follow the instructions for Unix systems.
+
+Otherwise, i.e. when building using `mingw32-make` or using `g++` directly from
+the command line, please follow [these instructions](@ref msw_build_apps_other)
+and provide the list of required compiler and build options manually.
 
 
 ### Mac, with Xcode
@@ -223,14 +233,14 @@ launchctl setenv WXWIN /Users/dconnet/devtools/wx/wxWidgets-3.1.5
 
 ### Other IDEs
 
-If you use an IDE with wxWidgets support, such as [Code::Blocks][1] or
-[CodeLite][2], please use the IDE wizards.
+If you use an IDE with wxWidgets support, such as [Code::Blocks][] or
+[CodeLite][], please use the IDE wizards.
 
-[1]: https://www.codeblocks.org/
-[2]: https://codelite.org/
+[Code::Blocks]: https://www.codeblocks.org/
+[CodeLite]: https://codelite.org/
 
 If you use another IDE, under Unix you should run `wx-config --cxxflags` and
 `wx-config --libs` commands separately and copy-and-paste their output to the
 "Additional preprocessor options" and "Additional linker options" fields in
 your IDE, respectively. Under MSW systems you need to configure the IDE using
-the instructions in the ["manual setup"](@ref msw_build_apps) section.
+the instructions in the [manual setup](@ref msw_build_apps_other) section.

@@ -2,7 +2,6 @@
 // Name:        anitest.cpp
 // Purpose:     anitest sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     02/07/2001
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame

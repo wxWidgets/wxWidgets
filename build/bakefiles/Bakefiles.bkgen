@@ -6,7 +6,7 @@
     The formats below are disabled because wxWidgets doesn't support these
     compilers any longer (although bakefile still does).
     -->
-    <disable-formats>borland,dmars,dmars_smake,msvc6prj,msvs2003prj,watcom</disable-formats>
+    <disable-formats>borland,dmars,dmars_smake,msvc6prj,msvs2003prj,msvs2005prj,msvs2008prj,watcom</disable-formats>
 
 
     <!-- These wildcards match all .bkl files in wxWidgets tree: -->
@@ -229,7 +229,7 @@
     <add-formats files="../../samples/*/*.bkl,../../samples/*/*/*.bkl">
         gnu
     </add-formats>
-    <del-formats files="../../samples/mfc/mfc.bkl">
+    <del-formats files="../../samples/mfc/mfc.bkl,../../samples/webview_chromium/webview_chromium.bkl">
         gnu
     </del-formats>
     <add-flags files="../../samples/*/*.bkl,../../samples/*/*/*.bkl"

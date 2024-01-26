@@ -2,7 +2,6 @@
 // Name:        wx/osx/nonownedwnd.h
 // Purpose:     declares wxNonOwnedWindow class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-03-24
 // Copyright:   (c) 2008 Stefan Csomor
 // Licence:     wxWindows licence
@@ -63,16 +62,16 @@ public:
     virtual void SubclassWin(WXWindow nativeWindow);
     virtual void UnsubclassWin();
 
-    virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
+    virtual wxPoint GetClientAreaOrigin() const override;
 
     // implement base class pure virtuals
 
-    virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
-    virtual bool CanSetTransparent() wxOVERRIDE;
+    virtual bool SetTransparent(wxByte alpha) override;
+    virtual bool CanSetTransparent() override;
 
-    virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style) override;
 
-    virtual void Update() wxOVERRIDE;
+    virtual void Update() override;
 
     WXWindow GetWXWindow() const ;
     static wxNonOwnedWindow* GetFromWXWindow( WXWindow win );
@@ -90,21 +89,21 @@ public:
     static void MacDelayedDeactivation(long timestamp);
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
 
-    virtual void SetWindowStyleFlag(long flags) wxOVERRIDE;
+    virtual void SetWindowStyleFlag(long flags) override;
 
-    virtual void Raise() wxOVERRIDE;
-    virtual void Lower() wxOVERRIDE;
-    virtual bool Show( bool show = true ) wxOVERRIDE;
+    virtual void Raise() override;
+    virtual void Lower() override;
+    virtual bool Show( bool show = true ) override;
 
-    virtual void SetExtraStyle(long exStyle) wxOVERRIDE;
+    virtual void SetExtraStyle(long exStyle) override;
 
-    virtual bool SetBackgroundColour( const wxColour &colour ) wxOVERRIDE;
+    virtual bool SetBackgroundColour( const wxColour &colour ) override;
 
     wxNonOwnedWindowImpl* GetNonOwnedPeer() const { return m_nowpeer; }
 
 #if wxOSX_USE_COCOA_OR_IPHONE
     // override the base class method to return an NSWindow instead of NSView
-    virtual void *OSXGetViewOrWindow() const wxOVERRIDE;
+    virtual void *OSXGetViewOrWindow() const override;
 #endif // Cocoa
 
     // osx specific event handling common for all osx-ports
@@ -120,25 +119,25 @@ public:
 
     void WindowWasPainted();
 
-    virtual bool Destroy() wxOVERRIDE;
+    virtual bool Destroy() override;
 
 protected:
     // common part of all ctors
     void Init();
 
-    virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE;
-    virtual void DoGetSize( int *width, int *height ) const wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
-    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetPosition( int *x, int *y ) const override;
+    virtual void DoGetSize( int *width, int *height ) const override;
+    virtual void DoMoveWindow(int x, int y, int width, int height) override;
+    virtual void DoGetClientSize(int *width, int *height) const override;
 
     virtual bool OSXShowWithEffect(bool show,
                                    wxShowEffect effect,
-                                   unsigned timeout) wxOVERRIDE;
+                                   unsigned timeout) override;
 
-    virtual bool DoClearShape() wxOVERRIDE;
-    virtual bool DoSetRegionShape(const wxRegion& region) wxOVERRIDE;
+    virtual bool DoClearShape() override;
+    virtual bool DoSetRegionShape(const wxRegion& region) override;
 #if wxUSE_GRAPHICS_CONTEXT
-    virtual bool DoSetPathShape(const wxGraphicsPath& path) wxOVERRIDE;
+    virtual bool DoSetPathShape(const wxGraphicsPath& path) override;
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     virtual void WillBeDestroyed();

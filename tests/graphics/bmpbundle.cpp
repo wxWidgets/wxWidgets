@@ -15,6 +15,8 @@
 #include "wx/bmpbndl.h"
 
 #include "wx/artprov.h"
+#include "wx/dcmemory.h"
+#include "wx/imaglist.h"
 
 #include "asserthelper.h"
 
@@ -49,30 +51,268 @@ TEST_CASE("BitmapBundle::FromBitmaps", "[bmpbundle]")
     CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
 }
 
+TEST_CASE("BitmapBundle::GetBitmap", "[bmpbundle]")
+{
+    const wxBitmapBundle b = wxBitmapBundle::FromBitmap(wxBitmap(16, 16));
+
+    CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
+    CHECK( b.GetBitmap(wxSize(32, 32)).GetSize() == wxSize(32, 32) );
+    CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
+}
+
+// Helper functions for the test below.
+namespace
+{
+
+// Default size here doesn't really matter.
+const wxSize BITMAP_SIZE(16, 16);
+
+// The choice of colours here is arbitrary too, but they need to be all
+// different to allow identifying which bitmap got scaled.
+struct ColourAtScale
+{
+    double scale;
+    wxUint32 rgb;
+};
+
+const ColourAtScale colours[] =
+{
+    { 1.0, 0x000000ff },
+    { 1.5, 0x0000ff00 },
+    { 2.0, 0x00ff0000 },
+};
+
+// Return the colour used for the (original) bitmap at the given scale.
+wxColour GetColourForScale(double scale)
+{
+    wxColour col;
+    for ( size_t n = 0; n < WXSIZEOF(colours); ++n )
+    {
+        if ( colours[n].scale == scale )
+        {
+            col.SetRGB(colours[n].rgb);
+            return col;
+        }
+    }
+
+    wxFAIL_MSG("no colour for this scale");
+
+    return col;
+}
+
+double GetScaleFromColour(const wxColour& col)
+{
+    const wxUint32 rgb = col.GetRGB();
+    for ( size_t n = 0; n < WXSIZEOF(colours); ++n )
+    {
+        if ( colours[n].rgb == rgb )
+            return colours[n].scale;
+    }
+
+    wxFAIL_MSG(wxString::Format("no scale for colour %s", col.GetAsString()));
+
+    return 0.0;
+}
+
+double SizeToScale(const wxSize& size)
+{
+    return static_cast<double>(size.y) / BITMAP_SIZE.y;
+}
+
+wxBitmap MakeSolidBitmap(double scale)
+{
+    wxBitmap bmp(BITMAP_SIZE*scale);
+
+    wxMemoryDC dc(bmp);
+    dc.SetBackground(GetColourForScale(scale));
+    dc.Clear();
+
+    return bmp;
+}
+
+wxColour GetBitmapColour(const wxBitmap& bmp)
+{
+    const wxImage img = bmp.ConvertToImage();
+
+    // We just assume the bitmap is solid colour, we could check it, but it
+    // doesn't seem really useful to do it.
+    return wxColour(img.GetRed(0, 0), img.GetGreen(0, 0), img.GetBlue(0, 0));
+}
+
+// This struct exists just to allow using it conveniently in CHECK_THAT().
+struct BitmapAtScale
+{
+    BitmapAtScale(const wxBitmapBundle& b, double scale)
+        : size(b.GetPreferredBitmapSizeAtScale(scale)),
+          bitmap(b.GetBitmap(size))
+    {
+    }
+
+    const wxSize size;
+    const wxBitmap bitmap;
+};
+
+class BitmapAtScaleMatcher : public Catch::MatcherBase<BitmapAtScale>
+{
+public:
+    explicit BitmapAtScaleMatcher(double scale, double scaleOrig)
+        : m_scale(scale),
+          m_scaleOrig(scaleOrig)
+    {
+    }
+
+    bool match(const BitmapAtScale& bitmapAtScale) const override
+    {
+        const wxBitmap& bmp = bitmapAtScale.bitmap;
+
+        if ( SizeToScale(bitmapAtScale.size) != m_scale ||
+                SizeToScale(bmp.GetSize()) != m_scale )
+        {
+            m_diffDesc.Printf("should have scale %.1f", m_scale);
+        }
+
+        if ( GetBitmapColour(bmp) != GetColourForScale(m_scaleOrig) )
+        {
+            if ( m_diffDesc.empty() )
+                m_diffDesc = "should be ";
+            else
+                m_diffDesc += " and be ";
+
+            m_diffDesc += wxString::Format("created from x%.1f", m_scaleOrig);
+        }
+
+        return m_diffDesc.empty();
+    }
+
+    std::string describe() const override
+    {
+        return m_diffDesc.utf8_string();
+    }
+
+private:
+    const double m_scale;
+    const double m_scaleOrig;
+    mutable wxString m_diffDesc;
+};
+
+// The first parameter here determines the size of the expected bitmap and the
+// second one, which defaults to the first one if it's not specified, the size
+// of the bitmap which must have been scaled to create the bitmap of the right
+// size.
+BitmapAtScaleMatcher SameAs(double scale, double scaleOrig = 0.0)
+{
+    if ( scaleOrig == 0.0 )
+        scaleOrig = scale;
+
+    return BitmapAtScaleMatcher(scale, scaleOrig);
+}
+
+} // anonymous namespace
+
+namespace Catch
+{
+    template <>
+    struct StringMaker<BitmapAtScale>
+    {
+        static std::string convert(const BitmapAtScale& bitmapAtScale)
+        {
+            const wxBitmap& bmp = bitmapAtScale.bitmap;
+
+            wxString scaleError;
+            if ( bmp.GetSize() != bitmapAtScale.size )
+            {
+                scaleError.Printf(" (DIFFERENT from expected %.1f)",
+                                  SizeToScale(bitmapAtScale.size));
+            }
+
+            return wxString::Format
+                   (
+                        "x%.1f bitmap%s created from x%.1f",
+                        SizeToScale(bmp.GetSize()),
+                        scaleError,
+                        GetScaleFromColour(GetBitmapColour(bmp))
+                   ).utf8_string();
+        }
+    };
+}
+
 TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
 {
-    CHECK( wxBitmapBundle().GetPreferredBitmapSizeAtScale(1) == wxDefaultSize );
+    // Check that empty bundle doesn't have any preferred size.
+    wxBitmapBundle b;
+    CHECK( b.GetPreferredBitmapSizeAtScale(1) == wxDefaultSize );
 
-    const wxSize normal(32, 32);
-    const wxSize bigger(64, 64);
+    const wxBitmap normal = MakeSolidBitmap(1.0);
+    const wxBitmap middle = MakeSolidBitmap(1.5);
+    const wxBitmap bigger = MakeSolidBitmap(2.0);
 
-    const wxBitmapBundle
-        b = wxBitmapBundle::FromBitmaps(wxBitmap(normal), wxBitmap(bigger));
+
+    // Then check what happens if there is only a single bitmap.
+    b = wxBitmapBundle::FromBitmap(normal);
+
+    // We should avoid scaling as long as the size is close enough to the
+    // actual bitmap size.
+    CHECK_THAT( BitmapAtScale(b, 0   ), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1   ), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1.25), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1.4 ), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1.5 ), SameAs(1) );
+
+    // Once it becomes too big, we're going to need to scale, but we should be
+    // scaling by an integer factor.
+    CHECK_THAT( BitmapAtScale(b, 1.75), SameAs(2, 1) );
+    CHECK_THAT( BitmapAtScale(b, 2   ), SameAs(2, 1) );
+    CHECK_THAT( BitmapAtScale(b, 2.25), SameAs(2, 1) );
+    CHECK_THAT( BitmapAtScale(b, 2.5 ), SameAs(3, 1) );
+
+
+    // Now check what happens when there is also a double size bitmap.
+    b = wxBitmapBundle::FromBitmaps(normal, bigger);
 
     // Check that the existing bitmaps are used without scaling for most of the
     // typical scaling values.
-    CHECK( b.GetPreferredBitmapSizeAtScale(0   ) == normal );
-    CHECK( b.GetPreferredBitmapSizeAtScale(1   ) == normal );
-    CHECK( b.GetPreferredBitmapSizeAtScale(1.25) == normal );
-    CHECK( b.GetPreferredBitmapSizeAtScale(1.4 ) == normal );
-    CHECK( b.GetPreferredBitmapSizeAtScale(1.5 ) == bigger );
-    CHECK( b.GetPreferredBitmapSizeAtScale(1.75) == bigger );
-    CHECK( b.GetPreferredBitmapSizeAtScale(2   ) == bigger );
-    CHECK( b.GetPreferredBitmapSizeAtScale(2.5 ) == bigger );
+    CHECK_THAT( BitmapAtScale(b, 0   ), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1   ), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1.25), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1.4 ), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1.5 ), SameAs(1) );
+    CHECK_THAT( BitmapAtScale(b, 1.75), SameAs(2) );
+    CHECK_THAT( BitmapAtScale(b, 2   ), SameAs(2) );
+    CHECK_THAT( BitmapAtScale(b, 2.5 ), SameAs(2) );
+    CHECK_THAT( BitmapAtScale(b, 3   ), SameAs(2) );
 
     // This scale is too big to use any of the existing bitmaps, so they will
-    // be scaled.
-    CHECK( b.GetPreferredBitmapSizeAtScale(3   ) == 3*normal );
+    // be scaled, but use integer factors and, importantly, scale the correct
+    // bitmap using them: we need to scale the small bitmap by a factor of 3,
+    // rather than scaling the larger bitmap by a factor of 1.5 here, but we
+    // must also scale the larger one by a factor of 2 rather than scaling the
+    // small one by a factor of 4.
+    CHECK_THAT( BitmapAtScale(b, 3.33), SameAs(3, 1) );
+    CHECK_THAT( BitmapAtScale(b, 4   ), SameAs(4, 2) );
+    CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5, 1) );
+
+
+    // Finally check that things work as expected when we have 3 versions.
+    wxVector<wxBitmap> bitmaps;
+    bitmaps.push_back(normal);
+    bitmaps.push_back(middle);
+    bitmaps.push_back(bigger);
+    b = wxBitmapBundle::FromBitmaps(bitmaps);
+
+    CHECK_THAT( BitmapAtScale(b, 0   ), SameAs(1.0) );
+    CHECK_THAT( BitmapAtScale(b, 1   ), SameAs(1.0) );
+    CHECK_THAT( BitmapAtScale(b, 1.25), SameAs(1.0) );
+    CHECK_THAT( BitmapAtScale(b, 1.4 ), SameAs(1.5) );
+    CHECK_THAT( BitmapAtScale(b, 1.5 ), SameAs(1.5) );
+    CHECK_THAT( BitmapAtScale(b, 1.75), SameAs(1.5) );
+    CHECK_THAT( BitmapAtScale(b, 2   ), SameAs(2.0) );
+    CHECK_THAT( BitmapAtScale(b, 2.5 ), SameAs(2.0) );
+    CHECK_THAT( BitmapAtScale(b, 3   ), SameAs(2.0) );
+
+    CHECK_THAT( BitmapAtScale(b, 3.33), SameAs(3.0, 1.5) );
+    CHECK_THAT( BitmapAtScale(b, 4.25), SameAs(4.0, 2.0) );
+    CHECK_THAT( BitmapAtScale(b, 4.50), SameAs(4.5, 1.5) );
+    CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5.0, 1.0) );
 }
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
@@ -138,6 +378,29 @@ TEST_CASE("BitmapBundle::FromSVG", "[bmpbundle][svg]")
     CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
 }
 
+TEST_CASE("BitmapBundle::FromSVG-alpha", "[bmpbundle][svg][alpha]")
+{
+    static const char svg_data[] =
+        "<svg viewBox=\"0 0 100 100\">"
+        "<line x1=\"0\" y1=\"0\" x2=\"100%\" y2=\"100%\" stroke=\"#3f7fff\" stroke-width=\"71%\"/>"
+        "</svg>"
+        ;
+
+    wxBitmapBundle b = wxBitmapBundle::FromSVG(svg_data, wxSize(2, 2));
+    REQUIRE( b.IsOk() );
+
+    wxImage img = b.GetBitmap(wxDefaultSize).ConvertToImage();
+    REQUIRE( img.HasAlpha() );
+    // Check that anti-aliased edge at 50% alpha round-trips (after possibly
+    // premultiplied storage in wxBitmap) to substantially original straight
+    // alpha pixel values in wxImage, allowing for roundoff error.
+    CHECK( (int)img.GetRed(0, 1) >= 0x3c );
+    CHECK( (int)img.GetRed(0, 1) <= 0x3f );
+    CHECK( (int)img.GetGreen(0, 1) >= 0x7b );
+    CHECK( (int)img.GetGreen(0, 1) <= 0x7f);
+    CHECK( (int)img.GetBlue(0, 1) == 0xff );
+}
+
 TEST_CASE("BitmapBundle::FromSVGFile", "[bmpbundle][svg][file]")
 {
     const wxSize size(20, 20); // completely arbitrary
@@ -147,6 +410,17 @@ TEST_CASE("BitmapBundle::FromSVGFile", "[bmpbundle][svg][file]")
     wxBitmapBundle b = wxBitmapBundle::FromSVGFile("horse.svg", size);
     REQUIRE( b.IsOk() );
     CHECK( b.GetDefaultSize() == size );
+}
+
+// This can be used to test loading an arbitrary image file by setting the
+// environment variable WX_TEST_IMAGE_PATH to point to it.
+TEST_CASE("BitmapBundle::Load", "[.]")
+{
+    wxString path;
+    REQUIRE( wxGetEnv("WX_TEST_SVG", &path) );
+
+    wxBitmapBundle bb = wxBitmapBundle::FromSVGFile(path, wxSize(32, 32));
+    REQUIRE( bb.IsOk() );
 }
 
 #endif // wxHAS_SVG
@@ -162,6 +436,30 @@ TEST_CASE("BitmapBundle::ArtProvider", "[bmpbundle][art]")
     b = wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_MENU, size);
     CHECK( b.IsOk() );
     CHECK( b.GetDefaultSize() == size );
+
+#if wxUSE_ARTPROVIDER_TANGO
+    // Tango art provider is supposed to use 16px for the default size of the
+    // menu and button images and 24px for all the other ones, but we need to
+    // choose the client kind for which the current platform doesn't define its
+    // own default/fallback size to be able to test for it, i.e. this is the
+    // client for which GetNativeSizeHint() of the native art provider returns
+    // wxDefaultSize.
+    const wxArtClient artClient =
+#ifdef __WXMSW__
+        wxART_TOOLBAR
+#else
+        wxART_LIST
+#endif
+        ;
+
+    // We also need to use an image provided by Tango but not by the native art
+    // provider, but here we can at least avoid the platform checks by using an
+    // image not provided by any native providers.
+    b = wxArtProvider::GetBitmapBundle(wxART_REFRESH, artClient);
+
+    CHECK( b.IsOk() );
+    CHECK( b.GetDefaultSize() == wxSize(24, 24) );
+#endif // wxUSE_ARTPROVIDER_TANGO
 }
 
 // This test only makes sense for the ports that actually support scaled
@@ -196,4 +494,76 @@ TEST_CASE("BitmapBundle::Scale", "[bmpbundle][scale]")
     CHECK( b.GetDefaultSize() == wxSize(8, 8) );
 }
 
+TEST_CASE("BitmapBundle::ImageList", "[bmpbundle][imagelist]")
+{
+    wxVector<wxBitmapBundle> images;
+    images.push_back(wxBitmapBundle::FromBitmaps(wxBitmap(16, 16), wxBitmap(32, 32)));
+    images.push_back(wxBitmapBundle::FromBitmap(wxBitmap(24, 24)));
+    images.push_back(wxBitmapBundle::FromBitmaps(wxBitmap(16, 16), wxBitmap(32, 32)));
+
+    // There are 2 bundles with preferred size of 32x32, so they should win.
+    const wxSize size = wxBitmapBundle::GetConsensusSizeFor(2.0, images);
+    CHECK( size == wxSize(32, 32) );
+
+    wxImageList iml(size.x, size.y);
+    for ( const auto& bundle : images )
+    {
+        wxBitmap bmp = bundle.GetBitmap(size);
+        REQUIRE( bmp.IsOk() );
+        CHECK( bmp.GetSize() == size );
+        REQUIRE( iml.Add(bmp) != -1 );
+    }
+
+    CHECK( iml.GetBitmap(0).GetSize() == size );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( iml.GetBitmap(0).GetScaleFactor() == 2 );
+#endif
+
+    CHECK( iml.GetBitmap(1).GetSize() == size );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    CHECK( iml.GetBitmap(1).GetScaleFactor() == Approx(1.3333333333) );
+#endif
+}
+
 #endif // ports with scaled bitmaps support
+
+TEST_CASE("BitmapBundle::GetConsensusSize", "[bmpbundle]")
+{
+    // Just a trivial helper to make writing the tests below simpler.
+    struct Bundles
+    {
+        wxVector<wxBitmapBundle> vec;
+
+        void Add(int size)
+        {
+            vec.push_back(wxBitmapBundle::FromBitmap(wxSize(size, size)));
+        }
+
+        int GetConsensusSize(double scale) const
+        {
+            return wxBitmapBundle::GetConsensusSizeFor(scale, vec).y;
+        }
+    } bundles;
+
+    // When there is a tie, a larger size is chosen by default.
+    bundles.Add(16);
+    bundles.Add(24);
+    CHECK( bundles.GetConsensusSize(2) == 48 );
+
+    // Breaking the tie results in the smaller size winning now.
+    bundles.Add(16);
+    CHECK( bundles.GetConsensusSize(2) == 32 );
+
+    // Integer scaling factors should be preferred.
+    CHECK( bundles.GetConsensusSize(1.5) == 16 );
+}
+
+// This test is not really related to wxBitmapBundle, but is just here because
+// this file already uses wxArtProvider and we don't have any tests for it
+// specifically right now.
+TEST_CASE("wxArtProvider::Delete", "[artprov]")
+{
+    auto* artprov = new wxArtProvider{};
+    wxArtProvider::Push(artprov);
+    delete artprov;
+}

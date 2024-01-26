@@ -2,7 +2,6 @@
 // Name:        samples/propgrid/sampleprops.cpp
 // Purpose:     wxPropertyGrid Sample Properties
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2006-03-05
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -76,8 +75,6 @@ wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& n
     AddPrivateChild( new wxColourProperty("Colour", wxPG_LABEL,
                                           fontData.GetColour() ) );
 }
-
-wxFontDataProperty::~wxFontDataProperty () { }
 
 void wxFontDataProperty::OnSetValue()
 {
@@ -203,11 +200,9 @@ wxSizeProperty::wxSizeProperty( const wxString& label, const wxString& name,
     AddPrivateChild( new wxIntProperty("Height",wxPG_LABEL,value.y) );
 }
 
-wxSizeProperty::~wxSizeProperty() { }
-
 void wxSizeProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( !HasAnyChild() ) return;
     const wxSize& size = wxSizeRefFromVariant(m_value);
     Item(0)->SetValue( (long)size.x );
     Item(1)->SetValue( (long)size.y );
@@ -243,11 +238,9 @@ wxPointProperty::wxPointProperty( const wxString& label, const wxString& name,
     AddPrivateChild( new wxIntProperty("Y",wxPG_LABEL,value.y) );
 }
 
-wxPointProperty::~wxPointProperty() { }
-
 void wxPointProperty::RefreshChildren()
 {
-    if ( !GetChildCount() ) return;
+    if ( !HasAnyChild() ) return;
     const wxPoint& point = wxPointRefFromVariant(m_value);
     Item(0)->SetValue( (long)point.x );
     Item(1)->SetValue( (long)point.y );
@@ -349,12 +342,12 @@ protected:
     int             m_precision;
 
     // Mandatory overridden methods
-    virtual wxString ArrayGet( size_t index ) wxOVERRIDE;
-    virtual size_t ArrayGetCount() wxOVERRIDE;
-    virtual bool ArrayInsert( const wxString& str, int index ) wxOVERRIDE;
-    virtual bool ArraySet( size_t index, const wxString& str ) wxOVERRIDE;
-    virtual void ArrayRemoveAt( int index ) wxOVERRIDE;
-    virtual void ArraySwap( size_t first, size_t second ) wxOVERRIDE;
+    virtual wxString ArrayGet( size_t index ) override;
+    virtual size_t ArrayGetCount() override;
+    virtual bool ArrayInsert( const wxString& str, int index ) override;
+    virtual bool ArraySet( size_t index, const wxString& str ) override;
+    virtual void ArrayRemoveAt( int index ) override;
+    virtual void ArraySwap( size_t first, size_t second ) override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayDoubleEditorDialog);
@@ -497,15 +490,13 @@ wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
     // (i.e. can't use comma when comma acts as decimal point in float).
     wxChar use_delimiter = ',';
 
-    if (wxString::Format("%.2f",12.34).Find(use_delimiter) >= 0)
+    if ( wxNumberFormatter::GetDecimalSeparator() == use_delimiter )
         use_delimiter = ';';
 
     m_delimiter = use_delimiter;
 
     SetValue( WXVARIANT(array) );
 }
-
-wxArrayDoubleProperty::~wxArrayDoubleProperty () { }
 
 void wxArrayDoubleProperty::OnSetValue()
 {
@@ -514,11 +505,11 @@ void wxArrayDoubleProperty::OnSetValue()
 }
 
 wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
-                                               int argFlags ) const
+                                               wxPGPropValFormatFlags flags ) const
 {
     wxString s;
 
-    if ( argFlags & wxPG_FULL_VALUE )
+    if ( !!(flags & wxPGPropValFormatFlags::FullValue) )
     {
         GenerateValueAsString(s,-1,false);
     }
@@ -566,7 +557,7 @@ bool wxArrayDoubleProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     // Create editor dialog.
     wxArrayDoubleEditorDialog dlg;
     dlg.SetPrecision(m_precision);
-    dlg.Create(pg->GetPanel(), wxEmptyString,
+    dlg.Create(pg->GetPanel(), "",
                m_dlgTitle.empty() ? GetLabel() : m_dlgTitle, curValue, m_dlgStyle);
     dlg.Move( pg->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
 
@@ -580,7 +571,7 @@ bool wxArrayDoubleProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& v
     return false;
 }
 
-bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
+bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& text, wxPGPropValFormatFlags ) const
 {
     // Add values to a temporary array so that in case
     // of error we can opt not to use them.
@@ -641,7 +632,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     wxTextValidator* validator =
-        new wxNumericPropertyValidator(wxNumericPropertyValidator::Float);
+        new wxNumericPropertyValidator(wxNumericPropertyValidator::NumericType::Float);
 
     // Accept also a delimiter and space character
     validator->AddCharIncludes(m_delimiter);
@@ -649,7 +640,7 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
-    return NULL;
+    return nullptr;
 #endif
 }
 
@@ -663,4 +654,68 @@ bool wxArrayDoubleProperty::ValidateValue(wxVariant& value,
     }
 
     return true;
+}
+
+// -----------------------------------------------------------------------
+// MyColourProperty
+// -----------------------------------------------------------------------
+
+// Test customizing wxColourProperty via subclassing
+// * Includes custom colour entry.
+// * Includes extra custom entry.
+MyColourProperty::MyColourProperty(const wxString& label,
+                                   const wxString& name,
+                                   const wxColour& value)
+    : wxColourProperty(label, name, value)
+{
+    wxPGChoices colours;
+    colours.Add("White");
+    colours.Add("Black");
+    colours.Add("Red");
+    colours.Add("Green");
+    colours.Add("Blue");
+    colours.Add("Custom");
+    colours.Add("None");
+    m_choices = colours;
+    SetIndex(0);
+    wxVariant variant;
+    variant << value;
+    SetValue(variant);
+}
+
+wxColour MyColourProperty::GetColour(int index) const
+{
+    switch ( index )
+    {
+    case 0: return *wxWHITE;
+    case 1: return *wxBLACK;
+    case 2: return *wxRED;
+    case 3: return *wxGREEN;
+    case 4: return *wxBLUE;
+    case 5:
+        // Return current colour for the custom entry
+        wxColour col;
+        if ( GetIndex() == GetCustomColourIndex() )
+        {
+            if ( m_value.IsNull() )
+                return col;
+            col << m_value;
+            return col;
+        }
+        return *wxWHITE;
+    }
+    return wxColour();
+}
+
+wxString MyColourProperty::ColourToString(const wxColour& col, int index, wxPGPropValFormatFlags flags) const
+{
+    if ( index == (int)(m_choices.GetCount() - 1) )
+        return wxString();
+
+    return wxColourProperty::ColourToString(col, index, flags);
+}
+
+int MyColourProperty::GetCustomColourIndex() const
+{
+    return m_choices.GetCount() - 2;
 }

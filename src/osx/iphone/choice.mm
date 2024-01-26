@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/choice.mm
 // Purpose:     wxChoice
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -98,23 +97,23 @@ public:
         [v setDataSource:v];
     }
 
-    void InsertItem( size_t pos, int itemid, const wxString& text) wxOVERRIDE
+    void InsertItem( size_t pos, int itemid, const wxString& text) override
     {
         wxCFStringRef cftext(text);
         [((wxUIPickerView*)m_osxView).rows insertObject:cftext.AsNSString() atIndex:pos];
     }
 
-    size_t GetNumberOfItems() const wxOVERRIDE
+    size_t GetNumberOfItems() const override
     {
         return [((wxUIPickerView*)m_osxView).rows count];
     }
 
-    void RemoveItem( size_t pos ) wxOVERRIDE
+    void RemoveItem( size_t pos ) override
     {
         [((wxUIPickerView*)m_osxView).rows removeObjectAtIndex:pos];
     }
 
-    void SetItem(int pos, const wxString& text) wxOVERRIDE
+    void SetItem(int pos, const wxString& text) override
     {
         wxCFStringRef cftext(text);
         [((wxUIPickerView*)m_osxView).rows replaceObjectAtIndex:pos withObject:cftext.AsNSString()];

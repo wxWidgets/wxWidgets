@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/popupwin.cpp
 // Purpose:     implements wxPopupWindow for wxMac
 // Author:      Stefan Csomor
-// Modified by:
 // Created:
 // Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence

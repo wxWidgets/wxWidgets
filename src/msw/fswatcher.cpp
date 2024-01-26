@@ -36,12 +36,12 @@ public:
     void SendEvent(wxFileSystemWatcherEvent& evt);
 
 protected:
-    bool Init() wxOVERRIDE;
+    bool Init() override;
 
     // adds watch to be monitored for file system changes
-    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryMSW> watch) wxOVERRIDE;
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryMSW> watch) override;
 
-    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryMSW> watch) wxOVERRIDE;
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryMSW> watch) override;
 
 private:
     bool DoSetUpWatch(wxFSWatchEntryMSW& watch);
@@ -62,7 +62,7 @@ wxFSWatcherImplMSW::~wxFSWatcherImplMSW()
 {
     // order the worker thread to finish & wait
     m_workerThread.Finish();
-    if (m_workerThread.Wait() != 0)
+    if (m_workerThread.Wait())
     {
         wxLogError(_("Ungraceful worker thread termination"));
     }
@@ -158,8 +158,8 @@ bool wxFSWatcherImplMSW::DoSetUpWatch(wxFSWatchEntryMSW& watch)
     int ret = ReadDirectoryChangesW(watch.GetHandle(), watch.GetBuffer(),
                                     wxFSWatchEntryMSW::BUFFER_SIZE,
                                     bWatchSubtree,
-                                    flags, NULL,
-                                    watch.GetOverlapped(), NULL);
+                                    flags, nullptr,
+                                    watch.GetOverlapped(), nullptr);
     if (!ret)
     {
         wxLogSysError(_("Unable to set up watch for '%s'"),
@@ -210,7 +210,7 @@ wxThread::ExitCode wxIOCPThread::Entry()
     while ( ReadEvents() );
 
     wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Ended IOCP thread");
-    return (ExitCode)0;
+    return nullptr;
 }
 
 // wait for events to occur, read them and send to interested parties
@@ -219,8 +219,8 @@ wxThread::ExitCode wxIOCPThread::Entry()
 bool wxIOCPThread::ReadEvents()
 {
     DWORD count = 0;
-    wxFSWatchEntryMSW* watch = NULL;
-    OVERLAPPED* overlapped = NULL;
+    wxFSWatchEntryMSW* watch = nullptr;
+    OVERLAPPED* overlapped = nullptr;
     switch ( m_iocp->GetStatus(&count, &watch, &overlapped) )
     {
         case wxIOCPService::Status_OK:
@@ -349,6 +349,8 @@ void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
             }
             wxFileSystemWatcherEvent event(flags, oldpath, newpath);
             SendEvent(event);
+            if ( it == events.end() )
+                break;
         }
         // all other events
         else

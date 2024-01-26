@@ -2,7 +2,6 @@
 // Name:        wx/generic/filectrlg.h
 // Purpose:     wxGenericFileCtrl Header
 // Author:      Diaa M. Sami
-// Modified by:
 // Created:     Jul-07-2007
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
@@ -206,7 +205,7 @@ public:
                style, pos, size, name );
     }
 
-    virtual ~wxGenericFileCtrl() {}
+    virtual ~wxGenericFileCtrl() = default;
 
     bool Create( wxWindow *parent,
                  wxWindowID id,
@@ -218,32 +217,32 @@ public:
                  const wxSize& size = wxDefaultSize,
                  const wxString& name = wxASCII_STR(wxFileCtrlNameStr) );
 
-    virtual void SetWildcard( const wxString& wildCard ) wxOVERRIDE;
-    virtual void SetFilterIndex( int filterindex ) wxOVERRIDE;
-    virtual bool SetDirectory( const wxString& dir ) wxOVERRIDE;
+    virtual void SetWildcard( const wxString& wildCard ) override;
+    virtual void SetFilterIndex( int filterindex ) override;
+    virtual bool SetDirectory( const wxString& dir ) override;
 
     // Selects a certain file.
     // In case the filename specified isn't found/couldn't be shown with
     // currently selected filter, false is returned and nothing happens
-    virtual bool SetFilename( const wxString& name ) wxOVERRIDE;
+    virtual bool SetFilename( const wxString& name ) override;
 
     // Changes to a certain directory and selects a certain file.
     // In case the filename specified isn't found/couldn't be shown with
     // currently selected filter, false is returned and if directory exists
     // it's chdir'ed to
-    virtual bool SetPath( const wxString& path ) wxOVERRIDE;
+    virtual bool SetPath( const wxString& path ) override;
 
-    virtual wxString GetFilename() const wxOVERRIDE;
-    virtual wxString GetDirectory() const wxOVERRIDE;
-    virtual wxString GetWildcard() const wxOVERRIDE { return this->m_wildCard; }
-    virtual wxString GetPath() const wxOVERRIDE;
-    virtual void GetPaths( wxArrayString& paths ) const wxOVERRIDE;
-    virtual void GetFilenames( wxArrayString& files ) const wxOVERRIDE;
-    virtual int GetFilterIndex() const wxOVERRIDE { return m_filterIndex; }
+    virtual wxString GetFilename() const override;
+    virtual wxString GetDirectory() const override;
+    virtual wxString GetWildcard() const override { return this->m_wildCard; }
+    virtual wxString GetPath() const override;
+    virtual void GetPaths( wxArrayString& paths ) const override;
+    virtual void GetFilenames( wxArrayString& files ) const override;
+    virtual int GetFilterIndex() const override { return m_filterIndex; }
 
-    virtual bool HasMultipleFileSelection() const wxOVERRIDE
+    virtual bool HasMultipleFileSelection() const override
         { return HasFlag(wxFC_MULTIPLE); }
-    virtual void ShowHidden(bool show) wxOVERRIDE { m_list->ShowHidden( show ); }
+    virtual void ShowHidden(bool show) override { m_list->ShowHidden( show ); }
 
     void GoToParentDir();
     void GoToHomeDir();

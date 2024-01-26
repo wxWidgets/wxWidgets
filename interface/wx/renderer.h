@@ -204,12 +204,12 @@ public:
     virtual int DrawHeaderButton(wxWindow *win, wxDC& dc,
                                  const wxRect& rect, int flags = 0,
                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                 wxHeaderButtonParams* params = NULL);
+                                 wxHeaderButtonParams* params = nullptr);
 
     virtual int DrawHeaderButtonContents(wxWindow *win, wxDC& dc,
                                          const wxRect& rect, int flags = 0,
                                          wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                         wxHeaderButtonParams* params = NULL);
+                                         wxHeaderButtonParams* params = nullptr);
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
@@ -389,7 +389,7 @@ public:
     */
     virtual int DrawHeaderButton(wxWindow* win, wxDC& dc, const wxRect& rect,
                                  int flags = 0,
-                                 wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE, wxHeaderButtonParams* params = NULL) = 0;
+                                 wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE, wxHeaderButtonParams* params = nullptr) = 0;
 
     /**
         Draw the contents of a header control button (label, sort arrows,
@@ -404,7 +404,7 @@ public:
     */
     virtual int DrawHeaderButtonContents(wxWindow* win, wxDC& dc,
                                          const wxRect& rect, int flags = 0,
-                                         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE, wxHeaderButtonParams* params = NULL) = 0;
+                                         wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE, wxHeaderButtonParams* params = nullptr) = 0;
 
     /**
         Draw a selection rectangle underneath the text as used e.g. in a

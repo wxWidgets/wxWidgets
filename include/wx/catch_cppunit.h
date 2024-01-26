@@ -9,7 +9,7 @@
 #ifndef _WX_CATCH_CPPUNIT_H_
 #define _WX_CATCH_CPPUNIT_H_
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 
 // CppUnit-compatible macros.
 
@@ -31,10 +31,16 @@
 // line but this can happen if they're used inside another macro, so wrap it
 // inside a scope.
 #define CPPUNIT_ASSERT_MESSAGE(msg, cond) \
-    do { INFO(msg); REQUIRE(cond); } while (Catch::alwaysFalse())
+    wxSTATEMENT_MACRO_BEGIN               \
+    INFO(msg);                            \
+    REQUIRE(cond);                        \
+    wxSTATEMENT_MACRO_END
 
 #define CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, x, y) \
-    do { INFO(msg); REQUIRE(x == y); } while (Catch::alwaysFalse())
+    wxSTATEMENT_MACRO_BEGIN                     \
+    INFO(msg);                                  \
+    REQUIRE(x == y);                            \
+    wxSTATEMENT_MACRO_END
 
 // CATCH Approx class uses the upper bound of "epsilon*(scale + max(|x|, |y|))"
 // for |x - y| which is not really compatible with our fixed delta, so we can't
@@ -83,18 +89,16 @@ namespace Catch
         static std::string convert(const wxString& wxs)
         {
             std::string s;
-            s.reserve(wxs.length());
-            for ( wxString::const_iterator i = wxs.begin();
-                  i != wxs.end();
-                  ++i )
+            s.reserve(wxs.length() + 2);
+            s += '"';
+            for ( auto c : wxs )
             {
-#if wxUSE_UNICODE
-                if ( !iswprint(*i) )
-                    s += wxString::Format(wxASCII_STR("\\u%04X"), *i).ToAscii();
+                if ( c >= 128 || !iswprint(c) )
+                    s += wxString::Format(wxASCII_STR("\\u%04X"), c).ToAscii();
                 else
-#endif // wxUSE_UNICODE
-                    s += *i;
+                    s += c;
             }
+            s += '"';
 
             return s;
         }
@@ -122,7 +126,7 @@ public:
     // not used here.
     explicit Test(const std::string& name = std::string()) : m_name(name) { }
 
-    virtual ~Test() { }
+    virtual ~Test() = default;
 
     virtual void runTest() = 0;
 
@@ -157,7 +161,7 @@ public:
     void addTest(Test* test) { m_tests.push_back(test); }
     size_t getChildTestCount() const { return m_tests.size(); }
 
-    void runTest() wxOVERRIDE
+    void runTest() override
     {
         for ( size_t n = 0; n < m_tests.size(); ++n )
         {
@@ -226,7 +230,7 @@ inline std::string wxGetCurrentTestName()
 // below and there just doesn't seem to be any way around it.
 #define CPPUNIT_TEST_SUITE(testclass)   \
     public:                             \
-    void runTest() wxOVERRIDE           \
+    void runTest() override           \
     {                                   \
         using namespace wxPrivate;      \
         TempStringAssign setClass(wxTheCurrentTestClass, #testclass)

@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextliststylepage.h
 // Purpose:     Declares the rich text formatting dialog list style page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/18/2006 11:36:37 AM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -63,8 +62,8 @@ public:
     void UpdatePreview();
 
     /// Transfer data from/to window
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
-    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() override;
+    virtual bool TransferDataToWindow() override;
 
     /// Get attributes for selected level
     wxRichTextAttr* GetAttributesForSelection();

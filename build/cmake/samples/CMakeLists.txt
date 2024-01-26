@@ -8,7 +8,7 @@
 #############################################################################
 
 wx_add_sample(access accesstest.cpp DEPENDS wxUSE_ACCESSIBILITY)
-wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
+wx_add_sample(animate anitest.cpp anitest.h DATA throbber.gif throbber_2x.gif hourglass.ani DEPENDS wxUSE_ANIMATIONCTRL)
 wx_add_sample(archive CONSOLE)
 wx_add_sample(artprov arttest.cpp artbrows.cpp artbrows.h)
 wx_add_sample(aui auidemo.cpp LIBRARIES wxaui wxhtml NAME auidemo DEPENDS wxUSE_AUI)
@@ -67,7 +67,7 @@ wx_add_sample(htlbox LIBRARIES wxhtml DEPENDS wxUSE_HTML)
 if(wxUSE_HTML)
     include(html.cmake)
 endif()
-wx_add_sample(image image.cpp canvas.cpp canvas.h cursor_png.c RES image.rc
+wx_add_sample(image image.cpp canvas.cpp canvas.h RES image.rc
     DATA horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm
     horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur
     horse.ico horse3.ani horse.svg smile.xbm toucan.png cmyk.jpg cursor.png
@@ -89,7 +89,6 @@ wx_add_sample(layout layout.cpp layout.h)
 wx_add_sample(listctrl listtest.cpp listtest.h RES listtest.rc DEPENDS wxUSE_LISTCTRL)
 wx_add_sample(mdi mdi.cpp mdi.h RES mdi.rc DEPENDS wxUSE_MDI wxUSE_DOC_VIEW_ARCHITECTURE wxUSE_MDI_ARCHITECTURE)
 wx_add_sample(mediaplayer LIBRARIES wxmedia DEPENDS wxUSE_MEDIACTRL)
-wx_add_sample(memcheck)
 wx_add_sample(menu DEPENDS wxUSE_MENUS wxUSE_MENUBAR)
 wx_add_sample(minimal IMPORTANT)
 wx_add_sample(notebook notebook.cpp notebook.h LIBRARIES wxaui DEPENDS wxUSE_NOTEBOOK)
@@ -116,7 +115,7 @@ wx_add_sample(power)
 wx_add_sample(preferences DEPENDS wxUSE_PREFERENCES_EDITOR)
 wx_add_sample(printing printing.cpp printing.h DEPENDS wxUSE_PRINTING_ARCHITECTURE)
 wx_add_sample(propgrid propgrid.cpp propgrid_minimal.cpp sampleprops.cpp
-    tests.cpp sampleprops.h propgrid.h LIBRARIES wxpropgrid NAME propgriddemo DEPENDS wxUSE_PROPGRID)
+    sampleprops.h propgrid.h LIBRARIES wxpropgrid NAME propgriddemo DEPENDS wxUSE_PROPGRID)
 wx_add_sample(render FOLDER render)
 wx_add_sample(render DLL renddll.cpp NAME renddll FOLDER render)
 wx_add_sample(ribbon ribbondemo.cpp LIBRARIES wxribbon NAME ribbondemo DEPENDS wxUSE_RIBBON)
@@ -142,7 +141,7 @@ wx_add_sample(stc stctest.cpp edit.cpp prefs.cpp edit.h defsext.h prefs.h
     DATA stctest.cpp NAME stctest LIBRARIES wxstc DEPENDS wxUSE_STC)
 wx_add_sample(svg svgtest.cpp RES svgtest.rc DEPENDS wxUSE_SVG)
 wx_add_sample(taborder)
-wx_add_sample(taskbar tbtest.cpp tbtest.h DEPENDS wxUSE_TASKBARICON)
+wx_add_sample(taskbar tbtest.cpp tbtest.h DATA info.svg DEPENDS wxUSE_TASKBARICON)
 wx_add_sample(text DEPENDS wxUSE_TEXTCTRL)
 wx_add_sample(thread DEPENDS wxUSE_THREADS)
 wx_add_sample(toolbar RES toolbar.rc DEPENDS wxUSE_TOOLBAR)
@@ -152,11 +151,8 @@ wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
-wx_add_sample(webview LIBRARIES wxwebview
-    DATA ../help/doc.zip:doc.zip
-    NAME webviewsample DEPENDS wxUSE_WEBVIEW)
-if(TARGET webviewsample AND wxUSE_STC)
-    wx_exe_link_libraries(webviewsample wxstc)
+if(wxUSE_WEBVIEW)
+    include(webview.cmake)
 endif()
 wx_add_sample(webrequest LIBRARIES wxnet DEPENDS wxUSE_WEBREQUEST)
 # widgets Sample
@@ -218,22 +214,24 @@ wx_list_add_prefix(WIDGETS_RC_FILES icons/
 wx_add_sample(widgets IMPORTANT ${SAMPLE_WIDGETS_SRC}
     DATA ${WIDGETS_RC_FILES} textctrl.cpp ../image/toucan.png:toucan.png
     )
-wx_add_sample(wizard DEPENDS wxUSE_WIZARDDLG)
+# includes needed by the native widget (like gtk.h)
+target_include_directories(widgets PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
+wx_add_sample(wizard DATA wiztest.svg wiztest2.svg DEPENDS wxUSE_WIZARDDLG)
 wx_add_sample(wrapsizer)
 
 wx_list_add_prefix(XRC_RC_FILES rc/
     aui.xpm aui.xrc
-    artprov.xpm artprov.xrc basicdlg.xpm
-    basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc
-    derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc
+    artprov.xpm artprov.xrc basicdlg.xpm basicdlg2.xpm
+    basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas2.xpm custclas.xrc
+    derivdlg.xpm derivdlg2.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc
     fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif
-    resource.xrc toolbar.xrc uncenter.xpm
+    resource.xrc toolbar.xrc uncenter.xpm uncenter2.xpm
     objref.xrc objrefdlg.xpm
     uncenter.xrc update.gif
     variable.xpm variable.xrc
     variants.xpm variants.xrc
     throbber.gif stop.xpm
-    wxbanner.gif
+    stop_2x.xpm wxbanner.gif
     )
 wx_add_sample(xrc
     xrcdemo.cpp

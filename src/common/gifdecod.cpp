@@ -23,8 +23,9 @@
 #include <string.h>
 #include "wx/gifdecod.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
+
+#include <memory>
 
 enum
 {
@@ -65,10 +66,6 @@ public:
     wxDECLARE_NO_COPY_CLASS(GIFImage);
 };
 
-wxDECLARE_SCOPED_PTR(GIFImage, GIFImagePtr)
-wxDEFINE_SCOPED_PTR(GIFImage, GIFImagePtr)
-
-
 //---------------------------------------------------------------------------
 // GIFImage constructor
 //---------------------------------------------------------------------------
@@ -81,8 +78,8 @@ GIFImage::GIFImage()
     transparent = 0;
     disposal = wxANIM_DONOTREMOVE;
     delay = -1;
-    p = (unsigned char *) NULL;
-    pal = (unsigned char *) NULL;
+    p = (unsigned char *) nullptr;
+    pal = (unsigned char *) nullptr;
     ncolours = 0;
 }
 
@@ -308,8 +305,9 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
              * an end-of-image symbol (ab_fin) they come up with
              * a zero-length subblock!! We catch this here so
              * that the decoder sees an ab_fin code.
+             * We also need to check if the file doesn't end unexpectedly.
              */
-            if (m_restbyte == 0)
+            if (stream.Eof() || m_restbyte == 0)
             {
                 code = ab_fin;
                 break;
@@ -782,7 +780,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             case GIF_MARKER_SEP:
             {
                 // allocate memory for IMAGEN struct
-                GIFImagePtr pimg(new GIFImage());
+                std::unique_ptr<GIFImage> pimg(new GIFImage());
 
                 wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
 
@@ -863,7 +861,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 
                 // get initial code size from first byte in raster data
                 bits = stream.GetC();
-                if (bits == 0)
+                if (stream.Eof() || bits <= 0)
                     return wxGIF_INVFORMAT;
 
                 // decode image

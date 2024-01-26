@@ -2,7 +2,6 @@
 // Name:        arttest.cpp
 // Purpose:     wxArtProvider sample
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2002/03/25
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
@@ -30,7 +29,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 class MyFrame : public wxFrame
@@ -60,7 +59,7 @@ private:
 enum
 {
     ID_Quit = wxID_EXIT,
-    ID_Logs = wxID_HIGHEST+1,
+    ID_Logs = wxID_HIGHEST,
     ID_Browser,
     ID_PlugProvider
 };
@@ -110,7 +109,7 @@ class MyArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
 };
 
 #include "info.xpm"
@@ -144,7 +143,7 @@ wxBitmap MyArtProvider::CreateBitmap(const wxArtID& id,
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size, style)
 {
     SetIcon(wxICON(sample));
 

@@ -2,7 +2,6 @@
 // Name:        wx/univ/bmpbuttn.h
 // Purpose:     wxBitmapButton class for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 class WXDLLIMPEXP_CORE wxBitmapButton : public wxBitmapButtonBase
 {
 public:
-    wxBitmapButton() { }
+    wxBitmapButton() = default;
 
     wxBitmapButton(wxWindow *parent,
                    wxWindowID id,
@@ -42,26 +41,26 @@ public:
                            const wxString& name = wxString());
 
 
-    virtual void SetMargins(int x, int y) wxOVERRIDE
+    virtual void SetMargins(int x, int y) override
     {
         SetBitmapMargins(x, y);
 
         wxBitmapButtonBase::SetMargins(x, y);
     }
 
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual bool Enable(bool enable = true) override;
 
-    virtual bool SetCurrent(bool doit = true) wxOVERRIDE;
+    virtual bool SetCurrent(bool doit = true) override;
 
-    virtual void Press() wxOVERRIDE;
-    virtual void Release() wxOVERRIDE;
+    virtual void Press() override;
+    virtual void Release() override;
 
 protected:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
     // called when one of the bitmap is changed by user
-    virtual void OnSetBitmap() wxOVERRIDE;
+    virtual void OnSetBitmap() override;
 
     // set bitmap to the given one if it's ok or to the normal bitmap and
     // return true if the bitmap really changed

@@ -52,7 +52,11 @@ Use @c configure option @c \--with-gtk=2 to use GTK 2.
 
 wxOSX/Cocoa is the port of wxWidgets for the macOS platform. It requires
 a minimum SDK 10.11, Xcode 7.2.1 or greater (runs under 10.10.5 and higher),
-and fully supports amd64 as well ARM builds and deploying under 10.10.
+and supports x86_64 (but not i386) and ARM builds and deploying under 10.10.
+
+Note that Apple clang must be used to build wxOSX, due to the use of
+Apple-specific extensions ("blocks") in the macOS SDK headers, and hence the
+applications using it must be built using clang as well.
 
 @subpage plat_osx_install "Build and Install Instructions"
 
@@ -75,22 +79,12 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 
 
 
-@section page_port_wxmotif wxMotif
-
-wxMotif is a port of wxWidgets for X11 systems using Motif libraries.
-It is no longer actively maintained and by now rather obsolete.
-
-@subpage plat_motif_install "Build Instructions"
-
-
-
-
 @section page_port_wxmsw wxMSW
 
-wxMSW is a port of wxWidgets for the Windows platforms (Windows XP and later
-are supported). wxMSW provides native look and feel for each Windows version.
+wxMSW is a port of wxWidgets for the Windows platforms (current version
+requires Windows 7 or later). wxMSW provides native look and feel for each Windows version.
 This port can be compiled with several compilers including Microsoft
-VC++ 2005 or later, MinGW, Cygwin as well as cross-compilation with a
+VC++ 2015 or later, MinGW, Cygwin as well as cross-compilation with a
 Linux-hosted MinGW tool chain.
 
 @subpage plat_msw_install "Build and Install Instructions"

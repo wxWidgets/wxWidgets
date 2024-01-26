@@ -2,7 +2,6 @@
 // Name:        src/common/cshelp.cpp
 // Purpose:     Context sensitive help class implementation
 // Author:      Julian Smart, Vadim Zeitlin
-// Modified by:
 // Created:     08/09/2000
 // Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -49,7 +48,7 @@ public:
         m_contextHelp = contextHelp;
     }
 
-    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
+    virtual bool ProcessEvent(wxEvent& event) override;
 
 //// Data
     wxContextHelp* m_contextHelp;
@@ -86,27 +85,6 @@ wxContextHelp::~wxContextHelp()
         EndContextHelp();
 }
 
-// Not currently needed, but on some systems capture may not work as
-// expected so we'll leave it here for now.
-#ifdef __WXMOTIF__
-static void wxPushOrPopEventHandlers(wxContextHelp* help, wxWindow* win, bool push)
-{
-    if (push)
-        win->PushEventHandler(new wxContextHelpEvtHandler(help));
-    else
-        win->PopEventHandler(true);
-
-    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow* child = node->GetData();
-        wxPushOrPopEventHandlers(help, child, push);
-
-        node = node->GetNext();
-    }
-}
-#endif
-
 // Begin 'context help mode'
 bool wxContextHelp::BeginContextHelp(wxWindow* win)
 {
@@ -125,11 +103,7 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     m_status = false;
 
-#ifdef __WXMOTIF__
-    wxPushOrPopEventHandlers(this, win, true);
-#else
     win->PushEventHandler(new wxContextHelpEvtHandler(this));
-#endif
 
     win->CaptureMouse();
 
@@ -137,11 +111,7 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 
     win->ReleaseMouse();
 
-#ifdef __WXMOTIF__
-    wxPushOrPopEventHandlers(this, win, false);
-#else
     win->PopEventHandler(true);
-#endif
 
     win->SetCursor(oldCursor);
 
@@ -228,7 +198,7 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
 // Dispatch the help event to the relevant window
 bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 {
-    wxCHECK_MSG( win, false, wxT("win parameter can't be NULL") );
+    wxCHECK_MSG( win, false, wxT("win parameter can't be null") );
 
     wxHelpEvent helpEvent(wxEVT_HELP, win->GetId(), pt,
                           wxHelpEvent::Origin_HelpButton);
@@ -290,7 +260,7 @@ void wxContextHelpButton::OnContextHelp(wxCommandEvent& WXUNUSED(event))
 // wxHelpProvider
 // ----------------------------------------------------------------------------
 
-wxHelpProvider *wxHelpProvider::ms_helpProvider = NULL;
+wxHelpProvider *wxHelpProvider::ms_helpProvider = nullptr;
 
 // trivial implementation of some methods which we don't want to make pure
 // virtual for convenience
@@ -319,7 +289,7 @@ wxString wxHelpProvider::GetHelpTextMaybeAtPoint(wxWindowBase *window)
     if ( m_helptextAtPoint != wxDefaultPosition ||
             m_helptextOrigin != wxHelpEvent::Origin_Unknown )
     {
-        wxCHECK_MSG( window, wxEmptyString, wxT("window must not be NULL") );
+        wxCHECK_MSG( window, wxEmptyString, wxT("window must not be null") );
 
         wxPoint pt = m_helptextAtPoint;
         wxHelpEvent::Origin origin = m_helptextOrigin;
@@ -337,39 +307,33 @@ wxString wxHelpProvider::GetHelpTextMaybeAtPoint(wxWindowBase *window)
 // wxSimpleHelpProvider
 // ----------------------------------------------------------------------------
 
-#define WINHASH_KEY(w) wxPtrToUInt(w)
-
 wxString wxSimpleHelpProvider::GetHelp(const wxWindowBase *window)
 {
-    wxSimpleHelpProviderHashMap::iterator it = m_hashWindows.find(WINHASH_KEY(window));
+    const auto it = m_hashWindows.find(window);
+    if ( it != m_hashWindows.end() )
+        return it->second;
 
-    if ( it == m_hashWindows.end() )
-    {
-        it = m_hashIds.find(window->GetId());
-        if ( it == m_hashIds.end() )
-            return wxEmptyString;
-    }
+    const auto it2 = m_hashIds.find(window->GetId());
+    if ( it2 != m_hashIds.end() )
+        return it2->second;
 
-    return it->second;
+    return {};
 }
 
 void wxSimpleHelpProvider::AddHelp(wxWindowBase *window, const wxString& text)
 {
-    m_hashWindows.erase(WINHASH_KEY(window));
-    m_hashWindows[WINHASH_KEY(window)] = text;
+    m_hashWindows[window] = text;
 }
 
 void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 {
-    wxSimpleHelpProviderHashMap::key_type key = (wxSimpleHelpProviderHashMap::key_type)id;
-    m_hashIds.erase(key);
-    m_hashIds[key] = text;
+    m_hashIds[id] = text;
 }
 
 // removes the association
 void wxSimpleHelpProvider::RemoveHelp(wxWindowBase* window)
 {
-    m_hashWindows.erase(WINHASH_KEY(window));
+    m_hashWindows.erase(window);
 }
 
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
@@ -395,13 +359,13 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 #endif // wxUSE_MS_HTML_HELP
         {
 #if wxUSE_TIPWINDOW
-            static wxTipWindow* s_tipWindow = NULL;
+            static wxTipWindow* s_tipWindow = nullptr;
 
             if ( s_tipWindow )
             {
                 // Prevent s_tipWindow being nulled in OnIdle, thereby removing
                 // the chance for the window to be closed by ShowHelp
-                s_tipWindow->SetTipWindowPtr(NULL);
+                s_tipWindow->SetTipWindowPtr(nullptr);
                 s_tipWindow->Close();
             }
 
@@ -469,8 +433,8 @@ wxString wxContextId(int id)
 class wxHelpProviderModule : public wxModule
 {
 public:
-    bool OnInit() wxOVERRIDE;
-    void OnExit() wxOVERRIDE;
+    bool OnInit() override;
+    void OnExit() override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxHelpProviderModule);
@@ -492,7 +456,7 @@ void wxHelpProviderModule::OnExit()
     if (wxHelpProvider::Get())
     {
         delete wxHelpProvider::Get();
-        wxHelpProvider::Set(NULL);
+        wxHelpProvider::Set(nullptr);
     }
 }
 

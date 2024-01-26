@@ -2,7 +2,6 @@
 // Name:        src/msw/dc.cpp
 // Purpose:     wxDC class for MSW port
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -37,6 +36,8 @@
 #endif
 
 #include "wx/msw/dc.h"
+
+#include "wx/scopedarray.h"
 #include "wx/sysopt.h"
 
 #ifdef wxHAS_RAW_BITMAP
@@ -67,11 +68,9 @@
     //
     // We also load some GDI functions not present in MinGW libraries
     // dynamically.
-    #if wxUSE_DYNLIB_CLASS
-        #include "wx/dynlib.h"
+    #include "wx/dynlib.h"
 
-        #define USE_DYNAMIC_GDI_FUNCS
-    #endif
+    #define USE_DYNAMIC_GDI_FUNCS
 #endif // _MSC_VER/!_MSC_VER
 
 using namespace wxMSWImpl;
@@ -100,16 +99,27 @@ static const int VIEWPORT_EXTENT = 134217727;
 // ----------------------------------------------------------------------------
 
 /*
-   We currently let Windows do all the translations itself so these macros are
-   not really needed (any more) but keep them to enhance readability of the
-   code by allowing to see where are the logical and where are the device
-   coordinates used.
+   We currently let Windows perform the scaling itself, as it might be more
+   efficient than doing it in our own code, but we handle device origin
+   translation ourselves as this allows us to use the full (at least 32-bit)
+   range of wxCoord rather than being limited to 27-bit range of GDI functions.
+
+   This means that instead of 2 coordinate systems -- physical and logical --
+   we actually have 3 of them, as there is also a device coordinate system
+   which is the same as logical one, but doesn't take the device origin into
+   account (but does take into account the logical origin and scale). So this
+   device coordinate system is simply shifted compared to the logical one.
+
+   IOW:
+
+        logical = (physical - deviceOrigin)/scale + logicalOrigin
+        device  = physical/scale + logicalOrigin = logical + deviceOrigin/scale
  */
 
-#define XLOG2DEV(x) (x)
-#define YLOG2DEV(y) (y)
-#define XDEV2LOG(x) (x)
-#define YDEV2LOG(y) (y)
+#define XLOG2DEV(x) ((x) + (m_deviceOriginX / m_scaleX))
+#define YLOG2DEV(y) ((y) + (m_deviceOriginY / m_scaleY))
+#define XDEV2LOG(x) ((x) - (m_deviceOriginX / m_scaleX))
+#define YDEV2LOG(y) ((y) - (m_deviceOriginY / m_scaleY))
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -131,7 +141,7 @@ public:
     {
     }
 
-    // return the symbol with the given name or NULL if the DLL not loaded
+    // return the symbol with the given name or nullptr if the DLL not loaded
     // or symbol not present
     void *GetSymbol(const wxChar *name)
     {
@@ -144,10 +154,10 @@ public:
 
             // reset the name whether we succeeded or failed so that we don't
             // try again the next time
-            m_dllName = NULL;
+            m_dllName = nullptr;
         }
 
-        return m_dll.IsLoaded() ? m_dll.GetSymbol(name) : NULL;
+        return m_dll.IsLoaded() ? m_dll.GetSymbol(name) : nullptr;
     }
 
     void Unload()
@@ -176,19 +186,19 @@ static wxOnceOnlyDLLLoader wxGDI32DLL(wxT("gdi32.dll"));
 typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
                                     HDC,int,int,int,int,
                                     BLENDFUNCTION);
-static AlphaBlend_t gs_pfnAlphaBlend = NULL;
+static AlphaBlend_t gs_pfnAlphaBlend = nullptr;
 static bool gs_triedToLoadAlphaBlend = false;
 
 typedef BOOL (WINAPI *GradientFill_t)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
-static GradientFill_t gs_pfnGradientFill = NULL;
+static GradientFill_t gs_pfnGradientFill = nullptr;
 static bool gs_triedToLoadGradientFill = false;
 
 typedef DWORD (WINAPI *GetLayout_t)(HDC);
-static GetLayout_t gs_pfnGetLayout = NULL;
+static GetLayout_t gs_pfnGetLayout = nullptr;
 static bool gs_triedToLoadGetLayout = false;
 
 typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
-static SetLayout_t gs_pfnSetLayout = NULL;
+static SetLayout_t gs_pfnSetLayout = nullptr;
 static bool gs_triedToLoadSetLayout = false;
 #endif // USE_DYNAMIC_GDI_FUNCS
 
@@ -199,22 +209,22 @@ static bool gs_triedToLoadSetLayout = false;
 class wxGDIDLLsCleanupModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override
     {
         wxMSIMG32DLL.Unload();
         wxGDI32DLL.Unload();
 #ifdef USE_DYNAMIC_GDI_FUNCS
-        gs_pfnGetLayout = NULL;
+        gs_pfnGetLayout = nullptr;
         gs_triedToLoadGetLayout = false;
 
-        gs_pfnSetLayout = NULL;
+        gs_pfnSetLayout = nullptr;
         gs_triedToLoadSetLayout = false;
 
-        gs_pfnAlphaBlend = NULL;
+        gs_pfnAlphaBlend = nullptr;
         gs_triedToLoadAlphaBlend = false;
 
-        gs_pfnGradientFill = NULL;
+        gs_pfnGradientFill = nullptr;
         gs_triedToLoadGradientFill = false;
 #endif // USE_DYNAMIC_GDI_FUNCS
     }
@@ -324,7 +334,7 @@ BOOL GradientFill(HDC hdc, PTRIVERTEX pVert, ULONG numVert,
     return ::GradientFill(hdc, pVert, numVert, pMesh, numMesh, mode);
 }
 
-#else // Can't use the functions neither statically nor dynamically.
+#else // Can't use the functions either statically or dynamically.
 
 inline
 DWORD GetLayout(HDC WXUNUSED(hdc))
@@ -402,6 +412,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBrushAttrsSetter);
 };
 
+namespace
+{
+
 // this class sets the stretch blit mode to COLORONCOLOR during its lifetime
 class StretchBltModeChanger
 {
@@ -431,6 +444,32 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(StretchBltModeChanger);
 };
+
+// This one changes polygon fill mode to the given one during its lifetime.
+class PolyFillModeSetter
+{
+public:
+    PolyFillModeSetter(HDC hdc, wxPolygonFillMode mode)
+        : m_hdc(hdc)
+    {
+        m_modeOld = ::SetPolyFillMode(m_hdc, mode == wxODDEVEN_RULE ? ALTERNATE
+                                                                    : WINDING);
+    }
+
+    ~PolyFillModeSetter()
+    {
+        ::SetPolyFillMode(m_hdc, m_modeOld);
+    }
+
+private:
+    const HDC m_hdc;
+
+    int m_modeOld;
+
+    wxDECLARE_NO_COPY_CLASS(PolyFillModeSetter);
+};
+
+} // anonymous namespace
 
 // ===========================================================================
 // implementation
@@ -470,6 +509,13 @@ WXHDC wxDC::GetHDC() const
 // wxMSWDCImpl
 // ---------------------------------------------------------------------------
 
+void wxMSWDCImpl::InitWindow(wxWindow* window)
+{
+    m_window = window;
+    if ( m_window )
+        m_contentScaleFactor = m_window->GetDPIScaleFactor();
+}
+
 wxMSWDCImpl::wxMSWDCImpl( wxDC *owner, WXHDC hDC ) :
     wxDCImpl( owner )
 {
@@ -498,7 +544,7 @@ wxMSWDCImpl::~wxMSWDCImpl()
             else
             {
                 // Must have been a wxScreenDC
-                ::ReleaseDC((HWND) NULL, GetHdc());
+                ::ReleaseDC(nullptr, GetHdc());
             }
         }
     }
@@ -516,7 +562,7 @@ void wxMSWDCImpl::SelectOldObjects(WXHDC dc)
             ::SelectObject((HDC) dc, (HBITMAP) m_oldBitmap);
             if (m_selectedBitmap.IsOk())
             {
-                m_selectedBitmap.SetSelectedInto(NULL);
+                m_selectedBitmap.SetSelectedInto(nullptr);
             }
         }
         m_oldBitmap = 0;
@@ -562,12 +608,28 @@ void wxMSWDCImpl::SelectOldObjects(WXHDC dc)
 void wxMSWDCImpl::UpdateClipBox()
 {
     RECT rect;
-    ::GetClipBox(GetHdc(), &rect);
+    if ( ::GetClipBox(GetHdc(), &rect) == ERROR )
+    {
+        wxLogLastError("GetClipBox");
+        return;
+    }
 
-    m_clipX1 = (wxCoord) XDEV2LOG(rect.left);
-    m_clipY1 = (wxCoord) YDEV2LOG(rect.top);
-    m_clipX2 = (wxCoord) XDEV2LOG(rect.right);
-    m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom);
+    // Don't shift by the device origin if the clipping box is empty.
+    if ( rect.left == rect.right && rect.top == rect.bottom )
+    {
+        m_clipX1 =
+        m_clipY1 =
+        m_clipX2 =
+        m_clipY2 = 0;
+    }
+    else
+    {
+        m_clipX1 = (wxCoord) XDEV2LOG(rect.left);
+        m_clipY1 = (wxCoord) YDEV2LOG(rect.top);
+        m_clipX2 = (wxCoord) XDEV2LOG(rect.right);
+        m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom);
+    }
+
     m_isClipBoxValid = true;
 }
 
@@ -608,17 +670,17 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
 {
     wxCHECK_RET( hrgn, wxT("invalid clipping region") );
 
-    HRGN hRgnRTL = NULL;
+    HRGN hRgnRTL = nullptr;
     // DC with enabled RTL layout needs a mirrored region
     // so we have to create such a region temporarily.
     if ( GetLayoutDirection() == wxLayout_RightToLeft )
     {
-        DWORD bufLen = ::GetRegionData(hrgn, 0, NULL);  // Get the storage size
-        char* pDataBuf = new char[bufLen];   // Buffer for the region data
-        if ( ::GetRegionData(hrgn, bufLen, reinterpret_cast<RGNDATA*>(pDataBuf)) != bufLen )
+        DWORD bufLen = ::GetRegionData(hrgn, 0, nullptr);  // Get the storage size
+        wxScopedArray<char> pDataBuf(bufLen);
+        RGNDATA* const rgndata = reinterpret_cast<RGNDATA*>(pDataBuf.get());
+        if ( ::GetRegionData(hrgn, bufLen, rgndata) != bufLen )
         {
             wxLogLastError("GetRegionData");
-            delete[] pDataBuf;
             return;
         }
         int dcw, dch;
@@ -637,8 +699,7 @@ void wxMSWDCImpl::SetClippingHrgn(WXHRGN hrgn, bool doRtlOffset)
         // shoulde be adjusted.
         tr.eDx = doRtlOffset ? dcw : dcw-1; // max X
         tr.eDy = 0;
-        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, reinterpret_cast<RGNDATA*>(pDataBuf));
-        delete[] pDataBuf;
+        hRgnRTL = ::ExtCreateRegion(&tr, bufLen, rgndata);
         if ( !hRgnRTL )
         {
             wxLogLastError("ExtCreateRegion");
@@ -806,8 +867,6 @@ void wxMSWDCImpl::Clear()
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
     ::FillRect(GetHdc(), &rect, hbr);
-
-    RealizeScaleAndOrigin();
 }
 
 bool wxMSWDCImpl::DoFloodFill(wxCoord x,
@@ -843,7 +902,7 @@ bool wxMSWDCImpl::DoFloodFill(wxCoord x,
 
 bool wxMSWDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    wxCHECK_MSG( col, false, wxT("NULL colour parameter in wxMSWDCImpl::GetPixel") );
+    wxCHECK_MSG( col, false, wxT("null colour parameter in wxMSWDCImpl::GetPixel") );
 
     // get the color of the pixel
     COLORREF pixelcolor = ::GetPixel(GetHdc(), XLOG2DEV(x), YLOG2DEV(y));
@@ -906,8 +965,7 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
         wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
     }
 
-    CalcBoundingBox(rect.left, rect.top);
-    CalcBoundingBox(rect.right, rect.bottom);
+    CalcBoundingBox(rect.left, rect.top, rect.right, rect.bottom);
 }
 
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
@@ -939,8 +997,7 @@ void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
         wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), XLOG2DEV(x2), YLOG2DEV(y2));
     }
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
@@ -992,8 +1049,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
         Arc(GetHdc(),xxx1,yyy1,xxx2,yyy2, xx1,yy1,xx2,yy2);
     }
 
-    CalcBoundingBox(xc - r, yc - r);
-    CalcBoundingBox(xc + r, yc + r);
+    CalcBoundingBox(xc - r, yc - r, xc + r, yc + r);
 }
 
 void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -1017,22 +1073,27 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
 {
     wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
-    // Do things less efficiently if we have offsets
-    if (xoffset != 0 || yoffset != 0)
+    PolyFillModeSetter polyfillModeSetter(GetHdc(), fillStyle);
+
+    // Do things less efficiently if we have offsets or need to account for the
+    // device origin offset
+    if (xoffset != 0 || yoffset != 0 || m_deviceOriginX != 0 || m_deviceOriginY != 0)
     {
-        POINT *cpoints = new POINT[n];
+        wxScopedArray<POINT> cpoints(n);
         int i;
         for (i = 0; i < n; i++)
         {
-            cpoints[i].x = (int)(points[i].x + xoffset);
-            cpoints[i].y = (int)(points[i].y + yoffset);
+            // First adjust the logical coordinates to include the offset.
+            cpoints[i].x = points[i].x + xoffset;
+            cpoints[i].y = points[i].y + yoffset;
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
+
+            // Now convert them to the device coordinates that we need to use.
+            cpoints[i].x += XLOG2DEV(0);
+            cpoints[i].y += YLOG2DEV(0);
         }
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)Polygon(GetHdc(), cpoints, n);
-        SetPolyFillMode(GetHdc(),prev);
-        delete[] cpoints;
+        (void)Polygon(GetHdc(), cpoints.get(), n);
     }
     else
     {
@@ -1040,9 +1101,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
         for (i = 0; i < n; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         Polygon(GetHdc(), reinterpret_cast<const POINT*>(points), n);
-        SetPolyFillMode(GetHdc(),prev);
     }
 }
 
@@ -1059,39 +1118,39 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
     for (i = cnt = 0; i < n; i++)
         cnt += count[i];
 
-    // Do things less efficiently if we have offsets
-    if (xoffset != 0 || yoffset != 0)
+    PolyFillModeSetter polyfillModeSetter(GetHdc(), fillStyle);
+
+    // The code here is similar to the code in DoDrawPolygon() above.
+    if (xoffset != 0 || yoffset != 0 || m_deviceOriginX != 0 || m_deviceOriginY != 0)
     {
-        POINT *cpoints = new POINT[cnt];
+        wxScopedArray<POINT> cpoints(cnt);
         for (i = 0; i < cnt; i++)
         {
-            cpoints[i].x = (int)(points[i].x + xoffset);
-            cpoints[i].y = (int)(points[i].y + yoffset);
+            cpoints[i].x = points[i].x + xoffset;
+            cpoints[i].y = points[i].y + yoffset;
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
+
+            cpoints[i].x += XLOG2DEV(0);
+            cpoints[i].y += YLOG2DEV(0);
         }
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
-        (void)PolyPolygon(GetHdc(), cpoints, count, n);
-        SetPolyFillMode(GetHdc(),prev);
-        delete[] cpoints;
+        (void)PolyPolygon(GetHdc(), cpoints.get(), count, n);
     }
     else
     {
         for (i = 0; i < cnt; i++)
             CalcBoundingBox(points[i].x, points[i].y);
 
-        int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
         PolyPolygon(GetHdc(), reinterpret_cast<const POINT*>(points), count, n);
-        SetPolyFillMode(GetHdc(),prev);
     }
 }
 
 void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-    // Do things less efficiently if we have offsets
-    if (xoffset != 0 || yoffset != 0)
+    // The logic here is similar to that of DoDrawPolygon() above.
+    if (xoffset != 0 || yoffset != 0 || m_deviceOriginX != 0 || m_deviceOriginY != 0)
     {
-        POINT *cpoints = new POINT[n];
+        wxScopedArray<POINT> cpoints(n);
         int i;
         for (i = 0; i < n; i++)
         {
@@ -1099,9 +1158,11 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
             cpoints[i].y = (int)(points[i].y + yoffset);
 
             CalcBoundingBox(cpoints[i].x, cpoints[i].y);
+
+            cpoints[i].x += XLOG2DEV(0);
+            cpoints[i].y += YLOG2DEV(0);
         }
-        (void)Polyline(GetHdc(), cpoints, n);
-        delete[] cpoints;
+        (void)Polyline(GetHdc(), cpoints.get(), n);
     }
     else
     {
@@ -1142,8 +1203,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
     (void)Rectangle(GetHdc(), x1dev, y1dev, x2dev, y2dev);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
@@ -1172,10 +1232,9 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     }
 
     (void)RoundRect(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2),
-        YLOG2DEV(y2), (int) (2*XLOG2DEV(radius)), (int)( 2*YLOG2DEV(radius)));
+        YLOG2DEV(y2), (int) (2*radius), (int)( 2*radius));
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -1192,8 +1251,7 @@ void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 
     ::Ellipse(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 #if wxUSE_SPLINES
@@ -1213,20 +1271,22 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     // B2 = (2*P1 + P2)/3
     // B3 = P2
 
-    wxCHECK_RET( points, "NULL pointer to spline points?" );
+    wxCHECK_RET( points, "null pointer to spline points?" );
 
     const size_t n_points = points->size();
     wxCHECK_RET( n_points >= 2 , "incomplete list of spline points?" );
 
     const size_t n_bezier_points = n_points * 3 + 1;
-    POINT *lppt = new POINT[n_bezier_points];
+    wxScopedArray<POINT> lppt(n_bezier_points);
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1;
 
     wxPointList::const_iterator itPt = points->begin();
     wxPoint* p = *itPt; ++itPt;
-    lppt[ bezier_pos ].x = x1 = p->x;
-    lppt[ bezier_pos ].y = y1 = p->y;
+    x1 = p->x;
+    y1 = p->y;
+    lppt[ bezier_pos ].x = XLOG2DEV(x1);
+    lppt[ bezier_pos ].y = YLOG2DEV(y1);
     bezier_pos++;
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
@@ -1280,9 +1340,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
 
-    ::PolyBezier( GetHdc(), lppt, bezier_pos );
-
-    delete []lppt;
+    ::PolyBezier( GetHdc(), lppt.get(), bezier_pos );
 }
 #endif // wxUSE_SPLINES
 
@@ -1326,8 +1384,7 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
     (void)Arc(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2),
               rx1, ry1, rx2, ry2);
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x, y, x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
@@ -1348,11 +1405,10 @@ void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
     }
     else
     {
-        ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
+        ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, nullptr, DI_NORMAL);
     }
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + icon.GetWidth(), y + icon.GetHeight());
+    CalcBoundingBox(wxPoint(x, y), icon.GetSize());
 }
 
 void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
@@ -1387,17 +1443,17 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
             }
             else
             {
-                curBmp.SetMask(NULL);
+                curBmp.SetMask(nullptr);
             }
         }
 
         MemoryHDC hdcMem;
         SelectInHDC select(hdcMem, GetHbitmapOf(curBmp));
 
-        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, curBmp) )
+        if ( AlphaBlt(this, XLOG2DEV(x), YLOG2DEV(y), width, height,
+                            0, 0, width, height, hdcMem, curBmp) )
         {
-            CalcBoundingBox(x, y);
-            CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
+            CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
             return;
         }
     }
@@ -1448,7 +1504,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
             }
 #endif // wxUSE_PALETTE
 
-            ok = ::MaskBlt(cdc, x, y, width, height,
+            ok = ::MaskBlt(cdc, XLOG2DEV(x), YLOG2DEV(y), width, height,
                             hdcMem, 0, 0,
                             hbmpMask, 0, 0,
                             MAKEROP4(SRCCOPY, DSTCOPY)) != 0;
@@ -1480,7 +1536,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         HDC memdc = wxMSWImpl::CreateCompatibleDCWithLayout( cdc );
         HBITMAP hbitmap = (HBITMAP) bmp.GetHBITMAP( );
 
-        wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is NULL?") );
+        wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is null?") );
 
         wxTextColoursChanger textCol(GetHdc(), *this);
 
@@ -1494,7 +1550,8 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 #endif // wxUSE_PALETTE
 
         HGDIOBJ hOldBitmap = ::SelectObject( memdc, hbitmap );
-        ::BitBlt( cdc, x, y, width, height, memdc, 0, 0, SRCCOPY);
+        ::BitBlt(cdc, XLOG2DEV(x), YLOG2DEV(y), width, height,
+                 memdc, 0, 0, SRCCOPY);
 
 #if wxUSE_PALETTE
         if (oldPal)
@@ -1505,8 +1562,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         ::DeleteDC( memdc );
     }
 
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
+    CalcBoundingBox(wxPoint(x, y), bmp.GetSize());
 }
 
 void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
@@ -1531,17 +1587,13 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     DrawAnyText(text, x, y);
 
     // update the bounding box
-    CalcBoundingBox(x, y);
-
-    wxCoord w, h;
-    GetOwner()->GetTextExtent(text, &w, &h);
-    CalcBoundingBox(x + w, y + h);
+    CalcBoundingBox(wxPoint(x, y), GetOwner()->GetTextExtent(text));
 }
 
 void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
-    if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, NULL,
-                   text.c_str(), text.length(), NULL) == 0 )
+    if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, nullptr,
+                   text.c_str(), text.length(), nullptr) == 0 )
     {
         wxLogLastError(wxT("TextOut"));
     }
@@ -1628,14 +1680,12 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     // determining which of them is really topmost/leftmost/...)
 
     // "upper left" and "upper right"
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 
     // "bottom left" and "bottom right"
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
-    CalcBoundingBox(x, y);
-    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    CalcBoundingBox(x, y, x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 }
 
 // ---------------------------------------------------------------------------
@@ -1797,7 +1847,7 @@ void wxMSWDCImpl::SetBrush(const wxBrush& brush)
                         GetHdc(),
                         m_deviceOriginX % sizeBrushBitmap.x,
                         m_deviceOriginY % sizeBrushBitmap.y,
-                        NULL                    // [out] previous brush origin
+                        nullptr                    // [out] previous brush origin
                     ) )
             {
                 wxLogLastError(wxT("SetBrushOrgEx()"));
@@ -1969,7 +2019,7 @@ void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
 
 bool wxMSWDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
-    wxTextMeasure txm(GetOwner(), NULL); // don't change the font
+    wxTextMeasure txm(GetOwner(), nullptr); // don't change the font
     return txm.GetPartialTextExtents(text, widths, 1.0);
 }
 
@@ -2025,11 +2075,10 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
     devExtY /= gcd;
     logExtY /= gcd;
 
-    ::SetViewportExtEx(GetHdc(), devExtX, devExtY, NULL);
-    ::SetWindowExtEx(GetHdc(), logExtX, logExtY, NULL);
+    ::SetViewportExtEx(GetHdc(), devExtX, devExtY, nullptr);
+    ::SetWindowExtEx(GetHdc(), logExtX, logExtY, nullptr);
 
-    ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
-    ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
+    ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, nullptr);
 
     m_isClipBoxValid = false;
 }
@@ -2140,27 +2189,65 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
     wxDCImpl::SetDeviceOrigin( x, y );
 
-    ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
+    // Do not call RealizeScaleAndOrigin(), we don't rely on Windows for the
+    // device origin translation.
 
     m_isClipBoxValid = false;
 }
 
 wxPoint wxMSWDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
 {
-    POINT p[1];
-    p[0].x = x;
-    p[0].y = y;
-    ::DPtoLP(GetHdc(), p, WXSIZEOF(p));
-    return wxPoint(p[0].x, p[0].y);
+    POINT p;
+    p.x = x;
+    p.y = y;
+    ::DPtoLP(GetHdc(), &p, 1);
+
+    wxPoint pt(p.x, p.y);
+
+    if ( m_deviceOriginX || m_deviceOriginY )
+    {
+        // Note the minus sign, we use it for convenience here as we actually
+        // need the reverse translation below.
+        const double dx = -m_deviceOriginX / m_scaleX;
+        const double dy = -m_deviceOriginY / m_scaleY;
+
+#if wxUSE_DC_TRANSFORM_MATRIX
+        // In presence of a world transform we need to apply it to the device
+        // origin shift too as it's not taken into account by the HDC itself.
+        wxAffineMatrix2D m0 = GetTransformMatrix();
+        if ( !m0.IsIdentity() )
+        {
+            // Compute m^(-1)*T*m where T is the translation matrix.
+            wxAffineMatrix2D m = m0;
+            m.Invert();
+            m.Translate(dx, dy);
+            m.Concat(m0);
+
+            const wxPoint2DDouble dp = m.TransformPoint(pt);
+
+            // We don't use rounding here because we don't use it elsewhere.
+            pt.x = dp.m_x;
+            pt.y = dp.m_y;
+        }
+        else
+#endif // wxUSE_DC_TRANSFORM_MATRIX
+        {
+            // In this case things can be done much simpler.
+            pt.x += dx;
+            pt.y += dy;
+        }
+    }
+
+    return pt;
 }
 
 wxPoint wxMSWDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
 {
-    POINT p[1];
-    p[0].x = x;
-    p[0].y = y;
-    ::LPtoDP(GetHdc(), p, WXSIZEOF(p));
-    return wxPoint(p[0].x, p[0].y);
+    POINT p;
+    p.x = x;
+    p.y = y;
+    ::LPtoDP(GetHdc(), &p, 1);
+    return wxPoint(p.x + m_deviceOriginX, p.y + m_deviceOriginY);
 }
 
 wxSize wxMSWDCImpl::DeviceToLogicalRel(int x, int y) const
@@ -2252,7 +2339,7 @@ wxAffineMatrix2D wxMSWDCImpl::GetTransformMatrix() const
 
 void wxMSWDCImpl::ResetTransformMatrix()
 {
-    ::ModifyWorldTransform(GetHdc(), NULL, MWT_IDENTITY);
+    ::ModifyWorldTransform(GetHdc(), nullptr, MWT_IDENTITY);
     ::SetGraphicsMode(GetHdc(), GM_COMPATIBLE);
     m_isClipBoxValid = false;
 }
@@ -2281,7 +2368,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          wxRasterOperationMode rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask)
 {
-    wxCHECK_MSG( source, false, wxT("wxMSWDCImpl::Blit(): NULL wxDC pointer") );
+    wxCHECK_MSG( source, false, wxT("wxMSWDCImpl::Blit(): null wxDC pointer") );
 
     wxMSWDCImpl *implSrc = wxDynamicCast( source->GetImpl(), wxMSWDCImpl );
     if ( !implSrc )
@@ -2289,6 +2376,20 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         // TODO: Do we want to be able to blit from other DCs too?
         return false;
     }
+
+    const wxRect bbox(xdest, ydest, dstWidth, dstHeight);
+
+    // Take the device origin into account manually here, as none of the
+    // functions used below would do it.
+    xdest += XLOG2DEV(0);
+    ydest += YLOG2DEV(0);
+
+    const int xsrcOrig = xsrc;
+    const int ysrcOrig = ysrc;
+
+    // This does the same thing as XLOG2DEV() but for the source DC.
+    xsrc += implSrc->m_deviceOriginX / implSrc->m_scaleX;
+    ysrc += implSrc->m_deviceOriginY / implSrc->m_scaleY;
 
     HDC hdcSrc = GetHdcOf(*implSrc);
 
@@ -2301,13 +2402,12 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         if ( AlphaBlt(this, xdest, ydest, dstWidth, dstHeight,
                       xsrc, ysrc, srcWidth, srcHeight, hdcSrc, bmpSrc) )
         {
-            CalcBoundingBox(xdest, ydest);
-            CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
+            CalcBoundingBox(bbox);
             return true;
         }
     }
 
-    wxMask *mask = NULL;
+    wxMask *mask = nullptr;
     if ( useMask )
     {
         mask = bmpSrc.GetMask();
@@ -2358,7 +2458,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     if ( dwRop == BLACKNESS || dwRop == WHITENESS ||
             dwRop == DSTINVERT || dwRop == DSTCOPY )
     {
-        hdcSrc = NULL;
+        hdcSrc = nullptr;
     }
 
     bool success = false;
@@ -2402,7 +2502,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
 #if wxUSE_DC_CACHEING
             // create a temp buffer bitmap and DCs to access it and the mask
-            wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, hdcSrc);
+            wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(nullptr, hdcSrc);
             dc_mask = (HDC) dcCacheEntry1->m_dc;
 
             wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, GetHDC());
@@ -2504,8 +2604,8 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 // automatically as it doesn't even work with the source HDC.
                 // So do this manually to ensure that the coordinates are
                 // interpreted in the same way here as in all the other cases.
-                xsrc = source->LogicalToDeviceX(xsrc);
-                ysrc = source->LogicalToDeviceY(ysrc);
+                xsrc = source->LogicalToDeviceX(xsrcOrig);
+                ysrc = source->LogicalToDeviceY(ysrcOrig);
                 srcWidth = source->LogicalToDeviceXRel(srcWidth);
                 srcHeight = source->LogicalToDeviceYRel(srcHeight);
 
@@ -2589,10 +2689,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     }
 
     if ( success )
-    {
-        CalcBoundingBox(xdest, ydest);
-        CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
-    }
+        CalcBoundingBox(bbox);
 
     return success;
 }
@@ -2648,8 +2745,7 @@ wxSize wxMSWDCImpl::GetPPI() const
 
     if ( !ppi.x || !ppi.y )
     {
-        ppi.x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
-        ppi.y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+        ppi = wxGetDPIofHDC(GetHdc());
     }
 
     return ppi;
@@ -2781,8 +2877,8 @@ void wxMSWDCImpl::ClearCache()
 class wxDCModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxMSWDCImpl::ClearCache(); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxMSWDCImpl::ClearCache(); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxDCModule);
@@ -2908,10 +3004,10 @@ void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
     // one vertex for upper left and one for upper-right
     TRIVERTEX vertices[2];
 
-    vertices[0].x = rect.GetLeft();
-    vertices[0].y = rect.GetTop();
-    vertices[1].x = rect.GetRight()+1;
-    vertices[1].y = rect.GetBottom()+1;
+    vertices[0].x = XLOG2DEV(rect.GetLeft());
+    vertices[0].y = YLOG2DEV(rect.GetTop());
+    vertices[1].x = XLOG2DEV(rect.GetRight()) + 1;
+    vertices[1].y = YLOG2DEV(rect.GetBottom()) + 1;
 
     vertices[firstVertex].Red = (COLOR16)(initialColour.Red() << 8);
     vertices[firstVertex].Green = (COLOR16)(initialColour.Green() << 8);
@@ -2934,8 +3030,7 @@ void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
                 : GRADIENT_FILL_RECT_V
          ) )
     {
-        CalcBoundingBox(rect.GetLeft(), rect.GetBottom());
-        CalcBoundingBox(rect.GetRight(), rect.GetTop());
+        CalcBoundingBox(rect);
     }
     else
     {

@@ -26,7 +26,7 @@ public:
     virtual ~wxWindowDCImpl();
 
 protected:
-    // initializes the DC for painting on given window; if rect!=NULL, then
+    // initializes the DC for painting on given window; if rect!=nullptr, then
     // for painting only on the given region of the window
     void InitForWin(wxWindow *win, const wxRect *rect);
 
@@ -50,6 +50,9 @@ class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 public:
     wxClientDCImpl(wxDC *owner) : wxWindowDCImpl(owner) { }
     wxClientDCImpl(wxDC *owner, wxWindow *win);
+
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return true; }
 
     wxDECLARE_DYNAMIC_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);

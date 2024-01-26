@@ -2,7 +2,6 @@
 // Name:        artbrows.cpp
 // Purpose:     wxArtProvider demo - art browser dialog
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2002/04/05
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
@@ -196,11 +195,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
 wxArtBrowserDialog::~wxArtBrowserDialog()
 {
-    const int itemCount = m_list->GetItemCount();
-
-    // item data are set by the ART_ICON macro
-    for ( int i = 0; i < itemCount; ++i )
-        delete reinterpret_cast<wxString*>(m_list->GetItemData(i));
+    DeleteListItemData();
 }
 
 wxSize wxArtBrowserDialog::GetSelectedBitmapSize() const
@@ -209,6 +204,14 @@ wxSize wxArtBrowserDialog::GetSelectedBitmapSize() const
   return wxSize(size, size);
 }
 
+void wxArtBrowserDialog::DeleteListItemData()
+{
+    const int itemCount = m_list->GetItemCount();
+
+    // item data are set by the ART_ICON macro
+    for ( int i = 0; i < itemCount; ++i )
+        delete reinterpret_cast<wxString*>(m_list->GetItemData(i));
+}
 
 void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
 {
@@ -221,6 +224,7 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
     long sel = m_list->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
     if (sel < 0) sel = 0;
 
+    DeleteListItemData();
     m_list->DeleteAllItems();
     FillBitmaps(img, m_list, index, client, wxSize(16, 16));
     m_list->AssignImageList(img, wxIMAGE_LIST_SMALL);

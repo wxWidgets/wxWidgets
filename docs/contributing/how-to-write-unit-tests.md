@@ -27,7 +27,7 @@ build the library:
   directory where you ran configure, not the one in the source tree) and run
   `make test` (non-GUI tests) or `make test_gui` (GUI ones) to build.
 
-- When using CMake, add `-DwxBUILD_TESTS=ON` (or `=CONSOLE` for non-GUI tests
+- When using CMake, add `-DwxBUILD_TESTS=ALL` (or `=CONSOLE_ONLY` for non-GUI tests
   only) to the command line arguments, or choose the desired `wxBUILD_TESTS`
   option in `cmake-gui`.
 
@@ -74,7 +74,7 @@ Tests physical structure
 All (i.e. both GUI and non-GUI) unit tests are under `tests` subdirectory. When
 adding a new test, try to find an existing file to add it to. If there are no
 applicable files, try to add a new file to an existing directory. If there is
-no applicable directory neither, create a new one and put the new file there
+no applicable directory either, create a new one and put the new file there
 (i.e. do _not_ put new files directly under `tests`). If your test is small,
 consider adding it to `tests/misc/misctests.cpp`.
 

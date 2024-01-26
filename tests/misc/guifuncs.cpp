@@ -25,9 +25,10 @@
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
 #include "wx/panel.h"
-#include "wx/scopedptr.h"
 
 #include "asserthelper.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // the tests
@@ -43,10 +44,10 @@ TEST_CASE("GUI::DisplaySize", "[guifuncs]")
     CHECK( sz.x == w );
     CHECK( sz.y == h );
 
-    // test that passing NULL works as expected, e.g. doesn't crash
-    wxDisplaySize(NULL, NULL);
-    wxDisplaySize(&w, NULL);
-    wxDisplaySize(NULL, &h);
+    // test that passing nullptr works as expected, e.g. doesn't crash
+    wxDisplaySize(nullptr, nullptr);
+    wxDisplaySize(&w, nullptr);
+    wxDisplaySize(nullptr, &h);
 
     CHECK( sz.x == w );
     CHECK( sz.y == h );
@@ -58,7 +59,23 @@ TEST_CASE("GUI::DisplaySize", "[guifuncs]")
 }
 
 #if wxUSE_DATAOBJ
-TEST_CASE("GUI::URLDataObject", "[guifuncs]")
+TEST_CASE("GUI::TextDataObject", "[guifuncs][clipboard]")
+{
+    const wxString text("Hello clipboard!");
+
+    wxTextDataObject* const dobj = new wxTextDataObject(text);
+    CHECK( dobj->GetText() == text );
+
+    wxClipboardLocker lockClip;
+    CHECK( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
+
+    wxTextDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+    CHECK( dobj2.GetText() == text );
+}
+
+TEST_CASE("GUI::URLDataObject", "[guifuncs][clipboard]")
 {
     // this tests for buffer overflow, see #11102
     const char * const
@@ -69,6 +86,45 @@ TEST_CASE("GUI::URLDataObject", "[guifuncs]")
     wxClipboardLocker lockClip;
     CHECK( wxTheClipboard->SetData(dobj) );
     wxTheClipboard->Flush();
+
+    wxURLDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+    CHECK( dobj2.GetURL() == url );
+}
+
+TEST_CASE("GUI::HTMLDataObject", "[guifuncs][clipboard]")
+{
+    const wxString text("<h1>Hello clipboard!</h1>");
+
+    wxHTMLDataObject* const dobj = new wxHTMLDataObject(text);
+    CHECK( dobj->GetHTML() == text );
+
+    wxClipboardLocker lockClip;
+    CHECK( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
+
+    wxHTMLDataObject dobj2;
+    REQUIRE( wxTheClipboard->GetData(dobj2) );
+    CHECK( dobj2.GetHTML() == text );
+}
+
+// This disabled by default test allows to check that we retrieve HTML data
+// from the system clipboard correctly.
+TEST_CASE("GUI::ShowHTML", "[.]")
+{
+    wxClipboardLocker lockClip;
+
+    wxHTMLDataObject dobj;
+    REQUIRE( wxTheClipboard->GetData(dobj) );
+
+    WARN("Clipboard contents:\n---start---\n" << dobj.GetHTML() << "\n---end--");
+}
+
+TEST_CASE("GUI::DataFormatCompare", "[guifuncs][dataformat]")
+{
+    const wxDataFormat df(wxDF_TEXT);
+    CHECK( df == wxDF_TEXT );
+    CHECK( df != wxDF_INVALID );
 }
 #endif // wxUSE_DATAOBJ
 
@@ -115,9 +171,9 @@ TEST_CASE("GUI::ClientToScreen", "[guifuncs]")
     wxWindow* const tlw = wxTheApp->GetTopWindow();
     REQUIRE( tlw );
 
-    wxScopedPtr<wxPanel> const
+    std::unique_ptr<wxPanel> const
         p1(new wxPanel(tlw, wxID_ANY, wxPoint(0, 0), wxSize(100, 50)));
-    wxScopedPtr<wxPanel> const
+    std::unique_ptr<wxPanel> const
         p2(new wxPanel(tlw, wxID_ANY, wxPoint(0, 50), wxSize(100, 50)));
     wxWindow* const
         b = new wxWindow(p2.get(), wxID_ANY, wxPoint(10, 10), wxSize(30, 10));
@@ -167,10 +223,10 @@ TEST_CASE("GUI::FindWindowAtPoint", "[guifuncs]")
     // assertion messages.
     parent->SetLabel("parent");
 
-    wxScopedPtr<wxWindow> btn1(new TestButton(parent, "1", wxPoint(10, 10)));
-    wxScopedPtr<wxWindow> btn2(new TestButton(parent, "2", wxPoint(10, 90)));
+    std::unique_ptr<wxWindow> btn1(new TestButton(parent, "1", wxPoint(10, 10)));
+    std::unique_ptr<wxWindow> btn2(new TestButton(parent, "2", wxPoint(10, 90)));
 
-    // No need to use wxScopedPtr<> for this one, it will be deleted by btn2.
+    // No need to use std::unique_ptr<> for this one, it will be deleted by btn2.
     wxWindow* btn3 = new TestButton(btn2.get(), "3", wxPoint(20, 20));
 
     // We need this to realize the windows created above under wxGTK.
@@ -204,9 +260,9 @@ TEST_CASE("GUI::FindWindowAtPoint", "[guifuncs]")
 
 TEST_CASE("wxWindow::Dump", "[window]")
 {
-    CHECK_NOTHROW( wxDumpWindow(NULL) );
+    CHECK_NOTHROW( wxDumpWindow(nullptr) );
 
-    wxScopedPtr<wxButton>
+    std::unique_ptr<wxButton>
         button(new wxButton(wxTheApp->GetTopWindow(), wxID_ANY, "bloordyblop"));
 
     const std::string s = wxDumpWindow(button.get()).utf8_string();

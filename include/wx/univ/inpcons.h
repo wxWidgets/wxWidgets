@@ -2,7 +2,6 @@
 // Name:        wx/univ/inpcons.h
 // Purpose:     wxInputConsumer: mix-in class for input handling
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -37,8 +36,8 @@ typedef wxString wxControlAction;
 class WXDLLIMPEXP_CORE wxInputConsumer
 {
 public:
-    wxInputConsumer() { m_inputHandler = NULL; }
-    virtual ~wxInputConsumer() { }
+    wxInputConsumer() { m_inputHandler = nullptr; }
+    virtual ~wxInputConsumer() = default;
 
     // get the input handler
     wxInputHandler *GetInputHandler() const { return m_inputHandler; }
@@ -65,7 +64,7 @@ public:
     //
     // the parameter is the default input handler which should receive all
     // unprocessed input (i.e. typically handlerDef is passed to
-    // wxStdInputHandler ctor) or it may be NULL
+    // wxStdInputHandler ctor) or it may be null
     //
     // the returned pointer will not be deleted by caller so it must either
     // point to a static object or be deleted on program termination
@@ -125,7 +124,7 @@ private:
 // When we add an event table entry (= use a member pointer) pointing to
 // wxIC's OnXXX method, GCC compiles code that executes wxIC::OnXXX with the
 // version of "this" that belongs to wxControl, not wxIC! In our particular
-// case, the effect is that m_handler is NULL (probably same memory
+// case, the effect is that m_handler is null (probably same memory
 // area as the_other_vtable's_this->m_refObj) and input handling doesn't work.)
 #define WX_FORWARD_TO_INPUT_CONSUMER(classname) \
     void classname::OnMouse(wxMouseEvent& event) \

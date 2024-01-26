@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/x11/glcanvas.h
-// Purpose:     wxGLCanvas, for using OpenGL with wxWidgets 2.0 for Motif.
+// Purpose:     wxGLCanvas, for using OpenGL with X11
 //              Uses the GLX extension.
 // Author:      Julian Smart and Wolfram Gloger
-// Modified by:
 // Created:     1995, 1999
 // Copyright:   (c) Julian Smart, Wolfram Gloger
 // Licence:     wxWindows licence
@@ -17,6 +16,8 @@
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasX11
 {
 public:
+    wxGLCanvas() = default;
+
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
                wxWindowID id = wxID_ANY,
@@ -29,7 +30,7 @@ public:
     explicit // avoid implicitly converting a wxWindow* to wxGLCanvas
     wxGLCanvas(wxWindow *parent,
                wxWindowID id = wxID_ANY,
-               const int *attribList = NULL,
+               const int *attribList = nullptr,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -51,7 +52,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxGLCanvasName,
-                const int *attribList = NULL,
+                const int *attribList = nullptr,
                 const wxPalette& palette = wxNullPalette);
 
     // implement wxGLCanvasX11 methods

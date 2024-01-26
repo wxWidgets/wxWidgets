@@ -2,7 +2,6 @@
 // Name:        wx/osx/statbox.h
 // Purpose:     wxStaticBox class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -16,7 +15,7 @@ class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
     wxDECLARE_DYNAMIC_CLASS(wxStaticBox);
 
 public:
-    wxStaticBox() {}
+    wxStaticBox() = default;
     wxStaticBox(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
@@ -34,15 +33,15 @@ public:
            long style = 0,
            const wxString& name = wxASCII_STR(wxStaticBoxNameStr));
 
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) wxOVERRIDE {}
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) override {}
     virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {}
 
-    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const wxOVERRIDE;
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const override;
 
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
     // protect native font of box
-    virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
+    virtual bool SetFont( const wxFont &font ) override;
 };
 
 #endif

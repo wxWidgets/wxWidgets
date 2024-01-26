@@ -48,21 +48,21 @@ public:
 
 
 public:
-    virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
-    virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) wxOVERRIDE;
+    virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
+    virtual bool Load(wxInputStream& stream, wxAnimationType type = wxANIMATION_TYPE_ANY) override;
 
-    virtual void Stop() wxOVERRIDE;
-    virtual bool Play() wxOVERRIDE
+    virtual void Stop() override;
+    virtual bool Play() override
         { return Play(true /* looped */); }
-    virtual bool IsPlaying() const wxOVERRIDE
+    virtual bool IsPlaying() const override
         { return m_isPlaying; }
 
-    void SetAnimation(const wxAnimation &animation) wxOVERRIDE;
+    void SetAnimation(const wxAnimationBundle &animations) override;
 
-    virtual void SetInactiveBitmap(const wxBitmapBundle &bmp) wxOVERRIDE;
+    virtual void SetInactiveBitmap(const wxBitmapBundle &bmp) override;
 
     // override base class method
-    virtual bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
+    virtual bool SetBackgroundColour(const wxColour& col) override;
 
     static wxAnimation CreateCompatibleAnimation();
 
@@ -93,7 +93,7 @@ public:     // extended API specific to this implementation of wxAnimateCtrl
         { return m_backingStore; }
 
 protected:      // internal utilities
-    virtual wxAnimationImpl* DoCreateAnimationImpl() const wxOVERRIDE;
+    virtual wxAnimationImpl* DoCreateAnimationImpl() const override;
 
     // resize this control to fit m_animation
     void FitToAnimation();
@@ -107,8 +107,8 @@ protected:      // internal utilities
     bool RebuildBackingStoreUpToFrame(unsigned int);
     void DrawFrame(wxDC &dc, unsigned int);
 
-    virtual void DisplayStaticImage() wxOVERRIDE;
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DisplayStaticImage() override;
+    virtual wxSize DoGetBestSize() const override;
 
     // This function can be used as event handler for wxEVT_DPI_CHANGED event
     // and simply calls UpdateStaticImage() to refresh the m_bmpStaticReal when it happens.
@@ -140,6 +140,9 @@ protected:
                                       // on the screen
 
 private:
+    // True if we need to show the next frame after painting the current one.
+    bool m_needToShowNextFrame = false;
+
     typedef wxAnimationCtrlBase base_type;
     wxDECLARE_DYNAMIC_CLASS(wxGenericAnimationCtrl);
     wxDECLARE_EVENT_TABLE();

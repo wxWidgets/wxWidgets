@@ -1,0 +1,64 @@
+#############################################################################
+# Name:        build/cmake/lib/webview_chromium/cef_version_info.cmake
+# Purpose:     CMake file CEF version information
+# Author:      Tobias Taschner
+# Created:     2018-02-03
+# Copyright:   (c) 2018 wxWidgets development team
+# Licence:     wxWindows licence
+#############################################################################
+
+#
+# DO NOT MODIFY MANUALLY
+#
+# To update the include file see cef_update_version_info.cmake
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    if(CMAKE_SIZEOF_VOID_P LESS 8)
+        message(ERROR "Unsupported macOS system")
+    else()
+        if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+            set(CEF_PLATFORM "macosarm64")
+            set(CEF_SHA1 "@CEF_SHA1_macosarm64@")
+        else()
+            set(CEF_PLATFORM "macosx64")
+            set(CEF_SHA1 "@CEF_SHA1_macosx64@")
+        endif()
+    endif()
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    if(CMAKE_SIZEOF_VOID_P LESS 8)
+        if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm")
+            set(CEF_PLATFORM "linuxarm")
+            set(CEF_SHA1 "@CEF_SHA1_linuxarm@")
+        else()
+            message(ERROR "Unsupported Linux system")
+        endif()
+    else()
+        if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+            set(CEF_PLATFORM "linuxarm64")
+            set(CEF_SHA1 "@CEF_SHA1_linuxarm64@")
+        else()
+            set(CEF_PLATFORM "linux64")
+            set(CEF_SHA1 "@CEF_SHA1_linux64@")
+        endif()
+    endif()
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    if(CMAKE_SIZEOF_VOID_P LESS 8)
+        if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm")
+            message(ERROR "Unsupported Windows system")
+        else()
+            set(CEF_PLATFORM "windows32")
+            set(CEF_SHA1 "@CEF_SHA1_windows32@")
+        endif()
+    else()
+        if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+            set(CEF_PLATFORM "windowsarm64")
+            set(CEF_SHA1 "@CEF_SHA1_windowsarm64@")
+        else()
+            set(CEF_PLATFORM "windows64")
+            set(CEF_SHA1 "@CEF_SHA1_windows64@")
+        endif()
+    endif()
+else()
+    message(ERROR "Unsupported CEF system")
+endif()
+set(CEF_URL "@CEF_BASE_URL@@CEF_VERSION@_${CEF_PLATFORM}@CEF_FILE_EXT@")

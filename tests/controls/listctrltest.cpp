@@ -36,10 +36,10 @@ class ListCtrlTestCase : public ListBaseTestCase, public CppUnit::TestCase
 public:
     ListCtrlTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
-    virtual wxListCtrl *GetList() const wxOVERRIDE { return m_list; }
+    virtual wxListCtrl *GetList() const override { return m_list; }
 
 private:
     CPPUNIT_TEST_SUITE( ListCtrlTestCase );
@@ -48,10 +48,12 @@ private:
         WXUISIM_TEST( ColumnClick );
         WXUISIM_TEST( ColumnDrag );
         CPPUNIT_TEST( SubitemRect );
+        CPPUNIT_TEST( ColumnCount );
     CPPUNIT_TEST_SUITE_END();
 
     void EditLabel();
     void SubitemRect();
+    void ColumnCount();
 #if wxUSE_UIACTIONSIMULATOR
     // Column events are only supported in wxListCtrl currently so we test them
     // here rather than in ListBaseTest
@@ -77,21 +79,31 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ListCtrlTestCase, "ListCtrlTestCase" );
 void ListCtrlTestCase::setUp()
 {
     m_list = new wxListCtrl(wxTheApp->GetTopWindow());
-    m_list->SetWindowStyle(wxLC_REPORT);
+    m_list->SetWindowStyle(wxLC_REPORT | wxLC_EDIT_LABELS);
     m_list->SetSize(400, 200);
+
+    wxTheApp->GetTopWindow()->Raise();
 }
 
 void ListCtrlTestCase::tearDown()
 {
     DeleteTestWindow(m_list);
-    m_list = NULL;
+    m_list = nullptr;
 }
 
 void ListCtrlTestCase::EditLabel()
 {
+    EventCounter editItem(m_list, wxEVT_LIST_BEGIN_LABEL_EDIT);
+    EventCounter endEditItem(m_list, wxEVT_LIST_END_LABEL_EDIT);
+
     m_list->InsertColumn(0, "Column 0");
     m_list->InsertItem(0, "foo");
     m_list->EditLabel(0);
+
+    m_list->EndEditLabel(true);
+
+    CHECK(editItem.GetCount() == 1);
+    CHECK(endEditItem.GetCount() == 1);
 }
 
 void ListCtrlTestCase::SubitemRect()
@@ -134,9 +146,36 @@ void ListCtrlTestCase::SubitemRect()
     m_list->GetSubItemRect(1, 1, rectLabel, wxLIST_RECT_LABEL);
 
     CHECK(rectIcon.IsEmpty());
-    // Here we can't check for exact equality neither as there can be a margin.
+    // Here we can't check for exact equality either as there can be a margin.
     CHECK(rectLabel.GetLeft() >= rectItem.GetLeft());
     CHECK(rectLabel.GetRight() == rectItem.GetRight());
+}
+
+void ListCtrlTestCase::ColumnCount()
+{
+    CHECK(m_list->GetColumnCount() == 0);
+    m_list->InsertColumn(0, "Column 0");
+    m_list->InsertColumn(1, "Column 1");
+    CHECK(m_list->GetColumnCount() == 2);
+
+    // Recreate the control in other modes to check the count there as well.
+    delete m_list;
+    m_list = new wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxLC_LIST);
+    CHECK(m_list->GetColumnCount() == 1);
+
+    delete m_list;
+    m_list = new wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxLC_ICON);
+    CHECK(m_list->GetColumnCount() == 0);
+
+    delete m_list;
+    m_list = new wxListCtrl(wxTheApp->GetTopWindow(), wxID_ANY,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxLC_SMALL_ICON);
+    CHECK(m_list->GetColumnCount() == 0);
 }
 
 #if wxUSE_UIACTIONSIMULATOR

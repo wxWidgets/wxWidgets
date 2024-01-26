@@ -2,7 +2,6 @@
 // Name:        collpane.cpp
 // Purpose:     wxCollapsiblePane sample
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/10/06
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
@@ -72,16 +71,19 @@ class MyApp: public wxApp
 {
 public:
     MyApp() { }
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
-    virtual bool OnInit() wxOVERRIDE;
-
-    wxDECLARE_NO_COPY_CLASS(MyApp);
+    virtual bool OnInit() override;
 };
 
 class MyFrame: public wxFrame
 {
 public:
     MyFrame();
+    MyFrame(const MyFrame&) = delete;
+    MyFrame& operator=(const MyFrame&) = delete;
+
     virtual ~MyFrame();
 
     // Menu commands
@@ -104,13 +106,15 @@ private:
     wxBoxSizer *m_paneSizer;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
 class MyDialog : public wxDialog
 {
 public:
     MyDialog(wxFrame *parent);
+    MyDialog(const MyDialog&) = delete;
+    MyDialog& operator=(const MyDialog&) = delete;
+
     void OnToggleStatus(wxCommandEvent& WXUNUSED(ev));
     void OnAlignButton(wxCommandEvent& WXUNUSED(ev));
     void OnPaneChanged(wxCollapsiblePaneEvent& event);
@@ -120,7 +124,6 @@ private:
     wxGridSizer *m_paneSizer;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyDialog);
 };
 
 
@@ -168,7 +171,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxCollapsiblePane sample",
+       : wxFrame(nullptr, wxID_ANY, "wxCollapsiblePane sample",
                  wxDefaultPosition, wxSize(420, 300))
 {
     SetIcon(wxICON(sample));

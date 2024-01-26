@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtexthtml.cpp
 // Purpose:     HTML I/O for wxRichTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRichTextHTMLHandler, wxRichTextFileHandler);
 int wxRichTextHTMLHandler::sm_fileCounter = 1;
 
 wxRichTextHTMLHandler::wxRichTextHTMLHandler(const wxString& name, const wxString& ext, int type)
-    : wxRichTextFileHandler(name, ext, type), m_buffer(NULL), m_font(false), m_inTable(false)
+    : wxRichTextFileHandler(name, ext, type), m_buffer(nullptr), m_font(false), m_inTable(false)
 {
     m_fontSizeMapping.Add(8);
     m_fontSizeMapping.Add(10);
@@ -74,9 +73,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     wxRichTextDrawingContext context(buffer);
     buffer->Defragment(context);
 
-#if wxUSE_UNICODE
-    wxCSConv* customEncoding = NULL;
-    wxMBConv* conv = NULL;
+    wxCSConv* customEncoding = nullptr;
+    wxMBConv* conv = nullptr;
     if (!GetEncoding().IsEmpty())
     {
         customEncoding = new wxCSConv(GetEncoding());
@@ -89,14 +87,9 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         conv = customEncoding;
     else
         conv = & wxConvUTF8;
-#endif
 
     {
-#if wxUSE_UNICODE
         wxTextOutputStream str(stream, wxEOL_NATIVE, *conv);
-#else
-        wxTextOutputStream str(stream, wxEOL_NATIVE);
-#endif
 
         wxRichTextAttr currentParaStyle = buffer->GetAttributes();
         wxRichTextAttr currentCharStyle = buffer->GetAttributes();
@@ -116,7 +109,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         while (node)
         {
             wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
-            wxASSERT (para != NULL);
+            wxASSERT (para != nullptr);
 
             if (para)
             {
@@ -172,12 +165,10 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         str << wxT("\n");
     }
 
-#if wxUSE_UNICODE
     if (customEncoding)
         delete customEncoding;
-#endif
 
-    m_buffer = NULL;
+    m_buffer = nullptr;
 
     return true;
 }

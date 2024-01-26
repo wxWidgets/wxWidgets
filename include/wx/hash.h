@@ -91,7 +91,7 @@ public:
     typedef wxHashTableBase_Node Node;
 
     wxHashTableBase();
-    virtual ~wxHashTableBase() { }
+    virtual ~wxHashTableBase() = default;
 
     void Create( wxKeyType keyType = wxKEY_INTEGER,
                  size_t size = wxHASH_SIZE_DEFAULT );
@@ -230,7 +230,7 @@ public:
     // Way of iterating through whole hash table (e.g. to delete everything)
     // Not necessary, of course, if you're only storing pointers to
     // objects maintained separately
-    void BeginFind() { m_curr = NULL; m_currBucket = 0; }
+    void BeginFind() { m_curr = nullptr; m_currBucket = 0; }
     Node* Next();
 
     void Clear() { wxHashTableBase::Clear(); }
@@ -244,7 +244,7 @@ protected:
     // m_curr to it and m_currBucket to its bucket
     void GetNextNode( size_t bucketStart );
 private:
-    virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE;
+    virtual void DoDeleteContents( wxHashTableBase_Node* node ) override;
 
     // current node
     Node* m_curr;
@@ -275,7 +275,7 @@ private:
         eltype *Delete(long lhash, long key)                                  \
             { return (eltype*)DoDelete(key, lhash); }                         \
     private:                                                                  \
-        virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE\
+        virtual void DoDeleteContents( wxHashTableBase_Node* node ) override\
             { delete (eltype*)node->GetData(); }                              \
                                                                               \
         wxDECLARE_NO_COPY_CLASS(hashclass);                                   \

@@ -2,7 +2,6 @@
 // Name:        src/msw/dcclient.cpp
 // Purpose:     wxClientDC class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -25,7 +24,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
-    #include "wx/hashmap.h"
     #include "wx/log.h"
     #include "wx/window.h"
 #endif
@@ -34,6 +32,8 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/private/paint.h"
+
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // local data structures
@@ -95,28 +95,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPaintDCInfoOur);
 };
 
-// This subclass contains information for the HDCs we receive from outside, as
-// WPARAM of WM_PAINT itself.
-class wxPaintDCInfoExternal : public wxPaintDCInfo
-{
-public:
-    wxPaintDCInfoExternal(HDC hdc)
-        : wxPaintDCInfo(hdc),
-          m_state(::SaveDC(hdc))
-    {
-    }
-
-    virtual ~wxPaintDCInfoExternal()
-    {
-        ::RestoreDC(m_hdc, m_state);
-    }
-
-private:
-    const int m_state;
-
-    wxDECLARE_NO_COPY_CLASS(wxPaintDCInfoExternal);
-};
-
 // The global map containing HDC to use for the given window. The entries in
 // this map only exist during WM_PAINT processing and are destroyed when it is
 // over.
@@ -128,9 +106,7 @@ private:
 // all of them because we can't call BeginPaint() more than once. So we cache
 // the first HDC created for the window in this map and then reuse it later if
 // needed. And, of course, remove it from the map when the painting is done.
-WX_DECLARE_HASH_MAP(wxWindow *, wxPaintDCInfo *,
-                    wxPointerHash, wxPointerEqual,
-                    PaintDCInfos);
+using PaintDCInfos = std::unordered_map<wxWindow*, wxPaintDCInfo*>;
 
 PaintDCInfos gs_PaintDCInfos;
 
@@ -156,7 +132,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxCHECK_RET( window, wxT("invalid window in wxWindowDCImpl") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = (WXHDC) ::GetWindowDC(GetHwndOf(m_window));
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
@@ -199,7 +175,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = (WXHDC)::GetDC(GetHwndOf(window));
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
@@ -253,7 +229,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner ) :
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
    wxClientDCImpl( owner )
 {
-    wxCHECK_RET( window, wxT("NULL canvas in wxPaintDCImpl ctor") );
+    wxCHECK_RET( window, wxT("null canvas in wxPaintDCImpl ctor") );
 
     using namespace wxMSWImpl;
     wxCHECK_RET( !paintStack.empty(),
@@ -263,7 +239,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
 
     paintStack.top().createdPaintDC = true;
 
-    m_window = window;
+    InitWindow(window);
 
     // do we have a DC for this window in the cache?
     m_hDC = FindDCInCache(m_window);
@@ -275,7 +251,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
         m_hDC = info->GetHDC();
     }
 
-    // Note: at this point m_hDC can be NULL under MicroWindows, when dragging.
+    // Note: at this point m_hDC can be null under MicroWindows, when dragging.
     if (!GetHDC())
         return;
 
@@ -302,7 +278,7 @@ wxPaintDCInfo *wxPaintDCImpl::FindInCache(wxWindow *win)
 {
     PaintDCInfos::const_iterator it = gs_PaintDCInfos.find( win );
 
-    return it != gs_PaintDCInfos.end() ? it->second : NULL;
+    return it != gs_PaintDCInfos.end() ? it->second : nullptr;
 }
 
 /* static */
@@ -352,7 +328,7 @@ wxPaintDCExImpl::wxPaintDCExImpl(wxDC *owner, wxWindow *window, WXHDC dc)
 {
     wxCHECK_RET( dc, wxT("wxPaintDCEx requires an existing device context") );
 
-    m_window = window;
+    InitWindow(window);
     m_hDC = dc;
 }
 
