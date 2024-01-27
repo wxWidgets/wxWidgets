@@ -61,8 +61,6 @@ public:
     // wxGTK-specific
     bool Create(const wxString& fontname);
 
-    virtual ~wxFont();
-
     // implement base class pure virtuals
     virtual double GetFractionalPointSize() const override;
     virtual wxFontStyle GetStyle() const override;

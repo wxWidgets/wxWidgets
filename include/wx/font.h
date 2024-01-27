@@ -340,9 +340,6 @@ public:
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     */
 
-    // creator function
-    virtual ~wxFontBase();
-
 
     // from the font components
     static wxFont *New(

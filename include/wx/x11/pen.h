@@ -38,8 +38,6 @@ public:
 
     wxPen( const wxPenInfo& info );
 
-    virtual ~wxPen();
-
     bool operator == ( const wxPen& pen ) const;
     bool operator != (const wxPen& pen) const { return !(*this == pen); }
 

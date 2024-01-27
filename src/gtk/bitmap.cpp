@@ -531,10 +531,6 @@ wxBitmap::wxBitmap(const wxCursor& cursor)
 #endif
 }
 
-wxBitmap::~wxBitmap()
-{
-}
-
 bool wxBitmap::Create( int width, int height, int depth )
 {
     UnRef();

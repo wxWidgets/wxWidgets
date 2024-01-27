@@ -38,8 +38,6 @@ public:
     // ------------
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
-    virtual ~wxColour();
-
     bool operator==(const wxColour& col) const;
     bool operator!=(const wxColour& col) const { return !(*this == col); }
 
