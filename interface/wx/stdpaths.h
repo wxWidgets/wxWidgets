@@ -409,14 +409,14 @@ public:
 
     /**
         Return OS specific directory where project shared liraries are.
-        The function is different from GetPluginsDir() as PlugIns
-        and Shared Libraries are 2 different things (especially on Mac).
-        Plugin is a library that can be used without restartng the applicatioon
-        whereas the library needes to be installed and the application restarted.
+        The function does the same thing as GetPluginsDir() under non-Mac platforms
+        but differs from it under Mac, where plugins (shared libraries loaded by the
+        application dynamically while it's running) and shared libraries (that the
+        application is statically linked with) are stored in different directories.
 
         - Windows: @c it returns the folder where the application binary is located
         - Unix:    @c it returns the libraries installation path, i.e. /usr/lib
-        - Mac:     @c "/Applications/exename.app/Contents/Frameworks/"
+        - Mac:     @c "/Applications/exename.app/Contents/Frameworks"
 
         @since 3.3.0
     */
