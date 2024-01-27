@@ -849,10 +849,58 @@ bool wxKeyEvent::IsKeyInCategory(int category) const
             return (category & WXK_CATEGORY_JUMP) != 0;
 
         case WXK_TAB:
+            // We have to make an extra check for this one, as it's a synonym
+            // for Ctrl-I, but we don't want to recognize Ctrl-I as a TAB key.
+            // As raw key codes are platform-dependent we have to do it in
+            // platform-specific way.
+#ifdef __WXMSW__
+            // Under Windows the native WM_CHAR already does the translation
+            // and so we need to look at the scan code, which is part of the
+            // flags, rather than the key code itself.
+            if ( ((GetRawKeyFlags() >> 16) & 0xff) == 0x17 )
+            {
+                return false;
+            }
+#else // !__WXMSW__
+            // For the other platforms we can use the raw key code, but it's
+            // still different, with Mac doing its own thing. We assume all the
+            // other platforms do as GTK does and use either "I" or "i" for
+            // this letter events.
+            switch ( GetRawKeyCode() )
+            {
+#ifdef __WXOSX__
+                case 0x22: // kVK_ANSI_I
+#else
+                case 'I':
+                case 'i':
+#endif
+                    return false;
+            }
+#endif // __WXMSW__/!__WXMSW__
+            wxFALLTHROUGH;
         case WXK_NUMPAD_TAB:
             return (category & WXK_CATEGORY_TAB) != 0;
 
         case WXK_BACK:
+            // See the comment above for TAB.
+#ifdef __WXMSW__
+            if ( ((GetRawKeyFlags() >> 16) & 0xff) == 0x23 )
+            {
+                return false;
+            }
+#else // !__WXMSW__
+            switch ( GetRawKeyCode() )
+            {
+#ifdef __WXOSX__
+                case 0x04: // kVK_ANSI_H
+#else
+                case 'H':
+                case 'h':
+#endif
+                    return false;
+            }
+#endif // __WXMSW__/!__WXMSW__
+            wxFALLTHROUGH;
         case WXK_DELETE:
         case WXK_NUMPAD_DELETE:
             return (category & WXK_CATEGORY_CUT) != 0;
