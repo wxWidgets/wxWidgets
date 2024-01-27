@@ -27,6 +27,7 @@ public:
     virtual wxString GetLocalDataDir() const override;
     virtual wxString GetUserDataDir() const override;
     virtual wxString GetPluginsDir() const override;
+    virtual wxString GetSharedLibrariesDir() const override;
     virtual wxString GetResourcesDir() const override;
     virtual wxString
     GetLocalizedResourcesDir(const wxString& lang,

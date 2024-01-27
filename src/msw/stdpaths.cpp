@@ -348,6 +348,12 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
     return fn.GetFullName();
 }
 
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    wxFileName fn( GetExecutablePath() );
+    return fn.GetPath();
+}
+
 // ============================================================================
 // wxStandardPathsWin16 implementation
 // ============================================================================

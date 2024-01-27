@@ -171,3 +171,7 @@ wxString wxStandardPathsBase::AppendAppInfo(const wxString& dir) const
     return subdir;
 }
 
+wxString wxStandardPathsBase::GetSharedLibrariesDir() const
+{
+    return {};
+}

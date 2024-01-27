@@ -145,4 +145,11 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
     return fn.GetFullName();
 }
 
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    // Shared libraries on OSX should be stored inside the
+    // <Bundle.app>/Contents/Frameworks
+    return wxCFStringRef::AsString([NSBundle mainBundle].privateFrameworksPath);
+}
+
 #endif // wxUSE_STDPATHS

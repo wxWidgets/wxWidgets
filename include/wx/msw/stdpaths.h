@@ -27,6 +27,7 @@ public:
     virtual wxString GetUserDataDir() const override;
     virtual wxString GetUserLocalDataDir() const override;
     virtual wxString GetPluginsDir() const override;
+    virtual wxString GetSharedLibrariesDir() const override;
     virtual wxString GetUserDir(Dir userDir) const override;
     virtual wxString MakeConfigFileName(const wxString& basename,
                                         ConfigFileConv conv = ConfigFileConv_Ext

@@ -312,7 +312,7 @@ public:
     /**
         Return the program installation prefix, e.g.\ @c /usr, @c /opt or @c /home/zeitlin.
 
-        If the prefix had been previously by SetInstallPrefix(), returns that
+        If the prefix had been previously set by SetInstallPrefix(), returns that
         value, otherwise tries to determine it automatically (Linux only right now)
         and finally returns the default @c /usr/local value if it failed.
 
@@ -440,6 +440,22 @@ public:
         @c "C:\Documents and Settings\username\Local Settings\Application Data\appinfo"
     */
     virtual wxString GetUserLocalDataDir() const;
+
+    /**
+        Return OS specific directory where project shared liraries are.
+
+        The function does the same thing as GetPluginsDir() under non-Mac platforms
+        but differs from it under Mac, where plugins (shared libraries loaded by the
+        application dynamically while it's running) and shared libraries (that the
+        application is statically linked with) are stored in different directories.
+
+        - Windows: returns the folder where the application binary is located
+        - Unix:    returns the libraries installation path, i.e. /usr/lib
+        - Mac:     returns `Contents/Frameworks` bundle subdirectory
+
+        @since 3.3.0
+    */
+    virtual wxString GetSharedLibrariesDir() const;
 
     /**
         MSW-specific function to customize application directory detection.
