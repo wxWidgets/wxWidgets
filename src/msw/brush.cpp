@@ -231,10 +231,6 @@ wxBrush::wxBrush(const wxBitmap& stipple)
     m_refData = new wxBrushRefData(stipple);
 }
 
-wxBrush::~wxBrush()
-{
-}
-
 // ----------------------------------------------------------------------------
 // wxBrush house keeping stuff
 // ----------------------------------------------------------------------------

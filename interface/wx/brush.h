@@ -132,19 +132,6 @@ public:
     wxBrush(const wxBrush& brush);
 
     /**
-        Destructor.
-
-        See @ref overview_refcount_destruct for more info.
-
-        @remarks Although all remaining brushes are deleted when the application
-                 exits, the application should try to clean up all brushes itself.
-                 This is because wxWidgets cannot know if a pointer to the brush
-                 object is stored in an application data structure, and there is
-                 a risk of double deletion.
-    */
-    virtual ~wxBrush();
-
-    /**
         Returns a reference to the brush colour.
 
         @see SetColour()

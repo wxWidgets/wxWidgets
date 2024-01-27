@@ -86,8 +86,6 @@ public:
 
     bool Create(const wxNativeFontInfo& info);
 
-    virtual ~wxFont();
-
     // implement base class pure virtuals
     virtual double GetFractionalPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;

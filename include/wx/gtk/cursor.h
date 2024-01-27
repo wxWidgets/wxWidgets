@@ -37,8 +37,6 @@ public:
 
     virtual wxPoint GetHotSpot() const wxOVERRIDE;
 
-    virtual ~wxCursor();
-
     // implementation
 
     GdkCursor *GetCursor() const;

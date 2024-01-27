@@ -102,10 +102,6 @@ wxPen::wxPen()
 {
 }
 
-wxPen::~wxPen()
-{
-}
-
 // Should implement Create
 wxPen::wxPen(const wxColour& col, int Width, wxPenStyle Style)
 {

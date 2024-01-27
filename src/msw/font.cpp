@@ -835,10 +835,6 @@ bool wxFont::DoCreate(const wxFontInfo& info)
     return RealizeResource();
 }
 
-wxFont::~wxFont()
-{
-}
-
 // ----------------------------------------------------------------------------
 // real implementation
 // ----------------------------------------------------------------------------

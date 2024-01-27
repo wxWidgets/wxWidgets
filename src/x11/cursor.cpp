@@ -147,10 +147,6 @@ wxCursor::wxCursor(const char* const* WXUNUSED(xpmData))
 }
 #endif
 
-wxCursor::~wxCursor()
-{
-}
-
 wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
     return new wxCursorRefData;

@@ -402,10 +402,6 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
     }
 }
 
-wxCursor::~wxCursor()
-{
-}
-
 // ----------------------------------------------------------------------------
 // other wxCursor functions
 // ----------------------------------------------------------------------------

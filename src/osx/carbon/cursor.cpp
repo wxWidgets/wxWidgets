@@ -316,10 +316,6 @@ void wxCursor::MacInstall() const
 #endif
 }
 
-wxCursor::~wxCursor()
-{
-}
-
 // Global cursor setting
 wxCursor gGlobalCursor;
 void wxSetCursor(const wxCursor& cursor)

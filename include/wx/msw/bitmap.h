@@ -114,8 +114,6 @@ public:
     }
 #endif // WXWIN_COMPATIBILITY_3_0
 
-    virtual ~wxBitmap();
-
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
     wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;

@@ -28,8 +28,6 @@ public:
     wxColour(const GdkRGBA& gdkRGBA);
 #endif
 
-    virtual ~wxColour();
-
     bool operator==(const wxColour& col) const;
     bool operator!=(const wxColour& col) const { return !(*this == col); }
 

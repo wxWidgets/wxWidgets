@@ -92,8 +92,6 @@ public:
 
     bool Create(const wxNativeFontInfo& info, WXHFONT hFont = NULL);
 
-    virtual ~wxFont();
-
     // implement base class pure virtuals
     virtual double GetFractionalPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;

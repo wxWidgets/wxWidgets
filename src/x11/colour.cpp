@@ -140,10 +140,6 @@ void wxColourRefData::AllocColour( WXColormap cmap )
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
-wxColour::~wxColour()
-{
-}
-
 bool wxColour::operator == ( const wxColour& col ) const
 {
     if (m_refData == col.m_refData) return true;

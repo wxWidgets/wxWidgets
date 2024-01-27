@@ -72,10 +72,6 @@ wxGraphicsObject::wxGraphicsObject( wxGraphicsRenderer* renderer )
     SetRefData( new wxGraphicsObjectRefData(renderer));
 }
 
-wxGraphicsObject::~wxGraphicsObject()
-{
-}
-
 bool wxGraphicsObject::IsNull() const
 {
     return m_refData == NULL;

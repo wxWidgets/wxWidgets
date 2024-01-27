@@ -397,18 +397,6 @@ public:
     explicit wxBitmap(const wxCursor& cursor);
 
     /**
-        Destructor.
-        See @ref overview_refcount_destruct for more info.
-
-        If the application omits to delete the bitmap explicitly, the bitmap will be
-        destroyed automatically by wxWidgets when the application exits.
-
-        @warning
-        Do not delete a bitmap that is selected into a memory device context.
-    */
-    virtual ~wxBitmap();
-
-    /**
         Adds a handler to the end of the static list of format handlers.
 
         @param handler

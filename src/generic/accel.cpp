@@ -99,10 +99,6 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     }
 }
 
-wxAcceleratorTable::~wxAcceleratorTable()
-{
-}
-
 bool wxAcceleratorTable::IsOk() const
 {
     return m_refData != NULL;
