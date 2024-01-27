@@ -257,7 +257,7 @@ MyFrame::MyFrame(const wxString& title)
     SetSizerAndFit(sizer);
 
     // set size and position on screen
-    SetSize(700, 340);
+    SetSize(FromDIP(wxSize(700, 340)));
     CentreOnScreen();
 
     // connect menu event handlers
