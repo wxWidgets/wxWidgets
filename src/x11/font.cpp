@@ -439,10 +439,6 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding WXUNUSED(enc))
     return true;
 }
 
-wxFont::~wxFont()
-{
-}
-
 wxGDIRefData *wxFont::CreateGDIRefData() const
 {
     return new wxFontRefData;

@@ -27,7 +27,6 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
 
     wxCursor(wxStockCursor id) { InitFromStock(id); }
-    virtual ~wxCursor();
 
     void MacInstall() const ;
 

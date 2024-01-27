@@ -83,11 +83,6 @@ wxBrush::wxBrush( const wxBitmap &stippleBitmap )
         M_BRUSHDATA->m_style = wxBRUSHSTYLE_STIPPLE_MASK;
 }
 
-wxBrush::~wxBrush()
-{
-    // m_refData unrefed in ~wxObject
-}
-
 wxGDIRefData *wxBrush::CreateGDIRefData() const
 {
     return new wxBrushRefData;

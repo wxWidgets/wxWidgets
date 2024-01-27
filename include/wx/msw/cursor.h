@@ -29,8 +29,6 @@ public:
 
     virtual wxPoint GetHotSpot() const override;
 
-    virtual ~wxCursor();
-
     // implementation only
     void SetHCURSOR(WXHCURSOR cursor) { SetHandle((WXHANDLE)cursor); }
     WXHCURSOR GetHCURSOR() const { return (WXHCURSOR)GetHandle(); }

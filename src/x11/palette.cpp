@@ -126,10 +126,6 @@ wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green
     Create(n, red, green, blue);
 }
 
-wxPalette::~wxPalette()
-{
-}
-
 int wxPalette::GetColoursCount() const
 {
     if (m_refData)

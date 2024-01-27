@@ -128,7 +128,6 @@ class WXDLLIMPEXP_CORE wxGraphicsObject : public wxObject
 public:
     wxGraphicsObject();
     wxGraphicsObject( wxGraphicsRenderer* renderer );
-    virtual ~wxGraphicsObject();
 
     bool IsNull() const;
 

@@ -39,10 +39,6 @@ wxAcceleratorTable::wxAcceleratorTable()
     m_refData = nullptr;
 }
 
-wxAcceleratorTable::~wxAcceleratorTable()
-{
-}
-
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {

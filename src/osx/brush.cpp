@@ -89,10 +89,6 @@ wxBrush::wxBrush()
 {
 }
 
-wxBrush::~wxBrush()
-{
-}
-
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style)
 {
     m_refData = new wxBrushRefData( col, style );

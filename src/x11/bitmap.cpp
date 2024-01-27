@@ -952,10 +952,6 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int depth )
     (void) Create(bits, wxBITMAP_TYPE_XBM_DATA, width, height, depth);
 }
 
-wxBitmap::~wxBitmap()
-{
-}
-
 int wxBitmap::GetHeight() const
 {
     wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );

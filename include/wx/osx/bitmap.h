@@ -123,8 +123,6 @@ public:
     wxBitmap(const wxCursor &cursor);
 #endif
 
-    virtual ~wxBitmap() = default;
-
     wxImage ConvertToImage() const override;
 
     // get the given part of bitmap
