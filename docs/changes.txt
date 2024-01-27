@@ -274,6 +274,7 @@ All (GUI):
 - Improve multiple selection UI in generic wxListCtrl (taler21, #24332).
 - Fix item deselection in multi-selection generic wxListCtrl (taler21, #24312).
 - Reduce flicker when closing wxAuiNotebook tab (Eran Ifrah, #24372).
+- Don't include Ctrl+I/Ctrl+H in "TAB"/"cut" key categories (#24254).
 
 wxGTK:
 
