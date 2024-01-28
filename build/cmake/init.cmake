@@ -8,12 +8,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
-    set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-else()
-    # If the standard is not set explicitly, check whether we can use C++11
-    # without any special options.
+function(checkCompilerDefaults)
     include(CheckCXXSourceCompiles)
     check_cxx_source_compiles("
         #include <vector>
@@ -24,6 +19,28 @@ else()
             return v[0];
         }"
         wxHAVE_CXX11)
+
+    check_cxx_source_compiles("
+        #if defined(_MSVC_LANG)
+            #if _MSVC_LANG < 201703L
+                #error C++17 support is required
+            #endif
+        #elif __cplusplus < 201703L
+            #error C++17 support is required
+        #endif
+        int main() {
+            [[maybe_unused]] auto unused = 17;
+        }"
+        wxHAVE_CXX17)
+endfunction()
+
+if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+    set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+else()
+    # If the standard is not set explicitly, check whether we can use C++11
+    # without any special options.
+    checkCompilerDefaults()
     if(NOT wxHAVE_CXX11)
         # If not, request it explicitly and let CMake check if it's supported.
         set(CMAKE_CXX_STANDARD 11)
@@ -505,30 +522,9 @@ if(wxUSE_GUI)
         endif()
 
         if(wxUSE_WEBVIEW_CHROMIUM)
-            # Check for C++17 support as it's required by CEF: we trust
-            # CMAKE_CXX_STANDARD if it is defined, but we need to compile a
-            # test program if it is not because the compiler could be
-            # supporting C++17 anyway.
-            if (DEFINED CMAKE_CXX_STANDARD)
-                if (CMAKE_CXX_STANDARD GREATER_EQUAL 17)
-                    set(wxHAVE_CXX17 ON)
-                endif()
-            else()
-                check_cxx_source_compiles("
-                    #if defined(_MSVC_LANG)
-                        #if _MSVC_LANG < 201703L
-                            #error C++17 support is required
-                        #endif
-                    #elif __cplusplus < 201703L
-                        #error C++17 support is required
-                    #endif
-                    int main() {
-                        [[maybe_unused]] auto unused = 17;
-                    }"
-                    wxHAVE_CXX17)
-            endif()
-
-            if (NOT wxHAVE_CXX17)
+            # CEF requires C++17: we trust CMAKE_CXX_STANDARD if it is defined,
+            # or the previously tested wxHAVE_CXX17 if the compiler supports C++17 anyway.
+            if(NOT (CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR wxHAVE_CXX17))
                 # We shouldn't disable this option as it's disabled by default and
                 # if it is on, it means that CEF is meant to be used, but we can't
                 # continue neither as libcef_dll_wrapper will fail to build
