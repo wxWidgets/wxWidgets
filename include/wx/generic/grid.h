@@ -2743,7 +2743,6 @@ protected:
 
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
-    void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
 
 

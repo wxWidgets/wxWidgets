@@ -2642,7 +2642,6 @@ wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_SIZE( wxGrid::OnSize )
     EVT_DPI_CHANGED( wxGrid::OnDPIChanged )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
-    EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_CHAR ( wxGrid::OnChar )
 wxEND_EVENT_TABLE()
 
@@ -6115,11 +6114,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
         }
     }
-}
-
-void wxGrid::OnKeyUp( wxKeyEvent& WXUNUSED(event) )
-{
-    // try local handlers
 }
 
 void wxGrid::OnChar( wxKeyEvent& event )
