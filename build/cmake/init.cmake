@@ -501,9 +501,9 @@ if(wxUSE_GUI)
         endif()
 
         if(wxUSE_WEBVIEW_CHROMIUM AND WIN32 AND NOT MSVC)
-            message(WARNING "WebviewChromium libcef_dll_wrapper can only be built with MSVC... disabled")
-            wx_option_force_value(wxUSE_WEBVIEW_CHROMIUM OFF)
+            message(FATAL_ERROR "WebviewChromium libcef_dll_wrapper can only be built with MSVC")
         endif()
+
         if(wxUSE_WEBVIEW_CHROMIUM)
             # Check for C++17 support as it's required by CEF: we trust
             # CMAKE_CXX_STANDARD if it is defined, but we need to compile a
