@@ -64,7 +64,16 @@ if(MSVC)
     endif()
 endif()
 
+set(_saved_CMAKE_MESSAGE_LOG_LEVEL ${CMAKE_MESSAGE_LOG_LEVEL})
+set(CEF_SHOW_RESULTS FALSE CACHE BOOL "Show CEF configuration results")
+if(NOT CEF_SHOW_RESULTS)
+    set(CMAKE_MESSAGE_LOG_LEVEL ERROR)
+endif()
+
 add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
+
+set(CMAKE_MESSAGE_LOG_LEVEL ${_saved_CMAKE_MESSAGE_LOG_LEVEL})
+
 set_target_properties(libcef_dll_wrapper PROPERTIES
     FOLDER "Third Party Libraries"
     OUTPUT_NAME "libcef_dll_wrapper"
@@ -103,5 +112,6 @@ mark_as_advanced(USE_ATL)
 mark_as_advanced(USE_SANDBOX)
 mark_as_advanced(OPTION_USE_ARC)
 mark_as_advanced(CEF_ROOT)
+mark_as_advanced(CEF_SHOW_RESULTS)
 mark_as_advanced(CEF_DEBUG_INFO_FLAG)
 mark_as_advanced(CEF_RUNTIME_LIBRARY_FLAG)
