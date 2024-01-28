@@ -22,8 +22,8 @@
     wxString variable; wxListBox uses a wxArrayInt; wxCheckBox uses a boolean.
 
     @since 3.2.5
-    A wxLB_SINGLE wxListBox can also use an int.  wxColourPickerCtrl support.
-    A 3-state wxCheckBox can use wxCheckBoxState.
+    A wxLB_SINGLE wxListBox and a wxRadioButton group can also use an int.
+    wxColourPickerCtrl support.  A 3-state wxCheckBox can use wxCheckBoxState.
 
     For more information, please see @ref overview_validator.
 
@@ -79,7 +79,7 @@ public:
     wxGenericValidator(int* valPtr);
     /**
         Constructor taking a wxArrayInt pointer. This will be used for
-        wxListBox, wxCheckListBox.
+        wxListBox, wxCheckListBox, and wxRadioButton group.
 
         @param valPtr
             A pointer to a variable that contains the value. This variable

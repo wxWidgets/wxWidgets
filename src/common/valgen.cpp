@@ -172,6 +172,28 @@ bool wxGenericValidator::TransferToWindow()
             pControl->SetValue(*m_pBool) ;
             return true;
         }
+        else if (m_pInt)
+        {
+            wxRadioButton* selected = nullptr;
+            for (int i = 0 ;
+                pControl ;
+                ++i, pControl = pControl != pControl->GetLastInGroup() ? pControl->GetNextInGroup() : nullptr)
+            {
+                wxCHECK_MSG(!pControl->GetValidator() ||
+                            pControl == pControl->GetFirstInGroup(),
+                        false,
+                        "wxRadioButton group validator must be on first item in group");
+                if (i == *m_pInt)
+                {
+                    selected = pControl;
+                }
+            }
+            if (selected)
+            {
+                selected->SetValue(true);
+                return true;
+            }
+        }
     } else
 #endif
 
@@ -497,6 +519,25 @@ bool wxGenericValidator::TransferFromWindow()
         if (m_pBool)
         {
             *m_pBool = pControl->GetValue() ;
+            return true;
+        }
+        else if (m_pInt)
+        {
+            *m_pInt = -1;
+            for (int i = 0 ;
+                pControl ;
+                ++i, pControl = pControl != pControl->GetLastInGroup() ? pControl->GetNextInGroup() : nullptr)
+            {
+                wxCHECK_MSG(!pControl->GetValidator() ||
+                            pControl == pControl->GetFirstInGroup(),
+                        false,
+                        "wxRadioButton group validator must be on first item in group");
+                if (pControl->GetValue())
+                {
+                    *m_pInt = i;
+                }
+            }
+            wxASSERT(*m_pInt >= 0 || !"no selected radio button!");
             return true;
         }
     } else
