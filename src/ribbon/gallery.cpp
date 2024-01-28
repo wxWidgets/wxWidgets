@@ -35,11 +35,7 @@ wxIMPLEMENT_CLASS(wxRibbonGallery, wxRibbonControl);
 class wxRibbonGalleryItem
 {
 public:
-    wxRibbonGalleryItem()
-    {
-        m_id = 0;
-        m_is_visible = false;
-    }
+    wxRibbonGalleryItem() = default;
 
     void SetId(int id) {m_id = id;}
     void SetBitmap(const wxBitmap& bitmap) {m_bitmap = bitmap;}
@@ -61,8 +57,8 @@ protected:
     wxBitmap m_bitmap;
     wxClientDataContainer m_client_data;
     wxRect m_position;
-    int m_id;
-    bool m_is_visible;
+    int m_id = 0;
+    bool m_is_visible = false;
 };
 
 wxBEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)

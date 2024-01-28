@@ -215,9 +215,9 @@ wxColour wxRibbonHSLColour::ToRGB() const
             blue = tmp1;
     }
     return wxColour(
-        (unsigned char)(red * 255.0f),
-        (unsigned char)(green * 255.0f),
-        (unsigned char)(blue * 255.0f));
+        static_cast<unsigned char>(red * 255.0f),
+        static_cast<unsigned char>(green * 255.0f),
+        static_cast<unsigned char>(blue * 255.0f));
 }
 
 wxRibbonHSLColour wxRibbonHSLColour::Darker(float delta) const

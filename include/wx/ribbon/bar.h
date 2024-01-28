@@ -68,7 +68,7 @@ public:
     void SetPage(wxRibbonPage* page) {m_page = page;}
 
 protected:
-    wxRibbonPage* m_page;
+    wxRibbonPage* m_page = nullptr;
 
 #ifndef SWIG
 private:
@@ -80,7 +80,7 @@ class WXDLLIMPEXP_RIBBON wxRibbonPageTabInfo
 {
 public:
     wxRect rect;
-    wxRibbonPage *page;
+    wxRibbonPage* page = nullptr;
     int ideal_width;
     int small_begin_need_separator_width;
     int small_must_have_separator_width;

@@ -35,7 +35,7 @@ public:
     wxRect dropdown;
     wxPoint position;
     wxSize size;
-    wxObject* client_data;
+    wxObject* client_data = nullptr;
     int id;
     wxRibbonButtonKind kind;
     long state;

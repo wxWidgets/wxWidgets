@@ -197,8 +197,8 @@ protected:
 
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;
-    wxRibbonButtonBarButtonInstance* m_hovered_button;
-    wxRibbonButtonBarButtonInstance* m_active_button;
+    wxRibbonButtonBarButtonInstance* m_hovered_button = nullptr;
+    wxRibbonButtonBarButtonInstance* m_active_button = nullptr;
 
     wxPoint m_layout_offset;
     wxSize m_bitmap_size_large;
@@ -209,7 +209,7 @@ protected:
     bool m_show_tooltips_for_disabled;
 
 private:
-    wxRibbonBar* m_ribbonBar;
+    wxRibbonBar* m_ribbonBar = nullptr;
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonButtonBar);
@@ -237,8 +237,8 @@ public:
     bool PopupMenu(wxMenu* menu);
 
 protected:
-    wxRibbonButtonBar* m_bar;
-    wxRibbonButtonBarButtonBase *m_button;
+    wxRibbonButtonBar* m_bar = nullptr;
+    wxRibbonButtonBarButtonBase* m_button = nullptr;
 
 #ifndef SWIG
 private:
