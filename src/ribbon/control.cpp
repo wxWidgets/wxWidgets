@@ -34,7 +34,7 @@ bool wxRibbonControl::Create(wxWindow *parent, wxWindowID id,
         return false;
 
     wxRibbonControl *ribbon_parent = wxDynamicCast(parent, wxRibbonControl);
-    if(ribbon_parent)
+    if ( ribbon_parent != nullptr )
     {
         m_art = ribbon_parent->GetArtProvider();
     }
@@ -52,11 +52,11 @@ wxSize wxRibbonControl::DoGetNextSmallerSize(wxOrientation direction,
 {
     // Dummy implementation for code which doesn't check for IsSizingContinuous() == true
     wxSize minimum(GetMinSize());
-    if((direction & wxHORIZONTAL) && size.x > minimum.x)
+    if ( (direction & wxHORIZONTAL) && size.x > minimum.x )
     {
         size.x--;
     }
-    if((direction & wxVERTICAL) && size.y > minimum.y)
+    if ( (direction & wxVERTICAL) && size.y > minimum.y )
     {
         size.y--;
     }
@@ -67,11 +67,11 @@ wxSize wxRibbonControl::DoGetNextLargerSize(wxOrientation direction,
                                           wxSize size) const
 {
     // Dummy implementation for code which doesn't check for IsSizingContinuous() == true
-    if(direction & wxHORIZONTAL)
+    if ( direction & wxHORIZONTAL )
     {
         size.x++;
     }
-    if(direction & wxVERTICAL)
+    if ( direction & wxVERTICAL )
     {
         size.y++;
     }
@@ -110,7 +110,7 @@ wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
     for ( wxWindow* win = GetParent(); win; win = win->GetParent() )
     {
         wxRibbonBar* bar = wxDynamicCast(win, wxRibbonBar);
-        if ( bar )
+        if ( bar != nullptr )
             return bar;
     }
 

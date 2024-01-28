@@ -35,7 +35,7 @@ public:
     wxRect dropdown;
     wxPoint position;
     wxSize size;
-    wxObject* client_data;
+    wxObject* client_data{ nullptr };
     int id;
     wxRibbonButtonKind kind;
     long state;
@@ -294,7 +294,7 @@ wxRibbonToolBarToolBase* wxRibbonToolBar::InsertSeparator(size_t pos)
         {
             wxRibbonToolBarToolGroup* new_group = InsertGroup(g+1);
 
-            for(size_t t = pos; t < tool_count; t++)
+            for(size_t t = pos; t < tool_count; ++t)
                 new_group->tools.Add(group->tools[t]);
             group->tools.RemoveAt(pos, tool_count-pos);
 

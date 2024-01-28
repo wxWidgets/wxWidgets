@@ -213,6 +213,7 @@ public:
                 }
                 wxFALLTHROUGH;
             case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
+                wxFALLTHROUGH;
             default:
                 return false;
             }
@@ -837,7 +838,7 @@ wxSize wxRibbonButtonBar::DoGetNextLargerSize(wxOrientation direction,
 {
     size_t nlayouts = m_layouts.GetCount();
     size_t i = nlayouts;
-    while(i > 0)
+    while (i > 0)
     {
         --i;
         wxRibbonButtonBarLayout* layout = m_layouts.Item(i);
@@ -1099,7 +1100,7 @@ void wxRibbonButtonBar::MakeLayouts()
         // be collapsed because "min_size_class" is set, try it again
         // starting from second rightmost button and so on.
         size_t iLast = btn_count;
-        while(iLast-- > 0)
+        while (iLast-- > 0)
         {
             TryCollapseLayout(m_layouts.Last(), iLast, &iLast,
                               wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
@@ -1413,7 +1414,7 @@ void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
                 m_lock_active_state = false;
 
                 wxStaticCast(m_parent, wxRibbonPanel)->HideIfExpanded();
-            } while(false);
+            } while (false);
             if(m_active_button) // may have been NULLed by event handler
             {
                 m_active_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;

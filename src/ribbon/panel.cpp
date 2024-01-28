@@ -711,7 +711,9 @@ bool wxRibbonPanel::Realize()
                 scale = 2.0;
 
             wxImage img(m_minimised_icon.ConvertToImage());
-            img.Rescale(int(scale * bitmap_size.GetWidth()), int(scale * bitmap_size.GetHeight()), wxIMAGE_QUALITY_HIGH);
+            img.Rescale(static_cast<int>(scale * bitmap_size.GetWidth()),
+                        static_cast<int>(scale * bitmap_size.GetHeight()),
+                        wxIMAGE_QUALITY_HIGH);
             m_minimised_icon_resized = wxBitmap(img, -1, scale);
         }
         else
@@ -848,7 +850,7 @@ bool wxRibbonPanel::ShowExpanded()
     // and thus assume a new position.
     // NB: Children iterators not used as behaviour is not well defined
     // when iterating over a container which is being emptied
-    while(!GetChildren().IsEmpty())
+    while (!GetChildren().IsEmpty())
     {
         wxWindow *child = GetChildren().GetFirst()->GetData();
         child->Reparent(m_expanded_panel);
@@ -899,7 +901,7 @@ bool wxRibbonPanel::TryAfter(wxEvent& evt)
 
 static bool IsAncestorOf(wxWindow *ancestor, wxWindow *window)
 {
-    while(window != nullptr)
+    while (window != nullptr)
     {
         wxWindow *parent = window->GetParent();
         if(parent == ancestor)
@@ -975,7 +977,7 @@ bool wxRibbonPanel::HideExpanded()
     // Move children back to original panel
     // NB: Children iterators not used as behaviour is not well defined
     // when iterating over a container which is being emptied
-    while(!GetChildren().IsEmpty())
+    while (!GetChildren().IsEmpty())
     {
         wxWindow *child = GetChildren().GetFirst()->GetData();
         child->Reparent(m_expanded_dummy);
@@ -1017,7 +1019,7 @@ wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
     bool primary_x = false;
     int secondary_x = 0;
     int secondary_y = 0;
-    switch(direction)
+    switch (direction)
     {
     case wxNORTH:
         pos.x = panel.GetX() + (panel.GetWidth() - expanded_size.GetWidth()) / 2;
@@ -1037,6 +1039,7 @@ wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
         secondary_y = -1;
         break;
     case wxWEST:
+        wxFALLTHROUGH;
     default:
         pos.x = panel.GetX() - expanded_size.GetWidth();
         pos.y = panel.GetY() + (panel.GetHeight() - expanded_size.GetHeight()) / 2;
@@ -1116,7 +1119,7 @@ wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
 void wxRibbonPanel::HideIfExpanded()
 {
     wxRibbonPage* const containingPage = wxDynamicCast(m_parent, wxRibbonPage);
-    if (containingPage)
+    if (containingPage != nullptr)
         containingPage->HideIfExpanded();
 }
 

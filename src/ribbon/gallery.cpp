@@ -35,11 +35,7 @@ wxIMPLEMENT_CLASS(wxRibbonGallery, wxRibbonControl);
 class wxRibbonGalleryItem
 {
 public:
-    wxRibbonGalleryItem()
-    {
-        m_id = 0;
-        m_is_visible = false;
-    }
+    wxRibbonGalleryItem() = default;
 
     void SetId(int id) {m_id = id;}
     void SetBitmap(const wxBitmap& bitmap) {m_bitmap = bitmap;}
@@ -61,8 +57,8 @@ protected:
     wxBitmap m_bitmap;
     wxClientDataContainer m_client_data;
     wxRect m_position;
-    int m_id;
-    bool m_is_visible;
+    int m_id{ 0 };
+    bool m_is_visible{ false };
 };
 
 wxBEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)
@@ -161,7 +157,7 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
     wxRibbonGalleryItem *active_item = nullptr;
     if(m_client_rect.Contains(pos))
     {
-        if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+        if(m_art != nullptr && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
             pos.x += m_scroll_amount;
         else
             pos.y += m_scroll_amount;
@@ -314,7 +310,7 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
     if(m_mouse_active_rect != nullptr)
     {
         wxPoint pos = evt.GetPosition();
-        if(m_active_item)
+        if ( m_active_item != nullptr )
         {
             if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
                 pos.x += m_scroll_amount;
