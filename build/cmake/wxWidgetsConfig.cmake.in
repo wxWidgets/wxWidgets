@@ -59,6 +59,13 @@ endmacro()
 # for compatibility with FindwxWidgets
 set(wxWidgets_LIBRARIES)
 
+# create one target with all libraries, same as FindwxWidgets
+set(CREATE_WX_TARGET OFF)
+if(NOT TARGET wxWidgets::wxWidgets)
+    add_library(wxWidgets::wxWidgets INTERFACE IMPORTED)
+    set(CREATE_WX_TARGET ON)
+endif()
+
 # list all available components
 set(@PROJECT_NAME@_COMPONENTS)
 foreach(libname @wxLIB_TARGETS@)
@@ -113,6 +120,9 @@ foreach(libname @wxLIB_TARGETS@)
         list(FIND @PROJECT_NAME@_FIND_COMPONENTS ${name} idx)
         if(NOT @PROJECT_NAME@_FIND_COMPONENTS OR idx GREATER -1)
             list(APPEND wxWidgets_LIBRARIES wx::${name})
+            if(CREATE_WX_TARGET)
+                target_link_libraries(wxWidgets::wxWidgets INTERFACE wx::${name})
+            endif()
         endif()
     endif()
 endforeach()
