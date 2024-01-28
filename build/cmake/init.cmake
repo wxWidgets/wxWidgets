@@ -34,15 +34,18 @@ function(checkCompilerDefaults)
         wxHAVE_CXX17)
 endfunction()
 
-if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+if(DEFINED CMAKE_CXX_STANDARD)
+    # User has explicitly set a CMAKE_CXX_STANDARD.
+elseif(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+    # Standard is set using wxBUILD_CXX_STANDARD.
     set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 else()
-    # If the standard is not set explicitly, check whether we can use C++11
-    # without any special options.
+    # CMAKE_CXX_STANDARD not defined.
     checkCompilerDefaults()
     if(NOT wxHAVE_CXX11)
-        # If not, request it explicitly and let CMake check if it's supported.
+        # If the standard is not set explicitly, and the default compiler settings
+        # do not support c++11, request it explicitly.
         set(CMAKE_CXX_STANDARD 11)
         set(CMAKE_CXX_STANDARD_REQUIRED ON)
     endif()
