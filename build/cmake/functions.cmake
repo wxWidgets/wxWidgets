@@ -593,6 +593,12 @@ endfunction()
 function(wx_add_builtin_library name)
     wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
 
+    list(GET src_list 0 src_file)
+    if(NOT EXISTS "${src_file}")
+        message(FATAL_ERROR "${name} file does not exist: \"${src_file}\".\
+        Make sure you checkout the git submodules.")
+    endif()
+
     if(${name} MATCHES "wx.*")
         string(SUBSTRING ${name} 2 -1 name_short)
     else()
