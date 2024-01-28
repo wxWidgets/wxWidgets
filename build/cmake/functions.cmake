@@ -324,6 +324,11 @@ function(wx_set_target_properties target_name)
             )
     endif()
 
+    if(WIN32)
+        target_compile_definitions(${target_name} PUBLIC UNICODE)
+    endif()
+    target_compile_definitions(${target_name} PUBLIC _UNICODE)
+
     file(RELATIVE_PATH wxSETUP_HEADER_REL ${wxOUTPUT_DIR} ${wxSETUP_HEADER_PATH})
     target_include_directories(${target_name}
         BEFORE
@@ -564,6 +569,11 @@ function(wx_set_builtin_target_properties target_name)
             _SCL_SECURE_NO_WARNINGS=1
         )
     endif()
+
+    if(WIN32)
+        target_compile_definitions(${target_name} PUBLIC UNICODE)
+    endif()
+    target_compile_definitions(${target_name} PUBLIC _UNICODE)
 
     target_include_directories(${target_name} BEFORE PRIVATE ${wxSETUP_HEADER_PATH})
 
