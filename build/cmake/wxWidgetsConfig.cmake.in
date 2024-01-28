@@ -127,6 +127,12 @@ foreach(libname @wxLIB_TARGETS@)
     endif()
 endforeach()
 
+if(TARGET wx::wxgl)
+    # make sure OpenGL targets are available:
+    # The link interface of target "wx::wxgl" contains: OpenGL::GLU
+    find_package(OpenGL QUIET)
+endif()
+
 # if no components are specified in find_package, check all of them
 if(NOT @PROJECT_NAME@_FIND_COMPONENTS)
     set(@PROJECT_NAME@_FIND_COMPONENTS ${@PROJECT_NAME@_COMPONENTS})
