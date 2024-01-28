@@ -172,6 +172,26 @@ bool wxGenericValidator::TransferToWindow()
             pControl->SetValue(*m_pBool) ;
             return true;
         }
+        else if (m_pInt)
+        {
+            const auto last = pControl->GetLastInGroup();
+            for (int i = 0 ; ; ++i)
+            {
+                if (i == *m_pInt)
+                {
+                    pControl->SetValue(true);
+                    return true;
+                }
+
+                if (pControl == last)
+                {
+                    wxFAIL_MSG("value out of range or not enough radio buttons");
+                    return false;
+                }
+
+                pControl = pControl->GetNextInGroup();
+            }
+        }
     } else
 #endif
 
@@ -499,6 +519,29 @@ bool wxGenericValidator::TransferFromWindow()
             *m_pBool = pControl->GetValue() ;
             return true;
         }
+        else if (m_pInt)
+        {
+            const auto last = pControl->GetLastInGroup();
+            for (int i = 0 ; ; ++i)
+            {
+                if (pControl->GetValue())
+                {
+                    *m_pInt = i;
+                    return true;
+                }
+
+                if (pControl == last)
+                {
+                    // This really should never happen.
+                    wxFAIL_MSG("no selected radio button?");
+
+                    *m_pInt = wxNOT_FOUND;
+                    return false;
+                }
+
+                pControl = pControl->GetNextInGroup();
+            }
+        }
     } else
 #endif
 #if wxUSE_TOGGLEBTN
@@ -793,6 +836,21 @@ bool wxGenericValidator::TransferFromWindow()
         return false;
 
     return false;
+}
+
+void wxGenericValidator::SetWindow(wxWindow* win)
+{
+#if wxUSE_RADIOBTN
+    if (m_pInt)
+    {
+        if (wxRadioButton* pControl = wxDynamicCast(win, wxRadioButton))
+        {
+            wxCHECK_RET(pControl == pControl->GetFirstInGroup(),
+                        "wxRadioButton group validator must be on first item in group");
+        }
+    }
+#endif
+    wxValidator::SetWindow(win);
 }
 
 /*
