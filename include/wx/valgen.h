@@ -76,6 +76,10 @@ public:
     // Called to transfer data to the window
     virtual bool TransferFromWindow() override;
 
+    // Called when the validator is associated with a window, may be useful to
+    // override if it needs to somehow initialize the window.
+    virtual void SetWindow(wxWindow* win) override;
+
 protected:
     void Initialize();
 
