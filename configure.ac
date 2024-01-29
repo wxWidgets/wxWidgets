@@ -3448,7 +3448,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WXCONFIG_RPATH="-R\$libdir"
     else
     case "${host}" in
-      *-*-linux* | *-*-gnu* )
+      *-*-linux* | *-*-gnu* | *-*-freebsd*)
         DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
         ;;
