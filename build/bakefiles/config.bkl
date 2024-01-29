@@ -415,6 +415,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="WX_CXXFLAGS"/>
         <option name="WX_LDFLAGS"/>
         <option name="HOST_SUFFIX"/>
+        <option name="DYLIB_RPATH_FLAG"/>
         <option name="DYLIB_RPATH_INSTALL"/>
         <option name="DYLIB_RPATH_POSTLINK"/>
         <option name="SAMPLES_RPATH_FLAG"/>
