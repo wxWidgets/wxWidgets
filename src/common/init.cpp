@@ -440,22 +440,6 @@ bool wxEntryStart(int& argc, char **argv)
 // clean up
 // ----------------------------------------------------------------------------
 
-// cleanup done before destroying wxTheApp
-static void DoCommonPreCleanup()
-{
-#if wxUSE_LOG
-    // flush the logged messages if any and don't use the current probably
-    // unsafe log target any more: the default one (wxLogGui) can't be used
-    // after the resources are freed which happens when we return and the user
-    // supplied one might be even more unsafe (using any wxWidgets GUI function
-    // is unsafe starting from now)
-    //
-    // notice that wxLog will still recreate a default log target if any
-    // messages are logged but that one will be safe to use until the very end
-    delete wxLog::SetActiveTarget(nullptr);
-#endif // wxUSE_LOG
-}
-
 // cleanup done after destroying wxTheApp
 static void DoCommonPostCleanup()
 {
@@ -488,19 +472,17 @@ static void DoCommonPostCleanup()
 
 void wxEntryCleanup()
 {
-    DoCommonPreCleanup();
-
-
     // delete the application object
-    if ( wxTheApp )
+    if ( wxAppConsole * const app = wxApp::GetInstance() )
     {
+        app->CleanUp();
+
         // reset the global pointer to it to nullptr before destroying it as in
         // some circumstances this can result in executing the code using
-        // wxTheApp and using half-destroyed object is no good
-        wxAppConsole * const app = wxApp::GetInstance();
+        // wxTheApp and using half-destroyed object is no good (note that it
+        // usually would be already reset by wxAppBase::CleanUp(), but ensure
+        // that it is definitely done by doing it here too)
         wxApp::SetInstance(nullptr);
-
-        app->CleanUp();
 
         delete app;
     }
