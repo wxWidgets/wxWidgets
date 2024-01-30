@@ -263,6 +263,7 @@ All (GUI):
 - Fix crash in wxLogGui when wxUSE_LOG_DIALOG==0 (Randalphwa, #24087).
 - Use wxUILocale in wxFloatProperty (Miguel Gimenez, Artur Wieczorek, #24140).
 - Fix crash in wxImage::InitAlpha() if image is invalid (Randalphwa, #24260).
+- Fix wxLogStatus() when wxNO_IMPLICIT_WXSTRING_ENCODING is defined (#24267).
 
 wxGTK:
 

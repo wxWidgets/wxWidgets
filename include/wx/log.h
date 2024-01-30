@@ -1333,7 +1333,7 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 // and it will have changed already by then (in fact it even changes when
 // wxString::Format() is called because of vsnprintf() inside it so it can
 // change even much sooner)
-#define wxLOG_KEY_SYS_ERROR_CODE "wx.sys_error"
+#define wxLOG_KEY_SYS_ERROR_CODE wxASCII_STR("wx.sys_error")
 
 #define wxLogSysError \
     wxDO_LOG_IF_ENABLED_WITH_FUNC(Error, MaybeStore(wxLOG_KEY_SYS_ERROR_CODE, \
@@ -1349,7 +1349,7 @@ WXDLLIMPEXP_BASE wxString wxSysErrorMsgStr(unsigned long nErrCode = 0);
 #if wxUSE_GUI
     // wxLogStatus() is similar to wxLogSysError() as it allows to optionally
     // specify the frame to which the message should go
-    #define wxLOG_KEY_FRAME "wx.frame"
+    #define wxLOG_KEY_FRAME wxASCII_STR("wx.frame")
 
     #define wxLogStatus \
         wxDO_LOG_IF_ENABLED_WITH_FUNC(Status, MaybeStore(wxLOG_KEY_FRAME).Log)
