@@ -5605,7 +5605,10 @@ wxDataViewCtrl::~wxDataViewCtrl()
 
 #if wxUSE_ACCESSIBILITY
     SetAccessible(nullptr);
-    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
+    // There is no need to notify anybody if we're destroyed as part of
+    // application shutdown and doing it would just crash in this case.
+    if ( wxTheApp )
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
 #endif // wxUSE_ACCESSIBILITY
 }
 
