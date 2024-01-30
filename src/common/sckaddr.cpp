@@ -849,7 +849,14 @@ bool wxIPV4address::Hostname(unsigned long addr)
         return false;
     }
 
-    m_origHostname = Hostname();
+    const wxUint8
+        addr1 = (addr >> 24) & 0xFF,
+        addr2 = (addr >> 16) & 0xFF,
+        addr3 = (addr >>  8) & 0xFF,
+        addr4 = (addr >>  0) & 0xFF;
+
+    m_origHostname = wxString::Format("%hhu.%hhu.%hhu.%hhu", addr1, addr2, addr3, addr4);
+
     return true;
 }
 
