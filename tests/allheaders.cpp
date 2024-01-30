@@ -411,4 +411,6 @@ TEST_CASE("wxNO_IMPLICIT_WXSTRING_ENCODING", "[string]")
     // wxNO_IMPLICIT_WXSTRING_ENCODING must be set
     s = "Hello, implicit encoding";
 #endif
+
+    wxLogSysError(wxASCII_STR("Bogus error for testing"));
 }
