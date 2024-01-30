@@ -218,7 +218,7 @@ void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
     {
         wxWindow* child = node->GetData();
         wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
-        if ( ribbon_child != nullptr )
+        if ( ribbon_child )
         {
             ribbon_child->SetArtProvider(art);
         }
@@ -227,9 +227,9 @@ void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
     // The scroll buttons are children of the parent ribbon control, not the
     // page, so they're not taken into account by the loop above, but they
     // still use the same art provider, so we need to update them too.
-    if ( m_scroll_left_btn != nullptr )
+    if ( m_scroll_left_btn )
         m_scroll_left_btn->SetArtProvider(art);
-    if ( m_scroll_right_btn != nullptr )
+    if ( m_scroll_right_btn )
         m_scroll_right_btn->SetArtProvider(art);
 }
 
@@ -467,14 +467,14 @@ void wxRibbonPage::SetSizeWithScrollButtonAdjustment(int x, int y, int width, in
     {
         if(GetMajorAxis() == wxHORIZONTAL)
         {
-            if ( m_scroll_left_btn != nullptr )
+            if ( m_scroll_left_btn )
             {
                 int w = m_scroll_left_btn->GetSize().GetWidth();
                 m_scroll_left_btn->SetPosition(wxPoint(x, y));
                 x += w;
                 width -= w;
             }
-            if ( m_scroll_right_btn != nullptr )
+            if ( m_scroll_right_btn )
             {
                 int w = m_scroll_right_btn->GetSize().GetWidth();
                 width -= w;
@@ -483,14 +483,14 @@ void wxRibbonPage::SetSizeWithScrollButtonAdjustment(int x, int y, int width, in
         }
         else
         {
-            if ( m_scroll_left_btn != nullptr )
+            if ( m_scroll_left_btn )
             {
                 int h = m_scroll_left_btn->GetSize().GetHeight();
                 m_scroll_left_btn->SetPosition(wxPoint(x, y));
                 y += h;
                 height -= h;
             }
-            if ( m_scroll_right_btn != nullptr )
+            if ( m_scroll_right_btn )
             {
                 int h = m_scroll_right_btn->GetSize().GetHeight();
                 height -= h;
@@ -540,7 +540,7 @@ void wxRibbonPage::OnSize(wxSizeEvent& evt)
 {
     wxSize new_size = evt.GetSize();
 
-    if ( m_art != nullptr )
+    if ( m_art )
     {
         wxMemoryDC temp_dc;
         wxRect invalid_rect = m_art->GetPageBackgroundRedrawArea(temp_dc, this, m_old_size, new_size);
@@ -1078,7 +1078,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                     // come to this panel again anyway)
                     amount = 32;
                 }
-                if (largest_panel_size != nullptr)
+                if (largest_panel_size)
                 {
                     if (direction & wxHORIZONTAL)
                     {
@@ -1091,7 +1091,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                 }
                 minimum_amount -= amount;
             }
-            else if (largest_panel_size != nullptr)
+            else if (largest_panel_size)
             {
                 wxSize smaller = largest_panel->GetNextSmallerSize(direction, *largest_panel_size);
                 wxSize delta = (*largest_panel_size) - smaller;

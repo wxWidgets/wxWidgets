@@ -157,7 +157,7 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
     wxRibbonGalleryItem *active_item = nullptr;
     if(m_client_rect.Contains(pos))
     {
-        if(m_art != nullptr && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+        if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
             pos.x += m_scroll_amount;
         else
             pos.y += m_scroll_amount;
@@ -310,7 +310,7 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
     if(m_mouse_active_rect != nullptr)
     {
         wxPoint pos = evt.GetPosition();
-        if ( m_active_item != nullptr )
+        if ( m_active_item )
         {
             if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
                 pos.x += m_scroll_amount;

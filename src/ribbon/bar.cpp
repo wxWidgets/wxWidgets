@@ -140,7 +140,7 @@ void wxRibbonBar::ShowPanels(bool show)
 void wxRibbonBar::SetWindowStyleFlag(long style)
 {
     m_flags = style;
-    if ( m_art != nullptr )
+    if ( m_art )
         m_art->SetFlags(style);
 }
 
