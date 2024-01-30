@@ -247,11 +247,11 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     // TODO: Remove next line once this provider stops piggybacking MSW
     wxRibbonMSWArtProvider::SetColourScheme(primary, secondary, tertiary);
 
-    const auto LikePrimary = [&primary_hsl](const float luminance)
+    const auto LikePrimary = [primary_hsl](float luminance)
         {
             return wxRibbonShiftLuminance(primary_hsl, luminance).ToRGB();
         };
-    const auto LikeSecondary = [&secondary_hsl](const float luminance)
+    const auto LikeSecondary = [secondary_hsl](float luminance)
         {
             return wxRibbonShiftLuminance(secondary_hsl, luminance).ToRGB();
         };

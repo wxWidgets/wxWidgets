@@ -354,13 +354,13 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     // Map secondary luminance from [0, 1] to [0.1, 0.9]
     secondary_hsl.luminance = std::cos(secondary_hsl.luminance * float(M_PI)) * -0.4f + 0.5f;
 
-    const auto LikePrimary = [&primary_hsl, &primary_is_gray]
+    const auto LikePrimary = [primary_hsl, primary_is_gray]
         (const float h, const float s, const float l)
         {
             return primary_hsl.ShiftHue(h).Saturated(primary_is_gray ? 0.0f : s)
                 .Lighter(l).ToRGB();
         };
-    const auto LikeSecondary = [&secondary_hsl, &secondary_is_gray]
+    const auto LikeSecondary = [secondary_hsl, secondary_is_gray]
         (const float h, const float s, const float l)
         {
             return secondary_hsl.ShiftHue(h).Saturated(secondary_is_gray ? 0.0f : s)
