@@ -789,11 +789,3 @@ Window wxGetWindowParent(Window window)
         return (Window) 0;
 #endif
 }
-
-void wxApp::Exit()
-{
-    wxApp::CleanUp();
-
-    wxAppConsole::Exit();
-}
-
