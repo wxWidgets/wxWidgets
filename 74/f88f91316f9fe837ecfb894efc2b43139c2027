@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxRadioButton group support to wxGenericValidator (Bill Su, #24264).
