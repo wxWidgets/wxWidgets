@@ -136,6 +136,7 @@ DEFAULT_DEFAULT_wxUSE_QT=0
 PROGRAM_EXT=
 SAMPLES_CXXFLAGS=
 SAMPLES_RPATH_FLAG=
+DYLIB_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
 
@@ -3443,12 +3444,12 @@ if test "$wxUSE_SHARED" = "yes"; then
 
     dnl test for Sun CC which can be used under both Solaris and Linux
     if test "x$SUNCXX" = xyes; then
-        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-R\$libdir"
     else
     case "${host}" in
-      *-*-linux* | *-*-gnu* )
-        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+      *-*-linux* | *-*-gnu* | *-*-freebsd*)
+        DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
         ;;
 
@@ -3469,7 +3470,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             [],[])],
             [
                 AC_MSG_RESULT([yes])
-                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
                 WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
             ],[
                 AC_MSG_RESULT([no])
@@ -3479,7 +3480,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                     [],[])],
                     [
                         AC_MSG_RESULT([yes])
-                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        DYLIB_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
                         WXCONFIG_RPATH="-Wl,-R,\$libdir"
                     ],[
                         AC_MSG_RESULT([no])
@@ -3522,7 +3523,7 @@ EOF
         ;;
 
       *-*-hpux* )
-        SAMPLES_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,+b,\$libdir"
         ;;
 
@@ -3530,10 +3531,13 @@ EOF
     fi
 
     if test $wxUSE_RPATH = "no"; then
-        SAMPLES_RPATH_FLAG=''
+        DYLIB_RPATH_FLAG=''
         DYLIB_PATH_POSTLINK=''
         WXCONFIG_RPATH=''
     fi
+
+    dnl Flag for the samples is the same as for the libraries themselves.
+    SAMPLES_RPATH_FLAG="$DYLIB_RPATH_FLAG"
 
     SHARED=1
 
@@ -7804,6 +7808,7 @@ AC_SUBST(DEBUG_FLAG)
 TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[[A-Z]]' '[[a-z]]'`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
+AC_SUBST(DYLIB_RPATH_FLAG)
 AC_SUBST(DYLIB_RPATH_INSTALL)
 AC_SUBST(DYLIB_RPATH_POSTLINK)
 AC_SUBST(SAMPLES_RPATH_FLAG)

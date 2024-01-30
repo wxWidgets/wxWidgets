@@ -894,6 +894,7 @@ HEADER_PAD_OPTION
 SAMPLES_RPATH_FLAG
 DYLIB_RPATH_POSTLINK
 DYLIB_RPATH_INSTALL
+DYLIB_RPATH_FLAG
 TOOLKIT_VERSION
 TOOLKIT_LOWERCASE
 DEBUG_FLAG
@@ -3858,6 +3859,7 @@ DEFAULT_DEFAULT_wxUSE_QT=0
 PROGRAM_EXT=
 SAMPLES_CXXFLAGS=
 SAMPLES_RPATH_FLAG=
+DYLIB_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
 
@@ -22917,7 +22919,11 @@ $as_echo "$as_me: WARNING: --enable-macosx_arch is ignored when --enable-univers
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
     else
-                OSX_ARCH_OPTS=arm64,x86_64
+                        OSX_ARCH_OPTS=x86_64
+
+                if  `sw_vers -productVersion | sed 's/\..*//'` -gt 10 ; then
+            OSX_ARCH_OPTS=arm64,$OSX_ARCH_OPTS
+        fi
     fi
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for architectures to use in universal binary" >&5
@@ -31483,12 +31489,12 @@ $as_echo "$wx_cv_cc_visibility_workaround" >&6; }
     fi
 
         if test "x$SUNCXX" = xyes; then
-        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-R\$libdir"
     else
     case "${host}" in
-      *-*-linux* | *-*-gnu* )
-        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+      *-*-linux* | *-*-gnu* | *-*-freebsd*)
+        DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
         ;;
 
@@ -31515,7 +31521,7 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
                 WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
 
 else
@@ -31540,7 +31546,7 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        DYLIB_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
                         WXCONFIG_RPATH="-Wl,-R,\$libdir"
 
 else
@@ -31588,7 +31594,7 @@ EOF
         ;;
 
       *-*-hpux* )
-        SAMPLES_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,+b,\$libdir"
         ;;
 
@@ -31596,10 +31602,12 @@ EOF
     fi
 
     if test $wxUSE_RPATH = "no"; then
-        SAMPLES_RPATH_FLAG=''
+        DYLIB_RPATH_FLAG=''
         DYLIB_PATH_POSTLINK=''
         WXCONFIG_RPATH=''
     fi
+
+        SAMPLES_RPATH_FLAG="$DYLIB_RPATH_FLAG"
 
     SHARED=1
 
@@ -40688,6 +40696,7 @@ fi
 
 
 TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[A-Z]' '[a-z]'`
+
 
 
 

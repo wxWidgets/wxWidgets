@@ -197,8 +197,6 @@ jobs:
 
       - name: Set up build environment
         run: |
-          echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
-
           wxPROC_COUNT=`./build/tools/proc_count.sh`
           echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
 

@@ -23,8 +23,6 @@ task:
         arch: arm
 
   before_script: |
-    echo LD_LIBRARY_PATH=`pwd`/lib >> $CIRRUS_ENV
-
     wxPROC_COUNT=`./build/tools/proc_count.sh`
     # ARM systems have 64 CPUs but run out of memory and crash when using that
     # many jobs, so limit them to something reasonable.

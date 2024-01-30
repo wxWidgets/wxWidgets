@@ -122,7 +122,6 @@ jobs:
     - name: Set environment variables
       run: |
         echo TZ=UTC >> $GITHUB_ENV
-        echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
         wxPROC_COUNT=`sysctl -n hw.logicalcpu`
         ((wxPROC_COUNT++))
         echo wxPROC_COUNT=$wxPROC_COUNT >> $GITHUB_ENV
