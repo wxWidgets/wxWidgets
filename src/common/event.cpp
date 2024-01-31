@@ -1405,7 +1405,10 @@ void wxEvtHandler::ProcessPendingEvents()
 
     wxLEAVE_CRIT_SECT( m_pendingEventsLock );
 
-    ProcessEvent(*event);
+    // We must not let exceptions escape from here, there is no outer exception
+    // handler to catch them and so letting them do it would just terminate the
+    // program.
+    SafelyProcessEvent(*event);
 
     // careful: this object could have been deleted by the event handler
     // executed by the above ProcessEvent() call, so we can't access any fields
