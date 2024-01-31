@@ -1865,6 +1865,11 @@ to use it.
 @row3col{choices, @ref overview_xrcformat_type_string,
     Space-separated string containing the possible choices for the properties
     using them, e.g. wxFlagsProperty or wxEnumProperty.}
+@row3col{attribute, @ref overview_xrcformat_type_string,
+    Value for the property attribute with the name specified by the `name`
+    attribute of this element. Additional `recurse` attribute is supported and,
+    if specified with the value of `1`, results in the attribute being set for
+    this property and all its children recursively.}
 @endTable
 
 These elements define individual rows of @ref xrc_wxpropertygrid or @ref

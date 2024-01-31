@@ -2157,7 +2157,8 @@ public:
     // Empty string mean autodetect.
     bool AddAttribute( const wxString& name,
                        const wxString& type,
-                       const wxString& value );
+                       const wxString& value,
+                       wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse );
 
     // Called once in AddChildren.
     virtual void DoScanForChildren() = 0;
@@ -2196,6 +2197,9 @@ protected:
 
     // Tree-hierarchy of added properties (that can have children).
     std::vector<wxPGProperty*> m_propHierarchy;
+
+    // Recursively set attributes.
+    std::unordered_map<wxString, wxVariant> m_inheritedAttributes;
 
     // Hashmap for string-id to wxPGChoicesData mapping.
     std::unordered_map<wxString, wxPGChoicesData*> m_dictIdChoices;

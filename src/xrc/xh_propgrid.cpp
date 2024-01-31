@@ -175,8 +175,12 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         wxString s1 = node->GetAttribute("name");
         if ( s1.length() )
         {
+            wxPGPropertyValuesFlags flags = node->GetAttribute("recurse") == "1"
+                ? wxPGPropertyValuesFlags::Recurse
+                : wxPGPropertyValuesFlags::DontRecurse;
+
             m_populator->AddAttribute( s1, node->GetAttribute("type"),
-                                       node->GetNodeContent() );
+                                       node->GetNodeContent(), flags );
         }
     }
     else if( m_class == wxT("wxPropertyGrid"))

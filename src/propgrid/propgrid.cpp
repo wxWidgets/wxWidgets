@@ -6416,9 +6416,22 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
 
 void wxPropertyGridPopulator::AddChildren( wxPGProperty* property )
 {
+    // Preserve inherited attributes to be able to restore them later:
+    // attributes recursively set for the children of this property shouldn't
+    // be inherited by its siblings.
+    const auto inheritedAttributesOrig = m_inheritedAttributes;
+
+    // Apply inherited attributes to the property.
+    for ( const auto& it : m_inheritedAttributes )
+    {
+        property->SetAttribute(it.first, it.second);
+    }
+
     m_propHierarchy.push_back(property);
     DoScanForChildren();
     m_propHierarchy.pop_back();
+
+    m_inheritedAttributes = std::move(inheritedAttributesOrig);
 }
 
 // -----------------------------------------------------------------------
@@ -6540,7 +6553,8 @@ bool wxPropertyGridPopulator::ToLongPCT( const wxString& s, long* pval, long max
 
 bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
                                             const wxString& type,
-                                            const wxString& value )
+                                            const wxString& value,
+                                            wxPGPropertyValuesFlags flags )
 {
     if ( m_propHierarchy.empty() )
         return false;
@@ -6587,6 +6601,11 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
             ProcessError(wxString::Format(wxS("Invalid attribute type '%s'"),type));
             return false;
         }
+    }
+
+    if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
+    {
+        m_inheritedAttributes[name] = variant;
     }
 
     p->SetAttribute( name, variant );

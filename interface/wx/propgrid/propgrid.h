@@ -1534,10 +1534,16 @@ public:
 
         @param value
             Attribute value.
+
+        @param flags
+            Flags used when setting the attribute. Currently only
+            wxPGPropertyValuesFlags::Recurse is used here. This parameter is
+            only available since wxWidgets 3.3.0.
     */
     bool AddAttribute( const wxString& name,
                        const wxString& type,
-                       const wxString& value );
+                       const wxString& value,
+                       wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse );
 
     /**
         Called once in AddChildren.
