@@ -110,7 +110,6 @@ wxColour wxRibbonAUIArtProvider::GetColour(int id) const
     switch(id)
     {
     case wxRIBBON_ART_PAGE_BACKGROUND_COLOUR:
-        wxFALLTHROUGH;
     case wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR:
         return m_background_brush.GetColour();
     case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR:
@@ -118,11 +117,9 @@ wxColour wxRibbonAUIArtProvider::GetColour(int id) const
     case wxRIBBON_ART_TAB_CTRL_BACKGROUND_GRADIENT_COLOUR:
         return m_tab_ctrl_background_gradient_colour;
     case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_TOP_COLOUR:
-        wxFALLTHROUGH;
     case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR:
         return m_tab_active_top_background_brush.GetColour();
     case wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR:
-        wxFALLTHROUGH;
     case wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR:
         return m_tab_hover_background_brush.GetColour();
     case wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR:
@@ -454,7 +451,7 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
     dc.GetClippingBox(old_clip);
     bool is_first_tab = false;
     wxRibbonBar* bar = wxDynamicCast(tab.page->GetParent(), wxRibbonBar);
-    if (bar != nullptr && bar->GetPage(0) == tab.page)
+    if (bar && bar->GetPage(0) == tab.page)
         is_first_tab = true;
 
     wxBitmap icon;

@@ -57,8 +57,8 @@ protected:
     wxBitmap m_bitmap;
     wxClientDataContainer m_client_data;
     wxRect m_position;
-    int m_id{ 0 };
-    bool m_is_visible{ false };
+    int m_id = 0;
+    bool m_is_visible = false;
 };
 
 wxBEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)

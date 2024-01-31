@@ -901,7 +901,7 @@ bool wxRibbonPanel::TryAfter(wxEvent& evt)
 
 static bool IsAncestorOf(wxWindow *ancestor, wxWindow *window)
 {
-    while (window != nullptr)
+    while (window)
     {
         wxWindow *parent = window->GetParent();
         if(parent == ancestor)
