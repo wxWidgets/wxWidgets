@@ -54,7 +54,7 @@ protected:
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
 
-    wxRibbonPage* m_sibling{ nullptr };
+    wxRibbonPage* m_sibling = nullptr;
     long m_flags;
 
     wxDECLARE_CLASS(wxRibbonPageScrollButton);
