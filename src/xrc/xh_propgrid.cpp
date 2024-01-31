@@ -110,12 +110,11 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 {
     const wxXmlNode* node = m_node;
     wxString nodeName = node->GetName();
-    wxString emptyString;
 
     if ( nodeName == wxT("property") )
     {
         // property
-        wxString clas = node->GetAttribute(wxT("class"), emptyString);
+        wxString clas = node->GetAttribute("class");
 
         wxString label;
         wxString sLabel(wxT("label"));
@@ -143,7 +142,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         if ( choicesNode )
         {
             choices = m_populator->ParseChoices( choicesNode->GetNodeContent(),
-                                                 choicesNode->GetAttribute(wxT("id"), emptyString));
+                                                 choicesNode->GetAttribute("id"));
         }
 
         wxPGProperty* property = m_populator->Add( clas, label, name, pValue, &choices );
@@ -173,10 +172,10 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
     else if ( nodeName == wxT("attribute") )
     {
         // attribute
-        wxString s1 = node->GetAttribute(wxT("name"), emptyString);
+        wxString s1 = node->GetAttribute("name");
         if ( s1.length() )
         {
-            m_populator->AddAttribute( s1, node->GetAttribute(wxT("type"), emptyString),
+            m_populator->AddAttribute( s1, node->GetAttribute("type"),
                                        node->GetNodeContent() );
         }
     }
@@ -208,13 +207,13 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         //
         // Add choices list outside of a property
         m_populator->ParseChoices( node->GetNodeContent(),
-                                   node->GetAttribute(wxT("id"), emptyString));
+                                   node->GetAttribute("id"));
     }
     else if ( nodeName == wxT("splitterpos") )
     {
         // splitterpos
         wxASSERT(m_populator);
-        wxString sIndex = node->GetAttribute(wxT("index"), emptyString);
+        wxString sIndex = node->GetAttribute("index");
 
         long index;
         if ( !sIndex.ToLong(&index, 10) )
