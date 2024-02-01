@@ -42,10 +42,31 @@ enum wxTextValidatorStyle
 };
 
 // ----------------------------------------------------------------------------
+// wxTextEntryValidator: common base class for wxTextValidator & wxNumValidator
+// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxTextEntryValidator : public wxValidator
+{
+public:
+    wxTextEntryValidator() = default;
+    wxTextEntryValidator(const wxTextEntryValidator& other) = default;
+
+    // Override base class method to check whether the window does support
+    // this type of validators or not.
+    virtual void SetWindow(wxWindow* win) override;
+
+protected:
+    // Get the text entry of the associated control. Normally shouldn't ever
+    // return nullptr (and will assert if it does) but the caller should still
+    // test the return value for safety.
+    wxTextEntry* GetTextEntry() const;
+};
+
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxTextValidator: public wxTextEntryValidator
 {
 public:
     wxTextValidator(long style = wxFILTER_NONE, wxString *val = nullptr);
@@ -76,8 +97,6 @@ public:
     // ACCESSORS
     inline long GetStyle() const { return m_validatorStyle; }
     void SetStyle(long style);
-
-    wxTextEntry *GetTextEntry();
 
     // strings & chars inclusions:
     // ---------------------------

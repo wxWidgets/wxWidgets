@@ -16,7 +16,7 @@
 #if wxUSE_VALIDATORS
 
 #include "wx/textentry.h"
-#include "wx/validate.h"
+#include "wx/valtext.h"
 
 // This header uses std::numeric_limits<>::min/max, but these symbols are,
 // unfortunately, often defined as macros and the code here wouldn't compile in
@@ -39,7 +39,7 @@ enum wxNumValidatorStyle
 // Base class for all numeric validators.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxNumValidatorBase : public wxValidator
+class WXDLLIMPEXP_CORE wxNumValidatorBase : public wxTextEntryValidator
 {
 public:
     // Change the validator style. Usually it's specified during construction.
@@ -50,17 +50,13 @@ public:
     // we don't need this as we do our validation on the fly here.
     virtual bool Validate(wxWindow * WXUNUSED(parent)) override { return true; }
 
-    // Override base class method to check that the window is a text control or
-    // combobox.
-    virtual void SetWindow(wxWindow *win) override;
-
 protected:
     wxNumValidatorBase(int style)
     {
         m_style = style;
     }
 
-    wxNumValidatorBase(const wxNumValidatorBase& other) : wxValidator(other)
+    wxNumValidatorBase(const wxNumValidatorBase& other) : wxTextEntryValidator(other)
     {
         m_style = other.m_style;
     }
@@ -69,11 +65,6 @@ protected:
     {
         return (m_style & style) != 0;
     }
-
-    // Get the text entry of the associated control. Normally shouldn't ever
-    // return nullptr (and will assert if it does return it) but the caller should
-    // still test the return value for safety.
-    wxTextEntry *GetTextEntry() const;
 
     // Convert wxNUM_VAL_THOUSANDS_SEPARATOR and wxNUM_VAL_NO_TRAILING_ZEROES
     // bits of our style to the corresponding wxNumberFormatter::Style values.
