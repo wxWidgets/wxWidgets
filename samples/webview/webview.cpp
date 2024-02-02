@@ -1207,19 +1207,15 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     }
     m_histMenuItems.clear();
 
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > back = m_browser->GetBackwardHistory();
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > forward = m_browser->GetForwardHistory();
-
     wxMenuItem* item;
 
-    unsigned int i;
-    for(i = 0; i < back.size(); i++)
+    for ( const auto& histItem : m_browser->GetBackwardHistory() )
     {
-        wxString title = back[i]->GetTitle();
+        wxString title = histItem->GetTitle();
         if ( title.empty() )
             title = "(untitled)";
         item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
-        m_histMenuItems[item->GetId()] = back[i];
+        m_histMenuItems[item->GetId()] = histItem;
         Bind(wxEVT_MENU, &WebFrame::OnHistory, this, item->GetId());
     }
 
@@ -1232,13 +1228,13 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     //No need to connect the current item
     m_histMenuItems[item->GetId()] = wxSharedPtr<wxWebViewHistoryItem>(new wxWebViewHistoryItem(m_browser->GetCurrentURL(), m_browser->GetCurrentTitle()));
 
-    for(i = 0; i < forward.size(); i++)
+    for ( const auto& histItem : m_browser->GetForwardHistory() )
     {
-        wxString title = forward[i]->GetTitle();
+        wxString title = histItem->GetTitle();
         if ( title.empty() )
             title = "(untitled)";
         item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
-        m_histMenuItems[item->GetId()] = forward[i];
+        m_histMenuItems[item->GetId()] = histItem;
         Bind(wxEVT_TOOL, &WebFrame::OnHistory, this, item->GetId());
     }
 
