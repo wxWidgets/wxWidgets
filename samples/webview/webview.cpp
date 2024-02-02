@@ -1000,7 +1000,10 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     unsigned int i;
     for(i = 0; i < back.size(); i++)
     {
-        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, back[i]->GetTitle());
+        wxString title = back[i]->GetTitle();
+        if ( title.empty() )
+            title = "(untitled)";
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
         m_histMenuItems[item->GetId()] = back[i];
         Bind(wxEVT_MENU, &WebFrame::OnHistory, this, item->GetId());
     }
@@ -1016,7 +1019,10 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
 
     for(i = 0; i < forward.size(); i++)
     {
-        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, forward[i]->GetTitle());
+        wxString title = forward[i]->GetTitle();
+        if ( title.empty() )
+            title = "(untitled)";
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
         m_histMenuItems[item->GetId()] = forward[i];
         Bind(wxEVT_TOOL, &WebFrame::OnHistory, this, item->GetId());
     }
