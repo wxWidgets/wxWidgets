@@ -1207,22 +1207,23 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     }
     m_histMenuItems.clear();
 
+    // We can't use empty labels for the menu items, so use this helper to give
+    // them at least some name if we don't have anything better.
+    const auto makeLabel = [](const wxString& title)
+    {
+        return title.empty() ? "(untitled)" : title;
+    };
+
     wxMenuItem* item;
 
     for ( const auto& histItem : m_browser->GetBackwardHistory() )
     {
-        wxString title = histItem->GetTitle();
-        if ( title.empty() )
-            title = "(untitled)";
-        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, makeLabel(histItem->GetTitle()));
         m_histMenuItems[item->GetId()] = histItem;
         Bind(wxEVT_MENU, &WebFrame::OnHistory, this, item->GetId());
     }
 
-    wxString title = m_browser->GetCurrentTitle();
-    if ( title.empty() )
-        title = "(untitled)";
-    item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
+    item = m_tools_history_menu->AppendRadioItem(wxID_ANY, makeLabel(m_browser->GetCurrentTitle()));
     item->Check();
 
     //No need to connect the current item
@@ -1230,10 +1231,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
 
     for ( const auto& histItem : m_browser->GetForwardHistory() )
     {
-        wxString title = histItem->GetTitle();
-        if ( title.empty() )
-            title = "(untitled)";
-        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, makeLabel(histItem->GetTitle()));
         m_histMenuItems[item->GetId()] = histItem;
         Bind(wxEVT_TOOL, &WebFrame::OnHistory, this, item->GetId());
     }
