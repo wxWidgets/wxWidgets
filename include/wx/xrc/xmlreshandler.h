@@ -62,6 +62,9 @@ public:
     virtual bool IsOfClass(wxXmlNode *node, const wxString& classname) const = 0;
     virtual bool IsObjectNode(const wxXmlNode *node) const = 0;
     virtual wxString GetNodeName(const wxXmlNode *node) const = 0;
+    virtual wxString GetNodeAttribute(const wxXmlNode *node,
+                                      const wxString& attrName,
+                                      const wxString& defaultValue) const = 0;
     virtual wxString GetNodeContent(const wxXmlNode *node) const = 0;
     virtual wxXmlNode *GetNodeParent(const wxXmlNode *node) const = 0;
     virtual wxXmlNode *GetNodeNext(const wxXmlNode *node) const = 0;
@@ -245,6 +248,13 @@ protected:
     wxString GetNodeName(const wxXmlNode *node) const
     {
         return GetImpl()->GetNodeName(node);
+    }
+
+    wxString GetNodeAttribute(const wxXmlNode *node,
+                              const wxString& attrName,
+                              const wxString& defaultValue = {}) const
+    {
+        return GetImpl()->GetNodeAttribute(node, attrName, defaultValue);
     }
 
     wxString GetNodeContent(const wxXmlNode *node) const

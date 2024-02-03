@@ -771,6 +771,17 @@ protected:
     wxString GetNodeName(wxXmlNode* node) const;
 
     /**
+        Gets the node attribute value.
+
+        If @a node is @NULL or the attribute is not present, returns @a defaultValue.
+
+        @since 3.3.0
+    */
+    wxString GetNodeAttribute(const wxXmlNode *node,
+                              const wxString& attrName,
+                              const wxString& defaultValue = {}) const;
+
+    /**
         Gets node content from wxXML_ENTITY_NODE.
     */
     wxString GetNodeContent(wxXmlNode* node) const;

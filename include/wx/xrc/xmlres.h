@@ -511,6 +511,11 @@ public:
     // Returns the name of the node, e.g. "object" or "sizeritem".
     wxString GetNodeName(const wxXmlNode *node) const override;
 
+    // Returns the value of the given attribute under the node.
+    wxString GetNodeAttribute(const wxXmlNode *node,
+                              const wxString& attrName,
+                              const wxString& defaultValue) const override;
+
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as
     // wxXML_ENTITY_NODE name="tag", content=""

@@ -2265,6 +2265,14 @@ wxString wxXmlResourceHandlerImpl::GetNodeName(const wxXmlNode *node) const
     return node ? node->GetName() : wxString{};
 }
 
+wxString
+wxXmlResourceHandlerImpl::GetNodeAttribute(const wxXmlNode *node,
+                                           const wxString& attrName,
+                                           const wxString& defaultValue) const
+{
+    return node ? node->GetAttribute(attrName, defaultValue) : defaultValue;
+}
+
 wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node) const
 {
     return node ? node->GetNodeContent() : wxString{};
