@@ -512,7 +512,7 @@ public:
     // wxXML_ENTITY_NODE name="tag", content=""
     //    |-- wxXML_TEXT_NODE or
     //        wxXML_CDATA_SECTION_NODE name="" content="content"
-    wxString GetNodeContent(const wxXmlNode *node) override;
+    wxString GetNodeContent(const wxXmlNode *node) const override;
 
     wxXmlNode *GetNodeParent(const wxXmlNode *node) const override;
     wxXmlNode *GetNodeNext(const wxXmlNode *node) const override;

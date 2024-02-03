@@ -763,7 +763,7 @@ protected:
     /**
         Gets node content from wxXML_ENTITY_NODE.
     */
-    wxString GetNodeContent(wxXmlNode* node);
+    wxString GetNodeContent(wxXmlNode* node) const;
 
     /**
         Gets the parent of the node given.

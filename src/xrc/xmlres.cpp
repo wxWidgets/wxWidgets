@@ -2260,7 +2260,7 @@ bool wxXmlResourceHandlerImpl::IsObjectNode(const wxXmlNode *node) const
                     node->GetName() == wxS("object_ref"));
 }
 
-wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node)
+wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node) const
 {
     return node ? node->GetNodeContent() : wxString{};
 }
