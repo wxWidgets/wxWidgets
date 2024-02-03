@@ -507,6 +507,10 @@ public:
     bool IsOfClass(wxXmlNode *node, const wxString& classname) const override;
 
     bool IsObjectNode(const wxXmlNode *node) const override;
+
+    // Returns the name of the node, e.g. "object" or "sizeritem".
+    wxString GetNodeName(const wxXmlNode *node) const override;
+
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as
     // wxXML_ENTITY_NODE name="tag", content=""

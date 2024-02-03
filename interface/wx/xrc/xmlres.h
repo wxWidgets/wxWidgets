@@ -760,6 +760,16 @@ protected:
         @since 3.1.0
     */
     bool IsObjectNode(const wxXmlNode *node) const;
+
+    /**
+        Returns the node name.
+
+        Returns empty string if @a node is @NULL.
+
+        @since 3.3.0
+    */
+    wxString GetNodeName(wxXmlNode* node) const;
+
     /**
         Gets node content from wxXML_ENTITY_NODE.
     */
