@@ -1,0 +1,1 @@
+wxAll (GUI): Several fixes to scrolling in wxVListBox (Bill Su, #24278).
