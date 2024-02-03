@@ -45,7 +45,11 @@ public:
         }
         else
 #endif
+#if wxUSE_WEBVIEW_WEBKIT2
+            m_alternateHistoryURL = "about:srcdoc";
+#else
             m_alternateHistoryURL = "about:";
+#endif
     }
 
     ~WebViewTestCase()

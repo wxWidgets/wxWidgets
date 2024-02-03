@@ -1207,32 +1207,32 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     }
     m_histMenuItems.clear();
 
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > back = m_browser->GetBackwardHistory();
-    wxVector<wxSharedPtr<wxWebViewHistoryItem> > forward = m_browser->GetForwardHistory();
+    // We can't use empty labels for the menu items, so use this helper to give
+    // them at least some name if we don't have anything better.
+    const auto makeLabel = [](const wxString& title)
+    {
+        return title.empty() ? "(untitled)" : title;
+    };
 
     wxMenuItem* item;
 
-    unsigned int i;
-    for(i = 0; i < back.size(); i++)
+    for ( const auto& histItem : m_browser->GetBackwardHistory() )
     {
-        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, back[i]->GetTitle());
-        m_histMenuItems[item->GetId()] = back[i];
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, makeLabel(histItem->GetTitle()));
+        m_histMenuItems[item->GetId()] = histItem;
         Bind(wxEVT_MENU, &WebFrame::OnHistory, this, item->GetId());
     }
 
-    wxString title = m_browser->GetCurrentTitle();
-    if ( title.empty() )
-        title = "(untitled)";
-    item = m_tools_history_menu->AppendRadioItem(wxID_ANY, title);
+    item = m_tools_history_menu->AppendRadioItem(wxID_ANY, makeLabel(m_browser->GetCurrentTitle()));
     item->Check();
 
     //No need to connect the current item
     m_histMenuItems[item->GetId()] = wxSharedPtr<wxWebViewHistoryItem>(new wxWebViewHistoryItem(m_browser->GetCurrentURL(), m_browser->GetCurrentTitle()));
 
-    for(i = 0; i < forward.size(); i++)
+    for ( const auto& histItem : m_browser->GetForwardHistory() )
     {
-        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, forward[i]->GetTitle());
-        m_histMenuItems[item->GetId()] = forward[i];
+        item = m_tools_history_menu->AppendRadioItem(wxID_ANY, makeLabel(histItem->GetTitle()));
+        m_histMenuItems[item->GetId()] = histItem;
         Bind(wxEVT_TOOL, &WebFrame::OnHistory, this, item->GetId());
     }
 
