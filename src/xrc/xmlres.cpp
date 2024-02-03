@@ -2262,18 +2262,7 @@ bool wxXmlResourceHandlerImpl::IsObjectNode(const wxXmlNode *node) const
 
 wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node)
 {
-    const wxXmlNode *n = node;
-    if (n == nullptr) return wxEmptyString;
-    n = n->GetChildren();
-
-    while (n)
-    {
-        if (n->GetType() == wxXML_TEXT_NODE ||
-            n->GetType() == wxXML_CDATA_SECTION_NODE)
-            return n->GetContent();
-        n = n->GetNext();
-    }
-    return wxEmptyString;
+    return node ? node->GetNodeContent() : wxString{};
 }
 
 wxXmlNode *wxXmlResourceHandlerImpl::GetNodeParent(const wxXmlNode *node) const
