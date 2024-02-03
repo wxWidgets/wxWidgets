@@ -17,8 +17,6 @@
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/propgrid.h"
 
-#include "wx/xml/xml.h"
-
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
 #endif
@@ -109,12 +107,12 @@ void wxPropertyGridXmlHandler::HandlePropertyGridParams()
 wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 {
     const wxXmlNode* node = m_node;
-    wxString nodeName = node->GetName();
+    wxString nodeName = GetNodeName(node);
 
     if ( nodeName == wxT("property") )
     {
         // property
-        wxString clas = node->GetAttribute("class");
+        wxString clas = GetNodeAttribute(node, "class");
 
         wxString label;
         wxString sLabel(wxT("label"));
@@ -141,8 +139,8 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
         wxPGChoices choices;
         if ( choicesNode )
         {
-            choices = m_populator->ParseChoices( choicesNode->GetNodeContent(),
-                                                 choicesNode->GetAttribute("id"));
+            choices = m_populator->ParseChoices( GetNodeContent(choicesNode),
+                                                 GetNodeAttribute(choicesNode, "id"));
         }
 
         wxPGProperty* property = m_populator->Add( clas, label, name, pValue, &choices );
@@ -172,15 +170,15 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
     else if ( nodeName == wxT("attribute") )
     {
         // attribute
-        wxString s1 = node->GetAttribute("name");
+        wxString s1 = GetNodeAttribute(node, "name");
         if ( s1.length() )
         {
-            wxPGPropertyValuesFlags flags = node->GetAttribute("recurse") == "1"
+            wxPGPropertyValuesFlags flags = GetNodeAttribute(node, "recurse") == "1"
                 ? wxPGPropertyValuesFlags::Recurse
                 : wxPGPropertyValuesFlags::DontRecurse;
 
-            m_populator->AddAttribute( s1, node->GetAttribute("type"),
-                                       node->GetNodeContent(), flags );
+            m_populator->AddAttribute( s1, GetNodeAttribute(node, "type"),
+                                       GetNodeContent(node), flags );
         }
     }
     else if( m_class == wxT("wxPropertyGrid"))
@@ -210,20 +208,20 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
         //
         // Add choices list outside of a property
-        m_populator->ParseChoices( node->GetNodeContent(),
-                                   node->GetAttribute("id"));
+        m_populator->ParseChoices( GetNodeContent(node),
+                                   GetNodeAttribute(node, "id"));
     }
     else if ( nodeName == wxT("splitterpos") )
     {
         // splitterpos
         wxASSERT(m_populator);
-        wxString sIndex = node->GetAttribute("index");
+        wxString sIndex = GetNodeAttribute(node, "index");
 
         long index;
         if ( !sIndex.ToLong(&index, 10) )
             index = 0;
 
-        wxString s = node->GetNodeContent();
+        wxString s = GetNodeContent(node);
         long pos;
         if ( wxPropertyGridPopulator::ToLongPCT(s, &pos, m_pg->GetClientSize().x) )
             m_populator->GetState()->DoSetSplitter( pos, index );
@@ -278,7 +276,7 @@ wxObject *wxPropertyGridXmlHandler::DoCreateResource()
 
 bool wxPropertyGridXmlHandler::CanHandle(wxXmlNode *node)
 {
-    wxString name = node->GetName();
+    const wxString name = GetNodeName(node);
 
     return (
             (
