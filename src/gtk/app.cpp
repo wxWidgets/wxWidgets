@@ -568,6 +568,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
 void wxApp::CleanUp()
 {
+    wxAppBase::CleanUp();
+
     if (m_idleSourceId != 0)
         g_source_remove(m_idleSourceId);
 
@@ -577,8 +579,6 @@ void wxApp::CleanUp()
         g_type_class_unref(gt);
 
     gdk_threads_leave();
-
-    wxAppBase::CleanUp();
 }
 
 void wxApp::WakeUpIdle()

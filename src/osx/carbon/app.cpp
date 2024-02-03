@@ -358,13 +358,14 @@ int wxApp::OnRun()
 void wxApp::CleanUp()
 {
     wxMacAutoreleasePool autoreleasepool;
+
+    wxAppBase::CleanUp();
+
 #if wxUSE_TOOLTIPS
     wxToolTip::RemoveToolTips() ;
 #endif
 
     DoCleanUp();
-
-    wxAppBase::CleanUp();
 }
 
 //----------------------------------------------------------------------
