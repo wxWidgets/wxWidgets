@@ -632,9 +632,19 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 
         case WXK_PAGEDOWN:
         case WXK_NUMPAD_PAGEDOWN:
+        {
+            size_t oldBegin = GetVisibleBegin();
             PageDown();
-            current = GetVisibleBegin();
+            if (GetVisibleBegin() > oldBegin)
+            {
+                current = GetVisibleBegin();
+            }
+            else
+            {
+                current = GetRowCount() - 1;
+            }
             break;
+        }
 
         case WXK_PAGEUP:
         case WXK_NUMPAD_PAGEUP:
