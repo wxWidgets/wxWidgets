@@ -921,12 +921,15 @@ public:
     // indicates that we may have an extra first argument preceding the format
     // string and that if we do have it, we should store it in m_info using the
     // given key (while by default 0 value will be used)
-    wxLogger& MaybeStore(const wxString& key, wxUIntPtr value = 0)
+    wxLogger& MaybeStore(const char* key, wxUIntPtr value = 0)
     {
         wxASSERT_MSG( m_optKey.empty(), "can only have one optional value" );
-        m_optKey = key;
 
-        m_info.StoreValue(key, value);
+        // We only use keys defined in this file and we can be sure they
+        // contain ASCII characters only.
+        m_optKey = wxString::FromAscii(key);
+
+        m_info.StoreValue(m_optKey, value);
         return *this;
     }
 
