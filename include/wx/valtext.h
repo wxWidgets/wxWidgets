@@ -59,6 +59,26 @@ protected:
     // return nullptr (and will assert if it does) but the caller should still
     // test the return value for safety.
     wxTextEntry* GetTextEntry() const;
+
+    // Return true if @text can be pasted in the control. return false otherwise.
+    //
+    // This function (called by OnPaste() handler) filters out invalid characters
+    // from the clipboard contents as it shouldn't be possible to sneak them into
+    // the control in such a way.
+    //
+    // This seems better than not allowing to paste anything at all if there is
+    // anything invalid on the clipboard, e.g. it is more user-friendly to omit
+    // any trailing spaces in a control not allowing them than to refuse to
+    // paste a string with some spaces into it completely.
+    //
+    // Out of abundance of caution also prefer to let the control do its own
+    // thing if there are no invalid characters at all, as we can be sure it
+    // does the right thing in all cases, while our code might not deal with
+    // some edge cases correctly.
+    virtual bool CanPaste(const wxString& text) = 0;
+
+    // Event handlers
+    void OnPaste(wxClipboardTextEvent& event);
 };
 
 
@@ -174,7 +194,7 @@ protected:
     wxArrayString        m_excludes;
 
 private:
-    void OnPaste(wxClipboardTextEvent& event);
+    virtual bool CanPaste(const wxString& text) override;
 
     wxDECLARE_NO_ASSIGN_CLASS(wxTextValidator);
     wxDECLARE_DYNAMIC_CLASS(wxTextValidator);

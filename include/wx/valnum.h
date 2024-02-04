@@ -97,6 +97,8 @@ private:
     // some valid value.
     virtual wxString NormalizeString(const wxString& s) const = 0;
 
+    // Override base class
+    virtual bool CanPaste(const wxString& text) override;
 
     // Event handlers.
     void OnChar(wxKeyEvent& event);

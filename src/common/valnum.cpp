@@ -196,6 +196,48 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
         text->MarkDirty();
 }
 
+bool wxNumValidatorBase::CanPaste(const wxString& text)
+{
+    wxString valid;
+    valid.reserve(text.length());
+
+    bool hasInvalid = false;
+    int pos = 0;
+
+    // Examine all characters one by one.
+    for ( wxString::const_iterator i = text.begin(), end = text.end();
+          i != end; ++i )
+    {
+        const wxUniChar ch = *i;
+
+        if ( IsCharOk(valid, pos, ch) )
+        {
+            valid += ch;
+            ++pos;
+        }
+        else // Invalid character.
+        {
+            // Only beep once per paste, not for every invalid character.
+            if ( !hasInvalid && !wxValidator::IsSilent() )
+                wxBell();
+
+            hasInvalid = true;
+        }
+    }
+
+    // If we can't let the control paste everything, do it ourselves.
+    if ( hasInvalid )
+    {
+        wxTextEntry * const entry = GetTextEntry();
+        if ( entry )
+        {
+            entry->WriteText(valid);
+        }
+    }
+
+    return !hasInvalid;
+}
+
 // ============================================================================
 // wxIntegerValidatorBase implementation
 // ============================================================================

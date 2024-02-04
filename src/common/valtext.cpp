@@ -62,6 +62,7 @@ void wxTextEntryValidator::SetWindow(wxWindow* win)
     if ( GetTextEntry() )
     {
         // Bind event handlers
+        Bind(wxEVT_TEXT_PASTE, &wxTextEntryValidator::OnPaste, this);
     }
     else
     {
@@ -98,6 +99,25 @@ wxTextEntry* wxTextEntryValidator::GetTextEntry() const
     return nullptr;
 }
 
+void wxTextEntryValidator::OnPaste(wxClipboardTextEvent& event)
+{
+#if wxUSE_CLIPBOARD
+    wxClipboardLocker lock;
+    wxTextDataObject data;
+    wxTheClipboard->GetData(data);
+
+    if ( !CanPaste(data.GetText()) )
+    {
+        // Skip the call to wxEvent::Skip() below, preventing the normal
+        // paste from happening.
+        return;
+    }
+
+#endif // wxUSE_CLIPBOARD
+
+    event.Skip();
+}
+
 // ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
@@ -105,7 +125,6 @@ wxTextEntry* wxTextEntryValidator::GetTextEntry() const
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
-    EVT_TEXT_PASTE(wxID_ANY, wxTextValidator::OnPaste)
 wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
@@ -316,26 +335,8 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     event.Skip(false);
 }
 
-void wxTextValidator::OnPaste(wxClipboardTextEvent& event)
+bool wxTextValidator::CanPaste(const wxString& text)
 {
-#if wxUSE_CLIPBOARD
-    // Filter out invalid characters from the clipboard contents as it
-    // shouldn't be possible to sneak them into the control in such a way.
-    //
-    // This seems better than not allowing to paste anything at all if there is
-    // anything invalid on the clipboard, e.g. it is more user-friendly to omit
-    // any trailing spaces in a control not allowing them than to refuse to
-    // paste a string with some spaces into it completely.
-    //
-    // Out of abundance of caution also prefer to let the control do its own
-    // thing if there are no invalid characters at all, as we can be sure it
-    // does the right thing in all cases, while our code might not deal with
-    // some edge cases correctly.
-    wxClipboardLocker lock;
-    wxTextDataObject data;
-    wxTheClipboard->GetData(data);
-    const wxString& text = data.GetText();
-
     wxString valid;
     valid.reserve(text.length());
 
@@ -368,15 +369,10 @@ void wxTextValidator::OnPaste(wxClipboardTextEvent& event)
         if ( entry )
         {
             entry->WriteText(valid);
-
-            // Skip the call to wxEvent::Skip() below, preventing the normal
-            // paste from happening.
-            return;
         }
     }
-#endif // wxUSE_CLIPBOARD
 
-    event.Skip();
+    return !hasInvalid;
 }
 
 bool wxTextValidator::IsValidChar(const wxUniChar& c) const
