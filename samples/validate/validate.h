@@ -128,6 +128,9 @@ private:
     wxString        m_charExcludes;
     wxArrayString   m_includes;
     wxArrayString   m_excludes;
+
+    wxString        m_regexStr;
+    wxString        m_regexPurpose;
 };
 
 class MyData

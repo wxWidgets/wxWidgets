@@ -32,6 +32,7 @@
 
 #include "wx/clipbrd.h"
 #include "wx/combo.h"
+#include "wx/regex.h"
 
 // ----------------------------------------------------------------------------
 // global helpers
@@ -440,6 +441,76 @@ bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 
     return false;
 }
+
+#if wxUSE_REGEX
+// ----------------------------------------------------------------------------
+// wxRegexValidator implementation
+// ----------------------------------------------------------------------------
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegexValidator, wxTextValidator);
+
+wxRegexValidator::wxRegexValidator(long style, wxString* str)
+    : wxTextValidator(style, str)
+{
+}
+
+wxRegexValidator::wxRegexValidator(const wxString& pattern,
+                                           const wxString& purpose,
+                                           long style, wxString* str)
+    : wxTextValidator(style, str)
+{
+    SetRegEx(pattern, purpose);
+}
+
+void wxRegexValidator::SetPurpose(const wxString& purpose)
+{
+    m_purpose = purpose;
+
+    if ( m_purpose.empty() )
+        m_purpose = _("input");
+}
+
+void wxRegexValidator::SetRegEx(const wxString& pattern, const wxString& purpose)
+{
+    m_regex.reset(new wxRegEx);
+
+    // No need to check for a (possible) compilation error here
+    // as the object will be checked for validity when used anyhow.
+    m_regex->Compile(pattern);
+
+    SetPurpose(purpose);
+}
+
+void wxRegexValidator::SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& purpose)
+{
+    m_regex = regex;
+
+    SetPurpose(purpose);
+}
+
+wxObject* wxRegexValidator::Clone() const
+{
+    return new wxRegexValidator(*this);
+}
+
+wxString wxRegexValidator::IsValid(const wxString& str) const
+{
+    wxASSERT_MSG( (m_regex && m_regex->IsValid()),
+        "wxRegexValidator not properly initialized!" );
+
+    wxString errmsg;
+
+    if ( m_validatorStyle != wxFILTER_NONE )
+        errmsg = wxTextValidator::IsValid(str);
+
+    if ( errmsg.empty() && !m_regex->Matches(str) )
+    {
+        errmsg = wxString::Format(_("'%s' is not a valid %s"), str, m_purpose);
+    }
+
+    return errmsg;
+}
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)

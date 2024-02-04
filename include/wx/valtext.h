@@ -15,9 +15,11 @@
 
 #if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
+class WXDLLIMPEXP_FWD_BASE wxRegEx;
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 #include "wx/validate.h"
+#include "wx/sharedptr.h"
 
 enum wxTextValidatorStyle
 {
@@ -200,6 +202,40 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxTextValidator);
     wxDECLARE_EVENT_TABLE();
 };
+
+#if wxUSE_REGEX
+// ----------------------------------------------------------------------------
+// wxRegexValidator declaration
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxRegexValidator : public wxTextValidator
+{
+public:
+    wxRegexValidator(long style = wxFILTER_NONE, wxString* str = nullptr);
+    wxRegexValidator(const wxString& pattern, const wxString& purpose,
+                     long style = wxFILTER_NONE, wxString* str = nullptr);
+
+    // Use one of these functions to initialize the validator if the first
+    // constructor was used to create it.
+    void SetRegEx(const wxString& pattern, const wxString& purpose);
+    void SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& purpose);
+
+    virtual wxObject* Clone() const override;
+
+    // Override base class function
+    virtual wxString IsValid(const wxString& str) const override;
+
+private:
+    void SetPurpose(const wxString& purpose);
+
+    wxSharedPtr<wxRegEx>   m_regex;
+    wxString               m_purpose; // The purpose of the regular expression,
+                                      // i.e.: phone number.
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRegexValidator);
+};
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
