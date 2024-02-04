@@ -1,5 +1,19 @@
 @PACKAGE_INIT@
 
+cmake_policy(PUSH)
+# Set policies to prevent warnings
+if(POLICY CMP0057)
+    # Support new if() IN_LIST operator.
+    cmake_policy(SET CMP0057 NEW)
+endif()
+if(POLICY CMP0072)
+    # FindOpenGL prefers GLVND by default when available.
+    cmake_policy(GET CMP0072 _OpenGL_GL_POLICY)
+    if (_OpenGL_GL_POLICY STREQUAL "")
+        cmake_policy(SET CMP0072 NEW)
+    endif()
+endif()
+
 # determine target from compiler, platform and library type
 if(WIN32 AND NOT CYGWIN AND NOT MSYS)
     if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
@@ -137,3 +151,5 @@ if(NOT @PROJECT_NAME@_FIND_COMPONENTS)
 endif()
 
 check_required_components("@PROJECT_NAME@")
+
+cmake_policy(POP)
