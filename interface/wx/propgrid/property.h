@@ -1885,6 +1885,9 @@ public:
 
         Tries to retain value type, although currently if it is not string,
         then it is forced to integer.
+
+        If @a newValue is wxNOT_FOUND (`-1`), then the property's value is
+        reset to unspecified, as if SetValueToUnspecified() was called.
     */
     void SetChoiceSelection( int newValue );
 
