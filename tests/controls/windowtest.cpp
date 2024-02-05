@@ -213,16 +213,12 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
     CHECK( resCursor1.IsOk() );
 #endif
 #ifdef __WXOSX__
-    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "/horse.png" );
     // Check the cur file
-    wxCursor resCursor3( "horse" );
+    wxCursor resCursor3( "horse2" );
     CHECK( resCursor3.IsOk() );
-    wxRemoveFile( wxStandardPaths::Get().GetResourcesDir() + "/horse.cur" );
     // Check that loading fails if the cursor file is not found
-    wxCursor resCursor2( "horse" );
+    wxCursor resCursor2( "horse3" );
     CHECK( resCursor2.IsOk() );
-    wxCopyFile( "horse.png", wxStandardPaths::Get().GetResourcesDir() + "/horse.png" );
-    wxCopyFile( "horse.cur", wxStandardPaths::Get().GetResourcesDir() + "/horse.cur" );
 #endif
 #if wxUSE_CARET
     CHECK(!m_window->GetCaret());
