@@ -290,6 +290,7 @@ wxMSW:
 - Fix restoring hidden top level windows (Christian Walther, #24117).
 - Add support for VT_UI8 OLE VARIANT type (Miguel Gimenez, #24115).
 - Fix using "Alt" when wxGrid has focus (Dietmar Schwertberger, #24247).
+- Fix wxButton::GetDefaultSize() in high DPI under MSW (#24283).
 
 wxOSX:
 
