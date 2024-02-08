@@ -267,6 +267,7 @@ All (GUI):
 - Don't let exceptions escape from event handlers called during idle processing.
 - Fix reading some previously not loaded GIF images (Mark Wagner, #22799).
 - Fix wxGrid selection after deleting rows/cols (Dietmar Schwertberger, 24286).
+- Auto-grow in-place editor in generic wxListCtrl again (taler21, #24293).
 
 wxGTK:
 

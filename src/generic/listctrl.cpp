@@ -1517,7 +1517,7 @@ bool wxListTextCtrlWrapper::CheckForEndEditKey(const wxKeyEvent& event)
 
 void wxListTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
 {
-    if (m_aboutToFinish)
+    if ( !m_aboutToFinish )
     {
         // auto-grow the textctrl:
         wxSize parentSize = m_owner->GetSize();
