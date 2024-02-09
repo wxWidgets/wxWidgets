@@ -1,0 +1,1 @@
+wxAll: Avoid DNS lookup when constructing wxIPV4address from IP (SMMB-DEV, #23109).
