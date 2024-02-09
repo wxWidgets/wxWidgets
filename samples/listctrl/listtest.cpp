@@ -650,6 +650,8 @@ void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
             wxString label;
             if ( !(i % 5) )
                 label.Printf("Longer label %d", i);
+            else if ( !(i % 4) )
+                label.Printf("#%d", i);
             else
                 label.Printf("Label %d", i);
 
