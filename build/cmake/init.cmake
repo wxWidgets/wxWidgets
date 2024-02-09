@@ -8,12 +8,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
-    set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-else()
-    # If the standard is not set explicitly, check whether we can use C++11
-    # without any special options.
+function(checkCompilerDefaults)
     include(CheckCXXSourceCompiles)
     check_cxx_source_compiles("
         #include <vector>
@@ -24,8 +19,33 @@ else()
             return v[0];
         }"
         wxHAVE_CXX11)
+
+    check_cxx_source_compiles("
+        #if defined(_MSVC_LANG)
+            #if _MSVC_LANG < 201703L
+                #error C++17 support is required
+            #endif
+        #elif __cplusplus < 201703L
+            #error C++17 support is required
+        #endif
+        int main() {
+            [[maybe_unused]] auto unused = 17;
+        }"
+        wxHAVE_CXX17)
+endfunction()
+
+if(DEFINED CMAKE_CXX_STANDARD)
+    # User has explicitly set a CMAKE_CXX_STANDARD.
+elseif(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+    # Standard is set using wxBUILD_CXX_STANDARD.
+    set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+else()
+    # CMAKE_CXX_STANDARD not defined.
+    checkCompilerDefaults()
     if(NOT wxHAVE_CXX11)
-        # If not, request it explicitly and let CMake check if it's supported.
+        # If the standard is not set explicitly, and the default compiler settings
+        # do not support c++11, request it explicitly.
         set(CMAKE_CXX_STANDARD 11)
         set(CMAKE_CXX_STANDARD_REQUIRED ON)
     endif()
@@ -133,20 +153,12 @@ wx_string_append(wxBUILD_FILE_ID "${lib_flavour}")
 
 set(wxPLATFORM_ARCH)
 if(CMAKE_GENERATOR_PLATFORM)
-    if (CMAKE_GENERATOR_PLATFORM STREQUAL "x64")
-        set(wxPLATFORM_ARCH "x64")
-    elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM")
-        set(wxPLATFORM_ARCH "arm")
-    elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
-        set(wxPLATFORM_ARCH "arm64")
+    if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "Win32")
+        string(TOLOWER ${CMAKE_GENERATOR_PLATFORM} wxPLATFORM_ARCH)
     endif()
 elseif(CMAKE_VS_PLATFORM_NAME)
-    if (CMAKE_VS_PLATFORM_NAME STREQUAL "x64")
-        set(wxPLATFORM_ARCH "x64")
-    elseif(CMAKE_VS_PLATFORM_NAME STREQUAL "ARM")
-        set(wxPLATFORM_ARCH "arm")
-    elseif(CMAKE_VS_PLATFORM_NAME STREQUAL "ARM64")
-        set(wxPLATFORM_ARCH "arm64")
+    if(NOT CMAKE_VS_PLATFORM_NAME STREQUAL "Win32")
+        string(TOLOWER ${CMAKE_VS_PLATFORM_NAME} wxPLATFORM_ARCH)
     endif()
 else()
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -494,47 +506,28 @@ if(wxUSE_GUI)
                 message(WARNING "webkit or chromium not found or enabled, wxWebview won't be available")
                 wx_option_force_value(wxUSE_WEBVIEW OFF)
             endif()
-        elseif(WXMSW)
-            if(NOT wxUSE_WEBVIEW_IE AND NOT wxUSE_WEBVIEW_EDGE AND NOT wxUSE_WEBVIEW_CHROMIUM)
-                message(WARNING "WebviewIE and WebviewEdge and WebviewChromium not found or enabled, wxWebview won't be available")
-                wx_option_force_value(wxUSE_WEBVIEW OFF)
-            endif()
         elseif(APPLE)
             if(NOT wxUSE_WEBVIEW_WEBKIT AND NOT wxUSE_WEBVIEW_CHROMIUM)
                 message(WARNING "webkit and chromium not found or enabled, wxWebview won't be available")
                 wx_option_force_value(wxUSE_WEBVIEW OFF)
             endif()
+        else()
+            set(wxUSE_WEBVIEW_WEBKIT OFF)
+        endif()
+
+        if(WXMSW AND NOT wxUSE_WEBVIEW_IE AND NOT wxUSE_WEBVIEW_EDGE AND NOT wxUSE_WEBVIEW_CHROMIUM)
+            message(WARNING "WebviewIE and WebviewEdge and WebviewChromium not found or enabled, wxWebview won't be available")
+            wx_option_force_value(wxUSE_WEBVIEW OFF)
         endif()
 
         if(wxUSE_WEBVIEW_CHROMIUM AND WIN32 AND NOT MSVC)
-            message(WARNING "WebviewChromium libcef_dll_wrapper can only be built with MSVC... disabled")
-            wx_option_force_value(wxUSE_WEBVIEW_CHROMIUM OFF)
+            message(FATAL_ERROR "WebviewChromium libcef_dll_wrapper can only be built with MSVC")
         endif()
-        if(wxUSE_WEBVIEW_CHROMIUM)
-            # Check for C++17 support as it's required by CEF: we trust
-            # CMAKE_CXX_STANDARD if it is defined, but we need to compile a
-            # test program if it is not because the compiler could be
-            # supporting C++17 anyway.
-            if (DEFINED CMAKE_CXX_STANDARD)
-                if (CMAKE_CXX_STANDARD GREATER_EQUAL 17)
-                    set(wxHAVE_CXX17 ON)
-                endif()
-            else()
-                check_cxx_source_compiles("
-                    #if defined(_MSVC_LANG)
-                        #if _MSVC_LANG < 201703L
-                            #error C++17 support is required
-                        #endif
-                    #elif __cplusplus < 201703L
-                        #error C++17 support is required
-                    #endif
-                    int main() {
-                        [[maybe_unused]] auto unused = 17;
-                    }"
-                    wxHAVE_CXX17)
-            endif()
 
-            if (NOT wxHAVE_CXX17)
+        if(wxUSE_WEBVIEW_CHROMIUM)
+            # CEF requires C++17: we trust CMAKE_CXX_STANDARD if it is defined,
+            # or the previously tested wxHAVE_CXX17 if the compiler supports C++17 anyway.
+            if(NOT (CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR wxHAVE_CXX17))
                 # We shouldn't disable this option as it's disabled by default and
                 # if it is on, it means that CEF is meant to be used, but we can't
                 # continue neither as libcef_dll_wrapper will fail to build
@@ -552,6 +545,32 @@ if(wxUSE_GUI)
             endif()
         endif()
     endif()
+
+    set(wxWebviewInfo "enable wxWebview")
+    if(wxUSE_WEBVIEW)
+        if(wxUSE_WEBVIEW_WEBKIT)
+            list(APPEND webviewBackends "WebKit")
+        endif()
+        if(wxUSE_WEBVIEW_WEBKIT2)
+            list(APPEND webviewBackends "WebKit2")
+        endif()
+        if(wxUSE_WEBVIEW_EDGE)
+            if(wxUSE_WEBVIEW_EDGE_STATIC)
+                list(APPEND webviewBackends "Edge (static)")
+            else()
+                list(APPEND webviewBackends "Edge")
+            endif()
+        endif()
+        if(wxUSE_WEBVIEW_IE)
+            list(APPEND webviewBackends "IE")
+        endif()
+        if(wxUSE_WEBVIEW_CHROMIUM)
+            list(APPEND webviewBackends "Chromium")
+        endif()
+        string(REPLACE ";" ", " webviewBackends "${webviewBackends}")
+        set(wxWebviewInfo "${wxWebviewInfo} with ${webviewBackends}")
+    endif()
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_WEBVIEW ${wxWebviewInfo})
 
     if(wxUSE_PRIVATE_FONTS AND WXGTK)
         find_package(FONTCONFIG)

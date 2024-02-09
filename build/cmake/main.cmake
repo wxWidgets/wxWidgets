@@ -75,7 +75,7 @@ if(wxTOOLKIT_EXTRA)
     set(wxTOOLKIT_DESC "with support for: ${wxTOOLKIT_DESC}")
 endif()
 
-message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM}
+message(STATUS "Configured wxWidgets ${wxVERSION} for ${CMAKE_SYSTEM_NAME}
     Min OS Version required at runtime:                ${wxREQUIRED_OS_DESC}
     Which GUI toolkit should wxWidgets use?            ${wxBUILD_TOOLKIT} ${wxTOOLKIT_VERSION} ${wxTOOLKIT_DESC}
     Should wxWidgets be compiled into single library?  ${wxBUILD_MONOLITHIC}

@@ -324,6 +324,11 @@ function(wx_set_target_properties target_name)
             )
     endif()
 
+    if(WIN32)
+        target_compile_definitions(${target_name} PUBLIC UNICODE)
+    endif()
+    target_compile_definitions(${target_name} PUBLIC _UNICODE)
+
     file(RELATIVE_PATH wxSETUP_HEADER_REL ${wxOUTPUT_DIR} ${wxSETUP_HEADER_PATH})
     target_include_directories(${target_name}
         BEFORE
@@ -565,6 +570,12 @@ function(wx_set_builtin_target_properties target_name)
         )
     endif()
 
+    if(WIN32)
+        # not needed for wxWidgets anymore (it is always built with unicode)
+        # but keep it here so applications linking to wxWidgets will inherit it
+        target_compile_definitions(${target_name} PUBLIC UNICODE _UNICODE)
+    endif()
+
     target_include_directories(${target_name} BEFORE PRIVATE ${wxSETUP_HEADER_PATH})
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
@@ -582,6 +593,12 @@ endfunction()
 # Add a third party builtin library
 function(wx_add_builtin_library name)
     wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
+
+    list(GET src_list 0 src_file)
+    if(NOT EXISTS "${src_file}")
+        message(FATAL_ERROR "${name} file does not exist: \"${src_file}\".\
+        Make sure you checkout the git submodules.")
+    endif()
 
     if(${name} MATCHES "wx.*")
         string(SUBSTRING ${name} 2 -1 name_short)

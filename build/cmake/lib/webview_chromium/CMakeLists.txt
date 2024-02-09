@@ -56,18 +56,30 @@ endif()
 set(USE_ATL OFF)        # Disable usage of ATL in CEF
 set(USE_SANDBOX OFF)    # Disable usage of sandbox on windows
 
+if(MSVC)
+    if(wxBUILD_USE_STATIC_RUNTIME)
+        set(CEF_RUNTIME_LIBRARY_FLAG "/MT" CACHE STRING "" FORCE)
+    else()
+        set(CEF_RUNTIME_LIBRARY_FLAG "/MD" CACHE STRING "" FORCE)
+    endif()
+endif()
+
+set(_saved_CMAKE_MESSAGE_LOG_LEVEL ${CMAKE_MESSAGE_LOG_LEVEL})
+set(CEF_SHOW_RESULTS FALSE CACHE BOOL "Show CEF configuration results")
+if(NOT CEF_SHOW_RESULTS)
+    set(CMAKE_MESSAGE_LOG_LEVEL ERROR)
+endif()
+
 add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
+
+set(CMAKE_MESSAGE_LOG_LEVEL ${_saved_CMAKE_MESSAGE_LOG_LEVEL})
+
 set_target_properties(libcef_dll_wrapper PROPERTIES
     FOLDER "Third Party Libraries"
     OUTPUT_NAME "libcef_dll_wrapper"
 )
 
-if(MSVC)
-    # Modify CEF compiler options to match VC runtime
-    get_target_property(cef_compile_options libcef_dll_wrapper COMPILE_OPTIONS)
-    string(REGEX REPLACE "/MTd?;" "" cef_compile_options "${cef_compile_options}")
-    set_target_properties(libcef_dll_wrapper PROPERTIES COMPILE_OPTIONS "${cef_compile_options}")
-else()
+if(NOT MSVC)
     set_target_properties(libcef_dll_wrapper PROPERTIES COMPILE_OPTIONS "-Wno-extra")
 endif()
 
@@ -100,5 +112,6 @@ mark_as_advanced(USE_ATL)
 mark_as_advanced(USE_SANDBOX)
 mark_as_advanced(OPTION_USE_ARC)
 mark_as_advanced(CEF_ROOT)
+mark_as_advanced(CEF_SHOW_RESULTS)
 mark_as_advanced(CEF_DEBUG_INFO_FLAG)
 mark_as_advanced(CEF_RUNTIME_LIBRARY_FLAG)
