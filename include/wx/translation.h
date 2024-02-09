@@ -203,6 +203,8 @@ private:
     static void SetNonOwned(wxTranslations *t);
     friend class wxLocale;
 
+    wxString DoGetBestAvailableTranslation(const wxString& domain, const wxString& additionalAvailableLanguage);
+
 private:
     wxString m_lang;
     wxTranslationsLoader *m_loader;
