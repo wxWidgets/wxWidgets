@@ -749,13 +749,13 @@ bool wxRibbonPage::DoActualLayout()
         int w = m_size_calc_array[size_index].GetWidth();
         int h = m_size_calc_array[size_index].GetHeight();
         child->SetSize(origin.x, origin.y, w, h);
-        if(major_axis == wxHORIZONTAL)
+        if ( major_axis == wxHORIZONTAL )
         {
-            origin.x += w + gap;
+            origin.x += w + (child->IsShown() ? gap : 0);
         }
         else
         {
-            origin.y += h + gap;
+            origin.y += h + (child->IsShown() ? gap : 0);
         }
     }
 
