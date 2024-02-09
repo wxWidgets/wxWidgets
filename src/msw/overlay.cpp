@@ -99,8 +99,9 @@ void wxOverlayImpl::Init(wxDC* dc, int , int , int , int )
 
     m_window = dc->GetWindow();
 
-    m_rect.SetSize(m_window->GetClientSize());
-    m_rect.SetPosition(m_window->GetScreenPosition());
+    // The rectangle must be in screen coordinates
+    m_rect = m_window->GetClientRect();
+    m_window->ClientToScreen(&m_rect.x, &m_rect.y);
 
     m_bitmap.CreateWithLogicalSize(m_rect.GetSize(), m_window->GetDPIScaleFactor());
 
