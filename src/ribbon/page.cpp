@@ -751,11 +751,11 @@ bool wxRibbonPage::DoActualLayout()
         child->SetSize(origin.x, origin.y, w, h);
         if(major_axis == wxHORIZONTAL)
         {
-            origin.x += w + gap;
+            origin.x += w + (child->IsShown() ? gap : 0);
         }
         else
         {
-            origin.y += h + gap;
+            origin.y += h + (child->IsShown() ? gap : 0);
         }
     }
 
