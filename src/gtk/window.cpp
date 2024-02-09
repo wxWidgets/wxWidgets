@@ -72,6 +72,8 @@ typedef guint KeySym;
     #define PANGO_VERSION_CHECK(a,b,c) 0
 #endif
 
+constexpr const char* TRACE_MOUSE = "mouse";
+
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -2248,14 +2250,21 @@ wx_window_focus_callback(GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_enter_callback( GtkWidget*,
+gtk_window_enter_callback( GtkWidget* widget,
                            GdkEventCrossing *gdk_event,
                            wxWindowGTK *win )
 {
+    wxLogTrace(TRACE_MOUSE, "Window enter in %s (window %p) for window %p",
+               wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
+
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     // Event was emitted after a grab
-    if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
+    if (gdk_event->mode != GDK_CROSSING_NORMAL)
+    {
+        wxLogTrace(TRACE_MOUSE, "Ignore event with mode %d", gdk_event->mode);
+        return FALSE;
+    }
 
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
     InitMouseEvent(win, event, gdk_event);
@@ -2271,17 +2280,24 @@ gtk_window_enter_callback( GtkWidget*,
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_leave_callback( GtkWidget*,
+gtk_window_leave_callback( GtkWidget* widget,
                            GdkEventCrossing *gdk_event,
                            wxWindowGTK *win )
 {
+    wxLogTrace(TRACE_MOUSE, "Window leave in %s (window %p) for window %p",
+               wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
+
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
     if (win->m_needCursorReset)
         win->GTKUpdateCursor();
 
     // Event was emitted after an ungrab
-    if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
+    if (gdk_event->mode != GDK_CROSSING_NORMAL)
+    {
+        wxLogTrace(TRACE_MOUSE, "Ignore event with mode %d", gdk_event->mode);
+        return FALSE;
+    }
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
     InitMouseEvent(win, event, gdk_event);
