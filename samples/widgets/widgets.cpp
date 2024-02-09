@@ -741,6 +741,17 @@ void WidgetsFrame::ConnectToWidgetEvents()
         w->Bind(wxEVT_SET_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
         w->Bind(wxEVT_KILL_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
 
+        w->Bind(wxEVT_ENTER_WINDOW, [w](wxMouseEvent& event)
+            {
+                wxLogMessage("Mouse entered into '%s'", w->GetClassInfo()->GetClassName());
+                event.Skip();
+            });
+        w->Bind(wxEVT_LEAVE_WINDOW, [w](wxMouseEvent& event)
+            {
+                wxLogMessage("Mouse left '%s'", w->GetClassInfo()->GetClassName());
+                event.Skip();
+            });
+
         w->Bind(wxEVT_CONTEXT_MENU, &WidgetsFrame::OnWidgetContextMenu, this);
     }
 }
