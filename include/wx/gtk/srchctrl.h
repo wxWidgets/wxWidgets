@@ -96,6 +96,9 @@ private:
 #endif // wxUSE_MENUS/!wxUSE_MENUS
     }
 
+protected:
+    virtual GdkWindow* GTKGetWindow(wxArrayGdkWindows& windows) const override;
+
 private:
     virtual GtkEntry *GetEntry() const override
         { return m_entry; }
