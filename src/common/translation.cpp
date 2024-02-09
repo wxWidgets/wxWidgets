@@ -123,14 +123,6 @@ void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 
 #endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
-// Use locale-based detection as a fallback
-wxString GetPreferredUILanguageFallback(const wxArrayString& WXUNUSED(available))
-{
-    const wxString lang = wxUILocale::GetLanguageCanonicalName(wxUILocale::GetSystemLocale());
-    wxLogTrace(TRACE_I18N, " - obtained best language from locale: %s", lang);
-    return lang;
-}
-
 wxString GetPreferredUILanguage(const wxArrayString& available)
 {
     wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
@@ -175,7 +167,7 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
     if (!langNoMatchRegion.empty())
         return langNoMatchRegion;
 
-    return GetPreferredUILanguageFallback(available);
+    return wxString();
 }
 
 } // anonymous namespace
