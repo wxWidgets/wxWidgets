@@ -2102,7 +2102,8 @@ PROPGRIDDLL_OBJECTS =  \
 	propgriddll_propgrid.o \
 	propgriddll_propgridiface.o \
 	propgriddll_propgridpagestate.o \
-	propgriddll_props.o
+	propgriddll_props.o \
+	propgriddll_xh_propgrid.o
 PROPGRIDDLL_ODEP = $(_____pch_wxprec_propgriddll_wx_wxprec_h_gch___depname)
 PROPGRIDLIB_CXXFLAGS = $(__propgridlib_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
@@ -2118,7 +2119,8 @@ PROPGRIDLIB_OBJECTS =  \
 	propgridlib_propgrid.o \
 	propgridlib_propgridiface.o \
 	propgridlib_propgridpagestate.o \
-	propgridlib_props.o
+	propgridlib_props.o \
+	propgridlib_xh_propgrid.o
 PROPGRIDLIB_ODEP = $(_____pch_wxprec_propgridlib_wx_wxprec_h_gch___depname)
 RICHTEXTDLL_CXXFLAGS = $(__richtextdll_PCH_INC) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
@@ -4020,6 +4022,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/propgrid/propgridpagestate.h \
 	wx/propgrid/props.h \
 	wx/propgrid/private.h \
+	wx/xrc/xh_propgrid.h \
 	wx/ribbon/art.h \
 	wx/ribbon/art_internal.h \
 	wx/ribbon/bar.h \
@@ -4339,6 +4342,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_propgridiface.o \
 	monodll_propgridpagestate.o \
 	monodll_props.o \
+	monodll_xh_propgrid.o \
 	monodll_art_internal.o \
 	monodll_art_msw.o \
 	monodll_art_aui.o \
@@ -6106,6 +6110,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_propgridiface.o \
 	monolib_propgridpagestate.o \
 	monolib_props.o \
+	monolib_xh_propgrid.o \
 	monolib_art_internal.o \
 	monolib_art_msw.o \
 	monolib_art_aui.o \
@@ -16366,6 +16371,9 @@ monodll_propgridpagestate.o: $(srcdir)/src/propgrid/propgridpagestate.cpp $(MONO
 monodll_props.o: $(srcdir)/src/propgrid/props.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/propgrid/props.cpp
 
+monodll_xh_propgrid.o: $(srcdir)/src/xrc/xh_propgrid.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_propgrid.cpp
+
 monodll_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
 
@@ -21123,6 +21131,9 @@ monolib_propgridpagestate.o: $(srcdir)/src/propgrid/propgridpagestate.cpp $(MONO
 
 monolib_props.o: $(srcdir)/src/propgrid/props.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/propgrid/props.cpp
+
+monolib_xh_propgrid.o: $(srcdir)/src/xrc/xh_propgrid.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_propgrid.cpp
 
 monolib_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
@@ -33736,6 +33747,9 @@ propgriddll_propgridpagestate.o: $(srcdir)/src/propgrid/propgridpagestate.cpp $(
 propgriddll_props.o: $(srcdir)/src/propgrid/props.cpp $(PROPGRIDDLL_ODEP)
 	$(CXXC) -c -o $@ $(PROPGRIDDLL_CXXFLAGS) $(srcdir)/src/propgrid/props.cpp
 
+propgriddll_xh_propgrid.o: $(srcdir)/src/xrc/xh_propgrid.cpp $(PROPGRIDDLL_ODEP)
+	$(CXXC) -c -o $@ $(PROPGRIDDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_propgrid.cpp
+
 propgridlib_advprops.o: $(srcdir)/src/propgrid/advprops.cpp $(PROPGRIDLIB_ODEP)
 	$(CXXC) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(srcdir)/src/propgrid/advprops.cpp
 
@@ -33759,6 +33773,9 @@ propgridlib_propgridpagestate.o: $(srcdir)/src/propgrid/propgridpagestate.cpp $(
 
 propgridlib_props.o: $(srcdir)/src/propgrid/props.cpp $(PROPGRIDLIB_ODEP)
 	$(CXXC) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(srcdir)/src/propgrid/props.cpp
+
+propgridlib_xh_propgrid.o: $(srcdir)/src/xrc/xh_propgrid.cpp $(PROPGRIDLIB_ODEP)
+	$(CXXC) -c -o $@ $(PROPGRIDLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_propgrid.cpp
 
 richtextdll_version_rc.o: $(srcdir)/src/msw/version.rc $(RICHTEXTDLL_ODEP)
 	$(WINDRES) -i$< -o$@  $(__INC_TIFF_BUILD_p_54) $(__INC_TIFF_p_54) $(__INC_JPEG_p_54) $(__INC_PNG_p_53) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65)   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include --define WXUSINGDLL --define WXMAKINGDLL_RICHTEXT

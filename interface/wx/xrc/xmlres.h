@@ -760,10 +760,31 @@ protected:
         @since 3.1.0
     */
     bool IsObjectNode(const wxXmlNode *node) const;
+
+    /**
+        Returns the node name.
+
+        Returns empty string if @a node is @NULL.
+
+        @since 3.3.0
+    */
+    wxString GetNodeName(wxXmlNode* node) const;
+
+    /**
+        Gets the node attribute value.
+
+        If @a node is @NULL or the attribute is not present, returns @a defaultValue.
+
+        @since 3.3.0
+    */
+    wxString GetNodeAttribute(const wxXmlNode *node,
+                              const wxString& attrName,
+                              const wxString& defaultValue = {}) const;
+
     /**
         Gets node content from wxXML_ENTITY_NODE.
     */
-    wxString GetNodeContent(wxXmlNode* node);
+    wxString GetNodeContent(wxXmlNode* node) const;
 
     /**
         Gets the parent of the node given.

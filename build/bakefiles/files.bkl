@@ -3055,6 +3055,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/propgrid/propgridiface.cpp
     src/propgrid/propgridpagestate.cpp
     src/propgrid/props.cpp
+    src/xrc/xh_propgrid.cpp
 </set>
 <set var="PROPGRID_HDR" hints="files">
     wx/propgrid/advprops.h
@@ -3067,6 +3068,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
     wx/propgrid/private.h
+    wx/xrc/xh_propgrid.h
 </set>
 
 <!-- ====================================================================== -->

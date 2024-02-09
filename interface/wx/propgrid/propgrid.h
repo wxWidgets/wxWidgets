@@ -433,8 +433,8 @@ enum class wxPGKeyboardAction
 
     Call wxPropertyGrid::SetSortFunction() to set it.
 
-    Sort function should return a value greater than 0 if position of p1 is
-    after p2. So, for instance, when comparing property names, you can use
+    Sort function should return a value greater than 0 if position of @a p1 is
+    after @a p2. So, for instance, when comparing property names, you can use
     following implementation:
 
         @code
@@ -525,9 +525,9 @@ public:
         @param action
             Which action to trigger. See @ref propgrid_keyboard_actions.
         @param keycode
-            Which keycode triggers the action.
+            Which key triggers the action.
         @param modifiers
-            Which key event modifiers, in addition to keycode, are needed to
+            Which key event modifiers, in addition to key code, are needed to
             trigger the action.
     */
     void AddActionTrigger(wxPGKeyboardAction action, int keycode, int modifiers = 0);
@@ -627,7 +627,7 @@ public:
                 const wxString& name = wxPropertyGridNameStr );
 
     /**
-        Dedicates a specific keycode to wxPropertyGrid. This means that such
+        Dedicates a specific key code to wxPropertyGrid. This means that such
         key presses will not be redirected to editor controls.
 
         Using this function allows, for example, navigation between
@@ -676,7 +676,7 @@ public:
                 already fairly large.
 
                 Note that you can also get calculated column widths by calling
-                GetState->GetColumnWidth() immediately after this function
+                GetState()->GetColumnWidth() immediately after this function
                 returns.
     */
     wxSize FitColumns();
@@ -1061,7 +1061,7 @@ public:
 
         @param sortFunction
             The sorting function to be used. It should return a value greater
-            than 0 if position of p1 is after p2. So, for instance, when
+            than 0 if position of @a p1 is after @a p2. So, for instance, when
             comparing property names, you can use following implementation:
 
             @code
@@ -1128,7 +1128,7 @@ public:
 
     /**
         Must be called in wxPGEditor::CreateControls() if primary editor window
-        is wxTextCtrl, just before textctrl is created.
+        is wxTextCtrl, just before the text control is created.
         @param text
             Initial text value of created wxTextCtrl.
     */
@@ -1352,7 +1352,7 @@ public:
     ~wxPropertyGridEvent();
 
     /**
-        Returns @true if you can veto the action that the event is signaling.
+        Returns @true if you can veto the action that the event is signalling.
     */
     bool CanVeto() const;
 
@@ -1438,7 +1438,7 @@ public:
 
     /**
         Call this from your event handler to veto action that the event is
-        signaling. You can only veto a shutdown if wxPropertyGridEvent::CanVeto()
+        signalling. You can only veto a shutdown if wxPropertyGridEvent::CanVeto()
         returns @true.
 
         @remarks Currently only @c wxEVT_PG_CHANGING supports vetoing.
@@ -1534,10 +1534,16 @@ public:
 
         @param value
             Attribute value.
+
+        @param flags
+            Flags used when setting the attribute. Currently only
+            wxPGPropertyValuesFlags::Recurse is used here. This parameter is
+            only available since wxWidgets 3.3.0.
     */
     bool AddAttribute( const wxString& name,
                        const wxString& type,
-                       const wxString& value );
+                       const wxString& value,
+                       wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse );
 
     /**
         Called once in AddChildren.

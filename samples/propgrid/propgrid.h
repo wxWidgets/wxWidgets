@@ -100,7 +100,7 @@ public:
     FormMain(const wxString& title);
     ~FormMain();
 
-    wxPropertyGridManager*  m_pPropGridManager;
+    wxPropertyGridManager*  m_propGridManager;
     wxPropertyGrid*     m_propGrid;
 
     wxTextCtrl*     m_tcPropLabel;
@@ -111,7 +111,7 @@ public:
     wxLogWindow*    m_logWindow;
 #endif
 
-    wxPGEditor*     m_pSampleMultiButtonEditor;
+    wxPGEditor*     m_sampleMultiButtonEditor;
     wxPGChoices     m_combinedFlags;
 
     wxMenuItem*     m_itemCatColours;

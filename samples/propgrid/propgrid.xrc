@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
+
+<object class="wxFrame" name="propgrid">
+    <title>wxPropertyGrid XRC Demo</title>
+    <object class="wxBoxSizer">
+        <object class="sizeritem">
+            <option>1</option>
+            <flag>wxALL|wxEXPAND</flag>
+            <border>5</border>
+            <object class="wxPropertyGridManager">
+                <style>wxPG_AUTO_SORT|wxPG_TOOLTIPS|wxPG_TOOLBAR</style>
+                <exstyle>wxPG_EX_MODE_BUTTONS|wxPG_EX_HELP_AS_TOOLTIPS</exstyle>
+                <virtualwidth>0</virtualwidth>
+                <page>
+                    <label>Sample Page 1</label>
+                    <property class="wxPropertyCategory">
+                        <label>Appearance</label>
+                        <property class="wxSystemColourProperty">
+                            <label>Cell Colour</label>
+                            <value>(255,255,255)</value>
+                            <tip>Sample help string</tip>
+                        </property>
+                        <property class="wxSystemColourProperty">
+                            <label>Cell Text Colour</label>
+                            <value>(0,0,0)</value>
+                        </property>
+                        <property class="wxFlagsProperty">
+                            <label>Window Styles</label>
+                            <!-- List of supported flags: COLLAPSED, DISABLED, HIDDEN, NOEDITOR -->
+                            <flags>EXPANDED</flags>
+                            <choices id="WindowStyles">"wxSIMPLE_BORDER"=0x0001 "wxDOUBLE_BORDER"=0x0002
+                                                       "wxSUNKEN_BORDER"=0x0004 "wxRAISED_BORDER"=0x0008
+                                                       "wxNO_BORDER"=0x0010 "wxTRANSPARENT_WINDOW"=0x0020
+                                                       "wxTAB_TRAVERSAL"=0x0040 "wxWANTS_CHARS"=0x0080
+                                                       "wxCAPTION"=0x0100 "wxMINIMIZE"=0x0200
+                                                       "wxMAXIMIZE"=0x0400 "wxCLOSE_BOX"=0x0800
+                                                       "wxSTAY_ON_TOP"=0x1000 "wxSYSTEM_MENU"=0x2000
+                                                       "wxRESIZE_BORDER"=0x4000 "wxFRAME_TOOL_WINDOW"=0x8000
+                            </choices>
+                            <value>wxTAB__TRAVERSAL, wxCAPTION, wxCLOSE__BOX, wxSYSTEM__MENU, wxRESIZE__BORDER</value>
+                            <tip>NB: These window style values are not genuine!</tip>
+                        </property>
+                        <property class="wxCursorProperty">
+                            <label>Cursor</label>
+                            <value>Default</value>
+                        </property>
+                        <property class="wxFontProperty">
+                            <label>Font</label>
+                            <value>10; Swiss; Abadi MT Condensed Extra Bold; Normal; Normal; False</value>
+                            <expanded>1</expanded>
+                        </property>
+                        <property class="wxStringProperty">
+                            <label>Label</label>
+                            <value>wxPropertyGrid Sample</value>
+                        </property>
+                    </property>
+                    <property class="wxPropertyCategory">
+                        <label>Miscellaneous</label>
+                        <property class="wxFileProperty">
+                            <label>File Property</label>
+                            <value>samples.xrc</value>
+                            <attribute name="Wildcard">XRC files (*.xrc)|*.xrc</attribute>
+                            <attribute name="ShowFullPath">true</attribute>
+                            <attribute name="DialogTitle">This is custom dialog title</attribute>
+                        </property>
+                    </property>
+                </page>
+                <page>
+                    <label>Sample Page 2</label>
+                    <columns>3</columns>
+                    <!-- NB: Regardless that choices must be defined on page-level, they are global. -->
+                    <choices id="EnterpriseCrew">"Picard" "Riker" "Data" "LaForge" "Worf" "Crusher" "Troi"
+                    </choices>
+                    <splitterpos>30%</splitterpos>
+                    <splitterpos index="1">90%</splitterpos>
+                    <property class="wxEnumProperty">
+                        <label>Enum Property 1</label>
+                        <value>Riker</value>
+                        <choices>@EnterpriseCrew</choices>
+                    </property>
+                    <property class="wxEnumProperty">
+                        <label>Enum Property 2</label>
+                        <value>Data</value>
+                        <choices>@EnterpriseCrew</choices>
+                    </property>
+                    <property class="wxEnumProperty">
+                        <label>Enum Property 3</label>
+                        <value>Picard</value>
+                        <!-- NB: Since choices with given id has already been defined, it
+                                 is used instead of this new list. -->
+                        <choices id="EnterpriseCrew">"Kirk" "Spock" "McCoy"
+                        </choices>
+                    </property>
+                </page>
+            </object>
+        </object>
+    </object>
+</object>
+
+</resource>

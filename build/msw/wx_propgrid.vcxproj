@@ -464,6 +464,7 @@
     <ClCompile Include="..\..\src\propgrid\propgridiface.cpp" />
     <ClCompile Include="..\..\src\propgrid\propgridpagestate.cpp" />
     <ClCompile Include="..\..\src\propgrid\props.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_propgrid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -504,6 +505,7 @@
     <ClInclude Include="..\..\include\wx\propgrid\propgridpagestate.h" />
     <ClInclude Include="..\..\include\wx\propgrid\props.h" />
     <ClInclude Include="..\..\include\wx\propgrid\private.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_propgrid.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
