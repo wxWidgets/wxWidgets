@@ -96,9 +96,6 @@ public:
     }
     wxEvent *Clone() const wxOVERRIDE { return new wxAuiToolBarEvent(*this); }
 
-    bool IsButtonClickedAfterDropDown() const  { return m_buttonClickedAfterDropDown; }
-    void SetButtonClickedAfterDropDown(bool c) { m_buttonClickedAfterDropDown = c;    }
-
     bool IsDropDownClicked() const  { return m_isDropdownClicked; }
     void SetDropDownClicked(bool c) { m_isDropdownClicked = c;    }
 
@@ -112,7 +109,6 @@ public:
     void SetToolId(int toolId) { m_toolId = toolId; }
 
 private:
-    bool m_buttonClickedAfterDropDown;
     bool m_isDropdownClicked;
     wxPoint m_clickPt;
     wxRect m_rect;
@@ -760,7 +756,6 @@ protected:
     wxAuiToolBarArt* m_art;             // art provider
     wxBoxSizer* m_sizer;                // main sizer for toolbar
     wxAuiToolBarItem* m_actionItem;    // item that's being acted upon (pressed)
-    wxAuiToolBarItem* m_droppedItem;    // item that triggered a dropdown
     wxAuiToolBarItem* m_tipItem;       // item that has its tooltip shown
     wxBitmap m_bitmap;                  // double-buffer bitmap
     wxSizerItem* m_gripperSizerItem;

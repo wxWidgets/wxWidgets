@@ -831,7 +831,6 @@ void wxAuiToolBar::Init()
     m_sizerElementCount = 0;
     m_actionPos = wxDefaultPosition;
     m_actionItem = NULL;
-    m_droppedItem = NULL;
     m_tipItem = NULL;
     m_art = new wxAuiDefaultToolBarArt;
     m_toolTextOrientation = wxAUI_TBTOOL_TEXT_BOTTOM;
@@ -2634,7 +2633,6 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
                     ce.SetEventObject(this);
                     ce.SetToolId(m_actionItem->m_toolId);
                     ce.SetClickPoint(wxPoint(evt.GetX(), evt.GetY()));
-                    ce.SetButtonClickedAfterDropDown(0);
                     GetEventHandler()->ProcessEvent(ce);
                 }
             }
@@ -2646,7 +2644,6 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
     m_dragging = false;
     m_actionPos = wxPoint(evt.GetX(), evt.GetY());
     m_actionItem = FindToolByPosition(evt.GetX(), evt.GetY());
-    m_droppedItem = NULL;
 
     if (m_actionItem)
     {
@@ -2699,10 +2696,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         // and not just the drop-down
         SetPressedItem(dropDownHit ? 0 : m_actionItem);
 
-        if(!GetEventHandler()->ProcessEvent(e) || e.GetSkipped())
-            CaptureMouse();
-        else if ((m_windowStyle & wxAUI_TB_ALLOW_CLICK_WITH_DROPDOWN) && !dropDownHit)
-            m_droppedItem = m_actionItem;
+        if (!GetEventHandler()->ProcessEvent(e) || e.GetSkipped()) CaptureMouse();
 
         if(dropDownHit)
         {
@@ -2720,11 +2714,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 
 void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 {
-    if (!HasCapture())
-    {
-        if (m_droppedItem == NULL) return;
-        else m_actionItem = m_droppedItem;
-    }
+    if (!HasCapture()) return;
 
     SetPressedItem(NULL);
 
@@ -2772,13 +2762,11 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
             GetEventHandler()->ProcessEvent(e);
 
-            // Fire a complementary event to identify the state of the tool on
-            // button click
+            // Fire a complementary event
             wxAuiToolBarEvent ce(wxEVT_AUITOOLBAR_TOOL_BUTTON, m_actionItem->m_toolId);
             ce.SetEventObject(this);
             ce.SetToolId(m_actionItem->m_toolId);
             ce.SetClickPoint(wxPoint(evt.GetX(), evt.GetY()));
-            ce.SetButtonClickedAfterDropDown(m_droppedItem ? 1 : 0);
             GetEventHandler()->ProcessEvent(ce);
 
             // Ensure hovered item is really ok, as mouse may have moved during
@@ -2794,7 +2782,6 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
     // reset member variables
     m_actionPos = wxPoint(-1,-1);
     m_actionItem = NULL;
-    m_droppedItem = NULL;
 }
 
 void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
@@ -3034,7 +3021,6 @@ void wxAuiToolBar::OnLeaveWindow(wxMouseEvent& evt)
 void wxAuiToolBar::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(evt))
 {
     m_dragging = false;
-
     DoResetMouseState();
 }
 
