@@ -127,6 +127,7 @@ struct WXDLLIMPEXP_CORE wxHeaderButtonParams
     wxColour    m_labelColour;
     wxBitmap    m_labelBitmap;
     int         m_labelAlignment;
+    int         m_bitmapAlignment;
 };
 
 enum wxHeaderSortIconType

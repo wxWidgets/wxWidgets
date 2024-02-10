@@ -422,71 +422,32 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
     }
     labelWidth += arrowSpace;
 
-    int bmpWidth = 0;
+    // short-circuit if no params exist
+    if ( !params ) return labelWidth;
 
-    // draw the bitmap if there is one
-    if ( params && params->m_labelBitmap.IsOk() )
+    const int bmp_margin = 1; // an extra pixel on either side of the bitmap
+    const int txt_margin = 5; // number of pixels to reserve on either side of the label
+
+    // get the dimensions of the bitmap, if any, and of the label text
+    int w = -1;
+    int h = -1;
+    int availWidth = rect.width;
+    if ( params->m_labelBitmap.IsOk() )
     {
-        int w = params->m_labelBitmap.GetLogicalWidth();
-        int h = params->m_labelBitmap.GetLogicalHeight();
-
-        const int margin = 1; // an extra pixel on either side of the bitmap
-
-        bmpWidth = w + 2*margin;
-        labelWidth += bmpWidth;
-
-        int x = rect.x + margin;
-        const int y = rect.y + wxMax(1, (rect.height - h) / 2);
-
-        const int extraSpace = rect.width - labelWidth;
-        if ( params->m_labelText.empty() && extraSpace > 0 )
-        {
-            // use the alignment flags
-            switch (params->m_labelAlignment)
-            {
-                default:
-                case wxALIGN_LEFT:
-                    break;
-
-                case wxALIGN_CENTER:
-                    x += extraSpace/2;
-                    break;
-
-                case wxALIGN_RIGHT:
-                    x += extraSpace;
-                    break;
-            }
-        }
-
-        wxDCClipper clip(dc, rect);
-        dc.DrawBitmap(params->m_labelBitmap, x, y, true);
+        w = params->m_labelBitmap.GetLogicalWidth();
+        h = params->m_labelBitmap.GetLogicalHeight();
+        labelWidth = 2*bmp_margin + w;
+        availWidth -= labelWidth;
     }
-
-    // Draw a label if one is given
-    if ( params && !params->m_labelText.empty() )
+    wxString label( params->m_labelText );
+    int tw, th, td;
+    wxFont font = params->m_labelFont.IsOk() ? params->m_labelFont : win->GetFont();
+    wxDCFontChanger setFont(dc, font);
+    if ( !label.empty() )
     {
-        const int margin = 5;   // number of pixels to reserve on either side of the label
-        labelWidth += 2*margin;
-
-        wxFont font  = params->m_labelFont.IsOk() ?
-            params->m_labelFont : win->GetFont();
-        wxColour clr = params->m_labelColour.IsOk() ?
-            params->m_labelColour : win->GetForegroundColour();
-
-        wxString label( params->m_labelText );
-
-        wxDCFontChanger setFont(dc, font);
-        wxDCTextColourChanger setTextFg(dc, clr);
-        wxDCTextBgModeChanger setBgMode(dc, wxBRUSHSTYLE_TRANSPARENT);
-
-        int tw, th, td;
-        dc.GetTextExtent( label, &tw, &th, &td);
-
-        int x = rect.x + bmpWidth + margin;
-        const int y = rect.y + wxMax(0, (rect.height - (th+td)) / 2);
-
-        // truncate and add an ellipsis (...) if the text is too wide.
-        const int availWidth = rect.width - labelWidth;
+        dc.GetTextExtent( label, &tw, &th, &td );
+        labelWidth += 2*txt_margin;
+        availWidth -= 2*txt_margin;
 #if wxUSE_CONTROLS
         if ( tw > availWidth )
         {
@@ -497,28 +458,62 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
                                          wxELLIPSIZE_FLAGS_NONE);
             tw = dc.GetTextExtent(label).x;
         }
-        else // enough space, we can respect alignment
 #endif // wxUSE_CONTROLS
-        {
-            switch (params->m_labelAlignment)
-            {
-                default:
-                case wxALIGN_LEFT:
-                    break;
-
-                case wxALIGN_CENTER:
-                    x += (availWidth - tw)/2;
-                    break;
-
-                case wxALIGN_RIGHT:
-                    x += availWidth - tw;
-                    break;
-            }
-        }
-
-        dc.DrawText(label, x, y);
-
         labelWidth += tw;
+        availWidth -= tw;
+    }
+
+    // calculate position of left edge of label text
+    int label_x = rect.x;
+    switch (params->m_labelAlignment)
+    {
+        default:
+        case wxALIGN_LEFT:
+            break;
+
+        case wxALIGN_CENTER:
+            label_x += availWidth / 2;
+            break;
+
+        case wxALIGN_RIGHT:
+            label_x += availWidth;
+            break;
+    }
+    // calculate the position of the bitmap
+    int bmp_x = label_x;
+    if ((w != -1) && (!label.empty()))
+    {
+        switch (params->m_bitmapAlignment)
+        {
+            default:
+            case wxALIGN_LEFT:
+                // shift the label right to open space for the bitmap
+                label_x += w + 2*bmp_margin;
+                break;
+
+            case wxALIGN_RIGHT:
+                bmp_x += tw + 2*txt_margin;
+                break;
+        }
+    }
+
+    // draw the bitmap if there is one
+    if ( params->m_labelBitmap.IsOk() )
+    {
+        const int y = rect.y + wxMax(1, (rect.height - h) / 2);
+        wxDCClipper clip(dc, rect);
+        dc.DrawBitmap(params->m_labelBitmap, bmp_x + bmp_margin, y, true);
+    }
+
+    // draw a label if one is given
+    if ( !params->m_labelText.empty() )
+    {
+        wxColour clr = params->m_labelColour.IsOk() ?
+            params->m_labelColour : win->GetForegroundColour();
+        wxDCTextColourChanger setTextFg(dc, clr);
+        wxDCTextBgModeChanger setBgMode(dc, wxBRUSHSTYLE_TRANSPARENT);
+        const int y = rect.y + wxMax(0, (rect.height - (th+td)) / 2);
+        dc.DrawText(label, label_x + txt_margin, y);
     }
 
     return labelWidth;
