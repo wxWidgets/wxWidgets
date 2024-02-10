@@ -19,6 +19,8 @@
 
 #include "wx/scrolwin.h"
 
+#include "wx/bmpbndl.h"
+
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
     #include <iterator>
 #endif
@@ -1275,6 +1277,8 @@ public:
 
     virtual wxString GetRowLabelValue( int row );
     virtual wxString GetColLabelValue( int col );
+    virtual wxBitmap GetColLabelBitmap( int WXUNUSED(col) ) { return wxNullBitmap; }
+    virtual wxBitmapBundle GetColLabelBitmapBundle( int WXUNUSED(col) ) { return wxBitmapBundle(); }
     virtual wxString GetCornerLabelValue() const;
     virtual void SetRowLabelValue( int WXUNUSED(row), const wxString& ) {}
     virtual void SetColLabelValue( int WXUNUSED(col), const wxString& ) {}
@@ -1843,12 +1847,14 @@ public:
     wxColour GetLabelTextColour() const { return m_labelTextColour; }
     wxFont   GetLabelFont() const { return m_labelFont; }
     void     GetRowLabelAlignment( int *horiz, int *vert ) const;
-    void     GetColLabelAlignment( int *horiz, int *vert ) const;
+    void     GetColLabelAlignment( int *horiz, int *vert, int *icon = nullptr ) const;
     void     GetCornerLabelAlignment( int *horiz, int *vert ) const;
     int      GetColLabelTextOrientation() const;
     int      GetCornerLabelTextOrientation() const;
     wxString GetRowLabelValue( int row ) const;
     wxString GetColLabelValue( int col ) const;
+    wxBitmap GetColLabelBitmap( int col ) const;
+    wxBitmapBundle GetColLabelBitmapBundle( int col ) const;
     wxString GetCornerLabelValue() const;
 
     wxColour GetCellHighlightColour() const { return m_cellHighlightColour; }
@@ -1873,6 +1879,7 @@ public:
     void     SetLabelFont( const wxFont& );
     void     SetRowLabelAlignment( int horiz, int vert );
     void     SetColLabelAlignment( int horiz, int vert );
+    void     SetColBitmapAlignment( int horiz );
     void     SetCornerLabelAlignment( int horiz, int vert );
     void     SetColLabelTextOrientation( int textOrientation );
     void     SetCornerLabelTextOrientation( int textOrientation );
@@ -2674,6 +2681,7 @@ protected:
     int        m_rowLabelVertAlign;
     int        m_colLabelHorizAlign;
     int        m_colLabelVertAlign;
+    int        m_colBitmapHorizAlign;
     int        m_colLabelTextOrientation;
     int        m_cornerLabelHorizAlign;
     int        m_cornerLabelVertAlign;

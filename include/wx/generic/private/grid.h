@@ -20,6 +20,8 @@
 // for wxGridOperations
 #include "wx/generic/gridsel.h"
 
+#include "wx/bmpbndl.h"
+
 // ----------------------------------------------------------------------------
 // array classes
 // ----------------------------------------------------------------------------
@@ -48,8 +50,8 @@ public:
     }
 
     virtual wxString GetTitle() const wxOVERRIDE { return m_grid->GetColLabelValue(m_col); }
-    virtual wxBitmap GetBitmap() const wxOVERRIDE { return wxNullBitmap; }
-    virtual wxBitmapBundle GetBitmapBundle() const wxOVERRIDE { return wxBitmapBundle(); }
+    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_grid->GetColLabelBitmap(m_col); }
+    virtual wxBitmapBundle GetBitmapBundle() const wxOVERRIDE { return m_grid->GetColLabelBitmapBundle(m_col); }
     virtual int GetWidth() const wxOVERRIDE { return m_grid->GetColSize(m_col); }
     virtual int GetMinWidth() const wxOVERRIDE { return m_grid->GetColMinimalWidth(m_col); }
     virtual wxAlignment GetAlignment() const wxOVERRIDE
@@ -57,6 +59,14 @@ public:
         int horz,
             vert;
         m_grid->GetColLabelAlignment(&horz, &vert);
+
+        return static_cast<wxAlignment>(horz);
+    }
+    virtual wxAlignment GetBitmapAlignment() const wxOVERRIDE
+    {
+        int horz,
+            temp;
+        m_grid->GetColLabelAlignment(&temp, &temp, &horz);
 
         return static_cast<wxAlignment>(horz);
     }

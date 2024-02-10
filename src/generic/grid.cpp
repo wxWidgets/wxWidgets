@@ -3020,6 +3020,7 @@ void wxGrid::Init()
 
     m_colLabelHorizAlign = wxALIGN_CENTRE;
     m_colLabelVertAlign  = wxALIGN_CENTRE;
+    m_colBitmapHorizAlign = wxALIGN_LEFT;
     m_colLabelTextOrientation = wxHORIZONTAL;
 
     m_cornerLabelHorizAlign = wxALIGN_CENTRE;
@@ -8825,12 +8826,14 @@ void wxGrid::GetRowLabelAlignment( int *horiz, int *vert ) const
         *vert  = m_rowLabelVertAlign;
 }
 
-void wxGrid::GetColLabelAlignment( int *horiz, int *vert ) const
+void wxGrid::GetColLabelAlignment( int *horiz, int *vert, int *icon ) const
 {
     if ( horiz )
         *horiz = m_colLabelHorizAlign;
     if ( vert )
         *vert  = m_colLabelVertAlign;
+    if ( icon )
+        *icon  = m_colBitmapHorizAlign;
 }
 
 int wxGrid::GetColLabelTextOrientation() const
@@ -8876,6 +8879,30 @@ wxString wxGrid::GetColLabelValue( int col ) const
         wxString s;
         s << col;
         return s;
+    }
+}
+
+wxBitmap wxGrid::GetColLabelBitmap( int col ) const
+{
+    if ( m_table )
+    {
+        return m_table->GetColLabelBitmap( col );
+    }
+    else
+    {
+        return wxNullBitmap;
+    }
+}
+
+wxBitmapBundle wxGrid::GetColLabelBitmapBundle( int col ) const
+{
+    if ( m_table )
+    {
+        return m_table->GetColLabelBitmapBundle( col );
+    }
+    else
+    {
+        return wxBitmapBundle();
     }
 }
 
@@ -9071,6 +9098,26 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
     if ( vert == wxALIGN_TOP || vert == wxALIGN_CENTRE || vert == wxALIGN_BOTTOM )
     {
         m_colLabelVertAlign = vert;
+    }
+
+    if ( ShouldRefresh() )
+    {
+        m_colLabelWin->Refresh();
+    }
+}
+
+void wxGrid::SetColBitmapAlignment( int horiz )
+{
+    // allow old (incorrect) defs to be used
+    switch ( horiz )
+    {
+        case wxLEFT:   horiz = wxALIGN_LEFT; break;
+        case wxRIGHT:  horiz = wxALIGN_RIGHT; break;
+    }
+
+    if ( horiz == wxALIGN_LEFT || horiz == wxALIGN_RIGHT )
+    {
+        m_colBitmapHorizAlign = horiz;
     }
 
     if ( ShouldRefresh() )
