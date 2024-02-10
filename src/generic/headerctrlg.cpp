@@ -553,8 +553,11 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         wxHeaderButtonParams params;
         params.m_labelText = col.GetTitle();
-        params.m_labelBitmap = col.GetBitmapBundle().GetBitmapFor(this);
+        params.m_labelBitmap = col.GetBitmap();
+        if (!params.m_labelBitmap.IsOk())
+            params.m_labelBitmap = col.GetBitmapBundle().GetBitmapFor(this);
         params.m_labelAlignment = col.GetAlignment();
+        params.m_bitmapAlignment = col.GetBitmapAlignment();
 
 #ifdef __WXGTK__
         if (i == count-1 && xpos + colWidth >= w)

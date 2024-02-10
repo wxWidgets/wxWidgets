@@ -110,6 +110,9 @@ public:
     // alignment of the text: wxALIGN_CENTRE, wxALIGN_LEFT or wxALIGN_RIGHT
     virtual wxAlignment GetAlignment() const = 0;
 
+    // alignment of the bitmap: wxALIGN_LEFT or wxALIGN_RIGHT
+    virtual wxAlignment GetBitmapAlignment() const { return wxALIGN_LEFT; }
+
 
     // flags manipulations:
     // --------------------

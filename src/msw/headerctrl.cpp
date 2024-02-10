@@ -460,6 +460,32 @@ void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     hdi.pszText = buf.data();
     hdi.cchTextMax = wxStrlen(buf);
 
+    const wxBitmap& bmp = col.GetBitmap();
+    if ( bmp.IsOk() )
+    {
+        hdi.mask |= HDI_IMAGE;
+
+        if ( HasFlag(wxHD_BITMAP_ON_RIGHT) )
+            hdi.fmt |= HDF_BITMAP_ON_RIGHT;
+
+        wxSize bmpSize;
+        if ( !m_imageList )
+        {
+            bmpSize = bmp.GetSize();
+            m_imageList = new wxImageList(bmpSize.x, bmpSize.y);
+            (void) // suppress mingw32 warning about unused computed value
+            Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
+        }
+        else // already have an image list
+        {
+            // use the same size for all bitmaps
+            bmpSize = m_imageList->GetSize();
+        }
+
+        m_imageList->Add(bmp);
+        hdi.iImage = m_imageList->GetImageCount() - 1;
+    }
+
     const wxBitmapBundle& bb = col.GetBitmapBundle();
     if ( bb.IsOk() )
     {
