@@ -1411,26 +1411,27 @@ bool wxTranslations::AddCatalog(const wxString& domain,
                                 const wxString& msgIdCharset)
 {
     gs_msgIdCharset[domain] = msgIdCharset;
-    return AddCatalog(domain, msgIdLanguage);
+    return DoAddCatalog(domain, msgIdLanguage) != Translations_NotFound;
 }
 #endif // !wxUSE_UNICODE
 
 bool wxTranslations::AddAvailableCatalog(const wxString& domain)
 {
-    const wxString domain_lang = GetBestAvailableTranslation(domain);
-    if ( domain_lang.empty() )
-    {
-        wxLogTrace(TRACE_I18N,
-                    wxS("no suitable translation for domain '%s' found"),
-                    domain);
-        return false;
-    }
-
-    return LoadCatalog(domain, domain_lang, wxString());
+    return AddAvailableCatalog(domain, wxLANGUAGE_ENGLISH_US);
 }
 
-bool wxTranslations::AddCatalog(const wxString& domain,
-                                wxLanguage msgIdLanguage)
+bool wxTranslations::AddAvailableCatalog(const wxString& domain, wxLanguage msgIdLanguage)
+{
+    return DoAddCatalog(domain, msgIdLanguage) == Translations_Found;
+}
+
+bool wxTranslations::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
+{
+    return DoAddCatalog(domain, msgIdLanguage) != Translations_NotFound;
+}
+
+wxTranslations::Translations wxTranslations::DoAddCatalog(const wxString& domain,
+                                                          wxLanguage msgIdLanguage)
 {
     const wxString msgIdLang = wxUILocale::GetLanguageCanonicalName(msgIdLanguage);
     const wxString domain_lang = GetBestTranslation(domain, msgIdLang);
@@ -1439,7 +1440,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
         wxLogTrace(TRACE_I18N,
                     wxS("no suitable translation for domain '%s' found"),
                     domain);
-        return false;
+        return Translations_NotFound;
     }
 
     if ( LoadCatalog(domain, domain_lang, wxString()) )
@@ -1447,7 +1448,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
         wxLogTrace(TRACE_I18N,
                    wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
                    domain_lang, domain, msgIdLang);
-        return true;
+        return Translations_Found;
     }
 
     // LoadCatalog() failed, but GetBestTranslation() returned non-empty language.
@@ -1455,7 +1456,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
     wxLogTrace(TRACE_I18N,
                 wxS("not using translations for domain '%s' with msgid language '%s'"),
                 domain, msgIdLang);
-    return true;
+    return Translations_NotNeeded;
 }
 
 
