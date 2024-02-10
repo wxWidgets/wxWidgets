@@ -1843,7 +1843,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
         if (m_overflowVisible && m_overflowSizerItem)
             cli_h -= m_overflowSizerItem->GetMinSize().y;
 
-        if (rect.y+rect.height < cli_h)
+        if (rect.y+rect.height <= cli_h)
             return true;
     }
     else
@@ -1852,7 +1852,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
         if (m_overflowVisible && m_overflowSizerItem)
             cli_w -= m_overflowSizerItem->GetMinSize().x;
 
-        if (rect.x+rect.width < cli_w)
+        if (rect.x+rect.width <= cli_w)
             return true;
     }
 
@@ -2501,8 +2501,8 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         wxRect item_rect = item.m_sizerItem->GetRect();
 
 
-        if ((horizontal  && item_rect.x + item_rect.width >= last_extent) ||
-            (!horizontal && item_rect.y + item_rect.height >= last_extent))
+        if ((horizontal  && item_rect.x + item_rect.width > last_extent) ||
+            (!horizontal && item_rect.y + item_rect.height > last_extent))
         {
             break;
         }
