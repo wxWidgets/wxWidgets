@@ -211,12 +211,15 @@ wxPG_HOVER_HIGHLIGHT                = 0x00008000,
 // Do not use gutters around the expander bitmap
 wxPG_NO_GUTTER                      = 0x00010000,
 
+// The labels are always shown as enabled
+wxPG_LABELS_ALWAYS_ENABLED          = 0x00020000,
+
 // A mask which can be used to filter (out) all styles.
 wxPG_WINDOW_STYLE_MASK = wxPG_AUTO_SORT|wxPG_HIDE_CATEGORIES|wxPG_BOLD_MODIFIED|
                          wxPG_SPLITTER_AUTO_CENTER|wxPG_TOOLTIPS|wxPG_HIDE_MARGIN|
                          wxPG_STATIC_SPLITTER|wxPG_LIMITED_EDITING|wxPG_TOOLBAR|
                          wxPG_DESCRIPTION|wxPG_NO_INTERNAL_BORDER|wxPG_HOVER_HIGHLIGHT|
-                         wxPG_NO_GUTTER
+                         wxPG_NO_GUTTER|wxPG_LABELS_ALWAYS_ENABLED
 };
 
 #if wxPG_COMPATIBILITY_1_4

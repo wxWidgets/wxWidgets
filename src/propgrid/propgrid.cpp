@@ -2485,6 +2485,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             {
                 wxPGCellRenderer* renderer;
                 int cmnVal = p->GetCommonValue();
+                if ((ci == 0) && (windowStyle & wxPG_LABELS_ALWAYS_ENABLED))
+                    cellRenderFlags &= ~(wxPGCellRenderer::Disabled |
+                                         wxPGCellRenderer::DontUseCellFgCol);
                 if ( cmnVal == -1 || ci != 1 )
                 {
                     renderer = p->GetCellRenderer(ci);
