@@ -281,6 +281,12 @@ public:
     // Loads HTML page from file
     bool LoadFile(const wxFileName& filename);
 
+    // Scrolls to anchor of this name. (Anchor is #news
+    // or #features etc. it is part of address sometimes:
+    // http://www.ms.mff.cuni.cz/~vsla8348/wxhtml/index.html#news)
+    // Return value : true if anchor exists, false otherwise
+    bool ScrollToAnchor(const wxString& anchor);
+
     // Returns full location of opened page
     wxString GetOpenedPage() const {return m_OpenedPage;}
     // Returns anchor within opened page
@@ -391,12 +397,6 @@ public:
 
 protected:
     void Init();
-
-    // Scrolls to anchor of this name. (Anchor is #news
-    // or #features etc. it is part of address sometimes:
-    // http://www.ms.mff.cuni.cz/~vsla8348/wxhtml/index.html#news)
-    // Return value : true if anchor exists, false otherwise
-    bool ScrollToAnchor(const wxString& anchor);
 
     // Prepares layout (= fill m_PosX, m_PosY for fragments) based on
     // actual size of window. This method also setup scrollbars
