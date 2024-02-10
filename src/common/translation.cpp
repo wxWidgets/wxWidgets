@@ -1315,22 +1315,18 @@ bool wxTranslations::AddStdCatalog()
     return AddCatalog(domain);
 }
 
-bool wxTranslations::AddAvailableCatalog(const wxString& domain)
+bool wxTranslations::AddAvailableCatalog(const wxString& domain, wxLanguage msgIdLanguage)
 {
-    const wxString domain_lang = GetBestAvailableTranslation(domain);
-    if ( domain_lang.empty() )
-    {
-        wxLogTrace(TRACE_I18N,
-                    wxS("no suitable translation for domain '%s' found"),
-                    domain);
-        return false;
-    }
-
-    return LoadCatalog(domain, domain_lang);
+    return DoAddCatalog(domain, msgIdLanguage) == Translations::Found;
 }
 
-bool wxTranslations::AddCatalog(const wxString& domain,
-                                wxLanguage msgIdLanguage)
+bool wxTranslations::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
+{
+    return DoAddCatalog(domain, msgIdLanguage) != Translations::NotFound;
+}
+
+wxTranslations::Translations wxTranslations::DoAddCatalog(const wxString& domain,
+                                                          wxLanguage msgIdLanguage)
 {
     const wxString msgIdLang = wxUILocale::GetLanguageCanonicalName(msgIdLanguage);
     const wxString domain_lang = GetBestTranslation(domain, msgIdLang);
@@ -1339,7 +1335,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
         wxLogTrace(TRACE_I18N,
                     wxS("no suitable translation for domain '%s' found"),
                     domain);
-        return false;
+        return Translations::NotFound;
     }
 
     if ( LoadCatalog(domain, domain_lang) )
@@ -1347,7 +1343,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
         wxLogTrace(TRACE_I18N,
                    wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
                    domain_lang, domain, msgIdLang);
-        return true;
+        return Translations::Found;
     }
 
     // LoadCatalog() failed, but GetBestTranslation() returned non-empty language.
@@ -1355,7 +1351,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
     wxLogTrace(TRACE_I18N,
                 wxS("not using translations for domain '%s' with msgid language '%s'"),
                 domain, msgIdLang);
-    return true;
+    return Translations::NotNeeded;
 }
 
 

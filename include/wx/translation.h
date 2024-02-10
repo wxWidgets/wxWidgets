@@ -160,7 +160,7 @@ public:
 
     // add catalog for the given domain returning true if it could be found by
     // wxTranslationsLoader
-    bool AddAvailableCatalog(const wxString& domain);
+    bool AddAvailableCatalog(const wxString& domain, wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
     // add standard wxWidgets catalog ("wxstd")
     bool AddStdCatalog();
@@ -193,6 +193,15 @@ public:
     static const wxString& GetUntranslatedString(const wxString& str);
 
 private:
+    enum class Translations
+    {
+      NotNeeded = -1,
+      NotFound = 0,
+      Found = 1
+    };
+
+    Translations DoAddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+
     // perform loading of the catalog via m_loader
     bool LoadCatalog(const wxString& domain, const wxString& lang);
 

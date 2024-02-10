@@ -158,6 +158,16 @@ public:
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
 
+        @param domain
+            The catalog domain to add.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+            It is used if AddCatalog() cannot find any catalog for current language:
+            if the language is same as source code language, then strings from source
+            code are used instead.
+
         @return
             @true if catalog was successfully loaded, @false otherwise, usually
             because it wasn't found. Note that unlike AddCatalog() this
@@ -167,9 +177,10 @@ public:
             selected or system-default languages, but is not necessarily an
             error if no translations are needed in the first place.
 
-        @since 3.3.0
+        @since 3.2.5
      */
-    bool AddAvailableCatalog(const wxString& domain);
+    bool AddAvailableCatalog(const wxString& domain,
+                             wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
 
     /**
         Add a catalog for use with the current locale or fall back to the
