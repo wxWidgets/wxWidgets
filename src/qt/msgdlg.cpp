@@ -18,9 +18,8 @@
 
 class wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
 {
-
-    public:
-        wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );
+public:
+    wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );
 };
 
 
