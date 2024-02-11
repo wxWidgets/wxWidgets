@@ -422,7 +422,7 @@ public:
     void DisablePeerVerify(bool disable = true);
 
     /**
-        Returns if peer verification has been disabled.
+        Return @true if SSL certificate verification has been disabled.
 
         @see DisablePeerVerify()
     */
@@ -788,7 +788,7 @@ public:
     wxWebSessionHandle GetNativeHandle() const;
 
     /**
-        Return true if the session was successfully opened and can be used.
+        Return @true if the session was successfully opened and can be used.
     */
     bool IsOpened() const;
 
