@@ -1308,6 +1308,11 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 
 #endif
 
+#ifdef wxPG_ICON_WIDTH
+    // Icons are always square in this case.
+    m_iconHeight = m_iconWidth;
+#endif
+
     m_gutterWidth = m_iconWidth / wxPG_GUTTER_DIV;
     if ( m_gutterWidth < wxPG_GUTTER_MIN )
         m_gutterWidth = wxPG_GUTTER_MIN;
