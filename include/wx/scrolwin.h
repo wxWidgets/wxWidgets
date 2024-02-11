@@ -439,7 +439,7 @@ public:
         m_targetWindow = this;
 
 #ifdef __WXMAC__
-        this->MacSetClipChildren();
+        this->MacSetClipChildren(true);
 #endif
 
         // by default, we're scrollable in both directions (but if one of the
