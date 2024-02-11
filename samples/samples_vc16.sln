@@ -10,8 +10,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "minimal", "minimal\minimal.
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base", "..\build\msw\wx_base.vcxproj", "{3FCC50C2-81E9-5DB2-B8D8-2129427568B1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D} = {01F4CE10-2CFB-41A8-B41F-E54337868A1D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "..\build\msw\wx_core.vcxproj", "{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D} = {01F4CE10-2CFB-41A8-B41F-E54337868A1D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_custom_build", "..\build\msw\wx_custom_build.vcxproj", "{01F4CE10-2CFB-41A8-B41F-E54337868A1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +81,22 @@ Global
 		{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}.Release|Win32.Build.0 = Release|Win32
 		{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}.Release|x64.ActiveCfg = Release|x64
 		{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}.Release|x64.Build.0 = Release|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Debug|Win32.Build.0 = Debug|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Debug|x64.ActiveCfg = Debug|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Debug|x64.Build.0 = Debug|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Debug|x64.ActiveCfg = DLL Debug|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Debug|x64.Build.0 = DLL Debug|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Release|Win32.Build.0 = DLL Release|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Release|x64.ActiveCfg = DLL Release|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.DLL Release|x64.Build.0 = DLL Release|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Release|Win32.ActiveCfg = Release|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Release|Win32.Build.0 = Release|Win32
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Release|x64.ActiveCfg = Release|x64
+		{01F4CE10-2CFB-41A8-B41F-E54337868A1D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
