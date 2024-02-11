@@ -109,8 +109,6 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
     if ( style & wxSTAY_ON_TOP )
         dlg->setWindowModality( Qt::ApplicationModal );
 
-    PostCreation(false);
-
     Centre(wxBOTH | wxCENTER_FRAME);
 }
 
