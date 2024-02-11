@@ -93,6 +93,12 @@ void wxQtMessageDialog::InitializeIfNeeded(wxMessageDialog& msgdlg)
     setText( wxQtConvertString( msgdlg.GetMessage() ) );
     setWindowTitle( wxQtConvertString( msgdlg.GetTitle() ) );
 
+    const wxString& extendedMessage = msgdlg.GetExtendedMessage();
+    if ( !extendedMessage.empty() )
+    {
+        setInformativeText( wxQtConvertString( extendedMessage ) );
+    }
+
     // Buttons
     const long style = msgdlg.GetMessageDialogStyle();
 
