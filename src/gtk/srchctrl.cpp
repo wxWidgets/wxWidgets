@@ -362,10 +362,11 @@ void wxSearchCtrl::PopupSearchMenu()
 GdkWindow* wxSearchCtrl::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
 #ifdef __WXGTK3__
-        GTKFindWindow(m_widget, windows);
-        return nullptr;
+    GTKFindWindow(m_widget, windows);
+    return nullptr;
 #else
-        return gtk_entry_get_text_window(GTK_ENTRY(m_widget));
+    wxUnusedVar(windows);
+    return gtk_entry_get_text_window(GTK_ENTRY(m_widget));
 #endif
 }
 #endif // wxUSE_SEARCHCTRL
