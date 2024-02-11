@@ -14,6 +14,7 @@
 #include "wx/qt/private/winevent.h"
 
 #include <QtWidgets/qmessagebox.h>
+#include <QtWidgets/qpushbutton.h>
 
 
 class wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
@@ -102,14 +103,20 @@ void wxQtMessageDialog::InitializeIfNeeded(wxMessageDialog& msgdlg)
     // Buttons
     const long style = msgdlg.GetMessageDialogStyle();
 
+    const auto applyCustomLabelIfSet = [](QPushButton* button, const wxString& label)
+    {
+        if ( !label.empty() )
+            button->setText( wxQtConvertString( label ) );
+    };
+
     if ( style & wxOK )
-        addButton( QMessageBox::Ok );
+        applyCustomLabelIfSet(addButton( QMessageBox::Ok ), msgdlg.GetOKLabel());
     if ( style & wxCANCEL )
-        addButton( QMessageBox::Cancel );
+        applyCustomLabelIfSet(addButton( QMessageBox::Cancel ), msgdlg.GetCancelLabel());
     if ( style & wxYES_NO )
     {
-        addButton( QMessageBox::Yes );
-        addButton( QMessageBox::No );
+        applyCustomLabelIfSet(addButton( QMessageBox::Yes ), msgdlg.GetYesLabel());
+        applyCustomLabelIfSet(addButton( QMessageBox::No ), msgdlg.GetNoLabel());
     }
 
     // Default button
