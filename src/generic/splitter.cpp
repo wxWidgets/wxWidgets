@@ -840,6 +840,18 @@ int wxSplitterWindow::ConvertSashPosition(int sashPosition) const
     }
     else // sashPosition == 0
     {
+        // Use last split position if we have it.
+        if ( m_splitMode == wxSPLIT_VERTICAL )
+        {
+            if ( m_lastSplitPosition.x )
+                return m_lastSplitPosition.x;
+        }
+        else if ( m_splitMode == wxSPLIT_HORIZONTAL )
+        {
+            if ( m_lastSplitPosition.y )
+                return m_lastSplitPosition.y;
+        }
+
         // default, put it in the centre
         return GetWindowSize() / 2;
     }
@@ -869,6 +881,15 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         wxFAIL_MSG(wxT("splitter: attempt to remove a non-existent window"));
 
         return false;
+    }
+
+    if (m_splitMode == wxSPLIT_VERTICAL)
+    {
+        m_lastSplitPosition.x = m_sashPosition;
+    }
+    else if (m_splitMode == wxSPLIT_HORIZONTAL)
+    {
+        m_lastSplitPosition.y = m_sashPosition;
     }
 
     OnUnsplit(win);
@@ -1085,6 +1106,17 @@ void wxSplitterWindow::OnUnsplit(wxWindow *winRemoved)
     // call this before calling the event handler which may delete the window
     winRemoved->Show(false);
 }
+
+wxPoint wxSplitterWindow::GetLastSplitPosition() const
+{
+    return m_lastSplitPosition;
+}
+
+void wxSplitterWindow::SetLastSplitPosition(const wxPoint& pos)
+{
+    m_lastSplitPosition = pos;
+}
+
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__)
 
