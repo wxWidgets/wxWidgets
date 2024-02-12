@@ -97,6 +97,12 @@ public:
         it simply returns the language set with SetLanguage() if it's available
         or empty string otherwise.
 
+        @warning
+        This function does not consider messages ID language (typically
+        English) and can return inappropriate language if it is anywhere in
+        user's preferred languages list. Use GetBestTranslation() instead
+        unless you have very specific needs.
+
         @since 3.3.0
      */
     wxString GetBestAvailableTranslation(const wxString& domain);
