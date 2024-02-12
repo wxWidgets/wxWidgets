@@ -226,6 +226,12 @@ public:
     // all any more.
     wxDEPRECATED_INLINE( void SetSashSize(int WXUNUSED(width)), return; )
 
+    // Get the sash position that was last used before Unsplit
+    void GetDefaultSashPosition(int& horizontal, int& vertical) const;
+
+    // Set the default initial sash position to use when the splitter is split
+    void SetDefaultSashPosition(int horizontal, int vertical);
+
 protected:
     // event handlers
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -289,6 +295,8 @@ protected:
     wxPoint     m_ptStart;      // mouse position when dragging started
     int         m_sashStart;    // sash position when dragging started
     int         m_minimumPaneSize;
+    int         m_latestHorizontalSashPosition;
+    int         m_latestVerticalSashPosition;
     wxCursor    m_sashCursorWE;
     wxCursor    m_sashCursorNS;
     wxOverlay   m_overlay;

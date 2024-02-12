@@ -130,7 +130,8 @@ void wxSplitterWindow::Init()
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = wxCursor(wxCURSOR_SIZENS);
-
+    m_latestHorizontalSashPosition = 0;
+    m_latestVerticalSashPosition = 0;
     m_needUpdating = false;
     m_isHot = false;
 }
@@ -471,6 +472,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
                 newPosition = m_sashPosition + delta;
                 if( newPosition < m_minimumPaneSize )
                     newPosition = m_minimumPaneSize;
+
             }
 
             // Send an event with the newly calculated position. The handler
@@ -824,6 +826,7 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
 
 
     SetSashPosition(sashPosition, true);
+    
     return true;
 }
 
@@ -840,6 +843,12 @@ int wxSplitterWindow::ConvertSashPosition(int sashPosition) const
     }
     else // sashPosition == 0
     {
+        int defaultPos = GetWindowSize() / 2;
+        if (m_splitMode == wxSPLIT_VERTICAL) {
+            return m_latestVerticalSashPosition != 0 ? m_latestVerticalSashPosition : defaultPos;
+        } else if (m_splitMode == wxSPLIT_HORIZONTAL) {
+            return m_latestHorizontalSashPosition != 0 ? m_latestHorizontalSashPosition : defaultPos;
+        }
         // default, put it in the centre
         return GetWindowSize() / 2;
     }
@@ -869,6 +878,12 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         wxFAIL_MSG(wxT("splitter: attempt to remove a non-existent window"));
 
         return false;
+    }
+
+    if (m_splitMode == wxSPLIT_VERTICAL) {
+        m_latestVerticalSashPosition = m_sashPosition;
+    } else if (m_splitMode == wxSPLIT_HORIZONTAL) {
+        m_latestHorizontalSashPosition = m_sashPosition;
     }
 
     OnUnsplit(win);
@@ -1085,6 +1100,19 @@ void wxSplitterWindow::OnUnsplit(wxWindow *winRemoved)
     // call this before calling the event handler which may delete the window
     winRemoved->Show(false);
 }
+
+void wxSplitterWindow::GetDefaultSashPosition(int& horizontal, int& vertical) const
+{
+    horizontal = m_latestHorizontalSashPosition;
+    vertical = m_latestVerticalSashPosition;
+}
+
+void wxSplitterWindow::SetDefaultSashPosition(int horizontal, int vertical)
+{
+    m_latestHorizontalSashPosition = horizontal;
+    m_latestVerticalSashPosition = vertical;
+}
+
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__)
 
