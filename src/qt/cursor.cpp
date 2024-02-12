@@ -159,7 +159,11 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
 void wxCursor::InitFromImage( const wxImage & image )
 {
     AllocExclusive();
-    GetHandle() = QCursor(*wxBitmap(image).GetHandle(),
+
+    wxBitmap bmp(image);
+    bmp.QtBlendMaskWithAlpha();
+
+    GetHandle() = QCursor(*bmp.GetHandle(),
                            image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) ?
                            image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X) : -1,
                            image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y) ?
