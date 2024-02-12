@@ -615,34 +615,32 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
 // Draw the sash tracker (for whilst moving the sash)
 void wxSplitterWindow::DrawSashTracker(int x, int y)
 {
-    int w, h;
-    GetClientSize(&w, &h);
+    // One of the components of this size will be modified below, the other one
+    // will stay unchanged as the tracker goes across the entire window.
+    wxSize sizeSash = GetClientSize();
 
-    int x1, y1;
-    int x2, y2;
+    // One of the components of this position will be modified below, the other
+    // one is always 0 as the tracker starts at the left/top of the window.
+    wxPoint posSash;
 
     const int sashTrackerWidth = GetDefaultSashSize();
 
     if ( m_splitMode == wxSPLIT_VERTICAL )
     {
-        x1 = wxClip(x, 0, w);
-        x2 = sashTrackerWidth;
-        y1 = 0;
-        y2 = h;
+        posSash.x = wxClip(x, 0, sizeSash.x);
+        sizeSash.x = sashTrackerWidth;
     }
     else
     {
-        y1 = wxClip(y, 0, h);
-        y2 = sashTrackerWidth;
-        x1 = 0;
-        x2 = w;
+        posSash.y = wxClip(y, 0, sizeSash.y);
+        sizeSash.y = sashTrackerWidth;
     }
 
     wxClientDC dc(this);
     wxDCOverlay overlaydc( m_overlay, &dc );
     overlaydc.Clear();
 
-    const wxRect rect{x1, y1, x2, y2};
+    const wxRect rect{posSash, sizeSash};
 
     DrawResizeHint(dc, rect);
 }
