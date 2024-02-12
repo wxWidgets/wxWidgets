@@ -139,6 +139,8 @@ wxString wxCheckBox::GetLabel() const
 
 void wxCheckBox::SetLabel(const wxString& label)
 {
+    wxCheckBoxBase::SetLabel( label );
+
     m_qtCheckBox->setText( wxQtConvertString(label) );
 }
 

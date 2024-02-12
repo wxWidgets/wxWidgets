@@ -58,12 +58,14 @@ QWidget *wxStaticBox::GetHandle() const
 
 void wxStaticBox::SetLabel(const wxString& label)
 {
-    m_qtGroupBox->setTitle(wxQtConvertString(label));
+    wxStaticBoxBase::SetLabel( label );
+
+    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 }
 
 wxString wxStaticBox::GetLabel() const
 {
-    return wxQtConvertString(m_qtGroupBox->title());
+    return wxQtConvertString( m_qtGroupBox->title() );
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const

@@ -112,6 +112,8 @@ void wxAnyButton::QtSetBitmap( const wxBitmapBundle &bitmapBundle )
 
 void wxAnyButton::SetLabel( const wxString &label )
 {
+    wxAnyButtonBase::SetLabel( label );
+
     m_qtPushButton->setText( wxQtConvertString( label ));
 }
 
