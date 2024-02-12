@@ -126,7 +126,7 @@
 class wxOverlayImpl: public wxOverlay::Impl
 {
 public:
-    wxOverlayImpl();
+    wxOverlayImpl() = default;
     ~wxOverlayImpl();
 
     virtual void Reset() override;
@@ -138,28 +138,21 @@ public:
 
     void CreateOverlayWindow(wxDC* dc);
 
-    WXWindow m_overlayWindow;
-    WXWindow m_overlayParentWindow;
-    CGContextRef m_overlayContext;
+    WXWindow m_overlayWindow = nullptr;
+    WXWindow m_overlayParentWindow = nullptr;
+    CGContextRef m_overlayContext = nullptr;
     // we store the window in case we would have to issue a Refresh()
-    wxWindow* m_window;
+    wxWindow* m_window = nullptr;
 
-    int m_x;
-    int m_y;
-    int m_width;
-    int m_height;
+    int m_x = 0;
+    int m_y = 0;
+    int m_width = 0;
+    int m_height = 0;
 } ;
 
 wxOverlay::Impl* wxOverlay::Create()
 {
     return new wxOverlayImpl;
-}
-
-wxOverlayImpl::wxOverlayImpl()
-{
-    m_window = nullptr ;
-    m_overlayContext = nullptr ;
-    m_overlayWindow = nullptr ;
 }
 
 wxOverlayImpl::~wxOverlayImpl()
