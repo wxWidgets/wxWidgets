@@ -69,15 +69,6 @@ wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
 #endif // wxMSW
 wxEND_EVENT_TABLE()
 
-static bool IsLive(wxSplitterWindow* wnd)
-{
-    // with wxSP_LIVE_UPDATE style the splitter windows are always resized
-    // following the mouse movement while it drags the sash, without it we only
-    // draw the sash at the new position but only resize the windows when the
-    // dragging is finished
-    return wnd->HasFlag(wxSP_LIVE_UPDATE);
-}
-
 static wxBitmap wxPaneCreateStippleBitmap()
 {
     // Notice that wxOverlay, under wxMSW, uses the wxBLACK colour i.e.(0,0,0)
@@ -239,7 +230,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         return;
     }
 
-    bool isLive = IsLive(this);
+    // with wxSP_LIVE_UPDATE style the splitter windows are always resized
+    // following the mouse movement while it drags the sash, without it we only
+    // draw the sash at the new position but only resize the windows when the
+    // dragging is finished
+    const bool isLive = HasFlag(wxSP_LIVE_UPDATE);
 
     if (event.LeftDown())
     {
@@ -414,7 +409,7 @@ void wxSplitterWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
     SetCursor(* wxSTANDARD_CURSOR);
 
     // Erase sash tracker
-    if ( !IsLive(this) )
+    if ( HasFlag(wxSP_LIVE_UPDATE) )
     {
         m_overlay.Reset();
     }
