@@ -627,6 +627,11 @@ public:
 protected:
     void Init();
 
+    // Override to return the calculated client size because under wxMSW
+    // wxControl::DoGetBestSize() returns DEFAULT_ITEM_HEIGHT which is too
+    // wide as a default toolbar height.
+    virtual wxSize DoGetBestSize() const override;
+
     virtual void OnCustomRender(wxDC& WXUNUSED(dc),
                                 const wxAuiToolBarItem& WXUNUSED(item),
                                 const wxRect& WXUNUSED(rect)) { }

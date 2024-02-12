@@ -2248,6 +2248,10 @@ void wxAuiToolBar::DoIdleUpdate()
     }
 }
 
+wxSize wxAuiToolBar::DoGetBestSize() const
+{
+    return GetClientSize();
+}
 
 void wxAuiToolBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 {
