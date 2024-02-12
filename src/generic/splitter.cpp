@@ -89,16 +89,6 @@ static wxBitmap wxPaneCreateStippleBitmap()
     return wxBitmap(img);
 }
 
-static void DrawResizeHint(wxDC& dc, const wxRect& rect)
-{
-    wxBitmap stipple = wxPaneCreateStippleBitmap();
-    wxBrush brush(stipple);
-    dc.SetBrush(brush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
-
-    dc.DrawRectangle(rect);
-}
-
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
                                    const wxPoint& pos,
                                    const wxSize& size,
@@ -640,9 +630,12 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
     wxDCOverlay overlaydc( m_overlay, &dc );
     overlaydc.Clear();
 
-    const wxRect rect{posSash, sizeSash};
+    wxBitmap stipple = wxPaneCreateStippleBitmap();
+    wxBrush brush(stipple);
+    dc.SetBrush(brush);
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
-    DrawResizeHint(dc, rect);
+    dc.DrawRectangle(posSash, sizeSash);
 }
 
 int wxSplitterWindow::GetWindowSize() const
