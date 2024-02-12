@@ -85,6 +85,11 @@ public:
         translations offered to the user. To do this, pass the app's main
         catalog as @a domain.
 
+        @note
+        The returned list does not include messages ID language, i.e. the
+        language (typically English) included in the source code. In the use
+        case described above, that language needs to be added manually.
+
         @see GetBestTranslation()
      */
     wxArrayString GetAvailableTranslations(const wxString& domain) const;
