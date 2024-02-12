@@ -1128,7 +1128,7 @@ wxSize wxWindowQt::DoGetBestSize() const
 {
     const wxSize size = wxWindowBase::DoGetBestSize();
 
-    if ( dynamic_cast<wxQtWidget*>(GetHandle()) )
+    if ( !GetHandle() || dynamic_cast<wxQtWidget*>(GetHandle()) )
     {
         return size;
     }
