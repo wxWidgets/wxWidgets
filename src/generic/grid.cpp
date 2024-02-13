@@ -3003,6 +3003,7 @@ void wxGrid::Init()
     m_canDragCell = false;
     m_dragMoveRowOrCol = -1;
     m_dragLastPos  = -1;
+    m_dragLastRowOrCol = -2;
     m_dragLastColour  = nullptr;
     m_dragRowOrCol = -1;
     m_dragRowOrColOldSize = -1;
@@ -4039,6 +4040,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                     oper.DrawParallelLine(dc, 0, markerLength, markerPos + 1);
                     dc.SetPen(wxNullPen);
 
+                    m_dragLastRowOrCol = lineAt;
                     m_dragLastPos = markerPos;
                     m_dragLastColour = markerColour;
                 }
@@ -4446,6 +4448,7 @@ void wxGrid::DoAfterDraggingEnd()
     m_lastMousePos = wxDefaultPosition;
     // from drag moving row/col
     m_dragMoveRowOrCol = -1;
+    m_dragLastRowOrCol = -2;
     m_dragLastPos = -1;
     m_dragLastColour = nullptr;
 
@@ -5908,6 +5911,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                             // end row/column moving
                             m_winCapture->Refresh();
                             m_dragLastPos = -1;
+                            m_dragLastRowOrCol = -2;
                             m_dragLastColour = nullptr;
                             break;
 
@@ -6902,6 +6906,17 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 
     rend.DrawLabel(*this, dc, GetRowLabelValue(row),
                    rect, hAlign, vAlign, wxHORIZONTAL);
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_ROW &&
+         (m_dragLastRowOrCol == row || m_dragLastRowOrCol == row-1 ) )
+    {
+        // draw the insertion marker for drag-moving
+        wxPen pen(*m_dragLastColour, 2);
+        dc.SetPen(pen);
+        dc.DrawLine(0, m_dragLastPos + 1, m_rowLabelWidth, m_dragLastPos + 1);
+        dc.SetPen(wxNullPen);
+    }
+
 }
 
 bool wxGrid::UseNativeColHeader(bool native)
@@ -7058,6 +7073,16 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     const int orient = GetColLabelTextOrientation();
 
     rend.DrawLabel(*this, dc, GetColLabelValue(col), rect, hAlign, vAlign, orient);
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL &&
+        (m_dragLastRowOrCol == col || m_dragLastRowOrCol == col - 1) )
+    {
+        // draw the insertion marker for drag-moving
+        wxPen pen(*m_dragLastColour, 2);
+        dc.SetPen(pen);
+        dc.DrawLine(m_dragLastPos + 1, 0, m_dragLastPos + 1, m_colLabelHeight);
+        dc.SetPen(wxNullPen);
+    }
 }
 
 // TODO: these 2 functions should be replaced with wxDC::DrawLabel() to which
