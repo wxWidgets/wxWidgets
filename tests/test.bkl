@@ -429,6 +429,7 @@
         <files>internat.po internat.mo</files>
     </template>
 
+    <wx-data id="en_GB" template="catalog"/>
     <wx-data id="fr" template="catalog"/>
     <wx-data id="ja" template="catalog"/>
 
