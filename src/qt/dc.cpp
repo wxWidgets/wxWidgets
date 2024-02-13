@@ -222,14 +222,16 @@ void wxQtDCImpl::SetBackground(const wxBrush& brush)
 {
     m_backgroundBrush = brush;
 
+    // For consistency with the other ports: clearing the dc with
+    // invalid brush (Qt::NoBrush) should use white colour (which
+    // happens to be the default colour in Qt too) instead of no
+    // colour at all.
+    if (!m_backgroundBrush.IsOk())
+        m_backgroundBrush = *wxWHITE_BRUSH;
+
     if (m_qtPainter->isActive())
     {
-        // For consistency with the other ports: clearing the dc with
-        // invalid brush (Qt::NoBrush) should use white colour (which
-        // happens to be the default colour in Qt too) instead of no
-        // colour at all.
-        m_qtPainter->setBackground(
-            brush.IsOk() ? brush.GetHandle() : Qt::white);
+        m_qtPainter->setBackground(m_backgroundBrush.GetHandle());
     }
 }
 
