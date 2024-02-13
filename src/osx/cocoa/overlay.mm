@@ -157,6 +157,11 @@ wxOverlay::Impl* wxOverlay::Create()
 
 wxOverlayImpl::~wxOverlayImpl()
 {
+    // Set it to null before calling Reset() to prevent it from drawing
+    // anything: this is not needed when destroying the overlay and would
+    // result in problems.
+    m_window = nullptr;
+
     Reset();
 }
 
@@ -275,6 +280,15 @@ void wxOverlayImpl::Clear(wxDC* dc)
 
 void wxOverlayImpl::Reset()
 {
+    if ( m_window )
+    {
+        // erase whatever was drawn on the overlay the last time
+        wxClientDC dc(m_window);
+        BeginDrawing(&dc);
+        Clear(&dc);
+        EndDrawing(&dc);
+    }
+
     if ( m_overlayContext )
     {
         [(id)m_overlayContext release];
