@@ -254,7 +254,7 @@ MyFrame::MyFrame()
                       "Toggle sash invisibility");
     splitMenu->AppendSeparator();
 
-    auto itemLive = splitMenu->AppendCheckItem(SPLIT_LIVE,
+    splitMenu->AppendCheckItem(SPLIT_LIVE,
                                "&Live update\tCtrl-L",
                                "Toggle live update mode");
     splitMenu->AppendCheckItem(SPLIT_BORDER,
@@ -305,12 +305,6 @@ MyFrame::MyFrame()
 
     menuBar->Check(SPLIT_LIVE, true);
     m_splitter = new MySplitterWindow(this);
-
-    if ( m_splitter->AlwaysUsesLiveUpdate() )
-    {
-        // Only live update mode is supported, so this menu item can't be used.
-        itemLive->Enable(false);
-    }
 
     // If you use non-zero gravity you must initialize the splitter with its
     // correct initial size, otherwise it will change the sash position by a

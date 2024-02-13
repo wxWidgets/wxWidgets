@@ -143,20 +143,6 @@ public:
     virtual ~wxSplitterWindow();
 
     /**
-        Returns true if splitter always behaves as if wxSP_LIVE_UPDATE were
-        specified.
-
-        This function returns true if non-live update mode is not supported and
-        live update is always used, even if wxSP_LIVE_UPDATE was not explicitly
-        specified.
-
-        @see wxClientDC::CanBeUsedForDrawing()
-
-        @since 3.3.0
-    */
-    bool AlwaysUsesLiveUpdate() const;
-
-    /**
         Creation function, for two-step construction.
         See wxSplitterWindow() for details.
     */

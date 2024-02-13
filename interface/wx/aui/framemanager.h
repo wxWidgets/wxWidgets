@@ -228,6 +228,8 @@ public:
         @param window The associated window, may be null (this parameter was
             added in wxWidgets 3.3.0)
 
+        @note As of wxWidgets 3.3.0 this function always returns false.
+
         @since 3.1.4
      */
     static bool AlwaysUsesLiveResize(const wxWindow* window);

@@ -12,6 +12,7 @@
 
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer
+#include "wx/overlay.h"
 
 class WXDLLIMPEXP_FWD_CORE wxSplitterEvent;
 
@@ -130,9 +131,6 @@ public:
 
     // Is the window split?
     bool IsSplit() const { return (m_windowTwo != nullptr); }
-
-    // Return true if wxSP_LIVE_UPDATE is always used.
-    bool AlwaysUsesLiveUpdate() const;
 
     // Sets the border size
     void SetBorderSize(int WXUNUSED(width)) { }
@@ -293,7 +291,7 @@ protected:
     int         m_minimumPaneSize;
     wxCursor    m_sashCursorWE;
     wxCursor    m_sashCursorNS;
-    wxPen      *m_sashTrackerPen;
+    wxOverlay   m_overlay;
 
     // when in live mode, set this to true to resize children in idle
     bool        m_needUpdating:1;

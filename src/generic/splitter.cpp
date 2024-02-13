@@ -69,19 +69,15 @@ wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
 #endif // wxMSW
 wxEND_EVENT_TABLE()
 
-bool wxSplitterWindow::AlwaysUsesLiveUpdate() const
+static wxBitmap wxPaneCreateStippleBitmap()
 {
-    return !wxClientDC::CanBeUsedForDrawing(this);
-}
-
-static bool IsLive(wxSplitterWindow* wnd)
-{
-    // with wxSP_LIVE_UPDATE style the splitter windows are always resized
-    // following the mouse movement while it drags the sash, without it we only
-    // draw the sash at the new position but only resize the windows when the
-    // dragging is finished -- but drawing the sash is done using wxClientDC,
-    // so check if we can use it and always use live resizing if we can't
-    return wnd->AlwaysUsesLiveUpdate() || wnd->HasFlag(wxSP_LIVE_UPDATE);
+    // Notice that wxOverlay, under wxMSW, uses the wxBLACK colour i.e.(0,0,0)
+    // as the key colour for transparency. and using it for the stipple bitmap
+    // will make the sash feedback totaly invisible if the window's background
+    // colour is (192,192,192) or so. (1,1,1) is used instead.
+    unsigned char data[] = { 1,1,1,192,192,192, 192,192,192,1,1,1 };
+    wxImage img(2,2,data,true);
+    return wxBitmap(img);
 }
 
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
@@ -134,7 +130,6 @@ void wxSplitterWindow::Init()
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = wxCursor(wxCURSOR_SIZENS);
-    m_sashTrackerPen = new wxPen(*wxBLACK, 2, wxPENSTYLE_SOLID);
 
     m_needUpdating = false;
     m_isHot = false;
@@ -142,7 +137,6 @@ void wxSplitterWindow::Init()
 
 wxSplitterWindow::~wxSplitterWindow()
 {
-    delete m_sashTrackerPen;
 }
 
 // ----------------------------------------------------------------------------
@@ -236,7 +230,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         return;
     }
 
-    bool isLive = IsLive(this);
+    // with wxSP_LIVE_UPDATE style the splitter windows are always resized
+    // following the mouse movement while it drags the sash, without it we only
+    // draw the sash at the new position but only resize the windows when the
+    // dragging is finished
+    const bool isLive = HasFlag(wxSP_LIVE_UPDATE);
 
     if (event.LeftDown())
     {
@@ -280,10 +278,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             return;
         }
 
-        // Erase old tracker
+        // Hide sash tracker
         if ( !isLive )
         {
-            DrawSashTracker(m_oldX, m_oldY);
+            m_overlay.Reset();
         }
 
         // the position of the click doesn't exactly correspond to
@@ -361,9 +359,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
             m_sashPositionCurrent = posSashNew;
 
-            // Erase old tracker
-            DrawSashTracker(m_oldX, m_oldY);
-
             m_oldX = (m_splitMode == wxSPLIT_VERTICAL ? m_sashPositionCurrent : x);
             m_oldY = (m_splitMode != wxSPLIT_VERTICAL ? m_sashPositionCurrent : y);
 
@@ -380,7 +375,6 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 m_oldY = 0;
 #endif // __WXMSW__
 
-            // Draw new one
             DrawSashTracker(m_oldX, m_oldY);
         }
         else
@@ -414,10 +408,10 @@ void wxSplitterWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
 
     SetCursor(* wxSTANDARD_CURSOR);
 
-    // Erase old tracker
-    if ( !IsLive(this) )
+    // Erase sash tracker
+    if ( HasFlag(wxSP_LIVE_UPDATE) )
     {
-        DrawSashTracker(m_oldX, m_oldY);
+        m_overlay.Reset();
     }
 }
 
@@ -606,49 +600,37 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
 // Draw the sash tracker (for whilst moving the sash)
 void wxSplitterWindow::DrawSashTracker(int x, int y)
 {
-    int w, h;
-    GetClientSize(&w, &h);
+    // One of the components of this size will be modified below, the other one
+    // will stay unchanged as the tracker goes across the entire window.
+    wxSize sizeSash = GetClientSize();
 
-    int x1, y1;
-    int x2, y2;
+    // One of the components of this position will be modified below, the other
+    // one is always 0 as the tracker starts at the left/top of the window.
+    wxPoint posSash;
+
+    const int sashTrackerWidth = GetDefaultSashSize();
 
     if ( m_splitMode == wxSPLIT_VERTICAL )
     {
-        x1 = x2 = wxClip(x, 0, w) + m_sashTrackerPen->GetWidth()/2;
-        y1 = 2;
-        y2 = h-2;
+        posSash.x = wxClip(x, 0, sizeSash.x);
+        sizeSash.x = sashTrackerWidth;
     }
     else
     {
-        y1 = y2 = wxClip(y, 0, h) + m_sashTrackerPen->GetWidth()/2;
-        x1 = 2;
-        x2 = w-2;
+        posSash.y = wxClip(y, 0, sizeSash.y);
+        sizeSash.y = sashTrackerWidth;
     }
 
-#if defined(__WXGTK3__)
     wxClientDC dc(this);
+    wxDCOverlay overlaydc( m_overlay, &dc );
+    overlaydc.Clear();
 
-    // In the ports with wxGraphicsContext-based wxDC, such as wxGTK3 or wxOSX,
-    // wxINVERT only works for inverting the background when using white
-    // foreground (note that this code is not used anyhow for __WXMAC__ due to
-    // always using live-resizing there, see IsLive()).
-    dc.SetPen(*wxWHITE_PEN);
-#else
-    // We need to use wxScreenDC and not wxClientDC at least for wxMSW where
-    // drawing in this window itself would be hidden by its children windows,
-    // that cover it almost entirely.
-    wxScreenDC dc;
-    ClientToScreen(&x1, &y1);
-    ClientToScreen(&x2, &y2);
+    wxBitmap stipple = wxPaneCreateStippleBitmap();
+    wxBrush brush(stipple);
+    dc.SetBrush(brush);
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
-    dc.SetPen(*m_sashTrackerPen);
-#endif
-
-    dc.SetLogicalFunction(wxINVERT);
-
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    dc.DrawLine(x1, y1, x2, y2);
+    dc.DrawRectangle(posSash, sizeSash);
 }
 
 int wxSplitterWindow::GetWindowSize() const

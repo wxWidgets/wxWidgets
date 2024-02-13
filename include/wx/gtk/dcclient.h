@@ -122,6 +122,7 @@ public:
     PangoFontDescription *m_fontdesc;
 
     void SetUpDC( bool ismem = false );
+    void DontClipSubWindows();
     void Destroy();
 
     virtual void ComputeScaleAndOrigin() override;

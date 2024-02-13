@@ -33,7 +33,7 @@
     #include "wx/settings.h"
     #include "wx/app.h"
     #include "wx/dcclient.h"
-    #include "wx/dcscreen.h"
+    #include "wx/dcmemory.h"
     #include "wx/toolbar.h"
     #include "wx/image.h"
     #include "wx/statusbr.h"
@@ -64,6 +64,8 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
     #include "wx/msw/dc.h"
 #endif
 
+#include "wx/dcgraph.h"
+
 #include <memory>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
@@ -73,229 +75,37 @@ wxIMPLEMENT_CLASS(wxAuiManager, wxEvtHandler);
 
 const int auiToolBarLayer = 10;
 
-#ifndef __WXGTK__
-
-
-class wxPseudoTransparentFrame : public wxFrame
-{
-public:
-    wxPseudoTransparentFrame(wxWindow* parent = nullptr,
-                wxWindowID id = wxID_ANY,
-                const wxString& title = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE,
-                const wxString &name = wxT("frame"))
-                    : wxFrame(parent, id, title, pos, size, style | wxFRAME_SHAPED, name)
-    {
-        SetBackgroundStyle(wxBG_STYLE_PAINT);
-        m_amount=0;
-        m_maxWidth=0;
-        m_maxHeight=0;
-        m_lastWidth=0;
-        m_lastHeight=0;
-        m_canSetShape = true;
-        m_region = wxRegion(0, 0, 0, 0);
-        SetTransparent(0);
-    }
-
-    virtual bool SetTransparent(wxByte alpha) override
-    {
-        if (m_canSetShape)
-        {
-            wxSize size = GetClientSize();
-
-            m_maxWidth = size.x;
-            m_maxHeight = size.y;
-            m_amount = alpha;
-            m_region.Clear();
-//            m_region.Union(0, 0, 1, m_maxWidth);
-            if (m_amount)
-            {
-                for (int y=0; y<m_maxHeight; y++)
-                {
-                    // Reverse the order of the bottom 4 bits
-                    int j=((y&8)?1:0)|((y&4)?2:0)|((y&2)?4:0)|((y&1)?8:0);
-                    if ((j*16+8)<m_amount)
-                        m_region.Union(0, y, m_maxWidth, 1);
-                }
-            }
-            SetShape(m_region);
-            Refresh();
-        }
-        return true;
-    }
-
-    void OnPaint(wxPaintEvent& WXUNUSED(event))
-    {
-        wxPaintDC dc(this);
-
-        if (m_region.IsEmpty())
-            return;
-
-#ifdef __WXMAC__
-        dc.SetBrush(wxColour(128, 192, 255));
-#else
-        dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_ACTIVECAPTION));
-#endif
-        dc.SetPen(*wxTRANSPARENT_PEN);
-
-        wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
-
-        while (upd)
-        {
-            wxRect rect(upd.GetRect());
-            dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
-
-            ++upd;
-        }
-    }
-
-    void OnSize(wxSizeEvent& event)
-    {
-        // We sometimes get surplus size events
-        if ((event.GetSize().GetWidth() == m_lastWidth) &&
-            (event.GetSize().GetHeight() == m_lastHeight))
-        {
-            event.Skip();
-            return;
-        }
-        m_lastWidth = event.GetSize().GetWidth();
-        m_lastHeight = event.GetSize().GetHeight();
-
-        SetTransparent(m_amount);
-        m_region.Intersect(0, 0, event.GetSize().GetWidth(),
-                           event.GetSize().GetHeight());
-        SetShape(m_region);
-        Refresh();
-        event.Skip();
-    }
-
-private:
-    wxByte m_amount;
-    int m_maxWidth;
-    int m_maxHeight;
-    bool m_canSetShape;
-    int m_lastWidth,m_lastHeight;
-
-    wxRegion m_region;
-
-    wxDECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame);
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxPseudoTransparentFrame, wxFrame);
-
-wxBEGIN_EVENT_TABLE(wxPseudoTransparentFrame, wxFrame)
-    EVT_PAINT(wxPseudoTransparentFrame::OnPaint)
-    EVT_SIZE(wxPseudoTransparentFrame::OnSize)
-wxEND_EVENT_TABLE()
-
-
-#else // __WXGTK__
-
-#include "wx/gtk/private/wrapgtk.h"
-
-static void
-gtk_pseudo_window_realized_callback( GtkWidget *m_widget, void *WXUNUSED(win) )
-{
-        wxSize disp = wxGetDisplaySize();
-        int amount = 128;
-        wxRegion region;
-        for (int y=0; y<disp.y; y++)
-                {
-                    // Reverse the order of the bottom 4 bits
-                    int j=((y&8)?1:0)|((y&4)?2:0)|((y&2)?4:0)|((y&1)?8:0);
-                    if ((j*16+8)<amount)
-                        region.Union(0, y, disp.x, 1);
-                }
-        gdk_window_shape_combine_region(gtk_widget_get_window(m_widget), region.GetRegion(), 0, 0);
-}
-
-
-class wxPseudoTransparentFrame: public wxFrame
-{
-public:
-    wxPseudoTransparentFrame(wxWindow* parent = nullptr,
-                wxWindowID id = wxID_ANY,
-                const wxString& title = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE,
-                const wxString &name = wxT("frame"))
-    {
-         if (!CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
-            return;
-
-        m_title = title;
-
-        m_widget = gtk_window_new( GTK_WINDOW_POPUP );
-        g_object_ref(m_widget);
-
-        if (parent) parent->AddChild(this);
-
-        g_signal_connect( m_widget, "realize",
-                      G_CALLBACK (gtk_pseudo_window_realized_callback), this );
-
-        m_backgroundColour.Set(128, 192, 255);
-        GTKApplyWidgetStyle();
-    }
-
-    bool SetTransparent(wxByte WXUNUSED(alpha)) override
-    {
-        return true;
-    }
-
-protected:
-    virtual void DoSetSizeHints( int minW, int minH,
-                                 int maxW, int maxH,
-                                 int incW, int incH) override
-    {
-        // the real wxFrame method doesn't work for us because we're not really
-        // a top level window so skip it
-        wxWindow::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
-    }
-
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame);
-};
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxPseudoTransparentFrame, wxFrame);
-
-#endif // !__WXGTK__/__WXGTK__
-
-
-
 // -- static utility functions --
+
+static wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByte a)
+{
+    unsigned char data[] = { r,g,b, 0,0,0, r,g,b };
+    unsigned char alpha[] = { a, 128, a };
+
+    wxImage img(1,3,data,true);
+    img.SetAlpha(alpha,true);
+    return wxBitmap(img);
+}
 
 static wxBitmap wxPaneCreateStippleBitmap()
 {
-    // TODO: Provide x1.5 and x2.0 versions.
-    unsigned char data[] = { 0,0,0,192,192,192, 192,192,192,0,0,0 };
+    // Notice that wxOverlay, under wxMSW, uses the wxBLACK colour i.e.(0,0,0)
+    // as the key colour for transparency. and using it for the stipple bitmap
+    // will make the sash feedback totaly invisible if the window's background
+    // colour is (192,192,192) or so. (1,1,1) is used instead.
+    unsigned char data[] = { 1,1,1,192,192,192, 192,192,192,1,1,1 };
     wxImage img(2,2,data,true);
     return wxBitmap(img);
 }
 
 static void DrawResizeHint(wxDC& dc, const wxRect& rect)
 {
-#ifdef __WXMSW__
     wxBitmap stipple = wxPaneCreateStippleBitmap();
     wxBrush brush(stipple);
     dc.SetBrush(brush);
-    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    PatBlt(GetHdcOf(*impl), rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight(), PATINVERT);
-#else
-    // Note that we have to use white colour for wxINVERT to work with
-    // wxGraphicsContext-based wxDC implementations, such as used by wxGTK3
-    // (and wxOSX, but this code is never used for the latter because it always
-    // uses live resize).
-    dc.SetPen(*wxWHITE_PEN);
-    dc.SetBrush(*wxWHITE_BRUSH);
+    dc.SetPen(*wxTRANSPARENT_PEN);
 
-    dc.SetLogicalFunction(wxINVERT);
     dc.DrawRectangle(rect);
-#endif
 }
 
 
@@ -594,12 +404,13 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_actionWindow = nullptr;
     m_hoverButton = nullptr;
     m_art = new wxAuiDefaultDockArt;
-    m_hintWnd = nullptr;
     m_flags = flags;
     m_hasMaximized = false;
     m_frame = nullptr;
     m_dockConstraintX = 0.3;
     m_dockConstraintY = 0.3;
+    m_hintFadeMax = 128;
+
     m_reserved = nullptr;
     m_currentDragItem = -1;
 
@@ -744,22 +555,8 @@ wxAuiDockUIPart* wxAuiManager::HitTest(int x, int y)
 // options which are global to wxAuiManager
 void wxAuiManager::SetFlags(unsigned int flags)
 {
-    // find out if we have to call UpdateHintWindowConfig()
-    bool update_hint_wnd = false;
-    unsigned int hint_mask = wxAUI_MGR_TRANSPARENT_HINT |
-                             wxAUI_MGR_VENETIAN_BLINDS_HINT |
-                             wxAUI_MGR_RECTANGLE_HINT;
-    if ((flags & hint_mask) != (m_flags & hint_mask))
-        update_hint_wnd = true;
-
-
     // set the new flags
     m_flags = flags;
-
-    if (update_hint_wnd)
-    {
-        UpdateHintWindowConfig();
-    }
 }
 
 unsigned int wxAuiManager::GetFlags() const
@@ -767,17 +564,14 @@ unsigned int wxAuiManager::GetFlags() const
     return m_flags;
 }
 
-/* static */ bool wxAuiManager::AlwaysUsesLiveResize(const wxWindow* window)
+/* static */ bool wxAuiManager::AlwaysUsesLiveResize(const wxWindow* WXUNUSED(window))
 {
-    // Not using live resize relies on wxClientDC being usable for drawing, so
-    // we have to use live resize if it can't be used on the current platform.
-    return !wxClientDC::CanBeUsedForDrawing(window);
+    return false;
 }
 
 bool wxAuiManager::HasLiveResize() const
 {
-    return AlwaysUsesLiveResize(m_frame) ||
-            (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
+    return (GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;
 }
 
 // don't use these anymore as they are deprecated
@@ -807,79 +601,6 @@ wxAuiManager* wxAuiManager::GetManager(wxWindow* window)
         return nullptr;
 
     return evt.GetManager();
-}
-
-
-void wxAuiManager::UpdateHintWindowConfig()
-{
-    // find out if the system can do transparent frames
-    bool can_do_transparent = false;
-
-    wxWindow* w = m_frame;
-    while (w)
-    {
-        if (wxDynamicCast(w, wxFrame))
-        {
-            wxFrame* f = static_cast<wxFrame*>(w);
-            can_do_transparent = f->CanSetTransparent();
-
-            break;
-        }
-
-        w = w->GetParent();
-    }
-
-    // if there is an existing hint window, delete it
-    if (m_hintWnd)
-    {
-        m_hintWnd->Destroy();
-        m_hintWnd = nullptr;
-    }
-
-    m_hintFadeMax = 50;
-    m_hintWnd = nullptr;
-
-    if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) && can_do_transparent)
-    {
-        // Make a window to use for a transparent hint
-        m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
-                                 wxDefaultPosition, wxSize(1,1),
-                                     wxFRAME_TOOL_WINDOW |
-                                     wxFRAME_FLOAT_ON_PARENT |
-                                     wxFRAME_NO_TASKBAR |
-                                     wxNO_BORDER);
-        #ifdef __WXMAC__
-            // Do nothing so this event isn't handled in the base handlers.
-
-            // Letting the hint window activate without this handler can lead to
-            // weird behaviour on Mac where the menu is switched out to the top
-            // window's menu in MDI applications when it shouldn't be. So since
-            // we don't want user interaction with the hint window anyway, we just
-            // prevent it from activating here.
-            m_hintWnd->Bind(wxEVT_ACTIVATE, [](wxActivateEvent&) {});
-        #endif
-
-        m_hintWnd->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT));
-    }
-    else
-    {
-        if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) != 0 ||
-            (m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) != 0)
-        {
-            // system can't support transparent fade, or the venetian
-            // blinds effect was explicitly requested
-            m_hintWnd = new wxPseudoTransparentFrame(m_frame,
-                                                      wxID_ANY,
-                                                      wxEmptyString,
-                                                      wxDefaultPosition,
-                                                      wxSize(1,1),
-                                                            wxFRAME_TOOL_WINDOW |
-                                                            wxFRAME_FLOAT_ON_PARENT |
-                                                            wxFRAME_NO_TASKBAR |
-                                                            wxNO_BORDER);
-            m_hintFadeMax = 128;
-        }
-    }
 }
 
 
@@ -923,8 +644,6 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
     }
 
 #endif
-
-    UpdateHintWindowConfig();
 }
 
 
@@ -3279,10 +2998,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
     return false;
 }
 
-
 void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
 {
-    if (!m_hintWnd || m_hintFadeAmt >= m_hintFadeMax)
+    if (m_hintFadeAmt >= m_hintFadeMax)
     {
         m_hintFadeTimer.Stop();
         Unbind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
@@ -3291,132 +3009,114 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
     }
 
     m_hintFadeAmt++;
-    m_hintWnd->SetTransparent(m_hintFadeAmt);
+
+    ShowHint(m_lastHint);
 }
 
 void wxAuiManager::ShowHint(const wxRect& rect)
 {
-    if (m_hintWnd)
+    wxClientDC dc(m_frame);
+    wxDCOverlay overlaydc(m_overlay, &dc);
+    overlaydc.Clear();
+
+    wxDCClipper clip(dc, rect);
+
+    if ( m_flags & wxAUI_MGR_RECTANGLE_HINT )
     {
-        // if the hint rect is the same as last time, don't do anything
-        if (m_lastHint == rect)
-            return;
-        m_lastHint = rect;
-
-        // Decide if we want to fade in the hint and set it to the end value if
-        // we don't.
-        if ((m_flags & wxAUI_MGR_HINT_FADE)
-            && !((m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) &&
-                 (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
-            )
-            m_hintFadeAmt = 0;
-        else
-            m_hintFadeAmt = m_hintFadeMax;
-
-        m_hintWnd->SetSize(rect);
-        m_hintWnd->SetTransparent(m_hintFadeAmt);
-
-        if (!m_hintWnd->IsShown())
-            m_hintWnd->Show();
-
-        // if we are dragging a floating pane, set the focus
-        // back to that floating pane (otherwise it becomes unfocused)
-        if (m_action == actionDragFloatingPane && m_actionWindow)
-            m_actionWindow->SetFocus();
-
-        m_hintWnd->Raise();
-
-
-        if (m_hintFadeAmt != m_hintFadeMax) //  Only fade if we need to
-        {
-            // start fade in timer
-            m_hintFadeTimer.SetOwner(this);
-            m_hintFadeTimer.Start(15);
-            Bind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
-                 m_hintFadeTimer.GetId());
-        }
-    }
-    else  // Not using a transparent hint window...
-    {
-        if (!(m_flags & wxAUI_MGR_RECTANGLE_HINT))
-            return;
-
-        if (m_lastHint != rect)
-        {
-            // remove the last hint rectangle
-            m_lastHint = rect;
-            m_frame->Refresh();
-            m_frame->Update();
-        }
-
-        wxScreenDC screendc;
-        wxRegion clip(1, 1, 10000, 10000);
-
-        // clip all floating windows, so we don't draw over them
-        int i, pane_count;
-        for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
-        {
-            wxAuiPaneInfo& pane = m_panes.Item(i);
-
-            if (pane.IsFloating() &&
-                    pane.frame &&
-                        pane.frame->IsShown())
-            {
-                wxRect r = pane.frame->GetRect();
-#ifdef __WXGTK__
-                // wxGTK returns the client size, not the whole frame size
-                r.width += pane.frame->FromDIP(15);
-                r.height += pane.frame->FromDIP(35);
-                r.Inflate(pane.frame->FromDIP(wxSize(5, 5)));
-#endif
-
-                clip.Subtract(r);
-            }
-        }
-
-        // As we can only hide the hint by redrawing the managed window, we
-        // need to clip the region to the managed window too or we get
-        // nasty redrawn problems.
-        clip.Intersect(m_frame->GetRect());
-
-        screendc.SetDeviceClippingRegion(clip);
-
+        // Not using a transparent hint window...
         wxBitmap stipple = wxPaneCreateStippleBitmap();
         wxBrush brush(stipple);
-        screendc.SetBrush(brush);
-        screendc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(brush);
+        dc.SetPen(*wxTRANSPARENT_PEN);
 
-        screendc.DrawRectangle(rect.x, rect.y, m_frame->FromDIP(5), rect.height);
-        screendc.DrawRectangle(rect.x + m_frame->FromDIP(5), rect.y, rect.width - m_frame->FromDIP(10), m_frame->FromDIP(5));
-        screendc.DrawRectangle(rect.x + rect.width - m_frame->FromDIP(5), rect.y, m_frame->FromDIP(5), rect.height);
-        screendc.DrawRectangle(rect.x + m_frame->FromDIP(5), rect.y + rect.height - m_frame->FromDIP(5), rect.width - m_frame->FromDIP(10), m_frame->FromDIP(5));
+        const int d = m_frame->FromDIP(5);
+        const int dd = m_frame->FromDIP(10);
+
+        dc.DrawRectangle(rect.x, rect.y, d, rect.height);
+        dc.DrawRectangle(rect.x + d, rect.y, rect.width - dd, d);
+        dc.DrawRectangle(rect.x + rect.width - d, rect.y, d, rect.height);
+        dc.DrawRectangle(rect.x + d, rect.y + rect.height - d, rect.width - dd, d);
+
+        return;
+    }
+
+#ifdef __WXGTK3__
+    // The standard DC under wxGTK3 supports alpha drawing, whether the overlay
+    // is native (Wayland) or generic (X11).
+    const bool canDrawTransparentHint = true;
+#else
+    const bool canDrawTransparentHint = m_overlay.IsNative();
+#endif
+
+    const auto hintCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+    const unsigned char r = hintCol.GetRed();
+    const unsigned char g = hintCol.GetGreen();
+    const unsigned char b = hintCol.GetBlue();
+    const unsigned char a = m_hintFadeAmt;
+
+    const auto makeBrush = [this, r, g, b, a]()
+    {
+        return (m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) != 0
+                    ? wxCreateVenetianBlindsBitmap(r, g, b, a)
+                    : wxBrush(wxColour(r, g, b, a));
+    };
+
+    if ( canDrawTransparentHint )
+    {
+#ifdef __WXMSW__
+        m_overlay.SetOpacity(m_hintFadeAmt);
+#endif // __WXMSW__
+
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(makeBrush());
+        dc.DrawRectangle(rect);
+    }
+    else
+    {
+        wxBitmap bmp(rect.GetSize(), 32);
+        wxMemoryDC mdc(bmp);
+        mdc.Blit(0, 0, rect.width, rect.height, &dc, rect.x, rect.y);
+        wxRasterOperationMode logicalFunc = wxINVERT;
+
+#if wxUSE_GRAPHICS_CONTEXT
+        {
+            wxGCDC gdc(mdc);
+            gdc.SetPen(*wxTRANSPARENT_PEN);
+            gdc.SetBrush(makeBrush());
+            gdc.DrawRectangle(wxPoint(0, 0), rect.GetSize());
+        }
+
+        logicalFunc = wxCOPY;
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+        dc.Blit(rect.x, rect.y, rect.width, rect.height, &mdc, 0, 0, logicalFunc);
+    }
+
+    // if we are dragging a floating pane, set the focus
+    // back to that floating pane (otherwise it becomes unfocused)
+    if (m_action == actionDragFloatingPane && m_actionWindow)
+        m_actionWindow->SetFocus();
+
+    if (m_hintFadeAmt != m_hintFadeMax) //  Only fade if we need to
+    {
+        // start fade in timer
+        m_hintFadeTimer.SetOwner(this);
+        m_hintFadeTimer.Start(10);
+        Bind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
+             m_hintFadeTimer.GetId());
     }
 }
 
 void wxAuiManager::HideHint()
 {
-    // hides a transparent window hint, if there is one
-    if (m_hintWnd)
-    {
-        if (m_hintWnd->IsShown())
-            m_hintWnd->Show(false);
-        m_hintWnd->SetTransparent(0);
-        m_hintFadeTimer.Stop();
-        // In case this is called while a hint fade is going, we need to
-        // disconnect the event handler.
-        Unbind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
-               m_hintFadeTimer.GetId());
-        m_lastHint = wxRect();
-        return;
-    }
+    m_overlay.Reset();
+    m_hintFadeTimer.Stop();
+    // In case this is called while a hint fade is going, we need to
+    // disconnect the event handler.
+    Unbind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
+           m_hintFadeTimer.GetId());
 
-    // hides a painted hint by redrawing the frame window
-    if (!m_lastHint.IsEmpty())
-    {
-        m_frame->Refresh();
-        m_frame->Update();
-        m_lastHint = wxRect();
-    }
+    m_lastHint = wxRect();
 }
 
 
@@ -3455,7 +3155,7 @@ void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
 // first calls DoDrop() to determine the exact position the pane would
 // be at were if dropped.  If the pane would indeed become docked at the
 // specified drop point, the rectangle hint will be returned in
-// screen coordinates.  Otherwise, an empty rectangle is returned.
+// client coordinates.  Otherwise, an empty rectangle is returned.
 // |pane_window| is the window pointer of the pane being dragged, |pt| is
 // the mouse position, in client coordinates.  |offset| describes the offset
 // that the mouse is from the upper-left corner of the item being dragged
@@ -3526,18 +3226,15 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
 
     delete sizer;
 
-    if (rect.IsEmpty())
+    if ( !rect.IsEmpty() )
     {
-        return rect;
-    }
+        rect.Offset( m_frame->GetClientAreaOrigin() );
 
-    // actually show the hint rectangle on the screen
-    m_frame->ClientToScreen(&rect.x, &rect.y);
-
-    if ( m_frame->GetLayoutDirection() == wxLayout_RightToLeft )
-    {
-        // Mirror rectangle in RTL mode
-        rect.x -= rect.GetWidth();
+        if ( m_frame->GetLayoutDirection() == wxLayout_RightToLeft )
+        {
+            // Mirror rectangle in RTL mode
+            rect.x -= rect.GetWidth();
+        }
     }
 
     return rect;
@@ -3557,10 +3254,22 @@ void wxAuiManager::DrawHintRect(wxWindow* pane_window,
     {
         HideHint();
     }
-    else
+    else if (m_lastHint != rect) // if the hint rect is the same as last time, don't do anything
     {
-        ShowHint(rect);
-    }
+        m_lastHint = rect;
+
+        // Decide if we want to fade in the hint and set it to the end value if
+        // we don't.
+        if ((m_flags & wxAUI_MGR_HINT_FADE)
+            && !((m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) &&
+                 (m_flags & wxAUI_MGR_NO_VENETIAN_BLINDS_FADE))
+            )
+            m_hintFadeAmt = 0;
+        else
+            m_hintFadeAmt = m_hintFadeMax;
+
+         ShowHint(rect);
+     }
 }
 
 void wxAuiManager::OnFloatingPaneMoveStart(wxWindow* wnd)
@@ -3896,7 +3605,7 @@ void wxAuiManager::Repaint(wxDC* dc)
     // make a client dc
     if (!dc)
     {
-        if ( AlwaysUsesLiveResize(m_frame) )
+        if ( !wxClientDC::CanBeUsedForDrawing(m_frame) )
         {
             // We can't use wxClientDC in these ports.
             m_frame->Refresh() ;
@@ -4453,8 +4162,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         if (!HasLiveResize())
         {
             // get rid of the hint rectangle
-            wxClientDC dc{m_frame};
-            DrawResizeHint(dc, m_actionHintRect);
+            m_overlay.Reset();
         }
         if (m_currentDragItem != -1 && HasLiveResize())
             m_actionPart = & (m_uiParts.Item(m_currentDragItem));
@@ -4569,18 +4277,20 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             else
             {
                 wxRect rect(pos, m_actionPart->rect.GetSize());
-                wxClientDC dc{m_frame};
 
                 if (!m_actionHintRect.IsEmpty())
                 {
-                    // remove old resize hint
-                    DrawResizeHint(dc, m_actionHintRect);
                     m_actionHintRect = wxRect();
                 }
 
-                // draw new resize hint
-                DrawResizeHint(dc, rect);
+                wxClientDC dc{m_frame};
+                wxDCOverlay overlaydc(m_overlay, &dc);
+                overlaydc.Clear();
+
+                // draw resize hint
                 m_actionHintRect = rect;
+                rect.SetPosition(rect.GetPosition() + m_frame->GetClientAreaOrigin());
+                DrawResizeHint(dc, rect);
             }
         }
     }
