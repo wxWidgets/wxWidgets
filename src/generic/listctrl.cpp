@@ -2395,8 +2395,15 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
 
     data->GetItem( 0, le.m_item );
     le.m_item.m_text = value;
-    return !GetParent()->GetEventHandler()->ProcessEvent( le ) ||
-                le.IsAllowed();
+
+    GetParent()->GetEventHandler()->ProcessEvent( le );
+
+    if ( !le.IsAllowed() )
+        return false;
+
+    m_dirty = true;
+
+    return true;
 }
 
 void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
