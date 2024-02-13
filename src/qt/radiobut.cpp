@@ -164,3 +164,15 @@ QWidget *wxRadioButton::GetHandle() const
 {
     return m_qtRadioButton;
 }
+
+wxString wxRadioButton::GetLabel() const
+{
+    return wxQtConvertString( m_qtRadioButton->text() );
+}
+
+void wxRadioButton::SetLabel(const wxString& label)
+{
+    wxRadioButtonBase::SetLabel(label);
+
+    m_qtRadioButton->setText( wxQtConvertString(label) );
+}

@@ -365,3 +365,14 @@ QWidget *wxRadioBox::GetHandle() const
     return m_qtGroupBox;
 }
 
+void wxRadioBox::SetLabel(const wxString& label)
+{
+    wxControlBase::SetLabel( label );
+
+    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
+}
+
+wxString wxRadioBox::GetLabel() const
+{
+    return wxQtConvertString( m_qtGroupBox->title() );
+}

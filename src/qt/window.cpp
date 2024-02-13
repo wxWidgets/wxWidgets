@@ -1176,7 +1176,14 @@ void wxWindowQt::DoSetToolTip( wxToolTip *tip )
 bool wxWindowQt::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->UpdateUI();
-    menu->GetHandle()->exec( GetHandle()->mapToGlobal( QPoint( x, y ) ) );
+
+    QPoint pt;
+    if (x == wxDefaultCoord && y == wxDefaultCoord)
+        pt = QCursor::pos();
+    else
+        pt = GetHandle()->mapToGlobal(QPoint(x, y));
+
+    menu->GetHandle()->exec(pt);
 
     return true;
 }
