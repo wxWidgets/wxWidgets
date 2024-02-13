@@ -51,6 +51,12 @@ wxWidgets programs.
          default value if it's not a number, so that e.g. setting it to "yes"
          suppresses all GTK diagnostics while setting it to 16 only suppresses
          GTK warning messages.}
+@itemdef{WXLANGUAGE,
+         This variable can be set to override OS setting of preferred languages
+         and make wxUILocale::GetPreferredUILanguages() return the set list
+         instead. The format is same as GNU's <a
+         href="https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html">LANGUAGE</a>
+         variable: a colon-separated list of language codes.}
 */
 
 @see wxSystemOptions
