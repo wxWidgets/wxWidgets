@@ -6,8 +6,8 @@
     <object class="wxBoxSizer">
         <object class="sizeritem">
             <option>1</option>
-            <flag>wxALL|wxEXPAND</flag>
-            <border>5</border>
+            <flag>wxEXPAND</flag>
+            <minsize>400,500</minsize>
             <object class="wxPropertyGridManager">
                 <style>wxPG_AUTO_SORT|wxPG_TOOLTIPS|wxPG_TOOLBAR</style>
                 <exstyle>wxPG_EX_MODE_BUTTONS|wxPG_EX_HELP_AS_TOOLTIPS</exstyle>
