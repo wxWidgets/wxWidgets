@@ -1,0 +1,1 @@
+wxMSW: Fix wxPropertyGrid expander buttons appearance in high DPI (#24304).
