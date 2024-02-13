@@ -2552,6 +2552,15 @@ public:
         Bind(wxEVT_BUTTON, &TestNotificationMessageWindow::OnCloseClicked, this, wxID_CLOSE);
     }
 
+    ~TestNotificationMessageWindow()
+    {
+#if defined(__WXMSW__) && wxUSE_TASKBARICON
+        // If the persistent taskbar icon has been created and is
+        // not deleted at the end, the application will never exit.
+        delete m_taskbarIcon;
+#endif
+    }
+
 private:
     enum
     {
