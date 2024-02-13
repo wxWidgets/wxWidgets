@@ -19,6 +19,7 @@
 
 #include "wx/intl.h"
 #include "wx/uilocale.h"
+#include "wx/scopeguard.h"
 
 #include "wx/private/glibc.h"
 
@@ -241,8 +242,9 @@ void IntlTestCase::IsAvailable()
 
 TEST_CASE("wxTranslations::AddCatalog", "[translations]")
 {
-    // We currently have translations for French and Japanese in this test
-    // directory, check that loading those succeeds but loading others doesn't.
+    // We currently have translations for British English, French and Japanese
+    // in this test directory, check that loading those succeeds but loading
+    // others doesn't.
     wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
 
     const wxString domain("internat");
@@ -252,11 +254,12 @@ TEST_CASE("wxTranslations::AddCatalog", "[translations]")
     SECTION("All")
     {
         auto available = trans.GetAvailableTranslations(domain);
-        REQUIRE( available.size() == 2 );
+        REQUIRE( available.size() == 3 );
 
         available.Sort();
-        CHECK( available[0] == "fr" );
-        CHECK( available[1] == "ja" );
+        CHECK( available[0] == "en_GB" );
+        CHECK( available[1] == "fr" );
+        CHECK( available[2] == "ja" );
     }
 
     SECTION("French")
@@ -284,6 +287,60 @@ TEST_CASE("wxTranslations::AddCatalog", "[translations]")
 
         // But using a completely different language should not.
         CHECK_FALSE( trans.AddCatalog(domain, wxLANGUAGE_DUTCH) );
+    }
+}
+
+TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
+{
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+
+    const wxString domain("internat");
+
+    wxTranslations trans;
+    wxON_BLOCK_EXIT1( wxUnsetEnv, "WXLANGUAGE" );
+
+    SECTION("ChooseLanguage")
+    {
+        // Simple case.
+        wxSetEnv("WXLANGUAGE", "fr:en");
+        CHECK( trans.GetBestTranslation(domain) == "fr" );
+        CHECK( trans.GetBestAvailableTranslation(domain) == "fr" );
+
+        // Choose 2nd language _and_ its base form.
+        wxSetEnv("WXLANGUAGE", "cs:fr_CA:en");
+        CHECK( trans.GetBestTranslation(domain) == "fr" );
+        CHECK( trans.GetBestAvailableTranslation(domain) == "fr" );
+    }
+
+    SECTION("EnglishHandling")
+    {
+        // Check that existing en_GB file isn't used for msgid language.
+        wxSetEnv("WXLANGUAGE", "en_US");
+
+        CHECK( trans.GetBestTranslation(domain) == "en" );
+        // GetBestAvailableTranslation() will wrongly return "en_GB", don't test that.
+
+        wxSetEnv("WXLANGUAGE", "es:en");
+        CHECK( trans.GetBestTranslation(domain) == "en" );
+        // GetBestAvailableTranslation() will wrongly return "en_GB", don't test that.
+
+        // And that it is used when it should be
+        wxSetEnv("WXLANGUAGE", "en_GB");
+        CHECK( trans.GetBestTranslation(domain) == "en_GB" );
+        CHECK( trans.GetBestAvailableTranslation(domain) == "en_GB" );
+
+    }
+
+    SECTION("DontSkipMsgidLanguage")
+    {
+        // Check that msgid language will be used if it's the best match.
+        wxSetEnv("WXLANGUAGE", "cs:en:fr");
+        CHECK( trans.GetBestTranslation(domain) == "en" );
+
+        // ...But won't be used if there's a suitable translation file.
+        wxSetEnv("WXLANGUAGE", "fr:en:cs");
+        CHECK( trans.GetBestTranslation(domain) == "fr" );
+        CHECK( trans.GetBestAvailableTranslation(domain) == "fr" );
     }
 }
 

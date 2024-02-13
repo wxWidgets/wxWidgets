@@ -463,7 +463,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-image-sample data-images fr ja
+all: test$(EXEEXT) $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_gui_bundle___depname) $(__test_allheaders___depname) $(__test_allheaders_bundle___depname) data data-image-sample data-images en_GB fr ja
 
 install: 
 
@@ -599,6 +599,18 @@ data-images:
 	fi; \
 	case "$$x" in ?*) \
 	cp -pRf $(srcdir)/image/$$f image ;; \
+	esac; \
+	done
+
+en_GB: 
+	@mkdir -p ./intl/en_GB
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./intl/en_GB/$$f -a ! -d ./intl/en_GB/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/intl/en_GB/$$f -newer ./intl/en_GB/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/intl/en_GB/$$f ./intl/en_GB ;; \
 	esac; \
 	done
 
@@ -1278,4 +1290,4 @@ failtest_allheaders:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
 .PHONY: all install uninstall clean distclean test_gui_bundle \
-	test_allheaders_bundle data data-image-sample data-images fr ja
+	test_allheaders_bundle data data-image-sample data-images en_GB fr ja
