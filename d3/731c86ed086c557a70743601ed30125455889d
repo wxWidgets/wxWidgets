@@ -1,0 +1,1 @@
+wxAll (GUI): Restore non-live-resize in wxAUI and wxSplitterWindow (AliKet, #24193).
