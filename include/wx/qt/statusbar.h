@@ -37,7 +37,7 @@ protected:
     virtual void DoUpdateStatusText(int number) override;
 
 private:
-    void UpdateFields();
+    void CreateFieldsIfNeeded();
 
     QStatusBar *m_qtStatusBar = nullptr;
     std::vector<QWidget*> m_qtPanes;

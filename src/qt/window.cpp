@@ -1830,6 +1830,11 @@ QPainter *wxWindowQt::QtGetPainter()
     return m_qtPainter.get();
 }
 
+bool wxWindowQt::QtCanPaintWithoutActivePainter() const
+{
+    return false;
+}
+
 bool wxWindowQt::EnableTouchEvents(int eventsMask)
 {
     wxCHECK_MSG( GetHandle(), false, "can't be called before creating the window" );

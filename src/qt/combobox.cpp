@@ -288,40 +288,48 @@ void wxComboBox::SetSelection( long from, long to )
 
     SetInsertionPoint( from );
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != nullptr )
+    if ( QLineEdit* const lineEdit = m_qtComboBox->lineEdit() )
     {
-        m_qtComboBox->lineEdit()->setSelection( from, to - from );
+        lineEdit->setSelection( from, to - from );
     }
 }
 
 void wxComboBox::SetInsertionPoint( long pos )
 {
-    // check if pos indicates end of text:
-    if ( pos == -1 )
-        m_qtComboBox->lineEdit()->end( false );
-    else
-        m_qtComboBox->lineEdit()->setCursorPosition( pos );
+    if ( QLineEdit* const lineEdit = m_qtComboBox->lineEdit() )
+    {
+        // check if pos indicates end of text:
+        if ( pos == -1 )
+            lineEdit->end( false );
+        else
+            lineEdit->setCursorPosition( pos );
+    }
 }
 
 long wxComboBox::GetInsertionPoint() const
 {
-    long selectionStart = m_qtComboBox->lineEdit()->selectionStart();
+    QLineEdit* const lineEdit = m_qtComboBox->lineEdit();
+
+    if ( !lineEdit )
+        return -1;
+
+    long selectionStart = lineEdit->selectionStart();
 
     if ( selectionStart >= 0 )
         return selectionStart;
 
-    return m_qtComboBox->lineEdit()->cursorPosition();
+    return lineEdit->cursorPosition();
 }
 
 void wxComboBox::GetSelection(long* from, long* to) const
 {
     // use the inner text entry widget (note that can be null if not editable)
-    if ( m_qtComboBox->lineEdit() != nullptr )
+    if ( QLineEdit* const lineEdit = m_qtComboBox->lineEdit() )
     {
-        *from = m_qtComboBox->lineEdit()->selectionStart();
+        *from = lineEdit->selectionStart();
         if ( *from >= 0 )
         {
-            *to = *from + m_qtComboBox->lineEdit()->selectedText().length();
+            *to = *from + lineEdit->selectedText().length();
             return;
         }
     }
