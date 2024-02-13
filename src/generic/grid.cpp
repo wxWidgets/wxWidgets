@@ -6976,7 +6976,6 @@ void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
         dc.DrawLine(m_dragLastPos + 1, 0, m_dragLastPos + 1, m_colLabelHeight);
         dc.SetPen(wxNullPen);
     }
-
 }
 
 void wxGrid::DrawCornerLabel(wxDC& dc)
