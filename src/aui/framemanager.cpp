@@ -3054,7 +3054,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
     const unsigned char b = hintCol.GetBlue();
     const unsigned char a = m_hintFadeAmt;
 
-    const auto makeBrush = [=]()
+    const auto makeBrush = [this, r, g, b, a]()
     {
         return (m_flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) != 0
                     ? wxCreateVenetianBlindsBitmap(r, g, b, a)
