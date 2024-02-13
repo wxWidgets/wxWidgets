@@ -6855,6 +6855,15 @@ void wxGrid::DrawRowLabels( wxDC& dc, const wxArrayInt& rows)
     {
         DrawRowLabel( dc, rows[i] );
     }
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_ROW && m_dragLastColour )
+    {
+        // draw the insertion marker for drag-moving
+        wxPen pen(*m_dragLastColour, 2);
+        dc.SetPen(pen);
+        dc.DrawLine(0, m_dragLastPos + 1, m_rowLabelWidth, m_dragLastPos + 1);
+        dc.SetPen(wxNullPen);
+    }
 }
 
 void wxGrid::DrawRowLabel( wxDC& dc, int row )
@@ -6957,6 +6966,15 @@ void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
     for ( size_t i = 0; i < numLabels; i++ )
     {
         DrawColLabel( dc, cols[i] );
+    }
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL && m_dragLastColour )
+    {
+        // draw the insertion marker for drag-moving
+        wxPen pen(*m_dragLastColour, 2);
+        dc.SetPen(pen);
+        dc.DrawLine(m_dragLastPos + 1, 0, m_dragLastPos + 1, m_colLabelHeight);
+        dc.SetPen(wxNullPen);
     }
 }
 
