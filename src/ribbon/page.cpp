@@ -1102,6 +1102,59 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
     return minimum_amount <= 0;
 }
 
+wxRibbonPanel* wxRibbonPage::GetPanel(int n)
+{
+    size_t currentPanelIndex = 0;
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+        node;
+        node = node->GetNext())
+    {
+        wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+        if (panel != nullptr)
+            {
+            if (n == currentPanelIndex)
+                {
+                return panel;
+                }
+            ++currentPanelIndex;
+            }
+    }
+    return nullptr;
+}
+
+wxRibbonPanel* wxRibbonPage::GetPanelById(wxWindowID id)
+{
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+        node;
+        node = node->GetNext())
+    {
+        wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+        if (panel != nullptr)
+            {
+            if (panel->GetId() == id)
+                {
+                return panel;
+                }
+            }
+    }
+    return nullptr;
+}
+
+size_t wxRibbonPage::GetPanelCount()
+{
+    size_t panelCount = 0;
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+            node;
+            node = node->GetNext())
+    {
+        if ( node->GetData()->IsKindOf(CLASSINFO(wxRibbonPanel)) )
+        {
+            ++panelCount;
+        }
+    }
+    return panelCount;
+}
+
 bool wxRibbonPage::DismissExpandedPanel()
 {
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
@@ -1109,11 +1162,11 @@ bool wxRibbonPage::DismissExpandedPanel()
               node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if(panel == nullptr || !panel->IsShown())
+        if ( panel == nullptr || !panel->IsShown() )
         {
             continue;
         }
-        if(panel->GetExpandedPanel() != nullptr)
+        if (panel->GetExpandedPanel() != nullptr )
         {
             return panel->HideExpanded();
         }
