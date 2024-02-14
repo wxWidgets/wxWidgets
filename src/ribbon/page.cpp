@@ -1104,10 +1104,10 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
 
 wxRibbonPanel* wxRibbonPage::GetPanel(int n)
 {
-    size_t currentPanelIndex = 0;
-    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-        node;
-        node = node->GetNext())
+    int currentPanelIndex = 0;
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+            node;
+            node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
         if ( panel != nullptr )
@@ -1124,9 +1124,9 @@ wxRibbonPanel* wxRibbonPage::GetPanel(int n)
 
 wxRibbonPanel* wxRibbonPage::GetPanelById(wxWindowID id)
 {
-    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-        node;
-        node = node->GetNext())
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+            node;
+            node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
         if ( panel != nullptr && panel->GetId() == id )
@@ -1140,9 +1140,9 @@ wxRibbonPanel* wxRibbonPage::GetPanelById(wxWindowID id)
 size_t wxRibbonPage::GetPanelCount()
 {
     size_t panelCount = 0;
-    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
             node;
-            node = node->GetNext())
+            node = node->GetNext() )
     {
         if ( node->GetData()->IsKindOf(CLASSINFO(wxRibbonPanel)) )
         {
