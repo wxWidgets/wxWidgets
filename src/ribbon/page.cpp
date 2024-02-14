@@ -1110,9 +1110,9 @@ wxRibbonPanel* wxRibbonPage::GetPanel(int n)
         node = node->GetNext())
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if (panel != nullptr)
+        if ( panel != nullptr )
             {
-            if (n == currentPanelIndex)
+            if ( n == currentPanelIndex )
                 {
                 return panel;
                 }
@@ -1129,12 +1129,9 @@ wxRibbonPanel* wxRibbonPage::GetPanelById(wxWindowID id)
         node = node->GetNext())
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if (panel != nullptr)
+        if ( panel != nullptr && panel->GetId() == id )
             {
-            if (panel->GetId() == id)
-                {
                 return panel;
-                }
             }
     }
     return nullptr;
