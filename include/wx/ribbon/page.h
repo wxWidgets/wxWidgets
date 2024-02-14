@@ -62,6 +62,10 @@ public:
 
     void HideIfExpanded();
 
+    wxRibbonPanel* GetPanel(int n);
+    wxRibbonPanel* GetPanelById(wxWindowID id);
+    size_t GetPanelCount();
+
 protected:
     virtual wxSize DoGetBestSize() const override;
     virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
