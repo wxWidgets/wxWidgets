@@ -54,7 +54,7 @@
           building it, you need to pass `--enable-cef_debug` option to
           wxWidgets configure to avoid mismatches between various definitions
           in the wrapper itself and in wxWidgets.
-        * Under all platforms you may want to use `-DCEF_USE_SANDBOX=OFF`
+        * Under all platforms you may want to use `-DUSE_SANDBOX=OFF`
           option to avoid linking with the sandbox library which is not
           provided in the "Minimal Distribution" if you don't use this feature.
     4. Copy the static library binary in the platform-dependent location:
