@@ -436,6 +436,9 @@ void wxGraphicsPathData::AddRoundedRectangle( wxDouble x, wxDouble y, wxDouble w
         AddRectangle(x,y,w,h);
     else
     {
+        wxDouble maxR = std::min(w, h) / 2.0;
+        if ( radius > maxR ) radius = maxR;
+
         MoveToPoint(x+w, y+h/2);
         AddArc(x+w-radius, y+h-radius, radius, 0.0, M_PI/2.0, true);
         AddArc(x+radius, y+h-radius, radius, M_PI/2.0, M_PI, true);
