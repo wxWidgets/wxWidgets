@@ -864,6 +864,9 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
 
     if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
 
+    wxDouble maxR = std::min(width, height) / 2.0;
+    if ( radius > maxR ) radius = maxR;
+
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y);
     wxCoord ww = m_signX * XLOG2DEVREL(width);
