@@ -83,6 +83,12 @@ void wxQtDCImpl::QtPreparePainter( )
         m_qtPainter->setBrush( wxBrush().GetHandle() );
         m_qtPainter->setFont( wxFont().GetHandle() );
 
+        if (m_qtPainter->device()->depth() > 1)
+        {
+            m_qtPainter->setRenderHints(QPainter::Antialiasing,
+                                        true);
+        }
+
         if (m_clipping)
         {
             m_qtPainter->setClipRegion( m_clippingRegion.GetHandle() );
