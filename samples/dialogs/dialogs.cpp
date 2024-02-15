@@ -433,7 +433,7 @@ bool MyApp::OnInit()
     #endif // wxUSE_COLOURDLG
 
     #if wxUSE_FONTDLG
-        choices_menu->Append(DIALOGS_CHOOSE_FONT, "Choose &font\tShift-Ctrl-N");
+        choices_menu->Append(DIALOGS_CHOOSE_FONT, "Choose &font\tShift-Ctrl-J");
     #endif // wxUSE_FONTDLG
 
     #if wxUSE_CHOICEDLG
