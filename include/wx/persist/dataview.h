@@ -16,6 +16,9 @@
 
 #include "wx/dataview.h"
 
+#include <memory>
+#include <map>
+
 // ----------------------------------------------------------------------------
 // String constants used by wxPersistentDataViewCtrl.
 // ----------------------------------------------------------------------------
@@ -94,6 +97,7 @@ public:
 
     virtual bool Restore() override
     {
+        std::map<int, wxDataViewColumn*> order;
         wxDataViewCtrl* const control = Get();
 
         for ( unsigned int col = 0; col < control->GetColumnCount(); col++ )
@@ -115,7 +119,18 @@ public:
             if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), &width) )
                 column->SetWidth(width);
 
-            // TODO: Set the column's view position.
+            // Retrieve the column's view position.
+            int pos;
+            if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_POS), &pos) )
+                order.emplace(pos, column);
+        }
+
+        // Restore the columns' position.
+        for ( auto &i: order ) {
+            auto column = i.second;
+            auto clone = std::make_unique<wxDataViewColumn>(*column);
+            if ( control->DeleteColumn(column) )
+                control->AppendColumn(clone.release());
         }
 
         // Restore the sort key and order if there is a valid model and sort
