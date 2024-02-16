@@ -2549,12 +2549,17 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
         else if (event.LeftDown())
         {
-            // reset the selection and bail out
-            HighlightAll(false);
-            // generate a DESELECTED event for
-            // virtual multi-selection lists
-            if ( IsVirtual() && !IsSingleSel() )
-                SendNotify( m_lineLastClicked, wxEVT_LIST_ITEM_DESELECTED );
+            // reset the selection in multi-selection mode only when Ctrl and
+            // Shift keys are not pressed to mimic MSW behaviour
+            if ( IsSingleSel() || !(event.ControlDown() || event.ShiftDown()) )
+            {
+                // reset the selection and bail out
+                HighlightAll(false);
+                // generate a DESELECTED event for
+                // virtual multi-selection lists
+                if ( IsVirtual() && !IsSingleSel() )
+                    SendNotify( m_lineLastClicked, wxEVT_LIST_ITEM_DESELECTED );
+            }
         }
 
         return;
