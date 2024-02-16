@@ -270,6 +270,7 @@ All (GUI):
 - Auto-grow in-place editor in generic wxListCtrl again (taler21, #24293).
 - Center labels in generic wxListCtrl correctly again (taler21, #24292).
 - Fix label display after editing it in generic wxListCtrl (taler21, #24311).
+- Improve multiple selection UI in generic wxListCtrl (taler21, #24332).
 
 wxGTK:
 
