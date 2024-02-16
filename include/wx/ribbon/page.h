@@ -64,7 +64,7 @@ public:
 
     wxRibbonPanel* GetPanel(int n);
     wxRibbonPanel* GetPanelById(wxWindowID id);
-    size_t GetPanelCount();
+    size_t GetPanelCount() const;
 
 protected:
     virtual wxSize DoGetBestSize() const override;

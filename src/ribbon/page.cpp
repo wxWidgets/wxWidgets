@@ -1137,7 +1137,7 @@ wxRibbonPanel* wxRibbonPage::GetPanelById(wxWindowID id)
     return nullptr;
 }
 
-size_t wxRibbonPage::GetPanelCount()
+size_t wxRibbonPage::GetPanelCount() const
 {
     size_t panelCount = 0;
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
