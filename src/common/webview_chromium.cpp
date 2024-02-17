@@ -829,9 +829,22 @@ bool wxWebViewChromium::DoCreateBrowser(const wxString& url)
         }
     }
 
+    // Check if we need to create a custom client handler.
+    const auto configChrome =
+        static_cast<wxWebViewConfigurationChromium*>(m_implData->m_config.GetNativeConfiguration());
+    if ( auto create = configChrome->m_clientCreate )
+    {
+        m_actualClient = create(m_clientHandler, configChrome->m_clientCreateData);
+        if ( m_actualClient )
+            m_actualClient->AddRef();
+    }
+
+    if ( !m_actualClient )
+        m_actualClient = m_clientHandler;
+
     if ( !CefBrowserHost::CreateBrowser(
             info,
-            CefRefPtr<CefClient>{m_clientHandler},
+            CefRefPtr<CefClient>{m_actualClient},
             url.ToStdString(),
             browsersettings,
             nullptr, // No extra info
@@ -856,7 +869,10 @@ wxWebViewChromium::~wxWebViewChromium()
 
         constexpr bool forceClose = true;
         m_clientHandler->GetHost()->CloseBrowser(forceClose);
-        m_clientHandler->Release();
+
+        // We need to destroy the client handler used by the browser to allow
+        // it to close.
+        m_actualClient->Release();
 
         // We need to wait until the browser is really closed, which happens
         // asynchronously, as otherwise we could exit the program and call
@@ -905,6 +921,11 @@ wxWebViewChromium::~wxWebViewChromium()
         // really destroying the object before CefShutdown() is called.
         wxUnusedVar(handle);
 #endif
+
+        // If we hadn't release our own client handler above, we need to do it
+        // now (notice that it's safe to do it, as it can't be used any more).
+        if ( m_clientHandler != m_actualClient )
+            m_clientHandler->Release();
     }
 
     delete m_implData;

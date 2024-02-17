@@ -2533,6 +2533,7 @@ set(WEBVIEW_CMN_HDR
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
     wx/webview_chromium.h
+    wx/webview_chromium_impl.h
 )
 
 set(WEBVIEW_OSX_SHARED_HDR

@@ -61,6 +61,9 @@
     <ClInclude Include="..\..\include\wx\webview_chromium.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\webview_chromium_impl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\webviewarchivehandler.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

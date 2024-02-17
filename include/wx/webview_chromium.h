@@ -18,6 +18,8 @@ class WXDLLIMPEXP_FWD_BASE wxFileName;
 
 extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[];
 
+class CefClient;
+
 // Private namespace containing classes used only in the implementation.
 namespace wxCEF
 {
@@ -170,6 +172,10 @@ private:
     friend class wxCEF::ClientHandler;
     wxCEF::ClientHandler* m_clientHandler = nullptr;
 
+    // Actual client used by CEF: this can be either m_clientHandler itself or
+    // a custom client provided by the application.
+    CefClient* m_actualClient = nullptr;
+
     friend class wxWebViewChromiumModule;
     static bool ms_cefInitialized;
 
@@ -198,6 +204,19 @@ public:
 
     // Logging level must be one of cef_log_severity_t values (0 means default).
     int m_logLevel = 0;
+
+    // Function to create the custom CefClient to use if non-null.
+    //
+    // The CefClient subclass must delegate all not otherwise implemented
+    // functions to the provided client (and should always delegate the
+    // lifetime-related callbacks).
+    //
+    // It is recommended, although not required, to derive the custom client
+    // from wxDelegatingCefClient defined in wx/webview_chromium_impl.h.
+    CefClient* (*m_clientCreate)(CefClient* client, void* data) = nullptr;
+
+    // Data to pass to m_clientCreate if it is used.
+    void* m_clientCreateData = nullptr;
 };
 
 
