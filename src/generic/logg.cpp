@@ -209,18 +209,24 @@ public:
 // members and so its constructor and destructor are trivial.
 LogFlushHook gs_logFlushHook;
 
+// Registration count, just in case the application creates more than one
+// wxLogGui instance (which is unusual but can still happen).
+int gs_logFlushHookRegistrationCount = 0;
+
 } // anonymous namespace
 
 wxLogGui::wxLogGui()
 {
-    gs_logFlushHook.Register();
+    if ( !gs_logFlushHookRegistrationCount++ )
+        gs_logFlushHook.Register();
 
     Clear();
 }
 
 wxLogGui::~wxLogGui()
 {
-    gs_logFlushHook.Unregister();
+    if ( !--gs_logFlushHookRegistrationCount )
+        gs_logFlushHook.Unregister();
 }
 
 void wxLogGui::Clear()
