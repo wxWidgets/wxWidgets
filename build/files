@@ -2486,6 +2486,7 @@ WEBVIEW_CMN_HDR =
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
     wx/webview_chromium.h
+    wx/webview_chromium_impl.h
 
 WEBVIEW_OSX_SHARED_HDR =
     wx/osx/webviewhistoryitem_webkit.h

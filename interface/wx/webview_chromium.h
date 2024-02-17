@@ -386,6 +386,36 @@ public:
         Default value 0 means to use default "INFO" log level.
      */
     int m_logLevel = 0;
+
+    /**
+        Function to create the custom CefClient to use if non-null.
+
+        CEF uses an object of CefClient class to customize handling of many
+        operations, by allowing to return custom objects from its callbacks,
+        and for processing IPC messages received from the other processes used
+        by CEF. By defining this function pointer, the application can use its
+        own CefClient subclass to customize many aspects of CEF behaviour
+        beyond what is possible using the standard wxWebView API.
+
+        Please note that the returned object must delegate all not otherwise
+        implemented functions to the provided @a client (and should always
+        delegate the lifetime-related callbacks). You can ensure that this is
+        the case by deriving your custom CefClient subclass from
+        wxDelegatingCefClient, but you still need to do it manually if not
+        using this class.
+     */
+    CefClient* (*m_clientCreate)(CefClient* client, void* data) = nullptr;
+
+    /**
+        Data to pass to m_clientCreate if it is used.
+
+        This is just an arbitrary pointer, which is passed as argument to
+        m_clientCreate function if it is non-null.
+
+        This pointer itself may be null if it is not necessary to pass any
+        extra data to the client creation function.
+     */
+    void* m_clientCreateData = nullptr;
 };
 
 /**
@@ -415,6 +445,13 @@ public:
         }
     );
     @endcode
+
+    @note Using wxEvent dispatching adds a significant overhead to handling of
+    CEF IPC messages, so if performance is important (i.e. many such messages
+    are expected), it is recommended to configure wxWebViewChromium to use a
+    custom `CefClient` as described in wxWebViewConfigurationChromium
+    documentation and handle the messages directly in the overridden
+    `OnProcessMessageReceived()` of the custom client class.
 
     @since 3.3.0
     @library{wxwebview}
