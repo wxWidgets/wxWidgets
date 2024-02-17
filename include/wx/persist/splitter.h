@@ -23,8 +23,8 @@
 // Special position value of -1 means the splitter is not split at all.
 #define wxPERSIST_SPLITTER_POSITION wxASCII_STR("Position")
 
-#define wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL wxASCII_STR("Horizontal")
-#define wxPERSIST_SPLITTER_DEFAULT_VERTICAL wxASCII_STR("Vertical")
+#define wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL wxASCII_STR("LastHorz")
+#define wxPERSIST_SPLITTER_DEFAULT_VERTICAL wxASCII_STR("LastVert")
 
 // ----------------------------------------------------------------------------
 // wxPersistentSplitter: supports saving/restoring splitter position
@@ -42,12 +42,11 @@ public:
     {
         wxSplitterWindow* const splitter = Get();
 
-        int horizontal, vertical;
-        splitter->GetDefaultSashPosition(horizontal, vertical);
+        wxPoint lastSplitPos = splitter->GetLastSplitPosition();
         int pos = splitter->IsSplit() ? splitter->GetSashPosition() : -1;
         SaveValue(wxPERSIST_SPLITTER_POSITION, pos);
-        SaveValue(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, horizontal);
-        SaveValue(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, vertical);
+        SaveValue(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, lastSplitPos.y);
+        SaveValue(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, lastSplitPos.x);
     }
 
     virtual bool Restore() override
@@ -55,17 +54,17 @@ public:
         int pos;
         if ( !RestoreValue(wxPERSIST_SPLITTER_POSITION, &pos) )
             return false;
-        
+
         int horizontal, vertical;
         if (!RestoreValue(wxPERSIST_SPLITTER_DEFAULT_HORIZONTAL, &horizontal))
             return false;
         if (!RestoreValue(wxPERSIST_SPLITTER_DEFAULT_VERTICAL, &vertical))
             return false;
-        
+
         if ( pos == -1 )
         {
             Get()->Unsplit();
-            Get()->SetDefaultSashPosition(horizontal, vertical);
+            Get()->SetLastSplitPosition(vertical, horizontal);
         }
         else
             Get()->SetSashPosition(pos);

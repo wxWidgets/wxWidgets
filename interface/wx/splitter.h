@@ -477,6 +477,32 @@ public:
         before showing the top-level window.
     */
     void UpdateSize();
+
+    /**
+        Get the last sash position.
+
+        The last sash position gets updated each time the window is unsplit. It
+        is kept internally to restore the sash in its previous position on the
+        next split operation.
+
+        @return Point where a vertical/horizontal sash was before the last unsplit.
+    */
+    const wxPoint& GetLastSplitPosition() const;
+
+    /**
+        Sets the last sash position.
+
+        This does not affect the actual sash position while the window is split.
+        It controls the initial position of the sash each time the window
+        gets split.
+
+        @param x
+            Sash position for wxSPLIT_VERTICAL mode
+
+        @param y
+            Sash position for wxSPLIT_HORIZONTAL mode
+    */
+    void SetLastSplitPosition(int x, int y);
 };
 
 

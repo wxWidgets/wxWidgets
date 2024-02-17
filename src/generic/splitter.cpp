@@ -130,8 +130,7 @@ void wxSplitterWindow::Init()
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = wxCursor(wxCURSOR_SIZENS);
-    m_latestHorizontalSashPosition = 0;
-    m_latestVerticalSashPosition = 0;
+    m_lastSplitPosition = wxPoint(0, 0);
     m_needUpdating = false;
     m_isHot = false;
 }
@@ -472,7 +471,6 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
                 newPosition = m_sashPosition + delta;
                 if( newPosition < m_minimumPaneSize )
                     newPosition = m_minimumPaneSize;
-
             }
 
             // Send an event with the newly calculated position. The handler
@@ -826,7 +824,6 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
 
 
     SetSashPosition(sashPosition, true);
-    
     return true;
 }
 
@@ -844,13 +841,16 @@ int wxSplitterWindow::ConvertSashPosition(int sashPosition) const
     else // sashPosition == 0
     {
         int defaultPos = GetWindowSize() / 2;
-        if (m_splitMode == wxSPLIT_VERTICAL) {
-            return m_latestVerticalSashPosition != 0 ? m_latestVerticalSashPosition : defaultPos;
-        } else if (m_splitMode == wxSPLIT_HORIZONTAL) {
-            return m_latestHorizontalSashPosition != 0 ? m_latestHorizontalSashPosition : defaultPos;
+        if (m_splitMode == wxSPLIT_VERTICAL)
+        {
+            return m_lastSplitPosition.x != 0 ? m_lastSplitPosition.x : defaultPos;
+        }
+        else if (m_splitMode == wxSPLIT_HORIZONTAL)
+        {
+            return m_lastSplitPosition.y != 0 ? m_lastSplitPosition.y : defaultPos;
         }
         // default, put it in the centre
-        return GetWindowSize() / 2;
+        return defaultPos;
     }
 }
 
@@ -880,10 +880,13 @@ bool wxSplitterWindow::Unsplit(wxWindow *toRemove)
         return false;
     }
 
-    if (m_splitMode == wxSPLIT_VERTICAL) {
-        m_latestVerticalSashPosition = m_sashPosition;
-    } else if (m_splitMode == wxSPLIT_HORIZONTAL) {
-        m_latestHorizontalSashPosition = m_sashPosition;
+    if (m_splitMode == wxSPLIT_VERTICAL)
+    {
+        m_lastSplitPosition.x = m_sashPosition;
+    }
+    else if (m_splitMode == wxSPLIT_HORIZONTAL)
+    {
+        m_lastSplitPosition.y = m_sashPosition;
     }
 
     OnUnsplit(win);
@@ -1101,16 +1104,14 @@ void wxSplitterWindow::OnUnsplit(wxWindow *winRemoved)
     winRemoved->Show(false);
 }
 
-void wxSplitterWindow::GetDefaultSashPosition(int& horizontal, int& vertical) const
+const wxPoint& wxSplitterWindow::GetLastSplitPosition() const
 {
-    horizontal = m_latestHorizontalSashPosition;
-    vertical = m_latestVerticalSashPosition;
+    return m_lastSplitPosition;
 }
 
-void wxSplitterWindow::SetDefaultSashPosition(int horizontal, int vertical)
+void wxSplitterWindow::SetLastSplitPosition(int horizontal, int vertical)
 {
-    m_latestHorizontalSashPosition = horizontal;
-    m_latestVerticalSashPosition = vertical;
+    m_lastSplitPosition = wxPoint(horizontal, vertical);
 }
 
 
