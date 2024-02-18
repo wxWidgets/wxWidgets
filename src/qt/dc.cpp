@@ -924,12 +924,16 @@ void wxQtDCImpl::DoDrawLines(int n, const wxPoint points[],
             path.lineTo(wxQtConvertPoint(points[i]));
         }
 
-        m_qtPainter->translate(xoffset, yoffset);
+        {
+            QtDCOffsetHelper helper(m_qtPainter);
 
-        QBrush savebrush = m_qtPainter->brush();
-        m_qtPainter->setBrush(Qt::NoBrush);
-        m_qtPainter->drawPath(path);
-        m_qtPainter->setBrush(savebrush);
+            m_qtPainter->translate(xoffset, yoffset);
+
+            QBrush savebrush = m_qtPainter->brush();
+            m_qtPainter->setBrush(Qt::NoBrush);
+            m_qtPainter->drawPath(path);
+            m_qtPainter->setBrush(savebrush);
+        }
 
         // Reset transform
         ComputeScaleAndOrigin();
@@ -940,15 +944,20 @@ void wxQtDCImpl::DoDrawPolygon(int n, const wxPoint points[],
                        wxCoord xoffset, wxCoord yoffset,
                        wxPolygonFillMode fillStyle )
 {
+    Qt::FillRule fill = (fillStyle == wxWINDING_RULE) ? Qt::WindingFill : Qt::OddEvenFill;
+
     QPolygon qtPoints;
     for (int i = 0; i < n; i++) {
         qtPoints << wxQtConvertPoint(points[i]);
     }
 
-    Qt::FillRule fill = (fillStyle == wxWINDING_RULE) ? Qt::WindingFill : Qt::OddEvenFill;
+    {
+        QtDCOffsetHelper helper(m_qtPainter);
 
-    m_qtPainter->translate(xoffset, yoffset);
-    m_qtPainter->drawPolygon(qtPoints, fill);
+        m_qtPainter->translate(xoffset, yoffset);
+        m_qtPainter->drawPolygon(qtPoints, fill);
+    }
+
     // Reset transform
     ComputeScaleAndOrigin();
 }
