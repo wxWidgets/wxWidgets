@@ -186,6 +186,8 @@ void FontPickerWidgetsPage::CreatePicker()
                                         *wxSWISS_FONT,
                                         wxDefaultPosition, wxDefaultSize,
                                         style);
+
+    NotifyWidgetRecreation(m_fontPicker);
 }
 
 void FontPickerWidgetsPage::RecreatePicker()

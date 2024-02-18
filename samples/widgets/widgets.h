@@ -149,6 +149,13 @@ public:
     // this is currently used only to take into account the border flags
     virtual void RecreateWidget() = 0;
 
+    // notify the main window about the widget recreation if it didn't happen
+    // due to a call to RecreateWidget()
+    void NotifyWidgetRecreation(wxWindow* widget);
+
+    // enable notifications about the widget recreation disabled initially
+    void EnableRecreationNotifications() { m_notifyRecreate = true; }
+
     // apply current attributes to the widget(s)
     void SetUpWidget();
 
@@ -191,6 +198,9 @@ protected:
 public:
     // the head of the linked list containinginfo about all pages
     static WidgetsPageInfo *ms_widgetPages;
+
+private:
+    bool m_notifyRecreate = false;
 };
 
 // ----------------------------------------------------------------------------

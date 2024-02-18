@@ -276,6 +276,8 @@ void CheckBoxWidgetsPage::CreateCheckbox()
                               wxDefaultPosition, wxDefaultSize,
                               flags);
 
+    NotifyWidgetRecreation(m_checkbox);
+
     m_sizerCheckbox->Add(0, 0, 1, wxCENTRE);
     m_sizerCheckbox->Add(m_checkbox, 1, wxCENTRE);
     m_sizerCheckbox->Add(0, 0, 1, wxCENTRE);

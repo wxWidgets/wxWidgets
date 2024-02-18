@@ -248,6 +248,8 @@ void FilePickerWidgetsPage::CreatePicker()
                                         "Hello!", "*",
                                         wxDefaultPosition, wxDefaultSize,
                                         style);
+
+    NotifyWidgetRecreation(m_filePicker);
 }
 
 void FilePickerWidgetsPage::RecreatePicker()

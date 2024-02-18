@@ -198,6 +198,8 @@ void EditableListboxWidgetsPage::CreateLbox()
                                    wxDefaultPosition, wxDefaultSize,
                                    flags);
 
+    NotifyWidgetRecreation(m_lbox);
+
     m_lbox->SetStrings(items);
     m_sizerLbox->Add(m_lbox, 1, wxGROW | wxALL, 5);
     m_sizerLbox->Layout();

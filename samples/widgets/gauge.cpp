@@ -307,6 +307,9 @@ void GaugeWidgetsPage::CreateGauge()
     m_gauge = new wxGauge(this, GaugePage_Gauge, m_range,
                           wxDefaultPosition, wxDefaultSize,
                           flags);
+
+    NotifyWidgetRecreation(m_gauge);
+
     m_gauge->SetValue(val);
 
     if ( flags & wxGA_VERTICAL )

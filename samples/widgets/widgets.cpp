@@ -257,8 +257,6 @@ protected:
     WidgetsPage *CurrentPage();
 
 private:
-    void ConnectToWidgetEvents();
-
     // the panel containing everything
     wxPanel *m_panel;
 
@@ -773,23 +771,6 @@ WidgetsPage *WidgetsFrame::CurrentPage()
     return wxStaticCast(page, WidgetsPage);
 }
 
-void WidgetsFrame::ConnectToWidgetEvents()
-{
-    auto& app = wxGetApp();
-
-    const Widgets& widgets = CurrentPage()->GetWidgets();
-
-    for ( Widgets::const_iterator it = widgets.begin();
-            it != widgets.end();
-            ++it )
-    {
-        wxWindow* const w = *it;
-        wxCHECK_RET(w, "null widget");
-
-        app.ConnectToWidgetEvents(w);
-    }
-}
-
 WidgetsFrame::~WidgetsFrame()
 {
 #if USE_LOG
@@ -847,7 +828,18 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
         curPage->SetScrollRate(10, 10);
         curPage->FitInside();
 
-        ConnectToWidgetEvents();
+        auto& app = wxGetApp();
+        for ( const auto w : CurrentPage()->GetWidgets() )
+        {
+            app.ConnectToWidgetEvents(w);
+        }
+
+        // From now on, we're interested in these notifications as we'll need
+        // to reconnect to the widget events if it's recreated (unfortunately
+        // we can't rely getting them on creation as some page don't generate
+        // them -- but neither can we rely on not getting them as some pages do
+        // generate them, hence the use of m_notifyRecreate flag).
+        curPage->EnableRecreationNotifications();
     }
 
     // re-apply the attributes to the widget(s)
@@ -1016,11 +1008,6 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
     WidgetsPage *page = CurrentPage();
 
     page->RecreateWidget();
-
-    ConnectToWidgetEvents();
-
-    // re-apply the attributes to the widget(s)
-    page->SetUpWidget();
 }
 
 void WidgetsFrame::OnSetVariant(wxCommandEvent& event)
@@ -1480,6 +1467,19 @@ wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
     sizer->AddSpacer(2);
 
     return checkbox;
+}
+
+void WidgetsPage::NotifyWidgetRecreation(wxWindow* widget)
+{
+    if ( !m_notifyRecreate )
+    {
+        // We're in the process of initialization, don't notify yet.
+        return;
+    }
+
+    SetUpWidget();
+
+    wxGetApp().ConnectToWidgetEvents(widget);
 }
 
 /* static */
