@@ -79,9 +79,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "richtext", "..\build\msw\wx
 		{01F4CE10-2CFB-41A8-B41F-E54337868A1D} = {01F4CE10-2CFB-41A8-B41F-E54337868A1D}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{0172DD98-3CFD-416E-AF5F-100F0BC39AC8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wxWidgets Libraries", "wxWidgets Libraries", "{0172DD98-3CFD-416E-AF5F-100F0BC39AC8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Main Samples", "Main Samples", "{5E03E08F-336A-4384-9A1B-7077114C73F1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base Samples", "Base Samples", "{5E03E08F-336A-4384-9A1B-7077114C73F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wxtiff", "..\build\msw\wx_wxtiff.vcxproj", "{75596CE6-5AE7-55C9-B890-C07B0A657A83}"
 EndProject
@@ -154,7 +154,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "propgrid", "propgrid\propgr
 		{A1A8355B-0988-528E-9CC2-B971D6266669} = {A1A8355B-0988-528E-9CC2-B971D6266669}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{CE9594BC-6A4F-42EB-B68C-C02E0C5EE4EC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Various Others", "Various Others", "{CE9594BC-6A4F-42EB-B68C-C02E0C5EE4EC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "render", "render\render.vcxproj", "{C6EAC135-FDC8-4175-B79C-9B2A6DA012CE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -162,7 +162,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "render", "render\render.vcx
 		{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75} = {6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Widget-Specific Samples", "Widget-Specific Samples", "{7E902553-28FC-478D-9C0C-A55A63270E0A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{7E902553-28FC-478D-9C0C-A55A63270E0A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "splitter", "splitter\splitter.vcxproj", "{3C475B4E-2814-B659-512D-A4013D59EBE7}"
 	ProjectSection(ProjectDependencies) = postProject
