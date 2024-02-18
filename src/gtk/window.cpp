@@ -2246,14 +2246,16 @@ wx_window_focus_callback(GtkWidget *widget,
     return FALSE;
 }
 
+} // extern "C"
+
 //-----------------------------------------------------------------------------
 // "enter_notify_event"
 //-----------------------------------------------------------------------------
 
-static gboolean
-gtk_window_enter_callback( GtkWidget* widget,
-                           GdkEventCrossing *gdk_event,
-                           wxWindowGTK *win )
+gboolean
+wxGTKImpl::WindowEnterCallback(GtkWidget* widget,
+                               GdkEventCrossing* gdk_event,
+                               wxWindowGTK* win)
 {
     wxLogTrace(TRACE_MOUSE, "Window enter in %s (window %p) for window %p",
                wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
@@ -2297,14 +2299,26 @@ gtk_window_enter_callback( GtkWidget* widget,
     return win->GTKProcessEvent(event);
 }
 
+extern "C" {
+
+static gboolean
+gtk_window_enter_callback( GtkWidget* widget,
+                           GdkEventCrossing *gdk_event,
+                           wxWindowGTK *win )
+{
+    return wxGTKImpl::WindowEnterCallback(widget, gdk_event, win);
+}
+
+} // extern "C"
+
 //-----------------------------------------------------------------------------
 // "leave_notify_event"
 //-----------------------------------------------------------------------------
 
-static gboolean
-gtk_window_leave_callback( GtkWidget* widget,
-                           GdkEventCrossing *gdk_event,
-                           wxWindowGTK *win )
+gboolean
+wxGTKImpl::WindowLeaveCallback(GtkWidget* widget,
+                               GdkEventCrossing* gdk_event,
+                               wxWindowGTK* win)
 {
     wxLogTrace(TRACE_MOUSE, "Window leave in %s (window %p) for window %p",
                wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
@@ -2329,6 +2343,16 @@ gtk_window_leave_callback( GtkWidget* widget,
     InitMouseEvent(win, event, gdk_event);
 
     return win->GTKProcessEvent(event);
+}
+
+extern "C" {
+
+static gboolean
+gtk_window_leave_callback( GtkWidget* widget,
+                           GdkEventCrossing *gdk_event,
+                           wxWindowGTK *win )
+{
+    return wxGTKImpl::WindowLeaveCallback(widget, gdk_event, win);
 }
 
 //-----------------------------------------------------------------------------

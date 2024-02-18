@@ -94,6 +94,17 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
 // contain the mouse pointer.
 bool SetWindowUnderMouse(wxWindowGTK* win);
 
+// Implementation of enter/leave window callbacks.
+gboolean
+WindowEnterCallback(GtkWidget* widget,
+                    GdkEventCrossing* event,
+                    wxWindowGTK* win);
+
+gboolean
+WindowLeaveCallback(GtkWidget* widget,
+                    GdkEventCrossing* event,
+                    wxWindowGTK* win);
+
 } // namespace wxGTKImpl
 
 #endif // _GTK_PRIVATE_EVENT_H_
