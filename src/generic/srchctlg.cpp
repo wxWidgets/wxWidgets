@@ -1023,7 +1023,7 @@ void wxSearchCtrl::RecalcBitmaps()
     }
     wxSize sizeText = m_text->GetBestSize();
 
-    int bitmapHeight = sizeText.y - FromDIP(8);
+    int bitmapHeight = sizeText.y - FromDIP(4);
     int bitmapWidth  = sizeText.y * 20 / 14;
 
     if ( !m_searchBitmapUser )

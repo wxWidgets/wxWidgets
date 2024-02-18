@@ -144,8 +144,6 @@ public:
 #endif // wxUSE_MENUS
 
 protected:
-    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
-
     virtual void DoSetValue(const wxString& value, int flags) override;
     virtual wxString DoGetValue() const override;
 
