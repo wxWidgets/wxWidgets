@@ -1669,15 +1669,12 @@ bool wxWindowGTK::GTKShouldIgnoreEvent() const
     return g_blockEventsOnDrag;
 }
 
-int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
+int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny* WXUNUSED(event)) const
 {
     if (g_blockEventsOnDrag)
         return TRUE;
     if (g_blockEventsOnScroll)
         return TRUE;
-
-    if (!GTKIsOwnWindow(event->window))
-        return FALSE;
 
     return -1;
 }
