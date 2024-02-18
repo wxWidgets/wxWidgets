@@ -183,6 +183,10 @@ public:
     // real implementation of WidgetsPage method with the same name
     bool IsUsingLogWindow() const;
 
+    // connects handlers showing some interesting widget events to the given
+    // widget
+    void ConnectToWidgetEvents(wxWindow* w);
+
 private:
 #if USE_LOG
     wxLog* m_logTarget;
@@ -253,9 +257,6 @@ protected:
     WidgetsPage *CurrentPage();
 
 private:
-    void OnWidgetFocus(wxFocusEvent& event);
-    void OnWidgetContextMenu(wxContextMenuEvent& event);
-
     void ConnectToWidgetEvents();
 
     // the panel containing everything
@@ -428,6 +429,51 @@ bool WidgetsApp::IsUsingLogWindow() const
 #else // !USE_LOG
     return false;
 #endif // USE_LOG
+}
+
+namespace
+{
+
+void OnFocus(wxFocusEvent& event)
+{
+    // Don't show annoying message boxes when starting or closing the sample,
+    // only log these events in our own logger.
+    if ( wxGetApp().IsUsingLogWindow() )
+    {
+        wxWindow* win = (wxWindow*)event.GetEventObject();
+        wxLogMessage("Widget '%s' %s focus", win->GetClassInfo()->GetClassName(),
+                     event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
+    }
+
+    event.Skip();
+}
+
+} // anonymous namespace
+
+void WidgetsApp::ConnectToWidgetEvents(wxWindow* w)
+{
+    w->Bind(wxEVT_SET_FOCUS, OnFocus);
+    w->Bind(wxEVT_KILL_FOCUS, OnFocus);
+
+    w->Bind(wxEVT_ENTER_WINDOW, [w](wxMouseEvent& event)
+        {
+            wxLogMessage("Mouse entered into '%s'", w->GetClassInfo()->GetClassName());
+            event.Skip();
+        });
+    w->Bind(wxEVT_LEAVE_WINDOW, [w](wxMouseEvent& event)
+        {
+            wxLogMessage("Mouse left '%s'", w->GetClassInfo()->GetClassName());
+            event.Skip();
+        });
+
+    w->Bind(wxEVT_CONTEXT_MENU, [w](wxContextMenuEvent& event)
+        {
+            wxLogMessage("Context menu event for '%s' at %dx%d",
+                         w->GetClassInfo()->GetClassName(),
+                         event.GetPosition().x,
+                         event.GetPosition().y);
+            event.Skip();
+        });
 }
 
 // ----------------------------------------------------------------------------
@@ -729,6 +775,8 @@ WidgetsPage *WidgetsFrame::CurrentPage()
 
 void WidgetsFrame::ConnectToWidgetEvents()
 {
+    auto& app = wxGetApp();
+
     const Widgets& widgets = CurrentPage()->GetWidgets();
 
     for ( Widgets::const_iterator it = widgets.begin();
@@ -738,21 +786,7 @@ void WidgetsFrame::ConnectToWidgetEvents()
         wxWindow* const w = *it;
         wxCHECK_RET(w, "null widget");
 
-        w->Bind(wxEVT_SET_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
-        w->Bind(wxEVT_KILL_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
-
-        w->Bind(wxEVT_ENTER_WINDOW, [w](wxMouseEvent& event)
-            {
-                wxLogMessage("Mouse entered into '%s'", w->GetClassInfo()->GetClassName());
-                event.Skip();
-            });
-        w->Bind(wxEVT_LEAVE_WINDOW, [w](wxMouseEvent& event)
-            {
-                wxLogMessage("Mouse left '%s'", w->GetClassInfo()->GetClassName());
-                event.Skip();
-            });
-
-        w->Bind(wxEVT_CONTEXT_MENU, &WidgetsFrame::OnWidgetContextMenu, this);
+        app.ConnectToWidgetEvents(w);
     }
 }
 
@@ -1269,31 +1303,6 @@ void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_MENUS
-
-void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
-{
-    // Don't show annoying message boxes when starting or closing the sample,
-    // only log these events in our own logger.
-    if ( wxGetApp().IsUsingLogWindow() )
-    {
-        wxWindow* win = (wxWindow*)event.GetEventObject();
-        wxLogMessage("Widget '%s' %s focus", win->GetClassInfo()->GetClassName(),
-                     event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
-    }
-
-    event.Skip();
-}
-
-void WidgetsFrame::OnWidgetContextMenu(wxContextMenuEvent& event)
-{
-    wxWindow* win = (wxWindow*)event.GetEventObject();
-    wxLogMessage("Context menu event for %s at %dx%d",
-                 win->GetClassInfo()->GetClassName(),
-                 event.GetPosition().x,
-                 event.GetPosition().y);
-
-    event.Skip();
-}
 
 // ----------------------------------------------------------------------------
 // WidgetsPageInfo
