@@ -644,6 +644,18 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
     }
 
 #endif
+
+#ifdef __WXQT__
+    Bind(wxEVT_SHOW, [this](wxShowEvent& event)
+    {
+        if ( event.IsShown() )
+        {
+            this->Update();
+        }
+
+        event.Skip();
+    });
+#endif
 }
 
 
@@ -2201,6 +2213,11 @@ void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) 
 
 void wxAuiManager::Update()
 {
+#ifdef __WXQT__
+    if ( !GetManagedWindow()->IsShownOnScreen() )
+        return;
+#endif
+
     m_hoverButton = nullptr;
     m_actionPart = nullptr;
 
