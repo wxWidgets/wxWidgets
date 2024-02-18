@@ -292,6 +292,7 @@ wxGTK:
 - Respect the minimum size of controls in wxToolBar (#25210).
 - Don't consume Ctrl-C when using SDL-based wxSound (Kyriet, #25067).
 - Avoid repaint problems when using wxWindow::Update() with Wayland (#25036).
+- Generate wxEVT_ENTER_WINDOW in icon part of wxSearchCtrl too (#24245).
 
 wxMSW:
 

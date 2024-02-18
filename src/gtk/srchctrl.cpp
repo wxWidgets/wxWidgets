@@ -20,6 +20,7 @@
 
 #include "wx/utils.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/event.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
 
@@ -91,6 +92,28 @@ wx_gtk_icon_press(GtkEntry* WXUNUSED(entry),
         event.SetEventObject(ctrl);
         ctrl->HandleWindowEvent(event);
     }
+}
+
+static gboolean
+wx_gtk_entry_event(GtkEntry* WXUNUSED(entry),
+                   GdkEvent* event,
+                   wxSearchCtrl* ctrl)
+{
+    if ( event->type == GDK_MOTION_NOTIFY )
+    {
+        // GtkEntry "event" signal handler ignores motion events happening over
+        // inactive icons, but we want to notify the window about the mouse
+        // entering it when they happen.
+        if ( wxGTKImpl::SetWindowUnderMouse(ctrl) )
+        {
+            wxMouseEvent mouseEvent(wxEVT_ENTER_WINDOW);
+            wxGTKImpl::InitMouseEvent(ctrl, mouseEvent, (GdkEventMotion*)event);
+
+            ctrl->GTKProcessEvent(mouseEvent);
+        }
+    }
+
+    return FALSE;
 }
 
 }
@@ -209,6 +232,8 @@ void wxSearchCtrl::GTKCreateSearchEntryWidget()
     }
 
     g_signal_connect(m_entry, "icon-press", G_CALLBACK(wx_gtk_icon_press), this);
+
+    g_signal_connect(m_entry, "event", G_CALLBACK(wx_gtk_entry_event), this);
 }
 
 GtkEditable *wxSearchCtrl::GetEditable() const
