@@ -74,6 +74,15 @@ public:
         m_style = data.m_style;
     }
 
+    void DoSetStipple(const wxBitmap& stipple)
+    {
+        m_qtBrush.setTexture(*stipple.GetHandle());
+        if (stipple.GetMask() != nullptr)
+            m_style = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
+        else
+            m_style = wxBRUSHSTYLE_STIPPLE;
+    }
+
     bool operator == (const wxBrushRefData& data) const
     {
         return m_qtBrush == data.m_qtBrush;
@@ -113,11 +122,8 @@ wxBrush::wxBrush(const wxColour& col, int style)
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
-    if (stipple.GetMask() != nullptr)
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
-    else
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
+
+    static_cast<wxBrushRefData*>(m_refData)->DoSetStipple(stipple);
 }
 
 
@@ -143,12 +149,8 @@ void wxBrush::SetStyle(wxBrushStyle style)
 void wxBrush::SetStipple(const wxBitmap& stipple)
 {
     AllocExclusive();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
 
-    if (stipple.GetMask() != nullptr)
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
-    else
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
+    static_cast<wxBrushRefData*>(m_refData)->DoSetStipple(stipple);
 }
 
 
