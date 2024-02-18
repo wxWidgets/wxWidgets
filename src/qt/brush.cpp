@@ -13,6 +13,7 @@
 #include "wx/qt/private/utils.h"
 #include "wx/bitmap.h"
 
+#include <QtGui/QBitmap>
 #include <QtGui/QBrush>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject);
@@ -76,11 +77,34 @@ public:
 
     void DoSetStipple(const wxBitmap& stipple)
     {
-        m_qtBrush.setTexture(*stipple.GetHandle());
-        if (stipple.GetMask() != nullptr)
-            m_style = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
+        m_style = wxBRUSHSTYLE_STIPPLE;
+
+        if ( !stipple.GetMask() && stipple.GetDepth() == 32 )
+        {
+            m_qtBrush.setTextureImage(stipple.GetHandle()->toImage());
+        }
         else
-            m_style = wxBRUSHSTYLE_STIPPLE;
+        {
+            if ( stipple.GetMask() || stipple.GetDepth() == 1 )
+            {
+                auto pixmap = stipple.GetMask() ? stipple.GetMask()->GetBitmap().GetHandle()
+                                                : stipple.GetHandle();
+                m_qtBrush.setTexture(*pixmap);
+                m_style = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
+            }
+            else
+            {
+                m_qtBrush.setTexture(*stipple.GetHandle());
+
+                // Note: This code used to be in wxQtDCImpl::SetBrush().
+                //       But, do we really need to do it ?
+
+                //Don't use the mask
+                QPixmap p = m_qtBrush.texture();
+                p.setMask(QBitmap());
+                m_qtBrush.setTexture(p);
+            }
+        }
     }
 
     bool operator == (const wxBrushRefData& data) const

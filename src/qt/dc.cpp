@@ -194,26 +194,10 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
     if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE)
     {
         // Use a monochrome mask: use foreground color for the mask
-        QBrush b(brush.GetHandle());
-        b.setColor(m_textForegroundColour.GetQColor());
-        b.setTexture(b.texture().mask());
-        m_qtPainter->setBrush(b);
+        m_brush.SetColour(m_textForegroundColour);
     }
-    else if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE)
-    {
-        //Don't use the mask
-        QBrush b(brush.GetHandle());
 
-        QPixmap p = b.texture();
-        p.setMask(QBitmap());
-        b.setTexture(p);
-
-        m_qtPainter->setBrush(b);
-    }
-    else
-    {
-        m_qtPainter->setBrush(brush.GetHandle());
-    }
+    m_qtPainter->setBrush(m_brush.GetHandle());
 
     ApplyRasterColourOp();
 }
