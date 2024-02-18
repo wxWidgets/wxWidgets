@@ -15,7 +15,7 @@
 #if wxUSE_DATAVIEWCTRL
 
 #include "wx/dataview.h"
-#include <map>
+#include "wx/vector.h"
 
 // ----------------------------------------------------------------------------
 // String constants used by wxPersistentDataViewCtrl.
@@ -95,8 +95,8 @@ public:
 
     virtual bool Restore() override
     {
-        std::map<int, wxDataViewColumn*> order;
         wxDataViewCtrl* const control = Get();
+        wxVector<wxDataViewColumn*> order(control->GetColumnCount());
 
         for ( unsigned int col = 0; col < control->GetColumnCount(); col++ )
         {
@@ -117,21 +117,33 @@ public:
             if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_WIDTH), &width) )
                 column->SetWidth(width);
 
-            // Retrieve column's view position.
+            // Retrieve column's view positions.
             int pos;
             if ( RestoreValue(columnPrefix + wxASCII_STR(wxPERSIST_DVC_POS), &pos) )
-                order.emplace(pos, column);
+            {
+                if ( pos >= 0 && static_cast<unsigned int>(pos) < order.size() && !order[pos] )
+                    order[pos] = column;
+            }
         }
 
-        // Restore columns' position.
-        int new_pos = 0; // do not trust saved values from registry
-        for ( auto &i: order ) {
-            auto column = i.second;
-            auto pos = control->GetColumnPosition(column);
-            if ( pos != new_pos && control->DeleteColumn(column) ) {
-                control->InsertColumn(new_pos, column); // wxASSERT(pos > new_pos);
+        // Verify columns' ordering data.
+        for ( auto column: order )
+        {
+            if ( !column )
+            {
+                order.clear(); // do not restore positions
+                break;
             }
-            ++new_pos;
+        }
+
+        // Restore columns' positions.
+        for ( auto i = 0U; i < order.size(); ++i )
+        {
+            auto column = order[i];
+            auto pos = control->GetColumnPosition(column);
+            if ( i != static_cast<unsigned int>(pos) && control->DeleteColumn(column) ) {
+                control->InsertColumn(i, column);
+            }
         }
 
         // Restore the sort key and order if there is a valid model and sort
