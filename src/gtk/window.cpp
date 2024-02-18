@@ -234,6 +234,23 @@ static wxWindowGTK *gs_deferredFocusOut = nullptr;
 GdkEvent    *g_lastMouseEvent = nullptr;
 int          g_lastButtonNumber = 0;
 
+static wxWindowGTK* g_windowUnderMouse = nullptr;
+
+namespace wxGTKImpl
+{
+
+bool SetWindowUnderMouse(wxWindowGTK* win)
+{
+    if ( g_windowUnderMouse == win )
+        return false;
+
+    g_windowUnderMouse = win;
+
+    return true;
+}
+
+} // namespace wxGTKImpl
+
 #ifdef wxHAS_XKB
 namespace
 {
@@ -2251,6 +2268,26 @@ gtk_window_enter_callback( GtkWidget* widget,
         return FALSE;
     }
 
+    if ( g_windowUnderMouse == win )
+    {
+        // This can happen if the enter event was generated from another
+        // callback, as is the case for wxSearchCtrl, for example.
+        wxLogTrace(TRACE_MOUSE, "Reentering window %s", wxDumpWindow(win));
+        return FALSE;
+    }
+
+    if ( g_windowUnderMouse )
+    {
+        // We must not have got the leave event for the previous window, so
+        // generate it now -- better late than never.
+        wxMouseEvent event( wxEVT_LEAVE_WINDOW );
+        InitMouseEvent(g_windowUnderMouse, event, gdk_event);
+
+        (void)g_windowUnderMouse->GTKProcessEvent(event);
+    }
+
+    g_windowUnderMouse = win;
+
     wxMouseEvent event( wxEVT_ENTER_WINDOW );
     InitMouseEvent(win, event, gdk_event);
 
@@ -2284,6 +2321,9 @@ gtk_window_leave_callback( GtkWidget* widget,
         wxLogTrace(TRACE_MOUSE, "Ignore event with mode %d", gdk_event->mode);
         return FALSE;
     }
+
+    if ( win == g_windowUnderMouse )
+        g_windowUnderMouse = nullptr;
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
     InitMouseEvent(win, event, gdk_event);
@@ -2913,6 +2953,9 @@ wxWindowGTK::~wxWindowGTK()
     // throw exceptions from their assert handler, so don't assert here.
     if ( g_captureWindow == this )
         g_captureWindow = nullptr;
+
+    if ( g_windowUnderMouse == this )
+        g_windowUnderMouse = nullptr;
 
     if (m_wxwindow)
     {
