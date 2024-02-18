@@ -1669,35 +1669,19 @@ bool wxWindowGTK::GTKShouldIgnoreEvent() const
     return g_blockEventsOnDrag;
 }
 
-int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny* WXUNUSED(event)) const
+// Some callbacks check for just g_blockEventsOnDrag but others check for both
+// it and g_blockEventsOnScroll. It's not really clear why, but define a helper
+// function performing the latter check too for now to avoid changing the
+// behaviour of the existing code.
+namespace
 {
-    if (g_blockEventsOnDrag)
-        return TRUE;
-    if (g_blockEventsOnScroll)
-        return TRUE;
 
-    return -1;
+bool AreGTKEventsBlocked()
+{
+    return g_blockEventsOnDrag || g_blockEventsOnScroll;
 }
 
-// overloads for all GDK event types we use here: we need to have this as
-// GdkEventXXX can't be implicitly cast to GdkEventAny even if it, in fact,
-// derives from it in the sense that the structs have the same layout
-#define wxDEFINE_COMMON_PROLOGUE_OVERLOAD(T)                                  \
-    static int wxGtkCallbackCommonPrologue(T *event, wxWindowGTK *win)        \
-    {                                                                         \
-        return win->GTKCallbackCommonPrologue((GdkEventAny *)event);          \
-    }
-
-wxDEFINE_COMMON_PROLOGUE_OVERLOAD(GdkEventButton)
-wxDEFINE_COMMON_PROLOGUE_OVERLOAD(GdkEventMotion)
-wxDEFINE_COMMON_PROLOGUE_OVERLOAD(GdkEventCrossing)
-
-#undef wxDEFINE_COMMON_PROLOGUE_OVERLOAD
-
-#define wxCOMMON_CALLBACK_PROLOGUE(event, win)                                \
-    const int rc = wxGtkCallbackCommonPrologue(event, win);                   \
-    if ( rc != -1 )                                                           \
-        return rc
+} // anonymous namespace
 
 // all event handlers must have C linkage as they're called from GTK+ C code
 extern "C"
@@ -1721,7 +1705,8 @@ gtk_window_button_press_callback( GtkWidget* WXUNUSED_IN_GTK3(widget),
 
     wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
 
-    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
+    if ( AreGTKEventsBlocked() )
+        return FALSE;
 
     g_lastButtonNumber = gdk_event->button;
 
@@ -1855,7 +1840,8 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 {
     wxPROCESS_EVENT_ONCE(GdkEventButton, gdk_event);
 
-    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
+    if ( AreGTKEventsBlocked() )
+        return FALSE;
 
     g_lastButtonNumber = 0;
 
@@ -1957,7 +1943,8 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
 {
     wxPROCESS_EVENT_ONCE(GdkEventMotion, gdk_event);
 
-    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
+    if ( AreGTKEventsBlocked() )
+        return FALSE;
 
     g_lastMouseEvent = (GdkEvent*) gdk_event;
 
@@ -2254,7 +2241,8 @@ gtk_window_enter_callback( GtkWidget* widget,
     wxLogTrace(TRACE_MOUSE, "Window enter in %s (window %p) for window %p",
                wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
 
-    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
+    if ( AreGTKEventsBlocked() )
+        return FALSE;
 
     // Event was emitted after a grab
     if (gdk_event->mode != GDK_CROSSING_NORMAL)
@@ -2284,7 +2272,8 @@ gtk_window_leave_callback( GtkWidget* widget,
     wxLogTrace(TRACE_MOUSE, "Window leave in %s (window %p) for window %p",
                wxDumpWindow(win), gtk_widget_get_window(widget), gdk_event->window);
 
-    wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
+    if ( AreGTKEventsBlocked() )
+        return FALSE;
 
     if (win->m_needCursorReset)
         win->GTKUpdateCursor();
