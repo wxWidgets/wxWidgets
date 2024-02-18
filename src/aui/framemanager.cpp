@@ -79,10 +79,12 @@ const int auiToolBarLayer = 10;
 
 static wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByte a)
 {
-    unsigned char data[] = { r,g,b, 0,0,0, r,g,b };
-    unsigned char alpha[] = { a, 128, a };
+    const unsigned char c = wxSystemSettings::GetAppearance().IsDark() ? 220 : 5;
 
-    wxImage img(1,3,data,true);
+    unsigned char data[] = { r,g,b, r,g,b, c,c,c, c,c,c };
+    unsigned char alpha[] = { a, a, 200, 200 };
+
+    wxImage img(1,4,data,true);
     img.SetAlpha(alpha,true);
     return wxBitmap(img);
 }
