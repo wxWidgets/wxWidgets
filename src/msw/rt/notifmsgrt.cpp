@@ -418,13 +418,31 @@ wxString wxToastNotifMsgImpl::ms_appId;
 wxCOMPtr<IToastNotificationManagerStatics> wxToastNotifMsgImpl::ms_toastMgr;
 
 HRESULT wxToastEventHandler::Invoke(
-    IToastNotification *WXUNUSED(sender),
-    IInspectable *WXUNUSED(args))
+    IToastNotification *sender,
+    IInspectable *args)
 {
     if ( m_impl )
     {
-        wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_CLICK);
-        m_impl->ProcessNotificationEvent(evt);
+        IToastDismissedEventArgs *dea = nullptr;
+        IToastFailedEventArgs *fea = nullptr;
+
+        if ( SUCCEEDED(args->QueryInterface(__uuidof(IToastDismissedEventArgs), (void**)&dea)) )
+        {
+            // FIXME: We have for some unknown reason ended up in this function even though
+            // args is really a IToastDismissedEventArgs*. Call the actual implementation
+            // we wanted.
+            return Invoke(sender, dea);
+        }
+        else if ( SUCCEEDED(args->QueryInterface(__uuidof(IToastFailedEventArgs), (void**)&fea)) )
+        {
+            // FIXME: Same as above.
+            return Invoke(sender, fea);
+        }
+        else
+        {
+            wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_CLICK);
+            m_impl->ProcessNotificationEvent(evt);
+        }
     }
 
     return S_OK;
