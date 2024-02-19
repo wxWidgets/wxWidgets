@@ -312,15 +312,33 @@ public:
         // Values according to the OpenDesktop specification at:
         // https://developer.gnome.org/notification-spec/
 
+        auto reason = wxNotificationMessage::DismissalReason::Unknown;
         switch (closeReason)
         {
-            case 1: // Expired
-            case 2: // The notification was dismissed by the user.
+            case 1: // "The notification expired."
+                reason = wxNotificationMessage::DismissalReason::TimedOut;
+                break;
+            case 2: // "The notification was dismissed by the user."
+                reason = wxNotificationMessage::DismissalReason::ByUser;
+                break;
+            case 3: // "The notification was closed by a call to CloseNotification."
+                reason = wxNotificationMessage::DismissalReason::ByApp;
+                break;
+        }
+
+        switch (reason)
+        {
+            case wxNotificationMessage::DismissalReason::TimedOut:
+            case wxNotificationMessage::DismissalReason::ByUser:
             {
                 wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_DISMISSED);
+                evt.SetInt(static_cast<int>(reason));
                 ProcessNotificationEvent(evt);
                 break;
             }
+            case wxNotificationMessage::DismissalReason::ByApp:
+            case wxNotificationMessage::DismissalReason::Unknown:
+                break;
         }
 
     }

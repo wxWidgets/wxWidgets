@@ -214,6 +214,7 @@ void wxBalloonNotifMsgImpl::OnIconDismiss(wxTaskBarIconEvent& WXUNUSED(event))
 void wxBalloonNotifMsgImpl::OnTimeout(wxTaskBarIconEvent& WXUNUSED(event))
 {
     wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_DISMISSED);
+    evt.SetInt(static_cast<int>(wxNotificationMessage::DismissalReason::TimedOut));
     ProcessNotificationEvent(evt);
 
     OnIconHidden();
@@ -330,6 +331,7 @@ wxBalloonNotifMsgImpl::Show(int timeout)
 bool wxBalloonNotifMsgImpl::Close()
 {
     wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_DISMISSED);
+    evt.SetInt(static_cast<int>(wxNotificationMessage::DismissalReason::ByUser));
     ProcessNotificationEvent(evt);
 
     OnIconHidden();

@@ -81,6 +81,15 @@ public:
         Timeout_Never = 0   // notification will never time out
     };
 
+    // reasons for dismissal, posted with wxEVT_NOTIFICATION_MESSAGE_DISMISSED events
+    enum class DismissalReason
+    {
+        Unknown,
+        ByUser,
+        ByApp,
+        TimedOut
+    };
+
     // show the notification to the user and hides it after timeout seconds
     // pass (special values Timeout_Auto and Timeout_Never can be used)
     //
