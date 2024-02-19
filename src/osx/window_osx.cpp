@@ -265,7 +265,7 @@ void wxWindowMac::MacSetClipChildren()
 {
     m_clipChildren = true ;
     if ( m_peer )
-        m_peer->UseClippingView();
+        m_peer->UseClippingView(false);
 }
 
 WXWidget wxWindowMac::GetHandle() const
@@ -394,7 +394,7 @@ bool wxWindowMac::Create(wxWindowMac *parent,
         SetPeer(wxWidgetImpl::CreateUserPane( this, parent, id, pos, size , style, GetExtraStyle() ));
         MacPostControlCreate(pos, size) ;
         if ( m_clipChildren )
-            m_peer->UseClippingView();
+            m_peer->UseClippingView(false);
     }
 
     wxWindowCreateEvent event((wxWindow*)this);
@@ -2715,7 +2715,7 @@ void wxWidgetImpl::AdjustClippingView(wxScrollBar* WXUNUSED(horizontal), wxScrol
 {
 }
 
-void wxWidgetImpl::UseClippingView()
+void wxWidgetImpl::UseClippingView(bool WXUNUSED(forceClippingViewCreation))
 {
 }
 
