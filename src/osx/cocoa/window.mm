@@ -4079,16 +4079,23 @@ void wxWidgetCocoaImpl::AdjustClippingView(wxScrollBar* horizontal, wxScrollBar*
 
 void wxWidgetCocoaImpl::UseClippingView()
 {
-   wxWindow* peer = m_wxPeer;
-
-    if ( peer && m_osxClipView == nil)
+// starting from Sonoma child windows are bleeding through under the scrollbar
+// use native scrollviews therefore
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_14_0
+    if ( WX_IS_MACOS_AVAILABLE(14, 0) )
     {
-        m_osxClipView = [[wxNSClipView alloc] initWithFrame: m_osxView.bounds];
-        [(NSClipView*)m_osxClipView setDrawsBackground: NO];
-        [m_osxView addSubview:m_osxClipView];
+        wxWindow* peer = m_wxPeer;
 
-        // TODO check for additional subwindows which might have to be moved to the clip view ?
+        if ( peer && m_osxClipView == nil)
+        {
+            m_osxClipView = [[wxNSClipView alloc] initWithFrame: m_osxView.bounds];
+            [(NSClipView*)m_osxClipView setDrawsBackground: NO];
+            [m_osxView addSubview:m_osxClipView];
+
+            // TODO check for additional subwindows which might have to be moved to the clip view ?
+        }
     }
+#endif
 }
 
 

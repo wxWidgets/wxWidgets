@@ -2112,40 +2112,40 @@ bool wxWindowMac::MacIsChildOfClientArea( const wxWindow* child ) const
 void wxWindowMac::MacRepositionScrollBars()
 {
 #if wxUSE_SCROLLBAR
-    if ( !m_hScrollBar && !m_vScrollBar )
-        return ;
-
-    int scrlsize = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
-    int adjust = MacHasScrollBarCorner() ? scrlsize - 1 : 0 ;
-
-    // get real client area
-    int width, height ;
-    GetSize( &width , &height );
-
-    width -= MacGetLeftBorderSize() + MacGetRightBorderSize();
-    height -= MacGetTopBorderSize() + MacGetBottomBorderSize();
-
-    wxPoint vPoint( width - scrlsize, 0 ) ;
-    wxSize vSize( scrlsize, height - adjust ) ;
-    wxPoint hPoint( 0 , height - scrlsize ) ;
-    wxSize hSize( width - adjust, scrlsize ) ;
-
-    if ( m_vScrollBar )
-        m_vScrollBar->SetSize( vPoint.x , vPoint.y, vSize.x, vSize.y , wxSIZE_ALLOW_MINUS_ONE );
-    if ( m_hScrollBar )
-        m_hScrollBar->SetSize( hPoint.x , hPoint.y, hSize.x, hSize.y, wxSIZE_ALLOW_MINUS_ONE );
-    if ( m_growBox )
+    if ( m_hScrollBar || m_vScrollBar )
     {
-        if ( MacHasScrollBarCorner() )
+        int scrlsize = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
+        int adjust = MacHasScrollBarCorner() ? scrlsize - 1 : 0 ;
+
+        // get real client area
+        int width, height ;
+        GetSize( &width , &height );
+
+        width -= MacGetLeftBorderSize() + MacGetRightBorderSize();
+        height -= MacGetTopBorderSize() + MacGetBottomBorderSize();
+
+        wxPoint vPoint( width - scrlsize, 0 ) ;
+        wxSize vSize( scrlsize, height - adjust ) ;
+        wxPoint hPoint( 0 , height - scrlsize ) ;
+        wxSize hSize( width - adjust, scrlsize ) ;
+
+        if ( m_vScrollBar )
+            m_vScrollBar->SetSize( vPoint.x , vPoint.y, vSize.x, vSize.y , wxSIZE_ALLOW_MINUS_ONE );
+        if ( m_hScrollBar )
+            m_hScrollBar->SetSize( hPoint.x , hPoint.y, hSize.x, hSize.y, wxSIZE_ALLOW_MINUS_ONE );
+        if ( m_growBox )
         {
-            m_growBox->SetSize( width - scrlsize, height - scrlsize, wxDefaultCoord, wxDefaultCoord, wxSIZE_USE_EXISTING );
-            if ( !m_growBox->IsShown() )
-                m_growBox->Show();
-        }
-        else
-        {
-            if ( m_growBox->IsShown() )
-                m_growBox->Hide();
+            if ( MacHasScrollBarCorner() )
+            {
+                m_growBox->SetSize( width - scrlsize, height - scrlsize, wxDefaultCoord, wxDefaultCoord, wxSIZE_USE_EXISTING );
+                if ( !m_growBox->IsShown() )
+                    m_growBox->Show();
+            }
+            else
+            {
+                if ( m_growBox->IsShown() )
+                    m_growBox->Hide();
+            }
         }
     }
     m_peer->AdjustClippingView(m_hScrollBar, m_vScrollBar);
