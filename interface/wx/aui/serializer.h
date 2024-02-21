@@ -61,6 +61,11 @@ public:
         This function will be called for all panes and must be implemented to
         save their data in a format from which it can be restored later using a
         matching wxAuiDeserializer implementation.
+
+        Note that all sizes and positions in @a pane are using DIPs, i.e.
+        resolution-independent pixels, when it is passed to this function, so
+        it does _not_ need to perform any scaling itself to ensure that the
+        stored values are restored correctly if the resolution changes.
      */
     virtual void SavePane(const wxAuiPaneInfo& pane) = 0;
 
@@ -84,6 +89,9 @@ public:
         This function will be called for all docks and must be implemented to
         save their data in a format from which it can be restored later using a
         matching wxAuiDeserializer implementation.
+
+        As with SavePane(), the coordinates in @a dock are always in DIPs and
+        this function does _not_ need to perform any scaling itself.
      */
     virtual void SaveDock(const wxAuiDockInfo& dock) = 0;
 
@@ -148,6 +156,10 @@ public:
         Unlike the serializer function, this one is called only once and should
         return all the panes in the layout.
 
+        Just as the serializer function, this one doesn't need to perform any
+        scaling itself as this will be done, if necessary, by wxAuiManager
+        itself.
+
         If some pane in the returned vector doesn't already exist, i.e. there
         is no pane with the matching name, CreatePaneWindow() is called to
         allow creating it on the fly.
@@ -168,6 +180,9 @@ public:
 
     /**
         Load information about all the docks previously saved with SaveDock().
+
+        As with LoadPanes(), this function doesn't need to perform any scaling
+        itself.
      */
     virtual std::vector<wxAuiDockInfo> LoadDocks() = 0;
 
