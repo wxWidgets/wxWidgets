@@ -188,8 +188,8 @@ bool MyApp::OnInit()
     ::wxInitAllImageHandlers();
 
     // Fill in the application information fields before creating wxConfig.
-    SetVendorName("wxWidgets");
-    SetAppName("wx_docview_sample");
+    SetVendorName("wxWidgets_Samples");
+    SetAppName("docview");
     SetAppDisplayName("wxWidgets DocView Sample");
 
     //// Create a document manager
