@@ -1341,6 +1341,45 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
     return true;
 }
 
+// These helper functions are used by SaveLayout() and LoadLayout() below, as
+// we save the panes and docks geometries using DIPs on all platforms in order
+// to ensure that they're restored correctly if the display DPI changes between
+// saving and restoring the layout even on the platforms not using DIPs.
+namespace
+{
+
+void MakeDIP(wxWindow* w, wxPoint& pos)
+{
+    pos = w->ToDIP(pos);
+}
+
+void MakeDIP(wxWindow* w, wxSize& size)
+{
+    size = w->ToDIP(size);
+}
+
+void MakeDIP(wxWindow* w, wxRect& rect)
+{
+    rect = wxRect{w->ToDIP(rect.GetPosition()), w->ToDIP(rect.GetSize())};
+}
+
+void MakeLogical(wxWindow* w, wxPoint& pos)
+{
+    pos = w->FromDIP(pos);
+}
+
+void MakeLogical(wxWindow* w, wxSize& size)
+{
+    size = w->FromDIP(size);
+}
+
+void MakeLogical(wxWindow* w, wxRect& rect)
+{
+    rect = wxRect{w->FromDIP(rect.GetPosition()), w->FromDIP(rect.GetSize())};
+}
+
+} // anonymous namespace
+
 void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
 {
     serializer.BeforeSave();
@@ -1350,7 +1389,20 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
         serializer.BeforeSavePanes();
 
         for ( const auto& pane : m_panes )
-            serializer.SavePane(pane);
+        {
+            auto paneDIP = pane;
+
+            MakeDIP(m_frame, paneDIP.best_size);
+            MakeDIP(m_frame, paneDIP.min_size);
+            MakeDIP(m_frame, paneDIP.max_size);
+
+            MakeDIP(m_frame, paneDIP.floating_pos);
+            MakeDIP(m_frame, paneDIP.floating_size);
+
+            MakeDIP(m_frame, paneDIP.rect);
+
+            serializer.SavePane(paneDIP);
+        }
 
         serializer.AfterSavePanes();
     }
@@ -1360,7 +1412,13 @@ void wxAuiManager::SaveLayout(wxAuiSerializer& serializer) const
         serializer.BeforeSaveDocks();
 
         for ( const auto& dock : m_docks )
-            serializer.SaveDock(dock);
+        {
+            auto dockDIP = dock;
+
+            MakeDIP(m_frame, dockDIP.rect);
+
+            serializer.SaveDock(dockDIP);
+        }
 
         serializer.AfterSaveDocks();
     }
@@ -1394,8 +1452,19 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
     };
     std::vector<NewPane> newPanes;
 
-    for ( const auto& pane : deserializer.LoadPanes() )
+    for ( const auto& paneDIP : deserializer.LoadPanes() )
     {
+        auto pane = paneDIP;
+
+        MakeLogical(m_frame, pane.best_size);
+        MakeLogical(m_frame, pane.min_size);
+        MakeLogical(m_frame, pane.max_size);
+
+        MakeLogical(m_frame, pane.floating_pos);
+        MakeLogical(m_frame, pane.floating_size);
+
+        MakeLogical(m_frame, pane.rect);
+
         if ( pane.IsMaximized() )
             hasMaximized = true;
 
@@ -1423,8 +1492,12 @@ void wxAuiManager::LoadLayout(wxAuiDeserializer& deserializer)
     }
 
     wxAuiDockInfoArray docks;
-    for ( const auto& dock : deserializer.LoadDocks() )
+    for ( const auto& dockDIP : deserializer.LoadDocks() )
     {
+        auto dock = dockDIP;
+
+        MakeLogical(m_frame, dock.rect);
+
         docks.push_back(dock);
     }
 
