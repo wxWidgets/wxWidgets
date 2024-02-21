@@ -368,7 +368,7 @@ public :
     // scrolling views need a clip subview that acts as parent for native children
     // (except for the scollbars) which are children of the view itself
     virtual void        AdjustClippingView(wxScrollBar* horizontal, wxScrollBar* vertical);
-    virtual void        UseClippingView(bool forceClippingViewCreation);
+    virtual void        UseClippingView();
 
     // returns native view which acts as a parent for native children
     virtual WXWidget    GetContainer() const;
