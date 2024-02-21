@@ -126,14 +126,32 @@ if(UNIX AND NOT APPLE AND NOT WIN32 AND (WXX11 OR WXGTK2 OR (WXGTK AND wxHAVE_GD
 endif()
 
 if(WXQT)
-    set(QT_COMPONENTS Core Widgets Gui OpenGL Test)
+    set(QT_COMPONENTS Core Widgets Gui OpenGL OpenGLWidgets Test)
+
+    find_package(Qt6 COMPONENTS ${QT_COMPONENTS})
+    if (Qt6_FOUND)
+        set(QT_MAJOR_VERSION 6)
+
+        find_package(PkgConfig REQUIRED)
+
+        pkg_check_modules (GLIB2 REQUIRED glib-2.0)
+        include_directories(${GLIB2_INCLUDE_DIRS})
+
+        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS})
+        list(APPEND wxTOOLKIT_LIBRARIES ${GLIB_LIBRARIES})
+    else()
+        set(QT_COMPONENTS Core Widgets Gui OpenGL Test)
+
+        find_package(Qt5 5.15 REQUIRED COMPONENTS ${QT_COMPONENTS})
+        set(QT_MAJOR_VERSION 5)
+    endif()
+
     foreach(QT_COMPONENT ${QT_COMPONENTS})
-        find_package(Qt5 COMPONENTS ${QT_COMPONENT} REQUIRED)
-        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${Qt5${QT_COMPONENT}_INCLUDE_DIRS})
-        list(APPEND wxTOOLKIT_LIBRARIES ${Qt5${QT_COMPONENT}_LIBRARIES})
-        list(APPEND wxTOOLKIT_DEFINITIONS ${Qt5${QT_COMPONENT}_COMPILE_DEFINITIONS})
+        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${Qt${wxQT_MAJOR_VERSION}${QT_COMPONENT}_INCLUDE_DIRS})
+        list(APPEND wxTOOLKIT_LIBRARIES ${Qt${QT_MAJOR_VERSION}${QT_COMPONENT}_LIBRARIES})
+        list(APPEND wxTOOLKIT_DEFINITIONS ${Qt${QT_MAJOR_VERSION}${QT_COMPONENT}_COMPILE_DEFINITIONS})
     endforeach()
-    set(wxTOOLKIT_VERSION ${Qt5Core_VERSION})
+    set(wxTOOLKIT_VERSION ${Qt${QT_MAJOR_VERSION}Core_VERSION})
 endif()
 
 if(APPLE)

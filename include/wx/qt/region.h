@@ -9,9 +9,17 @@
 #ifndef _WX_QT_REGION_H_
 #define _WX_QT_REGION_H_
 
+#include <QtCore/QtConfig>
+
 class QRegion;
 class QRect;
+
+#if QT_VERSION_MAJOR >= 6
+template <typename T> class QList;
+template<typename T> using QVector = QList<T>;
+#else
 template<class T> class QVector;
+#endif
 
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {

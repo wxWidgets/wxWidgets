@@ -22,6 +22,7 @@ class QWidget;
 
 class QCloseEvent;
 class QContextMenuEvent;
+class QEnterEvent;
 class QEvent;
 class QFocusEvent;
 class QKeyEvent;
@@ -158,7 +159,8 @@ public:
     virtual bool QtHandleWheelEvent  ( QWidget *handler, QWheelEvent *event );
     virtual bool QtHandleKeyEvent    ( QWidget *handler, QKeyEvent *event );
     virtual bool QtHandleMouseEvent  ( QWidget *handler, QMouseEvent *event );
-    virtual bool QtHandleEnterEvent  ( QWidget *handler, QEvent *event );
+    virtual bool QtHandleEnterEvent  ( QWidget *handler, QEnterEvent *event );
+    virtual bool QtHandleLeaveEvent  ( QWidget *handler, QEvent *event );
     virtual bool QtHandleMoveEvent   ( QWidget *handler, QMoveEvent *event );
     virtual bool QtHandleShowEvent   ( QWidget *handler, QEvent *event );
     virtual bool QtHandleChangeEvent ( QWidget *handler, QEvent *event );

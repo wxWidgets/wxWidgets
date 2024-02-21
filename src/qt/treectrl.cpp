@@ -32,12 +32,14 @@ struct TreeItemDataQt
 
     explicit TreeItemDataQt(wxTreeItemData* data) : data(data)
     {
+#if QT_VERSION_MAJOR < 6
         static bool s_registered = false;
         if ( !s_registered )
         {
             qRegisterMetaTypeStreamOperators<TreeItemDataQt>("TreeItemDataQt");
             s_registered = true;
         }
+#endif
     }
 
     wxTreeItemData *getData() const

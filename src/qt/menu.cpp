@@ -14,6 +14,7 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/stockitem.h"
 
+#include <QActionGroup>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 

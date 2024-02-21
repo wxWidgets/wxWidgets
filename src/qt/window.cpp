@@ -18,7 +18,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QShortcut>
+#include <QShortcut>
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -1468,8 +1468,24 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
     e.SetPosition( wxQtConvertPoint( qPt ) );
     e.SetEventObject(this);
 
+#if QT_VERSION_MAJOR >= 6
+    QPoint angleDelta = event->angleDelta();
+
+    if (std::abs(angleDelta.y()) >= std::abs(angleDelta.x()))
+    {
+        e.m_wheelAxis = wxMOUSE_WHEEL_VERTICAL;
+        e.m_wheelRotation = angleDelta.y();
+    }
+    else
+    {
+        e.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+        e.m_wheelRotation = angleDelta.x();
+    }
+#else
     e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
     e.m_wheelRotation = event->delta();
+#endif
+
     e.m_linesPerAction = 3;
     e.m_wheelDelta = 120;
 
@@ -1710,9 +1726,25 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
     return handled;
 }
 
-bool wxWindowQt::QtHandleEnterEvent ( QWidget *handler, QEvent *event )
+bool wxWindowQt::QtHandleEnterEvent ( QWidget *handler, QEnterEvent *WXUNUSED( event ) )
 {
-    wxMouseEvent e( event->type() == QEvent::Enter ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW );
+    wxMouseEvent e( wxEVT_ENTER_WINDOW );
+    e.m_clickCount = 0;
+    e.SetPosition( wxQtConvertPoint( handler->mapFromGlobal( QCursor::pos() ) ) );
+    e.SetEventObject(this);
+
+    // Mouse buttons
+    wxQtFillMouseButtons( QApplication::mouseButtons(), &e );
+
+    // Keyboard modifiers
+    wxQtFillKeyboardModifiers( QApplication::keyboardModifiers(), &e );
+
+    return ProcessWindowEvent( e );
+}
+
+bool wxWindowQt::QtHandleLeaveEvent ( QWidget *handler, QEvent *WXUNUSED( event ) )
+{
+    wxMouseEvent e( wxEVT_LEAVE_WINDOW );
     e.m_clickCount = 0;
     e.SetPosition( wxQtConvertPoint( handler->mapFromGlobal( QCursor::pos() ) ) );
     e.SetEventObject(this);

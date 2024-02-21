@@ -124,10 +124,31 @@ int wxQtEventLoopBase::DoRun()
     return ret;
 }
 
+#if QT_VERSION_MAJOR >= 6
+#include <glib.h>
+#endif
+
 bool wxQtEventLoopBase::Pending() const
 {
-    QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
+#if QT_VERSION_MAJOR >= 6
+#if !defined(QT_NO_GLIB) && !defined(Q_OS_WIN)
+    if (qEnvironmentVariableIsEmpty("QT_NO_GLIB") /*&& QEventDispatcherGlib::versionSupported()*/)
+    {
+        // QPAEventDispatcherGlib
+        GMainContext *ctx = g_main_context_get_thread_default();
+
+        return g_main_context_pending(ctx);
+    }
+    else
+#endif
+    {
+        // QUnixEventDispatcherQPA
+        extern uint qGlobalPostedEventsCount(); // from qapplication.cpp
+        return qGlobalPostedEventsCount();
+    }
+#else
     return instance->hasPendingEvents();
+#endif
 }
 
 bool wxQtEventLoopBase::Dispatch()

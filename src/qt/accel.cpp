@@ -11,7 +11,8 @@
 #include "wx/accel.h"
 #include "wx/qt/private/converter.h"
 #include <QtCore/QVariant>
-#include <QtWidgets/QShortcut>
+#include <QShortcut>
+#include <QWidget>
 
 // ----------------------------------------------------------------------------
 // wxAccelRefData: the data used by wxAcceleratorTable

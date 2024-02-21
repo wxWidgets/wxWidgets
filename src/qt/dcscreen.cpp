@@ -12,7 +12,6 @@
 #include "wx/qt/dcscreen.h"
 
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
 #include <QtGui/QPainter>
 #include <QtGui/QPicture>
 #include <QtGui/QPixmap>
@@ -42,7 +41,15 @@ void wxScreenDCImpl::DoGetSize(int *width, int *height) const
 // defered allocation for blit
 QPixmap *wxScreenDCImpl::GetQPixmap()
 {
-    if ( !m_qtPixmap )
-        m_qtPixmap = new QPixmap(QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId()));
+    if (!m_qtPixmap)
+    {
+        WId winId = 0;
+
+#if QT_VERSION_MAJOR < 6
+        winId = QApplication::desktop()->winId();
+#endif
+
+        m_qtPixmap = new QPixmap(QApplication::primaryScreen()->grabWindow(winId));
+    }
     return m_qtPixmap;
 }

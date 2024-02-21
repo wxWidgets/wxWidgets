@@ -84,15 +84,15 @@ public:
         wxWindow::QtStoreWindowPointer( this, handler );
 
         // Handle QWidget destruction signal AFTER it gets deleted
-        QObject::connect( this, &QObject::destroyed, this,
-                          &wxQtEventSignalHandler::HandleDestroyedSignal );
+        // QObject::connect( this, &QObject::destroyed, this,
+        //                   &wxQtEventSignalHandler::HandleDestroyedSignal );
 
         Widget::setMouseTracking(true);
     }
 
-    void HandleDestroyedSignal()
-    {
-    }
+    // void HandleDestroyedSignal()
+    // {
+    // }
 
     virtual Handler *GetHandler() const override
     {
@@ -160,7 +160,7 @@ protected:
     //virtual void dropEvent ( QDropEvent * event ) { }
 
     //wxMouseEvent
-    virtual void enterEvent ( QEvent * event ) override
+    virtual void enterEvent ( QEnterEvent * event ) override
     {
         if ( !this->GetHandler() )
             return;
@@ -237,7 +237,7 @@ protected:
         if ( !this->GetHandler() )
             return;
 
-        if ( !this->GetHandler()->QtHandleEnterEvent(this, event) )
+        if ( !this->GetHandler()->QtHandleLeaveEvent(this, event) )
             Widget::leaveEvent(event);
         else
             event->accept();
