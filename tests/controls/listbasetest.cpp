@@ -179,12 +179,12 @@ void ListBaseTestCase::MultiSelect()
 {
 #if wxUSE_UIACTIONSIMULATOR
 
-#ifndef __WXMSW__
-    // FIXME: This test fails on Travis CI although works fine on
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    // FIXME: This test fails on GitHub CI under wxGTK2 although works fine on
     //        development machine, no idea why though!
     if ( IsAutomaticTest() )
         return;
-#endif // !__WXMSW__
+#endif // wxGTK2
 
     wxListCtrl* const list = GetList();
 
