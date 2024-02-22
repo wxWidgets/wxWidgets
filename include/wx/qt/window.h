@@ -10,6 +10,7 @@
 #define _WX_QT_WINDOW_H_
 
 #include <memory>
+#include <QtConfig>
 
 class QShortcut;
 template < class T > class QList;
