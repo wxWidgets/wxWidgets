@@ -34,7 +34,7 @@ public:
           wxQtSignalHandler(handler)
     {
         connect(this,
-                &QButtonGroup::buttonClicked,
+                static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
                 this, &wxQtButtonGroup::buttonClicked);
     }
 

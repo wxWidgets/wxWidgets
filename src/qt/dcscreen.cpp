@@ -17,6 +17,10 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QScreen>
 
+#if QT_VERSION_MAJOR < 6
+#include <QDesktopWidget>
+#endif
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxQtDCImpl);
 
 wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner )

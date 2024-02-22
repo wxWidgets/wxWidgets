@@ -160,7 +160,11 @@ protected:
     //virtual void dropEvent ( QDropEvent * event ) { }
 
     //wxMouseEvent
+#if QT_VERSION_MAJOR >= 6
     virtual void enterEvent ( QEnterEvent * event ) override
+#else
+    virtual void enterEvent ( QEvent * event ) override
+#endif
     {
         if ( !this->GetHandler() )
             return;

@@ -1726,7 +1726,11 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
     return handled;
 }
 
+#if QT_VERSION_MAJOR >= 6
 bool wxWindowQt::QtHandleEnterEvent ( QWidget *handler, QEnterEvent *WXUNUSED( event ) )
+#else
+bool wxWindowQt::QtHandleEnterEvent ( QWidget *handler, QEvent *WXUNUSED( event ) )
+#endif
 {
     wxMouseEvent e( wxEVT_ENTER_WINDOW );
     e.m_clickCount = 0;

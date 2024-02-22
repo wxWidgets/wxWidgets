@@ -72,7 +72,12 @@ public:
 private:
     void mouseReleaseEvent( QMouseEvent *event ) override;
     void mousePressEvent( QMouseEvent *event ) override;
+
+#if QT_VERSION_MAJOR >= 6
     void enterEvent( QEnterEvent *event ) override;
+#else
+    void enterEvent( QEvent *event ) override;
+#endif
 
     const wxWindowID m_toolId;
 };
@@ -95,7 +100,11 @@ void wxQtToolButton::mousePressEvent( QMouseEvent *event )
     }
 }
 
+#if QT_VERSION_MAJOR >= 6
 void wxQtToolButton::enterEvent( QEnterEvent *WXUNUSED(event) )
+#else
+void wxQtToolButton::enterEvent( QEvent *WXUNUSED(event) )
+#endif
 {
     GetToolBar()->OnMouseEnter( m_toolId );
 }

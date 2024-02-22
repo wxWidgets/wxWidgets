@@ -147,7 +147,7 @@ bool wxQtEventLoopBase::Pending() const
         return qGlobalPostedEventsCount();
     }
 #else
-    return instance->hasPendingEvents();
+    return QAbstractEventDispatcher::instance()->hasPendingEvents();
 #endif
 }
 
