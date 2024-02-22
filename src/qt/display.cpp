@@ -14,6 +14,10 @@
 #include <QScreen>
 #include "wx/qt/private/converter.h"
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
+#include <QDesktopWidget>
+#endif
+
 class wxDisplayImplQt : public wxDisplayImpl
 {
 public:
@@ -98,8 +102,12 @@ unsigned wxDisplayFactoryQt::GetCount()
 
 int wxDisplayFactoryQt::GetFromPoint(const wxPoint& pt)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QScreen *screen = QApplication::screenAt(wxQtConvertPoint(pt));
     return QApplication::screens().indexOf(screen);
+#else
+    return QApplication::desktop()->screenNumber( wxQtConvertPoint( pt ));
+#endif
 }
 
 //##############################################################################
