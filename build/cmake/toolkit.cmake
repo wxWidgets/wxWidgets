@@ -141,7 +141,7 @@ if(WXQT)
     else()
         set(QT_COMPONENTS Core Widgets Gui OpenGL Test)
 
-        find_package(Qt5 5.15 REQUIRED COMPONENTS ${QT_COMPONENTS})
+        find_package(Qt5 REQUIRED COMPONENTS ${QT_COMPONENTS})
         set(QT_MAJOR_VERSION 5)
     endif()
 
