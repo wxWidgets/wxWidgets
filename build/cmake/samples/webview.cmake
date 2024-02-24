@@ -20,7 +20,7 @@ if(wxUSE_WEBVIEW_CHROMIUM AND TARGET webviewsample)
         add_custom_command(
             TARGET webviewsample
             POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CEF_ROOT}/$<CONFIG> $<TARGET_FILE_DIR:webviewsample>
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CEF_ROOT}/Release $<TARGET_FILE_DIR:webviewsample>
             COMMAND ${CMAKE_COMMAND} -E copy_directory ${CEF_ROOT}/Resources $<TARGET_FILE_DIR:webviewsample>
             COMMENT "Copying webviewsample CEF resources..."
         )
@@ -38,7 +38,7 @@ if(wxUSE_WEBVIEW_CHROMIUM AND TARGET webviewsample)
             TARGET webviewsample
             POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "${CEF_ROOT}/$<CONFIG>/Chromium Embedded Framework.framework"
+                "${CEF_ROOT}/Release/Chromium Embedded Framework.framework"
                 "$<TARGET_FILE_DIR:webviewsample>/../Frameworks/Chromium Embedded Framework.framework"
         )
 

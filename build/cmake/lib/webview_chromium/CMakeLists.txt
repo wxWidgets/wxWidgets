@@ -86,16 +86,12 @@ endif()
 add_library(libcef SHARED IMPORTED GLOBAL)
 if(APPLE)
     set_target_properties(libcef PROPERTIES
-        IMPORTED_LOCATION_DEBUG "${CEF_ROOT}/Debug/Chromium Embedded Framework.framework/Chromium Embedded Framework"
-        IMPORTED_LOCATION_RELEASE "${CEF_ROOT}/Release/Chromium Embedded Framework.framework/Chromium Embedded Framework"
+        IMPORTED_LOCATION "${CEF_ROOT}/Release/Chromium Embedded Framework.framework/Chromium Embedded Framework"
     )
 else()
     set_target_properties(libcef PROPERTIES
-        IMPORTED_LOCATION ${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
-        IMPORTED_LOCATION_DEBUG ${CEF_ROOT}/Debug/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
-        IMPORTED_IMPLIB_DEBUG ${CEF_ROOT}/Debug/libcef${CMAKE_IMPORT_LIBRARY_SUFFIX}
-        IMPORTED_LOCATION_RELEASE ${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
-        IMPORTED_IMPLIB_RELEASE ${CEF_ROOT}/Release/libcef${CMAKE_IMPORT_LIBRARY_SUFFIX}
+        IMPORTED_LOCATION "${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        IMPORTED_IMPLIB "${CEF_ROOT}/Release/libcef${CMAKE_IMPORT_LIBRARY_SUFFIX}"
     )
 endif()
 
