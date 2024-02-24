@@ -70,8 +70,27 @@ if(NOT CEF_SHOW_RESULTS)
     set(CMAKE_MESSAGE_LOG_LEVEL ERROR)
 endif()
 
+# prevent libcef_dll_wrapper from creating only Release and Debug configs
+# in multi-configuration generators
+# variable_watch does not seem to be scoped, and we can't unset it, or replace it,
+# and we don't care if it is changed later, so use enable_guard
+# to stop the guard from working after libcef_dll_wrapper is added.
+set(enable_guard 1)
+macro(set_readonly VAR)
+    set(_${VAR}_ ${${VAR}})
+    variable_watch(${VAR} readonly_guard)
+endmacro()
+macro(readonly_guard VAR access value)
+    if (enable_guard AND "${access}" STREQUAL "MODIFIED_ACCESS" AND NOT "${value}" STREQUAL "${_${VAR}_}")
+        set(${VAR} ${_${VAR}_})
+        message(WARNING "Blocked changing variable '${VAR}' to '${value}', reset to '${${VAR}}'")
+    endif()
+endmacro()
+set_readonly(CMAKE_CONFIGURATION_TYPES)
+
 add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
 
+set(enable_guard 0)
 set(CMAKE_MESSAGE_LOG_LEVEL ${_saved_CMAKE_MESSAGE_LOG_LEVEL})
 
 set_target_properties(libcef_dll_wrapper PROPERTIES
