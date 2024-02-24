@@ -80,7 +80,7 @@ set_target_properties(libcef_dll_wrapper PROPERTIES
 )
 
 if(NOT MSVC)
-    set_target_properties(libcef_dll_wrapper PROPERTIES COMPILE_OPTIONS "-Wno-extra")
+    target_compile_options(libcef_dll_wrapper PRIVATE "-Wno-extra")
 endif()
 
 add_library(libcef SHARED IMPORTED GLOBAL)
