@@ -271,6 +271,7 @@ All (GUI):
 - Center labels in generic wxListCtrl correctly again (taler21, #24292).
 - Fix label display after editing it in generic wxListCtrl (taler21, #24311).
 - Improve multiple selection UI in generic wxListCtrl (taler21, #24332).
+- Fix item deselection in multi-selection generic wxListCtrl (taler21, #24312).
 
 wxGTK:
 
