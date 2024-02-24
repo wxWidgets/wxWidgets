@@ -102,6 +102,31 @@ if(NOT MSVC)
     target_compile_options(libcef_dll_wrapper PRIVATE "-Wno-extra")
 endif()
 
+# libcef_dll_wrapper only sets properties for Debug and Release.
+# Extract the release options/flags and apply them to RelWithDebInfo and MinSizeRel.
+macro(rls_flags property)
+    get_target_property(props libcef_dll_wrapper ${property})
+    string(FIND "${props}" "$<CONFIG:Release>:" index)
+    math(EXPR index "${index}+18")
+    string(SUBSTRING "${props}" ${index} -1 props)
+    string(FIND "${props}" ">" index)
+    string(SUBSTRING "${props}" 0 ${index} props)
+    if ("${property}" STREQUAL "COMPILE_DEFINITIONS")
+        target_compile_definitions(libcef_dll_wrapper PRIVATE
+            $<$<CONFIG:RelWithDebInfo>:${props}>
+            $<$<CONFIG:MinSizeRel>:${props}>
+        )
+    else()
+        target_compile_options(libcef_dll_wrapper PRIVATE
+            $<$<CONFIG:RelWithDebInfo>:${props}>
+            $<$<CONFIG:MinSizeRel>:${props}>
+        )
+    endif()
+endmacro()
+rls_flags(COMPILE_DEFINITIONS)
+rls_flags(COMPILE_OPTIONS)
+
+
 add_library(libcef SHARED IMPORTED GLOBAL)
 if(APPLE)
     set_target_properties(libcef PROPERTIES
