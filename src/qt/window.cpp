@@ -1385,6 +1385,12 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     // itself otherwise.
     const bool ok = m_qtPainter->begin( widget );
 
+    if (m_qtPainter->device()->depth() > 1)
+    {
+        m_qtPainter->setRenderHints(QPainter::Antialiasing,
+                                    true);
+    }
+
     if ( ok )
     {
         bool handled;
