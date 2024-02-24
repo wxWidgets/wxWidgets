@@ -11,6 +11,20 @@ include(../../source_groups.cmake)
 
 include(cef_version_info.cmake)
 
+set(KNOWN_CONFIGS "Debug;Release;RelWithDebInfo;MinSizeRel")
+if(CMAKE_CONFIGURATION_TYPES)
+    foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
+        if (NOT cfg IN_LIST KNOWN_CONFIGS)
+            message(WARNING "Unknown build configuration '${cfg}', this might cause issues with libcef_dll_wrapper")
+        endif()
+    endforeach()
+elseif(CMAKE_BUILD_TYPE)
+    if (NOT CMAKE_BUILD_TYPE IN_LIST KNOWN_CONFIGS)
+        message(WARNING "Unknown build configuration '${cfg}', this might cause issues with libcef_dll_wrapper")
+    endif()
+endif()
+
+
 find_path(CEF_ROOT
     NAMES libcef_dll
     HINTS
@@ -70,8 +84,27 @@ if(NOT CEF_SHOW_RESULTS)
     set(CMAKE_MESSAGE_LOG_LEVEL ERROR)
 endif()
 
+# prevent libcef_dll_wrapper from creating only Release and Debug configs
+# in multi-configuration generators
+# variable_watch does not seem to be scoped, and we can't unset it, or replace it,
+# and we don't care if it is changed later, so use enable_guard
+# to stop the guard from working after libcef_dll_wrapper is added.
+set(enable_guard 1)
+macro(set_readonly VAR)
+    set(_${VAR}_ ${${VAR}})
+    variable_watch(${VAR} readonly_guard)
+endmacro()
+macro(readonly_guard VAR access value)
+    if (enable_guard AND "${access}" STREQUAL "MODIFIED_ACCESS" AND NOT "${value}" STREQUAL "${_${VAR}_}")
+        set(${VAR} ${_${VAR}_})
+        message(WARNING "Blocked changing variable '${VAR}' to '${value}', reset to '${${VAR}}'")
+    endif()
+endmacro()
+set_readonly(CMAKE_CONFIGURATION_TYPES)
+
 add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
 
+set(enable_guard 0)
 set(CMAKE_MESSAGE_LOG_LEVEL ${_saved_CMAKE_MESSAGE_LOG_LEVEL})
 
 set_target_properties(libcef_dll_wrapper PROPERTIES
@@ -80,22 +113,43 @@ set_target_properties(libcef_dll_wrapper PROPERTIES
 )
 
 if(NOT MSVC)
-    set_target_properties(libcef_dll_wrapper PROPERTIES COMPILE_OPTIONS "-Wno-extra")
+    target_compile_options(libcef_dll_wrapper PRIVATE "-Wno-extra")
 endif()
+
+# libcef_dll_wrapper only sets properties for Debug and Release.
+# Extract the release options/flags and apply them to RelWithDebInfo and MinSizeRel.
+macro(rls_flags property)
+    get_target_property(props libcef_dll_wrapper ${property})
+    string(FIND "${props}" "$<CONFIG:Release>:" index)
+    math(EXPR index "${index}+18")
+    string(SUBSTRING "${props}" ${index} -1 props)
+    string(FIND "${props}" ">" index)
+    string(SUBSTRING "${props}" 0 ${index} props)
+    if ("${property}" STREQUAL "COMPILE_DEFINITIONS")
+        target_compile_definitions(libcef_dll_wrapper PRIVATE
+            $<$<CONFIG:RelWithDebInfo>:${props}>
+            $<$<CONFIG:MinSizeRel>:${props}>
+        )
+    else()
+        target_compile_options(libcef_dll_wrapper PRIVATE
+            $<$<CONFIG:RelWithDebInfo>:${props}>
+            $<$<CONFIG:MinSizeRel>:${props}>
+        )
+    endif()
+endmacro()
+rls_flags(COMPILE_DEFINITIONS)
+rls_flags(COMPILE_OPTIONS)
+
 
 add_library(libcef SHARED IMPORTED GLOBAL)
 if(APPLE)
     set_target_properties(libcef PROPERTIES
-        IMPORTED_LOCATION_DEBUG "${CEF_ROOT}/Debug/Chromium Embedded Framework.framework/Chromium Embedded Framework"
-        IMPORTED_LOCATION_RELEASE "${CEF_ROOT}/Release/Chromium Embedded Framework.framework/Chromium Embedded Framework"
+        IMPORTED_LOCATION "${CEF_ROOT}/Release/Chromium Embedded Framework.framework/Chromium Embedded Framework"
     )
 else()
     set_target_properties(libcef PROPERTIES
-        IMPORTED_LOCATION ${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
-        IMPORTED_LOCATION_DEBUG ${CEF_ROOT}/Debug/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
-        IMPORTED_IMPLIB_DEBUG ${CEF_ROOT}/Debug/libcef${CMAKE_IMPORT_LIBRARY_SUFFIX}
-        IMPORTED_LOCATION_RELEASE ${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}
-        IMPORTED_IMPLIB_RELEASE ${CEF_ROOT}/Release/libcef${CMAKE_IMPORT_LIBRARY_SUFFIX}
+        IMPORTED_LOCATION "${CEF_ROOT}/Release/libcef${CMAKE_SHARED_LIBRARY_SUFFIX}"
+        IMPORTED_IMPLIB "${CEF_ROOT}/Release/libcef${CMAKE_IMPORT_LIBRARY_SUFFIX}"
     )
 endif()
 
