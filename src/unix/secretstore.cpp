@@ -70,13 +70,12 @@ class wxSecretValueLibSecretImpl : public wxSecretValueImpl
 public:
     // Create a new secret value.
     //
-    // Notice that we have to use text/plain as content type and not
-    // application/octet-stream which would have been more logical because
-    // libsecret accepts only valid UTF-8 strings for the latter, while our
-    // data is not necessarily UTF-8 (nor even text at all...).
+    // Notice that we have to use application/octet-stream as content type and not
+    // text/plain which would make libsecret treat the data as textual and somehow
+    // causes mutation on storage or retrieval.
     wxSecretValueLibSecretImpl(size_t size, const void* data)
         : m_value(secret_value_new(static_cast<const gchar*>(data), size,
-                                   "text/plain"))
+                                   "application/octet-stream"))
     {
     }
 
