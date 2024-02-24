@@ -263,7 +263,7 @@ public:
                                       new wxWebViewConfigurationImplChromium);
     }
 
-    virtual void* GetNativeConfiguration() const
+    virtual void* GetNativeConfiguration() const override
     {
         // Our "native" configuration is our own Chromium-specific class from
         // which we inherit.
