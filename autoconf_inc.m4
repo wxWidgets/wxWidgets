@@ -302,12 +302,6 @@ dnl ### begin block 20_COND_MONOLITHIC_0_USE_WEBVIEW_1[../../demos/bombs/bombs.b
         COND_MONOLITHIC_0_USE_WEBVIEW_1=""
     fi
     AC_SUBST(COND_MONOLITHIC_0_USE_WEBVIEW_1)
-dnl ### begin block 20_COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1[../../samples/propgrid/propgrid.bkl,../../tests/test.bkl] ###
-    COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
-        COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1=""
-    fi
-    AC_SUBST(COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1)
 dnl ### begin block 20_COND_MONOLITHIC_0_USE_XML_1[wx.bkl] ###
     COND_MONOLITHIC_0_USE_XML_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_XML" = "x1" ; then
