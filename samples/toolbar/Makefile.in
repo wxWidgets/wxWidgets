@@ -180,9 +180,6 @@ toolbar$(EXEEXT): $(TOOLBAR_OBJECTS) $(__toolbar___win32rc)
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns toolbar.app/Contents/Resources/wxmac.icns
-@COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.png toolbar.app/Contents/Resources/horse.png
-@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.cur toolbar.app/Contents/Resources/horse.cur
 @COND_PLATFORM_MACOSX_1@	cp -f $(srcdir)/bitmaps/new.png $(srcdir)/bitmaps/open.png $(srcdir)/bitmaps/save.png $(srcdir)/bitmaps/copy.png $(srcdir)/bitmaps/cut.png $(srcdir)/bitmaps/paste.png $(srcdir)/bitmaps/print.png $(srcdir)/bitmaps/help.png $(srcdir)/bitmaps/new_2x.png $(srcdir)/bitmaps/open_2x.png $(srcdir)/bitmaps/save_2x.png $(srcdir)/bitmaps/copy_2x.png $(srcdir)/bitmaps/cut_2x.png $(srcdir)/bitmaps/paste_2x.png $(srcdir)/bitmaps/print_2x.png $(srcdir)/bitmaps/help_2x.png toolbar.app/Contents/Resources
 
 @COND_PLATFORM_MACOSX_1@toolbar_bundle: $(____toolbar_BUNDLE_TGT_REF_DEP)

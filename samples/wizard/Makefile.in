@@ -180,9 +180,6 @@ wizard$(EXEEXT): $(WIZARD_OBJECTS) $(__wizard___win32rc)
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns wizard.app/Contents/Resources/wxmac.icns
-@COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.png wizard.app/Contents/Resources/horse.png
-@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.cur wizard.app/Contents/Resources/horse.cur
 
 @COND_PLATFORM_MACOSX_1@wizard_bundle: $(____wizard_BUNDLE_TGT_REF_DEP)
 

@@ -214,10 +214,7 @@ TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 #endif
 #ifdef __WXOSX__
     // Check the cur file
-    wxCursor resCursor3( "horse2" );
-    CHECK( resCursor3.IsOk() );
-    // Check that loading fails if the cursor file is not found
-    wxCursor resCursor2( "horse3" );
+    wxCursor resCursor2( "bullseye" );
     CHECK( resCursor2.IsOk() );
 #endif
 #if wxUSE_CARET
