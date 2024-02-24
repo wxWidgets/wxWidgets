@@ -11,6 +11,20 @@ include(../../source_groups.cmake)
 
 include(cef_version_info.cmake)
 
+set(KNOWN_CONFIGS "Debug;Release;RelWithDebInfo;MinSizeRel")
+if(CMAKE_CONFIGURATION_TYPES)
+    foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
+        if (NOT cfg IN_LIST KNOWN_CONFIGS)
+            message(WARNING "Unknown build configuration '${cfg}', this might cause issues with libcef_dll_wrapper")
+        endif()
+    endforeach()
+elseif(CMAKE_BUILD_TYPE)
+    if (NOT CMAKE_BUILD_TYPE IN_LIST KNOWN_CONFIGS)
+        message(WARNING "Unknown build configuration '${cfg}', this might cause issues with libcef_dll_wrapper")
+    endif()
+endif()
+
+
 find_path(CEF_ROOT
     NAMES libcef_dll
     HINTS
