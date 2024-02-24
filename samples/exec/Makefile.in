@@ -154,7 +154,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 exec$(EXEEXT): $(EXEC_OBJECTS) $(__exec___win32rc)
-	$(CXX) -o $@ $(EXEC_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(EXEC_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)   $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	$(__exec___os2_emxbindcmd)
 
 @COND_PLATFORM_MACOSX_1@exec.app/Contents/PkgInfo: exec$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
@@ -166,10 +166,10 @@ exec$(EXEEXT): $(EXEC_OBJECTS) $(__exec___win32rc)
 @COND_PLATFORM_MACOSX_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.exec/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/exec/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/exec/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/exec version $(WX_VERSION), (c) 2002-2023 wxWidgets/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/exec version $(WX_VERSION), (c) 2002-2024 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >exec.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
