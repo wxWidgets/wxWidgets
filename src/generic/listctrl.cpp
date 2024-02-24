@@ -2220,7 +2220,10 @@ void wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
                                : RefreshLine(oldLine); // refresh the old focus to remove it
     }
 
-    if ( selCount > 1 ) // multiple-selection only
+    // Deselect the remaining items we may have when using multiple selection
+    // (for single selection the only selected item is always the highlighted
+    // one, so we would have already returned above).
+    if ( selCount != 0 )
     {
         // Deselecting many items at once will generate wxEVT_XXX_DESELECTED event
         // for each one of them. although this may be inefficient if the number of
