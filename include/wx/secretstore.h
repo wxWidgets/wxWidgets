@@ -46,9 +46,8 @@ public:
 
     // Creates a secret value from string.
     explicit wxSecretValue(const wxString& secret)
+        : m_impl(NewImpl(wxScopedCharBuffer(secret.utf8_str())))
     {
-        const wxScopedCharBuffer buf(secret.utf8_str());
-        m_impl = NewImpl(buf.length(), buf.data());
     }
 
     wxSecretValue(const wxSecretValue& other);
@@ -88,9 +87,10 @@ public:
     static void WipeString(wxString& str);
 
 private:
-    // This method is implemented in platform-specific code and must return a
+    // These methods are implemented in platform-specific code and must return a
     // new heap-allocated object initialized with the given data.
     static wxSecretValueImpl* NewImpl(size_t size, const void *data);
+    static wxSecretValueImpl* NewImpl(const wxScopedCharBuffer &buf);
 
     // This ctor is only used by wxSecretStore and takes ownership of the
     // provided existing impl pointer.

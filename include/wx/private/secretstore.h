@@ -46,6 +46,13 @@ public:
         memcpy(m_data, data, size);
     }
 
+    wxSecretValueGenericImpl(const wxScopedCharBuffer& buf)
+        : m_size(buf.length()),
+          m_data(new char[buf.length()])
+    {
+      memcpy(m_data, data, size);
+    }
+
     virtual ~wxSecretValueGenericImpl()
     {
         if ( m_data )

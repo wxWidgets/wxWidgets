@@ -79,6 +79,15 @@ public:
     {
     }
 
+    // Create a new secret value from text.
+    //
+    // Notice that we have to use text/plain as content type.
+    wxSecretValueLibSecretImpl(const wxScopedCharBuffer &buf)
+        : m_value(secret_value_new(static_cast<const gchar*>(buf.data()), buf.length(),
+                                   "text/plain"))
+    {
+    }
+
     // Adopt an existing secret value.
     //
     // This ctor takes ownership of the provided pointer and will release it
@@ -364,6 +373,11 @@ const char* wxSecretStoreLibSecretImpl::FIELD_USER = "user";
 wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data)
 {
     return new wxSecretValueLibSecretImpl(size, data);
+}
+
+wxSecretValueImpl* wxSecretValue::NewImpl(const wxScopedCharBuffer &buf)
+{
+  return new wxSecretValueLibSecretImpl(buf);
 }
 
 /* static */

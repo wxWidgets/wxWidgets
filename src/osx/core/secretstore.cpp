@@ -245,6 +245,11 @@ wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data)
     return new wxSecretValueGenericImpl(size, data);
 }
 
+wxSecretValueImpl* wxSecretValue::NewImpl(const wxScopedCharBuffer &buf)
+{
+  return new wxSecretValueGenericImpl(buf.length(), buf.data());
+}
+
 /* static */
 wxSecretStore wxSecretStore::GetDefault()
 {
