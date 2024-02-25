@@ -463,8 +463,16 @@ typedef short int WXTYPE;
     #endif /* defined(__has_include) */
 #endif /* !__WX_SETUP_H__ */
 
-// Allow disabling the use of std::initializer_list<> in case it creates
-// overload ambiguities for the existing code.
+// Allow disabling the use of std::initializer_list<> if it creates overload
+// ambiguities for the existing code by predefining wxNO_INITIALIZER_LIST and
+// also always predefine this symbol when ABI compatibility with versions
+// before support for std::initializer_list<> was added is requested.
+#if wxABI_VERSION < 30205
+    #ifndef wxNO_INITIALIZER_LIST
+        #define wxNO_INITIALIZER_LIST
+    #endif
+#endif /* wxABI_VERSION < 30205 */
+
 #if !defined(wxHAVE_INITIALIZER_LIST) && !defined(wxNO_INITIALIZER_LIST)
     #if __cplusplus >= 201103L
         #define wxHAVE_INITIALIZER_LIST
