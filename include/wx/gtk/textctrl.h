@@ -11,6 +11,8 @@
 #define _WX_GTK_TEXTCTRL_H_
 
 typedef struct _GtkTextMark GtkTextMark;
+typedef struct _GTKGetTextBuffer GTKGetTextBuffer;
+typedef struct _GTKGetEditable GTKGetEditable;
 
 //-----------------------------------------------------------------------------
 // wxTextCtrl
@@ -102,6 +104,14 @@ public:
                                     = wxTextProofOptions::Default()) override;
     virtual wxTextProofOptions GetProofCheckOptions() const override;
 #endif // wxUSE_SPELLCHECK && __WXGTK3__
+
+    // GTK-specific functions
+
+    // Get the underlying text buffer for multi-line controls.
+    GtkTextBuffer *GTKGetTextBuffer() { return IsMultiLine() ? m_buffer : nullptr; }
+    // Get the underlying text control.
+    GtkEditable *GTKGetEditable() const { return GetEditable(); }
+
 
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );

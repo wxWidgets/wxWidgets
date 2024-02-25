@@ -109,18 +109,7 @@ bool wxMetafile::SetClipboard(int width, int height)
     if (!m_refData)
         return false;
 
-    bool alreadyOpen = wxClipboardOpen();
-    if (!alreadyOpen)
-    {
-        wxOpenClipboard();
-        if (!wxEmptyClipboard())
-            return false;
-    }
-    bool success = wxSetClipboardData(wxDF_METAFILE, this, width,height);
-    if (!alreadyOpen)
-        wxCloseClipboard();
-
-    return success;
+    return wxTheClipboard->SetData(new wxMetafileDataObject(*this));
 #endif
 }
 

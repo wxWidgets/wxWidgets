@@ -2,7 +2,6 @@
 // Name:        src/unix/sound_sdl.cpp
 // Purpose:     wxSound backend using SDL
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004/01/31
 // Copyright:   (c) 2004, Open Source Applications Foundation
 // Licence:     wxWindows licence

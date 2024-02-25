@@ -20,7 +20,7 @@
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxInfoBarXmlHandler, wxXmlResourceHandler);
 
-#define XRC_ADD_SHOW_EFFECT(style) m_effectNames[style] = #style;
+#define XRC_ADD_SHOW_EFFECT(style) m_effectNames[style] = #style
 
 wxInfoBarXmlHandler::wxInfoBarXmlHandler()
     : wxXmlResourceHandler(), m_insideBar(false)

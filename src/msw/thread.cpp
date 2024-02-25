@@ -32,8 +32,6 @@
 #include "wx/apptrait.h"
 #include "wx/scopeguard.h"
 
-#include "wx/private/threadinfo.h"
-
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/seh.h"
@@ -580,10 +578,6 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
     if ( isDetached )
         thread->m_internal->LetDie();
 
-    // Do this as the very last thing to ensure that thread-specific info is
-    // not recreated any longer.
-    wxThreadSpecificInfo::ThreadCleanUp();
-
     return rc;
 }
 
@@ -743,7 +737,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 
         case STATE_EXITED:
             // We don't need to wait for the thread to exit if it already did,
-            // but doing it does no harm neither and it's a rare case not worth
+            // but doing it does no harm either and it's a rare case not worth
             // optimizing for.
             //
             // Just ensure we don't call OnDelete() again as we may have
@@ -1346,7 +1340,7 @@ bool wxThreadModule::OnInit()
 
     // main thread doesn't have associated wxThread object, so store 0 in the
     // TLS instead
-    if ( !::TlsSetValue(gs_tlsThisThread, (LPVOID)0) )
+    if ( !::TlsSetValue(gs_tlsThisThread, nullptr) )
     {
         ::TlsFree(gs_tlsThisThread);
         gs_tlsThisThread = TLS_OUT_OF_INDEXES;

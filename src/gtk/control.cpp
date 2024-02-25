@@ -78,15 +78,11 @@ wxSize wxControl::DoGetBestSize() const
     // Do not return any arbitrary default value...
     wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
-    wxSize best;
+    wxSize best(GTKGetPreferredSize(m_widget));
     if (m_wxwindow)
     {
-        // this is not a native control, size_request is likely to be (0,0)
-        best = wxControlBase::DoGetBestSize();
-    }
-    else
-    {
-        best = GTKGetPreferredSize(m_widget);
+        // For non-native controls, GTK preferred size may not be useful
+        best.IncTo(base_type::DoGetBestSize());
     }
 
     return best;
@@ -95,11 +91,6 @@ wxSize wxControl::DoGetBestSize() const
 void wxControl::PostCreation(const wxSize& size)
 {
     wxWindow::PostCreation();
-
-#ifdef __WXGTK3__
-    if (HasFlag(wxNO_BORDER))
-        GTKApplyCssStyle("*{ border:none; border-radius:0; padding:0 }");
-#endif
 
 #ifndef __WXGTK3__
     // NB: GetBestSize needs to know the style, otherwise it will assume
@@ -111,6 +102,13 @@ void wxControl::PostCreation(const wxSize& size)
 #endif
 
     SetInitialSize(size);
+}
+
+void wxControl::GTKRemoveBorder()
+{
+#ifdef __WXGTK3__
+    GTKApplyCssStyle("*{ border:none; border-radius:0; padding:0 }");
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -366,12 +364,17 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 wxSize wxControl::GTKGetEntryMargins(GtkEntry* entry) const
 {
     wxSize size;
-    gtk_entry_get_layout_offsets(entry, &size.x, &size.y);
 
 #ifdef __WXGTK3__
-    GtkBorder border;
     GtkStyleContext* sc = gtk_widget_get_style_context(GTK_WIDGET(entry));
-    gtk_style_context_get_padding(sc, gtk_style_context_get_state(sc), &border);
+    GtkStateFlags    state = gtk_style_context_get_state(sc);
+
+    GtkBorder padding, border;
+    gtk_style_context_get_padding(sc, state, &padding);
+    gtk_style_context_get_border(sc, state, &border);
+
+    size.x += padding.left + padding.right + border.left + border.right;
+    size.y += padding.top + padding.bottom + border.top + border.bottom;
 #else
     if (gtk_entry_get_has_frame(entry))
     {
@@ -402,10 +405,10 @@ wxSize wxControl::GTKGetEntryMargins(GtkEntry* entry) const
         }
     }
 #endif // GTK+ 2.10+
-#endif
 
     size.x += border.left + border.right;
     size.y += border.top  + border.bottom;
+#endif
 
     return size;
 }

@@ -91,7 +91,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 pyramid: $(PYRAMID_OBJECTS)
-	$(CXX) -o $@ $(PYRAMID_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs gl,core,base`
+	$(CXX) -o $@ $(PYRAMID_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs gl,core,base` -lGL
 
 pyramid_pyramid.o: ./pyramid.cpp
 	$(CXX) -c -o $@ $(PYRAMID_CXXFLAGS) $(CPPDEPS) $<

@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2022-06-19 13:07+0200\n"
+"PO-Revision-Date: 2023-09-14 22:55+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
-"n%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 # generic/filedlgg.cpp:825
 #: ../include/wx/defs.h:2592
@@ -1230,8 +1230,8 @@ msgstr "Tvorba poročila o razhroščevanju ni uspela."
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
-"Obdelava poročila o razhroščevanju ni uspela, datoteke so ostale v mapi "
-"\"%s\"."
+"Obdelava poročila o razhroščevanju ni uspela, datoteke so ostale v mapi \"%s"
+"\"."
 
 #: ../src/common/debugrpt.cpp:574
 msgid "A debug report has been generated. It can be found in"
@@ -1288,37 +1288,35 @@ msgstr "&Shrani"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Zavrzi spremembe"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Ne shrani"
+msgstr "&Ne zapri"
 
 # common/docview.cpp:440
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "Ali želite shraniti spremembe dokumenta %s?"
+msgstr "Ali želite shraniti spremembe v %s, preden ga zaprete?"
 
 # common/textcmn.cpp:121
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "Besedila ni mogoče shraniti."
+msgstr "Dokument mora biti zaprt."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "Shranjevanje %s je spodletelo, ali želite poskusiti znova?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Poskusi znova"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Zavrzi spremembe"
 
 # generic/dirdlgg.cpp:550
 #: ../src/common/docview.cpp:680
@@ -5959,8 +5957,8 @@ msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
 msgstr ""
-"Program je bil preveden z zastarelo različico GTK+, ponovno ga zgradite z "
-"GTK+ 2.12 ali novejšim."
+"Program je bil preveden z zastarelo različico GTK+, ponovno ga zgradite z GTK"
+"+ 2.12 ali novejšim."
 
 # generic/dirdlgg.cpp:550
 #: ../src/html/chm.cpp:138
@@ -7529,7 +7527,6 @@ msgstr "Vrsta datoteke:"
 # msw/mdi.cpp:1294
 # msw/window.cpp:2286
 #: ../src/osx/cocoa/menu.mm:243
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Okno"
@@ -7539,25 +7536,21 @@ msgstr "Okno"
 # html/helpfrm.cpp:208
 # msw/mdi.cpp:1283
 #: ../src/osx/cocoa/menu.mm:260
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Pomoč"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Pomanjšaj"
 
 #: ../src/osx/cocoa/menu.mm:304
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
 msgstr "Povečaj"
 
 #: ../src/osx/cocoa/menu.mm:310
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Pomakni vse v ospredje"
@@ -7577,8 +7570,8 @@ msgstr "Datoteka pisave »%s« ne obstaja."
 #: ../src/osx/fontutil.cpp:89
 #, c-format
 msgid ""
-"Font file \"%s\" cannot be used as it is not inside the font directory "
-"\"%s\"."
+"Font file \"%s\" cannot be used as it is not inside the font directory \"%s"
+"\"."
 msgstr ""
 "Datoteke pisave »%s« ni mogoče uporabiti, saj je ni v mapi pisave »%s«."
 
@@ -10498,42 +10491,3 @@ msgstr "Ni mogoče naložiti virov iz datoteke »%s«."
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Ustvarjanje %s »%s« ni uspelo."
-
-# common/prntbase.cpp:106
-# common/prntbase.cpp:148
-#~ msgid "Printing "
-#~ msgstr "Tiskanje poteka"
-
-# generic/dirdlgg.cpp:550
-#~ msgid "Failed to insert text in the control."
-#~ msgstr "V kontrolnik ni bilo mogoče vstaviti besedila."
-
-# generic/filedlgg.cpp:1092
-#~ msgid "Please choose a valid font."
-#~ msgstr "Prosimo, izberite veljavno pisavo."
-
-# html/winpars.cpp:364
-#, c-format
-#~ msgid "Failed to display HTML document in %s encoding"
-#~ msgstr "Dokumenta HTML, kodiranega v %s, ni mogoče prikazati."
-
-# common/docview.cpp:306
-#, c-format
-#~ msgid "wxWidgets could not open display for '%s': exiting."
-#~ msgstr "wxWidgets ne more odpreti zaslona za '%s': izhod iz programa."
-
-# generic/filedlgg.cpp:534
-#~ msgid "Filter"
-#~ msgstr "Končnica"
-
-# generic/fontdlgg.cpp:207
-#~ msgid "Directories"
-#~ msgstr "Mape"
-
-# generic/filedlgg.cpp:534
-#~ msgid "Files"
-#~ msgstr "Datoteke"
-
-# generic/dirdlgg.cpp:191
-#~ msgid "Selection"
-#~ msgstr "Izbira"

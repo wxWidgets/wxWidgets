@@ -2,7 +2,6 @@
 // Name:        src/common/dcbase.cpp
 // Purpose:     generic methods of the wxDC Class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05/25/99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -175,6 +174,11 @@ wxDCImpl *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *owner, const wxPrintD
 }
 #endif
 
+bool wxNativeDCFactory::CanDrawUsingClientDC(const wxWindow* window) const
+{
+    return wxClientDCImpl::CanBeUsedForDrawing(window);
+}
+
 //-----------------------------------------------------------------------------
 // wxWindowDC
 //-----------------------------------------------------------------------------
@@ -195,6 +199,12 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxClientDC, wxWindowDC);
 wxClientDC::wxClientDC(wxWindow *win)
           : wxWindowDC(wxDCFactory::Get()->CreateClientDC(this, win))
 {
+}
+
+/* static */
+bool wxClientDC::CanBeUsedForDrawing(const wxWindow* window)
+{
+    return wxDCFactory::Get()->CanDrawUsingClientDC(window);
 }
 
 //-----------------------------------------------------------------------------
@@ -1398,13 +1408,17 @@ float wxDCImpl::GetFontPointSizeAdjustment(float dpi)
     return float(wxDisplay::GetStdPPIValue()) / dpi;
 }
 
+static void mmToPx(wxWindow* win, double& x, double& y)
+{
+    const wxSize ppi(win ? wxDisplay(win).GetPPI() : wxGetDisplayPPI());
+    x = ppi.x * mm2inches;
+    y = ppi.y * mm2inches;
+}
+
 double wxDCImpl::GetMMToPXx() const
 {
     if ( wxIsNullDouble(m_mm_to_pix_x) )
-    {
-        m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                        (double)wxGetDisplaySizeMM().GetWidth();
-    }
+        mmToPx(m_window, m_mm_to_pix_x, m_mm_to_pix_y);
 
     return m_mm_to_pix_x;
 }
@@ -1412,10 +1426,7 @@ double wxDCImpl::GetMMToPXx() const
 double wxDCImpl::GetMMToPXy() const
 {
     if ( wxIsNullDouble(m_mm_to_pix_y) )
-    {
-        m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                        (double)wxGetDisplaySizeMM().GetHeight();
-    }
+        mmToPx(m_window, m_mm_to_pix_x, m_mm_to_pix_y);
 
     return m_mm_to_pix_y;
 }

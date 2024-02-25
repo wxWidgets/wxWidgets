@@ -2,7 +2,6 @@
 // Name:        wx/control.h
 // Purpose:     wxControl common interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     26.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -32,7 +31,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxControlNameStr[];
 class WXDLLIMPEXP_CORE wxControlBase : public wxWindow
 {
 public:
-    wxControlBase() { }
+    wxControlBase() = default;
 
     virtual ~wxControlBase();
 

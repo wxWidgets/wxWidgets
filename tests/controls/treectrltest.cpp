@@ -317,6 +317,11 @@ void TreeCtrlTestCase::LabelEdit()
 
     wxUIActionSimulator sim;
 
+#ifdef __WXQT__
+    m_tree->SetFocus();
+    wxYield();
+#endif
+
     m_tree->SetFocusedItem(m_tree->GetRootItem());
     m_tree->EditLabel(m_tree->GetRootItem());
 
@@ -338,6 +343,7 @@ void TreeCtrlTestCase::KeyDown()
     wxUIActionSimulator sim;
 
     m_tree->SetFocus();
+    wxYield();
     sim.Text("aAbB");
     wxYield();
 

@@ -50,6 +50,9 @@ public:
 
     virtual void Clear() override;
 
+    void UpdateClipBox();
+
+    virtual bool DoGetClippingRect(wxRect& rect) const override;
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height) override;
 
@@ -117,6 +120,9 @@ protected:
     QPixmap *m_qtPixmap;
 
     wxRegion m_clippingRegion;
+
+    bool m_isClipBoxValid = false;
+
 private:
     enum wxQtRasterColourOp
     {

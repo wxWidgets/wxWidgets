@@ -2,7 +2,6 @@
 // Name:        wx/event.h
 // Purpose:     Event classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -462,7 +461,7 @@ private:
     void (Class::*m_method)(EventArg&);
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorMethod() { }
+    wxEventFunctorMethod() = default;
 
     typedef wxEventFunctorMethod<EventTag, Class,
                                  EventArg, EventHandler> thisClass;
@@ -518,7 +517,7 @@ private:
     void (*m_handler)(EventArg&);
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunction() { }
+    wxEventFunctorFunction() = default;
 
     typedef wxEventFunctorFunction<EventTag, EventArg> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
@@ -570,7 +569,7 @@ private:
     const void *m_handlerAddr;
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunctor() { }
+    wxEventFunctorFunctor() = default;
 
     typedef wxEventFunctorFunctor<EventTag, Functor> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
@@ -2279,7 +2278,7 @@ public:
     wxUint32      m_rawFlags;
 
     // Indicates whether the key event is a repeat
-    bool          m_isRepeat;
+    bool          m_isRepeat = false;
 
 private:
     // Set the event to propagate if necessary, i.e. if it's of wxEVT_CHAR_HOOK
@@ -2288,8 +2287,6 @@ private:
     {
         if ( m_eventType == wxEVT_CHAR_HOOK )
             m_propagationLevel = wxEVENT_PROPAGATE_MAX;
-
-        m_allowNext = false;
     }
 
     // Copy only the event data present in this class, this is used by
@@ -2315,11 +2312,11 @@ private:
     // If this flag is true, the normal key events should still be generated
     // even if wxEVT_CHAR_HOOK had been handled. By default it is false as
     // handling wxEVT_CHAR_HOOK suppresses all the subsequent events.
-    bool m_allowNext;
+    bool m_allowNext = false;
 
     // If true, m_x and m_y were already initialized. If false, try to get them
     // when they're requested.
-    bool m_hasPosition;
+    bool m_hasPosition = false;
 
     wxDECLARE_DYNAMIC_CLASS(wxKeyEvent);
 };
@@ -3524,7 +3521,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntry : public wxEventTableEntryBase
     const int& m_eventType;
 
 private:
-    wxDECLARE_NO_ASSIGN_CLASS(wxEventTableEntry);
+    wxDECLARE_NO_ASSIGN_DEF_COPY(wxEventTableEntry);
 };
 
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
@@ -4232,6 +4229,7 @@ typedef void (wxEvtHandler::*wxRotateGestureEventFunction)(wxRotateGestureEvent&
 typedef void (wxEvtHandler::*wxTwoFingerTapEventFunction)(wxTwoFingerTapEvent&);
 typedef void (wxEvtHandler::*wxLongPressEventFunction)(wxLongPressEvent&);
 typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
+typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 
 #define wxCommandEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxCommandEventFunction, func)
@@ -4320,6 +4318,8 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
     wxEVENT_HANDLER_CAST(wxLongPressEventFunction, func)
 #define wxPressAndTapEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxPressAndTapEventFunction, func)
+#define wxFullScreenEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxFullScreenEventFunction, func)
 
 #endif // wxUSE_GUI
 
@@ -4541,6 +4541,7 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
 #define EVT_SET_CURSOR(func) wx__DECLARE_EVT0(wxEVT_SET_CURSOR, wxSetCursorEventHandler(func))
 #define EVT_MOUSE_CAPTURE_CHANGED(func) wx__DECLARE_EVT0(wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEventHandler(func))
 #define EVT_MOUSE_CAPTURE_LOST(func) wx__DECLARE_EVT0(wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEventHandler(func))
+#define EVT_FULLSCREEN(func) wx__DECLARE_EVT0(wxEVT_FULLSCREEN, wxFullScreenEventHandler(func))
 
 // Mouse events
 #define EVT_LEFT_DOWN(func) wx__DECLARE_EVT0(wxEVT_LEFT_DOWN, wxMouseEventHandler(func))
@@ -4657,7 +4658,7 @@ typedef void (wxEvtHandler::*wxPressAndTapEventFunction)(wxPressAndTapEvent&);
 #define EVT_GESTURE_ROTATE(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_ROTATE, winid, wxRotateGestureEventHandler(func))
 #define EVT_TWO_FINGER_TAP(winid, func) wx__DECLARE_EVT1(wxEVT_TWO_FINGER_TAP, winid, wxTwoFingerTapEventHandler(func))
 #define EVT_LONG_PRESS(winid, func) wx__DECLARE_EVT1(wxEVT_LONG_PRESS, winid, wxLongPressEventHandler(func))
-#define EVT_PRESS_AND_TAP(winid, func) wx__DECLARE_EVT1(wxEVT_PRESS_AND_TAP, winid, wxPressAndTapEvent(func))
+#define EVT_PRESS_AND_TAP(winid, func) wx__DECLARE_EVT1(wxEVT_PRESS_AND_TAP, winid, wxPressAndTapEventHandler(func))
 
 // Convenience macros for commonly-used commands
 #define EVT_CHECKBOX(winid, func) wx__DECLARE_EVT1(wxEVT_CHECKBOX, winid, wxCommandEventHandler(func))

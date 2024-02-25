@@ -27,6 +27,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/statbox.h"
 #endif
 
 #include "wx/artprov.h"
@@ -141,11 +142,13 @@ void ColourPickerWidgetsPage::CreateContent()
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, "&ColourPicker style");
-    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, "With textctrl");
-    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, "With label");
-    m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(clrbox, "With opacity");
-    boxleft->Add(clrbox, 0, wxALL|wxGROW, 5);
+    wxStaticBoxSizer *styleSizer = new wxStaticBoxSizer(wxVERTICAL, this, "&ColourPicker style");
+    wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
+
+    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
+    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(styleSizer, "With label", wxID_ANY, styleSizerBox);
+    m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(styleSizer, "With opacity", wxID_ANY, styleSizerBox);
+    boxleft->Add(styleSizer, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);

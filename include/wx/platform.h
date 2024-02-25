@@ -455,6 +455,9 @@
 #        ifndef MAC_OS_X_VERSION_10_16
 #           define MAC_OS_X_VERSION_10_16 101600
 #        endif
+         /*
+            Note that since macOS 11 there is no more "X" in the names.
+          */
 #        ifndef MAC_OS_VERSION_11_0
 #           define MAC_OS_VERSION_11_0 110000
 #        endif

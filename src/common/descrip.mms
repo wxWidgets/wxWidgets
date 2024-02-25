@@ -223,7 +223,7 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
 		valnum.obj,numformatter.obj,markupparser.obj,\
 		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
-		textmeasurecmn.obj,modalhook.obj,threadinfo.obj,\
+        textmeasurecmn.obj,modalhook.obj,\
 		addremovectrl.obj,notifmsgcmn.obj,graphcmn.obj,dcsvg.obj,\
 		dcgraph.obj,secretstore.obj,uilocale.obj,bmpbndl.obj
 
@@ -718,7 +718,6 @@ persist.obj : persist.cpp
 time.obj : time.cpp
 textmeasurecmn.obj : textmeasurecmn.cpp
 modalhook.obj : modalhook.cpp
-threadinfo.obj : threadinfo.cpp
 addremovectrl.obj : addremovectrl.cpp
 notifmsgcmn.obj : notifmsgcmn.cpp
 graphcmn.obj : graphcmn.cpp

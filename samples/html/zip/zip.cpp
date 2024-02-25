@@ -2,7 +2,6 @@
 // Name:        zip.cpp
 // Purpose:     wxHtml sample
 // Author:      ?
-// Modified by:
 // Created:     ?
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

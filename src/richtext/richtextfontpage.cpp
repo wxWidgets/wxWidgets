@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextfontpage.cpp
 // Purpose:     Font page for wxRichTextFormattingDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     2006-10-02
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

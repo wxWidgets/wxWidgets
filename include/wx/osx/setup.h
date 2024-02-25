@@ -446,7 +446,7 @@
 //
 // Default is 1
 //
-// Recommended setting: 1 (needed by wxSocket)
+// Recommended setting: 1
 #define wxUSE_STOPWATCH     1
 
 // Set wxUSE_FSWATCHER to 1 if you want to enable wxFileSystemWatcher
@@ -717,6 +717,13 @@
 //
 // Recommended setting: 1
 #define wxUSE_WEBVIEW 1
+
+// Use the Chromium Embedded Framework wxWebview backend
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_WEBVIEW_CHROMIUM 0
 
 // Use the IE wxWebView backend
 //
@@ -1334,7 +1341,7 @@
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
-// set to 1 and, under Windows, also to add opengl32.lib and glu32.lib to the
+// set to 1 and, under Windows, also to add opengl32.lib to the
 // list of libraries used to link your application when linking to wxWidgets
 // statically (although this is done implicitly for Microsoft Visual C++ users).
 //

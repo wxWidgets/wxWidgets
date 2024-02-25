@@ -2,7 +2,6 @@
 // Name:        wx/minifram.h
 // Purpose:     wxMiniFrame base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Copyright:   (c) 2014 wxWidgets dev team

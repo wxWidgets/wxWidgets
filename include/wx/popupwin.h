@@ -2,7 +2,6 @@
 // Name:        wx/popupwin.h
 // Purpose:     wxPopupWindow interface declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.01.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@
 class WXDLLIMPEXP_CORE wxPopupWindowBase : public wxNonOwnedWindow
 {
 public:
-    wxPopupWindowBase() { }
+    wxPopupWindowBase() = default;
     virtual ~wxPopupWindowBase();
 
     // create the popup window
@@ -126,7 +125,7 @@ class WXDLLIMPEXP_CORE wxPopupTransientWindow : public wxPopupTransientWindowBas
 {
 public:
     // ctors
-    wxPopupTransientWindow() { }
+    wxPopupTransientWindow() = default;
     wxPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE)
         { Create(parent, style); }
 

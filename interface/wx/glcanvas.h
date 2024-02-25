@@ -774,8 +774,8 @@ enum
         libraries are found.
         On Windows, OpenGL support is enabled by default (@c wxUSE_GLCANVAS set
         to @c 1 in the @c setup.h file). If your program links with wxWidgets
-        statically, you need to add @c opengl32.lib (and @c glu32.lib for old
-        OpenGL versions) to the list of the libraries your program is linked with.
+        statically, you need to add @c opengl32.lib to the list of libraries
+        your program is linked with.
 
     @library{wxgl}
     @category{gl}

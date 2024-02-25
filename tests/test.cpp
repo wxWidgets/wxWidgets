@@ -340,6 +340,9 @@ public:
 
     virtual int OnRun() override
     {
+        if ( !IsGUIEnabled() )
+            return 0;
+
         if ( TestAppBase::OnRun() != 0 )
             m_exitcode = EXIT_FAILURE;
 
@@ -351,6 +354,35 @@ public:
         return RunTests();
     }
 #endif // wxUSE_GUI/!wxUSE_GUI
+
+    // Hack to test that GUI applications not using GUI at all work: this was
+    // broken in the past (see #23981), so now the test suite checks that
+    // running this test with WX_TEST_DISABLE_GUI works.
+#if wxUSE_GUI
+    bool IsGUIEnabled() const
+    {
+        return !wxGetEnv(wxASCII_STR("WX_TEST_DISABLE_GUI"), nullptr);
+    }
+
+    virtual bool Initialize(int& argcIn, wxChar **argvIn) override
+    {
+        return IsGUIEnabled() ? wxApp::Initialize(argcIn, argvIn)
+                              : wxAppConsole::Initialize(argcIn, argvIn);
+    }
+
+    virtual bool OnInitGui() override
+    {
+        return !IsGUIEnabled() || wxApp::OnInitGui();
+    }
+
+    virtual void CleanUp() override
+    {
+        if ( IsGUIEnabled() )
+            wxApp::CleanUp();
+        else
+            wxAppConsole::CleanUp();
+    }
+#endif // wxUSE_GUI
 
 private:
     int RunTests();
@@ -419,14 +451,11 @@ static bool DoCheckConnection()
     // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
     //       wxCore we use a simple rough test:
 
-    wxSocketBase::Initialize();
+    wxSocketInitializer socketInit;
 
     wxIPV4address addr;
     if (!addr.Hostname(0xadfe5c16) || !addr.Service(wxASCII_STR("www")))
-    {
-        wxSocketBase::Shutdown();
         return false;
-    }
 
     const char* const
         HTTP_GET = "GET / HTTP /1.1\r\nHost: www.wxwidgets.org\r\n\r\n";
@@ -435,8 +464,6 @@ static bool DoCheckConnection()
     sock.SetTimeout(10);    // 10 secs
     bool online = sock.Connect(addr) &&
                     (sock.Write(HTTP_GET, strlen(HTTP_GET)), sock.WaitForRead(1));
-
-    wxSocketBase::Shutdown();
 
     return online;
 }
@@ -497,11 +524,11 @@ bool EnableUITests()
 
         if ( s_enabled == -1 )
         {
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
             s_enabled = 1;
-#else // !(__WXMSW__ || __WXGTK__)
+#else // !(__WXMSW__ || __WXGTK__ || __WXQT__)
             s_enabled = 0;
-#endif // (__WXMSW__ || __WXGTK__)
+#endif // (__WXMSW__ || __WXGTK__ || __WXQT__)
         }
     }
 
@@ -597,6 +624,14 @@ TestApp::TestApp()
 //
 bool TestApp::OnInit()
 {
+#if wxUSE_GUI
+    if ( !IsGUIEnabled() )
+    {
+        wxFputs(wxASCII_STR("Not running tests because GUI is disabled.\n"), stderr);
+        return true;
+    }
+#endif // wxUSE_GUI
+
     // Hack: don't call TestAppBase::OnInit() to let CATCH handle command line.
 
     // Output some important information about the test environment.
@@ -693,6 +728,9 @@ int TestApp::RunTests()
 int TestApp::OnExit()
 {
 #if wxUSE_GUI
+    if ( !IsGUIEnabled() )
+        return wxAppConsole::OnExit();
+
     delete GetTopWindow();
 #endif // wxUSE_GUI
 

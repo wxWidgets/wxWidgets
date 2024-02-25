@@ -2212,15 +2212,6 @@
 #   endif
 #endif /* wxUSE_XRC */
 
-#if wxUSE_SOCKETS && !wxUSE_STOPWATCH
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_SOCKETS requires wxUSE_STOPWATCH"
-#   else
-#       undef wxUSE_SOCKETS
-#       define wxUSE_SOCKETS 0
-#   endif
-#endif /* wxUSE_SOCKETS */
-
 #if wxUSE_SVG && !wxUSE_STREAMS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SVG requires wxUSE_STREAMS"
@@ -2289,7 +2280,8 @@
 #endif /* wxUSE_TREELISTCTRL */
 
 #if wxUSE_WEBVIEW && !(wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2 || \
-                       wxUSE_WEBVIEW_IE || wxUSE_WEBVIEW_EDGE)
+                       wxUSE_WEBVIEW_IE || wxUSE_WEBVIEW_EDGE || \
+                       wxUSE_WEBVIEW_CHROMIUM)
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_WEBVIEW requires at least one backend"
 #   else
@@ -2344,10 +2336,10 @@
 #if wxUSE_MEDIACTRL
 #   if !wxUSE_LONGLONG
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxMediaCtrl requires wxUSE_LONLONG"
+#           error "wxMediaCtrl requires wxUSE_LONGLONG"
 #       else
-#           undef wxUSE_LONLONG
-#           define wxUSE_LONLONG 1
+#           undef wxUSE_LONGLONG
+#           define wxUSE_LONGLONG 1
 #       endif
 #   endif
 #endif /* wxUSE_MEDIACTRL */
@@ -2383,10 +2375,10 @@
 #   endif
 #   if !wxUSE_LONGLONG
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxRichTextCtrl requires wxUSE_LONLONG"
+#           error "wxRichTextCtrl requires wxUSE_LONGLONG"
 #       else
-#           undef wxUSE_LONLONG
-#           define wxUSE_LONLONG 1
+#           undef wxUSE_LONGLONG
+#           define wxUSE_LONGLONG 1
 #       endif
 #   endif
 #   if !wxUSE_VARIANT

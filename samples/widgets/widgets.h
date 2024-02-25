@@ -46,7 +46,7 @@ class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 
 class WidgetsPageInfo;
 
-#include "wx/panel.h"
+#include "wx/scrolwin.h"
 #include "wx/vector.h"
 
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
@@ -119,7 +119,7 @@ struct WidgetAttributes
     long m_defaultFlags;
 };
 
-class WidgetsPage : public wxPanel
+class WidgetsPage : public wxScrolledWindow
 {
 public:
     WidgetsPage(WidgetsBookCtrl *book,
@@ -172,18 +172,21 @@ protected:
     // create a sizer containing a label and a text ctrl
     wxSizer *CreateSizerWithTextAndLabel(const wxString& label,
                                          wxWindowID id = wxID_ANY,
-                                         wxTextCtrl **ppText = nullptr);
+                                         wxTextCtrl **ppText = nullptr,
+                                         wxWindow* statBoxParent = nullptr);
 
     // create a sizer containing a button and a text ctrl
     wxSizer *CreateSizerWithTextAndButton(wxWindowID idBtn,
                                           const wxString& labelBtn,
                                           wxWindowID id = wxID_ANY,
-                                          wxTextCtrl **ppText = nullptr);
+                                          wxTextCtrl **ppText = nullptr,
+                                          wxWindow* statBoxParent = nullptr);
 
     // create a checkbox and add it to the sizer
     wxCheckBox *CreateCheckBoxAndAddToSizer(wxSizer *sizer,
                                             const wxString& label,
-                                            wxWindowID id = wxID_ANY);
+                                            wxWindowID id = wxID_ANY,
+                                            wxWindow* statBoxParent = nullptr);
 
 public:
     // the head of the linked list containinginfo about all pages

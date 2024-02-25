@@ -108,7 +108,7 @@ inline wxUint32 wxAtomicDec (wxUint32 &value) { return --value; }
 class wxAtomicInt32
 {
 public:
-    wxAtomicInt32() { } // non initialized for consistency with basic int type
+    wxAtomicInt32() = default; // non initialized for consistency with basic int type
     wxAtomicInt32(wxInt32 v) : m_value(v) { }
     wxAtomicInt32(const wxAtomicInt32& a) : m_value(a.m_value) {}
 

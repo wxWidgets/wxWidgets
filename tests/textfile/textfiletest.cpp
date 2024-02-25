@@ -336,12 +336,18 @@ TEST_CASE("wxTextFile::Special", "[textfile][linux][special-file]")
     SECTION("/proc")
     {
         wxTextFile f;
-        CHECK( f.Open("/proc/cpuinfo") );
+        REQUIRE( f.Open("/proc/cpuinfo") );
         CHECK( f.GetLineCount() > 1 );
     }
 
     SECTION("/sys")
     {
+        if ( wxFile::Exists("/sys/power/state") )
+        {
+            WARN("/sys/power/state doesn't exist, skipping test");
+            return;
+        }
+
         wxTextFile f;
         CHECK( f.Open("/sys/power/state") );
         REQUIRE( f.GetLineCount() == 1 );

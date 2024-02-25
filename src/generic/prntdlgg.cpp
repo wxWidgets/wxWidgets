@@ -2,7 +2,6 @@
 // Name:        src/generic/prntdlgg.cpp
 // Purpose:     Generic print dialogs
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

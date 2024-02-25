@@ -2,7 +2,6 @@
 // Name:        wx/generic/gridctrl.h
 // Purpose:     wxGrid controls
 // Author:      Paul Gammans, Roger Gammans
-// Modified by:
 // Created:     11/04/2001
 // Copyright:   (c) The Computer Surgery (paul@compsurg.co.uk)
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        winundef.h
 // Purpose:     undefine the common symbols #define'd by <windows.h>
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     16.05.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

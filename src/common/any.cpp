@@ -2,7 +2,6 @@
 // Name:        src/common/any.cpp
 // Purpose:     wxAny class, container for any type
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     07/05/2009
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

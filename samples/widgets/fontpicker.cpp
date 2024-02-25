@@ -27,6 +27,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/statbox.h"
 #endif
 
 #include "wx/artprov.h"
@@ -134,15 +135,16 @@ FontPickerWidgetsPage::FontPickerWidgetsPage(WidgetsBookCtrl *book,
 void FontPickerWidgetsPage::CreateContent()
 {
     // left pane
-    wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
+    wxSizer *leftSizer = new wxBoxSizer(wxVERTICAL);
+    wxStaticBoxSizer *styleSizer = new wxStaticBoxSizer(wxVERTICAL, this, "&FontPicker style");
+    wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
 
-    wxStaticBoxSizer *fontbox = new wxStaticBoxSizer(wxVERTICAL, this, "&FontPicker style");
-    m_chkFontTextCtrl = CreateCheckBoxAndAddToSizer(fontbox, "With textctrl");
-    m_chkFontDescAsLabel = CreateCheckBoxAndAddToSizer(fontbox, "Font desc as btn label");
-    m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(fontbox, "Use font for label");
-    boxleft->Add(fontbox, 0, wxALL|wxGROW, 5);
+    m_chkFontTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
+    m_chkFontDescAsLabel = CreateCheckBoxAndAddToSizer(styleSizer, "Font desc as btn label", wxID_ANY, styleSizerBox);
+    m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(styleSizer, "Use font for label", wxID_ANY, styleSizerBox);
+    leftSizer->Add(styleSizer, 0, wxALL|wxGROW, 5);
 
-    boxleft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
+    leftSizer->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     Reset();    // set checkboxes state
@@ -159,7 +161,7 @@ void FontPickerWidgetsPage::CreateContent()
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
-    sz->Add(boxleft, 0, wxGROW|wxALL, 5);
+    sz->Add(leftSizer, 0, wxGROW|wxALL, 5);
     sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
 
     SetSizer(sz);

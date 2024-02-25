@@ -101,7 +101,7 @@ bool wxToggleButton::Create(wxWindow *parent,
     // this button is toggleable and has a text label
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 void wxToggleButton::SetValue(bool state)

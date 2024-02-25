@@ -35,6 +35,9 @@ public:
     virtual void SetValue(bool value) override;
     virtual bool GetValue() const override;
 
+    virtual void SetLabel(const wxString &label) override;
+    virtual wxString GetLabel() const override;
+
     virtual QWidget *GetHandle() const override;
 
 private:

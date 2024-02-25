@@ -84,7 +84,7 @@ in CMake the following generators are recommended:
 * macOS: Xcode
 * Linux: Ninja or Makefiles
 
-CMake 3.10 or newer is recommended. The minimum version required is 2.8.12.
+CMake 3.10 or newer is recommended. The minimum tested version is 3.5.
 
 Using CMake with your applications     {#cmake_apps}
 ==================================

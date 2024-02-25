@@ -18,6 +18,25 @@
     used explicitly if you want to use files and not the registry even under
     Windows.
 
+    @section fileconf_paths Configuration Files Paths
+
+    The default path for local (or user) configuration file is `~/.appname`,
+    i.e. it is stored directly in the user home directory. This default
+    path is backwards-compatible but not recommended any more and it is advised
+    to call wxStandardPaths::SetFileLayout() with
+    wxStandardPaths::FileLayout_XDG parameter to change the default path to
+    `~/.config/appname.conf`. MigrateLocalFile() may be helpful for moving the
+    existing configuration file to the new location.
+
+    Alternatively, it is possible to specify ::wxCONFIG_USE_XDG flag in the
+    style parameter of the constructor to use this XDG-compliant path without
+    changing the global file layout.
+
+    And for the programs using multiple configuration files it is recommended
+    to use both ::wxCONFIG_USE_XDG and ::wxCONFIG_USE_SUBDIR which change the
+    default file path to `~/.config/appname/appname.conf` -- and allow the
+    program to store other files in the same `~/.config/appname` directory.
+
     @library{wxbase}
     @category{cfg}
 
@@ -71,8 +90,8 @@ public:
         parameter in the constructor.
 
         @a style has the same meaning as in @ref wxConfigBase::wxConfigBase "wxConfig constructor"
-        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR bit is
-        examined by this function.
+        and can contain any combination of styles but only wxCONFIG_USE_SUBDIR,
+        wxCONFIG_USE_XDG and wxCONFIG_USE_HOME are really used by this function.
 
         Notice that this function cannot be used if @a basename is already a full path name.
     */
@@ -80,6 +99,72 @@ public:
 
     static wxString GetGlobalFileName(const wxString& szFile);
     static wxString GetLocalFileName(const wxString& szFile, int style = 0);
+
+    /**
+        Contains return value of MigrateLocalFile().
+
+        @since 3.3.0
+    */
+    struct MigrationResult
+    {
+        /// If empty, it means the old file wasn't found and nothing was done.
+        wxString oldPath;
+
+        /// The name of the new file.
+        wxString newPath;
+
+        /// If empty, means the file was successfully migrated.
+        wxString error;
+    };
+
+    /**
+        Move the existing configuration file to a new location.
+
+        This function is useful for moving legacy configuration files in
+        `~/.appname` or `~/.appname/appname.conf` to the XDG-compliant location
+        under `~/.config`. To do this, simply specify ::wxCONFIG_USE_XDG as
+        part of @a newStyle.
+
+        The returned MigrationResult object describes what, if anything, was
+        done: if its `oldPath` member is empty, it means that the file
+        corresponding to @a oldStyle was not found and nothing was done.
+        Otherwise, if its `error` member is empty, the old file was found and
+        moved to `newPath`. And if `error` is not empty, it contains the
+        user-readable error message describing why moving the file failed.
+
+        Typical example of using this function is shown in the widgets sample:
+        @code
+        // Execute this early during the application startup, before the
+        // global wxConfig object is created.
+        const auto res = wxFileConfig::MigrateLocalFile("app", wxCONFIG_USE_XDG);
+        if ( !res.oldPath.empty() ) {
+            if ( res.error.empty() ) {
+                wxLogMessage("Config file was migrated from \"%s\" to \"%s\"",
+                             res.oldPath, res.newPath);
+            } else {
+                wxLogWarning("Migrating old config failed: %s.", res.error);
+            }
+        }
+
+        // Prefer doing it only after successfully calling MigrateLocalFile(),
+        // otherwise, i.e. if it failed, the old config file wouldn't be used.
+        wxStandardPaths::Get().SetFileLayout(wxStandardPaths::FileLayout_XDG);
+        @endcode
+
+        @param name Name of the configuration file.
+        @param newStyle Style which is used by the current version of the
+            program, typically including ::wxCONFIG_USE_XDG and possibly also
+            including ::wxCONFIG_USE_SUBDIR.
+        @param oldStyle Style which was used by the previous versions of the
+            program, possibly including ::wxCONFIG_USE_SUBDIR and typically
+            including ::wxCONFIG_USE_HOME.
+
+        @since 3.3.0
+    */
+    static MigrationResult
+    MigrateLocalFile(const wxString& name,
+                     int newStyle,
+                     int oldStyle = wxCONFIG_USE_HOME);
 
     /**
         Saves all config data to the given stream, returns @true if data was saved

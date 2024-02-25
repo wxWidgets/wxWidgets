@@ -2,7 +2,6 @@
 // Name:        exec.cpp
 // Purpose:     exec sample demonstrates wxExecute and related functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     15.01.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

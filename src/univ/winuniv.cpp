@@ -2,7 +2,6 @@
 // Name:        src/univ/winuniv.cpp
 // Purpose:     implementation of extra wxWindow methods for wxUniv port
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -558,7 +557,7 @@ bool wxWindow::IsCurrent() const
     return m_isCurrent;
 }
 
-bool wxWindow::SetCurrent(bool doit)
+bool wxWindow::WXMakeCurrent(bool doit)
 {
     if ( doit == m_isCurrent )
         return false;

@@ -2,7 +2,6 @@
 // Name:        src/x11/pen.cpp
 // Purpose:     wxPen
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -37,6 +36,7 @@ public:
     }
 
     wxPenRefData( const wxPenRefData& data )
+        : wxGDIRefData()
     {
         m_style = data.m_style;
         m_width = data.m_width;
@@ -105,11 +105,6 @@ wxPen::wxPen(const wxColour& colour, int width, int style)
 wxPen::wxPen(const wxPenInfo& info)
 {
     m_refData = new wxPenRefData(info);
-}
-
-wxPen::~wxPen()
-{
-    // m_refData unrefed in ~wxObject
 }
 
 wxGDIRefData *wxPen::CreateGDIRefData() const

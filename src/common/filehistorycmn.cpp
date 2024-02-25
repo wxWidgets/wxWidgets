@@ -271,6 +271,7 @@ void wxFileHistoryBase::Load(const wxConfigBase& config)
     }
 
     AddFilesToMenu();
+    DoRefreshLabels();
 }
 
 void wxFileHistoryBase::Save(wxConfigBase& config)

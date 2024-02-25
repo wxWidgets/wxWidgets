@@ -395,7 +395,10 @@ __WXLIB_MONO_p = \
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
 !endif
 !if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
-__LIB_LEXILLA_IF_MONO_p = wxlexilla$(WXDEBUGFLAG).lib
+__LIB_LEXILLA_IF_MONO_p = $(__LIB_LEXILLA_p)
+!endif
+!if "$(USE_STC)" == "1"
+__LIB_LEXILLA_p = wxlexilla$(WXDEBUGFLAG).lib
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib

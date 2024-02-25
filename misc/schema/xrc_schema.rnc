@@ -202,6 +202,8 @@ builtinWindowClasses =
     | wxNotebook
     | wxOwnerDrawnComboBox
     | wxPanel
+    | wxPropertyGrid
+    | wxPropertyGridManager
     | wxPropertySheetDialog
     | wxRadioButton
     | wxRadioBox
@@ -305,6 +307,8 @@ builtinClassesNames =
     | "wxNotebook"
     | "wxOwnerDrawnComboBox"
     | "wxPanel"
+    | "wxPropertyGrid"
+    | "wxPropertyGridManager"
     | "wxPropertySheetDialog"
     | "wxRadioButton"
     | "wxRadioBox"
@@ -430,7 +434,9 @@ stdWindowProperties =
         [xrc:p="o"] element ownfont {_, t_font }* &
         [xrc:p="o"] element help    {_, t_text }*
 
+# hack: add "feature" to "platform" because it also can be used on any element
 platform =
+        attribute feature  { t_string }? &
         attribute platform {
             xsd:string { pattern = "(win|mac|msw|unix)( *\| *(win|mac|msw|unix))*" }
         }?
@@ -458,8 +464,7 @@ t_showeffect = "wxSHOW_EFFECT_NONE" | "wxSHOW_EFFECT_ROLL_TO_LEFT" |
                "wxSHOW_EFFECT_EXPAND"
 
 t_url        = string
-t_colour     = xsd:string { pattern = "#[0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]" } |
-               xsd:string { pattern = "[^#].*" }
+t_colour     = xsd:string { pattern = "(#[0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]|[a-zA-Z0-9 ]+)(\|dark:(#[0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]|[a-zA-Z0-9 ]+))?" }
 t_position   = t_size
 t_size       = xsd:string { pattern = "(-?\d+),(-?\d+)d?" }
 t_pair_ints  = xsd:string { pattern = "(-?\d+),(-?\d+)" }
@@ -1272,6 +1277,62 @@ wxPanel =
         stdObjectNodeAttributes &
         stdWindowProperties &
         (sizerNode | windowNode* )?
+    }
+
+
+wxPropertyGrid =
+    element object {
+        attribute class { "wxPropertyGrid" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element virtualwidth {_, t_integer }* &
+        (wxPropertyGridProperty | objectRef)*
+    }
+
+wxPropertyGridManager =
+    element object {
+        attribute class { "wxPropertyGridManager" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element virtualwidth {_, t_integer }* &
+        (wxPropertyGridPage | objectRef)*
+    }
+
+wxPropertyGridPage =
+    element page {
+        [xrc:p="o"] element label    {_, t_text }* &
+        [xrc:p="o"] element columns  {_, t_integer}* &
+        [xrc:p="o"] element splitterpos {
+            attribute index { t_integer }* &
+            # Too lax: it should be t_integer with optional "%", not text.
+            t_text
+        }* &
+        [xrc:p="o"] element choices  {
+            attribute id { t_identifier } &
+            t_text
+        }* &
+        (wxPropertyGridProperty | objectRef)*
+    }
+
+wxPropertyGridProperty =
+    element property {
+        attribute class { t_identifier } &
+        [xrc:p="o"] element label    {_, t_text }* &
+        [xrc:p="o"] element value    {_, t_text }* &
+        [xrc:p="o"] element attribute{
+            attribute name { t_identifier } &
+            t_text
+        }* &
+        # Too lax: choices should either have an id attribute or start with "@"
+        # referencing an ID defined elsewhere.
+        [xrc:p="o"] element choices  {
+            attribute id { t_identifier }* &
+            t_text
+        }* &
+        [xrc:p="o"] element tip      {_, t_text }* &
+        [xrc:p="o"] element expanded {_, t_bool }* &
+        [xrc:p="o"] element flags    {_, t_text }* &
+        (wxPropertyGridProperty | objectRef)*
     }
 
 

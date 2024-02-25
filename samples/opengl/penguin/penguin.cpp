@@ -21,11 +21,6 @@
 #endif
 
 #include "penguin.h"
-#ifdef __DARWIN__
-    #include <OpenGL/glu.h>
-#else
-    #include <GL/glu.h>
-#endif
 
 #include "../../sample.xpm"
 
@@ -312,7 +307,9 @@ void TestGLCanvas::ResetProjectionMode()
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45, double(ClientSize.x) / ClientSize.y, 1, 100);
+    double fH = tan(M_PI / 8);
+    double fW = fH * ClientSize.x / ClientSize.y;
+    glFrustum(-fW, fW, -fH, fH, 1.0, 100.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

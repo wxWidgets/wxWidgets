@@ -110,6 +110,9 @@ wxString wxGetOsDescription()
             case 13:
                 osName = "Ventura";
                 break;
+            case 14:
+                osName = "Sonoma";
+                break;
         }
     }
 #else

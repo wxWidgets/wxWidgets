@@ -2,7 +2,6 @@
 // Name:        src/x11/app.cpp
 // Purpose:     wxApp
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -199,10 +198,10 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
 
 void wxApp::CleanUp()
 {
+    wxAppBase::CleanUp();
+
     wxDELETE(wxWidgetHashTable);
     wxDELETE(wxClientWidgetHashTable);
-
-    wxAppBase::CleanUp();
 }
 
 wxApp::wxApp()
@@ -790,11 +789,3 @@ Window wxGetWindowParent(Window window)
         return (Window) 0;
 #endif
 }
-
-void wxApp::Exit()
-{
-    wxApp::CleanUp();
-
-    wxAppConsole::Exit();
-}
-

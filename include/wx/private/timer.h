@@ -30,7 +30,7 @@ public:
     // empty but virtual base class dtor, the caller is responsible for
     // stopping the timer before it's destroyed (it can't be done from here as
     // it's too late)
-    virtual ~wxTimerImpl() { }
+    virtual ~wxTimerImpl() = default;
 
 
     // start the timer. When overriding call base version first.

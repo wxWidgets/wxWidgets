@@ -2,7 +2,6 @@
 // Name:        wx/iconloc.h
 // Purpose:     declaration of wxIconLocation class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.06.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

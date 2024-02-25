@@ -2,7 +2,6 @@
 // Name:        src/msw/filedlg.cpp
 // Purpose:     wxFileDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -109,6 +108,33 @@ SetProcessUserModeExceptionPolicy_t gs_pfnSetProcessUserModeExceptionPolicy =
 DWORD gs_oldExceptionPolicyFlags = 0;
 
 bool gs_changedPolicy = false;
+
+/*
+    This function removes any remaining mouse messages from the input queue in
+    order to prevent them from being passed to controls positioned underneath
+    the wxFileDialog after it has been destroyed, see #10924.
+*/
+void DrainMouseMessages()
+{
+    // Note that we have to use this struct as PeekMessage() wouldn't remove
+    // the messages from the input queue, even with PM_REMOVE, if we pass it a
+    // null pointer.
+    MSG msg;
+
+    // This loop is used just to ensure that we don't loop indefinitely in case
+    // there is something generating an endless stream of mouse messages in the
+    // system (1000 is an arbitrary but "sufficiently large" number), the real
+    // loop termination condition is inside it.
+    for ( int i = 0; i < 1000; ++i )
+    {
+        if ( !::PeekMessage(&msg, nullptr, WM_MOUSEFIRST, WM_MOUSELAST,
+                            PM_REMOVE | PM_QS_INPUT) )
+        {
+            // No more mouse messages left.
+            break;
+        }
+    }
+}
 
 /*
 Since Windows 7 by default (callback) exceptions aren't swallowed anymore
@@ -326,6 +352,7 @@ public:
     }
 };
 
+#if wxUSE_RADIOBTN
 class wxFileDialogRadioButtonImplFDC
     : public wxFileDialogImplFDC<wxFileDialogRadioButtonImpl>
 {
@@ -366,6 +393,7 @@ public:
 private:
     const DWORD m_item;
 };
+#endif // wxUSE_RADIOBTN
 
 class wxFileDialogChoiceImplFDC
     : public wxFileDialogImplFDC<wxFileDialogChoiceImpl>
@@ -534,6 +562,7 @@ public:
         return new wxFileDialogCheckBoxImplFDC(m_fdc, m_lastId);
     }
 
+#if wxUSE_RADIOBTN
     wxFileDialogRadioButtonImpl* AddRadioButton(const wxString& label) override
     {
         HRESULT hr;
@@ -568,6 +597,7 @@ public:
 
         return impl;
     }
+#endif // wxUSE_RADIOBTN
 
     wxFileDialogChoiceImpl* AddChoice(size_t n, const wxString* strings) override
     {
@@ -993,19 +1023,17 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 
 {
     // NB: all style checks are done by wxFileDialogBase::Create
+}
 
-    m_data = nullptr;
+wxFileDialog::~wxFileDialog()
+{
+    delete m_data;
 
     // Must set to zero, otherwise the wx routines won't size the window
     // the second time you call the file dialog, because it thinks it is
     // already at the requested size.. (when centering)
     gs_rectDialog.x =
     gs_rectDialog.y = 0;
-}
-
-wxFileDialog::~wxFileDialog()
-{
-    delete m_data;
 }
 
 wxFileDialogMSWData& wxFileDialog::MSWData()
@@ -1219,12 +1247,26 @@ int wxFileDialog::ShowModal()
     wxWindowDisabler disableOthers(this, parent);
 
     /*
-        We need to use the old style dialog in order to use a hook function
-        which allows us to use custom controls in it but, if possible, we
-        prefer to use the new style one instead.
+        We prefer to use the new style dialog if possible, but have to fall
+        back on the old common dialog in a few cases.
     */
 #if wxUSE_IFILEOPENDIALOG
-    if ( !HasExtraControlCreator() )
+    bool canUseIFileDialog = true;
+
+    /*
+        We need to use the old style dialog in order to use a hook function
+        which allows us to use custom controls in it.
+     */
+    if ( HasExtraControlCreator() )
+        canUseIFileDialog = false;
+
+    /*
+        We also can't use it if we have a parent in some cases.
+     */
+    if ( hWndParent && !wxMSWImpl::wxIFileDialog::CanBeUsedWithAnOwner() )
+        canUseIFileDialog = false;
+
+    if ( canUseIFileDialog )
     {
         const int rc = ShowIFileDialog(hWndParent);
         if ( rc != wxID_NONE )
@@ -1458,6 +1500,8 @@ int wxFileDialog::ShowCommFileDialog(WXHWND hWndParent)
     DWORD errCode;
     bool success = DoShowCommFileDialog(&of, m_windowStyle, &errCode);
 
+    DrainMouseMessages();
+
     // When using a hook, our HWND was set from MSWOnInitDialogHook() called
     // above, but it's not valid any longer once the dialog was destroyed, so
     // reset it now.
@@ -1665,6 +1709,9 @@ int wxFileDialog::ShowIFileDialog(WXHWND hWndParent)
 
     // Finally do show the dialog.
     const int rc = fileDialog.Show(hWndParent, options, &m_fileNames, &m_path);
+
+    DrainMouseMessages();
+
     if ( rc == wxID_OK )
     {
         // As with the common dialog, the index is 1-based here, but don't make

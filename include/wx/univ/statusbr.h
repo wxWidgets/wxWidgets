@@ -2,7 +2,6 @@
 // Name:        wx/univ/statusbr.h
 // Purpose:     wxStatusBarUniv: wxStatusBar for wxUniversal declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.10.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        oleauto.cpp
 // Purpose:     OLE Automation wxWidgets sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     08/12/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

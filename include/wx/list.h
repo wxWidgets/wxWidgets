@@ -1164,14 +1164,14 @@ class WXDLLIMPEXP_BASE wxList : public wxObjectList
 {
 public:
 #if defined(wxWARN_COMPAT_LIST_USE) && !wxUSE_STD_CONTAINERS
-    wxList() { }
+    wxList() = default;
     wxDEPRECATED( wxList(int key_type) );
 #elif !wxUSE_STD_CONTAINERS
     wxList(int key_type = wxKEY_NONE);
 #endif
 
     // this destructor is required for Darwin
-   ~wxList() { }
+   ~wxList() = default;
 
 #if !wxUSE_STD_CONTAINERS
     wxList& operator=(const wxList& list)

@@ -2,7 +2,6 @@
 // Name:        wx/x11/cursor.h
 // Purpose:     wxCursor class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -32,7 +31,6 @@ public:
     wxCursor(const wxString& name,
              wxBitmapType type = wxCURSOR_DEFAULT_TYPE,
              int hotSpotX = 0, int hotSpotY = 0);
-    virtual ~wxCursor();
 
     // implementation
 

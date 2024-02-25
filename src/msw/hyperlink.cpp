@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/settings.h"
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/msw/private.h"
     #include "wx/msw/missing.h"
@@ -107,6 +108,14 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent,
         return false;
     }
 
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+    {
+        // Override the colour used by default by the native control with the
+        // colour appropriate for the dark mode, as the default one doesn't
+        // have enough contrast in it.
+        SetNormalColour(GetClassDefaultAttributes().colFg);
+    }
+
     ConnectMenuHandlers();
 
     return true;
@@ -158,6 +167,94 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
     m_labelOrig = label;
     wxWindow::SetLabel( GetLabelForSysLink(label, GetURL()) );
     InvalidateBestSize();
+}
+
+bool wxHyperlinkCtrl::MSWAreCustomColoursEnabled() const
+{
+    LITEM litem = { 0 };
+    litem.mask = LIF_ITEMINDEX | LIF_STATE;
+    litem.stateMask = LIS_DEFAULTCOLORS;
+    if ( !::SendMessage(GetHwnd(), LM_GETITEM, 0, (LPARAM)&litem) )
+    {
+        wxLogDebug("LM_GETITEM(LIS_DEFAULTCOLORS) unexpectedly failed");
+        return false;
+    }
+
+    return (litem.state & LIS_DEFAULTCOLORS) != 0;
+}
+
+void wxHyperlinkCtrl::MSWEnableCustomColours()
+{
+    // By default, the native control ignores the colours we set for it, so we
+    // need to explicitly enable this for them to be used.
+    if ( !MSWAreCustomColoursEnabled() )
+    {
+        LITEM litem = { 0 };
+        litem.mask = LIF_ITEMINDEX | LIF_STATE;
+        litem.state =
+        litem.stateMask = LIS_DEFAULTCOLORS;
+        if ( !::SendMessage(GetHwnd(), LM_SETITEM, 0, (LPARAM)&litem) )
+            wxLogDebug("LM_SETITEM(LIS_DEFAULTCOLORS) unexpectedly failed");
+    }
+}
+
+wxColour wxHyperlinkCtrl::GetHoverColour() const
+{
+    if ( !HasNativeHyperlinkCtrl() )
+        return wxGenericHyperlinkCtrl::GetHoverColour();
+
+    // Native control doesn't use special colour on hover.
+    return GetNormalColour();
+}
+
+wxColour wxHyperlinkCtrl::GetNormalColour() const
+{
+    if ( !HasNativeHyperlinkCtrl() || MSWAreCustomColoursEnabled() )
+        return wxGenericHyperlinkCtrl::GetNormalColour();
+
+    return GetClassDefaultAttributes().colFg;
+}
+
+void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
+{
+    if ( HasNativeHyperlinkCtrl() )
+        MSWEnableCustomColours();
+
+    wxGenericHyperlinkCtrl::SetNormalColour(colour);
+}
+
+wxColour wxHyperlinkCtrl::GetVisitedColour() const
+{
+    if ( !HasNativeHyperlinkCtrl() || MSWAreCustomColoursEnabled() )
+        return wxGenericHyperlinkCtrl::GetVisitedColour();
+
+    // Native control doesn't show visited links differently.
+    return GetNormalColour();
+}
+
+void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
+{
+    if ( HasNativeHyperlinkCtrl() )
+        MSWEnableCustomColours();
+
+    wxGenericHyperlinkCtrl::SetVisitedColour(colour);
+}
+
+wxVisualAttributes wxHyperlinkCtrl::GetDefaultAttributes() const
+{
+    return GetClassDefaultAttributes(GetWindowVariant());
+}
+
+/* static */
+wxVisualAttributes
+wxHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    auto attrs = wxGenericHyperlinkCtrl::GetClassDefaultAttributes(variant);
+
+    if ( HasNativeHyperlinkCtrl() && !wxSystemSettings::GetAppearance().IsDark() )
+        attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_HOTLIGHT);
+
+    return attrs;
 }
 
 wxSize wxHyperlinkCtrl::DoGetBestClientSize() const

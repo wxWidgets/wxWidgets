@@ -355,7 +355,7 @@ public:
     int GetPageByName( const wxString& name ) const;
 
     /**
-        Returns index for a relevant propertygrid state.
+        Returns index for a relevant property grid state.
         If no match is found, wxNOT_FOUND is returned.
     */
     int GetPageByState( const wxPropertyGridPageState* pstate ) const;

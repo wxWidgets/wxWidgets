@@ -35,6 +35,8 @@ public:
     };
 
     MyApp();
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
     // override some wxApp virtual methods
     virtual bool OnInit() override;
@@ -90,7 +92,6 @@ private:
     wxMenu *m_menuEdit;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 wxDECLARE_APP(MyApp);

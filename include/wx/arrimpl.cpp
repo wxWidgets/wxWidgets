@@ -2,7 +2,6 @@
 // Name:        wx/arrimpl.cpp
 // Purpose:     helper file for implementation of dynamic lists
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     16.10.97
 // Copyright:   (c) 1997 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

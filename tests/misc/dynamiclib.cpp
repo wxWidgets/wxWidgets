@@ -28,6 +28,9 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
 #if defined(__WINDOWS__)
     static const char* const LIB_NAME = "kernel32.dll";
     static const char* const FUNC_NAME = "lstrlenA";
+#elif defined(__CYGWIN__)
+    static const char* const LIB_NAME = "cygwin1.dll";
+    static const char* const FUNC_NAME = "strlen";
 #elif defined(__DARWIN__)
     // Under macOS 12+ we can actually load the libc dylib even though the
     // corresponding file doesn't exist on disk, so we have to handle it
@@ -43,7 +46,7 @@ TEST_CASE("DynamicLibrary::Load", "[dynlib]")
         "/usr/lib",
     };
 
-    static const char* const candidateVersions[] = { "6", "7", };
+    static const char* const candidateVersions[] = { "6", "7", "6.1", "0.3", "0.1" };
 
     wxString LIB_NAME;
     wxArrayString allMatches;

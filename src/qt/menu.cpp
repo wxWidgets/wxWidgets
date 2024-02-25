@@ -25,13 +25,12 @@ static void ApplyStyle( QMenu *qtMenu, long style )
 
 // wxQtActionGroup: an exclusive group which synchronizes QActions in
 // QActionGroup with their wx wrappers.
-class wxQtActionGroup : public QActionGroup, public wxQtSignalHandler
+class wxQtActionGroup : public QActionGroup
 {
 
 public:
     explicit wxQtActionGroup( wxMenu* handler )
-        : QActionGroup( handler->GetHandle() ),
-          wxQtSignalHandler( handler )
+        : QActionGroup( handler->GetHandle() )
     {
         setExclusive(true);
 
@@ -44,7 +43,16 @@ public:
     }
 
 private:
-    void triggered ( QAction* action );
+    void triggered ( QAction* action )
+    {
+        if ( action != m_activeAction )
+        {
+            if ( m_activeAction->isCheckable() )
+                m_activeAction->setChecked(false);
+
+            m_activeAction = action;
+        }
+    }
 
     QAction* m_activeAction;
 };
@@ -168,6 +176,8 @@ wxMenuItem *wxMenu::DoAppend(wxMenuItem *item)
     if ( wxMenuBase::DoAppend( item ) == nullptr )
         return nullptr;
 
+    item->QtCreateAction( this );
+
     InsertMenuItemAction( this, previousItem, item, successiveItem );
 
     return item;
@@ -184,6 +194,8 @@ wxMenuItem *wxMenu::DoInsert(size_t insertPosition, wxMenuItem *item)
 
     if ( wxMenuBase::DoInsert( insertPosition, item ) == nullptr )
         return nullptr;
+
+    item->QtCreateAction( this );
 
     InsertMenuItemAction( this, previousItem, item, successiveItem );
 
@@ -213,23 +225,25 @@ QMenu *wxMenu::GetHandle() const
 wxMenuBar::wxMenuBar()
 {
     m_qtMenuBar  = new QMenuBar();
-    PostCreation(false);
+
+    wxMenuBarBase::Create(nullptr, wxID_ANY);
 }
 
-wxMenuBar::wxMenuBar( long WXUNUSED( style ))
+wxMenuBar::wxMenuBar( long style )
 {
     m_qtMenuBar = new QMenuBar();
-    PostCreation(false);
+
+    wxMenuBarBase::Create(nullptr, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
 }
 
-wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long WXUNUSED( style ))
+wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long style)
 {
     m_qtMenuBar = new QMenuBar();
 
     for ( size_t i = 0; i < count; ++i )
         Append( menus[ i ], titles[ i ] );
 
-    PostCreation(false);
+    wxMenuBarBase::Create(nullptr, wxID_ANY, wxDefaultPosition, wxDefaultSize, style);
 }
 
 
@@ -339,15 +353,4 @@ void wxMenuBar::Detach()
 QWidget *wxMenuBar::GetHandle() const
 {
     return m_qtMenuBar;
-}
-
-void wxQtActionGroup::triggered( QAction* action )
-{
-    if ( action != m_activeAction )
-    {
-        if ( m_activeAction->isCheckable() )
-            m_activeAction->setChecked(false);
-
-        m_activeAction = action;
-    }
 }

@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/cfdictionaryref.h
 // Purpose:     wxCFDictionaryRef class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2018/07/27
 // Copyright:   (c) 2018 Stefan Csomor
 // Licence:     wxWindows licence
@@ -57,6 +56,14 @@ public:
      the object will be explicitly retained by this new ref.
      */
     wxCFDictionaryRefCommon(const wxCFDictionaryRefCommon&) = default;
+
+    /*! @method     operator=
+        @abstract   Assigns the other ref's pointer to us when the otherRef is the same type.
+        @param otherRef The other ref holder to copy.
+        @discussion The incoming pointer is retained, the original pointer is released, and this object
+                    is made to point to the new pointer.
+    */
+    wxCFDictionaryRefCommon& operator=(const wxCFDictionaryRefCommon&) = default;
 
     wxCFTypeRef GetValue(const void* key)
     {

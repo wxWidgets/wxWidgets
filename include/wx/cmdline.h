@@ -3,7 +3,6 @@
 // Purpose:     wxCmdLineParser and related classes for parsing the command
 //              line options
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.01.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -102,7 +101,7 @@ struct wxCmdLineEntryDesc
 class WXDLLIMPEXP_BASE wxCmdLineArg
 {
 public:
-    virtual ~wxCmdLineArg() {}
+    virtual ~wxCmdLineArg() = default;
 
     virtual double GetDoubleVal() const = 0;
     virtual long GetLongVal() const = 0;

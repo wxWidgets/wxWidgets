@@ -21,7 +21,7 @@ class wxCustomBackgroundWindow : public W,
 public:
     typedef W BaseWindowClass;
 
-    wxCustomBackgroundWindow() { }
+    wxCustomBackgroundWindow() = default;
 
 protected:
     virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) override

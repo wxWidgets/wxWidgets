@@ -59,11 +59,11 @@ SERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
 SERVER_OBJECTS =  \
 	server_server.o
 BASECLIENT_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BASECLIENT_OBJECTS =  \
 	baseclient_baseclient.o
 BASESERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BASESERVER_OBJECTS =  \
 	baseserver_baseserver.o
 

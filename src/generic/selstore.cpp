@@ -2,7 +2,6 @@
 // Name:        src/generic/selstore.cpp
 // Purpose:     wxSelectionStore implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     08.06.03 (extracted from src/generic/listctrl.cpp)
 // Copyright:   (c) 2000-2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

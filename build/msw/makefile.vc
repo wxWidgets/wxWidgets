@@ -19,10 +19,12 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	VISUALSTUDIOPLATFORM="$(VISUALSTUDIOPLATFORM)" DEBUG_INFO="$(DEBUG_INFO)" \
 	DEBUG_FLAG="$(DEBUG_FLAG)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
-	USE_WEBVIEW="$(USE_WEBVIEW)" USE_MEDIA="$(USE_MEDIA)" USE_XML="$(USE_XML)" \
-	USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" USE_RIBBON="$(USE_RIBBON)" \
-	USE_PROPGRID="$(USE_PROPGRID)" USE_RICHTEXT="$(USE_RICHTEXT)" \
-	USE_STC="$(USE_STC)" USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
+	USE_WEBVIEW="$(USE_WEBVIEW)" \
+	USE_WEBVIEW_CHROMIUM="$(USE_WEBVIEW_CHROMIUM)" USE_MEDIA="$(USE_MEDIA)" \
+	USE_XML="$(USE_XML)" USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" \
+	USE_RIBBON="$(USE_RIBBON)" USE_PROPGRID="$(USE_PROPGRID)" \
+	USE_RICHTEXT="$(USE_RICHTEXT)" USE_STC="$(USE_STC)" \
+	USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" \
 	USE_DPI_AWARE_MANIFEST="$(USE_DPI_AWARE_MANIFEST)" \
 	USE_THREADS="$(USE_THREADS)" USE_CAIRO="$(USE_CAIRO)" \
@@ -511,7 +513,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_tarstrm.obj \
 	$(OBJS)\monodll_textbuf.obj \
 	$(OBJS)\monodll_textfile.obj \
-	$(OBJS)\monodll_threadinfo.obj \
 	$(OBJS)\monodll_time.obj \
 	$(OBJS)\monodll_timercmn.obj \
 	$(OBJS)\monodll_timerimpl.obj \
@@ -535,6 +536,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_common_secretstore.obj \
 	$(OBJS)\monodll_lzmastream.obj \
 	$(OBJS)\monodll_common_uilocale.obj \
+	$(OBJS)\monodll_fs_data.obj \
 	$(OBJS)\monodll_basemsw.obj \
 	$(OBJS)\monodll_crashrpt.obj \
 	$(OBJS)\monodll_debughlp.obj \
@@ -682,7 +684,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_tarstrm.obj \
 	$(OBJS)\monolib_textbuf.obj \
 	$(OBJS)\monolib_textfile.obj \
-	$(OBJS)\monolib_threadinfo.obj \
 	$(OBJS)\monolib_time.obj \
 	$(OBJS)\monolib_timercmn.obj \
 	$(OBJS)\monolib_timerimpl.obj \
@@ -706,6 +707,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_common_secretstore.obj \
 	$(OBJS)\monolib_lzmastream.obj \
 	$(OBJS)\monolib_common_uilocale.obj \
+	$(OBJS)\monolib_fs_data.obj \
 	$(OBJS)\monolib_basemsw.obj \
 	$(OBJS)\monolib_crashrpt.obj \
 	$(OBJS)\monolib_debughlp.obj \
@@ -841,7 +843,6 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_tarstrm.obj \
 	$(OBJS)\basedll_textbuf.obj \
 	$(OBJS)\basedll_textfile.obj \
-	$(OBJS)\basedll_threadinfo.obj \
 	$(OBJS)\basedll_time.obj \
 	$(OBJS)\basedll_timercmn.obj \
 	$(OBJS)\basedll_timerimpl.obj \
@@ -865,6 +866,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_common_secretstore.obj \
 	$(OBJS)\basedll_lzmastream.obj \
 	$(OBJS)\basedll_common_uilocale.obj \
+	$(OBJS)\basedll_fs_data.obj \
 	$(OBJS)\basedll_basemsw.obj \
 	$(OBJS)\basedll_crashrpt.obj \
 	$(OBJS)\basedll_debughlp.obj \
@@ -982,7 +984,6 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_tarstrm.obj \
 	$(OBJS)\baselib_textbuf.obj \
 	$(OBJS)\baselib_textfile.obj \
-	$(OBJS)\baselib_threadinfo.obj \
 	$(OBJS)\baselib_time.obj \
 	$(OBJS)\baselib_timercmn.obj \
 	$(OBJS)\baselib_timerimpl.obj \
@@ -1006,6 +1007,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_common_secretstore.obj \
 	$(OBJS)\baselib_lzmastream.obj \
 	$(OBJS)\baselib_common_uilocale.obj \
+	$(OBJS)\baselib_fs_data.obj \
 	$(OBJS)\baselib_basemsw.obj \
 	$(OBJS)\baselib_crashrpt.obj \
 	$(OBJS)\baselib_debughlp.obj \
@@ -1305,15 +1307,17 @@ WEBVIEWDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_348)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	/I$(SETUPHDIR) /I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 \
 	/DWXBUILDING /I..\..\3rdparty\webview2\build\native\include /DWXUSINGDLL \
-	/DWXMAKINGDLL_WEBVIEW $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_webviewdll.pch" $(CPPFLAGS) $(CXXFLAGS)
+	/DWXMAKINGDLL_WEBVIEW /I..\..\\3rdparty\cef $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_webviewdll.pch" \
+	$(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWDLL_OBJECTS =  \
 	$(OBJS)\webviewdll_dummy.obj \
 	$(OBJS)\webviewdll_webview_ie.obj \
 	$(OBJS)\webviewdll_webview_edge.obj \
 	$(OBJS)\webviewdll_webview.obj \
 	$(OBJS)\webviewdll_webviewarchivehandler.obj \
-	$(OBJS)\webviewdll_webviewfshandler.obj
+	$(OBJS)\webviewdll_webviewfshandler.obj \
+	$(OBJS)\webviewdll_webview_chromium.obj
 WEBVIEWDLL_RESOURCES =  \
 	$(OBJS)\webviewdll_version.res
 WEBVIEWLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_363)$(__DEBUGRUNTIME) /DWIN32 \
@@ -1326,16 +1330,17 @@ WEBVIEWLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_363)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	/I$(SETUPHDIR) /I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 \
-	/DWXBUILDING /I..\..\3rdparty\webview2\build\native\include $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_webviewlib.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	/DWXBUILDING /I..\..\3rdparty\webview2\build\native\include \
+	/I..\..\\3rdparty\cef $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_webviewlib.pch" $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWLIB_OBJECTS =  \
 	$(OBJS)\webviewlib_dummy.obj \
 	$(OBJS)\webviewlib_webview_ie.obj \
 	$(OBJS)\webviewlib_webview_edge.obj \
 	$(OBJS)\webviewlib_webview.obj \
 	$(OBJS)\webviewlib_webviewarchivehandler.obj \
-	$(OBJS)\webviewlib_webviewfshandler.obj
+	$(OBJS)\webviewlib_webviewfshandler.obj \
+	$(OBJS)\webviewlib_webview_chromium.obj
 QADLL_CXXFLAGS = /M$(__RUNTIME_LIBS_379)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\tiff\libtiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
 	/I..\..\3rdparty\pcre\src\wx /I..\..\src\expat\expat\lib $(__DEBUGINFO) \
@@ -1702,7 +1707,8 @@ PROPGRIDDLL_OBJECTS =  \
 	$(OBJS)\propgriddll_propgrid.obj \
 	$(OBJS)\propgriddll_propgridiface.obj \
 	$(OBJS)\propgriddll_propgridpagestate.obj \
-	$(OBJS)\propgriddll_props.obj
+	$(OBJS)\propgriddll_props.obj \
+	$(OBJS)\propgriddll_xh_propgrid.obj
 PROPGRIDDLL_RESOURCES =  \
 	$(OBJS)\propgriddll_version.res
 PROPGRIDLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_549)$(__DEBUGRUNTIME) /DWIN32 \
@@ -1726,7 +1732,8 @@ PROPGRIDLIB_OBJECTS =  \
 	$(OBJS)\propgridlib_propgrid.obj \
 	$(OBJS)\propgridlib_propgridiface.obj \
 	$(OBJS)\propgridlib_propgridpagestate.obj \
-	$(OBJS)\propgridlib_props.obj
+	$(OBJS)\propgridlib_props.obj \
+	$(OBJS)\propgridlib_xh_propgrid.obj
 RICHTEXTDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_565)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\tiff\libtiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
 	/I..\..\3rdparty\pcre\src\wx /I..\..\src\expat\expat\lib $(__DEBUGINFO) \
@@ -1868,6 +1875,9 @@ BUILD_CFG_FILE = $(SETUPHDIR)\build.cfg
 !if "$(TARGET_CPU)" == "AMD64"
 ARCH_SUFFIX = _x64
 !endif
+!if "$(TARGET_CPU)" == "ARM"
+ARCH_SUFFIX = _arm
+!endif
 !if "$(TARGET_CPU)" == "ARM64"
 ARCH_SUFFIX = _arm64
 !endif
@@ -1885,6 +1895,9 @@ ARCH_SUFFIX = _x64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 ARCH_SUFFIX = _x64
+!endif
+!if "$(TARGET_CPU)" == "arm"
+ARCH_SUFFIX = _arm
 !endif
 !if "$(TARGET_CPU)" == "arm64"
 ARCH_SUFFIX = _arm64
@@ -1937,6 +1950,9 @@ LIBTYPE_SUFFIX = dll
 !if "$(TARGET_CPU)" == "AMD64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
+!if "$(TARGET_CPU)" == "ARM"
+LINK_TARGET_CPU = /MACHINE:ARM
+!endif
 !if "$(TARGET_CPU)" == "ARM64"
 LINK_TARGET_CPU = /MACHINE:ARM64
 !endif
@@ -1954,6 +1970,9 @@ LINK_TARGET_CPU = /MACHINE:X64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:X64
+!endif
+!if "$(TARGET_CPU)" == "arm"
+LINK_TARGET_CPU = /MACHINE:ARM
 !endif
 !if "$(TARGET_CPU)" == "arm64"
 LINK_TARGET_CPU = /MACHINE:ARM64
@@ -2088,6 +2107,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_webview.obj \
 	$(OBJS)\monodll_webviewarchivehandler.obj \
 	$(OBJS)\monodll_webviewfshandler.obj \
+	$(OBJS)\monodll_webview_chromium.obj \
 	$(OBJS)\monodll_debugrpt.obj \
 	$(OBJS)\monodll_dbgrptg.obj \
 	$(OBJS)\monodll_xh_activityindicator.obj \
@@ -2178,6 +2198,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_propgridiface.obj \
 	$(OBJS)\monodll_propgridpagestate.obj \
 	$(OBJS)\monodll_props.obj \
+	$(OBJS)\monodll_xh_propgrid.obj \
 	$(OBJS)\monodll_art_internal.obj \
 	$(OBJS)\monodll_art_msw.obj \
 	$(OBJS)\monodll_art_aui.obj \
@@ -2943,6 +2964,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_webview.obj \
 	$(OBJS)\monolib_webviewarchivehandler.obj \
 	$(OBJS)\monolib_webviewfshandler.obj \
+	$(OBJS)\monolib_webview_chromium.obj \
 	$(OBJS)\monolib_debugrpt.obj \
 	$(OBJS)\monolib_dbgrptg.obj \
 	$(OBJS)\monolib_xh_activityindicator.obj \
@@ -3033,6 +3055,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_propgridiface.obj \
 	$(OBJS)\monolib_propgridpagestate.obj \
 	$(OBJS)\monolib_props.obj \
+	$(OBJS)\monolib_xh_propgrid.obj \
 	$(OBJS)\monolib_art_internal.obj \
 	$(OBJS)\monolib_art_msw.obj \
 	$(OBJS)\monolib_art_aui.obj \
@@ -6132,7 +6155,7 @@ $(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).lib: $(WXLEXILLA_OBJECTS)
 
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\monodll_dummy.obj  $(MONODLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(__wxlexilla) $(OBJS)\monodll_version.res $(__wxscintilla_library_link_DEP) $(__wxlexilla_library_link_DEP)
-	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_123)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) /LIBPATH:..\..\3rdparty\webview2\build\native\$(__webview_additional_libdirs_arch_FILENAMES) $(LDFLAGS) @<<
+	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_123)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) /LIBPATH:..\..\3rdparty\webview2\build\native\$(__webview_additional_libdirs_arch_FILENAMES)  $(LDFLAGS) @<<
 	$(MONODLL_OBJECTS) $(MONODLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib    imm32.lib   $(__wxscintilla) $(__wxlexilla) /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 <<
 !endif
@@ -6260,8 +6283,8 @@ wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_WEBVIEW)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\webviewdll_dummy.obj  $(WEBVIEWDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(__wxlexilla) $(OBJS)\webviewdll_version.res $(__coredll___depname) $(__basedll___depname)
-	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_340)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) /LIBPATH:..\..\3rdparty\webview2\build\native\$(__webview_additional_libdirs_arch_FILENAMES) $(LDFLAGS) @<<
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\webviewdll_dummy.obj  $(WEBVIEWDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(__wxlexilla) $(__coredll___depname) $(__basedll___depname) $(OBJS)\webviewdll_version.res
+	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_340)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) /LIBPATH:..\..\3rdparty\webview2\build\native\$(__webview_additional_libdirs_arch_FILENAMES)  $(LDFLAGS) @<<
 	$(WEBVIEWDLL_OBJECTS) $(WEBVIEWDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
 <<
 !endif
@@ -6433,7 +6456,7 @@ wxstc: $(____wxstc_namedll_DEP) $(____wxstc_namelib_DEP)
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\gldll_dummy.obj  $(GLDLL_OBJECTS) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregexu$(WXDEBUGFLAG).lib $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(__wxlexilla) $(OBJS)\gldll_version.res $(__basedll___depname) $(__coredll___depname) $(__monodll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_619)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(GLDLL_OBJECTS) $(GLDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) opengl32.lib glu32.lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
+	$(GLDLL_OBJECTS) $(GLDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) opengl32.lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
 <<
 !endif
 
@@ -6503,6 +6526,7 @@ build_cfg_file: $(SETUPHDIR)
 	@echo USE_RICHTEXT=$(USE_RICHTEXT) >>$(BUILD_CFG_FILE)
 	@echo USE_STC=$(USE_STC) >>$(BUILD_CFG_FILE)
 	@echo USE_WEBVIEW=$(USE_WEBVIEW) >>$(BUILD_CFG_FILE)
+	@echo USE_WEBVIEW_CHROMIUM=$(USE_WEBVIEW_CHROMIUM) >>$(BUILD_CFG_FILE)
 	@echo USE_XML=$(USE_XML) >>$(BUILD_CFG_FILE)
 	@echo USE_XRC=$(USE_XRC) >>$(BUILD_CFG_FILE)
 	@echo COMPILER=vc >>$(BUILD_CFG_FILE)
@@ -7627,9 +7651,6 @@ $(OBJS)\monodll_textbuf.obj: ..\..\src\common\textbuf.cpp
 $(OBJS)\monodll_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\textfile.cpp
 
-$(OBJS)\monodll_threadinfo.obj: ..\..\src\common\threadinfo.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\threadinfo.cpp
-
 $(OBJS)\monodll_time.obj: ..\..\src\common\time.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\time.cpp
 
@@ -7698,6 +7719,9 @@ $(OBJS)\monodll_lzmastream.obj: ..\..\src\common\lzmastream.cpp
 
 $(OBJS)\monodll_common_uilocale.obj: ..\..\src\common\uilocale.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\uilocale.cpp
+
+$(OBJS)\monodll_fs_data.obj: ..\..\src\common\fs_data.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\fs_data.cpp
 
 $(OBJS)\monodll_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\basemsw.cpp
@@ -8272,6 +8296,9 @@ $(OBJS)\monodll_webviewarchivehandler.obj: ..\..\src\common\webviewarchivehandle
 $(OBJS)\monodll_webviewfshandler.obj: ..\..\src\common\webviewfshandler.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webviewfshandler.cpp
 
+$(OBJS)\monodll_webview_chromium.obj: ..\..\src\common\webview_chromium.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webview_chromium.cpp
+
 $(OBJS)\monodll_debugrpt.obj: ..\..\src\common\debugrpt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\debugrpt.cpp
 
@@ -8541,6 +8568,9 @@ $(OBJS)\monodll_propgridpagestate.obj: ..\..\src\propgrid\propgridpagestate.cpp
 
 $(OBJS)\monodll_props.obj: ..\..\src\propgrid\props.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\propgrid\props.cpp
+
+$(OBJS)\monodll_xh_propgrid.obj: ..\..\src\xrc\xh_propgrid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_propgrid.cpp
 
 $(OBJS)\monodll_art_internal.obj: ..\..\src\ribbon\art_internal.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\art_internal.cpp
@@ -10221,9 +10251,6 @@ $(OBJS)\monolib_textbuf.obj: ..\..\src\common\textbuf.cpp
 $(OBJS)\monolib_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\textfile.cpp
 
-$(OBJS)\monolib_threadinfo.obj: ..\..\src\common\threadinfo.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\threadinfo.cpp
-
 $(OBJS)\monolib_time.obj: ..\..\src\common\time.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\time.cpp
 
@@ -10292,6 +10319,9 @@ $(OBJS)\monolib_lzmastream.obj: ..\..\src\common\lzmastream.cpp
 
 $(OBJS)\monolib_common_uilocale.obj: ..\..\src\common\uilocale.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\uilocale.cpp
+
+$(OBJS)\monolib_fs_data.obj: ..\..\src\common\fs_data.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\fs_data.cpp
 
 $(OBJS)\monolib_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\basemsw.cpp
@@ -10866,6 +10896,9 @@ $(OBJS)\monolib_webviewarchivehandler.obj: ..\..\src\common\webviewarchivehandle
 $(OBJS)\monolib_webviewfshandler.obj: ..\..\src\common\webviewfshandler.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webviewfshandler.cpp
 
+$(OBJS)\monolib_webview_chromium.obj: ..\..\src\common\webview_chromium.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webview_chromium.cpp
+
 $(OBJS)\monolib_debugrpt.obj: ..\..\src\common\debugrpt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\debugrpt.cpp
 
@@ -11135,6 +11168,9 @@ $(OBJS)\monolib_propgridpagestate.obj: ..\..\src\propgrid\propgridpagestate.cpp
 
 $(OBJS)\monolib_props.obj: ..\..\src\propgrid\props.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\propgrid\props.cpp
+
+$(OBJS)\monolib_xh_propgrid.obj: ..\..\src\xrc\xh_propgrid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_propgrid.cpp
 
 $(OBJS)\monolib_art_internal.obj: ..\..\src\ribbon\art_internal.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\art_internal.cpp
@@ -12815,9 +12851,6 @@ $(OBJS)\basedll_textbuf.obj: ..\..\src\common\textbuf.cpp
 $(OBJS)\basedll_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\textfile.cpp
 
-$(OBJS)\basedll_threadinfo.obj: ..\..\src\common\threadinfo.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\threadinfo.cpp
-
 $(OBJS)\basedll_time.obj: ..\..\src\common\time.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\time.cpp
 
@@ -12886,6 +12919,9 @@ $(OBJS)\basedll_lzmastream.obj: ..\..\src\common\lzmastream.cpp
 
 $(OBJS)\basedll_common_uilocale.obj: ..\..\src\common\uilocale.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\uilocale.cpp
+
+$(OBJS)\basedll_fs_data.obj: ..\..\src\common\fs_data.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\fs_data.cpp
 
 $(OBJS)\basedll_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\basemsw.cpp
@@ -13160,9 +13196,6 @@ $(OBJS)\baselib_textbuf.obj: ..\..\src\common\textbuf.cpp
 $(OBJS)\baselib_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\textfile.cpp
 
-$(OBJS)\baselib_threadinfo.obj: ..\..\src\common\threadinfo.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\threadinfo.cpp
-
 $(OBJS)\baselib_time.obj: ..\..\src\common\time.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\time.cpp
 
@@ -13231,6 +13264,9 @@ $(OBJS)\baselib_lzmastream.obj: ..\..\src\common\lzmastream.cpp
 
 $(OBJS)\baselib_common_uilocale.obj: ..\..\src\common\uilocale.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\uilocale.cpp
+
+$(OBJS)\baselib_fs_data.obj: ..\..\src\common\fs_data.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\fs_data.cpp
 
 $(OBJS)\baselib_basemsw.obj: ..\..\src\msw\basemsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\basemsw.cpp
@@ -17151,9 +17187,6 @@ $(OBJS)\htmllib_htmllbox.obj: ..\..\src\generic\htmllbox.cpp
 $(OBJS)\webviewdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
-$(OBJS)\webviewdll_version.res: ..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\3rdparty\pcre\src\wx /i ..\..\src\expat\expat\lib $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_73)  $(__TARGET_CPU_COMPFLAG_p_73) /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG)  /i ..\..\3rdparty\webview2\build\native\include /d WXUSINGDLL /d WXMAKINGDLL_WEBVIEW ..\..\src\msw\version.rc
-
 $(OBJS)\webviewdll_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
 
@@ -17168,6 +17201,12 @@ $(OBJS)\webviewdll_webviewarchivehandler.obj: ..\..\src\common\webviewarchivehan
 
 $(OBJS)\webviewdll_webviewfshandler.obj: ..\..\src\common\webviewfshandler.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\common\webviewfshandler.cpp
+
+$(OBJS)\webviewdll_webview_chromium.obj: ..\..\src\common\webview_chromium.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\common\webview_chromium.cpp
+
+$(OBJS)\webviewdll_version.res: ..\..\src\msw\version.rc
+	rc /fo$@  /d WIN32  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\3rdparty\pcre\src\wx /i ..\..\src\expat\expat\lib $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_73)  $(__TARGET_CPU_COMPFLAG_p_73) /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_67) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG)  /i ..\..\3rdparty\webview2\build\native\include /d WXUSINGDLL /d WXMAKINGDLL_WEBVIEW /i ..\..\\3rdparty\cef ..\..\src\msw\version.rc
 
 $(OBJS)\webviewlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
@@ -17186,6 +17225,9 @@ $(OBJS)\webviewlib_webviewarchivehandler.obj: ..\..\src\common\webviewarchivehan
 
 $(OBJS)\webviewlib_webviewfshandler.obj: ..\..\src\common\webviewfshandler.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\common\webviewfshandler.cpp
+
+$(OBJS)\webviewlib_webview_chromium.obj: ..\..\src\common\webview_chromium.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WEBVIEWLIB_CXXFLAGS) ..\..\src\common\webview_chromium.cpp
 
 $(OBJS)\qadll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(QADLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
@@ -17832,6 +17874,9 @@ $(OBJS)\propgriddll_propgridpagestate.obj: ..\..\src\propgrid\propgridpagestate.
 $(OBJS)\propgriddll_props.obj: ..\..\src\propgrid\props.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDDLL_CXXFLAGS) ..\..\src\propgrid\props.cpp
 
+$(OBJS)\propgriddll_xh_propgrid.obj: ..\..\src\xrc\xh_propgrid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDDLL_CXXFLAGS) ..\..\src\xrc\xh_propgrid.cpp
+
 $(OBJS)\propgridlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -17858,6 +17903,9 @@ $(OBJS)\propgridlib_propgridpagestate.obj: ..\..\src\propgrid\propgridpagestate.
 
 $(OBJS)\propgridlib_props.obj: ..\..\src\propgrid\props.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDLIB_CXXFLAGS) ..\..\src\propgrid\props.cpp
+
+$(OBJS)\propgridlib_xh_propgrid.obj: ..\..\src\xrc\xh_propgrid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDLIB_CXXFLAGS) ..\..\src\xrc\xh_propgrid.cpp
 
 $(OBJS)\richtextdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHTEXTDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp

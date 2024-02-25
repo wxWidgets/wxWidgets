@@ -923,7 +923,7 @@ control.
 
 @section page_samples_webview wxWebView Sample
 
-The wxWebView sample demonstarates the various capabilities of the wxWebView
+The wxWebView sample demonstrates the various capabilities of the wxWebView
 control. It is set up as a simple single window web browser, but with support
 for many of the more complex wxWebView features, including browsing through
 archives.

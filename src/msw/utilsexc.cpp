@@ -2,7 +2,6 @@
 // Name:        src/msw/utilsexc.cpp
 // Purpose:     wxExecute implementation for MSW
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) 1998-2002 wxWidgets dev team
 // Licence:     wxWindows licence

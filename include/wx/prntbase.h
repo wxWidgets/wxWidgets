@@ -2,7 +2,6 @@
 // Name:        wx/prntbase.h
 // Purpose:     Base classes for printing framework
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -75,8 +74,8 @@ enum wxPreviewFrameModalityKind
 class WXDLLIMPEXP_CORE wxPrintFactory
 {
 public:
-    wxPrintFactory() {}
-    virtual ~wxPrintFactory() {}
+    wxPrintFactory() = default;
+    virtual ~wxPrintFactory() = default;
 
     virtual wxPrinterBase *CreatePrinter( wxPrintDialogData* data ) = 0;
 

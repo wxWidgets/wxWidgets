@@ -2,7 +2,6 @@
 // Name:        wx/msw/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -39,7 +38,7 @@ class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage,
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later
-    wxBitmap() { }
+    wxBitmap() = default;
 
     // Initialize with raw data
     wxBitmap(const char bits[], int width, int height, int depth = 1);
@@ -114,8 +113,6 @@ public:
     }
 #endif // WXWIN_COMPATIBILITY_3_0
 
-    virtual ~wxBitmap();
-
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
     wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
@@ -158,6 +155,14 @@ public:
                            int depth = wxBITMAP_SCREEN_DEPTH)
         { return CreateWithDIPSize(wxSize(width, height), scale, depth); }
 
+    bool CreateWithLogicalSize(const wxSize& sz,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return CreateWithLogicalSize(wxSize(width, height), scale, depth); }
+
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = nullptr) const;
 
@@ -177,7 +182,7 @@ public:
     void SetMask(wxMask *mask);
 
     bool HasAlpha() const;
-    void UseAlpha(bool use = true);
+    bool UseAlpha(bool use = true);
     void ResetAlpha() { UseAlpha(false); }
 
     // old synonyms for CreateWithDIPSize() and GetLogicalXXX() functions
@@ -293,7 +298,7 @@ protected:
 class WXDLLIMPEXP_CORE wxBitmapHandler : public wxGDIImageHandler
 {
 public:
-    wxBitmapHandler() { }
+    wxBitmapHandler() = default;
     wxBitmapHandler(const wxString& name, const wxString& ext, wxBitmapType type)
         : wxGDIImageHandler(name, ext, type) { }
 

@@ -327,8 +327,7 @@ wxRect wxDisplayImplGTK::GetClientArea() const
 
 int wxDisplayImplGTK::GetDepth() const
 {
-    // TODO: How to get the depth of the specific display?
-    return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
+    return gdk_visual_get_depth(gdk_screen_get_system_visual(m_screen));
 }
 
 #if GTK_CHECK_VERSION(3,10,0)
@@ -361,9 +360,13 @@ wxArrayVideoModes wxDisplayImplGTK::GetModes(const wxVideoMode& mode) const
         modes = wxX11_GetModes(this, mode, display);
 #endif
     }
-#else
-    wxUnusedVar(mode);
+    else
 #endif
+    {
+        const wxVideoMode current(GetCurrentMode());
+        if (current.Matches(mode))
+            modes.push_back(current);
+    }
     return modes;
 }
 
@@ -377,7 +380,14 @@ wxVideoMode wxDisplayImplGTK::GetCurrentMode() const
         int nScreen = gdk_x11_screen_get_screen_number(m_screen);
         mode = wxXF86VidMode_GetCurrentMode(display, nScreen);
     }
+    else
 #endif
+    {
+        const wxRect rect(GetGeometry());
+        mode.w = rect.width;
+        mode.h = rect.height;
+        mode.bpp = gdk_visual_get_depth(gdk_screen_get_system_visual(m_screen));
+    }
     return mode;
 }
 

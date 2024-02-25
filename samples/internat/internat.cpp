@@ -2,7 +2,6 @@
 // Name:        internat.cpp
 // Purpose:     Demonstrates internationalisation (i18n) support
 // Author:      Vadim Zeitlin/Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

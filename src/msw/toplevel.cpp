@@ -2,7 +2,6 @@
 // Name:        src/msw/toplevel.cpp
 // Purpose:     implements wxTopLevelWindow for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     24.09.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -130,7 +129,9 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     else
         msflags |= WS_POPUP;
 
-    if ( style & wxCAPTION )
+    // We need to use WS_CAPTION to show any of the minimize/maximize/close
+    // buttons, so enable it if any of these styles is specified.
+    if ( style & (wxCAPTION | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCLOSE_BOX) )
         msflags |= WS_CAPTION;
     else
         msflags |= WS_POPUP;
@@ -155,8 +156,6 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
     if ( style & (wxSYSTEM_MENU | wxCLOSE_BOX) )
         msflags |= WS_SYSMENU;
 
-    // NB: under CE these 2 styles are not supported currently, we should
-    //     call Minimize()/Maximize() "manually" if we want to support them
     if ( style & wxMINIMIZE )
         msflags |= WS_MINIMIZE;
 
@@ -709,7 +708,7 @@ bool wxTopLevelWindowMSW::IsMaximized() const
 
 void wxTopLevelWindowMSW::Iconize(bool iconize)
 {
-    if ( iconize == MSWIsIconized() )
+    if ( iconize == IsIconized() )
     {
         // Do nothing, in particular don't restore non-iconized windows when
         // Iconize(false) is called as this would wrongly un-maximize them.

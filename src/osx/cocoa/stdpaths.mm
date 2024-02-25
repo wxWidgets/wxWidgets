@@ -101,11 +101,17 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxString& lang,
 
 wxString wxStandardPaths::GetUserDir(Dir userDir) const
 {
+    wxString subdir;
+
     NSSearchPathDirectory dirType;
     switch (userDir)
     {
         case Dir_Cache:
             dirType = NSCachesDirectory;
+            break;
+        case Dir_Config:
+            dirType = NSLibraryDirectory;
+            subdir = "/Preferences";
             break;
         case Dir_Desktop:
             dirType = NSDesktopDirectory;
@@ -127,7 +133,7 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
             break;
     }
     
-    return GetFMDirectory(dirType, NSUserDomainMask);
+    return GetFMDirectory(dirType, NSUserDomainMask) + subdir;
 }
 
 wxString
@@ -137,6 +143,13 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
     wxFileName fn(wxEmptyString, basename);
     fn.SetName(fn.GetName() + wxT(" Preferences"));
     return fn.GetFullName();
+}
+
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    // Shared libraries on OSX should be stored inside the
+    // <Bundle.app>/Contents/Frameworks
+    return wxCFStringRef::AsString([NSBundle mainBundle].privateFrameworksPath);
 }
 
 #endif // wxUSE_STDPATHS

@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/cursor.cpp
 // Purpose:     wxCursor class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -334,10 +333,6 @@ void wxCursor::MacInstall() const
     if ( IsOk() )
         wxMacCocoaSetCursor( M_CURSORDATA->m_hCursor );
 #endif
-}
-
-wxCursor::~wxCursor()
-{
 }
 
 // Global cursor setting

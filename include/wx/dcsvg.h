@@ -2,7 +2,6 @@
 // Name:        wx/dcsvg.h
 // Purpose:     wxSVGFileDC
 // Author:      Chris Elliott
-// Modified by:
 // Created:
 // Copyright:   (c) Chris Elliott
 // Licence:     wxWindows licence
@@ -47,7 +46,7 @@ public:
                                wxCoord x, wxCoord y,
                                wxOutputStream& stream) const = 0;
 
-    virtual ~wxSVGBitmapHandler() {}
+    virtual ~wxSVGBitmapHandler() = default;
 };
 
 // Predefined standard bitmap handler: creates a file, stores the bitmap in

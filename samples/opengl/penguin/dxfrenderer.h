@@ -2,7 +2,6 @@
 // Name:        dxfrenderer.h
 // Purpose:     DXF reader and renderer
 // Author:      Sandro Sigala
-// Modified by:
 // Created:     2005-11-10
 // Copyright:   (c) Sandro Sigala
 // Licence:     wxWindows licence
@@ -11,6 +10,7 @@
 #ifndef _DXFRENDERER_H_
 #define _DXFRENDERER_H_
 
+#include <memory>
 #include <vector>
 
 struct DXFVector
@@ -71,7 +71,7 @@ private:
 
     bool m_loaded;
     std::vector<DXFLayer> m_layers;
-    std::vector<DXFEntity> m_entities;
+    std::vector<std::unique_ptr<DXFEntity>> m_entities;
 };
 
 #endif // !_DXFRENDERER_H_

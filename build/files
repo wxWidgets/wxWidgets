@@ -233,6 +233,7 @@ QT_HDR =
     wx/generic/fontpickerg.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/generic/paletteg.h
     wx/generic/prntdlgg.h
     wx/qt/accel.h
     wx/qt/anybutton.h
@@ -257,6 +258,7 @@ QT_HDR =
     wx/qt/dataobj.h
     wx/qt/dataobj2.h
     wx/qt/dataview.h
+    wx/qt/datectrl.h
     wx/qt/dc.h
     wx/qt/dcclient.h
     wx/qt/dcmemory.h
@@ -283,7 +285,6 @@ QT_HDR =
     wx/qt/msgdlg.h
     wx/qt/nonownedwnd.h
     wx/qt/notebook.h
-    wx/qt/palette.h
     wx/qt/pen.h
     wx/qt/popupwin.h
     wx/qt/printdlg.h
@@ -304,6 +305,7 @@ QT_HDR =
     wx/qt/textctrl.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
+    wx/qt/timectrl.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
@@ -322,6 +324,7 @@ QT_SRC=
     src/generic/fontpickerg.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
+    src/generic/paletteg.cpp
     src/generic/prntdlgg.cpp
     src/generic/textmeasure.cpp
     src/qt/accel.cpp
@@ -347,6 +350,7 @@ QT_SRC=
     src/qt/cursor.cpp
     src/qt/dataobj.cpp
     src/qt/dataview.cpp
+    src/qt/datectrl.cpp
     src/qt/dc.cpp
     src/qt/dcclient.cpp
     src/qt/dcmemory.cpp
@@ -375,7 +379,7 @@ QT_SRC=
     src/qt/msgdlg.cpp
     src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
-    src/qt/palette.cpp
+    src/qt/overlay.cpp
     src/qt/pen.cpp
     src/qt/popupwin.cpp
     src/qt/printdlg.cpp
@@ -383,6 +387,7 @@ QT_SRC=
     src/qt/radiobox.cpp
     src/qt/radiobut.cpp
     src/qt/region.cpp
+    src/qt/renderer.cpp
     src/qt/scrolbar.cpp
     src/qt/settings.cpp
     src/qt/slider.cpp
@@ -398,6 +403,7 @@ QT_SRC=
     src/qt/textctrl.cpp
     src/qt/textentry.cpp
     src/qt/tglbtn.cpp
+    src/qt/timectrl.cpp
     src/qt/timer.cpp
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
@@ -450,6 +456,7 @@ BASE_CMN_SRC =
     src/common/filtfind.cpp
     src/common/fmapbase.cpp
     src/common/fs_arc.cpp
+    src/common/fs_data.cpp
     src/common/fs_filter.cpp
     src/common/hash.cpp
     src/common/hashmap.cpp
@@ -484,7 +491,6 @@ BASE_CMN_SRC =
     src/common/tarstrm.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
-    src/common/threadinfo.cpp
     src/common/time.cpp
     src/common/timercmn.cpp
     src/common/timerimpl.cpp
@@ -567,6 +573,7 @@ BASE_CMN_HDR =
     wx/fontenc.h
     wx/fontmap.h
     wx/fs_arc.h
+    wx/fs_data.h
     wx/fs_filter.h
     wx/fs_mem.h
     wx/fs_zip.h
@@ -1146,6 +1153,7 @@ GUI_CMN_HDR =
     wx/peninfobase.h
     wx/persist.h
     wx/persist/bookctrl.h
+    wx/persist/combobox.h
     wx/persist/dataview.h
     wx/persist/splitter.h
     wx/persist/toplevel.h
@@ -2019,7 +2027,6 @@ OSX_COMMON_SRC =
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
     src/osx/carbon/popupwin.cpp
-    src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
     src/osx/carbon/region.cpp
     # cocoa bridge
@@ -2170,6 +2177,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/radiobut.mm
+    src/osx/cocoa/renderer.mm
     src/osx/cocoa/scrolbar.mm
     src/osx/cocoa/settings.mm
     src/osx/cocoa/slider.mm
@@ -2467,6 +2475,7 @@ WEBVIEW_CMN_SRC =
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
+    src/common/webview_chromium.cpp
 
 WEBVIEW_MSW_HDR =
     wx/msw/webviewhistoryitem_ie.h
@@ -2476,12 +2485,14 @@ WEBVIEW_CMN_HDR =
     wx/webview.h
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
+    wx/webview_chromium.h
 
 WEBVIEW_OSX_SHARED_HDR =
     wx/osx/webviewhistoryitem_webkit.h
     wx/osx/webview_webkit.h
 
 WEBVIEW_OSX_SHARED_SRC =
+    src/osx/webview_chromium.mm
     src/osx/webview_webkit.mm
 
 WEBVIEW_GTK_HDR =
@@ -2764,6 +2775,7 @@ PROPGRID_SRC =
     src/propgrid/propgridiface.cpp
     src/propgrid/propgridpagestate.cpp
     src/propgrid/props.cpp
+    src/xrc/xh_propgrid.cpp
 PROPGRID_HDR =
     wx/propgrid/advprops.h
     wx/propgrid/editors.h
@@ -2775,6 +2787,7 @@ PROPGRID_HDR =
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
     wx/propgrid/private.h
+    wx/xrc/xh_propgrid.h
 
 # wxRichTextCtrl
 

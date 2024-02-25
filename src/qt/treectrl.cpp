@@ -573,12 +573,20 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
+    m_qtWindow =
     m_qtTreeWidget = new wxQTreeWidget(parent, this);
     m_qtTreeWidget->header()->hide();
 
+    Bind(wxEVT_KEY_DOWN, &wxTreeCtrl::OnKeyDown, this);
+
+    if ( !wxTreeCtrlBase::Create(parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, validator, name) )
+    {
+        return false;
+    }
+
     SetWindowStyleFlag(style);
 
-    return QtCreateControl(parent, id, pos, size, style, validator, name);
+    return true;
 }
 
 wxTreeCtrl::~wxTreeCtrl()
@@ -627,6 +635,12 @@ void wxTreeCtrl::OnImagesChanged()
     {
         DoUpdateIconsSize(GetUpdatedImageListFor(this));
     }
+}
+
+void wxTreeCtrl::SetStateImages(const wxVector<wxBitmapBundle>& images)
+{
+    m_imagesState.SetImages(images);
+    m_qtTreeWidget->update();
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
@@ -1419,4 +1433,15 @@ wxTreeItemId wxTreeCtrl::GetNext(const wxTreeItemId &item) const
         p = GetItemParent(p);
     } while ( p.IsOk() && !toFind.IsOk() );
     return toFind;
+}
+
+void wxTreeCtrl::OnKeyDown(wxKeyEvent& event)
+{
+    // send a tree event
+    wxTreeEvent te( wxEVT_TREE_KEY_DOWN, this);
+    te.m_evtKey = event;
+    if ( GetEventHandler()->ProcessEvent( te ) )
+        return;
+
+    event.Skip();
 }

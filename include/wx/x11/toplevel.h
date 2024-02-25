@@ -2,7 +2,6 @@
 // Name:        wx/x11/toplevel.h
 // Purpose:     wxTopLevelWindowX11 is the X11 implementation of wxTLW
 // Author:      Julian Smart
-// Modified by:
 // Created:     20.09.01
 // Copyright:   (c) 2002 Julian Smart
 // Licence:     wxWindows licence

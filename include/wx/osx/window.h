@@ -2,7 +2,6 @@
 // Name:        wx/osx/window.h
 // Purpose:     wxWindowMac class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -152,7 +151,6 @@ public:
     // --------------
 
     void OnMouseEvent( wxMouseEvent &event );
-    void OnDPIChanged( wxDPIChangedEvent& event );
 
     void MacOnScroll( wxScrollEvent&event );
 
@@ -226,7 +224,7 @@ public:
     // returns true if children have to clipped to the content area
     // (e.g., scrolled windows)
     bool                MacClipChildren() const { return m_clipChildren ; }
-    void                MacSetClipChildren( bool clip ) { m_clipChildren = clip ; }
+    void                MacSetClipChildren();
 
     // returns true if the grandchildren need to be clipped to the children's content area
     // (e.g., splitter windows)
@@ -293,9 +291,6 @@ public:
     // internal response to size events
     virtual void MacOnInternalSize() {}
 
-    // Return the DPI corresponding to the given scale factor.
-    static wxSize       OSXMakeDPIFromScaleFactor(double scaleFactor);
-
 #if wxUSE_MENUS
     // Called on the invoking window after handling the menu event.
     virtual void        OSXAfterMenuEvent() { }
@@ -342,7 +337,7 @@ protected:
     virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const ;
 
     bool                MacHasScrollBarCorner() const;
-    void                MacCreateScrollBars( long style ) ;
+    void                MacCreateScrollBars( ) ;
     void                MacRepositionScrollBars() ;
 
     // implement the base class pure virtuals

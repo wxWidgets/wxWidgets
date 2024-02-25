@@ -198,7 +198,7 @@ wxTangoArtProvider::CreateBitmapBundle(const wxArtID& id,
 
         // Note: when adding elements here, try to also add the corresponding
         //       icon to src/gtk/artgtk.cpp as the GTK art provider is supposed
-        //       to have all the icons the Tango provider has, see configure.in.
+        //       to have all the icons the Tango provider has, see configure.ac.
     };
 
     #undef BITMAP_DATA

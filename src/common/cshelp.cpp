@@ -2,7 +2,6 @@
 // Name:        src/common/cshelp.cpp
 // Purpose:     Context sensitive help class implementation
 // Author:      Julian Smart, Vadim Zeitlin
-// Modified by:
 // Created:     08/09/2000
 // Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence

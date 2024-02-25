@@ -19,11 +19,10 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_CORE wxBrush: public wxBrushBase
 {
 public:
-    wxBrush() { }
+    wxBrush() = default;
 
     wxBrush( const wxColour &colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID );
     wxBrush( const wxBitmap &stippleBitmap );
-    virtual ~wxBrush();
 
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }

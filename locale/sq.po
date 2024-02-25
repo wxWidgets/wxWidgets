@@ -1,10 +1,10 @@
-# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004, 2006, 2019, 2022.
+# Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004, 2006, 2019, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2022-06-25 11:38+0300\n"
+"PO-Revision-Date: 2024-01-17 09:33+0200\n"
 "Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: <wx-translators@wxwidgets.org>\n"
 "Language: sq\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: ../include/wx/defs.h:2592
 msgid "All files (*.*)|*.*"
@@ -1096,35 +1096,33 @@ msgstr "&Ruaje"
 
 #: ../src/common/docview.cpp:523 ../src/common/docview.cpp:561
 msgid "&Discard changes"
-msgstr ""
+msgstr "&Hidhi tej ndryshimet"
 
 #: ../src/common/docview.cpp:524
-#, fuzzy
 msgid "Do&n't close"
-msgstr "Mos e Ruaj"
+msgstr "&Mos e mbyll"
 
 #: ../src/common/docview.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s before closing it?"
-msgstr "Doni të ruhen ndryshimet te %s?"
+msgstr "Doni të ruhen ndryshimet te %s para se të mbyllet?"
 
 #: ../src/common/docview.cpp:560
-#, fuzzy
 msgid "The document must be closed."
-msgstr "Teksti s’u ruajt dot."
+msgstr "Dokumenti duhet mbyllur."
 
 #: ../src/common/docview.cpp:572
 #, c-format
 msgid "Saving %s failed, would you like to retry?"
-msgstr ""
+msgstr "Ruajtja e %s dështoi, do të donit të riprovohej?"
 
 #: ../src/common/docview.cpp:578
 msgid "Retry"
-msgstr ""
+msgstr "Riprovo"
 
 #: ../src/common/docview.cpp:578
 msgid "Discard changes"
-msgstr ""
+msgstr "Hidhi tej ndryshimet"
 
 #: ../src/common/docview.cpp:680
 #, c-format
@@ -6442,31 +6440,26 @@ msgid "File type:"
 msgstr "Lloj kartele:"
 
 #: ../src/osx/cocoa/menu.mm:243
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Window"
 msgstr "Dritare"
 
 #: ../src/osx/cocoa/menu.mm:260
-#, fuzzy
 msgctxt "macOS menu name"
 msgid "Help"
 msgstr "Ndihmë"
 
 #: ../src/osx/cocoa/menu.mm:299
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Minimize"
 msgstr "Minimizoje"
 
 #: ../src/osx/cocoa/menu.mm:304
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Zoom"
-msgstr "Zmadhoje"
+msgstr "Zoom"
 
 #: ../src/osx/cocoa/menu.mm:310
-#, fuzzy
 msgctxt "macOS menu item"
 msgid "Bring All to Front"
 msgstr "Silli të Tëra Para"
@@ -6711,7 +6704,7 @@ msgstr "Blu"
 
 #: ../src/propgrid/advprops.cpp:1496
 msgid "Purple"
-msgstr "E purpurt"
+msgstr "E purpur"
 
 #: ../src/propgrid/advprops.cpp:1497
 msgid "Teal"
@@ -9230,805 +9223,3 @@ msgstr "S’ngarkohen dot burime prej kartele '%s'."
 #, c-format
 msgid "Creating %s \"%s\" failed."
 msgstr "Krijimi i %s “%s” dështoi."
-
-#~ msgid "Printing "
-#~ msgstr "Po shtypet "
-
-#~ msgid "Failed to insert text in the control."
-#~ msgstr "S’u arrit të futej tekst te kontrolli."
-
-#~ msgid "Please choose a valid font."
-#~ msgstr "Ju lutemi, zgjidhni shkronja të vlefshme."
-
-#, c-format
-#~ msgid "Failed to display HTML document in %s encoding"
-#~ msgstr "S’u arrit të shfaqej dokument HTML në kodimin %s"
-
-#, c-format
-#~ msgid "wxWidgets could not open display for '%s': exiting."
-#~ msgstr "wxWidgets s’hapi dot ekranin për '%s': po dilet."
-
-#~ msgid "Filter"
-#~ msgstr "Filtër"
-
-#~ msgid "Directories"
-#~ msgstr "Drejtori"
-
-#~ msgid "Files"
-#~ msgstr "Kartela"
-
-#~ msgid "Selection"
-#~ msgstr "Përzgjedhje"
-
-#~ msgid " (while overwriting an existing item)"
-#~ msgstr " (teksa mbishkruhet një element ekzistues)"
-
-#~ msgid "&Save as"
-#~ msgstr "&Ruaje si"
-
-#, c-format
-#~ msgid "'%s' doesn't consist only of valid characters"
-#~ msgstr "'%s' s’përbëhet vetëm nga shenja të vlefshme"
-
-#, c-format
-#~ msgid "'%s' should be numeric."
-#~ msgstr "'%s' duhet të jetë numerik."
-
-#, c-format
-#~ msgid "'%s' should only contain ASCII characters."
-#~ msgstr "'%s' duhet të përmbajë vetëm shenja ASCII."
-
-#, c-format
-#~ msgid "'%s' should only contain alphabetic characters."
-#~ msgstr "'%s' duhet të përmbajë vetëm shenja abc-je."
-
-#, c-format
-#~ msgid "'%s' should only contain alphabetic or numeric characters."
-#~ msgstr "'%s' duhet të përmbajë vetëm shenja abc-je ose numerike."
-
-#, c-format
-#~ msgid "'%s' should only contain digits."
-#~ msgstr "'%s' duhet të përmbajë vetëm shifra."
-
-#, c-format
-#~ msgid "Can't create window of class %s"
-#~ msgstr "S’krijohet dritare klase %s"
-
-#~ msgid "Could not initalize libnotify."
-#~ msgstr "S’u gatit dot libnotify."
-
-#~ msgid "Couldn't create the overlay window"
-#~ msgstr "S’u krijua dot dritarja përsipër"
-
-#, c-format
-#~ msgid "Failed to convert file \"%s\" to Unicode."
-#~ msgstr "S’u arrit të shndërrohej kartela \"%s\" në Unikod."
-
-#~ msgid "Failed to set text in the text control."
-#~ msgstr "S’u arrit të caktohej tekst te kontrolli i tekstit."
-
-#, c-format
-#~ msgid "Invalid GTK+ command line option, use \"%s --help\""
-#~ msgstr "Mundësi e paligjshme rreshti urdhrash GTK+, përdorni \"%s --help\""
-
-#~ msgid "No unused colour in image."
-#~ msgstr "Pa ngjyrë të papërdorur në figurë."
-
-#~ msgid "Not available"
-#~ msgstr "S’ka"
-
-#~ msgid "Replace selection"
-#~ msgstr "Zëvendëso përzgjedhjen"
-
-#~ msgid "Save as"
-#~ msgstr "Ruajeni si"
-
-#~ msgid "Style Organiser"
-#~ msgstr "Organizues Stilesh"
-
-#~ msgid "The following standard GTK+ options are also supported:\n"
-#~ msgstr "Mbulohen edhe mundësitë standarde GTK+ vijuese:\n"
-
-#~ msgid "conversion to 8-bit encoding failed"
-#~ msgstr "shndërrimi në kodim 8-bit dështoi"
-
-#, c-format
-#~ msgid "locale '%s' cannot be set."
-#~ msgstr "nuk caktohet dot vendorja '%s'."
-
-#, fuzzy
-#~ msgid "Adding flavor TEXT failed"
-#~ msgstr "Shtimi i kategorisë dështoi"
-
-#, fuzzy
-#~ msgid "Adding flavor utxt failed"
-#~ msgstr "Shtimi i kategorisë dështoi"
-
-#~ msgid "Bitmap renderer cannot render value; value type: "
-#~ msgstr "Vizatuesi bitmap s’vizaton dot vlerën; lloj vlere: "
-
-#~ msgid "Column could not be added."
-#~ msgstr "S’shtohej dot shtyllë."
-
-#~ msgid "Column index not found."
-#~ msgstr "S’u gjet tregues shtyllash."
-
-#~ msgid "Column width could not be determined"
-#~ msgstr "S’u përcaktua dot gjerësi shtylle"
-
-#~ msgid "Column width could not be set."
-#~ msgstr "S’u caktua dot gjerësi shtylle."
-
-#~ msgid "Confirm registry update"
-#~ msgstr "Ripohoni përditësim regjistri"
-
-#~ msgid "Could not determine column index."
-#~ msgstr "S’u përcaktua dot tregues shtyllash."
-
-#~ msgid "Could not determine column's position"
-#~ msgstr "S’u përcaktua dot pozicioni i shtyllës"
-
-#~ msgid "Could not determine number of columns."
-#~ msgstr "S’u përcaktua dot numër shtyllash."
-
-#~ msgid "Could not determine number of items"
-#~ msgstr "S’u përcaktua dot numër objektesh"
-
-#~ msgid "Could not get header description."
-#~ msgstr "S’u mor dot përshkrim kryesh."
-
-#~ msgid "Could not get items."
-#~ msgstr "S’u morën dot objekte."
-
-#, fuzzy
-#~ msgid "Could not get property flags."
-#~ msgstr "S’u morën dot objektet e përzgjedhur."
-
-#~ msgid "Could not get selected items."
-#~ msgstr "S’u morën dot objektet e përzgjedhur."
-
-#~ msgid "Could not remove column."
-#~ msgstr "S’u hoq dot shtyllë."
-
-#~ msgid "Could not retrieve number of items"
-#~ msgstr "S’u mor dot numër objektesh"
-
-#~ msgid "Could not set column width."
-#~ msgstr "S’u caktua dot gjerësi shtylle."
-
-#~ msgid "Could not set header description."
-#~ msgstr "S’u caktua dot përshkrim kryesh."
-
-#~ msgid "Could not set icon."
-#~ msgstr "S’u caktua dot ikonë."
-
-#~ msgid "Could not set maximum width."
-#~ msgstr "S’u caktua dot gjerësi maksimum."
-
-#~ msgid "Could not set minimum width."
-#~ msgstr "S’u caktua dot gjerësi minimum."
-
-#, fuzzy
-#~ msgid "Could not set property flags."
-#~ msgstr "Caktoni flamurka në ndarje të re."
-
-#~ msgid "Data object has invalid data format"
-#~ msgstr "Objekt të dhënash ka format të pavlefshëm të dhënash"
-
-#~ msgid "Date renderer cannot render value; value type: "
-#~ msgstr "Vizatuesi i datave s’vizaton dot vlerën; lloj vlere: "
-
-#~ msgid ""
-#~ "Do you want to overwrite the command used to %s files with extension "
-#~ "\"%s\" ?\n"
-#~ "Current value is \n"
-#~ "%s, \n"
-#~ "New value is \n"
-#~ "%s %1"
-#~ msgstr ""
-#~ "Doni të mbishkruhet urdhri i përdorur mbi kartelat %s me zgjatim "
-#~ "\"%s\" ?\n"
-#~ "Vlera e çastit është \n"
-#~ "%s, \n"
-#~ "Vlera e re është \n"
-#~ "%s %1"
-
-#~ msgid "Failed to retrieve data from the clipboard."
-#~ msgstr "S’u arrit të merreshin të dhënash prej të papastrës."
-
-#~ msgid "GIF: Invalid gif index."
-#~ msgstr "GIF: tregues gif i pavlefshëm."
-
-#~ msgid "GIF: unknown error!!!"
-#~ msgstr "GIF: gabim i panjohur!!!"
-
-#~ msgid "Icon & text renderer cannot render value; value type: "
-#~ msgstr ""
-#~ "Vizatuesi i ikonave & teksteve s’mund të vizatojë vlerën; lloj vlere: "
-
-#, fuzzy
-#~ msgid "Invalid data view item"
-#~ msgstr "ID e pavlefshme objekti."
-
-#~ msgid "New directory"
-#~ msgstr "Drejtori e re"
-
-#, fuzzy
-#~ msgid "No column existing."
-#~ msgstr "Shtyllë"
-
-#, fuzzy
-#~ msgid "No column for the specified column existing."
-#~ msgstr "Pa vizatues të specifikuar për shtyllë."
-
-#, fuzzy
-#~ msgid "No column for the specified column position existing."
-#~ msgstr "S’ka shtyllë ose vizatues për treguesin e specifikuar të shtyllave."
-
-#~ msgid "No renderer specified for column."
-#~ msgstr "Pa vizatues të specifikuar për shtyllë."
-
-#~ msgid "Number of columns could not be determined."
-#~ msgstr "S’u përcaktua dot numër shtyllash."
-
-#~ msgid "OpenGL function \"%s\" failed: %s (error %d)"
-#~ msgstr "Funksioni OpenGL \"%s\" dështoi: %s (gabim %d)."
-
-#~ msgid ""
-#~ "Please install a newer version of comctl32.dll\n"
-#~ "(at least version 4.70 is required but you have %d.%02d)\n"
-#~ "or this program won't operate correctly."
-#~ msgstr ""
-#~ "Ju lutemi, instaloni një version më të ri të comctl32.dll\n"
-#~ "(lypset e pakta versioni 4.70, ndërsa ju keni %d.%02d)\n"
-#~ "ose programi s’ka për të punuar si duhet."
-
-#, fuzzy
-#~ msgid "Pointer to model not set correctly."
-#~ msgstr "Si model tastiere cakto %1.<br/>"
-
-#~ msgid "Progress renderer cannot render value type; value type: "
-#~ msgstr "Vizatuesi i ecurisë s’vizaton dot vlerën; lloj vlere: "
-
-#~ msgid "Rendering failed."
-#~ msgstr "Vizatimi dështoi."
-
-#~ msgid "Show hidden directories"
-#~ msgstr "Shfaq drejtori të fshehura"
-
-#~ msgid "Text renderer cannot render value; value type: "
-#~ msgstr "Vizatuesi i teksteve s’mund të vizatojë vlerën; lloj vlere: "
-
-#~ msgid "There is no column or renderer for the specified column index."
-#~ msgstr "S’ka shtyllë ose vizatues për treguesin e specifikuar të shtyllave."
-
-#~ msgid ""
-#~ "This system doesn't support date controls, please upgrade your version of "
-#~ "comctl32.dll"
-#~ msgstr ""
-#~ "Ky sistem s’mbulon kontrolle datash, ju lutemi, përmirësoni versionin "
-#~ "tuaj të comctl32.dll-së"
-
-#~ msgid "Too many colours in PNG, the image may be slightly blurred."
-#~ msgstr "Si shumë ngjyra në PNG, figura mund të jetë pakëz e turbullt."
-
-#~ msgid "Unable to initialize Hildon program"
-#~ msgstr "S’arrihet të gatitet programi Hildon"
-
-#~ msgid "Unknown data format"
-#~ msgstr "Format i panjohur të dhënash"
-
-#~ msgid "Win32s on Windows 3.1"
-#~ msgstr "Win32s për Windows 3.1"
-
-#~ msgid "Windows 10"
-#~ msgstr "Windows 10"
-
-#~ msgid "Windows 2000"
-#~ msgstr "Windows 2000"
-
-#~ msgid "Windows 8"
-#~ msgstr "Windows 8"
-
-#~ msgid "Windows 8.1"
-#~ msgstr "Windows 8.1"
-
-#~ msgid "Windows 95"
-#~ msgstr "Windows 95"
-
-#~ msgid "Windows 95 OSR2"
-#~ msgstr "Windows 95 OSR2"
-
-#~ msgid "Windows 98"
-#~ msgstr "Windows 98"
-
-#~ msgid "Windows 98 SE"
-#~ msgstr "Windows 98 SE"
-
-#~ msgid "Windows 9x (%d.%d)"
-#~ msgstr "Windows 9x (%d.%d)"
-
-#~ msgid "Windows CE (%d.%d)"
-#~ msgstr "Windows CE (%d.%d)"
-
-#~ msgid "Windows NT %lu.%lu"
-#~ msgstr "Windows NT %lu.%lu"
-
-#~ msgid "Windows Server 10"
-#~ msgstr "Windows Server 10"
-
-#~ msgid "Windows Server 2003"
-#~ msgstr "Windows Server 2003"
-
-#~ msgid "Windows Server 2008"
-#~ msgstr "Windows Server 2008"
-
-#~ msgid "Windows Server 2008 R2"
-#~ msgstr "Windows Server 2008 R2"
-
-#~ msgid "Windows Server 2012"
-#~ msgstr "Windows Server 2012"
-
-#~ msgid "Windows Server 2012 R2"
-#~ msgstr "Windows Server 2012 R2"
-
-#~ msgid "Windows XP"
-#~ msgstr "Windows XP"
-
-#~ msgid "can't execute '%s'"
-#~ msgstr "s’përmbushet dot '%s'"
-
-#~ msgid "error opening '%s'"
-#~ msgstr "gabim në hapjen e '%s'"
-
-#~ msgid "Cannot create mutex."
-#~ msgstr "S'krijoj dot mutex."
-
-#~ msgid "Cannot resume thread %lu"
-#~ msgstr "Cannot resume thread %lu"
-
-#~ msgid "Cannot suspend thread %lu"
-#~ msgstr "S'pushoj dot rrjedhën %lu"
-
-#~ msgid "Couldn't release a mutex"
-#~ msgstr "S'munda të lëshoj mutex"
-
-#, fuzzy
-#~ msgid "DIVIDE"
-#~ msgstr "<DRIVE>"
-
-#~ msgid "Execution of command '%s' failed with error: %ul"
-#~ msgstr "Përmbushja e urdhrit '%s' dështoi me gabim: %ul"
-
-#~ msgid ""
-#~ "File '%s' already exists.\n"
-#~ "Do you want to replace it?"
-#~ msgstr ""
-#~ "Ka një kartelë %s tashmë.\n"
-#~ "Doni ta zëvendësoni?"
-
-#~ msgid "buffer is too small for Windows directory."
-#~ msgstr "shtytëza është shumë e vogël për drejtori Windows."
-
-#~ msgid "Print preview"
-#~ msgstr "Paraparje shtypjeje"
-
-#, fuzzy
-#~ msgid "&Preview..."
-#~ msgstr " Paraparje"
-
-#, fuzzy
-#~ msgid "Preview..."
-#~ msgstr " Paraparje"
-
-#~ msgid "&Save..."
-#~ msgstr "&Ruaj..."
-
-#, fuzzy
-#~ msgid "About "
-#~ msgstr "&Rreth..."
-
-#~ msgid "All files (*.*)|*"
-#~ msgstr "Tërë kartelat (*.*)|*"
-
-#~ msgid "Cannot initialize SciTech MGL!"
-#~ msgstr "S'gatis dot SciTech MGL!"
-
-#~ msgid "Cannot initialize display."
-#~ msgstr "S'gatis dot ekranin."
-
-#~ msgid "Cannot start thread: error writing TLS"
-#~ msgstr "S'nis dot rrjedhë: gabim në shkrim TLS-je"
-
-#~ msgid "Close\tAlt-F4"
-#~ msgstr "Mbyll\tAlt-F4"
-
-#~ msgid "Couldn't create cursor."
-#~ msgstr "S'krijova dot kursor"
-
-#~ msgid "Directory '%s' doesn't exist!"
-#~ msgstr "Drejtoria '%s' nuk ekziston!"
-
-#~ msgid "Mode %ix%i-%i not available."
-#~ msgstr "Mënyrë %ix%i-%i jo e mundshme."
-
-#~ msgid "Paper Size"
-#~ msgstr "Madhësi Letre "
-
-#~ msgid "&Goto..."
-#~ msgstr "&Goto..."
-
-#~ msgid "<<"
-#~ msgstr "<<"
-
-#~ msgid ">>"
-#~ msgstr ">>"
-
-#~ msgid ">>|"
-#~ msgstr ">>|"
-
-#~ msgid "Archive doesnt contain #SYSTEM file"
-#~ msgstr "Arkiva nuk përfshin kartelë #SYSTEM"
-
-#~ msgid "Can't check image format of file '%s': file does not exist."
-#~ msgstr ""
-#~ "S'kontrolloj dot format pamjeje të kartelës '%s': kartela nuk ekziston."
-
-#~ msgid "Can't load image from file '%s': file does not exist."
-#~ msgstr "S'ngarkoj dot pamje prej kartelës '%s': kartela nuk ekziston."
-
-#~ msgid "Cannot convert dialog units: dialog unknown."
-#~ msgstr "S'shndërroj dot njësi dialogjesh: dialog i panjohur."
-
-#~ msgid "Cannot convert from the charset '%s'!"
-#~ msgstr "S'shndërroj dot prej kodimi '%s'!"
-
-#~ msgid "Cannot find container for unknown control '%s'."
-#~ msgstr "S'gjej dot përmbajtës për kontrollin e panjohur '%s'."
-
-#~ msgid "Cannot find font node '%s'."
-#~ msgstr "S'gjej dot nyje gërmash '%s'."
-
-#~ msgid "Cannot open file '%s'."
-#~ msgstr "S'hap dot kartelë '%s'."
-
-#~ msgid "Cannot parse coordinates from '%s'."
-#~ msgstr "S'përtyp dot koordinata prej '%s'."
-
-#~ msgid "Cannot parse dimension from '%s'."
-#~ msgstr "S'përtyp dot përmasa prej '%s'."
-
-#~ msgid "Cant create the thread event queue"
-#~ msgstr "S'mund të krijoj radhë ngjarjesh rrjedhe"
-
-#, fuzzy
-#~ msgid "Click to cancel this window."
-#~ msgstr "Mbyll këtë dritare"
-
-#, fuzzy
-#~ msgid "Click to confirm your selection."
-#~ msgstr "KLikoni për ripohim përzgjedhje gërmash."
-
-#~ msgid "Could not unlock mutex"
-#~ msgstr "S'çkyça dot \"mutex\"-in"
-
-#~ msgid "Error while waiting on semaphore"
-#~ msgstr "Gabim gjatë pritjes në semafor"
-
-#, fuzzy
-#~ msgid "Failed to connect to session manager: %s"
-#~ msgstr "Dështova në lidhjen dialup %s: %s"
-
-#~ msgid "Failed to create a status bar."
-#~ msgstr "Dështova në krijimin e një shtylle gjendjesh."
-
-#~ msgid "Failed to register OpenGL window class."
-#~ msgstr "Dështova në regjistrim klase dritareje OpenGL."
-
-#~ msgid "Fatal error: "
-#~ msgstr "Gabim fatal:"
-
-#~ msgid "Goto Page"
-#~ msgstr "Shko te Faqe"
-
-#, fuzzy
-#~ msgid "Help : %s"
-#~ msgstr "Ndihmë: %s"
-
-#~ msgid "I64"
-#~ msgstr "I64"
-
-#~ msgid "Internal error, illegal wxCustomTypeInfo"
-#~ msgstr "Gabim i brendshëm, wxCustomTypeInfo i jashtëligjshëm"
-
-#~ msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-#~ msgstr "Burim XRC i pavlefshëm '%s': s'ka nyje rrënje 'resource'."
-
-#~ msgid "No handler found for XML node '%s', class '%s'!"
-#~ msgstr "S'u gjet trajtues për nyje XML '%s', klasa '%s'!"
-
-#, fuzzy
-#~ msgid "No image handler for type %ld defined."
-#~ msgstr "Nuk është përcaktuar trajtues pamjesh për tipin %d."
-
-#, fuzzy
-#~ msgid "Owner not initialized."
-#~ msgstr "S'gatis dot ekranin."
-
-#, fuzzy
-#~ msgid "Passed item is invalid."
-#~ msgstr "'%s' është e mangët"
-
-#~ msgid "Passing a already registered object to SetObjectName"
-#~ msgstr "Po i kaloj SetObjectName-it një objekt tashmë të regjistruar"
-
-#~ msgid "Program aborted."
-#~ msgstr "Programi u ndërpre."
-
-#~ msgid "Resource files must have same version number!"
-#~ msgstr "kartelat e burimit duhet të të kenë të njëjtij numër versioni!"
-
-#, fuzzy
-#~ msgid "Search!"
-#~ msgstr "Kërko"
-
-#~ msgid "Sorry, could not open this file for saving."
-#~ msgstr "Më ndjeni, s'munda ta hap dot këtë kartelë për ruajtje."
-
-#~ msgid "Sorry, could not save this file."
-#~ msgstr "Më ndjeni, s'munda ta ruaj dot këtë kartelë."
-
-#~ msgid "Sorry, print preview needs a printer to be installed."
-#~ msgstr ""
-#~ "Më ndjeni, paraparjet e shtypjes lypin të ketë një shtypës të instaluar."
-
-#~ msgid "Status: "
-#~ msgstr "Gjendje:"
-
-#~ msgid "TIFF library error."
-#~ msgstr "Gabim librarie TIFF"
-
-#~ msgid "TIFF library warning."
-#~ msgstr "Sinjalizim librarie TIFF."
-
-#~ msgid ""
-#~ "The file '%s' couldn't be opened.\n"
-#~ "It has been removed from the most recently used files list."
-#~ msgstr ""
-#~ "Kartela '%s' s'mund të hapej.\n"
-#~ "Është hequr nga lista e kartelave më të përdorura së fundmi."
-
-#~ msgid "The path '%s' contains too many \"..\"!"
-#~ msgstr "Shtegu '%s' përmban shumë \"..\"!"
-
-#~ msgid "Trying to solve a NULL hostname: giving up"
-#~ msgstr "Po përpiqem të shquaj një strehëemër NULL: po dorëzohem"
-
-#~ msgid "Unknown style flag "
-#~ msgstr "Shenjë e panjohur stili"
-
-#~ msgid "Warning"
-#~ msgstr "Sinjalizim"
-
-#~ msgid "Windows 2000 (build %lu"
-#~ msgstr "Windows 2000 (build %lu"
-
-#~ msgid "XRC resource '%s' (class '%s') not found!"
-#~ msgstr "Nuk u gjet burim XRC '%s' (klasa '%s')!"
-
-#, fuzzy
-#~ msgid "XRC resource: Cannot create animation from '%s'."
-#~ msgstr "Burim XRC: Nuk mund të krijoj bitmap prej '%s'."
-
-#~ msgid "XRC resource: Cannot create bitmap from '%s'."
-#~ msgstr "Burim XRC: Nuk mund të krijoj bitmap prej '%s'."
-
-#, fuzzy
-#~ msgid ""
-#~ "XRC resource: Incorrect colour specification '%s' for attribute '%s'."
-#~ msgstr "Burim XRC: tregim i pasaktë ngjyre '%s' për vetinë '%s'."
-
-#~ msgid "[EMPTY]"
-#~ msgstr "[BOSH]"
-
-#~ msgid "catalog file for domain '%s' not found."
-#~ msgstr "nuk u gjet kartelë katalogu për përkatësinë '%s'."
-
-#~ msgid "delegate has no type info"
-#~ msgstr "i deleguari nuk ka të dhëna tipi"
-
-#, fuzzy
-#~ msgid "encoding %i"
-#~ msgstr "kodim %s"
-
-#~ msgid "looking for catalog '%s' in path '%s'."
-#~ msgstr "po shoh për katalog '%s' te shtegu '%s'."
-
-#~ msgid "wxSocket: invalid signature in ReadMsg."
-#~ msgstr "wxSocket: nënshkrim i pavlefshëm në ReadMsg."
-
-#~ msgid "wxSocket: unknown event!."
-#~ msgstr "wxSocket: ngjarje e panjohur!."
-
-#~ msgid "|<<"
-#~ msgstr "|<<"
-
-#~ msgid "\t%s: %s\n"
-#~ msgstr "\t%s: %s\n"
-
-#, fuzzy
-#~ msgid " Couldn't create the UnicodeConverter"
-#~ msgstr "S'krijova dot kursor"
-
-#~ msgid "#define %s must be an integer."
-#~ msgstr "#define %s duhet të jetë një numër i plotë."
-
-#~ msgid "%s not a bitmap resource specification."
-#~ msgstr "%s jo një përcaktim burimi bitmap."
-
-#~ msgid "%s not an icon resource specification."
-#~ msgstr "%s jo një përcaktim burimi ikone."
-
-#~ msgid "%s: ill-formed resource file syntax."
-#~ msgstr "%s: sintaksë e keqformuar kartele burimi."
-
-#~ msgid "&Open"
-#~ msgstr "&Hap"
-
-#~ msgid "&Print"
-#~ msgstr "&Shtyp"
-
-#~ msgid "*** It can be found in \"%s\"\n"
-#~ msgstr "*** Mund të gjendet te \"%s\"\n"
-
-#~ msgid ""
-#~ ", expected static, #include or #define\n"
-#~ "while parsing resource."
-#~ msgstr ""
-#~ ", pritej statik, #include ose #define\n"
-#~ "ndërkohë që përtypej burimi."
-
-#~ msgid "Bitmap resource specification %s not found."
-#~ msgstr "Nuk u gjet përcaktim burimi bitmap %s."
-
-#~ msgid ""
-#~ "Could not resolve control class or id '%s'. Use (non-zero) integer "
-#~ "instead\n"
-#~ " or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "S'arrita të pikas klasë kontrolli ose id '%s'. Përdorni më mirë numër të "
-#~ "plotë (jo-zero)\n"
-#~ " ose jepni #define (shihni doracakun për gracka të mundshme)"
-
-#~ msgid ""
-#~ "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
-#~ "or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "S'arrita të pikas id menuje '%s'. Përdorni më mirë numër të plotë (jo-"
-#~ "zero)\n"
-#~ " ose jepni #define (shihni doracakun për gracka të mundshme)"
-
-#~ msgid "Expected '*' while parsing resource."
-#~ msgstr "Pritej '*' ndërkohë që përtypej burimi."
-
-#~ msgid "Expected '=' while parsing resource."
-#~ msgstr "Pritej '=' ndërkohë që përtypej burimi."
-
-#~ msgid "Expected 'char' while parsing resource."
-#~ msgstr "Pritej 'char' ndërkohë që përtypej burimi."
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Dështova në gjetje burimi XBM resource %s.\n"
-#~ "Harruat të përdorni wxResourceLoadBitmapData?"
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadIconData?"
-#~ msgstr ""
-#~ "Dështova në gjetje burimi XBM %s.\n"
-#~ "Harruat të përdornit wxResourceLoadIconData?"
-
-#~ msgid ""
-#~ "Failed to find XPM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Dështova në gjetje burimi XPM resource %s.\n"
-#~ "Harruat të përdornit wxResourceLoadBitmapData?"
-
-#~ msgid "Failed to get clipboard data."
-#~ msgstr "Dështova në marrje të dhënash të papastre"
-
-#~ msgid "Failed to load shared library '%s' Error '%s'"
-#~ msgstr "Dështova në ngarkim librarie të përbashkët '%s' Gabim '%s'"
-
-#~ msgid "Found "
-#~ msgstr "U gjetën"
-
-#~ msgid "Icon resource specification %s not found."
-#~ msgstr "Nuk u gjet përcaktim %s burimi ikone."
-
-#~ msgid "Ill-formed resource file syntax."
-#~ msgstr "Sintaksë e keqformuar kartele burimi."
-
-#~ msgid "Long Conversions not supported"
-#~ msgstr "Shndërrime të Gjatë të pambuluar"
-
-#~ msgid "No XPM icon facility available!"
-#~ msgstr "Pa lehtësira ikone XPM të mundshme!"
-
-#~ msgid "Option '%s' requires a value, '=' expected."
-#~ msgstr "Mundësia '%s' lyp një vlerë, pritej '='."
-
-#, fuzzy
-#~ msgid "Select all"
-#~ msgstr "Përzgjidhni &Tërë"
-
-#~ msgid "Unexpected end of file while parsing resource."
-#~ msgstr "Fund i papritur kartele ndërkohë që përtypja burime."
-
-#~ msgid "Unrecognized style %s while parsing resource."
-#~ msgstr "Stil %s i papranuar ndërkohë që përtypja burime."
-
-#~ msgid "Video Output"
-#~ msgstr "Dalje Video"
-
-#~ msgid "establish"
-#~ msgstr "vendos"
-
-#~ msgid "initiate"
-#~ msgstr "fillo"
-
-#~ msgid "invalid eof() return value."
-#~ msgstr "vlerë e pavlefshme përgjigjeje eof()"
-
-#~ msgid "unknown line terminator"
-#~ msgstr "përfundues i panjohur rreshti"
-
-#~ msgid "writing"
-#~ msgstr "po shkruaj"
-
-#~ msgid "."
-#~ msgstr "."
-
-#~ msgid "Cannot open URL '%s'"
-#~ msgstr "S'hap dot URL '%s'"
-
-#~ msgid "Error "
-#~ msgstr "Gabim"
-
-#~ msgid "Failed to create directory %s/.gnome."
-#~ msgstr "Dështova në krijimin e drejtorisë %s/.gnome."
-
-#~ msgid "Failed to create directory %s/mime-info."
-#~ msgstr "Dështova në krijimin e drejtorisë %s/mime-info."
-
-#~ msgid "MP Thread Support is not available on this System"
-#~ msgstr "Mbulimi për Rrjedha MP nuk është i passhëm në këtë Sistem"
-
-#~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
-#~ msgstr "Kartela mailcap %s, rreshti %d: u shpërfill zë jo i plotë."
-
-#~ msgid "Mime.types file %s, line %d: unterminated quoted string."
-#~ msgstr "Kartela mime.types %s, rreshti %d: varg në thojza i papërfunduar."
-
-#~ msgid "Unknown field in file %s, line %d: '%s'."
-#~ msgstr "Zonë e panjohur te kartela %s, rreshti %d: '%s'."
-
-#~ msgid "bold "
-#~ msgstr "të trasha"
-
-#~ msgid "can't query for GUI plugins name in console applications"
-#~ msgstr "s'pyes dot për emra shtojcash GUI në zbatime konsole"
-
-#, fuzzy
-#~ msgid "light "
-#~ msgstr "butë"
-
-#~ msgid "underlined "
-#~ msgstr "nënvijëzuar"
-
-#~ msgid "unsupported zip archive"
-#~ msgstr "arkivë zip e pambuluar"

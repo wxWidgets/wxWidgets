@@ -2,7 +2,6 @@
 // Name:        event.cpp
 // Purpose:     wxWidgets sample demonstrating different event usage
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.01
 // Copyright:   (c) 2001-2009 Vadim Zeitlin
 // Licence:     wxWindows licence

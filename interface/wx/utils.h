@@ -856,9 +856,8 @@ wxString wxGetUserHome(const wxString& user = wxEmptyString);
 /**
     This function returns the "user id" also known as "login name" under Unix
     (i.e. something like "jsmith"). It uniquely identifies the current user (on
-    this system).  Under Windows or NT, this function first looks in the
-    environment variables USER and LOGNAME; if neither of these is found, the
-    entry @b UserId in the @b wxWidgets section of the WIN.INI file is tried.
+    this system).  Under Windows, this function looks in the
+    environment variable USERNAME.
 
     @return The login name if successful or an empty string otherwise.
 
@@ -881,11 +880,11 @@ wxString wxGetUserId();
 bool wxGetUserId(char* buf, int sz);
 
 /**
-    This function returns the full user name (something like "Mr. John Smith").
+    This function returns the full user name (something like "John Smith").
 
-    Under Windows or NT, this function looks for the entry UserName in the
-    wxWidgets section of the WIN.INI file. If PenWindows is running, the entry
-    Current in the section User of the PENWIN.INI file is used.
+    Under Windows, this function will attempt to get the user's full name
+    from the domain controller (or local computer); if that fails, it will
+    return the login name (or empty string if that cannot be resolved).
 
     @return The full user name if successful or an empty string otherwise.
 

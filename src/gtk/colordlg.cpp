@@ -2,7 +2,6 @@
 // Name:        src/gtk/colordlg.cpp
 // Purpose:     Native wxColourDialog for GTK+
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004/06/04
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence

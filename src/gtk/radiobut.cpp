@@ -92,7 +92,22 @@ bool wxRadioButton::Create( wxWindow *parent,
         }
     }
 
-    m_widget = gtk_radio_button_new_with_label( radioButtonGroup, label.utf8_str() );
+    // GTK does not allow a radio button to be inactive if it is the only radio
+    // button in its group, so we need to work around this by creating a second
+    // hidden radio button.
+    if (HasFlag(wxRB_SINGLE))
+    {
+        m_hiddenButton = gtk_radio_button_new( nullptr );
+        m_widget = gtk_radio_button_new_with_label_from_widget( GTK_RADIO_BUTTON(m_hiddenButton), label.utf8_str() );
+        // Since this is the second button in the group, we need to ensure it
+        // is active by default and not the first hidden one.
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widget), TRUE );
+    }
+    else
+    {
+        m_widget = gtk_radio_button_new_with_label( radioButtonGroup, label.utf8_str() );
+    }
+
     g_object_ref(m_widget);
 
     SetLabel(label);
@@ -133,9 +148,12 @@ void wxRadioButton::SetValue( bool val )
     }
     else
     {
-        // should give an assert
-        // RL - No it shouldn't.  A wxGenericValidator might try to set it
-        //      as FALSE.  Failing silently is probably TRTTD here.
+        // Normal radio buttons can only be turned off by turning on another
+        // button in the same group, but the single ones can be turned off
+        // manually, which is implemented by turning a hidden button on, as
+        // it's the only way to do it with GTK.
+        if (HasFlag(wxRB_SINGLE))
+            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_hiddenButton), TRUE );
     }
 
     g_signal_handlers_unblock_by_func(

@@ -2,7 +2,6 @@
 // Name:        wx/msw/region.h
 // Purpose:     wxRegion class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) 1997-2002 wxWidgets team
 // Licence:     wxWindows licence

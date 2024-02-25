@@ -2,7 +2,6 @@
 // Name:        press.pov
 // Purpose:     POV-Ray scene used to generate clip for splash
 // Author:      Wlodzimierz ABX Skiba
-// Modified by:
 // Created:     24/11/2004
 // Copyright:   (c) Wlodzimierz Skiba
 // Licence:     wxWindows licence

@@ -219,11 +219,11 @@ wxTextFileType wxTextBuffer::GuessType() const
 
     size_t n;
     for ( n = 0; n < nScan; n++ )     // the beginning
-        AnalyseLine(n);
+        AnalyseLine(n)
     for ( n = (nCount - nScan)/2; n < (nCount + nScan)/2; n++ )
-        AnalyseLine(n);
+        AnalyseLine(n)
     for ( n = nCount - nScan; n < nCount; n++ )
-        AnalyseLine(n);
+        AnalyseLine(n)
 
     #undef   AnalyseLine
 

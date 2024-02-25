@@ -2,7 +2,6 @@
 // Name:        src/generic/odcombo.cpp
 // Purpose:     wxOwnerDrawnComboBox, wxVListBoxComboPopup
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
@@ -1104,6 +1103,7 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
             AssignNewItemClientData(n, clientData, i, type);
         }
 
+        InvalidateBestSize();
         return n;
     }
     else
@@ -1114,6 +1114,7 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
             AssignNewItemClientData(pos, clientData, i, type);
         }
 
+        InvalidateBestSize();
         return pos - 1;
     }
 }

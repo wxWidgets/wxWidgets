@@ -68,10 +68,17 @@
         Notice that this constructor supposes that the string contains data in
         the current locale encoding, use FromUTF8() if the string contains
         UTF-8-encoded data instead.
+        - Standard @c std::string_view using implicit wxString::wxString(std::string_view)
+        constructor.
+        Notice that this constructor supposes that the string contains data in
+        the current locale encoding, use FromUTF8() if the string contains
+        UTF-8-encoded data instead.
         - Wide @c wchar_t* string using implicit
         wxString::wxString(const wchar_t*) constructor.
         - Standard @c std::wstring using implicit
         wxString::wxString(const std::wstring&) constructor.
+        - Standard @c std::wstring_view using implicit
+        wxString::wxString(std::wstring_view) constructor.
 
     Notice that many of the constructors are implicit, meaning that you don't
     even need to write them at all to pass the existing string to some
@@ -478,11 +485,30 @@ public:
     wxString(const std::string& str);
 
     /**
+       Constructs a string from @a str using the using the current locale encoding
+       to convert it to Unicode (wxConvLibc).
+
+       @note Requires the application to be compiled with C++17
+
+       @since 3.3.0
+    */
+    wxString(std::string_view str);
+
+    /**
        Constructs a string from @a str.
 
        @see ToStdWstring(), wc_string()
     */
     wxString(const std::wstring& str);
+
+    /**
+       Constructs a string from @a str.
+
+       @note Requires the application to be compiled with C++17
+
+       @since 3.3.0
+    */
+    wxString(std::wstring_view str);
 
     /**
         String destructor.
@@ -885,12 +911,12 @@ public:
     /**
         Concatenation: returns a new string equal to the concatenation of the operands.
     */
-    wxString operator +(const wxString& x, const wxString& y);
+    friend wxString operator +(const wxString& x, const wxString& y);
 
     /**
         @overload
     */
-    wxString operator +(const wxString& x, wxUniChar y);
+    friend wxString operator +(const wxString& x, wxUniChar y);
 
     wxString& operator<<(const wxString& s);
     wxString& operator<<(const char* psz);
@@ -988,6 +1014,54 @@ public:
         @see Cmp(), CmpNoCase()
     */
     bool IsSameAs(wxUniChar ch, bool caseSensitive = true) const;
+
+    ///@{
+    /**
+        Comparison operator for string types.
+    */
+    friend bool operator==(const wxString& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxString& s2);
+    friend bool operator< (const wxString& s1, const wxString& s2);
+    friend bool operator> (const wxString& s1, const wxString& s2);
+    friend bool operator<=(const wxString& s1, const wxString& s2);
+    friend bool operator>=(const wxString& s1, const wxString& s2);
+    friend bool operator==(const wxString& s1, const wxCStrData& s2);
+    friend bool operator==(const wxCStrData& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxCStrData& s2);
+    friend bool operator!=(const wxCStrData& s1, const wxString& s2);
+    friend bool operator==(const wxString& s1, const wxWCharBuffer& s2);
+    friend bool operator==(const wxWCharBuffer& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxWCharBuffer& s2);
+    friend bool operator!=(const wxWCharBuffer& s1, const wxString& s2);
+    friend bool operator==(const wxString& s1, const wxCharBuffer& s2);
+    friend bool operator==(const wxCharBuffer& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxCharBuffer& s2);
+    friend bool operator!=(const wxCharBuffer& s1, const wxString& s2);
+    ///@}
+
+    ///@{
+    /**
+        Comparison operators char types.
+    */
+    friend bool operator==(const wxUniChar& c, const wxString& s);
+    friend bool operator==(const wxUniCharRef& c, const wxString& s);
+    friend bool operator==(char c, const wxString& s);
+    friend bool operator==(wchar_t c, const wxString& s);
+    friend bool operator==(int c, const wxString& s);
+    friend bool operator==(const wxString& s, const wxUniChar& c);
+    friend bool operator==(const wxString& s, const wxUniCharRef& c);
+    friend bool operator==(const wxString& s, char c);
+    friend bool operator==(const wxString& s, wchar_t c);
+    friend bool operator!=(const wxUniChar& c, const wxString& s);
+    friend bool operator!=(const wxUniCharRef& c, const wxString& s);
+    friend bool operator!=(char c, const wxString& s);
+    friend bool operator!=(wchar_t c, const wxString& s);
+    friend bool operator!=(int c, const wxString& s);
+    friend bool operator!=(const wxString& s, const wxUniChar& c);
+    friend bool operator!=(const wxString& s, const wxUniCharRef& c);
+    friend bool operator!=(const wxString& s, char c);
+    friend bool operator!=(const wxString& s, wchar_t c);
+    ///@}
 
     /**
         Returns @true if the string contents matches a mask containing '*' and '?'.
@@ -1931,11 +2005,15 @@ public:
         The overload taking @c std::string is only available starting with
         wxWidgets 3.1.1.
 
+        The overload taking @c std::string_view is only available starting with
+        wxWidgets 3.3.0 and requires the consumer application to use C++17.
+
         @since 2.8.4
     */
     static wxString FromUTF8(const char* s);
     static wxString FromUTF8(const char* s, size_t len);
     static wxString FromUTF8(const std::string& s);
+    static wxString FromUTF8(std::string_view s);
     ///@}
 
     ///@{
@@ -1955,63 +2033,19 @@ public:
         The overload taking @c std::string is only available starting with
         wxWidgets 3.1.1.
 
+        The overload taking @c std::string_view is only available starting with
+        wxWidgets 3.3.0 and requires the consumer application to use C++17.
+
         @since 2.8.9
     */
     static wxString FromUTF8Unchecked(const char* s);
     static wxString FromUTF8Unchecked(const char* s, size_t len);
     static wxString FromUTF8Unchecked(const std::string& s);
+    static wxString FromUTF8Unchecked(std::string_view s);
     ///@}
 };
 
 
-
-///@{
-/**
-    Comparison operator for string types.
-*/
-inline bool operator==(const wxString& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxString& s2);
-inline bool operator< (const wxString& s1, const wxString& s2);
-inline bool operator> (const wxString& s1, const wxString& s2);
-inline bool operator<=(const wxString& s1, const wxString& s2);
-inline bool operator>=(const wxString& s1, const wxString& s2);
-inline bool operator==(const wxString& s1, const wxCStrData& s2);
-inline bool operator==(const wxCStrData& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxCStrData& s2);
-inline bool operator!=(const wxCStrData& s1, const wxString& s2);
-inline bool operator==(const wxString& s1, const wxWCharBuffer& s2);
-inline bool operator==(const wxWCharBuffer& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxWCharBuffer& s2);
-inline bool operator!=(const wxWCharBuffer& s1, const wxString& s2);
-inline bool operator==(const wxString& s1, const wxCharBuffer& s2);
-inline bool operator==(const wxCharBuffer& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxCharBuffer& s2);
-inline bool operator!=(const wxCharBuffer& s1, const wxString& s2);
-///@}
-
-///@{
-/**
-    Comparison operators char types.
-*/
-inline bool operator==(const wxUniChar& c, const wxString& s);
-inline bool operator==(const wxUniCharRef& c, const wxString& s);
-inline bool operator==(char c, const wxString& s);
-inline bool operator==(wchar_t c, const wxString& s);
-inline bool operator==(int c, const wxString& s);
-inline bool operator==(const wxString& s, const wxUniChar& c);
-inline bool operator==(const wxString& s, const wxUniCharRef& c);
-inline bool operator==(const wxString& s, char c);
-inline bool operator==(const wxString& s, wchar_t c);
-inline bool operator!=(const wxUniChar& c, const wxString& s);
-inline bool operator!=(const wxUniCharRef& c, const wxString& s);
-inline bool operator!=(char c, const wxString& s);
-inline bool operator!=(wchar_t c, const wxString& s);
-inline bool operator!=(int c, const wxString& s);
-inline bool operator!=(const wxString& s, const wxUniChar& c);
-inline bool operator!=(const wxString& s, const wxUniCharRef& c);
-inline bool operator!=(const wxString& s, char c);
-inline bool operator!=(const wxString& s, wchar_t c);
-///@}
 
 /**
     The global wxString instance of an empty string.

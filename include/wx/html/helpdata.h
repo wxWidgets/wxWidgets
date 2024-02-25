@@ -107,7 +107,7 @@ class WXDLLIMPEXP_HTML wxHtmlSearchEngine : public wxObject
 {
 public:
     wxHtmlSearchEngine() : wxObject() {}
-    virtual ~wxHtmlSearchEngine() {}
+    virtual ~wxHtmlSearchEngine() = default;
 
     // Sets the keyword we will be searching for
     virtual void LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only);

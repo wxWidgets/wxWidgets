@@ -2,7 +2,6 @@
 // Name:        wx/volume.h
 // Purpose:     wxFSVolume - encapsulates system volume information
 // Author:      George Policello
-// Modified by:
 // Created:     28 Jan 02
 // Copyright:   (c) 2002 George Policello
 // Licence:     wxWindows licence

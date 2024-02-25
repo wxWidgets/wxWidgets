@@ -39,6 +39,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
+    [v setBoxType:NSBoxSeparator];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
 }

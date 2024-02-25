@@ -2,7 +2,6 @@
 // Name:        wx/ribbon/bar.h
 // Purpose:     Top-level component of the ribbon-bar-style interface
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-05-23
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -69,7 +68,7 @@ public:
     void SetPage(wxRibbonPage* page) {m_page = page;}
 
 protected:
-    wxRibbonPage* m_page;
+    wxRibbonPage* m_page = nullptr;
 
 #ifndef SWIG
 private:
@@ -81,7 +80,7 @@ class WXDLLIMPEXP_RIBBON wxRibbonPageTabInfo
 {
 public:
     wxRect rect;
-    wxRibbonPage *page;
+    wxRibbonPage* page = nullptr;
     int ideal_width;
     int small_begin_need_separator_width;
     int small_must_have_separator_width;
@@ -126,6 +125,7 @@ public:
     bool SetActivePage(wxRibbonPage* page);
     int GetActivePage() const;
     wxRibbonPage* GetPage(int n);
+    wxRibbonPage* GetPageById(wxWindowID id);
     size_t GetPageCount() const;
     bool DismissExpandedPanel();
     int GetPageNumber(wxRibbonPage* page) const;

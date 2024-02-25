@@ -14,6 +14,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/datetime.h"
 #include "wx/localedefs.h"
 #include "wx/string.h"
 #include "wx/vector.h"
@@ -40,7 +41,7 @@ public:
     static wxLocaleIdent FromTag(const wxString& tag);
 
     // Default ctor creates an empty, invalid identifier.
-    wxLocaleIdent() { }
+    wxLocaleIdent() = default;
 
     // Set language
     wxLocaleIdent& Language(const wxString& language);
@@ -146,6 +147,18 @@ public:
 
     // Query the locale for the specified localized name.
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const;
+
+#if wxUSE_DATETIME
+    // Get the full (default) or abbreviated localized month name
+    // returns empty string on error
+    wxString GetMonthName(wxDateTime::Month month,
+                          wxDateTime::NameForm form = {}) const;
+
+    // Get the full (default) or abbreviated localized weekday name
+    // returns empty string on error
+    wxString GetWeekDayName(wxDateTime::WeekDay weekday,
+                            wxDateTime::NameForm form = {}) const;
+#endif // wxUSE_DATETIME
 
     // Query the layout direction of the current locale.
     wxLayoutDirection GetLayoutDirection() const;

@@ -479,8 +479,8 @@ class wxMyVariantData : public wxVariantData
 {
 public:
     wxMyVariantData(const MyClass& value)
+        : m_value(value)
     {
-        m_value = value;
     }
 
     virtual bool Eq(wxVariantData& WXUNUSED(data)) const override

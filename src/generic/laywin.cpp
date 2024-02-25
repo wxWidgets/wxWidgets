@@ -5,7 +5,6 @@
 //              layout-awareness (via event handlers). This is suited to
 //              IDE-style window layout.
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -51,7 +50,7 @@ void wxSashLayoutWindow::Init()
     m_orientation = wxLAYOUT_HORIZONTAL;
     m_alignment = wxLAYOUT_TOP;
 #ifdef __WXMAC__
-    MacSetClipChildren( true ) ;
+    MacSetClipChildren() ;
 #endif
 }
 

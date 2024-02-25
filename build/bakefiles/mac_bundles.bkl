@@ -49,10 +49,10 @@
                 sed -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.$(id)/" \
                     -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_EXECUTABLE_NAME}/$(id)/" \
                     -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_BUNDLE_NAME}/$(id)/" \
-                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2023 wxWidgets/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2024 wxWidgets/" \
                     -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
-                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_INFO_STRING}/$(id) version $(WX_VERSION), (c) 2002-2023 wxWidgets/" \
-                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2023 wxWidgets/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_INFO_STRING}/$(id) version $(WX_VERSION), (c) 2002-2024 wxWidgets/" \
+                    -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2024 wxWidgets/" \
                     -e "s/\$(DOLLAR)$(DOLLAR){MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
                     $(BUNDLE_PLIST) >$(BUNDLE)/Info.plist
 

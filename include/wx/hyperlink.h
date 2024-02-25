@@ -99,7 +99,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_HYPERLINK, wxHyperlinkEvent );
 class WXDLLIMPEXP_CORE wxHyperlinkEvent : public wxCommandEvent
 {
 public:
-    wxHyperlinkEvent() {}
+    wxHyperlinkEvent() = default;
     wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString& url)
         : wxCommandEvent(wxEVT_HYPERLINK, id),
           m_url(url)
@@ -147,7 +147,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     class WXDLLIMPEXP_CORE wxHyperlinkCtrl : public wxGenericHyperlinkCtrl
     {
     public:
-        wxHyperlinkCtrl() { }
+        wxHyperlinkCtrl() = default;
 
         wxHyperlinkCtrl(wxWindow *parent,
                         wxWindowID id,

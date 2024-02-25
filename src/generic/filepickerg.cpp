@@ -2,7 +2,6 @@
 // Name:        src/generic/filepickerg.cpp
 // Purpose:     wxGenericFileDirButton class implementation
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     15/04/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence

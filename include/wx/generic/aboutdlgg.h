@@ -55,8 +55,12 @@ public:
     bool Create(const wxAboutDialogInfo& info, wxWindow* parent = nullptr);
 
 protected:
-    // this virtual method may be overridden to add some more controls to the
-    // dialog
+    // Return the parent to use for custom controls.
+    wxWindow* GetCustomControlParent() const { return m_contents; }
+
+    // This virtual method may be overridden to add some more controls to the
+    // dialog. The controls should be created using GetCustomControlParent() as
+    // the parent and then passed to AddControl().
     //
     // notice that for this to work you must call Create() from the derived
     // class ctor and not use the base class ctor directly as otherwise the
@@ -87,7 +91,7 @@ private:
 #endif // !wxUSE_MODAL_ABOUT_DIALOG
 
     // The panel containing the dialog contents.
-    wxPanel *m_contents = nullptr;
+    wxWindow *m_contents = nullptr;
 
     wxSizer *m_sizerText = nullptr;
 };

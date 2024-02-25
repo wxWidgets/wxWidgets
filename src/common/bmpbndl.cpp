@@ -619,7 +619,7 @@ void RecordSizePref(SizePrefs& prefs, const wxSize& size)
 
 /* static */
 wxSize
-wxBitmapBundle::GetConsensusSizeFor(wxWindow* win,
+wxBitmapBundle::GetConsensusSizeFor(const wxWindow* win,
                                     const wxVector<wxBitmapBundle>& bundles)
 {
     return GetConsensusSizeFor(win->GetDPIScaleFactor(), bundles);
@@ -669,17 +669,13 @@ wxBitmapBundle::GetConsensusSizeFor(double scale,
 
 /* static */
 wxImageList*
-wxBitmapBundle::CreateImageList(wxWindow* win,
+wxBitmapBundle::CreateImageList(const wxWindow* win,
                                 const wxVector<wxBitmapBundle>& bundles)
 {
     wxCHECK_MSG( win, nullptr, "must have a valid window" );
     wxCHECK_MSG( !bundles.empty(), nullptr, "should have some images" );
 
-    wxSize size = GetConsensusSizeFor(win, bundles);
-
-    // wxImageList wants the logical size for the platforms where logical and
-    // physical pixels are different.
-    size /= win->GetContentScaleFactor();
+    const wxSize size = GetConsensusSizeFor(win, bundles);
 
     wxImageList* const iml = new wxImageList(size.x, size.y);
 

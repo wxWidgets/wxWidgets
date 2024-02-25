@@ -20,7 +20,7 @@ class WXDLLIMPEXP_BASE wxTrackerNode
 {
 public:
     wxTrackerNode() : m_nxt(nullptr) { }
-    virtual ~wxTrackerNode() { }
+    virtual ~wxTrackerNode() = default;
 
     virtual void OnObjectDestroy() = 0;
 

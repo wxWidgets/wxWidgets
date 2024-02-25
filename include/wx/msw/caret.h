@@ -2,7 +2,6 @@
 // Name:        wx/msw/caret.h
 // Purpose:     wxCaret class - the MSW implementation of wxCaret
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     23.05.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

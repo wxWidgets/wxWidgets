@@ -2,7 +2,6 @@
 // Name:        wx/textctrl.h
 // Purpose:     wxTextAttr and wxTextCtrlBase class - the interface of wxTextCtrl
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     13.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -606,8 +605,8 @@ private:
 class WXDLLIMPEXP_CORE wxTextAreaBase
 {
 public:
-    wxTextAreaBase() { }
-    virtual ~wxTextAreaBase() { }
+    wxTextAreaBase() = default;
+    virtual ~wxTextAreaBase() = default;
 
     // lines access
     // ------------
@@ -714,7 +713,7 @@ class WXDLLIMPEXP_CORE wxTextCtrlIface : public wxTextAreaBase,
                                          public wxTextEntryBase
 {
 public:
-    wxTextCtrlIface() { }
+    wxTextCtrlIface() = default;
 
     // wxTextAreaBase overrides
     virtual wxString GetValue() const override
@@ -751,8 +750,8 @@ public:
     // creation
     // --------
 
-    wxTextCtrlBase() { }
-    virtual ~wxTextCtrlBase() { }
+    wxTextCtrlBase() = default;
+    virtual ~wxTextCtrlBase() = default;
 
 
     // more readable flag testing methods

@@ -29,17 +29,11 @@
         which are ABI-compatible with each other. This is used by official wx
         binaries, so we want to check this one too.
       -->
-    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '10.0'">100</wxToolsetVersion>
-    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '11.0'">110</wxToolsetVersion>
-    <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '12.0'">120</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '14.0'">140</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '15.0'">141</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '16.0'">142</wxToolsetVersion>
     <wxToolsetVersion Condition="'$(VisualStudioVersion)' == '17.0'">143</wxToolsetVersion>
 
-    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '10.0'">100</wxToolsetVerABICompat>
-    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '11.0'">110</wxToolsetVerABICompat>
-    <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '12.0'">120</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '14.0'">14x</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '15.0'">14x</wxToolsetVerABICompat>
     <wxToolsetVerABICompat Condition="'$(VisualStudioVersion)' == '16.0'">14x</wxToolsetVerABICompat>
