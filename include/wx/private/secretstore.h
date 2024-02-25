@@ -50,7 +50,7 @@ public:
         : m_size(buf.length()),
           m_data(new char[buf.length()])
     {
-      memcpy(m_data, data, size);
+      memcpy(m_data, buf.data(), buf.length());
     }
 
     virtual ~wxSecretValueGenericImpl()
