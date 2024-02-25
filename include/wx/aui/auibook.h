@@ -434,6 +434,7 @@ protected:
     void OnTabBgDClick(wxAuiNotebookEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnDpiChanged(wxDPIChangedEvent& event);
 
     // set selection to the given window (which must be non-null and be one of
     // our pages, otherwise an assert is raised)

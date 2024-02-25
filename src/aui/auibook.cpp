@@ -1700,6 +1700,7 @@ wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxBookCtrlBase)
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
     EVT_SYS_COLOUR_CHANGED(wxAuiNotebook::OnSysColourChanged)
+    EVT_DPI_CHANGED(wxAuiNotebook::OnDpiChanged)
 wxEND_EVENT_TABLE()
 
 void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
@@ -1721,6 +1722,12 @@ void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
         tabctrl->Refresh();
     }
     Refresh();
+}
+
+void wxAuiNotebook::OnDpiChanged(wxDPIChangedEvent& event)
+{
+    UpdateTabCtrlHeight();
+    event.Skip();
 }
 
 void wxAuiNotebook::Init()
