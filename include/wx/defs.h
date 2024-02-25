@@ -306,7 +306,12 @@ typedef short int WXTYPE;
 
     // Rvalue references are supported since MSVS 2010, but enabling them
     // causes compilation errors on versions before 2015
+    //
+    // And move support in wxString is only available since 3.2.3, so don't
+    // compile it in when compatibility with older versions is requested.
+#if wxABI_VERSION >= 30203
     #define wxHAS_RVALUE_REF
+#endif
 
     #define wxHAS_NOEXCEPT
     #define wxNOEXCEPT noexcept

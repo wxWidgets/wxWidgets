@@ -254,6 +254,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Add support for "%F" format specifier to wxDateTime (#24173).
+- Restore possible ABI incompatibility with wx < 3.2.3 in wxString.
 
 All (GUI):
 
