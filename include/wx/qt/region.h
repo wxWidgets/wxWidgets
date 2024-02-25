@@ -11,7 +11,6 @@
 
 class QRegion;
 class QRect;
-template<class T> class QVector;
 
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
@@ -84,7 +83,7 @@ public:
     wxRect GetRect() const;
 
 private:
-    QVector < QRect > *m_qtRects;
+    void *m_qtRects;
     int m_pos;
 
     wxDECLARE_DYNAMIC_CLASS(wxRegionIterator);

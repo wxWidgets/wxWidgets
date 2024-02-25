@@ -548,7 +548,11 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 
 void wxNativeFontInfo::SetNumericWeight(int weight)
 {
+#if QT_VERSION_MAJOR >= 6
+    m_qtFont.setWeight(static_cast<QFont::Weight>(ConvertFontWeight(weight)));
+#else
     m_qtFont.setWeight(ConvertFontWeight(weight));
+#endif
 }
 
 void wxNativeFontInfo::SetUnderlined(bool underlined)

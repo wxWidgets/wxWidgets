@@ -623,8 +623,10 @@ wxRendererQt::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect,
 
     if ( flags & wxCONTROL_SPECIAL )
     {
+#if QT_VERSION_MAJOR < 6
         if ( isKDE )
             option.orientation = Qt::Vertical;
+#endif
     }
     else
     {
