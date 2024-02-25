@@ -403,7 +403,7 @@ endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
     cmake_push_check_state(RESET)
-    set(CMAKE_REQUIRED_LIBRARIES pthread)
+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
     wx_check_cxx_source_compiles("
         void *p;
         pthread_cleanup_push(ThreadCleanupFunc, p);
