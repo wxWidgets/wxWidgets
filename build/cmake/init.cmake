@@ -330,7 +330,14 @@ if(wxUSE_INTL AND NOT wxUSE_FILE)
 endif()
 
 if(wxUSE_THREADS)
-    find_package(Threads REQUIRED)
+    if(ANDROID)
+        # Android has pthreads but FindThreads fails due to missing pthread_cancel
+        set(CMAKE_USE_PTHREADS_INIT 1)
+        set(CMAKE_THREAD_LIBS_INIT "")
+        set(Threads_FOUND TRUE)
+    else()
+        find_package(Threads REQUIRED)
+    endif()
 endif()
 
 if(wxUSE_LIBLZMA)
