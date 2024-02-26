@@ -206,8 +206,6 @@ protected:
     virtual void DoSetClientSize(int width, int height) override;
     virtual void DoGetClientSize(int *width, int *height) const override;
 
-    virtual wxSize DoGetBestSize() const override;
-
     virtual void DoMoveWindow(int x, int y, int width, int height) override;
 
 #if wxUSE_TOOLTIPS

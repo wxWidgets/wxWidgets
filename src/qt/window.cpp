@@ -49,8 +49,9 @@ inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
 
     return qtWidget;
 }
+}
 
-inline wxSize wxQtGetBestSize(QWidget* qtWidget)
+extern wxSize wxQtGetBestSize(QWidget* qtWidget)
 {
     auto size = qtWidget->sizeHint();
     // best effort to ensure a correct size (note that some qt controls
@@ -58,7 +59,7 @@ inline wxSize wxQtGetBestSize(QWidget* qtWidget)
     size = size.expandedTo(qtWidget->minimumSizeHint());
     return wxQtConvertSize(size);
 }
-}
+
 
 // Base Widget helper (no scrollbar, used by wxWindow)
 
@@ -1146,24 +1147,6 @@ void wxWindowQt::DoSetClientSize(int width, int height)
         // Resize the window to be as small as the client size but no smaller
         wxQtSetClientSize(GetHandle(), width, height);
     }
-}
-
-wxSize wxWindowQt::DoGetBestSize() const
-{
-    const wxSize size = wxWindowBase::DoGetBestSize();
-
-    if ( dynamic_cast<wxQtWidget*>(GetHandle()) )
-    {
-        return size;
-    }
-
-    wxSize bestSize = wxQtGetBestSize( GetHandle() );
-    if ( size.IsFullySpecified() )
-    {
-        bestSize.IncTo(size);
-    }
-
-    return bestSize;
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
