@@ -491,8 +491,7 @@ void wxWindowQt::PostCreation(bool generic)
         DoEnable(false);
 
     // The window might have been hidden before Create() and it needs to remain
-    // hidden in this case, so do it (unfortunately there doesn't seem to be
-    // any way to create the window initially hidden with Qt).
+    // hidden in this case.
     GetHandle()->setVisible(m_isShown);
 
     wxWindowCreateEvent event(this);
