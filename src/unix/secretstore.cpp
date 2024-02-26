@@ -68,23 +68,10 @@ private:
 class wxSecretValueLibSecretImpl : public wxSecretValueImpl
 {
 public:
-    // Create a new secret value.
-    //
-    // Notice that we have to use application/octet-stream as content type and not
-    // text/plain which would make libsecret treat the data as textual and somehow
-    // causes mutation on storage or retrieval.
-    wxSecretValueLibSecretImpl(size_t size, const void* data)
+    // Create a new secret value for the given content type.
+    wxSecretValueLibSecretImpl(size_t size, const void* data, const char* content_type)
         : m_value(secret_value_new(static_cast<const gchar*>(data), size,
-                                   "application/octet-stream"))
-    {
-    }
-
-    // Create a new secret value from text.
-    //
-    // Notice that we have to use text/plain as content type.
-    wxSecretValueLibSecretImpl(const wxScopedCharBuffer &buf)
-        : m_value(secret_value_new(static_cast<const gchar*>(buf.data()), buf.length(),
-                                   "text/plain"))
+                                   content_type))
     {
     }
 
@@ -370,14 +357,9 @@ const char* wxSecretStoreLibSecretImpl::FIELD_USER = "user";
 // ============================================================================
 
 /* static */
-wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data)
+wxSecretValueImpl* wxSecretValue::NewImpl(size_t size, const void *data, const char* content_type)
 {
-    return new wxSecretValueLibSecretImpl(size, data);
-}
-
-wxSecretValueImpl* wxSecretValue::NewImpl(const wxScopedCharBuffer &buf)
-{
-  return new wxSecretValueLibSecretImpl(buf);
+    return new wxSecretValueLibSecretImpl(size, data, content_type);
 }
 
 /* static */
