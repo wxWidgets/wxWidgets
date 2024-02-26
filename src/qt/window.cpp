@@ -325,6 +325,8 @@ void wxWindowQt::Init()
 #endif
     m_qtWindow = nullptr;
     m_qtContainer = nullptr;
+
+    m_pendingClientSize = wxDefaultSize;
 }
 
 wxWindowQt::wxWindowQt()
@@ -1115,12 +1117,20 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 
 void wxWindowQt::DoGetClientSize(int *width, int *height) const
 {
-    QWidget *qtWidget = QtGetClientWidget();
-    wxCHECK_RET( qtWidget, "window must be created" );
+    if ( m_pendingClientSize != wxDefaultSize )
+    {
+        if ( width )  *width = m_pendingClientSize.x;
+        if ( height ) *height = m_pendingClientSize.y;
+    }
+    else
+    {
+        QWidget *qtWidget = QtGetClientWidget();
+        wxCHECK_RET( qtWidget, "window must be created" );
 
-    const QRect geometry = qtWidget->geometry();
-    if (width)  *width = geometry.width();
-    if (height) *height = geometry.height();
+        const QRect geometry = qtWidget->geometry();
+        if (width)  *width = geometry.width();
+        if (height) *height = geometry.height();
+    }
 }
 
 
@@ -1148,6 +1158,11 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
     qtWidget->move( x, y );
 
     wxQtSetClientSize(qtWidget, width, height);
+
+    if ( !qtWidget->isVisible() )
+    {
+        m_pendingClientSize = wxSize(width, height);
+    }
 }
 
 #if wxUSE_TOOLTIPS
@@ -1456,6 +1471,8 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 
 bool wxWindowQt::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEvent *event )
 {
+    m_pendingClientSize = wxDefaultSize;
+
     wxSizeEvent e( wxQtConvertSize( event->size() ) );
     e.SetEventObject(this);
 

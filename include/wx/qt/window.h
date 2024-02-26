@@ -243,6 +243,8 @@ private:
 
     bool m_mouseInside;
 
+    wxSize  m_pendingClientSize;
+
 #if wxUSE_ACCEL
     wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns
     std::unique_ptr<wxQtShortcutHandler> m_qtShortcutHandler; // always allocated
