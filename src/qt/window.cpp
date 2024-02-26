@@ -959,6 +959,30 @@ void wxWindowQt::SetWindowStyleFlag( long style )
     GetHandle()->setWindowFlags( qtFlags );
 }
 
+wxSize wxWindowQt::GetWindowBorderSize() const
+{
+    wxCoord border;
+    switch ( GetBorder() )
+    {
+        case wxBORDER_STATIC:
+        case wxBORDER_SIMPLE:
+        case wxBORDER_SUNKEN:
+        case wxBORDER_RAISED:
+        case wxBORDER_THEME:
+            border = 1;
+            break;
+
+        default:
+            wxFAIL_MSG( wxT("unknown border style") );
+            wxFALLTHROUGH;
+
+        case wxBORDER_NONE:
+            border = 0;
+    }
+
+    return 2 * wxSize(border, border);
+}
+
 void wxWindowQt::SetExtraStyle( long exStyle )
 {
     long exStyleOld = GetExtraStyle();
@@ -1360,6 +1384,12 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     // QAbstractScrollArea can only draw in it. Start the paint in the widget
     // itself otherwise.
     const bool ok = m_qtPainter->begin( widget );
+
+    if (m_qtPainter->device()->depth() > 1)
+    {
+        m_qtPainter->setRenderHints(QPainter::Antialiasing,
+                                    true);
+    }
 
     if ( ok )
     {

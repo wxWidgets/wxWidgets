@@ -189,10 +189,10 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 @COND_PLATFORM_MACOSX_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.webview/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/webview/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/webview/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/webview version $(WX_VERSION), (c) 2002-2023 wxWidgets/" \
-@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/webview version $(WX_VERSION), (c) 2002-2024 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >webview.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
@@ -220,6 +220,7 @@ webview$(EXEEXT): $(WEBVIEW_OBJECTS) $(__webview___win32rc)
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	ln -fs "../../../webview Helper.app/Contents/MacOS/webview Helper" "$$helper_contents/MacOS/$$helper_name"; \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/$$helper_name/"  \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/$$helper_name/" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${BUNDLE_ID_SUFFIX}/.$$helper_name/" \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in > "$$helper_contents/Info.plist"; \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp webview_helper.app/Contents/PkgInfo "$$helper_contents"; \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	cp -Rf webview_helper.app/Contents/Resources "$$helper_contents"; \
@@ -249,6 +250,7 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	mkdir -p webview_helper.app/Contents/Resources
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	sed -e "s/\$${PRODUCT_NAME}/webview Helper/"  \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${EXECUTABLE_NAME}/webview Helper/" \
+@COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	-e "s/\$${BUNDLE_ID_SUFFIX}//" \
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	$(top_srcdir)//samples/webview/cef_helper_info.plist.in >webview_helper.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	/bin/echo "APPL????" >webview_helper.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1@	

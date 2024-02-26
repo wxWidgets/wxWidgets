@@ -40,6 +40,9 @@ ARTTEST_RESOURCES =  \
 !if "$(TARGET_CPU)" == "AMD64"
 ARCH_SUFFIX = _x64
 !endif
+!if "$(TARGET_CPU)" == "ARM"
+ARCH_SUFFIX = _arm
+!endif
 !if "$(TARGET_CPU)" == "ARM64"
 ARCH_SUFFIX = _arm64
 !endif
@@ -57,6 +60,9 @@ ARCH_SUFFIX = _x64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 ARCH_SUFFIX = _x64
+!endif
+!if "$(TARGET_CPU)" == "arm"
+ARCH_SUFFIX = _arm
 !endif
 !if "$(TARGET_CPU)" == "arm64"
 ARCH_SUFFIX = _arm64
@@ -97,6 +103,9 @@ LIBTYPE_SUFFIX = dll
 !if "$(TARGET_CPU)" == "AMD64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
+!if "$(TARGET_CPU)" == "ARM"
+LINK_TARGET_CPU = /MACHINE:ARM
+!endif
 !if "$(TARGET_CPU)" == "ARM64"
 LINK_TARGET_CPU = /MACHINE:ARM64
 !endif
@@ -114,6 +123,9 @@ LINK_TARGET_CPU = /MACHINE:X64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:X64
+!endif
+!if "$(TARGET_CPU)" == "arm"
+LINK_TARGET_CPU = /MACHINE:ARM
 !endif
 !if "$(TARGET_CPU)" == "arm64"
 LINK_TARGET_CPU = /MACHINE:ARM64
@@ -415,7 +427,7 @@ clean:
 	-if exist $(OBJS)\arttest.pdb del $(OBJS)\arttest.pdb
 
 $(OBJS)\arttest.exe: $(ARTTEST_OBJECTS) $(OBJS)\arttest_sample.res
-	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\arttest.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\arttest.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS   $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
 	$(ARTTEST_OBJECTS) $(ARTTEST_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 

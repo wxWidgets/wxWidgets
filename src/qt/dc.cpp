@@ -42,6 +42,49 @@ static void SetBrushColour( QPainter *qtPainter, QColor col )
     qtPainter->setBrush( b );
 }
 
+class QtDCOffsetHelper
+{
+public:
+    QtDCOffsetHelper(QPainter *qpainter)
+    {
+        m_shouldOffset = ShouldOffset(qpainter->pen());
+        if (!m_shouldOffset)
+            return;
+
+        m_qp = qpainter;
+        m_offset = 0.5;
+
+        m_qp->translate(m_offset, m_offset);
+    }
+
+    ~QtDCOffsetHelper()
+    {
+        if (m_shouldOffset)
+            m_qp->translate(-m_offset, -m_offset);
+    }
+
+    bool ShouldOffset(const QPen &pen) const
+    {
+        if (pen.style() == Qt::NoPen)
+            return false;
+
+        double width = pen.widthF();
+
+        // always offset for 1-pixel width
+        if (width <= 0)
+            return true;
+
+        // offset if pen width is odd integer
+        const int w = int(width);
+        return (w & 1) && wxIsSameDouble(width, w);
+    }
+
+private:
+    QPainter *m_qp;
+    double m_offset;
+    bool m_shouldOffset;
+};
+
 wxIMPLEMENT_CLASS(wxQtDCImpl,wxDCImpl);
 
 wxQtDCImpl::wxQtDCImpl( wxDC *owner )
@@ -82,6 +125,12 @@ void wxQtDCImpl::QtPreparePainter( )
         m_qtPainter->setPen( wxPen().GetHandle() );
         m_qtPainter->setBrush( wxBrush().GetHandle() );
         m_qtPainter->setFont( wxFont().GetHandle() );
+
+        if (m_qtPainter->device()->depth() > 1)
+        {
+            m_qtPainter->setRenderHints(QPainter::Antialiasing,
+                                        true);
+        }
 
         if (m_clipping)
         {
@@ -194,26 +243,10 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
     if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE)
     {
         // Use a monochrome mask: use foreground color for the mask
-        QBrush b(brush.GetHandle());
-        b.setColor(m_textForegroundColour.GetQColor());
-        b.setTexture(b.texture().mask());
-        m_qtPainter->setBrush(b);
+        m_brush.SetColour(m_textForegroundColour);
     }
-    else if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE)
-    {
-        //Don't use the mask
-        QBrush b(brush.GetHandle());
 
-        QPixmap p = b.texture();
-        p.setMask(QBitmap());
-        b.setTexture(p);
-
-        m_qtPainter->setBrush(b);
-    }
-    else
-    {
-        m_qtPainter->setBrush(brush.GetHandle());
-    }
+    m_qtPainter->setBrush(m_brush.GetHandle());
 
     ApplyRasterColourOp();
 }
@@ -576,11 +609,15 @@ bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
 void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
+    QtDCOffsetHelper helper( m_qtPainter );
+
     m_qtPainter->drawPoint(x, y);
 }
 
 void wxQtDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
+    QtDCOffsetHelper helper( m_qtPainter );
+
     m_qtPainter->drawLine(x1, y1, x2, y2);
 }
 
@@ -594,55 +631,72 @@ void wxQtDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     QLineF l2( xc, yc, x2, y2 );
     QPointF center( xc, yc );
 
-    qreal penWidth = m_qtPainter->pen().width();
-    qreal lenRadius = l1.length() - penWidth / 2;
+    qreal lenRadius = l1.length();
     QPointF centerToCorner( lenRadius, lenRadius );
 
     QRect rectangle = QRectF( center - centerToCorner, center + centerToCorner ).toRect();
 
     // Calculate the angles
-    int startAngle = (int)( l1.angle() * 16 );
-    int endAngle = (int)( l2.angle() * 16 );
+    int startAngle = (int)(l1.angle() * 16);
+    int endAngle = (int)(l2.angle() * 16);
+
+    while(endAngle < startAngle)
+        endAngle += 360 * 16;
+
     int spanAngle = endAngle - startAngle;
-    if ( spanAngle < 0 )
-    {
-        spanAngle = -spanAngle;
-    }
+
+    QtDCOffsetHelper helper( m_qtPainter );
 
     if ( spanAngle == 0 )
         m_qtPainter->drawEllipse( rectangle );
-    else
+    else if (m_qtPainter->brush().style() != Qt::NoBrush)
         m_qtPainter->drawPie( rectangle, startAngle, spanAngle );
+    else
+        m_qtPainter->drawArc( rectangle, startAngle, spanAngle );
 }
 
 void wxQtDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                double sa, double ea)
 {
-    int penWidth = m_qtPainter->pen().width();
-    x += penWidth / 2;
-    y += penWidth / 2;
-    w -= penWidth;
-    h -= penWidth;
+    int startAngle = (int)( sa * 16 );
+    int endAngle = (int)( ea * 16 );
 
-    double spanAngle = sa - ea;
-    if (spanAngle < -180)
-        spanAngle += 360;
-    if (spanAngle > 180)
-        spanAngle -= 360;
+    while(endAngle < startAngle)
+        endAngle += 360 * 16;
 
-    if ( spanAngle == 0 )
-        m_qtPainter->drawEllipse( x, y, w, h );
+    int spanAngle = endAngle - startAngle;
+
+    QRect rectangle(x, y, w, h);
+
+    QtDCOffsetHelper helper( m_qtPainter );
+
+    if (spanAngle == 0)
+    {
+        m_qtPainter->drawEllipse( rectangle );
+    }
     else
-        m_qtPainter->drawPie( x, y, w, h, (int)( sa * 16 ), (int)( ( ea - sa ) * 16 ) );
+    {
+        if (m_qtPainter->brush().style() != Qt::NoBrush)
+        {
+            QPen savedPen = m_qtPainter->pen();
+            m_qtPainter->setPen( QPen( Qt::NoPen ) );
+            m_qtPainter->drawPie( rectangle, startAngle, spanAngle );
+            m_qtPainter->setPen( savedPen );
+        }
+
+        m_qtPainter->drawArc( rectangle, startAngle, spanAngle );
+    }
 }
 
 void wxQtDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    int penWidth = m_qtPainter->pen().width();
-    x += penWidth / 2;
-    y += penWidth / 2;
-    width -= penWidth;
-    height -= penWidth;
+    if (m_qtPainter->pen().style() != Qt::NoPen)
+    {
+        width -= 1;
+        height -= 1;
+    }
+
+    QtDCOffsetHelper helper( m_qtPainter );
 
     m_qtPainter->drawRect( x, y, width, height );
 }
@@ -651,11 +705,13 @@ void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
                                     wxCoord width, wxCoord height,
                                     double radius)
 {
-    int penWidth = m_qtPainter->pen().width();
-    x += penWidth / 2;
-    y += penWidth / 2;
-    width -= penWidth;
-    height -= penWidth;
+    if (m_qtPainter->pen().style() != Qt::NoPen)
+    {
+        width -= 1;
+        height -= 1;
+    }
+
+    QtDCOffsetHelper helper( m_qtPainter );
 
     m_qtPainter->drawRoundedRect( x, y, width, height, radius, radius );
 }
@@ -663,11 +719,7 @@ void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
                            wxCoord width, wxCoord height)
 {
-    const int penWidth = m_qtPainter->pen().width();
-    x += penWidth / 2;
-    y += penWidth / 2;
-    width -= penWidth;
-    height -= penWidth;
+    QtDCOffsetHelper helper( m_qtPainter );
 
     m_qtPainter->drawEllipse( x, y, width, height );
 }
@@ -682,6 +734,8 @@ void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
     int left, top, right, bottom;
     inv.map( w, h, &right, &bottom );
     inv.map( 0, 0, &left, &top );
+
+    QtDCOffsetHelper helper( m_qtPainter );
 
     m_qtPainter->drawLine( left, y, right, y );
     m_qtPainter->drawLine( x, top, x, bottom );
@@ -854,12 +908,16 @@ void wxQtDCImpl::DoDrawLines(int n, const wxPoint points[],
             path.lineTo(wxQtConvertPoint(points[i]));
         }
 
-        m_qtPainter->translate(xoffset, yoffset);
+        {
+            QtDCOffsetHelper helper(m_qtPainter);
 
-        QBrush savebrush = m_qtPainter->brush();
-        m_qtPainter->setBrush(Qt::NoBrush);
-        m_qtPainter->drawPath(path);
-        m_qtPainter->setBrush(savebrush);
+            m_qtPainter->translate(xoffset, yoffset);
+
+            QBrush savebrush = m_qtPainter->brush();
+            m_qtPainter->setBrush(Qt::NoBrush);
+            m_qtPainter->drawPath(path);
+            m_qtPainter->setBrush(savebrush);
+        }
 
         // Reset transform
         ComputeScaleAndOrigin();
@@ -870,15 +928,20 @@ void wxQtDCImpl::DoDrawPolygon(int n, const wxPoint points[],
                        wxCoord xoffset, wxCoord yoffset,
                        wxPolygonFillMode fillStyle )
 {
+    Qt::FillRule fill = (fillStyle == wxWINDING_RULE) ? Qt::WindingFill : Qt::OddEvenFill;
+
     QPolygon qtPoints;
     for (int i = 0; i < n; i++) {
         qtPoints << wxQtConvertPoint(points[i]);
     }
 
-    Qt::FillRule fill = (fillStyle == wxWINDING_RULE) ? Qt::WindingFill : Qt::OddEvenFill;
+    {
+        QtDCOffsetHelper helper(m_qtPainter);
 
-    m_qtPainter->translate(xoffset, yoffset);
-    m_qtPainter->drawPolygon(qtPoints, fill);
+        m_qtPainter->translate(xoffset, yoffset);
+        m_qtPainter->drawPolygon(qtPoints, fill);
+    }
+
     // Reset transform
     ComputeScaleAndOrigin();
 }
