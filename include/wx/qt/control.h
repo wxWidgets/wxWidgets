@@ -24,6 +24,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxASCII_STR(wxControlNameStr));
 
+    virtual wxSize DoGetBestSize() const override;
+
 private:
     wxDECLARE_DYNAMIC_CLASS(wxControl);
 };
