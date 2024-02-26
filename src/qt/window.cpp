@@ -435,6 +435,12 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     if ( parent )
         parent->AddChild( this );
 
+    // Workaround so that the initial size set below is effective. Otherwise it can be
+    // changed by the algorithm determining the initial sizes of the different parts of
+    // the UI (wxAUI does this for example).
+    wxQtEnsureSignalsBlocked blocker(GetHandle());
+    GetHandle()->setVisible(true);
+
     wxPoint p;
     if ( pos != wxDefaultPosition )
         p = pos;
