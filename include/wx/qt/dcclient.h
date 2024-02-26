@@ -22,6 +22,8 @@ public:
 
     ~wxWindowDCImpl();
 
+    virtual void DoGetSize(int *width, int *height) const override;
+
 protected:
     std::unique_ptr<QPicture> m_pict;
 
@@ -39,6 +41,8 @@ class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 public:
     wxClientDCImpl( wxDC *owner );
     wxClientDCImpl( wxDC *owner, wxWindow *win );
+
+    virtual void DoGetSize(int *width, int *height) const override;
 
     static bool
     CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return false; }
