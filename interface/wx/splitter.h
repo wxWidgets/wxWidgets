@@ -491,7 +491,7 @@ public:
 
         @since 3.3.0
     */
-    const wxPoint& GetLastSplitPosition() const;
+    wxPoint GetLastSplitPosition() const;
 
     /**
         Sets the last sash position.
