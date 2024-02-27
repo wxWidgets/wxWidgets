@@ -3147,7 +3147,7 @@ void wxGrid::CalcDimensions()
 
     // compute the size of the scrollable area
     int w = m_numCols > 0 ? GetColRight(GetColAt(m_numCols - 1)) : 0;
-    int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) : 0;
+    int h = m_numRows > 0 ? GetRowBottom(GetRowAt(m_numRows - 1)) : 0;
 
     w += m_extraWidth;
     h += m_extraHeight;
