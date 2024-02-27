@@ -128,6 +128,8 @@ wxDEFINE_EVENT( wxEVT_GRID_ROW_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_ROW_AUTO_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
+wxDEFINE_EVENT( wxEVT_GRID_ROW_LABEL_SIZE, wxGridSizeEvent);
+wxDEFINE_EVENT( wxEVT_GRID_COL_LABEL_SIZE, wxGridSizeEvent);
 wxDEFINE_EVENT( wxEVT_GRID_ROW_MOVE, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_MOVE, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SORT, wxGridEvent );
@@ -2799,6 +2801,8 @@ void wxGrid::InitPixelFields()
         m_rowLabelWidth  = FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH);
     if ( m_colLabelWin->IsShown() )
         m_colLabelHeight = FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT);
+    m_rowLabelMinWidth = 0;
+    m_colLabelMinHeight = 0;
 
     m_defaultColWidth = FromDIP(WXGRID_DEFAULT_COL_WIDTH);
 
@@ -3959,6 +3963,10 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
     // index into data rows/cols
     int lineAt = oper.GetLineAt(this, posAt);
 
+    int edge = FromDIP(WXGRID_LABEL_EDGE_ZONE);
+    // coord < 0 can happen w. captured mouse; probably not relevant here, though
+    int atLabelEdge = abs(coord) < edge;
+
     if ( CheckIfDragCancelled(&event) )
         return;
 
@@ -4066,6 +4074,11 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
             DoStartResizeRowOrCol(lineEdge, oper.GetLineSize(this, lineEdge));
             ChangeCursorMode(oper.GetCursorModeResize(), labelWin);
         }
+        else if ( atLabelEdge && oper.CanDragLabelSize(this) )
+        {
+            DoStartResizeRowOrCol(-2, oper.GetLabelSize(this));
+            ChangeCursorMode(oper.GetCursorModeResize(), labelWin);
+        }
         else
         {
             // not a request to start resizing
@@ -4147,6 +4160,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         }
         else // not on line separator or it's not resizable
         {
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, labelWin);  // can be CursorModeMove at label edge
             if ( line >=0 &&
                  oper.SendEvent( this, wxEVT_GRID_LABEL_LEFT_DCLICK, line, event ) == Event_Unhandled )
             {
@@ -4237,6 +4251,13 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                 {
                     ChangeCursorMode(oper.GetCursorModeResize(), labelWin, false);
                 }
+            }
+        }
+        else if ( atLabelEdge && oper.CanDragLabelSize(this) )
+        {
+            if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
+            {
+                ChangeCursorMode(oper.GetCursorModeResize(), labelWin, false);
             }
         }
         else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
@@ -4361,15 +4382,71 @@ void wxGrid::DoStartResizeRowOrCol(int col, int size)
 
 void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
 {
-    if ( event.LeftDown() )
+
+    if ( CheckIfDragCancelled(&event) )
+        return;
+
+    // if label resize is allowed:
+    //  - check the mouse position is at right or bottom edge
+    //  - initialize oper to correct operation type
+    bool atBottomEdge = false, atRightEdge = false, atLabelEdge = false;
+    const wxPoint posEvent = event.GetPosition();
+    int edge = FromDIP(WXGRID_LABEL_EDGE_ZONE);
+    const wxGridOperations* oper = nullptr;
+
+    if ( m_canDragRowLabelSize && posEvent.x >= m_rowLabelWidth - edge )
+        atLabelEdge = atRightEdge = true;
+    else if ( m_canDragColLabelSize && posEvent.y >= m_colLabelHeight - edge )
+        atLabelEdge = atBottomEdge = true;
+
+    if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
+        ( atBottomEdge && m_cursorMode == WXGRID_CURSOR_SELECT_CELL ) )
+        oper = new wxGridRowOperations();
+    else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL || atRightEdge )
+        oper = new wxGridColumnOperations();
+
+    if ( m_dragRowOrCol == -2 && event.Dragging() )
     {
-        // indicate corner label by having both row and
-        // col args == -1
-        //
-        if ( SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, -1, event ) == Event_Unhandled )
+        if ( !m_isDragging )
+            m_isDragging = true;
+
+        if ( event.LeftIsDown() )
+        {
+            if ( oper && m_cursorMode == oper->GetCursorModeResize() )
+            {
+                DoGridDragResize(event.GetPosition(), *oper, nullptr);
+            }
+        }
+        return;
+    }
+
+    if ( m_isDragging && (event.Entering() || event.Leaving()) )
+        return;
+
+    if ( event.Entering() || event.Leaving() )
+    {
+        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_cornerLabelWin);
+    }
+    else if ( event.LeftDown() )
+    {
+        if ( atLabelEdge && oper->CanDragLabelSize(this) )
+        {
+            DoStartResizeRowOrCol(-2, oper->GetLabelSize(this));
+            ChangeCursorMode(oper->GetCursorModeResize(), m_cornerLabelWin);
+        }
+        // indicate corner label by having both row and col args == -1
+        else if ( SendEvent(wxEVT_GRID_LABEL_LEFT_CLICK, -1, -1, event) == Event_Unhandled )
         {
             SelectAll();
         }
+    }
+    else if ( event.LeftUp() && m_isDragging && m_dragRowOrCol == -2 )
+    {
+        if ( m_cursorMode == oper->GetCursorModeResize() )
+        {
+            oper->DoEndLineResize(this, event, nullptr);
+        }
+        EndDraggingIfNecessary();
     }
     else if ( event.LeftDClick() )
     {
@@ -4390,6 +4467,14 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
             // no default action at the moment
             event.Skip();
         }
+    }
+    else if ( event.Moving() )
+    {
+        if ( atLabelEdge )
+            ChangeCursorMode(oper->GetCursorModeResize(), m_cornerLabelWin, false);
+        else
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_cornerLabelWin, false);
+        event.Skip();
     }
     else
     {
@@ -4977,19 +5062,30 @@ void wxGrid::DoGridDragResize(const wxPoint& position,
                  "shouldn't be called when not drag resizing" );
 
     // Get the logical position from the physical one we're passed.
-    const wxPoint
+    wxPoint logicalPos = position;
+    if ( gridWindow )
         logicalPos = CalcGridWindowUnscrolledPosition(position, gridWindow);
 
     // Size of the row/column is determined by the mouse coordinates in the
     // orthogonal direction.
     const int linePos = oper.Dual().Select(logicalPos);
 
-    const int lineStart = oper.GetLineStartPos(this, m_dragRowOrCol);
-    oper.SetLineSize(this, m_dragRowOrCol,
-                     wxMax(linePos - lineStart,
-                           oper.GetMinimalLineSize(this, m_dragRowOrCol)));
-
-    // TODO: generate RESIZING event, see #10754, if the size has changed.
+    if ( m_dragRowOrCol == -2 )
+    {
+        // dragging label size, either in row/col label window or corner
+        if ( gridWindow )
+            oper.SetLabelSize(this, wxMax(linePos + oper.GetLabelSize(this), oper.GetMinimalLabelSize(this)));
+        else
+            oper.SetLabelSize(this, wxMax(linePos, oper.GetMinimalLabelSize(this)));
+    }
+    else
+    {
+        const int lineStart = oper.GetLineStartPos(this, m_dragRowOrCol);
+        oper.SetLineSize(this, m_dragRowOrCol,
+            wxMax(linePos - lineStart,
+                oper.GetMinimalLineSize(this, m_dragRowOrCol)));
+        // TODO: generate RESIZING event, see #10754, if the size has changed.
+    }
 }
 
 wxPoint wxGrid::GetPositionForResizeEvent(int width) const
@@ -5011,17 +5107,20 @@ wxPoint wxGrid::GetPositionForResizeEvent(int width) const
 void wxGrid::DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow* gridWindow)
 {
     DoGridDragResize(event.GetPosition(), wxGridRowOperations(), gridWindow);
-
-    SendGridSizeEvent(wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, event);
-
+    if (m_dragRowOrCol == -2 )
+        SendGridSizeEvent(wxEVT_GRID_COL_LABEL_SIZE, -1, event);
+    else
+        SendGridSizeEvent(wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, event);
     m_dragRowOrCol = -1;
 }
 
 void wxGrid::DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow* gridWindow)
 {
     DoGridDragResize(event.GetPosition(), wxGridColumnOperations(), gridWindow);
-
-    SendGridSizeEvent(wxEVT_GRID_COL_SIZE, m_dragRowOrCol, event);
+    if ( m_dragRowOrCol == -2 )
+        SendGridSizeEvent(wxEVT_GRID_ROW_LABEL_SIZE, -1, event);
+    else
+        SendGridSizeEvent(wxEVT_GRID_COL_SIZE, m_dragRowOrCol, event);
 
     m_dragRowOrCol = -1;
 }
@@ -5914,10 +6013,17 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                         case WXGRID_CURSOR_RESIZE_ROW:
                         case WXGRID_CURSOR_RESIZE_COL:
                             // reset to size from before dragging
-                            (m_cursorMode == WXGRID_CURSOR_RESIZE_ROW
-                                ? static_cast<const wxGridOperations&>(wxGridRowOperations())
-                                : static_cast<const wxGridOperations&>(wxGridColumnOperations())
-                            ).SetLineSize(this, m_dragRowOrCol, m_dragRowOrColOldSize);
+                            if ( m_dragRowOrCol == -2 )
+                            {   if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
+                                    SetColLabelSize(m_dragRowOrColOldSize);
+                                else
+                                    SetRowLabelSize(m_dragRowOrColOldSize);
+                            }
+                            else
+                                (m_cursorMode == WXGRID_CURSOR_RESIZE_ROW
+                                    ? static_cast<const wxGridOperations&>(wxGridRowOperations())
+                                    : static_cast<const wxGridOperations&>(wxGridColumnOperations())
+                                ).SetLineSize(this, m_dragRowOrCol, m_dragRowOrColOldSize);
 
                             m_dragRowOrCol = -1;
                             break;
@@ -8726,6 +8832,19 @@ void wxGrid::SetColLabelSize( int height )
     }
 }
 
+void wxGrid::SetRowLabelMinimalSize(int width)
+{
+    if ( width >= 0 )
+        m_rowLabelMinWidth = width;
+}
+
+
+void wxGrid::SetColLabelMinimalSize(int height)
+{
+    if ( height >= 0 )
+        m_colLabelMinHeight = height;
+}
+
 void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
 {
     if ( m_labelBackgroundColour != colour )
@@ -9678,6 +9797,16 @@ void wxGrid::EnableDragColSize( bool enable )
 void wxGrid::EnableDragGridSize( bool enable )
 {
     m_canDragGridSize = enable;
+}
+
+void wxGrid::EnableDragRowLabelSize(bool enable)
+{
+    m_canDragRowLabelSize = enable;
+}
+
+void wxGrid::EnableDragColLabelSize(bool enable)
+{
+    m_canDragColLabelSize = enable;
 }
 
 void wxGrid::EnableDragCell( bool enable )

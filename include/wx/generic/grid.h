@@ -1845,8 +1845,10 @@ public:
     //
     int      GetDefaultRowLabelSize() const { return FromDIP(WXGRID_DEFAULT_ROW_LABEL_WIDTH); }
     int      GetRowLabelSize() const { return m_rowLabelWidth; }
+    int      GetRowLabelMinimalSize() const { return m_colLabelMinHeight;  }
     int      GetDefaultColLabelSize() const { return FromDIP(WXGRID_DEFAULT_COL_LABEL_HEIGHT); }
     int      GetColLabelSize() const { return m_colLabelHeight; }
+    int      GetColLabelMinimalSize() const { return m_rowLabelMinWidth; }
     wxColour GetLabelBackgroundColour() const { return m_labelBackgroundColour; }
     wxColour GetLabelTextColour() const { return m_labelTextColour; }
     wxFont   GetLabelFont() const { return m_labelFont; }
@@ -1874,6 +1876,8 @@ public:
 
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
+    void     SetRowLabelMinimalSize( int width );
+    void     SetColLabelMinimalSize( int height );
     void     HideRowLabels() { SetRowLabelSize( 0 ); }
     void     HideColLabels() { SetColLabelSize( 0 ); }
     void     SetLabelBackgroundColour( const wxColour& );
@@ -1940,6 +1944,19 @@ public:
         { return m_canDragRowSize && DoCanResizeLine(row, m_setFixedRows); }
     bool CanDragColSize(int col) const
         { return m_canDragColSize && DoCanResizeLine(col, m_setFixedCols); }
+
+    // functions globally enabling row/column label interactive resizing
+    // (enabled by default)
+    void     EnableDragRowLabelSize(bool enable = true);
+    void     DisableDragRowLabelSize() { EnableDragRowLabelSize(false); }
+
+    void     EnableDragColLabelSize(bool enable = true);
+    void     DisableDragColLabelSize() { EnableDragColLabelSize(false); }
+
+    bool CanDragRowLabelSize() const
+        { return m_canDragRowLabelSize; }
+    bool CanDragColLabelSize() const
+        { return m_canDragRowLabelSize; }
 
     // interactive row reordering (disabled by default)
     bool     EnableDragRowMove( bool enable = true );
@@ -2509,6 +2526,8 @@ protected:
 
     int m_rowLabelWidth;
     int m_colLabelHeight;
+    int m_rowLabelMinWidth;
+    int m_colLabelMinHeight;
 
     // the size of the margin left to the right and bottom of the cell area
     int m_extraWidth,
@@ -2646,6 +2665,8 @@ protected:
     bool    m_canDragColMove;
     bool    m_canHideColumns;
     bool    m_canDragGridSize;
+    bool    m_canDragRowLabelSize;
+    bool    m_canDragColLabelSize;
     bool    m_canDragCell;
 
     // Index of the row or column being drag-moved or -1 if there is no move
@@ -2659,6 +2680,7 @@ protected:
     const wxColour *m_dragLastColour;
 
     // Row or column (depending on m_cursorMode value) currently being resized
+    // or -2 if row or col label is being resized
     // or -1 if there is no resize operation in progress.
     int     m_dragRowOrCol;
 
@@ -3343,6 +3365,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_SIZE, wxGridSizeEvent
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_AUTO_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_LABEL_SIZE, wxGridSizeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_LABEL_SIZE, wxGridSizeEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_RANGE_SELECTING, wxGridRangeSelectEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_RANGE_SELECTED, wxGridRangeSelectEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_CELL_CHANGING, wxGridEvent );
@@ -3397,6 +3421,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_ROW_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(ROW_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(COL_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_AUTO_SIZE(id, fn)       wx__DECLARE_GRIDSIZEEVT(COL_AUTO_SIZE, id, fn)
+#define EVT_GRID_CMD_ROW_LABEL_SIZE(id, fn)      wx__DECLARE_GRIDSIZEEVT(ROW_LABEL_SIZE, id, fn)
+#define EVT_GRID_CMD_COL_LABEL_SIZE(id, fn)      wx__DECLARE_GRIDSIZEEVT(COL_LABEL_SIZE, id, fn)
 #define EVT_GRID_CMD_ROW_MOVE(id, fn)            wx__DECLARE_GRIDEVT(ROW_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_SORT(id, fn)            wx__DECLARE_GRIDEVT(COL_SORT, id, fn)
@@ -3424,6 +3450,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_ROW_SIZE(fn)            EVT_GRID_CMD_ROW_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_SIZE(fn)            EVT_GRID_CMD_COL_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_AUTO_SIZE(fn)       EVT_GRID_CMD_COL_AUTO_SIZE(wxID_ANY, fn)
+#define EVT_GRID_ROW_LABEL_SIZE(fn)      EVT_GRID_CMD_ROW_LABEL_SIZE(wxID_ANY, fn)
+#define EVT_GRID_COL_LABEL_SIZE(fn)      EVT_GRID_CMD_COL_LABEL_SIZE(wxID_ANY, fn)
 #define EVT_GRID_ROW_MOVE(fn)            EVT_GRID_CMD_ROW_MOVE(wxID_ANY, fn)
 #define EVT_GRID_COL_MOVE(fn)            EVT_GRID_CMD_COL_MOVE(wxID_ANY, fn)
 #define EVT_GRID_COL_SORT(fn)            EVT_GRID_CMD_COL_SORT(wxID_ANY, fn)
