@@ -134,7 +134,7 @@ public:
     @library{wxcore}
     @category{misc}
 
-    @see wxBeginBusyCursor(), wxEndBusyCursor(), wxWindowDisabler
+    @see wxBeginBusyCursor(), wxEndBusyCursor(), wxWindowDisabler, wxBusyInfo
 */
 class wxBusyCursor
 {
