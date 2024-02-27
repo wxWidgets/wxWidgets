@@ -34,6 +34,8 @@ class GridFrame : public wxFrame
     void ToggleEditing( wxCommandEvent& );
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
+    void ToggleRowLabelSizing(wxCommandEvent&);
+    void ToggleColLabelSizing(wxCommandEvent&);
     void ToggleRowMoving( wxCommandEvent& );
     void ToggleColMoving( wxCommandEvent& );
     void ToggleColHiding( wxCommandEvent& );
@@ -111,6 +113,8 @@ class GridFrame : public wxFrame
     void OnRowSize( wxGridSizeEvent& );
     void OnColSize( wxGridSizeEvent& );
     void OnColAutoSize( wxGridSizeEvent& );
+    void OnRowLabelSize( wxGridSizeEvent& );
+    void OnColLabelSize( wxGridSizeEvent& );
     void OnRowMove( wxGridEvent& );
     void OnColMove( wxGridEvent& );
     void OnSelectCell( wxGridEvent& );
@@ -150,6 +154,8 @@ public:
         ID_TOGGLEEDIT,
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
+        ID_TOGGLEROWLABELSIZING,
+        ID_TOGGLECOLLABELSIZING,
         ID_TOGGLEROWMOVING,
         ID_TOGGLECOLMOVING,
         ID_TOGGLECOLHIDING,
