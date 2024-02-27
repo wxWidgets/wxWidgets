@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // this minimal resource file is all what is needed for most of the wxWidgets
-// samples
+// tests
 
 // note that the icon used by the Explorer (i.e. the programs icon) is the
 // first icon in the executable and the icons are sorted both by their order

@@ -64,7 +64,6 @@
 
                 <!-- copy the application icon: -->
                 cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns
-
                 </command>
             <if cond="BUNDLE_RESOURCES!=''">
                 <command>

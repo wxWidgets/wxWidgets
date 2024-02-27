@@ -9,7 +9,6 @@
 
     <include file="../build/bakefiles/common_samples.bkl"/>
 
-<!--    <set var="BUNDLE_RESOURCES">horse.png</set> -->
     <set var="BUNDLE_RESOURCES">$(TOP_SRCDIR)tests/horse.png $(TOP_SRCDIR)include/wx/msw/bullseye.cur</set>
 
     <template id="wx_test">
@@ -440,7 +439,6 @@
     <wx-data id="en_GB" template="catalog"/>
     <wx-data id="fr" template="catalog"/>
     <wx-data id="ja" template="catalog"/>
-
     <fragment format="autoconf">
 failtest: failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
 
