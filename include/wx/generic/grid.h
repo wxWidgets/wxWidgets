@@ -2905,7 +2905,8 @@ private:
     // process different clicks on grid cells
     void DoGridCellLeftDown(wxMouseEvent& event,
                             const wxGridCellCoords& coords,
-                            const wxPoint& pos);
+                            const wxPoint& pos,
+                            wxGridWindow* gridWindow);
     void DoGridCellLeftDClick(wxMouseEvent& event,
                              const wxGridCellCoords& coords,
                              const wxPoint& pos);

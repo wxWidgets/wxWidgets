@@ -4741,7 +4741,8 @@ bool wxGrid::DoGridDragEvent(wxMouseEvent& event,
 void
 wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
                            const wxGridCellCoords& coords,
-                           const wxPoint& pos)
+                           const wxPoint& pos,
+                           wxGridWindow* gridWindow)
 {
     if ( SendEvent(wxEVT_GRID_CELL_LEFT_CLICK, coords, event) != Event_Unhandled )
     {
@@ -4749,6 +4750,8 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         return;
     }
 
+
+    bool captureMouse = false;
     // Process the mouse down event depending on the current cursor mode. Note
     // that this assumes m_cursorMode was set in the mouse move event hendler.
     switch ( m_cursorMode )
@@ -4761,17 +4764,27 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
                 {
                     dragRowOrCol = XToEdgeOfCol(pos.x);
                     if ( dragRowOrCol != wxNOT_FOUND )
+                    {
                         DoStartResizeRowOrCol(dragRowOrCol, GetColSize(dragRowOrCol));
+                    }
                     else
+                    {
                         DoStartResizeRowOrCol(-2, m_rowLabelWidth);
+                        captureMouse = true;
+                    }
                 }
                 else
                 {
                     dragRowOrCol = YToEdgeOfRow(pos.y);
                     if ( dragRowOrCol != wxNOT_FOUND )
+                    {
                         DoStartResizeRowOrCol(dragRowOrCol, GetRowSize(dragRowOrCol));
+                    }
                     else
+                    {
                         DoStartResizeRowOrCol(-2, m_colLabelHeight);
+                        captureMouse = true;
+                    }
                 }
             }
             break;
@@ -4852,6 +4865,15 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         case WXGRID_CURSOR_MOVE_COL:
             // Nothing to do here for this case.
             break;
+    }
+
+    if ( captureMouse && m_winCapture != gridWindow )
+    {
+        // for label resizing, we capture the mouse as the we might be at x or y = 0 and
+        // the window could be left before resizing actually starts / dragging is detected
+        gridWindow->CaptureMouse();
+        m_winCapture = gridWindow;
+        m_isDragging = true;  // avoid capturing again in ProcessGridCellMouseEvent
     }
 }
 
@@ -5059,7 +5081,7 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
 
             if ( event.LeftDown() )
             {
-                DoGridCellLeftDown(event, coords, pos);
+                DoGridCellLeftDown(event, coords, pos, gridWindow);
                 handled = true;
             }
             else if ( event.LeftDClick() )
