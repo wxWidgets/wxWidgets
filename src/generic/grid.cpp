@@ -4011,10 +4011,13 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         {
             if ( m_cursorMode == oper.GetCursorModeResize() )
             {
+                // resizing a row/col
+                // or the labels at the edge to the corner label window
                 DoGridDragResize(event.GetPosition(), oper, gridWindow);
             }
             else if ( labelEdgeOper && m_cursorMode == labelEdgeOper->GetCursorModeResize() )
             {
+                // resizing labels at the edge to the grid window
                 DoGridDragResize(event.GetPosition(), *labelEdgeOper, nullptr);
             }
             else if ( m_cursorMode == oper.GetCursorModeSelect() && line >=0 )
