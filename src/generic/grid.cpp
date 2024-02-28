@@ -3981,7 +3981,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         // near the edge to the corner label window
         labelEdgeOper = &oper;
     }
-    else if ( dual.CanDragLabelSize(this) && oper.Select(unscrolledPos) > dual.GetLabelSize(this) - edge )
+    else if ( dual.CanDragLabelSize(this) && oper.Select(posEvent) > dual.GetLabelSize(this) - edge )
     {
         // near the right/bottom edge to the grid window
         labelEdgeOper = &dual;
@@ -4018,7 +4018,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
             else if ( labelEdgeOper && m_cursorMode == labelEdgeOper->GetCursorModeResize() )
             {
                 // resizing labels at the edge to the grid window
-                DoGridDragResize(event.GetPosition(), *labelEdgeOper, nullptr);
+                DoGridDragResize(posEvent, *labelEdgeOper, nullptr);
             }
             else if ( m_cursorMode == oper.GetCursorModeSelect() && line >=0 )
             {
@@ -4207,6 +4207,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         }
         else if ( labelEdgeOper && m_cursorMode == labelEdgeOper->GetCursorModeResize() )
         {
+            event.SetPosition(posEvent);
             labelEdgeOper->DoEndLineResize(this, event, nullptr);
         }
         else if ( m_cursorMode == oper.GetCursorModeMove() )
