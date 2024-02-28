@@ -1090,6 +1090,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddSpacer(int pixels)
     item.m_minSize = wxDefaultSize;
     item.m_userData = 0;
     item.m_sticky = false;
+    item.m_actualSize = wxSize(pixels, pixels);
 
     m_items.Add(item);
     return &m_items.Last();
@@ -1187,7 +1188,7 @@ wxAuiToolBarItem* wxAuiToolBar::FindToolByPosition(wxCoord x, wxCoord y) const
         if (!item.m_sizerItem)
             continue;
 
-        wxRect rect = item.m_sizerItem->GetRect();
+        wxRect rect = GetActualToolRect(item);
         if (rect.Contains(x,y))
         {
             // if the item doesn't fit on the toolbar, return NULL
@@ -1211,7 +1212,7 @@ wxAuiToolBarItem* wxAuiToolBar::FindToolByPositionWithPacking(wxCoord x, wxCoord
         if (!item.m_sizerItem)
             continue;
 
-        wxRect rect = item.m_sizerItem->GetRect();
+        wxRect rect = GetActualToolRect(item);
 
         // apply tool packing
         if (i+1 < count)
@@ -1835,7 +1836,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
     int cli_w, cli_h;
     GetClientSize(&cli_w, &cli_h);
 
-    wxRect rect = m_items[tool_idx].m_sizerItem->GetRect();
+    wxRect rect = GetActualToolRect(m_items[tool_idx]);
 
     if (m_orientation == wxVERTICAL)
     {
@@ -1870,7 +1871,7 @@ wxRect wxAuiToolBar::GetToolRect(int tool_id) const
     wxAuiToolBarItem* tool = FindTool(tool_id);
     if (tool && tool->m_sizerItem)
     {
-        return tool->m_sizerItem->GetRect();
+        return GetActualToolRect(*tool);
     }
 
     return wxRect();
@@ -1965,6 +1966,8 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
     {
         wxAuiToolBarItem& item = m_items.Item(i);
         wxSizerItem* sizerItem = NULL;
+
+        RecalculateToolSize(item);
 
         switch (item.m_kind)
         {
@@ -2498,8 +2501,12 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         if (!item.m_sizerItem)
             continue;
 
-        wxRect item_rect = item.m_sizerItem->GetRect();
-
+        // the dimensions computed by the sizer do not reflect the actual
+        // dimensions of the tool; if a tool cannot fit inside the available
+        // space the sizer width/height will be reduced, down to zero.
+        // So the tests below use the actual dimensions of the tool to check
+        // for fit in the toolbar.
+        wxRect item_rect = GetActualToolRect(item);
 
         if ((horizontal  && item_rect.x + item_rect.width > last_extent) ||
             (!horizontal && item_rect.y + item_rect.height > last_extent))
@@ -2662,7 +2669,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         e.SetToolId(m_actionItem->m_toolId);
 
         int mouse_x = evt.GetX();
-        wxRect rect = m_actionItem->m_sizerItem->GetRect();
+        wxRect rect = GetActualToolRect(*m_actionItem);
         int dropdownWidth = m_art->GetElementSize(wxAUI_TBART_DROPDOWN_SIZE);
         const bool dropDownHit = m_actionItem->m_dropDown &&
                                  mouse_x >= (rect.x+rect.width-dropdownWidth) &&
@@ -3005,6 +3012,44 @@ void wxAuiToolBar::DoResetMouseState()
     // are outside of the window
     m_actionPos = wxPoint(-1,-1);
     m_actionItem = NULL;
+}
+
+void wxAuiToolBar::RecalculateToolSize(wxAuiToolBarItem& item)
+{
+    wxClientDC dc(this);
+    if (!dc.IsOk()) return;
+    if (item.m_kind == wxITEM_SEPARATOR)
+    {
+        if (m_orientation == wxHORIZONTAL)
+            item.m_actualSize = wxSize(m_art->GetElementSize(wxAUI_TBART_SEPARATOR_SIZE), 0);
+        else
+            item.m_actualSize = wxSize(0, m_art->GetElementSize(wxAUI_TBART_SEPARATOR_SIZE));
+        return;
+    }
+    item.m_actualSize = m_art->GetToolSize(dc, this, item);
+}
+
+wxRect wxAuiToolBar::GetActualToolRect(wxAuiToolBarItem& item) const
+{
+    wxRect rect = item.m_sizerItem->GetRect();
+    if ((item.m_kind != wxITEM_SPACER) || (item.m_spacerPixels != 0) || (item.m_proportion == 0))
+    {
+        int padding = 0;
+        switch (item.m_kind)
+        {
+            case wxITEM_LABEL:
+            case wxITEM_CHECK:
+            case wxITEM_NORMAL:
+            case wxITEM_RADIO:  padding = m_toolBorderPadding*2; break;
+            default:            break;
+        }
+        if (item.m_kind != wxITEM_CONTROL)
+        {
+            if (m_orientation == wxHORIZONTAL) rect.width = item.m_actualSize.x + padding;
+            else rect.height = item.m_actualSize.y + padding;
+        }
+    }
+    return rect;
 }
 
 void wxAuiToolBar::OnLeaveWindow(wxMouseEvent& evt)

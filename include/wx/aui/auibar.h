@@ -139,6 +139,7 @@ public:
         m_sticky = true;
         m_userData = 0;
         m_alignment = wxALIGN_CENTER;
+        m_actualSize = wxSize(0, 0);
     }
 
     void Assign(const wxAuiToolBarItem& c)
@@ -301,6 +302,7 @@ private:
     wxString m_longHelp;                // long help (for status bar)
     wxSizerItem* m_sizerItem;           // sizer item
     wxSize m_minSize;                   // item's minimum size
+    wxSize m_actualSize;                // item's size computed by the art provider
     int m_spacerPixels;                 // size of a spacer
     int m_toolId;                       // item's id
     int m_kind;                         // item's kind
@@ -791,6 +793,11 @@ protected:
 private:
     // Common part of OnLeaveWindow() and OnCaptureLost().
     void DoResetMouseState();
+    // Recalculate a tool's dimensions and cache it
+    void RecalculateToolSize(wxAuiToolBarItem& item);
+    // Returns the position and actual size of a tool; for
+    // stretch spacers it returns the sizer's dimension
+    wxRect GetActualToolRect(wxAuiToolBarItem& item) const;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_CLASS(wxAuiToolBar);
