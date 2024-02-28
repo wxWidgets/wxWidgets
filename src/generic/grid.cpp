@@ -4760,14 +4760,19 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
                 if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
                 {
                     dragRowOrCol = XToEdgeOfCol(pos.x);
-                    DoStartResizeRowOrCol(dragRowOrCol, GetColSize(dragRowOrCol));
+                    if ( dragRowOrCol != wxNOT_FOUND )
+                        DoStartResizeRowOrCol(dragRowOrCol, GetColSize(dragRowOrCol));
+                    else
+                        DoStartResizeRowOrCol(-2, m_rowLabelWidth);
                 }
                 else
                 {
                     dragRowOrCol = YToEdgeOfRow(pos.y);
-                    DoStartResizeRowOrCol(dragRowOrCol, GetRowSize(dragRowOrCol));
+                    if ( dragRowOrCol != wxNOT_FOUND )
+                        DoStartResizeRowOrCol(dragRowOrCol, GetRowSize(dragRowOrCol));
+                    else
+                        DoStartResizeRowOrCol(-2, m_colLabelHeight);
                 }
-                wxCHECK_RET( dragRowOrCol != -1, "Can't determine row or column in resizing mode" );
             }
             break;
 
@@ -4914,31 +4919,24 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
 
     int dragRow = YToEdgeOfRow( pos.y );
     int dragCol = XToEdgeOfCol( pos.x );
+    int edge = FromDIP(WXGRID_LABEL_EDGE_ZONE);
 
     // Dragging on the corner of a cell to resize in both directions is not
     // implemented, so choose to resize the column when the cursor is over the
     // cell corner, as this is a more common operation.
+    CursorMode newCursorMode = WXGRID_CURSOR_SELECT_CELL;  // default value
+
     if ( dragCol >= 0 && CanDragGridColEdges() && CanDragColSize(dragCol) )
-    {
-        if ( m_cursorMode != WXGRID_CURSOR_RESIZE_COL )
-        {
-            ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, gridWindow, false);
-        }
-    }
+        newCursorMode = WXGRID_CURSOR_RESIZE_COL;
     else if ( dragRow >= 0 && CanDragGridRowEdges() && CanDragRowSize(dragRow) )
-    {
-        if ( m_cursorMode != WXGRID_CURSOR_RESIZE_ROW)
-        {
-            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, gridWindow, false);
-        }
-    }
-    else // Neither on a row or col edge
-    {
-        if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
-        {
-            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, gridWindow, false);
-        }
-    }
+        newCursorMode = WXGRID_CURSOR_RESIZE_ROW;
+    else if ( abs(pos.x) <= edge && CanDragRowLabelSize() )
+        newCursorMode = WXGRID_CURSOR_RESIZE_COL;
+    else if ( abs(pos.y) <= edge && CanDragColLabelSize() )
+        newCursorMode = WXGRID_CURSOR_RESIZE_ROW;
+
+    if ( newCursorMode != m_cursorMode )
+        ChangeCursorMode(newCursorMode, gridWindow, false);
 }
 
 void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventGridWindow )
