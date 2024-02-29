@@ -1,0 +1,1 @@
+wxGTK: Limit radius in wxDC::DrawRoundedRectangle() (Alex Shvartzkop, #24327).
