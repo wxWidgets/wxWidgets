@@ -161,6 +161,8 @@ void StatBmpWidgetsPage::RecreateWidget()
                                               style);
     }
 
+    NotifyWidgetRecreation(m_statbmp);
+
     wxStaticBitmapBase::ScaleMode scaleMode = (wxStaticBitmapBase::ScaleMode) m_scaleRadio->GetSelection();
     m_statbmp->SetScaleMode(scaleMode);
     if ( m_statbmp->GetScaleMode() != scaleMode )

@@ -145,6 +145,8 @@ void ActivityIndicatorWidgetsPage::RecreateWidget()
                                           wxDefaultPosition, wxDefaultSize,
                                           GetAttrs().m_defaultFlags);
 
+    NotifyWidgetRecreation(m_indicator);
+
     m_sizerIndicator->AddStretchSpacer();
     m_sizerIndicator->Add(m_indicator, wxSizerFlags().Centre());
     m_sizerIndicator->AddStretchSpacer();

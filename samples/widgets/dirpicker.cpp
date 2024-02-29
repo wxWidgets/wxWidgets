@@ -209,6 +209,8 @@ void DirPickerWidgetsPage::CreatePicker()
                                       wxGetHomeDir(), "Hello!",
                                       wxDefaultPosition, wxDefaultSize,
                                       style);
+
+    NotifyWidgetRecreation(m_dirPicker);
 }
 
 void DirPickerWidgetsPage::RecreatePicker()

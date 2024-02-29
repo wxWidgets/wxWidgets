@@ -461,6 +461,9 @@ void ToggleWidgetsPage::CreateToggle()
                                       wxDefaultPosition, wxDefaultSize,
                                       flags);
     }
+
+    NotifyWidgetRecreation(m_toggle);
+
     m_toggle->SetValue(value);
 
 #ifdef wxHAS_BITMAPTOGGLEBUTTON

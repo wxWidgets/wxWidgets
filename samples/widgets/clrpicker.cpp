@@ -191,6 +191,8 @@ void ColourPickerWidgetsPage::CreatePicker()
     m_clrPicker = new wxColourPickerCtrl(this, PickerPage_Colour, *wxRED,
                                          wxDefaultPosition, wxDefaultSize,
                                          style);
+
+    NotifyWidgetRecreation(m_clrPicker);
 }
 
 void ColourPickerWidgetsPage::RecreatePicker()

@@ -308,6 +308,8 @@ void NativeWidgetsPage::RecreateWidget()
     delete m_nativeWindow;
     m_nativeWindow = new NativeWindow(this);
 
+    NotifyWidgetRecreation(m_nativeWindow);
+
     m_sizerCtrl->Clear();
     if ( m_chkExpand->IsChecked() )
     {

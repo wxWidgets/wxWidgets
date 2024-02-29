@@ -787,6 +787,8 @@ void TextWidgetsPage::CreateText()
 
     m_text = new WidgetsTextCtrl(m_sizerText->GetStaticBox(), TextPage_Textctrl, valueOld, flags);
 
+    NotifyWidgetRecreation(m_text);
+
 #if 0
     if ( m_chkFilename->GetValue() )
         ;

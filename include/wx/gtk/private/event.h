@@ -88,6 +88,23 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     event.SetTimestamp( gdk_event->time );
 }
 
+// Update the window currently known to be under the mouse pointer.
+//
+// Returns true if it was updated, false if this window was already known to
+// contain the mouse pointer.
+bool SetWindowUnderMouse(wxWindowGTK* win);
+
+// Implementation of enter/leave window callbacks.
+gboolean
+WindowEnterCallback(GtkWidget* widget,
+                    GdkEventCrossing* event,
+                    wxWindowGTK* win);
+
+gboolean
+WindowLeaveCallback(GtkWidget* widget,
+                    GdkEventCrossing* event,
+                    wxWindowGTK* win);
+
 } // namespace wxGTKImpl
 
 #endif // _GTK_PRIVATE_EVENT_H_

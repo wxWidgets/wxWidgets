@@ -178,6 +178,8 @@ void SearchCtrlWidgetsPage::CreateControl()
 
     m_srchCtrl = new wxSearchCtrl(this, -1, wxEmptyString, wxDefaultPosition,
                                   FromDIP(wxSize(150, -1)), style);
+
+    NotifyWidgetRecreation(m_srchCtrl);
 }
 
 void SearchCtrlWidgetsPage::RecreateWidget()

@@ -517,6 +517,8 @@ void SliderWidgetsPage::CreateSlider()
                             wxDefaultPosition, wxDefaultSize,
                             flags);
 
+    NotifyWidgetRecreation(m_slider);
+
     if ( m_slider->HasFlag(wxSL_VERTICAL) )
     {
         m_sizerSlider->AddStretchSpacer(1);

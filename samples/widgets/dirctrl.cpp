@@ -302,6 +302,8 @@ void DirCtrlWidgetsPage::CreateDirCtrl(bool defaultPath)
     delete m_dirCtrl;
     m_dirCtrl = dirCtrl;
 
+    NotifyWidgetRecreation(m_dirCtrl);
+
     // relayout the sizer
     GetSizer()->Layout();
 }
