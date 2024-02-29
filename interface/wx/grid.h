@@ -4564,6 +4564,24 @@ public:
     bool CanDragRowSize(int row) const;
 
     /**
+        Returns @true if the row labels can be resized by dragging with the
+        mouse (which is the case by default).
+
+        @since 3.3.0
+    */
+    bool CanDragRowLabelSize();
+
+    /**
+        Returns @true if the column labels can be resized by dragging with the
+        mouse (which is the case by default).
+
+        This is the same as CanDragRowLabelSize() but for column labels.
+
+        @since 3.3.0
+    */
+    bool CanDragColLabelSize();
+
+    /**
         Returns @true if columns can be hidden from the popup menu of the native header.
 
         @since 3.1.3
@@ -4638,6 +4656,24 @@ public:
     void DisableDragRowSize();
 
     /**
+        Disables row label sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragRowLabelSize().
+
+        @since 3.3.0
+    */
+    void DisableDragRowLabelSize();
+
+    /**
+        Disables column label sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragColLabelSize().
+
+        @since 3.3.0
+    */
+    void DisableDragColLabelSize();
+
+    /**
         Disables column hiding from the header popup menu.
 
         Equivalent to passing @false to EnableHidingColumns().
@@ -4705,6 +4741,24 @@ public:
         @see DisableRowResize()
     */
     void EnableDragRowSize(bool enable = true);
+
+    /**
+        Enables or disables row label sizing by dragging with the mouse.
+
+        @see DisableDragRowLabelSize()
+
+        @since 3.3.0
+    */
+    void EnableDragRowLabelSize(bool enable = true);
+
+    /**
+        Enables or disables col label sizing by dragging with the mouse.
+
+        @see DisableDragColLabelSize()
+
+        @since 3.3.0
+    */
+    void EnableDragColLabelSize(bool enable = true);
 
     /**
         Enables or disables column hiding from the header popup menu.
@@ -6477,6 +6531,14 @@ public:
         wxWidgets 2.9.5.
     @event{EVT_GRID_ROW_SIZE(func)}
         Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
+    @event{EVT_GRID_ROW_LABEL_SIZE(id, func)}
+        The user resized the row labels.
+        Corresponds to @c wxEVT_GRID_ROW_LABEL_SIZE event type.
+        This is new since wxWidgets 3.3.0.
+    @event{EVT_GRID_COL_LABEL_SIZE(id, func)}
+        The user resized the column labels.
+        Corresponds to @c wxEVT_GRID_COL_LABEL_SIZE event type.
+        This is new since wxWidgets 3.3.0.
     @endEventTable
 
     @library{wxcore}
@@ -6742,6 +6804,8 @@ wxEventType wxEVT_GRID_ROW_SIZE;
 wxEventType wxEVT_GRID_ROW_AUTO_SIZE;
 wxEventType wxEVT_GRID_COL_SIZE;
 wxEventType wxEVT_GRID_COL_AUTO_SIZE;
+wxEventType wxEVT_GRID_ROW_LABEL_SIZE;
+wxEventType wxEVT_GRID_COL_LABEL_SIZE;
 wxEventType wxEVT_GRID_RANGE_SELECTING;
 wxEventType wxEVT_GRID_RANGE_SELECTED;
 wxEventType wxEVT_GRID_CELL_CHANGING;
