@@ -1,0 +1,1 @@
+wxGTK: Fix handling of binary secrets in wxSecretStore (Martin Corino, #24352).
