@@ -298,7 +298,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
             InitFromImage( image );
         }
         else
-            wxFAIL_MSG( "No PNG or CUR cursor image found in Resources" );
+            wxLogDebug( "No PNG or CUR cursor image found in Resources" );
 #endif
     }
     else
