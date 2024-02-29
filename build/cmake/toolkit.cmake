@@ -134,6 +134,13 @@ if(WXQT)
         list(APPEND wxTOOLKIT_DEFINITIONS ${Qt5${QT_COMPONENT}_COMPILE_DEFINITIONS})
     endforeach()
     set(wxTOOLKIT_VERSION ${Qt5Core_VERSION})
+
+    if(ANDROID)
+        # A hack to remove _${ANDROID_ABI} that Qt5AndroidSupport.cmake added
+        # which breaks wx-config.
+        set(CMAKE_SHARED_LIBRARY_SUFFIX_C ${CMAKE_SHARED_LIBRARY_SUFFIX})
+        set(CMAKE_SHARED_LIBRARY_SUFFIX_CXX ${CMAKE_SHARED_LIBRARY_SUFFIX})
+    endif()
 endif()
 
 if(APPLE)

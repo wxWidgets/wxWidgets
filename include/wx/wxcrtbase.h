@@ -160,9 +160,9 @@
 
 #ifdef __ANDROID__ // these functions are broken on android
 
-extern double android_wcstod(const wchar_t *nptr, wchar_t **endptr);
-extern long android_wcstol(const wchar_t *nptr, wchar_t **endptr, int base);
-extern unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int base);
+WXDLLIMPEXP_BASE double android_wcstod(const wchar_t *nptr, wchar_t **endptr);
+WXDLLIMPEXP_BASE long android_wcstol(const wchar_t *nptr, wchar_t **endptr, int base);
+WXDLLIMPEXP_BASE unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int base);
 
 #define wxCRT_StrtodW    android_wcstod
 #define wxCRT_StrtolW    android_wcstol
