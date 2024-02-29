@@ -1956,7 +1956,7 @@ public:
     bool CanDragRowLabelSize() const
         { return m_canDragRowLabelSize; }
     bool CanDragColLabelSize() const
-        { return m_canDragRowLabelSize; }
+        { return m_canDragColLabelSize; }
 
     // interactive row reordering (disabled by default)
     bool     EnableDragRowMove( bool enable = true );
