@@ -11858,7 +11858,7 @@ wxAccStatus wxGridCellAccessible::GetChildCount(int* childCount)
 }
 
 // Gets the specified child (starting from 1).
-// If *child is NULL and return value is wxACC_OK, this means that the child
+// If *child is nullptr and return value is wxACC_OK, this means that the child
 // is a simple element and not an accessible object.
 wxAccStatus wxGridCellAccessible::GetChild(int childId, wxAccessible** child)
 {
@@ -11965,7 +11965,7 @@ wxAccStatus wxGridCellAccessible::GetValue(int childId, wxString* strValue)
 }
 
 // Gets the window with the keyboard focus.
-// If childId is 0 and child is NULL, no object in this subhierarchy has the focus.
+// If childId is 0 and child is nullptr, no object in this subhierarchy has the focus.
 // If this object has the focus, child should be 'this'.
 wxAccStatus wxGridCellAccessible::GetFocus(int* childId, wxAccessible** child)
 {
