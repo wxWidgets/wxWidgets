@@ -6262,7 +6262,6 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         objectId++;
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_SELECTIONWITHIN, this, wxOBJID_CLIENT, wxACC_SELF);
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT, objectId);
-    printf("\nwxGrid::SetCurrentCell -> sending wxACC_EVENT_OBJECT_FOCUS %d and wxACC_EVENT_OBJECT_SELECTIONWITHIN %x\n", objectId, (int)this);
 #endif // wxUSE_ACCESSIBILITY
 
     return true;
