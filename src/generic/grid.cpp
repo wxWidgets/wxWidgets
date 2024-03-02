@@ -11663,7 +11663,7 @@ wxAccStatus wxGridAccessible::GetState(int childId, long* state)
 }
 
 // Returns a localized string representing the value for the object.
-wxAccStatus wxGridAccessible::GetValue(int childId, wxString* strValue)
+wxAccStatus wxGridAccessible::GetValue(int childId, wxString* WXUNUSED(strValue))
 {
 
     wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
