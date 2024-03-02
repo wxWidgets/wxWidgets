@@ -1282,5 +1282,64 @@ TryGetValueAsDate(wxDateTime& result,
 
 } // namespace wxGridPrivate
 
+
+#if wxUSE_ACCESSIBILITY
+//-----------------------------------------------------------------------------
+// accessibility support for whole grid and per cell
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxGridAccessible : public wxWindowAccessible
+{
+public:
+    explicit wxGridAccessible(wxGrid* win);
+
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId,
+        wxAccessible** childObject) override;
+
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
+    virtual wxAccStatus GetName(int childId, wxString* name) override;
+    virtual wxAccStatus GetChildCount(int* childCount) override;
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
+    virtual wxAccStatus GetState(int childId, long* state) override;
+    virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
+
+private:
+    std::unique_ptr<wxGridCellAccessible> m_gridCellAccessible;
+};
+
+class WXDLLIMPEXP_CORE wxGridCellAccessible : public wxAccessible
+{
+public:
+    wxGridCellAccessible(wxGrid* win, int childId);
+
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId,
+        wxAccessible** childObject) override;
+
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
+    virtual wxAccStatus GetName(int childId, wxString* name) override;
+    virtual wxAccStatus GetChildCount(int* childCount) override;
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
+    virtual wxAccStatus GetParent(wxAccessible** parent) override;
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
+    virtual wxAccStatus GetState(int childId, long* state) override;
+    virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
+
+private:
+    const int m_childId;
+    // row and / or col can be -1 for column or row header
+    const wxGridCellCoords m_coords;
+
+    bool m_isSameRow = false;
+    bool m_isSameCol = false;
+
+    friend class wxGridAccessible;
+    void DoGetLocation(wxGrid* grid, wxRect& rect);
+};
+
+#endif // wxUSE_ACCESSIBILITY
+
 #endif // wxUSE_GRID
 #endif // _WX_GENERIC_GRID_PRIVATE_H_

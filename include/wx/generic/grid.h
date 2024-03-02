@@ -120,6 +120,11 @@ class wxGridRowOperations;
 class wxGridColumnOperations;
 class wxGridDirectionOperations;
 
+#if wxUSE_ACCESSIBILITY
+class WXDLLIMPEXP_FWD_CORE wxGridAccessible;
+class WXDLLIMPEXP_FWD_CORE wxGridCellAccessible;
+#endif // wxUSE_ACCESSIBILITY
+
 
 // ----------------------------------------------------------------------------
 // macros
@@ -2417,6 +2422,13 @@ public:
     // implementation only
     void CancelMouseCapture();
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+    virtual bool Show(bool show) override;
+    virtual void SetName(const wxString &name) override;
+    virtual bool Reparent(wxWindowBase *newParent) override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
     virtual wxSize DoGetBestSize() const override;
     virtual void DoEnable(bool enable) override;
@@ -2774,6 +2786,11 @@ protected:
 
     friend class wxGridHeaderColumn;
     friend class wxGridHeaderCtrl;
+
+#if wxUSE_ACCESSIBILITY
+    friend class wxGridAccessible;
+    friend class wxGridCellAccessible;
+#endif // wxUSE_ACCESSIBILITY
 
 private:
     // This is called from both Create() and OnDPIChanged() to (re)initialize
