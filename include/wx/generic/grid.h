@@ -3510,8 +3510,8 @@ public:
 private:
     wxGridCellAccessible *m_gridCellAccessible;
 
-    int wxGridAccessible::GetChildId(wxGrid* grid, int row, int col,
-                                     bool isRowHeader, bool isColHeader);
+    int GetChildId(wxGrid* grid, int row, int col,
+                   bool isRowHeader, bool isColHeader);
 };
 
 class WXDLLIMPEXP_CORE wxGridCellAccessible: public wxAccessible
