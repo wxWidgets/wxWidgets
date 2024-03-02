@@ -2695,6 +2695,11 @@ wxGrid::~wxGrid()
 
     delete m_setFixedRows;
     delete m_setFixedCols;
+
+#if wxUSE_ACCESSIBILITY
+    SetAccessible(nullptr);
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 }
 
 //
@@ -2777,6 +2782,10 @@ void wxGrid::Create()
     m_labelTextColour = m_rowLabelWin->GetForegroundColour();
 
     InitPixelFields();
+
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_CREATE, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
 }
 
 void wxGrid::InitPixelFields()
@@ -6241,6 +6250,21 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
     RefreshBlock(coords, coords);
 
+#if wxUSE_ACCESSIBILITY
+    int numCols = GetNumberCols();
+    if ( m_rowLabelWidth )
+        numCols++;
+    int row = coords.GetRow();
+    if ( m_colLabelHeight )
+        row++;
+    int objectId = numCols*row + coords.GetCol() + 1;
+    if ( m_rowLabelWidth )
+        objectId++;
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_SELECTIONWITHIN, this, wxOBJID_CLIENT, wxACC_SELF);
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_FOCUS, this, wxOBJID_CLIENT, objectId);
+    printf("\nwxGrid::SetCurrentCell -> sending wxACC_EVENT_OBJECT_FOCUS %d and wxACC_EVENT_OBJECT_SELECTIONWITHIN %x\n", objectId, (int)this);
+#endif // wxUSE_ACCESSIBILITY
+
     return true;
 }
 
@@ -7293,7 +7317,9 @@ void wxGrid::ForceRefresh()
 void wxGrid::DoEnable(bool enable)
 {
     wxScrolledCanvas::DoEnable(enable);
-
+#if wxUSE_ACCESSIBILITY
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_STATECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+#endif // wxUSE_ACCESSIBILITY
     Refresh(false /* don't erase background */);
 }
 
@@ -11019,6 +11045,44 @@ void wxGrid::SetRowSizes(const wxGridSizesInfo& sizeInfo)
     DoSetSizes(sizeInfo, wxGridRowOperations());
 }
 
+#if wxUSE_ACCESSIBILITY
+
+bool wxGrid::Show(bool show)
+{
+    bool changed = wxWindow::Show(show);
+    if ( changed )
+    {
+        wxAccessible::NotifyEvent(show ? wxACC_EVENT_OBJECT_SHOW : wxACC_EVENT_OBJECT_HIDE,
+                                  this, wxOBJID_CLIENT, wxACC_SELF);
+    }
+
+    return changed;
+}
+
+void wxGrid::SetName(const wxString &name)
+{
+    wxWindow::SetName(name);
+    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_NAMECHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+}
+
+bool wxGrid::Reparent(wxWindowBase *newParent)
+{
+    bool changed = wxWindowBase::Reparent(newParent);
+    if ( changed )
+    {
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_PARENTCHANGE, this, wxOBJID_CLIENT, wxACC_SELF);
+    }
+
+    return changed;
+}
+
+wxAccessible* wxGrid::CreateAccessible()
+{
+    return new wxGridAccessible(this);
+}
+
+#endif // wxUSE_ACCESSIBILITY
+
 wxGridSizesInfo::wxGridSizesInfo(int defSize, const wxArrayInt& allSizes)
 {
     m_sizeDefault = defSize;
@@ -11336,5 +11400,590 @@ wxGetContentRect(wxSize contentSize,
 
     return contentRect;
 }
+
+
+#if wxUSE_ACCESSIBILITY
+
+//-----------------------------------------------------------------------------
+// wxGridAccessible
+//-----------------------------------------------------------------------------
+
+wxGridAccessible::wxGridAccessible(wxGrid* win)
+    : wxWindowAccessible(win)
+{
+    m_gridCellAccessible = nullptr;
+}
+
+wxGridAccessible::~wxGridAccessible()
+{
+    if ( m_gridCellAccessible )
+    {
+        delete m_gridCellAccessible;
+        m_gridCellAccessible = nullptr;
+    }
+}
+
+// helper to convert row / col into child object id
+// error handling is not required here
+int wxGridAccessible::GetChildId(wxGrid* grid, int row, int col, bool isRowHeader, bool isColHeader)
+{
+    int childId = 0;
+    int numberCols = grid->GetNumberCols();
+    if ( grid->m_rowLabelWidth )
+        numberCols++;
+
+    if ( isColHeader && isRowHeader )
+        childId = 1;
+    else if ( isColHeader )
+    {
+        childId = col + 1;
+        if ( grid->m_rowLabelWidth )
+            childId++;
+    }
+    else if ( isRowHeader )
+    {
+        childId = row * numberCols + 1;
+        if ( grid->m_colLabelHeight )
+            childId += numberCols;
+    }
+    else
+    {
+        childId = row * numberCols + col + 1;
+        if ( grid->m_colLabelHeight )
+            childId += numberCols;
+        if ( grid->m_rowLabelWidth )
+            childId++;
+    }
+    return childId;
+}
+
+// Can return either a child object, or an integer
+// representing the child element, starting from 1.
+wxAccStatus wxGridAccessible::HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK(grid, wxACC_FAIL);
+
+    wxPoint pos = grid->ScreenToClient(pt);
+
+    if ( grid->HitTest(pos) != wxHT_WINDOW_INSIDE )
+    {
+        *childId = wxACC_SELF;
+        return wxACC_OK;
+    }
+
+    // this one is reduced by the sizes of the labels
+    wxPoint gridPos = pos;
+    gridPos.x -= grid->m_rowLabelWidth;
+    gridPos.y -= grid->m_colLabelHeight;
+
+    // depending on window type, the unscrolled position x and/or y will be picked
+    wxPoint unscrolledPos = grid->CalcUnscrolledPosition(gridPos);
+
+    // pick the correct scrolled or unscrolled x/y values and calculate row, col etc.
+    // merged cells are not handled
+    int row = -1, col = -1;
+    bool isColHeader = false, isRowHeader = false;
+
+    if ( grid->m_gridWin->GetRect().Contains(pos) )
+    {
+        // x and y scrolling
+        row = grid->YToRow(unscrolledPos.y, false, nullptr);
+        col = grid->XToCol(unscrolledPos.x, false, nullptr);
+    }
+    else if ( grid->m_frozenCornerGridWin && grid->m_frozenCornerGridWin->GetRect().Contains(pos) )
+    {
+        // fixed, no scrolling
+        row = grid->YToRow(gridPos.y, false, nullptr);
+        col = grid->XToCol(gridPos.x, false, nullptr);
+    }
+    else if ( grid->m_frozenRowGridWin && grid->m_frozenRowGridWin->GetRect().Contains(pos) )
+    {
+        // only x scrolling
+        row = grid->YToRow(gridPos.y, false, nullptr);
+        col = grid->XToCol(unscrolledPos.x, false, nullptr);
+    }
+    else if ( grid->m_frozenColGridWin && grid->m_frozenColGridWin->GetRect().Contains(pos) )
+    {
+        // only y scrolling
+        row = grid->YToRow(unscrolledPos.y, false, nullptr);
+        col = grid->XToCol(gridPos.x, false, nullptr);
+    }
+    else if ( grid->m_cornerLabelWin && grid->m_cornerLabelWin->GetRect().Contains(pos) )
+    {
+        // on corner label, fixed, no scrolling
+        isColHeader = isRowHeader = true;
+    }
+    else if ( grid->m_rowLabelWin && grid->m_rowLabelWin->GetRect().Contains(pos) )
+    {
+        // on row labels, only y scrolling
+        isRowHeader = true;
+        row = grid->YToRow(unscrolledPos.y, false, nullptr);
+    }
+    else if ( grid->m_rowFrozenLabelWin && grid->m_rowFrozenLabelWin->GetRect().Contains(pos) )
+    {
+        // on frozen row labels, no scrolling
+        isRowHeader = true;
+        row = grid->YToRow(gridPos.y, false, nullptr);
+    }
+    else if ( grid->m_colLabelWin && grid->m_colLabelWin->GetRect().Contains(pos) )
+    {
+        // on col labels, only x scrolling
+        isColHeader = true;
+        col = grid->XToCol(unscrolledPos.x, false, nullptr);
+    }
+    else if ( grid->m_colFrozenLabelWin && grid->m_colFrozenLabelWin->GetRect().Contains(pos) )
+    {
+        // on frozen col labels, no scrolling
+        isColHeader = true;
+        col = grid->XToCol(gridPos.x, false, nullptr);
+    }
+
+    if ( ( !isRowHeader && col == -1 ) || ( !isColHeader && row == -1 ) )
+    {
+        // not over label or grid cell, but over the grid
+        *childId = wxACC_SELF;
+        *childObject = this;
+        return wxACC_OK;
+    }
+
+    *childId = GetChildId(grid, row, col, isRowHeader, isColHeader);
+
+    return wxACC_OK;
+}
+
+// Returns the rectangle for this object (id = 0)
+wxAccStatus wxGridAccessible::GetLocation(wxRect& rect, int childId)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId != wxACC_SELF )
+        return wxACC_NOT_IMPLEMENTED;
+
+    rect = grid->GetScreenRect();
+
+    return wxACC_OK;
+}
+
+// Gets the name of the specified object.
+wxAccStatus wxGridAccessible::GetName(int childId, wxString* name)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId != wxACC_SELF )
+        return wxACC_NOT_IMPLEMENTED;
+
+    *name = grid->GetName();
+
+    return wxACC_OK;
+}
+
+// Gets the number of children.
+wxAccStatus wxGridAccessible::GetChildCount(int* childCount)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    int numberCols = grid->GetNumberCols();
+    int numberRows = grid->GetNumberRows();
+    if (grid->m_colLabelHeight)
+        numberRows++;
+    if (grid->m_rowLabelWidth)
+        numberCols++;
+
+    *childCount = numberRows * numberCols;
+
+    return wxACC_OK;
+}
+
+// Gets the specified child (starting from 1).
+// If *child is null and return value is wxACC_OK, this means that the child
+// is a simple element and not an accessible object.
+wxAccStatus wxGridAccessible::GetChild(int childId, wxAccessible** child)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId == wxACC_SELF )
+    {
+        *child = this;
+    }
+    else
+    {
+        if ( !m_gridCellAccessible || m_gridCellAccessible->m_childId!=childId)
+        {
+            delete m_gridCellAccessible;
+            m_gridCellAccessible = new wxGridCellAccessible(grid, childId);
+        }
+        *child = m_gridCellAccessible;
+    }
+    return wxACC_OK;
+}
+
+// Returns a role constant.
+wxAccStatus wxGridAccessible::GetRole(int childId, wxAccRole* role)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId == wxACC_SELF )
+        *role = wxROLE_SYSTEM_TABLE;
+    else
+        *role = wxROLE_SYSTEM_CELL;
+
+    return wxACC_OK;
+}
+
+// Returns a state constant.
+wxAccStatus wxGridAccessible::GetState(int childId, long* state)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId > 0 )
+        return wxACC_NOT_IMPLEMENTED;
+
+    long st = 0;
+    if ( !grid->IsEnabled() )
+        st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+    if ( !grid->IsShown() )
+        st |= wxACC_STATE_SYSTEM_INVISIBLE;
+
+    if( grid->IsFocusable() )
+        st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+
+    // this needs to be returned such that a child below is recognized as focused
+    // (check for cursorRow and cursorCol being != -1?)
+    if ( grid->HasFocus() )
+        st |=  wxACC_STATE_SYSTEM_FOCUSED;
+
+    *state = st;
+    return wxACC_OK;
+}
+
+// Returns a localized string representing the value for the object.
+wxAccStatus wxGridAccessible::GetValue(int childId, wxString* strValue)
+{
+
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId != wxACC_SELF )
+        return wxACC_NOT_IMPLEMENTED;
+
+    // we don't have a value for the grid
+    return wxACC_NOT_SUPPORTED;
+}
+
+// Gets the window with the keyboard focus.
+// If childId is 0 and child is null, no object in this subhierarchy has the focus.
+// If this object has the focus, child should be 'this'.
+wxAccStatus wxGridAccessible::GetFocus(int* childId, wxAccessible** child)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( grid->HasFocus() )
+    {
+        wxGridCellCoords coord = grid->GetGridCursorCoords();
+        if ( coord == wxGridNoCellCoords )
+        {
+            *childId = wxACC_SELF;
+            *child = this;
+        }
+        else
+        {
+            *child = nullptr;
+            *childId = GetChildId(grid, coord.GetRow(), coord.GetCol(), false, false);
+        }
+    }
+    else
+    {
+        *childId = 0;
+        *child = nullptr;
+    }
+
+    return wxACC_OK;
+}
+
+
+//-----------------------------------------------------------------------------
+// wxGridCellAccessible
+//-----------------------------------------------------------------------------
+
+wxGridCellAccessible::wxGridCellAccessible(wxGrid* grid, int childId)
+    : wxAccessible(grid)
+{
+    m_childId = childId;
+
+    // calculate row, col, isRowHeader, isColHeader from childId
+    if ( childId == 1 && grid->m_colLabelHeight && grid->m_rowLabelWidth )
+    {
+        m_row = m_col = -1;
+        m_isRowHeader = true;
+        m_isColHeader = true;
+    }
+    else
+    {
+        m_isRowHeader = m_isColHeader = false;
+        int numCols = grid->GetNumberCols();
+        if ( grid->m_rowLabelWidth )
+            numCols++;
+        m_row = (childId - 1) / numCols;
+        m_col = (childId - 1) % numCols;
+        if ( grid->m_rowLabelWidth )
+        {
+            if ( m_col == 0 )
+            {
+                m_col = -1;
+                m_isRowHeader = true;
+            }
+            else
+                m_col--;
+        }
+        if ( grid->m_colLabelHeight )
+        {
+            if ( m_row == 0 )
+            {
+                m_row = -1;
+                m_isColHeader = true;
+            }
+            else
+                m_row--;
+        }
+    }
+}
+
+// Gets the parent
+wxAccStatus wxGridCellAccessible::GetParent(wxAccessible** parent)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK(grid, wxACC_FAIL);
+
+    *parent = grid->m_accessible;
+    return wxACC_OK;
+}
+
+// Can return either a child object, or an integer
+// representing the child element, starting from 1.
+wxAccStatus wxGridCellAccessible::HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    wxPoint pos = grid->ScreenToClient(pt);
+    wxRect cellRect;
+    DoGetLocation(grid, cellRect);
+
+    if ( grid->HitTest(pos) != wxHT_WINDOW_INSIDE || !cellRect.Contains(pt) )
+    {
+        *childId = wxACC_SELF;
+        return wxACC_OK;
+    }
+
+    *childObject = this;
+
+    return wxACC_OK;
+}
+
+// helper to return the screen rectangle for this cell
+void wxGridCellAccessible::DoGetLocation(wxGrid* grid, wxRect& rect)
+{
+    rect = grid->GetScreenRect();
+    wxPoint unscrolledPos = grid->CalcScrolledPosition(rect.GetLeftTop());
+
+    if ( m_isColHeader )
+    {
+        rect.height = grid->m_colLabelHeight;
+    }
+    else
+    {
+        if ( m_row >= grid->m_numFrozenRows )
+            rect.y = unscrolledPos.y;
+        rect.y = rect.y + grid->m_colLabelHeight + grid->GetRowTop(m_row);
+        rect.height = grid->GetRowHeight(m_row);
+    }
+    if ( m_isRowHeader )
+        rect.width = grid->m_rowLabelWidth;
+    else
+    {
+        if ( m_col >= grid->m_numFrozenCols )
+            rect.x = unscrolledPos.x;
+        rect.x = rect.x + grid->m_rowLabelWidth + grid->GetColLeft(m_col);
+        rect.width = grid->GetColWidth(m_col);
+    }
+}
+
+// Returns the rectangle for this object (id = 0) or a child element (id > 0).
+wxAccStatus wxGridCellAccessible::GetLocation(wxRect& rect, int elementId)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+    if ( elementId != wxACC_SELF )
+        return wxACC_FAIL;
+
+    DoGetLocation(grid, rect);
+
+    return wxACC_OK;
+}
+
+// Gets the name of the specified object.
+wxAccStatus wxGridCellAccessible::GetName(int childId, wxString* name)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId != wxACC_SELF )
+        return wxACC_FAIL;
+
+    if ( m_isColHeader && m_isRowHeader )
+        *name = _("Grid Corner");
+    else if ( m_isColHeader )
+        *name = wxString::Format(_("Column %s Header"), grid->GetColLabelValue(m_col));
+    else if ( m_isRowHeader )
+        *name = wxString::Format(_("Row %s Header"), grid->GetRowLabelValue(m_row));
+    else
+        *name = wxString::Format(_("Row %s, Column %s"),
+            grid->GetRowLabelValue(m_row), grid->GetColLabelValue(m_col));
+
+    return wxACC_OK;
+}
+
+// Gets the number of children.
+wxAccStatus wxGridCellAccessible::GetChildCount(int* childCount)
+{
+    *childCount = 0;
+    return wxACC_OK;
+}
+
+// Gets the specified child (starting from 1).
+// If *child is NULL and return value is wxACC_OK, this means that the child
+// is a simple element and not an accessible object.
+wxAccStatus wxGridCellAccessible::GetChild(int childId, wxAccessible** child)
+{
+    if (childId != wxACC_SELF)
+        return wxACC_FAIL;
+
+    *child = this;
+    return wxACC_OK;
+}
+
+// Returns a role constant.
+wxAccStatus wxGridCellAccessible::GetRole(int childId, wxAccRole* role)
+{
+    if ( childId != wxACC_SELF )
+        return wxACC_FAIL;
+
+    if ( m_isColHeader )
+        *role = wxROLE_SYSTEM_COLUMNHEADER;
+    else if ( m_isRowHeader )
+        *role = wxROLE_SYSTEM_ROWHEADER;
+    else
+        *role = wxROLE_SYSTEM_CELL;
+
+    return wxACC_OK;
+}
+
+// Returns a state constant.
+wxAccStatus wxGridCellAccessible::GetState(int childId, long* state)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+    if ( childId != wxACC_SELF )
+        return wxACC_FAIL;
+
+    long st = 0;
+
+    if ( !grid->IsEnabled() )
+        st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
+
+    if ( !m_isColHeader && !grid->IsRowShown(m_row) )
+        st |= wxACC_STATE_SYSTEM_INVISIBLE;
+    else if ( !m_isRowHeader && !grid->IsColShown(m_col) )
+        st |= wxACC_STATE_SYSTEM_INVISIBLE;
+
+    if( grid->IsFocusable() )
+        st |= wxACC_STATE_SYSTEM_FOCUSABLE;
+
+    st |= wxACC_STATE_SYSTEM_SELECTABLE;
+
+    const int cursorRow = grid->GetGridCursorRow();
+    const int cursorCol = grid->GetGridCursorCol();
+
+    if ( !m_isColHeader && !m_isRowHeader && grid->HasFocus() && m_col==cursorCol && m_row==cursorRow)
+        st |= wxACC_STATE_SYSTEM_FOCUSED;
+
+    // check selection and visibility
+    if ( m_isRowHeader && m_isColHeader )
+    {
+        // check whether complete grid is selected?
+    }
+    else if ( m_isRowHeader )
+    {
+        wxArrayInt selectedRows = grid->GetSelectedRows();
+        if ( selectedRows.Index(m_row) != wxNOT_FOUND )
+            st |= wxACC_STATE_SYSTEM_SELECTED;
+    }
+    else if ( m_isColHeader )
+    {
+        wxArrayInt selectedCols = grid->GetSelectedCols();
+        if ( selectedCols.Index(m_col) != wxNOT_FOUND )
+            st |= wxACC_STATE_SYSTEM_SELECTED;
+    }
+    else
+    {
+        if ( grid->IsInSelection(m_row, m_col) )
+            st |= wxACC_STATE_SYSTEM_SELECTED;
+        if ( grid->IsVisible(m_row, m_col, false) )
+            st |= wxACC_STATE_SYSTEM_OFFSCREEN;
+    }
+
+    *state = st;
+    return wxACC_OK;
+}
+
+// Returns a localized string representing the value for the object or child.
+wxAccStatus wxGridCellAccessible::GetValue(int childId, wxString* strValue)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    if ( childId != wxACC_SELF )
+        return wxACC_FAIL;
+
+    if ( m_isColHeader && m_isRowHeader )
+        *strValue = grid->GetCornerLabelValue();
+    else if ( m_isColHeader )
+        *strValue = grid->GetColLabelValue(m_col);
+    else if ( m_isRowHeader )
+        *strValue = grid->GetRowLabelValue(m_row);
+    else
+        *strValue = grid->GetCellValue(m_row, m_col);
+
+    return wxACC_OK;
+}
+
+// Gets the window with the keyboard focus.
+// If childId is 0 and child is NULL, no object in this subhierarchy has the focus.
+// If this object has the focus, child should be 'this'.
+wxAccStatus wxGridCellAccessible::GetFocus(int* childId, wxAccessible** child)
+{
+    wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
+    wxCHECK( grid, wxACC_FAIL );
+
+    *childId = wxACC_SELF;
+
+    const int cursorRow = grid->GetGridCursorRow();
+    const int cursorCol = grid->GetGridCursorCol();
+
+    if ( !m_isColHeader && !m_isRowHeader && cursorRow == m_row && cursorCol == m_col )
+        *child = this;
+
+    return wxACC_OK;
+}
+
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_GRID

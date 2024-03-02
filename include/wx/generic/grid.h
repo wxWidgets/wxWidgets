@@ -120,6 +120,11 @@ class wxGridRowOperations;
 class wxGridColumnOperations;
 class wxGridDirectionOperations;
 
+#if wxUSE_ACCESSIBILITY
+class WXDLLIMPEXP_FWD_CORE wxGridAccessible;
+class WXDLLIMPEXP_FWD_CORE wxGridCellAccessible;
+#endif // wxUSE_ACCESSIBILITY
+
 
 // ----------------------------------------------------------------------------
 // macros
@@ -2411,6 +2416,13 @@ public:
     // implementation only
     void CancelMouseCapture();
 
+#if wxUSE_ACCESSIBILITY
+    virtual wxAccessible* CreateAccessible() override;
+    virtual bool Show(bool show) override;
+    virtual void SetName(const wxString &name) override;
+    virtual bool Reparent(wxWindowBase *newParent) override;
+#endif // wxUSE_ACCESSIBILITY
+
 protected:
     virtual wxSize DoGetBestSize() const override;
     virtual void DoEnable(bool enable) override;
@@ -2768,6 +2780,11 @@ protected:
 
     friend class wxGridHeaderColumn;
     friend class wxGridHeaderCtrl;
+
+#if wxUSE_ACCESSIBILITY
+    friend class wxGridAccessible;
+    friend class wxGridCellAccessible;
+#endif // wxUSE_ACCESSIBILITY
 
 private:
     // This is called from both Create() and OnDPIChanged() to (re)initialize
@@ -3466,6 +3483,80 @@ extern const int wxEVT_GRID_CHANGE_SEL_LABEL;
 #define EVT_GRID_CHANGE_SEL_LABEL(fn) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_GRID_CHANGE_SEL_LABEL, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxGridEventFunction, &fn ), nullptr ),
 
 #endif
+
+#if wxUSE_ACCESSIBILITY
+//-----------------------------------------------------------------------------
+// accessibility support for whole grid and per cell
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxGridAccessible: public wxWindowAccessible
+{
+public:
+    wxGridAccessible(wxGrid* win);
+    virtual ~wxGridAccessible();
+
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId,
+                                wxAccessible** childObject) override;
+
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
+
+    virtual wxAccStatus GetName(int childId, wxString* name) override;
+
+    virtual wxAccStatus GetChildCount(int* childCount) override;
+
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
+
+    virtual wxAccStatus GetState(int childId, long* state) override;
+
+    virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
+
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
+
+private:
+    wxGridCellAccessible *m_gridCellAccessible;
+
+    int wxGridAccessible::GetChildId(wxGrid* grid, int row, int col,
+                                     bool isRowHeader, bool isColHeader);
+};
+
+class WXDLLIMPEXP_CORE wxGridCellAccessible: public wxAccessible
+{
+public:
+    wxGridCellAccessible(wxGrid* win, int childId);
+
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId,
+                                wxAccessible** childObject) override;
+
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
+
+    virtual wxAccStatus GetName(int childId, wxString* name) override;
+
+    virtual wxAccStatus GetChildCount(int* childCount) override;
+
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
+
+    virtual wxAccStatus GetParent(wxAccessible** parent) override;
+
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
+
+    virtual wxAccStatus GetState(int childId, long* state) override;
+
+    virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
+
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
+
+private:
+    int m_childId;
+    int m_row;
+    int m_col;
+    bool m_isRowHeader;
+    bool m_isColHeader;
+    friend class wxGridAccessible;
+    void DoGetLocation(wxGrid* grid, wxRect& rect);
+};
+#endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_GRID
 #endif // _WX_GENERIC_GRID_H_
