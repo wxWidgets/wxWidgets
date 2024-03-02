@@ -3499,19 +3499,12 @@ public:
                                 wxAccessible** childObject) override;
 
     virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
-
     virtual wxAccStatus GetName(int childId, wxString* name) override;
-
     virtual wxAccStatus GetChildCount(int* childCount) override;
-
     virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
-
     virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
-
     virtual wxAccStatus GetState(int childId, long* state) override;
-
     virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
-
     virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
 
 private:
@@ -3530,21 +3523,13 @@ public:
                                 wxAccessible** childObject) override;
 
     virtual wxAccStatus GetLocation(wxRect& rect, int elementId) override;
-
     virtual wxAccStatus GetName(int childId, wxString* name) override;
-
     virtual wxAccStatus GetChildCount(int* childCount) override;
-
     virtual wxAccStatus GetChild(int childId, wxAccessible** child) override;
-
     virtual wxAccStatus GetParent(wxAccessible** parent) override;
-
     virtual wxAccStatus GetRole(int childId, wxAccRole* role) override;
-
     virtual wxAccStatus GetState(int childId, long* state) override;
-
     virtual wxAccStatus GetValue(int childId, wxString* strValue) override;
-
     virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
 
 private:
