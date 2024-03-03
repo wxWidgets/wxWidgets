@@ -52,7 +52,7 @@ protected:                                                                    \
 class WXDLLIMPEXP_CORE wxFileButton : public wxGenericFileButton
 {
 public:
-    wxFileButton() { Init(); }
+    wxFileButton() = default;
     wxFileButton(wxWindow *parent,
                  wxWindowID id,
                  const wxString& label = wxASCII_STR(wxFilePickerWidgetLabel),
@@ -65,7 +65,6 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxASCII_STR(wxFilePickerWidgetNameStr))
     {
-        Init();
         m_pickerStyle = style;
         Create(parent, id, label, path, message, wildcard,
                pos, size, style, validator, name);
@@ -98,14 +97,11 @@ public:     // overrides
     FILEDIRBTN_OVERRIDES
 
 protected:
-    wxDialog *m_dialog;
+    wxDialog* m_dialog = nullptr;
 
     virtual void DoApplyWidgetStyle(GtkRcStyle*) override;
 
 private:
-    // common part of all ctors
-    void Init() { m_dialog = nullptr; }
-
     wxDECLARE_DYNAMIC_CLASS(wxFileButton);
 };
 
@@ -117,7 +113,7 @@ private:
 class WXDLLIMPEXP_CORE wxDirButton : public wxGenericDirButton
 {
 public:
-    wxDirButton() { Init(); }
+    wxDirButton() = default;
     wxDirButton(wxWindow *parent,
                 wxWindowID id,
                 const wxString& label = wxASCII_STR(wxFilePickerWidgetLabel),
@@ -129,8 +125,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxASCII_STR(wxFilePickerWidgetNameStr))
     {
-        Init();
-
         m_pickerStyle = style;
 
         Create(parent, id, label, path, message, wxEmptyString,
@@ -169,23 +163,17 @@ public:     // overrides
     FILEDIRBTN_OVERRIDES
 
 protected:
-    wxDialog *m_dialog;
+    wxDialog* m_dialog = nullptr;
 
     virtual void DoApplyWidgetStyle(GtkRcStyle*) override;
 
 public:    // used by the GTK callback only
 
-    bool m_bIgnoreNextChange;
+    bool m_bIgnoreNextChange = false;
 
     void GTKUpdatePath(const char *gtkpath);
 
 private:
-    void Init()
-    {
-        m_dialog = nullptr;
-        m_bIgnoreNextChange = false;
-    }
-
     wxDECLARE_DYNAMIC_CLASS(wxDirButton);
 };
 

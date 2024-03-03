@@ -27,7 +27,7 @@ class WXDLLIMPEXP_CORE wxGenericFileDirButton : public wxButton,
                                                 public wxFileDirPickerWidgetBase
 {
 public:
-    wxGenericFileDirButton() { Init(); }
+    wxGenericFileDirButton() = default;
     wxGenericFileDirButton(wxWindow *parent,
                            wxWindowID id,
                            const wxString& label = wxASCII_STR(wxFilePickerWidgetLabel),
@@ -40,7 +40,6 @@ public:
                            const wxValidator& validator = wxDefaultValidator,
                            const wxString& name = wxASCII_STR(wxFilePickerWidgetNameStr))
     {
-        Init();
         Create(parent, id, label, path, message, wildcard,
                pos, size, style, validator, name);
     }
@@ -80,14 +79,10 @@ protected:
     // we just store the style passed to the ctor here instead of passing it to
     // wxButton as some of our bits can conflict with wxButton styles and it
     // just doesn't make sense to use picker styles for wxButton anyhow
-    long m_pickerStyle;
+    long m_pickerStyle = -1;
 
     // Initial directory set by SetInitialDirectory() call or empty.
     wxString m_initialDir;
-
-private:
-    // common part of all ctors
-    void Init() { m_pickerStyle = -1; }
 };
 
 
