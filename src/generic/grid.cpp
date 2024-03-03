@@ -3966,6 +3966,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
     // index into data rows/cols
     int lineAt = oper.GetLineAt(this, posAt);
 
+
     int edge = FromDIP(WXGRID_LABEL_EDGE_ZONE);
     // this will be set if we are dragging or could drag a label window edge
     const wxGridOperations* labelEdgeOper = nullptr;
@@ -4428,7 +4429,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
     bool atBottomEdge = false, atRightEdge = false, atLabelEdge = false;
     const wxPoint posEvent = event.GetPosition();
     int edge = FromDIP(WXGRID_LABEL_EDGE_ZONE);
-    const wxGridOperations* oper = nullptr;
+    std::unique_ptr<wxGridOperations> oper;
 
     if ( m_canDragRowLabelSize && posEvent.x >= m_rowLabelWidth - edge )
         atLabelEdge = atRightEdge = true;
@@ -4437,9 +4438,9 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
 
     if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
         ( atBottomEdge && m_cursorMode == WXGRID_CURSOR_SELECT_CELL ) )
-        oper = new wxGridRowOperations();
+        oper.reset(new wxGridRowOperations());
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL || atRightEdge )
-        oper = new wxGridColumnOperations();
+        oper.reset(new wxGridColumnOperations());
 
     if ( m_dragRowOrCol == -2 && event.Dragging() )
     {
@@ -6070,7 +6071,8 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                         case WXGRID_CURSOR_RESIZE_COL:
                             // reset to size from before dragging
                             if ( m_dragRowOrCol == -2 )
-                            {   if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
+                            {
+                                if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
                                     SetColLabelSize(m_dragRowOrColOldSize);
                                 else
                                     SetRowLabelSize(m_dragRowOrColOldSize);
@@ -8890,15 +8892,15 @@ void wxGrid::SetColLabelSize( int height )
 
 void wxGrid::SetRowLabelMinimalSize(int width)
 {
-    if ( width >= 0 )
-        m_rowLabelMinWidth = width;
+    wxCHECK_RET(width >= 0, "invalid min row label width");
+    m_rowLabelMinWidth = width;
 }
 
 
 void wxGrid::SetColLabelMinimalSize(int height)
 {
-    if ( height >= 0 )
-        m_colLabelMinHeight = height;
+    wxCHECK_RET(height >= 0, "invalid min col label height");
+    m_colLabelMinHeight = height;
 }
 
 void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
