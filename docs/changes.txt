@@ -300,6 +300,7 @@ wxMSW:
 - Fix using "Alt" when wxGrid has focus (Dietmar Schwertberger, #24247).
 - Fix wxButton::GetDefaultSize() in high DPI under MSW (#24283).
 - Improve native MSW dialog DPI awareness (Maarten Bent, #24196).
+- Fix bug with not showing some wxStaticText labels (#24365).
 
 wxOSX:
 
