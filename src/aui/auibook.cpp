@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/aui/tabmdi.h"
+#include "wx/wupdlock.h"
 
 #include "wx/dcbuffer.h" // just for wxALWAYS_NATIVE_DOUBLE_BUFFER
 
@@ -2095,6 +2096,12 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
 // but does not destroy the window
 bool wxAuiNotebook::RemovePage(size_t page_idx)
 {
+    // Lock the window for changes to avoid flicker when
+    // removing the active page (there is a noticeable 
+    // flicker from the active tab is closed and until a
+    // new one is selected) - this is noticeable on MSW
+    wxWindowUpdateLocker locker { this };
+
     // save active window pointer
     wxWindow* active_wnd = nullptr;
     if (m_curPage >= 0)
