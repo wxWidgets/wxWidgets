@@ -2999,6 +2999,9 @@ void wxGrid::Init()
     m_canDragColMove = false;
     m_canHideColumns = true;
 
+    m_canDragRowLabelSize = false;
+    m_canDragColLabelSize = false;
+
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture = nullptr;
     m_canDragRowSize = true;

@@ -4565,7 +4565,7 @@ public:
 
     /**
         Returns @true if the row labels can be resized by dragging with the
-        mouse (which is the case by default).
+        mouse.
 
         @since 3.3.0
     */
@@ -4573,7 +4573,7 @@ public:
 
     /**
         Returns @true if the column labels can be resized by dragging with the
-        mouse (which is the case by default).
+        mouse.
 
         This is the same as CanDragRowLabelSize() but for column labels.
 

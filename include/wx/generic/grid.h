@@ -1946,7 +1946,7 @@ public:
         { return m_canDragColSize && DoCanResizeLine(col, m_setFixedCols); }
 
     // functions globally enabling row/column label interactive resizing
-    // (enabled by default)
+    // (disabled by default)
     void     EnableDragRowLabelSize(bool enable = true);
     void     DisableDragRowLabelSize() { EnableDragRowLabelSize(false); }
 

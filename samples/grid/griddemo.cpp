@@ -818,8 +818,8 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEEDIT, true );
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
-    GetMenuBar()->Check(ID_TOGGLEROWLABELSIZING, true);
-    GetMenuBar()->Check(ID_TOGGLECOLLABELSIZING, true);
+    GetMenuBar()->Check(ID_TOGGLEROWLABELSIZING, false);
+    GetMenuBar()->Check(ID_TOGGLECOLLABELSIZING, false);
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
     GetMenuBar()->Check( ID_TOGGLECOLHIDING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
