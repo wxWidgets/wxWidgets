@@ -3,7 +3,6 @@
 // Purpose:     wxGLCanvas, for using OpenGL with X11
 //              Uses the GLX extension.
 // Author:      Julian Smart and Wolfram Gloger
-// Modified by:
 // Created:     1995, 1999
 // Copyright:   (c) Julian Smart, Wolfram Gloger
 // Licence:     wxWindows licence

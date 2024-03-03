@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextctrl.h
 // Purpose:     A rich edit control
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

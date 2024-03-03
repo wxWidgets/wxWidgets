@@ -23,7 +23,7 @@
         {
         public:
             // Default constructor is implemented in the same way as always.
-            MyControlWithSubChildren() { }
+            MyControlWithSubChildren() = default;
 
             // Non-default constructor can't use wxControl ctor any more as
             // wxControl is not its direct base class, but it can use Create().

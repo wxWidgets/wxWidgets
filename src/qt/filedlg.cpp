@@ -138,7 +138,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     foreach (QString file, selectedfiles )
     {
         wxFileName fn = wxQtConvertString(file);
-        files.Add(fn.GetName());
+        files.Add(fn.GetFullName());
     }
 }
 

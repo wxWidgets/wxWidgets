@@ -28,8 +28,12 @@
     #include "wx/dataobj.h"
 #endif // wxUSE_CLIPBOARD
 
-#ifdef __WXGTK__
-    #include "wx/stopwatch.h"
+#if defined(__WXGTK__) || defined(__WXQT__)
+    #include "waitfor.h"
+#endif
+
+#ifdef __WXQT__
+#include <QtGlobal>
 #endif
 
 #include "wx/private/localeset.h"
@@ -241,6 +245,10 @@ void TextCtrlTestCase::ReadOnly()
     m_text->SetFocus();
 #endif
 
+    // We get spurious update under wxQt. get rid of it before doing
+    // the next simulation.
+    updated.Clear();
+
     sim.Text("abcdef");
     wxYield();
 
@@ -252,6 +260,13 @@ void TextCtrlTestCase::ReadOnly()
 void TextCtrlTestCase::MaxLength()
 {
 #if wxUSE_UIACTIONSIMULATOR
+#ifdef __WXQT__
+    #if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+        WARN("wxEVT_TEXT_MAXLEN event is only generated if Qt version is 5.12 or greater");
+        return;
+    #endif
+#endif
+
     EventCounter updated(m_text, wxEVT_TEXT);
     EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
 
@@ -353,9 +368,6 @@ void TextCtrlTestCase::Redirector()
 
 void TextCtrlTestCase::HitTestSingleLine()
 {
-#ifdef __WXQT__
-    WARN("Does not work under WxQt");
-#else
     m_text->ChangeValue("Hit me");
 
     // We don't know the size of the text borders, so we can't really do any
@@ -366,6 +378,21 @@ void TextCtrlTestCase::HitTestSingleLine()
 
     long pos = -1;
 
+#ifdef __WXQT__
+    // Although it works fine interactively, testing HitTest() is not
+    // straightforward under wxQt: We have to call SetInsertionPoint()
+    // explicitly with the position returned by HitTest() before we call
+    // it a second time (in the test below) to get the correct result.
+    auto SetCursorPositionHack = [&](int n)
+    {
+        m_text->HitTest(wxPoint(n*sizeChar.x, yMid), &pos);
+        m_text->SetInsertionPoint(pos);
+        wxYield();
+    };
+#else
+    #define SetCursorPositionHack(n) // do nothing under the other ports
+#endif
+
 #ifdef __WXGTK__
     wxYield();
 #endif
@@ -374,6 +401,7 @@ void TextCtrlTestCase::HitTestSingleLine()
     // first few characters under it.
     SECTION("Normal")
     {
+        SetCursorPositionHack(2);
         REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos >= 0 );
         CHECK( pos < 3 );
@@ -383,6 +411,7 @@ void TextCtrlTestCase::HitTestSingleLine()
     // character.
     SECTION("Beyond")
     {
+        SetCursorPositionHack(20);
         REQUIRE( m_text->HitTest(wxPoint(20*sizeChar.x, yMid), &pos) == wxTE_HT_BEYOND );
         CHECK( pos == m_text->GetLastPosition() );
     }
@@ -395,23 +424,21 @@ void TextCtrlTestCase::HitTestSingleLine()
         m_text->ChangeValue(wxString(200, 'X'));
         m_text->SetInsertionPointEnd();
 
-    #ifdef __WXGTK__
-        // wxGTK must be given an opportunity to lay the text out.
-        for ( wxStopWatch sw; sw.Time() < 50; )
-            wxYield();
+    #if defined(__WXGTK__) || defined(__WXQT__)
+        // wxGTK and wxQt must be given an opportunity to lay the text out.
+        YieldForAWhile();
     #endif
 
         REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos > 3 );
 
         // Using negative coordinates works even under Xvfb, so test at least
-        // for this -- however this only works in wxGTK, not wxMSW.
-#ifdef __WXGTK__
+        // for this -- however this only works in wxGTK and wxQt, not wxMSW.
+#if defined(__WXGTK__) || defined(__WXQT__)
         REQUIRE( m_text->HitTest(wxPoint(-2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos > 3 );
-#endif // __WXGTK__
+#endif // __WXGTK__ || __WXQT__
     }
-#endif
 }
 
 #if 0
@@ -757,18 +784,10 @@ void TextCtrlTestCase::DoPositionToCoordsTestWithStyle(long style)
 
     // wxGTK needs to yield here to update the text control.
 #ifdef __WXGTK__
-    wxStopWatch sw;
-    while ( m_text->PositionToCoords(0).y == 0 ||
-                m_text->PositionToCoords(pos).y > TEXT_HEIGHT )
-    {
-        if ( sw.Time() > 1000 )
-        {
-            FAIL("Timed out waiting for wxTextCtrl update.");
-            break;
-        }
-
-        wxYield();
-    }
+    WaitFor("wxTextCtrl update", [this, pos]() {
+        return m_text->PositionToCoords(0).y != 0 &&
+                m_text->PositionToCoords(pos).y <= TEXT_HEIGHT;
+    }, 1000);
 #endif // __WXGTK__
 
     wxPoint coords = m_text->PositionToCoords(0);
@@ -1337,19 +1356,26 @@ TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
     s += "1\n2\n3\n4\n5\n";
     const wxSize sizeMedium = getBestSizeFor(s);
 
-    // Control with a few lines of text in it should be taller.
-    CHECK( sizeMedium.y > sizeEmpty.y );
-
     s += "6\n7\n8\n9\n10\n";
     const wxSize sizeLong = getBestSizeFor(s);
-
-    // And a control with many lines in it should be even more so.
-    CHECK( sizeLong.y > sizeMedium.y );
 
     s += s;
     s += s;
     s += s;
     const wxSize sizeVeryLong = getBestSizeFor(s);
+
+#ifndef __WXQT__
+    // Control with a few lines of text in it should be taller.
+    CHECK( sizeMedium.y > sizeEmpty.y );
+
+    // And a control with many lines in it should be even more so.
+    CHECK( sizeLong.y > sizeMedium.y );
+#else
+    // Under wxQt, the multiline textctrl has a fixed calculated best size
+    // regardless of its content.
+    CHECK( sizeMedium.y == sizeEmpty.y );
+    CHECK( sizeLong.y == sizeMedium.y );
+#endif
 
     // However there is a cutoff at 10 lines currently, so anything longer than
     // that should still have the same best size.

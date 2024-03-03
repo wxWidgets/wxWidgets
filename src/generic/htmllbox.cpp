@@ -2,7 +2,6 @@
 // Name:        src/generic/htmllbox.cpp
 // Purpose:     implementation of wxHtmlListBox
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.05.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -400,11 +399,11 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     // draw the selected cell in selected state ourselves if we're using custom
     // colours (to test for this, check the callbacks by passing them any dummy
     // (but valid, to avoid asserts) colour):
+    wxHtmlSelection htmlSel;
     if ( IsSelected(n) &&
             (GetSelectedTextColour(*wxBLACK).IsOk() ||
              GetSelectedTextBgColour(*wxWHITE).IsOk()) )
     {
-        wxHtmlSelection htmlSel;
         htmlSel.Set(wxPoint(0,0), cell, wxPoint(INT_MAX, INT_MAX), cell);
         htmlRendInfo.SetSelection(&htmlSel);
         htmlRendInfo.SetStyle(m_htmlRendStyle);

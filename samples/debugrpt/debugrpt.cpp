@@ -2,7 +2,6 @@
 // Name:        debugrpt.cpp
 // Purpose:     minimal sample showing wxDebugReport and related classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-20
 // Copyright:   (c) 2005 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -158,6 +157,8 @@ class MyFrame : public wxFrame
 {
 public:
     MyFrame();
+    MyFrame(const MyFrame&) = delete;
+    MyFrame& operator=(const MyFrame&) = delete;
 
 private:
     void OnListLoadedDLLs(wxCommandEvent& event);
@@ -186,7 +187,6 @@ private:
     // number of lines drawn in OnPaint()
     int m_numLines;
 
-    wxDECLARE_NO_COPY_CLASS(MyFrame);
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -203,6 +203,8 @@ class MyApp : public wxApp
 public:
     // call wxHandleFatalExceptions here
     MyApp();
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
     // create our main window here
     virtual bool OnInit() override;
@@ -220,8 +222,6 @@ public:
 
 private:
     bool m_uploadReport;
-
-    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 wxIMPLEMENT_APP(MyApp);

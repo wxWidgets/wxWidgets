@@ -17,6 +17,8 @@
 
     See the @ref page_samples_uiaction for an example of using this class.
 
+    @note This class currently doesn't work when using Wayland with wxGTK.
+
     @since 2.9.2
 
     @library{wxcore}

@@ -2,7 +2,6 @@
 // Name:        wx/gdiobj.h
 // Purpose:     wxGDIObject base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
@@ -24,7 +23,7 @@ class WXDLLIMPEXP_CORE wxGDIRefData : public wxObjectRefData
 public:
     // Default ctor which needs to be defined just because we use
     // wxDECLARE_NO_COPY_CLASS() below.
-    wxGDIRefData() { }
+    wxGDIRefData() = default;
 
     // override this in the derived classes to check if this data object is
     // really fully initialized

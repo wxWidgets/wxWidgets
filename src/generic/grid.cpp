@@ -2642,7 +2642,6 @@ wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledCanvas )
     EVT_SIZE( wxGrid::OnSize )
     EVT_DPI_CHANGED( wxGrid::OnDPIChanged )
     EVT_KEY_DOWN( wxGrid::OnKeyDown )
-    EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_CHAR ( wxGrid::OnChar )
 wxEND_EVENT_TABLE()
 
@@ -2789,6 +2788,10 @@ void wxGrid::InitPixelFields()
     m_defaultRowHeight += 4;
 #endif
 
+    // Scroll by row height to avoid showing partial rows when all heights are
+    // the same.
+    m_yScrollPixelsPerLine = m_defaultRowHeight;
+
     // Don't change the value when called from OnDPIChanged() later if the
     // corresponding label window is hidden, these values should remain zeroes
     // then.
@@ -2866,6 +2869,9 @@ wxGrid::SetTable(wxGridTableBase *table,
             HideCellEditControl();
             m_cellEditCtrlEnabled = false;
 
+            // Don't hold on to attributes cached from the old table
+            ClearAttrCache();
+
             m_table->SetView(nullptr);
             if( m_ownTable )
                 delete m_table;
@@ -2908,6 +2914,8 @@ wxGrid::SetTable(wxGridTableBase *table,
     }
 
     InvalidateBestSize();
+
+    UpdateCurrentCellOnRedim();
 
     return m_created;
 }
@@ -3058,7 +3066,7 @@ void wxGrid::InitRowHeights()
 
     for ( int i = 0; i < m_numRows; i++ )
     {
-        int rowBottom = ( GetRowPos( i ) + 1 ) * m_defaultRowHeight;;
+        int rowBottom = ( GetRowPos( i ) + 1 ) * m_defaultRowHeight;
         m_rowBottoms.Add( rowBottom );
     }
 }
@@ -4934,9 +4942,15 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *eventG
             DisableCellEditControl();
 
             if ( event.LeftDown() )
-                handled = (DoGridCellLeftDown(event, coords, pos), true);
+            {
+                DoGridCellLeftDown(event, coords, pos);
+                handled = true;
+            }
             else if ( event.LeftDClick() )
-                handled = (DoGridCellLeftDClick(event, coords, pos), true);
+            {
+                DoGridCellLeftDClick(event, coords, pos);
+                handled = true;
+            }
             else if ( event.RightDown() )
                 handled = SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event) != Event_Unhandled;
             else if ( event.RightDClick() )
@@ -6084,72 +6098,12 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
             case 'C':
                 if ( event.GetModifiers() == wxMOD_CONTROL )
                 {
-                    // Coordinates of the selected block to copy to clipboard.
-                    wxGridBlockCoords sel;
-
-                    // Check if we have any selected blocks and if we don't
-                    // have too many of them.
-                    const wxGridBlocks blocks = GetSelectedBlocks();
-                    wxGridBlocks::iterator iter = blocks.begin();
-                    if ( iter == blocks.end() )
+                    if ( !CopySelection() )
                     {
-                        // No selection, copy just the current cell.
-                        if ( m_currentCellCoords == wxGridNoCellCoords )
-                        {
-                            // But we don't even have it -- nothing to do then.
-                            event.Skip();
-                            break;
-                        }
-
-                        sel = wxGridBlockCoords(GetGridCursorRow(),
-                                                GetGridCursorCol(),
-                                                GetGridCursorRow(),
-                                                GetGridCursorCol());
+                        wxLogWarning(_("Error copying grid to the clipboard. "
+                            "Either selected cells were not contiguous or "
+                            "no cell was selected."));
                     }
-                    else // We do have at least one selected block.
-                    {
-                        sel = *blocks.begin();
-
-                        if ( ++iter != blocks.end() )
-                        {
-                            // As we use simple text format, we can't copy more
-                            // than one block to clipboard.
-                            wxLogWarning
-                            (
-                                _("Copying more than one selected block "
-                                  "to clipboard is not supported.")
-                            );
-                            break;
-                        }
-                    }
-
-                    wxClipboardLocker lockClipboard;
-                    if ( !lockClipboard )
-                    {
-                        // Error message should have been already given and we
-                        // don't have much to add.
-                        break;
-                    }
-
-                    wxString buf;
-                    for ( int row = sel.GetTopRow(); row <= sel.GetBottomRow(); row++ )
-                    {
-                        bool first = true;
-
-                        for ( int col = sel.GetLeftCol(); col <= sel.GetRightCol(); col++ )
-                        {
-                            if ( first )
-                                first = false;
-                            else
-                                buf += '\t';
-
-                            buf += GetCellValue(row, col);
-                        }
-
-                        buf += wxTextFile::GetEOL();
-                    }
-
-                    wxTheClipboard->SetData(new wxTextDataObject(buf));
                     break;
                 }
                 wxFALLTHROUGH;
@@ -6160,11 +6114,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
         }
     }
-}
-
-void wxGrid::OnKeyUp( wxKeyEvent& WXUNUSED(event) )
-{
-    // try local handlers
 }
 
 void wxGrid::OnChar( wxKeyEvent& event )
@@ -6906,6 +6855,15 @@ void wxGrid::DrawRowLabels( wxDC& dc, const wxArrayInt& rows)
     {
         DrawRowLabel( dc, rows[i] );
     }
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_ROW && m_dragLastColour )
+    {
+        // draw the insertion marker for drag-moving
+        wxPen pen(*m_dragLastColour, 2);
+        dc.SetPen(pen);
+        dc.DrawLine(0, m_dragLastPos + 1, m_rowLabelWidth, m_dragLastPos + 1);
+        dc.SetPen(wxNullPen);
+    }
 }
 
 void wxGrid::DrawRowLabel( wxDC& dc, int row )
@@ -7008,6 +6966,15 @@ void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
     for ( size_t i = 0; i < numLabels; i++ )
     {
         DrawColLabel( dc, cols[i] );
+    }
+
+    if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL && m_dragLastColour )
+    {
+        // draw the insertion marker for drag-moving
+        wxPen pen(*m_dragLastColour, 2);
+        dc.SetPen(pen);
+        dc.DrawLine(m_dragLastPos + 1, 0, m_dragLastPos + 1, m_colLabelHeight);
+        dc.SetPen(wxNullPen);
     }
 }
 
@@ -9894,8 +9861,11 @@ void wxGrid::DoSetRowSize( int row, int height )
         int cw, ch;
         GetClientSize(&cw, &ch);
 
-        const wxRect updateRect(0, y, cw, ch - y);
-        Refresh(true, &updateRect);
+        if (ch > y)
+        {
+            const wxRect updateRect(0, y, cw, ch - y);
+            Refresh(true, &updateRect);
+        }
     }
 }
 
@@ -10035,8 +10005,11 @@ void wxGrid::DoSetColSize( int col, int width )
         int cw, ch;
         GetClientSize(&cw, &ch);
 
-        const wxRect updateRect(x, 0, cw - x, ch);
-        Refresh(true, &updateRect);
+        if (cw > x)
+        {
+            const wxRect updateRect(x, 0, cw - x, ch);
+            Refresh(true, &updateRect);
+        }
     }
 }
 
@@ -10833,6 +10806,76 @@ void wxGrid::ClearSelection()
 {
     if ( IsSelection() )
         m_selection->ClearSelection();
+}
+
+bool wxGrid::CopySelection()
+{
+#if wxUSE_CLIPBOARD
+    // Coordinates of the selected block to copy to clipboard.
+    wxGridBlockCoords sel;
+
+    // Check if we have any selected blocks and if we don't
+    // have too many of them.
+    const wxGridBlocks blocks = GetSelectedBlocks();
+    wxGridBlocks::iterator iter = blocks.begin();
+    if (iter == blocks.end())
+    {
+        // No selection, copy just the current cell.
+        if (m_currentCellCoords == wxGridNoCellCoords)
+        {
+            // But we don't even have it -- nothing to do then.
+            return false;
+        }
+
+        sel = wxGridBlockCoords(GetGridCursorRow(),
+            GetGridCursorCol(),
+            GetGridCursorRow(),
+            GetGridCursorCol());
+    }
+    else // We do have at least one selected block.
+    {
+        sel = *blocks.begin();
+
+        if (++iter != blocks.end())
+        {
+            // As we use simple text format, we can't copy more
+            // than one block to clipboard.
+            return false;
+        }
+    }
+
+    wxClipboardLocker lockClipboard;
+    if (!lockClipboard)
+    {
+        return false;
+    }
+
+    bool firstRow = true;
+    wxString buf;
+    for (int row = sel.GetTopRow(); row <= sel.GetBottomRow(); row++)
+    {
+        if (firstRow)
+            firstRow = false;
+        else
+            buf += wxTextFile::GetEOL();
+
+        bool firstColumn = true;
+
+        for (int col = sel.GetLeftCol(); col <= sel.GetRightCol(); col++)
+        {
+            if (firstColumn)
+                firstColumn = false;
+            else
+                buf += '\t';
+
+            buf += GetCellValue(row, col);
+        }
+    }
+
+    wxTheClipboard->SetData(new wxTextDataObject(buf));
+#endif // wxUSE_CLIPBOARD
+
+    return true;
 }
 
 // This function returns the rectangle that encloses the given block

@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/utils.mm
 // Purpose:     various cocoa utility functions
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -109,8 +108,14 @@ void wxBell()
             activate = true;
         }
 
-        if ( activate )
-            [NSApp activateIgnoringOtherApps: YES];
+        if ( activate ) {
+            if ( [NSApp activationPolicy] == NSApplicationActivationPolicyAccessory ) {
+                [[NSRunningApplication currentApplication] activateWithOptions: NSApplicationActivateIgnoringOtherApps];
+            }
+            else {
+                [NSApp activateIgnoringOtherApps: YES];
+            }
+        }
     }
 }
 
@@ -580,7 +585,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
     const wxSize bitmapSize(subrect ? subrect->GetSize() : m_window->GetSize());
     wxBitmap bitmap;
-    bitmap.CreateWithDIPSize(bitmapSize, m_contentScaleFactor);
+    bitmap.CreateWithLogicalSize(bitmapSize, m_contentScaleFactor);
 
     NSView* view = (NSView*) m_window->GetHandle();
     if ( [view isHiddenOrHasHiddenAncestor] == NO )
@@ -612,7 +617,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
         CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
 
-        // The bitmap created by wxBitmap::CreateWithDIPSize() above is scaled,
+        // The bitmap created by wxBitmap::CreateWithLogicalSize() above is scaled,
         // so we need to adjust the coordinates for it.
         r.size.width /= m_contentScaleFactor;
         r.size.height /= m_contentScaleFactor;

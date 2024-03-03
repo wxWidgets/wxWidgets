@@ -16,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
-    wxFont() { }
+    wxFont() = default;
 
     wxFont(const wxFontInfo& info);
 
@@ -60,8 +60,6 @@ public:
 
     // wxGTK-specific
     bool Create(const wxString& fontname);
-
-    virtual ~wxFont();
 
     // implement base class pure virtuals
     virtual double GetFractionalPointSize() const override;

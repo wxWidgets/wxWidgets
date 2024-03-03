@@ -2,7 +2,6 @@
 // Name:        src/msw/tooltip.cpp
 // Purpose:     wxToolTip class implementation for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.99
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -572,7 +571,7 @@ bool wxToolTip::AdjustMaxWidth()
     // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
     // extent of its first line as max value
     HFONT hfont = (HFONT)
-        SendTooltipMessage(GetToolTipCtrl(), WM_GETFONT, 0);
+        SendTooltipMessage(GetToolTipCtrl(), WM_GETFONT, nullptr);
 
     if ( !hfont )
     {
@@ -632,7 +631,7 @@ bool wxToolTip::AdjustMaxWidth()
     // one would result in breaking the longer lines unnecessarily as
     // all our tooltips share the same maximal width
     if ( maxWidth > SendTooltipMessage(GetToolTipCtrl(),
-                                       TTM_GETMAXTIPWIDTH, 0) )
+                                       TTM_GETMAXTIPWIDTH, nullptr) )
     {
         SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
                            wxUIntToPtr(maxWidth));

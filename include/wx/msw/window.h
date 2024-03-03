@@ -213,13 +213,6 @@ public:
 
     void OnPaint(wxPaintEvent& event);
 
-    // Override this to return true to automatically invert the window colours
-    // in dark mode.
-    //
-    // This doesn't result in visually great results, but may still be better
-    // than using light background.
-    virtual bool MSWShouldUseAutoDarkMode() const { return false; }
-
 public:
     // Windows subclassing
     void SubclassWin(WXHWND hWnd);
@@ -616,26 +609,13 @@ protected:
     {
     }
 
-    // this allows you to implement standard control borders without
-    // repeating the code in different classes that are not derived from
-    // wxControl
-    virtual wxBorder GetDefaultBorderForControl() const override;
-
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const override;
-
-    // Translate wxBORDER_THEME (and other border styles if necessary to the value
-    // that makes most sense for this Windows environment
-    virtual wxBorder TranslateBorder(wxBorder border) const;
+    // Translate wxBORDER_THEME to a standard border style or return it as is
+    // if themed border should be used, depending on CanApplyThemeBorder().
+    wxBorder DoTranslateBorder(wxBorder border) const;
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) override;
 #endif // wxUSE_MENUS_NATIVE
-
-    // Called by Reparent() after the window parent changes, i.e. GetParent()
-    // returns the new parent inside this function.
-    virtual void MSWAfterReparent();
-
 
     // the window handle
     WXHWND                m_hWnd;

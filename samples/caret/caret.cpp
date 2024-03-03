@@ -2,7 +2,6 @@
 // Name:        caret.cpp
 // Purpose:     wxCaret sample
 // Author:      Robert Roebling
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) wxWindows team
 // Licence:     wxWindows licence
@@ -306,7 +305,7 @@ MyCanvas::MyCanvas( wxWindow *parent )
 {
     m_text = nullptr;
 
-    SetBackgroundColour(*wxWHITE);
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
     SetFontSize(12);
 
@@ -420,7 +419,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxChar ch = CharAt(x, y);
             if ( !ch )
                 ch = ' ';
-#ifdef __WXOSX__
+#if defined(__WXOSX__) || defined(__WXQT__)
             dc.DrawText(ch, m_xMargin + x * m_widthChar,
                         m_yMargin + y * m_heightChar );
 #else
@@ -428,9 +427,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 #endif
         }
 
-#ifndef __WXOSX__
-        dc.DrawText( line, m_xMargin, m_yMargin + y * m_heightChar );
-#endif
+        if ( !line.empty() )
+            dc.DrawText( line, m_xMargin, m_yMargin + y * m_heightChar );
     }
 }
 

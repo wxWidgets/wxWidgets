@@ -2,7 +2,6 @@
 // Name:        wx/x11/dc.h
 // Purpose:     wxDC class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -25,7 +24,7 @@ class WXDLLIMPEXP_CORE wxX11DCImpl : public wxDCImpl
 {
 public:
     wxX11DCImpl( wxDC *owner );
-    virtual ~wxX11DCImpl() { }
+    virtual ~wxX11DCImpl() = default;
 
     virtual wxSize GetPPI() const;
 

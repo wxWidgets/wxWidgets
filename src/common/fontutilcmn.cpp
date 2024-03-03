@@ -2,7 +2,6 @@
 // Name:        src/common/fontutilcmn.cpp
 // Purpose:     Font helper functions common for all ports
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2006-12-20
 // Copyright:   (c) Vadim Zeitlin, Vaclav Slavik
 // Licence:     wxWindows licence

@@ -83,7 +83,7 @@ wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 
     // Ensure image size is the same as the size of the images on the image list.
     wxBitmap bmpResized;
-    const wxSize sz = bmp.GetLogicalSize();
+    const wxSize sz = bmp.GetSize();
     if ( sz.x == m_size.x && sz.y == m_size.y )
     {
         bmpResized = bmp;
@@ -106,6 +106,17 @@ wxBitmap wxGenericImageList::GetImageListBitmap(const wxBitmap& bitmap) const
 #endif // wxUSE_IMAGE
     }
 
+#ifdef __WXQT__
+    // In wxQt the returned bitmap is used with native list/tree controls which require
+    // the bitmap to already have its mask applied to it, as it's used directly by Qt
+    // and not via our wxDC::DrawBitmap() which would apply the mask itself, so we must
+    // take it into account here -- the only alternative would be for the controls to do
+    // it themselves, but then this would happen every time the bitmap is drawn, which
+    // would be less efficient than doing it just once here.
+
+    bmpResized.QtBlendMaskWithAlpha();
+#endif
+
     return bmpResized;
 }
 
@@ -114,14 +125,20 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     // Cannot add image to invalid list
     wxCHECK_MSG( m_size != wxSize(0, 0), -1, "Invalid image list" );
 
-    // We use the logical size here as image list images size is specified in
-    // logical pixels, just as window coordinates and sizes are.
-    const wxSize bitmapSize = bitmap.GetLogicalSize();
+    const int index = GetImageCount();
+    const wxSize bitmapSize = bitmap.GetSize();
 
     // There is a special case: a bitmap may contain more than one image,
     // in which case we're supposed to chop it in parts, just as Windows
     // ImageList_Add() does.
-    if ( bitmapSize.x == m_size.x )
+    //
+    // However we don't apply this special case to bitmaps with a scale factor
+    // different from 1: their actual physical size could be the same as ours
+    // for all we know (we don't have a scale factor here and wxImageList API
+    // prevents it from having one), so leave them alone. This is clearly a
+    // hack but OTOH nobody uses multi-image bitmaps with a scale factor and it
+    // avoids problems when using scaled bitmaps in the image list, see #23994.
+    if ( bitmapSize.x == m_size.x || bitmap.GetScaleFactor() != 1.0 )
     {
         m_images.push_back(GetImageListBitmap(bitmap));
     }
@@ -139,7 +156,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         return -1;
     }
 
-    return GetImageCount() - 1;
+    return index;
 }
 
 int wxGenericImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )

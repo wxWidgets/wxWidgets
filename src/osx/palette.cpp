@@ -2,7 +2,6 @@
 // Name:        src/osx/palette.cpp
 // Purpose:     wxPalette
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -69,10 +68,6 @@ wxPalette::wxPalette()
 wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
     Create(n, red, green, blue);
-}
-
-wxPalette::~wxPalette()
-{
 }
 
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)

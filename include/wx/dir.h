@@ -2,7 +2,6 @@
 // Name:        wx/dir.h
 // Purpose:     wxDir is a class for enumerating the files in a directory
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     08.12.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -58,7 +57,7 @@ class WXDLLIMPEXP_BASE wxDirTraverser
 {
 public:
     /// a virtual dtor has been provided since this class has virtual members
-    virtual ~wxDirTraverser() { }
+    virtual ~wxDirTraverser() = default;
     // called for each file found by wxDir::Traverse()
     //
     // return wxDIR_STOP or wxDIR_CONTINUE from here (wxDIR_IGNORE doesn't

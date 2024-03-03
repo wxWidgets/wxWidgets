@@ -83,7 +83,7 @@ wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
 
     - wxPropertyGridInterface's property operation member functions all accept
       a special wxPGPropArg id argument, using which you can refer to properties
-      either by their pointer (for performance) or by their name (for conveniency).
+      either by their pointer (for performance) or by their name (for convenience).
 
     @library{wxpropgrid}
     @category{propgrid}
@@ -368,7 +368,7 @@ public:
             See @ref propgrid_iterator_flags.
     */
     void GetPropertiesWithFlag( wxArrayPGProperty* targetArr,
-                                wxPGProperty::FlagType flags,
+                                wxPGPropertyFlags flags,
                                 bool inverse = false,
                                 int iterFlags = (wxPG_ITERATE_PROPERTIES|wxPG_ITERATE_HIDDEN|wxPG_ITERATE_CATEGORIES) ) const;
 
@@ -472,7 +472,7 @@ public:
     */
     wxVariant GetPropertyValue( wxPGPropArg id );
 
-    /** Return's property's value as wxArrayInt. */
+    /** Returns property's value as wxArrayInt. */
     wxArrayInt GetPropertyValueAsArrayInt( wxPGPropArg id ) const;
 
     /** Returns property's value as wxArrayString. */
@@ -481,7 +481,7 @@ public:
     /** Returns property's value as bool */
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
 
-    /** Return's property's value as wxDateTime. */
+    /** Returns property's value as wxDateTime. */
     wxDateTime GetPropertyValueAsDateTime( wxPGPropArg id ) const;
 
     /** Returns property's value as double-precision floating point number. */
@@ -813,7 +813,7 @@ public:
     wxString SaveEditableState( int includedStates = AllStates ) const;
 
     /**
-        Sets strings listed in the choice dropdown of a wxBoolProperty.
+        Sets strings listed in the choice drop-down of a wxBoolProperty.
 
         Defaults are "True" and "False", so changing them to, say, "Yes" and
         "No" may be useful in some less technical applications.
@@ -824,7 +824,7 @@ public:
     /**
         Set proportion of an auto-stretchable column. wxPG_SPLITTER_AUTO_CENTER
         window style needs to be used to indicate that columns are auto-
-        resizable.
+        resizeable.
 
         @returns Returns @false on failure.
 
@@ -844,7 +844,7 @@ public:
             Text identifier of attribute. See @ref propgrid_property_attributes.
         @param value
             Value of attribute.
-        @param argFlags
+        @param flags
             Optional.
             Use wxPGPropertyValuesFlags::Recurse to set the attribute to child
             properties recursively.
@@ -855,7 +855,7 @@ public:
         - Property is refreshed with new settings.
     */
     void SetPropertyAttribute(wxPGPropArg id, const wxString& attrName, wxVariant value,
-                              wxPGPropertyValuesFlags argFlags = wxPGPropertyValuesFlags::DontRecurse);
+                              wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse);
 
     /**
         Sets property attribute for all applicable properties.
@@ -985,7 +985,7 @@ public:
             to wxPGPropertyValuesFlags::DontRecurse to prevent this.
 
         @remarks
-        - This is mainly for use with textctrl editor. Only some other
+        - This is mainly for use with TextCtrl editor. Only some other
         editors fully support it.
         - Property is refreshed with new settings.
     */
@@ -1194,8 +1194,8 @@ public:
 
     /**
         @remarks This function reselects the property and may cause
-        excess flicker, so to just call Refresh() on a rect
-        of single property, call DrawItem() instead.
+        excess flicker, so to just call Refresh() on a rectangle
+        of a single property, call DrawItem() instead.
     */
     virtual void RefreshProperty( wxPGProperty* p ) = 0;
 };

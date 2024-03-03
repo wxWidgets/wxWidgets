@@ -44,8 +44,8 @@ class wxPreferencesEditorImpl;
 class WXDLLIMPEXP_CORE wxPreferencesPage
 {
 public:
-    wxPreferencesPage() {}
-    virtual ~wxPreferencesPage() {}
+    wxPreferencesPage() = default;
+    virtual ~wxPreferencesPage() = default;
 
     // Name of the page, used e.g. for tabs
     virtual wxString GetName() const = 0;

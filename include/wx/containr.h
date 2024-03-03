@@ -2,7 +2,6 @@
 // Name:        wx/containr.h
 // Purpose:     wxControlContainer and wxNavigationEnabled declarations
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.01
 // Copyright:   (c) 2001, 2011 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -47,7 +46,7 @@ public:
         m_inSetFocus = false;
         m_winLastFocused = nullptr;
     }
-    virtual ~wxControlContainerBase() {}
+    virtual ~wxControlContainerBase() = default;
 
     void SetContainerWindow(wxWindow *winParent)
     {

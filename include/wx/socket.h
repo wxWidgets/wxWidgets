@@ -2,7 +2,6 @@
 // Name:        wx/socket.h
 // Purpose:     Socket handling classes
 // Authors:     Guilhem Lavaux, Guillermo Rodriguez Garcia
-// Modified by:
 // Created:     April 1997
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -312,6 +311,21 @@ private:
 
     wxDECLARE_CLASS(wxSocketBase);
     wxDECLARE_NO_COPY_CLASS(wxSocketBase);
+};
+
+
+// ----------------------------------------------------------------------------
+// wxSocketInitializer: trivial RAII helper for sockets initialization/shutdown
+// ----------------------------------------------------------------------------
+
+class wxSocketInitializer
+{
+public:
+    wxSocketInitializer() { wxSocketBase::Initialize(); }
+    ~wxSocketInitializer() { wxSocketBase::Shutdown(); }
+
+    wxSocketInitializer(const wxSocketInitializer&) = delete;
+    wxSocketInitializer& operator=(const wxSocketInitializer&) = delete;
 };
 
 

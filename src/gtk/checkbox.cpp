@@ -38,41 +38,26 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
     {
         GtkToggleButton *toggle = GTK_TOGGLE_BUTTON(widget);
 
-        if (cb->Is3rdStateAllowedForUser())
-        {
-            // The 3 states cycle like this when clicked:
-            // checked -> undetermined -> unchecked -> checked -> ...
-            bool active = gtk_toggle_button_get_active(toggle) != 0;
-            bool inconsistent = gtk_toggle_button_get_inconsistent(toggle) != 0;
+        // The 3 states cycle like this when clicked:
+        // checked -> undetermined -> unchecked -> checked -> ...
 
+        if (gtk_toggle_button_get_inconsistent(toggle))
+        {
+            // undetermined -> unchecked
             wxGtkEventsDisabler<wxCheckBox> noEvents(cb);
-
-            if (!active && !inconsistent)
-            {
-                // checked -> undetermined
-                gtk_toggle_button_set_active(toggle, true);
-                gtk_toggle_button_set_inconsistent(toggle, true);
-            }
-            else if (!active && inconsistent)
-            {
-                // undetermined -> unchecked
-                gtk_toggle_button_set_inconsistent(toggle, false);
-            }
-            else if (active && !inconsistent)
-            {
-                // unchecked -> checked
-                // nothing to do
-            }
-            else
-            {
-                wxFAIL_MSG(wxT("3state wxCheckBox in unexpected state!"));
-            }
-        }
-        else
-        {
-            // user's action unsets undetermined state:
+            gtk_toggle_button_set_active(toggle, false);
             gtk_toggle_button_set_inconsistent(toggle, false);
         }
+        else if (!gtk_toggle_button_get_active(toggle))
+        {
+            if (cb->Is3rdStateAllowedForUser())
+            {
+                // checked -> undetermined
+                gtk_toggle_button_set_inconsistent(toggle, true);
+            }
+            // else checked -> unchecked
+        }
+        // else unchecked -> checked
     }
 
     wxCommandEvent event(wxEVT_CHECKBOX, cb->GetId());
@@ -156,23 +141,15 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     m_parent->DoAddChild( this );
 
-#ifdef __WXGTK3__
-    // CSS added if the window has wxNO_BORDER inside base class PostCreation()
-    // makes checkbox look broken in the default GTK 3 theme, so avoid doing
-    // this by temporarily turning this flag off.
-    if ( style & wxNO_BORDER )
-        ToggleWindowStyle(wxNO_BORDER);
-#endif
-
     PostCreation(size);
 
-#ifdef __WXGTK3__
-    // Turn it back on if necessary.
-    if ( style & wxNO_BORDER )
-        ToggleWindowStyle(wxNO_BORDER);
-#endif
-
     return true;
+}
+
+void wxCheckBox::GTKRemoveBorder()
+{
+    // CSS added if the window has wxBORDER_NONE makes
+    // checkbox look broken in the default GTK 3 theme
 }
 
 void wxCheckBox::GTKDisableEvents()
@@ -191,37 +168,36 @@ void wxCheckBox::SetValue( bool state )
 {
     wxCHECK_RET( m_widgetCheckbox != nullptr, wxT("invalid checkbox") );
 
-    if (state == GetValue())
-        return;
-
-    wxGtkEventsDisabler<wxCheckBox> noEvents(this);
-    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
+    DoSet3StateValue(state ? wxCHK_CHECKED : wxCHK_UNCHECKED);
 }
 
 bool wxCheckBox::GetValue() const
 {
     wxCHECK_MSG( m_widgetCheckbox != nullptr, false, wxT("invalid checkbox") );
 
-    return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_widgetCheckbox)) != 0;
+    return DoGet3StateValue() != wxCHK_UNCHECKED;
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
 {
-    SetValue(state != wxCHK_UNCHECKED);
-    gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(m_widgetCheckbox),
-                                       state == wxCHK_UNDETERMINED);
+    if (DoGet3StateValue() == state)
+        return;
+
+    GtkToggleButton* tglbtn = GTK_TOGGLE_BUTTON(m_widgetCheckbox);
+
+    wxGtkEventsDisabler<wxCheckBox> noEvents(this);
+    gtk_toggle_button_set_inconsistent(tglbtn, state == wxCHK_UNDETERMINED);
+    gtk_toggle_button_set_active(tglbtn, state == wxCHK_CHECKED);
 }
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-    if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(m_widgetCheckbox)))
-    {
+    GtkToggleButton* tglbtn = GTK_TOGGLE_BUTTON(m_widgetCheckbox);
+
+    if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(tglbtn)))
         return wxCHK_UNDETERMINED;
-    }
-    else
-    {
-        return GetValue() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
-    }
+
+    return gtk_toggle_button_get_active(tglbtn) ? wxCHK_CHECKED : wxCHK_UNCHECKED;
 }
 
 void wxCheckBox::SetLabel( const wxString& label )

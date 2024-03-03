@@ -2,7 +2,6 @@
 // Name:        wx/msw/setup.h
 // Purpose:     Configuration for the library
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -440,7 +439,7 @@
 //
 // Default is 1
 //
-// Recommended setting: 1 (needed by wxSocket)
+// Recommended setting: 1
 #define wxUSE_STOPWATCH     1
 
 // Set wxUSE_FSWATCHER to 1 if you want to enable wxFileSystemWatcher
@@ -711,6 +710,13 @@
 //
 // Recommended setting: 1
 #define wxUSE_WEBVIEW 1
+
+// Use the Chromium Embedded Framework wxWebview backend
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_WEBVIEW_CHROMIUM 0
 
 // Use the IE wxWebView backend
 //
@@ -1328,7 +1334,7 @@
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
-// set to 1 and, under Windows, also to add opengl32.lib and glu32.lib to the
+// set to 1 and, under Windows, also to add opengl32.lib to the
 // list of libraries used to link your application when linking to wxWidgets
 // statically (although this is done implicitly for Microsoft Visual C++ users).
 //
@@ -1546,15 +1552,14 @@
 //
 // Default is 1.
 //
-// Recommended setting: 1 if you need to support XP, as Direct2D is not
-// available there.
+// Recommended setting: 1, GDI+ is always available.
 #define wxUSE_GRAPHICS_GDIPLUS wxUSE_GRAPHICS_CONTEXT
 
 // Enable support for Direct2D-based implementation of wxGraphicsContext.
 //
-// Default is 1 for compilers which support it, i.e. MSVS currently. If you
-// use another compiler and installed the necessary SDK components manually,
-// you need to change this setting.
+// Default is 1 for MSVS. MinGW-w64 supports Direct2D as well, but if you use
+// it, you need to change this setting manually as other MinGW distributions
+// may not support it.
 //
 // Recommended setting: 1 for faster and better quality graphics.
 #if defined(_MSC_VER)

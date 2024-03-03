@@ -2,7 +2,6 @@
 // Name:        wx/clrpicker.h
 // Purpose:     wxColourPickerCtrl base header
 // Author:      Francesco Montorsi (based on Vadim Zeitlin's code)
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Vadim Zeitlin, Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -41,7 +40,7 @@ class WXDLLIMPEXP_CORE wxColourPickerWidgetBase
 {
 public:
     wxColourPickerWidgetBase() : m_colour(*wxBLACK) { }
-    virtual ~wxColourPickerWidgetBase() {}
+    virtual ~wxColourPickerWidgetBase() = default;
 
     wxColour GetColour() const
         { return m_colour; }
@@ -100,8 +99,8 @@ protected:
 class WXDLLIMPEXP_CORE wxColourPickerCtrl : public wxPickerBase
 {
 public:
-    wxColourPickerCtrl() {}
-    virtual ~wxColourPickerCtrl() {}
+    wxColourPickerCtrl() = default;
+    virtual ~wxColourPickerCtrl() = default;
 
 
     wxColourPickerCtrl(wxWindow *parent, wxWindowID id,
@@ -165,7 +164,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOURPICKER_DIALOG_CANCELLED,
 class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {
 public:
-    wxColourPickerEvent() {}
+    wxColourPickerEvent() = default;
     wxColourPickerEvent(wxObject *generator, int id, const wxColour &col, wxEventType commandType = wxEVT_COLOURPICKER_CHANGED)
         : wxCommandEvent(commandType, id),
           m_colour(col)

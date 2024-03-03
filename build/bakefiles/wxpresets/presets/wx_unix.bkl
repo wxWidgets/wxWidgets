@@ -8,7 +8,7 @@ Format-specific notes:
 
 * autoconf:
         Beware that you have to use WX_CONFIG_OPTIONS and
-        WX_CONFIG_CHECK in your configure.in to get at least the
+        WX_CONFIG_CHECK in your configure.ac to get at least the
         WX_CPPFLAGS, WX_CFLAGS, WX_CXXFLAGS, WX_LIBS option values defined.
 
         To detect the WX_* option values typically you also want to use

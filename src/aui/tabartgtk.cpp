@@ -2,7 +2,6 @@
 // Name:        src/aui/tabartgtk.cpp
 // Purpose:     implementation of the wxAuiGTKTabArt
 // Author:      Jens Lody and Teodor Petrov
-// Modified by:
 // Created:     2012-03-23
 // Copyright:   (c) 2012 Jens Lody <jens@codeblocks.org>
 //                  and Teodor Petrov

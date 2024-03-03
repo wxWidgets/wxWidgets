@@ -2,7 +2,6 @@
 // Name:        wx/univ/notebook.h
 // Purpose:     universal version of wxNotebook
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.02.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

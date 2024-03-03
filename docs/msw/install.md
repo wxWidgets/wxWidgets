@@ -230,9 +230,11 @@ executed from a DOS command line window (cmd.exe, *not* Bash sh.exe).
    for more details.
 
    NOTE: For parallel builds, i.e. using `-jN` make option, please run
-         `mingw32-make -jN ... setup_h` first and then rerun the full
-         make command without `setup_h` at the end to work around a bug
-         in the current makefiles.
+         the make command first without the `-jN` option and with `setup_h`
+         target specified, e.g. `mingw32-make ... setup_h`. Only after that
+         run the make command with the same wxWidgets build options but now
+         with the `-jN` option and without `setup_h` target, e.g. `mingw32-make -j4 ...`.
+         All this is necessary to work around the bug in the makefile.
 
 2. To verify your build, change the directory to `samples\minimal` and
    run the same mingw32-make command (with the same parameters there),
@@ -327,9 +329,10 @@ The full list of the build settings follows:
 
 * `RUNTIME_LIBS=static`
 
-  Links static version of C and C++ runtime libraries into the executable, so
-  that the program does not depend on DLLs provided with the compiler (e.g.
-  Visual C++'s msvcrt.dll). Can be used only with MSVC.
+  (VC++ only.) Links static version of C and C++ runtime libraries into the
+  executable, so that the program does not depend on DLLs provided with the
+  compiler.
+
   Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
 
 * `DEBUG_FLAG=0`
@@ -364,7 +367,7 @@ The full list of the build settings follows:
   usable .pdb files with debug information) and this setting makes it
   possible.
 
-* `TARGET_CPU=X64|ARM64|IA64`
+* `TARGET_CPU=X64|ARM|ARM64|IA64`
 
   (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86
   build is performed.
@@ -411,6 +414,12 @@ The full list of the build settings follows:
 Building Applications Using wxWidgets  {#msw_build_apps}
 =====================================
 
+Note: If you want to use CMake for building your project, please see
+@ref overview_cmake.
+
+Using Microsoft Visual C++ IDE         {#msw_build_apps_msvc}
+------------------------------
+
 If you use MSVS for building your project, simply add
 `wxwidgets.props` property sheet to (all) your project(s) using wxWidgets
 by using "View|Property Manager" menu item to open the property manager
@@ -422,10 +431,8 @@ If you've created a new empty project (i.e. chose "Empty Project" in the
 you need to change "Linker|System|SubSystem" in the project properties to
 "Windows", from the default "Console". You don't need to do anything else.
 
-If you want to use CMake for building your project, please see
-@ref overview_cmake.
-
-Otherwise follow the instructions below for "manual" setup of your project.
+Using Other Compilers or Command Line  {#msw_build_apps_other}
+-------------------------------------
 
 We suppose that wxWidgets sources are under the directory `$WXWIN` (notice that
 different tool chains refer to environment variables such as WXWIN in
@@ -433,13 +440,14 @@ different ways, e.g. MSVC users should use `$``(WXWIN)` instead of just
 `$WXWIN`). And we will use `<wx-lib-dir>` as a shortcut for the subdirectory of
 `$WXWIN\lib` which is composed from several parts separated by underscore:
 first, a compiler-specific prefix (e.g. "vc" for MSVC, "gcc" for g++ or the
-value of `COMPILER_PREFIX` if you set it explicitly), then optional "x64" if
-building in 64 bits and finally either "lib" or "dll" depending on whether
-static or dynamic wx libraries are being used.
+value of `COMPILER_PREFIX` if you set it explicitly), then "x64" if building in
+64 bits using MSVC (but not any other compilers) and finally either "lib" or
+"dll" depending on whether static or dynamic wx libraries are being used.
 
 For example, WXWIN could be "c:\wxWidgets\3.4.5" and `<wx-lib-dir>` could be
 `c:\wxWidgets\3.4.5\lib\vc_x64_lib` for 64-bit static libraries built with
-MSVC.
+MSVC but for shared libraries built with gcc it would be
+`c:\wxWidgets\3.4.5\lib\gcc_dll` instead.
 
 Here is what you need to do:
 
@@ -447,27 +455,43 @@ Here is what you need to do:
   - compiler
   - resource compiler
   include paths.
-* If using MSVC, prepend `$WXWIN\include\msvc` to the include paths too.
-  Otherwise, append `<wx-lib-dir>\mswu[d]` to the include paths, where "d" should
+* Append `<wx-lib-dir>\mswu[d]` to the include paths, where "d" should
   be used for debug builds only.
+  When using MSVC, there is a simpler alternative which allows to use the
+  same compiler options for debug and release builds: just prepend
+  `$WXWIN\include\msvc` to the include paths **instead** of the paths above.
 * Define the following symbols for the preprocessor:
   - `__WXMSW__` to ensure you use the correct wxWidgets port.
   - `NDEBUG` if you want to build in release mode, i.e. disable asserts.
   - `WXUSINGDLL` if you are using DLL build of wxWidgets.
 * Add `<wx-lib-dir>` directory described above to the libraries path.
 
-When using MSVC, the libraries are linked automatically using "#pragma
-comment(lib)" feature of this compiler. With all the other compilers you also
-need to:
+When using MSVC, using `include\msvc` in the compiler include path has another
+advantage: the header found in this directory ensures that all the required
+libraries are linked automatically using `#pragma comment(lib)` feature of this
+compiler. With the other compilers, or if you don't use `include\msvc` with
+MSVC, you also need to:
 
 * Add the list of libraries to link with to the linker input. The exact list
   depends on which libraries you use and whether you built wxWidgets in
-  monolithic or default multlib mode and basically should include all the
-  relevant libraries from the directory above, e.g. `wxmsw31ud_core.lib
-  wxbase31ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
-  wxexpatd.lib` for a debug build of an application using the core library only
-  (all wxWidgets applications use the base library).
+  monolithic or default multi-lib mode and basically should include all the
+  relevant libraries from the directory above, e.g. `wxmsw34ud_core.lib
+  wxbase34ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
+  wxexpatd.lib` for a debug build of an application using the core library of
+  wxWidgets 3.4 only (all wxWidgets applications use the base library).
 
+
+For example, to compile your program with gcc using debug wxWidgets DLLs
+you would need to use the following options for the compiler (and `windres`
+resource compiler):
+
+    -I$WXWIN/include -I$WXWIN/lib/gcc_dll/mswud -D__WXMSW__ -DWXUSINGDLL
+
+and
+
+    -L$WXWIN/lib/gcc_dll
+
+for the linker.
 
 Finally, please notice that the makefiles and project files provided with
 wxWidgets samples show which flags should be used when building applications

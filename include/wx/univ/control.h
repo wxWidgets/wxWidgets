@@ -2,7 +2,6 @@
 // Name:        wx/univ/control.h
 // Purpose:     universal wxControl: adds handling of mnemonics
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

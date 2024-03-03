@@ -167,15 +167,14 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
     m_qtToolBar = new wxQtToolbar( parent, this );
     m_qtToolBar->setWindowTitle( wxQtConvertString( name ) );
 
+    if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
+    {
+        return false;
+    }
+
     SetWindowStyleFlag(style);
 
-    // not calling to wxWindow::Create, so do the rest of initialization:
-    if (parent)
-        parent->AddChild( this );
-
-    PostCreation();
-
-    return wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name );
+    return true;
 }
 
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
@@ -307,12 +306,13 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             {
             default:
                 wxFAIL_MSG("unknown toolbar child type");
-                // fall through
+                wxFALLTHROUGH;
             case wxITEM_RADIO:
                 GetActionGroup(pos)->addAction(action);
-                // fall-through
+                wxFALLTHROUGH;
             case wxITEM_CHECK:
                 tool->m_qtToolButton->setCheckable(true);
+                break;
             case wxITEM_DROPDOWN:
             case wxITEM_NORMAL:
                 break;

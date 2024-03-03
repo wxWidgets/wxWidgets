@@ -3,7 +3,6 @@
 // Purpose:     wxSound class (loads and plays short Windows .wav files).
 //              Optional on non-Windows platforms.
 // Author:      Ryan Norton, Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Ryan Norton, Stefan Csomor
 // Licence:     wxWindows licence

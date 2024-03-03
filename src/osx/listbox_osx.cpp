@@ -2,7 +2,6 @@
 // Name:        src/osx/listbox_osx.cpp
 // Purpose:     wxListBox
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -377,7 +376,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     {
         const wxString& item = items[i];
         idx = IsSorted() ? m_strings.sorted->Add(item)
-                         : (m_strings.unsorted->Insert(item, pos), pos++);
+                         : ((void)m_strings.unsorted->Insert(item, pos), pos++);
 
         m_itemsClientData.Insert(nullptr, idx);
         AssignNewItemClientData(idx, clientData, i, type);

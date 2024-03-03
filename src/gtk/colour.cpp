@@ -139,10 +139,6 @@ wxColour::wxColour(const GdkColor& gdkColor)
 }
 #endif
 
-wxColour::~wxColour()
-{
-}
-
 bool wxColour::operator == ( const wxColour& col ) const
 {
     if (m_refData == col.m_refData)

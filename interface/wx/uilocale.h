@@ -198,6 +198,43 @@ public:
     wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const;
 
     /**
+        Gets the full (default), abbreviated or shortest name of the given month.
+
+        This function returns the name in the current locale, use
+        wxDateTime::GetEnglishMonthName() to get the untranslated name if necessary.
+
+        @param month
+            One of wxDateTime::Jan, ..., wxDateTime::Dec values.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
+
+        @see GetWeekDayName()
+        @since 3.3.0
+    */
+    wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form = {});
+
+    /**
+        Gets the full (default), abbreviated or shortest name of the given week day.
+
+        This function returns the name in the current locale, use
+        wxDateTime::GetEnglishWeekDayName() to get the untranslated name if necessary.
+
+        @param weekday
+            One of wxDateTime::Sun, ..., wxDateTime::Sat values.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
+
+        @see GetMonthName()
+    */
+    wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form = {});
+
+    /**
         Query the layout direction of the current locale.
 
         @return

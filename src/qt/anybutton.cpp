@@ -112,6 +112,8 @@ void wxAnyButton::QtSetBitmap( const wxBitmapBundle &bitmapBundle )
 
 void wxAnyButton::SetLabel( const wxString &label )
 {
+    wxAnyButtonBase::SetLabel( label );
+
     m_qtPushButton->setText( wxQtConvertString( label ));
 }
 
@@ -158,7 +160,7 @@ wxAnyButton::State wxAnyButton::QtGetCurrentState() const
         return State_Pressed;
     }
 
-    if ( HasCapture() || m_qtPushButton->hasMouseTracking() || m_qtPushButton->underMouse() )
+    if ( HasCapture() || m_qtPushButton->underMouse() )
     {
         return State_Current;
     }

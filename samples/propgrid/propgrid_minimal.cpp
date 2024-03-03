@@ -2,7 +2,6 @@
 // Name:        samples/propgrid/propgrid_minimal.cpp
 // Purpose:     Minimal portion of wxPropertyGrid sample
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     2008-08-23
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -55,7 +54,7 @@ MyFrame::MyFrame(wxWindow* parent)
     pg->Append( new wxIntProperty("Int Property", wxPG_LABEL) );
     pg->Append( new wxBoolProperty("Bool Property", wxPG_LABEL) );
 
-    SetSize(400, 600);
+    SetClientSize(FromDIP(wxSize(400, 300)));
 }
 
 void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)

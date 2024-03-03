@@ -2,7 +2,6 @@
 // Name:        printfbench.cpp
 // Purpose:     benchmarks for wx*Printf*() functions
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     27/3/2006
 // Copyright:   (c) 2006-2009 Francesco Montorsi
 // Licence:     wxWindows licence

@@ -68,6 +68,16 @@ public:
     // The entries contain platform-dependent identifiers.
     static wxVector<wxString> GetPreferredUILanguages();
 
+#if wxUSE_DATETIME
+    // Helper function used by GetMonthName/GetWeekDayName(): returns 0 if flags is
+    // wxDateTime::Name_Full, 1 if it is wxDateTime::Name_Abbr, and 2 if it is
+    // wxDateTime::Name_Shortest or -1 if the flags is incorrect (and asserts in this case)
+    //
+    // the return value of this function is used as an index into 2D array
+    // containing full names in its first row and abbreviated ones in the 2nd one
+    static int ArrayIndexFromFlag(wxDateTime::NameFlags flags);
+#endif // wxUSE_DATETIME
+
     // Use this locale in the UI.
     //
     // This is not implemented for all platforms, notably not for Mac where the
@@ -80,11 +90,16 @@ public:
     virtual wxLocaleIdent GetLocaleId() const = 0;
     virtual wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat) const = 0;
     virtual wxString GetLocalizedName(wxLocaleName name, wxLocaleForm form) const = 0;
+#if wxUSE_DATETIME
+    virtual wxString GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const = 0;
+    virtual wxString GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const = 0;
+#endif // wxUSE_DATETIME
+
     virtual wxLayoutDirection GetLayoutDirection() const = 0;
     virtual int CompareStrings(const wxString& lhs, const wxString& rhs,
                                int flags) const = 0;
 
-    virtual ~wxUILocaleImpl() { }
+    virtual ~wxUILocaleImpl() = default;
 };
 
 #endif // _WX_PRIVATE_UILOCALE_H_

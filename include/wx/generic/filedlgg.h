@@ -2,7 +2,6 @@
 // Name:        wx/generic/filedlgg.h
 // Purpose:     wxGenericFileDialog
 // Author:      Robert Roebling
-// Modified by:
 // Created:     8/17/99
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
@@ -140,7 +139,7 @@ private:
 class WXDLLIMPEXP_CORE wxFileDialog: public wxGenericFileDialog
 {
 public:
-    wxFileDialog() {}
+    wxFileDialog() = default;
 
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),

@@ -2,7 +2,6 @@
 // Name:        src/osx/core/strconv_cf.cpp
 // Purpose:     Unicode conversion classes
 // Author:      David Elliott
-// Modified by:
 // Created:     2007-07-06
 // Copyright:   (c) 2007 David Elliott
 // Licence:     wxWindows licence

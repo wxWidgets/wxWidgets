@@ -222,7 +222,7 @@ static void realize_callback(GtkWidget* widget, wxGStreamerMediaBackend* be)
 #endif // wxGTK
 
 wxGStreamerMediaBackend::wxGStreamerMediaBackend()
-  : m_player(0), m_video_renderer(0), m_videoSize(0, 0), m_last_state(wxMEDIASTATE_STOPPED), m_loaded(false)
+  : m_player(nullptr), m_video_renderer(nullptr), m_videoSize(0, 0), m_last_state(wxMEDIASTATE_STOPPED), m_loaded(false)
 {
 
 }

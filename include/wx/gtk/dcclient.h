@@ -122,6 +122,7 @@ public:
     PangoFontDescription *m_fontdesc;
 
     void SetUpDC( bool ismem = false );
+    void DontClipSubWindows();
     void Destroy();
 
     virtual void ComputeScaleAndOrigin() override;
@@ -149,6 +150,9 @@ public:
     wxClientDCImpl( wxDC *owner, wxWindow *win );
 
     virtual void DoGetSize(int *width, int *height) const override;
+
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return true; }
 
     wxDECLARE_ABSTRACT_CLASS(wxClientDCImpl);
 };

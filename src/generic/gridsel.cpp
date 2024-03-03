@@ -2,7 +2,6 @@
 // Name:        src/generic/gridsel.cpp
 // Purpose:     wxGridSelection
 // Author:      Stefan Neis
-// Modified by:
 // Created:     20/02/1999
 // Copyright:   (c) Stefan Neis (Stefan.Neis@t-online.de)
 // Licence:     wxWindows licence
@@ -489,7 +488,7 @@ void wxGridSelection::UpdateRows( size_t pos, int numRows )
                         count--;
                     }
                     else
-                        block.SetBottomRow( pos );
+                        block.SetBottomRow( pos - 1 );
                 }
             }
         }
@@ -538,7 +537,7 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
                         count--;
                     }
                     else
-                        block.SetRightCol(pos);
+                        block.SetRightCol( pos - 1 );
                 }
             }
         }

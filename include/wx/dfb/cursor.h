@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxImage;
 class WXDLLIMPEXP_CORE wxCursor : public wxCursorBase
 {
 public:
-    wxCursor() {}
+    wxCursor() = default;
     wxCursor(wxStockCursor id) { InitFromStock(id); }
 #if wxUSE_IMAGE
     wxCursor(const wxImage& image);

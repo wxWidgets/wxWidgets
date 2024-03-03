@@ -229,7 +229,7 @@
     <add-formats files="../../samples/*/*.bkl,../../samples/*/*/*.bkl">
         gnu
     </add-formats>
-    <del-formats files="../../samples/mfc/mfc.bkl">
+    <del-formats files="../../samples/mfc/mfc.bkl,../../samples/webview_chromium/webview_chromium.bkl">
         gnu
     </del-formats>
     <add-flags files="../../samples/*/*.bkl,../../samples/*/*/*.bkl"

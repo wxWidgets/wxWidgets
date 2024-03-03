@@ -79,7 +79,7 @@ private:
 
 #ifndef SWIG
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxAuiNotebookEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxAuiNotebookEvent);
 #endif
 };
 
@@ -189,6 +189,9 @@ protected:
     wxRect m_rect;
     size_t m_tabOffset;
     unsigned int m_flags;
+
+private:
+    int GetCloseButtonState(const wxAuiNotebookPage& page) const;
 };
 
 
@@ -209,6 +212,9 @@ public:
     bool IsDragging() const { return m_isDragging; }
 
     void SetRect(const wxRect& rect) { wxAuiTabContainer::SetRect(rect, this); }
+
+    // Internal helper.
+    void DoShowTab(int idx);
 
 protected:
     // choose the default border for this window
@@ -236,13 +242,18 @@ protected:
 
 protected:
 
-    wxPoint m_clickPt;
-    wxWindow* m_clickTab;
-    bool m_isDragging;
-    wxAuiTabContainerButton* m_hoverButton;
-    wxAuiTabContainerButton* m_pressedButton;
+    wxPoint m_clickPt = wxDefaultPosition;
+    wxWindow* m_clickTab = nullptr;
+    bool m_isDragging = false;
+
+    wxAuiTabContainerButton* m_hoverButton = nullptr;
+    wxAuiTabContainerButton* m_pressedButton = nullptr;
 
     void SetHoverTab(wxWindow* wnd);
+
+private:
+    // Reset dragging-related fields above to their initial values.
+    void DoEndDragging();
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxAuiTabCtrl);
@@ -423,6 +434,7 @@ protected:
     void OnTabBgDClick(wxAuiNotebookEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnDpiChanged(wxDPIChangedEvent& event);
 
     // set selection to the given window (which must be non-null and be one of
     // our pages, otherwise an assert is raised)

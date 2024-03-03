@@ -2,7 +2,6 @@
 // Name:        src/osx/core/timer.cpp
 // Purpose:     wxTimer implementation using CoreFoundation
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-07-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

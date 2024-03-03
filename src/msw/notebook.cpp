@@ -2,7 +2,6 @@
 // Name:        src/msw/notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.06.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -1651,7 +1650,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
     RECT rcBg;
     ::GetThemeBackgroundContentRect(theme,
                                     (HDC) hDC,
-                                    9, /* TABP_PANE */
+                                    TABP_PANE,
                                     0,
                                     &rc,
                                     &rcBg);
@@ -1663,7 +1662,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
                             (
                                 theme,
                                 (HDC) hDC,
-                                9 /* TABP_PANE */,
+                                TABP_PANE,
                                 0,
                                 &rcBg,
                                 &rc
@@ -1674,15 +1673,7 @@ WXHBRUSH wxNotebook::QueryBgBitmap()
 
     {
         SelectInHDC selectBmp(hDCMem, hBmp);
-        ::DrawThemeBackground
-                                (
-                                    theme,
-                                    hDCMem,
-                                    9 /* TABP_PANE */,
-                                    0,
-                                    &rc,
-                                    nullptr
-                                );
+        theme.DrawBackground(hDCMem, rc, TABP_PANE);
     } // deselect bitmap from the memory HDC before using it
 
     return (WXHBRUSH)::CreatePatternBrush(hBmp);
@@ -1738,20 +1729,13 @@ bool wxNotebook::MSWPrintChild(WXHDC hDC, wxWindow *child)
                                     (
                                         theme,
                                         (HDC) hDC,
-                                        9 /* TABP_PANE */,
+                                        TABP_PANE,
                                         0,
                                         &rc,
                                         &rc
                                     );
-            ::DrawThemeBackground
-                                    (
-                                        theme,
-                                        (HDC) hDC,
-                                        9 /* TABP_PANE */,
-                                        0,
-                                        &rc,
-                                        nullptr
-                                    );
+
+            theme.DrawBackground((HDC) hDC, rc, TABP_PANE);
             return true;
         }
     }

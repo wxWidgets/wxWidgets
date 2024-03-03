@@ -50,6 +50,8 @@ public:
         // no custom background initially to avoid confusing people
         m_drawCustomBg = false;
     }
+    MyHtmlWindow(const MyHtmlWindow&) = delete;
+    MyHtmlWindow& operator=(const MyHtmlWindow&) = delete;
 
     virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType WXUNUSED(type),
                                              const wxString& WXUNUSED(url),
@@ -71,7 +73,6 @@ private:
     bool m_drawCustomBg;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyHtmlWindow);
 };
 
 // Define a new frame type: this is going to be our main frame

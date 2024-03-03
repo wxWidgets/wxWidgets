@@ -2,7 +2,6 @@
 // Name:        src/unix/fontutil.cpp
 // Purpose:     Font helper functions for wxX11, wxGTK
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.11.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

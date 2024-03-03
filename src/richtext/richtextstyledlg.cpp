@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextstyledlg.cpp
 // Purpose:
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/5/2006 12:05:31 PM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

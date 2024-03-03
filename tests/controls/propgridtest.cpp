@@ -16,11 +16,12 @@
 #if wxUSE_DATEPICKCTRL
 #include "wx/datectrl.h"
 #endif
-#include "wx/stopwatch.h"
 
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/manager.h"
 #include "wx/propgrid/advprops.h"
+
+#include "waitfor.h"
 
 #include <random>
 #include <vector>
@@ -450,11 +451,7 @@ static wxPropertyGridManager* CreateGrid(int style, int extraStyle)
     pgManager->Refresh();
     pgManager->Update();
     // Wait for update to be done
-    wxStopWatch sw;
-    while ( sw.Time() < 100 )
-    {
-        wxYield();
-    }
+    YieldForAWhile(100);
 
     return pgManager;
 }
@@ -510,7 +507,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             wxPGProperty* p = it.GetProperty();
             if ( p->IsCategory() )
                 FAIL_CHECK(wxString::Format("'%s' is a category (non-private child property expected)", p->GetLabel()).c_str());
-            else if ( p->GetParent()->HasFlag(wxPG_PROP_AGGREGATE) )
+            else if ( p->GetParent()->HasFlag(wxPGPropertyFlags::Aggregate) )
                 FAIL_CHECK(wxString::Format("'%s' is a private child (non-private child property expected)", p->GetLabel()).c_str());
             count++;
         }
@@ -530,7 +527,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         for ( auto it = pgManager->GetVIterator(wxPG_ITERATE_PROPERTIES | wxPG_ITERATE_CATEGORIES); !it.AtEnd(); it.Next() )
         {
             wxPGProperty* p = it.GetProperty();
-            if ( p->GetParent()->HasFlag(wxPG_PROP_AGGREGATE) )
+            if ( p->GetParent()->HasFlag(wxPGPropertyFlags::Aggregate) )
                 FAIL_CHECK(wxString::Format("'%s' is a private child (non-private child property or category expected)", p->GetLabel()).c_str());
             count++;
         }
@@ -542,7 +539,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
             wxPGProperty* p = it.GetProperty();
             if ( (p->GetParent() != p->GetGrid()->GetRoot() && !p->GetParent()->IsExpanded()) )
                 FAIL_CHECK(wxString::Format("'%s' had collapsed parent (only visible properties expected)", p->GetLabel()).c_str());
-            else if ( p->HasFlag(wxPG_PROP_HIDDEN) )
+            else if ( p->HasFlag(wxPGPropertyFlags::Hidden) )
                 FAIL_CHECK(wxString::Format("'%s' was hidden (only visible properties expected)", p->GetLabel()).c_str());
             count++;
         }
@@ -700,7 +697,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         // Delete everything in reverse order
 
         std::vector<wxPGProperty*> array;
-        for ( auto it = pgManager->GetVIterator(wxPG_ITERATE_ALL & ~(wxPG_IT_CHILDREN(wxPG_PROP_AGGREGATE))); !it.AtEnd(); it.Next() )
+        for ( auto it = pgManager->GetVIterator(wxPG_ITERATE_ALL & ~(wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate))); !it.AtEnd(); it.Next() )
         {
             array.push_back(it.GetProperty());
         }
@@ -713,7 +710,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         }
 
         // Check if grid is empty.
-        auto it = pgManager->GetVIterator(wxPG_ITERATE_ALL & ~(wxPG_IT_CHILDREN(wxPG_PROP_AGGREGATE)));
+        auto it = pgManager->GetVIterator(wxPG_ITERATE_ALL & ~(wxPG_IT_CHILDREN(wxPGPropertyFlags::Aggregate)));
         if ( !it.AtEnd() )
         {
             FAIL_CHECK("Not all properties are deleted");
@@ -722,11 +719,7 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
         pgManager->Refresh();
         pgManager->Update();
         // Wait for update to be done
-        wxStopWatch sw;
-        while ( sw.Time() < 100 )
-        {
-            wxYield();
-        }
+        YieldForAWhile(100);
     }
 
     SECTION("Default_Values")
@@ -826,9 +819,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
 #if wxUSE_DATETIME
         wxDateTime dt1 = wxDateTime::Now();
-        dt1.SetYear(dt1.GetYear() - 1);
+        if ( dt1.GetMonth() == wxDateTime::Feb && dt1.GetDay() == 29 )
+            dt1.SetDay(28);
 
-        wxDateTime dt2 = wxDateTime::Now();
+        wxDateTime dt2 = dt1;
+        dt1.SetYear(dt1.GetYear() - 1);
         dt2.SetYear(dt2.GetYear() - 10);
 #endif
 
@@ -1484,8 +1479,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
     SECTION("SetSplitterPosition")
     {
+#ifndef __WXQT__
         const int trySplitterPos = 50;
-
+#else
+        const int trySplitterPos = 51; // FIXME!
+#endif
         int style = wxPG_AUTO_SORT;  // wxPG_SPLITTER_AUTO_CENTER;
         ReplaceGrid(pgManager, style, -1);
 
@@ -1601,22 +1599,22 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 wxPGProperty* p = *it;
 
                 // Save initial flags
-                wxPGProperty::FlagType oldFlags = 0;
-                if ( p->HasFlag(wxPG_PROP_COLLAPSED) )
+                wxPGPropertyFlags oldFlags = wxPGPropertyFlags::Null;
+                if ( p->HasFlag(wxPGPropertyFlags::Collapsed) )
                 {
-                    oldFlags |= wxPG_PROP_COLLAPSED;
+                    oldFlags |= wxPGPropertyFlags::Collapsed;
                 }
-                if ( p->HasFlag(wxPG_PROP_DISABLED) )
+                if ( p->HasFlag(wxPGPropertyFlags::Disabled) )
                 {
-                    oldFlags |= wxPG_PROP_DISABLED;
+                    oldFlags |= wxPGPropertyFlags::Disabled;
                 }
-                if ( p->HasFlag(wxPG_PROP_HIDDEN) )
+                if ( p->HasFlag(wxPGPropertyFlags::Hidden) )
                 {
-                    oldFlags |= wxPG_PROP_HIDDEN;
+                    oldFlags |= wxPGPropertyFlags::Hidden;
                 }
-                if ( p->HasFlag(wxPG_PROP_NOEDITOR) )
+                if ( p->HasFlag(wxPGPropertyFlags::NoEditor) )
                 {
-                    oldFlags |= wxPG_PROP_NOEDITOR;
+                    oldFlags |= wxPGPropertyFlags::NoEditor;
                 }
 
                 wxString flags;
@@ -1656,37 +1654,37 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
                 // Verify if flags have been properly set
                 if ( flags.Find("COLLAPSED") != wxNOT_FOUND &&
-                    !p->HasFlag(wxPG_PROP_COLLAPSED) )
+                    !p->HasFlag(wxPGPropertyFlags::Collapsed) )
                 {
                     FAIL_CHECK(wxString::Format("Error setting flag from string 'COLLAPSED' for property '%s'",
                         p->GetName()).c_str());
                 }
                 if ( flags.Find("COLLAPSED") == wxNOT_FOUND &&
-                    p->HasFlag(wxPG_PROP_COLLAPSED) )
+                    p->HasFlag(wxPGPropertyFlags::Collapsed) )
                 {
                     FAIL_CHECK(wxString::Format("Error resetting flag from string 'COLLAPSED'for property '%s'",
                         p->GetName()).c_str());
                 }
                 if ( flags.Find("DISABLED") != wxNOT_FOUND &&
-                    !p->HasFlag(wxPG_PROP_DISABLED) )
+                    !p->HasFlag(wxPGPropertyFlags::Disabled) )
                 {
                     FAIL_CHECK(wxString::Format("Error setting flag from string 'DISABLED' for property '%s'",
                         p->GetName()).c_str());
                 }
                 if ( flags.Find("DISABLED") == wxNOT_FOUND &&
-                    p->HasFlag(wxPG_PROP_DISABLED) )
+                    p->HasFlag(wxPGPropertyFlags::Disabled) )
                 {
                     FAIL_CHECK(wxString::Format("Error resetting flag from string 'DISABLED' for property '%s'",
                         p->GetName()).c_str());
                 }
                 if ( flags.Find("HIDDEN") != wxNOT_FOUND &&
-                    !p->HasFlag(wxPG_PROP_HIDDEN) )
+                    !p->HasFlag(wxPGPropertyFlags::Hidden) )
                 {
                     FAIL_CHECK(wxString::Format("Error setting flag from string 'HIDDEN' for property '%s'",
                         p->GetName()).c_str());
                 }
                 if ( flags.Find("HIDDEN") == wxNOT_FOUND &&
-                    p->HasFlag(wxPG_PROP_HIDDEN) )
+                    p->HasFlag(wxPGPropertyFlags::Hidden) )
                 {
                     FAIL_CHECK(wxString::Format("Error resetting flag from string 'HIDDEN' for property '%s'",
                         p->GetName()).c_str());
@@ -1695,8 +1693,8 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 // Get individual flags
                 bool ok;
 
-                flags = p->GetFlagsAsString(wxPG_PROP_COLLAPSED);
-                if ( p->HasFlag(wxPG_PROP_COLLAPSED) )
+                flags = p->GetFlagsAsString(wxPGPropertyFlags::Collapsed);
+                if ( p->HasFlag(wxPGPropertyFlags::Collapsed) )
                 {
                     ok = (flags == "COLLAPSED");
                 }
@@ -1706,12 +1704,12 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_COLLAPSED flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::Collapsed flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
-                flags = p->GetFlagsAsString(wxPG_PROP_DISABLED);
-                if ( p->HasFlag(wxPG_PROP_DISABLED) )
+                flags = p->GetFlagsAsString(wxPGPropertyFlags::Disabled);
+                if ( p->HasFlag(wxPGPropertyFlags::Disabled) )
                 {
                     ok = (flags == "DISABLED");
                 }
@@ -1721,12 +1719,12 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_DISABLED flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::Disabled flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
-                flags = p->GetFlagsAsString(wxPG_PROP_HIDDEN);
-                if ( p->HasFlag(wxPG_PROP_HIDDEN) )
+                flags = p->GetFlagsAsString(wxPGPropertyFlags::Hidden);
+                if ( p->HasFlag(wxPGPropertyFlags::Hidden) )
                 {
                     ok = (flags == "HIDDEN");
                 }
@@ -1736,12 +1734,12 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_HIDDEN flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::Hidden flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
-                flags = p->GetFlagsAsString(wxPG_PROP_NOEDITOR);
-                if ( p->HasFlag(wxPG_PROP_NOEDITOR) )
+                flags = p->GetFlagsAsString(wxPGPropertyFlags::NoEditor);
+                if ( p->HasFlag(wxPGPropertyFlags::NoEditor) )
                 {
                     ok = (flags == "NOEDITOR");
                 }
@@ -1751,13 +1749,13 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_NOEDITOR flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::NoEditor flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
                 // Get all flags
-                flags = p->GetFlagsAsString(wxPG_STRING_STORED_FLAGS);
-                if ( p->HasFlag(wxPG_PROP_COLLAPSED) )
+                flags = p->GetFlagsAsString(wxPGPropertyFlags::StringStoredFlags);
+                if ( p->HasFlag(wxPGPropertyFlags::Collapsed) )
                 {
                     ok = (flags.Find("COLLAPSED") != wxNOT_FOUND);
                 }
@@ -1767,11 +1765,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_COLLAPSED flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::Collapsed flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
-                if ( p->HasFlag(wxPG_PROP_DISABLED) )
+                if ( p->HasFlag(wxPGPropertyFlags::Disabled) )
                 {
                     ok = (flags.Find("DISABLED") != wxNOT_FOUND);
                 }
@@ -1781,11 +1779,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_DISBALED flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::Disabled flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
-                if ( p->HasFlag(wxPG_PROP_HIDDEN) )
+                if ( p->HasFlag(wxPGPropertyFlags::Hidden) )
                 {
                     ok = (flags.Find("HIDDEN") != wxNOT_FOUND);
                 }
@@ -1795,11 +1793,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_HIDDEN flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::Hidden flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
-                if ( p->HasFlag(wxPG_PROP_NOEDITOR) )
+                if ( p->HasFlag(wxPGPropertyFlags::NoEditor) )
                 {
                     ok = (flags.Find("NOEDITOR") != wxNOT_FOUND);
                 }
@@ -1809,15 +1807,15 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
                 }
                 if ( !ok )
                 {
-                    FAIL_CHECK(wxString::Format("Invalid string for wxPG_PROP_NOEDITOR flag for property '%s'",
+                    FAIL_CHECK(wxString::Format("Invalid string for wxPGPropertyFlags::NoEditor flag for property '%s'",
                         p->GetName()).c_str());
                 }
 
                 // Restore original flags
-                p->ChangeFlag(wxPG_PROP_COLLAPSED, (oldFlags & wxPG_PROP_COLLAPSED) != 0);
-                p->ChangeFlag(wxPG_PROP_DISABLED, (oldFlags & wxPG_PROP_DISABLED) != 0);
-                p->ChangeFlag(wxPG_PROP_HIDDEN, (oldFlags & wxPG_PROP_HIDDEN) != 0);
-                p->ChangeFlag(wxPG_PROP_NOEDITOR, (oldFlags & wxPG_PROP_NOEDITOR) != 0);
+                p->ChangeFlag(wxPGPropertyFlags::Collapsed, !!(oldFlags & wxPGPropertyFlags::Collapsed));
+                p->ChangeFlag(wxPGPropertyFlags::Disabled, !!(oldFlags & wxPGPropertyFlags::Disabled));
+                p->ChangeFlag(wxPGPropertyFlags::Hidden, !!(oldFlags & wxPGPropertyFlags::Hidden));
+                p->ChangeFlag(wxPGPropertyFlags::NoEditor, !!(oldFlags & wxPGPropertyFlags::NoEditor));
             }
         }
     }

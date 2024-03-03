@@ -800,10 +800,8 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
         return nullptr;
     }
 
-    wxString encoding(wxT("UTF-8"));
-
     std::unique_ptr<wxXmlDocument> doc(new wxXmlDocument);
-    if (!doc->Load(*stream, encoding))
+    if (!doc->Load(*stream))
     {
         wxLogError(_("Cannot load resources from file '%s'."), filename);
         return nullptr;
@@ -1780,12 +1778,43 @@ static wxColour GetSystemColour(const wxString& name)
     return wxNullColour;
 }
 
-wxColour wxXmlResourceHandlerImpl::GetColour(const wxString& param, const wxColour& defaultv)
+wxColour
+wxXmlResourceHandlerImpl::GetColour(const wxString& param,
+                                    const wxColour& defaultLight,
+                                    const wxColour& defaultDark)
 {
-    wxString v = GetParamValue(param);
+    const wxString& values = GetParamValue(param);
 
-    if ( v.empty() )
-        return defaultv;
+    if ( values.empty() )
+        return wxSystemSettings::SelectLightDark(defaultLight, defaultDark);
+
+    wxStringTokenizer tk(values, "|");
+    wxString v = tk.GetNextToken();
+
+    while ( tk.HasMoreTokens() )
+    {
+        wxString altCol = tk.GetNextToken();
+        wxString altV;
+        if ( altCol.StartsWith("dark:", &altV) )
+        {
+            if ( wxSystemSettings::GetAppearance().IsDark() )
+                v = altV;
+            //else: just ignore it, it's valid but not used
+        }
+        else
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format
+                (
+                    "unrecognized alternative colour specification \"%s\"",
+                    altCol
+                )
+            );
+            return wxNullColour;
+        }
+    }
 
     wxColour clr;
 
@@ -1859,7 +1888,7 @@ wxBitmap LoadBitmapFromFS(wxXmlResourceHandlerImpl* impl,
     wxImage img(*(fsfile->GetStream()));
     delete fsfile;
 #else
-    wxImage img(name);
+    wxImage img(path);
 #endif
 
     if (!img.IsOk())
@@ -2231,20 +2260,22 @@ bool wxXmlResourceHandlerImpl::IsObjectNode(const wxXmlNode *node) const
                     node->GetName() == wxS("object_ref"));
 }
 
-wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node)
+wxString wxXmlResourceHandlerImpl::GetNodeName(const wxXmlNode *node) const
 {
-    const wxXmlNode *n = node;
-    if (n == nullptr) return wxEmptyString;
-    n = n->GetChildren();
+    return node ? node->GetName() : wxString{};
+}
 
-    while (n)
-    {
-        if (n->GetType() == wxXML_TEXT_NODE ||
-            n->GetType() == wxXML_CDATA_SECTION_NODE)
-            return n->GetContent();
-        n = n->GetNext();
-    }
-    return wxEmptyString;
+wxString
+wxXmlResourceHandlerImpl::GetNodeAttribute(const wxXmlNode *node,
+                                           const wxString& attrName,
+                                           const wxString& defaultValue) const
+{
+    return node ? node->GetAttribute(attrName, defaultValue) : defaultValue;
+}
+
+wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node) const
+{
+    return node ? node->GetNodeContent() : wxString{};
 }
 
 wxXmlNode *wxXmlResourceHandlerImpl::GetNodeParent(const wxXmlNode *node) const

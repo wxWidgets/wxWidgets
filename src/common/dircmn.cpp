@@ -2,7 +2,6 @@
 // Name:        src/common/dircmn.cpp
 // Purpose:     wxDir methods common to all implementations
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.05.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

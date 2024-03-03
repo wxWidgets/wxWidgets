@@ -16,7 +16,7 @@
 class WXDLLIMPEXP_CORE wxRadioButton: public wxRadioButtonBase
 {
 public:
-    wxRadioButton() { }
+    wxRadioButton() = default;
     wxRadioButton( wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,
@@ -55,6 +55,8 @@ protected:
 
 private:
     typedef wxControl base_type;
+    // Only used by wxRB_SINGLE
+    GtkWidget* m_hiddenButton = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS(wxRadioButton);
 };

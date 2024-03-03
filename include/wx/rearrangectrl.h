@@ -46,7 +46,7 @@ public:
     // --------------
 
     // default ctor, call Create() later
-    wxRearrangeList() { }
+    wxRearrangeList() = default;
 
     // ctor creating the control, the arguments are the same as for
     // wxCheckListBox except for the extra order array which defines the

@@ -1262,6 +1262,9 @@ void wxNSTextViewControl::SetStyle(long start,
             case wxTEXT_ALIGNMENT_CENTER:
                 [m_textView setAlignment:NSCenterTextAlignment];
                 break;
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
+                [m_textView setAlignment:NSJustifiedTextAlignment];
+                break;
             default:
                 [m_textView setAlignment:NSLeftTextAlignment];
                 break;

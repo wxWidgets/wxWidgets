@@ -2,7 +2,6 @@
 // Name:        src/osx/iphone/nonownedwnd.mm
 // Purpose:     non owned window for iphone
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2008-06-20
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

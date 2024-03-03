@@ -63,6 +63,10 @@ public:
     // NOTE: also wxWindow::Set/GetLabel, wxWindow::Set/GetBackgroundColour,
     //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
+    // overridden/inherited wxWindow methods
+    virtual wxVisualAttributes GetDefaultAttributes() const override;
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
     // Helper used by this class itself and native MSW implementation that

@@ -2,7 +2,6 @@
 // Name:        wx/dirdlg.h
 // Purpose:     wxDirDialog base class
 // Author:      Robert Roebling
-// Modified by:
 // Created:
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows Licence
@@ -54,7 +53,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxDirSelectorPromptStr[];
 class WXDLLIMPEXP_CORE wxDirDialogBase : public wxDialog
 {
 public:
-    wxDirDialogBase() {}
+    wxDirDialogBase() = default;
     wxDirDialogBase(wxWindow *parent,
                     const wxString& title = wxASCII_STR(wxDirSelectorPromptStr),
                     const wxString& defaultPath = wxEmptyString,
@@ -66,7 +65,7 @@ public:
         Create(parent, title, defaultPath, style, pos, sz, name);
     }
 
-    virtual ~wxDirDialogBase() {}
+    virtual ~wxDirDialogBase() = default;
 
 
     bool Create(wxWindow *parent,

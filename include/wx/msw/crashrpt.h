@@ -2,7 +2,6 @@
 // Name:        wx/msw/crashrpt.h
 // Purpose:     helpers for the structured exception handling (SEH) under Win32
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     13.07.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

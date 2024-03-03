@@ -378,7 +378,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     m_parent->DoAddChild( this );
 
     PostCreation(size);
-    SetInitialSize(size); // need this too because this is a wxControlWithItems
 
     g_signal_connect_after (selection, "changed",
                             G_CALLBACK (gtk_listitem_changed_callback), this);
@@ -936,7 +935,15 @@ wxSize wxListBox::DoGetBestSize() const
     // Don't make the listbox too tall but don't make it too small either
     lbHeight = (cy+4) * wxMin(wxMax(count, 3), 10);
 
-    return wxSize(lbWidth, lbHeight);
+    wxSize size(lbWidth, lbHeight);
+#ifdef __WXGTK3__
+    // Ensure size is at least the required minimum
+    wxSize min;
+    gtk_widget_get_preferred_width(m_widget, &min.x, nullptr);
+    gtk_widget_get_preferred_height_for_width(m_widget, min.x, &min.y, nullptr);
+    size.IncTo(min);
+#endif
+    return size;
 }
 
 // static

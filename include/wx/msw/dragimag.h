@@ -3,7 +3,6 @@
 // Purpose:     wxDragImage class: a kind of a cursor, that can cope
 //              with more sophisticated images
 // Author:      Julian Smart
-// Modified by:
 // Created:     08/04/99
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

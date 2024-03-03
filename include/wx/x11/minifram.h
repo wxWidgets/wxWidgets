@@ -4,7 +4,6 @@
 //              If there is no equivalent on your platform, just make it a
 //              normal frame.
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -20,7 +19,7 @@ class WXDLLIMPEXP_CORE wxMiniFrame: public wxFrame {
     wxDECLARE_DYNAMIC_CLASS(wxMiniFrame);
 
 public:
-    inline wxMiniFrame() {}
+    inline wxMiniFrame() = default;
     inline wxMiniFrame(wxWindow *parent,
         wxWindowID id,
         const wxString& title,
@@ -33,7 +32,7 @@ public:
         Create(parent, id, title, pos, size, style, name);
     }
 
-    virtual ~wxMiniFrame() {}
+    virtual ~wxMiniFrame() = default;
 protected:
 };
 

@@ -2,7 +2,6 @@
 // Name:        wx/glcanvas.h
 // Purpose:     wxGLCanvas base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -258,11 +257,6 @@ public:
     // of the list of attributes passed at ctor when no wxGLAttributes is used
     // as a parameter
     wxGLContextAttrs& GetGLCTXAttrs() { return m_GLCTXAttrs; }
-
-#ifdef __WXUNIVERSAL__
-    // resolve the conflict with wxWindowUniv::SetCurrent()
-    virtual bool SetCurrent(bool doit) { return wxWindow::SetCurrent(doit); }
-#endif
 
 protected:
     // override this to implement SetColour() in GL_INDEX_MODE

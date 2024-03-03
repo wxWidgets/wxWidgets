@@ -48,6 +48,7 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
 
+#include "wx/msw/private/custompaint.h"
 #include "wx/msw/private/darkmode.h"
 
 #include <memory>
@@ -340,13 +341,13 @@ wxColour wxDarkModeSettings::GetMenuColour(wxMenuColour which)
             return wxColour(0xffffff);
 
         case wxMenuColour::StandardBg:
-            return wxColour(0x6d6d6d);
+            return GetColour(wxSYS_COLOUR_MENU);
 
         case wxMenuColour::DisabledFg:
-            return wxColour(0x414141);
+            return wxColour(0x6d6d6d);
 
         case wxMenuColour::HotBg:
-            return wxColour(0x2b2b2b);
+            return wxColour(0x414141);
     }
 
     wxFAIL_MSG( "unreachable" );
@@ -431,32 +432,35 @@ HBRUSH GetBackgroundBrush()
     return brush ? GetHbrushOf(*brush) : 0;
 }
 
+#if wxUSE_IMAGE
+
+static void
+InvertBitmapPixel(unsigned char& r, unsigned char& g, unsigned char& b,
+                  unsigned char& WXUNUSED(a))
+{
+    wxImage::RGBValue rgb(r, g, b);
+    wxImage::HSVValue hsv = wxImage::RGBtoHSV(rgb);
+
+    // There is no really good way to convert normal colours to dark mode,
+    // but try to do a bit better than just inverting the value because
+    // this results in colours which are much too dark.
+    hsv.value = sqrt(1.0 - hsv.value*hsv.value);
+
+    rgb = wxImage::HSVtoRGB(hsv);
+
+    r = rgb.red;
+    g = rgb.green;
+    b = rgb.blue;
+}
+
+#endif // wxUSE_IMAGE
+
 wxBitmap InvertBitmap(const wxBitmap& bmp)
 {
 #if wxUSE_IMAGE
-    wxImage image = bmp.ConvertToImage();
-
-    unsigned char *data = image.GetData();
-    const int len = image.GetWidth()*image.GetHeight();
-    for ( int i = 0; i < len; ++i, data += 3 )
-    {
-        wxImage::RGBValue rgb(data[0], data[1], data[2]);
-        wxImage::HSVValue hsv = wxImage::RGBtoHSV(rgb);
-
-        // There is no really good way to convert normal colours to dark mode,
-        // but try to do a bit better than just inverting the value because
-        // this results in colours which are much too dark.
-        hsv.value = sqrt(1.0 - hsv.value*hsv.value);
-
-        rgb = wxImage::HSVtoRGB(hsv);
-        data[0] = rgb.red;
-        data[1] = rgb.green;
-        data[2] = rgb.blue;
-    }
-
-    return wxBitmap(image);
+    return wxMSWImpl::PostPaintEachPixel(bmp, InvertBitmapPixel);
 #else // !wxUSE_IMAGE
-    return wxBitmap();
+    return bmp;
 #endif // wxUSE_IMAGE/!wxUSE_IMAGE
 }
 
@@ -466,29 +470,18 @@ bool PaintIfNecessary(HWND hwnd, WXWNDPROC defWndProc)
     if ( !wxMSWImpl::ShouldUseDarkMode() )
         return false;
 
-    const RECT rc = wxGetClientRect(hwnd);
-    const wxSize size{rc.right - rc.left, rc.bottom - rc.top};
-
-    // Don't bother doing anything with the empty windows.
-    if ( size == wxSize() )
-        return false;
-
-    // Ask the control to paint itself on the given bitmap.
-    wxBitmap bmp(size);
-    {
-        wxMemoryDC mdc(bmp);
-
-        WPARAM wparam = (WPARAM)GetHdcOf(mdc);
-        if ( defWndProc )
-            ::CallWindowProc(defWndProc, hwnd, WM_PAINT, wparam, 0);
-        else
-            ::DefWindowProc(hwnd, WM_PAINT, wparam, 0);
-    }
-
-    PAINTSTRUCT ps;
-    wxDCTemp dc(::BeginPaint(hwnd, &ps), size);
-    dc.DrawBitmap(InvertBitmap(bmp), 0, 0);
-    ::EndPaint(hwnd, &ps);
+    wxMSWImpl::CustomPaint
+    (
+        hwnd,
+        [defWndProc](HWND hwnd, WPARAM wParam)
+        {
+            if ( defWndProc )
+                ::CallWindowProc(defWndProc, hwnd, WM_PAINT, wParam, 0);
+            else
+                ::DefWindowProc(hwnd, WM_PAINT, wParam, 0);
+        },
+        InvertBitmap
+    );
 
     return true;
 #else // !wxUSE_IMAGE
@@ -690,7 +683,7 @@ HandleMenuMessage(WXLRESULT* result,
                 if ( itemState & ODS_NOACCEL)
                     drawTextFlags |= DT_HIDEPREFIX;
 
-                wxUxThemeHandle menuTheme(GetHwndOf(w), L"Menu");
+                wxUxThemeHandle menuTheme(w, L"Menu");
                 ::DrawThemeTextEx(menuTheme, dis.hDC, MENU_BARITEM, partState,
                                   buf, mii.cch, drawTextFlags, rcItem,
                                   &textOpts);

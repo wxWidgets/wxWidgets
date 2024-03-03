@@ -2,7 +2,6 @@
 // Name:        src/common/url.cpp
 // Purpose:     URL parser
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     20/07/1997
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -31,7 +30,9 @@ wxIMPLEMENT_CLASS(wxURL, wxURI);
 wxProtoInfo *wxURL::ms_protocols = nullptr;
 
 // Enforce linking of protocol classes:
+#if wxUSE_PROTOCOL_FILE
 USE_PROTOCOL(wxFileProto)
+#endif
 
 #if wxUSE_PROTOCOL_HTTP
 USE_PROTOCOL(wxHTTP)

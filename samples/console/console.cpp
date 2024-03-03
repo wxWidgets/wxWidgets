@@ -2,7 +2,6 @@
 // Name:        samples/console/console.cpp
 // Purpose:     A sample console (as opposed to GUI) program using wxWidgets
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.10.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

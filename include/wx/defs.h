@@ -82,14 +82,7 @@
 #ifdef __VISUALC__
     /*  the only "real" warning here is 4244 but there are just too many of them */
     /*  in our code... one day someone should go and fix them but until then... */
-#   pragma warning(disable:4097)    /*  typedef used as class */
-#   pragma warning(disable:4201)    /*  nonstandard extension used: nameless struct/union */
 #   pragma warning(disable:4244)    /*  conversion from double to float */
-#   pragma warning(disable:4355)    /* 'this' used in base member initializer list */
-#   pragma warning(disable:4511)    /*  copy ctor couldn't be generated */
-#   pragma warning(disable:4512)    /*  operator=() couldn't be generated */
-#   pragma warning(disable:4514)   /*  unreferenced inline func has been removed */
-#   pragma warning(disable:4710)    /*  function not inlined */
 
     /*
         TODO: this warning should really be enabled as it can be genuinely
@@ -163,6 +156,12 @@
 #   endif
 #endif
 
+/* Prevents conflicts between sys/types.h and winsock.h with Cygwin, */
+/* when using Windows sockets. */
+#if defined(__CYGWIN__) && defined(__WINDOWS__)
+#define __USE_W32_SOCKETS
+#endif
+
 /*  ---------------------------------------------------------------------------- */
 /*  wxWidgets version and compatibility defines */
 /*  ---------------------------------------------------------------------------- */
@@ -197,6 +196,15 @@
     #endif
 #else
     #define wxCHECK_CXX_STD(ver) 0
+#endif
+
+/**
+ * C++ header checks
+ */
+#if defined(__has_include)
+    #define wxHAS_CXX17_INCLUDE(header) (wxCHECK_CXX_STD(201703L) && __has_include(header))
+#else
+    #define wxHAS_CXX17_INCLUDE(header) 0
 #endif
 
 /*  ---------------------------------------------------------------------------- */
@@ -774,19 +782,22 @@ typedef short int WXTYPE;
 
 
 #define wxDEFINE_COMPARISON(op, T1, T2, cmp) \
-    inline bool operator op(T1 x, T2 y) { return cmp(x, y, op); }
+    friend bool operator op(T1 x, T2 y) { return cmp(x, y, op); }
 
 #define wxDEFINE_COMPARISON_REV(op, T1, T2, cmp, oprev) \
-    inline bool operator op(T2 y, T1 x) { return cmp(x, y, oprev); }
+    friend bool operator op(T2 y, T1 x) { return cmp(x, y, oprev); }
 
 #define wxDEFINE_COMPARISON_BY_REV(op, T1, T2, oprev) \
-    inline bool operator op(T1 x, T2 y) { return y oprev x; }
+    friend bool operator op(T1 x, T2 y) { return y oprev x; }
 
 /*
     Define all 6 comparison operators (==, !=, <, <=, >, >=) for the given
     types in the specified order. The implementation is provided by the cmp
     macro. Normally wxDEFINE_ALL_COMPARISONS should be used as comparison
     operators are usually symmetric.
+
+    Note that comparison operators are defined as hidden friends and so this
+    macro can only be used inside the class declaration.
  */
 #define wxDEFINE_COMPARISONS(T1, T2, cmp) \
     wxFOR_ALL_COMPARISONS_3(wxDEFINE_COMPARISON, T1, T2, cmp)
@@ -795,6 +806,9 @@ typedef short int WXTYPE;
     Define all 6 comparison operators (==, !=, <, <=, >, >=) for the given
     types in the specified order, implemented in terms of existing operators
     for the reverse order.
+
+    Note that comparison operators are defined as hidden friends and so this
+    macro can only be used inside the class declaration.
  */
 #define wxDEFINE_COMPARISONS_BY_REV(T1, T2) \
     wxFOR_ALL_COMPARISONS_2_REV(wxDEFINE_COMPARISON_BY_REV, T1, T2)

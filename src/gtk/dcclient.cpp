@@ -454,6 +454,14 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
     gdk_gc_set_clip_rectangle( m_bgGC, nullptr );
 }
 
+void wxWindowDCImpl::DontClipSubWindows()
+{
+    gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
+    gdk_gc_set_subwindow( m_brushGC, GDK_INCLUDE_INFERIORS );
+    gdk_gc_set_subwindow( m_textGC, GDK_INCLUDE_INFERIORS );
+    gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
+}
+
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 {
     wxCHECK_RET( m_window, wxT("GetSize() doesn't work without window") );
@@ -855,6 +863,9 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
     if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
+
+    wxDouble maxR = std::min(width, height) / 2.0;
+    if ( radius > maxR ) radius = maxR;
 
     wxCoord xx = XLOG2DEV(x);
     wxCoord yy = YLOG2DEV(y);
@@ -2018,14 +2029,33 @@ void wxWindowDCImpl::DestroyClippingRegion()
 
 void wxWindowDCImpl::Destroy()
 {
-    if (m_penGC) wxFreePoolGC( m_penGC );
-    m_penGC = nullptr;
-    if (m_brushGC) wxFreePoolGC( m_brushGC );
-    m_brushGC = nullptr;
-    if (m_textGC) wxFreePoolGC( m_textGC );
-    m_textGC = nullptr;
-    if (m_bgGC) wxFreePoolGC( m_bgGC );
-    m_bgGC = nullptr;
+    if (m_penGC)
+    {
+        gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
+        wxFreePoolGC( m_penGC );
+        m_penGC = nullptr;
+    }
+
+    if (m_brushGC)
+    {
+        gdk_gc_set_subwindow( m_brushGC, GDK_CLIP_BY_CHILDREN );
+        wxFreePoolGC( m_brushGC );
+        m_brushGC = nullptr;
+    }
+
+    if (m_textGC)
+    {
+        gdk_gc_set_subwindow( m_textGC, GDK_CLIP_BY_CHILDREN );
+        wxFreePoolGC( m_textGC );
+        m_textGC = nullptr;
+    }
+
+    if (m_bgGC)
+    {
+        gdk_gc_set_subwindow( m_bgGC, GDK_CLIP_BY_CHILDREN );
+        wxFreePoolGC( m_bgGC );
+        m_bgGC = nullptr;
+    }
 }
 
 void wxWindowDCImpl::SetDeviceOrigin( wxCoord x, wxCoord y )

@@ -2,7 +2,6 @@
 // Name:        wx/generic/dcpsg.h
 // Purpose:     wxPostScriptDC class
 // Author:      Julian Smart and others
-// Modified by:
 // Copyright:   (c) Julian Smart and Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

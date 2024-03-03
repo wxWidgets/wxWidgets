@@ -2,7 +2,6 @@
 // Name:        wx/protocol/protocol.h
 // Purpose:     Protocol base class
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     10/07/1997
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence

@@ -12,7 +12,7 @@
 class WXDLLIMPEXP_ADV wxGtkCalendarCtrl : public wxCalendarCtrlBase
 {
 public:
-    wxGtkCalendarCtrl() {}
+    wxGtkCalendarCtrl() = default;
     wxGtkCalendarCtrl(wxWindow *parent,
                           wxWindowID id,
                           const wxDateTime& date = wxDefaultDateTime,
@@ -32,7 +32,7 @@ public:
                 long style = wxCAL_SHOW_HOLIDAYS,
                 const wxString& name = wxASCII_STR(wxCalendarNameStr));
 
-    virtual ~wxGtkCalendarCtrl() {}
+    virtual ~wxGtkCalendarCtrl() = default;
 
     virtual bool SetDate(const wxDateTime& date) override;
     virtual wxDateTime GetDate() const override;

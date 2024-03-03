@@ -2,7 +2,6 @@
 // Name:        src/unix/joystick.cpp
 // Purpose:     wxJoystick class
 // Author:      Ported to Linux by Guilhem Lavaux
-// Modified by:
 // Created:     05/23/98
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence

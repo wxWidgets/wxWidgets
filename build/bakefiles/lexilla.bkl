@@ -3,12 +3,16 @@
 
     <if cond="FORMAT=='autoconf'">
         <set var="LIB_LEXILLA">
-          wxlexilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            <if cond="USE_STC=='1'">
+              wxlexilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
         </set>
     </if>
     <if cond="FORMAT!='autoconf'">
         <set var="LIB_LEXILLA">
-            wxlexilla$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            <if cond="USE_STC=='1'">
+              wxlexilla$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            </if>
         </set>
     </if>
 

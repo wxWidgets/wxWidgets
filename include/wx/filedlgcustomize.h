@@ -15,7 +15,9 @@
 class wxFileDialogCustomControlImpl;
 class wxFileDialogButtonImpl;
 class wxFileDialogCheckBoxImpl;
+#if wxUSE_RADIOBTN
 class wxFileDialogRadioButtonImpl;
+#endif
 class wxFileDialogChoiceImpl;
 class wxFileDialogTextCtrlImpl;
 class wxFileDialogStaticTextImpl;
@@ -92,6 +94,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxFileDialogCheckBox);
 };
 
+#if wxUSE_RADIOBTN
 // A class representing a custom radio button.
 class WXDLLIMPEXP_CORE wxFileDialogRadioButton : public wxFileDialogCustomControl
 {
@@ -110,6 +113,7 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxFileDialogRadioButton);
 };
+#endif // wxUSE_RADIOBTN
 
 // A class representing a custom combobox button.
 class WXDLLIMPEXP_CORE wxFileDialogChoice : public wxFileDialogCustomControl
@@ -170,7 +174,9 @@ class WXDLLIMPEXP_CORE wxFileDialogCustomize
 public:
     wxFileDialogButton* AddButton(const wxString& label);
     wxFileDialogCheckBox* AddCheckBox(const wxString& label);
+#if wxUSE_RADIOBTN
     wxFileDialogRadioButton* AddRadioButton(const wxString& label);
+#endif
     wxFileDialogChoice* AddChoice(size_t n, const wxString* strings);
     wxFileDialogTextCtrl* AddTextCtrl(const wxString& label = wxString());
     wxFileDialogStaticText* AddStaticText(const wxString& label);

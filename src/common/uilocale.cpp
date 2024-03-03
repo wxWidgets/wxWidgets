@@ -24,12 +24,17 @@
 
 #include "wx/arrstr.h"
 #include "wx/intl.h"
+#include "wx/log.h"
+#include "wx/tokenzr.h"
+#include "wx/utils.h"
 
 #ifndef __WINDOWS__
     #include "wx/language.h"
 #endif
 
 #include "wx/private/uilocale.h"
+
+#define TRACE_I18N wxS("i18n")
 
 // ----------------------------------------------------------------------------
 // helper functions
@@ -62,7 +67,6 @@ inline bool IsDefaultCLocale(const wxString& locale)
 }
 
 } // anonymous namespace
-
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -109,6 +113,13 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
 
     wxLocaleIdent locId;
 
+    // 0. Check for special locale identifiers "C" and "POSIX"
+    if (IsDefaultCLocale(tag))
+    {
+        locId.Language(tag);
+        return locId;
+    }
+
     // 1. Handle platform-dependent cases
 
     // 1a. Check for modifier in POSIX tag
@@ -152,8 +163,11 @@ wxLocaleIdent wxLocaleIdent::FromTag(const wxString& tag)
     //
     // Make sure we don't extract the region identifier erroneously as a sortorder identifier
     {
-        wxString tagTemp = tagMain.BeforeFirst('_', &tagRest);
-        if (tagRest.length() > 4 && locId.m_modifier.empty() && locId.m_charset.empty())
+        wxString tagTemp = tagMain.BeforeLast('_', &tagRest);
+        if (!tagTemp.empty() &&
+                tagRest.length() > 4 &&
+                    locId.m_modifier.empty() &&
+                        locId.m_charset.empty())
         {
             // Windows sortorder found
             locId.SortOrder(tagRest);
@@ -526,7 +540,14 @@ wxUILocale::wxUILocale(const wxLocaleIdent& localeId)
         return;
     }
 
-    m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    if (IsDefaultCLocale(localeId.GetLanguage()))
+    {
+        m_impl = wxUILocaleImpl::CreateStdC();
+    }
+    else
+    {
+        m_impl = wxUILocaleImpl::CreateForLocale(localeId);
+    }
 }
 
 wxUILocale::wxUILocale(const wxUILocale& loc)
@@ -584,6 +605,24 @@ wxString wxUILocale::GetLocalizedName(wxLocaleName name, wxLocaleForm form) cons
 
     return m_impl->GetLocalizedName(name, form);
 }
+
+#if wxUSE_DATETIME
+wxString wxUILocale::GetMonthName(wxDateTime::Month month, wxDateTime::NameForm form) const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetMonthName(month, form);
+}
+
+wxString wxUILocale::GetWeekDayName(wxDateTime::WeekDay weekday, wxDateTime::NameForm form) const
+{
+    if (!m_impl)
+        return wxString();
+
+    return m_impl->GetWeekDayName(weekday, form);
+}
+#endif // wxUSE_DATETIME
 
 wxLayoutDirection wxUILocale::GetLayoutDirection() const
 {
@@ -644,7 +683,7 @@ int wxUILocale::GetSystemLanguage()
 {
     const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
     size_t count = languagesDB.size();
-    wxVector<wxString> preferred = wxUILocaleImpl::GetPreferredUILanguages();
+    wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
 
     for (wxVector<wxString>::const_iterator j = preferred.begin();
         j != preferred.end();
@@ -709,6 +748,29 @@ int wxUILocale::GetSystemLocale()
 /* static */
 wxVector<wxString> wxUILocale::GetPreferredUILanguages()
 {
+    // The WXLANGUAGE variable may contain a colon separated list of language
+    // codes in the order of preference. It is modelled after GNU's LANGUAGE:
+    // http://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html
+    wxString languageFromEnv;
+    if (wxGetEnv("WXLANGUAGE", &languageFromEnv) && !languageFromEnv.empty())
+    {
+        wxVector<wxString> preferred;
+        wxStringTokenizer tknzr(languageFromEnv, ":");
+        while (tknzr.HasMoreTokens())
+        {
+            const wxString tok = tknzr.GetNextToken();
+            if (const wxLanguageInfo* li = wxUILocale::FindLanguageInfo(tok))
+            {
+                preferred.push_back(li->CanonicalName);
+            }
+        }
+        if (!preferred.empty())
+        {
+            wxLogTrace(TRACE_I18N, " - using languages override from WXLANGUAGE: '%s'", languageFromEnv);
+            return preferred;
+        }
+    }
+
     return wxUILocaleImpl::GetPreferredUILanguages();
 }
 
@@ -871,5 +933,27 @@ const wxLanguageInfo* wxUILocale::FindLanguageInfo(const wxLocaleIdent& locId)
 
     return infoRet;
 }
+
+#if wxUSE_DATETIME
+int wxUILocaleImpl::ArrayIndexFromFlag(wxDateTime::NameFlags flags)
+{
+    switch (flags)
+    {
+        case wxDateTime::Name_Full:
+            return 0;
+
+        case wxDateTime::Name_Abbr:
+            return 1;
+
+        case wxDateTime::Name_Shortest:
+            return 2;
+
+        default:
+            wxFAIL_MSG("unknown wxDateTime::NameFlags value");
+    }
+
+    return -1;
+}
+#endif // wxUSE_DATETIME
 
 #endif // wxUSE_INTL

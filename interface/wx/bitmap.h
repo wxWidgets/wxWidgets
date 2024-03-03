@@ -397,18 +397,6 @@ public:
     explicit wxBitmap(const wxCursor& cursor);
 
     /**
-        Destructor.
-        See @ref overview_refcount_destruct for more info.
-
-        If the application omits to delete the bitmap explicitly, the bitmap will be
-        destroyed automatically by wxWidgets when the application exits.
-
-        @warning
-        Do not delete a bitmap that is selected into a memory device context.
-    */
-    virtual ~wxBitmap();
-
-    /**
         Adds a handler to the end of the static list of format handlers.
 
         @param handler
@@ -494,6 +482,10 @@ public:
         Create a bitmap specifying its size in DPI-independent pixels and the
         scale factor to use.
 
+        This should be used when the bitmap size is fixed (e.g. at
+        compile-time) and not if it comes from wxWindow::GetSize() or other
+        similar functions -- use CreateWithLogicalSize() in the latter case.
+
         The physical size of the bitmap is obtained by multiplying the given
         @a size by @a scale and rounding it to the closest integer.
 
@@ -523,6 +515,43 @@ public:
     bool CreateWithDIPSize(int width, int height,
                            double scale,
                            int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /**
+        Create a bitmap specifying its size in logical pixels and the scale
+        factor to use.
+
+        This should be typically used when creating bitmaps associated to a
+        window area, e.g. to create a bitmap covering the entire window the
+        @a size parameter should be wxWindow::GetClientSize() and @a scale
+        should be the wxWindow::GetDPIScaleFactor().
+
+        The physical size of the bitmap created by this function depends on the
+        platform and will be the same as @a size on the platforms for which
+        `wxHAS_DPI_INDEPENDENT_PIXELS` is not defined (e.g. wxMSW) or @a size
+        multiplied by @a scale for those where it is (e.g. wxGTK3 and wxOSX).
+        In other words, this function is the same as CreateWithDIPSize() if
+        `wxHAS_DPI_INDEPENDENT_PIXELS` is defined, but not otherwise.
+
+        @param size
+            The size of the bitmap in logical pixels. Both width and
+            height must be strictly positive.
+        @param scale
+            Scale factor used by the bitmap, see SetScaleFactor().
+        @param depth
+            The number of bits used to represent each bitmap pixel.
+
+        @return @true if the creation was successful.
+
+        @since 3.3.0
+     */
+    bool CreateWithLogicalSize(const wxSize& size,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
+
+    /// @overload
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Create a bitmap with a scale factor.

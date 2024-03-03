@@ -12,7 +12,6 @@
 #include "wx/bitmap.h"
 
 class QAction;
-class wxQtAction;
 
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
@@ -35,8 +34,6 @@ public:
     virtual void Check(bool check = true) override;
     virtual bool IsChecked() const override;
 
-    virtual void SetBitmap(const wxBitmapBundle& bitmap) override;
-
     virtual QAction *GetHandle() const;
 
     virtual void SetFont(const wxFont& font);
@@ -46,9 +43,12 @@ public:
     virtual void ClearExtraAccels() override;
 #endif // wxUSE_ACCEL
 
+    // implementation
+    void QtCreateAction(wxMenu* parentMenu);
+
 private:
     // Qt is using an action instead of a menu item.
-    wxQtAction *m_qtAction;
+    QAction *m_qtAction = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS( wxMenuItem );
 };

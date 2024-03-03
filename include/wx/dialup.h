@@ -2,7 +2,6 @@
 // Name:        wx/dialup.h
 // Purpose:     Network related wxWidgets classes and functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -57,7 +56,7 @@ public:
     virtual bool IsOk() const = 0;
 
     // virtual dtor for any base class
-    virtual ~wxDialUpManager() { }
+    virtual ~wxDialUpManager() = default;
 
     // operations
     // ----------

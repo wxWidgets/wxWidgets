@@ -386,17 +386,32 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
     wxString de = wxSystemOptions::GetOption(wxT("gtk.desktop"));
+    if (!de.empty())
+        return de;
+
+    de = wxGetenv(wxS("XDG_CURRENT_DESKTOP"));
+    if (!de.empty())
+    {
+        // Can be a colon separated list according to
+        // https://wiki.archlinux.org/title/Environment_variables#Examples
+        de = de.BeforeFirst(':');
+    }
 #if wxUSE_DETECT_SM
     if ( de.empty() )
     {
-        static const wxString s_SM = GetSM().Upper();
-
-        if (s_SM.Contains(wxT("GNOME")))
-            de = wxT("GNOME");
-        else if (s_SM.Contains(wxT("KDE")))
-            de = wxT("KDE");
+        static const wxString s_SM(GetSM());
+        de = s_SM;
+        de.Replace(wxS("-session"), wxString());
     }
 #endif // wxUSE_DETECT_SM
+
+    de.MakeUpper();
+    if (de.Contains(wxS("GNOME")))
+        de = wxS("GNOME");
+    else if (de.Contains(wxS("KDE")))
+        de = wxS("KDE");
+    else if (de.Contains(wxS("XFCE")))
+        de = wxS("XFCE");
 
     return de;
 }

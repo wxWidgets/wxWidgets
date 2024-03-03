@@ -93,6 +93,7 @@ jobs:
             compiler: g++-4.8
             container: ubuntu:18.04
             configure_flags: --disable-shared
+            allow_extra_warnings: true
             use_xvfb: true
           - name: Ubuntu 18.04 wxGTK 3 compatible 3.0
             runner: ubuntu-latest
@@ -119,6 +120,7 @@ jobs:
             configure_flags: --with-cxx=20 --enable-utf8 --enable-utf8only
             use_asan: true
             use_xvfb: true
+            build_out_of_tree_samples: true
           - name: Ubuntu 18.04 wxX11
             runner: ubuntu-latest
             container: ubuntu:18.04
@@ -135,6 +137,7 @@ jobs:
             container: ubuntu:18.04
             configure_flags: --with-qt --enable-pch --without-opengl
             skip_samples: true
+            use_xvfb: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
@@ -194,8 +197,6 @@ jobs:
 
       - name: Set up build environment
         run: |
-          echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
-
           wxPROC_COUNT=`./build/tools/proc_count.sh`
           echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
 
@@ -233,7 +234,10 @@ jobs:
           esac
 
           if [ -z ${{ matrix.allow_warnings }} ]; then
-            error_opts="-Werror $allow_warn_opt"
+            if [ -z ${{ matrix.allow_extra_warnings }} ]; then
+              error_opts="-Wextra"
+            fi
+            error_opts="$error_opts -Werror $allow_warn_opt"
             echo "wxMAKEFILE_ERROR_CXXFLAGS=$error_opts" >> $GITHUB_ENV
             echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
           fi
@@ -338,6 +342,11 @@ jobs:
             exit $rc
           fi
 
+      - name: Testing launching GUI test
+        working-directory: tests
+        run: |
+          WX_TEST_DISABLE_GUI=1 ./test_gui
+
       - name: Testing GUI using Xvfb
         if: matrix.use_xvfb
         working-directory: tests
@@ -358,6 +367,9 @@ jobs:
             # RichTextCtrlTestCase whose Table sub-test seems to be problematic.
             wx_tests_selection='~[.] ~RichTextCtrlTestCase'
           fi
+
+          # The tests only work reliably with native windows
+          export QT_USE_NATIVE_WINDOWS=1
 
           # Configure the system to create core files and create them in the
           # current directory instead of using apport to handle them, as
@@ -396,3 +408,12 @@ jobs:
         run: |
           make -C samples/minimal -f makefile.unx clean
           make -C samples/minimal -f makefile.unx $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
+
+      - name: Building samples out of tree
+        if: matrix.build_out_of_tree_samples
+        run: |
+          make -C samples clean
+          for f in $(find samples -name makefile.unx); do
+              mv $f $(dirname $f)/Makefile
+          done
+          make -C samples -k $wxBUILD_ARGS

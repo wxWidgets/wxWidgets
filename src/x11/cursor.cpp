@@ -2,7 +2,6 @@
 // Name:        src/x11/cursor.cpp
 // Purpose:     wxCursor class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -146,10 +145,6 @@ wxCursor::wxCursor(const char* const* WXUNUSED(xpmData))
     wxFAIL_MSG( wxT("wxCursor creation from XPM not yet implemented") );
 }
 #endif
-
-wxCursor::~wxCursor()
-{
-}
 
 wxGDIRefData *wxCursor::CreateGDIRefData() const
 {

@@ -15,7 +15,52 @@
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
             <sys-lib>$(LIB_LEXILLA)</sys-lib>
+            <ldflags>$(EXTRALDFLAGS_WEBVIEW)</ldflags>
+            <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
         </if>
+
+        <!--
+            Under Mac we need to package the helper so that CEF can find it.
+        -->
+        <add-target target="package" type="action"
+            cond="FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
+            <depends>webview_helper</depends>
+            <dependency-of>all</dependency-of>
+            <command>
+                mkdir -p webview.app/Contents/Frameworks/
+                mkdir -p webview.app/Contents/Frameworks/webview\ Helper.app
+                cp -Rf $(CEF_DIR)/Release/Chromium\ Embedded\ Framework.framework webview.app/Contents/Frameworks/
+                <!-- Copy helper app and create all the required clones of it. -->
+                cp -Rf webview_helper.app/ webview.app/Contents/Frameworks/webview\ Helper.app/
+                for name in Alerts GPU Plugin Renderer; do \
+                    helper_name="webview Helper ($$name)"; \
+                    helper_contents="webview.app/Contents/Frameworks/$$helper_name.app/Contents"; \
+                    mkdir -p "$$helper_contents/MacOS"; \
+                    ln -fs "../../../webview Helper.app/Contents/MacOS/webview Helper" "$$helper_contents/MacOS/$$helper_name"; \
+                    sed -e "s/\$${PRODUCT_NAME}/$$helper_name/"  \
+                        -e "s/\$${EXECUTABLE_NAME}/$$helper_name/" \
+                        -e "s/\$${BUNDLE_ID_SUFFIX}/.$$helper_name/" \
+                        $(TOP_SRCDIR)/samples/webview/cef_helper_info.plist.in > "$$helper_contents/Info.plist"; \
+                    cp webview_helper.app/Contents/PkgInfo "$$helper_contents"; \
+                    cp -Rf webview_helper.app/Contents/Resources "$$helper_contents"; \
+                done
+            </command>
+        </add-target>
+
+        <!--
+            Under Unix we don't need to build a separate helper, but we still
+            need to copy (or link, so save some space, as these files are huge)
+            all the required files to the sample directory.
+        -->
+        <add-target target="copy_cef_files" type="action"
+            cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
+            <depends>webview</depends>
+            <dependency-of>all</dependency-of>
+            <command>
+                @for f in $(CEF_DIR)/Release/* $(CEF_DIR)/Resources/*; do [ -e $$f ] || ln -s $$f .; done
+            </command>
+        </add-target>
+
     </exe>
 
     <wx-data id="data">
@@ -23,5 +68,43 @@
             handler_advanced.html
         </files>
     </wx-data>
+
+    <exe id="webview_helper"
+        cond="FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1' and FORMAT[:3] != 'msv'">
+        <sources>
+            cef_process_helper.cpp
+        </sources>
+        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+            <include>$(CEF_DIR)</include>
+            <ldflags>$(EXTRALDFLAGS_WEBVIEW)</ldflags>
+            <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
+        </if>
+        <add-target target="fix_cef_link" type="action"
+                    cond="FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
+            <depends>webview_helper</depends>
+            <dependency-of>all</dependency-of>
+            <command>
+                <!--make helper app bundle -->
+                mkdir -p webview_helper.app
+                mkdir -p webview_helper.app/Contents/MacOS
+                mkdir -p webview_helper.app/Contents/Resources
+                sed -e "s/\$${PRODUCT_NAME}/webview Helper/"  \
+                    -e "s/\$${EXECUTABLE_NAME}/webview Helper/" \
+                    -e "s/\$${BUNDLE_ID_SUFFIX}//" \
+                    $(TOP_SRCDIR)/samples/webview/cef_helper_info.plist.in >webview_helper.app/Contents/Info.plist
+                /bin/echo "APPL????" >webview_helper.app/Contents/PkgInfo
+                <!--Fix CEF link path -->
+                install_name_tool -change \
+                    "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
+                    "@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" \
+                    webview_helper
+                cp -f webview_helper webview_helper.app/Contents/MacOS/webview\ Helper
+                cp -f $(TOP_SRCDIR)/src/osx/carbon/wxmac.icns webview_helper.app/Contents/Resources/wxmac.icns
+            </command>
+        </add-target>
+        <modify-target target="clean" cond="FORMAT=='autoconf' and PLATFORM_MACOSX=='1' and USE_WEBVIEW_CHROMIUM=='1'">
+            <command>rm -rf $(id).app</command>
+        </modify-target>
+    </exe>
 
 </makefile>

@@ -2,7 +2,6 @@
 // Name:        wx/generic/textdlgg.h
 // Purpose:     wxTextEntryDialog class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -96,7 +95,7 @@ private:
 class WXDLLIMPEXP_CORE wxPasswordEntryDialog : public wxTextEntryDialog
 {
 public:
-    wxPasswordEntryDialog() { }
+    wxPasswordEntryDialog() = default;
     wxPasswordEntryDialog(wxWindow *parent,
                       const wxString& message,
                       const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),

@@ -14,6 +14,8 @@ public:
     wxPopupWindow();
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
 
+    bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
+
 protected:
 
 private:

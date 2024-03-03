@@ -2,7 +2,6 @@
 // Name:        src/common/fontcmn.cpp
 // Purpose:     implementation of wxFontBase methods
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -139,11 +138,6 @@ void wxFontBase::SetDefaultEncoding(wxFontEncoding encoding)
                  wxT("can't set default encoding to wxFONTENCODING_DEFAULT") );
 
     ms_encodingDefault = encoding;
-}
-
-wxFontBase::~wxFontBase()
-{
-    // this destructor is required for Darwin
 }
 
 /* static */

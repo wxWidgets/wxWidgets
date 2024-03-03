@@ -2,7 +2,6 @@
 // Name:        src/common/ownerdrwcmn.cpp
 // Purpose:     wxOwnerDrawn class methods common to all platforms
 // Author:      Marcin Malich
-// Modified by:
 // Created:     2009-09-22
 // Copyright:   (c) 2009 Marcin Malich <me@malcom.pl>
 // Licence:     wxWindows licence

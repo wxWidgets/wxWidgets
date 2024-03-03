@@ -2,7 +2,6 @@
 // Name:        wx/msw/apptrait.h
 // Purpose:     class implementing wxAppTraits for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.06.2003
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

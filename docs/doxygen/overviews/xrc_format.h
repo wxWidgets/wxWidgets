@@ -222,7 +222,7 @@ is "." regardless of the locale.
 
 @subsection overview_xrcformat_type_colour Colour
 
-Colour specification can be either any string colour representation accepted
+A single colour can be either any string colour representation accepted
 by wxColour::Set() or any wxSYS_COLOUR_XXX symbolic name accepted by
 wxSystemSettings::GetColour(). In particular, the following forms are supported:
 
@@ -231,11 +231,21 @@ wxSystemSettings::GetColour(). In particular, the following forms are supported:
 @li CSS-style "rgb(r,g,b)" and "rgba(r,g,b,a)"
 @li wxSYS_COLOUR_XXX symbolic names
 
+Moreover, a single colour definition in XRC may contain more than one colour,
+separated by `|` (pipe symbol), with the first colour used by default and the
+subsequent colours in specific situations. Currently the only supported
+alternative colour is the colour to be used in dark mode, which must be
+prefixed with "dark:".
+
+It is recommended to provide both light and dark values when not using system
+colour names (that already adapt to the dark mode), as it's rare for the same
+colour to look well in both light and dark mode.
+
 Some examples:
 @code
 <fg>red</fg>
 <fg>#ff0000</fg>
-<fg>rgb(255,0,0)</fg>
+<fg>rgb(192,192,192)|dark:#404040</fg>
 <fg>wxSYS_COLOUR_HIGHLIGHT</fg>
 @endcode
 
@@ -286,6 +296,13 @@ DPI-dependent scaling, i.e. the format is just
   size := x "," y
 
 and @c x and @c y are just integers which are not interpreted in any way.
+
+
+@subsection overview_xrcformat_type_percent Integer or percent
+
+This is a value which can be either a simple (unsigned) integer or a percent,
+specified as `N%`, with a literal percent sign, of some other implicitly
+specified length.
 
 
 @subsection overview_xrcformat_type_text Text
@@ -643,7 +660,9 @@ controls cannot have children.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{animation, @ref overview_xrcformat_type_url,
-    Animation file to load into the control (default: none).}
+    Animation file to load into the control or, since wxWindow 3.3.0, multiple
+    semicolon-separated files in order of increasing size, corresponding to
+    multiple versions of the animation for different resolutions (default: none).}
 @row3col{inactive-bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to use when not playing the animation (default: the default).}
 @endTable
@@ -1723,6 +1742,139 @@ No additional properties.
 wxPanel may have optional children: either exactly one
 @ref overview_xrcformat_sizers "sizer" child or any number of non-toplevel window
 objects.
+
+
+@subsubsection xrc_wxpropertygrid wxPropertyGrid
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{virtualwidth, @ref overview_xrcformat_type_dimension,
+    Optional width passed to wxPropertyGrid::SetVirtualWidth().}
+@endTable
+
+A wxPropertyGrid may have @ref xrc_wxpropertygridproperty child objects.
+
+Example:
+@code
+<object class="wxPropertyGrid">
+    <property class="wxStringProperty">
+        <label>Name</label>
+        <value>Now And Then</value>
+    </property>
+    <property class="wxIntProperty">
+        <label>Year</label>
+        <value>2023</value>
+    </property>
+</object>
+@endcode
+
+Notice that wxPropertyGrid support in XRC is available in wxWidgets 3.3.0 and
+later only and you need to explicitly register its handler using
+@code
+    #include <wx/xrc/xh_propgrid.h>
+
+    AddHandler(new wxPropertyGridXmlHandler);
+@endcode
+to use it.
+
+
+@subsubsection xrc_wxpropertygridmanager wxPropertyGridManager
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{virtualwidth, @ref overview_xrcformat_type_dimension,
+    Optional width passed to wxPropertyGrid::SetVirtualWidth().}
+@endTable
+
+A wxPropertyGridManager contains one or more `page` elements each of which in
+turn contains one of more @ref xrc_wxpropertygridproperty child objects.
+
+Page elements may also have the following attributes:
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    Label used for the page.}
+@row3col{columns, integer,
+    Optional column count passed to wxPropertyGridPageState::SetColumnCount().}
+@row3col{splitterpos, @ref overview_xrcformat_type_percent,
+    Optional splitter position passed to wxPropertyGridPageState::DoSetSplitter().
+    The `pos` argument of this function may be specified as `index` attribute
+    of this element and defaults to 0 if not given.}
+@row3col{choices, strings,
+    Space-separated list of double-quoted strings which can be used as choices
+    in a wxEnumProperty of this wxPropertyGridManager object by using the
+    `id` attribute of this element there.}
+@endTable
+
+Example:
+@code
+<object class="wxPropertyGridManager">
+    <page>
+        <property class="wxStringProperty">
+            <label>Name</label>
+            <value>Now And Then</value>
+        </property>
+        <property class="wxIntProperty">
+            <label>Year</label>
+            <value>2023</value>
+        </property>
+    </page>
+    <page>
+        <label>Reviews</label>
+        <choices id="stars">"1" "2" "3" "4" "5"</choices>
+        <property class="wxIntProperty">
+            <label>Metacritic</label>
+            <value>87</value>
+        </property>
+        <property class="wxEnumProperty">
+            <label>The Guardian</label>
+            <value>4</value>
+            <choices>@stars</choices>
+        </property>
+    </page>
+</object>
+@endcode
+
+Notice that wxPropertyGrid support in XRC is available in wxWidgets 3.3.0 and
+later only and you need to explicitly register its handler using
+@code
+    #include <wx/xrc/xh_propgrid.h>
+
+    AddHandler(new wxPropertyGridXmlHandler);
+@endcode
+to use it.
+
+
+@subsubsection xrc_wxpropertygridproperty wxPropertyGridProperty
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    Property label appearing in the property grid.}
+@row3col{value, @ref overview_xrcformat_type_string,
+    Initial property value.}
+@row3col{flags, @ref overview_xrcformat_type_style,
+    Combination of wxPGPropertyFlags values without the leading `wxPG_PROP_`
+    prefix. Only "COLLAPSED", "DISABLED", "HIDDEN" and "NOEDITOR" are currently
+    allowed. (default: 0).}
+@row3col{tip, @ref overview_xrcformat_type_text,
+    Optional help string.}
+@row3col{expanded, @ref overview_xrcformat_type_bool,
+    For a property with children, may be used to specify whether it should be
+    expanded by default.}
+@row3col{choices, @ref overview_xrcformat_type_string,
+    Space-separated string containing the possible choices for the properties
+    using them, e.g. wxFlagsProperty or wxEnumProperty.}
+@row3col{attribute, @ref overview_xrcformat_type_string,
+    Value for the property attribute with the name specified by the `name`
+    attribute of this element. Additional `recurse` attribute is supported and,
+    if specified with the value of `1`, results in the attribute being set for
+    this property and all its children recursively.}
+@endTable
+
+These elements define individual rows of @ref xrc_wxpropertygrid or @ref
+xrc_wxpropertygridmanager. Notice that they may be nested: a property with the
+class "wxPropertyCategory" will normally contain other properties inside it.
 
 
 @subsubsection xrc_wxpropertysheetdialog wxPropertySheetDialog

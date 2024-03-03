@@ -448,8 +448,16 @@ bool wxLocale::Init(int lang, int flags)
     }
 
     // Under (non-Darwn) Unix wxUILocale already set the C locale, but under
-    // the other platforms we still have to do it here.
-#if defined(__WIN32__) || defined(__WXOSX__)
+    // the other platforms we still have to do it.
+#if defined(__WXOSX__)
+    // Locale-related environment variables are typically not set at all under
+    // macOS, so don't rely on them unless we really have no other choice, i.e.
+    // we don't recognize the locale ourselves.
+    if ( !(info ? info->TrySetLocale() : wxSetlocale(LC_ALL, "")) )
+    {
+        ok = false;
+    }
+#elif defined(__WIN32__)
 
     // We prefer letting the CRT to set its locale on its own when using
     // default locale, as it does a better job of it than we do. We also have
@@ -787,18 +795,6 @@ bool wxLocale::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
     if ( !t )
         return false;
     return t->AddCatalog(domain, msgIdLanguage);
-}
-
-// add a catalog to our linked list
-bool wxLocale::AddCatalog(const wxString& szDomain,
-                        wxLanguage      msgIdLanguage,
-                        const wxString& msgIdCharset)
-{
-    wxTranslations *t = wxTranslations::Get();
-    if ( !t )
-        return false;
-    wxUnusedVar(msgIdCharset);
-    return t->AddCatalog(szDomain, msgIdLanguage);
 }
 
 bool wxLocale::IsLoaded(const wxString& domain) const
@@ -1252,7 +1248,7 @@ wxString wxLocale::GetOSInfo(wxLocaleInfo index, wxLocaleCategory cat)
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
-    CFStringRef cfstr = 0;
+    CFStringRef cfstr = nullptr;
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:

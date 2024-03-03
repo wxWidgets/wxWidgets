@@ -510,13 +510,13 @@ struct BMPDesc
 
     wxScopedArray<BMPPalette> paletteData;
 
-    int rmask, gmask, bmask, amask;
+    int rmask, gmask, bmask;
 };
 
 // Read the data in BMP format into the given image.
 //
-// The stream must be positioned at the start of the palette data for the
-// bitmaps using palettes or at the start of the bitmap data otherwise.
+// The stream must be positioned at the start of the bitmap data
+// (i.e., after any palette data)
 bool LoadBMPData(wxImage * image, const BMPDesc& desc,
                  wxInputStream& stream, bool verbose)
 {
@@ -546,7 +546,10 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
 
     // destroy existing here instead of:
     image->Destroy();
-    image->Create(width, height);
+    // In most cases we will set every pixel explicitly, so there
+    // is no point clearing (but see exception for RLE below)
+    bool clear = false;
+    image->Create(width, height, clear);
 
     unsigned char *ptr = image->GetData();
 
@@ -620,6 +623,18 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
             gmask = desc.gmask;
             bmask = desc.bmask;
 
+            // Mimic Windows behaviour: alpha is applied only in 32bpp
+            // and if the colour masks are the same as for BI_RGB.
+            // Any alpha mask in the header is ignored.
+            if ( bpp == 32 &&
+                 rmask == 0x00FF0000 &&
+                 gmask == 0x0000FF00 &&
+                 bmask == 0x000000FF )
+            {
+                amask = 0xFF000000;
+                ashift = 24;
+            }
+
             // find shift amount (Least significant bit of mask)
             for (bit = bpp-1; bit>=0; bit--)
             {
@@ -670,21 +685,22 @@ bool LoadBMPData(wxImage * image, const BMPDesc& desc,
         }
     }
 
-    /*
-     * Reading the image data
-     */
-    unsigned char *data = ptr;
-
-    /* set the whole image to the background color */
-    if ( bpp < 16 && (desc.comp == BI_RLE4 || desc.comp == BI_RLE8) )
+    // RLE-compressed bitmaps do not necessarily specify every pixel explicitly,
+    // as the delta escape sequence allows offsetting the current pixel position.
+    // They therefore have an implicit background, which is either:
+    //  1. The colour of the first entry in the colour table
+    //     (as done by LoadImage() with LR_CREATEDIBSECTION)
+    //  2. Black (as done by functions like LoadBitmap() and CreateDIBitmap())
+    // wxWidgets has historically implemented (1). See #23638
+    if ( desc.comp == BI_RLE4 || desc.comp == BI_RLE8 )
     {
-        for (int i = 0; i < width * height; i++)
+        unsigned char* pPix = ptr;
+        while ( pPix < ptr + width * height * 3 )
         {
-            *ptr++ = cmap[0].r;
-            *ptr++ = cmap[0].g;
-            *ptr++ = cmap[0].b;
+            *pPix++ = cmap[0].r;
+            *pPix++ = cmap[0].g;
+            *pPix++ = cmap[0].b;
         }
-        ptr = data;
     }
 
     int linesize = ((width * bpp + 31) / 32) * 4;
@@ -1207,15 +1223,18 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         if ( desc.comp == BI_BITFIELDS )
         {
             // Read the mask values from the header.
-            if ( !stream.ReadAll(dbuf, 4 * 4) )
+            if ( !stream.ReadAll(dbuf, 4 * 3) )
                 return false;
 
-            hdrBytesRead += 4 * 4;
+            hdrBytesRead += 4 * 3;
 
             desc.rmask = wxINT32_SWAP_ON_BE(dbuf[0]);
             desc.gmask = wxINT32_SWAP_ON_BE(dbuf[1]);
             desc.bmask = wxINT32_SWAP_ON_BE(dbuf[2]);
-            desc.amask = wxINT32_SWAP_ON_BE(dbuf[3]);
+
+            // There will also be an alpha mask if (and only if) the header is
+            // V4 or V5, so we mustn't try to read it if we don't have one of
+            // those. But it's not used anywhere in any case.
         }
 
         // Now that we've read everything we needed from the header, advance
@@ -1230,6 +1249,10 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     // We must have read the header entirely by now and we also read the 14
     // bytes preceding it: "BM" signature and 3 other DWORDs.
     wxFileOffset bytesRead = 14 + hdrSize;
+
+    // We might have read colour masks.
+    if ( desc.comp == BI_BITFIELDS )
+        bytesRead += 12;
 
     // We must have a palette for 1bpp, 4bpp and 8bpp bitmaps.
     if (desc.ncolors == 0 && desc.bpp < 16)

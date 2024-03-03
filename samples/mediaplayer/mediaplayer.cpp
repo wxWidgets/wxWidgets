@@ -2,7 +2,6 @@
 // Name:        mediaplayer.cpp
 // Purpose:     wxMediaCtrl sample
 // Author:      Ryan Norton
-// Modified by:
 // Created:     11/10/04
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

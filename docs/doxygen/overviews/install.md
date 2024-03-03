@@ -49,7 +49,7 @@ about using [vcpkg][] C++ package manager for installing wxWidgets.
 Building from Source
 --------------------
 
-### Getting the sources
+### Getting the sources                {#install_get_sources}
 
 To build the library you need to get its sources first. The recommended way to
 do it is to use Git to check them out from the official wxWidgets repository
@@ -187,7 +187,17 @@ e.g. if you use `AC_CONFIG_MACRO_DIRS([m4])`).
 
 For applications using Microsoft Visual Studio IDE, simply add the provided
 `wxwidgets.props` property sheet file to your project as explained in the
-[instructions](@ref msw_build_apps) and build the project as usual.
+[instructions](@ref msw_build_apps_msvc) and build the project as usual.
+
+
+### MSW, with MinGW
+
+If you use MinGW in any Unix-like environment (Cygwin, MSYS2 etc), please
+follow the instructions for Unix systems.
+
+Otherwise, i.e. when building using `mingw32-make` or using `g++` directly from
+the command line, please follow [these instructions](@ref msw_build_apps_other)
+and provide the list of required compiler and build options manually.
 
 
 ### Mac, with Xcode
@@ -233,4 +243,4 @@ If you use another IDE, under Unix you should run `wx-config --cxxflags` and
 `wx-config --libs` commands separately and copy-and-paste their output to the
 "Additional preprocessor options" and "Additional linker options" fields in
 your IDE, respectively. Under MSW systems you need to configure the IDE using
-the instructions in the [manual setup](@ref msw_build_apps) section.
+the instructions in the [manual setup](@ref msw_build_apps_other) section.

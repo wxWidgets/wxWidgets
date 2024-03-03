@@ -1515,7 +1515,7 @@ public:
         device contexts associated with a window and the same value as
         wxBitmap::GetScaleFactor() for the associated bitmap for wxMemoryDC.
 
-        @note Beware, this function does _not_ return the same value as
+        @note Beware that since wxWidgets 3.1.6, this function does _not_ return the same value as
         wxWindow::GetContentScaleFactor() for the device contexts associated
         with the window. Unlike wxWindow method, it always returns the
         effective scale factor instead of always returning 1 on platforms where

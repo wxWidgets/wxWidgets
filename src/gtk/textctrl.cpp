@@ -797,11 +797,8 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // new, empty control, see https://github.com/wxWidgets/wxWidgets/issues/11409
         gtk_entry_get_text((GtkEntry*)m_text);
 
-#ifndef __WXGTK3__
         if (style & wxNO_BORDER)
             gtk_entry_set_has_frame((GtkEntry*)m_text, FALSE);
-#endif
-
     }
     g_object_ref(m_widget);
 
@@ -1054,7 +1051,7 @@ bool wxTextCtrl::EnableProofCheck(const wxTextProofOptions& options)
         gspell_entry_set_inline_spell_checking(spell, options.IsSpellCheckEnabled());
     }
 
-    return GetProofCheckOptions().IsSpellCheckEnabled();
+    return GetProofCheckOptions().IsSpellCheckEnabled() == options.IsSpellCheckEnabled();
 }
 
 wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
@@ -1065,16 +1062,24 @@ wxTextProofOptions wxTextCtrl::GetProofCheckOptions() const
     {
         GtkTextView *textview = GTK_TEXT_VIEW(m_text);
 
-        if ( textview && gspell_text_view_get_from_gtk_text_view(textview) )
-            opts.SpellCheck();
+        if ( textview )
+        {
+            GspellTextView *spell = gspell_text_view_get_from_gtk_text_view (textview);
+            if ( spell && gspell_text_view_get_inline_spell_checking(spell) )
+                opts.SpellCheck();
+        }
     }
 
     else
     {
         GtkEntry *entry = GTK_ENTRY(m_text);
 
-        if ( entry && gspell_entry_get_from_gtk_entry(entry) )
-            opts.SpellCheck();
+        if ( entry )
+        {
+            GspellEntry *spell = gspell_entry_get_from_gtk_entry(entry);
+            if ( spell && gspell_entry_get_inline_spell_checking(spell) )
+                opts.SpellCheck();
+        }
     }
 
     return opts;
@@ -2138,52 +2143,23 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     if ( IsSingleLine() )
     {
-        if ( HasFlag(wxBORDER_NONE) )
-        {
-#ifdef __WXGTK3__
-            tsize.IncBy(9, 0);
-#else
-            tsize.IncBy(4, 0);
-#endif // GTK3
-        }
-        else
-        {
-            // default height
-            tsize.y = GTKGetPreferredSize(m_widget).y;
-#ifdef __WXGTK3__
-            // Add the margins we have previously set.
-            tsize.IncBy( GTKGetEntryMargins(GetEntry()) );
-#else
-            // For GTK 2 these margins are too big, so hard code something more
-            // reasonable, this is not great but should be fine considering
-            // that it's very unlikely that GTK 2 is going to evolve, making
-            // this inappropriate.
-            tsize.IncBy(20, 0);
-#endif
-        }
+        // Default height
+        tsize.y = GTKGetPreferredSize(m_widget).y;
+
+        // Add padding + border size
+        tsize.x += GTKGetEntryMargins(GetEntry()).x;
     }
 
     //multiline
     else
     {
-        // add space for vertical scrollbar
-        if ( m_scrollBar[1] && !(m_windowStyle & wxTE_NO_VSCROLL) )
-            tsize.IncBy(GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[1])).x + 3, 0);
-
         // height
         if ( ylen <= 0 )
-        {
             tsize.y = 1 + cHeight * wxMax(wxMin(GetNumberOfLines(), 10), 2);
-            // add space for horizontal scrollbar
-            if ( m_scrollBar[0] && (m_windowStyle & wxHSCROLL) )
-                tsize.IncBy(0, GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[0])).y + 3);
-        }
 
-        if ( !HasFlag(wxBORDER_NONE) )
-        {
-            // hardcode borders, margins, etc
-            tsize.IncBy(5, 4);
-        }
+        GtkRequisition req;
+        gtk_widget_get_preferred_size(m_widget, &req, nullptr);
+        tsize.IncTo(wxSize(req.width, req.height));
     }
 
     // We should always use at least the specified height if it's valid.

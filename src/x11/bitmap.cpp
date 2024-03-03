@@ -2,7 +2,6 @@
 // Name:        src/x11/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -59,6 +58,7 @@ wxMask::wxMask()
 }
 
 wxMask::wxMask(const wxMask& mask)
+    : wxObject()
 {
     m_display = mask.m_display;
     if ( !mask.m_bitmap )
@@ -285,6 +285,7 @@ wxBitmapRefData::wxBitmapRefData()
 }
 
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
+    : wxGDIRefData()
 {
     m_pixmap = 0;
     m_bitmap = 0;
@@ -949,10 +950,6 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int depth )
     m_refData = new wxBitmapRefData;
 
     (void) Create(bits, wxBITMAP_TYPE_XBM_DATA, width, height, depth);
-}
-
-wxBitmap::~wxBitmap()
-{
 }
 
 int wxBitmap::GetHeight() const

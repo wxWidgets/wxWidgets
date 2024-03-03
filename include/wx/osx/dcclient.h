@@ -2,7 +2,6 @@
 // Name:        wx/osx/dcclient.h
 // Purpose:     wxClientDC, wxPaintDC and wxWindowDC classes
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -54,6 +53,9 @@ public:
     wxClientDCImpl( wxDC *owner );
     wxClientDCImpl( wxDC *owner, wxWindow *window );
     virtual ~wxClientDCImpl();
+
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return false; }
 
 private:
     wxDECLARE_CLASS(wxClientDCImpl);

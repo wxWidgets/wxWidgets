@@ -115,6 +115,9 @@ public:
         [7872] d:\testApp\src\testApp.cpp(85) : *** Application started ***
     @endverbatim
 
+    See wxLogFormatterNone for a trivial version of this class not doing any
+    formatting,
+
     @library{wxbase}
     @category{logging}
 
@@ -194,6 +197,31 @@ protected:
     virtual wxString FormatTime(time_t time) const;
 };
 
+
+/**
+    Specialized formatter not formatting the messages at all.
+
+    This class can be used to make wxLog log just the messages themselves,
+    without any time stamps or prefixes indicating their severity.
+
+    Example of using it:
+
+    @code
+    wxLog* logger = wxLog::GetActiveTarget();
+    delete logger->SetFormatter(new wxLogFormatterNone{});
+
+    // Log messages won't have time stamps or "Error:", "Warning:" etc
+    // prefixes any more.
+    @endcode
+
+    @since 3.3.0
+*/
+class wxLogFormatterNone : public wxLogFormatter
+{
+public:
+    /// Trivial default constructor.
+    wxLogFormatterNone();
+};
 
 /**
     @class wxLog
@@ -344,6 +372,10 @@ public:
         When it is called from the other threads it simply calls Flush() on the
         currently active log target, so it mostly makes sense to do this if a
         thread has its own logger set with SetThreadActiveTarget().
+
+        Note that when using the default log target, this method is called
+        automatically before showing any modal dialog, in order to prevent
+        showing several modal dialogs one after another.
     */
     static void FlushActive();
 
@@ -494,6 +526,11 @@ public:
 
         Notice that the current time stamp is only used by the default log
         formatter and custom formatters may ignore this format.
+
+        The default time stamp is `%X`, i.e. locale-dependent time
+        representation.
+
+        @see SetTimestamp()
     */
     static const wxString& GetTimestamp();
 
@@ -507,6 +544,11 @@ public:
         formatter and custom formatters may ignore this format. You can also
         define a custom wxLogFormatter to customize the time stamp handling
         beyond changing its format.
+
+        In addition to calling this function explicitly, it can also be called
+        implicitly by wxWidgets if `WXLOG_TIME_FORMAT` environment variable is
+        set, see @ref overview_envvars "overview of the environment variables"
+        affecting wxWidgets programs.
     */
     static void SetTimestamp(const wxString& format);
 
@@ -764,13 +806,11 @@ public:
 /**
     @class wxLogInterposerTemp
 
-    A special version of wxLogChain which uses itself as the new log target.
-    It forwards log messages to the previously installed one in addition to
-    processing them itself. Unlike wxLogInterposer, it doesn't delete the old
-    target which means it can be used to temporarily redirect log output.
+    Legacy class which should not be used any longer.
 
-    As per wxLogInterposer, this class must be derived from to implement
-    wxLog::DoLog and/or wxLog::DoLogString methods.
+    @deprecated
+    This class is only preserved for compatibility, but using it can result in
+    unexpected behaviour and memory leaks.
 
     @library{wxbase}
     @category{logging}
@@ -893,6 +933,18 @@ public:
     wxLogBuffer();
 
     /**
+        Clear all the messages in the buffer.
+
+        This can be done to prevent them from being flushed by the next call to
+        Flush(), which happens implicitly if this logger ceases to be the
+        active logger after a call to wxLog::SetActiveTarget() with a different
+        log target.
+
+        @since 3.3.0
+    */
+    void Clear();
+
+    /**
         Shows all the messages collected so far to the user (using a message box in the
         GUI applications or by printing them out to the console in text mode) and
         clears the internal buffer.
@@ -908,6 +960,65 @@ public:
     const wxString& GetBuffer() const;
 };
 
+
+/**
+    @class wxLogCollector
+
+    Allows to collect all log messages into a string instead of showing them.
+
+    This class is supposed to be used as a local variable and collects all the
+    messages logged during its lifetime instead of showing them as usual, e.g.
+
+    @code
+    void Foo()
+    {
+        wxLogCollector collectLogs;
+
+        // Call some function that can log error messages, e.g. try to create a
+        // new directory. Without wxLogCollector a failure here would show
+        // errors to the user.
+        if ( !wxFileName::Mkdir("/some/path", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL) )
+        {
+            // Instead, we can report them here as we see fit, e.g. write them
+            // to a log file or process them in some other way.
+            wxFprintf(logFile, "Creating directory failed: %s",
+                      collectLogs.GetMessages());
+        }
+    }
+    @endcode
+
+    Note that because this class uses wxLog::SetActiveTarget() to temporarily
+    switch the active log target to wxLogBuffer, you need to ensure that the
+    log target doesn't change while it is alive (in the simplest case by just
+    avoiding to change it at all).
+
+    @since 3.3.0
+*/
+class wxLogCollector
+{
+public:
+    /**
+        Constructor overrides active log target to collect messages.
+    */
+    wxLogCollector();
+
+    /**
+        Get all the collected messages.
+
+        The returned string may be empty but if it isn't, it contains the
+        trailing new line (and may also contain more new lines inside it if
+        multiple messages were logged).
+
+        Note that the messages here contain just the messages, without any time
+        stamps or log level prefixes.
+    */
+    const wxString& GetMessages() const;
+
+    /**
+        Destructor restores the previously active log target.
+    */
+    ~wxLogCollector();
+};
 
 
 /**
@@ -956,6 +1067,8 @@ public:
 
     This class is thread-safe and can be used from both the main and the
     backgrounds threads.
+
+    @see wxLogCollector
 
     @library{wxbase}
     @category{logging}
@@ -1448,10 +1561,12 @@ void wxVLogError(const char* formatString, va_list argPtr);
     do the same thing for log messages of any level, and not just the tracing
     ones.
 
-    Like wxLogDebug(), trace functions only do something in debug builds and
-    expand to nothing in the release one. The reason for making it a separate
-    function is that usually there are a lot of trace messages, so it might
-    make sense to separate them from other debug messages.
+    Like wxLogDebug(), trace functions are disabled at compile time if
+    wxWidgets is compiled without debugging support, i.e. with `wxDEBUG_LEVEL`
+    set to 0 see @ref overview_debugging "Debugging overview" for more details).
+    The reason for having a separate function for tracing messages is that
+    usually there are a lot of them and so it may be useful to separate them
+    from the other debug messages.
 
     Trace messages can be separated into different categories; these functions in facts
     only log the message if the given @a mask is currently enabled in wxLog.
@@ -1510,9 +1625,13 @@ void wxVLogTrace(wxTraceMask mask, const char* formatString, va_list argPtr);
 /** @addtogroup group_funcmacro_log */
 ///@{
 /**
-    The right functions for debug output. They only do something in debug mode
-    (when the preprocessor symbol @c \__WXDEBUG__ is defined) and expand to
-    nothing in release mode (otherwise).
+    The function to use for debugging output.
+
+    In addition to not producing any output if the current log level is not
+    high enough, just as all the other logging function, this function does
+    nothing at all, and is not even present in the final executable code, if
+    wxWidgets was compiled without debugging support, i.e. `wxDEBUG_LEVEL` is 0
+    (see @ref overview_debugging "Debugging overview" for more details).
 
     @header{wx/log.h}
 */

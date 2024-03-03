@@ -252,15 +252,18 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
     {
         switch (error->code)
         {
+#if SOUP_MAJOR_VERSION < 3
             case SOUP_STATUS_CANCELLED:
                 type = wxWEBVIEW_NAV_ERR_USER_CANCELLED;
                 break;
 
             case SOUP_STATUS_CANT_RESOLVE:
+#endif
             case SOUP_STATUS_NOT_FOUND:
                 type = wxWEBVIEW_NAV_ERR_NOT_FOUND;
                 break;
 
+#if SOUP_MAJOR_VERSION < 3
             case SOUP_STATUS_CANT_RESOLVE_PROXY:
             case SOUP_STATUS_CANT_CONNECT:
             case SOUP_STATUS_CANT_CONNECT_PROXY:
@@ -272,6 +275,7 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
             case SOUP_STATUS_MALFORMED:
                 type = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
+#endif
 
             case SOUP_STATUS_BAD_REQUEST:
                 type = wxWEBVIEW_NAV_ERR_REQUEST;
@@ -903,6 +907,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     PostCreation(size);
 
+    NotifyWebViewCreated();
+
     /* Open a webpage */
     if (!isChildWebView)
         webkit_web_view_load_uri(m_web_view, url.utf8_str());
@@ -988,6 +994,46 @@ bool wxWebViewWebKit::SetUserAgent(const wxString& userAgent)
     else
         m_customUserAgent = userAgent;
     return true;
+}
+
+bool wxWebViewWebKit::SetProxy(const wxString& proxy)
+{
+#if WEBKIT_CHECK_VERSION(2, 16, 0)
+    if (wx_check_webkit_version(2, 16, 0))
+    {
+        const auto context = static_cast<WebKitWebContext*>(m_config.GetNativeConfiguration());
+        wxCHECK_MSG( context, false, "no context?" );
+
+        const auto data_manager = webkit_web_context_get_website_data_manager(context);
+        wxCHECK_MSG( data_manager, false, "no data manager?" );
+
+        const auto proxy_settings = webkit_network_proxy_settings_new(
+            proxy.utf8_str(),
+            nullptr // no hosts to ignore
+        );
+        wxCHECK_MSG( proxy_settings, false, "failed to create proxy settings" );
+
+        webkit_website_data_manager_set_network_proxy_settings(
+            data_manager,
+            WEBKIT_NETWORK_PROXY_MODE_CUSTOM,
+            proxy_settings
+        );
+
+        webkit_network_proxy_settings_free(proxy_settings);
+
+        return true;
+    }
+
+    wxLogError(_("Setting proxy is not supported by WebKit, at least version 2.16 is required."));
+
+    return false;
+#else // WebKit < 2.16 doesn't support setting proxy
+    wxUnusedVar(proxy);
+
+    wxLogError(_("This program was compiled without support for setting WebKit proxy."));
+
+    return false;
+#endif // WebKit 2.16+
 }
 
 void wxWebViewWebKit::Stop()

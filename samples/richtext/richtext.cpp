@@ -2,7 +2,6 @@
 // Name:        samples/richtext/richtext.cpp
 // Purpose:     wxWidgets rich text editor sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-10-02
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

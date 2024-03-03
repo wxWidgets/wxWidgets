@@ -2,7 +2,6 @@
 // Name:        src/common/combocmn.cpp
 // Purpose:     wxComboCtrlBase
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
@@ -156,6 +155,11 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define DEFAULT_DROPBUTTON_WIDTH      22
 #undef COMBO_MARGIN
 #define COMBO_MARGIN                  FOCUS_RING
+
+#elif defined(__WXQT__)
+
+#include "wx/nonownedwnd.h"
+#define wxComboCtrlGenericTLW   wxNonOwnedWindow
 
 #else
 

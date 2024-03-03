@@ -2,7 +2,6 @@
 // Name:        wx/generic/gridsel.h
 // Purpose:     wxGridSelection
 // Author:      Stefan Neis
-// Modified by:
 // Created:     20/02/2000
 // Copyright:   (c) Stefan Neis
 // Licence:     wxWindows licence

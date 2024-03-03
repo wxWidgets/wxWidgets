@@ -580,6 +580,9 @@ static const struct ToLongData
     { wxT("-1"), -1, Number_Signed | Number_Long },
     // this is surprising but consistent with strtoul() behaviour
     { wxT("-1"), (TestValue_t)ULONG_MAX, Number_Unsigned | Number_Long },
+    // a couple of edge cases
+    { wxT(" +1"), 1, Number_Ok },
+    { wxT(" -1"), (TestValue_t)ULONG_MAX, Number_Unsigned | Number_Long },
 
     // this must overflow, even with 64 bit long
     { wxT("922337203685477580711"), 0, Number_Invalid },
@@ -607,6 +610,17 @@ static const struct ToLongData
     { wxT("0x11"), 17, Number_Ok,       0 },
     { wxT("0x11"),  0, Number_Invalid,  8 },
     { wxT("0x11"), 17, Number_Ok,      16 },
+
+    {
+#if SIZEOF_LONG == 4
+      wxT("0xffffffff"),
+#elif SIZEOF_LONG == 8
+      wxT("0xffffffffffffffff"),
+#else
+    #error "Unknown sizeof(long)"
+#endif
+      (TestValue_t)ULONG_MAX, Number_Unsigned, 0
+    },
 };
 
 wxGCC_WARNING_RESTORE(missing-field-initializers)
@@ -770,7 +784,7 @@ TEST_CASE("StringToULongLong", "[wxString]")
 
 TEST_CASE("StringToDouble", "[wxString]")
 {
-    double d;
+    double d = 0.0;
     static const struct ToDoubleData
     {
         const wxChar *str;
@@ -790,6 +804,17 @@ TEST_CASE("StringToDouble", "[wxString]")
         { wxT("--1"), 0, false },
         { wxT("-3E-5"), -3E-5, true },
         { wxT("-3E-abcde5"), 0, false },
+
+        { wxT(" 1"), 1, true },
+        { wxT(" .1"), .1, true },
+        { wxT(" -1.2"), -1.2, true },
+
+        // printf can output + in a valid double/float string
+        { wxT("+1"), 1, true },
+        { wxT("+.1"), 0.1, true },
+        { wxT("++1"), 0, false },
+
+        { wxT("0X1.BC70A3D70A3D7p+6"), 111.11, true },
     };
 
     // test ToCDouble() first:
@@ -802,6 +827,18 @@ TEST_CASE("StringToDouble", "[wxString]")
         if ( ld.ok )
             CHECK( d == ld.value );
     }
+
+    CHECK( wxString("inf").ToCDouble(&d) );
+    CHECK( std::isinf(d) );
+
+    CHECK( wxString("INFINITY").ToCDouble(&d) );
+    CHECK( std::isinf(d) );
+
+    CHECK( wxString("nan").ToCDouble(&d) );
+    CHECK( std::isnan(d) );
+
+    CHECK( wxString("NAN").ToCDouble(&d) );
+    CHECK( std::isnan(d) );
 
 
     // test ToDouble() now:
@@ -830,6 +867,16 @@ TEST_CASE("StringToDouble", "[wxString]")
         { wxT("--1"), 0, false },
         { wxT("-3E-5"), -3E-5, true },
         { wxT("-3E-abcde5"), 0, false },
+
+        { wxT(" 1"), 1, true },
+        { wxT(" ,1"), .1, true },
+
+        // printf can output + in a valid double/float string
+        { wxT("+1"), 1, true },
+        { wxT("+,1"), 0.1, true },
+        { wxT("++1"), 0, false },
+
+        { wxT("0X1,BC70A3D70A3D7P+6"), 111.11, true },
     };
 
     for ( n = 0; n < WXSIZEOF(doubleData2); n++ )
@@ -839,6 +886,18 @@ TEST_CASE("StringToDouble", "[wxString]")
         if ( ld.ok )
             CHECK( d == ld.value );
     }
+
+    CHECK( wxString("inf").ToDouble(&d) );
+    CHECK( std::isinf(d) );
+
+    CHECK( wxString("INFINITY").ToDouble(&d) );
+    CHECK( std::isinf(d) );
+
+    CHECK( wxString("nan").ToDouble(&d) );
+    CHECK( std::isnan(d) );
+
+    CHECK( wxString("NAN").ToDouble(&d) );
+    CHECK( std::isnan(d) );
 }
 
 TEST_CASE("StringFromDouble", "[wxString]")

@@ -2,7 +2,6 @@
 // Name:        src/x11/colour.cpp
 // Purpose:     wxColour class
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -38,6 +37,7 @@ public:
     }
 
     wxColourRefData(const wxColourRefData& data)
+        : wxGDIRefData()
     {
         m_color = data.m_color;
         m_colormap = data.m_colormap;
@@ -139,10 +139,6 @@ void wxColourRefData::AllocColour( WXColormap cmap )
 #define M_COLDATA ((wxColourRefData *)m_refData)
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
-
-wxColour::~wxColour()
-{
-}
 
 bool wxColour::operator == ( const wxColour& col ) const
 {

@@ -25,7 +25,7 @@ msg "Updating version to $ver_string_new"
 
 ver_for_sed="$ver_major\.$ver_minor\.$ver_release"
 
-run_sed configure.in \
+run_sed configure.ac \
     "/^AC_INIT/s/$ver_for_sed/$ver_string_new/" \
     "s/^wx_release_number=$ver_release/wx_release_number=$ver_release_new/" \
     "s/^wx_subrelease_number=.*$/wx_subrelease_number=0/"

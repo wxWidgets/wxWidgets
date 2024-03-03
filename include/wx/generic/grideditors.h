@@ -415,7 +415,7 @@ public:
     {
     }
 
-    virtual ~wxGridCellEnumEditor() {}
+    virtual ~wxGridCellEnumEditor() = default;
 
     virtual wxGridCellEditor* Clone() const override
         { return new wxGridCellEnumEditor(*this); }

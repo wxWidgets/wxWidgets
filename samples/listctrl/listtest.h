@@ -2,7 +2,6 @@
 // Name:        listctrl.h
 // Purpose:     wxListCtrl sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -21,11 +20,10 @@ class MyApp: public wxApp
 {
 public:
     MyApp() { }
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
     virtual bool OnInit() override;
-
-private:
-    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 class MyListCtrl: public wxListCtrl
@@ -41,6 +39,8 @@ public:
             m_updated = -1;
 
         }
+    MyListCtrl(const MyListCtrl&) = delete;
+    MyListCtrl &operator=(const MyListCtrl&) = delete;
 
     // add one item to the listctrl in report mode
     void InsertItemInReportView(int i);
@@ -74,9 +74,6 @@ public:
 
     void OnRightClick(wxMouseEvent& event);
 
-    virtual void CheckItem(long item, bool check) override;
-    virtual bool IsItemChecked(long item) const override;
-
 private:
     void ShowContextMenu(const wxPoint& pos, long item);
     void SetColumnImage(int col, int image);
@@ -94,7 +91,6 @@ private:
     // checked boxes in virtual list
     wxSelectionStore m_checked;
 
-    wxDECLARE_NO_COPY_CLASS(MyListCtrl);
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -103,6 +99,9 @@ class MyFrame: public wxFrame
 {
 public:
     MyFrame(const wxString& title);
+    MyFrame(const MyFrame&) = delete;
+    MyFrame &operator=(const MyFrame&) = delete;
+
     virtual ~MyFrame();
 
 protected:
@@ -189,8 +188,6 @@ private:
     // number of items to initialize list/report view with
     int m_numListItems;
 
-
-    wxDECLARE_NO_COPY_CLASS(MyFrame);
     wxDECLARE_EVENT_TABLE();
 };
 

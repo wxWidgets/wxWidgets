@@ -2,7 +2,6 @@
 // Name:        src/common/svg.cpp
 // Purpose:     SVG sample
 // Author:      Chris Elliott
-// Modified by:
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

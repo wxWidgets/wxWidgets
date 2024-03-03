@@ -2,7 +2,6 @@
 // Name:        wx/scrolwin.h
 // Purpose:     wxScrolledWindow, wxScrolledControl and wxScrollHelper
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     30.08.00
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -70,7 +69,7 @@ class WXDLLIMPEXP_CORE wxAnyScrollHelperBase
 {
 public:
     explicit wxAnyScrollHelperBase(wxWindow* win);
-    virtual ~wxAnyScrollHelperBase() {}
+    virtual ~wxAnyScrollHelperBase() = default;
 
     // Disable use of keyboard keys for scrolling. By default cursor movement
     // keys (including Home, End, Page Up and Down) are used to scroll the
@@ -440,7 +439,7 @@ public:
         m_targetWindow = this;
 
 #ifdef __WXMAC__
-        this->MacSetClipChildren(true);
+        this->MacSetClipChildren();
 #endif
 
         // by default, we're scrollable in both directions (but if one of the
@@ -499,5 +498,18 @@ public:
 };
 
 typedef wxScrolled<wxWindow> wxScrolledCanvas;
+
+namespace wxPrivate
+{
+
+// This class is specifically DLL-exported, even though it's trivial, in order
+// to ensure that there is only a single copy of wxScrolledCanvas in the wx DLL.
+class WXDLLIMPEXP_CORE wxScrolledCanvasDummySubclass : public wxScrolledCanvas
+{
+public:
+    wxScrolledCanvasDummySubclass();
+};
+
+} // namespace wxPrivate
 
 #endif // _WX_SCROLWIN_H_BASE_

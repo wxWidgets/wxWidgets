@@ -158,8 +158,8 @@ bool wxIFFDecoder::ConvertToImage(wxImage *image) const
             }
         }
 
-        pal[3 * transparent + 0] = 255,
-        pal[3 * transparent + 1] = 0,
+        pal[3 * transparent + 0] = 255;
+        pal[3 * transparent + 1] = 0;
         pal[3 * transparent + 2] = 255;
 
         image->SetMaskColour(255, 0, 255);

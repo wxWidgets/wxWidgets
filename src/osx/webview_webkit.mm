@@ -3,7 +3,6 @@
 // Purpose:     wxWebViewWebKit - embeddable web kit control,
 //                             OS X implementation of web view component
 // Author:      Jethro Grassie / Kevin Ollivier / Marianne Gagnon
-// Modified by:
 // Created:     2004-4-16
 // Copyright:   (c) Jethro Grassie / Kevin Ollivier / Marianne Gagnon
 // Licence:     wxWindows licence
@@ -320,6 +319,8 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
     }
 
     m_UIDelegate = uiDelegate;
+
+    NotifyWebViewCreated();
 
     if (m_request)
         [m_webView loadRequest:(NSURLRequest*)m_request];

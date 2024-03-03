@@ -337,7 +337,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/msgdlg.h
     wx/qt/nonownedwnd.h
     wx/qt/notebook.h
-    wx/qt/palette.h
     wx/qt/pen.h
     wx/qt/popupwin.h
     wx/qt/printdlg.h
@@ -375,6 +374,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dvrenderers.h
     $(QT_PLATFORM_HDR)
     wx/qt/treectrl.h
+    wx/generic/paletteg.h
+    wx/qt/datectrl.h
+    wx/qt/timectrl.h
 </set>
 
 <set var="QT_SRC" hints="files">
@@ -440,7 +442,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/minifram.cpp
     src/qt/msgdlg.cpp
     src/qt/notebook.cpp
-    src/qt/palette.cpp
     src/qt/nonownedwnd.cpp
     src/qt/pen.cpp
     src/qt/popupwin.cpp
@@ -473,6 +474,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/window.cpp
     $(QT_PLATFORM_SRC)
     src/qt/treectrl.cpp
+    src/generic/paletteg.cpp
+    src/qt/datectrl.cpp
+    src/qt/timectrl.cpp
+    src/qt/overlay.cpp
+    src/qt/renderer.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -552,7 +558,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/tarstrm.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
-    src/common/threadinfo.cpp
     src/common/time.cpp
     src/common/timercmn.cpp
     src/common/timerimpl.cpp
@@ -576,6 +581,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/secretstore.cpp
     src/common/lzmastream.cpp
     src/common/uilocale.cpp
+    src/common/fs_data.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
     src/common/event.cpp
@@ -751,6 +757,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/lzmastream.h
     wx/localedefs.h
     wx/uilocale.h
+    wx/fs_data.h
 </set>
 
 
@@ -1318,6 +1325,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/bmpbndl.h
     wx/filedlgcustomize.h
     wx/compositebookctrl.h
+    wx/persist/combobox.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2154,7 +2162,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
     src/osx/carbon/popupwin.cpp
-    src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
     src/osx/carbon/region.cpp
     <!-- cocoa bridge -->
@@ -2335,6 +2342,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/activityindicator.mm
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
+    src/osx/cocoa/renderer.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -2664,12 +2672,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         src/gtk/webview_webkit.cpp
         src/gtk/webview_webkit2.cpp
     </if>
-    <if cond="PLATFORM_MACOSX=='1'">src/osx/webview_webkit.mm</if>
+    <if cond="PLATFORM_MACOSX=='1'">
+        src/osx/webview_chromium.mm
+        src/osx/webview_webkit.mm
+    </if>
 </set>
 <set var="WEBVIEW_CMN_SRC" hints="files">
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
+    src/common/webview_chromium.cpp
 </set>
 <set var="WEBVIEW_SRC" hints="files">
     $(WEBVIEW_SRC_PLATFORM)
@@ -2695,6 +2707,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/webview.h
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
+    wx/webview_chromium.h
+    wx/webview_chromium_impl.h
 </set>
 <set var="WEBVIEW_HDR" hints="files">
     $(WEBVIEW_HDR_PLATFORM)
@@ -3042,6 +3056,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/propgrid/propgridiface.cpp
     src/propgrid/propgridpagestate.cpp
     src/propgrid/props.cpp
+    src/xrc/xh_propgrid.cpp
 </set>
 <set var="PROPGRID_HDR" hints="files">
     wx/propgrid/advprops.h
@@ -3054,6 +3069,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
     wx/propgrid/private.h
+    wx/xrc/xh_propgrid.h
 </set>
 
 <!-- ====================================================================== -->

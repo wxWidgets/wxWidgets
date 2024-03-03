@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/dataview.mm
 // Purpose:     wxDataView
 // Author:
-// Modified by:
 // Created:     2009-01-31
 // Copyright:
 // Licence:     wxWindows licence
@@ -1602,6 +1601,12 @@ outlineView:(NSOutlineView*)outlineView
     const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:row]);
 
     const NSInteger col = [self clickedColumn];
+
+    // Column can be invalid too, e.g. when clicking beyond the last column,
+    // so check for this too for the same reason as we do it for the row above.
+    if ( col == -1 )
+      return;
+
     wxDataViewColumn* const dvCol = implementation->GetColumn(col);
 
     // Check if we need to activate a custom renderer first.

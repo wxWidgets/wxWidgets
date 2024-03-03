@@ -569,6 +569,14 @@ TEST_CASE_METHOD(ImageListTestCase,
         CHECK(HasMaskOrAlpha(bmp2));
         CHECK(bmp2.GetSize() == BITMAP_SIZE);
     }
+
+    SECTION("Add 2x width image")
+    {
+        il.RemoveAll();
+        int idx = il.Add(wxBitmap(BITMAP_SIZE.x * 2, BITMAP_SIZE.y));
+        CHECK(idx == 0);
+        CHECK(il.GetImageCount() == 2);
+    }
 }
 
 TEST_CASE("ImageList:NegativeTests", "[imagelist][negative]")
