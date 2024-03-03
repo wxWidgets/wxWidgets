@@ -4087,7 +4087,7 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
         return;
     }
 
-    if ( m_isDragging && (event.Entering() || event.Leaving()) )
+    if ( (m_isDragging || m_winCapture == labelWin) && (event.Entering() || event.Leaving()) )
         return;
 
     // ------------ Entering or leaving the window
@@ -4457,7 +4457,7 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
         return;
     }
 
-    if ( m_isDragging && (event.Entering() || event.Leaving()) )
+    if ( (m_isDragging || m_winCapture == m_cornerLabelWin) && (event.Entering() || event.Leaving()) )
         return;
 
     if ( event.Entering() || event.Leaving() )
