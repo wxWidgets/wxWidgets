@@ -9,6 +9,8 @@
 
     <include file="../build/bakefiles/common_samples.bkl"/>
 
+    <set var="BUNDLE_RESOURCES">$(TOP_SRCDIR)tests/horse.png $(TOP_SRCDIR)include/wx/msw/bullseye.cur</set>
+
     <template id="wx_test">
         <win32-res>$(WXTOPDIR)tests/test.rc</win32-res>
         <if cond="FORMAT=='autoconf'">
@@ -437,8 +439,6 @@
     <wx-data id="en_GB" template="catalog"/>
     <wx-data id="fr" template="catalog"/>
     <wx-data id="ja" template="catalog"/>
-
-
     <fragment format="autoconf">
 failtest: failtest_combobox failtest_evthandler failtest_weakref failtest_allheaders
 

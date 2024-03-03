@@ -64,9 +64,6 @@
 
                 <!-- copy the application icon: -->
                 cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns
-
-                cp -f $(WXTOPDIR)tests/horse.png $(BUNDLE)/Resources/horse.png
-                cp -f $(WXTOPDIR)tests/horse.cur $(BUNDLE)/Resources/horse2.cur
                 </command>
             <if cond="BUNDLE_RESOURCES!=''">
                 <command>

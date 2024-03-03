@@ -16,10 +16,11 @@
     #include "wx/icon.h"
     #include "wx/image.h"
 #endif // WX_PRECOMP
+
 #include "wx/filename.h"
 #include "wx/xpmdecod.h"
-
 #include "wx/stdpaths.h"
+
 #include "wx/osx/private.h"
 
 
@@ -297,7 +298,7 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
             InitFromImage( image );
         }
         else
-            wxFAIL_MSG( "Neither PNG nor CUR cursor image found in Resources" );
+            wxLogDebug( "No PNG or CUR cursor image found in Resources" );
 #endif
     }
     else

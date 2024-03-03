@@ -181,9 +181,6 @@ uiaction$(EXEEXT): $(UIACTION_OBJECTS) $(__uiaction___win32rc)
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns uiaction.app/Contents/Resources/wxmac.icns
-@COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.png uiaction.app/Contents/Resources/horse.png
-@COND_PLATFORM_MACOSX_1@	cp -f ../../tests/horse.cur uiaction.app/Contents/Resources/horse.cur
 
 @COND_PLATFORM_MACOSX_1@uiaction_bundle: $(____uiaction_BUNDLE_TGT_REF_DEP)
 
