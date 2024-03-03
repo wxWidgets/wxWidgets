@@ -2680,12 +2680,15 @@ protected:
     const wxColour *m_dragLastColour;
 
     // Row or column (depending on m_cursorMode value) currently being resized
-    // or -2 if row or col label is being resized
     // or -1 if there is no resize operation in progress.
     int     m_dragRowOrCol;
 
-    // Original row or column size when resizing; used when the user cancels
+    // Original row, column or label size when resizing; used when the user cancels
     int     m_dragRowOrColOldSize;
+
+    // Row or column labels (depending on m_cursorMode value) currently being
+    // resized
+    bool    m_dragLabel;
 
     // true if a drag operation is in progress; when this is true,
     // m_startDragPos is valid, i.e. not wxDefaultPosition
@@ -2936,13 +2939,16 @@ private:
 
     void DoStartResizeRowOrCol(int col, int size);
     void DoStartMoveRowOrCol(int col);
+    void DoStartResizeLabel(int size);
 
     // These functions should only be called when actually resizing/moving,
-    // i.e. m_dragRowOrCol and m_dragMoveCol, respectively, are valid.
+    // i.e. m_dragRowOrCol, m_dragMoveCol, m_dragLabel, respectively, are valid.
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndMoveRow(int pos);
     void DoEndMoveCol(int pos);
+    void DoEndDragResizeRowLabel(const wxMouseEvent& event, wxGridWindow* gridWindow);
+    void DoEndDragResizeColLabel(const wxMouseEvent& event, wxGridWindow* gridWindow);
 
     // Helper function returning the position (only the horizontal component
     // really counts) corresponding to the given column drag-resize event.

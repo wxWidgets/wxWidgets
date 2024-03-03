@@ -632,6 +632,8 @@ public:
 
     // return whether the column/row label window can be interactively resized
     virtual bool CanDragLabelSize(wxGrid* grid) const = 0;
+    // call DoEndDragResizeRowLabel or DoEndDragResizeColLabel
+    virtual void DoEndLabelResize(wxGrid* grid, const wxMouseEvent& event, wxGridWindow* gridWindow) const = 0;
     // set the column/row label size
     virtual void SetLabelSize(wxGrid* grid, int size) const = 0;
     // return the column/row label size
@@ -780,6 +782,9 @@ public:
         { grid->DoEndDragResizeRow(event, gridWindow); }
     virtual bool CanDragLabelSize(wxGrid* grid) const override
         { return grid->CanDragColLabelSize(); }
+    virtual void DoEndLabelResize(wxGrid *grid, const wxMouseEvent& event,
+        wxGridWindow* gridWindow) const override
+        { grid->DoEndDragResizeColLabel(event, gridWindow); }
     virtual void SetLabelSize(wxGrid* grid, int size) const override
         { grid->SetColLabelSize(size); }
     virtual int GetLabelSize(wxGrid* grid) const override
@@ -931,6 +936,9 @@ public:
 
     virtual bool CanDragLabelSize(wxGrid* grid) const override
         { return grid->CanDragRowLabelSize();}
+    virtual void DoEndLabelResize(wxGrid *grid, const wxMouseEvent& event,
+        wxGridWindow* gridWindow) const override
+        { grid->DoEndDragResizeRowLabel(event, gridWindow); }
     virtual int GetLabelSize(wxGrid* grid) const override
         { return grid->m_rowLabelWidth; }
     virtual void SetLabelSize(wxGrid* grid, int size) const override
