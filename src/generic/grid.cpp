@@ -11404,6 +11404,87 @@ wxGetContentRect(wxSize contentSize,
 #if wxUSE_ACCESSIBILITY
 
 //-----------------------------------------------------------------------------
+// helpers for wxGridAccessible and wxGridCellAccessible
+//-----------------------------------------------------------------------------
+
+// helper to convert row / col into child object id
+// error handling is not required here
+static int GetChildId(wxGrid* grid, int row, int col,
+                      bool isRowHeader, bool isColHeader)
+{
+    int childId = 0;
+    int numberCols = grid->GetNumberCols();
+    if ( grid->GetRowLabelSize() )
+        numberCols++;
+
+    if ( isColHeader && isRowHeader )
+        childId = 1;
+    else if ( isColHeader )
+    {
+        childId = col + 1;
+        if ( grid->GetRowLabelSize() )
+            childId++;
+    }
+    else if ( isRowHeader )
+    {
+        childId = row * numberCols + 1;
+        if ( grid->GetColLabelSize() )
+            childId += numberCols;
+    }
+    else
+    {
+        childId = row * numberCols + col + 1;
+        if ( grid->GetColLabelSize() )
+            childId += numberCols;
+        if ( grid->GetRowLabelSize() )
+            childId++;
+    }
+    return childId;
+}
+
+// helper to calculate row, col, isRowHeader, isColHeader from childId
+static void GetRowCol(wxGrid* grid, int childId, int* row, int* col,
+                      bool* isRowHeader, bool* isColHeader)
+{
+    if ( childId == 1 && grid->GetColLabelSize() && grid->GetRowLabelSize() )
+    {
+        *row = *col = -1;
+        *isRowHeader = true;
+        *isColHeader = true;
+    }
+    else
+    {
+        *isRowHeader = *isColHeader = false;
+        int numCols = grid->GetNumberCols();
+        if ( grid->GetRowLabelSize() )
+            numCols++;
+        *row = (childId - 1) / numCols;
+        *col = (childId - 1) % numCols;
+        if ( grid->GetRowLabelSize() )
+        {
+            if ( *col == 0 )
+            {
+                *col = -1;
+                *isRowHeader = true;
+            }
+            else
+                (*col)--;
+        }
+        if ( grid->GetColLabelSize() )
+        {
+            if ( *row == 0 )
+            {
+                *row = -1;
+                *isColHeader = true;
+            }
+            else
+                (*row)--;
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------
 // wxGridAccessible
 //-----------------------------------------------------------------------------
 
@@ -11420,40 +11501,6 @@ wxGridAccessible::~wxGridAccessible()
         delete m_gridCellAccessible;
         m_gridCellAccessible = nullptr;
     }
-}
-
-// helper to convert row / col into child object id
-// error handling is not required here
-int wxGridAccessible::GetChildId(wxGrid* grid, int row, int col, bool isRowHeader, bool isColHeader)
-{
-    int childId = 0;
-    int numberCols = grid->GetNumberCols();
-    if ( grid->m_rowLabelWidth )
-        numberCols++;
-
-    if ( isColHeader && isRowHeader )
-        childId = 1;
-    else if ( isColHeader )
-    {
-        childId = col + 1;
-        if ( grid->m_rowLabelWidth )
-            childId++;
-    }
-    else if ( isRowHeader )
-    {
-        childId = row * numberCols + 1;
-        if ( grid->m_colLabelHeight )
-            childId += numberCols;
-    }
-    else
-    {
-        childId = row * numberCols + col + 1;
-        if ( grid->m_colLabelHeight )
-            childId += numberCols;
-        if ( grid->m_rowLabelWidth )
-            childId++;
-    }
-    return childId;
 }
 
 // Can return either a child object, or an integer
@@ -11628,9 +11675,22 @@ wxAccStatus wxGridAccessible::GetRole(int childId, wxAccRole* role)
     wxCHECK( grid, wxACC_FAIL );
 
     if ( childId == wxACC_SELF )
+    {
         *role = wxROLE_SYSTEM_TABLE;
+    }
     else
-        *role = wxROLE_SYSTEM_CELL;
+    {
+        // children can be cells or headers
+        int row, col;
+        bool isRowHeader, isColHeader;
+        GetRowCol(grid, childId, &row, &col, &isRowHeader, &isColHeader);
+        if ( isColHeader )
+            *role = wxROLE_SYSTEM_COLUMNHEADER;
+        else if ( isRowHeader )
+            *role = wxROLE_SYSTEM_ROWHEADER;
+        else
+            *role = wxROLE_SYSTEM_CELL;
+    }
 
     return wxACC_OK;
 }
@@ -11716,43 +11776,7 @@ wxGridCellAccessible::wxGridCellAccessible(wxGrid* grid, int childId)
     : wxAccessible(grid)
 {
     m_childId = childId;
-
-    // calculate row, col, isRowHeader, isColHeader from childId
-    if ( childId == 1 && grid->m_colLabelHeight && grid->m_rowLabelWidth )
-    {
-        m_row = m_col = -1;
-        m_isRowHeader = true;
-        m_isColHeader = true;
-    }
-    else
-    {
-        m_isRowHeader = m_isColHeader = false;
-        int numCols = grid->GetNumberCols();
-        if ( grid->m_rowLabelWidth )
-            numCols++;
-        m_row = (childId - 1) / numCols;
-        m_col = (childId - 1) % numCols;
-        if ( grid->m_rowLabelWidth )
-        {
-            if ( m_col == 0 )
-            {
-                m_col = -1;
-                m_isRowHeader = true;
-            }
-            else
-                m_col--;
-        }
-        if ( grid->m_colLabelHeight )
-        {
-            if ( m_row == 0 )
-            {
-                m_row = -1;
-                m_isColHeader = true;
-            }
-            else
-                m_row--;
-        }
-    }
+    GetRowCol(grid, childId, &m_row, &m_col, &m_isRowHeader, &m_isColHeader);
 }
 
 // Gets the parent
@@ -11816,11 +11840,11 @@ void wxGridCellAccessible::DoGetLocation(wxGrid* grid, wxRect& rect)
 }
 
 // Returns the rectangle for this object (id = 0) or a child element (id > 0).
-wxAccStatus wxGridCellAccessible::GetLocation(wxRect& rect, int elementId)
+wxAccStatus wxGridCellAccessible::GetLocation(wxRect& rect, int childId)
 {
     wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
     wxCHECK( grid, wxACC_FAIL );
-    if ( elementId != wxACC_SELF )
+    if ( childId != wxACC_SELF )
         return wxACC_FAIL;
 
     DoGetLocation(grid, rect);
