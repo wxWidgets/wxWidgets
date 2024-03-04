@@ -4905,36 +4905,31 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
                          const wxGridCellCoords& coords,
                          wxGridWindow* gridWindow)
 {
-
-    switch ( m_cursorMode )
+    if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
     {
-        case WXGRID_CURSOR_SELECT_CELL:
-            if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl() )
-            {
-                ClearSelection();
-
-                if ( DoEnableCellEditControl(wxGridActivationSource::From(event)) )
-                    GetCurrentCellEditorPtr()->StartingClick();
-
-                m_waitForSlowClick = false;
-            }
-            break;
-
-        case WXGRID_CURSOR_RESIZE_ROW:
-        case WXGRID_CURSOR_RESIZE_COL:
+        if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl() )
         {
-            const wxGridOperations* oper = (m_cursorMode == WXGRID_CURSOR_RESIZE_ROW
-                ? (wxGridOperations*) new wxGridRowOperations()
-                : (wxGridOperations*) new wxGridColumnOperations());
-            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-            if ( m_dragRowOrCol != -1 )
-                DoEndDragResizeRowOrCol(event, gridWindow, *oper);
-            else if ( m_dragLabel )
-                DoEndDragResizeLabel(event, gridWindow, *oper);
+            ClearSelection();
 
-            delete oper;
+            if ( DoEnableCellEditControl(wxGridActivationSource::From(event)) )
+                GetCurrentCellEditorPtr()->StartingClick();
+
+            m_waitForSlowClick = false;
         }
-        break;
+    }
+    else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
+              m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
+    {
+        const wxGridOperations* oper = (m_cursorMode == WXGRID_CURSOR_RESIZE_ROW
+            ? (wxGridOperations*) new wxGridRowOperations()
+            : (wxGridOperations*) new wxGridColumnOperations());
+        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
+        if ( m_dragRowOrCol != -1 )
+            DoEndDragResizeRowOrCol(event, gridWindow, *oper);
+        else if ( m_dragLabel )
+            DoEndDragResizeLabel(event, gridWindow, *oper);
+
+        delete oper;
     }
 
     m_dragLastPos = -1;
