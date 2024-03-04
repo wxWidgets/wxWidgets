@@ -4935,7 +4935,7 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
         if ( m_dragRowOrCol != -1 )
             DoEndDragResizeRow(event, gridWindow);
         else if ( m_dragLabel )
-            DoEndDragResizeLabel(event, gridWindow, &wxGridRowOperations());
+            DoEndDragResizeLabel(event, gridWindow, wxGridRowOperations());
     }
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
     {
@@ -4943,7 +4943,7 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
         if ( m_dragRowOrCol != -1 )
             DoEndDragResizeCol(event, gridWindow);
         else if ( m_dragLabel )
-            DoEndDragResizeLabel(event, gridWindow, &wxGridColumnOperations());
+            DoEndDragResizeLabel(event, gridWindow, wxGridColumnOperations());
     }
 
     m_dragLastPos = -1;
@@ -5195,11 +5195,11 @@ void wxGrid::DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow* gridWin
 }
 
 void wxGrid::DoEndDragResizeLabel(const wxMouseEvent& event, wxGridWindow* gridWindow,
-    const wxGridOperations* oper)
+    const wxGridOperations& oper)
 {
     printf("DoEndDragResizeColLabel\n");
-    DoGridDragResize(event.GetPosition(), *oper, gridWindow);
-    SendGridSizeEvent(oper->GetEventTypeLabelSize(), -1, event);
+    DoGridDragResize(event.GetPosition(), oper, gridWindow);
+    SendGridSizeEvent(oper.GetEventTypeLabelSize(), -1, event);
     m_dragLabel = false;
 }
 

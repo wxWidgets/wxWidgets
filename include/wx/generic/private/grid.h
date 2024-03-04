@@ -786,7 +786,7 @@ public:
         { return grid->CanDragColLabelSize(); }
     virtual void DoEndLabelResize(wxGrid *grid, const wxMouseEvent& event,
         wxGridWindow* gridWindow) const override
-        { grid->DoEndDragResizeLabel(event, gridWindow, this); }
+        { grid->DoEndDragResizeLabel(event, gridWindow, *this); }
     virtual wxEventType GetEventTypeLabelSize() const override
         { return wxEVT_GRID_COL_LABEL_SIZE; }
 
@@ -943,7 +943,7 @@ public:
         { return grid->CanDragRowLabelSize();}
     virtual void DoEndLabelResize(wxGrid *grid, const wxMouseEvent& event,
         wxGridWindow* gridWindow) const override
-        { grid->DoEndDragResizeLabel(event, gridWindow, this); }
+        { grid->DoEndDragResizeLabel(event, gridWindow, *this); }
     virtual wxEventType GetEventTypeLabelSize() const override
         { return wxEVT_GRID_ROW_LABEL_SIZE; }
     virtual int GetLabelSize(wxGrid* grid) const override
