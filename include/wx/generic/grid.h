@@ -2947,8 +2947,8 @@ private:
     void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndMoveRow(int pos);
     void DoEndMoveCol(int pos);
-    void DoEndDragResizeRowLabel(const wxMouseEvent& event, wxGridWindow* gridWindow);
-    void DoEndDragResizeColLabel(const wxMouseEvent& event, wxGridWindow* gridWindow);
+    void DoEndDragResizeLabel(const wxMouseEvent& event, wxGridWindow* gridWindow,
+                              const wxGridOperations* oper);
 
     // Helper function returning the position (only the horizontal component
     // really counts) corresponding to the given column drag-resize event.
