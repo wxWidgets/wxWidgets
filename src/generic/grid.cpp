@@ -4778,33 +4778,21 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         case WXGRID_CURSOR_RESIZE_ROW:
         case WXGRID_CURSOR_RESIZE_COL:
             {
-                int dragRowOrCol = wxNOT_FOUND;
-                if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
+                const wxGridOperations* oper = (m_cursorMode == WXGRID_CURSOR_RESIZE_ROW
+                                               ? (wxGridOperations*) new wxGridRowOperations()
+                                               : (wxGridOperations*) new wxGridColumnOperations());
+                int dragRowOrCol = PosToEdgeOfLine(oper->Dual().Select(pos), *oper);
+
+                if ( dragRowOrCol != wxNOT_FOUND )
                 {
-                    dragRowOrCol = XToEdgeOfCol(pos.x);
-                    if ( dragRowOrCol != wxNOT_FOUND )
-                    {
-                        DoStartResizeRowOrCol(dragRowOrCol, GetColSize(dragRowOrCol));
-                    }
-                    else
-                    {
-                        DoStartResizeLabel(m_rowLabelWidth);
-                        captureMouse = true;
-                    }
+                    DoStartResizeRowOrCol(dragRowOrCol, oper->GetLineSize(this, dragRowOrCol));
                 }
                 else
                 {
-                    dragRowOrCol = YToEdgeOfRow(pos.y);
-                    if ( dragRowOrCol != wxNOT_FOUND )
-                    {
-                        DoStartResizeRowOrCol(dragRowOrCol, GetRowSize(dragRowOrCol));
-                    }
-                    else
-                    {
-                        DoStartResizeLabel(m_colLabelHeight);
-                        captureMouse = true;
-                    }
+                    DoStartResizeLabel(oper->GetLabelSize(this));
+                    captureMouse = true;
                 }
+                delete oper;
             }
             break;
 
