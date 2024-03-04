@@ -2943,8 +2943,8 @@ private:
 
     // These functions should only be called when actually resizing/moving,
     // i.e. m_dragRowOrCol, m_dragMoveCol, m_dragLabel, respectively, are valid.
-    void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
-    void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
+    void DoEndDragResizeRowOrCol(const wxMouseEvent& event, wxGridWindow* gridWindow,
+                                 const wxGridOperations& oper);
     void DoEndMoveRow(int pos);
     void DoEndMoveCol(int pos);
     void DoEndDragResizeLabel(const wxMouseEvent& event, wxGridWindow* gridWindow,
