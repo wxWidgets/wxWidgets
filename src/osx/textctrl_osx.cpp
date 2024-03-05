@@ -781,12 +781,12 @@ int wxTextWidgetImpl::GetNumberOfLines() const
 
 int wxTextWidgetImpl::GetPhysicalLineCount() const
 {
-    return 0;
+    return -1;
 }
 
 int wxTextWidgetImpl::GetLogicalLineCount() const
 {
-    return 0;
+    return -1;
 }
 
 wxString wxTextWidgetImpl::GetLineText(long lineNo) const
