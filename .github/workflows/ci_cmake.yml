@@ -127,7 +127,7 @@ jobs:
       # required for CMake to find Ninja
       - name: "[Windows] Set up MSVC Developer Command Prompt"
         if: runner.os == 'Windows'
-        uses: wxWidgets/gha-setup-vsdevenv@ac61ecb4b05909261f8f375601c0e15aabdd9f10
+        uses: wsu-cb/gha-setup-vsdevenv@88f270931cf5aca859332d1f0e5e3fb96c7a8261
 
       - name: Configuring
         run: |
