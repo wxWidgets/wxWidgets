@@ -1618,7 +1618,7 @@ public:
 
         @since 3.1.3
     */
-    virtual unsigned GetPhysicalLineCount() const;
+    virtual int GetPhysicalLineCount() const;
 
     /*
         Return number of logical lines in the text buffer.
@@ -1628,7 +1628,7 @@ public:
 
         @since 3.1.3
     */
-    virtual unsigned GetLogicalLineCount() const;
+    virtual int GetLogicalLineCount() const;
 
     /**
         Returns the style at this position in the text control.

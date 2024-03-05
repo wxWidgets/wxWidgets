@@ -1368,7 +1368,7 @@ void wxNSTextViewControl::SetJustification()
     [m_textView setAlignment:align];
 }
 
-unsigned wxNSTextViewControl::GetPhysicalLineCount() const
+int wxNSTextViewControl::GetPhysicalLineCount() const
 {
     const NSString *string = [m_textView string];
     unsigned numberOfLines, index, stringLength = [string length];
@@ -1379,7 +1379,7 @@ unsigned wxNSTextViewControl::GetPhysicalLineCount() const
     return numberOfLines;
 }
 
-unsigned wxNSTextViewControl::GetLogicalLineCount() const
+int wxNSTextViewControl::GetLogicalLineCount() const
 {
     NSLayoutManager *layoutManager = [m_textView layoutManager];
     unsigned numberOfLines, index, numberOfGlyphs = [layoutManager numberOfGlyphs];

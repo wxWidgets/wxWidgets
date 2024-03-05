@@ -992,12 +992,12 @@ bool wxTextAreaBase::SaveFile(const wxString& filename, int fileType)
     return DoSaveFile(filenameToUse, fileType);
 }
 
-unsigned wxTextAreaBase::GetPhysicalLineCount() const
+int wxTextAreaBase::GetPhysicalLineCount() const
 {
     return 0;
 }
 
-unsigned wxTextAreaBase::GetLogicalLineCount() const
+int wxTextAreaBase::GetLogicalLineCount() const
 {
     return 0;
 }

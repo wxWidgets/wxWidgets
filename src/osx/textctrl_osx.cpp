@@ -278,12 +278,12 @@ int wxTextCtrl::GetNumberOfLines() const
     return GetTextPeer()->GetNumberOfLines() ;
 }
 
-unsigned wxTextCtrl::GetPhysicalLineCount() const
+int wxTextCtrl::GetPhysicalLineCount() const
 {
     return GetTextPeer()->GetPhysicalLineCount();
 }
 
-unsigned wxTextCtrl::GetLogicalLineCount() const
+int wxTextCtrl::GetLogicalLineCount() const
 {
     return GetTextPeer()->GetLogicalLineCount();
 }
@@ -779,12 +779,12 @@ int wxTextWidgetImpl::GetNumberOfLines() const
     return lines ;
 }
 
-unsigned wxTextWidgetImpl::GetPhysicalLineCount() const
+int wxTextWidgetImpl::GetPhysicalLineCount() const
 {
     return 0;
 }
 
-unsigned wxTextWidgetImpl::GetLogicalLineCount() const
+int wxTextWidgetImpl::GetLogicalLineCount() const
 {
     return 0;
 }

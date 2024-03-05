@@ -62,8 +62,8 @@ public:
     virtual int GetLineLength(long lineNo) const override;
     virtual wxString GetLineText(long lineNo) const override;
     virtual int GetNumberOfLines() const override;
-    virtual unsigned GetPhysicalLineCount() const override;
-    virtual unsigned GetLogicalLineCount() const override;
+    virtual int GetPhysicalLineCount() const override;
+    virtual int GetLogicalLineCount() const override;
 
     virtual bool IsModified() const override;
 
