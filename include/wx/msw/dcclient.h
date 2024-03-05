@@ -2,7 +2,6 @@
 // Name:        wx/msw/dcclient.h
 // Purpose:     wxClientDC class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@ public:
     // Create a DC corresponding to the whole window
     wxWindowDCImpl( wxDC *owner, wxWindow *win );
 
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
 
 protected:
     // initialize the newly created DC
@@ -55,7 +54,10 @@ public:
 
     virtual ~wxClientDCImpl();
 
-    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoGetSize(int *width, int *height) const override;
+
+    static bool
+    CanBeUsedForDrawing(const wxWindow* WXUNUSED(window)) { return true; }
 
 protected:
     void InitDC();
@@ -82,7 +84,7 @@ public:
     static void EndPaint(wxWindow *win);
 
 protected:
-    // Find the DC for this window in the cache, return NULL if not found.
+    // Find the DC for this window in the cache, return nullptr if not found.
     static wxPaintDCInfo *FindInCache(wxWindow* win);
 
     wxDECLARE_CLASS(wxPaintDCImpl);

@@ -11,6 +11,7 @@
 #define _WX_QT_PRIVATE_TREEITEM_DELEGATE_H
 
 #include <QtWidgets/QStyledItemDelegate>
+#include <QtWidgets/QToolTip>
 
 #include "wx/app.h"
 #include "wx/textctrl.h"
@@ -22,13 +23,13 @@ class wxQTTreeItemDelegate : public QStyledItemDelegate
 public:
     explicit wxQTTreeItemDelegate(wxWindow* parent)
         : m_parent(parent),
-        m_textCtrl(NULL)
+        m_textCtrl(nullptr)
     {
     }
 
-    QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &WXUNUSED(option), const QModelIndex &index) const wxOVERRIDE
+    QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &WXUNUSED(option), const QModelIndex &index) const override
     {
-        if ( m_textCtrl != NULL )
+        if ( m_textCtrl != nullptr )
             destroyEditor(m_textCtrl->GetHandle(), m_currentModelIndex);
 
         m_currentModelIndex = index;
@@ -37,17 +38,17 @@ public:
         return m_textCtrl->GetHandle();
     }
 
-    void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
+    void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const override
     {
-        if ( m_textCtrl != NULL )
+        if ( m_textCtrl != nullptr )
         {
             m_currentModelIndex = QModelIndex(); // invalidate the index
             wxTheApp->ScheduleForDestruction(m_textCtrl);
-            m_textCtrl = NULL;
+            m_textCtrl = nullptr;
         }
     }
 
-    void setModelData(QWidget *WXUNUSED(editor), QAbstractItemModel *WXUNUSED(model), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
+    void setModelData(QWidget *WXUNUSED(editor), QAbstractItemModel *WXUNUSED(model), const QModelIndex &WXUNUSED(index)) const override
     {
         // Don't set model data until wx has had a chance to send out events
     }
@@ -65,6 +66,28 @@ public:
     void AcceptModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
     {
         QStyledItemDelegate::setModelData(editor, model, index);
+    }
+
+    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
+    {
+        if ( event->type() == QEvent::ToolTip )
+        {
+            const QRect &itemRect = view->visualRect(index);
+            const QSize &bestSize = sizeHint(option, index);
+            if ( itemRect.width() < bestSize.width() )
+            {
+                const QString &value = index.data(Qt::DisplayRole).toString();
+                QToolTip::showText(event->globalPos(), value, view);
+            }
+            else
+            {
+                QToolTip::hideText();
+            }
+
+            return true;
+        }
+
+        return QStyledItemDelegate::helpEvent(event, view, option, index);
     }
 
 private:

@@ -2,7 +2,6 @@
 // Name:        wx/bmpcbox.h
 // Purpose:     wxBitmapComboBox base header
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Aug-31-2006
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
@@ -16,7 +15,7 @@
 
 #if wxUSE_BITMAPCOMBOBOX
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 #include "wx/dynarray.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -25,7 +24,7 @@ class WXDLLIMPEXP_FWD_CORE wxItemContainer;
 // Define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED for platforms which
 // wxBitmapComboBox implementation utilizes ownerdrawn combobox
 // (either native or generic).
-#if !defined(__WXGTK20__) || defined(__WXUNIVERSAL__)
+#if !defined(__WXGTK__) || defined(__WXUNIVERSAL__)
     #define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
@@ -40,10 +39,10 @@ public:
     // ctors and such
     wxBitmapComboBoxBase() { Init(); }
 
-    virtual ~wxBitmapComboBoxBase() { }
+    virtual ~wxBitmapComboBoxBase() = default;
 
     // Sets the image for the given item.
-    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap) = 0;
+    virtual void SetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap) = 0;
 
 #if !defined(wxBITMAPCOMBOBOX_OWNERDRAWN_BASED)
 
@@ -79,7 +78,7 @@ protected:
     void BCBDoClear();
     void BCBDoDeleteOneItem(unsigned int n);
 
-    void DoSetItemBitmap(unsigned int n, const wxBitmap& bitmap);
+    void DoSetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap);
 
     void DrawBackground(wxDC& dc, const wxRect& rect, int item, int flags) const;
     void DrawItem(wxDC& dc, const wxRect& rect, int item, const wxString& text,
@@ -87,7 +86,7 @@ protected:
     wxCoord MeasureItem(size_t item) const;
 
     // Returns true if image size was affected
-    virtual bool OnAddBitmap(const wxBitmap& bitmap);
+    virtual bool OnAddBitmap(const wxBitmapBundle& bitmap);
 
     // Recalculates amount of empty space needed in front of text
     // in control itself. Returns number that can be passed to
@@ -97,8 +96,8 @@ protected:
 
     void UpdateInternals();
 
-    wxArrayPtrVoid      m_bitmaps;  // Images associated with items
-    wxSize              m_usedImgSize;  // Size of bitmaps
+    wxVector<wxBitmapBundle> m_bitmapbundles;// Images associated with items
+    wxSize                   m_usedImgSize;  // Size of bitmaps
 
     int                 m_imgAreaWidth;  // Width and height of area next to text field
     int                 m_fontHeight;
@@ -114,7 +113,7 @@ private:
     #include "wx/generic/bmpcbox.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/bmpcbox.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/bmpcbox.h"
 #else
     #include "wx/generic/bmpcbox.h"

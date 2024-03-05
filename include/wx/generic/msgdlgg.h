@@ -2,7 +2,6 @@
 // Name:        wx/generic/msgdlgg.h
 // Purpose:     Generic wxMessageDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -18,11 +17,11 @@ class WXDLLIMPEXP_CORE wxGenericMessageDialog : public wxMessageDialogBase
 public:
     wxGenericMessageDialog(wxWindow *parent,
                            const wxString& message,
-                           const wxString& caption = wxMessageBoxCaptionStr,
+                           const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                            long style = wxOK|wxCENTRE,
                            const wxPoint& pos = wxDefaultPosition);
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
 protected:
     // Creates a message dialog taking any options that have been set after
@@ -42,7 +41,7 @@ private:
     // Creates and returns a standard button sizer using the style of this
     // dialog and the custom labels, if any.
     //
-    // May return NULL on smart phone platforms not using buttons at all.
+    // May return nullptr on smart phone platforms not using buttons at all.
     wxSizer *CreateMsgDlgButtonSizer();
 
     wxPoint m_pos;

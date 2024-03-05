@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/comimpl.h
 // Purpose:     COM helper routines, COM debugging support &c
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.02.1998
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -21,15 +20,15 @@
 // General purpose functions and macros
 // ============================================================================
 
-// release the interface pointer (if !NULL)
+// release the interface pointer (if non-null)
 inline void ReleaseInterface(IUnknown *pIUnk)
 {
-  if ( pIUnk != NULL )
+  if ( pIUnk != nullptr )
     pIUnk->Release();
 }
 
-// release the interface pointer (if !NULL) and make it NULL
-#define   RELEASE_AND_NULL(p)   if ( (p) != NULL ) { p->Release(); p = NULL; };
+// release the interface pointer (if non-null) and set it to nullptr
+#define   RELEASE_AND_NULL(p)   if ( (p) != nullptr ) { p->Release(); p = nullptr; };
 
 // return true if the iid is in the array
 extern WXDLLIMPEXP_CORE bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
@@ -39,6 +38,9 @@ extern WXDLLIMPEXP_CORE bool IsIidFromList(REFIID riid, const IID *aIids[], size
 // ============================================================================
 
 /*
+   WARNING: This does NOT work with multiple inheritance, so multiple
+   interfaces can only be supported when they inherit from each other.
+
    The most dumb implementation of IUnknown methods. We don't support
    aggregation nor containment, but for 99% of cases this simple
    implementation is quite enough.
@@ -56,7 +58,7 @@ extern WXDLLIMPEXP_CORE bool IsIidFromList(REFIID riid, const IID *aIids[], size
  */
 
 /*
-  wxAutoULong: this class is used for automatically initalising m_cRef to 0
+  wxAutoULong: this class is used for automatically initialising m_cRef to 0
 */
 class wxAutoULong
 {
@@ -82,9 +84,9 @@ private:
 
 #define   DECLARE_IUNKNOWN_METHODS                                            \
   public:                                                                     \
-    STDMETHODIMP          QueryInterface(REFIID, void **) wxOVERRIDE;         \
-    STDMETHODIMP_(ULONG)  AddRef() wxOVERRIDE;                                \
-    STDMETHODIMP_(ULONG)  Release() wxOVERRIDE;                               \
+    STDMETHODIMP          QueryInterface(REFIID, void **) override;         \
+    STDMETHODIMP_(ULONG)  AddRef() override;                                \
+    STDMETHODIMP_(ULONG)  Release() override;                               \
   private:                                                                    \
     static  const IID    *ms_aIids[];                                         \
     wxAutoULong           m_cRef
@@ -110,7 +112,7 @@ private:
       return S_OK;                                                            \
     }                                                                         \
     else {                                                                    \
-      *ppv = NULL;                                                            \
+      *ppv = nullptr;                                                            \
                                                                               \
       return (HRESULT) E_NOINTERFACE;                                         \
     }                                                                         \

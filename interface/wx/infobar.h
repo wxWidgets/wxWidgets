@@ -131,7 +131,7 @@ public:
         Notice that the generic wxInfoBar implementation handles the button
         events itself and so they are not propagated to the info bar parent and
         you need to either inherit from wxInfoBar and handle them in your
-        derived class or use wxEvtHandler::Connect(), as is done in the dialogs
+        derived class or use wxEvtHandler::Bind(), as is done in the dialogs
         sample, to handle the button events in the parent frame.
 
         @param btnid
@@ -231,7 +231,7 @@ public:
         wxMSW). The methods here allow to change the default effect used (or
         disable it entirely) and change its duration.
      */
-    //@{
+    ///@{
 
     /**
         Set the effects to use when showing and hiding the bar.
@@ -283,5 +283,5 @@ public:
      */
     virtual bool SetFont(const wxFont& font);
 
-    //@}
+    ///@}
 };

@@ -62,7 +62,7 @@
         down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 6);
         down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 14);
         wxCursor down_cursor = wxCursor(down_image);
-    #elif defined(__WXGTK__) or defined(__WXMOTIF__)
+    #elif defined(__WXGTK__)
         wxCursor down_cursor = wxCursor(down_bits, 32, 32, 6, 14,
                                         down_mask, wxWHITE, wxBLACK);
     #endif
@@ -93,9 +93,6 @@ public:
         The parameters @a fg and @a bg have an effect only on GTK+, and force
         the cursor to use particular background and foreground colours.
 
-        If either @a hotSpotX or @a hotSpotY is -1, the hotspot will be the
-        centre of the cursor image (Motif only).
-
         @param bits
             An array of XBM data bits.
         @param width
@@ -109,7 +106,7 @@ public:
         @param maskBits
             Bits for a mask bitmap.
 
-        @onlyfor{wxgtk,wxmotif}
+        @onlyfor{wxgtk}
 
         @beginWxPerlOnly
         In wxPerl use Wx::Cursor->newData(bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0).
@@ -117,7 +114,7 @@ public:
     */
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = NULL);
+             const char maskBits[] = nullptr);
 
     /**
         Constructs a cursor by passing a string resource name or filename.
@@ -140,13 +137,12 @@ public:
             - under MacOS, it defaults to @c wxBITMAP_TYPE_MACCURSOR_RESOURCE;
               when specifying a string resource name, first the color cursors 'crsr'
               and then the black/white cursors 'CURS' in the resource chain are scanned
-              through. Note that resource forks are deprecated on OS X so this
+              through. Note that resource forks are deprecated on macOS so this
               is only available for legacy reasons and should not be used in
               new code.
             - under GTK, it defaults to @c wxBITMAP_TYPE_XPM.
               See the wxCursor(const wxImage& image) ctor for more info.
             - under X11, it defaults to @c wxBITMAP_TYPE_XPM.
-            - under Motif, it defaults to @c wxBITMAP_TYPE_XBM.
         @param hotSpotX
             Hotspot x coordinate (relative to the top left of the image).
         @param hotSpotY
@@ -191,23 +187,23 @@ public:
     wxCursor(const wxImage& image);
 
     /**
+        Constructs a cursor from XPM data.
+
+        In versions of wxWidgets until 3.1.6 constructing wxCursor from XPM
+        data implicitly used wxImage constructor from XPM data and wxCursor
+        constructor from wxImage. Since 3.1.6 this constructor overload is
+        available to allow constructing wxCursor from XPM to still work, even
+        though wxImage constructor from XPM is now @c explicit.
+     */
+    wxCursor(const char* const* xpmData);
+
+    /**
         Copy constructor, uses @ref overview_refcount "reference counting".
 
         @param cursor
             Pointer or reference to a cursor to copy.
     */
     wxCursor(const wxCursor& cursor);
-
-    /**
-        Destroys the cursor. See
-        @ref overview_refcount_destruct "reference-counted object destruction"
-        for more info.
-
-        A cursor can be reused for more than one window, and does not get
-        destroyed when the window is destroyed. wxWidgets destroys all cursors
-        on application exit, although it is best to clean them up explicitly.
-    */
-    virtual ~wxCursor();
 
     /**
         Returns @true if cursor data is present.
@@ -239,10 +235,10 @@ public:
 
     @see wxStockCursor
 */
-//@{
+///@{
 wxCursor wxNullCursor;
 wxCursor* wxSTANDARD_CURSOR;
 wxCursor* wxHOURGLASS_CURSOR;
 wxCursor* wxCROSS_CURSOR;
-//@}
+///@}
 

@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
@@ -43,7 +40,7 @@
 
 wxToolTip::wxToolTip(const wxString &tip)
 {
-    m_window = NULL;
+    m_window = nullptr;
     SetTip(tip);
 }
 
@@ -63,7 +60,7 @@ const wxString &wxToolTip::GetTip() const
 
 void wxToolTip::SetWindow(wxWindow *win)
 {
-    wxCHECK_RET(win != NULL, "window should not be NULL");
+    wxCHECK_RET(win != nullptr, "window should not be null");
     m_window = win;
     m_window->QtApplyToolTip(m_text);
 }

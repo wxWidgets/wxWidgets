@@ -2,7 +2,6 @@
 // Name:        src/osx/utils_osx.cpp
 // Purpose:     Various utilities
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -65,10 +64,8 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 {
     wxUnusedVar(flags);
 
-    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(document)));
-    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-    wxCFRef<CFURLRef> curl(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
-    OSStatus err = LSOpenCFURLRef( curl , NULL );
+    wxCFRef<CFURLRef> curl(wxOSXCreateURLFromFileSystemPath(document));
+    OSStatus err = LSOpenCFURLRef( curl , nullptr );
 
     if (err == noErr)
     {
@@ -88,8 +85,8 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
     wxCFRef< CFURLRef > curl( CFURLCreateWithString( kCFAllocatorDefault,
-                              wxCFStringRef( params.url ), NULL ) );
-    OSStatus err = LSOpenCFURLRef( curl , NULL );
+                              wxCFStringRef( params.url ), nullptr ) );
+    OSStatus err = LSOpenCFURLRef( curl , nullptr );
 
     if (err == noErr)
     {
@@ -142,7 +139,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 {
     static wxCFRef<CGColorSpaceRef> genericRGBColorSpace;
 
-    if (genericRGBColorSpace == NULL)
+    if (genericRGBColorSpace == nullptr)
     {
 #if wxOSX_USE_IPHONE
         genericRGBColorSpace.reset( CGColorSpaceCreateDeviceRGB() );
@@ -197,7 +194,7 @@ void wxMacStringToPascal( const wxString&from , unsigned char * to )
 
 wxString wxMacMakeStringFromPascal( const unsigned char * from )
 {
-    return wxString( (char*) &from[1] , wxConvLocal , from[0] );
+    return wxString(&from[1], wxConvLocal, from[0]);
 }
 
 #endif // wxOSX_USE_COCOA_OR_CARBON

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS
 
@@ -46,9 +43,7 @@ union Float64Data
 // ----------------------------------------------------------------------------
 
 wxDataStreamBase::wxDataStreamBase(const wxMBConv& conv)
-#if wxUSE_UNICODE
     : m_conv(conv.Clone())
-#endif // wxUSE_UNICODE
 {
     // It is unused in non-Unicode build, so suppress a warning there.
     wxUnusedVar(conv);
@@ -62,19 +57,15 @@ wxDataStreamBase::wxDataStreamBase(const wxMBConv& conv)
 #endif // wxUSE_APPLE_IEEE
 }
 
-#if wxUSE_UNICODE
 void wxDataStreamBase::SetConv( const wxMBConv &conv )
 {
     delete m_conv;
     m_conv = conv.Clone();
 }
-#endif
 
 wxDataStreamBase::~wxDataStreamBase()
 {
-#if wxUSE_UNICODE
     delete m_conv;
-#endif // wxUSE_UNICODE
 }
 
 // ---------------------------------------------------------------------------
@@ -182,18 +173,12 @@ wxString wxDataInputStream::ReadString()
     const size_t len = Read32();
     if ( len > 0 )
     {
-#if wxUSE_UNICODE
         wxCharBuffer tmp(len);
         if ( tmp )
         {
             m_input->Read(tmp.data(), len);
-            ret = m_conv->cMB2WC(tmp.data(), len, NULL);
+            ret = m_conv->cMB2WC(tmp.data(), len, nullptr);
         }
-#else
-        wxStringBuffer buf(ret, len);
-        if ( buf )
-            m_input->Read(buf, len);
-#endif
     }
 
     return ret;
@@ -588,13 +573,8 @@ void wxDataOutputStream::Write8(wxUint8 i)
 
 void wxDataOutputStream::WriteString(const wxString& string)
 {
-#if wxUSE_UNICODE
   const wxWX2MBbuf buf = string.mb_str(*m_conv);
   size_t len = buf.length();
-#else
-  const wxWX2MBbuf buf = string.mb_str();
-  size_t len = string.size();
-#endif
   Write32(len);
   if (len > 0)
       m_output->Write(buf, len);

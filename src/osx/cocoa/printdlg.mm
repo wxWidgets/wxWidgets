@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/printdlg.mm
 // Purpose:     wxPrintDialog, wxPageSetupDialog
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -74,7 +73,7 @@ int wxMacPrintDialog::ShowModal()
 
     OSXBeginModalDialog();
 
-    if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSOKButton )
+    if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSModalResponseOK )
     {
         result = wxID_OK;
         m_printDialogData.GetPrintData().ConvertFromNative();
@@ -100,7 +99,7 @@ int wxMacPageSetupDialog::ShowModal()
     
     OSXBeginModalDialog();
 
-    if ( [pageLayout runModalWithPrintInfo:printInfo] == NSOKButton )
+    if ( [pageLayout runModalWithPrintInfo:printInfo] == NSModalResponseOK )
     {
         result = wxID_OK;
         m_pageSetupData.GetPrintData().ConvertFromNative();

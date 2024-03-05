@@ -12,15 +12,14 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
 #include "wx/list.h"
+
+#include <memory>
 
 // --------------------------------------------------------------------------
 // test class
@@ -116,7 +115,8 @@ void ListsTestCase::wxStdListTest()
     wxListInt list1;
     wxListInt::iterator it, en;
     wxListInt::reverse_iterator rit, ren;
-    int i;
+    int buf[4];
+    int& i = buf[0];
     for ( i = 0; i < 5; ++i )
         list1.push_back(i + &i);
 
@@ -200,7 +200,7 @@ void ListsTestCase::wxListCtorTest()
         CPPUNIT_ASSERT( list2.GetCount() == 2 );
         CPPUNIT_ASSERT( Baz::GetNumber() == 2 );
 
-#if !wxUSE_STL
+#if !wxUSE_STD_CONTAINERS
         list1.DeleteContents(true);
 #else
         WX_CLEAR_LIST(wxListBazs, list1);
@@ -210,7 +210,49 @@ void ListsTestCase::wxListCtorTest()
     CPPUNIT_ASSERT( Baz::GetNumber() == 0 );
 }
 
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
+// Check for WX_DECLARE_LIST_3 which is used to define wxWindowList: we can't
+// use this class itself here, as it's in the GUI library, so declare something
+// similar.
+struct ListElementBase
+{
+    virtual ~ListElementBase() { }
+};
+
+struct ListElement : ListElementBase
+{
+    explicit ListElement(int n) : m_n(n) { }
+
+    int m_n;
+};
+
+WX_DECLARE_LIST_3(ListElement, ListElementBase, ElementsList, ElementsListNode, class);
+
+#if wxUSE_STD_CONTAINERS
+
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(ElementsList)
+
+#else // !wxUSE_STD_CONTAINERS
+
+void ElementsListNode::DeleteData()
+{
+    delete static_cast<ListElement *>(GetData());
+}
+
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
+
+TEST_CASE("wxWindowList::Find", "[list]")
+{
+    ListElement* const el = new ListElement(17);
+    std::unique_ptr<ListElementBase> elb(el);
+
+    ElementsList l;
+    l.Append(el);
+
+    // We should be able to call Find() with the base class pointer.
+    ElementsList::compatibility_iterator it = l.Find(elb.get());
+    CHECK( it == l.GetFirst() );
+}
 
 #include <list>
 
@@ -232,5 +274,3 @@ TEST_CASE("wxList::iterator", "[list][std][iterator]")
     const wxListBazs cli;
     CHECK( std::list<Baz*>(cli.begin(), cli.end()).empty() );
 }
-
-#endif // wxUSE_STD_CONTAINERS_COMPATIBLY

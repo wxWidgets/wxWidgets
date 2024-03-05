@@ -28,7 +28,7 @@ public:
 
         @see wxPrintDialogData
     */
-    wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
+    wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = nullptr);
     wxPrintDialog(wxWindow *parent, wxPrintData* data);
 
     /**
@@ -104,7 +104,7 @@ public:
         Pass a parent window, and optionally a pointer to a block of page
         setup data, which will be copied to the print dialog's internal data.
     */
-    wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = NULL);
+    wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = nullptr);
 
     /**
         Destructor.

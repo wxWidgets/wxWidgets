@@ -39,10 +39,10 @@
     delete the native window when the wxNativeWindow itself is destroyed, you
     need to explicitly call Disown(). Otherwise you need to perform the
     necessary cleanup in your own code by calling the appropriate
-    platform-specific function: under MSW, this is @c ::DestroyWindow(), under
+    platform-specific function: under MSW, this is @c \::DestroyWindow(), under
     GTK @c g_object_unref() and under Cocoa -- @c -release:.
 
-    See the "native" page of the widgets sample for the examples of using
+    See the "native" page of the @ref page_samples_widgets for the examples of using
     this class under all major platforms.
 
     @since 3.1.0
@@ -75,7 +75,7 @@ public:
         Really create the window after using the default ctor to create the C++
         object.
 
-        @param parent A non-NULL parent window. For the platforms where the
+        @param parent A non-null parent window. For the platforms where the
             parent is used for creating the native window (e.g. MSW), this must
             be the wxWindow corresponding to the parent handle used when
             creating the native window.

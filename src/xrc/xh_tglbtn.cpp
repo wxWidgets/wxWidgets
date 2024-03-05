@@ -10,13 +10,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_TOGGLEBTN
 
-# if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
+# if !defined(__WXUNIVERSAL__)
 #  define wxHAVE_BITMAPS_IN_BUTTON 1
 # endif
 
@@ -29,7 +26,12 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxToggleButtonXmlHandler, wxXmlResourceHandler);
 wxToggleButtonXmlHandler::wxToggleButtonXmlHandler()
     : wxXmlResourceHandler()
 {
+    XRC_ADD_STYLE(wxBU_LEFT);
+    XRC_ADD_STYLE(wxBU_RIGHT);
+    XRC_ADD_STYLE(wxBU_TOP);
+    XRC_ADD_STYLE(wxBU_BOTTOM);
     XRC_ADD_STYLE(wxBU_EXACTFIT);
+    XRC_ADD_STYLE(wxBU_NOTEXT);
 
     AddWindowStyles();
 }
@@ -85,9 +87,26 @@ void wxToggleButtonXmlHandler::DoCreateToggleButton(wxObject *control)
 #ifdef wxHAVE_BITMAPS_IN_BUTTON
     if ( GetParamNode("bitmap") )
     {
-        button->SetBitmap(GetBitmap("bitmap", wxART_BUTTON),
+        button->SetBitmap(GetBitmapBundle("bitmap", wxART_BUTTON),
                           GetDirection("bitmapposition"));
     }
+
+    const wxXmlNode* node = GetParamNode("pressed");
+    if (node)
+        button->SetBitmapPressed(GetBitmapBundle(node));
+    node = GetParamNode("focus");
+    if (node)
+        button->SetBitmapFocus(GetBitmapBundle(node));
+    node = GetParamNode("disabled");
+    if (node)
+        button->SetBitmapDisabled(GetBitmapBundle(node));
+    node = GetParamNode("current");
+    if (node)
+        button->SetBitmapCurrent(GetBitmapBundle(node));
+
+    const wxSize margins = GetSize("margins");
+    if (margins != wxDefaultSize)
+        button->SetBitmapMargins(margins);
 #endif
 
     button->SetValue(GetBool( wxT("checked")));
@@ -100,11 +119,28 @@ void wxToggleButtonXmlHandler::DoCreateBitmapToggleButton(wxObject *control)
 
     button->Create(m_parentAsWindow,
                    GetID(),
-                   GetBitmap(wxT("bitmap"), wxART_BUTTON),
+                   GetBitmapBundle(wxT("bitmap"), wxART_BUTTON),
                    GetPosition(), GetSize(),
                    GetStyle(),
                    wxDefaultValidator,
                    GetName());
+
+    const wxXmlNode* node = GetParamNode("pressed");
+    if (node)
+        button->SetBitmapPressed(GetBitmapBundle(node));
+    node = GetParamNode("focus");
+    if (node)
+        button->SetBitmapFocus(GetBitmapBundle(node));
+    node = GetParamNode("disabled");
+    if (node)
+        button->SetBitmapDisabled(GetBitmapBundle(node));
+    node = GetParamNode("current");
+    if (node)
+        button->SetBitmapCurrent(GetBitmapBundle(node));
+
+    const wxSize margins = GetSize("margins");
+    if (margins != wxDefaultSize)
+        button->SetBitmapMargins(margins);
 
     button->SetValue(GetBool( wxT("checked")));
 }

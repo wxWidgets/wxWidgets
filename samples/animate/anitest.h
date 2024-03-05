@@ -2,7 +2,6 @@
 // Name:        anitest.cpp
 // Purpose:     anitest sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     02/07/2001
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame
@@ -36,17 +35,20 @@ public:
     void OnSetBgColor(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
 
+#ifdef wxHAS_NATIVE_ANIMATIONCTRL
+    void OnUseGeneric(wxCommandEvent& event);
+#endif // wxHAS_NATIVE_ANIMATIONCTRL
+
     void OnUpdateUI(wxUpdateUIEvent& event);
 
 #if wxUSE_FILEDLG
     void OnOpen(wxCommandEvent& event);
 #endif // wxUSE_FILEDLG
 
-    wxAnimationCtrl* GetAnimationCtrl() const { return m_animationCtrl; }
-
-protected:
-    wxAnimationCtrl*    m_animationCtrl;
-
 private:
+    void RecreateAnimation(long style);
+
+    wxAnimationCtrlBase* m_animationCtrl;
+
     wxDECLARE_EVENT_TABLE();
 };

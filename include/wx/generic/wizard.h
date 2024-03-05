@@ -29,7 +29,7 @@ public:
     wxWizard(wxWindow *parent,
              int id = wxID_ANY,
              const wxString& title = wxEmptyString,
-             const wxBitmap& bitmap = wxNullBitmap,
+             const wxBitmapBundle& bitmap = wxBitmapBundle(),
              const wxPoint& pos = wxDefaultPosition,
              long style = wxDEFAULT_DIALOG_STYLE)
     {
@@ -39,30 +39,30 @@ public:
     bool Create(wxWindow *parent,
              int id = wxID_ANY,
              const wxString& title = wxEmptyString,
-             const wxBitmap& bitmap = wxNullBitmap,
+             const wxBitmapBundle& bitmap = wxBitmapBundle(),
              const wxPoint& pos = wxDefaultPosition,
              long style = wxDEFAULT_DIALOG_STYLE);
     void Init();
     virtual ~wxWizard();
 
     // implement base class pure virtuals
-    virtual bool RunWizard(wxWizardPage *firstPage) wxOVERRIDE;
-    virtual wxWizardPage *GetCurrentPage() const wxOVERRIDE;
-    virtual void SetPageSize(const wxSize& size) wxOVERRIDE;
-    virtual wxSize GetPageSize() const wxOVERRIDE;
-    virtual void FitToPage(const wxWizardPage *firstPage) wxOVERRIDE;
-    virtual wxSizer *GetPageAreaSizer() const wxOVERRIDE;
-    virtual void SetBorder(int border) wxOVERRIDE;
+    virtual bool RunWizard(wxWizardPage *firstPage) override;
+    virtual wxWizardPage *GetCurrentPage() const override;
+    virtual void SetPageSize(const wxSize& size) override;
+    virtual wxSize GetPageSize() const override;
+    virtual void FitToPage(const wxWizardPage *firstPage) override;
+    virtual wxSizer *GetPageAreaSizer() const override;
+    virtual void SetBorder(int border) override;
 
     /// set/get bitmap
-    const wxBitmap& GetBitmap() const { return m_bitmap; }
-    void SetBitmap(const wxBitmap& bitmap);
+    wxBitmap GetBitmap() const { return m_bitmap.GetBitmapFor(this); }
+    void SetBitmap(const wxBitmapBundle& bitmap);
 
     // implementation only from now on
     // -------------------------------
 
     // is the wizard running?
-    bool IsRunning() const { return m_page != NULL; }
+    bool IsRunning() const { return m_page != nullptr; }
 
     // show the prev/next page, but call TransferDataFromWindow on the current
     // page first and return false without changing the page if
@@ -74,7 +74,7 @@ public:
     virtual void DoCreateControls();
 
     // Do the adaptation
-    virtual bool DoLayoutAdaptation() wxOVERRIDE;
+    virtual bool DoLayoutAdaptation() override;
 
     // Set/get bitmap background colour
     void SetBitmapBackgroundColour(const wxColour& colour) { m_bitmapBackgroundColour = colour; }
@@ -102,7 +102,7 @@ protected:
     virtual bool ResizeBitmap(wxBitmap& bmp);
 
     // was the dialog really created?
-    bool WasCreated() const { return m_btnPrev != NULL; }
+    bool WasCreated() const { return m_btnPrev != nullptr; }
 
     // event handlers
     void OnCancel(wxCommandEvent& event);
@@ -116,6 +116,9 @@ protected:
     void AddBackNextPair(wxBoxSizer *buttonRow);
     void AddButtonRow(wxBoxSizer *mainColumn);
 
+    // This function can be used as event handle for wxEVT_DPI_CHANGED event.
+    void WXHandleDPIChanged(wxDPIChangedEvent& event);
+
     // the page size requested by user
     wxSize m_sizePage;
 
@@ -123,9 +126,9 @@ protected:
     wxPoint m_posWizard;
 
     // wizard state
-    wxWizardPage *m_page;       // the current page or NULL
-    wxWizardPage *m_firstpage;  // the page RunWizard started on or NULL
-    wxBitmap      m_bitmap;     // the default bitmap to show
+    wxWizardPage  *m_page;       // the current page or nullptr
+    wxWizardPage  *m_firstpage;  // the page RunWizard started on or nullptr
+    wxBitmapBundle m_bitmap;     // the default bitmap to show
 
     // wizard controls
     wxButton    *m_btnPrev,     // the "<Back" button

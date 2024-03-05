@@ -46,7 +46,7 @@ class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 
 class WidgetsPageInfo;
 
-#include "wx/panel.h"
+#include "wx/scrolwin.h"
 #include "wx/vector.h"
 
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
@@ -95,9 +95,9 @@ struct WidgetAttributes
 #endif // wxUSE_TOOLTIPS
         m_enabled = true;
         m_show = true;
-        m_dir = wxLayout_LeftToRight;
+        m_dir = wxLayout_Default;
         m_variant = wxWINDOW_VARIANT_NORMAL;
-        m_cursor = *wxSTANDARD_CURSOR;
+        m_cursor = wxNullCursor;
         m_defaultFlags = wxBORDER_DEFAULT;
     }
 
@@ -119,7 +119,7 @@ struct WidgetAttributes
     long m_defaultFlags;
 };
 
-class WidgetsPage : public wxPanel
+class WidgetsPage : public wxScrolledWindow
 {
 public:
     WidgetsPage(WidgetsBookCtrl *book,
@@ -130,7 +130,7 @@ public:
     virtual wxWindow *GetWidget() const = 0;
 
     // return the control shown by this page, if it supports text entry interface
-    virtual wxTextEntryBase *GetTextEntry() const { return NULL; }
+    virtual wxTextEntryBase *GetTextEntry() const { return nullptr; }
 
     // lazy creation of the content
     virtual void CreateContent() = 0;
@@ -149,7 +149,14 @@ public:
     // this is currently used only to take into account the border flags
     virtual void RecreateWidget() = 0;
 
-    // apply current atrributes to the widget(s)
+    // notify the main window about the widget recreation if it didn't happen
+    // due to a call to RecreateWidget()
+    void NotifyWidgetRecreation(wxWindow* widget);
+
+    // enable notifications about the widget recreation disabled initially
+    void EnableRecreationNotifications() { m_notifyRecreate = true; }
+
+    // apply current attributes to the widget(s)
     void SetUpWidget();
 
     // the default attributes for the widget
@@ -163,31 +170,37 @@ protected:
     // several helper functions for page creation
 
     // create a horz sizer containing the given control and the text ctrl
-    // (pointer to which will be saved in the provided variable if not NULL)
+    // (pointer to which will be saved in the provided variable if not null)
     // with the specified id
     wxSizer *CreateSizerWithText(wxControl *control,
                                  wxWindowID id = wxID_ANY,
-                                 wxTextCtrl **ppText = NULL);
+                                 wxTextCtrl **ppText = nullptr);
 
     // create a sizer containing a label and a text ctrl
     wxSizer *CreateSizerWithTextAndLabel(const wxString& label,
                                          wxWindowID id = wxID_ANY,
-                                         wxTextCtrl **ppText = NULL);
+                                         wxTextCtrl **ppText = nullptr,
+                                         wxWindow* statBoxParent = nullptr);
 
     // create a sizer containing a button and a text ctrl
     wxSizer *CreateSizerWithTextAndButton(wxWindowID idBtn,
                                           const wxString& labelBtn,
                                           wxWindowID id = wxID_ANY,
-                                          wxTextCtrl **ppText = NULL);
+                                          wxTextCtrl **ppText = nullptr,
+                                          wxWindow* statBoxParent = nullptr);
 
     // create a checkbox and add it to the sizer
     wxCheckBox *CreateCheckBoxAndAddToSizer(wxSizer *sizer,
                                             const wxString& label,
-                                            wxWindowID id = wxID_ANY);
+                                            wxWindowID id = wxID_ANY,
+                                            wxWindow* statBoxParent = nullptr);
 
 public:
     // the head of the linked list containinginfo about all pages
     static WidgetsPageInfo *ms_widgetPages;
+
+private:
+    bool m_notifyRecreate = false;
 };
 
 // ----------------------------------------------------------------------------
@@ -221,7 +234,7 @@ private:
     // the function to create this page
     Constructor m_ctor;
 
-    // next node in the linked list or NULL
+    // next node in the linked list or nullptr
     WidgetsPageInfo *m_next;
 };
 

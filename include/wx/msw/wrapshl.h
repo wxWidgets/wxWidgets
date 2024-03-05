@@ -2,7 +2,6 @@
 // Name:        wx/msw/wrapshl.h
 // Purpose:     wrapper class for stuff from shell32.dll
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

@@ -36,16 +36,21 @@ https://tukaani.org/xz/ or clone its repository and perform the usual
 
 commands sequence.
 
-As wxWidgets is built using either configure or CMake under Unix-like systems,
-there is nothing special to do to let wxWidgets use liblzma, as it will be
-detected automatically -- just check the end of configure or CMake output to
-confirm that it was found. If this is not the case because the library was
-installed in some non-default location, you need to provide @c CPPFLAGS and @c
-LDFLAGS on configure command line, e.g.:
+@subsection page_build_liblzma_configure Use liblzma with configure
+
+Pass @c --with-liblzma option to configure to enable liblzma and check the end
+of configure output to confirm that it was found. If this is not the case
+because the library was installed in some non-default location, you need to
+provide @c CPPFLAGS and @c LDFLAGS on configure command line, e.g.:
 
 @code
-    $ ../configure CPPFLAGS=-I/opt/liblzma/include LDFLAGS=-L/opt/liblzma/lib
+    $ ../configure --with-liblzma CPPFLAGS=-I/opt/liblzma/include LDFLAGS=-L/opt/liblzma/lib
 @endcode
+
+@subsection page_build_liblzma_cmake Use liblzma with CMake
+
+When using CMake, add @c -DwxUSE_LIBLZMA=ON to CMake command line to enable
+using liblzma.
 
 
 @section page_build_liblzma_msw MSW not using configure
@@ -71,6 +76,7 @@ as simple as executing the following commands:
     > .\bootstrap-vcpkg.bat
     > .\vcpkg integrate install
     > .\vcpkg install liblzma
+    > .\vcpkg install liblzma:x64-windows
 @endcode
 
 Afterwards, liblzma headers and libraries (in DLL form) will be available to
@@ -118,7 +124,7 @@ inside the @c ClCompile tag as well as add @c liblzma.lib to the @c
 AdditionalDependencies tag under @c Link itself. The result should look like
 the following, assuming liblzma sources are in c:\\src\\liblzma:
 
-@code
+@code{.unparsed}
   <ItemDefinitionGroup>
     <ClCompile>
       ... any existing lines here ...

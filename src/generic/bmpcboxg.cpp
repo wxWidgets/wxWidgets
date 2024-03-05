@@ -2,7 +2,6 @@
 // Name:        src/generic/bmpcboxg.cpp
 // Purpose:     wxBitmapComboBox
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Aug-31-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
@@ -18,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BITMAPCOMBOBOX
 
@@ -135,11 +131,16 @@ wxBitmapComboBox::~wxBitmapComboBox()
     DoClear();
 }
 
+wxString wxBitmapComboBox::GetStringSelection() const
+{
+    return wxItemContainer::GetStringSelection();
+}
+
 // ----------------------------------------------------------------------------
 // Item manipulation
 // ----------------------------------------------------------------------------
 
-void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmap& bitmap)
+void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmapBundle& bitmap)
 {
     OnAddBitmap(bitmap);
     DoSetItemBitmap(n, bitmap);
@@ -153,15 +154,12 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
                                     void **clientData, wxClientDataType type)
 {
     const unsigned int numItems = items.GetCount();
-    const unsigned int countNew = GetCount() + numItems;
 
     wxASSERT( numItems == 1 || !HasFlag(wxCB_SORT) );  // Sanity check
 
-    m_bitmaps.Alloc(countNew);
-
     for ( unsigned int i = 0; i < numItems; i++ )
     {
-        m_bitmaps.Insert(new wxBitmap(wxNullBitmap), pos + i);
+        m_bitmapbundles.insert(m_bitmapbundles.begin() + pos + i, wxBitmapBundle());
     }
 
     const int index = wxOwnerDrawnComboBox::DoInsertItems(items, pos,
@@ -176,15 +174,15 @@ int wxBitmapComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
     {
         // Move pre-inserted empty bitmap into correct position
         // (usually happens when combo box has wxCB_SORT style)
-        wxBitmap* bmp = static_cast<wxBitmap*>(m_bitmaps[pos]);
-        m_bitmaps.RemoveAt(pos);
-        m_bitmaps.Insert(bmp, index);
+        wxBitmapBundle bmp = m_bitmapbundles.at(pos);
+        m_bitmapbundles.erase(m_bitmapbundles.begin() + pos);
+        m_bitmapbundles.insert(m_bitmapbundles.begin() + index, bmp);
     }
 
     return index;
 }
 
-int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap)
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmapBundle& bitmap)
 {
     const int n = wxOwnerDrawnComboBox::Append(item);
     if(n != wxNOT_FOUND)
@@ -192,7 +190,7 @@ int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap)
     return n;
 }
 
-int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmapBundle& bitmap,
                              void *clientData)
 {
     const int n = wxOwnerDrawnComboBox::Append(item, clientData);
@@ -201,7 +199,7 @@ int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
     return n;
 }
 
-int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Append(const wxString& item, const wxBitmapBundle& bitmap,
                              wxClientData *clientData)
 {
     const int n = wxOwnerDrawnComboBox::Append(item, clientData);
@@ -211,7 +209,7 @@ int wxBitmapComboBox::Append(const wxString& item, const wxBitmap& bitmap,
 }
 
 int wxBitmapComboBox::Insert(const wxString& item,
-                             const wxBitmap& bitmap,
+                             const wxBitmapBundle& bitmap,
                              unsigned int pos)
 {
     const int n = wxOwnerDrawnComboBox::Insert(item, pos);
@@ -220,7 +218,7 @@ int wxBitmapComboBox::Insert(const wxString& item,
     return n;
 }
 
-int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Insert(const wxString& item, const wxBitmapBundle& bitmap,
                              unsigned int pos, void *clientData)
 {
     const int n = wxOwnerDrawnComboBox::Insert(item, pos, clientData);
@@ -229,7 +227,7 @@ int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
     return n;
 }
 
-int wxBitmapComboBox::Insert(const wxString& item, const wxBitmap& bitmap,
+int wxBitmapComboBox::Insert(const wxString& item, const wxBitmapBundle& bitmap,
                              unsigned int pos, wxClientData *clientData)
 {
     const int n = wxOwnerDrawnComboBox::Insert(item, pos, clientData);
@@ -351,7 +349,7 @@ wxCoord wxBitmapComboBox::OnMeasureItem(size_t item) const
 wxCoord wxBitmapComboBox::OnMeasureItemWidth(size_t item) const
 {
     wxCoord x, y;
-    GetTextExtent(GetString(item), &x, &y, 0, 0);
+    GetTextExtent(GetString(item), &x, &y, nullptr, nullptr);
     x += m_imgAreaWidth;
     return x;
 }

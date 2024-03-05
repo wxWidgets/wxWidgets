@@ -209,6 +209,11 @@ public:
     virtual ~wxAuiDockArt();
 
     /**
+       Create a copy of this wxAuiDockArt instance.
+    */
+    virtual wxAuiDockArt* Clone() = 0;
+
+    /**
         Draws a background.
     */
     virtual void DrawBackground(wxDC& dc, wxWindow* window, int orientation,
@@ -297,6 +302,7 @@ public:
 
     wxAuiDefaultDockArt();
 
+    virtual wxAuiDockArt* Clone();
     int GetMetric(int metricId);
     void SetMetric(int metricId, int newVal);
     wxColour GetColour(int id);
@@ -359,14 +365,14 @@ protected:
     wxBrush m_backgroundBrush;
     wxBrush m_gripperBrush;
     wxFont m_captionFont;
-    wxBitmap m_inactiveCloseBitmap;
-    wxBitmap m_inactivePinBitmap;
-    wxBitmap m_inactiveMaximizeBitmap;
-    wxBitmap m_inactiveRestoreBitmap;
-    wxBitmap m_activeCloseBitmap;
-    wxBitmap m_activePinBitmap;
-    wxBitmap m_activeMaximizeBitmap;
-    wxBitmap m_activeRestoreBitmap;
+    wxBitmapBundle m_inactiveCloseBitmap;
+    wxBitmapBundle m_inactivePinBitmap;
+    wxBitmapBundle m_inactiveMaximizeBitmap;
+    wxBitmapBundle m_inactiveRestoreBitmap;
+    wxBitmapBundle m_activeCloseBitmap;
+    wxBitmapBundle m_activePinBitmap;
+    wxBitmapBundle m_activeMaximizeBitmap;
+    wxBitmapBundle m_activeRestoreBitmap;
     wxPen m_gripperPen1;
     wxPen m_gripperPen2;
     wxPen m_gripperPen3;

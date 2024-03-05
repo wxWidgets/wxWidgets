@@ -610,12 +610,18 @@ public:
     int GetC();
 
     /**
-        Returns the last number of bytes read.
+        Returns the last number of bytes read by the last input operation.
+
+        Such operations include Read(), GetC() and Peek().
     */
     virtual size_t LastRead() const;
 
     /**
         Returns the first character in the input queue without removing it.
+
+        If Peek() failed, e.g. because there is nothing more to read in the
+        stream, LastRead() will return 0 after calling it, otherwise it will
+        return 1.
     */
     virtual char Peek();
 
@@ -783,12 +789,12 @@ public:
         @param stream
             The associated low-level stream.
         @param buffer
-            The buffer to use if non-@NULL. Notice that the ownership of this
+            The buffer to use if non-null. Notice that the ownership of this
             buffer is taken by the stream, i.e. it will delete it. If this
             parameter is @NULL a default 1KB buffer is used.
     */
     wxBufferedInputStream(wxInputStream& stream,
-                          wxStreamBuffer *buffer = NULL);
+                          wxStreamBuffer *buffer = nullptr);
 
     /**
         Constructor allowing to specify the size of the buffer.
@@ -877,7 +883,7 @@ public:
     static const wxFilterClassFactory* Find(const wxString& protocol,
                                             wxStreamProtocolType type = wxSTREAM_PROTOCOL);
 
-    //@{
+    ///@{
     /**
         GetFirst and GetNext can be used to enumerate the available factories.
         For example, to list them:
@@ -887,7 +893,7 @@ public:
         const wxFilterClassFactory *factory = wxFilterClassFactory::GetFirst();
 
         while (factory) {
-            list << factory->GetProtocol() << wxT("\n");
+            list << factory->GetProtocol() << "\n";
             factory = factory->GetNext();
         }
         @endcode
@@ -897,7 +903,7 @@ public:
     */
     static const wxFilterClassFactory* GetFirst();
     const wxFilterClassFactory* GetNext() const;
-    //@}
+    ///@}
 
     /**
         Returns the wxFileSystem protocol supported by this factory.
@@ -917,12 +923,12 @@ public:
         const wxChar *const *p;
 
         for (p = factory->GetProtocols(wxSTREAM_FILEEXT); *p; p++)
-            list << *p << wxT("\n");
+            list << *p << "\n";
         @endcode
     */
     virtual const wxChar * const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const = 0;
 
-    //@{
+    ///@{
     /**
         Create a new input or output stream to decompress or compress a given stream.
 
@@ -933,7 +939,7 @@ public:
     virtual wxFilterOutputStream* NewStream(wxOutputStream& stream) const = 0;
     virtual wxFilterInputStream*  NewStream(wxInputStream* stream) const = 0;
     virtual wxFilterOutputStream* NewStream(wxOutputStream* stream) const = 0;
-    //@}
+    ///@}
 
     /**
         Remove the file extension of @a location if it is one of the file
@@ -987,7 +993,7 @@ public:
 class wxFilterOutputStream : public wxOutputStream
 {
 public:
-    //@{
+    ///@{
     /**
         Initializes a "filter" stream.
 
@@ -996,7 +1002,7 @@ public:
     */
     wxFilterOutputStream(wxOutputStream& stream);
     wxFilterOutputStream(wxOutputStream* stream);
-    //@}
+    ///@}
 };
 
 
@@ -1020,7 +1026,7 @@ public:
 class wxFilterInputStream : public wxInputStream
 {
 public:
-    //@{
+    ///@{
     /**
         Initializes a "filter" stream.
 
@@ -1029,7 +1035,7 @@ public:
     */
     wxFilterInputStream(wxInputStream& stream);
     wxFilterInputStream(wxInputStream* stream);
-    //@}
+    ///@}
 };
 
 
@@ -1058,12 +1064,12 @@ public:
         @param stream
             The associated low-level stream.
         @param buffer
-            The buffer to use if non-@NULL. Notice that the ownership of this
+            The buffer to use if non-null. Notice that the ownership of this
             buffer is taken by the stream, i.e. it will delete it. If this
             parameter is @NULL a default 1KB buffer is used.
     */
     wxBufferedOutputStream(wxOutputStream& stream,
-                           wxStreamBuffer *buffer = NULL);
+                           wxStreamBuffer *buffer = nullptr);
 
     /**
         Constructor allowing to specify the size of the buffer.
@@ -1118,7 +1124,7 @@ public:
 class wxWrapperInputStream : public wxFilterInputStream
 {
 public:
-    //@{
+    ///@{
     /**
         Initializes a wrapper stream.
 
@@ -1127,7 +1133,7 @@ public:
     */
     wxWrapperInputStream(wxInputStream& stream);
     wxWrapperInputStream(wxInputStream* stream);
-    //@}
+    ///@}
 
 protected:
     /**
@@ -1139,7 +1145,7 @@ protected:
      */
     wxWrapperInputStream();
 
-    //@{
+    ///@{
     /**
         Set up the wrapped stream for an object initialized using the default
         constructor.
@@ -1150,5 +1156,5 @@ protected:
      */
     void InitParentStream(wxInputStream& stream);
     void InitParentStream(wxInputStream* stream);
-    //@}
+    ///@}
 };

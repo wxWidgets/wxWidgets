@@ -21,21 +21,46 @@
 class wxDisplayFactory
 {
 public:
-    wxDisplayFactory() { }
+    wxDisplayFactory() = default;
     virtual ~wxDisplayFactory() { ClearImpls(); }
 
     // Create the display if necessary using CreateDisplay(), otherwise just
     // get it from cache.
     wxDisplayImpl* GetDisplay(unsigned n)
     {
-        if ( m_impls.empty() )
+        // Normally, m_impls should be cleared if the number of displays in the
+        // system changes because InvalidateCache() must be called. However in
+        // some ports (e.g. Mac right now, see #18318), cache invalidation never
+        // happens, so we can end up with m_impls size being out of sync with
+        // the actual number of monitors. Compensate for this here by checking
+        // if the index is invalid and invalidating the cache at least in this
+        // case.
+        //
+        // Note that this is still incorrect because we continue using outdated
+        // information if the first monitor is disconnected, for example. The
+        // only real solution is to ensure that InvalidateCache() is called,
+        // but for now this at least avoids crashes when a new display is
+        // connected.
+        if ( n >= m_impls.size() )
+        {
+            // This strange two-step resize is done to clear all the existing
+            // elements: they may not be valid any longer if the number of
+            // displays has changed.
+            m_impls.resize(0);
             m_impls.resize(GetCount());
+        }
         else if ( m_impls[n] )
+        {
+            // Just return the existing display if we have it.
             return m_impls[n];
+        }
 
         m_impls[n] = CreateDisplay(n);
         return m_impls[n];
     }
+
+    // Return the primary display object, creating it if necessary.
+    wxDisplayImpl* GetPrimaryDisplay();
 
     // get the total number of displays
     virtual unsigned GetCount() = 0;
@@ -43,9 +68,13 @@ public:
     // return the display for the given point or wxNOT_FOUND
     virtual int GetFromPoint(const wxPoint& pt) = 0;
 
+    // return the display with biggest intersection with the given rectangle or
+    // wxNOT_FOUND
+    virtual int GetFromRect(const wxRect& rect);
+
     // return the display for the given window or wxNOT_FOUND
     //
-    // the window pointer must not be NULL (i.e. caller should check it)
+    // the window pointer must not be null (i.e. caller should check it)
     virtual int GetFromWindow(const wxWindow *window);
 
     // Trigger recreation of wxDisplayImpl when they're needed the next time.
@@ -54,7 +83,7 @@ public:
 protected:
     // create a new display object
     //
-    // it can return a NULL pointer if the display creation failed
+    // it can return a null pointer if the display creation failed
     virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
 private:
@@ -75,7 +104,7 @@ class wxDisplayImpl
 {
 public:
     // virtual dtor for this base class
-    virtual ~wxDisplayImpl() { }
+    virtual ~wxDisplayImpl() = default;
 
 
     // return the full area of this display
@@ -90,14 +119,9 @@ public:
     // return the scale factor used to convert logical pixels to physical ones
     virtual double GetScaleFactor() const { return 1.0; }
 
-    // return the resolution of the display, uses GetSize(), GetScaleFactor()
-    // and GetSizeMM() by default but can be also overridden directly
-    virtual wxSize GetPPI() const;
-
-    // return the physical size of the display or (0, 0) if unknown: this is
-    // only used by GetPPI() implementation in the base class, so if GetPPI()
-    // is overridden, this one doesn't have to be implemented
-    virtual wxSize GetSizeMM() const { return wxSize(0, 0); }
+    // return the resolution of the display, by default uses GetScaleFactor(),
+    // but can be also overridden directly, as is done in wxMSW
+    virtual wxSize GetPPI() const { return wxDisplay::GetStdPPI()*GetScaleFactor(); }
 
     // return the name (may be empty)
     virtual wxString GetName() const { return wxString(); }
@@ -124,11 +148,6 @@ protected:
     // create the object providing access to the display with the given index
     wxDisplayImpl(unsigned n) : m_index(n) { }
 
-    // Compute PPI from the sizes in pixels and mm.
-    //
-    // Return (0, 0) if physical size (in mm) is not known, i.e. 0.
-    static wxSize ComputePPI(int pxX, int pxY, int mmX, int mmY);
-
 
     // the index of this display (0 is always the primary one)
     const unsigned m_index;
@@ -154,17 +173,17 @@ public:
 #if wxUSE_DISPLAY
     // no video modes support for us, provide just the stubs
     virtual wxArrayVideoModes
-    GetModes(const wxVideoMode& WXUNUSED(mode)) const wxOVERRIDE
+    GetModes(const wxVideoMode& WXUNUSED(mode)) const override
     {
         return wxArrayVideoModes();
     }
 
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE
+    virtual wxVideoMode GetCurrentMode() const override
     {
         return wxVideoMode();
     }
 
-    virtual bool ChangeMode(const wxVideoMode& WXUNUSED(mode)) wxOVERRIDE
+    virtual bool ChangeMode(const wxVideoMode& WXUNUSED(mode)) override
     {
         return false;
     }
@@ -187,11 +206,11 @@ public:
 class wxDisplayFactorySingle : public wxDisplayFactory
 {
 public:
-    virtual unsigned GetCount() wxOVERRIDE { return 1; }
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual unsigned GetCount() override { return 1; }
+    virtual int GetFromPoint(const wxPoint& pt) override;
 
 protected:
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) override;
 
     virtual wxDisplayImpl *CreateSingleDisplay() = 0;
 };

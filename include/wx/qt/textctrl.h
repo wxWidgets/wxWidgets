@@ -8,7 +8,6 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-class QScrollArea;
 class wxQtEdit;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
@@ -22,7 +21,7 @@ public:
                const wxSize &size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString &name = wxTextCtrlNameStr);
+               const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
     virtual ~wxTextCtrl();
 
@@ -33,43 +32,68 @@ public:
                 const wxSize &size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxTextCtrlNameStr);
+                const wxString &name = wxASCII_STR(wxTextCtrlNameStr));
 
-    virtual int GetLineLength(long lineNo) const wxOVERRIDE;
-    virtual wxString GetLineText(long lineNo) const wxOVERRIDE;
-    virtual int GetNumberOfLines() const wxOVERRIDE;
+    virtual int GetLineLength(long lineNo) const override;
+    virtual wxString GetLineText(long lineNo) const override;
+    virtual int GetNumberOfLines() const override;
 
-    virtual bool IsModified() const wxOVERRIDE;
-    virtual void MarkDirty() wxOVERRIDE;
-    virtual void DiscardEdits() wxOVERRIDE;
+    virtual bool IsModified() const override;
+    virtual void MarkDirty() override;
+    virtual void DiscardEdits() override;
 
-    virtual bool SetStyle(long start, long end, const wxTextAttr& style) wxOVERRIDE;
-    virtual bool GetStyle(long position, wxTextAttr& style) wxOVERRIDE;
-    virtual bool SetDefaultStyle(const wxTextAttr& style) wxOVERRIDE;
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style) override;
+    virtual bool GetStyle(long position, wxTextAttr& style) override;
+    virtual bool SetDefaultStyle(const wxTextAttr& style) override;
 
-    virtual long XYToPosition(long x, long y) const wxOVERRIDE;
-    virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;
+    virtual long XYToPosition(long x, long y) const override;
+    virtual bool PositionToXY(long pos, long *x, long *y) const override;
 
-    virtual void ShowPosition(long pos) wxOVERRIDE;
+    virtual void ShowPosition(long pos) override;
 
-    virtual void SetInsertionPoint(long pos) wxOVERRIDE;
-    virtual long GetInsertionPoint() const wxOVERRIDE;
-    virtual void SetSelection( long from, long to ) wxOVERRIDE;
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const override;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const override
+    {
+        return wxTextCtrlBase::HitTest(pt, col, row);
+    }
 
-    virtual wxString DoGetValue() const wxOVERRIDE;
-    virtual void DoSetValue(const wxString &text, int flags = 0) wxOVERRIDE;
-    virtual void WriteText(const wxString& text) wxOVERRIDE;
+    virtual void SetInsertionPoint(long pos) override;
+    virtual long GetInsertionPoint() const override;
+    virtual void SetSelection( long from, long to ) override;
+    virtual void GetSelection(long *from, long *to) const override;
 
-    virtual QWidget *GetHandle() const wxOVERRIDE;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
+
+    virtual void EmptyUndoBuffer() override;
+
+    virtual bool IsEditable() const override;
+    virtual void SetEditable(bool editable) override;
+
+    virtual wxString DoGetValue() const override;
+    virtual void DoSetValue(const wxString &text, int flags = 0) override;
+    virtual void WriteText(const wxString& text) override;
+
+    virtual void SetMaxLength(unsigned long len) override;
+
+    virtual QWidget *GetHandle() const override;
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
-    virtual bool DoLoadFile(const wxString& file, int fileType) wxOVERRIDE;
-    virtual bool DoSaveFile(const wxString& file, int fileType) wxOVERRIDE;
+    virtual bool DoLoadFile(const wxString& file, int fileType) override;
+    virtual bool DoSaveFile(const wxString& file, int fileType) override;
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const wxOVERRIDE;
+    // From wxTextEntry:
+    virtual wxWindow *GetEditableWindow() override { return this; }
 
 private:
     wxQtEdit *m_qtEdit;

@@ -2,7 +2,6 @@
 // Name:        wx/thrimpl.cpp
 // Purpose:     common part of wxThread Implementations
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.06.02 (extracted from src/*/thread.cpp files)
 // Copyright:   (c) Vadim Zeitlin (2002)
 // Licence:     wxWindows licence
@@ -21,7 +20,7 @@ wxMutex::wxMutex(wxMutexType mutexType)
     if ( !m_internal->IsOk() )
     {
         delete m_internal;
-        m_internal = NULL;
+        m_internal = nullptr;
     }
 }
 
@@ -32,7 +31,7 @@ wxMutex::~wxMutex()
 
 bool wxMutex::IsOk() const
 {
-    return m_internal != NULL;
+    return m_internal != nullptr;
 }
 
 wxMutexError wxMutex::Lock()
@@ -235,7 +234,7 @@ wxCondition::wxCondition(wxMutex& mutex)
     if ( !m_internal->IsOk() )
     {
         delete m_internal;
-        m_internal = NULL;
+        m_internal = nullptr;
     }
 }
 
@@ -246,7 +245,7 @@ wxCondition::~wxCondition()
 
 bool wxCondition::IsOk() const
 {
-    return m_internal != NULL;
+    return m_internal != nullptr;
 }
 
 wxCondError wxCondition::Wait()
@@ -291,7 +290,7 @@ wxSemaphore::wxSemaphore(int initialcount, int maxcount)
     if ( !m_internal->IsOk() )
     {
         delete m_internal;
-        m_internal = NULL;
+        m_internal = nullptr;
     }
 }
 
@@ -302,7 +301,7 @@ wxSemaphore::~wxSemaphore()
 
 bool wxSemaphore::IsOk() const
 {
-    return m_internal != NULL;
+    return m_internal != nullptr;
 }
 
 wxSemaError wxSemaphore::Wait()
@@ -342,16 +341,8 @@ wxSemaError wxSemaphore::Post()
 // ----------------------------------------------------------------------------
 
 #include "wx/utils.h"
-#include "wx/private/threadinfo.h"
-#include "wx/scopeguard.h"
 
 void wxThread::Sleep(unsigned long milliseconds)
 {
     wxMilliSleep(milliseconds);
-}
-
-void *wxThread::CallEntry()
-{
-    wxON_BLOCK_EXIT0(wxThreadSpecificInfo::ThreadCleanUp);
-    return Entry();
 }

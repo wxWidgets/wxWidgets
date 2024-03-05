@@ -87,7 +87,7 @@ def getWxRelease(wxRoot=None):
         global wxRootDir
         wxRoot = wxRootDir
         
-    configureText = open(os.path.join(wxRoot, "configure.in"), "r").read()
+    configureText = open(os.path.join(wxRoot, "configure.ac"), "r").read()
     majorVersion = re.search("wx_major_version_number=(\d+)", configureText).group(1)
     minorVersion = re.search("wx_minor_version_number=(\d+)", configureText).group(1)
     
@@ -372,9 +372,7 @@ def main(scriptName, args):
         flags = {}
         buildDir = os.path.abspath(os.path.join(scriptDir, "..", "msw"))
 
-        print("creating wx/msw/setup.h from setup0.h")
-        if options.unicode:
-            flags["wxUSE_UNICODE"] = "1"
+        print("creating wx/msw/setup.h")
     
         if options.cairo:
             if not os.environ.get("CAIRO_ROOT"):
@@ -392,10 +390,6 @@ def main(scriptName, args):
             flags["wxUSE_AFM_FOR_POSTSCRIPT"] = "0"
             flags["wxUSE_DATEPICKCTRL_GENERIC"] = "1"
 
-            # Remove this when Windows XP finally dies, or when there is a
-            # solution for ticket #13116...
-            flags["wxUSE_COMPILER_TLS"] = "0"
-            
             if VERSION < (2,9):
                 flags["wxUSE_DIB_FOR_BITMAP"] = "1"
 
@@ -404,13 +398,13 @@ def main(scriptName, args):
 
     
         mswIncludeDir = os.path.join(wxRootDir, "include", "wx", "msw")
-        setup0File = os.path.join(mswIncludeDir, "setup0.h")
-        setupText = open(setup0File, "rb").read()
+        setupFile = os.path.join(mswIncludeDir, "setup.h")
+        setupText = open(setupFile, "rb").read()
         
         for flag in flags:
             setupText, subsMade = re.subn(flag + "\s+?\d", "%s %s" % (flag, flags[flag]), setupText)
             if subsMade == 0:
-                print("Flag %s wasn't found in setup0.h!" % flag)
+                print("Flag %s wasn't found in setup.h!" % flag)
                 sys.exit(1)
     
         setupFile = open(os.path.join(mswIncludeDir, "setup.h"), "wb")
@@ -420,8 +414,6 @@ def main(scriptName, args):
         if toolkit == "msvc":
             print("setting build options...")
             args.append("-f makefile.vc")
-            if options.unicode:
-                args.append("UNICODE=1")
     
             if options.wxpython:
                 args.append("OFFICIAL_BUILD=1")

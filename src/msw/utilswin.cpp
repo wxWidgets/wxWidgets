@@ -2,7 +2,6 @@
 // Name:        src/msw/utilswin.cpp
 // Purpose:     Various utility functions only available in Windows GUI
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.06.2003 (extracted from msw/utils.cpp)
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -10,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

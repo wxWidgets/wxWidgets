@@ -31,7 +31,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = 0,
                         const wxValidator& validator = wxDefaultValidator,
-                        const wxString& name = wxButtonNameStr)
+                        const wxString& name = wxASCII_STR(wxButtonNameStr))
         : wxGenericCommandLinkButton()
     {
         Create(parent, id, mainLabel, note, pos, size, style, validator, name);
@@ -45,26 +45,26 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr);
+                const wxString& name = wxASCII_STR(wxButtonNameStr));
 
     // overridden base class methods
     // -----------------------------
 
     // do the same thing as in the generic case here
-    virtual void SetLabel(const wxString& label) wxOVERRIDE
+    virtual void SetLabel(const wxString& label) override
     {
         SetMainLabelAndNote(label.BeforeFirst('\n'), label.AfterFirst('\n'));
     }
 
     virtual void SetMainLabelAndNote(const wxString& mainLabel,
-                                     const wxString& note) wxOVERRIDE;
+                                     const wxString& note) override;
 
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const override;
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
-    virtual bool HasNativeBitmap() const wxOVERRIDE;
+    virtual bool HasNativeBitmap() const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCommandLinkButton);

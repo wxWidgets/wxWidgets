@@ -19,12 +19,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/icon.h"
@@ -99,13 +95,13 @@ wxObjectRefData *wxIcon::CloneRefData(const wxObjectRefData *dataOrig) const
     const wxIconRefData *
         data = static_cast<const wxIconRefData *>(dataOrig);
     if ( !data )
-        return NULL;
+        return nullptr;
 
     // we don't have to copy m_hIcon because we're only called from SetHICON()
     // which overwrites m_hIcon anyhow currently
     //
     // and if we're called from SetWidth/Height/Depth(), it doesn't make sense
-    // to copy it neither as the handle would be inconsistent with the new size
+    // to copy it either as the handle would be inconsistent with the new size
     return new wxIconRefData(*data);
 }
 
@@ -118,7 +114,8 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
     }
     else
     {
-        InitFromHICON((WXHICON)hicon, bmp.GetWidth(), bmp.GetHeight());
+        InitFromHICON((WXHICON)hicon, bmp.GetWidth(), bmp.GetHeight(),
+                      bmp.GetScaleFactor());
     }
 }
 
@@ -157,10 +154,10 @@ bool wxIcon::CreateFromHICON(WXHICON icon)
     return InitFromHICON(icon, size.GetWidth(), size.GetHeight());
 }
 
-bool wxIcon::InitFromHICON(WXHICON icon, int width, int height)
+bool wxIcon::InitFromHICON(WXHICON icon, int width, int height, double scale)
 {
 #if wxDEBUG_LEVEL >= 2
-    if ( icon != NULL )
+    if ( icon != nullptr )
     {
         wxSize size = wxGetHiconSize(icon);
         wxASSERT_MSG(size.GetWidth() == width && size.GetHeight() == height,
@@ -173,6 +170,7 @@ bool wxIcon::InitFromHICON(WXHICON icon, int width, int height)
     GetGDIImageData()->m_handle = (WXHANDLE)icon;
     GetGDIImageData()->m_width = width;
     GetGDIImageData()->m_height = height;
+    GetGDIImageData()->m_scaleFactor = scale;
 
     return IsOk();
 }

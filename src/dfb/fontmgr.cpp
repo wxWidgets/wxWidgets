@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/gdicmn.h"
@@ -58,7 +55,7 @@ wxFontInstance::wxFontInstance(float ptSize, bool aa,
     desc.fract_height = pixSize;
 
     if ( filename == BUILTIN_DFB_FONT_FILENAME )
-        m_font = wxIDirectFB::Get()->CreateFont(NULL, &desc);
+        m_font = wxIDirectFB::Get()->CreateFont(nullptr, &desc);
     else
         m_font = wxIDirectFB::Get()->CreateFont(filename.fn_str(), &desc);
 
@@ -196,11 +193,11 @@ void wxFontsManager::AddFontsFromDir(const wxString& indexFile)
     if ( !fn.FileExists() )
     {
         wxLogWarning(_("Fonts index file %s disappeared while loading fonts."),
-                     indexFile.c_str());
+                     indexFile);
         return;
     }
 
-    wxLogTrace("font", "adding fonts from %s", dir.c_str());
+    wxLogTrace("font", "adding fonts from %s", dir);
 
     wxFileConfig cfg(wxEmptyString, wxEmptyString,
                      indexFile, wxEmptyString,
@@ -234,9 +231,9 @@ void wxFontsManager::AddFont(const wxString& dir,
                              const wxString& name,
                              wxFileConfig& cfg)
 {
-    wxLogTrace("font", "adding font '%s'", name.c_str());
+    wxLogTrace("font", "adding font '%s'", name);
 
-    wxConfigPathChanger ch(&cfg, wxString::Format("/%s/", name.c_str()));
+    wxConfigPathChanger ch(&cfg, wxString::Format("/%s/", name));
 
     AddBundle
     (

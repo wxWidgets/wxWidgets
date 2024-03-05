@@ -42,7 +42,7 @@ public:
 
     public:
         compatibility_iterator()
-            : m_iter(), m_list( NULL ) {}
+            : m_iter(), m_list( nullptr ) {}
         compatibility_iterator( ListType* li, iterator i )
             : m_iter( i ), m_list( li ) {}
         compatibility_iterator( const ListType* li, iterator i )
@@ -206,10 +206,10 @@ public:
     class Node
     {
     public:
-        Node(wxDList<T> *list = NULL,
-             Node *previous = NULL,
-             Node *next = NULL,
-             T *data = NULL)
+        Node(wxDList<T> *list = nullptr,
+             Node *previous = nullptr,
+             Node *next = nullptr,
+             T *data = nullptr)
         {
             m_list = list;
             m_previous = previous;
@@ -226,7 +226,7 @@ public:
             // handle the case when we're being deleted from the list by
             // the user (i.e. not by the list itself from DeleteNode) -
             // we must do it for compatibility with old code
-            if (m_list != NULL)
+            if (m_list != nullptr)
                 m_list->DetachNode(this);
         }
 
@@ -267,7 +267,7 @@ public:
     class compatibility_iterator
     {
     public:
-        compatibility_iterator(nodetype *ptr = NULL) : m_ptr(ptr) { }
+        compatibility_iterator(nodetype *ptr = nullptr) : m_ptr(ptr) { }
         nodetype *operator->() const { return m_ptr; }
         operator nodetype *() const  { return m_ptr; }
 
@@ -279,7 +279,7 @@ private:
     void Init()
     {
         m_nodeFirst =
-        m_nodeLast = NULL;
+        m_nodeLast = nullptr;
         m_count = 0;
         m_destroy = false;
     }
@@ -289,7 +289,7 @@ private:
         if ( m_destroy )
             node->DeleteData();
         // so that the node knows that it's being deleted by the list
-        node->m_list = NULL;
+        node->m_list = nullptr;
         delete node;
     }
 
@@ -328,7 +328,7 @@ public:
     ~wxDList()
     {
         nodetype *each = m_nodeFirst;
-        while ( each != NULL )
+        while ( each != nullptr )
         {
             nodetype *next = each->GetNext();
                 DoDeleteNode(each);
@@ -339,11 +339,11 @@ public:
     void Assign(const wxDList<T> &list)
     {
         wxASSERT_MSG( !list.m_destroy,
-                      "copying list which owns it's elements is a bad idea" );
+                      "copying list which owns its elements is a bad idea" );
         Clear();
         m_destroy = list.m_destroy;
-        m_nodeFirst = NULL;
-        m_nodeLast = NULL;
+        m_nodeFirst = nullptr;
+        m_nodeLast = nullptr;
         nodetype* node;
         for (node = list.GetFirst(); node; node = node->GetNext() )
             Append(node->GetData());
@@ -352,7 +352,7 @@ public:
 
     nodetype *Append( T *object )
     {
-        nodetype *node = new nodetype( this, m_nodeLast, NULL, object );
+        nodetype *node = new nodetype( this, m_nodeLast, nullptr, object );
 
         if ( !m_nodeFirst )
         {
@@ -370,7 +370,7 @@ public:
 
     nodetype *Insert( T* object )
     {
-        return Insert( NULL, object );
+        return Insert( nullptr, object );
     }
 
     nodetype *Insert( size_t pos, T* object )
@@ -383,7 +383,7 @@ public:
 
     nodetype *Insert( nodetype *position, T* object )
     {
-        wxCHECK_MSG( !position || position->m_list == this, NULL,
+        wxCHECK_MSG( !position || position->m_list == this, nullptr,
                      "can't insert before a node from another list" );
 
         // previous and next node for the node being inserted
@@ -396,13 +396,13 @@ public:
         else
         {
             // inserting in the beginning of the list
-            prev = NULL;
+            prev = nullptr;
             next = m_nodeFirst;
         }
         nodetype *node = new nodetype( this, prev, next, object );
         if ( !m_nodeFirst )
             m_nodeLast = node;
-        if ( prev == NULL )
+        if ( prev == nullptr )
             m_nodeFirst = node;
         m_count++;
         return node;
@@ -424,19 +424,19 @@ public:
                return current;
         }
         wxFAIL_MSG( "invalid index in Item()" );
-        return NULL;
+        return nullptr;
     }
 
     T *operator[](size_t index) const
     {
         nodetype *node = Item(index);
-        return node ? node->GetData() : NULL;
+        return node ? node->GetData() : nullptr;
     }
 
     nodetype *DetachNode( nodetype *node )
     {
-        wxCHECK_MSG( node, NULL, "detaching NULL wxNodeBase" );
-        wxCHECK_MSG( node->m_list == this, NULL,
+        wxCHECK_MSG( node, nullptr, "detaching null wxNodeBase" );
+        wxCHECK_MSG( node->m_list == this, nullptr,
                      "detaching node which is not from this list" );
         // update the list
         nodetype **prevNext = node->GetPrevious() ? &node->GetPrevious()->m_next
@@ -447,7 +447,7 @@ public:
         *nextPrev = node->GetPrevious();
         m_count--;
         // mark the node as not belonging to this list any more
-        node->m_list = NULL;
+        node->m_list = nullptr;
         return node;
     }
 
@@ -486,7 +486,7 @@ public:
                 return current;
         }
         // not found
-        return NULL;
+        return nullptr;
     }
 
     int IndexOf(const T *object) const
@@ -511,7 +511,7 @@ public:
             current = next;
         }
         m_nodeFirst =
-        m_nodeLast = NULL;
+        m_nodeLast = nullptr;
         m_count = 0;
     }
 
@@ -556,7 +556,7 @@ public:
             if ( (*F)(current->GetData()) )
                 return current->GetData();
         }
-        return NULL;
+        return nullptr;
     }
 
     T *LastThat(wxListIterateFunction F)
@@ -566,7 +566,7 @@ public:
             if ( (*F)(current->GetData()) )
                 return current->GetData();
         }
-        return NULL;
+        return nullptr;
     }
 
     /* STL interface */
@@ -593,7 +593,7 @@ public:
         typedef ptr_type pointer_type;
 
         iterator(Node* node, Node* init) : m_node(node), m_init(init) {}
-        iterator() : m_node(NULL), m_init(NULL) { }
+        iterator() : m_node(nullptr), m_init(nullptr) { }
         reference_type operator*() const
             { return *m_node->GetDataPtr(); }
         // ptrop
@@ -633,7 +633,7 @@ public:
 
         const_iterator(Node* node, Node* init)
             : m_node(node), m_init(init) { }
-        const_iterator() : m_node(NULL), m_init(NULL) { }
+        const_iterator() : m_node(nullptr), m_init(nullptr) { }
         const_iterator(const iterator& it)
             : m_node(it.m_node), m_init(it.m_init) { }
         reference_type operator*() const
@@ -676,7 +676,7 @@ public:
 
         reverse_iterator(Node* node, Node* init)
             : m_node(node), m_init(init) { }
-        reverse_iterator() : m_node(NULL), m_init(NULL) { }
+        reverse_iterator() : m_node(nullptr), m_init(nullptr) { }
         reference_type operator*() const
             { return *m_node->GetDataPtr(); }
         // ptrop
@@ -715,7 +715,7 @@ public:
 
         const_reverse_iterator(Node* node, Node* init)
             : m_node(node), m_init(init) { }
-        const_reverse_iterator() : m_node(NULL), m_init(NULL) { }
+        const_reverse_iterator() : m_node(nullptr), m_init(nullptr) { }
         const_reverse_iterator(const reverse_iterator& it)
             : m_node(it.m_node), m_init(it.m_init) { }
         reference_type operator*() const
@@ -746,15 +746,15 @@ public:
     iterator begin() { return iterator(GetFirst(), GetLast()); }
     const_iterator begin() const
         { return const_iterator(GetFirst(), GetLast()); }
-    iterator end() { return iterator(NULL, GetLast()); }
-    const_iterator end() const { return const_iterator(NULL, GetLast()); }
+    iterator end() { return iterator(nullptr, GetLast()); }
+    const_iterator end() const { return const_iterator(nullptr, GetLast()); }
     reverse_iterator rbegin()
         { return reverse_iterator(GetLast(), GetFirst()); }
     const_reverse_iterator rbegin() const
         { return const_reverse_iterator(GetLast(), GetFirst()); }
-    reverse_iterator rend() { return reverse_iterator(NULL, GetFirst()); }
+    reverse_iterator rend() { return reverse_iterator(nullptr, GetFirst()); }
     const_reverse_iterator rend() const
-        { return const_reverse_iterator(NULL, GetFirst()); }
+        { return const_reverse_iterator(nullptr, GetFirst()); }
     void resize(size_type n, value_type v = value_type())
     {
         while (n < size())

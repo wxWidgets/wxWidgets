@@ -2,7 +2,6 @@
 // Name:        src/common/srchcmn.cpp
 // Purpose:     common (to all ports) bits of wxSearchCtrl
 // Author:      Robin Dunn
-// Modified by:
 // Created:     19-Dec-2006
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SEARCHCTRL
 

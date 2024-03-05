@@ -2,7 +2,6 @@
 // Name:        wx/x11/window.h
 // Purpose:     wxWindow class
 // Author:      Julian Smart
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 #include "wx/region.h"
 
 // ----------------------------------------------------------------------------
-// wxWindow class for Motif - see also wxWindowBase
+// wxWindow class for X11 - see also wxWindowBase
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxWindowX11 : public wxWindowBase
@@ -30,7 +29,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxPanelNameStr)
+        const wxString& name = wxASCII_STR(wxPanelNameStr))
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -43,14 +42,14 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
-        const wxString& name = wxPanelNameStr);
+        const wxString& name = wxASCII_STR(wxPanelNameStr));
 
     virtual void Raise();
     virtual void Lower();
 
     // SetLabel(), which does nothing in wxWindow
-    virtual void SetLabel(const wxString& label) wxOVERRIDE { m_Label = label; }
-    virtual wxString GetLabel() const wxOVERRIDE            { return m_Label; }
+    virtual void SetLabel(const wxString& label) override { m_Label = label; }
+    virtual wxString GetLabel() const override            { return m_Label; }
 
     virtual bool Show( bool show = true );
     virtual bool Enable( bool enable = true );
@@ -60,7 +59,7 @@ public:
     virtual void WarpPointer(int x, int y);
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL );
+                          const wxRect *rect = nullptr );
     virtual void Update();
 
     virtual bool SetBackgroundColour( const wxColour &colour );
@@ -72,7 +71,7 @@ public:
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
 
-    virtual void ScrollWindow( int dx, int dy, const wxRect* rect = NULL );
+    virtual void ScrollWindow( int dx, int dy, const wxRect* rect = nullptr );
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
@@ -160,9 +159,9 @@ protected:
     // implement the base class pure virtuals
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
-                                 int *descent = NULL,
-                                 int *externalLeading = NULL,
-                                 const wxFont *font = NULL) const;
+                                 int *descent = nullptr,
+                                 int *externalLeading = nullptr,
+                                 const wxFont *font = nullptr) const;
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
     virtual void DoGetPosition( int *x, int *y ) const;
@@ -203,7 +202,7 @@ private:
 // undesired effects.
 //
 // Usage: create an instance of this class on the stack to disable the size
-// optimisation, it will be reenabled as soon as the object goes out from scope.
+// optimisation, it will be re-enabled as soon as the object goes out from scope.
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxNoOptimize

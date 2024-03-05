@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
@@ -113,6 +110,8 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle hwnd)
 
     // inherit the other attributes we can from the native HWND
     AdoptAttributesFromHWND();
+
+    wxTopLevelWindows.Append(this);
 
     return true;
 }

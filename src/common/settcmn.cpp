@@ -17,9 +17,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/settings.h"
 
@@ -71,6 +68,21 @@ void wxSystemSettings::SetScreenType( wxSystemScreenType screen )
 // Trivial wxSystemAppearance implementation
 // ----------------------------------------------------------------------------
 
+// wxMSW has its own implementation of these functions.
+#if !defined(__WXMSW__)
+
+bool wxSystemAppearance::AreAppsDark() const
+{
+    return IsDark();
+}
+
+bool wxSystemAppearance::IsSystemDark() const
+{
+    return IsDark();
+}
+
+#endif // !__WXMSW__
+
 #if !defined(__WXOSX__)
 
 wxString wxSystemAppearance::GetName() const
@@ -78,12 +90,17 @@ wxString wxSystemAppearance::GetName() const
     return wxString();
 }
 
+#endif // !__WXOSX__
+
+// These ports implement this function using platform-specific API.
+#if !defined(__WXOSX__) && !defined(__WXMSW__)
+
 bool wxSystemAppearance::IsDark() const
 {
     return IsUsingDarkBackground();
 }
 
-#endif // !__WXOSX__
+#endif // !__WXOSX__ && !__WXMSW__
 
 bool wxSystemAppearance::IsUsingDarkBackground() const
 {

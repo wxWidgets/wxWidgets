@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HYPERLINKCTRL
 
@@ -37,10 +34,13 @@
     #include "wx/menu.h"
     #include "wx/log.h"
     #include "wx/dataobj.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/clipbrd.h"
 #include "wx/renderer.h"
+
+#include "wx/private/hyperlink.h"
 
 // ============================================================================
 // implementation
@@ -110,7 +110,7 @@ void wxGenericHyperlinkCtrl::Init()
     m_visited = false;
 
     // colours
-    m_normalColour = *wxBLUE;
+    m_normalColour = wxPrivate::GetLinkColour();
     m_hoverColour = *wxRED;
     m_visitedColour = wxColour("#551a8b");
 }
@@ -125,8 +125,22 @@ void wxGenericHyperlinkCtrl::ConnectMenuHandlers()
 
 wxSize wxGenericHyperlinkCtrl::DoGetBestClientSize() const
 {
-    wxClientDC dc((wxWindow *)this);
+    wxClientDC dc(const_cast<wxGenericHyperlinkCtrl*>(this));
     return dc.GetTextExtent(GetLabel());
+}
+
+wxVisualAttributes wxGenericHyperlinkCtrl::GetDefaultAttributes() const
+{
+    return GetClassDefaultAttributes(GetWindowVariant());
+}
+
+/* static */
+wxVisualAttributes
+wxGenericHyperlinkCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    auto attrs = wxHyperlinkCtrlBase::GetClassDefaultAttributes(variant);
+    attrs.colFg = wxPrivate::GetLinkColour();
+    return attrs;
 }
 
 

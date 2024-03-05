@@ -178,11 +178,7 @@ typedef struct tagHH_POPUPW {
     LPCWSTR   pszFont;
 } HH_POPUPW;
 
-#ifdef _UNICODE
 typedef HH_POPUPW HH_POPUP;
-#else
-typedef HH_POPUPA HH_POPUP;
-#endif
 
 typedef struct tagHH_ALINKA {
     int    cbStruct;
@@ -206,13 +202,8 @@ typedef struct tagHH_ALINKW {
     BOOL    fIndexOnFail;
 } HH_ALINKW;
 
-#ifdef _UNICODE
 typedef HH_ALINKW HH_ALINK;
 typedef HH_ALINKW HH_AKLINK;
-#else
-typedef HH_ALINKA HH_ALINK;
-typedef HH_ALINKA HH_AKLINK;
-#endif
 
 enum {
     HHWIN_NAVTYPE_TOC,
@@ -296,11 +287,7 @@ typedef struct tagHH_FTS_QUERYW {
     LPCWSTR pszWindow;
 } HH_FTS_QUERYW;
 
-#ifdef _UNICODE
 typedef HH_FTS_QUERYW HH_FTS_QUERY;
-#else
-typedef HH_FTS_QUERYA HH_FTS_QUERY;
-#endif
 
 typedef struct tagHH_WINTYPEA {
     int          cbStruct;
@@ -380,11 +367,7 @@ typedef struct tagHH_WINTYPEW {
     LPCWSTR      pszCustomTabs;
 } HH_WINTYPEW, *PHH_WINTYPEW;
 
-#ifdef _UNICODE
 typedef HH_WINTYPEW HH_WINTYPE;
-#else
-typedef HH_WINTYPEA HH_WINTYPE;
-#endif
 
 enum {
     HHACT_TAB_CONTENTS,
@@ -427,11 +410,7 @@ typedef struct tagHH_NTRACKW {
     PHH_WINTYPEW phhWinType;
 } HH_NTRACKW;
 
-#ifdef _UNICODE
 typedef HH_NTRACKW HH_NTRACK;
-#else
-typedef HH_NTRACKA HH_NTRACK;
-#endif
 
 HWND WINAPI HtmlHelpA(HWND,LPCSTR,UINT,DWORD);
 HWND WINAPI HtmlHelpA(HWND,LPCSTR,UINT,DWORD);

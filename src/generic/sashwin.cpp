@@ -4,7 +4,6 @@
 //              sash on each edge, allowing it to be dragged. An event
 //              is generated when the sash is released.
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -13,9 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SASH
 
@@ -78,7 +74,7 @@ void wxSashWindow::Init()
     m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
     m_mouseCaptured = false;
-    m_currentCursor = NULL;
+    m_currentCursor = nullptr;
 
     // Eventually, we'll respond to colour change messages
     InitColours();
@@ -313,7 +309,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         else
         {
             SetCursor(wxNullCursor);
-            m_currentCursor = NULL;
+            m_currentCursor = nullptr;
         }
     }
     else if ( event.Dragging() &&
@@ -548,7 +544,6 @@ void wxSashWindow::DrawSashTracker(wxSashEdgePosition edge, int x, int y)
     int w, h;
     GetClientSize(&w, &h);
 
-    wxScreenDC screenDC;
     int x1, y1;
     int x2, y2;
 
@@ -586,18 +581,34 @@ void wxSashWindow::DrawSashTracker(wxSashEdgePosition edge, int x, int y)
     ClientToScreen(&x1, &y1);
     ClientToScreen(&x2, &y2);
 
+#ifdef __WXGTK3__
+    // We need to draw over the parent window, not this one, as we want to
+    // allow the sash go outside of this window.
+    wxWindow* const parent = wxGetTopLevelParent(this);
+    if ( !parent )
+        return;
+
+    wxClientDC dc(parent);
+    parent->ScreenToClient(&x1, &y1);
+    parent->ScreenToClient(&x2, &y2);
+
+    // In the ports with wxGraphicsContext-based wxDC, wxINVERT only works for
+    // inverting the background when using white foreground (note that this
+    // code is not going to work anyhow with wxOSX nor with wxGTK when using
+    // Wayland, as drawing using wxClientDC doesn't work at all there), but
+    // this at least makes it work with wxGTK with X11.
+    wxPen sashTrackerPen(*wxWHITE, 2, wxPENSTYLE_SOLID);
+#else
+    wxScreenDC dc;
+
     wxPen sashTrackerPen(*wxBLACK, 2, wxPENSTYLE_SOLID);
+#endif
 
-    screenDC.SetLogicalFunction(wxINVERT);
-    screenDC.SetPen(sashTrackerPen);
-    screenDC.SetBrush(*wxTRANSPARENT_BRUSH);
+    dc.SetLogicalFunction(wxINVERT);
+    dc.SetPen(sashTrackerPen);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-    screenDC.DrawLine(x1, y1, x2, y2);
-
-    screenDC.SetLogicalFunction(wxCOPY);
-
-    screenDC.SetPen(wxNullPen);
-    screenDC.SetBrush(wxNullBrush);
+    dc.DrawLine(x1, y1, x2, y2);
 }
 
 // Position and size subwindows.

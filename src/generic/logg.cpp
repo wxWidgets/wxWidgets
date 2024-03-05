@@ -3,7 +3,6 @@
 // Purpose:     wxLog-derived classes which need GUI support (the rest is in
 //              src/common/log.cpp)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.99 (extracted from src/common/log.cpp)
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -20,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -50,6 +46,7 @@
 #include "wx/artprov.h"
 #include "wx/collpane.h"
 #include "wx/arrstr.h"
+#include "wx/modalhook.h"
 #include "wx/msgout.h"
 #include "wx/scopeguard.h"
 
@@ -178,7 +175,7 @@ wxEND_EVENT_TABLE()
 // filename and try to open it, returns true on success (file was opened),
 // false if file couldn't be opened/created and -1 if the file selection
 // dialog was cancelled
-static int OpenLogFile(wxFile& file, wxString *filename = NULL, wxWindow *parent = NULL);
+static int OpenLogFile(wxFile& file, wxString *filename = nullptr, wxWindow *parent = nullptr);
 
 #endif // CAN_SAVE_FILES
 
@@ -192,9 +189,44 @@ static int OpenLogFile(wxFile& file, wxString *filename = NULL, wxWindow *parent
 
 #if wxUSE_LOGGUI
 
+namespace
+{
+
+class LogFlushHook : public wxModalDialogHook
+{
+public:
+    LogFlushHook() = default;
+
+    virtual int Enter(wxDialog* WXUNUSED(dialog)) override
+    {
+        wxLog::FlushActive();
+
+        return wxID_NONE;
+    }
+};
+
+// We can have a static object of this class because it doesn't have any
+// members and so its constructor and destructor are trivial.
+LogFlushHook gs_logFlushHook;
+
+// Registration count, just in case the application creates more than one
+// wxLogGui instance (which is unusual but can still happen).
+int gs_logFlushHookRegistrationCount = 0;
+
+} // anonymous namespace
+
 wxLogGui::wxLogGui()
 {
+    if ( !gs_logFlushHookRegistrationCount++ )
+        gs_logFlushHook.Register();
+
     Clear();
+}
+
+wxLogGui::~wxLogGui()
+{
+    if ( !--gs_logFlushHookRegistrationCount )
+        gs_logFlushHook.Unregister();
 }
 
 void wxLogGui::Clear()
@@ -236,7 +268,7 @@ wxString wxLogGui::GetTitle() const
             titleFormat = _("%s Information");
     }
 
-    return wxString::Format(titleFormat, wxTheApp->GetAppDisplayName());
+    return wxString::Format(titleFormat, wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
 }
 
 void
@@ -255,7 +287,7 @@ wxLogGui::DoShowMultipleLogMessages(const wxArrayString& messages,
                                     int style)
 {
 #if wxUSE_LOG_DIALOG
-    wxLogDialog dlg(NULL,
+    wxLogDialog dlg(nullptr,
                     messages, severities, times,
                     title, style);
 
@@ -270,7 +302,7 @@ wxLogGui::DoShowMultipleLogMessages(const wxArrayString& messages,
     const size_t nMsgCount = messages.size();
     message.reserve(nMsgCount*100);
     for ( size_t n = nMsgCount; n > 0; n-- ) {
-        message << m_aMessages[n - 1] << wxT("\n");
+        message << messages[n - 1] << wxT("\n");
     }
 
     DoShowSingleLogMessage(message, title, style);
@@ -345,7 +377,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
             {
                 m_aMessages.Add(msg);
                 m_aSeverity.Add(wxLOG_Message);
-                m_aTimes.Add((long)info.timestamp);
+                m_aTimes.Add((long)(info.timestampMS / 1000));
                 m_bHasMessages = true;
             }
             break;
@@ -353,7 +385,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
         case wxLOG_Status:
 #if wxUSE_STATUSBAR
             {
-                wxFrame *pFrame = NULL;
+                wxFrame *pFrame = nullptr;
 
                 // check if the frame was passed to us explicitly
                 wxUIntPtr ptr = 0;
@@ -363,7 +395,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
                 }
 
                 // find the top window and set it's status text if it has any
-                if ( pFrame == NULL ) {
+                if ( pFrame == nullptr ) {
                     wxWindow *pWin = wxTheApp->GetTopWindow();
                     if ( wxDynamicCast(pWin, wxFrame) ) {
                         pFrame = (wxFrame *)pWin;
@@ -398,7 +430,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
 
             m_aMessages.Add(msg);
             m_aSeverity.Add((int)level);
-            m_aTimes.Add((long)info.timestamp);
+            m_aTimes.Add((long)(info.timestampMS / 1000));
             m_bHasMessages = true;
             break;
 
@@ -442,7 +474,7 @@ public:
     virtual ~wxLogFrame();
 
     // Don't prevent the application from exiting if just this frame remains.
-    virtual bool ShouldPreventAppExit() const wxOVERRIDE { return false; }
+    virtual bool ShouldPreventAppExit() const override { return false; }
 
     // menu callbacks
     void OnClose(wxCommandEvent& event);
@@ -491,17 +523,17 @@ wxEND_EVENT_TABLE()
 wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTitle)
           : wxFrame(pParent, wxID_ANY, szTitle)
 {
+    // We don't want our parent frame getting any events from us.
+    SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+
     m_log = log;
 
     m_pTextCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
             wxDefaultSize,
             wxTE_MULTILINE  |
             wxHSCROLL       |
-            // needed for Win32 to avoid 65Kb limit but it doesn't work well
-            // when using RichEdit 2.0 which we always do in the Unicode build
-#if !wxUSE_UNICODE
+            // needed for Win32 to avoid 65Kb limit
             wxTE_RICH       |
-#endif // !wxUSE_UNICODE
             wxTE_READONLY);
 
 #if wxUSE_MENUS
@@ -573,7 +605,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         wxLogError(_("Can't save log contents to file."));
     }
     else {
-        wxLogStatus((wxFrame*)this, _("Log saved to the file '%s'."), filename.c_str());
+        wxLogStatus((wxFrame*)this, _("Log saved to the file '%s'."), filename);
     }
 }
 #endif // CAN_SAVE_FILES
@@ -596,10 +628,10 @@ wxLogWindow::wxLogWindow(wxWindow *pParent,
                          bool bShow,
                          bool bDoPass)
 {
-    // Initialize it to NULL to ensure that we don't crash if any log messages
+    // Initialize it to nullptr to ensure that we don't crash if any log messages
     // are generated before the frame is fully created (while this doesn't
     // happen normally, it might, in principle).
-    m_pLogFrame = NULL;
+    m_pLogFrame = nullptr;
 
     PassMessages(bDoPass);
 
@@ -643,12 +675,12 @@ bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))
 
 void wxLogWindow::OnFrameDelete(wxFrame * WXUNUSED(frame))
 {
-    m_pLogFrame = NULL;
+    m_pLogFrame = nullptr;
 }
 
 wxLogWindow::~wxLogWindow()
 {
-    // may be NULL if log frame already auto destroyed itself
+    // may be null if log frame already auto destroyed itself
     delete m_pLogFrame;
 }
 
@@ -700,7 +732,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
         m_times.Add(times[n]);
     }
 
-    m_listctrl = NULL;
+    m_listctrl = nullptr;
 
     bool isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
@@ -804,11 +836,13 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
         m_listctrl->InsertColumn(1, wxT("Time"));
 
     // prepare the imagelist
-    static const int ICON_SIZE = 16;
-    wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
+    wxSize iconSize(16, 16);
+    iconSize *= parent->GetDPIScaleFactor();
+
+    wxImageList *imageList = new wxImageList(iconSize.x, iconSize.y);
 
     // order should be the same as in the switch below!
-    static const char* const icons[] =
+    static wxString const icons[] =
     {
         wxART_ERROR,
         wxART_WARNING,
@@ -820,7 +854,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
     {
         wxBitmap bmp = wxArtProvider::GetBitmap(icons[icon], wxART_MESSAGE_BOX,
-                                                wxSize(ICON_SIZE, ICON_SIZE));
+                                                iconSize);
 
         // This may very well fail if there are insufficient colours available.
         // Degrade gracefully.
@@ -964,7 +998,7 @@ void wxLogDialog::OnCopy(wxCommandEvent& WXUNUSED(event))
 void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 {
     wxFile file;
-    int rc = OpenLogFile(file, NULL, this);
+    int rc = OpenLogFile(file, nullptr, this);
     if ( rc == -1 )
     {
         // cancelled
@@ -1012,7 +1046,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
         bool bAppend = false;
         wxString strMsg;
         strMsg.Printf(_("Append log to file '%s' (choosing [No] will overwrite it)?"),
-                      filename.c_str());
+                      filename);
         switch ( wxMessageBox(strMsg, _("Question"),
                               wxICON_QUESTION | wxYES_NO | wxCANCEL) ) {
             case wxYES:

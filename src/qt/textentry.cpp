@@ -9,6 +9,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/textentry.h"
+#include "wx/window.h"
+
+#include <QtWidgets/QWidget>
 
 wxTextEntry::wxTextEntry()
 {
@@ -73,12 +76,12 @@ long wxTextEntry::GetLastPosition() const
 
 void wxTextEntry::SetSelection(long WXUNUSED(from), long WXUNUSED(to))
 {
-    wxFAIL_MSG("wxTextEntry::SetSelection should be overriden");
+    wxFAIL_MSG("wxTextEntry::SetSelection should be overridden");
 }
 
 void wxTextEntry::GetSelection(long *from, long *to) const
 {
-    // no unified get selection method in Qt (overriden in textctrl & combobox)
+    // no unified get selection method in Qt (overridden in textctrl & combobox)
     // only called if no selection
     // If the return values from and to are the same, there is no
     // selection.
@@ -102,12 +105,20 @@ wxString wxTextEntry::DoGetValue() const
     return wxString();
 }
 
-void wxTextEntry::DoSetValue(const wxString &WXUNUSED(value), int WXUNUSED(flags))
+void wxTextEntry::DoSetValue(const wxString& value, int flags)
 {
+    wxTextEntryBase::DoSetValue(value, flags);
 }
 
 wxWindow *wxTextEntry::GetEditableWindow()
 {
-    return NULL;
+    return nullptr;
 }
 
+void wxTextEntry::EnableTextChangedEvents(bool enable)
+{
+    wxWindow* const win = GetEditableWindow();
+
+    if ( win )
+        win->GetHandle()->blockSignals(!enable);
+}

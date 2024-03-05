@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -23,6 +20,8 @@
 #endif // WX_PRECOMP
 
 #include "asserthelper.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // test fixture
@@ -287,6 +286,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::SetMinSize", "[sizer]")
     CHECK(m_sizer->GetMinSize().x == 100);
 }
 
+#if wxUSE_LISTBOX
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::BestSizeRespectsMaxSize", "[sizer]")
 {
     m_sizer->Clear();
@@ -332,6 +332,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize1", "[si
 
     CHECK(listbox2->GetSize().GetWidth() == maxWidth);
 }
+#endif
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize2", "[sizer]")
 {
@@ -365,7 +366,9 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
 #define ASSERT_SIZER_INVALID_FLAGS(f, msg) \
     WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE( \
             "Expected assertion not generated for " msg, \
-            sizer->Add(10, 10, 0, f) \
+            std::unique_ptr<wxSizerItem> item(new wxSizerItem(10, 10, 0, f)); \
+            sizer->Add(item.get()); \
+            item.release() \
         )
 
 #define ASSERT_SIZER_INCOMPATIBLE_FLAGS(f1, f2) \
@@ -394,7 +397,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
     // Combining two vertical alignment flags doesn't make sense.
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxALIGN_BOTTOM, wxALIGN_CENTRE_VERTICAL);
 
-    // Combining wxEXPAND with vertical alignment doesn't make sense neither.
+    // Combining wxEXPAND with vertical alignment doesn't make sense either.
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_VERTICAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_BOTTOM);
 
@@ -437,4 +440,46 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
 
 #undef ASSERT_SIZER_INCOMPATIBLE_FLAGS
 #undef ASSERT_SIZER_INVALID_FLAGS
+}
+
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Replace", "[sizer]")
+{
+    m_sizer->AddSpacer(1);
+    m_sizer->Replace(0, new wxSizerItem(new wxWindow(m_win, wxID_ANY)));
+}
+
+TEST_CASE("Sizer::CombineFlags", "[sizer]")
+{
+    // This is a compile-time test which simply verifies that we can combine
+    // all the different flags without getting any warnings about doing it --
+    // as would have been the case when using C++20 or later if we didn't use
+    // wxALLOW_COMBINING_ENUMS() for all these enums in wx/defs.h.
+    //
+    // These constants belong to the following enums, respectively:
+    //
+    //         wxALIGN_CENTER         wxAlignment
+    //         wxBORDER_NONE          wxBorder
+    //         wxLEFT                 wxDirection
+    //         wxCENTER               wxGeometryCentre
+    //         wxFIXED_MINSIZE        wxSizerFlagBits
+    //         wxEXPAND               wxStretch
+    //
+    int n = (wxALIGN_CENTER | wxBORDER_NONE)
+          | (wxALIGN_CENTER | wxLEFT)
+          | (wxALIGN_CENTER | wxCENTER)
+          | (wxALIGN_CENTER | wxFIXED_MINSIZE)
+          | (wxALIGN_CENTER | wxEXPAND)
+          | (wxBORDER_NONE | wxLEFT)
+          | (wxBORDER_NONE | wxCENTER)
+          | (wxBORDER_NONE | wxFIXED_MINSIZE)
+          | (wxBORDER_NONE | wxEXPAND)
+          | (wxLEFT | wxCENTER)
+          | (wxLEFT | wxFIXED_MINSIZE)
+          | (wxLEFT | wxEXPAND)
+          | (wxCENTER | wxFIXED_MINSIZE)
+          | (wxCENTER | wxEXPAND)
+          | (wxFIXED_MINSIZE | wxEXPAND)
+          ;
+
+    wxUnusedVar(n);
 }

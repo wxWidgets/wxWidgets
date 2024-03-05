@@ -2,7 +2,6 @@
 // Name:        src/msw/stdpaths.cpp
 // Purpose:     wxStandardPaths implementation for Win32
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STDPATHS
 
@@ -36,6 +32,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapshl.h"
+#include "wx/msw/private/cotaskmemptr.h"
 #include <initguid.h>
 
 // ----------------------------------------------------------------------------
@@ -69,7 +66,7 @@ struct ShellFunctions
 {
     ShellFunctions()
     {
-        pSHGetKnownFolderPath = NULL;
+        pSHGetKnownFolderPath = nullptr;
         initialized = false;
     }
 
@@ -89,8 +86,6 @@ ShellFunctions gs_shellFuncs;
 
 void ResolveShellFunctions()
 {
-#if wxUSE_DYNLIB_CLASS
-
     // start with the newest functions, fall back to the oldest ones
     // first check for SHGetFolderPath (shell32.dll 5.0)
     wxString shellDllName(wxT("shell32"));
@@ -98,7 +93,7 @@ void ResolveShellFunctions()
     wxDynamicLibrary dllShellFunctions( shellDllName );
     if ( !dllShellFunctions.IsLoaded() )
     {
-        wxLogTrace(TRACE_MASK, wxT("Failed to load %s.dll"), shellDllName.c_str() );
+        wxLogTrace(TRACE_MASK, wxT("Failed to load %s.dll"), shellDllName );
     }
 
     // don't give errors if the functions are unavailable, we're ready to deal
@@ -112,7 +107,6 @@ void ResolveShellFunctions()
     // because we also link to it statically, so it's ok
 
     gs_shellFuncs.initialized = true;
-#endif
 }
 
 } // anonymous namespace
@@ -133,27 +127,21 @@ wxString wxStandardPaths::DoGetDirectory(int csidl)
 
     hr = ::SHGetFolderPath
             (
-            NULL,               // parent window, not used
+            nullptr,               // parent window, not used
             csidl,
-            NULL,               // access token (current user)
+            nullptr,               // access token (current user)
             SHGFP_TYPE_CURRENT, // current path, not just default value
             wxStringBuffer(dir, MAX_PATH)
             );
 
-    // somewhat incredibly, the error code in the Unicode version is
-    // different from the one in ASCII version for this function
-#if wxUSE_UNICODE
     if ( hr == E_FAIL )
-#else
-    if ( hr == S_FALSE )
-#endif
     {
         // directory doesn't exist, maybe we can get its default value?
         hr = ::SHGetFolderPath
                 (
-                NULL,
+                nullptr,
                 csidl,
-                NULL,
+                nullptr,
                 SHGFP_TYPE_DEFAULT,
                 wxStringBuffer(dir, MAX_PATH)
                 );
@@ -171,12 +159,11 @@ wxString wxStandardPaths::DoGetKnownFolder(const GUID& rfid)
 
     if ( gs_shellFuncs.pSHGetKnownFolderPath )
     {
-        PWSTR pDir;
+        wxCoTaskMemPtr<wchar_t> pDir;
         HRESULT hr = gs_shellFuncs.pSHGetKnownFolderPath(rfid, 0, 0, &pDir);
         if ( SUCCEEDED(hr) )
         {
             dir = pDir;
-            CoTaskMemFree(pDir);
         }
     }
 
@@ -201,6 +188,9 @@ wxString wxStandardPaths::GetUserDir(Dir userDir) const
     {
         case Dir_Cache:
             csidl = CSIDL_LOCAL_APPDATA;
+            break;
+        case Dir_Config:
+            csidl = CSIDL_APPDATA;
             break;
         case Dir_Desktop:
             csidl = CSIDL_DESKTOPDIRECTORY;
@@ -264,10 +254,14 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     // there can also be an architecture-dependent parent directory, ignore it
     // as well
 #ifdef __WIN64__
+    IgnoreAppSubDir("Win64");
     IgnoreAppSubDir("x64");
+    IgnoreAppSubDir("x86_64");
     IgnoreAppSubDir("ARM64");
 #else // __WIN32__
     IgnoreAppSubDir("Win32");
+    IgnoreAppSubDir("x86");
+    IgnoreAppSubDir("ARM");
 #endif // __WIN64__/__WIN32__
 
     wxString compilerPrefix;
@@ -275,8 +269,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "vc";
 #elif defined(__GNUG__)
     compilerPrefix = "gcc";
-#elif defined(__BORLANDC__)
-    compilerPrefix = "bcc";
 #else
     return;
 #endif
@@ -354,6 +346,12 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
     wxFileName fn(wxEmptyString, basename);
     fn.SetExt(wxT("ini"));
     return fn.GetFullName();
+}
+
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    wxFileName fn( GetExecutablePath() );
+    return fn.GetPath();
 }
 
 // ============================================================================

@@ -54,6 +54,13 @@ bool wxDataViewBitmapRenderer::GetValue( wxVariant &value ) const
     return false;
 }
 
+bool
+wxDataViewBitmapRenderer::IsCompatibleVariantType(const wxString& variantType) const
+{
+    return variantType == wxS("wxBitmap")
+            || variantType == wxS("wxIcon");
+}
+
 //==============================================================================
 
 wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &variantType, wxDataViewCellMode mode,
@@ -87,7 +94,7 @@ wxSize wxDataViewCustomRenderer::GetSize() const
 
 wxDC *wxDataViewCustomRenderer::GetDC()
 {
-    return NULL;
+    return nullptr;
 }
 
 //==============================================================================
@@ -178,7 +185,7 @@ wxSize wxDataViewIconTextRenderer::GetSize() const
 
 wxControl *wxDataViewIconTextRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
-    return NULL;
+    return nullptr;
 }
 
 bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )

@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtexttabspage.cpp
 // Purpose:     Implements the rich text formatting dialog tabs page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/4/2006 8:03:20 AM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -62,8 +61,8 @@ void wxRichTextTabsPage::Init()
     m_tabsPresent = false;
 
 ////@begin wxRichTextTabsPage member initialisation
-    m_tabEditCtrl = NULL;
-    m_tabListCtrl = NULL;
+    m_tabEditCtrl = nullptr;
+    m_tabListCtrl = nullptr;
 ////@end wxRichTextTabsPage member initialisation
 }
 

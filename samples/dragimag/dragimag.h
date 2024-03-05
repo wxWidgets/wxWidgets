@@ -2,7 +2,6 @@
 // Name:        dragimag.h
 // Purpose:     wxDragImage sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     28/2/2000
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -44,16 +43,16 @@ class MyApp: public wxApp
 {
 public:
     MyApp();
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
 //// Operations
 
     // Tile the bitmap
-    bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
+    bool TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap);
 
 //// Accessors
-    wxBitmap& GetBackgroundBitmap() const { return (wxBitmap&) m_background; }
+    const wxBitmap& GetBackgroundBitmap() const { return m_background; }
 
     bool GetUseScreen() const { return m_useScreen; }
     void SetUseScreen(bool useScreen) { m_useScreen = useScreen; }
@@ -136,7 +135,7 @@ public:
 
     wxRect GetRect() const { return wxRect(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight()); }
 
-    wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
+    const wxBitmap& GetBitmap() const { return m_bitmap; }
     void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
 
     int GetDragMethod() const { return m_dragMethod; }
@@ -177,10 +176,12 @@ public:
     {
     }
 
+#if wxUSE_GENERIC_DRAGIMAGE
     // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
     // a window, so we need to draw the background explicitly.
     virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC, const wxRect& sourceRect,
-                    const wxRect& destRect) const wxOVERRIDE;
+                    const wxRect& destRect) const override;
+#endif
 
 protected:
     MyCanvas*   m_canvas;

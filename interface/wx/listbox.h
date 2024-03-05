@@ -24,10 +24,7 @@
     performance nor from user interface point of view, for large number of
     items.
 
-    Notice that currently @c TAB characters in list box items text are not
-    handled consistently under all platforms, so they should be replaced by
-    spaces to display strings properly everywhere. The list box doesn't
-    support any other control characters at all.
+    Notice that the list box doesn't support control characters other than @c TAB.
 
     @beginStyleTable
     @style{wxLB_SINGLE}
@@ -114,7 +111,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               int n = 0,
-              const wxString choices[] = NULL,
+              const wxString choices[] = nullptr,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = wxListBoxNameStr);
@@ -144,7 +141,7 @@ public:
     */
     virtual ~wxListBox();
 
-    //@{
+    ///@{
     /**
         Creates the listbox for two-step construction.
         See wxListBox() for further details.
@@ -152,7 +149,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n = 0, const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
@@ -163,7 +160,12 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
-    //@}
+    ///@}
+
+    /**
+        return true if the listbox allows multiple selection
+    */
+    bool HasMultipleSelection() const;
 
     /**
         Deselects an item in the list box.
@@ -177,6 +179,18 @@ public:
 
     virtual void SetSelection(int n);
 
+    /**
+        Returns the index of the selected item or @c wxNOT_FOUND if no item is
+        selected.
+
+        @return The position of the current selection.
+
+        @remarks This method can be used with single selection list boxes only,
+                 you must use wxListBox::GetSelections() for the list
+                 boxes with wxLB_MULTIPLE style.
+
+        @see SetSelection(), GetStringSelection()
+    */
     virtual int GetSelection() const;
 
     virtual bool SetStringSelection(const wxString& s, bool select);
@@ -186,7 +200,7 @@ public:
         Fill an array of ints with the positions of the currently selected items.
 
         @param selections
-            A reference to an wxArrayInt instance that is used to store the result of
+            A reference to a wxArrayInt instance that is used to store the result of
             the query.
 
         @return The number of selections.
@@ -321,6 +335,28 @@ public:
     */
     int GetTopItem() const;
 
+    /**
+        MSW-specific function for setting custom tab stop distances.
+
+        Tab stops are expressed in dialog unit widths, i.e. "quarters of the
+        average character width for the font that is selected into the list
+        box".
+
+        @param tabStops
+            If this argument is empty, tab stops are reset to their default
+            value (every 32 dialog units). If it contains a single element, tab
+            stops are set at each multiple of the given value. Otherwise tab
+            stops are set at every element of the array, which must be in
+            ascending order.
+
+        @return @true if all specified tabs are set, @false otherwise
+
+        @onlyfor{wxmsw}
+
+        @since 3.1.4
+     */
+    virtual bool MSWSetTabStops(const wxVector<int>& tabStops);
+
     // NOTE: Phoenix needs to see the implementation of pure virtuals so it
     // knows that this class is not abstract.
     virtual unsigned int GetCount() const;
@@ -328,4 +364,3 @@ public:
     virtual void SetString(unsigned int n, const wxString& s);
     virtual int FindString(const wxString& s, bool bCase = false) const;
 };
-

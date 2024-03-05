@@ -3,7 +3,6 @@
 // Purpose:     wxInputHandler class maps the keyboard and mouse events to the
 //              actions which then are performed by the control
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     18.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -86,24 +85,24 @@ public:
 
     virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
-                           bool pressed) wxOVERRIDE
+                           bool pressed) override
     {
         return m_handler ? m_handler->HandleKey(consumer, event, pressed)
                          : false;
     }
 
     virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event) wxOVERRIDE
+                             const wxMouseEvent& event) override
     {
         return m_handler ? m_handler->HandleMouse(consumer, event) : false;
     }
 
-    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event) wxOVERRIDE
+    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event) override
     {
         return m_handler ? m_handler->HandleMouseMove(consumer, event) : false;
     }
 
-    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event) wxOVERRIDE
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event) override
     {
         return m_handler ? m_handler->HandleFocus(consumer, event) : false;
     }

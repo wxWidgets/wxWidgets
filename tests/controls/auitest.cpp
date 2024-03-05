@@ -12,32 +12,49 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#if wxUSE_AUI
+
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/panel.h"
-#include "wx/scopedptr.h"
 
+#include "wx/aui/auibar.h"
 #include "wx/aui/auibook.h"
 
 #include "asserthelper.h"
 
+#include <memory>
+
 // ----------------------------------------------------------------------------
-// test class
+// test fixtures
 // ----------------------------------------------------------------------------
 
-TEST_CASE( "wxAuiNotebook::DoGetBestSize", "[aui]" )
+class AuiNotebookTestCase
 {
-    wxWindow *frame = wxTheApp->GetTopWindow();
-    REQUIRE( frame );
-    wxAuiNotebook *nb = new wxAuiNotebook(frame);
-    wxScopedPtr<wxAuiNotebook> cleanUp(nb);
+public:
+    AuiNotebookTestCase()
+        : nb(new wxAuiNotebook(wxTheApp->GetTopWindow()))
+    {
+    }
 
+    ~AuiNotebookTestCase()
+    {
+        delete nb;
+    }
+
+protected:
+    wxAuiNotebook* const nb;
+};
+
+// ----------------------------------------------------------------------------
+// the tests themselves
+// ----------------------------------------------------------------------------
+
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::DoGetBestSize", "[aui]")
+{
     wxPanel *p = new wxPanel(nb);
     p->SetMinSize(wxSize(100, 100));
     REQUIRE( nb->AddPage(p, "Center Pane") );
@@ -128,3 +145,38 @@ TEST_CASE( "wxAuiNotebook::DoGetBestSize", "[aui]" )
         CHECK( nb->GetBestSize() == wxSize(250, 175 + 3*tabHeight) );
     }
 }
+
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::RTTI", "[aui][rtti]")
+{
+    wxBookCtrlBase* const book = nb;
+    CHECK( wxDynamicCast(book, wxAuiNotebook) == nb );
+
+    CHECK( wxDynamicCast(nb, wxBookCtrlBase) == book );
+}
+
+TEST_CASE_METHOD(AuiNotebookTestCase, "wxAuiNotebook::FindPage", "[aui]")
+{
+    wxPanel *p1 = new wxPanel(nb);
+    wxPanel *p2 = new wxPanel(nb);
+    wxPanel *p3 = new wxPanel(nb);
+    REQUIRE( nb->AddPage(p1, "Page 1") );
+    REQUIRE( nb->AddPage(p2, "Page 2") );
+
+    CHECK( nb->FindPage(nullptr) == wxNOT_FOUND );
+    CHECK( nb->FindPage(p1) == 0 );
+    CHECK( nb->FindPage(p2) == 1 );
+    CHECK( nb->FindPage(p3) == wxNOT_FOUND );
+}
+
+TEST_CASE("wxAuiToolBar::Items", "[aui][toolbar]")
+{
+    std::unique_ptr<wxAuiToolBar> tbar{new wxAuiToolBar(wxTheApp->GetTopWindow())};
+
+    // Check that adding more toolbar elements doesn't invalidate the existing
+    // pointers.
+    auto first = tbar->AddLabel(wxID_ANY, "first");
+    tbar->AddLabel(wxID_ANY, "second");
+    CHECK( first->GetLabel() == "first" );
+}
+
+#endif

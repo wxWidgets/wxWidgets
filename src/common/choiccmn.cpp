@@ -2,7 +2,6 @@
 // Name:        src/common/choiccmn.cpp
 // Purpose:     common (to all ports) wxChoice functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     26.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CHOICE
 
@@ -57,7 +53,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -107,7 +102,7 @@ wxChoiceBase::~wxChoiceBase()
 wxSize wxChoiceBase::DoGetBestSize() const
 {
     // a reasonable width for an empty choice list
-    wxSize best(80, -1);
+    wxSize best(FromDIP(80), -1);
 
     const unsigned int nItems = GetCount();
     if ( nItems > 0 )

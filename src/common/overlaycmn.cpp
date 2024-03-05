@@ -2,7 +2,6 @@
 // Name:        src/common/overlaycmn.cpp
 // Purpose:     common wxOverlay code
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     2006-10-20
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/overlay.h"
 #include "wx/private/overlay.h"
@@ -36,15 +32,14 @@
 // wxOverlay
 // ----------------------------------------------------------------------------
 
-wxOverlay::wxOverlay()
-{
-    m_impl = new wxOverlayImpl();
-    m_inDrawing = false;
-}
-
 wxOverlay::~wxOverlay()
 {
     delete m_impl;
+}
+
+bool wxOverlay::IsNative() const
+{
+    return m_impl->IsNative();
 }
 
 bool wxOverlay::IsOk()
@@ -80,6 +75,21 @@ void wxOverlay::Reset()
     m_impl->Reset();
 }
 
+void wxOverlay::SetOpacity(int alpha)
+{
+    m_impl->SetOpacity(alpha);
+}
+
+// ----------------------------------------------------------------------------
+
+wxOverlay::Impl::~Impl()
+{
+}
+
+bool wxOverlay::Impl::IsNative() const
+{
+    return true;
+}
 
 // ----------------------------------------------------------------------------
 // wxDCOverlay
@@ -132,11 +142,40 @@ void wxDCOverlay::Clear()
 // generic implementation of wxOverlayImpl
 // ----------------------------------------------------------------------------
 
-#ifndef wxHAS_NATIVE_OVERLAY
+#ifdef wxHAS_GENERIC_OVERLAY
+
+#include "wx/window.h"
+
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+#include "wx/gtk/dcclient.h"
+#endif
+
+namespace {
+class wxOverlayImpl: public wxOverlay::Impl
+{
+public:
+    wxOverlayImpl();
+    ~wxOverlayImpl();
+    virtual bool IsNative() const override;
+    virtual bool IsOk() override;
+    virtual void Init(wxDC* dc, int x, int y, int width, int height) override;
+    virtual void BeginDrawing(wxDC* dc) override;
+    virtual void EndDrawing(wxDC* dc) override;
+    virtual void Clear(wxDC* dc) override;
+    virtual void Reset() override;
+
+    wxBitmap m_bmpSaved;
+    int m_x;
+    int m_y;
+    int m_width;
+    int m_height;
+    wxWindow* m_window;
+};
+} // namespace
 
 wxOverlayImpl::wxOverlayImpl()
 {
-     m_window = NULL ;
+     m_window = nullptr ;
      m_x = m_y = m_width = m_height = 0 ;
 }
 
@@ -144,47 +183,106 @@ wxOverlayImpl::~wxOverlayImpl()
 {
 }
 
+bool wxOverlayImpl::IsNative() const
+{
+    return false;
+}
+
 bool wxOverlayImpl::IsOk()
 {
-    return m_bmpSaved.IsOk() ;
+    return false;
 }
 
 void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
 {
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    // Workaround! to include sub-windows in the final drawing (on the overlay)
+    // as drawing on a DC under wxGTK2 clips children by default.
+    const auto dcimpl = static_cast<wxWindowDCImpl *>(dc->GetImpl());
+    if ( dcimpl )
+        dcimpl->DontClipSubWindows();
+#endif
+
+    if (m_bmpSaved.IsOk())
+    {
+        if (x != m_x || y != m_y || width != m_width || height != m_height)
+        {
+            if (m_window)
+                m_window->Update();
+
+            // Area that needs to be copied from window
+            wxRect rect(x, y, width, height);
+            wxRegion region(rect);
+            rect.Intersect(wxRect(m_x, m_y, m_width, m_height));
+            region.Subtract(rect);
+            rect = region.GetBox();
+
+            const wxBitmap bmpOld(m_bmpSaved);
+            m_bmpSaved.Create(width, height, *dc);
+            wxMemoryDC dcMem(m_bmpSaved);
+
+            // Get new area from window
+            dcMem.Blit(rect.x - x, rect.y - y, rect.width, rect.height, dc, rect.x, rect.y);
+
+            // Copy old area to new position
+            dcMem.DrawBitmap(bmpOld, m_x - x, m_y - y);
+
+            m_x = x;
+            m_y = y;
+            m_width = width;
+            m_height = height;
+        }
+        return;
+    }
     m_window = dc->GetWindow();
-    wxMemoryDC dcMem ;
-    m_bmpSaved.Create( width, height );
-    dcMem.SelectObject( m_bmpSaved );
+    m_bmpSaved.Create(width, height, *dc);
+    wxMemoryDC dcMem(m_bmpSaved);
     m_x = x ;
     m_y = y ;
     m_width = width ;
     m_height = height ;
     dcMem.Blit(0, 0, m_width, m_height,
         dc, x, y);
-    dcMem.SelectObject( wxNullBitmap );
 }
 
 void wxOverlayImpl::Clear(wxDC* dc)
 {
-    wxMemoryDC dcMem ;
-    dcMem.SelectObject( m_bmpSaved );
-    dc->Blit( m_x, m_y, m_width, m_height , &dcMem , 0 , 0 );
-    dcMem.SelectObject( wxNullBitmap );
+    dc->DrawBitmap(m_bmpSaved, m_x, m_y);
 }
 
 void wxOverlayImpl::Reset()
 {
-    m_bmpSaved = wxBitmap();
+    m_bmpSaved.UnRef();
+
+    if ( m_window )
+        m_window->Refresh();
 }
 
-void wxOverlayImpl::BeginDrawing(wxDC*  WXUNUSED(dc))
+void wxOverlayImpl::BeginDrawing(wxDC* dc)
 {
+    // Make sure no drawing is done outside of overlay area
+    dc->SetClippingRegion(m_x, m_y, m_width, m_height);
 }
 
 void wxOverlayImpl::EndDrawing(wxDC* WXUNUSED(dc))
 {
 }
 
-#endif // !wxHAS_NATIVE_OVERLAY
+#ifndef wxHAS_NATIVE_OVERLAY
+wxOverlay::Impl* wxOverlay::Create()
+{
+    return new wxOverlayImpl;
+}
+#endif
 
+#endif // wxHAS_GENERIC_OVERLAY
 
+wxOverlay::wxOverlay()
+{
+    m_impl = Create();
+#if defined(wxHAS_GENERIC_OVERLAY) && defined(wxHAS_NATIVE_OVERLAY)
+    if (m_impl == nullptr)
+        m_impl = new wxOverlayImpl;
+#endif
+    m_inDrawing = false;
+}

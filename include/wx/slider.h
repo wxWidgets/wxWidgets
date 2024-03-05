@@ -2,7 +2,6 @@
 // Name:        wx/slider.h
 // Purpose:     wxSlider interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     09.02.01
 // Copyright:   (c) 1996-2001 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -61,7 +60,7 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxSliderNameStr);
     */
-    wxSliderBase() { }
+    wxSliderBase() = default;
 
     // get/set the current slider value (should be in range)
     virtual int GetValue() const = 0;
@@ -99,16 +98,12 @@ public:
     virtual int GetSelStart() const { return GetMax(); }
     virtual void SetSelection(int WXUNUSED(min), int WXUNUSED(max)) { }
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE( void SetTickFreq(int freq, int), DoSetTickFreq(freq); )
-#endif
-
 protected:
     // Platform-specific implementation of SetTickFreq
     virtual void DoSetTickFreq(int WXUNUSED(freq)) { /* unsupported by default */ }
 
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // adjust value according to wxSL_INVERSE style
     virtual int ValueInvertOrNot(int value) const
@@ -131,12 +126,8 @@ private:
     #include "wx/univ/slider.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/slider.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/slider.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/slider.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/slider.h"
+    #include "wx/gtk/slider.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/slider.h"
 #elif defined(__WXQT__)

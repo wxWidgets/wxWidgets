@@ -12,9 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/scrolwin.h"
 
@@ -54,6 +51,8 @@ void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
     {
         upper = (virtSize + pixelsPerLine - 1) / pixelsPerLine;
         page_size = winSize / pixelsPerLine;
+        if (page_size == 0)
+            page_size = 1;
         *lines = upper;
         *linesPerPage = page_size;
     }
@@ -95,12 +94,8 @@ void wxScrollHelper::AdjustScrollbars()
     int vw, vh;
     m_targetWindow->GetVirtualSize(&vw, &vh);
 #ifdef __WXGTK3__
-    if (m_targetWindow != m_win)
-    {
-        // setting wxPizza preferred size keeps GtkScrolledWindow from causing
-        // an infinite sizing loop
-        gtk_widget_set_size_request(m_win->m_wxwindow, vw, vh);
-    }
+    // GtkScrolledWindow uses child's preferred size as virtual size
+    gtk_widget_set_size_request(m_win->m_wxwindow, vw, vh);
 #endif
 
     int w, h;
@@ -118,14 +113,14 @@ void wxScrollHelper::AdjustScrollbars()
         return;
     }
 
-    m_targetWindow->GetClientSize(&w, NULL);
+    m_targetWindow->GetClientSize(&w, nullptr);
     DoAdjustHScrollbar(w, vw);
 
-    m_targetWindow->GetClientSize(NULL, &h);
+    m_targetWindow->GetClientSize(nullptr, &h);
     DoAdjustVScrollbar(h, vh);
 
     const int w_old = w;
-    m_targetWindow->GetClientSize(&w, NULL);
+    m_targetWindow->GetClientSize(&w, nullptr);
     if ( w != w_old )
     {
         // It is necessary to repeat the calculations in this case to avoid an
@@ -137,7 +132,7 @@ void wxScrollHelper::AdjustScrollbars()
         // leading to an unending series if the sizes are just right.
         DoAdjustHScrollbar(w, vw);
 
-        m_targetWindow->GetClientSize(NULL, &h);
+        m_targetWindow->GetClientSize(nullptr, &h);
         DoAdjustVScrollbar(h, vh);
     }
 }
@@ -162,7 +157,7 @@ void wxScrollHelper::DoScrollOneDir(int orient,
 
 void wxScrollHelper::DoScroll( int x_pos, int y_pos )
 {
-    wxCHECK_RET( m_targetWindow != 0, wxT("No target window") );
+    wxCHECK_RET( m_targetWindow != nullptr, wxT("No target window") );
 
     DoScrollOneDir(wxHORIZONTAL, x_pos, m_xScrollPixelsPerLine, &m_xScrollPosition);
     DoScrollOneDir(wxVERTICAL, y_pos, m_yScrollPixelsPerLine, &m_yScrollPosition);
@@ -190,7 +185,7 @@ GtkPolicyType GtkPolicyFromWX(wxScrollbarVisibility visibility)
 
         default:
             wxFAIL_MSG( wxS("unknown scrollbar visibility") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxSHOW_SB_ALWAYS:
             policy = GTK_POLICY_ALWAYS;

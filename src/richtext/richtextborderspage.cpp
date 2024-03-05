@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextborderspage.cpp
 // Purpose:     A border editing page for the wxRTC formatting dialog.
 // Author:      Julian Smart
-// Modified by: 
 // Created:     21/10/2010 11:34:24
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -153,52 +152,52 @@ void wxRichTextBordersPage::Init()
     m_ignoreUpdates = false;
 
 ////@begin wxRichTextBordersPage member initialisation
-    m_leftBorderCheckbox = NULL;
-    m_leftBorderWidth = NULL;
-    m_leftBorderWidthUnits = NULL;
-    m_leftBorderStyle = NULL;
-    m_leftBorderColour = NULL;
-    m_rightBorderCheckbox = NULL;
-    m_rightBorderWidth = NULL;
-    m_rightBorderWidthUnits = NULL;
-    m_rightBorderStyle = NULL;
-    m_rightBorderColour = NULL;
-    m_topBorderCheckbox = NULL;
-    m_topBorderWidth = NULL;
-    m_topBorderWidthUnits = NULL;
-    m_topBorderStyle = NULL;
-    m_topBorderColour = NULL;
-    m_bottomBorderCheckbox = NULL;
-    m_bottomBorderWidth = NULL;
-    m_bottomBorderWidthUnits = NULL;
-    m_bottomBorderStyle = NULL;
-    m_bottomBorderColour = NULL;
-    m_borderSyncCtrl = NULL;
-    m_leftOutlineCheckbox = NULL;
-    m_leftOutlineWidth = NULL;
-    m_leftOutlineWidthUnits = NULL;
-    m_leftOutlineStyle = NULL;
-    m_leftOutlineColour = NULL;
-    m_rightOutlineCheckbox = NULL;
-    m_rightOutlineWidth = NULL;
-    m_rightOutlineWidthUnits = NULL;
-    m_rightOutlineStyle = NULL;
-    m_rightOutlineColour = NULL;
-    m_topOutlineCheckbox = NULL;
-    m_topOutlineWidth = NULL;
-    m_topOutlineWidthUnits = NULL;
-    m_topOutlineStyle = NULL;
-    m_topOutlineColour = NULL;
-    m_bottomOutlineCheckbox = NULL;
-    m_bottomOutlineWidth = NULL;
-    m_bottomOutlineWidthUnits = NULL;
-    m_bottomOutlineStyle = NULL;
-    m_bottomOutlineColour = NULL;
-    m_outlineSyncCtrl = NULL;
-    m_cornerRadiusCheckBox = NULL;
-    m_cornerRadiusText = NULL;
-    m_cornerRadiusUnits = NULL;
-    m_borderPreviewCtrl = NULL;
+    m_leftBorderCheckbox = nullptr;
+    m_leftBorderWidth = nullptr;
+    m_leftBorderWidthUnits = nullptr;
+    m_leftBorderStyle = nullptr;
+    m_leftBorderColour = nullptr;
+    m_rightBorderCheckbox = nullptr;
+    m_rightBorderWidth = nullptr;
+    m_rightBorderWidthUnits = nullptr;
+    m_rightBorderStyle = nullptr;
+    m_rightBorderColour = nullptr;
+    m_topBorderCheckbox = nullptr;
+    m_topBorderWidth = nullptr;
+    m_topBorderWidthUnits = nullptr;
+    m_topBorderStyle = nullptr;
+    m_topBorderColour = nullptr;
+    m_bottomBorderCheckbox = nullptr;
+    m_bottomBorderWidth = nullptr;
+    m_bottomBorderWidthUnits = nullptr;
+    m_bottomBorderStyle = nullptr;
+    m_bottomBorderColour = nullptr;
+    m_borderSyncCtrl = nullptr;
+    m_leftOutlineCheckbox = nullptr;
+    m_leftOutlineWidth = nullptr;
+    m_leftOutlineWidthUnits = nullptr;
+    m_leftOutlineStyle = nullptr;
+    m_leftOutlineColour = nullptr;
+    m_rightOutlineCheckbox = nullptr;
+    m_rightOutlineWidth = nullptr;
+    m_rightOutlineWidthUnits = nullptr;
+    m_rightOutlineStyle = nullptr;
+    m_rightOutlineColour = nullptr;
+    m_topOutlineCheckbox = nullptr;
+    m_topOutlineWidth = nullptr;
+    m_topOutlineWidthUnits = nullptr;
+    m_topOutlineStyle = nullptr;
+    m_topOutlineColour = nullptr;
+    m_bottomOutlineCheckbox = nullptr;
+    m_bottomOutlineWidth = nullptr;
+    m_bottomOutlineWidthUnits = nullptr;
+    m_bottomOutlineStyle = nullptr;
+    m_bottomOutlineColour = nullptr;
+    m_outlineSyncCtrl = nullptr;
+    m_cornerRadiusCheckBox = nullptr;
+    m_cornerRadiusText = nullptr;
+    m_cornerRadiusUnits = nullptr;
+    m_borderPreviewCtrl = nullptr;
 ////@end wxRichTextBordersPage member initialisation
 }
 
@@ -756,7 +755,7 @@ bool wxRichTextBordersPage::TransferDataToWindow()
         units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
         units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
         
-        wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetCornerRadius(), m_cornerRadiusText, m_cornerRadiusUnits, NULL,
+        wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetCornerRadius(), m_cornerRadiusText, m_cornerRadiusUnits, nullptr,
             & units);
 
         if (GetAttributes()->GetTextBoxAttr().GetCornerRadius().GetValue() == 0)
@@ -793,7 +792,7 @@ bool wxRichTextBordersPage::TransferDataFromWindow()
         units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
         units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
             
-        wxRichTextFormattingDialog::GetDimensionValue(GetAttributes()->GetTextBoxAttr().GetCornerRadius(), m_cornerRadiusText, m_cornerRadiusUnits, NULL,
+        wxRichTextFormattingDialog::GetDimensionValue(GetAttributes()->GetTextBoxAttr().GetCornerRadius(), m_cornerRadiusText, m_cornerRadiusUnits, nullptr,
             & units);
 
         if (m_cornerRadiusCheckBox->Get3StateValue() == wxCHK_UNDETERMINED)
@@ -835,7 +834,7 @@ void wxRichTextBordersPage::SetBorderValue(wxTextAttrBorder& border, wxTextCtrl*
         units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
         units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
         
-        wxRichTextFormattingDialog::SetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, NULL,
+        wxRichTextFormattingDialog::SetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, nullptr,
             & units);
 
         int sel = borderStyles.Index(border.GetStyle());
@@ -860,7 +859,7 @@ void wxRichTextBordersPage::GetBorderValue(wxTextAttrBorder& border, wxTextCtrl*
     units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
     units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
         
-    wxRichTextFormattingDialog::GetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, NULL,
+    wxRichTextFormattingDialog::GetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, nullptr,
         & units);
 
     int sel = styleCtrl->GetSelection();
@@ -1001,8 +1000,8 @@ void wxRichTextBordersPage::OnRichtextBorderCheckboxClick( wxCommandEvent& event
         return;
 
     m_ignoreUpdates = true;
-    wxCheckBox* checkBox = NULL;
-    wxComboBox* comboBox = NULL;
+    wxCheckBox* checkBox = nullptr;
+    wxComboBox* comboBox = nullptr;
     if (event.GetId() == ID_RICHTEXT_OUTLINE_LEFT_CHECKBOX)
     {
         checkBox = m_leftOutlineCheckbox;
@@ -1331,7 +1330,7 @@ wxRichTextBorderPreviewCtrl::wxRichTextBorderPreviewCtrl(wxWindow *parent, wxWin
     if ((style & wxBORDER_MASK) == wxBORDER_DEFAULT)
         style |= wxBORDER_THEME;
 
-    m_attributes = NULL;
+    m_attributes = nullptr;
 
     wxWindow::Create(parent, id, pos, sz, style);
     SetBackgroundColour(*wxWHITE);
@@ -1368,6 +1367,6 @@ void wxRichTextBorderPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         rect.width -= 2*margin;
         rect.height -= 2*margin;
         
-        wxRichTextObject::DrawBoxAttributes(dc, NULL, attr, rect);
+        wxRichTextObject::DrawBoxAttributes(dc, nullptr, attr, rect);
     }
 }

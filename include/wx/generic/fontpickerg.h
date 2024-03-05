@@ -2,7 +2,6 @@
 // Name:        wx/generic/fontpickerg.h
 // Purpose:     wxGenericFontButton header
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -22,7 +21,7 @@ class WXDLLIMPEXP_CORE wxGenericFontButton : public wxButton,
                                              public wxFontPickerWidgetBase
 {
 public:
-    wxGenericFontButton() {}
+    wxGenericFontButton() = default;
     wxGenericFontButton(wxWindow *parent,
                         wxWindowID id,
                         const wxFont &initial = wxNullFont,
@@ -30,18 +29,18 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxFONTBTN_DEFAULT_STYLE,
                         const wxValidator& validator = wxDefaultValidator,
-                        const wxString& name = wxFontPickerWidgetNameStr)
+                        const wxString& name = wxASCII_STR(wxFontPickerWidgetNameStr))
     {
         Create(parent, id, initial, pos, size, style, validator, name);
     }
 
-    virtual wxColour GetSelectedColour() const wxOVERRIDE
+    virtual wxColour GetSelectedColour() const override
         { return m_data.GetColour(); }
 
-    virtual void SetSelectedColour(const wxColour &colour) wxOVERRIDE
+    virtual void SetSelectedColour(const wxColour &colour) override
         { m_data.SetColour(colour); UpdateFont(); }
 
-    virtual ~wxGenericFontButton() {}
+    virtual ~wxGenericFontButton() = default;
 
 
 public:     // API extensions specific for wxGenericFontButton
@@ -62,14 +61,14 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxFONTBTN_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxFontPickerWidgetNameStr);
+                const wxString& name = wxASCII_STR(wxFontPickerWidgetNameStr));
 
     void OnButtonClick(wxCommandEvent &);
 
 
 protected:
 
-    void UpdateFont() wxOVERRIDE;
+    void UpdateFont() override;
 
     wxFontData m_data;
 

@@ -2,7 +2,6 @@
 // Name:        samples/richtext/richtext.cpp
 // Purpose:     wxWidgets rich text editor sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-10-02
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -94,15 +90,15 @@ public:
     {
     }
 
-    virtual bool CanEditProperties(wxRichTextField* WXUNUSED(obj)) const wxOVERRIDE { return true; }
-    virtual bool EditProperties(wxRichTextField* WXUNUSED(obj), wxWindow* WXUNUSED(parent), wxRichTextBuffer* WXUNUSED(buffer)) wxOVERRIDE
+    virtual bool CanEditProperties(wxRichTextField* WXUNUSED(obj)) const override { return true; }
+    virtual bool EditProperties(wxRichTextField* WXUNUSED(obj), wxWindow* WXUNUSED(parent), wxRichTextBuffer* WXUNUSED(buffer)) override
     {
         wxString label = GetLabel();
         wxMessageBox(wxString::Format("Editing %s", label));
         return true;
     }
 
-    virtual wxString GetPropertiesMenuLabel(wxRichTextField* WXUNUSED(obj)) const wxOVERRIDE
+    virtual wxString GetPropertiesMenuLabel(wxRichTextField* WXUNUSED(obj)) const override
     {
         return GetLabel();
     }
@@ -117,7 +113,7 @@ public:
     {
     }
 
-    virtual bool UpdateField(wxRichTextBuffer* buffer, wxRichTextField* obj) wxOVERRIDE
+    virtual bool UpdateField(wxRichTextBuffer* buffer, wxRichTextField* obj) override
     {
         if (buffer)
         {
@@ -169,19 +165,19 @@ public:
         Prepares the content just before insertion (or after buffer reset). Called by the same function in wxRichTextBuffer.
         Currently is only called if undo mode is on.
     */
-    virtual void PrepareContent(wxRichTextParagraphLayoutBox& container) wxOVERRIDE;
+    virtual void PrepareContent(wxRichTextParagraphLayoutBox& container) override;
 
     /**
         Can we delete this range?
         Sends an event to the control.
     */
-    virtual bool CanDeleteRange(wxRichTextParagraphLayoutBox& container, const wxRichTextRange& range) const wxOVERRIDE;
+    virtual bool CanDeleteRange(wxRichTextParagraphLayoutBox& container, const wxRichTextRange& range) const override;
 
     /**
         Can we insert content at this position?
         Sends an event to the control.
     */
-    virtual bool CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const wxOVERRIDE;
+    virtual bool CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const override;
 
     /**
         Finds a table,  either selected or near the cursor
@@ -207,8 +203,8 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
     void CreateStyles();
 
@@ -318,7 +314,7 @@ public:
 protected:
 
     // Forward command events to the current rich text control, if any
-    bool ProcessEvent(wxEvent& event) wxOVERRIDE;
+    bool ProcessEvent(wxEvent& event) override;
 
     // Write text
     void WriteInitialText();
@@ -758,8 +754,10 @@ void MyApp::CreateStyles()
 // frame constructor
 MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
         const wxSize& size, long style)
-       : wxFrame(NULL, id, title, pos, size, style)
+       : wxFrame(nullptr, id, title, pos, size, style)
 {
+    m_richTextCtrl = nullptr;
+
 #ifdef __WXMAC__
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
@@ -955,7 +953,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     }
     else
     {
-        int width = GetClientSize().GetWidth() * 0.8;
+        int width = GetClientSize().GetWidth() * 4 / 5;
         splitter->SplitVertically(m_richTextCtrl, styleListCtrl, width);
         splitter->SetSashGravity(0.8);
     }
@@ -1190,22 +1188,22 @@ void MyFrame::WriteInitialText()
 
         r.Newline();
 
-        wxRichTextAttr attr;
-        attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetRight().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetBottom().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        wxRichTextAttr attr1;
+        attr1.GetTextBoxAttr().GetMargins().GetLeft().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetTop().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetRight().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetBottom().SetValue(20, wxTEXT_ATTR_UNITS_PIXELS);
 
-        attr.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
-        attr.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
+        attr1.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
+        attr1.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
 
-        wxRichTextBox* textBox = r.WriteTextBox(attr);
+        wxRichTextBox* textBox = r.WriteTextBox(attr1);
         r.SetFocusObject(textBox);
 
         r.WriteText("This is a text box. Just testing! Once more unto the breach, dear friends, once more...");
 
-        r.SetFocusObject(NULL); // Set the focus back to the main buffer
+        r.SetFocusObject(nullptr); // Set the focus back to the main buffer
         r.SetInsertionPointEnd();
     }
 #endif
@@ -1216,22 +1214,22 @@ void MyFrame::WriteInitialText()
 
         r.Newline();
 
-        wxRichTextAttr attr;
-        attr.GetTextBoxAttr().GetMargins().GetLeft().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetTop().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetRight().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetMargins().GetBottom().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetPadding() = attr.GetTextBoxAttr().GetMargins();
+        wxRichTextAttr attr1;
+        attr1.GetTextBoxAttr().GetMargins().GetLeft().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetTop().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetRight().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetMargins().GetBottom().SetValue(5, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetPadding() = attr.GetTextBoxAttr().GetMargins();
 
-        attr.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
-        attr.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
-        attr.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
+        attr1.GetTextBoxAttr().GetBorder().SetColour(*wxBLACK);
+        attr1.GetTextBoxAttr().GetBorder().SetWidth(1, wxTEXT_ATTR_UNITS_PIXELS);
+        attr1.GetTextBoxAttr().GetBorder().SetStyle(wxTEXT_BOX_ATTR_BORDER_SOLID);
 
-        wxRichTextAttr cellAttr = attr;
+        wxRichTextAttr cellAttr = attr1;
         cellAttr.GetTextBoxAttr().GetWidth().SetValue(200, wxTEXT_ATTR_UNITS_PIXELS);
         cellAttr.GetTextBoxAttr().GetHeight().SetValue(150, wxTEXT_ATTR_UNITS_PIXELS);
 
-        wxRichTextTable* table = r.WriteTable(6, 4, attr, cellAttr);
+        wxRichTextTable* table = r.WriteTable(6, 4, attr1, cellAttr);
 
         int i, j;
         for (j = 0; j < table->GetRowCount(); j++)
@@ -1264,7 +1262,7 @@ void MyFrame::WriteInitialText()
         cell->Clear();
         r.WriteText("This cell spans 2 columns and 3 rows");
 
-        r.SetFocusObject(NULL); // Set the focus back to the main buffer
+        r.SetFocusObject(nullptr); // Set the focus back to the main buffer
         r.SetInsertionPointEnd();
     }
 #endif
@@ -1342,9 +1340,11 @@ bool MyFrame::ProcessEvent(wxEvent& event)
             s_id = event.GetId();
 
             wxWindow* focusWin = wxFindFocusDescendant(this);
+            if (!focusWin)
+                focusWin = m_richTextCtrl;
             if (focusWin && focusWin->GetEventHandler()->ProcessEvent(event))
             {
-                //s_command = NULL;
+                //s_command = nullptr;
                 s_eventType = 0;
                 s_id = 0;
                 return true;
@@ -1382,15 +1382,15 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxString path = dialog.GetPath();
+        wxString path1 = dialog.GetPath();
 
-        if (!path.empty())
+        if (!path1.empty())
         {
             int filterIndex = dialog.GetFilterIndex();
             int fileType = (filterIndex < (int) fileTypes.GetCount())
                            ? fileTypes[filterIndex]
                            : wxRICHTEXT_TYPE_TEXT;
-            m_richTextCtrl->LoadFile(path, fileType);
+            m_richTextCtrl->LoadFile(path1, fileType);
         }
     }
 }
@@ -1420,14 +1420,14 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxString path = dialog.GetPath();
+        wxString path1 = dialog.GetPath();
 
-        if (!path.empty())
+        if (!path1.empty())
         {
             wxBusyCursor busy;
             wxStopWatch stopwatch;
 
-            m_richTextCtrl->SaveFile(path);
+            m_richTextCtrl->SaveFile(path1);
 
             long t = stopwatch.Time();
             wxLogDebug("Saving took %ldms", t);
@@ -1814,7 +1814,7 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSwitchStyleSheets(wxCommandEvent& WXUNUSED(event))
 {
-    static wxRichTextStyleSheet* gs_AlternateStyleSheet = NULL;
+    static wxRichTextStyleSheet* gs_AlternateStyleSheet = nullptr;
 
     wxRichTextStyleListCtrl *styleList = (wxRichTextStyleListCtrl*) FindWindow(ID_RICHTEXT_STYLE_LIST);
     wxRichTextStyleComboCtrl* styleCombo = (wxRichTextStyleComboCtrl*) FindWindow(ID_RICHTEXT_STYLE_COMBO);
@@ -1869,7 +1869,7 @@ void MyFrame::OnManageStyles(wxCommandEvent& WXUNUSED(event))
 
     int flags = wxRICHTEXT_ORGANISER_CREATE_STYLES|wxRICHTEXT_ORGANISER_EDIT_STYLES;
 
-    wxRichTextStyleOrganiserDialog dlg(flags, sheet, NULL, this, wxID_ANY, _("Style Manager"));
+    wxRichTextStyleOrganiserDialog dlg(flags, sheet, nullptr, this, wxID_ANY, _("Style Manager"));
     dlg.ShowModal();
 }
 
@@ -1945,7 +1945,7 @@ void MyFrame::OnRenumberList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->NumberList(range, NULL, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+        m_richTextCtrl->NumberList(range, nullptr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
     }
 }
 
@@ -1954,7 +1954,7 @@ void MyFrame::OnPromoteList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->PromoteList(1, range, NULL);
+        m_richTextCtrl->PromoteList(1, range, nullptr);
     }
 }
 
@@ -1963,7 +1963,7 @@ void MyFrame::OnDemoteList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->PromoteList(-1, range, NULL);
+        m_richTextCtrl->PromoteList(-1, range, nullptr);
     }
 }
 
@@ -2028,7 +2028,7 @@ void MyFrame::OnTableDeleteRow(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTableFocusedUpdateUI(wxUpdateUIEvent& event)
 {
-    event.Enable(m_richTextCtrl->FindTable() != NULL);
+    event.Enable(m_richTextCtrl->FindTable() != nullptr);
 }
 
 void MyFrame::OnTableHasCellsUpdateUI(wxUpdateUIEvent& event)
@@ -2223,37 +2223,37 @@ public:
     /**
         Returns @true if this object has virtual attributes that we can provide.
     */
-    virtual bool HasVirtualAttributes(wxRichTextObject* obj) const wxOVERRIDE;
+    virtual bool HasVirtualAttributes(wxRichTextObject* obj) const override;
 
     /**
         Provides virtual attributes that we can provide.
     */
-    virtual bool GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const wxOVERRIDE;
+    virtual bool GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const override;
 
     /**
         Gets the count for mixed virtual attributes for individual positions within the object.
         For example, individual characters within a text object may require special highlighting.
     */
-    virtual int GetVirtualSubobjectAttributesCount(wxRichTextObject* WXUNUSED(obj)) const wxOVERRIDE { return 0; }
+    virtual int GetVirtualSubobjectAttributesCount(wxRichTextObject* WXUNUSED(obj)) const override { return 0; }
 
     /**
         Gets the mixed virtual attributes for individual positions within the object.
         For example, individual characters within a text object may require special highlighting.
         Returns the number of virtual attributes found.
     */
-    virtual int GetVirtualSubobjectAttributes(wxRichTextObject* WXUNUSED(obj), wxArrayInt& WXUNUSED(positions), wxRichTextAttrArray& WXUNUSED(attributes)) const wxOVERRIDE  { return 0; }
+    virtual int GetVirtualSubobjectAttributes(wxRichTextObject* WXUNUSED(obj), wxArrayInt& WXUNUSED(positions), wxRichTextAttrArray& WXUNUSED(attributes)) const override  { return 0; }
 
     /**
         Do we have virtual text for this object? Virtual text allows an application
         to replace characters in an object for editing and display purposes, for example
         for highlighting special characters.
     */
-    virtual bool HasVirtualText(const wxRichTextPlainText* WXUNUSED(obj)) const wxOVERRIDE { return false; }
+    virtual bool HasVirtualText(const wxRichTextPlainText* WXUNUSED(obj)) const override { return false; }
 
     /**
         Gets the virtual text for this object.
     */
-    virtual bool GetVirtualText(const wxRichTextPlainText* WXUNUSED(obj), wxString& WXUNUSED(text)) const wxOVERRIDE { return false; }
+    virtual bool GetVirtualText(const wxRichTextPlainText* WXUNUSED(obj), wxString& WXUNUSED(text)) const override { return false; }
 
     wxColour    m_lockBackgroundColour;
 };
@@ -2315,12 +2315,12 @@ wxRichTextTable* MyRichTextCtrl::FindTable() const
     while (obj)
     {
         obj = obj->GetParent();
-        wxRichTextTable* table = wxDynamicCast(obj, wxRichTextTable);
-        if (table)
+        wxRichTextTable* table1 = wxDynamicCast(obj, wxRichTextTable);
+        if (table1)
         {
-            return table;
+            return table1;
         }
     }
 
-    return NULL;
+    return nullptr;
 }

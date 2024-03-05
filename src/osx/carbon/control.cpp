@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/control.cpp
 // Purpose:     wxControl class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -72,7 +71,7 @@ bool wxControl::ProcessCommand( wxCommandEvent &event )
 
 void  wxControl::OnKeyDown( wxKeyEvent &WXUNUSED(event) )
 {
-    if ( GetPeer() == NULL || !GetPeer()->IsOk() )
+    if ( GetPeer() == nullptr || !GetPeer()->IsOk() )
         return;
 
     // TODO

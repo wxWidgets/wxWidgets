@@ -24,11 +24,11 @@
 //-----------------------------------------------------------------------------
 // structure internally used by wxRadioBox to store its child buttons
 
-class wxGTKRadioButtonInfo : public wxObject
+class wxGTKRadioButtonInfo
 {
 public:
-    wxGTKRadioButtonInfo( GtkRadioButton * abutton, const wxRect & arect )
-    : button( abutton ), rect( arect ) {}
+    explicit wxGTKRadioButtonInfo( GtkRadioButton * abutton )
+    : button( abutton ) {}
 
     GtkRadioButton * button;
     wxRect           rect;
@@ -37,9 +37,6 @@ public:
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST( wxRadioBoxButtonsInfoList )
 
 extern bool          g_blockEventsOnDrag;
 
@@ -93,12 +90,15 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
         return FALSE;
     }
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = rb->m_buttonsInfo.GetFirst();
-    while( node && GTK_WIDGET( node->GetData()->button ) != widget )
+    const auto begin = rb->m_buttonsInfo.begin();
+    const auto end = rb->m_buttonsInfo.end();
+
+    auto it = begin;
+    while( it != end && GTK_WIDGET( it->button ) != widget )
     {
-        node = node->GetNext();
+        ++it;
     }
-    if (!node)
+    if (it == end)
     {
         return FALSE;
     }
@@ -106,20 +106,20 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
     if ((gdk_event->keyval == GDK_KEY_Up) ||
         (gdk_event->keyval == GDK_KEY_Left))
     {
-        if (node == rb->m_buttonsInfo.GetFirst())
-            node = rb->m_buttonsInfo.GetLast();
-        else
-            node = node->GetPrevious();
+        if (it == begin)
+            it = end;
+
+        --it;
     }
     else
     {
-        if (node == rb->m_buttonsInfo.GetLast())
-            node = rb->m_buttonsInfo.GetFirst();
-        else
-            node = node->GetNext();
+        ++it;
+
+        if (it == end)
+            it = begin;
     }
 
-    GtkWidget *button = (GtkWidget*) node->GetData()->button;
+    GtkWidget *button = GTK_WIDGET( it->button );
 
     gtk_widget_grab_focus( button );
 
@@ -164,16 +164,14 @@ static void gtk_radiobutton_size_allocate( GtkWidget *widget,
                                            GtkAllocation * alloc,
                                            wxRadioBox *win )
 {
-    for ( wxRadioBoxButtonsInfoList::compatibility_iterator node = win->m_buttonsInfo.GetFirst();
-          node;
-          node = node->GetNext())
+    for ( auto& info : win->m_buttonsInfo )
     {
-        if (widget == GTK_WIDGET(node->GetData()->button))
+        if (widget == GTK_WIDGET(info.button))
         {
             const wxPoint origin = win->GetPosition();
             wxRect rect = wxRect( alloc->x - origin.x, alloc->y - origin.y,
                                   alloc->width, alloc->height );
-            node->GetData()->rect = rect;
+            info.rect = rect;
             break;
         }
     }
@@ -186,7 +184,7 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
 {
     const GtkAllocation& a = widget->allocation;
     gtk_paint_flat_box(gtk_widget_get_style(widget), gtk_widget_get_window(widget),
-        GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, widget, "", a.x, a.y, a.width, a.height);
+        GTK_STATE_NORMAL, GTK_SHADOW_NONE, nullptr, widget, "", a.x, a.y, a.width, a.height);
     return false;
 }
 }
@@ -197,6 +195,37 @@ static gboolean expose_event(GtkWidget* widget, GdkEventExpose*, wxWindow*)
 //-----------------------------------------------------------------------------
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
+
+wxRadioBox::wxRadioBox() = default;
+
+wxRadioBox::wxRadioBox(wxWindow *parent,
+           wxWindowID id,
+           const wxString& title,
+           const wxPoint& pos,
+           const wxSize& size,
+           int n,
+           const wxString choices[],
+           int majorDim,
+           long style,
+           const wxValidator& val,
+           const wxString& name)
+{
+    Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
+}
+
+wxRadioBox::wxRadioBox(wxWindow *parent,
+           wxWindowID id,
+           const wxString& title,
+           const wxPoint& pos,
+           const wxSize& size,
+           const wxArrayString& choices,
+           int majorDim,
+           long style,
+           const wxValidator& val,
+           const wxString& name)
+{
+    Create( parent, id, title, pos, size, choices, majorDim, style, val, name );
+}
 
 bool wxRadioBox::Create( wxWindow *parent, wxWindowID id,
                          const wxString& title,
@@ -242,7 +271,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     unsigned int num_of_cols = GetColumnCount();
     unsigned int num_of_rows = GetRowCount();
 
-    GtkRadioButton *rbtn = NULL;
+    GtkRadioButton *rbtn = nullptr;
 
 #ifdef __WXGTK3__
     GtkWidget* grid = gtk_grid_new();
@@ -256,7 +285,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     gtk_container_add( GTK_CONTAINER(m_widget), table );
 #endif
 
-    GSList *radio_button_group = NULL;
+    GSList *radio_button_group = nullptr;
     for (unsigned int i = 0; i < (unsigned int)n; i++)
     {
         if ( i != 0 )
@@ -304,16 +333,16 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             label += *pc;
         }
         if ( hasMnemonic )
-            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_mnemonic( radio_button_group, wxGTK_CONV( label ) ) );
+            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_mnemonic( radio_button_group, label.utf8_str() ) );
         else
-            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, wxGTK_CONV( label ) ) );
+            rbtn = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, label.utf8_str() ) );
 
         gtk_widget_show( GTK_WIDGET(rbtn) );
 
         g_signal_connect (rbtn, "key_press_event",
                           G_CALLBACK (gtk_radiobox_keypress_callback), this);
 
-        m_buttonsInfo.Append( new wxGTKRadioButtonInfo( rbtn, wxRect() ) );
+        m_buttonsInfo.emplace_back(rbtn);
 
 #ifdef __WXGTK3__
         int left, top;
@@ -373,20 +402,17 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
 wxRadioBox::~wxRadioBox()
 {
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        GtkWidget *button = GTK_WIDGET( node->GetData()->button );
+        GtkWidget *button = GTK_WIDGET( info.button );
         GTKDisconnect(button);
         gtk_widget_destroy( button );
-        node = node->GetNext();
     }
-    WX_CLEAR_LIST( wxRadioBoxButtonsInfoList, m_buttonsInfo );
 }
 
 bool wxRadioBox::Show( bool show )
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid radiobox") );
 
     if (!wxControl::Show(show))
     {
@@ -397,17 +423,14 @@ bool wxRadioBox::Show( bool show )
     if ( HasFlag(wxNO_BORDER) )
         gtk_widget_hide( m_widget );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        GtkWidget *button = GTK_WIDGET( node->GetData()->button );
+        GtkWidget *button = GTK_WIDGET( info.button );
 
         if (show)
             gtk_widget_show( button );
         else
             gtk_widget_hide( button );
-
-        node = node->GetNext();
     }
 
     return true;
@@ -415,13 +438,11 @@ bool wxRadioBox::Show( bool show )
 
 void wxRadioBox::SetSelection( int n )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid radiobox") );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.Item( n );
+    wxCHECK_RET( n >= 0 && n < (int)m_buttonsInfo.size(), wxT("radiobox wrong index") );
 
-    wxCHECK_RET( node, wxT("radiobox wrong index") );
-
-    GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->GetData()->button );
+    GtkToggleButton *button = GTK_TOGGLE_BUTTON( m_buttonsInfo[n].button );
 
     GtkDisableEvents();
 
@@ -432,17 +453,15 @@ void wxRadioBox::SetSelection( int n )
 
 int wxRadioBox::GetSelection(void) const
 {
-    wxCHECK_MSG( m_widget != NULL, wxNOT_FOUND, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != nullptr, wxNOT_FOUND, wxT("invalid radiobox") );
 
     int count = 0;
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->GetData()->button );
+        GtkToggleButton *button = GTK_TOGGLE_BUTTON( info.button );
         if (gtk_toggle_button_get_active(button)) return count;
         count++;
-        node = node->GetNext();
     }
 
     wxFAIL_MSG( wxT("wxRadioBox none selected") );
@@ -452,37 +471,31 @@ int wxRadioBox::GetSelection(void) const
 
 wxString wxRadioBox::GetString(unsigned int n) const
 {
-    wxCHECK_MSG( m_widget != NULL, wxEmptyString, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != nullptr, wxEmptyString, wxT("invalid radiobox") );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.Item( n );
+    wxCHECK_MSG( n < m_buttonsInfo.size(), wxEmptyString, wxT("radiobox wrong index") );
 
-    wxCHECK_MSG( node, wxEmptyString, wxT("radiobox wrong index") );
+    GtkLabel* label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(m_buttonsInfo[n].button)));
 
-    GtkLabel* label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(node->GetData()->button)));
-
-    wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
-
-    return str;
+    return wxString::FromUTF8Unchecked( gtk_label_get_text(label) );
 }
 
 void wxRadioBox::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid radiobox") );
 
     GTKSetLabelForFrame(GTK_FRAME(m_widget), label);
 }
 
-void wxRadioBox::SetString(unsigned int item, const wxString& label)
+void wxRadioBox::SetString(unsigned int n, const wxString& label)
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid radiobox") );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.Item( item );
+    wxCHECK_RET( n < m_buttonsInfo.size(), wxT("radiobox wrong index") );
 
-    wxCHECK_RET( node, wxT("radiobox wrong index") );
+    GtkLabel* g_label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(m_buttonsInfo[n].button)));
 
-    GtkLabel* g_label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(node->GetData()->button)));
-
-    gtk_label_set_text( g_label, wxGTK_CONV( label ) );
+    gtk_label_set_text( g_label, label.utf8_str() );
 }
 
 bool wxRadioBox::Enable( bool enable )
@@ -500,30 +513,26 @@ void wxRadioBox::DoEnable(bool enable)
 
     wxControl::DoEnable(enable);
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        GtkButton *button = GTK_BUTTON( node->GetData()->button );
+        GtkButton *button = GTK_BUTTON( info.button );
         GtkLabel *label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(button)));
 
         gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
         gtk_widget_set_sensitive( GTK_WIDGET(label), enable );
-        node = node->GetNext();
     }
 
     if (enable)
         GTKFixSensitivity();
 }
 
-bool wxRadioBox::Enable(unsigned int item, bool enable)
+bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid radiobox") );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.Item( item );
+    wxCHECK_MSG( n < m_buttonsInfo.size(), false, wxT("radiobox wrong index") );
 
-    wxCHECK_MSG( node, false, wxT("radiobox wrong index") );
-
-    GtkButton *button = GTK_BUTTON( node->GetData()->button );
+    GtkButton *button = GTK_BUTTON( m_buttonsInfo[n].button );
     GtkLabel *label = GTK_LABEL(gtk_bin_get_child(GTK_BIN(button)));
 
     gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
@@ -532,30 +541,26 @@ bool wxRadioBox::Enable(unsigned int item, bool enable)
     return true;
 }
 
-bool wxRadioBox::IsItemEnabled(unsigned int item) const
+bool wxRadioBox::IsItemEnabled(unsigned int n) const
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid radiobox") );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.Item( item );
+    wxCHECK_MSG( n < m_buttonsInfo.size(), false, wxT("radiobox wrong index") );
 
-    wxCHECK_MSG( node, false, wxT("radiobox wrong index") );
-
-    GtkButton *button = GTK_BUTTON( node->GetData()->button );
+    GtkButton *button = GTK_BUTTON( m_buttonsInfo[n].button );
 
     // don't use GTK_WIDGET_IS_SENSITIVE() here, we want to return true even if
     // the parent radiobox is disabled
     return gtk_widget_get_sensitive(GTK_WIDGET(button)) != 0;
 }
 
-bool wxRadioBox::Show(unsigned int item, bool show)
+bool wxRadioBox::Show(unsigned int n, bool show)
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid radiobox") );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.Item( item );
+    wxCHECK_MSG( n < m_buttonsInfo.size(), false, wxT("radiobox wrong index") );
 
-    wxCHECK_MSG( node, false, wxT("radiobox wrong index") );
-
-    GtkWidget *button = GTK_WIDGET( node->GetData()->button );
+    GtkWidget *button = GTK_WIDGET( m_buttonsInfo[n].button );
 
     if (show)
         gtk_widget_show( button );
@@ -565,45 +570,37 @@ bool wxRadioBox::Show(unsigned int item, bool show)
     return true;
 }
 
-bool wxRadioBox::IsItemShown(unsigned int item) const
+bool wxRadioBox::IsItemShown(unsigned int n) const
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid radiobox") );
+    wxCHECK_MSG( m_widget != nullptr, false, wxT("invalid radiobox") );
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.Item( item );
+    wxCHECK_MSG( n < m_buttonsInfo.size(), false, wxT("radiobox wrong index") );
 
-    wxCHECK_MSG( node, false, wxT("radiobox wrong index") );
-
-    GtkButton *button = GTK_BUTTON( node->GetData()->button );
+    GtkButton *button = GTK_BUTTON( m_buttonsInfo[n].button );
 
     return gtk_widget_get_visible(GTK_WIDGET(button)) != 0;
 }
 
 unsigned int wxRadioBox::GetCount() const
 {
-    return m_buttonsInfo.GetCount();
+    return m_buttonsInfo.size();
 }
 
 void wxRadioBox::GtkDisableEvents()
 {
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        g_signal_handlers_block_by_func(node->GetData()->button,
+        g_signal_handlers_block_by_func(info.button,
             (gpointer)gtk_radiobutton_clicked_callback, this);
-
-        node = node->GetNext();
     }
 }
 
 void wxRadioBox::GtkEnableEvents()
 {
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        g_signal_handlers_unblock_by_func(node->GetData()->button,
+        g_signal_handlers_unblock_by_func(info.button,
             (gpointer)gtk_radiobutton_clicked_callback, this);
-
-        node = node->GetNext();
     }
 }
 
@@ -611,15 +608,12 @@ void wxRadioBox::DoApplyWidgetStyle(GtkRcStyle *style)
 {
     GTKFrameApplyWidgetStyle(GTK_FRAME(m_widget), style);
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        GtkWidget *widget = GTK_WIDGET( node->GetData()->button );
+        GtkWidget *widget = GTK_WIDGET( info.button );
 
         GTKApplyStyle(widget, style);
         GTKApplyStyle(gtk_bin_get_child(GTK_BIN(widget)), style);
-
-        node = node->GetNext();
     }
 
 #ifndef __WXGTK3__
@@ -644,13 +638,11 @@ void wxRadioBox::GTKApplyToolTip(const char* tip)
 {
     // set this tooltip for all radiobuttons which don't have their own tips
     unsigned n = 0;
-    for ( wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-          node;
-          node = node->GetNext(), n++ )
+    for ( const auto& info : m_buttonsInfo )
     {
-        if ( !GetItemToolTip(n) )
+        if ( !GetItemToolTip(n++) )
         {
-            wxToolTip::GTKApply(GTK_WIDGET(node->GetData()->button), tip);
+            wxToolTip::GTKApply(GTK_WIDGET(info.button), tip);
         }
     }
 }
@@ -661,9 +653,9 @@ void wxRadioBox::DoSetItemToolTip(unsigned int n, wxToolTip *tooltip)
     if ( !tooltip )
         tooltip = GetToolTip();
     if ( tooltip )
-        buf = wxGTK_CONV(tooltip->GetTip());
+        buf = tooltip->GetTip().utf8_str();
 
-    wxToolTip::GTKApply(GTK_WIDGET(m_buttonsInfo[n]->button), buf);
+    wxToolTip::GTKApply(GTK_WIDGET(m_buttonsInfo[n].button), buf);
 }
 
 #endif // wxUSE_TOOLTIPS
@@ -672,37 +664,35 @@ GdkWindow *wxRadioBox::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
     windows.push_back(gtk_widget_get_window(m_widget));
 
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
+    for ( const auto& info : m_buttonsInfo )
     {
-        GtkWidget *button = GTK_WIDGET( node->GetData()->button );
+        GtkWidget *button = GTK_WIDGET( info.button );
 
-        // don't put NULL pointers in the 'windows' array!
+        // don't put null pointers in the 'windows' array!
         if (gtk_widget_get_window(button))
             windows.push_back(gtk_widget_get_window(button));
-
-        node = node->GetNext();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 // static
 wxVisualAttributes
 wxRadioBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_radio_button_new_with_label(NULL, ""));
+    return GetDefaultAttributesFromGTKWidget(gtk_radio_button_new_with_label(nullptr, ""));
 }
 
 int wxRadioBox::GetItemFromPoint(const wxPoint& point) const
 {
     const wxPoint pt = ScreenToClient(point);
     unsigned n = 0;
-    for ( wxRadioBoxButtonsInfoList::compatibility_iterator
-            node = m_buttonsInfo.GetFirst(); node; node = node->GetNext(), n++ )
+    for ( const auto& info : m_buttonsInfo )
     {
-        if ( m_buttonsInfo[n]->rect.Contains(pt) )
+        if ( info.rect.Contains(pt) )
             return n;
+
+        ++n;
     }
 
     return wxNOT_FOUND;

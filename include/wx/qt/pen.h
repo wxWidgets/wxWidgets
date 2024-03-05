@@ -17,29 +17,31 @@ public:
 
     wxPen( const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID );
 
+    wxPen( const wxPenInfo& info );
+
     wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
     wxPen(const wxColour& col, int width, int style);
 
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const;
 
-    virtual void SetColour(const wxColour& col) wxOVERRIDE;
-    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) wxOVERRIDE;
+    virtual void SetColour(const wxColour& col) override;
+    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) override;
 
-    virtual void SetWidth(int width) wxOVERRIDE;
-    virtual void SetStyle(wxPenStyle style) wxOVERRIDE;
-    virtual void SetStipple(const wxBitmap& stipple) wxOVERRIDE;
-    virtual void SetDashes(int nb_dashes, const wxDash *dash) wxOVERRIDE;
-    virtual void SetJoin(wxPenJoin join) wxOVERRIDE;
-    virtual void SetCap(wxPenCap cap) wxOVERRIDE;
+    virtual void SetWidth(int width) override;
+    virtual void SetStyle(wxPenStyle style) override;
+    virtual void SetStipple(const wxBitmap& stipple) override;
+    virtual void SetDashes(int nb_dashes, const wxDash *dash) override;
+    virtual void SetJoin(wxPenJoin join) override;
+    virtual void SetCap(wxPenCap cap) override;
 
-    virtual wxColour GetColour() const wxOVERRIDE;
-    virtual wxBitmap *GetStipple() const wxOVERRIDE;
-    virtual wxPenStyle GetStyle() const wxOVERRIDE;
-    virtual wxPenJoin GetJoin() const wxOVERRIDE;
-    virtual wxPenCap GetCap() const wxOVERRIDE;
-    virtual int GetWidth() const wxOVERRIDE;
-    virtual int GetDashes(wxDash **ptr) const wxOVERRIDE;
+    virtual wxColour GetColour() const override;
+    virtual wxBitmap *GetStipple() const override;
+    virtual wxPenStyle GetStyle() const override;
+    virtual wxPenJoin GetJoin() const override;
+    virtual wxPenCap GetCap() const override;
+    virtual int GetWidth() const override;
+    virtual int GetDashes(wxDash **ptr) const override;
 
     wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
     void SetStyle(int style) { SetStyle((wxPenStyle)style); }
@@ -47,8 +49,8 @@ public:
     QPen GetHandle() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
+    virtual wxGDIRefData *CreateGDIRefData() const override;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPen);

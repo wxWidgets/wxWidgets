@@ -130,7 +130,7 @@ public:
             The UI help string to associate with the new tool.
         @param kind
             The kind of tool to add.
-        @param client_data
+        @param clientData
             Client data to associate with the new tool.
 
         @return An opaque pointer which can be used only with other tool bar
@@ -144,7 +144,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* clientData = NULL);
+                wxObject* clientData = nullptr);
 
     /**
         Add a separator to the tool bar.
@@ -232,7 +232,7 @@ public:
             The UI help string to associate with the new tool.
         @param kind
             The kind of tool to add.
-        @param client_data
+        @param clientData
             Client data to associate with the new tool.
 
         @return An opaque pointer which can be used only with other tool bar
@@ -249,7 +249,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* clientData = NULL);
+                wxObject* clientData = nullptr);
 
     /**
         Insert a separator to the tool bar at the specified position.
@@ -301,11 +301,22 @@ public:
     /**
         Return the opaque pointer corresponding to the given tool.
 
-        @return an opaque pointer, NULL if is a separator or not found.
+        @return an opaque pointer, @NULL if is a separator or not found.
 
         @since 2.9.4
     */
-    wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const
+    wxRibbonToolBarToolBase* GetToolByPos(size_t pos)const;
+
+    /**
+        Returns the opaque pointer for the tool at the given coordinates,
+        which are relative to the toolbar's parent.
+
+        @return an opaque pointer, @NULL if is not found.
+
+        @since 3.1.5
+    */
+    virtual wxRibbonToolBarToolBase* GetToolByPos(wxCoord x, wxCoord y)const;
+
 
     /**
         Returns the number of tools in the toolbar.
@@ -315,13 +326,22 @@ public:
     virtual size_t GetToolCount() const;
 
     /**
-        Return the id assciated to the tool opaque structure.
+        Return the id associated to the tool opaque structure.
 
         The structure pointer must not be @NULL.
 
         @since 2.9.4
     */
     virtual int GetToolId(const wxRibbonToolBarToolBase* tool)const;
+
+    /**
+        Returns the active item of the tool bar or @NULL if there is none.
+
+        The active tool is the one being clicked.
+
+        @since 3.1.7
+    */
+    virtual wxRibbonToolBarToolBase* GetActiveTool() const;
 
     /**
         Get any client data associated with the tool.
@@ -379,6 +399,18 @@ public:
         @since 2.9.4
     */
     virtual int GetToolPos(int tool_id)const;
+
+    /**
+        Returns the tool's rect with coordinates relative to the toolbar's parent,
+        or a default-constructed rect if the tool is not found.
+
+        @param tool_id
+            ID of the tool in question, as passed to AddTool().
+
+        @since 3.1.5
+    */
+    virtual wxRect GetToolRect(int tool_id)const;
+
 
     /**
         Gets the on/off state of a toggle tool.
@@ -500,7 +532,7 @@ class wxRibbonToolBarEvent : public wxCommandEvent
 public:
     wxRibbonToolBarEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                         wxRibbonToolBar* bar = NULL);
+                         wxRibbonToolBar* bar = nullptr);
 
     wxRibbonToolBar* GetBar();
     void SetBar(wxRibbonToolBar* bar);

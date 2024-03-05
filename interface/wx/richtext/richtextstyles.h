@@ -506,7 +506,7 @@ public:
     */
     wxRichTextAttr CombineWithParagraphStyle(int indent,
                                          const wxRichTextAttr& paraStyle,
-                                         wxRichTextStyleSheet* styleSheet = NULL);
+                                         wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         This function finds the level (from 0 to 9) whose indentation attribute mostly
@@ -522,7 +522,7 @@ public:
         included in the result.
     */
     wxRichTextAttr GetCombinedStyle(int indent,
-                                wxRichTextStyleSheet* styleSheet = NULL);
+                                wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         This function combines the list style's base attributes and the style for the
@@ -533,7 +533,7 @@ public:
     */
 
     wxRichTextAttr GetCombinedStyleForLevel(int level,
-                                     wxRichTextStyleSheet* styleSheet = NULL);
+                                     wxRichTextStyleSheet* styleSheet = nullptr);
 
     /**
         Returns the style for the given level. @a level is a number between 0 and 9.
@@ -557,6 +557,11 @@ public:
         form is for convenient setting of the most commonly-used attributes.
     */
     void SetLevelAttributes(int level, const wxRichTextAttr& attr);
+
+    /**
+        Convenience function for setting the major attributes for a list level specification.
+     */
+    void SetAttributes(int i, int leftIndent, int leftSubIndent, int bulletStyle, const wxString& bulletSymbol = wxEmptyString);
 };
 
 
@@ -582,9 +587,19 @@ public:
     wxRichTextStyleSheet();
 
     /**
+        Copy constructor.
+     */
+    wxRichTextStyleSheet(const wxRichTextStyleSheet& sheet);
+
+    /**
         Destructor.
     */
     virtual ~wxRichTextStyleSheet();
+
+    /**
+        Copies given style sheet.
+     */
+    void Copy(const wxRichTextStyleSheet& sheet);
 
     /**
         Adds a definition to the character style list.

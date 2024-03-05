@@ -6,6 +6,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    SVG shape rendering mode.
+
+    These options represent the values defined in the SVG specification:
+    https://svgwg.org/svg2-draft/painting.html#ShapeRenderingProperty
+*/
+enum wxSVGShapeRenderingMode
+{
+    wxSVG_SHAPE_RENDERING_AUTO = 0,
+    wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED,
+    wxSVG_SHAPE_RENDERING_CRISP_EDGES,
+    wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION,
+
+    wxSVG_SHAPE_RENDERING_OPTIMISE_SPEED = wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED
+};
+
+
+/**
     @class wxSVGFileDC
 
     A wxSVGFileDC is a device context onto which graphics and text can be
@@ -66,7 +83,7 @@ public:
         or derive your own bitmap handler class and use it if you need to
         customize the bitmap handling further.
 
-        @param handler The new bitmap handler. If non-NULL, this object takes
+        @param handler The new bitmap handler. If non-null, this object takes
             ownership of this handler and will delete it when it is not needed
             any more.
 
@@ -75,15 +92,15 @@ public:
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
     /**
-        Sets the clipping region for this device context to the intersection of
-        the given region described by the parameters of this method and the previously
-        set clipping region.
-        Clipping is implemented in the SVG output using SVG group elements (\<g\>), with
-        nested group elements being used to represent clipping region intersections when
-        two or more calls are made to SetClippingRegion().
+        Set the shape rendering mode of the generated SVG.
+        All subsequent drawing calls will have this rendering mode set in the
+        SVG file.
+
+        The default mode is wxSVG_SHAPE_RENDERING_AUTO.
+
+        @since 3.1.3
     */
-    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width,
-                           wxCoord height);
+    void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
 
     /**
         Destroys the current clipping region so that none of the DC is clipped.
@@ -93,7 +110,7 @@ public:
     */
     void DestroyClippingRegion();
 
-    //@{
+    ///@{
     /**
         Function not implemented in this DC class.
     */
@@ -109,7 +126,7 @@ public:
     void EndDoc();
     void StartPage();
     void EndPage();
-    //@}
+    ///@}
 };
 
 /**

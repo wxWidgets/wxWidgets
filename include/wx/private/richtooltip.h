@@ -26,19 +26,19 @@ public:
     // These methods simply mirror the public wxRichToolTip ones.
     virtual void SetBackgroundColour(const wxColour& col,
                                      const wxColour& colEnd) = 0;
-    virtual void SetCustomIcon(const wxIcon& icon) = 0;
+    virtual void SetCustomIcon(const wxBitmapBundle& icon) = 0;
     virtual void SetStandardIcon(int icon) = 0;
     virtual void SetTimeout(unsigned milliseconds,
                             unsigned millisecondsShowdelay = 0) = 0;
     virtual void SetTipKind(wxTipKind tipKind) = 0;
     virtual void SetTitleFont(const wxFont& font) = 0;
 
-    virtual void ShowFor(wxWindow* win, const wxRect* rect = NULL) = 0;
+    virtual void ShowFor(wxWindow* win, const wxRect* rect = nullptr) = 0;
 
-    virtual ~wxRichToolTipImpl() { }
+    virtual ~wxRichToolTipImpl() = default;
 
 protected:
-    wxRichToolTipImpl() { }
+    wxRichToolTipImpl() = default;
 };
 
 #endif // _WX_PRIVATE_RICHTOOLTIP_H_

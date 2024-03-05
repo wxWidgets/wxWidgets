@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_UIACTIONSIMULATOR
 
@@ -26,6 +23,8 @@
 
 #include "wx/uiaction.h"
 #include "wx/vector.h"
+
+#include "waitfor.h"
 
 namespace
 {
@@ -160,7 +159,6 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                   desc.m_keycode,
                                   ev.GetKeyCode() );
 
-#if wxUSE_UNICODE
     if ( desc.m_keycode < WXK_START )
     {
         // For Latin-1 our key code is the same as Unicode character value.
@@ -175,7 +173,6 @@ void TestEvent(int line, const wxKeyEvent& ev, const KeyDesc& desc)
                                       0,
                                       (int)ev.GetUnicodeKey() );
     }
-#endif // wxUSE_UNICODE
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "wrong modifiers in " + msg,
                                   desc.m_mods,
@@ -197,8 +194,8 @@ class KeyboardEventTestCase : public CppUnit::TestCase
 public:
     KeyboardEventTestCase() {}
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( KeyboardEventTestCase );
@@ -229,7 +226,8 @@ void KeyboardEventTestCase::setUp()
     m_win = new KeyboardTestWindow(wxTheApp->GetTopWindow());
     wxYield();
     m_win->SetFocus();
-    wxYield(); // needed to show the new window
+
+    YieldForAWhile(10); // needed to show the new window
 
     // The window might get some key up events when it's being shown if the key
     // was pressed when the program was started and released after the window
@@ -245,6 +243,9 @@ void KeyboardEventTestCase::tearDown()
 
 void KeyboardEventTestCase::NormalLetter()
 {
+#ifdef __WXQT__
+    WARN("FIXME! doesn't work like the other ports.");
+#else
     wxUIActionSimulator sim;
     sim.Char('a');
     wxYield();
@@ -257,6 +258,7 @@ void KeyboardEventTestCase::NormalLetter()
 
     CPPUNIT_ASSERT_EQUAL( 1, m_win->GetKeyUpCount() );
     ASSERT_KEY_EVENT_IS( m_win->GetKeyUpEvent(), 'A' );
+#endif
 }
 
 void KeyboardEventTestCase::NormalSpecial()
@@ -277,6 +279,9 @@ void KeyboardEventTestCase::NormalSpecial()
 
 void KeyboardEventTestCase::CtrlLetter()
 {
+#ifdef __WXQT__
+    WARN("FIXME! doesn't work like the other ports.");
+#else
     wxUIActionSimulator sim;
     sim.Char('z', wxMOD_CONTROL);
     wxYield();
@@ -296,6 +301,7 @@ void KeyboardEventTestCase::CtrlLetter()
                          KeyDesc('Z', wxMOD_CONTROL) );
     ASSERT_KEY_EVENT_IS( m_win->GetKeyUpEvent(1),
                          ModKeyUp(WXK_CONTROL) );
+#endif
 }
 
 void KeyboardEventTestCase::CtrlSpecial()

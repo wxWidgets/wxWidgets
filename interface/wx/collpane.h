@@ -127,7 +127,7 @@ public:
 
     /**
         @param parent
-            Parent window, must not be non-@NULL.
+            Parent window, must not be non-null.
         @param id
             The identifier for the control.
         @param label
@@ -140,7 +140,7 @@ public:
         @param style
             The window style, see wxCP_* flags.
         @param validator
-            Validator which can be used for additional date checks.
+            Validator which can be used for additional data checks.
         @param name
             Control name.
 

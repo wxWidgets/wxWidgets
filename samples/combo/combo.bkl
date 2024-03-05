@@ -12,9 +12,10 @@
 
     <wx-data id="data">
         <files>
-            dropbuth.png
-            dropbutn.png
-            dropbutp.png
+            dropbuth.svg
+            dropbutn.svg
+            dropbutp.svg
+            three-dots.svg
         </files>
     </wx-data>
 

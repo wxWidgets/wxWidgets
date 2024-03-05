@@ -24,7 +24,7 @@ public:
 
 
 wxStaticBox::wxStaticBox() :
-    m_qtGroupBox(NULL)
+    m_qtGroupBox(nullptr)
 {
 }
 
@@ -48,7 +48,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     m_qtGroupBox = new wxQtGroupBox( parent, this );
     m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    return wxStaticBoxBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 QWidget *wxStaticBox::GetHandle() const
@@ -58,12 +58,14 @@ QWidget *wxStaticBox::GetHandle() const
 
 void wxStaticBox::SetLabel(const wxString& label)
 {
-    m_qtGroupBox->setTitle(wxQtConvertString(label));
+    wxStaticBoxBase::SetLabel( label );
+
+    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 }
 
 wxString wxStaticBox::GetLabel() const
 {
-    return wxQtConvertString(m_qtGroupBox->title());
+    return wxQtConvertString( m_qtGroupBox->title() );
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const

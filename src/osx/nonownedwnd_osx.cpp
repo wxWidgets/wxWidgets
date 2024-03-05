@@ -16,7 +16,6 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include "wx/hashmap.h"
 #include "wx/evtloop.h"
 #include "wx/tooltip.h"
 #include "wx/nonownedwnd.h"
@@ -28,6 +27,8 @@
 #if wxUSE_SYSTEM_OPTIONS
     #include "wx/sysopt.h"
 #endif
+
+#include <unordered_map>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -45,22 +46,27 @@ clock_t wxNonOwnedWindow::s_lastFlush = 0;
 // wxWindowMac utility functions
 // ---------------------------------------------------------------------------
 
-WX_DECLARE_HASH_MAP(WXWindow, wxNonOwnedWindowImpl*, wxPointerHash, wxPointerEqual, MacWindowMap);
+namespace
+{
+
+using MacWindowMap = std::unordered_map<WXWindow, wxNonOwnedWindowImpl*>;
 
 static MacWindowMap wxWinMacWindowList;
+
+} // anonymous namespace
 
 wxNonOwnedWindow* wxNonOwnedWindow::GetFromWXWindow( WXWindow win )
 {
     wxNonOwnedWindowImpl* impl = wxNonOwnedWindowImpl::FindFromWXWindow(win);
 
-    return ( impl != NULL ? impl->GetWXPeer() : NULL ) ;
+    return ( impl != nullptr ? impl->GetWXPeer() : nullptr ) ;
 }
 
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::FindFromWXWindow (WXWindow window)
 {
     MacWindowMap::iterator node = wxWinMacWindowList.find(window);
 
-    return (node == wxWinMacWindowList.end()) ? NULL : node->second;
+    return (node == wxWinMacWindowList.end()) ? nullptr : node->second;
 }
 
 void wxNonOwnedWindowImpl::RemoveAssociations( wxNonOwnedWindowImpl* impl)
@@ -78,9 +84,9 @@ void wxNonOwnedWindowImpl::RemoveAssociations( wxNonOwnedWindowImpl* impl)
 
 void wxNonOwnedWindowImpl::Associate( WXWindow window, wxNonOwnedWindowImpl *impl )
 {
-    // adding NULL WindowRef is (first) surely a result of an error and
+    // adding null WindowRef is (first) surely a result of an error and
     // nothing else :-)
-    wxCHECK_RET( window != (WXWindow) NULL, wxT("attempt to add a NULL WindowRef to window list") );
+    wxCHECK_RET( window != (WXWindow) nullptr, wxT("attempt to add a null WindowRef to window list") );
 
     wxWinMacWindowList[window] = impl;
 }
@@ -91,11 +97,11 @@ void wxNonOwnedWindowImpl::Associate( WXWindow window, wxNonOwnedWindowImpl *imp
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxNonOwnedWindowImpl, wxObject);
 
-wxNonOwnedWindow *wxNonOwnedWindow::s_macDeactivateWindow = NULL;
+wxNonOwnedWindow *wxNonOwnedWindow::s_macDeactivateWindow = nullptr;
 
 void wxNonOwnedWindow::Init()
 {
-    m_nowpeer = NULL;
+    m_nowpeer = nullptr;
     m_isNativeWindowWrapper = false;
     m_ignoreResizing = false;
 }
@@ -152,8 +158,6 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
 
-    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ));
-
     if ( parent )
         parent->AddChild(this);
 
@@ -173,7 +177,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent, WXWindow nativeWindow)
 void wxNonOwnedWindow::SubclassWin(WXWindow nativeWindow)
 {
     wxASSERT_MSG( !m_isNativeWindowWrapper, wxT("subclassing window twice?") );
-    wxASSERT_MSG( m_nowpeer == NULL, wxT("window already was created") );
+    wxASSERT_MSG( m_nowpeer == nullptr, wxT("window already was created") );
 
     m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, GetParent(), nativeWindow );
     m_isNativeWindowWrapper = true;
@@ -190,7 +194,7 @@ void wxNonOwnedWindow::UnsubclassWin()
 
     wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;
     wxDELETE(m_nowpeer);
-    SetPeer(NULL);
+    SetPeer(nullptr);
     m_isNativeWindowWrapper = false;
 }
 
@@ -207,7 +211,7 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 
     // avoid dangling refs
     if ( s_macDeactivateWindow == this )
-        s_macDeactivateWindow = NULL;
+        s_macDeactivateWindow = nullptr;
 }
 
 bool wxNonOwnedWindow::Destroy()
@@ -260,7 +264,9 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
     // only set the native background color if the toplevel window's
     // background is not supposed to be transparent, otherwise the
     // transparency is lost
-    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT)
+    // we cannot set the background color on a shaped toplevel window
+    // otherwise we loose the shape and end up with a rectangular background
+    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT && GetShape().IsEmpty() )
     {
         if ( m_nowpeer )
             return m_nowpeer->SetBackgroundColour(c);
@@ -360,7 +366,7 @@ void wxNonOwnedWindow::MacActivate( long timestamp , bool WXUNUSED(inIsActivatin
     wxLogTrace(TRACE_ACTIVATE, wxT("TopLevel=%p::MacActivate"), this);
 
     if (s_macDeactivateWindow == this)
-        s_macDeactivateWindow = NULL;
+        s_macDeactivateWindow = nullptr;
 
     MacDelayedDeactivation(timestamp);
 }
@@ -415,7 +421,7 @@ bool wxNonOwnedWindow::SetBackgroundStyle(wxBackgroundStyle style)
 
 void wxNonOwnedWindow::DoMoveWindow(int x, int y, int width, int height)
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return;
 
     m_cachedClippedRectValid = false ;
@@ -426,7 +432,7 @@ void wxNonOwnedWindow::DoMoveWindow(int x, int y, int width, int height)
 
 void wxNonOwnedWindow::DoGetPosition( int *x, int *y ) const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return;
 
     int x1,y1 ;
@@ -440,7 +446,7 @@ void wxNonOwnedWindow::DoGetPosition( int *x, int *y ) const
 
 void wxNonOwnedWindow::DoGetSize( int *width, int *height ) const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return;
 
     int w,h;
@@ -455,7 +461,7 @@ void wxNonOwnedWindow::DoGetSize( int *width, int *height ) const
 
 void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return;
 
     int left, top, w, h;
@@ -481,7 +487,7 @@ void wxNonOwnedWindow::WindowWasPainted()
 
 void wxNonOwnedWindow::Update()
 {
-    if ( m_nowpeer == NULL )
+    if ( m_nowpeer == nullptr )
         return;
 
     if ( clock() - s_lastFlush > CLOCKS_PER_SEC / 30 )
@@ -493,7 +499,7 @@ void wxNonOwnedWindow::Update()
 
 WXWindow wxNonOwnedWindow::GetWXWindow() const
 {
-    return m_nowpeer ? m_nowpeer->GetWXWindow() : NULL;
+    return m_nowpeer ? m_nowpeer->GetWXWindow() : nullptr;
 }
 
 #if wxOSX_USE_COCOA_OR_IPHONE
@@ -510,6 +516,7 @@ void *wxNonOwnedWindow::OSXGetViewOrWindow() const
 bool wxNonOwnedWindow::DoClearShape()
 {
     m_shape.Clear();
+    m_shapePath = wxGraphicsPath();
 
     wxSize sz = GetClientSize();
     wxRegion region(0, 0, sz.x, sz.y);
@@ -519,23 +526,23 @@ bool wxNonOwnedWindow::DoClearShape()
 
 bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
+    m_shapePath = wxGraphicsPath();
     m_shape = region;
 
     // set the native content view to transparency, this is an implementation detail
     // no reflected in the wx BackgroundStyle
     GetPeer()->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+    GetPeer()->SetNeedsDisplay();
 
     return m_nowpeer->SetShape(region);
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
 
-#include "wx/scopedptr.h"
+#include <memory>
 
 bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 {
-    m_shapePath = path;
-
     // Convert the path to wxRegion by rendering the path on a window-sized
     // bitmap, creating a mask from it and finally creating the region from
     // this mask.
@@ -543,17 +550,24 @@ bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
 
     {
         wxMemoryDC dc(bmp);
-        dc.SetBackground(*wxBLACK);
+        dc.SetBackground(*wxBLACK_BRUSH);
         dc.Clear();
 
-        wxScopedPtr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
-        context->SetBrush(*wxWHITE);
-        context->FillPath(m_shapePath);
+        std::unique_ptr<wxGraphicsContext> context(wxGraphicsContext::Create(dc));
+        context->SetBrush(*wxWHITE_BRUSH);
+        context->SetAntialiasMode(wxANTIALIAS_NONE);
+        context->FillPath(path);
     }
 
     bmp.SetMask(new wxMask(bmp, *wxBLACK));
 
-    return DoSetRegionShape(wxRegion(bmp));
+    // the shape path has to be set AFTER the region is set, because that method
+    // clears any former path
+    bool success = DoSetRegionShape(wxRegion(bmp));
+    if ( success )
+        m_shapePath = path;
+
+    return success;
 }
 
 void

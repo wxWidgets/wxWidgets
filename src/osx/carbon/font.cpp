@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/font.cpp
 // Purpose:     wxFont class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -19,6 +18,7 @@
 #include "wx/gdicmn.h"
 #include "wx/log.h"
 #include "wx/math.h"
+#include "wx/module.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -27,9 +27,13 @@
 #include "wx/tokenzr.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
+#include <array>
 #include <map>
 #include <string>
+
+#include <float.h>       // for FLT_MAX
 
 #define TRACE_CTFONT "ctfont"
 
@@ -47,7 +51,7 @@ public:
 
     wxFontRefData(CTFontRef font);
 
-    float GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
+    double GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
 
     wxFontFamily GetFamily() const { return m_info.GetFamily(); }
 
@@ -73,7 +77,7 @@ public:
 
     const wxNativeFontInfo& GetNativeFontInfo() const;
 
-    void SetFractionalPointSize(float size)
+    void SetFractionalPointSize(double size)
     {
         if (GetFractionalPointSize() != size)
         {
@@ -167,15 +171,15 @@ namespace
     const int kCTWeightsCount = 12;
     static CGFloat gCTWeights[kCTWeightsCount] = {
         -1.000, // 0
-        -0.800, // 100
-        -0.600, // 200
-        -0.400, // 300
-        0.000, // 400
-        0.230, // 500
-        0.300, // 600
-        0.400, // 700
-        0.560, // 800
-        0.620, // 900
+        -0.800, // 100, NSFontWeightUltraLight
+        -0.600, // 200, NSFontWeightThin
+        -0.400, // 300, NSFontWeightLight
+        0.000, // 400, NSFontWeightRegular
+        0.230, // 500, NSFontWeightMedium
+        0.300, // 600, NSFontWeightSemibold
+        0.400, // 700, NSFontWeightBold
+        0.560, // 800, NSFontWeightHeavy
+        0.620, // 900, NSFontWeightBlack
         0.750, // 1000
     };
 
@@ -212,7 +216,7 @@ namespace
             case wxFONTFAMILY_SCRIPT:
             case wxFONTFAMILY_ROMAN:
             case wxFONTFAMILY_DECORATIVE:
-                faceName = wxT("Times");
+                faceName = wxT("Times New Roman");
                 break;
 
             case wxFONTFAMILY_SWISS:
@@ -221,11 +225,11 @@ namespace
 
             case wxFONTFAMILY_MODERN:
             case wxFONTFAMILY_TELETYPE:
-                faceName = wxT("Courier");
+                faceName = wxT("Courier New");
                 break;
 
             default:
-                faceName = wxT("Times");
+                faceName = wxT("Times New Roman");
                 break;
         }
 
@@ -253,10 +257,13 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
 {
     m_info.Init();
 
+    wxFontFamily family = info.GetFamily();
+    if (family == wxFONTFAMILY_DEFAULT)
+        family = wxFONTFAMILY_SWISS;
+    SetFamily(family);
+
     if ( info.HasFaceName() )
         SetFaceName(info.GetFaceName());
-    else
-        SetFamily(info.GetFamily());
 
     m_info.SetSizeOrDefault(info.GetFractionalPointSize());
     SetNumericWeight(info.GetNumericWeight());
@@ -288,6 +295,8 @@ void wxFontRefData::SetFont(CTFontRef font)
     dict.SetValue(kCTForegroundColorFromContextAttributeName, kCFBooleanTrue);
 
     m_ctFontAttributes = dict;
+
+    m_cgFont = CTFontCopyGraphicsFont(m_ctFont, nullptr);
 }
 
 static const CGAffineTransform kSlantTransform = CGAffineTransformMake(1, 0, tan(wxDegToRad(11)), 1, 0, 0);
@@ -320,10 +329,6 @@ void wxFontRefData::AllocIfNeeded() const
 void wxFontRefData::Alloc()
 {
     wxCHECK_RET(m_info.GetPointSize() > 0, wxT("Point size should not be zero."));
-
-    // make sure the font descriptor has been processed properly
-    // otherwise the Post Script Name may not be valid yet
-    m_info.RealizeResource();
     
     // use font caching, we cache a font with a certain size and a font with just any size for faster creation
     wxString lookupnameNoSize = wxString::Format("%s_%d_%d", m_info.GetPostScriptName(), (int)m_info.GetStyle(), m_info.GetNumericWeight());
@@ -343,12 +348,11 @@ void wxFontRefData::Alloc()
         CachedFontEntry& entryNoSize = fontcache[lookupnameNoSize];
         if ( entryNoSize.used )
         {
-            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetPointSize(), NULL, NULL);
+            m_ctFont = CTFontCreateCopyWithAttributes(entryNoSize.font, m_info.GetFractionalPointSize(), nullptr, nullptr);
             m_ctFontAttributes = entryNoSize.fontAttributes.CreateCopy();
             m_ctFontAttributes.SetValue(kCTFontAttributeName,m_ctFont.get());
-            m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
+            m_cgFont = CTFontCopyGraphicsFont(m_ctFont, nullptr);
             entryWithSize.font = m_ctFont;
-            entryWithSize.cgFont = m_cgFont;
             entryWithSize.cgFont = m_cgFont;
             entryWithSize.fontAttributes = m_ctFontAttributes;
             entryWithSize.used = true;
@@ -357,16 +361,16 @@ void wxFontRefData::Alloc()
         {
             // emulate slant if necessary, the font descriptor itself carries that information,
             // while the weight can only be determined properly from the generated font itself
-            const CGAffineTransform* remainingTransform = NULL;
+            const CGAffineTransform* remainingTransform = nullptr;
             if ( m_info.GetStyle() != wxFONTSTYLE_NORMAL && m_info.GetCTSlant(m_info.GetCTFontDescriptor()) < 0.01 )
                 remainingTransform = &kSlantTransform;
 
-            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetPointSize(), remainingTransform);
+            wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_info.GetCTFontDescriptor(), m_info.GetFractionalPointSize(), remainingTransform);
 
             // emulate weigth if necessary
             int difference = m_info.GetNumericWeight() - CTWeightToWX(wxNativeFontInfo::GetCTWeight(font));
 
-            SetFont(font);
+            SetFont(font); // Sets m_ctFont, m_ctFontAttributes, m_cgFont
             if ( difference != 0 )
             {
                 if ( difference > 0 )
@@ -382,7 +386,18 @@ void wxFontRefData::Alloc()
                 }
             }
 
-            m_cgFont = CTFontCopyGraphicsFont(m_ctFont, NULL);
+            // Preserve the fields not represented by CTFont.
+            const bool wasUnderlined = m_info.GetUnderlined();
+            const bool wasStrikethrough = m_info.GetStrikethrough();
+
+            m_info.InitFromFont(m_ctFont);
+
+            // Restore them as they were reset by InitFromFont().
+            if ( wasUnderlined )
+                m_info.SetUnderlined(wasUnderlined);
+            if ( wasStrikethrough )
+                m_info.SetStrikethrough(wasStrikethrough);
+
             entryWithSize.font = m_ctFont;
             entryWithSize.cgFont = m_cgFont;
             entryWithSize.fontAttributes = m_ctFontAttributes;
@@ -394,7 +409,7 @@ void wxFontRefData::Alloc()
             entryNoSize.used = true;
          }
     }
-    m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, NULL));
+    m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, nullptr));
 }
 
 bool wxFontRefData::IsFixedWidth() const
@@ -441,41 +456,115 @@ bool wxFont::Create(const wxNativeFontInfo& info)
     return true;
 }
 
+// Module maintaining and, most importantly, cleaning up, a cache wxFontRefData
+// objects corresponding to the system fonts, as recreating them every time is
+// too expensive.
+class wxOSXSystemFontsCacheModule : public wxModule
+{
+public:
+    wxOSXSystemFontsCacheModule() { }
+
+    bool OnInit() override
+    {
+        for ( auto& p: ms_systemFontsCache )
+            p = nullptr;
+
+        return true;
+    }
+
+    void OnExit() override
+    {
+        for ( auto& p: ms_systemFontsCache )
+        {
+            if ( p )
+            {
+                p->DecRef();
+                p = nullptr;
+            }
+        }
+    }
+
+    // The returned pointer must be DecRef()'d by caller if non-null.
+    static wxFontRefData* Get(wxOSXSystemFont font)
+    {
+        wxCHECK(font != wxOSX_SYSTEM_FONT_NONE, nullptr);
+
+        wxFontRefData*& cached = ms_systemFontsCache[font - 1];
+        if ( !cached )
+        {
+            CTFontUIFontType uifont;
+            switch (font)
+            {
+                // This case is unreachable because of the precondition check
+                // above and is only present to avoid -Wswitch warnings.
+                case wxOSX_SYSTEM_FONT_NONE:
+                    wxFALLTHROUGH;
+
+                case wxOSX_SYSTEM_FONT_NORMAL:
+                    uifont = kCTFontUIFontSystem;
+                    break;
+                case wxOSX_SYSTEM_FONT_BOLD:
+                    uifont = kCTFontUIFontEmphasizedSystem;
+                    break;
+                case wxOSX_SYSTEM_FONT_SMALL:
+                    uifont = kCTFontUIFontSmallSystem;
+                    break;
+                case wxOSX_SYSTEM_FONT_SMALL_BOLD:
+                    uifont = kCTFontUIFontSmallEmphasizedSystem;
+                    break;
+                case wxOSX_SYSTEM_FONT_MINI:
+                    uifont = kCTFontUIFontMiniSystem;
+                    break;
+                case wxOSX_SYSTEM_FONT_MINI_BOLD:
+                    uifont = kCTFontUIFontMiniEmphasizedSystem;
+                    break;
+                case wxOSX_SYSTEM_FONT_LABELS:
+                    uifont = kCTFontUIFontLabel;
+                    break;
+                case wxOSX_SYSTEM_FONT_VIEWS:
+                    uifont = kCTFontUIFontViews;
+                    break;
+                case wxOSX_SYSTEM_FONT_FIXED:
+                    uifont = kCTFontUIFontUserFixedPitch;
+                    break;
+
+                // Remember to update Cache array size when adding new cases to
+                // this switch statement!
+            }
+            wxCFRef<CTFontRef> ctfont(CTFontCreateUIFontForLanguage(uifont, 0.0, nullptr));
+            cached = new wxFontRefData(ctfont);
+        }
+
+        cached->IncRef();
+
+        return cached;
+    }
+
+private:
+    // This relies on wxOSX_SYSTEM_FONT_FIXED being the last element of enum,
+    // which should rename true until a new enum element is added, at which
+    // stage we should get a warning about the missing case in the switch above
+    // and the size of this array will need to be modified when adding the new
+    // case.
+    //
+    // Notice that we don't need "+ 1" here because we never cache the font for
+    // wxOSX_SYSTEM_FONT_NONE which should be never used, so we use the index
+    // of "enum value - 1" in the cache.
+    using Cache = std::array<wxFontRefData*, wxOSX_SYSTEM_FONT_FIXED>;
+
+    // Cache owns the pointers, i.e. calls DecRef() on them when it's destroyed.
+    static Cache ms_systemFontsCache;
+
+    wxDECLARE_DYNAMIC_CLASS(wxOSXSystemFontsCacheModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxOSXSystemFontsCacheModule, wxModule);
+
+wxOSXSystemFontsCacheModule::Cache wxOSXSystemFontsCacheModule::ms_systemFontsCache;
+
 wxFont::wxFont(wxOSXSystemFont font)
 {
-    wxASSERT(font != wxOSX_SYSTEM_FONT_NONE);
-    CTFontUIFontType uifont = kCTFontSystemFontType;
-    switch (font)
-    {
-        case wxOSX_SYSTEM_FONT_NORMAL:
-            uifont = kCTFontSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_BOLD:
-            uifont = kCTFontEmphasizedSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_SMALL:
-            uifont = kCTFontSmallSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_SMALL_BOLD:
-            uifont = kCTFontSmallEmphasizedSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_MINI:
-            uifont = kCTFontMiniSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_MINI_BOLD:
-            uifont = kCTFontMiniEmphasizedSystemFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_LABELS:
-            uifont = kCTFontLabelFontType;
-            break;
-        case wxOSX_SYSTEM_FONT_VIEWS:
-            uifont = kCTFontViewsFontType;
-            break;
-        default:
-            break;
-    }
-    wxCFRef<CTFontRef> ctfont(CTFontCreateUIFontForLanguage(uifont, 0.0, NULL));
-    m_refData = new wxFontRefData(ctfont);
+    m_refData = wxOSXSystemFontsCacheModule::Get(font);
 }
 
 #if wxOSX_USE_COCOA
@@ -534,10 +623,6 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-wxFont::~wxFont()
-{
-}
-
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
     UnRef();
@@ -567,7 +652,7 @@ wxGDIRefData* wxFont::CloneGDIRefData(const wxGDIRefData* data) const
     return new wxFontRefData(*static_cast<const wxFontRefData*>(data));
 }
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 
@@ -622,9 +707,9 @@ void wxFont::SetStrikethrough(bool strikethrough)
 // accessors
 // ----------------------------------------------------------------------------
 
-// TODO: insert checks everywhere for M_FONTDATA == NULL!
+// TODO: insert checks everywhere for M_FONTDATA == nullptr!
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
 
@@ -635,12 +720,12 @@ wxSize wxFont::GetPixelSize() const
 {
 #if wxUSE_GRAPHICS_CONTEXT
     // TODO: consider caching the value
-    wxGraphicsContext* dc = wxGraphicsContext::CreateFromNative((CGContextRef)NULL);
-    dc->SetFont(*(wxFont*)this, *wxBLACK);
+    wxGraphicsContext* dc = wxGraphicsContext::CreateFromNative((CGContextRef)nullptr);
+    dc->SetFont(*this, *wxBLACK);
     wxDouble width, height = 0;
-    dc->GetTextExtent(wxT("g"), &width, &height, NULL, NULL);
+    dc->GetTextExtent(wxT("g"), &width, &height, nullptr, nullptr);
     delete dc;
-    return wxSize((int)width, (int)height);
+    return wxSize(wxRound(width), wxRound(height));
 #else
     return wxFontBase::GetPixelSize();
 #endif
@@ -705,13 +790,13 @@ wxFontEncoding wxFont::GetEncoding() const
 
 CTFontRef wxFont::OSXGetCTFont() const
 {
-    wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid font"));
     return M_FONTDATA->OSXGetCTFont();
 }
 
 CFDictionaryRef wxFont::OSXGetCTFontAttributes() const
 {
-    wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid font"));
     return M_FONTDATA->OSXGetCTFontAttributes();
 }
 
@@ -719,7 +804,7 @@ CFDictionaryRef wxFont::OSXGetCTFontAttributes() const
 
 CGFontRef wxFont::OSXGetCGFont() const
 {
-    wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
+    wxCHECK_MSG(IsOk(), nullptr, wxT("invalid font"));
     return M_FONTDATA->OSXGetCGFont();
 }
 
@@ -727,7 +812,7 @@ CGFontRef wxFont::OSXGetCGFont() const
 
 const wxNativeFontInfo* wxFont::GetNativeFontInfo() const
 {
-    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : NULL;
+    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -745,6 +830,7 @@ void wxNativeFontInfo::Init()
     m_encoding = wxFONTENCODING_UTF8;
 
     m_ctWeight = 0.0;
+    m_ctWidth = 0.0;
     m_style = wxFONTSTYLE_NORMAL;
     m_ctSize = 0.0;
     m_family = wxFONTFAMILY_DEFAULT;
@@ -764,6 +850,7 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
     m_encoding = info.m_encoding;
 
     m_ctWeight = info.m_ctWeight;
+    m_ctWidth = info.m_ctWidth;
     m_style = info.m_style;
     m_ctSize = info.m_ctSize;
     m_family = info.m_family;
@@ -776,7 +863,15 @@ void wxNativeFontInfo::InitFromFont(CTFontRef font)
 {
     Init();
 
-    InitFromFontDescriptor(CTFontCopyFontDescriptor(font) );
+    wxCFRef<CTFontDescriptorRef> desc(CTFontCopyFontDescriptor(font));
+    InitFromFontDescriptor( desc );
+
+    // in case the font itself does not exist as italic it might have
+    // been created with the emulation via a font transform
+    if ( !CGAffineTransformIsIdentity(CTFontGetMatrix(font)) )
+    {
+        m_style = wxFONTSTYLE_ITALIC;
+    }
 }
 
 void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
@@ -786,6 +881,7 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     m_descriptor.reset(wxCFRetain(desc));
 
     m_ctWeight = GetCTWeight(desc);
+    m_ctWidth = GetCTwidth(desc);
     m_style = GetCTSlant(desc) > 0.01 ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontSizeAttribute)).GetValue(m_ctSize, CGFloat(0.0));
 
@@ -814,7 +910,6 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     }
 
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(m_postScriptName);
 }
 
 void wxNativeFontInfo::Free()
@@ -837,7 +932,7 @@ void wxNativeFontInfo::RealizeResource() const
 
 void wxNativeFontInfo::CreateCTFontDescriptor()
 {
-    CTFontDescriptorRef descriptor = NULL;
+    CTFontDescriptorRef descriptor = nullptr;
     wxCFMutableDictionaryRef attributes;
 
     // build all attributes that define our font.
@@ -848,6 +943,16 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
         wxString fontname = m_familyName;
         if ( fontname.empty() )
             fontname = FamilyToFaceName(m_family);
+
+        // Courier and Times fonts used to be available everywhere and so are
+        // commonly hard-coded in the applications (even though they shouldn't
+        // be, and "teletype" or "roman" font family should be used instead),
+        // so make sure we still support them even if macOS > 12 doesn't have
+        // any fonts with these names any more.
+        if ( fontname == "Courier")
+            fontname = "Courier New";
+        else if ( fontname == "Times" )
+            fontname = "Times New Roman";
 
         CFDictionaryAddValue(attributes, kCTFontFamilyNameAttribute, wxCFStringRef(fontname));
     }
@@ -861,46 +966,46 @@ void wxNativeFontInfo::CreateCTFontDescriptor()
         traits.SetValue(kCTFontSymbolicTrait, kCTFontItalicTrait);
 
     traits.SetValue(kCTFontWeightTrait,m_ctWeight);
+    traits.SetValue(kCTFontWidthTrait,m_ctWidth);
 
     attributes.SetValue(kCTFontTraitsAttribute,traits.get());
     attributes.SetValue(kCTFontSizeAttribute, m_ctSize);
 
     // Create the font descriptor with our attributes
     descriptor = CTFontDescriptorCreateWithAttributes(attributes);
-    wxASSERT(descriptor != NULL);
+    wxASSERT(descriptor != nullptr);
 
     m_descriptor = descriptor;
     
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(m_postScriptName);
 
 #if wxDEBUG_LEVEL >= 2
     // for debugging: show all different font names
-    wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_descriptor, 12, NULL);
+    wxCFRef<CTFontRef> font = CTFontCreateWithFontDescriptor(m_descriptor, 12, nullptr);
     wxString familyname;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontFamilyNameAttribute)).GetValue(familyname);
     wxLogTrace(TRACE_CTFONT,"****** CreateCTFontDescriptor ******");
-    wxLogTrace(TRACE_CTFONT,"Descriptor FontFamilyName: %s",familyname.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor FontFamilyName: %s",familyname);
     
     wxString name;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontNameAttribute)).GetValue(name);
-    wxLogTrace(TRACE_CTFONT,"Descriptor FontName: %s",name.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor FontName: %s",name);
     
     wxString display;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontDisplayNameAttribute)).GetValue(display);
-    wxLogTrace(TRACE_CTFONT,"Descriptor DisplayName: %s",display.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor DisplayName: %s",display);
     
     wxString style;
     wxCFTypeRef(CTFontDescriptorCopyAttribute(m_descriptor, kCTFontStyleNameAttribute)).GetValue(style);
-    wxLogTrace(TRACE_CTFONT,"Descriptor StyleName: %s",style.c_str());
+    wxLogTrace(TRACE_CTFONT,"Descriptor StyleName: %s",style);
 
     wxString psname;
     wxCFTypeRef(CTFontCopyPostScriptName(font)).GetValue(psname);
-    wxLogTrace(TRACE_CTFONT,"Created Font PostScriptName: %s",psname.c_str());
+    wxLogTrace(TRACE_CTFONT,"Created Font PostScriptName: %s",psname);
     
     wxString fullname;
     wxCFTypeRef(CTFontCopyFullName(font)).GetValue(fullname);
-    wxLogTrace(TRACE_CTFONT,"Created Font FullName: %s",fullname.c_str());
+    wxLogTrace(TRACE_CTFONT,"Created Font FullName: %s",fullname);
     
     wxLogTrace(TRACE_CTFONT,"************************************");
 #endif
@@ -926,6 +1031,15 @@ CGFloat wxNativeFontInfo::GetCTWeight(CTFontDescriptorRef descr)
     return weight;
 }
 
+CGFloat wxNativeFontInfo::GetCTwidth(CTFontDescriptorRef descr)
+{
+    CGFloat weight;
+    CFTypeRef fonttraitstype = CTFontDescriptorCopyAttribute(descr, kCTFontTraitsAttribute);
+    wxCFDictionaryRef traits((CFDictionaryRef)fonttraitstype);
+    traits.GetValue(kCTFontWidthTrait).GetValue(&weight, CGFloat(0.0));
+    return weight;
+}
+
 CGFloat wxNativeFontInfo::GetCTSlant(CTFontDescriptorRef descr)
 {
     CGFloat slant;
@@ -935,8 +1049,18 @@ CGFloat wxNativeFontInfo::GetCTSlant(CTFontDescriptorRef descr)
     return slant;
 }
 
+// recipe taken from
+// https://developer.apple.com/library/archive/documentation/StringsTextFonts/Conceptual/CoreText_Programming/FontOperations/FontOperations.html
 
-//
+// common prefix of plist serializiation, gets removed and readded
+
+static const wxString& GetPListPrefix()
+{
+    static const wxString s_plistPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC "
+    "\"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">";
+    return s_plistPrefix;
+}
+
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     double d;
@@ -950,95 +1074,167 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
     version = l;
-    //
-    //  Ignore the version for now
-    //
 
-    token = tokenizer.GetNextToken();
-    if ( !token.ToCDouble(&d) )
-        return false;
-#ifdef __LP64__
-    // CGFloat is just double in this case.
-    m_ctSize = d;
-#else // !__LP64__
-    m_ctSize = static_cast<CGFloat>(d);
-    if ( static_cast<double>(m_ctSize) != d )
-        return false;
-#endif // __LP64__/!__LP64__
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_family = (wxFontFamily)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_style = (wxFontStyle)l;
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_ctWeight = WXWeightToCT(wxFont::ConvertFromLegacyWeightIfNecessary(l));
-
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_underlined = l != 0;
-
-    if ( version == 0L )
+    if ( version == 0 || version == 1 )
     {
-        m_strikethrough = false;
-    }
-    else
-    {
+        token = tokenizer.GetNextToken();
+        if ( !token.ToCDouble(&d) )
+            return false;
+        if ( d < 0 )
+            return false;
+        m_ctSize = d;
+
         token = tokenizer.GetNextToken();
         if ( !token.ToLong(&l) )
             return false;
-        m_strikethrough = l != 0;
-    }
+        m_family = (wxFontFamily)l;
 
-    // this works correctly via fallback even if this is (backwards compatibility) a font family name
-    SetPostScriptName( tokenizer.GetNextToken() );
-    
-    RealizeResource();
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_style = (wxFontStyle)l;
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_ctWeight = WXWeightToCT(wxFont::ConvertFromLegacyWeightIfNecessary(l));
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_underlined = l != 0;
+
+        if ( version == 0L )
+        {
+            m_strikethrough = false;
+        }
+        else
+        {
+            token = tokenizer.GetNextToken();
+            if ( !token.ToLong(&l) )
+                return false;
+            m_strikethrough = l != 0;
+        }
+
+        // this works correctly via fallback even if this is (backwards compatibility) a font family name
+        SetPostScriptName( tokenizer.GetNextToken() );
+
+        RealizeResource();
 
 #ifndef __WXMAC__
-    if( !m_familyName )
-        return false;
+        if( !m_familyName )
+            return false;
 #endif
 
-    token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
-        return false;
-    m_encoding = (wxFontEncoding)l;
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        m_encoding = (wxFontEncoding)l;
+        return true;
+    }
+    else if ( version == 2 || version == 3 )
+    {
+        wxFontStyle style = wxFONTSTYLE_NORMAL;
 
-    return true;
+        if ( version == 3 )
+        {
+            token = tokenizer.GetNextToken();
+            if ( !token.ToLong(&l) )
+                return false;
+            style = (wxFontStyle)l;
+        }
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        bool underlined = l != 0;
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        bool strikethrough = l != 0;
+
+        token = tokenizer.GetNextToken();
+        if ( !token.ToLong(&l) )
+            return false;
+        wxFontEncoding encoding = (wxFontEncoding)l;
+
+        wxString xml = tokenizer.GetString();
+        xml = GetPListPrefix()+xml;
+        wxCFStringRef plist(xml);
+        wxCFDataRef listData(CFStringCreateExternalRepresentation(kCFAllocatorDefault,plist,kCFStringEncodingUTF8,0));
+        wxCFDictionaryRef attributes((CFDictionaryRef) CFPropertyListCreateWithData(kCFAllocatorDefault, listData, 0, nullptr, nullptr));
+        CTFontDescriptorRef descriptor = nullptr;
+        if (attributes != nullptr)
+            descriptor = CTFontDescriptorCreateWithAttributes(attributes);
+        if (descriptor != nullptr)
+        {
+            InitFromFontDescriptor(descriptor);
+            CFRelease(descriptor);
+            m_underlined = underlined;
+            m_strikethrough = strikethrough;
+            m_encoding = encoding;
+            m_style = style;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 wxString wxNativeFontInfo::ToString() const
 {
-    // make sure the font descriptor has been processed properly
-    // otherwise the Post Script Name may not be valid yet
-    RealizeResource();
-    
     wxString s;
 
-    s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
-        1, // version
-        wxString::FromCDouble(GetFractionalPointSize()),
-        GetFamily(),
-        (int)GetStyle(),
-        GetNumericWeight(),
-        GetUnderlined(),
-        GetStrikethrough(),
-        GetPostScriptName().GetData(),
-        (int)GetEncoding());
+    // version 2 is a streamed property list of the font descriptor as recommended by Apple
+    // prefixed by the attributes that are non-native to the native font ref like underline, strikethrough etc.
+    // version 3 adds to v2 the style attribute because this cannot always be expressed
+    // in the native font descriptor. In situations where there is no native italic font
+    // the slant-ness has to be emulated in the font's transform
+    wxCFDictionaryRef attributes(CTFontDescriptorCopyAttributes(GetCTFontDescriptor()));
+
+    if (attributes != nullptr)
+    {
+        CFPropertyListFormat format = kCFPropertyListXMLFormat_v1_0;
+        if (CFPropertyListIsValid(attributes, format))
+        {
+            wxCFDataRef listData(CFPropertyListCreateData(kCFAllocatorDefault, attributes, format, 0, nullptr));
+            wxCFStringRef cfString( CFStringCreateFromExternalRepresentation( kCFAllocatorDefault, listData, kCFStringEncodingUTF8) );
+            wxString xml = cfString.AsString();
+            xml.Replace("\r",wxEmptyString,true);
+            xml.Replace("\t",wxEmptyString,true);
+            xml = xml.Mid(xml.Find("<plist"));
+
+            s.Printf("%d;%d;%d;%d;%d;%s",
+                 3, // version
+                 (int)GetStyle(),
+                 GetUnderlined(),
+                 GetStrikethrough(),
+                 (int)GetEncoding(),
+                 xml);
+        }
+    }
+
+    if ( s.empty() )
+    {
+        // fallback to version 1
+        s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
+                 1, // version
+                 wxString::FromCDouble(GetFractionalPointSize()),
+                 GetFamily(),
+                 (int)GetStyle(),
+                 GetNumericWeight(),
+                 GetUnderlined(),
+                 GetStrikethrough(),
+                 GetPostScriptName().GetData(),
+                 (int)GetEncoding());
+
+    }
 
     return s;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_ctSize;
 }
@@ -1060,7 +1256,25 @@ bool wxNativeFontInfo::GetUnderlined() const
 
 wxString wxNativeFontInfo::GetPostScriptName() const
 {
-    return m_postScriptName;
+    // return user-set PostScript name as-is
+    if ( !m_postScriptName.empty() )
+        return m_postScriptName;
+
+    // if not explicitly set, obtain it from the font descriptor
+    wxString ps;
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(GetCTFontDescriptor(), kCTFontNameAttribute)).GetValue(ps);
+
+    if ( WX_IS_MACOS_AVAILABLE(10, 16) )
+    {
+        // the PostScript names reported in macOS start with a dot for System Fonts, this has to be corrected
+        // otherwise round-trips are not possible, resulting in a Times Fallback, therefore we replace these with
+        // their official PostScript Name
+        wxString rest;
+        if ( ps.StartsWith(".SFNS", &rest) )
+            return "SFPro" + rest;
+    }
+
+    return ps;
 }
 
 wxString wxNativeFontInfo::GetFaceName() const
@@ -1085,7 +1299,7 @@ bool wxNativeFontInfo::GetStrikethrough() const
 
 // changing the font descriptor
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     if (GetFractionalPointSize() != pointsize)
     {
@@ -1109,7 +1323,13 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style_)
 
     if (formerIsItalic != newIsItalic)
     {
-        Free();
+        if ( m_descriptor )
+        {
+            if ( m_style != wxFONTSTYLE_NORMAL )
+                m_descriptor = CTFontDescriptorCreateCopyWithSymbolicTraits(m_descriptor, kCTFontItalicTrait, kCTFontItalicTrait);
+            else
+                m_descriptor = CTFontDescriptorCreateCopyWithSymbolicTraits(m_descriptor, 0, kCTFontItalicTrait);
+        }
     }
 }
 
@@ -1153,8 +1373,8 @@ bool wxNativeFontInfo::SetPostScriptName(const wxString& postScriptName)
 void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
     Free();
-    m_familyName.clear();
     m_family = family;
+    m_familyName = FamilyToFaceName(family);
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)

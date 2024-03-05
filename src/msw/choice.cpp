@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CHOICE
 
@@ -38,6 +35,9 @@
 #include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/uxtheme.h"
+
+#include "wx/msw/private/darkmode.h"
 
 // ============================================================================
 // implementation
@@ -124,21 +124,32 @@ bool wxChoice::Create(wxWindow *parent,
                   style, validator, name);
 }
 
-bool wxChoice::MSWShouldPreProcessMessage(WXMSG *pMsg)
+bool wxChoice::MSWShouldPreProcessMessage(WXMSG *msg)
 {
-    MSG *msg = (MSG *) pMsg;
-
-    // if the dropdown list is visible, don't preprocess certain keys
-    if ( msg->message == WM_KEYDOWN
-        && (msg->wParam == VK_ESCAPE || msg->wParam == VK_RETURN) )
+    if ( msg->message == WM_KEYDOWN &&
+            !(HIWORD(msg->lParam) & KF_ALTDOWN) &&
+                !wxIsShiftDown() &&
+                    !wxIsCtrlDown() )
     {
-        if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
+        switch ( msg->wParam )
         {
-            return false;
+            case VK_ESCAPE:
+            case VK_RETURN:
+                // These keys are needed by the control itself when the
+                // dropdown list is visible, so don't preprocess them then.
+                if (::SendMessage(GetHwndOf(this), CB_GETDROPPEDSTATE, 0, 0))
+                {
+                    return false;
+                }
+                break;
+
+            case VK_F4:
+                // This key can always be used to show the dropdown.
+                return false;
         }
     }
 
-    return wxControl::MSWShouldPreProcessMessage(pMsg);
+    return wxControl::MSWShouldPreProcessMessage(msg);
 }
 
 WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -181,17 +192,33 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
     // there doesn't seem to be any way to get the text colour using themes
-    // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
+    // API: TMT_TEXTCOLOR doesn't work either for EDIT nor COMBOBOX
     attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
 
     // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
-    attrs.colBg = wnd->MSWGetThemeColour(L"EDIT",
-                                         EP_EDITTEXT,
-                                         ETS_NORMAL,
-                                         ThemeColourBackground,
-                                         wxSYS_COLOUR_WINDOW);
+    wxUxThemeHandle hTheme(wnd, L"EDIT");
+    attrs.colBg = hTheme.GetColour(EP_EDITTEXT, TMT_FILLCOLOR, ETS_NORMAL);
+    if ( !attrs.colBg.IsOk() )
+        attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
     return attrs;
+}
+
+bool wxChoice::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    support.themeName = L"CFD";
+
+    // It is slightly improper to do this in a const function, but as we know
+    // that this will only be called when we're using the dark mode, we also
+    // use it to enable it for the drop down list, if any, to ensure that it
+    // uses dark scrollbars.
+    WinStruct<COMBOBOXINFO> info;
+    if ( ::GetComboBoxInfo(GetHwnd(), &info) && info.hwndList )
+    {
+        wxMSWDarkMode::AllowForWindow(info.hwndList);
+    }
+
+    return true;
 }
 
 wxChoice::~wxChoice()
@@ -335,8 +362,8 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     // string in place
 
     // we need to preserve the client data manually
-    void *oldData = NULL;
-    wxClientData *oldObjData = NULL;
+    void *oldData = nullptr;
+    wxClientData *oldObjData = nullptr;
     if ( HasClientUntypedData() )
         oldData = GetClientData(n);
     else if ( HasClientObjectData() )
@@ -365,10 +392,13 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
+    const int len = (int)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
 
     wxString str;
-    if ( len != CB_ERR && len > 0 )
+
+    wxCHECK_MSG( len != CB_ERR, str, wxS("Invalid index") );
+
+    if ( len > 0 )
     {
         if ( ::SendMessage
                (
@@ -415,7 +445,7 @@ void* wxChoice::DoGetItemClientData(unsigned int n) const
         wxLogLastError(wxT("CB_GETITEMDATA"));
 
         // unfortunately, there is no way to return an error code to the user
-        rc = (LPARAM) NULL;
+        rc = 0;
     }
 
     return (void *)rc;
@@ -458,9 +488,18 @@ void wxChoice::MSWEndDeferWindowPos()
 
 void wxChoice::MSWUpdateDropDownHeight()
 {
+    int flags = wxSIZE_USE_EXISTING;
+    if ( wxApp::GetComCtl32Version() < 600 )
+    {
+        // Make sure our DoMoveWindow() will get called to update the dropdown
+        // height, this happens automatically with comctl32.dll v6, but not
+        // with earlier versions.
+        flags |= wxSIZE_FORCE;
+    }
+
     // be careful to not change the width here
     DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, GetSize().y,
-              wxSIZE_USE_EXISTING);
+              flags);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)

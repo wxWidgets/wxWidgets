@@ -86,7 +86,7 @@ public:
 
     /**
         Disable automatic check for connection status change - notice that the
-        @c wxEVT_DIALUP_XXX events won't be sent any more neither.
+        @c wxEVT_DIALUP_XXX events won't be sent any more either.
     */
     virtual void DisableAutoCheckOnlineStatus() = 0;
 
@@ -137,7 +137,7 @@ public:
 
     /**
         Returns @true if the dialup manager was initialized correctly. If this
-        function returns @false, no other functions will work neither, so it is
+        function returns @false, no other functions will work either, so it is
         a good idea to call this function and check its result before calling
         any other wxDialUpManager methods.
     */

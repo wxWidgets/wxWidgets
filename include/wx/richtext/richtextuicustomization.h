@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextuicustomization.h
 // Purpose:     UI customization base class for wxRTC
 // Author:      Julian Smart
-// Modified by:
 // Created:     2010-11-14
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
@@ -34,8 +33,8 @@
 class WXDLLIMPEXP_RICHTEXT wxRichTextUICustomization
 {
 public:
-    wxRichTextUICustomization() {}
-    virtual ~wxRichTextUICustomization() {}
+    wxRichTextUICustomization() = default;
+    virtual ~wxRichTextUICustomization() = default;
 
     /// Show the help given the current active window, and a help topic id.
     virtual bool ShowHelp(wxWindow* win, long id) = 0;
@@ -53,9 +52,9 @@ public:
     wxRichTextHelpInfo()
     {
         m_helpTopic = -1;
-        m_uiCustomization = NULL;
+        m_uiCustomization = nullptr;
     }
-    virtual ~wxRichTextHelpInfo() {}
+    virtual ~wxRichTextHelpInfo() = default;
 
     virtual bool ShowHelp(wxWindow* win)
     {
@@ -81,7 +80,7 @@ public:
     bool HasHelpId() const { return m_helpTopic != -1; }
 
     /// Is there a valid customization object?
-    bool HasUICustomization() const { return m_uiCustomization != NULL; }
+    bool HasUICustomization() const { return m_uiCustomization != nullptr; }
 
 protected:
     wxRichTextUICustomization*  m_uiCustomization;
@@ -103,13 +102,13 @@ protected:
 /// of the formatting dialog.
 
 #define DECLARE_HELP_PROVISION() \
-    wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override) \
+    wxWARNING_SUPPRESS_MISSING_OVERRIDE() \
     virtual long GetHelpId() const { return sm_helpInfo.GetHelpId(); } \
     virtual void SetHelpId(long id) { sm_helpInfo.SetHelpId(id); } \
     virtual wxRichTextUICustomization* GetUICustomization() const { return sm_helpInfo.GetUICustomization(); } \
     virtual void SetUICustomization(wxRichTextUICustomization* customization) { sm_helpInfo.SetUICustomization(customization); } \
     virtual bool ShowHelp(wxWindow* win) { return sm_helpInfo.ShowHelp(win); } \
-    wxCLANG_WARNING_RESTORE(inconsistent-missing-override) \
+    wxWARNING_RESTORE_MISSING_OVERRIDE() \
 public: \
     static wxRichTextHelpInfo& GetHelpInfo() { return sm_helpInfo; }\
 protected: \

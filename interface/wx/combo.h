@@ -77,13 +77,13 @@ public:
             When item matches an entry, but the entry's string representation
             is not exactly the same (case mismatch, for example), then the
             true item string should be written back to here, if it is not
-            a NULL pointer.
+            @NULL.
 
         @remarks
             Default implementation always return true and does not alter
             trueItem.
     */
-    virtual bool FindItem(const wxString& item, wxString* trueItem=NULL);
+    virtual bool FindItem(const wxString& item, wxString* trueItem = nullptr);
 
     /**
         The derived class may implement this to return adjusted size for the
@@ -483,33 +483,33 @@ public:
         Returns disabled button bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the disabled state bitmap.
+        @return The disabled state bitmap.
     */
-    const wxBitmap& GetBitmapDisabled() const;
+    wxBitmap GetBitmapDisabled() const;
 
     /**
         Returns button mouse hover bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the mouse hover state bitmap.
+        @return The mouse hover state bitmap.
     */
-    const wxBitmap& GetBitmapHover() const;
+    wxBitmap GetBitmapHover() const;
 
     /**
         Returns default button bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the normal state bitmap.
+        @return The normal state bitmap.
     */
-    const wxBitmap& GetBitmapNormal() const;
+    wxBitmap GetBitmapNormal() const;
 
     /**
         Returns depressed button bitmap that has been set with
         SetButtonBitmaps().
 
-        @return A reference to the depressed state bitmap.
+        @return The depressed state bitmap.
     */
-    const wxBitmap& GetBitmapPressed() const;
+    wxBitmap GetBitmapPressed() const;
 
     /**
         Returns current size of the dropdown button.
@@ -697,11 +697,11 @@ public:
         @param bmpDisabled
             Disabled button image.
     */
-    void SetButtonBitmaps(const wxBitmap& bmpNormal,
+    void SetButtonBitmaps(const wxBitmapBundle& bmpNormal,
                           bool pushButtonBg = false,
-                          const wxBitmap& bmpPressed = wxNullBitmap,
-                          const wxBitmap& bmpHover = wxNullBitmap,
-                          const wxBitmap& bmpDisabled = wxNullBitmap);
+                          const wxBitmapBundle& bmpPressed = wxBitmapBundle(),
+                          const wxBitmapBundle& bmpHover = wxBitmapBundle(),
+                          const wxBitmapBundle& bmpDisabled = wxBitmapBundle());
 
     /**
         Sets size and position of dropdown button.
@@ -730,7 +730,7 @@ public:
         Sets a hint shown in an empty unfocused combo control.
 
         Notice that hints are known as <em>cue banners</em> under MSW or
-        <em>placeholder strings</em> under OS X.
+        <em>placeholder strings</em> under macOS.
 
         @see wxTextEntry::SetHint()
 
@@ -751,7 +751,48 @@ public:
     */
     virtual void SetInsertionPointEnd();
 
-    //@{
+    /**
+        Uses the given window instead of the default text control as the main
+        window of the combo control.
+
+        By default, combo controls without @c wxCB_READONLY style create a
+        wxTextCtrl which shows the current value and allows to edit it. This
+        method allows to use some other window instead of this wxTextCtrl.
+
+        This method can be called after creating the combo fully, however in
+        this case a wxTextCtrl is unnecessarily created just to be immediately
+        destroyed when it's replaced by a custom window. If you wish to avoid
+        this, you can use the following approach, also shown in the combo
+        sample:
+
+        @code
+            // Create the combo control using its default ctor.
+            wxComboCtrl* combo = new wxComboCtrl();
+
+            // Create the custom main control using its default ctor too.
+            SomeWindow* main = new SomeWindow();
+
+            // Set the custom main control before creating the combo.
+            combo->SetMainControl(main);
+
+            // And only create it now: wxTextCtrl won't be unnecessarily
+            // created because the combo already has a main window.
+            combo->Create(panel, wxID_ANY, wxEmptyString);
+
+            // Finally create the main window itself, now that its parent was
+            // created.
+            main->Create(combo, ...);
+        @endcode
+
+        Note that when a custom main window is used, none of the methods of
+        this class inherited from wxTextEntry, such as SetValue(), Replace(),
+        SetInsertionPoint() etc do anything and simply return.
+
+        @since 3.1.6
+    */
+    void SetMainControl(wxWindow* win);
+
+    ///@{
     /**
         Attempts to set the control margins. When margins are given as wxPoint,
         x indicates the left and y the top margin. Use -1 to indicate that
@@ -764,7 +805,7 @@ public:
     */
     bool SetMargins(const wxPoint& pt);
     bool SetMargins(wxCoord left, wxCoord top = -1);
-    //@}
+    ///@}
 
     /**
         Set side of the control to which the popup will align itself. Valid

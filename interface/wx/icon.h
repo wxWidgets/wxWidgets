@@ -120,7 +120,7 @@ public:
         wxIcon icon(wxICON(sample));
 
         // Equivalent to:
-        #if defined(__WXGTK__) || defined(__WXMOTIF__)
+        #if defined(__WXGTK__)
         wxIcon icon(sample_xpm);
         #endif
 
@@ -182,7 +182,7 @@ public:
         Attach a Windows icon handle.
 
         This wxMSW-specific method allows assigning a native Windows @c HICON
-        (which must be castes to @c WXHICON opaque handle type) to wxIcon.
+        (which must be cast to @c WXHICON opaque handle type) to wxIcon.
         Notice that this means that the @c HICON will be destroyed by wxIcon
         when it is destroyed.
 
@@ -222,16 +222,59 @@ public:
     int GetDepth() const;
 
     /**
-        Gets the height of the icon in pixels.
+        Gets the height of the icon in physical pixels.
 
-        @see GetWidth()
+        @see GetWidth(), GetLogicalHeight()
     */
     int GetHeight() const;
 
     /**
-        Gets the width of the icon in pixels.
+        Gets the height of the icon in logical pixels.
 
-        @see GetHeight()
+        See wxBitmap::GetLogicalHeight().
+
+        @since 3.1.6
+     */
+    double GetLogicalHeight() const;
+
+    /**
+        Gets the size of the icon in logical pixels.
+
+        See wxBitmap::GetLogicalSize().
+
+        @since 3.1.6
+     */
+    wxSize GetLogicalSize() const;
+
+    /**
+        Gets the width of the icon in logical pixels.
+
+        See wxBitmap::GetLogicalWidth().
+
+        @since 3.1.6
+     */
+    double GetLogicalWidth() const;
+
+    /**
+        Gets the scale factor of this icon.
+
+        See wxBitmap::GetScaleFactor().
+
+        @since 3.1.6
+     */
+    double GetScaleFactor() const;
+
+    /**
+        Gets the size of the icon in physical pixels.
+
+        @see GetLogicalSize()
+     */
+    wxSize GetSize() const;
+
+    /**
+        Gets the width of the icon in physical pixels.
+
+        @see GetHeight(), GetLogicalWidth()
     */
     int GetWidth() const;
 
@@ -267,6 +310,9 @@ public:
                   int desiredWidth = -1, int desiredHeight = -1);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the depth member (does not affect the icon data).
 
         @param depth
@@ -275,6 +321,9 @@ public:
     void SetDepth(int depth);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the height member (does not affect the icon data).
 
         @param height
@@ -283,6 +332,9 @@ public:
     void SetHeight(int height);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the width member (does not affect the icon data).
 
         @param width

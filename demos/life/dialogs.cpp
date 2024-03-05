@@ -2,7 +2,6 @@
 // Name:        life/dialogs.cpp
 // Purpose:     Life! dialogs
 // Author:      Guillermo Rodriguez Garcia, <guille@iies.es>
-// Modified by:
 // Created:     Jan/2000
 // Copyright:   (c) 2000, Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
@@ -14,10 +13,6 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -93,7 +88,7 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
     m_list = new wxListBox( this, ID_LISTBOX,
         wxDefaultPosition,
         listSize,
-        0, NULL,
+        0, nullptr,
         wxLB_SINGLE | wxLB_NEEDED_SB | wxLB_HSCROLL );
 
     for (unsigned i = 0; i < (sizeof(g_patterns) / sizeof(LifePattern)); i++)

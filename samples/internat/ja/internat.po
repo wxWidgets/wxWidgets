@@ -42,10 +42,6 @@ msgstr "&2 _N() (ngettext)"
 msgid "&3 wxTRANSLATE() (gettext_noop)"
 msgstr "&3 wxTRANSLATE() (gettext_noop)"
 
-#: ../internat.cpp:227
-msgid "&File"
-msgstr "ファイルと終了(&F)"
-
 #: ../internat.cpp:228
 msgid "&Test"
 msgstr "試行(&T)"

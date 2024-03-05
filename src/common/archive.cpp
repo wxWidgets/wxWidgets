@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
@@ -69,7 +66,7 @@ void wxArchiveEntry::SetNotifier(wxArchiveNotifier& notifier)
 
 wxArchiveEntry& wxArchiveEntry::operator=(const wxArchiveEntry& WXUNUSED(e))
 {
-    m_notifier = NULL;
+    m_notifier = nullptr;
     return *this;
 }
 
@@ -77,7 +74,7 @@ wxArchiveEntry& wxArchiveEntry::operator=(const wxArchiveEntry& WXUNUSED(e))
 /////////////////////////////////////////////////////////////////////////////
 // wxArchiveClassFactory
 
-wxArchiveClassFactory *wxArchiveClassFactory::sm_first = NULL;
+wxArchiveClassFactory *wxArchiveClassFactory::sm_first = nullptr;
 
 void wxArchiveClassFactory::Remove()
 {

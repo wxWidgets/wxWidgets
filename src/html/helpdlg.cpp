@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h"
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_WXHTML_HELP
 
@@ -53,8 +50,8 @@ void wxHtmlHelpDialog::Init(wxHtmlHelpData* data)
 {
     // Simply pass the pointer on to the help window
     m_Data = data;
-    m_HtmlHelpWin = NULL;
-    m_helpController = NULL;
+    m_HtmlHelpWin = nullptr;
+    m_helpController = nullptr;
 }
 
 // Create: builds the GUI components.
@@ -77,7 +74,6 @@ bool wxHtmlHelpDialog::Create(wxWindow* parent, wxWindowID id,
     wxWindow* item1 = this;
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
-    item1->SetAutoLayout(true);
 
     wxWindow* item3 = m_HtmlHelpWin;
     item2->Add(item3, 1, wxGROW|wxALL, 5);

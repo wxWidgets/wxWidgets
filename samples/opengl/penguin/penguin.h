@@ -2,7 +2,6 @@
 // Name:        penguin.h
 // Purpose:     wxGLCanvas demo program
 // Author:      Robert Roebling
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
@@ -45,7 +44,7 @@ struct GLData
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 
@@ -80,6 +79,8 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = "TestGLCanvas");
+    TestGLCanvas(const TestGLCanvas&) = delete;
+    TestGLCanvas& operator=(const TestGLCanvas&) = delete;
 
     virtual ~TestGLCanvas();
 
@@ -99,7 +100,6 @@ private:
     GLData       m_gldata;
     DXFRenderer  m_renderer;
 
-    wxDECLARE_NO_COPY_CLASS(TestGLCanvas);
     wxDECLARE_EVENT_TABLE();
 };
 

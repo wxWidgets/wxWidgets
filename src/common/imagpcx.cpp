@@ -10,19 +10,14 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_PCX
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
-    #include "wx/list.h"
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/palette.h"
-    #include "wx/hash.h"
     #include "wx/module.h"
 #endif
 
@@ -220,7 +215,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
     if (!image->IsOk())
         return wxPCX_MEMERR;
 
-    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == NULL)
+    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == nullptr)
         return wxPCX_MEMERR;
 
     // Now start reading the file, line by line, and store
@@ -342,7 +337,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
     if (bytesperline % 2)
         bytesperline++;
 
-    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == NULL)
+    if ((p = (unsigned char *) malloc(bytesperline * nplanes)) == nullptr)
         return wxPCX_MEMERR;
 
     // Build header data and write it to the stream. Initially,

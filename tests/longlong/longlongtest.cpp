@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -92,7 +89,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( LongLongTestCase, "LongLongTestCase" );
 
 LongLongTestCase::LongLongTestCase()
 {
-    srand((unsigned)time(NULL));
+    srand((unsigned)time(nullptr));
 }
 
 void LongLongTestCase::Conversion()

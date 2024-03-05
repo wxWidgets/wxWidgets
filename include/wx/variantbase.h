@@ -67,8 +67,8 @@ public:
     { }
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& WXUNUSED(str)) const { return false; }
-    virtual bool Read(wxSTD istream& WXUNUSED(str)) { return false; }
+    virtual bool Write(std::ostream& WXUNUSED(str)) const { return false; }
+    virtual bool Read(std::istream& WXUNUSED(str)) { return false; }
 #endif
     virtual bool Write(wxString& WXUNUSED(str)) const { return false; }
     virtual bool Read(wxString& WXUNUSED(str)) { return false; }
@@ -83,7 +83,7 @@ public:
     virtual const wxTypeInfo* GetTypeInfo() const = 0;
 
     // If it based on wxObject return the ClassInfo.
-    virtual wxClassInfo* GetValueClassInfo() { return NULL; }
+    virtual wxClassInfo* GetValueClassInfo() { return nullptr; }
 
     int GetRefCount() const
         { return m_count; }
@@ -99,7 +99,7 @@ protected:
     // Protected dtor should make some incompatible code
     // break more louder. That is, they should do data->DecRef()
     // instead of delete data.
-    virtual ~wxVariantData() {}
+    virtual ~wxVariantData() = default;
 
 private:
     int m_count;
@@ -109,7 +109,7 @@ template<typename T> class wxVariantDataT : public wxVariantData
 {
 public:
     wxVariantDataT(const T& d) : m_data(d) {}
-    virtual ~wxVariantDataT() {}
+    virtual ~wxVariantDataT() = default;
 
     // get a ref to the stored data
     T & Get() { return m_data; }
@@ -132,7 +132,7 @@ public:
     //virtual wxVariantData* Clone() const { return new wxVariantDataT<T>( Get() ); }
 
     // returns the type info of the contentc
-    virtual const wxTypeInfo* GetTypeInfo() const { return wxGetTypeInfo( (T*) NULL ); }
+    virtual const wxTypeInfo* GetTypeInfo() const { return wxGetTypeInfo( (T*) nullptr ); }
 
 private:
     T m_data;
@@ -188,7 +188,7 @@ public:
     // destroy a reference
     void UnRef();
 
-    // Make NULL (i.e. delete the data)
+    // Make null (i.e. delete the data)
     void MakeNull();
 
     // write contents to a string (e.g. for debugging)
@@ -210,7 +210,7 @@ public:
     const wxTypeInfo* GetTypeInfo() const
     {
         if (!m_data)
-            return NULL;
+            return nullptr;
         return m_data->GetTypeInfo();
     }
 
@@ -238,23 +238,20 @@ public:
     {
         const wxVariantDataT<T> *dataptr =
             wx_dynamic_cast(const wxVariantDataT<T>*, m_data);
-        return dataptr != NULL;
+        return dataptr != nullptr;
     }
 
     // returns this value as string
     wxString GetAsString() const;
 
     // gets the stored data casted to a wxObject*,
-    // returning NULL if cast is not possible
+    // returning nullptr if cast is not possible
     wxObject* GetAsObject();
 
 protected:
     wxVariantData*  m_data;
     wxString        m_name;
 };
-
-#include "wx/dynarray.h"
-WX_DECLARE_OBJARRAY_WITH_DECL(wxVariantBase, wxVariantBaseArray, class WXDLLIMPEXP_BASE);
 
 
 // templated streaming, every type must have their specialization for these methods

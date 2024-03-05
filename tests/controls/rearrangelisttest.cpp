@@ -8,9 +8,8 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#ifndef __WXOSX_IPHONE__
+
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -25,12 +24,12 @@ class RearrangeListTestCase : public ItemContainerTestCase, public CppUnit::Test
 public:
     RearrangeListTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_rearrange; }
-    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_rearrange; }
+    virtual wxItemContainer *GetContainer() const override { return m_rearrange; }
+    virtual wxWindow *GetContainerWindow() const override { return m_rearrange; }
 
     CPPUNIT_TEST_SUITE( RearrangeListTestCase );
         wxITEM_CONTAINER_TESTS();
@@ -155,3 +154,5 @@ void RearrangeListTestCase::MoveClientData()
     CPPUNIT_ASSERT_EQUAL("third", m_rearrange->GetString(1));
     CPPUNIT_ASSERT_EQUAL("first", m_rearrange->GetString(2));
 }
+
+#endif

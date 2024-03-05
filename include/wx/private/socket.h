@@ -48,7 +48,7 @@
 /*
    Including sys/types.h under Cygwin results in the warnings about "fd_set
    having been defined in sys/types.h" when winsock.h is included later and
-   doesn't seem to be necessary anyhow. It's not needed under Mac neither.
+   doesn't seem to be necessary anyhow. It's not needed under Mac either.
  */
 #if !defined(__WXMAC__) && !defined(__WXMSW__)
 #include <sys/types.h>
@@ -157,7 +157,7 @@ public:
     virtual void Uninstall_Callback(wxSocketImpl *socket,
                                     wxSocketNotify event = wxSOCKET_LOST) = 0;
 
-    virtual ~wxSocketManager() { }
+    virtual ~wxSocketManager() = default;
 
 private:
     // get the manager to use if we don't have it yet
@@ -263,7 +263,7 @@ public:
     // flags defines what kind of conditions we're interested in, the return
     // value is composed of a (possibly empty) subset of the bits set in flags
     wxSocketEventFlags Select(wxSocketEventFlags flags,
-                              wxTimeVal_t *timeout = NULL);
+                              wxTimeVal_t *timeout = nullptr);
 
     // convenient wrapper calling Select() with our default timeout
     wxSocketEventFlags SelectWithTimeout(wxSocketEventFlags flags)
@@ -273,13 +273,19 @@ public:
 
     // just a wrapper for accept(): it is called to create a new wxSocketImpl
     // corresponding to a new server connection represented by the given
-    // wxSocketBase, returns NULL on error (including immediately if there are
+    // wxSocketBase, returns nullptr on error (including immediately if there are
     // no pending connections as our sockets are non-blocking)
     wxSocketImpl *Accept(wxSocketBase& wxsocket);
 
 
     // notifications
     // -------------
+
+    // Update the socket depending on the presence or absence of wxSOCKET_BLOCK
+    // in GetSocketFlags(): if it's present, make the socket blocking and
+    // ensure that we don't get any asynchronous event for it, otherwise put
+    // it into non-blocking mode and enable monitoring it in the event loop.
+    virtual void UpdateBlockingState() = 0;
 
     // notify m_wxsocket about the given socket event by calling its (inaptly
     // named) OnRequest() method
@@ -323,10 +329,6 @@ private:
     // called by Close() if we have a valid m_fd
     virtual void DoClose() = 0;
 
-    // put this socket into non-blocking mode and enable monitoring this socket
-    // as part of the event loop
-    virtual void UnblockAndRegisterWithEventLoop() = 0;
-
     // check that the socket wasn't created yet and that the given address
     // (either m_local or m_peer depending on the socket kind) is valid and
     // set m_error and return false if this is not the case
@@ -350,7 +352,7 @@ private:
     }
 
     // apply the options to the (just created) socket and register it with the
-    // event loop by calling UnblockAndRegisterWithEventLoop()
+    // event loop by calling UpdateBlockingState()
     void PostCreation();
 
     // update local address after binding/connecting
@@ -363,7 +365,7 @@ private:
     int SendDgram(const void *buffer, int size);
 
 
-    // set in ctor and never changed except that it's reset to NULL when the
+    // set in ctor and never changed except that it's reset to nullptr when the
     // socket is shut down
     wxSocketBase *m_wxsocket;
 

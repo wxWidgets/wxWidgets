@@ -15,8 +15,6 @@
 
 #include "wx/mediactrl.h"
 
-#include <gst/player/player.h>      // main gstreamer player header
-
 #ifndef  WX_PRECOMP
     #include "wx/log.h"             // wxLogDebug/wxLogSysError/wxLogTrace
     #include "wx/app.h"             // wxTheApp->argc, wxTheApp->argv
@@ -29,8 +27,12 @@
 
 #ifdef __WXGTK__
     #include "wx/gtk/private/wrapgtk.h"
-    #include <gdk/gdkx.h>
+    #include "wx/gtk/private/mediactrl.h"
 #endif
+
+wxGCC_WARNING_SUPPRESS(cast-qual)
+#include <gst/player/player.h>      // main gstreamer player header
+wxGCC_WARNING_RESTORE()
 
 //=============================================================================
 //  Declarations
@@ -59,36 +61,36 @@ public:
                                      const wxSize& size,
                                      long style,
                                      const wxValidator& validator,
-                                     const wxString& name) wxOVERRIDE;
+                                     const wxString& name) override;
 
-    virtual bool Play() wxOVERRIDE;
-    virtual bool Pause() wxOVERRIDE;
-    virtual bool Stop() wxOVERRIDE;
+    virtual bool Play() override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
 
-    virtual bool Load(const wxString& fileName) wxOVERRIDE;
-    virtual bool Load(const wxURI& location) wxOVERRIDE;
+    virtual bool Load(const wxString& fileName) override;
+    virtual bool Load(const wxURI& location) override;
     virtual bool Load(const wxURI& location,
-                      const wxURI& proxy) wxOVERRIDE
+                      const wxURI& proxy) override
         { return wxMediaBackendCommonBase::Load(location, proxy); }
 
 
-    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
-    virtual wxLongLong GetPosition() wxOVERRIDE;
-    virtual wxLongLong GetDuration() wxOVERRIDE;
+    virtual bool SetPosition(wxLongLong where) override;
+    virtual wxLongLong GetPosition() override;
+    virtual wxLongLong GetDuration() override;
 
-    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize GetVideoSize() const wxOVERRIDE;
+    virtual void Move(int x, int y, int w, int h) override;
+    wxSize GetVideoSize() const override;
 
-    virtual double GetPlaybackRate() wxOVERRIDE;
-    virtual bool SetPlaybackRate(double dRate) wxOVERRIDE;
+    virtual double GetPlaybackRate() override;
+    virtual bool SetPlaybackRate(double dRate) override;
 
-    virtual wxMediaState GetState() wxOVERRIDE;
+    virtual wxMediaState GetState() override;
 
-    virtual bool SetVolume(double dVolume) wxOVERRIDE;
-    virtual double GetVolume() wxOVERRIDE;
+    virtual bool SetVolume(double dVolume) override;
+    virtual double GetVolume() override;
 
-    virtual wxLongLong GetDownloadProgress() wxOVERRIDE;
-    virtual wxLongLong GetDownloadTotal() wxOVERRIDE;
+    virtual wxLongLong GetDownloadProgress() override;
+    virtual wxLongLong GetDownloadTotal() override;
 
     bool DoLoad(const wxString& locstring);
     wxMediaCtrl* GetControl() { return m_ctrl; } // for C Callbacks
@@ -140,7 +142,24 @@ expose_event_callback(GtkWidget* widget, GdkEventExpose* event, wxGStreamerMedia
         // GST Doesn't redraw automatically while paused
         // Plus, the video sometimes doesn't redraw when it looses focus
         // or is painted over so we just tell it to redraw...
-        gst_player_video_overlay_video_renderer_expose(GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer));
+        gst_player_video_overlay_video_renderer_expose(
+            GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer)
+        );
+#ifdef __WXGTK3__
+        GdkWindow* window = gtk_widget_get_window(widget);
+        if (wxGTKImpl::IsWayland(window))
+        {
+            // on wayland we need to place the video
+            int x, y;
+            GtkAllocation allocation;
+            gdk_window_get_origin(window, &x, &y);
+            gtk_widget_get_allocation(widget, &allocation);
+            gst_player_video_overlay_video_renderer_set_render_rectangle(
+                GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
+                x, y, allocation.width, allocation.height
+            );
+        }
+#endif
     }
     else
     {
@@ -173,14 +192,25 @@ expose_event_callback(GtkWidget* widget, GdkEventExpose* event, wxGStreamerMedia
 extern "C" {
 static void realize_callback(GtkWidget* widget, wxGStreamerMediaBackend* be)
 {
-    gdk_flush();
-
+    gst_player_video_overlay_video_renderer_set_window_handle(
+        GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
+        wxGtkGetIdFromWidget(widget)
+    );
+#ifdef __WXGTK3__
     GdkWindow* window = gtk_widget_get_window(widget);
-    wxASSERT(window);
-
-    gst_player_video_overlay_video_renderer_set_window_handle(GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
-                                (gpointer) GDK_WINDOW_XID(window)
-                                );
+    if (wxGTKImpl::IsWayland(window))
+    {
+        // on wayland we need to place the video
+        int x, y;
+        GtkAllocation allocation;
+        gdk_window_get_origin(window, &x, &y);
+        gtk_widget_get_allocation(widget, &allocation);
+        gst_player_video_overlay_video_renderer_set_render_rectangle(
+            GST_PLAYER_VIDEO_OVERLAY_VIDEO_RENDERER(be->m_video_renderer),
+            x, y, allocation.width, allocation.height
+        );
+    }
+#endif
     GtkWidget* w = be->GetControl()->m_wxwindow;
 #ifdef __WXGTK3__
     g_signal_connect(w, "draw", G_CALLBACK(draw_callback), be);
@@ -192,17 +222,17 @@ static void realize_callback(GtkWidget* widget, wxGStreamerMediaBackend* be)
 #endif // wxGTK
 
 wxGStreamerMediaBackend::wxGStreamerMediaBackend()
-  : m_player(0), m_video_renderer(0), m_videoSize(0, 0), m_last_state(wxMEDIASTATE_STOPPED), m_loaded(false)
+  : m_player(nullptr), m_video_renderer(nullptr), m_videoSize(0, 0), m_last_state(wxMEDIASTATE_STOPPED), m_loaded(false)
 {
 
 }
 
 wxGStreamerMediaBackend::~wxGStreamerMediaBackend()
 {
-    m_video_renderer = NULL;
+    m_video_renderer = nullptr;
     if (m_player)
         gst_object_unref(m_player);
-    m_player = NULL;
+    m_player = nullptr;
 }
 
 extern "C" {
@@ -220,7 +250,35 @@ static void end_of_stream_callback(GstPlayer * WXUNUSED(player), wxGStreamerMedi
 {
     be->EndOfStream();
 }
+
+#define GST_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE "GstWaylandDisplayHandleContextType"
+static GstBusSyncReply bus_sync_handler(GstBus * WXUNUSED(bus), GstMessage* msg,  gpointer WXUNUSED(user_data))
+{
+    const gchar *type = nullptr;
+
+    if (GST_MESSAGE_TYPE(msg) == GST_MESSAGE_NEED_CONTEXT &&
+        gst_message_parse_context_type(msg, &type) &&
+        !g_strcmp0 (type, GST_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE))
+    {
+        GstContext *context = gst_context_new (GST_WAYLAND_DISPLAY_HANDLE_CONTEXT_TYPE, TRUE);
+        GstStructure *s = gst_context_writable_structure(context);
+        wxDisplayInfo display_info = wxGetDisplayInfo();
+        /* On wayland we need to explicitely transmit the display handle to gstreamer,
+         * but attribute expected depends on which video sink got selected.
+         * "display" will likely remain as the normal way of doing for gst 1.19+
+         * but there is no harm in setting both for compatibility
+         */
+        gst_structure_set(s, "handle", G_TYPE_POINTER, display_info.dpy, nullptr);
+        gst_structure_set(s, "display", G_TYPE_POINTER, display_info.dpy, nullptr);
+        gst_element_set_context(GST_ELEMENT(msg->src), context);
+
+        return GST_BUS_DROP;
+    }
+
+    return GST_BUS_PASS;
 }
+}
+
 
 bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                             wxWindowID id,
@@ -234,8 +292,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     //init gstreamer
     //
 
-    //Convert arguments to unicode if enabled
-#if wxUSE_UNICODE
+    //Convert arguments to unicode
     int i;
     char **argvGST = new char*[wxTheApp->argc + 1];
     for ( i = 0; i < wxTheApp->argc; i++ )
@@ -243,28 +300,22 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
         argvGST[i] = wxStrdupA(wxTheApp->argv[i].utf8_str());
     }
 
-    argvGST[wxTheApp->argc] = NULL;
+    argvGST[wxTheApp->argc] = nullptr;
 
     int argcGST = wxTheApp->argc;
-#else
-#define argcGST wxTheApp->argc
-#define argvGST wxTheApp->argv
-#endif
 
     //Really init gstreamer
     gboolean bInited;
-    GError* error = NULL;
+    GError* error = nullptr;
     bInited = gst_init_check(&argcGST, &argvGST, &error);
 
     // Cleanup arguments for unicode case
-#if wxUSE_UNICODE
     for ( i = 0; i < argcGST; i++ )
     {
         free(argvGST[i]);
     }
 
     delete [] argvGST;
-#endif
 
     if(!bInited)    //gst_init_check fail?
     {
@@ -304,7 +355,9 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // Turn off double-buffering so that
     // so it doesn't draw over the video and cause sporadic
     // disappearances of the video
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_widget_set_double_buffered(m_ctrl->m_wxwindow, FALSE);
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
 #endif
 
     // don't erase the background of our control window
@@ -312,7 +365,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     m_ctrl->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     // Tell gstreamer to play in our window
-    gpointer window_handle = NULL;
+    gpointer window_handle = nullptr;
 #ifdef __WXGTK__
     if (!gtk_widget_get_realized(m_ctrl->m_wxwindow))
     {
@@ -324,9 +377,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     }
     else
     {
-        GdkWindow* window = gtk_widget_get_window(m_ctrl->m_wxwindow);
-        wxASSERT(window);
-        window_handle = (gpointer) GDK_WINDOW_XID(window);
+        window_handle = wxGtkGetIdFromWidget(m_ctrl->m_wxwindow);
 
         GtkWidget* w = m_ctrl->m_wxwindow;
 #ifdef __WXGTK3__
@@ -340,7 +391,34 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 #endif
 
     m_video_renderer = gst_player_video_overlay_video_renderer_new(window_handle);
-    m_player = gst_player_new(m_video_renderer, gst_player_g_main_context_signal_dispatcher_new(NULL));
+    m_player = gst_player_new(m_video_renderer, gst_player_g_main_context_signal_dispatcher_new(nullptr));
+
+    wxDisplayInfo info = wxGetDisplayInfo();
+    if (info.type == wxDisplayWayland)
+    {
+        // wayland needs a specific handler to pass display to gstreamer
+        GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(gst_player_get_pipeline(m_player)));
+        gst_bus_add_signal_watch(bus);
+        gst_bus_set_sync_handler(bus, bus_sync_handler, this, nullptr);
+        gst_object_unref(bus);
+
+        // xvimagesink is known to crash gstreamer with a wayland window
+        // if display is set; try to make it not load.
+        GstPluginFeature *feature;
+        feature = gst_registry_find_feature(
+            gst_registry_get(), "xvimagesink", GST_TYPE_ELEMENT_FACTORY
+        );
+        if (feature) {
+            gst_plugin_feature_set_rank(feature, GST_RANK_NONE);
+        }
+        // same for ximagesink
+        feature = gst_registry_find_feature(
+            gst_registry_get(), "ximagesink", GST_TYPE_ELEMENT_FACTORY
+        );
+        if (feature) {
+            gst_plugin_feature_set_rank(feature, GST_RANK_NONE);
+        }
+    }
 
     g_signal_connect(m_player, "video-dimensions-changed", G_CALLBACK(video_dimensions_changed_callback), this);
     g_signal_connect(m_player, "state-changed", G_CALLBACK(state_changed_callback), this);

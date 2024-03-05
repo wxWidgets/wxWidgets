@@ -2,7 +2,6 @@
 // Name:        src/x11/colour.cpp
 // Purpose:     wxColour class
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -33,11 +32,12 @@ public:
         m_color.green = 0;
         m_color.blue = 0;
         m_color.pixel = 0;
-        m_colormap = NULL;
+        m_colormap = nullptr;
         m_hasPixel = false;
     }
 
     wxColourRefData(const wxColourRefData& data)
+        : wxGDIRefData()
     {
         m_color = data.m_color;
         m_colormap = data.m_colormap;
@@ -140,10 +140,6 @@ void wxColourRefData::AllocColour( WXColormap cmap )
 
 #define SHIFT (8*(sizeof(short int)-sizeof(char)))
 
-wxColour::~wxColour()
-{
-}
-
 bool wxColour::operator == ( const wxColour& col ) const
 {
     if (m_refData == col.m_refData) return true;
@@ -238,7 +234,7 @@ unsigned long wxColour::GetPixel() const
 
 WXColor *wxColour::GetColor() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid colour") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid colour") );
 
     return (WXColor*) &M_COLDATA->m_color;
 }

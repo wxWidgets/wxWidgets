@@ -25,12 +25,7 @@
         without them being defined, better give a clearer error right now.
      */
     #if !defined(UNICODE)
-        #ifndef wxUSE_UNICODE
-            #error "wxUSE_UNICODE must be defined before including this header."
-        #endif
-        #if wxUSE_UNICODE
-            #error "UNICODE must be defined before including this header."
-        #endif
+        #error "UNICODE must be defined before including this header."
     #endif
 
     /*
@@ -72,20 +67,8 @@
     #define wxCHECK_MINGW32_VERSION( major, minor ) (0)
 #endif
 
-#if defined( __MINGW32__ ) && !defined(__WINE__) && !defined( HAVE_W32API_H )
-    #if __MINGW32_MAJOR_VERSION >= 1
-        #define HAVE_W32API_H
-    #endif
-#elif defined( __CYGWIN__ ) && !defined( HAVE_W32API_H )
-    #if ( __GNUC__ > 2 )
-        #define HAVE_W32API_H
-    #endif
-#endif
-
 /* check for MinGW/Cygwin w32api version ( releases >= 0.5, only ) */
-#if defined( HAVE_W32API_H )
 #include <w32api.h>
-#endif
 
 #if defined(__W32API_MAJOR_VERSION) && defined(__W32API_MINOR_VERSION)
     #define wxCHECK_W32API_VERSION( major, minor ) \

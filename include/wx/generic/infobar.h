@@ -38,17 +38,17 @@ public:
     // ----------------------------
 
     virtual void ShowMessage(const wxString& msg,
-                             int flags = wxICON_INFORMATION) wxOVERRIDE;
+                             int flags = wxICON_INFORMATION) override;
 
-    virtual void Dismiss() wxOVERRIDE;
+    virtual void Dismiss() override;
 
-    virtual void AddButton(wxWindowID btnid, const wxString& label = wxString()) wxOVERRIDE;
+    virtual void AddButton(wxWindowID btnid, const wxString& label = wxString()) override;
 
-    virtual void RemoveButton(wxWindowID btnid) wxOVERRIDE;
+    virtual void RemoveButton(wxWindowID btnid) override;
 
-    virtual size_t GetButtonCount() const wxOVERRIDE;
-    virtual wxWindowID GetButtonId(size_t idx) const wxOVERRIDE;
-    virtual bool HasButtonId(wxWindowID btnid) const wxOVERRIDE;
+    virtual size_t GetButtonCount() const override;
+    virtual wxWindowID GetButtonId(size_t idx) const override;
+    virtual bool HasButtonId(wxWindowID btnid) const override;
 
     // methods specific to this version
     // --------------------------------
@@ -81,15 +81,15 @@ public:
 
     // setting the font of this window sets it for the text control inside it
     // (default font is a larger and bold version of the normal one)
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) override;
 
     // same thing with the colour: this affects the text colour
-    virtual bool SetForegroundColour(const wxColor& colour) wxOVERRIDE;
+    virtual bool SetForegroundColour(const wxColor& colour) override;
 
 protected:
     // info bar shouldn't have any border by default, the colour difference
     // between it and the main window separates it well enough
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
 
     // update the parent to take our new or changed size into account (notably

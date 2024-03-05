@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HEADERCTRL
 
@@ -58,6 +55,7 @@ void wxHeaderCtrl::Init()
     m_colBeingReordered = COL_NONE;
     m_dragOffset = 0;
     m_scrollOffset = 0;
+    m_wasSeparatorDClick = false;
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -458,7 +456,22 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
         const unsigned pos = GetColumnPos(colNew);
         event.SetNewOrder(pos);
 
-        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        const bool processed = GetEventHandler()->ProcessEvent(event);
+
+        if ( !processed )
+        {
+            // get the reordered columns
+            wxArrayInt order = GetColumnsOrder();
+            MoveColumnInOrderArray(order, colOld, pos);
+
+            // As the event wasn't processed, call the virtual function
+            // callback.
+            UpdateColumnsOrder(order);
+
+            // update columns order
+            SetColumnsOrder(order);
+        }
+        else if ( event.IsAllowed() )
         {
             // do reorder the columns
             DoMoveCol(colOld, pos);
@@ -555,7 +568,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         wxHeaderButtonParams params;
         params.m_labelText = col.GetTitle();
-        params.m_labelBitmap = col.GetBitmap();
+        params.m_labelBitmap = col.GetBitmapBundle().GetBitmapFor(this);
         params.m_labelAlignment = col.GetAlignment();
 
 #ifdef __WXGTK__
@@ -611,6 +624,9 @@ void wxHeaderCtrl::OnKeyDown(wxKeyEvent& event)
 
 void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 {
+    const bool wasSeparatorDClick = m_wasSeparatorDClick;
+    m_wasSeparatorDClick = false;
+
     // do this in advance to allow simply returning if we're not interested,
     // we'll undo it if we do handle the event below
     mevent.Skip();
@@ -651,7 +667,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
     // find if the event is over a column at all
     bool onSeparator;
     const unsigned col = mevent.Leaving()
-                            ? (onSeparator = false, COL_NONE)
+                            ? ((void)(onSeparator = false), COL_NONE)
                             : FindColumnAtPoint(xPhysical, &onSeparator);
 
 
@@ -713,8 +729,9 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
                 if ( onSeparator && dblclk )
                 {
                     evtType = wxEVT_HEADER_SEPARATOR_DCLICK;
+                    m_wasSeparatorDClick = true;
                 }
-                else // not double click on separator
+                else if (!wasSeparatorDClick)
                 {
                     evtType = click ? wxEVT_HEADER_CLICK
                                     : wxEVT_HEADER_DCLICK;

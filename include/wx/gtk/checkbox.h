@@ -22,7 +22,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxCheckBoxNameStr)
+            const wxString& name = wxASCII_STR(wxCheckBoxNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -33,12 +33,12 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxCheckBoxNameStr );
+                const wxString& name = wxASCII_STR(wxCheckBoxNameStr) );
 
-    void SetValue( bool state ) wxOVERRIDE;
-    bool GetValue() const wxOVERRIDE;
+    void SetValue( bool state ) override;
+    bool GetValue() const override;
 
-    virtual void SetLabel( const wxString& label ) wxOVERRIDE;
+    virtual void SetLabel( const wxString& label ) override;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -48,16 +48,18 @@ public:
     void GTKEnableEvents();
 
 protected:
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) override;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const override;
 
-    virtual void DoEnable(bool enable) wxOVERRIDE;
+    virtual void DoEnable(bool enable) override;
 
-    void DoSet3StateValue(wxCheckBoxState state) wxOVERRIDE;
-    wxCheckBoxState DoGet3StateValue() const wxOVERRIDE;
+    void DoSet3StateValue(wxCheckBoxState state) override;
+    wxCheckBoxState DoGet3StateValue() const override;
 
 private:
     typedef wxCheckBoxBase base_type;
+
+    virtual void GTKRemoveBorder() override;
 
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;

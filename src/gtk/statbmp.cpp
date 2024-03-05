@@ -14,6 +14,7 @@
 #include "wx/statbmp.h"
 
 #include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/image.h"
 
 //-----------------------------------------------------------------------------
 // wxStaticBitmap
@@ -23,14 +24,14 @@ wxStaticBitmap::wxStaticBitmap(void)
 {
 }
 
-wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
+wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmapBundle &bitmap,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
     Create( parent, id, bitmap, pos, size, style, name );
 }
 
-bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
+bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmapBundle &bitmap,
                              const wxPoint &pos, const wxSize &size,
                              long style, const wxString &name )
 {
@@ -41,9 +42,7 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         return false;
     }
 
-    m_bitmap = bitmap;
-
-    m_widget = gtk_image_new();
+    m_widget = wxGtkImage::New(this);
     g_object_ref(m_widget);
 
     if (bitmap.IsOk())
@@ -55,19 +54,21 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     return true;
 }
 
-void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
+void wxStaticBitmap::SetBitmap( const wxBitmapBundle &bitmap )
 {
-    m_bitmap = bitmap;
+    const wxSize sizeOld(DoGetBestSize());
 
-    // always use pixbuf, because pixmap mask does not
-    // work with disabled images in some themes
-    if (m_bitmap.IsOk())
-        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), m_bitmap.GetPixbuf());
-    else
-        gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget), NULL);
+    m_bitmapBundle = bitmap;
 
-    InvalidateBestSize();
-    SetSize(GetBestSize());
+    const wxSize sizeNew(DoGetBestSize());
+
+    WX_GTK_IMAGE(m_widget)->Set(bitmap);
+
+    if (sizeNew != sizeOld)
+    {
+        InvalidateBestSize();
+        SetSize(GetBestSize());
+    }
 }
 
 // static

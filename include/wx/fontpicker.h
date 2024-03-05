@@ -2,7 +2,6 @@
 // Name:        wx/fontpicker.h
 // Purpose:     wxFontPickerCtrl base header
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -34,7 +33,7 @@ class WXDLLIMPEXP_CORE wxFontPickerWidgetBase
 {
 public:
     wxFontPickerWidgetBase() : m_selectedFont(*wxNORMAL_FONT) { }
-    virtual ~wxFontPickerWidgetBase() {}
+    virtual ~wxFontPickerWidgetBase() = default;
 
     wxFont GetSelectedFont() const
         { return m_selectedFont; }
@@ -72,7 +71,7 @@ protected:
     (wxFNTP_FONTDESC_AS_LABEL | wxFNTP_USEFONT_FOR_LABEL)
 
 // native version currently only exists in wxGTK2
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/fontpicker.h"
     #define wxFontPickerWidget      wxFontButton
 #else
@@ -95,7 +94,7 @@ protected:
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl: platform-independent class which embeds the
-// platform-dependent wxFontPickerWidget andm if wxFNTP_USE_TEXTCTRL style is
+// platform-dependent wxFontPickerWidget and if wxFNTP_USE_TEXTCTRL style is
 // used, a textctrl next to it.
 // ----------------------------------------------------------------------------
 
@@ -107,7 +106,7 @@ public:
     {
     }
 
-    virtual ~wxFontPickerCtrl() {}
+    virtual ~wxFontPickerCtrl() = default;
 
 
     wxFontPickerCtrl(wxWindow *parent,
@@ -117,7 +116,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxFNTP_DEFAULT_STYLE,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxFontPickerCtrlNameStr)
+                     const wxString& name = wxASCII_STR(wxFontPickerCtrlNameStr))
         : m_nMinPointSize(wxFNTP_MINPOINT_SIZE), m_nMaxPointSize(wxFNTP_MAXPOINT_SIZE)
     {
         Create(parent, id, initial, pos, size, style, validator, name);
@@ -130,7 +129,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxFNTP_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxFontPickerCtrlNameStr);
+                const wxString& name = wxASCII_STR(wxFontPickerCtrlNameStr));
 
 
 public:         // public API
@@ -162,8 +161,8 @@ public:         // public API
 
 public:        // internal functions
 
-    void UpdatePickerFromTextCtrl() wxOVERRIDE;
-    void UpdateTextCtrlFromPicker() wxOVERRIDE;
+    void UpdatePickerFromTextCtrl() override;
+    void UpdateTextCtrlFromPicker() override;
 
     // event handler for our picker
     void OnFontChange(wxFontPickerEvent &);
@@ -175,7 +174,7 @@ public:        // internal functions
 protected:
 
     // extracts the style for our picker from wxFontPickerCtrl's style
-    long GetPickerStyle(long style) const wxOVERRIDE
+    long GetPickerStyle(long style) const override
         { return (style & (wxFNTP_FONTDESC_AS_LABEL|wxFNTP_USEFONT_FOR_LABEL)); }
 
     // the minimum pointsize allowed to the user
@@ -201,7 +200,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FONTPICKER_CHANGED, wxFontPick
 class WXDLLIMPEXP_CORE wxFontPickerEvent : public wxCommandEvent
 {
 public:
-    wxFontPickerEvent() {}
+    wxFontPickerEvent() = default;
     wxFontPickerEvent(wxObject *generator, int id, const wxFont &f)
         : wxCommandEvent(wxEVT_FONTPICKER_CHANGED, id),
           m_font(f)
@@ -213,12 +212,12 @@ public:
     void SetFont(const wxFont &c) { m_font = c; }
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxFontPickerEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxFontPickerEvent(*this); }
 
 private:
     wxFont m_font;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFontPickerEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxFontPickerEvent);
 };
 
 // ----------------------------------------------------------------------------

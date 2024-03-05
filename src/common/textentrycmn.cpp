@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TEXTCTRL || wxUSE_COMBOBOX
 
@@ -316,9 +313,7 @@ bool wxTextEntryBase::CanPaste() const
 #if wxUSE_CLIPBOARD
         // check if there is any text on the clipboard
         if ( wxTheClipboard->IsSupported(wxDF_TEXT)
-#if wxUSE_UNICODE
                 || wxTheClipboard->IsSupported(wxDF_UNICODETEXT)
-#endif // wxUSE_UNICODE
            )
         {
             return true;
@@ -341,7 +336,9 @@ namespace
 // Poor man's lambda: helper for binding ConvertToUpperCase() to the event
 struct ForceUpperFunctor
 {
-    explicit ForceUpperFunctor(wxTextEntryBase* entry)
+    // This class must have default ctor in wxNO_RTTI case, so allow creating
+    // it with null entry even if this never actually happens in practice.
+    explicit ForceUpperFunctor(wxTextEntryBase* entry = nullptr)
         : m_entry(entry)
     {
     }
@@ -411,7 +408,7 @@ bool wxTextEntryBase::SetHint(const wxString& hint)
     {
         // Setting empty hint removes any currently set one.
         delete m_hintData;
-        m_hintData = NULL;
+        m_hintData = nullptr;
     }
     //else: Setting empty hint when we don't have any doesn't do anything.
 

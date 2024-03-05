@@ -8,10 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_BUSYINFO
 
 // for all others, include the necessary headers
@@ -63,6 +59,21 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
                                                   wxDefaultSize,
                                                   wxALIGN_CENTRE);
         title->SetFont(title->GetFont().Scaled(2));
+
+#ifdef __WXGTK__
+        // This bad hack is needed to fix layout under GTK: the font sent above
+        // is not taken into account for the size calculation until the window
+        // is shown but we need the correct size when computing the best size
+        // below, as otherwise we would make the entire frame too small and
+        // when the correct size is used for the actual layout later, the title
+        // control would take too much space pushing the text below it outside
+        // of the window bounds.
+        //
+        // So preemptively make it about as big as it's going to be to prevent
+        // this from happening.
+        title->SetMinSize(2*title->GetBestSize());
+#endif // __WXGTK__
+
 #if wxUSE_MARKUP
         title->SetLabelMarkup(flags.m_title);
 #else
@@ -73,30 +84,27 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     }
     else
     {
-        title = NULL;
+        title = nullptr;
     }
 
     // Vertically center the text in the window.
     sizer->AddStretchSpacer();
 
-    wxControl* text;
 #if wxUSE_MARKUP
+    m_text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
+                                               wxDefaultPosition,
+                                               wxDefaultSize,
+                                               wxALIGN_CENTRE);
     if ( !flags.m_text.empty() )
-    {
-        text = new wxStaticTextWithMarkupSupport(panel, wxID_ANY, wxString(),
-                                                 wxDefaultPosition,
-                                                 wxDefaultSize,
-                                                 wxALIGN_CENTRE);
-        text->SetLabelMarkup(flags.m_text);
-    }
+        m_text->SetLabelMarkup(flags.m_text);
     else
+        m_text->SetLabelText(flags.m_label);
+#else
+    m_text = new wxStaticText(panel, wxID_ANY, wxString());
+    m_text->SetLabelText(flags.m_label);
 #endif // wxUSE_MARKUP
-    {
-        text = new wxStaticText(panel, wxID_ANY, wxString());
-        text->SetLabelText(flags.m_label);
-    }
 
-    sizer->Add(text, wxSizerFlags().DoubleBorder().Centre());
+    sizer->Add(m_text, wxSizerFlags().DoubleBorder().Centre());
 
     sizer->AddStretchSpacer();
 
@@ -106,7 +114,7 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     {
         if ( title )
             title->SetForegroundColour(flags.m_foreground);
-        text->SetForegroundColour(flags.m_foreground);
+        m_text->SetForegroundColour(flags.m_foreground);
     }
 
     if ( flags.m_background.IsOk() )
@@ -129,6 +137,20 @@ void wxBusyInfo::Init(const wxBusyInfoFlags& flags)
     m_InfoFrame->Show(true);
     m_InfoFrame->Refresh();
     m_InfoFrame->Update();
+}
+
+void wxBusyInfo::UpdateText(const wxString& str)
+{
+#if wxUSE_MARKUP
+    m_text->SetLabelMarkup(str);
+#else // !wxUSE_MARKUP
+    m_text->SetLabelText(str);
+#endif // wxUSE_MARKUP/!wxUSE_MARKUP
+}
+
+void wxBusyInfo::UpdateLabel(const wxString& str)
+{
+    m_text->SetLabelText(str);
 }
 
 wxBusyInfo::~wxBusyInfo()

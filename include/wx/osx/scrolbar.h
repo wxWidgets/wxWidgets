@@ -2,7 +2,6 @@
 // Name:        wx/osx/scrolbar.h
 // Purpose:     wxScrollBar class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -24,7 +23,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxScrollBarNameStr)
+                const wxString& name = wxASCII_STR(wxScrollBarNameStr))
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -34,16 +33,16 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxScrollBarNameStr);
+                const wxString& name = wxASCII_STR(wxScrollBarNameStr));
 
-    virtual int GetThumbPosition() const wxOVERRIDE;
-    virtual int GetThumbSize() const wxOVERRIDE { return m_viewSize; }
-    virtual int GetPageSize() const wxOVERRIDE { return m_pageSize; }
-    virtual int GetRange() const wxOVERRIDE { return m_objectSize; }
+    virtual int GetThumbPosition() const override;
+    virtual int GetThumbSize() const override { return m_viewSize; }
+    virtual int GetPageSize() const override { return m_pageSize; }
+    virtual int GetRange() const override { return m_objectSize; }
 
-    virtual void SetThumbPosition(int viewStart) wxOVERRIDE;
+    virtual void SetThumbPosition(int viewStart) override;
     virtual void SetScrollbar(int position, int thumbSize, int range,
-            int pageSize, bool refresh = true) wxOVERRIDE;
+            int pageSize, bool refresh = true) override;
 
     // needed for RTTI
     void SetThumbSize( int s ) { SetScrollbar( GetThumbPosition() , s , GetRange() , GetPageSize() , true ) ; }
@@ -51,11 +50,11 @@ public:
     void SetRange( int s ) { SetScrollbar( GetThumbPosition() , GetThumbSize() , s , GetPageSize() , true ) ; }
 
         // implementation only from now on
-    void Command(wxCommandEvent& event) wxOVERRIDE;
-    virtual void TriggerScrollEvent( wxEventType scrollEvent ) wxOVERRIDE;
-    virtual bool OSXHandleClicked( double timestampsec ) wxOVERRIDE;
+    void Command(wxCommandEvent& event) override;
+    virtual void TriggerScrollEvent( wxEventType scrollEvent ) override;
+    virtual bool OSXHandleClicked( double timestampsec ) override;
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
 
     int m_pageSize;
     int m_viewSize;

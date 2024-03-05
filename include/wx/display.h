@@ -21,7 +21,7 @@
     #include "wx/dynarray.h"
     #include "wx/vidmode.h"
 
-    WX_DECLARE_EXPORTED_OBJARRAY(wxVideoMode, wxArrayVideoModes);
+    using wxArrayVideoModes = wxBaseArray<wxVideoMode>;
 
     // default, uninitialized, video mode object
     extern WXDLLIMPEXP_DATA_CORE(const wxVideoMode) wxDefaultVideoMode;
@@ -42,12 +42,14 @@ class WXDLLIMPEXP_FWD_CORE wxDisplayImpl;
 class WXDLLIMPEXP_CORE wxDisplay
 {
 public:
+    // default ctor creates the object corresponding to the primary display
+    wxDisplay();
+
     // initialize the object containing all information about the given
     // display
     //
-    // the displays are numbered from 0 to GetCount() - 1, 0 is always the
-    // primary display and the only one which is always supported
-    wxDisplay(unsigned n = 0);
+    // the displays are numbered from 0 to GetCount() - 1
+    explicit wxDisplay(unsigned n);
 
     // create display object corresponding to the display of the given window
     // or the default one if the window display couldn't be found
@@ -65,13 +67,17 @@ public:
     // it doesn't belong to any display
     static int GetFromPoint(const wxPoint& pt);
 
+    // find the display which has the biggest intersection with the given
+    // rectangle or wxNOT_FOUND if the rectangle doesn't intersect any display
+    static int GetFromRect(const wxRect& rect);
+
     // find the display where the given window lies, return wxNOT_FOUND if it
     // is not shown at all
     static int GetFromWindow(const wxWindow *window);
 
 
     // return true if the object was initialized successfully
-    bool IsOk() const { return m_impl != NULL; }
+    bool IsOk() const { return m_impl != nullptr; }
 
     // get the full display size
     wxRect GetGeometry() const;
@@ -84,6 +90,24 @@ public:
 
     // get the resolution of this monitor in pixels per inch
     wxSize GetPPI() const;
+
+    // get the default resolution for displays on this platform
+    static int GetStdPPIValue()
+    {
+#ifdef __WXOSX__
+        return 72;
+#else
+        return 96;
+#endif
+    }
+
+    static wxSize GetStdPPI()
+    {
+        return wxSize(GetStdPPIValue(), GetStdPPIValue());
+    }
+
+    // get the scaling used by this display
+    double GetScaleFactor() const;
 
     // name may be empty
     wxString GetName() const;

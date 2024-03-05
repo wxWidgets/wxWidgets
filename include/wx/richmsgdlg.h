@@ -86,7 +86,7 @@ private:
     public:
         wxRichMessageDialog( wxWindow *parent,
                              const wxString& message,
-                             const wxString& caption = wxMessageBoxCaptionStr,
+                             const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                              long style = wxOK | wxCENTRE )
             : wxGenericRichMessageDialog( parent, message, caption, style )
             { }

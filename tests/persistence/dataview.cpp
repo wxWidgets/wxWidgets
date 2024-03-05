@@ -12,21 +12,20 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#if wxUSE_DATAVIEWCTRL
+
 
 #include "testpersistence.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dataview.h"
-
-    #ifdef __WXGTK__
-        #include "wx/stopwatch.h"
-    #endif // __WXGTK__
 #endif // WX_PRECOMP
 
 #include "wx/persist/dataview.h"
+
+#ifdef __WXGTK__
+    #include "waitfor.h"
+#endif // __WXGTK__
 
 // ----------------------------------------------------------------------------
 // constants
@@ -91,17 +90,9 @@ static wxDataViewCtrl* CreatePersistenceTestDVC()
 void GTKWaitRealized(wxDataViewCtrl* list)
 {
 #ifdef __WXGTK__
-    wxStopWatch sw;
-    while ( list->GetColumn(0)->GetWidth() == 0 )
-    {
-        if ( sw.Time() > 500 )
-        {
-            WARN("Timed out waiting for wxDataViewCtrl to be realized");
-            break;
-        }
-
-        wxYield();
-    }
+    WaitFor("wxDataViewCtrl to be realized", [list]() {
+        return list->GetColumn(0)->GetWidth() != 0;
+    });
 #else // !__WXGTK__
     wxUnusedVar(list);
 #endif // __WXGTK__/!__WXGTK__
@@ -170,3 +161,5 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
         delete list->GetParent();
     }
 }
+
+#endif

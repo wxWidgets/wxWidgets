@@ -2,7 +2,6 @@
 // Name:        wx/ribbon/panel.h
 // Purpose:     Ribbon-style container for a group of related tools / controls
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-05-25
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -62,16 +61,16 @@ public:
     bool ShowExpanded();
     bool HideExpanded();
 
-    void SetArtProvider(wxRibbonArtProvider* art) wxOVERRIDE;
+    void SetArtProvider(wxRibbonArtProvider* art) override;
 
-    virtual bool Realize() wxOVERRIDE;
-    virtual bool Layout() wxOVERRIDE;
-    virtual wxSize GetMinSize() const wxOVERRIDE;
+    virtual bool Realize() override;
+    virtual bool Layout() override;
+    virtual wxSize GetMinSize() const override;
 
-    virtual bool IsSizingContinuous() const wxOVERRIDE;
+    virtual bool IsSizingContinuous() const override;
 
-    virtual void AddChild(wxWindowBase *child) wxOVERRIDE;
-    virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
+    virtual void AddChild(wxWindowBase *child) override;
+    virtual void RemoveChild(wxWindowBase *child) override;
 
     virtual bool HasExtButton() const;
 
@@ -79,25 +78,25 @@ public:
     wxRibbonPanel* GetExpandedPanel();
 
     // Finds the best width and height given the parent's width and height
-    virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const wxOVERRIDE;
+    virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const override;
 
     long GetFlags() { return m_flags; }
 
     void HideIfExpanded();
 
 protected:
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const override;
     virtual wxSize GetPanelSizerBestSize() const;
     wxSize  GetPanelSizerMinSize() const;
-    wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
     wxSize GetMinNotMinimisedSize() const;
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                      wxSize relative_to) const wxOVERRIDE;
+                                      wxSize relative_to) const override;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                     wxSize relative_to) const wxOVERRIDE;
+                                     wxSize relative_to) const override;
 
-    void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO) override;
     void OnSize(wxSizeEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
@@ -112,7 +111,7 @@ protected:
 
     void TestPositionForHover(const wxPoint& pos);
     bool ShouldSendEventToDummy(wxEvent& evt);
-    virtual bool TryAfter(wxEvent& evt) wxOVERRIDE;
+    virtual bool TryAfter(wxEvent& evt) override;
 
     void CommonInit(const wxString& label, const wxBitmap& icon, long style);
     static wxRect GetExpandedPosition(wxRect panel,
@@ -145,12 +144,12 @@ class WXDLLIMPEXP_RIBBON wxRibbonPanelEvent : public wxCommandEvent
 public:
     wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPanel* panel = NULL)
+                       wxRibbonPanel* panel = nullptr)
         : wxCommandEvent(command_type, win_id)
         , m_panel(panel)
     {
     }
-    wxEvent *Clone() const wxOVERRIDE { return new wxRibbonPanelEvent(*this); }
+    wxEvent *Clone() const override { return new wxRibbonPanelEvent(*this); }
 
     wxRibbonPanel* GetPanel() {return m_panel;}
     void SetPanel(wxRibbonPanel* panel) {m_panel = panel;}

@@ -2,7 +2,6 @@
 // Name:        arttest.cpp
 // Purpose:     wxArtProvider sample
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2002/03/25
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -33,7 +29,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 class MyFrame : public wxFrame
@@ -63,7 +59,7 @@ private:
 enum
 {
     ID_Quit = wxID_EXIT,
-    ID_Logs = wxID_HIGHEST+1,
+    ID_Logs = wxID_HIGHEST,
     ID_Browser,
     ID_PlugProvider
 };
@@ -113,7 +109,7 @@ class MyArtProvider : public wxArtProvider
 {
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size) wxOVERRIDE;
+                                  const wxSize& size) override;
 };
 
 #include "info.xpm"
@@ -147,7 +143,7 @@ wxBitmap MyArtProvider::CreateBitmap(const wxArtID& id,
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size, style)
 {
     SetIcon(wxICON(sample));
 
@@ -158,13 +154,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(wxID_ABOUT, "&About\tF1", "Show about dialog");
 
-    menuFile->AppendCheckItem(ID_PlugProvider, "&Plug-in art provider", "Enable custom art provider");
+    menuFile->AppendCheckItem(ID_PlugProvider, "&Plug-in art provider\tCtrl-P", "Enable custom art provider");
     menuFile->AppendSeparator();
 
 #if wxUSE_LOG
-    menuFile->Append(ID_Logs, "&Logging test", "Show some logging output");
+    menuFile->Append(ID_Logs, "&Logging test\tCtrl-L", "Show some logging output");
 #endif // wxUSE_LOG
-    menuFile->Append(ID_Browser, "&Resources browser", "Browse all available icons");
+    menuFile->Append(ID_Browser, "&Resources browser\tCtrl-R", "Browse all available icons");
     menuFile->AppendSeparator();
 
     menuFile->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");

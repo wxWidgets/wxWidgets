@@ -10,9 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -122,6 +119,8 @@ private:
 
     void OnPaintInputWin(wxPaintEvent& event);
 
+    void OnIdle(wxIdleEvent& event);
+
     void LogEvent(const wxString& name, wxKeyEvent& event);
 
     // Set m_inputWin to either a new window of the given kind:
@@ -146,7 +145,7 @@ class MyApp : public wxApp
 {
 public:
     // 'Main program' equivalent: the program execution "starts" here
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         // create the main application window
         new MyFrame("Keyboard wxWidgets App");
@@ -170,8 +169,8 @@ wxIMPLEMENT_APP(MyApp);
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title),
-         m_inputWin(NULL),
+       : wxFrame(nullptr, wxID_ANY, title),
+         m_inputWin(nullptr),
          m_skipHook(true),
          m_skipDown(true)
 {
@@ -237,8 +236,8 @@ MyFrame::MyFrame(const wxString& title)
                                             wxDefaultPosition, wxDefaultSize,
                                             wxTE_READONLY);
     headerText->SetValue(
-               " event          key     KeyCode mod   UnicodeKey  "
-               "  RawKeyCode RawKeyFlags  Position");
+               " event            key   KeyCode mod    UnicodeKey "
+               " RawKeyCode RawKeyFlags  Position  Repeat?  Category");
 
 
     m_logText = new wxTextCtrl(this, wxID_ANY, "",
@@ -258,7 +257,7 @@ MyFrame::MyFrame(const wxString& title)
     SetSizerAndFit(sizer);
 
     // set size and position on screen
-    SetSize(700, 340);
+    SetSize(FromDIP(wxSize(700, 340)));
     CentreOnScreen();
 
     // connect menu event handlers
@@ -282,8 +281,10 @@ MyFrame::MyFrame(const wxString& title)
     // the usual key events this one is propagated upwards
     Bind(wxEVT_CHAR_HOOK, &MyFrame::OnCharHook, this);
 
-    // status bar is useful for showing the menu items help strings
-    CreateStatusBar();
+    Bind(wxEVT_IDLE, &MyFrame::OnIdle, this);
+
+    // second status bar field is used by OnIdle() to show the modifiers state
+    CreateStatusBar(2);
 
     // and show itself (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -385,7 +386,7 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(RBUTTON)
         WXK_(CANCEL)
         WXK_(MBUTTON)
-        WXK_(CLEAR)
+        WXK_(NUMPAD_CENTER)
         WXK_(SHIFT)
         WXK_(ALT)
         WXK_(CONTROL)
@@ -463,7 +464,6 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(NUMPAD_PAGEUP)
         WXK_(NUMPAD_PAGEDOWN)
         WXK_(NUMPAD_END)
-        WXK_(NUMPAD_BEGIN)
         WXK_(NUMPAD_INSERT)
         WXK_(NUMPAD_DELETE)
         WXK_(NUMPAD_EQUAL)
@@ -496,10 +496,25 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(LAUNCH_MAIL)
         WXK_(LAUNCH_APP1)
         WXK_(LAUNCH_APP2)
+        WXK_(LAUNCH_0)
+        WXK_(LAUNCH_1)
+        WXK_(LAUNCH_2)
+        WXK_(LAUNCH_3)
+        WXK_(LAUNCH_4)
+        WXK_(LAUNCH_5)
+        WXK_(LAUNCH_6)
+        WXK_(LAUNCH_7)
+        WXK_(LAUNCH_8)
+        WXK_(LAUNCH_9)
+        // skip A/B which are duplicate cases of APP1/2
+        WXK_(LAUNCH_C)
+        WXK_(LAUNCH_D)
+        WXK_(LAUNCH_E)
+        WXK_(LAUNCH_F)
 #undef WXK_
 
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -515,13 +530,38 @@ wxString GetKeyName(const wxKeyEvent &event)
     if ( keycode >= 32 && keycode < 128 )
         return wxString::Format("'%c'", (unsigned char)keycode);
 
-#if wxUSE_UNICODE
     int uc = event.GetUnicodeKey();
     if ( uc != WXK_NONE )
         return wxString::Format("'%c'", uc);
-#endif
 
     return "unknown";
+}
+
+// another helper showing the key category as determined by IsKeyInCategory().
+wxString GetKeyCategory(const wxKeyEvent& event)
+{
+    struct Category
+    {
+        wxKeyCategoryFlags category;
+        const char* name;
+    };
+
+    const Category categories[] =
+    {
+        { WXK_CATEGORY_ARROW,   "arrow" },
+        { WXK_CATEGORY_PAGING,  "page" },
+        { WXK_CATEGORY_JUMP,    "jump" },
+        { WXK_CATEGORY_TAB,     "tab" },
+        { WXK_CATEGORY_CUT,     "cut" },
+    };
+
+    for ( const auto& cat : categories )
+    {
+        if ( event.IsKeyInCategory(cat.category) )
+            return cat.name;
+    }
+
+    return {};
 }
 
 
@@ -530,17 +570,15 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
     wxString msg;
     // event  key_name  KeyCode  modifiers  Unicode  raw_code raw_flags pos
     msg.Printf("%7s %15s %5d   %c%c%c%c"
-#if wxUSE_UNICODE
                    "%5d (U+%04x)"
-#else
-                   "    none   "
-#endif
 #ifdef wxHAS_RAW_KEY_CODES
                    "  %7lu    0x%08lx"
 #else
                    "  not-set    not-set"
 #endif
                    "  (%5d,%5d)"
+                   "  %s"
+                   "     %s"
                    "\n",
                name,
                GetKeyName(event),
@@ -549,19 +587,30 @@ void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
                event.AltDown()     ? 'A' : '-',
                event.ShiftDown()   ? 'S' : '-',
                event.MetaDown()    ? 'M' : '-'
-#if wxUSE_UNICODE
                , event.GetUnicodeKey()
                , event.GetUnicodeKey()
-#endif
 #ifdef wxHAS_RAW_KEY_CODES
                , (unsigned long) event.GetRawKeyCode()
                , (unsigned long) event.GetRawKeyFlags()
 #endif
                , event.GetX()
                , event.GetY()
+               , event.IsAutoRepeat() ? "Yes" : "No"
+               , GetKeyCategory(event)
                );
 
     m_logText->AppendText(msg);
 }
 
+void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+    wxString state;
+    if ( wxGetKeyState(WXK_CONTROL) )
+        state += "CTRL ";
+    if ( wxGetKeyState(WXK_ALT) )
+        state += "ALT ";
+    if ( wxGetKeyState(WXK_SHIFT) )
+        state += "SHIFT ";
 
+    SetStatusText(state, 1);
+}

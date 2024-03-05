@@ -10,9 +10,6 @@
 
 #if wxUSE_SLIDER
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -27,14 +24,15 @@ class SliderTestCase : public CppUnit::TestCase
 public:
     SliderTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( SliderTestCase );
 #ifndef __WXOSX__
         WXUISIM_TEST( PageUpDown );
         WXUISIM_TEST( LineUpDown );
+        WXUISIM_TEST( EvtSlider );
         WXUISIM_TEST( LinePageSize );
 #endif
         CPPUNIT_TEST( Value );
@@ -47,6 +45,7 @@ private:
 
     void PageUpDown();
     void LineUpDown();
+    void EvtSlider();
     void LinePageSize();
     void Value();
     void Range();
@@ -94,6 +93,7 @@ void SliderTestCase::PageUpDown()
     wxUIActionSimulator sim;
 
     m_slider->SetFocus();
+    wxYield();
 
     sim.Char(WXK_PAGEUP);
     sim.Char(WXK_PAGEDOWN);
@@ -112,8 +112,9 @@ void SliderTestCase::LineUpDown()
     EventCounter linedown(m_slider, wxEVT_SCROLL_LINEDOWN);
 
     wxUIActionSimulator sim;
-    wxYield();
+
     m_slider->SetFocus();
+    wxYield();
 
     sim.Char(WXK_UP);
     sim.Char(WXK_DOWN);
@@ -125,12 +126,32 @@ void SliderTestCase::LineUpDown()
 #endif
 }
 
+void SliderTestCase::EvtSlider()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    EventCounter slider(m_slider, wxEVT_SLIDER);
+
+    wxUIActionSimulator sim;
+
+    m_slider->SetFocus();
+    wxYield();
+
+    sim.Char(WXK_UP);
+    sim.Char(WXK_DOWN);
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(2, slider.GetCount());
+#endif
+}
+
 void SliderTestCase::LinePageSize()
 {
 #if wxUSE_UIACTIONSIMULATOR
     wxUIActionSimulator sim;
-    wxYield();
+
     m_slider->SetFocus();
+    wxYield();
 
     m_slider->SetPageSize(20);
 
@@ -188,7 +209,7 @@ void SliderTestCase::Range()
 
 void SliderTestCase::Thumb()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+#if wxUSE_UIACTIONSIMULATOR
     EventCounter track(m_slider, wxEVT_SCROLL_THUMBTRACK);
     EventCounter release(m_slider, wxEVT_SCROLL_THUMBRELEASE);
     EventCounter changed(m_slider, wxEVT_SCROLL_CHANGED);
@@ -197,12 +218,14 @@ void SliderTestCase::Thumb()
 
     m_slider->SetValue(0);
 
-    sim.MouseDragDrop(m_slider->ClientToScreen(wxPoint(10, 10)),m_slider->ClientToScreen(wxPoint(50, 10)));
+    // use the slider real position for dragging the mouse.
+    const int ypos = m_slider->GetSize().y / 2;
+    sim.MouseDragDrop(m_slider->ClientToScreen(wxPoint(10, ypos)),m_slider->ClientToScreen(wxPoint(50, ypos)));
     wxYield();
 
     CPPUNIT_ASSERT(track.GetCount() != 0);
     CPPUNIT_ASSERT_EQUAL(1, release.GetCount());
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
     CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
 #endif
 #endif

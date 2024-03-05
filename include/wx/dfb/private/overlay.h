@@ -12,24 +12,25 @@
 
 #include "wx/dfb/dfbptr.h"
 #include "wx/gdicmn.h"
+#include "wx/private/overlay.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
-class wxOverlayImpl
+class wxOverlayImpl: public wxOverlay::Impl
 {
 public:
     wxOverlayImpl();
     ~wxOverlayImpl();
 
-    void Reset();
-    bool IsOk();
-    void Init(wxDC* dc, int x , int y , int width , int height);
-    void BeginDrawing(wxDC* dc);
-    void EndDrawing(wxDC* dc);
-    void Clear(wxDC* dc);
+    virtual void Reset() override;
+    virtual bool IsOk() override;
+    virtual void Init(wxDC* dc, int x, int y, int width, int height) override;
+    virtual void BeginDrawing(wxDC* dc) override;
+    virtual void EndDrawing(wxDC* dc) override;
+    virtual void Clear(wxDC* dc) override;
 
     // wxDFB specific methods:
     bool IsEmpty() const { return m_isEmpty; }

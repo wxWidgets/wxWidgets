@@ -19,7 +19,7 @@
     methods.
 
     In the description of the methods below, the example return values are given
-    for the Unix, Windows and OS X systems, however please note that these are
+    for the Unix, Windows and macOS systems, however please note that these are
     just the examples and the actual values may differ. For example, under Windows:
     the system administrator may change the standard directories locations, e.g.
     the Windows directory may be named @c "W:\Win2003" instead of
@@ -80,6 +80,18 @@ public:
         Dir_Cache,
 
         /**
+            Directory containing configuration information.
+
+            Example return values:
+            - Unix: `~/.config`
+            - Windows: `C:\Users\username\AppData\Roaming`
+            - Mac: @c `~/Library/Preferences`
+
+            @since 3.3.0
+        */
+        Dir_Config,
+
+        /**
             Directory containing user documents.
 
             Example return values:
@@ -102,7 +114,7 @@ public:
 
             Example return values:
             - Unix/Mac: @c ~/Downloads
-            - Windows: @c "C:\Users\username\Downloads" (Only available on Vista and newer)
+            - Windows: @c "C:\Users\username\Downloads"
         */
         Dir_Downloads,
 
@@ -196,6 +208,20 @@ public:
     };
 
     /**
+        Append application and/or vendor name to the given directory.
+
+        By default, appends the subdirectory with the application name, as
+        returned by wxApp::GetAppName(), to the given directory.
+
+        This behaviour is affected by UseAppInfo(), e.g. if this function is
+        called with `AppInfo_VendorName` then the vendor name would be appended
+        instead of the application name.
+
+        @since 3.3.0
+    */
+    wxString AppendAppInfo(const wxString& dir) const;
+
+    /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
 
         After a call to this function the program directory will be exactly the
@@ -286,7 +312,7 @@ public:
     /**
         Return the program installation prefix, e.g.\ @c /usr, @c /opt or @c /home/zeitlin.
 
-        If the prefix had been previously by SetInstallPrefix(), returns that
+        If the prefix had been previously set by SetInstallPrefix(), returns that
         value, otherwise tries to determine it automatically (Linux only right now)
         and finally returns the default @c /usr/local value if it failed.
 
@@ -310,7 +336,7 @@ public:
         specified category for the given language.
 
         In general this is just the same as @a lang subdirectory of GetResourcesDir()
-        (or @c lang.lproj under OS X) but is something quite different for
+        (or @c lang.lproj under macOS) but is something quite different for
         message catalog category under Unix where it returns the standard
         @c prefix/share/locale/lang/LC_MESSAGES directory.
 
@@ -337,7 +363,7 @@ public:
         The resources are the auxiliary data files needed for the application to run
         and include, for example, image and sound files it might use.
 
-        This function is the same as GetDataDir() for all platforms except OS X.
+        This function is the same as GetDataDir() for all platforms except macOS.
         Example return values:
         - Unix: @c prefix/share/appinfo
         - Windows: the directory where the executable file is located
@@ -370,17 +396,25 @@ public:
         - Mac: @c ~/Library/Preferences
 
         Only use this method if you have a single configuration file to put in this
-        directory, otherwise GetUserDataDir() is more appropriate as the latter
-        adds @c appinfo to the path, unlike this function.
+        directory, otherwise calling AppendAppInfo() with the value returned by
+        GetDir() with wxStandardPaths::Dir_Config is more appropriate.
     */
     virtual wxString GetUserConfigDir() const;
 
     /**
-        Return the directory for the user-dependent application data files:
+        Return the directory for the user-dependent application data files.
+
+        The returned path is:
+
         - Unix: @c ~/.appinfo
         - Windows: @c "C:\Users\username\AppData\Roaming\appinfo" or
                    @c "C:\Documents and Settings\username\Application Data\appinfo"
         - Mac: @c "~/Library/Application Support/appinfo"
+
+        Please note that under Unix this function return value doesn't depend
+        on the file layout, and so returns a possibly unexpected value when
+        wxStandardPaths::FileLayout_XDG is used. Consider using GetUserDir()
+        instead if you use XDG layout, as this function does respect it.
     */
     virtual wxString GetUserDataDir() const;
 
@@ -406,6 +440,22 @@ public:
         @c "C:\Documents and Settings\username\Local Settings\Application Data\appinfo"
     */
     virtual wxString GetUserLocalDataDir() const;
+
+    /**
+        Return OS specific directory where project shared liraries are.
+
+        The function does the same thing as GetPluginsDir() under non-Mac platforms
+        but differs from it under Mac, where plugins (shared libraries loaded by the
+        application dynamically while it's running) and shared libraries (that the
+        application is statically linked with) are stored in different directories.
+
+        - Windows: returns the folder where the application binary is located
+        - Unix:    returns the libraries installation path, i.e. /usr/lib
+        - Mac:     returns `Contents/Frameworks` bundle subdirectory
+
+        @since 3.3.0
+    */
+    virtual wxString GetSharedLibrariesDir() const;
 
     /**
         MSW-specific function to customize application directory detection.
@@ -496,14 +546,16 @@ public:
         plugins directory on Unix, etc.
 
         Valid values for @a info are:
-            - @c AppInfo_None: don't use neither application nor vendor name in
+            - `AppInfo_None`: use neither application nor vendor name in
             the paths.
-            - @c AppInfo_AppName: use the application name in the paths.
-            - @c AppInfo_VendorName: use the vendor name in the paths, usually
-            used combined with AppInfo_AppName, i.e. as @code AppInfo_AppName |
-            AppInfo_VendorName @endcode
+            - `AppInfo_AppName`: use the application name in the paths.
+            - `AppInfo_VendorName`: use the vendor name in the paths, usually
+            used combined with `AppInfo_AppName`, i.e. as
+            `AppInfo_AppName | AppInfo_VendorName`.
 
         By default, only the application name is used.
+
+        @see AppendAppInfo()
 
         @since 2.9.0
     */

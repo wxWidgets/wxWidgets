@@ -2,7 +2,6 @@
 // Name:        splash.cpp
 // Purpose:     wxSplashScreen sample
 // Author:      Wlodzimierz ABX Skiba
-// Modified by:
 // Created:     04/08/2004
 // Copyright:   (c) Wlodzimierz Skiba
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -61,7 +57,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     void DecorateSplashScreen(wxBitmap& bmp);
 };
@@ -91,7 +87,7 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    Minimal_Run = wxID_HIGHEST + 1
+    Minimal_Run = wxID_HIGHEST
 };
 
 // ----------------------------------------------------------------------------
@@ -153,7 +149,7 @@ bool MyApp::OnInit()
             wxSIMPLE_BORDER|wxSTAY_ON_TOP);
     }
 
-#if !defined(__WXGTK20__)
+#if !defined(__WXGTK__)
     // we don't need it at least on wxGTK with GTK+ 2.12.9
     wxYield();
 #endif
@@ -187,7 +183,7 @@ void MyApp::DecorateSplashScreen(wxBitmap& bmp)
     // create a copyright notice that uses the year that this file was compiled
     wxString year(__DATE__);
     wxString copyrightLabel = wxString::Format("%s%s wxWidgets. %s",
-        wxString::FromUTF8("\xc2\xa9"), year.Mid(year.Length() - 4),
+        wxString::FromUTF8("\xc2\xa9"), year.Mid(year.length() - 4),
         "All rights reserved.");
 
     // draw the (white) labels inside of our orange box (at the bottom of the splashscreen)
@@ -209,7 +205,7 @@ void MyApp::DecorateSplashScreen(wxBitmap& bmp)
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 

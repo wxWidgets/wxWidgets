@@ -95,6 +95,10 @@ public:
     void OnAnnotationRemove(wxCommandEvent& event);
     void OnAnnotationClear(wxCommandEvent& event);
     void OnAnnotationStyle(wxCommandEvent& event);
+    // indicators
+    void OnIndicatorFill(wxCommandEvent& event);
+    void OnIndicatorClear(wxCommandEvent& event);
+    void OnIndicatorStyle(wxCommandEvent& event);
     //! extra
     void OnChangeCase (wxCommandEvent &event);
     void OnConvertEOL (wxCommandEvent &event);
@@ -102,6 +106,7 @@ public:
     void OnMultiPaste(wxCommandEvent& event);
     void OnMultipleSelectionsTyping(wxCommandEvent& event);
     void OnCustomPopup(wxCommandEvent& evt);
+    void OnTechnology(wxCommandEvent& event);
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
@@ -115,7 +120,6 @@ public:
     //! language/lexer
     wxString DeterminePrefs (const wxString &filename);
     bool InitializePrefs (const wxString &filename);
-    bool UserSettings (const wxString &filename);
     LanguageInfo const* GetLanguageInfo () {return m_language;}
 
     //! load/save file
@@ -172,12 +176,12 @@ public:
     EditPrint (Edit *edit, const wxString& title = "");
 
     //! event handlers
-    bool OnPrintPage (int page) wxOVERRIDE;
-    bool OnBeginDocument (int startPage, int endPage) wxOVERRIDE;
+    bool OnPrintPage (int page) override;
+    bool OnBeginDocument (int startPage, int endPage) override;
 
     //! print functions
-    bool HasPage (int page) wxOVERRIDE;
-    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
+    bool HasPage (int page) override;
+    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) override;
 
 private:
     Edit *m_edit;

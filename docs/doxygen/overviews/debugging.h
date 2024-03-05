@@ -81,7 +81,7 @@ Example of using an assertion macro:
 @code
 void GetTheAnswer(int *p)
 {
-    wxCHECK_RET( p, "pointer can't be NULL in GetTheAnswer()" );
+    wxCHECK_RET( p, "pointer can't be null in GetTheAnswer()" );
 
     *p = 42;
 };
@@ -89,7 +89,7 @@ void GetTheAnswer(int *p)
 
 If the condition is false, i.e. @c p is @NULL, the assertion handler is called
 and, in any case (even when wxDEBUG_LEVEL is 0), the function returns without
-dereferencing the NULL pointer on the next line thus avoiding a crash.
+dereferencing the null pointer on the next line thus avoiding a crash.
 
 The default assertion handler behaviour depends on whether the application
 using wxWidgets was compiled in release build (with @c NDEBUG defined) or debug

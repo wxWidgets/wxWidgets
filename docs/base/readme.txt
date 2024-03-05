@@ -3,7 +3,7 @@
 
 NB: this file applies to wxBase library only. If you are using a GUI version
     of wxWidgets, please refer to the documentation in the appropriate
-    subdirectory (msw, gtk, motif &c).
+    subdirectory (msw, gtk &c).
 
 
  Welcome to wxBase!
@@ -30,7 +30,7 @@ executing simultaneously (portably!) and so on.
 --------------------------------------
 
  wxBase can be compiled and used under Win32, mostly any modern Unix system
-(including OS X), VMS and BeOS (this release couldn't be tested under
+(including macOS), VMS and BeOS (this release couldn't be tested under
 these platforms so you might encounter some problems but they should be easy
 to solve -- please contact us in this case!)
 

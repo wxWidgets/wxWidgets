@@ -16,7 +16,7 @@ IMPORTANT NOTE:
   example: wxX11 2.8.0, gcc 2.95.4, Redhat 6.2
 
 First steps                            {#x11_first_steps}
------------
+===========
 
 - Download wxX11-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as
@@ -393,7 +393,7 @@ automatically using wx-config
 2. The other way creates a project within the source code
 directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
-to the bottom of the configure.in script and run autoconf
+to the bottom of the configure.ac script and run autoconf
 and configure before you can type make.
 
 Further notes by Julian Smart          {#x11_notes}
@@ -426,10 +426,6 @@ Troubleshooting                        {#x11_troubleshooting}
 - Solaris compilation with gcc: if the compiler has problems with the variable
   argument functions, try putting the gcc fixinclude file paths early in the
   include path.
-
-- If you operator-related compile errors or strange memory problems
-  (for example in deletion of string arrays), set wxUSE_GLOBAL_MEMORY_OPERATORS
-  and wxUSE_MEMORY_TRACING to 0 in setup.h, and recompile.
 
 - If you get an internal compiler error in gcc, turn off optimisations.
 

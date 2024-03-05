@@ -2,7 +2,6 @@
 // Name:        wx/x11/brush.h
 // Purpose:     wxBrush class
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -28,11 +27,10 @@ class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_CORE wxBrush : public wxBrushBase
 {
 public:
-    wxBrush() { }
+    wxBrush() = default;
 
     wxBrush( const wxColour &colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID );
     wxBrush( const wxBitmap &stippleBitmap );
-    virtual ~wxBrush();
 
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }

@@ -2,7 +2,6 @@
 // Name:        wx/ribbon/control.h
 // Purpose:     Extension of wxControl with common ribbon methods
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-06-05
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -30,7 +29,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxControlNameStr)
+                    const wxString& name = wxASCII_STR(wxControlNameStr))
     {
         Init();
 
@@ -41,7 +40,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxControlNameStr);
+            const wxString& name = wxASCII_STR(wxControlNameStr));
 
     virtual void SetArtProvider(wxRibbonArtProvider* art);
     wxRibbonArtProvider* GetArtProvider() const {return m_art;}
@@ -69,7 +68,7 @@ protected:
                                        wxSize relative_to) const;
 
 private:
-    void Init() { m_art = NULL; }
+    void Init() { m_art = nullptr; }
 
 #ifndef SWIG
     wxDECLARE_CLASS(wxRibbonControl);

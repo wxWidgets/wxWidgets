@@ -3,7 +3,6 @@
 // Purpose:     wxFile - encapsulates low-level "file descriptor"
 //              wxTempFile
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -16,9 +15,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-  #pragma hdrstop
-#endif
 
 #if wxUSE_FILE
 
@@ -53,18 +49,6 @@
     #ifdef __GNUWIN32__
         #include "wx/msw/wrapwin.h"
     #endif
-#elif (defined(__WXSTUBS__))
-    // Have to ifdef this for different environments
-    #include <io.h>
-#elif (defined(__WXMAC__))
-#if __MSL__ < 0x6000
-    int access( const char *path, int mode ) { return 0 ; }
-#else
-    int _access( const char *path, int mode ) { return 0 ; }
-#endif
-    char* mktemp( char * path ) { return path ;}
-    #include <stat.h>
-    #include <unistd.h>
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
@@ -259,7 +243,7 @@ bool wxFile::Close()
 
 bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
 {
-    wxCHECK_MSG( str, false, wxS("Output string must be non-NULL") );
+    wxCHECK_MSG( str, false, wxS("Output string must be non-null") );
 
     static const ssize_t READSIZE = 4096;
 
@@ -339,7 +323,7 @@ ssize_t wxFile::Read(void *pBuf, size_t nCount)
     if ( !nCount )
         return 0;
 
-    wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
+    wxCHECK( (pBuf != nullptr) && IsOpened(), 0 );
 
     ssize_t iRc = wxRead(m_fd, pBuf, nCount);
 
@@ -358,7 +342,7 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
     if ( !nCount )
         return 0;
 
-    wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
+    wxCHECK( (pBuf != nullptr) && IsOpened(), 0 );
 
     ssize_t iRc = wxWrite(m_fd, pBuf, nCount);
 
@@ -380,7 +364,6 @@ bool wxFile::Write(const wxString& s, const wxMBConv& conv)
 
     const wxWX2MBbuf buf = s.mb_str(conv);
 
-#if wxUSE_UNICODE
     const size_t size = buf.length();
 
     if ( !size )
@@ -390,9 +373,6 @@ bool wxFile::Write(const wxString& s, const wxMBConv& conv)
         // must fail too to indicate that we can't save the data.
         return false;
     }
-#else
-    const size_t size = s.length();
-#endif
 
     return Write(buf, size) == size;
 }
@@ -479,7 +459,8 @@ wxFileOffset wxFile::Length() const
         wxFileOffset iLen = const_cast<wxFile *>(this)->SeekEnd();
         if ( iLen != wxInvalidOffset ) {
             // restore old position
-            if ( ((wxFile *)this)->Seek(iRc) == wxInvalidOffset ) {
+            if (const_cast<wxFile*>(this)->Seek(iRc) == wxInvalidOffset)
+            {
                 // error
                 iLen = wxInvalidOffset;
             }
@@ -570,7 +551,7 @@ bool wxTempFile::Open(const wxString& strName)
     mode_t mode;
 
     wxStructStat st;
-    if ( stat( (const char*) m_strName.fn_str(), &st) == 0 )
+    if ( wxStat(m_strName, &st) == 0 )
     {
         mode = st.st_mode;
     }
@@ -607,12 +588,12 @@ bool wxTempFile::Commit()
     m_file.Close();
 
     if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
-        wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't remove file '%s'"), m_strName);
         return false;
     }
 
     if ( !wxRenameFile(m_strTemp, m_strName)  ) {
-        wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
+        wxLogSysError(_("can't commit changes to file '%s'"), m_strName);
         return false;
     }
 
@@ -624,7 +605,7 @@ void wxTempFile::Discard()
     m_file.Close();
     if ( wxRemove(m_strTemp) != 0 )
     {
-        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
+        wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp);
     }
 }
 

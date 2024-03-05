@@ -2,7 +2,6 @@
 // Name:        src/msw/popupwin.cpp
 // Purpose:     implements wxPopupWindow for MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     08.05.02
 // Copyright:   (c) 2002 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_POPUPWIN
 
@@ -36,7 +32,7 @@
 //
 // Note that this global variable is used in src/msw/window.cpp and so must be
 // extern.
-wxPopupWindow* wxCurrentPopupWindow = NULL;
+wxPopupWindow* wxCurrentPopupWindow = nullptr;
 
 // ============================================================================
 // implementation
@@ -57,6 +53,14 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
                wxWindow::Create(parent, wxID_ANY,
                                 wxDefaultPosition, wxDefaultSize,
                                 flags);
+}
+
+wxPopupWindow::~wxPopupWindow()
+{
+    // If the popup is destroyed without being hidden first, ensure that we are
+    // not left with a dangling pointer.
+    if ( wxCurrentPopupWindow == this )
+        wxCurrentPopupWindow = nullptr;
 }
 
 WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
@@ -135,7 +139,7 @@ bool wxPopupWindow::Show(bool show)
         // There could have been a previous popup window which hasn't been
         // hidden yet. This will happen now, when we show this one, as it will
         // result in activation loss for the other one, so it's ok to overwrite
-        // the old pointer, even if it's non-NULL.
+        // the old pointer, even if it's non-null.
         wxCurrentPopupWindow = this;
     }
     else
@@ -143,7 +147,7 @@ bool wxPopupWindow::Show(bool show)
         // Only reset the pointer if it points to this window, otherwise we
         // would lose the correct value in the situation described above.
         if ( wxCurrentPopupWindow == this )
-            wxCurrentPopupWindow = NULL;
+            wxCurrentPopupWindow = nullptr;
     }
 
     if ( HasFlag(wxPU_CONTAINS_CONTROLS) )
@@ -180,10 +184,10 @@ void wxPopupTransientWindow::Popup(wxWindow* focus)
 {
     Show();
 
-    // We can only set focus to one of our children as setting it to another
-    // window would result in an immediate loss of activation and popup
-    // disappearance.
-    if ( focus && IsDescendant(focus) )
+    // We can only set focus when using wxPU_CONTAINS_CONTROLS and then only to
+    // one of our children as setting it to another window would result in an
+    // immediate loss of activation and popup disappearance.
+    if ( HasFlag(wxPU_CONTAINS_CONTROLS) && focus && IsDescendant(focus) )
         focus->SetFocus();
 }
 
@@ -195,7 +199,7 @@ void wxPopupTransientWindow::Dismiss()
 void wxPopupTransientWindow::DismissOnDeactivate()
 {
     // Hide the window automatically when it loses activation.
-    Dismiss();
+    DismissAndNotify();
 
     // Activation might have gone to a different window or maybe
     // even a different application, don't let our owner continue
@@ -207,6 +211,19 @@ void wxPopupTransientWindow::DismissOnDeactivate()
         {
             ::SendMessage(GetHwndOf(owner), WM_NCACTIVATE, FALSE, 0);
         }
+    }
+}
+
+void wxPopupTransientWindow::MSWDismissUnfocusedPopup()
+{
+    // When we use wxPU_CONTAINS_CONTROLS, we can react to the popup
+    // deactivation in MSWHandleMessage(), but if we don't have focus, we don't
+    // get any events ourselves, so we rely on wxWindow to forward them to us.
+    if ( !HasFlag(wxPU_CONTAINS_CONTROLS) )
+    {
+        // It doesn't seem necessary to use CallAfter() here, as dismissing
+        // this window shouldn't affect the focus, as it never has it anyhow.
+        DismissAndNotify();
     }
 }
 

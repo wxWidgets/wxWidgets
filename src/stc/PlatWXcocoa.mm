@@ -58,6 +58,7 @@
 
 - (void)mouseEntered:(NSEvent *)evt
 {
+    wxUnusedVar(evt);
     wxMouseEvent wxevent(wxEVT_ENTER_WINDOW);
     wxevent.SetEventObject(m_wxWin);
     m_wxWin->ProcessWindowEvent(wxevent);
@@ -65,6 +66,7 @@
 
 - (void)mouseExited:(NSEvent *)evt
 {
+    wxUnusedVar(evt);
     wxMouseEvent wxevent(wxEVT_LEAVE_WINDOW);
     wxevent.SetEventObject(m_wxWin);
     m_wxWin->ProcessWindowEvent(wxevent);
@@ -88,7 +90,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     static_cast<wxWidgetCocoaImpl*>(m_wxWin->GetPeer())->
-        drawRect(&dirtyRect, self, NULL);
+        drawRect(&dirtyRect, self, nil);
 }
 
 @end

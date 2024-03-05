@@ -73,10 +73,6 @@ msgstr "&2 _N() (ngettext)"
 msgid "&3 wxTRANSLATE() (gettext_noop)"
 msgstr "&3 wxTRANSLATE() (gettext_noop)"
 
-#: ../internat.cpp:274 ../internat.cpp:305
-msgid "&File"
-msgstr "&File"
-
 #: ../internat.cpp:275 ../internat.cpp:306
 msgid "&Test"
 msgstr "&Prova"

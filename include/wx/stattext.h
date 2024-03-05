@@ -2,7 +2,6 @@
 // Name:        wx/stattext.h
 // Purpose:     wxStaticText base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticTextNameStr[];
 class WXDLLIMPEXP_CORE wxStaticTextBase : public wxControl
 {
 public:
-    wxStaticTextBase() { }
+    wxStaticTextBase() = default;
 
     // wrap the text of the control so that no line is longer than the given
     // width (if possible: this function won't break words)
@@ -42,8 +41,8 @@ public:
     void Wrap(int width);
 
     // overridden base virtuals
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
-    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
+    virtual bool AcceptsFocus() const override { return false; }
+    virtual bool HasTransparentBackground() override { return true; }
 
     bool IsEllipsized() const
     {
@@ -53,7 +52,7 @@ public:
 protected:      // functions required for wxST_ELLIPSIZE_* support
 
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     // Calls Ellipsize() on the real label if necessary. Unlike GetLabelText(),
     // keeps the mnemonics instead of removing them.
@@ -100,12 +99,8 @@ private:
     #include "wx/univ/stattext.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/stattext.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/stattext.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/stattext.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/stattext.h"
+    #include "wx/gtk/stattext.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/stattext.h"
 #elif defined(__WXQT__)

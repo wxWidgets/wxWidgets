@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/timer.h"
@@ -26,11 +23,13 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 #include "wx/fswatcher.h"
-#include "wx/scopedptr.h"
+#include "wx/log.h"
 #include "wx/stdpaths.h"
 #include "wx/vector.h"
 
 #include "testfile.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // local functions
@@ -131,32 +130,48 @@ public:
     // static helpers
     static const wxFileName& GetWatchDir()
     {
-        static wxFileName dir;
-
-        if (dir.DirExists())
-            return dir;
+        if (ms_watchDir.DirExists())
+            return ms_watchDir;
 
         wxString tmp = wxStandardPaths::Get().GetTempDir();
-        dir.AssignDir(tmp);
+        ms_watchDir.AssignDir(tmp);
 
         // XXX look for more unique name? there is no function to generate
         // unique filename, the file always get created...
-        dir.AppendDir("fswatcher_test");
-        REQUIRE(!dir.DirExists());
-        REQUIRE(dir.Mkdir());
+        ms_watchDir.AppendDir("fswatcher_test");
+        REQUIRE(!ms_watchDir.DirExists());
 
-        return dir;
+        TestLogEnabler enableLogs;
+        REQUIRE(ms_watchDir.Mkdir());
+
+        REQUIRE(ms_watchDir.DirExists());
+
+        return ms_watchDir;
     }
 
     static void RemoveWatchDir()
     {
-        wxFileName dir = GetWatchDir();
-        REQUIRE(dir.DirExists());
+        REQUIRE(ms_watchDir.DirExists());
 
         // just to be really sure we know what we remove
-        REQUIRE( dir.GetDirs().Last() == "fswatcher_test" );
+        REQUIRE( ms_watchDir.GetDirs().Last() == "fswatcher_test" );
 
-        CHECK( dir.Rmdir(wxPATH_RMDIR_RECURSIVE) );
+        // Sometimes the directory can't be destroyed immediately because,
+        // apparently, Windows itself keeps a handle to it (or one of the files
+        // in it?), so retry a few times.
+        TestLogEnabler enableLogs;
+        for ( int i = 0; i < 3; ++i )
+        {
+            if ( ms_watchDir.Rmdir(wxPATH_RMDIR_RECURSIVE) )
+            {
+                ms_watchDir = wxFileName();
+                return;
+            }
+
+            wxMilliSleep(200);
+        }
+
+        FAIL( "Failed to remove " << ms_watchDir.GetFullPath() );
     }
 
     static wxFileName RandomName(const wxFileName& base, int length = 10)
@@ -181,9 +196,13 @@ public:
 
 protected:
     static EventGenerator* ms_instance;
+
+private:
+    static wxFileName ms_watchDir;
 };
 
-EventGenerator* EventGenerator::ms_instance = 0;
+EventGenerator* EventGenerator::ms_instance = nullptr;
+wxFileName EventGenerator::ms_watchDir;
 
 
 // Abstract base class from which concrete event tests inherit.
@@ -329,7 +348,7 @@ protected:
     EventGenerator& eg;
     wxEventLoop m_loop;    // loop reference
 
-    wxScopedPtr<wxFileSystemWatcher> m_watcher;
+    std::unique_ptr<wxFileSystemWatcher> m_watcher;
 
     int m_eventTypes;  // Which event-types to watch. Normally all of them
 
@@ -382,12 +401,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.CreateFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_CREATE);
             event.SetPath(eg.m_file);
@@ -411,17 +430,17 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.DeleteFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_DELETE);
             event.SetPath(eg.m_old);
 
-            // CHECK maybe new path here could be NULL or sth?
+            // CHECK maybe new path here could be null or sth?
             event.SetNewPath(eg.m_old);
             return event;
         }
@@ -435,7 +454,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 }
 
 // kqueue-based implementation doesn't collapse create/delete pairs in
-// renames and doesn't detect neither modifications nor access to the
+// renames and detects neither modifications nor access to the
 // files reliably currently so disable these tests
 //
 // FIXME: fix the code and reenable them
@@ -451,12 +470,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.RenameFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_RENAME);
             event.SetPath(eg.m_old);
@@ -482,12 +501,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.ModifyFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_MODIFY);
             event.SetPath(eg.m_file);
@@ -516,12 +535,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.ReadFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
             event.SetPath(eg.m_file);
@@ -552,12 +571,12 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     class EventTester : public FSWTesterBase
     {
     public:
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             CHECK(eg.TouchFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ATTRIB);
             event.SetPath(eg.m_file);
@@ -587,7 +606,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
         // DELETE as the event path fields would be wrong in CheckResult()
         EventTester() : FSWTesterBase(wxFSW_EVENT_ACCESS) {}
 
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             // As wxFSW_EVENT_ACCESS is passed to the ctor only ReadFile() will
             // generate an event. Without it they all will, and the test fails
@@ -596,7 +615,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             CHECK(eg.ReadFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
             event.SetPath(eg.m_file);
@@ -797,12 +816,11 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             CHECK( m_watcher->GetWatchedPathsCount() == 0 );
         }
 
-        virtual void GenerateEvent() wxOVERRIDE
+        virtual void GenerateEvent() override
         {
             // We don't use this function for events. Just run the tests
 
             wxFileName watchdir = EventGenerator::GetWatchDir();
-            REQUIRE(watchdir.DirExists());
 
             wxFileName treedir(watchdir);
             treedir.AppendDir("treetrunk");
@@ -835,14 +853,14 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             Exit();
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+        virtual wxFileSystemWatcherEvent ExpectedEvent() override
         {
             FAIL("Shouldn't be called");
 
             return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
         }
 
-        virtual void CheckResult() wxOVERRIDE
+        virtual void CheckResult() override
         {
             // Do nothing. We override this to prevent receiving events in
             // ExpectedEvent()
@@ -880,25 +898,25 @@ public:
         Start(1000, true);
     }
 
-    virtual void GenerateEvent() wxOVERRIDE
+    virtual void GenerateEvent() override
     {
         m_watcher->Remove(EventGenerator::GetWatchDir());
         CHECK(eg.CreateFile());
     }
 
-    virtual void CheckResult() wxOVERRIDE
+    virtual void CheckResult() override
     {
         REQUIRE( m_events.empty() );
     }
 
-    virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
+    virtual wxFileSystemWatcherEvent ExpectedEvent() override
     {
         FAIL( "Shouldn't be called" );
 
         return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
     }
 
-    virtual void Notify() wxOVERRIDE
+    virtual void Notify() override
     {
         SendIdle();
     }

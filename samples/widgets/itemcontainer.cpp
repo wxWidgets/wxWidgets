@@ -17,9 +17,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -43,6 +40,8 @@ public:
     {
         m_tracker->StartTrackingData();
     }
+    TrackedClientData(const TrackedClientData&) = delete;
+    TrackedClientData& operator=(const TrackedClientData&) = delete;
 
     virtual ~TrackedClientData()
     {
@@ -57,8 +56,6 @@ public:
 private:
     ItemContainerWidgetsPage *m_tracker;
     int m_value;
-
-    wxDECLARE_NO_COPY_CLASS(TrackedClientData);
 };
 
 // ============================================================================

@@ -2,7 +2,6 @@
 // Name:        text.cpp
 // Purpose:     TextCtrl wxWidgets sample
 // Author:      Robert Roebling
-// Modified by:
 // Copyright:   (c) Robert Roebling, Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,9 +9,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -55,7 +51,7 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // a text ctrl which allows to call different wxTextCtrl functions
@@ -158,7 +154,7 @@ public:
 private:
     // get the currently focused text control or return the default one
     // (m_multitext) is no text ctrl has focus -- in any case, returns
-    // something non NULL
+    // something non null
     wxTextCtrl *GetFocusedText() const;
 };
 
@@ -751,9 +747,7 @@ void MyTextCtrl::LogKeyEvent(const wxString& name, wxKeyEvent& event) const
         }
     }
 
-#if wxUSE_UNICODE
     key += wxString::Format(" (Unicode: %#04x)", event.GetUnicodeKey());
-#endif // wxUSE_UNICODE
 
     wxLogMessage( "%s event: %s (flags = %c%c%c%c)",
                   name,
@@ -1026,6 +1020,16 @@ void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
 
 void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
+    if ( ms_logKey )
+        LogKeyEvent( "Key down", event);
+
+    event.Skip();
+
+    // Only handle bare function keys below, notably let Alt-Fn perform their
+    // usual default functions as intercepting them is annoying.
+    if ( event.GetModifiers() != 0 )
+        return;
+
     switch ( event.GetKeyCode() )
     {
         case WXK_F1:
@@ -1119,11 +1123,6 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             wxLogMessage("Control marked as non modified");
             break;
     }
-
-    if ( ms_logKey )
-        LogKeyEvent( "Key down", event);
-
-    event.Skip();
 }
 
 //----------------------------------------------------------------------
@@ -1145,12 +1144,22 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_text = new MyTextCtrl( this, wxID_ANY, "Single line.",
                              wxDefaultPosition, wxDefaultSize,
-                             wxTE_PROCESS_ENTER);
+                             wxTE_PROCESS_ENTER | wxTE_RICH2);
     m_text->SetForegroundColour(*wxBLUE);
     m_text->SetBackgroundColour(*wxLIGHT_GREY);
     (*m_text) << " Appended.";
     m_text->SetInsertionPoint(0);
     m_text->WriteText( "Prepended. " );
+
+#if wxUSE_SPELLCHECK
+    if ( m_text->EnableProofCheck(wxTextProofOptions::Default()) )
+    {
+        // Break the string in several parts to avoid misspellings in the sources.
+        (*m_text) << " Mis"
+                      "s"
+                      "spelled.";
+    }
+#endif
 
     m_password = new MyTextCtrl( this, wxID_ANY, "",
       wxPoint(10,50), wxSize(140,wxDefaultCoord), wxTE_PASSWORD );
@@ -1203,11 +1212,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                 m_horizontal->SetFont(wxFontInfo(18)
                                         .Family(wxFONTFAMILY_SWISS)
                                         .Encoding(wxFONTENCODING_CP1251));
-#if wxUSE_UNICODE
                 m_horizontal->AppendText(L"\x0412\x0430\x0434\x0438\x043c \x0426");
-#else
-                m_horizontal->AppendText("\313\301\326\305\324\323\321 \325\304\301\336\316\331\315");
-#endif
         }
     }
     else
@@ -1231,11 +1236,30 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_tab = new MyTextCtrl( this, 100, "Multiline, allow <TAB> processing.",
       wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
-    m_tab->SetClientData((void *)wxS("tab"));
+    m_tab->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("tab"))));
 
     m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
-      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
-    m_enter->SetClientData((void *)wxS("enter"));
+      wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER | wxTE_RICH2 );
+    m_enter->SetClientData(const_cast<void*>(static_cast<const void*>(wxS("enter"))));
+
+#if wxUSE_SPELLCHECK
+    (*m_enter) << "\n";
+
+    // Enable grammar check just for demonstration purposes (note that it's
+    // only supported under Mac, but spell checking will be enabled under the
+    // other platforms too, if supported). If we didn't want to enable it, we
+    // could omit the EnableProofCheck() argument entirely.
+    if ( !m_enter->EnableProofCheck(wxTextProofOptions::Default().GrammarCheck()) )
+    {
+        (*m_enter) << "Spell checking is not available on this platform, sorry.";
+    }
+    else
+    {
+        (*m_enter) << "Spell checking is enabled, mis"
+                      "s"
+                      "spelled words should be highlighted.";
+    }
+#endif
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, "Allows more than 30Kb of text\n"
                                 "(on all Windows versions)\n"
@@ -1311,7 +1335,7 @@ wxTextCtrl *MyPanel::GetFocusedText() const
 {
     wxWindow *win = FindFocus();
 
-    wxTextCtrl *text = win ? wxDynamicCast(win, wxTextCtrl) : NULL;
+    wxTextCtrl *text = win ? wxDynamicCast(win, wxTextCtrl) : nullptr;
     return text ? text : m_multitext;
 }
 
@@ -1438,6 +1462,7 @@ void MyPanel::DoMoveToEndOfText()
 
 void MyPanel::DoGetWindowCoordinates()
 {
+#if wxUSE_LOG
     wxTextCtrl * const text = GetFocusedText();
 
     const wxPoint pt0 = text->PositionToCoords(0);
@@ -1446,6 +1471,7 @@ void MyPanel::DoGetWindowCoordinates()
               "(" << ptCur.x << ", "  << ptCur.y << "), "
               "first position coordinates: "
               "(" << pt0.x << ", "  << pt0.y << ")\n";
+#endif // wxUSE_LOG
 }
 
 void MyPanel::DoMoveToEndOfEntry()
@@ -1534,7 +1560,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title, int x, int y)
-       : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y))
+       : wxFrame(nullptr, wxID_ANY, title, wxPoint(x, y))
 {
     SetIcon(wxICON(sample));
 
@@ -1673,7 +1699,7 @@ void MyFrame::OnRichTextTest(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnIdle( wxIdleEvent& event )
 {
     // track the window which has the focus in the status bar
-    static wxWindow *s_windowFocus = (wxWindow *)NULL;
+    static wxWindow *s_windowFocus = nullptr;
     wxWindow *focus = wxWindow::FindFocus();
     if ( focus && (focus != s_windowFocus) )
     {

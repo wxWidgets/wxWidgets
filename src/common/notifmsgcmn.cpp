@@ -15,10 +15,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_NOTIFICATION_MESSAGE
 
 #include "wx/notifmsg.h"
@@ -39,7 +35,7 @@ wxDEFINE_EVENT( wxEVT_NOTIFICATION_MESSAGE_ACTION, wxCommandEvent );
 
 wxNotificationMessageBase::~wxNotificationMessageBase()
 {
-    m_impl->Detach();
+    delete m_impl;
 }
 
 bool wxNotificationMessageBase::Show(int timeout)
@@ -95,7 +91,10 @@ bool wxNotificationMessageBase::AddAction(wxWindowID actionid, const wxString &l
 
 void wxNotificationMessage::Init()
 {
-    m_impl = new wxGenericNotificationMessageImpl(this);
+    // This is only used when we derive from wxGenericNotificationMessage,
+    // which already initializes its m_impl correctly, so there is nothing to
+    // do here (but we still need to have this method for consistency with the
+    // native implementations).
 }
 
 #endif

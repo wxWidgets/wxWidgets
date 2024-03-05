@@ -2,7 +2,6 @@
 // Name:        griddemo.h
 // Purpose:     Grid control wxWidgets sample
 // Author:      Michael Bedward
-// Modified by:
 // Copyright:   (c) Michael Bedward, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -16,7 +15,7 @@ class wxGrid;
 class GridApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 
@@ -35,7 +34,9 @@ class GridFrame : public wxFrame
     void ToggleEditing( wxCommandEvent& );
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
+    void ToggleRowMoving( wxCommandEvent& );
     void ToggleColMoving( wxCommandEvent& );
+    void ToggleColHiding( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridDragCell ( wxCommandEvent& );
     void SetNativeColHeader ( wxCommandEvent& );
@@ -48,6 +49,8 @@ class GridFrame : public wxFrame
     void AutoSizeCols( wxCommandEvent& );
     void CellOverflow( wxCommandEvent& );
     void ResizeCell( wxCommandEvent& );
+    void ToggleCheckeredCells( wxCommandEvent& );
+    void ToggleColouredCells( wxCommandEvent& );
     void SetLabelColour( wxCommandEvent& );
     void SetLabelTextColour( wxCommandEvent& );
     void SetLabelFont(wxCommandEvent &);
@@ -68,12 +71,14 @@ class GridFrame : public wxFrame
     void DeleteSelectedRows( wxCommandEvent& );
     void DeleteSelectedCols( wxCommandEvent& );
     void ClearGrid( wxCommandEvent& );
+    void EditCell( wxCommandEvent& );
     void SetCornerLabelValue( wxCommandEvent& );
     void ShowSelection( wxCommandEvent& );
     void SelectCells( wxCommandEvent& );
     void SelectRows( wxCommandEvent& );
     void SelectCols( wxCommandEvent& );
     void SelectRowsOrCols( wxCommandEvent& );
+    void SelectNone( wxCommandEvent& );
 
     void FreezeOrThaw( wxCommandEvent& );
 
@@ -108,6 +113,7 @@ class GridFrame : public wxFrame
     void OnColAutoSize( wxGridSizeEvent& );
     void OnSelectCell( wxGridEvent& );
     void OnRangeSelected( wxGridRangeSelectEvent& );
+    void OnRangeSelecting( wxGridRangeSelectEvent& );
     void OnCellValueChanging( wxGridEvent& );
     void OnCellValueChanged( wxGridEvent& );
     void OnCellBeginDrag( wxGridEvent& );
@@ -120,12 +126,15 @@ class GridFrame : public wxFrame
 
     void OnGridCustomTab(wxGridEvent& event);
 
+    void OnGridContextMenu(wxContextMenuEvent& event);
+
 public:
     GridFrame();
     ~GridFrame();
 
     void OnQuit( wxCommandEvent& );
-    void About( wxCommandEvent& );
+    void OnClear( wxCommandEvent& );
+    void OnAbout( wxCommandEvent& );
     void OnVTable( wxCommandEvent& );
     void OnBugsTable( wxCommandEvent& );
     void OnTabularTable( wxCommandEvent& );
@@ -139,12 +148,16 @@ public:
         ID_TOGGLEEDIT,
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
+        ID_TOGGLEROWMOVING,
         ID_TOGGLECOLMOVING,
+        ID_TOGGLECOLHIDING,
         ID_TOGGLEGRIDSIZING,
         ID_TOGGLEGRIDDRAGCELL,
         ID_TOGGLEGRIDLINES,
         ID_AUTOSIZECOLS,
         ID_CELLOVERFLOW,
+        ID_TOGGLE_CHECKERED_CELLS,
+        ID_TOGGLE_COLOURED_CELLS,
         ID_HIDECOL,
         ID_SHOWCOL,
         ID_HIDEROW,
@@ -177,6 +190,7 @@ public:
         ID_DELETEROW,
         ID_DELETECOL,
         ID_CLEARGRID,
+        ID_EDITCELL,
         ID_SETCORNERLABEL,
         ID_SHOWSEL,
         ID_CHANGESEL,
@@ -184,6 +198,7 @@ public:
         ID_SELROWS,
         ID_SELCOLS,
         ID_SELROWSORCOLS,
+        ID_SELNONE,
         ID_SET_CELL_FG_COLOUR,
         ID_SET_CELL_BG_COLOUR,
         ID_VTABLE,
@@ -245,7 +260,7 @@ public:
                       wxDC& dc,
                       const wxRect& rect,
                       int row, int col,
-                      bool isSelected) wxOVERRIDE;
+                      bool isSelected) override;
 };
 
 // ----------------------------------------------------------------------------
@@ -258,15 +273,15 @@ class BigGridTable : public wxGridTableBase
 public:
     BigGridTable(long sizeGrid) { m_sizeGrid = sizeGrid; }
 
-    int GetNumberRows() wxOVERRIDE { return m_sizeGrid; }
-    int GetNumberCols() wxOVERRIDE { return m_sizeGrid; }
-    wxString GetValue( int row, int col ) wxOVERRIDE
+    int GetNumberRows() override { return m_sizeGrid; }
+    int GetNumberCols() override { return m_sizeGrid; }
+    wxString GetValue( int row, int col ) override
     {
         return wxString::Format("(%d, %d)", row, col);
     }
 
-    void SetValue( int , int , const wxString&  ) wxOVERRIDE { /* ignore */ }
-    bool IsEmptyCell( int , int  ) wxOVERRIDE { return false; }
+    void SetValue( int , int , const wxString&  ) override { /* ignore */ }
+    bool IsEmptyCell( int , int  ) override { return false; }
 
 private:
     long m_sizeGrid;
@@ -290,13 +305,12 @@ class MyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
     MyGridCellAttrProvider();
-    virtual ~MyGridCellAttrProvider();
 
     virtual wxGridCellAttr *GetAttr(int row, int col,
-                                    wxGridCellAttr::wxAttrKind  kind) const wxOVERRIDE;
+                                    wxGridCellAttr::wxAttrKind  kind) const override;
 
 private:
-    wxGridCellAttr *m_attrForOddRows;
+    wxGridCellAttrPtr m_attrForOddRows;
 };
 
 // ----------------------------------------------------------------------------
@@ -308,23 +322,23 @@ class BugsGridTable : public wxGridTableBase
 public:
     BugsGridTable() { }
 
-    virtual int GetNumberRows() wxOVERRIDE;
-    virtual int GetNumberCols() wxOVERRIDE;
-    virtual bool IsEmptyCell( int row, int col ) wxOVERRIDE;
-    virtual wxString GetValue( int row, int col ) wxOVERRIDE;
-    virtual void SetValue( int row, int col, const wxString& value ) wxOVERRIDE;
+    virtual int GetNumberRows() override;
+    virtual int GetNumberCols() override;
+    virtual bool IsEmptyCell( int row, int col ) override;
+    virtual wxString GetValue( int row, int col ) override;
+    virtual void SetValue( int row, int col, const wxString& value ) override;
 
-    virtual wxString GetColLabelValue( int col ) wxOVERRIDE;
+    virtual wxString GetColLabelValue( int col ) override;
 
-    virtual wxString GetTypeName( int row, int col ) wxOVERRIDE;
-    virtual bool CanGetValueAs( int row, int col, const wxString& typeName ) wxOVERRIDE;
-    virtual bool CanSetValueAs( int row, int col, const wxString& typeName ) wxOVERRIDE;
+    virtual wxString GetTypeName( int row, int col ) override;
+    virtual bool CanGetValueAs( int row, int col, const wxString& typeName ) override;
+    virtual bool CanSetValueAs( int row, int col, const wxString& typeName ) override;
 
-    virtual long GetValueAsLong( int row, int col ) wxOVERRIDE;
-    virtual bool GetValueAsBool( int row, int col ) wxOVERRIDE;
+    virtual long GetValueAsLong( int row, int col ) override;
+    virtual bool GetValueAsBool( int row, int col ) override;
 
-    virtual void SetValueAsLong( int row, int col, long value ) wxOVERRIDE;
-    virtual void SetValueAsBool( int row, int col, bool value ) wxOVERRIDE;
+    virtual void SetValueAsLong( int row, int col, long value ) override;
+    virtual void SetValueAsBool( int row, int col, bool value ) override;
 };
 
 class BugsGridFrame : public wxFrame

@@ -2,7 +2,6 @@
 // Name:        src/ribbon/control.cpp
 // Purpose:     Extension of wxControl with common ribbon methods
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-06-05
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -10,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RIBBON
 
@@ -118,7 +114,7 @@ wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
             return bar;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 #endif // wxUSE_RIBBON

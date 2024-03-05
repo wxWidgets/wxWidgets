@@ -13,17 +13,21 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/defs.h"
 
 #include "wx/math.h"
+#include "wx/mimetype.h"
+#include "wx/versioninfo.h"
 
 // just some classes using wxRTTI for wxStaticCast() test
 #include "wx/tarstrm.h"
 #include "wx/zipstrm.h"
+
+#ifdef __WINDOWS__
+    // Needed for wxMulDivInt32().
+    #include "wx/msw/wrapwin.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // test class
@@ -37,9 +41,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( MiscTestCase );
         CPPUNIT_TEST( Assert );
-#ifdef HAVE_VARIADIC_MACROS
         CPPUNIT_TEST( CallForEach );
-#endif // HAVE_VARIADIC_MACROS
         CPPUNIT_TEST( Delete );
         CPPUNIT_TEST( StaticCast );
     CPPUNIT_TEST_SUITE_END();
@@ -76,12 +78,11 @@ void MiscTestCase::Assert()
     WX_ASSERT_FAILS_WITH_ASSERT(AssertIfOdd(1));
 
     // doesn't fail any more
-    wxAssertHandler_t oldHandler = wxSetAssertHandler(NULL);
+    wxAssertHandler_t oldHandler = wxSetAssertHandler(nullptr);
     AssertIfOdd(17);
     wxSetAssertHandler(oldHandler);
 }
 
-#ifdef HAVE_VARIADIC_MACROS
 void MiscTestCase::CallForEach()
 {
     #define MY_MACRO(pos, str) s += str;
@@ -93,29 +94,28 @@ void MiscTestCase::CallForEach()
 
     #undef MY_MACRO
 }
-#endif // HAVE_VARIADIC_MACROS
 
 void MiscTestCase::Delete()
 {
     // Allocate some arbitrary memory to get a valid pointer:
     long *pointer = new long;
-    CPPUNIT_ASSERT( pointer != NULL );
+    CPPUNIT_ASSERT( pointer != nullptr );
 
-    // Check that wxDELETE sets the pointer to NULL:
+    // Check that wxDELETE sets the pointer to nullptr:
     wxDELETE( pointer );
-    CPPUNIT_ASSERT( pointer == NULL );
+    CPPUNIT_ASSERT( pointer == nullptr );
 
     // Allocate some arbitrary array to get a valid pointer:
     long *array = new long[ 3 ];
-    CPPUNIT_ASSERT( array != NULL );
+    CPPUNIT_ASSERT( array != nullptr );
 
-    // Check that wxDELETEA sets the pointer to NULL:
+    // Check that wxDELETEA sets the pointer to nullptr:
     wxDELETEA( array );
-    CPPUNIT_ASSERT( array == NULL );
+    CPPUNIT_ASSERT( array == nullptr );
 
     // this results in compilation error, as it should
 #if 0
-    struct SomeUnknownStruct *p = NULL;
+    struct SomeUnknownStruct *p = nullptr;
     wxDELETE(p);
 #endif
 }
@@ -123,12 +123,16 @@ void MiscTestCase::Delete()
 namespace
 {
 
+#ifdef __WXDEBUG__
+
 // helper function used just to avoid warnings about value computed not being
 // used in WX_ASSERT_FAILS_WITH_ASSERT() in StaticCast() below
 bool IsNull(void *p)
 {
-    return p == NULL;
+    return p == nullptr;
 }
+
+#endif // __WXDEBUG__
 
 } // anonymous namespace
 
@@ -152,6 +156,18 @@ void MiscTestCase::StaticCast()
 #endif // wxUSE_TARSTREAM
 }
 
+TEST_CASE("RTTI::ClassInfo", "[rtti]")
+{
+    wxObject obj;
+    CHECK( obj.GetClassInfo()->IsKindOf(wxCLASSINFO(wxObject)) );
+    CHECK( !obj.GetClassInfo()->IsKindOf(wxCLASSINFO(wxArchiveEntry)) );
+
+#if wxUSE_ZIPSTREAM
+    wxZipEntry zipEntry;
+    CHECK( zipEntry.GetClassInfo()->IsKindOf(wxCLASSINFO(wxArchiveEntry)) );
+#endif // wxUSE_ZIPSTREAM
+}
+
 TEST_CASE("wxCTZ", "[math]")
 {
     CHECK( wxCTZ(1) == 0 );
@@ -160,4 +176,81 @@ TEST_CASE("wxCTZ", "[math]")
     CHECK( wxCTZ(0x80000000) == 31 );
 
     WX_ASSERT_FAILS_WITH_ASSERT( wxCTZ(0) );
+}
+
+TEST_CASE("wxRound", "[math]")
+{
+    CHECK( wxRound(2.3) == 2 );
+    CHECK( wxRound(3.7) == 4 );
+    CHECK( wxRound(-0.5f) == -1 );
+
+    WX_ASSERT_FAILS_WITH_ASSERT( wxRound(2.0*INT_MAX) );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxRound(1.1*INT_MIN) );
+
+    // For compatibility reasons, we allow using wxRound() with integer types
+    // as well, even if this doesn't really make sense/
+#if WXWIN_COMPATIBILITY_3_0
+    #ifdef __VISUALC__
+        #pragma warning(push)
+        #pragma warning(disable:4996)
+    #endif
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    CHECK( wxRound(-9) == -9 );
+    CHECK( wxRound((size_t)17) == 17 );
+    CHECK( wxRound((short)289) == 289 );
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+    #ifdef __VISUALC__
+        #pragma warning(pop)
+    #endif
+#endif // WXWIN_COMPATIBILITY_3_0
+}
+
+TEST_CASE("wxMulDivInt32", "[math]")
+{
+    // Check that it rounds correctly.
+    CHECK( wxMulDivInt32(15, 3, 2) == 23 );
+
+    // Check that it doesn't overflow.
+    CHECK( wxMulDivInt32((INT_MAX - 1)/2, 200, 100) == INT_MAX - 1 );
+}
+
+#if wxUSE_MIMETYPE
+TEST_CASE("wxFileTypeInfo", "[mime]")
+{
+    SECTION("no extensions")
+    {
+        wxFileTypeInfo fti("binary/*", "", wxString{}, L"plain binary");
+        REQUIRE( fti.GetExtensionsCount() == 0 );
+    }
+
+    SECTION("extension without null at the end")
+    {
+        wxFileTypeInfo fti("image/png", "", wxEmptyString, "PNG image", "png");
+        REQUIRE( fti.GetExtensionsCount() == 1 );
+        CHECK( fti.GetExtensions()[0] == "png" );
+    }
+
+    SECTION("two extensions with null at the end")
+    {
+        wxFileTypeInfo fti("image/jpeg", "", "", "JPEG image",
+                           "jpg", L"jpeg", nullptr);
+        REQUIRE( fti.GetExtensionsCount() == 2 );
+        CHECK( fti.GetExtensions()[0] == "jpg" );
+        CHECK( fti.GetExtensions()[1] == "jpeg" );
+    }
+}
+#endif // wxUSE_MIMETYPE
+
+TEST_CASE("wxVersionInfo", "[version]")
+{
+    wxVersionInfo ver120("test", 1, 2);
+    CHECK( ver120.AtLeast(1, 2) );
+    CHECK( ver120.AtLeast(1, 0) );
+    CHECK( ver120.AtLeast(0, 9) );
+
+    CHECK_FALSE( ver120.AtLeast(1, 2, 1) );
+    CHECK_FALSE( ver120.AtLeast(1, 3) );
+    CHECK_FALSE( ver120.AtLeast(2, 0) );
 }

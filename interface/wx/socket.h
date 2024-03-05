@@ -131,13 +131,17 @@ public:
     bool AnyAddress();
 
     /**
-        Set the address to hostname, which can be a host name or an IP-style address
-        in dot notation(<tt>a.b.c.d</tt>).
+        Set the address to hostname, which can be a host name, an IP-style address
+        in dot notation(<tt>a.b.c.d</tt>) or a 32-bit representation of the
+        address as the number.
 
         @return @true on success, @false if something goes wrong (invalid
                 hostname or invalid IP address).
     */
+    //@{
     bool Hostname(const wxString& hostname);
+    bool Hostname(unsigned long addr);
+    //@}
 
     /**
         Returns the hostname which matches the IP address.
@@ -479,7 +483,7 @@ public:
     @endEventTable
 
     @library{wxnet}
-    @category{net}
+    @category{net,events}
 
     @see wxSocketBase, wxSocketClient, wxSocketServer
 */
@@ -664,7 +668,7 @@ enum wxSocketEventFlags
     This option can have surprising platform dependent behaviour, so check the
     documentation for your platform's implementation of setsockopt().
 
-    Note that on BSD-based systems(e.g. OS X), use of
+    Note that on BSD-based systems(e.g. macOS), use of
     @b wxSOCKET_REUSEADDR implies @b SO_REUSEPORT in addition to
     @b SO_REUSEADDR to be consistent with Windows.
 
@@ -732,7 +736,7 @@ public:
     /**
         @name Construction and Destruction
     */
-    //@{
+    ///@{
 
     /**
         Default constructor.
@@ -777,7 +781,8 @@ public:
 
         It is safe to call this function multiple times (only the first call
         does anything) but you must call Shutdown() exactly once for every call
-        to Initialize().
+        to Initialize(), see wxSocketInitializer which ensures that this is the
+        case.
 
         This function should only be called from the main thread.
 
@@ -794,17 +799,18 @@ public:
         every successful call to Initialize().
 
         This function should only be called from the main thread, just as
-        Initialize().
+        Initialize() and usually shouldn't be called explicitly at all as it's
+        safer to use wxSocketInitializer.
      */
     static void Shutdown();
 
-    //@}
+    ///@}
 
 
     /**
         @name Socket State
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if an error occurred in the last IO operation.
@@ -941,7 +947,7 @@ public:
     */
     void SaveState();
 
-    //@}
+    ///@}
 
 
     /**
@@ -949,7 +955,7 @@ public:
 
         See also: wxSocketServer::WaitForAccept(), wxSocketClient::WaitOnConnect()
     */
-    //@{
+    ///@{
 
     /**
         Shut down the socket, disabling further transmission and reception of
@@ -1331,13 +1337,13 @@ public:
     */
     wxSocketBase& WriteMsg(const void* buffer, wxUint32 nbytes);
 
-    //@}
+    ///@}
 
 
     /**
         @name Handling Socket Events
     */
-    //@{
+    ///@{
 
     /**
         Returns a pointer of the client data for this socket, as set with
@@ -1421,9 +1427,34 @@ public:
     */
     wxSOCKET_T GetSocket() const;
 
-    //@}
+    ///@}
 };
 
+/**
+    @class wxSocketInitializer
+
+    Class initializing sockets in its ctor and shutting them down in its dtor.
+
+    This is a simple RAII wrapper around wxSocketBase::Initialize() and
+    wxSocketBase::Shutdown().
+
+    @since 3.3.0
+ */
+class wxSocketInitializer
+{
+public:
+    /// Calls wxSocketBase::Initialize().
+    wxSocketInitializer();
+
+    /// Calls wxSocketBase::Shutdown().
+    ~wxSocketInitializer();
+
+    /// Can't be copied.
+    wxSocketInitializer(const wxSocketInitializer&) = delete;
+
+    /// Can't be assigned.
+    wxSocketInitializer& operator=(const wxSocketInitializer&) = delete;
+};
 
 
 /**

@@ -13,9 +13,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GRAPHICS_CONTEXT
 
@@ -47,7 +44,7 @@ public:
         m_bmp = wxNullBitmap;
     }
 
-    virtual void setUp() wxOVERRIDE
+    virtual void setUp() override
     {
         m_gcdc->ResetBoundingBox();
     }

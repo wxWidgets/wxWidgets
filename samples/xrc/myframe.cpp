@@ -13,9 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // For all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -40,7 +37,7 @@
 
 //-----------------------------------------------------------------------------
 
-#include "wx/xrc/xmlres.h"              // XRC XML resouces
+#include "wx/xrc/xmlres.h"              // XRC XML resources
 
 //-----------------------------------------------------------------------------
 
@@ -52,6 +49,8 @@
 #include "objrefdlg.h"
 // For functions to manipulate the corresponding controls.
 #include "wx/animate.h"
+#include "wx/generic/animate.h"
+#include "wx/infobar.h"
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
 
@@ -85,6 +84,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand)
     EVT_MENU(XRCID("uncentered_tool_or_menuitem"), MyFrame::OnUncenteredToolOrMenuCommand)
+    EVT_MENU(XRCID("multiple_accels"), MyFrame::OnMultipleAccels)
     EVT_MENU(XRCID("aui_demo_tool_or_menuitem"), MyFrame::OnAuiDemoToolOrMenuCommand)
     EVT_MENU(XRCID("obj_ref_tool_or_menuitem"), MyFrame::OnObjRefToolOrMenuCommand)
     EVT_MENU(XRCID("custom_class_tool_or_menuitem"), MyFrame::OnCustomClassToolOrMenuCommand)
@@ -104,10 +104,10 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame(wxWindow* parent)
 {
     // Load up this frame from XRC. [Note, instead of making a class's
-    // constructor take a wxWindow* parent with a default value of NULL,
+    // constructor take a wxWindow* parent with a default value of nullptr,
     // we could have just had designed MyFrame class with an empty
     // constructor and then written here:
-    // wxXmlResource::Get()->LoadFrame(this, (wxWindow* )NULL, "main_frame");
+    // wxXmlResource::Get()->LoadFrame(this, nullptr, "main_frame");
     // since this frame will always be the top window, and thus parentless.
     // However, the current approach has source code that can be recycled
     // for other frames that aren't the top level window.]
@@ -205,14 +205,17 @@ void MyFrame::OnAnimationCtrlPlay(wxCommandEvent& event)
 
     wxWindow *win = btn->GetParent();
     wxAnimationCtrl *ctrl = XRCCTRL(*win, "controls_animation_ctrl", wxAnimationCtrl);
+    wxGenericAnimationCtrl *generic =
+        XRCCTRL(*win, "controls_generic_animation_ctrl", wxGenericAnimationCtrl);
     if (ctrl->IsPlaying())
     {
         ctrl->Stop();
+        generic->Stop();
         btn->SetLabel("Play");
     }
     else
     {
-        if (ctrl->Play())
+        if ( ctrl->Play() && generic->Play() )
             btn->SetLabel("Stop");
         else
             wxLogError("Cannot play the animation...");
@@ -265,6 +268,12 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
              XRCID("controls_animation_button_play"));
 #endif
 
+#if wxUSE_INFOBAR
+    // Show the message on button click
+    dlg.Bind(wxEVT_BUTTON, &MyFrame::OnInfoBarShowMessage, this,
+        XRCID("controls_infobar_button_message"));
+#endif
+
     // All done. Show the dialog.
     dlg.ShowModal();
 }
@@ -275,6 +284,26 @@ void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     wxDialog dlg;
     wxXmlResource::Get()->LoadDialog(&dlg, this, "uncentered_dialog");
     dlg.ShowModal();
+}
+
+void MyFrame::OnMultipleAccels(wxCommandEvent& WXUNUSED(event))
+{
+    wxString msg;
+#if defined(__WXOSX_COCOA__)
+    wxString main = "Cmd-W";
+    wxString extra1 = "Cmd-T";
+    wxString extra2 = "Shift-Cmd-W";
+#else
+    wxString main = "Ctrl-W";
+    wxString extra1 = "Ctrl-T";
+    wxString extra2 = "Shift-Ctrl-W";
+#endif
+    msg.Printf(
+        "You can open this dialog with any of '%s' (main), '%s' or '%s' (extra) accelerators.",
+        main, extra1, extra2
+    );
+
+    wxMessageBox(msg, _("Multiple accelerators demo"), wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
@@ -291,7 +320,7 @@ void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnObjRefToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     // The dialog redirects log messages, so save the old log target first
-    wxLog* oldlogtarget = wxLog::SetActiveTarget(NULL);
+    wxLog* oldlogtarget = wxLog::SetActiveTarget(nullptr);
 
     // Make an instance of the dialog
     ObjrefDialog* objrefDialog = new ObjrefDialog(this);
@@ -363,7 +392,7 @@ void MyFrame::OnRecursiveLoad(wxCommandEvent& WXUNUSED(event))
     // this is a slightly contrived example, please keep in mind that it's done
     // only to demonstrate LoadObjectRecursively() in action and is not the
     // recommended to do this
-    wxDialog dlg(NULL, wxID_ANY, "Recursive Load Example",
+    wxDialog dlg(nullptr, wxID_ANY, "Recursive Load Example",
                  wxDefaultPosition, wxDefaultSize,
                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     wxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
@@ -404,4 +433,19 @@ void MyFrame::OnAboutToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
                 "Welcome to %s", wxVERSION_STRING);
 
     wxMessageBox(msg, _("About XML resources demo"), wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnInfoBarShowMessage(wxCommandEvent& event)
+{
+#if wxUSE_INFOBAR
+    // get the pointers we need
+    wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
+    if ( !btn || !btn->GetParent() )
+        return;
+
+    wxWindow *win = btn->GetParent();
+    wxInfoBar *ctrl = XRCCTRL(*win, "controls_infobar", wxInfoBar);
+    ctrl->ShowMessage("Message", wxICON_QUESTION);
+#endif
+
 }

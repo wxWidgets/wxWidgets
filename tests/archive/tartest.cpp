@@ -8,10 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #   include "wx/wx.h"
 #endif
@@ -32,13 +28,13 @@ class tartest : public ArchiveTestSuite
 public:
     tartest();
 
-    void runTest() wxOVERRIDE { DoRunTest(); }
+    void runTest() override { DoRunTest(); }
 
 protected:
     CppUnit::Test *makeTest(string descr, int options,
                             bool genericInterface,
                             const wxString& archiver,
-                            const wxString& unarchiver) wxOVERRIDE;
+                            const wxString& unarchiver) override;
 };
 
 tartest::tartest()
@@ -56,7 +52,7 @@ CppUnit::Test *tartest::makeTest(
     const wxString& unarchiver)
 {
     if ((options & Stub) && (options & PipeIn) == 0)
-        return NULL;
+        return nullptr;
 
     if (genericInterface)
     {

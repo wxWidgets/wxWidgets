@@ -62,3 +62,5 @@ MSVS version:
   can be tested with the "Crash" menu item in the except sample) and  update
   the version check in `include/wx/msw/seh.h` to suppress this warning for the
   new version too.
+- Update checks for `VISUALSTUDIOVERSION` in `build/bakefiles/common.bkl` to
+  take the new version into account.

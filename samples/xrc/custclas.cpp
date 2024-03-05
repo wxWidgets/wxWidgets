@@ -13,9 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // For all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -38,7 +35,7 @@
 // that if one of these menu items is clicked, then a certain function is
 // called.
 enum {
-    PU_ADD_RECORD        = wxID_HIGHEST + 1,
+    PU_ADD_RECORD        = wxID_HIGHEST,
     PU_EDIT_RECORD,
     PU_DELETE_RECORD
 };
@@ -85,7 +82,7 @@ MyResizableListCtrl::MyResizableListCtrl( wxWindow *parent, wxWindowID id,
     // This listctrl needs to insert its columns in the constructor, since
     // as soon as the listctrl is built, it is resized and grafted onto an
     // "unknown" XRC placeholder. This induces an OnSize() event, calling the
-    // overrriden OnSize function for this class, which needs to have 3
+    // overridden OnSize function for this class, which needs to have 3
     // columns to resize (else an assert on WXGTK debug build).
     InsertColumn( RECORD_COLUMN, _("Record"), wxLIST_FORMAT_LEFT, 140);
     InsertColumn( ACTION_COLUMN, _("Action"), wxLIST_FORMAT_LEFT, 70);

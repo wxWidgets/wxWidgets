@@ -2,7 +2,6 @@
 // Name:        event.cpp
 // Purpose:     wxWidgets sample demonstrating different event usage
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.01.01
 // Copyright:   (c) 2001-2009 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -36,6 +32,7 @@
 #include <wx/statline.h>
 #include <wx/log.h>
 #include "gestures.h"
+#include "chessboard.h"
 
 // ----------------------------------------------------------------------------
 // event constants
@@ -50,7 +47,7 @@ wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent);
     DECLARE_EVENT_TABLE_ENTRY( \
         wxEVT_MY_CUSTOM_COMMAND, id, wxID_ANY, \
         wxCommandEventHandler(fn), \
-        (wxObject *) NULL \
+        nullptr \
     ),
 
 // ----------------------------------------------------------------------------
@@ -67,7 +64,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // these are regular event handlers used to highlight the events handling
     // order
@@ -76,7 +73,7 @@ public:
 
     // we override wxAppConsole::FilterEvent used to highlight the events
     // handling order
-    virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
+    virtual int FilterEvent(wxEvent& event) override;
 
 private:
     wxDECLARE_EVENT_TABLE();
@@ -146,6 +143,9 @@ public:
 
     // Gesture
     void OnGesture(wxCommandEvent& event);
+
+    // Demonstrates using a new event class
+    void OnNewEventClass(wxCommandEvent& event);
 
 private:
     // symbolic names for the status bar fields
@@ -226,7 +226,8 @@ enum
     Event_Pop,
     Event_Custom,
     Event_Test,
-    Event_Gesture
+    Event_Gesture,
+    Event_NewEventClass
 };
 
 // ----------------------------------------------------------------------------
@@ -259,6 +260,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Push, MyFrame::OnPushEventHandler)
     EVT_MENU(Event_Pop, MyFrame::OnPopEventHandler)
     EVT_MENU(Event_Gesture, MyFrame::OnGesture)
+    EVT_MENU(Event_NewEventClass, MyFrame::OnNewEventClass)
 
     EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
 
@@ -356,13 +358,13 @@ void MyApp::OnClickStaticHandlerApp(wxCommandEvent& event)
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame(NULL, wxID_ANY, title, pos, size)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     SetIcon(wxICON(sample));
 
     // init members
     m_nPush = 0;
-    m_btnDynamic = NULL;
+    m_btnDynamic = nullptr;
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
@@ -390,6 +392,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                       "Generate a custom event");
     menuEvent->Append(Event_Gesture, "&Gesture events\tCtrl-G",
                     "Gesture event");
+    menuEvent->Append(Event_NewEventClass, "&New wxEvent class demo\tCtrl-N",
+                    "Demonstrates a new wxEvent-derived class");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -589,6 +593,13 @@ void MyFrame::OnGesture(wxCommandEvent& WXUNUSED(event))
         m_gestureFrame = new MyGestureFrame();
         m_gestureFrame->Show(true);
     }
+}
+
+void MyFrame::OnNewEventClass(wxCommandEvent& WXUNUSED(event))
+{
+    MyChessBoardDialog dlg(this);
+
+    dlg.ShowModal();
 }
 
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))

@@ -54,7 +54,7 @@ public:
 
     A wxSpinButton has two small up and down (or left and right) arrow buttons.
 
-    It is often used next to a text control for increment and decrementing a value.
+    It is often used next to a text control for incrementing and decrementing a value.
     Portable programs should try to use wxSpinCtrl instead as wxSpinButton is not
     implemented for all platforms but wxSpinCtrl is as it degenerates to a simple
     wxTextCtrl on such platforms.
@@ -147,6 +147,15 @@ public:
                 const wxString& name = "wxSpinButton");
 
     /**
+        Get the value for increment for a spin control.
+
+        The default value is 1 but it can be changed using SetIncrement().
+
+        @since 3.1.6
+    */
+    int GetIncrement() const;
+
+    /**
         Returns the maximum permissible value.
 
         @see SetRange()
@@ -166,6 +175,23 @@ public:
         @see SetValue()
     */
     virtual int GetValue() const;
+
+    /**
+        Sets the increment for the control.
+
+        The increment is the number by which the value changes when the up or
+        down arrow is used.
+
+        The default is 1.
+
+        This function is currently implemented only in wxMSW and does nothing
+        under the other platforms.
+
+        @since 3.1.6
+
+        @see wxSpinCtrl::SetIncrement()
+    */
+    void SetIncrement(int value);
 
     /**
         Sets the range of the spin button.

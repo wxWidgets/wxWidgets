@@ -76,7 +76,7 @@ public:
         Creates this widget with given parameters.
 
         @param parent
-            Parent window, must not be non-@NULL.
+            Parent window, must not be non-null.
         @param id
             The identifier for the control.
         @param font
@@ -89,7 +89,7 @@ public:
         @param style
             The window style, see wxFNTP_* flags.
         @param validator
-            Validator which can be used for additional date checks.
+            Validator which can be used for additional data checks.
         @param name
             Control name.
 

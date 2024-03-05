@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextsizepage.cpp
 // Purpose:     Implements the rich text formatting dialog size page.
 // Author:      Julian Smart
-// Modified by:
 // Created:     20/10/2010 10:23:24
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -133,68 +132,68 @@ void wxRichTextSizePage::Init()
 {
 ////@begin wxRichTextSizePage member initialisation
     m_positionMode = 0;
-    m_parentSizer = NULL;
-    m_floatingAlignmentSizer = NULL;
-    m_floatingSizer = NULL;
-    m_float = NULL;
-    m_alignmentSizer = NULL;
-    m_verticalAlignmentCheckbox = NULL;
-    m_verticalAlignmentComboBox = NULL;
-    m_sizeSizer = NULL;
-    m_widthSizer = NULL;
-    m_widthCheckbox = NULL;
-    m_widthLabel = NULL;
-    m_width = NULL;
-    m_unitsW = NULL;
-    m_heightSizer = NULL;
-    m_heightCheckbox = NULL;
-    m_heightLabel = NULL;
-    m_height = NULL;
-    m_unitsH = NULL;
-    m_minWidthCheckbox = NULL;
-    m_minWidthSizer = NULL;
-    m_minWidth = NULL;
-    m_unitsMinW = NULL;
-    m_minHeightCheckbox = NULL;
-    m_minHeightSizer = NULL;
-    m_minHeight = NULL;
-    m_unitsMinH = NULL;
-    m_maxWidthCheckbox = NULL;
-    m_maxWidthSizer = NULL;
-    m_maxWidth = NULL;
-    m_unitsMaxW = NULL;
-    m_maxHeightCheckbox = NULL;
-    m_maxHeightSizer = NULL;
-    m_maxHeight = NULL;
-    m_unitsMaxH = NULL;
-    m_positionControls = NULL;
-    m_moveObjectParentSizer = NULL;
-    m_positionModeSizer = NULL;
-    m_positionModeCtrl = NULL;
-    m_positionGridSizer = NULL;
-    m_leftSizer = NULL;
-    m_positionLeftCheckbox = NULL;
-    m_leftLabel = NULL;
-    m_left = NULL;
-    m_unitsLeft = NULL;
-    m_topSizer = NULL;
-    m_positionTopCheckbox = NULL;
-    m_topLabel = NULL;
-    m_top = NULL;
-    m_unitsTop = NULL;
-    m_rightSizer = NULL;
-    m_positionRightCheckbox = NULL;
-    m_rightLabel = NULL;
-    m_rightPositionSizer = NULL;
-    m_right = NULL;
-    m_unitsRight = NULL;
-    m_bottomSizer = NULL;
-    m_positionBottomCheckbox = NULL;
-    m_bottomLabel = NULL;
-    m_bottomPositionSizer = NULL;
-    m_bottom = NULL;
-    m_unitsBottom = NULL;
-    m_moveObjectSizer = NULL;
+    m_parentSizer = nullptr;
+    m_floatingAlignmentSizer = nullptr;
+    m_floatingSizer = nullptr;
+    m_float = nullptr;
+    m_alignmentSizer = nullptr;
+    m_verticalAlignmentCheckbox = nullptr;
+    m_verticalAlignmentComboBox = nullptr;
+    m_sizeSizer = nullptr;
+    m_widthSizer = nullptr;
+    m_widthCheckbox = nullptr;
+    m_widthLabel = nullptr;
+    m_width = nullptr;
+    m_unitsW = nullptr;
+    m_heightSizer = nullptr;
+    m_heightCheckbox = nullptr;
+    m_heightLabel = nullptr;
+    m_height = nullptr;
+    m_unitsH = nullptr;
+    m_minWidthCheckbox = nullptr;
+    m_minWidthSizer = nullptr;
+    m_minWidth = nullptr;
+    m_unitsMinW = nullptr;
+    m_minHeightCheckbox = nullptr;
+    m_minHeightSizer = nullptr;
+    m_minHeight = nullptr;
+    m_unitsMinH = nullptr;
+    m_maxWidthCheckbox = nullptr;
+    m_maxWidthSizer = nullptr;
+    m_maxWidth = nullptr;
+    m_unitsMaxW = nullptr;
+    m_maxHeightCheckbox = nullptr;
+    m_maxHeightSizer = nullptr;
+    m_maxHeight = nullptr;
+    m_unitsMaxH = nullptr;
+    m_positionControls = nullptr;
+    m_moveObjectParentSizer = nullptr;
+    m_positionModeSizer = nullptr;
+    m_positionModeCtrl = nullptr;
+    m_positionGridSizer = nullptr;
+    m_leftSizer = nullptr;
+    m_positionLeftCheckbox = nullptr;
+    m_leftLabel = nullptr;
+    m_left = nullptr;
+    m_unitsLeft = nullptr;
+    m_topSizer = nullptr;
+    m_positionTopCheckbox = nullptr;
+    m_topLabel = nullptr;
+    m_top = nullptr;
+    m_unitsTop = nullptr;
+    m_rightSizer = nullptr;
+    m_positionRightCheckbox = nullptr;
+    m_rightLabel = nullptr;
+    m_rightPositionSizer = nullptr;
+    m_right = nullptr;
+    m_unitsRight = nullptr;
+    m_bottomSizer = nullptr;
+    m_positionBottomCheckbox = nullptr;
+    m_bottomLabel = nullptr;
+    m_bottomPositionSizer = nullptr;
+    m_bottom = nullptr;
+    m_unitsBottom = nullptr;
+    m_moveObjectSizer = nullptr;
 ////@end wxRichTextSizePage member initialisation
 }
 
@@ -791,7 +790,7 @@ bool wxRichTextSizePage::TransferDataToWindow()
         }
     }
 
-    wxRichTextImage* imageObj = NULL;
+    wxRichTextImage* imageObj = nullptr;
     if (dialog)
         imageObj = wxDynamicCast(dialog->GetObject(), wxRichTextImage);
 

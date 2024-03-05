@@ -37,7 +37,7 @@ public:
     */
     wxCheckListBox();
 
-    //@{
+    ///@{
     /**
         Constructor, creating and showing a list box.
 
@@ -70,7 +70,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    int n = 0,
-                   const wxString choices[] = NULL,
+                   const wxString choices[] = nullptr,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = "listBox");
@@ -106,14 +106,14 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = "listBox");
-    //@}
+    ///@}
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int nStrings = 0,
-                const wxString choices[] = NULL,
+                const wxString choices[] = nullptr,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);

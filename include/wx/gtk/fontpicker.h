@@ -2,7 +2,6 @@
 // Name:        wx/gtk/fontpicker.h
 // Purpose:     wxFontButton header
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -29,7 +28,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxFONTBTN_DEFAULT_STYLE,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = wxFontPickerWidgetNameStr)
+                 const wxString& name = wxASCII_STR(wxFontPickerWidgetNameStr))
     {
         Init();
 
@@ -43,18 +42,18 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxFONTBTN_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxFontPickerWidgetNameStr);
+                const wxString& name = wxASCII_STR(wxFontPickerWidgetNameStr));
 
-    virtual wxColour GetSelectedColour() const wxOVERRIDE
+    virtual wxColour GetSelectedColour() const override
         { return m_selectedColour; }
 
-    void SetSelectedColour(const wxColour &colour) wxOVERRIDE
+    void SetSelectedColour(const wxColour &colour) override
         { m_selectedColour = colour; }
 
     virtual ~wxFontButton();
 
 protected:
-    void UpdateFont() wxOVERRIDE;
+    void UpdateFont() override;
 
 
 public:     // used by the GTK callback only

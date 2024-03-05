@@ -2,7 +2,6 @@
 // Name:        src/msw/slider.cpp
 // Purpose:     wxSlider, using trackbar control
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart 1998
 //                  Vadim Zeitlin 2004
@@ -20,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SLIDER
 
@@ -69,9 +65,9 @@ const int TICK = 8;
 
 void wxSlider::Init()
 {
-    m_labels = NULL;
+    m_labels = nullptr;
 
-    m_hBrushBg = NULL;
+    m_hBrushBg = nullptr;
 
     m_pageSize = 1;
     m_lineSize = 1;
@@ -152,23 +148,27 @@ bool wxSlider::Create(wxWindow *parent,
             HWND wnd = ::CreateWindow
                          (
                             wxT("STATIC"),
-                            NULL,
+                            nullptr,
                             WS_CHILD | WS_VISIBLE | SS_CENTER,
                             0, 0, 0, 0,
                             hwndParent,
                             (HMENU)wxUIntToPtr(lblid.GetValue()),
                             wxGetInstance(),
-                            NULL
+                            nullptr
                          );
 
             m_labels->Set(n, wnd, lblid);
         }
-        m_labels->SetFont(GetFont());
     }
 
     // now create the main control too
     if ( !MSWCreateControl(TRACKBAR_CLASS, wxEmptyString, pos, size) )
         return false;
+
+    if ( m_labels )
+    {
+        m_labels->SetFont(GetFont());
+    }
 
     // and initialize everything
     SetRange(minValue, maxValue);
@@ -307,15 +307,28 @@ bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
     SetValue(newPos);
 
     wxScrollEvent event(scrollEvent, m_windowId);
+    bool          processed = false;
+
     event.SetPosition(newPos);
     event.SetEventObject( this );
-    HandleWindowEvent(event);
+    processed = HandleWindowEvent(event);
 
-    wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
-    cevent.SetInt( newPos );
-    cevent.SetEventObject( this );
+    // Do not generate wxEVT_SLIDER when the native scroll message
+    // parameter is SB_ENDSCROLL, which always follows only after
+    // another scroll message which already changed the slider value.
+    // Therefore, sending wxEVT_SLIDER after SB_ENDSCROLL
+    // would result in two wxEVT_SLIDER events with the same value.
+    if ( wParam != SB_ENDSCROLL )
+    {
+        wxCommandEvent cevent( wxEVT_SLIDER, GetId() );
 
-    return HandleWindowEvent( cevent );
+        cevent.SetInt( newPos );
+        cevent.SetEventObject( this );
+
+        processed = HandleWindowEvent( cevent );
+    }
+
+    return processed;
 }
 
 void wxSlider::Command (wxCommandEvent & event)
@@ -541,8 +554,12 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 wxSize wxSlider::DoGetBestSize() const
 {
     // this value is arbitrary:
-    static const int length = FromDIP(100);
-    const int thumbSize = GetThumbLength();
+    const int length = FromDIP(100);
+
+    // We need 2 extra pixels (which are not scaled by the DPI by the native
+    // control) on either side to account for the focus rectangle.
+    const int thumbSize = GetThumbLength() + 4;
+
     const int tickSize = FromDIP(TICK);
 
     int *width;
@@ -617,6 +634,26 @@ WXHBRUSH wxSlider::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     }
 
     return hBrush;
+}
+
+void wxSlider::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxSliderBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_labels && m_font.IsOk() )
+    {
+        m_labels->SetFont(m_font);
+    }
+}
+
+void wxSlider::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& event)
+{
+    // We need to update the thumb before processing wxEVT_DPI_CHANGED in the
+    // user code, as it may update the slider size, which wouldn't work
+    // correctly if it still used the old thumb length.
+    int thumbLen = GetThumbLength();
+
+    SetThumbLength(event.ScaleX(thumbLen));
 }
 
 // ----------------------------------------------------------------------------
@@ -754,17 +791,17 @@ void wxSlider::SetTick(int tickPos)
 
 WXHWND wxSlider::GetStaticMin() const
 {
-    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Min] : NULL;
+    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Min] : nullptr;
 }
 
 WXHWND wxSlider::GetStaticMax() const
 {
-    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Max] : NULL;
+    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Max] : nullptr;
 }
 
 WXHWND wxSlider::GetEditValue() const
 {
-    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Value] : NULL;
+    return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Value] : nullptr;
 }
 
 WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxSlider, wxSliderBase, m_labels)

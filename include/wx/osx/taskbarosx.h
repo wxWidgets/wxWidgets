@@ -2,7 +2,6 @@
 // File:        wx/mac/taskbarosx.h
 // Purpose:     Defines wxTaskBarIcon class for OSX
 // Author:      Ryan Norton
-// Modified by:
 // Created:     04/04/2003
 // Copyright:   (c) Ryan Norton, 2003
 // Licence:     wxWindows licence
@@ -30,7 +29,7 @@ public:
     bool IsOk() const { return true; }
 
     bool IsIconInstalled() const;
-    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
+    bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString);
     bool RemoveIcon();
     bool PopupMenu(wxMenu *menu);
 

@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -24,9 +21,11 @@
 
 #include "asserthelper.h"
 
+#include <memory>
+
 TEST_CASE("wxWrapSizer::CalcMin", "[wxWrapSizer]")
 {
-    wxScopedPtr<wxWindow> win(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    std::unique_ptr<wxWindow> win(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
     win->SetClientSize(180, 240);
 
     wxSizer *sizer = new wxWrapSizer(wxHORIZONTAL);
@@ -77,7 +76,7 @@ TEST_CASE("wxWrapSizer::CalcMin", "[wxWrapSizer]")
 
 TEST_CASE("wxWrapSizer::CalcMinFromMinor", "[wxWrapSizer]")
 {
-    wxScopedPtr<wxWindow> win(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
+    std::unique_ptr<wxWindow> win(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY));
     win->SetClientSize(180, 240);
 
     wxSizer* boxSizer = new wxBoxSizer(wxHORIZONTAL);

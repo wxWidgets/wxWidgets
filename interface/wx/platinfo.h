@@ -20,15 +20,15 @@
 */
 enum wxOperatingSystemId
 {
-    wxOS_UNKNOWN = 0,                 //!< returned on error
+    wxOS_UNKNOWN = 0,                 //!< Returned on error.
 
     wxOS_MAC_OS         = 1 << 0,     //!< Apple Mac OS 8/9/X with Mac paths
-    wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple OS X with Unix paths
+    wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple macOS with Unix paths
 
     //! A combination of all @c wxOS_MAC_* values previously listed.
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
-    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (XP/Vista/7/8/10)
+    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (XP/Vista/7/8/10/11)
 
     //! Any Windows system, currently can be only wxOS_WINDOWS_NT.
     wxOS_WINDOWS = wxOS_WINDOWS_NT,
@@ -63,20 +63,36 @@ enum wxPortId
     wxPORT_BASE     = 1 << 0,       //!< wxBase, no native toolkit used
 
     wxPORT_MSW      = 1 << 1,       //!< wxMSW, native toolkit is Windows API
-    wxPORT_MOTIF    = 1 << 2,       //!< wxMotif, using [Open]Motif or Lesstif
-    wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK+ 1.x, 2.x, 3.x, GPE
+    wxPORT_MOTIF    = 1 << 2,       //!< wxMotif, not supported any longer.
+    wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK
     wxPORT_DFB      = 1 << 4,       //!< wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       //!< wxX11, using wxUniversal
     wxPORT_MAC      = 1 << 7,       //!< wxMac, using Carbon or Classic Mac API
     wxPORT_COCOA    = 1 << 8,       //!< wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_QT       = 1 << 10       //!< wxQT, using QT4
+    wxPORT_QT       = 1 << 10       //!< wxQT, using Qt 5+
 };
 
 
 /**
-    The architecture of the operating system
+    The architecture bitness of the operating system
     (regardless of the build environment of wxWidgets library - see ::wxIsPlatform64Bit()
     documentation for more info).
+
+    @since 3.1.5
+*/
+enum wxBitness
+{
+    wxBITNESS_INVALID = -1,        //!< returned on error
+
+    wxBITNESS_32,                  //!< 32 bit
+    wxBITNESS_64,                  //!< 64 bit
+
+    wxBITNESS_MAX
+};
+
+
+/**
+    @deprecated Use wxBitness instead.
 */
 enum wxArchitecture
 {
@@ -123,10 +139,49 @@ struct wxLinuxDistributionInfo
 
 
 /**
+    @class wxPlatformId
+
+    Defines a very broad platform categorization.
+
+    Usually you would use wxPlatformInfo to get all the platform details rather
+    than this class which only distinguishes between MSW, Mac and Unix
+    platforms.
+
+    This class is mostly useful if a short string describing the platform
+    corresponds to the current platform, i.e. the platform under which the
+    executable runs. The recognized strings are:
+
+    - "msw" (preferred) or "win" (for compatibility) for MSW.
+    - "mac" for Apple systems, i.e. macOS and iOS.
+    - "unix" for the (other) Unix-like systems.
+
+    @since 3.1.5
+ */
+class wxPlatformId
+{
+    /**
+        Returns the preferred current platform name.
+
+        Use MatchesCurrent() to check if the name is one of the possibly
+        several names corresponding to the current platform.
+
+        Returns one of "msw", "mac" or "unix" or an empty string if the current
+        platform is not recognized.
+     */
+    static wxString GetCurrent();
+
+    /**
+        Returns true if the given string matches the current platform.
+     */
+    static bool MatchesCurrent(const wxString& s);
+};
+
+
+/**
     @class wxPlatformInfo
 
     This class holds information about the operating system, the toolkit and the
-    basic architecture of the machine where the application is currently running.
+    basic architecture bitness of the machine where the application is currently running.
 
     This class does not only have @e getters for the information above, it also has
     @e setters. This allows you to e.g. save the current platform information in a
@@ -172,7 +227,7 @@ public:
                    wxOperatingSystemId id = wxOS_UNKNOWN,
                    int osMajor = -1,
                    int osMinor = -1,
-                   wxArchitecture arch = wxARCH_INVALID,
+                   wxBitness bitness = wxBITNESS_INVALID,
                    wxEndianness endian = wxENDIAN_INVALID);
 
 
@@ -223,12 +278,19 @@ public:
 
         These getters allow for easy string-to-enumeration-value conversion.
     */
-    //@{
+    ///@{
 
     /**
-        Converts the given string to a wxArchitecture enum value or to
-        @c wxARCH_INVALID if the given string is not a valid architecture string
+        Converts the given string to a wxBitness enum value or to
+        @c wxBITNESS_INVALID if the given string is not a valid architecture bitness string
         (i.e. does not contain nor @c 32 nor @c 64 strings).
+
+        @since 3.1.5
+    */
+    static wxBitness GetBitness(const wxString& bitness);
+
+    /**
+        @deprecated Use GetBitness() instead.
     */
     static wxArchitecture GetArch(const wxString& arch);
 
@@ -252,7 +314,7 @@ public:
     */
     static wxPortId GetPortId(const wxString& portname);
 
-    //@}
+    ///@}
 
 
     /**
@@ -260,12 +322,19 @@ public:
 
         These getters allow for easy enumeration-value-to-string conversion.
     */
-    //@{
+    ///@{
 
     /**
-        Returns the name for the given wxArchitecture enumeration value.
+        @deprecated Use GetBitnessName() instead.
     */
     static wxString GetArchName(wxArchitecture arch);
+
+    /**
+        Returns the name for the given wxBitness enumeration value.
+
+        @since 3.1.5
+    */
+    static wxString GetBitnessName(wxBitness bitness);
 
     /**
         Returns name for the given wxEndianness enumeration value.
@@ -313,23 +382,48 @@ public:
     */
     static wxString GetOperatingSystemDirectory();
 
-    //@}
+    ///@}
 
 
     /**
         @name Getters
     */
-    //@{
+    ///@{
 
     /**
-        Returns the architecture ID of this wxPlatformInfo instance.
+        @deprecated Use GetBitness() instead.
     */
     wxArchitecture GetArchitecture() const;
+
+    /**
+        Returns the architecture bitness ID of this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    wxBitness GetBitness() const;
 
     /**
         Returns the endianness ID of this wxPlatformInfo instance.
     */
     wxEndianness GetEndianness() const;
+
+    /**
+        Returns the CPU architecture name, if available.
+
+        @see wxGetCpuArchitectureName(), GetNativeCpuArchitectureName()
+
+        @since 3.1.5
+     */
+    wxString GetCpuArchitectureName() const;
+
+    /**
+        Returns the native CPU architecture name, if available.
+
+        @since 3.1.6
+
+        @see ::wxGetNativeCpuArchitectureName(), GetCpuArchitectureName()
+     */
+    wxString GetNativeCpuArchitectureName() const;
 
     /**
         Returns the run-time major version of the OS associated with this
@@ -431,18 +525,25 @@ public:
     */
     int GetToolkitMicroVersion() const;
 
-    //@}
+    ///@}
 
 
     /**
         @name String-form getters
     */
-    //@{
+    ///@{
 
     /**
-        Returns the name for the architecture of this wxPlatformInfo instance.
+        @deprecated Use GetBitnessName() instead.
     */
     wxString GetArchName() const;
+
+    /**
+        Returns the name for the architecture bitness of this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    wxString GetBitnessName() const;
 
     /**
         Returns the name for the endianness of this wxPlatformInfo instance.
@@ -473,19 +574,26 @@ public:
     */
     wxString GetPortIdShortName() const;
 
-    //@}
+    ///@}
 
 
 
     /**
         @name Setters
     */
-    //@{
+    ///@{
 
     /**
-        Sets the architecture enum value associated with this wxPlatformInfo instance.
+        @deprecated Use SetBitness() instead.
     */
     void SetArchitecture(wxArchitecture n);
+
+    /**
+        Sets the architecture bitness enum value associated with this wxPlatformInfo instance.
+
+        @since 3.1.5
+    */
+    void SetBitness(wxBitness n);
 
     /**
         Sets the endianness enum value associated with this wxPlatformInfo instance.
@@ -528,6 +636,23 @@ public:
     */
     void SetLinuxDistributionInfo(const wxLinuxDistributionInfo& di);
 
-    //@}
+    ///@}
 };
 
+/**
+    Returns @true only for MSW programs running under Wine.
+
+    Return @true if the program is running under [Wine](https://www.winehq.org/)
+    and not a "native" MSW system.
+
+    @param ver If non-null and the program is executing under Wine, it is
+        filled with Wine version information (this output parameter is only
+        available in wxWidgets 3.3.0 and later).
+    @return @true if running under Wine, @false otherwise.
+
+    @since 3.1.6
+
+    @library{wxbase}
+    @category{cfg}
+*/
+bool wxIsRunningUnderWine(wxVersionInfo* ver = nullptr);

@@ -2,7 +2,6 @@
 // Name:        src/aui/floatpane.cpp
 // Purpose:     wxaui: wx advanced user interface - docking window manager
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2005-05-17
 // Copyright:   (C) Copyright 2005-2006, Kirix Corporation, All Rights Reserved
 // Licence:     wxWindows Library Licence, Version 3.1
@@ -18,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_AUI
 
@@ -56,6 +52,7 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 {
     m_moving = false;
     m_mgr.SetManagedWindow(this);
+    m_mgr.SetArtProvider(owner_mgr->GetArtProvider()->Clone());
     m_solidDrag = true;
 
     // find out if the system supports solid window drag.
@@ -74,7 +71,7 @@ wxAuiFloatingFrame::~wxAuiFloatingFrame()
     // if we do not do this, then we can crash...
     if (m_ownerMgr && m_ownerMgr->m_actionWindow == this)
     {
-        m_ownerMgr->m_actionWindow = NULL;
+        m_ownerMgr->m_actionWindow = nullptr;
     }
 
     m_mgr.UnInit();
@@ -205,6 +202,13 @@ void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
 
 void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
 {
+    // Always sync pane's floating_pos with frame's position
+    if (m_ownerMgr)
+    {
+        m_ownerMgr->GetPane(m_paneWindow).
+            floating_pos = GetRect().GetPosition();
+    }
+
     if (!m_solidDrag)
     {
         // systems without solid window dragging need to be
@@ -243,14 +247,6 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
         m_last3Rect = m_last2Rect;
         m_last2Rect = m_lastRect;
         m_lastRect = winRect;
-
-        // However still update the internally stored position to avoid
-        // snapping back to the old one later.
-        if (m_ownerMgr)
-        {
-            m_ownerMgr->GetPane(m_paneWindow).
-                floating_pos = winRect.GetPosition();
-        }
 
         return;
     }

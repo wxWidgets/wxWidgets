@@ -9,10 +9,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #if wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
 
 #ifndef WX_PRECOMP
@@ -61,10 +57,10 @@ public:
 
     void Detach()
     {
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 
-    // DesktopToastActivatedEventHandler 
+    // DesktopToastActivatedEventHandler
     IFACEMETHODIMP Invoke(IToastNotification *sender, IInspectable* args);
 
     // DesktopToastDismissedEventHandler
@@ -94,7 +90,7 @@ class wxToastNotifMsgImpl : public wxNotificationMessageImpl
 public:
     wxToastNotifMsgImpl(wxNotificationMessageBase* notification) :
         wxNotificationMessageImpl(notification),
-        m_toastEventHandler(NULL)
+        m_toastEventHandler(nullptr)
     {
 
     }
@@ -105,7 +101,7 @@ public:
             m_toastEventHandler->Detach();
     }
 
-    virtual bool Show(int WXUNUSED(timeout)) wxOVERRIDE
+    virtual bool Show(int WXUNUSED(timeout)) override
     {
         wxCOMPtr<IXmlDocument> toastXml;
         HRESULT hr = CreateToastXML(&toastXml);
@@ -117,7 +113,7 @@ public:
         return SUCCEEDED(hr);
     }
 
-    virtual bool Close() wxOVERRIDE
+    virtual bool Close() override
     {
         if ( m_notifier.get() && m_toast.get() )
         {
@@ -129,33 +125,33 @@ public:
             return false;
     }
 
-    virtual void SetTitle(const wxString& title) wxOVERRIDE
+    virtual void SetTitle(const wxString& title) override
     {
         m_title = title;
     }
 
-    virtual void SetMessage(const wxString& message) wxOVERRIDE
+    virtual void SetMessage(const wxString& message) override
     {
         m_message = message;
     }
 
-    virtual void SetParent(wxWindow *WXUNUSED(parent)) wxOVERRIDE
+    virtual void SetParent(wxWindow *WXUNUSED(parent)) override
     {
 
     }
 
-    virtual void SetFlags(int WXUNUSED(flags)) wxOVERRIDE
+    virtual void SetFlags(int WXUNUSED(flags)) override
     {
 
     }
 
-    virtual void SetIcon(const wxIcon& WXUNUSED(icon)) wxOVERRIDE
+    virtual void SetIcon(const wxIcon& WXUNUSED(icon)) override
     {
         // Icon would have to be saved to disk (temporarily?)
         // to be used as a file:// url in the notifications XML
     }
 
-    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label)) wxOVERRIDE
+    virtual bool AddAction(wxWindowID WXUNUSED(actionid), const wxString &WXUNUSED(label)) override
     {
         return false;
     }
@@ -164,13 +160,13 @@ public:
     {
         if ( m_toastEventHandler )
             m_toastEventHandler->Detach();
-        m_notifier = NULL;
-        m_toast = NULL;
+        m_notifier = nullptr;
+        m_toast = nullptr;
     }
 
     HRESULT CreateToast(IXmlDocument *xml)
     {
-        HRESULT hr = ms_toastMgr->CreateToastNotifierWithId(rt::TempStringRef::Make(ms_appId), &m_notifier);
+        HRESULT hr = ms_toastMgr->CreateToastNotifierWithId(rt::TempStringRef(ms_appId), &m_notifier);
         if ( SUCCEEDED(hr) )
         {
             wxCOMPtr<IToastNotificationFactory> factory;
@@ -215,7 +211,7 @@ public:
         if ( SUCCEEDED(hr) )
         {
             wxCOMPtr<IXmlNodeList> nodeList;
-            hr = (*toastXml)->GetElementsByTagName(rt::TempStringRef::Make("text"), &nodeList);
+            hr = (*toastXml)->GetElementsByTagName(rt::TempStringRef("text"), &nodeList);
             if ( SUCCEEDED(hr) )
             {
                 hr = SetNodeListValueString(0, m_title, nodeList, *toastXml);
@@ -244,7 +240,7 @@ public:
     {
         wxCOMPtr<IXmlText> inputText;
 
-        HRESULT hr = xml->CreateTextNode(rt::TempStringRef::Make(str), &inputText);
+        HRESULT hr = xml->CreateTextNode(rt::TempStringRef(str), &inputText);
         if ( SUCCEEDED(hr) )
         {
             wxCOMPtr<IXmlNode> inputTextNode;
@@ -281,7 +277,7 @@ public:
     {
         // Prepare interfaces
         wxCOMPtr<IShellLink> shellLink;
-        if ( FAILED(CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+        if ( FAILED(CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
             IID_IShellLinkW, reinterpret_cast<void**>(&shellLink))) )
             return false;
         wxCOMPtr<IPersistFile> persistFile;
@@ -396,7 +392,7 @@ public:
     {
         if (ms_toastStaticsInitialized == 1)
         {
-            ms_toastMgr = NULL;
+            ms_toastMgr = nullptr;
             ms_toastStaticsInitialized = -1;
         }
     }
@@ -463,14 +459,17 @@ class wxToastNotifMsgModule : public wxModule
 public:
     wxToastNotifMsgModule()
     {
+        // Using RT API requires OLE and, importantly, we must ensure our
+        // OnExit() runs before it is uninitialized.
+        AddDependency("wxOleInitModule");
     }
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         wxToastNotifMsgImpl::Uninitalize();
     }
@@ -512,7 +511,7 @@ wxNotificationMessageImpl* wxToastNotificationHelper::CreateInstance(wxNotificat
     return new wxToastNotifMsgImpl(notification);
 #else
     wxUnusedVar(notification);
-    return NULL;
+    return nullptr;
 #endif
 }
 

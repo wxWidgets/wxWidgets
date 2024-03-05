@@ -3,7 +3,6 @@
 // Purpose:     second part of platform specific wxDataObject header -
 //              declarations of predefined wxDataObjectSimple-derived classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     21.10.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -29,21 +28,21 @@ public:
         {
             SetFormat(wxDF_DIB);
 
-            m_data = NULL;
+            m_data = nullptr;
         }
 
     // implement base class pure virtuals
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *buf) const override;
+    virtual bool SetData(size_t len, const void *buf) override;
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const override
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const wxOVERRIDE
+                             void *buf) const override
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf) wxOVERRIDE
+                         size_t len, const void *buf) override
         { return SetData(len, buf); }
 
 private:
@@ -69,17 +68,17 @@ public:
         }
 
     // implement base class pure virtuals
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *buf) const override;
+    virtual bool SetData(size_t len, const void *buf) override;
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const override
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const wxOVERRIDE
+                             void *buf) const override
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf) wxOVERRIDE
+                         size_t len, const void *buf) override
         { return SetData(len, buf); }
 
 private:
@@ -93,21 +92,21 @@ private:
 class WXDLLIMPEXP_CORE wxFileDataObject : public wxFileDataObjectBase
 {
 public:
-    wxFileDataObject() { }
+    wxFileDataObject() = default;
 
     // implement base class pure virtuals
-    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
-    virtual size_t GetDataSize() const wxOVERRIDE;
-    virtual bool GetDataHere(void *pData) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) override;
+    virtual size_t GetDataSize() const override;
+    virtual bool GetDataHere(void *pData) const override;
     virtual void AddFile(const wxString& file);
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const override
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const wxOVERRIDE
+                             void *buf) const override
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf) wxOVERRIDE
+                         size_t len, const void *buf) override
         { return SetData(len, buf); }
 
 private:
@@ -133,7 +132,7 @@ public:
     // override to set m_textFormat
     virtual bool SetData(const wxDataFormat& format,
                          size_t len,
-                         const void *buf) wxOVERRIDE;
+                         const void *buf) override;
 
 private:
     // last data object we got data in

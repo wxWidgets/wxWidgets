@@ -18,10 +18,11 @@
 #include "wx/app.h"
 #include "wx/cmdline.h"
 #include "wx/filename.h"
-#include "wx/scopedptr.h"
 #include "wx/vector.h"
 #include "wx/wfstream.h"
 #include "wx/zipstrm.h"
+
+#include <memory>
 
 class ArchiveApp: public wxAppConsole
 {
@@ -29,15 +30,15 @@ public:
     ArchiveApp()
     {
         m_forceZip64 = false;
-        m_archiveClassFactory = NULL;
-        m_filterClassFactory = NULL;
+        m_archiveClassFactory = nullptr;
+        m_filterClassFactory = nullptr;
     }
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
 
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
-    virtual int OnRun() wxOVERRIDE;
+    virtual int OnRun() override;
 
 private:
     enum ArchiveCommandType
@@ -62,7 +63,7 @@ private:
     wxVector<wxString> m_fileNames;
     bool m_forceZip64;
 
-    // At most one of these pointers is non-NULL.
+    // At most one of these pointers is non-null.
     const wxArchiveClassFactory* m_archiveClassFactory;
     const wxFilterClassFactory* m_filterClassFactory;
 
@@ -198,7 +199,7 @@ int ArchiveApp::DoCreate()
     wxTempFileOutputStream fileOutputStream(m_archiveFileName);
     if (m_archiveClassFactory)
     {
-        wxScopedPtr<wxArchiveOutputStream> archiveOutputStream(m_archiveClassFactory->NewStream(fileOutputStream));
+        std::unique_ptr<wxArchiveOutputStream> archiveOutputStream(m_archiveClassFactory->NewStream(fileOutputStream));
         if (m_archiveClassFactory->GetProtocol().IsSameAs("zip", false) && m_forceZip64)
             reinterpret_cast<wxZipOutputStream*>(archiveOutputStream.get())->SetFormat(wxZIP_FORMAT_ZIP64);
 
@@ -229,7 +230,7 @@ int ArchiveApp::DoCreate()
             return -1;
         }
 
-        wxScopedPtr<wxFilterOutputStream> filterOutputStream(m_filterClassFactory->NewStream(fileOutputStream));
+        std::unique_ptr<wxFilterOutputStream> filterOutputStream(m_filterClassFactory->NewStream(fileOutputStream));
         wxFileInputStream inputFileStream(*m_fileNames.begin());
         if (!inputFileStream.IsOk())
         {
@@ -253,7 +254,7 @@ int ArchiveApp::DoList()
 
     if (m_archiveClassFactory)
     {
-        wxScopedPtr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
+        std::unique_ptr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
         wxPrintf("Archive: %s\n", m_archiveFileName);
         wxPrintf("Length     Date       Time     Name\n");
         wxPrintf("---------- ---------- -------- ----\n");
@@ -291,7 +292,7 @@ int ArchiveApp::DoExtract()
 
     if (m_archiveClassFactory)
     {
-        wxScopedPtr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
+        std::unique_ptr<wxArchiveInputStream> archiveStream(m_archiveClassFactory->NewStream(fileInputStream));
         wxPrintf("Extracting from: %s\n", m_archiveFileName);
         for (wxArchiveEntry* entry = archiveStream->GetNextEntry(); entry;
              entry = archiveStream->GetNextEntry())
@@ -306,7 +307,7 @@ int ArchiveApp::DoExtract()
     }
     else
     {
-        wxScopedPtr<wxFilterInputStream> filterStream(m_filterClassFactory->NewStream(fileInputStream));
+        std::unique_ptr<wxFilterInputStream> filterStream(m_filterClassFactory->NewStream(fileInputStream));
         wxPrintf("Extracting single file from: %s\n", m_archiveFileName);
         wxTempFileOutputStream outputFileStream(wxFileName(m_archiveFileName).GetName());
         if (!CopyStreamData(*filterStream, outputFileStream, -1))

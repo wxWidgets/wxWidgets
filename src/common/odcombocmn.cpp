@@ -2,7 +2,6 @@
 // Name:        src/common/odcombocmn.cpp
 // Purpose:     wxOwnerDrawnComboBox common code
 // Author:      Jaakko Salli
-// Modified by:
 // Created:     Apr-30-2006
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
@@ -18,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ODCOMBOBOX
 
@@ -41,7 +37,7 @@
 // ----------------------------------------------------------------------------
 
 wxIMPLEMENT_DYNAMIC_CLASS2_XTI(wxOwnerDrawnComboBox, wxComboCtrl, \
-                               wxControlWithItems, "wx/odcombo.h")
+                               wxControlWithItems, "wx/odcombo.h");
 
 wxBEGIN_PROPERTIES_TABLE(wxOwnerDrawnComboBox)
 wxEND_PROPERTIES_TABLE()

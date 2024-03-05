@@ -2,7 +2,6 @@
 // Name:        src/common/hashmap.cpp
 // Purpose:     wxHashMap implementation
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     29/01/2002
 // Copyright:   (c) Mattia Barbon
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/hashmap.h"
 

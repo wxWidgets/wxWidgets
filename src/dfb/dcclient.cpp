@@ -18,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
@@ -99,7 +96,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxDFBDCImpl);
 wxWindowDCImpl::wxWindowDCImpl(wxDC *owner, wxWindow *win)
               : wxDFBDCImpl(owner)
 {
-    InitForWin(win, NULL);
+    InitForWin(win, nullptr);
 }
 
 void wxWindowDCImpl::InitForWin(wxWindow *win, const wxRect *rect)

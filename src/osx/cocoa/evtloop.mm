@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/evtloop.mm
 // Purpose:     implementation of wxEventLoop for OS X
 // Author:      Vadim Zeitlin, Stefan Csomor
-// Modified by:
 // Created:     2006-01-12
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 
@@ -34,9 +30,10 @@
 #include "wx/log.h"
 #include "wx/scopeguard.h"
 #include "wx/vector.h"
-#include "wx/hashmap.h"
 
 #include "wx/osx/private.h"
+
+#include <unordered_map>
 
 struct wxModalSessionStackElement
 {
@@ -46,8 +43,7 @@ struct wxModalSessionStackElement
 
 typedef wxVector<wxModalSessionStackElement> wxModalSessionStack;
 
-WX_DECLARE_HASH_MAP(wxGUIEventLoop*, wxModalSessionStack*, wxPointerHash, wxPointerEqual,
-                    wxModalSessionStackMap);
+using wxModalSessionStackMap = std::unordered_map<wxGUIEventLoop*, wxModalSessionStack*>;
 
 static wxModalSessionStackMap gs_modalSessionStackMap;
 
@@ -72,7 +68,7 @@ static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
     if ( cat | wxEVT_CATEGORY_USER_INPUT )
     {
         mask |=
-            NSLeftMouseDownMask	|
+            NSLeftMouseDownMask |
             NSLeftMouseUpMask |
             NSRightMouseDownMask |
             NSRightMouseUpMask |
@@ -120,7 +116,7 @@ wxGUIEventLoop::wxGUIEventLoop()
     m_modalSession = nil;
     m_dummyWindow = nil;
     m_modalNestedLevel = 0;
-    m_modalWindow = NULL;
+    m_modalWindow = nullptr;
     m_osxLowLevelWakeUp = false;
 }
 
@@ -171,11 +167,11 @@ bool wxGUIEventLoop::Dispatch()
                 inMode:NSDefaultRunLoopMode
                 dequeue: YES])
     {
-        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
-        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+        WXEVENTREF formerEvent = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == nullptr ? nullptr : wxTheApp->MacGetCurrentEventHandlerCallRef();
 
         if (wxTheApp)
-            wxTheApp->MacSetCurrentEvent(event, NULL);
+            wxTheApp->MacSetCurrentEvent(event, nullptr);
         m_sleepTime = 0.0;
         [NSApp sendEvent: event];
 
@@ -215,7 +211,7 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
         
         switch (response) 
         {
-            case NSRunContinuesResponse:
+            case NSModalResponseContinue:
             {
                 [[NSRunLoop currentRunLoop]
                         runMode:NSDefaultRunLoopMode
@@ -229,8 +225,8 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
                 
                 return -1;
             }
-            case NSRunStoppedResponse:
-            case NSRunAbortedResponse:
+            case NSModalResponseStop:
+            case NSModalResponseAbort:
                 return -1;
             default:
                 // nested native loops may return other codes here, just ignore them
@@ -355,7 +351,7 @@ void wxGUIEventLoop::OSXDoStop()
     // We should only stop the top level event loop.
     if ( gs_loopNestingLevel <= 1 )
     {
-        [NSApp stop:0];
+        [NSApp stop:nullptr];
     }
 
     // For the top level loop only calling stop: is not enough when called from
@@ -403,14 +399,14 @@ CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
 {
     m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
-    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    wxASSERT_MSG( m_modalWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = m_modalWindow->GetWXWindow();
 }
 
 wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 {
-    m_modalWindow = NULL;
-    wxASSERT_MSG( modalNativeWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalWindow = nullptr;
+    wxASSERT_MSG( modalNativeWindow != nullptr, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = modalNativeWindow;
 }
 
@@ -459,7 +455,7 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
     m_modalNestedLevel++;
     if ( m_modalNestedLevel > 1 )
     {
-        wxModalSessionStack* stack = NULL;
+        wxModalSessionStack* stack = nullptr;
         
         if ( m_modalNestedLevel == 2 )
         {
@@ -493,7 +489,7 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
             modalWindow->Show();
         
         wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
-        wxASSERT_MSG( now != NULL, "must pass in a toplevel window for modal event loop" );
+        wxASSERT_MSG( now != nullptr, "must pass in a toplevel window for modal event loop" );
         nsnow = now ? now->GetWXWindow() : nil;
     }
     else
@@ -509,12 +505,12 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
         [nsnow orderOut:nil];
     }
     m_modalSession = [NSApp beginModalSessionForWindow:nsnow];
-    wxASSERT_MSG(m_modalSession != NULL, "modal session couldn't be started");
+    wxASSERT_MSG(m_modalSession != nullptr, "modal session couldn't be started");
 }
 
 void wxGUIEventLoop::EndModalSession()
 {
-    wxASSERT_MSG(m_modalSession != NULL, "no modal session active");
+    wxASSERT_MSG(m_modalSession != nullptr, "no modal session active");
     
     wxASSERT_MSG(m_modalNestedLevel > 0, "incorrect modal nesting level");
     
@@ -561,72 +557,15 @@ void wxGUIEventLoop::EndModalSession()
 // 
 //
 
-wxWindowDisabler::wxWindowDisabler(bool disable)
+void wxWindowDisabler::AfterDisable(wxWindow* winToSkip)
 {
-    m_modalEventLoop = NULL;
-    m_disabled = disable;
-    if ( disable )
-        DoDisable();
-}
-
-wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
-{
-    m_disabled = true;
-    DoDisable(winToSkip);
-}
-
-void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
-{    
-    // remember the top level windows which were already disabled, so that we
-    // don't reenable them later
-    m_winDisabled = NULL;
-    
-    wxWindowList::compatibility_iterator node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-    {
-        wxWindow *winTop = node->GetData();
-        if ( winTop == winToSkip )
-            continue;
-        
-        // we don't need to disable the hidden or already disabled windows
-        if ( winTop->IsEnabled() && winTop->IsShown() )
-        {
-            winTop->Disable();
-        }
-        else
-        {
-            if ( !m_winDisabled )
-            {
-                m_winDisabled = new wxWindowList;
-            }
-            
-            m_winDisabled->Append(winTop);
-        }
-    }
-    
     m_modalEventLoop = (wxEventLoop*)wxEventLoopBase::GetActive();
     if (m_modalEventLoop)
         m_modalEventLoop->BeginModalSession(winToSkip);
 }
 
-wxWindowDisabler::~wxWindowDisabler()
+void wxWindowDisabler::BeforeEnable()
 {
-    if ( !m_disabled )
-        return;
-    
     if (m_modalEventLoop)
         m_modalEventLoop->EndModalSession();
-    
-    wxWindowList::compatibility_iterator node;
-    for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
-    {
-        wxWindow *winTop = node->GetData();
-        if ( !m_winDisabled || !m_winDisabled->Find(winTop) )
-        {
-            winTop->Enable();
-        }
-        //else: had been already disabled, don't reenable
-    }
-    
-    delete m_winDisabled;
 }

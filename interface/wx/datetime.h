@@ -94,7 +94,7 @@ public:
         /// the time in the current time zone
         Local,
 
-        //@{
+        ///@{
         /// zones from GMT (= Greenwich Mean Time): they're guaranteed to be
         /// consequent numbers, so writing something like `GMT0 + offset' is
         /// safe if abs(offset) <= 12
@@ -107,7 +107,7 @@ public:
         GMT7, GMT8, GMT9, GMT10, GMT11, GMT12, GMT13,
         // Note that GMT12 and GMT_12 are not the same: there is a difference
         // of exactly one day between them
-        //@}
+        ///@}
 
         // some symbolic names for TZ
 
@@ -147,8 +147,7 @@ public:
         NZST = GMT12,       //!< Standard Time
         NZDT = GMT13,       //!< Daylight Saving Time
 
-        /// Universal Coordinated Time = the new and politically correct name
-        /// for GMT.
+        /// Universal Coordinated Time
         UTC = GMT0
     };
 
@@ -216,7 +215,18 @@ public:
     enum NameFlags
     {
         Name_Full = 0x01,       ///< return full name
-        Name_Abbr = 0x02        ///< return abbreviated name
+        Name_Abbr = 0x02,       ///< return abbreviated name
+        Name_Shortest = 0x03    ///< return shortest name @since_wx{3.3.0}
+    };
+
+    /**
+        Context for name use in GetWeekDayName() and GetMonthName() functions.
+        @since 3.3.0
+    */
+    enum NameContext
+    {
+        Context_Formatting,      ///< name for use in date formatting context
+        Context_Standalone       ///< name for use in standalone context
     };
 
     /**
@@ -236,6 +246,63 @@ public:
         Sunday_First     ///< week starts with a Sunday
     };
 
+    /**
+        Class representing a name form.
+
+        This class describes the form of month or weekday names used in
+        formatting a date. It contains attributes for the requested name
+        length and the formatting context. It is used as a parameter to
+        the GetWeekDayName() and GetMonthName() functions.
+        @since 3.3.0
+     */
+    class NameForm
+    {
+    public:
+        /**
+            Constructor for a name form.
+
+            Initializes this object to use the given form of the name (full by
+            default) in the formatting context.
+
+            Note that this constructor is _not_ explicit, to allow the existing
+            code which passes wxDateTime::NameFlags to various functions now
+            taking NameForm to work. Please beware of the implicit conversions
+            here.
+         */
+        NameForm(NameFlags flags = Name_Full) : m_flags(flags) {}
+
+        /// Set the flag for full month or weekday names.
+        NameForm& Full();
+
+        /// Set the flag for abbreviated month or weekday names.
+        NameForm& Abbr();
+
+        /// Set the flag for shortest month or weekday names.
+        NameForm& Shortest();
+
+        /**
+            Set the context for date formatting.
+
+            In some languages, month and day names have different forms depending
+            on whether they're used on their own, e.g. as names of the months in the
+            calendar, or as part of a date representation.
+
+            Use this function if you need to localize a date format or in another
+            similar context.
+
+            @see Standalone()
+        */
+        NameForm& Formatting();
+
+        /// Set the context for standalone use.
+        NameForm& Standalone();
+
+        /// Return the flags describing the requested name length.
+        NameFlags GetFlags() const;
+
+        /// Return the context of name usage.
+        NameContext GetContext() const;
+    };
 
     /**
         Class representing a time zone.
@@ -274,7 +341,7 @@ public:
 
         This struct is analogous to standard C <code>struct tm</code> and uses
         the same, not always immediately obvious, conventions for its members:
-        notably its mon and mday fields count from 0 while yday counts from 1.
+        notably its mon and yday fields count from 0 while mday counts from 1.
      */
     struct Tm
     {
@@ -313,7 +380,7 @@ public:
         you should use IsValid() method to check that the values were correct
         as constructors cannot return an error code.
     */
-    //@{
+    ///@{
 
     /**
         Default constructor. Use one of the Set() functions to initialize the
@@ -480,7 +547,7 @@ public:
     */
     wxDateTime& operator=(const struct tm& tm);
 
-    //@}
+    ///@}
 
 
 
@@ -489,9 +556,9 @@ public:
 
         Here are the trivial accessors. Other functions, which might have to
         perform some more complicated calculations to find the answer are under
-        the "Date Arithmetics" section.
+        the "Date Arithmetic" section.
     */
-    //@{
+    ///@{
 
     /**
         Returns the date and time in DOS format.
@@ -666,7 +733,7 @@ public:
     */
     bool IsWorkDay(Country country = Country_Default) const;
 
-    //@}
+    ///@}
 
 
 
@@ -683,7 +750,7 @@ public:
         using any other operators or IsEarlierThan() or IsLaterThan() functions
         would result in an assert because their result is not well-defined.
     */
-    //@{
+    ///@{
 
     /**
         Returns @true if this date precedes the given one.
@@ -733,15 +800,15 @@ public:
     */
     bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
 
-    //@}
+    ///@}
 
 
 
     /**
-        @name Date Arithmetics
+        @name Date Arithmetic
 
         These functions carry out
-        @ref overview_datetime_arithmetics "arithmetics" on the wxDateTime
+        @ref overview_datetime_arithmetics "arithmetic" on the wxDateTime
         objects. As explained in the overview, either wxTimeSpan or wxDateSpan
         may be added to wxDateTime, hence all functions are overloaded to
         accept both arguments.
@@ -752,7 +819,7 @@ public:
         the object to which it is applied. The operators "-=" and "+=" are
         defined to be equivalent to the second forms of these functions.
     */
-    //@{
+    ///@{
 
     /**
         Adds the given date span to this object.
@@ -840,7 +907,7 @@ public:
     */
     wxTimeSpan operator-(const wxDateTime& dt2) const;
 
-    //@}
+    ///@}
 
 
 
@@ -849,11 +916,11 @@ public:
 
         See @ref datetime_formatting
     */
-    //@{
+    ///@{
 
     /**
         This function does the same as the standard ANSI C @c strftime(3)
-        function (http://www.cplusplus.com/reference/clibrary/ctime/strftime.html).
+        function (https://cplusplus.com/reference/ctime/strftime/).
         Please see its description for the meaning of @a format parameter.
 
         Notice that POSIX @c "%g", @c "%G", @c "%V" and @c "%z" format
@@ -978,7 +1045,7 @@ public:
             Will be filled with the iterator pointing to the location where the
             parsing stopped if the function returns @true. If the entire string
             was consumed, it is set to @c date.end(). Notice that this argument
-            must be non-@NULL.
+            must be non-null.
         @return
             @true if at least part of the string was parsed successfully,
             @false otherwise.
@@ -1061,7 +1128,7 @@ public:
     */
     bool ParseTime(const wxString& time, wxString::const_iterator *end);
 
-    //@}
+    ///@}
 
 
 
@@ -1076,7 +1143,7 @@ public:
         None of the functions in this section modify the time part of the
         wxDateTime, they only work with the date part of it.
     */
-    //@{
+    ///@{
 
     /**
         Returns the copy of this object to which SetToLastMonthDay() was
@@ -1195,7 +1262,7 @@ public:
     */
     wxDateTime& SetToYearDay(wxDateTime_t yday);
 
-    //@}
+    ///@}
 
 
 
@@ -1208,7 +1275,7 @@ public:
 
         Related functions in other groups: wxDateTime(double), Set(double)
     */
-    //@{
+    ///@{
 
     /**
         Synonym for GetJulianDayNumber().
@@ -1245,7 +1312,7 @@ public:
     */
     double GetRataDie() const;
 
-    //@}
+    ///@}
 
 
 
@@ -1262,7 +1329,7 @@ public:
 
         Related functions in other groups: GetBeginDST(), GetEndDST()
     */
-    //@{
+    ///@{
 
     /**
         Transform the date from the given time zone to the local one.
@@ -1318,7 +1385,7 @@ public:
     */
     wxDateTime ToUTC(bool noDST = false) const;
 
-    //@}
+    ///@}
 
 
 
@@ -1395,55 +1462,64 @@ public:
     /**
         Return the standard English name of the given month.
 
-        This function always returns "January" or "Jan" for January, use
+        This function always returns "January", "Jan" or "JA" for January, use
         GetMonthName() to retrieve the name of the month in the users current
         locale.
 
         @param month
             One of wxDateTime::Jan, ..., wxDateTime::Dec values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetEnglishWeekDayName()
 
         @since 2.9.0
      */
     static wxString GetEnglishMonthName(Month month,
-                                        NameFlags flags = Name_Full);
+                                        NameForm form = {});
 
     /**
         Return the standard English name of the given week day.
 
-        This function always returns "Monday" or "Mon" for Monday, use
-        GetWeekDayName() to retrieve the name of the month in the users current
+        This function always returns "Monday", "Mon" or "Mo" for Monday, use
+        GetWeekDayName() to retrieve the name of the month in the user's current
         locale.
 
         @param weekday
             One of wxDateTime::Sun, ..., wxDateTime::Sat values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetEnglishMonthName()
 
         @since 2.9.0
      */
     static wxString GetEnglishWeekDayName(WeekDay weekday,
-                                          NameFlags flags = Name_Full);
+                                          NameFlags form = {});
 
     /**
-        Gets the full (default) or abbreviated name of the given month.
+        Gets the full (default), abbreviated or shortest name of the given month.
 
         This function returns the name in the current locale, use
         GetEnglishMonthName() to get the untranslated name if necessary.
 
         @param month
             One of wxDateTime::Jan, ..., wxDateTime::Dec values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetWeekDayName()
     */
-    static wxString GetMonthName(Month month, NameFlags flags = Name_Full);
+    static wxString GetMonthName(Month month, NameFlags form = {});
 
     /**
         Returns the number of days in the given year. The only supported value
@@ -1479,27 +1555,30 @@ public:
     static tm* GetTmNow();
 
     /**
-        Gets the full (default) or abbreviated name of the given week day.
+        Gets the full (default), abbreviated or shortest name of the given week day.
 
         This function returns the name in the current locale, use
         GetEnglishWeekDayName() to get the untranslated name if necessary.
 
         @param weekday
             One of wxDateTime::Sun, ..., wxDateTime::Sat values.
-        @param flags
-            Either Name_Full (default) or Name_Abbr.
+        @param form
+            Name form consisting of the flags (Name_Full, Name_Abbr, or Name_Shortest)
+            and the context (Context_Formatting or Context_Standalone)
+            The default is Name_Full in Context_Formatting.
+            Example: wxNameForm().Abbr().Standalone()
 
         @see GetMonthName()
     */
     static wxString GetWeekDayName(WeekDay weekday,
-                                   NameFlags flags = Name_Full);
+                                   NameForm form = {});
 
     /**
         Returns @true if DST was used in the given year (the current one by
         default) in the given country.
     */
     static bool IsDSTApplicable(int year = Inv_Year,
-                                  Country country = Country_Default);
+                                Country country = Country_Default);
 
     /**
          Acquires the first weekday of a week based on locale and/or OS settings.
@@ -1527,7 +1606,7 @@ public:
     static bool IsWestEuropeanCountry(Country country = Country_Default);
 
     /**
-        Returns the object corresponding to the current time.
+        Returns the object corresponding to the current time in local time zone.
 
         Example:
 
@@ -1572,11 +1651,11 @@ public:
     static wxDateTime Today();
 
     /**
-        Returns the object corresponding to the current UTC time including the
+        Returns the object corresponding to the current time including the
         milliseconds.
 
-        Notice that unlike Now(), this method creates a wxDateTime object
-        corresponding to UTC, not local, time.
+        Like Now(), this method creates the wxDateTime object corresponding to
+        the current moment in local time.
 
         @see Now(), wxGetUTCTimeMillis()
     */
@@ -1600,18 +1679,111 @@ const wxDateTime wxDefaultDateTime;
 /**
     @class wxDateTimeWorkDays
 
-    @todo Write wxDateTimeWorkDays documentation.
+    Holiday authority that classifies all Saturdays and Sundays
+    as holidays.
 
     @library{wxbase}
     @category{data}
 */
-class wxDateTimeWorkDays
+class wxDateTimeWorkDays : public wxDateTimeHolidayAuthority
 {
-public:
-
+protected:
+    /**
+        Override which returns @true if provided date is a Saturday and Sunday.
+    */
+    virtual bool DoIsHoliday(const wxDateTime& dt) const override;
+    /**
+        Override which returns all Saturdays and Sundays from a provided range.
+    */
+    virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                        const wxDateTime& dtEnd,
+                                        wxDateTimeArray& holidays) const override;
 };
 
+/**
+    @class wxDateTimeUSCatholicFeasts
 
+    Holiday authority that returns Catholic holy days of obligation,
+    as observed in the United States. This includes:
+
+    - Solemnity of Mary, Mother of God
+    - Easter (moveable feast)
+    - Ascension (moveable feast)
+    - Assumption of the Blessed Virgin Mary
+    - All Saints Day
+    - Immaculate Conception of the Blessed Virgin Mary
+    - Christmas
+
+    @library{wxbase}
+    @category{data}
+
+    @since 3.3.0
+*/
+class wxDateTimeUSCatholicFeasts : public wxDateTimeHolidayAuthority
+{
+public:
+    /**
+        Returns the date for Easter for a given year.
+    */
+    static wxDateTime GetEaster(int year);
+
+    /**
+        Returns the date for Ascension for a given year.
+        Celebrated on the 40th day of Easter/
+        sixth Thursday after Easter Sunday.
+    */
+    static wxDateTime GetThursdayAscension(int year);
+
+    /**
+        Returns the date for Ascension for a given year.
+        This is the same as GetThursdayAscension(),
+        but moved to the Sunday following the traditional Ascension
+        that falls on a Thursday.
+    */
+    static wxDateTime GetSundayAscension(int year);
+
+protected:
+    /**
+        Override which returns @true if provided date is a holy day of obligation.
+    */
+    bool DoIsHoliday(const wxDateTime& dt) const override;
+
+    /**
+        Override to determine the holy days of obligation within a date range.
+    */
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
+};
+
+/**
+    @class wxDateTimeChristianHolidays
+
+    Holiday authority that returns holidays common to all Christian religions.
+    This includes:
+
+    - Easter (moveable feast)
+    - Christmas
+
+    @library{wxbase}
+    @category{data}
+
+    @since 3.3.0
+*/
+class WXDLLIMPEXP_BASE wxDateTimeChristianHolidays : public wxDateTimeUSCatholicFeasts
+{
+protected:
+    /**
+        Override which returns @true if provided date is Easter or Christmas.
+    */
+    bool DoIsHoliday(const wxDateTime& dt) const override;
+    /**
+        Override to determine the holidays within a date range.
+    */
+    size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                const wxDateTime& dtEnd,
+                                wxDateTimeArray& holidays) const override;
+};
 
 /**
     @class wxDateSpan
@@ -2152,7 +2324,12 @@ public:
 /**
     @class wxDateTimeHolidayAuthority
 
-    @todo Write wxDateTimeHolidayAuthority documentation.
+    Class which decides whether a given
+    date is a holiday and is used by all functions working with "work days".
+
+    New classes can be derived from this to determine specific holidays.
+    These classes should override DoIsHoliday() and DoGetHolidaysInRange(),
+    and be passed to wxDateTimeHolidayAuthority::AddAuthority() to be used.
 
     @library{wxbase}
     @category{data}
@@ -2160,6 +2337,40 @@ public:
 class wxDateTimeHolidayAuthority
 {
 public:
+    /// Returns @true if the given date is a holiday.
+    static bool IsHoliday(const wxDateTime& dt);
 
+    /**
+        Fills the provided array with all holidays in the given range, returns
+        the number of them.
+     */
+    static size_t GetHolidaysInRange(const wxDateTime& dtStart,
+                                     const wxDateTime& dtEnd,
+                                     wxDateTimeArray& holidays);
+
+    /// Clears the list of holiday authorities.
+    static void ClearAllAuthorities();
+
+    /**
+        Adds a new holiday authority.
+
+        The pointer will be deleted by wxDateTimeHolidayAuthority.
+     */
+    static void AddAuthority(wxDateTimeHolidayAuthority* auth);
+
+protected:
+    /**
+        This function should be overridden to determine whether
+        a given day is a holiday.
+     */
+    virtual bool DoIsHoliday(const wxDateTime& dt) const = 0;
+
+    /**
+        This function should be overridden to fill an array with
+        all holidays between the two given dates.
+     */
+    virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                        const wxDateTime& dtEnd,
+                                        wxDateTimeArray& holidays) const = 0;
 };
 

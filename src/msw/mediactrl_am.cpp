@@ -2,7 +2,6 @@
 // Name:        src/msw/mediactrl_am.cpp
 // Purpose:     ActiveMovie/WMP6/PocketPC 2000 Media Backend for Windows
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by:
 // Created:     01/29/05
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
@@ -36,9 +35,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_MEDIACTRL && wxUSE_ACTIVEX
 
@@ -80,6 +76,7 @@
 //
 //  Some of these are not used but are kept here for future reference anyway
 //---------------------------------------------------------------------------
+wxCLANG_WARNING_SUPPRESS(unused-const-variable)
 const IID IID_IActiveMovie          = {0x05589FA2,0xC356,0x11CE,{0xBF,0x01,0x00,0xAA,0x00,0x55,0x59,0x5A}};
 const IID IID_IActiveMovie2         = {0xB6CD6554,0xE9CB,0x11D0,{0x82,0x1F,0x00,0xA0,0xC9,0x1F,0x9C,0xA0}};
 const IID IID_IActiveMovie3         = {0x265EC140,0xAE62,0x11D1,{0x85,0x00,0x00,0xA0,0xC9,0x1F,0x9C,0xA0}};
@@ -109,6 +106,7 @@ const IID IID_IFilterGraph =            {0x56A8689F, 0x0AD4, 0x11CE,{0xB0, 0x3A,
 const IID IID_IGraphBuilder =           {0x56A868A9, 0x0AD4, 0x11CE,{0xB0, 0x3A, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70}};
 const IID IID_IVMRFilterConfig9 =       {0x5A804648, 0x4F66, 0x4867,{0x9C, 0x43, 0x4F, 0x5C, 0x82, 0x2C, 0xF1, 0xB8}};
 const IID IID_IBaseFilter =             {0x56A86895, 0x0AD4, 0x11CE,{0xB0, 0x3A, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70}};
+wxCLANG_WARNING_RESTORE(unused-const-variable)
 
 //---------------------------------------------------------------------------
 //  QUARTZ COM INTERFACES (dumped from quartz.idl from MSVC COM Browser)
@@ -822,44 +820,44 @@ public:
                                      const wxSize& size,
                                      long style,
                                      const wxValidator& validator,
-                                     const wxString& name) wxOVERRIDE;
+                                     const wxString& name) override;
 
-    virtual bool Play() wxOVERRIDE;
-    virtual bool Pause() wxOVERRIDE;
-    virtual bool Stop() wxOVERRIDE;
+    virtual bool Play() override;
+    virtual bool Pause() override;
+    virtual bool Stop() override;
 
-    virtual bool Load(const wxString& fileName) wxOVERRIDE;
-    virtual bool Load(const wxURI& location) wxOVERRIDE;
-    virtual bool Load(const wxURI& location, const wxURI& proxy) wxOVERRIDE;
+    virtual bool Load(const wxString& fileName) override;
+    virtual bool Load(const wxURI& location) override;
+    virtual bool Load(const wxURI& location, const wxURI& proxy) override;
 
     bool DoLoad(const wxString& location);
     void FinishLoad();
 
-    virtual wxMediaState GetState() wxOVERRIDE;
+    virtual wxMediaState GetState() override;
 
-    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
-    virtual wxLongLong GetPosition() wxOVERRIDE;
-    virtual wxLongLong GetDuration() wxOVERRIDE;
+    virtual bool SetPosition(wxLongLong where) override;
+    virtual wxLongLong GetPosition() override;
+    virtual wxLongLong GetDuration() override;
 
-    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
-    wxSize GetVideoSize() const wxOVERRIDE;
+    virtual void Move(int x, int y, int w, int h) override;
+    wxSize GetVideoSize() const override;
 
-    virtual double GetPlaybackRate() wxOVERRIDE;
-    virtual bool SetPlaybackRate(double) wxOVERRIDE;
+    virtual double GetPlaybackRate() override;
+    virtual bool SetPlaybackRate(double) override;
 
-    virtual double GetVolume() wxOVERRIDE;
-    virtual bool SetVolume(double) wxOVERRIDE;
+    virtual double GetVolume() override;
+    virtual bool SetVolume(double) override;
 
-    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
+    virtual bool ShowPlayerControls(wxMediaCtrlPlayerControls flags) override;
 
     void DoGetDownloadProgress(wxLongLong*, wxLongLong*);
-    virtual wxLongLong GetDownloadProgress() wxOVERRIDE
+    virtual wxLongLong GetDownloadProgress() override
     {
         wxLongLong progress, total;
         DoGetDownloadProgress(&progress, &total);
         return progress;
     }
-    virtual wxLongLong GetDownloadTotal() wxOVERRIDE
+    virtual wxLongLong GetDownloadTotal() override
     {
         wxLongLong progress, total;
         DoGetDownloadProgress(&progress, &total);
@@ -931,7 +929,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend);
 wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 {
     wxChar szError[MAX_ERROR_TEXT_LEN];
-    if( m_lpAMGetErrorText != NULL &&
+    if( m_lpAMGetErrorText != nullptr &&
        (*m_lpAMGetErrorText)(hrdsv, szError, MAX_ERROR_TEXT_LEN) == 0)
     {
         return wxString::Format(wxT("DirectShow error \"%s\" \n")
@@ -962,12 +960,12 @@ wxString wxAMMediaBackend::GetErrorString(HRESULT hrdsv)
 // wxAMMediaBackend Constructor
 //---------------------------------------------------------------------------
 wxAMMediaBackend::wxAMMediaBackend()
-                 :m_pAX(NULL),
-                  m_pAM(NULL),
-                  m_pMP(NULL),
+                 :m_pAX(nullptr),
+                  m_pAM(nullptr),
+                  m_pMP(nullptr),
                   m_bestSize(wxDefaultSize)
 {
-   m_evthandler = NULL;
+   m_evthandler = nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -1017,11 +1015,11 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     // Now determine which (if any) media player interface is
     // available - IMediaPlayer or IActiveMovie
-    if( ::CoCreateInstance(CLSID_MediaPlayer, NULL,
+    if( ::CoCreateInstance(CLSID_MediaPlayer, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IMediaPlayer, (void**)&m_pMP) != 0 )
     {
-        if( ::CoCreateInstance(CLSID_ActiveMovie, NULL,
+        if( ::CoCreateInstance(CLSID_ActiveMovie, nullptr,
                                   CLSCTX_INPROC_SERVER,
                                   IID_IActiveMovie, (void**)&m_pAM) != 0 )
             return false;
@@ -1104,7 +1102,7 @@ bool wxAMMediaBackend::Load(const wxURI& location)
 {
     //  Turn off loading from a proxy as user
     //  may have set it previously
-    INSPlay* pPlay = NULL;
+    INSPlay* pPlay = nullptr;
     GetAM()->QueryInterface(IID_INSPlay, (void**) &pPlay);
     if(pPlay)
     {
@@ -1121,7 +1119,7 @@ bool wxAMMediaBackend::Load(const wxURI& location)
 bool wxAMMediaBackend::Load(const wxURI& location, const wxURI& proxy)
 {
     // Set the proxy of the NETSHOW interface
-    INSPlay* pPlay = NULL;
+    INSPlay* pPlay = nullptr;
     GetAM()->QueryInterface(IID_INSPlay, (void**) &pPlay);
 
     if(pPlay)
@@ -1452,14 +1450,14 @@ bool wxAMMediaBackend::SetPlaybackRate(double dRate)
 void wxAMMediaBackend::DoGetDownloadProgress(wxLongLong* pLoadProgress,
                                              wxLongLong* pLoadTotal)
 {
-    IUnknown* pFG = NULL;
+    IUnknown* pFG = nullptr;
 
     HRESULT hr = m_pAM->get_FilterGraph(&pFG);
 
-    // notice that the call above may return S_FALSE and leave pFG NULL
+    // notice that the call above may return S_FALSE and leave pFG null
     if(SUCCEEDED(hr) && pFG)
     {
-        IAMOpenProgress* pOP = NULL;
+        IAMOpenProgress* pOP = nullptr;
         hr = pFG->QueryInterface(IID_IAMOpenProgress, (void**)&pOP);
         if(SUCCEEDED(hr) && pOP)
         {

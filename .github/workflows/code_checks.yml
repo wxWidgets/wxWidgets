@@ -1,0 +1,99 @@
+# This workflow does some quick checks.
+name: Code Checks
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  check-unix:
+    runs-on: ubuntu-20.04
+    name: Check Spelling
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install codespell
+        run: |
+          pip3 install --no-warn-script-location codespell==1.17.1
+
+      - name: Run codespell
+        run: |
+          CODESPELL=$HOME/.local/bin/codespell ./misc/scripts/spellcheck
+
+
+  check-whitespace:
+    runs-on: ubuntu-20.04
+    name: Check Whitespace
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check for trailing whitespace and TABs
+        run: |
+            git fetch --depth=1 origin master
+            git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol,tab-in-indent \
+                diff --check origin/master \
+                ':!.gitmodules' \
+                ':!Makefile.in' \
+                ':!config.guess' \
+                ':!config.sub' \
+                ':!configure' \
+                ':!**/descrip.mms' \
+                ':!install-sh' \
+                ':!build/autogen.mk' \
+                ':!build/bakefiles/make_dist.mk' \
+                ':!build/bakefiles/scintilla.bkl' \
+                ':!docs/doxygen/doxygen-awesome-css/*' \
+                ':!samples/widgets/widgets.bkl' \
+                ':!tests/test.bkl' \
+                ':!**/*akefile*' \
+                ':!**/*.pbxproj' \
+                ':!**/Info*.plist*' \
+                ':!**/*.sln' \
+                ':!**/*.vcproj' \
+                ':!**/*.xpm'
+
+
+  check-mixed-eol:
+    runs-on: ubuntu-20.04
+    name: Check Mixed EOL
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dos2unix
+        run: |
+          sudo apt-get install -y dos2unix
+
+      - name: Check for mixed EOL
+        run: |
+            ./misc/scripts/check_mixed_eol.sh
+
+  check-cxx-style:
+    runs-on: ubuntu-20.04
+    name: Check C++ Style
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check for obsolete macros use
+        run: |
+            git fetch --depth=1 origin master
+            if git diff origin/master \
+               ':**.h' ':**.cpp' \
+               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^"_@A-Za-z0-9]NULL([- ,;()+*/%&=!?]|$))'; then
+              echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
+              exit 1
+            fi

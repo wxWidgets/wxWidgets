@@ -19,11 +19,11 @@
 class wxControlWithItemsGeneric : public wxControlWithItemsBase
 {
 public:
-    wxControlWithItemsGeneric() { }
+    wxControlWithItemsGeneric() = default;
 
     virtual void DoInitItemClientData()
     {
-        m_itemsClientData.resize(GetCount(), NULL);
+        m_itemsClientData.resize(GetCount(), nullptr);
     }
 
     virtual void DoSetItemClientData(unsigned int n, void *clientData)
@@ -79,7 +79,7 @@ protected:
             // it's more efficient to insert everything at once and then update
             // for big number of items to avoid moving the array contents
             // around (which would result in O(N^2) algorithm)
-            m_itemsClientData.Insert(NULL, pos, numItems);
+            m_itemsClientData.Insert(nullptr, pos, numItems);
 
             for ( unsigned int n = 0; n < numItems; ++n, ++pos )
                 m_itemsClientData[pos] = clientData[n];
@@ -102,7 +102,7 @@ private:
             if ( type == wxClientData_None )
             {
                 // we didn't have the client data before and are not asked to
-                // store it now neither
+                // store it now either
                 return false;
             }
 

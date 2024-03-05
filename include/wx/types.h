@@ -247,10 +247,6 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "I64"
-#elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
-    #define wxLongLong_t __int64
-    #define wxLongLongSuffix i64
-    #define wxLongLongFmtSpec "L"
 #elif defined(__MINGW32__) && \
     (defined(__USE_MINGW_ANSI_STDIO) && (__USE_MINGW_ANSI_STDIO != 1))
     #define wxLongLong_t long long
@@ -277,17 +273,8 @@ typedef wxUint32 wxDword;
         wxLL() and wxULL() macros allow to define 64 bit constants in a
         portable way.
      */
-    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-        #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
-        #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
-    #else
-        /*
-            Currently only Borland compiler has broken concatenation operator
-            and this compiler is known to use [u]i64 suffix.
-         */
-        #define wxLL(x) wxAPPEND_i64(x)
-        #define wxULL(x) wxAPPEND_ui64(x)
-    #endif
+    #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
+    #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
 
     typedef wxLongLong_t wxInt64;
     typedef wxULongLong_t wxUint64;
@@ -354,17 +341,9 @@ typedef wxUint32 wxDword;
 #endif
 
 /*
-    We can't rely on Windows _W64 being defined as windows.h may not be
-    included so define our own equivalent: this should be used with types
-    like WXLPARAM or WXWPARAM which are 64 bit under Win64 to avoid warnings
-    each time we cast it to a pointer or a handle (which results in hundreds
-    of warnings as Win32 API often passes pointers in them)
+    This macro is obsolete and defined only for compatibility, don't use.
  */
-#ifdef __VISUALC__
-    #define wxW64 __w64
-#else
-    #define wxW64
-#endif
+#define wxW64
 
 /*
    Define signed and unsigned integral types big enough to contain all of long,
@@ -384,7 +363,7 @@ typedef wxUint32 wxDword;
        to wxIntPtr (which we do often as this is what it is defined for) in 32
        bit build with MSVC.
      */
-    typedef wxW64 ssize_t wxIntPtr;
+    typedef ssize_t wxIntPtr;
     typedef size_t wxUIntPtr;
 #else
     /*

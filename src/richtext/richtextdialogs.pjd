@@ -66,16 +66,13 @@
     <string name="cpp_implementation_preamble">"// For compilers that support precompilation, includes &quot;wx/wx.h&quot;.
 #include &quot;wx/wxprec.h&quot;
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include &quot;wx/wx.h&quot;
 #endif
 
 "</string>
-    <string name="cpp_function_declaration_comment">"	/// %BODY%
+    <string name="cpp_function_declaration_comment">" /// %BODY%
 "</string>
     <string name="cpp_function_implementation_comment">"
 /*!

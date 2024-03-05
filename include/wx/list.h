@@ -52,18 +52,19 @@ typedef wxObjectListNode wxNode;
 
 #define wxLIST_COMPATIBILITY
 
-#define WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl) \
-    WX_DECLARE_LIST_WITH_DECL(elT, liT, decl)
-#define WX_DECLARE_LIST_PTR_3(elT, dummy1, liT, dummy2, decl) \
-    WX_DECLARE_LIST_3(elT, dummy1, liT, dummy2, decl)
+#define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
+    WX_DECLARE_LIST_3(elT, elT, liT, dummy, decl)
+
+#define WX_DECLARE_LIST_PTR_3(elT, baseT, liT, dummy, decl) \
+    WX_DECLARE_LIST_3(elT, baseT, liT, dummy, decl)
 
 #define WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
     WX_DECLARE_LIST_WITH_DECL(elT, liT, decl)
 #define WX_DECLARE_LIST_PTR_2(elT, liT, dummy, decl) \
-    WX_DECLARE_LIST_2(elT, liT, dummy, decl) \
+    WX_DECLARE_LIST_2(elT, liT, dummy, decl)
 
-#define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
-    WX_DECLARE_LIST_XO(elT*, liT, decl)
+#define WX_DECLARE_LIST_3(elT, baseT, liT, dummy, decl) \
+    WX_DECLARE_LIST_XO(elT*, baseT*, liT, decl)
 
 template<class T>
 class wxList_SortFunction
@@ -71,7 +72,7 @@ class wxList_SortFunction
 public:
     wxList_SortFunction(wxSortCompareFunction f) : m_f(f) { }
     bool operator()(const T& i1, const T& i2)
-      { return m_f((T*)&i1, (T*)&i2) < 0; }
+      { return m_f(&i1, &i2) < 0; }
 private:
     wxSortCompareFunction m_f;
 };
@@ -98,7 +99,7 @@ private:
     reference to Foo::Bar() function
 
 
-    Note 2: the EmptyList is needed to allow having a NULL pointer-like
+    Note 2: the EmptyList is needed to allow having a null pointer-like
     invalid iterator. We used to use just an uninitialized iterator object
     instead but this fails with some debug/checked versions of STL, notably the
     glibc version activated with _GLIBCXX_DEBUG, so we need to have a separate
@@ -106,7 +107,7 @@ private:
  */
 
 // the real wxList-class declaration
-#define WX_DECLARE_LIST_XO(elT, liT, decl)                                    \
+#define WX_DECLARE_LIST_XO(elT, baseT, liT, decl)                             \
     decl _WX_LIST_HELPER_##liT                                                \
     {                                                                         \
         typedef elT _WX_LIST_ITEM_TYPE_##liT;                                 \
@@ -134,7 +135,7 @@ private:
                                                                               \
         public:                                                               \
             compatibility_iterator()                                          \
-                : m_iter(_WX_LIST_HELPER_##liT::EmptyList.end()), m_list( NULL ) {}                  \
+                : m_iter(_WX_LIST_HELPER_##liT::EmptyList.end()), m_list( nullptr ) {}                  \
             compatibility_iterator( liT* li, iterator i )                     \
                 : m_iter( i ), m_list( li ) {}                                \
             compatibility_iterator( const liT* li, iterator i )               \
@@ -183,11 +184,11 @@ private:
     public:                                                                   \
         liT() : m_destroy( false ) {}                                         \
                                                                               \
-        compatibility_iterator Find( const elT e ) const                      \
+        compatibility_iterator Find( const baseT e ) const                    \
         {                                                                     \
           liT* _this = const_cast< liT* >( this );                            \
           return compatibility_iterator( _this,                               \
-                     std::find( _this->begin(), _this->end(), e ) );          \
+                     std::find( _this->begin(), _this->end(), (const elT)e ));\
         }                                                                     \
                                                                               \
         bool IsEmpty() const                                                  \
@@ -218,11 +219,11 @@ private:
             iterator i = const_cast< liT* >(this)->end();                     \
             return compatibility_iterator( this, !empty() ? --i : i );        \
         }                                                                     \
-        bool Member( elT e ) const                                            \
+        bool Member( baseT e ) const                                          \
             { return Find( e ); }                                             \
         compatibility_iterator Nth( int n ) const                             \
             { return Item( n ); }                                             \
-        int IndexOf( elT e ) const                                            \
+        int IndexOf( baseT e ) const                                          \
             { return Find( e ).IndexOf(); }                                   \
                                                                               \
         compatibility_iterator Append( elT e )                                \
@@ -264,7 +265,7 @@ private:
             }                                                                 \
             return false;                                                     \
         }                                                                     \
-        bool DeleteObject( elT e )                                            \
+        bool DeleteObject( baseT e )                                          \
         {                                                                     \
             return DeleteNode( Find( e ) );                                   \
         }                                                                     \
@@ -333,13 +334,15 @@ class WXDLLIMPEXP_BASE wxListKey
 public:
     // implicit ctors
     wxListKey() : m_keyType(wxKEY_NONE)
-        { }
+        { m_key.integer = 0; }
     wxListKey(long i) : m_keyType(wxKEY_INTEGER)
         { m_key.integer = i; }
     wxListKey(const wxString& s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
+#ifndef wxNO_IMPLICIT_WXSTRING_ENCODING
     wxListKey(const char *s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
+#endif // wxNO_IMPLICIT_WXSTRING_ENCODING
     wxListKey(const wchar_t *s) : m_keyType(wxKEY_STRING)
         { m_key.string = new wxString(s); }
 
@@ -380,10 +383,10 @@ class WXDLLIMPEXP_BASE wxNodeBase
 friend class wxListBase;
 public:
     // ctor
-    wxNodeBase(wxListBase *list = NULL,
-               wxNodeBase *previous = NULL,
-               wxNodeBase *next = NULL,
-               void *data = NULL,
+    wxNodeBase(wxListBase *list = nullptr,
+               wxNodeBase *previous = nullptr,
+               wxNodeBase *next = nullptr,
+               void *data = nullptr,
                const wxListKey& key = wxDefaultListKey);
 
     virtual ~wxNodeBase();
@@ -483,7 +486,8 @@ public:
     wxDEPRECATED( wxNode *Nth(size_t n) const );    // use Item
 
     // kludge for typesafe list migration in core classes.
-    wxDEPRECATED( operator wxList&() const );
+    wxDEPRECATED( operator wxList&() );
+    wxDEPRECATED( operator const wxList&() const );
 #endif // wxLIST_COMPATIBILITY
 
 protected:
@@ -511,7 +515,7 @@ protected:
     {
         wxNodeBase *node = Item(n);
 
-        return node ? node->GetData() : NULL;
+        return node ? node->GetData() : nullptr;
     }
 
     // operations
@@ -522,12 +526,12 @@ protected:
     wxNodeBase *Append(void *object);
         // insert a new item at the beginning of the list
     wxNodeBase *Insert(void *object)
-        { return Insert(static_cast<wxNodeBase *>(NULL), object); }
+        { return Insert(static_cast<wxNodeBase *>(nullptr), object); }
         // insert a new item at the given position
     wxNodeBase *Insert(size_t pos, void *object)
         { return pos == GetCount() ? Append(object)
                                    : Insert(Item(pos), object); }
-        // insert before given node or at front of list if prev == NULL
+        // insert before given node or at front of list if prev == nullptr
     wxNodeBase *Insert(wxNodeBase *prev, void *object);
 
         // keyed append
@@ -535,7 +539,7 @@ protected:
     wxNodeBase *Append(const wxString& key, void *object);
 
         // removes node from the list but doesn't delete it (returns pointer
-        // to the node or NULL if it wasn't found in the list)
+        // to the node or nullptr if it wasn't found in the list)
     wxNodeBase *DetachNode(wxNodeBase *node);
         // delete element from list, returns false if node not found
     bool DeleteNode(wxNodeBase *node);
@@ -543,7 +547,7 @@ protected:
         // is on), returns false if object not found
     bool DeleteObject(void *object);
 
-    // search (all return NULL if item not found)
+    // search (all return nullptr if item not found)
         // by data
     wxNodeBase *Find(const void *object) const;
 
@@ -563,7 +567,7 @@ protected:
     void *LastThat(wxListIterateFunction func);
 
     // for STL interface, "last" points to one after the last node
-    // of the controlled sequence (NULL for the end of the list)
+    // of the controlled sequence (nullptr for the end of the list)
     void Reverse();
     void DeleteNodes(wxNodeBase* first, wxNodeBase* last);
 private:
@@ -592,15 +596,11 @@ private:
 // -----------------------------------------------------------------------------
 
 // Helper macro defining common iterator typedefs
-#if wxUSE_STD_CONTAINERS_COMPATIBLY
-    #include <iterator>
+#include <iterator>
 
-    #define WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()                          \
-        typedef std::ptrdiff_t difference_type;                               \
-        typedef std::bidirectional_iterator_tag iterator_category;
-#else
-    #define WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()
-#endif
+#define WX_DECLARE_LIST_ITER_DIFF_AND_CATEGORY()                          \
+    typedef std::ptrdiff_t difference_type;                               \
+    typedef std::bidirectional_iterator_tag iterator_category;
 
 // and now some heavy magic...
 
@@ -637,10 +637,10 @@ private:
     classexp nodetype : public wxNodeBase                                   \
     {                                                                       \
     public:                                                                 \
-        nodetype(wxListBase *list = NULL,                                   \
-                 nodetype *previous = NULL,                                 \
-                 nodetype *next = NULL,                                     \
-                 T *data = NULL,                                            \
+        nodetype(wxListBase *list = nullptr,                                   \
+                 nodetype *previous = nullptr,                                 \
+                 nodetype *next = nullptr,                                     \
+                 T *data = nullptr,                                            \
                  const wxListKey& key = wxDefaultListKey)                   \
             : wxNodeBase(list, previous, next, data, key) { }               \
                                                                             \
@@ -655,7 +655,7 @@ private:
             { wxNodeBase::SetData(data); }                                  \
                                                                             \
     protected:                                                              \
-        virtual void DeleteData() wxOVERRIDE;                               \
+        virtual void DeleteData() override;                               \
                                                                             \
         wxDECLARE_NO_COPY_CLASS(nodetype);                                  \
     };                                                                      \
@@ -667,7 +667,7 @@ private:
         classexp compatibility_iterator                                     \
         {                                                                   \
         public:                                                             \
-            compatibility_iterator(Node *ptr = NULL) : m_ptr(ptr) { }       \
+            compatibility_iterator(Node *ptr = nullptr) : m_ptr(ptr) { }       \
                                                                             \
             Node *operator->() const { return m_ptr; }                      \
             operator Node *() const { return m_ptr; }                       \
@@ -695,13 +695,13 @@ private:
         T *operator[](size_t index) const                                   \
         {                                                                   \
             nodetype *node = Item(index);                                   \
-            return node ? (T*)(node->GetData()) : NULL;                     \
+            return node ? (T*)(node->GetData()) : nullptr;                     \
         }                                                                   \
                                                                             \
         nodetype *Append(Tbase *object)                                     \
             { return (nodetype *)wxListBase::Append(object); }              \
         nodetype *Insert(Tbase *object)                                     \
-            { return (nodetype *)Insert(static_cast<nodetype *>(NULL),      \
+            { return (nodetype *)Insert(static_cast<nodetype *>(nullptr),      \
                                         object); }                          \
         nodetype *Insert(size_t pos, Tbase *object)                         \
             { return (nodetype *)wxListBase::Insert(pos, object); }         \
@@ -729,7 +729,7 @@ private:
             { return (nodetype *)wxListBase::Find(key); }                   \
                                                                             \
         bool Member(const Tbase *object) const                              \
-            { return Find(object) != NULL; }                                \
+            { return Find(object) != nullptr; }                                \
                                                                             \
         int IndexOf(Tbase *object) const                                    \
             { return wxListBase::IndexOf(object); }                         \
@@ -743,7 +743,7 @@ private:
         virtual wxNodeBase *CreateNode(wxNodeBase *prev, wxNodeBase *next,  \
                                void *data,                                  \
                                const wxListKey& key = wxDefaultListKey)     \
-                               wxOVERRIDE                                   \
+                               override                                   \
             {                                                               \
                 return new nodetype(this,                                   \
                                     (nodetype *)prev, (nodetype *)next,     \
@@ -779,7 +779,7 @@ private:
             typedef pointer pointer_type;                                   \
                                                                             \
             iterator(Node* node, Node* init) : m_node(node), m_init(init) {}\
-            iterator() : m_node(NULL), m_init(NULL) { }                     \
+            iterator() : m_node(nullptr), m_init(nullptr) { }                     \
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
             ptrop                                                           \
@@ -831,7 +831,7 @@ private:
                                                                             \
             const_iterator(Node* node, Node* init)                          \
                 : m_node(node), m_init(init) { }                            \
-            const_iterator() : m_node(NULL), m_init(NULL) { }               \
+            const_iterator() : m_node(nullptr), m_init(nullptr) { }               \
             const_iterator(const iterator& it)                              \
                 : m_node(it.m_node), m_init(it.m_init) { }                  \
             reference_type operator*() const                                \
@@ -885,7 +885,7 @@ private:
                                                                             \
             reverse_iterator(Node* node, Node* init)                        \
                 : m_node(node), m_init(init) { }                            \
-            reverse_iterator() : m_node(NULL), m_init(NULL) { }             \
+            reverse_iterator() : m_node(nullptr), m_init(nullptr) { }             \
             reference_type operator*() const                                \
                 { return *(pointer_type)m_node->GetDataPtr(); }             \
             ptrop                                                           \
@@ -925,7 +925,7 @@ private:
                                                                             \
             const_reverse_iterator(Node* node, Node* init)                  \
                 : m_node(node), m_init(init) { }                            \
-            const_reverse_iterator() : m_node(NULL), m_init(NULL) { }       \
+            const_reverse_iterator() : m_node(nullptr), m_init(nullptr) { }       \
             const_reverse_iterator(const reverse_iterator& it)              \
                 : m_node(it.m_node), m_init(it.m_init) { }                  \
             reference_type operator*() const                                \
@@ -956,15 +956,15 @@ private:
         iterator begin() { return iterator(GetFirst(), GetLast()); }        \
         const_iterator begin() const                                        \
             { return const_iterator(GetFirst(), GetLast()); }               \
-        iterator end() { return iterator(NULL, GetLast()); }                \
-        const_iterator end() const { return const_iterator(NULL, GetLast()); }\
+        iterator end() { return iterator(nullptr, GetLast()); }                \
+        const_iterator end() const { return const_iterator(nullptr, GetLast()); }\
         reverse_iterator rbegin()                                           \
             { return reverse_iterator(GetLast(), GetFirst()); }             \
         const_reverse_iterator rbegin() const                               \
             { return const_reverse_iterator(GetLast(), GetFirst()); }       \
-        reverse_iterator rend() { return reverse_iterator(NULL, GetFirst()); }\
+        reverse_iterator rend() { return reverse_iterator(nullptr, GetFirst()); }\
         const_reverse_iterator rend() const                                 \
-            { return const_reverse_iterator(NULL, GetFirst()); }            \
+            { return const_reverse_iterator(nullptr, GetFirst()); }            \
         void resize(size_type n, value_type v = value_type())               \
         {                                                                   \
             while (n < size())                                              \
@@ -1147,7 +1147,6 @@ inline int wxListBase::Number() const { return (int)GetCount(); }
 inline wxNode *wxListBase::First() const { return (wxNode *)GetFirst(); }
 inline wxNode *wxListBase::Last() const { return (wxNode *)GetLast(); }
 inline wxNode *wxListBase::Nth(size_t n) const { return (wxNode *)Item(n); }
-inline wxListBase::operator wxList&() const { return *(wxList*)this; }
 
 #endif
 
@@ -1165,14 +1164,14 @@ class WXDLLIMPEXP_BASE wxList : public wxObjectList
 {
 public:
 #if defined(wxWARN_COMPAT_LIST_USE) && !wxUSE_STD_CONTAINERS
-    wxList() { }
+    wxList() = default;
     wxDEPRECATED( wxList(int key_type) );
 #elif !wxUSE_STD_CONTAINERS
     wxList(int key_type = wxKEY_NONE);
 #endif
 
     // this destructor is required for Darwin
-   ~wxList() { }
+   ~wxList() = default;
 
 #if !wxUSE_STD_CONTAINERS
     wxList& operator=(const wxList& list)
@@ -1200,6 +1199,10 @@ public:
 
 #if !wxUSE_STD_CONTAINERS
 
+// wxListBase deprecated methods
+inline wxListBase::operator wxList&() { return *static_cast<wxList*>(this); }
+inline wxListBase::operator const wxList&() const { return *static_cast<const wxList*>(this); }
+
 // -----------------------------------------------------------------------------
 // wxStringList class for compatibility with the old code
 // -----------------------------------------------------------------------------
@@ -1212,10 +1215,10 @@ public:
         // default
 #ifdef wxWARN_COMPAT_LIST_USE
     wxStringList();
-    wxDEPRECATED( wxStringList(const wxChar *first ...) ); // FIXME-UTF8
+    wxDEPRECATED( wxStringList(const wxChar *first ...) );
 #else
     wxStringList();
-    wxStringList(const wxChar *first ...); // FIXME-UTF8
+    wxStringList(const wxChar *first ...);
 #endif
 
         // copying the string list: the strings are copied, too (extremely
@@ -1252,7 +1255,7 @@ private:
 
 #else // if wxUSE_STD_CONTAINERS
 
-WX_DECLARE_LIST_XO(wxString, wxStringListBase, class WXDLLIMPEXP_BASE);
+WX_DECLARE_LIST_XO(wxString, wxString, wxStringListBase, class WXDLLIMPEXP_BASE);
 
 class WXDLLIMPEXP_BASE wxStringList : public wxStringListBase
 {

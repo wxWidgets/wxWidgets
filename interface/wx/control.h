@@ -141,6 +141,27 @@ public:
     wxSize GetSizeFromTextSize(const wxSize& tsize) const;
 
     /**
+        Determine the minimum size needed by the control to display the given text.
+
+        The helper function that uses combination of GetSizeFromTextSize() and
+        GetTextExtent() which used together pretty often:
+        @code
+            wxSize GetSizeFromText(const wxString& text) const
+            {
+                return GetSizeFromTextSize(GetTextExtent(text).GetWidth());
+            }
+        @endcode
+
+        @param text The given text.
+        @return The size that the control should have to leave the area of the
+            specified text. May return wxDefaultSize if this method is not
+            implemented for this particular control under the current platform.
+
+        @since 3.1.3
+     */
+    wxSize GetSizeFromText(const wxString& text) const;
+
+    /**
         Sets the control's label.
 
         All "&" characters in the @a label are special and indicate that the

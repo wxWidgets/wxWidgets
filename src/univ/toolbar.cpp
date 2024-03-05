@@ -2,7 +2,6 @@
 // Name:        src/univ/toolbar.cpp
 // Purpose:     implementation of wxToolBar for wxUniversal
 // Author:      Robert Roebling, Vadim Zeitlin (universalization)
-// Modified by:
 // Created:     20.02.02
 // Copyright:   (c) 2001 Robert Roebling,
 //              (c) 2002 SciTech Software, Inc. (www.scitechsoft.com)
@@ -20,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TOOLBAR
 
@@ -81,8 +77,8 @@ public:
     wxToolBarTool(wxToolBar *tbar,
                   int id,
                   const wxString& label,
-                  const wxBitmap& bmpNormal,
-                  const wxBitmap& bmpDisabled,
+                  const wxBitmapBundle& bmpNormal,
+                  const wxBitmapBundle& bmpDisabled,
                   wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelp,
@@ -222,7 +218,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
     if ( IsVertical() )
     {
         if ( x < 0 || x > m_maxWidth )
-            return NULL;
+            return nullptr;
 
         // we always use x, even for a vertical toolbar, this makes the code
         // below simpler
@@ -231,7 +227,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
     else // horizontal
     {
         if ( y < 0 || y > m_maxHeight )
-            return NULL;
+            return nullptr;
     }
 
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
@@ -248,11 +244,11 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         {
             // don't return the separators from here, they don't accept any
             // input anyhow
-            return tool->IsSeparator() ? NULL : tool;
+            return tool->IsSeparator() ? nullptr : tool;
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void wxToolBar::SetToolShortHelp(int id, const wxString& help)
@@ -316,8 +312,8 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *tool, bool WXUNUSED(toggle))
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxString& label,
-                                         const wxBitmap& bmpNormal,
-                                         const wxBitmap& bmpDisabled,
+                                         const wxBitmapBundle& bmpNormal,
+                                         const wxBitmapBundle& bmpDisabled,
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
@@ -343,7 +339,7 @@ wxRect wxToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
 
     wxRect rect;
 
-    wxCHECK_MSG( tool, rect, wxT("GetToolRect: NULL tool") );
+    wxCHECK_MSG( tool, rect, wxT("GetToolRect: null tool") );
 
     // ensure that we always have the valid tool position
     if ( m_needsLayout )
@@ -563,33 +559,6 @@ wxSize wxToolBar::DoGetBestClientSize() const
     return wxSize(m_maxWidth, m_maxHeight);
 }
 
-void wxToolBar::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    int old_width, old_height;
-    GetSize(&old_width, &old_height);
-
-    wxToolBarBase::DoSetSize(x, y, width, height, sizeFlags);
-
-    // Correct width and height if needed.
-    if ( width == wxDefaultCoord || height == wxDefaultCoord )
-    {
-        int tmp_width, tmp_height;
-        GetSize(&tmp_width, &tmp_height);
-
-        if ( width == wxDefaultCoord )
-            width = tmp_width;
-        if ( height == wxDefaultCoord )
-            height = tmp_height;
-    }
-
-    // We must refresh the frame size when the toolbar changes size
-    // otherwise the toolbar can be shown incorrectly
-    if ( old_width != width || old_height != height )
-    {
-        SendSizeEventToParent();
-    }
-}
-
 // ----------------------------------------------------------------------------
 // wxToolBar drawing
 // ----------------------------------------------------------------------------
@@ -603,7 +572,7 @@ void wxToolBar::GetRectLimits(const wxRect& rect,
                               wxCoord *start,
                               wxCoord *end) const
 {
-    wxCHECK_RET( start && end, wxT("NULL pointer in GetRectLimits") );
+    wxCHECK_RET( start && end, wxT("null pointer in GetRectLimits") );
 
     if ( IsVertical() )
     {
@@ -743,7 +712,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_TOOLBAR_PRESS )
     {
-        wxLogTrace(wxT("toolbar"), wxT("Button '%s' pressed."), tool->GetShortHelp().c_str());
+        wxLogTrace(wxT("toolbar"), wxT("Button '%s' pressed."), tool->GetShortHelp());
 
         tool->Invert();
 
@@ -751,7 +720,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_TOOLBAR_RELEASE )
     {
-        wxLogTrace(wxT("toolbar"), wxT("Button '%s' released."), tool->GetShortHelp().c_str());
+        wxLogTrace(wxT("toolbar"), wxT("Button '%s' released."), tool->GetShortHelp());
 
         wxASSERT_MSG( tool->IsInverted(), wxT("release unpressed button?") );
 
@@ -832,9 +801,9 @@ wxInputHandler *wxToolBar::GetStdInputHandler(wxInputHandler *handlerDef)
 wxStdToolbarInputHandler::wxStdToolbarInputHandler(wxInputHandler *handler)
                         : wxStdInputHandler(handler)
 {
-    m_winCapture = NULL;
-    m_toolCapture = NULL;
-    m_toolLast = NULL;
+    m_winCapture = nullptr;
+    m_toolCapture = nullptr;
+    m_toolLast = nullptr;
 }
 
 bool wxStdToolbarInputHandler::HandleKey(wxInputConsumer *consumer,
@@ -874,7 +843,7 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
             if ( m_winCapture )
             {
                 m_winCapture->ReleaseMouse();
-                m_winCapture = NULL;
+                m_winCapture = nullptr;
             }
 
             if (m_toolCapture)
@@ -885,7 +854,7 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
                     consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );
             }
 
-            m_toolCapture = NULL;
+            m_toolCapture = nullptr;
 
             return true;
         }
@@ -907,7 +876,7 @@ bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
         {
             // We cannot possibly be over a tool when
             // leaving the toolbar
-            tool = NULL;
+            tool = nullptr;
         }
         else
         {
@@ -918,7 +887,7 @@ bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
         {
             // During capture we only care of the captured tool
             if (tool && (tool != m_toolCapture))
-                tool = NULL;
+                tool = nullptr;
 
             if (tool == m_toolLast)
                 return true;

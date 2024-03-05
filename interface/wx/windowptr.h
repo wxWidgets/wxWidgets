@@ -77,6 +77,6 @@ public:
 
         If the reference count of the previously owned pointer was 1 it will be deleted.
     */
-    void reset(T* ptr = NULL);
+    void reset(T* ptr = nullptr);
 };
 

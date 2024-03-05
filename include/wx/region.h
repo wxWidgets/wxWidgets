@@ -2,7 +2,6 @@
 // Name:        wx/region.h
 // Purpose:     Base header for wxRegion
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
@@ -201,22 +200,20 @@ protected:
     virtual bool DoCombine(const wxRegion& region, wxRegionOp op) = 0;
 
     // implement some wxRegionBase pure virtuals in terms of Combine()
-    virtual bool DoUnionWithRect(const wxRect& rect) wxOVERRIDE;
-    virtual bool DoUnionWithRegion(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoIntersect(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoSubtract(const wxRegion& region) wxOVERRIDE;
-    virtual bool DoXor(const wxRegion& region) wxOVERRIDE;
+    virtual bool DoUnionWithRect(const wxRect& rect) override;
+    virtual bool DoUnionWithRegion(const wxRegion& region) override;
+    virtual bool DoIntersect(const wxRegion& region) override;
+    virtual bool DoSubtract(const wxRegion& region) override;
+    virtual bool DoXor(const wxRegion& region) override;
 };
 
 #endif // ports with wxRegion::Combine()
 
 #if defined(__WXMSW__)
     #include "wx/msw/region.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/region.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/region.h"
-#elif defined(__WXMOTIF__) || defined(__WXX11__)
+    #include "wx/gtk/region.h"
+#elif defined(__WXX11__)
     #include "wx/x11/region.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/region.h"

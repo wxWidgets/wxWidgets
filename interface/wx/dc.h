@@ -14,6 +14,16 @@
     and the corresponding @e dst destination pixel gets combined together to produce
     the final pixel. E.g. @c wxCLEAR and @c wxSET completely ignore the source
     and the destination pixel and always put zeroes or ones in the final surface.
+
+    Note that not all modes are supported under all platforms. Notably wxGTK3
+    and wxMac only support the following modes:
+    - wxCOPY
+    - wxOR
+    - wxNO_OP
+    - wxCLEAR
+    - wxXOR
+    and only support the commonly used @c wxINVERT when the source colour is
+    white (as it is implemented using wxCOMPOSITION_DIFF composition mode).
 */
 enum wxRasterOperationMode
 {
@@ -155,7 +165,7 @@ struct wxFontMetrics
     In general wxDC methods don't support alpha transparency and the alpha
     component of wxColour is simply ignored and you need to use wxGraphicsContext
     for full transparency support. There are, however, a few exceptions: first,
-    under OS X and GTK+ 3 colours with alpha channel are supported in all the normal
+    under macOS and GTK+ 3 colours with alpha channel are supported in all the normal
     wxDC-derived classes as they use wxGraphicsContext internally. Second,
     under all platforms wxSVGFileDC also fully supports alpha channel. In both
     of these cases the instances of wxPen or wxBrush that are built from
@@ -164,7 +174,7 @@ struct wxFontMetrics
 
     @section dc_transform_support Support for Transformation Matrix
 
-    On some platforms (currently under MSW, GTK+ 3, OS X) wxDC has support for
+    On some platforms (currently under MSW, GTK+ 3, macOS) wxDC has support for
     applying an arbitrary affine transformation matrix to its coordinate system
     (since 3.1.1 this feature is also supported by wxGCDC in all ports).
     Call CanUseTransformMatrix() to check if this support is available and then
@@ -192,71 +202,174 @@ public:
     /**
         @name Coordinate conversion functions
     */
-    //@{
+    ///@{
 
     /**
         Convert @e device X coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalX(wxCoord x) const;
 
     /**
         Convert @e device X coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalXRel(wxCoord x) const;
 
     /**
         Converts @e device Y coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalY(wxCoord y) const;
 
     /**
         Convert @e device Y coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord DeviceToLogicalYRel(wxCoord y) const;
 
     /**
         Converts logical X coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceX(wxCoord x) const;
 
     /**
         Converts logical X coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        axis orientation. Use this for converting a horizontal distance like
+        for example a width.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceXRel(wxCoord x) const;
 
     /**
         Converts logical Y coordinate to device coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceY(wxCoord y) const;
 
     /**
         Converts logical Y coordinate to relative device coordinate, using the
         current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
+        axis orientation. Use this for converting a vertical distance like
+        for example a height.
+
+        @note Affine transformation applied to the coordinate system
+        with SetTransformMatrix() is not taken into account.
     */
     wxCoord LogicalToDeviceYRel(wxCoord y) const;
 
-    //@}
+    /**
+        Converts device (@a x, @a y) coordinates to logical coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint DeviceToLogical(const wxPoint& pt) const;
+
+    /**
+        Converts device @a x, @a y coordinates to relative logical coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize DeviceToLogicalRel(const wxSize& dim) const;
+
+    /**
+        Converts logical (@a x, @a y) coordinates to device coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, device origin, axes orientation,
+        affine transformation.
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(wxCoord x, wxCoord y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxPoint LogicalToDevice(const wxPoint& pt) const;
+
+    /**
+        Converts logical @a x, @a y coordinates to relative device coordinates
+        taking into account all applied transformations like the current
+        mapping mode, scale factors, affine transformation.
+        Use this for converting distances like e.g. width and height.
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(int x, int y) const;
+
+    /**
+        @overload
+
+        @since 3.1.5
+    */
+    wxSize LogicalToDeviceRel(const wxSize& dim) const;
+
+    ///@}
 
 
 
     /**
         @name Drawing functions
     */
-    //@{
+    ///@{
 
     /**
         Clears the device context using the current background brush.
+
+        Note that SetBackground() method must be used to set the brush used by
+        Clear(), the brush used for filling the shapes set by SetBrush() is
+        ignored by it.
+
+        If no background brush was set, solid white brush is used to clear the
+        device context.
     */
     void Clear();
 
@@ -289,7 +402,7 @@ public:
 
     /**
         Draw a bitmap on the device context at the specified point. If
-        @a transparent is @true and the bitmap has a transparency mask, the
+        @a useMask is @true and the bitmap has a transparency mask, the
         bitmap will be drawn transparently.
 
         When drawing a mono-bitmap, the current text foreground colour will be
@@ -401,7 +514,7 @@ public:
     void DrawLabel(const wxString& text, const wxBitmap& bitmap,
                    const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                   int indexAccel = -1, wxRect* rectBounding = NULL);
+                   int indexAccel = -1, wxRect* rectBounding = nullptr);
 
     /**
         @overload
@@ -602,9 +715,16 @@ public:
     /**
         Draws a spline between all given points using the current pen.
 
+        The number of points must be at least 2 for the spline to be drawn.
+
+        @note Drawn curve is not an interpolating curve - it does not go
+        through all points. It may be considered a smoothing curve.
+
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
+
+        @image html drawing-spline.png
     */
     void DrawSpline(int n, const wxPoint points[]);
 
@@ -742,13 +862,13 @@ public:
     */
     void CrossHair(const wxPoint& pt);
 
-    //@}
+    ///@}
 
 
     /**
         @name Clipping region functions
     */
-    //@{
+    ///@{
 
     /**
         Destroys the current clipping region so that none of the DC is clipped.
@@ -765,16 +885,16 @@ public:
         @remarks
         Clipping region is given in logical coordinates.
 
-        @param x If non-@NULL, filled in with the logical horizontal coordinate
+        @param x If non-null, filled in with the logical horizontal coordinate
             of the top left corner of the clipping region if the function
             returns true or 0 otherwise.
-        @param y If non-@NULL, filled in with the logical vertical coordinate
+        @param y If non-null, filled in with the logical vertical coordinate
             of the top left corner of the clipping region if the function
             returns true or 0 otherwise.
-        @param width If non-@NULL, filled in with the width of the clipping
+        @param width If non-null, filled in with the width of the clipping
             region if the function returns true or the device context width
             otherwise.
-        @param height If non-@NULL, filled in with the height of the clipping
+        @param height If non-null, filled in with the height of the clipping
             region if the function returns true or the device context height
             otherwise.
         @return @true if there is a clipping region or @false if there is no
@@ -832,13 +952,13 @@ public:
      */
     void SetDeviceClippingRegion(const wxRegion& region);
 
-    //@}
+    ///@}
 
 
     /**
         @name Text/character extent functions
     */
-    //@{
+    ///@{
 
     /**
         Gets the character height of the currently set font.
@@ -876,6 +996,12 @@ public:
         used for the text extent calculation, otherwise the currently selected
         font is used.
 
+        If @a string is empty, its horizontal extent is 0 but, for convenience
+        when using this function for allocating enough space for a possibly
+        multi-line string, its vertical extent is the same as the height of an
+        empty line of text. Please note that this behaviour differs from that
+        of GetTextExtent().
+
         @note This function works with both single-line and multi-line strings.
 
         @beginWxPerlOnly
@@ -888,8 +1014,8 @@ public:
     */
     void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
                                 wxCoord* h,
-                                wxCoord* heightLine = NULL,
-                                const wxFont* font = NULL) const;
+                                wxCoord* heightLine = nullptr,
+                                const wxFont* font = nullptr) const;
     /**
         Gets the dimensions of the string using the currently selected font.
         @a string is the text string to measure.
@@ -938,6 +1064,8 @@ public:
         used for the text extent calculation. Otherwise the currently selected
         font is.
 
+        If @a string is empty, its extent is 0 in both directions, as expected.
+
         @note This function only works with single-line strings.
 
         @beginWxPerlOnly
@@ -950,9 +1078,9 @@ public:
              GetMultiLineTextExtent()
     */
     void GetTextExtent(const wxString& string, wxCoord* w, wxCoord* h,
-                       wxCoord* descent = NULL,
-                       wxCoord* externalLeading = NULL,
-                       const wxFont* font = NULL) const;
+                       wxCoord* descent = nullptr,
+                       wxCoord* externalLeading = nullptr,
+                       const wxFont* font = nullptr) const;
 
     /**
         @overload
@@ -964,16 +1092,16 @@ public:
     */
     wxSize GetTextExtent(const wxString& string) const;
 
-    //@}
+    ///@}
 
 
     /**
         @name Text properties functions
     */
-    //@{
+    ///@{
 
     /**
-        Returns the current background mode: @c wxPENSTYLE_SOLID or @c wxPENSTYLE_TRANSPARENT.
+        Returns the current background mode: @c wxBRUSHSTYLE_SOLID or @c wxBRUSHSTYLE_TRANSPARENT.
 
         @see SetBackgroundMode()
     */
@@ -1013,19 +1141,25 @@ public:
     const wxColour& GetTextForeground() const;
 
     /**
-        @a mode may be one of @c wxPENSTYLE_SOLID and @c wxPENSTYLE_TRANSPARENT.
+        Change the current background mode.
 
         This setting determines whether text will be drawn with a background
         colour or not.
+
+        Default is @c wxBRUSHSTYLE_TRANSPARENT, i.e. text background is not
+        drawn.
+
+        @param mode one of @c wxBRUSHSTYLE_SOLID and @c wxBRUSHSTYLE_TRANSPARENT.
     */
     void SetBackgroundMode(int mode);
 
     /**
         Sets the current font for the DC.
 
-        If the argument is ::wxNullFont (or another invalid font; see wxFont::IsOk),
-        the current font is selected out of the device context (leaving wxDC without
-        any valid font), allowing the current font to be destroyed safely.
+        The @a font parameter should be valid, although in wxMSW port (only)
+        the argument ::wxNullFont is also accepted and resets the device
+        context font to the default value used by the system (which is not
+        generally useful).
 
         @see wxFont
     */
@@ -1055,13 +1189,13 @@ public:
     */
     void SetLayoutDirection(wxLayoutDirection dir);
 
-    //@}
+    ///@}
 
 
     /**
         @name Bounding box functions
     */
-    //@{
+    ///@{
 
     /**
         Adds the specified point to the bounding box which can be retrieved
@@ -1099,13 +1233,13 @@ public:
     */
     void ResetBoundingBox();
 
-    //@}
+    ///@}
 
 
     /**
         @name Page and document start/end functions
     */
-    //@{
+    ///@{
 
     /**
         Starts a document (only relevant when outputting to a printer).
@@ -1128,13 +1262,13 @@ public:
     */
     void EndPage();
 
-    //@}
+    ///@}
 
 
     /**
         @name Bit-Block Transfer operations (blit)
     */
-    //@{
+    ///@{
 
     /**
         Copy from a source DC to this DC.
@@ -1296,13 +1430,13 @@ public:
                      bool useMask = false,
                      wxCoord xsrcMask = wxDefaultCoord,
                      wxCoord ysrcMask = wxDefaultCoord);
-    //@}
+    ///@}
 
 
     /**
         @name Background/foreground brush and pen
     */
-    //@{
+    ///@{
 
     /**
         Gets the brush used for painting the background.
@@ -1354,7 +1488,7 @@ public:
     */
     void SetPen(const wxPen& pen);
 
-    //@}
+    ///@}
 
 
     /**
@@ -1366,10 +1500,30 @@ public:
             - Background brush
             - Layout direction
 
+        Note that the scaling factor is not considered to be an attribute of
+        wxDC and is @e not copied by this function.
+
         @param dc
             A valid (i.e. its IsOk() must return @true) source device context.
      */
     void CopyAttributes(const wxDC& dc);
+
+    /**
+        Returns the factor used for converting logical pixels to physical ones.
+
+        Returns the same value as wxWindow::GetDPIScaleFactor() for the
+        device contexts associated with a window and the same value as
+        wxBitmap::GetScaleFactor() for the associated bitmap for wxMemoryDC.
+
+        @note Beware that since wxWidgets 3.1.6, this function does _not_ return the same value as
+        wxWindow::GetContentScaleFactor() for the device contexts associated
+        with the window. Unlike wxWindow method, it always returns the
+        effective scale factor instead of always returning 1 on platforms where
+        logical pixels are the same as physical ones, such as MSW.
+
+        @since 2.9.5
+     */
+    double GetContentScaleFactor() const;
 
     /**
         Returns the depth (number of bits/pixel) of this DC.
@@ -1416,6 +1570,54 @@ public:
         Returns the resolution of the device in pixels per inch.
     */
     wxSize GetPPI() const;
+
+    /**
+        Convert DPI-independent pixel values to the value in pixels appropriate
+        for the DC.
+
+        See wxWindow::FromDIP(const wxSize& sz) for more info about converting
+        device independent pixel values.
+
+        @since 3.1.7
+     */
+    wxSize FromDIP(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint FromDIP(const wxPoint& pt) const;
+
+    /**
+        Convert DPI-independent value in pixels to the value in pixels
+        appropriate for the DC.
+
+        This is the same as FromDIP(const wxSize& sz) overload, but assumes
+        that the resolution is the same in horizontal and vertical directions.
+
+        @since 3.1.7
+     */
+    int FromDIP(int d) const;
+
+    /**
+        Convert pixel values of the current DC to DPI-independent pixel values.
+
+        See wxWindow::ToDIP(const wxSize& sz) for more info about converting
+        device independent pixel values.
+
+        @since 3.1.7
+     */
+    wxSize ToDIP(const wxSize& sz) const;
+
+    /// @overload
+    wxPoint ToDIP(const wxPoint& pt) const;
+
+    /**
+        Convert pixel values of the current DC to DPI-independent pixel values.
+
+        This is the same as ToDIP(const wxSize& sz) overload, but assumes
+        that the resolution is the same in horizontal and vertical directions.
+
+        @since 3.1.7
+     */
+    int ToDIP(int d) const;
 
     /**
         Gets the horizontal and vertical extent of this device context in @e device units.
@@ -1497,6 +1699,14 @@ public:
 
     /**
         Sets the current logical function for the device context.
+
+        @note This function is not fully supported in all ports, due to the
+        limitations of the underlying drawing model. Notably, @c wxINVERT which
+        was commonly used for drawing rubber bands or other moving outlines in
+        the past, is not, and will not, be supported by wxGTK3 and wxMac. The
+        suggested alternative is to draw temporarily objects normally and
+        refresh the (affected part of the) window to remove them later.
+
         It determines how a @e source pixel (from a pen or brush colour, or source
         device context if using Blit()) combines with a @e destination pixel in
         the current device context.
@@ -1506,8 +1716,7 @@ public:
 
         The default is @c wxCOPY, which simply draws with the current colour.
         The others combine the current colour and the background using a logical
-        operation. @c wxINVERT is commonly used for drawing rubber bands or moving
-        outlines, since drawing twice reverts to the original colour.
+        operation.
     */
     void SetLogicalFunction(wxRasterOperationMode function);
 
@@ -1551,7 +1760,7 @@ public:
         See the notes about the availability of these functions in the class
         documentation.
     */
-    //@{
+    ///@{
 
     /**
         Check if the use of transformation matrix is supported by the current
@@ -1592,13 +1801,13 @@ public:
     */
     void ResetTransformMatrix();
 
-    //@}
+    ///@}
 
 
     /**
         @name query capabilities
     */
-    //@{
+    ///@{
 
     /**
        Does the DC support drawing bitmaps?
@@ -1610,17 +1819,17 @@ public:
     */
     bool CanGetTextExtent() const;
 
-    //@}
+    ///@}
 
     /**
        Returns a value that can be used as a handle to the native drawing
        context, if this wxDC has something that could be thought of in that
        way.  (Not all of them do.)
 
-       For example, on Windows the return value is an HDC, on OS X it is a
+       For example, on Windows the return value is an HDC, on macOS it is a
        CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
        wxGCDC then the return value will be the value returned from
-       wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
+       wxGraphicsContext::GetNativeContext.  A value of @NULL is returned if
        the DC does not have anything that fits the handle concept.
 
        @since 2.9.5
@@ -1631,7 +1840,7 @@ public:
     /**
        If supported by the platform and the type of DC, fetch the contents of the DC, or a subset of it, as a bitmap.
     */
-    wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
+    wxBitmap GetAsBitmap(const wxRect *subrect = nullptr) const;
 
 
     /**
@@ -1655,7 +1864,7 @@ public:
      */
     void SetLogicalOrigin(wxCoord x, wxCoord y);
 
-    //@{
+    ///@{
     /**
         Return the coordinates of the logical point (0, 0).
 
@@ -1663,7 +1872,22 @@ public:
      */
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
     wxPoint GetLogicalOrigin() const;
-    //@}
+    ///@}
+
+    /**
+       If supported by the platform and the @a wxDC implementation, this method
+       will return the @a wxGraphicsContext associated with the DC. Otherwise
+       @NULL is returned.
+    */
+    virtual wxGraphicsContext* GetGraphicsContext() const;
+
+    /**
+       Associate a wxGraphicsContext with the DC. Ignored if not supported by
+       the specific @a wxDC implementation. It is unlikely that this will need to
+       be used in application code.
+    */
+    virtual void SetGraphicsContext( wxGraphicsContext* ctx );
+
 };
 
 
@@ -1707,7 +1931,7 @@ public:
 class wxDCClipper
 {
 public:
-    //@{
+    ///@{
     /**
         Sets the clipping region to the specified region/coordinates.
 
@@ -1716,7 +1940,7 @@ public:
     wxDCClipper(wxDC& dc, const wxRegion& region);
     wxDCClipper(wxDC& dc, const wxRect& rect);
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
-    //@}
+    ///@}
 
     /**
         Destroys the clipping region associated with the DC passed to the ctor.
@@ -1934,7 +2158,8 @@ public:
         @param dc
             The DC where the mode must be temporary set.
         @param mode
-            The background mode to set.
+            The background mode to set, one of @c wxBRUSHSTYLE_SOLID or @c
+            wxBRUSHSTYLE_TRANSPARENT.
     */
     wxDCBgModeChanger(wxDC& dc, int mode);
 

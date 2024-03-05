@@ -65,6 +65,23 @@ public:
     bool GetEnableEffects() const;
 
     /**
+        Returns the state of the flags restricting the selection.
+
+        Note that currently these flags are only effectively used in wxMSW.
+
+        @returns
+        - @c wxFONTRESTRICT_NONE If no restriction applies, or a combination of
+        the following flags:
+        - @c wxFONTRESTRICT_SCALABLE To show only scalable fonts - no raster fonts.
+        - @c wxFONTRESTRICT_FIXEDPITCH To show only monospaced fonts.
+
+        The default value is @c wxFONTRESTRICT_NONE.
+
+        @since 3.1.4
+    */
+    int GetRestrictSelection() const;
+
+    /**
         Gets the font that will be initially used by the font dialog. This
         should have previously been set by the application.
     */
@@ -76,6 +93,24 @@ public:
         The default value is @false.
     */
     bool GetShowHelp() const;
+
+    /**
+        Restricts the selection to a subset of the available fonts.
+
+        Note that currently these flags are only effectively used in wxMSW and
+        are ignored in the other ports.
+
+        Possible values are:
+
+        - @c wxFONTRESTRICT_NONE No restriction, show all fonts in the dialog.
+        - @c wxFONTRESTRICT_SCALABLE To show only scalable fonts - no raster fonts.
+        - @c wxFONTRESTRICT_FIXEDPITCH To show only monospaced fonts.
+
+        The default value is @c wxFONTRESTRICT_NONE.
+
+        @since 3.1.4
+    */
+    void RestrictSelection(int flags);
 
     /**
         Under Windows, determines whether symbol fonts can be selected. Has no

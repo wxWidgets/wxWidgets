@@ -2,7 +2,6 @@
 // Name:        wx/osx/app.h
 // Purpose:     wxApp class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -38,21 +37,21 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
     wxApp();
     virtual ~wxApp();
 
-    virtual void WakeUpIdle() wxOVERRIDE;
+    virtual void WakeUpIdle() override;
 
-    virtual void SetPrintMode(int mode) wxOVERRIDE { m_printMode = mode; }
+    virtual void SetPrintMode(int mode) override { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
 
     // calling OnInit with an auto-release pool ready ...
-    virtual bool CallOnInit() wxOVERRIDE;
+    virtual bool CallOnInit() override;
 #if wxUSE_GUI
     // setting up all MacOS Specific Event-Handlers etc
-    virtual bool OnInitGui() wxOVERRIDE;
+    virtual bool OnInitGui() override;
 #endif // wxUSE_GUI
 
-    virtual int OnRun() wxOVERRIDE;
+    virtual int OnRun() override;
 
-    virtual bool ProcessIdle() wxOVERRIDE;
+    virtual bool ProcessIdle() override;
 
     // implementation only
     void OnIdle(wxIdleEvent& event);
@@ -67,8 +66,8 @@ public:
 
     static bool           sm_isEmbedded;
     // Implementation
-    virtual bool Initialize(int& argc, wxChar **argv) wxOVERRIDE;
-    virtual void CleanUp() wxOVERRIDE;
+    virtual bool Initialize(int& argc, wxChar **argv) override;
+    virtual void CleanUp() override;
 
     // the installed application event handler
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
@@ -77,7 +76,7 @@ public:
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
 
     // adding a CFType object to be released only at the end of the current event cycle (increases the
-    // refcount of the object passed), needed in case we are in the middle of an event concering an object
+    // refcount of the object passed), needed in case we are in the middle of an event concerning an object
     // we want to delete and cannot do it immediately
     // TODO change semantics to be in line with cocoa (make autrelease NOT increase the count)
     void                  MacAddToAutorelease( void* cfrefobj );
@@ -138,6 +137,9 @@ public:
 
     // override this to return false from a non-bundled console app in order to stay in background ...
     virtual bool         OSXIsGUIApplication() { return true; }
+
+    // Allow the user to disable the tab bar support in the application
+    void                 OSXEnableAutomaticTabbing(bool enable);
 
 #if wxOSX_USE_COCOA_OR_IPHONE
     // immediately before the native event loop launches

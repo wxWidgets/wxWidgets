@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_COLOURPICKERCTRL
 
@@ -35,7 +32,7 @@ wxObject *wxColourPickerCtrlXmlHandler::DoCreateResource()
 
    picker->Create(m_parentAsWindow,
                   GetID(),
-                  GetColour(wxT("value"), *wxBLACK),
+                  GetColour(wxT("value"), *wxBLACK, *wxWHITE),
                   GetPosition(), GetSize(),
                   GetStyle(wxT("style"), wxCLRP_DEFAULT_STYLE),
                   wxDefaultValidator,

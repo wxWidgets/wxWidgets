@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -333,7 +330,7 @@ TAG_HANDLER_BEGIN(BIGSMALL, "BIG,SMALL")
         int oldsize = m_WParser->GetFontSize();
         int sz = (tag.GetName() == wxT("BIG")) ? +1 : -1;
 
-        m_WParser->SetFontSize(sz);
+        m_WParser->SetFontSize(oldsize + sz);
         m_WParser->GetContainer()->InsertCell(
             new wxHtmlFontCell(m_WParser->CreateCurrentFont()));
 

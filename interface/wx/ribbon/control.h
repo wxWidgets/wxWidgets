@@ -36,7 +36,7 @@ public:
     /**
         Constructor.
 
-        If @a parent is a wxRibbonControl with a non-NULL art provider, then
+        If @a parent is a wxRibbonControl with a non-null art provider, then
         the art provider of new control is set to that of @a parent.
     */
     wxRibbonControl(wxWindow *parent, wxWindowID id,
@@ -57,7 +57,7 @@ public:
 
     /**
         Get the art provider to be used. Note that until an art provider has
-        been set in some way, this function may return NULL.
+        been set in some way, this function may return @NULL.
     */
     wxRibbonArtProvider* GetArtProvider() const;
 
@@ -148,7 +148,7 @@ public:
     bool Realise();
 
     /**
-        Get the first ancestor which is a wxRibbonBar (or derived) or NULL
+        Get the first ancestor which is a wxRibbonBar (or derived) or @NULL
         if not having such parent.
 
         @since 2.9.4

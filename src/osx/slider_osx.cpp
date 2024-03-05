@@ -2,7 +2,6 @@
 // Name:        src/osx/slider_osx.cpp
 // Purpose:     wxSlider
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
@@ -44,9 +43,9 @@ wxSlider::wxSlider()
     m_rangeMin = 0;
     m_tickFreq = 0;
 
-    m_macMinimumStatic = NULL;
-    m_macMaximumStatic = NULL;
-    m_macValueStatic = NULL;
+    m_macMinimumStatic = nullptr;
+    m_macMaximumStatic = nullptr;
+    m_macValueStatic = nullptr;
 }
 
 bool wxSlider::Create(wxWindow *parent,
@@ -59,9 +58,9 @@ bool wxSlider::Create(wxWindow *parent,
 {    
     DontCreatePeer();
     
-    m_macMinimumStatic = NULL;
-    m_macMaximumStatic = NULL;
-    m_macValueStatic = NULL;
+    m_macMinimumStatic = nullptr;
+    m_macMaximumStatic = nullptr;
+    m_macValueStatic = nullptr;
 
     m_lineSize = 1;
     m_tickFreq = 0;
@@ -117,10 +116,14 @@ bool wxSlider::Create(wxWindow *parent,
     // other values
 #endif
     
-    if (style & wxSL_LABELS)
+    if (style & wxSL_MIN_MAX_LABELS)
     {
         m_macMinimumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
         m_macMaximumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
+    }
+
+    if (style & wxSL_VALUE_LABEL)
+    {
         m_macValueStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
     }
 
@@ -397,6 +400,24 @@ wxSize wxSlider::DoGetBestSize() const
 
 void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 {
+    if ( w == -1 || h == -1 ||
+            (!(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) && (x == -1 || y == -1)) )
+    {
+        const wxRect currentRect = GetRect();
+        if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        {
+            if ( x == -1 )
+                x = currentRect.x;
+            if ( y == -1 )
+                y = currentRect.y;
+        }
+
+        if ( w == -1 )
+            w = currentRect.width;
+        if ( h == -1 )
+            h = currentRect.height;
+    }
+
     int minValWidth, maxValWidth, textheight;
     int width = w;
 

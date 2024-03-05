@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTCTRL
 
@@ -38,6 +35,8 @@
 
 #include "wx/imaglist.h"
 #include "wx/renderer.h"
+
+#include "wx/generic/private/drawbitmap.h"
 #include "wx/generic/private/listctrl.h"
 #include "wx/generic/private/widthcalc.h"
 
@@ -58,30 +57,20 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// // the height of the header window (FIXME: should depend on its font!)
-// static const int HEADER_HEIGHT = 23;
-
 static const int SCROLL_UNIT_X = 15;
 
 // the spacing between the lines (in report mode)
 static const int LINE_SPACING = 0;
 
 // extra margins around the text label
-#ifdef __WXGTK__
 static const int EXTRA_WIDTH = 6;
-#else
-static const int EXTRA_WIDTH = 4;
-#endif
-
-#ifdef __WXGTK__
 static const int EXTRA_HEIGHT = 6;
-#else
-static const int EXTRA_HEIGHT = 4;
-#endif
 
 // margin between the window and the items
 static const int EXTRA_BORDER_X = 2;
 static const int EXTRA_BORDER_Y = 2;
+
+static const int ICON_OFFSET_X = 2;
 
 // offset for the header window
 static const int HEADER_OFFSET_X = 0;
@@ -93,9 +82,6 @@ static const int MARGIN_BETWEEN_ROWS = 6;
 // when autosizing the columns, add some slack
 static const int AUTOSIZE_COL_MARGIN = 10;
 
-// default width for the header columns
-static const int WIDTH_COL_DEFAULT = 80;
-
 // the space between the image and the text in the report mode
 static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
 
@@ -105,21 +91,31 @@ static const int HEADER_IMAGE_MARGIN_IN_REPORT_MODE = 2;
 // space after a checkbox
 static const int MARGIN_AROUND_CHECKBOX = 5;
 
-
-// ----------------------------------------------------------------------------
-// arrays/list implementations
-// ----------------------------------------------------------------------------
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListItemDataList)
-
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListHeaderDataList)
-
-
 // ----------------------------------------------------------------------------
 // wxListItemData
 // ----------------------------------------------------------------------------
+
+wxListItemData::wxListItemData(wxListItemData&& other)
+{
+    m_owner = other.m_owner;
+
+    // Take ownership of the pointers from the other object and reset them.
+    std::swap(m_attr, other.m_attr);
+    std::swap(m_rect, other.m_rect);
+}
+
+wxListItemData& wxListItemData::operator=(wxListItemData&& other)
+{
+    m_image = other.m_image;
+    m_data = other.m_data;
+    m_owner = other.m_owner;
+
+    // Swap them to let our pointers be deleted by the other object if necessary.
+    std::swap(m_attr, other.m_attr);
+    std::swap(m_rect, other.m_rect);
+
+    return *this;
+}
 
 wxListItemData::~wxListItemData()
 {
@@ -131,23 +127,11 @@ wxListItemData::~wxListItemData()
     delete m_rect;
 }
 
-void wxListItemData::Init()
-{
-    m_image = -1;
-    m_data = 0;
-
-    m_attr = NULL;
-}
-
 wxListItemData::wxListItemData(wxListMainWindow *owner)
 {
-    Init();
-
     m_owner = owner;
 
-    if ( owner->InReportView() )
-        m_rect = NULL;
-    else
+    if ( !owner->InReportView() )
         m_rect = new wxRect;
 }
 
@@ -298,6 +282,11 @@ wxListHeaderData::wxListHeaderData( const wxListItem &item )
     Init();
 
     SetItem( item );
+
+    // Always give some initial width to the new columns (it's still possible
+    // to set the width to 0 explicitly, however).
+    if ( !(m_mask & wxLIST_MASK_WIDTH) )
+        SetWidth(wxLIST_DEFAULT_COL_WIDTH);
 }
 
 void wxListHeaderData::SetItem( const wxListItem &item )
@@ -333,7 +322,7 @@ void wxListHeaderData::SetHeight( int h )
 
 void wxListHeaderData::SetWidth( int w )
 {
-    m_width = w < 0 ? WIDTH_COL_DEFAULT : w;
+    m_width = w < 0 ? wxLIST_DEFAULT_COL_WIDTH : w;
 }
 
 void wxListHeaderData::SetState( int flag )
@@ -356,7 +345,7 @@ bool wxListHeaderData::IsHit( int x, int y ) const
     return ((x >= m_xpos) && (x <= m_xpos+m_width) && (y >= m_ypos) && (y <= m_ypos+m_height));
 }
 
-void wxListHeaderData::GetItem( wxListItem& item )
+void wxListHeaderData::GetItem( wxListItem& item ) const
 {
     long mask = item.m_mask;
     if ( !mask )
@@ -420,10 +409,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
 {
     m_owner = owner;
 
-    if ( InReportView() )
-        m_gi = NULL;
-    else // !report
-        m_gi = new GeometryInfo;
+    SetReportView(InReportView());
 
     m_highlighted = false;
     m_checked = false;
@@ -433,10 +419,9 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
 
 void wxListLineData::CalculateSize( wxDC *dc, int spacing )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
+    wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
-    wxListItemData *item = node->GetData();
+    wxListItemData* const item = &m_items[0];
 
     wxString s;
     wxCoord lw, lh;
@@ -533,12 +518,11 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
     }
 }
 
-void wxListLineData::SetPosition( int x, int y, int spacing )
+void wxListLineData::SetPosition( int x, int y, int WXUNUSED(spacing) )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
+    wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
-    wxListItemData *item = node->GetData();
+    wxListItemData* const item = &m_items[0];
 
     switch ( GetMode() )
     {
@@ -556,13 +540,12 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
 
             if ( item->HasText() )
             {
-                if (m_gi->m_rectAll.width > spacing)
-                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2);
-                else
-                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2) + (spacing / 2) - (m_gi->m_rectLabel.width / 2);
-                m_gi->m_rectLabel.y = m_gi->m_rectAll.y + m_gi->m_rectAll.height + 2 - m_gi->m_rectLabel.height;
-                m_gi->m_rectHighlight.x = m_gi->m_rectLabel.x - 2;
-                m_gi->m_rectHighlight.y = m_gi->m_rectLabel.y - 2;
+                m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2) +
+                    (m_gi->m_rectAll.width - m_gi->m_rectLabel.width) / 2;
+                m_gi->m_rectLabel.y = m_gi->m_rectAll.y + m_gi->m_rectAll.height +
+                    (EXTRA_HEIGHT/2) - m_gi->m_rectLabel.height;
+                m_gi->m_rectHighlight.x = m_gi->m_rectLabel.x - (EXTRA_WIDTH/2);
+                m_gi->m_rectHighlight.y = m_gi->m_rectLabel.y - (EXTRA_HEIGHT/2);
             }
             else // no text, highlight the icon
             {
@@ -604,86 +587,47 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
 void wxListLineData::InitItems( int num )
 {
     for (int i = 0; i < num; i++)
-        m_items.Append( new wxListItemData(m_owner) );
+        m_items.emplace_back( m_owner );
 }
 
 void wxListLineData::SetItem( int index, const wxListItem &info )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    wxCHECK_RET( node, wxT("invalid column index in SetItem") );
-
-    wxListItemData *item = node->GetData();
-    item->SetItem( info );
+    m_items.at(index).SetItem( info );
 }
 
 void wxListLineData::GetItem( int index, wxListItem &info ) const
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    if (node)
-    {
-        wxListItemData *item = node->GetData();
-        item->GetItem( info );
-    }
+    m_items.at(index).GetItem( info );
 }
 
 wxString wxListLineData::GetText(int index) const
 {
-    wxString s;
-
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    if (node)
-    {
-        wxListItemData *item = node->GetData();
-        s = item->GetText();
-    }
-
-    return s;
+    return m_items.at(index).GetText();
 }
 
 void wxListLineData::SetText( int index, const wxString& s )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    if (node)
-    {
-        wxListItemData *item = node->GetData();
-        item->SetText( s );
-    }
+    m_items.at(index).SetText(s);
 }
 
 void wxListLineData::SetImage( int index, int image )
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    wxCHECK_RET( node, wxT("invalid column index in SetImage()") );
-
-    wxListItemData *item = node->GetData();
-    item->SetImage(image);
+    m_items.at(index).SetImage(image);
 }
 
 int wxListLineData::GetImage( int index ) const
 {
-    wxListItemDataList::compatibility_iterator node = m_items.Item( index );
-    wxCHECK_MSG( node, -1, wxT("invalid column index in GetImage()") );
-
-    wxListItemData *item = node->GetData();
-    return item->GetImage();
+    return m_items.at(index).GetImage();
 }
 
 wxItemAttr *wxListLineData::GetAttr() const
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_MSG( node, NULL, wxT("invalid column index in GetAttr()") );
-
-    wxListItemData *item = node->GetData();
-    return item->GetAttr();
+    return m_items.at(0).GetAttr();
 }
 
 void wxListLineData::SetAttr(wxItemAttr *attr)
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("invalid column index in SetAttr()") );
-
-    wxListItemData *item = node->GetData();
-    item->SetAttr(attr);
+    m_items.at(0).SetAttr(attr);
 }
 
 void wxListLineData::ApplyAttributes(wxDC *dc,
@@ -766,12 +710,11 @@ void wxListLineData::ApplyAttributes(wxDC *dc,
 
 void wxListLineData::Draw(wxDC *dc, bool current)
 {
-    wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-    wxCHECK_RET( node, wxT("no subitems at all??") );
+    wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
     ApplyAttributes(dc, m_gi->m_rectHighlight, IsHighlighted(), current);
 
-    wxListItemData *item = node->GetData();
+    wxListItemData* const item = &m_items[0];
     if (item->HasImage())
     {
         // centre the image inside our rectangle, this looks nicer when items
@@ -794,22 +737,19 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rect,
                                        const wxRect& rectHL,
                                        bool highlighted,
-                                       bool current )
+                                       bool current,
+                                       bool checked )
 {
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
     //       GetAttr() and move these lines into the loop below
 
+    // Note: GetSubItemRect() needs to be modified if the layout here changes.
+
     ApplyAttributes(dc, rectHL, highlighted, current);
 
-    wxCoord x = rect.x + HEADER_OFFSET_X,
+    wxCoord x = rect.x + HEADER_OFFSET_X + ICON_OFFSET_X,
             yMid = rect.y + rect.height/2;
-#ifdef __WXGTK__
-    // This probably needs to be done
-    // on all platforms as the icons
-    // otherwise nearly touch the border
-    x += 2;
-#endif
 
     if ( m_owner->HasCheckBoxes() )
     {
@@ -819,7 +759,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         rr.x += MARGIN_AROUND_CHECKBOX;
 
         int flags = 0;
-        if (m_checked)
+        if (checked)
             flags |= wxCONTROL_CHECKED;
         wxRendererNative::Get().DrawCheckBox(m_owner, *dc, rr, flags);
 
@@ -827,12 +767,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     }
 
     size_t col = 0;
-    for ( wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
-          node;
-          node = node->GetNext(), col++ )
+    for ( const auto& item : m_items )
     {
-        wxListItemData *item = node->GetData();
-
         int width = m_owner->GetColumnWidth(col);
         if (col == 0 && m_owner->HasCheckBoxes())
             width -= x;
@@ -843,11 +779,11 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         const int wText = width;
         wxDCClipper clipper(*dc, xOld, rect.y, wText, rect.height);
 
-        if ( item->HasImage() )
+        if ( item.HasImage() )
         {
             int ix, iy;
-            m_owner->GetImageSize( item->GetImage(), ix, iy );
-            m_owner->DrawImage( item->GetImage(), dc, xOld, yMid - iy/2 );
+            m_owner->GetImageSize( item.GetImage(), ix, iy );
+            m_owner->DrawImage( item.GetImage(), dc, xOld, yMid - iy/2 );
 
             ix += IMAGE_MARGIN_IN_REPORT_MODE;
 
@@ -855,8 +791,10 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             width -= ix;
         }
 
-        if ( item->HasText() )
-            DrawTextFormatted(dc, item->GetText(), col, xOld, yMid, width);
+        if ( item.HasText() )
+            DrawTextFormatted(dc, item.GetText(), col, xOld, yMid, width);
+
+        ++col;
     }
 }
 
@@ -948,6 +886,7 @@ bool wxListLineData::Highlight( bool on )
         return false;
 
     m_highlighted = on;
+    m_owner->UpdateSelectionCount(on);
 
     return true;
 }
@@ -968,7 +907,7 @@ wxEND_EVENT_TABLE()
 
 void wxListHeaderWindow::Init()
 {
-    m_currentCursor = NULL;
+    m_currentCursor = nullptr;
     m_isDragging = false;
     m_dirty = false;
     m_sendSetColumnWidth = false;
@@ -978,8 +917,11 @@ wxListHeaderWindow::wxListHeaderWindow()
 {
     Init();
 
-    m_owner = NULL;
-    m_resizeCursor = NULL;
+    m_owner = nullptr;
+    m_resizeCursor = nullptr;
+
+    m_sortAsc = true;
+    m_sortCol = -1;
 }
 
 bool wxListHeaderWindow::Create( wxWindow *win,
@@ -1031,10 +973,10 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
     wxGenericListCtrl *parent = m_owner->GetListCtrl();
 
     int xpix;
-    parent->GetScrollPixelsPerUnit( &xpix, NULL );
+    parent->GetScrollPixelsPerUnit( &xpix, nullptr );
 
     int view_start;
-    parent->GetViewStart( &view_start, NULL );
+    parent->GetViewStart( &view_start, nullptr );
 
 
     int org_x = 0;
@@ -1042,7 +984,7 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
     dc.GetDeviceOrigin( &org_x, &org_y );
 
     // account for the horz scrollbar offset
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
         // Maybe we just have to check for m_signX
@@ -1068,7 +1010,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // width and height of the entire header window
     int w, h;
     GetClientSize( &w, &h );
-    parent->CalcUnscrolledPosition(w, 0, &w, NULL);
+    parent->CalcUnscrolledPosition(w, 0, &w, nullptr);
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetTextForeground(GetForegroundColour());
@@ -1098,6 +1040,15 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             flags |= wxCONTROL_SELECTED;
 #endif
 
+        wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE;
+        if ( i == m_sortCol )
+        {
+            if ( m_sortAsc )
+                sortArrow = wxHDR_SORT_ICON_UP;
+            else
+                sortArrow = wxHDR_SORT_ICON_DOWN;
+        }
+
         if (i == 0)
            flags |= wxCONTROL_SPECIAL; // mark as first column
 
@@ -1106,7 +1057,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                     this,
                                     dc,
                                     wxRect(x, HEADER_OFFSET_Y, cw, ch),
-                                    flags
+                                    flags,
+                                    sortArrow
                                 );
 
         // see if we have enough space for the column label
@@ -1120,19 +1072,19 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // and the width of the icon, if any
         int ix = 0, iy = 0;    // init them just to suppress the compiler warnings
         const int image = item.m_image;
-        wxImageList *imageList;
+        wxWithImages *smallImages;
         if ( image != -1 )
         {
-            imageList = m_owner->GetSmallImageList();
-            if ( imageList )
+            smallImages = m_owner->GetSmallImages();
+            if ( smallImages )
             {
-                imageList->GetSize(image, ix, iy);
+                smallImages->GetImageLogicalSize(this, image, ix, iy);
                 wLabel += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
             }
         }
         else
         {
-            imageList = NULL;
+            smallImages = nullptr;
         }
 
         // ignore alignment if there is not enough space anyhow
@@ -1161,16 +1113,15 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h);
 
         // if we have an image, draw it on the right of the label
-        if ( imageList )
+        if ( smallImages )
         {
-            imageList->Draw
-                       (
-                        image,
-                        dc,
-                        xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
-                        HEADER_OFFSET_Y + (h - iy)/2,
-                        wxIMAGELIST_DRAW_TRANSPARENT
-                       );
+            wxDrawImageBitmap
+            (
+                this, *smallImages, image,
+                dc,
+                xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
+                HEADER_OFFSET_Y + (h - iy)/2
+            );
         }
 
         dc.DrawText( item.GetText(),
@@ -1206,35 +1157,9 @@ void wxListHeaderWindow::OnInternalIdle()
 
 void wxListHeaderWindow::DrawCurrent()
 {
-#if 1
-    // m_owner->SetColumnWidth( m_column, m_currentX - m_minX );
     m_sendSetColumnWidth = true;
     m_colToSend = m_column;
     m_widthToSend = m_currentX - m_minX;
-#else
-    int x1 = m_currentX;
-    int y1 = 0;
-    m_owner->ClientToScreen( &x1, &y1 );
-
-    int x2 = m_currentX;
-    int y2 = 0;
-    m_owner->GetClientSize( NULL, &y2 );
-    m_owner->ClientToScreen( &x2, &y2 );
-
-    wxScreenDC dc;
-    dc.SetLogicalFunction( wxINVERT );
-    dc.SetPen( wxPen(*wxBLACK, 2) );
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
-
-    AdjustDC(dc);
-
-    dc.DrawLine( x1, y1, x2, y2 );
-
-    dc.SetLogicalFunction( wxCOPY );
-
-    dc.SetPen( wxNullPen );
-    dc.SetBrush( wxNullBrush );
-#endif
 }
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
@@ -1243,8 +1168,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     // we want to work with logical coords
     int x;
-    parent->CalcUnscrolledPosition(event.GetX(), 0, &x, NULL);
-    int y = event.GetY();
+    parent->CalcUnscrolledPosition(event.GetX(), 0, &x, nullptr);
 
     if (m_isDragging)
     {
@@ -1253,8 +1177,8 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         // we don't draw the line beyond our window, but we allow dragging it
         // there
         int w = 0;
-        GetClientSize( &w, NULL );
-        parent->CalcUnscrolledPosition(w, 0, &w, NULL);
+        GetClientSize( &w, nullptr );
+        parent->CalcUnscrolledPosition(w, 0, &w, nullptr);
         w -= 6;
 
         // erase the line if it was drawn
@@ -1297,7 +1221,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
             xpos += m_owner->GetColumnWidth( col );
             m_column = col;
 
-            if ( (abs(x-xpos) < 3) && (y < 22) )
+            if ( abs(x-xpos) < 3 )
             {
                 // near the column border
                 hit_border = true;
@@ -1353,6 +1277,15 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                                     : wxEVT_LIST_COL_RIGHT_CLICK,
                                 event.GetPosition());
             }
+        }
+        else if ( event.LeftDClick() && hit_border )
+        {
+            // Autosize the column when the divider is clicked: if there are
+            // any items, fit the columns to its contents, otherwise just fit
+            // it to its label width.
+            parent->SetColumnWidth(m_column,
+                                   parent->IsEmpty() ? wxLIST_AUTOSIZE_USEHEADER
+                                                     : wxLIST_AUTOSIZE);
         }
         else if (event.Moving())
         {
@@ -1471,7 +1404,7 @@ void wxListTextCtrlWrapper::EndEdit(EndReason reason)
 
         case End_Destroy:
             // Don't generate any notifications for the control being destroyed
-            // and don't set focus to it neither.
+            // and don't set focus to it either.
             Finish(false);
             break;
     }
@@ -1518,6 +1451,7 @@ bool wxListTextCtrlWrapper::CheckForEndEditKey(const wxKeyEvent& event)
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
             EndEdit( End_Accept );
             break;
 
@@ -1534,7 +1468,7 @@ bool wxListTextCtrlWrapper::CheckForEndEditKey(const wxKeyEvent& event)
 
 void wxListTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
 {
-    if (m_aboutToFinish)
+    if ( !m_aboutToFinish )
     {
         // auto-grow the textctrl:
         wxSize parentSize = m_owner->GetSize();
@@ -1587,6 +1521,7 @@ wxEND_EVENT_TABLE()
 void wxListMainWindow::Init()
 {
     m_dirty = true;
+    m_selCount =
     m_countVirt = 0;
     m_lineFrom =
     m_lineTo = (size_t)-1;
@@ -1595,8 +1530,8 @@ void wxListMainWindow::Init()
     m_headerWidth =
     m_lineHeight = 0;
 
-    m_small_image_list = NULL;
-    m_normal_image_list = NULL;
+    m_small_images = nullptr;
+    m_normal_images = nullptr;
 
     m_small_spacing = 30;
     m_normal_spacing = 40;
@@ -1607,16 +1542,18 @@ void wxListMainWindow::Init()
 
     m_lastOnSame = false;
     m_renameTimer = new wxListRenameTimer( this );
-    m_findTimer = NULL;
+    m_findTimer = nullptr;
     m_findBell = 0;  // default is to not ring bell at all
-    m_textctrlWrapper = NULL;
+    m_textctrlWrapper = nullptr;
 
     m_current =
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
-    m_lineBeforeLastClicked = (size_t)-1;
+    m_lineBeforeLastClicked =
+    m_anchor  = (size_t)-1;
 
     m_hasCheckBoxes = false;
+    m_extendRulesAndAlternateColour = false;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -1624,7 +1561,7 @@ wxListMainWindow::wxListMainWindow()
     Init();
 
     m_highlightBrush =
-    m_highlightUnfocusedBrush = NULL;
+    m_highlightUnfocusedBrush = nullptr;
 }
 
 wxListMainWindow::wxListMainWindow( wxWindow *parent,
@@ -1667,8 +1604,6 @@ wxListMainWindow::~wxListMainWindow()
         m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Destroy);
 
     DoDeleteAllItems();
-    WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
-    WX_CLEAR_ARRAY(m_aColWidths);
 
     delete m_highlightBrush;
     delete m_highlightUnfocusedBrush;
@@ -1678,10 +1613,9 @@ wxListMainWindow::~wxListMainWindow()
 
 void wxListMainWindow::SetReportView(bool inReportView)
 {
-    const size_t count = m_lines.size();
-    for ( size_t n = 0; n < count; n++ )
+    for ( auto& line : m_lines )
     {
-        m_lines[n]->SetReportView(inReportView);
+        line.SetReportView(inReportView);
     }
 }
 
@@ -1717,22 +1651,21 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
     // control changed as it would have the incorrect number of fields
     // otherwise
     if ( !m_lines.empty() &&
-            m_lines[0]->m_items.GetCount() != (size_t)GetColumnCount() )
+            m_lines[0].m_items.size() != (size_t)GetColumnCount() )
     {
-        self->m_lines.Clear();
+        self->m_lines.clear();
     }
 
     if ( m_lines.empty() )
     {
-        wxListLineData *line = new wxListLineData(self);
-        self->m_lines.push_back(line);
+        self->m_lines.emplace_back(self);
 
         // don't waste extra memory -- there never going to be anything
         // else/more in this array
-        wxShrinkToFit(self->m_lines);
+        self->m_lines.shrink_to_fit();
     }
 
-    return m_lines[0];
+    return &self->m_lines[0];
 }
 
 // ----------------------------------------------------------------------------
@@ -1750,12 +1683,12 @@ wxCoord wxListMainWindow::GetLineHeight() const
         dc.SetFont( GetFont() );
 
         wxCoord y;
-        dc.GetTextExtent(wxT("H"), NULL, &y);
+        dc.GetTextExtent(wxT("H"), nullptr, &y);
 
-        if ( m_small_image_list && m_small_image_list->GetImageCount() )
+        if ( m_small_images && m_small_images->GetImageCount() )
         {
             int iw = 0, ih = 0;
-            m_small_image_list->GetSize(0, iw, ih);
+            m_small_images->GetImageLogicalSize(this, 0, iw, ih);
             y = wxMax(y, ih);
         }
 
@@ -1794,10 +1727,9 @@ wxRect wxListMainWindow::GetLineLabelRect(size_t line) const
 
     int image_x = 0;
     wxListLineData *data = GetLine(line);
-    wxListItemDataList::compatibility_iterator node = data->m_items.GetFirst();
-    if (node)
+    if ( !data->m_items.empty() )
     {
-        wxListItemData *item = node->GetData();
+        wxListItemData *item = &data->m_items[0];
         if ( item->HasImage() )
         {
             int ix, iy;
@@ -1882,8 +1814,13 @@ bool wxListMainWindow::IsHighlighted(size_t line) const
 
 void wxListMainWindow::HighlightLines( size_t lineFrom,
                                        size_t lineTo,
-                                       bool highlight )
+                                       bool highlight,
+                                       SendEvent sendEvent )
 {
+    // It is safe to swap the bounds here if they are not in order.
+    if ( lineFrom > lineTo )
+        wxSwap(lineFrom, lineTo);
+
     if ( IsVirtual() )
     {
         wxArrayInt linesChanged;
@@ -1906,13 +1843,13 @@ void wxListMainWindow::HighlightLines( size_t lineFrom,
     {
         for ( size_t line = lineFrom; line <= lineTo; line++ )
         {
-            if ( HighlightLine(line, highlight) )
+            if ( HighlightLine(line, highlight, sendEvent) )
                 RefreshLine(line);
         }
     }
 }
 
-bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
+bool wxListMainWindow::HighlightLine( size_t line, bool highlight, SendEvent sendEvent )
 {
     bool changed;
 
@@ -1928,7 +1865,7 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
         changed = ld->Highlight(highlight);
     }
 
-    if ( changed )
+    if ( changed && sendEvent )
     {
         SendNotify( line, highlight ? wxEVT_LIST_ITEM_SELECTED
                                     : wxEVT_LIST_ITEM_DESELECTED );
@@ -2001,13 +1938,16 @@ void wxListMainWindow::RefreshAfter( size_t lineFrom )
 {
     if ( InReportView() )
     {
-        size_t visibleFrom, visibleTo;
-        GetVisibleLinesRange(&visibleFrom, &visibleTo);
+        // Note that we don't compare lineFrom with the last visible line
+        // because we refresh the entire rectangle below it anyhow, so it
+        // doesn't matter if it's bigger than it. And we must still refresh
+        // even if lineFrom is invalid because it may have been (just) deleted
+        // when we're called from DeleteItem().
+        size_t visibleFrom;
+        GetVisibleLinesRange(&visibleFrom, nullptr);
 
         if ( lineFrom < visibleFrom )
             lineFrom = visibleFrom;
-        else if ( lineFrom > visibleTo )
-            return;
 
         wxRect rect;
         rect.x = 0;
@@ -2069,7 +2009,19 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     if ( m_dirty )
-        RecalculatePositions( false );
+    {
+        // Calling Refresh() from inside OnPaint() doesn't work under macOS, so
+        // don't do it immediately...
+        RecalculatePositions();
+
+        // ... but schedule it for later.
+        CallAfter(&wxWindow::Refresh, true, (const wxRect*)nullptr);
+
+        // Don't bother redoing the relayout again the next time nor redrawing
+        // now, as we'll be refresh soon anyhow.
+        m_dirty = false;
+        return;
+    }
 
     GetListCtrl()->PrepareDC( dc );
 
@@ -2083,7 +2035,22 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int lineHeight = GetLineHeight();
 
         size_t visibleFrom, visibleTo;
+        const size_t linesPerPage = (unsigned int) m_linesPerPage;
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
+
+        // We may need to iterate beyond visibleTo if we want to draw striped
+        // background across the entire window.
+        size_t visibleEnd;
+        wxColour colAlt;
+        if ( m_extendRulesAndAlternateColour )
+        {
+            colAlt = GetListCtrl()->GetAlternateRowColour();
+            visibleEnd = wxMax(linesPerPage, visibleTo);
+        }
+        else
+        {
+            visibleEnd = visibleTo;
+        }
 
         wxRect rectLine;
         int xOrig = dc.LogicalToDeviceX( 0 );
@@ -2101,7 +2068,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             GetParent()->GetEventHandler()->ProcessEvent( evCache );
         }
 
-        for ( size_t line = visibleFrom; line <= visibleTo; line++ )
+        for ( size_t line = visibleFrom; line <= visibleEnd; line++ )
         {
             rectLine = GetLineRect(line);
 
@@ -2113,11 +2080,27 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 continue;
             }
 
+            if ( line > visibleTo )
+            {
+                // We only iterate beyond visibleTo when we have to draw the
+                // odd rows background, so do this if needed.
+                if ( line % 2 )
+                {
+                    dc.SetBrush(colAlt);
+                    dc.SetPen(*wxTRANSPARENT_PEN);
+                    dc.DrawRectangle(rectLine);
+                }
+
+                // But don't do anything else, as there is no valid item.
+                continue;
+            }
+
             GetLine(line)->DrawInReportMode( &dc,
                                              rectLine,
                                              GetLineHighlightRect(line),
                                              IsHighlighted(line),
-                                             line == m_current );
+                                             line == m_current,
+                                             IsItemChecked(line) );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2127,7 +2110,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             size_t i = visibleFrom;
             if (i == 0) i = 1; // Don't draw the first one
-            for ( ; i <= visibleTo; i++ )
+            for ( ; i <= visibleEnd; i++ )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2136,7 +2119,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
 
             // Draw last horizontal rule
-            if ( visibleTo == GetItemCount() - 1 )
+            if ( visibleEnd == GetItemCount() - 1 )
             {
                 dc.SetPen( pen );
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2146,7 +2129,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         // Draw vertical rules if required
-        if ( HasFlag(wxLC_VRULES) && !IsEmpty() )
+        if ( HasFlag(wxLC_VRULES) &&
+                (m_extendRulesAndAlternateColour || !IsEmpty()) )
         {
             wxPen pen(GetRuleColour(), 1, wxPENSTYLE_SOLID);
             wxRect firstItemRect, lastItemRect;
@@ -2157,14 +2141,22 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.SetPen(pen);
             dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
+            int clientHeight, clientWidth;
+            GetSize( &clientWidth, &clientHeight );
+
             for (int col = 0; col < GetColumnCount(); col++)
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth;
                 int x_pos = x - dev_x;
                 if (col < GetColumnCount()-1) x_pos -= 2;
+
+                int ruleHeight = m_extendRulesAndAlternateColour && visibleEnd > visibleTo
+                                    ? clientHeight
+                                    : lastItemRect.GetBottom() + 1 - dev_y;
+
                 dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
-                            x_pos, lastItemRect.GetBottom() + 1 - dev_y);
+                            x_pos, ruleHeight);
             }
         }
     }
@@ -2213,6 +2205,61 @@ void wxListMainWindow::HighlightAll( bool on )
     }
 }
 
+void wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
+{
+    const unsigned selCount = GetSelectedItemCount();
+
+    if ( selCount == 1 && IsHighlighted(line) )
+    {
+        return; // Nothing changed.
+    }
+
+    if ( oldLine != (size_t)-1 )
+    {
+        IsHighlighted(oldLine) ? ReverseHighlight(oldLine)
+                               : RefreshLine(oldLine); // refresh the old focus to remove it
+    }
+
+    // Deselect the remaining items we may have when using multiple selection
+    // (for single selection the only selected item is always the highlighted
+    // one, so we would have already returned above).
+    if ( selCount != 0 )
+    {
+        // Deselecting many items at once will generate wxEVT_XXX_DESELECTED event
+        // for each one of them. although this may be inefficient if the number of
+        // deselected items is too much, we keep doing this (for non-virtual list
+        // controls) for backward compatibility concerns. For virtual listctrl (in
+        // multi-selection mode), wxMSW sends only a notification to indicate that
+        // something has been deselected. Notice that to be fully compatible with
+        // wxMSW behaviour, _line_ shouldn't be deselected if it was selected.
+
+        const SendEvent sendEvent = IsVirtual() ? SendEvent_None : SendEvent_Normal;
+
+        size_t lineFrom = 0,
+               lineTo   = GetItemCount() - 1;
+
+        if ( line > lineFrom && line < lineTo )
+        {
+            HighlightLines(lineFrom, line - 1, false, sendEvent);
+            HighlightLines(line + 1, lineTo, false, sendEvent);
+        }
+        else // _line_ is equal to lineFrom or lineTo
+        {
+            line == lineFrom ? ++lineFrom : --lineTo;
+            HighlightLines(lineFrom, lineTo, false, sendEvent);
+        }
+
+        // If we didn't send the event for individual items above, send it for all of them now.
+        if ( sendEvent == SendEvent_None )
+            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
+    }
+
+    // _line_ should be the only selected item.
+    HighlightLine(line);
+    // refresh the new focus to add it.
+    RefreshLine(line);
+}
+
 void wxListMainWindow::OnChildFocus(wxChildFocusEvent& WXUNUSED(event))
 {
     // Do nothing here.  This prevents the default handler in wxScrolledWindow
@@ -2224,8 +2271,10 @@ void wxListMainWindow::SendNotify( size_t line,
                                    wxEventType command,
                                    const wxPoint& point )
 {
-    wxListEvent le( command, GetParent()->GetId() );
-    le.SetEventObject( GetParent() );
+    wxGenericListCtrl* const listctrl = GetListCtrl();
+
+    wxListEvent le( command, listctrl->GetId() );
+    le.SetEventObject( listctrl );
 
     le.m_item.m_itemId =
     le.m_itemIndex = line;
@@ -2240,25 +2289,23 @@ void wxListMainWindow::SendNotify( size_t line,
         le.m_pointDrag = GetPosition() + point;
     }
 
-    // don't try to get the line info for virtual list controls: the main
-    // program has it anyhow and if we did it would result in accessing all
-    // the lines, even those which are not visible now and this is precisely
-    // what we're trying to avoid
-    if ( !IsVirtual() )
+    // provide information about the (first column of the) item in the event if
+    // we have a valid item and any columns at all
+    if ( line != (size_t)-1 && listctrl->GetColumnCount() )
     {
-        if ( line != (size_t)-1 )
-        {
-            GetLine(line)->GetItem( 0, le.m_item );
-        }
-        //else: this happens for wxEVT_LIST_ITEM_FOCUSED event
+        GetLine(line)->GetItem( 0, le.m_item );
     }
-    //else: there may be no more such item
 
-    GetParent()->GetEventHandler()->ProcessEvent( le );
+    listctrl->GetEventHandler()->ProcessEvent( le );
 }
 
-void wxListMainWindow::ChangeCurrent(size_t current)
+bool wxListMainWindow::ChangeCurrentWithoutEvent(size_t current)
 {
+    if ( current == m_current )
+    {
+        return false; // Nothing changed!
+    }
+
     m_current = current;
 
     // as the current item changed, we shouldn't start editing it when the
@@ -2266,12 +2313,24 @@ void wxListMainWindow::ChangeCurrent(size_t current)
     if ( m_renameTimer->IsRunning() )
         m_renameTimer->Stop();
 
-    SendNotify(current, wxEVT_LIST_ITEM_FOCUSED);
+    return true;
+}
+
+void wxListMainWindow::ChangeCurrent(size_t current)
+{
+    if ( ChangeCurrentWithoutEvent(current) )
+        SendNotify(current, wxEVT_LIST_ITEM_FOCUSED);
 }
 
 wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass)
 {
-    wxCHECK_MSG( (item >= 0) && ((size_t)item < GetItemCount()), NULL,
+    // Calling this function for control without wxLC_EDIT_LABELS flag set
+    // is not portable. i.e. on wxMSW this function cannot edit labels if
+    // the flag is not already set on the control.
+    wxASSERT_MSG( HasFlag(wxLC_EDIT_LABELS),
+                 "should only be called if wxLC_EDIT_LABELS flag is set");
+
+    wxCHECK_MSG( (item >= 0) && ((size_t)item < GetItemCount()), nullptr,
                  wxT("wrong index in wxGenericListCtrl::EditLabel()") );
 
     wxASSERT_MSG( textControlClass->IsKindOf(wxCLASSINFO(wxTextCtrl)),
@@ -2284,13 +2343,19 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     le.m_item.m_itemId =
     le.m_itemIndex = item;
     wxListLineData *data = GetLine(itemEdit);
-    wxCHECK_MSG( data, NULL, wxT("invalid index in EditLabel()") );
+    wxCHECK_MSG( data, nullptr, wxT("invalid index in EditLabel()") );
     data->GetItem( 0, le.m_item );
+
+    // See comment in EditLabel() (src/msw/listctrl.cpp) for why we create the
+    // text control before sending the wxEVT_LIST_BEGIN_LABEL_EDIT event.
+    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
+    m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
 
     if ( GetParent()->GetEventHandler()->ProcessEvent( le ) && !le.IsAllowed() )
     {
+        m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Destroy);
         // vetoed by user code
-        return NULL;
+        return nullptr;
     }
 
     if ( m_dirty )
@@ -2299,8 +2364,6 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
         Update();
     }
 
-    wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
-    m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
     return m_textctrlWrapper->GetText();
 }
 
@@ -2335,8 +2398,15 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
 
     data->GetItem( 0, le.m_item );
     le.m_item.m_text = value;
-    return !GetParent()->GetEventHandler()->ProcessEvent( le ) ||
-                le.IsAllowed();
+
+    GetParent()->GetEventHandler()->ProcessEvent( le );
+
+    if ( !le.IsAllowed() )
+        return false;
+
+    m_dirty = true;
+
+    return true;
 }
 
 void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
@@ -2360,7 +2430,7 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 void wxListMainWindow::OnFindTimer()
 {
     m_findPrefix.clear();
-    if ( m_findBell )
+    if ( m_findBell == -1 )
         m_findBell = 1;
 }
 
@@ -2412,7 +2482,11 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             evtCtx.SetEventObject(GetParent());
             GetParent()->GetEventHandler()->ProcessEvent(evtCtx);
         }
-        return;
+
+        if ( IsEmpty() )
+            return;
+
+        // Continue processing...
     }
 
     if (m_dirty)
@@ -2459,7 +2533,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     else
         m_dragCount = 0;
 
-    // The only mouse event that can be generated without any valid item is
+    // The only mouse events that can be generated without any valid item are
+    // wxEVT_LIST_ITEM_DESELECTED for virtual lists, and
     // wxEVT_LIST_ITEM_RIGHT_CLICK as it can be useful to have a global
     // popup menu for the list control itself which should be shown even when
     // the user clicks outside of any item.
@@ -2477,8 +2552,17 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
         else if (event.LeftDown())
         {
-            // reset the selection and bail out
-            HighlightAll(false);
+            // reset the selection in multi-selection mode only when Ctrl and
+            // Shift keys are not pressed to mimic MSW behaviour
+            if ( IsSingleSel() || !(event.ControlDown() || event.ShiftDown()) )
+            {
+                // reset the selection and bail out
+                HighlightAll(false);
+                // generate a DESELECTED event for
+                // virtual multi-selection lists
+                if ( IsVirtual() && !IsSingleSel() )
+                    SendNotify( m_lineLastClicked, wxEVT_LIST_ITEM_DESELECTED );
+            }
         }
 
         return;
@@ -2532,8 +2616,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         if (m_lineSelectSingleOnUp != (size_t)-1)
         {
             // select single line
-            HighlightAll( false );
-            ReverseHighlight(m_lineSelectSingleOnUp);
+            HighlightOnly(m_lineSelectSingleOnUp);
         }
 
         if (m_lastOnSame)
@@ -2551,6 +2634,14 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
 
             m_lastOnSame = false;
+        }
+
+        if ( GetSelectedItemCount() == 1 || event.CmdDown() )
+        {
+            // In multiple selection mode, the anchor is set to the first selected
+            // item or can be changed to m_current if Ctrl key is down, as is the
+            // case under wxMSW.
+            m_anchor = m_current;
         }
 
         m_lineSelectSingleOnUp = (size_t)-1;
@@ -2572,9 +2663,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         // Multi-selections should not be cleared if a selected item is clicked.
         if (!IsHighlighted(current))
         {
-            HighlightAll(false);
+            size_t oldCurrent = m_current;
             ChangeCurrent(current);
-            ReverseHighlight(m_current);
+            HighlightOnly(m_current, oldCurrent);
         }
 
         SendNotify( current, wxEVT_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
@@ -2592,7 +2683,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_lineLastClicked = current;
 
         size_t oldCurrent = m_current;
-        bool oldWasSelected = IsHighlighted(m_current);
+        bool oldWasSelected = HasCurrent() && IsHighlighted(m_current);
 
         bool cmdModifierDown = event.CmdDown();
         if ( IsSingleSel() || !(cmdModifierDown || event.ShiftDown()) )
@@ -2603,11 +2694,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
             else if (IsSingleSel() || !IsHighlighted(current))
             {
-                HighlightAll(false);
-
                 ChangeCurrent(current);
-
-                ReverseHighlight(m_current);
+                HighlightOnly(m_current, oldWasSelected ? oldCurrent : (size_t)-1);
             }
             else // multi sel & current is highlighted & no mod keys
             {
@@ -2627,16 +2715,15 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             {
                 ChangeCurrent(current);
 
-                size_t lineFrom = oldCurrent,
-                       lineTo = current;
-
-                if ( lineTo < lineFrom )
+                if ( oldCurrent == (size_t)-1 )
                 {
-                    lineTo = lineFrom;
-                    lineFrom = m_current;
+                    // Highlight m_current only if there is no previous selection.
+                    HighlightLine(m_current);
                 }
-
-                HighlightLines(lineFrom, lineTo);
+                else if ( oldCurrent != current && m_anchor != (size_t)-1 )
+                {
+                    ExtendSelection(oldCurrent, current);
+                }
             }
             else // !ctrl, !shift
             {
@@ -2645,7 +2732,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
         }
 
-        if (m_current != oldCurrent)
+        if (m_current != oldCurrent && oldCurrent != (size_t)-1)
             RefreshLine( oldCurrent );
 
         // Set the flag telling us whether the next click on this item should
@@ -2750,6 +2837,81 @@ bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
 // keyboard handling
 // ----------------------------------------------------------------------------
 
+// Helper function which handles items selection correctly and efficiently. and
+// simply, mimic the wxMSW behaviour. And The benefit of this function is that it
+// ensures that wxEVT_LIST_ITEM_{DE}SELECTED events are only generated for items
+// freshly (de)selected (i.e. items that have really changed state). Useful for
+// multi-selection mode when selecting using mouse or arrows with Shift key down.
+void wxListMainWindow::ExtendSelection(size_t oldCurrent, size_t newCurrent)
+{
+    // Refresh the old/new focus to remove/add it
+    RefreshLine(oldCurrent);
+    RefreshLine(newCurrent);
+
+    // Given a selection [anchor, old], to change/extend it to new (i.e. the
+    // selection becomes [anchor, new]) we discriminate three possible cases:
+    //
+    // Case 1) new < old <= anchor || anchor <= old < new
+    // i.e. oldCurrent between anchor and newCurrent, in which case we:
+    // - Highlight everything between anchor and newCurrent (inclusive).
+    //
+    // Case 2) old < new <= anchor || anchor <= new < old
+    // i.e. newCurrent between anchor and oldCurrent, in which case we:
+    // - Unhighlight everything between oldCurrent and newCurrent (exclusive).
+    //
+    // Case 3) old < anchor < new || new < anchor < old
+    // i.e. anchor between oldCurrent and newCurrent, in which case we
+    // - Highlight everything between anchor and newCurrent (inclusive).
+    // - Unhighlight everything between anchor (exclusive) and oldCurrent.
+
+    size_t lineFrom, lineTo;
+
+    if ( (newCurrent < oldCurrent && oldCurrent <= m_anchor) ||
+         (newCurrent > oldCurrent && oldCurrent >= m_anchor) )
+    {
+        lineFrom = m_anchor;
+        lineTo   = newCurrent;
+
+        HighlightLines(lineFrom, lineTo);
+    }
+    else if ( (oldCurrent < newCurrent && newCurrent <= m_anchor) ||
+              (oldCurrent > newCurrent && newCurrent >= m_anchor) )
+    {
+        lineFrom = oldCurrent;
+        lineTo   = newCurrent;
+
+        // Exclude newCurrent from being deselected
+        (lineTo < lineFrom) ? ++lineTo : --lineTo;
+
+        HighlightLines(lineFrom, lineTo, false);
+
+        // For virtual listctrl (in multi-selection mode), wxMSW sends only
+        // a notification to indicate that something has been deselected.
+        if ( IsVirtual() )
+            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
+    }
+    else if ( (oldCurrent < m_anchor && m_anchor < newCurrent) ||
+              (newCurrent < m_anchor && m_anchor < oldCurrent) )
+    {
+        lineFrom = m_anchor;
+        lineTo   = oldCurrent;
+
+        // Exclude anchor from being deselected
+        (lineTo < lineFrom) ? --lineFrom : ++lineFrom;
+
+        HighlightLines(lineFrom, lineTo, false);
+
+        // See above.
+        if ( IsVirtual() )
+            SendNotify((size_t)-1, wxEVT_LIST_ITEM_DESELECTED);
+
+        lineFrom = m_anchor;
+        lineTo   = newCurrent;
+
+        HighlightLines(lineFrom, lineTo);
+    }
+}
+
 void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 {
     wxCHECK_RET( newCurrent < (size_t)GetItemCount(),
@@ -2757,42 +2919,33 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 
     size_t oldCurrent = m_current;
 
+    ChangeCurrent(newCurrent);
+
     // in single selection we just ignore Shift as we can't select several
     // items anyhow
     if ( event.ShiftDown() && !IsSingleSel() )
     {
-        ChangeCurrent(newCurrent);
-
-        // refresh the old focus to remove it
-        RefreshLine( oldCurrent );
-
-        // select all the items between the old and the new one
-        if ( oldCurrent > newCurrent )
-        {
-            newCurrent = oldCurrent;
-            oldCurrent = m_current;
-        }
-
-        HighlightLines(oldCurrent, newCurrent);
+        ExtendSelection(oldCurrent, newCurrent);
     }
     else // !shift
     {
-        // all previously selected items are unselected unless ctrl is held
-        // in a multiselection control
+        // all previously selected items are unselected unless ctrl is held in
+        // a multi-selection control. in single selection mode we must always
+        // have a selected item.
         if ( !event.ControlDown() || IsSingleSel() )
-            HighlightAll(false);
+        {
+            HighlightOnly(m_current, oldCurrent);
 
-        ChangeCurrent(newCurrent);
-
-        // refresh the old focus to remove it
-        RefreshLine( oldCurrent );
-
-        // in single selection mode we must always have a selected item
-        if ( !event.ControlDown() || IsSingleSel() )
-            HighlightLine( m_current, true );
+            // Update anchor
+            m_anchor = m_current;
+        }
+        else
+        {
+            // refresh the old/new focus to remove/add it
+            RefreshLine(oldCurrent);
+            RefreshLine(m_current);
+        }
     }
-
-    RefreshLine( m_current );
 
     MoveToFocus();
 }
@@ -2810,10 +2963,11 @@ void wxListMainWindow::OnKeyDown( wxKeyEvent &event )
 
     // send a list event
     wxListEvent le( wxEVT_LIST_KEY_DOWN, parent->GetId() );
+    const size_t current = ShouldSendEventForCurrent() ? m_current : (size_t)-1;
     le.m_item.m_itemId =
-    le.m_itemIndex = m_current;
-    if (HasCurrent())
-        GetLine(m_current)->GetItem( 0, le.m_item );
+    le.m_itemIndex = current;
+    if ( current != (size_t)-1 )
+        GetLine(current)->GetItem( 0, le.m_item );
     le.m_code = event.GetKeyCode();
     le.SetEventObject( parent );
     if (parent->GetEventHandler()->ProcessEvent( le ))
@@ -2967,7 +3121,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
                 {
                     ReverseHighlight(m_current);
                 }
-                else // normal space press
+                else if ( ShouldSendEventForCurrent() ) // normal space press
                 {
                     SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
                 }
@@ -2980,6 +3134,12 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
         case WXK_RETURN:
         case WXK_EXECUTE:
+            if ( event.HasModifiers() || !ShouldSendEventForCurrent() )
+            {
+                event.Skip();
+                break;
+            }
+
             SendNotify( m_current, wxEVT_LIST_ITEM_ACTIVATED );
             break;
 
@@ -3023,7 +3183,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
                 // Notice that we should start the timer even if we didn't find
                 // anything to make sure we reset the search state later.
-                m_findTimer->Start(wxListFindTimer::DELAY, wxTIMER_ONE_SHOT);
+                m_findTimer->StartOnce(wxListFindTimer::DELAY);
 
                 // restart timer even when there's no match so bell get's reset
                 if ( item != (size_t)-1 )
@@ -3037,7 +3197,7 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 
                     // Reset the bell flag if it had been temporarily disabled
                     // before.
-                    if ( m_findBell )
+                    if ( m_findBell == -1 )
                         m_findBell = 1;
                 }
                 else // No such item
@@ -3083,6 +3243,7 @@ void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
     {
         m_hasFocus = true;
 
+        UpdateCurrent();
         RefreshSelected();
     }
 }
@@ -3103,41 +3264,25 @@ void wxListMainWindow::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 
 void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
 {
-    if ( HasFlag(wxLC_ICON) && (m_normal_image_list))
+    if ( HasFlag(wxLC_ICON) && m_normal_images )
     {
-        m_normal_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
+        wxDrawImageBitmap(this, *m_normal_images, index, *dc, x, y);
     }
-    else if ( HasFlag(wxLC_SMALL_ICON) && (m_small_image_list))
+    else if ( HasFlag(wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT) && m_small_images )
     {
-        m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
-    }
-    else if ( HasFlag(wxLC_LIST) && (m_small_image_list))
-    {
-        m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
-    }
-    else if ( InReportView() && (m_small_image_list))
-    {
-        m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
+        wxDrawImageBitmap(this, *m_small_images, index, *dc, x, y);
     }
 }
 
 void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
 {
-    if ( HasFlag(wxLC_ICON) && m_normal_image_list )
+    if ( HasFlag(wxLC_ICON) && m_normal_images )
     {
-        m_normal_image_list->GetSize( index, width, height );
+        m_normal_images->GetImageLogicalSize(this, index, width, height);
     }
-    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_image_list )
+    else if ( HasFlag(wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT) && m_small_images )
     {
-        m_small_image_list->GetSize( index, width, height );
-    }
-    else if ( HasFlag(wxLC_LIST) && m_small_image_list )
-    {
-        m_small_image_list->GetSize( index, width, height );
-    }
-    else if ( InReportView() && m_small_image_list )
-    {
-        m_small_image_list->GetSize( index, width, height );
+        m_small_images->GetImageLogicalSize(this, index, width, height);
     }
     else
     {
@@ -3146,28 +3291,29 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
     }
 }
 
-void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
+
+void wxListMainWindow::SetImages( wxWithImages *images, const int which )
 {
     m_dirty = true;
 
     // calc the spacing from the icon size
     int width = 0;
 
-    if ((imageList) && (imageList->GetImageCount()) )
+    if ((images) && (images->HasImages()) )
     {
         int height;
-        imageList->GetSize(0, width, height);
+        images->GetImageLogicalSize(this, 0, width, height);
     }
 
     if (which == wxIMAGE_LIST_NORMAL)
     {
-        m_normal_image_list = imageList;
+        m_normal_images = images;
         m_normal_spacing = width + 8;
     }
 
     if (which == wxIMAGE_LIST_SMALL)
     {
-        m_small_image_list = imageList;
+        m_small_images = images;
         m_small_spacing = width + 14;
         m_lineHeight = 0;  // ensure that the line height will be recalc'd
     }
@@ -3204,10 +3350,10 @@ wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
     const int image = column->GetImage();
     if ( image != -1 )
     {
-        if ( m_small_image_list )
+        if ( m_small_images )
         {
             int ix = 0, iy = 0;
-            m_small_image_list->GetSize(image, ix, iy);
+            m_small_images->GetImageLogicalSize(this, image, ix, iy);
             width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
         }
     }
@@ -3217,11 +3363,10 @@ wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
 
 void wxListMainWindow::SetColumn( int col, const wxListItem &item )
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in SetColumn" );
 
-    wxCHECK_RET( node, wxT("invalid column index in SetColumn") );
-
-    wxListHeaderData *column = node->GetData();
+    wxListHeaderData* const column = &m_columns[col];
     column->SetItem( item );
 
     if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER )
@@ -3246,17 +3391,12 @@ public:
     {
     }
 
-    virtual void UpdateWithRow(int row) wxOVERRIDE
+    virtual void UpdateWithRow(int row) override
     {
         wxListLineData *line = m_listmain->GetLine( row );
-        wxListItemDataList::compatibility_iterator n = line->m_items.Item( GetColumn() );
-
-        wxCHECK_RET( n, wxS("no subitem?") );
-
-        wxListItemData* const itemData = n->GetData();
 
         wxListItem item;
-        itemData->GetItem(item);
+        line->m_items.at(GetColumn()).GetItem(item);
 
         UpdateWithWidth(m_listmain->GetItemWidthWithImage(&item));
     }
@@ -3280,12 +3420,10 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
     if ( headerWin )
         headerWin->m_dirty = true;
 
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-    wxCHECK_RET( node, wxT("no column?") );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in SetColumnWidth" );
 
-    wxListHeaderData *column = node->GetData();
-
-    size_t count = GetItemCount();
+    wxListHeaderData* const column = &m_columns[col];
 
     if ( width == wxLIST_AUTOSIZE_USEHEADER || width == wxLIST_AUTOSIZE )
     {
@@ -3297,32 +3435,42 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             calculator.UpdateWithWidth(ComputeMinHeaderWidth(column));
 
         //  if the cached column width isn't valid then recalculate it
-        wxColWidthInfo* const pWidthInfo = m_aColWidths.Item(col);
-        if ( pWidthInfo->bNeedsUpdate )
+        wxColWidthInfo& widthInfo = m_aColWidths[col];
+        if ( widthInfo.bNeedsUpdate )
         {
             size_t first_visible, last_visible;
             GetVisibleLinesRange(&first_visible, &last_visible);
 
-            calculator.ComputeBestColumnWidth(count, first_visible, last_visible);
-            pWidthInfo->nMaxWidth = calculator.GetMaxWidth();
-            pWidthInfo->bNeedsUpdate = false;
+            calculator.ComputeBestColumnWidth(GetItemCount(),
+                                              first_visible, last_visible);
+            widthInfo.nMaxWidth = calculator.GetMaxWidth();
+            widthInfo.bNeedsUpdate = false;
         }
         else
         {
-            calculator.UpdateWithWidth(pWidthInfo->nMaxWidth);
+            calculator.UpdateWithWidth(widthInfo.nMaxWidth);
+        }
+
+        width = calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN;
+
+        if ( col == 0 && HasCheckBoxes() )
+        {
+            // also account for the space needed by the checkbox
+            width += wxRendererNative::Get().GetCheckBoxSize(this).x
+                        + 2*MARGIN_AROUND_CHECKBOX;
         }
 
         // expand the last column to fit the client size
         // only for AUTOSIZE_USEHEADER to mimic MSW behaviour
-        int margin = 0;
         if ( (width == wxLIST_AUTOSIZE_USEHEADER) && (col == GetColumnCount() - 1) )
         {
-            margin = GetClientSize().GetX();
+            int margin = GetClientSize().GetX();
             for ( int i = 0; i < col && margin > 0; ++i )
-                margin -= m_columns.Item(i)->GetData()->GetWidth();
-        }
+                margin -= m_columns.at(i).GetWidth();
 
-        width = wxMax(margin, calculator.GetMaxWidth() + AUTOSIZE_COL_MARGIN);
+            if ( margin > width )
+                width = margin;
+        }
     }
 
     column->SetWidth( width );
@@ -3349,20 +3497,18 @@ int wxListMainWindow::GetHeaderWidth() const
 
 void wxListMainWindow::GetColumn( int col, wxListItem &item ) const
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-    wxCHECK_RET( node, wxT("invalid column index in GetColumn") );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in GetColumn" );
 
-    wxListHeaderData *column = node->GetData();
-    column->GetItem( item );
+    m_columns[col].GetItem( item );
 }
 
 int wxListMainWindow::GetColumnWidth( int col ) const
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-    wxCHECK_MSG( node, 0, wxT("invalid column index") );
+    wxCHECK_MSG( col >= 0 && col < (int)m_columns.size(), 0,
+                 "invalid column index in GetColumnWidth" );
 
-    wxListHeaderData *column = node->GetData();
-    return column->GetWidth();
+    return m_columns[col].GetWidth();
 }
 
 // ----------------------------------------------------------------------------
@@ -3389,11 +3535,11 @@ void wxListMainWindow::SetItem( wxListItem &item )
             //  update the Max Width Cache if needed
             int width = GetItemWidthWithImage(&item);
 
-            wxColWidthInfo* const pWidthInfo = m_aColWidths.Item(item.m_col);
-            if ( width > pWidthInfo->nMaxWidth )
+            wxColWidthInfo& widthInfo = m_aColWidths.at(item.m_col);
+            if ( width > widthInfo.nMaxWidth )
             {
-                pWidthInfo->nMaxWidth = width;
-                pWidthInfo->bNeedsUpdate = true;
+                widthInfo.nMaxWidth = width;
+                widthInfo.bNeedsUpdate = true;
             }
         }
     }
@@ -3599,6 +3745,10 @@ void wxListMainWindow::SetItemCount(long count)
     if ( HasCurrent() && m_current >= (size_t)count )
         ChangeCurrent(count - 1);
 
+    // And do the same thing for the multiple selection anchor.
+    if ( m_anchor != (size_t)-1 && m_anchor >= (size_t)count )
+        m_anchor = count - 1;
+
     m_selStore.SetItemCount(count);
     m_countVirt = count;
 
@@ -3618,17 +3768,7 @@ int wxListMainWindow::GetSelectedItemCount() const
     if ( IsVirtual() )
         return m_selStore.GetSelectedCount();
 
-    // TODO: we probably should maintain the number of items selected even for
-    //       non virtual controls as enumerating all lines is really slow...
-    size_t countSel = 0;
-    size_t count = GetItemCount();
-    for ( size_t line = 0; line < count; line++ )
-    {
-        if ( GetLine(line)->IsHighlighted() )
-            countSel++;
-    }
-
-    return countSel;
+    return m_selCount;
 }
 
 // ----------------------------------------------------------------------------
@@ -3675,7 +3815,8 @@ wxRect wxListMainWindow::GetViewRect() const
 }
 
 bool
-wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect) const
+wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect,
+                                 int code) const
 {
     wxCHECK_MSG( subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM || InReportView(),
                  false,
@@ -3686,8 +3827,7 @@ wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect) const
     // ensure that we're laid out, otherwise we could return nonsense
     if ( m_dirty )
     {
-        wxConstCast(this, wxListMainWindow)->
-            RecalculatePositions(true /* no refresh */);
+        wxConstCast(this, wxListMainWindow)->RecalculatePositions();
     }
 
     rect = GetLineRect((size_t)item);
@@ -3703,6 +3843,51 @@ wxListMainWindow::GetSubItemRect(long item, long subItem, wxRect& rect) const
             rect.x += GetColumnWidth(i);
         }
         rect.width = GetColumnWidth(subItem);
+
+        switch ( code )
+        {
+            case wxLIST_RECT_BOUNDS:
+                // Nothing to do.
+                break;
+
+            case wxLIST_RECT_ICON:
+            case wxLIST_RECT_LABEL:
+                // Note: this needs to be kept in sync with DrawInReportMode().
+                {
+                    rect.x += ICON_OFFSET_X;
+                    rect.width -= ICON_OFFSET_X;
+
+                    wxListLineData* const line = GetLine(item);
+                    if ( subItem == 0 && line->HasImage() )
+                    {
+                        int ix, iy;
+                        GetImageSize(line->GetImage(), ix, iy);
+
+                        const int iconWidth = ix + IMAGE_MARGIN_IN_REPORT_MODE;
+
+                        if ( code == wxLIST_RECT_ICON )
+                        {
+                            rect.width = iconWidth;
+                        }
+                        else // wxLIST_RECT_LABEL
+                        {
+                            rect.x += iconWidth;
+                            rect.width -= iconWidth;
+                        }
+                    }
+                    else // No icon
+                    {
+                        if ( code == wxLIST_RECT_ICON )
+                            rect = wxRect();
+                        //else: label rect is the same as the full one
+                    }
+                }
+                break;
+
+            default:
+                wxFAIL_MSG(wxS("Unknown rectangle requested"));
+                return false;
+        }
     }
 
     GetListCtrl()->CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
@@ -3743,10 +3928,15 @@ bool wxListMainWindow::EnableCheckBoxes(bool enable)
 
 void wxListMainWindow::CheckItem(long item, bool state)
 {
-    wxListLineData *line = GetLine((size_t)item);
-    line->Check(state);
+    wxCHECK_RET( HasCheckBoxes(), "checkboxes are disabled" );
 
-    RefreshLine(item);
+    if ( !IsVirtual() )
+    {
+        wxListLineData* line = GetLine((size_t)item);
+        line->Check(state);
+
+        RefreshLine(item);
+    }
 
     SendNotify(item, state ? wxEVT_LIST_ITEM_CHECKED
         : wxEVT_LIST_ITEM_UNCHECKED);
@@ -3754,8 +3944,19 @@ void wxListMainWindow::CheckItem(long item, bool state)
 
 bool wxListMainWindow::IsItemChecked(long item) const
 {
-    wxListLineData *line = GetLine((size_t)item);
-    return line->IsChecked();
+    if ( !HasCheckBoxes() )
+        return false;
+
+    if ( !IsVirtual() )
+    {
+        wxListLineData* line = GetLine((size_t)item);
+        return line->IsChecked();
+    }
+    else
+    {
+        wxGenericListCtrl* listctrl = GetListCtrl();
+        return listctrl->OnGetItemIsChecked(item);
+    }
 }
 
 bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y)
@@ -3777,7 +3978,7 @@ bool wxListMainWindow::IsInsideCheckBox(long item, int x, int y)
 // geometry calculation
 // ----------------------------------------------------------------------------
 
-void wxListMainWindow::RecalculatePositions(bool noRefresh)
+void wxListMainWindow::RecalculatePositions()
 {
     const int lineHeight = GetLineHeight();
 
@@ -3787,9 +3988,9 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
     const size_t count = GetItemCount();
 
     int iconSpacing;
-    if ( HasFlag(wxLC_ICON) && m_normal_image_list )
+    if ( HasFlag(wxLC_ICON) && m_normal_images )
         iconSpacing = m_normal_spacing;
-    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_image_list )
+    else if ( HasFlag(wxLC_SMALL_ICON) && m_small_images )
         iconSpacing = m_small_spacing;
     else
         iconSpacing = 0;
@@ -3984,18 +4185,14 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
             );
         }
     }
-
-    if ( !noRefresh )
-    {
-        // FIXME: why should we call it from here?
-        UpdateCurrent();
-
-        RefreshAll();
-    }
 }
 
-void wxListMainWindow::RefreshAll()
+void wxListMainWindow::RecalculatePositionsAndRefresh()
 {
+    RecalculatePositions();
+
+    // Whether the window was dirty or not before, it won't be any longer after
+    // the next refresh.
     m_dirty = false;
     Refresh();
 
@@ -4010,7 +4207,13 @@ void wxListMainWindow::RefreshAll()
 void wxListMainWindow::UpdateCurrent()
 {
     if ( !HasCurrent() && !IsEmpty() )
-        ChangeCurrent(0);
+    {
+        // Initialise m_current to the first item without sending any
+        // wxEVT_LIST_ITEM_FOCUSED event (typicaly when the control gains focus)
+        // and this is to allow changing the focused item using the arrow keys.
+        // which is the behaviour found in the wxMSW port.
+        ChangeCurrentWithoutEvent(0);
+    }
 }
 
 long wxListMainWindow::GetNextItem( long item,
@@ -4076,22 +4279,19 @@ void wxListMainWindow::DeleteItem( long lindex )
         //  mark the Column Max Width cache as dirty if the items in the line
         //  we're deleting contain the Max Column Width
         wxListLineData * const line = GetLine(index);
-        wxListItemDataList::compatibility_iterator n;
         wxListItem      item;
 
-        for (size_t i = 0; i < m_columns.GetCount(); i++)
+        size_t i = 0;
+        for ( const auto& it : line->m_items )
         {
-            n = line->m_items.Item( i );
-            wxListItemData* itemData;
-            itemData = n->GetData();
-            itemData->GetItem(item);
+            it.GetItem(item);
 
             int itemWidth;
             itemWidth = GetItemWidthWithImage(&item);
 
-            wxColWidthInfo *pWidthInfo = m_aColWidths.Item(i);
-            if ( itemWidth >= pWidthInfo->nMaxWidth )
-                pWidthInfo->bNeedsUpdate = true;
+            wxColWidthInfo& widthInfo = m_aColWidths.at(i++);
+            if ( itemWidth >= widthInfo.nMaxWidth )
+                widthInfo.bNeedsUpdate = true;
         }
 
         ResetVisibleLinesRange();
@@ -4106,8 +4306,10 @@ void wxListMainWindow::DeleteItem( long lindex )
     }
     else
     {
-        delete m_lines[index];
-        m_lines.erase( m_lines.begin() + index );
+        auto const iter =  m_lines.begin() + index;
+        if ( iter->IsHighlighted() )
+            UpdateSelectionCount(false);
+        m_lines.erase(iter);
     }
 
     // we need to refresh the (vert) scrollbar as the number of items changed
@@ -4125,21 +4327,17 @@ void wxListMainWindow::DeleteItem( long lindex )
 
 void wxListMainWindow::DeleteColumn( int col )
 {
-    wxListHeaderDataList::compatibility_iterator node = m_columns.Item( col );
-
-    wxCHECK_RET( node, wxT("invalid column index in DeleteColumn()") );
+    wxCHECK_RET( col >= 0 && col < (int)m_columns.size(),
+                 "invalid column index in DeleteColumn()" );
 
     m_dirty = true;
-    delete node->GetData();
-    m_columns.Erase( node );
+    m_columns.erase( m_columns.begin() + col );
 
     if ( !IsVirtual() )
     {
         // update all the items
-        for ( size_t i = 0; i < m_lines.size(); i++ )
+        for ( auto& line : m_lines )
         {
-            wxListLineData * const line = GetLine(i);
-
             // In the following atypical but possible scenario it can be
             // legal to call DeleteColumn() but the items may not have any
             // values for it:
@@ -4151,19 +4349,16 @@ void wxListMainWindow::DeleteColumn( int col )
             //  6. Call DeleteColumn().
             // So we need to check for this as otherwise we would simply crash
             // if this happens.
-            if ( line->m_items.GetCount() <= static_cast<unsigned>(col) )
+            if ( line.m_items.size() <= static_cast<unsigned>(col) )
                 continue;
 
-            wxListItemDataList::compatibility_iterator n = line->m_items.Item( col );
-            delete n->GetData();
-            line->m_items.Erase(n);
+            line.m_items.erase(line.m_items.begin() + col);
         }
     }
 
     if ( InReportView() )   //  we only cache max widths when in Report View
     {
-        delete m_aColWidths.Item(col);
-        m_aColWidths.RemoveAt(col);
+        m_aColWidths.erase(m_aColWidths.begin() + col);
     }
 
     // invalidate it as it has to be recalculated
@@ -4175,8 +4370,8 @@ void wxListMainWindow::DoDeleteAllItems()
     // We will need to update all columns if any items are inserted again.
     if ( InReportView() )
     {
-        for ( size_t i = 0; i < m_aColWidths.GetCount(); i++ )
-            m_aColWidths.Item(i)->bNeedsUpdate = true;
+        for ( auto& widthInfo : m_aColWidths )
+            widthInfo.bNeedsUpdate = true;
     }
 
     if ( IsEmpty() )
@@ -4199,24 +4394,28 @@ void wxListMainWindow::DoDeleteAllItems()
         m_countVirt = 0;
         m_selStore.Clear();
     }
+    else
+    {
+        m_selCount = 0;
+    }
 
     if ( InReportView() )
         ResetVisibleLinesRange();
 
-    m_lines.Clear();
+    m_lines.clear();
 }
 
 void wxListMainWindow::DeleteAllItems()
 {
     DoDeleteAllItems();
 
-    RecalculatePositions();
+    RecalculatePositionsAndRefresh();
 }
 
 void wxListMainWindow::DeleteEverything()
 {
-    WX_CLEAR_LIST(wxListHeaderDataList, m_columns);
-    WX_CLEAR_ARRAY(m_aColWidths);
+    m_columns.clear();
+    m_aColWidths.clear();
 
     DeleteAllItems();
 }
@@ -4233,7 +4432,7 @@ void wxListMainWindow::EnsureVisible( long index )
     // We have to call this here because the label in question might just have
     // been added and its position is not known yet
     if ( m_dirty )
-        RecalculatePositions(true /* no refresh */);
+        RecalculatePositions();
 
     MoveToItem((size_t)index);
 }
@@ -4290,7 +4489,7 @@ long wxListMainWindow::FindItem(long start, wxUIntPtr data)
 long wxListMainWindow::FindItem( const wxPoint& pt )
 {
     size_t topItem;
-    GetVisibleLinesRange( &topItem, NULL );
+    GetVisibleLinesRange( &topItem, nullptr );
 
     wxPoint p;
     GetItemPosition( GetItemCount() - 1, p );
@@ -4361,34 +4560,34 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         wxCHECK_RET( col < m_aColWidths.size(), "invalid item column" );
 
         // calculate the width of the item and adjust the max column width
-        wxColWidthInfo *pWidthInfo = m_aColWidths.Item(col);
+        wxColWidthInfo& widthInfo = m_aColWidths[col];
         int width = GetItemWidthWithImage(&item);
         item.SetWidth(width);
-        if (width > pWidthInfo->nMaxWidth)
+        if (width > widthInfo.nMaxWidth)
         {
-            pWidthInfo->nMaxWidth = width;
-            pWidthInfo->bNeedsUpdate = true;
+            widthInfo.nMaxWidth = width;
+            widthInfo.bNeedsUpdate = true;
         }
     }
 
-    wxListLineData *line = new wxListLineData(this);
+    wxListLineData line(this);
 
-    line->SetItem( item.m_col, item );
+    line.SetItem( item.m_col, item );
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         // Reset the buffered height if it's not big enough for the new image.
         int image = item.GetImage();
-        if ( m_small_image_list && image != -1 && InReportView() )
+        if ( m_small_images && image != -1 && InReportView() )
         {
             int imageWidth, imageHeight;
-            m_small_image_list->GetSize(image, imageWidth, imageHeight);
+            m_small_images->GetImageLogicalSize(this, image, imageWidth, imageHeight);
 
             if ( imageHeight > m_lineHeight )
                 m_lineHeight = 0;
         }
     }
 
-    m_lines.insert( m_lines.begin() + id, line );
+    m_lines.insert( m_lines.begin() + id, std::move(line) );
 
     m_dirty = true;
 
@@ -4410,39 +4609,36 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
     m_dirty = true;
     if ( InReportView() )
     {
-        wxListHeaderData *column = new wxListHeaderData( item );
+        wxListHeaderData column( item );
         if (item.m_width == wxLIST_AUTOSIZE_USEHEADER)
-            column->SetWidth(ComputeMinHeaderWidth(column));
+            column.SetWidth(ComputeMinHeaderWidth(&column));
 
-        wxColWidthInfo *colWidthInfo = new wxColWidthInfo(0, IsVirtual());
+        wxColWidthInfo colWidthInfo(0, IsVirtual());
 
-        bool insert = (col >= 0) && ((size_t)col < m_columns.GetCount());
+        bool insert = (col >= 0) && ((size_t)col < m_columns.size());
         if ( insert )
         {
-            wxListHeaderDataList::compatibility_iterator
-                node = m_columns.Item( col );
-            m_columns.Insert( node, column );
-            m_aColWidths.Insert( colWidthInfo, col );
+            m_columns.insert( m_columns.begin() + col, column );
+            m_aColWidths.insert( m_aColWidths.begin() + col, colWidthInfo );
             idx = col;
         }
         else
         {
-            idx = m_aColWidths.GetCount();
-            m_columns.Append( column );
-            m_aColWidths.Add( colWidthInfo );
+            idx = m_aColWidths.size();
+            m_columns.push_back( column );
+            m_aColWidths.push_back( colWidthInfo );
         }
 
         if ( !IsVirtual() )
         {
             // update all the items
-            for ( size_t i = 0; i < m_lines.size(); i++ )
+            for ( auto& line : m_lines )
             {
-                wxListLineData * const line = GetLine(i);
-                wxListItemData * const data = new wxListItemData(this);
+                auto& items = line.m_items;
                 if ( insert )
-                    line->m_items.Insert(col, data);
+                    items.emplace(items.begin() + col, this);
                 else
-                    line->m_items.Append(data);
+                    items.emplace_back(this);
             }
         }
 
@@ -4463,13 +4659,13 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
     {
         int ix, iy;
         GetImageSize( item->GetImage(), ix, iy );
-        width += ix + 5;
+        width += ix + IMAGE_MARGIN_IN_REPORT_MODE;
     }
 
     if (!item->GetText().empty())
     {
         wxCoord w;
-        dc.GetTextExtent( item->GetText(), &w, NULL );
+        dc.GetTextExtent( item->GetText(), &w, nullptr );
         width += w;
     }
 
@@ -4488,13 +4684,13 @@ struct wxListLineComparator
     {
     }
 
-    bool operator()(wxListLineData* const& line1,
-                    wxListLineData* const& line2) const
+    bool operator()(const wxListLineData& line1,
+                    const wxListLineData& line2) const
     {
         wxListItem item;
-        line1->GetItem( 0, item );
+        line1.GetItem( 0, item );
         wxUIntPtr data1 = item.m_data;
-        line2->GetItem( 0, item );
+        line2.GetItem( 0, item );
         wxUIntPtr data2 = item.m_data;
         return m_f(data1, data2, m_data) < 0;
     }
@@ -4530,7 +4726,7 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
         wxGenericListCtrl* lc = GetListCtrl();
         wxCHECK_RET( lc, wxT("no listctrl window?") );
 
-        if (lc->m_headerWin) // when we use wxLC_NO_HEADER, m_headerWin==NULL
+        if (lc->m_headerWin) // when we use wxLC_NO_HEADER, m_headerWin==nullptr
         {
             lc->m_headerWin->Refresh();
             lc->m_headerWin->Update();
@@ -4655,32 +4851,22 @@ wxEND_EVENT_TABLE()
 
 void wxGenericListCtrl::Init()
 {
-    m_imageListNormal = NULL;
-    m_imageListSmall = NULL;
-    m_imageListState = NULL;
-
-    m_ownsImageListNormal =
-    m_ownsImageListSmall =
-    m_ownsImageListState = false;
-
-    m_mainWin = NULL;
-    m_headerWin = NULL;
+    m_mainWin = nullptr;
+    m_headerWin = nullptr;
 }
 
 wxGenericListCtrl::~wxGenericListCtrl()
 {
-    if (m_ownsImageListNormal)
-        delete m_imageListNormal;
-    if (m_ownsImageListSmall)
-        delete m_imageListSmall;
-    if (m_ownsImageListState)
-        delete m_imageListState;
+    // Don't wait until the base class does it because our subwindows expect
+    // their parent window to be a wxListCtrl, but this won't be the case any
+    // more when we get to the base class dtor (it will be only a wxWindow).
+    DestroyChildren();
 }
 
 void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
 {
     bool needs_header = HasHeader();
-    bool has_header = (m_headerWin != NULL);
+    bool has_header = (m_headerWin != nullptr);
 
     if (needs_header == has_header)
         return;
@@ -4759,6 +4945,16 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     return true;
 }
 
+void wxGenericListCtrl::ExtendRulesAndAlternateColour(bool state)
+{
+    wxCHECK_RET( m_mainWin, "can't be called before creation" );
+
+    wxASSERT_MSG( InReportView(), "can only be called in report mode" );
+
+    m_mainWin->ExtendRulesAndAlternateColour(state);
+    m_mainWin->Refresh();
+}
+
 wxBorder wxGenericListCtrl::GetDefaultBorder() const
 {
     return wxBORDER_THEME;
@@ -4834,6 +5030,34 @@ bool wxGenericListCtrl::IsItemChecked(long item) const
         return false;
 
     return m_mainWin->IsItemChecked(item);
+}
+
+void wxGenericListCtrl::ShowSortIndicator(int idx, bool ascending)
+{
+    if ( m_headerWin &&
+                (idx != m_headerWin->m_sortCol ||
+                 (idx != -1 && ascending != m_headerWin->m_sortAsc)) )
+    {
+        m_headerWin->m_sortCol = idx;
+        m_headerWin->m_sortAsc = ascending;
+        m_headerWin->Refresh();
+    }
+}
+
+int wxGenericListCtrl::GetSortIndicator() const
+{
+    if ( m_headerWin )
+        return m_headerWin->m_sortCol;
+
+    return -1;
+}
+
+bool wxGenericListCtrl::IsAscendingSortIndicator() const
+{
+    if ( m_headerWin )
+        return m_headerWin->m_sortAsc;
+
+    return true;
 }
 
 void wxGenericListCtrl::SetSingleStyle( long style, bool add )
@@ -4923,6 +5147,31 @@ bool wxGenericListCtrl::SetColumnWidth( int col, int width )
 {
     m_mainWin->SetColumnWidth( col, width );
     return true;
+}
+
+// Column ordering functions
+int wxGenericListCtrl::GetColumnOrder(int col) const
+{
+    // TODO: Implement this on generic port
+    return col;
+}
+
+int wxGenericListCtrl::GetColumnIndexFromOrder(int order) const
+{
+    // TODO: Implement this on generic port
+    return order;
+}
+
+wxArrayInt wxGenericListCtrl::GetColumnsOrder() const
+{
+    // TODO: Implement this on generic port
+    return wxArrayInt();
+}
+
+bool wxGenericListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
+{
+    // TODO: Implement this on generic port
+    return false;
 }
 
 int wxGenericListCtrl::GetCountPerPage() const
@@ -5030,9 +5279,9 @@ bool wxGenericListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 bool wxGenericListCtrl::GetSubItemRect(long item,
                                        long subItem,
                                        wxRect& rect,
-                                       int WXUNUSED(code)) const
+                                       int code) const
 {
-    if ( !m_mainWin->GetSubItemRect( item, subItem, rect ) )
+    if ( !m_mainWin->GetSubItemRect( item, subItem, rect, code ) )
         return false;
 
     if ( m_mainWin->HasHeader() )
@@ -5059,7 +5308,11 @@ int wxGenericListCtrl::GetItemCount() const
 
 int wxGenericListCtrl::GetColumnCount() const
 {
-    return m_mainWin->GetColumnCount();
+    // wxLC_LIST is special as we want to return 1 for it, for compatibility
+    // with the native wxMSW version and not the real number of columns, which
+    // is 0. For the other non-wxLC_REPORT modes returning 0 is fine, however,
+    // as wxMSW does it too.
+    return HasFlag(wxLC_LIST) ? 1 : m_mainWin->GetColumnCount();
 }
 
 void wxGenericListCtrl::SetItemSpacing( int spacing, bool isSmall )
@@ -5140,7 +5393,7 @@ void wxGenericListCtrl::SetTextColour(const wxColour& col)
 long wxGenericListCtrl::GetTopItem() const
 {
     size_t top;
-    m_mainWin->GetVisibleLinesRange(&top, NULL);
+    m_mainWin->GetVisibleLinesRange(&top, nullptr);
     return (long)top;
 }
 
@@ -5149,54 +5402,9 @@ long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const
     return m_mainWin->GetNextItem( item, geom, state );
 }
 
-wxImageList *wxGenericListCtrl::GetImageList(int which) const
+void wxGenericListCtrl::DoUpdateImages(int which )
 {
-    if (which == wxIMAGE_LIST_NORMAL)
-        return m_imageListNormal;
-    else if (which == wxIMAGE_LIST_SMALL)
-        return m_imageListSmall;
-    else if (which == wxIMAGE_LIST_STATE)
-        return m_imageListState;
-
-    return NULL;
-}
-
-void wxGenericListCtrl::SetImageList( wxImageList *imageList, int which )
-{
-    if ( which == wxIMAGE_LIST_NORMAL )
-    {
-        if (m_ownsImageListNormal)
-            delete m_imageListNormal;
-        m_imageListNormal = imageList;
-        m_ownsImageListNormal = false;
-    }
-    else if ( which == wxIMAGE_LIST_SMALL )
-    {
-        if (m_ownsImageListSmall)
-            delete m_imageListSmall;
-        m_imageListSmall = imageList;
-        m_ownsImageListSmall = false;
-    }
-    else if ( which == wxIMAGE_LIST_STATE )
-    {
-        if (m_ownsImageListState)
-            delete m_imageListState;
-        m_imageListState = imageList;
-        m_ownsImageListState = false;
-    }
-
-    m_mainWin->SetImageList( imageList, which );
-}
-
-void wxGenericListCtrl::AssignImageList(wxImageList *imageList, int which)
-{
-    SetImageList(imageList, which);
-    if ( which == wxIMAGE_LIST_NORMAL )
-        m_ownsImageListNormal = true;
-    else if ( which == wxIMAGE_LIST_SMALL )
-        m_ownsImageListSmall = true;
-    else if ( which == wxIMAGE_LIST_STATE )
-        m_ownsImageListState = true;
+    m_mainWin->SetImages( GetImages(which), which );
 }
 
 bool wxGenericListCtrl::Arrange( int WXUNUSED(flag) )
@@ -5218,7 +5426,7 @@ bool wxGenericListCtrl::DeleteAllItems()
 
 bool wxGenericListCtrl::DeleteAllColumns()
 {
-    size_t count = m_mainWin->m_columns.GetCount();
+    size_t count = m_mainWin->m_columns.size();
     for ( size_t n = 0; n < count; n++ )
         DeleteColumn( 0 );
     return true;
@@ -5281,9 +5489,12 @@ long wxGenericListCtrl::FindItem( long WXUNUSED(start), const wxPoint& pt,
     return m_mainWin->FindItem( pt );
 }
 
-// TODO: sub item hit testing
-long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *) const
+long wxGenericListCtrl::HitTest(const wxPoint& point, int& flags, long *col) const
 {
+    // TODO: sub item hit testing
+    if ( col )
+        *col = -1;
+
     return m_mainWin->HitTest( (int)point.x, (int)point.y, flags );
 }
 
@@ -5330,7 +5541,7 @@ long wxGenericListCtrl::DoInsertColumn( long col, const wxListItem &item )
     long idx = m_mainWin->InsertColumn( col, item );
 
     // NOTE: if wxLC_NO_HEADER was given, then we are in report view mode but
-    //       still have m_headerWin==NULL
+    //       still have m_headerWin==nullptr
     if (m_headerWin)
         m_headerWin->Refresh();
 
@@ -5362,7 +5573,7 @@ bool wxGenericListCtrl::SortItems( wxListCtrlCompare fn, wxIntPtr data )
 // event handlers
 // ----------------------------------------------------------------------------
 
-void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxGenericListCtrl::OnSize(wxSizeEvent& event)
 {
     if (!m_mainWin) return;
 
@@ -5375,9 +5586,11 @@ void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 
     Layout();
 
-    m_mainWin->RecalculatePositions();
+    m_mainWin->RecalculatePositionsAndRefresh();
 
     AdjustScrollbars();
+
+    event.Skip();
 }
 
 void wxGenericListCtrl::OnInternalIdle()
@@ -5385,7 +5598,7 @@ void wxGenericListCtrl::OnInternalIdle()
     wxWindow::OnInternalIdle();
 
     if (m_mainWin->m_dirty)
-        m_mainWin->RecalculatePositions();
+        m_mainWin->RecalculatePositionsAndRefresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -5422,7 +5635,7 @@ bool wxGenericListCtrl::SetForegroundColour( const wxColour &colour )
 
 bool wxGenericListCtrl::SetFont( const wxFont &font )
 {
-    if ( !wxWindow::SetFont( font ) )
+    if (!BaseType::SetFont(font))
         return false;
 
     if (m_mainWin)
@@ -5530,7 +5743,7 @@ wxSize wxGenericListCtrl::DoGetBestClientSize() const
         // If we have the scrollbars we need to account for them too. And to
         // make sure the scrollbars status is up to date we need to call this
         // function to set them.
-        m_mainWin->RecalculatePositions(true /* no refresh */);
+        m_mainWin->RecalculatePositions();
 
         // Unfortunately we can't use wxWindow::HasScrollbar() here as we need
         // to use m_mainWin client/virtual size for determination of whether we
@@ -5631,7 +5844,7 @@ void wxGenericListCtrl::Update()
     if ( m_mainWin )
     {
         if ( m_mainWin->m_dirty )
-            m_mainWin->RecalculatePositions();
+            m_mainWin->RecalculatePositionsAndRefresh();
 
         m_mainWin->Update();
     }

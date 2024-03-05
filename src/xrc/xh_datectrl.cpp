@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_DATEPICKCTRL
 
@@ -44,6 +41,10 @@ wxObject *wxDateCtrlXmlHandler::DoCreateResource()
                   GetName());
 
     SetupWindow(picker);
+
+    // Note that we want to set this one even if it's empty.
+    if ( HasParam(wxS("null-text")) )
+        picker->SetNullText(GetText(wxS("null-text")));
 
     return picker;
 }

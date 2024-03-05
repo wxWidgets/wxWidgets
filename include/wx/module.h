@@ -2,7 +2,6 @@
 // Name:        wx/module.h
 // Purpose:     Modules handling
 // Author:      Wolfram Gloger/adapted by Guilhem Lavaux
-// Modified by:
 // Created:     04/11/98
 // Copyright:   (c) Wolfram Gloger and Guilhem Lavaux
 // Licence:     wxWindows licence
@@ -12,18 +11,12 @@
 #define _WX_MODULE_H_
 
 #include "wx/object.h"
-#include "wx/list.h"
-#include "wx/arrstr.h"
-#include "wx/dynarray.h"
+#include "wx/string.h"
+#include "wx/vector.h"
 
-// declare a linked list of modules
-class WXDLLIMPEXP_FWD_BASE wxModule;
-WX_DECLARE_USER_EXPORTED_LIST(wxModule, wxModuleList, WXDLLIMPEXP_BASE);
+class wxModule;
 
-// and an array of class info objects
-WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxClassInfo *, wxArrayClassInfo,
-                                    class WXDLLIMPEXP_BASE);
-
+typedef wxVector<wxModule*> wxModuleList;
 
 // declaring a class derived from wxModule will automatically create an
 // instance of this class on program startup, call its OnInit() method and call
@@ -31,8 +24,8 @@ WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxClassInfo *, wxArrayClassInfo,
 class WXDLLIMPEXP_BASE wxModule : public wxObject
 {
 public:
-    wxModule() {}
-    virtual ~wxModule() {}
+    wxModule() = default;
+    virtual ~wxModule() = default;
 
     // if module init routine returns false the application
     // will fail to startup
@@ -54,30 +47,33 @@ public:
     static void RegisterModule(wxModule *module);
     static void RegisterModules();
     static bool InitializeModules();
-    static void CleanUpModules() { DoCleanUpModules(m_modules); }
+    static void CleanUpModules();
+    static bool AreInitialized() { return ms_areInitialized; }
 
     // used by wxObjectLoader when unloading shared libs's
 
     static void UnregisterModule(wxModule *module);
 
 protected:
-    static wxModuleList m_modules;
+    static wxModuleList ms_modules;
+
+    static bool ms_areInitialized;
 
     // the function to call from constructor of a deriving class add module
     // dependency which will be initialized before the module and unloaded
     // after that
     void AddDependency(wxClassInfo *dep)
     {
-        wxCHECK_RET( dep, wxT("NULL module dependency") );
+        wxCHECK_RET( dep, wxT("null module dependency") );
 
-        m_dependencies.Add(dep);
+        m_dependencies.push_back(dep);
     }
 
     // same as the version above except it will look up wxClassInfo by name on
-    // its own
+    // its own. Note that className must be ASCII
     void AddDependency(const char *className)
     {
-        m_namedDependencies.Add(className);
+        m_namedDependencies.push_back(wxASCII_STR(className));
     }
 
 
@@ -89,7 +85,7 @@ private:
 
     // cleanup the modules in the specified list (which may not contain all
     // modules if we're called during initialization because not all modules
-    // could be initialized) and also empty m_modules itself
+    // could be initialized) and also empty ms_modules itself
     static void DoCleanUpModules(const wxModuleList& modules);
 
     // resolve all named dependencies and add them to the normal m_dependencies
@@ -98,11 +94,12 @@ private:
 
     // module dependencies: contains wxClassInfo pointers for all modules which
     // must be initialized before this one
+    typedef wxVector<wxClassInfo*> wxArrayClassInfo;
     wxArrayClassInfo m_dependencies;
 
     // and the named dependencies: those will be resolved during run-time and
     // added to m_dependencies
-    wxArrayString m_namedDependencies;
+    wxVector<wxString> m_namedDependencies;
 
     // used internally while initializing/cleaning up modules
     enum

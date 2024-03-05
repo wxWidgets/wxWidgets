@@ -2,7 +2,6 @@
 // Name:        src/common/fontcmn.cpp
 // Purpose:     implementation of wxFontBase methods
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.09.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/font.h"
 
@@ -144,11 +140,6 @@ void wxFontBase::SetDefaultEncoding(wxFontEncoding encoding)
     ms_encodingDefault = encoding;
 }
 
-wxFontBase::~wxFontBase()
-{
-    // this destructor is required for Darwin
-}
-
 /* static */
 wxFont *wxFontBase::New(int size,
                         wxFontFamily family,
@@ -252,14 +243,14 @@ int wxFontBase::GetNumericWeightOf(wxFontWeight weight_)
 
 int wxFontBase::GetPointSize() const
 {
-    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
+    return wxRound(GetFractionalPointSize());
 }
 
 
 wxSize wxFontBase::GetPixelSize() const
 {
     wxScreenDC dc;
-    dc.SetFont(*(wxFont *)this);
+    dc.SetFont(*static_cast<const wxFont*>(this));
     return wxSize(dc.GetCharWidth(), dc.GetCharHeight());
 }
 
@@ -277,7 +268,7 @@ bool wxFontBase::IsUsingSizeInPixels() const
 
 void wxFontBase::SetPointSize(int pointSize)
 {
-    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointSize));
+    SetFractionalPointSize(pointSize);
 }
 
 void wxFontBase::SetPixelSize( const wxSize& pixelSize )
@@ -428,7 +419,7 @@ bool wxFontBase::SetNativeFontInfoUserDesc(const wxString& info)
     return false;
 }
 
-bool wxFontBase::operator==(const wxFont& font) const
+bool wxFontBase::operator==(const wxFontBase& font) const
 {
     // either it is the same font, i.e. they share the same common data or they
     // have different ref datas but still describe the same font
@@ -436,12 +427,7 @@ bool wxFontBase::operator==(const wxFont& font) const
            (
             IsOk() == font.IsOk() &&
             GetPointSize() == font.GetPointSize() &&
-            // in wxGTK1 GetPixelSize() calls GetInternalFont() which uses
-            // operator==() resulting in infinite recursion so we can't use it
-            // in that port
-#if (!defined(__WXGTK__) || defined(__WXGTK20__))
             GetPixelSize() == font.GetPixelSize() &&
-#endif
             GetFamily() == font.GetFamily() &&
             GetStyle() == font.GetStyle() &&
             GetNumericWeight() == font.GetNumericWeight() &&
@@ -686,7 +672,7 @@ wxFont& wxFont::MakeStrikethrough()
 
 wxFont& wxFont::Scale(float x)
 {
-    SetFractionalPointSize(x*GetFractionalPointSize());
+    SetFractionalPointSize(double(x) * GetFractionalPointSize());
     return *this;
 }
 
@@ -716,7 +702,7 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
     // set the first valid facename we can find on this system
     wxString validfacename = wxFontEnumerator::GetFacenames().Item(0);
-    wxLogTrace(wxT("font"), wxT("Falling back to '%s'"), validfacename.c_str());
+    wxLogTrace(wxT("font"), wxT("Falling back to '%s'"), validfacename);
     SetFaceName(validfacename);
 #else // !wxUSE_FONTENUM
     SetFaceName(facenames[0]);
@@ -725,12 +711,12 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
 int wxNativeFontInfo::GetPointSize() const
 {
-    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
+    return wxRound(GetFractionalPointSize());
 }
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
-    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointsize));
+    SetFractionalPointSize(pointsize);
 }
 
 #ifdef wxNO_NATIVE_FONTINFO
@@ -758,9 +744,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToCDouble(&d) )
         return false;
-    pointSize = static_cast<float>(d);
-    if ( static_cast<double>(pointSize) != d )
+    if ( d < 0 )
         return false;
+    pointSize = d;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -837,7 +823,7 @@ void wxNativeFontInfo::Init()
     encoding = wxFONTENCODING_DEFAULT;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return pointSize;
 }
@@ -877,7 +863,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return encoding;
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     pointSize = pointsize;
 }
@@ -923,7 +909,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
 // conversion to/from user-readable string: this is used in the generic
 // versions and under MSW as well because there is no standard font description
 // format there anyhow (but there is a well-defined standard for X11 fonts used
-// by wxGTK and wxMotif)
+// by wxGTK and wxX11)
 
 #if defined(wxNO_NATIVE_FONTINFO) || defined(__WXMSW__) || defined(__WXOSX__)
 
@@ -1369,7 +1355,7 @@ wxString wxToString(const wxFontBase& font)
 
 bool wxFromString(const wxString& str, wxFontBase *font)
 {
-    wxCHECK_MSG( font, false, wxT("NULL output parameter") );
+    wxCHECK_MSG( font, false, wxT("null output parameter") );
 
     if ( str.empty() )
     {

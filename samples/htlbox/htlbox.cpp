@@ -2,7 +2,6 @@
 // Name:        htmllbox.cpp
 // Purpose:     HtmlLbox wxWidgets sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     31.05.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -64,6 +60,8 @@ class MyHtmlListBox : public wxHtmlListBox
 public:
     MyHtmlListBox() { }
     MyHtmlListBox(wxWindow *parent, bool multi = false);
+    MyHtmlListBox(const MyHtmlListBox&) = delete;
+    MyHtmlListBox& operator=(const MyHtmlListBox&) = delete;
 
     void SetChangeSelFg(bool change) { m_change = change; }
     void UpdateFirstItem();
@@ -71,11 +69,11 @@ public:
 protected:
     // override this method to return data to be shown in the listbox (this is
     // mandatory)
-    virtual wxString OnGetItem(size_t n) const wxOVERRIDE;
+    virtual wxString OnGetItem(size_t n) const override;
 
     // change the appearance by overriding these functions (this is optional)
-    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const wxOVERRIDE;
-    virtual wxColour GetSelectedTextColour(const wxColour& colFg) const wxOVERRIDE;
+    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const override;
+    virtual wxColour GetSelectedTextColour(const wxColour& colFg) const override;
 
     // flag telling us whether we should use fg colour even for the selected
     // item
@@ -94,7 +92,6 @@ public:
     wxTextFile m_file;
 #endif
 
-    wxDECLARE_NO_COPY_CLASS(MyHtmlListBox);
     wxDECLARE_DYNAMIC_CLASS(MyHtmlListBox);
 };
 
@@ -152,7 +149,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { (new MyFrame())->Show(); return true; }
+    virtual bool OnInit() override { (new MyFrame())->Show(); return true; }
 };
 
 // ----------------------------------------------------------------------------
@@ -236,7 +233,7 @@ wxIMPLEMENT_APP(MyApp);
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "HtmlLbox wxWidgets Sample",
+       : wxFrame(nullptr, wxID_ANY, "HtmlLbox wxWidgets Sample",
                  wxDefaultPosition, wxSize(500, 500))
 {
     // set the frame icon
@@ -317,7 +314,7 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
-    delete wxLog::SetActiveTarget(NULL);
+    delete wxLog::SetActiveTarget(nullptr);
 }
 
 void MyFrame::CreateBox()
@@ -331,7 +328,7 @@ void MyFrame::CreateBox()
     else // simple listbox
     {
         m_hlbox = new wxSimpleHtmlListBox(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          0, NULL, multi ? wxLB_MULTIPLE : 0);
+                                          0, nullptr, multi ? wxLB_MULTIPLE : 0);
 
         // unlike wxHtmlListBox which is abstract, wxSimpleHtmlListBox is a
         // concrete control and doesn't support virtual mode, this we need

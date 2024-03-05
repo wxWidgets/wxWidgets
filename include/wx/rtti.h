@@ -15,12 +15,6 @@
 #if !wxUSE_EXTENDED_RTTI     // XTI system is meant to replace these macros
 
 // ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
-#include "wx/memory.h"
-
-// ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
 
@@ -62,14 +56,14 @@ public:
     ~wxClassInfo();
 
     wxObject *CreateObject() const
-        { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
-    bool IsDynamic() const { return (NULL != m_objectConstructor); }
+        { return m_objectConstructor ? (*m_objectConstructor)() : nullptr; }
+    bool IsDynamic() const { return (nullptr != m_objectConstructor); }
 
     const wxChar       *GetClassName() const { return m_className; }
     const wxChar       *GetBaseClassName1() const
-        { return m_baseInfo1 ? m_baseInfo1->GetClassName() : NULL; }
+        { return m_baseInfo1 ? m_baseInfo1->GetClassName() : nullptr; }
     const wxChar       *GetBaseClassName2() const
-        { return m_baseInfo2 ? m_baseInfo2->GetClassName() : NULL; }
+        { return m_baseInfo2 ? m_baseInfo2->GetClassName() : nullptr; }
     const wxClassInfo  *GetBaseClass1() const { return m_baseInfo1; }
     const wxClassInfo  *GetBaseClass2() const { return m_baseInfo2; }
     int                 GetSize() const { return m_objectSize; }
@@ -139,13 +133,17 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
 #define wxDECLARE_ABSTRACT_CLASS(name)                                        \
     public:                                                                   \
-        static wxClassInfo ms_classInfo;                                      \
-        wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)               \
-        virtual wxClassInfo *GetClassInfo() const                             \
-        wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
+        wxWARNING_SUPPRESS_MISSING_OVERRIDE()                                 \
+        virtual wxClassInfo *GetClassInfo() const wxDUMMY_OVERRIDE;           \
+        wxWARNING_RESTORE_MISSING_OVERRIDE()                                  \
+        static wxClassInfo ms_classInfo
 
 #define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(name)                               \
     wxDECLARE_NO_ASSIGN_CLASS(name);                                          \
+    wxDECLARE_DYNAMIC_CLASS(name)
+
+#define wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(name)                      \
+    wxDECLARE_NO_ASSIGN_DEF_COPY(name);                                       \
     wxDECLARE_DYNAMIC_CLASS(name)
 
 #define wxDECLARE_DYNAMIC_CLASS_NO_COPY(name)                                 \
@@ -172,7 +170,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
         { return &name::ms_classInfo; }
 
 #define wxIMPLEMENT_CLASS_COMMON1(name, basename, func)                       \
-    wxIMPLEMENT_CLASS_COMMON(name, basename, NULL, func)
+    wxIMPLEMENT_CLASS_COMMON(name, basename, nullptr, func)
 
 #define wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, func)           \
     wxIMPLEMENT_CLASS_COMMON(name, basename1, &basename2::ms_classInfo, func)
@@ -200,11 +198,11 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
     // Single inheritance with one base class
 #define wxIMPLEMENT_ABSTRACT_CLASS(name, basename)                            \
-    wxIMPLEMENT_CLASS_COMMON1(name, basename, NULL)
+    wxIMPLEMENT_CLASS_COMMON1(name, basename, nullptr)
 
     // Multiple inheritance with two base classes
 #define wxIMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2)               \
-    wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, NULL)
+    wxIMPLEMENT_CLASS_COMMON2(name, basename1, basename2, nullptr)
 
 // -----------------------------------
 // XTI-compatible macros

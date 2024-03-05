@@ -2,7 +2,6 @@
 // Name:        src/common/debugrpt.cpp
 // Purpose:     wxDebugReport and related classes implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-17
 // Copyright:   (c) 2005 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -18,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -77,7 +73,7 @@ public:
     bool IsOk() const { return m_isOk; }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE;
+    virtual void OnStackFrame(const wxStackFrame& frame) override;
 
     wxXmlNode *m_nodeStack;
     bool m_isOk;
@@ -210,7 +206,7 @@ wxDebugReport::wxDebugReport()
     // permissions
     if ( !wxMkdir(m_dir, 0700) )
     {
-        wxLogSysError(_("Failed to create directory \"%s\""), m_dir.c_str());
+        wxLogSysError(_("Failed to create directory \"%s\""), m_dir);
         wxLogError(_("Debug report couldn't be created."));
 
         Reset();
@@ -229,7 +225,7 @@ wxDebugReport::~wxDebugReport()
             if ( wxRemove(wxFileName(m_dir, file).GetFullPath()) != 0 )
             {
                 wxLogSysError(_("Failed to remove debug report file \"%s\""),
-                              file.c_str());
+                              file);
                 m_dir.clear();
                 break;
             }
@@ -241,7 +237,7 @@ wxDebugReport::~wxDebugReport()
         if ( wxRmDir(m_dir) != 0 )
         {
             wxLogSysError(_("Failed to clean up debug report directory \"%s\""),
-                          m_dir.c_str());
+                          m_dir);
         }
     }
 }
@@ -383,7 +379,7 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
         if ( !path.empty() )
             nodeModule->AddAttribute(wxT("path"), path);
 
-        void *addr = NULL;
+        void *addr = nullptr;
         size_t len = 0;
         if ( info.GetAddress(&addr, &len) )
         {
@@ -562,7 +558,7 @@ bool wxDebugReport::Process()
     if ( !DoProcess() )
     {
         wxLogError(_("Processing debug report has failed, leaving the files in \"%s\" directory."),
-                   GetDirectory().c_str());
+                   GetDirectory());
 
         Reset();
 
@@ -589,7 +585,7 @@ bool wxDebugReport::DoProcess()
 
     msg += _("\nPlease send this report to the program maintainer, thank you!\n");
 
-    wxLogMessage(wxT("%s"), msg.c_str());
+    wxLogMessage(wxT("%s"), msg);
 
     // we have to do this or the report would be deleted, and we don't even
     // have any way to ask the user if he wants to keep it from here
@@ -721,10 +717,10 @@ bool wxDebugReportUpload::DoProcess()
     int rc = wxExecute(wxString::Format
                        (
                             wxT("%s -F \"%s=@%s\" %s"),
-                            m_curlCmd.c_str(),
-                            m_inputField.c_str(),
-                            GetCompressedFileName().c_str(),
-                            m_uploadURL.c_str()
+                            m_curlCmd,
+                            m_inputField,
+                            GetCompressedFileName(),
+                            m_uploadURL
                        ),
                        output,
                        errors);
@@ -739,7 +735,7 @@ bool wxDebugReportUpload::DoProcess()
         {
             for ( size_t n = 0; n < count; n++ )
             {
-                wxLogWarning(wxT("%s"), errors[n].c_str());
+                wxLogWarning(wxT("%s"), errors[n]);
             }
         }
 

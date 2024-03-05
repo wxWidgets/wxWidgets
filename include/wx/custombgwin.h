@@ -23,10 +23,10 @@ class wxCustomBackgroundWindowBase
 {
 public:
     // Trivial default ctor.
-    wxCustomBackgroundWindowBase() { }
+    wxCustomBackgroundWindowBase() = default;
 
     // Also a trivial but virtual -- to suppress g++ warnings -- dtor.
-    virtual ~wxCustomBackgroundWindowBase() { }
+    virtual ~wxCustomBackgroundWindowBase() = default;
 
     // Use the given bitmap to tile the background of this window. This bitmap
     // will show through any transparent children.

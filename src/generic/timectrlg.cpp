@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_TIMEPICKCTRL
 
@@ -30,6 +27,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/timectrl.h"
+#include "wx/uilocale.h"
 
 // This class is only compiled if there is no native version or if we
 // explicitly want to use both the native and generic one (this is useful for
@@ -75,6 +73,7 @@ public:
         m_btn = new wxSpinButton(ctrl, wxID_ANY,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxSP_VERTICAL | wxSP_WRAP);
+        m_btn->SetCanFocus(false);
 
         m_currentField = Field_Hour;
         m_isFirstDigit = true;
@@ -87,7 +86,7 @@ public:
         // instead of zeros) too as this is the most common unsupported case in
         // practice.
 #if wxUSE_INTL
-        m_useAMPM = wxLocale::GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
+        m_useAMPM = wxUILocale::GetCurrent().GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
 #else
         m_useAMPM = false;
 #endif
@@ -158,7 +157,7 @@ private:
     // Event handlers for various events in our controls.
     void OnTextSetFocus(wxFocusEvent& event)
     {
-        HighlightCurrentField();
+        CallAfter(&wxTimePickerGenericImpl::HighlightCurrentField);
 
         event.Skip();
     }
@@ -251,6 +250,9 @@ private:
                     }
                 }
                 break;
+            case WXK_TAB:
+                event.Skip();
+                break;
 
             // Do not skip the other events, just consume them to prevent the
             // user from editing the text directly.
@@ -259,6 +261,8 @@ private:
 
     void OnTextClick(wxMouseEvent& event)
     {
+        m_text->SetFocus();
+
         Field field = Field_Max; // Initialize just to suppress warnings.
         long pos;
         switch ( m_text->HitTest(event.GetPosition(), &pos) )
@@ -291,7 +295,7 @@ private:
             case wxTE_HT_BELOW:
                 // This shouldn't happen for single line control.
                 wxFAIL_MSG( "Unreachable" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxTE_HT_BEYOND:
                 // Select the last field.
@@ -300,15 +304,18 @@ private:
         }
 
         ChangeCurrentField(field);
+        CallAfter(&wxTimePickerGenericImpl::HighlightCurrentField);
     }
 
     void OnArrowUp(wxSpinEvent& WXUNUSED(event))
     {
+        m_text->SetFocus();
         ChangeCurrentFieldBy1(Dir_Up);
     }
 
     void OnArrowDown(wxSpinEvent& WXUNUSED(event))
     {
+        m_text->SetFocus();
         ChangeCurrentFieldBy1(Dir_Down);
     }
 
@@ -368,8 +375,6 @@ private:
     // Select the currently actively field.
     void HighlightCurrentField()
     {
-        m_text->SetFocus();
-
         const CharRange range = GetFieldRange(m_currentField);
 
         m_text->SetSelection(range.from, range.to);
@@ -574,7 +579,7 @@ private:
 
 void wxTimePickerCtrlGeneric::Init()
 {
-    m_impl = NULL;
+    m_impl = nullptr;
 }
 
 bool
@@ -661,8 +666,14 @@ wxSize wxTimePickerCtrlGeneric::DoGetBestSize() const
     if ( !m_impl )
         return Base::DoGetBestSize();
 
-    wxSize size = m_impl->m_text->GetBestSize();
-    size.x += m_impl->m_btn->GetBestSize().x + HMARGIN_TEXT_SPIN;
+    wxTextCtrl* const text = m_impl->m_text;
+    int w;
+    text->GetTextExtent(text->GetValue(), &w, nullptr);
+    wxSize size(text->GetSizeFromTextSize(w + 1));
+
+    const wxSize sizeBtn(m_impl->m_btn->GetBestSize());
+    size.y = wxMax(size.y, sizeBtn.y);
+    size.x += sizeBtn.x + HMARGIN_TEXT_SPIN;
 
     return size;
 }

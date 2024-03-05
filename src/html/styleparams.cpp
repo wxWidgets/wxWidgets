@@ -11,9 +11,6 @@
 #include "wx/html/htmltag.h"
 #include "wx/html/styleparams.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML
 
@@ -66,7 +63,7 @@ wxHtmlStyleParams::wxHtmlStyleParams(const wxHtmlTag& tag)
             m_names.Add(tempString);
 
             // Extract and trim values
-            tempString = token.SubString(colonIndex + 1, token.Length() - 1);
+            tempString = token.SubString(colonIndex + 1, token.length() - 1);
             tempString.Trim(true).Trim(false);
             // Add to values list
             m_values.Add(tempString);

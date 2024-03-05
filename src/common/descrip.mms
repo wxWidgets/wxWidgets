@@ -2,33 +2,33 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 June 2017                                                        *
+# Date : 20 October 2021                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)\
 	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)/incl=[-.regex]
+CC_DEFINE = /define=(__WXMOTIF__=1,WXBUILDING=1)/name=(as_is,short)/incl=[-.regex]
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CC_DEFINE = /define=(__WXGTK__=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	/incl=[-.regex]
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1,WXBUILDING=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)\
+CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1,WXBUILDING=1)/float=ieee/name=(as_is,short)\
 	/ieee=denorm/incl=[-.regex]
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
-CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1,WXBUILDING=1)/float=ieee\
 	/name=(as_is,short)/incl=[-.regex]
 .else
 CXX_DEFINE =
@@ -143,7 +143,6 @@ OBJECTS1=fs_inet.obj,\
 		list.obj,\
 		log.obj,\
 		longlong.obj,\
-		memory.obj,\
 		menucmn.obj,\
 		mimecmn.obj,\
 		module.obj,\
@@ -175,7 +174,6 @@ OBJECTS1=fs_inet.obj,\
 		strconv.obj,\
 		stream.obj,\
 		string.obj,\
-		stringimpl.obj,\
 		stringops.obj,\
 		strvararg.obj,\
 		sysopt.obj
@@ -225,17 +223,17 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
 		valnum.obj,numformatter.obj,markupparser.obj,\
 		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
-		textmeasurecmn.obj,modalhook.obj,threadinfo.obj,\
+        textmeasurecmn.obj,modalhook.obj,\
 		addremovectrl.obj,notifmsgcmn.obj,graphcmn.obj,dcsvg.obj,\
-		dcgraph.obj
+		dcgraph.obj,secretstore.obj,uilocale.obj,bmpbndl.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
 OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
-	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,\
+        dynload.obj,fddlgcmn.obj,fs_mem.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
 	taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
-	combocmn.obj
+	combocmn.obj,cairo.obj
 
 
 OBJECTS_GTK2=fontutilcmn.obj,cairo.obj
@@ -337,7 +335,6 @@ SOURCES = \
 		listctrlcmn.cpp,\
 		log.cpp,\
 		longlong.cpp,\
-		memory.cpp,\
 		menucmn.cpp,\
 		mimecmn.cpp,\
 		module.cpp,\
@@ -376,7 +373,6 @@ SOURCES = \
 		strvararg.cpp,\
 		sysopt.cpp,\
 		string.cpp,\
-		stringimpl.cpp,\
 		stringops.cpp,\
 		tbarbase.cpp,\
 		textbuf.cpp,\
@@ -411,7 +407,6 @@ SOURCES = \
 		dpycmn.cpp,\
 		dseldlg.cpp,\
 		dynload.cpp,\
-		effects.cpp,\
 		fddlgcmn.cpp,\
 		fs_mem.cpp,\
 		gbsizer.cpp,\
@@ -432,7 +427,8 @@ SOURCES = \
 		gridcmn.cpp,odcombocmn.cpp,spinbtncmn.cpp,scrolbarcmn.cpp,\
 		colourdata.cpp,fontdata.cpp affinematrix2d.cpp\
 		richtooltipcmn.cpp persist.cpp time.cpp textmeasurecmn.cpp \
-		modalhook.cpp graphcmn.cpp dcsvg.cpp dcgraph.cpp
+		modalhook.cpp graphcmn.cpp dcsvg.cpp dcgraph.cpp \
+		secretstore.cpp uilocale.cpp bmpbndl.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -578,7 +574,6 @@ lboxcmn.obj : lboxcmn.cpp
 list.obj : list.cpp
 log.obj : log.cpp
 longlong.obj : longlong.cpp
-memory.obj : memory.cpp
 menucmn.obj : menucmn.cpp
 mimecmn.obj : mimecmn.cpp
 module.obj : module.cpp
@@ -615,7 +610,6 @@ stream.obj : stream.cpp
 strvararg.obj : strvararg.cpp
 sysopt.obj : sysopt.cpp
 string.obj : string.cpp
-stringimpl.obj : stringimpl.cpp
 stringops.obj : stringops.cpp
 tbarbase.obj : tbarbase.cpp
 textbuf.obj : textbuf.cpp
@@ -647,7 +641,6 @@ dndcmn.obj : dndcmn.cpp
 dpycmn.obj : dpycmn.cpp
 dseldlg.obj : dseldlg.cpp
 dynload.obj : dynload.cpp
-effects.obj : effects.cpp
 fddlgcmn.obj : fddlgcmn.cpp
 fs_mem.obj : fs_mem.cpp
 gbsizer.obj : gbsizer.cpp
@@ -655,6 +648,7 @@ geometry.obj : geometry.cpp
 matrix.obj : matrix.cpp
 radiocmn.obj : radiocmn.cpp
 regex.obj : regex.cpp
+	cxx$(CXX_DEFINE)/warn=disable=(INTSIGNCHANGE)/obj=regex.obj regex.cpp
 taskbarcmn.obj : taskbarcmn.cpp
 xti.obj : xti.cpp
 xtistrm.obj : xtistrm.cpp
@@ -724,9 +718,11 @@ persist.obj : persist.cpp
 time.obj : time.cpp
 textmeasurecmn.obj : textmeasurecmn.cpp
 modalhook.obj : modalhook.cpp
-threadinfo.obj : threadinfo.cpp
 addremovectrl.obj : addremovectrl.cpp
 notifmsgcmn.obj : notifmsgcmn.cpp
 graphcmn.obj : graphcmn.cpp
 dcsvg.obj : dcsvg.cpp
 dcgraph.obj : dcgraph.cpp
+secretstore.obj : secretstore.cpp
+uilocale.obj : uilocale.cpp
+bmpbndl.obj : bmpbndl.cpp

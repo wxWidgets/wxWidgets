@@ -2,7 +2,6 @@
 // Name:        src/common/textcmn.cpp
 // Purpose:     implementation of platform-independent functions of wxTextCtrl
 // Author:      Julian Smart
-// Modified by:
 // Created:     13.07.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -15,9 +14,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/event.h"
@@ -74,7 +70,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -1155,14 +1150,11 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
             break;
 
         default:
-#if wxUSE_UNICODE
             if ( event.GetUnicodeKey() )
             {
                 ch = event.GetUnicodeKey();
             }
-            else
-#endif
-            if ( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
+            else if ( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
             {
                 // FIXME this is not going to work for non letters...
                 if ( !event.ShiftDown() )

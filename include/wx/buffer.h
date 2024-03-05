@@ -2,7 +2,6 @@
 // Name:        wx/buffer.h
 // Purpose:     auto buffer classes: buffers which automatically free memory
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.04.99
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -13,6 +12,10 @@
 
 #include "wx/defs.h"
 #include "wx/wxcrtbase.h"
+
+#if wxUSE_STD_IOSTREAM
+    #include "wx/iosfwrap.h"
+#endif
 
 #include <stdlib.h>             // malloc() and free()
 
@@ -56,7 +59,62 @@ struct UntypedBufferData
 // NB: this is defined in string.cpp and not the (non-existent) buffer.cpp
 WXDLLIMPEXP_BASE UntypedBufferData * GetUntypedNullData();
 
+// Implementation of stream insertion operators: they can't be inline because
+// we don't have full std::ostream declaration here.
+#if wxUSE_STD_IOSTREAM
+WXDLLIMPEXP_BASE std::ostream& OutputCharBuffer(std::ostream&, const char* s);
+WXDLLIMPEXP_BASE std::ostream& OutputWCharBuffer(std::ostream&, const wchar_t* ws);
+#if defined(HAVE_WOSTREAM)
+WXDLLIMPEXP_BASE std::wostream& OutputWCharBuffer(std::wostream&, const wchar_t* ws);
+#endif // defined(HAVE_WOSTREAM)
+#endif // wxUSE_STD_IOSTREAM
+
 } // namespace wxPrivate
+
+
+// Template used as CRTP base class for wxScopedCharTypeBuffer in order to
+// define overloaded operator<<() for it.
+//
+// By default we don't define any operators, but we do define them for the
+// usual char and wchar_t specializations below.
+template <typename T, typename Buffer>
+struct wxScopedCharTypeBufferStreamSupport
+{
+};
+
+// Suppress the warning about declaring a non-template friend because this is
+// exactly what we want to do here.
+wxGCC_ONLY_WARNING_SUPPRESS(non-template-friend)
+
+template <typename Buffer>
+struct wxScopedCharTypeBufferStreamSupport<char, Buffer>
+{
+#if wxUSE_STD_IOSTREAM
+  friend std::ostream& operator<<(std::ostream& oss, const Buffer& buf)
+  {
+      return wxPrivate::OutputCharBuffer(oss, buf.data());
+  }
+#endif // wxUSE_STD_IOSTREAM
+};
+
+template <typename Buffer>
+struct wxScopedCharTypeBufferStreamSupport<wchar_t, Buffer>
+{
+#if wxUSE_STD_IOSTREAM
+  friend std::ostream& operator<<(std::ostream& oss, const Buffer& buf)
+  {
+      return wxPrivate::OutputWCharBuffer(oss, buf.data());
+  }
+#if defined(HAVE_WOSTREAM)
+  friend std::wostream& operator<<(std::wostream& woss, const Buffer& buf)
+  {
+      return wxPrivate::OutputWCharBuffer(woss, buf.data());
+  }
+#endif // defined(HAVE_WOSTREAM)
+#endif // wxUSE_STD_IOSTREAM
+};
+
+wxGCC_ONLY_WARNING_RESTORE(non-template-friend)
 
 
 // Reference-counted character buffer for storing string data. The buffer
@@ -64,6 +122,7 @@ WXDLLIMPEXP_BASE UntypedBufferData * GetUntypedNullData();
 // is valid; see wxCharTypeBuffer<T> for persistent variant.
 template <typename T>
 class wxScopedCharTypeBuffer
+    : wxScopedCharTypeBufferStreamSupport<T, wxScopedCharTypeBuffer<T>>
 {
 public:
     typedef T CharType;
@@ -133,7 +192,7 @@ public:
     CharType *release() const
     {
         if ( m_data == GetNullData() )
-            return NULL;
+            return nullptr;
 
         wxASSERT_MSG( m_data->m_owned, wxT("can't release non-owned buffer") );
         wxASSERT_MSG( m_data->m_ref == 1, wxT("can't release shared buffer") );
@@ -141,7 +200,7 @@ public:
         CharType * const p = m_data->Get();
 
         wxScopedCharTypeBuffer *self = const_cast<wxScopedCharTypeBuffer*>(this);
-        self->m_data->Set(NULL, 0);
+        self->m_data->Set(nullptr, 0);
         self->DecRef();
 
         return p;
@@ -176,7 +235,7 @@ protected:
         }
     };
 
-    // placeholder for NULL string, to simplify this code
+    // placeholder for null string, to simplify this code
     static Data *GetNullData()
     {
         return static_cast<Data *>(wxPrivate::GetUntypedNullData());
@@ -252,7 +311,7 @@ protected:
 public:
     typedef T CharType;
 
-    wxCharTypeBuffer(const CharType *str = NULL, size_t len = wxNO_LEN)
+    wxCharTypeBuffer(const CharType *str = nullptr, size_t len = wxNO_LEN)
     {
         if ( str )
         {
@@ -365,10 +424,17 @@ public:
     wxCharBuffer(const wxScopedCharTypeBufferBase& buf)
         : wxCharTypeBufferBase(buf) {}
 
-    wxCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
+    wxCharBuffer(const CharType *str = nullptr) : wxCharTypeBufferBase(str) {}
     wxCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
     wxCharBuffer(const wxCStrData& cstr);
+
+#if wxUSE_STD_IOSTREAM
+    // Define this to disambiguate between converting to the base class or to
+    // wxString when using operator<<() with the objects of this class.
+    friend WXDLLIMPEXP_BASE
+    std::ostream& operator<<(std::ostream& oss, const wxCharBuffer& buf);
+#endif // wxUSE_STD_IOSTREAM
 };
 
 class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
@@ -382,55 +448,57 @@ public:
     wxWCharBuffer(const wxScopedCharTypeBufferBase& buf)
         : wxCharTypeBufferBase(buf) {}
 
-    wxWCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
+    wxWCharBuffer(const CharType *str = nullptr) : wxCharTypeBufferBase(str) {}
     wxWCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
     wxWCharBuffer(const wxCStrData& cstr);
+
+#if wxUSE_STD_IOSTREAM
+    // See wxCharBuffer for why this is needed.
+    friend WXDLLIMPEXP_BASE
+    std::ostream& operator<<(std::ostream& oss, const wxWCharBuffer& buf);
+#if defined(HAVE_WOSTREAM)
+    friend WXDLLIMPEXP_BASE
+    std::wostream& operator<<(std::wostream& woss, const wxWCharBuffer& buf);
+#endif // defined(HAVE_WOSTREAM)
+#endif // wxUSE_STD_IOSTREAM
 };
 
-// wxCharTypeBuffer<T> implicitly convertible to T*
-template <typename T>
-class wxWritableCharTypeBuffer : public wxCharTypeBuffer<T>
+// wxCharTypeBuffer<T> implicitly convertible to T*, for char and wchar_t,
+// implemented slightly differently because in one case we must be
+// constructible from a buffer and in another -- from a raw pointer.
+
+class wxWritableCharBuffer : public wxScopedCharTypeBuffer<char>
 {
 public:
-    typedef typename wxScopedCharTypeBuffer<T>::CharType CharType;
+    explicit wxWritableCharBuffer(const wxScopedCharTypeBuffer<char>& src)
+        : wxScopedCharTypeBuffer<char>(src) {}
 
-    wxWritableCharTypeBuffer(const wxScopedCharTypeBuffer<T>& src)
-        : wxCharTypeBuffer<T>(src) {}
-    // FIXME-UTF8: this won't be needed after converting mb_str()/wc_str() to
-    //             always return a buffer
-    //             + we should derive this class from wxScopedCharTypeBuffer
-    //               then
-    wxWritableCharTypeBuffer(const CharType *str = NULL)
-        : wxCharTypeBuffer<T>(str) {}
-
-    operator CharType*() { return this->data(); }
+    operator char*() { return data(); }
 };
 
-typedef wxWritableCharTypeBuffer<char> wxWritableCharBuffer;
-typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
+class wxWritableWCharBuffer : public wxCharTypeBuffer<wchar_t>
+{
+public:
+    explicit wxWritableWCharBuffer(const CharType *str)
+        : wxCharTypeBuffer<wchar_t>(str) {}
+
+    operator wchar_t*() { return data(); }
+};
 
 
-#if wxUSE_UNICODE
-    #define wxWxCharBuffer wxWCharBuffer
+// Compatibility defines, don't use them in the new code.
+#define wxWxCharBuffer wxWCharBuffer
 
-    #define wxMB2WXbuf wxWCharBuffer
-    #define wxWX2MBbuf wxCharBuffer
-    #if wxUSE_UNICODE_WCHAR
-        #define wxWC2WXbuf wxChar*
-        #define wxWX2WCbuf wxChar*
-    #elif wxUSE_UNICODE_UTF8
-        #define wxWC2WXbuf wxWCharBuffer
-        #define wxWX2WCbuf wxWCharBuffer
-    #endif
-#else // ANSI
-    #define wxWxCharBuffer wxCharBuffer
-
-    #define wxMB2WXbuf wxChar*
-    #define wxWX2MBbuf wxChar*
-    #define wxWC2WXbuf wxCharBuffer
+#define wxMB2WXbuf wxWCharBuffer
+#define wxWX2MBbuf wxCharBuffer
+#if wxUSE_UNICODE_WCHAR
+    #define wxWC2WXbuf wxChar*
+    #define wxWX2WCbuf wxChar*
+#else /* wxUSE_UNICODE_UTF8 */
+    #define wxWC2WXbuf wxWCharBuffer
     #define wxWX2WCbuf wxWCharBuffer
-#endif // Unicode/ANSI
+#endif
 
 // ----------------------------------------------------------------------------
 // A class for holding growable data buffers (not necessarily strings)
@@ -448,7 +516,7 @@ public:
     // everything is private as it can only be used by wxMemoryBuffer
 private:
     wxMemoryBufferData(size_t size = wxMemoryBufferData::DefBufSize)
-        : m_data(size ? malloc(size) : NULL), m_size(size), m_len(0), m_ref(0)
+        : m_data(size ? malloc(size) : nullptr), m_size(size), m_len(0), m_ref(0)
     {
     }
     ~wxMemoryBufferData() { free(m_data); }
@@ -483,13 +551,13 @@ private:
 
     void *release()
     {
-        if ( m_data == NULL )
-            return NULL;
+        if ( m_data == nullptr )
+            return nullptr;
 
         wxASSERT_MSG( m_ref == 1, "can't release shared buffer" );
 
         void *p = m_data;
-        m_data = NULL;
+        m_data = nullptr;
         m_len =
         m_size = 0;
 

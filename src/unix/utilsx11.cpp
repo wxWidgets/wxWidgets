@@ -2,18 +2,15 @@
 // Name:        src/unix/utilsx11.cpp
 // Purpose:     Miscellaneous X11 functions (for wxCore)
 // Author:      Mattia Barbon, Vaclav Slavik, Robert Roebling
-// Modified by:
 // Created:     25.03.02
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXX11__) || defined(__WXGTK__)
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-
-#include "wx/unix/utilsx11.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -26,33 +23,36 @@
 #include "wx/apptrait.h"
 #include "wx/private/launchbrowser.h"
 
+#ifdef __WXGTK__
+#include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/backend.h"
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#define wxHAS_X11_SUPPORT
+#endif
+GdkWindow* wxGetTopLevelGDK();
+GtkWidget* wxGetTopLevelGTK();
+
+#if GTK_CHECK_VERSION(3,4,0)
+#define wxHAS_GETKEYSTATE_GTK
+#endif //GTK+ 3.4
+#else
+// When not using GTK we always use X11, as we don't support anything else.
+#define wxHAS_X11_SUPPORT
+#endif // GTK
+
+#ifdef wxHAS_X11_SUPPORT
+
+#include "wx/unix/utilsx11.h"
+
 #ifdef __VMS
 #pragma message disable nosimpint
 #endif
-#include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 #ifdef __VMS
 #pragma message enable nosimpint
 #endif
-
-#ifdef __WXGTK__
-#ifdef __WXGTK20__
-#include "wx/gtk/private/wrapgtk.h"
-#else // GTK+ 1.x
-#include <gtk/gtk.h>
-#define GDK_WINDOWING_X11
-#endif
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
-GdkWindow* wxGetTopLevelGDK();
-GtkWidget* wxGetTopLevelGTK();
-#endif
-
-// Only X11 backend is supported for wxGTK here (GTK < 2 has no others)
-#if !defined(__WXGTK__) || \
-    (!defined(__WXGTK20__) || defined(GDK_WINDOWING_X11))
 
 // Various X11 Atoms used in this file:
 static Atom _NET_WM_STATE = 0;
@@ -63,7 +63,7 @@ static Atom _NET_WM_WINDOW_TYPE_NORMAL = 0;
 static Atom _KDE_NET_WM_WINDOW_TYPE_OVERRIDE = 0;
 static Atom _WIN_LAYER = 0;
 static Atom KWIN_RUNNING = 0;
-#ifndef __WXGTK20__
+#ifndef __WXGTK__
 static Atom _NET_SUPPORTING_WM_CHECK = 0;
 static Atom _NET_SUPPORTED = 0;
 #endif
@@ -279,10 +279,10 @@ static void wxWinHintsSetLayer(Display *display, Window rootWnd,
 
 
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
 static bool wxQueryWMspecSupport(Display* WXUNUSED(display),
                                  Window WXUNUSED(rootWnd),
-                                 Atom (feature))
+                                 Atom feature)
 {
     GdkAtom gatom = gdk_x11_xatom_to_atom(feature);
     return gdk_x11_screen_supports_net_wm_hint(gdk_screen_get_default(), gatom);
@@ -329,7 +329,7 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
                        _NET_SUPPORTED, 0, LONG_MAX,
                        False, XA_ATOM, &type, &format, &natoms,
                        &after, (unsigned char **)&atoms);
-    if ( type != XA_ATOM || atoms == NULL )
+    if ( type != XA_ATOM || atoms == nullptr )
         return false;
 
     // Lookup the feature we want:
@@ -2589,25 +2589,24 @@ static bool wxGetKeyStateX11(wxKeyCode key)
     return (key_vector[keyCode >> 3] & (1 << (keyCode & 7))) != 0;
 }
 
-#endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+#endif // wxHAS_X11_SUPPORT
 
 // We need to use GDK functions when using wxGTK with a non-X11 backend, the
 // X11 code above can't work in this case.
 #ifdef __WXGTK__
 
 // gdk_keymap_get_modifier_state() is only available since 3.4
-#if GTK_CHECK_VERSION(3,4,0)
 
-#define wxHAS_GETKEYSTATE_GTK
+#ifdef wxHAS_GETKEYSTATE_GTK
 
 static bool wxGetKeyStateGTK(wxKeyCode key)
 {
-    if (gtk_check_version(3,4,0) != NULL)
+    if (gtk_check_version(3,4,0) != nullptr)
         return false;
 
     GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
     GdkKeymap* keymap = gdk_keymap_get_for_display(display);
-    guint state = gdk_keymap_get_modifier_state(keymap);
+
     guint mask = 0;
     switch (key)
     {
@@ -2623,28 +2622,51 @@ static bool wxGetKeyStateGTK(wxKeyCode key)
             mask = GDK_SHIFT_MASK;
             break;
 
+        case WXK_CAPITAL:
+            return gdk_keymap_get_caps_lock_state(keymap) != FALSE;
+
+        case WXK_NUMLOCK:
+            return gdk_keymap_get_num_lock_state(keymap) != FALSE;
+
+#if GTK_CHECK_VERSION(3,18,0)
+        case WXK_SCROLL:
+            if (gtk_check_version(3,18,0) == nullptr)
+                return gdk_keymap_get_scroll_lock_state(keymap) != FALSE;
+            wxFALLTHROUGH;
+#endif // GTK 3.18+
+
         default:
-            wxFAIL_MSG(wxS("Unsupported key, only modifiers can be used"));
+            wxFAIL_MSG(wxString::Format(
+                "Unsupported key %u, the only supported ones are: Ctrl, Alt, "
+                "Shift, Caps Lock, Num Lock and Scroll Lock for GTK 3.18+",
+                key));
+
             return false;
     }
-    return (state & mask) != 0;
-}
 
-#endif // GTK+ 3.4
+    // Mask is set if we get here, so it must be one of the modifier keys.
+    return (gdk_keymap_get_modifier_state(keymap) & mask) != 0;
+
+}
+#endif // wxHAS_GETKEYSTATE_GTK
+
 #endif // __WXGTK__
 
 bool wxGetKeyState(wxKeyCode key)
 {
 #ifdef wxHAS_GETKEYSTATE_GTK
-    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
-    const char* name = g_type_name(G_TYPE_FROM_INSTANCE(display));
-    if (strcmp(name, "GdkX11Display") != 0)
+    if (!wxGTKImpl::IsX11(nullptr))
     {
         return wxGetKeyStateGTK(key);
     }
 #endif // GTK+ 3.4+
 
-    return wxGetKeyStateX11(key);
+#ifdef wxHAS_X11_SUPPORT
+    if ( wxGetKeyStateX11(key) )
+        return true;
+#endif
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -2667,7 +2689,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
         const char* argv[3];
         argv[0] = xdg_open.fn_str();
         argv[1] = document.fn_str();
-        argv[2] = NULL;
+        argv[2] = nullptr;
         if (wxExecute(argv))
             return true;
     }
@@ -2685,7 +2707,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 #ifdef __WXGTK__
 #ifdef __WXGTK4__
     if (gtk_show_uri_on_window((GtkWindow*)wxGetTopLevelGTK(),
-            params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
+            params.url.utf8_str(), GDK_CURRENT_TIME, nullptr))
     {
         return true;
     }
@@ -2694,7 +2716,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
     {
         GdkScreen* screen = gdk_window_get_screen(wxGetTopLevelGDK());
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
+        if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, nullptr))
             return true;
         wxGCC_WARNING_RESTORE()
     }
@@ -2703,7 +2725,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
     const char* argv[4];
     argv[1] = params.GetPathOrURL().fn_str();
-    argv[2] = NULL;
+    argv[2] = nullptr;
 
     // Our best best is to use xdg-open from freedesktop.org cross-desktop
     // compatibility suite xdg-utils
@@ -2745,7 +2767,7 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
         argv[2] = argv[1];
         argv[0] = "kfmclient";
         argv[1] = "openURL";
-        argv[3] = NULL;
+        argv[3] = nullptr;
         if (wxExecute(argv))
             return true;
     }
@@ -2753,4 +2775,4 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
     return false;
 }
 
-#endif // __WXX11__ || __WXGTK__ || __WXMOTIF__
+#endif // __WXX11__ || __WXGTK__

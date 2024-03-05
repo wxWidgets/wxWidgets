@@ -11,12 +11,16 @@
 
 #include "wx/window.h"
 
+#include <memory>
+
 // We need to wrap wxWindow* in a class as specializing StringMaker for
 // wxWindow* doesn't seem to work.
 class wxWindowPtr
 {
 public:
     explicit wxWindowPtr(wxWindow* win) : m_win(win) {}
+    template <typename W>
+    explicit wxWindowPtr(const std::unique_ptr<W>& win) : m_win(win.get()) {}
 
     wxString Dump() const
     {
@@ -44,7 +48,9 @@ private:
 
 // Macro providing more information about the current focus if comparison
 // fails.
-#define CHECK_FOCUS_IS(w) CHECK(wxWindowPtr(wxWindow::FindFocus()) == wxWindowPtr(w))
+#define CHECK_SAME_WINDOW(w1, w2) CHECK(wxWindowPtr(w1) == wxWindowPtr(w2))
+
+#define CHECK_FOCUS_IS(w) CHECK_SAME_WINDOW(wxWindow::FindFocus(), w)
 
 namespace Catch
 {

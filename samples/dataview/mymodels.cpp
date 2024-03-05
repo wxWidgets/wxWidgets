@@ -12,24 +12,14 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/dataview.h"
 #include "mymodels.h"
-
-// ----------------------------------------------------------------------------
-// resources
-// ----------------------------------------------------------------------------
-
-#include "null.xpm"
-#include "wx_small.xpm"
-
 
 // ----------------------------------------------------------------------------
 // MyMusicTreeModel
@@ -37,12 +27,14 @@
 
 MyMusicTreeModel::MyMusicTreeModel()
 {
-    m_root = new MyMusicTreeModelNode( NULL, "My Music" );
+    m_root = new MyMusicTreeModelNode( nullptr, "My Music" );
 
     // setup pop music
     m_pop = new MyMusicTreeModelNode( m_root, "Pop music" );
     m_pop->Append(
         new MyMusicTreeModelNode( m_pop, "You are not alone", "Michael Jackson", 1995 ) );
+    m_pop->Append(
+        new MyMusicTreeModelNode( m_pop, "Yesterday", "The Beatles", -1 /* not specified */ ) );
     m_pop->Append(
         new MyMusicTreeModelNode( m_pop, "Take a bow", "Madonna", 1994 ) );
     m_root->Append( m_pop );
@@ -55,8 +47,6 @@ MyMusicTreeModel::MyMusicTreeModel()
     m_classical->Append( new MyMusicTreeModelNode( m_classical, "German Requiem",
                                                    "Johannes Brahms", 1868 ) );
     m_root->Append( m_classical );
-
-    m_classicalMusicIsKnownToControl = false;
 }
 
 wxString MyMusicTreeModel::GetTitle( const wxDataViewItem &item ) const
@@ -108,14 +98,10 @@ void MyMusicTreeModel::AddToClassical( const wxString &title, const wxString &ar
         new MyMusicTreeModelNode( m_classical, title, artist, year );
     m_classical->Append( child_node );
 
-    // FIXME: what's m_classicalMusicIsKnownToControl for?
-    if (m_classicalMusicIsKnownToControl)
-    {
-        // notify control
-        wxDataViewItem child( (void*) child_node );
-        wxDataViewItem parent( (void*) m_classical );
-        ItemAdded( parent, child );
-    }
+    // notify control
+    wxDataViewItem child( (void*) child_node );
+    wxDataViewItem parent( (void*) m_classical );
+    ItemAdded( parent, child );
 }
 
 void MyMusicTreeModel::Delete( const wxDataViewItem &item )
@@ -136,22 +122,35 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
 
     // is the node one of those we keep stored in special pointers?
     if (node == m_pop)
-        m_pop = NULL;
+        m_pop = nullptr;
     else if (node == m_classical)
-        m_classical = NULL;
+        m_classical = nullptr;
     else if (node == m_ninth)
-        m_ninth = NULL;
+        m_ninth = nullptr;
 
     // first remove the node from the parent's array of children;
-    // NOTE: MyMusicTreeModelNodePtrArray is only an array of _pointers_
-    //       thus removing the node from it doesn't result in freeing it
-    node->GetParent()->GetChildren().Remove( node );
-
-    // free the node
-    delete node;
+    auto& siblings = node->GetParent()->GetChildren();
+    for ( auto it = siblings.begin(); it != siblings.end(); ++it )
+    {
+        if ( it->get() == node )
+        {
+            siblings.erase(it);
+            break;
+        }
+    }
 
     // notify control
     ItemDeleted( parent, item );
+}
+void MyMusicTreeModel::Clear()
+{
+    m_pop       = nullptr;
+    m_classical = nullptr;
+    m_ninth     = nullptr;
+
+    m_root->GetChildren().clear();
+
+    Cleared();
 }
 
 int MyMusicTreeModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
@@ -196,7 +195,8 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         variant = node->m_artist;
         break;
     case 2:
-        variant = (long) node->m_year;
+        if (node->m_year != -1)
+            variant = (long) node->m_year;
         break;
     case 3:
         variant = node->m_quality;
@@ -205,7 +205,9 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         variant = 80L;  // all music is very 80% popular
         break;
     case 5:
-        if (GetYear(item) < 1900)
+        if (node->m_year == -1)
+            variant = "n/a";
+        else if (node->m_year < 1900)
             variant = "old";
         else
             variant = "new";
@@ -251,7 +253,16 @@ bool MyMusicTreeModel::IsEnabled( const wxDataViewItem &item,
     MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
 
     // disable Beethoven's ratings, his pieces can only be good
-    return !(col == 3 && node->m_artist.EndsWith("Beethoven"));
+    if (col == 3 && node->m_artist.EndsWith("Beethoven"))
+        return false;
+
+    // also disable editing the year when it's not specified, this doesn't work
+    // because the editor needs some initial value
+    if (col == 2 && node->m_year == -1)
+        return false;
+
+    // otherwise allow editing
+    return true;
 }
 
 wxDataViewItem MyMusicTreeModel::GetParent( const wxDataViewItem &item ) const
@@ -271,7 +282,7 @@ wxDataViewItem MyMusicTreeModel::GetParent( const wxDataViewItem &item ) const
 
 bool MyMusicTreeModel::IsContainer( const wxDataViewItem &item ) const
 {
-    // the invisble root node can have children
+    // the invisible root node can have children
     // (in our model always "MyMusic")
     if (!item.IsOk())
         return true;
@@ -290,25 +301,17 @@ unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
         return 1;
     }
 
-    if (node == m_classical)
-    {
-        MyMusicTreeModel *model = (MyMusicTreeModel*)(const MyMusicTreeModel*) this;
-        model->m_classicalMusicIsKnownToControl = true;
-    }
-
     if (node->GetChildCount() == 0)
     {
         return 0;
     }
 
-    unsigned int count = node->GetChildren().GetCount();
-    for (unsigned int pos = 0; pos < count; pos++)
+    for ( const auto& child : node->GetChildren() )
     {
-        MyMusicTreeModelNode *child = node->GetChildren().Item( pos );
-        array.Add( wxDataViewItem( (void*) child ) );
+        array.Add( wxDataViewItem( child.get() ) );
     }
 
-    return count;
+    return array.size();
 }
 
 
@@ -342,9 +345,12 @@ static int my_sort( int *v1, int *v2 )
 
 #define INITIAL_NUMBER_OF_ITEMS 10000
 
-MyListModel::MyListModel() :
+MyListModel::MyListModel(int modelFlags) :
         wxDataViewVirtualListModel( INITIAL_NUMBER_OF_ITEMS )
 {
+    const wxString multiLineText = L"top (\u1ED6)\ncentre\nbottom (g)";
+    const bool useMultiLine = (modelFlags & MODEL_USE_MULTI_LINE_TEXT) != 0;
+
     // the first 100 items are really stored in this model;
     // all the others are synthesized on request
     static const unsigned NUMBER_REAL_ITEMS = 100;
@@ -352,17 +358,22 @@ MyListModel::MyListModel() :
     m_toggleColValues.reserve(NUMBER_REAL_ITEMS);
     m_textColValues.reserve(NUMBER_REAL_ITEMS);
     m_toggleColValues.push_back(false);
-    m_textColValues.push_back("first row with long label to test ellipsization");
+    m_textColValues.push_back(useMultiLine
+        ? multiLineText
+        : wxString("first row with long label to test ellipsization"));
     for (unsigned int i = 1; i < NUMBER_REAL_ITEMS; i++)
     {
         m_toggleColValues.push_back(false);
         m_textColValues.push_back(wxString::Format("real row %d", i));
     }
 
-    m_iconColValues.assign(NUMBER_REAL_ITEMS, "test");
+    m_iconColValues.assign(NUMBER_REAL_ITEMS,
+        useMultiLine ? multiLineText : wxString("test"));
 
-    m_icon[0] = wxIcon( null_xpm );
-    m_icon[1] = wxIcon( wx_small_xpm );
+    const wxSize size = GetIconSizeFromModelFlags(modelFlags);
+
+    m_icon[0] = wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_LIST, size);
+    m_icon[1] = wxArtProvider::GetBitmapBundle(wxART_WX_LOGO, wxART_LIST, size);
 }
 
 void MyListModel::Prepend( const wxString &text )
@@ -412,7 +423,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
 
     // Sort in descending order so that the last
     // row will be deleted first. Otherwise the
-    // remaining indeces would all be wrong.
+    // remaining indices would all be wrong.
     rows.Sort( my_sort_reverse );
     for (i = 0; i < rows.GetCount(); i++)
     {
@@ -437,13 +448,6 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            if (row >= m_toggleColValues.size())
-                variant = false;
-            else
-                variant = m_toggleColValues[row];
-            break;
-
         case Col_EditableText:
             if (row >= m_textColValues.GetCount())
                 variant = wxString::Format( "virtual row %d", row );
@@ -451,15 +455,22 @@ void MyListModel::GetValueByRow( wxVariant &variant,
                 variant = m_textColValues[ row ];
             break;
 
-        case Col_IconText:
+        case Col_ToggleIconText:
             {
                 wxString text;
+                wxCheckBoxState state;
                 if ( row >= m_iconColValues.GetCount() )
+                {
                     text = "virtual icon";
+                    state = wxCHK_UNDETERMINED;
+                }
                 else
+                {
                     text = m_iconColValues[row];
+                    state = m_toggleColValues[row] ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+                }
 
-                variant << wxDataViewIconText(text, m_icon[row % 2]);
+                variant << wxDataViewCheckIconText(text, m_icon[row % 2], state);
             }
             break;
 
@@ -487,16 +498,13 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 
         case Col_Custom:
             {
-                IntToStringMap::const_iterator it = m_customColValues.find(row);
+                const auto it = m_customColValues.find(row);
                 if ( it != m_customColValues.end() )
                     variant = it->second;
                 else
                     variant = wxString::Format("%d", row % 100);
             }
             break;
-
-        case Col_Max:
-            wxFAIL_MSG( "invalid column" );
     }
 }
 
@@ -505,9 +513,6 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            return false;
-
         case Col_EditableText:
         case Col_Date:
             if (row < m_toggleColValues.size())
@@ -521,7 +526,7 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
             }
             return false;
 
-        case Col_IconText:
+        case Col_ToggleIconText:
             if ( !(row % 2) )
                 return false;
             attr.SetColour(*wxYELLOW);
@@ -565,9 +570,6 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
                     return false;
             }
             break;
-
-        case Col_Max:
-            wxFAIL_MSG( "invalid column" );
     }
 
     return true;
@@ -578,20 +580,13 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
 {
     switch ( col )
     {
-        case Col_Toggle:
-            if (row >= m_toggleColValues.size())
-                return false;
-
-            m_toggleColValues[row] = variant.GetBool();
-            return true;
-
         case Col_EditableText:
-        case Col_IconText:
+        case Col_ToggleIconText:
             if (row >= m_textColValues.GetCount())
             {
                 // the item is not in the range of the items
                 // which we store... for simplicity, don't allow editing it
-                wxLogError( "Cannot edit rows with an index greater than %d",
+                wxLogError( "Cannot edit rows with an index greater than %zu",
                             m_textColValues.GetCount() );
                 return false;
             }
@@ -600,11 +595,13 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
             {
                 m_textColValues[row] = variant.GetString();
             }
-            else // col == Col_IconText
+            else // col == Col_ToggleIconText
             {
-                wxDataViewIconText iconText;
-                iconText << variant;
-                m_iconColValues[row] = iconText.GetText();
+                wxDataViewCheckIconText checkIconText;
+                checkIconText << variant;
+                m_toggleColValues[row] =
+                    checkIconText.GetCheckedState() == wxCHK_CHECKED;
+                m_iconColValues[row] = checkIconText.GetText();
             }
             return true;
 
@@ -616,9 +613,6 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
         case Col_Custom:
             m_customColValues[row] = variant.GetString();
             break;
-
-        case Col_Max:
-            wxFAIL_MSG( "invalid column" );
     }
 
     return false;
@@ -633,4 +627,16 @@ bool MyListStoreDerivedModel::IsEnabledByRow(unsigned int row, unsigned int col)
 {
     // disabled the last two checkboxes
     return !(col == 0 && 8 <= row && row <= 9);
+}
+
+// ----------------------------------------------------------------------------
+// MyListStoreHasValueModel
+// ----------------------------------------------------------------------------
+
+bool MyListStoreHasValueModel::HasValue(const wxDataViewItem &item, unsigned int col) const
+{
+    unsigned int row = GetRow( item );
+    // the diagonal entries don't have values. This is just a silly example to demonstrate the
+    // usage of overriding HasValue to specify that some columns don't have values for some items
+    return row != col;
 }

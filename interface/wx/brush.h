@@ -132,19 +132,6 @@ public:
     wxBrush(const wxBrush& brush);
 
     /**
-        Destructor.
-
-        See @ref overview_refcount_destruct for more info.
-
-        @remarks Although all remaining brushes are deleted when the application
-                 exits, the application should try to clean up all brushes itself.
-                 This is because wxWidgets cannot know if a pointer to the brush
-                 object is stored in an application data structure, and there is
-                 a risk of double deletion.
-    */
-    virtual ~wxBrush();
-
-    /**
         Returns a reference to the brush colour.
 
         @see SetColour()
@@ -153,7 +140,7 @@ public:
 
     /**
         Gets a pointer to the stipple bitmap. If the brush does not have a @c wxBRUSHSTYLE_STIPPLE
-        style, this bitmap may be non-@NULL but uninitialised (i.e. wxBitmap:IsOk() returns @false).
+        style, this bitmap may be non-null but uninitialised (i.e. wxBitmap:IsOk() returns @false).
 
         @see SetStipple()
     */
@@ -215,7 +202,7 @@ public:
     bool IsTransparent() const;
 
 
-    //@{
+    ///@{
     /**
         Sets the brush colour using red, green and blue values.
 
@@ -223,7 +210,7 @@ public:
     */
     virtual void SetColour(const wxColour& colour);
     virtual void SetColour(unsigned char red, unsigned char green, unsigned char blue);
-    //@}
+    ///@}
 
     /**
         Sets the stipple bitmap.

@@ -28,34 +28,34 @@ public:
     virtual ~wxTextEntry();
 
     // implement wxTextEntryBase pure virtual methods
-    virtual void WriteText(const wxString& text) wxOVERRIDE;
-    virtual void Remove(long from, long to) wxOVERRIDE;
+    virtual void WriteText(const wxString& text) override;
+    virtual void Remove(long from, long to) override;
 
-    virtual void Copy() wxOVERRIDE;
-    virtual void Cut() wxOVERRIDE;
-    virtual void Paste() wxOVERRIDE;
+    virtual void Copy() override;
+    virtual void Cut() override;
+    virtual void Paste() override;
 
-    virtual void Undo() wxOVERRIDE;
-    virtual void Redo() wxOVERRIDE;
-    virtual bool CanUndo() const wxOVERRIDE;
-    virtual bool CanRedo() const wxOVERRIDE;
+    virtual void Undo() override;
+    virtual void Redo() override;
+    virtual bool CanUndo() const override;
+    virtual bool CanRedo() const override;
 
-    virtual void SetInsertionPoint(long pos) wxOVERRIDE;
-    virtual long GetInsertionPoint() const wxOVERRIDE;
-    virtual long GetLastPosition() const wxOVERRIDE;
+    virtual void SetInsertionPoint(long pos) override;
+    virtual long GetInsertionPoint() const override;
+    virtual long GetLastPosition() const override;
 
-    virtual void SetSelection(long from, long to) wxOVERRIDE;
-    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
+    virtual void SetSelection(long from, long to) override;
+    virtual void GetSelection(long *from, long *to) const override;
 
-    virtual bool IsEditable() const wxOVERRIDE;
-    virtual void SetEditable(bool editable) wxOVERRIDE;
+    virtual bool IsEditable() const override;
+    virtual void SetEditable(bool editable) override;
 
-    virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
-    virtual void ForceUpper() wxOVERRIDE;
+    virtual void SetMaxLength(unsigned long len) override;
+    virtual void ForceUpper() override;
 
 #ifdef __WXGTK3__
-    virtual bool SetHint(const wxString& hint) wxOVERRIDE;
-    virtual wxString GetHint() const wxOVERRIDE;
+    virtual bool SetHint(const wxString& hint) override;
+    virtual wxString GetHint() const override;
 #endif
 
     // implementation only from now on
@@ -86,15 +86,15 @@ protected:
     void GTKConnectChangedSignal();
 
 
-    virtual void DoSetValue(const wxString& value, int flags) wxOVERRIDE;
-    virtual wxString DoGetValue() const wxOVERRIDE;
+    virtual void DoSetValue(const wxString& value, int flags) override;
+    virtual wxString DoGetValue() const override;
 
     // margins functions
-    virtual bool DoSetMargins(const wxPoint& pt) wxOVERRIDE;
-    virtual wxPoint DoGetMargins() const wxOVERRIDE;
+    virtual bool DoSetMargins(const wxPoint& pt) override;
+    virtual wxPoint DoGetMargins() const override;
 
-    virtual bool DoAutoCompleteStrings(const wxArrayString& choices) wxOVERRIDE;
-    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
+    virtual bool DoAutoCompleteStrings(const wxArrayString& choices) override;
+    virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) override;
 
     // Call this from the overridden wxWindow::GTKIMFilterKeypress() to use
     // GtkEntry IM context.
@@ -112,7 +112,7 @@ protected:
     //
     // Note that we make it protected in wxGTK as it is called from wxComboBox
     // currently.
-    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE;
+    virtual void EnableTextChangedEvents(bool enable) override;
 
     // Helper for wxTE_PROCESS_ENTER handling: activates the default button in
     // the dialog containing this control if any.

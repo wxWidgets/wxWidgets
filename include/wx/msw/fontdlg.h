@@ -2,7 +2,6 @@
 // Name:        wx/msw/fontdlg.h
 // Purpose:     wxFontDialog class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -24,9 +23,9 @@ public:
     wxFontDialog(wxWindow *parent, const wxFontData& data)
         : wxFontDialogBase(parent, data) { Create(parent, data); }
 
-    virtual int ShowModal() wxOVERRIDE;
-    virtual void SetTitle(const wxString& title) wxOVERRIDE;
-    virtual wxString GetTitle() const wxOVERRIDE;
+    virtual int ShowModal() override;
+    virtual void SetTitle(const wxString& title) override;
+    virtual wxString GetTitle() const override;
 
 protected:
     wxString m_title;

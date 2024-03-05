@@ -1,0 +1,55 @@
+<head>
+    <title>Advanced Handler Sample</title>
+
+    <style>
+        .mono {
+            font-family: monospace;
+        }
+    </style>
+
+    <script>
+        function sendRequest() {
+            let url = document.getElementById("request_url").value;
+            let request_content_type = document.getElementById("request_content_type").value;
+            let request_data = document.getElementById("request_data").value;
+            console.log("clicked");
+
+            const req = new XMLHttpRequest();
+            req.addEventListener("load", (ev) => {
+                document.getElementById("response_response").value = req.responseText;
+            });
+            req.open("POST", url);
+            req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            req.send(request_data);
+        }
+    </script>
+</head>
+
+<body>
+    <p>
+        This sample demonstrates how to use <i>wxWebViewHandler::StartRequest()</i>
+        to enable advanced requests from html and javascript in the web view.
+    </p>
+
+    Request URL<br />
+    <input id="request_url" size="40" value=""><br />
+    Request content type<br />
+    <input id="request_content_type" size="40" value="application/json"><br />
+    Request Data<br />
+    <textarea class="mono" cols="60" rows="8" id="request_data">{ param1: "wxwidgets", param2: "webview" }</textarea>
+    <br />
+    <button onclick="sendRequest()">Start request</button><br />
+    Response Data<br />
+    <textarea class="mono" cols="60" rows="8" id="response_response"></textarea>
+
+    <script>
+        // init request_url
+        let postURL;
+        if (navigator.userAgent.indexOf("Edg") > 0)
+            postURL = "https://wxpost.wxsite//main/test/1";
+        else
+            postURL = "wxpost://main/test/1";
+
+        document.getElementById("request_url").value = postURL;
+    </script>
+</body>

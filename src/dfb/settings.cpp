@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/settings.h"
 
@@ -70,10 +67,10 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index,
     switch (index)
     {
         case wxSYS_SCREEN_X:
-            wxDisplaySize(&val, NULL);
+            wxDisplaySize(&val, nullptr);
             return val;
         case wxSYS_SCREEN_Y:
-            wxDisplaySize(NULL, &val);
+            wxDisplaySize(nullptr, &val);
             return val;
 
         default:

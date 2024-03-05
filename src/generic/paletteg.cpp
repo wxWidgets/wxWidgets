@@ -10,13 +10,12 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_PALETTE
 
 #include "wx/palette.h"
+
+#include <vector>
 
 //-----------------------------------------------------------------------------
 // wxPalette
@@ -27,34 +26,20 @@ struct wxPaletteEntry
     unsigned char red, green, blue;
 };
 
-class wxPaletteRefData : public wxGDIRefData
+struct wxPaletteRefData : public wxGDIRefData
 {
-public:
-    wxPaletteRefData();
-    wxPaletteRefData(const wxPaletteRefData& palette);
-    virtual ~wxPaletteRefData();
+    wxPaletteRefData() = default;
+    wxPaletteRefData(const wxPaletteRefData& other);
 
-    int m_count;
-    wxPaletteEntry *m_entries;
+    std::vector<wxPaletteEntry> m_entries;
 };
 
-wxPaletteRefData::wxPaletteRefData()
-{
-    m_count = 0;
-    m_entries = NULL;
-}
-
+// We need to define the copy ctor explicitly because the base class copy
+// ctor is deleted.
 wxPaletteRefData::wxPaletteRefData(const wxPaletteRefData& palette)
+    : wxGDIRefData()
 {
-    m_count = palette.m_count;
-    m_entries = new wxPaletteEntry[m_count];
-    for ( int i = 0; i < m_count; i++ )
-        m_entries[i] = palette.m_entries[i];
-}
-
-wxPaletteRefData::~wxPaletteRefData()
-{
-    delete[] m_entries;
+    m_entries = palette.m_entries;
 }
 
 //-----------------------------------------------------------------------------
@@ -65,7 +50,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPalette,wxGDIObject);
 
 wxPalette::wxPalette()
 {
-    m_refData = NULL;
+    m_refData = nullptr;
 }
 
 wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
@@ -73,14 +58,10 @@ wxPalette::wxPalette(int n, const unsigned char *red, const unsigned char *green
     Create(n, red, green, blue);
 }
 
-wxPalette::~wxPalette()
-{
-}
-
 int wxPalette::GetColoursCount() const
 {
     if (m_refData)
-        return M_PALETTEDATA->m_count;
+        return M_PALETTEDATA->m_entries.size();
 
     return 0;
 }
@@ -93,15 +74,16 @@ bool wxPalette::Create(int n,
     UnRef();
     m_refData = new wxPaletteRefData();
 
-    M_PALETTEDATA->m_count = n;
-    M_PALETTEDATA->m_entries = new wxPaletteEntry[n];
+    M_PALETTEDATA->m_entries.resize(n);
 
-    wxPaletteEntry *e = M_PALETTEDATA->m_entries;
-    for (int i = 0; i < n; i++, e++)
+    int i = 0;
+    for ( wxPaletteEntry& e : M_PALETTEDATA->m_entries )
     {
-        e->red = red[i];
-        e->green = green[i];
-        e->blue = blue[i];
+        e.red = red[i];
+        e.green = green[i];
+        e.blue = blue[i];
+
+        ++i;
     }
 
     return true;
@@ -116,15 +98,17 @@ int wxPalette::GetPixel( unsigned char red,
     int closest = 0;
     double d,distance = 1000.0; // max. dist is 256
 
-    wxPaletteEntry *e = M_PALETTEDATA->m_entries;
-    for (int i = 0; i < M_PALETTEDATA->m_count; i++, e++)
+    int i = 0;
+    for ( const wxPaletteEntry& e : M_PALETTEDATA->m_entries )
     {
-        if ((d = 0.299 * abs(red - e->red) +
-                 0.587 * abs(green - e->green) +
-                 0.114 * abs(blue - e->blue)) < distance) {
+        if ((d = 0.299 * abs(red - e.red) +
+                 0.587 * abs(green - e.green) +
+                 0.114 * abs(blue - e.blue)) < distance) {
             distance = d;
             closest = i;
         }
+
+        ++i;
     }
     return closest;
 }
@@ -134,8 +118,11 @@ bool wxPalette::GetRGB(int pixel,
                        unsigned char *green,
                        unsigned char *blue) const
 {
-    if (!m_refData) return false;
-    if (pixel >= M_PALETTEDATA->m_count) return false;
+    if ( !m_refData )
+        return false;
+
+    if ( pixel < 0 || (unsigned)pixel >= M_PALETTEDATA->m_entries.size() )
+        return false;
 
     wxPaletteEntry& p = M_PALETTEDATA->m_entries[pixel];
     if (red) *red = p.red;

@@ -19,6 +19,7 @@
 class WXDLLIMPEXP_CORE wxKeyboardState
 {
 public:
+    explicit
     wxKeyboardState(bool controlDown = false,
                     bool shiftDown = false,
                     bool altDown = false,

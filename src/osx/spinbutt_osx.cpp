@@ -2,7 +2,6 @@
 // Name:        src/osx/spinbutt_osx.cpp
 // Purpose:     wxSpinButton
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
@@ -140,6 +139,16 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
     // send a thumbtrack event if EVT_SPIN_UP/DOWN wasn't vetoed 
     if ( newValue != oldValue )
         SendThumbTrackEvent() ;
+}
+
+void wxSpinButton::SetIncrement(int value)
+{
+    GetPeer()->SetIncrement( value );
+}
+
+int wxSpinButton::GetIncrement() const
+{
+    return GetPeer()->GetIncrement();
 }
 
 #endif // wxUSE_SPINBTN

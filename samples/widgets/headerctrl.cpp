@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HEADERCTRL
 
@@ -48,21 +45,23 @@
 // HeaderCtrlWidgetsPage
 // ----------------------------------------------------------------------------
 
+#define NUMBER_OF_COLUMNS 4
+
 class HeaderCtrlWidgetsPage : public WidgetsPage
 {
 public:
     HeaderCtrlWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
         : WidgetsPage(book, imaglist, header_xpm)
     {
-        m_header = NULL;
-        m_sizerHeader = NULL;
+        m_header = nullptr;
+        m_sizerHeader = nullptr;
     }
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_header; }
-    virtual void RecreateWidget() wxOVERRIDE;
+    virtual wxWindow *GetWidget() const override { return m_header; }
+    virtual void RecreateWidget() override;
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
     // event handlers
@@ -79,14 +78,14 @@ protected:
     long GetHeaderStyleFlags() const;
     // reset column style
     void ResetColumnStyle(int col);
-    // compose columnm style flags based on selections
+    // compose column style flags based on selections
     int GetColumnStyleFlags(int col) const;
-    // get columnm alignment flags based on selection
+    // get column alignment flags based on selection
     wxAlignment GetColumnAlignmentFlag(int col) const;
 
     // the control itself and the sizer it is in
     wxHeaderCtrlSimple *m_header;
-    wxSizer *m_sizerHeader;
+    wxStaticBoxSizer *m_sizerHeader;
     // the check boxes for header styles
     wxCheckBox *m_chkAllowReorder;
     wxCheckBox *m_chkAllowHide;
@@ -100,7 +99,7 @@ protected:
         wxCheckBox *chkAllowHide;
         wxCheckBox *chkWithBitmap;
         wxRadioBox *rbAlignments;
-    } m_colSettings[2];
+    } m_colSettings[NUMBER_OF_COLUMNS];
 
 private:
     DECLARE_WIDGETS_PAGE(HeaderCtrlWidgetsPage)
@@ -116,8 +115,7 @@ private:
     #define HEADER_CTRL_FAMILY GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(HeaderCtrlWidgetsPage,
-                       "Header", HEADER_CTRL_FAMILY);
+IMPLEMENT_WIDGETS_PAGE(HeaderCtrlWidgetsPage, "Header", HEADER_CTRL_FAMILY);
 
 static const wxString gs_colAlignments[] = { "none", "left", "centre", "right" };
 static const wxAlignment gs_colAlignFlags[] = { wxALIGN_NOT, wxALIGN_LEFT, wxALIGN_CENTRE, wxALIGN_RIGHT };
@@ -127,48 +125,53 @@ static const wxAlignment gs_colAlignFlags[] = { wxALIGN_NOT, wxALIGN_LEFT, wxALI
 
 void HeaderCtrlWidgetsPage::CreateContent()
 {
-    // left pane
-    wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
+    // top pane
+    wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // header style
-    wxSizer *sizerHeader = new wxStaticBoxSizer(wxVERTICAL, this, "&Header style");
-    m_chkAllowReorder = CreateCheckBoxAndAddToSizer(sizerHeader, "Allow &reorder");
-    m_chkAllowHide = CreateCheckBoxAndAddToSizer(sizerHeader, "Alow &hide");
-    m_chkBitmapOnRight = CreateCheckBoxAndAddToSizer(sizerHeader, "&Bitmap on right");
+    wxStaticBoxSizer *styleSizer = new wxStaticBoxSizer(wxVERTICAL, this, "&Header style");
+    wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
+
+    m_chkAllowReorder = CreateCheckBoxAndAddToSizer(styleSizer, "Allow &reorder", wxID_ANY, styleSizerBox);
+    m_chkAllowHide = CreateCheckBoxAndAddToSizer(styleSizer, "Alow &hide", wxID_ANY, styleSizerBox);
+    m_chkBitmapOnRight = CreateCheckBoxAndAddToSizer(styleSizer, "&Bitmap on right", wxID_ANY, styleSizerBox);
     ResetHeaderStyle();
-    sizerLeft->Add(sizerHeader, wxSizerFlags().Expand());
+
+    styleSizer->AddStretchSpacer();
+    wxButton* btnReset = new wxButton(styleSizerBox, wxID_ANY, "&Reset");
+    styleSizer->Add(btnReset, wxSizerFlags().CenterHorizontal().Border());
+    sizerTop->Add(styleSizer, wxSizerFlags().Expand());
 
     // column flags
     for ( int i = 0; i < (int)WXSIZEOF(m_colSettings); i++ )
     {
-        wxSizer* sizerCol = new wxStaticBoxSizer(wxVERTICAL, this, wxString::Format("Column %i style", i+1));
-        m_colSettings[i].chkAllowResize = CreateCheckBoxAndAddToSizer(sizerCol, "Allow resize");
-        m_colSettings[i].chkAllowReorder = CreateCheckBoxAndAddToSizer(sizerCol, "Allow reorder");
-        m_colSettings[i].chkAllowSort = CreateCheckBoxAndAddToSizer(sizerCol, "Allow sort");
-        m_colSettings[i].chkAllowHide = CreateCheckBoxAndAddToSizer(sizerCol, "Hidden");
-        m_colSettings[i].chkWithBitmap = CreateCheckBoxAndAddToSizer(sizerCol, "With bitmap");
-        m_colSettings[i].rbAlignments = new wxRadioBox(this, wxID_ANY, "Alignment",
+        wxStaticBoxSizer* sizerCol = new wxStaticBoxSizer(wxVERTICAL, this, wxString::Format("Column %i style", i+1));
+        wxStaticBox* const sizerColBox = sizerCol->GetStaticBox();
+
+        m_colSettings[i].chkAllowResize = CreateCheckBoxAndAddToSizer(sizerCol, "Allow resize", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkAllowReorder = CreateCheckBoxAndAddToSizer(sizerCol, "Allow reorder", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkAllowSort = CreateCheckBoxAndAddToSizer(sizerCol, "Allow sort", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkAllowHide = CreateCheckBoxAndAddToSizer(sizerCol, "Hidden", wxID_ANY, sizerColBox);
+        m_colSettings[i].chkWithBitmap = CreateCheckBoxAndAddToSizer(sizerCol, "With bitmap", wxID_ANY, sizerColBox);
+        m_colSettings[i].rbAlignments = new wxRadioBox(sizerColBox, wxID_ANY, "Alignment",
                wxDefaultPosition, wxDefaultSize, WXSIZEOF(gs_colAlignments), gs_colAlignments,
                2, wxRA_SPECIFY_COLS);
-        sizerCol->Add(m_colSettings[i].rbAlignments, wxSizerFlags().Expand().Border(wxALL, 5));
+        sizerCol->Add(m_colSettings[i].rbAlignments, wxSizerFlags().Expand().Border());
         ResetColumnStyle(i);
-        sizerLeft->Add(sizerCol, wxSizerFlags().Expand().Border(wxTOP, 15));
+        sizerTop->AddSpacer(15);
+        sizerTop->Add(sizerCol, wxSizerFlags().Expand());
     }
 
-    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border(wxALL, 5)); // spacer
-    wxButton* btnReset = new wxButton(this, wxID_ANY, "&Reset");
-    sizerLeft->Add(btnReset, wxSizerFlags().CenterHorizontal().Border(wxALL, 15));
-
-    // right pane
+    // bottom pane
     m_sizerHeader = new wxStaticBoxSizer(wxVERTICAL, this, "Header");
     RecreateWidget();
 
     // the 2 panes compose the window
-    wxSizer* sizerTop = new wxBoxSizer(wxHORIZONTAL);
-    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder());
-    sizerTop->Add(m_sizerHeader, wxSizerFlags(1).Expand().DoubleBorder());
+    wxSizer* sizerAll = new wxBoxSizer(wxVERTICAL);
+    sizerAll->Add(sizerTop, wxSizerFlags().Expand().Border());
+    sizerAll->Add(m_sizerHeader, wxSizerFlags(1).Expand().Border());
 
-    SetSizer(sizerTop);
+    SetSizer(sizerAll);
 
     // Bind event handlers
     m_chkAllowReorder->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckOrRadioBox, this);
@@ -185,10 +188,6 @@ void HeaderCtrlWidgetsPage::CreateContent()
     }
     btnReset->Bind(wxEVT_BUTTON, &HeaderCtrlWidgetsPage::OnResetButton, this);
     btnReset->Bind(wxEVT_UPDATE_UI, &HeaderCtrlWidgetsPage::OnUpdateUIResetButton, this);
-
-    m_header->Bind(wxEVT_HEADER_RESIZING, &HeaderCtrlWidgetsPage::OnResizing, this);
-    m_header->Bind(wxEVT_HEADER_BEGIN_RESIZE, &HeaderCtrlWidgetsPage::OnBeginResize, this);
-    m_header->Bind(wxEVT_HEADER_END_RESIZE, &HeaderCtrlWidgetsPage::OnEndResize, this);
 }
 
 void HeaderCtrlWidgetsPage::RecreateWidget()
@@ -197,22 +196,29 @@ void HeaderCtrlWidgetsPage::RecreateWidget()
 
     long flags = GetAttrs().m_defaultFlags | GetHeaderStyleFlags();
 
-    m_header = new wxHeaderCtrlSimple(this, wxID_ANY,
+    m_header = new wxHeaderCtrlSimple(m_sizerHeader->GetStaticBox(), wxID_ANY,
                                       wxDefaultPosition, wxDefaultSize,
                                       flags);
-    wxASSERT(WXSIZEOF(m_colSettings) == 2);
-    wxHeaderColumnSimple col1("First", 100, GetColumnAlignmentFlag(0), GetColumnStyleFlags(0));
-    if ( m_colSettings[0].chkWithBitmap->IsChecked() )
+
+    NotifyWidgetRecreation(m_header);
+
+    m_header->Bind(wxEVT_HEADER_RESIZING, &HeaderCtrlWidgetsPage::OnResizing, this);
+    m_header->Bind(wxEVT_HEADER_BEGIN_RESIZE, &HeaderCtrlWidgetsPage::OnBeginResize, this);
+    m_header->Bind(wxEVT_HEADER_END_RESIZE, &HeaderCtrlWidgetsPage::OnEndResize, this);
+
+    for ( int i = 0; i < (int)WXSIZEOF(m_colSettings); i++ )
     {
-        col1.SetBitmap(wxArtProvider::GetIcon(wxART_ERROR, wxART_BUTTON));
+        wxHeaderColumnSimple col(wxString::Format("Column %d", i + 1),
+                                 FromDIP(100),
+                                 GetColumnAlignmentFlag(i),
+                                 GetColumnStyleFlags(i));
+        if ( m_colSettings[i].chkWithBitmap->IsChecked() )
+        {
+            const wxArtID icons[] = { wxART_ERROR, wxART_QUESTION, wxART_WARNING, wxART_INFORMATION };
+            col.SetBitmap(wxArtProvider::GetBitmapBundle(icons[i % WXSIZEOF(icons)], wxART_BUTTON));
+        }
+        m_header->AppendColumn(col);
     }
-    m_header->AppendColumn(col1);
-    wxHeaderColumnSimple col2("Second", 200, GetColumnAlignmentFlag(1), GetColumnStyleFlags(1));
-    if ( m_colSettings[1].chkWithBitmap->IsChecked() )
-    {
-        col2.SetBitmap(wxArtProvider::GetIcon(wxART_QUESTION, wxART_BUTTON));
-    }
-    m_header->AppendColumn(col2);
 
     m_sizerHeader->AddStretchSpacer();
     m_sizerHeader->Add(m_header, wxSizerFlags().Expand());
@@ -310,19 +316,19 @@ void HeaderCtrlWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& evt)
 
 void HeaderCtrlWidgetsPage::OnResizing(wxHeaderCtrlEvent& evt)
 {
-    wxLogMessage("Column %i resizing, width = %i", evt.GetColumn(), evt.GetWidth());
+    wxLogMessage("Column %i resizing, width = %i", evt.GetColumn() + 1, evt.GetWidth());
     evt.Skip();
 }
 
 void HeaderCtrlWidgetsPage::OnBeginResize(wxHeaderCtrlEvent& evt)
 {
-    wxLogMessage("Column %i resize began, width = %i", evt.GetColumn(), evt.GetWidth());
+    wxLogMessage("Column %i resize began, width = %i", evt.GetColumn() + 1, evt.GetWidth());
     evt.Skip();
 }
 
 void HeaderCtrlWidgetsPage::OnEndResize(wxHeaderCtrlEvent& evt)
 {
-    wxLogMessage("Column %i resize ended, width = %i", evt.GetColumn(), evt.GetWidth());
+    wxLogMessage("Column %i resize ended, width = %i", evt.GetColumn() + 1, evt.GetWidth());
     evt.Skip();
 }
 

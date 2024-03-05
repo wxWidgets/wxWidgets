@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/pen.h"
 
@@ -137,7 +134,7 @@ int wxPen::GetDashes(wxDash **ptr) const
 {
     wxFAIL_MSG( "GetDashes not implemented" );
 
-    *ptr = NULL;
+    *ptr = nullptr;
     return 0;
 }
 
@@ -152,7 +149,7 @@ wxDash* wxPen::GetDash() const
 {
     wxFAIL_MSG( "GetDash not implemented" );
 
-    return NULL;
+    return nullptr;
 }
 
 wxPenCap wxPen::GetCap() const
@@ -194,10 +191,10 @@ wxColour wxPen::GetColour() const
 
 wxBitmap *wxPen::GetStipple() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid pen") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid pen") );
 
     wxFAIL_MSG( "GetStipple not implemented" );
-    return NULL;
+    return nullptr;
 }
 
 wxGDIRefData *wxPen::CreateGDIRefData() const

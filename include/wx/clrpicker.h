@@ -2,7 +2,6 @@
 // Name:        wx/clrpicker.h
 // Purpose:     wxColourPickerCtrl base header
 // Author:      Francesco Montorsi (based on Vadim Zeitlin's code)
-// Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Vadim Zeitlin, Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -41,7 +40,7 @@ class WXDLLIMPEXP_CORE wxColourPickerWidgetBase
 {
 public:
     wxColourPickerWidgetBase() : m_colour(*wxBLACK) { }
-    virtual ~wxColourPickerWidgetBase() {}
+    virtual ~wxColourPickerWidgetBase() = default;
 
     wxColour GetColour() const
         { return m_colour; }
@@ -74,10 +73,10 @@ protected:
 // under the name "wxColourPickerWidget".
 // NOTE: wxColourPickerCtrl allocates a wxColourPickerWidget and relies on the
 //       fact that all classes being mapped as wxColourPickerWidget have the
-//       same prototype for their contructor (and also explains why we use
+//       same prototype for their constructor (and also explains why we use
 //       define instead of a typedef)
 // since GTK > 2.4, there is GtkColorButton
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/clrpicker.h"
     #define wxColourPickerWidget      wxColourButton
 #elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)
@@ -100,15 +99,15 @@ protected:
 class WXDLLIMPEXP_CORE wxColourPickerCtrl : public wxPickerBase
 {
 public:
-    wxColourPickerCtrl() {}
-    virtual ~wxColourPickerCtrl() {}
+    wxColourPickerCtrl() = default;
+    virtual ~wxColourPickerCtrl() = default;
 
 
     wxColourPickerCtrl(wxWindow *parent, wxWindowID id,
         const wxColour& col = *wxBLACK, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = wxCLRP_DEFAULT_STYLE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxColourPickerCtrlNameStr)
+        const wxString& name = wxASCII_STR(wxColourPickerCtrlNameStr))
         { Create(parent, id, col, pos, size, style, validator, name); }
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -117,7 +116,7 @@ public:
            const wxSize& size = wxDefaultSize,
            long style = wxCLRP_DEFAULT_STYLE,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxColourPickerCtrlNameStr);
+           const wxString& name = wxASCII_STR(wxColourPickerCtrlNameStr));
 
 
 public:         // public API
@@ -137,16 +136,16 @@ public:         // public API
 public:        // internal functions
 
     // update the button colour to match the text control contents
-    void UpdatePickerFromTextCtrl() wxOVERRIDE;
+    void UpdatePickerFromTextCtrl() override;
 
     // update the text control to match the button's colour
-    void UpdateTextCtrlFromPicker() wxOVERRIDE;
+    void UpdateTextCtrlFromPicker() override;
 
     // event handler for our picker
     void OnColourChange(wxColourPickerEvent &);
 
 protected:
-    virtual long GetPickerStyle(long style) const wxOVERRIDE
+    virtual long GetPickerStyle(long style) const override
         { return (style & (wxCLRP_SHOW_LABEL | wxCLRP_SHOW_ALPHA)); }
 
 private:
@@ -165,7 +164,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOURPICKER_DIALOG_CANCELLED,
 class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {
 public:
-    wxColourPickerEvent() {}
+    wxColourPickerEvent() = default;
     wxColourPickerEvent(wxObject *generator, int id, const wxColour &col, wxEventType commandType = wxEVT_COLOURPICKER_CHANGED)
         : wxCommandEvent(commandType, id),
           m_colour(col)
@@ -178,12 +177,12 @@ public:
 
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxColourPickerEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxColourPickerEvent(*this); }
 
 private:
     wxColour m_colour;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxColourPickerEvent);
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxColourPickerEvent);
 };
 
 // ----------------------------------------------------------------------------

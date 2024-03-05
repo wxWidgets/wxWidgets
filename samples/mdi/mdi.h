@@ -2,7 +2,6 @@
 // Name:        mdi.cpp
 // Purpose:     MDI sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Helper class logging menu open/close events.
@@ -26,6 +25,8 @@ public:
           m_frame(frame)
     {
     }
+    MenuEventLogger(const MenuEventLogger&) = delete;
+    MenuEventLogger& operator=(const MenuEventLogger&) = delete;
 
 protected:
     void LogMenuOpenClose(wxMenuEvent& event, const char *action)
@@ -53,8 +54,6 @@ protected:
 
     const wxString m_label;
     wxFrame* const m_frame;
-
-    wxDECLARE_NO_COPY_CLASS(MenuEventLogger);
 };
 
 class MyCanvas : public wxScrolledWindow,
@@ -62,7 +61,7 @@ class MyCanvas : public wxScrolledWindow,
 {
 public:
     MyCanvas(wxFrame *parent, const wxPoint& pos, const wxSize& size);
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
 
     bool IsDirty() const { return m_dirty; }
 
@@ -156,6 +155,8 @@ private:
     {
     public:
         EventHandler(unsigned numChild) : m_numChild(numChild) { }
+        EventHandler(const EventHandler&) = delete;
+        EventHandler &operator=(const EventHandler&) = delete;
 
     private:
         void OnRefresh(wxCommandEvent& event)
@@ -167,8 +168,6 @@ private:
         const unsigned m_numChild;
 
         wxDECLARE_EVENT_TABLE();
-
-        wxDECLARE_NO_COPY_CLASS(EventHandler);
     };
 
     wxDECLARE_EVENT_TABLE();

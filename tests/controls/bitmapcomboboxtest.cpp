@@ -10,9 +10,6 @@
 
 #if wxUSE_BITMAPCOMBOBOX
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -24,9 +21,6 @@
 #include "itemcontainertest.h"
 #include "asserthelper.h"
 
-//Test only if we are based off of wxComboBox
-#ifndef wxGENERIC_BITMAPCOMBOBOX
-
 class BitmapComboBoxTestCase : public TextEntryTestCase,
                                public ItemContainerTestCase,
                                public CppUnit::TestCase
@@ -34,17 +28,17 @@ class BitmapComboBoxTestCase : public TextEntryTestCase,
 public:
     BitmapComboBoxTestCase() { }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_combo; }
-    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_combo; }
+    virtual wxTextEntry *GetTestEntry() const override { return m_combo; }
+    virtual wxWindow *GetTestWindow() const override { return m_combo; }
 
-    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_combo; }
-    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_combo; }
+    virtual wxItemContainer *GetContainer() const override { return m_combo; }
+    virtual wxWindow *GetContainerWindow() const override { return m_combo; }
 
-    virtual void CheckStringSelection(const char * WXUNUSED(sel)) wxOVERRIDE
+    virtual void CheckStringSelection(const char * WXUNUSED(sel)) override
     {
         // do nothing here, as explained in TextEntryTestCase comment, our
         // GetStringSelection() is the wxChoice, not wxTextEntry, one and there
@@ -58,19 +52,6 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void Bitmap();
-
-#if defined(__WXGTK__) && wxUSE_UIACTIONSIMULATOR
-    virtual void SimSelect() wxOVERRIDE
-    {
-        // There is an inexplicable and locally irreproducible failure in this
-        // test for wxBitmapComboBox when it runs on the Linux buildbot slaves:
-        // wxUIActionSimulator::Select() fails there for some reason, so skip
-        // the test. If you ever manage to reproduce this locally, please try
-        // to debug it to understand what goes on!
-        if ( !IsAutomaticTest() )
-            ItemContainerTestCase::SimSelect();
-    }
-#endif // __WXGTK__
 
     wxBitmapComboBox *m_combo;
 
@@ -95,9 +76,9 @@ void BitmapComboBoxTestCase::Bitmap()
     wxArrayString items;
     items.push_back("item 0");
     items.push_back("item 1");
-
-    //We need this otherwise MSVC complains as it cannot find a suitable append
-    static_cast<wxComboBox*>(m_combo)->Append(items);
+    // TODO: Add wxBitmapComboBoxBase::Append(wxArrayString )
+    for( unsigned int i = 0; i < items.size(); ++i )
+        m_combo->Append(items[i]);
 
     CPPUNIT_ASSERT(!m_combo->GetItemBitmap(0).IsOk());
 
@@ -117,8 +98,10 @@ void BitmapComboBoxTestCase::Bitmap()
     CPPUNIT_ASSERT(m_combo->GetItemBitmap(0).IsOk());
 
     CPPUNIT_ASSERT_EQUAL(wxSize(16, 16), m_combo->GetBitmapSize());
-}
 
-#endif //wxGENERIC_BITMAPCOMBOBOX
+    m_combo->SetSelection( 1 );
+
+    CPPUNIT_ASSERT_EQUAL( m_combo->GetStringSelection(), "item with bitmap" );
+}
 
 #endif //wxUSE_BITMAPCOMBOBOX

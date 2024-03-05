@@ -9,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -73,7 +70,7 @@ class WrapSizerApp : public wxApp
 public:
     WrapSizerApp() {}
 
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         new WrapSizerFrame;
         return true;
@@ -88,7 +85,7 @@ wxIMPLEMENT_APP(WrapSizerApp);
 // ----------------------------------------------------------------------------
 
 WrapSizerFrame::WrapSizerFrame()
-        : wxFrame(NULL, wxID_ANY, "wxWrapSizer Sample")
+        : wxFrame(nullptr, wxID_ANY, "wxWrapSizer Sample")
 {
     SetIcon(wxICON(sample));
 
@@ -148,6 +145,8 @@ WrapSizerFrame::WrapSizerFrame()
 
     // Set sizer for the panel
     m_panel->SetSizer(sizerRoot);
+
+    SetClientSize(m_panel->GetBestSize());
 
     Show();
 }

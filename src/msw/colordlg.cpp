@@ -2,7 +2,6 @@
 // Name:        src/msw/colordlg.cpp
 // Purpose:     wxColourDialog class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COLOURDLG
 
@@ -40,6 +36,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -54,7 +51,7 @@
 static wxRect gs_rectDialog(0, 0, 222, 324);
 
 // The dialog currently being shown or null.
-static wxColourDialog* gs_activeDialog = NULL;
+static wxColourDialog* gs_activeDialog = nullptr;
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -180,7 +177,9 @@ int wxColourDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
 
     wxWindow* const parent = GetParentForModalDialog(m_parent, GetWindowStyle());
-    WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;
+    WXHWND hWndParent = parent ? GetHwndOf(parent) : nullptr;
+
+    wxWindowDisabler disableOthers(this, parent);
 
     // initialize the struct used by Windows
     CHOOSECOLOR chooseColorStruct;
@@ -215,6 +214,8 @@ int wxColourDialog::ShowModal()
     // Set the global pointer for the duration of the modal dialog life-time.
     gs_activeDialog = this;
     wxON_BLOCK_EXIT_NULL(gs_activeDialog);
+
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
 
     // do show the modal dialog
     if ( !::ChooseColor(&chooseColorStruct) )

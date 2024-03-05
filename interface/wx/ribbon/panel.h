@@ -39,7 +39,7 @@ public:
     */
     wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPanel* panel = NULL);
+                       wxRibbonPanel* panel = nullptr);
 
     /**
         Returns the panel relating to this event.
@@ -65,13 +65,29 @@ wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
     A panel adds a border and label to a group of controls, and can be
     minimised (either automatically to conserve space, or manually by the user).
 
-    Non ribbon controls can be placed on a panel using wxSizers to manage
+    Non-ribbon controls can be placed on a panel using wxSizers to manage
     layout. Panel size is governed by the sizer's minimum calculated size and
-    the parent wxRibbonPage's dimensions. For functional and aesthetic reasons
-    it is recommended that ribbon and non ribbon controls are not mixed in one
+    the parent wxRibbonPage's dimensions. For functional and aesthetic reasons,
+    it is recommended that ribbon and non-ribbon controls are not mixed in one
     panel.
 
-    @sa wxRibbonPage
+    A wxRibbonPage can show or hide its panels to offer a dynamic experience
+    for the end user. For example, a page can hide certain panels and show others
+    when the user interacts with other elements in the application. As an example
+    of toggling the visibility of a panel:
+
+    @code
+        wxRibbonPanel* panel = m_ribbon->GetPage(0)->GetPanelById(ID_EDITOR_PANEL);
+        if ( panel != nullptr )
+        {
+            panel->Show(!panel->IsShown());
+        }
+        // Update the UI
+        m_ribbon->Realise();
+        m_ribbon->Layout();
+    @endcode
+
+    @see wxRibbonPage
 
     @beginStyleTable
     @style{wxRIBBON_PANEL_DEFAULT_STYLE}
@@ -268,7 +284,7 @@ public:
         Get the dummy panel of an expanded panel.
 
         Note that this should be called on an expanded panel to get the dummy
-        associated with it - it will return NULL when called on the dummy
+        associated with it - it will return @NULL when called on the dummy
         itself.
 
         @see ShowExpanded()
@@ -280,7 +296,7 @@ public:
         Get the expanded panel of a dummy panel.
 
         Note that this should be called on a dummy panel to get the expanded
-        panel associated with it - it will return NULL when called on the
+        panel associated with it - it will return @NULL when called on the
         expanded panel itself.
 
         @see ShowExpanded()

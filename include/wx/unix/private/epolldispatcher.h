@@ -21,7 +21,7 @@ struct epoll_event;
 class WXDLLIMPEXP_BASE wxEpollDispatcher : public wxFDIODispatcher
 {
 public:
-    // create a new instance of this class, can return NULL if
+    // create a new instance of this class, can return nullptr if
     // epoll() is not supported on this system
     //
     // the caller should delete the returned pointer
@@ -30,11 +30,11 @@ public:
     virtual ~wxEpollDispatcher();
 
     // implement base class pure virtual methods
-    virtual bool RegisterFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL) wxOVERRIDE;
-    virtual bool ModifyFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL) wxOVERRIDE;
-    virtual bool UnregisterFD(int fd) wxOVERRIDE;
-    virtual bool HasPending() const wxOVERRIDE;
-    virtual int Dispatch(int timeout = TIMEOUT_INFINITE) wxOVERRIDE;
+    virtual bool RegisterFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL) override;
+    virtual bool ModifyFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL) override;
+    virtual bool UnregisterFD(int fd) override;
+    virtual bool HasPending() const override;
+    virtual int Dispatch(int timeout = TIMEOUT_INFINITE) override;
 
 private:
     // ctor is private, use Create()

@@ -23,7 +23,7 @@ public:
 
 
 wxStaticText::wxStaticText() :
-    m_qtLabel(NULL)
+    m_qtLabel(nullptr)
 {
 }
 
@@ -47,7 +47,6 @@ bool wxStaticText::Create(wxWindow *parent,
             const wxString &name)
 {
     m_qtLabel = new wxQtStaticText( parent, this );
-    m_qtLabel->setText( wxQtConvertString( label ) );
 
     // Set the buddy to itself to get the mnemonic key but ensure that we don't have
     // any unwanted side effects, so disable the interaction:
@@ -64,7 +63,9 @@ bool wxStaticText::Create(wxWindow *parent,
     else
         m_qtLabel->setAlignment(Qt::AlignLeft);
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    SetLabel(label);
+
+    return wxStaticTextBase::Create(parent, id, pos, size, style, wxDefaultValidator, name);
 }
 
 void wxStaticText::SetLabel(const wxString& label)

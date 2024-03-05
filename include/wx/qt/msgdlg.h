@@ -10,19 +10,17 @@
 
 #include "wx/msgdlg.h"
 
-class QMessageBox;
-
 class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 {
 public:
     wxMessageDialog(wxWindow *parent, const wxString& message,
-                    const wxString& caption = wxMessageBoxCaptionStr,
+                    const wxString& caption = wxASCII_STR(wxMessageBoxCaptionStr),
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
     virtual ~wxMessageDialog();
 
     // Reimplemented to translate return codes from Qt to wx
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMessageDialog);

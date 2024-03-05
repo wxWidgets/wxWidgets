@@ -25,7 +25,7 @@ Regenerate required make/project files:
 
 3. Download GTK+ for Windows and uncompress files in the directory
 without spaces in the name. We suppose later that GTK+/Win32 is
-in the C:\gtk directory.
+in the `C:\gtk` directory.
 
     http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+_2.24.10-1_win32.zip
 
@@ -48,11 +48,11 @@ and library directory
 
 See http://msdn.microsoft.com/en-us/library/t9az1d21(v=vs.90).aspx
 
-Open solution file in build\msw directory, select "GTK+ Debug" solution
+Open solution file in `build\msw` directory, select "GTK+ Debug" solution
 configuration and build the solution. To be sure that everything is as expected
 you can build minimal sample.
 
-GTK+ is linked to wxWidgets always as DLL, so C:\gtk\bin directory should be
+GTK+ is linked to wxWidgets always as DLL, so `C:\gtk\bin` directory should be
 in %PATH% environment variable before application run.
 
 4.2 You can also build using nmake:

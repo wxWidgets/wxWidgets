@@ -2,7 +2,6 @@
 // Name:        src/ribbon/art_internal.cpp
 // Purpose:     Helper functions & classes used by ribbon art providers
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-08-04
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
@@ -10,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RIBBON
 
@@ -130,12 +126,12 @@ wxRibbonHSLColour::wxRibbonHSLColour(const wxColour& col)
     if (Min == Max)
     {
         // colour is a shade of grey
-        hue = 0.0;
-        saturation = 0.0;
+        hue = 0;
+        saturation = 0;
     }
     else
     {
-        if(luminance <= 0.5)
+        if (luminance <= 0.5f)
             saturation = (Max - Min) / (Max + Min);
         else
             saturation = (Max - Min) / (2.0f - (Max + Min));
@@ -143,7 +139,7 @@ wxRibbonHSLColour::wxRibbonHSLColour(const wxColour& col)
         if(Max == red)
         {
             hue = 60.0f * (green - blue) / (Max - Min);
-            if(hue < 0.0)
+            if (hue < 0)
                 hue += 360.0f;
         }
         else if(Max == green)
@@ -164,64 +160,64 @@ wxColour wxRibbonHSLColour::ToRGB() const
     float _hue = (hue - float(floor(hue / 360.0f)) * 360.0f);
     float _saturation = saturation;
     float _luminance = luminance;
-    if(_saturation > 1.0) _saturation = 1.0;
-    if(_saturation < 0.0) _saturation = 0.0;
-    if(_luminance > 1.0) _luminance = 1.0;
-    if(_luminance < 0.0) _luminance = 0.0;
+    if (_saturation > 1) _saturation = 1;
+    if (_saturation < 0) _saturation = 0;
+    if (_luminance > 1) _luminance = 1;
+    if (_luminance < 0) _luminance = 0;
 
     float red, blue, green;
-    if(_saturation == 0.0)
+    if (_saturation == 0)
     {
         // colour is a shade of grey
         red = blue = green = _luminance;
     }
     else
     {
-        float tmp2 = (_luminance < 0.5)
+        float tmp2 = (_luminance < 0.5f)
            ? _luminance * (1.0f + _saturation)
            : (_luminance + _saturation) - (_luminance * _saturation);
         float tmp1 = 2.0f * _luminance - tmp2;
 
         float tmp3R = _hue + 120.0f;
-        if(tmp3R > 360.0)
+        if (tmp3R > 360)
             tmp3R -= 360.0f;
-        if(tmp3R < 60.0)
+        if (tmp3R < 60)
             red = tmp1 + (tmp2 - tmp1) * tmp3R / 60.0f;
-        else if(tmp3R < 180.0)
+        else if (tmp3R < 180)
             red = tmp2;
-        else if(tmp3R < 240.0)
+        else if (tmp3R < 240)
             red = tmp1 + (tmp2 - tmp1) * (240.0f - tmp3R) / 60.0f;
         else
             red = tmp1;
 
         float tmp3G = _hue;
-        if(tmp3G > 360.0)
+        if (tmp3G > 360)
             tmp3G -= 360.0f;
-        if(tmp3G < 60.0)
+        if (tmp3G < 60)
             green = tmp1 + (tmp2 - tmp1) * tmp3G / 60.0f;
-        else if(tmp3G < 180.0)
+        else if (tmp3G < 180)
             green = tmp2;
-        else if(tmp3G < 240.0)
+        else if (tmp3G < 240)
             green = tmp1 + (tmp2 - tmp1) * (240.0f - tmp3G) / 60.0f;
         else
             green = tmp1;
 
         float tmp3B = _hue + 240.0f;
-        if(tmp3B > 360.0)
+        if (tmp3B > 360)
             tmp3B -= 360.0f;
-        if(tmp3B < 60.0)
+        if (tmp3B < 60)
             blue = tmp1 + (tmp2 - tmp1) * tmp3B / 60.0f;
-        else if(tmp3B < 180.0)
+        else if (tmp3B < 180)
             blue = tmp2;
-        else if(tmp3B < 240.0)
+        else if (tmp3B < 240)
             blue = tmp1 + (tmp2 - tmp1) * (240.0f - tmp3B) / 60.0f;
         else
             blue = tmp1;
     }
     return wxColour(
-        (unsigned char)(red * 255.0f),
-        (unsigned char)(green * 255.0f),
-        (unsigned char)(blue * 255.0f));
+        static_cast<unsigned char>(red * 255.0f),
+        static_cast<unsigned char>(green * 255.0f),
+        static_cast<unsigned char>(blue * 255.0f));
 }
 
 wxRibbonHSLColour wxRibbonHSLColour::Darker(float delta) const

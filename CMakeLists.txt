@@ -7,7 +7,7 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
 
 if(NOT CMAKE_CONFIGURATION_TYPES)
     get_property(HAVE_MULTI_CONFIG_GENERATOR GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
@@ -16,6 +16,8 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
         set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
     endif()
 endif()
+
+file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}" CMAKE_INSTALL_PREFIX)
 
 # https://blog.kitware.com/cmake-and-the-default-build-type/
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -26,23 +28,27 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 endif()
 
+# This block, particularly the versions used, should be kept in sync with
+# samples/minimal/CMakeLists.txt.
 if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
     # If no deployment target has been set default to the minimum supported
-    # OS X version (this has to be set before the first project() call)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9 CACHE STRING "OS X Deployment Target")
+    # OS version (this has to be set before the first project() call)
+    if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+        set(CMAKE_OSX_DEPLOYMENT_TARGET 12.0 CACHE STRING "iOS Deployment Target")
+    else()
+        set(CMAKE_OSX_DEPLOYMENT_TARGET 10.10 CACHE STRING "macOS Deployment Target")
+    endif()
 endif()
 
 include(build/cmake/policies.cmake NO_POLICY_SCOPE)
 
-project(wxWidgets)
-
 # Initialize variables for quick access to wx root dir in sub dirs
 set(wxSOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(wxBINARY_DIR ${CMAKE_BINARY_DIR})
+set(wxBINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(wxOUTPUT_DIR ${wxBINARY_DIR}/lib)
 
 # parse the version number from wx/version.h and include in wxMAJOR_VERSION and wxMINOR_VERSION
-file(READ include/wx/version.h WX_VERSION_H_CONTENTS)
+file(READ "${wxSOURCE_DIR}/include/wx/version.h" WX_VERSION_H_CONTENTS)
 string(REGEX MATCH "wxMAJOR_VERSION[ \t]+([0-9]+)"
     wxMAJOR_VERSION ${WX_VERSION_H_CONTENTS})
 string (REGEX MATCH "([0-9]+)"
@@ -55,6 +61,7 @@ string(REGEX MATCH "wxRELEASE_NUMBER[ \t]+([0-9]+)"
     wxRELEASE_NUMBER ${WX_VERSION_H_CONTENTS})
 string (REGEX MATCH "([0-9]+)"
     wxRELEASE_NUMBER ${wxRELEASE_NUMBER})
+
 # Determine if current version is a "Development" release
 math(EXPR rel_dev "${wxMINOR_VERSION} % 2")
 if(rel_dev)
@@ -63,8 +70,32 @@ else()
     set(wxVERSION_IS_DEV FALSE)
 endif()
 
+# parse the .so version from build/bakefiles/version.bkl
+file(READ "${wxSOURCE_DIR}/build/bakefiles/version.bkl" WX_VERSION_BKL_CONTENTS)
+string(REGEX MATCH "WX_CURRENT.>([0-9]+)"
+    WX_CURRENT ${WX_VERSION_BKL_CONTENTS})
+string(REGEX MATCH "([0-9]+)"
+    WX_CURRENT ${WX_CURRENT})
+string(REGEX MATCH "WX_REVISION.>([0-9]+)"
+    WX_REVISION ${WX_VERSION_BKL_CONTENTS})
+string(REGEX MATCH "([0-9]+)"
+    WX_REVISION ${WX_REVISION})
+string(REGEX MATCH "WX_AGE.>([0-9]+)"
+    WX_AGE ${WX_VERSION_BKL_CONTENTS})
+string(REGEX MATCH "([0-9]+)"
+    WX_AGE ${WX_AGE})
+math(EXPR wxSOVERSION_MAJOR "${WX_CURRENT} - ${WX_AGE}")
+set(wxSOVERSION ${wxSOVERSION_MAJOR}.${WX_AGE}.${WX_REVISION})
+
 set(wxVERSION ${wxMAJOR_VERSION}.${wxMINOR_VERSION}.${wxRELEASE_NUMBER})
-set(wxCOPYRIGHT "1992-2019 wxWidgets")
+set(wxCOPYRIGHT "2002-2024 wxWidgets")
+
+set(wxLANGUAGES C CXX)
+if(APPLE AND NOT CMAKE_VERSION VERSION_LESS "3.16")
+    list(APPEND wxLANGUAGES OBJCXX)
+endif()
+
+project(wxWidgets VERSION ${wxVERSION} LANGUAGES ${wxLANGUAGES})
 
 include(build/cmake/main.cmake)
 

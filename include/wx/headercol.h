@@ -10,7 +10,7 @@
 #ifndef _WX_HEADERCOL_H_
 #define _WX_HEADERCOL_H_
 
-#include "wx/bitmap.h"
+#include "wx/bmpbndl.h"
 
 #if wxUSE_HEADERCTRL
 
@@ -74,7 +74,7 @@ public:
     // virtual dtor for the base class to avoid gcc warnings even though we
     // don't normally delete the objects of this class via a pointer to
     // wxHeaderColumn so it's not necessary, strictly speaking
-    virtual ~wxHeaderColumn() { }
+    virtual ~wxHeaderColumn() = default;
 
     // getters for various attributes
     // ------------------------------
@@ -89,8 +89,15 @@ public:
     // title is the string shown for this column
     virtual wxString GetTitle() const = 0;
 
-    // bitmap shown (instead of text) in the column header
-    virtual wxBitmap GetBitmap() const = 0;                                   \
+    // This function exists only for backwards compatibility, it's recommended to override
+    // GetBitmapBundle() in the new code and override this one to do nothing, as it will
+    // never be called if GetBitmapBundle() is overridden.
+    virtual wxBitmap GetBitmap() const = 0;
+
+    // Override this function to return the bundle containing the bitmap to show in the
+    // column header. By default delegates to GetBitmap() but should be overridden if
+    // the bitmaps are used.
+    virtual wxBitmapBundle GetBitmapBundle() const { return GetBitmap(); }
 
     // width of the column in pixels, can be set to wxCOL_WIDTH_DEFAULT meaning
     // unspecified/default
@@ -161,7 +168,7 @@ class WXDLLIMPEXP_CORE wxSettableHeaderColumn : public wxHeaderColumn
 {
 public:
     virtual void SetTitle(const wxString& title) = 0;
-    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) = 0;
     virtual void SetWidth(int width) = 0;
     virtual void SetMinWidth(int minWidth) = 0;
     virtual void SetAlignment(wxAlignment align) = 0;
@@ -221,7 +228,7 @@ public:
         Init();
     }
 
-    wxHeaderColumnSimple(const wxBitmap& bitmap,
+    wxHeaderColumnSimple(const wxBitmapBundle& bitmap,
                          int width = wxCOL_WIDTH_DEFAULT,
                          wxAlignment align = wxALIGN_CENTER,
                          int flags = wxCOL_DEFAULT_FLAGS)
@@ -234,34 +241,35 @@ public:
     }
 
     // implement base class pure virtuals
-    virtual void SetTitle(const wxString& title) wxOVERRIDE { m_title = title; }
-    virtual wxString GetTitle() const wxOVERRIDE { return m_title; }
+    virtual void SetTitle(const wxString& title) override { m_title = title; }
+    virtual wxString GetTitle() const override { return m_title; }
 
-    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE { m_bitmap = bitmap; }
-    wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
+    virtual void SetBitmap(const wxBitmapBundle& bitmap) override { m_bitmap = bitmap; }
+    wxBitmap GetBitmap() const override { wxFAIL_MSG("unreachable"); return wxNullBitmap; }
+    wxBitmapBundle GetBitmapBundle() const override { return m_bitmap; }
 
-    virtual void SetWidth(int width) wxOVERRIDE { m_width = width; }
-    virtual int GetWidth() const wxOVERRIDE { return m_width; }
+    virtual void SetWidth(int width) override { m_width = width; }
+    virtual int GetWidth() const override { return m_width; }
 
-    virtual void SetMinWidth(int minWidth) wxOVERRIDE { m_minWidth = minWidth; }
-    virtual int GetMinWidth() const wxOVERRIDE { return m_minWidth; }
+    virtual void SetMinWidth(int minWidth) override { m_minWidth = minWidth; }
+    virtual int GetMinWidth() const override { return m_minWidth; }
 
-    virtual void SetAlignment(wxAlignment align) wxOVERRIDE { m_align = align; }
-    virtual wxAlignment GetAlignment() const wxOVERRIDE { return m_align; }
+    virtual void SetAlignment(wxAlignment align) override { m_align = align; }
+    virtual wxAlignment GetAlignment() const override { return m_align; }
 
-    virtual void SetFlags(int flags) wxOVERRIDE { m_flags = flags; }
-    virtual int GetFlags() const wxOVERRIDE { return m_flags; }
+    virtual void SetFlags(int flags) override { m_flags = flags; }
+    virtual int GetFlags() const override { return m_flags; }
 
-    virtual bool IsSortKey() const wxOVERRIDE { return m_sort; }
-    virtual void UnsetAsSortKey() wxOVERRIDE { m_sort = false; }
+    virtual bool IsSortKey() const override { return m_sort; }
+    virtual void UnsetAsSortKey() override { m_sort = false; }
 
-    virtual void SetSortOrder(bool ascending) wxOVERRIDE
+    virtual void SetSortOrder(bool ascending) override
     {
         m_sort = true;
         m_sortAscending = ascending;
     }
 
-    virtual bool IsSortOrderAscending() const wxOVERRIDE { return m_sortAscending; }
+    virtual bool IsSortOrderAscending() const override { return m_sortAscending; }
 
 private:
     // common part of all ctors
@@ -273,7 +281,7 @@ private:
     }
 
     wxString m_title;
-    wxBitmap m_bitmap;
+    wxBitmapBundle m_bitmap;
     int m_width,
         m_minWidth;
     wxAlignment m_align;

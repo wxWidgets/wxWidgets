@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/slider.mm
 // Purpose:     wxSlider
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
@@ -46,8 +45,8 @@ public :
     {
     }
 
-    virtual void controlAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE;
-    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd) wxOVERRIDE;
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender) override;
+    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd) override;
 };
 
 // we will have a mouseDown, then in the native

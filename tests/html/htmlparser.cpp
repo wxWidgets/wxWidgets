@@ -14,9 +14,6 @@
 
 #if wxUSE_HTML
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
@@ -24,34 +21,33 @@
 
 #include "wx/html/winpars.h"
 
+#include <memory>
+
 // Test that parsing invalid HTML simply fails but doesn't crash for example.
 TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
 {
     class NullParser : public wxHtmlWinParser
     {
-    public:
-        virtual wxObject *GetProduct() wxOVERRIDE { return NULL; }
-
     protected:
-        virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE { }
+        virtual void AddText(const wxString& WXUNUSED(txt)) override { }
     };
 
     NullParser p;
     wxMemoryDC dc;
     p.SetDC(&dc);
 
-    p.Parse("<");
-    p.Parse("<foo");
-    p.Parse("<!--");
-    p.Parse("<!---");
+    delete p.Parse("<");
+    delete p.Parse("<foo");
+    delete p.Parse("<!--");
+    delete p.Parse("<!---");
 }
 
 TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
 {
     wxMemoryDC dc;
 
-    wxHtmlContainerCell* const top = new wxHtmlContainerCell(NULL);
-    wxHtmlContainerCell* const cont = new wxHtmlContainerCell(NULL);
+    std::unique_ptr<wxHtmlContainerCell> const top(new wxHtmlContainerCell(nullptr));
+    wxHtmlContainerCell* const cont = new wxHtmlContainerCell(nullptr);
     wxHtmlCell* const cell1 = new wxHtmlWordCell("Hello", dc);
     wxHtmlCell* const cell2 = new wxHtmlColourCell(*wxRED);
     wxHtmlCell* const cell3 = new wxHtmlWordCell("world", dc);
@@ -64,7 +60,7 @@ TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
     SECTION("container")
     {
         top->Detach(cont);
-        CHECK( top->GetFirstChild() == NULL );
+        CHECK( top->GetFirstChild() == nullptr );
 
         delete cont;
     }
@@ -91,7 +87,7 @@ TEST_CASE("wxHtmlCell::Detach", "[html][cell]")
         cont->Detach(cell3);
         CHECK( cont->GetFirstChild() == cell1 );
         CHECK( cell1->GetNext() == cell2 );
-        CHECK( cell2->GetNext() == NULL );
+        CHECK( cell2->GetNext() == nullptr );
 
         delete cell3;
     }

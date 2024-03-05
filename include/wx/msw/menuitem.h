@@ -2,7 +2,6 @@
 // Name:        wx/msw/menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     11.11.97
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -14,8 +13,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-#include "wx/bitmap.h"
 
 #if wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
@@ -34,20 +31,20 @@ class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *parentMenu = NULL,
+    wxMenuItem(wxMenu *parentMenu = nullptr,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = NULL);
+               wxMenu *subMenu = nullptr);
     virtual ~wxMenuItem();
 
     // override base class virtuals
-    virtual void SetItemLabel(const wxString& strName) wxOVERRIDE;
+    virtual void SetItemLabel(const wxString& strName) override;
 
-    virtual void Enable(bool bDoEnable = true) wxOVERRIDE;
-    virtual void Check(bool bDoCheck = true) wxOVERRIDE;
-    virtual bool IsChecked() const wxOVERRIDE;
+    virtual void Enable(bool bDoEnable = true) override;
+    virtual void Check(bool bDoCheck = true) override;
+    virtual bool IsChecked() const override;
 
     // unfortunately needed to resolve ambiguity between
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
@@ -61,53 +58,52 @@ public:
     // Win32 API
     WXWPARAM GetMSWId() const;
 
-#if WXWIN_COMPATIBILITY_2_8
-    // compatibility only, don't use in new code
-    wxDEPRECATED(
-    wxMenuItem(wxMenu *parentMenu,
-               int id,
-               const wxString& text,
-               const wxString& help,
-               bool isCheckable,
-               wxMenu *subMenu = NULL)
-    );
-#endif
-
-    void SetBitmaps(const wxBitmap& bmpChecked,
-                    const wxBitmap& bmpUnchecked = wxNullBitmap)
+    void SetBitmaps(const wxBitmapBundle& bmpChecked,
+                    const wxBitmapBundle& bmpUnchecked = wxNullBitmap)
     {
         DoSetBitmap(bmpChecked, true);
         DoSetBitmap(bmpUnchecked, false);
     }
 
-    void SetBitmap(const wxBitmap& bmp, bool bChecked = true)
+    virtual void SetBitmap(const wxBitmapBundle& bmp) override
+    {
+        DoSetBitmap(bmp, true);
+    }
+
+    virtual wxBitmap GetBitmap() const override
+    {
+        return GetBitmap(true);
+    }
+
+    void SetupBitmaps();
+
+    // The functions taking bChecked are wxMSW-specific.
+    void SetBitmap(const wxBitmapBundle& bmp, bool bChecked)
     {
         DoSetBitmap(bmp, bChecked);
     }
 
-    const wxBitmap& GetBitmap(bool bChecked = true) const
-        { return (bChecked ? m_bmpChecked : m_bmpUnchecked); }
+    wxBitmap GetBitmap(bool bChecked) const;
 
 #if wxUSE_OWNER_DRAWN
-    void SetDisabledBitmap(const wxBitmap& bmpDisabled)
+    void SetDisabledBitmap(const wxBitmapBundle& bmpDisabled)
     {
         m_bmpDisabled = bmpDisabled;
         SetOwnerDrawn(true);
     }
 
-    const wxBitmap& GetDisabledBitmap() const
-        { return m_bmpDisabled; }
+    wxBitmap GetDisabledBitmap() const;
 
     int MeasureAccelWidth() const;
 
     // override wxOwnerDrawn base class virtuals
-    virtual wxString GetName() const wxOVERRIDE;
-    virtual bool OnMeasureItem(size_t *pwidth, size_t *pheight) wxOVERRIDE;
-    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) wxOVERRIDE;
+    virtual wxString GetName() const override;
+    virtual bool OnMeasureItem(size_t *pwidth, size_t *pheight) override;
+    virtual bool OnDrawItem(wxDC& dc, const wxRect& rc, wxODAction act, wxODStatus stat) override;
 
 protected:
-    virtual void GetFontToUse(wxFont& font) const wxOVERRIDE;
-    virtual void GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const wxOVERRIDE;
+    virtual void GetFontToUse(wxFont& font) const override;
+    virtual void GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const override;
 
 private:
     // helper function for draw std menu check mark
@@ -128,7 +124,7 @@ private:
     WXHBITMAP GetHBitmapForMenu(BitmapKind kind) const;
 
     // helper function to set/change the bitmap
-    void DoSetBitmap(const wxBitmap& bmp, bool bChecked);
+    void DoSetBitmap(const wxBitmapBundle& bmp, bool bChecked);
 
 private:
     // common part of all ctors
@@ -140,12 +136,20 @@ private:
     // position (which is not really supposed to ever happen).
     int MSGetMenuItemPos() const;
 
+    // Get the extent of the given text using the correct font.
+    wxSize GetMenuTextExtent(const wxString& text) const;
+
     // item bitmaps
-    wxBitmap m_bmpChecked,     // bitmap to put near the item
-             m_bmpUnchecked;   // (checked is used also for 'uncheckable' items)
+    wxBitmapBundle m_bmpUnchecked;   // (used only for checkable items)
 #if wxUSE_OWNER_DRAWN
-    wxBitmap m_bmpDisabled;
+    wxBitmapBundle m_bmpDisabled;
 #endif // wxUSE_OWNER_DRAWN
+
+    // Bitmaps being currently used: we must store them separately from the
+    // bundle itself because their HBITMAPs must remain valid as long as
+    // they're used by Windows.
+    wxBitmap m_bmpCheckedCurrent,
+             m_bmpUncheckedCurrent;
 
     // Give wxMenu access to our MSWMustUseOwnerDrawn() and GetHBitmapForMenu().
     friend class wxMenu;

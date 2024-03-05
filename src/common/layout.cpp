@@ -2,7 +2,6 @@
 // Name:        src/common/layout.cpp
 // Purpose:     Constraint layout system classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CONSTRAINTS
 
@@ -74,7 +70,7 @@ wxIndividualLayoutConstraint::wxIndividualLayoutConstraint()
     percent = 0;
     otherEdge = wxTop;
     done = false;
-    otherWin = NULL;
+    otherWin = nullptr;
 }
 
 void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val, int marg)
@@ -157,7 +153,7 @@ bool wxIndividualLayoutConstraint::ResetIfWin(wxWindowBase *otherW)
         value = 0;
         percent = 0;
         otherEdge = wxTop;
-        otherWin = NULL;
+        otherWin = nullptr;
         return true;
     }
 
@@ -211,7 +207,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -286,7 +282,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) - margin);
+                        value = (edgePos * percent) / 100 - margin;
                         done = true;
                         return true;
                     }
@@ -364,7 +360,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -439,7 +435,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) - margin);
+                        value = (edgePos * percent) / 100 - margin;
                         done = true;
                         return true;
                     }
@@ -517,7 +513,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -585,7 +581,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01) + margin);
+                        value = (edgePos * percent) / 100 + margin;
                         done = true;
                         return true;
                     }
@@ -626,7 +622,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01));
+                        value = (edgePos * percent) / 100;
                         done = true;
                         return true;
                     }
@@ -684,7 +680,7 @@ bool wxIndividualLayoutConstraint::SatisfyConstraint(wxLayoutConstraints *constr
                     int edgePos = GetEdge(otherEdge, win, otherWin);
                     if (edgePos != -1)
                     {
-                        value = (int)(edgePos*(((float)percent)*0.01));
+                        value = (edgePos * percent) / 100;
                         done = true;
                         return true;
                     }

@@ -2,7 +2,6 @@
 // Name:        wx/unix/fontutil.h
 // Purpose:     font-related helper functions for Unix/X11
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05.11.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -21,14 +20,14 @@
 
 // returns the handle of the nearest available font or 0
 extern wxNativeFont
-wxLoadQueryNearestFont(float pointSize,
+wxLoadQueryNearestFont(double pointSize,
                        wxFontFamily family,
                        wxFontStyle style,
                        int weight,
                        bool underlined,
                        const wxString &facename,
                        wxFontEncoding encoding,
-                       wxString* xFontName = NULL);
+                       wxString* xFontName = nullptr);
 
 // returns the font specified by the given XLFD
 extern wxNativeFont wxLoadFont(const wxString& fontSpec);

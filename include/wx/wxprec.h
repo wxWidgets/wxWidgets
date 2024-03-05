@@ -2,7 +2,6 @@
 // Name:        wx/wxprec.h
 // Purpose:     Includes the appropriate files for precompiled headers
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -13,7 +12,7 @@
 
 // check if to use precompiled headers: do it for most Windows compilers unless
 // explicitly disabled by defining NOPCH
-#if defined(__VISUALC__) || defined(__BORLANDC__)
+#if defined(__VISUALC__)
     // If user did not request NOCPH and we're not building using configure
     // then assume user wants precompiled headers.
     #if !defined(NOPCH) && !defined(__WX_SETUP_H__)

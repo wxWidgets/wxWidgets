@@ -7,22 +7,21 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-include(../source_groups.cmake)
-
 if(wxBUILD_MONOLITHIC)
     # Initialize variables for monolithic build
     set(wxMONO_SRC_FILES)
     set(wxMONO_LIBS_PRIVATE)
     set(wxMONO_LIBS_PUBLIC)
-    set(wxMONO_INCLUDE_DIRS_PRIVATE)
-    set(wxMONO_INCLUDE_DIRS_PUBLIC)
+    set(wxMONO_INCLUDE_DIRS)
+    set(wxMONO_DEFINITIONS)
     set(wxMONO_NONCOMPILED_CPP_FILES)
+    set(wxMONO_DEPENDENCIES)
 endif()
 
 # Define third party libraries
 set(LIBS_THIRDPARTY regex zlib expat)
 if(wxUSE_GUI)
-    list(APPEND LIBS_THIRDPARTY jpeg png tiff)
+    list(APPEND LIBS_THIRDPARTY jpeg png tiff nanosvg)
 endif()
 foreach(LIB IN LISTS LIBS_THIRDPARTY)
     include(${LIB}.cmake)
@@ -30,8 +29,14 @@ endforeach()
 
 # add_opt_lib()
 # Add library which may have been disabled by wxUSE_...
-macro(add_opt_lib name var_name)
-    if(${var_name})
+macro(add_opt_lib name)
+    set(add_lib ON)
+    foreach(var_name ${ARGN})
+        if(NOT ${var_name})
+            set(add_lib OFF)
+        endif()
+    endforeach()
+    if(add_lib)
         list(APPEND LIBS ${name})
     endif()
 endmacro()
@@ -59,6 +64,7 @@ if(wxUSE_GUI)
     add_opt_lib(media wxUSE_MEDIACTRL)
     add_opt_lib(gl wxUSE_OPENGL)
     add_opt_lib(qa wxUSE_DEBUGREPORT)
+    add_opt_lib(webview_chromium wxUSE_WEBVIEW wxUSE_WEBVIEW_CHROMIUM)
 endif() # wxUSE_GUI
 
 # Include XML library last
@@ -74,28 +80,32 @@ endforeach()
 
 if(wxBUILD_MONOLITHIC)
     # Create monolithic library target
-    list(LENGTH wxMONO_SRC_FILES src_file_count)
-    wx_add_library(mono ${wxMONO_SRC_FILES})
+    wx_add_library(wxmono IS_MONO ${wxMONO_SRC_FILES})
     foreach(vis PRIVATE PUBLIC)
         if(wxMONO_LIBS_${vis})
             # Remove libs included in mono from list
             foreach(lib IN LISTS LIBS)
-                list(REMOVE_ITEM wxMONO_LIBS_${vis} ${lib})
+                list(REMOVE_ITEM wxMONO_LIBS_${vis} wx${lib})
             endforeach()
 
-            target_link_libraries(mono ${vis} ${wxMONO_LIBS_${vis}})
-        endif()
-        if(wxMONO_INCLUDE_DIRS_${vis})
-            target_include_directories(mono ${vis} ${wxMONO_INCLUDE_DIRS_${vis}})
-        endif()
-        if(wxMONO_DEFINITIONS_${vis})
-            target_compile_definitions(mono ${vis} ${wxMONO_DEFINITIONS_${vis}})
+            target_link_libraries(wxmono ${vis} ${wxMONO_LIBS_${vis}})
         endif()
     endforeach()
+    if(wxMONO_INCLUDE_DIRS)
+        target_include_directories(wxmono BEFORE PRIVATE ${wxMONO_INCLUDE_DIRS})
+    endif()
+    if(wxMONO_DEFINITIONS)
+        target_compile_definitions(wxmono PRIVATE ${wxMONO_DEFINITIONS})
+    endif()
     foreach(file ${wxMONO_NONCOMPILED_CPP_FILES})
         set_source_files_properties(${file} PROPERTIES HEADER_FILE_ONLY TRUE)
     endforeach()
-    wx_finalize_lib(mono)
+    foreach(dep ${wxMONO_DEPENDENCIES})
+        add_dependencies(wxmono ${dep})
+    endforeach()
+    if(wxUSE_WEBVIEW)
+        wx_webview_copy_webview2_loader(wxmono)
+    endif()
 endif()
 
 # Propagate variable(s) to parent scope

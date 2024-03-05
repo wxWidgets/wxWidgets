@@ -18,11 +18,9 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/datetimectrl.h"
+#include "wx/uilocale.h"
 
 #ifdef wxNEEDS_DATETIMEPICKCTRL
 
@@ -52,6 +50,40 @@
 // wxDateTimePickerCtrl implementation
 // ============================================================================
 
+namespace wxMSWImpl
+{
+
+LRESULT CALLBACK
+DateTimeUDProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam,
+               UINT_PTR uIdSubclass, DWORD_PTR WXUNUSED(dwRefData))
+{
+    switch ( nMsg )
+    {
+        case WM_PAINT:
+            // This is a bit ridiculous, but we have to explicitly paint the
+            // control here, even if all we do is to let it draw itself,
+            // because without this it may not draw the lower arrow at all when
+            // using WS_EX_COMPOSITED (it probably optimizes redraw by assuming
+            // that previously drawn part doesn't change, but this is not the
+            // case when compositing it used).
+            {
+                PAINTSTRUCT ps;
+                ::BeginPaint(hwnd, &ps);
+                ::DefSubclassProc(hwnd, WM_PAINT, (WPARAM)ps.hdc, 0);
+                ::EndPaint(hwnd, &ps);
+            }
+            return 0;
+
+        case WM_NCDESTROY:
+            ::RemoveWindowSubclass(hwnd, DateTimeUDProc, uIdSubclass);
+            break;
+    }
+
+    return ::DefSubclassProc(hwnd, nMsg, wParam, lParam);
+}
+
+} // namespace wxMSWImpl
+
 bool
 wxDateTimePickerCtrl::MSWCreateDateTimePicker(wxWindow *parent,
                                               wxWindowID id,
@@ -78,6 +110,15 @@ wxDateTimePickerCtrl::MSWCreateDateTimePicker(wxWindow *parent,
     else
         SetValue(wxDateTime::Now());
 
+    // If have an up-down control, we must explicitly paint it ourselves
+    // because otherwise it may be not redrawn at all with WS_EX_COMPOSITED.
+    WinStruct<DATETIMEPICKERINFO> info;
+    ::SendMessage(GetHwnd(), DTM_GETDATETIMEPICKERINFO, 0, (LPARAM)&info);
+    if ( info.hwndUD )
+    {
+        ::SetWindowSubclass(info.hwndUD, wxMSWImpl::DateTimeUDProc, 0, 0);
+    }
+
     return true;
 }
 
@@ -102,6 +143,8 @@ void wxDateTimePickerCtrl::SetValue(const wxDateTime& dt)
         return;
     }
 
+    MSWUpdateFormatIfNeeded(dt.IsValid());
+
     m_date = dt;
 }
 
@@ -110,31 +153,126 @@ wxDateTime wxDateTimePickerCtrl::GetValue() const
     return m_date;
 }
 
-wxSize wxDateTimePickerCtrl::DoGetBestSize() const
+void wxDateTimePickerCtrl::MSWUpdateFormatIfNeeded(bool valid)
 {
-    // Since Vista, the control can compute its best size itself, just ask it.
-    wxSize size;
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
-    {
-        SIZE idealSize;
+    if ( MSWAllowsNone() && !m_nullText.empty() && valid != m_date.IsValid() )
+        MSWUpdateFormat(valid);
+}
 
-        // Work around https://bugs.winehq.org/show_bug.cgi?id=44680 by
-        // checking for the return value: even if all "real" MSW systems do
-        // support this message, Wine does not, even when it's configured to
-        // return Vista or later version to the application.
-        if ( ::SendMessage(m_hWnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
-        {
-            size = wxSize(idealSize.cx, idealSize.cy);
-        }
+void wxDateTimePickerCtrl::MSWUpdateFormat(bool valid)
+{
+    // We just use nullptr to reset to the default format when the date is valid,
+    // as the control seems to remember whichever format was used when it was
+    // created, i.e. this works both with and without wxDP_SHOWCENTURY.
+
+    // Use a temporary variable to ensure that the code compiles in
+    // wxUSE_UNICODE_UTF8 case, where t_str() doesn't return a pointer.
+    const TCHAR* format;
+    if ( valid )
+        format = nullptr;
+    else
+        format = m_nullText.t_str();
+
+    DateTime_SetFormat(GetHwnd(), format);
+}
+
+void wxDateTimePickerCtrl::SetNullText(const wxString& text)
+{
+    m_nullText = text;
+    if ( m_nullText.empty() )
+    {
+        // Using empty format doesn't work with the native control, it just
+        // uses the default short date format in this case, so set the format
+        // to the single space which is more or less guaranteed to work as it's
+        // the semi-official way to clear the control contents when it doesn't
+        // have any valid value, according to Microsoft's old KB document
+        // Q238077, which can still be found online by searching for its
+        // number, even if it's not available on Microsoft web site any more.
+        //
+        // Coincidentally, it's also convenient for us, as we can just check if
+        // null text is empty to see if we need to use it elsewhere in the code.
+        m_nullText = wxS(" ");
+    }
+    else
+    {
+        // We need to quote the text, as otherwise format specifiers (e.g.
+        // "d", "m" etc) would be interpreted specially by the control. To make
+        // things simple, we just quote it entirely and always.
+        m_nullText.Replace("'", "''");
+        m_nullText.insert(0, "'");
+        m_nullText.append("'");
     }
 
-    if ( !size.x || !size.y )
-    {
-        wxClientDC dc(const_cast<wxDateTimePickerCtrl *>(this));
+    // Apply it immediately if we don't have any value right now.
+    if ( !m_date.IsValid() )
+        MSWUpdateFormat(false);
+}
 
+wxSize wxDateTimePickerCtrl::DoGetBestSize() const
+{
+    wxSize size;
+
+    // Use DTM_GETIDEALSIZE to ask the control itself to compute its ideal
+    // size, but we can't use it with DTS_SHOWNONE because handling of
+    // this flag is completely broken (up to at least Window 10 20H2): it's
+    // not just ignored, but we get completely wrong results when this flag
+    // is on, e.g. the returned width is less than the width without it or
+    // much greater than the real value after a DPI change (and growing
+    // with every new change, even when repeatedly switching between the
+    // same DPI values, e.g. dragging a window between 2 monitors with
+    // different scaling). Moreover, note that even without DTS_SHOWNONE,
+    // DTM_GETIDEALSIZE still returns wrong results for the height after a
+    // DPI change, so we never use the vertical component of the value
+    // returned by it.
+    //
+    // Unfortunately, resetting this style doesn't work either, so we have
+    // to create a whole new window just for this, which is pretty wasteful
+    // but seems unavoidable.
+    HWND hwnd;
+    if ( MSWAllowsNone() )
+    {
+        hwnd = ::CreateWindow
+                 (
+                    DATETIMEPICK_CLASS,
+                    wxT(""),
+                    ::GetWindowLong(GetHwnd(), GWL_STYLE) & ~DTS_SHOWNONE,
+                    0, 0, 1, 1,
+                    GetHwndOf(m_parent),
+                    0,
+                    wxGetInstance(),
+                    nullptr
+                 );
+        wxCHECK_MSG( hwnd, wxSize(),
+                     wxS("SysDateTimePick32 creation unexpected failed") );
+
+        wxSetWindowFont(hwnd, GetFont());
+    }
+    else
+    {
+        hwnd = GetHwnd();
+    }
+
+    // Also work around https://bugs.winehq.org/show_bug.cgi?id=44680 by
+    // checking for the return value: even if all "real" MSW systems do support
+    // this message, Wine does not, even when it's configured to return Vista
+    // or later version to the application, and returns FALSE for it.
+    SIZE idealSize = { 0, 0 };
+    if ( ::SendMessage(hwnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
+    {
+        size.x = idealSize.cx;
+        size.y = GetCharHeight();
+    }
+
+    if ( hwnd != GetHwnd() )
+    {
+        ::DestroyWindow(hwnd);
+    }
+
+    if ( !size.x ) // Compute the size ourselves.
+    {
         // Use the same native format as the underlying native control.
 #if wxUSE_INTL
-        wxString s = wxDateTime::Now().Format(wxLocale::GetOSInfo(MSWGetFormat()));
+        wxString s = wxDateTime::Now().Format(wxUILocale::GetCurrent().GetInfo(MSWGetFormat()));
 #else // !wxUSE_INTL
         wxString s("XXX-YYY-ZZZZ");
 #endif // wxUSE_INTL/!wxUSE_INTL
@@ -145,17 +283,23 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
         // the width of the month string varies a lot, so try to account for it
         s += wxS("W");
 
-        size = dc.GetTextExtent(s);
+        size = GetTextExtent(s);
 
-        // account for the drop-down arrow or spin arrows
+        // Account for the drop-down arrow or spin arrows.
         size.x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X, m_parent);
     }
 
-    // We need to account for the checkbox, if we have one, ourselves as
-    // DTM_GETIDEALSIZE doesn't seem to take it into account, at least under
-    // Windows 7.
+    // Account for the checkbox.
     if ( MSWAllowsNone() )
-        size.x += 3*GetCharWidth();
+    {
+        // The extra 8px here was determined heuristically as the value which
+        // results in the same layout with and without DTS_SHOWNONE under
+        // Windows 7 and Windows 10 with 100%, 150% and 200% scaling.
+        size.x += wxGetSystemMetrics(SM_CXMENUCHECK, m_parent) + 8;
+    }
+
+    int scrollY = wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_Y, m_parent);
+    size.y = wxMax(size.y, scrollY);
 
     // In any case, adjust the height to be the same as for the text controls.
     size.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(size.y);
@@ -170,7 +314,12 @@ wxDateTimePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case DTN_DATETIMECHANGE:
-            if ( MSWOnDateTimeChange(*(NMDATETIMECHANGE*)(hdr)) )
+            const NMDATETIMECHANGE& dtch = *(NMDATETIMECHANGE*)(hdr);
+
+            // Update the format before showing the new date if necessary.
+            MSWUpdateFormatIfNeeded(dtch.dwFlags == GDT_VALID);
+
+            if ( MSWOnDateTimeChange(dtch) )
             {
                 *result = 0;
                 return true;

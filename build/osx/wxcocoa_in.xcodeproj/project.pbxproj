@@ -32,6 +32,7 @@
 				40926E09199902D10012D04A /* PBXTargetDependency */,
 				40926E0B199902D10012D04A /* PBXTargetDependency */,
 				40926E0D199902D10012D04A /* PBXTargetDependency */,
+				1F94221A296C4A7E003B8901 /* PBXTargetDependency */,
 				40926E0F199902D10012D04A /* PBXTargetDependency */,
 				40926E11199902D10012D04A /* PBXTargetDependency */,
 				40926E13199902D10012D04A /* PBXTargetDependency */,
@@ -126,6 +127,7 @@
 		405EB7B11998E7470062EE0F /* libwxpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9301998979C00A0D4DC /* libwxpng.a */; };
 		405EB7B21998E7470062EE0F /* libwxregex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B939199897A400A0D4DC /* libwxregex.a */; };
 		405EB7B31998E7470062EE0F /* libwxscintilla.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B942199897AF00A0D4DC /* libwxscintilla.a */; };
+		1F94221B296C4A7E003B8901 /* libwxlexilla.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F942219296C4A7E003B8901 /* libwxlexilla.a */; };
 		405EB7B41998E7470062EE0F /* libwxtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B91E1998977F00A0D4DC /* libwxtiff.a */; };
 		405EB7B51998E7470062EE0F /* libwxzlib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40D9B9271998978A00A0D4DC /* libwxzlib.a */; };
 		405EB7C61998E7950062EE0F /* libwx_baseu.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4046DDED1997E244008DB584 /* libwx_baseu.dylib */; };
@@ -823,6 +825,13 @@
 			remoteGlobalIDString = 40D9B93A199897AF00A0D4DC;
 			remoteInfo = wxscintilla;
 		};
+		1F94221C296C4A7E003B8901 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F942211296C4A7E003B8901;
+			remoteInfo = wxlexilla;
+		};
 		405EB7A91998E71B0062EE0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -1194,6 +1203,13 @@
 			remoteGlobalIDString = 40D9B93A199897AF00A0D4DC;
 			remoteInfo = wxscintilla;
 		};
+		1F94221D296C4A7E003B8901 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1F942211296C4A7E003B8901;
+			remoteInfo = wxlexilla;
+		};
 		40926E0E199902D10012D04A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
@@ -1256,6 +1272,7 @@
 		40D9B9301998979C00A0D4DC /* libwxpng.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxpng.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D9B939199897A400A0D4DC /* libwxregex.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxregex.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		40D9B942199897AF00A0D4DC /* libwxscintilla.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxscintilla.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F942219296C4A7E003B8901 /* libwxlexilla.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwxlexilla.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2AAC0C705546C1D00DB518D /* libwx_osx_cocoa.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libwx_osx_cocoa.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1460,6 +1477,7 @@
 				405EB7B11998E7470062EE0F /* libwxpng.a in Frameworks */,
 				405EB7B21998E7470062EE0F /* libwxregex.a in Frameworks */,
 				405EB7B31998E7470062EE0F /* libwxscintilla.a in Frameworks */,
+				1F94221B296C4A7E003B8901 /* libwxlexilla.a in Frameworks */,
 				405EB7B41998E7470062EE0F /* libwxtiff.a in Frameworks */,
 				405EB7B51998E7470062EE0F /* libwxzlib.a in Frameworks */,
 			);
@@ -1554,6 +1572,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1F942215296C4A7E003B8901 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D2AAC0C505546C1D00DB518D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1590,6 +1615,7 @@
 				40D9B9301998979C00A0D4DC /* libwxpng.a */,
 				40D9B939199897A400A0D4DC /* libwxregex.a */,
 				40D9B942199897AF00A0D4DC /* libwxscintilla.a */,
+				1F942219296C4A7E003B8901 /* libwxlexilla.a */,
 				404EC636199899CA006EE284 /* libwx_osx_cocoau_gl.dylib */,
 				405EB81B1998E8C10062EE0F /* libwx_osx_cocoau_qa.dylib */,
 			);
@@ -1776,6 +1802,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40D9B93C199897AF00A0D4DC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F942213296C4A7E003B8901 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2144,6 +2177,7 @@
 				405EB7A41998E71B0062EE0F /* PBXTargetDependency */,
 				405EB7A61998E71B0062EE0F /* PBXTargetDependency */,
 				405EB7A81998E71B0062EE0F /* PBXTargetDependency */,
+				1F94221E296C4A7E003B8901 /* PBXTargetDependency */,
 				405EB7AA1998E71B0062EE0F /* PBXTargetDependency */,
 				405EB7AC1998E71B0062EE0F /* PBXTargetDependency */,
 			);
@@ -2351,6 +2385,24 @@
 			productReference = 40D9B942199897AF00A0D4DC /* libwxscintilla.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		1F942211296C4A7E003B8901 /* wxlexilla */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1F942216296C4A7E003B8901 /* Build configuration list for PBXNativeTarget "wxlexilla" */;
+			buildPhases = (
+				1F942212296C4A7E003B8901 /* ShellScript */,
+				1F942213296C4A7E003B8901 /* Headers */,
+				1F942214296C4A7E003B8901 /* Sources */,
+				1F942215296C4A7E003B8901 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = wxlexilla;
+			productName = wxcocoa;
+			productReference = 1F942219296C4A7E003B8901 /* libwxlexilla.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		D2AAC0C605546C1D00DB518D /* dynamic */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB917D08733D990010E9CD /* Build configuration list for PBXNativeTarget "dynamic" */;
@@ -2412,6 +2464,7 @@
 				40D9B9281998979C00A0D4DC /* wxpng */,
 				40D9B931199897A400A0D4DC /* wxregex */,
 				40D9B93A199897AF00A0D4DC /* wxscintilla */,
+				1F942211296C4A7E003B8901 /* wxlexilla */,
 				40D9B9161998977F00A0D4DC /* wxtiff */,
 				40D9B91F1998978A00A0D4DC /* wxzlib */,
 				4046DE371997ED6D008DB584 /* xml */,
@@ -2747,6 +2800,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${WXROOT}/distrib/mac/pbsetup-sh\" \"${WXROOT}/src\" \"${WXROOT}/build/osx/setup/${WXTOOLKIT}\"";
 		};
+		1F942212296C4A7E003B8901 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${WXROOT}/distrib/mac/pbsetup-sh\" \"${WXROOT}/src\" \"${WXROOT}/build/osx/setup/${WXTOOLKIT}\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2912,6 +2978,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		40D9B93D199897AF00A0D4DC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1F942214296C4A7E003B8901 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3393,6 +3466,11 @@
 			target = 40D9B93A199897AF00A0D4DC /* wxscintilla */;
 			targetProxy = 405EB7A71998E71B0062EE0F /* PBXContainerItemProxy */;
 		};
+		1F94221E296C4A7E003B8901 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F942211296C4A7E003B8901 /* wxlexilla */;
+			targetProxy = 1F94221C296C4A7E003B8901 /* PBXContainerItemProxy */;
+		};
 		405EB7AA1998E71B0062EE0F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 40D9B9161998977F00A0D4DC /* wxtiff */;
@@ -3657,6 +3735,11 @@
 			isa = PBXTargetDependency;
 			target = 40D9B93A199897AF00A0D4DC /* wxscintilla */;
 			targetProxy = 40926E0C199902D10012D04A /* PBXContainerItemProxy */;
+		};
+		1F94221A296C4A7E003B8901 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1F942211296C4A7E003B8901 /* wxlexilla */;
+			targetProxy = 1F94221D296C4A7E003B8901 /* PBXContainerItemProxy */;
 		};
 		40926E0F199902D10012D04A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4243,6 +4326,28 @@
 			};
 			name = Release;
 		};
+		1F942217296C4A7E003B8901 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 400BF7301998B591006A2363 /* wxcocoa_ml3rd.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_EXTENSION = .a;
+				EXECUTABLE_PREFIX = lib;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
+			};
+			name = Debug;
+		};
+		1F942218296C4A7E003B8901 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 400BF7301998B591006A2363 /* wxcocoa_ml3rd.xcconfig */;
+			buildSettings = {
+				EXECUTABLE_EXTENSION = .a;
+				EXECUTABLE_PREFIX = lib;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4485,6 +4590,15 @@
 			buildConfigurations = (
 				40D9B940199897AF00A0D4DC /* Debug */,
 				40D9B941199897AF00A0D4DC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1F942216296C4A7E003B8901 /* Build configuration list for PBXNativeTarget "wxlexilla" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1F942217296C4A7E003B8901 /* Debug */,
+				1F942218296C4A7E003B8901 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -254,11 +251,7 @@ void TokenizerTestCase::StrtokCompat()
         if ( ttd.mode != wxTOKEN_STRTOK )
             continue;
 
-#if wxUSE_UNICODE
         wxWCharBuffer
-#else
-        wxCharBuffer
-#endif
             buf(ttd.str);
         wxChar *last;
         wxChar *s = wxStrtok(buf.data(), ttd.delims, &last);
@@ -267,7 +260,7 @@ void TokenizerTestCase::StrtokCompat()
         while ( tkz.HasMoreTokens() )
         {
             CPPUNIT_ASSERT_EQUAL( wxString(s), tkz.GetNextToken() );
-            s = wxStrtok(NULL, ttd.delims, &last);
+            s = wxStrtok(nullptr, ttd.delims, &last);
         }
     }
 }

@@ -2,7 +2,6 @@
 // Name:        src/msw/brush.cpp
 // Purpose:     wxBrush
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,14 +18,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/brush.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
@@ -89,14 +84,14 @@ wxBrushRefData::wxBrushRefData(const wxColour& colour, wxBrushStyle style)
 {
     m_style = style;
 
-    m_hBrush = NULL;
+    m_hBrush = nullptr;
 }
 
 wxBrushRefData::wxBrushRefData(const wxBitmap& stipple)
 {
     DoSetStipple(stipple);
 
-    m_hBrush = NULL;
+    m_hBrush = nullptr;
 }
 
 wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
@@ -107,7 +102,7 @@ wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
     m_style = data.m_style;
 
     // we can't share HBRUSH, we'd need to create another one ourselves
-    m_hBrush = NULL;
+    m_hBrush = nullptr;
 }
 
 wxBrushRefData::~wxBrushRefData()
@@ -144,7 +139,7 @@ void wxBrushRefData::Free()
     {
         ::DeleteObject(m_hBrush);
 
-        m_hBrush = NULL;
+        m_hBrush = nullptr;
     }
 }
 
@@ -234,10 +229,6 @@ wxBrush::wxBrush(const wxBitmap& stipple)
     m_refData = new wxBrushRefData(stipple);
 }
 
-wxBrush::~wxBrush()
-{
-}
-
 // ----------------------------------------------------------------------------
 // wxBrush house keeping stuff
 // ----------------------------------------------------------------------------
@@ -280,14 +271,14 @@ wxBrushStyle wxBrush::GetStyle() const
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid brush") );
 
     return M_BRUSHDATA->GetStipple();
 }
 
 WXHANDLE wxBrush::GetResourceHandle() const
 {
-    wxCHECK_MSG( IsOk(), FALSE, wxT("invalid brush") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid brush") );
 
     return (WXHANDLE)M_BRUSHDATA->GetHBRUSH();
 }

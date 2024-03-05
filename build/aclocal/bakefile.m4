@@ -27,7 +27,7 @@ dnl
 
 dnl ---------------------------------------------------------------------------
 dnl Lots of compiler & linker detection code contained here was taken from
-dnl wxWidgets configure.in script (see https://www.wxwidgets.org)
+dnl wxWidgets configure script (see https://www.wxwidgets.org)
 dnl ---------------------------------------------------------------------------
 
 
@@ -44,7 +44,7 @@ AC_DEFUN([AC_BAKEFILE_GNUMAKE],
     AC_CACHE_CHECK([if make is GNU make], bakefile_cv_prog_makeisgnu,
     [
         if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-                egrep -s GNU > /dev/null); then
+                grep -sE GNU > /dev/null); then
             bakefile_cv_prog_makeisgnu="yes"
         else
             bakefile_cv_prog_makeisgnu="no"
@@ -282,46 +282,11 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       *-*-darwin* )
-        AC_BAKEFILE_CREATE_FILE_SHARED_LD_SH
-        chmod +x shared-ld-sh
+        SHARED_LD_MODULE_CC="\${CC} -bundle -single_module -headerpad_max_install_names -o"
+        SHARED_LD_MODULE_CXX="\${CXX} -bundle -single_module -headerpad_max_install_names -o"
 
-        SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
-        SHARED_LD_MODULE_CXX="CXX=\"\$(CXX)\" $SHARED_LD_MODULE_CC"
-
-        dnl Most apps benefit from being fully binded (its faster and static
-        dnl variables initialized at startup work).
-        dnl This can be done either with the exe linker flag -Wl,-bind_at_load
-        dnl or with a double stage link in order to create a single module
-        dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
-
-        dnl If using newer dev tools then there is a -single_module flag that
-        dnl we can use to do this for dylibs, otherwise we'll need to use a helper
-        dnl script.  Check the version of gcc to see which way we can go:
-        AC_CACHE_CHECK([for gcc 3.1 or later], bakefile_cv_gcc31, [
-           AC_TRY_COMPILE([],
-               [
-                   #if (__GNUC__ < 3) || \
-                       ((__GNUC__ == 3) && (__GNUC_MINOR__ < 1))
-                       This is old gcc
-                   #endif
-               ],
-               [
-                   bakefile_cv_gcc31=yes
-               ],
-               [
-                   bakefile_cv_gcc31=no
-               ]
-           )
-        ])
-        if test "$bakefile_cv_gcc31" = "no"; then
-            dnl Use the shared-ld-sh helper script
-            SHARED_LD_CC="`pwd`/shared-ld-sh -dynamiclib -headerpad_max_install_names -o"
-            SHARED_LD_CXX="$SHARED_LD_CC"
-        else
-            dnl Use the -single_module flag and let the linker do it for us
-            SHARED_LD_CC="\${CC} -dynamiclib -single_module -headerpad_max_install_names -o"
-            SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
-        fi
+        SHARED_LD_CC="\${CC} -dynamiclib -single_module -headerpad_max_install_names -o"
+        SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
 
         if test "x$GCC" = "xyes"; then
             PIC_FLAG="-dynamic -fPIC"
@@ -554,7 +519,7 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     if test "x$SUNCXX" = "xyes"; then
         dnl Sun C++ compiler requires special way of creating static libs;
         dnl see here for more details:
-        dnl https://sourceforge.net/tracker/?func=detail&atid=109863&aid=1229751&group_id=9863
+        dnl https://github.com/wxWidgets/wxWidgets/issues/2639
         AR=$CXX
         AROPTIONS="-xar -o"
         AC_SUBST(AR)
@@ -572,7 +537,7 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     AC_CHECK_TOOL(STRIP, strip, :)
     AC_CHECK_TOOL(NM, nm, :)
 
-    dnl Don't use `install -d`, see https://trac.wxwidgets.org/ticket/13452
+    dnl Don't use `install -d`, see https://github.com/wxWidgets/wxWidgets/issues/13452
     INSTALL_DIR="mkdir -p"
     AC_SUBST(INSTALL_DIR)
 
@@ -635,7 +600,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
         if test "x$GCC" = "xyes"; then
             dnl test if we have gcc-3.4:
             AC_MSG_CHECKING([if the compiler supports precompiled headers])
-            AC_TRY_COMPILE([],
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
                 [
                     #if !defined(__GNUC__) || !defined(__GNUC_MINOR__)
                         There is no PCH support
@@ -649,7 +614,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
                        ( defined(__INTEL_COMPILER) )
                         There is no PCH support
                     #endif
-                ],
+                ])],
                 [
                     AC_MSG_RESULT([yes])
                     GCC_PCH=1
@@ -693,7 +658,7 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
 dnl ---------------------------------------------------------------------------
 dnl AC_BAKEFILE([autoconf_inc.m4 inclusion])
 dnl
-dnl To be used in configure.in of any project using Bakefile-generated mks
+dnl To be used in configure.ac of any project using Bakefile-generated mks
 dnl
 dnl Behaviour can be modified by setting following variables:
 dnl    BAKEFILE_CHECK_BASICS    set to "no" if you don't want bakefile to
@@ -745,13 +710,13 @@ AC_DEFUN([AC_BAKEFILE],
     AC_SUBST(OBJCXXFLAGS)
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.11"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.13"
 
     dnl includes autoconf_inc.m4:
     $1
 
     if test "$BAKEFILE_AUTOCONF_INC_M4_VERSION" = "" ; then
-        AC_MSG_ERROR([No version found in autoconf_inc.m4 - bakefile macro was changed to take additional argument, perhaps configure.in wasn't updated (see the documentation)?])
+        AC_MSG_ERROR([No version found in autoconf_inc.m4 - bakefile macro was changed to take additional argument, perhaps configure.ac wasn't updated (see the documentation)?])
     fi
 
     if test "$BAKEFILE_BAKEFILE_M4_VERSION" != "$BAKEFILE_AUTOCONF_INC_M4_VERSION" ; then
@@ -867,117 +832,6 @@ else
 fi
 EOF
 dnl ===================== bk-deps ends here =====================
-])
-
-AC_DEFUN([AC_BAKEFILE_CREATE_FILE_SHARED_LD_SH],
-[
-dnl ===================== shared-ld-sh begins here =====================
-dnl    (Created by merge-scripts.py from shared-ld-sh
-dnl     file do not edit here!)
-D='$'
-cat <<EOF >shared-ld-sh
-#!/bin/sh
-#-----------------------------------------------------------------------------
-#-- Name:        distrib/mac/shared-ld-sh
-#-- Purpose:     Link a mach-o dynamic shared library for Darwin / Mac OS X
-#-- Author:      Gilles Depeyrot
-#-- Copyright:   (c) 2002 Gilles Depeyrot
-#-- Licence:     any use permitted
-#-----------------------------------------------------------------------------
-
-verbose=0
-args=""
-objects=""
-linking_flag="-dynamiclib"
-ldargs="-r -keep_private_externs -nostdlib"
-
-if test "x${D}CXX" = "x"; then
-    CXX="c++"
-fi
-
-while test ${D}# -gt 0; do
-    case ${D}1 in
-
-       -v)
-        verbose=1
-        ;;
-
-       -o|-compatibility_version|-current_version|-framework|-undefined|-install_name)
-        # collect these options and values
-        args="${D}{args} ${D}1 ${D}2"
-        shift
-        ;;
-
-       -arch|-isysroot)
-        # collect these options and values
-        ldargs="${D}{ldargs} ${D}1 ${D}2"
-        shift
-        ;;
-
-       -s|-Wl,*)
-        # collect these load args
-        ldargs="${D}{ldargs} ${D}1"
-        ;;
-
-       -l*|-L*|-flat_namespace|-headerpad_max_install_names)
-        # collect these options
-        args="${D}{args} ${D}1"
-        ;;
-
-       -dynamiclib|-bundle)
-        linking_flag="${D}1"
-        ;;
-
-       -*)
-        echo "shared-ld: unhandled option '${D}1'"
-        exit 1
-        ;;
-
-        *.o | *.a | *.dylib)
-        # collect object files
-        objects="${D}{objects} ${D}1"
-        ;;
-
-        *)
-        echo "shared-ld: unhandled argument '${D}1'"
-        exit 1
-        ;;
-
-    esac
-    shift
-done
-
-status=0
-
-#
-# Link one module containing all the others
-#
-if test ${D}{verbose} = 1; then
-    echo "${D}CXX ${D}{ldargs} ${D}{objects} -o master.${D}${D}.o"
-fi
-${D}CXX ${D}{ldargs} ${D}{objects} -o master.${D}${D}.o
-status=${D}?
-
-#
-# Link the shared library from the single module created, but only if the
-# previous command didn't fail:
-#
-if test ${D}{status} = 0; then
-    if test ${D}{verbose} = 1; then
-        echo "${D}CXX ${D}{linking_flag} master.${D}${D}.o ${D}{args}"
-    fi
-    ${D}CXX ${D}{linking_flag} master.${D}${D}.o ${D}{args}
-    status=${D}?
-fi
-
-#
-# Remove intermediate module
-#
-rm -f master.${D}${D}.o
-
-exit ${D}status
-EOF
-dnl ===================== shared-ld-sh ends here =====================
 ])
 
 AC_DEFUN([AC_BAKEFILE_CREATE_FILE_BK_MAKE_PCH],

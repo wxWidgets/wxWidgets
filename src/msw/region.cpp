@@ -2,7 +2,6 @@
 // Name:      src/msw/region.cpp
 // Purpose:   wxRegion implementation using Win32 API
 // Author:    Vadim Zeitlin
-// Modified by:
 // Created:   Fri Oct 24 10:46:34 MET 1997
 // Copyright: (c) 1997-2002 wxWidgets team
 // Licence:   wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/region.h"
 
@@ -48,10 +44,10 @@ public:
 
     wxRegionRefData(const wxRegionRefData& data) : wxGDIRefData()
     {
-        DWORD noBytes = ::GetRegionData(data.m_region, 0, NULL);
+        DWORD noBytes = ::GetRegionData(data.m_region, 0, nullptr);
         RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
         ::GetRegionData(data.m_region, noBytes, rgnData);
-        m_region = ::ExtCreateRegion(NULL, noBytes, rgnData);
+        m_region = ::ExtCreateRegion(nullptr, noBytes, rgnData);
         delete[] (char*) rgnData;
     }
 
@@ -85,7 +81,7 @@ private:
 
 wxRegion::wxRegion()
 {
-    m_refData = NULL;
+    m_refData = nullptr;
 }
 
 wxRegion::wxRegion(WXHRGN hRegion)
@@ -135,7 +131,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
     m_refData = new wxRegionRefData;
     M_REGION = ::CreatePolygonRgn
                (
-                    (POINT*)points,
+                    reinterpret_cast<const POINT*>(points),
                     n,
                     fillStyle == wxODDEVEN_RULE ? ALTERNATE : WINDING
                );
@@ -153,7 +149,7 @@ wxGDIRefData *wxRegion::CreateGDIRefData() const
 
 wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxRegionRefData(*(wxRegionRefData *)data);
+    return new wxRegionRefData(*static_cast<const wxRegionRefData*>(data));
 }
 
 // ----------------------------------------------------------------------------
@@ -341,7 +337,7 @@ void wxRegionIterator::Init()
     m_current =
     m_numRects = 0;
 
-    m_rects = NULL;
+    m_rects = nullptr;
 }
 
 wxRegionIterator::~wxRegionIterator()
@@ -352,7 +348,7 @@ wxRegionIterator::~wxRegionIterator()
 // Initialize iterator for region
 wxRegionIterator::wxRegionIterator(const wxRegion& region)
 {
-    m_rects = NULL;
+    m_rects = nullptr;
 
     Reset(region);
 }
@@ -374,7 +370,7 @@ wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
     }
     else
     {
-        m_rects = NULL;
+        m_rects = nullptr;
     }
 
     return *this;
@@ -396,7 +392,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
         m_numRects = 0;
     else
     {
-        DWORD noBytes = ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, 0, NULL);
+        DWORD noBytes = ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, 0, nullptr);
         RGNDATA *rgnData = (RGNDATA*) new char[noBytes];
         ::GetRegionData(((wxRegionRefData*)region.m_refData)->m_region, noBytes, rgnData);
 

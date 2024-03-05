@@ -3,7 +3,6 @@
 // Purpose:      Dynamic loading framework
 // Author:       Ron Lee, David Falkinder, Vadim Zeitlin and a cast of 1000's
 //               (derived in part from dynlib.cpp (c) 1998 Guilhem Lavaux)
-// Modified by:
 // Created:      03/12/01
 // Copyright:    (c) 2001 Ron Lee <ron@debian.org>
 // Licence:      wxWindows licence
@@ -15,9 +14,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_DYNAMIC_LOADER
 
@@ -28,7 +24,6 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/hash.h"
     #include "wx/utils.h"
     #include "wx/module.h"
 #endif
@@ -43,7 +38,7 @@
 // ---------------------------------------------------------------------------
 
 
-wxDLImports*  wxPluginLibrary::ms_classes = NULL;
+wxDLImports*  wxPluginLibrary::ms_classes = nullptr;
 
 class wxPluginLibraryModule : public wxModule
 {
@@ -51,14 +46,14 @@ public:
     wxPluginLibraryModule() { }
 
     // TODO: create ms_classes on demand, why always preallocate it?
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         wxPluginLibrary::ms_classes = new wxDLImports;
         wxPluginManager::CreateManifest();
         return true;
     }
 
-    virtual void OnExit() wxOVERRIDE
+    virtual void OnExit() override
     {
         wxDELETE(wxPluginLibrary::ms_classes);
         wxPluginManager::ClearManifest();
@@ -100,10 +95,10 @@ wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
     else // We didn't register any classes at all.
     {
         m_ourFirst =
-        m_ourLast = NULL;
+        m_ourLast = nullptr;
     }
 
-    if( m_handle != 0 )
+    if( m_handle != nullptr )
     {
         UpdateClasses();
         RegisterModules();
@@ -117,7 +112,7 @@ wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
 
 wxPluginLibrary::~wxPluginLibrary()
 {
-    if( m_handle != 0 )
+    if( m_handle != nullptr )
     {
         UnregisterModules();
         RestoreClasses();
@@ -126,7 +121,7 @@ wxPluginLibrary::~wxPluginLibrary()
 
 wxPluginLibrary *wxPluginLibrary::RefLib()
 {
-    wxCHECK_MSG( m_linkcount > 0, NULL,
+    wxCHECK_MSG( m_linkcount > 0, nullptr,
                  wxT("Library had been already deleted!") );
 
     ++m_linkcount;
@@ -271,7 +266,7 @@ void wxPluginLibrary::UnregisterModules()
 // wxPluginManager
 // ---------------------------------------------------------------------------
 
-wxDLManifest*   wxPluginManager::ms_manifest = NULL;
+wxDLManifest*   wxPluginManager::ms_manifest = nullptr;
 
 // ------------------------
 // Static accessors
@@ -289,7 +284,7 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
 
     if ( flags & wxDL_NOSHARE )
     {
-        entry = NULL;
+        entry = nullptr;
     }
     else
     {
@@ -299,7 +294,7 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
     if ( entry )
     {
         wxLogTrace(wxT("dll"),
-                   wxT("LoadLibrary(%s): already loaded."), realname.c_str());
+                   wxT("LoadLibrary(%s): already loaded."), realname);
 
         entry->RefLib();
     }
@@ -312,13 +307,13 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
             (*ms_manifest)[realname] = entry;
 
             wxLogTrace(wxT("dll"),
-                       wxT("LoadLibrary(%s): loaded ok."), realname.c_str());
+                       wxT("LoadLibrary(%s): loaded ok."), realname);
 
         }
         else
         {
             wxLogTrace(wxT("dll"),
-                       wxT("LoadLibrary(%s): failed to load."), realname.c_str());
+                       wxT("LoadLibrary(%s): failed to load."), realname);
 
             // we have created entry just above
             if ( !entry->UnrefLib() )
@@ -327,7 +322,7 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
                 wxFAIL_MSG( wxT("Currently linked library is not loaded?") );
             }
 
-            entry = NULL;
+            entry = nullptr;
         }
     }
 
@@ -350,12 +345,12 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
     if ( !entry )
     {
         wxLogDebug(wxT("Attempt to unload library '%s' which is not loaded."),
-                   libname.c_str());
+                   libname);
 
         return false;
     }
 
-    wxLogTrace(wxT("dll"), wxT("UnloadLibrary(%s)"), realname.c_str());
+    wxLogTrace(wxT("dll"), wxT("UnloadLibrary(%s)"), realname);
 
     if ( !entry->UnrefLib() )
     {
@@ -396,7 +391,7 @@ void wxPluginManager::Unload()
 
     m_entry->UnrefLib();
 
-    m_entry = NULL;
+    m_entry = nullptr;
 }
 
 #endif  // wxUSE_DYNAMIC_LOADER

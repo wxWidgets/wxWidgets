@@ -2,7 +2,6 @@
 // Name:        mediaplayer.cpp
 // Purpose:     wxMediaCtrl sample
 // Author:      Ryan Norton
-// Modified by:
 // Created:     11/10/04
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
@@ -15,7 +14,7 @@
 // of the wxMediaCtrl class in wxWidgets.
 //
 // To use this sample, simply select Open File from the file menu,
-// select the file you want to play - and MediaPlayer will play the file in a
+// select the file you want to play - and MediaPlayer will play the file in
 // the current notebook page, showing video if necessary.
 //
 // You can select one of the menu options, or move the slider around
@@ -39,9 +38,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -141,18 +137,18 @@ class wxMediaPlayerApp : public wxApp
 {
 public:
 #ifdef __WXMAC__
-    virtual void MacOpenFiles(const wxArrayString & fileNames ) wxOVERRIDE;
+    virtual void MacOpenFiles(const wxArrayString & fileNames ) override;
 #endif
 
 #if wxUSE_CMDLINE_PARSER
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
     // Files specified on the command line, if any.
     wxVector<wxString> m_params;
 #endif // wxUSE_CMDLINE_PARSER
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
 protected:
     class wxMediaPlayerFrame* m_frame;
@@ -285,7 +281,7 @@ public:
     wxMediaPlayerTimer(wxMediaPlayerFrame* frame) {m_frame = frame;}
 
     // Called each time the timer's timeout expires
-    void Notify() wxOVERRIDE;
+    void Notify() override;
 
     wxMediaPlayerFrame* m_frame;       // The wxMediaPlayerFrame
 };
@@ -351,7 +347,7 @@ public:
     wxPlayListDropTarget(wxMediaPlayerListCtrl& list) : m_list(list) {}
     ~wxPlayListDropTarget(){}
         virtual bool OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                         const wxArrayString& files) wxOVERRIDE
+                         const wxArrayString& files) override
     {
         for (size_t i = 0; i < files.GetCount(); ++i)
         {
@@ -503,7 +499,7 @@ void wxMediaPlayerApp::MacOpenFiles(const wxArrayString & fileNames )
 // ----------------------------------------------------------------------------
 
 wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600,600))
+       : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(1366,768))
 {
     SetIcon(wxICON(sample));
 
@@ -909,7 +905,7 @@ void wxMediaPlayerFrame::DoOpenFile(const wxString& path, bool bNewPage)
 // ----------------------------------------------------------------------------
 // wxMediaPlayerFrame::DoPlayFile
 //
-// Pauses the file if its the currently playing file,
+// Pauses the file if it's the currently playing file,
 // otherwise it plays the file
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
@@ -1495,14 +1491,15 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
 
     //  Make sure creation was successful
     bool bOK = m_mediactrl->Create(this, wxID_MEDIACTRL, wxEmptyString,
-                                    wxDefaultPosition, wxDefaultSize, 0,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxMC_NO_AUTORESIZE,
 // you could specify a macro backend here like
 //  wxMEDIABACKEND_WMP10);
 //        "wxPDFMediaBackend");
                                    szBackend);
 // you could change the cursor here like
 //    m_mediactrl->SetCursor(wxCURSOR_BLANK);
-// note that this may not effect it if SetPlayerControls
+// note that this may not affect it if SetPlayerControls
 // is set to something else than wxMEDIACTRLPLAYERCONTROLS_NONE
     wxASSERT_MSG(bOK, "Could not create media control!");
     wxUnusedVar(bOK);
@@ -1611,14 +1608,14 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_volSlider = new wxSlider(this, wxID_VOLSLIDER, 100, // init
                             0, // start
                             100, // end
-                            wxDefaultPosition, wxSize(250,20),
+                            wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
     horsizer3->Add(m_volSlider, 1, wxALL, 5);
 
     m_pbSlider = new wxSlider(this, wxID_PBSLIDER, 4, // init
                             1, // start
                             16, // end
-                            wxDefaultPosition, wxSize(250,20),
+                            wxDefaultPosition, wxDefaultSize,
                             wxSL_HORIZONTAL );
     horsizer3->Add(m_pbSlider, 1, wxALL, 5);
     sizer->Add(horsizer3, 1, wxCENTRE | wxALL, 5);

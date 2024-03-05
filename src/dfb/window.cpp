@@ -19,9 +19,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/window.h"
 
@@ -34,7 +31,7 @@
 #include "wx/dynarray.h"
 
 #include "wx/dfb/private.h"
-#include "wx/private/overlay.h"
+#include "wx/dfb/private/overlay.h"
 
 #define TRACE_EVENTS "events"
 #define TRACE_PAINT  "paint"
@@ -48,12 +45,12 @@
 // ---------------------------------------------------------------------------
 
 // the window that has keyboard focus:
-static wxWindowDFB *gs_focusedWindow = NULL;
+static wxWindowDFB *gs_focusedWindow = nullptr;
 // the window that is about to be focused after currently focused
 // one looses focus:
-static wxWindow *gs_toBeFocusedWindow = NULL;
+static wxWindow *gs_toBeFocusedWindow = nullptr;
 // the window that has mouse capture
-static wxWindowDFB *gs_mouseCapture = NULL;
+static wxWindowDFB *gs_mouseCapture = nullptr;
 
 // ---------------------------------------------------------------------------
 // overlays support
@@ -87,8 +84,8 @@ wxWindow *wxGetActiveWindow()
 void wxWindowDFB::Init()
 {
     m_isShown = true;
-    m_tlw = NULL;
-    m_overlays = NULL;
+    m_tlw = nullptr;
+    m_overlays = nullptr;
 }
 
 // Destructor
@@ -143,10 +140,10 @@ bool wxWindowDFB::Create(wxWindow *parent,
 
 wxIDirectFBSurfacePtr wxWindowDFB::ObtainDfbSurface() const
 {
-    wxCHECK_MSG( m_parent, NULL, "parentless window?" );
+    wxCHECK_MSG( m_parent, nullptr, "parentless window?" );
 
     wxIDirectFBSurfacePtr parentSurface(m_parent->GetDfbSurface());
-    wxCHECK_MSG( parentSurface, NULL, "invalid parent surface" );
+    wxCHECK_MSG( parentSurface, nullptr, "invalid parent surface" );
 
     wxRect r(GetRect());
     AdjustForParentClientOrigin(r.x, r.y, 0);
@@ -168,7 +165,7 @@ wxIDirectFBSurfacePtr wxWindowDFB::GetDfbSurface()
 
 void wxWindowDFB::InvalidateDfbSurface()
 {
-    m_surface = NULL;
+    m_surface = nullptr;
 
     // surfaces of the children are subsurfaces of this window's surface,
     // so they must be invalidated as well:
@@ -194,7 +191,7 @@ void wxWindowDFB::SetFocus()
     {
         gs_toBeFocusedWindow = (wxWindow*)this;
         gs_focusedWindow->DFBKillFocus();
-        gs_toBeFocusedWindow = NULL;
+        gs_toBeFocusedWindow = nullptr;
     }
 
     gs_focusedWindow = this;
@@ -231,7 +228,7 @@ void wxWindowDFB::DFBKillFocus()
     wxCHECK_RET( gs_focusedWindow == this,
                  "killing focus on window that doesn't have it" );
 
-    gs_focusedWindow = NULL;
+    gs_focusedWindow = nullptr;
 
     if ( m_isBeingDeleted )
         return; // don't send any events from dtor
@@ -304,7 +301,7 @@ void wxWindowDFB::DoReleaseMouse()
 #if 0
     DFB_wmUncaptureEvents(m_wnd, wxDFB_CAPTURE_MOUSE);
 #endif
-    gs_mouseCapture = NULL;
+    gs_mouseCapture = nullptr;
 }
 
 /* static */ wxWindow *wxWindowBase::GetCapture()
@@ -684,8 +681,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     // only send wxNcPaintEvent if drawing at least part of nonclient area:
     if ( !clientRect.Contains(rect) )
     {
-        wxNcPaintEvent eventNc(GetId());
-        eventNc.SetEventObject(this);
+        wxNcPaintEvent eventNc(this);
         HandleWindowEvent(eventNc);
     }
     else
@@ -697,8 +693,7 @@ void wxWindowDFB::PaintWindow(const wxRect& rect)
     // only send wxPaintEvent if drawing at least part of client area:
     if ( rect.Intersects(clientRect) )
     {
-        wxPaintEvent eventPt(GetId());
-        eventPt.SetEventObject(this);
+        wxPaintEvent eventPt(this);
         HandleWindowEvent(eventPt);
     }
     else
@@ -966,21 +961,7 @@ static long GetUntraslatedKeyCode(DFBInputDeviceKeyIdentifier key_id,
     switch ( DFB_KEY_TYPE(key_symbol) )
     {
         case DIKT_UNICODE:
-#if wxUSE_UNICODE
             return key_symbol;
-#else
-            if ( key_symbol < 128 )
-                return key_symbol;
-            else
-            {
-                wchar_t chr = key_symbol;
-                wxCharBuffer buf(wxConvUI->cWC2MB(&chr, 1, NULL));
-                if ( buf )
-                    return *buf; // may be 0 if failed
-                else
-                    return 0;
-            }
-#endif
 
         default:
             return GetTranslatedKeyCode(key_id);
@@ -1007,9 +988,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     event.SetTimestamp(wxDFB_EVENT_TIMESTAMP(e));
     event.m_rawCode = e.key_code;
     event.m_keyCode = GetTranslatedKeyCode(e.key_id);
-#if wxUSE_UNICODE
     event.m_uniChar = e.key_symbol;
-#endif
     event.m_shiftDown = ( e.modifiers & DIMM_SHIFT ) != 0;
     event.m_controlDown = ( e.modifiers & DIMM_CONTROL ) != 0;
     event.m_altDown = ( e.modifiers & DIMM_ALT ) != 0;
@@ -1044,7 +1023,7 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
                 return;
         }
 
-        // Synthetize navigation key event, but do it only if the TAB key
+        // Synthesize navigation key event, but do it only if the TAB key
         // wasn't handled yet:
         if ( isTab && GetParent() && GetParent()->HasFlag(wxTAB_TRAVERSAL) )
         {
@@ -1070,5 +1049,5 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 wxWindow* wxFindWindowAtPoint(const wxPoint& WXUNUSED(pt))
 {
     wxFAIL_MSG( "wxFindWindowAtPoint not implemented" );
-    return NULL;
+    return nullptr;
 }

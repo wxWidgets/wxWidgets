@@ -2,7 +2,6 @@
 // Name:        wx/stringops.h
 // Purpose:     implementation of wxString primitive operations
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2007-04-16
 // Copyright:   (c) 2007 REA Elektronik GmbH
 // Licence:     wxWindows licence
@@ -12,9 +11,12 @@
 #define _WX_WXSTRINGOPS_H__
 
 #include "wx/chartype.h"
-#include "wx/stringimpl.h"
 #include "wx/unichar.h"
 #include "wx/buffer.h"
+
+#include "wx/beforestd.h"
+#include <string>
+#include "wx/afterstd.h"
 
 // This header contains wxStringOperations "namespace" class that implements
 // elementary operations on string data as static methods; wxString methods and
@@ -22,8 +24,7 @@
 // one for UTF-8 encoded char* string and one for "raw" wchar_t* strings (or
 // char* in ANSI build).
 
-// FIXME-UTF8: only wchar after we remove ANSI build
-#if wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 struct WXDLLIMPEXP_BASE wxStringOperationsWchar
 {
     // moves the iterator to the next Unicode character
@@ -73,14 +74,14 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
         buf.data[1] = 0;
         return buf;
     }
-    static wxWxCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
+    static wxWCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);
     static bool IsSingleCodeUnitCharacter(const wxUniChar&) { return true; }
 #endif
 
-    static wxUniChar DecodeChar(const wxStringImpl::const_iterator& i)
+    static wxUniChar DecodeChar(const std::wstring::const_iterator& i)
         { return *i; }
 };
-#endif // wxUSE_UNICODE_WCHAR || !wxUSE_UNICODE
+#endif // wxUSE_UNICODE_WCHAR
 
 
 #if wxUSE_UNICODE_UTF8
@@ -88,21 +89,21 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
 {
     // checks correctness of UTF-8 sequence
     static bool IsValidUtf8String(const char *c,
-                                  size_t len = wxStringImpl::npos);
+                                  size_t len = std::string::npos);
     static bool IsValidUtf8LeadByte(unsigned char c)
     {
         return (c <= 0x7F) || (c >= 0xC2 && c <= 0xF4);
     }
 
-    // table of offsets to skip forward when iterating over UTF-8 sequence
-    static const unsigned char ms_utf8IterTable[256];
+    // returns offset to skip forward when iterating over UTF-8 sequence
+    static unsigned char GetUTF8IterOffset(unsigned char c);
 
 
     template<typename Iterator>
     static void IncIter(Iterator& i)
     {
         wxASSERT( IsValidUtf8LeadByte(*i) );
-        i += ms_utf8IterTable[(unsigned char)*i];
+        i += GetUTF8IterOffset(*i);
     }
 
     template<typename Iterator>
@@ -178,11 +179,11 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     static size_t GetUtf8CharLength(char c)
     {
         wxASSERT( IsValidUtf8LeadByte(c) );
-        return ms_utf8IterTable[(unsigned char)c];
+        return GetUTF8IterOffset(c);
     }
 
     // decodes single UTF-8 character from UTF-8 string
-    static wxUniChar DecodeChar(wxStringImpl::const_iterator i)
+    static wxUniChar DecodeChar(std::string::const_iterator i)
     {
         if ( (unsigned char)*i < 0x80 )
             return (int)*i;
@@ -190,7 +191,7 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     }
 
 private:
-    static wxUniChar DecodeNonAsciiChar(wxStringImpl::const_iterator i);
+    static wxUniChar DecodeNonAsciiChar(std::string::const_iterator i);
 };
 #endif // wxUSE_UNICODE_UTF8
 

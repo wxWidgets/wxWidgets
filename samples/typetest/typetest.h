@@ -2,7 +2,6 @@
 // Name:        typetest.h
 // Purpose:     Types wxWidgets sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -15,10 +14,10 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp() { m_textCtrl = NULL; m_mimeDatabase = NULL; }
+    MyApp() { m_textCtrl = nullptr; m_mimeDatabase = nullptr; }
 
-    bool OnInit() wxOVERRIDE;
-    int OnExit() wxOVERRIDE { delete m_mimeDatabase; return wxApp::OnExit(); }
+    bool OnInit() override;
+    int OnExit() override { delete m_mimeDatabase; return wxApp::OnExit(); }
 
     void DoVariantDemo(wxCommandEvent& event);
     void DoByteOrderDemo(wxCommandEvent& event);
@@ -29,9 +28,7 @@ public:
     void DoStreamDemo5(wxCommandEvent& event);
     void DoStreamDemo6(wxCommandEvent& event);
     void DoStreamDemo7(wxCommandEvent& event);
-#if wxUSE_UNICODE
     void DoUnicodeDemo(wxCommandEvent& event);
-#endif // wxUSE_UNICODE
     void DoMIMEDemo(wxCommandEvent& event);
 
     wxTextCtrl* GetTextCtrl() const { return m_textCtrl; }

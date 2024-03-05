@@ -2,7 +2,6 @@
 // Name:        wx/nonownedwnd.h
 // Purpose:     declares wxNonTopLevelWindow class
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2006-12-24
 // Copyright:   (c) 2006 TT-Solutions
 // Licence:     wxWindows licence
@@ -62,17 +61,17 @@ public:
     // ------------------------------
 
     virtual void AdjustForParentClientOrigin(int& WXUNUSED(x), int& WXUNUSED(y),
-                                             int WXUNUSED(sizeFlags) = 0) const wxOVERRIDE
+                                             int WXUNUSED(sizeFlags) = 0) const override
     {
         // Non owned windows positions don't need to be adjusted for parent
         // client area origin so simply do nothing here.
     }
 
-    virtual void InheritAttributes() wxOVERRIDE
+    virtual void InheritAttributes() override
     {
         // Non owned windows don't inherit attributes from their parent window
         // (if the parent frame is red, it doesn't mean that all dialogs shown
-        // by it should be red as well), so don't do anything here neither.
+        // by it should be red as well), so don't do anything here either.
     }
 
 protected:
@@ -96,7 +95,7 @@ protected:
 
 #if defined(__WXDFB__)
     #include "wx/dfb/nonownedwnd.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/nonownedwnd.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/nonownedwnd.h"

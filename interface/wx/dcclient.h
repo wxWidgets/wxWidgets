@@ -18,12 +18,6 @@
     automatically sets the clipping area to the damaged area of the window.
     Attempts to draw outside this area do not appear.
 
-    To draw on a window from outside your EVT_PAINT() handler, construct a
-    wxClientDC object.
-
-    To draw on the whole window including decorations, construct a wxWindowDC
-    object (Windows only).
-
     A wxPaintDC object is initialized to use the same font and colours as the
     window it is associated with.
 
@@ -46,16 +40,39 @@ public:
 /**
     @class wxClientDC
 
-    A wxClientDC must be constructed if an application wishes to paint on the
-    client area of a window from outside an EVT_PAINT() handler. This should
-    normally be constructed as a temporary stack object; don't store a
-    wxClientDC object.
+    wxClientDC is primarily useful for obtaining information about the window
+    from outside EVT_PAINT() handler.
 
-    To draw on a window from within an EVT_PAINT() handler, construct a
-    wxPaintDC object instead.
+    Typical use of this class is to obtain the extent of some text string in
+    order to allocate enough size for a window, e.g.
+    @code
+        // Create the initially empty label with the size big enough to show
+        // the given string.
+        wxClientDC dc(this);
+        wxStaticText* text = new wxStaticText
+            (
+                this, wxID_ANY, "",
+                wxPoint(),
+                dc.GetTextExtent("String of max length"),
+                wxST_NO_AUTORESIZE
+            );
+    }
+    @endcode
 
-    To draw on the whole window including decorations, construct a wxWindowDC
-    object (Windows only).
+    @note While wxClientDC may also be used for drawing on the client area of a
+    window from outside an EVT_PAINT() handler in some ports, this does @em not
+    work on most of the platforms: neither wxOSX nor wxGTK with GTK 3 Wayland
+    backend support this at all, so drawing using wxClientDC simply doesn't
+    have any effect there. CanBeUsedForDrawing() can be used to determine
+    whether wxClientDC can be used for drawing in the current environment, but
+    it is recommended to only draw on the window using wxPaintDC, as this is
+    guaranteed to work everywhere. To redraw a small part of the window, use
+    wxWindow::RefreshRect() to invalidate just this part and check
+    wxWindow::GetUpdateRegion() in the paint event handler to redraw this part
+    only.
+
+    wxClientDC objects should normally be constructed as temporary stack
+    objects, i.e. don't store a wxClientDC object.
 
     A wxClientDC object is initialized to use the same font and colours as the
     window it is associated with.
@@ -72,6 +89,23 @@ public:
         Constructor. Pass a pointer to the window on which you wish to paint.
     */
     wxClientDC(wxWindow* window);
+
+    /**
+        Return true if drawing on wxClientDC actually works.
+
+        In many environments (currently this includes wxGTK when using Wayland
+        backend, wxMSW when using double buffering and wxOSX in all cases),
+        wxClientDC can be only used for obtaining information about the device
+        context, but not for actually drawing on it. Portable code should avoid
+        using wxClientDC completely, as explained in the class documentation,
+        but it is also possible to optionally use it only when it does work,
+        i.e. when this function returns @true.
+
+        @param window The window that would be used with wxClientDC.
+
+        @since 3.3.0
+     */
+    static bool CanBeUsedForDrawing(const wxWindow* window);
 };
 
 

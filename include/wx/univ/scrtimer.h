@@ -2,7 +2,6 @@
 // Name:        wx/univ/scrtimer.h
 // Purpose:     wxScrollTimer: small helper class for wxScrollArrow/Thumb
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     18.02.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -34,7 +33,7 @@ public:
     void StartAutoScroll();
 
     // the base class method
-    virtual void Notify() wxOVERRIDE;
+    virtual void Notify() override;
 
 protected:
     // to implement in derived classes: perform the scroll action and return

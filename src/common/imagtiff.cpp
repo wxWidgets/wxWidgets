@@ -17,9 +17,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_LIBTIFF
 
@@ -65,7 +62,7 @@ FormatTiffMessage(const char *module, const char *fmt, va_list ap)
         // than nothing
         strcpy(buf, "Incorrectly formatted TIFF message");
     }
-    buf[WXSIZEOF(buf)-1] = 0; // make sure it is always NULL-terminated
+    buf[WXSIZEOF(buf)-1] = 0; // make sure it is always NUL-terminated
 
     wxString msg(buf);
     if ( module )
@@ -146,7 +143,7 @@ static wxSeekMode wxSeekModeFromTIFF(int whence)
 extern "C"
 {
 
-tsize_t TIFFLINKAGEMODE
+static tsize_t TIFFLINKAGEMODE
 wxTIFFNullProc(thandle_t WXUNUSED(handle),
           tdata_t WXUNUSED(buf),
           tsize_t WXUNUSED(size))
@@ -154,7 +151,7 @@ wxTIFFNullProc(thandle_t WXUNUSED(handle),
     return (tsize_t) -1;
 }
 
-tsize_t TIFFLINKAGEMODE
+static tsize_t TIFFLINKAGEMODE
 wxTIFFReadProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxInputStream *stream = (wxInputStream*) handle;
@@ -162,7 +159,7 @@ wxTIFFReadProc(thandle_t handle, tdata_t buf, tsize_t size)
     return wx_truncate_cast(tsize_t, stream->LastRead());
 }
 
-tsize_t TIFFLINKAGEMODE
+static tsize_t TIFFLINKAGEMODE
 wxTIFFWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
@@ -170,7 +167,7 @@ wxTIFFWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
     return wx_truncate_cast(tsize_t, stream->LastWrite());
 }
 
-toff_t TIFFLINKAGEMODE
+static toff_t TIFFLINKAGEMODE
 wxTIFFSeekIProc(thandle_t handle, toff_t off, int whence)
 {
     wxInputStream *stream = (wxInputStream*) handle;
@@ -179,10 +176,16 @@ wxTIFFSeekIProc(thandle_t handle, toff_t off, int whence)
                                             wxSeekModeFromTIFF(whence)));
 }
 
-toff_t TIFFLINKAGEMODE
+static toff_t TIFFLINKAGEMODE
 wxTIFFSeekOProc(thandle_t handle, toff_t off, int whence)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
+
+    // For weird reasons of compatibility with Solaris libc, libtiff calls
+    // Seek(0, SEEK_END) before every write, but we really don't need to do
+    // anything in this case.
+    if ( off == 0 && whence == SEEK_END )
+        return wxFileOffsetToTIFF( stream->TellO() );
 
     toff_t offset = wxFileOffsetToTIFF(
         stream->SeekO((wxFileOffset)off, wxSeekModeFromTIFF(whence)) );
@@ -222,14 +225,14 @@ wxTIFFSeekOProc(thandle_t handle, toff_t off, int whence)
     return wxFileOffsetToTIFF( stream->TellO() );
 }
 
-int TIFFLINKAGEMODE
+static int TIFFLINKAGEMODE
 wxTIFFCloseIProc(thandle_t WXUNUSED(handle))
 {
     // there is no need to close the input stream
     return 0;
 }
 
-int TIFFLINKAGEMODE
+static int TIFFLINKAGEMODE
 wxTIFFCloseOProc(thandle_t handle)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
@@ -237,14 +240,14 @@ wxTIFFCloseOProc(thandle_t handle)
     return stream->Close() ? 0 : -1;
 }
 
-toff_t TIFFLINKAGEMODE
+static toff_t TIFFLINKAGEMODE
 wxTIFFSizeProc(thandle_t handle)
 {
     wxStreamBase *stream = (wxStreamBase*) handle;
     return (toff_t) stream->GetSize();
 }
 
-int TIFFLINKAGEMODE
+static int TIFFLINKAGEMODE
 wxTIFFMapProc(thandle_t WXUNUSED(handle),
              tdata_t* WXUNUSED(pbase),
              toff_t* WXUNUSED(psize))
@@ -252,7 +255,7 @@ wxTIFFMapProc(thandle_t WXUNUSED(handle),
     return 0;
 }
 
-void TIFFLINKAGEMODE
+static void TIFFLINKAGEMODE
 wxTIFFUnmapProc(thandle_t WXUNUSED(handle),
                tdata_t WXUNUSED(base),
                toff_t WXUNUSED(size))
@@ -261,7 +264,7 @@ wxTIFFUnmapProc(thandle_t WXUNUSED(handle),
 
 } // extern "C"
 
-TIFF*
+static TIFF*
 TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
 {
     TIFF* tif = TIFFClientOpen(name, mode,
@@ -273,7 +276,7 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
     return tif;
 }
 
-TIFF*
+static TIFF*
 TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
 {
     TIFF* tif = TIFFClientOpen(name, mode,
@@ -316,24 +319,24 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         return false;
     }
 
-    uint32 w, h;
-    uint32 *raster;
+    wxUint32 w, h;
+    wxUint32 *raster;
 
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &w );
     TIFFGetField( tif, TIFFTAG_IMAGELENGTH, &h );
 
-    uint16 samplesPerPixel = 0;
+    wxUint16 samplesPerPixel = 0;
     (void) TIFFGetFieldDefaulted(tif, TIFFTAG_SAMPLESPERPIXEL, &samplesPerPixel);
 
-    uint16 bitsPerSample = 0;
+    wxUint16 bitsPerSample = 0;
     (void) TIFFGetFieldDefaulted(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample);
 
-    uint16 extraSamples;
-    uint16* samplesInfo;
+    wxUint16 extraSamples;
+    wxUint16* samplesInfo;
     TIFFGetFieldDefaulted(tif, TIFFTAG_EXTRASAMPLES,
                           &extraSamples, &samplesInfo);
 
-    uint16 photometric;
+    wxUint16 photometric;
     if (!TIFFGetField(tif, TIFFTAG_PHOTOMETRIC, &photometric))
     {
         photometric = PHOTOMETRIC_MINISWHITE;
@@ -347,7 +350,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     // guard against integer overflow during multiplication which could result
     // in allocating a too small buffer and then overflowing it
-    const double bytesNeeded = (double)w * (double)h * sizeof(uint32);
+    const double bytesNeeded = (double)w * (double)h * sizeof(wxUint32);
     if ( bytesNeeded >= wxUINT32_MAX )
     {
         if ( verbose )
@@ -360,7 +363,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         return false;
     }
 
-    raster = (uint32*) _TIFFmalloc( (uint32)bytesNeeded );
+    raster = (wxUint32*) _TIFFmalloc( (wxUint32)bytesNeeded );
 
     if (!raster)
     {
@@ -391,7 +394,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if ( hasAlpha )
         image->SetAlpha();
 
-    uint16 planarConfig = PLANARCONFIG_CONTIG;
+    wxUint16 planarConfig = PLANARCONFIG_CONTIG;
     (void) TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &planarConfig);
 
     bool ok = true;
@@ -409,7 +412,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     {
         const bool isGreyScale = (bitsPerSample == 8);
         unsigned char *buf = (unsigned char *)_TIFFmalloc(TIFFScanlineSize(tif));
-        uint32 pos = 0;
+        wxUint32 pos = 0;
         const bool minIsWhite = (photometric == PHOTOMETRIC_MINISWHITE);
         const int minValue =  minIsWhite ? 255 : 0;
         const int maxValue = 255 - minValue;
@@ -419,7 +422,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         wxImage, later on expects (normally TIFFReadRGBAImageOriented is
         used to decode which uses an ABGR layout).
         */
-        for (uint32 y = 0; y < h; ++y)
+        for (wxUint32 y = 0; y < h; ++y)
         {
             if (TIFFReadScanline(tif, buf, y, 0) != 1)
             {
@@ -429,10 +432,10 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
             if (isGreyScale)
             {
-                for (uint32 x = 0; x < w; ++x)
+                for (wxUint32 x = 0; x < w; ++x)
                 {
-                    uint8 val = minIsWhite ? 255 - buf[x*2] : buf[x*2];
-                    uint8 alpha = minIsWhite ? 255 - buf[x*2+1] : buf[x*2+1];
+                    wxUint8 val = minIsWhite ? 255 - buf[x*2] : buf[x*2];
+                    wxUint8 alpha = minIsWhite ? 255 - buf[x*2+1] : buf[x*2+1];
                     raster[pos] = val + (val << 8) + (val << 16)
                         + (alpha << 24);
                     pos++;
@@ -440,11 +443,11 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
             }
             else
             {
-                for (uint32 x = 0; x < w; ++x)
+                for (wxUint32 x = 0; x < w; ++x)
                 {
                     int mask = buf[x*2/8] << ((x*2)%8);
 
-                    uint8 val = mask & 128 ? maxValue : minValue;
+                    wxUint8 val = mask & 128 ? maxValue : minValue;
                     raster[pos] = val + (val << 8) + (val << 16)
                         + ((mask & 64 ? maxValue : minValue) << 24);
                     pos++;
@@ -479,11 +482,11 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     unsigned char *alpha = image->GetAlpha();
 
-    uint32 pos = 0;
+    wxUint32 pos = 0;
 
-    for (uint32 i = 0; i < h; i++)
+    for (wxUint32 i = 0; i < h; i++)
     {
-        for (uint32 j = 0; j < w; j++)
+        for (wxUint32 j = 0; j < w; j++)
         {
             *(ptr++) = (unsigned char)TIFFGetR(raster[pos]);
             *(ptr++) = (unsigned char)TIFFGetG(raster[pos]);
@@ -498,7 +501,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     image->SetOption(wxIMAGE_OPTION_TIFF_PHOTOMETRIC, photometric);
 
-    uint16 compression;
+    wxUint16 compression;
     /*
     Copy some baseline TIFF tags which helps when re-saving a TIFF
     to be similar to the original image.
@@ -520,7 +523,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
     // Set the resolution unit.
     wxImageResolution resUnit = wxIMAGE_RESOLUTION_NONE;
-    uint16 tiffRes;
+    wxUint16 tiffRes;
     if ( TIFFGetFieldDefaulted(tif, TIFFTAG_RESOLUTIONUNIT, &tiffRes) )
     {
         switch (tiffRes)
@@ -612,15 +615,15 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
 
     const int imageWidth = image->GetWidth();
-    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  (uint32) imageWidth);
-    TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (uint32)image->GetHeight());
-    TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-    TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,  (wxUint32) imageWidth);
+    TIFFSetField(tif, TIFFTAG_IMAGELENGTH, (wxUint32)image->GetHeight());
+    TIFFSetField(tif, TIFFTAG_ORIENTATION, (wxUint16)ORIENTATION_TOPLEFT);
+    TIFFSetField(tif, TIFFTAG_PLANARCONFIG, (wxUint16)PLANARCONFIG_CONTIG);
 
     // save the image resolution if we have it
     int xres, yres;
     const wxImageResolution res = GetResolutionFromOptions(*image, &xres, &yres);
-    uint16 tiffRes;
+    wxUint16 tiffRes;
     switch ( res )
     {
         default:
@@ -643,8 +646,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if ( tiffRes != RESUNIT_NONE )
     {
         TIFFSetField(tif, TIFFTAG_RESOLUTIONUNIT, tiffRes);
-        TIFFSetField(tif, TIFFTAG_XRESOLUTION, (float)xres);
-        TIFFSetField(tif, TIFFTAG_YRESOLUTION, (float)yres);
+        TIFFSetField(tif, TIFFTAG_XRESOLUTION, static_cast<double>(xres));
+        TIFFSetField(tif, TIFFTAG_YRESOLUTION, static_cast<double>(yres));
     }
 
 
@@ -709,22 +712,47 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     int extraSamples = hasAlpha ? 1 : 0;
 
-    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, spp + extraSamples);
-    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, bps);
-    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, photometric);
-    TIFFSetField(tif, TIFFTAG_COMPRESSION, compression);
+    TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, (wxUint16)(spp + extraSamples));
+    TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, (wxUint16)bps);
+    TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, (wxUint16)photometric);
+    TIFFSetField(tif, TIFFTAG_COMPRESSION, (wxUint16)compression);
 
     if (extraSamples)
     {
-        uint16 extra[] = { EXTRASAMPLE_UNSPECIFIED };
-        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, (long) 1, &extra);
+        wxUint16 extra[] = { EXTRASAMPLE_UNSPECIFIED };
+        TIFFSetField(tif, TIFFTAG_EXTRASAMPLES, (wxUint16) 1, &extra);
     }
 
     // scanlinesize is determined by spp+extraSamples and bps
     const tsize_t linebytes =
         (tsize_t)((imageWidth * (spp + extraSamples) * bps + 7) / 8);
 
-    unsigned char *buf;
+    unsigned char* buf = nullptr;
+
+    // Ensure that everything is cleaned up on scope exit.
+    class CleanUp
+    {
+    public:
+        CleanUp(TIFF* tif, unsigned char* buf)
+            : m_tif(tif), m_buf(buf)
+        {
+        }
+
+        ~CleanUp()
+        {
+            TIFFClose(m_tif);
+
+            if (m_buf)
+                _TIFFfree(m_buf);
+        }
+
+        CleanUp(const CleanUp&) = delete;
+        CleanUp& operator=(const CleanUp&) = delete;
+
+    private:
+        TIFF* const m_tif;
+        unsigned char* const m_buf;
+    } cleanUp(tif, buf);
 
     const bool isColouredImage = (spp > 1)
         && (photometric != PHOTOMETRIC_MINISWHITE)
@@ -741,17 +769,11 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                 wxLogError( _("TIFF: Couldn't allocate memory.") );
             }
 
-            TIFFClose( tif );
-
             return false;
         }
     }
-    else
-    {
-        buf = NULL;
-    }
 
-    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (uint32) -1));
+    TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,TIFFDefaultStripSize(tif, (wxUint32) -1));
 
     const int bitsPerPixel = (spp + extraSamples) * bps;
     const int bytesPerPixel = (bitsPerPixel + 7) / 8;
@@ -793,7 +815,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             {
                 for ( int column = 0; column < imageWidth; column++ )
                 {
-                    uint8 value = ptr[column*3 + 1];
+                    wxUint8 value = ptr[column*3 + 1];
                     if (minIsWhite)
                     {
                         value = 255 - value;
@@ -804,8 +826,8 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                     if (hasAlpha)
                     {
                         value = image->GetAlpha(column, row);
-                        buf[column*bytesPerPixel+1]
-                            = minIsWhite ? 255 - value : value;
+                        buf[column*bytesPerPixel+1] = minIsWhite ? 255 - value
+                                                                 : value;
                     }
                 }
             }
@@ -813,7 +835,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             {
                 for ( int column = 0; column < linebytes; column++ )
                 {
-                    uint8 reverse = 0;
+                    wxUint8 reverse = 0;
                     int pixelsPerByteCount = (column + 1 != linebytes)
                         ? pixelsPerByte
                         : remainingPixelCount;
@@ -823,14 +845,14 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
                             == minIsWhite )
                         {
                             // check only green as this is sufficient
-                            reverse |= (uint8) (128 >> (bp * bitsPerPixel));
+                            reverse |= (wxUint8) (128 >> (bp * bitsPerPixel));
                         }
 
                         if (hasAlpha
                             && (image->GetAlpha(column * pixelsPerByte + bp,
                                     row) <= 127) == minIsWhite)
                         {
-                            reverse |= (uint8) (64 >> (bp * bitsPerPixel));
+                            reverse |= (wxUint8) (64 >> (bp * bitsPerPixel));
                         }
                     }
 
@@ -839,16 +861,12 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
             }
         }
 
-        if ( TIFFWriteScanline(tif, buf ? buf : ptr, (uint32)row, 0) < 0 )
+        if ( TIFFWriteScanline(tif, buf ? buf : ptr, (wxUint32)row, 0) < 0 )
         {
             if (verbose)
             {
                 wxLogError( _("TIFF: Error writing image.") );
             }
-
-            TIFFClose( tif );
-            if (buf)
-                _TIFFfree(buf);
 
             return false;
         }
@@ -856,10 +874,15 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         ptr += imageWidth * 3;
     }
 
-    (void) TIFFClose(tif);
+    if (!TIFFFlush(tif))
+    {
+        if (verbose)
+        {
+            wxLogError( _("TIFF: Error flushing data.") );
+        }
 
-    if (buf)
-        _TIFFfree(buf);
+        return false;
+    }
 
     return true;
 }

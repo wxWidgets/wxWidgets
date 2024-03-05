@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -42,7 +39,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Existing pages:
@@ -94,7 +91,7 @@ class MyPage : public wxScrolledWindow
 {
 public:
     MyPage(wxNotebook *parent, int index);
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
     bool OnSave(wxString);
 private:
     int m_index;
@@ -139,7 +136,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame(NULL, -1, "SVG Demo",
+    MyFrame* frame = new MyFrame(nullptr, -1, "SVG Demo",
                                  wxDefaultPosition, wxSize(500, 400));
 
     frame->Show(true);
@@ -487,10 +484,10 @@ void MyPage::OnDraw(wxDC& dc)
             double padding = (double)txtPad / sqrt(2.0);
             txtX = 150;
             txtY = 200;
-            dc.DrawLine(txtX - padding, txtY, txtX + lenW, txtY - lenW); // top
-            dc.DrawLine(txtX + lenW, txtY - lenW, txtX - padding + lenH + lenW, txtY + (lenH - lenW));
-            dc.DrawLine(txtX - padding, txtY, txtX - padding + lenH, txtY + lenH);
-            dc.DrawLine(txtX - padding + lenH, txtY + lenH, txtX - padding + lenH + lenW, txtY + (lenH - lenW)); // bottom
+            dc.DrawLine(txtX - int(padding), txtY, txtX + int(lenW), txtY - int(lenW)); // top
+            dc.DrawLine(txtX + int(lenW), txtY - int(lenW), txtX - int(padding + lenH + lenW), txtY + int(lenH - lenW));
+            dc.DrawLine(txtX - int(padding), txtY, txtX - int(padding + lenH), txtY + int(lenH));
+            dc.DrawLine(txtX - int(padding + lenH), txtY + int(lenH), txtX - int(padding + lenH + lenW), txtY + int(lenH - lenW)); // bottom
             dc.DrawRotatedText(txtStr, txtX, txtY, 45);
             break;
     }

@@ -23,7 +23,7 @@
 class wxDocMDIParentFrame : public wxMDIParentFrame
 {
 public:
-    //@{
+    ///@{
     /**
         Constructor.
     */
@@ -35,7 +35,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
                         const wxString& name = wxFrameNameStr);
-    //@}
+    ///@}
 
     /**
         Destructor.

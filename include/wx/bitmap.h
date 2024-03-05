@@ -2,7 +2,6 @@
 // Name:        wx/bitmap.h
 // Purpose:     wxBitmap class interface
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     22.04.01
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -19,22 +18,16 @@
 #include "wx/gdicmn.h"  // for wxBitmapType
 #include "wx/colour.h"
 #include "wx/image.h"
+#include "wx/variant.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
+class WXDLLIMPEXP_FWD_CORE wxCursor;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
-class WXDLLIMPEXP_FWD_CORE wxDC;
-
-// ----------------------------------------------------------------------------
-// wxVariant support
-// ----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLIMPEXP_CORE)
-#endif
+class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // ----------------------------------------------------------------------------
 // wxMask represents the transparent area of the bitmap
@@ -71,7 +64,6 @@ protected:
 #if defined(__WXDFB__) || \
     defined(__WXMAC__) || \
     defined(__WXGTK__) || \
-    defined(__WXMOTIF__) || \
     defined(__WXX11__) || \
     defined(__WXQT__)
     #define wxUSE_BITMAP_BASE 1
@@ -97,6 +89,12 @@ class WXDLLIMPEXP_CORE wxBitmapHelpers
 public:
     // Create a new wxBitmap from the PNG data in the given buffer.
     static wxBitmap NewFromPNGData(const void* data, size_t size);
+
+    // Rescale the given bitmap to the requested size.
+    static void Rescale(wxBitmap& bmp, const wxSize& sizeNeeded);
+
+    // wxVariant support
+    wxDECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap, WXDLLIMPEXP_CORE);
 };
 
 
@@ -114,7 +112,7 @@ class WXDLLIMPEXP_CORE wxBitmapHandler : public wxObject
 {
 public:
     wxBitmapHandler() { m_type = wxBITMAP_TYPE_INVALID; }
-    virtual ~wxBitmapHandler() { }
+    virtual ~wxBitmapHandler() = default;
 
     // NOTE: the following functions should be pure virtuals, but they aren't
     //       because otherwise almost all ports would have to implement
@@ -131,7 +129,7 @@ public:
         { return false; }
 
     virtual bool SaveFile(const wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name),
-                           wxBitmapType WXUNUSED(type), const wxPalette *WXUNUSED(palette) = NULL) const
+                           wxBitmapType WXUNUSED(type), const wxPalette *WXUNUSED(palette) = nullptr) const
         { return false; }
 
     void SetName(const wxString& name)      { m_name = name; }
@@ -174,8 +172,29 @@ public:
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
-    virtual bool CreateScaled(int w, int h, int d, double logicalScale)
-        { return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d); }
+
+    // DIP size and logical size are the same thing for ports using scaling,
+    // i.e. where physical and logical sizes are different (e.g. wxGTK and
+    // wxOSX), but we want to have both sets of functions to use them in the
+    // ports where physical and logical sizes are the same (wxMSW).
+
+    bool CreateWithDIPSize(const wxSize& sz,
+                           double scale,
+                           int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(sz, scale, depth); }
+    bool CreateWithDIPSize(int width, int height,
+                           double scale,
+                           int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(wxSize(width, height), scale, depth); }
+
+    bool CreateWithLogicalSize(const wxSize& sz,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(sz, scale, depth); }
+    bool CreateWithLogicalSize(int width, int height,
+                               double scale,
+                               int depth = wxBITMAP_SCREEN_DEPTH)
+        { return DoCreate(wxSize(width, height), scale, depth); }
 
     virtual int GetHeight() const = 0;
     virtual int GetWidth() const = 0;
@@ -184,12 +203,30 @@ public:
     wxSize GetSize() const
         { return wxSize(GetWidth(), GetHeight()); }
 
-    // support for scaled bitmaps
-    virtual double GetScaleFactor() const { return 1.0; }
-    virtual double GetScaledWidth() const { return GetWidth() / GetScaleFactor(); }
-    virtual double GetScaledHeight() const { return GetHeight() / GetScaleFactor(); }
-    virtual wxSize GetScaledSize() const
-        { return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight())); }
+    // Store or return the scale factor, which determines the ratio between the
+    // bitmap physical size and its DIP size (on all platforms). By default
+    // it's just 1.
+    virtual void SetScaleFactor(double scale);
+    virtual double GetScaleFactor() const;
+
+    // This function returns the size divided by the scale factor, so that a
+    // 64x64 bitmap with a scale factor of 2 has DIP size of 32x32 everywhere.
+    wxSize GetDIPSize() const;
+
+    // These functions return the corresponding metrics divided by the scale
+    // factor on platforms with DPI-independent pixels (e.g. GTK, Mac) and just
+    // return the same thing as normal accessors elsewhere (e.g. MSW).
+    double GetLogicalWidth() const;
+    double GetLogicalHeight() const;
+    wxSize GetLogicalSize() const;
+
+    // Old synonyms for CreateWithDIPSize() and GetLogicalXXX() functions,
+    // prefer the new names in the new code.
+    bool CreateScaled(int w, int h, int d, double logicalScale)
+        { return CreateWithDIPSize(w, h, logicalScale, d); }
+    double GetScaledWidth() const { return GetLogicalWidth(); }
+    double GetScaledHeight() const { return GetLogicalHeight(); }
+    wxSize GetScaledSize() const { return GetLogicalSize(); }
 
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
@@ -204,7 +241,7 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const = 0;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = NULL) const = 0;
+                          const wxPalette *palette = nullptr) const = 0;
     virtual bool LoadFile(const wxString &name, wxBitmapType type) = 0;
 
     /*
@@ -220,8 +257,14 @@ public:
     virtual void SetPalette(const wxPalette& palette) = 0;
 #endif // wxUSE_PALETTE
 
+    // Alpha support for 32bpp bitmaps: check if it's used, request that it be
+    // used or not.
+    virtual bool HasAlpha() const;
+    virtual bool UseAlpha(bool use = true);
+    void ResetAlpha() { UseAlpha(false); }
+
     // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon) = 0;
+    bool CopyFromIcon(const wxIcon& icon);
 
     // implementation:
 #if WXWIN_COMPATIBILITY_3_0
@@ -255,6 +298,8 @@ public:
     }
 
 protected:
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth);
+
     static wxList sm_handlers;
 
     wxDECLARE_ABSTRACT_CLASS(wxBitmapBase);
@@ -268,19 +313,13 @@ protected:
 #if defined(__WXMSW__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/msw/bitmap.h"
-#elif defined(__WXMOTIF__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
-    #include "wx/x11/bitmap.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #ifdef __WINDOWS__
         #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #else
         #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #endif
     #include "wx/gtk/bitmap.h"
-#elif defined(__WXGTK__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
-    #include "wx/gtk1/bitmap.h"
 #elif defined(__WXX11__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #include "wx/x11/bitmap.h"

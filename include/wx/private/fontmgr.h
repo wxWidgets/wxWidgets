@@ -32,7 +32,7 @@ class wxFontInstanceBase
 {
 protected:
     wxFontInstanceBase(float ptSize, bool aa) : m_ptSize(ptSize), m_aa(aa) {}
-    virtual ~wxFontInstanceBase() {}
+    virtual ~wxFontInstanceBase() = default;
 
 public:
     float GetPointSize() const { return m_ptSize; }
@@ -115,7 +115,7 @@ public:
     };
 
     /// Returns true if the given face is available
-    bool HasFace(FaceType type) const { return m_faces[type] != NULL; }
+    bool HasFace(FaceType type) const { return m_faces[type] != nullptr; }
 
     /**
         Returns font face object that can be used to render font of given type.
@@ -218,7 +218,7 @@ public:
 
     const wxNativeFontInfo *GetNativeFontInfo() const { return &m_info; }
 
-    float GetFractionalPointSize() const { return m_info.pointSize; }
+    double GetFractionalPointSize() const { return m_info.pointSize; }
     wxString GetFaceName() const { return m_info.faceName; }
     wxFontFamily GetFamily() const { return m_info.family; }
     wxFontStyle GetStyle() const { return m_info.style; }
@@ -226,7 +226,7 @@ public:
     bool GetUnderlined() const { return m_info.underlined; }
     wxFontEncoding GetEncoding() const { return m_info.encoding; }
 
-    void SetFractionalPointSize(float pointSize);
+    void SetFractionalPointSize(double pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);

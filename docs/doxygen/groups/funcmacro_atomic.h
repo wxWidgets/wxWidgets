@@ -14,7 +14,7 @@ When using multi-threaded applications, it is often required to access or
 modify memory which is shared between threads. Atomic integer and pointer
 operations are an efficient way to handle this issue (another, less efficient,
 way is to use a wxMutex or wxCriticalSection). A native implementation exists
-for Windows, Linux, Solaris and OS X; for others, a wxCriticalSection is
+for Windows, Linux, Solaris and macOS; for others, a wxCriticalSection is
 used to protect the data.
 
 One particular application is reference counting (used by so-called

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_LISTBOX
 
@@ -64,7 +61,7 @@ public:
     int GetIndex() const
         { return m_parent->GetItemIndex(const_cast<wxListBoxItem*>(this)); }
 
-    wxString GetName() const wxOVERRIDE
+    wxString GetName() const override
         { return m_parent->GetString(GetIndex()); }
 
 private:
@@ -187,7 +184,18 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     }
 #endif // wxUSE_OWNER_DRAWN
 
+    // tabs stops are expanded by default on linux/GTK and macOS/Cocoa
+    msStyle |= LBS_USETABSTOPS;
+
     return msStyle;
+}
+
+void wxListBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxListBoxBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_font.IsOk() )
+        SetFont(m_font);
 }
 
 void wxListBox::OnInternalIdle()
@@ -368,7 +376,7 @@ void *wxListBox::DoGetItemClientData(unsigned int n) const
     {
         wxLogLastError(wxT("LB_GETITEMDATA"));
 
-        return NULL;
+        return nullptr;
     }
 
     return (void *)rc;
@@ -516,8 +524,8 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     // remember the state of the item
     bool wasSelected = IsSelected(n);
 
-    void *oldData = NULL;
-    wxClientData *oldObjData = NULL;
+    void *oldData = nullptr;
+    wxClientData *oldObjData = nullptr;
     if ( HasClientUntypedData() )
         oldData = GetClientData(n);
     else if ( HasClientObjectData() )
@@ -561,7 +569,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
         return;
 
 
-    WindowHDC dc(GetHwnd());
+    ClientHDC dc(GetHwnd());
     SelectInHDC selFont(dc, GetHfontOf(GetFont()));
 
     TEXTMETRIC lpTextMetric;
@@ -603,6 +611,12 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
     //else: it shouldn't change
 }
 
+bool wxListBox::MSWSetTabStops(const wxVector<int>& tabStops)
+{
+    return SendMessage(GetHwnd(), LB_SETTABSTOPS, (WPARAM)tabStops.size(),
+                       (LPARAM)(tabStops.empty() ? nullptr : &tabStops[0])) == TRUE;
+}
+
 wxSize wxListBox::DoGetBestClientSize() const
 {
     // find the widest string
@@ -611,7 +625,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     for (unsigned int i = 0; i < m_noItems; i++)
     {
         wxString str(GetString(i));
-        GetTextExtent(str, &wLine, NULL);
+        GetTextExtent(str, &wLine, nullptr);
         if ( wLine > wListbox )
             wListbox = wLine;
     }
@@ -628,7 +642,7 @@ wxSize wxListBox::DoGetBestClientSize() const
     wListbox += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
 
     // don't make the listbox too tall (limit height to 10 items) but don't
-    // make it too small neither
+    // make it too small either
     int hListbox = SendMessage(GetHwnd(), LB_GETITEMHEIGHT, 0, 0)*
                     wxMin(wxMax(m_noItems, 3), 10);
 
@@ -695,21 +709,21 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 bool wxListBox::SetFont(const wxFont &font)
 {
+    wxListBoxBase::SetFont(font);
+
     if ( HasFlag(wxLB_OWNERDRAW) )
     {
         const unsigned count = m_aItems.GetCount();
         for ( unsigned i = 0; i < count; i++ )
-            m_aItems[i]->SetFont(font);
+            m_aItems[i]->SetFont(m_font);
 
         // Non owner drawn list boxes update the item height on their own, but
         // we need to do it manually in the owner drawn case.
         wxClientDC dc(this);
-        dc.SetFont(font);
+        dc.SetFont(m_font);
         SendMessage(GetHwnd(), LB_SETITEMHEIGHT, 0,
                     dc.GetCharHeight() + 2 * LISTBOX_EXTRA_SPACE);
     }
-
-    wxListBoxBase::SetFont(font);
 
     return true;
 }
@@ -761,7 +775,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 
     MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
-    HDC hdc = CreateIC(wxT("DISPLAY"), NULL, NULL, 0);
+    HDC hdc = CreateIC(wxT("DISPLAY"), nullptr, nullptr, 0);
 
     {
         wxDCTemp dc((WXHDC)hdc);

@@ -30,7 +30,7 @@ class MyFrame : public wxFrame
 public:
 
     // Constructor.
-    MyFrame( wxWindow* parent=(wxWindow *)NULL);
+    MyFrame( wxWindow* parent=nullptr);
 
 private:
 
@@ -43,6 +43,7 @@ private:
     void OnDerivedDialogToolOrMenuCommand(wxCommandEvent& event);
     void OnControlsToolOrMenuCommand(wxCommandEvent& event);
     void OnUncenteredToolOrMenuCommand(wxCommandEvent& event);
+    void OnMultipleAccels(wxCommandEvent& event);
     void OnAuiDemoToolOrMenuCommand(wxCommandEvent& event);
     void OnObjRefToolOrMenuCommand(wxCommandEvent& event);
     void OnCustomClassToolOrMenuCommand(wxCommandEvent& event);
@@ -52,6 +53,7 @@ private:
     void OnVariants(wxCommandEvent& event);
     void OnRecursiveLoad(wxCommandEvent& event);
     void OnAnimationCtrlPlay(wxCommandEvent& event);
+    void OnInfoBarShowMessage(wxCommandEvent& event);
 
     // Any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();

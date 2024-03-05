@@ -2,7 +2,6 @@
 // Name:        wx/checklst.h
 // Purpose:     wxCheckListBox class interface
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     12.09.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -24,7 +23,7 @@
 class WXDLLIMPEXP_CORE wxCheckListBoxBase : public wxListBox
 {
 public:
-    wxCheckListBoxBase() { }
+    wxCheckListBoxBase() = default;
 
     // check list box specific methods
     virtual bool IsChecked(unsigned int item) const = 0;
@@ -39,12 +38,8 @@ public:
     #include "wx/univ/checklst.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/checklst.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/checklst.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/checklst.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/checklst.h"
+    #include "wx/gtk/checklst.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/checklst.h"
 #elif defined(__WXQT__)

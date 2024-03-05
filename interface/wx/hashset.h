@@ -6,13 +6,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxHashSet
+    wxHashSet is a legacy hash set container similar to std::unordered_set.
 
-    This is a simple, type-safe, and reasonably efficient hash set class,
-    whose interface is a subset of the interface of STL containers.
+    @note As all the other legacy @ref overview_container "container classes",
+    this class shouldn't be used in the new code.
 
-    The interface is similar to std::tr1::hash_set or std::set classes but
-    notice that, unlike std::set, the contents of a hash set is not sorted.
+    Please see https://en.cppreference.com/w/cpp/container/unordered_set for
+    the full description of this class API: in the default build, this class is
+    a thin wrapper inheriting from the standard class.
 
     Example:
     @code
@@ -80,7 +81,7 @@
         class MyKeyHash
         {
         public:
-            MyKeyHash() { }
+            MyKeyHash() = default;
 
             unsigned long operator()( const MyKey& k ) const
                 {
@@ -94,7 +95,7 @@
         class MyKeyEqual
         {
         public:
-            MyKeyEqual() { }
+            MyKeyEqual() = default;
             bool operator()( const MyKey& a, const MyKey& b ) const
                 {
                     // compare for equality
@@ -151,14 +152,14 @@ public:
     */
     wxHashSet(const wxHashSet& set);
 
-    //@{
+    ///@{
     /**
         Returns an iterator pointing at the first element of the hash set.
         Please remember that hash sets do not guarantee ordering.
     */
     const_iterator begin() const;
     iterator begin();
-    //@}
+    ///@}
 
     /**
         Removes all elements from the hash set.
@@ -176,14 +177,14 @@ public:
     */
     bool empty() const;
 
-    //@{
+    ///@{
     /**
         Returns an iterator pointing at the one-after-the-last element of the hash set.
         Please remember that hash sets do not guarantee ordering.
     */
     const_iterator end() const;
     iterator end();
-    //@}
+    ///@}
 
     /**
         Erases the element with the given key, and returns the number of elements
@@ -191,16 +192,16 @@ public:
     */
     size_type erase(const key_type& key);
 
-    //@{
+    ///@{
     /**
         Erases the element pointed to by the iterator. After the deletion
         the iterator is no longer valid and must not be used.
     */
     void erase(iterator it);
     void erase(const_iterator it);
-    //@}
+    ///@}
 
-    //@{
+    ///@{
     /**
         If an element with the given key is present, the functions returns
         an iterator pointing at that element, otherwise an invalid iterator
@@ -212,7 +213,7 @@ public:
     */
     iterator find(const key_type& key) const;
     const_iterator find(const key_type& key) const;
-    //@}
+    ///@}
 
     /**
         Inserts the given value in the hash set.

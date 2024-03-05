@@ -16,9 +16,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -77,7 +74,7 @@ wxEND_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "wxWidgets Layout Demo")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets Layout Demo")
 {
     SetIcon(wxICON(sample));
 
@@ -207,7 +204,7 @@ void MyFrame::TestFlexSizers(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
 {
-    MySizerDialog dialog( this, "Notebook Sizer Test Dialog" );
+    MyNotebookWithSizerDialog dialog( this, "Notebook Sizer Test Dialog" );
 
     dialog.ShowModal();
 }
@@ -324,7 +321,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
     wxFlexGridSizer *sizerFlex;
     wxPanel* p = new wxPanel(this, wxID_ANY);
 
-    // consttuct the first column
+    // construct the first column
     wxSizer *sizerCol1 = new wxBoxSizer(wxVERTICAL);
     sizerCol1->Add(new wxStaticText(p, wxID_ANY, "Ungrowable:"), 0, wxCENTER | wxTOP, 20);
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
@@ -396,13 +393,15 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
 }
 
 // ----------------------------------------------------------------------------
-// MySizerDialog
+// MyNotebookWithSizerDialog
 // ----------------------------------------------------------------------------
 
-MySizerDialog::MySizerDialog(wxWindow *parent, const wxString &title)
-             : wxDialog(parent, wxID_ANY, wxString(title))
+MyNotebookWithSizerDialog::MyNotebookWithSizerDialog(wxWindow *parent, const wxString &title)
+             : wxDialog(parent, wxID_ANY, wxString(title),
+                        wxDefaultPosition, wxDefaultSize,
+                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
-    // Begin with first hierarchy: a notebook at the top and
+    // Begin with first hierarchy: a notebook at the top
     // and OK button at the bottom.
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );

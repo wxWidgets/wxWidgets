@@ -2,7 +2,6 @@
 // Name:        wx/imaglist.h
 // Purpose:     wxImageList base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -12,6 +11,13 @@
 #define _WX_IMAGLIST_H_BASE_
 
 #include "wx/defs.h"
+
+#include "wx/bitmap.h"
+
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+
 
 /*
  * wxImageList is used for wxListCtrl, wxTreeCtrl. These controls refer to
@@ -41,7 +47,52 @@ enum
 #define wxIMAGELIST_DRAW_SELECTED       0x0004
 #define wxIMAGELIST_DRAW_FOCUSED        0x0008
 
-#if defined(__WXMSW__)
+// Define the interface of platform-specific wxImageList class.
+class WXDLLIMPEXP_CORE wxImageListBase : public wxObject
+{
+public:
+    /*
+        This class should provide default ctor as well as the following ctor:
+
+        wxImageList(int width, int height, bool mask = true, int initialCount = 1)
+
+        and Create() member function taking the same parameters and returning
+        bool.
+     */
+
+    virtual void Destroy() = 0;
+
+    // Returns the size the image list was created with.
+    wxSize GetSize() const { return m_size; }
+
+    virtual int GetImageCount() const = 0;
+    virtual bool GetSize(int index, int &width, int &height) const = 0;
+
+    virtual int Add(const wxBitmap& bitmap) = 0;
+    virtual int Add(const wxBitmap& bitmap, const wxBitmap& mask) = 0;
+    virtual int Add(const wxBitmap& bitmap, const wxColour& maskColour) = 0;
+
+    virtual bool Replace(int index,
+                         const wxBitmap& bitmap,
+                         const wxBitmap& mask = wxNullBitmap) = 0;
+    virtual bool Remove(int index) = 0;
+    virtual bool RemoveAll() = 0;
+
+    virtual bool Draw(int index, wxDC& dc, int x, int y,
+                      int flags = wxIMAGELIST_DRAW_NORMAL,
+                      bool solidBackground = false) = 0;
+
+    virtual wxBitmap GetBitmap(int index) const = 0;
+    virtual wxIcon GetIcon(int index) const = 0;
+
+protected:
+    // Size of a single bitmap in the list in physical pixels.
+    wxSize m_size;
+
+    bool m_useMask = false;
+};
+
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/imaglist.h"
     #define wxHAS_NATIVE_IMAGELIST
 #else

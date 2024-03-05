@@ -7,8 +7,7 @@
 # being called with this dir as the cwd, but if we generate this file
 # with configure an explicit path should be specified -- RL.
 
-WX_LINGUAS := $(shell ls *.po */*.po 2> /dev/null | sed 's/wxstd.pot//g' | sed 's/.po//g')
-WX_LINGUAS_UPDATE := $(shell ls *.po 2> /dev/null | sed 's/wxstd.pot//g' | sed 's/.po//g')
+WX_LINGUAS := $(shell ls *.po 2> /dev/null | sed 's/wxstd.pot//g' | sed 's/.po//g')
 
 # the programs we use (TODO: use configure to detect them)
 MSGFMT=msgfmt --verbose
@@ -17,26 +16,24 @@ XGETTEXT=xgettext
 XARGS=xargs
 
 # common xgettext args: C++ syntax, use the specified macro names as markers
-XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -kwxGetTranslation --add-comments=TRANSLATORS: -s -j
+XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxGETTEXT_IN_CONTEXT:1c,2 -kwxGETTEXT_IN_CONTEXT_PLURAL:1c,2,3 -kwxTRANSLATE -kwxTRANSLATE_IN_CONTEXT:1c,2 -kwxGetTranslation --add-comments=TRANSLATORS: -j
 
 # implicit rules
 %.mo: %.po
 	$(MSGFMT) -c -o $@ $<
 
 # a PO file must be updated from wxstd.pot to include new translations
-# (but not manually maintained platform-specific files like msw/it.po)
-$(foreach lang,$(WX_LINGUAS_UPDATE),$(lang).po): wxstd.pot
+$(foreach lang,$(WX_LINGUAS),$(lang).po): wxstd.pot
 
 %.po:
 	if [ -f $@ ]; then $(MSGMERGE) $@ wxstd.pot > $@.new && mv $@.new $@; else cp wxstd.pot $@; fi
 
 wxstd.pot:
 	touch $@
-	find ../include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
-	find ../src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
+	(find ../include -name "*.h"; find ../src -name "*.cpp"; find ../src -name "*.mm") | LC_COLLATE=C sort | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
 
 allpo: force-update
-	@-for t in $(WX_LINGUAS_UPDATE); do $(MAKE) $$t.po; done
+	@-for t in $(WX_LINGUAS); do $(MAKE) $$t.po; done
 
 allmo:
 	@for t in $(WX_LINGUAS); do $(MAKE) $$t.mo; done

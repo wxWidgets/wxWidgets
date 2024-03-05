@@ -1,4 +1,5 @@
 wx_root:[wxwidgets.lib]libwx_x11_univ.olb/lib
+sys$library:libpcre2/lib
 sys$library:libcairo.olb/lib
 sys$library:libpixman.olb/lib
 sys$library:libjpeg.olb/lib

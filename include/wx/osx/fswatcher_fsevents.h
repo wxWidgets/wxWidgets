@@ -15,10 +15,7 @@
 
 #if wxUSE_FSWATCHER
 
-#include <CoreServices/CoreServices.h>
 #include "wx/unix/fswatcher_kqueue.h"
-
-WX_DECLARE_STRING_HASH_MAP(FSEventStreamRef, FSEventStreamRefMap);
 
 /*
  The FSEvents watcher uses the newer FSEvents service
@@ -50,17 +47,17 @@ public:
     // reimplement adding a tree so that it does not use
     // kqueue at all
     bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                const wxString& filespec = wxEmptyString) wxOVERRIDE;
+                const wxString& filespec = wxEmptyString) override;
 
     // reimplement removing a tree so that we
     // cleanup the opened fs streams
-    bool RemoveTree(const wxFileName& path) wxOVERRIDE;
+    bool RemoveTree(const wxFileName& path) override;
 
     // reimplement remove all so that we cleanup
     // watches from kqeueue and from FSEvents
-    bool RemoveAll() wxOVERRIDE;
+    bool RemoveAll() override;
 
-    // post an file change event to the owner
+    // post a file change event to the owner
     void PostChange(const wxFileName& oldFileName,
       const wxFileName& newFileName, int event);
 
@@ -78,8 +75,10 @@ public:
 
 private:
 
-    // map of path => FSEventStreamRef
-    FSEventStreamRefMap m_streams;
+    // use the pImpl idiom to eliminate this header's dependency
+    // on CoreServices.h (and ultimately AssertMacros.h)
+    struct PrivateData;
+    PrivateData *m_pImpl;
 
 };
 

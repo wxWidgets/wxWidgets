@@ -20,8 +20,8 @@ class WXDLLIMPEXP_XRC wxChoiceXmlHandler : public wxXmlResourceHandler
 
 public:
     wxChoiceXmlHandler();
-    virtual wxObject *DoCreateResource() wxOVERRIDE;
-    virtual bool CanHandle(wxXmlNode *node) wxOVERRIDE;
+    virtual wxObject *DoCreateResource() override;
+    virtual bool CanHandle(wxXmlNode *node) override;
 
 private:
     bool m_insideBox;

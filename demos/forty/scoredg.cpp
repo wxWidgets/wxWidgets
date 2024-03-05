@@ -2,7 +2,6 @@
 // Name:        scoredg.cpp
 // Purpose:     Forty Thieves patience game
 // Author:      Chris Breeze
-// Modified by:
 // Created:     21/07/97
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:     wxWindows licence
@@ -10,10 +9,6 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -85,7 +80,7 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 {
     dc.SetFont(* m_font);
 
-    const wxChar* str = m_text;
+    const wxChar* str = m_text.c_str();
     unsigned int tab = 0;
     unsigned int tabstops[] = { 5, 100, 150, 200 };
 
@@ -106,7 +101,7 @@ void ScoreCanvas::OnDraw(wxDC& dc)
         while (*str && *str >= ' ') *dest++ = *str++;
         *dest = '\0';
 
-        dc.DrawText(text, tabstops[tab], y);
+        dc.DrawText(text, FromDIP(tabstops[tab]), y);
 
         if (*str == '\t')
         {
@@ -131,8 +126,7 @@ wxEND_EVENT_TABLE()
 
 ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     wxDialog(parent, wxID_ANY, _("Scores"),
-            wxDefaultPosition, wxSize(400, 300)),
-    m_scoreFile(file)
+            wxDefaultPosition, wxSize(400, 300))
 {
     // create grid with players
     wxArrayString players;
@@ -177,7 +171,7 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     list->EnableEditing(false);
     sz.x = wxDefaultCoord;
 #else
-    ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile, wxDefaultPosition, sz);
+    ScoreCanvas* list = new ScoreCanvas(this, file, wxDefaultPosition, sz);
 #endif
 
     list->SetInitialSize(sz);

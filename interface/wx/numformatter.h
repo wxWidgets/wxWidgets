@@ -8,10 +8,14 @@
 /**
     @class wxNumberFormatter
 
-    Helper class for formatting and parsing numbers with thousands separators.
+    Formatting and parsing numbers using the current UI locale conventions,
+    including support for using the correct decimal point character and
+    thousands separators.
 
     This class contains only static functions, so users must not create instances
     but directly call the member functions.
+
+    @see wxUILocale
 
     @since 2.9.2
 
@@ -32,7 +36,7 @@ public:
 
         /**
             If this flag is given, thousands separators will be inserted in the
-            number string representation as defined by the current locale.
+            number string representation as defined by the current UI locale.
          */
         Style_WithThousandsSep  = 0x01,
 
@@ -56,7 +60,7 @@ public:
         Returns string representation of an integer number.
 
         By default, the string will use thousands separators if appropriate for
-        the current locale. This can be avoided by passing Style_None as @a
+        the current UI locale. This can be avoided by passing Style_None as @a
         flags in which case the call to the function has exactly the same
         effect as <code>wxString::Format("%ld", val)</code>.
 
@@ -70,7 +74,11 @@ public:
             Combination of values from the Style enumeration (except for
             Style_NoTrailingZeroes which can't be used with this overload).
     */
+    ///@{
     static wxString ToString(long val, int flags = Style_WithThousandsSep);
+    static wxString ToString(long long val, int flags = Style_WithThousandsSep);
+    static wxString ToString(unsigned long long val, int flags = Style_WithThousandsSep);
+    ///@}
 
     /**
         Returns string representation of a floating point number.
@@ -85,24 +93,42 @@ public:
     static wxString
     ToString(double val, int precision, int flags = Style_WithThousandsSep);
 
+    /**
+        Format the given number using one of the floating point formats and
+        ensure that the result uses the correct decimal separator.
+
+        Prefer using ToString() if possible, i.e. if format is "%g" or "%.Nf"
+        which are supported by it directly.
+
+        @since 3.1.6
+     */
+    static wxString Format(const wxString& format, double val);
 
     /**
         Parse a string representation of a number possibly including thousands
         separators.
 
-        These functions parse number representation in the current locale. On
+        These functions parse number representation in the current UI locale. On
         success they return @true and store the result at the location pointed
         to by @a val (which can't be @NULL), otherwise @false is returned.
 
+        Note that the overload taking unsigned long long value is only
+        available since wxWidgets 3.1.5. Also, unlike wxString::ToULongLong()
+        and the standard functions such as @c strtoul(), this overload does
+        @em not accept, i.e. returns @false, for the strings starting with the
+        minus sign.
+
         @see wxString::ToLong(), wxString::ToDouble()
      */
-    //@{
+    ///@{
     static bool FromString(wxString s, long *val);
+    static bool FromString(wxString s, long long *val);
+    static bool FromString(wxString s, unsigned long long *val);
     static bool FromString(wxString s, double *val);
-    //@}
+    ///@}
 
     /**
-        Get the decimal separator for the current locale.
+        Get the decimal separator for the current UI locale.
 
         Decimal separators is always defined and we fall back to returning '.'
         in case of an error.
@@ -111,14 +137,14 @@ public:
 
     /**
         Get the thousands separator if grouping of the digits is used by the
-        current locale.
+        current UI locale.
 
         The value returned in @a sep should be only used if the function
         returns @true, otherwise no thousands separator should be used at all.
 
         @param sep
             Points to the variable receiving the thousands separator character
-            if it is used by the current locale. May be @NULL if only the
+            if it is used by the current UI locale. May be @NULL if only the
             function return value is needed.
      */
     static bool GetThousandsSeparatorIfUsed(wxChar *sep);

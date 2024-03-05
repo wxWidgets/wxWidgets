@@ -25,6 +25,7 @@
          cond="wxUSE_LIBPNG=='builtin' and USE_GUI=='1' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <include>$(INC_ZLIB)</include>
+        <define>PNG_INTEL_SSE</define>
         <cflags-borland>-w-8004</cflags-borland>
         <cflags-watcom>-wcd=124</cflags-watcom>
         <sources>
@@ -43,7 +44,20 @@
             src/png/pngwrite.c
             src/png/pngwtran.c
             src/png/pngwutil.c
+            src/png/arm/arm_init.c
+            src/png/arm/filter_neon_intrinsics.c
+            src/png/arm/palette_neon_intrinsics.c
+            src/png/intel/intel_init.c
+            src/png/intel/filter_sse2_intrinsics.c
         </sources>
+        <if cond="IS_MSVC=='0'">
+            <sources>
+                src/png/mips/filter_msa_intrinsics.c
+                src/png/mips/mips_init.c
+                src/png/powerpc/filter_vsx_intrinsics.c
+                src/png/powerpc/powerpc_init.c
+            </sources>
+        </if>
     </lib>
 
 </makefile>

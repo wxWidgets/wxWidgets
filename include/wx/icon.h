@@ -2,7 +2,6 @@
 // Name:        wx/icon.h
 // Purpose:     wxIcon base header
 // Author:      Julian Smart
-// Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -12,7 +11,7 @@
 #define _WX_ICON_H_BASE_
 
 #include "wx/iconloc.h"
-
+#include "wx/variant.h"
 
 // a more readable way to tell
 #define wxICON_SCREEN_DEPTH     (-1)
@@ -25,18 +24,14 @@
 #if defined(__WXMSW__)
   #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICO_RESOURCE
   #include "wx/msw/icon.h"
-#elif defined(__WXMOTIF__)
-  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
-  #include "wx/motif/icon.h"
-#elif defined(__WXGTK20__)
+
+  #define wxICON_DIFFERENT_FROM_BITMAP
+#elif defined(__WXGTK__)
   #ifdef __WINDOWS__
     #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_ICO_RESOURCE
   #else
     #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
   #endif
-  #include "wx/generic/icon.h"
-#elif defined(__WXGTK__)
-  #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
   #include "wx/generic/icon.h"
 #elif defined(__WXX11__)
   #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
@@ -58,15 +53,9 @@
   #include "wx/generic/icon.h"
 #endif
 
-//-----------------------------------------------------------------------------
-// wxVariant support
-//-----------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
-#include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxIcon,WXDLLIMPEXP_CORE)
+#ifndef wxICON_DIFFERENT_FROM_BITMAP
+    #define wxICON_IS_BITMAP
 #endif
-
 
 #endif
     // _WX_ICON_H_BASE_

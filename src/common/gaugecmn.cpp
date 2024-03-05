@@ -2,7 +2,6 @@
 // Name:        src/common/gaugecmn.cpp
 // Purpose:     wxGaugeBase: common to all ports methods of wxGauge
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.02.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
@@ -69,7 +65,6 @@ wxFLAGS_MEMBER(wxBORDER)
 // standard window styles
 wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
 wxFLAGS_MEMBER(wxCLIP_CHILDREN)
-wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
 wxFLAGS_MEMBER(wxWANTS_CHARS)
 wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
 wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
@@ -106,11 +101,11 @@ wxCONSTRUCTOR_6( wxGauge, wxWindow*, Parent, wxWindowID, Id, int, Range, \
 
 void wxGaugeBase::InitProgressIndicatorIfNeeded()
 {
-    m_appProgressIndicator = NULL;
+    m_appProgressIndicator = nullptr;
     if ( HasFlag(wxGA_PROGRESS) )
     {
         wxWindow* topParent = wxGetTopLevelParent(this);
-        if ( topParent != NULL )
+        if ( topParent != nullptr )
         {
             m_appProgressIndicator =
                 new wxAppProgressIndicator(topParent, GetRange());

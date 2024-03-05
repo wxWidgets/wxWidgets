@@ -2,7 +2,6 @@
 // Name:        demo.cpp
 // Purpose:     wxHelpController demo
 // Author:      Karsten Ballueder
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Karsten Ballueder, Julian Smart
 // Licence:     wxWindows licence
@@ -18,10 +17,6 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#   pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers
@@ -96,10 +91,10 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     // do some clean up here
-    virtual int OnExit() wxOVERRIDE;
+    virtual int OnExit() override;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -377,7 +372,7 @@ bool MyApp::OnInit()
 int MyApp::OnExit()
 {
     // clean up
-    delete wxHelpProvider::Set(NULL);
+    delete wxHelpProvider::Set(nullptr);
 
     return 0;
 }
@@ -388,7 +383,7 @@ int MyApp::OnExit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, 300, title, pos, size)
+       : wxFrame(nullptr, 300, title, pos, size)
 #if USE_HTML_HELP
     , m_embeddedHtmlHelp(wxHF_EMBEDDED|wxHF_DEFAULT_STYLE)
 #endif

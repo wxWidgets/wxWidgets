@@ -2,7 +2,6 @@
 // Name:        wx/generic/fontdlgg.h
 // Purpose:     wxGenericFontDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -45,7 +44,7 @@ public:
         : wxFontDialogBase(parent, data) { Init(); }
     virtual ~wxGenericFontDialog();
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
     // Internal functions
     void OnCloseWindow(wxCloseEvent& event);
@@ -61,7 +60,7 @@ public:
 
 protected:
 
-    virtual bool DoCreate(wxWindow *parent) wxOVERRIDE;
+    virtual bool DoCreate(wxWindow *parent) override;
 
 private:
 

@@ -2,7 +2,6 @@
 // Name:        wx/sstream.h
 // Purpose:     string-based streams
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-09-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -26,23 +25,23 @@ public:
     // it
     wxStringInputStream(const wxString& s);
 
-    virtual wxFileOffset GetLength() const wxOVERRIDE;
-    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+    virtual wxFileOffset GetLength() const override;
+    virtual bool IsSeekable() const override { return true; }
 
 protected:
-    virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode) wxOVERRIDE;
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
-    virtual size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode) override;
+    virtual wxFileOffset OnSysTell() const override;
+    virtual size_t OnSysRead(void *buffer, size_t size) override;
 
 private:
+    // Return the length of the string in bytes.
+    size_t GetBufferSize() const { return m_buf.length(); }
+
     // the string that was passed in the ctor
     wxString m_str;
 
     // the buffer we're reading from
-    wxCharBuffer m_buf;
-
-    // length of the buffer we're reading from
-    size_t m_len;
+    const wxCharBuffer m_buf;
 
     // position in the stream in bytes, *not* in chars
     size_t m_pos;
@@ -62,17 +61,17 @@ public:
     //
     // Note that the conversion object should have the life time greater than
     // this stream.
-    explicit wxStringOutputStream(wxString *pString = NULL,
+    explicit wxStringOutputStream(wxString *pString = nullptr,
                                   wxMBConv& conv = wxConvUTF8);
 
     // get the string containing current output
     const wxString& GetString() const { return *m_str; }
 
-    virtual bool IsSeekable() const wxOVERRIDE { return true; }
+    virtual bool IsSeekable() const override { return true; }
 
 protected:
-    virtual wxFileOffset OnSysTell() const wxOVERRIDE;
-    virtual size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
+    virtual wxFileOffset OnSysTell() const override;
+    virtual size_t OnSysWrite(const void *buffer, size_t size) override;
 
 private:
     // internal string, not used if caller provided his own string
@@ -89,10 +88,8 @@ private:
     // arbitrary 8 bit data
     wxMBConv& m_conv;
 
-#if wxUSE_UNICODE
     // unconverted data from the last call to OnSysWrite()
     wxMemoryBuffer m_unconv;
-#endif // wxUSE_UNICODE
 
     wxDECLARE_NO_COPY_CLASS(wxStringOutputStream);
 };

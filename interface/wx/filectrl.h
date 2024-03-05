@@ -71,7 +71,7 @@ public:
         Constructs the window.
 
         @param parent
-            Parent window, must not be non-@NULL.
+            Parent window, must not be non-null.
         @param id
             The identifier for the control.
         @param defaultDirectory
@@ -91,9 +91,6 @@ public:
             Initial size.
         @param name
             Control name.
-
-        @return @true if the control was successfully created or @false if
-                 creation failed.
     */
 
     wxFileCtrl(wxWindow* parent, wxWindowID id,
@@ -107,6 +104,9 @@ public:
 
     /**
         Create function for two-step construction. See wxFileCtrl() for details.
+
+        @return @true if the control was successfully created or @false if
+                 creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& defaultDirectory = wxEmptyString,

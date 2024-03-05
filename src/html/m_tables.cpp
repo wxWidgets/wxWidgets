@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
@@ -99,9 +96,9 @@ public:
     wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
     virtual ~wxHtmlTableCell();
 
-    virtual void RemoveExtraSpacing(bool top, bool bottom) wxOVERRIDE;
+    virtual void RemoveExtraSpacing(bool top, bool bottom) override;
 
-    virtual void Layout(int w) wxOVERRIDE;
+    virtual void Layout(int w) override;
 
     void AddRow(const wxHtmlTag& tag);
     void AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag);
@@ -128,9 +125,9 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
  : wxHtmlContainerCell(parent)
 {
     m_PixelScale = pixel_scale;
-    m_ColsInfo = NULL;
+    m_ColsInfo = nullptr;
     m_NumCols = m_NumRows = m_NumAllocatedRows = 0;
-    m_CellInfo = NULL;
+    m_CellInfo = nullptr;
     m_ActualCol = m_ActualRow = -1;
 
     /* scan params: */
@@ -230,7 +227,7 @@ void wxHtmlTableCell::ReallocRows(int rows)
     for (int row = m_NumRows; row < rows ; ++row)
     {
         if (m_NumCols == 0)
-            m_CellInfo[row] = NULL;
+            m_CellInfo[row] = nullptr;
         else
         {
             m_CellInfo[row] = (cellStruct*) malloc(sizeof(cellStruct) * m_NumCols);
@@ -556,7 +553,7 @@ void wxHtmlTableCell::Layout(int w)
             {
                 // Assign with, make sure not to drop below minWidth
                 if (maxWidth)
-                    m_ColsInfo[i].pixwidth = (int)(wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5);
+                    m_ColsInfo[i].pixwidth = (int)(wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5f);
                 else
                     m_ColsInfo[i].pixwidth = wpix / j;
 
@@ -568,13 +565,14 @@ void wxHtmlTableCell::Layout(int w)
                     if (!m_ColsInfo[r].width)
                         minRequired += m_ColsInfo[r].minWidth;
                 }
+                const int pixwidthPrev = m_ColsInfo[i].pixwidth;
                 m_ColsInfo[i].pixwidth = wxMax(wxMin(wpix - minRequired, m_ColsInfo[i].pixwidth), m_ColsInfo[i].minWidth);
 
                 if (maxWidth)
                 {
-                    if (m_ColsInfo[i].pixwidth > (wpix * (m_ColsInfo[i].maxWidth / (float)maxWidth) + 0.5))
+                    if (m_ColsInfo[i].pixwidth > pixwidthPrev)
                     {
-                        int diff = (int)(m_ColsInfo[i].pixwidth - (wpix * m_ColsInfo[i].maxWidth / (float)maxWidth + 0.5));
+                        int diff = m_ColsInfo[i].pixwidth - pixwidthPrev;
                         maxWidth += diff - m_ColsInfo[i].maxWidth;
                     }
                     else
@@ -712,8 +710,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
 
     TAG_HANDLER_CONSTR(TABLE)
     {
-        m_Table = NULL;
-        m_enclosingContainer = NULL;
+        m_Table = nullptr;
+        m_enclosingContainer = nullptr;
         m_tAlign.clear();
         m_rAlign.clear();
     }

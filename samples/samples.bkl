@@ -83,27 +83,26 @@
     <subproject id="text" template="sub"/>
     <subproject id="thread" template="sub"/>
     <subproject id="toolbar" template="sub"/>
+    <subproject id="treelist" template="sub"/>
     <subproject id="treectrl" template="sub"/>
     <subproject id="typetest" template="sub"/>
     <subproject id="uiaction" template="sub"/>
     <subproject id="validate" template="sub"/>
     <subproject id="vscroll" template="sub"/>
     <subproject id="webview" template="sub" cond="USE_STC=='1'"/>
+    <subproject id="webrequest" template="sub"/>
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>
     <subproject id="xrc" template="sub" cond="USE_HTML=='1' and USE_RIBBON=='1'"/>
 
     <!--
-        These samples don't always build (they need non-default wxWidgets
-        configuration or some 3rd party library being installed) so don't build
-        them by default by using "optsub" template instead of "sub" one and
-        some of them also require MSVC compiler so don't use them with the
-        other ones.
+        This sample requires MSVC and doesn't always build even with it as it
+        needs MFC being installed so don't build it by default by using
+        "optsub" template instead of the "sub" one.
      -->
     <if cond="FORMAT[:3] == 'msv'">
         <subproject id="mfc" template="optsub"/>
     </if>
-    <subproject id="memcheck" template="optsub"/>
 
 </makefile>

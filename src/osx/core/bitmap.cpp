@@ -1,8 +1,11 @@
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/core/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -17,6 +20,7 @@
     #include "wx/dcmemory.h"
     #include "wx/icon.h"
     #include "wx/image.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/metafile.h"
@@ -41,6 +45,11 @@ CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffe
 // If raw bitmap data needs to be accessed, then even the NSImage has to be
 // rendered into a CGBitmapContextRef
 
+static inline bool IsCGImageAlphaFlag(CGImageAlphaInfo alphaInfo)
+{
+    return !(alphaInfo == kCGImageAlphaNone || alphaInfo == kCGImageAlphaNoneSkipFirst || alphaInfo == kCGImageAlphaNoneSkipLast);
+}
+
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
     friend class WXDLLIMPEXP_FWD_CORE wxIcon;
@@ -55,7 +64,7 @@ public:
 
     virtual ~wxBitmapRefData();
 
-    bool IsOk() const wxOVERRIDE;
+    bool IsOk() const override;
 
     void Free();
 
@@ -65,6 +74,8 @@ public:
     int GetBytesPerRow() const;
     bool HasAlpha() const;
     WXImage GetImage() const;
+
+    void SetScaleFactor(double scale);
     double GetScaleFactor() const { return m_scaleFactor; }
 
     const void *GetRawAccess() const;
@@ -95,7 +106,7 @@ public:
 #if wxOSX_USE_ICONREF
     // caller should increase ref count if needed longer
     // than the bitmap exists
-    IconRef       GetIconRef();
+    IconRef       GetIconRef() const;
 #endif
 
     CGContextRef  GetBitmapContext() const;
@@ -120,7 +131,7 @@ private :
     bool          m_isTemplate;
 
 #if wxOSX_USE_ICONREF
-    IconRef       m_iconRef;
+    mutable IconRef       m_iconRef;
 #endif
 
     wxCFRef<CGContextRef>  m_hBitmap;
@@ -140,19 +151,19 @@ static size_t GetBestBytesPerRow( size_t rawBytes )
 
 void wxBitmapRefData::Init()
 {
-    m_nsImage = NULL;
-    m_bitmapMask = NULL ;
-    m_cgImageRef = NULL ;
+    m_nsImage = nullptr;
+    m_bitmapMask = nullptr ;
+    m_cgImageRef = nullptr ;
     m_isTemplate = false;
 
 #if wxOSX_USE_ICONREF
-    m_iconRef = NULL ;
+    m_iconRef = nullptr ;
 #endif
-    m_hBitmap = NULL ;
+    m_hBitmap = nullptr ;
 
     m_rawAccessCount = 0 ;
     m_scaleFactor = 1.0;
-    m_selectedInto = NULL;
+    m_selectedInto = nullptr;
 }
 
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy) : wxGDIRefData()
@@ -160,13 +171,15 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy) : wxGDIRefData()
     Init();
     Create(tocopy.GetWidth(), tocopy.GetHeight(), tocopy.GetDepth(), tocopy.GetScaleFactor());
 
+    // Bitmap can have both mask and alpha channel so we have to copy both form the source.
     if (tocopy.m_bitmapMask)
         m_bitmapMask = new wxMask(*tocopy.m_bitmapMask);
-    else if (tocopy.HasAlpha())
+
+    if (tocopy.HasAlpha())
         UseAlpha(true);
 
     unsigned char* dest = (unsigned char*)GetRawAccess();
-    unsigned char* source = (unsigned char*)tocopy.GetRawAccess();
+    const unsigned char* source = static_cast<const unsigned char*>(tocopy.GetRawAccess());
     size_t numbytes = GetBytesPerRow() * GetHeight();
     memcpy( dest, source, numbytes );
 }
@@ -225,31 +238,25 @@ bool wxBitmapRefData::Create( WXImage image )
 
 bool wxBitmapRefData::Create(CGImageRef image, double scale)
 {
-    if (image != NULL)
+    if (image != nullptr)
     {
-        size_t m_width = CGImageGetWidth(image);
-        size_t m_height = CGImageGetHeight(image);
+        size_t width = CGImageGetWidth(image);
+        size_t height = CGImageGetHeight(image);
 
-        m_hBitmap = NULL;
+        m_hBitmap = nullptr;
         m_scaleFactor = scale;
 
-        size_t m_bytesPerRow = GetBestBytesPerRow(m_width * 4);
-        void* data = NULL;
+        size_t bytesPerRow = GetBestBytesPerRow(width * 4);
 
         CGImageAlphaInfo alpha = CGImageGetAlphaInfo(image);
-        if (alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipFirst || alpha == kCGImageAlphaNoneSkipLast)
-        {
-            m_hBitmap = CGBitmapContextCreate((char*)data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst);
-        }
-        else
-        {
-            m_hBitmap = CGBitmapContextCreate((char*)data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
-        }
-        CGRect rect = CGRectMake(0, 0, m_width, m_height);
+        bool hasAlpha = IsCGImageAlphaFlag(alpha);
+        m_hBitmap = CGBitmapContextCreate(nullptr, width, height, 8, bytesPerRow, wxMacGetGenericRGBColorSpace(),
+                                          hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst);
+        wxCHECK_MSG(m_hBitmap, false, wxT("Unable to create CGBitmapContext context"));
+        CGRect rect = CGRectMake(0, 0, width, height);
         CGContextDrawImage(m_hBitmap, rect, image);
 
-        wxASSERT_MSG(m_hBitmap, wxT("Unable to create CGBitmapContext context"));
-        CGContextTranslateCTM(m_hBitmap, 0, m_height);
+        CGContextTranslateCTM(m_hBitmap, 0, height);
         CGContextScaleCTM(m_hBitmap, 1 * m_scaleFactor, -1 * m_scaleFactor);
     }
     return IsOk();
@@ -257,7 +264,7 @@ bool wxBitmapRefData::Create(CGImageRef image, double scale)
 
 bool wxBitmapRefData::Create(CGContextRef context)
 {
-    if ( context != NULL && CGBitmapContextGetData(context) )
+    if ( context != nullptr && CGBitmapContextGetData(context) )
     {
         m_hBitmap = context;
         // our own contexts conform to this, always.
@@ -274,17 +281,16 @@ bool wxBitmapRefData::Create(CGContextRef context)
 
 bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
 {
-    size_t m_width = wxMax(1, w);
-    size_t m_height = wxMax(1, h);
+    size_t width = wxMax(1, w);
+    size_t height = wxMax(1, h);
 
     m_scaleFactor = logicalscale;
-    m_hBitmap = NULL;
+    m_hBitmap = nullptr;
 
-    size_t m_bytesPerRow = GetBestBytesPerRow(m_width * 4);
-    void* data = NULL;
-    m_hBitmap = CGBitmapContextCreate((char*)data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst);
-    wxASSERT_MSG(m_hBitmap, wxT("Unable to create CGBitmapContext context"));
-    CGContextTranslateCTM(m_hBitmap, 0, m_height);
+    size_t bytesPerRow = GetBestBytesPerRow(width * 4);
+    m_hBitmap = CGBitmapContextCreate(nullptr, width, height, 8, bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst);
+    wxCHECK_MSG(m_hBitmap, false, wxT("Unable to create CGBitmapContext context"));
+    CGContextTranslateCTM(m_hBitmap, 0, height);
     CGContextScaleCTM(m_hBitmap, 1 * GetScaleFactor(), -1 * GetScaleFactor());
 
     return IsOk();
@@ -292,7 +298,7 @@ bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
 
 bool wxBitmapRefData::IsOk() const
 {
-    return (m_hBitmap.get() != NULL || m_nsImage != NULL);
+    return (m_hBitmap.get() != nullptr || m_nsImage != nullptr);
 }
 
 int wxBitmapRefData::GetWidth() const
@@ -302,7 +308,7 @@ int wxBitmapRefData::GetWidth() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetWidth(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).width * m_scaleFactor;
+        return int(wxOSXGetImageSize(m_nsImage).width * m_scaleFactor);
 }
 
 int wxBitmapRefData::GetHeight() const
@@ -312,7 +318,7 @@ int wxBitmapRefData::GetHeight() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetHeight(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).height * m_scaleFactor;
+        return int(wxOSXGetImageSize(m_nsImage).height * m_scaleFactor);
 }
 
 int wxBitmapRefData::GetDepth() const
@@ -324,24 +330,24 @@ int wxBitmapRefData::GetDepth() const
     else
         return 32; // a bitmap converted from an nsimage would have this depth
 }
+
 int wxBitmapRefData::GetBytesPerRow() const
 {
     wxCHECK_MSG( IsOk() , 0 , "Invalid Bitmap");
 
-    if ( m_hBitmap )
-        return (int) CGBitmapContextGetBytesPerRow(m_hBitmap);
-    else
-        return (int) GetBestBytesPerRow( GetWidth() * 4);
+    // Row stride length makes sense only for a bitmap representation
+    EnsureBitmapExists();
+    return (int) CGBitmapContextGetBytesPerRow(m_hBitmap);
 }
 
 bool wxBitmapRefData::HasAlpha() const
 {
-    wxCHECK_MSG( IsOk() , 0 , "Invalid Bitmap");
+    wxCHECK_MSG( IsOk() , false , "Invalid Bitmap");
 
     if ( m_hBitmap )
     {
         CGImageAlphaInfo alpha = CGBitmapContextGetAlphaInfo(m_hBitmap);
-        return !(alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipFirst || alpha == kCGImageAlphaNoneSkipLast);
+        return IsCGImageAlphaFlag(alpha);
     }
     else
     {
@@ -351,7 +357,7 @@ bool wxBitmapRefData::HasAlpha() const
 
 WXImage wxBitmapRefData::GetImage() const
 {
-    wxCHECK_MSG( IsOk() , 0 , "Invalid Bitmap");
+    wxCHECK_MSG( IsOk() , nullptr , "Invalid Bitmap");
 
     if ( !m_nsImage )
     {
@@ -362,6 +368,18 @@ WXImage wxBitmapRefData::GetImage() const
     return m_nsImage;
 }
 
+void wxBitmapRefData::SetScaleFactor( double scale )
+{
+    wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
+
+    if ( m_scaleFactor == scale )
+        return ;
+
+    CGContextScaleCTM( m_hBitmap, 1 / GetScaleFactor(), -1 / GetScaleFactor() );
+    m_scaleFactor = scale;
+    CGContextScaleCTM( m_hBitmap, GetScaleFactor(), -GetScaleFactor() );
+}
+
 void wxBitmapRefData::UseAlpha( bool use )
 {
     wxCHECK_RET( IsOk() , wxT("invalid bitmap") ) ;
@@ -369,11 +387,10 @@ void wxBitmapRefData::UseAlpha( bool use )
     if ( HasAlpha() == use )
         return ;
 
-    CGContextRef hBitmap = CGBitmapContextCreate(NULL, GetWidth(), GetHeight(), 8, GetBytesPerRow(), wxMacGetGenericRGBColorSpace(), use ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst );
+    CGContextRef hBitmap = CGBitmapContextCreate(nullptr, GetWidth(), GetHeight(), 8, GetBytesPerRow(), wxMacGetGenericRGBColorSpace(), use ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst );
 
     memcpy(CGBitmapContextGetData(hBitmap),CGBitmapContextGetData(m_hBitmap),GetBytesPerRow()*GetHeight());
-
-    wxASSERT_MSG( hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+    wxCHECK_RET( hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
     CGContextTranslateCTM( hBitmap, 0,  GetHeight() );
     CGContextScaleCTM( hBitmap, GetScaleFactor(), -GetScaleFactor() );
 
@@ -382,7 +399,7 @@ void wxBitmapRefData::UseAlpha( bool use )
 
 const void *wxBitmapRefData::GetRawAccess() const
 {
-    wxCHECK_MSG( IsOk(), NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr , wxT("invalid bitmap") ) ;
 
     EnsureBitmapExists();
 
@@ -397,12 +414,12 @@ void *wxBitmapRefData::GetRawAccess()
 
 void *wxBitmapRefData::BeginRawAccess()
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") ) ;
     wxASSERT( m_rawAccessCount == 0 ) ;
 
 #if wxOSX_USE_ICONREF
-    wxASSERT_MSG( m_iconRef == NULL ,
-                 wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
+    wxASSERT_MSG( m_iconRef == nullptr ,
+                 wxT("Currently, modifying bitmaps that are used in controls already is not supported") ) ;
 #endif
 
     ++m_rawAccessCount ;
@@ -420,6 +437,15 @@ void wxBitmapRefData::EndRawAccess()
     wxASSERT( m_rawAccessCount == 1 ) ;
 
     --m_rawAccessCount ;
+
+    // Update existing NSImage with new bitmap data
+    if ( m_nsImage )
+    {
+        wxCFRef<CGImageRef> image(CGBitmapContextCreateImage(m_hBitmap));
+        wxMacCocoaRelease(m_nsImage);
+        m_nsImage = wxOSXGetImageFromCGImage(image, GetScaleFactor(), IsTemplate());
+        wxMacCocoaRetain(m_nsImage);
+    }
 }
 
 bool wxBitmapRefData::HasNativeSize()
@@ -432,9 +458,9 @@ bool wxBitmapRefData::HasNativeSize()
 }
 
 #if wxOSX_USE_ICONREF
-IconRef wxBitmapRefData::GetIconRef()
+IconRef wxBitmapRefData::GetIconRef() const
 {
-    if ( m_iconRef == NULL )
+    if ( m_iconRef == nullptr )
     {
         // Create Icon Family Handle
 
@@ -511,7 +537,7 @@ IconRef wxBitmapRefData::GetIconRef()
                 bool hasAlpha = HasAlpha() ;
                 wxMask *mask = m_bitmapMask ;
                 unsigned char * sourcePtr = (unsigned char*) GetRawAccess() ;
-                unsigned char * masksourcePtr = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
+                unsigned char * masksourcePtr = mask ? (unsigned char*) mask->GetRawAccess() : nullptr ;
 
                 for ( int y = 0 ; y < h ; ++y, sourcePtr += GetBytesPerRow() , masksourcePtr += mask ? mask->GetBytesPerRow() : 0 )
                 {
@@ -529,7 +555,7 @@ IconRef wxBitmapRefData::GetIconRef()
 
                         if ( mask )
                         {
-                            a = 0xFF - *masksource++ ;
+                            a = *masksource++ ;
                         }
                         else if ( !hasAlpha )
                             a = 0xFF ;
@@ -566,10 +592,10 @@ IconRef wxBitmapRefData::GetIconRef()
             {
                 // setup the header properly
 
-                Handle data = NULL ;
-                Handle maskdata = NULL ;
-                unsigned char * maskptr = NULL ;
-                unsigned char * ptr = NULL ;
+                Handle data = nullptr ;
+                Handle maskdata = nullptr ;
+                unsigned char * maskptr = nullptr ;
+                unsigned char * ptr = nullptr ;
                 size_t datasize, masksize ;
 
                 datasize = sz * sz * 4 ;
@@ -587,7 +613,7 @@ IconRef wxBitmapRefData::GetIconRef()
                 bool hasAlpha = HasAlpha() ;
                 wxMask *mask = m_bitmapMask ;
                 unsigned char * sourcePtr = (unsigned char*) GetRawAccess() ;
-                unsigned char * masksourcePtr = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
+                unsigned char * masksourcePtr = mask ? (unsigned char*) mask->GetRawAccess() : nullptr ;
 
                 for ( int y = 0 ; y < h ; ++y, sourcePtr += GetBytesPerRow() , masksourcePtr += mask ? mask->GetBytesPerRow() : 0 )
                 {
@@ -610,7 +636,7 @@ IconRef wxBitmapRefData::GetIconRef()
                         *dest++ = b ;
 
                         if ( mask )
-                            *maskdest++ = 0xFF - *masksource++ ;
+                            *maskdest++ = *masksource++ ;
                         else if ( hasAlpha )
                             *maskdest++ = a ;
                         else
@@ -638,7 +664,7 @@ IconRef wxBitmapRefData::GetIconRef()
         HUnlock((Handle) iconFamily);
         DisposeHandle( (Handle) iconFamily ) ;
 
-        wxCHECK_MSG( err == noErr, NULL, wxT("Error when constructing icon ref") );
+        wxCHECK_MSG( err == noErr, nullptr, wxT("Error when constructing icon ref") );
     }
 
     return m_iconRef ;
@@ -650,105 +676,38 @@ CGImageRef wxBitmapRefData::CreateCGImage() const
     wxASSERT( IsOk() ) ;
     wxASSERT( m_rawAccessCount >= 0 ) ;
     CGImageRef image ;
-    if ( m_rawAccessCount > 0 || m_cgImageRef == NULL )
+    if ( m_rawAccessCount > 0 || m_cgImageRef == nullptr )
     {
-        if (m_nsImage)
+        if ( m_hBitmap )
         {
-            image = wxOSXCreateCGImageFromImage(m_nsImage);
+            image = CGBitmapContextCreateImage(m_hBitmap);
         }
         else
         {
-            if (GetDepth() != 1 && m_bitmapMask == NULL)
-            {
-#if 0
-            // in order for this code to work properly, wxMask would have to invert black and white
-            // in the native bitmap
-            if ( m_bitmapMask )
-            {
-                CGImageRef tempImage = CGBitmapContextCreateImage( m_hBitmap );
-                CGImageRef tempMask = CGBitmapContextCreateImage((CGContextRef) m_bitmapMask->GetHBITMAP() );
-                image = CGImageCreateWithMask( tempImage, tempMask );
-                CGImageRelease(tempMask);
-                CGImageRelease(tempImage);
-            }
-            else
-#endif
-                image = CGBitmapContextCreateImage(m_hBitmap);
-            }
-            else
-            {
-                size_t imageSize = GetHeight() * GetBytesPerRow();
+            image = wxOSXCreateCGImageFromImage(m_nsImage);
+        }
 
-                int w = GetWidth();
-                int h = GetHeight();
-                CGImageAlphaInfo alphaInfo = kCGImageAlphaNoneSkipFirst;
-                wxMemoryBuffer membuf;
+        if ( m_bitmapMask )
+        {
+            // First apply mask to image
+            CGImageRef imageMask = CGBitmapContextCreateImage(m_bitmapMask->GetHBITMAP());
+            CGImageRef imageMasked = CGImageCreateWithMask(image, imageMask);
 
-                if (m_bitmapMask)
-                {
-                    alphaInfo = kCGImageAlphaFirst;
-                    unsigned char* destalphastart = (unsigned char*)membuf.GetWriteBuf(imageSize);
-                    memcpy(destalphastart, GetRawAccess(), imageSize);
-                    unsigned char* sourcemaskstart = (unsigned char*)m_bitmapMask->GetRawAccess();
-                    int maskrowbytes = m_bitmapMask->GetBytesPerRow();
-                    for (int y = 0; y < h; ++y, destalphastart += GetBytesPerRow(), sourcemaskstart += maskrowbytes)
-                    {
-                        unsigned char* sourcemask = sourcemaskstart;
-                        unsigned char* destalpha = destalphastart;
-                        for (int x = 0; x < w; ++x, sourcemask += kMaskBytesPerPixel, destalpha += 4)
-                        {
-                            *destalpha = 0xFF - *sourcemask;
-                        }
-                    }
-                    membuf.UngetWriteBuf(imageSize);
-                }
-                else
-                {
-                    if (HasAlpha())
-                    {
-#if wxOSX_USE_PREMULTIPLIED_ALPHA
-                        alphaInfo = kCGImageAlphaPremultipliedFirst;
-#else
-                        alphaInfo = kCGImageAlphaFirst;
-#endif
-                    }
-                    memcpy(membuf.GetWriteBuf(imageSize), GetRawAccess(), imageSize);
-                    membuf.UngetWriteBuf(imageSize);
-                }
+            // Convert masked image to plain ARGB image without mask
+            int w = GetWidth();
+            int h = GetHeight();
+            CGContextRef hBmpAlpha = CGBitmapContextCreate(nullptr, w, h, 8, GetBytesPerRow(), wxMacGetGenericRGBColorSpace(),                   kCGImageAlphaPremultipliedFirst);
+            CGRect r = CGRectMake(0, 0, w, h);
+            CGContextDrawImage(hBmpAlpha, r, imageMasked);
+            CGContextTranslateCTM(hBmpAlpha, 0, h);
+            CGContextScaleCTM(hBmpAlpha, GetScaleFactor(), -GetScaleFactor());
 
-                CGDataProviderRef dataProvider = NULL;
-                if (GetDepth() == 1)
-                {
-                    // TODO CHECK ALIGNMENT
-                    wxMemoryBuffer maskBuf;
-                    unsigned char* maskBufData = (unsigned char*)maskBuf.GetWriteBuf(GetWidth() * GetHeight());
-                    unsigned char* bufData = (unsigned char*)membuf.GetData();
-                    // copy one color component
-                    size_t i = 0;
-                    for (int y = 0; y < GetHeight(); bufData += GetBytesPerRow(), ++y)
-                    {
-                        unsigned char* bufDataIter = bufData + 3;
-                        for (int x = 0; x < GetWidth(); bufDataIter += 4, ++x, ++i)
-                        {
-                            maskBufData[i] = *bufDataIter;
-                        }
-                    }
-                    maskBuf.UngetWriteBuf(GetWidth() * GetHeight());
+            CGImageRelease(imageMasked);
+            CGImageRelease(imageMask);
 
-                    dataProvider = wxMacCGDataProviderCreateWithMemoryBuffer(maskBuf);
-
-                    image = ::CGImageMaskCreate(w, h, 8, 8, GetWidth(), dataProvider, NULL, false);
-                }
-                else
-                {
-                    CGColorSpaceRef colorSpace = wxMacGetGenericRGBColorSpace();
-                    dataProvider = wxMacCGDataProviderCreateWithMemoryBuffer(membuf);
-                    image = ::CGImageCreate(
-                        w, h, 8, 32, GetBytesPerRow(), colorSpace, alphaInfo,
-                        dataProvider, NULL, false, kCGRenderingIntentDefault);
-                }
-                CGDataProviderRelease(dataProvider);
-            }
+            CGImageRelease(image);
+            image = CGBitmapContextCreateImage(hBmpAlpha);
+            CGContextRelease(hBmpAlpha);
         }
     }
     else
@@ -757,7 +716,7 @@ CGImageRef wxBitmapRefData::CreateCGImage() const
         CGImageRetain( image ) ;
     }
 
-    if ( m_rawAccessCount == 0 && m_cgImageRef == NULL)
+    if ( m_rawAccessCount == 0 && m_cgImageRef == nullptr)
     {
         // we keep it for later use
         m_cgImageRef = image ;
@@ -774,16 +733,16 @@ CGContextRef wxBitmapRefData::GetBitmapContext() const
 
 void wxBitmapRefData::SetSelectedInto(wxDC *dc)
 {
-    if ( dc == NULL )
+    if ( dc == nullptr )
     {
-        if ( m_selectedInto != NULL )
+        if ( m_selectedInto != nullptr )
             EndRawAccess();
     }
     else
     {
-        wxASSERT_MSG( m_selectedInto == NULL || m_selectedInto == dc, "Bitmap already selected into a different dc");
+        wxASSERT_MSG( m_selectedInto == nullptr || m_selectedInto == dc, "Bitmap already selected into a different dc");
 
-        if ( m_selectedInto == NULL )
+        if ( m_selectedInto == nullptr )
             (void) BeginRawAccess();
     }
 
@@ -800,13 +759,13 @@ void wxBitmapRefData::FreeDerivedRepresentations()
     if ( m_cgImageRef )
     {
         CGImageRelease( m_cgImageRef ) ;
-        m_cgImageRef = NULL ;
+        m_cgImageRef = nullptr ;
     }
 #if wxOSX_USE_ICONREF
     if ( m_iconRef )
     {
         ReleaseIconRef( m_iconRef ) ;
-        m_iconRef = NULL ;
+        m_iconRef = nullptr ;
     }
 #endif // wxOSX_USE_ICONREF
 }
@@ -834,11 +793,6 @@ wxBitmapRefData::~wxBitmapRefData()
 // wxBitmap
 // ----------------------------------------------------------------------------
 
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
-{
-    return Create( icon.GetImage() );
-}
-
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
     m_refData = new wxBitmapRefData( the_width , the_height , no_bits ) ;
@@ -851,7 +805,7 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
             if ( the_width % 8 )
                 linesize++;
 
-            unsigned char* linestart = (unsigned char*) bits ;
+            const unsigned char* linestart = reinterpret_cast<const unsigned char*>(bits);
             unsigned char* destptr = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
 
             for ( int y = 0 ; y < the_height ; ++y , linestart += linesize, destptr += GetBitmapData()->GetBytesPerRow() )
@@ -924,14 +878,14 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 #if WXWIN_COMPATIBILITY_3_0
 const void * wxBitmap::GetRawAccess() const
 {
-    wxCHECK_MSG( IsOk() , NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk() , nullptr , wxT("invalid bitmap") ) ;
 
     return GetBitmapData()->GetRawAccess() ;
 }
 
 void * wxBitmap::BeginRawAccess()
 {
-    wxCHECK_MSG( IsOk() , NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk() , nullptr , wxT("invalid bitmap") ) ;
 
     return GetBitmapData()->BeginRawAccess() ;
 }
@@ -946,7 +900,7 @@ void wxBitmap::EndRawAccess()
 
 CGImageRef wxBitmap::CreateCGImage() const
 {
-    wxCHECK_MSG( IsOk(), NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr , wxT("invalid bitmap") ) ;
 
     return GetBitmapData()->CreateCGImage() ;
 }
@@ -955,7 +909,7 @@ CGImageRef wxBitmap::CreateCGImage() const
 
 IconRef wxBitmap::GetIconRef() const
 {
-    wxCHECK_MSG( IsOk(), NULL , wxT("invalid bitmap") ) ;
+    wxCHECK_MSG( IsOk(), nullptr , wxT("invalid bitmap") ) ;
 
     return GetBitmapData()->GetIconRef() ;
 }
@@ -963,7 +917,7 @@ IconRef wxBitmap::GetIconRef() const
 IconRef wxBitmap::CreateIconRef() const
 {
     IconRef icon = GetIconRef();
-    __Verify_noErr(AcquireIconRef(icon));
+    wxOSX_VERIFY_NOERR(AcquireIconRef(icon));
     return icon;
 }
 #endif
@@ -972,6 +926,13 @@ wxBitmap::wxBitmap(WXImage image)
 {
     (void)Create(image);
 }
+
+#if wxOSX_USE_COCOA
+wxBitmap::wxBitmap(const wxCursor &cursor)
+{
+    m_refData = new wxBitmapRefData( wxOSXGetNSImageFromNSCursor( cursor.GetHCURSOR() ) );
+}
+#endif
 
 bool wxBitmap::Create(WXImage image)
 {
@@ -996,37 +957,40 @@ bool wxBitmap::Create(CGContextRef bitmapcontext)
     return GetBitmapData()->IsOk() ;
 }
 
-WXImage wxBitmap::GetImage() const
+WXImage wxBitmap::OSXGetImage() const
 {
-    return GetBitmapData()->GetImage();
+    return IsOk() ? GetBitmapData()->GetImage() : nullptr;
 }
 
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {
-    wxCHECK_MSG( IsOk() &&
-                (rect.x >= 0) && (rect.y >= 0) &&
-                (rect.x+rect.width <= GetWidth()) &&
-                (rect.y+rect.height <= GetHeight()),
-                wxNullBitmap, wxT("invalid bitmap or bitmap region") );
+    wxCHECK_MSG( IsOk(), wxNullBitmap, wxT("invalid bitmap") );
+
+    wxCHECK_MSG((rect.x >= 0) && (rect.y >= 0) &&
+                (rect.x+rect.width <= GetLogicalWidth()) &&
+                (rect.y+rect.height <= GetLogicalHeight()),
+                wxNullBitmap, wxT("invalid bitmap region") );
 
     wxBitmap ret;
     double scale = GetScaleFactor();
-    ret.CreateScaled( rect.width, rect.height, GetDepth(), scale );
+    ret.CreateWithLogicalSize( rect.GetSize(), scale, GetDepth() );
     wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
+    if ( HasAlpha() )
+        ret.UseAlpha() ;
 
-    int destwidth = rect.width*scale ;
-    int destheight = rect.height*scale ;
+    int destwidth = int(rect.width * scale);
+    int destheight = int(rect.height * scale);
 
     {
-        unsigned char *sourcedata = (unsigned char*) GetBitmapData()->GetRawAccess() ;
+        const unsigned char* sourcedata = static_cast<const unsigned char*>(GetBitmapData()->GetRawAccess());
         unsigned char *destdata = (unsigned char*) ret.GetBitmapData()->BeginRawAccess() ;
-        wxASSERT((sourcedata != NULL) && (destdata != NULL));
+        wxASSERT((sourcedata != nullptr) && (destdata != nullptr));
 
-        if ( (sourcedata != NULL) && (destdata != NULL) )
+        if ( (sourcedata != nullptr) && (destdata != nullptr) )
         {
             int sourcelinesize = GetBitmapData()->GetBytesPerRow() ;
             int destlinesize = ret.GetBitmapData()->GetBytesPerRow() ;
-            unsigned char* source = sourcedata + size_t(rect.x * scale) * 4 + size_t(rect.y * scale) * sourcelinesize;
+            const unsigned char* source = sourcedata + size_t(rect.x * scale) * 4 + size_t(rect.y * scale) * sourcelinesize;
             unsigned char* dest = destdata;
 
             for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
@@ -1048,9 +1012,9 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 
         unsigned char *source = (unsigned char *) GetBitmapData()->m_bitmapMask->GetRawAccess() ;
         unsigned char *destdata = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
-        wxASSERT( (source != NULL) && (destdata != NULL) ) ;
+        wxASSERT( (source != nullptr) && (destdata != nullptr) ) ;
 
-        if ( (source != NULL) && (destdata != NULL) )
+        if ( (source != nullptr) && (destdata != nullptr) )
         {
             source += rect.x * kMaskBytesPerPixel + rect.y * sourcelinesize ;
             unsigned char *dest = destdata ;
@@ -1066,8 +1030,6 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         mask->OSXCreate( maskbuf , destwidth , destheight , rowBytes );
         ret.SetMask(mask) ;
     }
-    else if ( HasAlpha() )
-        ret.UseAlpha() ;
 
     return ret;
 }
@@ -1089,17 +1051,18 @@ bool wxBitmap::Create(int w, int h, int d)
 bool wxBitmap::Create(int w, int h, const wxDC& dc)
 {
     double factor = dc.GetContentScaleFactor();
-    return CreateScaled(w,h,wxBITMAP_SCREEN_DEPTH, factor);
+    return CreateWithDIPSize(w, h, factor);
 }
 
-bool wxBitmap::CreateScaled(int w, int h, int d, double logicalScale)
+bool wxBitmap::DoCreate(const wxSize& size, double scale, int d)
 {
     UnRef();
 
     if ( d < 0 )
         d = wxDisplayDepth() ;
 
-    m_refData = new wxBitmapRefData( w*logicalScale , h*logicalScale , d, logicalScale );
+    const wxSize sizePhys = size*scale;
+    m_refData = new wxBitmapRefData( sizePhys.x, sizePhys.y, d, scale );
 
     return GetBitmapData()->IsOk() ;
 }
@@ -1133,16 +1096,17 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
 
         if  ( type == wxBITMAP_TYPE_PNG )
         {
-            if ( wxOSXGetMainScreenContentScaleFactor() > 1.9 )
+            const int contentScaleFactor = wxRound(wxOSXGetMainScreenContentScaleFactor());
+            if ( contentScaleFactor > 1 )
             {
                 wxFileName fn(filename);
                 fn.MakeAbsolute();
-                fn.SetName(fn.GetName()+"@2x");
+                fn.SetName(fn.GetName()+wxString::Format("@%dx",contentScaleFactor));
 
                 if ( fn.Exists() )
                 {
                     fname = fn.GetFullPath();
-                    scale = 2.0;
+                    scale = contentScaleFactor;
                 }
             }
         }
@@ -1170,7 +1134,7 @@ bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height
 
     wxBitmapHandler *handler = FindHandler(type);
 
-    if ( handler == NULL )
+    if ( handler == nullptr )
     {
         wxLogWarning(wxT("no bitmap handler for type %d defined."), type);
 
@@ -1182,7 +1146,7 @@ bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height
 
 #if wxUSE_IMAGE
 
-wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale)
 {
     wxCHECK_RET( image.IsOk(), wxT("invalid image") );
 
@@ -1198,62 +1162,99 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
 
     if ( bitmapRefData->IsOk())
     {
-        // Create picture
+        bool hasMask = image.HasMask();
+        bool hasAlpha = image.HasAlpha();
 
-        bool hasAlpha = false ;
-
-        if ( image.HasMask() )
-        {
-            // takes precedence, don't mix with alpha info
-        }
-        else
-        {
-            hasAlpha = image.HasAlpha() ;
-        }
-
+        // convert this bitmap to use its alpha channel
         if ( hasAlpha )
-            UseAlpha() ;
+            UseAlpha();
 
-        unsigned char* destinationstart = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
-        unsigned char* data = image.GetData();
-        if ( destinationstart != NULL && data != NULL )
+        const unsigned char *sourcePixels = image.GetData();
+        unsigned char* destinationPixels = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
+
+        if ( destinationPixels != nullptr && sourcePixels != nullptr )
         {
-            const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
-            for (int y = 0; y < height; destinationstart += GetBitmapData()->GetBytesPerRow(), y++)
+            const unsigned char *sourceAlpha = hasAlpha ? image.GetAlpha() : nullptr ;
+
+            const unsigned char mr = hasMask ? image.GetMaskRed() : 0;
+            const unsigned char mg = hasMask ? image.GetMaskGreen() : 0;
+            const unsigned char mb = hasMask ? image.GetMaskBlue() : 0;
+
+            unsigned char* destinationRowStart = destinationPixels;
+
+            wxMemoryBuffer maskbuf ;
+            int maskRowBytes = GetBestBytesPerRow( width * kMaskBytesPerPixel );
+            size_t maskbufsize = maskRowBytes * height ;
+
+            unsigned char *destinationMask = nullptr;
+            if ( hasMask )
+                destinationMask = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
+
+            unsigned char* destinationMaskRowStart = destinationMask;
+
+            for (int y = 0; y < height;
+                destinationRowStart += GetBitmapData()->GetBytesPerRow(),
+                destinationMaskRowStart += hasMask ? maskRowBytes : 0,
+                y++)
             {
-                unsigned char * destination = destinationstart;
+                unsigned char * destination = destinationRowStart;
+                unsigned char * destinationMask = destinationMaskRowStart;
                 for (int x = 0; x < width; x++)
                 {
+                    if ( hasMask )
+                    {
+                        bool isMasked = sourcePixels[0] == mr && sourcePixels[1] == mg && sourcePixels[2] == mb;
+                        *destinationMask++ = isMasked ? wxIMAGE_ALPHA_TRANSPARENT : wxIMAGE_ALPHA_OPAQUE ;
+                    }
+
                     if ( hasAlpha )
                     {
-                        const unsigned char a = *alpha++;
-                        *destination++ = a ;
+                        unsigned char a = *sourceAlpha++;
 
-    #if wxOSX_USE_PREMULTIPLIED_ALPHA
-                        *destination++ = ((*data++) * a + 127) / 255 ;
-                        *destination++ = ((*data++) * a + 127) / 255 ;
-                        *destination++ = ((*data++) * a + 127) / 255 ;
-    #else
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
-    #endif
+                        *destination++ = a ;
+#if wxOSX_USE_PREMULTIPLIED_ALPHA
+                        *destination++ = ((*sourcePixels++) * a + 127) / 255 ;
+                        *destination++ = ((*sourcePixels++) * a + 127) / 255 ;
+                        *destination++ = ((*sourcePixels++) * a + 127) / 255 ;
+#else
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+#endif
                     }
                     else
                     {
-                        *destination++ = 0xFF ;
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
-                        *destination++ = *data++ ;
+                        *destination++ = wxIMAGE_ALPHA_OPAQUE ;
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+                        *destination++ = *sourcePixels++ ;
+
                     }
                 }
             }
-
             GetBitmapData()->EndRawAccess() ;
+
+            if ( hasMask )
+            {
+                maskbuf.UngetWriteBuf( maskbufsize ) ;
+
+                wxMask* mask = new wxMask();
+                mask->OSXCreate(maskbuf, width , height , maskRowBytes ) ;
+
+                SetMask( mask );
+            }
         }
-        if ( image.HasMask() )
-            SetMask( new wxMask( *this , wxColour( image.GetMaskRed() , image.GetMaskGreen() , image.GetMaskBlue() ) ) ) ;
     }
+}
+
+wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
+{
+    InitFromImage(image, depth, scale);
+}
+
+wxBitmap::wxBitmap(const wxImage& image, const wxDC& dc)
+{
+    InitFromImage(image, -1, dc.GetContentScaleFactor());
 }
 
 wxImage wxBitmap::ConvertToImage() const
@@ -1265,7 +1266,7 @@ wxImage wxBitmap::ConvertToImage() const
     // this call may trigger a conversion from platform image to bitmap, issue it
     // before any measurements are taken, multi-resolution platform images may be
     // rendered incorrectly otherwise
-    unsigned char* sourcestart = (unsigned char*) GetBitmapData()->GetRawAccess() ;
+    const unsigned char* sourcestart = static_cast<const unsigned char*>(GetBitmapData()->GetRawAccess());
 
     // create an wxImage object
     int width = GetWidth();
@@ -1278,8 +1279,8 @@ wxImage wxBitmap::ConvertToImage() const
     bool hasAlpha = false ;
     bool hasMask = false ;
     int maskBytesPerRow = 0 ;
-    unsigned char *alpha = NULL ;
-    unsigned char *mask = NULL ;
+    unsigned char *alpha = nullptr ;
+    unsigned char *mask = nullptr ;
 
     if ( HasAlpha() )
         hasAlpha = true ;
@@ -1310,7 +1311,7 @@ wxImage wxBitmap::ConvertToImage() const
     for (int yy = 0; yy < height; yy++ , sourcestart += GetBitmapData()->GetBytesPerRow() , mask += maskBytesPerRow )
     {
         unsigned char * maskp = mask ;
-        const wxUint32 * source = (wxUint32*)sourcestart;
+        const wxUint32* source = reinterpret_cast<const wxUint32*>(sourcestart);
 
         for (int xx = 0; xx < width; xx++)
         {
@@ -1327,23 +1328,26 @@ wxImage wxBitmap::ConvertToImage() const
             r = ((color&0x0000FF00) >> 8) ;
             a = (color&0x000000FF);
 #endif
+            bool isMasked = false;
             if ( hasMask )
             {
-                if ( *maskp++ == 0xFF )
+                if ( *maskp++ == 0x00 )
                 {
                     r = MASK_RED ;
                     g = MASK_GREEN ;
                     b = MASK_BLUE ;
+                    isMasked = true;
                 }
                 else if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                     b = MASK_BLUE_REPLACEMENT ;
             }
-            else if ( hasAlpha )
+
+            if ( hasAlpha )
             {
                 *alpha++ = a ;
 #if wxOSX_USE_PREMULTIPLIED_ALPHA
                 // this must be non-premultiplied data
-                if ( a != 0xFF && a!= 0 )
+                if ( !isMasked && a != 0xFF && a!= 0 )
                 {
                     r = r * 255 / a;
                     g = g * 255 / a;
@@ -1405,6 +1409,18 @@ int wxBitmap::GetWidth() const
    return GetBitmapData()->GetWidth() ;
 }
 
+void wxBitmap::SetScaleFactor(double scale)
+{
+    wxCHECK_RET( IsOk(), wxT("invalid bitmap") );
+
+    if ( GetBitmapData()->GetScaleFactor() != scale )
+    {
+        AllocExclusive();
+
+        GetBitmapData()->SetScaleFactor(scale) ;
+    }
+}
+
 double wxBitmap::GetScaleFactor() const
 {
     wxCHECK_MSG( IsOk(), -1, wxT("invalid bitmap") );
@@ -1421,7 +1437,7 @@ int wxBitmap::GetDepth() const
 
 wxMask *wxBitmap::GetMask() const
 {
-   wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
+   wxCHECK_MSG( IsOk(), nullptr, wxT("invalid bitmap") );
 
    return GetBitmapData()->m_bitmapMask;
 }
@@ -1434,19 +1450,19 @@ bool wxBitmap::HasAlpha() const
 }
 
 #if WXWIN_COMPATIBILITY_3_0
-void wxBitmap::SetWidth(int w)
+void wxBitmap::SetWidth(int WXUNUSED_UNLESS_DEBUG(w))
 {
     AllocExclusive();
     wxASSERT_MSG( GetWidth() == w, "Changing the bitmap width is not supported");
 }
 
-void wxBitmap::SetHeight(int h)
+void wxBitmap::SetHeight(int WXUNUSED_UNLESS_DEBUG(h))
 {
     AllocExclusive();
     wxASSERT_MSG( GetHeight() == h, "Changing the bitmap height is not supported");
 }
 
-void wxBitmap::SetDepth(int d)
+void wxBitmap::SetDepth(int WXUNUSED_UNLESS_DEBUG(d))
 {
     AllocExclusive();
     wxASSERT_MSG( d == -1 || GetDepth() == d, "Changing the bitmap depth is not supported");
@@ -1456,7 +1472,7 @@ void wxBitmap::SetDepth(int d)
 #if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
-   wxCHECK_MSG( IsOk(), NULL, wxT("Invalid bitmap  GetPalette()") );
+   wxCHECK_MSG( IsOk(), nullptr, wxT("Invalid bitmap  GetPalette()") );
 
    return & const_cast<wxBitmapRefData*>(GetBitmapData())->m_bitmapPalette;
 }
@@ -1527,7 +1543,7 @@ void wxMask::Init()
 
 void *wxMask::GetRawAccess() const
 {
-    wxCHECK_MSG( m_maskBitmap, NULL , wxT("invalid mask") ) ;
+    wxCHECK_MSG( m_maskBitmap, nullptr , wxT("invalid mask") ) ;
     return CGBitmapContextGetData(m_maskBitmap);
 }
 
@@ -1557,7 +1573,7 @@ void wxMask::DoCreateMaskBitmap(int width, int height, int bytesPerRow)
    if ( bytesPerRow < 0 )
         bytesPerRow = GetBestBytesPerRow(width * kMaskBytesPerPixel);
 
-    m_maskBitmap = CGBitmapContextCreate(NULL, width, height, kMaskBytesPerPixel * 8, bytesPerRow, colorspace,
+    m_maskBitmap = CGBitmapContextCreate(nullptr, width, height, kMaskBytesPerPixel * 8, bytesPerRow, colorspace,
         kCGImageAlphaNone);
     wxASSERT_MSG(m_maskBitmap, wxT("Unable to create CGBitmapContext context"));
 }
@@ -1568,7 +1584,7 @@ void wxMask::RealizeNative()
     if ( m_maskBitmap )
     {
         CGContextRelease( (CGContextRef) m_maskBitmap );
-       m_maskBitmap = NULL ;
+       m_maskBitmap = nullptr ;
     }
 
     CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
@@ -1583,27 +1599,31 @@ void wxMask::RealizeNative()
 #endif
 }
 
-// Create a mask from a mono bitmap (copies the bitmap).
-
+// Construct a mask from a 8 bpp memory buffer
 bool wxMask::OSXCreate(const wxMemoryBuffer& data,int width , int height , int bytesPerRow)
 {
-    wxASSERT( data.GetDataLen() == (size_t)(height * bytesPerRow) ) ;
+    size_t dataLen = data.GetDataLen();
+    wxCHECK( dataLen == (size_t)(height * bytesPerRow), false );
+    const void* srcdata = data.GetData();
+    wxCHECK( srcdata, false );
 
     DoCreateMaskBitmap(width, height, bytesPerRow);
+    void* destdata = GetRawAccess();
+    wxCHECK( destdata, false );
 
-    RealizeNative() ;
-
-    return true ;
+    memcpy(destdata, srcdata, dataLen);
+    return true;
 }
 
+// Create a mask from a mono bitmap (copies the bitmap).
 bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 {
-    int m_width, m_height, m_bytesPerRow;
-    m_width = bitmap.GetWidth() ;
-    m_height = bitmap.GetHeight() ;
+    int width, height, bytesPerRow;
+    width = bitmap.GetWidth() ;
+    height = bitmap.GetHeight() ;
 
-    DoCreateMaskBitmap(m_width, m_height);
-    m_bytesPerRow = GetBytesPerRow();
+    DoCreateMaskBitmap(width, height);
+    bytesPerRow = GetBytesPerRow();
 
     // pixel access needs a non-const bitmap currently
     wxBitmap bmp(bitmap);
@@ -1612,19 +1632,18 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
     wxNativePixelData::Iterator p(data);
 
     unsigned char * destdatabase = (unsigned char*) GetRawAccess();
-    wxASSERT( destdatabase != NULL ) ;
-    if ( destdatabase != NULL)
+    wxASSERT( destdatabase != nullptr ) ;
+    if ( destdatabase != nullptr)
     {
-        for ( int y = 0 ; y < m_height; ++y,  destdatabase += m_bytesPerRow )
+        for ( int y = 0 ; y < height; ++y,  destdatabase += bytesPerRow )
         {
             wxNativePixelData::Iterator rowStart = p;
             unsigned char *destdata = destdatabase ;
-            for ( int x = 0 ; x < m_width ; ++x, ++p )
+            for ( int x = 0 ; x < width ; ++x, ++p )
             {
-                if ( ( p.Red() + p.Green() + p.Blue() ) > 0x10 )
-                    *destdata++ = 0xFF ;
-                else
-                    *destdata++ = 0x00 ;
+                int v = p.Red() + p.Green() + p.Blue();
+                wxASSERT_MSG( v == 0 || v == 3*0xFF, "Non-monochrome bitmap supplied" );
+                *destdata++ = v < (3 * 0xFF) / 2 ? 0 : 0xFF;
             }
             p = rowStart;
             p.OffsetY(data, 1);
@@ -1636,13 +1655,13 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 
 bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 {
-    int m_width, m_height, m_bytesPerRow;
+    int width, height, bytesPerRow;
 
-    m_width = bitmap.GetWidth() ;
-    m_height = bitmap.GetHeight() ;
+    width = bitmap.GetWidth() ;
+    height = bitmap.GetHeight() ;
 
-    DoCreateMaskBitmap(m_width, m_height);
-    m_bytesPerRow = GetBytesPerRow();
+    DoCreateMaskBitmap(width, height);
+    bytesPerRow = GetBytesPerRow();
 
     // pixel access needs a non-const bitmap currently
     wxBitmap bmp(bitmap);
@@ -1651,19 +1670,19 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
     wxNativePixelData::Iterator p(data);
 
     unsigned char * destdatabase = (unsigned char*) GetRawAccess();
-    wxASSERT( destdatabase != NULL ) ;
-    if ( destdatabase != NULL)
+    wxASSERT( destdatabase != nullptr ) ;
+    if ( destdatabase != nullptr)
     {
-        for ( int y = 0 ; y < m_height; ++y,  destdatabase += m_bytesPerRow )
+        for ( int y = 0 ; y < height; ++y,  destdatabase += bytesPerRow )
         {
             wxNativePixelData::Iterator rowStart = p;
             unsigned char *destdata = destdatabase ;
-            for ( int x = 0 ; x < m_width ; ++x, ++p )
+            for ( int x = 0 ; x < width ; ++x, ++p )
             {
                 if ( wxColour( p.Red(), p.Green(), p.Blue() ) == colour )
-                    *destdata++ = 0xFF ;
+                    *destdata++ = 0x0 ;
                 else
-                    *destdata++ = 0x00 ;
+                    *destdata++ = 0xFF ;
            }
             p = rowStart;
             p.OffsetY(data, 1);
@@ -1677,30 +1696,28 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 
 wxBitmap wxMask::GetBitmap() const
 {
-    int m_width, m_height, m_bytesPerRow;
-    m_width = GetWidth();
-    m_height = GetHeight();
-    m_bytesPerRow = GetBytesPerRow();
+    int width, height, bytesPerRow;
+    width = GetWidth();
+    height = GetHeight();
+    bytesPerRow = GetBytesPerRow();
 
 
-    wxBitmap bitmap(m_width, m_height, 32);
+    wxBitmap bitmap(width, height, 32);
     wxNativePixelData data(bitmap);
 
     wxNativePixelData::Iterator p(data);
 
     const unsigned char* srcbase = static_cast<unsigned char*>(GetRawAccess());
 
-    for (int y = 0; y < m_height; ++y, srcbase += m_bytesPerRow)
+    for (int y = 0; y < height; ++y, srcbase += bytesPerRow)
     {
         wxNativePixelData::Iterator rowStart = p;
         const unsigned char* src = srcbase;
-        for (int x = 0; x < m_width; ++x, ++p, ++src)
+        for (int x = 0; x < width; ++x, ++p, ++src)
         {
             const unsigned char byte = *src;
-            p.Alpha() = 0xff;
-            p.Red() = byte;
-            p.Green() = byte;
-            p.Blue() = byte;
+            wxASSERT( byte == 0 || byte == 0xFF );
+            p.Red() = p.Green() = p.Blue() = byte;
         }
         p = rowStart;
         p.OffsetY(data, 1);
@@ -1737,7 +1754,7 @@ public:
                           const wxString& name,
                           wxBitmapType type,
                           int desiredWidth,
-                          int desiredHeight) wxOVERRIDE;
+                          int desiredHeight) override;
 };
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxBundleResourceHandler, wxBitmapHandler);
@@ -1774,6 +1791,44 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler);
 
 #if wxOSX_USE_COCOA
 
+class WXDLLEXPORT wxICNSHandler: public wxBitmapHandler
+{
+    wxDECLARE_DYNAMIC_CLASS(wxICNSHandler);
+
+public:
+    inline wxICNSHandler()
+    {
+        SetName(wxT("icns file"));
+        SetExtension("icns");
+        SetType(wxBITMAP_TYPE_ICON);
+    }
+
+    bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          int desiredWidth,
+                          int desiredHeight) override
+    {
+        wxCFRef<CFURLRef> iconURL;
+        wxCFStringRef filePath(name);
+
+        iconURL.reset(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, filePath, kCFURLPOSIXPathStyle, false));
+
+        WXImage img = wxOSXGetNSImageFromCFURL(iconURL);
+
+        if ( img )
+        {
+            bitmap->Create(img);
+            return true;
+        }
+
+        return wxBitmapHandler::LoadFile( bitmap, name, type, desiredWidth, desiredHeight);
+    }
+
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxICNSHandler, wxBitmapHandler);
+
 class WXDLLEXPORT wxICNSResourceHandler: public wxBundleResourceHandler
 {
     wxDECLARE_DYNAMIC_CLASS(wxICNSResourceHandler);
@@ -1790,7 +1845,7 @@ public:
                           const wxString& name,
                           wxBitmapType type,
                           int desiredWidth,
-                          int desiredHeight) wxOVERRIDE;
+                          int desiredHeight) override;
 
 };
 
@@ -1885,16 +1940,30 @@ bool wxICNSResourceHandler::LoadFile(wxBitmap *bitmap,
         theId = kHelpFolderIcon;
     }
 
+    WXImage img = nullptr;
+
     if ( theId != 0 )
     {
-        IconRef iconRef = NULL ;
-        __Verify_noErr(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
-        if ( iconRef )
-        {
-            WXImage img = wxOSXGetNSImageFromIconRef(iconRef);
-            bitmap->Create(img);
-            return true;
-        }
+        IconRef iconRef = nullptr ;
+        
+        wxOSX_VERIFY_NOERR(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
+        img = wxOSXGetNSImageFromIconRef(iconRef);
+    }
+    else
+    {
+        wxCFRef<CFURLRef> iconURL;
+        wxCFStringRef resname(resourceName);
+        wxCFStringRef restype(GetExtension().Lower());
+
+        iconURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, nullptr));
+        
+        img = wxOSXGetNSImageFromCFURL(iconURL);
+    }
+    
+    if ( img )
+    {
+        bitmap->Create(img);
+        return true;
     }
 
     return wxBundleResourceHandler::LoadFile( bitmap, resourceName, type, desiredWidth, desiredHeight);
@@ -1909,41 +1978,43 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
                                      int WXUNUSED(desiredHeight))
 {
     wxString ext = GetExtension().Lower();
-    wxCFStringRef resname(name);
-    wxCFStringRef resname2x(name+"@2x");
     wxCFStringRef restype(ext);
     double scale = 1.0;
     
     wxCFRef<CFURLRef> imageURL;
     
-    if ( wxOSXGetMainScreenContentScaleFactor() > 1.9 )
+    const int contentScaleFactor = wxRound(wxOSXGetMainScreenContentScaleFactor());
+    if ( contentScaleFactor > 1 )
     {
-        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname2x, restype, NULL));
-        scale = 2.0;
+        wxCFStringRef resname(wxString::Format("%s@%dx", name, contentScaleFactor));
+        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, nullptr));
+        scale = contentScaleFactor;
     }
     
-    if ( imageURL.get() == NULL )
+    if ( imageURL.get() == nullptr )
     {
-        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
+        wxCFStringRef resname(name);
+        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, nullptr));
         scale = 1.0;
     }
     
-    if ( imageURL.get() != NULL )
+    if ( imageURL.get() != nullptr )
     {
         // Create the data provider object
         wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithURL (imageURL) );
-        CGImageRef image = NULL;
+        CGImageRef image = nullptr;
         
         if ( ext == "jpeg" )
-            image = CGImageCreateWithJPEGDataProvider (provider, NULL, true,
+            image = CGImageCreateWithJPEGDataProvider (provider, nullptr, true,
                                                    kCGRenderingIntentDefault);
         else if ( ext == "png" )
-            image = CGImageCreateWithPNGDataProvider (provider, NULL, true,
+            image = CGImageCreateWithPNGDataProvider (provider, nullptr, true,
                                                        kCGRenderingIntentDefault);
-        if ( image != NULL )
+        if ( image != nullptr )
         {
             bitmap->Create(image,scale);
             CGImageRelease(image);
+            return true;
         }
     }
         
@@ -1954,9 +2025,9 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
 wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
 {
     wxCFRef<CGDataProviderRef>
-        provider(CGDataProviderCreateWithData(NULL, data, size, NULL) );
+        provider(CGDataProviderCreateWithData(nullptr, data, size, nullptr) );
     wxCFRef<CGImageRef>
-        image(CGImageCreateWithPNGDataProvider(provider, NULL, true,
+        image(CGImageCreateWithPNGDataProvider(provider, nullptr, true,
                                                 kCGRenderingIntentDefault));
 
     return wxBitmap(image);
@@ -1966,6 +2037,7 @@ void wxBitmap::InitStandardHandlers()
 {
 #if wxOSX_USE_COCOA_OR_CARBON
     // no icns on iOS
+    AddHandler( new wxICNSHandler );
     AddHandler( new wxICNSResourceHandler ) ;
 #endif
     AddHandler( new wxPNGResourceHandler );
@@ -1980,10 +2052,10 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
     if ( !IsOk() )
         // no bitmap, no data (raw or otherwise)
-        return NULL;
+        return nullptr;
 
     if ( bpp != GetDepth() )
-        return NULL;
+        return nullptr;
 
     data.m_width = GetWidth() ;
     data.m_height = GetHeight() ;
@@ -1997,11 +2069,13 @@ void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(dataBase))
     GetBitmapData()->EndRawAccess() ;
 }
 
-void wxBitmap::UseAlpha(bool use )
+bool wxBitmap::UseAlpha(bool use)
 {
     // remember that we are using alpha channel:
     // we'll need to create a proper mask in UngetRawData()
     GetBitmapData()->UseAlpha( use );
+
+    return true;
 }
 
 void wxBitmap::SetSelectedInto(wxDC *dc)

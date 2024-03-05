@@ -53,7 +53,7 @@ bool wxFrame::Create( wxWindow *parent,
 
 void wxFrame::DoGetClientSize( int *width, int *height ) const
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    wxASSERT_MSG( (m_widget != nullptr), wxT("invalid frame") );
 
     wxFrameBase::DoGetClientSize(width, height);
 
@@ -67,7 +67,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         if (m_frameMenuBar && m_frameMenuBar->IsShown())
         {
             int h;
-            gtk_widget_get_preferred_height(m_frameMenuBar->m_widget, NULL, &h);
+            gtk_widget_get_preferred_height(m_frameMenuBar->m_widget, nullptr, &h);
             *height -= h;
         }
 #endif // wxUSE_MENUS_NATIVE
@@ -88,7 +88,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
             if (width)
             {
                 int w;
-                gtk_widget_get_preferred_width(m_frameToolBar->m_widget, NULL, &w);
+                gtk_widget_get_preferred_width(m_frameToolBar->m_widget, nullptr, &w);
                 *width -= w;
             }
         }
@@ -97,16 +97,16 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
             if (height)
             {
                 int h;
-                gtk_widget_get_preferred_height(m_frameToolBar->m_widget, NULL, &h);
+                gtk_widget_get_preferred_height(m_frameToolBar->m_widget, nullptr, &h);
                 *height -= h;
             }
         }
     }
 #endif // wxUSE_TOOLBAR
 
-    if (width != NULL && *width < 0)
+    if (width != nullptr && *width < 0)
         *width = 0;
-    if (height != NULL && *height < 0)
+    if (height != nullptr && *height < 0)
         *height = 0;
 }
 
@@ -119,17 +119,17 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 #if wxUSE_MENUS
         m_frameMenuBar,
 #else
-        NULL,
+        nullptr,
 #endif
 #if wxUSE_TOOLBAR
         m_frameToolBar,
 #else
-        NULL,
+        nullptr,
 #endif
 #if wxUSE_STATUSBAR
         m_frameStatusBar,
 #else
-        NULL,
+        nullptr,
 #endif
     };
     const long fsNoBar[] = {
@@ -187,8 +187,8 @@ bool wxFrame::SendIdleEvents(wxIdleEvent& event)
 
 void wxFrame::DetachMenuBar()
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-    wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
+    wxASSERT_MSG( (m_widget != nullptr), wxT("invalid frame") );
+    wxASSERT_MSG( (m_wxwindow != nullptr), wxT("invalid frame") );
 
     if ( m_frameMenuBar )
         gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );

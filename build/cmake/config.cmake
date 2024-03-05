@@ -12,15 +12,16 @@ file(MAKE_DIRECTORY ${wxCONFIG_DIR})
 set(TOOLCHAIN_FULLNAME ${wxBUILD_FILE_ID})
 
 macro(wx_configure_script input output)
-    set(abs_top_srcdir ${CMAKE_CURRENT_SOURCE_DIR})
-    set(abs_top_builddir ${CMAKE_CURRENT_BINARY_DIR})
+    # variables used in wx-config-inplace.in
+    set(abs_top_srcdir ${wxSOURCE_DIR})
+    set(abs_top_builddir ${wxBINARY_DIR})
 
     configure_file(
-        ${input}
-        ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
+        ${wxSOURCE_DIR}/${input}
+        ${wxBINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
         ESCAPE_QUOTES @ONLY NEWLINE_STYLE UNIX)
     file(COPY
-        ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
+        ${wxBINARY_DIR}${CMAKE_FILES_DIRECTORY}/${output}
         DESTINATION ${wxCONFIG_DIR}
         FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
             GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
@@ -29,16 +30,58 @@ endmacro()
 
 macro(wx_get_dependencies var lib)
     set(${var})
-    if(TARGET ${lib})
-        get_target_property(deps ${lib} LINK_LIBRARIES)
+    if(TARGET wx${lib})
+        get_target_property(deps wx${lib} LINK_LIBRARIES)
         foreach(dep IN LISTS deps)
             if(TARGET ${dep})
-                get_target_property(dep_name ${dep} OUTPUT_NAME)
-                set(dep_name "-l${dep_name}")
+                get_target_property(dep_type ${dep} TYPE)
+                if (dep_type STREQUAL "INTERFACE_LIBRARY")
+                    get_target_property(dep_name ${dep} INTERFACE_OUTPUT_NAME)
+                else()
+                    get_target_property(dep_name ${dep} OUTPUT_NAME)
+                endif()
+
+                # imported target
+                if(CMAKE_VERSION VERSION_GREATER "3.18")
+                    # CMake <= 3.18 only allows a few properties to be checked, not LOCATION, see
+                    # https://cmake.org/cmake/help/v3.18/manual/cmake-buildsystem.7.html#interface-libraries
+                    set(prop_suffix)
+                    if (CMAKE_BUILD_TYPE)
+                        string(TOUPPER "${CMAKE_BUILD_TYPE}" prop_suffix)
+                        set(prop_suffix "_${prop_suffix}")
+                    endif()
+                    if(NOT dep_name AND prop_suffix)
+                        get_target_property(dep_name ${dep} LOCATION${prop_suffix})
+                    endif()
+                    if(NOT dep_name)
+                        get_target_property(dep_name ${dep} LOCATION)
+                    endif()
+                endif()
+                if(NOT dep_name)
+                    get_target_property(dep_name ${dep} IMPORTED_LIBNAME)
+                endif()
             else()
-                get_filename_component(dep_name ${dep} NAME)
+                # For the value like $<$<CONFIG:DEBUG>:LIB_PATH>
+                # Or $<$<NOT:$<CONFIG:DEBUG>>:LIB_PATH>
+                string(REGEX REPLACE "^.+>:(.+)>$" "\\1" dep_name ${dep})
+                if (NOT dep_name)
+                    set(dep_name ${dep})
+                endif()
             endif()
-            wx_string_append(${var} "${dep_name} ")
+            if(dep_name STREQUAL "libc.so")
+                # don't include this library
+            elseif(dep_name MATCHES "^-(.*)$")   # -l, -framework, -weak_framework
+                wx_string_append(${var} "${dep_name} ")
+            elseif(dep_name MATCHES "^lib(.*)(.so|.dylib|.tbd|.a)$")
+                wx_string_append(${var} "-l${CMAKE_MATCH_1} ")
+            elseif(dep_name)
+                get_filename_component(abs_path ${dep_name} PATH)
+                if (abs_path) # value contains path
+                    wx_string_append(${var} "${dep_name} ")
+                else()
+                    wx_string_append(${var} "-l${dep_name} ")
+                endif()
+            endif()
         endforeach()
         string(STRIP ${${var}} ${var})
     endif()
@@ -46,14 +89,19 @@ endmacro()
 
 function(wx_write_config_inplace)
     wx_configure_script(
-        "${CMAKE_CURRENT_SOURCE_DIR}/wx-config-inplace.in"
+        "wx-config-inplace.in"
         "inplace-${TOOLCHAIN_FULLNAME}"
         )
+    if(WIN32_MSVC_NAMING)
+        set(COPY_CMD copy)
+    else()
+        set(COPY_CMD create_symlink)
+    endif()
     execute_process(
         COMMAND
-        ${CMAKE_COMMAND} -E create_symlink
-        "lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
-        "${CMAKE_CURRENT_BINARY_DIR}/wx-config"
+        "${CMAKE_COMMAND}" -E ${COPY_CMD}
+        "${wxBINARY_DIR}/lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}"
+        "${wxBINARY_DIR}/wx-config"
         )
 endfunction()
 
@@ -65,9 +113,6 @@ function(wx_write_config)
     set(libdir "\${exec_prefix}/lib")
     set(bindir "\${exec_prefix}/bin")
 
-    find_program(EGREP egrep)
-    mark_as_advanced(EGREP)
-
     if(wxBUILD_MONOLITHIC)
         set(MONOLITHIC 1)
     else()
@@ -78,13 +123,7 @@ function(wx_write_config)
     else()
         set(SHARED 0)
     endif()
-    if(wxUSE_UNICODE)
-        set(WX_CHARTYPE unicode)
-        set(lib_unicode_suffix u)
-    else()
-        set(WX_CHARTYPE ansi)
-        set(lib_unicode_suffix)
-    endif()
+    set(lib_unicode_suffix u)
     if(CMAKE_CROSSCOMPILING)
         set(cross_compiling yes)
         set(host_alias ${CMAKE_SYSTEM_NAME})
@@ -98,15 +137,12 @@ function(wx_write_config)
     set(STD_BASE_LIBS_ALL xml net base)
     set(STD_GUI_LIBS_ALL xrc html qa adv core)
     foreach(lib IN ITEMS xrc webview stc richtext ribbon propgrid aui gl media html qa adv core xml net base)
-        list(FIND wxLIB_TARGETS ${lib} hasLib)
-        if (hasLib GREATER -1)
+        if (wx${lib} IN_LIST wxLIB_TARGETS)
             wx_string_append(BUILT_WX_LIBS "${lib} ")
-            list(FIND STD_BASE_LIBS_ALL ${lib} index)
-            if (index GREATER -1)
+            if (${lib} IN_LIST STD_BASE_LIBS_ALL)
                 wx_string_append(STD_BASE_LIBS "${lib} ")
             endif()
-            list(FIND STD_GUI_LIBS_ALL ${lib} index)
-            if (index GREATER -1)
+            if (${lib} IN_LIST STD_GUI_LIBS_ALL)
                 wx_string_append(STD_GUI_LIBS "${lib} ")
             endif()
         endif()
@@ -142,16 +178,19 @@ function(wx_write_config)
 
     set(CC ${CMAKE_C_COMPILER})
     set(CXX ${CMAKE_CXX_COMPILER})
-    set(WXCONFIG_CFLAGS)
-    set(WXCONFIG_LDFLAGS)
-    if(CMAKE_USE_PTHREADS_INIT)
-        set(WXCONFIG_CFLAGS "-pthread")
-        set(WXCONFIG_LDFLAGS "-pthread")
+    set(WXCONFIG_CFLAGS ${CMAKE_THREAD_LIBS_INIT})
+    set(WXCONFIG_LDFLAGS ${CMAKE_THREAD_LIBS_INIT})
+    set(WXCONFIG_CPPFLAGS)
+    if(wxBUILD_SHARED)
+        wx_string_append(WXCONFIG_CPPFLAGS " -DWXUSINGDLL")
     endif()
-    set(WXCONFIG_CPPFLAGS "-DWXUSINGDLL")
     foreach(flag IN LISTS wxTOOLKIT_DEFINITIONS)
         wx_string_append(WXCONFIG_CPPFLAGS " -D${flag}")
     endforeach()
+    if(wxBUILD_LARGEFILE_SUPPORT)
+        wx_string_append(WXCONFIG_CPPFLAGS " -D_FILE_OFFSET_BITS=64")
+    endif()
+    string(STRIP "${WXCONFIG_CPPFLAGS}" WXCONFIG_CPPFLAGS)
     set(WXCONFIG_CXXFLAGS ${WXCONFIG_CFLAGS})
     set(WXCONFIG_LDFLAGS_GUI)
     set(WXCONFIG_RESFLAGS)
@@ -160,7 +199,7 @@ function(wx_write_config)
     set(RESCOMP)
 
     wx_configure_script(
-        "${CMAKE_CURRENT_SOURCE_DIR}/wx-config.in"
+        "wx-config.in"
         "${TOOLCHAIN_FULLNAME}"
         )
 endfunction()

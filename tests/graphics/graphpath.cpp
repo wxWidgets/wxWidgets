@@ -12,16 +12,14 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/bitmap.h"
 #include "wx/dcmemory.h"
 #include "wx/dcgraph.h"
-#include "wx/scopedptr.h"
+
+#include <memory>
 
 static void DoAllTests(wxGraphicsContext* gc);
 
@@ -33,7 +31,7 @@ TEST_CASE("GraphicsPathTestCase", "[path]")
 {
     wxBitmap bmp(500, 500);
     wxMemoryDC mdc(bmp);
-    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(mdc));
+    std::unique_ptr<wxGraphicsContext> gc(wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(mdc));
     REQUIRE(gc);
     DoAllTests(gc.get());
 }
@@ -45,7 +43,7 @@ TEST_CASE("GraphicsPathTestCaseGDIPlus", "[path][gdi+]")
 {
     wxBitmap bmp(500, 500);
     wxMemoryDC mdc(bmp);
-    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsRenderer::GetGDIPlusRenderer()->CreateContext(mdc));
+    std::unique_ptr<wxGraphicsContext> gc(wxGraphicsRenderer::GetGDIPlusRenderer()->CreateContext(mdc));
     REQUIRE(gc);
     DoAllTests(gc.get());
 }
@@ -54,9 +52,12 @@ TEST_CASE("GraphicsPathTestCaseGDIPlus", "[path][gdi+]")
 #if wxUSE_GRAPHICS_DIRECT2D
 TEST_CASE("GraphicsPathTestCaseDirect2D", "[path][d2d]")
 {
+    if ( wxIsRunningUnderWine() )
+        return;
+
     wxBitmap bmp(500, 500);
     wxMemoryDC mdc(bmp);
-    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsRenderer::GetDirect2DRenderer()->CreateContext(mdc));
+    std::unique_ptr<wxGraphicsContext> gc(wxGraphicsRenderer::GetDirect2DRenderer()->CreateContext(mdc));
     REQUIRE(gc);
     DoAllTests(gc.get());
 }
@@ -69,7 +70,7 @@ TEST_CASE("GraphicsPathTestCaseCairo", "[path][cairo]")
 {
     wxBitmap bmp(500, 500);
     wxMemoryDC mdc(bmp);
-    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsRenderer::GetCairoRenderer()->CreateContext(mdc));
+    std::unique_ptr<wxGraphicsContext> gc(wxGraphicsRenderer::GetCairoRenderer()->CreateContext(mdc));
     REQUIRE(gc);
     DoAllTests(gc.get());
 }

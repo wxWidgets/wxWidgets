@@ -2,7 +2,6 @@
 // Name:        src/osx/carbon/dcclient.cpp
 // Purpose:     wxClientDCImpl class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -54,7 +53,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
 
     m_release = false;
-    if ( cg == NULL )
+    if ( cg == nullptr )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
         m_contentScaleFactor = window->GetContentScaleFactor();
@@ -76,7 +75,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
             CGContextTranslateCTM( cg , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
 
         wxGraphicsContext* context = wxGraphicsContext::CreateFromNative( cg );
-        context->EnableOffset(m_contentScaleFactor <= 1);
+        context->SetContentScaleFactor(m_contentScaleFactor);
         SetGraphicsContext( context );
     }
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
@@ -105,6 +104,22 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
         *height = m_height;
 }
 
+void wxWindowDCImpl::DestroyClippingRegion()
+{
+    wxGCDCImpl::DestroyClippingRegion();
+
+    wxPoint clipPos = DeviceToLogical(m_origin.x, m_origin.y);
+    wxSize clipDim = DeviceToLogicalRel(m_width, m_height);
+    DoSetClippingRegion(clipPos.x, clipPos.y, clipDim.x, clipDim.y);
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+wxPoint wxWindowDCImpl::OSXGetOrigin() const
+{
+    return m_origin;
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
 /*
  * wxClientDCImpl
  */
@@ -120,14 +135,14 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
     wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
-    wxPoint origin = window->GetClientAreaOrigin() ;
+    m_origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     if ( !m_window->IsShownOnScreen() )
         m_width = m_height = 0;
     
     int x0,y0;
     DoGetDeviceOrigin(&x0,&y0);
-    SetDeviceOrigin( origin.x + x0, origin.y + y0 );
+    SetDeviceOrigin( m_origin.x + x0, m_origin.y + y0 );
     
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
@@ -152,9 +167,9 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
-    wxPoint origin = window->GetClientAreaOrigin() ;
+    m_origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
-    SetDeviceOrigin( origin.x, origin.y );
+    SetDeviceOrigin( m_origin.x, m_origin.y );
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 

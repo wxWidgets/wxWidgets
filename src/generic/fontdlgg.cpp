@@ -2,7 +2,6 @@
 // Name:        src/generic/fontdlgg.cpp
 // Purpose:     Generic font dialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -11,11 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#if wxUSE_FONTDLG && (!defined(__WXGTK__) || defined(__WXGPE__) || defined(__WXUNIVERSAL__))
+#if wxUSE_FONTDLG
 
 #ifndef WX_PRECOMP
     #include <stdio.h>
@@ -265,7 +260,7 @@ static wxString wxColourDialogNames[NUM_COLS]={wxT("ORANGE"),
 void wxGenericFontDialog::Init()
 {
     m_useEvents = false;
-    m_previewer = NULL;
+    m_previewer = nullptr;
     Create( m_parent ) ;
 }
 
@@ -358,7 +353,6 @@ void wxGenericFontDialog::CreateWidgets()
 
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     this->SetSizer(itemBoxSizer2);
-    this->SetAutoLayout(true);
 
     wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer2->Add(itemBoxSizer3, 1, wxGROW|wxALL, 5);
@@ -401,7 +395,7 @@ void wxGenericFontDialog::CreateWidgets()
 
     wxBoxSizer* itemBoxSizer14 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer14, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
-    m_colourChoice = NULL;
+    m_colourChoice = nullptr;
     if (m_fontData.GetEnableEffects())
     {
         wxStaticText* itemStaticText15 = new wxStaticText( this, wxID_STATIC, _("C&olour:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -437,7 +431,7 @@ void wxGenericFontDialog::CreateWidgets()
     itemBoxSizer17->Add(m_pointSizeChoice, 0, wxALIGN_LEFT|wxALL, 5);
 #endif
 
-    m_underLineCheckBox = NULL;
+    m_underLineCheckBox = nullptr;
     if (m_fontData.GetEnableEffects())
     {
         wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxVERTICAL);
@@ -518,7 +512,6 @@ void wxGenericFontDialog::CreateWidgets()
 
     GetSizer()->SetItemMinSize(m_previewer, is_pda ? 100 : 430, is_pda ? 40 : 100);
     GetSizer()->SetSizeHints(this);
-    GetSizer()->Fit(this);
 
     Centre(wxBOTH);
 

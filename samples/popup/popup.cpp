@@ -2,7 +2,6 @@
 // Name:        popup.cpp
 // Purpose:     Popup wxWidgets sample
 // Author:      Robert Roebling
-// Modified by:
 // Created:     2005-02-04
 // Copyright:   (c) 2005 Robert Roebling
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -69,10 +65,10 @@ public:
     virtual ~SimpleTransientPopup();
 
     // wxPopupTransientWindow virtual methods are all overridden to log them
-    virtual void Popup(wxWindow *focus = NULL) wxOVERRIDE;
-    virtual void OnDismiss() wxOVERRIDE;
-    virtual bool ProcessLeftDown(wxMouseEvent& event) wxOVERRIDE;
-    virtual bool Show( bool show = true ) wxOVERRIDE;
+    virtual void Popup(wxWindow *focus = nullptr) override;
+    virtual void OnDismiss() override;
+    virtual bool ProcessLeftDown(wxMouseEvent& event) override;
+    virtual bool Show( bool show = true ) override;
 
 private:
     wxScrolledWindow *m_panel;
@@ -108,10 +104,14 @@ wxBEGIN_EVENT_TABLE(SimpleTransientPopup,wxPopupTransientWindow)
 wxEND_EVENT_TABLE()
 
 SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
-                     :wxPopupTransientWindow( parent )
+                     :wxPopupTransientWindow( parent,
+                                              wxBORDER_NONE |
+                                              wxPU_CONTAINS_CONTROLS )
 {
+    wxColour colour = wxSystemSettings::SelectLightDark(*wxLIGHT_GREY, wxColour(90, 90, 90));
+
     m_panel = new wxScrolledWindow( this, wxID_ANY );
-    m_panel->SetBackgroundColour( *wxLIGHT_GREY );
+    m_panel->SetBackgroundColour(colour);
 
     // Keep this code to verify if mouse events work, they're required if
     // you're making a control like a combobox where the items are highlighted
@@ -215,7 +215,7 @@ void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
     wxRect rect(m_mouseText->GetRect());
     rect.SetX(-100000);
     rect.SetWidth(1000000);
-    wxColour colour(*wxLIGHT_GREY);
+    wxColour colour = wxSystemSettings::SelectLightDark(*wxLIGHT_GREY, wxColour(90, 90, 90));
 
     if (rect.Contains(event.GetPosition()))
     {
@@ -294,7 +294,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
     MyFrame *m_frame;
 };
@@ -339,9 +339,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title)
-: wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(500,300))
+: wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(500,300))
 {
-    m_simplePopup = m_scrolledPopup = NULL;
+    m_simplePopup = m_scrolledPopup = nullptr;
 
     SetIcon(wxICON(sample));
 
@@ -460,9 +460,9 @@ wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 MyDialog::MyDialog(const wxString& title)
-         :wxDialog(NULL, wxID_ANY, title, wxPoint(50,50), wxSize(400,300))
+         :wxDialog(nullptr, wxID_ANY, title, wxPoint(50,50), wxSize(400,300))
 {
-    m_simplePopup = m_scrolledPopup = NULL;
+    m_simplePopup = m_scrolledPopup = nullptr;
     wxPanel *panel = new wxPanel(this, -1);
 
     wxButton *button1 = new wxButton( panel, Minimal_StartSimplePopup, "Show simple popup", wxPoint(20,20) );

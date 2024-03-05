@@ -21,26 +21,9 @@
  */
 #include "wx/types.h"
 
-/* check whether we have wchar_t and which size it is if we do */
-#if !defined(wxUSE_WCHAR_T)
-    #if defined(__UNIX__)
-        #if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__) || defined(__DARWIN__)
-            #define wxUSE_WCHAR_T 1
-        #else
-            #define wxUSE_WCHAR_T 0
-        #endif
-    #elif defined(__GNUWIN32__) && !defined(__MINGW32__)
-        #define wxUSE_WCHAR_T 0
-    #else
-        /* add additional compiler checks if this fails */
-        #define wxUSE_WCHAR_T 1
-    #endif
-#endif /* !defined(wxUSE_WCHAR_T) */
-
-/* Unicode support requires wchar_t */
-#if !wxUSE_WCHAR_T
-    #error "wchar_t must be available"
-#endif /* Unicode */
+/* This is kept only for backwards compatibility, in case some application code
+   checks for it. It's always 1 and can't be changed. */
+#define wxUSE_WCHAR_T 1
 
 /*
    non Unix compilers which do have wchar.h (but not tchar.h which is included
@@ -110,9 +93,6 @@
 /* VC++ and BC++ starting with 5.2 have TCHAR support */
 #ifdef __VISUALC__
     #define wxHAVE_TCHAR_SUPPORT
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
-    #define wxHAVE_TCHAR_SUPPORT
-    #include <ctype.h>
 #elif defined(__MINGW32__)
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
@@ -123,61 +103,37 @@
 #ifdef wxHAVE_TCHAR_SUPPORT
     /* get TCHAR definition if we've got it */
     #include <tchar.h>
-
-    /* we surely do have wchar_t if we have TCHAR */
-    #ifndef wxUSE_WCHAR_T
-        #define wxUSE_WCHAR_T 1
-    #endif /* !defined(wxUSE_WCHAR_T) */
 #endif /* wxHAVE_TCHAR_SUPPORT */
 
 /* ------------------------------------------------------------------------- */
-/* define wxChar type                                                        */
+/* define wxChar type for compatibility only                                 */
 /* ------------------------------------------------------------------------- */
 
-/* TODO: define wxCharInt to be equal to either int or wint_t? */
-
-#if !wxUSE_UNICODE
-    typedef char wxChar;
-    typedef signed char wxSChar;
-    typedef unsigned char wxUChar;
-#else
-    /* VZ: note that VC++ defines _T[SU]CHAR simply as wchar_t and not as    */
-    /*     signed/unsigned version of it which (a) makes sense to me (unlike */
-    /*     char wchar_t is always unsigned) and (b) was how the previous     */
-    /*     definitions worked so keep it like this                           */
-    typedef wchar_t wxChar;
-    typedef wchar_t wxSChar;
-    typedef wchar_t wxUChar;
-#endif /* ASCII/Unicode */
+typedef wchar_t wxChar;
+typedef wchar_t wxSChar;
+typedef wchar_t wxUChar;
 
 /* ------------------------------------------------------------------------- */
 /* define wxStringCharType                                                   */
 /* ------------------------------------------------------------------------- */
 
-/* depending on the platform, Unicode build can either store wxStrings as
+/* depending on the build options, strings can store their data either as
    wchar_t* or UTF-8 encoded char*: */
-#if wxUSE_UNICODE
-    /* FIXME-UTF8: what would be better place for this? */
-    #if defined(wxUSE_UTF8_LOCALE_ONLY) && !defined(wxUSE_UNICODE_UTF8)
-        #error "wxUSE_UTF8_LOCALE_ONLY only makes sense with wxUSE_UNICODE_UTF8"
-    #endif
-    #ifndef wxUSE_UTF8_LOCALE_ONLY
-        #define wxUSE_UTF8_LOCALE_ONLY 0
-    #endif
-
-    #ifndef wxUSE_UNICODE_UTF8
-        #define wxUSE_UNICODE_UTF8 0
-    #endif
-
-    #if wxUSE_UNICODE_UTF8
-        #define wxUSE_UNICODE_WCHAR 0
-    #else
-        #define wxUSE_UNICODE_WCHAR 1
-    #endif
-#else
-    #define wxUSE_UNICODE_WCHAR 0
-    #define wxUSE_UNICODE_UTF8  0
+#if defined(wxUSE_UTF8_LOCALE_ONLY) && !defined(wxUSE_UNICODE_UTF8)
+    #error "wxUSE_UTF8_LOCALE_ONLY only makes sense with wxUSE_UNICODE_UTF8"
+#endif
+#ifndef wxUSE_UTF8_LOCALE_ONLY
     #define wxUSE_UTF8_LOCALE_ONLY 0
+#endif
+
+#ifndef wxUSE_UNICODE_UTF8
+    #define wxUSE_UNICODE_UTF8 0
+#endif
+
+#if wxUSE_UNICODE_UTF8
+    #define wxUSE_UNICODE_WCHAR 0
+#else
+    #define wxUSE_UNICODE_WCHAR 1
 #endif
 
 #ifndef SIZEOF_WCHAR_T
@@ -193,7 +149,7 @@
 /* define char type used by wxString internal representation: */
 #if wxUSE_UNICODE_WCHAR
     typedef wchar_t wxStringCharType;
-#else /* wxUSE_UNICODE_UTF8 || ANSI */
+#else /* wxUSE_UNICODE_UTF8 */
     typedef char wxStringCharType;
 #endif
 
@@ -214,19 +170,11 @@
    compatibility.
  */
 #ifndef wxT
-    #if !wxUSE_UNICODE
-        #define wxT(x) x
-    #else /* Unicode */
-        /*
-            Notice that we use an intermediate macro to allow x to be expanded
-            if it's a macro itself.
-         */
-        #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-            #define wxT(x) wxCONCAT_HELPER(L, x)
-        #else
-            #define wxT(x) wxPREPEND_L(x)
-        #endif
-    #endif /* ASCII/Unicode */
+    /*
+        Notice that we use an intermediate macro to allow x to be expanded
+        if it's a macro itself.
+     */
+    #define wxT(x) wxCONCAT_HELPER(L, x)
 #endif /* !defined(wxT) */
 
 /*
@@ -237,20 +185,15 @@
 
 /*
    wxS ("wx string") macro can be used to create literals using the same
-   representation as wxString does internally, i.e. wchar_t in Unicode build
-   under Windows or char in UTF-8-based Unicode builds and (deprecated) ANSI
-   builds everywhere (see wxStringCharType definition above).
+   representation as wxString does internally, i.e. wchar_t by default
+   char in UTF-8-based builds.
  */
 #if wxUSE_UNICODE_WCHAR
     /*
         As above with wxT(), wxS() argument is expanded if it's a macro.
      */
-    #ifndef wxCOMPILER_BROKEN_CONCAT_OPER
-        #define wxS(x) wxCONCAT_HELPER(L, x)
-    #else
-        #define wxS(x) wxPREPEND_L(x)
-    #endif
-#else /* wxUSE_UNICODE_UTF8 || ANSI */
+    #define wxS(x) wxCONCAT_HELPER(L, x)
+#else /* wxUSE_UNICODE_UTF8 */
     #define wxS(x) x
 #endif
 
@@ -274,17 +217,28 @@
 /* a helper macro allowing to make another macro Unicode-friendly, see below */
 #define wxAPPLY_T(x) wxT(x)
 
-/* Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs */
+/*
+   Unicode-friendly analogs of the standard __FILE__, DATE and TIME macros.
+
+   These macros exist only for backwards compatibility, there should be no
+   reason to use them in the new code, just use the standard macros instead.
+
+   Also note that we must not use the actual macro names for the two latter
+   ones, as doing this would prevent ccache from caching the results of
+   compiling any file including this header by default, rendering ccache
+   ineffective for wxWidgets programs. Hence the use of "##" below and avoiding
+   naming these macros in this comment.
+ */
 #ifndef __TFILE__
     #define __TFILE__ wxAPPLY_T(__FILE__)
 #endif
 
 #ifndef __TDATE__
-    #define __TDATE__ wxAPPLY_T(__DATE__)
+    #define __TDATE__ wxAPPLY_T(__ ## DATE__)
 #endif
 
 #ifndef __TTIME__
-    #define __TTIME__ wxAPPLY_T(__TIME__)
+    #define __TTIME__ wxAPPLY_T(__ ## TIME__)
 #endif
 
 #endif /* _WX_WXCHARTYPE_H_ */

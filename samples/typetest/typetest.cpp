@@ -2,7 +2,6 @@
 // Name:        typetest.cpp
 // Purpose:     Types wxWidgets sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -32,13 +28,8 @@
 #undef new
 #endif
 
-#include "wx/ioswrap.h"
-
-#if wxUSE_IOSTREAMH
-    #include <fstream.h>
-#else
-    #include <fstream>
-#endif
+#include <iostream>
+#include <fstream>
 
 #include "wx/wfstream.h"
 #include "wx/datstrm.h"
@@ -53,9 +44,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(MyApp, wxApp);
 wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
     EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
-#if wxUSE_UNICODE
     EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
-#endif // wxUSE_UNICODE
     EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
     EVT_MENU(TYPES_STREAM2, MyApp::DoStreamDemo2)
     EVT_MENU(TYPES_STREAM3, MyApp::DoStreamDemo3)
@@ -75,7 +64,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, "wxWidgets Types Demo",
+    MyFrame *frame = new MyFrame(nullptr, "wxWidgets Types Demo",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Give it an icon
@@ -91,9 +80,7 @@ bool MyApp::OnInit()
     wxMenu *test_menu = new wxMenu;
     test_menu->Append(TYPES_VARIANT, "&Variant test");
     test_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
-#if wxUSE_UNICODE
     test_menu->Append(TYPES_UNICODE, "&Unicode test");
-#endif // wxUSE_UNICODE
     test_menu->Append(TYPES_STREAM, "&Stream test");
     test_menu->Append(TYPES_STREAM2, "&Stream seek test");
     test_menu->Append(TYPES_STREAM3, "&Stream error test");
@@ -127,7 +114,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( "Writing to ofstream and wxFileOutputStream:\n" );
 
-    wxSTD ofstream std_file_output( "test_std.dat" );
+    std::ofstream std_file_output( "test_std.dat" );
     wxFileOutputStream file_output( file_name );
     wxBufferedOutputStream buf_output( file_output );
     wxTextOutputStream text_output( buf_output );
@@ -151,8 +138,8 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     text_output << d << "\n";
     std_file_output << d << "\n";
 
-    float f = (float)0.00001;
-    tmp.Printf( "Float: %f\n", f );
+    float f = 0.00001f;
+    tmp.Printf( "Float: %f\n", double(f) );
     textCtrl.WriteText( tmp );
     text_output << f << "\n";
     std_file_output << f << "\n";
@@ -167,7 +154,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.WriteText( "\nReading from ifstream:\n" );
 
-    wxSTD ifstream std_file_input( "test_std.dat" );
+    std::ifstream std_file_input( "test_std.dat" );
 
     std_file_input >> si;
     tmp.Printf( "Signed int: %d\n", si );
@@ -182,7 +169,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
 
     std_file_input >> f;
-    tmp.Printf( "Float: %f\n", f );
+    tmp.Printf( "Float: %f\n", double(f) );
     textCtrl.WriteText( tmp );
 
     char std_buf[200];
@@ -212,7 +199,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
 
     text_input >> f;
-    tmp.Printf( "Float: %f\n", f );
+    tmp.Printf( "Float: %f\n", double(f) );
     textCtrl.WriteText( tmp );
 
     text_input >> str;
@@ -878,7 +865,6 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( str );
 }
 
-#if wxUSE_UNICODE
 void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
@@ -897,7 +883,6 @@ void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
     puts( str.mbc_str() );
 
 }
-#endif
 
 void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
 {

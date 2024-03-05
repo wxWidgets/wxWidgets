@@ -92,7 +92,7 @@ of MSW, MAC and OS2
 class MyAppTraits : public wxGUIAppTraits
 {
 public:
-    virtual wxLog *CreateLogTarget() wxOVERRIDE;
+    virtual wxLog *CreateLogTarget() override;
 };
 
 #endif // wxUSE_LOG
@@ -103,16 +103,16 @@ class MyApp: public wxApp
 public:
     MyApp() { m_startupProgressStyle = -1; }
 
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 
 #if wxUSE_CMDLINE_PARSER
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 #endif // wxUSE_CMDLINE_PARSER
 
 protected:
 #if wxUSE_LOG
-    virtual wxAppTraits *CreateTraits() wxOVERRIDE { return new MyAppTraits; }
+    virtual wxAppTraits *CreateTraits() override { return new MyAppTraits; }
 #endif // wxUSE_LOG
 
 private:
@@ -190,6 +190,8 @@ class TestMessageBoxDialog : public wxDialog
 {
 public:
     TestMessageBoxDialog(wxWindow *parent);
+    TestMessageBoxDialog(const TestMessageBoxDialog&) = delete;
+    TestMessageBoxDialog& operator=(const TestMessageBoxDialog&) = delete;
 
     bool Create();
 
@@ -201,7 +203,7 @@ protected:
     void PrepareMessageDialog(wxMessageDialogBase &dlg);
 
     virtual void AddAdditionalTextOptions(wxSizer *WXUNUSED(sizer)) { }
-    virtual void AddAdditionalFlags(wxSizer *WXUNUSED(sizer)) { }
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *WXUNUSED(sizer)) { }
 
     void ShowResult(int res);
 
@@ -256,7 +258,6 @@ private:
     wxStaticText *m_labelResult;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
 
 #if wxUSE_RICHMSGDLG
@@ -267,8 +268,8 @@ public:
 
 protected:
     // overrides method in base class
-    virtual void AddAdditionalTextOptions(wxSizer *sizer) wxOVERRIDE;
-    virtual void AddAdditionalFlags(wxSizer *sizer) wxOVERRIDE;
+    virtual void AddAdditionalTextOptions(wxSizer *sizer) override;
+    virtual void AddAdditionalFlags(wxStaticBoxSizer *sizer) override;
 
     void OnApply(wxCommandEvent& event);
 
@@ -368,6 +369,8 @@ public:
 #if wxUSE_MSGDLG
     void MessageBox(wxCommandEvent& event);
     void MessageBoxDialog(wxCommandEvent& event);
+    void MessageBoxDialogWindowModal(wxCommandEvent& event);
+    void MessageBoxDialogWindowModalClosed(wxWindowModalDialogEvent& event);
     void MessageBoxInfo(wxCommandEvent& event);
     void MessageBoxWindowModal(wxCommandEvent& event);
     void MessageBoxWindowModalClosed(wxWindowModalDialogEvent& event);
@@ -414,6 +417,10 @@ public:
     void PasswordEntry(wxCommandEvent& event);
 #endif // wxUSE_TEXTDLG
 
+#ifdef wxUSE_CREDENTIALDLG
+    void CredentialEntry(wxCommandEvent& event);
+#endif // wxUSE_CREDENTIALDLG
+
 #if wxUSE_NUMBERDLG
     void NumericEntry(wxCommandEvent& event);
 #endif // wxUSE_NUMBERDLG
@@ -422,7 +429,12 @@ public:
     void FileOpen(wxCommandEvent& event);
     void FileOpen2(wxCommandEvent& event);
     void FilesOpen(wxCommandEvent& event);
+    void FilesOpenWindowModal(wxCommandEvent& event);
+    void FilesOpenWindowModalClosed(wxWindowModalDialogEvent& event);
     void FileSave(wxCommandEvent& event);
+    void FileSaveWindowModal(wxCommandEvent& event);
+    void FileSaveWindowModalClosed(wxWindowModalDialogEvent& event);
+    void MacToggleAlwaysShowTypes(wxCommandEvent& event);
 #endif // wxUSE_FILEDLG
 
 #if USE_FILEDLG_GENERIC
@@ -433,7 +445,10 @@ public:
 
 #if wxUSE_DIRDLG
     void DirChoose(wxCommandEvent& event);
+    void DirChooseWindowModal(wxCommandEvent& event);
+    void DirChooseWindowModalClosed(wxWindowModalDialogEvent& event);
     void DirChooseNew(wxCommandEvent& event);
+    void DirChooseMultiple(wxCommandEvent& event);
 #endif // wxUSE_DIRDLG
 
 #if USE_DIRDLG_GENERIC
@@ -503,8 +518,10 @@ public:
 
     void OnTestDefaultActionDialog(wxCommandEvent& event);
     void OnModalHook(wxCommandEvent& event);
+    void OnSimulatedUnsaved(wxCommandEvent& event);
 
     void OnExit(wxCommandEvent& event);
+    void OnClose(wxCloseEvent& event);
 
 private:
 #if wxUSE_COLOURDLG
@@ -543,6 +560,14 @@ private:
     SettingsData m_settingsData;
 #endif // USE_SETTINGS_DIALOG
 
+#if wxUSE_TIPWINDOW
+    void OnShowTip(wxCommandEvent& event);
+    void OnUpdateShowTipUI(wxUpdateUIEvent& event);
+
+    wxTipWindow *m_tipWindow;
+#endif // wxUSE_TIPWINDOW
+
+    bool m_confirmExit;
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -576,6 +601,7 @@ enum
     DIALOGS_MESSAGE_BOX,
     DIALOGS_MESSAGE_BOX_WINDOW_MODAL,
     DIALOGS_MESSAGE_DIALOG,
+    DIALOGS_MESSAGE_DIALOG_WINDOW_MODAL,
     DIALOGS_MESSAGE_BOX_WXINFO,
     DIALOGS_RICH_MESSAGE_DIALOG,
     DIALOGS_SINGLE_CHOICE,
@@ -585,15 +611,23 @@ enum
     DIALOGS_LINE_ENTRY,
     DIALOGS_TEXT_ENTRY,
     DIALOGS_PASSWORD_ENTRY,
+    DIALOGS_CREDENTIAL_ENTRY,
     DIALOGS_FILE_OPEN,
     DIALOGS_FILE_OPEN2,
     DIALOGS_FILES_OPEN,
+    DIALOGS_FILES_OPEN_WINDOW_MODAL,
     DIALOGS_FILE_SAVE,
+    DIALOGS_FILE_SAVE_WINDOW_MODAL,
     DIALOGS_FILE_OPEN_GENERIC,
     DIALOGS_FILES_OPEN_GENERIC,
     DIALOGS_FILE_SAVE_GENERIC,
+    DIALOGS_FILE_USE_CUSTOMIZER,
+    DIALOGS_FILE_USE_EXTRA_CONTROL_CREATOR,
+    DIALOGS_MAC_TOGGLE_ALWAYS_SHOW_TYPES,
     DIALOGS_DIR_CHOOSE,
+    DIALOGS_DIR_CHOOSE_WINDOW_MODAL,
     DIALOGS_DIRNEW_CHOOSE,
+    DIALOGS_DIRMULTIPLE_CHOOSE,
     DIALOGS_GENERIC_DIR_CHOOSE,
     DIALOGS_TIP,
     DIALOGS_NUM_ENTRY,
@@ -621,13 +655,15 @@ enum
     DIALOGS_REPLACE,
     DIALOGS_REQUEST,
     DIALOGS_NOTIFY_MSG,
+    DIALOGS_SHOW_TIP,
     DIALOGS_RICHTIP_DIALOG,
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
     DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
     DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,
     DIALOGS_TEST_DEFAULT_ACTION,
-    DIALOGS_MODAL_HOOK
+    DIALOGS_MODAL_HOOK,
+    DIALOGS_SIMULATE_UNSAVED
 };
 
 #endif

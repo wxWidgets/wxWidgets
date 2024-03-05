@@ -41,7 +41,7 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = wxEL_DEFAULT_STYLE,
-                      const wxString& name = wxEditableListBoxNameStr)
+                      const wxString& name = wxASCII_STR(wxEditableListBoxNameStr))
     {
         Init();
         Create(parent, id, label, pos, size, style, name);
@@ -52,7 +52,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxEL_DEFAULT_STYLE,
-                const wxString& name = wxEditableListBoxNameStr);
+                const wxString& name = wxASCII_STR(wxEditableListBoxNameStr));
 
     void SetStrings(const wxArrayString& strings);
     void GetStrings(wxArrayString& strings) const;
@@ -74,8 +74,8 @@ protected:
     {
         m_style = 0;
         m_selection = 0;
-        m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;
-        m_listCtrl = NULL;
+        m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = nullptr;
+        m_listCtrl = nullptr;
     }
 
     void OnItemSelected(wxListEvent& event);

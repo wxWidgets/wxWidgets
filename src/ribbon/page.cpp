@@ -2,16 +2,12 @@
 // Name:        src/ribbon/page.cpp
 // Purpose:     Container for ribbon-bar-style interface panels
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-05-25
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RIBBON
 
@@ -40,7 +36,7 @@ static int GetSizeInOrientation(wxSize size, wxOrientation orientation);
 class wxRibbonPageScrollButton : public wxRibbonControl
 {
 public:
-    wxRibbonPageScrollButton(wxRibbonPage* sibling,
+    explicit wxRibbonPageScrollButton(wxRibbonPage* sibling,
                  wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -49,7 +45,7 @@ public:
     virtual ~wxRibbonPageScrollButton();
 
 protected:
-    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const override { return wxBORDER_NONE; }
 
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
@@ -58,7 +54,7 @@ protected:
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
 
-    wxRibbonPage* m_sibling;
+    wxRibbonPage* m_sibling = nullptr;
     long m_flags;
 
     wxDECLARE_CLASS(wxRibbonPageScrollButton);
@@ -156,8 +152,8 @@ wxEND_EVENT_TABLE()
 
 wxRibbonPage::wxRibbonPage()
 {
-    m_scroll_left_btn = NULL;
-    m_scroll_right_btn = NULL;
+    m_scroll_left_btn = nullptr;
+    m_scroll_right_btn = nullptr;
     m_scroll_amount = 0;
     m_scroll_buttons_visible = false;
 }
@@ -199,9 +195,9 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
 
     SetLabel(label);
     m_icon = icon;
-    m_scroll_left_btn = NULL;
-    m_scroll_right_btn = NULL;
-    m_size_calc_array = NULL;
+    m_scroll_left_btn = nullptr;
+    m_scroll_right_btn = nullptr;
+    m_size_calc_array = nullptr;
     m_size_calc_array_size = 0;
     m_scroll_amount = 0;
     m_scroll_buttons_visible = false;
@@ -606,7 +602,7 @@ bool wxRibbonPage::Realize()
                   node = node->GetNext())
     {
         wxRibbonControl* child = wxDynamicCast(node->GetData(), wxRibbonControl);
-        if(child == NULL)
+        if(child == nullptr)
         {
             continue;
         }
@@ -755,11 +751,11 @@ bool wxRibbonPage::DoActualLayout()
         child->SetSize(origin.x, origin.y, w, h);
         if(major_axis == wxHORIZONTAL)
         {
-            origin.x += w + gap;
+            origin.x += w + (child->IsShown() ? gap : 0);
         }
         else
         {
-            origin.y += h + gap;
+            origin.y += h + (child->IsShown() ? gap : 0);
         }
     }
 
@@ -839,10 +835,10 @@ bool wxRibbonPage::ShowScrollButtons()
     }
     else
     {
-        if(m_scroll_left_btn != NULL)
+        if(m_scroll_left_btn != nullptr)
         {
             m_scroll_left_btn->Destroy();
-            m_scroll_left_btn = NULL;
+            m_scroll_left_btn = nullptr;
             reposition = true;
         }
     }
@@ -881,10 +877,10 @@ bool wxRibbonPage::ShowScrollButtons()
     }
     else
     {
-        if(m_scroll_right_btn != NULL)
+        if(m_scroll_right_btn != nullptr)
         {
             m_scroll_right_btn->Destroy();
-            m_scroll_right_btn = NULL;
+            m_scroll_right_btn = nullptr;
             reposition = true;
         }
     }
@@ -914,15 +910,15 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
     while(maximum_amount > 0)
     {
         int smallest_size = INT_MAX;
-        wxRibbonPanel* smallest_panel = NULL;
-        wxSize* smallest_panel_size = NULL;
+        wxRibbonPanel* smallest_panel = nullptr;
+        wxSize* smallest_panel_size = nullptr;
         wxSize* panel_size = m_size_calc_array;
         for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                   node;
                   node = node->GetNext(), ++panel_size )
         {
             wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-            if(panel == NULL)
+            if(panel == nullptr || !panel->IsShown())
             {
                 continue;
             }
@@ -956,7 +952,7 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
                 }
             }
         }
-        if(smallest_panel != NULL)
+        if(smallest_panel != nullptr)
         {
             if(smallest_panel->IsSizingContinuous())
             {
@@ -1008,8 +1004,8 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
 {
     while(minimum_amount > 0)
     {
-        wxRibbonPanel* largest_panel = NULL;
-        wxSize* largest_panel_size = NULL;
+        wxRibbonPanel* largest_panel = nullptr;
+        wxSize* largest_panel_size = nullptr;
         wxSize* panel_size = m_size_calc_array;
         if(!m_collapse_stack.IsEmpty())
         {
@@ -1022,7 +1018,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                       node = node->GetNext(), ++panel_size )
             {
                 wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-                if(panel == largest_panel)
+                if(panel == largest_panel && panel->IsShown())
                 {
                     largest_panel_size = panel_size;
                     break;
@@ -1037,7 +1033,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                       node = node->GetNext(), ++panel_size )
             {
                 wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-                if(panel == NULL)
+                if(panel == nullptr || !panel->IsShown())
                 {
                     continue;
                 }
@@ -1068,7 +1064,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                 }
             }
         }
-        if(largest_panel != NULL)
+        if(largest_panel != nullptr)
         {
             if(largest_panel->IsSizingContinuous())
             {
@@ -1106,6 +1102,56 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
     return minimum_amount <= 0;
 }
 
+wxRibbonPanel* wxRibbonPage::GetPanel(int n)
+{
+    int currentPanelIndex = 0;
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+        if ( panel != nullptr )
+        {
+            if ( n == currentPanelIndex )
+            {
+                return panel;
+            }
+            ++currentPanelIndex;
+        }
+    }
+    return nullptr;
+}
+
+wxRibbonPanel* wxRibbonPage::GetPanelById(wxWindowID id)
+{
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+        if ( panel != nullptr && panel->GetId() == id )
+        {
+            return panel;
+        }
+    }
+    return nullptr;
+}
+
+size_t wxRibbonPage::GetPanelCount() const
+{
+    size_t panelCount = 0;
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        if ( node->GetData()->IsKindOf(CLASSINFO(wxRibbonPanel)) )
+        {
+            ++panelCount;
+        }
+    }
+    return panelCount;
+}
+
 bool wxRibbonPage::DismissExpandedPanel()
 {
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
@@ -1113,11 +1159,11 @@ bool wxRibbonPage::DismissExpandedPanel()
               node = node->GetNext() )
     {
         wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-        if(panel == NULL)
+        if(panel == nullptr || !panel->IsShown())
         {
             continue;
         }
-        if(panel->GetExpandedPanel() != NULL)
+        if(panel->GetExpandedPanel() != nullptr)
         {
             return panel->HideExpanded();
         }

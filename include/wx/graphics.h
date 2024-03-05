@@ -2,7 +2,6 @@
 // Name:        wx/graphics.h
 // Purpose:     graphics context header
 // Author:      Stefan Csomor
-// Modified by:
 // Created:
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -68,8 +67,17 @@ enum wxCompositionMode
     wxCOMPOSITION_XOR, /* R = S*(1 - Da) + D*(1 - Sa) */
 
     // mathematical compositions
-    wxCOMPOSITION_ADD /* R = S + D */
+    wxCOMPOSITION_ADD, /* R = S + D */
+    wxCOMPOSITION_DIFF /* R = abs(S - D) */
 };
+
+enum wxGradientType
+{
+    wxGRADIENT_NONE,
+    wxGRADIENT_LINEAR,
+    wxGRADIENT_RADIAL
+};
+
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
@@ -92,10 +100,11 @@ class WXDLLIMPEXP_FWD_CORE wxGraphicsBrush;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsFont;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmap;
 
+
 /*
  * notes about the graphics context apis
  *
- * angles : are measured in radians, 0.0 being in direction of positiv x axis, PI/2 being
+ * angles : are measured in radians, 0.0 being in direction of positive x axis, PI/2 being
  * in direction of positive y axis.
  */
 
@@ -119,53 +128,26 @@ class WXDLLIMPEXP_CORE wxGraphicsObject : public wxObject
 public:
     wxGraphicsObject();
     wxGraphicsObject( wxGraphicsRenderer* renderer );
-    virtual ~wxGraphicsObject();
 
     bool IsNull() const;
 
-    // returns the renderer that was used to create this instance, or NULL if it has not been initialized yet
+    // returns the renderer that was used to create this instance, or nullptr if it has not been initialized yet
     wxGraphicsRenderer* GetRenderer() const;
     wxGraphicsObjectRefData* GetGraphicsData() const;
 protected:
-    virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
+    virtual wxObjectRefData* CreateRefData() const override;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const override;
 
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };
 
-// ----------------------------------------------------------------------------
-// wxGraphicsPenInfo describes a wxGraphicsPen
-// ----------------------------------------------------------------------------
 
-class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
-{
-public:
-    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
-                               wxDouble width = 1.0,
-                               wxPenStyle style = wxPENSTYLE_SOLID)
-        : wxPenInfoBase<wxGraphicsPenInfo>(colour, style)
-    {
-        m_width = width;
-    }
-
-    // Setters
-
-    wxGraphicsPenInfo& Width(wxDouble width)
-        { m_width = width; return *this; }
-
-    // Accessors
-
-    wxDouble GetWidth() const { return m_width; }
-
-private:
-    wxDouble m_width;
-};
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
 {
 public:
-    wxGraphicsPen() {}
-    virtual ~wxGraphicsPen() {}
+    wxGraphicsPen() = default;
+    virtual ~wxGraphicsPen() = default;
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsPen);
 };
@@ -175,8 +157,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
 class WXDLLIMPEXP_CORE wxGraphicsBrush : public wxGraphicsObject
 {
 public:
-    wxGraphicsBrush() {}
-    virtual ~wxGraphicsBrush() {}
+    wxGraphicsBrush() = default;
+    virtual ~wxGraphicsBrush() = default;
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsBrush);
 };
@@ -186,8 +168,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
 class WXDLLIMPEXP_CORE wxGraphicsFont : public wxGraphicsObject
 {
 public:
-    wxGraphicsFont() {}
-    virtual ~wxGraphicsFont() {}
+    wxGraphicsFont() = default;
+    virtual ~wxGraphicsFont() = default;
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsFont);
 };
@@ -197,8 +179,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
 class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
 {
 public:
-    wxGraphicsBitmap() {}
-    virtual ~wxGraphicsBitmap() {}
+    wxGraphicsBitmap() = default;
+    virtual ~wxGraphicsBitmap() = default;
 
     // Convert bitmap to wxImage: this is more efficient than converting to
     // wxBitmap first and then to wxImage and also works without X server
@@ -223,9 +205,9 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
 class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
 {
 public:
-    wxGraphicsMatrix() {}
+    wxGraphicsMatrix() = default;
 
-    virtual ~wxGraphicsMatrix() {}
+    virtual ~wxGraphicsMatrix() = default;
 
     // concatenates the matrix
     virtual void Concat( const wxGraphicsMatrix *t );
@@ -235,9 +217,9 @@ public:
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
         wxDouble tx=0.0, wxDouble ty=0.0);
 
-    // gets the component valuess of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
+    // gets the component values of the matrix
+    virtual void Get(wxDouble* a=nullptr, wxDouble* b=nullptr,  wxDouble* c=nullptr,
+                     wxDouble* d=nullptr, wxDouble* tx=nullptr, wxDouble* ty=nullptr) const;
 
     // makes this the inverse matrix
     virtual void Invert();
@@ -286,11 +268,216 @@ private:
 
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
 
+// ----------------------------------------------------------------------------
+// wxGradientStop and wxGradientStops: Specify what intermediate colors are used
+// and how they are spread out in a gradient
+// ----------------------------------------------------------------------------
+
+// gcc 9 gives a nonsensical warning about implicitly generated move ctor not
+// throwing but not being noexcept, suppress it.
+#if wxCHECK_GCC_VERSION(9, 1) && !wxCHECK_GCC_VERSION(10, 0)
+wxGCC_WARNING_SUPPRESS(noexcept)
+#endif
+
+// Describes a single gradient stop.
+class wxGraphicsGradientStop
+{
+public:
+    wxGraphicsGradientStop(wxColour col = wxTransparentColour,
+                           float pos = 0.0f)
+        : m_col(col),
+          m_pos(pos)
+    {
+    }
+
+    // default copy ctor, assignment operator and dtor are ok
+
+    const wxColour& GetColour() const { return m_col; }
+    void SetColour(const wxColour& col) { m_col = col; }
+
+    float GetPosition() const { return m_pos; }
+    void SetPosition(float pos)
+    {
+        wxASSERT_MSG( pos >= 0 && pos <= 1, "invalid gradient stop position" );
+
+        m_pos = pos;
+    }
+
+private:
+    // The colour of this gradient band.
+    wxColour m_col;
+
+    // Its starting position: 0 is the beginning and 1 is the end.
+    float m_pos;
+};
+
+#if wxCHECK_GCC_VERSION(9, 1) && !wxCHECK_GCC_VERSION(10, 0)
+wxGCC_WARNING_RESTORE(noexcept)
+#endif
+
+// A collection of gradient stops ordered by their positions (from lowest to
+// highest). The first stop (index 0, position 0.0) is always the starting
+// colour and the last one (index GetCount() - 1, position 1.0) is the end
+// colour.
+class WXDLLIMPEXP_CORE wxGraphicsGradientStops
+{
+public:
+    wxGraphicsGradientStops(wxColour startCol = wxTransparentColour,
+                            wxColour endCol = wxTransparentColour)
+    {
+        // we can't use Add() here as it relies on having start/end stops as
+        // first/last array elements so do it manually
+        m_stops.push_back(wxGraphicsGradientStop(startCol, 0.f));
+        m_stops.push_back(wxGraphicsGradientStop(endCol, 1.f));
+    }
+
+    // default copy ctor, assignment operator and dtor are ok for this class
+
+
+    // Add a stop in correct order.
+    void Add(const wxGraphicsGradientStop& stop);
+    void Add(wxColour col, float pos) { Add(wxGraphicsGradientStop(col, pos)); }
+
+    // Get the number of stops.
+    size_t GetCount() const { return m_stops.size(); }
+
+    // Return the stop at the given index (which must be valid).
+    wxGraphicsGradientStop Item(unsigned n) const { return m_stops.at(n); }
+
+    // Get/set start and end colours.
+    void SetStartColour(wxColour col)
+        { m_stops[0].SetColour(col); }
+    wxColour GetStartColour() const
+        { return m_stops[0].GetColour(); }
+    void SetEndColour(wxColour col)
+        { m_stops[m_stops.size() - 1].SetColour(col); }
+    wxColour GetEndColour() const
+        { return m_stops[m_stops.size() - 1].GetColour(); }
+
+private:
+    // All the stops stored in ascending order of positions.
+    wxVector<wxGraphicsGradientStop> m_stops;
+};
+
+// ----------------------------------------------------------------------------
+// wxGraphicsPenInfo describes a wxGraphicsPen
+// ----------------------------------------------------------------------------
+
+class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
+{
+public:
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
+                               wxDouble width = 1.0,
+                               wxPenStyle style = wxPENSTYLE_SOLID)
+        : wxPenInfoBase<wxGraphicsPenInfo>(colour, style)
+    {
+        m_width = width;
+        m_gradientType = wxGRADIENT_NONE;
+    }
+
+    // Setters
+
+    wxGraphicsPenInfo& Width(wxDouble width)
+    { m_width = width; return *this; }
+
+    wxGraphicsPenInfo&
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxColour& c1, const wxColour& c2,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
+    {
+        m_gradientType = wxGRADIENT_LINEAR;
+        m_x1 = x1;
+        m_y1 = y1;
+        m_x2 = x2;
+        m_y2 = y2;
+        m_stops.SetStartColour(c1);
+        m_stops.SetEndColour(c2);
+        m_matrix = matrix;
+        return *this;
+    }
+
+    wxGraphicsPenInfo&
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
+    {
+        m_gradientType = wxGRADIENT_LINEAR;
+        m_x1 = x1;
+        m_y1 = y1;
+        m_x2 = x2;
+        m_y2 = y2;
+        m_stops = stops;
+        m_matrix = matrix;
+        return *this;
+    }
+
+    wxGraphicsPenInfo&
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, wxDouble radius,
+                   const wxColour& oColor, const wxColour& cColor,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
+    {
+        m_gradientType = wxGRADIENT_RADIAL;
+        m_x1 = startX;
+        m_y1 = startY;
+        m_x2 = endX;
+        m_y2 = endY;
+        m_radius = radius;
+        m_stops.SetStartColour(oColor);
+        m_stops.SetEndColour(cColor);
+        m_matrix = matrix;
+        return *this;
+    }
+
+    wxGraphicsPenInfo&
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY,
+                   wxDouble radius, const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
+    {
+        m_gradientType = wxGRADIENT_RADIAL;
+        m_x1 = startX;
+        m_y1 = startY;
+        m_x2 = endX;
+        m_y2 = endY;
+        m_radius = radius;
+        m_stops = stops;
+        m_matrix = matrix;
+        return *this;
+    }
+
+    // Accessors
+
+    wxDouble GetWidth() const { return m_width; }
+    wxGradientType GetGradientType() const { return m_gradientType; }
+    wxDouble GetX1() const { return m_x1; }
+    wxDouble GetY1() const { return m_y1; }
+    wxDouble GetX2() const { return m_x2; }
+    wxDouble GetY2() const { return m_y2; }
+    wxDouble GetStartX() const { return m_x1; }
+    wxDouble GetStartY() const { return m_y1; }
+    wxDouble GetEndX() const { return m_x2; }
+    wxDouble GetEndY() const { return m_y2; }
+    wxDouble GetRadius() const { return m_radius; }
+    const wxGraphicsGradientStops& GetStops() const { return m_stops; }
+    const wxGraphicsMatrix& GetMatrix() const { return m_matrix; }
+
+private:
+    wxDouble m_width;
+    wxGradientType m_gradientType;
+    wxDouble m_x1, m_y1, m_x2, m_y2; // also used for m_xo, m_yo, m_xc, m_yc
+    wxDouble m_radius;
+    wxGraphicsGradientStops m_stops;
+    wxGraphicsMatrix m_matrix;
+};
+
+
+
 class WXDLLIMPEXP_CORE wxGraphicsPath : public wxGraphicsObject
 {
 public:
-    wxGraphicsPath()  {}
-    virtual ~wxGraphicsPath() {}
+    wxGraphicsPath()  = default;
+    virtual ~wxGraphicsPath() = default;
 
     //
     // These are the path primitives from which everything else can be constructed
@@ -373,86 +560,10 @@ private:
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPath) wxNullGraphicsPath;
 
 
-// Describes a single gradient stop.
-class wxGraphicsGradientStop
-{
-public:
-    wxGraphicsGradientStop(wxColour col = wxTransparentColour,
-                           float pos = 0.)
-        : m_col(col),
-          m_pos(pos)
-    {
-    }
-
-    // default copy ctor, assignment operator and dtor are ok
-
-    const wxColour& GetColour() const { return m_col; }
-    void SetColour(const wxColour& col) { m_col = col; }
-
-    float GetPosition() const { return m_pos; }
-    void SetPosition(float pos)
-    {
-        wxASSERT_MSG( pos >= 0 && pos <= 1, "invalid gradient stop position" );
-
-        m_pos = pos;
-    }
-
-private:
-    // The colour of this gradient band.
-    wxColour m_col;
-
-    // Its starting position: 0 is the beginning and 1 is the end.
-    float m_pos;
-};
-
-// A collection of gradient stops ordered by their positions (from lowest to
-// highest). The first stop (index 0, position 0.0) is always the starting
-// colour and the last one (index GetCount() - 1, position 1.0) is the end
-// colour.
-class WXDLLIMPEXP_CORE wxGraphicsGradientStops
-{
-public:
-    wxGraphicsGradientStops(wxColour startCol = wxTransparentColour,
-                            wxColour endCol = wxTransparentColour)
-    {
-        // we can't use Add() here as it relies on having start/end stops as
-        // first/last array elements so do it manually
-        m_stops.push_back(wxGraphicsGradientStop(startCol, 0.f));
-        m_stops.push_back(wxGraphicsGradientStop(endCol, 1.f));
-    }
-
-    // default copy ctor, assignment operator and dtor are ok for this class
-
-
-    // Add a stop in correct order.
-    void Add(const wxGraphicsGradientStop& stop);
-    void Add(wxColour col, float pos) { Add(wxGraphicsGradientStop(col, pos)); }
-
-    // Get the number of stops.
-    size_t GetCount() const { return m_stops.size(); }
-
-    // Return the stop at the given index (which must be valid).
-    wxGraphicsGradientStop Item(unsigned n) const { return m_stops.at(n); }
-
-    // Get/set start and end colours.
-    void SetStartColour(wxColour col)
-        { m_stops[0].SetColour(col); }
-    wxColour GetStartColour() const
-        { return m_stops[0].GetColour(); }
-    void SetEndColour(wxColour col)
-        { m_stops[m_stops.size() - 1].SetColour(col); }
-    wxColour GetEndColour() const
-        { return m_stops[m_stops.size() - 1].GetColour(); }
-
-private:
-    // All the stops stored in ascending order of positions.
-    wxVector<wxGraphicsGradientStop> m_stops;
-};
-
 class WXDLLIMPEXP_CORE wxGraphicsContext : public wxGraphicsObject
 {
 public:
-    wxGraphicsContext(wxGraphicsRenderer* renderer, wxWindow* window = NULL);
+    wxGraphicsContext(wxGraphicsRenderer* renderer, wxWindow* window = nullptr);
 
     virtual ~wxGraphicsContext();
 
@@ -467,7 +578,7 @@ public:
 #endif
 #endif
 
-    // Create a context from a DC of unknown type, if supported, returns NULL otherwise
+    // Create a context from a DC of unknown type, if supported, returns nullptr otherwise
     static wxGraphicsContext* CreateFromUnknownDC(const wxDC& dc);
 
     static wxGraphicsContext* CreateFromNative( void * context );
@@ -523,24 +634,28 @@ public:
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxColour& c1, const wxColour& c2) const;
+                              const wxColour& c1, const wxColour& c2,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) const;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     // sets the brush to a radial gradient originating at (xo,yc) and ending
     // on a circle around (xc,yc) with the given radius; the colours may be
     // specified by just the two extremes or the full array of gradient stops
     wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc, wxDouble radius,
-                              const wxColour& oColor, const wxColour& cColor) const;
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY, wxDouble radius,
+                              const wxColour& oColor, const wxColour& cColor,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc, wxDouble radius,
-                              const wxGraphicsGradientStops& stops) const;
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY, wxDouble radius,
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     // creates a font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
@@ -621,7 +736,29 @@ public:
     }
 
     // returns the resolution of the graphics context in device points per inch
-    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
+    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY) const;
+
+    wxSize FromDIP(const wxSize& sz) const;
+    wxPoint FromDIP(const wxPoint& pt) const
+    {
+        const wxSize sz = FromDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int FromDIP(int d) const
+    {
+        return FromDIP(wxSize(d, 0)).x;
+    }
+
+    wxSize ToDIP(const wxSize& sz) const;
+    wxPoint ToDIP(const wxPoint& pt) const
+    {
+        const wxSize sz = ToDIP(wxSize(pt.x, pt.y));
+        return wxPoint(sz.x, sz.y);
+    }
+    int ToDIP(int d) const
+    {
+        return ToDIP(wxSize(d, 0)).x;
+    }
 
 #if 0
     // sets the current alpha on this context
@@ -711,7 +848,7 @@ public:
 
 
     virtual void GetTextExtent( const wxString &text, wxDouble *width, wxDouble *height,
-        wxDouble *descent = NULL, wxDouble *externalLeading = NULL ) const  = 0;
+        wxDouble *descent = nullptr, wxDouble *externalLeading = nullptr ) const  = 0;
 
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const = 0;
 
@@ -760,7 +897,15 @@ public:
     virtual void EnableOffset(bool enable = true);
 
     void DisableOffset() { EnableOffset(false); }
-    bool OffsetEnabled() { return m_enableOffset; }
+    bool OffsetEnabled() const { return m_enableOffset; }
+
+    void SetContentScaleFactor(double contentScaleFactor);
+    double GetContentScaleFactor() const { return m_contentScaleFactor; }
+
+#ifdef __WXMSW__
+    virtual WXHDC GetNativeHDC() = 0;
+    virtual void ReleaseNativeHDC(WXHDC hdc) = 0;
+#endif
 
 protected:
     // These fields must be initialized in the derived class ctors.
@@ -796,6 +941,7 @@ private:
     // Create() or the associated window of the wxDC this context was created
     // from.
     wxWindow* const m_window;
+    double m_contentScaleFactor;
 
     wxDECLARE_NO_COPY_CLASS(wxGraphicsContext);
     wxDECLARE_ABSTRACT_CLASS(wxGraphicsContext);
@@ -845,9 +991,9 @@ private:
 class WXDLLIMPEXP_CORE wxGraphicsRenderer : public wxObject
 {
 public:
-    wxGraphicsRenderer() {}
+    wxGraphicsRenderer() = default;
 
-    virtual ~wxGraphicsRenderer() {}
+    virtual ~wxGraphicsRenderer() = default;
 
     static wxGraphicsRenderer* GetDefaultRenderer();
 
@@ -916,13 +1062,15 @@ public:
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) = 0;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) = 0;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
@@ -930,6 +1078,9 @@ public:
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) = 0;
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col = *wxBLACK) = 0;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
@@ -946,7 +1097,7 @@ public:
 
     virtual wxString GetName() const = 0;
     virtual void
-    GetVersion(int* major, int* minor = NULL, int* micro = NULL) const = 0;
+    GetVersion(int* major, int* minor = nullptr, int* micro = nullptr) const = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxGraphicsRenderer);

@@ -9,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_BANNERWINDOW
 
@@ -74,9 +71,9 @@ wxBannerWindow::Create(wxWindow* parent,
     return true;
 }
 
-void wxBannerWindow::SetBitmap(const wxBitmap& bmp)
+void wxBannerWindow::SetBitmap(const wxBitmapBundle& bmp)
 {
-    m_bitmap = bmp;
+    m_bitmapBundle = bmp;
 
     m_colBitmapBg = wxColour();
 
@@ -112,9 +109,9 @@ wxFont wxBannerWindow::GetTitleFont() const
 
 wxSize wxBannerWindow::DoGetBestClientSize() const
 {
-    if ( m_bitmap.IsOk() )
+    if ( m_bitmapBundle.IsOk() )
     {
-        return m_bitmap.GetSize();
+        return m_bitmapBundle.GetPreferredLogicalSizeFor(this);
     }
     else
     {
@@ -146,7 +143,7 @@ void wxBannerWindow::OnSize(wxSizeEvent& event)
 
 void wxBannerWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    if ( m_bitmap.IsOk() && m_title.empty() && m_message.empty() )
+    if ( m_bitmapBundle.IsOk() && m_title.empty() && m_message.empty() )
     {
         // No need for buffering in this case.
         wxPaintDC dc(this);
@@ -158,7 +155,7 @@ void wxBannerWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
         wxAutoBufferedPaintDC dc(this);
 
         // Deal with the background first.
-        if ( m_bitmap.IsOk() )
+        if ( m_bitmapBundle.IsOk() )
         {
             DrawBitmapBackground(dc);
         }
@@ -210,7 +207,7 @@ wxColour wxBannerWindow::GetBitmapBg()
 
     // Determine the colour to use to extend the bitmap. It's the colour of the
     // bitmap pixels at the edge closest to the area where it can be extended.
-    wxImage image(m_bitmap.ConvertToImage());
+    wxImage image(m_bitmapBundle.GetBitmapFor(this).ConvertToImage());
 
     // The point we get the colour from. The choice is arbitrary and in general
     // the bitmap should have the same colour on the entire edge of this point
@@ -263,6 +260,7 @@ void wxBannerWindow::DrawBitmapBackground(wxDC& dc)
     wxRect rectSolid;
 
     const wxSize size = GetClientSize();
+    const wxBitmap currentBitmap = m_bitmapBundle.GetBitmapFor(this);
 
     switch ( m_direction )
     {
@@ -270,9 +268,9 @@ void wxBannerWindow::DrawBitmapBackground(wxDC& dc)
         case wxBOTTOM:
             // Draw the bitmap at the origin, its rightmost could be truncated,
             // as it's meant to be.
-            dc.DrawBitmap(m_bitmap, 0, 0);
+            dc.DrawBitmap(currentBitmap, 0, 0);
 
-            rectSolid.x = m_bitmap.GetWidth();
+            rectSolid.x = currentBitmap.GetLogicalWidth();
             rectSolid.width = size.x - rectSolid.x;
             rectSolid.height = size.y;
             break;
@@ -282,16 +280,16 @@ void wxBannerWindow::DrawBitmapBackground(wxDC& dc)
             // must be always visible so intentionally draw it possibly partly
             // outside of the window.
             rectSolid.width = size.x;
-            rectSolid.height = size.y - m_bitmap.GetHeight();
-            dc.DrawBitmap(m_bitmap, 0, rectSolid.height);
+            rectSolid.height = size.y - currentBitmap.GetLogicalHeight();
+            dc.DrawBitmap(currentBitmap, 0, rectSolid.height);
             break;
 
         case wxRIGHT:
             // Draw the bitmap at the origin, possibly truncating its
             // bottommost part.
-            dc.DrawBitmap(m_bitmap, 0, 0);
+            dc.DrawBitmap(currentBitmap, 0, 0);
 
-            rectSolid.y = m_bitmap.GetHeight();
+            rectSolid.y = currentBitmap.GetLogicalHeight();
             rectSolid.height = size.y - rectSolid.y;
             rectSolid.width = size.x;
             break;

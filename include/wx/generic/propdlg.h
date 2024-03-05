@@ -2,7 +2,6 @@
 // Name:        wx/generic/propdlg.h
 // Purpose:     wxPropertySheetDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-03-12
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -83,7 +82,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& sz = wxDefaultSize,
                        long style = wxDEFAULT_DIALOG_STYLE,
-                       const wxString& name = wxDialogNameStr)
+                       const wxString& name = wxASCII_STR(wxDialogNameStr))
     {
         Init();
         Create(parent, id, title, pos, sz, style, name);
@@ -94,7 +93,7 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& sz = wxDefaultSize,
                        long style = wxDEFAULT_DIALOG_STYLE,
-                       const wxString& name = wxDialogNameStr);
+                       const wxString& name = wxASCII_STR(wxDialogNameStr));
 
 //// Accessors
 
@@ -103,7 +102,7 @@ public:
     wxBookCtrlBase* GetBookCtrl() const { return m_bookCtrl; }
 
     // Override function in base
-    virtual wxWindow* GetContentWindow() const wxOVERRIDE;
+    virtual wxWindow* GetContentWindow() const override;
 
     // Set and get the inner sizer
     void SetInnerSizer(wxSizer* sizer) { m_innerSizer = sizer; }

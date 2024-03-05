@@ -2,7 +2,6 @@
 // Name:        wx/treebase.h
 // Purpose:     wxTreeCtrl base classes and types
 // Author:      Julian Smart et al
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) 1997,1998 Robert Roebling
 // Licence:     wxWindows licence
@@ -60,7 +59,7 @@ public:
     // creation/destruction
     // --------------------
         // default ctor
-    wxTreeItemData() { }
+    wxTreeItemData() = default;
 
         // default copy ctor/assignment operator are ok
 
@@ -123,10 +122,6 @@ static const int wxTREE_ITEMSTATE_PREV  = -3;   // cycle to the previous state
 #define wxTR_SINGLE                  0x0000     // for convenience
 #define wxTR_MULTIPLE                0x0020     // can select multiple items
 
-#if WXWIN_COMPATIBILITY_2_8
-    #define wxTR_EXTENDED            0x0040     // deprecated, don't use
-#endif // WXWIN_COMPATIBILITY_2_8
-
 #define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080     // what it says
 
 #define wxTR_EDIT_LABELS             0x0200     // can edit item labels
@@ -137,11 +132,14 @@ static const int wxTREE_ITEMSTATE_PREV  = -3;   // cycle to the previous state
 
 // make the default control appearance look more native-like depending on the
 // platform
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     #define wxTR_DEFAULT_STYLE       (wxTR_HAS_BUTTONS | wxTR_NO_LINES)
 #elif defined(__WXMAC__)
     #define wxTR_DEFAULT_STYLE \
         (wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxTR_FULL_ROW_HIGHLIGHT)
+#elif defined(__WXMSW__)
+    #define wxTR_DEFAULT_STYLE \
+        (wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxTR_LINES_AT_ROOT | wxTR_TWIST_BUTTONS | wxTR_FULL_ROW_HIGHLIGHT)
 #else
     #define wxTR_DEFAULT_STYLE       (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
 #endif
@@ -198,7 +196,7 @@ public:
                 const wxTreeItemId &item = wxTreeItemId());
     wxTreeEvent(const wxTreeEvent& event);
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxTreeEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxTreeEvent(*this); }
 
     // accessors
         // get the item on which the operation was performed or the newly

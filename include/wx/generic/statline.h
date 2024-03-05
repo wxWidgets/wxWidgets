@@ -22,14 +22,14 @@ class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 
 public:
     // constructors and pseudo-constructors
-    wxStaticLine() { m_statbox = NULL; }
+    wxStaticLine() { m_statbox = nullptr; }
 
     wxStaticLine( wxWindow *parent,
                   wxWindowID id = wxID_ANY,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
-                  const wxString &name = wxStaticLineNameStr )
+                  const wxString &name = wxASCII_STR(wxStaticLineNameStr) )
     {
         Create(parent, id, pos, size, style, name);
     }
@@ -41,7 +41,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
-                 const wxString &name = wxStaticLineNameStr );
+                 const wxString &name = wxASCII_STR(wxStaticLineNameStr) );
 
     // it's necessary to override this wxWindow function because we
     // will want to return the main widget for m_statbox

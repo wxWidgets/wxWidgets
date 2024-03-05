@@ -2,7 +2,6 @@
 // Name:        auidemo.cpp
 // Purpose:     wxaui: wx advanced user interface - sample/test program
 // Author:      Benjamin I. Williams
-// Modified by:
 // Created:     2005-10-03
 // Copyright:   (C) Copyright 2005, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 #include "wx/grid.h"
@@ -22,17 +18,20 @@
 #include "wx/artprov.h"
 #include "wx/clipbrd.h"
 #include "wx/image.h"
+#include "wx/choice.h"
 #include "wx/colordlg.h"
 #include "wx/wxhtml.h"
 #include "wx/imaglist.h"
 #include "wx/dataobj.h"
 #include "wx/dcclient.h"
 #include "wx/bmpbuttn.h"
+#include "wx/log.h"
 #include "wx/menu.h"
 #include "wx/toolbar.h"
 #include "wx/statusbr.h"
 #include "wx/msgdlg.h"
 #include "wx/textdlg.h"
+#include "wx/stattext.h"
 
 #include "wx/aui/aui.h"
 #include "../sample.xpm"
@@ -42,7 +41,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxDECLARE_APP(MyApp);
@@ -57,7 +56,7 @@ class MyFrame : public wxFrame
 {
     enum
     {
-        ID_CreateTree = wxID_HIGHEST+1,
+        ID_CreateTree = wxID_HIGHEST,
         ID_CreateGrid,
         ID_CreateText,
         ID_CreateHTML,
@@ -102,6 +101,8 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
+        ID_NotebookNewTab,
+        ID_NotebookDeleteTab,
 
         ID_SampleItem,
 
@@ -116,8 +117,6 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE | wxSUNKEN_BORDER);
 
-    ~MyFrame();
-
     wxAuiDockArt* GetDockArt();
     void DoUpdate();
 
@@ -125,9 +124,9 @@ private:
     wxTextCtrl* CreateTextCtrl(const wxString& text = wxEmptyString);
     wxGrid* CreateGrid();
     wxTreeCtrl* CreateTreeCtrl();
-    wxSizeReportCtrl* CreateSizeReportCtrl(const wxSize &size = wxWindow::FromDIP(wxSize(80, 80), NULL));
+    wxSizeReportCtrl* CreateSizeReportCtrl(const wxSize &size = wxWindow::FromDIP(wxSize(80, 80), nullptr));
     wxPoint GetStartPosition();
-    wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = NULL);
+    wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = nullptr);
     wxAuiNotebook* CreateNotebook();
 
     wxString GetIntroText();
@@ -164,6 +163,9 @@ private:
     void OnNotebookFlag(wxCommandEvent& evt);
     void OnUpdateUI(wxUpdateUIEvent& evt);
 
+    void OnNotebookNewTab(wxCommandEvent& evt);
+    void OnNotebookDeleteTab(wxCommandEvent& evt);
+
     void OnPaneClose(wxAuiManagerEvent& evt);
 
 private:
@@ -188,7 +190,7 @@ public:
     wxSizeReportCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     wxAuiManager* mgr = NULL)
+                     wxAuiManager* mgr = nullptr)
                      : wxControl(parent, id, pos, size, wxNO_BORDER)
     {
         m_mgr = mgr;
@@ -265,7 +267,7 @@ class SettingsPanel : public wxPanel
 {
     enum
     {
-        ID_PaneBorderSize = wxID_HIGHEST+1,
+        ID_PaneBorderSize = wxID_HIGHEST,
         ID_SashSize,
         ID_CaptionSize,
         ID_BackgroundColor,
@@ -566,11 +568,11 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    wxFrame* frame = new MyFrame(NULL,
+    wxFrame* frame = new MyFrame(nullptr,
                                  wxID_ANY,
                                  "wxAUI Sample Application",
                                  wxDefaultPosition,
-                                 wxWindow::FromDIP(wxSize(800, 600), NULL));
+                                 wxWindow::FromDIP(wxSize(800, 600), nullptr));
     frame->Show();
 
     return true;
@@ -611,6 +613,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_NotebookArtSimple, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookAlignTop,     MyFrame::OnTabAlignment)
     EVT_MENU(ID_NotebookAlignBottom,  MyFrame::OnTabAlignment)
+    EVT_MENU(ID_NotebookNewTab, MyFrame::OnNotebookNewTab)
+    EVT_MENU(ID_NotebookDeleteTab, MyFrame::OnNotebookDeleteTab)
     EVT_MENU(ID_NoGradient, MyFrame::OnGradient)
     EVT_MENU(ID_VerticalGradient, MyFrame::OnGradient)
     EVT_MENU(ID_HorizontalGradient, MyFrame::OnGradient)
@@ -709,7 +713,9 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendCheckItem(ID_NoVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
-    options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
+    // Only show "live resize" toggle if it's actually functional.
+    if ( !wxAuiManager::AlwaysUsesLiveResize() )
+        options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
     options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_NoGradient, _("No Caption Gradient"));
     options_menu->AppendRadioItem(ID_VerticalGradient, _("Vertical Caption Gradient"));
@@ -737,6 +743,9 @@ MyFrame::MyFrame(wxWindow* parent,
     notebook_menu->AppendCheckItem(ID_NotebookScrollButtons, _("Scroll Buttons Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookWindowList, _("Window List Button Visible"));
     notebook_menu->AppendCheckItem(ID_NotebookTabFixedWidth, _("Fixed-width Tabs"));
+    notebook_menu->AppendSeparator();
+    notebook_menu->Append(ID_NotebookNewTab, _("Add a &New Tab"));
+    notebook_menu->Append(ID_NotebookDeleteTab, _("&Delete Last Tab"));
 
     m_perspectives_menu = new wxMenu;
     m_perspectives_menu->Append(ID_CreatePerspective, _("Create Perspective"));
@@ -784,22 +793,20 @@ MyFrame::MyFrame(wxWindow* parent,
     // create some toolbars
     wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb1->SetToolBitmapSize(FromDIP(wxSize(48,48)));
-    tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
+    tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb1->AddSeparator();
-    tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb1->AddTool(ID_SampleItem+3, "Test", wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb1->AddTool(ID_SampleItem+4, "Test", wxArtProvider::GetBitmap(wxART_WARNING));
-    tb1->AddTool(ID_SampleItem+5, "Test", wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
+    tb1->AddTool(ID_SampleItem+3, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
+    tb1->AddTool(ID_SampleItem+4, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
+    tb1->AddTool(ID_SampleItem+5, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
     tb1->SetCustomOverflowItems(prepend_items, append_items);
     tb1->Realize();
 
 
     wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_HORIZONTAL);
-    tb2->SetToolBitmapSize(FromDIP(wxSize(16,16)));
 
-    wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, FromDIP(wxSize(16,16)));
+    wxBitmapBundle tb2_bmp1 = wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
     tb2->AddTool(ID_SampleItem+6, "Disabled", tb2_bmp1);
     tb2->AddTool(ID_SampleItem+7, "Test", tb2_bmp1);
     tb2->AddTool(ID_SampleItem+8, "Test", tb2_bmp1);
@@ -819,8 +826,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb3->SetToolBitmapSize(FromDIP(wxSize(16,16)));
-    wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, FromDIP(wxSize(16,16)));
+    wxBitmapBundle tb3_bmp1 = wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
     tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxITEM_CHECK);
     tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxITEM_CHECK);
     tb3->AddTool(ID_SampleItem+18, "Check 3", tb3_bmp1, "Check 3", wxITEM_CHECK);
@@ -842,11 +848,12 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
-    tb4->SetToolBitmapSize(FromDIP(wxSize(16,16)));
-    wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
+    wxBitmapBundle tb4_bmp1 = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
     tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
     tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+24, "Item 3", tb4_bmp1);
+    tb4->SetToolSticky(ID_SampleItem+23, true);
+    tb4->AddTool(ID_SampleItem+24, "Disabled", tb4_bmp1);
+    tb4->EnableTool(ID_SampleItem+24, false); // Just to show disabled items look
     tb4->AddTool(ID_SampleItem+25, "Item 4", tb4_bmp1);
     tb4->AddSeparator();
     tb4->AddTool(ID_SampleItem+26, "Item 5", tb4_bmp1);
@@ -864,13 +871,12 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-    tb5->SetToolBitmapSize(FromDIP(wxSize(48,48)));
-    tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
+    tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmapBundle(wxART_ERROR));
     tb5->AddSeparator();
-    tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmap(wxART_WARNING));
-    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmapBundle(wxART_QUESTION));
+    tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmapBundle(wxART_INFORMATION));
+    tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmapBundle(wxART_WARNING));
+    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmapBundle(wxART_MISSING_IMAGE));
     tb5->SetCustomOverflowItems(prepend_items, append_items);
     tb5->Realize();
 
@@ -929,9 +935,9 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
                   Name("test10").Caption("Text Pane with Hide Prompt").
                   Bottom().Layer(1).Position(1).
-                  Icon(wxArtProvider::GetBitmap(wxART_WARNING,
-                                                wxART_OTHER,
-                                                wxSize(iconSize, iconSize))));
+                  Icon(wxArtProvider::GetBitmapBundle(wxART_WARNING,
+                                                      wxART_OTHER,
+                                                      wxSize(iconSize, iconSize))));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
                   Name("test11").Caption("Fixed Pane").
@@ -1010,11 +1016,6 @@ MyFrame::MyFrame(wxWindow* parent,
 
     // "commit" all changes made to wxAuiManager
     m_mgr.Update();
-}
-
-MyFrame::~MyFrame()
-{
-    m_mgr.UnInit();
 }
 
 wxAuiDockArt* MyFrame::GetDockArt()
@@ -1273,7 +1274,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
 
         case ID_NotebookNoCloseButton:
-            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) != 0);
+            event.Check((m_notebook_style & (wxAUI_NB_CLOSE_BUTTON|wxAUI_NB_CLOSE_ON_ALL_TABS|wxAUI_NB_CLOSE_ON_ACTIVE_TAB)) == 0);
             break;
         case ID_NotebookCloseButton:
             event.Check((m_notebook_style & wxAUI_NB_CLOSE_BUTTON) != 0);
@@ -1311,6 +1312,36 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
 
     }
 }
+
+
+void MyFrame::OnNotebookNewTab(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    book->AddPage(new wxTextCtrl(book, wxID_ANY, "New Tab",
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE | wxNO_BORDER),
+                  wxString::Format("Tab %zu", book->GetPageCount() + 1),
+                  true /* select */);
+}
+
+
+void MyFrame::OnNotebookDeleteTab(wxCommandEvent& WXUNUSED(evt))
+{
+    auto* const book =
+        wxCheckCast<wxAuiNotebook>(m_mgr.GetPane("notebook_content").window);
+
+    auto numPages = book->GetPageCount();
+    if ( !numPages )
+    {
+        wxLogWarning("No pages to delete.");
+        return;
+    }
+
+    book->DeletePage(numPages - 1);
+}
+
 
 void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 {
@@ -1407,7 +1438,7 @@ void MyFrame::OnNotebookPageChanging(wxAuiNotebookEvent& evt)
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
 {
     // for the purpose of this test application, explicitly
-    // allow all noteboko drag and drop events
+    // allow all notebook drag and drop events
     evt.Allow();
 }
 
@@ -1495,6 +1526,7 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
         // create the popup menu
         wxMenu menuPopup;
 
+        // TODO: Use GetBitmapBundle() when wxMenuItem is updated to use it too.
         wxBitmap bmp = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, FromDIP(wxSize(16,16)));
 
         wxMenuItem* m1 =  new wxMenuItem(&menuPopup, 10001, _("Drop Down Item 1"));
@@ -1595,11 +1627,11 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl()
                                       FromDIP(wxSize(160,250)),
                                       wxTR_DEFAULT_STYLE | wxNO_BORDER);
 
-    wxSize size = FromDIP(wxSize(16, 16));
-    wxImageList* imglist = new wxImageList(size.x, size.y, true, 2);
-    imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, size));
-    imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, size));
-    tree->AssignImageList(imglist);
+    wxSize size(16, 16);
+    wxVector<wxBitmapBundle> images;
+    images.push_back(wxArtProvider::GetBitmapBundle(wxART_FOLDER, wxART_OTHER, size));
+    images.push_back(wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, size));
+    tree->SetImages(images);
 
     wxTreeItemId root = tree->AddRoot("wxAUI Project", 0);
     wxArrayTreeItemIds items;
@@ -1661,7 +1693,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
                                     m_notebook_style);
    ctrl->Freeze();
 
-   wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
+   wxBitmapBundle page_bmp = wxArtProvider::GetBitmapBundle(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
 
    ctrl->AddPage(CreateHTMLCtrl(ctrl), "Welcome to wxAUI" , false, page_bmp);
    ctrl->SetPageToolTip(0, "Welcome to wxAUI (this is a page tooltip)");

@@ -2,7 +2,6 @@
 // Name:        src/generic/clrpickerg.cpp
 // Purpose:     wxGenericColourButton class implementation
 // Author:      Francesco Montorsi (readapted code written by Vadim Zeitlin)
-// Modified by:
 // Created:     15/04/2006
 // Copyright:   (c) Vadim Zeitlin, Francesco Montorsi
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COLOURPICKERCTRL
 
@@ -29,6 +25,10 @@
 #include "wx/colordlg.h"
 #include "wx/dcmemory.h"
 
+namespace // anonymous namespace
+{
+const wxSize defaultBitmapSize(60, 13);
+}
 
 // ============================================================================
 // implementation
@@ -46,8 +46,6 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
                         const wxSize &size, long style,
                         const wxValidator& validator, const wxString &name)
 {
-    m_bitmap = wxBitmap( 60, 13 );
-
     // create this button
     if (!wxBitmapButton::Create( parent, id, m_bitmap, pos,
                            size, style, validator, name ))
@@ -59,10 +57,13 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
     // and handle user clicks on it
     Bind(wxEVT_BUTTON, &wxGenericColourButton::OnButtonClick, this, GetId());
 
+    m_bitmap = wxBitmap(FromDIP(defaultBitmapSize));
     m_colour = col;
     UpdateColour();
     InitColourData();
     ms_data.SetChooseAlpha((style & wxCLRP_SHOW_ALPHA) != 0);
+
+    Bind(wxEVT_DPI_CHANGED, &wxGenericColourButton::OnDPIChanged, this);
 
     return true;
 }
@@ -118,6 +119,14 @@ void wxGenericColourButton::OnColourChanged(wxColourDialogEvent& ev)
     parent->ProcessWindowEvent(event);
 }
 
+void wxGenericColourButton::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    m_bitmap = wxBitmap(FromDIP(defaultBitmapSize));
+    UpdateColour();
+
+    event.Skip();
+}
+
 void wxGenericColourButton::UpdateColour()
 {
     wxMemoryDC dc(m_bitmap);
@@ -130,10 +139,17 @@ void wxGenericColourButton::UpdateColour()
         wxColour col( ~m_colour.Red(), ~m_colour.Green(), ~m_colour.Blue() );
         dc.SetTextForeground( col );
         dc.SetFont( GetFont() );
-        dc.DrawText( m_colour.GetAsString(wxC2S_HTML_SYNTAX), 0, 0 );
+
+        const wxString text = m_colour.GetAsString(wxC2S_HTML_SYNTAX);
+        const wxSize textSize = dc.GetTextExtent(text);
+        const int x = (m_bitmap.GetWidth() - textSize.GetWidth()) / 2;
+        const int y = (m_bitmap.GetHeight() - textSize.GetHeight()) / 2;
+        dc.DrawText(text, x, y);
     }
 
     dc.SelectObject( wxNullBitmap );
+
+    SetBitmapLabel( wxNullBitmap );
     SetBitmapLabel( m_bitmap );
 }
 

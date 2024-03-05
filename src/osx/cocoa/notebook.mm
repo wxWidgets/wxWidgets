@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/notebook.mm
 // Purpose:     implementation of wxNotebook
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -22,7 +21,7 @@
 #endif
 
 #include "wx/string.h"
-#include "wx/imaglist.h"
+#include "wx/private/bmpbndl.h"
 #include "wx/osx/private.h"
 
 //
@@ -142,7 +141,6 @@
     {
         imageSize.width *= labelSize.height/imageSize.height;
         imageSize.height *= labelSize.height/imageSize.height;
-        [m_image setScalesWhenResized:YES];
         [m_image setSize: imageSize];
     }
     labelSize.width += imageSize.width;
@@ -153,9 +151,19 @@
     if(m_image)
     {
         NSSize imageSize = [m_image size];
-        [m_image compositeToPoint:NSMakePoint(tabRect.origin.x,
-                tabRect.origin.y+imageSize.height)
-            operation:NSCompositeSourceOver];
+        NSAffineTransform* imageTransform = [NSAffineTransform transform];
+        if( [[self view] isFlipped] )
+        {
+            [imageTransform translateXBy:tabRect.origin.x yBy:tabRect.origin.y+imageSize.height];
+            [imageTransform scaleXBy:1.0 yBy:-1.0];
+            [imageTransform concat];
+        }
+        [m_image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        if( [[self view] isFlipped] )
+        {
+            [imageTransform invert];
+            [imageTransform concat];
+        }
         tabRect.size.width -= imageSize.width;
         tabRect.origin.x += imageSize.width;
     }
@@ -165,6 +173,7 @@
 {
     return m_image;
 }
+
 - (void)setImage:(NSImage*)image
 {
     [image retain];
@@ -173,6 +182,7 @@
     if(!m_image)
         return;
 }
+
 @end // implementation WXCTabViewImageItem : NSTabViewItem
 
 
@@ -183,7 +193,7 @@ public:
     {
     }
 
-    void GetContentArea( int &left , int &top , int &width , int &height ) const wxOVERRIDE
+    void GetContentArea( int &left , int &top , int &width , int &height ) const override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         NSRect r = [slf contentRect];
@@ -193,7 +203,7 @@ public:
         height = (int)r.size.height;
     }
 
-    void SetValue( wxInt32 value ) wxOVERRIDE
+    void SetValue( wxInt32 value ) override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         // avoid 'changed' events when setting the tab programmatically
@@ -204,7 +214,7 @@ public:
         [slf setDelegate:controller];
     }
 
-    wxInt32 GetValue() const wxOVERRIDE
+    wxInt32 GetValue() const override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         NSTabViewItem* selectedItem = [slf selectedTabViewItem];
@@ -214,7 +224,7 @@ public:
             return [slf indexOfTabViewItem:selectedItem]+1;
     }
 
-    void SetMaximum( wxInt32 maximum ) wxOVERRIDE
+    void SetMaximum( wxInt32 maximum ) override
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         int cocoacount = [slf numberOfTabViewItems ];
@@ -242,7 +252,7 @@ public:
         [slf setDelegate:controller];
     }
 
-    void SetupTabs( const wxNotebook& notebook) wxOVERRIDE
+    void SetupTabs( const wxNotebook& notebook) override
     {
         int pcount = notebook.GetPageCount();
 
@@ -253,20 +263,18 @@ public:
             wxNotebookPage* page = notebook.GetPage(i);
             NSTabViewItem* item = [(wxNSTabView*) m_osxView tabViewItemAtIndex:i];
             [item setView:page->GetHandle() ];
-            wxCFStringRef cf( page->GetLabel() , notebook.GetFont().GetEncoding() );
+            wxCFStringRef cf( page->GetLabel() );
             [item setLabel:cf.AsNSString()];
-            if ( notebook.GetImageList() && notebook.GetPageImage(i) >= 0 )
+
+            const wxBitmapBundle bitmap = notebook.GetPageBitmapBundle(i);
+            if ( bitmap.IsOk() )
             {
-                const wxBitmap bmap = notebook.GetImageList()->GetBitmap( notebook.GetPageImage( i ) ) ;
-                if ( bmap.IsOk() )
-                {
-                    [(WXCTabViewImageItem*) item setImage: bmap.GetNSImage()];
-                }
+                [(WXCTabViewImageItem*) item setImage: wxOSXGetImageFromBundle(bitmap)];
             }
         }
     }
 
-    int TabHitTest(const wxPoint & pt, long* flags) wxOVERRIDE
+    int TabHitTest(const wxPoint & pt, long* flags) override
     {
         int retval = wxNOT_FOUND;
         
@@ -326,7 +334,7 @@ public:
     m_peer = new wxMacControl( this );
     OSStatus err = CreateTabsControl(
         MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds,
-        tabsize, tabstyle, 0, NULL, GetPeer()->GetControlRefAddr() );
+        tabsize, tabstyle, 0, nullptr, GetPeer()->GetControlRefAddr() );
     verify_noerr( err );
 #endif
 */
@@ -338,7 +346,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
                                     long style,
                                     long WXUNUSED(extraStyle))
 {
-    static wxTabViewController* controller = NULL;
+    static wxTabViewController* controller = nullptr;
 
     if ( !controller )
         controller =[[wxTabViewController alloc] init];

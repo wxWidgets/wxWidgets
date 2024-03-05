@@ -2,7 +2,6 @@
 // Name:        src/msw/radiobut.cpp
 // Purpose:     wxRadioButton
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_RADIOBTN
 
@@ -29,11 +25,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/dcscreen.h"
-    #include "wx/toplevel.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/private/window.h"
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 
@@ -74,6 +70,19 @@ bool wxRadioButton::Create(wxWindow *parent,
     // do it)
     if ( HasFlag(wxRB_GROUP) )
         SetValue(true);
+
+    return true;
+}
+
+bool wxRadioButton::MSWGetDarkModeSupport(MSWDarkModeSupport& support) const
+{
+    // Weirdly enough, even though radio buttons support dark theme (they
+    // notably change the way they draw the focus rectangle if we set it), they
+    // still use the default black foreground colour in it, making their text
+    // unreadable, so we need to change it manually.
+    wxRadioButtonBase::MSWGetDarkModeSupport(support);
+
+    support.setForeground = true;
 
     return true;
 }
@@ -181,11 +190,29 @@ void wxRadioButton::SetValue(bool value)
     }
     else
     {
-        // Don't change focus right now, this could be unexpected, but do
-        // ensure that when our parent regains focus, it goes to this button
-        // and not another one, which would result in this one losing its
-        // checked status.
-        GetParent()->WXSetPendingFocus(this);
+        // We don't need to change the focus right now, so avoid doing it as it
+        // could be unexpected (and also would result in focus set/kill events
+        // that wouldn't be generated under the other platforms).
+        if ( !GetParent()->IsDescendant(FindFocus()) )
+        {
+            // However tell the parent to focus this radio button when it
+            // regains the focus the next time, to avoid focusing another one
+            // and this changing the value. Note that this is not ideal: it
+            // would be better to only change pending focus if it currently
+            // points to a radio button, but this is much simpler to do, as
+            // otherwise we'd need to not only check if the pending focus is a
+            // radio button, but also if we'd give the focus to a radio button
+            // when there is no current pending focus, so don't bother with it
+            // until somebody really complains about it being a problem in
+            // practice.
+            GetParent()->WXSetPendingFocus(this);
+        }
+        //else: don't overwrite the pending focus if the window has the focus
+        // currently, as this would make its state inconsistent and would be
+        // useless anyhow, as the problem we're trying to solve here won't
+        // happen in this case (we know that our focused sibling is not a radio
+        // button in the same group, otherwise we would have set shouldSetFocus
+        // to true above).
     }
 }
 
@@ -238,31 +265,32 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 wxSize wxRadioButton::DoGetBestSize() const
 {
-    static int s_radioSize = 0;
+    static wxPrivate::DpiDependentValue<wxCoord> s_radioSize;
 
-    if ( !s_radioSize )
+    if ( s_radioSize.HasChanged(this) )
     {
-        wxScreenDC dc;
+        wxClientDC dc(const_cast<wxRadioButton*>(this));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-        s_radioSize = dc.GetCharHeight();
+        s_radioSize.SetAtNewDPI(dc.GetCharHeight());
     }
 
+    wxCoord& radioSize = s_radioSize.Get();
     wxString str = GetLabel();
 
     int wRadio, hRadio;
     if ( !str.empty() )
     {
         GetTextExtent(GetLabelText(str), &wRadio, &hRadio);
-        wRadio += s_radioSize + GetCharWidth();
+        wRadio += radioSize + GetCharWidth();
 
-        if ( hRadio < s_radioSize )
-            hRadio = s_radioSize;
+        if ( hRadio < radioSize )
+            hRadio = radioSize;
     }
     else
     {
-        wRadio = s_radioSize;
-        hRadio = s_radioSize;
+        wRadio = radioSize;
+        hRadio = radioSize;
     }
 
     return wxSize(wRadio, hRadio);

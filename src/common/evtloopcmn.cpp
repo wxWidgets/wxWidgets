@@ -11,9 +11,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/evtloop.h"
 
@@ -35,7 +32,7 @@ static int gs_eventLoopCount = 0;
 // wxEventLoopBase
 // ----------------------------------------------------------------------------
 
-wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;
+wxEventLoopBase *wxEventLoopBase::ms_activeLoop = nullptr;
 
 wxEventLoopBase::wxEventLoopBase()
 {
@@ -193,11 +190,11 @@ wxEventLoopBase::AddSourceForFD(int fd,
     // Delegate to the event loop sources manager defined by it.
     wxEventLoopSourcesManagerBase* const
         manager = wxApp::GetValidTraits().GetEventLoopSourcesManager();
-    wxCHECK_MSG( manager, NULL, wxS("Must have wxEventLoopSourcesManager") );
+    wxCHECK_MSG( manager, nullptr, wxS("Must have wxEventLoopSourcesManager") );
 
     return manager->AddSourceForFD(fd, handler, flags);
 #else // !wxUSE_CONSOLE_EVENTLOOP
-    return NULL;
+    return nullptr;
 #endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
 }
 
@@ -270,7 +267,15 @@ int wxEventLoopManual::DoRun()
                 // generate and process idle events for as long as we don't
                 // have anything else to do, but stop doing this if Exit() is
                 // called by one of the idle handlers
-                while ( !m_shouldExit && !Pending() && ProcessIdle() )
+                //
+                // note that Pending() only checks for pending events from the
+                // underlying toolkit, but not our own pending events added by
+                // QueueEvent(), so we need to call HasPendingEvents() to check
+                // for them too
+                while ( !m_shouldExit
+                            && !Pending()
+                                && !(wxTheApp && wxTheApp->HasPendingEvents())
+                                    && ProcessIdle() )
                     ;
 
                 // if Exit() was called, don't dispatch any more events here
@@ -355,7 +360,7 @@ int wxEventLoopManual::DoRun()
             }
             catch ( ... )
             {
-                // OnException() throwed, possibly rethrowing the same
+                // OnException() thrown, possibly rethrowing the same
                 // exception again: very good, but we still need OnExit() to
                 // be called
                 OnExit();

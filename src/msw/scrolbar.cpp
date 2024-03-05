@@ -2,7 +2,6 @@
 // Name:        src/msw/scrolbar.cpp
 // Purpose:     wxScrollBar
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SCROLLBAR
 
@@ -44,7 +40,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-wxScrollBar::~wxScrollBar(void)
+wxScrollBar::~wxScrollBar()
 {
 }
 
@@ -153,7 +149,7 @@ void wxScrollBar::SetThumbPosition(int viewStart)
     ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, TRUE);
 }
 
-int wxScrollBar::GetThumbPosition(void) const
+int wxScrollBar::GetThumbPosition() const
 {
     WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.fMask = SIF_POS;
@@ -238,7 +234,7 @@ WXHBRUSH wxScrollBar::MSWControlColor(WXHDC pDC, WXHWND hWnd)
     // XP) brush instead of GetBackgroundColour() one as the base class would
     //
     // note that fg colour isn't used for a scrollbar
-    return UseBgCol() ? wxControl::MSWControlColor(pDC, hWnd) : NULL;
+    return UseBgCol() ? wxControl::MSWControlColor(pDC, hWnd) : nullptr;
 }
 
 #endif // wxUSE_SCROLLBAR

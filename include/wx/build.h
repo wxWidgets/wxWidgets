@@ -2,7 +2,6 @@
 // Name:        wx/build.h
 // Purpose:     Runtime build options checking
 // Author:      Vadim Zeitlin, Vaclav Slavik
-// Modified by:
 // Created:     07.05.02
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -46,7 +45,7 @@
 #elif wxUSE_UNICODE_WCHAR
     #define __WX_BO_UNICODE "wchar_t"
 #else
-    #define __WX_BO_UNICODE "ANSI"
+    #error "Either wxUSE_UNICODE_UTF8 or wxUSE_UNICODE_WCHAR must be 1"
 #endif
 
 // GCC and Intel C++ share same C++ ABI (and possibly others in the future),
@@ -81,22 +80,20 @@
     // ABI-compatible with the corresponding version of the MSVC and we want to
     // allow using it compile the application code using MSVC-built DLLs.
     #define __WX_BO_COMPILER ",Intel C++"
-#elif defined(__BORLANDC__)
-    #define __WX_BO_COMPILER ",Borland C++"
 #else
     #define __WX_BO_COMPILER
 #endif
 
 // WXWIN_COMPATIBILITY macros affect presence of virtual functions
-#if WXWIN_COMPATIBILITY_2_8
-    #define __WX_BO_WXWIN_COMPAT_2_8 ",compatible with 2.8"
-#else
-    #define __WX_BO_WXWIN_COMPAT_2_8
-#endif
 #if WXWIN_COMPATIBILITY_3_0
     #define __WX_BO_WXWIN_COMPAT_3_0 ",compatible with 3.0"
 #else
     #define __WX_BO_WXWIN_COMPAT_3_0
+#endif
+#if WXWIN_COMPATIBILITY_3_2
+    #define __WX_BO_WXWIN_COMPAT_3_2 ",compatible with 3.2"
+#else
+    #define __WX_BO_WXWIN_COMPAT_3_2
 #endif
 
 // deriving wxWin containers from STL ones changes them completely:
@@ -112,7 +109,7 @@
     " (" __WX_BO_UNICODE \
      __WX_BO_COMPILER \
      __WX_BO_STL \
-     __WX_BO_WXWIN_COMPAT_2_8 __WX_BO_WXWIN_COMPAT_3_0 \
+     __WX_BO_WXWIN_COMPAT_3_0 __WX_BO_WXWIN_COMPAT_3_2 \
      ")"
 
 

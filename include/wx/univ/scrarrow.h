@@ -2,7 +2,6 @@
 // Name:        wx/univ/scrarrow.h
 // Purpose:     wxScrollArrows class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.01.01
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -82,7 +81,7 @@ private:
 class WXDLLIMPEXP_CORE wxControlWithArrows
 {
 public:
-    virtual ~wxControlWithArrows() {}
+    virtual ~wxControlWithArrows() = default;
 
     // get the renderer to use for drawing the arrows
     virtual wxRenderer *GetRenderer() const = 0;

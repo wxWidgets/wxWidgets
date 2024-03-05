@@ -2,7 +2,6 @@
 // Name:        wx/xtistrm.h
 // Purpose:     streaming runtime metadata information (extended class info)
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     27/07/03
 // Copyright:   (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence
@@ -51,7 +50,7 @@ class WXDLLIMPEXP_BASE wxObjectReader;
 class WXDLLIMPEXP_BASE wxObjectWriterCallback
 {
 public:
-    virtual ~wxObjectWriterCallback() {}
+    virtual ~wxObjectWriterCallback() = default;
 
     // will be called before an object is written, may veto by returning false
     virtual bool BeforeWriteObject( wxObjectWriter *WXUNUSED(writer),
@@ -154,7 +153,7 @@ public:
     virtual void DoBeginWriteObject(const wxObject *object, const wxClassInfo *classInfo,
                                     int objectID, const wxStringToAnyHashMap &metadata ) = 0;
 
-    // end of writing an toplevel object name param is used for unique
+    // end of writing a toplevel object name param is used for unique
     // identification within the container
     virtual void DoEndWriteObject(const wxObject *object,
                 const wxClassInfo *classInfo, int objectID ) = 0;
@@ -213,7 +212,7 @@ Streaming callbacks for depersisting XML to code, or running objects
 class WXDLLIMPEXP_BASE wxObjectReaderCallback;
 
 /*
-wxObjectReader handles streaming in a class from a arbitrary format.
+wxObjectReader handles streaming in a class from an arbitrary format.
 While walking through it issues calls out to interfaces to readercallback
 the guts from the underlying storage format.
 */
@@ -233,7 +232,7 @@ public:
     // The return value is the root object ID, which can
     // then be used to ask the depersister about that object
     // if there was a problem you will get back wxInvalidObjectID and the current
-    // error log will carry the problems encoutered
+    // error log will carry the problems encountered
     virtual int ReadObject( const wxString &name, wxObjectReaderCallback *readercallback ) = 0;
 
 private:
@@ -249,7 +248,7 @@ private:
 class WXDLLIMPEXP_BASE wxObjectReaderCallback
 {
 public:
-    virtual ~wxObjectReaderCallback() {}
+    virtual ~wxObjectReaderCallback() = default;
 
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo,

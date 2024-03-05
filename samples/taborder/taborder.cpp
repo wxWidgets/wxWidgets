@@ -16,9 +16,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -78,7 +75,7 @@ enum
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // and the main sample window
@@ -194,7 +191,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, "TabOrder wxWidgets Sample",
+       : wxFrame(nullptr, wxID_ANY, "TabOrder wxWidgets Sample",
                  wxDefaultPosition, wxSize(700, 450))
 {
     SetIcon(wxICON(sample));
@@ -245,7 +242,7 @@ void MyFrame::OnTabBackward(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 {
     // track the window which has the focus in the status bar
-    static wxWindow *s_windowFocus = NULL;
+    static wxWindow *s_windowFocus = nullptr;
     wxWindow *focus = wxWindow::FindFocus();
     if ( focus != s_windowFocus )
     {

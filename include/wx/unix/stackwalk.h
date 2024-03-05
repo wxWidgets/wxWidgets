@@ -2,7 +2,6 @@
 // Name:        wx/unix/stackwalk.h
 // Purpose:     declaration of wxStackWalker for Unix
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2005-01-19
 // Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -25,14 +24,14 @@ public:
     //
     // NB: we don't copy syminfo pointer so it should have lifetime at least as
     //     long as ours
-    wxStackFrame(size_t level = 0, void *address = NULL, const char *syminfo = NULL)
+    wxStackFrame(size_t level = 0, void *address = nullptr, const char *syminfo = nullptr)
         : wxStackFrameBase(level, address)
     {
         m_syminfo = syminfo;
     }
 
 protected:
-    virtual void OnGetName() wxOVERRIDE;
+    virtual void OnGetName() override;
 
     // optimized for the 2 step initialization done by wxStackWalker
     void Set(const wxString &name, const wxString &filename, const char* syminfo,
@@ -62,7 +61,7 @@ public:
     // addr2line, normally we can retrieve it from wxTheApp but if wxTheApp
     // doesn't exist or doesn't have the correct value, the path may be given
     // explicitly
-    wxStackWalker(const char *argv0 = NULL)
+    wxStackWalker(const char *argv0 = nullptr)
     {
         ms_exepath = wxString::FromAscii(argv0);
     }
@@ -72,9 +71,9 @@ public:
         FreeStack();
     }
 
-    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE;
+    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) override;
 #if wxUSE_ON_FATAL_EXCEPTION
-    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE { Walk(2, maxDepth); }
+    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) override { Walk(2, maxDepth); }
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
     static const wxString& GetExePath() { return ms_exepath; }

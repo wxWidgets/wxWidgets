@@ -46,7 +46,7 @@ public:
     // --------------
 
     // default ctor, call Create() later
-    wxRearrangeList() { }
+    wxRearrangeList() = default;
 
     // ctor creating the control, the arguments are the same as for
     // wxCheckListBox except for the extra order array which defines the
@@ -60,7 +60,7 @@ public:
                     const wxArrayString& items,
                     long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxRearrangeListNameStr)
+                    const wxString& name = wxASCII_STR(wxRearrangeListNameStr))
     {
         Create(parent, id, pos, size, order, items, style, validator, name);
     }
@@ -75,7 +75,7 @@ public:
                 const wxArrayString& items,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRearrangeListNameStr);
+                const wxString& name = wxASCII_STR(wxRearrangeListNameStr));
 
 
     // items order
@@ -97,12 +97,12 @@ public:
 
 
     // Override this to keep our m_order array in sync with the real item state.
-    virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
+    virtual void Check(unsigned int item, bool check = true) override;
 
     int DoInsertItems(const wxArrayStringsAdapter& items, unsigned int pos,
-                      void **clientData, wxClientDataType type) wxOVERRIDE;
-    void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
-    void DoClear() wxOVERRIDE;
+                      void **clientData, wxClientDataType type) override;
+    void DoDeleteOneItem(unsigned int n) override;
+    void DoClear() override;
 
 private:
     // swap two items at the given positions in the listbox
@@ -141,7 +141,7 @@ public:
                     const wxArrayString& items,
                     long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxRearrangeListNameStr)
+                    const wxString& name = wxASCII_STR(wxRearrangeListNameStr))
     {
         Init();
 
@@ -156,7 +156,7 @@ public:
                 const wxArrayString& items,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxRearrangeListNameStr);
+                const wxString& name = wxASCII_STR(wxRearrangeListNameStr));
 
     // get the underlying listbox
     wxRearrangeList *GetList() const { return m_list; }
@@ -195,7 +195,7 @@ public:
                       const wxArrayInt& order,
                       const wxArrayString& items,
                       const wxPoint& pos = wxDefaultPosition,
-                      const wxString& name = wxRearrangeDialogNameStr)
+                      const wxString& name = wxASCII_STR(wxRearrangeDialogNameStr))
     {
         Init();
 
@@ -208,7 +208,7 @@ public:
                 const wxArrayInt& order,
                 const wxArrayString& items,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxString& name = wxRearrangeDialogNameStr);
+                const wxString& name = wxASCII_STR(wxRearrangeDialogNameStr));
 
 
     // methods for the dialog customization
@@ -228,7 +228,7 @@ public:
 
 private:
     // common part of all ctors
-    void Init() { m_ctrl = NULL; }
+    void Init() { m_ctrl = nullptr; }
 
     wxRearrangeCtrl *m_ctrl;
 

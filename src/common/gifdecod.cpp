@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STREAMS && wxUSE_GIF
 
@@ -26,8 +23,9 @@
 #include <string.h>
 #include "wx/gifdecod.h"
 #include "wx/scopedarray.h"
-#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
+
+#include <memory>
 
 enum
 {
@@ -68,10 +66,6 @@ public:
     wxDECLARE_NO_COPY_CLASS(GIFImage);
 };
 
-wxDECLARE_SCOPED_PTR(GIFImage, GIFImagePtr)
-wxDEFINE_SCOPED_PTR(GIFImage, GIFImagePtr)
-
-
 //---------------------------------------------------------------------------
 // GIFImage constructor
 //---------------------------------------------------------------------------
@@ -84,8 +78,8 @@ GIFImage::GIFImage()
     transparent = 0;
     disposal = wxANIM_DONOTREMOVE;
     delay = -1;
-    p = (unsigned char *) NULL;
-    pal = (unsigned char *) NULL;
+    p = (unsigned char *) nullptr;
+    pal = (unsigned char *) nullptr;
     ncolours = 0;
 }
 
@@ -311,8 +305,9 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
              * an end-of-image symbol (ab_fin) they come up with
              * a zero-length subblock!! We catch this here so
              * that the decoder sees an ab_fin code.
+             * We also need to check if the file doesn't end unexpectedly.
              */
-            if (m_restbyte == 0)
+            if (stream.Eof() || m_restbyte == 0)
             {
                 code = ab_fin;
                 break;
@@ -373,7 +368,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     int ab_free;                    // first free position in alphabet
     int ab_max;                     // last possible character in alphabet
     int pass;                       // pass number in interlaced images
-    int pos;                        // index into decompresion stack
+    int pos;                        // index into decompression stack
     unsigned int x, y;              // position in image buffer
 
     int code, lastcode, abcabca;
@@ -448,28 +443,26 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
         // make new entry in alphabet (only if NOT just cleared)
         if (lastcode != -1)
         {
-            // Normally, after the alphabet is full and can't grow any
-            // further (ab_free == 4096), encoder should (must?) emit CLEAR
-            // to reset it. This checks whether we really got it, otherwise
-            // the GIF is damaged.
-            if (ab_free > ab_max)
-                return wxGIF_INVFORMAT;
-
-            // This assert seems unnecessary since the condition above
-            // eliminates the only case in which it went false. But I really
-            // don't like being forced to ask "Who in .text could have
-            // written there?!" And I wouldn't have been forced to ask if
-            // this line had already been here.
-            wxASSERT(ab_free < allocSize);
-
-            ab_prefix[ab_free] = lastcode;
-            ab_tail[ab_free]   = code;
-            ab_free++;
-
-            if ((ab_free > ab_max) && (ab_bits < 12))
+            // The GIF specification does not require sending a CLEAR code
+            // once the alphabet is full.  Instead, the encoder can continue
+            // with the alphabet as-is, making no further updates until a
+            // CLEAR code is emitted.
+            if (ab_free <= ab_max)
             {
-                ab_bits++;
-                ab_max = (1 << ab_bits) - 1;
+                // It should be impossible to trigger this assert, since the
+                // above check should prevent the alphabet from growing
+                // beyond 4096 entries.
+                wxASSERT(ab_free < allocSize);
+
+                ab_prefix[ab_free] = lastcode;
+                ab_tail[ab_free]   = code;
+                ab_free++;
+
+                if ((ab_free > ab_max) && (ab_bits < 12))
+                {
+                    ab_bits++;
+                    ab_max = (1 << ab_bits) - 1;
+                }
             }
         }
 
@@ -785,7 +778,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             case GIF_MARKER_SEP:
             {
                 // allocate memory for IMAGEN struct
-                GIFImagePtr pimg(new GIFImage());
+                std::unique_ptr<GIFImage> pimg(new GIFImage());
 
                 wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
 
@@ -866,7 +859,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 
                 // get initial code size from first byte in raster data
                 bits = stream.GetC();
-                if (bits == 0)
+                if (stream.Eof() || bits <= 0)
                     return wxGIF_INVFORMAT;
 
                 // decode image

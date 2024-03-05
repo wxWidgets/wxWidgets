@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_XRC && wxUSE_STATBMP
 
@@ -36,7 +33,7 @@ wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 
     bmp->Create(m_parentAsWindow,
                 GetID(),
-                GetBitmap(wxT("bitmap"), wxART_OTHER, GetSize()),
+                GetBitmapBundle(wxT("bitmap"), wxART_OTHER, GetSize()),
                 GetPosition(), GetSize(),
                 GetStyle(),
                 GetName());

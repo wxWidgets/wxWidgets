@@ -29,7 +29,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_CORE wxTextEntryBase
 {
 public:
-    wxTextEntryBase() { m_eventsBlock = 0; m_hintData = NULL; }
+    wxTextEntryBase() { m_eventsBlock = 0; m_hintData = nullptr; }
     virtual ~wxTextEntryBase();
 
 
@@ -126,7 +126,7 @@ public:
 
     // notice that we take ownership of the pointer and will delete it
     //
-    // if the pointer is NULL auto-completion is disabled
+    // if the pointer is null auto-completion is disabled
     bool AutoComplete(wxTextCompleter *completer)
         { return DoAutoCompleteCustom(completer); }
 
@@ -321,14 +321,12 @@ private:
     class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
     {
     };
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/textentry.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/textentry.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textentry.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/textentry.h"
 #elif defined(__WXQT__)
     #include "wx/qt/textentry.h"
 #else

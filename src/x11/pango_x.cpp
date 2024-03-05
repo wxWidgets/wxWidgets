@@ -57,7 +57,7 @@ x11_pango_get_item_properties( PangoItem      *item,
 
 void
 x11_draw_glyphs( Drawable            drawable,
-                 GC                  gc,
+                 GC                  WXUNUSED(gc),
                  PangoFont          *font,
                  int                 x,
                  int                 y,
@@ -96,13 +96,10 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
     PangoRectangle overall_rect;
     PangoRectangle logical_rect;
     PangoRectangle ink_rect;
-    PangoContext *context;
     gint x_off = 0;
     gint rise = 0;
 
-    context = pango_layout_get_context (line->layout);
-
-    pango_layout_line_get_extents (line,NULL, &overall_rect);
+    pango_layout_line_get_extents (line,nullptr, &overall_rect);
 
     GSList *tmp_list = line->runs;
     while (tmp_list)
@@ -125,7 +122,7 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
         if (!shape_set)
         {
             if (uline == PANGO_UNDERLINE_NONE)
-                pango_glyph_string_extents (run->glyphs, run->item->analysis.font, NULL, &logical_rect);
+                pango_glyph_string_extents (run->glyphs, run->item->analysis.font, nullptr, &logical_rect);
             else
                 pango_glyph_string_extents (run->glyphs, run->item->analysis.font, &ink_rect, &logical_rect);
         }
@@ -174,7 +171,7 @@ x11_draw_layout_with_colors( Drawable      drawable,
         PangoLayoutLine *line = pango_layout_iter_get_line (iter);
 
         PangoRectangle logical_rect;
-        pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
+        pango_layout_iter_get_line_extents (iter, nullptr, &logical_rect);
 
         int baseline = pango_layout_iter_get_baseline (iter);
 

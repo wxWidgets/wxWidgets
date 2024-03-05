@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextstylepage.cpp
 // Purpose:     Implements the rich text formatting dialog style name tab.
 // Author:      Julian Smart
-// Modified by:
 // Created:     10/5/2006 11:34:55 AM
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -57,9 +56,9 @@ void wxRichTextStylePage::Init()
     m_nameIsEditable = false;
     
 ////@begin wxRichTextStylePage member initialisation
-    m_styleName = NULL;
-    m_basedOn = NULL;
-    m_nextStyle = NULL;
+    m_styleName = nullptr;
+    m_basedOn = nullptr;
+    m_nextStyle = nullptr;
 ////@end wxRichTextStylePage member initialisation
 }
 
@@ -313,7 +312,7 @@ wxIcon wxRichTextStylePage::GetIconResource( const wxString& name )
 void wxRichTextStylePage::OnNextStyleUpdate( wxUpdateUIEvent& event )
 {
     wxRichTextStyleDefinition* def = wxRichTextFormattingDialog::GetDialogStyleDefinition(this);
-    event.Enable(wxDynamicCast(def, wxRichTextParagraphStyleDefinition) != NULL);
+    event.Enable(wxDynamicCast(def, wxRichTextParagraphStyleDefinition) != nullptr);
 }
 
 #endif // wxUSE_RICHTEXT

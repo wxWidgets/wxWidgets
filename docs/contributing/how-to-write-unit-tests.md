@@ -9,6 +9,37 @@ included in wxWidgets as a submodule, so you will need to run
 to get it before the first use. Catch is header-only and doesn't need to be
 compiled.
 
+Building the tests
+------------------
+
+Before starting modifying the tests, please make sure you can build the
+existing tests. This requires having built the library itself successfully
+first and the way to build the test must correspond to the way you used to
+build the library:
+
+- When using MSVS under MSW: just open the provided `tests/test_vcX.sln` (for
+  non-GUI tests) or `tests/test_gui_vcX.sln` (for the GUI ones) solution file
+  (where `X` corresponds to the version of MSVS you use, e.g. 16 for MSVS 2019)
+  and build it in the configuration of your choice.
+
+- When using configure under Unix or in a Unix-like environment, such as MSYS:
+  go to the `tests` subdirectory under the _build_ directory (i.e. the
+  directory where you ran configure, not the one in the source tree) and run
+  `make test` (non-GUI tests) or `make test_gui` (GUI ones) to build.
+
+- When using CMake, add `-DwxBUILD_TESTS=ALL` (or `=CONSOLE_ONLY` for non-GUI tests
+  only) to the command line arguments, or choose the desired `wxBUILD_TESTS`
+  option in `cmake-gui`.
+
+- When using `makefile.vc` or `makefile.gcc` under MSW to build the libraries,
+  use the same makefile under `tests` to build the tests.
+
+
+Once the tests were built successfully, you can run them to check that
+everything works correctly by simply launching the corresponding test binary.
+See the last subsection for more details about running the tests.
+
+
 Testing with Catch
 ------------------
 
@@ -43,7 +74,7 @@ Tests physical structure
 All (i.e. both GUI and non-GUI) unit tests are under `tests` subdirectory. When
 adding a new test, try to find an existing file to add it to. If there are no
 applicable files, try to add a new file to an existing directory. If there is
-no applicable directory neither, create a new one and put the new file there
+no applicable directory either, create a new one and put the new file there
 (i.e. do _not_ put new files directly under `tests`). If your test is small,
 consider adding it to `tests/misc/misctests.cpp`.
 

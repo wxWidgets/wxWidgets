@@ -2,7 +2,6 @@
 // Name:        wx/generic/textdlgg.h
 // Purpose:     wxTextEntryDialog class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -38,12 +37,13 @@ class WXDLLIMPEXP_CORE wxTextEntryDialog : public wxDialog
 public:
     wxTextEntryDialog()
     {
-        m_textctrl = NULL;
+        m_textctrl = nullptr;
+        m_dialogStyle = 0;
     }
 
     wxTextEntryDialog(wxWindow *parent,
                       const wxString& message,
-                      const wxString& caption = wxGetTextFromUserPromptStr,
+                      const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition)
@@ -53,7 +53,7 @@ public:
 
     bool Create(wxWindow *parent,
                 const wxString& message,
-                const wxString& caption = wxGetTextFromUserPromptStr,
+                const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                 const wxString& value = wxEmptyString,
                 long style = wxTextEntryDialogStyle,
                 const wxPoint& pos = wxDefaultPosition);
@@ -67,15 +67,12 @@ public:
 
 #if wxUSE_VALIDATORS
     void SetTextValidator( const wxTextValidator& validator );
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( void SetTextValidator( long style ) );
-#endif
     void SetTextValidator( wxTextValidatorStyle style = wxFILTER_NONE );
     wxTextValidator* GetTextValidator() { return (wxTextValidator*)m_textctrl->GetValidator(); }
 #endif // wxUSE_VALIDATORS
 
-    virtual bool TransferDataToWindow() wxOVERRIDE;
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
+    virtual bool TransferDataToWindow() override;
+    virtual bool TransferDataFromWindow() override;
 
     // implementation only
     void OnOK(wxCommandEvent& event);
@@ -98,10 +95,10 @@ private:
 class WXDLLIMPEXP_CORE wxPasswordEntryDialog : public wxTextEntryDialog
 {
 public:
-    wxPasswordEntryDialog() { }
+    wxPasswordEntryDialog() = default;
     wxPasswordEntryDialog(wxWindow *parent,
                       const wxString& message,
-                      const wxString& caption = wxGetPasswordFromUserPromptStr,
+                      const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition)
@@ -111,7 +108,7 @@ public:
 
     bool Create(wxWindow *parent,
                 const wxString& message,
-                const wxString& caption = wxGetPasswordFromUserPromptStr,
+                const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
                 const wxString& value = wxEmptyString,
                 long style = wxTextEntryDialogStyle,
                 const wxPoint& pos = wxDefaultPosition);
@@ -128,18 +125,18 @@ private:
 
 WXDLLIMPEXP_CORE wxString
     wxGetTextFromUser(const wxString& message,
-                    const wxString& caption = wxGetTextFromUserPromptStr,
+                    const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                     const wxString& default_value = wxEmptyString,
-                    wxWindow *parent = NULL,
+                    wxWindow *parent = nullptr,
                     wxCoord x = wxDefaultCoord,
                     wxCoord y = wxDefaultCoord,
                     bool centre = true);
 
 WXDLLIMPEXP_CORE wxString
     wxGetPasswordFromUser(const wxString& message,
-                        const wxString& caption = wxGetPasswordFromUserPromptStr,
+                        const wxString& caption = wxASCII_STR(wxGetPasswordFromUserPromptStr),
                         const wxString& default_value = wxEmptyString,
-                        wxWindow *parent = NULL,
+                        wxWindow *parent = nullptr,
                         wxCoord x = wxDefaultCoord,
                         wxCoord y = wxDefaultCoord,
                         bool centre = true);

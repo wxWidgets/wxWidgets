@@ -103,6 +103,8 @@ bool wxFileDialog::Create(wxWindow *parent,
 
 wxString wxFileDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetPaths() instead" );
+
     wxArrayString paths;
     GetPaths(paths);
     if (paths.empty())
@@ -120,6 +122,8 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
 
 wxString wxFileDialog::GetFilename() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
+
     wxArrayString filenames;
     GetFilenames(filenames);
     if ( filenames.empty() )
@@ -134,7 +138,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     foreach (QString file, selectedfiles )
     {
         wxFileName fn = wxQtConvertString(file);
-        files.Add(fn.GetName());
+        files.Add(fn.GetFullName());
     }
 }
 

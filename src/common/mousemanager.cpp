@@ -18,9 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -46,7 +43,7 @@ wxEND_EVENT_TABLE()
 
 void wxMouseEventsManager::Init()
 {
-    m_win = NULL;
+    m_win = nullptr;
     m_state = State_Normal;
     m_item = wxNOT_FOUND;
 }

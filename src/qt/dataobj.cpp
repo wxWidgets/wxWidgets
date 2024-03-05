@@ -8,12 +8,15 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+
+#include <QtCore/QMimeData>
+#include <QtGui/QPixmap>
 
 #include "wx/dataobj.h"
 #include "wx/scopedarray.h"
+#include "wx/qt/private/converter.h"
+
+typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 
 namespace
 {
@@ -150,14 +153,81 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format,
     return false;
 }
 
+void wxDataObject::QtAddDataTo(QMimeData &mimeData) const
+{
+    const size_t count = GetFormatCount();
+    wxDataFormatArray formats(count);
+    GetAllFormats(formats.get());
+
+    // how to add timestamp?
+
+    // Unfortunately I cannot find a way to use the qt clipboard with
+    // a callback to select the data type, so I must copy it all here
+
+    for (size_t i = 0; i < count; i++)
+    {
+        const wxDataFormat format(formats[i]);
+
+        int size = GetDataSize(format);
+        if (!size)
+            continue;
+
+        QByteArray bytearray(size, 0);
+        GetDataHere(format, bytearray.data());
+        mimeData.setData(wxQtConvertString(format.GetMimeType()), bytearray);
+    }
+}
+
+bool wxDataObject::QtSetDataFrom(const QMimeData &mimeData)
+{
+    const size_t count = GetFormatCount(Set);
+    wxDataFormatArray formats(count);
+    GetAllFormats(formats.get(), Set);
+
+    for (size_t i = 0; i < count; i++)
+    {
+        const wxDataFormat format(formats[i]);
+
+        // is this format supported by clipboard ?
+        if (!mimeData.hasFormat(wxQtConvertString(format.GetMimeType())))
+            continue;
+
+        QtSetDataSingleFormat(mimeData, format);
+        return true;
+    }
+
+    return false;
+}
+
+void wxDataObject::QtSetDataSingleFormat(const QMimeData &mimeData, const wxDataFormat &format)
+{
+    QByteArray bytearray = mimeData.data(wxQtConvertString(format.GetMimeType()));
+    SetData(format, bytearray.size(), bytearray.constData());
+}
+
 //############################################################################
 
 wxBitmapDataObject::wxBitmapDataObject()
 {
 }
 
-wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &WXUNUSED(bitmap) )
+wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &bitmap )
+    : wxBitmapDataObjectBase( bitmap )
 {
+}
+
+void wxBitmapDataObject::QtAddDataTo(QMimeData &mimeData) const
+{
+    mimeData.setImageData(GetBitmap().GetHandle()->toImage());
+}
+
+bool wxBitmapDataObject::QtSetDataFrom(const QMimeData &mimeData)
+{
+    if (!mimeData.hasImage())
+        return false;
+
+    SetBitmap(wxBitmap(QPixmap::fromImage(qvariant_cast<QImage>(mimeData.imageData()))));
+    return true;
 }
 
 //#############################################################################
@@ -165,14 +235,17 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &WXUNUSED(bitmap) )
 // wxTextDataObject
 // ---------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
 void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
     wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
     formats[0] = wxDataFormat(wxDF_UNICODETEXT);
     formats[1] = wxDataFormat(wxDF_TEXT);
 }
-#endif
+
+void wxTextDataObject::QtSetDataSingleFormat(const QMimeData &mimeData, const wxDataFormat &WXUNUSED(format))
+{
+    SetText(wxQtConvertString(mimeData.text()));
+}
 
 //#############################################################################
 

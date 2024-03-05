@@ -26,7 +26,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxCollapsibleHeaderCtrlNameStr[];
 class WXDLLIMPEXP_CORE wxCollapsibleHeaderCtrlBase : public wxControl
 {
 public:
-    wxCollapsibleHeaderCtrlBase() { }
+    wxCollapsibleHeaderCtrlBase() = default;
 
     wxCollapsibleHeaderCtrlBase(wxWindow *parent,
         wxWindowID id,
@@ -35,7 +35,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxBORDER_NONE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxCollapsibleHeaderCtrlNameStr)
+        const wxString& name = wxASCII_STR(wxCollapsibleHeaderCtrlNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
@@ -47,7 +47,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxBORDER_NONE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxCollapsibleHeaderCtrlNameStr)
+        const wxString& name = wxASCII_STR(wxCollapsibleHeaderCtrlNameStr))
     {
         if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
             return false;
@@ -82,7 +82,7 @@ class WXDLLIMPEXP_CORE wxCollapsibleHeaderCtrl
     : public wxGenericCollapsibleHeaderCtrl
 {
 public:
-    wxCollapsibleHeaderCtrl() { }
+    wxCollapsibleHeaderCtrl() = default;
 
     wxCollapsibleHeaderCtrl(wxWindow *parent,
         wxWindowID id,
@@ -91,7 +91,7 @@ public:
         const wxSize& size = wxDefaultSize,
         long style = wxBORDER_NONE,
         const wxValidator& validator = wxDefaultValidator,
-        const wxString& name = wxCollapsibleHeaderCtrlNameStr)
+        const wxString& name = wxASCII_STR(wxCollapsibleHeaderCtrlNameStr))
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }

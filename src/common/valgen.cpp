@@ -2,7 +2,6 @@
 // Name:        src/common/valgen.cpp
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
-// Modified by:
 // Created:     Jan 22 1999
 // Copyright:   (c) 1999 Kevin Smith
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_VALIDATORS
 
@@ -44,6 +40,9 @@
 #endif
 #if wxUSE_TOGGLEBTN
     #include "wx/tglbtn.h"
+#endif
+#if wxUSE_COLOURPICKERCTRL
+    #include "wx/clrpicker.h"
 #endif
 #include "wx/filename.h"
 
@@ -103,6 +102,18 @@ wxGenericValidator::wxGenericValidator(double *val)
     m_pDouble = val;
 }
 
+wxGenericValidator::wxGenericValidator(wxColour* val)
+{
+    Initialize();
+    m_pColour = val;
+}
+
+wxGenericValidator::wxGenericValidator(wxCheckBoxState* val)
+{
+    Initialize();
+    m_pCheckBoxState = val;
+}
+
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
     : wxValidator()
 {
@@ -123,12 +134,14 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
     m_pFileName = val.m_pFileName;
     m_pFloat = val.m_pFloat;
     m_pDouble = val.m_pDouble;
+    m_pColour = val.m_pColour;
+    m_pCheckBoxState = val.m_pCheckBoxState;
 
     return true;
 }
 
 // Called to transfer data to the window
-bool wxGenericValidator::TransferToWindow(void)
+bool wxGenericValidator::TransferToWindow()
 {
     if ( !m_validatorWindow )
         return false;
@@ -143,6 +156,11 @@ bool wxGenericValidator::TransferToWindow(void)
             pControl->SetValue(*m_pBool);
             return true;
         }
+        else if (m_pCheckBoxState && pControl->Is3State())
+        {
+            pControl->Set3StateValue(*m_pCheckBoxState);
+            return true;
+        }
     } else
 #endif
 #if wxUSE_RADIOBTN
@@ -153,6 +171,26 @@ bool wxGenericValidator::TransferToWindow(void)
         {
             pControl->SetValue(*m_pBool) ;
             return true;
+        }
+        else if (m_pInt)
+        {
+            const auto last = pControl->GetLastInGroup();
+            for (int i = 0 ; ; ++i)
+            {
+                if (i == *m_pInt)
+                {
+                    pControl->SetValue(true);
+                    return true;
+                }
+
+                if (pControl == last)
+                {
+                    wxFAIL_MSG("value out of range or not enough radio buttons");
+                    return false;
+                }
+
+                pControl = pControl->GetNextInGroup();
+            }
         }
     } else
 #endif
@@ -167,7 +205,7 @@ bool wxGenericValidator::TransferToWindow(void)
             return true;
         }
     } else
-#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK__)) && !defined(__WXUNIVERSAL__)
     if (wxDynamicCast(m_validatorWindow, wxBitmapToggleButton))
     {
         wxBitmapToggleButton * pControl = (wxBitmapToggleButton *) m_validatorWindow;
@@ -214,7 +252,7 @@ bool wxGenericValidator::TransferToWindow(void)
         }
     } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WXMOTIF__)
+#if wxUSE_SPINCTRL
     if (wxDynamicCast(m_validatorWindow, wxSpinCtrl))
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
@@ -349,7 +387,7 @@ bool wxGenericValidator::TransferToWindow(void)
         }
         else if (m_pFloat)
         {
-            pControl->SetValue(wxString::Format(wxT("%g"), *m_pFloat));
+            pControl->SetValue(wxString::Format(wxS("%g"), double(*m_pFloat)));
             return true;
         }
         else if (m_pDouble)
@@ -381,6 +419,17 @@ bool wxGenericValidator::TransferToWindow(void)
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+            pControl->Check(*m_pInt);
+
+            return true;
+        }
         else
             return false;
     } else
@@ -404,6 +453,31 @@ bool wxGenericValidator::TransferToWindow(void)
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+            pControl->SetSelection(*m_pInt);
+
+            return true;
+        }
+    } else
+#endif
+
+    // colour controls
+#if wxUSE_COLOURPICKERCTRL
+    if (wxDynamicCast(m_validatorWindow, wxColourPickerCtrl))
+    {
+        wxColourPickerCtrl* pControl = (wxColourPickerCtrl*)m_validatorWindow;
+        if (m_pColour)
+        {
+            pControl->SetColour(*m_pColour);
+
+            return true;
+        }
     } else
 #endif
     {   // to match the last 'else' above
@@ -414,7 +488,7 @@ bool wxGenericValidator::TransferToWindow(void)
 }
 
 // Called to transfer data from the window
-bool wxGenericValidator::TransferFromWindow(void)
+bool wxGenericValidator::TransferFromWindow()
 {
     if ( !m_validatorWindow )
         return false;
@@ -429,6 +503,11 @@ bool wxGenericValidator::TransferFromWindow(void)
             *m_pBool = pControl->GetValue() ;
             return true;
         }
+        else if (m_pCheckBoxState && pControl->Is3State())
+        {
+            *m_pCheckBoxState = pControl->Get3StateValue();
+            return true;
+        }
     } else
 #endif
 #if wxUSE_RADIOBTN
@@ -439,6 +518,29 @@ bool wxGenericValidator::TransferFromWindow(void)
         {
             *m_pBool = pControl->GetValue() ;
             return true;
+        }
+        else if (m_pInt)
+        {
+            const auto last = pControl->GetLastInGroup();
+            for (int i = 0 ; ; ++i)
+            {
+                if (pControl->GetValue())
+                {
+                    *m_pInt = i;
+                    return true;
+                }
+
+                if (pControl == last)
+                {
+                    // This really should never happen.
+                    wxFAIL_MSG("no selected radio button?");
+
+                    *m_pInt = wxNOT_FOUND;
+                    return false;
+                }
+
+                pControl = pControl->GetNextInGroup();
+            }
         }
     } else
 #endif
@@ -452,7 +554,7 @@ bool wxGenericValidator::TransferFromWindow(void)
             return true;
         }
     } else
-#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK__)) && !defined(__WXUNIVERSAL__)
     if (wxDynamicCast(m_validatorWindow, wxBitmapToggleButton))
     {
         wxBitmapToggleButton *pControl = (wxBitmapToggleButton *) m_validatorWindow;
@@ -499,7 +601,7 @@ bool wxGenericValidator::TransferFromWindow(void)
         }
     } else
 #endif
-#if wxUSE_SPINCTRL && !defined(__WXMOTIF__)
+#if wxUSE_SPINCTRL
     if (wxDynamicCast(m_validatorWindow, wxSpinCtrl))
     {
         wxSpinCtrl* pControl = (wxSpinCtrl*) m_validatorWindow;
@@ -658,6 +760,26 @@ bool wxGenericValidator::TransferFromWindow(void)
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+
+            size_t i,
+                count = pControl->GetCount();
+            for ( i = 0; i < count; i++ )
+            {
+                if (pControl->IsChecked(i))
+                {
+                    *m_pInt = i;
+                }
+            }
+
+            return true;
+        }
         else
             return false;
     } else
@@ -682,7 +804,32 @@ bool wxGenericValidator::TransferFromWindow(void)
 
             return true;
         }
+        else if (m_pInt)
+        {
+            wxCHECK_MSG(
+                !pControl->HasMultipleSelection(),
+                false,
+                "multi-select control requires wxArrayInt"
+            );
+
+            *m_pInt = pControl->GetSelection();
+
+            return true;
+        }
     } else
+#endif
+#if wxUSE_COLOURPICKERCTRL
+        if (wxDynamicCast(m_validatorWindow, wxColourPickerCtrl))
+        {
+            wxColourPickerCtrl* pControl = (wxColourPickerCtrl*)m_validatorWindow;
+            if (m_pColour)
+            {
+                *m_pColour = pControl->GetColour();
+
+                return true;
+            }
+        }
+        else
 #endif
 
     // unrecognized control, or bad pointer
@@ -691,21 +838,38 @@ bool wxGenericValidator::TransferFromWindow(void)
     return false;
 }
 
+void wxGenericValidator::SetWindow(wxWindow* win)
+{
+#if wxUSE_RADIOBTN
+    if (m_pInt)
+    {
+        if (wxRadioButton* pControl = wxDynamicCast(win, wxRadioButton))
+        {
+            wxCHECK_RET(pControl == pControl->GetFirstInGroup(),
+                        "wxRadioButton group validator must be on first item in group");
+        }
+    }
+#endif
+    wxValidator::SetWindow(win);
+}
+
 /*
   Called by constructors to initialize ALL data members
 */
 void wxGenericValidator::Initialize()
 {
-    m_pBool = NULL;
-    m_pInt = NULL;
-    m_pString = NULL;
-    m_pArrayInt = NULL;
+    m_pBool = nullptr;
+    m_pInt = nullptr;
+    m_pString = nullptr;
+    m_pArrayInt = nullptr;
 #if wxUSE_DATETIME
-    m_pDateTime = NULL;
+    m_pDateTime = nullptr;
 #endif // wxUSE_DATETIME
-    m_pFileName = NULL;
-    m_pFloat = NULL;
-    m_pDouble = NULL;
+    m_pFileName = nullptr;
+    m_pFloat = nullptr;
+    m_pDouble = nullptr;
+    m_pColour = nullptr;
+    m_pCheckBoxState = nullptr;
 }
 
 #endif // wxUSE_VALIDATORS

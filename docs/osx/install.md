@@ -1,19 +1,19 @@
-wxWidgets for OS X installation        {#plat_osx_install}
+wxWidgets for macOS installation        {#plat_osx_install}
 -----------------------------------
 
 [TOC]
 
-wxWidgets can be compiled using Apple's Cocoa library.
+wxWidgets can be compiled using Apple's Cocoa toolkit.
 
 Most OS X developers should start by downloading and installing Xcode
 from the App Store.  It is a free IDE from Apple that provides
 all of the tools you need for working with wxWidgets.
 
-After Xcode is installed, download wxWidgets-{version}.tar.bz2 and then
+After Xcode is installed, download `wxWidgets-{version}.tar.bz2` and then
 double-click on it to unpack it to create a wxWidgets directory.
 
 Next use Terminal (under Applications, Utilities, Terminal) to access a command
-prompt.  Use cd to change directories to your wxWidgets directory and execute
+prompt.  Use `cd` to change directories to your wxWidgets directory and execute
 the following sets of commands from the wxWidgets directory.
 
     mkdir build-cocoa-debug
@@ -21,29 +21,61 @@ the following sets of commands from the wxWidgets directory.
     ../configure --enable-debug
     make
 
-Build the samples and demos
+It is recommended to use `-jN` option with the last command, where `N` is a
+number of the processors in your system (which can be checked using `sysctl -n
+hw.ncpu` command if you are not sure), as this will dramatically speed up the
+build on modern systems. So in practice you should use a command like this:
+
+    make -j8
+
+(but don't use it unless you actually have 8 CPUs and enough memory for that
+many parallel compiler invocations).
+
+You may also prefer to add `-s` option to avoid normal output from make and/or
+redirect it you to a log file for further inspection.
+
+You should build at least the smallest possible wxWidgets sample to verify that
+everything is working as intended, by doing
+
+    cd samples/minimal
+    make
+
+and then running `minimal.app` from this directory from Finder.
+
+If you'd like to, you can also build all the other samples and demos
 
     cd samples; make;cd ..
     cd demos;   make;cd ..
-
-After the compilation completes, use Finder to run the samples and demos
-* Go to build-cocoa-debug/samples to experiment with the Cocoa samples.
-* Go to build-cocoa-debug/demos to experiment with the Cocoa demos.
-* Double-click on the executables which have an icon showing three small squares.
-* The source code for the samples is in wxWidgets/samples
-* The source code for the demos is in wxWidgets/demos
-
-More information about building on OS X is available in the wxWiki.
-Here are two useful links
-  * https://wiki.wxwidgets.org/Guides_%26_Tutorials
-  * https://wiki.wxwidgets.org/Development:_wxMac
 
 
 Advanced topics                        {#osx_advanced}
 ===============
 
+Building library for distribution
+---------------------------------
+
+When building library for the distribution with your application, you shouldn't
+use `--enable-debug` option above but you may want to use `--disable-sys-libs`
+option to ensure that it has no dependencies on the other libraries available
+on the current system as they might not be present on all systems where the
+application is used.
+
+It is also often desirable to build the final version of the application as
+"universal binary", i.e. a combination of binaries for several different
+architectures. In this case, you should build wxWidgets as universal binary
+too, using `--enable-universal_binary` option. By default, this option enables
+building for the usually wanted set of architectures (currently ARM and Intel)
+but you may override this by listing the architectures you want to use
+explicitly, separating them with commas.
+
+
 Installing library                     {#osx_install}
 ------------------
+
+It is rarely desirable to install non-Apple software into system directories,
+so the recommended way of using wxWidgets under macOS is to skip the `make
+install` step and simply use the full path to `wx-config` under the build
+directory when building application using the library.
 
 If you want to install the library into the system directories you'll need
 to do this as root.  The accepted way of running commands as root is to
@@ -53,18 +85,15 @@ account marked as a "Computer Administrator".  Then
     sudo make install
     type \<YOUR OWN PASSWORD\>
 
-Note that while using this method is okay for development, it is not
-recommended that you require endusers to install wxWidgets into their
-system directories in order to use your program.  One way to avoid this
-is to configure wxWidgets with --disable-shared.  Another way to avoid
-it is to make a framework for wxWidgets.  Making frameworks is beyond
-the scope of this document.
+Distributing applications using wxWidgets
+-----------------------------------------
 
-**Note:**
-It is rarely desirable to install non-Apple software into system directories.
-By configuring the library with --disable-shared and using the full path
-to wx-config with the --in-place option you can avoid installing the library.
-
+If you build wxWidgets as static libraries, i.e. pass `--disable-shared` option
+to configure, you don't need to do anything special to distribute them, as all
+the required code is linked into your application itself. When using shared
+libraries (which is the default), you need to copy the libraries into your
+application bundle and change their paths using `install_name_tool` so that
+they are loaded from their new locations.
 
 Apple Developer Tools: Xcode           {#osx_xcode}
 ----------------------------
@@ -80,45 +109,3 @@ the libraries using commands like this:
 
     $ cd utils/wxrc
     $ g++ -o wxrc wxrc.cpp `wx-config --cxxflags --libs base,xml`
-
-Creating universal binaries            {#osx_universal_bin}
----------------------------
-
-The Xcode projects for the wxWidgets library and minimal project are set up
-to create universal binaries.
-
-If using the Apple command line tools, pass --enable-universal_binary when
-configuring wxWidgets. This will create the libraries for all the supported
-architectures, currently ppc, i386 and x86_64 . You may explicitly specify
-the architectures to use as a comma-separated list,
-e.g. --enable-universal_binary=i386,x86_64.
-
-Notice that if you use wx-config --libs to link your application, the -arch
-flags are not added automatically as it is possible to link e.g. x86_64-only
-program to a "fat" library containing other architectures. If you want to
-build a universal application, you need to add the necessary "-arch xxx" flags
-to your project or makefile separately.
-
-As an alternative to using --enable-universal_binary, you can build for
-each architecture separately and then use the lipo tool to glue the
-binaries together. Assuming building on a PPC system:
-
-1. First build in the usual way to get the PPC library.
-
-2. Then, build for Intel, in a different folder. This time use:
-
-        export CFLAGS="-g -isysroot /Developer/SDKs/MacOSX10.7.sdk -arch i386"
-        export LDFLAGS="-syslibroot,/Developer/SDKs/MacOSX10.7.sdk"
-
-        ./configure --disable-dependency-tracking --enable-static=yes --enable-shared=no \
-        --target=i386-apple-darwin8 --host=powerpc-apple-darwin8 --build=i386-apple-darwin8
-
-You will need to reverse the powerpc and i386 parameters everywhere to build PPC on an Intel
-machine.
-
-3. Use lipo to glue the binaries together.
-
-See also:
-http://developer.apple.com/technotes/tn2005/tn2137.html
-
-

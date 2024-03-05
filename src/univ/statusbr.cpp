@@ -2,7 +2,6 @@
 // Name:        src/univ/statusbr.cpp
 // Purpose:     wxStatusBar implementation
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     14.10.01
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
@@ -18,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATUSBAR
 
@@ -235,7 +231,7 @@ wxRect wxStatusBarUniv::DoGetFieldRect(int n) const
     wxCoord borderBetweenFields;
     wxRect rect = self->GetTotalFieldRect(&borderBetweenFields);
 
-    // it's the caller responsability to check this, if unsure - call
+    // it's the caller responsibility to check this, if unsure - call
     // GetFieldRect() instead
     wxCHECK_MSG( !m_widthsAbs.IsEmpty(), rect,
                  wxT("can't be called if we don't have the widths") );

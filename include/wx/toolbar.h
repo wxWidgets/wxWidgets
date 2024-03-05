@@ -2,7 +2,6 @@
 // Name:        wx/toolbar.h
 // Purpose:     wxToolBar interface declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.11.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -17,7 +16,7 @@
 // wxToolBar style flags
 // ----------------------------------------------------------------------------
 
-enum
+enum wxToolBarStyleFlags
 {
     // lay out the toolbar horizontally
     wxTB_HORIZONTAL  = wxHORIZONTAL,    // == 0x0004
@@ -61,6 +60,8 @@ enum
     wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL
 };
 
+wxALLOW_COMBINING_ENUMS(wxToolBarStyleFlags, wxBorder)
+
 #if wxUSE_TOOLBAR
     #include "wx/tbarbase.h"     // the base class for all toolbars
 
@@ -68,12 +69,8 @@ enum
        #include "wx/univ/toolbar.h"
     #elif defined(__WXMSW__)
        #include "wx/msw/toolbar.h"
-    #elif defined(__WXMOTIF__)
-       #include "wx/motif/toolbar.h"
-    #elif defined(__WXGTK20__)
-        #include "wx/gtk/toolbar.h"
     #elif defined(__WXGTK__)
-        #include "wx/gtk1/toolbar.h"
+        #include "wx/gtk/toolbar.h"
     #elif defined(__WXMAC__)
        #include "wx/osx/toolbar.h"
     #elif defined(__WXQT__)

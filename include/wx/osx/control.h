@@ -2,7 +2,6 @@
 // Name:        wx/osx/control.h
 // Purpose:     wxControl class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -24,7 +23,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxControlNameStr)
+             const wxString& name = wxASCII_STR(wxControlNameStr))
     {
         Create(parent, winid, pos, size, style, validator, name);
     }
@@ -33,10 +32,10 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxControlNameStr);
+            const wxString& name = wxASCII_STR(wxControlNameStr));
 
    // Simulates an event
-   virtual void Command(wxCommandEvent& event) wxOVERRIDE { ProcessCommand(event); }
+   virtual void Command(wxCommandEvent& event) override { ProcessCommand(event); }
 
    // implementation from now on
    // --------------------------

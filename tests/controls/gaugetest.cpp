@@ -10,9 +10,6 @@
 
 #if wxUSE_GAUGE
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -24,8 +21,8 @@ class GaugeTestCase : public CppUnit::TestCase
 public:
     GaugeTestCase() { }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    void setUp() override;
+    void tearDown() override;
 
 private:
     CPPUNIT_TEST_SUITE( GaugeTestCase );

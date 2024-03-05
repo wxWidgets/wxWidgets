@@ -20,9 +20,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -151,7 +148,7 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxMDIParentFrame(NULL, wxID_ANY, "wxWidgets MDI Sample",
+       : wxMDIParentFrame(nullptr, wxID_ANY, "wxWidgets MDI Sample",
                           wxDefaultPosition, wxSize(500, 400)),
          MenuEventLogger("parent", this)
 {
@@ -230,7 +227,7 @@ MyFrame::~MyFrame()
     Unbind(wxEVT_SIZE, &MyFrame::OnSize, this);
 
     // also prevent its use as log target
-    delete wxLog::SetActiveTarget(NULL);
+    delete wxLog::SetActiveTarget(nullptr);
 }
 
 #if wxUSE_MENUS
@@ -363,9 +360,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxFrame *parent, const wxPoint& pos, const wxSize& size)
         : wxScrolledWindow(parent, wxID_ANY, pos, size,
-                           wxSUNKEN_BORDER |
-                           wxNO_FULL_REPAINT_ON_RESIZE |
-                           wxVSCROLL | wxHSCROLL),
+                           wxSUNKEN_BORDER | wxVSCROLL | wxHSCROLL),
           MenuEventLogger("canvas", parent)
 
 {

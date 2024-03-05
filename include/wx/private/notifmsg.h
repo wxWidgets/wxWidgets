@@ -14,13 +14,12 @@ class wxNotificationMessageImpl
 {
 public:
     wxNotificationMessageImpl(wxNotificationMessageBase* notification):
-        m_notification(notification),
-        m_active(false)
+        m_notification(notification)
     {
 
     }
 
-    virtual ~wxNotificationMessageImpl() { }
+    virtual ~wxNotificationMessageImpl() = default;
 
     virtual bool Show(int timeout) = 0;
 
@@ -38,20 +37,9 @@ public:
 
     virtual bool AddAction(wxWindowID actionid, const wxString &label) = 0;
 
-    virtual void Detach()
-    {
-        if (m_active)
-            m_notification = NULL;
-        else
-            delete this;
-    }
-
     bool ProcessNotificationEvent(wxEvent& event)
     {
-        if (m_notification)
-            return m_notification->ProcessEvent(event);
-        else
-            return false;
+        return m_notification->ProcessEvent(event);
     }
 
     wxNotificationMessageBase* GetNotification() const
@@ -61,16 +49,6 @@ public:
 
 protected:
     wxNotificationMessageBase* m_notification;
-    bool m_active;
-
-    void SetActive(bool active)
-    {
-        m_active = active;
-
-        // Delete the implementation if the notification is detached
-        if (!m_notification && !active)
-            delete this;
-    }
 };
 
 #endif // _WX_PRIVATE_NOTIFMSG_H_

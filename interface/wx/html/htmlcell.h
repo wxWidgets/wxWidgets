@@ -274,7 +274,7 @@ public:
 
     /**
        Find a cell inside this cell positioned at the given coordinates
-       (relative to this's positions). Returns NULL if no such cell exists.
+       (relative to this's positions). Returns @NULL if no such cell exists.
        The flag can be used to specify whether to look for terminal or
        nonterminal cells or both. In either case, returned cell is deepest
        cell in cells tree that contains [x,y].
@@ -445,7 +445,7 @@ public:
     virtual void SetPos(int x, int y);
 
     /**
-       Converts the cell into text representation. If sel != NULL then
+       Converts the cell into text representation. If sel != nullptr then
        only part of the cell inside the selection is converted.
     */
     virtual wxString ConvertToText(wxHtmlSelection* sel) const;

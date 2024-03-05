@@ -2,7 +2,6 @@
 // Name:        src/x11/dcscreen.cpp
 // Purpose:     wxScreenDC class
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -45,10 +44,8 @@ wxScreenDCImpl::wxScreenDCImpl( wxDC* owner )
 
     m_isScreenDC = true;
 
-#if wxUSE_UNICODE
     m_context = wxTheApp->GetPangoContext();
     m_fontdesc = wxNORMAL_FONT->GetNativeFontInfo()->description;
-#endif
 
     SetUpDC();
 

@@ -184,6 +184,23 @@ public:
     bool IsCurrent(size_t item) const;
 
     /**
+        Get the current item or @c wxNOT_FOUND if there is no
+        current item.
+
+        @since 3.3.0
+    */
+    int GetCurrent() const;
+
+    /**
+        Set the specified item as the current item, if it is wxNOT_FOUND
+        the current item is unset. The current item will be automatically
+        scrolled into view if it isn't currently visible.
+
+        @since 3.3.0
+    */
+    void SetCurrent(int current);
+
+    /**
         Returns @true if this item is selected, @false otherwise.
     */
     bool IsSelected(size_t item) const;
@@ -233,7 +250,7 @@ public:
     */
     virtual void SetItemCount(size_t count);
 
-    //@{
+    ///@{
     /**
         Set the margins: horizontal margin is the distance between the window
         border and the item contents while vertical margin is half of the
@@ -243,7 +260,7 @@ public:
     */
     void SetMargins(const wxPoint& pt);
     void SetMargins(wxCoord x, wxCoord y);
-    //@}
+    ///@}
 
     /**
         Set the selection to the specified item, if it is -1 the selection is

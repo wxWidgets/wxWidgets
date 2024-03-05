@@ -2,7 +2,6 @@
 // Name:        src/msw/font.cpp
 // Purpose:     wxFont class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -19,14 +18,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/font.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/log.h"
@@ -77,7 +72,7 @@ public:
     void Free();
 
     // all wxFont accessors
-    float GetFractionalPointSize() const
+    double GetFractionalPointSize() const
     {
         return m_nativeFontInfo.GetFractionalPointSize();
     }
@@ -159,13 +154,14 @@ public:
 
     int GetLogFontHeightAtPPI(int ppi) const
     {
-        return m_nativeFontInfo.GetLogFontHeightAtPPI(ppi);
+        return m_nativeFontInfo.GetLogFontHeightAtPPI(
+            m_nativeFontInfo.pointSize, ppi);
     }
 
     // ... and setters: notice that all of them invalidate the currently
     // allocated HFONT, if any, so that the next call to GetHFONT() recreates a
     // new one
-    void SetFractionalPointSize(float pointSize)
+    void SetFractionalPointSize(double pointSize)
     {
         Free();
 
@@ -278,10 +274,10 @@ protected:
         ScreenHDC hdc;
         SelectInHDC selectFont(hdc, (HFONT)GetHFONT());
 
-        UINT otmSize = GetOutlineTextMetrics(hdc, 0, NULL);
+        UINT otmSize = GetOutlineTextMetrics(hdc, 0, nullptr);
         if ( !otmSize )
         {
-            wxLogLastError("GetOutlineTextMetrics(NULL)");
+            wxLogLastError("GetOutlineTextMetrics(nullptr)");
             return wxString();
         }
 
@@ -328,7 +324,7 @@ protected:
 
 wxFontRefData::wxFontRefData(const wxFontInfo& info)
 {
-    m_hFont = NULL;
+    m_hFont = nullptr;
 
     m_sizeUsingPixels = info.IsUsingSizeInPixels();
     if ( m_sizeUsingPixels )
@@ -402,13 +398,24 @@ void wxFontRefData::Free()
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
+wxNativeFontInfo::wxNativeFontInfo(const LOGFONT& lf_, const wxWindow* win)
+    : lf(lf_),
+      pointSize(GetPointSizeAtPPI(lf.lfHeight, win ? win->GetDPI().y : 0))
+{ }
+
 /* static */
-float wxNativeFontInfo::GetPointSizeFromLogFontHeight(int height)
+double wxNativeFontInfo::GetPointSizeAtPPI(int lfHeight, int ppi)
 {
-    // Determine the size in points using the primary screen DPI as we don't
-    // have anything else here.
-    const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-    return 72.0f * abs(height) / ppi;
+    if ( ppi == 0 )
+        ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+
+    return abs(lfHeight) * 72.0 / ppi;
+}
+
+/* static */
+int wxNativeFontInfo::GetLogFontHeightAtPPI(double size, int ppi)
+{
+    return -wxRound(size * ppi / 72.0);
 }
 
 void wxNativeFontInfo::Init()
@@ -423,10 +430,10 @@ void wxNativeFontInfo::Init()
                     ? DEFAULT_QUALITY
                     : PROOF_QUALITY;
 
-    pointSize = 0.0f;
+    pointSize = 0;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return pointSize;
 }
@@ -509,10 +516,11 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxGetFontEncFromCharSet(lf.lfCharSet);
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointSizeNew)
+void wxNativeFontInfo::SetFractionalPointSize(double pointSizeNew)
 {
     // We don't have the correct DPI to use here, so use that of the
-    // primary screen.
+    // primary screen and rely on WXAdjustToPPI() changing it later if
+    // necessary.
     const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
     lf.lfHeight = GetLogFontHeightAtPPI(pointSizeNew, ppi);
 
@@ -533,9 +541,9 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
     lf.lfHeight = -abs(pixelSize.GetHeight());
     lf.lfWidth = pixelSize.GetWidth();
 
-    // We don't have the right DPI to use here neither, but we need to update
+    // We don't have the right DPI to use here either, but we need to update
     // the point size too, so fall back to the default.
-    pointSize = GetPointSizeFromLogFontHeight(lf.lfHeight);
+    pointSize = GetPointSizeAtPPI(lf.lfHeight);
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -658,13 +666,15 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
 
-    bool setPointSizeFromHeight = false;
+    // If fractional point size is not present (which can happen if we have a
+    // string in version 0 or even with version 1 if it doesn't contain a valid
+    // point size), ensure that we set it from lfHeight below.
+    bool setPointSizeFromHeight = true;
     switch ( l )
     {
         case 0:
-            // Fractional point size is not present in this version, it will be
-            // set from lfHeight below in this case.
-            setPointSizeFromHeight = true;
+            // Fractional point size is not present in this version, so nothing
+            // special to do.
             break;
 
         case 1:
@@ -672,9 +682,14 @@ bool wxNativeFontInfo::FromString(const wxString& s)
                 double d;
                 if ( !tokenizer.GetNextToken().ToCDouble(&d) )
                     return false;
-                pointSize = static_cast<float>(d);
-                if ( static_cast<double>(pointSize) != d )
-                    return false;
+
+                // If the size is present but 0, ignore it and still use
+                // lfHeight, as with v0 strings.
+                if ( !wxIsNullDouble(d) )
+                {
+                    pointSize = d;
+                    setPointSizeFromHeight = false;
+                }
             }
             break;
 
@@ -688,7 +703,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
     lf.lfHeight = l;
     if ( setPointSizeFromHeight )
-        pointSize = GetPointSizeFromLogFontHeight(l);
+        pointSize = GetPointSizeAtPPI(l);
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -818,10 +833,6 @@ bool wxFont::DoCreate(const wxFontInfo& info)
     return RealizeResource();
 }
 
-wxFont::~wxFont()
-{
-}
-
 // ----------------------------------------------------------------------------
 // real implementation
 // ----------------------------------------------------------------------------
@@ -840,8 +851,8 @@ bool wxFont::RealizeResource()
 {
     // NOTE: the GetHFONT() call automatically triggers a reallocation of
     //       the HFONT if necessary (will do nothing if we already have the resource);
-    //       it returns NULL only if there is a failure in wxFontRefData::Alloc()...
-    return GetHFONT() != NULL;
+    //       it returns nullptr only if there is a failure in wxFontRefData::Alloc()...
+    return GetHFONT() != nullptr;
 }
 
 bool wxFont::FreeResource(bool WXUNUSED(force))
@@ -875,7 +886,7 @@ bool wxFont::IsFree() const
 // change font attribute: we recreate font when doing it
 // ----------------------------------------------------------------------------
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 
@@ -887,6 +898,19 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
     AllocExclusive();
 
     M_FONTDATA->SetPixelSize(pixelSize);
+}
+
+void wxFont::WXAdjustToPPI(const wxSize& ppi)
+{
+    // We only use vertical component here as we only adjust LOGFONT::lfHeight.
+    const int heightNew = M_FONTDATA->GetLogFontHeightAtPPI(ppi.y);
+
+    if ( heightNew != M_FONTDATA->GetLogFontHeight() )
+    {
+        AllocExclusive();
+
+        M_FONTDATA->SetLogFontHeight(heightNew);
+    }
 }
 
 void wxFont::SetFamily(wxFontFamily family)
@@ -959,7 +983,7 @@ void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 // accessors
 // ----------------------------------------------------------------------------
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
@@ -1029,7 +1053,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : NULL;
+    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : nullptr;
 }
 
 bool wxFont::IsFixedWidth() const
@@ -1080,8 +1104,8 @@ class wxPrivateFontsListModule : public wxModule
 public:
     wxPrivateFontsListModule() { }
 
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE { gs_privateFontFileNames.clear(); }
+    bool OnInit() override { return true; }
+    void OnExit() override { gs_privateFontFileNames.clear(); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPrivateFontsListModule);
@@ -1093,7 +1117,7 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
 {
     if ( !AddFontResourceEx(filename.t_str(), FR_PRIVATE, 0) )
     {
-        wxLogSysError(_("Font file \"%s\" couldn't be loaded"), filename);
+        wxLogError(_("Font file \"%s\" couldn't be loaded"), filename);
         return false;
     }
 

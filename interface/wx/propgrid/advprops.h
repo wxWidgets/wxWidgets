@@ -8,13 +8,13 @@
 
 
 
+/** Web colour is currently unsupported @hideinitializer */
+constexpr wxUint32 wxPG_COLOUR_WEB_BASE  = 0x10000;
 
-// Web colour is currently unsupported
-#define wxPG_COLOUR_WEB_BASE        0x10000
-
-
-#define wxPG_COLOUR_CUSTOM      0xFFFFFF
-#define wxPG_COLOUR_UNSPECIFIED (wxPG_COLOUR_CUSTOM+1)
+/** @hideinitializer */
+constexpr wxUint32 wxPG_COLOUR_CUSTOM = 0xFFFFFF;
+/** @hideinitializer */
+constexpr wxUint32 wxPG_COLOUR_UNSPECIFIED = wxPG_COLOUR_CUSTOM + 1;
 
 /** @class wxColourPropertyValue
 
@@ -77,7 +77,8 @@ public:
                    const wxFont& value = wxFont());
     virtual ~wxFontProperty();
     virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
                                     wxVariant& childValue ) const;
@@ -86,12 +87,6 @@ public:
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
 };
-
-
-
-
-/** If set, then match from list is searched for a custom colour. */
-#define wxPG_PROP_TRANSLATE_CUSTOM      wxPG_PROP_CLASS_SPECIFIC_1
 
 
 /** @class wxSystemColourProperty
@@ -113,26 +108,24 @@ public:
     virtual ~wxSystemColourProperty();
 
     virtual void OnSetValue();
-    virtual bool IntToValue(wxVariant& variant,
-                            int number,
-                            int argFlags = 0) const;
+    virtual bool IntToValue(wxVariant& variant, int number,
+                            wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
-    /**
-        Override in derived class to customize how colours are printed as
+    /** Override in derived class to customize how colours are printed as
         strings.
     */
-    virtual wxString ColourToString( const wxColour& col, int index,
-                                     int argFlags = 0 ) const;
+    virtual wxString ColourToString(const wxColour& col, int index,
+                                    wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     /** Returns index of entry that triggers colour picker dialog
         (default is last).
     */
     virtual int GetCustomColourIndex() const;
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue( wxVariant& variant,
-                                const wxString& text,
-                                int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxWindow* primary, wxEvent& event );
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
@@ -140,7 +133,8 @@ public:
     virtual void OnCustomPaint( wxDC& dc,
                                 const wxRect& rect, wxPGPaintData& paintdata );
 
-    // Helper function to show the colour dialog
+    /** Helper function to show the colour dialog
+    */
     bool QueryColourFromUser( wxVariant& variant ) const;
 
     /** Default is to use wxSystemSettings::GetColour(index). Override to use
@@ -148,7 +142,7 @@ public:
     */
     virtual wxColour GetColour( int index ) const;
 
-    wxColourPropertyValue GetVal( const wxVariant* pVariant = NULL ) const;
+    wxColourPropertyValue GetVal( const wxVariant* pVariant = nullptr ) const;
 
 protected:
 
@@ -190,7 +184,8 @@ public:
                       const wxColour& value = *wxWHITE );
     virtual ~wxColourProperty();
 
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual wxColour GetColour( int index ) const;
 
 protected:
@@ -211,6 +206,8 @@ public:
                       int value = 0 );
     virtual ~wxCursorProperty();
 
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
     virtual wxSize OnMeasureImage( int item ) const;
     virtual void OnCustomPaint( wxDC& dc,
                                 const wxRect& rect, wxPGPaintData& paintdata );
@@ -240,7 +237,7 @@ public:
 
     wxImageFileProperty( const wxString& label= wxPG_LABEL,
                          const wxString& name = wxPG_LABEL,
-                         const wxString& value = wxEmptyString);
+                         const wxString& value = wxString());
     virtual ~wxImageFileProperty();
 
     virtual void OnSetValue();
@@ -248,10 +245,6 @@ public:
     virtual wxSize OnMeasureImage( int item ) const;
     virtual void OnCustomPaint( wxDC& dc,
                                 const wxRect& rect, wxPGPaintData& paintdata );
-
-protected:
-    wxBitmap*   m_pBitmap; // final thumbnail area
-    wxImage*    m_pImage; // intermediate thumbnail area
 };
 
 
@@ -289,22 +282,20 @@ public:
     virtual ~wxMultiChoiceProperty();
 
     virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue(wxVariant& variant,
-                               const wxString& text,
-                               int argFlags = 0) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     wxArrayInt GetValueAsArrayInt() const;
 
 protected:
     virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
 
-    void GenerateValueAsString( wxVariant& value, wxString* target ) const;
+    wxString GenerateValueAsString(const wxVariant& value) const;
 
     // Returns translation of values into string indices.
     wxArrayInt GetValueAsIndices() const;
-
-    wxArrayString       m_valueAsStrings;  // Value as array of strings
 
     // Cache displayed text since generating it is relatively complicated.
     wxString            m_display;
@@ -334,10 +325,10 @@ public:
     virtual ~wxDateProperty();
 
     virtual void OnSetValue();
-    virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
-    virtual bool StringToValue(wxVariant& variant,
-                               const wxString& text,
-                               int argFlags = 0) const;
+    virtual wxString ValueToString(wxVariant& value,
+                                   wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               wxPGPropValFormatFlags flags = wxPGPropValFormatFlags::Null) const;
 
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 

@@ -8,9 +8,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 
 #if wxUSE_FILESYSTEM
@@ -27,7 +24,6 @@
 #include "wx/mimetype.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
-#include "wx/uri.h"
 #include "wx/private/fileback.h"
 #include "wx/utils.h"
 
@@ -131,21 +127,21 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
         return mime;
     }
-    else
-#endif
-    {
-        if ( ext.IsSameAs(wxT("htm"), false) || ext.IsSameAs(wxT("html"), false) )
-            return wxT("text/html");
-        if ( ext.IsSameAs(wxT("jpg"), false) || ext.IsSameAs(wxT("jpeg"), false) )
-            return wxT("image/jpeg");
-        if ( ext.IsSameAs(wxT("gif"), false) )
-            return wxT("image/gif");
-        if ( ext.IsSameAs(wxT("png"), false) )
-            return wxT("image/png");
-        if ( ext.IsSameAs(wxT("bmp"), false) )
-            return wxT("image/bmp");
-        return wxEmptyString;
-    }
+#endif // wxUSE_MIMETYPE
+
+    // Without wxUSE_MIMETYPE, recognize just a few hardcoded special cases.
+    if ( ext.IsSameAs(wxT("htm"), false) || ext.IsSameAs(wxT("html"), false) )
+        return wxT("text/html");
+    if ( ext.IsSameAs(wxT("jpg"), false) || ext.IsSameAs(wxT("jpeg"), false) )
+        return wxT("image/jpeg");
+    if ( ext.IsSameAs(wxT("gif"), false) )
+        return wxT("image/gif");
+    if ( ext.IsSameAs(wxT("png"), false) )
+        return wxT("image/png");
+    if ( ext.IsSameAs(wxT("bmp"), false) )
+        return wxT("image/bmp");
+
+    return wxString();
 }
 
 
@@ -275,11 +271,11 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 {
     // location has Unix path separators
     wxString right = GetRightLocation(location);
-    wxFileName fn = wxFileSystem::URLToFileName(right);
+    wxFileName fn = wxFileName::URLToFileName(right);
     wxString fullpath = ms_root + fn.GetFullPath();
 
     if (!wxFileExists(fullpath))
-        return NULL;
+        return nullptr;
 
     // we need to check whether we can really read from this file, otherwise
     // wxFSFile is not going to work
@@ -293,7 +289,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     if ( !is->IsOk() )
     {
         delete is;
-        return NULL;
+        return nullptr;
     }
 
     return new wxFSFile(is,
@@ -308,7 +304,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
-    wxFileName fn = wxFileSystem::URLToFileName(GetRightLocation(spec));
+    wxFileName fn = wxFileName::URLToFileName(GetRightLocation(spec));
     const wxString found = wxFindFirstFile(ms_root + fn.GetFullPath(), flags);
     if ( found.empty() )
         return found;
@@ -338,7 +334,8 @@ wxList wxFileSystem::m_Handlers;
 
 wxFileSystem::~wxFileSystem()
 {
-    WX_CLEAR_HASH_MAP(wxFSHandlerHash, m_LocalHandlers)
+    for ( const auto& kv : m_LocalHandlers )
+        delete kv.second;
 }
 
 
@@ -371,7 +368,7 @@ static wxString MakeCorrectPath(const wxString& path)
             if (j >= 0 && r.GetChar(j) != wxT(':'))
             {
                 for (j = j - 1; j >= 0 && r.GetChar(j) != wxT('/') && r.GetChar(j) != wxT(':'); j--) {}
-                r.Remove(j + 1);
+                r.Truncate(j + 1);
             }
         }
     }
@@ -421,7 +418,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
             {
                 if (m_Path[(unsigned int) i] == wxT(':'))
                 {
-                    m_Path.Remove(i+1);
+                    m_Path.Truncate(i+1);
                     break;
                 }
             }
@@ -430,7 +427,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
         }
         else
         {
-            m_Path.Remove(pathpos+1);
+            m_Path.Truncate(pathpos+1);
         }
     }
 }
@@ -459,12 +456,12 @@ wxFileSystemHandler *wxFileSystem::MakeLocal(wxFileSystemHandler *h)
 wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
 {
     if ((flags & wxFS_READ) == 0)
-        return NULL;
+        return nullptr;
 
     wxString loc = MakeCorrectPath(location);
     unsigned i, ln;
     wxChar meta;
-    wxFSFile *s = NULL;
+    wxFSFile *s = nullptr;
     wxList::compatibility_iterator node;
 
     ln = loc.length();
@@ -482,23 +479,24 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
     m_LastName.clear();
 
     // try relative paths first :
-    if (meta != wxT(':'))
+    if (meta != wxT(':') && !m_Path.empty())
     {
+        const wxString fullloc = m_Path + loc;
         node = m_Handlers.GetFirst();
         while (node)
         {
             wxFileSystemHandler *h = (wxFileSystemHandler*) node -> GetData();
-            if (h->CanOpen(m_Path + loc))
+            if (h->CanOpen(fullloc))
             {
-                s = MakeLocal(h)->OpenFile(*this, m_Path + loc);
-                if (s) { m_LastName = m_Path + loc; break; }
+                s = MakeLocal(h)->OpenFile(*this, fullloc);
+                if (s) { m_LastName = fullloc; break; }
             }
             node = node->GetNext();
         }
     }
 
     // if failed, try absolute paths :
-    if (s == NULL)
+    if (s == nullptr)
     {
         node = m_Handlers.GetFirst();
         while (node)
@@ -531,7 +529,7 @@ wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
     wxList::compatibility_iterator node;
     wxString spec2(spec);
 
-    m_FindFileHandler = NULL;
+    m_FindFileHandler = nullptr;
 
     for (int i = spec2.length()-1; i >= 0; i--)
         if (spec2[(unsigned int) i] == wxT('\\')) spec2.GetWritableChar(i) = wxT('/'); // Want to be windows-safe
@@ -567,7 +565,7 @@ wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
 
 wxString wxFileSystem::FindNext()
 {
-    if (m_FindFileHandler == NULL) return wxEmptyString;
+    if (m_FindFileHandler == nullptr) return wxEmptyString;
     else return m_FindFileHandler -> FindNext();
 }
 
@@ -616,12 +614,12 @@ void wxFileSystem::AddHandler(wxFileSystemHandler *handler)
 wxFileSystemHandler* wxFileSystem::RemoveHandler(wxFileSystemHandler *handler)
 {
     // if handler has already been removed (or deleted)
-    // we return NULL. This is by design in case
+    // we return nullptr. This is by design in case
     // CleanUpHandlers() is called before RemoveHandler
     // is called, as we cannot control the order
     // which modules are unloaded
     if (!m_Handlers.DeleteObject(handler))
-        return NULL;
+        return nullptr;
 
     return handler;
 }
@@ -645,101 +643,16 @@ void wxFileSystem::CleanUpHandlers()
     WX_CLEAR_LIST(wxList, m_Handlers);
 }
 
-static const wxString g_unixPathString(wxT("/"));
-static const wxString g_nativePathString(wxFILE_SEP_PATH);
-
 // Returns the native path for a file URL
 wxFileName wxFileSystem::URLToFileName(const wxString& url)
 {
-    wxString path = url;
-
-    if ( path.Find(wxT("file://")) == 0 )
-    {
-        path = path.Mid(7);
-    }
-    else if ( path.Find(wxT("file:")) == 0 )
-    {
-        path = path.Mid(5);
-    }
-    // Remove preceding double slash on Mac Classic
-#if defined(__WXMAC__) && !defined(__UNIX__)
-    else if ( path.Find(wxT("//")) == 0 )
-        path = path.Mid(2);
-#endif
-
-    path = wxURI::Unescape(path);
-
-#ifdef __WINDOWS__
-    // file urls either start with a forward slash (local harddisk),
-    // otherwise they have a servername/sharename notation,
-    // which only exists on msw and corresponds to a unc
-    if ( path.length() > 1 && (path[0u] == wxT('/') && path [1u] != wxT('/')) )
-    {
-        path = path.Mid(1);
-    }
-    else if ( (url.Find(wxT("file://")) == 0) &&
-              (path.Find(wxT('/')) != wxNOT_FOUND) &&
-              (path.length() > 1) && (path[1u] != wxT(':')) )
-    {
-        path = wxT("//") + path;
-    }
-#endif
-
-    path.Replace(g_unixPathString, g_nativePathString);
-
-    return wxFileName(path, wxPATH_NATIVE);
-}
-
-// Escapes non-ASCII and others characters in file: URL to be valid URLs
-static wxString EscapeFileNameCharsInURL(const char *in)
-{
-    wxString s;
-
-    for ( const unsigned char *p = (const unsigned char*)in; *p; ++p )
-    {
-        const unsigned char c = *p;
-
-        // https://tools.ietf.org/html/rfc1738#section-5
-        if ( (c >= '0' && c <= '9') ||
-             (c >= 'a' && c <= 'z') ||
-             (c >= 'A' && c <= 'Z') ||
-             strchr("/:$-_.+!*'(),", c) ) // Plus '/' and ':'
-        {
-            s << c;
-        }
-        else
-        {
-            s << wxString::Format("%%%02x", c);
-        }
-    }
-
-    return s;
+    return wxFileName::URLToFileName( url );
 }
 
 // Returns the file URL for a native path
 wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 {
-    wxFileName fn = filename;
-    fn.Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_TILDE | wxPATH_NORM_ABSOLUTE);
-    wxString url = fn.GetFullPath(wxPATH_NATIVE);
-
-#ifndef __UNIX__
-    // unc notation, wxMSW
-    if ( url.Find(wxT("\\\\")) == 0 )
-    {
-        url = url.Mid(2);
-    }
-    else
-    {
-        url = wxT("/") + url;
-    }
-#endif
-
-    url.Replace(g_nativePathString, g_unixPathString);
-
-    // Do wxURI- and common practice-compatible escaping: encode the string
-    // into UTF-8, then escape anything non-ASCII:
-    return wxT("file://") + EscapeFileNameCharsInURL(url.utf8_str());
+    return wxFileName::FileNameToURL( filename );
 }
 
 
@@ -752,17 +665,17 @@ class wxFileSystemModule : public wxModule
     public:
         wxFileSystemModule() :
             wxModule(),
-            m_handler(NULL)
+            m_handler(nullptr)
         {
         }
 
-        virtual bool OnInit() wxOVERRIDE
+        virtual bool OnInit() override
         {
             m_handler = new wxLocalFSHandler;
             wxFileSystem::AddHandler(m_handler);
             return true;
         }
-        virtual void OnExit() wxOVERRIDE
+        virtual void OnExit() override
         {
             delete wxFileSystem::RemoveHandler(m_handler);
 

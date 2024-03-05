@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -33,7 +30,7 @@ wxBitmapToggleButton::wxBitmapToggleButton()
 
 wxBitmapToggleButton::wxBitmapToggleButton(wxWindow *parent,
                wxWindowID id,
-               const wxBitmap& label,
+               const wxBitmapBundle& label,
                const wxPoint& pos,
                const wxSize& size,
                long style,
@@ -45,7 +42,7 @@ wxBitmapToggleButton::wxBitmapToggleButton(wxWindow *parent,
 
 bool wxBitmapToggleButton::Create(wxWindow *parent,
             wxWindowID id,
-            const wxBitmap& label,
+            const wxBitmapBundle& label,
             const wxPoint& pos,
             const wxSize& size, long style,
             const wxValidator& validator,
@@ -104,7 +101,7 @@ bool wxToggleButton::Create(wxWindow *parent,
     // this button is toggleable and has a text label
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 void wxToggleButton::SetValue(bool state)

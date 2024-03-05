@@ -137,7 +137,7 @@ private:
 class WXDLLIMPEXP_QA wxDebugReportCompress : public wxDebugReport
 {
 public:
-    wxDebugReportCompress() { }
+    wxDebugReportCompress() = default;
 
     // you can optionally specify the directory and/or name of the file where
     // the debug report should be generated, a default location under the
@@ -152,10 +152,10 @@ public:
     const wxString& GetCompressedFileName() const { return m_zipfile; }
 
 protected:
-    virtual bool DoProcess() wxOVERRIDE;
+    virtual bool DoProcess() override;
 
     // return the location where the report will be saved
-    wxFileName GetSaveLocation() const wxOVERRIDE;
+    wxFileName GetSaveLocation() const override;
 
 private:
     // user-specified file directory/base name, use defaults if empty
@@ -185,7 +185,7 @@ public:
                         const wxString& curl = wxT("curl"));
 
 protected:
-    virtual bool DoProcess() wxOVERRIDE;
+    virtual bool DoProcess() override;
 
     // this function may be overridden in a derived class to show the output
     // from curl: this may be an HTML page or anything else that the server
@@ -222,7 +222,7 @@ class WXDLLIMPEXP_QA wxDebugReportPreview
 {
 public:
     // ctor is trivial
-    wxDebugReportPreview() { }
+    wxDebugReportPreview() = default;
 
     // present the report to the user and allow him to modify it by removing
     // some or all of the files and, potentially, adding some notes
@@ -232,7 +232,7 @@ public:
     virtual bool Show(wxDebugReport& dbgrpt) const = 0;
 
     // dtor is trivial as well but should be virtual for a base class
-    virtual ~wxDebugReportPreview() { }
+    virtual ~wxDebugReportPreview() = default;
 };
 
 #if wxUSE_GUI
@@ -244,9 +244,9 @@ public:
 class WXDLLIMPEXP_QA wxDebugReportPreviewStd : public wxDebugReportPreview
 {
 public:
-    wxDebugReportPreviewStd() { }
+    wxDebugReportPreviewStd() = default;
 
-    virtual bool Show(wxDebugReport& dbgrpt) const wxOVERRIDE;
+    virtual bool Show(wxDebugReport& dbgrpt) const override;
 };
 
 #endif // wxUSE_GUI

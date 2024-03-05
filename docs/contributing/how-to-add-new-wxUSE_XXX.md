@@ -51,14 +51,14 @@ The following files need to be modified when adding a new `wxUSE_FOO`:
    section. Please keep the alphabetic order.
 
    If there are any dependencies, i.e. `wxUSE_FOO` requires `wxUSE_BAR` and
-   `wxUSE_BAZ`, check for thme here too.
+   `wxUSE_BAZ`, check for them here too.
 
 - `include/wx/msw/chkconf.h` for MSW-specific options
 
    These options won't be defined for the other ports, so shouldn't be added to
    the common `include/wx/chkconf.h` but to this file instead.
 
-- `configure.in`
+- `configure.ac`
 
    Here you need to add `DEFAULT_wxUSE_FOO` define. It should be added in the
    block beginning after `WX_ARG_CACHE_INIT` line and should default to "no" for

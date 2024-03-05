@@ -2,7 +2,6 @@
 // Name:        xti.cpp
 // Purpose:     eXtended RTTI support sample
 // Author:      Stefan Csomor, Francesco Montorsi
-// Modified by:
 // Created:     13/5/2007
 // Copyright:   (c) Stefan Csomor, Francesco Montorsi
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -157,7 +153,7 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyFrame::MyFrame(const wxString& title)
-    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(300, 200))
+    : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(300, 200))
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -215,7 +211,7 @@ MyFrame::MyFrame(const wxString& title)
 //      MyXTIFrame()
 //      {
 //          Init();
-//          m_button = NULL;
+//          m_button = nullptr;
 //      }
 //
 //      bool Create(wxWindow *parent,
@@ -280,13 +276,13 @@ public:
         // this approach would be used if the handler would not
         // be connected really in the designer, so we have to supply
         // the information
-        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty("Button") );
+        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty(wxT("Button")) );
         if ( object == but &&
-             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo("OnClick") )
+             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo(wxT("OnClick")) )
         {
             eventSink = m_frame;
             handlerInfo = m_frame->GetClassInfo()->
-                FindHandlerInfo("ButtonClickHandler");
+                FindHandlerInfo(wxT("ButtonClickHandler"));
             return true;
         }
         return false;
@@ -316,22 +312,22 @@ void RegisterFrameRTTI()
     // is not defined anywhere in this program
     wxDynamicClassInfo *dyninfo =
         wx_dynamic_cast( wxDynamicClassInfo *, wxClassInfo::FindClass("MyXTIFrame"));
-    if ( dyninfo == NULL )
+    if ( dyninfo == nullptr )
     {
-        dyninfo = new wxDynamicClassInfo("myxtiframe.h",
-                            "MyXTIFrame",
+        dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
+                            wxT("MyXTIFrame"),
                             CLASSINFO(wxFrame) );
 
         // this class has a property named "Button" and the relative handler:
-        dyninfo->AddProperty("Button", wxGetTypeInfo((wxButton**) NULL));
-        dyninfo->AddHandler("ButtonClickHandler",
-            NULL /* no instance of the handler method */, CLASSINFO( wxEvent ) );
+        dyninfo->AddProperty(wxT("Button"), wxGetTypeInfo((wxButton**) nullptr));
+        dyninfo->AddHandler(wxT("ButtonClickHandler"),
+            nullptr /* no instance of the handler method */, CLASSINFO( wxEvent ) );
     }
 }
 
 wxDynamicObject* CreateFrameRTTI()
 {
-    int baseID = 100;
+    int baseID = wxID_HIGHEST;
     wxAny Params[10];
 
     // the class is now part of XTI internal table so that we can
@@ -341,7 +337,7 @@ wxDynamicObject* CreateFrameRTTI()
     wxASSERT( info );
     wxDynamicObject* frameWrapper =
         wx_dynamic_cast(wxDynamicObject*, info->CreateObject() );
-    Params[0] = wxAny((wxWindow*)(NULL));
+    Params[0] = wxAny((wxWindow*)(nullptr));
     Params[1] = wxAny(wxWindowID(baseID++));
     Params[2] = wxAny(wxString("This is a frame created from XTI"));
     Params[3] = wxAny(wxPoint(-1,-1));
@@ -389,7 +385,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
     wxASSERT( info->Create(button, 6, Params ));
-    frameWrapper->SetProperty( "Button", wxAny( button ) );
+    frameWrapper->SetProperty( wxT("Button"), wxAny( button ) );
 
     // other controls page
 
@@ -553,11 +549,11 @@ wxDynamicObject* LoadFrameRTTI(const wxString &fileName)
     // load the XML document
     wxXmlDocument xml;
     if (!xml.Load(fileName))
-        return NULL;
+        return nullptr;
 
     wxXmlNode *root = xml.GetRoot();
     if (root->GetName() != "TestXTI")
-        return NULL;
+        return nullptr;
 
     // now depersist the wxFrame we saved into it using wxObjectRuntimeReaderCallback
     wxObjectRuntimeReaderCallback Callbacks;
@@ -596,7 +592,7 @@ bool GenerateFrameRTTICode(const wxString &inFileName, const wxString &outFileNa
 
     // header preamble
     tos <<
-        "#include \"wx/wxprec.h\" \n#ifdef __BORLANDC__\n#pragma hdrstop\n#endif\n#ifndef WX_PRECOMP\n#include \"wx/wx.h\" \n#endif\n\n";
+        "#include \"wx/wxprec.h\" \n#ifndef WX_PRECOMP\n#include \"wx/wx.h\" \n#endif\n\n";
     // add object includes
     tos.WriteString( headerincludes );
 
@@ -704,10 +700,10 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
         wxStringOutputStream str;
         f.Read(str);
 
-        wxDialog dlg(this, wxID_ANY, "Generated code",
+        wxDialog dlg3(this, wxID_ANY, "Generated code",
                      wxDefaultPosition, wxDefaultSize,
                      wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE);
-        wxPanel *panel = new wxPanel(&dlg);
+        wxPanel *panel = new wxPanel(&dlg3);
         wxSizer *sz = new wxBoxSizer(wxVERTICAL);
         sz->Add(new wxTextCtrl(panel, wxID_ANY, str.GetString(),
                                wxDefaultPosition, wxDefaultSize,
@@ -715,7 +711,7 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
                 1, wxGROW|wxALL, 5);
         sz->Add(new wxButton(panel, wxID_OK), 0, wxALIGN_RIGHT|wxALL, 5);
         panel->SetSizerAndFit(sz);
-        dlg.ShowModal();
+        dlg3.ShowModal();
     }
 }
 

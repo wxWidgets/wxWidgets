@@ -9,6 +9,7 @@
 
 #include "wx/string.h"
 #include "wx/ffile.h"
+#include "wx/arrstr.h"
 
 #include "bench.h"
 #include "htmlparser/htmlpars.h"
@@ -293,6 +294,74 @@ BENCHMARK_FUNC(ReplaceShorter)
 }
 
 // ----------------------------------------------------------------------------
+// string arrays
+// ----------------------------------------------------------------------------
+
+BENCHMARK_FUNC(ArrStrPushBack)
+{
+    wxArrayString a;
+    for (int i = 0; i < 100; ++i)
+    {
+        a.push_back(wxString(asciistr));
+        a.push_back(wxString(utf8str));
+    }
+    return !a.empty();
+}
+
+BENCHMARK_FUNC(ArrStrInsert)
+{
+    wxArrayString a;
+    for (int i = 0; i < 100; ++i)
+    {
+        a.insert(a.begin(), wxString(asciistr));
+        a.insert(a.begin(), wxString(utf8str));
+    }
+    return !a.empty();
+}
+
+BENCHMARK_FUNC(ArrStrSort)
+{
+    wxArrayString a;
+    a.reserve(100);
+    for (int i = 0; i < 100; ++i)
+        a.push_back(wxString(asciistr + i));
+    a.Sort();
+    return !a.empty();
+}
+
+BENCHMARK_FUNC(VectorStrPushBack)
+{
+    std::vector<wxString> v;
+    for (int i = 0; i < 100; ++i)
+    {
+        v.push_back(wxString(asciistr));
+        v.push_back(wxString(utf8str));
+    }
+    return !v.empty();
+}
+
+BENCHMARK_FUNC(VectorStrInsert)
+{
+    std::vector<wxString> v;
+    for (int i = 0; i < 100; ++i)
+    {
+        v.insert(v.begin(), wxString(asciistr));
+        v.insert(v.begin(), wxString(utf8str));
+    }
+    return !v.empty();
+}
+
+BENCHMARK_FUNC(VectorStrSort)
+{
+    std::vector<wxString> v;
+    v.reserve(100);
+    for (int i = 0; i < 100; ++i)
+        v.push_back(wxString(asciistr + i));
+    std::sort(v.begin(), v.end());
+    return !v.empty();
+}
+
+// ----------------------------------------------------------------------------
 // string case conversion
 // ----------------------------------------------------------------------------
 
@@ -424,7 +493,7 @@ BENCHMARK_FUNC(CharBuffer)
 class DummyParser : public wx28HtmlParser
 {
 public:
-    virtual wxObject* GetProduct() { return NULL; }
+    virtual wxObject* GetProduct() { return nullptr; }
     virtual void AddText(const wxChar*) {}
 };
 
@@ -453,3 +522,197 @@ BENCHMARK_FUNC(ParseHTML)
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// conversions between strings and numbers
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+const struct ToDoubleData
+{
+    const char *str;
+    double value;
+    bool ok;
+} toDoubleData[] =
+{
+    { "1", 1, true },
+    { "1.23", 1.23, true },
+    { ".1", .1, true },
+    { "1.", 1, true },
+    { "1..", 0, false },
+    { "0", 0, true },
+    { "a", 0, false },
+    { "12345", 12345, true },
+    { "-1", -1, true },
+    { "--1", 0, false },
+    { "-3E-5", -3E-5, true },
+    { "-3E-abcde5", 0, false },
+};
+
+const struct FromDoubleData
+{
+    double value;
+    int prec;
+    const char *str;
+} fromDoubleData[] =
+{
+    { 1.23,             -1, "1.23" },
+    { -0.45678,         -1, "-0.45678" },
+    { 1.2345678,         0, "1" },
+    { 1.2345678,         1, "1.2" },
+    { 1.2345678,         2, "1.23" },
+    { 1.2345678,         3, "1.235" },
+};
+
+} // anonymous namespace
+
+BENCHMARK_FUNC(StringToDouble)
+{
+    double d = 0.;
+    for ( const auto& data : toDoubleData )
+    {
+        if ( wxString(data.str).ToDouble(&d) != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(StringToCDouble)
+{
+    double d = 0.;
+    for ( const auto& data : toDoubleData )
+    {
+        if ( wxString(data.str).ToCDouble(&d) != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(StringFromDouble)
+{
+    for ( const auto& data : fromDoubleData )
+    {
+        const wxString& s = wxString::FromDouble(data.value, data.prec);
+        if ( wxStrcmp(s.utf8_str(), data.str) != 0 )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(StringFromCDouble)
+{
+    for ( const auto& data : fromDoubleData )
+    {
+        const wxString& s = wxString::FromCDouble(data.value, data.prec);
+        if ( wxStrcmp(s.utf8_str(), data.str) != 0 )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(Strtod)
+{
+    double d = 0.;
+    char* end = nullptr;
+    for ( const auto& data : toDoubleData )
+    {
+        d = strtod(data.str, &end);
+
+        if ( (end && *end == '\0') != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(PrintfDouble)
+{
+    char buf[64];
+    for ( const auto& data : fromDoubleData )
+    {
+        if ( data.prec == -1 )
+        {
+            if ( !snprintf(buf, sizeof(buf), "%g", data.value) )
+                return false;
+        }
+        else
+        {
+            if ( !snprintf(buf, sizeof(buf), "%.*f", data.prec, data.value) )
+                return false;
+        }
+
+        if ( strcmp(buf, data.str) != 0 )
+            return false;
+    }
+
+    return true;
+}
+
+#if wxHAS_CXX17_INCLUDE(<charconv>)
+
+#include <charconv>
+
+#ifdef __cpp_lib_to_chars
+BENCHMARK_FUNC(StdFromChars)
+{
+    double d = 0.;
+    for ( const auto& data : toDoubleData )
+    {
+        const auto end = data.str + strlen(data.str);
+        const auto res = std::from_chars(data.str, end, d);
+
+        if ( (res.ptr == end && res.ec == std::errc{}) != data.ok )
+            return false;
+
+        if ( data.ok && d != data.value )
+            return false;
+    }
+
+    return true;
+}
+
+BENCHMARK_FUNC(StdToChars)
+{
+    char buf[64];
+    std::to_chars_result res;
+    for ( const auto& data : fromDoubleData )
+    {
+        if ( data.prec == -1 )
+        {
+            res = std::to_chars(buf, buf + sizeof(buf), data.value);
+        }
+        else
+        {
+            res = std::to_chars(buf, buf + sizeof(buf), data.value,
+                                std::chars_format::fixed, data.prec);
+        }
+
+        if ( res.ec != std::errc{} )
+            return false;
+
+        *res.ptr = '\0';
+
+        if ( strcmp(buf, data.str) != 0 )
+            return false;
+    }
+
+    return true;
+}
+#endif // __cpp_lib_to_chars
+
+#endif // wxHAS_CXX17_INCLUDE(<charconv>)

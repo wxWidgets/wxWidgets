@@ -2,7 +2,6 @@
 // Name:        wx/osx/filedlg.h
 // Purpose:     wxFileDialog class
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -32,14 +31,14 @@ protected:
 public:
     wxFileDialog() { Init(); }
     wxFileDialog(wxWindow *parent,
-                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),
                  const wxString& defaultDir = wxEmptyString,
                  const wxString& defaultFile = wxEmptyString,
-                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 const wxString& wildCard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                  long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
-                 const wxString& name = wxFileDialogNameStr)
+                 const wxString& name = wxASCII_STR(wxFileDialogNameStr))
     {
         Init();
 
@@ -47,43 +46,38 @@ public:
     }
 
     void Create(wxWindow *parent,
-                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& message = wxASCII_STR(wxFileSelectorPromptStr),
                  const wxString& defaultDir = wxEmptyString,
                  const wxString& defaultFile = wxEmptyString,
-                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 const wxString& wildCard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                  long style = wxFD_DEFAULT_STYLE,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
-                 const wxString& name = wxFileDialogNameStr);
+                 const wxString& name = wxASCII_STR(wxFileDialogNameStr));
 
 #if wxOSX_USE_COCOA
     ~wxFileDialog();
 #endif
 
-    virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE { paths = m_paths; }
-    virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE { files = m_fileNames ; }
+    virtual void GetPaths(wxArrayString& paths) const override { paths = m_paths; }
+    virtual void GetFilenames(wxArrayString& files) const override { files = m_fileNames ; }
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal() wxOVERRIDE;
-    virtual void ModalFinishedCallback(void* panel, int resultCode) wxOVERRIDE;
+    virtual void ShowWindowModal() override;
+    virtual void ModalFinishedCallback(void* panel, int resultCode) override;
 #endif
 
-    virtual bool SupportsExtraControl() const wxOVERRIDE;
+    virtual bool SupportsExtraControl() const override;
 
     // implementation only
-
-#if wxOSX_USE_COCOA
-    // returns true if the file can be shown as active
-    bool CheckFile( const wxString& filename );
-#endif
 
 protected:
     // not supported for file dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) override {}
 
     void SetupExtraControls(WXWindow nativeWindow);
 
@@ -91,6 +85,7 @@ protected:
     virtual wxWindow* CreateFilterPanel(wxWindow *extracontrol);
     void DoOnFilterSelected(int index);
     virtual void OnFilterSelected(wxCommandEvent &event);
+    int GetMatchingFilterExtension(const wxString& filename);
 
     wxArrayString m_filterExtensions;
     wxArrayString m_filterNames;
@@ -100,7 +95,6 @@ protected:
     int m_firstFileTypeFilter;
     wxArrayString m_currentExtensions;
     WX_NSObject m_delegate;
-    WX_NSObject m_sheetDelegate;
 #endif
 
 private:

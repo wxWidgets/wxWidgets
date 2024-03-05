@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/private/graphicsd2d.h
-// Purpose:     Allow functions from graphicsd2d.cpp to be used in othe files
+// Purpose:     Allow functions from graphicsd2d.cpp to be used in other files
 // Author:      New Pagodi
 // Created:     2017-10-31
 // Copyright:   (c) 2017 wxWidgets development team

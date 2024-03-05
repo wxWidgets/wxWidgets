@@ -10,4 +10,8 @@
         <wx-lib>base</wx-lib>
     </exe>
 
+    <wx-data id="data">
+        <files>info.svg</files>
+    </wx-data>
+
 </makefile>

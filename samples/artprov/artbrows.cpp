@@ -2,7 +2,6 @@
 // Name:        artbrows.cpp
 // Purpose:     wxArtProvider demo - art browser dialog
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2002/04/05
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -28,7 +24,7 @@
 #include "artbrows.h"
 
 #define ART_CLIENT(id) \
-    choice->Append(#id, (void*)id);
+    choice->Append(#id, new wxStringClientData(id));
 #define ART_ICON(id) \
     { \
         int ind; \
@@ -38,7 +34,7 @@
         else \
             ind = 0; \
         list->InsertItem(index, #id, ind); \
-        list->SetItemPtrData(index, wxPtrToUInt(id)); \
+        list->SetItemPtrData(index, wxPtrToUInt(new wxString(id))); \
         index++; \
     }
 
@@ -117,6 +113,8 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_FLOPPY)
     ART_ICON(wxART_CDROM)
     ART_ICON(wxART_REMOVABLE)
+    ART_ICON(wxART_REFRESH)
+    ART_ICON(wxART_STOP)
 }
 
 
@@ -195,6 +193,10 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     SetArtClient(wxART_MESSAGE_BOX);
 }
 
+wxArtBrowserDialog::~wxArtBrowserDialog()
+{
+    DeleteListItemData();
+}
 
 wxSize wxArtBrowserDialog::GetSelectedBitmapSize() const
 {
@@ -202,6 +204,14 @@ wxSize wxArtBrowserDialog::GetSelectedBitmapSize() const
   return wxSize(size, size);
 }
 
+void wxArtBrowserDialog::DeleteListItemData()
+{
+    const int itemCount = m_list->GetItemCount();
+
+    // item data are set by the ART_ICON macro
+    for ( int i = 0; i < itemCount; ++i )
+        delete reinterpret_cast<wxString*>(m_list->GetItemData(i));
+}
 
 void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
 {
@@ -214,6 +224,7 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
     long sel = m_list->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
     if (sel < 0) sel = 0;
 
+    DeleteListItemData();
     m_list->DeleteAllItems();
     FillBitmaps(img, m_list, index, client, wxSize(16, 16));
     m_list->AssignImageList(img, wxIMAGE_LIST_SMALL);
@@ -222,14 +233,16 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
     m_list->SetItemState(sel, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 
     m_client = client;
-    SetArtBitmap((const char*)m_list->GetItemData(sel), m_client);
+
+    const wxString *data = (const wxString*)m_list->GetItemData(sel);
+    SetArtBitmap(*data, m_client);
 }
 
 void wxArtBrowserDialog::OnSelectItem(wxListEvent &event)
 {
-    const char *data = (const char*)event.GetData();
-    m_currentArtId = wxString( data );
-    SetArtBitmap(data, m_client, GetSelectedBitmapSize());
+    const wxString *data = (const wxString*)event.GetData();
+    m_currentArtId = *data;
+    SetArtBitmap(*data, m_client, GetSelectedBitmapSize());
 }
 
 void wxArtBrowserDialog::OnChangeSize(wxCommandEvent& WXUNUSED(event))
@@ -239,8 +252,8 @@ void wxArtBrowserDialog::OnChangeSize(wxCommandEvent& WXUNUSED(event))
 
 void wxArtBrowserDialog::OnChooseClient(wxCommandEvent &event)
 {
-    const char *data = (const char*)event.GetClientData();
-    SetArtClient(data);
+    wxStringClientData *data = (wxStringClientData *)event.GetClientObject();
+    SetArtClient(data->GetData());
 }
 
 void wxArtBrowserDialog::SetArtBitmap(const wxArtID& id, const wxArtClient& client, const wxSize& size)

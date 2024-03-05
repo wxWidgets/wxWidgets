@@ -2,7 +2,6 @@
 // Name:        conftest.cpp
 // Purpose:     demo of wxConfig and related classes
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     03.08.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -17,9 +16,6 @@
 // ----------------------------------------------------------------------------
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef  WX_PRECOMP
   #include "wx/wx.h"
@@ -40,8 +36,8 @@ class MyApp: public wxApp
 {
 public:
   // implement base class virtuals
-  virtual bool OnInit() wxOVERRIDE;
-  virtual int OnExit() wxOVERRIDE;
+  virtual bool OnInit() override;
+  virtual int OnExit() override;
 };
 
 class MyFrame: public wxFrame
@@ -136,7 +132,7 @@ int MyApp::OnExit()
     // clean up: Set() returns the active config object as Get() does, but unlike
     // Get() it doesn't try to create one if there is none (definitely not what
     // we want here!)
-    delete wxConfigBase::Set((wxConfigBase *) NULL);
+    delete wxConfigBase::Set(nullptr);
 
     return 0;
 }
@@ -147,7 +143,7 @@ int MyApp::OnExit()
 
 // main frame ctor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *) NULL, wxID_ANY, "wxConfig Demo")
+       : wxFrame(nullptr, wxID_ANY, "wxConfig Demo")
 {
     SetIcon(wxICON(sample));
 
@@ -232,7 +228,7 @@ void MyFrame::OnAbout(wxCommandEvent&)
 void MyFrame::OnDelete(wxCommandEvent&)
 {
     wxConfigBase *pConfig = wxConfigBase::Get();
-    if ( pConfig == NULL )
+    if ( pConfig == nullptr )
     {
         wxLogError("No config to delete!");
         return;
@@ -242,7 +238,7 @@ void MyFrame::OnDelete(wxCommandEvent&)
     {
         wxLogMessage("Config file/registry key successfully deleted.");
 
-        delete wxConfigBase::Set(NULL);
+        delete wxConfigBase::Set(nullptr);
         wxConfigBase::DontCreateOnDemand();
     }
     else
@@ -254,7 +250,7 @@ void MyFrame::OnDelete(wxCommandEvent&)
 MyFrame::~MyFrame()
 {
     wxConfigBase *pConfig = wxConfigBase::Get();
-    if ( pConfig == NULL )
+    if ( pConfig == nullptr )
         return;
 
     // save the control's values to the config

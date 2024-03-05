@@ -35,16 +35,18 @@ public:
     };
 
     MyApp();
+    MyApp(const MyApp&) = delete;
+    MyApp& operator=(const MyApp&) = delete;
 
     // override some wxApp virtual methods
-    virtual bool OnInit() wxOVERRIDE;
-    virtual int OnExit() wxOVERRIDE;
+    virtual bool OnInit() override;
+    virtual int OnExit() override;
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
 #ifdef __WXMAC__
-    virtual void MacNewFile() wxOVERRIDE;
+    virtual void MacNewFile() override;
 #endif // __WXMAC__
 
     // our specific methods
@@ -52,7 +54,7 @@ public:
     wxFrame *CreateChildFrame(wxView *view, bool isCanvas);
 
     // these accessors should only be called in single document mode, otherwise
-    // the pointers are NULL and an assert is triggered
+    // the pointers are null and an assert is triggered
     MyCanvas *GetMainWindowCanvas() const
         { wxASSERT(m_canvas); return m_canvas; }
     wxMenu *GetMainWindowEditMenu() const
@@ -66,10 +68,13 @@ private:
     wxMenu *CreateDrawingEditMenu();
 
     // create and associate with the given frame the menu bar containing the
-    // given file and edit (possibly NULL) menus as well as the standard help
+    // given file and edit (possibly null) menus as well as the standard help
     // one
     void CreateMenuBarForFrame(wxFrame *frame, wxMenu *file, wxMenu *edit);
 
+
+    // force close all windows
+    void OnForceCloseAll(wxCommandEvent& event);
 
     // show the about box: as we can have different frames it's more
     // convenient, even if somewhat less usual, to handle this in the
@@ -87,7 +92,6 @@ private:
     wxMenu *m_menuEdit;
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 wxDECLARE_APP(MyApp);

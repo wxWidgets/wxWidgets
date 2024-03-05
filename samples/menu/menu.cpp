@@ -2,7 +2,6 @@
 // Name:        samples/menu.cpp
 // Purpose:     wxMenu/wxMenuBar sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -35,6 +31,10 @@
     #include "wx/textdlg.h"
 #endif
 
+#include "wx/artprov.h"
+#include "wx/filehistory.h"
+#include "wx/filename.h"
+
 #if !wxUSE_MENUS
     // nice try...
     #error "menu sample requires wxUSE_MENUS=1"
@@ -42,7 +42,7 @@
 
 // not all ports have support for EVT_CONTEXT_MENU yet, don't define
 // USE_CONTEXT_MENU for those which don't
-#if defined(__WXMOTIF__) || defined(__WXX11__)
+#if defined(__WXX11__)
     #define USE_CONTEXT_MENU 0
 #else
     #define USE_CONTEXT_MENU 1
@@ -56,8 +56,6 @@
     #define USE_LOG_WINDOW 0
 #endif
 
-#include "copy.xpm"
-
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
@@ -70,7 +68,7 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 // Define a new frame
@@ -160,6 +158,12 @@ protected:
 
     void OnSize(wxSizeEvent& event);
 
+#if wxUSE_FILE_HISTORY
+    void OnFileHistoryMenuItem(wxCommandEvent& event);
+
+    void OnFileHistoryStyleItem(wxCommandEvent& event);
+#endif
+
 private:
 #if USE_LOG_WINDOW
     void LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxString& what);
@@ -170,7 +174,7 @@ private:
 
     wxMenuItem *GetLastMenuItem() const;
 
-    // the menu previously detached from the menubar (may be NULL)
+    // the menu previously detached from the menubar (may be null)
     wxMenu *m_menu;
 
     // the count of dummy menus already created
@@ -179,6 +183,11 @@ private:
 #if USE_LOG_WINDOW
     // the control used for logging
     wxTextCtrl *m_textctrl;
+#endif
+
+#if wxUSE_FILE_HISTORY
+    wxMenu*        m_fileHistoryMenu;
+    wxFileHistory* m_fileHistory;
 #endif
 
     // the previous log target
@@ -289,6 +298,11 @@ enum
 #if wxUSE_TEXTDLG
     Menu_Menu_FindItem,
 #endif
+#if wxUSE_FILE_HISTORY
+    Menu_Menu_FileHistory1,
+    Menu_Menu_FileHistory2,
+    Menu_Menu_FileHistory3,
+#endif
 
     Menu_Test_Normal = 400,
     Menu_Test_Check,
@@ -368,6 +382,16 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Test_Radio2,    MyFrame::OnTestRadio)
     EVT_MENU(Menu_Test_Radio3,    MyFrame::OnTestRadio)
 
+#if wxUSE_FILE_HISTORY
+    EVT_MENU(wxID_FILE1,          MyFrame::OnFileHistoryMenuItem)
+    EVT_MENU(wxID_FILE2,          MyFrame::OnFileHistoryMenuItem)
+    EVT_MENU(wxID_FILE3,          MyFrame::OnFileHistoryMenuItem)
+
+    EVT_MENU(Menu_Menu_FileHistory1,     MyFrame::OnFileHistoryStyleItem)
+    EVT_MENU(Menu_Menu_FileHistory2,     MyFrame::OnFileHistoryStyleItem)
+    EVT_MENU(Menu_Menu_FileHistory3,     MyFrame::OnFileHistoryStyleItem)
+#endif
+
     EVT_UPDATE_UI(Menu_SubMenu_Normal,    MyFrame::OnUpdateSubMenuNormal)
     EVT_UPDATE_UI(Menu_SubMenu_Check,     MyFrame::OnUpdateSubMenuCheck)
     EVT_UPDATE_UI(Menu_SubMenu_Radio1,    MyFrame::OnUpdateSubMenuRadio)
@@ -441,16 +465,16 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame((wxFrame *)NULL, wxID_ANY, "wxWidgets menu sample")
+       : wxFrame(nullptr, wxID_ANY, "wxWidgets menu sample")
 {
     SetIcon(wxICON(sample));
 
 #if USE_LOG_WINDOW
-    m_textctrl = NULL;
+    m_textctrl = nullptr;
 #endif
-    m_menu = NULL;
+    m_menu = nullptr;
     m_countDummy = 0;
-    m_logOld = NULL;
+    m_logOld = nullptr;
 
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -533,7 +557,7 @@ MyFrame::MyFrame()
 #if USE_LOG_WINDOW
     wxMenuItem *item = new wxMenuItem(fileMenu, Menu_File_ClearLog,
                                       "Clear &log\tCtrl-L");
-    item->SetBitmap(copy_xpm);
+    item->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_DELETE, wxART_MENU));
     fileMenu->Append(item);
     fileMenu->AppendSeparator();
 #endif // USE_LOG_WINDOW
@@ -541,6 +565,19 @@ MyFrame::MyFrame()
     fileMenu->Append(Menu_File_ShowDialog, "Show &Dialog\tCtrl-D",
                         "Show a dialog");
     fileMenu->AppendSeparator();
+
+#if wxUSE_FILE_HISTORY
+    m_fileHistoryMenu = new wxMenu();
+
+    m_fileHistory = new wxFileHistory();
+    m_fileHistory->UseMenu(m_fileHistoryMenu);
+
+    m_fileHistory->AddFileToHistory( wxFileName("menu.cpp").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("Makefile.in").GetAbsolutePath() );
+    m_fileHistory->AddFileToHistory( wxFileName("minimal", "minimal", "cpp").GetAbsolutePath() );
+
+    fileMenu->AppendSubMenu(m_fileHistoryMenu, "Sample file history");
+#endif
 
     fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit menu sample");
 
@@ -592,7 +629,15 @@ MyFrame::MyFrame()
                      "Enable or disable the last menu item", true);
     menuMenu->Append(Menu_Menu_Check, "&Check menu item\tAlt-C",
                      "Check or uncheck the last menu item", true);
+
+    // Show the effect of Break(). As wxMSW is the only port in which calling
+    // it actually does something, insert a separator under the other platforms.
+#ifdef __WXMSW__
+    menuMenu->Break();
+#else
     menuMenu->AppendSeparator();
+#endif
+
     menuMenu->Append(Menu_Menu_GetInfo, "Get menu item in&fo\tAlt-F",
                      "Show the state of the last menu item");
 #if wxUSE_TEXTDLG
@@ -603,6 +648,16 @@ MyFrame::MyFrame()
     menuMenu->AppendSeparator();
     menuMenu->Append(Menu_Menu_FindItem, "Find menu item from label",
                      "Find a menu item by searching for its label");
+#endif
+#if wxUSE_FILE_HISTORY
+    wxMenu* menuFileHistoryStyle = new wxMenu();
+
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory1, "Hide current path");
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory2, "Hide all paths");
+    menuFileHistoryStyle->AppendRadioItem(Menu_Menu_FileHistory3, "Show all paths");
+
+    menuMenu->AppendSeparator();
+    menuMenu->AppendSubMenu(menuFileHistoryStyle, "Select file history menu style");
 #endif
 
     wxMenu *testMenu = new wxMenu;
@@ -684,6 +739,7 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
+    delete m_fileHistory;
     delete m_menu;
 
     // delete the event handler installed in ctor
@@ -714,14 +770,14 @@ wxMenuItem *MyFrame::GetLastMenuItem() const
 {
     wxMenuBar *menubar = GetMenuBar();
     wxMenu *menu = menubar->GetMenu(menubar->FindMenu("Test"));
-    wxCHECK_MSG( menu, NULL, "no 'Test' menu?" );
+    wxCHECK_MSG( menu, nullptr, "no 'Test' menu?" );
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetLast();
     if ( !node )
     {
         wxLogWarning("No last item in the 'Test' menu!");
 
-        return NULL;
+        return nullptr;
     }
     else
     {
@@ -830,7 +886,7 @@ void MyFrame::OnToggleMenu(wxCommandEvent& WXUNUSED(event))
     {
         // restore it
         mbar->Insert(0, m_menu, "&File");
-        m_menu = NULL;
+        m_menu = nullptr;
     }
 }
 
@@ -929,7 +985,7 @@ void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( menu, "no 'Test' menu?" );
 
     menu->Append(Menu_Dummy_Last, "&Dummy sub menu",
-                 CreateDummyMenu(NULL), "Dummy sub menu help");
+                 CreateDummyMenu(nullptr), "Dummy sub menu help");
 }
 
 void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -1184,13 +1240,14 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
     else // normal case, shift not pressed
     {
         menu.Append(Menu_Help_About, "&About");
-        menu.Append(Menu_Popup_Submenu, "&Submenu", CreateDummyMenu(NULL));
+        menu.Append(Menu_Popup_Submenu, "&Submenu", CreateDummyMenu(nullptr));
         menu.Append(Menu_Popup_ToBeDeleted, "To be &deleted");
         menu.AppendCheckItem(Menu_Popup_ToBeChecked, "To be &checked");
         menu.Append(Menu_Popup_ToBeGreyed, "To be &greyed",
                     "This menu item should be initially greyed out");
         menu.AppendSeparator();
-        menu.Append(Menu_File_Quit, "E&xit");
+        menu.Append(Menu_File_Quit, "E&xit")
+            ->SetBitmap(wxArtProvider::GetBitmapBundle(wxART_QUIT, wxART_MENU));
 
         menu.Delete(Menu_Popup_ToBeDeleted);
         menu.Check(Menu_Popup_ToBeChecked, true);
@@ -1235,19 +1292,21 @@ void MyFrame::LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxStri
 
     if ( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
     {
-        msg << " (id=" << event.GetId() << ")";
+        msg << " (id=" << event.GetId() << " in ";
     }
-    else // wxEVT_MENU_{OPEN,CLOSE}
+    else
     {
-        wxMenu* const menu = event.GetMenu();
-        if ( menu )
-        {
-            msg << " (menu with title \"" << menu->GetTitle() << "\")";
-        }
-        else
-        {
-            msg << " (no menu)";
-        }
+        msg << " (";
+    }
+
+    wxMenu* const menu = event.GetMenu();
+    if ( menu )
+    {
+        msg << "menu with title \"" << menu->GetTitle() << "\")";
+    }
+    else
+    {
+        msg << "no menu provided)";
     }
 
     msg << ".";
@@ -1309,6 +1368,36 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
     PositionMenuBar();
 #endif // __WXUNIVERSAL__
 }
+
+#if wxUSE_FILE_HISTORY
+void MyFrame::OnFileHistoryMenuItem(wxCommandEvent& event)
+{
+    int eventID = event.GetId();
+
+    wxString fname = m_fileHistory->GetHistoryFile(eventID - wxID_FILE1);
+
+    wxMessageBox(wxString::Format("Selected file %s", fname), "File history activated",
+                 wxOK | wxICON_INFORMATION);
+
+    m_fileHistory->AddFileToHistory(fname);
+}
+
+void MyFrame::OnFileHistoryStyleItem(wxCommandEvent& event)
+{
+    switch( event.GetId() )
+    {
+    case Menu_Menu_FileHistory1:
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_IF_DIFFERENT);
+        break;
+    case Menu_Menu_FileHistory2:
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_NEVER);
+        break;
+    case Menu_Menu_FileHistory3:
+        m_fileHistory->SetMenuPathStyle(wxFH_PATH_SHOW_ALWAYS);
+        break;
+    }
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // MyDialog

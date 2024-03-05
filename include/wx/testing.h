@@ -34,15 +34,19 @@ class WXDLLIMPEXP_FWD_CORE wxFileDialogBase;
 #include "wx/msgdlg.h"
 #include "wx/filedlg.h"
 
+#ifndef __WXDEBUG__
+    #include "wx/crt.h"
+#endif // !__WXDEBUG__
+
 #include <typeinfo>
 
 class wxTestingModalHook;
 
 // This helper is used to construct the best possible name for the dialog of
-// the given type using wxRTTI for this type, if any, and the C++ RTTI for
-// either the type T statically or the dynamic type of "dlg" if it's non-null.
-template <class T>
-wxString wxGetDialogClassDescription(const wxClassInfo *ci, T* dlg = NULL)
+// the given type using either wxRTTI or C++ RTTI.
+inline
+wxString
+wxGetDialogClassDescription(const wxClassInfo *ci, const std::type_info& ti)
 {
     // We prefer to use the name from wxRTTI as it's guaranteed to be readable,
     // unlike the name returned by type_info::name() which may need to be
@@ -51,8 +55,8 @@ wxString wxGetDialogClassDescription(const wxClassInfo *ci, T* dlg = NULL)
     // than a readable but useless "wxDialog".
     if ( ci == wxCLASSINFO(wxDialog) )
     {
-        return wxString::Format("dialog of type \"%s\"",
-                                (dlg ? typeid(*dlg) : typeid(T)).name());
+        return wxString::Format(wxASCII_STR("dialog of type \"%s\""),
+                                wxASCII_STR(ti.name()));
     }
 
     // We consider that an unmangled name is clear enough to be used on its own.
@@ -65,7 +69,7 @@ class wxModalExpectation
 {
 public:
     wxModalExpectation() : m_isOptional(false) {}
-    virtual ~wxModalExpectation() {}
+    virtual ~wxModalExpectation() = default;
 
     wxString GetDescription() const
     {
@@ -107,7 +111,7 @@ template<class T> class wxExpectModal;
     T must be a class derived from wxDialog and E is the derived class type,
     i.e. this is an example of using CRTP. The default value of E is fine in
     case you're using this class as a base for your wxExpectModal<>
-    specialization anyhow but also if you don't use neither Optional() nor
+    specialization anyhow but also if you don't use either Optional() or
     Describe() methods, as the derived class type is only needed for them.
  */
 template<class T, class E = wxExpectModal<T> >
@@ -163,7 +167,7 @@ public:
     }
 
 protected:
-    virtual int Invoke(wxDialog *dlg) const wxOVERRIDE
+    virtual int Invoke(wxDialog *dlg) const override
     {
         DialogType *t = dynamic_cast<DialogType*>(dlg);
         if ( t )
@@ -173,9 +177,9 @@ protected:
     }
 
     /// Returns description of the expected dialog (by default, its class).
-    virtual wxString GetDefaultDescription() const wxOVERRIDE
+    virtual wxString GetDefaultDescription() const override
     {
-        return wxGetDialogClassDescription<T>(wxCLASSINFO(T));
+        return wxGetDialogClassDescription(wxCLASSINFO(T), typeid(T));
     }
 
     /**
@@ -220,7 +224,7 @@ public:
     }
 
 protected:
-    virtual int OnInvoked(T *WXUNUSED(dlg)) const wxOVERRIDE
+    virtual int OnInvoked(T *WXUNUSED(dlg)) const override
     {
         return m_id;
     }
@@ -239,7 +243,7 @@ public:
     }
 
 protected:
-    virtual wxString GetDefaultDescription() const wxOVERRIDE
+    virtual wxString GetDefaultDescription() const override
     {
         // It can be useful to show which buttons the expected message box was
         // supposed to have, in case there could have been several of them.
@@ -248,23 +252,23 @@ protected:
         {
             case wxID_YES:
             case wxID_NO:
-                details = "wxYES_NO style";
+                details = wxASCII_STR("wxYES_NO style");
                 break;
 
             case wxID_CANCEL:
-                details = "wxCANCEL style";
+                details = wxASCII_STR("wxCANCEL style");
                 break;
 
             case wxID_OK:
-                details = "wxOK style";
+                details = wxASCII_STR("wxOK style");
                 break;
 
             default:
-                details.Printf("a button with ID=%d", m_id);
+                details.Printf(wxASCII_STR("a button with ID=%d"), m_id);
                 break;
         }
 
-        return "wxMessageDialog with " + details;
+        return wxASCII_STR("wxMessageDialog with ") + details;
     }
 };
 
@@ -289,7 +293,7 @@ public:
     }
 
 protected:
-    virtual int OnInvoked(wxFileDialog *dlg) const wxOVERRIDE
+    virtual int OnInvoked(wxFileDialog *dlg) const override
     {
         dlg->SetPath(m_path);
         return m_id;
@@ -311,9 +315,9 @@ public:
     // wxTEST_DIALOG macro, otherwise it falls back to the location of this
     // line itself, which is not very useful, so normally you should provide
     // your own values.
-    wxTestingModalHook(const char* file = NULL,
+    wxTestingModalHook(const char* file = nullptr,
                        int line = 0,
-                       const char* func = NULL)
+                       const char* func = nullptr)
         : m_file(file), m_line(line), m_func(func)
     {
         Register();
@@ -321,7 +325,7 @@ public:
 
     // Called to verify that all expectations were met. This cannot be done in
     // the destructor, because ReportFailure() may throw (either because it's
-    // overriden or because wx's assertions handling is, globally). And
+    // overridden or because wx's assertions handling is, globally). And
     // throwing from the destructor would introduce all sort of problems,
     // including messing up the order of errors in some cases.
     void CheckUnmetExpectations()
@@ -337,7 +341,7 @@ public:
             (
                 wxString::Format
                 (
-                    "Expected %s was not shown.",
+                    wxASCII_STR("Expected %s was not shown."),
                     expect->GetDescription()
                 )
             );
@@ -351,7 +355,7 @@ public:
     }
 
 protected:
-    virtual int Enter(wxDialog *dlg) wxOVERRIDE
+    virtual int Enter(wxDialog *dlg) override
     {
         while ( !m_expectations.empty() )
         {
@@ -370,7 +374,7 @@ protected:
                 (
                     wxString::Format
                     (
-                        "%s was shown unexpectedly, expected %s.",
+                        wxASCII_STR("%s was shown unexpectedly, expected %s."),
                         DescribeUnexpectedDialog(dlg),
                         expect->GetDescription()
                     )
@@ -384,7 +388,7 @@ protected:
         (
             wxString::Format
             (
-                "%s was shown unexpectedly.",
+                wxASCII_STR("%s was shown unexpectedly."),
                 DescribeUnexpectedDialog(dlg)
             )
         );
@@ -403,15 +407,15 @@ protected:
         {
             return wxString::Format
                    (
-                        "A message box \"%s\"",
+                        wxASCII_STR("A message box \"%s\""),
                         msgdlg->GetMessage()
                    );
         }
 
         return wxString::Format
                (
-                    "A %s with title \"%s\"",
-                    wxGetDialogClassDescription(dlg->GetClassInfo(), dlg),
+                    wxASCII_STR("A %s with title \"%s\""),
+                    wxGetDialogClassDescription(dlg->GetClassInfo(), typeid(*dlg)),
                     dlg->GetTitle()
                );
     }
@@ -421,10 +425,20 @@ protected:
     // course, can itself be customized.
     virtual void ReportFailure(const wxString& msg)
     {
+#ifdef __WXDEBUG__
         wxFAIL_MSG_AT( msg,
                        m_file ? m_file : __FILE__,
                        m_line ? m_line : __LINE__,
-                       m_func ? m_func : __WXFUNCTION__ );
+                       m_func ? m_func : __func__ );
+#else // !__WXDEBUG__
+        // We still need to report the failure somehow when wx asserts are
+        // disabled.
+        wxFprintf(stderr, wxASCII_STR("%s at %s:%d in %s()\n"),
+                  msg,
+                  wxASCII_STR(m_file ? m_file : __FILE__),
+                  m_line ? m_line : __LINE__,
+                  wxASCII_STR(m_func ? m_func : __func__));
+#endif // __WXDEBUG__/!__WXDEBUG__
     }
 
 private:
@@ -501,21 +515,14 @@ private:
           wxExpectModal<> for your dialog type and implement its OnInvoked()
           method.
  */
-#ifdef HAVE_VARIADIC_MACROS
-
-// See wx/cpp.h for the explanations of this hack.
-#if defined(__GNUC__) && __GNUC__ == 3
-    #pragma GCC system_header
-#endif /* gcc-3.x */
-
 #define wxTEST_DIALOG(codeToRun, ...)                                          \
-    {                                                                          \
-        wxTEST_DIALOG_HOOK_CLASS wx_hook(__FILE__, __LINE__, __WXFUNCTION__);  \
+    wxSTATEMENT_MACRO_BEGIN                                                    \
+        wxTEST_DIALOG_HOOK_CLASS wx_hook(__FILE__, __LINE__, __func__);        \
         wxCALL_FOR_EACH(WX_TEST_IMPL_ADD_EXPECTATION, __VA_ARGS__)             \
         codeToRun;                                                             \
         wx_hook.CheckUnmetExpectations();                                      \
-    }
-#endif /* HAVE_VARIADIC_MACROS */
+    wxSTATEMENT_MACRO_END
+
 
 #endif // !WXBUILDING
 

@@ -20,7 +20,7 @@ public:
 
 private:
     void valueChanged(int value);
-    virtual void stepBy(int steps) wxOVERRIDE; // see QAbstractSpinBox::stepBy()
+    virtual void stepBy(int steps) override; // see QAbstractSpinBox::stepBy()
 };
 
 wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
@@ -61,7 +61,7 @@ void wxQtSpinButton::stepBy(int steps)
 
 
 wxSpinButton::wxSpinButton() :
-    m_qtSpinBox(NULL)
+    m_qtSpinBox(nullptr)
 {
 }
 
@@ -91,7 +91,7 @@ bool wxSpinButton::Create(wxWindow *parent,
     wxSize newSize( size );
     newSize.SetWidth( 18 );
 
-    return QtCreateControl( parent, id, pos, newSize, style, wxDefaultValidator, name );
+    return wxSpinButtonBase::Create( parent, id, pos, newSize, style, wxDefaultValidator, name );
 }
 
 void wxSpinButton::SetRange(int min, int max)

@@ -2,7 +2,6 @@
 // Name:        wx/sound.h
 // Purpose:     wxSoundBase class
 // Author:      Vaclav Slavik
-// Modified by:
 // Created:     2004/02/01
 // Copyright:   (c) 2004, Vaclav Slavik
 // Licence:     wxWindows licence

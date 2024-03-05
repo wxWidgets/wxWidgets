@@ -1,7 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/dndcmn.cpp
 // Author:      Robert Roebling
-// Modified by:
 // Created:     19.10.99
 // Copyright:   (c) wxWidgets Team
 // Licence:     wxWindows licence
@@ -13,9 +12,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dnd.h"
 

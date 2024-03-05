@@ -2,7 +2,6 @@
 // Name:        src/common/dcbase.cpp
 // Purpose:     generic methods of the wxDC Class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     05/25/99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/dc.h"
 #include "wx/dcclient.h"
@@ -29,7 +25,9 @@
 #include "wx/dcscreen.h"
 #include "wx/dcprint.h"
 #include "wx/prntbase.h"
+#include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
+#include "wx/stack.h"
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
@@ -38,6 +36,8 @@
 #endif
 
 #include "wx/private/textmeasure.h"
+#include "wx/private/rescale.h"
+#include "wx/display.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/dcclient.h"
@@ -45,28 +45,20 @@
     #include "wx/msw/dcscreen.h"
 #endif
 
-#ifdef __WXGTK3__
-    #include "wx/gtk/dc.h"
-#elif defined __WXGTK20__
-    #include "wx/gtk/dcclient.h"
-    #include "wx/gtk/dcmemory.h"
-    #include "wx/gtk/dcscreen.h"
-#elif defined(__WXGTK__)
-    #include "wx/gtk1/dcclient.h"
-    #include "wx/gtk1/dcmemory.h"
-    #include "wx/gtk1/dcscreen.h"
+#ifdef __WXGTK__
+    #ifdef __WXGTK3__
+        #include "wx/gtk/dc.h"
+    #else
+        #include "wx/gtk/dcclient.h"
+        #include "wx/gtk/dcmemory.h"
+        #include "wx/gtk/dcscreen.h"
+    #endif
 #endif
 
 #ifdef __WXMAC__
     #include "wx/osx/dcclient.h"
     #include "wx/osx/dcmemory.h"
     #include "wx/osx/dcscreen.h"
-#endif
-
-#ifdef __WXMOTIF__
-    #include "wx/motif/dcclient.h"
-    #include "wx/motif/dcmemory.h"
-    #include "wx/motif/dcscreen.h"
 #endif
 
 #ifdef __WXX11__
@@ -90,7 +82,7 @@
 // wxDCFactory
 //----------------------------------------------------------------------------
 
-wxDCFactory *wxDCFactory::m_factory = NULL;
+wxDCFactory *wxDCFactory::m_factory = nullptr;
 
 void wxDCFactory::Set(wxDCFactory *factory)
 {
@@ -110,8 +102,8 @@ wxDCFactory *wxDCFactory::Get()
 class wxDCFactoryCleanupModule : public wxModule
 {
 public:
-    virtual bool OnInit() wxOVERRIDE { return true; }
-    virtual void OnExit() wxOVERRIDE { wxDCFactory::Set(NULL); }
+    virtual bool OnInit() override { return true; }
+    virtual void OnExit() override { wxDCFactory::Set(nullptr); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxDCFactoryCleanupModule);
@@ -182,6 +174,11 @@ wxDCImpl *wxNativeDCFactory::CreatePrinterDC( wxPrinterDC *owner, const wxPrintD
 }
 #endif
 
+bool wxNativeDCFactory::CanDrawUsingClientDC(const wxWindow* window) const
+{
+    return wxClientDCImpl::CanBeUsedForDrawing(window);
+}
+
 //-----------------------------------------------------------------------------
 // wxWindowDC
 //-----------------------------------------------------------------------------
@@ -202,6 +199,12 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxClientDC, wxWindowDC);
 wxClientDC::wxClientDC(wxWindow *win)
           : wxWindowDC(wxDCFactory::Get()->CreateClientDC(this, win))
 {
+}
+
+/* static */
+bool wxClientDC::CanBeUsedForDrawing(const wxWindow* window)
+{
+    return wxDCFactory::Get()->CanDrawUsingClientDC(window);
 }
 
 //-----------------------------------------------------------------------------
@@ -317,7 +320,7 @@ int wxPrinterDC::GetResolution() const
 wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
 wxDCImpl::wxDCImpl( wxDC *owner )
-        : m_window(NULL)
+        : m_window(nullptr)
         , m_colour(true)
         , m_ok(true)
         , m_clipping(false)
@@ -347,6 +350,8 @@ wxDCImpl::wxDCImpl( wxDC *owner )
         , m_palette()
         , m_hasCustomPalette(false)
 #endif // wxUSE_PALETTE
+        , m_devClipX1(0), m_devClipY1(0), m_devClipX2(0), m_devClipY2(0)
+        , m_useDevClipCoords(false)
 {
     m_owner = owner;
 }
@@ -364,13 +369,16 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     wxASSERT_MSG( w >= 0 && h >= 0,
                   wxS("Clipping box size values cannot be negative") );
 
-    wxRect clipRegion(x, y, w, h);
+    // If we set clipping box with this method we can operate on device coordinates
+    // and calculate clipping box properly also when transformations were applied to DC.
+    m_useDevClipCoords = true;
+    wxRect clipRegion(LogicalToDevice(x, y), LogicalToDeviceRel(w, h));
 
     if ( m_clipping )
     {
         // New clipping box is an intersection
         // of required clipping box and the current one.
-        wxRect curRegion(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
+        wxRect curRegion(m_devClipX1, m_devClipY1, m_devClipX2 - m_devClipX1, m_devClipY2 - m_devClipY1);
         clipRegion.Intersect(curRegion);
     }
     else
@@ -379,8 +387,7 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
         // of required clipping box and DC surface.
         int dcWidth, dcHeight;
         DoGetSize(&dcWidth, &dcHeight);
-        wxRect dcRect(DeviceToLogicalX(0), DeviceToLogicalY(0),
-                      DeviceToLogicalXRel(dcWidth), DeviceToLogicalYRel(dcHeight));
+        wxRect dcRect(0, 0, dcWidth, dcHeight);
         clipRegion.Intersect(dcRect);
 
         m_clipping = true;
@@ -388,24 +395,21 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 
     if ( clipRegion.IsEmpty() )
     {
-        m_clipX1 = m_clipY1 = m_clipX2 = m_clipY2 = 0;
+        m_devClipX1 = m_devClipY1 = m_devClipX2 = m_devClipY2 = 0;
     }
     else
     {
-        m_clipX1 = clipRegion.GetLeft();
-        m_clipY1 = clipRegion.GetTop();
-        m_clipX2 = clipRegion.GetRight() + 1;
-        m_clipY2 = clipRegion.GetBottom() + 1;
+        m_devClipX1 = clipRegion.GetLeft();
+        m_devClipY1 = clipRegion.GetTop();
+        m_devClipX2 = clipRegion.GetRight() + 1;
+        m_devClipY2 = clipRegion.GetBottom() + 1;
     }
 }
 
 wxRect wxDCImpl::GetLogicalArea() const
 {
     const wxSize size = GetSize();
-    return wxRect(DeviceToLogicalX(0),
-                  DeviceToLogicalY(0),
-                  DeviceToLogicalXRel(size.x),
-                  DeviceToLogicalYRel(size.y));
+    return wxRect(DeviceToLogical(0, 0), DeviceToLogicalRel(size.x, size.y));
 }
 
 bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
@@ -426,11 +430,18 @@ bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
 
     if ( m_clipping )
     {
-        rect = wxRect(m_clipX1,
-                      m_clipY1,
-                      m_clipX2 - m_clipX1,
-                      m_clipY2 - m_clipY1);
-
+        if ( m_useDevClipCoords )
+        {
+            if ( m_devClipX1 == m_devClipX2 || m_devClipY1 == m_devClipY2 )
+                rect = wxRect(); // empty clip region
+            else
+                rect = wxRect(DeviceToLogical(m_devClipX1, m_devClipY1), DeviceToLogicalRel(m_devClipX2 - m_devClipX1, m_devClipY2 - m_devClipY1));
+        }
+        else
+        {
+            // When derived class set coordinates in logical units directly...
+            rect = wxRect(m_clipX1, m_clipY1, m_clipX2 - m_clipX1, m_clipY2 - m_clipY1);
+        }
         return true;
     }
     else // No active clipping region.
@@ -500,6 +511,26 @@ wxCoord wxDCImpl::LogicalToDeviceXRel(wxCoord x) const
 wxCoord wxDCImpl::LogicalToDeviceYRel(wxCoord y) const
 {
     return wxRound((double)(y) * m_scaleY);
+}
+
+wxPoint wxDCImpl::DeviceToLogical(wxCoord x, wxCoord y) const
+{
+    return wxPoint(DeviceToLogicalX(x), DeviceToLogicalY(y));
+}
+
+wxPoint wxDCImpl::LogicalToDevice(wxCoord x, wxCoord y) const
+{
+    return wxPoint(LogicalToDeviceX(x), LogicalToDeviceY(y));
+}
+
+wxSize wxDCImpl::DeviceToLogicalRel(int x, int y) const
+{
+    return wxSize(DeviceToLogicalXRel(x), DeviceToLogicalYRel(y));
+}
+
+wxSize wxDCImpl::LogicalToDeviceRel(int x, int y) const
+{
+    return wxSize(LogicalToDeviceXRel(x), LogicalToDeviceYRel(y));
 }
 
 void wxDCImpl::ComputeScaleAndOrigin()
@@ -578,6 +609,28 @@ void wxDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     ComputeScaleAndOrigin();
 }
 
+wxSize wxDCImpl::FromDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    const wxSize dpi = GetPPI();
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(baseline).To(dpi);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
+wxSize wxDCImpl::ToDIP(const wxSize& sz) const
+{
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    return sz;
+#else
+    const wxSize dpi = GetPPI();
+    const wxSize baseline = wxDisplay::GetStdPPI();
+    return wxRescaleCoord(sz).From(dpi).To(baseline);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+}
+
 bool wxDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
     wxTextMeasure tm(GetOwner(), &m_font);
@@ -611,8 +664,7 @@ void wxDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     DoDrawLine(x1, y3, x3, y2);
     DoDrawLine(x3, y2, x2, y1);
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(x1, y1, x2, y2);
 }
 
 bool
@@ -669,7 +721,7 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 void wxDCImpl::DrawLines(const wxPointList *list, wxCoord xoffset, wxCoord yoffset)
 {
     int n = list->GetCount();
-    wxPoint *points = new wxPoint[n];
+    wxScopedArray<wxPoint> points(n);
 
     int i = 0;
     for ( wxPointList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
@@ -679,9 +731,7 @@ void wxDCImpl::DrawLines(const wxPointList *list, wxCoord xoffset, wxCoord yoffs
         points[i].y = point->y;
     }
 
-    DoDrawLines(n, points, xoffset, yoffset);
-
-    delete [] points;
+    DoDrawLines(n, points.get(), xoffset, yoffset);
 }
 
 void wxDCImpl::DrawPolygon(const wxPointList *list,
@@ -689,7 +739,7 @@ void wxDCImpl::DrawPolygon(const wxPointList *list,
                            wxPolygonFillMode fillStyle)
 {
     int n = list->GetCount();
-    wxPoint *points = new wxPoint[n];
+    wxScopedArray<wxPoint> points(n);
 
     int i = 0;
     for ( wxPointList::compatibility_iterator node = list->GetFirst(); node; node = node->GetNext(), i++ )
@@ -699,9 +749,7 @@ void wxDCImpl::DrawPolygon(const wxPointList *list,
         points[i].y = point->y;
     }
 
-    DoDrawPolygon(n, points, xoffset, yoffset, fillStyle);
-
-    delete [] points;
+    DoDrawPolygon(n, points.get(), xoffset, yoffset, fillStyle);
 }
 
 void
@@ -718,14 +766,13 @@ wxDCImpl::DoDrawPolyPolygon(int n,
     }
 
     int      i, j, lastOfs;
-    wxPoint* pts;
 
     for (i = j = lastOfs = 0; i < n; i++)
     {
         lastOfs = j;
         j      += count[i];
     }
-    pts = new wxPoint[j+n-1];
+    wxScopedArray<wxPoint> pts(j+n-1);
     for (i = 0; i < j; i++)
         pts[i] = points[i];
     for (i = 2; i <= n; i++)
@@ -736,15 +783,14 @@ wxDCImpl::DoDrawPolyPolygon(int n,
 
     {
         wxDCPenChanger setTransp(*m_owner, *wxTRANSPARENT_PEN);
-        DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
+        DoDrawPolygon(j, pts.get(), xoffset, yoffset, fillStyle);
     }
 
     for (i = j = 0; i < n; i++)
     {
-        DoDrawLines(count[i], pts+j, xoffset, yoffset);
+        DoDrawLines(count[i], pts.get()+j, xoffset, yoffset);
         j += count[i];
     }
-    delete[] pts;
 }
 
 #if wxUSE_SPLINES
@@ -774,7 +820,7 @@ void wx_quadratic_spline(double a1, double b1, double a2, double b2,
 static
 void wx_clear_stack();
 static
-int wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
+bool wx_spline_pop(double *x1, double *y1, double *x2, double *y2, double *x3,
         double *y3, double *x4, double *y4);
 static
 void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3,
@@ -820,47 +866,44 @@ typedef struct wx_spline_stack_struct {
     double           x1, y1, x2, y2, x3, y3, x4, y4;
 } Stack;
 
-#define         SPLINE_STACK_DEPTH             20
-static Stack    wx_spline_stack[SPLINE_STACK_DEPTH];
-static Stack   *wx_stack_top;
-static int      wx_stack_count;
+static wxStack<Stack> gs_wx_spline_stack;
 
 void wx_clear_stack()
 {
-    wx_stack_top = wx_spline_stack;
-    wx_stack_count = 0;
+    gs_wx_spline_stack = wxStack<Stack>();
 }
 
 void wx_spline_push(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
 {
-    wx_stack_top->x1 = x1;
-    wx_stack_top->y1 = y1;
-    wx_stack_top->x2 = x2;
-    wx_stack_top->y2 = y2;
-    wx_stack_top->x3 = x3;
-    wx_stack_top->y3 = y3;
-    wx_stack_top->x4 = x4;
-    wx_stack_top->y4 = y4;
-    wx_stack_top++;
-    wx_stack_count++;
+    Stack rec;
+    rec.x1 = x1;
+    rec.y1 = y1;
+    rec.x2 = x2;
+    rec.y2 = y2;
+    rec.x3 = x3;
+    rec.y3 = y3;
+    rec.x4 = x4;
+    rec.y4 = y4;
+    gs_wx_spline_stack.push(rec);
 }
 
-int wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
-                  double *x3, double *y3, double *x4, double *y4)
+bool wx_spline_pop(double *x1, double *y1, double *x2, double *y2,
+                   double *x3, double *y3, double *x4, double *y4)
 {
-    if (wx_stack_count == 0)
-        return (0);
-    wx_stack_top--;
-    wx_stack_count--;
-    *x1 = wx_stack_top->x1;
-    *y1 = wx_stack_top->y1;
-    *x2 = wx_stack_top->x2;
-    *y2 = wx_stack_top->y2;
-    *x3 = wx_stack_top->x3;
-    *y3 = wx_stack_top->y3;
-    *x4 = wx_stack_top->x4;
-    *y4 = wx_stack_top->y4;
-    return (1);
+    if ( gs_wx_spline_stack.empty() )
+        return false;
+
+    const Stack& top = gs_wx_spline_stack.top();
+    *x1 = top.x1;
+    *y1 = top.y1;
+    *x2 = top.x2;
+    *y2 = top.y2;
+    *x3 = top.x3;
+    *y3 = top.y3;
+    *x4 = top.x4;
+    *y4 = top.y4;
+    gs_wx_spline_stack.pop();
+    return true;
 }
 
 static bool wx_spline_add_point(double x, double y)
@@ -886,49 +929,38 @@ static void wx_spline_draw_point_array(wxDC *dc)
 void wxDCImpl::DoDrawSpline( const wxPointList *points )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
+    wxCHECK_RET(points, "null pointer to spline points?");
+    wxCHECK_RET(points->size() >= 2, "incomplete list of spline points?");
 
     const wxPoint *p;
-    double cx1, cy1, cx2, cy2;
     double           x1, y1, x2, y2;
 
-    wxPointList::compatibility_iterator node = points->GetFirst();
-    if (!node)
-        // empty list
-        return;
-
-    p = node->GetData();
-
+    wxPointList::const_iterator itPt= points->begin();
+    p = *itPt; ++itPt;
     x1 = p->x;
     y1 = p->y;
 
-    node = node->GetNext();
-    p = node->GetData();
-
+    p = *itPt; ++itPt;
     x2 = p->x;
     y2 = p->y;
-    cx1 = (double)((x1 + x2) / 2);
-    cy1 = (double)((y1 + y2) / 2);
-    cx2 = (double)((cx1 + x2) / 2);
-    cy2 = (double)((cy1 + y2) / 2);
+    double cx1 = (double)((x1 + x2) / 2);
+    double cy1 = (double)((y1 + y2) / 2);
+    double cx2 = (double)((cx1 + x2) / 2);
+    double cy2 = (double)((cy1 + y2) / 2);
 
     wx_spline_add_point(x1, y1);
 
-    while ((node = node->GetNext())
-#if !wxUSE_STD_CONTAINERS
-           != NULL
-#endif // !wxUSE_STD_CONTAINERS
-          )
+    while ( itPt != points->end() )
     {
-        double cx3, cy3, cx4, cy4;
-        p = node->GetData();
         x1 = x2;
         y1 = y2;
+        p = *itPt; ++itPt;
         x2 = p->x;
         y2 = p->y;
-        cx4 = (double)(x1 + x2) / 2;
-        cy4 = (double)(y1 + y2) / 2;
-        cx3 = (double)(x1 + cx4) / 2;
-        cy3 = (double)(y1 + cy4) / 2;
+        double cx4 = (double)(x1 + x2) / 2;
+        double cy4 = (double)(y1 + y2) / 2;
+        double cx3 = (double)(x1 + cx4) / 2;
+        double cy3 = (double)(y1 + cy4) / 2;
 
         wx_quadratic_spline(cx1, cy1, cx2, cy2, cx3, cy3, cx4, cy4);
 
@@ -1113,7 +1145,7 @@ void wxDCImpl::DoGradientFillConcentric(const wxRect& rect,
 
 void wxDCImpl::InheritAttributes(wxWindow *win)
 {
-    wxCHECK_RET( win, "window can't be NULL" );
+    wxCHECK_RET( win, "window can't be null" );
 
     SetFont(win->GetFont());
     SetTextForeground(win->GetForegroundColour());
@@ -1184,7 +1216,7 @@ void wxDC::DrawLabel(const wxString& text,
     wxCoord x, y;
     if ( alignment & wxALIGN_RIGHT )
     {
-        x = rect.GetRight() - width;
+        x = rect.GetRight() - width + 1;
     }
     else if ( alignment & wxALIGN_CENTRE_HORIZONTAL )
     {
@@ -1197,7 +1229,7 @@ void wxDC::DrawLabel(const wxString& text,
 
     if ( alignment & wxALIGN_BOTTOM )
     {
-        y = rect.GetBottom() - height;
+        y = rect.GetBottom() - height + 1;
     }
     else if ( alignment & wxALIGN_CENTRE_VERTICAL )
     {
@@ -1240,7 +1272,7 @@ void wxDC::DrawLabel(const wxString& text,
     {
         if ( pc == text.end() || *pc == '\n' )
         {
-            int xRealStart = x; // init it here to avoid compielr warnings
+            int xRealStart = x; // init it here to avoid compiler warnings
 
             if ( !curLine.empty() )
             {
@@ -1249,7 +1281,7 @@ void wxDC::DrawLabel(const wxString& text,
                 if ( alignment & (wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL) )
                 {
                     wxCoord widthLine;
-                    GetTextExtent(curLine, &widthLine, NULL);
+                    GetTextExtent(curLine, &widthLine, nullptr);
 
                     if ( alignment & wxALIGN_RIGHT )
                     {
@@ -1286,9 +1318,9 @@ void wxDC::DrawLabel(const wxString& text,
             if ( pc - text.begin() == indexAccel )
             {
                 // remember to draw underscore here
-                GetTextExtent(curLine, &startUnderscore, NULL);
+                GetTextExtent(curLine, &startUnderscore, nullptr);
                 curLine += *pc;
-                GetTextExtent(curLine, &endUnderscore, NULL);
+                GetTextExtent(curLine, &endUnderscore, nullptr);
 
                 yUnderscore = y + heightLine;
             }
@@ -1323,70 +1355,8 @@ void wxDC::DrawLabel(const wxString& text,
         *rectBounding = wxRect(x, y - heightText, widthText, heightText);
     }
 
-    CalcBoundingBox(x0, y0);
-    CalcBoundingBox(x0 + width0, y0 + height);
+    m_pimpl->CalcBoundingBox(wxPoint(x0, y0), wxSize(width0, height));
 }
-
-#if WXWIN_COMPATIBILITY_2_8
-    // for compatibility with the old code when wxCoord was long everywhere
-void wxDC::GetTextExtent(const wxString& string,
-                       long *x, long *y,
-                       long *descent,
-                       long *externalLeading,
-                       const wxFont *theFont) const
-    {
-        wxCoord x2, y2, descent2, externalLeading2;
-        m_pimpl->DoGetTextExtent(string, &x2, &y2,
-                        &descent2, &externalLeading2,
-                        theFont);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-        if ( descent )
-            *descent = descent2;
-        if ( externalLeading )
-            *externalLeading = externalLeading2;
-    }
-
-void wxDC::GetLogicalOrigin(long *x, long *y) const
-    {
-        wxCoord x2, y2;
-        m_pimpl->DoGetLogicalOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-void wxDC::GetDeviceOrigin(long *x, long *y) const
-    {
-        wxCoord x2, y2;
-        m_pimpl->DoGetDeviceOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
-    {
-        wxRect r;
-        m_pimpl->DoGetClippingRect(r);
-        if (x) *x = r.x;
-        if (y) *y = r.y;
-        if (w) *w = r.width;
-        if (h) *h = r.height;
-    }
-
-void wxDC::DrawObject(wxDrawObject* drawobject)
-{
-    drawobject->Draw(*this);
-    CalcBoundingBox(drawobject->MinX(),drawobject->MinY());
-    CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
-}
-
-#endif  // WXWIN_COMPATIBILITY_2_8
 
 /*
 Notes for wxWidgets DrawEllipticArcRot(...)
@@ -1435,17 +1405,20 @@ float wxDCImpl::GetFontPointSizeAdjustment(float dpi)
     // are ~6 times smaller when printing. Unfortunately, this bug is so severe
     // that *all* printing code has to account for it and consequently, other
     // ports need to emulate this bug too:
-    const wxSize screenPPI = wxGetDisplayPPI();
-    return float(screenPPI.y) / dpi;
+    return float(wxDisplay::GetStdPPIValue()) / dpi;
+}
+
+static void mmToPx(wxWindow* win, double& x, double& y)
+{
+    const wxSize ppi(win ? wxDisplay(win).GetPPI() : wxGetDisplayPPI());
+    x = ppi.x * mm2inches;
+    y = ppi.y * mm2inches;
 }
 
 double wxDCImpl::GetMMToPXx() const
 {
     if ( wxIsNullDouble(m_mm_to_pix_x) )
-    {
-        m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                        (double)wxGetDisplaySizeMM().GetWidth();
-    }
+        mmToPx(m_window, m_mm_to_pix_x, m_mm_to_pix_y);
 
     return m_mm_to_pix_x;
 }
@@ -1453,10 +1426,7 @@ double wxDCImpl::GetMMToPXx() const
 double wxDCImpl::GetMMToPXy() const
 {
     if ( wxIsNullDouble(m_mm_to_pix_y) )
-    {
-        m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                        (double)wxGetDisplaySizeMM().GetHeight();
-    }
+        mmToPx(m_window, m_mm_to_pix_x, m_mm_to_pix_y);
 
     return m_mm_to_pix_y;
 }

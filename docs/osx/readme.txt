@@ -11,7 +11,7 @@ bug reports or comments to the wxWidgets users list. Information
 on how to subscribe is available from the wxWidgets.org homepage.
 
 Questions/Problems related directly to the mac port can be reported
-at https://trac.wxwidgets.org.
+at https://github.com/wxWidgets/wxWidgets/issues/new.
 
 wxWidgets/Mac doesn't come with any guarantee whatsoever. It
 might crash your harddisk or destroy your monitor. It doesn't

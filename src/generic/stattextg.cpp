@@ -9,9 +9,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STATTEXT
 
@@ -108,7 +105,7 @@ void wxGenericStaticText::SetLabel(const wxString& label)
     if ( m_markupText )
     {
         delete m_markupText;
-        m_markupText = NULL;
+        m_markupText = nullptr;
     }
 #endif // wxUSE_MARKUP
 

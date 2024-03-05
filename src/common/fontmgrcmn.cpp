@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/private/fontmgr.h"
 
@@ -89,7 +86,7 @@ wxFontInstance *wxFontFaceBase::GetFontInstance(float ptSize, bool aa)
 wxFontBundleBase::wxFontBundleBase()
 {
     for (int i = 0; i < FaceType_Max; i++)
-        m_faces[i] = NULL;
+        m_faces[i] = nullptr;
 }
 
 wxFontBundleBase::~wxFontBundleBase()
@@ -102,7 +99,7 @@ wxFontFace *wxFontBundleBase::GetFace(FaceType type) const
 {
     wxFontFace *f = m_faces[type];
 
-    wxCHECK_MSG( f, NULL, wxT("no such face in font bundle") );
+    wxCHECK_MSG( f, nullptr, wxT("no such face in font bundle") );
 
     f->Acquire();
 
@@ -142,7 +139,7 @@ wxFontBundleBase::GetFaceForFont(const wxFontMgrFontRefData& font) const
         }
 
         wxFAIL_MSG( wxT("no face") );
-        return NULL;
+        return nullptr;
     }
 
     return GetFace((FaceType)type);
@@ -152,7 +149,7 @@ wxFontBundleBase::GetFaceForFont(const wxFontMgrFontRefData& font) const
 // wxFontsManagerBase
 // ----------------------------------------------------------------------------
 
-wxFontsManager *wxFontsManagerBase::ms_instance = NULL;
+wxFontsManager *wxFontsManagerBase::ms_instance = nullptr;
 
 wxFontsManagerBase::wxFontsManagerBase()
 {
@@ -189,7 +186,7 @@ wxFontBundle *wxFontsManagerBase::GetBundle(const wxString& name) const
 wxFontBundle *
 wxFontsManagerBase::GetBundleForFont(const wxFontMgrFontRefData& font) const
 {
-    wxFontBundle *bundle = NULL;
+    wxFontBundle *bundle = nullptr;
 
     wxString facename = font.GetFaceName();
     if ( !facename.empty() )
@@ -245,8 +242,8 @@ wxFontMgrFontRefData::wxFontMgrFontRefData(int size,
     m_info.underlined = underlined;
     m_info.encoding = encoding;
 
-    m_fontFace = NULL;
-    m_fontBundle = NULL;
+    m_fontFace = nullptr;
+    m_fontBundle = nullptr;
     m_fontValid = false;
 }
 
@@ -280,7 +277,7 @@ wxFontMgrFontRefData::GetFontInstance(float scale, bool antialiased) const
                                        antialiased);
 }
 
-void wxFontMgrFontRefData::SetFractionalPointSize(float pointSize)
+void wxFontMgrFontRefData::SetFractionalPointSize(double pointSize)
 {
     m_info.pointSize = pointSize;
     m_fontValid = false;

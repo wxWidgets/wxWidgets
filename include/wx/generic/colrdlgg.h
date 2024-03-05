@@ -2,7 +2,6 @@
 // Name:        wx/generic/colrdlgg.h
 // Purpose:     wxGenericColourDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -37,18 +36,19 @@ class WXDLLIMPEXP_CORE wxGenericColourDialog : public wxDialog
 public:
     wxGenericColourDialog();
     wxGenericColourDialog(wxWindow *parent,
-                          const wxColourData *data = NULL);
+                          const wxColourData *data = nullptr);
     virtual ~wxGenericColourDialog();
 
-    bool Create(wxWindow *parent, const wxColourData *data = NULL);
+    bool Create(wxWindow *parent, const wxColourData *data = nullptr);
 
     wxColourData &GetColourData() { return m_colourData; }
 
-    virtual int ShowModal() wxOVERRIDE;
+    virtual int ShowModal() override;
 
     // Internal functions
     void OnMouseEvent(wxMouseEvent& event);
     void OnPaint(wxPaintEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
     void OnCustomColourMouseClick(wxMouseEvent& event);
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
@@ -79,6 +79,7 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
 
 #if wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
+    virtual void CreateCustomBitmaps();
     void DoPreviewBitmap(wxBitmap& bmp, const wxColour& colour);
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
 
@@ -121,11 +122,6 @@ protected:
     // Bitmaps to preview custom colours (with alpha channel)
     wxStaticBitmap *m_customColoursBmp[16];
 #endif // wxCLRDLGG_USE_PREVIEW_WITH_ALPHA
-
-    int m_buttonY;
-
-    int m_okButtonX;
-    int m_customButtonX;
 
     //  static bool colourDialogCancelled;
 

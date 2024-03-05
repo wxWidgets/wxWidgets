@@ -77,7 +77,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray,
 
 struct WXDLLIMPEXP_HTML wxHtmlHelpDataItem
 {
-    wxHtmlHelpDataItem() : level(0), parent(NULL), id(wxID_ANY), book(NULL) {}
+    wxHtmlHelpDataItem() : level(0), parent(nullptr), id(wxID_ANY), book(nullptr) {}
 
     int level;
     wxHtmlHelpDataItem *parent;
@@ -107,7 +107,7 @@ class WXDLLIMPEXP_HTML wxHtmlSearchEngine : public wxObject
 {
 public:
     wxHtmlSearchEngine() : wxObject() {}
-    virtual ~wxHtmlSearchEngine() {}
+    virtual ~wxHtmlSearchEngine() = default;
 
     // Sets the keyword we will be searching for
     virtual void LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only);
@@ -138,10 +138,10 @@ public:
                        bool case_sensitive, bool whole_words_only,
                        const wxString& book = wxEmptyString);
     bool Search();  // do the next iteration
-    bool IsActive() { return m_Active; }
-    int GetCurIndex() { return m_CurIndex; }
-    int GetMaxIndex() { return m_MaxIndex; }
-    const wxString& GetName() { return m_Name; }
+    bool IsActive() const { return m_Active; }
+    int GetCurIndex() const { return m_CurIndex; }
+    int GetMaxIndex() const { return m_MaxIndex; }
+    const wxString& GetName() const { return m_Name; }
 
     const wxHtmlHelpDataItem *GetCurItem() const { return m_CurItem; }
 
@@ -203,7 +203,7 @@ protected:
     wxHtmlBookRecArray m_bookRecords;
 
     wxHtmlHelpDataItems m_contents; // list of all available books and pages
-    wxHtmlHelpDataItems m_index; // list of index itesm
+    wxHtmlHelpDataItems m_index; // list of index items
 
 protected:
     // Imports .hhp files (MS HTML Help Workshop)

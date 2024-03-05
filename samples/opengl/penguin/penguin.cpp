@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
@@ -24,11 +21,6 @@
 #endif
 
 #include "penguin.h"
-#ifdef __DARWIN__
-    #include <OpenGL/glu.h>
-#else
-    #include <GL/glu.h>
-#endif
 
 #include "../../sample.xpm"
 
@@ -43,7 +35,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, "wxWidgets Penguin Sample",
+    MyFrame *frame = new MyFrame(nullptr, "wxWidgets Penguin Sample",
         wxDefaultPosition, wxDefaultSize);
 
 #if wxUSE_ZLIB
@@ -146,7 +138,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent,
                            const wxSize& size,
                            long style,
                            const wxString& name)
-    : wxGLCanvas(parent, id, NULL, pos, size,
+    : wxGLCanvas(parent, id, nullptr, pos, size,
                  style | wxFULL_REPAINT_ON_RESIZE, name)
 {
     // Explicitly create a new rendering context instance for this canvas.
@@ -247,10 +239,10 @@ void TestGLCanvas::OnMouse(wxMouseEvent& event)
         /* drag in progress, simulate trackball */
         float spin_quat[4];
         trackball(spin_quat,
-            (2.0*m_gldata.beginx - sz.x) / sz.x,
-            (sz.y - 2.0*m_gldata.beginy) / sz.y,
-            (2.0*event.GetX() - sz.x)    / sz.x,
-            (sz.y - 2.0*event.GetY())    / sz.y);
+            (2 * m_gldata.beginx - sz.x) / sz.x,
+            (sz.y - 2 * m_gldata.beginy) / sz.y,
+            float(2 * event.GetX() - sz.x) / sz.x,
+            float(sz.y - 2 * event.GetY()) / sz.y);
 
         add_quats(spin_quat, m_gldata.quat, m_gldata.quat);
 
@@ -306,17 +298,18 @@ void TestGLCanvas::ResetProjectionMode()
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);
 
-    int w, h;
-    GetClientSize(&w, &h);
+    const wxSize ClientSize = GetClientSize() * GetContentScaleFactor();
 
     // It's up to the application code to update the OpenGL viewport settings.
     // In order to avoid extensive context switching, consider doing this in
     // OnPaint() rather than here, though.
-    glViewport(0, 0, (GLint) w, (GLint) h);
+    glViewport(0, 0, ClientSize.x, ClientSize.y);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, (GLfloat)w/h, 1.0, 100.0);
+    double fH = tan(M_PI / 8);
+    double fW = fH * ClientSize.x / ClientSize.y;
+    glFrustum(-fW, fW, -fH, fH, 1.0, 100.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }

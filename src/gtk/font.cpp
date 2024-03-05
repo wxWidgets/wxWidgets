@@ -49,7 +49,7 @@ public:
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
-    void SetFractionalPointSize(float pointSize);
+    void SetFractionalPointSize(double pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
@@ -89,7 +89,7 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
     if ( info.HasFaceName() )
     {
         pango_font_description_set_family( m_nativeFontInfo.description,
-                                           wxGTK_CONV_SYS(info.GetFaceName()) );
+                                           info.GetFaceName().utf8_str() );
     }
     else
     {
@@ -134,7 +134,7 @@ wxFontRefData::wxFontRefData(const wxString& nativeFontInfoString)
 // wxFontRefData SetXXX()
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::SetFractionalPointSize(float pointSize)
+void wxFontRefData::SetFractionalPointSize(double pointSize)
 {
     m_nativeFontInfo.SetFractionalPointSize(pointSize);
 }
@@ -152,7 +152,7 @@ bool wxFontRefData::SetPixelSize(const wxSize& pixelSize)
     wxCHECK_MSG( pixelSize.GetWidth() >= 0 && pixelSize.GetHeight() > 0, false,
                  "Negative values for the pixel size or zero pixel height are not allowed" );
 
-    if (wx_pango_version_check(1,8,0) != NULL ||
+    if (wx_pango_version_check(1,8,0) != nullptr ||
         pixelSize.GetWidth() != 0)
     {
         // NOTE: pango_font_description_set_absolute_size() only sets the font height;
@@ -275,15 +275,11 @@ bool wxFont::Create(const wxString& fontname)
     return true;
 }
 
-wxFont::~wxFont()
-{
-}
-
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
@@ -340,7 +336,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG( IsOk(), NULL, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), nullptr, wxT("invalid font") );
 
     return &(M_FONTDATA->m_nativeFontInfo);
 }
@@ -356,7 +352,7 @@ bool wxFont::IsFixedWidth() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 
@@ -516,7 +512,7 @@ extern PangoContext* wxGetPangoContext();
 namespace
 {
 
-FcConfig* gs_fcConfig = NULL;
+FcConfig* gs_fcConfig = nullptr;
 
 // Module used to clean up the global FcConfig.
 class wxFcConfigDestroyModule : public wxModule
@@ -524,13 +520,13 @@ class wxFcConfigDestroyModule : public wxModule
 public:
     wxFcConfigDestroyModule() { }
 
-    bool OnInit() wxOVERRIDE { return true; }
-    void OnExit() wxOVERRIDE
+    bool OnInit() override { return true; }
+    void OnExit() override
     {
         if ( gs_fcConfig )
         {
             FcConfigDestroy(gs_fcConfig);
-            gs_fcConfig = NULL;
+            gs_fcConfig = nullptr;
         }
     }
 
@@ -547,7 +543,7 @@ bool wxFontBase::AddPrivateFont(const wxString& filename)
     // We already checked that we have the required functions at compile-time,
     // but we should also check if they're available at run-time in case we use
     // older versions of them than the ones we were compiled with.
-    if ( wx_pango_version_check(1,38,0) != NULL )
+    if ( wx_pango_version_check(1,38,0) != nullptr )
     {
         wxLogError(_("Using private fonts is not supported on this system: "
                      "Pango library is too old, 1.38 or later required."));

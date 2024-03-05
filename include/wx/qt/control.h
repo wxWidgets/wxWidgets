@@ -16,20 +16,13 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize, long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = wxControlNameStr);
+             const wxString& name = wxASCII_STR(wxControlNameStr));
 
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
             const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxControlNameStr);
-
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
-
-protected:
-    bool QtCreateControl( wxWindow *parent, wxWindowID id, const wxPoint &pos,
-        const wxSize &size, long style, const wxValidator &validator,
-        const wxString &name );
+            const wxString& name = wxASCII_STR(wxControlNameStr));
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxControl);

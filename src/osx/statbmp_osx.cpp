@@ -2,7 +2,6 @@
 // Name:        src/osx/statbmp_osx.cpp
 // Purpose:     wxStaticBitmap
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -29,7 +28,7 @@
 
 bool wxStaticBitmap::Create(wxWindow *parent,
                             wxWindowID id,
-                            const wxBitmap& bitmap,
+                            const wxBitmapBundle& bitmap,
                             const wxPoint& pos,
                             const wxSize& size,
                             long style,
@@ -47,19 +46,24 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 
     MacPostControlCreate( pos, size );
 
-    SetBitmap(bitmap);
+    // Don't call SetBitmap() here, as we don't need to change the size nor
+    // refresh the window here.
+    m_bitmapBundle = bitmap;
+    GetPeer()->SetBitmap(bitmap);
+
+    SetInitialSize(size);
 
     return true;
 }
 
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    m_bitmap = bitmap;
-    SetInitialSize(GetBitmapSize());
-
+    m_bitmapBundle = bitmap;
     GetPeer()->SetBitmap(bitmap);
 
+    InvalidateBestSize();
+    SetSize(GetBestSize());
     Refresh();
 }
 

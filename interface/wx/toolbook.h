@@ -28,7 +28,7 @@ wxEventType wxEVT_TOOLBOOK_PAGE_CHANGING;
 
     @beginStyleTable
     @style{wxTBK_BUTTONBAR}
-        Use wxButtonToolBar-based implementation under OS X (ignored under
+        Use wxButtonToolBar-based implementation under macOS (ignored under
         other platforms).
     @style{wxTBK_HORZ_LAYOUT}
         Shows the text and the icons alongside, not vertically stacked (only
@@ -58,7 +58,7 @@ wxEventType wxEVT_TOOLBOOK_PAGE_CHANGING;
 class wxToolbook : public wxBookCtrlBase
 {
 public:
-    //@{
+    ///@{
     /**
         Constructs a choicebook control.
     */
@@ -68,7 +68,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxEmptyString);
-    //@}
+    ///@}
 
     /**
        Create the tool book control that has already been constructed with

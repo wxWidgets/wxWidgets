@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/error.h"
 #include "wx/gtk/private/mnemonics.h"
 
 #ifdef __UNIX__
@@ -139,8 +140,8 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
     if ( !filename )
         return;
 
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
-    gboolean have_preview = pixbuf != NULL;
+    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, nullptr);
+    gboolean have_preview = pixbuf != nullptr;
 
     gtk_image_set_from_pixbuf(GTK_IMAGE(preview), pixbuf);
     if ( pixbuf )
@@ -209,13 +210,10 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     }
 
     GtkFileChooserAction gtk_action;
-    GtkWindow* gtk_parent = NULL;
+    GtkWindow* gtk_parent = nullptr;
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
-#ifndef __WXGTK4__
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-#endif
     wxString ok_btn_stock;
     if ( style & wxFD_SAVE )
     {
@@ -223,7 +221,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_SAVE));
 #else
-        ok_btn_stock = GTK_STOCK_SAVE;
+        ok_btn_stock = "gtk-save";
 #endif
     }
     else
@@ -232,25 +230,23 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
 #ifdef __WXGTK4__
         ok_btn_stock = wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN));
 #else
-        ok_btn_stock = GTK_STOCK_OPEN;
+        ok_btn_stock = "gtk-open";
 #endif
     }
 
     m_widget = gtk_file_chooser_dialog_new(
-                   wxGTK_CONV(m_message),
+                   m_message.utf8_str(),
                    gtk_parent,
                    gtk_action,
 #ifdef __WXGTK4__
-                   static_cast<const gchar*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
+                   static_cast<const gchar*>(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)).utf8_str()),
 #else
-                   GTK_STOCK_CANCEL,
+                   "gtk-cancel",
 #endif
                    GTK_RESPONSE_CANCEL,
-                   static_cast<const gchar*>(wxGTK_CONV(ok_btn_stock)), GTK_RESPONSE_ACCEPT,
-                   NULL);
-#ifndef __WXGTK4__
-    wxGCC_WARNING_RESTORE()
-#endif
+                   static_cast<const gchar*>(ok_btn_stock.utf8_str()), GTK_RESPONSE_ACCEPT,
+                   nullptr);
+
     g_object_ref(m_widget);
     GtkFileChooser* file_chooser = GTK_FILE_CHOOSER(m_widget);
 
@@ -363,7 +359,7 @@ wxFileDialog::~wxFileDialog()
         // get chooser to drop its reference right now, allowing wxWindow dtor
         // to verify that ref count drops to zero
         gtk_file_chooser_set_extra_widget(
-            GTK_FILE_CHOOSER(m_widget), NULL);
+            GTK_FILE_CHOOSER(m_widget), nullptr);
     }
 }
 
@@ -374,6 +370,8 @@ void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
     wxGtkString
         str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
     m_dir = wxString::FromUTF8(str);
+
+    TransferDataFromExtraControl();
 
     EndDialog(wxID_OK);
 }
@@ -401,6 +399,7 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 
 wxString wxFileDialog::GetPath() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetPaths() instead" );
     return m_fc.GetPath();
 }
 
@@ -433,9 +432,7 @@ void wxFileDialog::SetPath(const wxString& path)
     // we need an absolute path for GTK native chooser so ensure that we have
     // it: use the initial directory if it was set or just CWD otherwise (this
     // is the default behaviour if m_dir is empty)
-    wxFileName fn(path);
-    fn.MakeAbsolute(m_dir);
-    m_fc.SetPath(fn.GetFullPath());
+    m_fc.SetPath(wxFileName(path).GetAbsolutePath(m_dir));
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
@@ -451,7 +448,7 @@ void wxFileDialog::SetFilename(const wxString& name)
 
     if (HasFdFlag(wxFD_SAVE))
     {
-        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
+        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), name.utf8_str());
     }
 
     else
@@ -468,6 +465,8 @@ void wxFileDialog::SetFilename(const wxString& name)
 
 wxString wxFileDialog::GetFilename() const
 {
+    wxCHECK_MSG( !HasFlag(wxFD_MULTIPLE), wxString(), "When using wxFD_MULTIPLE, must call GetFilenames() instead" );
+
     wxString currentFilename( m_fc.GetFilename() );
     if (currentFilename.empty())
     {
@@ -498,8 +497,24 @@ void wxFileDialog::GTKSelectionChanged(const wxString& filename)
 {
     m_currentlySelectedFilename = filename;
 
-    if (m_extraControl)
-        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+    UpdateExtraControlUI();
+}
+
+bool wxFileDialog::AddShortcut(const wxString& directory, int WXUNUSED(flags))
+{
+    wxGtkError error;
+
+    if ( !gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(m_widget),
+                                               directory.utf8_str(),
+                                               error.Out()) )
+    {
+        wxLogDebug("Failed to add shortcut \"%s\": %s",
+                   directory, error.GetMessage());
+
+        return false;
+    }
+
+    return true;
 }
 
 #endif // wxUSE_FILEDLG

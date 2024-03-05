@@ -12,9 +12,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_WXHTML_HELP
 
@@ -81,8 +78,8 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 {
     // Simply pass the pointer on to the help window
     m_Data = data;
-    m_HtmlHelpWin = NULL;
-    m_helpController = NULL;
+    m_HtmlHelpWin = nullptr;
+    m_helpController = nullptr;
     m_shouldPreventAppExit = false;
 }
 

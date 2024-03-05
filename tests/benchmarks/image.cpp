@@ -43,6 +43,7 @@ BENCHMARK_FUNC(LoadPNG)
     return image.LoadFile("horse.png");
 }
 
+#if wxUSE_LIBTIFF
 BENCHMARK_FUNC(LoadTIFF)
 {
     static bool s_handlerAdded = false;
@@ -55,6 +56,7 @@ BENCHMARK_FUNC(LoadTIFF)
     wxImage image;
     return image.LoadFile("horse.tif");
 }
+#endif // wxUSE_LIBTIFF
 
 static const wxImage& GetTestImage()
 {
@@ -63,7 +65,7 @@ static const wxImage& GetTestImage()
     if ( !s_triedToLoad )
     {
         s_triedToLoad = true;
-        s_image.LoadFile("horse.bmp");
+        s_image.LoadFile(Bench::GetStringParameter("horse.bmp"));
     }
 
     return s_image;
@@ -71,20 +73,48 @@ static const wxImage& GetTestImage()
 
 BENCHMARK_FUNC(EnlargeNormal)
 {
-    return GetTestImage().Scale(300, 300, wxIMAGE_QUALITY_NORMAL).IsOk();
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(150) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_NORMAL).IsOk();
+}
+
+BENCHMARK_FUNC(EnlargeBoxAverage)
+{
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(150) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_BOX_AVERAGE).IsOk();
 }
 
 BENCHMARK_FUNC(EnlargeHighQuality)
 {
-    return GetTestImage().Scale(300, 300, wxIMAGE_QUALITY_HIGH).IsOk();
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(150) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_HIGH).IsOk();
 }
 
 BENCHMARK_FUNC(ShrinkNormal)
 {
-    return GetTestImage().Scale(50, 50, wxIMAGE_QUALITY_NORMAL).IsOk();
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(50) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_NORMAL).IsOk();
+}
+
+BENCHMARK_FUNC(ShrinkBoxAverage)
+{
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(50) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_BOX_AVERAGE).IsOk();
 }
 
 BENCHMARK_FUNC(ShrinkHighQuality)
 {
-    return GetTestImage().Scale(50, 50, wxIMAGE_QUALITY_HIGH).IsOk();
+    const wxImage& image = GetTestImage();
+    const double factor = Bench::GetNumericParameter(50) / 100.;
+    return image.Scale(factor*image.GetWidth(), factor*image.GetHeight(),
+                       wxIMAGE_QUALITY_HIGH).IsOk();
 }

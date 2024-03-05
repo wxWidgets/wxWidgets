@@ -33,8 +33,13 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 class wxItemAttr;
 class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 
-#if !(defined(__WXGTK20__) || defined(__WXOSX__) ) || defined(__WXUNIVERSAL__)
-// #if !(defined(__WXOSX__)) || defined(__WXUNIVERSAL__)
+#if wxUSE_NATIVE_DATAVIEWCTRL && !defined(__WXUNIVERSAL__)
+    #if defined(__WXGTK__) || defined(__WXOSX__)
+        #define wxHAS_NATIVE_DATAVIEWCTRL
+    #endif
+#endif
+
+#ifndef wxHAS_NATIVE_DATAVIEWCTRL
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif
 
@@ -103,8 +108,8 @@ WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 class WXDLLIMPEXP_CORE wxDataViewModelNotifier
 {
 public:
-    wxDataViewModelNotifier() { m_owner = NULL; }
-    virtual ~wxDataViewModelNotifier() { m_owner = NULL; }
+    wxDataViewModelNotifier() { m_owner = nullptr; }
+    virtual ~wxDataViewModelNotifier() { m_owner = nullptr; }
 
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
     virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
@@ -191,11 +196,6 @@ class WXDLLIMPEXP_CORE wxDataViewModel: public wxRefCounter
 public:
     wxDataViewModel();
 
-    virtual unsigned int GetColumnCount() const = 0;
-
-    // return type as reported by wxVariant
-    virtual wxString GetColumnType( unsigned int col ) const = 0;
-
     // get value into a wxVariant
     virtual void GetValue( wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) const = 0;
@@ -203,7 +203,7 @@ public:
     // return true if the given item has a value to display in the given
     // column: this is always true except for container items which by default
     // only show their label in the first column (but see HasContainerColumns())
-    bool HasValue(const wxDataViewItem& item, unsigned col) const
+    virtual bool HasValue(const wxDataViewItem& item, unsigned col) const
     {
         return col == 0 || !IsContainer(item) || HasContainerColumns(item);
     }
@@ -276,6 +276,18 @@ public:
     virtual bool IsListModel() const { return false; }
     virtual bool IsVirtualListModel() const { return false; }
 
+    // deprecated: these methods used to be pure virtual but they're not really
+    // needed by the implementation, and so now overriding them is unnecessary
+    // as they're never called, but they're still preserved to avoid breaking
+    // the existing code using "override" with them in the derived classes.
+    wxDEPRECATED_MSG("Use wxDataViewCtrl::GetColumnCount() and don't override")
+    virtual unsigned int GetColumnCount() const { return 0; }
+    wxDEPRECATED_MSG("Don't override this function, is is not needed any more")
+    virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const
+    {
+        return wxString();
+    }
+
 protected:
     // Dtor is protected because the objects of this class must not be deleted,
     // DecRef() must be used instead.
@@ -334,13 +346,13 @@ public:
 
     // implement some base class pure virtual directly
     virtual wxDataViewItem
-    GetParent( const wxDataViewItem & WXUNUSED(item) ) const wxOVERRIDE
+    GetParent( const wxDataViewItem & WXUNUSED(item) ) const override
     {
         // items never have valid parent in this model
         return wxDataViewItem();
     }
 
-    virtual bool IsContainer( const wxDataViewItem &item ) const wxOVERRIDE
+    virtual bool IsContainer( const wxDataViewItem &item ) const override
     {
         // only the invisible (and invalid) root item has children
         return !item.IsOk();
@@ -348,30 +360,30 @@ public:
 
     // and implement some others by forwarding them to our own ones
     virtual void GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const wxOVERRIDE
+                           const wxDataViewItem &item, unsigned int col ) const override
     {
         GetValueByRow(variant, GetRow(item), col);
     }
 
     virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) wxOVERRIDE
+                           const wxDataViewItem &item, unsigned int col ) override
     {
         return SetValueByRow( variant, GetRow(item), col );
     }
 
     virtual bool GetAttr(const wxDataViewItem &item, unsigned int col,
-                         wxDataViewItemAttr &attr) const wxOVERRIDE
+                         wxDataViewItemAttr &attr) const override
     {
         return GetAttrByRow( GetRow(item), col, attr );
     }
 
-    virtual bool IsEnabled(const wxDataViewItem &item, unsigned int col) const wxOVERRIDE
+    virtual bool IsEnabled(const wxDataViewItem &item, unsigned int col) const override
     {
         return IsEnabledByRow( GetRow(item), col );
     }
 
 
-    virtual bool IsListModel() const wxOVERRIDE { return true; }
+    virtual bool IsListModel() const override { return true; }
 };
 
 // ---------------------------------------------------------
@@ -394,13 +406,13 @@ public:
 
     // convert to/from row/wxDataViewItem
 
-    virtual unsigned GetRow( const wxDataViewItem &item ) const wxOVERRIDE;
+    virtual unsigned GetRow( const wxDataViewItem &item ) const override;
     wxDataViewItem GetItem( unsigned int row ) const;
 
     // implement base methods
-    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const wxOVERRIDE;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const override;
 
-    unsigned int GetCount() const wxOVERRIDE { return (unsigned int)m_hash.GetCount(); }
+    unsigned int GetCount() const override { return (unsigned int)m_hash.GetCount(); }
 
 private:
     wxDataViewItemArray m_hash;
@@ -433,22 +445,22 @@ public:
 
     // convert to/from row/wxDataViewItem
 
-    virtual unsigned GetRow( const wxDataViewItem &item ) const wxOVERRIDE;
+    virtual unsigned GetRow( const wxDataViewItem &item ) const override;
     wxDataViewItem GetItem( unsigned int row ) const;
 
     // compare based on index
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending ) const wxOVERRIDE;
-    virtual bool HasDefaultCompare() const wxOVERRIDE;
+                         unsigned int column, bool ascending ) const override;
+    virtual bool HasDefaultCompare() const override;
 
     // implement base methods
-    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const wxOVERRIDE;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const override;
 
-    unsigned int GetCount() const wxOVERRIDE { return m_size; }
+    unsigned int GetCount() const override { return m_size; }
 
     // internal
-    virtual bool IsVirtualListModel() const wxOVERRIDE { return true; }
+    virtual bool IsVirtualListModel() const override { return true; }
 
 private:
     unsigned int m_size;
@@ -485,7 +497,7 @@ public:
     }
 
     // ctor for the bitmap columns
-    wxDataViewColumnBase(const wxBitmap& bitmap,
+    wxDataViewColumnBase(const wxBitmapBundle& bitmap,
                          wxDataViewRenderer *renderer,
                          unsigned int model_column)
         : m_bitmap(bitmap)
@@ -506,13 +518,20 @@ public:
 
     // implement some of base class pure virtuals (the rest is port-dependent
     // and done differently in generic and native versions)
-    virtual void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE { m_bitmap = bitmap; }
-    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
+    virtual void SetBitmap( const wxBitmapBundle& bitmap ) override { m_bitmap = bitmap; }
+    virtual wxBitmap GetBitmap() const override { return m_bitmap.GetBitmap(wxDefaultSize); }
+    virtual wxBitmapBundle GetBitmapBundle() const override { return m_bitmap; }
+
+    // Special accessor for use by wxWidgets only returning the width that was
+    // explicitly set, either by the application, using SetWidth(), or by the
+    // user, resizing the column interactively. It is usually the same as
+    // GetWidth(), but can be different for the last column.
+    virtual int WXGetSpecifiedWidth() const { return GetWidth(); }
 
 protected:
     wxDataViewRenderer      *m_renderer;
     int                      m_model_column;
-    wxBitmap                 m_bitmap;
+    wxBitmapBundle           m_bitmap;
     wxDataViewCtrl          *m_owner;
 
 private:
@@ -552,11 +571,11 @@ public:
     // -----------------
 
     wxDataViewColumn *PrependTextColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependIconTextColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependToggleColumn( const wxString &label, unsigned int model_column,
@@ -568,19 +587,19 @@ public:
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependDateColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependBitmapColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependTextColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependIconTextColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependToggleColumn( const wxBitmap &label, unsigned int model_column,
@@ -592,20 +611,20 @@ public:
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependDateColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *PrependBitmapColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
 
     wxDataViewColumn *AppendTextColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendIconTextColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxString &label, unsigned int model_column,
@@ -617,19 +636,19 @@ public:
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendDateColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendBitmapColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendTextColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendIconTextColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
@@ -641,11 +660,11 @@ public:
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendDateColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_NOT,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
 
@@ -704,10 +723,10 @@ public:
     wxDataViewItem GetCurrentItem() const;
     void SetCurrentItem(const wxDataViewItem& item);
 
-    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(0); }
+    virtual wxDataViewItem GetTopItem() const { return wxDataViewItem(nullptr); }
     virtual int GetCountPerPage() const { return wxNOT_FOUND; }
 
-    // Currently focused column of the current item or NULL if no column has focus
+    // Currently focused column of the current item or nullptr if no column has focus
     virtual wxDataViewColumn *GetCurrentColumn() const = 0;
 
     // Selection: both GetSelection() and GetSelections() can be used for the
@@ -729,14 +748,15 @@ public:
     virtual void UnselectAll() = 0;
 
     void Expand( const wxDataViewItem & item );
+    void ExpandChildren( const wxDataViewItem & item );
     void ExpandAncestors( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item ) = 0;
     virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
 
     virtual void EnsureVisible( const wxDataViewItem & item,
-                                const wxDataViewColumn *column = NULL ) = 0;
+                                const wxDataViewColumn *column = nullptr ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
-    virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = nullptr ) const = 0;
 
     virtual bool SetRowHeight( int WXUNUSED(rowHeight) ) { return false; }
 
@@ -748,8 +768,21 @@ public:
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
         { return false; }
-    virtual bool EnableDropTarget(const wxDataFormat& WXUNUSED(format))
-        { return false; }
+
+    bool EnableDropTargets(const wxVector<wxDataFormat>& formats)
+        { return DoEnableDropTarget(formats); }
+
+    bool EnableDropTarget(const wxDataFormat& format)
+    {
+        wxVector<wxDataFormat> formats;
+        if (format.GetType() != wxDF_INVALID)
+        {
+            formats.push_back(format);
+        }
+
+        return DoEnableDropTarget(formats);
+    }
+
 #endif // wxUSE_DRAG_AND_DROP
 
     // define control visual attributes
@@ -765,7 +798,7 @@ public:
     virtual bool SetAlternateRowColour(const wxColour& WXUNUSED(colour))
         { return false; }
 
-    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
+    virtual wxVisualAttributes GetDefaultAttributes() const override
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -780,9 +813,22 @@ protected:
     virtual void DoSetExpanderColumn() = 0 ;
     virtual void DoSetIndent() = 0;
 
+#if wxUSE_DRAG_AND_DROP
+    // Helper function which can be used by DoEnableDropTarget() implementations
+    // in the derived classes: return a composite data object supporting the
+    // given formats or null if the vector is empty.
+    static wxDataObjectComposite*
+    CreateDataObject(const wxVector<wxDataFormat>& formats);
+
+    virtual bool DoEnableDropTarget(const wxVector<wxDataFormat>& WXUNUSED(formats))
+        { return false; }
+#endif // wxUSE_DRAG_AND_DROP
+
     // Just expand this item assuming it is already shown, i.e. its parent has
     // been already expanded using ExpandAncestors().
-    virtual void DoExpand(const wxDataViewItem & item) = 0;
+    //
+    // If expandChildren is true, also expand all its children recursively.
+    virtual void DoExpand(const wxDataViewItem & item, bool expandChildren) = 0;
 
 private:
     // Implementation of the public Set/GetCurrentItem() methods which are only
@@ -811,7 +857,7 @@ public:
     wxDataViewEvent()
         : wxNotifyEvent()
     {
-        Init(NULL, NULL, wxDataViewItem());
+        Init(nullptr, nullptr, wxDataViewItem());
     }
 
     // Constructor for the events affecting columns (and possibly also items).
@@ -830,7 +876,7 @@ public:
                     const wxDataViewItem& item)
         : wxNotifyEvent(evtType, dvc->GetId())
     {
-        Init(dvc, NULL, item);
+        Init(dvc, nullptr, item);
     }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -894,16 +940,19 @@ public:
     int GetDragFlags() const { return m_dragFlags; }
     void SetDropEffect( wxDragResult effect ) { m_dropEffect = effect; }
     wxDragResult GetDropEffect() const { return m_dropEffect; }
-    // for plaforms (currently only OSX) that support Drag/Drop insertion of items,
-	// this is the proposed child index for the insertion
-	void SetProposedDropIndex(int index) { m_proposedDropIndex = index; }
-	int GetProposedDropIndex() const { return m_proposedDropIndex;}
+    // For platforms (currently generic and OSX) that support Drag/Drop
+    // insertion of items, this is the proposed child index for the insertion.
+    void SetProposedDropIndex(int index) { m_proposedDropIndex = index; }
+    int GetProposedDropIndex() const { return m_proposedDropIndex;}
+
+    // Internal, only used by wxWidgets itself.
+    void InitData(wxDataObjectComposite* obj, wxDataFormat format);
 #endif // wxUSE_DRAG_AND_DROP
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxDataViewEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxDataViewEvent(*this); }
 
     // These methods shouldn't be used outside of wxWidgets and wxWidgets
-    // itself doesn't use them any longer neither as it constructs the events
+    // itself doesn't use them any longer either as it constructs the events
     // with the appropriate ctors directly.
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("Pass the argument to the ctor instead")
@@ -931,6 +980,7 @@ protected:
 #if wxUSE_DRAG_AND_DROP
     wxDataObject       *m_dataObject;
 
+    wxMemoryBuffer      m_dataBuf;
     wxDataFormat        m_dataFormat;
     void*               m_dataBuffer;
     size_t              m_dataSize;
@@ -1011,7 +1061,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     #include "wx/generic/dataview.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK__)
     #include "wx/gtk/dataview.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/dataview.h"
@@ -1069,15 +1119,11 @@ public:
 
     // override base virtuals
 
-    virtual unsigned int GetColumnCount() const wxOVERRIDE;
-
-    virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE;
-
     virtual void GetValueByRow( wxVariant &value,
-                           unsigned int row, unsigned int col ) const wxOVERRIDE;
+                           unsigned int row, unsigned int col ) const override;
 
     virtual bool SetValueByRow( const wxVariant &value,
-                           unsigned int row, unsigned int col ) wxOVERRIDE;
+                           unsigned int row, unsigned int col ) override;
 
 
 public:
@@ -1126,23 +1172,23 @@ public:
     bool InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
 
     // overridden from base class
-    virtual bool PrependColumn( wxDataViewColumn *col ) wxOVERRIDE;
-    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col ) wxOVERRIDE;
-    virtual bool AppendColumn( wxDataViewColumn *col ) wxOVERRIDE;
-    virtual bool ClearColumns() wxOVERRIDE;
+    virtual bool PrependColumn( wxDataViewColumn *col ) override;
+    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col ) override;
+    virtual bool AppendColumn( wxDataViewColumn *col ) override;
+    virtual bool ClearColumns() override;
 
     wxDataViewColumn *AppendTextColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
+          wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendToggleColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = wxCOL_WIDTH_DEFAULT,
+          wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendProgressColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
+          wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
     wxDataViewColumn *AppendIconTextColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxCOL_WIDTH_DEFAULT,
+          wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
 
     void AppendItem( const wxVector<wxVariant> &values, wxUIntPtr data = 0 )
         { GetStore()->AppendItem( values, data ); }
@@ -1181,10 +1227,7 @@ public:
     int GetItemCount() const
         { return GetStore()->GetItemCount(); }
 
-    void OnSize( wxSizeEvent &event );
-
 private:
-    wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewListCtrl);
 };
 
@@ -1196,24 +1239,28 @@ class WXDLLIMPEXP_CORE wxDataViewTreeStoreNode
 {
 public:
     wxDataViewTreeStoreNode( wxDataViewTreeStoreNode *parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = nullptr );
     virtual ~wxDataViewTreeStoreNode();
 
     void SetText( const wxString &text )
         { m_text = text; }
     wxString GetText() const
         { return m_text; }
-    void SetIcon( const wxIcon &icon )
+    void SetIcon( const wxBitmapBundle &icon )
         { m_icon = icon; }
-    const wxIcon &GetIcon() const
+    const wxBitmapBundle& GetBitmapBundle() const
         { return m_icon; }
+    wxIcon GetIcon() const
+        { return m_icon.GetIcon(wxDefaultSize); }
     void SetData( wxClientData *data )
-        { if (m_data) delete m_data; m_data = data; }
+        { delete m_data; m_data = data; }
     wxClientData *GetData() const
         { return m_data; }
 
     wxDataViewItem GetItem() const
-        { return wxDataViewItem( (void*) this ); }
+        { return wxDataViewItem(const_cast<void*>(static_cast<const void*>(this))); }
 
     virtual bool IsContainer()
         { return false; }
@@ -1224,7 +1271,7 @@ public:
 private:
     wxDataViewTreeStoreNode  *m_parent;
     wxString                  m_text;
-    wxIcon                    m_icon;
+    wxBitmapBundle            m_icon;
     wxClientData             *m_data;
 };
 
@@ -1234,8 +1281,10 @@ class WXDLLIMPEXP_CORE wxDataViewTreeStoreContainerNode: public wxDataViewTreeSt
 {
 public:
     wxDataViewTreeStoreContainerNode( wxDataViewTreeStoreNode *parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
-        wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
+        wxClientData *data = nullptr );
     virtual ~wxDataViewTreeStoreContainerNode();
 
     const wxDataViewTreeStoreNodes &GetChildren() const
@@ -1245,24 +1294,26 @@ public:
 
     wxDataViewTreeStoreNodes::iterator FindChild(wxDataViewTreeStoreNode* node);
 
-    void SetExpandedIcon( const wxIcon &icon )
+    void SetExpandedIcon( const wxBitmapBundle &icon )
         { m_iconExpanded = icon; }
-    const wxIcon &GetExpandedIcon() const
+    const wxBitmapBundle& GetExpandedBitmapBundle() const
         { return m_iconExpanded; }
+    wxIcon GetExpandedIcon() const
+        { return m_iconExpanded.GetIcon(wxDefaultSize); }
 
     void SetExpanded( bool expanded = true )
         { m_isExpanded = expanded; }
     bool IsExpanded() const
         { return m_isExpanded; }
 
-    virtual bool IsContainer() wxOVERRIDE
+    virtual bool IsContainer() override
         { return true; }
 
     void DestroyChildren();
 
 private:
     wxDataViewTreeStoreNodes     m_children;
-    wxIcon                       m_iconExpanded;
+    wxBitmapBundle               m_iconExpanded;
     bool                         m_isExpanded;
 };
 
@@ -1275,31 +1326,45 @@ public:
     ~wxDataViewTreeStore();
 
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = nullptr );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = nullptr );
     wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, const wxIcon &icon = wxNullIcon, wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        wxClientData *data = nullptr );
 
     wxDataViewItem PrependContainer( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
-        wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
+        wxClientData *data = nullptr );
     wxDataViewItem AppendContainer( const wxDataViewItem& parent,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
-        wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
+        wxClientData *data = nullptr );
     wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, const wxIcon &icon = wxNullIcon, const wxIcon &expanded = wxNullIcon,
-        wxClientData *data = NULL );
+        const wxString &text,
+        const wxBitmapBundle &icon = wxBitmapBundle(),
+        const wxBitmapBundle &expanded = wxBitmapBundle(),
+        wxClientData *data = nullptr );
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const;
     int GetChildCount( const wxDataViewItem& parent ) const;
 
     void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const;
-    void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemIcon( const wxDataViewItem& item ) const;
-    void SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemExpandedIcon( const wxDataViewItem& item ) const;
+    void SetItemIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxBitmapBundle GetItemBitmapBundle( const wxDataViewItem& item ) const;
+    wxIcon GetItemIcon( const wxDataViewItem& item ) const;
+    void SetItemExpandedIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxBitmapBundle GetItemExpandedBitmapBundle( const wxDataViewItem& item ) const;
+    wxIcon GetItemExpandedIcon( const wxDataViewItem& item ) const;
     void SetItemData( const wxDataViewItem& item, wxClientData *data );
     wxClientData *GetItemData( const wxDataViewItem& item ) const;
 
@@ -1310,22 +1375,18 @@ public:
     // implement base methods
 
     virtual void GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const wxOVERRIDE;
+                           const wxDataViewItem &item, unsigned int col ) const override;
     virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) wxOVERRIDE;
-    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const wxOVERRIDE;
-    virtual bool IsContainer( const wxDataViewItem &item ) const wxOVERRIDE;
-    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const wxOVERRIDE;
+                           const wxDataViewItem &item, unsigned int col ) override;
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const override;
+    virtual bool IsContainer( const wxDataViewItem &item ) const override;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const override;
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending ) const wxOVERRIDE;
+                         unsigned int column, bool ascending ) const override;
 
-    virtual bool HasDefaultCompare() const wxOVERRIDE
+    virtual bool HasDefaultCompare() const override
         { return true; }
-    virtual unsigned int GetColumnCount() const wxOVERRIDE
-        { return 1; }
-    virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const wxOVERRIDE
-        { return wxT("wxDataViewIconText"); }
 
     wxDataViewTreeStoreNode *FindNode( const wxDataViewItem &item ) const;
     wxDataViewTreeStoreContainerNode *FindContainerNode( const wxDataViewItem &item ) const;
@@ -1341,7 +1402,7 @@ class WXDLLIMPEXP_CORE wxDataViewTreeCtrl: public wxDataViewCtrl,
                                           public wxWithImages
 {
 public:
-    wxDataViewTreeCtrl() { }
+    wxDataViewTreeCtrl() = default;
     wxDataViewTreeCtrl(wxWindow *parent,
                        wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,
@@ -1368,35 +1429,37 @@ public:
         { return GetStore()->IsContainer(item); }
 
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = nullptr );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
-        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = nullptr );
     wxDataViewItem InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
-        const wxString &text, int icon = NO_IMAGE, wxClientData *data = NULL );
+        const wxString &text, int icon = NO_IMAGE, wxClientData *data = nullptr );
 
     wxDataViewItem PrependContainer( const wxDataViewItem& parent,
         const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem AppendContainer( const wxDataViewItem& parent,
         const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
     wxDataViewItem InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
         const wxString &text, int icon = NO_IMAGE, int expanded = NO_IMAGE,
-        wxClientData *data = NULL );
+        wxClientData *data = nullptr );
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const
         { return GetStore()->GetNthChild(parent, pos); }
     int GetChildCount( const wxDataViewItem& parent ) const
         { return GetStore()->GetChildCount(parent); }
+    wxDataViewItem GetItemParent(wxDataViewItem item) const
+        { return GetStore()->GetParent(item); }
 
     void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const
         { return GetStore()->GetItemText(item); }
-    void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemIcon( const wxDataViewItem& item ) const
+    void SetItemIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxIcon GetItemIcon( const wxDataViewItem& item ) const
         { return GetStore()->GetItemIcon(item); }
-    void SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon );
-    const wxIcon &GetItemExpandedIcon( const wxDataViewItem& item ) const
+    void SetItemExpandedIcon( const wxDataViewItem& item, const wxBitmapBundle &icon );
+    wxIcon GetItemExpandedIcon( const wxDataViewItem& item ) const
         { return GetStore()->GetItemExpandedIcon(item); }
     void SetItemData( const wxDataViewItem& item, wxClientData *data )
         { GetStore()->SetItemData(item,data); }
@@ -1410,6 +1473,9 @@ public:
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
     void OnSize( wxSizeEvent &event );
+
+protected:
+    virtual void OnImagesChanged() override;
 
 private:
     wxDECLARE_EVENT_TABLE();

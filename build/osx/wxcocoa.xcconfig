@@ -3,10 +3,18 @@ WXTOOLKITUPPER = COCOA
 
 #include "wx.xcconfig"
 
-MACOSX_DEPLOYMENT_TARGET = 10.7
+MACOSX_DEPLOYMENT_TARGET = 10.10
+MACOSX_DEPLOYMENT_TARGET[arch=arm64] = 11.0
 
 GCC_VERSION =
 
-ARCHS = i386 x86_64
+// Set ARCHS explicitly for when Xcode stops targeting x86_64 by default.
+// Unknown targets are ignored by Xcode (arm64 requires Xcode 12 or later).
+ARCHS = x86_64 arm64
 
-OTHER_LDFLAGS = -framework WebKit -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework OpenGL -framework AVFoundation -framework CoreMedia -framework Security -weak_framework AVKit
+// Using i386 as a target results in a deprecation error since Xcode 10 (first
+// a warning in 9). If Xcode 9 or earlier is used and the i386 target is also
+// needed, one solution is to enable the following line locally.
+//ARCHS = i386 x86_64
+
+OTHER_LDFLAGS = -framework WebKit -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework OpenGL -framework AVFoundation -framework CoreMedia -framework Security -framework QuartzCore -weak_framework AVKit

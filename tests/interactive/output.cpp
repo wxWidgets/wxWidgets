@@ -16,9 +16,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/app.h"
 #include "wx/wxcrt.h"           // for wxPuts
@@ -29,7 +26,9 @@
 // ----------------------------------------------------------------------------
 
 #define TEST_DYNLIB
+#if wxUSE_MIMETYPE
 #define TEST_MIME
+#endif
 #define TEST_INFO_FUNCTIONS
 #define TEST_STACKWALKER
 #define TEST_STDPATHS
@@ -106,7 +105,7 @@ void InteractiveOutputTestCase::TestDllListLoaded()
         const wxDynamicLibraryDetails& details = dlls[n];
         wxPrintf("%-45s", details.GetPath());
 
-        void *addr wxDUMMY_INITIALIZE(NULL);
+        void *addr wxDUMMY_INITIALIZE(nullptr);
         size_t len wxDUMMY_INITIALIZE(0);
         if ( details.GetAddress(&addr, &len) )
         {
@@ -155,7 +154,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
         filetype->GetDescription(&desc);
         filetype->GetExtensions(exts);
 
-        filetype->GetIcon(NULL);
+        filetype->GetIcon(nullptr);
 
         wxString extsAll;
         for ( size_t e = 0; e < exts.GetCount(); e++ )
@@ -281,7 +280,7 @@ void InteractiveOutputTestCase::TestPlatformInfo()
     wxPrintf(wxT("Operating system name is: %s\n"), plat.GetOperatingSystemIdName());
     wxPrintf(wxT("Port ID name is: %s\n"), plat.GetPortIdName());
     wxPrintf(wxT("Port ID short name is: %s\n"), plat.GetPortIdShortName());
-    wxPrintf(wxT("Architecture is: %s\n"), plat.GetArchName());
+    wxPrintf(wxT("Architecture bitness is: %s\n"), plat.GetBitnessName());
     wxPrintf(wxT("Endianness is: %s\n"), plat.GetEndiannessName());
 
     wxPuts(wxEmptyString);
@@ -319,7 +318,7 @@ public:
     {
     }
 
-    virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE
+    virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH) override
     {
         wxPuts(wxT("Stack dump:"));
 
@@ -327,7 +326,7 @@ public:
     }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
+    virtual void OnStackFrame(const wxStackFrame& frame) override
     {
         wxPrintf("[%2zu] ", frame.GetLevel());
 
@@ -404,6 +403,7 @@ void InteractiveOutputTestCase::TestStandardPaths()
     wxPrintf(wxT("Executable path:\t%s\n"), stdp.GetExecutablePath());
     wxPrintf(wxT("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir());
     wxPrintf(wxT("Resources dir:\t\t%s\n"), stdp.GetResourcesDir());
+    wxPrintf( "Shared Libraries dir:\t\t%s\n", stdp.GetSharedLibrariesDir() );
     wxPrintf(wxT("Localized res. dir:\t%s\n"),
              stdp.GetLocalizedResourcesDir(wxT("fr")));
     wxPrintf(wxT("Message catalogs dir:\t%s\n"),
@@ -422,7 +422,7 @@ void InteractiveOutputTestCase::TestStandardPaths()
 // wxVolume tests
 // ----------------------------------------------------------------------------
 
-#if !defined(__WIN32__) || !wxUSE_FSVOLUME
+#if (!defined(__WIN32__) && !defined(__APPLE__)) || defined(__WXOSX_IPHONE__) || !wxUSE_FSVOLUME
     #undef TEST_VOLUME
 #endif
 

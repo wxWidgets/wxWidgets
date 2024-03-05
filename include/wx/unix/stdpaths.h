@@ -2,7 +2,6 @@
 // Name:        wx/unix/stdpaths.h
 // Purpose:     wxStandardPaths for Unix systems
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -37,26 +36,27 @@ public:
 
 
     // implement base class pure virtuals
-    virtual wxString GetExecutablePath() const wxOVERRIDE;
-    virtual wxString GetConfigDir() const wxOVERRIDE;
-    virtual wxString GetUserConfigDir() const wxOVERRIDE;
-    virtual wxString GetDataDir() const wxOVERRIDE;
-    virtual wxString GetLocalDataDir() const wxOVERRIDE;
-    virtual wxString GetUserDataDir() const wxOVERRIDE;
-    virtual wxString GetPluginsDir() const wxOVERRIDE;
+    virtual wxString GetExecutablePath() const override;
+    virtual wxString GetConfigDir() const override;
+    virtual wxString GetUserConfigDir() const override;
+    virtual wxString GetDataDir() const override;
+    virtual wxString GetLocalDataDir() const override;
+    virtual wxString GetUserDataDir() const override;
+    virtual wxString GetPluginsDir() const override;
     virtual wxString GetLocalizedResourcesDir(const wxString& lang,
-                                              ResourceCat category) const wxOVERRIDE;
+                                              ResourceCat category) const override;
+    virtual wxString GetSharedLibrariesDir() const override;
 #ifndef __VMS
-    virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
+    virtual wxString GetUserDir(Dir userDir) const override;
 #endif
     virtual wxString MakeConfigFileName(const wxString& basename,
                                         ConfigFileConv conv = ConfigFileConv_Ext
-                                        ) const wxOVERRIDE;
+                                        ) const override;
 
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating
     // objects of this class directly.
-    wxStandardPaths() { }
+    wxStandardPaths() = default;
 
 private:
     wxString m_prefix;

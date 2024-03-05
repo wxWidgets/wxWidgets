@@ -19,79 +19,79 @@ automatically add stock bitmaps when using stock IDs.
 Also note that you can retrieve stock bitmaps using wxArtProvider.
 
 @beginDefList
-@row3col{<b>Stock ID</b>, <b>GTK icon</b>, <b>Stock label</b>}
-@stock{wxID_ABOUT,about,&About}
-@stock{wxID_ADD,add,Add}
-@stock{wxID_APPLY,apply,&Apply}
-@stock{wxID_BACKWARD,go-back-ltr,&Back}
-@stock{wxID_BOLD,bold,&Bold}
-@stock{wxID_BOTTOM,goto-bottom,&Bottom}
-@stock{wxID_CANCEL,cancel,&Cancel}
-@stock{wxID_CDROM,cdrom,&CD-Rom}
-@stock{wxID_CLEAR,clear,&Clear}
-@stock{wxID_CLOSE,close,&Close}
-@stock{wxID_CONVERT,convert,&Convert}
-@stock{wxID_COPY,copy,&Copy}
-@stock{wxID_CUT,cut,Cu&t}
-@stock{wxID_DELETE,delete,&Delete}
-@stock{wxID_DOWN,go-down,&Down}
-@stock{wxID_EDIT,edit,&Edit}
-@stock{wxID_EXECUTE,execute,&Execute}
-@stock{wxID_EXIT,quit,&Quit}
-@stock{wxID_FILE,file,&File}
-@stock{wxID_FIND,find,&Find...}
-@stock{wxID_FIRST,goto-first-ltr,&First}
-@stock{wxID_FLOPPY,floppy,&Floppy}
-@stock{wxID_FORWARD,go-forward-ltr,&Forward}
-@stock{wxID_HARDDISK,harddisk,&Harddisk}
-@stock{wxID_HELP,help,&Help}
-@stock{wxID_HOME,home,&Home}
-@stock{wxID_INDENT,indent-ltr,Indent}
-@stock{wxID_INDEX,index,&Index}
-@stock{wxID_INFO,info,&Info}
-@stock{wxID_ITALIC,italic,&Italic}
-@stock{wxID_JUMP_TO,jump-to-ltr,&Jump to}
-@stock{wxID_JUSTIFY_CENTER,justify-center,Centered}
-@stock{wxID_JUSTIFY_FILL,justify-fill,Justified}
-@stock{wxID_JUSTIFY_LEFT,justify-left,Align Left}
-@stock{wxID_JUSTIFY_RIGHT,justify-right,Align Right}
-@stock{wxID_LAST,goto-last-ltr,&Last}
-@stock{wxID_NETWORK,network,&Network}
-@stock{wxID_NEW,new,&New}
-@stock{wxID_NO,no,&No}
-@stock{wxID_OK,ok,&OK}
-@stock{wxID_OPEN,open,&Open...}
-@stock{wxID_PASTE,paste,&Paste}
-@stock{wxID_PREFERENCES,preferences,&Preferences}
-@stock{wxID_PREVIEW,print-preview,Print previe&w}
-@stock{wxID_PRINT,print,&Print...}
-@stock{wxID_PROPERTIES,properties,&Properties}
-@stock{wxID_REDO,redo-ltr,&Redo}
-@stock{wxID_REFRESH,refresh,Refresh}
-@stock{wxID_REMOVE,remove,Remove}
-@stock{wxID_REPLACE,find-and-replace,Rep&lace...}
-@stock{wxID_REVERT_TO_SAVED,revert-to-saved-ltr,Revert to Saved}
-@stock{wxID_SAVE,save,&Save}
-@stock{wxID_SAVEAS,save-as,Save &As...}
-@stock{wxID_SELECTALL,select-all,Select &All}
-@stock{wxID_SELECT_COLOR,select-color,&Color}
-@stock{wxID_SELECT_FONT,select-font,&Font}
-@stock{wxID_SORT_ASCENDING,sort-ascending,&Ascending}
-@stock{wxID_SORT_DESCENDING,sort-descending,&Descending}
-@stock{wxID_SPELL_CHECK,spell-check,&Spell Check}
-@stock{wxID_STOP,stop,&Stop}
-@stock{wxID_STRIKETHROUGH,strikethrough,&Strikethrough}
-@stock{wxID_TOP,goto-top,&Top}
-@stock{wxID_UNDELETE,undelete-ltr,Undelete}
-@stock{wxID_UNDERLINE,underline,&Underline}
-@stock{wxID_UNDO,undo-ltr,&Undo}
-@stock{wxID_UNINDENT,unindent-ltr,&Unindent}
-@stock{wxID_UP,go-up,&Up}
-@stock{wxID_YES,yes,&Yes}
-@stock{wxID_ZOOM_100,zoom-100,&Actual Size}
-@stock{wxID_ZOOM_FIT,zoom-fit,Zoom to &Fit}
-@stock{wxID_ZOOM_IN,zoom-in,Zoom &In}
-@stock{wxID_ZOOM_OUT,zoom-out,Zoom &Out}
+@row3col{<b>Stock ID</b>, <b>Stock label</b>, <b>GTK icon</b>}
+@stock{wxID_ABOUT,&About,about}
+@stock{wxID_ADD,Add,add}
+@stock{wxID_APPLY,&Apply,apply}
+@stock{wxID_BACKWARD,&Back,go-back-ltr}
+@stock{wxID_BOLD,&Bold,bold}
+@stock{wxID_BOTTOM,&Bottom,goto-bottom}
+@stock{wxID_CANCEL,&Cancel,cancel}
+@stock{wxID_CDROM,&CD-ROM,cdrom}
+@stock{wxID_CLEAR,&Clear,clear}
+@stock{wxID_CLOSE,&Close,close}
+@stock{wxID_CONVERT,&Convert,convert}
+@stock{wxID_COPY,&Copy,copy}
+@stock{wxID_CUT,Cu&t,cut}
+@stock{wxID_DELETE,&Delete,delete}
+@stock{wxID_DOWN,&Down,go-down}
+@stock{wxID_EDIT,&Edit,edit}
+@stock{wxID_EXECUTE,&Execute,execute}
+@stock{wxID_EXIT,&Quit,quit}
+@stock{wxID_FILE,&File,file}
+@stock{wxID_FIND,&Find...,find}
+@stock{wxID_FIRST,&First,goto-first-ltr}
+@stock{wxID_FLOPPY,&Floppy,floppy}
+@stock{wxID_FORWARD,&Forward,go-forward-ltr}
+@stock{wxID_HARDDISK,&Harddisk,harddisk}
+@stock{wxID_HELP,&Help,help}
+@stock{wxID_HOME,&Home,home}
+@stock{wxID_INDENT,Indent,indent-ltr}
+@stock{wxID_INDEX,&Index,index}
+@stock{wxID_INFO,&Info,info}
+@stock{wxID_ITALIC,&Italic,italic}
+@stock{wxID_JUMP_TO,&Jump to,jump-to-ltr}
+@stock{wxID_JUSTIFY_CENTER,Centered,justify-center}
+@stock{wxID_JUSTIFY_FILL,Justified,justify-fill}
+@stock{wxID_JUSTIFY_LEFT,Align Left,justify-left}
+@stock{wxID_JUSTIFY_RIGHT,Align Right,justify-right}
+@stock{wxID_LAST,&Last,goto-last-ltr}
+@stock{wxID_NETWORK,&Network,network}
+@stock{wxID_NEW,&New,new}
+@stock{wxID_NO,&No,no}
+@stock{wxID_OK,&OK,ok}
+@stock{wxID_OPEN,&Open...,open}
+@stock{wxID_PASTE,&Paste,paste}
+@stock{wxID_PREFERENCES,&Preferences,preferences}
+@stock{wxID_PREVIEW,Print previe&w,print-preview}
+@stock{wxID_PRINT,&Print...,print}
+@stock{wxID_PROPERTIES,&Properties,properties}
+@stock{wxID_REDO,&Redo,redo-ltr}
+@stock{wxID_REFRESH,Refresh,refresh}
+@stock{wxID_REMOVE,Remove,remove}
+@stock{wxID_REPLACE,Rep&lace...,find-and-replace}
+@stock{wxID_REVERT_TO_SAVED,Revert to Saved,revert-to-saved-ltr}
+@stock{wxID_SAVE,&Save,save}
+@stock{wxID_SAVEAS,Save &As...,save-as}
+@stock{wxID_SELECTALL,Select &All,select-all}
+@stock{wxID_SELECT_COLOR,&Color,select-color}
+@stock{wxID_SELECT_FONT,&Font,select-font}
+@stock{wxID_SORT_ASCENDING,&Ascending,sort-ascending}
+@stock{wxID_SORT_DESCENDING,&Descending,sort-descending}
+@stock{wxID_SPELL_CHECK,&Spell Check,spell-check}
+@stock{wxID_STOP,&Stop,stop}
+@stock{wxID_STRIKETHROUGH,&Strikethrough,strikethrough}
+@stock{wxID_TOP,&Top,goto-top}
+@stock{wxID_UNDELETE,Undelete,undelete-ltr}
+@stock{wxID_UNDERLINE,&Underline,underline}
+@stock{wxID_UNDO,&Undo,undo-ltr}
+@stock{wxID_UNINDENT,&Unindent,unindent-ltr}
+@stock{wxID_UP,&Up,go-up}
+@stock{wxID_YES,&Yes,yes}
+@stock{wxID_ZOOM_100,&Actual Size,zoom-100}
+@stock{wxID_ZOOM_FIT,Zoom to &Fit,zoom-fit}
+@stock{wxID_ZOOM_IN,Zoom &In,zoom-in}
+@stock{wxID_ZOOM_OUT,Zoom &Out,zoom-out}
 @endDefList
 
 Note that some of the IDs listed above also have a stock accelerator and an

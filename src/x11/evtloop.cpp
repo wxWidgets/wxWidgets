@@ -2,7 +2,6 @@
 // Name:        src/x11/evtloop.cpp
 // Purpose:     implements wxEventLoop for X11
 // Author:      Julian Smart
-// Modified by:
 // Created:     01.06.01
 // Copyright:   (c) 2002 Julian Smart
 // Licence:     wxWindows licence
@@ -22,7 +21,6 @@
 #include "wx/evtloop.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/module.h"
@@ -220,7 +218,7 @@ bool wxGUIEventLoop::Dispatch()
         wxFD_ZERO(&writeset);
         wxFD_SET(fd, &readset);
 
-        if (select( fd+1, &readset, &writeset, NULL, &tv ) != 0)
+        if (select( fd+1, &readset, &writeset, nullptr, &tv ) != 0)
         {
             // An X11 event was pending, get it
             if (wxFD_ISSET( fd, &readset ))

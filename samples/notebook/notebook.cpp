@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -40,20 +37,19 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#ifdef __WXGTK__
+    // Many version of wxGTK generate spurious diagnostic messages when
+    // destroying wxNotebook (or removing pages from it), allow wxWidgets to
+    // suppress them.
+    GTKAllowDiagnosticsControl();
+#endif // __WXGTK__
+
 #if wxUSE_HELP
     wxHelpProvider::Set( new wxSimpleHelpProvider );
 #endif
 
     // Create the main window
     MyFrame *frame = new MyFrame();
-
-    // Problem with generic wxNotebook implementation whereby it doesn't size
-    // properly unless you set the size again
-#if defined(__WXMOTIF__)
-    int width, height;
-    frame->GetSize(& width, & height);
-    frame->SetSize(wxDefaultCoord, wxDefaultCoord, width, height);
-#endif
 
     frame->Show();
 
@@ -118,28 +114,26 @@ wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
     panel->SetHelpText("An empty panel");
 #endif
 
-    (void) new wxStaticText( panel, wxID_ANY,
-                             "This page intentionally left blank",
-                             wxPoint(10, 10) );
+    wxSizer* const s = new wxBoxSizer(wxVERTICAL);
+    s->Add(new wxStaticText( panel, wxID_ANY,
+                             "This page intentionally left blank" ),
+           wxSizerFlags().Expand().DoubleBorder());
+    panel->SetSizer(s);
 
     return panel;
 }
 
-wxPanel *CreateBigButtonPage(wxBookCtrlBase *parent)
+wxWindow *CreateFullPageText(wxBookCtrlBase *parent)
 {
-    wxPanel *panel = new wxPanel(parent);
+    wxTextCtrl *text = new wxTextCtrl(parent, wxID_ANY, "Full page text",
+                                      wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE);
 
 #if wxUSE_HELP
-    panel->SetHelpText("Panel with a maximized button");
+    text->SetHelpText("Page consisting of just a text control");
 #endif
 
-    wxButton *buttonBig = new wxButton(panel, wxID_ANY, "Maximized button");
-
-    wxBoxSizer *sizerPanel = new wxBoxSizer(wxVERTICAL);
-    sizerPanel->Add(buttonBig, 1, wxEXPAND);
-    panel->SetSizer(sizerPanel);
-
-    return panel;
+    return text;
 }
 
 wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
@@ -151,18 +145,21 @@ wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
 #endif
 
     panel->SetBackgroundColour( wxColour( "MAROON" ) );
-    (void) new wxStaticText( panel, wxID_ANY,
-                             "This page has been inserted, not added.",
-                             wxPoint(10, 10) );
+
+    wxSizer* const s = new wxBoxSizer(wxVERTICAL);
+    s->Add(new wxStaticText( panel, wxID_ANY,
+                             "This page has been inserted, not added." ),
+           wxSizerFlags().Expand().DoubleBorder());
+    panel->SetSizer(s);
 
     return panel;
 }
 
 int GetIconIndex(wxBookCtrlBase* bookCtrl)
 {
-    if (bookCtrl && bookCtrl->GetImageList())
+    if (bookCtrl)
     {
-       int nImages = bookCtrl->GetImageList()->GetImageCount();
+       const int nImages = bookCtrl->GetImageCount();
        if (nImages > 0)
        {
            return bookCtrl->GetPageCount() % nImages;
@@ -176,22 +173,22 @@ void CreateInitialPages(wxBookCtrlBase *parent)
 {
     // Create and add some panels to the notebook
 
-    wxPanel *panel = CreateRadioButtonsPage(parent);
-    parent->AddPage( panel, RADIOBUTTONS_PAGE_NAME, false, GetIconIndex(parent) );
+    wxWindow *page = CreateRadioButtonsPage(parent);
+    parent->AddPage( page, RADIOBUTTONS_PAGE_NAME, false, GetIconIndex(parent) );
 
-    panel = CreateVetoPage(parent);
-    parent->AddPage( panel, VETO_PAGE_NAME, false, GetIconIndex(parent) );
+    page = CreateVetoPage(parent);
+    parent->AddPage( page, VETO_PAGE_NAME, false, GetIconIndex(parent) );
 
-    panel = CreateBigButtonPage(parent);
-    parent->AddPage( panel, MAXIMIZED_BUTTON_PAGE_NAME, false, GetIconIndex(parent) );
+    page = CreateFullPageText(parent);
+    parent->AddPage( page, TEXT_PAGE_NAME, false, GetIconIndex(parent) );
 
-    panel = CreateInsertPage(parent);
-    parent->InsertPage( 0, panel, I_WAS_INSERTED_PAGE_NAME, false, GetIconIndex(parent) );
+    page = CreateInsertPage(parent);
+    parent->InsertPage( 0, page, I_WAS_INSERTED_PAGE_NAME, false, GetIconIndex(parent) );
 
     parent->SetSelection(1);
 }
 
-wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
+wxWindow *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
 {
     if ( pageName.Contains(INSERTED_PAGE_NAME) ||
             pageName.Contains(ADDED_PAGE_NAME) ||
@@ -208,12 +205,12 @@ wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
     if ( pageName == RADIOBUTTONS_PAGE_NAME )
         return CreateRadioButtonsPage(parent);
 
-    if ( pageName == MAXIMIZED_BUTTON_PAGE_NAME )
-        return CreateBigButtonPage(parent);
+    if ( pageName == TEXT_PAGE_NAME )
+        return CreateFullPageText(parent);
 
     wxFAIL_MSG( "unknown page name" );
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -282,7 +279,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-    : wxFrame(NULL, wxID_ANY, wxString("wxWidgets book controls sample"))
+    : wxFrame(nullptr, wxID_ANY, wxString("wxWidgets book controls sample"))
 {
 #if wxUSE_HELP
     SetExtraStyle(wxFRAME_EX_CONTEXTHELP);
@@ -336,7 +333,7 @@ MyFrame::MyFrame()
 #endif
     menuType->AppendRadioItem(ID_BOOK_SIMPLEBOOK, "&Simple book\tCtrl-7");
 
-    menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
+    menuType->Check(static_cast<int>(ID_BOOK_NOTEBOOK) + m_type, true);
 
     wxMenu *menuOrient = new wxMenu;
     menuOrient->AppendRadioItem(ID_ORIENT_DEFAULT, "&Default\tAlt-0");
@@ -397,21 +394,16 @@ MyFrame::MyFrame()
     SetMenuBar(menuBar);
 
     // books creation
-    m_panel    = NULL;
-    m_bookCtrl = NULL;
+    m_panel    = nullptr;
+    m_bookCtrl = nullptr;
 
-    // create a dummy image list with a few icons
+    // use some random images for the book control pages
     const wxSize imageSize(32, 32);
 
-    m_imageList = new wxImageList(imageSize.GetWidth(), imageSize.GetHeight());
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, imageSize));
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize));
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, imageSize));
-    m_imageList->
-        Add(wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_INFORMATION, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_QUESTION, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_WARNING, wxART_OTHER, imageSize));
+    m_images.push_back(wxArtProvider::GetBitmapBundle(wxART_ERROR, wxART_OTHER, imageSize));
 
     m_panel = new wxPanel(this);
 
@@ -445,8 +437,6 @@ MyFrame::~MyFrame()
 #if USE_LOG
     delete wxLog::SetActiveTarget(m_logTargetOld);
 #endif // USE_LOG
-
-    delete m_imageList;
 }
 
 // DISPATCH_ON_TYPE() macro is an ugly way to write the "same" code for
@@ -548,7 +538,7 @@ void MyFrame::RecreateBook()
 
     wxBookCtrlBase *oldBook = m_bookCtrl;
 
-    m_bookCtrl = NULL;
+    m_bookCtrl = nullptr;
 
     DISPATCH_ON_TYPE(m_bookCtrl = new,
                          wxNotebook,
@@ -568,7 +558,7 @@ void MyFrame::RecreateBook()
     // wxToolbook doesn't work without icons so always use them for it.
     if ( m_chkShowImages || m_type == Type_Toolbook )
     {
-        m_bookCtrl->SetImageList(m_imageList);
+        m_bookCtrl->SetImages(m_images);
     }
 
     if ( oldBook )
@@ -577,7 +567,7 @@ void MyFrame::RecreateBook()
         // we only need the old treebook if we're recreating another treebook
         wxTreebook *tbkOld = m_type == Type_Treebook
                                 ? wxDynamicCast(oldBook, wxTreebook)
-                                : NULL;
+                                : nullptr;
 #endif // wxUSE_TREEBOOK
 
         const int count = oldBook->GetPageCount();
@@ -940,7 +930,7 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 {
     static int s_nPages = wxNOT_FOUND;
     static int s_nSel = wxNOT_FOUND;
-    static wxBookCtrlBase *s_currBook = NULL;
+    static wxBookCtrlBase *s_currBook = nullptr;
 
     wxBookCtrlBase *currBook = GetCurrentBook();
 

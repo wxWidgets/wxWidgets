@@ -2,7 +2,6 @@
 // File:        src/osx/cocoa/taskbar.mm
 // Purpose:     Implements wxTaskBarIcon class
 // Author:      David Elliott, Stefan Csomor
-// Modified by:
 // Created:     2004/01/24
 // Copyright:   (c) 2004 David Elliott, Stefan Csomor
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 #ifndef WX_PRECOMP
     #include "wx/toplevel.h"
     #include "wx/menu.h"
-    #include "wx/icon.h"
+    #include "wx/bmpbndl.h"
     #include "wx/log.h"
     #include "wx/dcclient.h"
 #endif
@@ -22,6 +21,8 @@
 #include "wx/taskbar.h"
 
 #include "wx/osx/private.h"
+
+#include <memory>
 
 class wxTaskBarIconWindow;
 
@@ -38,6 +39,8 @@ class wxTaskBarIconWindow : public wxTopLevelWindow
 {
 public:
     wxTaskBarIconWindow(wxTaskBarIconImpl *impl);
+
+    double GetContentScaleFactor() const override;
 
     void OnMenuEvent(wxCommandEvent& event);
     void OnUpdateUIEvent(wxUpdateUIEvent& event);
@@ -58,7 +61,7 @@ public:
     
     virtual bool IsStatusItem() const { return false; }
 
-    virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) = 0;
+    virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) = 0;
     virtual bool RemoveIcon() = 0;
     
     bool IsIconInstalled() const { return m_icon.IsOk(); }
@@ -68,6 +71,8 @@ public:
     inline wxTaskBarIcon* GetTaskBarIcon() { return m_taskBarIcon; }
     wxMenu * CreatePopupMenu()
     { return m_taskBarIcon->CreatePopupMenu(); }
+    wxMenu * GetPopupMenu()
+    { return m_taskBarIcon->GetPopupMenu(); }
 
     wxDECLARE_NO_COPY_CLASS(wxTaskBarIconImpl);
 
@@ -88,9 +93,9 @@ class wxTaskBarIconDockImpl: public wxTaskBarIconImpl
 public:
     wxTaskBarIconDockImpl(wxTaskBarIcon *taskBarIcon);
     virtual ~wxTaskBarIconDockImpl();
-    virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
-    virtual bool RemoveIcon() wxOVERRIDE;
-    virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;
+    virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) override;
+    virtual bool RemoveIcon() override;
+    virtual bool PopupMenu(wxMenu *menu) override;
 
     static WX_NSMenu OSXGetDockHMenu();
 protected:
@@ -100,6 +105,7 @@ protected:
 private:
     wxTaskBarIconDockImpl();
     wxMenu             *m_pMenu;
+    std::unique_ptr<wxMenu> m_menuDeleter;
 };
 
 class wxTaskBarIconCustomStatusItemImpl;
@@ -120,17 +126,34 @@ public:
     wxTaskBarIconCustomStatusItemImpl(wxTaskBarIcon *taskBarIcon);
     virtual ~wxTaskBarIconCustomStatusItemImpl();
     
-    virtual bool IsStatusItem() const wxOVERRIDE { return true; }
+    virtual bool IsStatusItem() const override { return true; }
 
-    virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
-    virtual bool RemoveIcon() wxOVERRIDE;
-    virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;
+    virtual bool SetIcon(const wxBitmapBundle& icon, const wxString& tooltip = wxEmptyString) override;
+    virtual bool RemoveIcon() override;
+    virtual bool PopupMenu(wxMenu *menu) override;
 protected:
     NSStatusItem *m_statusItem;
     wxOSXStatusItemTarget *m_target;
 private:
     wxTaskBarIconCustomStatusItemImpl();
 };
+
+namespace
+{
+
+// Helper function.
+// We can not get scale factor from wxTaskBarIconWindow,
+// using scale factor from main screen here.
+wxBitmap IconFromBundle(const wxBitmapBundle& bndl)
+{
+    return bndl.GetBitmap(
+        bndl.GetPreferredBitmapSizeAtScale(
+            wxOSXGetMainScreenContentScaleFactor()
+        )
+    );
+}
+
+} // anonymous namespace
 
 // ============================================================================
 // wxTaskBarIcon implementation
@@ -145,7 +168,7 @@ wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType iconType)
     else if(iconType == wxTBI_CUSTOM_STATUSITEM)
         m_impl = new wxTaskBarIconCustomStatusItemImpl(this);
     else
-    {   m_impl = NULL;
+    {   m_impl = nullptr;
         wxFAIL_MSG(wxT("Invalid wxTaskBarIcon type"));
     }
 }
@@ -157,7 +180,7 @@ wxTaskBarIcon::~wxTaskBarIcon()
         if ( m_impl->IsIconInstalled() )
             m_impl->RemoveIcon();
         delete m_impl;
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 }
 
@@ -179,7 +202,7 @@ bool wxTaskBarIcon::IsIconInstalled() const
     return false;
 }
 
-bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
+bool wxTaskBarIcon::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
 {
     if ( m_impl )
         return m_impl->SetIcon(icon,tooltip);
@@ -220,20 +243,20 @@ wxTaskBarIconImpl::~wxTaskBarIconImpl()
 // ============================================================================
 // wxTaskBarIconDockImpl
 // ============================================================================
-wxTaskBarIconDockImpl *wxTaskBarIconDockImpl::sm_dockIcon = NULL;
+wxTaskBarIconDockImpl *wxTaskBarIconDockImpl::sm_dockIcon = nullptr;
 
 wxTaskBarIconDockImpl::wxTaskBarIconDockImpl(wxTaskBarIcon *taskBarIcon)
 :   wxTaskBarIconImpl(taskBarIcon)
 {
     wxASSERT_MSG(!sm_dockIcon, wxT("You should never have more than one dock icon!"));
     sm_dockIcon = this;
-    m_pMenu = NULL;
+    m_pMenu = nullptr;
 }
 
 wxTaskBarIconDockImpl::~wxTaskBarIconDockImpl()
 {
     if(sm_dockIcon == this)
-        sm_dockIcon = NULL;
+        sm_dockIcon = nullptr;
 }
 
 WX_NSMenu wxTaskBarIconDockImpl::OSXGetDockHMenu()
@@ -246,32 +269,38 @@ WX_NSMenu wxTaskBarIconDockImpl::OSXGetDockHMenu()
 
 WX_NSMenu wxTaskBarIconDockImpl::OSXDoGetDockHMenu()
 {
-    wxMenu *dockMenu = CreatePopupMenu();
+    m_menuDeleter.reset();
 
-    if(!dockMenu)
-        return nil;
-    
-    wxDELETE(m_pMenu);
+    m_pMenu = GetPopupMenu();
 
-    m_pMenu = dockMenu;
-    
+    if (!m_pMenu)
+    {
+        m_pMenu = CreatePopupMenu();
+
+        if (!m_pMenu)
+            return nil;
+
+        m_menuDeleter.reset(m_pMenu);
+    }
+
     m_pMenu->SetInvokingWindow(m_eventWindow);
     
     m_pMenu->UpdateUI();
     
-    return (WX_NSMenu)dockMenu->GetHMenu();
+    return (WX_NSMenu)m_pMenu->GetHMenu();
 }
 
-bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(tooltip))
+bool wxTaskBarIconDockImpl::SetIcon(const wxBitmapBundle& icon, const wxString& WXUNUSED(tooltip))
 {
-    m_icon.CopyFromIcon(icon);
+    m_icon = IconFromBundle(icon);
     [[NSApplication sharedApplication] setApplicationIconImage:m_icon.GetNSImage()];
     return true;
 }
 
 bool wxTaskBarIconDockImpl::RemoveIcon()
 {
-    wxDELETE(m_pMenu);
+    m_menuDeleter.reset();
+
     m_icon = wxBitmap();
     [[NSApplication sharedApplication] setApplicationIconImage:nil];
     return true;
@@ -305,7 +334,13 @@ bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 - (void) clickedAction: (id) sender
 {
     wxUnusedVar(sender);
-    wxMenu *menu = impl->CreatePopupMenu();
+    wxMenu *menu = impl->GetPopupMenu();
+    if (menu)
+    {
+        impl->PopupMenu(menu);
+        return;
+    }
+    menu = impl->CreatePopupMenu();
     if (menu)
     {
         impl->PopupMenu(menu);
@@ -337,52 +372,36 @@ wxTaskBarIconCustomStatusItemImpl::~wxTaskBarIconCustomStatusItemImpl()
 {
 }
 
-bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxString& tooltip)
+bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxBitmapBundle& icon, const wxString& tooltip)
 {
     if(!m_statusItem)
     {
-        m_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+        m_statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
         [m_statusItem retain];
 
         m_target = [[wxOSXStatusItemTarget alloc] init];
         [m_target setImplementation:this];
-        [m_statusItem setHighlightMode:YES];
-        [m_statusItem setTarget:m_target];
-        [m_statusItem setAction:@selector(clickedAction:)];
-        [m_statusItem sendActionOn:NSLeftMouseDownMask];
+        [[m_statusItem button] setTarget:m_target];
+        [[m_statusItem button] setAction:@selector(clickedAction:)];
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
+        [[m_statusItem button] sendActionOn: NSEventMaskLeftMouseDown | NSEventMaskRightMouseDown];
+#endif
     }
 
-    m_icon.CopyFromIcon(icon);
-    
-    // status item doesn't scale automatically
-    // first scale to optimal pixel resolution
-    
-    int dimension = wxMax( m_icon.GetHeight(), m_icon.GetWidth() );
-    int target_dimension = 16 * wxOSXGetMainScreenContentScaleFactor();
-    if ( dimension > target_dimension )
-    {
-        wxImage img = m_icon.ConvertToImage();
-        int factor = (dimension+(target_dimension-1))/target_dimension;
-        m_icon = img.ShrinkBy(factor, factor);
-    }
-    
+    m_icon = IconFromBundle(icon);
     NSImage* nsimage = m_icon.GetNSImage();
-    NSSize size = [nsimage size];
-    
-    // then scale to optimal point resolution
-    
-    dimension = wxMax(size.width,size.height);
-    if ( dimension > 16 )
-    {
-        int factor = (dimension+15)/16;
-        size.width /= factor;
-        size.height /= factor;
-        [nsimage setSize:size];
-    }
-    [m_statusItem setImage:nsimage];
+    [[m_statusItem button] setImageScaling: NSImageScaleProportionallyUpOrDown];
+
+    CGFloat statusBarThickness = [[NSStatusBar systemStatusBar] thickness];
+    NSSize statusBarSize = NSMakeSize(statusBarThickness, statusBarThickness);
+    NSImage* statusBarScaledImage = [NSImage imageWithSize:statusBarSize flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+        [nsimage drawInRect:dstRect fromRect:NSZeroRect operation:NSCompositingOperationSourceOver fraction:1];
+        return YES;
+    }];
+    [[m_statusItem button] setImage:statusBarScaledImage];
     
     wxCFStringRef cfTooltip(tooltip);
-    [m_statusItem setToolTip:cfTooltip.AsNSString()];
+    [[m_statusItem button] setToolTip:cfTooltip.AsNSString()];
     return true;
 }
 
@@ -402,12 +421,11 @@ bool wxTaskBarIconCustomStatusItemImpl::PopupMenu(wxMenu *menu)
 {
     wxASSERT(menu);
 
-    menu->SetInvokingWindow(m_eventWindow);
+    wxMenuInvokingWindowSetter setInvokingWindow(*menu, m_eventWindow);
     menu->UpdateUI();
 
     [m_statusItem popUpStatusItemMenu:(NSMenu*)menu->GetHMenu()];
 
-    menu->SetInvokingWindow(NULL);
     return true;
 }
 
@@ -423,6 +441,13 @@ wxEND_EVENT_TABLE()
 wxTaskBarIconWindow::wxTaskBarIconWindow(wxTaskBarIconImpl *impl) 
 : m_impl(impl)
 {
+}
+
+double wxTaskBarIconWindow::GetContentScaleFactor() const
+{
+    // We don't have any real window here, so use the main screen scale, which
+    // should be appropriate for dock/status icons.
+    return wxOSXGetMainScreenContentScaleFactor();
 }
 
 void wxTaskBarIconWindow::OnMenuEvent(wxCommandEvent& event)

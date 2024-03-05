@@ -126,7 +126,7 @@ protected:
         as usual and Exit() will be called when it is dismissed. If the return
         value is anything else, the dialog is not shown at all and its
         wxDialog::ShowModal() simply returns with the given result. In this
-        case, Exit() won't be called neither.
+        case, Exit() won't be called either.
 
         @param dialog The dialog about to be shown, never @NULL.
         @return wxID_NONE to continue with showing the dialog or anything else

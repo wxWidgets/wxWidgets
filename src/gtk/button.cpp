@@ -19,6 +19,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/list.h"
+#include "wx/gtk/private/image.h"
 
 // ----------------------------------------------------------------------------
 // GTK callbacks
@@ -49,8 +50,8 @@ wxgtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
     wxWindow* parent = win->GetParent();
     if (parent && parent->m_wxwindow && gtk_widget_get_can_default(widget))
     {
-        GtkBorder* border = NULL;
-        gtk_widget_style_get(widget, "default_border", &border, NULL);
+        GtkBorder* border = nullptr;
+        gtk_widget_style_get(widget, "default_border", &border, nullptr);
         if (border)
         {
             win->MoveWindow(
@@ -68,6 +69,10 @@ wxgtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 //-----------------------------------------------------------------------------
 // wxButton
 //-----------------------------------------------------------------------------
+
+#ifndef __WXGTK3__
+bool wxButton::m_exactFitStyleDefined = false;
+#endif // !__WXGTK3__
 
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
@@ -98,30 +103,30 @@ bool wxButton::Create(wxWindow *parent,
     {
         m_widget = gtk_button_new();
 
-        GtkWidget *image = gtk_image_new();
+        GtkWidget* image = wxGtkImage::New(this);
         gtk_widget_show(image);
         gtk_container_add(GTK_CONTAINER(m_widget), image);
     }
 
     g_object_ref(m_widget);
 
-    float x_alignment = 0.5;
+    float x_alignment = 0.5f;
     if (HasFlag(wxBU_LEFT))
-        x_alignment = 0.0;
+        x_alignment = 0;
     else if (HasFlag(wxBU_RIGHT))
-        x_alignment = 1.0;
+        x_alignment = 1;
 
-    float y_alignment = 0.5;
+    float y_alignment = 0.5f;
     if (HasFlag(wxBU_TOP))
-        y_alignment = 0.0;
+        y_alignment = 0;
     else if (HasFlag(wxBU_BOTTOM))
-        y_alignment = 1.0;
+        y_alignment = 1;
 
 #ifdef __WXGTK4__
     if (useLabel)
     {
         g_object_set(gtk_bin_get_child(GTK_BIN(m_widget)),
-            "xalign", x_alignment, "yalign", y_alignment, NULL);
+            "xalign", x_alignment, "yalign", y_alignment, nullptr);
     }
 #else
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
@@ -134,6 +139,28 @@ bool wxButton::Create(wxWindow *parent,
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
+
+    if ( useLabel && (style & wxBU_EXACTFIT) )
+    {
+#ifdef __WXGTK3__
+        GTKApplyCssStyle("* { padding:0 }");
+#else
+        // Define a special button style without inner border
+        // if it's not yet done.
+        if ( !m_exactFitStyleDefined )
+        {
+            gtk_rc_parse_string(
+              "style \"wxButton_wxBU_EXACTFIT_style\"\n"
+              "{ GtkButton::inner-border = { 0, 0, 0, 0 } }\n"
+              "widget \"*wxButton_wxBU_EXACTFIT*\" style \"wxButton_wxBU_EXACTFIT_style\"\n"
+            );
+            m_exactFitStyleDefined = true;
+        }
+
+        // Assign the button to the GTK style without inner border.
+        gtk_widget_set_name(m_widget, "wxButton_wxBU_EXACTFIT");
+#endif // __WXGTK3__ / !__WXGTK3__
+    }
 
     g_signal_connect_after (m_widget, "clicked",
                             G_CALLBACK (wxgtk_button_clicked_callback),
@@ -159,13 +186,13 @@ wxWindow *wxButton::SetDefault()
     gtk_widget_grab_default( m_widget );
 
     // resize for default border
-    wxgtk_button_style_set_callback( m_widget, NULL, this );
+    wxgtk_button_style_set_callback( m_widget, nullptr, this );
 
     return oldDefault;
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 {
     static wxSize size = wxDefaultSize;
     if (size == wxDefaultSize)
@@ -184,19 +211,19 @@ wxSize wxButtonBase::GetDefaultSize()
         GtkWidget *btn = gtk_button_new_with_mnemonic(labelGTK.utf8_str());
 #else
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        GtkWidget *btn = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+        GtkWidget* btn = gtk_button_new_from_stock("gtk-cancel");
         wxGCC_WARNING_RESTORE()
 #endif
         gtk_container_add(GTK_CONTAINER(box), btn);
         gtk_container_add(GTK_CONTAINER(wnd), box);
         GtkRequisition req;
-        gtk_widget_get_preferred_size(btn, NULL, &req);
+        gtk_widget_get_preferred_size(btn, nullptr, &req);
 
         gint minwidth, minheight;
         gtk_widget_style_get(box,
                              "child-min-width", &minwidth,
                              "child-min-height", &minheight,
-                             NULL);
+                             nullptr);
 
         size.x = wxMax(minwidth, req.width);
         size.y = wxMax(minheight, req.height);
@@ -208,7 +235,7 @@ wxSize wxButtonBase::GetDefaultSize()
 
 void wxButton::SetLabel( const wxString &lbl )
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid button") );
+    wxCHECK_RET( m_widget != nullptr, wxT("invalid button") );
 
     wxString label(lbl);
 
@@ -241,7 +268,7 @@ void wxButton::SetLabel( const wxString &lbl )
     // so "use-underline" GtkButton property remained unset
     gtk_button_set_use_underline(GTK_BUTTON(m_widget), TRUE);
     const wxString labelGTK = GTKConvertMnemonics(label);
-    gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
+    gtk_button_set_label(GTK_BUTTON(m_widget), labelGTK.utf8_str());
 #ifndef __WXGTK4__
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
@@ -254,7 +281,7 @@ void wxButton::SetLabel( const wxString &lbl )
 #if wxUSE_MARKUP
 bool wxButton::DoSetLabelMarkup(const wxString& markup)
 {
-    wxCHECK_MSG( m_widget != NULL, false, "invalid button" );
+    wxCHECK_MSG( m_widget != nullptr, false, "invalid button" );
 
     const wxString stripped = RemoveMarkup(markup);
     if ( stripped.empty() && !markup.empty() )
@@ -277,13 +304,13 @@ GtkLabel *wxButton::GTKGetLabel() const
     if (GTK_IS_LABEL(child))
         return GTK_LABEL(child);
 
-    return NULL;
+    return nullptr;
 #else
     wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     if ( GTK_IS_ALIGNMENT(child) )
     {
         GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
-        GtkLabel* label = NULL;
+        GtkLabel* label = nullptr;
         wxGtkList list(gtk_container_get_children(GTK_CONTAINER(box)));
         for (GList* item = list; item; item = item->next)
         {
@@ -365,5 +392,4 @@ wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_button_new());
 }
-
 #endif // wxUSE_BUTTON

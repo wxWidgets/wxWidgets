@@ -2,7 +2,6 @@
 // Name:        wx/generic/numdlgg.h
 // Purpose:     wxNumberEntryDialog class
 // Author:      John Labenski
-// Modified by:
 // Created:     07.02.04 (extracted from textdlgg.cpp)
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -85,7 +84,7 @@ WXDLLIMPEXP_CORE long
                         long value = 0,
                         long min = 0,
                         long max = 100,
-                        wxWindow *parent = NULL,
+                        wxWindow *parent = nullptr,
                         const wxPoint& pos = wxDefaultPosition);
 
 #endif // wxUSE_NUMBERDLG

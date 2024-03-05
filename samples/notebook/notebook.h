@@ -26,7 +26,7 @@
 class MyApp : public wxApp
 {
 public:
-    bool OnInit() wxOVERRIDE;
+    bool OnInit() override;
 };
 
 wxDECLARE_APP(MyApp);
@@ -131,7 +131,7 @@ private:
 
     wxBoxSizer *m_sizerFrame;
 
-    wxImageList *m_imageList;
+    wxBookCtrlBase::Images m_images;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -189,7 +189,7 @@ enum ID_COMMANDS
 #define I_WAS_INSERTED_PAGE_NAME        "Inserted"
 #define RADIOBUTTONS_PAGE_NAME          "Radiobuttons"
 #define VETO_PAGE_NAME                  "Veto"
-#define MAXIMIZED_BUTTON_PAGE_NAME      "Maximized button"
+#define TEXT_PAGE_NAME                  "Text"
 
 // Pages that can be added by the user
 #define INSERTED_PAGE_NAME              "Inserted "

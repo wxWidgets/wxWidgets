@@ -10,9 +10,11 @@
 #ifndef _WX_GTK_PRIVATE_WRAPGTK_H_
 #define _WX_GTK_PRIVATE_WRAPGTK_H_
 
+wxGCC_WARNING_SUPPRESS(deprecated-declarations)
 wxGCC_WARNING_SUPPRESS(parentheses)
 #include <gtk/gtk.h>
 wxGCC_WARNING_RESTORE(parentheses)
+wxGCC_WARNING_RESTORE(deprecated-declarations)
 
 #include "wx/gtk/private/gtk2-compat.h"
 

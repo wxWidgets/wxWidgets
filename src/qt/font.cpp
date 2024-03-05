@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include <QtGui/QFont>
 #include <QtGui/QFontInfo>
@@ -241,7 +238,7 @@ int wxFont::GetPointSize() const
     return M_FONTDATA.wxNativeFontInfo::GetPointSize();
 }
 
-float wxFont::GetFractionalPointSize() const
+double wxFont::GetFractionalPointSize() const
 {
     return M_FONTDATA.GetFractionalPointSize();
 }
@@ -287,7 +284,7 @@ bool wxFont::GetStrikethrough() const
 }
 
 
-void wxFont::SetFractionalPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(double pointSize)
 {
     AllocExclusive();
 
@@ -352,7 +349,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
-    SetFractionalPointSize(info.GetPointSize());
+    SetFractionalPointSize(info.GetFractionalPointSize());
     SetFamily(info.GetFamily());
     SetStyle(info.GetStyle());
     SetNumericWeight(info.GetWeight());
@@ -390,14 +387,26 @@ void wxNativeFontInfo::Init()
 {
 }
 
-float wxNativeFontInfo::GetFractionalPointSize() const
+double wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_qtFont.pointSizeF();
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const
 {
-    return wxSize(0, m_qtFont.pixelSize());
+    // Note that QFont::pixelSize() returns -1 if the size was set with setPointSize().
+    // If so, fall back to QFontInfo::pixelSize() which returns the pixel size of the
+    // matched window system font.
+
+    int pixelSize = m_qtFont.pixelSize();
+
+    if ( pixelSize < 0 )
+    {
+        QFontInfo fontInfo(m_qtFont);
+        pixelSize = fontInfo.pixelSize();
+    }
+
+    return wxSize(0, pixelSize);
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -501,7 +510,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_UTF8;
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(double pointsize)
 {
     m_qtFont.setPointSizeF(pointsize);
 }
@@ -563,7 +572,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
     m_qtFont.setStyleHint(ConvertFontFamily(family));
     // reset the face name to force qt to choose a new font
-    m_qtFont.setFamily("");
+    m_qtFont.setFamily(m_qtFont.defaultFamily());
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))

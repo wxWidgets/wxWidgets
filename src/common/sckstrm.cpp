@@ -2,7 +2,6 @@
 // Name:        src/common/sckstrm.cpp
 // Purpose:     wxSocket*Stream
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     17/07/97
 // Copyright:   (c)
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SOCKETS && wxUSE_STREAMS
 

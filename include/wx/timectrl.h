@@ -29,7 +29,10 @@ enum
 // wxTimePickerCtrl: Allow the user to enter the time.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxTimePickerCtrlBase : public wxDateTimePickerCtrl
+// The template argument must be a class deriving from wxDateTimePickerCtrlBase
+// (i.e. in practice either this class itself or wxDateTimePickerCtrl).
+template <typename Base>
+class wxTimePickerCtrlCommonBase : public Base
 {
 public:
     /*
@@ -67,18 +70,18 @@ public:
             return false;
         }
 
-        SetValue(dt);
+        this->SetValue(dt);
 
         return true;
     }
 
-    // Get the current time components. All pointers must be non-NULL.
+    // Get the current time components. All pointers must be non-null.
     bool GetTime(int* hour, int* min, int* sec) const
     {
         wxCHECK_MSG( hour && min && sec, false,
-                     wxS("Time component pointers must be non-NULL") );
+                     wxS("Time component pointers must be non-null") );
 
-        const wxDateTime::Tm tm = GetValue().GetTm();
+        const wxDateTime::Tm tm = this->GetValue().GetTm();
         *hour = tm.hour;
         *min = tm.min;
         *sec = tm.sec;
@@ -86,6 +89,10 @@ public:
         return true;
     }
 };
+
+// This class is defined mostly for compatibility and is used as the base class
+// by native wxTimePickerCtrl implementations.
+typedef wxTimePickerCtrlCommonBase<wxDateTimePickerCtrl> wxTimePickerCtrlBase;
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/timectrl.h"
@@ -95,13 +102,17 @@ public:
     #include "wx/osx/timectrl.h"
 
     #define wxHAS_NATIVE_TIMEPICKERCTRL
+#elif defined(__WXQT__) && !defined(__WXUNIVERSAL__)
+    #include "wx/qt/timectrl.h"
+
+    #define wxHAS_NATIVE_TIMEPICKERCTRL
 #else
     #include "wx/generic/timectrl.h"
 
     class WXDLLIMPEXP_ADV wxTimePickerCtrl : public wxTimePickerCtrlGeneric
     {
     public:
-        wxTimePickerCtrl() { }
+        wxTimePickerCtrl() = default;
         wxTimePickerCtrl(wxWindow *parent,
                          wxWindowID id,
                          const wxDateTime& date = wxDefaultDateTime,

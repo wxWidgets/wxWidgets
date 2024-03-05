@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -27,9 +24,7 @@
     #include "wx/longlong.h"
 #endif
 
-#if wxUSE_UNICODE
-    #include "wx/mstream.h"
-#endif // wxUSE_UNICODE
+#include "wx/mstream.h"
 
 #include "testfile.h"
 
@@ -52,13 +47,11 @@ private:
         CPPUNIT_TEST( TestULongLong );
 #endif // wxUSE_LONGLONG
 
-#if wxUSE_UNICODE
         CPPUNIT_TEST( TestUTF8Input );
         CPPUNIT_TEST( TestEmbeddedZerosUTF16LEInput );
         CPPUNIT_TEST( TestEmbeddedZerosUTF16BEInput );
         CPPUNIT_TEST( TestEmbeddedZerosUTF32LEInput );
         CPPUNIT_TEST( TestEmbeddedZerosUTF32BEInput );
-#endif // wxUSE_UNICODE
     CPPUNIT_TEST_SUITE_END();
 
     void Endline();
@@ -69,7 +62,6 @@ private:
     void TestULongLong();
 #endif // wxUSE_LONGLONG
 
-#if wxUSE_UNICODE
     void TestUTF8Input();
     void TestEmbeddedZerosUTF16LEInput();
     void TestEmbeddedZerosUTF16BEInput();
@@ -78,8 +70,6 @@ private:
     void TestInput(const wxMBConv& conv,
                    const void* encodedText,
                    size_t encodedSize );
-#endif // wxUSE_UNICODE
-
 
     wxDECLARE_NO_COPY_CLASS(TextStreamTestCase);
 };
@@ -127,7 +117,7 @@ void TextStreamTestCase::Endline()
 
 void TextStreamTestCase::MiscTests()
 {
-    wxString filename = wxT("testdata.fc");
+    wxString filename = wxT("testdata.conf");
     wxFileInputStream fsIn(filename);
     if ( !fsIn.IsOk() )
     {
@@ -204,8 +194,6 @@ void TextStreamTestCase::TestULongLong()
 }
 
 #endif // wxUSE_LONGLONG
-
-#if wxUSE_UNICODE
 
 static const wchar_t txtWchar[4] =
 {
@@ -324,6 +312,44 @@ TEST_CASE("wxTextInputStream::GetChar", "[text][input][stream][char]")
         REQUIRE( tis.GetChar() == 0x00 );
         CHECK( tis.GetInputStream().Eof() );
     }
-}
 
-#endif // wxUSE_UNICODE
+    // Two null bytes that look like the start of UTF-32BE BOM,
+    // followed by 4 byte UTF-8 sequence.
+    // Needs wxConvAuto to not switch to fallback on <6 bytes.
+    SECTION("UTF8-with-nulls")
+    {
+        const wxUint8 buf[] = { 0x00, 0x00, 0xf0, 0x90, 0x8c, 0x98 };
+        wxMemoryInputStream mis(buf, sizeof(buf));
+        wxTextInputStream tis(mis);
+
+        wxCharTypeBuffer<wxChar> e = wxString::FromUTF8((const char*)buf, sizeof(buf))
+                                     .tchar_str<wxChar>();
+        for ( size_t i = 0; i < e.length(); ++i )
+        {
+            INFO("i = " << i);
+            REQUIRE( tis.GetChar() == e[i] );
+        }
+        REQUIRE( tis.GetChar() == 0x00 );
+        CHECK( tis.GetInputStream().Eof() );
+    }
+
+    // Two null bytes that look like the start of UTF-32BE BOM,
+    // then 3 bytes that look like the start of UTF-8 sequence.
+    // Needs 6 character output buffer in GetChar().
+    SECTION("almost-UTF8-with-nulls")
+    {
+        const wxUint8 buf[] = { 0x00, 0x00, 0xf0, 0x90, 0x8c, 0xe0 };
+        wxMemoryInputStream mis(buf, sizeof(buf));
+        wxTextInputStream tis(mis);
+
+        wxCharTypeBuffer<wxChar> e = wxString((const char*)buf, wxCSConv(wxFONTENCODING_ISO8859_1),
+                                              sizeof(buf)).tchar_str<wxChar>();
+        for ( size_t i = 0; i < e.length(); ++i )
+        {
+            INFO("i = " << i);
+            REQUIRE( tis.GetChar() == e[i] );
+        }
+        REQUIRE( tis.GetChar() == 0x00 );
+        CHECK( tis.GetInputStream().Eof() );
+    }
+}

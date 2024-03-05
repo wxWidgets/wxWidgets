@@ -49,7 +49,7 @@ enum wxPropertySheetDialogFlags
 
     /**
         Shrinks the dialog window to fit the currently selected page
-        (common behaviour for property sheets on OS X).
+        (common behaviour for property sheets on macOS).
     */
     wxPROPSHEET_SHRINKTOFIT = 0x0100,
 };

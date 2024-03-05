@@ -2,7 +2,6 @@
 // Name:        src/msw/crashrpt.cpp
 // Purpose:     code to generate crash dumps (minidumps)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     13.07.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_CRASHREPORT
 
@@ -31,6 +27,7 @@
 
 #include "wx/msw/debughlp.h"
 #include "wx/msw/crashrpt.h"
+#include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
 // classes
@@ -43,7 +40,7 @@ class BusyCursor
 public:
     BusyCursor()
     {
-        HCURSOR hcursorBusy = ::LoadCursor(NULL, IDC_WAIT);
+        HCURSOR hcursorBusy = ::LoadCursor(nullptr, IDC_WAIT);
         m_hcursorOld = ::SetCursor(hcursorBusy);
     }
 
@@ -115,10 +112,10 @@ wxCrashReportImpl::wxCrashReportImpl(const wxChar *filename)
                     filename,
                     GENERIC_WRITE,
                     0,                          // no sharing
-                    NULL,                       // default security
+                    nullptr,                    // default security
                     CREATE_ALWAYS,
                     FILE_FLAG_WRITE_THROUGH,
-                    NULL                        // no template file
+                    nullptr                     // no template file
                 );
 }
 
@@ -132,7 +129,7 @@ void wxCrashReportImpl::Output(const wxChar *format, ...)
     wxString s = wxString::FormatV(format, argptr);
 
     wxCharBuffer buf(s.mb_str(wxConvUTF8));
-    ::WriteFile(m_hFile, buf.data(), strlen(buf.data()), &cbWritten, 0);
+    ::WriteFile(m_hFile, buf.data(), strlen(buf.data()), &cbWritten, nullptr);
 
     va_end(argptr);
 }
@@ -212,8 +209,8 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
                 m_hFile,                    // file to write to
                 dumpFlags,                  // kind of dump to craete
                 &minidumpExcInfo,
-                NULL,                       // no extra user-defined data
-                NULL                        // no callbacks
+                nullptr,                    // no extra user-defined data
+                nullptr                     // no callbacks
               ) )
         {
             Output(wxT("MiniDumpWriteDump() failed."));
@@ -271,7 +268,7 @@ bool wxCrashReport::GenerateNow(int flags)
 
     __try
     {
-        RaiseException(0x1976, 0, 0, NULL);
+        RaiseException(0x1976, 0, 0, nullptr);
     }
     __except( rc = Generate(flags, (EXCEPTION_POINTERS *)GetExceptionInformation()),
               EXCEPTION_CONTINUE_EXECUTION )
@@ -359,20 +356,7 @@ wxString wxCrashContext::GetExceptionString() const
 
         default:
             // unknown exception, ask NTDLL for the name
-            if ( !::FormatMessage
-                    (
-                     FORMAT_MESSAGE_IGNORE_INSERTS |
-                     FORMAT_MESSAGE_FROM_HMODULE,
-                     ::GetModuleHandle(wxT("NTDLL.DLL")),
-                     code,
-                     0,
-                     wxStringBuffer(s, 1024),
-                     1024,
-                     0
-                    ) )
-            {
-                s.Printf(wxT("UNKNOWN_EXCEPTION(%d)"), code);
-            }
+            s = wxMSWFormatMessage(code, ::GetModuleHandle(wxT("NTDLL.DLL")));
     }
 
     #undef CASE_EXCEPTION

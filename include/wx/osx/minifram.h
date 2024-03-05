@@ -4,7 +4,6 @@
 //              If there is no equivalent on your platform, just make it a
 //              normal frame.
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -20,20 +19,20 @@ class WXDLLIMPEXP_CORE wxMiniFrame: public wxFrame {
   wxDECLARE_DYNAMIC_CLASS(wxMiniFrame);
 
 public:
-  wxMiniFrame() {}
+  wxMiniFrame() = default;
   wxMiniFrame(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxCAPTION | wxRESIZE_BORDER | wxTINY_CAPTION,
-           const wxString& name = wxFrameNameStr)
+           const wxString& name = wxASCII_STR(wxFrameNameStr))
   {
       // Use wxFrame constructor in absence of more specific code.
       Create(parent, id, title, pos, size, style | wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT , name);
   }
 
-  virtual ~wxMiniFrame() {}
+  virtual ~wxMiniFrame() = default;
 protected:
 };
 

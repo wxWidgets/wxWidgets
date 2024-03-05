@@ -47,9 +47,9 @@ public:
 
     virtual ~wxSocketImplMSW();
 
-    virtual wxSocketError GetLastError() const wxOVERRIDE;
+    virtual wxSocketError GetLastError() const override;
 
-    virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags)) wxOVERRIDE
+    virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags)) override
     {
         // notifications are never disabled in this implementation, there is no
         // need for this as WSAAsyncSelect() only sends notification once when
@@ -57,10 +57,7 @@ public:
         // anything here
     }
 
-private:
-    virtual void DoClose() wxOVERRIDE;
-
-    virtual void UnblockAndRegisterWithEventLoop() wxOVERRIDE
+    virtual void UpdateBlockingState() override
     {
         if ( GetSocketFlags() & wxSOCKET_BLOCK )
         {
@@ -74,6 +71,9 @@ private:
             // would result in data races and other unpleasantness.
             wxIoctlSocketArg_t trueArg = 1;
             ioctlsocket(m_fd, FIONBIO, &trueArg);
+
+            // Uninstall it in case it was installed before.
+            wxSocketManager::Get()->Uninstall_Callback(this);
         }
         else
         {
@@ -82,6 +82,9 @@ private:
             wxSocketManager::Get()->Install_Callback(this);
         }
     }
+
+private:
+    virtual void DoClose() override;
 
     int m_msgnumber;
 

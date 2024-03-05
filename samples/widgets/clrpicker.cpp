@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_COLOURPICKERCTRL
 
@@ -30,6 +27,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/statbox.h"
 #endif
 
 #include "wx/artprov.h"
@@ -64,11 +62,11 @@ class ColourPickerWidgetsPage : public WidgetsPage
 public:
     ColourPickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
 
-    virtual wxWindow *GetWidget() const wxOVERRIDE { return m_clrPicker; }
-    virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
+    virtual wxWindow *GetWidget() const override { return m_clrPicker; }
+    virtual void RecreateWidget() override { RecreatePicker(); }
 
     // lazy creation of the content
-    virtual void CreateContent() wxOVERRIDE;
+    virtual void CreateContent() override;
 
 protected:
 
@@ -124,7 +122,7 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-#if defined(__WXGTK20__)
+#if defined(__WXGTK__)
     #define FAMILY_CTRLS NATIVE_CTRLS
 #else
     #define FAMILY_CTRLS GENERIC_CTRLS
@@ -144,11 +142,13 @@ void ColourPickerWidgetsPage::CreateContent()
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, "&ColourPicker style");
-    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, "With textctrl");
-    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, "With label");
-    m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(clrbox, "With opacity");
-    boxleft->Add(clrbox, 0, wxALL|wxGROW, 5);
+    wxStaticBoxSizer *styleSizer = new wxStaticBoxSizer(wxVERTICAL, this, "&ColourPicker style");
+    wxStaticBox* const styleSizerBox = styleSizer->GetStaticBox();
+
+    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(styleSizer, "With textctrl", wxID_ANY, styleSizerBox);
+    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(styleSizer, "With label", wxID_ANY, styleSizerBox);
+    m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(styleSizer, "With opacity", wxID_ANY, styleSizerBox);
+    boxleft->Add(styleSizer, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -156,7 +156,7 @@ void ColourPickerWidgetsPage::CreateContent()
     Reset();    // set checkboxes state
 
     // create pickers
-    m_clrPicker = NULL;
+    m_clrPicker = nullptr;
     CreatePicker();
 
     // right pane
@@ -191,6 +191,8 @@ void ColourPickerWidgetsPage::CreatePicker()
     m_clrPicker = new wxColourPickerCtrl(this, PickerPage_Colour, *wxRED,
                                          wxDefaultPosition, wxDefaultSize,
                                          style);
+
+    NotifyWidgetRecreation(m_clrPicker);
 }
 
 void ColourPickerWidgetsPage::RecreatePicker()

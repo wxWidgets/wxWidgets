@@ -28,7 +28,7 @@ public:
     void Wrap(wxWindow *win, const wxString& text, int widthMax);
 
     // we don't need it, but just to avoid compiler warnings
-    virtual ~wxTextWrapper() { }
+    virtual ~wxTextWrapper() = default;
 
 protected:
     // line may be empty
@@ -101,7 +101,7 @@ protected:
                                 wxControl::EscapeMnemonics(line));
     }
 
-    virtual void OnOutputLine(const wxString& line) wxOVERRIDE
+    virtual void OnOutputLine(const wxString& line) override
     {
         if ( !line.empty() )
         {

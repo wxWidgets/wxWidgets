@@ -11,15 +11,17 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FSWATCHER && defined(wxHAVE_FSEVENTS_FILE_NOTIFICATIONS)
 
 #include "wx/fswatcher.h"
 #include "wx/osx/core/cfstring.h"
+#include "wx/osx/core/private/strconv_cf.h"
+
 #include <CoreFoundation/CoreFoundation.h>
+#include <CoreServices/CoreServices.h>
+
+#include <unordered_map>
 
 // A small class that we will give the FSEvents
 // framework, which will be forwarded to the function
@@ -186,6 +188,10 @@ static void FileNameFromEvent(wxFileName& eventFileName, char* path,
     {
         eventFileName.AssignDir(strPath);
     }
+    if ( flags & kFSEventStreamEventFlagItemIsSymlink )
+    {
+        eventFileName.Assign(strPath);
+    }
 }
 
 // This is the function that the FsEvents API
@@ -267,26 +273,32 @@ static void wxFSEventCallback(ConstFSEventStreamRef WXUNUSED(streamRef), void *c
 static void wxDeleteContext(const void* context)
 {
     wxFSEventWatcherContext* watcherContext =
-        (wxFSEventWatcherContext*) context;
+        static_cast<wxFSEventWatcherContext*>(const_cast<void*>(context));
     delete watcherContext;
 }
 
+struct wxFsEventsFileSystemWatcher::PrivateData
+{
+    // map of path => FSEventStreamRef
+    std::unordered_map<wxString, FSEventStreamRef> m_streams;
+};
+
 wxFsEventsFileSystemWatcher::wxFsEventsFileSystemWatcher()
-: wxKqueueFileSystemWatcher()
+: wxKqueueFileSystemWatcher(), m_pImpl(new PrivateData)
 {
 
 }
 
 wxFsEventsFileSystemWatcher::wxFsEventsFileSystemWatcher(const wxFileName& path,
     int events)
-: wxKqueueFileSystemWatcher(path, events)
+: wxKqueueFileSystemWatcher(path, events), m_pImpl(new PrivateData)
 {
 
 }
 
 wxFsEventsFileSystemWatcher::~wxFsEventsFileSystemWatcher()
 {
-
+    delete m_pImpl;
 }
 
 bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
@@ -311,7 +323,7 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
         return false;
     }
 
-    if ( m_streams.find(canonical) != m_streams.end() )
+    if ( m_pImpl->m_streams.find(canonical) != m_pImpl->m_streams.end() )
     {
         // How to take into account filespec
         // if client adds a watch for /home/*.cpp
@@ -333,9 +345,9 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
     );
     ctx.version = 0;
     ctx.info = watcherContext;
-    ctx.retain = NULL;
+    ctx.retain = nullptr;
     ctx.release = &wxDeleteContext;
-    ctx.copyDescription = NULL;
+    ctx.copyDescription = nullptr;
     CFTimeInterval latency = 0.2;
 
     wxMacUniCharBuffer pathChars(path.GetPath());
@@ -345,7 +357,7 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
         pathChars.GetChars()
     );
     CFArrayRef pathRefs = CFArrayCreate(
-        kCFAllocatorDefault, (const void**)&pathRef, 1, NULL
+        kCFAllocatorDefault, (const void**)&pathRef, 1, nullptr
     );
     FSEventStreamCreateFlags flags = kFSEventStreamCreateFlagWatchRoot
         | kFSEventStreamCreateFlagFileEvents;
@@ -363,7 +375,7 @@ bool wxFsEventsFileSystemWatcher::AddTree(const wxFileName& path, int events,
         started = FSEventStreamStart(stream);
         if ( started )
         {
-            m_streams[canonical] = stream;
+            m_pImpl->m_streams[canonical] = stream;
         }
     }
 
@@ -396,14 +408,14 @@ bool wxFsEventsFileSystemWatcher::RemoveTree(const wxFileName& path)
         }
     }
 
-    FSEventStreamRefMap::iterator it = m_streams.find(canonical);
+    const auto it = m_pImpl->m_streams.find(canonical);
     bool removed = false;
-    if ( it != m_streams.end() )
+    if ( it != m_pImpl->m_streams.end() )
     {
         FSEventStreamStop(it->second);
         FSEventStreamInvalidate(it->second);
         FSEventStreamRelease(it->second);
-        m_streams.erase(it);
+        m_pImpl->m_streams.erase(it);
         removed = true;
     }
     return removed;
@@ -413,17 +425,18 @@ bool wxFsEventsFileSystemWatcher::RemoveAll()
 {
     // remove all watches created with Add()
     bool ret = wxKqueueFileSystemWatcher::RemoveAll();
-    FSEventStreamRefMap::iterator it = m_streams.begin();
-    while ( it != m_streams.end() )
+    if ( m_pImpl->m_streams.empty() )
+        return ret;
+
+    for ( const auto& kv : m_pImpl->m_streams )
     {
-        FSEventStreamStop(it->second);
-        FSEventStreamInvalidate(it->second);
-        FSEventStreamRelease(it->second);
-        ++it;
-        ret = true;
+        FSEventStreamRef stream = kv.second;
+        FSEventStreamStop(stream);
+        FSEventStreamInvalidate(stream);
+        FSEventStreamRelease(stream);
     }
-    m_streams.clear();
-    return ret;
+    m_pImpl->m_streams.clear();
+    return true;
 }
 
 void wxFsEventsFileSystemWatcher::PostChange(const wxFileName& oldFileName,
@@ -448,7 +461,7 @@ void wxFsEventsFileSystemWatcher::PostChange(const wxFileName& oldFileName,
         wxFSW_EVENT_ATTRIB
     };
 
-    for ( int i = 0; i < WXSIZEOF(allEvents); i++ )
+    for ( unsigned i = 0; i < WXSIZEOF(allEvents); i++ )
     {
         if ( event & allEvents[i] )
         {
@@ -487,21 +500,21 @@ void wxFsEventsFileSystemWatcher::PostError(const wxString& msg)
 
 int wxFsEventsFileSystemWatcher::GetWatchedPathsCount() const
 {
-    return m_streams.size() + wxFileSystemWatcherBase::GetWatchedPathsCount();
+    return m_pImpl->m_streams.size() + wxFileSystemWatcherBase::GetWatchedPathsCount();
 }
 
 int wxFsEventsFileSystemWatcher::GetWatchedPaths(wxArrayString* paths) const
 {
-    wxCHECK_MSG( paths != NULL, -1, "Null array passed to retrieve paths");
+    wxCHECK_MSG( paths != nullptr, -1, "Null array passed to retrieve paths");
     if ( !paths )
     {
         return 0;
     }
     wxFileSystemWatcherBase::GetWatchedPaths(paths);
-    FSEventStreamRefMap::const_iterator it = m_streams.begin();
-    for ( ; it != m_streams.end(); ++it )
+
+    for ( const auto& kv : m_pImpl->m_streams )
     {
-        paths->push_back(it->first);
+        paths->push_back(kv.first);
     }
     return paths->size();
 }

@@ -2,7 +2,6 @@
 // Name:        wx/osx/core/evtloop.h
 // Purpose:     CoreFoundation-based event loop
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-01-12
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -25,22 +24,22 @@ public:
 
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
-    virtual void ScheduleExit(int rc = 0) wxOVERRIDE;
+    virtual void ScheduleExit(int rc = 0) override;
 
     // return true if any events are available
-    virtual bool Pending() const wxOVERRIDE;
+    virtual bool Pending() const override;
 
     // dispatch a single event, return false if we should exit from the loop
-    virtual bool Dispatch() wxOVERRIDE;
+    virtual bool Dispatch() override;
 
     // same as Dispatch() but doesn't wait for longer than the specified (in
     // ms) timeout, return true if an event was processed, false if we should
     // exit the loop or -1 if timeout expired
-    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
+    virtual int DispatchTimeout(unsigned long timeout) override;
 
     // implement this to wake up the loop: usually done by posting a dummy event
     // to it (can be called from non main thread)
-    virtual void WakeUp() wxOVERRIDE;
+    virtual void WakeUp() override;
 
     bool ShouldProcessIdleEvents() const { return m_processIdleEvents ; }
 
@@ -53,13 +52,13 @@ public:
 protected:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
     // terminating when Exit() is called
-    virtual int DoRun() wxOVERRIDE;
+    virtual int DoRun() override;
 
     // may be overridden to perform some action at the start of each new event
     // loop iteration
     virtual void OnNextIteration() {}
 
-    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
+    virtual void DoYieldFor(long eventsToProcess) override;
 
     void CommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
     void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity);

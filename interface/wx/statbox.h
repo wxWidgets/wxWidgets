@@ -11,35 +11,33 @@
     A static box is a rectangle drawn around other windows to denote
     a logical grouping of items.
 
-    Note that while the previous versions required that windows appearing
-    inside a static box be created as its siblings (i.e. use the same parent as
-    the static box itself), since wxWidgets 2.9.1 it is also possible to create
-    them as children of wxStaticBox itself and you are actually encouraged to
-    do it like this if compatibility with the previous versions is not
-    important.
+    Typically wxStaticBox is not used directly, but only via wxStaticBoxSizer
+    class which lays out its elements inside a box.
 
-    So the new recommended way to create static box is:
+    If you do use it directly, please note that while the previous versions
+    required that windows appearing inside a static box be created as its
+    siblings (i.e. use the same parent as the static box itself), since
+    wxWidgets 2.9.1 it is strongly recommended to create them as children of
+    wxStaticBox itself, as doing this avoids problems with repainting that
+    could happen when creating the other windows as siblings of the box.
+    Notably, in wxMSW, siblings of the static box are not drawn at all inside
+    it when compositing is used, which is the case by default, and
+    wxWindow::MSWDisableComposited() must be explicitly called to fix this.
+    Creating windows located inside the static box as its children avoids this
+    problem and works well whether compositing is used or not.
+
+    To summarize, the correct way to create static box and the controls inside
+    it is:
     @code
         void MyFrame::CreateControls()
         {
             wxPanel *panel = new wxPanel(this);
             wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, "StaticBox");
 
-            new wxStaticText(box, wxID_ANY "This window is a child of the staticbox");
+            new wxStaticText(box, wxID_ANY, "This window is a child of the staticbox");
             ...
         }
     @endcode
-
-    While the compatible -- and now deprecated -- way is
-    @code
-            wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, "StaticBox");
-
-            new wxStaticText(panel, wxID_ANY "This window is a child of the panel");
-            ...
-    @endcode
-
-    Also note that there is a specialized wxSizer class (wxStaticBoxSizer) which can
-    be used as an easier way to pack items into a static box.
 
     @library{wxcore}
     @category{ctrl}
@@ -171,8 +169,7 @@ public:
         checkbox stays enabled even if @c box->Enable(false) is called.
 
         However with the actual behaviour, implemented in this overridden
-        method, the following code (shown using C++11 only for convenience,
-        this behaviour is not C++11-specific):
+        method, the following code:
         @code
             auto check = new wxCheckBox(parent, wxID_ANY, "Use the box");
             auto box = new wxStaticBox(parent, wxID_ANY, check);

@@ -2,7 +2,6 @@
 // Name:        src/generic/tipdlg.cpp
 // Purpose:     implementation of wxTipDialog
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     28.06.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_STARTUP_TIPS
 
@@ -62,7 +58,7 @@ class WXDLLIMPEXP_ADV wxFileTipProvider : public wxTipProvider
 public:
     wxFileTipProvider(const wxString& filename, size_t currentTip);
 
-    virtual wxString GetTip() wxOVERRIDE;
+    virtual wxString GetTip() override;
 
 private:
     wxTextFile m_textfile;
@@ -78,7 +74,7 @@ class WXDLLIMPEXP_ADV wxRegTipProvider : public wxTipProvider
 public:
     wxRegTipProvider(const wxString& keyname);
 
-    virtual wxString GetTip() wxOVERRIDE;
+    virtual wxString GetTip() override;
 };
 
 // Empty implementation for now to keep the linker happy
@@ -275,7 +271,6 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     SetSizer( topsizer );
 
     topsizer->SetSizeHints( this );
-    topsizer->Fit( this );
 
     Centre(wxBOTH | wxCENTER_FRAME);
 }

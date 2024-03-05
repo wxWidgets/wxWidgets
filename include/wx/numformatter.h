@@ -34,18 +34,28 @@ public:
     static wxString ToString(wxLongLong_t val,
                              int style = Style_WithThousandsSep);
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    static wxString ToString(wxULongLong_t val,
+                             int style = Style_WithThousandsSep);
     static wxString ToString(double val,
                              int precision,
                              int style = Style_WithThousandsSep);
 
+    // Format the given number using one of the floating point formats and
+    // ensure that the result uses the correct decimal separator.
+    // Prefer using ToString() if possible, i.e. if format is "%g" or "%.Nf"
+    // which are supported by it directly.
+    static wxString Format(const wxString& format, double val);
+
+
     // Parse a string representing a number, possibly with thousands separator.
     //
     // Return true on success and stores the result in the provided location
-    // which must be a valid non-NULL pointer.
+    // which must be a valid non-null pointer.
     static bool FromString(wxString s, long *val);
 #ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
     static bool FromString(wxString s, wxLongLong_t *val);
 #endif // wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    static bool FromString(wxString s, wxULongLong_t *val);
     static bool FromString(wxString s, double *val);
 
 

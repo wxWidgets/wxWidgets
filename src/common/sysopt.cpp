@@ -2,7 +2,6 @@
 // Name:        src/common/sysopt.cpp
 // Purpose:     wxSystemOptions
 // Author:      Julian Smart
-// Modified by:
 // Created:     2001-07-10
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_SYSTEM_OPTIONS
 
@@ -29,7 +25,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/list.h"
     #include "wx/string.h"
     #include "wx/arrstr.h"
 #endif

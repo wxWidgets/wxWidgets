@@ -46,24 +46,24 @@ public:
     mouse clicks, optionally with a tooltip above it to help provide information.
 
 
-    @section taskbaricon_xnote X Window System Note
+    @section taskbaricon_linux_note Linux Note
 
-    Under X Window System, the window manager must support either the
-    "System Tray Protocol" (see http://freedesktop.org/wiki/Specifications/systemtray-spec)
-    by freedesktop.org (WMs used by modern desktop environments such as GNOME >= 2,
-    KDE >= 3 and XFCE >= 4 all do) or the older methods used in GNOME 1.2 and KDE 1 and 2.
+    Taskbar is not supported by all window managers and desktop environments
+    under Linux and IsAvailable() function should be used to check whether it
+    is supported. In addition, even when the taskbar is supported, some
+    environments don't support showing the application-specified tooltip for
+    the icon in it.
 
-    If it doesn't, the icon will appear as a toplevel window on user's desktop.
-    Because not all window managers have system tray, there's no guarantee that
-    wxTaskBarIcon will work correctly under X Window System and so the applications
-    should use it only as an optional component of their user interface.
-    The user should be required to explicitly enable the taskbar icon on Unix,
-    it shouldn't be on by default.
+    Due to this, there's no guarantee that wxTaskBarIcon will work correctly
+    under Linux and so the applications should use it only as an optional
+    component of their user interface. The user should be required to
+    explicitly enable the taskbar icon on Unix, it shouldn't be on by default.
 
     @beginEventEmissionTable{wxTaskBarIconEvent}
     Note that not all ports are required to send these events and so it's better
-    to override wxTaskBarIcon::CreatePopupMenu() if all that the application does
-    is that it shows a popup menu in reaction to mouse click.
+    to override wxTaskBarIcon::CreatePopupMenu() or wxTaskBarIcon::GetPopupMenu()
+    if all that the application does is that it shows a popup menu in reaction to
+    mouse click.
     @event{EVT_TASKBAR_MOVE(func)}
         Process a @c wxEVT_TASKBAR_MOVE event.
     @event{EVT_TASKBAR_LEFT_DOWN(func)}
@@ -123,9 +123,10 @@ public:
         The events can be handled by a class derived from wxTaskBarIcon.
 
         @note
-        It is recommended to override CreatePopupMenu() callback instead of
-        calling this method from event handler, because some ports (e.g. wxCocoa)
-        may not implement PopupMenu() and mouse click events at all.
+        It is recommended to override the CreatePopupMenu() or GetPopupMenu()
+        callback instead of calling this method from event handler, because some
+        ports (e.g. wxCocoa) may not implement PopupMenu() and mouse click events
+        at all.
     */
     virtual bool PopupMenu(wxMenu* menu);
 
@@ -137,14 +138,14 @@ public:
     /**
         Sets the icon, and optional tooltip text.
     */
-    virtual bool SetIcon(const wxIcon& icon,
+    virtual bool SetIcon(const wxBitmapBundle& icon,
                          const wxString& tooltip = wxEmptyString);
 
     /**
         Returns true if system tray is available in the desktop environment the
         app runs under.
 
-        On Windows and OS X, the tray is always available and this function
+        On Windows and macOS, the tray is always available and this function
         simply returns true.
 
         On Unix, X11 environment may or may not provide the tray, depending on
@@ -166,17 +167,37 @@ public:
 protected:
 
     /**
-        This method is called by the library when the user requests popup menu
-        (on Windows and Unix platforms, this is when the user right-clicks the icon).
+        Called by the library when the user requests popup menu if
+        GetPopupMenu() is not overridden.
 
-        Override this function in order to provide popup menu associated with the icon.
-        If CreatePopupMenu() returns @NULL (this happens by default), no menu is shown,
-        otherwise the menu is displayed and then deleted by the library as soon as the
-        user dismisses it.
+        Override this function in order to provide popup menu associated with
+        the icon if you don't want to override GetPopupMenu(), i.e. if you
+        prefer creating a new menu every time instead of reusing the same menu.
 
-        The events can be handled by a class derived from wxTaskBarIcon.
+        If CreatePopupMenu() returns @NULL (this happens by default), no menu
+        is shown, otherwise the menu is displayed and then deleted by the
+        library as soon as the user dismisses it. If you don't want the menu to
+        be destroyed when it is dismissed, override GetPopupMenu() instead.
     */
     virtual wxMenu* CreatePopupMenu();
+
+    /**
+        Called by the library when the user requests popup menu.
+
+        On Windows and Unix platforms this happens when the user right-clicks
+        the icon, so overriding this method is the simplest way to implement
+        the standard behaviour of showing a menu when the taskbar icon is
+        clicked.
+
+        If GetPopupMenu() returns @NULL (this happens by default),
+        CreatePopupMenu() is called next and its menu is used (if non-null).
+        Otherwise the menu returned by GetPopupMenu() is shown and, contrary to
+        CreatePopupMenu(), not destroyed when the user dismisses it, allowing
+        to reuse the same menu pointer multiple times.
+
+        @since 3.1.5
+    */
+    virtual wxMenu* GetPopupMenu();
 };
 
 

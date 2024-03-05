@@ -2,7 +2,6 @@
 // Name:        src/common/xtistrm.cpp
 // Purpose:     streaming runtime metadata information
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     27/07/03
 // Copyright:   (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence
@@ -11,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/xtistrm.h"
 
@@ -42,17 +38,13 @@ using namespace std;
 
 struct wxObjectCodeReaderCallback::wxObjectCodeReaderCallbackInternal
 {
-#if wxUSE_UNICODE
     map<int,wstring> m_objectNames;
-#else
-    map<int,string> m_objectNames;
-#endif
 
     void SetObjectName(int objectID, const wxString &name )
     {
         if ( m_objectNames.find(objectID) != m_objectNames.end() )
         {
-            wxLogError( _("Passing a already registered object to SetObjectName") );
+            wxLogError( _("Passing an already registered object to SetObjectName") );
             return ;
         }
         m_objectNames[objectID] = (const wxChar *)name;

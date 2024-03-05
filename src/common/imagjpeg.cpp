@@ -9,9 +9,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_IMAGE && wxUSE_LIBJPEG
 
@@ -178,18 +175,21 @@ CPP_METHODDEF(void) wx_error_exit (j_common_ptr cinfo)
 /*
  * This will replace the standard output_message method when the user
  * wants us to be silent (verbose==false). We must have such method instead of
- * simply using NULL for cinfo->err->output_message because it's called
+ * simply using nullptr for cinfo->err->output_message because it's called
  * unconditionally from within libjpeg when there's "garbage input".
  */
 CPP_METHODDEF(void) wx_ignore_message (j_common_ptr WXUNUSED(cinfo))
 {
 }
 
+} // extern "C"
+
+static
 void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
 {
     wx_src_ptr src;
 
-    if (cinfo->src == NULL) {    /* first time for this JPEG object? */
+    if (cinfo->src == nullptr) {    /* first time for this JPEG object? */
         cinfo->src = (struct jpeg_source_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
             sizeof(wx_source_mgr));
@@ -197,7 +197,7 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src = (wx_src_ptr) cinfo->src;
     src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
     src->buffer = new JOCTET[JPEG_IO_BUFFER_SIZE];
-    src->pub.next_input_byte = NULL; /* until buffer loaded */
+    src->pub.next_input_byte = nullptr; /* until buffer loaded */
     src->stream = &infile;
 
     src->pub.init_source = wx_init_source;
@@ -206,8 +206,6 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
     src->pub.term_source = wx_term_source;
 }
-
-} // extern "C"
 
 static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 {
@@ -233,7 +231,7 @@ static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 
 bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
-    wxCHECK_MSG( image, false, "NULL image pointer" );
+    wxCHECK_MSG( image, false, "null image pointer" );
 
     struct jpeg_decompress_struct cinfo;
     wx_error_mgr jerr;
@@ -395,11 +393,13 @@ CPP_METHODDEF(void) wx_term_destination (j_compress_ptr cinfo)
         dest->stream->Write(dest->buffer, datacount);
 }
 
-GLOBAL(void) wx_jpeg_io_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
+} // extern "C"
+
+static void wx_jpeg_io_dest(j_compress_ptr cinfo, wxOutputStream& outfile)
 {
     wx_dest_ptr dest;
 
-    if (cinfo->dest == NULL) {    /* first time for this JPEG object? */
+    if (cinfo->dest == nullptr) {    /* first time for this JPEG object? */
         cinfo->dest = (struct jpeg_destination_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
             sizeof(wx_destination_mgr));
@@ -411,8 +411,6 @@ GLOBAL(void) wx_jpeg_io_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
     dest->pub.term_destination = wx_term_destination;
     dest->stream = &outfile;
 }
-
-} // extern "C"
 
 bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {

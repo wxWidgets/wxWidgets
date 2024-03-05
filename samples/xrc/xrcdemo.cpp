@@ -13,9 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // For all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
@@ -105,7 +102,7 @@ bool MyApp::OnInit()
 
     // Load all of the XRC files that will be used. You can put everything
     // into one giant XRC file if you wanted, but then they become more
-    // diffcult to manage, and harder to reuse in later projects.
+    // difficult to manage, and harder to reuse in later projects.
     if ( !wxXmlResource::Get()->LoadAllFiles("rc") )
         return false;
 
@@ -114,8 +111,8 @@ bool MyApp::OnInit()
     wxHelpProvider::Set( new wxSimpleHelpProvider );
 #endif // wxUSE_HELP
 
-    // Make an instance of your derived frame. Passing NULL (the default value
-    // of MyFrame's constructor is NULL) as the frame doesn't have a parent
+    // Make an instance of your derived frame. Passing nullptr (the default value
+    // of MyFrame's constructor is null) as the frame doesn't have a parent
     // since it is the main application window.
     MyFrame *frame = new MyFrame();
 

@@ -11,9 +11,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_ZLIB && wxUSE_STREAMS
 
@@ -76,9 +73,9 @@ wxZlibClassFactory::wxZlibClassFactory()
 const wxChar * const *
 wxZlibClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *mimes[] = { wxT("application/x-deflate"), NULL };
-    static const wxChar *encs[] =  { wxT("deflate"), NULL };
-    static const wxChar *empty[] = { NULL };
+    static const wxChar *mimes[] = { wxT("application/x-deflate"), nullptr };
+    static const wxChar *encs[] =  { wxT("deflate"), nullptr };
+    static const wxChar *empty[] = { nullptr };
 
     switch (type) {
         case wxSTREAM_MIMETYPE:         return mimes;
@@ -105,15 +102,15 @@ const wxChar * const *
 wxGzipClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
     static const wxChar *protos[] =
-        { wxT("gzip"), NULL };
+        { wxT("gzip"), nullptr };
     static const wxChar *mimes[] =
-        { wxT("application/gzip"), wxT("application/x-gzip"), NULL };
+        { wxT("application/gzip"), wxT("application/x-gzip"), nullptr };
     static const wxChar *encs[] =
-        { wxT("gzip"), NULL };
+        { wxT("gzip"), nullptr };
     static const wxChar *exts[] =
-        { wxT(".gz"), wxT(".gzip"), NULL };
+        { wxT(".gz"), wxT(".gzip"), nullptr };
     static const wxChar *empty[] =
-        { NULL };
+        { nullptr };
 
     switch (type) {
         case wxSTREAM_PROTOCOL: return protos;
@@ -143,7 +140,7 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream *stream, int flags)
 
 void wxZlibInputStream::Init(int flags)
 {
-  m_inflate = NULL;
+  m_inflate = nullptr;
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
   m_z_size = ZSTREAM_BUFFER_SIZE;
   m_pos = 0;
@@ -249,7 +246,7 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
       wxString msg(m_inflate->msg, *wxConvCurrent);
       if (!msg)
         msg = wxString::Format(_("zlib error %d"), err);
-      wxLogError(_("Can't read from inflate stream: %s"), msg.c_str());
+      wxLogError(_("Can't read from inflate stream: %s"), msg);
       m_lasterror = wxSTREAM_READ_ERROR;
   }
 
@@ -268,7 +265,7 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
 
 bool wxZlibInputStream::SetDictionary(const char *data, size_t datalen)
 {
-    return (inflateSetDictionary(m_inflate, (Bytef*)data, datalen) == Z_OK);
+    return inflateSetDictionary(m_inflate, reinterpret_cast<const Bytef*>(data), datalen) == Z_OK;
 }
 
 bool wxZlibInputStream::SetDictionary(const wxMemoryBuffer &buf)
@@ -299,7 +296,7 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream *stream,
 
 void wxZlibOutputStream::Init(int level, int flags)
 {
-  m_deflate = NULL;
+  m_deflate = nullptr;
   m_z_buffer = new unsigned char[ZSTREAM_BUFFER_SIZE];
   m_z_size = ZSTREAM_BUFFER_SIZE;
   m_pos = 0;
@@ -400,7 +397,7 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
     return 0;
 
   int err = Z_OK;
-  m_deflate->next_in = (unsigned char *)buffer;
+  m_deflate->next_in = const_cast<unsigned char*>(static_cast<const unsigned char*>(buffer));
   m_deflate->avail_in = size;
 
   while (err == Z_OK && m_deflate->avail_in > 0) {
@@ -424,7 +421,7 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
     wxString msg(m_deflate->msg, *wxConvCurrent);
     if (!msg)
       msg = wxString::Format(_("zlib error %d"), err);
-    wxLogError(_("Can't write to deflate stream: %s"), msg.c_str());
+    wxLogError(_("Can't write to deflate stream: %s"), msg);
   }
 
   size -= m_deflate->avail_in;
@@ -439,7 +436,7 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 
 bool wxZlibOutputStream::SetDictionary(const char *data, size_t datalen)
 {
-    return (deflateSetDictionary(m_deflate, (Bytef*)data, datalen) == Z_OK);
+    return deflateSetDictionary(m_deflate, reinterpret_cast<const Bytef*>(data), datalen) == Z_OK;
 }
 
 bool wxZlibOutputStream::SetDictionary(const wxMemoryBuffer &buf)

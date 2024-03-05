@@ -2,7 +2,6 @@
 // Name:        wx/spinbutt.h
 // Purpose:     wxSpinButtonBase class
 // Author:      Julian Smart, Vadim Zeitlin
-// Modified by:
 // Created:     23.07.99
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -61,12 +60,13 @@ public:
 
     // is this spin button vertically oriented?
     bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }
+    virtual void SetIncrement(int WXUNUSED(value)) { }
+    virtual int GetIncrement() const { return 1; }
 
 protected:
     // the range value
     int   m_min;
     int   m_max;
-
     wxDECLARE_NO_COPY_CLASS(wxSpinButtonBase);
 };
 
@@ -78,12 +78,8 @@ protected:
     #include "wx/univ/spinbutt.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/spinbutt.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/spinbutt.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/spinbutt.h"
 #elif defined(__WXGTK__)
-    #include "wx/gtk1/spinbutt.h"
+    #include "wx/gtk/spinbutt.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/spinbutt.h"
 #elif defined(__WXQT__)
@@ -111,7 +107,7 @@ public:
     int GetPosition() const { return m_commandInt; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
-    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSpinEvent(*this); }
+    virtual wxEvent *Clone() const override { return new wxSpinEvent(*this); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinEvent);

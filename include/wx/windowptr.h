@@ -40,7 +40,7 @@ public:
     {
     }
 
-    wxWindowPtr() {}
+    wxWindowPtr() = default;
     wxWindowPtr(const wxWindowPtr& tocopy) : wxSharedPtr<T>(tocopy) {}
 
     wxWindowPtr& operator=(const wxWindowPtr& tocopy)
@@ -54,7 +54,7 @@ public:
         return operator=(wxWindowPtr(win));
     }
 
-    void reset(T* ptr = NULL)
+    void reset(T* ptr = nullptr)
     {
         wxSharedPtr<T>::reset(ptr, wxPrivate::wxWindowDeleter());
     }

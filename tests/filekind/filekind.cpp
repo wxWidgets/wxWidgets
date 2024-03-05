@@ -8,9 +8,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
@@ -178,7 +175,7 @@ void FileKindTestCase::SocketStream()
 //
 void FileKindTestCase::MemoryStream()
 {
-    char buf[20];
+    char buf[20] = { 0 };
     wxMemoryInputStream inStream(buf, sizeof(buf));
     CPPUNIT_ASSERT(inStream.IsSeekable());
     wxMemoryOutputStream outStream(buf, sizeof(buf));

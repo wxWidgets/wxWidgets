@@ -348,7 +348,7 @@ public:
     */
     bool GetMimeTypes(wxArrayString& mimeTypes) const;
 
-    //@{
+    ///@{
     /**
         With the first version of this method, if the @true is returned, the
         string pointed to by @a command is filled with the command which must be
@@ -364,7 +364,7 @@ public:
     */
     bool GetOpenCommand(wxString* command, const MessageParameters& params);
     wxString GetOpenCommand(const wxString& filename) const;
-    //@}
+    ///@}
 
     /**
         If the function returns @true, the string pointed to by @a command is filled
@@ -433,18 +433,19 @@ public:
     /**
         Constructor allowing to specify all the fields at once.
 
-        This is a vararg constructor taking an arbitrary number of extensions
-        after the first four required parameters. The list must be terminated
-        by @c wxNullPtr, notice that @c NULL can't be used here in portable
-        code (C++0x @c nullptr can be used as well if your compiler supports
-        it).
+        This is a variadic constructor taking an arbitrary number of extensions
+        (which can be strings of any kind) after the four required parameters.
+
+        In wxWidgets versions before 3.3.0 the list of extensions had to be
+        terminated with @NULL, but this is not the case any more, trailing
+        @NULL is still allowed, but will be ignored.
      */
+    template <typename... Targs>
     wxFileTypeInfo(const wxString& mimeType,
                    const wxString& openCmd,
                    const wxString& printCmd,
                    const wxString& description,
-                   const wxString& extension,
-                   ...);
+                   Targs... extensions);
 
     /**
        Constructor using an array of string elements corresponding to the

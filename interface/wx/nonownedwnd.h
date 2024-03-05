@@ -37,6 +37,9 @@ public:
 
         This method is available in this class only since wxWidgets 2.9.3,
         previous versions only provided it in wxTopLevelWindow.
+
+        Note that windows with non default shape have a fixed size and can't be
+        resized using SetSize().
     */
     bool SetShape(const wxRegion& region);
 
@@ -55,9 +58,12 @@ public:
             SetShape(path);
         @endcode
 
+        Note that windows with non default shape have a fixed size and can't be
+        resized using SetSize().
+
         As the overload above, this method is not guaranteed to work on all
-        platforms but currently does work in wxMSW, wxOSX/Cocoa and wxGTK (with
-        the appropriate but almost always present X11 extensions) ports.
+        platforms but currently does work in wxMSW, wxOSX/Cocoa, wxGTK (with
+        the appropriate but almost always present X11 extensions) and wxQt ports.
 
         @since 2.9.3
      */

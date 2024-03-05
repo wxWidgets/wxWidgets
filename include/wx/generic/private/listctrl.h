@@ -19,6 +19,8 @@
 #include "wx/timer.h"
 #include "wx/settings.h"
 
+#include <memory>
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -40,7 +42,7 @@ struct wxColWidthInfo
     }
 };
 
-WX_DEFINE_ARRAY_PTR(wxColWidthInfo *, ColWidthArray);
+using ColWidthArray = std::vector<wxColWidthInfo>;
 
 //-----------------------------------------------------------------------------
 //  wxListItemData (internal)
@@ -50,6 +52,10 @@ class wxListItemData
 {
 public:
     wxListItemData(wxListMainWindow *owner);
+    wxListItemData(const wxListItemData&) = delete;
+    wxListItemData(wxListItemData&&);
+    wxListItemData& operator=(const wxListItemData&) = delete;
+    wxListItemData& operator=(wxListItemData&&);
     ~wxListItemData();
 
     void SetItem( const wxListItem &info );
@@ -90,25 +96,22 @@ public:
 
 public:
     // the item image or -1
-    int m_image;
+    int m_image = -1;
 
     // user data associated with the item
-    wxUIntPtr m_data;
+    wxUIntPtr m_data = 0;
 
     // the item coordinates are not used in report mode; instead this pointer is
-    // NULL and the owner window is used to retrieve the item position and size
-    wxRect *m_rect;
+    // null and the owner window is used to retrieve the item position and size
+    wxRect *m_rect = nullptr;
 
     // the list ctrl we are in
     wxListMainWindow *m_owner;
 
-    // custom attributes or NULL
-    wxItemAttr *m_attr;
+    // custom attributes or nullptr
+    wxItemAttr *m_attr = nullptr;
 
 protected:
-    // common part of all ctors
-    void Init();
-
     wxString m_text;
 };
 
@@ -133,7 +136,7 @@ public:
     const wxString& GetText() const { return m_text; }
     void SetText(const wxString& text) { m_text = text; }
 
-    void GetItem( wxListItem &item );
+    void GetItem( wxListItem &item ) const;
 
     bool IsHit( int x, int y ) const;
     int GetImage() const;
@@ -160,13 +163,11 @@ private:
 //  wxListLineData (internal)
 //-----------------------------------------------------------------------------
 
-WX_DECLARE_LIST(wxListItemData, wxListItemDataList);
-
 class wxListLineData
 {
 public:
     // the list of subitems: only may have more than one item in report mode
-    wxListItemDataList m_items;
+    std::vector<wxListItemData> m_items;
 
     // this is not used in report view
     struct GeometryInfo
@@ -189,13 +190,15 @@ public:
             wxASSERT_MSG( m_rectAll.width <= w,
                             wxT("width can only be increased") );
 
+            int delta = (w - m_rectAll.width) / 2;
             m_rectAll.width = w;
-            m_rectLabel.x = m_rectAll.x + (w - m_rectLabel.width) / 2;
-            m_rectIcon.x = m_rectAll.x + (w - m_rectIcon.width) / 2;
-            m_rectHighlight.x = m_rectAll.x + (w - m_rectHighlight.width) / 2;
+            m_rectLabel.x += delta;
+            m_rectIcon.x += delta;
+            m_rectHighlight.x += delta;
         }
-    }
-    *m_gi;
+    };
+
+    std::unique_ptr<GeometryInfo> m_gi;
 
     // is this item selected? [NB: not used in virtual mode]
     bool m_highlighted;
@@ -207,26 +210,19 @@ public:
 
 public:
     wxListLineData(wxListMainWindow *owner);
+    wxListLineData(const wxListLineData&) = delete;
+    wxListLineData(wxListLineData&& other) = default;
 
-    ~wxListLineData()
-    {
-        WX_CLEAR_LIST(wxListItemDataList, m_items);
-        delete m_gi;
-    }
+    wxListLineData& operator=(const wxListLineData&) = delete;
+    wxListLineData& operator=(wxListLineData&&) = default;
+
+    ~wxListLineData() = default;
 
     // called by the owner when it toggles report view
     void SetReportView(bool inReportView)
     {
         // we only need m_gi when we're not in report view so update as needed
-        if ( inReportView )
-        {
-            delete m_gi;
-            m_gi = NULL;
-        }
-        else
-        {
-            m_gi = new GeometryInfo;
-        }
+        m_gi.reset( inReportView ? nullptr : new GeometryInfo );
     }
 
     // are we in report mode?
@@ -287,7 +283,8 @@ public:
                            const wxRect& rect,
                            const wxRect& rectHL,
                            bool highlighted,
-                           bool current );
+                           bool current,
+                           bool checked );
 
 private:
     // set the line to contain num items (only can be > 1 in report mode)
@@ -311,19 +308,6 @@ private:
                            int x,
                            int yMid,    // this is middle, not top, of the text
                            int width);
-};
-
-class wxListLineDataArray : public wxVector<wxListLineData*>
-{
-public:
-    void Clear()
-    {
-        for ( size_t n = 0; n < size(); ++n )
-            delete (*this)[n];
-        clear();
-    }
-
-    ~wxListLineDataArray() { Clear(); }
 };
 
 //-----------------------------------------------------------------------------
@@ -365,7 +349,7 @@ public:
     virtual ~wxListHeaderWindow();
 
     // We never need focus as we don't have any keyboard interface.
-    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool AcceptsFocus() const override { return false; }
 
     void DrawCurrent();
     void AdjustDC( wxDC& dc );
@@ -381,9 +365,12 @@ public:
     int m_colToSend;
     int m_widthToSend;
 
-    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
+    bool m_sortAsc;
+    int m_sortCol;
 
-    virtual void OnInternalIdle() wxOVERRIDE;
+    virtual wxWindow *GetMainWindowOfCompositeControl() override { return GetParent(); }
+
+    virtual void OnInternalIdle() override;
 
 private:
     // common part of all ctors
@@ -407,7 +394,7 @@ private:
 
 public:
     wxListRenameTimer( wxListMainWindow *owner );
-    void Notify() wxOVERRIDE;
+    void Notify() override;
 };
 
 //-----------------------------------------------------------------------------
@@ -425,7 +412,7 @@ public:
     {
     }
 
-    virtual void Notify() wxOVERRIDE;
+    virtual void Notify() override;
 
 private:
     wxListMainWindow *m_owner;
@@ -483,8 +470,6 @@ private:
 //  wxListMainWindow (internal)
 //-----------------------------------------------------------------------------
 
-WX_DECLARE_LIST(wxListHeaderData, wxListHeaderDataList);
-
 class wxListMainWindow : public wxWindow
 {
 public:
@@ -519,14 +504,26 @@ public:
 
     // all these functions only do something if the line is currently visible
 
+    // Make sure that _line_ is the only item highlighted in the control.
+    // _oldLine_ is the old focused item.
+    void HighlightOnly( size_t line, size_t oldLine = (size_t)-1 );
+
+    // In multiple selection mode, instead of sending one notification per item
+    // (which is too slow if a lot of items are selected) we send only one notification
+    // for all of them which is the wxMSW behaviour. Currently done for virtual
+    // list controls and for deselection only.
+    enum SendEvent { SendEvent_None, SendEvent_Normal };
+
     // change the line "selected" state, return true if it really changed
-    bool HighlightLine( size_t line, bool highlight = true);
+    bool HighlightLine( size_t line, bool highlight = true,
+                        SendEvent sendEvent = SendEvent_Normal );
 
     // as HighlightLine() but do it for the range of lines: this is incredibly
     // more efficient for virtual list controls!
     //
     // NB: unlike HighlightLine() this one does refresh the lines on screen
-    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true );
+    void HighlightLines( size_t lineFrom, size_t lineTo, bool on = true,
+                         SendEvent sendEvent = SendEvent_Normal );
 
     // toggle the line state and refresh it
     void ReverseHighlight( size_t line )
@@ -587,13 +584,13 @@ public:
 
     wxTextCtrl *GetEditControl() const
     {
-        return m_textctrlWrapper ? m_textctrlWrapper->GetText() : NULL;
+        return m_textctrlWrapper ? m_textctrlWrapper->GetText() : nullptr;
     }
 
     void ResetTextControl(wxTextCtrl *text)
     {
         delete text;
-        m_textctrlWrapper = NULL;
+        m_textctrlWrapper = nullptr;
     }
 
     void OnRenameTimer();
@@ -625,7 +622,7 @@ public:
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height ) const;
 
-    void SetImageList( wxImageList *imageList, int which );
+    void SetImages( wxWithImages *images, const int which );
     void SetItemSpacing( int spacing, bool isSmall = false );
     int GetItemSpacing( bool isSmall = false );
 
@@ -633,7 +630,7 @@ public:
     void SetColumnWidth( int col, int width );
     void GetColumn( int col, wxListItem &item ) const;
     int GetColumnWidth( int col ) const;
-    int GetColumnCount() const { return m_columns.GetCount(); }
+    int GetColumnCount() const { return m_columns.size(); }
 
     // returns the sum of the heights of all columns
     int GetHeaderWidth() const;
@@ -649,7 +646,8 @@ public:
     {
         return GetSubItemRect(item, wxLIST_GETSUBITEMRECT_WHOLEITEM, rect);
     }
-    bool GetSubItemRect( long item, long subItem, wxRect& rect ) const;
+    bool GetSubItemRect( long item, long subItem, wxRect& rect,
+                         int code = wxLIST_RECT_BOUNDS ) const;
     wxRect GetViewRect() const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
     int GetSelectedItemCount() const;
@@ -678,14 +676,15 @@ public:
         SetItem( info );
     }
 
-    wxImageList* GetSmallImageList() const
-        { return m_small_image_list; }
+    wxWithImages* GetSmallImages() const
+        { return m_small_images; }
+
 
     // set the scrollbars and update the positions of the items
-    void RecalculatePositions(bool noRefresh = false);
+    void RecalculatePositions();
 
-    // refresh the window and the header
-    void RefreshAll();
+    // do the same thing and also call Refresh()
+    void RecalculatePositionsAndRefresh();
 
     long GetNextItem( long item, int geometry, int state ) const;
     void DeleteItem( long index );
@@ -717,7 +716,7 @@ public:
                      const wxPoint& point = wxDefaultPosition );
 
     // override base class virtual to reset m_lineHeight when the font changes
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE
+    virtual bool SetFont(const wxFont& font) override
     {
         if ( !wxWindow::SetFont(font) )
             return false;
@@ -726,6 +725,12 @@ public:
 
         return true;
     }
+
+    void ExtendRulesAndAlternateColour(bool extend)
+    {
+        m_extendRulesAndAlternateColour = extend;
+    }
+
 
     // these are for wxListLineData usage only
 
@@ -747,18 +752,32 @@ public:
         return m_hasFocus ? m_highlightBrush : m_highlightUnfocusedBrush;
     }
 
-    bool HasFocus() const wxOVERRIDE
+    bool HasFocus() const override
     {
         return m_hasFocus;
     }
 
+    void UpdateSelectionCount(bool selected)
+    {
+        wxASSERT_MSG( !IsVirtual(), "Can be called for non virtual lists only" );
+
+        if ( IsSingleSel() )
+            return;
+
+        selected ? ++m_selCount : --m_selCount;
+    }
+
+    void DrawInReportModeOnBlank ( wxDC *dc,
+                                   const wxRect& rect,
+                                   int lineNumber );
+
 protected:
     // the array of all line objects for a non virtual list control (for the
     // virtual list control we only ever use m_lines[0])
-    wxListLineDataArray  m_lines;
+    std::vector<wxListLineData> m_lines;
 
     // the list of column objects
-    wxListHeaderDataList m_columns;
+    std::vector<wxListHeaderData> m_columns;
 
     // currently focused item or -1
     size_t               m_current;
@@ -775,8 +794,9 @@ protected:
     bool                 m_dirty;
 
     wxColour            *m_highlightColour;
-    wxImageList         *m_small_image_list;
-    wxImageList         *m_normal_image_list;
+    wxWithImages        *m_small_images;
+    wxWithImages        *m_normal_images;
+
     int                  m_small_spacing;
     int                  m_normal_spacing;
     bool                 m_hasFocus;
@@ -802,10 +822,17 @@ protected:
            m_lineBeforeLastClicked,
            m_lineSelectSingleOnUp;
 
+    // Multiple selection extends from the anchor. Not used in single-selection mode.
+    size_t m_anchor;
+
     bool m_hasCheckBoxes;
 
 protected:
-    wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE { return GetParent(); }
+    wxWindow *GetMainWindowOfCompositeControl() override { return GetParent(); }
+
+    // the total count of items selected in a non virtual list control with
+    // multiple selections (always 0 otherwise)
+    size_t m_selCount;
 
     // the total count of items in a virtual list control
     size_t m_countVirt;
@@ -820,15 +847,18 @@ protected:
     // get the line data for the given index
     wxListLineData *GetLine(size_t n) const
     {
-        wxASSERT_MSG( n != (size_t)-1, wxT("invalid line index") );
-
+        wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
         if ( IsVirtual() )
         {
-            wxConstCast(this, wxListMainWindow)->CacheLineData(n);
+            self->CacheLineData(n);
             n = 0;
         }
+        else
+        {
+            wxCHECK_MSG( n < m_lines.size(), nullptr, wxT("invalid line index") );
+        }
 
-        return m_lines[n];
+        return &self->m_lines[n];
     }
 
     // get a dummy line which can be used for geometry calculations and such:
@@ -850,12 +880,30 @@ protected:
     // get the colour to be used for drawing the rules
     wxColour GetRuleColour() const
     {
-        return wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
+        return wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
     }
 
 private:
     // initialize the current item if needed
     void UpdateCurrent();
+
+    // change the current (== focused) item, without sending any event
+    // return true if m_current really changed.
+    bool ChangeCurrentWithoutEvent(size_t current);
+
+    // Trying to activate the current item from keyboard is only possible
+    // if it is actually selected. We don't send wxEVT_LIST_ITEM_ACTIVATED
+    // event if it is not, and wxEVT_LIST_KEY_DOWN event should carry -1
+    // in this case, as the wxMSW implementation does.
+    bool ShouldSendEventForCurrent() const
+    {
+        return HasCurrent() && IsHighlighted(m_current);
+    }
+
+    // For multiple selection mode.
+    // Change the selected range from [anchor, oldCurrent] to [anchor, newCurrent]
+    // without generating unnecessary wxEVT_LIST_ITEM_{DE}SELECTED events.
+    void ExtendSelection(size_t oldCurrent, size_t newCurrent);
 
     // delete all items but don't refresh: called from dtor
     void DoDeleteAllItems();
@@ -885,9 +933,12 @@ private:
             *m_highlightUnfocusedBrush;
 
     // wrapper around the text control currently used for in place editing or
-    // NULL if no item is being edited
+    // nullptr if no item is being edited
     wxListTextCtrlWrapper *m_textctrlWrapper;
 
+    // tells whether or not to paint empty rows with alternate colour and draw
+    // rulers on empty rows
+    bool m_extendRulesAndAlternateColour;
 
     wxDECLARE_EVENT_TABLE();
 

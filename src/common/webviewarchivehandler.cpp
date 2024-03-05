@@ -11,9 +11,6 @@
 
 #if wxUSE_WEBVIEW
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #include "wx/webviewarchivehandler.h"
 #include "wx/filesys.h"
@@ -76,13 +73,13 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         }
     }
 
-    //We do not have a protocol string so we just pass the path withouth the
+    //We do not have a protocol string so we just pass the path without the
     if(start == wxString::npos)
     {
         size_t doubleslash = path.find("//");
         //The path is incorrectly formed without // after the scheme
         if(doubleslash == wxString::npos)
-            return NULL;
+            return nullptr;
 
         wxString fspath = "file:" +
                           EscapeFileNameCharsInURL(path.substr(doubleslash + 2).utf8_str());
@@ -95,7 +92,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         //For the path to be valid there must to a path after the protocol
         if(end == wxString::npos)
         {
-            return NULL;
+            return nullptr;
         }
         wxString mainpath = path.substr(0, start);
         wxString archivepath = path.substr(end);
@@ -105,7 +102,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         size_t doubleslash = path.find("//");
         //The path is incorrectly formed without // after the first protocol
         if(doubleslash == wxString::npos)
-            return NULL;
+            return nullptr;
 
         wxString fspath = "file:" +
                           EscapeFileNameCharsInURL(mainpath.substr(doubleslash + 2).utf8_str())

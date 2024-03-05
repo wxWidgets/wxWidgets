@@ -17,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -46,10 +43,10 @@ class MyFrame : public wxFrame
 {
 public:
     MyFrame()
-        : wxFrame(NULL, wxID_ANY, "wxWidgets Power Management Sample",
+        : wxFrame(nullptr, wxID_ANY, "wxWidgets Power Management Sample",
                   wxDefaultPosition, wxSize(500, 200))
     {
-        m_powerResourceBlocker = NULL;
+        m_powerResourceBlocker = nullptr;
 
         wxMenu *fileMenu = new wxMenu;
         fileMenu->Append(wxID_NEW, "Start long running task\tCtrl-S");
@@ -266,7 +263,7 @@ wxEND_EVENT_TABLE()
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit() wxOVERRIDE
+    virtual bool OnInit() override
     {
         new MyFrame;
 

@@ -1,0 +1,177 @@
+# CI workflow for wxWidgets builds using CMake.
+name: CMake builds
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.circleci/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '.circleci/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/ci_mac.yml'
+      - '.github/workflows/ci_msw.yml'
+      - '.github/workflows/ci_msw_cross.yml'
+      - '.github/workflows/docs_update.yml'
+      - 'build/tools/appveyor*.bat'
+      - 'distrib/**'
+      - 'docs/**'
+      - 'interface/**'
+      - 'include/msvc/**'
+      - 'include/wx/msw/**'
+      - 'locale/**'
+      - 'src/msw/**'
+      - '*.md'
+      - '*.yml'
+      - 'wxwidgets.props'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    name: ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Ubuntu 22.04 wxGTK 3
+            runner: ubuntu-22.04
+            cmake_generator: Unix Makefiles
+            cmake_samples: ALL
+          - name: macOS 11 wxOSX
+            runner: macos-11
+            cmake_generator: Xcode
+          - name: macOS 11 wxIOS
+            runner: macos-11
+            cmake_generator: Xcode
+            cmake_defines: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_FIND_ROOT_PATH=/usr/local -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
+            cmake_samples: OFF
+            cmake_tests: OFF
+          - name: Windows MSVC
+            runner: windows-latest
+            no_sudo: 1
+            cmake_defines: -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe
+            cmake_generator: Ninja
+            cmake_samples: SOME
+            cmake_tests: CONSOLE_ONLY
+
+    env:
+      wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
+
+    # Use bash as the shell, even under MSW where the default is PowerShell.
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Set environment variables
+        run: |
+          wxPROC_COUNT=`./build/tools/proc_count.sh`
+          if [ "${{ matrix.cmake_generator }}" == "Xcode" ]; then
+              # Xcode generates a lot of output, suppress it so only warnings and errors are visible
+              wxBUILD_ARGS="-jobs $wxPROC_COUNT -quiet"
+          else
+              wxBUILD_ARGS=-j$wxPROC_COUNT
+          fi
+          echo wxBUILD_ARGS=$wxBUILD_ARGS >> $GITHUB_ENV
+
+          cmake_tests=${{ matrix.cmake_tests }}
+          if [ -z $cmake_tests ]; then cmake_tests=CONSOLE_ONLY; fi
+          echo wxCMAKE_TESTS=$cmake_tests >> $GITHUB_ENV
+
+          cmake_samples=${{ matrix.cmake_samples }}
+          if [ -z $cmake_samples ]; then cmake_samples=SOME; fi
+          echo wxCMAKE_SAMPLES=$cmake_samples >> $GITHUB_ENV
+
+          # Setting this variable suppresses "Error retrieving accessibility bus address"
+          # messages from WebKit tests that we're not interested in.
+          echo NO_AT_BRIDGE=1 >> $GITHUB_ENV
+
+      - name: Before install
+        run: |
+          ./build/tools/before_install.sh
+
+      # required for CMake to find Ninja
+      - name: "[Windows] Set up MSVC Developer Command Prompt"
+        if: runner.os == 'Windows'
+        uses: wxWidgets/gha-setup-vsdevenv@ac61ecb4b05909261f8f375601c0e15aabdd9f10
+
+      - name: Configuring
+        run: |
+          cmake --version
+          mkdir build_cmake
+          pushd build_cmake
+          cmake -G "${{ matrix.cmake_generator }}" ${{ matrix.cmake_defines }} -DwxBUILD_SAMPLES=$wxCMAKE_SAMPLES -DwxBUILD_TESTS=$wxCMAKE_TESTS ..
+
+      - name: Building
+        working-directory: build_cmake
+        run: |
+          cmake --build . -- $wxBUILD_ARGS
+
+      - name: Installing
+        working-directory: build_cmake
+        run: |
+            if [ -z "${{ matrix.no_sudo }}" ]; then
+                sudo cmake --build . --target install
+            else
+                cmake --build . --target install
+            fi
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Testing
+        if: matrix.cmake_tests != 'OFF'
+        working-directory: build_cmake
+        run: |
+          . ../build/tools/httpbin.sh
+
+          httpbin_launch
+
+          ctest -V -C Debug --output-on-failure --interactive-debug-mode 0 . || rc=$?
+          if [ -n "$rc" ]; then
+              httpbin_show_log
+              exit $rc
+          fi
+
+      - name: Testing installation
+        run: |
+          mkdir build_cmake_install_test
+          pushd build_cmake_install_test
+          cmake -G "${{ matrix.cmake_generator }}" ${{ matrix.cmake_defines }} ../samples/minimal
+          cmake --build .

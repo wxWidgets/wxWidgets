@@ -19,9 +19,6 @@
 // for compilers that support precompilation, includes "wx/wx.h"
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 // for all others, include the necessary headers explicitly
 #ifndef WX_PRECOMP
@@ -31,6 +28,7 @@
 #include "wx/artprov.h"
 #include "wx/bookctrl.h"
 #include "wx/sysopt.h"
+#include "wx/wupdlock.h"
 
 #include "wx/display.h"
 
@@ -54,7 +52,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit() wxOVERRIDE;
+    virtual bool OnInit() override;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -69,6 +67,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnFromPoint(wxCommandEvent& event);
     void OnFullScreen(wxCommandEvent& event);
+    void OnContentProtection(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
 #if wxUSE_DISPLAY
@@ -77,6 +76,8 @@ public:
 
     void OnDisplayChanged(wxDisplayChangedEvent& event);
 #endif // wxUSE_DISPLAY
+
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     void OnLeftClick(wxMouseEvent& event);
 
@@ -96,6 +97,7 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+#if wxUSE_DISPLAY
 // Client data class for the choice control containing the video modes
 class MyVideoModeClientData : public wxClientData
 {
@@ -104,6 +106,7 @@ public:
 
     const wxVideoMode mode;
 };
+#endif // wxUSE_DISPLAY
 
 // ----------------------------------------------------------------------------
 // constants
@@ -113,8 +116,10 @@ public:
 enum
 {
     // menu items
-    Display_FromPoint = wxID_HIGHEST + 1,
+    Display_FromPoint = wxID_HIGHEST,
     Display_FullScreen,
+    Display_ContentProtection_None,
+    Display_ContentProtection_Enable,
 
     // controls
     Display_ChangeMode,
@@ -140,6 +145,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Display_Quit,  MyFrame::OnQuit)
     EVT_MENU(Display_FromPoint,  MyFrame::OnFromPoint)
     EVT_MENU(Display_FullScreen, MyFrame::OnFullScreen)
+    EVT_MENU(Display_ContentProtection_None, MyFrame::OnContentProtection)
+    EVT_MENU(Display_ContentProtection_Enable, MyFrame::OnContentProtection)
     EVT_MENU(Display_About, MyFrame::OnAbout)
 
 #if wxUSE_DISPLAY
@@ -148,6 +155,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_DISPLAY_CHANGED(MyFrame::OnDisplayChanged)
 #endif // wxUSE_DISPLAY
+
+    EVT_DPI_CHANGED(MyFrame::OnDPIChanged)
 
     EVT_LEFT_UP(MyFrame::OnLeftClick)
 wxEND_EVENT_TABLE()
@@ -193,7 +202,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
+       : wxFrame(nullptr, wxID_ANY, title, pos, size, style)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -210,6 +219,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     itemFullScreen->SetBitmap(
             wxArtProvider::GetBitmap(wxART_FULL_SCREEN, wxART_MENU)
         );
+
+    wxMenu* contentProtectionMenu = new wxMenu();
+    contentProtectionMenu->Append(Display_ContentProtection_None, _("&None"), "", wxITEM_RADIO);
+    contentProtectionMenu->Check(Display_ContentProtection_None, true);
+    contentProtectionMenu->Append(Display_ContentProtection_Enable, _("&Enabled"), "", wxITEM_RADIO);
+    menuDisplay->Append(wxID_ANY, _("Content &Protection"), contentProtectionMenu);
+
     menuDisplay->Append(itemFullScreen);
     menuDisplay->AppendSeparator();
     menuDisplay->Append(Display_Quit, _("E&xit\tAlt-X"), _("Quit this program"));
@@ -290,6 +306,11 @@ void MyFrame::PopuplateWithDisplayInfo()
         sizer->Add(new wxStaticText(page, wxID_ANY,
                                     wxString::Format("%d", display.GetDepth())));
 
+        sizer->Add(new wxStaticText(page, wxID_ANY, "Scaling: "));
+        sizer->Add(new wxStaticText(page, wxID_ANY,
+                                    wxString::Format("%.2f",
+                                                     display.GetScaleFactor())));
+
         sizer->Add(new wxStaticText(page, wxID_ANY, "Name: "));
         sizer->Add(new wxStaticText(page, wxID_ANY, display.GetName()));
 
@@ -299,40 +320,54 @@ void MyFrame::PopuplateWithDisplayInfo()
 
         // add it to another sizer to have borders around it and button below
         wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
-        sizerTop->Add(sizer, 1, wxALL | wxEXPAND, 10);
+        sizerTop->Add(sizer, wxSizerFlags(1).Expand().DoubleBorder());
 
 #if wxUSE_DISPLAY
         wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
-        const wxArrayVideoModes modes = display.GetModes();
-        const size_t countModes = modes.GetCount();
-        for ( size_t nMode = 0; nMode < countModes; nMode++ )
+
         {
-            const wxVideoMode& mode = modes[nMode];
+            // Speed up the Append() loop below by foregoing the repeated resizing
+            // of the choice dropdown via repeated calls to GetBestSize() which
+            // happens deep inside the Append() call chain and executes another
+            // inner loop calling SendMessage() to get the control contents.
+            //
+            // As there can be a couple of hundreds of video modes, this saves
+            // many thousands of such calls and so has a very noticeable effect.
+            wxWindowUpdateLocker lockUpdates(choiceModes);
 
-            choiceModes->Append(VideoModeToText(mode),
-                                new MyVideoModeClientData(mode));
-        }
+            const wxArrayVideoModes modes = display.GetModes();
+            const size_t countModes = modes.GetCount();
+            for ( size_t nMode = 0; nMode < countModes; nMode++ )
+            {
+                const wxVideoMode& mode = modes[nMode];
 
-        sizer->Add(new wxStaticText(page, wxID_ANY, "&Modes: "));
-        sizer->Add(choiceModes, 0, wxEXPAND);
+                choiceModes->Append(VideoModeToText(mode),
+                    new MyVideoModeClientData(mode));
+            }
+        } // Destroy wxWindowUpdateLocker to finally resize the window now.
+
+        const wxString currentMode = VideoModeToText(display.GetCurrentMode());
+        choiceModes->SetStringSelection(currentMode);
+
+        sizer->Add(new wxStaticText(page, wxID_ANY, "&Modes: "),
+                   wxSizerFlags().CentreVertical());
+        sizer->Add(choiceModes, wxSizerFlags().Expand());
 
         sizer->Add(new wxStaticText(page, wxID_ANY, "Current: "));
-        sizer->Add(new wxStaticText(page, Display_CurrentMode,
-                                    VideoModeToText(display.GetCurrentMode())));
+        sizer->Add(new wxStaticText(page, Display_CurrentMode, currentMode));
 
         sizerTop->Add(new wxButton(page, Display_ResetMode, "&Reset mode"),
-                      0, wxALL | wxCENTRE, 5);
+                      wxSizerFlags().Centre().Border());
 #endif // wxUSE_DISPLAY
 
         page->SetSizer(sizerTop);
         page->Layout();
 
-        m_book->AddPage(page,
-                        wxString::Format("Display %lu",
-                                         (unsigned long)nDpy));
+        m_book->AddPage(page, wxString::Format("Display %zu", nDpy + 1));
     }
 
     SetClientSize(m_book->GetBestSize());
+    SetMinSize(GetSize());
 }
 
 #if wxUSE_DISPLAY
@@ -387,6 +422,34 @@ void MyFrame::OnFullScreen(wxCommandEvent& WXUNUSED(event))
     ShowFullScreen(!IsFullScreen());
 }
 
+void MyFrame::OnContentProtection(wxCommandEvent& event)
+{
+    wxContentProtection contentProtection;
+    switch (event.GetId())
+    {
+    case Display_ContentProtection_Enable:
+        contentProtection = wxCONTENT_PROTECTION_ENABLED;
+        break;
+    default:
+        contentProtection = wxCONTENT_PROTECTION_NONE;
+    }
+
+    if (SetContentProtection(contentProtection))
+    {
+        switch (GetContentProtection())
+        {
+        case wxCONTENT_PROTECTION_ENABLED:
+            wxLogInfo("The contents of this window should now NOT be visible in screen captures.");
+            break;
+        case wxCONTENT_PROTECTION_NONE:
+            wxLogInfo("The contents of this window should now be visible in screen captures.");
+            break;
+        }
+    }
+    else
+        wxLogError("Content protection could not be changed");
+}
+
 #if wxUSE_DISPLAY
 
 void MyFrame::OnChangeMode(wxCommandEvent& event)
@@ -410,6 +473,15 @@ void MyFrame::OnResetMode(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // wxUSE_DISPLAY
+
+void MyFrame::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    wxLogStatus(this, "DPI changed: was %d*%d, now %d*%d",
+                event.GetOldDPI().x, event.GetOldDPI().y,
+                event.GetNewDPI().x, event.GetNewDPI().y);
+
+    event.Skip();
+}
 
 void MyFrame::OnLeftClick(wxMouseEvent& event)
 {

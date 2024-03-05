@@ -2,7 +2,6 @@
 // Name:        wx/afterstd.h
 // Purpose:     #include after STL headers
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07/07/03
 // Copyright:   (c) 2003 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -17,9 +16,9 @@
 #endif
 
 // undo what we did in wx/beforestd.h
-#if defined(__VISUALC__) && __VISUALC__ <= 1201
+#if defined(__VISUALC__) && __VISUALC__ >= 1910
     #pragma warning(pop)
-#endif
+#endif // VC++ >= 14.1
 
 // see beforestd.h for explanation
 #if defined(HAVE_VISIBILITY) && defined(HAVE_BROKEN_LIBSTDCXX_VISIBILITY)

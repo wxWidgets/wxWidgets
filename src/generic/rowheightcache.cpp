@@ -18,10 +18,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
@@ -197,17 +193,17 @@ bool HeightCache::GetLineInfo(unsigned int row, int &start, int &height)
 {
     int y = 0;
     bool found = false;
-    HeightToRowRangesMap::iterator it;
-    for (it = m_heightToRowRange.begin(); it != m_heightToRowRange.end(); ++it)
+
+    for ( const auto& kv : m_heightToRowRange )
     {
-        int rowHeight = it->first;
-        RowRanges* rowRanges = it->second;
-        if (rowRanges->Has(row))
+        int rowHeight = kv.first;
+        const RowRanges& rowRanges = kv.second;
+        if (rowRanges.Has(row))
         {
             height = rowHeight;
             found = true;
         }
-        y += rowHeight * (rowRanges->CountTo(row));
+        y += rowHeight * (rowRanges.CountTo(row));
     }
     if (found)
     {
@@ -224,12 +220,11 @@ bool HeightCache::GetLineStart(unsigned int row, int &start)
 
 bool HeightCache::GetLineHeight(unsigned int row, int &height)
 {
-    HeightToRowRangesMap::iterator it;
-    for (it = m_heightToRowRange.begin(); it != m_heightToRowRange.end(); ++it)
+    for ( const auto& kv : m_heightToRowRange )
     {
-        int rowHeight = it->first;
-        RowRanges* rowRanges = it->second;
-        if (rowRanges->Has(row))
+        int rowHeight = kv.first;
+        const RowRanges& rowRanges = kv.second;
+        if (rowRanges.Has(row))
         {
             height = rowHeight;
             return true;
@@ -241,11 +236,11 @@ bool HeightCache::GetLineHeight(unsigned int row, int &height)
 bool HeightCache::GetLineAt(int y, unsigned int &row)
 {
     unsigned int total = 0;
-    HeightToRowRangesMap::iterator it;
-    for (it = m_heightToRowRange.begin(); it != m_heightToRowRange.end(); ++it)
+
+    for ( const auto& kv : m_heightToRowRange )
     {
-        RowRanges* rowRanges = it->second;
-        total += rowRanges->CountAll();
+        const RowRanges& rowRanges = kv.second;
+        total += rowRanges.CountAll();
     }
 
     if (total == 0)
@@ -296,33 +291,20 @@ bool HeightCache::GetLineAt(int y, unsigned int &row)
 
 void HeightCache::Put(unsigned int row, int height)
 {
-    RowRanges *rowRanges = m_heightToRowRange[height];
-    if (rowRanges == NULL)
-    {
-        rowRanges = new RowRanges();
-        m_heightToRowRange[height] = rowRanges;
-    }
-    rowRanges->Add(row);
+    m_heightToRowRange[height].Add(row);
 }
 
 void HeightCache::Remove(unsigned int row)
 {
-    HeightToRowRangesMap::iterator it;
-    for (it = m_heightToRowRange.begin(); it != m_heightToRowRange.end(); ++it)
+    for ( auto& kv : m_heightToRowRange )
     {
-        RowRanges* rowRanges = it->second;
-        rowRanges->Remove(row);
+        RowRanges& rowRanges = kv.second;
+        rowRanges.Remove(row);
     }
 }
 
 void HeightCache::Clear()
 {
-    HeightToRowRangesMap::iterator it;
-    for (it = m_heightToRowRange.begin(); it != m_heightToRowRange.end(); ++it)
-    {
-        RowRanges* rowRanges = it->second;
-        delete rowRanges;
-    }
     m_heightToRowRange.clear();
 }
 

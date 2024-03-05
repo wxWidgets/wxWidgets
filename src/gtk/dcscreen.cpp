@@ -33,7 +33,7 @@ void wxScreenDCImpl::Init()
 
     m_context = gdk_pango_context_get();
     // Note: The Sun customised version of Pango shipping with Solaris 10
-    // crashes if the language is left NULL (see bug 1374114)
+    // crashes if the language is left null (see bug #2962)
     pango_context_set_language( m_context, gtk_get_default_language() );
     m_layout = pango_layout_new( m_context );
 //    m_fontdesc = pango_font_description_copy( widget->style->font_desc );
@@ -42,20 +42,11 @@ void wxScreenDCImpl::Init()
 
     SetUpDC();
 
-    gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
-    gdk_gc_set_subwindow( m_brushGC, GDK_INCLUDE_INFERIORS );
-    gdk_gc_set_subwindow( m_textGC, GDK_INCLUDE_INFERIORS );
-    gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
+    DontClipSubWindows();
 }
 
 wxScreenDCImpl::~wxScreenDCImpl()
 {
-    g_object_unref(m_context);
-
-    gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
-    gdk_gc_set_subwindow( m_brushGC, GDK_CLIP_BY_CHILDREN );
-    gdk_gc_set_subwindow( m_textGC, GDK_CLIP_BY_CHILDREN );
-    gdk_gc_set_subwindow( m_bgGC, GDK_CLIP_BY_CHILDREN );
 }
 
 void wxScreenDCImpl::DoGetSize(int *width, int *height) const

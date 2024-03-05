@@ -11,9 +11,6 @@
 // ----------------------------------------------------------------------------
 
 #include "testprec.h"
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -85,7 +82,7 @@ void GraphicsContextDrawingTestCase::RunPluginsDrawingCase (
 // GraphicsContextDrawingTestCase::PluginInfo /////////////////////////////////
 
 GraphicsContextDrawingTestCase::PluginInfo::PluginInfo()
-    : library(NULL), gcFactory(NULL), destroy(NULL) {
+    : library(nullptr), gcFactory(nullptr), destroy(nullptr) {
 }
 
 GraphicsContextDrawingTestCase::PluginInfo::~PluginInfo()

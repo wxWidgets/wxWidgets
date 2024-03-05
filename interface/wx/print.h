@@ -195,6 +195,9 @@ public:
 
         Pass a print preview object plus other normal frame arguments.
         The print preview object will be destroyed by the frame when it closes.
+
+        Note that @a size typically should @e not be specified explicitly to
+        let the frame use its default size, adapted to its contents.
     */
     wxPreviewFrame(wxPrintPreviewBase* preview, wxWindow* parent,
                    const wxString& title = "Print Preview",
@@ -290,7 +293,7 @@ public:
     created. In particular, printing code relying on wxDC::GetTextExtent()
     heavily (for example, wxHtmlEasyPrinting and other wxHTML classes do) is
     affected. It is recommended to use native preview functionality on
-    platforms that offer it (OS X, GTK+).
+    platforms that offer it (macOS, GTK+).
 
     @library{wxcore}
     @category{printing}
@@ -308,7 +311,7 @@ public:
         printing, and the address of an optional block of printer data, which will
         be copied to the print preview object's print data.
 
-        If @a printoutForPrinting is non-@NULL, a @b "Print..." button will be placed on
+        If @a printoutForPrinting is non-null, a @b "Print..." button will be placed on
         the preview frame so that the user can print directly from the preview interface.
 
         @remarks
@@ -319,8 +322,8 @@ public:
         Use IsOk() to check whether the wxPrintPreview object was created correctly.
     */
     wxPrintPreview(wxPrintout* printout,
-                   wxPrintout* printoutForPrinting = NULL,
-                   wxPrintDialogData* data = NULL);
+                   wxPrintout* printoutForPrinting = nullptr,
+                   wxPrintDialogData* data = nullptr);
     wxPrintPreview(wxPrintout* printout,
                    wxPrintout* printoutForPrinting,
                    wxPrintData* data);
@@ -370,6 +373,13 @@ public:
         or @NULL if none exists.
     */
     virtual wxPrintout* GetPrintoutForPrinting() const;
+
+    /**
+        Gets the current percentage zoom level of the preview canvas.
+
+        @see SetZoom()
+    */
+    virtual int GetZoom() const;
 
     /**
         Returns @true if the wxPrintPreview is valid, @false otherwise.
@@ -427,6 +437,8 @@ public:
 
     /**
         Sets the percentage preview zoom, and refreshes the preview canvas accordingly.
+
+        @see GetZoom()
     */
     virtual void SetZoom(int percent);
 };
@@ -459,7 +471,7 @@ public:
 
         @see wxPrintDialogData, wxPrintData
     */
-    wxPrinter(wxPrintDialogData* data = NULL);
+    wxPrinter(wxPrintDialogData* data = nullptr);
 
     /**
         Creates the default printing abort window, with a cancel button.
@@ -702,6 +714,14 @@ public:
         and maximum page values that the user can select, and the required page range to
         be printed.
 
+        If the user chose to print only selected pages in the MSW printing
+        dialog, then @a pageFrom and @a pageTo are used to limit the page range
+        and IsPageSelected() is called later to query whether the page is
+        selected and so should be printed.
+
+        If the user chose to print the current page, then @a pageFrom and
+        @a pageTo should be both set to the current page number.
+
         By default this returns (1, 32000) for the page minimum and maximum values, and
         (1, 1) for the required page range.
 
@@ -771,6 +791,20 @@ public:
     virtual bool HasPage(int pageNum);
 
     /**
+        Should be overridden to return @true if this page is selected, or @false
+        if not.
+
+        This function is called for all the pages in the valid range when the
+        user chooses "Selection" in the "Page Range" area of the printing
+        dialog under MSW. It is not currently called under the other platforms.
+
+        The default implementation always returns @false.
+
+        @since 3.3.0
+    */
+    virtual bool IsPageSelected(int pageNum);
+
+    /**
         Returns @true if the printout is currently being used for previewing.
 
         @see GetPreview()
@@ -805,7 +839,7 @@ public:
         page rectangle, or page margins rectangle to perform your own scaling.
 
         @note
-        While the underlying drawing model of OS X is floating-point,
+        While the underlying drawing model of macOS is floating-point,
         wxWidgets's drawing model scales from integer coordinates.
     */
     void MapScreenSizeToDevice();

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/filesys/filesys.cpp
 // Purpose:     wxFileSystem unit test
-// Author:      Vaclav Slavik
+// Author:      Vaclav Slavik, Vyacheslav Lisovski
 // Created:     2004-03-28
 // Copyright:   (c) 2004 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,9 +12,6 @@
 
 #include "testprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -23,6 +20,12 @@
 #include "wx/filesys.h"
 
 #if wxUSE_FILESYSTEM
+
+#include "wx/fs_data.h"
+#include "wx/fs_mem.h"
+#include "wx/sstream.h"
+
+#include <memory>
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -39,44 +42,19 @@ public:
     wxString RightLocation(const wxString& p) { return GetRightLocation(p); }
     wxString Anchor(const wxString& p) { return GetAnchor(p); }
 
-    bool CanOpen(const wxString& WXUNUSED(url)) wxOVERRIDE { return false; }
+    bool CanOpen(const wxString& WXUNUSED(url)) override { return false; }
     wxFSFile *OpenFile(wxFileSystem& WXUNUSED(fs),
-                       const wxString& WXUNUSED(url)) wxOVERRIDE { return NULL; }
+                       const wxString& WXUNUSED(url)) override { return nullptr; }
 
 
 };
 
 
 // ----------------------------------------------------------------------------
-// test class
+// tests themselves
 // ----------------------------------------------------------------------------
 
-class FileSystemTestCase : public CppUnit::TestCase
-{
-public:
-    FileSystemTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( FileSystemTestCase );
-        CPPUNIT_TEST( UrlParsing );
-        CPPUNIT_TEST( FileNameToUrlConversion );
-        CPPUNIT_TEST( UnicodeFileNameToUrlConversion );
-    CPPUNIT_TEST_SUITE_END();
-
-    void UrlParsing();
-    void FileNameToUrlConversion();
-    void UnicodeFileNameToUrlConversion();
-
-    wxDECLARE_NO_COPY_CLASS(FileSystemTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( FileSystemTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileSystemTestCase, "FileSystemTestCase" );
-
-void FileSystemTestCase::UrlParsing()
+TEST_CASE("wxFileSystem::URLParsing", "[filesys][url][parse]")
 {
     static const struct Data
     {
@@ -151,14 +129,15 @@ void FileSystemTestCase::UrlParsing()
     for ( size_t n = 0; n < WXSIZEOF(data); n++ )
     {
         const Data& d = data[n];
-        CPPUNIT_ASSERT_EQUAL( d.protocol, tst.Protocol(d.url) );
-        CPPUNIT_ASSERT_EQUAL( d.left, tst.LeftLocation(d.url) );
-        CPPUNIT_ASSERT_EQUAL( d.right, tst.RightLocation(d.url) );
-        CPPUNIT_ASSERT_EQUAL( d.anchor, tst.Anchor(d.url) );
+        INFO( "Testing URL " << wxString(d.url) );
+        CHECK( tst.Protocol(d.url) == d.protocol );
+        CHECK( tst.LeftLocation(d.url) == d.left );
+        CHECK( tst.RightLocation(d.url) == d.right );
+        CHECK( tst.Anchor(d.url) == d.anchor );
     }
 }
 
-void FileSystemTestCase::FileNameToUrlConversion()
+TEST_CASE("wxFileSystem::FileNameToUrlConversion", "[filesys][url][filename]")
 {
     const static struct Data {
         const wxChar *input, *expected;
@@ -179,12 +158,13 @@ void FileSystemTestCase::FileNameToUrlConversion()
         wxFileName fn1(d.input);
         wxString url1 = wxFileSystem::FileNameToURL(fn1);
 
-        CPPUNIT_ASSERT_EQUAL( d.expected, url1 );
-        CPPUNIT_ASSERT( fn1.SameAs(wxFileSystem::URLToFileName(url1)) );
+        INFO( "Testing URL " << wxString(d.input) );
+        CHECK( url1 == d.expected );
+        CHECK( fn1.SameAs(wxFileName::URLToFileName(url1)) );
     }
 }
 
-void FileSystemTestCase::UnicodeFileNameToUrlConversion()
+TEST_CASE("wxFileSystem::UnicodeFileNameToUrlConversion", "[filesys][url][filename][unicode]")
 {
     const unsigned char filename_utf8[] = {
               0x4b, 0x72, 0xc3, 0xa1, 0x73, 0x79, 0x50, 0xc5,
@@ -196,7 +176,100 @@ void FileSystemTestCase::UnicodeFileNameToUrlConversion()
 
     wxString url = wxFileSystem::FileNameToURL(filename);
 
-    CPPUNIT_ASSERT( filename.SameAs(wxFileSystem::URLToFileName(url)) );
+    CHECK( filename.SameAs(wxFileName::URLToFileName(url)) );
+}
+
+TEST_CASE("wxFileSystem::DataSchemeFSHandler", "[filesys][dataschemefshandler][openfile]")
+{
+    // Install wxDataSchemeFSHandler just for the duration of this test.
+    class AutoDataSchemeFSHandler
+    {
+    public:
+        AutoDataSchemeFSHandler() : m_handler(new wxDataSchemeFSHandler())
+        {
+            wxFileSystem::AddHandler(m_handler.get());
+        }
+        ~AutoDataSchemeFSHandler()
+        {
+            wxFileSystem::RemoveHandler(m_handler.get());
+        }
+    private:
+        std::unique_ptr<wxDataSchemeFSHandler> const m_handler;
+    } autoDataSchemeFSHandler;
+
+    wxFileSystem fs;
+
+    const struct wxTestCaseData
+    {
+        const char *info, *input, *result1, *result2;
+    } testData[] =
+    {
+        { "Testing minimal URI with data",
+            "data:,the%20data", "text/plain", "the data" },
+        { "Testing base64 encoded",
+            "data:x-t1/x-s1;base64,SGVsbG8sIFdvcmxkIQ==", "x-t1/x-s1", "Hello, World!" },
+        { "Testing complex media type",
+            "data:image/svg+xml;utf8,<svg width='10'... </svg>", "image/svg+xml;utf8", "<svg width='10'... </svg>" }
+    };
+
+    for ( const auto& dataItem : testData )
+    {
+        INFO(dataItem.info);
+        std::unique_ptr<wxFSFile> file(fs.OpenFile(dataItem.input));
+        CHECK(file->GetMimeType() == dataItem.result1);
+
+        wxStringOutputStream sos;
+        sos.Write(*file->GetStream());
+        CHECK(sos.GetString () == dataItem.result2);
+    }
+}
+
+// Test that using FindFirst() after removing a previously found URL works:
+// this used to be broken, see https://github.com/wxWidgets/wxWidgets/issues/18744
+TEST_CASE("wxFileSystem::MemoryFSHandler", "[filesys][memoryfshandler][find]")
+{
+    // Install wxMemoryFSHandler just for the duration of this test.
+    class AutoMemoryFSHandler
+    {
+    public:
+        AutoMemoryFSHandler()
+            : m_handler(new wxMemoryFSHandler())
+        {
+            wxFileSystem::AddHandler(m_handler.get());
+        }
+
+        ~AutoMemoryFSHandler()
+        {
+            wxFileSystem::RemoveHandler(m_handler.get());
+        }
+
+    private:
+        std::unique_ptr<wxMemoryFSHandler> const m_handler;
+    } autoMemoryFSHandler;
+
+    wxMemoryFSHandler::AddFile("foo.txt", "foo contents");
+    wxMemoryFSHandler::AddFile("bar.txt", "bar contents");
+    wxFileSystem fs;
+
+    wxString const url = fs.FindFirst("memory:*.txt");
+    INFO("Found URL was: " << url);
+
+    wxString filename;
+    REQUIRE( url.StartsWith("memory:", &filename) );
+
+    // We don't know which of the two files will be found, this depends on the
+    // details of the hash table implementation and varies across builds, so
+    // handle both cases and remove the other file, which should certainly
+    // invalidate the iterator pointing to it.
+    if ( filename == "foo.txt" )
+        wxMemoryFSHandler::RemoveFile("bar.txt");
+    else if ( filename == "bar.txt" )
+        wxMemoryFSHandler::RemoveFile("foo.txt");
+    else
+        FAIL("Unexpected filename: " << filename);
+
+    CHECK( fs.FindFirst(url) == url );
+    CHECK( fs.FindNext() == "" );
 }
 
 #endif // wxUSE_FILESYSTEM

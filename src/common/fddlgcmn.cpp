@@ -2,7 +2,6 @@
 // Name:        src/common/fddlgcmn.cpp
 // Purpose:     common parts of wxFindReplaceDialog implementations
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.08.01
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_FINDREPLDLG
 
@@ -87,13 +83,14 @@ void wxFindReplaceDialogBase::Send(wxFindDialogEvent& event)
         }
     }
 
-    if ( !GetEventHandler()->ProcessEvent(event) )
+    if ( !ProcessWindowEvent(event) )
     {
         // the event is not propagated upwards to the parent automatically
         // because the dialog is a top level window, so do it manually as
-        // in 9 cases of 10 the message must be processed by the dialog
+        // in 9 cases out of 10 the message must be processed by the dialog
         // owner and not the dialog itself
-        (void)GetParent()->GetEventHandler()->ProcessEvent(event);
+        if ( GetParent() )
+            (void)GetParent()->ProcessWindowEvent(event);
     }
 }
 

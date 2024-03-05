@@ -6,7 +6,6 @@
 //    Vadim Zeitlin got rid of all ifdefs (11.12.99)
 //    Sylvain Bougnoux added wxStopWatch class
 //    Guillermo Rodriguez <guille@iies.es> rewrote from scratch (Dic/99)
-// Modified by:
 // Created:     20.06.2003 (extracted from common/timercmn.cpp)
 // Copyright:   (c) 1998-2003 wxWidgets Team
 // Licence:     wxWindows licence
@@ -23,9 +22,6 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/stopwatch.h"
 

@@ -24,7 +24,7 @@
 class WXDLLIMPEXP_CORE wxMSWOwnerDrawnButtonBase
 {
 protected:
-    // Ctor takes the back pointer to the real window, must be non-NULL.
+    // Ctor takes the back pointer to the real window, must be non-null.
     wxMSWOwnerDrawnButtonBase(wxWindow* win) :
         m_win(win)
     {
@@ -37,14 +37,7 @@ protected:
     // has virtual functions, but no virtual destructor without making the dtor
     // virtual which is not needed here as objects are never deleted via
     // pointers to this class (and protected dtor enforces this).
-    //
-    // Unfortunately g++ 3.4.5 still complains about the dtor being non virtual
-    // even if it is protected, but actually does not give any warnings if the
-    // dtor is not defined at all, so work around this 3.4.5 bug inside our
-    // general g++ workaround.
-#if wxCHECK_GCC_VERSION(4, 0)
-    ~wxMSWOwnerDrawnButtonBase() { }
-#endif // g++ 4.0+
+    ~wxMSWOwnerDrawnButtonBase() = default;
 
     // Make the control owner drawn if necessary to implement support for the
     // given foreground colour.
@@ -117,7 +110,7 @@ public:
     {
     }
 
-    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE
+    virtual bool SetForegroundColour(const wxColour& colour) override
     {
         if ( !Base::SetForegroundColour(colour) )
             return false;
@@ -127,7 +120,7 @@ public:
         return true;
     }
 
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) wxOVERRIDE
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) override
     {
         return MSWDrawButton(item) || Base::MSWOnDraw(item);
     }

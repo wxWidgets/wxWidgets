@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/glcanvas.mm
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under Macintosh
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -18,9 +17,6 @@
 
 #include "wx/wxprec.h"
 
-#if defined(__BORLANDC__)
-    #pragma hdrstop
-#endif
 
 #if wxUSE_GLCANVAS
 
@@ -33,6 +29,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
 {
@@ -89,7 +86,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     if ( GLAttrs && n1 > 1 )
     {
         n1--; // skip the ending '0'
-        while ( p < n1 )
+        while ( p < (unsigned)n1 )
         {
             data[p] = (NSOpenGLPixelFormatAttribute) GLAttrs[p];
             p++;
@@ -100,7 +97,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     {
         n2--; // skip the ending '0'
         unsigned p2 = 0;
-        while ( p2 < n2 )
+        while ( p2 < (unsigned)n2 )
             data[p++] = (NSOpenGLPixelFormatAttribute) ctxAttrs[p2++];
     }
 
@@ -149,17 +146,12 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
         impl->doCommandBySelector(aSelector, self, _cmd);
 }
 
-// We intentionally don't call [super update], so suppress the warning about it.
-wxCLANG_WARNING_SUPPRESS(objc-missing-super-calls)
-
-- (void) update
+- (NSOpenGLContext *) openGLContext
 {
-    // Prevent the base class code from breaking resizing on macOS 10.14.5
-    // (this is not necessary on the older versions, but doesn't seem to do any
-    // harm there neither).
+    // Prevent the NSOpenGLView from making it's own context
+    // We want to force using wxGLContexts
+    return nullptr;
 }
-
-wxCLANG_WARNING_RESTORE(objc-missing-super-calls)
 
 @end
 
@@ -178,6 +170,7 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
     
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
+    [v setWantsBestResolutionOpenGLSurface:YES];
     
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, wxWidgetImpl::Widget_UserKeyEvents | wxWidgetImpl::Widget_UserMouseEvents );
     SetPeer(c);

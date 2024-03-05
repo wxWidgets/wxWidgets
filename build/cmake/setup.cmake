@@ -23,14 +23,6 @@ include(CheckTypeSize)
 include(CMakePushCheckState)
 include(TestBigEndian)
 
-if(
-    APPLE AND
-    CMAKE_OSX_DEPLOYMENT_TARGET VERSION_LESS 10.9 AND
-    (CMAKE_CXX_STANDARD EQUAL 11 OR CMAKE_CXX_STANDARD EQUAL 14)
-  )
-    set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} "-stdlib=libc++")
-endif()
-
 # Add a definition to setup.h and append it to a list of defines for
 # for compile checks
 macro(wx_setup_definition def)
@@ -53,6 +45,7 @@ endif()
 if(UNIX)
     wx_setup_definition(wxUSE_UNIX)
     wx_setup_definition(__UNIX__)
+    list(APPEND CMAKE_REQUIRED_DEFINITIONS -D_FILE_OFFSET_BITS=64)
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -65,15 +58,21 @@ endif()
 
 if(WXGTK)
     # Add GTK version definitions
-    foreach(gtk_version 1.2.7 2.0 2.10 2.18 2.20 3.0)
-        if(wxTOOLKIT_VERSION VERSION_GREATER gtk_version)
-            string(REPLACE . "" gtk_version_dotless ${gtk_version})
-            set(__WXGTK${gtk_version_dotless}__ ON)
+    foreach(gtk_version 2.0 2.10 2.18 2.20 3.0 3.90.0)
+        if(NOT wxTOOLKIT_VERSION VERSION_LESS gtk_version)
+            if(gtk_version EQUAL 3.90.0)
+                set(__WXGTK4__ ON)
+            elseif(gtk_version EQUAL 3.0)
+                set(__WXGTK3__ ON)
+            else()
+                string(REPLACE . "" gtk_version_dotless ${gtk_version})
+                set(__WXGTK${gtk_version_dotless}__ ON)
+            endif()
         endif()
     endforeach()
 endif()
 
-set(wxINSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+set(wxINSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
 check_include_files("stdlib.h;stdarg.h;string.h;float.h" STDC_HEADERS)
 
@@ -82,6 +81,12 @@ if(wxBUILD_SHARED)
         check_cxx_compiler_flag(-fvisibility=hidden HAVE_VISIBILITY)
     endif()
 endif() # wxBUILD_SHARED
+
+if(MSVC)
+    set(DISABLE_ALL_WARNINGS "/w")
+else()
+    set(DISABLE_ALL_WARNINGS "-w")
+endif()
 
 # wx_check_cxx_source_compiles(<code> <var> [headers...])
 function(wx_check_cxx_source_compiles code res_var)
@@ -97,10 +102,15 @@ function(wx_check_cxx_source_compiles code res_var)
         endif()
     endforeach()
     set(src "${src}\n\nint main(int argc, char* argv[]) {\n ${code}\nreturn 0; }")
+    # We're not interested in any warnings that can arise in the test, which is
+    # especially important if -Werror is globally in effect.
+    cmake_push_check_state()
+    set(CMAKE_REQUIRED_FLAGS ${DISABLE_ALL_WARNINGS})
     check_cxx_source_compiles("${src}" ${res_var})
+    cmake_pop_check_state()
 endfunction()
 
-# wx_check_cxx_source_compiles(<code> <var> [headers...])
+# wx_check_c_source_compiles(<code> <var> [headers...])
 function(wx_check_c_source_compiles code res_var)
     set(src)
     foreach(header ${ARGN})
@@ -132,40 +142,6 @@ if(NOT MSVC)
         # try to understand how can we copy va_lists
         set(VA_LIST_IS_ARRAY YES)
     endif()
-endif()
-
-wx_check_c_source_compiles(
-    "#define test(fmt, ...) printf(fmt, __VA_ARGS__)
-    test(\"%s %d %p\", \"test\", 1, 0);"
-    HAVE_VARIADIC_MACROS
-    stdio.h
-    )
-#TODO: wxNO_VARIADIC_MACROS
-if(wxUSE_STL)
-    wx_check_cxx_source_compiles("
-        std::vector<int> moo;
-        std::list<int> foo;
-        std::vector<int>::iterator it =
-            std::find_if(moo.begin(), moo.end(),
-                std::bind2nd(std::less<int>(), 3));"
-        wxTEST_STL
-        string functional algorithm vector list
-        )
-    if(NOT wxTEST_STL)
-        message(FATAL_ERROR "Can't use wxUSE_STL as basic STL functionality is missing")
-    endif()
-
-    wx_check_cxx_source_compiles("
-        std::string foo, bar;
-        foo.compare(bar);
-        foo.compare(1, 1, bar);
-        foo.compare(1, 1, bar, 1, 1);
-        foo.compare(\"\");
-        foo.compare(1, 1, \"\");
-        foo.compare(1, 1, \"\", 2);"
-        HAVE_STD_STRING_COMPARE
-        string
-        )
 endif()
 
 # Check for availability of GCC's atomic operations builtins.
@@ -235,23 +211,6 @@ if(UNIX)
         endif()
     endif()
 
-    if(wxUSE_ON_FATAL_EXCEPTION)
-        wx_check_cxx_source_compiles(
-            "return 0; }
-            extern void testSigHandler(int) { };
-            int foo() {
-            struct sigaction sa;
-            sa.sa_handler = testSigHandler;"
-            wxTYPE_SA_HANDLER_IS_INT
-            signal.h
-            )
-        if(wxTYPE_SA_HANDLER_IS_INT)
-            set(wxTYPE_SA_HANDLER int)
-        else()
-            set(wxTYPE_SA_HANDLER void)
-        endif()
-    endif()
-
     # backtrace() and backtrace_symbols() for wxStackWalker
     if(wxUSE_STACKWALKER)
         wx_check_cxx_source_compiles("
@@ -276,7 +235,7 @@ if(UNIX)
     wx_check_funcs(mkstemp mktemp)
 
     # get the library function to use for wxGetDiskSpace(): it is statfs() under
-    # Linux and *BSD and statvfs() under Solaris
+    # Linux and *BSD and statvfs() under Solaris and NetBSD
     wx_check_c_source_compiles("
         return 0; }
         #if defined(__BSD__)
@@ -294,9 +253,23 @@ if(UNIX)
         l += fs.f_blocks;
         l += fs.f_bavail;"
         HAVE_STATFS)
-    if(HAVE_STATFS)
-        set(WX_STATFS_T "struct statfs")
-        wx_check_cxx_source_compiles("
+    wx_check_c_source_compiles("
+        return 0; }
+        #include <sys/statvfs.h>
+
+        int foo() {
+        long l;
+        struct statvfs fs;
+        statvfs(\"/\", &fs);
+        l = fs.f_bsize;
+        l += fs.f_blocks;
+        l += fs.f_bavail;"
+        HAVE_STATVFS)
+    if(HAVE_STATVFS)
+      set(WX_STATFS_T "struct statvfs")
+    elseif(HAVE_STATFS)
+      set(WX_STATFS_T "struct statfs")
+      wx_check_cxx_source_compiles("
             return 0; }
             #if defined(__BSD__)
             #include <sys/param.h>
@@ -308,12 +281,7 @@ if(UNIX)
             int foo() {
             struct statfs fs;
             statfs(\"/\", &fs);"
-            HAVE_STATFS_DECL)
-    else()
-        # TODO: implement statvfs checks
-        if(HAVE_STATVFS)
-            set(WX_STATFS_T statvfs_t)
-        endif()
+        HAVE_STATFS_DECL)
     endif()
 
     if(NOT HAVE_STATFS AND NOT HAVE_STATVFS)
@@ -373,6 +341,10 @@ if(UNIX)
 
     wx_check_funcs(fdopen)
 
+    if(wxBUILD_LARGEFILE_SUPPORT)
+        wx_check_funcs(fseeko)
+    endif()
+
     if(wxUSE_TARSTREAM)
         wx_check_funcs(sysconf)
 
@@ -419,11 +391,19 @@ if(UNIX)
         check_symbol_exists(inet_aton arpa/inet.h HAVE_INET_ATON)
         check_symbol_exists(inet_addr arpa/inet.h HAVE_INET_ADDR)
     endif(wxUSE_SOCKETS)
+
+    if(wxUSE_JOYSTICK AND NOT APPLE)
+        check_include_files("linux/joystick.h" HAVE_JOYSTICK_H)
+        if(NOT HAVE_JOYSTICK_H)
+            message(WARNING "wxJoystick is not available")
+            wx_option_force_value(wxUSE_JOYSTICK OFF)
+        endif()
+    endif()
 endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
     cmake_push_check_state(RESET)
-    set(CMAKE_REQUIRED_LIBRARIES pthread)
+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
     wx_check_cxx_source_compiles("
         void *p;
         pthread_cleanup_push(ThreadCleanupFunc, p);
@@ -460,19 +440,10 @@ if(CMAKE_USE_PTHREADS_INIT)
             message(WARNING "wxMutex won't be recursive on this platform")
         endif()
     endif()
-    if(wxUSE_COMPILER_TLS)
-        # test for compiler thread-specific variables support
-        wx_check_c_source_compiles("
-            static __thread int n = 0;
-            static __thread int *p = 0;"
-            HAVE___THREAD_KEYWORD
-            pthread.h
-            )
-        wx_check_cxx_source_compiles(
-            "void foo(abi::__forced_unwind&);"
-            HAVE_ABI_FORCEDUNWIND
-            cxxabi.h)
-    endif()
+    wx_check_cxx_source_compiles(
+        "void foo(abi::__forced_unwind&);"
+        HAVE_ABI_FORCEDUNWIND
+        cxxabi.h)
     cmake_pop_check_state()
 endif() # CMAKE_USE_PTHREADS_INIT
 
@@ -536,8 +507,6 @@ check_struct_has_member("struct passwd" pw_gecos pwd.h HAVE_PW_GECOS)
 # Check for functions
 # ---------------------------------------------------------------------------
 
-# TODO: wcslen
-
 # Check various string symbols
 foreach(func
     ftime
@@ -546,48 +515,30 @@ foreach(func
     wcsdup wcsnlen wcscasecmp wcsncasecmp
     wcsrctombs
     wcstoull
+    wcslen
     )
     string(TOUPPER ${func} func_upper)
     check_symbol_exists(${func} wchar.h HAVE_${func_upper})
 endforeach()
 
 # Check various functions
-foreach(func
-    fsync
-    snprintf vsnprintf strnlen strtoull
-    setpriority
-    )
-    string(TOUPPER ${func} func_upper)
-    check_function_exists(${func} HAVE_${func_upper})
-endforeach()
+wx_check_funcs(fsync
+               snprintf vsnprintf strnlen strtoull
+               setpriority
+               gettimeofday
+               )
 
 if(MSVC)
     check_symbol_exists(vsscanf stdio.h HAVE_VSSCANF)
 endif()
 
-# at least under IRIX with mipsPro the C99 round() function is available when
-# building using the C compiler but not when using C++ one
-check_cxx_symbol_exists(round math.h HAVE_ROUND)
-
 # Check includes
-if(NOT MSVC_VERSION LESS 1600)
-    check_include_file_cxx(tr1/type_traits HAVE_TR1_TYPE_TRAITS)
-    check_include_file_cxx(type_traits HAVE_TYPE_TRAITS)
-endif()
 check_include_file(fcntl.h HAVE_FCNTL_H)
 check_include_file(langinfo.h HAVE_LANGINFO_H)
 check_include_file(sched.h HAVE_SCHED_H)
 check_include_file(unistd.h HAVE_UNISTD_H)
-check_include_file(w32api.h HAVE_W32API_H)
 check_include_file(wchar.h HAVE_WCHAR_H)
 check_include_file(wcstr.h HAVE_WCSTR_H)
-
-
-wx_check_cxx_source_compiles(
-    "std::wstring s;"
-    HAVE_STD_WSTRING
-    string
-    )
 
 if(wxUSE_DATETIME)
     # check for timezone variable
@@ -609,16 +560,13 @@ if(wxUSE_DATETIME)
 endif()
 
 cmake_push_check_state(RESET)
-set(CMAKE_REQUIRED_LIBRARIES dl)
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
 check_symbol_exists(dlopen dlfcn.h HAVE_DLOPEN)
 cmake_pop_check_state()
 if(HAVE_DLOPEN)
-    check_symbol_exists(dlerror dlfcn.h HAVE_DLERROR)
     check_symbol_exists(dladdr dlfcn.h HAVE_DLADDR)
-else()
-    check_symbol_exists(shl_load dl.h HAVE_SHL_LOAD)
+    check_symbol_exists(dl_iterate_phdr link.h HAVE_DL_ITERATE_PHDR)
 endif()
-check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
 
 if(APPLE)
     set(wxUSE_EPOLL_DISPATCHER OFF)
@@ -648,15 +596,8 @@ if(wxUSE_XLOCALE)
     set(CMAKE_EXTRA_INCLUDE_FILES)
 endif()
 
-# Check size and availability of various types
-set(SYSTYPES
-    pid_t size_t
-    wchar_t int long short
-    gid_t uid_t
-    )
-if(NOT MSVC)
-    list(APPEND SYSTYPES mode_t off_t)
-endif()
+# Check sizes of various types
+set(SYSTYPES size_t wchar_t int long short)
 
 foreach(SYSTYPE ${SYSTYPES})
     string(TOUPPER ${SYSTYPE} SYSTYPE_UPPER)
@@ -671,6 +612,14 @@ check_type_size("long long" SIZEOF_LONG_LONG)
 check_type_size(ssize_t SSIZE_T)
 
 test_big_endian(WORDS_BIGENDIAN)
+
+# For generators using build type, ensure that wxHAVE_CEF_DEBUG matches it.
+if(wxUSE_WEBVIEW_CHROMIUM AND DEFINED CMAKE_BUILD_TYPE)
+    string(TOUPPER ${CMAKE_BUILD_TYPE} build_type)
+    if(${build_type} STREQUAL DEBUG)
+        set(wxHAVE_CEF_DEBUG ON)
+    endif()
+endif()
 
 configure_file(build/cmake/setup.h.in ${wxSETUP_HEADER_FILE})
 if(DEFINED wxSETUP_HEADER_FILE_DEBUG)

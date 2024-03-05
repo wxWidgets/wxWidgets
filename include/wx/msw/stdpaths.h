@@ -2,7 +2,6 @@
 // Name:        wx/msw/stdpaths.h
 // Purpose:     wxStandardPaths for Win32
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2004-10-19
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -21,17 +20,18 @@ class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
     // implement base class pure virtuals
-    virtual wxString GetExecutablePath() const wxOVERRIDE;
-    virtual wxString GetConfigDir() const wxOVERRIDE;
-    virtual wxString GetUserConfigDir() const wxOVERRIDE;
-    virtual wxString GetDataDir() const wxOVERRIDE;
-    virtual wxString GetUserDataDir() const wxOVERRIDE;
-    virtual wxString GetUserLocalDataDir() const wxOVERRIDE;
-    virtual wxString GetPluginsDir() const wxOVERRIDE;
-    virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
+    virtual wxString GetExecutablePath() const override;
+    virtual wxString GetConfigDir() const override;
+    virtual wxString GetUserConfigDir() const override;
+    virtual wxString GetDataDir() const override;
+    virtual wxString GetUserDataDir() const override;
+    virtual wxString GetUserLocalDataDir() const override;
+    virtual wxString GetPluginsDir() const override;
+    virtual wxString GetSharedLibrariesDir() const override;
+    virtual wxString GetUserDir(Dir userDir) const override;
     virtual wxString MakeConfigFileName(const wxString& basename,
                                         ConfigFileConv conv = ConfigFileConv_Ext
-                                        ) const wxOVERRIDE;
+                                        ) const override;
 
 
     // MSW-specific methods
@@ -95,8 +95,8 @@ protected:
 class WXDLLIMPEXP_BASE wxStandardPathsWin16 : public wxStandardPaths
 {
 public:
-    virtual wxString GetConfigDir() const wxOVERRIDE;
-    virtual wxString GetUserConfigDir() const wxOVERRIDE;
+    virtual wxString GetConfigDir() const override;
+    virtual wxString GetUserConfigDir() const override;
 };
 
 #endif // _WX_MSW_STDPATHS_H_

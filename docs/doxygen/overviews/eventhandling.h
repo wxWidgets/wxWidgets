@@ -315,7 +315,7 @@ In addition to using a method of the object generating the event itself, you
 can use a method from a completely different object as an event handler:
 
 @code
-void MyFrameHandler::OnFrameExit( wxCommandEvent & )
+void MyFrameHandler::OnFrameExit(wxCommandEvent&)
 {
     // Do something useful.
 }
@@ -324,8 +324,8 @@ MyFrameHandler myFrameHandler;
 
 MyFrame::MyFrame()
 {
-      Bind( wxEVT_MENU, &MyFrameHandler::OnFrameExit,
-              &myFrameHandler, wxID_EXIT );
+      Bind(wxEVT_MENU, &MyFrameHandler::OnFrameExit,
+              &myFrameHandler, wxID_EXIT);
 }
 @endcode
 
@@ -339,14 +339,14 @@ To use an ordinary function or a static method as an event handler you would
 write something like this:
 
 @code
-void HandleExit( wxCommandEvent & )
+void HandleExit(wxCommandEvent&)
 {
     // Do something useful
 }
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_MENU, &HandleExit, wxID_EXIT );
+    Bind(wxEVT_MENU, &HandleExit, wxID_EXIT);
 }
 @endcode
 
@@ -357,7 +357,7 @@ handler:
 
 struct MyFunctor
 {
-    void operator()( wxCommandEvent & )
+    void operator()(wxCommandEvent&)
     {
         // Do something useful
     }
@@ -367,7 +367,7 @@ MyFunctor myFunctor;
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_MENU, myFunctor, wxID_EXIT );
+    Bind(wxEVT_MENU, myFunctor, wxID_EXIT);
 }
 @endcode
 
@@ -389,14 +389,14 @@ Another common example of a generic functor is boost::function<> or, since
 C++11, std::function<>:
 
 @code
-#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+#if wxCHECK_CXX_STD(201103L)
 using namespace std;
 using namespace std::placeholders;
 #else // Pre C++11 compiler
 using namespace boost;
 #endif
 
-void MyHandler::OnExit( wxCommandEvent & )
+void MyHandler::OnExit(wxCommandEvent&)
 {
     // Do something useful
 }
@@ -405,9 +405,9 @@ MyHandler myHandler;
 
 MyFrame::MyFrame()
 {
-    function< void ( wxCommandEvent & ) > exitHandler( bind( &MyHandler::OnExit, &myHandler, _1 ));
+    function<void (wxCommandEvent& )> exitHandler(bind(&MyHandler::OnExit, &myHandler, _1));
 
-    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
+    Bind(wxEVT_MENU, exitHandler, wxID_EXIT);
 }
 @endcode
 
@@ -416,7 +416,7 @@ With the aid of @c bind<>() you can even use methods or functions which
 don't quite have the correct signature:
 
 @code
-void MyHandler::OnExit( int exitCode, wxCommandEvent &, wxString goodByeMessage )
+void MyHandler::OnExit(int exitCode, wxCommandEvent&, wxString goodByeMessage)
 {
     // Do something useful
 }
@@ -425,10 +425,10 @@ MyHandler myHandler;
 
 MyFrame::MyFrame()
 {
-    function< void ( wxCommandEvent & ) > exitHandler(
-            bind( &MyHandler::OnExit, &myHandler, EXIT_FAILURE, _1, "Bye" ));
+    function<void (wxCommandEvent&)> exitHandler(
+            bind(&MyHandler::OnExit, &myHandler, EXIT_FAILURE, _1, "Bye"));
 
-    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
+    Bind(wxEVT_MENU, exitHandler, wxID_EXIT);
 }
 @endcode
 
@@ -477,7 +477,7 @@ doesn't count as having handled the event and the search continues):
     checking the static event table entries, so if both a dynamic and a static
     event handler match the same event, the static one is never going to be
     used unless wxEvent::Skip() is called in the dynamic one. Also note that
-    the dynamically bound handlers are searched in order of their registration
+    the dynamically bound handlers are searched in reverse order of their registration
     during program run-time, i.e. later bound handlers take priority over the
     previously bound ones.
     </li>
@@ -676,13 +676,15 @@ void MyWindow::SendEvent()
 
 Under certain circumstances, you must define your own event class e.g., for
 sending more complex data from one place to another. Apart from defining your
-event class, you also need to define your own event table macro if you want to
-use event tables for handling events of this type.
+event class, you also need to define your own event table macro if you still
+need to use event tables (now considered legacy) for handling events of this type.
+See ChessBoardEvent in the event sample for a full working implementation
+of a new wxEvent-derived class.
 
-Here is an example:
+Here is a simple example:
 
 @code
-// define a new event class
+// create a new event class derived from wxEvent
 class MyPlotEvent: public wxEvent
 {
 public:
@@ -702,40 +704,51 @@ private:
     const wxPoint m_pos;
 };
 
-// we define a single MY_PLOT_CLICKED event type associated with the class
-// above but typically you are going to have more than one event type, e.g. you
-// could also have MY_PLOT_ZOOMED or MY_PLOT_PANNED &c -- in which case you
-// would just add more similar lines here
-wxDEFINE_EVENT(MY_PLOT_CLICKED, MyPlotEvent);
+// We use a single myEVT_PLOT_CLICKED event type associated with the class
+// above but often you are going to have more than one event type, e.g. you
+// could also have myEVT_PLOT_ZOOMED or myEVT_PLOT_PANNED etc. -- in which case
+// you would just add more similar lines here.
+//
+// Note that this macro, as all declarations, should be in the header, and
+// there should be a matching definition macro in some source file (see
+// wxDEFINE_EVENT below).
+wxDECLARE_EVENT(myEVT_PLOT_CLICKED, MyPlotEvent);
 
 
-// if you want to support old compilers you need to use some ugly macros:
+// --- Skip this part if you're only going to use Bind() (as recommended) ---
+
+// The following typedef and macro are needed only when the new event class
+// still needs to be used with the legacy approach to handling events - event
+// table macros or Connect() - to cast the type of a function handling it to
+// the type expected by the legacy event handling machinery.
 typedef void (wxEvtHandler::*MyPlotEventFunction)(MyPlotEvent&);
 #define MyPlotEventHandler(func) wxEVENT_HANDLER_CAST(MyPlotEventFunction, func)
 
-// if your code is only built using reasonably modern compilers, you could just
-// do this instead:
-#define MyPlotEventHandler(func) (&func)
+// If the new event is to be used with event tables, a macro for creating
+// event table entries for the new event type must be defined.
+#define EVT_PLOT_CLICKED(id, func) \
+    wx__DECLARE_EVT1(myEVT_PLOT_CLICKED, id, MyPlotEventHandler(func))
 
-// finally define a macro for creating the event table entries for the new
-// event type
-//
-// remember that you don't need this at all if you only use Bind<>() and that
-// you can replace MyPlotEventHandler(func) with just &func unless you use a
-// really old compiler
-#define MY_EVT_PLOT_CLICK(id, func) \
-    wx__DECLARE_EVT1(MY_PLOT_CLICKED, id, MyPlotEventHandler(func))
+// --- End of the part which is only relevant when using event tables ---
 
 
-// example of code handling the event (you will use one of these methods, not
-// both, of course):
+// Up until now, we only had declarations that would typically appear in a
+// header file. Starting from now we have the definitions, which must occur
+// only once in the program and so need to be in a source file.
+
+// This defines the event type declared above. If you use multiple event types,
+// you need to do it for each of them.
+wxDEFINE_EVENT(myEVT_PLOT_CLICKED, MyPlotEvent);
+
+// example of code handling the event (you will use one of these methods,
+// not both, of course):
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_PLOT(ID_MY_WINDOW, MyFrame::OnPlot)
+    EVT_PLOT_CLICKED(ID_MY_WINDOW, MyFrame::OnPlot)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
 {
-    Bind(MY_PLOT_CLICKED, &MyFrame::OnPlot, this, ID_MY_WINDOW);
+    Bind(myEVT_PLOT_CLICKED, &MyFrame::OnPlot, this, ID_MY_WINDOW);
 }
 
 void MyFrame::OnPlot(MyPlotEvent& event)
@@ -747,7 +760,7 @@ void MyFrame::OnPlot(MyPlotEvent& event)
 // example of code generating the event:
 void MyWindow::SendEvent()
 {
-    MyPlotEvent event(MY_PLOT_CLICKED, GetId(), wxPoint(...));
+    MyPlotEvent event(myEVT_PLOT_CLICKED, GetId(), wxPoint(...));
     event.SetEventObject(this);
     ProcessWindowEvent(event);
 }
@@ -860,9 +873,32 @@ positive.
 See @ref page_stdevtid for the list of standard identifiers available.
 You can use wxID_HIGHEST to determine the number above which it is safe to
 define your own identifiers. Or, you can use identifiers below wxID_LOWEST.
-Finally, you can allocate identifiers dynamically using wxNewId() function too.
-If you use wxNewId() consistently in your application, you can be sure that
-your identifiers don't conflict accidentally.
+
+
+@subsection overview_events_with_mouse_capture Event Handlers and Mouse Capture
+
+Some events are generated in response to a user action performed using the
+mouse and, often, the mouse will be captured (see wxWindow::CaptureMouse()) by
+the window generating the event in this case. This happens when the user is
+dragging the mouse, i.e. for all events involving resizing something (e.g. @c
+EVT_SPLITTER_SASH_POS_CHANGING), but also, perhaps less obviously, when
+selecting items (e.g. @c EVT_LIST_ITEM_SELECTED).
+
+When the mouse is captured, the control sending events will continue receiving
+all mouse events, meaning that the event handler can't do anything relying on
+getting them in any other window. Most notably, simply showing a modal dialog
+won't work as expected, as the dialog won't receive any mouse input and appear
+unresponsive to the user.
+
+The best solution is to avoid showing modal dialogs from such event handlers
+entirely, as it can be jarring for the user to be interrupted in their workflow
+by a dialog suddenly popping up. However if it's really indispensable to show a
+dialog, you need to forcefully break the existing mouse capture by capturing
+(and then releasing, because you don't really need the capture) it yourself:
+@code
+    dialog.CaptureMouse();
+    dialog.ReleaseMouse();
+@endcode
 
 
 @subsection overview_events_custom_generic Generic Event Table Macros

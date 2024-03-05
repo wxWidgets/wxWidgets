@@ -134,7 +134,7 @@ public:
             The parameter's name.
         @param value
             Pointer to the string to be filled with the parameter value, must
-            be non-@NULL.
+            be non-null.
 
         @since 3.0
      */

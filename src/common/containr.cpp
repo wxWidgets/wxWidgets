@@ -2,7 +2,6 @@
 // Name:        src/common/containr.cpp
 // Purpose:     implementation of wxControlContainer
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.01
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -19,9 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/containr.h"
@@ -50,25 +46,21 @@
 // wxControlContainerBase
 // ----------------------------------------------------------------------------
 
-void wxControlContainerBase::UpdateParentCanFocus()
+void wxControlContainerBase::UpdateParentCanFocus(bool acceptsFocusChildren)
 {
     // In the ports where it does something non trivial, the parent window
     // should only be focusable if it doesn't have any focusable children
     // (e.g. native focus handling in wxGTK totally breaks down otherwise).
-    m_winParent->SetCanFocus(m_acceptsFocusSelf && !m_acceptsFocusChildren);
+    m_winParent->SetCanFocus(m_acceptsFocusSelf && !acceptsFocusChildren);
 }
 
 bool wxControlContainerBase::UpdateCanFocusChildren()
 {
     const bool acceptsFocusChildren = HasAnyFocusableChildren();
-    if ( acceptsFocusChildren != m_acceptsFocusChildren )
-    {
-        m_acceptsFocusChildren = acceptsFocusChildren;
 
-        UpdateParentCanFocus();
-    }
+    UpdateParentCanFocus(acceptsFocusChildren);
 
-    return m_acceptsFocusChildren;
+    return acceptsFocusChildren;
 }
 
 bool wxControlContainerBase::HasAnyFocusableChildren() const
@@ -192,7 +184,7 @@ bool wxControlContainerBase::HasTransparentBackground() const
 
 wxControlContainer::wxControlContainer()
 {
-    m_winLastFocused = NULL;
+    m_winLastFocused = nullptr;
 }
 
 void wxControlContainer::SetLastFocus(wxWindow *win)
@@ -238,121 +230,41 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 }
 
 // --------------------------------------------------------------------
-// The following four functions are used to find other radio buttons
-// within the same group. Used by wxSetFocusToChild
+// The following functions is used by wxSetFocusToChild()
 // --------------------------------------------------------------------
 
-#if wxUSE_RADIOBTN
+#if defined(USE_RADIOBTN_NAV)
 
-wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
+namespace
 {
-    if ( btn->HasFlag(wxRB_GROUP) || btn->HasFlag(wxRB_SINGLE) )
-        return NULL;
 
-    const wxWindowList& siblings = btn->GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator nodeThis = siblings.Find(btn);
-    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
-
-    // Iterate over all previous siblings until we find the next radio button
-    wxWindowList::compatibility_iterator nodeBefore = nodeThis->GetPrevious();
-    wxRadioButton *prevBtn = 0;
-    while (nodeBefore)
-    {
-        prevBtn = wxDynamicCast(nodeBefore->GetData(), wxRadioButton);
-        if (prevBtn)
-            break;
-
-        nodeBefore = nodeBefore->GetPrevious();
-    }
-
-    if (!prevBtn || prevBtn->HasFlag(wxRB_SINGLE))
-    {
-        // no more buttons in group
-        return NULL;
-    }
-
-    return prevBtn;
-}
-
-wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn)
-{
-    if (btn->HasFlag(wxRB_SINGLE))
-        return NULL;
-
-    const wxWindowList& siblings = btn->GetParent()->GetChildren();
-    wxWindowList::compatibility_iterator nodeThis = siblings.Find(btn);
-    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
-
-    // Iterate over all previous siblings until we find the next radio button
-    wxWindowList::compatibility_iterator nodeNext = nodeThis->GetNext();
-    wxRadioButton *nextBtn = 0;
-    while (nodeNext)
-    {
-        nextBtn = wxDynamicCast(nodeNext->GetData(), wxRadioButton);
-        if (nextBtn)
-            break;
-
-        nodeNext = nodeNext->GetNext();
-    }
-
-    if ( !nextBtn || nextBtn->HasFlag(wxRB_GROUP) || nextBtn->HasFlag(wxRB_SINGLE) )
-    {
-        // no more buttons or the first button of the next group
-        return NULL;
-    }
-
-    return nextBtn;
-}
-
-wxRadioButton* wxGetFirstButtonInGroup(wxRadioButton *btn)
-{
-    while (true)
-    {
-        wxRadioButton* prevBtn = wxGetPreviousButtonInGroup(btn);
-        if (!prevBtn)
-            return btn;
-
-        btn = prevBtn;
-    }
-}
-
-wxRadioButton* wxGetLastButtonInGroup(wxRadioButton *btn)
-{
-    while (true)
-    {
-        wxRadioButton* nextBtn = wxGetNextButtonInGroup(btn);
-        if (!nextBtn)
-            return btn;
-
-        btn = nextBtn;
-    }
-}
-
-wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
+wxRadioButton* wxGetSelectedButtonInGroup(const wxRadioButton *btn)
 {
     // Find currently selected button
     if (btn->GetValue())
-        return btn;
+        return const_cast<wxRadioButton*>(btn);
 
     if (btn->HasFlag(wxRB_SINGLE))
-        return NULL;
+        return nullptr;
 
     wxRadioButton *selBtn;
 
     // First check all previous buttons
-    for (selBtn = wxGetPreviousButtonInGroup(btn); selBtn; selBtn = wxGetPreviousButtonInGroup(selBtn))
+    for (selBtn = btn->GetPreviousInGroup(); selBtn; selBtn = selBtn->GetPreviousInGroup())
         if (selBtn->GetValue())
             return selBtn;
 
     // Now all following buttons
-    for (selBtn = wxGetNextButtonInGroup(btn); selBtn; selBtn = wxGetNextButtonInGroup(selBtn))
+    for (selBtn = btn->GetNextInGroup(); selBtn; selBtn = selBtn->GetNextInGroup())
         if (selBtn->GetValue())
             return selBtn;
 
-    return NULL;
+    return nullptr;
 }
 
-#endif // wxUSE_RADIOBTN
+} // anonymous namespace
+
+#endif // USE_RADIOBTN_NAV
 
 // ----------------------------------------------------------------------------
 // Keyboard handling - this is the place where the TAB traversal logic is
@@ -366,7 +278,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 {
     // for a TLW we shouldn't involve the parent window, it has nothing to do
     // with keyboard navigation inside this TLW
-    wxWindow *parent = m_winParent->IsTopLevel() ? NULL
+    wxWindow *parent = m_winParent->IsTopLevel() ? nullptr
                                                  : m_winParent->GetParent();
 
     // the event is propagated downwards if the event emitter was our parent
@@ -384,7 +296,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
     if ( event.IsWindowChange() && !goingDown )
     {
         // check if we have a unique notebook-like child
-        wxWindow *bookctrl = NULL;
+        wxWindow *bookctrl = nullptr;
         for ( wxWindowList::const_iterator i = children.begin(),
                                          end = children.end();
               i != end;
@@ -398,7 +310,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
                     // this is the second book-like control already so don't do
                     // anything as we don't know which one should have its page
                     // changed
-                    bookctrl = NULL;
+                    bookctrl = nullptr;
                     break;
                 }
 
@@ -445,8 +357,8 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
     if ( goingDown )
     {
         // just to be sure it's not used (normally this is not necessary, but
-        // doesn't hurt neither)
-        m_winLastFocused = NULL;
+        // doesn't hurt either)
+        m_winLastFocused = nullptr;
 
         // start from first or last depending on where we're going
         node = forward ? children.GetFirst() : children.GetLast();
@@ -472,7 +384,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // If we are in a radio button group, start from the first item in the
             // group
             if ( event.IsFromTab() && wxIsKindOf(winFocus, wxRadioButton ) )
-                winFocus = wxGetFirstButtonInGroup((wxRadioButton*)winFocus);
+                winFocus = static_cast<wxRadioButton*>(winFocus)->GetFirstInGroup();
 #endif // USE_RADIOBTN_NAV
             // ok, we found the focus - now is it our child?
             start_node = children.Find( winFocus );
@@ -496,7 +408,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
         node = forward ? start_node->GetNext() : start_node->GetPrevious();
     }
 
-    // we want to cycle over all elements passing by NULL
+    // we want to cycle over all elements passing by nullptr
     for ( ;; )
     {
         // don't go into infinite loop
@@ -590,20 +502,20 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             // find the correct radio button to focus
             if ( forward )
             {
-                child = wxGetNextButtonInGroup(lastBtn);
+                child = lastBtn->GetNextInGroup();
                 if ( !child )
                 {
                     // no next button in group, set it to the first button
-                    child = wxGetFirstButtonInGroup(lastBtn);
+                    child = lastBtn->GetFirstInGroup();
                 }
             }
             else
             {
-                child = wxGetPreviousButtonInGroup(lastBtn);
+                child = lastBtn->GetPreviousInGroup();
                 if ( !child )
                 {
                     // no previous button in group, set it to the last button
-                    child = wxGetLastButtonInGroup(lastBtn);
+                    child = lastBtn->GetLastInGroup();
                 }
             }
 
@@ -655,7 +567,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 void wxControlContainer::HandleOnWindowDestroy(wxWindowBase *child)
 {
     if ( child == m_winLastFocused )
-        m_winLastFocused = NULL;
+        m_winLastFocused = nullptr;
 }
 
 // ----------------------------------------------------------------------------
@@ -679,7 +591,7 @@ void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
 
 bool wxControlContainer::SetFocusToChild()
 {
-    return wxSetFocusToChild(m_winParent, NULL);
+    return wxSetFocusToChild(m_winParent, nullptr);
 }
 
 
@@ -694,7 +606,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 {
     wxCHECK_MSG( win, false, wxT("wxSetFocusToChild(): invalid window") );
     //    wxCHECK_MSG( childLastFocused, false,
-    //             wxT("wxSetFocusToChild(): NULL child poonter") );
+    //             wxT("wxSetFocusToChild(): null child pointer") );
 
     if ( childLastFocused && *childLastFocused )
     {
@@ -703,7 +615,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         {
             // And it also could have become hidden in the meanwhile
             // We want to focus on the deepest widget visible
-            wxWindow *deepestVisibleWindow = NULL;
+            wxWindow *deepestVisibleWindow = nullptr;
 
             while ( *childLastFocused )
             {
@@ -713,7 +625,17 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
                         deepestVisibleWindow = *childLastFocused;
                 }
                 else
-                    deepestVisibleWindow = NULL;
+                    deepestVisibleWindow = nullptr;
+
+                // We shouldn't be looking for the child to focus beyond the
+                // TLW boundary. And we use IsTopNavigationDomain() here
+                // instead of IsTopLevel() because wxMDIChildFrame is also TLW
+                // from this point of view.
+                if ( (*childLastFocused)->
+                        IsTopNavigationDomain(wxWindow::Navigation_Tab) )
+                {
+                    break;
+                }
 
                 *childLastFocused = (*childLastFocused)->GetParent();
             }
@@ -735,7 +657,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         else
         {
             // it doesn't count as such any more
-            *childLastFocused = NULL;
+            *childLastFocused = nullptr;
         }
     }
 

@@ -2,7 +2,6 @@
 // Name:        wx/richtext/richtextborderspage.h
 // Purpose:     A border editing page for the wxRTC formatting dialog.
 // Author:      Julian Smart
-// Modified by:
 // Created:     21/10/2010 11:34:24
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -73,8 +72,8 @@ public:
     wxRichTextAttr* GetAttributes();
 
     /// Data transfer
-    virtual bool TransferDataToWindow() wxOVERRIDE;
-    virtual bool TransferDataFromWindow() wxOVERRIDE;
+    virtual bool TransferDataToWindow() override;
+    virtual bool TransferDataFromWindow() override;
 
     /// Updates the synchronization checkboxes to reflect the state of the attributes
     void UpdateSyncControls();

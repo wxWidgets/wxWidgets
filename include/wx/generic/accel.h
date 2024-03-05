@@ -20,7 +20,6 @@ class WXDLLIMPEXP_CORE wxAcceleratorTable : public wxObject
 public:
     wxAcceleratorTable();
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
-    virtual ~wxAcceleratorTable();
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
@@ -38,8 +37,8 @@ public:
 
 protected:
     // ref counting code
-    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
+    virtual wxObjectRefData *CreateRefData() const override;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const override;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxAcceleratorTable);

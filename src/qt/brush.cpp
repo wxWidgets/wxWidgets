@@ -13,6 +13,7 @@
 #include "wx/qt/private/utils.h"
 #include "wx/bitmap.h"
 
+#include <QtGui/QBitmap>
 #include <QtGui/QBrush>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject);
@@ -61,27 +62,60 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 
 class wxBrushRefData: public wxGDIRefData
 {
-    public:
-        wxBrushRefData() :
-            m_style(wxBRUSHSTYLE_INVALID)
+public:
+    wxBrushRefData() :
+        m_style(wxBRUSHSTYLE_INVALID)
+    {
+    }
+
+    wxBrushRefData( const wxBrushRefData& data )
+        : wxGDIRefData(),
+          m_qtBrush(data.m_qtBrush)
+    {
+        m_style = data.m_style;
+    }
+
+    void DoSetStipple(const wxBitmap& stipple)
+    {
+        m_style = wxBRUSHSTYLE_STIPPLE;
+
+        if ( !stipple.GetMask() && stipple.GetDepth() == 32 )
         {
+            m_qtBrush.setTextureImage(stipple.GetHandle()->toImage());
         }
-
-        wxBrushRefData( const wxBrushRefData& data )
-            : m_qtBrush(data.m_qtBrush)
+        else
         {
-            m_style = data.m_style;
+            if ( stipple.GetMask() || stipple.GetDepth() == 1 )
+            {
+                auto pixmap = stipple.GetMask() ? stipple.GetMask()->GetBitmap().GetHandle()
+                                                : stipple.GetHandle();
+                m_qtBrush.setTexture(*pixmap);
+                m_style = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
+            }
+            else
+            {
+                m_qtBrush.setTexture(*stipple.GetHandle());
+
+                // Note: This code used to be in wxQtDCImpl::SetBrush().
+                //       But, do we really need to do it ?
+
+                //Don't use the mask
+                QPixmap p = m_qtBrush.texture();
+                p.setMask(QBitmap());
+                m_qtBrush.setTexture(p);
+            }
         }
+    }
 
-        bool operator == (const wxBrushRefData& data) const
-        {
-            return m_qtBrush == data.m_qtBrush;
-        }
+    bool operator == (const wxBrushRefData& data) const
+    {
+        return m_qtBrush == data.m_qtBrush;
+    }
 
-        QBrush m_qtBrush;
+    QBrush m_qtBrush;
 
-        // To keep if mask is stippled
-        wxBrushStyle m_style;
+    // To keep if mask is stippled
+    wxBrushStyle m_style;
 };
 
 //-----------------------------------------------------------------------------
@@ -91,7 +125,6 @@ class wxBrushRefData: public wxGDIRefData
 
 wxBrush::wxBrush()
 {
-    m_refData = new wxBrushRefData();
 }
 
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
@@ -113,11 +146,8 @@ wxBrush::wxBrush(const wxColour& col, int style)
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
-    if (stipple.GetMask() != NULL)
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
-    else
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
+
+    static_cast<wxBrushRefData*>(m_refData)->DoSetStipple(stipple);
 }
 
 
@@ -143,12 +173,8 @@ void wxBrush::SetStyle(wxBrushStyle style)
 void wxBrush::SetStipple(const wxBitmap& stipple)
 {
     AllocExclusive();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
 
-    if (stipple.GetMask() != NULL)
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
-    else
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
+    static_cast<wxBrushRefData*>(m_refData)->DoSetStipple(stipple);
 }
 
 
@@ -164,16 +190,22 @@ bool wxBrush::operator==(const wxBrush& brush) const
 
 wxColour wxBrush::GetColour() const
 {
+    wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid brush") );
+
     return wxColour(M_BRUSHDATA.color());
 }
 
 wxBrushStyle wxBrush::GetStyle() const
 {
+    wxCHECK_MSG( IsOk(), wxBRUSHSTYLE_INVALID, "invalid brush" );
+
     return M_STYLEDATA;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
+    wxCHECK_MSG( IsOk(), nullptr, "invalid brush" );
+
     QPixmap p = M_BRUSHDATA.texture();
 
     if (p.isNull())
@@ -184,7 +216,7 @@ wxBitmap *wxBrush::GetStipple() const
 
 QBrush wxBrush::GetHandle() const
 {
-    return M_BRUSHDATA;
+    return IsOk() ? M_BRUSHDATA : QBrush();
 }
 
 wxGDIRefData *wxBrush::CreateGDIRefData() const

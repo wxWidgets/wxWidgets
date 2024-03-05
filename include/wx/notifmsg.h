@@ -36,7 +36,7 @@ public:
     // latter may be empty in which case only the title will be shown)
     wxNotificationMessageBase(const wxString& title,
                               const wxString& message = wxEmptyString,
-                              wxWindow *parent = NULL,
+                              wxWindow *parent = nullptr,
                               int flags = wxICON_INFORMATION)
     {
         Init();
@@ -96,7 +96,7 @@ protected:
     // Common part of all ctors.
     void Create(const wxString& title = wxEmptyString,
         const wxString& message = wxEmptyString,
-        wxWindow *parent = NULL,
+        wxWindow *parent = nullptr,
         int flags = wxICON_INFORMATION)
     {
         SetTitle(title);
@@ -111,7 +111,7 @@ private:
 
     void Init()
     {
-        m_impl = NULL;
+        m_impl = nullptr;
     }
 
     wxDECLARE_NO_COPY_CLASS(wxNotificationMessageBase);
@@ -123,7 +123,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_NOTIFICATION_MESSAGE_ACTION, w
 
 #if (defined(__WXGTK__) && wxUSE_LIBNOTIFY) || \
     (defined(__WXMSW__) && wxUSE_TASKBARICON && wxUSE_TASKBARICON_BALLOONS) || \
-    (defined(__WXOSX_COCOA__) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8))
+    defined(__WXOSX_COCOA__)
     #define wxHAS_NATIVE_NOTIFICATION_MESSAGE
 #endif
 
@@ -152,7 +152,7 @@ public:
     wxNotificationMessage() { Init(); }
     wxNotificationMessage(const wxString& title,
                           const wxString& message = wxString(),
-                          wxWindow *parent = NULL,
+                          wxWindow *parent = nullptr,
                           int flags = wxICON_INFORMATION)
     {
         Init();
@@ -164,7 +164,7 @@ public:
         const wxString& shortcutPath = wxString(),
         const wxString& appId = wxString());
 
-    // returns the task bar icon which was used previously (may be NULL)
+    // returns the task bar icon which was used previously (may be null)
     static wxTaskBarIcon *UseTaskBarIcon(wxTaskBarIcon *icon);
 
 #endif // defined(__WXMSW__) && defined(wxHAS_NATIVE_NOTIFICATION_MESSAGE)

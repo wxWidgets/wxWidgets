@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_math */
-//@{
+///@{
 
 /**
     Returns a non-zero value if @a x is neither infinite nor NaN (not a
@@ -89,9 +89,18 @@ double wxRadToDeg(double rad);
 unsigned int wxCTZ(wxUint32 x);
 
 /**
-    Small wrapper around round().
+    Small wrapper around std::lround().
+
+    This function exists for compatibility, as it was more convenient than
+    std::round() before C++11. Use std::lround() in the new code.
+
+    It is defined for all floating point types @c T and can be also used with
+    integer types for compatibility, but such use is deprecated -- simply
+    remove the calls to wxRound() from your code if you're using it with
+    integer types, it is unnecessary in this case.
 */
-int wxRound(double x);
+template <typename T>
+int wxRound(T x);
 
 /**
    Returns true if both double values are identical. This is
@@ -106,5 +115,15 @@ bool wxIsSameDouble(double x, double y);
 */
 bool wxIsNullDouble(double x);
 
-//@}
+/**
+    Computes the product of a number with a fraction with rounding.
+
+    This function returns @c n*numerator/denominator rounding the result. It is
+    similar to the standard Win32 @c MulDiv() function and, in fact, is
+    implemented by calling it under MSW, where @c wx/msw/wrapwin.h must be
+    included in addition to @c wx/math.h for it to be used.
+ */
+int wxMulDivInt32(int n, int numerator, int denominator);
+
+///@}
 

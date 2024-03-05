@@ -10,9 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/colour.h"
@@ -59,6 +56,6 @@ void wxColour::Init()
 
 void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
-    m_red = r, m_green = g, m_blue = b, m_alpha = a;
+    m_red = r; m_green = g; m_blue = b; m_alpha = a;
     m_valid = true;
 }

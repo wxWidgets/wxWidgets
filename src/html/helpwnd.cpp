@@ -12,9 +12,6 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #if wxUSE_WXHTML_HELP
 
@@ -65,11 +62,6 @@
 //  make the help frame unusable)
 const wxCoord CONTENT_TREE_INDEX_MIN_WIDTH = 150;
 
-/* Motif defines this as a macro */
-#ifdef Below
-#undef Below
-#endif
-
 //--------------------------------------------------------------------------
 // wxHtmlHelpTreeItemData (private)
 //--------------------------------------------------------------------------
@@ -115,7 +107,7 @@ public:
         SetStandardFonts();
     }
 
-    virtual bool LoadPage(const wxString& location) wxOVERRIDE
+    virtual bool LoadPage(const wxString& location) override
     {
         if ( !wxHtmlWindow::LoadPage(location) )
             return false;
@@ -172,7 +164,7 @@ void wxHtmlHelpWindow::UpdateMergedIndex()
     const wxHtmlHelpDataItems& items = m_Data->GetIndexArray();
     size_t len = items.size();
 
-    wxHtmlHelpMergedIndexItem *history[128] = {NULL};
+    wxHtmlHelpMergedIndexItem *history[128] = {nullptr};
 
     for (size_t i = 0; i < len; i++)
     {
@@ -191,7 +183,7 @@ void wxHtmlHelpWindow::UpdateMergedIndex()
             wxHtmlHelpMergedIndexItem *mi = new wxHtmlHelpMergedIndexItem();
             mi->name = item.GetIndentedName();
             mi->items.Add(&item);
-            mi->parent = (item.level == 0) ? NULL : history[item.level - 1];
+            mi->parent = (item.level == 0) ? nullptr : history[item.level - 1];
             history[item.level] = mi;
             merged.Add(mi);
         }
@@ -246,28 +238,28 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
     m_IndexPage = 0;
     m_SearchPage = 0;
 
-    m_ContentsBox = NULL;
-    m_IndexList = NULL;
-    m_IndexButton = NULL;
-    m_IndexButtonAll = NULL;
-    m_IndexText = NULL;
-    m_SearchList = NULL;
-    m_SearchButton = NULL;
-    m_SearchText = NULL;
-    m_SearchChoice = NULL;
-    m_IndexCountInfo = NULL;
-    m_Splitter = NULL;
-    m_NavigPan = NULL;
-    m_NavigNotebook = NULL;
-    m_HtmlWin = NULL;
-    m_Bookmarks = NULL;
-    m_SearchCaseSensitive = NULL;
-    m_SearchWholeWords = NULL;
+    m_ContentsBox = nullptr;
+    m_IndexList = nullptr;
+    m_IndexButton = nullptr;
+    m_IndexButtonAll = nullptr;
+    m_IndexText = nullptr;
+    m_SearchList = nullptr;
+    m_SearchButton = nullptr;
+    m_SearchText = nullptr;
+    m_SearchChoice = nullptr;
+    m_IndexCountInfo = nullptr;
+    m_Splitter = nullptr;
+    m_NavigPan = nullptr;
+    m_NavigNotebook = nullptr;
+    m_HtmlWin = nullptr;
+    m_Bookmarks = nullptr;
+    m_SearchCaseSensitive = nullptr;
+    m_SearchWholeWords = nullptr;
 
-    m_mergedIndex = NULL;
+    m_mergedIndex = nullptr;
 
 #if wxUSE_CONFIG
-    m_Config = NULL;
+    m_Config = nullptr;
     m_ConfigRoot.clear();
 #endif // wxUSE_CONFIG
 
@@ -277,7 +269,7 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
     m_Cfg.sashpos = 240;
     m_Cfg.navig_on = true;
 
-    m_NormalFonts = m_FixedFonts = NULL;
+    m_NormalFonts = m_FixedFonts = nullptr;
     m_NormalFace.clear();
     m_FixedFace.clear();
 #ifdef __WXMSW__
@@ -287,13 +279,13 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
 #endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
-    m_Printer = NULL;
+    m_Printer = nullptr;
 #endif
 
-    m_PagesHash = NULL;
+    m_PagesHash = nullptr;
     m_UpdateContents = true;
-    m_toolBar = NULL;
-    m_helpController = NULL;
+    m_toolBar = nullptr;
+    m_helpController = nullptr;
 }
 
 // Create: builds the GUI components.
@@ -301,9 +293,9 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
 // controls.
 // m_HtmlWin will *always* be created, but it's important to realize that
 // m_ContentsBox, m_IndexList, m_SearchList, m_SearchButton, m_SearchText and
-// m_SearchButton may be NULL.
+// m_SearchButton may be null.
 // moreover, if no contents, index or searchpage is needed, m_Splitter and
-// m_NavigPan will be NULL too (with m_HtmlWin directly connected to the frame)
+// m_NavigPan will be null too (with m_HtmlWin directly connected to the frame)
 
 bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
                              const wxPoint& pos, const wxSize& size,
@@ -329,7 +321,6 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     // The sizer for the whole top-level window.
     wxSizer *topWindowSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(topWindowSizer);
-    SetAutoLayout(true);
 
 #if wxUSE_TOOLBAR
     // toolbar?
@@ -348,7 +339,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     }
 #endif //wxUSE_TOOLBAR
 
-    wxSizer *navigSizer = NULL;
+    wxSizer *navigSizer = nullptr;
 
 #ifdef __WXMSW__
     wxBorder htmlWindowBorder = wxBORDER_THEME;
@@ -416,7 +407,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
             m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST,
                                          wxEmptyString,
                                          wxDefaultPosition, wxDefaultSize,
-                                         0, NULL, comboStyle);
+                                         0, nullptr, comboStyle);
             m_Bookmarks->Append(_("(bookmarks)"));
             for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
                 m_Bookmarks->Append(m_BookmarksNames[i]);
@@ -445,7 +436,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
         m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
                                        wxDefaultPosition, wxDefaultSize,
-#if defined(__WXGTK20__) || defined(__WXMAC__)
+#if defined(__WXGTK__) || defined(__WXMAC__)
                                        wxSUNKEN_BORDER |
                                        wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT |
                                        wxTR_NO_LINES
@@ -456,16 +447,19 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 #endif
                                        );
 
-        wxImageList *ContentsImageList = new wxImageList(16, 16);
+        wxSize iconSize(16, 16);
+        iconSize *= GetDPIScaleFactor();
+
+        wxImageList *ContentsImageList = new wxImageList(iconSize.x, iconSize.y);
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
         ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE,
                                                       wxART_HELP_BROWSER,
-                                                      wxSize(16, 16)));
+                                                      iconSize));
 
         m_ContentsBox->AssignImageList(ContentsImageList);
 
@@ -497,7 +491,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
                                             wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
         m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST,
                                     wxDefaultPosition, wxDefaultSize,
-                                    0, NULL, wxLB_SINGLE);
+                                    0, nullptr, wxLB_SINGLE);
 
 #if wxUSE_TOOLTIPS
         m_IndexButton->SetToolTip(_("Display all index items that contain given substring. Search is case insensitive."));
@@ -539,7 +533,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 #endif //wxUSE_TOOLTIPS
         m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST,
                                      wxDefaultPosition, wxDefaultSize,
-                                     0, NULL, wxLB_SINGLE);
+                                     0, nullptr, wxLB_SINGLE);
 
         sizer->Add(m_SearchText, 0, wxEXPAND | wxALL, 10);
         sizer->Add(m_SearchChoice, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
@@ -598,22 +592,22 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 wxHtmlHelpWindow::~wxHtmlHelpWindow()
 {
     if ( m_helpController )
-        m_helpController->SetHelpWindow(NULL);
+        m_helpController->SetHelpWindow(nullptr);
 
     delete m_mergedIndex;
 
     // PopEventHandler(); // wxhtmlhelpcontroller (not any more!)
     if (m_DataCreated)
         delete m_Data;
-    if (m_NormalFonts) delete m_NormalFonts;
-    if (m_FixedFonts) delete m_FixedFonts;
+    delete m_NormalFonts;
+    delete m_FixedFonts;
     if (m_PagesHash)
     {
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
         delete m_PagesHash;
     }
 #if wxUSE_PRINTING_ARCHITECTURE
-    if (m_Printer) delete m_Printer;
+    delete m_Printer;
 #endif
 }
 
@@ -801,7 +795,7 @@ void wxHtmlHelpWindow::DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it)
                                  _("Please choose the page to display:"),
                                  _("Help Topics"),
                                  arr,
-                                 (void**)NULL, // No client data
+                                 (void**)nullptr, // No client data
                                  wxCHOICEDLG_STYLE & ~wxCENTRE);
         if (dlg.ShowModal() == wxID_OK)
         {
@@ -877,7 +871,7 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
 #if wxUSE_PROGRESSDLG
                 progress.Update(status.GetCurIndex(), foundstr);
 #endif
-                m_SearchList->Append(status.GetName(), (void*)status.GetCurItem());
+                m_SearchList->Append(status.GetName(), const_cast<wxHtmlHelpDataItem*>(status.GetCurItem()));
             }
         }
 
@@ -1209,11 +1203,11 @@ public:
 
         sizer->Add(NormalFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                       wxSize(200, wxDefaultCoord),
-                      0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
+                      0, nullptr, wxCB_DROPDOWN | wxCB_READONLY));
 
         sizer->Add(FixedFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                       wxSize(200, wxDefaultCoord),
-                      0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
+                      0, nullptr, wxCB_DROPDOWN | wxCB_READONLY));
 
         sizer->Add(FontSize = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                       wxDefaultSize, wxSP_ARROW_KEYS, 2, 100, 2, wxT("wxSpinCtrl")));
@@ -1297,12 +1291,12 @@ void wxHtmlHelpWindow::OptionsDialog()
 {
     wxHtmlHelpWindowOptionsDialog dlg(this);
 
-    if (m_NormalFonts == NULL)
+    if (m_NormalFonts == nullptr)
     {
         m_NormalFonts = new wxArrayString(wxFontEnumerator::GetFacenames());
         m_NormalFonts->Sort(); // ascending sort
     }
-    if (m_FixedFonts == NULL)
+    if (m_FixedFonts == nullptr)
     {
         m_FixedFonts = new wxArrayString(
                     wxFontEnumerator::GetFacenames(wxFONTENCODING_SYSTEM,
@@ -1365,7 +1359,7 @@ void wxHtmlHelpWindow::NotifyPageChanged()
     if (m_UpdateContents && m_PagesHash)
     {
         wxString page = wxHtmlHelpHtmlWindow::GetOpenedPageWithAnchor(m_HtmlWin);
-        wxHtmlHelpHashData *ha = NULL;
+        wxHtmlHelpHashData *ha = nullptr;
         if (!page.empty())
             ha = (wxHtmlHelpHashData*) m_PagesHash->Get(page);
 
@@ -1401,7 +1395,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
             if (m_PagesHash)
             {
                 wxString page = wxHtmlHelpHtmlWindow::GetOpenedPageWithAnchor(m_HtmlWin);
-                wxHtmlHelpHashData *ha = NULL;
+                wxHtmlHelpHashData *ha = nullptr;
                 if (!page.empty())
                     ha = (wxHtmlHelpHashData*) m_PagesHash->Get(page);
                 if (ha && ha->m_Index > 0)
@@ -1419,7 +1413,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
             if (m_PagesHash)
             {
                 wxString page = wxHtmlHelpHtmlWindow::GetOpenedPageWithAnchor(m_HtmlWin);
-                wxHtmlHelpHashData *ha = NULL;
+                wxHtmlHelpHashData *ha = nullptr;
                 if (!page.empty())
                     ha = (wxHtmlHelpHashData*) m_PagesHash->Get(page);
                 if (ha && ha->m_Index > 0)
@@ -1448,7 +1442,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
             if (m_PagesHash)
             {
                 wxString page = wxHtmlHelpHtmlWindow::GetOpenedPageWithAnchor(m_HtmlWin);
-                wxHtmlHelpHashData *ha = NULL;
+                wxHtmlHelpHashData *ha = nullptr;
                 if (!page.empty())
                     ha = (wxHtmlHelpHashData*) m_PagesHash->Get(page);
 
@@ -1528,7 +1522,7 @@ void wxHtmlHelpWindow::OnToolbar(wxCommandEvent& event)
 #if wxUSE_PRINTING_ARCHITECTURE
         case wxID_HTML_PRINT :
             {
-                if (m_Printer == NULL)
+                if (m_Printer == nullptr)
                     m_Printer = new wxHtmlEasyPrinting(_("Help Printing"), this);
                 if (!m_HtmlWin->GetOpenedPage())
                 {

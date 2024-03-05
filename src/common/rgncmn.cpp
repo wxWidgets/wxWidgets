@@ -2,7 +2,6 @@
 // Name:        src/common/rgncmn.cpp
 // Purpose:     Methods of wxRegion that have a generic implementation
 // Author:      Robin Dunn
-// Modified by:
 // Created:     27-Mar-2003
 // Copyright:   (c) Robin Dunn
 // Licence:     wxWindows licence
@@ -15,9 +14,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #include "wx/region.h"
 

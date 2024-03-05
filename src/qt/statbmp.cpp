@@ -17,18 +17,22 @@ class wxQtStaticBmp : public wxQtEventSignalHandler< QLabel, wxStaticBitmap >
 {
 public:
     wxQtStaticBmp( wxWindow *parent, wxStaticBitmap *handler ):
-        wxQtEventSignalHandler< QLabel, wxStaticBitmap >( parent, handler ){}
+        wxQtEventSignalHandler< QLabel, wxStaticBitmap >( parent, handler )
+    {
+        // For compatibility with wxMSW and wxGTK3 ports.
+        setAlignment( Qt::AlignCenter );
+    }
 };
 
 
 wxStaticBitmap::wxStaticBitmap() :
-    m_qtLabel(NULL)
+    m_qtLabel(nullptr)
 {
 }
 
 wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
                 wxWindowID id,
-                const wxBitmap& label,
+                const wxBitmapBundle& label,
                 const wxPoint& pos,
                 const wxSize& size,
                 long style,
@@ -39,7 +43,7 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
 
 bool wxStaticBitmap::Create( wxWindow *parent,
              wxWindowID id,
-             const wxBitmap& label,
+             const wxBitmapBundle& label,
              const wxPoint& pos,
              const wxSize& size,
              long style,
@@ -48,39 +52,35 @@ bool wxStaticBitmap::Create( wxWindow *parent,
     m_qtLabel = new wxQtStaticBmp( parent, this );
     SetBitmap( label );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    return wxStaticBitmapBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 static void SetPixmap( QLabel *label, const QPixmap *pixMap )
 {
-    if ( pixMap != NULL )
+    if ( pixMap != nullptr )
         label->setPixmap( *pixMap );
 }
 
-void wxStaticBitmap::SetIcon(const wxIcon& icon)
+void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
-    SetPixmap( m_qtLabel, icon.GetHandle() );
-}
+    m_bitmapBundle = bitmap;
 
-void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
-{
-    SetPixmap( m_qtLabel, bitmap.GetHandle() );
+    SetPixmap( m_qtLabel, bitmap.GetBitmapFor(this).GetHandle() );
+
+    InvalidateBestSize();
 }
 
 wxBitmap wxStaticBitmap::GetBitmap() const
 {
-    const QPixmap* pix = m_qtLabel->pixmap();
-    if ( pix != NULL )
-        return wxBitmap( *pix );
-    else
-        return wxBitmap();
-}
+    wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
+    if ( !bitmap.IsOk() )
+    {
+        const QPixmap* pix = m_qtLabel->pixmap();
+        if ( pix != nullptr )
+            bitmap = wxBitmap( *pix );
+    }
 
-wxIcon wxStaticBitmap::GetIcon() const
-{
-    wxIcon icon;
-    icon.CopyFromBitmap( GetBitmap() );
-    return icon;
+    return bitmap;
 }
 
 QWidget *wxStaticBitmap::GetHandle() const

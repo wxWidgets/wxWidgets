@@ -79,11 +79,9 @@ public:
     virtual wxRendererNative* CreateRenderer() = 0;
 
     /**
-        This method returns the name of the desktop environment currently
-        running in a Unix desktop. Currently only "KDE" or "GNOME" are
-        supported and the code uses the X11 session protocol vendor name
-        to figure out, which desktop environment is running. The method
-        returns an empty string otherwise and on all other platforms.
+        Returns the name of the desktop environment currently running on a Unix
+        desktop. It returns an empty string for platforms other than wxGTK, or
+        if the desktop environment could not be determined.
     */
     virtual wxString GetDesktopEnvironment() const = 0;
 
@@ -104,7 +102,7 @@ public:
         digits of the native toolkit currently used.
 
         The version numbers returned are thus detected at run-time and not compile-time
-        (except when this is not possible e.g. wxMotif).
+        if possible.
 
         E.g. if your program is using wxGTK port this function will return wxPORT_GTK
         and put in given pointers the versions of the GTK library in use.
@@ -112,9 +110,9 @@ public:
 
         If a micro version is not available it will have a value of 0.
     */
-    virtual wxPortId GetToolkitVersion(int* major = NULL,
-                                       int* minor = NULL,
-                                       int* micro = NULL) const = 0;
+    virtual wxPortId GetToolkitVersion(int* major = nullptr,
+                                       int* minor = nullptr,
+                                       int* micro = nullptr) const = 0;
 
     /**
         Returns @true if @c fprintf(stderr) goes somewhere, @false otherwise.
@@ -133,5 +131,40 @@ public:
         Returns @true to suppress subsequent asserts, @false to continue as before.
     */
     virtual bool ShowAssertDialog(const wxString& msg) = 0;
+
+    /**
+        Shows a message box with the given text and title if possible.
+
+        In some ports, e.g. wxMSW, a message box will always be shown, while in
+        the other ones it will be only done if the GUI is available (e.g. X11
+        display was successfully opened for X11-based ports) and the function
+        simply returns @false without doing anything otherwise.
+
+        This function is safe in the sense that it can always be called, even
+        before creating wxApp, similarly to wxSafeShowMessage() which is
+        implemented by calling this function and then logging the message to
+        standard error stream if it returned @false.
+
+        @since 3.1.5
+
+        @param text
+            The text to show to the user.
+        @param title
+            The title of the message box shown to the user.
+        @return @true if the message box was shown or @false otherwise.
+     */
+    virtual bool SafeMessageBox(const wxString& text, const wxString& title) = 0;
+
+    /**
+        Helper function mostly useful for derived classes ShowAssertDialog()
+        implementation.
+
+        Returns the stack frame as a plain (and possibly empty) wxString.
+
+        This function is only available when @c wxUSE_STACKWALKER is 1.
+
+        @since 3.1.5
+     */
+    virtual wxString GetAssertStackTrace();
 };
 

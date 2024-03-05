@@ -8,9 +8,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -47,7 +44,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
     QtCreate(parent);
     SetLabel( label.IsEmpty() && wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return wxButtonBase::Create( parent, id, pos, size, style, validator, name );
 }
 
 wxWindow *wxButton::SetDefault()
@@ -61,7 +58,7 @@ wxWindow *wxButton::SetDefault()
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 {
     static wxSize size = wxDefaultSize;
     if (size == wxDefaultSize)

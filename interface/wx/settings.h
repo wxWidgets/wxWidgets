@@ -68,7 +68,7 @@ enum wxSystemColour
     wxSYS_COLOUR_BTNSHADOW,           //!< Edge shading colour on push buttons.
     wxSYS_COLOUR_GRAYTEXT,            //!< Colour of greyed (disabled) text.
     wxSYS_COLOUR_BTNTEXT,             //!< Colour of the text on push buttons.
-    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in active captions.
+    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in inactive captions.
     wxSYS_COLOUR_BTNHIGHLIGHT,        //!< Highlight colour for buttons.
     wxSYS_COLOUR_3DDKSHADOW,          //!< Dark shadow colour for three-dimensional display elements.
     wxSYS_COLOUR_3DLIGHT,             //!< Light colour for three-dimensional display elements.
@@ -78,14 +78,14 @@ enum wxSystemColour
     wxSYS_COLOUR_HOTLIGHT,            //!< Colour for a hyperlink or hot-tracked item.
 
     /**
-        Right side colour in the color gradient of an active window's title bar.
-        @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an active window's title
+        bar. @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTACTIVECAPTION,
 
     /**
-        Right side colour in the color gradient of an inactive window's title bar.
-        @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side color.
+        Right side colour in the colour gradient of an inactive window's title
+        bar. @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side colour.
     */
     wxSYS_COLOUR_GRADIENTINACTIVECAPTION,
 
@@ -97,7 +97,7 @@ enum wxSystemColour
 
     /**
         The background colour for the menu bar when menus appear as flat menus.
-        However, @c wxSYS_COLOUR_MENU continues to specify the background color of the menu popup.
+        However, @c wxSYS_COLOUR_MENU continues to specify the background colour of the menu popup.
     */
     wxSYS_COLOUR_MENUBAR,
 
@@ -114,9 +114,6 @@ enum wxSystemColour
         @since 2.9.1
      */
     wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT,
-
-    wxSYS_COLOUR_MAX
-
 
 
     // synonyms:
@@ -272,9 +269,25 @@ class wxSystemAppearance
 {
 public:
     /**
+        Return true if the applications on this system use dark theme by
+        default.
+
+        This function returns @true if dark mode is enabled for the
+        applications system-wide, even if it's not enabled for this particular
+        application.
+
+        Note that for non-MSW platforms this is currently the same as IsDark(),
+        but under MSW these two functions can return different values as dark
+        mode requires to opt-in into it specifically.
+
+        @since 3.3.0
+     */
+    bool AreAppsDark() const;
+
+    /**
         Return the name if available or empty string otherwise.
 
-        This is currently only implemented for macOS 10.9 or later and returns
+        This is currently only implemented for macOS and returns
         a not necessarily user-readable string such as "NSAppearanceNameAqua"
         there and an empty string under all the other platforms.
      */
@@ -286,8 +299,27 @@ public:
 
         This method should be used to check whether custom colours more
         appropriate for the default (light) or dark appearance should be used.
+
+        Note that this checks the appearance of the current application and not
+        the other applications on the system, so under MSW, for example, it
+        will return @false even if dark mode is used system-wide unless the
+        application opted in using dark mode using wxApp::MSWEnableDarkMode().
+        You can use IsSystemDark() or AreAppsDark() to check if the system is
+        using dark mode by default.
      */
     bool IsDark() const;
+
+    /**
+        Return true if the system UI uses dark theme.
+
+        This is the same as AreAppsDark() on the non-MSW platforms, but can be
+        different from the other function under MSW as it is possible to
+        configure default "Windows mode" and "app mode" to use different colour
+        schemes under Windows.
+
+        @since 3.3.0
+     */
+    bool IsSystemDark() const;
 
     /**
         Return true if the default window background is significantly darker
@@ -363,12 +395,12 @@ public:
 
         @a win is a pointer to the window for which the metric is requested.
         Specifying the @a win parameter is encouraged, because some metrics on some
-        ports are not supported without one,or they might be capable of reporting
+        ports are not supported without one, or they might be capable of reporting
         better values if given one. If a window does not make sense for a metric,
         one should still be given, as for example it might determine which displays
         cursor width is requested with wxSYS_CURSOR_X.
     */
-    static int GetMetric(wxSystemMetric index, wxWindow* win = NULL);
+    static int GetMetric(wxSystemMetric index, wxWindow* win = nullptr);
 
     /**
         Returns the screen type.
@@ -388,5 +420,20 @@ public:
         See the ::wxSystemFeature enum values.
     */
     static bool HasFeature(wxSystemFeature index);
+
+    /**
+        Select one of the two colours depending on whether light or dark mode
+        is used.
+
+        This is just a convenient helper using wxSystemAppearance::IsDark() to
+        select between the two colours.
+
+        @param colForLight Colour returned when using light appearance.
+        @param colForDark Colour returned when using dark appearance, as
+            detected by wxSystemAppearance::IsDark().
+
+        @since 3.3.0
+     */
+    static wxColour SelectLightDark(wxColour colForLight, wxColour colForDark);
 };
 

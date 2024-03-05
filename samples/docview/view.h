@@ -22,12 +22,12 @@
 class MyCanvas : public wxScrolledWindow
 {
 public:
-    // view may be NULL if we're not associated with one yet, but parent must
+    // view may be null if we're not associated with one yet, but parent must
     // be a valid pointer
-    MyCanvas(wxView *view, wxWindow *parent = NULL);
+    MyCanvas(wxView *view, wxWindow *parent = nullptr);
     virtual ~MyCanvas();
 
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
 
     // in a normal multiple document application a canvas is associated with
     // one view from the beginning until the end, but to support the single
@@ -45,7 +45,7 @@ public:
     {
         wxASSERT_MSG( m_view, "should be associated with a view" );
 
-        m_view = NULL;
+        m_view = nullptr;
     }
 
 private:
@@ -53,7 +53,7 @@ private:
 
     wxView *m_view;
 
-    // the segment being currently drawn or NULL if none
+    // the segment being currently drawn or nullptr if none
     DoodleSegment *m_currentSegment;
 
     // the last mouse press position
@@ -66,12 +66,12 @@ private:
 class DrawingView : public wxView
 {
 public:
-    DrawingView() : wxView(), m_canvas(NULL) {}
+    DrawingView() : wxView(), m_canvas(nullptr) {}
 
-    virtual bool OnCreate(wxDocument *doc, long flags) wxOVERRIDE;
-    virtual void OnDraw(wxDC *dc) wxOVERRIDE;
-    virtual void OnUpdate(wxView *sender, wxObject *hint = NULL) wxOVERRIDE;
-    virtual bool OnClose(bool deleteWindow = true) wxOVERRIDE;
+    virtual bool OnCreate(wxDocument *doc, long flags) override;
+    virtual void OnDraw(wxDC *dc) override;
+    virtual void OnUpdate(wxView *sender, wxObject *hint = nullptr) override;
+    virtual bool OnClose(bool deleteWindow = true) override;
 
     DrawingDocument* GetDocument();
 
@@ -92,11 +92,11 @@ private:
 class TextEditView : public wxView
 {
 public:
-    TextEditView() : wxView(), m_text(NULL) {}
+    TextEditView() : wxView(), m_text(nullptr) {}
 
-    virtual bool OnCreate(wxDocument *doc, long flags) wxOVERRIDE;
-    virtual void OnDraw(wxDC *dc) wxOVERRIDE;
-    virtual bool OnClose(bool deleteWindow = true) wxOVERRIDE;
+    virtual bool OnCreate(wxDocument *doc, long flags) override;
+    virtual void OnDraw(wxDC *dc) override;
+    virtual bool OnClose(bool deleteWindow = true) override;
 
     wxTextCtrl *GetText() const { return m_text; }
 
@@ -120,7 +120,7 @@ class ImageCanvas : public wxScrolledWindow
 public:
     ImageCanvas(wxView*);
 
-    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
+    virtual void OnDraw(wxDC& dc) override;
 private:
     wxView *m_view;
 };
@@ -134,10 +134,10 @@ class ImageView : public wxView
 public:
     ImageView() : wxView() {}
 
-    virtual bool OnCreate(wxDocument*, long flags) wxOVERRIDE;
-    virtual void OnDraw(wxDC*) wxOVERRIDE;
-    virtual bool OnClose(bool deleteWindow = true) wxOVERRIDE;
-    virtual void OnUpdate(wxView *sender, wxObject *hint = NULL) wxOVERRIDE;
+    virtual bool OnCreate(wxDocument*, long flags) override;
+    virtual void OnDraw(wxDC*) override;
+    virtual bool OnClose(bool deleteWindow = true) override;
+    virtual void OnUpdate(wxView *sender, wxObject *hint = nullptr) override;
 
     ImageDocument* GetDocument();
 
@@ -155,14 +155,14 @@ class ImageDetailsView : public wxView
 {
 public:
     ImageDetailsView(ImageDetailsDocument *doc);
+    ImageDetailsView(const ImageDetailsView&) = delete;
+    ImageDetailsView& operator=(const ImageDetailsView&) = delete;
 
-    virtual void OnDraw(wxDC *dc) wxOVERRIDE;
-    virtual bool OnClose(bool deleteWindow) wxOVERRIDE;
+    virtual void OnDraw(wxDC *dc) override;
+    virtual bool OnClose(bool deleteWindow) override;
 
 private:
     wxFrame *m_frame;
-
-    wxDECLARE_NO_COPY_CLASS(ImageDetailsView);
 };
 
 #endif // _WX_SAMPLES_DOCVIEW_VIEW_H_

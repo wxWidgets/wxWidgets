@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_debug */
-//@{
+///@{
 
 /**
     Exits the program immediately.
@@ -18,8 +18,6 @@
 void wxAbort();
 
 /**
-    @def wxDEBUG_LEVEL
-
     Preprocessor symbol defining the level of debug support available.
 
     This symbol is defined to 1 by default meaning that asserts are compiled in
@@ -40,8 +38,6 @@ void wxAbort();
 #define wxDEBUG_LEVEL
 
 /**
-    @def __WXDEBUG__
-
     Compatibility macro indicating presence of debug support.
 
     This symbol is defined if wxDEBUG_LEVEL is greater than 0 and undefined
@@ -147,7 +143,7 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
     default.
 
     It is mostly useful for asserting inside functions called from macros, as
-    by passing the usual @c __FILE__, @c __LINE__ and @c __FUNCTION__ values to
+    by passing the usual @c \__FILE__, @c \__LINE__ and @c \__FUNCTION__ values to
     a function, it's possible to pretend that the assert happens at the
     location of the macro in the source code (which can be useful) instead of
     inside the function itself (which is never useful as these values are
@@ -233,7 +229,7 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
     sometimes desirable to test them at the compile time.
 
     Note that this macro internally declares a struct whose name it tries to
-    make unique by using the @c __LINE__ in it but it may still not work if you
+    make unique by using the @c \__LINE__ in it but it may still not work if you
     use it on the same line in two different source files. In this case you may
     either change the line in which either of them appears on or use the
     wxCOMPILE_TIME_ASSERT2() macro.
@@ -275,8 +271,6 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
 void wxDisableAsserts();
 
 /**
-    @def wxDISABLE_ASSERTS_IN_RELEASE_BUILD
-
     Use this macro to disable asserts in release build when not using
     wxIMPLEMENT_APP().
 
@@ -416,5 +410,5 @@ void wxSetDefaultAssertHandler();
 */
 void wxTrap();
 
-//@}
+///@}
 

@@ -2,7 +2,6 @@
 // Name:        dxfrenderer.h
 // Purpose:     DXF reader and renderer
 // Author:      Sandro Sigala
-// Modified by:
 // Created:     2005-11-10
 // Copyright:   (c) Sandro Sigala
 // Licence:     wxWindows licence
@@ -10,6 +9,9 @@
 
 #ifndef _DXFRENDERER_H_
 #define _DXFRENDERER_H_
+
+#include <memory>
+#include <vector>
 
 struct DXFVector
 {
@@ -49,9 +51,6 @@ struct DXFLayer
     int colour;
 };
 
-WX_DECLARE_LIST(DXFEntity, DXFEntityList);
-WX_DECLARE_LIST(DXFLayer, DXFLayerList);
-
 class DXFRenderer
 {
 public:
@@ -71,8 +70,8 @@ private:
     void NormalizeEntities();
 
     bool m_loaded;
-    DXFLayerList m_layers;
-    DXFEntityList m_entities;
+    std::vector<DXFLayer> m_layers;
+    std::vector<std::unique_ptr<DXFEntity>> m_entities;
 };
 
 #endif // !_DXFRENDERER_H_

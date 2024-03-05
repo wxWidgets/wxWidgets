@@ -17,8 +17,10 @@
 #include "wx/dialog.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAboutDialogInfo;
+class WXDLLIMPEXP_FWD_CORE wxPanel;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxSizerFlags;
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
 
 // Under GTK and OS X "About" dialogs are not supposed to be modal, unlike MSW
 // and, presumably, all the other platforms.
@@ -41,22 +43,24 @@ public:
     // --------------------------------
 
     // default ctor, you must use Create() to really initialize the dialog
-    wxGenericAboutDialog() { Init(); }
+    wxGenericAboutDialog() = default;
 
     // ctor which fully initializes the object
-    wxGenericAboutDialog(const wxAboutDialogInfo& info, wxWindow* parent = NULL)
+    wxGenericAboutDialog(const wxAboutDialogInfo& info, wxWindow* parent = nullptr)
     {
-        Init();
-
         (void)Create(info, parent);
     }
 
     // this method must be called if and only if the default ctor was used
-    bool Create(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
+    bool Create(const wxAboutDialogInfo& info, wxWindow* parent = nullptr);
 
 protected:
-    // this virtual method may be overridden to add some more controls to the
-    // dialog
+    // Return the parent to use for custom controls.
+    wxWindow* GetCustomControlParent() const { return m_contents; }
+
+    // This virtual method may be overridden to add some more controls to the
+    // dialog. The controls should be created using GetCustomControlParent() as
+    // the parent and then passed to AddControl().
     //
     // notice that for this to work you must call Create() from the derived
     // class ctor and not use the base class ctor directly as otherwise the
@@ -71,7 +75,7 @@ protected:
     void AddControl(wxWindow *win);
 
     // add the text, if it's not empty, to the text sizer contents
-    void AddText(const wxString& text);
+    wxStaticText* AddText(const wxString& text);
 
 #if wxUSE_COLLPANE
     // add a wxCollapsiblePane containing the given text
@@ -79,9 +83,6 @@ protected:
 #endif // wxUSE_COLLPANE
 
 private:
-    // common part of all ctors
-    void Init() { m_sizerText = NULL; }
-
 #if !wxUSE_MODAL_ABOUT_DIALOG
     // An explicit handler for deleting the dialog when it's closed is needed
     // when we show it non-modally.
@@ -89,12 +90,15 @@ private:
     void OnOK(wxCommandEvent& event);
 #endif // !wxUSE_MODAL_ABOUT_DIALOG
 
-    wxSizer *m_sizerText;
+    // The panel containing the dialog contents.
+    wxWindow *m_contents = nullptr;
+
+    wxSizer *m_sizerText = nullptr;
 };
 
 // unlike wxAboutBox which can show either the native or generic about dialog,
 // this function always shows the generic one
-WXDLLIMPEXP_CORE void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
+WXDLLIMPEXP_CORE void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = nullptr);
 
 #endif // wxUSE_ABOUTDLG
 

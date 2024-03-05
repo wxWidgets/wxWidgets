@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/oleutils.h
 // Purpose:     OLE helper routines, OLE debugging support &c
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     19.02.1998
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -33,13 +32,15 @@
 // initialize/cleanup OLE
 // ----------------------------------------------------------------------------
 
-// call OleInitialize() or CoInitialize[Ex]() depending on the platform
+// Simple wrapper for OleInitialize().
+//
+// Avoid using it directly, use wxOleInitializer instead.
 //
 // return true if ok, false otherwise
 inline bool wxOleInitialize()
 {
     const HRESULT
-    hr = ::OleInitialize(NULL);
+    hr = ::OleInitialize(nullptr);
 
     // RPC_E_CHANGED_MODE indicates that OLE had been already initialized
     // before, albeit with different mode. Don't consider it to be an error as
@@ -66,12 +67,12 @@ inline void wxOleUninitialize()
 class WXDLLIMPEXP_CORE wxBasicString
 {
 public:
-    // Constructs with the owned BSTR set to NULL
-    wxBasicString() : m_bstrBuf(NULL) {}
+    // Constructs with the owned BSTR set to nullptr
+    wxBasicString() : m_bstrBuf(nullptr) {}
 
     // Constructs with the owned BSTR created from a wxString
     wxBasicString(const wxString& str)
-        : m_bstrBuf(SysAllocString(str.wc_str(*wxConvCurrent))) {}
+        : m_bstrBuf(SysAllocString(str.wc_str())) {}
 
     // Constructs with the owned BSTR as a copy of the BSTR owned by bstr
     wxBasicString(const wxBasicString& bstr) : m_bstrBuf(bstr.Copy()) {}
@@ -84,14 +85,14 @@ public:
 
     // Returns the owned BSTR and gives up its ownership,
     // the caller is responsible for freeing it
-    BSTR Detach();
+    wxNODISCARD BSTR Detach();
 
     // Returns a copy of the owned BSTR,
     // the caller is responsible for freeing it
-    BSTR Copy() const { return SysAllocString(m_bstrBuf); }
+    wxNODISCARD BSTR Copy() const { return SysAllocString(m_bstrBuf); }
 
     // Returns the address of the owned BSTR, not to be called
-    // when wxBasicString already contains a non-NULL BSTR
+    // when wxBasicString already contains a non-null BSTR
     BSTR* ByRef();
 
     // Sets its BSTR to a copy of the BSTR owned by bstr
@@ -122,15 +123,15 @@ public:
     CURRENCY GetValue() const { return m_value; }
     void SetValue(CURRENCY value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(std::ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataCurrency(m_value); }
-    virtual wxString GetType() const wxOVERRIDE { return wxS("currency"); }
+    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataCurrency(m_value); }
+    virtual wxString GetType() const override { return wxS("currency"); }
 
     DECLARE_WXANY_CONVERSION()
 
@@ -148,15 +149,15 @@ public:
     SCODE GetValue() const { return m_value; }
     void SetValue(SCODE value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(std::ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataErrorCode(m_value); }
-    virtual wxString GetType() const wxOVERRIDE { return wxS("errorcode"); }
+    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataErrorCode(m_value); }
+    virtual wxString GetType() const override { return wxS("errorcode"); }
 
     DECLARE_WXANY_CONVERSION()
 
@@ -168,7 +169,7 @@ private:
 class WXDLLIMPEXP_CORE wxVariantDataSafeArray : public wxVariantData
 {
 public:
-    explicit wxVariantDataSafeArray(SAFEARRAY* value = NULL)
+    explicit wxVariantDataSafeArray(SAFEARRAY* value = nullptr)
     {
         m_value = value;
     }
@@ -176,15 +177,15 @@ public:
     SAFEARRAY* GetValue() const { return m_value; }
     void SetValue(SAFEARRAY* value) { m_value = value; }
 
-    virtual bool Eq(wxVariantData& data) const wxOVERRIDE;
+    virtual bool Eq(wxVariantData& data) const override;
 
 #if wxUSE_STD_IOSTREAM
-    virtual bool Write(wxSTD ostream& str) const wxOVERRIDE;
+    virtual bool Write(std::ostream& str) const override;
 #endif
-    virtual bool Write(wxString& str) const wxOVERRIDE;
+    virtual bool Write(wxString& str) const override;
 
-    wxVariantData* Clone() const wxOVERRIDE { return new wxVariantDataSafeArray(m_value); }
-    virtual wxString GetType() const wxOVERRIDE { return wxS("safearray"); }
+    wxNODISCARD wxVariantData* Clone() const override { return new wxVariantDataSafeArray(m_value); }
+    virtual wxString GetType() const override { return wxS("safearray"); }
 
     DECLARE_WXANY_CONVERSION()
 
@@ -214,7 +215,7 @@ bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant,
 #endif // wxUSE_VARIANT
 
 // Convert string to Unicode
-WXDLLIMPEXP_CORE BSTR wxConvertStringToOle(const wxString& str);
+wxNODISCARD WXDLLIMPEXP_CORE BSTR wxConvertStringToOle(const wxString& str);
 
 // Convert string from BSTR to wxString
 WXDLLIMPEXP_CORE wxString wxConvertStringFromOle(BSTR bStr);

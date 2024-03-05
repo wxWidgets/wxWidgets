@@ -4,7 +4,6 @@
 //              wx/osx/cocoa/evtloop.h for consistency with the other Mac
 //              headers
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-01-12
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -26,11 +25,11 @@ public:
 
 #ifdef __WXOSX_COCOA__
     // skip wxGUIEventLoop to avoid missing Enter/Exit notifications
-    virtual int Run() wxOVERRIDE { return wxCFEventLoop::Run(); }
+    virtual int Run() override { return wxCFEventLoop::Run(); }
 #endif
 protected:
-    virtual void OSXDoRun() wxOVERRIDE;
-    virtual void OSXDoStop() wxOVERRIDE;
+    virtual void OSXDoRun() override;
+    virtual void OSXDoStop() override;
 
     // (in case) the modal window for this event loop
     wxNonOwnedWindow* m_modalWindow;

@@ -56,19 +56,19 @@ public:
     }
 
     virtual void SetButtonsToolTips(const wxString& addtip,
-                                    const wxString& removetip) wxOVERRIDE
+                                    const wxString& removetip) override
     {
         m_tbar->SetToolShortHelp(wxID_ADD, addtip);
         m_tbar->SetToolShortHelp(wxID_REMOVE, removetip);
     }
 
 private:
-    static wxBitmap GetNamedBitmap(const wxString& name)
+    static wxBitmapBundle GetNamedBitmap(const wxString& name)
     {
         // GTK UI guidelines recommend using "symbolic" versions of the icons
         // for these buttons, so try them first but fall back to the normal
         // ones if symbolic theme is not installed.
-        wxBitmap bmp = wxArtProvider::GetBitmap(name + "-symbolic", wxART_MENU);
+        wxBitmap bmp = wxArtProvider::GetBitmap(name + wxASCII_STR("-symbolic"), wxART_MENU);
         if ( !bmp.IsOk() )
             bmp = wxArtProvider::GetBitmap(name, wxART_MENU);
         return bmp;
