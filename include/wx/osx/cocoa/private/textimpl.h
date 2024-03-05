@@ -125,7 +125,7 @@ public:
     virtual void SetFont(const wxFont & font) override;
     virtual unsigned GetPhysicalLineCount() const;
     virtual unsigned GetLogicalLineCount() const;
-    
+ 
     virtual bool GetStyle(long position, wxTextAttr& style) override;
     virtual void SetStyle(long start, long end, const wxTextAttr& style) override;
 

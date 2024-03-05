@@ -276,13 +276,13 @@ public:
 
     void OnGetPhysicalCount(wxCommandEvent &WXUNUSED(event))
     {
-        wxMessageBox(wxString::Format("Number of newline characters is %d", 
+        wxMessageBox(wxString::Format("Number of newline characters is %d",
                                         m_panel->m_textrich->GetPhysicalLineCount()));
     }
 
     void OnGetLogicalCount(wxCommandEvent &WXUNUSED(event))
     {
-        wxMessageBox(wxString::Format("Number of visible lines is: %d", 
+        wxMessageBox(wxString::Format("Number of visible lines is: %d",
                                         m_panel->m_textrich->GetLogicalLineCount()));
     }
 
