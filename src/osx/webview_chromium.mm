@@ -53,12 +53,12 @@ namespace
 
 BOOL gs_handlingSendEvent = FALSE;
 
-BOOL isHandlingSendEventImpl(id self, SEL)
+BOOL isHandlingSendEventImpl(id, SEL)
 {
     return gs_handlingSendEvent;
 }
 
-void setHandlingSendEventImpl(id self, SEL, BOOL handlingSendEvent)
+void setHandlingSendEventImpl(id, SEL, BOOL handlingSendEvent)
 {
     gs_handlingSendEvent = handlingSendEvent;
 }
