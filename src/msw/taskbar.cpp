@@ -248,13 +248,16 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
 
     wxUnusedVar(icon); // It's only unused if not supported actually.
 
+#if _WIN32_WINNT >= 0x0600
     if ( icon.IsOk() )
     {
         m_balloonIcon = icon.GetIconFor(m_win);
         notifyData.hBalloonIcon = GetHiconOf(m_balloonIcon);
         notifyData.dwInfoFlags |= NIIF_USER | NIIF_LARGE_ICON;
     }
-    else if ( flags & wxICON_INFORMATION )
+    else
+#endif
+    if ( flags & wxICON_INFORMATION )
         notifyData.dwInfoFlags |= NIIF_INFO;
     else if ( flags & wxICON_WARNING )
         notifyData.dwInfoFlags |= NIIF_WARNING;
