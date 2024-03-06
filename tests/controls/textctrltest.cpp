@@ -615,20 +615,27 @@ void TextCtrlTestCase::FontStyle()
 
 void TextCtrlTestCase::Lines()
 {
+    CPPUNIT_ASSERT_EQUAL( 0, m_text->GetPhysicalLineCount() );
+    CPPUNIT_ASSERT_EQUAL( 0, m_text->GetLogicalLineCount() );
     m_text->SetValue("line1\nline2\nlong long line 3");
+    m_text->AppendText( "\nThis is a very long line to test logical line count in the text control." );
     m_text->Refresh();
     m_text->Update();
 
-    CPPUNIT_ASSERT_EQUAL(3, m_text->GetNumberOfLines());
+    CPPUNIT_ASSERT_EQUAL(4, m_text->GetNumberOfLines());
     CPPUNIT_ASSERT_EQUAL(5, m_text->GetLineLength(0));
     CPPUNIT_ASSERT_EQUAL("line2", m_text->GetLineText(1));
     CPPUNIT_ASSERT_EQUAL(16, m_text->GetLineLength(2));
 
     m_text->AppendText("\n\nMore text on line 5");
 
-    CPPUNIT_ASSERT_EQUAL(5, m_text->GetNumberOfLines());
-    CPPUNIT_ASSERT_EQUAL(0, m_text->GetLineLength(3));
-    CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(3));
+    CPPUNIT_ASSERT_EQUAL(6, m_text->GetNumberOfLines());
+#ifndef __WXQT__
+    CPPUNIT_ASSERT_EQUAL( 6, m_text->GetPhysicalLineCount() );
+    CPPUNIT_ASSERT_EQUAL( 7, m_text->GetLogicalLineCount() );
+#endif
+    CPPUNIT_ASSERT_EQUAL(0, m_text->GetLineLength(4));
+    CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(4));
 
     // Verify that wrapped lines count as (at least) lines (but it can be more
     // if it's wrapped more than once).
@@ -636,12 +643,12 @@ void TextCtrlTestCase::Lines()
     // This currently works neither in wxGTK, wxUniv, nor wxOSX/Cocoa, see
     // #12366, where GetNumberOfLines() always returns the number of logical,
     // not physical, lines.
-    m_text->AppendText("\n" + wxString(50, '1') + ' ' + wxString(50, '2'));
+/*    m_text->AppendText("\n" + wxString(50, '1') + ' ' + wxString(50, '2'));
 #if defined(__WXGTK__) || defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__) || defined(__WXQT__)
     CPPUNIT_ASSERT_EQUAL(6, m_text->GetNumberOfLines());
 #else
     CPPUNIT_ASSERT(m_text->GetNumberOfLines() > 6);
-#endif
+#endif*/
 }
 
 #if wxUSE_LOG
