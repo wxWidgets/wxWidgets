@@ -2905,6 +2905,9 @@ private:
                           const wxGridOperations& oper,
                           wxGridWindow* gridWindow);
 
+    // helper to get the wxGridOperations that match the cursor mode
+    std::unique_ptr<wxGridOperations> DoGetOperationsFromCursorMode(void);
+
     // process different clicks on grid cells
     void DoGridCellLeftDown(wxMouseEvent& event,
                             const wxGridCellCoords& coords,

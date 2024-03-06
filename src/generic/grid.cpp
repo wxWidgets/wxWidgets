@@ -4743,11 +4743,9 @@ bool wxGrid::DoGridDragEvent(wxMouseEvent& event,
         case WXGRID_CURSOR_RESIZE_ROW:
         case WXGRID_CURSOR_RESIZE_COL:
         {
-            //const wxGridOperations* oper = DoGetOperationsFromCursorMode();
-            std::unique_ptr<wxGridOperations> oper (DoGetOperationsFromCursorMode());
+            const auto oper(DoGetOperationsFromCursorMode());
             if ( m_dragLabel || m_dragRowOrCol != -1 )
                 DoGridDragResize(event.GetPosition(), *oper, gridWindow);
-            //delete oper;
         }
         break;
 
@@ -4779,8 +4777,7 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         case WXGRID_CURSOR_RESIZE_ROW:
         case WXGRID_CURSOR_RESIZE_COL:
             {
-                //const wxGridOperations* oper = DoGetOperationsFromCursorMode();
-                std::unique_ptr<wxGridOperations> oper(DoGetOperationsFromCursorMode());
+                const auto oper(DoGetOperationsFromCursorMode());
                 int dragRowOrCol = PosToEdgeOfLine(oper->Dual().Select(pos), *oper);
 
                 if ( dragRowOrCol != wxNOT_FOUND )
@@ -4792,7 +4789,6 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
                     DoStartResizeLabel(oper->GetLabelSize(this));
                     captureMouse = true;
                 }
-                //delete oper;
             }
             break;
 
@@ -4901,13 +4897,13 @@ wxGrid::DoGridCellLeftDClick(wxMouseEvent& event,
 }
 
 // helper to get the wxGridOperations that match the cursor mode
-// the returned instance needs to be destroyed by the calling code
-wxGridOperations* wxGrid::DoGetOperationsFromCursorMode()
+// the returned unique_ptr does not require a delete
+std::unique_ptr<wxGridOperations> wxGrid::DoGetOperationsFromCursorMode()
 {
     if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
-        return new wxGridRowOperations();
+        return std::unique_ptr<wxGridOperations> (new wxGridRowOperations());
     if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
-        return new wxGridColumnOperations();
+        return std::unique_ptr<wxGridOperations> (new wxGridColumnOperations());
     return nullptr;
 }
 
@@ -4931,15 +4927,12 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event,
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW ||
               m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
     {
-        //wxGridOperations* oper = DoGetOperationsFromCursorMode();
-        std::unique_ptr<wxGridOperations> oper(DoGetOperationsFromCursorMode());
+        const auto oper(DoGetOperationsFromCursorMode());
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
         if ( m_dragRowOrCol != -1 )
             DoEndDragResizeRowOrCol(event, gridWindow, *oper);
         else if ( m_dragLabel )
             DoEndDragResizeLabel(event, gridWindow, *oper);
-
-        //delete oper;
     }
 
     m_dragLastPos = -1;
@@ -6082,8 +6075,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                         case WXGRID_CURSOR_RESIZE_COL:
                         {
                             // reset to size from before dragging
-                            //const wxGridOperations* oper = DoGetOperationsFromCursorMode();
-                            std::unique_ptr<wxGridOperations> oper(DoGetOperationsFromCursorMode());
+                            const auto oper(DoGetOperationsFromCursorMode());
                             if ( m_dragLabel )
                             {
                                 oper->SetLabelSize(this, m_dragRowOrColOldSize);
@@ -6094,7 +6086,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                                 oper->SetLineSize(this, m_dragRowOrCol, m_dragRowOrColOldSize);
                                 m_dragRowOrCol = -1;
                             }
-                            //delete oper;
                         }
                         break;
 
