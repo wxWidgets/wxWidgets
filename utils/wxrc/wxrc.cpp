@@ -102,12 +102,12 @@ public:
         BrowseXmlNode(node->GetChildren());
     }
 
-    const ArrayOfXRCWidgetData& GetWidgetData()
+    const ArrayOfXRCWidgetData& GetWidgetData() const
     {
         return m_wdata;
     }
 
-    bool CanBeUsedWithXRCCTRL(const wxString& name)
+    static bool CanBeUsedWithXRCCTRL(const wxString& name)
     {
         if (name == wxT("tool") ||
             name == wxT("data") ||
@@ -170,27 +170,26 @@ public:
                     m_className +
                     wxT("(") +
                         *m_ancestorClassNames.begin() +
-                        wxT(" *parent=nullptr){\n") +
-                    wxT("  InitWidgetsFromXRC((wxWindow *)parent);\n")
+                        wxT(" *parent=nullptr){\n")
+                    wxT("  InitWidgetsFromXRC(static_cast<wxWindow *>(parent));\n")
                     wxT(" }\n")
-                    wxT("};\n")
                  );
         }
         else
         {
-            file.Write(m_className + wxT("(){\n") +
+            file.Write(m_className + wxT("(){\n")
                        wxT("  InitWidgetsFromXRC(nullptr);\n")
-                       wxT(" }\n")
-                       wxT("};\n"));
+                       wxT(" }\n"));
 
             for ( const auto& name : m_ancestorClassNames )
             {
-                file.Write(m_className + wxT("(") + name + wxT(" *parent){\n") +
-                            wxT("  InitWidgetsFromXRC((wxWindow *)parent);\n")
-                            wxT(" }\n")
-                            wxT("};\n"));
+                file.Write(m_className + wxT("(") + name + wxT(" *parent=nullptr){\n")
+                            wxT("  InitWidgetsFromXRC(static_cast<wxWindow *>(parent));\n")
+                            wxT(" }\n"));
             }
         }
+
+        file.Write(wxT("};\n"));
     }
 };
 WX_DECLARE_OBJARRAY(XRCWndClassData,ArrayOfXRCWndClassData);
