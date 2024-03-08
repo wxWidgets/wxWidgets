@@ -280,11 +280,15 @@ int wxTextCtrl::GetNumberOfLines() const
 
 int wxTextCtrl::GetPhysicalLineCount() const
 {
+    if( IsEmpty() )
+        return 1;
     return GetTextPeer()->GetPhysicalLineCount();
 }
 
 int wxTextCtrl::GetLogicalLineCount() const
 {
+    if( IsEmpty() )
+        return 1;
     return GetTextPeer()->GetLogicalLineCount();
 }
 

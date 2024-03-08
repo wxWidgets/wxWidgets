@@ -615,8 +615,8 @@ void TextCtrlTestCase::FontStyle()
 
 void TextCtrlTestCase::Lines()
 {
-    CPPUNIT_ASSERT_EQUAL( 0, m_text->GetPhysicalLineCount() );
-    CPPUNIT_ASSERT_EQUAL( 0, m_text->GetLogicalLineCount() );
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetPhysicalLineCount() );
+    CPPUNIT_ASSERT_EQUAL( 1, m_text->GetLogicalLineCount() );
     m_text->SetValue("line1\nline2\nlong long line 3");
     m_text->AppendText( "\nThis is a very long line to test logical line count in the text control." );
     m_text->Refresh();

@@ -1464,6 +1464,9 @@ int wxTextCtrl::GetNumberOfLines() const
 int wxTextCtrl::GetPhysicalLineCount() const
 {
     GtkTextIter end;
+
+    if( IsEmpty() )
+        return 1;
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_text));
     gtk_text_buffer_get_end_iter(buffer, &end);
     guint numberOfLines = gtk_text_iter_get_line(&end) + 1;
@@ -1474,6 +1477,9 @@ int wxTextCtrl::GetLogicalLineCount() const
 {
     GtkTextIter iter;
     unsigned numberOfLines = 1;
+
+    if( IsEmpty() )
+        return 1;
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_text));
     gtk_text_buffer_get_start_iter(buffer, &iter);
     while( gtk_text_view_forward_display_line(GTK_TEXT_VIEW(m_text), &iter))

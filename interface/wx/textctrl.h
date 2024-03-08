@@ -1604,6 +1604,9 @@ public:
         count of lines actually shown in the control, in wxMSW.
         Because of this discrepancy, it is not recommended to use this function.
 
+        @See GetPhysicalLineCount()/GetLogicalLineCount() to get the number
+        of unwrapped/wrapped lines in the control
+
         @remarks
             Note that even empty text controls have one line (where the
             insertion point is), so GetNumberOfLines() never returns 0.
@@ -1615,6 +1618,7 @@ public:
 
         This number corresponds to the number of newline characters in
         the text buffer.
+        Just like GetNumbrOfLines() this function never return 0.
 
         @since 3.1.3
     */
@@ -1623,8 +1627,8 @@ public:
     /*
         Return number of logical lines in the text buffer.
 
-        This number corresponds to the number of lines visible in the control, i.e.
-        number of wrapped lines.
+        This number corresponds to the number of wrapped lines in the control.
+        Just like GetNumbrOfLines() this function never return 0.
 
         @since 3.1.3
     */
