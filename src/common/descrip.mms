@@ -327,6 +327,7 @@ SOURCES = \
 		imagtga.cpp,\
 		imagtiff.cpp,\
 		imagxpm.cpp,\
+		imagwebp.cpp,\
 		intl.cpp,\
 		ipcbase.cpp,\
 		layout.cpp,\
@@ -567,6 +568,7 @@ imagpnm.obj : imagpnm.cpp
 imagtga.obj : imagtga.cpp
 imagtiff.obj : imagtiff.cpp
 imagxpm.obj : imagxpm.cpp
+imagwebp.obj : imagwebp.cpp
 intl.obj : intl.cpp
 ipcbase.obj : ipcbase.cpp
 layout.obj : layout.cpp

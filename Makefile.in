@@ -3796,6 +3796,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/imagtga.h \
 	wx/imagtiff.h \
 	wx/imagxpm.h \
+	wx/imagwebp.h \
 	wx/listbase.h \
 	wx/listbook.h \
 	wx/listctrl.h \
@@ -4454,6 +4455,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_imagtga.o \
 	monodll_imagtiff.o \
 	monodll_imagxpm.o \
+	monodll_imagwebp.o \
 	monodll_layout.o \
 	monodll_lboxcmn.o \
 	monodll_listctrlcmn.o \
@@ -4718,6 +4720,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_imagtga.o \
 	monodll_imagtiff.o \
 	monodll_imagxpm.o \
+	monodll_imagwebp.o \
 	monodll_layout.o \
 	monodll_lboxcmn.o \
 	monodll_listctrlcmn.o \
@@ -6222,6 +6225,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagtga.o \
 	monolib_imagtiff.o \
 	monolib_imagxpm.o \
+	monolib_imagwebp.o \
 	monolib_layout.o \
 	monolib_lboxcmn.o \
 	monolib_listctrlcmn.o \
@@ -6486,6 +6490,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_imagtga.o \
 	monolib_imagtiff.o \
 	monolib_imagxpm.o \
+	monolib_imagwebp.o \
 	monolib_layout.o \
 	monolib_lboxcmn.o \
 	monolib_listctrlcmn.o \
@@ -8140,6 +8145,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagtga.o \
 	coredll_imagtiff.o \
 	coredll_imagxpm.o \
+	coredll_imagwebp.o \
 	coredll_layout.o \
 	coredll_lboxcmn.o \
 	coredll_listctrlcmn.o \
@@ -8404,6 +8410,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_imagtga.o \
 	coredll_imagtiff.o \
 	coredll_imagxpm.o \
+	coredll_imagwebp.o \
 	coredll_layout.o \
 	coredll_lboxcmn.o \
 	coredll_listctrlcmn.o \
@@ -9633,6 +9640,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagtga.o \
 	corelib_imagtiff.o \
 	corelib_imagxpm.o \
+	corelib_imagwebp.o \
 	corelib_layout.o \
 	corelib_lboxcmn.o \
 	corelib_listctrlcmn.o \
@@ -9897,6 +9905,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_imagtga.o \
 	corelib_imagtiff.o \
 	corelib_imagxpm.o \
+	corelib_imagwebp.o \
 	corelib_layout.o \
 	corelib_lboxcmn.o \
 	corelib_listctrlcmn.o \
@@ -19112,6 +19121,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
 
+@COND_USE_GUI_1@monodll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
+
 @COND_USE_GUI_1@monodll_layout.o: $(srcdir)/src/common/layout.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/layout.cpp
 
@@ -23872,6 +23884,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
+
+@COND_USE_GUI_1@monolib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
 @COND_USE_GUI_1@monolib_layout.o: $(srcdir)/src/common/layout.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/layout.cpp
@@ -28724,6 +28739,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
 
+@COND_USE_GUI_1@coredll_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
+
 @COND_USE_GUI_1@coredll_layout.o: $(srcdir)/src/common/layout.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/layout.cpp
 
@@ -32446,6 +32464,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_imagxpm.o: $(srcdir)/src/common/imagxpm.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagxpm.cpp
+
+@COND_USE_GUI_1@corelib_imagwebp.o: $(srcdir)/src/common/imagwebp.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/imagwebp.cpp
 
 @COND_USE_GUI_1@corelib_layout.o: $(srcdir)/src/common/layout.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/layout.cpp

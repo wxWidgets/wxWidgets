@@ -193,6 +193,7 @@
 #include <wx/imagtga.h>
 #include <wx/imagtiff.h>
 #include <wx/imagxpm.h>
+#include <wx/imagwebp.h>
 #include <wx/infobar.h>
 #include <wx/init.h>
 #include <wx/intl.h>

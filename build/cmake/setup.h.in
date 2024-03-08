@@ -227,6 +227,8 @@
 
 #cmakedefine01 wxUSE_LIBLZMA
 
+#cmakedefine01 wxUSE_LIBWEBP
+
 #cmakedefine01 wxUSE_APPLE_IEEE
 
 #cmakedefine01 wxUSE_JOYSTICK

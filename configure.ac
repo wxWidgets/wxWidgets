@@ -317,6 +317,7 @@ DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_LIBLZMA=no
 DEFAULT_wxUSE_CAIRO=no
+DEFAULT_wxUSE_LIBWEBP=auto
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
@@ -522,6 +523,7 @@ else
 fi
 
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
+WX_ARG_WITH(libwebp,       [  --with-libwebp          use libwebp (WebP file format)], wxUSE_LIBWEBP)
 WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
@@ -2504,6 +2506,36 @@ if test "$wxUSE_LIBJBIG" = "yes"; then
 fi
 
 dnl ------------------------------------------------------------------------
+dnl Check for webp library
+dnl ------------------------------------------------------------------------
+
+WEBP_LINK=
+if test "$wxUSE_LIBWEBP" != "no"; then
+    PKG_CHECK_MODULES(
+        WebP,
+        [
+            libwebp
+            libwebpdemux
+        ],
+        [
+            WEBP_LINK=$WebP_LIBS
+            CXXFLAGS="$WebP_CFLAGS $CXXFLAGS"
+        ],
+        [
+            wxUSE_LIBWEBP="no"
+            AC_MSG_RESULT([not found via pkg-config])
+        ]
+    )
+fi
+if test "$wxUSE_LIBWEBP" = "auto"; then
+    dnl if we are here, then auto-detection did not fail. Set result to "yes"
+    wxUSE_LIBWEBP=yes
+fi
+if test "$wxUSE_LIBWEBP" = "yes"; then
+    AC_DEFINE(wxUSE_LIBWEBP)
+fi
+
+dnl ------------------------------------------------------------------------
 dnl Check for tiff library
 dnl ------------------------------------------------------------------------
 
@@ -2599,6 +2631,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             tiff_jpeg_option=--enable-jpeg
         fi
 
+        dnl if you ever want to enable webp, check if it clashes with the wxUSE_LIBWBP setting
         AX_SUBDIRS_CONFIGURE([src/tiff],
             [[--disable-jbig],
              [--disable-libdeflate],
@@ -7648,7 +7681,7 @@ EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBP_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -7713,6 +7746,10 @@ if test "$wxUSE_LIBLZMA" = "yes"; then
     if test "$wxUSE_GUI" != "yes" -o "$wxUSE_LIBTIFF" != "sys"; then
         WXCONFIG_LIBS="$LZMA_LINK $WXCONFIG_LIBS"
     fi
+fi
+if test "$wxUSE_LIBWEBP" = "yes"; then
+    dnl no need to check for duplicates since webp is disabled in the our builtin tiff
+    WXCONFIG_LIBS="$WEBP_LINK $WXCONFIG_LIBS"
 fi
 case "$wxUSE_ZLIB" in
     builtin)
@@ -8258,6 +8295,7 @@ echo "                                       tiff               ${wxUSE_LIBTIFF-
 if test "$wxUSE_X11" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
+echo "                                       webp               ${wxUSE_LIBWEBP}"
 echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"

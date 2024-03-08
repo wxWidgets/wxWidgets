@@ -805,6 +805,7 @@ set(GUI_CMN_SRC
     src/common/imagtga.cpp
     src/common/imagtiff.cpp
     src/common/imagxpm.cpp
+    src/common/imagwebp.cpp
     src/common/layout.cpp
     src/common/lboxcmn.cpp
     src/common/listctrlcmn.cpp

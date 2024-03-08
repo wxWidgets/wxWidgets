@@ -58,7 +58,7 @@ elseif(WXQT)
 endif()
 
 wx_add_library(wxcore ${CORE_SRC})
-foreach(lib JPEG PNG TIFF NANOSVG)
+foreach(lib JPEG PNG TIFF NANOSVG WebP)
     if(${lib}_LIBRARIES)
         wx_lib_link_libraries(wxcore PRIVATE ${${lib}_LIBRARIES})
     endif()
