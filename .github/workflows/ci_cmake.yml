@@ -93,7 +93,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
@@ -127,7 +127,7 @@ jobs:
       # required for CMake to find Ninja
       - name: "[Windows] Set up MSVC Developer Command Prompt"
         if: runner.os == 'Windows'
-        uses: wxWidgets/gha-setup-vsdevenv@ac61ecb4b05909261f8f375601c0e15aabdd9f10
+        uses: wxWidgets/gha-setup-vsdevenv@wx
 
       - name: Configuring
         run: |
@@ -151,7 +151,7 @@ jobs:
             fi
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 

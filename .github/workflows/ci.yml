@@ -186,11 +186,25 @@ jobs:
           esac
 
       - name: Checkout
+        if: matrix.container != 'ubuntu:18.04'
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Checkout Ubuntu 18.04
+        if: matrix.container == 'ubuntu:18.04'
         uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
       - name: Install CCache
+        if: matrix.container != 'ubuntu:18.04'
+        uses: hendrikmuhs/ccache-action@v1.2.12
+        with:
+          key: ${{ matrix.name }}
+
+      - name: Install CCache Ubuntu 18.04
+        if: matrix.container == 'ubuntu:18.04'
         uses: hendrikmuhs/ccache-action@v1.2.3
         with:
           key: ${{ matrix.name }}
@@ -312,7 +326,7 @@ jobs:
 
       - name: Setup Python
         if: matrix.container == ''
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
