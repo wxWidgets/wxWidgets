@@ -36,7 +36,7 @@ WX_CPPFLAGS = @WX_CPPFLAGS@
 WX_CXXFLAGS = @WX_CXXFLAGS@
 WX_LDFLAGS = @WX_LDFLAGS@
 HOST_SUFFIX = @HOST_SUFFIX@
-SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
+DYLIB_RPATH_FLAG = @DYLIB_RPATH_FLAG@
 SAMPLES_CXXFLAGS = @SAMPLES_CXXFLAGS@
 wx_top_builddir = @wx_top_builddir@
 
@@ -206,7 +206,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 @COND_USE_GUI_1@ipcclient$(EXEEXT): $(IPCCLIENT_OBJECTS) $(__ipcclient___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCCLIENT_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCCLIENT_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)  $(LDFLAGS_GUI)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 @COND_USE_GUI_1@	$(__ipcclient___os2_emxbindcmd)
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@ipcclient.app/Contents/PkgInfo: $(__ipcclient___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
@@ -237,7 +237,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@ipcclient_bundle: $(____ipcclient_BUNDLE_TGT_REF_DEP)
 
 @COND_USE_GUI_1@ipcserver$(EXEEXT): $(IPCSERVER_OBJECTS) $(__ipcserver___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCSERVER_OBJECTS)    -L$(LIBDIRNAME)  $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p_1) $(__LIB_LEXILLA_IF_MONO_p_1) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCSERVER_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)  $(LDFLAGS_GUI)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p_1) $(__LIB_LEXILLA_IF_MONO_p_1) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 @COND_USE_GUI_1@	$(__ipcserver___os2_emxbindcmd)
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@ipcserver.app/Contents/PkgInfo: $(__ipcserver___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
@@ -268,10 +268,10 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@ipcserver_bundle: $(____ipcserver_BUNDLE_TGT_REF_DEP)
 
 baseipcclient$(EXEEXT): $(BASEIPCCLIENT_OBJECTS)
-	$(CXX) -o $@ $(BASEIPCCLIENT_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG)   $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(BASEIPCCLIENT_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 baseipcserver$(EXEEXT): $(BASEIPCSERVER_OBJECTS)
-	$(CXX) -o $@ $(BASEIPCSERVER_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG)   $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_1) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(BASEIPCSERVER_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_1) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 ipcclient_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(srcdir) $(__DLLFLAG_p_0) $(__WIN32_DPI_MANIFEST_p) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
