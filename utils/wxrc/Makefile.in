@@ -37,6 +37,7 @@ WX_CPPFLAGS = @WX_CPPFLAGS@
 WX_CXXFLAGS = @WX_CXXFLAGS@
 WX_LDFLAGS = @WX_LDFLAGS@
 HOST_SUFFIX = @HOST_SUFFIX@
+DYLIB_RPATH_FLAG = @DYLIB_RPATH_FLAG@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -112,7 +113,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 @COND_USE_XML_1@wxrc$(EXEEXT): $(WXRC_OBJECTS)
-@COND_USE_XML_1@	$(CXX) -o $@ $(WXRC_OBJECTS)    -L$(LIBDIRNAME)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_XML_1@	$(CXX) -o $@ $(WXRC_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 @COND_USE_XML_1@install_wxrc: $(__wxrc___depname)
 @COND_USE_XML_1@	$(INSTALL_DIR) $(DESTDIR)$(bindir)
