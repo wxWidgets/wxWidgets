@@ -10,7 +10,7 @@
 #
 # DO NOT MODIFY MANUALLY
 #
-# To update the include file see cef_update_version_info.cmake
+# To update this file, use cef_update_version_info.cmake
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     if(CMAKE_SIZEOF_VOID_P LESS 8)
@@ -61,4 +61,4 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 else()
     message(ERROR "Unsupported CEF system")
 endif()
-set(CEF_URL "@CEF_BASE_URL@@CEF_VERSION@_${CEF_PLATFORM}${CEF_DISTRIBUTION}@CEF_FILE_EXT@")
+set(CEF_URL "@CEF_BASE_URL@@CEF_VERSION@_${CEF_PLATFORM}@CEF_DISTRIBUTION@@CEF_FILE_EXT@")
