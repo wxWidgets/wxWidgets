@@ -319,6 +319,7 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexAVS.o \
 	wxlexilla_LexAbaqus.o \
 	wxlexilla_LexAda.o \
+	wxlexilla_LexAsciidoc.o \
 	wxlexilla_LexAsm.o \
 	wxlexilla_LexAsn1.o \
 	wxlexilla_LexBaan.o \
@@ -354,6 +355,7 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexForth.o \
 	wxlexilla_LexFortran.o \
 	wxlexilla_LexGAP.o \
+	wxlexilla_LexGDScript.o \
 	wxlexilla_LexGui4Cli.o \
 	wxlexilla_LexHTML.o \
 	wxlexilla_LexHaskell.o \
@@ -362,6 +364,7 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexIndent.o \
 	wxlexilla_LexInno.o \
 	wxlexilla_LexJSON.o \
+	wxlexilla_LexJulia.o \
 	wxlexilla_LexKVIrc.o \
 	wxlexilla_LexKix.o \
 	wxlexilla_LexLaTeX.o \
@@ -428,6 +431,10 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_LexYAML.o \
 	wxlexilla_Accessor.o \
 	wxlexilla_DefaultLexer.o \
+	wxlexilla_InList.o \
+	wxlexilla_LexAccessor.o \
+	wxlexilla_LexCharacterCategory.o \
+	wxlexilla_LexCharacterSet.o \
 	wxlexilla_LexerBase.o \
 	wxlexilla_LexerModule.o \
 	wxlexilla_LexerNoExceptions.o \
@@ -14389,6 +14396,9 @@ wxlexilla_LexAbaqus.o: $(srcdir)/src/stc/lexilla/lexers/LexAbaqus.cxx
 wxlexilla_LexAda.o: $(srcdir)/src/stc/lexilla/lexers/LexAda.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexAda.cxx
 
+wxlexilla_LexAsciidoc.o: $(srcdir)/src/stc/lexilla/lexers/LexAsciidoc.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexAsciidoc.cxx
+
 wxlexilla_LexAsm.o: $(srcdir)/src/stc/lexilla/lexers/LexAsm.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexAsm.cxx
 
@@ -14494,6 +14504,9 @@ wxlexilla_LexFortran.o: $(srcdir)/src/stc/lexilla/lexers/LexFortran.cxx
 wxlexilla_LexGAP.o: $(srcdir)/src/stc/lexilla/lexers/LexGAP.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexGAP.cxx
 
+wxlexilla_LexGDScript.o: $(srcdir)/src/stc/lexilla/lexers/LexGDScript.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexGDScript.cxx
+
 wxlexilla_LexGui4Cli.o: $(srcdir)/src/stc/lexilla/lexers/LexGui4Cli.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexGui4Cli.cxx
 
@@ -14517,6 +14530,9 @@ wxlexilla_LexInno.o: $(srcdir)/src/stc/lexilla/lexers/LexInno.cxx
 
 wxlexilla_LexJSON.o: $(srcdir)/src/stc/lexilla/lexers/LexJSON.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexJSON.cxx
+
+wxlexilla_LexJulia.o: $(srcdir)/src/stc/lexilla/lexers/LexJulia.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexJulia.cxx
 
 wxlexilla_LexKVIrc.o: $(srcdir)/src/stc/lexilla/lexers/LexKVIrc.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexers/LexKVIrc.cxx
@@ -14715,6 +14731,18 @@ wxlexilla_Accessor.o: $(srcdir)/src/stc/lexilla/lexlib/Accessor.cxx
 
 wxlexilla_DefaultLexer.o: $(srcdir)/src/stc/lexilla/lexlib/DefaultLexer.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/DefaultLexer.cxx
+
+wxlexilla_InList.o: $(srcdir)/src/stc/lexilla/lexlib/InList.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/InList.cxx
+
+wxlexilla_LexAccessor.o: $(srcdir)/src/stc/lexilla/lexlib/LexAccessor.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/LexAccessor.cxx
+
+wxlexilla_LexCharacterCategory.o: $(srcdir)/src/stc/lexilla/lexlib/LexCharacterCategory.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/LexCharacterCategory.cxx
+
+wxlexilla_LexCharacterSet.o: $(srcdir)/src/stc/lexilla/lexlib/LexCharacterSet.cxx
+	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/LexCharacterSet.cxx
 
 wxlexilla_LexerBase.o: $(srcdir)/src/stc/lexilla/lexlib/LexerBase.cxx
 	$(CXXC) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(srcdir)/src/stc/lexilla/lexlib/LexerBase.cxx

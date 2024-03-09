@@ -268,6 +268,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexAVS.o \
 	$(OBJS)\wxlexilla_LexAbaqus.o \
 	$(OBJS)\wxlexilla_LexAda.o \
+	$(OBJS)\wxlexilla_LexAsciidoc.o \
 	$(OBJS)\wxlexilla_LexAsm.o \
 	$(OBJS)\wxlexilla_LexAsn1.o \
 	$(OBJS)\wxlexilla_LexBaan.o \
@@ -303,6 +304,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexForth.o \
 	$(OBJS)\wxlexilla_LexFortran.o \
 	$(OBJS)\wxlexilla_LexGAP.o \
+	$(OBJS)\wxlexilla_LexGDScript.o \
 	$(OBJS)\wxlexilla_LexGui4Cli.o \
 	$(OBJS)\wxlexilla_LexHTML.o \
 	$(OBJS)\wxlexilla_LexHaskell.o \
@@ -311,6 +313,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexIndent.o \
 	$(OBJS)\wxlexilla_LexInno.o \
 	$(OBJS)\wxlexilla_LexJSON.o \
+	$(OBJS)\wxlexilla_LexJulia.o \
 	$(OBJS)\wxlexilla_LexKVIrc.o \
 	$(OBJS)\wxlexilla_LexKix.o \
 	$(OBJS)\wxlexilla_LexLaTeX.o \
@@ -377,6 +380,10 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexYAML.o \
 	$(OBJS)\wxlexilla_Accessor.o \
 	$(OBJS)\wxlexilla_DefaultLexer.o \
+	$(OBJS)\wxlexilla_InList.o \
+	$(OBJS)\wxlexilla_LexAccessor.o \
+	$(OBJS)\wxlexilla_LexCharacterCategory.o \
+	$(OBJS)\wxlexilla_LexCharacterSet.o \
 	$(OBJS)\wxlexilla_LexerBase.o \
 	$(OBJS)\wxlexilla_LexerModule.o \
 	$(OBJS)\wxlexilla_LexerNoExceptions.o \
@@ -6639,6 +6646,9 @@ $(OBJS)\wxlexilla_LexAbaqus.o: ../../src/stc/lexilla/lexers/LexAbaqus.cxx
 $(OBJS)\wxlexilla_LexAda.o: ../../src/stc/lexilla/lexers/LexAda.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxlexilla_LexAsciidoc.o: ../../src/stc/lexilla/lexers/LexAsciidoc.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxlexilla_LexAsm.o: ../../src/stc/lexilla/lexers/LexAsm.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6744,6 +6754,9 @@ $(OBJS)\wxlexilla_LexFortran.o: ../../src/stc/lexilla/lexers/LexFortran.cxx
 $(OBJS)\wxlexilla_LexGAP.o: ../../src/stc/lexilla/lexers/LexGAP.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxlexilla_LexGDScript.o: ../../src/stc/lexilla/lexers/LexGDScript.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxlexilla_LexGui4Cli.o: ../../src/stc/lexilla/lexers/LexGui4Cli.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6766,6 +6779,9 @@ $(OBJS)\wxlexilla_LexInno.o: ../../src/stc/lexilla/lexers/LexInno.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexJSON.o: ../../src/stc/lexilla/lexers/LexJSON.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexJulia.o: ../../src/stc/lexilla/lexers/LexJulia.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexKVIrc.o: ../../src/stc/lexilla/lexers/LexKVIrc.cxx
@@ -6964,6 +6980,18 @@ $(OBJS)\wxlexilla_Accessor.o: ../../src/stc/lexilla/lexlib/Accessor.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_DefaultLexer.o: ../../src/stc/lexilla/lexlib/DefaultLexer.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_InList.o: ../../src/stc/lexilla/lexlib/InList.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexAccessor.o: ../../src/stc/lexilla/lexlib/LexAccessor.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexCharacterCategory.o: ../../src/stc/lexilla/lexlib/LexCharacterCategory.cxx
+	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxlexilla_LexCharacterSet.o: ../../src/stc/lexilla/lexlib/LexCharacterSet.cxx
 	$(CXX) -c -o $@ $(WXLEXILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxlexilla_LexerBase.o: ../../src/stc/lexilla/lexlib/LexerBase.cxx

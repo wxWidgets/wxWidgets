@@ -296,6 +296,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexAVS.obj \
 	$(OBJS)\wxlexilla_LexAbaqus.obj \
 	$(OBJS)\wxlexilla_LexAda.obj \
+	$(OBJS)\wxlexilla_LexAsciidoc.obj \
 	$(OBJS)\wxlexilla_LexAsm.obj \
 	$(OBJS)\wxlexilla_LexAsn1.obj \
 	$(OBJS)\wxlexilla_LexBaan.obj \
@@ -331,6 +332,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexForth.obj \
 	$(OBJS)\wxlexilla_LexFortran.obj \
 	$(OBJS)\wxlexilla_LexGAP.obj \
+	$(OBJS)\wxlexilla_LexGDScript.obj \
 	$(OBJS)\wxlexilla_LexGui4Cli.obj \
 	$(OBJS)\wxlexilla_LexHTML.obj \
 	$(OBJS)\wxlexilla_LexHaskell.obj \
@@ -339,6 +341,7 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexIndent.obj \
 	$(OBJS)\wxlexilla_LexInno.obj \
 	$(OBJS)\wxlexilla_LexJSON.obj \
+	$(OBJS)\wxlexilla_LexJulia.obj \
 	$(OBJS)\wxlexilla_LexKVIrc.obj \
 	$(OBJS)\wxlexilla_LexKix.obj \
 	$(OBJS)\wxlexilla_LexLaTeX.obj \
@@ -405,6 +408,10 @@ WXLEXILLA_OBJECTS =  \
 	$(OBJS)\wxlexilla_LexYAML.obj \
 	$(OBJS)\wxlexilla_Accessor.obj \
 	$(OBJS)\wxlexilla_DefaultLexer.obj \
+	$(OBJS)\wxlexilla_InList.obj \
+	$(OBJS)\wxlexilla_LexAccessor.obj \
+	$(OBJS)\wxlexilla_LexCharacterCategory.obj \
+	$(OBJS)\wxlexilla_LexCharacterSet.obj \
 	$(OBJS)\wxlexilla_LexerBase.obj \
 	$(OBJS)\wxlexilla_LexerModule.obj \
 	$(OBJS)\wxlexilla_LexerNoExceptions.obj \
@@ -7108,6 +7115,9 @@ $(OBJS)\wxlexilla_LexAbaqus.obj: ..\..\src\stc\lexilla\lexers\LexAbaqus.cxx
 $(OBJS)\wxlexilla_LexAda.obj: ..\..\src\stc\lexilla\lexers\LexAda.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexAda.cxx
 
+$(OBJS)\wxlexilla_LexAsciidoc.obj: ..\..\src\stc\lexilla\lexers\LexAsciidoc.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexAsciidoc.cxx
+
 $(OBJS)\wxlexilla_LexAsm.obj: ..\..\src\stc\lexilla\lexers\LexAsm.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexAsm.cxx
 
@@ -7213,6 +7223,9 @@ $(OBJS)\wxlexilla_LexFortran.obj: ..\..\src\stc\lexilla\lexers\LexFortran.cxx
 $(OBJS)\wxlexilla_LexGAP.obj: ..\..\src\stc\lexilla\lexers\LexGAP.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexGAP.cxx
 
+$(OBJS)\wxlexilla_LexGDScript.obj: ..\..\src\stc\lexilla\lexers\LexGDScript.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexGDScript.cxx
+
 $(OBJS)\wxlexilla_LexGui4Cli.obj: ..\..\src\stc\lexilla\lexers\LexGui4Cli.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexGui4Cli.cxx
 
@@ -7236,6 +7249,9 @@ $(OBJS)\wxlexilla_LexInno.obj: ..\..\src\stc\lexilla\lexers\LexInno.cxx
 
 $(OBJS)\wxlexilla_LexJSON.obj: ..\..\src\stc\lexilla\lexers\LexJSON.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexJSON.cxx
+
+$(OBJS)\wxlexilla_LexJulia.obj: ..\..\src\stc\lexilla\lexers\LexJulia.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexJulia.cxx
 
 $(OBJS)\wxlexilla_LexKVIrc.obj: ..\..\src\stc\lexilla\lexers\LexKVIrc.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexers\LexKVIrc.cxx
@@ -7434,6 +7450,18 @@ $(OBJS)\wxlexilla_Accessor.obj: ..\..\src\stc\lexilla\lexlib\Accessor.cxx
 
 $(OBJS)\wxlexilla_DefaultLexer.obj: ..\..\src\stc\lexilla\lexlib\DefaultLexer.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexlib\DefaultLexer.cxx
+
+$(OBJS)\wxlexilla_InList.obj: ..\..\src\stc\lexilla\lexlib\InList.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexlib\InList.cxx
+
+$(OBJS)\wxlexilla_LexAccessor.obj: ..\..\src\stc\lexilla\lexlib\LexAccessor.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexlib\LexAccessor.cxx
+
+$(OBJS)\wxlexilla_LexCharacterCategory.obj: ..\..\src\stc\lexilla\lexlib\LexCharacterCategory.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexlib\LexCharacterCategory.cxx
+
+$(OBJS)\wxlexilla_LexCharacterSet.obj: ..\..\src\stc\lexilla\lexlib\LexCharacterSet.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexlib\LexCharacterSet.cxx
 
 $(OBJS)\wxlexilla_LexerBase.obj: ..\..\src\stc\lexilla\lexlib\LexerBase.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXLEXILLA_CXXFLAGS) ..\..\src\stc\lexilla\lexlib\LexerBase.cxx

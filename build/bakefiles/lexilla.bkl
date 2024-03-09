@@ -50,6 +50,7 @@
             src/stc/lexilla/lexers/LexAVS.cxx
             src/stc/lexilla/lexers/LexAbaqus.cxx
             src/stc/lexilla/lexers/LexAda.cxx
+            src/stc/lexilla/lexers/LexAsciidoc.cxx
             src/stc/lexilla/lexers/LexAsm.cxx
             src/stc/lexilla/lexers/LexAsn1.cxx
             src/stc/lexilla/lexers/LexBaan.cxx
@@ -85,6 +86,7 @@
             src/stc/lexilla/lexers/LexForth.cxx
             src/stc/lexilla/lexers/LexFortran.cxx
             src/stc/lexilla/lexers/LexGAP.cxx
+            src/stc/lexilla/lexers/LexGDScript.cxx
             src/stc/lexilla/lexers/LexGui4Cli.cxx
             src/stc/lexilla/lexers/LexHTML.cxx
             src/stc/lexilla/lexers/LexHaskell.cxx
@@ -93,6 +95,7 @@
             src/stc/lexilla/lexers/LexIndent.cxx
             src/stc/lexilla/lexers/LexInno.cxx
             src/stc/lexilla/lexers/LexJSON.cxx
+            src/stc/lexilla/lexers/LexJulia.cxx
             src/stc/lexilla/lexers/LexKVIrc.cxx
             src/stc/lexilla/lexers/LexKix.cxx
             src/stc/lexilla/lexers/LexLaTeX.cxx
@@ -158,9 +161,11 @@
             src/stc/lexilla/lexers/LexX12.cxx
             src/stc/lexilla/lexers/LexYAML.cxx
             src/stc/lexilla/lexlib/Accessor.cxx
-            <!-- src/stc/lexilla/lexlib/CharacterCategory.cxx -->
-            <!-- src/stc/lexilla/lexlib/CharacterSet.cxx -->
             src/stc/lexilla/lexlib/DefaultLexer.cxx
+            src/stc/lexilla/lexlib/InList.cxx
+            src/stc/lexilla/lexlib/LexAccessor.cxx
+            src/stc/lexilla/lexlib/LexCharacterCategory.cxx
+            src/stc/lexilla/lexlib/LexCharacterSet.cxx
             src/stc/lexilla/lexlib/LexerBase.cxx
             src/stc/lexilla/lexlib/LexerModule.cxx
             src/stc/lexilla/lexlib/LexerNoExceptions.cxx
