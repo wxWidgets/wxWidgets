@@ -2148,7 +2148,9 @@ void wxWindowMac::MacRepositionScrollBars()
             }
         }
     }
-    m_peer->AdjustClippingView(m_hScrollBar, m_vScrollBar);
+
+    if( GetPeer() )
+        GetPeer()->AdjustClippingView(m_hScrollBar, m_vScrollBar);
 #endif
 }
 
