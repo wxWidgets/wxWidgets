@@ -645,7 +645,7 @@ int wxVListBoxComboPopup::FindString(const wxString& s, bool bCase) const
 
 bool wxVListBoxComboPopup::FindItem(const wxString& item, wxString* trueItem)
 {
-    int idx = m_strings.Index(item, false);
+    int idx = m_strings.Index(item, true);
     if ( idx == wxNOT_FOUND )
         return false;
     if ( trueItem != nullptr )
