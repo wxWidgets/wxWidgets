@@ -410,6 +410,7 @@ enum
     TEXT_CLIPBOARD_COPY = 200,
     TEXT_CLIPBOARD_PASTE,
     TEXT_CLIPBOARD_VETO,
+    TEXT_CLIPBOARD_USE_PRIMARY,
 
     // tooltip menu
     TEXT_TOOLTIPS_SETDELAY = 300,
@@ -490,6 +491,10 @@ bool MyApp::OnInit()
                           "Copy the selection to the clipboard");
     menuClipboard->Append(TEXT_CLIPBOARD_PASTE, "&Paste\tCtrl-Shift-V",
                           "Paste from clipboard to the text control");
+    menuClipboard->AppendSeparator();
+    menuClipboard->AppendCheckItem(TEXT_CLIPBOARD_USE_PRIMARY,
+        "Use &primary selection\tCtrl-Shift-P",
+        "If checked, use primary selection instead of clipboard");
     menuClipboard->AppendSeparator();
     menuClipboard->AppendCheckItem(TEXT_CLIPBOARD_VETO, "Vet&o\tCtrl-Shift-O",
                                    "Veto all clipboard operations");
@@ -1315,9 +1320,11 @@ wxTextCtrl *MyPanel::GetFocusedText() const
 #if wxUSE_CLIPBOARD
 void MyPanel::SelectClipboardSelection()
 {
-    // On X11, we want to exchange data with the clipboard selection instead
-    // of the primary selection -- which is actually the case by default.
-    wxTheClipboard->UsePrimarySelection(false);
+    wxFrame *frame = wxDynamicCast(wxGetTopLevelParent(this), wxFrame);
+    wxCHECK_RET( frame, "no parent frame?" );
+
+    wxTheClipboard->UsePrimarySelection(
+        frame->GetMenuBar()->IsChecked(TEXT_CLIPBOARD_USE_PRIMARY));
 }
 
 void MyPanel::DoPasteFromClipboard()
