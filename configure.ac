@@ -6155,10 +6155,6 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" -o "$wxUSE_CLIPBOARD" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
 fi
 
-if test "$wxUSE_CLIPBOARD" = "yes"; then
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS clipboard"
-fi
-
 if test "$wxUSE_SPLINES" = "yes" ; then
   AC_DEFINE(wxUSE_SPLINES)
 fi
