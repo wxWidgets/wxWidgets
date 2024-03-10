@@ -6335,31 +6335,6 @@ public:
         coordinates during the event handler execution, while the new ones are
         available via the event object GetRow() and GetCol() functions.
         Processes a @c wxEVT_GRID_SELECT_CELL event type.
-    @event{EVT_GRID_ROW_MOVE(func)}
-        The user tries to change the order of the rows in the grid by
-        dragging the row specified by GetRow(). This event can be vetoed to
-        either prevent the user from reordering the row change completely
-        (but notice that if you don't want to allow it at all, you simply
-        shouldn't call wxGrid::EnableDragRowMove() in the first place), vetoed
-        but handled in some way in the handler, e.g. by really moving the
-        row to the new position at the associated table level, or allowed to
-        proceed in which case wxGrid::SetRowPos() is used to reorder the
-        rows display order without affecting the use of the row indices
-        otherwise.
-        This event macro corresponds to @c wxEVT_GRID_ROW_MOVE event type.
-        It is only available since wxWidgets 3.1.7.
-    @event{EVT_GRID_COL_MOVE(func)}
-        The user tries to change the order of the columns in the grid by
-        dragging the column specified by GetCol(). This event can be vetoed to
-        either prevent the user from reordering the column change completely
-        (but notice that if you don't want to allow it at all, you simply
-        shouldn't call wxGrid::EnableDragColMove() in the first place), vetoed
-        but handled in some way in the handler, e.g. by really moving the
-        column to the new position at the associated table level, or allowed to
-        proceed in which case wxGrid::SetColPos() is used to reorder the
-        columns display order without affecting the use of the column indices
-        otherwise.
-        This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
     @event{EVT_GRID_COL_SORT(func)}
         This event is generated when a column is clicked by the user and its
         name is explained by the fact that the custom reaction to a click on a
@@ -6527,6 +6502,87 @@ public:
     bool ShiftDown() const;
 };
 
+
+/**
+    @class wxGridMoveEvent
+
+    This event class contains information about a row/column resize event.
+
+    @beginEventTable{wxGridMoveEvent}
+    @event{EVT_GRID_ROW_MOVE(func)}
+        The user tries to change the order of the rows in the grid by
+        dragging the row specified by GetRow(). This event can be vetoed to
+        either prevent the user from reordering the row change completely
+        (but notice that if you don't want to allow it at all, you simply
+        shouldn't call wxGrid::EnableDragRowMove() in the first place), vetoed
+        but handled in some way in the handler, e.g. by really moving the
+        row to the new position at the associated table level, or allowed to
+        proceed in which case wxGrid::SetRowPos() is used to reorder the
+        rows display order without affecting the use of the row indices
+        otherwise.
+        This event macro corresponds to @c wxEVT_GRID_ROW_MOVE event type.
+        It is only available since wxWidgets 3.1.7.
+    @event{EVT_GRID_COL_MOVE(func)}
+        The user tries to change the order of the columns in the grid by
+        dragging the column specified by GetCol(). This event can be vetoed to
+        either prevent the user from reordering the column change completely
+        (but notice that if you don't want to allow it at all, you simply
+        shouldn't call wxGrid::EnableDragColMove() in the first place), vetoed
+        but handled in some way in the handler, e.g. by really moving the
+        column to the new position at the associated table level, or allowed to
+        proceed in which case wxGrid::SetColPos() is used to reorder the
+        columns display order without affecting the use of the column indices
+        otherwise.
+        This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
+    @endEventTable
+
+    @library{wxcore}
+    @category{grid,events}
+*/
+class wxGridMoveEvent : public wxNotifyEvent
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridMoveEvent();
+    /**
+        Constructor for initializing all event attributes.
+    */
+    wxGridMoveEvent(int id, wxEventType type, wxObject* obj,
+        int rowOrCol = -1, int newRowOrCol = -1,
+        const wxKeyboardState& kbd = wxKeyboardState());
+
+    /**
+        Returns @true if the Alt key was down at the time of the event.
+    */
+    bool AltDown() const;
+
+    /**
+        Returns @true if the Control key was down at the time of the event.
+    */
+    bool ControlDown() const;
+
+    /**
+        Row or column at that was moved.
+    */
+    int GetRowOrCol() const;
+
+    /**
+        Target Row or column.
+    */
+    int GetNewRowOrCol() const;
+
+    /**
+        Returns @true if the Meta key was down at the time of the event.
+    */
+    bool MetaDown() const;
+
+    /**
+        Returns @true if the Shift key was down at the time of the event.
+    */
+    bool ShiftDown() const;
+};
 
 
 /**

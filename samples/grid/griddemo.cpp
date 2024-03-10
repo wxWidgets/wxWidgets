@@ -368,6 +368,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
+    EVT_GRID_ROW_MOVE(GridFrame::OnRowMove)
+    EVT_GRID_COL_MOVE(GridFrame::OnColMove)
     EVT_GRID_COL_AUTO_SIZE( GridFrame::OnColAutoSize )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECTING( GridFrame::OnRangeSelecting )
@@ -1712,6 +1714,25 @@ void GridFrame::OnColAutoSize( wxGridSizeEvent &event )
     }
 }
 
+void GridFrame::OnRowMove(wxGridMoveEvent& ev)
+{
+    const int row = ev.GetRowOrCol();
+
+    wxLogMessage("Moving row %d to %d", row, ev.GetNewRowOrCol());
+
+    ev.Skip();
+}
+
+
+void GridFrame::OnColMove(wxGridMoveEvent& ev)
+{
+    const int col = ev.GetRowOrCol();
+
+    wxLogMessage("Moving col %d to %d", col, ev.GetNewRowOrCol());
+
+    ev.Skip();
+}
+
 void GridFrame::OnSelectCell( wxGridEvent& ev )
 {
     wxString logBuf;
@@ -2524,7 +2545,7 @@ private:
                              m_grid->IsSortOrderAscending()));
     }
 
-    void OnGridRowMove(wxGridEvent& event)
+    void OnGridRowMove(wxGridMoveEvent& event)
     {
         // can't update it yet as the order hasn't been changed, so do it a bit
         // later
@@ -2533,7 +2554,7 @@ private:
         event.Skip();
     }
 
-    void OnGridColMove(wxGridEvent& event)
+    void OnGridColMove(wxGridMoveEvent& event)
     {
         // can't update it yet as the order hasn't been changed, so do it a bit
         // later
