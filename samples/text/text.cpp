@@ -152,6 +152,10 @@ public:
 #endif // wxUSE_LOG
 
 private:
+#if wxUSE_CLIPBOARD
+    void SelectClipboardSelection();
+#endif // wxUSE_CLIPBOARD
+
     // get the currently focused text control or return the default one
     // (m_multitext) is no text ctrl has focus -- in any case, returns
     // something non null
@@ -1309,12 +1313,17 @@ wxTextCtrl *MyPanel::GetFocusedText() const
 }
 
 #if wxUSE_CLIPBOARD
-void MyPanel::DoPasteFromClipboard()
+void MyPanel::SelectClipboardSelection()
 {
     // On X11, we want to get the data from the primary selection instead
     // of the normal clipboard (which isn't normal under X11 at all). This
     // call has no effect under MSW.
     wxTheClipboard->UsePrimarySelection();
+}
+
+void MyPanel::DoPasteFromClipboard()
+{
+    SelectClipboardSelection();
 
     if (!wxTheClipboard->Open())
     {
@@ -1368,10 +1377,7 @@ void MyPanel::DoPasteFromClipboard()
 
 void MyPanel::DoCopyToClipboard()
 {
-    // On X11, we want to get the data from the primary selection instead
-    // of the normal clipboard (which isn't normal under X11 at all). This
-    // call has no effect under MSW.
-    wxTheClipboard->UsePrimarySelection();
+    SelectClipboardSelection();
 
     wxString text( GetFocusedText()->GetStringSelection() );
 
