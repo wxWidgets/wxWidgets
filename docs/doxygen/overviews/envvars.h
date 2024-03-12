@@ -54,9 +54,10 @@ wxWidgets programs.
 @itemdef{WXLANGUAGE,
          This variable can be set to override OS setting of preferred languages
          and make wxUILocale::GetPreferredUILanguages() return the set list
-         instead. The format is same as GNU's <a
+         instead. The format is a superset of GNU's <a
          href="https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html">LANGUAGE</a>
-         variable: a colon-separated list of language codes.}
+         variable: a colon-separated list of language tags (which are, in their
+         simplest form, just the language names).}
 */
 
 @see wxSystemOptions

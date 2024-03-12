@@ -763,14 +763,25 @@ wxVector<wxString> wxUILocale::GetPreferredUILanguages()
         while (tknzr.HasMoreTokens())
         {
             const wxString tok = tknzr.GetNextToken();
-            if (const wxLanguageInfo* li = wxUILocale::FindLanguageInfo(tok))
+            auto ident = wxLocaleIdent::FromTag(tok);
+            if ( ident.IsEmpty() )
             {
-                preferred.push_back(li->CanonicalName);
+                wxLogTrace(TRACE_I18N, "Invalid language code '%s' in WXLANGUAGE", tok);
+                continue;
             }
+
+            if ( !wxUILocale::FindLanguageInfo(ident.GetLanguage()) )
+            {
+                wxLogTrace(TRACE_I18N, "Unknown language in '%s' in WXLANGUAGE", tok);
+                continue;
+            }
+
+            preferred.push_back(ident.GetTag());
         }
         if (!preferred.empty())
         {
-            wxLogTrace(TRACE_I18N, " - using languages override from WXLANGUAGE: '%s'", languageFromEnv);
+            wxLogTrace(TRACE_I18N, " - using languages override from WXLANGUAGE: [%s]",
+                       wxJoin(preferred, ','));
             return preferred;
         }
     }
