@@ -344,6 +344,25 @@ TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
     }
 }
 
+// This test can be used to check how GetBestTranslation() and
+// GetAvailableTranslations() work with the given preferred languages: set
+// WXLANGUAGE environment variable to the colon-separated list of preferred
+// languages to test before running it.
+TEST_CASE("wxTranslations::ShowAvailable", "[.]")
+{
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+
+    const wxString domain("internat");
+
+    wxTranslations trans;
+
+    WARN
+    (
+        "Available: [" << wxJoin(trans.GetAvailableTranslations(domain), ',') << "]\n"
+        "Best:      [" << trans.GetBestTranslation(domain) << "]"
+    );
+}
+
 TEST_CASE("wxLocale::Default", "[locale]")
 {
     const int langDef = wxUILocale::GetSystemLanguage();
