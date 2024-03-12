@@ -526,4 +526,11 @@ public:
 }
 #endif
 
+// There are multiple instances of this warning in lexers code, suppress them.
+#if defined(__clang__)
+#if __has_warning("-Wunused-but-set-variable")
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#endif
+
 #endif
