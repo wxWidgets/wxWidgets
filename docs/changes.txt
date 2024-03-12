@@ -314,6 +314,7 @@ wxOSX:
 - Restore activation for non-bundled applications (#24056, #24062).
 - Fix wrong tooltips for cells with custom renderers in wxDataViewCtrl (#24370).
 - Fix handling of nested modal dialogs (WakA, #24418).
+- Fix translations when using zh-Hans-CN locale (#24396).
 
 wxQt:
 

@@ -400,7 +400,11 @@ wxString wxLocaleIdent::GetTag(wxLocaleTagType tagType) const
             if (!m_charset.empty())
                 tag << '.' << m_charset;
             if (!m_script.empty())
-                tag << '@' << wxUILocale::GetScriptAliasFromName(m_script);
+            {
+                const wxString& script = wxUILocale::GetScriptAliasFromName(m_script);
+                if (!script.empty())
+                    tag << '@' << script;
+            }
             else if (!m_modifier.empty())
                 tag << '@' << m_modifier;
             break;

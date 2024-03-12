@@ -425,6 +425,11 @@ static void CheckTag(const wxString& tag)
     CHECK( wxLocaleIdent::FromTag(tag).GetTag() == tag );
 }
 
+static wxString TagToPOSIX(const char* tag)
+{
+    return wxLocaleIdent::FromTag(tag).GetTag(wxLOCALE_TAGTYPE_POSIX);
+}
+
 TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
 {
     CheckTag("");
@@ -434,6 +439,8 @@ TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
     CheckTag("English");
     CheckTag("English_United States");
     CheckTag("English_United States.utf8");
+
+    CHECK( TagToPOSIX("zh-Hans-CN") == "zh_CN" );
 }
 
 // Yet another helper for the test below.
