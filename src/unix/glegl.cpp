@@ -737,18 +737,54 @@ EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         return NULL;
     }
 
-    EGLConfig *config = new EGLConfig;
-    int returned;
-    // Use the first good match
-    if ( eglChooseConfig(dpy, attrsList, config, 1, &returned) && returned == 1 )
+    int numConfigs = 0;
+    eglChooseConfig(dpy, attrsList, NULL, 0, &numConfigs);
+
+    if (numConfigs == 0)
+        return NULL;
+
+    EGLConfig *configs = new EGLConfig[numConfigs]();
+    if (!eglChooseConfig(dpy, attrsList, configs, numConfigs, &numConfigs))
     {
-        return config;
-    }
-    else
-    {
-        delete config;
+        delete[] configs;
         return NULL;
     }
+
+    int requestedAlpha = -1;
+    for (int i = 0; attrsList[i] != EGL_NONE; i++)
+    {
+        if (attrsList[i] == EGL_ALPHA_SIZE)
+        {
+            requestedAlpha = attrsList[i + 1];
+            break;
+        }
+    }
+
+    int bestConfig = -1;
+    for (int i = 0; i < numConfigs; i++)
+    {
+        EGLint alpha = 0;
+        eglGetConfigAttrib(dpy, configs[i], EGL_ALPHA_SIZE, &alpha);
+
+        // Some drivers (e.g. Mesa Iris) put configs with alpha at the start of the config list,
+        // even if EGL_ALPHA_SIZE is zero or not specified.
+        // But we want to prefer configs without alpha in this case.
+        if (requestedAlpha <= 0 && alpha > 0)
+            continue;
+
+        if (bestConfig == -1)
+            bestConfig = i;
+    }
+
+    // Just choose the first config
+    if (bestConfig == -1)
+        bestConfig = 0;
+
+    EGLConfig *chosenConfig = new EGLConfig(configs[bestConfig]);
+
+    delete[] configs;
+
+    return chosenConfig;
 }
 
 /* static */
