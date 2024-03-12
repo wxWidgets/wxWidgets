@@ -426,11 +426,15 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\stc\lexilla\access\LexillaAccess.h" />
     <ClInclude Include="..\..\src\stc\lexilla\include\Lexilla.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\include\LexillaCompat.h" />
     <ClInclude Include="..\..\src\stc\lexilla\include\SciLexer.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\Accessor.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\CatalogueModules.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\DefaultLexer.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\InList.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexAccessor.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexCharacterCategory.h" />
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexCharacterSet.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerBase.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerModule.h" />
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.h" />
@@ -448,6 +452,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexA68k.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAbaqus.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAda.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAsciidoc.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAPDL.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAsm.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAsn1.cxx" />
@@ -488,6 +493,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexFortran.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexFSharp.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGAP.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGDScript.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGui4Cli.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexHaskell.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexHex.cxx" />
@@ -496,6 +502,7 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexIndent.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexInno.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexJSON.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexJulia.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexKix.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexKVIrc.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexLaTeX.cxx" />
@@ -562,6 +569,10 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexYAML.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\Accessor.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\DefaultLexer.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\InList.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexAccessor.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexCharacterCategory.cxx" />
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexCharacterSet.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerBase.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerModule.cxx" />
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerNoExceptions.cxx" />
