@@ -362,8 +362,18 @@ wxVector<wxString> wxUILocaleImpl::GetPreferredUILanguages()
     NSArray* preferredLangs = [NSLocale preferredLanguages];
     NSUInteger count = preferredLangs.count;
 
-    for (NSUInteger j = 0; j < count; ++j)
-        preferred.push_back(wxCFStringRef::AsString(preferredLangs[j]));
+    for (NSUInteger j = 0; j < count; ++j) {
+        NSString *langCode = preferredLangs[j];
+        // macOS will return things like `zh-Hans-CN`, but we want format of `zh_CN`.
+        // So, we first replace '-' with '_'
+        langCode = [langCode stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+        // And then remove the middle part, if exists
+        NSArray *langComponents = [langCode componentsSeparatedByString:@"_"];
+        if ([langComponents count] > 2) {
+            langCode = [NSString stringWithFormat:@"%@_%@", langComponents[0], langComponents[2]];
+        }
+        preferred.push_back(wxCFStringRef::AsString(langCode));
+    }
 
     return preferred;
 }
