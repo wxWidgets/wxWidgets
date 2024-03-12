@@ -187,14 +187,11 @@ TEST_CASE_METHOD(RequestFixture,
     if ( !InitBaseURL() )
         return;
 
-    // limit to 2048, with larger sizes the go-httpbin response
-    // does not include a content-length header
-    const int size = 2048;
-    Create(wxString::Format("/bytes/%d", size));
+    Create("/bytes/65536");
     Run();
-    CHECK( request.GetResponse().GetContentLength() == size );
-    CHECK( request.GetBytesExpectedToReceive() == size );
-    CHECK( request.GetBytesReceived() == size );
+    CHECK( request.GetResponse().GetContentLength() == 65536 );
+    CHECK( request.GetBytesExpectedToReceive() == 65536 );
+    CHECK( request.GetBytesReceived() == 65536 );
 }
 
 TEST_CASE_METHOD(RequestFixture,
@@ -232,9 +229,7 @@ TEST_CASE_METHOD(RequestFixture,
 
     Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
     Run();
-    // convert to c_str() and back to remove any trailing \0
-    wxString str(request.GetResponse().AsString().c_str());
-    CHECK( str == "The quick brown fox jumps over the lazy dog" );
+    CHECK( request.GetResponse().AsString() == "The quick brown fox jumps over the lazy dog" );
 }
 
 TEST_CASE_METHOD(RequestFixture,

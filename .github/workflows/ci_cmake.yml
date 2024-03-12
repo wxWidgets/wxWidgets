@@ -152,7 +152,7 @@ jobs:
 
       - name: Setup Go
         if: matrix.cmake_tests != 'OFF'
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: '1'
 

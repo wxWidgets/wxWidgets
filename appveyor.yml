@@ -29,7 +29,7 @@ skip_commits:
     - build/tools/httpbin.sh
 
 environment:
-  GOVERSION: "1.20.3"
+  GOVERSION: "1.22.1"
   GOPATH: c:\gopath
   matrix:
   - TOOLSET: msbuild
@@ -89,7 +89,7 @@ before_test:
     echo Getting and launching httpbin.
     rmdir %GOROOT% /s /q
     mkdir %GOROOT%
-    appveyor DownloadFile https://golang.org/dl/go%GOVERSION%.windows-amd64.msi
+    appveyor DownloadFile https://go.dev/dl/go%GOVERSION%.windows-amd64.msi
     msiexec /i go%GOVERSION%.windows-amd64.msi INSTALLDIR="%GOROOT%" /q
     go version
     go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2

@@ -203,7 +203,7 @@ jobs:
 
     - name: Setup Go
       if: matrix.skip_testing != true
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
         go-version: '1'
 

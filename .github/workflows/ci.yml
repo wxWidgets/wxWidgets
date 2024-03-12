@@ -319,6 +319,13 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_tests }}
 
       - name: Setup Go
+        if: matrix.container != 'ubuntu:18.04'
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1'
+
+      - name: Setup Go Ubuntu 18.04
+        if: matrix.container == 'ubuntu:18.04'
         uses: actions/setup-go@v4
         with:
           go-version: '1'
