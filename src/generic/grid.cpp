@@ -4526,7 +4526,6 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
             ChangeCursorMode(oper->GetCursorModeResize(), m_cornerLabelWin, false);
         else
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_cornerLabelWin, false);
-        event.Skip();
     }
     else
     {
