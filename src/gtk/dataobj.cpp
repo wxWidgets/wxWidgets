@@ -57,8 +57,16 @@ private:
     GdkAtom m_atom = nullptr;
 };
 
-wxGdkAtom g_textAtom    {"UTF8_STRING"};
-wxGdkAtom g_altTextAtom {"STRING"};
+#ifdef GDK_WINDOWING_WAYLAND
+    const char *wayland_display = getenv("WAYLAND_DISPLAY");
+    wxGdkAtom g_textAtom    = wayland_display ? wxGdkAtom{"text/plain;charset=utf-8"}
+                                              : wxGdkAtom{"UTF8_STRING"};
+    wxGdkAtom g_altTextAtom = wayland_display ? wxGdkAtom{"text/plain"}
+                                              : wxGdkAtom{"STRING"};
+#else
+    wxGdkAtom g_textAtom    {"UTF8_STRING"};
+    wxGdkAtom g_altTextAtom {"STRING"};
+#endif
 wxGdkAtom g_pngAtom     {"image/png"};
 wxGdkAtom g_fileAtom    {"text/uri-list"};
 wxGdkAtom g_htmlAtom    {"text/html"};
