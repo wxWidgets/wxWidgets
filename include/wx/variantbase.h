@@ -99,7 +99,7 @@ protected:
     // Protected dtor should make some incompatible code
     // break more louder. That is, they should do data->DecRef()
     // instead of delete data.
-    virtual ~wxVariantData() {}
+    virtual ~wxVariantData() = default;
 
 private:
     int m_count;
@@ -109,7 +109,7 @@ template<typename T> class wxVariantDataT : public wxVariantData
 {
 public:
     wxVariantDataT(const T& d) : m_data(d) {}
-    virtual ~wxVariantDataT() {}
+    virtual ~wxVariantDataT() = default;
 
     // get a ref to the stored data
     T & Get() { return m_data; }

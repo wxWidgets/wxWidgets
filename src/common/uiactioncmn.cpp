@@ -94,6 +94,7 @@ bool wxUIActionSimulatorImpl::MouseDragDrop(long x1, long y1, long x2, long y2,
 bool
 wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
 {
+#ifndef __WXQT__
     wxASSERT_MSG( !(modifiers & wxMOD_META ),
         "wxMOD_META is not implemented" );
     wxASSERT_MSG( !(modifiers & wxMOD_WIN ),
@@ -108,6 +109,11 @@ wxUIActionSimulator::Key(int keycode, int modifiers, bool isDown)
         SimulateModifiers(modifiers, false);
 
     return rc;
+#else
+    // Under wxQt we have to pass modifiers along with keycode for the simulation
+    // to succeed.
+    return m_impl->DoKey(keycode, modifiers, isDown);
+#endif
 }
 
 void wxUIActionSimulator::SimulateModifiers(int modifiers, bool isDown)

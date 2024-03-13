@@ -2,7 +2,6 @@
 // Name:        src/msw/clipbrd.cpp
 // Purpose:     Clipboard functionality
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -63,7 +62,7 @@
 static int gs_htmlcfid = 0;
 static int gs_pngcfid = 0;
 
-#ifdef WXWIN_COMPATIBILITY_3_2
+#if WXWIN_COMPATIBILITY_3_2
 
 static bool gs_wxClipboardIsOpen = false;
 

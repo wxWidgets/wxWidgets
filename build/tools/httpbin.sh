@@ -6,16 +6,12 @@ httpbin_launch() {
     WX_TEST_WEBREQUEST_URL=0
     export WX_TEST_WEBREQUEST_URL
 
+    go version
+    go install github.com/mccutchen/go-httpbin/v2/cmd/go-httpbin@v2
+
     echo 'Launching httpbin...'
-
-    # Installing Flask 2.1.0 and its dependency Werkzeug 2.1.0 results
-    # in failures when trying to run httpbin, so stick to an older but
-    # working version.
-    pip_explicit_deps='Flask==2.0.3 Werkzeug==2.0.3'
-
-    python3 -m pip install $pip_explicit_deps httpbin --user
-    python3 -m httpbin.core --port 50500 2>&1 >httpbin.log &
-    WX_TEST_WEBREQUEST_URL="http://localhost:50500"
+    go-httpbin -host 127.0.0.1 -port 8081 2>&1 >httpbin.log &
+    WX_TEST_WEBREQUEST_URL="http://127.0.0.1:8081"
 }
 
 httpbin_show_log() {

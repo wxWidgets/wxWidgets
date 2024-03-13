@@ -2,7 +2,6 @@
 // Name:        src/x11/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Julian Smart, Robert Roebling
-// Modified by:
 // Created:     17/09/98
 // Copyright:   (c) Julian Smart, Robert Roebling
 // Licence:     wxWindows licence
@@ -951,10 +950,6 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int depth )
     m_refData = new wxBitmapRefData;
 
     (void) Create(bits, wxBITMAP_TYPE_XBM_DATA, width, height, depth);
-}
-
-wxBitmap::~wxBitmap()
-{
 }
 
 int wxBitmap::GetHeight() const

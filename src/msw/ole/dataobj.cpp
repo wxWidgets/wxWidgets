@@ -2,7 +2,6 @@
 // Name:        src/msw/ole/dataobj.cpp
 // Purpose:     implementation of wx[I]DataObject class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     10.05.98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

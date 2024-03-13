@@ -2,7 +2,6 @@
 // Name:        wx/univ/renderer.h
 // Purpose:     wxRenderer class declaration
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     06.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

@@ -25,7 +25,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/gtk/private/wrapgtk.h"
-#include "wx/gtk/private/cairo.h"
+#include "wx/gtk/private/backend.h"
 
 //----------------------------------------------------------------------------
 // global data
@@ -679,14 +679,28 @@ static void source_drag_end( GtkWidget          *WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static gboolean
 gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDropSource *source )
 {
     source->GiveFeedback(ConvertFromGTK(gdk_drag_context_get_selected_action(source->m_dragContext)));
 
-    return 0;
+    return false;
 }
 }
+
+//-----------------------------------------------------------------------------
+// "draw" from m_iconWindow
+//-----------------------------------------------------------------------------
+
+#ifdef __WXGTK3__
+extern "C" {
+static gboolean draw_icon(GtkWidget*, cairo_t* cr, wxIcon* icon)
+{
+    icon->Draw(cr, 0, 0);
+    return true;
+}
+}
+#endif
 
 //---------------------------------------------------------------------------
 // wxDropSource
@@ -762,7 +776,40 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
     else
         icon = &m_iconNone;
 
-#ifndef __WXGTK3__
+#ifdef __WXGTK3__
+    GtkWidget* widget;
+    if (gtk_check_version(3,20,0) == nullptr)
+    {
+        widget = gtk_drawing_area_new();
+        gtk_widget_set_size_request(widget, icon->GetWidth(), icon->GetHeight());
+        gtk_widget_show(widget);
+        gtk_drag_set_icon_widget(context, widget, 0, 0);
+        // GTK >= 3.20 puts the icon widget in a GTK_WINDOW_POPUP,
+        // we need to connect to that widget to get "configure-event"
+        m_iconWindow = gtk_widget_get_parent(widget);
+    }
+    else
+    {
+        widget = gtk_window_new(GTK_WINDOW_POPUP);
+        m_iconWindow = widget;
+        gtk_widget_set_size_request(widget, icon->GetWidth(), icon->GetHeight());
+        gtk_widget_set_app_paintable(widget, true);
+        gtk_drag_set_icon_widget(context, m_iconWindow, 0, 0);
+    }
+
+    wxMask* wxmask = icon->GetMask();
+    cairo_surface_t* mask;
+    if (wxmask && (mask = *wxmask))
+    {
+        cairo_region_t* region = gdk_cairo_region_create_from_surface(mask);
+        gtk_widget_shape_combine_region(m_iconWindow, region);
+        cairo_region_destroy(region);
+    }
+
+    g_signal_connect(widget, "draw", G_CALLBACK(draw_icon), icon);
+
+#else // !__WXGTK3__
+
     GdkBitmap *mask;
     if ( icon->GetMask() )
         mask = *icon->GetMask();
@@ -773,50 +820,27 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
 
     GdkColormap *colormap = gtk_widget_get_colormap( m_widget );
     gtk_widget_push_colormap (colormap);
-#endif
 
     m_iconWindow = gtk_window_new (GTK_WINDOW_POPUP);
     gtk_widget_set_events (m_iconWindow, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
     gtk_widget_set_app_paintable (m_iconWindow, TRUE);
 
-#ifdef __WXGTK3__
-    gtk_widget_set_visual(m_iconWindow, gtk_widget_get_visual(m_widget));
-#else
     gtk_widget_pop_colormap ();
-#endif
 
     gtk_widget_set_size_request (m_iconWindow, icon->GetWidth(), icon->GetHeight());
     gtk_widget_realize (m_iconWindow);
 
-    g_signal_connect (m_iconWindow, "configure_event",
-                      G_CALLBACK (gtk_dnd_window_configure_callback), this);
-
-#ifdef __WXGTK3__
-    wxGTKImpl::CairoContext cr(gtk_widget_get_window(m_iconWindow));
-    icon->SetSourceSurface(cr, 0, 0);
-    cairo_pattern_t* pattern = cairo_get_source(cr);
-
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    gdk_window_set_background_pattern(gtk_widget_get_window(m_iconWindow), pattern);
-    wxGCC_WARNING_RESTORE(deprecated-declarations)
-
-    cairo_surface_t* mask = nullptr;
-    if (icon->GetMask())
-        mask = *icon->GetMask();
-    if (mask)
-    {
-        cairo_region_t* region = gdk_cairo_region_create_from_surface(mask);
-        gtk_widget_shape_combine_region(m_iconWindow, region);
-        cairo_region_destroy(region);
-    }
-#else
     gdk_window_set_back_pixmap(gtk_widget_get_window(m_iconWindow), pixmap, false);
 
     if (mask)
         gtk_widget_shape_combine_mask (m_iconWindow, mask, 0, 0);
-#endif
 
     gtk_drag_set_icon_widget( context, m_iconWindow, 0, 0 );
+#endif // !__WXGTK3__
+
+    g_object_ref(m_iconWindow);
+    g_signal_connect(m_iconWindow, "configure-event",
+        G_CALLBACK(gtk_dnd_window_configure_callback), this);
 }
 
 wxDragResult wxDropSource::DoDragDrop(int flags)
@@ -891,11 +915,21 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     PrepareIcon( allowed_actions, context );
 
-    while (m_waiting)
+    for (;;)
+    {
         gtk_main_iteration();
+        if (!m_waiting)
+            break;
+#ifdef __WXGTK3__
+        if (!wxGTKImpl::IsX11(gtk_widget_get_display(m_iconWindow)))
+            GiveFeedback(ConvertFromGTK(gdk_drag_context_get_selected_action(context)));
+#endif
+    }
 
     g_signal_handlers_disconnect_by_func (m_iconWindow,
                                           (gpointer) gtk_dnd_window_configure_callback, this);
+    g_object_unref(m_iconWindow);
+    m_iconWindow = nullptr;
 
     return m_retValue;
 }

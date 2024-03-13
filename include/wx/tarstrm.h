@@ -47,7 +47,7 @@ enum wxTarFormat
 class WXDLLIMPEXP_BASE wxTarNotifier
 {
 public:
-    virtual ~wxTarNotifier() { }
+    virtual ~wxTarNotifier() = default;
 
     virtual void OnEntryUpdated(class wxTarEntry& entry) = 0;
 };

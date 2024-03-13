@@ -2,7 +2,6 @@
 // Name:        listctrl.cpp
 // Purpose:     wxListCtrl sample
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -171,7 +170,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(600, 500))
+       : wxFrame(nullptr, wxID_ANY, title)
 {
     m_listCtrl = nullptr;
     m_logWindow = nullptr;
@@ -293,6 +292,9 @@ MyFrame::MyFrame(const wxString& title)
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
     RecreateList(wxLC_REPORT | wxLC_SINGLE_SEL);
+
+    // Make the list control big enough to show its initial contents.
+    m_listCtrl->SetInitialSize(FromDIP(wxSize(600, 300)));
 
 #ifdef __WXMSW__
     // this is useful to know specially when debugging :)
@@ -648,6 +650,8 @@ void MyFrame::InitWithIconItems(bool withText, bool sameIcon)
             wxString label;
             if ( !(i % 5) )
                 label.Printf("Longer label %d", i);
+            else if ( !(i % 4) )
+                label.Printf("#%d", i);
             else
                 label.Printf("Label %d", i);
 
@@ -1276,7 +1280,8 @@ void MyListCtrl::OnChecked(wxListEvent& event)
 
     if ( IsVirtual() )
     {
-        CheckItem(event.GetIndex(), true);
+        m_checked.SelectItem(event.GetIndex(), true);
+        RefreshItem(event.GetIndex());
     }
 
     event.Skip();
@@ -1288,7 +1293,8 @@ void MyListCtrl::OnUnChecked(wxListEvent& event)
 
     if ( IsVirtual() )
     {
-        CheckItem(event.GetIndex(), false);
+        m_checked.SelectItem(event.GetIndex(), false);
+        RefreshItem(event.GetIndex());
     }
 
     event.Skip();
@@ -1513,34 +1519,9 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     }
 }
 
-void MyListCtrl::CheckItem(long item, bool check)
-{
-    if ( IsVirtual() )
-    {
-        m_checked.SelectItem(item, check);
-        RefreshItem(item);
-    }
-    else
-    {
-        wxListCtrl::CheckItem(item, check);
-    }
-}
-
-bool MyListCtrl::IsItemChecked(long item) const
-{
-    if ( IsVirtual() )
-    {
-        return m_checked.IsSelected(item);
-    }
-    else
-    {
-        return wxListCtrl::IsItemChecked(item);
-    }
-}
-
 bool MyListCtrl::OnGetItemIsChecked(long item) const
 {
-    return IsItemChecked(item);
+    return m_checked.IsSelected(item);
 }
 
 int MyListCtrl::OnGetItemColumnImage(long item, long column) const

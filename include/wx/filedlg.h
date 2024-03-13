@@ -2,7 +2,6 @@
 // Name:        wx/filedlg.h
 // Purpose:     wxFileDialog base header
 // Author:      Robert Roebling
-// Modified by:
 // Created:     8/17/99
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
@@ -90,7 +89,7 @@ public:
         Create(parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name);
     }
 
-    virtual ~wxFileDialogBase() {}
+    virtual ~wxFileDialogBase() = default;
 
 
     bool Create(wxWindow *parent,

@@ -2,7 +2,6 @@
 // Name:        src/common/msgout.cpp
 // Purpose:     wxMessageOutput implementation
 // Author:      Mattia Barbon
-// Modified by:
 // Created:     17.07.02
 // Copyright:   (c) the wxWidgets team
 // Licence:     wxWindows licence
@@ -38,6 +37,10 @@
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
+#endif
+
+#if defined(__ANDROID__)
+    #include <android/log.h>
 #endif
 
 // ===========================================================================
@@ -144,8 +147,13 @@ wxMessageOutputStderr::wxMessageOutputStderr(FILE *fp, const wxMBConv& conv)
 void wxMessageOutputStderr::Output(const wxString& str)
 {
     const wxCharBuffer& buf = PrepareForOutput(str);
+
+#if defined(__ANDROID__)
+    __android_log_write(ANDROID_LOG_INFO, "wxWidgets", buf.data());
+#else
     fwrite(buf, buf.length(), 1, m_fp);
     fflush(m_fp);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -159,6 +167,10 @@ void wxMessageOutputDebug::Output(const wxString& str)
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
     ::OutputDebugString(out.t_str());
+#elif defined(__ANDROID__)
+    const wxCharBuffer& buf = PrepareForOutput(str);
+
+    __android_log_write(ANDROID_LOG_DEBUG, "wxWidgets", buf.data());
 #else
     // TODO: use native debug output function for the other ports too
     wxMessageOutputStderr::Output(str);

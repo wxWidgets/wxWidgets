@@ -110,7 +110,7 @@ function(wx_check_cxx_source_compiles code res_var)
     cmake_pop_check_state()
 endfunction()
 
-# wx_check_cxx_source_compiles(<code> <var> [headers...])
+# wx_check_c_source_compiles(<code> <var> [headers...])
 function(wx_check_c_source_compiles code res_var)
     set(src)
     foreach(header ${ARGN})
@@ -403,7 +403,7 @@ endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
     cmake_push_check_state(RESET)
-    set(CMAKE_REQUIRED_LIBRARIES pthread)
+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
     wx_check_cxx_source_compiles("
         void *p;
         pthread_cleanup_push(ThreadCleanupFunc, p);
@@ -565,6 +565,7 @@ check_symbol_exists(dlopen dlfcn.h HAVE_DLOPEN)
 cmake_pop_check_state()
 if(HAVE_DLOPEN)
     check_symbol_exists(dladdr dlfcn.h HAVE_DLADDR)
+    check_symbol_exists(dl_iterate_phdr link.h HAVE_DL_ITERATE_PHDR)
 endif()
 
 if(APPLE)
@@ -611,6 +612,14 @@ check_type_size("long long" SIZEOF_LONG_LONG)
 check_type_size(ssize_t SSIZE_T)
 
 test_big_endian(WORDS_BIGENDIAN)
+
+# For generators using build type, ensure that wxHAVE_CEF_DEBUG matches it.
+if(wxUSE_WEBVIEW_CHROMIUM AND DEFINED CMAKE_BUILD_TYPE)
+    string(TOUPPER ${CMAKE_BUILD_TYPE} build_type)
+    if(${build_type} STREQUAL DEBUG)
+        set(wxHAVE_CEF_DEBUG ON)
+    endif()
+endif()
 
 configure_file(build/cmake/setup.h.in ${wxSETUP_HEADER_FILE})
 if(DEFINED wxSETUP_HEADER_FILE_DEBUG)

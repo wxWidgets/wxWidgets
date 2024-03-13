@@ -76,6 +76,15 @@ public:
     {
         m_images = images;
 
+        // Setting the images overrides any image list set before, especially
+        // because we may have set it ourselves if GetUpdatedImageListFor() was
+        // called and we don't want to remain with the outdated image list now
+        // (if the new images are not empty, this would happen only slightly
+        // later when the image list is updated again, but if they are empty,
+        // it's not going to happen at all).
+        FreeIfNeeded();
+        m_imageList = nullptr;
+
         OnImagesChanged();
     }
 
@@ -129,6 +138,51 @@ public:
         return m_imageList;
     }
 
+    // Return physical bitmap size that should be used for all images.
+    //
+    // Returns (0, 0) if we don't have any images.
+    wxSize GetImageSize(const wxWindow* window) const
+    {
+        wxSize size;
+
+        if ( !m_images.empty() )
+        {
+            // This is a micro-optimization: if we have an image list here, we
+            // must have created it ourselves, as e.g. wxGenericTreeCtrl does,
+            // and then we must already have determined the correct size to use
+            // for the current window DPI and can just return it.
+            if ( m_imageList )
+            {
+                // Note that we shouldn't scale it by DPI factor here because
+                // we had already taken it into account when (re)creating it.
+                size = m_imageList->GetSize();
+            }
+            else
+            {
+                // Otherwise we need to compute the best size here ourselves.
+                size = wxBitmapBundle::GetConsensusSizeFor(window, m_images);
+            }
+        }
+        else if ( m_imageList )
+        {
+            // But if we have just the user-provided image list, we need to
+            // scale its size by the DPI scale because the bitmaps from it will
+            // be scaled when they are drawn (they should have scaling factor
+            // of 1, as for anything else wxBitmapBundle must be used).
+            size = m_imageList->GetSize() * window->GetDPIScaleFactor();
+        }
+
+        return size;
+    }
+
+    // Return logical bitmap size that should be used for all images.
+    //
+    // Returns (0, 0) if we don't have any images.
+    wxSize GetImageLogicalSize(const wxWindow* window) const
+    {
+        return window->FromPhys(GetImageSize(window));
+    }
+
     // Return logical size of the image to use or (0, 0) if there are none.
     wxSize GetImageLogicalSize(const wxWindow* window, int iconIndex) const
     {
@@ -143,7 +197,7 @@ public:
             else if ( m_imageList )
             {
                 // All images in the image list are of the same size.
-                size = m_imageList->GetSize();
+                size = window->FromPhys(m_imageList->GetSize());
             }
         }
 
@@ -171,7 +225,23 @@ public:
         {
             if ( !m_images.empty() )
             {
-                bitmap = m_images.at(iconIndex).GetBitmapFor(window);
+                // Note that it's not enough to just use GetBitmapFor() here to
+                // choose the bitmap of the size most appropriate for the window
+                // DPI as we need it to be of the same size as the other images
+                // used in the same control, so we have to use fixed size here.
+                const wxSize size = GetImageSize(window);
+
+                bitmap = m_images.at(iconIndex).GetBitmap(size);
+
+                // We also may need to adjust the scale factor to ensure that
+                // this bitmap takes the same space as all the others, as
+                // GetBitmap() may set it wrong in this case.
+                const wxSize logicalSize = window->FromPhys(size);
+
+                if ( bitmap.GetLogicalSize() != logicalSize )
+                {
+                    bitmap.SetScaleFactor(size.y / logicalSize.y);
+                }
             }
             else if ( m_imageList )
             {

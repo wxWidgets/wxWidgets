@@ -2,7 +2,6 @@
 // Name:        renddll.cpp
 // Purpose:     Example of a renderer implemented in a DLL
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.08.03
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

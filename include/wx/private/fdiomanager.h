@@ -35,7 +35,7 @@ public:
     virtual void RemoveInput(wxFDIOHandler *handler, int fd, Direction d) = 0;
 
     // empty but virtual dtor for the base class
-    virtual ~wxFDIOManager() { }
+    virtual ~wxFDIOManager() = default;
 };
 
 #endif // _WX_PRIVATE_FDIOMANAGER_H_

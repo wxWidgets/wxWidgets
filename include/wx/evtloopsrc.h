@@ -39,7 +39,7 @@ public:
     virtual void OnExceptionWaiting() = 0;
 
     // virtual dtor for the base class
-    virtual ~wxEventLoopSourceHandler() { }
+    virtual ~wxEventLoopSourceHandler() = default;
 };
 
 // flags describing which kind of IO events we're interested in

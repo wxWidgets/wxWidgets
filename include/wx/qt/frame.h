@@ -2,7 +2,6 @@
 // Name:        wx/qt/frame.h
 // Purpose:     wxFrame class interface
 // Author:      Peter Most
-// Modified by:
 // Created:     09.08.09
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence
@@ -14,7 +13,6 @@
 #include "wx/frame.h"
 
 class QMainWindow;
-class QScrollArea;
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
@@ -52,7 +50,6 @@ public:
     virtual void RemoveChild( wxWindowBase *child ) override;
 
     QMainWindow *GetQMainWindow() const;
-    virtual QScrollArea *QtGetScrollBarsContainer() const override;
 
 protected:
     virtual wxPoint GetClientAreaOrigin() const override;

@@ -10,7 +10,6 @@
             <ldflags>$(HEADER_PAD_OPTION)</ldflags>
 
             <wx-mac-app-bundle/>
-            <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
         </if>
 
         <sources>

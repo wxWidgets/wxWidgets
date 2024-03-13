@@ -3,7 +3,6 @@
 // Purpose:     wxGDIImage class: base class for wxBitmap, wxIcon, wxCursor
 //              under MSW
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     20.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence

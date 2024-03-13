@@ -286,6 +286,8 @@
 
 #define wxUSE_WEBVIEW 0
 
+#define wxUSE_WEBVIEW_CHROMIUM 0
+
 #ifdef __WXMSW__
 #define wxUSE_WEBVIEW_IE 0
 #else
@@ -598,6 +600,11 @@
  */
 #define wxUSE_SELECT_DISPATCHER 0
 #define wxUSE_EPOLL_DISPATCHER 0
+
+/*
+   Use debug version of CEF in wxWebViewChromium.
+ */
+#undef wxHAVE_CEF_DEBUG
 
 /*
    Use GStreamer for Unix.
@@ -934,6 +941,9 @@
 
 /* Define if you have the dladdr function.  */
 #undef HAVE_DLADDR
+
+/* Define if you have the dl_iterate_phdr function.  */
+#undef HAVE_DL_ITERATE_PHDR
 
 /* Define if you have Posix fnctl() function. */
 #undef HAVE_FCNTL

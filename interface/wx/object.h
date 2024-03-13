@@ -26,7 +26,7 @@
     class MyCar : public wxObject
     {
     public:
-        MyCar() { }
+        MyCar() = default;
         MyCar( int price );
 
         bool IsOk() const { return m_refData != nullptr; }

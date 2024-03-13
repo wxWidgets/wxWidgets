@@ -2,7 +2,6 @@
 // Name:        wx/event.h
 // Purpose:     Event classes
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -462,7 +461,7 @@ private:
     void (Class::*m_method)(EventArg&);
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorMethod() { }
+    wxEventFunctorMethod() = default;
 
     typedef wxEventFunctorMethod<EventTag, Class,
                                  EventArg, EventHandler> thisClass;
@@ -518,7 +517,7 @@ private:
     void (*m_handler)(EventArg&);
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunction() { }
+    wxEventFunctorFunction() = default;
 
     typedef wxEventFunctorFunction<EventTag, EventArg> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
@@ -570,7 +569,7 @@ private:
     const void *m_handlerAddr;
 
     // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunctor() { }
+    wxEventFunctorFunctor() = default;
 
     typedef wxEventFunctorFunctor<EventTag, Functor> thisClass;
     WX_DECLARE_TYPEINFO_INLINE(thisClass)
@@ -4659,7 +4658,7 @@ typedef void (wxEvtHandler::*wxFullScreenEventFunction)(wxFullScreenEvent&);
 #define EVT_GESTURE_ROTATE(winid, func) wx__DECLARE_EVT1(wxEVT_GESTURE_ROTATE, winid, wxRotateGestureEventHandler(func))
 #define EVT_TWO_FINGER_TAP(winid, func) wx__DECLARE_EVT1(wxEVT_TWO_FINGER_TAP, winid, wxTwoFingerTapEventHandler(func))
 #define EVT_LONG_PRESS(winid, func) wx__DECLARE_EVT1(wxEVT_LONG_PRESS, winid, wxLongPressEventHandler(func))
-#define EVT_PRESS_AND_TAP(winid, func) wx__DECLARE_EVT1(wxEVT_PRESS_AND_TAP, winid, wxPressAndTapEvent(func))
+#define EVT_PRESS_AND_TAP(winid, func) wx__DECLARE_EVT1(wxEVT_PRESS_AND_TAP, winid, wxPressAndTapEventHandler(func))
 
 // Convenience macros for commonly-used commands
 #define EVT_CHECKBOX(winid, func) wx__DECLARE_EVT1(wxEVT_CHECKBOX, winid, wxCommandEventHandler(func))

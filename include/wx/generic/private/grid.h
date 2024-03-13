@@ -460,7 +460,7 @@ class WXDLLIMPEXP_ADV wxGridRowOrColAttrData
 {
 public:
     // empty ctor to suppress warnings
-    wxGridRowOrColAttrData() {}
+    wxGridRowOrColAttrData() = default;
     ~wxGridRowOrColAttrData();
 
     void SetAttr(wxGridCellAttr *attr, int rowOrCol);
@@ -663,7 +663,7 @@ public:
 
     // This class is never used polymorphically but give it a virtual dtor
     // anyhow to suppress g++ complaints about it
-    virtual ~wxGridOperations() { }
+    virtual ~wxGridOperations() = default;
 };
 
 class wxGridRowOperations : public wxGridOperations
@@ -787,7 +787,7 @@ public:
         }
 
     virtual void SelectLine(wxGrid *grid, int line, wxMouseEvent &event) const override
-        { grid->m_selection->SelectRow(line, event); };
+        { grid->m_selection->SelectRow(line, event); }
     virtual void DeselectLine(wxGrid * grid, int line) const override
         { grid->DeselectRow(line); }
 
@@ -929,7 +929,7 @@ public:
         }
 
     virtual void SelectLine(wxGrid *grid, int line, wxMouseEvent &event) const override
-        { grid->m_selection->SelectCol(line, event); };
+        { grid->m_selection->SelectCol(line, event); }
     virtual void DeselectLine(wxGrid * grid, int line) const override
         { grid->DeselectCol(line); }
 
@@ -1022,7 +1022,7 @@ public:
 
     // This class is never used polymorphically but give it a virtual dtor
     // anyhow to suppress g++ complaints about it
-    virtual ~wxGridDirectionOperations() { }
+    virtual ~wxGridDirectionOperations() = default;
 
 protected:
     // Get the position of the row or column from the given coordinates pair.
@@ -1190,7 +1190,7 @@ WX_DEFINE_ARRAY_WITH_DECL_PTR(wxGridDataTypeInfo*, wxGridDataTypeInfoArray,
 class WXDLLIMPEXP_ADV wxGridTypeRegistry
 {
 public:
-    wxGridTypeRegistry() {}
+    wxGridTypeRegistry() = default;
     ~wxGridTypeRegistry();
 
     void RegisterDataType(const wxString& typeName,

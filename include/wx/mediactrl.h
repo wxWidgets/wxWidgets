@@ -2,7 +2,6 @@
 // Name:        wx/mediactrl.h
 // Purpose:     wxMediaCtrl class
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by:
 // Created:     11/07/04
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

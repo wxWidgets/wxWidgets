@@ -111,7 +111,7 @@ your environment is set up appropriately with the correct compiler in the
 PATH. Rather it affects some options passed to some of the common build
 utilities such as the resource compiler and the linker.
 
-Accepted values: IA64, X64, ARM64
+Accepted values: IA64, X64, ARM, ARM64
 (AMD64 accepted as synonym for X64 but should not be used any more).
             </description>
         </option>
@@ -227,6 +227,11 @@ Default is to use debug CRT if and only if BUILD==debug.
         <description>
             Build wxWebView library (USE_GUI must be 1)?
         </description>
+    </option>
+
+    <option name="USE_WEBVIEW_CHROMIUM">
+        <values>0,1</values>
+        <default-value>0</default-value>
     </option>
 
     <option name="USE_MEDIA">
@@ -404,11 +409,13 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="EXTRALIBS_SDL"/>
         <option name="EXTRALIBS_STC"/>
         <option name="EXTRALIBS_WEBVIEW"/>
+        <option name="EXTRALDFLAGS_WEBVIEW"/>
         <option name="WX_CPPFLAGS"/>
         <option name="WX_CFLAGS"/>
         <option name="WX_CXXFLAGS"/>
         <option name="WX_LDFLAGS"/>
         <option name="HOST_SUFFIX"/>
+        <option name="DYLIB_RPATH_FLAG"/>
         <option name="DYLIB_RPATH_INSTALL"/>
         <option name="DYLIB_RPATH_POSTLINK"/>
         <option name="SAMPLES_RPATH_FLAG"/>
@@ -479,9 +486,9 @@ it if SHARED=1 unless you know what you are doing.
         <set var="EXTRALIBS_MEDIA"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRALIBS_OPENGL">
-            <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib glu32.lib</if>
-            <if cond="COMPILER=='vc'">opengl32.lib glu32.lib</if>
-            <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
+            <if cond="COMPILER=='wat' and TOOLKIT=='MSW'">opengl32.lib</if>
+            <if cond="COMPILER=='vc'">opengl32.lib</if>
+            <if cond="COMPILER=='gcc'">-lopengl32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
         <set var="EXTRALIBS_STC">
@@ -490,6 +497,7 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc' and TOOLKIT=='MSW'">-limm32</if>
         </set>
         <set var="EXTRALIBS_WEBVIEW"/>
+        <set var="EXTRALDFLAGS_WEBVIEW"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
 
@@ -524,6 +532,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
         <set var="USE_WEBVIEW">1</set>
+        <set var="USE_WEBVIEW_CHROMIUM">0</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XML">1</set>
         <set var="USE_XRC">1</set>
@@ -553,4 +562,8 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_OPENGL">0</set>
     </if>
 
+    <!-- Directory where CEF should be available -->
+    <set var="CEF_DIR">
+        $(TOP_SRCDIR)/3rdparty/cef
+    </set>
 </makefile>

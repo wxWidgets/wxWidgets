@@ -3462,6 +3462,17 @@ public:
     */
     void SetAccessible(wxAccessible* accessible);
 
+    /**
+        Override to create a specific accessible object.
+    */
+    virtual wxAccessible* CreateAccessible();
+
+    /**
+        Returns the accessible object, calling CreateAccessible if necessary.
+        May return @NULL, in which case system-provide accessible is used.
+    */
+    wxAccessible* GetOrCreateAccessible();
+
     ///@}
 
 
@@ -3772,6 +3783,9 @@ public:
               programmatically so you should avoid using this function in Mac
               applications (and probably avoid using it under the other
               platforms without good reason as well).
+
+        @note This function does nothing when using wxGTK with Wayland because
+              Wayland intentionally doesn't provide the required functionality.
 
         @param x
             The new x position for the cursor.

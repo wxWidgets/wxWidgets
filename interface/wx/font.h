@@ -637,20 +637,6 @@ public:
     */
     wxFont(const wxNativeFontInfo& nativeInfo);
 
-    /**
-        Destructor.
-
-        See @ref overview_refcount_destruct "reference-counted object destruction"
-        for more info.
-
-        @remarks Although all remaining fonts are deleted when the application
-                 exits, the application should try to clean up all fonts
-                 itself. This is because wxWidgets cannot know if a
-                 pointer to the font object is stored in an application
-                 data structure, and there is a risk of double deletion.
-    */
-    virtual ~wxFont();
-
 
     /**
         @name Getters

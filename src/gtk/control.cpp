@@ -78,15 +78,11 @@ wxSize wxControl::DoGetBestSize() const
     // Do not return any arbitrary default value...
     wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
-    wxSize best;
+    wxSize best(GTKGetPreferredSize(m_widget));
     if (m_wxwindow)
     {
-        // this is not a native control, size_request is likely to be (0,0)
-        best = wxControlBase::DoGetBestSize();
-    }
-    else
-    {
-        best = GTKGetPreferredSize(m_widget);
+        // For non-native controls, GTK preferred size may not be useful
+        best.IncTo(base_type::DoGetBestSize());
     }
 
     return best;
@@ -95,11 +91,6 @@ wxSize wxControl::DoGetBestSize() const
 void wxControl::PostCreation(const wxSize& size)
 {
     wxWindow::PostCreation();
-
-#ifdef __WXGTK3__
-    if (HasFlag(wxNO_BORDER))
-        GTKApplyCssStyle("*{ border:none; border-radius:0; padding:0 }");
-#endif
 
 #ifndef __WXGTK3__
     // NB: GetBestSize needs to know the style, otherwise it will assume
@@ -111,6 +102,13 @@ void wxControl::PostCreation(const wxSize& size)
 #endif
 
     SetInitialSize(size);
+}
+
+void wxControl::GTKRemoveBorder()
+{
+#ifdef __WXGTK3__
+    GTKApplyCssStyle("*{ border:none; border-radius:0; padding:0 }");
+#endif
 }
 
 // ----------------------------------------------------------------------------

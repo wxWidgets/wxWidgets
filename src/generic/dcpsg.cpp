@@ -2,7 +2,6 @@
 // Name:        src/generic/dcpsg.cpp
 // Purpose:     Generic wxPostScriptDC implementation
 // Author:      Julian Smart, Robert Roebling, Markus Holzhem
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

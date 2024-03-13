@@ -3,7 +3,6 @@
 // Purpose:     wxInputHandler class maps the keyboard and mouse events to the
 //              actions which then are performed by the control
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     18.08.00
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence

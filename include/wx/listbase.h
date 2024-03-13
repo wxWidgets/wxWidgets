@@ -2,7 +2,6 @@
 // Name:        wx/listbase.h
 // Purpose:     wxListCtrl class
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     04.12.99
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -332,7 +331,7 @@ private:
 class WXDLLIMPEXP_CORE wxListCtrlBase : public wxSystemThemedControl<wxControl>
 {
 public:
-    wxListCtrlBase() { }
+    wxListCtrlBase() = default;
 
     // Image-related methods.
     // ----------------------

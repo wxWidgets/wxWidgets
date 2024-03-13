@@ -75,7 +75,7 @@
 
     @section apple_http macOS and iOS App Transport Security
 
-    Starting with macOS 10.11 and iOS 9 an application cannot create unsecure
+    Starting with macOS 10.11 and iOS 9 an application cannot create insecure
     connections (this includes HTTP and unverified HTTPS). You have to include
     additional fields in your Info.plist to enable such connections.
     For further details see the documentation on NSAppTransportSecurity
@@ -422,7 +422,7 @@ public:
     void DisablePeerVerify(bool disable = true);
 
     /**
-        Returns if peer verification has been disabled.
+        Return @true if SSL certificate verification has been disabled.
 
         @see DisablePeerVerify()
     */
@@ -788,7 +788,7 @@ public:
     wxWebSessionHandle GetNativeHandle() const;
 
     /**
-        Return true if the session was successfully opened and can be used.
+        Return @true if the session was successfully opened and can be used.
     */
     bool IsOpened() const;
 

@@ -2,7 +2,6 @@
 // Name:        wx/osx/fontdlg.h
 // Purpose:     wxFontDialog class using fonts window services (10.2+).
 // Author:      Ryan Norton
-// Modified by:
 // Created:     2004-09-25
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

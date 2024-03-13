@@ -1669,6 +1669,18 @@ public:
     // This is an internal helper function implemented by text-like controls.
     virtual const wxTextEntry* WXGetTextEntry() const { return nullptr; }
 
+
+    // DPI-related helpers for ports using DIPs.
+
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    // Return the DPI corresponding to the given scale factor.
+    static wxSize MakeDPIFromScaleFactor(double scaleFactor);
+
+    // Notify all non-top-level children of the given (typically top-level
+    // itself) window about the DPI change.
+    void WXNotifyDPIChange(double oldScaleFactor, double newScaleFactor);
+#endif // wxHAS_DPI_INDEPENDENT_PIXELS
+
 protected:
     // helper for the derived class Create() methods: the first overload, with
     // validator parameter, should be used for child windows while the second
@@ -2102,7 +2114,7 @@ class WXDLLIMPEXP_CORE wxWindowAccessible: public wxAccessible
 {
 public:
     wxWindowAccessible(wxWindow* win): wxAccessible(win) { if (win) win->SetAccessible(this); }
-    virtual ~wxWindowAccessible() {}
+    virtual ~wxWindowAccessible() = default;
 
 // Overridables
 

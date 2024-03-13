@@ -159,9 +159,11 @@ void DatePickerWidgetsPage::CreateContent()
                                  1, wxRA_SPECIFY_COLS);
     sizerLeft->Add(m_radioKind, wxSizerFlags().Expand().Border());
 
-    wxSizer* const sizerStyle = new wxStaticBoxSizer(wxVERTICAL, this, "&Style");
-    m_chkStyleCentury = CreateCheckBoxAndAddToSizer(sizerStyle, "Show &century");
-    m_chkStyleAllowNone = CreateCheckBoxAndAddToSizer(sizerStyle, "Allow &no value");
+    wxStaticBoxSizer* const sizerStyle = new wxStaticBoxSizer(wxVERTICAL, this, "&Style");
+    wxStaticBox* const sizerStyleBox = sizerStyle->GetStaticBox();
+
+    m_chkStyleCentury = CreateCheckBoxAndAddToSizer(sizerStyle, "Show &century", wxID_ANY, sizerStyleBox);
+    m_chkStyleAllowNone = CreateCheckBoxAndAddToSizer(sizerStyle, "Allow &no value", wxID_ANY, sizerStyleBox);
 
     sizerLeft->Add(sizerStyle, wxSizerFlags().Expand().Border());
 
@@ -282,6 +284,8 @@ void DatePickerWidgetsPage::CreateDatePicker()
     m_datePicker = new wxDatePickerCtrl(this, DatePickerPage_Picker, value,
                                         wxDefaultPosition, wxDefaultSize,
                                         style);
+
+    NotifyWidgetRecreation(m_datePicker);
 
     m_sizerDatePicker->Add(0, 0, 1, wxCENTRE);
     m_sizerDatePicker->Add(m_datePicker, 1, wxCENTRE);

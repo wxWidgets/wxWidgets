@@ -2,7 +2,6 @@
 // Name:        text.cpp
 // Purpose:     TextCtrl wxWidgets sample
 // Author:      Robert Roebling
-// Modified by:
 // Copyright:   (c) Robert Roebling, Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

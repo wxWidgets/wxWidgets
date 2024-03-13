@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/dataview.mm
 // Purpose:     wxDataView
 // Author:
-// Modified by:
 // Created:     2009-01-31
 // Copyright:
 // Licence:     wxWindows licence
@@ -1110,6 +1109,20 @@ outlineView:(NSOutlineView*)outlineView
 -(NSRect) titleRectForBounds:(NSRect)cellFrame
 {
     return cellFrame;
+}
+
+-(NSRect)expansionFrameWithFrame:(NSRect)cellFrame
+    inView:(NSView*)view
+{
+    // We override the default behaviour to avoid showing nonsensical tooltips
+    // for the custom cells: if we don't do this, NSTextFieldCell would show a
+    // tooltip with the debug representation of wxCustomRendererObject which is
+    // not very useful.
+    //
+    // Note: override outlineView:toolTipForCell:rect:tableColumn:item:mouseLocation:
+    // in NSOutlineViewDelegate if we ever want to support per-cell tooltips
+    // instead of just suppressing them.
+    return NSZeroRect;
 }
 
 @end

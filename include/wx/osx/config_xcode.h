@@ -2,7 +2,6 @@
 // Name:        wx/osx/config_xcode.h
 // Purpose:     configurations for xcode builds
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     29.04.04
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence

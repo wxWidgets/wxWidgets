@@ -523,24 +523,58 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             (n->GetType() == wxXML_TEXT_NODE ||
              n->GetType() == wxXML_CDATA_SECTION_NODE))
         {
-            wxString fullname;
-            if (wxIsAbsolutePath(n->GetContent()) || inputPath.empty())
-                fullname = n->GetContent();
-            else
-                fullname = inputPath + wxFILE_SEP_PATH + n->GetContent();
+            // At least <bitmap> content can include several semi-colon
+            // separated paths corresponding to the different resolutions of
+            // the bitmap, so check for this.
+            wxArrayString internalNames;
+            const wxArrayString paths = wxSplit(n->GetContent(), ';', '\0');
+            for (size_t i = 0; i < paths.size(); ++i)
+            {
+                const wxString& path = paths[i];
 
-            if (flagVerbose)
-                wxPrintf(wxT("adding     %s...\n"), fullname);
+                wxString fullname;
+                if (wxIsAbsolutePath(path) || inputPath.empty())
+                    fullname = path;
+                else
+                    fullname = inputPath + wxFILE_SEP_PATH + path;
 
-            wxString filename = GetInternalFileName(n->GetContent(), flist);
-            n->SetContent(filename);
+                if (flagVerbose)
+                    wxPrintf(wxT("adding     %s...\n"), fullname);
 
-            if (flist.Index(filename) == wxNOT_FOUND)
-                flist.Add(filename);
+                wxFileInputStream sin(fullname);
+                if (!sin)
+                {
+                    // Note that the full name was already given in the error
+                    // message logged by wxFileInputStream itself, so don't repeat
+                    // it here.
+                    wxLogError("Failed to read file referenced by \"%s\" at %d",
+                               node->GetName(), node->GetLineNumber());
+                    retCode = 1;
+                }
+                else
+                {
+                    wxString filename = GetInternalFileName(path, flist);
 
-            wxFileInputStream sin(fullname);
-            wxFileOutputStream sout(parOutputPath + wxFILE_SEP_PATH + filename);
-            sin.Read(sout); // copy the stream
+                    // Copy the entire stream to the output file.
+                    wxFileOutputStream sout(parOutputPath + wxFILE_SEP_PATH + filename);
+                    if ( sin.Read(sout).GetLastError() != wxSTREAM_EOF || !sout )
+                    {
+                        wxLogError("Failed to save \"%s\" referenced by \"%s\" at %d"
+                                   " to a temporary file",
+                                   fullname, node->GetName(), node->GetLineNumber());
+                        retCode = 1;
+                    }
+                    else
+                    {
+                        internalNames.push_back(filename);
+
+                        if (flist.Index(filename) == wxNOT_FOUND)
+                            flist.Add(filename);
+                    }
+                }
+            }
+
+            n->SetContent(wxJoin(internalNames, ';', '\0'));
         }
 
         // subnodes:

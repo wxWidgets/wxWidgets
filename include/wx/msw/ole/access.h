@@ -2,7 +2,6 @@
 // Name:        wx/msw/ole/access.h
 // Purpose:     declaration of the wxAccessible class
 // Author:      Julian Smart
-// Modified by:
 // Created:     2003-02-12
 // Copyright:   (c) 2003 Julian Smart
 // Licence:     wxWindows licence

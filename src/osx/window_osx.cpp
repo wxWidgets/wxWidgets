@@ -2,7 +2,6 @@
 // Name:        src/osx/window_osx.cpp
 // Purpose:     wxWindowMac
 // Author:      Stefan Csomor
-// Modified by:
 // Created:     1998-01-01
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
@@ -80,7 +79,6 @@
 
 wxBEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
-    EVT_DPI_CHANGED(wxWindowMac::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 #define wxMAC_DEBUG_REDRAW 0
@@ -263,6 +261,13 @@ wxWindowMac::~wxWindowMac()
     delete GetPeer() ;
 }
 
+void wxWindowMac::MacSetClipChildren()
+{
+    m_clipChildren = true ;
+    if ( m_peer )
+        m_peer->UseClippingView();
+}
+
 WXWidget wxWindowMac::GetHandle() const
 {
     if ( GetPeer() )
@@ -388,6 +393,8 @@ bool wxWindowMac::Create(wxWindowMac *parent,
     {
         SetPeer(wxWidgetImpl::CreateUserPane( this, parent, id, pos, size , style, GetExtraStyle() ));
         MacPostControlCreate(pos, size) ;
+        if ( m_clipChildren )
+            m_peer->UseClippingView();
     }
 
     wxWindowCreateEvent event((wxWindow*)this);
@@ -2105,42 +2112,45 @@ bool wxWindowMac::MacIsChildOfClientArea( const wxWindow* child ) const
 void wxWindowMac::MacRepositionScrollBars()
 {
 #if wxUSE_SCROLLBAR
-    if ( !m_hScrollBar && !m_vScrollBar )
-        return ;
-
-    int scrlsize = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
-    int adjust = MacHasScrollBarCorner() ? scrlsize - 1 : 0 ;
-
-    // get real client area
-    int width, height ;
-    GetSize( &width , &height );
-
-    width -= MacGetLeftBorderSize() + MacGetRightBorderSize();
-    height -= MacGetTopBorderSize() + MacGetBottomBorderSize();
-
-    wxPoint vPoint( width - scrlsize, 0 ) ;
-    wxSize vSize( scrlsize, height - adjust ) ;
-    wxPoint hPoint( 0 , height - scrlsize ) ;
-    wxSize hSize( width - adjust, scrlsize ) ;
-
-    if ( m_vScrollBar )
-        m_vScrollBar->SetSize( vPoint.x , vPoint.y, vSize.x, vSize.y , wxSIZE_ALLOW_MINUS_ONE );
-    if ( m_hScrollBar )
-        m_hScrollBar->SetSize( hPoint.x , hPoint.y, hSize.x, hSize.y, wxSIZE_ALLOW_MINUS_ONE );
-    if ( m_growBox )
+    if ( m_hScrollBar || m_vScrollBar )
     {
-        if ( MacHasScrollBarCorner() )
+        int scrlsize = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
+        int adjust = MacHasScrollBarCorner() ? scrlsize - 1 : 0 ;
+
+        // get real client area
+        int width, height ;
+        GetSize( &width , &height );
+
+        width -= MacGetLeftBorderSize() + MacGetRightBorderSize();
+        height -= MacGetTopBorderSize() + MacGetBottomBorderSize();
+
+        wxPoint vPoint( width - scrlsize, 0 ) ;
+        wxSize vSize( scrlsize, height - adjust ) ;
+        wxPoint hPoint( 0 , height - scrlsize ) ;
+        wxSize hSize( width - adjust, scrlsize ) ;
+
+        if ( m_vScrollBar )
+            m_vScrollBar->SetSize( vPoint.x , vPoint.y, vSize.x, vSize.y , wxSIZE_ALLOW_MINUS_ONE );
+        if ( m_hScrollBar )
+            m_hScrollBar->SetSize( hPoint.x , hPoint.y, hSize.x, hSize.y, wxSIZE_ALLOW_MINUS_ONE );
+        if ( m_growBox )
         {
-            m_growBox->SetSize( width - scrlsize, height - scrlsize, wxDefaultCoord, wxDefaultCoord, wxSIZE_USE_EXISTING );
-            if ( !m_growBox->IsShown() )
-                m_growBox->Show();
-        }
-        else
-        {
-            if ( m_growBox->IsShown() )
-                m_growBox->Hide();
+            if ( MacHasScrollBarCorner() )
+            {
+                m_growBox->SetSize( width - scrlsize, height - scrlsize, wxDefaultCoord, wxDefaultCoord, wxSIZE_USE_EXISTING );
+                if ( !m_growBox->IsShown() )
+                    m_growBox->Show();
+            }
+            else
+            {
+                if ( m_growBox->IsShown() )
+                    m_growBox->Hide();
+            }
         }
     }
+
+    if( GetPeer() )
+        GetPeer()->AdjustClippingView(m_hScrollBar, m_vScrollBar);
 #endif
 }
 
@@ -2319,25 +2329,6 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
     else
     {
         event.Skip() ;
-    }
-}
-
-// propagate the dpi changed event to the subwindows
-void wxWindowMac::OnDPIChanged(wxDPIChangedEvent& event)
-{
-    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-    while ( node )
-    {
-        // Only propagate to non-top-level windows
-        wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel() )
-        {
-            wxDPIChangedEvent event2( event.GetOldDPI(), event.GetNewDPI() );
-            event2.SetEventObject(win);
-            win->GetEventHandler()->ProcessEvent(event2);
-        }
-
-        node = node->GetNext();
     }
 }
 
@@ -2587,17 +2578,9 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     return false;
 }
 
-/* static */
-wxSize wxWindowMac::OSXMakeDPIFromScaleFactor(double scaleFactor)
-{
-    const int dpi = wxRound(scaleFactor*72.0);
-
-    return wxSize(dpi, dpi);
-}
-
 wxSize wxWindowMac::GetDPI() const
 {
-    return OSXMakeDPIFromScaleFactor(GetDPIScaleFactor());
+    return MakeDPIFromScaleFactor(GetDPIScaleFactor());
 }
 
 // on mac ContentScale and DPIScale are identical
@@ -2728,4 +2711,17 @@ bool wxWidgetImpl::NeedsFrame() const
 
 void wxWidgetImpl::SetDrawingEnabled(bool WXUNUSED(enabled))
 {
+}
+
+void wxWidgetImpl::AdjustClippingView(wxScrollBar* WXUNUSED(horizontal), wxScrollBar* WXUNUSED(vertical))
+{
+}
+
+void wxWidgetImpl::UseClippingView()
+{
+}
+
+WXWidget wxWidgetImpl::GetContainer() const
+{
+    return GetWXWidget();
 }

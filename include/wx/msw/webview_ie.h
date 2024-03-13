@@ -47,7 +47,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
 public:
 
-    wxWebViewIE() {}
+    wxWebViewIE() = default;
 
     wxWebViewIE(wxWindow* parent,
            wxWindowID id,

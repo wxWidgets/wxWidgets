@@ -14,6 +14,10 @@
 
 #include "wx/xrc/xmlreshandler.h"
 
+#if wxUSE_ANIMATIONCTRL
+    #include "wx/animate.h"
+#endif
+
 wxIMPLEMENT_ABSTRACT_CLASS(wxXmlResourceHandler, wxObject);
 
 wxXmlResourceHandlerImplBase* wxXmlResourceHandler::GetImpl() const
@@ -64,5 +68,25 @@ void wxXmlResourceHandler::AddWindowStyles()
     XRC_ADD_STYLE(wxWS_EX_PROCESS_IDLE);
     XRC_ADD_STYLE(wxWS_EX_PROCESS_UI_UPDATES);
 }
+
+#if wxUSE_ANIMATIONCTRL
+
+wxAnimationBundle
+wxXmlResourceHandler::GetAnimations(const wxString& param,
+                                    wxAnimationCtrlBase* ctrl)
+{
+    return GetImpl()->GetAnimations(param, ctrl);
+}
+
+#if WXWIN_COMPATIBILITY_3_2
+wxAnimation*
+wxXmlResourceHandler::GetAnimation(const wxString& param,
+                                   wxAnimationCtrlBase* ctrl)
+{
+    return GetImpl()->GetAnimation(param, ctrl);
+}
+#endif // WXWIN_COMPATIBILITY_3_2
+
+#endif // wxUSE_ANIMATIONCTRL
 
 #endif // wxUSE_XRC

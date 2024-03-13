@@ -61,7 +61,7 @@ public:
 class wxGtkCollatedArrayString
 {
 public:
-    wxGtkCollatedArrayString() { }
+    wxGtkCollatedArrayString() = default;
 
     int Add( const wxString &new_label )
     {

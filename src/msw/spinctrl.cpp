@@ -2,7 +2,6 @@
 // Name:        src/msw/spinctrl.cpp
 // Purpose:     wxSpinCtrl class implementation for Win32
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     22.07.99
 // Copyright:   (c) 1999-2005 Vadim Zeitlin
 // Licence:     wxWindows licence

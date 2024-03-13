@@ -800,10 +800,8 @@ wxXmlDocument *wxXmlResource::DoLoadFile(const wxString& filename)
         return nullptr;
     }
 
-    wxString encoding(wxT("UTF-8"));
-
     std::unique_ptr<wxXmlDocument> doc(new wxXmlDocument);
-    if (!doc->Load(*stream, encoding))
+    if (!doc->Load(*stream))
     {
         wxLogError(_("Cannot load resources from file '%s'."), filename);
         return nullptr;
@@ -2262,20 +2260,22 @@ bool wxXmlResourceHandlerImpl::IsObjectNode(const wxXmlNode *node) const
                     node->GetName() == wxS("object_ref"));
 }
 
-wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node)
+wxString wxXmlResourceHandlerImpl::GetNodeName(const wxXmlNode *node) const
 {
-    const wxXmlNode *n = node;
-    if (n == nullptr) return wxEmptyString;
-    n = n->GetChildren();
+    return node ? node->GetName() : wxString{};
+}
 
-    while (n)
-    {
-        if (n->GetType() == wxXML_TEXT_NODE ||
-            n->GetType() == wxXML_CDATA_SECTION_NODE)
-            return n->GetContent();
-        n = n->GetNext();
-    }
-    return wxEmptyString;
+wxString
+wxXmlResourceHandlerImpl::GetNodeAttribute(const wxXmlNode *node,
+                                           const wxString& attrName,
+                                           const wxString& defaultValue) const
+{
+    return node ? node->GetAttribute(attrName, defaultValue) : defaultValue;
+}
+
+wxString wxXmlResourceHandlerImpl::GetNodeContent(const wxXmlNode *node) const
+{
+    return node ? node->GetNodeContent() : wxString{};
 }
 
 wxXmlNode *wxXmlResourceHandlerImpl::GetNodeParent(const wxXmlNode *node) const

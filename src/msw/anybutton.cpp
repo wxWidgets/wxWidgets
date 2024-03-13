@@ -546,17 +546,7 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
     // By default all buttons have at least the standard size.
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        // The "Recommended sizing and spacing" section of MSDN layout article
-        // documents the default button size as being 50*14 dialog units or
-        // 75*23 relative pixels (what we call DIPs). As dialog units don't
-        // scale well in high DPI because of rounding errors, just DIPs here.
-        //
-        // Moreover, it looks like the extra 2px borders around the visible
-        // part of the button are not scaled correctly in higher than normal
-        // DPI, so add them without scaling.
-        const wxSize sizeDef = btn->FromDIP(wxSize(73, 21)) + wxSize(2, 2);
-
-        sizeBtn.IncTo(sizeDef);
+        sizeBtn.IncTo(wxButton::GetDefaultSize(btn));
     }
 
     // wxBU_EXACTFIT is typically used alongside a text control or similar,

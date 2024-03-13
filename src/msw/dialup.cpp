@@ -2,7 +2,6 @@
 // Name:        src/msw/dialup.cpp
 // Purpose:     MSW implementation of network/dialup classes and functions
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     07.07.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -816,7 +815,7 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
                    &rasDialParams,
                    0,                       // use callback for notifications
                    async ? (void *)wxRasDialFunc  // cast needed for gcc 3.1
-                         : 0,               // no notifications, sync operation
+                         : nullptr,         // no notifications, sync operation
                    &ms_hRasConnection
                   );
 

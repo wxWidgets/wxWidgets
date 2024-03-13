@@ -206,17 +206,6 @@ public:
     wxCursor(const wxCursor& cursor);
 
     /**
-        Destroys the cursor. See
-        @ref overview_refcount_destruct "reference-counted object destruction"
-        for more info.
-
-        A cursor can be reused for more than one window, and does not get
-        destroyed when the window is destroyed. wxWidgets destroys all cursors
-        on application exit, although it is best to clean them up explicitly.
-    */
-    virtual ~wxCursor();
-
-    /**
         Returns @true if cursor data is present.
     */
     virtual bool IsOk() const;

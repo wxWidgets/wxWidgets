@@ -116,14 +116,6 @@ void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 
 #endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
-// Use locale-based detection as a fallback
-wxString GetPreferredUILanguageFallback(const wxArrayString& WXUNUSED(available))
-{
-    const wxString lang = wxUILocale::GetLanguageCanonicalName(wxUILocale::GetSystemLocale());
-    wxLogTrace(TRACE_I18N, " - obtained best language from locale: %s", lang);
-    return lang;
-}
-
 wxString GetPreferredUILanguage(const wxArrayString& available)
 {
     wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
@@ -168,7 +160,7 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
     if (!langNoMatchRegion.empty())
         return langNoMatchRegion;
 
-    return GetPreferredUILanguageFallback(available);
+    return wxString();
 }
 
 } // anonymous namespace
@@ -947,7 +939,7 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
 {
 }
 
-// open disk file and read in it's contents
+// open disk file and read in its contents
 bool wxMsgCatalogFile::LoadFile(const wxString& filename,
                                 wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
@@ -1316,38 +1308,54 @@ bool wxTranslations::AddStdCatalog()
     // the name without the version if it's not found, as message catalogs
     // typically won't have the version in their names under non-Unix platforms
     // (i.e. where they're not installed by our own "make install").
-    if ( AddCatalog("wxstd-" wxSTRINGIZE(wxMAJOR_VERSION) "." wxSTRINGIZE(wxMINOR_VERSION)) )
-        return true;
+    wxString domain("wxstd-" wxSTRINGIZE(wxMAJOR_VERSION) "." wxSTRINGIZE(wxMINOR_VERSION));
+    if ( GetBestAvailableTranslation(domain).empty() )
+        domain = wxS("wxstd");
 
-    if ( AddCatalog(wxS("wxstd")) )
-        return true;
-
-    return false;
+    return AddCatalog(domain);
 }
 
-bool wxTranslations::AddCatalog(const wxString& domain,
-                                wxLanguage msgIdLanguage)
+bool wxTranslations::AddAvailableCatalog(const wxString& domain, wxLanguage msgIdLanguage)
+{
+    return DoAddCatalog(domain, msgIdLanguage) == Translations::Found;
+}
+
+bool wxTranslations::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
+{
+    return DoAddCatalog(domain, msgIdLanguage) != Translations::NotFound;
+}
+
+wxTranslations::Translations wxTranslations::DoAddCatalog(const wxString& domain,
+                                                          wxLanguage msgIdLanguage)
 {
     const wxString msgIdLang = wxUILocale::GetLanguageCanonicalName(msgIdLanguage);
     const wxString domain_lang = GetBestTranslation(domain, msgIdLang);
-
     if ( domain_lang.empty() )
     {
         wxLogTrace(TRACE_I18N,
                     wxS("no suitable translation for domain '%s' found"),
                     domain);
-        return false;
+        return Translations::NotFound;
     }
 
-    wxLogTrace(TRACE_I18N,
-                wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
-                domain_lang, domain, msgIdLang);
+    if ( LoadCatalog(domain, domain_lang) )
+    {
+        wxLogTrace(TRACE_I18N,
+                   wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
+                   domain_lang, domain, msgIdLang);
+        return Translations::Found;
+    }
 
-    return LoadCatalog(domain, domain_lang, msgIdLang);
+    // LoadCatalog() failed, but GetBestTranslation() returned non-empty language.
+    // That must mean that msgIdLanguage was used.
+    wxLogTrace(TRACE_I18N,
+                wxS("not using translations for domain '%s' with msgid language '%s'"),
+                domain, msgIdLang);
+    return Translations::NotNeeded;
 }
 
 
-bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang, const wxString& msgIdLang)
+bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
 {
     wxCHECK_MSG( m_loader, false, "loader can't be null" );
 
@@ -1382,15 +1390,6 @@ bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang, c
         wxString baselang = lang.BeforeFirst('_');
         if ( lang != baselang )
             cat = m_loader->LoadCatalog(domain, baselang);
-    }
-
-    if ( !cat )
-    {
-        // It is OK to not load catalog if the msgid language and m_language match,
-        // in which case we can directly display the texts embedded in program's
-        // source code:
-        if ( msgIdLang == lang )
-            return true;
     }
 
     if ( cat )
@@ -1430,14 +1429,66 @@ wxString wxTranslations::GetBestTranslation(const wxString& domain,
 wxString wxTranslations::GetBestTranslation(const wxString& domain,
                                             const wxString& msgIdLanguage)
 {
-    // explicitly set language should always be respected
-    if ( !m_lang.empty() )
-        return m_lang;
+    // Determine the best language, including the msgId language, which is always
+    // available because it is present in the code:
+    wxString lang = DoGetBestAvailableTranslation(domain, msgIdLanguage);
 
+    if ( lang.empty() )
+    {
+        wxLogTrace(TRACE_I18N,
+                   "no available language for domain '%s'", domain);
+    }
+    else if ( lang == msgIdLanguage || lang == msgIdLanguage.BeforeFirst('_') )
+    {
+        wxLogTrace(TRACE_I18N,
+                   "using message ID language '%s' for domain '%s'", lang, domain);
+    }
+
+    return lang;
+}
+
+wxString wxTranslations::GetBestAvailableTranslation(const wxString& domain)
+{
+    // Determine the best language from the ones with actual translation file:
+    // As this function never considers the language of the original messages as being
+    // available, pass empty string as message ID language to the helper function.
+    return DoGetBestAvailableTranslation(domain, wxString());
+}
+
+wxString wxTranslations::DoGetBestAvailableTranslation(const wxString& domain, const wxString& additionalAvailableLanguage)
+{
     wxArrayString available(GetAvailableTranslations(domain));
-    // it's OK to have duplicates, so just add msgid language
-    available.push_back(msgIdLanguage);
-    available.push_back(msgIdLanguage.BeforeFirst('_'));
+    if ( !additionalAvailableLanguage.empty() )
+    {
+        available.push_back(additionalAvailableLanguage);
+        available.push_back(additionalAvailableLanguage.BeforeFirst('_'));
+    }
+
+    if ( !m_lang.empty() )
+    {
+        wxLogTrace(TRACE_I18N,
+                   "searching for best translation to %s for domain '%s'",
+                   m_lang, domain);
+
+        wxString lang;
+        if ( available.Index(m_lang) != wxNOT_FOUND )
+        {
+            lang = m_lang;
+        }
+        else
+        {
+            const wxString baselang = m_lang.BeforeFirst('_');
+            if ( baselang != m_lang && available.Index(baselang) != wxNOT_FOUND )
+                lang = baselang;
+        }
+
+        if ( lang.empty() )
+            wxLogTrace(TRACE_I18N, " => no available translations found");
+        else
+            wxLogTrace(TRACE_I18N, " => found '%s'", lang);
+
+        return lang;
+    }
 
     wxLogTrace(TRACE_I18N, "choosing best language for domain '%s'", domain);
     LogTraceArray(" - available translations", available);

@@ -2,7 +2,6 @@
 // Name:        wx/univ/bmpbuttn.h
 // Purpose:     wxBitmapButton class for wxUniversal
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     25.08.00
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -14,7 +13,7 @@
 class WXDLLIMPEXP_CORE wxBitmapButton : public wxBitmapButtonBase
 {
 public:
-    wxBitmapButton() { }
+    wxBitmapButton() = default;
 
     wxBitmapButton(wxWindow *parent,
                    wxWindowID id,
@@ -51,7 +50,7 @@ public:
 
     virtual bool Enable(bool enable = true) override;
 
-    virtual bool SetCurrent(bool doit = true) override;
+    virtual bool WXMakeCurrent(bool doit = true) override;
 
     virtual void Press() override;
     virtual void Release() override;

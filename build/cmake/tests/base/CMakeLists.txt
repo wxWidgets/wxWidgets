@@ -106,6 +106,8 @@ if(wxUSE_XML)
 endif()
 
 set(TEST_DATA
+    intl/en_GB/internat.mo
+    intl/en_GB/internat.po
     intl/fr/internat.mo
     intl/fr/internat.po
     intl/ja/internat.mo

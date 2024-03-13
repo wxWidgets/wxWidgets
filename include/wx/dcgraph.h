@@ -2,7 +2,6 @@
 // Name:        wx/dcgraph.h
 // Purpose:     graphics context device bridge header
 // Author:      Stefan Csomor
-// Modified by:
 // Created:
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence

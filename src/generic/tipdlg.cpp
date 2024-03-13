@@ -2,7 +2,6 @@
 // Name:        src/generic/tipdlg.cpp
 // Purpose:     implementation of wxTipDialog
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     28.06.99
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence

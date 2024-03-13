@@ -2,7 +2,6 @@
 // Name:        wx/msw/helpwin.h
 // Purpose:     Help system: WinHelp implementation
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -23,7 +22,7 @@ class WXDLLIMPEXP_CORE wxWinHelpController: public wxHelpControllerBase
 
 public:
     wxWinHelpController(wxWindow* parentWindow = nullptr): wxHelpControllerBase(parentWindow) {}
-    virtual ~wxWinHelpController() {}
+    virtual ~wxWinHelpController() = default;
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file) override;

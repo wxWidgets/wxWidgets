@@ -578,9 +578,8 @@ in an arbitrary list of wxVariants.
 @subsection propgrid_fromfile Loading Population from a Text-based Storage
 
 Class wxPropertyGridPopulator may be helpful when writing code that
-loads properties from a text-source. In fact, the wxPropertyGrid xrc-handler
-(which may not be currently included in wxWidgets, but probably will be in
-near future) uses it.
+loads properties from a text-source. It is used by wxPropertyGrid XRC handler,
+for example.
 
 @subsection editablestate Saving and Restoring User-Editable State
 

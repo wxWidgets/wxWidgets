@@ -2,7 +2,6 @@
 // Name:        src/common/colourcmn.cpp
 // Purpose:     wxColourBase implementation
 // Author:      Francesco Montorsi
-// Modified by:
 // Created:     20/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence

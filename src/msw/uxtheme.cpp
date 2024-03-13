@@ -2,7 +2,6 @@
 // Name:        src/msw/uxtheme.cpp
 // Purpose:     implements wxUxThemeEngine class: support for XP themes
 // Author:      John Platts, Vadim Zeitlin
-// Modified by:
 // Created:     2003
 // Copyright:   (c) 2003 John Platts, Vadim Zeitlin
 // Licence:     wxWindows licence

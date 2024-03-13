@@ -198,6 +198,8 @@ void TimePickerWidgetsPage::CreateTimePicker()
                                         wxDefaultPosition, wxDefaultSize,
                                         style);
 
+    NotifyWidgetRecreation(m_timePicker);
+
     m_sizerTimePicker->Add(0, 0, 1, wxCENTRE);
     m_sizerTimePicker->Add(m_timePicker, 1, wxCENTRE);
     m_sizerTimePicker->Add(0, 0, 1, wxCENTRE);

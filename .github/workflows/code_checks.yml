@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install codespell
         run: |
@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Check for trailing whitespace and TABs
         run: |
@@ -70,7 +70,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dos2unix
         run: |
@@ -86,14 +86,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Check for obsolete macros use
         run: |
             git fetch --depth=1 origin master
             if git diff origin/master \
                ':**.h' ':**.cpp' \
-               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^"_@A-Za-z0-9]NULL[^"_A-Za-z0-9])'; then
+               | grep -E '^\+.*(wxOVERRIDE|wxNOEXCEPT|[^"_@A-Za-z0-9]NULL([- ,;()+*/%&=!?]|$))'; then
               echo "::error ::Please use C++11 equivalents of the deprecated macros in the new code."
               exit 1
             fi

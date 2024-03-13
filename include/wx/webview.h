@@ -97,7 +97,7 @@ enum wxWebViewUserScriptInjectionTime
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerRequest
 {
 public:
-    virtual ~wxWebViewHandlerRequest() { }
+    virtual ~wxWebViewHandlerRequest() = default;
     virtual wxString GetRawURI() const = 0;
     virtual wxString GetURI() const { return GetRawURI(); }
     virtual wxInputStream* GetData() const = 0;
@@ -109,14 +109,14 @@ public:
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerResponseData
 {
 public:
-    virtual ~wxWebViewHandlerResponseData() { }
+    virtual ~wxWebViewHandlerResponseData() = default;
     virtual wxInputStream* GetStream() = 0;
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerResponse
 {
 public:
-    virtual ~wxWebViewHandlerResponse() { }
+    virtual ~wxWebViewHandlerResponse() = default;
     virtual void SetStatus(int status) = 0;
     virtual void SetContentType(const wxString& contentType) = 0;
     virtual void SetHeader(const wxString& name, const wxString& value) = 0;
@@ -131,7 +131,7 @@ class WXDLLIMPEXP_WEBVIEW wxWebViewHandler
 public:
     wxWebViewHandler(const wxString& scheme)
         : m_scheme(scheme), m_securityURL() {}
-    virtual ~wxWebViewHandler() {}
+    virtual ~wxWebViewHandler() = default;
     virtual wxString GetName() const { return m_scheme; }
     virtual wxFSFile* GetFile(const wxString &uri);
     virtual void SetSecurityURL(const wxString& url) { m_securityURL = url; }
@@ -199,7 +199,7 @@ public:
         m_syncScriptResult = 0;
     }
 
-    virtual ~wxWebView() {}
+    virtual ~wxWebView() = default;
 
     virtual bool Create(wxWindow* parent,
            wxWindowID id,
@@ -251,6 +251,7 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
     virtual bool SetUserAgent(const wxString& userAgent) { wxUnusedVar(userAgent); return false; }
     virtual wxString GetUserAgent() const;
+    virtual bool SetProxy(const wxString& proxy) { wxUnusedVar(proxy); return false; }
 
     // Script
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const;
@@ -333,6 +334,9 @@ protected:
     void SendScriptResult(void* clientData, bool success,
         const wxString& output) const;
 
+    // Send wxEVT_WEBVIEW_CREATED event. This function is MT-safe.
+    void NotifyWebViewCreated();
+
 private:
     static void InitFactoryMap();
     static wxStringWebViewFactoryMap::iterator FindFactory(const wxString &backend);
@@ -375,7 +379,14 @@ protected:
 class WXDLLIMPEXP_WEBVIEW wxWebViewEvent : public wxNotifyEvent
 {
 public:
-    wxWebViewEvent() {}
+    wxWebViewEvent() = default;
+
+    wxWebViewEvent(wxWebView& webview, wxEventType type)
+        : wxNotifyEvent(type, webview.GetId())
+    {
+        SetEventObject(&webview);
+    }
+
     wxWebViewEvent(wxEventType type, int id, const wxString& url,
                    const wxString target,
                    wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE,
@@ -404,6 +415,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxWebViewEvent);
 };
 
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_CREATED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NAVIGATING, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_NAVIGATED, wxWebViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_LOADED, wxWebViewEvent );
@@ -421,6 +433,10 @@ typedef void (wxEvtHandler::*wxWebViewEventFunction)
 
 #define wxWebViewEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxWebViewEventFunction, func)
+
+#define EVT_WEBVIEW_CREATED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WEBVIEW_CREATED, id, \
+                     wxWebViewEventHandler(fn))
 
 #define EVT_WEBVIEW_NAVIGATING(id, fn) \
     wx__DECLARE_EVT1(wxEVT_WEBVIEW_NAVIGATING, id, \

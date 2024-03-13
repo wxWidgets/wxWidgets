@@ -2,7 +2,6 @@
 // Name:        src/msw/statbox.cpp
 // Purpose:     wxStaticBox
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -368,7 +367,8 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
 
 void wxStaticBox::MSWBeforeDPIChangedEvent(const wxDPIChangedEvent& WXUNUSED(event))
 {
-    PositionLabelWindow();
+    if ( m_labelWin )
+        PositionLabelWindow();
 }
 
 // ----------------------------------------------------------------------------
@@ -719,7 +719,8 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     const double scale = dc.GetContentScaleFactor();
     wxBitmap bitmap;
-    bitmap.CreateWithDIPSize(rc.right / scale, rc.bottom / scale, scale);
+    // Physical and logical sizes are the same in wxMSW.
+    bitmap.CreateWithLogicalSize(rc.right, rc.bottom, scale);
     memdc.SelectObject(bitmap);
 
     PaintBackground(memdc, rc);

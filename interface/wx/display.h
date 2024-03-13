@@ -149,6 +149,13 @@ public:
     wxString GetName() const;
 
     /**
+        Returns display depth, i.e. number of bits per pixel (0 if unknown)
+
+        @since 3.1.2
+    */
+    int GetDepth() const;
+
+    /**
         Returns display resolution in pixels per inch.
 
         Horizontal and vertical resolution are returned in @c x and @c y

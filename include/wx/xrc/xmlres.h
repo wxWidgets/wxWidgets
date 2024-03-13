@@ -488,7 +488,7 @@ public:
     wxXmlResourceHandlerImpl(wxXmlResourceHandler *handler);
 
     // Destructor.
-    virtual ~wxXmlResourceHandlerImpl() {}
+    virtual ~wxXmlResourceHandlerImpl() = default;
 
     // Creates an object (menu, dialog, control, ...) from an XML node.
     // Should check for validity.
@@ -507,12 +507,21 @@ public:
     bool IsOfClass(wxXmlNode *node, const wxString& classname) const override;
 
     bool IsObjectNode(const wxXmlNode *node) const override;
+
+    // Returns the name of the node, e.g. "object" or "sizeritem".
+    wxString GetNodeName(const wxXmlNode *node) const override;
+
+    // Returns the value of the given attribute under the node.
+    wxString GetNodeAttribute(const wxXmlNode *node,
+                              const wxString& attrName,
+                              const wxString& defaultValue) const override;
+
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as
     // wxXML_ENTITY_NODE name="tag", content=""
     //    |-- wxXML_TEXT_NODE or
     //        wxXML_CDATA_SECTION_NODE name="" content="content"
-    wxString GetNodeContent(const wxXmlNode *node) override;
+    wxString GetNodeContent(const wxXmlNode *node) const override;
 
     wxXmlNode *GetNodeParent(const wxXmlNode *node) const override;
     wxXmlNode *GetNodeNext(const wxXmlNode *node) const override;
@@ -621,11 +630,19 @@ public:
     wxImageList *GetImageList(const wxString& param = wxT("imagelist")) override;
 
 #if wxUSE_ANIMATIONCTRL
+    // Get all the animations defined in the given parameter which may contain
+    // more than one semicolon-separated paths.
+    wxAnimationBundle GetAnimations(const wxString& param = wxT("animation"),
+                                    wxAnimationCtrlBase* ctrl = nullptr) override;
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Use GetAnimations() instead")
     // Gets an animation creating it using the provided control (so that it
     // will be compatible with it) if any.
     wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
                               wxAnimationCtrlBase* ctrl = nullptr) override;
-#endif
+#endif // WXWIN_COMPATIBILITY_3_2
+#endif // wxUSE_ANIMATIONCTRL
 
     // Gets a font.
     wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = nullptr) override;
@@ -694,7 +711,7 @@ public:
     // Try to create instance of given class and return it, return nullptr on
     // failure:
     virtual wxObject *Create(const wxString& className) = 0;
-    virtual ~wxXmlSubclassFactory() {}
+    virtual ~wxXmlSubclassFactory() = default;
 };
 
 

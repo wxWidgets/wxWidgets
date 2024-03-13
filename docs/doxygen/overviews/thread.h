@@ -36,7 +36,7 @@ To implement non-blocking operations @e without using multiple threads you have
 two possible implementation choices:
 
 - use wxIdleEvent (e.g. to perform a long calculation while updating a progress dialog)
-- do everything at once but call wxWindow::Update() or wxApp::YieldFor(wxEVT_CATEGORY_UI)
+- do everything at once but call wxWindow::Update() or wxEventLoopBase::YieldFor(wxEVT_CATEGORY_UI)
   periodically to update the screen.
 
 However, it is generally much better to run time-consuming tasks in worker threads instead

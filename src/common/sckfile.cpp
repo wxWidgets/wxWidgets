@@ -2,7 +2,6 @@
 // Name:        src/common/sckfile.cpp
 // Purpose:     File protocol
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     20/07/97
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence

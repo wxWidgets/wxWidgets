@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextborderspage.cpp
 // Purpose:     A border editing page for the wxRTC formatting dialog.
 // Author:      Julian Smart
-// Modified by: 
 // Created:     21/10/2010 11:34:24
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence

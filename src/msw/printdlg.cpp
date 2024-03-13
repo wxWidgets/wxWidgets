@@ -2,7 +2,6 @@
 // Name:        src/msw/printdlg.cpp
 // Purpose:     wxPrintDialog, wxPageSetupDialog
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -521,6 +520,7 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
     }
 
     // Try to initialize devmode to user or system default.
+    GlobalPtr newDevMode;
     if (m_devMode)
     {
         GlobalPtrLock lockDevMode(m_devMode);
@@ -549,17 +549,20 @@ void wxWindowsPrintNativeData::InitializeDevMode(const wxString& printerName, Wi
                 if ( pDevMode )
                 {
                     DWORD devModeSize = pDevMode->dmSize + pDevMode->dmDriverExtra;
-                    GlobalPtr newDevMode(devModeSize, GMEM_FIXED | GMEM_ZEROINIT);
+                    newDevMode.Init(devModeSize, GMEM_FIXED | GMEM_ZEROINIT);
                     if ( newDevMode )
                     {
                         memcpy(newDevMode, pDevMode, devModeSize);
-
-                        ::GlobalFree(m_devMode);
-                        m_devMode = newDevMode.Release();
                     }
                 }
             }
         }
+    }
+
+    if ( newDevMode )
+    {
+        ::GlobalFree(static_cast<HGLOBAL>(m_devMode));
+        m_devMode = newDevMode.Release();
     }
 }
 

@@ -2,7 +2,6 @@
 // Name:        src/msw/bitmap.cpp
 // Purpose:     wxBitmap
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -666,10 +665,6 @@ bool wxBitmap::ConvertToDIB()
 
 #endif // wxUSE_WXDIB
 
-wxBitmap::~wxBitmap()
-{
-}
-
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     wxBitmapRefData *refData = new wxBitmapRefData;
@@ -769,6 +764,17 @@ bool wxBitmap::Create(int width, int height, const wxDC& dc)
 bool wxBitmap::CreateWithDIPSize(const wxSize& size, double scale, int depth)
 {
     if ( !Create(size*scale, depth) )
+        return false;
+
+    GetBitmapData()->m_scaleFactor = scale;
+
+    return true;
+}
+
+bool
+wxBitmap::CreateWithLogicalSize(const wxSize& size, double scale, int depth)
+{
+    if ( !Create(size, depth) )
         return false;
 
     GetBitmapData()->m_scaleFactor = scale;
@@ -1143,14 +1149,19 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect ) const
 
 wxBitmap wxBitmap::GetSubBitmapOfHDC( const wxRect& rect, WXHDC hdc ) const
 {
-    wxCHECK_MSG( IsOk() &&
-                 (rect.x >= 0) && (rect.y >= 0) &&
+    wxCHECK_MSG( IsOk(), wxNullBitmap, wxT("invalid bitmap") );
+
+    wxCHECK_MSG( (rect.x >= 0) && (rect.y >= 0) &&
                  (rect.x+rect.width <= GetWidth()) &&
                  (rect.y+rect.height <= GetHeight()),
-                 wxNullBitmap, wxT("Invalid bitmap or bitmap region") );
+                 wxNullBitmap, wxT("invalid bitmap region") );
 
     wxBitmap ret( rect.width, rect.height, GetDepth() );
     wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
+
+    // For consistency with the other ports, preserve this bitmap scale factor
+    // for the returned bitmap, even if it's not really used in wxMSW.
+    ret.SetScaleFactor(GetScaleFactor());
 
     // handle alpha channel, if any
     if (HasAlpha())
@@ -1222,16 +1233,15 @@ wxDC *wxBitmap::GetSelectedInto() const
 #endif
 }
 
-void wxBitmap::UseAlpha(bool use)
+bool wxBitmap::UseAlpha(bool use)
 {
-    if ( GetBitmapData() )
-    {
-        // Only 32bpp bitmaps can contain alpha channel.
-        if ( use && GetBitmapData()->m_depth < 32 )
-            use = false;
+    // Only 32bpp bitmaps can contain alpha channel.
+    if ( !GetBitmapData() || (use && GetBitmapData()->m_depth < 32) )
+        return false;
 
-        GetBitmapData()->m_hasAlpha = use;
-    }
+    GetBitmapData()->m_hasAlpha = use;
+
+    return true;
 }
 
 bool wxBitmap::HasAlpha() const

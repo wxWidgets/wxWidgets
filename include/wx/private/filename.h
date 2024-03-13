@@ -2,7 +2,6 @@
 // Name:        wx/private/filename.h
 // Purpose:     Internal declarations for src/common/filename.cpp
 // Author:      Mike Wetherell
-// Modified by:
 // Created:     2006-10-22
 // Copyright:   (c) 2006 Mike Wetherell
 // Licence:     wxWindows licence

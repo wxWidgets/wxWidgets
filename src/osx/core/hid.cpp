@@ -2,7 +2,6 @@
 // Name:        src/osx/core/hid.cpp
 // Purpose:     DARWIN HID layer for WX Implementation
 // Author:      Ryan Norton
-// Modified by:
 // Created:     11/11/2003
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence

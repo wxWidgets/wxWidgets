@@ -2,7 +2,6 @@
 // Name:        wx/settings.h
 // Purpose:     wxSystemSettings class
 // Author:      Julian Smart
-// Modified by:
 // Created:     01/02/97
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -193,7 +192,7 @@ private:
 
     // Ctor is private, even though it's trivial, because objects of this type
     // are only supposed to be created by wxSystemSettingsNative.
-    wxSystemAppearance() { }
+    wxSystemAppearance() = default;
 
     // Currently this class doesn't have any internal state because the only
     // available implementation doesn't need it. If we do need it later, we

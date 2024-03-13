@@ -45,6 +45,18 @@ wxWidgets programs.
          This can be helpful when running older programs recompiled with
          wxWidgets 3.1 or later, as these asserts are mostly harmless and can
          be safely ignored if the code works as expected.}
+@itemdef{WXSUPPRESS_GTK_DIAGNOSTICS,
+         If set to a non-zero value, wxApp::GTKSuppressDiagnostics() is called
+         on program startup using the numeric value of this variable or the
+         default value if it's not a number, so that e.g. setting it to "yes"
+         suppresses all GTK diagnostics while setting it to 16 only suppresses
+         GTK warning messages.}
+@itemdef{WXLANGUAGE,
+         This variable can be set to override OS setting of preferred languages
+         and make wxUILocale::GetPreferredUILanguages() return the set list
+         instead. The format is same as GNU's <a
+         href="https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html">LANGUAGE</a>
+         variable: a colon-separated list of language codes.}
 */
 
 @see wxSystemOptions

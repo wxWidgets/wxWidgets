@@ -11,6 +11,7 @@
     <wxCompilerPrefix>vc</wxCompilerPrefix>
     <wxCfg>
     </wxCfg>
+    <wxSuffix>u</wxSuffix>
     <wxVendor>custom</wxVendor>
     <wxRuntimeLibs>dynamic</wxRuntimeLibs>
     <wxReleaseRuntimeLibrary>MultiThreadedDLL</wxReleaseRuntimeLibrary>
@@ -28,11 +29,11 @@
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='x64'">
     <wxArchSuffix>_x64</wxArchSuffix>
   </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM'">
+    <wxArchSuffix>_arm</wxArchSuffix>
+  </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM64'">
     <wxArchSuffix>_arm64</wxArchSuffix>
-  </PropertyGroup>
-  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Itanium'">
-    <wxArchSuffix>_ia64</wxArchSuffix>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Debug' or '$(Configuration)'=='DLL Debug')">
     <wxSuffixDebug>d</wxSuffixDebug>
@@ -80,7 +81,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalOptions Condition="'$(PlatformToolset)' == 'v140_xp'">/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="('$(Configuration)'=='Release' or '$(Configuration)'=='DLL Release') and '$(VisualStudioVersion)' >= '14.0'">/Zc:throwingNew %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>

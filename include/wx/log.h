@@ -2,7 +2,6 @@
 // Name:        wx/log.h
 // Purpose:     Assorted wxLogXXX functions, and wxLog (sink for logs)
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     29/01/98
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
@@ -318,10 +317,10 @@ class WXDLLIMPEXP_BASE wxLogFormatter
 {
 public:
     // Default constructor.
-    wxLogFormatter() { }
+    wxLogFormatter() = default;
 
     // Trivial but virtual destructor for the base class.
-    virtual ~wxLogFormatter() { }
+    virtual ~wxLogFormatter() = default;
 
 
     // Override this method to implement custom formatting of the given log
@@ -342,6 +341,19 @@ protected:
 #endif // WXWIN_COMPATIBILITY_3_0
 };
 
+// Special kind of trivial formatter which simply uses the message unchanged.
+class wxLogFormatterNone : public wxLogFormatter
+{
+public:
+    wxLogFormatterNone() = default;
+
+    virtual wxString Format(wxLogLevel WXUNUSED(level),
+                            const wxString& msg,
+                            const wxLogRecordInfo& WXUNUSED(info)) const override
+    {
+        return msg;
+    }
+};
 
 // ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
@@ -661,10 +673,14 @@ private:
 class WXDLLIMPEXP_BASE wxLogBuffer : public wxLog
 {
 public:
-    wxLogBuffer() { }
+    wxLogBuffer() = default;
 
     // get the string contents with all messages logged
     const wxString& GetBuffer() const { return m_str; }
+
+    // clear all the messages, this, in particular, prevents them from being
+    // flushed
+    void Clear() { m_str.clear(); }
 
     // show the buffer contents to the user in the best possible way (this uses
     // wxMessageOutputMessageBox) and clear it
@@ -747,6 +763,41 @@ public:
 
 private:
     bool m_flagOld; // the previous value of the wxLog::ms_doLog
+};
+
+// ----------------------------------------------------------------------------
+// Collect all logged messages into a (multiline) string.
+// ----------------------------------------------------------------------------
+
+// This class is supposed to be used as a local variable and collects, without
+// showing them, all the messages logged during its lifetime.
+class wxLogCollector
+{
+public:
+    wxLogCollector()
+        : m_logOrig{wxLog::SetActiveTarget(&m_logBuf)}
+    {
+        delete m_logBuf.SetFormatter(new wxLogFormatterNone{});
+    }
+
+    ~wxLogCollector()
+    {
+        // Don't flush the messages in the buffer.
+        m_logBuf.Clear();
+
+        wxLog::SetActiveTarget(m_logOrig);
+    }
+
+    const wxString& GetMessages() const
+    {
+        return m_logBuf.GetBuffer();
+    }
+
+private:
+    wxLogBuffer m_logBuf;
+    wxLog* const m_logOrig;
+
+    wxDECLARE_NO_COPY_CLASS(wxLogCollector);
 };
 
 // ----------------------------------------------------------------------------
@@ -870,12 +921,15 @@ public:
     // indicates that we may have an extra first argument preceding the format
     // string and that if we do have it, we should store it in m_info using the
     // given key (while by default 0 value will be used)
-    wxLogger& MaybeStore(const wxString& key, wxUIntPtr value = 0)
+    wxLogger& MaybeStore(const char* key, wxUIntPtr value = 0)
     {
         wxASSERT_MSG( m_optKey.empty(), "can only have one optional value" );
-        m_optKey = key;
 
-        m_info.StoreValue(key, value);
+        // We only use keys defined in this file and we can be sure they
+        // contain ASCII characters only.
+        m_optKey = wxString::FromAscii(key);
+
+        m_info.StoreValue(m_optKey, value);
         return *this;
     }
 
@@ -1226,7 +1280,7 @@ wxDEFINE_EMPTY_LOG_FUNCTION2(Generic, wxLogLevel);
 class WXDLLIMPEXP_BASE wxLogNull
 {
 public:
-    wxLogNull() { }
+    wxLogNull() = default;
 };
 
 // Dummy macros to replace some functions.

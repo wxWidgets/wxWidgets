@@ -45,7 +45,7 @@ static const char *TEST_XRC_FILE = "test.xrc";
 void LoadXrcFrom(const wxString& xrcText)
 {
     wxStringInputStream sis(xrcText);
-    std::unique_ptr<wxXmlDocument> xmlDoc(new wxXmlDocument(sis, "UTF-8"));
+    std::unique_ptr<wxXmlDocument> xmlDoc(new wxXmlDocument(sis));
     REQUIRE( xmlDoc->IsOk() );
 
     // Load the xrc we've just created
@@ -294,7 +294,7 @@ TEST_CASE("XRC::EnvVarInPath", "[xrc]")
         "<root><bitmap>$(WX_TEST_ENV_IN_PATH).bmp</bitmap></root>"
 #endif
     );
-    wxXmlDocument xmlDoc(sis, "UTF-8");
+    wxXmlDocument xmlDoc(sis);
     REQUIRE( xmlDoc.IsOk() );
 
     class wxTestEnvXmlHandler : public wxXmlResourceHandler

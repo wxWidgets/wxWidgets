@@ -201,9 +201,20 @@ these functions too, so they are subject to the same limitations.
 
 
 
-@section overview_datetime_holidays wxDateTime and Holidays
+@section overview_datetime_holidays Holidays
 
-@todo WRITE THIS DOC PARAGRAPH.
+The wxDateTimeHolidayAuthority-derived classes help determine whether a
+given date is a holiday and are used by all functions working with "work days".
+In this context, a holiday is an event which results in a day off from work.
+
+Multiple holiday authorities can be combined by passing them to
+wxDateTimeHolidayAuthority::AddAuthority(), and a date can be verified as a holiday
+by calling wxDateTimeHolidayAuthority::IsHoliday().
+
+Holiday authorities are available for weekends (loaded by default) and
+Catholic/Christian holy days of obligation.
+Custom holiday authorities can also be created by deriving from wxDateTimeHolidayAuthority
+and defining DoIsHoliday() and DoGetHolidaysInRange().
 
 
 

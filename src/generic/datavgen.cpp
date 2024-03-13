@@ -1710,18 +1710,19 @@ public:
             m_dist_x -= indent;
             m_hint = new wxFrame( m_win->GetParent(), wxID_ANY, wxEmptyString,
                                         wxPoint(pos.x - m_dist_x, pos.y + 5 ),
-                                        ib.GetSize(),
+                                        wxSize(1, 1),
                                         wxFRAME_TOOL_WINDOW |
                                         wxFRAME_FLOAT_ON_PARENT |
                                         wxFRAME_NO_TASKBAR |
                                         wxNO_BORDER );
             new wxBitmapCanvas( m_hint, ib, ib.GetSize() );
+            m_hint->SetClientSize(ib.GetSize());
+            m_hint->SetTransparent(128);
             m_hint->Show();
         }
         else
         {
             m_hint->Move( pos.x - m_dist_x, pos.y + 5  );
-            m_hint->SetTransparent( 128 );
         }
 
         return false;
@@ -2835,7 +2836,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxDataViewTreeNode *node = nullptr;
             wxDataViewItem dataitem;
             const int line_height = GetLineHeight(item);
-            bool hasValue = true;
 
             if (!IsVirtualList())
             {
@@ -2847,10 +2847,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 }
 
                 dataitem = node->GetItem();
-
-                if ( !model->HasValue(dataitem, col->GetModelColumn()) )
-                    hasValue = false;
-
             }
             else
             {
@@ -2867,8 +2863,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 state |= wxDATAVIEW_CELL_SELECTED;
 
             cell->SetState(state);
-            if (hasValue)
-                hasValue = cell->PrepareForItem(model, dataitem, col->GetModelColumn());
+            const bool hasValue = cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
             if ( !selected )
@@ -5610,7 +5605,10 @@ wxDataViewCtrl::~wxDataViewCtrl()
 
 #if wxUSE_ACCESSIBILITY
     SetAccessible(nullptr);
-    wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
+    // There is no need to notify anybody if we're destroyed as part of
+    // application shutdown and doing it would just crash in this case.
+    if ( wxTheApp )
+        wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_DESTROY, this, wxOBJID_CLIENT, wxACC_SELF);
 #endif // wxUSE_ACCESSIBILITY
 }
 
@@ -5646,7 +5644,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     SetInitialSize(size);
 
 #ifdef __WXMAC__
-    MacSetClipChildren( true );
+    MacSetClipChildren();
 #endif
 
     m_clientArea = new wxDataViewMainWindow( this, wxID_ANY );

@@ -135,7 +135,7 @@ DEFAULT_DEFAULT_wxUSE_QT=0
 
 PROGRAM_EXT=
 SAMPLES_CXXFLAGS=
-SAMPLES_RPATH_FLAG=
+DYLIB_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
 
@@ -785,6 +785,15 @@ WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
 WX_ARG_FEATURE(webview,     [  --enable-webview        use wxWebView library], wxUSE_WEBVIEW)
 
+dnl This one is not enabled by default as it requires CEF to be available under
+dnl 3rdparty/cef.
+WX_ARG_ENABLE(webviewchromium, [  --enable-webviewchromium        use wxWebView Chromium backend], wxUSE_WEBVIEW_CHROMIUM)
+
+dnl When using wxWebViewChromium, we assume that CEF wrapper DLL was built in
+dnl release mode, use this option if it was built in debug one, i.e. with
+dnl -DCMAKE_BUILD_TYPE=Debug
+WX_ARG_ENABLE(cef_debug,    [  --enable-cef_debug      use debug build of CEF wrapper], wxUSE_CEF_DEBUG)
+
 dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 dnl can't be disabled, don't even provide an option to do it
 if test "$wxUSE_MAC" != 1; then
@@ -1027,6 +1036,13 @@ WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls 
 WX_ARG_FEATURE(taskbarbutton,[  --enable-taskbarbutton  enable wxTaskBarButton (Win32 only)], wxUSE_TASKBARBUTTON)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
+
+dnl Turn off MSW-only IE webview backend here to avoid reporting it as "on" in
+dnl the final summary message (Edge is turned off by default).
+if test "$wxUSE_MSW" != 1; then
+    DEFAULT_wxUSE_WEBVIEW_IE=no
+fi
+
 WX_ARG_FEATURE(webviewie,   [  --enable-webviewie      use wxWebView IE backend (Win32 only)], wxUSE_WEBVIEW_IE)
 WX_ARG_FEATURE(webviewedge, [  --enable-webviewedge    use wxWebView Edge backend (Win32 only)], wxUSE_WEBVIEW_EDGE)
 
@@ -1081,10 +1097,22 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
 fi
 
+dnl CEF requires at least C++14, so default to it and not C++11 when using it.
+if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+    wxDEFAULT_CXXSTD=14
+else
+    dnl By default we just need C++11.
+    wxDEFAULT_CXXSTD=11
+fi
+
 dnl AX_CXX_COMPILE_STDCXX requires its VERSION argument to be specified at
 dnl autoconf, not run, time.
-case "${wxWITH_CXX-11}" in
+case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
     11)
+        if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+            AC_MSG_ERROR([Using wxWebView Chromium backend requires C++14 or later.])
+        fi
+
         AX_CXX_COMPILE_STDCXX(11)
         ;;
 
@@ -1160,10 +1188,14 @@ if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
 
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
-    else dnl Use all architectures supported
-        OSX_ARCH_OPTS="i386"
-        if test "$wxUSE_OSX_COCOA" = 1; then
-            OSX_ARCH_OPTS="$OSX_ARCH_OPTS,x86_64"
+    else
+        dnl Use default architectures for the universal binaries: x86_64 is
+        dnl currently supported everywhere...
+        OSX_ARCH_OPTS=x86_64
+
+        dnl ... and non-ancient macOS versions also support ARM.
+        if [ `sw_vers -productVersion | sed 's/\..*//'` -gt 10 ]; then
+            OSX_ARCH_OPTS=arm64,$OSX_ARCH_OPTS
         fi
     fi
 
@@ -3285,7 +3317,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
     if test "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
-        OPENGL_LIBS="-lopengl32 -lglu32"
+        OPENGL_LIBS="-lopengl32"
     elif test "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then
 
         dnl adjust CPPFLAGS to include GL/gl.h location if necessary
@@ -3301,7 +3333,6 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         fi
 
         AC_CHECK_HEADER(GL/gl.h, [
-            AC_CHECK_HEADER(GL/glu.h, [
                 found_gl=0
 
                 WX_FIND_LIB(GL, glBegin, [/opt/graphics/OpenGL/lib])
@@ -3313,21 +3344,8 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                       fi
                     fi
 
-                    dnl don't suppose that libGL and libGLU are always in the
-                    dnl same directory -- this is not true for some common
-                    dnl distributions
-                    WX_FIND_LIB(GLU, gluBeginCurve, [/opt/graphics/OpenGL/lib])
-                    if test "$ac_find_libraries" != "" ; then
-                      if test "$ac_find_libraries" != "std" ; then
-                        WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
-                        if test "$ac_path_to_link" != " -L/usr/lib" -a \
-                                "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
-                        fi
-                      fi
-
                         found_gl=1
-                        OPENGL_LIBS="-lGL -lGLU"
+                        OPENGL_LIBS="-lGL"
 
                         if test "$WXGTK3" = 1; then
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
@@ -3354,7 +3372,6 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                                 fi
                             fi
                         fi
-                    fi
                 fi
 
                 if test "$found_gl" != 1; then
@@ -3366,10 +3383,9 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                           LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
-                      OPENGL_LIBS="-lMesaGL -lMesaGLU"
+                      OPENGL_LIBS="-lMesaGL"
                     fi
                 fi
-            ],, [ ])
         ],
         [],
         [ ])
@@ -3427,12 +3443,12 @@ if test "$wxUSE_SHARED" = "yes"; then
 
     dnl test for Sun CC which can be used under both Solaris and Linux
     if test "x$SUNCXX" = xyes; then
-        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-R\$libdir"
     else
     case "${host}" in
-      *-*-linux* | *-*-gnu* )
-        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+      *-*-linux* | *-*-gnu* | *-*-freebsd*)
+        DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
         ;;
 
@@ -3453,7 +3469,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             [],[])],
             [
                 AC_MSG_RESULT([yes])
-                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
                 WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
             ],[
                 AC_MSG_RESULT([no])
@@ -3463,7 +3479,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                     [],[])],
                     [
                         AC_MSG_RESULT([yes])
-                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        DYLIB_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
                         WXCONFIG_RPATH="-Wl,-R,\$libdir"
                     ],[
                         AC_MSG_RESULT([no])
@@ -3506,7 +3522,7 @@ EOF
         ;;
 
       *-*-hpux* )
-        SAMPLES_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,+b,\$libdir"
         ;;
 
@@ -3514,7 +3530,7 @@ EOF
     fi
 
     if test $wxUSE_RPATH = "no"; then
-        SAMPLES_RPATH_FLAG=''
+        DYLIB_RPATH_FLAG=''
         DYLIB_PATH_POSTLINK=''
         WXCONFIG_RPATH=''
     fi
@@ -4839,7 +4855,7 @@ else
                             ])
             ])
 
-            dnl check also for dlerror()
+            dnl check also for some optional functions which we may use
             if test "$HAVE_DL_FUNCS" = 1; then
                 AC_CHECK_FUNCS(dladdr,
                     AC_DEFINE(HAVE_DLADDR),
@@ -4851,6 +4867,8 @@ else
                             ])
                     ]
                 )
+
+                AC_CHECK_FUNCS(dl_iterate_phdr)
             fi
         fi
 
@@ -6794,6 +6812,8 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
 fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
+    dnl Work through the backends and see if any are available, if not then
+    dnl disable wxWebView and print a warning.
     USE_WEBVIEW_WEBKIT=0
     USE_WEBVIEW_WEBKIT2=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
@@ -6853,8 +6873,6 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
         elif test "$USE_WEBVIEW_WEBKIT2" = 1; then
             wxUSE_WEBVIEW="yes"
             AC_DEFINE(wxUSE_WEBVIEW_WEBKIT2)
-        else
-            AC_MSG_WARN([WebKit not available, disabling wxWebView])
         fi
     elif test "$wxUSE_MSW" = 1; then
         if test "$wxUSE_WEBVIEW_IE" = "yes"; then
@@ -6867,7 +6885,99 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             wxUSE_WEBVIEW="yes"
             AC_DEFINE(wxUSE_WEBVIEW_EDGE)
         fi
+    else
+        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+            AC_MSG_WARN([wxWebView IE backend only available under MSW, ignoring --enable-webviewie])
+            wxUSE_WEBVIEW_IE=no
+        fi
+        if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+            AC_MSG_WARN([wxWebView Edge backend only available under MSW, ignoring --enable-webviewedge])
+            wxUSE_WEBVIEW_EDGE=no
+        fi
     fi
+
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        CEF_DIR="$srcdir/3rdparty/cef"
+        CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
+
+        EXTRALIBS_WEBVIEW="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $EXTRALIBS_WEBVIEW"
+        if test "$wxUSE_MAC" != 1; then
+            dnl We need to make sure that libcef.so is loaded
+            dnl first, so ensure that it is always linked in.
+            EXTRALDFLAGS_WEBVIEW="-L$CEF_DIR/Release -Wl,--no-as-needed -lcef -Wl,--as-needed"
+        fi
+
+        AC_CACHE_CHECK([for CEF], wx_cv_lib_cef,
+            [
+                AC_LANG_PUSH(C++)
+
+                dnl Search for the Chromium headers in 3rdparty/cef
+                old_CPPFLAGS="$CPPFLAGS"
+                CPPFLAGS="-I$CEF_DIR $CPPFLAGS"
+                AC_COMPILE_IFELSE(
+                    [AC_LANG_PROGRAM([#include "include/cef_version.h"], [])],
+                    [wx_cv_lib_cef=yes],
+                    [cef_error="Chromium headers not found"]
+                )
+
+                dnl And that we can link with CEF.
+                if test "$wx_cv_lib_cef" = "yes"; then
+                    old_LIBS="$LIBS"
+
+                    LIBS="$EXTRALDFLAGS_WEBVIEW $EXTRALIBS_WEBVIEW $LIBS"
+
+                    AC_LINK_IFELSE([
+                        AC_LANG_SOURCE([
+                            #include "include/cef_app.h"
+
+                            int main()
+                            {
+                                CefShutdown();
+                            }])
+                        ],
+                        [],
+                        [
+                            wx_cv_lib_cef=no,
+                            cef_error="Linking with CEF failed, check that CEF wrapper library is in $CEF_DLL_WRAPPER_DIR"
+                        ]
+                    )
+
+                    LIBS="$old_LIBS"
+                fi
+
+                CPPFLAGS="$old_CPPFLAGS"
+
+                AC_LANG_POP()
+            ]
+        )
+
+        if test "$wx_cv_lib_cef" = "yes"; then
+            dnl This is a horrible hack but there simply doesn't seem to be a
+            dnl way to pass a string containing spaces as a single argument, so
+            dnl we can't include it in LIBS above, but luckily the test program
+            dnl actually links under Mac even without it, so we just add it
+            dnl here after the test, so it's used when linking our actual code.
+            if test "$wxUSE_MAC" = 1; then
+                EXTRALIBS_WEBVIEW="-F$CEF_DIR/Release -framework Chromium\ Embedded\ Framework $EXTRALIBS_WEBVIEW"
+            fi
+
+            wxUSE_WEBVIEW="yes"
+            USE_WEBVIEW_CHROMIUM=1
+            AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
+
+            dnl Just trust the option value, we don't really have any simple
+            dnl way to check the CEF wrapper DLL build type.
+            if test "$wxUSE_CEF_DEBUG" = "yes"; then
+                AC_DEFINE(wxHAVE_CEF_DEBUG)
+            fi
+        else
+            AC_MSG_ERROR([CEF not detected: $cef_error
+
+Please install it following the instructions in the manual or remove the
+--enable-webviewchromium option from configure command line])
+        fi
+    fi
+
 fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
@@ -6876,6 +6986,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
 else
     USE_WEBVIEW=0
+    AC_MSG_WARN([No wxWebView backends found, disabling wxWebView])
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -7686,15 +7797,16 @@ AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(EXTRALIBS_SDL)
 AC_SUBST(EXTRALIBS_STC)
 AC_SUBST(EXTRALIBS_WEBVIEW)
+AC_SUBST(EXTRALDFLAGS_WEBVIEW)
 AC_SUBST(WITH_PLUGIN_SDL)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
 TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[[A-Z]]' '[[a-z]]'`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
+AC_SUBST(DYLIB_RPATH_FLAG)
 AC_SUBST(DYLIB_RPATH_INSTALL)
 AC_SUBST(DYLIB_RPATH_POSTLINK)
-AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
 AC_SUBST(USE_DPI_AWARE_MANIFEST)
@@ -8062,12 +8174,7 @@ for subdir in $SUBDIRS; do
                 done
             else
                 dnl assume that everything compiles for utils &c
-                dnl any that shouldn't be built can be added to
-                dnl DISABLED_UTILS, DISABLED_DEMOS
-                disabled_var=DISABLED_`echo $subdir | tr '[[a-z]]' '[[A-Z]]'`
-                eval "disabled=\$$disabled_var"
-                disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         else
             dnl we build wxBase only
@@ -8158,7 +8265,28 @@ echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-
+echo $ECHO_N "                                       webview            ${wxUSE_WEBVIEW}$ECHO_C"
+if test "$wxUSE_WEBVIEW" = "yes"; then
+    echo $ECHO_N " (with backends:$ECHO_C"
+    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
+        echo $ECHO_N " WebKit$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_WEBKIT2" = "yes"; then
+        echo $ECHO_N " WebKit2$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+        echo $ECHO_N " Edge$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+        echo $ECHO_N " IE$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        echo $ECHO_N " Chromium$ECHO_C"
+    fi
+    echo ")"
+else
+    echo "no"
+fi
 echo ""
 
 dnl vi: set et sts=4 sw=4 com=\:dnl:

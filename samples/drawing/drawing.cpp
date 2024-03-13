@@ -2,7 +2,6 @@
 // Name:        samples/drawing/drawing.cpp
 // Purpose:     shows and tests wxDC features
 // Author:      Robert Roebling
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence

@@ -56,7 +56,7 @@ bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     if ( !value.IsEmpty() )
         SetValue( value );
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    return wxSpinCtrlBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 template< typename T, typename Widget >

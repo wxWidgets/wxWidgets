@@ -2,7 +2,6 @@
 // Name:        src/msw/imaglist.cpp
 // Purpose:     wxImageList implementation for Win32
 // Author:      Julian Smart
-// Modified by:
 // Created:     04/01/98
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -168,6 +167,12 @@ void
 wxImageList::GetImageListBitmaps(wxMSWBitmaps& bitmaps,
                                  const wxBitmap& bitmap, const wxBitmap& mask)
 {
+    if (!bitmap.IsOk())
+    {
+        // We can't do anything with an invalid bitmap.
+        return;
+    }
+
     // This can be overwritten below if we need to modify the bitmap, but it
     // doesn't cost anything to initialize the bitmap with this HBITMAP.
     bitmaps.hbmp = GetHbitmapOf(bitmap);

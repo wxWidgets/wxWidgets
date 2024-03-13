@@ -35,6 +35,8 @@ public:
     virtual unsigned int GetIndent() const override;
     virtual void SetIndent(unsigned int indent) override;
 
+    virtual void SetStateImages(const wxVector<wxBitmapBundle>& images) override;
+
     virtual void SetImageList(wxImageList *imageList) override;
     virtual void SetStateImageList(wxImageList *imageList) override;
 
@@ -136,6 +138,9 @@ protected:
     virtual wxTreeItemId DoTreeHitTest(const wxPoint& point, int& flags) const override;
 
     virtual void OnImagesChanged() override;
+
+    // For wxEVT_TREE_KEY_DOWN generation
+    void OnKeyDown(wxKeyEvent &event);
 
 private:
     void SendDeleteEvent(const wxTreeItemId &item);

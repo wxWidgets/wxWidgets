@@ -22,6 +22,7 @@
 #include "wx/window.h"
 
 class WXDLLIMPEXP_FWD_CORE wxAnimation;
+class WXDLLIMPEXP_FWD_CORE wxAnimationBundle;
 class WXDLLIMPEXP_FWD_CORE wxAnimationCtrlBase;
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
@@ -54,13 +55,17 @@ public:
     {}
 
     // Destructor.
-    virtual ~wxXmlResourceHandlerImplBase() {}
+    virtual ~wxXmlResourceHandlerImplBase() = default;
 
     virtual wxObject *CreateResource(wxXmlNode *node, wxObject *parent,
                                      wxObject *instance) = 0;
     virtual bool IsOfClass(wxXmlNode *node, const wxString& classname) const = 0;
     virtual bool IsObjectNode(const wxXmlNode *node) const = 0;
-    virtual wxString GetNodeContent(const wxXmlNode *node) = 0;
+    virtual wxString GetNodeName(const wxXmlNode *node) const = 0;
+    virtual wxString GetNodeAttribute(const wxXmlNode *node,
+                                      const wxString& attrName,
+                                      const wxString& defaultValue) const = 0;
+    virtual wxString GetNodeContent(const wxXmlNode *node) const = 0;
     virtual wxXmlNode *GetNodeParent(const wxXmlNode *node) const = 0;
     virtual wxXmlNode *GetNodeNext(const wxXmlNode *node) const = 0;
     virtual wxXmlNode *GetNodeChildren(const wxXmlNode *node) const = 0;
@@ -109,9 +114,15 @@ public:
     virtual wxImageList *GetImageList(const wxString& param = wxT("imagelist")) = 0;
 
 #if wxUSE_ANIMATIONCTRL
+    virtual wxAnimationBundle GetAnimations(const wxString& param = wxT("animation"),
+                                            wxAnimationCtrlBase* ctrl = nullptr) = 0;
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_BUT_USED_INTERNALLY_MSG("Use GetAnimations() instead")
     virtual wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
                                       wxAnimationCtrlBase* ctrl = nullptr) = 0;
-#endif
+#endif // WXWIN_COMPATIBILITY_3_2
+#endif // wxUSE_ANIMATIONCTRL
 
     virtual wxFont GetFont(const wxString& param = wxT("font"), wxWindow* parent = nullptr) = 0;
     virtual bool GetBoolAttr(const wxString& attr, bool defaultv) = 0;
@@ -233,7 +244,20 @@ protected:
     {
         return GetImpl()->IsObjectNode(node);
     }
-    wxString GetNodeContent(const wxXmlNode *node)
+
+    wxString GetNodeName(const wxXmlNode *node) const
+    {
+        return GetImpl()->GetNodeName(node);
+    }
+
+    wxString GetNodeAttribute(const wxXmlNode *node,
+                              const wxString& attrName,
+                              const wxString& defaultValue = {}) const
+    {
+        return GetImpl()->GetNodeAttribute(node, attrName, defaultValue);
+    }
+
+    wxString GetNodeContent(const wxXmlNode *node) const
     {
         return GetImpl()->GetNodeContent(node);
     }
@@ -377,12 +401,14 @@ protected:
     }
 
 #if wxUSE_ANIMATIONCTRL
+    wxAnimationBundle GetAnimations(const wxString& param = wxT("animation"),
+                                    wxAnimationCtrlBase* ctrl = nullptr);
+
+#if WXWIN_COMPATIBILITY_3_2
     wxAnimation* GetAnimation(const wxString& param = wxT("animation"),
-                              wxAnimationCtrlBase* ctrl = nullptr)
-    {
-        return GetImpl()->GetAnimation(param, ctrl);
-    }
-#endif
+                              wxAnimationCtrlBase* ctrl = nullptr);
+#endif // WXWIN_COMPATIBILITY_3_2
+#endif // wxUSE_ANIMATIONCTRL
 
     wxFont GetFont(const wxString& param = wxT("font"),
                    wxWindow* parent = nullptr)

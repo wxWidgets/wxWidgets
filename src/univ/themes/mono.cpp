@@ -2,7 +2,6 @@
 // Name:        src/univ/themes/mono.cpp
 // Purpose:     wxUniversal theme for monochrome displays
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-08-27
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence

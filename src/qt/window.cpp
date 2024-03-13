@@ -16,6 +16,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QShortcut>
 
@@ -35,10 +36,29 @@
 #include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 
-#define VERT_SCROLLBAR_POSITION 0, 1
-#define HORZ_SCROLLBAR_POSITION 1, 0
 
 #define TRACE_QT_WINDOW "qtwindow"
+
+namespace
+{
+inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
+                                     QWidget* qtWidget)
+{
+    if ( qtContainer && qtContainer->viewport() )
+        return qtContainer->viewport();
+
+    return qtWidget;
+}
+
+inline wxSize wxQtGetBestSize(QWidget* qtWidget)
+{
+    auto size = qtWidget->sizeHint();
+    // best effort to ensure a correct size (note that some qt controls
+    // implement just one or both size hints)
+    size = size.expandedTo(qtWidget->minimumSizeHint());
+    return wxQtConvertSize(size);
+}
+}
 
 // Base Widget helper (no scrollbar, used by wxWindow)
 
@@ -46,6 +66,19 @@ class wxQtWidget : public wxQtEventSignalHandler< QWidget, wxWindowQt >
 {
     public:
         wxQtWidget( wxWindowQt *parent, wxWindowQt *handler );
+
+        virtual QSize sizeHint() const override
+        {
+            // Make sure the window has a valid initial size because the default size of a
+            // generic control (e.g. wxPanel) is (0, 0) when created. Quoting the Qt docs:
+            //
+            //   "Setting the size to QSize(0, 0) will cause the widget
+            //    to not appear on screen. This also applies to windows."
+            //
+            // The value 20 seems to be the default for wxPanel under wxMSW.
+            return QSize(20, 20);
+        }
+
 };
 
 wxQtWidget::wxQtWidget( wxWindowQt *parent, wxWindowQt *handler )
@@ -61,11 +94,28 @@ public:
     wxQtScrollArea(wxWindowQt *parent, wxWindowQt *handler);
 
     bool event(QEvent *e) override;
+
+    void OnActionTriggered(int action);
+    void OnSliderReleased();
 };
 
 wxQtScrollArea::wxQtScrollArea( wxWindowQt *parent, wxWindowQt *handler )
     : wxQtEventSignalHandler< QScrollArea, wxWindowQt >( parent, handler )
 {
+    auto sb = horizontalScrollBar();
+    if ( sb )
+    {
+        connect( sb, &QScrollBar::actionTriggered, this, &wxQtScrollArea::OnActionTriggered );
+        connect( sb, &QScrollBar::sliderReleased, this, &wxQtScrollArea::OnSliderReleased );
+    }
+
+    sb = verticalScrollBar();
+
+    if ( sb )
+    {
+        connect( sb, &QScrollBar::actionTriggered, this, &wxQtScrollArea::OnActionTriggered );
+        connect( sb, &QScrollBar::sliderReleased, this, &wxQtScrollArea::OnSliderReleased );
+    }
 }
 
 bool wxQtScrollArea::event(QEvent *e)
@@ -111,29 +161,7 @@ bool wxQtScrollArea::event(QEvent *e)
     return QScrollArea::event(e);
 }
 
-class wxQtInternalScrollBar : public wxQtEventSignalHandler< QScrollBar, wxWindowQt >
-{
-public:
-    wxQtInternalScrollBar(wxWindowQt *parent, wxWindowQt *handler );
-    ~wxQtInternalScrollBar()
-    {
-        disconnect( this, &QScrollBar::actionTriggered, this, &wxQtInternalScrollBar::actionTriggered );
-        disconnect( this, &QScrollBar::sliderReleased, this, &wxQtInternalScrollBar::sliderReleased );
-    }
-    void actionTriggered( int action );
-    void sliderReleased();
-    void valueChanged( int position );
-};
-
-wxQtInternalScrollBar::wxQtInternalScrollBar( wxWindowQt *parent, wxWindowQt *handler )
-    : wxQtEventSignalHandler< QScrollBar, wxWindowQt >( parent, handler )
-{
-    connect( this, &QScrollBar::actionTriggered, this, &wxQtInternalScrollBar::actionTriggered );
-    connect( this, &QScrollBar::sliderReleased, this, &wxQtInternalScrollBar::sliderReleased );
-}
-
-
-void wxQtInternalScrollBar::actionTriggered( int action )
+void wxQtScrollArea::OnActionTriggered( int action )
 {
     wxEventType eventType = wxEVT_NULL;
     switch( action )
@@ -165,42 +193,49 @@ void wxQtInternalScrollBar::actionTriggered( int action )
 
     if ( GetHandler() )
     {
-        wxScrollWinEvent e( eventType, sliderPosition(), wxQtConvertOrientation( orientation() ) );
-        EmitEvent( e );
+        auto sb = static_cast<QScrollBar*>(sender());
+        if ( sb )
+        {
+            wxScrollWinEvent e( eventType, sb->sliderPosition(),
+                                wxQtConvertOrientation( sb->orientation() ) );
+            EmitEvent( e );
+        }
     }
 }
 
-void wxQtInternalScrollBar::sliderReleased()
+void wxQtScrollArea::OnSliderReleased()
 {
     if ( GetHandler() )
     {
-        wxScrollWinEvent e( wxEVT_SCROLLWIN_THUMBRELEASE, sliderPosition(), wxQtConvertOrientation( orientation() ) );
-        EmitEvent( e );
+        auto sb = static_cast<QScrollBar*>(sender());
+        if ( sb )
+        {
+            wxScrollWinEvent e( wxEVT_SCROLLWIN_THUMBRELEASE, sb->sliderPosition(),
+                                wxQtConvertOrientation( sb->orientation() ) );
+            EmitEvent( e );
+        }
     }
 }
 
 #if wxUSE_ACCEL || defined( Q_MOC_RUN )
-class wxQtShortcutHandler : public QObject, public wxQtSignalHandler
+
+class wxQtShortcutHandler : public QObject
 {
-
 public:
-    wxQtShortcutHandler( wxWindowQt *window );
+    explicit wxQtShortcutHandler( wxWindow *handler ) : m_handler(handler) { }
 
-public:
-    void activated();
+    void activated()
+    {
+        const int command = sender()->property("wxQt_Command").toInt();
+
+        m_handler->QtHandleShortcut( command );
+    }
+
+private:
+
+    wxWindow* const m_handler;
 };
 
-wxQtShortcutHandler::wxQtShortcutHandler( wxWindowQt *window )
-    : wxQtSignalHandler( window )
-{
-}
-
-void wxQtShortcutHandler::activated()
-{
-    int command = sender()->property("wxQt_Command").toInt();
-
-    static_cast<wxWindowQt*>(GetHandler())->QtHandleShortcut( command );
-}
 #endif // wxUSE_ACCEL
 
 //##############################################################################
@@ -236,27 +271,33 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
 }
 
 /* static */
-void wxWindowQt::QtSendSetCursorEvent(wxWindowQt* win, wxPoint posScreen)
+void wxWindowQt::QtSendSetCursorEvent(wxWindowQt* win, const wxPoint& posClient)
 {
-    wxWindowQt* w = win;
-    for ( ;; )
-    {
-        const wxPoint posClient = w->ScreenToClient(posScreen);
-        wxSetCursorEvent event(posClient.x, posClient.y);
-        event.SetEventObject(w);
+    const wxRect rect(win->GetClientAreaOrigin(), win->GetClientSize());
 
-        const bool processedEvtSetCursor = w->ProcessWindowEvent(event);
+    if ( rect.Contains(posClient) )
+    {
+        wxSetCursorEvent event( posClient.x , posClient.y );
+        event.SetId(win->GetId());
+        event.SetEventObject(win);
+
+        const bool processedEvtSetCursor = win->HandleWindowEvent(event);
         if ( processedEvtSetCursor && event.HasCursor() )
         {
             win->SetCursor(event.GetCursor());
-            return;
         }
+        else
+        {
+            // Notice that GetCursor() can return an invalid cursor even if the window already
+            // has a valid cursor set at the Qt level. Don't override it if this is the case.
+            const bool hasCursor = win->GetHandle()->testAttribute(Qt::WA_SetCursor);
 
-        w = w->GetParent();
-        if ( w == nullptr )
-            break;
+            if ( !hasCursor || (!wxIsBusy() && !win->GetParent()) )
+            {
+                win->SetCursor( *wxSTANDARD_CURSOR );
+            }
+        }
     }
-    win->SetCursor(wxCursor(wxCURSOR_ARROW));
 }
 
 static wxWindowQt *s_capturedWindow = nullptr;
@@ -273,10 +314,6 @@ static wxWindowQt *s_capturedWindow = nullptr;
 
 void wxWindowQt::Init()
 {
-    m_horzScrollBar = nullptr;
-    m_vertScrollBar = nullptr;
-
-    m_qtPicture = nullptr;
     m_qtPainter.reset(new QPainter());
 
     m_mouseInside = false;
@@ -350,36 +387,66 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     // that a generic control, like wxPanel, is being created, so we need a very
     // simple control as a base:
 
+    bool isGeneric = false;
+
     if ( GetHandle() == nullptr )
     {
+        isGeneric = true;
+
         if ( style & (wxHSCROLL | wxVSCROLL) )
         {
+            m_qtWindow =
             m_qtContainer = new wxQtScrollArea( parent, this );
-            m_qtWindow = m_qtContainer;
-            // Create the scroll bars if needed:
-            if ( style & wxHSCROLL )
-                QtSetScrollBar( wxHORIZONTAL );
-            if ( style & wxVSCROLL )
-                QtSetScrollBar( wxVERTICAL );
         }
         else
+        {
             m_qtWindow = new wxQtWidget( parent, this );
+        }
+    }
+    else
+    {
+        m_qtContainer = dynamic_cast<QAbstractScrollArea*>(m_qtWindow);
+    }
+
+    if ( m_qtContainer )
+    {
+        // If wx[HV]SCROLL is not given, the corresponding scrollbar is not shown
+        // at all. Otherwise it may be shown only on demand (default) or always, if
+        // the wxALWAYS_SHOW_SB is specified.
+        Qt::ScrollBarPolicy horzPolicy = (style & wxHSCROLL)
+                                          ? HasFlag(wxALWAYS_SHOW_SB)
+                                              ? Qt::ScrollBarAlwaysOn
+                                              : Qt::ScrollBarAsNeeded
+                                          : Qt::ScrollBarAlwaysOff;
+        Qt::ScrollBarPolicy vertPolicy = (style & wxVSCROLL)
+                                          ? HasFlag(wxALWAYS_SHOW_SB)
+                                              ? Qt::ScrollBarAlwaysOn
+                                              : Qt::ScrollBarAsNeeded
+                                          : Qt::ScrollBarAlwaysOff;
+
+        m_qtContainer->setHorizontalScrollBarPolicy( horzPolicy );
+        m_qtContainer->setVerticalScrollBarPolicy( vertPolicy );
     }
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
 
-    parent->AddChild( this );
+    if ( parent )
+        parent->AddChild( this );
 
     wxPoint p;
     if ( pos != wxDefaultPosition )
         p = pos;
 
-    DoMoveWindow( p.x, p.y, size.GetWidth(), size.GetHeight() );
+    wxSize initialSize = size;
+    initialSize.SetDefaults( IsTopLevel() ? wxTopLevelWindowBase::GetDefaultSize()
+                                          : wxQtGetBestSize( GetHandle() ) );
 
-    PostCreation();
+    DoMoveWindow( p.x, p.y, initialSize.GetWidth(), initialSize.GetHeight() );
 
-    return ( true );
+    PostCreation( isGeneric );
+
+    return true;
 }
 
 void wxWindowQt::PostCreation(bool generic)
@@ -435,8 +502,8 @@ void wxWindowQt::AddChild( wxWindowBase *child )
 {
     // Make sure all children are children of the inner scroll area widget (if any):
 
-    if ( QtGetScrollBarsContainer() )
-        QtReparent( child->GetHandle(), QtGetScrollBarsContainer()->viewport() );
+    if ( m_qtContainer )
+        QtReparent( child->GetHandle(), m_qtContainer->viewport() );
 
     wxWindowBase::AddChild( child );
 }
@@ -483,6 +550,9 @@ void wxWindowQt::DoEnable(bool enable)
 
 void wxWindowQt::SetFocus()
 {
+    if ( !GetHandle()->isActiveWindow() )
+        GetHandle()->activateWindow();
+
     GetHandle()->setFocus();
 }
 
@@ -537,25 +607,15 @@ void wxWindowQt::Update()
 {
     wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Update %s"), GetName());
     // send the paint event to the inner widget in scroll areas:
-    if ( QtGetScrollBarsContainer() )
-    {
-        QtGetScrollBarsContainer()->viewport()->update();
-    } else {
-        GetHandle()->update();
-    }
+
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
+    widget->repaint();
 }
 
 void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 {
-    QWidget *widget;
-
-    // get the inner widget in scroll areas:
-    if ( QtGetScrollBarsContainer() )
-    {
-        widget = QtGetScrollBarsContainer()->viewport();
-    } else {
-        widget = GetHandle();
-    }
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
 
     if ( widget != nullptr )
     {
@@ -619,7 +679,6 @@ bool wxWindowQt::SetFont( const wxFont &font )
     if (GetHandle())
     {
         GetHandle()->setFont( font.GetHandle() );
-        return true;
     }
 
     return wxWindowBase::SetFont(font);
@@ -672,61 +731,24 @@ void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *de
 
 QWidget *wxWindowQt::QtGetClientWidget() const
 {
-    QWidget *qtWidget = nullptr;
-    if ( m_qtContainer != nullptr )
-    {
-        qtWidget = m_qtContainer->viewport();
-    }
+    auto frame = wxDynamicCast(this, wxFrame);
+    if ( frame )
+        return frame->GetQMainWindow()->centralWidget();
 
-    if ( qtWidget == nullptr )
-    {
-        // We don't have scrollbars or the QScrollArea has no children
-        qtWidget = GetHandle();
-    }
-
-    return qtWidget;
+    return wxQtGetDrawingWidget(m_qtContainer, GetHandle());
 }
 
-/* Returns a scrollbar for the given orientation, or nullptr if the scrollbar
- * has not been previously created and create is false */
+/* Returns a scrollbar for the given orientation */
 QScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
 {
-    QScrollBar *scrollBar = nullptr;
+    wxCHECK_MSG( m_qtContainer, nullptr, "Window without scrolling area" );
 
     if ( orientation == wxHORIZONTAL )
-        scrollBar = m_horzScrollBar;
-    else
-        scrollBar = m_vertScrollBar;
-
-    return scrollBar;
-}
-
-/* Returns a new scrollbar for the given orientation, or set the scrollbar
- * passed as parameter */
-QScrollBar *wxWindowQt::QtSetScrollBar( int orientation, QScrollBar *scrollBar )
-{
-    QScrollArea *scrollArea = QtGetScrollBarsContainer();
-    wxCHECK_MSG( scrollArea, nullptr, "Window without scrolling area" );
-
-    // Create a new scrollbar if needed
-    if ( !scrollBar )
     {
-        scrollBar = new wxQtInternalScrollBar(this, this);
-        scrollBar->setOrientation( orientation == wxHORIZONTAL ? Qt::Horizontal : Qt::Vertical );
+        return m_qtContainer->horizontalScrollBar();
     }
 
-    // Let Qt handle layout
-    if ( orientation == wxHORIZONTAL )
-    {
-        scrollArea->setHorizontalScrollBar( scrollBar );
-        m_horzScrollBar = scrollBar;
-    }
-    else
-    {
-        scrollArea->setVerticalScrollBar( scrollBar );
-        m_vertScrollBar = scrollBar;
-    }
-    return scrollBar;
+    return m_qtContainer->verticalScrollBar();
 }
 
 
@@ -734,10 +756,9 @@ void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int r
 {
     wxCHECK_RET(GetHandle(), "Window has not been created");
 
-    //If not exist, create the scrollbar
+    // may return nullptr if the window is not scrollable in that orientation
+    // or if it's not scrollable at all.
     QScrollBar *scrollBar = QtGetScrollBar( orientation );
-    if ( scrollBar == nullptr )
-        scrollBar = QtSetScrollBar( orientation );
 
     // Configure the scrollbar if it exists. If range is zero we can get here with
     // scrollBar == nullptr and it is not a problem
@@ -797,11 +818,8 @@ int wxWindowQt::GetScrollRange( int orientation ) const
 void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
     // check if this is a scroll area (scroll only inner viewport)
-    QWidget *widget;
-    if ( QtGetScrollBarsContainer() )
-        widget = QtGetScrollBarsContainer()->viewport();
-    else
-        widget = GetHandle();
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
     // scroll the widget or the specified rect (not children)
     if ( rect != nullptr )
         widget->scroll( dx, dy, wxQtConvertRect( *rect ));
@@ -941,6 +959,30 @@ void wxWindowQt::SetWindowStyleFlag( long style )
     GetHandle()->setWindowFlags( qtFlags );
 }
 
+wxSize wxWindowQt::GetWindowBorderSize() const
+{
+    wxCoord border;
+    switch ( GetBorder() )
+    {
+        case wxBORDER_STATIC:
+        case wxBORDER_SIMPLE:
+        case wxBORDER_SUNKEN:
+        case wxBORDER_RAISED:
+        case wxBORDER_THEME:
+            border = 1;
+            break;
+
+        default:
+            wxFAIL_MSG( wxT("unknown border style") );
+            wxFALLTHROUGH;
+
+        case wxBORDER_NONE:
+            border = 0;
+    }
+
+    return 2 * wxSize(border, border);
+}
+
 void wxWindowQt::SetExtraStyle( long exStyle )
 {
     long exStyleOld = GetExtraStyle();
@@ -1008,6 +1050,23 @@ void wxWindowQt::DoGetPosition(int *x, int *y) const
     *y = qtWidget->y();
 }
 
+namespace
+{
+inline void wxQtSetClientSize(QWidget* qtWidget, int width, int height)
+{
+    // There doesn't seem to be any way to change Qt frame size directly, so
+    // change the widget size, but take into account the extra margins
+    // corresponding to the frame decorations.
+    const QSize frameSize = qtWidget->frameSize();
+    const QSize innerSize = qtWidget->geometry().size();
+    const QSize frameSizeDiff = frameSize - innerSize;
+
+    const int clientWidth = std::max(width - frameSizeDiff.width(), 0);
+    const int clientHeight = std::max(height - frameSizeDiff.height(), 0);
+
+    qtWidget->resize(clientWidth, clientHeight);
+}
+}
 
 void wxWindowQt::DoGetSize(int *width, int *height) const
 {
@@ -1081,6 +1140,30 @@ void wxWindowQt::DoSetClientSize(int width, int height)
     geometry.setWidth( width );
     geometry.setHeight( height );
     qtWidget->setGeometry( geometry );
+
+    if ( qtWidget != GetHandle() )
+    {
+        // Resize the window to be as small as the client size but no smaller
+        wxQtSetClientSize(GetHandle(), width, height);
+    }
+}
+
+wxSize wxWindowQt::DoGetBestSize() const
+{
+    const wxSize size = wxWindowBase::DoGetBestSize();
+
+    if ( dynamic_cast<wxQtWidget*>(GetHandle()) )
+    {
+        return size;
+    }
+
+    wxSize bestSize = wxQtGetBestSize( GetHandle() );
+    if ( size.IsFullySpecified() )
+    {
+        bestSize.IncTo(size);
+    }
+
+    return bestSize;
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
@@ -1089,17 +1172,7 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 
     qtWidget->move( x, y );
 
-    // There doesn't seem to be any way to change Qt frame size directly, so
-    // change the widget size, but take into account the extra margins
-    // corresponding to the frame decorations.
-    const QSize frameSize = qtWidget->frameSize();
-    const QSize innerSize = qtWidget->geometry().size();
-    const QSize frameSizeDiff = frameSize - innerSize;
-
-    const int clientWidth = std::max(width - frameSizeDiff.width(), 0);
-    const int clientHeight = std::max(height - frameSizeDiff.height(), 0);
-
-    qtWidget->resize(clientWidth, clientHeight);
+    wxQtSetClientSize(qtWidget, width, height);
 }
 
 #if wxUSE_TOOLTIPS
@@ -1127,7 +1200,14 @@ void wxWindowQt::DoSetToolTip( wxToolTip *tip )
 bool wxWindowQt::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->UpdateUI();
-    menu->GetHandle()->exec( GetHandle()->mapToGlobal( QPoint( x, y ) ) );
+
+    QPoint pt;
+    if (x == wxDefaultCoord && y == wxDefaultCoord)
+        pt = QCursor::pos();
+    else
+        pt = GetHandle()->mapToGlobal(QPoint(x, y));
+
+    menu->GetHandle()->exec(pt);
 
     return true;
 }
@@ -1169,12 +1249,9 @@ bool wxWindowQt::SetBackgroundStyle(wxBackgroundStyle style)
 
 bool wxWindowQt::QtSetBackgroundStyle()
 {
-    QWidget *widget;
     // if it is a scroll area, don't make transparent (invisible) scroll bars:
-    if ( QtGetScrollBarsContainer() )
-        widget = QtGetScrollBarsContainer()->viewport();
-    else
-        widget = GetHandle();
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
     // check if the control is created (wxGTK requires calling it before):
     if ( widget != nullptr )
     {
@@ -1241,8 +1318,11 @@ bool wxWindowQt::SetBackgroundColour(const wxColour& colour)
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
-    QWidget *widget = GetHandle();
-    wxQtChangeRoleColour(widget->backgroundRole(), widget, colour);
+    if ( colour.IsOk() )
+    {
+        QWidget *widget = QtGetParentWidget();
+        wxQtChangeRoleColour(widget->backgroundRole(), widget, colour);
+    }
 
     return true;
 }
@@ -1252,10 +1332,34 @@ bool wxWindowQt::SetForegroundColour(const wxColour& colour)
     if (!wxWindowBase::SetForegroundColour(colour))
         return false;
 
-    QWidget *widget = GetHandle();
+    QWidget *widget = QtGetParentWidget();
     wxQtChangeRoleColour(widget->foregroundRole(), widget, colour);
 
     return true;
+}
+
+void wxWindowQt::SetDoubleBuffered(bool on)
+{
+    wxCHECK_RET( GetHandle(), "invalid window" );
+
+    // Quoting from the Qt docs:
+    // ---------------------------
+    // Indicates that the widget wants to draw directly onto the screen. Widgets
+    // with this attribute set do not participate in composition management, i.e.
+    // they cannot be semi-transparent or shine through semi-transparent overlapping
+    // widgets. Note: This flag is only supported on X11 and it disables double buffering.
+    // On Qt for Embedded Linux, the flag only works when set on a top-level widget and it
+    // relies on support from the active screen driver. This flag is set or cleared by the
+    // widget's author. To render outside of Qt's paint system, e.g., if you require native
+    // painting primitives, you need to reimplement QWidget::paintEngine() to return 0 and
+    // set this flag.
+
+    GetHandle()->setAttribute(Qt::WA_PaintOnScreen, !on);
+}
+
+bool wxWindowQt::IsDoubleBuffered() const
+{
+    return !GetHandle()->testAttribute(Qt::WA_PaintOnScreen);
 }
 
 bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
@@ -1264,114 +1368,114 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
      * for the client area (the scrolled part). Events for the whole window
      * (including scrollbars and maybe status or menu bars are handled by Qt */
 
-    if ( QtGetScrollBarsContainer() && handler != QtGetScrollBarsContainer() )
+    if ( (m_qtContainer &&
+          m_qtContainer != handler) || handler != GetHandle() )
     {
         return false;
     }
-    else
+
+    // use the Qt event region:
+    m_updateRegion.QtSetRegion( event->region() );
+
+    // Prepare the Qt painter:
+    QWidget* const widget = wxQtGetDrawingWidget(m_qtContainer, GetHandle());
+
+    // Start the paint in the viewport if _widget_ is a scroll area, because
+    // QAbstractScrollArea can only draw in it. Start the paint in the widget
+    // itself otherwise.
+    const bool ok = m_qtPainter->begin( widget );
+
+    if (m_qtPainter->device()->depth() > 1)
     {
-        // use the Qt event region:
-        m_updateRegion.QtSetRegion( event->region() );
+        m_qtPainter->setRenderHints(QPainter::Antialiasing,
+                                    true);
+    }
 
-        // Prepare the Qt painter for wxWindowDC:
-        bool ok = false;
-        if ( QtGetScrollBarsContainer() )
-        {
-            // QScrollArea can only draw in the viewport:
-            ok = m_qtPainter->begin( QtGetScrollBarsContainer()->viewport() );
-        }
-        if ( !ok )
-        {
-            // Start the paint in the widget itself
-            ok =  m_qtPainter->begin( GetHandle() );
-        }
+    if ( ok )
+    {
+        bool handled;
 
-        if ( ok )
+        if ( !m_qtPicture )
         {
-            bool handled;
-
-            if ( m_qtPicture == nullptr )
+            // Real paint event (not for wxClientDC), prepare the background
+            switch ( GetBackgroundStyle() )
             {
-                // Real paint event (not for wxClientDC), prepare the background
-                switch ( GetBackgroundStyle() )
-                {
-                    case wxBG_STYLE_TRANSPARENT:
-                        if (IsTransparentBackgroundSupported())
-                        {
-                            // Set a transparent background, so that overlaying in parent
-                            // might indeed let see through where this child did not
-                            // explicitly paint. See wxBG_STYLE_SYSTEM for more comment
-                        }
-                        break;
-                    case wxBG_STYLE_ERASE:
-                        {
-                            // the background should be cleared by qt auto fill
-                            // send the erase event (properly creating a DC for it)
-                            wxPaintDC dc( this );
-                            dc.SetDeviceClippingRegion( m_updateRegion );
+                case wxBG_STYLE_TRANSPARENT:
+                    if (IsTransparentBackgroundSupported())
+                    {
+                        // Set a transparent background, so that overlaying in parent
+                        // might indeed let see through where this child did not
+                        // explicitly paint. See wxBG_STYLE_SYSTEM for more comment
+                    }
+                    break;
+                case wxBG_STYLE_ERASE:
+                    {
+                        // the background should be cleared by qt auto fill
+                        // send the erase event (properly creating a DC for it)
+                        wxPaintDC dc( this );
+                        dc.SetDeviceClippingRegion( m_updateRegion );
 
-                            wxEraseEvent erase( GetId(), &dc );
-                            erase.SetEventObject(this);
-                            if ( ProcessWindowEvent(erase) )
-                            {
-                                // background erased, don't do it again
-                                break;
-                            }
-                            // Ensure DC is cleared if handler didn't and Qt will not do it
-                            if ( UseBgCol() && !GetHandle()->autoFillBackground() )
-                            {
-                                wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
-                                           GetName(), GetBackgroundColour().GetAsString()
-                                           );
-                                dc.SetBackground(GetBackgroundColour());
-                                dc.Clear();
-                            }
-                        }
-                        // fall through
-                    case wxBG_STYLE_SYSTEM:
-                        if ( GetThemeEnabled() )
+                        wxEraseEvent erase( GetId(), &dc );
+                        erase.SetEventObject(this);
+                        if ( ProcessWindowEvent(erase) )
                         {
-                            // let qt render the background:
-                            // commented out as this will cause recursive painting
-                            // this should be done outside using setBackgroundRole
-                            // setAutoFillBackground or setAttribute
-                            //wxWindowDC dc( (wxWindow*)this );
-                            //widget->render(m_qtPainter);
+                            // background erased, don't do it again
+                            break;
                         }
-                        break;
-                    case wxBG_STYLE_PAINT:
-                        // nothing to do: window will be painted over in EVT_PAINT
-                        break;
+                        // Ensure DC is cleared if handler didn't and Qt will not do it
+                        if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                        {
+                            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
+                                       GetName(), GetBackgroundColour().GetAsString()
+                                       );
+                            dc.SetBackground(GetBackgroundColour());
+                            dc.Clear();
+                        }
+                    }
+                    wxFALLTHROUGH;
+                case wxBG_STYLE_SYSTEM:
+                    if ( GetThemeEnabled() )
+                    {
+                        // let qt render the background:
+                        // commented out as this will cause recursive painting
+                        // this should be done outside using setBackgroundRole
+                        // setAutoFillBackground or setAttribute
+                        //wxWindowDC dc( (wxWindow*)this );
+                        //widget->render(m_qtPainter);
+                    }
+                    break;
+                case wxBG_STYLE_PAINT:
+                    // nothing to do: window will be painted over in EVT_PAINT
+                    break;
 
-                    case wxBG_STYLE_COLOUR:
-                        wxFAIL_MSG( "unsupported background style" );
-                }
-
-                // send the paint event (wxWindowDC will draw directly):
-                wxPaintEvent paint( this );
-                handled = ProcessWindowEvent(paint);
-                m_updateRegion.Clear();
-            }
-            else
-            {
-                // Data from wxClientDC, paint it
-                m_qtPicture->play( m_qtPainter.get() );
-                // Reset picture
-                m_qtPicture->setData( nullptr, 0 );
-                handled = true;
+                case wxBG_STYLE_COLOUR:
+                    wxFAIL_MSG( "unsupported background style" );
             }
 
-            // commit changes of the painter to the widget
-            m_qtPainter->end();
-
-            return handled;
+            // send the paint event (wxWindowDC will draw directly):
+            wxPaintEvent paint( this );
+            handled = ProcessWindowEvent(paint);
+            m_updateRegion.Clear();
         }
         else
         {
-            // Painter didn't begun, not handled by wxWidgets:
-            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s Qt widget painter begin failed"), GetName() );
-            return false;
+            // Data from wxClientDC, paint it
+            m_qtPicture->play( m_qtPainter.get() );
+            // Reset picture
+            m_qtPicture.reset();
+            handled = true;
         }
+
+        // commit changes of the painter to the widget
+        m_qtPainter->end();
+
+        return handled;
+    }
+    else
+    {
+        // Painter didn't begun, not handled by wxWidgets:
+        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s Qt widget painter begin failed"), GetName() );
+        return false;
     }
 }
 
@@ -1467,6 +1571,22 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
                 return true;
         }
 #endif // wxUSE_ACCEL
+
+        // For compatibility with wxMSW, don't generate wxEVT_CHAR event for
+        // the following keys: SHIFT, CONTROL, MENU, CAPITAL, NUMLOCK and SCROLL.
+        switch ( event->key() )
+        {
+            case Qt::Key_Shift:
+            case Qt::Key_Control:
+            case Qt::Key_Meta:
+            case Qt::Key_Alt:
+            case Qt::Key_AltGr:
+            case Qt::Key_CapsLock:
+            case Qt::Key_NumLock:
+            case Qt::Key_ScrollLock:
+                // Skip event generation.
+                return handled;
+        }
 
         e.SetEventType( wxEVT_CHAR );
         e.SetEventObject(this);
@@ -1612,7 +1732,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
             ProcessWindowEvent( e );
         }
 
-        QtSendSetCursorEvent(this, wxQtConvertPoint( event->globalPos()));
+        QtSendSetCursorEvent(this, mousePos);
     }
 
     m_mouseInside = mouseInside;
@@ -1740,19 +1860,19 @@ QWidget *wxWindowQt::GetHandle() const
     return m_qtWindow;
 }
 
-QScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
-{
-    return m_qtContainer;
-}
-
 void wxWindowQt::QtSetPicture( QPicture* pict )
 {
-    m_qtPicture = pict;
+    m_qtPicture.reset(pict);
 }
 
 QPainter *wxWindowQt::QtGetPainter()
 {
     return m_qtPainter.get();
+}
+
+bool wxWindowQt::QtCanPaintWithoutActivePainter() const
+{
+    return false;
 }
 
 bool wxWindowQt::EnableTouchEvents(int eventsMask)

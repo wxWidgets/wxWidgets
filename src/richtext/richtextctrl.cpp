@@ -2,7 +2,6 @@
 // Name:        src/richtext/richtextctrl.cpp
 // Purpose:     A rich edit control
 // Author:      Julian Smart
-// Modified by:
 // Created:     2005-09-30
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
@@ -3021,15 +3020,17 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
     if (sz.x < 1 || sz.y < 1)
         return false;
 
-    if (!m_bufferBitmap.IsOk() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
+    if (!m_bufferBitmap.IsOk() || m_bufferBitmap.GetLogicalWidth() < sz.x || m_bufferBitmap.GetLogicalHeight() < sz.y)
+    {
         // As per https://github.com/wxWidgets/wxWidgets/issues/14403, prevent very inefficient fix to alpha bits of
         // destination by making the backing bitmap 24-bit. Note that using 24-bit depth breaks painting of
         // scrolled areas on wxWidgets 2.8.
-#if defined(__WXMSW__) && wxCHECK_VERSION(3,0,0)
-        m_bufferBitmap = wxBitmap(sz.x, sz.y, 24);
-#else
-        m_bufferBitmap = wxBitmap(sz.x, sz.y);
+        int depth = -1;
+#if defined(__WXMSW__)
+        depth = 24;
 #endif
+        m_bufferBitmap.CreateWithLogicalSize(sz, GetDPIScaleFactor(), depth);
+    }
     return m_bufferBitmap.IsOk();
 }
 #endif

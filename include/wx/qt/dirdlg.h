@@ -13,7 +13,7 @@ class QFileDialog;
 class WXDLLIMPEXP_CORE wxDirDialog : public wxDirDialogBase
 {
 public:
-    wxDirDialog() { }
+    wxDirDialog() = default;
 
     wxDirDialog(wxWindow *parent,
                 const wxString& message = wxASCII_STR(wxDirSelectorPromptStr),

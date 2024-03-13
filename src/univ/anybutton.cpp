@@ -249,7 +249,7 @@ bool wxStdAnyButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
             m_winHasMouse = false;
 
             // we do have a pressed button, so release it
-            consumer->GetInputWindow()->SetCurrent(false);
+            consumer->GetInputWindow()->WXMakeCurrent(false);
             consumer->PerformAction(wxACTION_BUTTON_RELEASE);
 
             return true;
@@ -263,7 +263,7 @@ bool wxStdAnyButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
             // we did have a pressed button which we released when leaving the
             // window, press it again
-            consumer->GetInputWindow()->SetCurrent(true);
+            consumer->GetInputWindow()->WXMakeCurrent(true);
             consumer->PerformAction(wxACTION_BUTTON_PRESS);
 
             return true;

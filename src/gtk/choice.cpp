@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/event.h"
 #include "wx/gtk/private/eventsdisabler.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/value.h"
@@ -32,6 +33,26 @@ gtk_choice_changed_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
     choice->SendSelectionChangedEvent(wxEVT_CHOICE);
 }
+
+#ifdef __WXGTK3__
+
+static gboolean
+wx_gtk_choice_enter_notify(GtkWidget* widget,
+                           GdkEventCrossing* gdk_event,
+                           wxChoice *choice)
+{
+    return wxGTKImpl::WindowEnterCallback(widget, gdk_event, choice);
+}
+
+static gboolean
+wx_gtk_choice_leave_notify(GtkWidget* widget,
+                           GdkEventCrossing* gdk_event,
+                           wxChoice* choice)
+{
+    return wxGTKImpl::WindowLeaveCallback(widget, gdk_event, choice);
+}
+
+#endif // __WXGTK3__
 
 }
 
@@ -103,6 +124,35 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     g_signal_connect_after (m_widget, "changed",
                             G_CALLBACK (gtk_choice_changed_callback), this);
+
+#ifdef __WXGTK3__
+    // Internal structure of GtkComboBoxText is complicated: it contains a
+    // GtkBox which contains a GtkToggleButton which contains another GtkBox
+    // which, in turn, contains GtkCellView (and more).
+    //
+    // And it's this internal GtkToggleButton which receives the mouse events
+    // and not the main widget itself, so find it and connect to its events.
+
+    // We could find it either by using gtk_container_forall() to get the box
+    // inside GtkComboBoxText and then get its only child, or by doing what we
+    // do here and getting GtkCellView directly and then getting its parent,
+    // which is simpler because GtkComboBoxText sets things up in such a way
+    // that its only child is the GtkCellView (even if, again, this is not how
+    // things really are internally).
+    auto cellView = gtk_bin_get_child(GTK_BIN(m_widget));
+    wxCHECK_MSG( cellView, true, "No cell view in GtkComboBoxText?" );
+
+    auto box = gtk_widget_get_parent(cellView);
+
+    auto button = gtk_widget_get_parent(box);
+    wxCHECK_MSG( GTK_IS_TOGGLE_BUTTON(button), true,
+                 "Unexpected grandparent of GtkCellView in GtkComboBoxText" );
+
+    g_signal_connect(button, "enter_notify_event",
+                     G_CALLBACK(wx_gtk_choice_enter_notify), this);
+    g_signal_connect(button, "leave_notify_event",
+                     G_CALLBACK(wx_gtk_choice_leave_notify), this);
+#endif // __WXGTK3__
 
     return true;
 }
@@ -371,13 +421,36 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     // a GtkEntry for wxComboBox and a GtkCellView for wxChoice
     GtkWidget* childPart = gtk_bin_get_child(GTK_BIN(m_widget));
 
+#ifdef __WXGTK3__
+    // Preferred size for wxChoice can be incorrect when control is empty,
+    // work around this by temporarily adding an item.
+    GtkTreeModel* model = nullptr;
+    if (GTK_IS_CELL_VIEW(childPart))
+    {
+        model = gtk_combo_box_get_model(GTK_COMBO_BOX(m_widget));
+        GtkTreeIter iter;
+        if (gtk_tree_model_get_iter_first(model, &iter))
+            model = nullptr;
+        else
+            gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(m_widget), "Gg");
+    }
+#endif
+
     // We are interested in the difference of sizes between the whole contol
     // and its child part. I.e. arrow, separators, etc.
     GtkRequisition req;
     gtk_widget_get_preferred_size(childPart, nullptr, &req);
-    wxSize totalS = GTKGetPreferredSize(m_widget);
+    wxSize tsize(GTKGetPreferredSize(m_widget));
 
-    wxSize tsize(xlen + totalS.x - req.width, totalS.y);
+#ifdef __WXGTK3__
+    if (model)
+        gtk_list_store_clear(GTK_LIST_STORE(model));
+#endif
+
+    tsize.x -= req.width;
+    if (tsize.x < 0)
+        tsize.x = 0;
+    tsize.x += xlen;
 
     // For a wxChoice, not for wxComboBox, add some margins
     if ( !GTK_IS_ENTRY(childPart) )

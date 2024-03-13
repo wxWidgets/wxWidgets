@@ -339,6 +339,21 @@ gtk_frame_configure_callback( GtkWidget*,
 
 void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
 {
+#ifdef __WXGTK3__
+    // First of all check if our DPI has changed.
+    const auto newScaleFactor = GetContentScaleFactor();
+    if ( newScaleFactor != m_scaleFactor )
+    {
+        const auto oldScaleFactor = m_scaleFactor;
+
+        // It seems safer to change it before generating the events to avoid
+        // any chance of reentrancy.
+        m_scaleFactor = newScaleFactor;
+
+        WXNotifyDPIChange(oldScaleFactor, newScaleFactor);
+    }
+#endif // __WXGTK3__
+
     wxPoint point;
 #ifdef GDK_WINDOWING_X11
     if (gs_decorCacheValid)
@@ -709,10 +724,21 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         g_object_ref(m_widget);
     }
 
+#ifdef __WXGTK3__
+    // This value may be incorrect as here it's just set to the scale factor of
+    // the primary monitor because the widget is not realized yet, but it's
+    // better than setting it to 1, as chances are that the window will be
+    // created on the primary monitor or, maybe, the other monitors use the
+    // same scale factor anyhow. And if this isn't the case, we will set it to
+    // the correct value when we get "configure-event" from GTK later.
+    m_scaleFactor = GetContentScaleFactor();
+#endif // __WXGTK3__
+
     wxWindow *topParent = wxGetTopLevelParent(m_parent);
     if (topParent && (((GTK_IS_WINDOW(topParent->m_widget)) &&
                        (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)) ||
-                       (style & wxFRAME_FLOAT_ON_PARENT)))
+                       (style & wxFRAME_FLOAT_ON_PARENT) ||
+                       (style & wxSTAY_ON_TOP)))
     {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget),
                                       GTK_WINDOW(topParent->m_widget) );

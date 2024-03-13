@@ -68,17 +68,21 @@ jobs:
     # versions of MinGW and Wine and is simpler to test with locally than the
     # bespoke container used by GitHub Actions by default.
     runs-on: ubuntu-latest
-    container: debian:testing-slim
+    container: debian:${{ matrix.debian_release }}-slim
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - name: wxMSW 64 bits
+            debian_release: testing
             configure_flags: --disable-compat32
           - name: wxMSW 32 bits
+            # Testing doesn't have 32 bit support any more.
+            debian_release: stable
             triplet: i686-w64-mingw32
           - name: wxMSW/Univ
+            debian_release: testing
             configure_flags: --enable-universal --disable-compat32 --disable-debug --disable-optimise
             minimal: true
     env:
@@ -125,12 +129,12 @@ jobs:
           echo "wxTEST_RUNNER=wine" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: hendrikmuhs/ccache-action@v1.2.3
+        uses: hendrikmuhs/ccache-action@v1.2.12
         with:
           key: ${{ matrix.name }}
 

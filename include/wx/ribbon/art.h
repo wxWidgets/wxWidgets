@@ -2,7 +2,6 @@
 // Name:        wx/ribbon/art.h
 // Purpose:     Art providers for ribbon-bar-style interface
 // Author:      Peter Cawley
-// Modified by:
 // Created:     2009-05-25
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence

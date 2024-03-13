@@ -2,7 +2,6 @@
 // Name:        samples/menu.cpp
 // Purpose:     wxMenu/wxMenuBar sample
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     01.11.99
 // Copyright:   (c) 1999 Vadim Zeitlin
 // Licence:     wxWindows licence

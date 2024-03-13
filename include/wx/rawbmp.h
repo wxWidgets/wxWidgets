@@ -2,7 +2,6 @@
 // Name:        wx/rawbmp.h
 // Purpose:     macros for fast, raw bitmap data access
 // Author:      Eric Kidd, Vadim Zeitlin
-// Modified by:
 // Created:     10.03.03
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -147,12 +146,19 @@ struct wxPixelFormat
 // wxImage format is common to all platforms
 typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 
+// wxPIXEL_FORMAT_ALPHA is the offset of alpha (defined if the format has
+// alpha).
+
+// wxHAS_PREMULTIPLIED_ALPHA is defined if R, G, and B are stored premultiplied
+// (scaled) by alpha, otherwise they have full value ("straight alpha").
+
 // the (most common) native bitmap format without alpha support
 #if defined(__WXMSW__)
     // under MSW the RGB components are reversed, they're in BGR order
     typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+    #define wxHAS_PREMULTIPLIED_ALPHA
 
     template<>
     struct wxPixelFormat<void, 1, -1, -1, -1, -1, bool>
@@ -171,12 +177,13 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
         enum { HasAlpha = false };
     };
     typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxMonoPixelFormat;
-#elif defined(__WXMAC__)
+#elif defined(__WXOSX__)
     // under Mac, first component is unused but still present, hence we use
     // 32bpp, not 24
     typedef wxPixelFormat<unsigned char, 32, 1, 2, 3> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 0
+    #define wxHAS_PREMULTIPLIED_ALPHA
 #elif defined(__WXGTK__)
     // Under GTK+ 2.X we use GdkPixbuf, which is standard RGB or RGBA
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
@@ -191,6 +198,25 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
+    #define wxHAS_PREMULTIPLIED_ALPHA
+
+    template<>
+    struct wxPixelFormat<void, 1, -1, -1, -1, -1, bool>
+    {
+        // the type which may hold the entire pixel value
+        typedef bool PixelType;
+
+        // size of one pixel in bits
+        static const int BitsPerPixel = 1;
+
+        // size of one pixel in ChannelType units (usually bytes)
+        static const int SizePixel = 1;
+
+        // true if we have an alpha channel (together with the other channels, this
+        // doesn't cover the case of wxImage which stores alpha separately)
+        enum { HasAlpha = false };
+    };
+    typedef wxPixelFormat<void, 1, -1, -1, -1, -1, bool> wxMonoPixelFormat;
 #endif
 
 // the (most common) native format for bitmaps with alpha channel
@@ -695,7 +721,7 @@ struct wxPixelDataOut<wxBitmap>
     };
 };
 
-    #if defined(__WXMSW__)
+    #if defined(__WXMSW__) || defined(__WXQT__)
         template <>
         struct wxPixelDataOut<wxBitmap>::wxPixelDataIn<wxMonoPixelFormat> : public wxPixelDataBase
         {
@@ -943,7 +969,7 @@ typedef wxPixelData<wxImage> wxImagePixelData;
 typedef wxPixelData<wxBitmap, wxNativePixelFormat> wxNativePixelData;
 typedef wxPixelData<wxBitmap, wxAlphaPixelFormat> wxAlphaPixelData;
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXQT__)
 typedef wxPixelData<wxBitmap, wxMonoPixelFormat> wxMonoPixelData;
 #endif
 

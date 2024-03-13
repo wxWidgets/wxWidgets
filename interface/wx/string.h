@@ -911,12 +911,12 @@ public:
     /**
         Concatenation: returns a new string equal to the concatenation of the operands.
     */
-    wxString operator +(const wxString& x, const wxString& y);
+    friend wxString operator +(const wxString& x, const wxString& y);
 
     /**
         @overload
     */
-    wxString operator +(const wxString& x, wxUniChar y);
+    friend wxString operator +(const wxString& x, wxUniChar y);
 
     wxString& operator<<(const wxString& s);
     wxString& operator<<(const char* psz);
@@ -1014,6 +1014,54 @@ public:
         @see Cmp(), CmpNoCase()
     */
     bool IsSameAs(wxUniChar ch, bool caseSensitive = true) const;
+
+    ///@{
+    /**
+        Comparison operator for string types.
+    */
+    friend bool operator==(const wxString& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxString& s2);
+    friend bool operator< (const wxString& s1, const wxString& s2);
+    friend bool operator> (const wxString& s1, const wxString& s2);
+    friend bool operator<=(const wxString& s1, const wxString& s2);
+    friend bool operator>=(const wxString& s1, const wxString& s2);
+    friend bool operator==(const wxString& s1, const wxCStrData& s2);
+    friend bool operator==(const wxCStrData& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxCStrData& s2);
+    friend bool operator!=(const wxCStrData& s1, const wxString& s2);
+    friend bool operator==(const wxString& s1, const wxWCharBuffer& s2);
+    friend bool operator==(const wxWCharBuffer& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxWCharBuffer& s2);
+    friend bool operator!=(const wxWCharBuffer& s1, const wxString& s2);
+    friend bool operator==(const wxString& s1, const wxCharBuffer& s2);
+    friend bool operator==(const wxCharBuffer& s1, const wxString& s2);
+    friend bool operator!=(const wxString& s1, const wxCharBuffer& s2);
+    friend bool operator!=(const wxCharBuffer& s1, const wxString& s2);
+    ///@}
+
+    ///@{
+    /**
+        Comparison operators char types.
+    */
+    friend bool operator==(const wxUniChar& c, const wxString& s);
+    friend bool operator==(const wxUniCharRef& c, const wxString& s);
+    friend bool operator==(char c, const wxString& s);
+    friend bool operator==(wchar_t c, const wxString& s);
+    friend bool operator==(int c, const wxString& s);
+    friend bool operator==(const wxString& s, const wxUniChar& c);
+    friend bool operator==(const wxString& s, const wxUniCharRef& c);
+    friend bool operator==(const wxString& s, char c);
+    friend bool operator==(const wxString& s, wchar_t c);
+    friend bool operator!=(const wxUniChar& c, const wxString& s);
+    friend bool operator!=(const wxUniCharRef& c, const wxString& s);
+    friend bool operator!=(char c, const wxString& s);
+    friend bool operator!=(wchar_t c, const wxString& s);
+    friend bool operator!=(int c, const wxString& s);
+    friend bool operator!=(const wxString& s, const wxUniChar& c);
+    friend bool operator!=(const wxString& s, const wxUniCharRef& c);
+    friend bool operator!=(const wxString& s, char c);
+    friend bool operator!=(const wxString& s, wchar_t c);
+    ///@}
 
     /**
         Returns @true if the string contents matches a mask containing '*' and '?'.
@@ -1998,54 +2046,6 @@ public:
 };
 
 
-
-///@{
-/**
-    Comparison operator for string types.
-*/
-inline bool operator==(const wxString& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxString& s2);
-inline bool operator< (const wxString& s1, const wxString& s2);
-inline bool operator> (const wxString& s1, const wxString& s2);
-inline bool operator<=(const wxString& s1, const wxString& s2);
-inline bool operator>=(const wxString& s1, const wxString& s2);
-inline bool operator==(const wxString& s1, const wxCStrData& s2);
-inline bool operator==(const wxCStrData& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxCStrData& s2);
-inline bool operator!=(const wxCStrData& s1, const wxString& s2);
-inline bool operator==(const wxString& s1, const wxWCharBuffer& s2);
-inline bool operator==(const wxWCharBuffer& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxWCharBuffer& s2);
-inline bool operator!=(const wxWCharBuffer& s1, const wxString& s2);
-inline bool operator==(const wxString& s1, const wxCharBuffer& s2);
-inline bool operator==(const wxCharBuffer& s1, const wxString& s2);
-inline bool operator!=(const wxString& s1, const wxCharBuffer& s2);
-inline bool operator!=(const wxCharBuffer& s1, const wxString& s2);
-///@}
-
-///@{
-/**
-    Comparison operators char types.
-*/
-inline bool operator==(const wxUniChar& c, const wxString& s);
-inline bool operator==(const wxUniCharRef& c, const wxString& s);
-inline bool operator==(char c, const wxString& s);
-inline bool operator==(wchar_t c, const wxString& s);
-inline bool operator==(int c, const wxString& s);
-inline bool operator==(const wxString& s, const wxUniChar& c);
-inline bool operator==(const wxString& s, const wxUniCharRef& c);
-inline bool operator==(const wxString& s, char c);
-inline bool operator==(const wxString& s, wchar_t c);
-inline bool operator!=(const wxUniChar& c, const wxString& s);
-inline bool operator!=(const wxUniCharRef& c, const wxString& s);
-inline bool operator!=(char c, const wxString& s);
-inline bool operator!=(wchar_t c, const wxString& s);
-inline bool operator!=(int c, const wxString& s);
-inline bool operator!=(const wxString& s, const wxUniChar& c);
-inline bool operator!=(const wxString& s, const wxUniCharRef& c);
-inline bool operator!=(const wxString& s, char c);
-inline bool operator!=(const wxString& s, wchar_t c);
-///@}
 
 /**
     The global wxString instance of an empty string.

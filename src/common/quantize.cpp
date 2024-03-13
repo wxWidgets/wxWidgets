@@ -2,7 +2,6 @@
 // Name:        src/common/quantize.cpp
 // Purpose:     wxQuantize implementation
 // Author:      Julian Smart
-// Modified by:
 // Created:     22/6/2000
 // Copyright:   (c) Thomas G. Lane, Vaclav Slavik, Julian Smart
 // Licence:     wxWindows licence + JPEG library licence

@@ -13,7 +13,7 @@ class wxGtkImage: GtkImage
 public:
     struct BitmapProvider
     {
-        virtual ~BitmapProvider() { }
+        virtual ~BitmapProvider() = default;
 
         virtual wxBitmap Get(int scale) const = 0;
         virtual void Set(const wxBitmapBundle&) { }

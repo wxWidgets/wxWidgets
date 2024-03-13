@@ -1347,6 +1347,7 @@ bool wxListCtrl::Create(wxWindow *parent,
         ? new wxQtVirtualListModel(this)
         : new wxQtListModel(this);
 
+    m_qtWindow =
     m_qtTreeWidget = new wxQtListTreeWidget(parent, this);
     m_qtTreeWidget->setModel(m_model);
     m_model->SetView(m_qtTreeWidget);
@@ -1355,7 +1356,9 @@ bool wxListCtrl::Create(wxWindow *parent,
     m_qtTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_qtTreeWidget->setTabKeyNavigation(true);
 
-    if ( !QtCreateControl(parent, id, pos, size, style, validator, name) )
+    if ( !wxListCtrlBase::Create(parent, id, pos, size,
+                                 style | wxVSCROLL | wxHSCROLL,
+                                 validator, name) )
         return false;
 
     SetWindowStyleFlag(style);

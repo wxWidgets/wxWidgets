@@ -755,6 +755,7 @@ COND_PLATFORM_WIN32_1
 COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_WIN32_0
+COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0
 COND_PLATFORM_UNIX_1_USE_GUI_1
 COND_PLATFORM_UNIX_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
@@ -764,6 +765,7 @@ COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
 COND_PLATFORM_UNIX_1
 COND_PLATFORM_UNIX_0
 COND_PLATFORM_OS2_1
+COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1
 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1
 COND_PLATFORM_MACOSX_1_USE_OPENGL_1
 COND_PLATFORM_MACOSX_1_USE_GUI_1
@@ -786,6 +788,7 @@ COND_MONOLITHIC_1_SHARED_0
 COND_MONOLITHIC_1
 COND_MONOLITHIC_0_USE_XRC_1
 COND_MONOLITHIC_0_USE_XML_1
+COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1
 COND_MONOLITHIC_0_USE_WEBVIEW_1
 COND_MONOLITHIC_0_USE_STC_1
 COND_MONOLITHIC_0_USE_RICHTEXT_1
@@ -891,11 +894,13 @@ HEADER_PAD_OPTION
 SAMPLES_RPATH_FLAG
 DYLIB_RPATH_POSTLINK
 DYLIB_RPATH_INSTALL
+DYLIB_RPATH_FLAG
 TOOLKIT_VERSION
 TOOLKIT_LOWERCASE
 DEBUG_FLAG
 DEBUG_INFO
 WITH_PLUGIN_SDL
+EXTRALDFLAGS_WEBVIEW
 EXTRALIBS_WEBVIEW
 EXTRALIBS_STC
 EXTRALIBS_SDL
@@ -958,8 +963,6 @@ WAYLAND_EGL_LIBS
 WAYLAND_EGL_CFLAGS
 EGL_LIBS
 EGL_CFLAGS
-GLU_LIBS
-GLU_CFLAGS
 GL_LIBS
 GL_CFLAGS
 SM_LIBS
@@ -1235,6 +1238,8 @@ enable_postscript
 enable_printarch
 enable_svg
 enable_webview
+enable_webviewchromium
+enable_cef_debug
 enable_graphics_ctx
 enable_graphics_d2d
 enable_clipboard
@@ -1415,8 +1420,6 @@ SM_CFLAGS
 SM_LIBS
 GL_CFLAGS
 GL_LIBS
-GLU_CFLAGS
-GLU_LIBS
 EGL_CFLAGS
 EGL_LIBS
 WAYLAND_EGL_CFLAGS
@@ -2204,6 +2207,8 @@ Optional Features:
   --enable-printarch      use printing architecture
   --enable-svg            use wxSVGFileDC device context
   --enable-webview        use wxWebView library
+  --enable-webviewchromium        use wxWebView Chromium backend
+  --enable-cef_debug      use debug build of CEF wrapper
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-graphics-d2d   use Direct2D-based graphics context
   --enable-clipboard      use wxClipboard class
@@ -2450,8 +2455,6 @@ Some influential environment variables:
   SM_LIBS     linker flags for SM, overriding pkg-config
   GL_CFLAGS   C compiler flags for GL, overriding pkg-config
   GL_LIBS     linker flags for GL, overriding pkg-config
-  GLU_CFLAGS  C compiler flags for GLU, overriding pkg-config
-  GLU_LIBS    linker flags for GLU, overriding pkg-config
   EGL_CFLAGS  C compiler flags for EGL, overriding pkg-config
   EGL_LIBS    linker flags for EGL, overriding pkg-config
   WAYLAND_EGL_CFLAGS
@@ -3856,6 +3859,7 @@ DEFAULT_DEFAULT_wxUSE_QT=0
 PROGRAM_EXT=
 SAMPLES_CXXFLAGS=
 SAMPLES_RPATH_FLAG=
+DYLIB_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
 
@@ -8821,6 +8825,66 @@ fi
           eval "$wx_cv_use_webview"
 
 
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-webviewchromium was given.
+if test "${enable_webviewchromium+set}" = set; then :
+  enableval=$enable_webviewchromium;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=yes'
+                          else
+                            wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=no'
+                          fi
+
+else
+
+                          wx_cv_use_webviewchromium='wxUSE_WEBVIEW_CHROMIUM=${'DEFAULT_wxUSE_WEBVIEW_CHROMIUM":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webviewchromium"
+
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-cef_debug was given.
+if test "${enable_cef_debug+set}" = set; then :
+  enableval=$enable_cef_debug;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_cef_debug='wxUSE_CEF_DEBUG=yes'
+                          else
+                            wx_cv_use_cef_debug='wxUSE_CEF_DEBUG=no'
+                          fi
+
+else
+
+                          wx_cv_use_cef_debug='wxUSE_CEF_DEBUG=${'DEFAULT_wxUSE_CEF_DEBUG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_cef_debug"
+
+
 if test "$wxUSE_MAC" != 1; then
 
           enablestring=
@@ -12622,6 +12686,11 @@ fi
           eval "$wx_cv_use_wxdib"
 
 
+if test "$wxUSE_MSW" != 1; then
+    DEFAULT_wxUSE_WEBVIEW_IE=no
+fi
+
+
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
           if test -z "$defaultval"; then
@@ -15302,8 +15371,18 @@ if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     as_fn_error $? "C++ compiler is needed to build wxWidgets" "$LINENO" 5
 fi
 
-case "${wxWITH_CXX-11}" in
+if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+    wxDEFAULT_CXXSTD=14
+else
+        wxDEFAULT_CXXSTD=11
+fi
+
+case "${wxWITH_CXX-$wxDEFAULT_CXXSTD}" in
     11)
+        if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+            as_fn_error $? "Using wxWebView Chromium backend requires C++14 or later." "$LINENO" 5
+        fi
+
           ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -22839,9 +22918,11 @@ $as_echo "$as_me: WARNING: --enable-macosx_arch is ignored when --enable-univers
 
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
-    else         OSX_ARCH_OPTS="i386"
-        if test "$wxUSE_OSX_COCOA" = 1; then
-            OSX_ARCH_OPTS="$OSX_ARCH_OPTS,x86_64"
+    else
+                        OSX_ARCH_OPTS=x86_64
+
+                if  `sw_vers -productVersion | sed 's/\..*//'` -gt 10 ; then
+            OSX_ARCH_OPTS=arm64,$OSX_ARCH_OPTS
         fi
     fi
 
@@ -30129,7 +30210,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
     if test "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
-        OPENGL_LIBS="-lopengl32 -lglu32"
+        OPENGL_LIBS="-lopengl32"
     elif test "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenGL headers" >&5
@@ -30169,10 +30250,6 @@ $as_echo "not found" >&6; }
         ac_fn_c_check_header_compile "$LINENO" "GL/gl.h" "ac_cv_header_GL_gl_h" "
 "
 if test "x$ac_cv_header_GL_gl_h" = xyes; then :
-
-            ac_fn_c_check_header_compile "$LINENO" "GL/glu.h" "ac_cv_header_GL_glu_h" "
-"
-if test "x$ac_cv_header_GL_glu_h" = xyes; then :
 
                 found_gl=0
 
@@ -30536,369 +30613,8 @@ fi
                       fi
                     fi
 
-
-  ac_find_libraries=
-
-    fl_pkgname=`echo "GLU" | tr [:upper:] [:lower:]`
-
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
-$as_echo "$PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
-$as_echo "$ac_pt_PKG_CONFIG" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
-$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-		PKG_CONFIG=""
-	fi
-
-fi 6> /dev/null
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GLU" >&5
-$as_echo_n "checking for GLU... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GLU_CFLAGS"; then
-        pkg_cv_GLU_CFLAGS="$GLU_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_GLU_CFLAGS=`$PKG_CONFIG --cflags "$fl_pkgname" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$GLU_LIBS"; then
-        pkg_cv_GLU_LIBS="$GLU_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$fl_pkgname\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$fl_pkgname") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_GLU_LIBS=`$PKG_CONFIG --libs "$fl_pkgname" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        GLU_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$fl_pkgname"`
-        else
-	        GLU_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$fl_pkgname"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$GLU_PKG_ERRORS" >&5
-
-
-      if test "x$ac_find_libraries" = "x"; then
-                if test "xgluBeginCurve" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluBeginCurve in -lGLU" >&5
-$as_echo_n "checking for gluBeginCurve in -lGLU... " >&6; }
-if ${ac_cv_lib_GLU_gluBeginCurve+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGLU  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gluBeginCurve ();
-int
-main ()
-{
-return gluBeginCurve ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GLU_gluBeginCurve=yes
-else
-  ac_cv_lib_GLU_gluBeginCurve=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLU_gluBeginCurve" >&5
-$as_echo "$ac_cv_lib_GLU_gluBeginCurve" >&6; }
-if test "x$ac_cv_lib_GLU_gluBeginCurve" = xyes; then :
-  ac_find_libraries="std"
-fi
-
-        fi
-      fi
-
-      if test "x$ac_find_libraries" = "x"; then
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking elsewhere" >&5
-$as_echo_n "checking elsewhere... " >&6; }
-
-  ac_find_libraries=
-  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libGLU.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-        if test "x$ac_find_libraries" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-        else
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-        fi
-      fi
-
-elif test $pkg_failed = untried; then
-
-      if test "x$ac_find_libraries" = "x"; then
-                if test "xgluBeginCurve" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gluBeginCurve in -lGLU" >&5
-$as_echo_n "checking for gluBeginCurve in -lGLU... " >&6; }
-if ${ac_cv_lib_GLU_gluBeginCurve+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGLU  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char gluBeginCurve ();
-int
-main ()
-{
-return gluBeginCurve ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GLU_gluBeginCurve=yes
-else
-  ac_cv_lib_GLU_gluBeginCurve=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GLU_gluBeginCurve" >&5
-$as_echo "$ac_cv_lib_GLU_gluBeginCurve" >&6; }
-if test "x$ac_cv_lib_GLU_gluBeginCurve" = xyes; then :
-  ac_find_libraries="std"
-fi
-
-        fi
-      fi
-
-      if test "x$ac_find_libraries" = "x"; then
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking elsewhere" >&5
-$as_echo_n "checking elsewhere... " >&6; }
-
-  ac_find_libraries=
-  for ac_dir in /opt/graphics/OpenGL/lib $SEARCH_LIB
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libGLU.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-        if test "x$ac_find_libraries" != "x"; then
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-        else
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-        fi
-      fi
-
-else
-	GLU_CFLAGS=$pkg_cv_GLU_CFLAGS
-	GLU_LIBS=$pkg_cv_GLU_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-            ac_find_libraries="std"
-
-                                                eval ac_find_cflags=\$GLU_CFLAGS
-      eval fl_libs=\$GLU_LIBS
-
-                  for fl_path in $fl_libs
-      do
-        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
-                              ac_find_libraries=`echo "$fl_path" | cut -c 3-`
-        fi
-      done
-
-fi
-
-                    if test "$ac_find_libraries" != "" ; then
-                      if test "$ac_find_libraries" != "std" ; then
-
-    if test "$ac_find_libraries" = "default location"; then
-    ac_path_to_link=""
-  else
-    echo "$LDFLAGS" | grep "\-L$ac_find_libraries" > /dev/null
-    result=$?
-    if test $result = 0; then
-      ac_path_to_link=""
-    else
-      ac_path_to_link=" -L$ac_find_libraries"
-    fi
-  fi
-
-                        if test "$ac_path_to_link" != " -L/usr/lib" -a \
-                                "$ac_path_to_link" != "$LDFLAGS_GL" ; then
-                          LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
-                        fi
-                      fi
-
                         found_gl=1
-                        OPENGL_LIBS="-lGL -lGLU"
+                        OPENGL_LIBS="-lGL"
 
                         if test "$WXGTK3" = 1; then
                             if test "$wxUSE_GLCANVAS_EGL" != "no"; then
@@ -31065,7 +30781,6 @@ $as_echo "$as_me: wxGLCanvas will not have Wayland support" >&6;}
                                 fi
                             fi
                         fi
-                    fi
                 fi
 
                 if test "$found_gl" != 1; then
@@ -31428,13 +31143,9 @@ fi
                           LDFLAGS_GL="$LDFLAGS_GL $ac_path_to_link"
                         fi
                       fi
-                      OPENGL_LIBS="-lMesaGL -lMesaGLU"
+                      OPENGL_LIBS="-lMesaGL"
                     fi
                 fi
-
-fi
-
-
 
 fi
 
@@ -31778,12 +31489,12 @@ $as_echo "$wx_cv_cc_visibility_workaround" >&6; }
     fi
 
         if test "x$SUNCXX" = xyes; then
-        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-R\$libdir"
     else
     case "${host}" in
-      *-*-linux* | *-*-gnu* )
-        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+      *-*-linux* | *-*-gnu* | *-*-freebsd*)
+        DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
         ;;
 
@@ -31810,7 +31521,7 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
                 WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
 
 else
@@ -31835,7 +31546,7 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        DYLIB_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
                         WXCONFIG_RPATH="-Wl,-R,\$libdir"
 
 else
@@ -31883,7 +31594,7 @@ EOF
         ;;
 
       *-*-hpux* )
-        SAMPLES_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,+b,\$libdir"
         ;;
 
@@ -31891,10 +31602,12 @@ EOF
     fi
 
     if test $wxUSE_RPATH = "no"; then
-        SAMPLES_RPATH_FLAG=''
+        DYLIB_RPATH_FLAG=''
         DYLIB_PATH_POSTLINK=''
         WXCONFIG_RPATH=''
     fi
+
+        SAMPLES_RPATH_FLAG="$DYLIB_RPATH_FLAG"
 
     SHARED=1
 
@@ -35455,6 +35168,18 @@ if test "x$ac_cv_lib_dl_dladdr" = xyes; then :
 fi
 
 
+
+fi
+done
+
+
+                for ac_func in dl_iterate_phdr
+do :
+  ac_fn_c_check_func "$LINENO" "dl_iterate_phdr" "ac_cv_func_dl_iterate_phdr"
+if test "x$ac_cv_func_dl_iterate_phdr" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_DL_ITERATE_PHDR 1
+_ACEOF
 
 fi
 done
@@ -39357,7 +39082,7 @@ if test "$wxUSE_RICHTEXT" = "yes"; then
 fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
-    USE_WEBVIEW_WEBKIT=0
+            USE_WEBVIEW_WEBKIT=0
     USE_WEBVIEW_WEBKIT2=0
     if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
         if test "$wxUSE_GTK" = 1; then
@@ -39624,9 +39349,6 @@ fi
             wxUSE_WEBVIEW="yes"
             $as_echo "#define wxUSE_WEBVIEW_WEBKIT2 1" >>confdefs.h
 
-        else
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKit not available, disabling wxWebView" >&5
-$as_echo "$as_me: WARNING: WebKit not available, disabling wxWebView" >&2;}
         fi
     elif test "$wxUSE_MSW" = 1; then
         if test "$wxUSE_WEBVIEW_IE" = "yes"; then
@@ -39639,7 +39361,130 @@ $as_echo "$as_me: WARNING: WebKit not available, disabling wxWebView" >&2;}
             $as_echo "#define wxUSE_WEBVIEW_EDGE 1" >>confdefs.h
 
         fi
+    else
+        if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxWebView IE backend only available under MSW, ignoring --enable-webviewie" >&5
+$as_echo "$as_me: WARNING: wxWebView IE backend only available under MSW, ignoring --enable-webviewie" >&2;}
+            wxUSE_WEBVIEW_IE=no
+        fi
+        if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxWebView Edge backend only available under MSW, ignoring --enable-webviewedge" >&5
+$as_echo "$as_me: WARNING: wxWebView Edge backend only available under MSW, ignoring --enable-webviewedge" >&2;}
+            wxUSE_WEBVIEW_EDGE=no
+        fi
     fi
+
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        CEF_DIR="$srcdir/3rdparty/cef"
+        CEF_DLL_WRAPPER_DIR="$CEF_DIR/libcef_dll_wrapper"
+
+        EXTRALIBS_WEBVIEW="-L$CEF_DLL_WRAPPER_DIR -lcef_dll_wrapper $EXTRALIBS_WEBVIEW"
+        if test "$wxUSE_MAC" != 1; then
+                                    EXTRALDFLAGS_WEBVIEW="-L$CEF_DIR/Release -Wl,--no-as-needed -lcef -Wl,--as-needed"
+        fi
+
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CEF" >&5
+$as_echo_n "checking for CEF... " >&6; }
+if ${wx_cv_lib_cef+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+                ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+                                old_CPPFLAGS="$CPPFLAGS"
+                CPPFLAGS="-I$CEF_DIR $CPPFLAGS"
+                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include "include/cef_version.h"
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  wx_cv_lib_cef=yes
+else
+  cef_error="Chromium headers not found"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+                                if test "$wx_cv_lib_cef" = "yes"; then
+                    old_LIBS="$LIBS"
+
+                    LIBS="$EXTRALDFLAGS_WEBVIEW $EXTRALIBS_WEBVIEW $LIBS"
+
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+                            #include "include/cef_app.h"
+
+                            int main()
+                            {
+                                CefShutdown();
+                            }
+
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+
+else
+
+                            wx_cv_lib_cef=no,
+                            cef_error="Linking with CEF failed, check that CEF wrapper library is in $CEF_DLL_WRAPPER_DIR"
+
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+
+                    LIBS="$old_LIBS"
+                fi
+
+                CPPFLAGS="$old_CPPFLAGS"
+
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_lib_cef" >&5
+$as_echo "$wx_cv_lib_cef" >&6; }
+
+        if test "$wx_cv_lib_cef" = "yes"; then
+                                                                        if test "$wxUSE_MAC" = 1; then
+                EXTRALIBS_WEBVIEW="-F$CEF_DIR/Release -framework Chromium\ Embedded\ Framework $EXTRALIBS_WEBVIEW"
+            fi
+
+            wxUSE_WEBVIEW="yes"
+            USE_WEBVIEW_CHROMIUM=1
+            $as_echo "#define wxUSE_WEBVIEW_CHROMIUM 1" >>confdefs.h
+
+
+                                    if test "$wxUSE_CEF_DEBUG" = "yes"; then
+                $as_echo "#define wxHAVE_CEF_DEBUG 1" >>confdefs.h
+
+            fi
+        else
+            as_fn_error $? "CEF not detected: $cef_error
+
+Please install it following the instructions in the manual or remove the
+--enable-webviewchromium option from configure command line" "$LINENO" 5
+        fi
+    fi
+
 fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
@@ -39649,6 +39494,8 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
 else
     USE_WEBVIEW=0
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No wxWebView backends found, disabling wxWebView" >&5
+$as_echo "$as_me: WARNING: No wxWebView backends found, disabling wxWebView" >&2;}
 fi
 
 
@@ -40847,7 +40694,9 @@ fi
 
 
 
+
 TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[A-Z]' '[a-z]'`
+
 
 
 
@@ -42475,6 +42324,11 @@ EOF
         COND_MONOLITHIC_0_USE_WEBVIEW_1=""
     fi
 
+    COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1=""
+    fi
+
     COND_MONOLITHIC_0_USE_XML_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_XML" = "x1" ; then
         COND_MONOLITHIC_0_USE_XML_1=""
@@ -42585,6 +42439,11 @@ EOF
         COND_PLATFORM_MACOSX_1_USE_SOVERSION_1=""
     fi
 
+    COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_USE_WEBVIEW_CHROMIUM_1=""
+    fi
+
     COND_PLATFORM_OS2_1="#"
     if test "x$PLATFORM_OS2" = "x1" ; then
         COND_PLATFORM_OS2_1=""
@@ -42628,6 +42487,11 @@ EOF
     COND_PLATFORM_UNIX_1_USE_PLUGINS_0="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_PLUGINS" = "x0" ; then
         COND_PLATFORM_UNIX_1_USE_PLUGINS_0=""
+    fi
+
+    COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
+        COND_PLATFORM_UNIX_1_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_PLATFORM_WIN32_0="#"
@@ -43347,10 +43211,7 @@ for subdir in $SUBDIRS; do
                     makefiles="samples/$subtree/Makefile.in $makefiles"
                 done
             else
-                                                                disabled_var=DISABLED_`echo $subdir | tr '[a-z]' '[A-Z]'`
-                eval "disabled=\$$disabled_var"
-                disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
+                                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         else
                                     if test ${subdir} = "samples"; then
@@ -45078,6 +44939,27 @@ echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-
+echo $ECHO_N "                                       webview            ${wxUSE_WEBVIEW}$ECHO_C"
+if test "$wxUSE_WEBVIEW" = "yes"; then
+    echo $ECHO_N " (with backends:$ECHO_C"
+    if test "$wxUSE_WEBVIEW_WEBKIT" = "yes"; then
+        echo $ECHO_N " WebKit$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_WEBKIT2" = "yes"; then
+        echo $ECHO_N " WebKit2$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_EDGE" = "yes"; then
+        echo $ECHO_N " Edge$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_IE" = "yes"; then
+        echo $ECHO_N " IE$ECHO_C"
+    fi
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        echo $ECHO_N " Chromium$ECHO_C"
+    fi
+    echo ")"
+else
+    echo "no"
+fi
 echo ""
 

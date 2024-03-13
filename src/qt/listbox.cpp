@@ -71,7 +71,7 @@ void wxQtListWidgetItem::setData(int role, const QVariant& value)
     if ( role == Qt::CheckStateRole )
     {
         const auto list = static_cast<wxQtListWidget*>(listWidget());
-        if ( list && list->isVisible() )
+        if ( list && list->isVisible() && !list->signalsBlocked() )
         {
             const auto handler = list->GetHandler();
             if ( handler )
@@ -137,7 +137,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         }
         m_qtListWidget->addItem(item);
     }
-    return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
+    return wxListBoxBase::Create( parent, id, pos, size,
+                                  style | wxVSCROLL | wxHSCROLL,
+                                  validator, name );
 }
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
@@ -170,7 +172,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         m_qtListWidget->addItem(item);
     }
 
-    return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
+    return wxListBoxBase::Create( parent, id, pos, size,
+                                  style | wxVSCROLL | wxHSCROLL,
+                                  validator, name );
 }
 
 void wxListBox::DoCreate(wxWindow* parent, long style)
@@ -315,7 +319,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
 
 int wxListBox::DoInsertOneItem(const wxString& text, unsigned int pos)
 {
-    QListWidgetItem* item = new QListWidgetItem();
+    QListWidgetItem* item = new wxQtListWidgetItem();
     item->setText(wxQtConvertString( text ));
     if ( m_hasCheckBoxes )
     {
@@ -323,7 +327,7 @@ int wxListBox::DoInsertOneItem(const wxString& text, unsigned int pos)
         item->setCheckState(Qt::Unchecked);
     }
     m_qtListWidget->insertItem(pos, item);
-    return pos;
+    return IsSorted() ? m_qtListWidget->row(item) : pos;
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
@@ -366,11 +370,6 @@ QWidget *wxListBox::GetHandle() const
 void wxListBox::QtSendEvent(wxEventType evtType, int rowIndex, bool selected)
 {
     SendEvent(evtType, rowIndex, selected);
-}
-
-QScrollArea *wxListBox::QtGetScrollBarsContainer() const
-{
-    return (QScrollArea *) m_qtListWidget;
 }
 
 void wxListBox::UnSelectAll()
