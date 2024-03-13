@@ -21,6 +21,7 @@ set(CEF_SHA1_windows32      "850c8f5ff35ad36c447e2492292dc965d4f13ebc")
 set(CEF_SHA1_windowsarm64   "a1e318fe1dc56d9e4014bf1e3b283a2ee70915d0")
 set(CEF_SHA1_windows64      "93e6ccdd093da457ae98fdf63f84becc2388bdb8")
 
+if(NOT DEFINED CEF_PLATFORM)
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     if(CMAKE_SIZEOF_VOID_P LESS 8)
         message(FATAL_ERROR "Unsupported macOS system")
@@ -62,6 +63,8 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 else()
     message(FATAL_ERROR "Unsupported CEF system")
 endif()
+endif()
+
 set(CEF_SHA1 "${CEF_SHA1_${CEF_PLATFORM}}")
 
 set(CEF_URL "https://cef-builds.spotifycdn.com/cef_binary_122.1.10+gc902316+chromium-122.0.6261.112_${CEF_PLATFORM}_minimal.tar.bz2")

@@ -9,8 +9,6 @@
 
 include(../../source_groups.cmake)
 
-include(cef_version_info.cmake)
-
 set(KNOWN_CONFIGS "Debug;Release;RelWithDebInfo;MinSizeRel")
 if(CMAKE_CONFIGURATION_TYPES)
     foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
@@ -38,7 +36,37 @@ set(CEF_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-source)
 set(CEF_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-build)
 
 if(NOT CEF_ROOT)
-    message("Downloading CEF binary distribution...")
+    # Note that CMAKE_OSX_ARCHITECTURES is always defined under macOS, but is
+    # empty if not explicitly specified, so do _not_ use if(DEFINED ...) here.
+    if(CMAKE_OSX_ARCHITECTURES)
+        list(LENGTH CMAKE_OSX_ARCHITECTURES num_archs)
+        if(num_archs GREATER 1)
+            # This could be implemented by getting CEF for all of them and then
+            # lipoing everything together, but right now we don't support this
+            # and require the application developer build multiple wx versions
+            # and lipo them on their side -- or, alternatively, provide a
+            # universal build of CEF themselves.
+            message(FATAL_ERROR "Building CEF for multiple architectures (${CMAKE_OSX_ARCHITECTURES}) is not supported")
+        endif()
+
+        # Set CEF_PLATFORM before including cef_version_info.cmake to prevent
+        # it from auto-detecting it.
+        if(CMAKE_OSX_ARCHITECTURES STREQUAL "arm64")
+            set(CEF_PLATFORM "macosarm64")
+        elseif(CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64")
+            set(CEF_PLATFORM "macosx64")
+        else()
+            message(FATAL_ERROR "Building CEF for macOS architecture ${CMAKE_OSX_ARCHITECTURES} is not supported")
+        endif()
+
+        # Also pass the proper architecture to the CEF build system to prevent
+        # it from auto-detecting it too.
+        set(PROJECT_ARCH ${CMAKE_OSX_ARCHITECTURES})
+    endif()
+
+    include(cef_version_info.cmake)
+
+    message("Downloading CEF binary distribution for ${CEF_PLATFORM}...")
 
     configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cef_download.cmake.in

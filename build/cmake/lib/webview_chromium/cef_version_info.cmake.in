@@ -21,6 +21,7 @@ set(CEF_SHA1_windows32      "@CEF_SHA1_windows32@")
 set(CEF_SHA1_windowsarm64   "@CEF_SHA1_windowsarm64@")
 set(CEF_SHA1_windows64      "@CEF_SHA1_windows64@")
 
+if(NOT DEFINED CEF_PLATFORM)
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     if(CMAKE_SIZEOF_VOID_P LESS 8)
         message(FATAL_ERROR "Unsupported macOS system")
@@ -62,6 +63,8 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 else()
     message(FATAL_ERROR "Unsupported CEF system")
 endif()
+endif()
+
 set(CEF_SHA1 "${CEF_SHA1_${CEF_PLATFORM}}")
 
 set(CEF_URL "@CEF_BASE_URL@@CEF_VERSION@_${CEF_PLATFORM}@CEF_DISTRIBUTION@@CEF_FILE_EXT@")
