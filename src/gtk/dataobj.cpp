@@ -59,8 +59,8 @@ private:
 
 wxGdkAtom g_textAtom            {"UTF8_STRING"};
 wxGdkAtom g_altTextAtom         {"STRING"};
-wxGdkAtom g_textAtomWayland     {"text/plain"};
-wxGdkAtom g_altTextAtomWayland  {"text/plain;charset=utf-8"};
+wxGdkAtom g_textAtomWayland     {"text/plain;charset=utf-8"};
+wxGdkAtom g_altTextAtomWayland  {"text/plain"};
 wxGdkAtom g_pngAtom             {"image/png"};
 wxGdkAtom g_fileAtom            {"text/uri-list"};
 wxGdkAtom g_htmlAtom            {"text/html"};
