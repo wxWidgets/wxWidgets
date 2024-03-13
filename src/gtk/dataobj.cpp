@@ -103,15 +103,19 @@ void wxDataFormat::SetType( wxDataFormatId type )
     m_type = type;
 
     if (m_type == wxDF_UNICODETEXT)
+    {
         if (getenv("WAYLAND_DISPLAY"))
             m_format = g_textAtomWayland;
         else
             m_format = g_textAtom;
+    }
     else if (m_type == wxDF_TEXT)
+    {
         if (getenv("WAYLAND_DISPLAY"))
             m_format = g_altTextAtomWayland;
         else
             m_format = g_altTextAtom;
+    }
     else
     if (m_type == wxDF_BITMAP)
         m_format = g_pngAtom;
