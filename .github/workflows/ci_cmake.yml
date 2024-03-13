@@ -155,6 +155,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1'
+          cache: false
 
       - name: Testing
         if: matrix.cmake_tests != 'OFF'
