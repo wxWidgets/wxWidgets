@@ -57,28 +57,21 @@ private:
     GdkAtom m_atom = nullptr;
 };
 
-static const char t_utf8_string[]          = "UTF8_STRING";
-static const char t_string[]               = "STRING";
-#ifdef GDK_WINDOWING_WAYLAND
-    static const char t_text_plain_utf8[]  = "text/plain;charset=utf-8";
-    static const char t_text_plain[]       = "text/plain";
-    const char *wayland_display = getenv("WAYLAND_DISPLAY");
-    wxGdkAtom g_textAtom    = wayland_display ? wxGdkAtom(t_text_plain_utf8)
-                                              : wxGdkAtom(t_utf8_string);
-    wxGdkAtom g_altTextAtom = wayland_display ? wxGdkAtom(t_text_plain)
-                                              : wxGdkAtom(t_string);
-#else
-    wxGdkAtom g_textAtom    {t_utf8_string};
-    wxGdkAtom g_altTextAtom {t_string};
-#endif
-wxGdkAtom g_pngAtom     {"image/png"};
-wxGdkAtom g_fileAtom    {"text/uri-list"};
-wxGdkAtom g_htmlAtom    {"text/html"};
+wxGdkAtom g_textAtom            {"UTF8_STRING"};
+wxGdkAtom g_altTextAtom         {"STRING"};
+wxGdkAtom g_textAtomWayland     {"text/plain"};
+wxGdkAtom g_altTextAtomWayland  {"text/plain;charset=utf-8"};
+wxGdkAtom g_pngAtom             {"image/png"};
+wxGdkAtom g_fileAtom            {"text/uri-list"};
+wxGdkAtom g_htmlAtom            {"text/html"};
 
 } // anonymous namespace
 
 // This is used in src/gtk/clipbrd.cpp
-extern GdkAtom wxGetAltTextAtom() { return g_altTextAtom; }
+extern GdkAtom wxGetAltTextAtom()
+{
+    return getenv("WAYLAND_DISPLAY") ? g_altTextAtomWayland : g_altTextAtom;
+}
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -110,9 +103,15 @@ void wxDataFormat::SetType( wxDataFormatId type )
     m_type = type;
 
     if (m_type == wxDF_UNICODETEXT)
-        m_format = g_textAtom;
+        if (getenv("WAYLAND_DISPLAY"))
+            m_format = g_textAtomWayland;
+        else
+            m_format = g_textAtom;
     else if (m_type == wxDF_TEXT)
-        m_format = g_altTextAtom;
+        if (getenv("WAYLAND_DISPLAY"))
+            m_format = g_altTextAtomWayland;
+        else
+            m_format = g_altTextAtom;
     else
     if (m_type == wxDF_BITMAP)
         m_format = g_pngAtom;
@@ -146,7 +145,13 @@ void wxDataFormat::SetId( NativeFormat format )
     if (m_format == g_textAtom)
         m_type = wxDF_UNICODETEXT;
     else
+    if (m_format == g_textAtomWayland)
+        m_type = wxDF_UNICODETEXT;
+    else
     if (m_format == g_altTextAtom)
+        m_type = wxDF_TEXT;
+    else
+    if (m_format == g_altTextAtomWayland)
         m_type = wxDF_TEXT;
     else
     if (m_format == g_pngAtom)
@@ -215,7 +220,7 @@ wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                 wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
     *formats++ = GetPreferredFormat();
-    *formats = g_altTextAtom;
+    *formats = getenv("WAYLAND_DISPLAY") ? g_altTextAtomWayland : g_altTextAtom;
 }
 
 // ----------------------------------------------------------------------------
