@@ -59,10 +59,10 @@ private:
 
 #ifdef GDK_WINDOWING_WAYLAND
     const char *wayland_display = getenv("WAYLAND_DISPLAY");
-    wxGdkAtom g_textAtom    = wayland_display ? wxGdkAtom{"text/plain;charset=utf-8"}
-                                              : wxGdkAtom{"UTF8_STRING"};
-    wxGdkAtom g_altTextAtom = wayland_display ? wxGdkAtom{"text/plain"}
-                                              : wxGdkAtom{"STRING"};
+    wxGdkAtom g_textAtom    = wayland_display ? wxGdkAtom("text/plain;charset=utf-8")
+                                              : wxGdkAtom("UTF8_STRING");
+    wxGdkAtom g_altTextAtom = wayland_display ? wxGdkAtom("text/plain")
+                                              : wxGdkAtom("STRING");
 #else
     wxGdkAtom g_textAtom    {"UTF8_STRING"};
     wxGdkAtom g_altTextAtom {"STRING"};
