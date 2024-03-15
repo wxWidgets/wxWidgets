@@ -112,7 +112,7 @@ private:
 class WebFrame : public wxFrame
 {
 public:
-    WebFrame(const wxString& url, bool isMain = true, wxWebViewWindowFeatures* windowFeatures = nullptr);
+    WebFrame(const wxString& url, bool isMain = true, wxWebViewWindowFeatures* windowFeatures = nullptr, bool isPrivate = false);
     virtual ~WebFrame();
 
     void UpdateState();
@@ -141,6 +141,7 @@ public:
     void OnSetZoom(wxCommandEvent& evt);
     void OnError(wxWebViewEvent& evt);
     void OnPrint(wxCommandEvent& evt);
+    void OnOpenPrivateWindow(wxCommandEvent& evt);
     void OnCut(wxCommandEvent& evt);
     void OnCopy(wxCommandEvent& evt);
     void OnPaste(wxCommandEvent& evt);
@@ -194,6 +195,7 @@ private:
     wxTextCtrl* m_url;
     wxWebView* m_browser;
     bool m_isMainFrame;
+    bool m_isPrivate;
 
     wxToolBar* m_toolbar;
     wxToolBarToolBase* m_toolbar_back;
@@ -368,10 +370,11 @@ bool WebApp::OnInit()
     return true;
 }
 
-WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* windowFeatures):
+WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* windowFeatures, bool isPrivate):
     wxFrame(nullptr, wxID_ANY, "wxWebView Sample")
 {
     m_isMainFrame = isMain;
+    m_isPrivate = isPrivate;
 
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -480,8 +483,24 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
         backend = wxWebViewBackendDefault;
     }
 
-    m_browser = (windowFeatures) ? windowFeatures->GetChildWebView()
-                                 : wxWebView::New(backend);
+    if (!windowFeatures)
+    {
+        wxWebViewConfiguration conf = wxWebView::NewConfiguration(backend);
+        if (m_isPrivate)
+        {
+            if (!conf.EnablePersistentStorage(false))
+            {
+                wxMessageBox("Disabling persistent storage is not supported by this backend!", "Error", wxICON_ERROR | wxCENTER, this);
+                m_isPrivate = false;
+            }
+        }
+
+        m_browser = wxWebView::New(conf);
+    }
+    else
+    {
+        m_browser = windowFeatures->GetChildWebView();
+    }
     if ( !m_browser )
     {
         wxLogFatalError("Failed to create wxWebView object using \"%s\" backend", backend);
@@ -568,6 +587,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     wxMenuItem* setPage = m_tools_menu->Append(wxID_ANY , _("Set page text"));
     wxMenuItem* viewSource = m_tools_menu->Append(wxID_ANY , _("View Source"));
     wxMenuItem* viewText = m_tools_menu->Append(wxID_ANY, _("View Text"));
+    wxMenuItem* openPrivate = m_tools_menu->Append(wxID_ANY, _("Open Private Window"));
     m_tools_menu->AppendSeparator();
     m_tools_layout = m_tools_menu->AppendRadioItem(wxID_ANY, _("Use Layout Zoom"));
     m_tools_tiny = m_tools_menu->AppendRadioItem(wxID_ANY, _("Tiny"));
@@ -707,6 +727,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     Bind(wxEVT_MENU, &WebFrame::OnViewSourceRequest, this, viewSource->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnViewTextRequest, this, viewText->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnPrint, this, print->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnOpenPrivateWindow, this, openPrivate->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnZoomLayout, this, m_tools_layout->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_tiny->GetId());
     Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_small->GetId());
@@ -788,7 +809,10 @@ void WebFrame::UpdateState()
         m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );
     }
 
-    SetTitle( m_browser->GetCurrentTitle() );
+    if (m_isPrivate)
+        SetTitle("[Private] " + m_browser->GetCurrentTitle());
+    else
+        SetTitle( m_browser->GetCurrentTitle() );
     m_url->SetValue( m_browser->GetCurrentURL() );
 }
 
@@ -1105,7 +1129,10 @@ void WebFrame::OnNewWindowFeatures(wxWebViewEvent &evt)
 
 void WebFrame::OnTitleChanged(wxWebViewEvent& evt)
 {
-    SetTitle(evt.GetString());
+    if (m_isPrivate)
+        SetTitle("[Private] " + evt.GetString());
+    else
+        SetTitle(evt.GetString());
     wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
 }
 
@@ -1543,6 +1570,12 @@ void WebFrame::OnError(wxWebViewEvent& evt)
 void WebFrame::OnPrint(wxCommandEvent& WXUNUSED(evt))
 {
     m_browser->Print();
+}
+
+void WebFrame::OnOpenPrivateWindow(wxCommandEvent& WXUNUSED(evt))
+{
+    WebFrame* newFrame = new WebFrame(m_browser->GetCurrentURL(), false, nullptr, true);
+    newFrame->Show();
 }
 
 SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
