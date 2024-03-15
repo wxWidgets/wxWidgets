@@ -117,6 +117,16 @@ public:
         return m_webViewConfiguration;
     }
 
+    virtual bool EnablePersistentStorage(bool enable) override
+    {
+        m_webViewConfiguration.websiteDataStore =
+            enable ?
+                [WKWebsiteDataStore defaultDataStore] :
+                [WKWebsiteDataStore nonPersistentDataStore];
+
+        return true;
+    }
+
     WKWebViewConfiguration* m_webViewConfiguration;
 };
 
