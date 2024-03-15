@@ -20,7 +20,7 @@
 #include <WebView2.h>
 
 #ifndef __ICoreWebView2Settings3_INTERFACE_DEFINED__
-    #error "WebView2 SDK version 1.0.864.35 or newer is required"
+    #error "WebView2 SDK version 1.0.1722.45 or newer is required"
 #endif
 
 #ifndef __VISUALC__
