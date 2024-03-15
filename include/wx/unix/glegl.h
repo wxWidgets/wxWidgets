@@ -100,7 +100,7 @@ public:
     // -------------------------------
 
     // get the EGLConfig we use
-    EGLConfig *GetEGLConfig() const { return m_config; }
+    EGLConfig GetEGLConfig() const { return m_config; }
     EGLDisplay GetEGLDisplay() const { return m_display; }
     EGLSurface GetEGLSurface() const { return m_surface; }
 
@@ -111,7 +111,7 @@ public:
     static bool InitDefaultConfig(const int *attribList);
 
     // get the default EGL Config (may be null, shouldn't be freed by caller)
-    static EGLConfig *GetDefaultConfig() { return ms_glEGLConfig; }
+    static EGLConfig GetDefaultConfig() { return ms_glEGLConfig; }
 
     // free the global GL visual, called by wxGLApp
     static void FreeDefaultConfig();
@@ -120,7 +120,7 @@ public:
     //
     // returns nullptr if EGLConfig couldn't be initialized, otherwise caller
     // is responsible for freeing the pointer
-    static EGLConfig *InitConfig(const wxGLAttributes& dispAttrs);
+    static EGLConfig InitConfig(const wxGLAttributes& dispAttrs);
 
     // Only called when using Wayland to indicate that we should be redrawn.
     void OnWLFrameCallback();
@@ -132,7 +132,7 @@ public:
 
 private:
 
-    EGLConfig *m_config;
+    EGLConfig m_config;
     EGLDisplay m_display;
     EGLSurface m_surface;
 
@@ -145,7 +145,7 @@ private:
     bool m_swapIntervalSet = false;
 
     // the global/default versions of the above
-    static EGLConfig *ms_glEGLConfig;
+    static EGLConfig ms_glEGLConfig;
 
     friend void wxEGLUpdatePosition(wxGLCanvasEGL* win);
 };
