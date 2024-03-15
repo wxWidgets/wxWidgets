@@ -265,6 +265,10 @@ public:
 #ifdef __VISUALC__
         m_webViewEnvironmentOptions = Make<CoreWebView2EnvironmentOptions>().Get();
         m_webViewEnvironmentOptions->put_Language(wxUILocale::GetCurrent().GetLocaleId().GetName().wc_str());
+
+        wxCOMPtr<ICoreWebView2EnvironmentOptions3> options3;
+        if (SUCCEEDED(m_webViewEnvironmentOptions->QueryInterface(IID_PPV_ARGS(&options3))))
+            options3->put_IsCustomCrashReportingEnabled(false);
 #endif
     }
 
@@ -904,6 +908,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     if (settings)
     {
         settings->put_IsStatusBarEnabled(false);
+
+        wxCOMPtr<ICoreWebView2Settings8> settings8;
+        if (SUCCEEDED(settings->QueryInterface(IID_PPV_ARGS(&settings8))))
+            settings8->put_IsReputationCheckingRequired(false);
     }
     UpdateWebMessageHandler();
 
