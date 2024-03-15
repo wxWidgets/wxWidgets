@@ -296,6 +296,12 @@ public:
     virtual void SetDataPath(const wxString& path) override { m_dataPath = path;}
     virtual wxString GetDataPath() const override { return m_dataPath; }
 
+    virtual bool EnablePersistentStorage(bool enable) override
+    {
+        m_persistentStorage = enable;
+        return true;
+    }
+
     bool CreateOrGetEnvironment(wxWebViewEdgeImpl* impl)
     {
         if (!m_webViewEnvironment)
@@ -336,6 +342,7 @@ public:
     wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxString m_dataPath;
+    bool m_persistentStorage = true;
 };
 
 wxString wxWebViewConfigurationImplEdge::ms_browserExecutableDir;
@@ -474,10 +481,27 @@ bool wxWebViewEdgeImpl::Create()
 void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environment)
 {
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
-    m_webViewEnvironment->CreateCoreWebView2Controller(
-        m_ctrl->GetHWND(),
-        Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-            this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+    wxCOMPtr<ICoreWebView2Environment10> environment10;
+    if (SUCCEEDED(m_webViewEnvironment->QueryInterface(IID_PPV_ARGS(&environment10))))
+    {
+        wxCOMPtr<ICoreWebView2ControllerOptions> controllerOptions;
+        if (SUCCEEDED(environment10->CreateCoreWebView2ControllerOptions(&controllerOptions)))
+        {
+            auto config = static_cast<wxWebViewConfigurationImplEdge*>(m_config.GetImpl());
+            controllerOptions->put_IsInPrivateModeEnabled(config->m_persistentStorage ? FALSE : TRUE);
+
+            environment10->CreateCoreWebView2ControllerWithOptions(
+                m_ctrl->GetHWND(),
+                controllerOptions.get(),
+                Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                    this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+        }
+    }
+    else
+        m_webViewEnvironment->CreateCoreWebView2Controller(
+            m_ctrl->GetHWND(),
+            Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
 }
 
 bool wxWebViewEdgeImpl::Initialize()
