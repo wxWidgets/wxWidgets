@@ -59,7 +59,7 @@ public:
     // -----------------------
 
     // default ctor doesn't do anything, InitConfig() must be called
-    wxGLCanvasEGL();
+    wxGLCanvasEGL() = default;
 
     // initializes EGLConfig corresponding to the given attributes
     bool InitVisual(const wxGLAttributes& dispAttrs);
@@ -132,16 +132,16 @@ public:
 
 private:
 
-    EGLConfig m_config;
-    EGLDisplay m_display;
-    EGLSurface m_surface;
+    EGLConfig m_config = nullptr;
+    EGLDisplay m_display = nullptr;
+    EGLSurface m_surface = nullptr;
 
-    unsigned long m_xwindow;
-    wl_surface *m_wlSurface;
-    wl_region *m_wlRegion;
-    wl_subsurface *m_wlSubsurface;
+    unsigned long m_xwindow = 0;
+    wl_surface *m_wlSurface = nullptr;
+    wl_region *m_wlRegion = nullptr;
+    wl_subsurface *m_wlSubsurface = nullptr;
 
-    bool m_readyToDraw;
+    bool m_readyToDraw = false;
     bool m_swapIntervalSet = false;
 
     // the global/default versions of the above

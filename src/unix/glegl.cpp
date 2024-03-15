@@ -339,21 +339,6 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 // initialization methods and dtor
 // ----------------------------------------------------------------------------
 
-wxGLCanvasEGL::wxGLCanvasEGL()
-{
-    m_config = nullptr;
-    m_display = nullptr;
-    m_surface = EGL_NO_SURFACE;
-    m_wlCompositor = nullptr;
-    m_wlSubcompositor = nullptr;
-    m_wlFrameCallbackHandler = nullptr;
-    m_wlEGLWindow = nullptr;
-    m_wlSurface = nullptr;
-    m_wlRegion = nullptr;
-    m_wlSubsurface = nullptr;
-    m_readyToDraw = false;
-}
-
 bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
 {
     m_config = InitConfig(dispAttrs);
