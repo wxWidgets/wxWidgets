@@ -253,7 +253,17 @@ jobs:
           echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
 
           # Remove some unnecessary files to ensure we have enough free space.
-          sudo rm -rf "AGENT_TOOLSDIRECTORY" /usr/share/dotnet
+          if [ '${{ matrix.runner }}' = 'ubuntu-22.04' ]; then
+            sudo rm -rf \
+              /opt/az \
+              /opt/google \
+              /opt/hostedtoolcache \
+              /opt/microsoft \
+              /opt/mssql-tools \
+              /usr/lib/jvm \
+              /usr/local/lib/android/sdk \
+              /usr/share/dotnet
+          fi
 
           ./build/tools/before_install.sh
 
