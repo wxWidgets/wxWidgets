@@ -57,8 +57,8 @@ private:
     GdkAtom m_atom = nullptr;
 };
 
-wxGdkAtom g_textAtom    {"UTF8_STRING"};
-wxGdkAtom g_altTextAtom {"STRING"};
+wxGdkAtom g_u8strAtom   {"UTF8_STRING"};
+wxGdkAtom g_strAtom     {"STRING"};
 wxGdkAtom g_pngAtom     {"image/png"};
 wxGdkAtom g_fileAtom    {"text/uri-list"};
 wxGdkAtom g_htmlAtom    {"text/html"};
@@ -66,7 +66,7 @@ wxGdkAtom g_htmlAtom    {"text/html"};
 } // anonymous namespace
 
 // This is used in src/gtk/clipbrd.cpp
-extern GdkAtom wxGetAltTextAtom() { return g_altTextAtom; }
+extern GdkAtom wxGetAltTextAtom() { return g_strAtom; }
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -98,9 +98,9 @@ void wxDataFormat::SetType( wxDataFormatId type )
     m_type = type;
 
     if (m_type == wxDF_UNICODETEXT)
-        m_format = g_textAtom;
+        m_format = g_u8strAtom;
     else if (m_type == wxDF_TEXT)
-        m_format = g_altTextAtom;
+        m_format = g_strAtom;
     else
     if (m_type == wxDF_BITMAP)
         m_format = g_pngAtom;
@@ -131,10 +131,10 @@ void wxDataFormat::SetId( NativeFormat format )
 {
     m_format = format;
 
-    if (m_format == g_textAtom)
+    if (m_format == g_u8strAtom)
         m_type = wxDF_UNICODETEXT;
     else
-    if (m_format == g_altTextAtom)
+    if (m_format == g_strAtom)
         m_type = wxDF_TEXT;
     else
     if (m_format == g_pngAtom)
@@ -203,7 +203,7 @@ wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                 wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
     *formats++ = GetPreferredFormat();
-    *formats = g_altTextAtom;
+    *formats = g_strAtom;
 }
 
 // ----------------------------------------------------------------------------
