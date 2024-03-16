@@ -241,6 +241,11 @@ jobs:
           df -h /
           echo
 
+      - name: Fix kernel mmap rnd bits
+        if: matrix.runner == 'ubuntu-22.04'
+        # See https://github.com/actions/runner-images/issues/9491#issuecomment-1989718917
+        run: sudo sysctl vm.mmap_rnd_bits=28
+
       - name: Configuring
         run: |
           wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
