@@ -365,10 +365,6 @@ wxString wxWebResponseURLSession::GetSuggestedFileName() const
 wxWebSessionURLSession::wxWebSessionURLSession()
 {
     m_delegate = [[wxWebSessionDelegate alloc] initWithSession:this];
-
-    m_session = [[NSURLSession sessionWithConfiguration:
-                  [NSURLSessionConfiguration defaultSessionConfiguration]
-                                               delegate:m_delegate delegateQueue:nil] retain];
 }
 
 wxWebSessionURLSession::~wxWebSessionURLSession()
@@ -391,6 +387,31 @@ wxVersionInfo wxWebSessionURLSession::GetLibraryVersionInfo()
     int verMaj, verMin, verMicro;
     wxGetOsVersion(&verMaj, &verMin, &verMicro);
     return wxVersionInfo("URLSession", verMaj, verMin, verMicro);
+}
+
+bool wxWebSessionURLSession::EnablePersistentStorage(bool enable)
+{
+    if (m_session)
+    {
+        wxFAIL_MSG("Persistent storage can only be enabled before the first request is made.");
+        return false;
+    }
+
+    m_persistentStorageEnabled = enable;
+    return true;
+}
+
+WX_NSURLSession wxWebSessionURLSession::GetSession()
+{
+    if (!m_session)
+    {
+        NSURLSessionConfiguration* config = (m_persistentStorageEnabled) ?
+             [NSURLSessionConfiguration defaultSessionConfiguration] :
+             [NSURLSessionConfiguration ephemeralSessionConfiguration];
+        m_session = [[NSURLSession sessionWithConfiguration:config delegate:m_delegate delegateQueue:nil] retain];
+    }
+
+    return m_session;
 }
 
 #endif // wxUSE_WEBREQUEST_URLSESSION

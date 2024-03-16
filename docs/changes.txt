@@ -88,6 +88,10 @@ Changes in behaviour not resulting in compilation errors
   but should be viewed as a hint not to use wxImageList (but wxBitmapBundle)
   in the applications supporting high DPI.
 
+- wxWebRequest doesn't use persistent storage under Mac any longer, as this
+  made is behaviour there incompatible with the other platforms. Please call
+  wxWebRequest::EnablePersistentStorage() explicitly if you need it.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

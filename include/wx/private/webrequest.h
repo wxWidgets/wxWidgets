@@ -254,6 +254,8 @@ public:
 
     virtual wxWebSessionHandle GetNativeHandle() const = 0;
 
+    virtual bool EnablePersistentStorage(bool WXUNUSED(enable)) { return false; }
+
 protected:
     wxWebSessionImpl();
 
