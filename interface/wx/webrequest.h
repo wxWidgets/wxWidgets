@@ -800,6 +800,23 @@ public:
         allow using this object again.
      */
     void Close();
+
+    /**
+        Allows to enable persistent storage for the session.
+
+        The default is to disable persistent storage. Before the first request
+        is created, this function can be called to enable persistent storage.
+        When enabled the session will store cookies and other data between
+        sessions.
+
+        @return @true if the backend supports to modify this setting. @false if
+            the setting is not supported by the backend.
+
+        @note This is only implemented on the macOS backend.
+
+        @since 3.3.0
+     */
+    bool EnablePersistentStorage(bool enable);
 };
 
 /**

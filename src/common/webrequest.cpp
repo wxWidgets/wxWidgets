@@ -1060,6 +1060,11 @@ wxWebSessionHandle wxWebSession::GetNativeHandle() const
     return m_impl ? m_impl->GetNativeHandle() : nullptr;
 }
 
+bool wxWebSession::EnablePersistentStorage(bool enable)
+{
+    return m_impl->EnablePersistentStorage(enable);
+}
+
 // ----------------------------------------------------------------------------
 // Module ensuring all global/singleton objects are destroyed on shutdown.
 // ----------------------------------------------------------------------------

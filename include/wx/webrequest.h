@@ -242,6 +242,8 @@ public:
 
     void Close();
 
+    bool EnablePersistentStorage(bool enable = true);
+
     wxWebSessionHandle GetNativeHandle() const;
 
 private:

@@ -104,6 +104,9 @@ public:
         textSizer->Add(m_textResponseTextCtrl,
             wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM));
 
+        m_peristentStorageCheckBox = new wxCheckBox(textPanel, wxID_ANY, "Enable persistent storage");
+        textSizer->Add(m_peristentStorageCheckBox, wxSizerFlags().Border());
+
         textPanel->SetSizer(textSizer);
         m_notebook->AddPage(textPanel, "Text");
 
@@ -192,6 +195,15 @@ public:
     void OnStartButton(wxCommandEvent& WXUNUSED(evt))
     {
         wxLogStatus(this, "Started request...");
+
+        if (m_notebook->GetSelection() == Page_Text && m_peristentStorageCheckBox->IsEnabled())
+        {
+            if (!wxWebSession::GetDefault().EnablePersistentStorage(m_peristentStorageCheckBox->IsChecked()) &&
+                m_peristentStorageCheckBox->IsChecked())
+                wxLogDebug("Persistent storage is not supported by the current backend");
+
+            m_peristentStorageCheckBox->Disable();
+        }
 
         // Create request for the specified URL from the default session
         m_currentRequest = wxWebSession::GetDefault().CreateRequest(this,
@@ -469,6 +481,7 @@ private:
     wxTextCtrl* m_postContentTypeTextCtrl;
     wxTextCtrl* m_postRequestTextCtrl;
     wxTextCtrl* m_textResponseTextCtrl;
+    wxCheckBox* m_peristentStorageCheckBox;
 
     wxGauge* m_downloadGauge;
     wxStaticText* m_downloadStaticText;
