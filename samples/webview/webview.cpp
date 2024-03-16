@@ -112,7 +112,14 @@ private:
 class WebFrame : public wxFrame
 {
 public:
-    WebFrame(const wxString& url, bool isMain = true, wxWebViewWindowFeatures* windowFeatures = nullptr, bool isPrivate = false);
+    enum
+    {
+        Child   = 0,
+        Main    = 1,
+        Private = 2
+    };
+
+    WebFrame(const wxString& url, int flags = 0, wxWebViewWindowFeatures* windowFeatures = nullptr);
     virtual ~WebFrame();
 
     void UpdateState();
@@ -192,10 +199,18 @@ public:
     void OnEnableBrowserAcceleratorKeys(wxCommandEvent& evt);
 
 private:
+    // Return a special prefix for the "private" ("incognito") window titles.
+    wxString GetPrivatePrefix() const
+    {
+        wxString prefix;
+        if (m_flags & Private)
+            prefix = "[Private] ";
+        return prefix;
+    }
+
     wxTextCtrl* m_url;
     wxWebView* m_browser;
-    bool m_isMainFrame;
-    bool m_isPrivate;
+    int m_flags;
 
     wxToolBar* m_toolbar;
     wxToolBarToolBase* m_toolbar_back;
@@ -364,18 +379,16 @@ bool WebApp::OnInit()
 
     delete wxLog::SetActiveTarget(new DebugOnlyLog);
 
-    WebFrame *frame = new WebFrame(m_url);
+    WebFrame *frame = new WebFrame(m_url, WebFrame::Main);
     frame->Show();
 
     return true;
 }
 
-WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* windowFeatures, bool isPrivate):
-    wxFrame(nullptr, wxID_ANY, "wxWebView Sample")
+WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* windowFeatures) :
+    wxFrame(nullptr, wxID_ANY, "wxWebView Sample"),
+    m_flags(flags)
 {
-    m_isMainFrame = isMain;
-    m_isPrivate = isPrivate;
-
     // set the frame icon
     SetIcon(wxICON(sample));
     SetTitle("wxWebView Sample");
@@ -441,7 +454,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
     // Create a log window
-    if (m_isMainFrame)
+    if (m_flags & Main)
         new wxLogWindow(this, _("Logging"));
 
 #if wxUSE_WEBVIEW_EDGE
@@ -486,12 +499,12 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     if (!windowFeatures)
     {
         wxWebViewConfiguration conf = wxWebView::NewConfiguration(backend);
-        if (m_isPrivate)
+        if (m_flags & Private)
         {
             if (!conf.EnablePersistentStorage(false))
             {
-                wxMessageBox("Disabling persistent storage is not supported by this backend!", "Error", wxICON_ERROR | wxCENTER, this);
-                m_isPrivate = false;
+                wxLogWarning("Disabling persistent storage is not supported by this backend!");
+                m_flags ^= Private;
             }
         }
 
@@ -517,7 +530,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
     }
 
 #ifdef __WXMAC__
-    if (m_isMainFrame)
+    if (m_flags & Main)
     {
         // With WKWebView handlers need to be registered before creation
         m_browser->RegisterHandler(wxSharedPtr<wxWebViewHandler>(new wxWebViewArchiveHandler("wxfs")));
@@ -532,7 +545,7 @@ WebFrame::WebFrame(const wxString& url, bool isMain, wxWebViewWindowFeatures* wi
 
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
-    if (m_isMainFrame)
+    if (m_flags & Main)
     {
         // Log backend information
         wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
@@ -809,10 +822,8 @@ void WebFrame::UpdateState()
         m_toolbar->EnableTool( m_toolbar_stop->GetId(), false );
     }
 
-    if (m_isPrivate)
-        SetTitle("[Private] " + m_browser->GetCurrentTitle());
-    else
-        SetTitle( m_browser->GetCurrentTitle() );
+    SetTitle(GetPrivatePrefix() + m_browser->GetCurrentTitle());
+
     m_url->SetValue( m_browser->GetCurrentURL() );
 }
 
@@ -1123,16 +1134,13 @@ void WebFrame::OnNewWindowFeatures(wxWebViewEvent &evt)
     wxLogMessage("Window features of child webview are available." + featureDescription);
 
     // Create child frame with the features specified by window.open() call
-    WebFrame* newFrame = new WebFrame(evt.GetURL(), false, features);
+    WebFrame* newFrame = new WebFrame(evt.GetURL(), WebFrame::Child, features);
     newFrame->Show();
 }
 
 void WebFrame::OnTitleChanged(wxWebViewEvent& evt)
 {
-    if (m_isPrivate)
-        SetTitle("[Private] " + evt.GetString());
-    else
-        SetTitle(evt.GetString());
+    SetTitle(GetPrivatePrefix() + evt.GetString());
     wxLogMessage("%s", "Title changed; title='" + evt.GetString() + "'");
 }
 
@@ -1158,7 +1166,7 @@ void WebFrame::OnScriptResult(wxWebViewEvent& evt)
 void WebFrame::OnWindowCloseRequested(wxWebViewEvent& WXUNUSED(evt))
 {
     wxLogMessage("Window close requested");
-    if (!m_isMainFrame)
+    if (!(m_flags & Main))
         Close();
 }
 
@@ -1574,7 +1582,7 @@ void WebFrame::OnPrint(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnOpenPrivateWindow(wxCommandEvent& WXUNUSED(evt))
 {
-    WebFrame* newFrame = new WebFrame(m_browser->GetCurrentURL(), false, nullptr, true);
+    WebFrame* newFrame = new WebFrame(m_browser->GetCurrentURL(), WebFrame::Private);
     newFrame->Show();
 }
 
