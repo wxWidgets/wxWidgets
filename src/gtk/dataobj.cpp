@@ -56,8 +56,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGdkAtom);
 };
 
-wxGdkAtom g_textAtom    ("UTF8_STRING");
-wxGdkAtom g_altTextAtom ("STRING");
+wxGdkAtom g_u8strAtom   ("UTF8_STRING");
+wxGdkAtom g_strAtom     ("STRING");
 wxGdkAtom g_pngAtom     ("image/png");
 wxGdkAtom g_fileAtom    ("text/uri-list");
 wxGdkAtom g_htmlAtom    ("text/html");
@@ -65,7 +65,7 @@ wxGdkAtom g_htmlAtom    ("text/html");
 } // anonymous namespace
 
 // This is used in src/gtk/clipbrd.cpp
-extern GdkAtom wxGetAltTextAtom() { return g_altTextAtom; }
+extern GdkAtom wxGetAltTextAtom() { return g_strAtom; }
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -98,15 +98,15 @@ void wxDataFormat::SetType( wxDataFormatId type )
 
 #if wxUSE_UNICODE
     if (m_type == wxDF_UNICODETEXT)
-        m_format = g_textAtom;
+        m_format = g_u8strAtom;
     else if (m_type == wxDF_TEXT)
-        m_format = g_altTextAtom;
+        m_format = g_strAtom;
 #else // !wxUSE_UNICODE
-    // notice that we don't map wxDF_UNICODETEXT to g_textAtom here, this
+    // notice that we don't map wxDF_UNICODETEXT to g_u8strAtom here, this
     // would lead the code elsewhere to treat data objects with this format as
     // containing UTF-8 data which is not true
     if (m_type == wxDF_TEXT)
-        m_format = g_textAtom;
+        m_format = g_u8strAtom;
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
     else
     if (m_type == wxDF_BITMAP)
@@ -138,14 +138,14 @@ void wxDataFormat::SetId( NativeFormat format )
 {
     m_format = format;
 
-    if (m_format == g_textAtom)
+    if (m_format == g_u8strAtom)
 #if wxUSE_UNICODE
         m_type = wxDF_UNICODETEXT;
 #else
         m_type = wxDF_TEXT;
 #endif
     else
-    if (m_format == g_altTextAtom)
+    if (m_format == g_strAtom)
         m_type = wxDF_TEXT;
     else
     if (m_format == g_pngAtom)
@@ -221,7 +221,7 @@ wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                 wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
     *formats++ = GetPreferredFormat();
-    *formats = g_altTextAtom;
+    *formats = g_strAtom;
 }
 
 #endif // wxUSE_UNICODE
