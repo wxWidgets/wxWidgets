@@ -368,6 +368,8 @@ public:
             the setting is not supported by the backend.
 
         @note This is only implemented on the Edge, WebKit2GTK+ and macOS backends.
+
+        @since 3.3.0
      */
     bool EnablePersistentStorage(bool enable);
 };
