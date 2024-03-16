@@ -42,7 +42,7 @@ public:
     // Name is literal, so we don't copy it but just store the pointer.
     wxGdkAtom(const char* name) : m_name(name), m_atom(NULL) {}
 
-    operator GdkAtom()
+    GdkAtom Get() const
     {
         if ( !m_atom )
             m_atom = gdk_atom_intern(m_name, FALSE);
@@ -50,23 +50,38 @@ public:
         return m_atom;
     }
 
+    operator GdkAtom() const { return Get(); }
+
 private:
     const char* const m_name;
-    GdkAtom m_atom;
-
-    wxDECLARE_NO_COPY_CLASS(wxGdkAtom);
+    mutable GdkAtom m_atom;
 };
 
+inline bool operator==(wxDataFormat format, const wxGdkAtom& wxatom)
+{
+    return format.GetFormatId() == wxatom.Get();
+}
+
+inline bool operator==(GdkAtom atom, const wxGdkAtom& wxatom)
+{
+    return atom == wxatom.Get();
+}
+
+// Text is special as it can be represented by several different atoms: we
+// accept all of them when pasting and provide all of them when copying.
+//
+// Note that there are also other atoms for text, e.g. "COMPOUND_TEXT" and
+// "TEXT", but it doesn't seem necessary to support them, so we don't.
 wxGdkAtom g_u8strAtom   ("UTF8_STRING");
 wxGdkAtom g_strAtom     ("STRING");
+wxGdkAtom g_u8textAtom  ("text/plain;charset=utf-8");
+wxGdkAtom g_textAtom    ("text/plain");
+
 wxGdkAtom g_pngAtom     ("image/png");
 wxGdkAtom g_fileAtom    ("text/uri-list");
 wxGdkAtom g_htmlAtom    ("text/html");
 
 } // anonymous namespace
-
-// This is used in src/gtk/clipbrd.cpp
-extern GdkAtom wxGetAltTextAtom() { return g_strAtom; }
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -139,14 +154,14 @@ void wxDataFormat::SetId( NativeFormat format )
 {
     m_format = format;
 
-    if (m_format == g_u8strAtom)
+    if (m_format == g_u8strAtom || m_format == g_u8textAtom)
 #if wxUSE_UNICODE
         m_type = wxDF_UNICODETEXT;
 #else
         m_type = wxDF_TEXT;
 #endif
     else
-    if (m_format == g_strAtom)
+    if (m_format == g_strAtom || m_format == g_textAtom)
         m_type = wxDF_TEXT;
     else
     if (m_format == g_pngAtom)
@@ -165,6 +180,23 @@ void wxDataFormat::SetId( const wxString& id )
 {
     m_type = wxDF_PRIVATE;
     m_format = gdk_atom_intern( id.ToAscii(), FALSE );
+}
+
+
+// This is also used by wxClipboard to check if the given atom refer to the
+// same format, so make it extern.
+extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2)
+{
+    if (atom1 == atom2)
+        return true;
+
+    if (atom1 == g_u8strAtom && atom2 == g_u8textAtom)
+        return true;
+
+    if (atom1 == g_strAtom && atom2 == g_textAtom)
+        return true;
+
+    return false;
 }
 
 void wxDataFormat::PrepareFormats()
@@ -199,7 +231,7 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
 
         for ( size_t n = 0; n < nFormatCount; n++ )
         {
-            if ( formats[n] == format )
+            if ( wxGTKIsSameFormat(formats[n], format) )
                 return true;
         }
 
