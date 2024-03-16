@@ -252,6 +252,9 @@ jobs:
 
           echo "wxMAKEFILE_CXXFLAGS=$wxMAKEFILE_CXXFLAGS $error_opts" >> $GITHUB_ENV
 
+          # Remove some unnecessary files to ensure we have enough free space.
+          sudo rm -rf "AGENT_TOOLSDIRECTORY" /usr/share/dotnet
+
           ./build/tools/before_install.sh
 
       - name: Show build environment
@@ -266,6 +269,10 @@ jobs:
 
           echo "ccache version:"
           ccache --version
+          echo
+
+          echo "Free space:"
+          df -h /
           echo
 
       - name: Configuring
