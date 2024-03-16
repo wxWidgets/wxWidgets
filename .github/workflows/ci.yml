@@ -78,33 +78,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Ubuntu 18.04 wxGTK 2
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            gtk_version: 2
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK UTF-8
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --enable-utf8 --enable-utf8only --enable-monolithic
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 static with gcc 4.8
-            runner: ubuntu-latest
-            compiler: g++-4.8
-            container: ubuntu:18.04
-            configure_flags: --disable-shared
-            allow_extra_warnings: true
-            use_xvfb: true
-          - name: Ubuntu 18.04 wxGTK 3 compatible 3.0
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --enable-compat30
-            use_xvfb: true
-          - name: Ubuntu 20.04 wxGTK 3 with clang
-            runner: ubuntu-20.04
-            compiler: clang++-10
-            configure_flags: --disable-sys-libs
-            use_xvfb: true
           - name: Ubuntu 22.04 wxGTK with wx containers
             runner: ubuntu-22.04
             configure_flags: --enable-compat30 --disable-std_containers
@@ -121,23 +94,6 @@ jobs:
             use_asan: true
             use_xvfb: true
             build_out_of_tree_samples: true
-          - name: Ubuntu 18.04 wxX11
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --with-x11 --enable-pch --disable-stc
-            skip_samples: true
-          - name: Ubuntu 18.04 wxDFB
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --with-directfb --enable-pch --disable-stc
-            skip_samples: true
-            allow_warnings: true
-          - name: Ubuntu 18.04 wxQt
-            runner: ubuntu-latest
-            container: ubuntu:18.04
-            configure_flags: --with-qt --enable-pch --without-opengl
-            skip_samples: true
-            use_xvfb: true
 
     env:
       wxGTK_VERSION: ${{ matrix.gtk_version && matrix.gtk_version || 3 }}
