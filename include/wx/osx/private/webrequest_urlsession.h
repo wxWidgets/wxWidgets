@@ -156,9 +156,9 @@ public:
     WX_wxWebSessionDelegate GetDelegate() { return m_delegate; }
 
 private:
-    WX_NSURLSession m_session;
+    WX_NSURLSession m_session = nullptr;
     WX_wxWebSessionDelegate m_delegate;
-    bool m_persistentStorageEnabled;
+    bool m_persistentStorageEnabled = false;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionURLSession);
 };

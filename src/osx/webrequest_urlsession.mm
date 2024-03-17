@@ -362,9 +362,7 @@ wxString wxWebResponseURLSession::GetSuggestedFileName() const
 // wxWebSessionURLSession
 //
 
-wxWebSessionURLSession::wxWebSessionURLSession():
-    m_session(nil),
-    m_persistentStorageEnabled(false)
+wxWebSessionURLSession::wxWebSessionURLSession()
 {
     m_delegate = [[wxWebSessionDelegate alloc] initWithSession:this];
 }
