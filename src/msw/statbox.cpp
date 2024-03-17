@@ -344,24 +344,6 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
         return 0;
     }
 
-    if ( nMsg == WM_UPDATEUISTATE )
-    {
-        // DefWindowProc() redraws just the static box text when it gets this
-        // message and it does it using the standard (blue in standard theme)
-        // colour and not our own label colour that we use in PaintForeground()
-        // resulting in the label mysteriously changing the colour when e.g.
-        // "Alt" is pressed anywhere in the window, see #12497.
-        //
-        // To avoid this we simply refresh the window forcing our own code
-        // redrawing the label in the correct colour to be called. This is
-        // inefficient but there doesn't seem to be anything else we can do.
-        //
-        // Notice that the problem is XP-specific and doesn't arise under later
-        // systems.
-        if ( m_hasFgCol && wxGetWinVersion() == wxWinVersion_XP )
-            Refresh();
-    }
-
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
