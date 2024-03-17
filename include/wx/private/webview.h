@@ -17,6 +17,7 @@ public:
     virtual void* GetNativeConfiguration() const { return nullptr; }
     virtual void SetDataPath(const wxString& WXUNUSED(path)) {}
     virtual wxString GetDataPath() const { return wxString{}; }
+    virtual bool EnablePersistentStorage(bool WXUNUSED(enable)) { return false; }
 };
 
 #endif // _WX_PRIVATE_WEBVIEW_H_

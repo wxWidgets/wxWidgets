@@ -355,6 +355,23 @@ public:
             always returns empty string for the other ones.
     */
     wxString GetDataPath() const;
+
+    /**
+        Allows to disable persistent storage for the webview.
+
+        The default is to enable it. When the webview is created without
+        persistent storage the data is stored in memory and is lost when
+        the webview is destroyed. In browsers this is equivalent to
+        "private browsing" or "incognito mode".
+
+        @return @true if the backend supports to modify this setting. @false if
+            the setting is not supported by the backend.
+
+        @note This is only implemented on the Edge, WebKit2GTK+ and macOS backends.
+
+        @since 3.3.0
+     */
+    bool EnablePersistentStorage(bool enable);
 };
 
 

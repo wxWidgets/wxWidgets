@@ -43,6 +43,10 @@
 #define wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
 #endif
 
+#if WEBKIT_CHECK_VERSION(2, 16, 0)
+#define wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+#endif
+
 // Function to check webkit version at runtime
 bool wx_check_webkit_version(int major, int minor, int micro)
 {
@@ -724,6 +728,19 @@ public:
     }
 #endif
 
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+    virtual bool EnablePersistentStorage(bool enable) override
+    {
+        if (wx_check_webkit_version(2, 16, 0))
+        {
+            m_persistentStorage = enable;
+            return true;
+        }
+        else
+            return false;
+    }
+#endif
+
     virtual void* GetNativeConfiguration() const override
     {
         return GetOrCreateContext();
@@ -735,11 +752,22 @@ private:
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
     mutable WebKitWebsiteDataManager* m_websiteDataManager = nullptr;
 #endif
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+    bool m_persistentStorage = true;
+#endif
 
     WebKitWebContext* GetOrCreateContext() const
     {
         if (m_webContext)
             return m_webContext;
+
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+        if (!m_persistentStorage)
+        {
+            m_webContext = webkit_web_context_new_ephemeral();
+            return m_webContext;
+        }
+#endif
 
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
         if (wx_check_webkit_version(2, 10, 0))
