@@ -584,7 +584,7 @@ WinSock1SocketPoller::~WinSock1SocketPoller()
     // Close the message window.
     if ( m_hwnd )
     {
-        CloseWindow(m_hwnd);
+        DestroyWindow(m_hwnd);
     }
 
     // Cleanup winsock.
