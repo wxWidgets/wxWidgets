@@ -3415,7 +3415,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
 
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(GetBackgroundColour());
-        dc.DrawRectangle(0, lastRect.y, clientSize.x, clientSize.y - lastRect.y);
+        dc.DrawRectangle(0, lastRect.GetBottom(), clientSize.x, clientSize.y - lastRect.GetBottom());
         return;
     }
 
