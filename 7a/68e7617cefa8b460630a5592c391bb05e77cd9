@@ -1,0 +1,1 @@
+wxAll: Add wxWebSession::EnablePersistentStorage() (Tobias Taschner, #23743).
