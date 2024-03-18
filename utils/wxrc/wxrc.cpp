@@ -28,6 +28,7 @@
 #include "wx/vector.h"
 
 #include <unordered_set>
+#include <vector>
 
 class XRCWidgetData
 {
@@ -626,6 +627,10 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
 
 static wxString FileToCppArray(wxString filename, int num)
 {
+    // [2024-03-15]
+    //   Some of the `wxString` objects are defined at the beginning of the function
+    //   (before the actual use, and with larger scope than needed)
+    //   in order to avoid repeated allocations and deallocations.
     wxString output;
     wxString tmp;
     wxString snum;
@@ -633,34 +638,94 @@ static wxString FileToCppArray(wxString filename, int num)
     wxFileOffset offset = file.Length();
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
 
-    const size_t lng = wx_truncate_cast(size_t, offset);
+    // [2024-03-15]
+    //
+    //   There are two environments (processes) to consider:
+    //     - the resource compiler;
+    //     - the process using the resource.
+    //
+    //   Previously, we used to check whether `offset` fitted into `size_t`.
+    //
+    //   But this used to check against the `size_t` of the resource compiler.
+    //   The check might have passed, but this might have been misleading
+    //   (if the resource compiler is a 64-bit process and the process using the resource is a 32-bit process).
+    //
+    //   Also, for Windows at least, the file format for modules (executables and shared libraries)
+    //   which are to be loaded in 64-bit processes
+    //   is not called PE64, but instead PE32+,
+    //   and yes, in this format virtual addresses are indeed 64-bit,
+    //   but in fact relative virtual addresses (and also file offsets) are 32-bit
+    //   (i.e. a single module cannot span for more than 4 GiB in virtual memory).
+    //
+    //   It follows that the check might have also been misleading
+    //   in the case of the resource compiler being a 64-bit Linux process
+    //   and the process using the resource being a Windows process -- even a 64-bit Windows process.
+    //
+    //   Therefore, we now check whether the size of the resource fits
+    //   not into `size_t`, but instead into `uint32_t`,
+    //   i.e. we do not support resources larger than 4 GiB.
+    //
+    const wxUint32 lng = wx_truncate_cast(wxUint32, offset);
     wxASSERT_MSG( static_cast<wxFileOffset>(lng) == offset,
                   wxT("Huge file not supported") );
 
     snum.Printf(wxT("%i"), num);
-    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %lu;\n"),
-                  static_cast<unsigned long>(lng));
-    output += wxT("static unsigned char xml_res_file_") + snum + wxT("[] = {\n");
+
+    tmp.Printf(wxT("// File '%s':\n"), filename);
+    output += tmp;
+
+    tmp.Printf(wxT("const size_t xml_res_size_") + snum + wxT(" = %u;\n"), lng);
+    output += tmp;
+
+    output += wxT("const unsigned char xml_res_file_") + snum + wxT("[] = {\n");
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
 
-    unsigned char *buffer = new unsigned char[lng];
-    file.Read(buffer, lng);
+    std::vector<unsigned char> buffer(lng);
+    file.Read(buffer.data(), lng);
 
-    for (size_t i = 0, linelng = 0; i < lng; i++)
+    for (wxUint32 i = 0, linelng = 0, sectionlng = 0; ; )
     {
-        tmp.Printf(wxT("%i"), buffer[i]);
-        if (i != 0) output << wxT(',');
-        if (linelng > 70)
+        if (! i || i >= lng || sectionlng >= 0x100)
         {
-            linelng = 0;
-            output << wxT("\n");
-        }
-        output << tmp;
-        linelng += tmp.length()+1;
-    }
+            if (linelng) wxFAIL;
 
-    delete[] buffer;
+            tmp.Printf
+            (
+                wxT("// Offset %8Xh of %8Xh (%7.2lf%%)%c\n"),
+                static_cast<unsigned>(i),
+                static_cast<unsigned>(lng),
+                lng ? 100.0 * i / lng : 0,
+                i < lng ? wxT(':') : wxT('.')
+            );
+            output << tmp;
+
+            sectionlng = 0;
+        }
+
+        if (i >= lng)
+            break;
+
+        tmp.Printf(wxT("0x%02x"), buffer[i]);
+        output << tmp;
+
+        ++i;
+        ++linelng;
+        ++sectionlng;
+
+        const bool newline{i == lng || linelng >= 0x10};
+        if (i < lng)
+        {
+            output << wxT(',');
+            if (! newline && ! (linelng % 4))
+                output << wxT(' ');
+        }
+        if (newline)
+        {
+            output << wxT('\n');
+            linelng = 0;
+        }
+    }
 
     output += wxT("};\n\n");
 
@@ -688,18 +753,23 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "#include <wx/xrc/xmlres.h>\n"
 "#include <wx/xrc/xh_all.h>\n"
 "\n"
-"#if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFileWithMimeType(name, data, size, mime)\n"
-"#else\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFile(name, data, size)\n"
-"#endif\n"
+"// [2024-03-11]\n"
+"//   In order for C++-compilation to run much faster and consume much less memory\n"
+"//   (especially with g++-14, at least with optimization and debugging information i.e. `-O2 -g`)\n"
+"//   and for the resulting module (executable or shared library) to occupy less space (on disk and in memory),\n"
+"//   we avoid (via an intermediary function with parameters of type pointers to arrays of characters)\n"
+"//   the inlining of construction of (many) wxString parameters\n"
+"//   (especially since (anyway) our arguments (in the generated C++ source code)\n"
+"//   are pointers to arrays of characters, not yet strings):\n"
+"//\n"
+"void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype);\n"
 "\n");
 
+    file.Write("namespace\n{\n");
     for (i = 0; i < flist.GetCount(); i++)
         file.Write(
               FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
+    file.Write("} // End of anonymous namespace.\n\n");
 
     file.Write(""
 "void " + parFuncname + "()\n"
@@ -749,8 +819,25 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
     }
 
     file.Write("}\n");
-
-
+    file.Write(
+        "\n"
+        "void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype)\n"
+        "{\n"
+        "    // [2024-03-11]\n"
+        "    //   It may appear as though this is a simply-forwarding function,\n"
+        "    //   but in fact it converts several arguments from `const wxChar *` to `const wxString &`,\n"
+        "    //   i.e. it constructs and destroys several temporary `wxString` objects,"
+        "    //   and therefore we centralize these operations here as opposed to inlining them at all call sites\n"
+        "    //   (which could cost significant time and memory at compile-time and also memory at run-time\n"
+        "    //   as described in comments at the beginning of this file).\n"
+        "    //\n"
+        "    #if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
+        "        return wxMemoryFSHandler::AddFileWithMimeType(filename, binarydata, size, mimetype);\n"
+        "    #else\n"
+        "        return wxMemoryFSHandler::AddFile(filename, binarydata, size);\n"
+        "    #endif\n"
+        "}\n"
+    );
 }
 
 void XmlResApp::GenCPPHeader()
