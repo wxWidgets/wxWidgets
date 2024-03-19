@@ -94,6 +94,15 @@ enum wxWebViewUserScriptInjectionTime
     wxWEBVIEW_INJECT_AT_DOCUMENT_END
 };
 
+enum wxWebViewBrowsingDataTypes
+{
+    wxWEBVIEW_BROWSING_DATA_COOKIES = 1,
+    wxWEBVIEW_BROWSING_DATA_CACHE = 2,
+    wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 4,
+    wxWEBVIEW_BROWSING_DATA_OTHER = 8,
+    wxWEBVIEW_BROWSING_DATA_ALL = 16
+};
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewHandlerRequest
 {
 public:
@@ -253,6 +262,9 @@ public:
     virtual bool SetUserAgent(const wxString& userAgent) { wxUnusedVar(userAgent); return false; }
     virtual wxString GetUserAgent() const;
     virtual bool SetProxy(const wxString& proxy) { wxUnusedVar(proxy); return false; }
+    virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
+        wxDateTime since = wxDateTime((time_t)0) )
+    { wxUnusedVar(types); wxUnusedVar(since); return false; }
 
     // Script
     virtual bool RunScript(const wxString& javascript, wxString* output = nullptr) const;
@@ -428,6 +440,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_TITLE_CHANGED, wxWe
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_FULLSCREEN_CHANGED, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_MESSAGE_RECEIVED, wxWebViewEvent);
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_SCRIPT_RESULT, wxWebViewEvent);
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_WEBVIEW, wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, wxWebViewEvent);
 
 typedef void (wxEvtHandler::*wxWebViewEventFunction)
              (wxWebViewEvent&);
