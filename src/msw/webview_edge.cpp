@@ -1420,7 +1420,56 @@ bool wxWebViewEdge::SetProxy(const wxString& proxy)
     return configImpl->SetProxy(proxy);
 }
 
-void* wxWebViewEdge::GetNativeBackend() const
+bool wxWebViewEdge::ClearBrowsingData(int types, wxDateTime since)
+{
+    wxCOMPtr<ICoreWebView2_13> webView13;
+    if (FAILED(m_impl->m_webView->QueryInterface(IID_PPV_ARGS(&webView13))))
+        return false;
+    wxCOMPtr<ICoreWebView2Profile> profile;
+    if (FAILED(webView13->get_Profile(&profile)))
+        return false;
+    wxCOMPtr<ICoreWebView2Profile2> profile2;
+    if (FAILED(profile->QueryInterface(IID_PPV_ARGS(&profile2))))
+        return false;
+
+    int dataKinds = 0;
+    if (types & wxWEBVIEW_BROWSING_DATA_ALL)
+    {
+        dataKinds = COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_PROFILE;
+        types |= wxWEBVIEW_BROWSING_DATA_COOKIES | wxWEBVIEW_BROWSING_DATA_DOM_STORAGE |
+            wxWEBVIEW_BROWSING_DATA_OTHER | wxWEBVIEW_BROWSING_DATA_CACHE;
+    }
+    if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
+        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_DISK_CACHE;
+    if (types & wxWEBVIEW_BROWSING_DATA_COOKIES)
+        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_COOKIES;
+    if (types & wxWEBVIEW_BROWSING_DATA_DOM_STORAGE)
+        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_ALL_DOM_STORAGE;
+    if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
+        dataKinds |= COREWEBVIEW2_BROWSING_DATA_KINDS_BROWSING_HISTORY |
+            COREWEBVIEW2_BROWSING_DATA_KINDS_SETTINGS |
+            COREWEBVIEW2_BROWSING_DATA_KINDS_DOWNLOAD_HISTORY |
+            COREWEBVIEW2_BROWSING_DATA_KINDS_GENERAL_AUTOFILL |
+            COREWEBVIEW2_BROWSING_DATA_KINDS_PASSWORD_AUTOSAVE;
+
+    profile2->ClearBrowsingDataInTimeRange(
+        (COREWEBVIEW2_BROWSING_DATA_KINDS) dataKinds,
+        (double) since.GetTicks(),
+        (double) wxDateTime::Now().GetTicks(),
+        Callback<ICoreWebView2ClearBrowsingDataCompletedHandler>(
+            [this](HRESULT error) -> HRESULT
+        {
+            wxWebViewEvent event(wxEVT_WEBVIEW_BROWSING_DATA_CLEARED, GetId(), wxString(), wxString());
+            event.SetInt(SUCCEEDED(error) ? 1 : 0);
+            event.SetEventObject(this);
+            AddPendingEvent(event);
+            return S_OK;
+        }).Get());
+
+    return true;
+}
+
+void *wxWebViewEdge::GetNativeBackend() const
 {
     return m_impl->m_webView;
 }
