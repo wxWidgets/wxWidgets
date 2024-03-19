@@ -454,8 +454,9 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
     // Create a log window
+    wxLogWindow* logWindow = nullptr;
     if (m_flags & Main)
-        new wxLogWindow(this, _("Logging"));
+        logWindow = new wxLogWindow(this, _("Logging"), false);
 
 #if wxUSE_WEBVIEW_EDGE
     // Check if a fixed version of edge is present in
@@ -580,7 +581,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     SetSizer(topsizer);
 
     //Set a more sensible size for web browsing
-    SetSize(FromDIP(wxSize(800, 600)));
+    SetSize(FromDIP(wxSize(940, 700)));
 
     if (windowFeatures)
     {
@@ -797,6 +798,17 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
 
     //Connect the idle events
     Bind(wxEVT_IDLE, &WebFrame::OnIdle, this);
+
+    Bind(wxEVT_SHOW, [this, logWindow](wxShowEvent& evt) {
+        if (evt.IsShown() && logWindow && logWindow->GetFrame())
+        {
+            auto size = GetSize();
+            logWindow->GetFrame()->SetSize(FromDIP(wxSize(0, 200)) + wxSize(size.x, 0));
+            logWindow->GetFrame()->SetPosition(GetPosition() + wxPoint(0, size.y));
+            logWindow->Show();
+        }
+        evt.Skip();
+    });
 }
 
 WebFrame::~WebFrame()
