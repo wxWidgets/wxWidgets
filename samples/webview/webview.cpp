@@ -279,6 +279,7 @@ private:
     wxStaticText* m_info_text;
     wxTextCtrl* m_find_ctrl;
     wxToolBar* m_find_toolbar;
+    wxTextCtrl* m_log_textCtrl;
 
     wxMenuHistoryMap m_histMenuItems;
     wxString m_findText;
@@ -453,11 +454,6 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     m_info = new wxInfoBar(this);
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
-    // Create a log window
-    wxLogWindow* logWindow = nullptr;
-    if (m_flags & Main)
-        logWindow = new wxLogWindow(this, _("Logging"), false);
-
 #if wxUSE_WEBVIEW_EDGE
     // Check if a fixed version of edge is present in
     // $executable_path/edge_fixed and use it
@@ -548,6 +544,12 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
 
     if (m_flags & Main)
     {
+        // Setup log text control
+        m_log_textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_RICH2);
+        m_log_textCtrl->SetMinSize(FromDIP(wxSize(100, 100)));
+        topsizer->Add(m_log_textCtrl, wxSizerFlags().Expand().Proportion(0));
+        wxLog::SetActiveTarget(new wxLogTextCtrl(m_log_textCtrl));
+
         // Log backend information
         wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
             wxWebView::GetBackendVersionInfo(backend).ToString());
@@ -693,6 +695,16 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
     m_browser_accelerator_keys = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Browser Accelerator Keys"));
 
+    if (m_flags & Main)
+    {
+        wxMenuItem* showLog = m_tools_menu->AppendCheckItem(wxID_ANY, _("Show Log"));
+        showLog->Check();
+        Bind(wxEVT_MENU, [this](wxCommandEvent& evt) {
+            m_log_textCtrl->Show(evt.IsChecked());
+            Layout();
+        }, showLog->GetId());
+    }
+
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
     m_tools_handle_new_window->Check();
@@ -798,17 +810,6 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
 
     //Connect the idle events
     Bind(wxEVT_IDLE, &WebFrame::OnIdle, this);
-
-    Bind(wxEVT_SHOW, [this, logWindow](wxShowEvent& evt) {
-        if (evt.IsShown() && logWindow && logWindow->GetFrame())
-        {
-            auto size = GetSize();
-            logWindow->GetFrame()->SetSize(FromDIP(wxSize(0, 200)) + wxSize(size.x, 0));
-            logWindow->GetFrame()->SetPosition(GetPosition() + wxPoint(0, size.y));
-            logWindow->Show();
-        }
-        evt.Skip();
-    });
 }
 
 WebFrame::~WebFrame()
