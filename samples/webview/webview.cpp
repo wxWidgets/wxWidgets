@@ -279,6 +279,7 @@ private:
     wxStaticText* m_info_text;
     wxTextCtrl* m_find_ctrl;
     wxToolBar* m_find_toolbar;
+    wxTextCtrl* m_log_textCtrl;
 
     wxMenuHistoryMap m_histMenuItems;
     wxString m_findText;
@@ -453,10 +454,6 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     m_info = new wxInfoBar(this);
     topsizer->Add(m_info, wxSizerFlags().Expand());
 
-    // Create a log window
-    if (m_flags & Main)
-        new wxLogWindow(this, _("Logging"));
-
 #if wxUSE_WEBVIEW_EDGE
     // Check if a fixed version of edge is present in
     // $executable_path/edge_fixed and use it
@@ -547,6 +544,12 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
 
     if (m_flags & Main)
     {
+        // Setup log text control
+        m_log_textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_RICH2);
+        m_log_textCtrl->SetMinSize(FromDIP(wxSize(100, 100)));
+        topsizer->Add(m_log_textCtrl, wxSizerFlags().Expand().Proportion(0));
+        wxLog::SetActiveTarget(new wxLogTextCtrl(m_log_textCtrl));
+
         // Log backend information
         wxLogMessage("Backend: %s Version: %s", m_browser->GetClassInfo()->GetClassName(),
             wxWebView::GetBackendVersionInfo(backend).ToString());
@@ -580,7 +583,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     SetSizer(topsizer);
 
     //Set a more sensible size for web browsing
-    SetSize(FromDIP(wxSize(800, 600)));
+    SetSize(FromDIP(wxSize(940, 700)));
 
     if (windowFeatures)
     {
@@ -691,6 +694,16 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     m_context_menu = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Context Menu"));
     m_dev_tools = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Dev Tools"));
     m_browser_accelerator_keys = m_tools_menu->AppendCheckItem(wxID_ANY, _("Enable Browser Accelerator Keys"));
+
+    if (m_flags & Main)
+    {
+        wxMenuItem* showLog = m_tools_menu->AppendCheckItem(wxID_ANY, _("Show Log"));
+        showLog->Check();
+        Bind(wxEVT_MENU, [this](wxCommandEvent& evt) {
+            m_log_textCtrl->Show(evt.IsChecked());
+            Layout();
+        }, showLog->GetId());
+    }
 
     //By default we want to handle navigation and new windows
     m_tools_handle_navigation->Check();
