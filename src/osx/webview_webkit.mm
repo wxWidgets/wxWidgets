@@ -23,6 +23,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfref.h"
+#include "wx/osx/cocoa/private/date.h"
 #include "wx/osx/private/available.h"
 #include "wx/private/jsscriptwrapper.h"
 #include "wx/private/webview.h"
@@ -35,6 +36,8 @@
 
 #include <WebKit/WebKit.h>
 #include <Foundation/NSURLError.h>
+
+using namespace wxOSXImpl;
 
 // using native types to get compile errors and warnings
 
@@ -496,6 +499,50 @@ bool wxWebViewWebKit::SetUserAgent(const wxString& userAgent)
             m_webView.customUserAgent = wxCFStringRef(userAgent).AsNSString();
         else
             m_customUserAgent = userAgent;
+
+        return true;
+    }
+    else
+        return false;
+}
+
+bool wxWebViewWebKit::ClearBrowsingData(int types, wxDateTime since)
+{
+    if ( WX_IS_MACOS_AVAILABLE(10, 11) )
+    {
+        NSSet<NSString*>* clearDataTypes = nil;
+        if (types & wxWEBVIEW_BROWSING_DATA_OTHER)
+        {
+            return false;
+        }
+        if (types & wxWEBVIEW_BROWSING_DATA_ALL)
+        {
+            clearDataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
+        }
+        else
+        {
+            NSMutableSet<NSString*>* dataTypes = [[NSMutableSet alloc] init];
+            if (types & wxWEBVIEW_BROWSING_DATA_COOKIES)
+                [dataTypes addObject:WKWebsiteDataTypeCookies];
+            if (types & wxWEBVIEW_BROWSING_DATA_CACHE)
+                [dataTypes addObjectsFromArray:@[WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache,
+                    WKWebsiteDataTypeOfflineWebApplicationCache]];
+            if (types & wxWEBVIEW_BROWSING_DATA_DOM_STORAGE)
+                [dataTypes addObjectsFromArray:@[WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage,
+                    WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases]];
+
+            clearDataTypes = dataTypes;
+        }
+
+        [m_webView.configuration.websiteDataStore removeDataOfTypes:clearDataTypes
+            modifiedSince:NSDateFromWX(since) completionHandler:^{
+                wxWebViewEvent event(wxEVT_WEBVIEW_BROWSING_DATA_CLEARED,
+                    GetId(),
+                    GetCurrentURL(),
+                    "");
+                event.SetInt(1);
+                ProcessWindowEvent(event);
+            }];
 
         return true;
     }
