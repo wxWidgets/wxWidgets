@@ -195,18 +195,6 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
 }
 
 // ----------------------------------------------------------------------------
-// wxTextDataObject
-// ----------------------------------------------------------------------------
-
-void
-wxTextDataObject::GetAllFormats(wxDataFormat *formats,
-                                wxDataObjectBase::Direction WXUNUSED(dir)) const
-{
-    *formats++ = GetPreferredFormat();
-    *formats = g_strAtom;
-}
-
-// ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 

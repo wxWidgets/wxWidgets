@@ -378,11 +378,15 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    // some platforms have 2 and not 1 format for text data
+    // non-MSW platforms need to support wxDF_TEXT in addition to wxDF_UNICODETEXT
 #if defined(wxNEEDS_UTF8_FOR_TEXT_DATAOBJ) || defined(wxNEEDS_UTF16_FOR_TEXT_DATAOBJ)
     virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const override { return 2; }
     virtual void GetAllFormats(wxDataFormat *formats,
-                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const override;
+                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const override
+    {
+        *formats++ = wxDataFormat(wxDF_UNICODETEXT);
+        *formats = wxDataFormat(wxDF_TEXT);
+    }
 
     virtual size_t GetDataSize() const override { return GetDataSize(GetPreferredFormat()); }
     virtual bool GetDataHere(void *buf) const override { return GetDataHere(GetPreferredFormat(), buf); }
