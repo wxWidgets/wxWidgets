@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_SCROLLBAR
+
 #include "wx/scrolbar.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
@@ -192,3 +194,5 @@ void wxQtScrollBar::valueChanged( int position )
         EmitEvent( e );
     }
 }
+
+#endif // wxUSE_SCROLLBAR
