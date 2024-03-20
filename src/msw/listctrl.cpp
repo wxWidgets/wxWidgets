@@ -3047,7 +3047,7 @@ RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
     return rc;
 }
 
-bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
+bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
 
@@ -3070,6 +3070,24 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
         RECT rc2;
         wxGetListCtrlSubItemRect(hwndList, item, 1, LVIR_BOUNDS, rc2);
         rc.right = rc2.left;
+    }
+
+    if ( listctrl->HasCheckBoxes() )
+    {
+        const HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_STATE);
+
+        if ( himl && ImageList_GetImageCount(himl) == 2 )
+        {
+            int cbX, cbY, cbWidth, cbHeight;
+
+            ImageList_GetIconSize(himl, &cbWidth, &cbHeight);
+            cbX = listctrl->FromDIP(2);
+            cbY = rc.top + ((rc.bottom - rc.top) / 2 - cbHeight / 2);
+            // When using style flag ILD_SELECTED or ILD_FOCUS, the checkboxes
+            // for selected items are drawn with a blue background, which we want to avoid.
+            ImageList_Draw(himl, listctrl->IsItemChecked(item) ? 1 : 0, hdc, cbX, cbY, ILD_TRANSPARENT);
+            rc.left += cbX + cbWidth;
+        }
     }
 
     // This mysterious offset is necessary for the owner drawn items to align
@@ -3167,7 +3185,7 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 // for consistency.
 //
 // pLVCD->clrText and clrTextBk should contain the colours to use
-void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3240,7 +3258,7 @@ void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     for ( int col = 0; col < colCount; col++ )
     {
         pLVCD->iSubItem = col;
-        HandleSubItemPrepaint(pLVCD, hfont, colCount);
+        HandleSubItemPrepaint(listctrl, pLVCD, hfont, colCount);
     }
 
     ::SetTextColor(hdc, colTextOld);
@@ -3264,7 +3282,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
                             ? wxColourToRGB(attr->GetBackgroundColour())
                             : wxColourToRGB(listctrl->GetBackgroundColour());
 
-        HandleItemPaint(pLVCD, nullptr);
+        HandleItemPaint(listctrl, pLVCD, nullptr);
         return CDRF_SKIPDEFAULT;
     }
 
@@ -3294,7 +3312,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
             // with recent comctl32.dll versions (5 and 6, it uses to work with
             // 4.something) so we have to draw the item entirely ourselves in
             // this case
-            HandleItemPaint(pLVCD, GetHfontOf(font));
+            HandleItemPaint(listctrl, pLVCD, GetHfontOf(font));
             return CDRF_SKIPDEFAULT;
         }
 
@@ -3315,7 +3333,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
     if ( listctrl->IsSystemThemeDisabled() &&
             pLVCD->clrTextBk == ::GetSysColor(COLOR_BTNFACE) )
     {
-        HandleItemPaint(pLVCD, nullptr);
+        HandleItemPaint(listctrl, pLVCD, nullptr);
         return CDRF_SKIPDEFAULT;
     }
 
