@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATBOX
+
 #include "wx/statbox.h"
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
@@ -75,3 +77,5 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     // need extra space for the label:
     *borderTop += GetCharHeight();
 }
+
+#endif // wxUSE_STATBOX
