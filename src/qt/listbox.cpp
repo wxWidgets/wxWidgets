@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_LISTBOX
+
 #include "wx/listbox.h"
 #include "wx/qt/private/winevent.h"
 
@@ -379,3 +381,5 @@ void wxListBox::UnSelectAll()
         l->setSelected(false);
     }
 }
+
+#endif // wxUSE_LISTBOX
