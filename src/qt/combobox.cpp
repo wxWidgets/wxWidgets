@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_COMBOBOX
+
 #include "wx/combobox.h"
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
@@ -336,3 +338,5 @@ void wxComboBox::GetSelection(long* from, long* to) const
     // No selection or text control, call base for default behaviour:
     wxTextEntry::GetSelection(from, to);
 }
+
+#endif // wxUSE_COMBOBOX

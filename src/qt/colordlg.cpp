@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_COLOURDLG
+
 #include "wx/qt/private/winevent.h"
 #include "wx/colordlg.h"
 
@@ -55,3 +57,5 @@ QColorDialog *wxColourDialog::GetQColorDialog() const
 {
     return static_cast<QColorDialog *>(m_qtWindow);
 }
+
+#endif // wxUSE_COLOURDLG

@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CHOICE
+
 #include "wx/choice.h"
 #include "wx/qt/private/winevent.h"
 
@@ -264,3 +266,5 @@ QWidget *wxChoice::GetHandle() const
 {
     return m_qtComboBox;
 }
+
+#endif // wxUSE_CHOICE

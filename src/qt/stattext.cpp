@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATTEXT
+
 #include "wx/stattext.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -97,3 +99,5 @@ QWidget *wxStaticText::GetHandle() const
 {
     return m_qtLabel;
 }
+
+#endif // wxUSE_STATTEXT

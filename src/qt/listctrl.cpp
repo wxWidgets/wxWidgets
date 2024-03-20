@@ -8,6 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_LISTCTRL
 
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QTreeView>
@@ -2177,3 +2178,5 @@ QWidget *wxListCtrl::GetHandle() const
 {
     return m_qtTreeWidget;
 }
+
+#endif // wxUSE_LISTCTRL

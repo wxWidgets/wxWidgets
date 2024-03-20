@@ -7243,24 +7243,26 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
             wx_has_graphics=1
         fi
 
-        AC_CACHE_CHECK([if Direct2D is available], wx_cv_lib_direct2d,
-            [
-                dnl same as above, we need to test only for the headers
-                AC_LANG_PUSH(C++)
-                AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-                    [#include <windows.h>
-                     #include <d2d1.h>
-                     #include <dwrite.h>
-                    ],
-                    [
-                        ID2D1Factory* factory = NULL;
-                    ])],
-                    wx_cv_lib_direct2d=yes,
-                    wx_cv_lib_direct2d=no
-                )
-                AC_LANG_POP()
-            ]
-        )
+        if test "$wxUSE_GRAPHICS_DIRECT2D" = "yes"; then
+            AC_CACHE_CHECK([if Direct2D is available], wx_cv_lib_direct2d,
+                [
+                    dnl same as above, we need to test only for the headers
+                    AC_LANG_PUSH(C++)
+                    AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+                        [#include <windows.h>
+                        #include <d2d1.h>
+                        #include <dwrite.h>
+                        ],
+                        [
+                            ID2D1Factory* factory = NULL;
+                        ])],
+                        wx_cv_lib_direct2d=yes,
+                        wx_cv_lib_direct2d=no
+                    )
+                    AC_LANG_POP()
+                ]
+            )
+        fi
         if test "$wx_cv_lib_direct2d" = "yes"; then
             AC_DEFINE(wxUSE_GRAPHICS_DIRECT2D)
         fi

@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FILEDLG
+
 #include "wx/filename.h"
 
 #include "wx/qt/private/converter.h"
@@ -257,3 +259,5 @@ QFileDialog *wxDirDialog::GetQFileDialog() const
 {
     return static_cast<QFileDialog *>(m_qtWindow);
 }
+
+#endif // wxUSE_FILEDLG

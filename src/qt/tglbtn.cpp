@@ -8,6 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_TOGGLEBTN
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -113,3 +114,5 @@ bool wxToggleButton::GetValue() const
 {
     return m_qtPushButton->isChecked();
 }
+
+#endif // wxUSE_TOGGLEBTN

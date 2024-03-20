@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_TREECTRL
+
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
@@ -1445,3 +1447,5 @@ void wxTreeCtrl::OnKeyDown(wxKeyEvent& event)
 
     event.Skip();
 }
+
+#endif // wxUSE_TREECTRL

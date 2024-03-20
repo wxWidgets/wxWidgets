@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATUSBAR
+
 #include "wx/statusbr.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
@@ -211,3 +213,5 @@ QWidget *wxStatusBar::GetHandle() const
 {
     return m_qtStatusBar;
 }
+
+#endif
