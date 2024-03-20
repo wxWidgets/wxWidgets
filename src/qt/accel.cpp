@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_ACCEL
+
 #include "wx/accel.h"
 #include "wx/qt/private/converter.h"
 #include <QtCore/QVariant>
@@ -94,3 +96,5 @@ bool wxAcceleratorTable::IsOk() const
 {
     return (m_refData != nullptr);
 }
+
+#endif // wxUSE_ACCEL
