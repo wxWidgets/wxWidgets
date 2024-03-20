@@ -53,8 +53,6 @@ public:
         return m_atom;
     }
 
-    operator GdkAtom() const { return Get(); }
-
 private:
     const char* const m_name;
     mutable GdkAtom m_atom = nullptr;
@@ -116,18 +114,18 @@ void wxDataFormat::SetType( wxDataFormatId type )
     m_type = type;
 
     if (m_type == wxDF_UNICODETEXT)
-        m_format = g_u8strAtom;
+        m_format = g_u8strAtom.Get();
     else if (m_type == wxDF_TEXT)
-        m_format = g_strAtom;
+        m_format = g_strAtom.Get();
     else
     if (m_type == wxDF_BITMAP)
-        m_format = g_pngAtom;
+        m_format = g_pngAtom.Get();
     else
     if (m_type == wxDF_FILENAME)
-        m_format = g_fileAtom;
+        m_format = g_fileAtom.Get();
     else
     if (m_type == wxDF_HTML)
-        m_format = g_htmlAtom;
+        m_format = g_htmlAtom.Get();
     else
     {
        wxFAIL_MSG( wxT("invalid dataformat") );
@@ -427,7 +425,7 @@ class wxTextURIListDataObject : public wxDataObjectSimple
 {
 public:
     wxTextURIListDataObject(const wxString& url)
-        : wxDataObjectSimple(wxDataFormat(g_fileAtom)),
+        : wxDataObjectSimple(wxDataFormat(g_fileAtom.Get())),
           m_url(url)
     {
     }
