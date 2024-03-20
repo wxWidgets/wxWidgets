@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATLINE
+
 #include "wx/statline.h"
 
 #include <QtWidgets/QFrame>
@@ -47,3 +49,5 @@ QWidget *wxStaticLine::GetHandle() const
 {
     return m_qtFrame;
 }
+
+#endif // wxUSE_STATLINE
