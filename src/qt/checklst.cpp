@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CHECKLISTBOX
+
 #include "wx/checklst.h"
 #include "wx/qt/private/winevent.h"
 
@@ -89,3 +91,4 @@ void wxCheckListBox::Check(unsigned int n, bool check )
     item->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 }
 
+#endif // wxUSE_CHECKLISTBOX
