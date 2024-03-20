@@ -111,6 +111,7 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 }
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_TOOLBAR
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
     if ( toolbar != nullptr )
@@ -135,6 +136,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     }
     wxFrameBase::SetToolBar( toolbar );
 }
+#endif // wxUSE_TOOLBAR
 
 void wxFrame::SetWindowStyleFlag( long style )
 {
