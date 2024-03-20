@@ -3226,23 +3226,8 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     if ( nmcd.uItemState & CDIS_SELECTED )
     {
-        wxSystemColour syscolFg, syscolBg;
-        if ( ::GetFocus() == hwndList )
-        {
-            syscolFg = wxSYS_COLOUR_HIGHLIGHTTEXT;
-            syscolBg = wxSYS_COLOUR_HIGHLIGHT;
-        }
-        else // selected but unfocused
-        {
-            syscolFg = wxSYS_COLOUR_WINDOWTEXT;
-            syscolBg = wxSYS_COLOUR_BTNFACE;
-
-            // don't grey out the icon in this case either
-            nmcd.uItemState &= ~CDIS_SELECTED;
-        }
-
-        pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(syscolFg));
-        pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(syscolBg));
+        pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+        pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     }
     //else: not selected, use normal colours from pLVCD
 
