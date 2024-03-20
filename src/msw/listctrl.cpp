@@ -3032,17 +3032,18 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 namespace
 {
 
-RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
+RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd, bool excludeIconPart = false)
 {
     RECT rc;
     wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_BOUNDS, rc);
 
-    RECT rcIcon;
-    wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
-
-    // exclude the icon part, neither the selection background nor focus rect
-    // should cover it
-    rc.left = rcIcon.right;
+    if ( excludeIconPart )
+    {
+        RECT rcIcon;
+        wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
+        if ( !::IsRectEmpty(&rcIcon) )
+            rc.left = rcIcon.right + 2; // 2 is used in HandleSubItemPrepaint as the gap between image and text
+    }
 
     return rc;
 }
@@ -3223,16 +3224,22 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     {
         nmcd.uItemState &= ~CDIS_FOCUS;
     }
+    
+    HDC hdc = nmcd.hdc;
+    RECT rc;
 
     if ( nmcd.uItemState & CDIS_SELECTED )
     {
         pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
         pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        rc = GetCustomDrawnItemRect(nmcd);
     }
-    //else: not selected, use normal colours from pLVCD
-
-    HDC hdc = nmcd.hdc;
-    RECT rc = GetCustomDrawnItemRect(nmcd);
+    else
+    {
+        // use normal colours from pLVCD
+        // do not draw item background colour under the checkbox/image
+        rc = GetCustomDrawnItemRect(nmcd, true);
+    }
 
     COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
     ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
