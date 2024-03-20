@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_SLIDER
+
 #include "wx/slider.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -292,3 +294,4 @@ QWidget *wxSlider::GetHandle() const
     return m_qtSlider;
 }
 
+#endif // wxUSE_SLIDER
