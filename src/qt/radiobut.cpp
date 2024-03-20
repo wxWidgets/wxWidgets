@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_RADIOBTN
+
 #include "wx/radiobut.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -176,3 +178,5 @@ void wxRadioButton::SetLabel(const wxString& label)
 
     m_qtRadioButton->setText( wxQtConvertString(label) );
 }
+
+#endif // wxUSE_RADIOBTN
