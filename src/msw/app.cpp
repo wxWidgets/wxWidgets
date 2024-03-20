@@ -149,6 +149,7 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // Module for OLE initialization and cleanup
 // ----------------------------------------------------------------------------
 
+#if wxUSE_OLE
 class wxOleInitModule : public wxModule
 {
 public:
@@ -171,6 +172,7 @@ private:
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxOleInitModule, wxModule);
+#endif //wxUSE_OLE
 
 // ===========================================================================
 // wxGUIAppTraits implementation
