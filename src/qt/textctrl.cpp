@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_TEXTCTRL
+
 #include "wx/textctrl.h"
 #include "wx/settings.h"
 #include "wx/qt/private/converter.h"
@@ -914,3 +916,5 @@ QWidget *wxTextCtrl::GetHandle() const
 {
     return (QWidget *) m_qtEdit->GetHandle();
 }
+
+#endif // wxUSE_TEXTCTRL
