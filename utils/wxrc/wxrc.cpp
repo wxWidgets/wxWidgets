@@ -27,8 +27,6 @@
 #include "wx/mimetype.h"
 #include "wx/vector.h"
 
-#include <unordered_set>
-
 class XRCWidgetData
 {
 public:
@@ -50,7 +48,6 @@ class XRCWndClassData
 private:
     wxString m_className;
     wxString m_parentClassName;
-    std::unordered_set<wxString> m_ancestorClassNames;
     ArrayOfXRCWidgetData m_wdata;
 
     void BrowseXmlNode(wxXmlNode* node)
@@ -79,26 +76,6 @@ public:
                     const wxXmlNode* node) :
         m_className(className) , m_parentClassName(parentClassName)
     {
-        if ( className == wxT("wxMenu") )
-        {
-            m_ancestorClassNames.insert(wxT("wxMenu"));
-            m_ancestorClassNames.insert(wxT("wxMenuBar"));
-        }
-        else if ( className == wxT("wxMDIChildFrame") )
-        {
-            m_ancestorClassNames.insert(wxT("wxMDIParentFrame"));
-        }
-        else if( className == wxT("wxMenuBar") ||
-                    className == wxT("wxStatusBar") ||
-                        className == wxT("wxToolBar") )
-        {
-            m_ancestorClassNames.insert(wxT("wxFrame"));
-        }
-        else
-        {
-            m_ancestorClassNames.insert(wxT("wxWindow"));
-        }
-
         BrowseXmlNode(node->GetChildren());
     }
 
@@ -163,34 +140,14 @@ public:
 
         file.Write( wxT("public:\n"));
 
-        if ( m_ancestorClassNames.size() == 1 )
-        {
-            file.Write
-                 (
-                    m_className +
-                    wxT("(") +
-                        *m_ancestorClassNames.begin() +
-                        wxT(" *parent=nullptr){\n") +
-                    wxT("  InitWidgetsFromXRC((wxWindow *)parent);\n")
-                    wxT(" }\n")
-                    wxT("};\n")
-                 );
-        }
-        else
-        {
-            file.Write(m_className + wxT("(){\n") +
-                       wxT("  InitWidgetsFromXRC(nullptr);\n")
-                       wxT(" }\n")
-                       wxT("};\n"));
-
-            for ( const auto& name : m_ancestorClassNames )
-            {
-                file.Write(m_className + wxT("(") + name + wxT(" *parent){\n") +
-                            wxT("  InitWidgetsFromXRC((wxWindow *)parent);\n")
-                            wxT(" }\n")
-                            wxT("};\n"));
-            }
-        }
+        file.Write
+             (
+                m_className +
+                wxT("(wxWindow *parent=nullptr){\n") +
+                wxT("  InitWidgetsFromXRC((wxWindow *)parent);\n")
+                wxT(" }\n")
+                wxT("};\n")
+             );
     }
 };
 WX_DECLARE_OBJARRAY(XRCWndClassData,ArrayOfXRCWndClassData);
