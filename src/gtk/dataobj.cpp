@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/mstream.h"
+#include "wx/scopedarray.h"
 #include "wx/uri.h"
 
 #include "wx/gtk/private.h"
@@ -193,20 +194,16 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
     }
     else
     {
-        wxDataFormat *formats = new wxDataFormat[nFormatCount];
-        GetAllFormats(formats,dir);
+        wxScopedArray<wxDataFormat> formats(nFormatCount);
+        GetAllFormats(formats.get(), dir);
 
-        size_t n;
-        for ( n = 0; n < nFormatCount; n++ )
+        for ( size_t n = 0; n < nFormatCount; n++ )
         {
             if ( formats[n] == format )
-                break;
+                return true;
         }
 
-        delete [] formats;
-
-        // found?
-        return n < nFormatCount;
+        return false;
     }
 }
 
