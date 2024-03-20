@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATBMP
+
 #include "wx/statbmp.h"
 #include "wx/qt/private/winevent.h"
 
@@ -87,3 +89,5 @@ QWidget *wxStaticBitmap::GetHandle() const
 {
     return m_qtLabel;
 }
+
+#endif // wxUSE_STATBMP
