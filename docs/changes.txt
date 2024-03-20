@@ -255,6 +255,7 @@ All:
 
 - Add support for "%F" format specifier to wxDateTime (#24173).
 - Restore possible ABI incompatibility with wx < 3.2.3 in wxString.
+- Set request and response for wxEVT_WEBREQUEST_DATA events (#24416).
 
 All (GUI):
 
