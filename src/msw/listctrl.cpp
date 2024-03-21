@@ -3032,21 +3032,15 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 namespace
 {
 
-RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd, bool excludeIconPart = false)
+RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
 {
     RECT rc;
     wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_BOUNDS, rc);
 
-    if ( excludeIconPart )
-    {
-        RECT rcIcon;
-        wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
-        if ( !::IsRectEmpty(&rcIcon) )
-            rc.left = rcIcon.right + 2; // 2 is used in HandleSubItemPrepaint as the gap between image and text
-    }
-
     return rc;
 }
+
+constexpr int GAP_BETWEEN_CHECKBOX_AND_TEXT = 2;
 
 bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
 {
@@ -3082,7 +3076,7 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
             int cbX, cbY, cbWidth, cbHeight;
 
             ImageList_GetIconSize(himl, &cbWidth, &cbHeight);
-            cbX = listctrl->FromDIP(2);
+            cbX = listctrl->FromDIP(GAP_BETWEEN_CHECKBOX_AND_TEXT);
             cbY = rc.top + ((rc.bottom - rc.top) / 2 - cbHeight / 2);
             // When using style flag ILD_SELECTED or ILD_FOCUS, the checkboxes
             // for selected items are drawn with a blue background, which we want to avoid.
@@ -3225,21 +3219,24 @@ void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     {
         nmcd.uItemState &= ~CDIS_FOCUS;
     }
-    
+
     HDC hdc = nmcd.hdc;
-    RECT rc;
+    RECT rc = GetCustomDrawnItemRect(nmcd);
 
     if ( nmcd.uItemState & CDIS_SELECTED )
     {
         pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
         pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-        rc = GetCustomDrawnItemRect(nmcd);
     }
     else
     {
         // use normal colours from pLVCD
+
         // do not draw item background colour under the checkbox/image
-        rc = GetCustomDrawnItemRect(nmcd, true);
+        RECT rcIcon;
+        wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
+        if ( !::IsRectEmpty(&rcIcon) )
+            rc.left = rcIcon.right + listctrl->FromDIP(GAP_BETWEEN_CHECKBOX_AND_TEXT);
     }
 
     COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
