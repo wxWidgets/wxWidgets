@@ -3111,9 +3111,13 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
     HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
     if ( himl && ImageList_GetImageCount(himl) )
     {
+        int wImage, hImage;
+        ImageList_GetIconSize(himl, &wImage, &hImage);
+
         if ( it.iImage != -1 )
         {
-            ImageList_Draw(himl, it.iImage, hdc, rc.left, rc.top,
+            int imgY = rc.top + ((rc.bottom - rc.top) / 2 - hImage / 2);
+            ImageList_Draw(himl, it.iImage, hdc, rc.left, imgY,
                            nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED
                                                            : ILD_TRANSPARENT);
         }
@@ -3124,9 +3128,6 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
         // images align?)
         if ( it.iImage != -1 || it.iSubItem == 0 )
         {
-            int wImage, hImage;
-            ImageList_GetIconSize(himl, &wImage, &hImage);
-
             rc.left += wImage + 2;
         }
     }
