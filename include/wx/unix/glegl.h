@@ -125,10 +125,10 @@ public:
     // Only called when using Wayland to indicate that we should be redrawn.
     void OnWLFrameCallback();
 
-    wl_compositor *m_wlCompositor;
-    wl_subcompositor *m_wlSubcompositor;
-    wl_callback *m_wlFrameCallbackHandler;
-    wl_egl_window *m_wlEGLWindow;
+    wl_compositor *m_wlCompositor = nullptr;
+    wl_subcompositor *m_wlSubcompositor = nullptr;
+    wl_callback *m_wlFrameCallbackHandler = nullptr;
+    wl_egl_window *m_wlEGLWindow = nullptr;
 
 private:
 
