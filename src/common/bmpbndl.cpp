@@ -248,7 +248,21 @@ double wxBitmapBundleImplSet::GetNextAvailableScale(size_t& i) const
         if ( entry.generated )
             continue;
 
-        return static_cast<double>(entry.bitmap.GetSize().y) / GetDefaultSize().y;
+        const wxBitmap& bitmap = entry.bitmap;
+
+        // Determining the scale is not as simple as just dividing the bitmap
+        // height by the bundle height, because this could give us a scale
+        // different from the one actually used by the bitmap: e.g. the size of
+        // a bundle constructed from a single 16x16 bitmap using 1.5 scale
+        // would be 11x11 and 16/11 != 1.5 that we want.
+        //
+        // So instead compute the ratio of the bitmap size in DIPs to the
+        // bundle size, which uses the same rounding, and then multiply it by
+        // the scale factor of the bitmap to get the real scale.
+        const double ratio =
+            static_cast<double>(bitmap.GetDIPSize().y) / GetDefaultSize().y;
+
+        return ratio * bitmap.GetScaleFactor();
     }
 
     return 0.0;
