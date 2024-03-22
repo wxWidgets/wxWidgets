@@ -580,17 +580,6 @@ void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray, Direction dir) 
 }
 
 // ----------------------------------------------------------------------------
-// wxTextDataObject
-// ----------------------------------------------------------------------------
-
-void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
-                                     wxDataObjectBase::Direction WXUNUSED(dir)) const
-{
-    *formats++ = wxDataFormat(wxDF_UNICODETEXT);
-    *formats = wxDataFormat(wxDF_TEXT);
-}
-
-// ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
 

@@ -179,12 +179,6 @@ See @ref overview_config for the descriptions of all features of this class.
 
 @sampledir{dataview}
 
-@section page_samples_clipboard Clipboard Sample
-
-@sampleabout{wxClipboard}
-
-@sampledir{clipboard}
-
 @section page_samples_debugrpt Debug Reporter Sample
 
 This sample shows how to use wxDebugReport class to
