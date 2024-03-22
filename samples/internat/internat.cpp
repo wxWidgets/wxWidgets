@@ -387,6 +387,18 @@ MyFrame::MyFrame()
                       ),
                   wxSizerFlags().Center().Border());
 
+    topSizer->Add(new wxStaticText
+                      (
+                        panel,
+                        wxID_ANY,
+                        wxString::Format
+                        (
+                          _("Preferred UI languages: [%s]"),
+                          wxJoin(wxUILocale::GetPreferredUILanguages(), ',')
+                        )
+                      ),
+                  wxSizerFlags().Center().Border());
+
     // create some controls affected by the locale
 
     // this demonstrates RTL layout mirroring for Arabic locales and using

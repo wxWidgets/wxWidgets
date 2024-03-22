@@ -344,6 +344,25 @@ TEST_CASE("wxTranslations::GetBestTranslation", "[translations]")
     }
 }
 
+// This test can be used to check how GetBestTranslation() and
+// GetAvailableTranslations() work with the given preferred languages: set
+// WXLANGUAGE environment variable to the colon-separated list of preferred
+// languages to test before running it.
+TEST_CASE("wxTranslations::ShowAvailable", "[.]")
+{
+    wxFileTranslationsLoader::AddCatalogLookupPathPrefix("./intl");
+
+    const wxString domain("internat");
+
+    wxTranslations trans;
+
+    WARN
+    (
+        "Available: [" << wxJoin(trans.GetAvailableTranslations(domain), ',') << "]\n"
+        "Best:      [" << trans.GetBestTranslation(domain) << "]"
+    );
+}
+
 TEST_CASE("wxLocale::Default", "[locale]")
 {
     const int langDef = wxUILocale::GetSystemLanguage();
@@ -476,6 +495,11 @@ static void CheckTag(const wxString& tag)
     CHECK( wxLocaleIdent::FromTag(tag).GetTag() == tag );
 }
 
+static wxString TagToPOSIX(const char* tag)
+{
+    return wxLocaleIdent::FromTag(tag).GetTag(wxLOCALE_TAGTYPE_POSIX);
+}
+
 TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
 {
     CheckTag("");
@@ -485,6 +509,8 @@ TEST_CASE("wxLocaleIdent::FromTag", "[uilocale][localeident]")
     CheckTag("English");
     CheckTag("English_United States");
     CheckTag("English_United States.utf8");
+
+    CHECK( TagToPOSIX("zh-Hans-CN") == "zh_CN" );
 }
 
 // Yet another helper for the test below.
