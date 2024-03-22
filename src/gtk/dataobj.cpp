@@ -220,8 +220,8 @@ void
 wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                 wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
-    *formats++ = GetPreferredFormat();
-    *formats = g_strAtom;
+    *formats++ = wxDataFormat(wxDF_UNICODETEXT);
+    *formats = wxDataFormat(wxDF_TEXT);
 }
 
 #endif // wxUSE_UNICODE
