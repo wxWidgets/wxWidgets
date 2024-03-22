@@ -1124,8 +1124,8 @@ wxSharedPtr<wxWebViewHistoryItem>
 wxWebViewWebKit::CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem)
 {
     wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
-                          webkit_back_forward_list_item_get_uri(gtkitem),
-                          webkit_back_forward_list_item_get_title(gtkitem));
+                          wxString::FromUTF8(webkit_back_forward_list_item_get_uri(gtkitem)),
+                          wxString::FromUTF8(webkit_back_forward_list_item_get_title(gtkitem)));
     wxitem->m_histItem = gtkitem;
     return wxSharedPtr<wxWebViewHistoryItem>(wxitem);
 }
