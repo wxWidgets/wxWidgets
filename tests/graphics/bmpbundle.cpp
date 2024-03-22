@@ -52,11 +52,19 @@ TEST_CASE("BitmapBundle::FromBitmaps", "[bmpbundle]")
 
 TEST_CASE("BitmapBundle::GetBitmap", "[bmpbundle]")
 {
-    const wxBitmapBundle b = wxBitmapBundle::FromBitmap(wxBitmap(16, 16));
+    wxBitmapBundle b = wxBitmapBundle::FromBitmap(wxBitmap(16, 16));
 
     CHECK( b.GetBitmap(wxSize(16, 16)).GetSize() == wxSize(16, 16) );
     CHECK( b.GetBitmap(wxSize(32, 32)).GetSize() == wxSize(32, 32) );
     CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
+
+    // Test for the special case when the requested size uses the same height
+    // but not the same width.
+    wxBitmap nonSquare(wxSize(51, 41));
+    b = wxBitmapBundle::FromBitmap(nonSquare);
+
+    const wxSize scaledSize(52, 41);
+    CHECK( b.GetBitmap(scaledSize).GetSize() == scaledSize );
 }
 
 // Helper functions for the test below.

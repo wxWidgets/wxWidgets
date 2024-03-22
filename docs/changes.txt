@@ -277,6 +277,7 @@ All (GUI):
 - Reduce flicker when closing wxAuiNotebook tab (Eran Ifrah, #24372).
 - Don't include Ctrl+I/Ctrl+H in "TAB"/"cut" key categories (#24254).
 - Make text in wxGenericMessageDialog more readable (Jeff Young, #24412).
+- Fix handling non-square bitmaps in wxBitmapBundle (#24433, #24434).
 
 wxGTK:
 
