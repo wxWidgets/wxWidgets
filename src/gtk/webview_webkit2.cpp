@@ -1119,6 +1119,17 @@ void wxWebViewWebKit::EnableHistory(bool)
     // In WebKit2GTK+, history can't be disabled so do nothing here.
 }
 
+/* static */
+wxSharedPtr<wxWebViewHistoryItem>
+wxWebViewWebKit::CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem)
+{
+    wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
+                          webkit_back_forward_list_item_get_uri(gtkitem),
+                          webkit_back_forward_list_item_get_title(gtkitem));
+    wxitem->m_histItem = gtkitem;
+    return wxSharedPtr<wxWebViewHistoryItem>(wxitem);
+}
+
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
 {
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
@@ -1129,12 +1140,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
-        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
-                              webkit_back_forward_list_item_get_uri(gtkitem),
-                              webkit_back_forward_list_item_get_title(gtkitem));
-        wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
-        backhist.push_back(item);
+        backhist.push_back(CreateHistoryItemFromWKItem(gtkitem));
     }
     return backhist;
 }
@@ -1148,12 +1154,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory(
     for(guint i = 0; i < g_list_length(list); i++)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
-        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
-                              webkit_back_forward_list_item_get_uri(gtkitem),
-                              webkit_back_forward_list_item_get_title(gtkitem));
-        wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
-        forwardhist.push_back(item);
+        forwardhist.push_back(CreateHistoryItemFromWKItem(gtkitem));
     }
     return forwardhist;
 }

@@ -22,6 +22,7 @@
 #endif
 
 typedef struct _WebKitWebView WebKitWebView;
+typedef struct _WebKitBackForwardListItem WebKitBackForwardListItem;
 
 //-----------------------------------------------------------------------------
 // wxWebViewWebKit
@@ -197,6 +198,9 @@ private:
     GDBusServer *m_dbusServer;
     GDBusProxy *m_extension;
     wxWebViewConfiguration m_config;
+
+    static wxSharedPtr<wxWebViewHistoryItem>
+    CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem);
 #endif
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
