@@ -312,6 +312,14 @@ TEST_CASE("BitmapBundle::GetPreferredSize", "[bmpbundle]")
     CHECK_THAT( BitmapAtScale(b, 4.25), SameAs(4.0, 2.0) );
     CHECK_THAT( BitmapAtScale(b, 4.50), SameAs(4.5, 1.5) );
     CHECK_THAT( BitmapAtScale(b, 5   ), SameAs(5.0, 1.0) );
+
+
+    // Another check to detect that the scale is computed correctly even when
+    // rounding is involved.
+    wxBitmap nonSquare(wxSize(51, 41));
+    nonSquare.SetScaleFactor(1.5);
+    b = wxBitmapBundle::FromBitmap(nonSquare);
+    CHECK( b.GetPreferredBitmapSizeAtScale(1.5) == nonSquare.GetSize() );
 }
 
 #ifdef wxHAS_DPI_INDEPENDENT_PIXELS
