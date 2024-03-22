@@ -1125,7 +1125,14 @@ wxWebViewWebKit::CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem)
 {
     wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
                           wxString::FromUTF8(webkit_back_forward_list_item_get_uri(gtkitem)),
-                          wxString::FromUTF8(webkit_back_forward_list_item_get_title(gtkitem)));
+                          // Since WebKit 2.43.4 titles are not stored any more
+                          // and the function is deprecated, so don't use it.
+#if !WEBKIT_CHECK_VERSION(2, 43, 4)
+                          wxString::FromUTF8(webkit_back_forward_list_item_get_title(gtkitem))
+#else
+                          wxString()
+#endif
+                          );
     wxitem->m_histItem = gtkitem;
     return wxSharedPtr<wxWebViewHistoryItem>(wxitem);
 }
