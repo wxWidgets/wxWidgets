@@ -169,9 +169,13 @@ private:
     {
         bool operator()(const Entry& entry1, const Entry& entry2) const
         {
-            // We could compare the bitmaps areas too, but they're supposed to
-            // all use different sizes anyhow, so keep things simple.
-            return entry1.bitmap.GetHeight() < entry2.bitmap.GetHeight();
+            const int h1 = entry1.bitmap.GetHeight();
+            const int h2 = entry2.bitmap.GetHeight();
+
+            // Lexicographical comparison of the bitmap sizes.
+            return h1 < h2 ||
+                    (h1 == h2 &&
+                     entry1.bitmap.GetWidth() < entry2.bitmap.GetWidth());
         }
     };
 
@@ -286,8 +290,20 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
         const wxSize sizeThis = entry.bitmap.GetSize();
         if ( sizeThis.y == size.y )
         {
-            // Exact match, just use it.
-            return entry.bitmap;
+            if ( sizeThis.x == size.x )
+            {
+                // Exact match, just use it.
+                return entry.bitmap;
+            }
+
+            if ( sizeThis.x < size.x )
+            {
+                lastSmaller = i;
+                continue;
+            }
+
+            // This bitmap is wider than the requested size, we'll rescale it
+            // below.
         }
 
         if ( sizeThis.y < size.y )
@@ -298,7 +314,7 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
             continue;
         }
 
-        if ( sizeThis.y > size.y && !entry.generated )
+        if ( !entry.generated )
         {
             // We know that we don't have any exact match and we've found the
             // next bigger bitmap, so rescale it to the desired size.
