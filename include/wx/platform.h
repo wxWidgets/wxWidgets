@@ -464,7 +464,7 @@
 #        ifndef MAC_OS_VERSION_12_0
 #           define MAC_OS_VERSION_12_0 120000
 #        endif
-#        ifndef MAC_OS_VERSION_11_0
+#        ifndef MAC_OS_VERSION_13_0
 #           define MAC_OS_VERSION_13_0 130000
 #        endif
 #        ifndef MAC_OS_VERSION_14_0
