@@ -3067,7 +3067,7 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
         rc.right = rc2.left;
     }
 
-    if ( listctrl->HasCheckBoxes() )
+    if ( !col && listctrl->HasCheckBoxes() )
     {
         const HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_STATE);
 
