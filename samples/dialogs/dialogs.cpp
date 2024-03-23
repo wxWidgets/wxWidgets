@@ -2782,7 +2782,8 @@ private:
 
     void OnNotificationDismissed(wxCommandEvent& event)
     {
-        ShowStatus("Notification was dismissed");
+        // See wxNotificationMessage::DismissalReason for reason explanations.
+        ShowStatus(wxString::Format("Notification was dismissed (reason: %d)", event.GetInt()));
 
         Raise();
 

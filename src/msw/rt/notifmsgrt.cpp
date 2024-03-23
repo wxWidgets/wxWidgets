@@ -432,11 +432,29 @@ HRESULT wxToastEventHandler::Invoke(
 
 HRESULT wxToastEventHandler::Invoke(
     IToastNotification *WXUNUSED(sender),
-    IToastDismissedEventArgs *WXUNUSED(e))
+    IToastDismissedEventArgs *e)
 {
     if ( m_impl )
     {
         wxCommandEvent evt(wxEVT_NOTIFICATION_MESSAGE_DISMISSED);
+        ABI::Windows::UI::Notifications::ToastDismissalReason nativeReason;
+        auto reason = wxNotificationMessage::DismissalReason::Unknown;
+        if ( SUCCEEDED(e->get_Reason(&nativeReason)) )
+        {
+            switch ( nativeReason )
+            {
+                case ABI::Windows::UI::Notifications::ToastDismissalReason_UserCanceled:
+                    reason = wxNotificationMessage::DismissalReason::ByUser;
+                    break;
+                case ABI::Windows::UI::Notifications::ToastDismissalReason_ApplicationHidden:
+                    reason = wxNotificationMessage::DismissalReason::ByApp;
+                    break;
+                case ABI::Windows::UI::Notifications::ToastDismissalReason_TimedOut:
+                    reason = wxNotificationMessage::DismissalReason::TimedOut;
+                    break;
+            }
+        }
+        evt.SetInt(static_cast<int>(reason));
         m_impl->ProcessNotificationEvent(evt);
     }
 
