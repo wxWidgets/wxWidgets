@@ -46,6 +46,13 @@ wxSecretValue::wxSecretValue(const wxSecretValue& other)
         m_impl->IncRef();
 }
 
+/* static */
+wxSecretValueImpl*
+wxSecretValue::NewImpl(size_t size, const void *data)
+{
+    return NewImpl(size, data, "text/plain");
+}
+
 wxSecretValue& wxSecretValue::operator=(const wxSecretValue& other)
 {
     // This code is written to be safe in case of self-assignment.

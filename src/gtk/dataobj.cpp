@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/mstream.h"
+#include "wx/scopedarray.h"
 #include "wx/uri.h"
 
 #include "wx/gtk/private.h"
@@ -41,7 +42,7 @@ public:
     // Name is literal, so we don't copy it but just store the pointer.
     wxGdkAtom(const char* name) : m_name(name), m_atom(NULL) {}
 
-    operator GdkAtom()
+    GdkAtom Get() const
     {
         if ( !m_atom )
             m_atom = gdk_atom_intern(m_name, FALSE);
@@ -51,21 +52,34 @@ public:
 
 private:
     const char* const m_name;
-    GdkAtom m_atom;
-
-    wxDECLARE_NO_COPY_CLASS(wxGdkAtom);
+    mutable GdkAtom m_atom;
 };
 
-wxGdkAtom g_textAtom    ("UTF8_STRING");
-wxGdkAtom g_altTextAtom ("STRING");
+inline bool operator==(wxDataFormat format, const wxGdkAtom& wxatom)
+{
+    return format.GetFormatId() == wxatom.Get();
+}
+
+inline bool operator==(GdkAtom atom, const wxGdkAtom& wxatom)
+{
+    return atom == wxatom.Get();
+}
+
+// Text is special as it can be represented by several different atoms: we
+// accept all of them when pasting and provide all of them when copying.
+//
+// Note that there are also other atoms for text, e.g. "COMPOUND_TEXT" and
+// "TEXT", but it doesn't seem necessary to support them, so we don't.
+wxGdkAtom g_u8strAtom   ("UTF8_STRING");
+wxGdkAtom g_strAtom     ("STRING");
+wxGdkAtom g_u8textAtom  ("text/plain;charset=utf-8");
+wxGdkAtom g_textAtom    ("text/plain");
+
 wxGdkAtom g_pngAtom     ("image/png");
 wxGdkAtom g_fileAtom    ("text/uri-list");
 wxGdkAtom g_htmlAtom    ("text/html");
 
 } // anonymous namespace
-
-// This is used in src/gtk/clipbrd.cpp
-extern GdkAtom wxGetAltTextAtom() { return g_altTextAtom; }
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -98,25 +112,25 @@ void wxDataFormat::SetType( wxDataFormatId type )
 
 #if wxUSE_UNICODE
     if (m_type == wxDF_UNICODETEXT)
-        m_format = g_textAtom;
+        m_format = g_u8strAtom.Get();
     else if (m_type == wxDF_TEXT)
-        m_format = g_altTextAtom;
+        m_format = g_strAtom.Get();
 #else // !wxUSE_UNICODE
-    // notice that we don't map wxDF_UNICODETEXT to g_textAtom here, this
+    // notice that we don't map wxDF_UNICODETEXT to g_u8strAtom here, this
     // would lead the code elsewhere to treat data objects with this format as
     // containing UTF-8 data which is not true
     if (m_type == wxDF_TEXT)
-        m_format = g_textAtom;
+        m_format = g_u8strAtom.Get();
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
     else
     if (m_type == wxDF_BITMAP)
-        m_format = g_pngAtom;
+        m_format = g_pngAtom.Get();
     else
     if (m_type == wxDF_FILENAME)
-        m_format = g_fileAtom;
+        m_format = g_fileAtom.Get();
     else
     if (m_type == wxDF_HTML)
-        m_format = g_htmlAtom;
+        m_format = g_htmlAtom.Get();
     else
     {
        wxFAIL_MSG( wxT("invalid dataformat") );
@@ -138,14 +152,14 @@ void wxDataFormat::SetId( NativeFormat format )
 {
     m_format = format;
 
-    if (m_format == g_textAtom)
+    if (m_format == g_u8strAtom || m_format == g_u8textAtom)
 #if wxUSE_UNICODE
         m_type = wxDF_UNICODETEXT;
 #else
         m_type = wxDF_TEXT;
 #endif
     else
-    if (m_format == g_altTextAtom)
+    if (m_format == g_strAtom || m_format == g_textAtom)
         m_type = wxDF_TEXT;
     else
     if (m_format == g_pngAtom)
@@ -164,6 +178,23 @@ void wxDataFormat::SetId( const wxString& id )
 {
     m_type = wxDF_PRIVATE;
     m_format = gdk_atom_intern( id.ToAscii(), FALSE );
+}
+
+
+// This is also used by wxClipboard to check if the given atom refer to the
+// same format, so make it extern.
+extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2)
+{
+    if (atom1 == atom2)
+        return true;
+
+    if (atom1 == g_u8strAtom && atom2 == g_u8textAtom)
+        return true;
+
+    if (atom1 == g_strAtom && atom2 == g_textAtom)
+        return true;
+
+    return false;
 }
 
 void wxDataFormat::PrepareFormats()
@@ -193,20 +224,16 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
     }
     else
     {
-        wxDataFormat *formats = new wxDataFormat[nFormatCount];
-        GetAllFormats(formats,dir);
+        wxScopedArray<wxDataFormat> formats(nFormatCount);
+        GetAllFormats(formats.get(), dir);
 
-        size_t n;
-        for ( n = 0; n < nFormatCount; n++ )
+        for ( size_t n = 0; n < nFormatCount; n++ )
         {
-            if ( formats[n] == format )
-                break;
+            if ( wxGTKIsSameFormat(formats[n], format) )
+                return true;
         }
 
-        delete [] formats;
-
-        // found?
-        return n < nFormatCount;
+        return false;
     }
 }
 
@@ -220,8 +247,8 @@ void
 wxTextDataObject::GetAllFormats(wxDataFormat *formats,
                                 wxDataObjectBase::Direction WXUNUSED(dir)) const
 {
-    *formats++ = GetPreferredFormat();
-    *formats = g_altTextAtom;
+    *formats++ = wxDataFormat(wxDF_UNICODETEXT);
+    *formats = wxDataFormat(wxDF_TEXT);
 }
 
 #endif // wxUSE_UNICODE
@@ -428,7 +455,7 @@ class wxTextURIListDataObject : public wxDataObjectSimple
 {
 public:
     wxTextURIListDataObject(const wxString& url)
-        : wxDataObjectSimple(wxDataFormat(g_fileAtom)),
+        : wxDataObjectSimple(wxDataFormat(g_fileAtom.Get())),
           m_url(url)
     {
     }

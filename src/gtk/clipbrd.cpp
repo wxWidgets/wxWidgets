@@ -34,6 +34,7 @@
 #include "wx/evtloop.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/backend.h"
 
 typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 
@@ -44,10 +45,8 @@ typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 static GdkAtom  g_targetsAtom     = 0;
 static GdkAtom  g_timestampAtom   = 0;
 
-#if wxUSE_UNICODE
 // This is defined in src/gtk/dataobj.cpp.
-extern GdkAtom wxGetAltTextAtom();
-#endif
+extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2);
 
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
@@ -175,9 +174,10 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
 bool wxClipboard::GTKOnTargetReceived(const wxDataFormat& format)
 {
-    if ( format != m_targetRequested )
+    if ( !wxGTKIsSameFormat(m_targetRequested, format) )
         return false;
 
+    m_targetRequested = format;
     m_formatSupported = true;
     return true;
 }
@@ -556,6 +556,11 @@ bool wxClipboard::DoIsSupported(const wxDataFormat& format)
     wxLogTrace(TRACE_CLIPBOARD, wxT("Checking if format %s is available"),
                format.GetId());
 
+    return DoGetTarget(format) != 0;
+}
+
+GdkAtom wxClipboard::DoGetTarget(const wxDataFormat& format)
+{
     // these variables will be used by our GTKOnTargetReceived()
     m_targetRequested = format;
     m_formatSupported = false;
@@ -571,7 +576,11 @@ bool wxClipboard::DoIsSupported(const wxDataFormat& format)
                                (guint32) GDK_CURRENT_TIME );
     }
 
-    return m_formatSupported;
+    if ( !m_formatSupported )
+        return 0;
+
+    // This could have been changed by GTKOnTargetReceived().
+    return m_targetRequested;
 }
 
 // ----------------------------------------------------------------------------
@@ -667,9 +676,35 @@ bool wxClipboard::AddData( wxDataObject *data )
     // for explanation
     AddSupportedTarget(g_timestampAtom);
 
+#ifdef __WXGTK3__
+    bool addedUTF8Text = false;
+#endif // __WXGTK3__
+
     for ( size_t i = 0; i < count; i++ )
     {
         const wxDataFormat format(formats[i]);
+
+#ifdef __WXGTK3__
+        if ( wxGTKImpl::IsWayland(gtk_widget_get_window(m_clipboardWidget)) )
+        {
+            if ( format == wxDF_UNICODETEXT )
+            {
+                addedUTF8Text = true;
+            }
+            else if ( format == wxDF_TEXT )
+            {
+                if ( addedUTF8Text )
+                {
+                    // We already added UTF-8 text format, adding plain text
+                    // format is not only unnecessary but seems to be actually
+                    // harmful under Wayland because it somehow _replaces_
+                    // UTF8_STRING, even though it shouldn't happen according
+                    // to the documentation.
+                    continue;
+                }
+            }
+        }
+#endif // __WXGTK3__
 
         wxLogTrace(TRACE_CLIPBOARD, wxT("Adding support for %s"),
                    format.GetId());
@@ -707,11 +742,9 @@ bool wxClipboard::IsSupported( const wxDataFormat& format )
         return true;
 
 #if wxUSE_UNICODE
-    if ( format == wxDF_UNICODETEXT )
-    {
-        // also with plain STRING format
-        return DoIsSupported(wxGetAltTextAtom());
-    }
+    // Check also plain STRING format for compatibility.
+    if ( format == wxDF_UNICODETEXT && DoIsSupported(wxDF_TEXT) )
+        return true;
 #endif // wxUSE_UNICODE
 
     return false;
@@ -731,12 +764,13 @@ bool wxClipboard::GetData( wxDataObject& data )
     {
         const wxDataFormat format(formats[i]);
 
-        // is this format supported by clipboard ?
-        if ( !DoIsSupported(format) )
+        // Get the atom corresponding to this format.
+        const GdkAtom target = DoGetTarget(format);
+        if ( !target )
             continue;
 
         wxLogTrace(TRACE_CLIPBOARD, wxT("Requesting format %s"),
-                   format.GetId());
+                   wxDataFormat(target).GetId());
 
         // these variables will be used by our GTKOnSelectionReceived()
         m_receivedData = &data;
@@ -747,7 +781,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 
             gtk_selection_convert(m_clipboardWidget,
                                   GTKGetClipboardAtom(),
-                                  format,
+                                  target,
                                   (guint32) GDK_CURRENT_TIME );
         } // wait until we get the results
 

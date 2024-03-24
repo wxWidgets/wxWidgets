@@ -19,6 +19,8 @@
 
 #include "wx/private/localeset.h"
 
+#include <errno.h>
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -172,6 +174,16 @@ void StringTestCase::Format()
         CPPUNIT_ASSERT_EQUAL( len, wxString::Format(wxT("%s"), s.c_str()).length());
     }
 
+    int errnoWas = errno;
+    // wxString::Format() should not modify errno
+    errno = 1234;
+    wxString::Format("abc %d %d", 1, 1);
+    CPPUNIT_ASSERT_EQUAL
+    (
+        1234,
+        errno
+    );
+    errno = errnoWas;
 
     // Positional parameters tests:
     CPPUNIT_ASSERT_EQUAL

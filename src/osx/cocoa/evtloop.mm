@@ -522,6 +522,7 @@ void wxGUIEventLoop::EndModalSession()
         m_modalSession = nil;
         if ( m_dummyWindow )
         {
+            [m_dummyWindow close];
             [m_dummyWindow release];
             m_dummyWindow = nil;
         }
@@ -546,8 +547,11 @@ void wxGUIEventLoop::EndModalSession()
         
         if ( m_dummyWindow != element.dummyWindow )
         {
-            if ( element.dummyWindow )
-                [element.dummyWindow release];
+            if ( m_dummyWindow )
+            {
+                [m_dummyWindow close];
+                [m_dummyWindow release];
+            }
 
             m_dummyWindow = element.dummyWindow;
         }

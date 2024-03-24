@@ -1347,10 +1347,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         bool processed = DeleteSelectedContent(& newPos);
 
-        int deletions = 0;
-        if (processed)
-            deletions ++;
-
         // Submit range in character positions, which are greater than caret positions,
         if (newPos < GetFocusObject()->GetOwnRange().GetEnd()+1)
         {
@@ -1363,7 +1359,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                     {
                         GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                        deletions ++;
                     }
                     processed = true;
                 }
@@ -1375,7 +1370,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                 {
                     GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                    deletions ++;
                 }
             }
         }
@@ -1588,10 +1582,6 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
 
         bool processed = DeleteSelectedContent(& newPos);
 
-        int deletions = 0;
-        if (processed)
-            deletions ++;
-
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
         if (newPos > -1)
@@ -1605,7 +1595,6 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
                     if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                     {
                         GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                        deletions ++;
                     }
                     processed = true;
                 }
@@ -1617,7 +1606,6 @@ bool wxRichTextCtrl::ProcessBackKey(wxKeyEvent& event, int flags)
                 if (CanDeleteRange(* GetFocusObject(), range.FromInternal()))
                 {
                     GetFocusObject()->DeleteRangeWithUndo(range, this, & GetBuffer());
-                    deletions ++;
                 }
             }
         }

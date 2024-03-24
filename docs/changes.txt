@@ -255,6 +255,7 @@ All:
 
 - Add support for "%F" format specifier to wxDateTime (#24173).
 - Restore possible ABI incompatibility with wx < 3.2.3 in wxString.
+- Set request and response for wxEVT_WEBREQUEST_DATA events (#24416).
 
 All (GUI):
 
@@ -273,9 +274,14 @@ All (GUI):
 - Fix label display after editing it in generic wxListCtrl (taler21, #24311).
 - Improve multiple selection UI in generic wxListCtrl (taler21, #24332).
 - Fix item deselection in multi-selection generic wxListCtrl (taler21, #24312).
+- Reduce flicker when closing wxAuiNotebook tab (Eran Ifrah, #24372).
+- Don't include Ctrl+I/Ctrl+H in "TAB"/"cut" key categories (#24254).
+- Make text in wxGenericMessageDialog more readable (Jeff Young, #24412).
+- Fix handling non-square bitmaps in wxBitmapBundle (#24433, #24434).
 
 wxGTK:
 
+- Fix copying/pasting text under Wayland (#24391).
 - Fix alpha in bitmaps created from SVG (Tim Eliseo, #24064).
 - Improve desktop environment detection, notably under Wayland (#24050).
 - Fix wxSystemSettings::GetMetric() scrollbar width calculation for GTK3 (#24057).
@@ -288,6 +294,8 @@ wxGTK:
 - Generic wxDataViewCtrl drag hint fixes (#24084).
 - Ensure wxListBox best size is at least the minimum required by GTK3.
 - Support setting thickness when creating wxGauge with GTK >= 3.20 (#24107).
+- Fix handling binary data in wxSecretStore (Martin Corino, #24351).
+- Make GTKSuppressDiagnostics(), broken since 3.2.1, work again (#24432).
 
 wxMSW:
 
@@ -299,11 +307,15 @@ wxMSW:
 - Fix using "Alt" when wxGrid has focus (Dietmar Schwertberger, #24247).
 - Fix wxButton::GetDefaultSize() in high DPI under MSW (#24283).
 - Improve native MSW dialog DPI awareness (Maarten Bent, #24196).
+- Fix bug with not showing some wxStaticText labels (#24365).
 
 wxOSX:
 
 - Fix clipping when using Sonoma/Xcode 15 SDK (#23916, #24054, #24067, #24073).
 - Restore activation for non-bundled applications (#24056, #24062).
+- Fix wrong tooltips for cells with custom renderers in wxDataViewCtrl (#24370).
+- Fix handling of nested modal dialogs (WakA, #24418).
+- Fix translations when using zh-Hans-CN locale (#24396).
 
 wxQt:
 

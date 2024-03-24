@@ -25,6 +25,13 @@
 #include "LexerModule.h"
 /***************************************/
 
+#if defined(__clang__)
+#if __has_warning("-Wunused-but-set-variable")
+// Disable warning for numNonBlank
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+#endif
+#endif
+
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
 #endif
