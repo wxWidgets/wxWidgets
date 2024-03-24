@@ -280,6 +280,11 @@ void wxOverlayImpl::Clear(wxDC* dc)
 
 void wxOverlayImpl::Reset()
 {
+    // Do nothing if Init() was never called: it's still valid to call Reset()
+    // in this case, but we can't, and don't need to, do anything in it.
+    if ( !m_overlayWindow )
+        return;
+
     if ( m_window )
     {
         // erase whatever was drawn on the overlay the last time
@@ -296,12 +301,9 @@ void wxOverlayImpl::Reset()
     }
 
     // todo : don't dispose, only hide and reposition on next run
-    if (m_overlayWindow)
-    {
-        [m_overlayParentWindow removeChildWindow:m_overlayWindow];
-        [m_overlayWindow release];
-        m_overlayWindow = nullptr ;
-    }
+    [m_overlayParentWindow removeChildWindow:m_overlayWindow];
+    [m_overlayWindow release];
+    m_overlayWindow = nullptr ;
 }
 
 #endif // wxHAS_NATIVE_OVERLAY
