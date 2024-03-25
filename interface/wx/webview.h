@@ -162,6 +162,25 @@ enum wxWebViewIE_EmulationLevel
 };
 
 /**
+    Types of browsing data that can be cleared.
+
+    @since 3.3.0
+*/
+enum wxWebViewBrowsingDataTypes
+{
+    /** All stored and session cookies */
+    wxWEBVIEW_BROWSING_DATA_COOKIES = 1,
+    /** Cached data from disk and memory */
+    wxWEBVIEW_BROWSING_DATA_CACHE = 2,
+    /** All DOM Storage: File Systems, Indexed DB, Local Storage, Web SQL, Cache Storage */
+    wxWEBVIEW_BROWSING_DATA_DOM_STORAGE = 4,
+    /** Other browsing data like history, settings, auto fill, passwords, etc. */
+    wxWEBVIEW_BROWSING_DATA_OTHER = 8,
+    /** All browsing data */
+    wxWEBVIEW_BROWSING_DATA_ALL = 16
+};
+
+/**
     A class describing the window information for a new child window.
 
     An object of this class can be obtained using wxWebViewEvent::GetTargetWindowFeatures()
@@ -978,6 +997,10 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
         only available in wxWidgets 3.1.6 or later. For usage details see
         RunScriptAsync().
+    @event{wxEVT_WEBVIEW_BROWSING_DATA_CLEARED(id, func)}
+        Process a @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event
+        only available in wxWidgets 3.3.0 or later. For usage details see
+        ClearBrowsingData().
     @endEventTable
 
     @since 2.9.3
@@ -1272,6 +1295,30 @@ public:
             e.g. because this is not supported by the currently used backend.
      */
     virtual bool SetProxy(const wxString& proxy);
+
+    /**
+        Clears the browsing data of the web view.
+
+        This function clears the browsing data of the web view, such as cookies,
+        cache, history, etc. The exact data that is cleared depends on the
+        backend used.
+
+        This operation is asynchronous and may take some time to complete. When finished
+        @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event is generated.
+
+        @param types The types of browsing data to clear. By default, it clears all types of browsing data.
+        @param since The time since when the browsing data should be cleared. By default, it clears all browsing data.
+        @return @true if the specified browsing data can be cleared by the backend. Completion will be notified by a
+            @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event, @false otherwise.
+
+        @since 3.3.0
+
+        @note This is only implemented on the Edge, WebKit2GTK+ and macOS backends.
+
+        @see wxWebViewBrowsingDataTypes
+     */
+    virtual bool ClearBrowsingData(int types = wxWEBVIEW_BROWSING_DATA_ALL,
+        wxDateTime since = wxDateTime((time_t)0) );
 
     /**
         @name Scripting
@@ -1897,6 +1944,10 @@ public:
         Process a @c wxEVT_WEBVIEW_SCRIPT_RESULT event
         only available in wxWidgets 3.1.6 or later. For usage details see
         wxWebView::RunScriptAsync().
+    @event{wxEVT_WEBVIEW_BROWSING_DATA_CLEARED(id, func)}
+        Process a @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED event
+        only available in wxWidgets 3.3.0 or later. For usage details see
+        wxWebView::ClearBrowsingData().
     @endEventTable
 
     @since 2.9.3
@@ -1954,8 +2005,9 @@ public:
     wxWebViewWindowFeatures* GetTargetWindowFeatures() const;
 
     /**
-        Returns true the script execution failed. Only valid for events of type
-        @c wxEVT_WEBVIEW_SCRIPT_RESULT
+        Returns @true if the operation failed.
+        Only valid for events of type
+        @c wxEVT_WEBVIEW_SCRIPT_RESULT and @c wxEVT_WEBVIEW_BROWSING_DATA_CLEARED
 
         @since 3.1.6
     */
