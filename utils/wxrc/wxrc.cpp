@@ -583,11 +583,15 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
 
 
 
-static wxString FileToCppArray(wxString filename, int num)
+static wxString FileToCppArray(wxString filename, unsigned num, unsigned numTotal)
 {
+    // Some of the `wxString` objects (e.g. `tmp`) are defined at the beginning of the function
+    // (before the actual use, and with larger scope than strictly needed)
+    // in order to avoid repeated allocations and deallocations.
     wxString output;
     wxString tmp;
     wxString snum;
+
     wxFFile file(filename, wxT("rb"));
     wxFileOffset offset = file.Length();
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
@@ -627,8 +631,15 @@ static wxString FileToCppArray(wxString filename, int num)
     wxASSERT_MSG( static_cast<wxFileOffset>(lng) == offset,
                   wxT("Huge file not supported") );
 
+    tmp.Printf(wxT("// Temporary file %4Xh of %4Xh (%6.2f%%) (of size %8Xh) '%s':\n"),
+               num, numTotal, num * 100.0 / numTotal, lng, filename);
+    output += tmp;
+
     snum.Printf(wxT("%u"), num);
-    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %u;\n"), lng);
+
+    tmp.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %u;\n"), lng);
+    output += tmp;
+
     output += wxT("static unsigned char xml_res_file_") + snum + wxT("[] = {\n");
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
@@ -658,7 +669,6 @@ static wxString FileToCppArray(wxString filename, int num)
 void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 {
     wxFFile file(parOutput, wxT("wt"));
-    unsigned i;
 
     if (flagVerbose)
         wxPrintf(wxT("creating C++ source file %s...\n"), parOutput);
@@ -684,9 +694,9 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "#endif\n"
 "\n");
 
-    for (i = 0; i < flist.GetCount(); i++)
+    for (unsigned i = 0, n = flist.GetCount(); i < n; ++i)
         file.Write(
-              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
+              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i, n));
 
     file.Write(""
 "void " + parFuncname + "()\n"
@@ -703,7 +713,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "    }\n"
 "\n");
 
-    for (i = 0; i < flist.GetCount(); i++)
+    for (unsigned i = 0, n = flist.GetCount(); i < n; i++)
     {
         wxString s;
 
@@ -729,7 +739,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
         file.Write(s);
     }
 
-    for (i = 0; i < parFiles.GetCount(); i++)
+    for (unsigned i = 0, n = parFiles.GetCount(); i < n; ++i)
     {
         file.Write("    wxXmlResource::Get()->Load(wxT(\"memory:XRC_resource/" +
                    GetInternalFileName(parFiles[i], flist) + "\"));\n");
