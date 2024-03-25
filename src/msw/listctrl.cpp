@@ -3435,7 +3435,10 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         return;
     }
 
-    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+    const wxColour penColour(wxSystemSettings::GetColour(wxMSWDarkMode::IsActive()
+                                                         ? wxSYS_COLOUR_GRAYTEXT
+                                                         : wxSYS_COLOUR_3DLIGHT));
+    wxPen pen(penColour);
     dc.SetPen(pen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
