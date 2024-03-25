@@ -3265,6 +3265,14 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
         // We need to always paint selected items ourselves as they come
         // out completely wrong in DarkMode_Explorer theme, see the comment
         // before MSWGetDarkModeSupport().
+        wxFont font;
+
+        if ( attr && attr->HasFont() )
+        {
+            font = attr->GetFont();
+            font.WXAdjustToPPI(listctrl->GetDPI());
+        }
+
         pLVCD->clrText = attr && attr->HasTextColour()
                             ? wxColourToRGB(attr->GetTextColour())
                             : wxColourToRGB(listctrl->GetTextColour());
@@ -3272,7 +3280,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
                             ? wxColourToRGB(attr->GetBackgroundColour())
                             : wxColourToRGB(listctrl->GetBackgroundColour());
 
-        HandleItemPaint(listctrl, pLVCD, nullptr);
+        HandleItemPaint(listctrl, pLVCD, font.IsOk() ? GetHfontOf(font) : nullptr);
         return CDRF_SKIPDEFAULT;
     }
 
