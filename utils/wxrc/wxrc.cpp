@@ -647,17 +647,47 @@ static wxString FileToCppArray(wxString filename, unsigned num, unsigned numTota
     std::vector<unsigned char> buffer(lng);
     file.Read(buffer.data(), lng);
 
-    for (wxUint32 i = 0, linelng = 0; i < lng; i++)
+    for (wxUint32 i = 0, linelng = 0, sectionlng = 0; ; )
     {
-        tmp.Printf(wxT("%i"), buffer[i]);
-        if (i != 0) output << wxT(',');
-        if (linelng > 70)
+        if (! i || i >= lng || sectionlng >= 0x100)
         {
-            linelng = 0;
-            output << wxT("\n");
+            if (linelng) wxFAIL;
+
+            tmp.Printf
+            (
+                wxT("// Offset %8Xh of %8Xh (%7.2lf%%)%c\n"),
+                static_cast<unsigned>(i),
+                static_cast<unsigned>(lng),
+                lng ? 100.0 * i / lng : 0,
+                i < lng ? wxT(':') : wxT('.')
+            );
+            output << tmp;
+
+            sectionlng = 0;
         }
+
+        if (i >= lng)
+            break;
+
+        tmp.Printf(wxT("0x%02x"), buffer[i]);
         output << tmp;
-        linelng += tmp.length()+1;
+
+        ++i;
+        ++linelng;
+        ++sectionlng;
+
+        const bool newline{i == lng || linelng >= 0x10};
+        if (i < lng)
+        {
+            output << wxT(',');
+            if (! newline && ! (linelng % 4))
+                output << wxT(' ');
+        }
+        if (newline)
+        {
+            output << wxT('\n');
+            linelng = 0;
+        }
     }
 
     output += wxT("};\n\n");
