@@ -27,6 +27,8 @@
 #include "wx/mimetype.h"
 #include "wx/vector.h"
 
+#include <vector>
+
 class XRCWidgetData
 {
 public:
@@ -631,8 +633,8 @@ static wxString FileToCppArray(wxString filename, int num)
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
 
-    unsigned char *buffer = new unsigned char[lng];
-    file.Read(buffer, lng);
+    std::vector<unsigned char> buffer(lng);
+    file.Read(buffer.data(), lng);
 
     for (wxUint32 i = 0, linelng = 0; i < lng; i++)
     {
@@ -646,8 +648,6 @@ static wxString FileToCppArray(wxString filename, int num)
         output << tmp;
         linelng += tmp.length()+1;
     }
-
-    delete[] buffer;
 
     output += wxT("};\n\n");
 
