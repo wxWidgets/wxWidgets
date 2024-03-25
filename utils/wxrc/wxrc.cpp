@@ -590,13 +590,43 @@ static wxString FileToCppArray(wxString filename, int num)
     wxFileOffset offset = file.Length();
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
 
-    const size_t lng = wx_truncate_cast(size_t, offset);
+    // Explanation for changing the type of `lng` (and `i`...) from `size_t` to `wxUint32`:
+    //
+    // There are two environments (processes) to consider:
+    //   - the resource compiler;
+    //   - the process using the resource.
+    //
+    // Previously, we used to check whether `offset` fitted into `size_t` (via `lng`).
+    //
+    // But this used to check against the `size_t` of the resource compiler.
+    // The check might have passed, but this might have been misleading
+    // (if the resource compiler is a 64-bit process and the process using the resource is a 32-bit process).
+    //
+    // Also, for Windows at least, the file format for modules (executables and shared libraries)
+    // which are to be loaded in 64-bit processes
+    // is not called PE64, but instead PE32+,
+    // and yes, in this format virtual addresses are indeed 64-bit,
+    // but in fact relative virtual addresses (and also file offsets) are 32-bit
+    // (i.e. a single module cannot span for more than 4 GiB in virtual memory (or on disk)).
+    //
+    // It follows that the check might have also been misleading
+    // in the case of the resource compiler being a 64-bit Unix (e.g. Linux) process
+    // and the process using the resource being a Windows process -- even a 64-bit Windows process.
+    //
+    // Therefore, we now check whether the size of the resource fits
+    // not into `size_t`, but instead into `wxUint32`,
+    // i.e. we do not support resources larger than 4 GiB.
+    //
+    // Anyway, even in 64-bit Unix processes, such huge static-storage-duration arrays
+    // (which are also initialized, and generally not to all-zeroes)
+    // might have not been supported by the C++ toolchain (compiler, librarian, linker...).
+    //
+    const wxUint32 lng = wx_truncate_cast(wxUint32, offset);
     wxASSERT_MSG( static_cast<wxFileOffset>(lng) == offset,
                   wxT("Huge file not supported") );
 
-    snum.Printf(wxT("%i"), num);
-    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %lu;\n"),
-                  static_cast<unsigned long>(lng));
+    snum.Printf(wxT("%u"), num);
+    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %u;\n"), lng);
     output += wxT("static unsigned char xml_res_file_") + snum + wxT("[] = {\n");
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
@@ -604,7 +634,7 @@ static wxString FileToCppArray(wxString filename, int num)
     unsigned char *buffer = new unsigned char[lng];
     file.Read(buffer, lng);
 
-    for (size_t i = 0, linelng = 0; i < lng; i++)
+    for (wxUint32 i = 0, linelng = 0; i < lng; i++)
     {
         tmp.Printf(wxT("%i"), buffer[i]);
         if (i != 0) output << wxT(',');
