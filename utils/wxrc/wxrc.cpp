@@ -28,6 +28,7 @@
 #include "wx/vector.h"
 
 #include <vector>
+#include <limits>
 
 class XRCWidgetData
 {
@@ -180,7 +181,7 @@ public:
     virtual int OnRun() override;
 
 private:
-    void ParseParams(const wxCmdLineParser& cmdline);
+    bool ParseParams(const wxCmdLineParser& cmdline);
     void CompileRes();
     wxArrayString PrepareTempFiles();
     void FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxString& inputPath);
@@ -200,6 +201,7 @@ private:
     bool flagVerbose, flagCPP, flagPython, flagGettext, flagValidate, flagValidateOnly;
     wxString parOutput, parFuncname, parOutputPath, parSchemaFile;
     wxArrayString parFiles;
+    wxUint32 sectionmaxlng{0};
     int retCode;
 
     ArrayOfXRCWndClassData aXRCWndClassData;
@@ -219,6 +221,7 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
         { wxCMD_LINE_SWITCH, "e", "extra-cpp-code",  "output C++ header file with XRC derived classes" },
         { wxCMD_LINE_SWITCH, "c", "cpp-code",  "output C++ source rather than .rsc file" },
+        { wxCMD_LINE_OPTION, "" , "dump-section-size",  "print section header every <num> bytes", wxCMD_LINE_VAL_NUMBER },
         { wxCMD_LINE_SWITCH, "p", "python-code",  "output wxPython source rather than .rsc file" },
         { wxCMD_LINE_SWITCH, "g", "gettext",  "output list of translatable strings (to stdout or file if -o used)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++/Python function name (with -c or -p) [InitXmlResource]" },
@@ -247,7 +250,11 @@ int XmlResApp::OnRun()
 
         case 0:
             retCode = 0;
-            ParseParams(parser);
+            if (! ParseParams(parser))
+            {
+                wxLogError(wxT("Error parsing command line."));
+                return 3;
+            }
 
             if (flagValidate)
             {
@@ -269,7 +276,7 @@ int XmlResApp::OnRun()
 
 
 
-void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
+bool XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
 {
     flagGettext = cmdline.Found("g");
     flagVerbose = cmdline.Found("v");
@@ -318,10 +325,24 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
         parFiles.Add(cmdline.GetParam(i));
 #endif
     }
+
+    sectionmaxlng = 0;
+    {
+        long val;
+        if (cmdline.Found("dump-section-size", &val))
+        {
+            if (val < 0 || static_cast<unsigned long>(val) > static_cast<unsigned long>(std::numeric_limits<wxUint32>::max()))
+            {
+                wxString msg; msg.Printf("dump-section-size: Value out of range: '%ld'.", val);
+                wxLogError(msg);
+                return false;
+            }
+            sectionmaxlng = static_cast<wxUint32>(val);
+        }
+    }
+
+    return true;
 }
-
-
-
 
 void XmlResApp::CompileRes()
 {
@@ -583,7 +604,7 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
 
 
 
-static wxString FileToCppArray(wxString filename, unsigned num, unsigned numTotal)
+static wxString FileToCppArray(wxString filename, unsigned num, unsigned numTotal, wxUint32 sectionmaxlng)
 {
     // Some of the `wxString` objects (e.g. `tmp`) are defined at the beginning of the function
     // (before the actual use, and with larger scope than strictly needed)
@@ -647,17 +668,51 @@ static wxString FileToCppArray(wxString filename, unsigned num, unsigned numTota
     std::vector<unsigned char> buffer(lng);
     file.Read(buffer.data(), lng);
 
-    for (wxUint32 i = 0, linelng = 0; i < lng; i++)
+    bool newline{true};
+    for (wxUint32 i = 0, linelng = 0, sectionlng = 0; ; )
     {
-        tmp.Printf(wxT("%i"), buffer[i]);
-        if (i != 0) output << wxT(',');
-        if (linelng > 70)
+        // If instructed by the user, we print a section header showing offset and percentage/progress.
+        if (sectionmaxlng && (! i || i >= lng || sectionlng >= sectionmaxlng))
         {
-            linelng = 0;
-            output << wxT("\n");
+            if (linelng) wxFAIL;
+
+            tmp.Printf
+            (
+                wxT("// Offset %8Xh of %8Xh (%7.2lf%%)%c\n"),
+                static_cast<unsigned>(i),
+                static_cast<unsigned>(lng),
+                lng ? 100.0 * i / lng : 0,
+                i < lng ? wxT(':') : wxT('.')
+            );
+            if(! newline)
+                output << '\n';
+            output << tmp;
+
+            sectionlng = 0;
         }
+
+        if (i >= lng)
+            break;
+
+        tmp.Printf(wxT("0x%02x"), buffer[i]);
         output << tmp;
-        linelng += tmp.length()+1;
+
+        ++i;
+        ++linelng;
+        ++sectionlng;
+
+        newline = i == lng || linelng >= 0x10;
+        if (i < lng)
+        {
+            output << wxT(',');
+            if (! newline && ! (linelng % 4))
+                output << wxT(' ');
+        }
+        if (newline)
+        {
+            output << wxT('\n');
+            linelng = 0;
+        }
     }
 
     output += wxT("};\n\n");
@@ -697,7 +752,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
     file.Write("namespace\n{\n");
     for (unsigned i = 0, n = flist.GetCount(); i < n; ++i)
         file.Write(
-              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i, n));
+              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i, n, sectionmaxlng));
     file.Write("} // End of anonymous namespace.\n\n");
 
     file.Write(""
