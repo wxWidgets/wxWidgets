@@ -637,10 +637,10 @@ static wxString FileToCppArray(wxString filename, unsigned num, unsigned numTota
 
     snum.Printf(wxT("%u"), num);
 
-    tmp.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %u;\n"), lng);
+    tmp.Printf(wxT("const size_t xml_res_size_") + snum + wxT(" = %u;\n"), lng);
     output += tmp;
 
-    output += wxT("static unsigned char xml_res_file_") + snum + wxT("[] = {\n");
+    output += wxT("const unsigned char xml_res_file_") + snum + wxT("[] = {\n");
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
 
@@ -694,9 +694,11 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "#endif\n"
 "\n");
 
+    file.Write("namespace\n{\n");
     for (unsigned i = 0, n = flist.GetCount(); i < n; ++i)
         file.Write(
               FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i, n));
+    file.Write("} // End of anonymous namespace.\n\n");
 
     file.Write(""
 "void " + parFuncname + "()\n"
