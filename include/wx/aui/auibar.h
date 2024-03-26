@@ -627,6 +627,12 @@ public:
 protected:
     void Init();
 
+    // Override to return wxDefaultSize because under wxMSW wxControl::DoGetBestSize()
+    // returns DEFAULT_ITEM_HEIGHT which is not suitable as the default height/width for
+    // a horizontal/vertical toolbar. Notice that the toolbar will be resized correctly
+    // when Realize() is called.
+    virtual wxSize DoGetBestSize() const override { return wxDefaultSize; }
+
     virtual void OnCustomRender(wxDC& WXUNUSED(dc),
                                 const wxAuiToolBarItem& WXUNUSED(item),
                                 const wxRect& WXUNUSED(rect)) { }

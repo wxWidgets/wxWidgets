@@ -49,8 +49,9 @@ inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
 
     return qtWidget;
 }
+}
 
-inline wxSize wxQtGetBestSize(QWidget* qtWidget)
+extern wxSize wxQtGetBestSize(QWidget* qtWidget)
 {
     auto size = qtWidget->sizeHint();
     // best effort to ensure a correct size (note that some qt controls
@@ -58,7 +59,7 @@ inline wxSize wxQtGetBestSize(QWidget* qtWidget)
     size = size.expandedTo(qtWidget->minimumSizeHint());
     return wxQtConvertSize(size);
 }
-}
+
 
 // Base Widget helper (no scrollbar, used by wxWindow)
 
@@ -434,6 +435,12 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
     if ( parent )
         parent->AddChild( this );
 
+    // Workaround so that the initial size set below is effective. Otherwise it can be
+    // changed by the algorithm determining the initial sizes of the different parts of
+    // the UI (wxAUI does this for example).
+    wxQtEnsureSignalsBlocked blocker(GetHandle());
+    GetHandle()->setVisible(true);
+
     wxPoint p;
     if ( pos != wxDefaultPosition )
         p = pos;
@@ -490,8 +497,7 @@ void wxWindowQt::PostCreation(bool generic)
         DoEnable(false);
 
     // The window might have been hidden before Create() and it needs to remain
-    // hidden in this case, so do it (unfortunately there doesn't seem to be
-    // any way to create the window initially hidden with Qt).
+    // hidden in this case.
     GetHandle()->setVisible(m_isShown);
 
     wxWindowCreateEvent event(this);
@@ -515,17 +521,10 @@ bool wxWindowQt::Show( bool show )
 
     // Show can be called before the underlying window is created:
 
-    QWidget *qtWidget = GetHandle();
-    if ( qtWidget == nullptr )
+    if ( QWidget *qtWidget = GetHandle() )
     {
-        return false;
+        qtWidget->setVisible( show );
     }
-
-    qtWidget->setVisible( show );
-
-    wxSizeEvent event(GetSize(), GetId());
-    event.SetEventObject(this);
-    HandleWindowEvent(event);
 
     return true;
 }
@@ -1146,24 +1145,6 @@ void wxWindowQt::DoSetClientSize(int width, int height)
         // Resize the window to be as small as the client size but no smaller
         wxQtSetClientSize(GetHandle(), width, height);
     }
-}
-
-wxSize wxWindowQt::DoGetBestSize() const
-{
-    const wxSize size = wxWindowBase::DoGetBestSize();
-
-    if ( dynamic_cast<wxQtWidget*>(GetHandle()) )
-    {
-        return size;
-    }
-
-    wxSize bestSize = wxQtGetBestSize( GetHandle() );
-    if ( size.IsFullySpecified() )
-    {
-        bestSize.IncTo(size);
-    }
-
-    return bestSize;
 }
 
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
