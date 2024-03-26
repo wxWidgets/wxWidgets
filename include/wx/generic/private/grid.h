@@ -627,9 +627,20 @@ public:
     // return whether the given row/column can be interactively resized
     virtual bool CanDragLineSize(wxGrid *grid, int line) const = 0;
 
-    // call DoEndDragResizeRow or DoEndDragResizeCol
-    virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event, wxGridWindow* gridWindow) const = 0;
+    // the event type after a row row or col resize
+    virtual wxEventType GetEventTypeLineSize() const = 0;
 
+    // return whether the column/row label window can be interactively resized
+    virtual bool CanDragLabelSize(wxGrid* grid) const = 0;
+    // call DoEndDragResizeRowLabel or DoEndDragResizeColLabel
+    virtual void DoEndLabelResize(wxGrid* grid, const wxMouseEvent& event, wxGridWindow* gridWindow) const = 0;
+    // the event type for the previous method
+    virtual wxEventType GetEventTypeLabelSize() const = 0;
+    // set the column/row label size
+    virtual void SetLabelSize(wxGrid* grid, int size) const = 0;
+    // return the column/row label size
+    virtual int GetLabelSize(wxGrid* grid) const = 0;
+    virtual int GetMinimalLabelSize(wxGrid* grid) const = 0;
 
     // extend current selection block up to given row or column
     virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
@@ -768,10 +779,23 @@ public:
 
     virtual bool CanDragLineSize(wxGrid *grid, int line) const override
         { return grid->CanDragRowSize(line); }
-    virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event,
-        wxGridWindow* gridWindow) const override
-        { grid->DoEndDragResizeRow(event, gridWindow); }
+    virtual wxEventType GetEventTypeLineSize() const override
+        { return wxEVT_GRID_ROW_SIZE; }
 
+    virtual bool CanDragLabelSize(wxGrid* grid) const override
+        { return grid->CanDragColLabelSize(); }
+    virtual void DoEndLabelResize(wxGrid *grid, const wxMouseEvent& event,
+        wxGridWindow* gridWindow) const override
+        { grid->DoEndDragResizeLabel(event, gridWindow, *this); }
+    virtual wxEventType GetEventTypeLabelSize() const override
+        { return wxEVT_GRID_COL_LABEL_SIZE; }
+
+    virtual void SetLabelSize(wxGrid* grid, int size) const override
+        { grid->SetColLabelSize(size); }
+    virtual int GetLabelSize(wxGrid* grid) const override
+        { return grid->m_colLabelHeight; }
+    virtual int GetMinimalLabelSize(wxGrid* grid) const override
+        { return grid->m_colLabelMinHeight; }
 
     virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
         const wxMouseEvent &event,
@@ -911,9 +935,22 @@ public:
 
     virtual bool CanDragLineSize(wxGrid *grid, int line) const override
         { return grid->CanDragColSize(line); }
-    virtual void DoEndLineResize(wxGrid *grid, const wxMouseEvent& event,
+    virtual wxEventType GetEventTypeLineSize() const override
+        { return wxEVT_GRID_COL_SIZE; }
+
+    virtual bool CanDragLabelSize(wxGrid* grid) const override
+        { return grid->CanDragRowLabelSize();}
+    virtual void DoEndLabelResize(wxGrid *grid, const wxMouseEvent& event,
         wxGridWindow* gridWindow) const override
-        { grid->DoEndDragResizeCol(event, gridWindow); }
+        { grid->DoEndDragResizeLabel(event, gridWindow, *this); }
+    virtual wxEventType GetEventTypeLabelSize() const override
+        { return wxEVT_GRID_ROW_LABEL_SIZE; }
+    virtual int GetLabelSize(wxGrid* grid) const override
+        { return grid->m_rowLabelWidth; }
+    virtual void SetLabelSize(wxGrid* grid, int size) const override
+        { grid->SetRowLabelSize(size); }
+    virtual int GetMinimalLabelSize(wxGrid* grid) const override
+        { return grid->m_rowLabelMinWidth; }
 
     virtual bool SelectionExtendCurrentBlock(wxGrid *grid, int line,
         const wxMouseEvent &event,
