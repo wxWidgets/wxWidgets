@@ -331,6 +331,8 @@ public:
     int GetSelection() const override;
 
     virtual void Split(size_t page, int direction);
+    
+    virtual void UnSplit(size_t pageSrc, size_t pageDst);
 
     const wxAuiManager& GetAuiManager() const { return m_mgr; }
 
