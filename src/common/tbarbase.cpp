@@ -467,9 +467,12 @@ void wxToolBarBase::AdjustToolBitmapSize()
           i != m_tools.end();
           ++i )
     {
-        const wxBitmapBundle& bmp = (*i)->GetNormalBitmapBundle();
-        if ( bmp.IsOk() )
-            bundles.push_back(bmp);
+        if( (*i)->IsAvailable() )
+        {
+            const wxBitmapBundle& bmp = (*i)->GetNormalBitmapBundle();
+            if ( bmp.IsOk() )
+                bundles.push_back(bmp);
+        }
     }
 
     if ( bundles.empty() )

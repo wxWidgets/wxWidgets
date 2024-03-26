@@ -65,7 +65,7 @@ public:
                   wxItemKind kind,
                   wxObject *clientData,
                   const wxString& shortHelp,
-                  const wxString& longHelp );
+                  const wxString& longHelp);
     
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label);
     
@@ -111,7 +111,7 @@ wxToolBarTool::wxToolBarTool(
                              wxItemKind kind,
                              wxObject *clientData,
                              const wxString& shortHelp,
-                             const wxString& longHelp )
+                             const wxString& longHelp)
 :
 wxToolBarToolBase(
                   tbar, id, label, bmpNormal, bmpDisabled, kind,
@@ -187,7 +187,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(
                                          wxItemKind kind,
                                          wxObject *clientData,
                                          const wxString& shortHelp,
-                                         const wxString& longHelp )
+                                         const wxString& longHelp)
 {
     return new wxToolBarTool(
                              this, id, label, bmpNormal, bmpDisabled, kind,
