@@ -128,8 +128,8 @@ wxDEFINE_EVENT( wxEVT_GRID_ROW_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_ROW_AUTO_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
-wxDEFINE_EVENT( wxEVT_GRID_ROW_MOVE, wxGridEvent );
-wxDEFINE_EVENT( wxEVT_GRID_COL_MOVE, wxGridEvent );
+wxDEFINE_EVENT( wxEVT_GRID_ROW_MOVE, wxGridMoveEvent );
+wxDEFINE_EVENT( wxEVT_GRID_COL_MOVE, wxGridMoveEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SORT, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECTING, wxGridRangeSelectEvent );
 wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECTED, wxGridRangeSelectEvent );
@@ -5068,9 +5068,10 @@ void wxGrid::DoStartMoveRowOrCol(int col)
 void wxGrid::DoEndMoveRow(int pos)
 {
     wxASSERT_MSG( m_dragMoveRowOrCol != -1, "no matching DoStartMoveRow?" );
-
-    if ( SendEvent(wxEVT_GRID_ROW_MOVE, -1, m_dragMoveRowOrCol) != Event_Vetoed )
+    if ( SendGridMoveEvent(wxEVT_GRID_ROW_MOVE, m_dragMoveRowOrCol, pos) != Event_Vetoed )
         SetRowPos(m_dragMoveRowOrCol, pos);
+    else
+        RefreshArea(wxGA_RowLabels);  // remove the markers
 
     m_dragMoveRowOrCol = -1;
 }
@@ -5169,8 +5170,10 @@ void wxGrid::DoEndMoveCol(int pos)
 {
     wxASSERT_MSG( m_dragMoveRowOrCol != -1, "no matching DoStartMoveCol?" );
 
-    if ( SendEvent(wxEVT_GRID_COL_MOVE, -1, m_dragMoveRowOrCol) != Event_Vetoed )
+    if ( SendGridMoveEvent(wxEVT_GRID_COL_MOVE, m_dragMoveRowOrCol, pos) != Event_Vetoed )
         SetColPos(m_dragMoveRowOrCol, pos);
+    else
+        RefreshArea(wxGA_ColLabels);  // remove the markers
 
     m_dragMoveRowOrCol = -1;
 }
@@ -5515,6 +5518,18 @@ wxGrid::SendGridSizeEvent(wxEventType type,
            mouseEv);
 
    return ProcessWindowEvent(gridEvt);
+}
+
+wxGrid::EventResult
+wxGrid::SendGridMoveEvent(wxEventType type, int rowOrCol, int newRowOrCol)
+{
+    wxGridMoveEvent gridEvt(GetId(), type, this, rowOrCol, newRowOrCol);
+
+    // copied from DoSendEvent:
+    const bool claimed = ProcessWindowEvent(gridEvt);
+    if ( !gridEvt.IsAllowed() )
+        return Event_Vetoed;
+    return claimed ? Event_Handled : Event_Unhandled;
 }
 
 wxGrid::EventResult wxGrid::DoSendEvent(wxGridEvent& gridEvt)
@@ -11103,6 +11118,19 @@ wxGridSizeEvent::wxGridSizeEvent( int id, wxEventType type, wxObject* obj,
           wxKeyboardState(control, shift, alt, meta)
 {
     Init(rowOrCol, x, y);
+
+    SetEventObject(obj);
+}
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxGridMoveEvent, wxNotifyEvent);
+
+wxGridMoveEvent::wxGridMoveEvent( int id, wxEventType type, wxObject* obj,
+                                  int rowOrCol, int newRowOrCol,
+                                  bool control, bool shift, bool alt, bool meta)
+        : wxNotifyEvent(type, id),
+          wxKeyboardState(control, shift, alt, meta)
+{
+    Init(rowOrCol, newRowOrCol);
 
     SetEventObject(obj);
 }

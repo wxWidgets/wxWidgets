@@ -2741,6 +2741,11 @@ protected:
                            int rowOrCol,
                            const wxMouseEvent& mouseEv);
 
+    // send wxEVT_GRID_{ROW,COL}_MOVE, return true if the event was processed,
+    // false otherwise
+    EventResult SendGridMoveEvent(wxEventType type,
+        int rowOrCol, int newRowOrCol);
+
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
@@ -3228,6 +3233,60 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridSizeEvent);
 };
 
+class WXDLLIMPEXP_CORE wxGridMoveEvent : public wxNotifyEvent,
+    public wxKeyboardState
+{
+public:
+    wxGridMoveEvent()
+        : wxNotifyEvent()
+    {
+        Init(-1, -1);
+    }
+
+    wxGridMoveEvent(int id,
+        wxEventType type,
+        wxObject* obj,
+        int rowOrCol = -1,
+        int newRowOrCol = -1,
+        const wxKeyboardState& kbd = wxKeyboardState())
+        : wxNotifyEvent(type, id),
+        wxKeyboardState(kbd)
+    {
+        Init(rowOrCol, newRowOrCol);
+
+        SetEventObject(obj);
+    }
+
+    wxDEPRECATED_CONSTRUCTOR(
+        wxGridMoveEvent(int id,
+            wxEventType type,
+            wxObject* obj,
+            int rowOrCol, int newRowOrCol,
+            bool control,
+            bool shift = false,
+            bool alt = false,
+            bool meta = false));
+
+    int GetRowOrCol() const { return m_rowOrCol; }
+    int GetNewRowOrCol() const { return m_newRowOrCol; }
+    // backwards compatibility
+    int GetCol() const { return m_rowOrCol; }
+
+    virtual wxEvent* Clone() const override { return new wxGridMoveEvent(*this); }
+
+protected:
+    int         m_rowOrCol;
+    int         m_newRowOrCol;
+
+private:
+    void Init(int rowOrCol, int newRowOrCol)
+    {
+        m_rowOrCol = rowOrCol;
+        m_newRowOrCol = newRowOrCol;
+    }
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN_DEF_COPY(wxGridMoveEvent);
+};
 
 class WXDLLIMPEXP_CORE wxGridRangeSelectEvent : public wxNotifyEvent,
                                                public wxKeyboardState
@@ -3352,13 +3411,14 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_EDITOR_SHOWN, wxGridEvent
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_EDITOR_HIDDEN, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_EDITOR_CREATED, wxGridEditorCreatedEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_CELL_BEGIN_DRAG, wxGridEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_MOVE, wxGridEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_MOVE, wxGridEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_ROW_MOVE, wxGridMoveEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_MOVE, wxGridMoveEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_COL_SORT, wxGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_GRID_TABBING, wxGridEvent );
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
 typedef void (wxEvtHandler::*wxGridSizeEventFunction)(wxGridSizeEvent&);
+typedef void (wxEvtHandler::*wxGridMoveEventFunction)(wxGridMoveEvent&);
 typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEvent&);
 typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreatedEvent&);
 
@@ -3367,6 +3427,9 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 
 #define wxGridSizeEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxGridSizeEventFunction, func)
+
+#define wxGridMoveEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxGridMoveEventFunction, func)
 
 #define wxGridRangeSelectEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxGridRangeSelectEventFunction, func)
@@ -3379,6 +3442,9 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 
 #define wx__DECLARE_GRIDSIZEEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_GRID_ ## evt, id, wxGridSizeEventHandler(fn))
+
+#define wx__DECLARE_GRIDMOVEEVT(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_GRID_ ## evt, id, wxGridMoveEventHandler(fn))
 
 #define wx__DECLARE_GRIDRANGESELEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_GRID_ ## evt, id, wxGridRangeSelectEventHandler(fn))
@@ -3397,8 +3463,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_ROW_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(ROW_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(COL_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_AUTO_SIZE(id, fn)       wx__DECLARE_GRIDSIZEEVT(COL_AUTO_SIZE, id, fn)
-#define EVT_GRID_CMD_ROW_MOVE(id, fn)            wx__DECLARE_GRIDEVT(ROW_MOVE, id, fn)
-#define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
+#define EVT_GRID_CMD_ROW_MOVE(id, fn)            wx__DECLARE_GRIDMOVEEVT(ROW_MOVE, id, fn)
+#define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDMOVEEVT(COL_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_SORT(id, fn)            wx__DECLARE_GRIDEVT(COL_SORT, id, fn)
 #define EVT_GRID_CMD_RANGE_SELECTING(id, fn)     wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECTING, id, fn)
 #define EVT_GRID_CMD_RANGE_SELECTED(id, fn)      wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECTED, id, fn)
