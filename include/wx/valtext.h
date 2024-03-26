@@ -15,9 +15,11 @@
 
 #if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
 
+class WXDLLIMPEXP_FWD_BASE wxRegEx;
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 #include "wx/validate.h"
+#include "wx/sharedptr.h"
 
 enum wxTextValidatorStyle
 {
@@ -42,10 +44,51 @@ enum wxTextValidatorStyle
 };
 
 // ----------------------------------------------------------------------------
+// wxTextEntryValidator: common base class for wxTextValidator & wxNumValidator
+// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxTextEntryValidator : public wxValidator
+{
+public:
+    wxTextEntryValidator() = default;
+    wxTextEntryValidator(const wxTextEntryValidator& other) = default;
+
+    // Override base class method to check whether the window does support
+    // this type of validators or not.
+    virtual void SetWindow(wxWindow* win) override;
+
+protected:
+    // Get the text entry of the associated control. Normally shouldn't ever
+    // return nullptr (and will assert if it does) but the caller should still
+    // test the return value for safety.
+    wxTextEntry* GetTextEntry() const;
+
+    // Return true if @text can be pasted in the control. return false otherwise.
+    //
+    // This function (called by OnPaste() handler) filters out invalid characters
+    // from the clipboard contents as it shouldn't be possible to sneak them into
+    // the control in such a way.
+    //
+    // This seems better than not allowing to paste anything at all if there is
+    // anything invalid on the clipboard, e.g. it is more user-friendly to omit
+    // any trailing spaces in a control not allowing them than to refuse to
+    // paste a string with some spaces into it completely.
+    //
+    // Out of abundance of caution also prefer to let the control do its own
+    // thing if there are no invalid characters at all, as we can be sure it
+    // does the right thing in all cases, while our code might not deal with
+    // some edge cases correctly.
+    virtual bool CanPaste(const wxString& text) = 0;
+
+    // Event handlers
+    void OnPaste(wxClipboardTextEvent& event);
+};
+
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxTextValidator: public wxTextEntryValidator
 {
 public:
     wxTextValidator(long style = wxFILTER_NONE, wxString *val = nullptr);
@@ -76,8 +119,6 @@ public:
     // ACCESSORS
     inline long GetStyle() const { return m_validatorStyle; }
     void SetStyle(long style);
-
-    wxTextEntry *GetTextEntry();
 
     // strings & chars inclusions:
     // ---------------------------
@@ -155,12 +196,46 @@ protected:
     wxArrayString        m_excludes;
 
 private:
-    void OnPaste(wxClipboardTextEvent& event);
+    virtual bool CanPaste(const wxString& text) override;
 
     wxDECLARE_NO_ASSIGN_CLASS(wxTextValidator);
     wxDECLARE_DYNAMIC_CLASS(wxTextValidator);
     wxDECLARE_EVENT_TABLE();
 };
+
+#if wxUSE_REGEX
+// ----------------------------------------------------------------------------
+// wxRegexValidator declaration
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxRegexValidator : public wxTextValidator
+{
+public:
+    wxRegexValidator(long style = wxFILTER_NONE, wxString* str = nullptr);
+    wxRegexValidator(const wxString& pattern, const wxString& purpose,
+                     long style = wxFILTER_NONE, wxString* str = nullptr);
+
+    // Use one of these functions to initialize the validator if the first
+    // constructor was used to create it.
+    void SetRegEx(const wxString& pattern, const wxString& purpose);
+    void SetRegEx(wxSharedPtr<wxRegEx> regex, const wxString& purpose);
+
+    virtual wxObject* Clone() const override;
+
+    // Override base class function
+    virtual wxString IsValid(const wxString& str) const override;
+
+private:
+    void SetPurpose(const wxString& purpose);
+
+    wxSharedPtr<wxRegEx>   m_regex;
+    wxString               m_purpose; // The purpose of the regular expression,
+                                      // i.e.: phone number.
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRegexValidator);
+};
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
