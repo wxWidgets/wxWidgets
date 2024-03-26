@@ -32,8 +32,23 @@
 #import <Foundation/NSLocale.h>
 #import <Foundation/NSDateFormatter.h>
 
+#include "wx/osx/private/uilocale.h"
+
 extern wxString
 wxGetInfoFromCFLocale(CFLocaleRef cfloc, wxLocaleInfo index, wxLocaleCategory cat);
+
+// Helper function to retrieve a pointer to the NSLocale of the current wxUILocale
+static NSLocale* gs_currentNSLocale = nullptr;
+
+NSLocale* wxGetCurrentNSLocale()
+{
+    if (!gs_currentNSLocale)
+    {
+        static wxCFRef<NSLocale*> stdCLocale([[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"] retain]);
+        gs_currentNSLocale = stdCLocale;
+    }
+    return gs_currentNSLocale;
+}
 
 // ----------------------------------------------------------------------------
 // wxLocaleIdent::GetName() implementation using Foundation
@@ -170,6 +185,8 @@ wxUILocaleImplCF::Use()
 {
     // There is no way to start using a locale other than default, so there is
     // nothing to do here.
+    // However, make the associated NSLocale instance accessible for internal use
+    gs_currentNSLocale = m_nsloc;
 }
 
 wxString
