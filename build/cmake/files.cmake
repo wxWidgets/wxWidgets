@@ -2793,6 +2793,7 @@ set(AUI_CMN_HDR
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
+    wx/aui/serializer.h
 )
 
 set(AUI_MSW_HDR

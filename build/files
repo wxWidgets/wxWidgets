@@ -2722,6 +2722,7 @@ AUI_CMN_HDR =
     wx/aui/auibar.h
     wx/aui/tabmdi.h
     wx/aui/aui.h
+    wx/aui/serializer.h
     wx/aui/tabart.h
     wx/xrc/xh_aui.h
     wx/xrc/xh_auitoolb.h
