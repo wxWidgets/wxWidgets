@@ -11,6 +11,9 @@ INCOMPATIBLE CHANGES SINCE 3.2.x:
 Changes in behaviour not resulting in compilation errors
 --------------------------------------------------------
 
+- In wxMSW, key code in OnChar events is now set to zero for non-ascii chars
+  to match behavior of other ports. Please use Unicode key instead.
+
 - wxMSW now uses double buffering by default, meaning that updating the
   windows using wxClientDC doesn't work any longer, which is consistent with
   the behaviour of wxGTK with Wayland backend and of wxOSX, but not with the

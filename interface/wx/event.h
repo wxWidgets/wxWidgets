@@ -1409,6 +1409,8 @@ enum wxKeyCategoryFlags
     to 31.
     Since version 2.9.2, the enum values @c WXK_CONTROL_A - @c WXK_CONTROL_Z
     can be used instead of the non-descriptive constant values 1-26.
+    Since version 3.3.0 such correction is done only for GetKeyCode(),
+    while GetUnicodeKey() returns a char value as if Control key was not pressed.
 
     Finally, modifier keys only generate key events but no char events at all.
     The modifiers keys are @c WXK_SHIFT, @c WXK_CONTROL, @c WXK_ALT and various
