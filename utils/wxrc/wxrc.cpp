@@ -377,13 +377,16 @@ wxString XmlResApp::GetInternalFileName(const wxString& name, const wxArrayStrin
     name2.Replace(wxT("*"), wxT("_"));
     name2.Replace(wxT("?"), wxT("_"));
 
-    wxString s = wxFileNameFromPath(parOutput) + wxT("$") + name2;
+    const wxString filenameOutput = wxFileNameFromPath(parOutput);
+
+    wxString s;
+    s.Printf(wxT("%s$%s"), filenameOutput, name2);
 
     if (wxFileExists(s) && flist.Index(s) == wxNOT_FOUND)
     {
         for (int i = 0;; i++)
         {
-            s.Printf(wxFileNameFromPath(parOutput) + wxT("$%03i-") + name2, i);
+            s.Printf(wxT("%s$%03i-%s"), filenameOutput, i, name2);
             if (!wxFileExists(s) || flist.Index(s) != wxNOT_FOUND)
                 break;
         }
