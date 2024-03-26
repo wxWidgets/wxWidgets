@@ -51,6 +51,7 @@ protected:
 #if wxUSE_INTL
     // Override to return the date/time format used by this control.
     virtual wxLocaleInfo MSWGetFormat() const = 0;
+    void MSWSetTimeFormat(wxLocaleInfo index);
 #endif // wxUSE_INTL
 
     // Override to indicate whether we can have no date at all.

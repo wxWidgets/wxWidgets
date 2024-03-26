@@ -32,6 +32,8 @@
 
 #include "wx/datectrl.h"
 #include "wx/dateevt.h"
+#include "wx/uilocale.h"
+#include "wx/msw/private/uilocale.h"
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl);
 
@@ -57,9 +59,16 @@ wxDatePickerCtrl::Create(wxWindow *parent,
     if ( !(style & wxDP_DROPDOWN) )
         style |= wxDP_SPIN;
 
-    return MSWCreateDateTimePicker(parent, id, dt,
-                                   pos, size, style,
-                                   validator, name);
+    bool ok = MSWCreateDateTimePicker(parent, id, dt,
+                                      pos, size, style,
+                                      validator, name);
+#if wxUSE_INTL
+    if (ok)
+    {
+        MSWSetTimeFormat(wxLOCALE_SHORT_DATE_FMT);
+    }
+#endif
+    return ok;
 }
 
 WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
