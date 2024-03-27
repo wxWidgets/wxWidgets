@@ -732,6 +732,10 @@ void DateTimeTestCase::TestTimeFormat()
             wxDateTime dt = formatTestDates[d].DT();
             for ( unsigned n = 0; n < WXSIZEOF(formatTestFormats); n++ )
             {
+                INFO("idxtz=" << idxtz);
+                INFO("d=" << d);
+                INFO("n=" << n);
+
                 const char *fmt = formatTestFormats[n].format;
 
                 // skip the check with %p for those locales which have empty AM/PM strings:
@@ -1377,6 +1381,8 @@ void DateTimeTestCase::TestDateParseISO()
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
+        INFO("n=" << n);
+
         wxDateTime dt;
         if ( dt.ParseISODate(parseTestDates[n].str) )
         {
@@ -1386,6 +1392,8 @@ void DateTimeTestCase::TestDateParseISO()
 
             for ( size_t m = 0; m < WXSIZEOF(parseTestTimes); m++ )
             {
+                INFO("m=" << m);
+
                 wxString dtCombined;
                 dtCombined << parseTestDates[n].str
                            << 'T'
