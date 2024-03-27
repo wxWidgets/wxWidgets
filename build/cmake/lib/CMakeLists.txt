@@ -21,7 +21,7 @@ endif()
 # Define third party libraries
 set(LIBS_THIRDPARTY regex zlib expat)
 if(wxUSE_GUI)
-    list(APPEND LIBS_THIRDPARTY jpeg png tiff nanosvg)
+    list(APPEND LIBS_THIRDPARTY jpeg png tiff nanosvg lunasvg plutovg)
 endif()
 foreach(LIB IN LISTS LIBS_THIRDPARTY)
     include(${LIB}.cmake)
