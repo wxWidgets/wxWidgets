@@ -530,6 +530,7 @@ WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifica
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
+WX_ARG_WITH(lunasvg,       [  --with-lunasvg          use LunaSVG for rasterizing SVG], wxUSE_LUNASVG)
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
     wx_needs_cairo_for_gc=1
@@ -2689,6 +2690,14 @@ dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_NANOSVG" = "yes"; then
     AC_DEFINE(wxUSE_NANOSVG)
+fi
+
+dnl ------------------------------------------------------------------------
+dnl Check for LunaSVG libraries
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_LUNASVG" = "yes"; then
+    AC_DEFINE(wxUSE_LUNASVG)
 fi
 
 dnl ------------------------------------------------------------------------

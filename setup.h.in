@@ -565,6 +565,8 @@
 
 #define wxUSE_LIBTIFF       0
 
+#define wxUSE_LUNASVG       0
+
 #define wxUSE_NANOSVG       0
 
 #define wxUSE_NANOSVG_EXTERNAL 0

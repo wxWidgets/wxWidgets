@@ -1104,6 +1104,7 @@ with_libnotify
 with_opengl
 with_xtest
 with_nanosvg
+with_lunasvg
 with_cairo
 with_dmalloc
 with_sdl
@@ -2378,6 +2379,7 @@ Optional Packages:
   --with-opengl           use OpenGL (or Mesa)
   --with-xtest            use XTest extension
   --with-nanosvg          use NanoSVG for rasterizing SVG
+  --with-lunasvg          use LunaSVG for rasterizing SVG
   --with-cairo            use Cairo-based wxGraphicsContext implementation
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
@@ -5022,23 +5024,38 @@ fi
               fi
           fi
 
+# Check whether --with-lunasvg was given.
+if test "${with_lunasvg+set}" = set; then :
+  withval=$with_lunasvg;
+                        if test "$withval" = yes; then
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=yes'
+                          wx_cv_use_nanosvg='wxUSE_NANOSVG=no'
+                        else
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=no'
+                        fi
+
+else
+
+                        wx_cv_use_lunasvg='wxUSE_LUNASVG=${'DEFAULT_wxUSE_LUNASVG":-$defaultval}"
+
+fi
+
 # Check whether --with-nanosvg was given.
 if test "${with_nanosvg+set}" = set; then :
   withval=$with_nanosvg;
                         if test "$withval" = yes; then
                           wx_cv_use_nanosvg='wxUSE_NANOSVG=yes'
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=no'
                         else
                           wx_cv_use_nanosvg='wxUSE_NANOSVG=no'
                         fi
-
-else
-
-                        wx_cv_use_nanosvg='wxUSE_NANOSVG=${'DEFAULT_wxUSE_NANOSVG":-$defaultval}"
+# default is to use lunasvg, not nanosvg
 
 fi
 
 
           eval "$wx_cv_use_nanosvg"
+          eval "$wx_cv_use_lunasvg"
 
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
@@ -26918,6 +26935,11 @@ fi
 
 if test "$wxUSE_NANOSVG" = "yes"; then
     $as_echo "#define wxUSE_NANOSVG 1" >>confdefs.h
+
+fi
+
+if test "$wxUSE_LUNASVG" = "yes"; then
+    $as_echo "#define wxUSE_LUNASVG 1" >>confdefs.h
 
 fi
 
