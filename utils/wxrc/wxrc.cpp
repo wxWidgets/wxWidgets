@@ -27,6 +27,8 @@
 #include "wx/mimetype.h"
 #include "wx/vector.h"
 
+#include <vector>
+
 class XRCWidgetData
 {
 public:
@@ -354,13 +356,16 @@ wxString XmlResApp::GetInternalFileName(const wxString& name, const wxArrayStrin
     name2.Replace(wxT("*"), wxT("_"));
     name2.Replace(wxT("?"), wxT("_"));
 
-    wxString s = wxFileNameFromPath(parOutput) + wxT("$") + name2;
+    const wxString filenameOutput = wxFileNameFromPath(parOutput);
+
+    wxString s;
+    s.Printf(wxT("%s$%s"), filenameOutput, name2);
 
     if (wxFileExists(s) && flist.Index(s) == wxNOT_FOUND)
     {
         for (int i = 0;; i++)
         {
-            s.Printf(wxFileNameFromPath(parOutput) + wxT("$%03i-") + name2, i);
+            s.Printf(wxT("%s$%03i-%s"), filenameOutput, i, name2);
             if (!wxFileExists(s) || flist.Index(s) != wxNOT_FOUND)
                 break;
         }
@@ -581,43 +586,112 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
 
 
 
-static wxString FileToCppArray(wxString filename, int num)
+static wxString FileToCppArray(wxString filename, unsigned num, unsigned numTotal)
 {
+    // Some of the `wxString` objects (e.g. `tmp`) are defined at the beginning of the function
+    // (before the actual use, and with larger scope than strictly needed)
+    // in order to avoid repeated allocations and deallocations.
     wxString output;
     wxString tmp;
     wxString snum;
+
     wxFFile file(filename, wxT("rb"));
     wxFileOffset offset = file.Length();
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
 
-    const size_t lng = wx_truncate_cast(size_t, offset);
+    // Explanation for changing the type of `lng` (and `i`...) from `size_t` to `wxUint32`:
+    //
+    // There are two environments (processes) to consider:
+    //   - the resource compiler;
+    //   - the process using the resource.
+    //
+    // Previously, we used to check whether `offset` fitted into `size_t` (via `lng`).
+    //
+    // But this used to check against the `size_t` of the resource compiler.
+    // The check might have passed, but this might have been misleading
+    // (if the resource compiler is a 64-bit process and the process using the resource is a 32-bit process).
+    //
+    // Also, for Windows at least, the file format for modules (executables and shared libraries)
+    // which are to be loaded in 64-bit processes
+    // is not called PE64, but instead PE32+,
+    // and yes, in this format virtual addresses are indeed 64-bit,
+    // but in fact relative virtual addresses (and also file offsets) are 32-bit
+    // (i.e. a single module cannot span for more than 4 GiB in virtual memory (or on disk)).
+    //
+    // It follows that the check might have also been misleading
+    // in the case of the resource compiler being a 64-bit Unix (e.g. Linux) process
+    // and the process using the resource being a Windows process -- even a 64-bit Windows process.
+    //
+    // Therefore, we now check whether the size of the resource fits
+    // not into `size_t`, but instead into `wxUint32`,
+    // i.e. we do not support resources larger than 4 GiB.
+    //
+    // Anyway, even in 64-bit Unix processes, such huge static-storage-duration arrays
+    // (which are also initialized, and generally not to all-zeroes)
+    // might have not been supported by the C++ toolchain (compiler, librarian, linker...).
+    //
+    const wxUint32 lng = wx_truncate_cast(wxUint32, offset);
     wxASSERT_MSG( static_cast<wxFileOffset>(lng) == offset,
                   wxT("Huge file not supported") );
 
-    snum.Printf(wxT("%i"), num);
-    output.Printf(wxT("static size_t xml_res_size_") + snum + wxT(" = %lu;\n"),
-                  static_cast<unsigned long>(lng));
-    output += wxT("static unsigned char xml_res_file_") + snum + wxT("[] = {\n");
+    tmp.Printf(wxT("// Temporary file %4Xh of %4Xh (%6.2f%%) (of size %8Xh) '%s':\n"),
+               num, numTotal, num * 100.0 / numTotal, lng, filename);
+    output += tmp;
+
+    snum.Printf(wxT("%u"), num);
+
+    tmp.Printf(wxT("const size_t xml_res_size_") + snum + wxT(" = %u;\n"), lng);
+    output += tmp;
+
+    output += wxT("const unsigned char xml_res_file_") + snum + wxT("[] = {\n");
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
 
-    unsigned char *buffer = new unsigned char[lng];
-    file.Read(buffer, lng);
+    std::vector<unsigned char> buffer(lng);
+    file.Read(buffer.data(), lng);
 
-    for (size_t i = 0, linelng = 0; i < lng; i++)
+    for (wxUint32 i = 0, linelng = 0, sectionlng = 0; ; )
     {
-        tmp.Printf(wxT("%i"), buffer[i]);
-        if (i != 0) output << wxT(',');
-        if (linelng > 70)
+        if (! i || i >= lng || sectionlng >= 0x100)
         {
-            linelng = 0;
-            output << wxT("\n");
-        }
-        output << tmp;
-        linelng += tmp.length()+1;
-    }
+            if (linelng) wxFAIL;
 
-    delete[] buffer;
+            tmp.Printf
+            (
+                wxT("// Offset %8Xh of %8Xh (%7.2lf%%)%c\n"),
+                static_cast<unsigned>(i),
+                static_cast<unsigned>(lng),
+                lng ? 100.0 * i / lng : 0,
+                i < lng ? wxT(':') : wxT('.')
+            );
+            output << tmp;
+
+            sectionlng = 0;
+        }
+
+        if (i >= lng)
+            break;
+
+        tmp.Printf(wxT("0x%02x"), buffer[i]);
+        output << tmp;
+
+        ++i;
+        ++linelng;
+        ++sectionlng;
+
+        const bool newline{i == lng || linelng >= 0x10};
+        if (i < lng)
+        {
+            output << wxT(',');
+            if (! newline && ! (linelng % 4))
+                output << wxT(' ');
+        }
+        if (newline)
+        {
+            output << wxT('\n');
+            linelng = 0;
+        }
+    }
 
     output += wxT("};\n\n");
 
@@ -628,7 +702,6 @@ static wxString FileToCppArray(wxString filename, int num)
 void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 {
     wxFFile file(parOutput, wxT("wt"));
-    unsigned i;
 
     if (flagVerbose)
         wxPrintf(wxT("creating C++ source file %s...\n"), parOutput);
@@ -645,18 +718,80 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "#include <wx/xrc/xmlres.h>\n"
 "#include <wx/xrc/xh_all.h>\n"
 "\n"
-"#if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFileWithMimeType(name, data, size, mime)\n"
-"#else\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFile(name, data, size)\n"
-"#endif\n"
+
+// In order for C++-compilation to run faster and consume less memory
+// (in the presence of thousands of input resource files)
+// (especially with g++-14):
+// ... Here comes a long explanation (with benchmarks too):
+//
+// In the C++ source code generated by the resource compiler,
+// for each binary file (XRC file or file referenced from an XRC file),
+// a call to `XRC_ADD_FILE` is placed in the generated file.
+//
+// Previously, `XRC_ADD_FILE` used to be a function-like macro
+// (similar to a function which had all its calls inlined at compile-time),
+// simply "forwarding" its arguments to `wxMemoryFSHandler::AddFile`.
+//
+// But some parameters of `wxMemoryFSHandler::AddFile` are of type `const wxString &`
+// while the arguments we have are of type `const wxChar *`,
+// and using the macro used to force at every "call" site
+// the construction and destruction of temporary `wxString` objects.
+//
+// When there are thousands of such calls, the compilation of the generated C++ source code
+// consumes a lot of time and memory:
+//
+//   For  2,000 binary files:
+//     g++-11 (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0  (`g++-11 -O2 -g`):    42.95 seconds and 1,107,296 KiB of RAM
+//     g++-14 (GCC) 14.0.1 20240117 (experimental)   (`g++    -O2 -g`):    93.44 seconds and 1,149,840 KiB of RAM
+//
+//   For 10,000 binary files:
+//     Visual C++ 2019 (version 19.29.30151 for x64) (`cl /O2 /Zi`):       46.51 seconds
+//     g++-11 (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0  (`g++-11 -O2 -g`):   151.13 seconds and 3,265,268 KiB of RAM
+//     g++-14 (GCC) 14.0.1 20240117 (experimental)   (`g++    -O2 -g`):   491.27 seconds and 3,489,140 KiB of RAM
+//
+//   For 20,000 binary files:
+//     Visual C++ 2019 (version 19.29.30151 for x64) (`cl /O2 /Zi`):       56.46 seconds
+//     g++-11 (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0  (`g++-11 -O2 -g`): 1,155.89 seconds and 6,217,464 KiB of RAM
+//     g++-14 (GCC) 14.0.1 20240117 (experimental)   (`g++    -O2 -g`): 2,799.70 seconds and 6,998,852 KiB of RAM
+//
+// We have now changed `XRC_ADD_FILE` from a function-like macro into an actual function.
+// It simply calls `wxMemoryFSHandler::AddFile`, therefore the behaviour is the same.
+// But its parameters are not of type `const wxString &`, but of type `const wxChar *` instead,
+// exactly matching the arguments in the generated C++ source code
+// and not requiring construction and destruction of temporary `wxString` objects
+// (or, at compile-time, generation of machine code which performs such constructions and destructions);
+// these constructions and destructions are now centralized in the body of `XRC_ADD_FILE`.
+//
+// The benchmarks of compiling the generated C++ source code have significantly improved:
+//
+//   For  2,000 binary files:
+//     g++-11 (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0  (`g++-11 -O2 -g`):     2.22 seconds and   358,936 KiB of RAM
+//     g++-14 (GCC) 14.0.1 20240117 (experimental)   (`g++    -O2 -g`):     4.52 seconds and   343,872 KiB of RAM
+//
+//   For 10,000 binary files:
+//     Visual C++ 2019 (version 19.29.30151 for x64) (`cl /O2 /Zi`):        3.23 seconds
+//     g++-11 (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0  (`g++-11 -O2 -g`):    13.59 seconds and   803,592 KiB of RAM
+//     g++-14 (GCC) 14.0.1 20240117 (experimental)   (`g++    -O2 -g`):    31.80 seconds and   858,884 KiB of RAM
+//
+//   For 20,000 binary files:
+//     Visual C++ 2019 (version 19.29.30151 for x64) (`cl /O2 /Zi`):        3.36 seconds
+//     g++-11 (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0  (`g++-11 -O2 -g`):    43.47 seconds and 1,417,348 KiB of RAM
+//     g++-14 (GCC) 14.0.1 20240117 (experimental)   (`g++    -O2 -g`):   123.11 seconds and 1,697,600 KiB of RAM
+//
+// (All benchmarks have been performed by x86_64 toolchains generating x86_64 machine code.)
+//
+// The `GenerateBigXRCFile.sh` script can be used to generate
+// many small resource files and an XRC file which references them all,
+// in order to conduct similar experiments/benchmarks.
+//
+"void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype);\n"
 "\n");
 
-    for (i = 0; i < flist.GetCount(); i++)
+    file.Write("namespace\n{\n");
+    for (unsigned i = 0, n = flist.GetCount(); i < n; ++i)
         file.Write(
-              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
+              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i, n));
+    file.Write("} // End of anonymous namespace.\n\n");
 
     file.Write(""
 "void " + parFuncname + "()\n"
@@ -673,7 +808,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "    }\n"
 "\n");
 
-    for (i = 0; i < flist.GetCount(); i++)
+    for (unsigned i = 0, n = flist.GetCount(); i < n; i++)
     {
         wxString s;
 
@@ -699,15 +834,31 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
         file.Write(s);
     }
 
-    for (i = 0; i < parFiles.GetCount(); i++)
+    for (unsigned i = 0, n = parFiles.GetCount(); i < n; ++i)
     {
         file.Write("    wxXmlResource::Get()->Load(wxT(\"memory:XRC_resource/" +
                    GetInternalFileName(parFiles[i], flist) + "\"));\n");
     }
 
     file.Write("}\n");
-
-
+    file.Write(
+        "\n"
+        "void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype)\n"
+        "{\n"
+        // It may appear as though this is a simply-forwarding function,
+        // but in fact it converts several arguments from `const wxChar *` to `const wxString &`,
+        // i.e. it constructs and destroys several temporary `wxString` objects,
+        // and therefore we centralize these operations here as opposed to inlining them at all call sites
+        // (which could cost significant time and memory at compile-time and also memory at run-time
+        // as described in comments at the beginning of this file).
+        //
+        "    #if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
+        "        return wxMemoryFSHandler::AddFileWithMimeType(filename, binarydata, size, mimetype);\n"
+        "    #else\n"
+        "        return wxMemoryFSHandler::AddFile(filename, binarydata, size);\n"
+        "    #endif\n"
+        "}\n"
+    );
 }
 
 void XmlResApp::GenCPPHeader()
