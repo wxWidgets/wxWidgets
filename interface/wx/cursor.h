@@ -105,6 +105,10 @@ public:
             Hotspot y coordinate (relative to the top left of the image).
         @param maskBits
             Bits for a mask bitmap.
+        @param fg
+            Foreground colour.
+        @param bg
+            Background colour.
 
         @onlyfor{wxgtk}
 
@@ -114,7 +118,8 @@ public:
     */
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,
-             const char maskBits[] = nullptr);
+             const char maskBits[] = nullptr,
+             const wxColour* fg = nullptr, const wxColour* bg = nullptr);
 
     /**
         Constructs a cursor by passing a string resource name or filename.
