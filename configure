@@ -690,6 +690,7 @@ COND_USE_RTTI_0
 COND_USE_PLUGINS_0
 COND_USE_PCH_1
 COND_USE_OPENGL_1
+COND_USE_LUNASVG_1
 COND_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_USE_GUI_1_wxUSE_LIBJPEG_builtin
@@ -739,6 +740,7 @@ COND_SHARED_0_wxUSE_ZLIB_builtin
 COND_SHARED_0_wxUSE_REGEX_builtin
 COND_SHARED_0_wxUSE_EXPAT_builtin
 COND_SHARED_0_USE_STC_1
+COND_SHARED_0_USE_LUNASVG_1
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin
@@ -1106,6 +1108,7 @@ with_libnotify
 with_opengl
 with_xtest
 with_nanosvg
+with_lunasvg
 with_cairo
 with_dmalloc
 with_sdl
@@ -1236,6 +1239,7 @@ enable_richtext
 enable_postscript
 enable_printarch
 enable_svg
+enable_lunasvg
 enable_webview
 enable_webviewchromium
 enable_cef_debug
@@ -2206,6 +2210,7 @@ Optional Features:
   --enable-postscript     use wxPostscriptDC device context (default for gtk+)
   --enable-printarch      use printing architecture
   --enable-svg            use wxSVGFileDC device context
+  --enable-lunasvg        use wxLunaSVG to render SVG images
   --enable-webview        use wxWebView library
   --enable-webviewchromium        use wxWebView Chromium backend
   --enable-cef_debug      use debug build of CEF wrapper
@@ -2380,6 +2385,7 @@ Optional Packages:
   --with-opengl           use OpenGL (or Mesa)
   --with-xtest            use XTest extension
   --with-nanosvg          use NanoSVG for rasterizing SVG
+  --with-lunasvg          use LunaSVG for rasterizing SVG, replaces NanoSVG
   --with-cairo            use Cairo-based wxGraphicsContext implementation
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
@@ -5045,6 +5051,35 @@ fi
 
 
           eval "$wx_cv_use_nanosvg"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-lunasvg was given.
+if test "${with_lunasvg+set}" = set; then :
+  withval=$with_lunasvg;
+                        if test "$withval" = yes; then
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=yes'
+                        else
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=no'
+                        fi
+
+else
+
+                        wx_cv_use_lunasvg='wxUSE_LUNASVG=${'DEFAULT_wxUSE_LUNASVG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_lunasvg"
 
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
@@ -8768,6 +8803,35 @@ fi
 
 
           eval "$wx_cv_use_svg"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-lunasvg was given.
+if test "${enable_lunasvg+set}" = set; then :
+  enableval=$enable_lunasvg;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_lunasvg='wxUSE_LUNASVG=yes'
+                          else
+                            wx_cv_use_lunasvg='wxUSE_LUNASVG=no'
+                          fi
+
+else
+
+                          wx_cv_use_lunasvg='wxUSE_LUNASVG=${'DEFAULT_wxUSE_LUNASVG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_lunasvg"
 
 
           enablestring=
@@ -39208,6 +39272,22 @@ fi
 
 fi
 
+USE_LUNASVG=0
+if test "$wxUSE_LUNASVG" = "yes"; then
+   if ! test -f "$srcdir/3rdparty/lunasvg/include/lunasvg.h" ; then
+       as_fn_error $? "
+   The required lunasvg header was not found. You probably need to run
+
+       git submodule update --init 3rdparty/lunasvg
+
+   to fix this." "$LINENO" 5
+   fi
+
+   $as_echo "#define wxUSE_LUNASVG 1" >>confdefs.h
+
+   USE_LUNASVG=1
+fi
+
 if test "$wxUSE_MENUS" = "yes"; then
     $as_echo "#define wxUSE_MENUS 1" >>confdefs.h
 
@@ -40549,6 +40629,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_LUNASVG" = "yes" ; then
+        BUILT_WX_LIBS="lunasvg $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_WEBVIEW" = "yes" ; then
         BUILT_WX_LIBS="webview $BUILT_WX_LIBS"
@@ -42773,6 +42856,11 @@ EOF
         COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
     fi
 
+    COND_SHARED_0_USE_LUNASVG_1="#"
+    if test "x$SHARED" = "x0" -a "x$USE_LUNASVG" = "x1" ; then
+        COND_SHARED_0_USE_LUNASVG_1=""
+    fi
+
     COND_SHARED_0_USE_STC_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_STC" = "x1" ; then
         COND_SHARED_0_USE_STC_1=""
@@ -43016,6 +43104,11 @@ EOF
     COND_USE_GUI_1_wxUSE_LIBTIFF_builtin="#"
     if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
         COND_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
+    fi
+
+    COND_USE_LUNASVG_1="#"
+    if test "x$USE_LUNASVG" = "x1" ; then
+        COND_USE_LUNASVG_1=""
     fi
 
     COND_USE_OPENGL_1="#"

@@ -246,15 +246,18 @@ public:
     /**
         Create a bundle from the SVG image.
 
-        Please note that the current implementation uses NanoSVG library
-        (https://github.com/memononen/nanosvg) for parsing and rasterizing SVG
-        images which imposes the following limitations:
+        Please note that the current implementation uses either LunaSVG library
+        (https://github.com/sammycage/lunasvg) (since wxWidgets 3.3) or NanoSVG
+        library (https://github.com/memononen/nanosvg) (since wxWidgets 3.1.7)
+        for parsing and rasterizing SVG images which imposes the following
+        limitations:
 
         - Text elements are not supported at all (see note for workaround).
         - SVG 1.1 filters are not supported.
         - Embedded images are not supported (see note for workaround).
 
-        These limitations will be relaxed in the future wxWidgets versions.
+        These limitations may be relaxed in future wxWidgets versions (these
+        features are planned, but not yet implemented in LunaSVG).
 
         Please also note that this method is only available in the ports
         providing raw bitmap access via wxPixelData. This is the case for all
@@ -293,6 +296,19 @@ public:
     /// @overload
     static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
 
+    /**
+        This function is only available when wxUSE_LUNASVG is defined.
+    */
+    static wxBitmapBundle FromSVG(const std::string& data, const wxSize& sizeDef);
+
+    /**
+        This function is only available when wxUSE_LUNASVG is defined.
+
+        @note You must call std::move() to pass the unique_ptr to this
+        function.
+    */
+    static wxBitmapBundle FromSVG(std::unique_ptr<wxlunasvg::Document> document,
+                                  const wxSize& sizeDef);
 
     /**
         Create a bundle from the SVG image loaded from the given file.

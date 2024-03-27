@@ -19,7 +19,18 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL
+#if defined(wxUSE_LUNASVG)
+    #if !(__cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L))
+        #warning "C++17 or later is required for wxLunaSVG support -- switching to NanoSVG"
+        #undef wxUSE_LUNASVG
+    #endif
+#endif
+
+#if !defined(wxHAS_SVG)
+#pragma message("wxHAS_SVG not defined")
+#endif
+
+#if defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL && !wxUSE_LUNASVG
 
 // Try to help people updating their sources from Git and forgetting to
 // initialize new submodules, if possible: if you get this error, it means that
@@ -35,6 +46,178 @@
 #endif // wxHAS_SVG
 
 #ifdef wxHAS_SVG
+
+#include "wx/bmpbndl.h"
+#if wxUSE_FFILE
+    #include "wx/ffile.h"
+#elif wxUSE_FILE
+    #include "wx/file.h"
+#else
+    #define wxNO_SVG_FILE
+#endif
+
+#include "wx/rawbmp.h"
+#include "wx/private/bmpbndl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"  // Only for wxMin()
+#endif // WX_PRECOMP
+
+#if wxUSE_LUNASVG
+
+#include <memory>
+
+#include "wx/buffer.h"
+#include "wx/log.h"
+
+// Try to help people updating their sources from Git and forgetting to
+// initialize new submodules, if possible: if you get this error, it means that
+// your source tree doesn't contain 3rdparty/lunasvg or 3rdparty/plutovg and you
+// should initialize and update the corresponding submodule.
+#ifdef __has_include
+    #if ! __has_include("../../3rdparty/lunasvg/include/lunasvg.h")
+        #error You need to run "git submodule update --init 3rdparty/lunasvg" from the wxWidgets directory.
+        #undef wxHAS_SVG
+    #endif
+    #if ! __has_include("../../3rdparty/plutovg/include/plutovg.h")
+        #error You need to run "git submodule update --init 3rdparty/plutovg" from the wxWidgets directory.
+        #undef wxHAS_SVG
+    #endif
+#endif // __has_include
+
+#include "../../3rdparty/lunasvg/include/lunasvg.h"
+
+class wxBitmapBundleImplSVG : public wxBitmapBundleImpl
+{
+public:
+    wxBitmapBundleImplSVG(std::unique_ptr<wxlunasvg::Document> svg_document, const wxSize& sizeDef);
+
+    virtual wxSize GetDefaultSize() const override;
+    virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override;
+
+    virtual wxBitmap GetBitmap(const wxSize& size) override;
+
+    bool IsOk() const;
+
+private:
+    wxBitmap DoRasterize(const wxSize& size);
+
+    std::unique_ptr<wxlunasvg::Document> m_svgDocument;
+
+    const wxSize m_sizeDef;
+
+    // Cache the last used bitmap (may be invalid if not used yet).
+    //
+    // Note that we cache only the last bitmap and not all the bitmaps ever
+    // requested from GetBitmap() for the different sizes because there would be
+    // no way to clear such cache and its growth could be unbounded, resulting
+    // in too many bitmap objects being used in an application using SVG for all
+    // of its icons.
+    wxBitmap m_cachedBitmap;
+
+    wxDECLARE_NO_COPY_CLASS(wxBitmapBundleImplSVG);
+};
+
+// ============================================================================
+// wxBitmapBundleImplSVG implementation
+// ============================================================================
+
+wxBitmapBundleImplSVG::wxBitmapBundleImplSVG(std::unique_ptr<wxlunasvg::Document> svg_document, const wxSize& sizeDef)
+    : m_sizeDef(sizeDef)
+{
+    m_svgDocument = std::move(svg_document);
+}
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef)
+{
+    wxCHECK_MSG(data != nullptr, wxBitmapBundle(), "null data pointer");
+    wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
+    auto svgDocument = wxlunasvg::Document::loadFromData(data);
+    return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
+}
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
+{
+    wxCHECK_MSG(data != nullptr, wxBitmapBundle(), "null data pointer");
+    wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
+    auto svgDocument = wxlunasvg::Document::loadFromData(data);
+    return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
+}
+
+/* static */
+wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef)
+{
+    wxCHECK_MSG(data != nullptr, wxBitmapBundle(), "null data pointer");
+    wxCHECK_MSG(len > 0, wxBitmapBundle(), "zero length data");
+    wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
+    auto svgDocument = wxlunasvg::Document::loadFromData(reinterpret_cast<const char*>(data), len);
+    return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
+}
+
+bool wxBitmapBundleImplSVG::IsOk() const
+{
+    return m_svgDocument != nullptr;
+}
+
+wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
+{
+    if (IsOk())
+    {
+        const wxlunasvg::Bitmap lbmp = m_svgDocument->renderToBitmap(size.x, size.y);
+
+        if (lbmp.valid())
+        {
+            const auto width = lbmp.width();
+            const auto height = lbmp.height();
+            const auto stride = lbmp.stride();
+            auto rowData = lbmp.data();
+
+            wxBitmap bmp(width, height, 32);
+            wxAlphaPixelData bmpdata(bmp);
+            wxAlphaPixelData::Iterator dst(bmpdata);
+
+            for (int y = 0; y < height; ++y)
+            {
+                auto data = rowData;
+                dst.MoveTo(bmpdata, 0, y);
+
+                for (int x = 0; x < width; ++x, ++dst)
+                {
+                    auto b = data[0];
+                    auto g = data[1];
+                    auto r = data[2];
+                    auto a = data[3];
+#ifndef wxHAS_PREMULTIPLIED_ALPHA
+                    if (a != 0 )
+                    {
+                        r = (r * 255) / a;
+                        g = (g * 255) / a;
+                        b = (b * 255) / a;
+                    }
+#endif
+                    dst.Red()   = r;
+                    dst.Green() = g;
+                    dst.Blue()  = b;
+                    dst.Alpha() = a;
+
+                    data += 4;
+                }
+
+                rowData += stride;
+            }
+
+            return bmp;
+        }
+        else
+            wxLogDebug("invalid wxlunasvg::Bitmap");
+    }
+
+    return wxBitmap();
+}
+
+#else // !wxUSE_LUNASVG
 
 // Note that we have to include NanoSVG headers before including any of wx
 // headers, notably wx/unichar.h which defines global operator==() overloads
@@ -68,22 +251,6 @@
 #ifdef __VISUALC__
     #pragma warning(pop)
 #endif
-
-#ifndef WX_PRECOMP
-    #include "wx/utils.h"                   // Only for wxMin()
-#endif // WX_PRECOMP
-
-#include "wx/bmpbndl.h"
-#ifdef wxUSE_FFILE
-    #include "wx/ffile.h"
-#elif wxUSE_FILE
-    #include "wx/file.h"
-#else
-    #define wxNO_SVG_FILE
-#endif
-#include "wx/rawbmp.h"
-
-#include "wx/private/bmpbndl.h"
 
 // ----------------------------------------------------------------------------
 // private helpers
@@ -138,27 +305,6 @@ private:
 // ============================================================================
 // wxBitmapBundleImplSVG implementation
 // ============================================================================
-
-wxSize wxBitmapBundleImplSVG::GetDefaultSize() const
-{
-    return m_sizeDef;
-}
-
-wxSize wxBitmapBundleImplSVG::GetPreferredBitmapSizeAtScale(double scale) const
-{
-    // We consider that we can render at any scale.
-    return m_sizeDef*scale;
-}
-
-wxBitmap wxBitmapBundleImplSVG::GetBitmap(const wxSize& size)
-{
-    if ( !m_cachedBitmap.IsOk() || m_cachedBitmap.GetSize() != size )
-    {
-        m_cachedBitmap = DoRasterize(size);
-    }
-
-    return m_cachedBitmap;
-}
 
 wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
 {
@@ -252,12 +398,38 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxS
     return FromSVG(copy.data(), sizeDef);
 }
 
+#endif // !wxUSE_LUNASVG
+
+// Common methods for both implementations.
+
+wxSize wxBitmapBundleImplSVG::GetDefaultSize() const
+{
+    return m_sizeDef;
+}
+
+wxSize wxBitmapBundleImplSVG::GetPreferredBitmapSizeAtScale(double scale) const
+{
+    return m_sizeDef * scale;
+}
+
+wxBitmap wxBitmapBundleImplSVG::GetBitmap(const wxSize& size)
+{
+    if ( !m_cachedBitmap.IsOk() || m_cachedBitmap.GetSize() != size )
+    {
+        m_cachedBitmap = DoRasterize(size);
+    }
+
+    return m_cachedBitmap;
+}
+
 /* static */
 wxBitmapBundle wxBitmapBundle::FromSVGFile(const wxString& path, const wxSize& sizeDef)
 {
-    // There is nsvgParseFromFile(), but it doesn't work with Unicode filenames
-    // under MSW and does exactly the same thing that we do here in any case,
-    // so it seems better to use our code.
+    // lunasvg has loadFromFile() which uses std::ifstream with a std::string,
+    // and therefore may not work properly with Unicode filenames under MSW.
+    //
+    // nanosvg has nsvgParseFromFile(), but it doesn't work with Unicode
+    // under MSW either.
 #ifndef wxNO_SVG_FILE
 #if wxUSE_FFILE
     wxFFile file(path, "rb");

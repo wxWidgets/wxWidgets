@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <set var="LIB_LUNASVG">
+            <if cond="USE_LUNASVG=='1'">
+                wxlunasvg$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="LIB_LUNASVG">
+            <if cond="USE_LUNASVG=='1'">
+                wxlunasvg$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+
+    <template id="wxlunasvg_cppflags">
+        <include>$(TOP_SRCDIR)3rdparty/lunasvg/include</include>
+        <include>$(TOP_SRCDIR)3rdparty/plutovg/include</include>
+    </template>
+
+    <set var="INC_LUNASVG">
+        <if cond="USE_LUNASVG=='1'">
+            $(TOP_SRCDIR)3rdparty/lunasvg/include
+            $(TOP_SRCDIR)3rdparty/plutovg/include
+        </if>
+    </set>
+
+    <lib id="wxlunasvg" template="3rdparty_lib,wxlunasvg_cppflags,msvc_setup_h"
+         cond="USE_LUNASVG=='1' and BUILDING_LIB=='1'">
+        <dirname>$(LIBDIRNAME)</dirname>
+        <if cond="FORMAT!='autoconf'">
+            <include>$(SETUPHDIR)</include>
+            <include>$(TOP_SRCDIR)3rdparty/lunasvg/include</include>
+            <include>$(TOP_SRCDIR)3rdparty/plutovg/include</include>
+        </if>
+        <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
+        <define>$(DEBUG_DEFINE)</define>
+        <sources>
+            3rdparty/lunasvg/source/lunasvg.cpp
+            3rdparty/lunasvg/source/graphics.cpp
+            3rdparty/lunasvg/source/svgelement.cpp
+            3rdparty/lunasvg/source/svggeometryelement.cpp
+            3rdparty/lunasvg/source/svglayoutstate.cpp
+            3rdparty/lunasvg/source/svgpaintelement.cpp
+            3rdparty/lunasvg/source/svgparser.cpp
+            3rdparty/lunasvg/source/svgproperty.cpp
+            3rdparty/lunasvg/source/svgrenderstate.cpp
+            3rdparty/lunasvg/source/svgtextelement.cpp
+
+            3rdparty/plutovg/source/plutovg-blend.c
+            3rdparty/plutovg/source/plutovg-canvas.c
+            3rdparty/plutovg/source/plutovg-font.c
+            3rdparty/plutovg/source/plutovg-matrix.c
+            3rdparty/plutovg/source/plutovg-paint.c
+            3rdparty/plutovg/source/plutovg-path.c
+            3rdparty/plutovg/source/plutovg-rasterize.c
+            3rdparty/plutovg/source/plutovg-surface.c
+            3rdparty/plutovg/source/plutovg-ft-math.c
+            3rdparty/plutovg/source/plutovg-ft-raster.c
+            3rdparty/plutovg/source/plutovg-ft-stroker.c
+        </sources>
+    </lib>
+
+    <!-- used to conditionally link against lunasvg only if it's enabled -->
+    <set var="wxlunasvg_library_link">
+        <if cond="USE_LUNASVG=='1' and BUILDING_LIB=='1'">lunasvg</if>
+    </set>
+
+</makefile>

@@ -530,6 +530,7 @@ WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifica
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 WX_ARG_WITH(xtest,         [  --with-xtest            use XTest extension], wxUSE_XTEST)
 WX_ARG_WITH(nanosvg,       [  --with-nanosvg          use NanoSVG for rasterizing SVG], wxUSE_NANOSVG)
+WX_ARG_WITH(lunasvg,       [  --with-lunasvg          use LunaSVG for rasterizing SVG, replaces NanoSVG], wxUSE_LUNASVG)
 
 if test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
     wx_needs_cairo_for_gc=1
@@ -782,6 +783,7 @@ WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUS
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
+WX_ARG_FEATURE(lunasvg,     [  --enable-lunasvg        use wxLunaSVG to render SVG images], wxUSE_LUNASVG)
 WX_ARG_FEATURE(webview,     [  --enable-webview        use wxWebView library], wxUSE_WEBVIEW)
 
 dnl This one is not enabled by default as it requires CEF to be available under
@@ -6758,6 +6760,21 @@ if test "$wxUSE_STC" = "yes"; then
    AC_SUBST(COND_PYTHON)
 fi
 
+USE_LUNASVG=0
+if test "$wxUSE_LUNASVG" = "yes"; then
+   if ! test -f "$srcdir/3rdparty/lunasvg/include/lunasvg.h" ; then
+       AC_MSG_ERROR([
+   The required lunasvg header was not found. You probably need to run
+
+       git submodule update --init 3rdparty/lunasvg
+
+   to fix this.])
+   fi
+
+   AC_DEFINE(wxUSE_LUNASVG)
+   USE_LUNASVG=1
+fi
+
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
     if test "$wxUSE_MENUBAR" = "yes"; then
@@ -7460,6 +7477,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_STC" = "yes" ; then
         BUILT_WX_LIBS="stc $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_LUNASVG" = "yes" ; then
+        BUILT_WX_LIBS="lunasvg $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_WEBVIEW" = "yes" ; then
         BUILT_WX_LIBS="webview $BUILT_WX_LIBS"

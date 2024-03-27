@@ -2843,4 +2843,3 @@ STC_CMN_HDR =
 STC_OSX_COCOA_SRC =
     src/stc/PlatWXcocoa.mm
 STC_OSX_COCOA_HDR =
-

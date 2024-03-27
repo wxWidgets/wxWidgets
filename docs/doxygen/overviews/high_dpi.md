@@ -267,14 +267,14 @@ wxBitmapBundle::FromSVG() or wxBitmapBundle::FromSVGFile(). Such bitmap
 bundles will always produce bitmaps of exactly the required size, at any
 resolution. At normal DPI, i.e. without any scaling, the size of the resulting
 bitmap will be the default bundle size, which must be provided when creating
-this kind of bitmap bundle, as SVG image itself doesn't necessarily contain
+this kind of bitmap bundle, as an SVG image itself doesn't necessarily contain
 this information.
 
-Note that wxWidgets currently uses [NanoSVG][] library for SVG support and so
+Note that wxWidgets currently uses the [LunaSVG][] library for SVG support and so
 doesn't support all SVG standard features and you may need to simplify or
 tweak the SVG files to make them appear correctly.
 
-[NanoSVG]: https://github.com/memononen/nanosvg
+[LunaSVG]: https://github.com/wxWidgets/lunasvg
 
 wxBitmapBundle and XRC              {#high_dpi_bundle_xrc}
 ----------------------
