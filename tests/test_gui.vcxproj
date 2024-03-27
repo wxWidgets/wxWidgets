@@ -585,7 +585,7 @@
     <ClCompile Include="xml\xrctest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\samples\sample.rc" />
+    <ResourceCompile Include=".\test.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

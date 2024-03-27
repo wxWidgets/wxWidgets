@@ -10,6 +10,12 @@
     <include file="../build/bakefiles/common_samples.bkl"/>
 
     <template id="wx_test">
+        <win32-res>$(WXTOPDIR)tests/test.rc</win32-res>
+        <res-include>$(TOP_SRCDIR)samples</res-include>
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include>
+            <res-include>$(TOP_SRCDIR)include</res-include>
+        </if>
         <include>$(TOP_SRCDIR)3rdparty/catch/single_include</include>
 
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
@@ -167,6 +173,8 @@
         </if>
     </template>
 
+    <set var="BUNDLE_RESOURCES">$(TOP_SRCDIR)tests/horse.png $(TOP_SRCDIR)include/wx/msw/bullseye.cur</set>
+
     <exe id="test_gui" template="wx_sample,wx_test"
                        template_append="stc_append,wx_append"
          cond="USE_GUI=='1'">
@@ -316,6 +324,9 @@
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
+
+    <!-- reset resources -->
+    <set var="BUNDLE_RESOURCES"></set>
 
     <exe id="test_allheaders" template="wx_sample,wx_test"
                               template_append="stc_append,wx_append"
