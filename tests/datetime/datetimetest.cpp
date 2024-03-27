@@ -127,7 +127,7 @@ struct Date
     wxDateTime::wxDateTime_t hour, min, sec;
     double jdn;
     wxDateTime::WeekDay wday;
-    time_t gmticks;
+    wxInt64 gmticks;
 
     void Init(const wxDateTime::Tm& tm)
     {
@@ -184,8 +184,8 @@ static const Date testDates[] =
     {  8, wxDateTime::Feb,  2036, 00, 00, 00, 2464731.5, wxDateTime::Fri,        -1 },
     {  1, wxDateTime::Jan,  2037, 00, 00, 00, 2465059.5, wxDateTime::Thu,        -1 },
     {  1, wxDateTime::Jan,  2038, 00, 00, 00, 2465424.5, wxDateTime::Fri,        -1 },
-    {  1, wxDateTime::Jan,  2044, 00, 00, 00, 2467615.5, wxDateTime::Fri,        -1 },
-    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon,        -1 },
+    {  1, wxDateTime::Jan,  2044, 00, 00, 00, 2467615.5, wxDateTime::Fri, 2335219200LL },
+    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon, 7954070400LL },
     { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, wxDateTime::Sat, 202219200 },
     { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, wxDateTime::Sun, 194400000 },
     {  1, wxDateTime::Jan,  1900, 12, 00, 00, 2415021.0, wxDateTime::Mon,        -1 },
@@ -1071,7 +1071,7 @@ void DateTimeTestCase::TestTimeTicks()
 
         INFO("n=" << n);
 
-        time_t ticks = (dt.GetValue() / 1000).ToLong();
+        wxInt64 ticks = (dt.GetValue() / 1000).GetValue();
         CHECK( d.gmticks == ticks );
     }
 }
