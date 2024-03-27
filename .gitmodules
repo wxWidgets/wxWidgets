@@ -38,3 +38,6 @@
 	path = src/stc/lexilla
 	url = https://github.com/wxWidgets/lexilla.git
 	branch = wx
+[submodule "3rdparty/lunasvg"]
+	path = 3rdparty/lunasvg
+	url = https://github.com/sammycage/lunasvg.git
