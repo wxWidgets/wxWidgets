@@ -558,6 +558,8 @@
 
 #cmakedefine01 wxUSE_LIBTIFF
 
+#cmakedefine01 wxUSE_LUNASVG
+
 #cmakedefine01 wxUSE_NANOSVG
 
 #cmakedefine01 wxUSE_NANOSVG_EXTERNAL

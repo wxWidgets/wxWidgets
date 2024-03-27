@@ -62,6 +62,8 @@
     #define WXLIBDESC "styled text"
 #elif defined WXMAKINGDLL_WEBVIEW
     #define WXLIBDESC "webview"
+#elif defined WXMAKINGDLL_LUNASVG
+    #define WXLIBDESC "lunasvg"
 #elif defined WXMAKINGDLL
     #define WXLIBDESC "monolithic"
 #else

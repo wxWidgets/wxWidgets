@@ -19,6 +19,17 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if defined(wxUSE_LUNASVG)
+    #if !(__cplusplus >= 201703L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201703L))
+        #warning "C++17 or later is required for wxLunaSVG support -- switching to NanoSVG"
+        #undef wxUSE_LUNASVG
+    #endif
+#endif
+
+#if !defined(wxHAS_SVG)
+#pragma message("wxHAS_SVG not defined")
+#endif
+
 #if defined(wxHAS_SVG) && !wxUSE_NANOSVG_EXTERNAL && !wxUSE_LUNASVG
 
 // Try to help people updating their sources from Git and forgetting to
@@ -48,6 +59,10 @@
 #include "wx/rawbmp.h"
 #include "wx/private/bmpbndl.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"  // Only for wxMin()
+#endif // WX_PRECOMP
+
 #if wxUSE_LUNASVG
 
 #include <memory>
@@ -57,11 +72,15 @@
 
 // Try to help people updating their sources from Git and forgetting to
 // initialize new submodules, if possible: if you get this error, it means that
-// your source tree doesn't contain 3rdparty/lunasvg and you should initialize
-// and update the corresponding submodule.
+// your source tree doesn't contain 3rdparty/lunasvg or 3rdparty/plutovg and you
+// should initialize and update the corresponding submodule.
 #ifdef __has_include
     #if ! __has_include("../../3rdparty/lunasvg/include/lunasvg.h")
         #error You need to run "git submodule update --init 3rdparty/lunasvg" from the wxWidgets directory.
+        #undef wxHAS_SVG
+    #endif
+    #if ! __has_include("../../3rdparty/plutovg/include/plutovg.h")
+        #error You need to run "git submodule update --init 3rdparty/plutovg" from the wxWidgets directory.
         #undef wxHAS_SVG
     #endif
 #endif // __has_include
@@ -137,21 +156,6 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxS
     return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
 }
 
-/* static */
-wxBitmapBundle wxBitmapBundle::FromSVG(const std::string& data, const wxSize& sizeDef)
-{
-    wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
-    auto svgDocument = wxlunasvg::Document::loadFromData(data);
-    return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
-}
-
-/* static */
-wxBitmapBundle wxBitmapBundle::FromSVG(std::unique_ptr<wxlunasvg::Document> document, const wxSize& sizeDef)
-{
-    wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
-    return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(document), sizeDef));
-}
-
 bool wxBitmapBundleImplSVG::IsOk() const
 {
     return m_svgDocument != nullptr;
@@ -159,18 +163,11 @@ bool wxBitmapBundleImplSVG::IsOk() const
 
 wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
 {
-    if ( IsOk() )
+    if (IsOk())
     {
-        const auto scale = wxMin(size.x / m_svgDocument->width(), size.y / m_svgDocument->height());
-        const auto documentMatrix = m_svgDocument->matrix();
-        const auto scaleMatrix = documentMatrix.scaled(scale, scale);
-        wxlunasvg::Bitmap lbmp(size.x, size.y);
+        const wxlunasvg::Bitmap lbmp = m_svgDocument->renderToBitmap(size.x, size.y);
 
-        lbmp.clear(0);
-        m_svgDocument->render(lbmp, scaleMatrix);
-
-        // conversion to wxBitmap is based on the code in wxlunasvg::Bitmap::convert()
-        if ( lbmp.valid() )
+        if (lbmp.valid())
         {
             const auto width = lbmp.width();
             const auto height = lbmp.height();
@@ -181,12 +178,12 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
             wxAlphaPixelData bmpdata(bmp);
             wxAlphaPixelData::Iterator dst(bmpdata);
 
-            for ( std::uint32_t y = 0; y < height; ++y )
+            for (int y = 0; y < height; ++y)
             {
                 auto data = rowData;
                 dst.MoveTo(bmpdata, 0, y);
 
-                for ( std::uint32_t x = 0; x < width; ++x, ++dst )
+                for (int x = 0; x < width; ++x, ++dst)
                 {
                     auto b = data[0];
                     auto g = data[1];
@@ -254,10 +251,6 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
 #ifdef __VISUALC__
     #pragma warning(pop)
 #endif
-
-#ifndef WX_PRECOMP
-    #include "wx/utils.h"                   // Only for wxMin()
-#endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
 // private helpers

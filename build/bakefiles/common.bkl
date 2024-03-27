@@ -183,7 +183,6 @@
     <set var="WXLIB_STC">
         <if cond="MONOLITHIC=='0' and USE_STC=='1'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
     </set>
-
     <set var="WXLIB_WEBVIEW">
         <if cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'">$(mk.evalExpr(wxwin.mkLibName('webview')))</if>
     </set>
@@ -674,7 +673,6 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <sys-lib>$(LIB_LEXILLA_IF_MONO)</sys-lib>
     </template>
 
-
     <set var="WX_DISABLE_PRECOMP_HEADERS" overwrite="0">0</set>
 
     <template id="wx_lib_b" template="wx,anylib">
@@ -781,6 +779,7 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
         <include>$(INC_TIFF)</include>
         <include>$(INC_JPEG)</include>
         <include>$(INC_PNG)</include>
+        <include>$(INC_LUNASVG)</include>
     </template>
 
     <template id="wx_lib"

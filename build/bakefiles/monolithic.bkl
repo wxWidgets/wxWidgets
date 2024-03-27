@@ -32,6 +32,7 @@
         <ldlibs>$(EXTRALIBS_HTML)</ldlibs>
         <ldlibs>$(EXTRALIBS_MEDIA)</ldlibs>
         <ldlibs>$(EXTRALIBS_STC)</ldlibs>
+        <ldlibs>$(EXTRALIBS_LUNASVG)</ldlibs>
         <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
         <ldflags>$(EXTRALDFLAGS_WEBVIEW)</ldflags>
         <ldlibs>$(EXTRALIBS_WEBVIEW)</ldlibs>
