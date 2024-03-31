@@ -1603,6 +1603,8 @@ wxListMainWindow::~wxListMainWindow()
     if ( m_textctrlWrapper )
         m_textctrlWrapper->EndEdit(wxListTextCtrlWrapper::End_Destroy);
 
+    DoDeleteAllItems();
+
     delete m_highlightBrush;
     delete m_highlightUnfocusedBrush;
     delete m_renameTimer;
