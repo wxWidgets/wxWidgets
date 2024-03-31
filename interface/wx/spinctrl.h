@@ -41,7 +41,7 @@
     text in the edit part of the spin control directly, the EVT_TEXT is generated,
     like for the wxTextCtrl. When the use enters text into the text area, the text
     is not validated until the control loses focus (e.g. by using the TAB key).
-    The value is then adjusted to the range and a wxSpinEvent sent then if the value
+    The value is then adjusted to the range and a wxSpinEvent is then sent if the value
     is different from the last value sent.
 
     @library{wxcore}

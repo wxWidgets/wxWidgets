@@ -390,7 +390,7 @@ wxString wxGetUIDateFormat();
       Region(), Script() and other methods.
 
     The first method is useful for interoperating with the other software using
-    BCP 47 language tags, while the second one may may result in more readable
+    BCP 47 language tags, while the second one may result in more readable
     code and allows to specify Unix-specific locale description parts such as
     charset and modifier that are not part of the BCP 47 strings.
 

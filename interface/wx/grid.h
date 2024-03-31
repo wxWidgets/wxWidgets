@@ -2099,7 +2099,7 @@ public:
 
     /**
         Return the canonicalized block where top left coordinates is less
-        then bottom right coordinates.
+        than bottom right coordinates.
      */
     wxGridBlockCoords Canonicalize() const;
 
@@ -5000,7 +5000,7 @@ public:
     /**
         Copies all cells that are currently selected.
 
-        Note that the cells most be contiguously selected;
+        Note that the cells must be contiguously selected;
         otherwise, nothing will be copied.
 
         Returns @c true if content is successfully copied,

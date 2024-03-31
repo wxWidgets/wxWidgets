@@ -1623,7 +1623,7 @@ void wxUsleep(unsigned long milliseconds);
         3 characters: 2 hexadecimal digits and the terminating null character.
 
     @remarks
-        Returned string is composed of uppercase hexdecimal characters.
+        Returned string is composed of uppercase hexadecimal characters.
 
     @header{wx/utils.h}
 */
