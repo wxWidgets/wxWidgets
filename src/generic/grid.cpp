@@ -11075,6 +11075,11 @@ void wxGrid::SetDropTarget(wxDropTarget *dropTarget)
     GetGridWindow()->SetDropTarget(dropTarget);
 }
 
+wxDropTarget* wxGrid::GetDropTarget() const
+{
+    return GetGridWindow()->GetDropTarget();
+}
+
 #endif // wxUSE_DRAG_AND_DROP
 
 // ----------------------------------------------------------------------------
