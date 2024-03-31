@@ -37,7 +37,6 @@ class MyApp: public wxApp
 public:
   // implement base class virtuals
   virtual bool OnInit() override;
-  virtual int OnExit() override;
 };
 
 class MyFrame: public wxFrame
@@ -125,16 +124,6 @@ bool MyApp::OnInit()
     }
 
     return true;
-}
-
-int MyApp::OnExit()
-{
-    // clean up: Set() returns the active config object as Get() does, but unlike
-    // Get() it doesn't try to create one if there is none (definitely not what
-    // we want here!)
-    delete wxConfigBase::Set(nullptr);
-
-    return 0;
 }
 
 // ----------------------------------------------------------------------------
