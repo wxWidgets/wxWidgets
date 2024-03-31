@@ -675,7 +675,7 @@ enum class wxPGPropertyFlags : int
 
     @remarks
     Uses int value, similar to wxEnumProperty, unless text entered by user is
-    is not in choices (in which case string value is used).
+    not in choices (in which case string value is used).
 
     @subsection wxMultiChoiceProperty
 

@@ -4481,7 +4481,7 @@ public:
     This event class contains information about window and session close events.
 
     The handler function for EVT_CLOSE is called when the user has tried to close a
-    a frame or dialog box using the window manager (X) or system menu (Windows).
+    frame or dialog box using the window manager (X) or system menu (Windows).
     It can also be invoked by the application itself programmatically, for example by
     calling the wxWindow::Close function.
 
