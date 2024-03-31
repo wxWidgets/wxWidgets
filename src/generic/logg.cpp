@@ -835,11 +835,8 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     if (hasTimeStamp)
         m_listctrl->InsertColumn(1, wxT("Time"));
 
-    // prepare the imagelist
-    wxSize iconSize(16, 16);
-    iconSize *= parent->GetDPIScaleFactor();
-
-    wxImageList *imageList = new wxImageList(iconSize.x, iconSize.y);
+    // prepare the images
+    wxVector<wxBitmapBundle> images;
 
     // order should be the same as in the switch below!
     static wxString const icons[] =
@@ -853,8 +850,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
 
     for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
     {
-        wxBitmap bmp = wxArtProvider::GetBitmap(icons[icon], wxART_MESSAGE_BOX,
-                                                iconSize);
+        auto bmp = wxArtProvider::GetBitmapBundle(icons[icon], wxART_LIST);
 
         // This may very well fail if there are insufficient colours available.
         // Degrade gracefully.
@@ -865,10 +861,10 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
             break;
         }
 
-        imageList->Add(bmp);
+        images.push_back(bmp);
     }
 
-    m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
+    m_listctrl->SetSmallImages(images);
 
     // fill the listctrl
     size_t count = m_messages.GetCount();
