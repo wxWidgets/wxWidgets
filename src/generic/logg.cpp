@@ -848,9 +848,9 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
 
     bool loadedIcons = true;
 
-    for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
+    for ( const auto& icon: icons )
     {
-        auto bmp = wxArtProvider::GetBitmapBundle(icons[icon], wxART_LIST);
+        auto bmp = wxArtProvider::GetBitmapBundle(icon, wxART_LIST);
 
         // This may very well fail if there are insufficient colours available.
         // Degrade gracefully.
