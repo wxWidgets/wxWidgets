@@ -2376,6 +2376,7 @@ public:
     // ------- drag and drop
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget(wxDropTarget *dropTarget) override;
+    virtual wxDropTarget* GetDropTarget() const override;
 #endif // wxUSE_DRAG_AND_DROP
 
 
