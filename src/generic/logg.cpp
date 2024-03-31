@@ -846,22 +846,9 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
         wxART_INFORMATION
     };
 
-    bool loadedIcons = true;
-
     for ( const auto& icon: icons )
     {
-        auto bmp = wxArtProvider::GetBitmapBundle(icon, wxART_LIST);
-
-        // This may very well fail if there are insufficient colours available.
-        // Degrade gracefully.
-        if ( !bmp.IsOk() )
-        {
-            loadedIcons = false;
-
-            break;
-        }
-
-        images.push_back(bmp);
+        images.push_back(wxArtProvider::GetBitmapBundle(icon, wxART_LIST));
     }
 
     m_listctrl->SetSmallImages(images);
@@ -871,26 +858,18 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     for ( size_t n = 0; n < count; n++ )
     {
         int image;
-
-        if ( loadedIcons )
+        switch ( m_severity[n] )
         {
-            switch ( m_severity[n] )
-            {
-                case wxLOG_Error:
-                    image = 0;
-                    break;
+            case wxLOG_Error:
+                image = 0;
+                break;
 
-                case wxLOG_Warning:
-                    image = 1;
-                    break;
+            case wxLOG_Warning:
+                image = 1;
+                break;
 
-                default:
-                    image = 2;
-            }
-        }
-        else // failed to load images
-        {
-            image = -1;
+            default:
+                image = 2;
         }
 
         wxString msg = m_messages[n];
