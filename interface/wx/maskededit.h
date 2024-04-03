@@ -476,15 +476,6 @@ public:
     */
     long GetInvalidFieldIndex() const;
 
-    /**
-        Sets bell on/off when a character is not accepted.
-
-        @param bell
-            Set it to @false if you don't want the sound.
-    */
-    void SetBellOnError(bool bell);
-
-
     //Accessors -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
     /**
         Gets the number of fields in the mask.

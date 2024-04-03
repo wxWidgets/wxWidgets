@@ -64,9 +64,6 @@ public:
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
-#if wxUSE_ACCESSIBILITY
-    void OnBell(wxCommandEvent& event);
-#endif
     void OnAbout(wxCommandEvent& event);
     void OnUpdatePlain(wxCommandEvent& event);
 
@@ -122,9 +119,6 @@ enum
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MaskCtrl_Quit,  MyFrame::OnQuit)
-#if wxUSE_ACCESSIBILITY
-    EVT_MENU(MaskCtrl_Bell,  MyFrame::OnBell)
-#endif
     EVT_MENU(MaskCtrl_About, MyFrame::OnAbout)
     EVT_TEXT(wxID_ANY, MyFrame::OnUpdatePlain)
 END_EVENT_TABLE()
@@ -231,22 +225,6 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
     Close(true);
 }
-
-#if wxUSE_ACCESSIBILITY
-void MyFrame::OnBell(wxCommandEvent& WXUNUSED(event))
-{
-    //Use the ID of each wxMaskedEdit control
-    wxVector<long>::const_iterator it;
-    for (it = ctrIDs.begin(); it != ctrIDs.end(); it++)
-    {
-        wxWindow* win = FindWindow(*it);
-        if ( wxMaskedEditText *etext = wxDynamicCast(win, wxMaskedEditText) )
-            etext->SetBellOnError( GetMenuBar()->IsChecked(MaskCtrl_Bell) );
-        else if ( wxMaskedEditCombo *ecombo = wxDynamicCast(win, wxMaskedEditCombo) )
-            ecombo->SetBellOnError( GetMenuBar()->IsChecked(MaskCtrl_Bell) );
-    }
-}
-#endif
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
