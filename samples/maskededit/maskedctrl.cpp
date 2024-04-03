@@ -2,9 +2,6 @@
 // Name:        samples/maskededit/maskedctrl.cpp
 // Purpose:     wxWidgets masked edit control sample
 // Author:      Manuel Martin
-// Modified by:
-// Created:     2012-07-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Manuel Martin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

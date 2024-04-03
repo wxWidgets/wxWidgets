@@ -2,9 +2,7 @@
 // Name:        wx/generic/maskededit.h
 // Purpose:     wxMaskedEdit interface
 // Author:      Manuel Martin
-// Modified by:
 // Created:     2012-07-30
-// RCS-ID:      $Id$
 // Copyright:   (c) Manuel Martin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -304,7 +302,7 @@ protected:
     }
 
     //Default colours
-    void GetDefaultColours(wxColour* defFgCol, wxColour* defBgCol);
+    void GetDefaultColours(wxColour* defFgCol, wxColour* defBgCol) const;
 
     //Handle the selection, returning the new possible control's value
     wxString HandleSelection(long *pos, bool *changed);
