@@ -485,7 +485,7 @@ MyPanel::MyPanel(MyFrame* parent)
     edTexCtrl->SetAllFieldsFlags(fieldFlags); //same as sample 3
     edTexCtrl->SetMaskedColours(mskColours);
     mainSizer->Add(edTexCtrl, sizerFlags);
-    edTexCtrl->SetPlainValue("1920");
+    edTexCtrl->SetAllFieldsValue("1920");
     //use the predefined range function
     fparamsIP.rmin = 0;
     fparamsIP.rmax = 255;

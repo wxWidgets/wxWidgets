@@ -455,7 +455,7 @@ public:
 
         @see GetAllFieldsValue(), SetFieldValue(), wxMaskedEditText::SetValue()
     */
-    bool SetPlainValue(const wxString& plainValue);
+    bool SetAllFieldsValue(const wxString& plainValue);
 
     /**
         Sets the value for a field.
@@ -465,7 +465,7 @@ public:
 
         If any character is not allowed, it returns @false.
 
-        @see GetFieldValue(), SetPlainValue(), wxMaskedEditText::SetValue()
+        @see GetFieldValue(), SetAllFieldsValue(), wxMaskedEditText::SetValue()
     */
     bool SetFieldValue(size_t index, const wxString& plainValue);
 
@@ -488,7 +488,7 @@ public:
         The return value is the current control's value, after removing
         all "literals" and filling untyped cells with per-field padding chars.
 
-        @see SetPlainValue(), GetFieldValue(), wxEditFieldFlags
+        @see SetAllFieldsValue(), GetFieldValue(), wxEditFieldFlags
     */
     wxString GetAllFieldsValue() const;
 
@@ -601,7 +601,7 @@ public:
        Notice that this method will generate a @c wxEVT_COMMAND_TEXT_UPDATED
        event, use ChangeValue() if this is undesirable.
 
-       @see wxTextEntry::SetValue(), wxMaskedEdit::SetPlainValue()
+       @see wxTextEntry::SetValue(), wxMaskedEdit::SetAllFieldsValue()
     */
     virtual void SetValue(const wxString& value);
 
@@ -725,7 +725,7 @@ public:
        event, use ChangeValue() if this is undesirable.
 
        @see wxComboBox::SetValue(), wxTextEntry::SetValue(),
-       wxMaskedEdit::SetPlainValue()
+       wxMaskedEdit::SetAllFieldsValue()
     */
     virtual void SetValue(const wxString& value);
 

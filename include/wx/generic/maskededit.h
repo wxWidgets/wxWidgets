@@ -222,7 +222,7 @@ public:
     bool SetParams(const wxMaskedEditParams& params);
 
     //Set the control's value from a undecorated text.
-    bool SetPlainValue(const wxString& plainValue);
+    bool SetAllFieldsValue(const wxString& plainValue);
 
     //Sets the value for a field.
     bool SetFieldValue(size_t index, const wxString& plainValue);

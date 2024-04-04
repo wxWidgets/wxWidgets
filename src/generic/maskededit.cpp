@@ -366,7 +366,7 @@ bool wxMaskedEdit::SetMask(const wxString& mask)
     for (size_t j = 0; j < m_ExpMask.Len(); j++)
         m_filled.push_back(false);
 
-    SetPlainValue("");
+    SetAllFieldsValue("");
 
     //Update the minimal size of the control
     sForSize << 'a'; //give it a tip, for margins
@@ -507,7 +507,7 @@ bool wxMaskedEdit::SetParams(const wxMaskedEditParams& params)
 //Set the control's value from an undecorated text, which is supposed to
 // resemble user's input.
 //Also annotates empty cells (characters not typed)
-bool wxMaskedEdit::SetPlainValue(const wxString& plainValue)
+bool wxMaskedEdit::SetAllFieldsValue(const wxString& plainValue)
 {
     //If the mask is not big enough, this plainValue does not fit in it
     //TODO: allow it with a flag?
@@ -1808,7 +1808,7 @@ wxChar wxMaskedEdit::ToUppLowCase(wxChar ch, size_t pos)
 }
 
 //Test the character.
-//'tryChar' is received from EVT_CHAR, SetPlainValue, SetFieldValue, etc.
+//'tryChar' is received from EVT_CHAR, SetAllFieldsValue, SetFieldValue, etc.
 //We change it to upper/lower if mask tells it so and it is accepted.
 bool wxMaskedEdit::TestChar(wxChar* tryChar, long pos)
 {

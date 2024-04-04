@@ -53,7 +53,7 @@ TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::CreateControl", "[mas
     CHECK( m_maskedEdit->GetValue() == "=bC-12 ++  .9876" );
 
     m_maskedEdit->SetFieldFlags( 3, wxMaskedEditFieldFlags( wxALIGN_RIGHT ) );
-    m_maskedEdit->SetPlainValue( "fg56" );
+    m_maskedEdit->SetAllFieldsValue( "fg56" );
     m_maskedEdit->SetFieldValue( 3, "987" );
     CHECK( m_maskedEdit->GetValue() == "=fG-56 ++  . 987" );
 }
@@ -69,7 +69,7 @@ TEST_CASE_METHOD( MaskedEditTestCase, "MaskedEditTestCase::TestSet", "[maskedtex
     CHECK( m_maskedEdit->GetValue() == "=bC-12 ++  .9876" );
 
     m_maskedEdit->SetFieldFlags( 3, wxMaskedEditFieldFlags( wxALIGN_RIGHT ) );
-    m_maskedEdit->SetPlainValue( "fg56" );
+    m_maskedEdit->SetAllFieldsValue( "fg56" );
     m_maskedEdit->SetFieldValue( 3, "987" );
     CHECK( m_maskedEdit->GetValue() == "=fG-56 ++  . 987" );
 }
