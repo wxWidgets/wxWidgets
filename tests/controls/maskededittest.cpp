@@ -11,10 +11,6 @@
 
 #if wxUSE_MASKED_EDIT
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif // WX_PRECOMP
