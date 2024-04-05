@@ -254,6 +254,7 @@ Changes in behaviour which may result in build errors
 All:
 
 - Add support for "%F" format specifier to wxDateTime (#24173).
+- Support dates > 2038 if time_t is 64-bit (Lauri Nurmi, #24464).
 - Restore possible ABI incompatibility with wx < 3.2.3 in wxString.
 - Set request and response for wxEVT_WEBREQUEST_DATA events (#24416).
 
