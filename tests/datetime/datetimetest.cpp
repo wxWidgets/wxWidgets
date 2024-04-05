@@ -129,7 +129,7 @@ struct Date
     wxDateTime::wxDateTime_t hour, min, sec;
     double jdn;
     wxDateTime::WeekDay wday;
-    time_t gmticks;
+    wxInt64 gmticks;
 
     void Init(const wxDateTime::Tm& tm)
     {
@@ -186,7 +186,8 @@ static const Date testDates[] =
     {  8, wxDateTime::Feb,  2036, 00, 00, 00, 2464731.5, wxDateTime::Fri,        -1 },
     {  1, wxDateTime::Jan,  2037, 00, 00, 00, 2465059.5, wxDateTime::Thu,        -1 },
     {  1, wxDateTime::Jan,  2038, 00, 00, 00, 2465424.5, wxDateTime::Fri,        -1 },
-    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon,        -1 },
+    {  1, wxDateTime::Jan,  2044, 00, 00, 00, 2467615.5, wxDateTime::Fri, 2335219200LL },
+    { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon, 7954070400LL },
     { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, wxDateTime::Sat, 202219200 },
     { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, wxDateTime::Sun, 194400000 },
     {  1, wxDateTime::Jan,  1900, 12, 00, 00, 2415021.0, wxDateTime::Mon,        -1 },
@@ -940,13 +941,13 @@ void DateTimeTestCase::TestTimeTicks()
 
         // GetValue() returns internal UTC-based representation, we need to
         // convert it to local TZ before comparing
-        time_t ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
+        wxInt64 ticks = (dt.GetValue() / 1000).ToLong() + TZ_LOCAL.GetOffset();
         if ( dt.IsDST() )
             ticks += 3600;
         CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks + tzOffset );
 
         dt = d.DT().FromTimezone(wxDateTime::UTC);
-        ticks = (dt.GetValue() / 1000).ToLong();
+        ticks = (dt.GetValue() / 1000).GetValue();
         CPPUNIT_ASSERT_EQUAL( d.gmticks, ticks );
     }
 }
@@ -980,6 +981,12 @@ void DateTimeTestCase::TestParseRFC822()
         {
             "Sat, 18 Dec 1999 10:48:30 -0500",
             { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            true
+        },
+
+        {
+            "Tue, 12 Apr 2044 10:48:30 -0500",
+            { 12, wxDateTime::Apr, 2044, 15, 48, 30 },
             true
         },
 
@@ -1093,6 +1100,7 @@ void DateTimeTestCase::TestDateParse()
         { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true },
         { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true },
         { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true },
+        { "Sun 20 Jun 2049", { 20, wxDateTime::Jun, 2049 }, true },
 
         // some invalid ones too
         { "29 Feb 2006" },
@@ -1221,6 +1229,12 @@ void DateTimeTestCase::TestDateTimeParse()
             "Thu 22 Nov 2007 07:40:00 PM",
             { 22, wxDateTime::Nov, 2007, 19, 40,  0 },
             true
+        },
+
+        {
+            "Sun 20 Jun 2049 07:40:00 PM",
+            { 20, wxDateTime::Jun, 2049, 19, 40,  0 },
+            true,
         },
 
         {
