@@ -15,6 +15,7 @@
 #if wxUSE_CREDENTIALDLG
 
 #include "wx/dialog.h"
+#include "wx/textctrl.h"
 #include "wx/webrequest.h"
 
 class WXDLLIMPEXP_CORE wxGenericCredentialEntryDialog : public wxDialog
