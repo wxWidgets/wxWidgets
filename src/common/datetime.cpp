@@ -26,7 +26,8 @@
  *    algorithms limitations, only dates from Nov 24, 4714BC are handled
  *
  * 3. standard ANSI C functions are used to do time calculations whenever
- *    possible, i.e. when the date is in the range Jan 1, 1970 to 2038
+ *    possible, i.e. when the date is in the range Jan 1, 1970 to 2038 (32-bit
+ *    time_t) or 2200 (64-bit time_t).
  *
  * 4. otherwise, the calculations are done by converting the date to/from JDN
  *    first (the range limitation mentioned above comes from here: the
@@ -1269,8 +1270,13 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
                       wxT("Invalid date in wxDateTime::Set()") );
 
     // the range of time_t type (inclusive)
+    // While the range for 64-bit time_t is billions of years per se,
+    // we cannot expect the C runtime to support dates thousands of years
+    // in the future. MSVC claims to support dates up to 3000-12-31;
+    // what macOS and *nix support is unknown, but let us pick year 2200
+    // as the maximum for now.
     static const int yearMinInRange = 1970;
-    static const int yearMaxInRange = 2037;
+    static const int yearMaxInRange = sizeof(time_t) > 4 ? 2200 : 2037;
 
     // test only the year instead of testing for the exact end of the Unix
     // time_t range - it doesn't bring anything to do more precise checks
