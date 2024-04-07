@@ -17,6 +17,8 @@
 #include "wx/dialog.h"
 #include "wx/webrequest.h"
 
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+
 class WXDLLIMPEXP_CORE wxGenericCredentialEntryDialog : public wxDialog
 {
 public:
