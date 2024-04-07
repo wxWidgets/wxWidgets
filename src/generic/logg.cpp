@@ -835,11 +835,8 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     if (hasTimeStamp)
         m_listctrl->InsertColumn(1, wxT("Time"));
 
-    // prepare the imagelist
-    wxSize iconSize(16, 16);
-    iconSize *= parent->GetDPIScaleFactor();
-
-    wxImageList *imageList = new wxImageList(iconSize.x, iconSize.y);
+    // prepare the images
+    wxVector<wxBitmapBundle> images;
 
     // order should be the same as in the switch below!
     static wxString const icons[] =
@@ -849,52 +846,30 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
         wxART_INFORMATION
     };
 
-    bool loadedIcons = true;
-
-    for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
+    for ( const auto& icon: icons )
     {
-        wxBitmap bmp = wxArtProvider::GetBitmap(icons[icon], wxART_MESSAGE_BOX,
-                                                iconSize);
-
-        // This may very well fail if there are insufficient colours available.
-        // Degrade gracefully.
-        if ( !bmp.IsOk() )
-        {
-            loadedIcons = false;
-
-            break;
-        }
-
-        imageList->Add(bmp);
+        images.push_back(wxArtProvider::GetBitmapBundle(icon, wxART_LIST));
     }
 
-    m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
+    m_listctrl->SetSmallImages(images);
 
     // fill the listctrl
     size_t count = m_messages.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
         int image;
-
-        if ( loadedIcons )
+        switch ( m_severity[n] )
         {
-            switch ( m_severity[n] )
-            {
-                case wxLOG_Error:
-                    image = 0;
-                    break;
+            case wxLOG_Error:
+                image = 0;
+                break;
 
-                case wxLOG_Warning:
-                    image = 1;
-                    break;
+            case wxLOG_Warning:
+                image = 1;
+                break;
 
-                default:
-                    image = 2;
-            }
-        }
-        else // failed to load images
-        {
-            image = -1;
+            default:
+                image = 2;
         }
 
         wxString msg = m_messages[n];
