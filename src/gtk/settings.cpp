@@ -220,6 +220,10 @@ bool UpdatePreferDark(GVariant* value)
     return changed;
 }
 
+// Global GDBusProxy for org.freedesktop.portal.Settings initialized by
+// wxSystemSettingsModule.
+GDBusProxy* gs_proxyPortalSettings = nullptr;
+
 } // anonymous namespace
 // "g-signal" from GDBusProxy
 extern "C" {
@@ -1209,9 +1213,6 @@ public:
     virtual bool OnInit() override;
     virtual void OnExit() override;
 
-#ifdef __WXGTK3__
-    GDBusProxy* m_proxy;
-#endif
     wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
 };
 wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
@@ -1228,8 +1229,6 @@ bool wxSystemSettingsModule::OnInit()
     // change the theme, we propagate it to the GtkSettings
     // 'gtk-application-prefer-dark-theme' property to get a dark theme.
 
-    m_proxy = nullptr;
-
     // If this is not a GUI app
     if (!g_type_class_peek(GTK_TYPE_WIDGET))
         return true;
@@ -1237,18 +1236,18 @@ bool wxSystemSettingsModule::OnInit()
     // GTK_THEME environment variable overrides other settings
     if (getenv("GTK_THEME") == nullptr)
     {
-        m_proxy = g_dbus_proxy_new_for_bus_sync(
+        gs_proxyPortalSettings = g_dbus_proxy_new_for_bus_sync(
             G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, nullptr,
             "org.freedesktop.portal.Desktop",
             "/org/freedesktop/portal/desktop",
             "org.freedesktop.portal.Settings",
             nullptr, nullptr);
     }
-    if (m_proxy)
+    if (gs_proxyPortalSettings)
     {
-        g_signal_connect(m_proxy, "g-signal", G_CALLBACK(proxy_g_signal), nullptr);
+        g_signal_connect(gs_proxyPortalSettings, "g-signal", G_CALLBACK(proxy_g_signal), nullptr);
 
-        GVariant* ret = g_dbus_proxy_call_sync(m_proxy, "Read",
+        GVariant* ret = g_dbus_proxy_call_sync(gs_proxyPortalSettings, "Read",
             g_variant_new("(ss)", "org.freedesktop.appearance", "color-scheme"),
             G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr);
         if (ret)
@@ -1277,8 +1276,11 @@ void wxSystemSettingsModule::OnExit()
         g_signal_handlers_disconnect_by_func(settings,
             (void*)notify_gtk_font_name, nullptr);
     }
-    if (m_proxy)
-        g_object_unref(m_proxy);
+    if (gs_proxyPortalSettings)
+    {
+        g_object_unref(gs_proxyPortalSettings);
+        gs_proxyPortalSettings = nullptr;
+    }
 #endif
     if (gs_tlw_parent)
     {
