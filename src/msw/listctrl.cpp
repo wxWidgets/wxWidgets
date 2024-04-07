@@ -3110,8 +3110,8 @@ bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT h
 
         if ( it.iImage != -1 )
         {
-            int imgY = rc.top + ((rc.bottom - rc.top) / 2 - hImage / 2);
-            ImageList_Draw(himl, it.iImage, hdc, rc.left, imgY,
+            const int yImage = rc.top + ((rc.bottom - rc.top) / 2 - hImage / 2);
+            ImageList_Draw(himl, it.iImage, hdc, rc.left, yImage,
                            nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED
                                                            : ILD_TRANSPARENT);
         }
