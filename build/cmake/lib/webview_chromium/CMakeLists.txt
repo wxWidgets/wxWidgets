@@ -229,7 +229,12 @@ endif()
 
 set(_saved_CMAKE_MESSAGE_LOG_LEVEL ${CMAKE_MESSAGE_LOG_LEVEL})
 set(CEF_SHOW_RESULTS FALSE CACHE BOOL "Show CEF configuration results")
-if(NOT CEF_SHOW_RESULTS)
+if(CEF_SHOW_RESULTS)
+    if(CMAKE_OSX_ARCHITECTURES)
+        # This is only used for the summary shown if CEF_SHOW_RESULTS is on.
+        set(PROJECT_ARCH ${CMAKE_OSX_ARCHITECTURES})
+    endif()
+else()
     set(CMAKE_MESSAGE_LOG_LEVEL ERROR)
 endif()
 
