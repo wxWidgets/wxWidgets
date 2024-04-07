@@ -13,6 +13,7 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
     #include "wx/toplevel.h"
     #include "wx/module.h"
 #endif
@@ -190,12 +191,17 @@ static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
 namespace
 {
 
+constexpr const char* TRACE_DARKMODE = "darkmode";
+
 bool UpdatePreferDark(const wxGtkVariant& value)
 {
     GtkSettings* const settings = gtk_settings_get_default();
     // This shouldn't happen, but don't bother doing anything else if it does.
     if (!settings)
+    {
+        wxLogTrace(TRACE_DARKMODE, "Failed to get GTK settings");
         return false;
+    }
 
     // 0: No preference, 1: Prefer dark appearance, 2: Prefer light appearance
     gboolean preferDark = value.GetUint32() == 1;
@@ -208,18 +214,32 @@ bool UpdatePreferDark(const wxGtkVariant& value)
 
     // This is not supposed to happen neither, but don't crash if it does.
     if (!themeName)
+    {
+        wxLogTrace(TRACE_DARKMODE, "Failed to get GTK theme name");
         return false;
+    }
 
     // We don't need to enable prefer-dark if the theme is already dark
     if (strstr(themeName, "-dark") || strstr(themeName, "-Dark"))
+    {
+        wxLogTrace(TRACE_DARKMODE, "Force dark mode for theme \"%s\"", themeName);
         preferDark = false;
+    }
+
     g_free(themeName);
 
     const bool changed = preferDark != preferDarkPrev;
     if (changed)
     {
+        wxLogTrace(TRACE_DARKMODE, "Turning dark mode preference %s",
+                   preferDark ? "on" : "off");
+
         g_object_set(settings,
             "gtk-application-prefer-dark-theme", preferDark, nullptr);
+    }
+    else
+    {
+        wxLogTrace(TRACE_DARKMODE, "Dark mode preference didn't change");
     }
     return changed;
 }
