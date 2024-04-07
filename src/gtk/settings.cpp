@@ -183,7 +183,10 @@ static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
 }
 }
 
-static bool UpdatePreferDark(GVariant* value)
+namespace
+{
+
+bool UpdatePreferDark(GVariant* value)
 {
     GtkSettings* const settings = gtk_settings_get_default();
     // This shouldn't happen, but don't bother doing anything else if it does.
@@ -217,6 +220,7 @@ static bool UpdatePreferDark(GVariant* value)
     return changed;
 }
 
+} // anonymous namespace
 // "g-signal" from GDBusProxy
 extern "C" {
 static void
