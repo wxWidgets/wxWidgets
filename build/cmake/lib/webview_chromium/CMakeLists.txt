@@ -9,8 +9,6 @@
 
 include(../../source_groups.cmake)
 
-include(cef_version_info.cmake)
-
 set(KNOWN_CONFIGS "Debug;Release;RelWithDebInfo;MinSizeRel")
 if(CMAKE_CONFIGURATION_TYPES)
     foreach(cfg ${CMAKE_CONFIGURATION_TYPES})
@@ -33,13 +31,23 @@ find_path(CEF_ROOT
     DOC "CEF Binary Root directory"
     )
 
-set(CEF_DOWNLOAD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-download)
-set(CEF_SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-source)
-set(CEF_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cef-build)
+# We may need to create multiple arch-specific directories, so define the
+# variables containing the common root for all of them.
+set(CEF_DOWNLOAD_ROOT ${CMAKE_CURRENT_BINARY_DIR}/cef-download)
+set(CEF_SOURCE_ROOT ${CMAKE_CURRENT_BINARY_DIR}/cef-source)
+set(CEF_BUILD_ROOT ${CMAKE_CURRENT_BINARY_DIR}/cef-build)
 
-if(NOT CEF_ROOT)
-    message("Downloading CEF binary distribution...")
+# But when we don't need multiple directories, just use them directly.
+set(CEF_DOWNLOAD_DIR ${CEF_DOWNLOAD_ROOT})
+set(CEF_SOURCE_DIR ${CEF_SOURCE_ROOT})
+set(CEF_BUILD_DIR ${CEF_BUILD_ROOT})
 
+# This function downloads and builds CEF for the specified platform.
+function(wx_download_cef CEF_PLATFORM)
+    message("Downloading CEF binary distribution for ${CEF_PLATFORM}...")
+
+    set(CEF_URL "${CEF_BASE_URL}${CEF_VERSION}_${CEF_PLATFORM}${CEF_DISTRIBUTION}${CEF_FILE_EXT}")
+    set(CEF_SHA1 "${CEF_SHA1_${CEF_PLATFORM}}")
     configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cef_download.cmake.in
         ${CEF_DOWNLOAD_DIR}/CMakeLists.txt
@@ -62,8 +70,149 @@ if(NOT CEF_ROOT)
     if(result)
         message(FATAL_ERROR "Build step for cef failed: ${result}")
     endif()
+endfunction()
 
-    set(CEF_ROOT ${CEF_SOURCE_DIR} CACHE PATH "CEF Binary Root directory" FORCE)
+if(NOT CEF_ROOT)
+    include(cef_version_info.cmake)
+
+    # Note that CMAKE_OSX_ARCHITECTURES is always defined under macOS, but is
+    # empty if not explicitly specified, so do _not_ use if(DEFINED ...) here.
+    if(CMAKE_OSX_ARCHITECTURES)
+        foreach(osx_arch IN LISTS CMAKE_OSX_ARCHITECTURES)
+            # Determine the matching CEF platform name.
+            if(${osx_arch} STREQUAL "arm64")
+                set(CEF_PLATFORM "macosarm64")
+            elseif(${osx_arch} STREQUAL "x86_64")
+                set(CEF_PLATFORM "macosx64")
+            else()
+                message(FATAL_ERROR "Building CEF for macOS architecture ${osx_arch} is not supported")
+            endif()
+
+            if(NOT first_cef_platform)
+                # Download/unpack CEF files in the root directory and remember
+                # that we did it by setting this variable.
+                set(first_cef_platform ${CEF_PLATFORM})
+            else()
+                list(APPEND other_cef_platforms ${CEF_PLATFORM})
+
+                # Use different subdirectories for the other architectures.
+                set(CEF_DOWNLOAD_DIR "${CEF_DOWNLOAD_ROOT}/${CEF_PLATFORM}")
+                set(CEF_SOURCE_DIR "${CEF_SOURCE_ROOT}/${CEF_PLATFORM}")
+                set(CEF_BUILD_DIR "${CEF_BUILD_ROOT}/${CEF_PLATFORM}")
+            endif()
+
+            wx_download_cef(${CEF_PLATFORM})
+        endforeach()
+
+        # Now lipo all the binaries together unless this is a degenerate case
+        # in which CMAKE_OSX_ARCHITECTURES contains only one element.
+        if(other_cef_platforms)
+            set(cef_binaries
+                "cef_sandbox.a"
+                "Chromium Embedded Framework.framework/Chromium Embedded Framework"
+                "Chromium Embedded Framework.framework/Libraries/libEGL.dylib"
+                "Chromium Embedded Framework.framework/Libraries/libGLESv2.dylib"
+                "Chromium Embedded Framework.framework/Libraries/libvk_swiftshader.dylib"
+            )
+
+            foreach(cef_bin_file IN LISTS cef_binaries)
+                set(lipo_command
+                    lipo -create "Release/${cef_bin_file}"
+                )
+
+                foreach(cef_platform IN LISTS other_cef_platforms)
+                    list(APPEND lipo_command "${cef_platform}/Release/${cef_bin_file}")
+                endforeach()
+
+                list(APPEND lipo_command "-output")
+                list(APPEND lipo_command "Release/${cef_bin_file}.tmp")
+
+                execute_process(
+                    COMMAND ${lipo_command}
+                    RESULT_VARIABLE result
+                    WORKING_DIRECTORY ${CEF_SOURCE_ROOT}
+                )
+                if(result)
+                    message(FATAL_ERROR "Running \"${lipo_command}\" in ${CEF_SOURCE_ROOT} failed: ${result}")
+                endif()
+
+                file(RENAME
+                    "${CEF_SOURCE_ROOT}/Release/${cef_bin_file}.tmp"
+                    "${CEF_SOURCE_ROOT}/Release/${cef_bin_file}"
+                )
+            endforeach()
+
+            # Special case of arch-specific v8 snapshot file.
+            foreach(cef_platform IN LISTS other_cef_platforms)
+                # This one uses the standard arch name instead of CEF-specific
+                # name used elsewhere just to make our life a bit more interesting.
+                if(${cef_platform} STREQUAL "macosarm64")
+                    set(cef_arch "arm64")
+                elseif(${cef_platform} STREQUAL "macosx64")
+                    set(cef_arch "x86_64")
+                else()
+                    message(FATAL_ERROR "Uknown v8 arch for CEF platform ${cef_platform}")
+                endif()
+
+                file(COPY_FILE
+                    "${CEF_SOURCE_ROOT}/${cef_platform}/Release/Chromium Embedded Framework.framework/Resources/v8_context_snapshot.${cef_arch}.bin"
+                    "${CEF_SOURCE_ROOT}/Release/Resources"
+                )
+            endforeach()
+
+            # This file differs between the architectures, but has a fixed name, so
+            # we can only remove it. FWIW it is not present in CEF included in
+            # /Application/Google Chrome.app, so it's probably the right thing to do.
+            file(REMOVE "${CEF_SOURCE_ROOT}/Release/Chrome Embedded Framework.framework/Resources/snapshot_blob.bin")
+        endif()
+    else()
+        # Auto detect CEF platform.
+        if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+            if(CMAKE_SIZEOF_VOID_P LESS 8)
+                message(FATAL_ERROR "Unsupported macOS system")
+            else()
+                if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+                    set(CEF_PLATFORM "macosarm64")
+                else()
+                    set(CEF_PLATFORM "macosx64")
+                endif()
+            endif()
+        elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+            if(CMAKE_SIZEOF_VOID_P LESS 8)
+                if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm")
+                    set(CEF_PLATFORM "linuxarm")
+                else()
+                    message(FATAL_ERROR "Unsupported Linux system")
+                endif()
+            else()
+                if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+                    set(CEF_PLATFORM "linuxarm64")
+                else()
+                    set(CEF_PLATFORM "linux64")
+                endif()
+            endif()
+        elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+            if(CMAKE_SIZEOF_VOID_P LESS 8)
+                if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm")
+                    message(FATAL_ERROR "Unsupported Windows system")
+                else()
+                    set(CEF_PLATFORM "windows32")
+                endif()
+            else()
+                if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+                    set(CEF_PLATFORM "windowsarm64")
+                else()
+                    set(CEF_PLATFORM "windows64")
+                endif()
+            endif()
+        else()
+            message(FATAL_ERROR "Unsupported CEF system")
+        endif()
+
+        wx_download_cef(${CEF_PLATFORM})
+    endif()
+
+    set(CEF_ROOT ${CEF_SOURCE_ROOT} CACHE PATH "CEF Binary Root directory" FORCE)
 endif()
 
 # CEF settings
@@ -80,7 +229,12 @@ endif()
 
 set(_saved_CMAKE_MESSAGE_LOG_LEVEL ${CMAKE_MESSAGE_LOG_LEVEL})
 set(CEF_SHOW_RESULTS FALSE CACHE BOOL "Show CEF configuration results")
-if(NOT CEF_SHOW_RESULTS)
+if(CEF_SHOW_RESULTS)
+    if(CMAKE_OSX_ARCHITECTURES)
+        # This is only used for the summary shown if CEF_SHOW_RESULTS is on.
+        set(PROJECT_ARCH ${CMAKE_OSX_ARCHITECTURES})
+    endif()
+else()
     set(CMAKE_MESSAGE_LOG_LEVEL ERROR)
 endif()
 
@@ -102,7 +256,13 @@ macro(readonly_guard VAR access value)
 endmacro()
 set_readonly(CMAKE_CONFIGURATION_TYPES)
 
-add_subdirectory(${CEF_ROOT} ${CEF_BUILD_DIR} EXCLUDE_FROM_ALL)
+# Prevent CEF from resetting CMAKE_OSX_ARCHITECTURES if it explicitly set, this
+# is required in order to allow building universal binaries.
+if(CMAKE_OSX_ARCHITECTURES)
+    set_readonly(CMAKE_OSX_ARCHITECTURES)
+endif()
+
+add_subdirectory(${CEF_ROOT} ${CEF_BUILD_ROOT} EXCLUDE_FROM_ALL)
 
 set(enable_guard 0)
 set(CMAKE_MESSAGE_LOG_LEVEL ${_saved_CMAKE_MESSAGE_LOG_LEVEL})

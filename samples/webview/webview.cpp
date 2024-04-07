@@ -481,7 +481,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
     // that MSVC linker keeps wxWebViewChromium code when using static
     // libraries while without it, it could discard it completely and it
     // wouldn't be available during run-time at all.
-    else if ( backend.CmpNoCase("cef") )
+    else if ( backend.CmpNoCase("cef") == 0 )
         backend = wxWebViewBackendChromium;
 #endif // wxUSE_WEBVIEW_CHROMIUM
 
