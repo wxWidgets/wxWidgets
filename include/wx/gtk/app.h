@@ -28,6 +28,7 @@ public:
      * default. when overriding this method, the code in it is likely to be
      * platform dependent, otherwise use OnInit(). */
     virtual bool SetNativeTheme(const wxString& theme) override;
+    virtual AppearanceResult SetAppearance(Appearance appearance) override;
     virtual bool OnInitGui() override;
 
     // override base class (pure) virtuals

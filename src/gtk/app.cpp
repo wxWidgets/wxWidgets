@@ -30,6 +30,10 @@
 #include "wx/gtk/private/log.h"
 #include "wx/gtk/private/threads.h"
 
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/appearance.h"
+#endif
+
 #include "wx/gtk/mimetype.h"
 //-----------------------------------------------------------------------------
 // link GnomeVFS
@@ -344,6 +348,34 @@ bool wxApp::SetNativeTheme(const wxString& theme)
     gtk_rc_reparse_all_for_settings(gtk_settings_get_default(), TRUE);
 
     return true;
+#endif
+}
+
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
+{
+#ifdef __WXGTK3__
+    wxGTKImpl::ColorScheme colorScheme = wxGTKImpl::ColorScheme::NoPreference;
+    switch ( appearance )
+    {
+        case Appearance::System:
+            // Already set above.
+            break;
+
+        case Appearance::Light:
+            colorScheme = wxGTKImpl::ColorScheme::PreferLight;
+            break;
+
+        case Appearance::Dark:
+            colorScheme = wxGTKImpl::ColorScheme::PreferDark;
+            break;
+    }
+
+    return wxGTKImpl::UpdateColorScheme(colorScheme) ? AppearanceResult::Success
+                                                     : AppearanceResult::Failure;
+#else
+    wxUnusedVar(appearance);
+
+    return AppearanceResult::Failure;
 #endif
 }
 
