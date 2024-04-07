@@ -228,20 +228,19 @@ bool UpdatePreferDark(const wxGtkVariant& value)
 
     g_free(themeName);
 
-    const bool changed = preferDark != preferDarkPrev;
-    if (changed)
-    {
-        wxLogTrace(TRACE_DARKMODE, "Turning dark mode preference %s",
-                   preferDark ? "on" : "off");
-
-        g_object_set(settings,
-            "gtk-application-prefer-dark-theme", preferDark, nullptr);
-    }
-    else
+    if ( preferDark == preferDarkPrev )
     {
         wxLogTrace(TRACE_DARKMODE, "Dark mode preference didn't change");
+        return false;
     }
-    return changed;
+
+    wxLogTrace(TRACE_DARKMODE, "Turning dark mode preference %s",
+               preferDark ? "on" : "off");
+
+    g_object_set(settings,
+        "gtk-application-prefer-dark-theme", preferDark, nullptr);
+
+    return true;
 }
 
 // Global GDBusProxy for org.freedesktop.portal.Settings initialized by
