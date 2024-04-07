@@ -3037,17 +3037,12 @@ RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
     RECT rc;
     wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_BOUNDS, rc);
 
-    RECT rcIcon;
-    wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
-
-    // exclude the icon part, neither the selection background nor focus rect
-    // should cover it
-    rc.left = rcIcon.right;
-
     return rc;
 }
 
-bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
+constexpr int GAP_BETWEEN_CHECKBOX_AND_TEXT = 2;
+
+bool HandleSubItemPrepaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
 
@@ -3072,6 +3067,24 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
         rc.right = rc2.left;
     }
 
+    if ( !col && listctrl->HasCheckBoxes() )
+    {
+        const HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_STATE);
+
+        if ( himl && ImageList_GetImageCount(himl) == 2 )
+        {
+            int cbX, cbY, cbWidth, cbHeight;
+
+            ImageList_GetIconSize(himl, &cbWidth, &cbHeight);
+            cbX = listctrl->FromDIP(GAP_BETWEEN_CHECKBOX_AND_TEXT);
+            cbY = rc.top + ((rc.bottom - rc.top) / 2 - cbHeight / 2);
+            // When using style flag ILD_SELECTED or ILD_FOCUS, the checkboxes
+            // for selected items are drawn with a blue background, which we want to avoid.
+            ImageList_Draw(himl, listctrl->IsItemChecked(item) ? 1 : 0, hdc, cbX, cbY, ILD_TRANSPARENT);
+            rc.left += cbX + cbWidth;
+        }
+    }
+
     // This mysterious offset is necessary for the owner drawn items to align
     // with the non-owner-drawn ones. Note that it's intentionally *not* scaled
     // by DPI factor because it doesn't seem to depend on the resolution.
@@ -3092,9 +3105,13 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
     HIMAGELIST himl = ListView_GetImageList(hwndList, LVSIL_SMALL);
     if ( himl && ImageList_GetImageCount(himl) )
     {
+        int wImage, hImage;
+        ImageList_GetIconSize(himl, &wImage, &hImage);
+
         if ( it.iImage != -1 )
         {
-            ImageList_Draw(himl, it.iImage, hdc, rc.left, rc.top,
+            const int yImage = rc.top + ((rc.bottom - rc.top) / 2 - hImage / 2);
+            ImageList_Draw(himl, it.iImage, hdc, rc.left, yImage,
                            nmcd.uItemState & CDIS_SELECTED ? ILD_SELECTED
                                                            : ILD_TRANSPARENT);
         }
@@ -3105,9 +3122,6 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
         // images align?)
         if ( it.iImage != -1 || it.iSubItem == 0 )
         {
-            int wImage, hImage;
-            ImageList_GetIconSize(himl, &wImage, &hImage);
-
             rc.left += wImage + 2;
         }
     }
@@ -3167,7 +3181,7 @@ void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
 // for consistency.
 //
 // pLVCD->clrText and clrTextBk should contain the colours to use
-void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+void HandleItemPaint(wxListCtrl* listctrl, LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd; // just a shortcut
 
@@ -3206,30 +3220,24 @@ void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
         nmcd.uItemState &= ~CDIS_FOCUS;
     }
 
-    if ( nmcd.uItemState & CDIS_SELECTED )
-    {
-        wxSystemColour syscolFg, syscolBg;
-        if ( ::GetFocus() == hwndList )
-        {
-            syscolFg = wxSYS_COLOUR_HIGHLIGHTTEXT;
-            syscolBg = wxSYS_COLOUR_HIGHLIGHT;
-        }
-        else // selected but unfocused
-        {
-            syscolFg = wxSYS_COLOUR_WINDOWTEXT;
-            syscolBg = wxSYS_COLOUR_BTNFACE;
-
-            // don't grey out the icon in this case either
-            nmcd.uItemState &= ~CDIS_SELECTED;
-        }
-
-        pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(syscolFg));
-        pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(syscolBg));
-    }
-    //else: not selected, use normal colours from pLVCD
-
     HDC hdc = nmcd.hdc;
     RECT rc = GetCustomDrawnItemRect(nmcd);
+
+    if ( nmcd.uItemState & CDIS_SELECTED )
+    {
+        pLVCD->clrText = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
+        pLVCD->clrTextBk = wxColourToRGB(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    }
+    else
+    {
+        // use normal colours from pLVCD
+
+        // do not draw item background colour under the checkbox/image
+        RECT rcIcon;
+        wxGetListCtrlItemRect(nmcd.hdr.hwndFrom, nmcd.dwItemSpec, LVIR_ICON, rcIcon);
+        if ( !::IsRectEmpty(&rcIcon) )
+            rc.left = rcIcon.right + listctrl->FromDIP(GAP_BETWEEN_CHECKBOX_AND_TEXT);
+    }
 
     COLORREF colTextOld = ::SetTextColor(hdc, pLVCD->clrText);
     ::FillRect(hdc, &rc, AutoHBRUSH(pLVCD->clrTextBk));
@@ -3240,7 +3248,7 @@ void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     for ( int col = 0; col < colCount; col++ )
     {
         pLVCD->iSubItem = col;
-        HandleSubItemPrepaint(pLVCD, hfont, colCount);
+        HandleSubItemPrepaint(listctrl, pLVCD, hfont, colCount);
     }
 
     ::SetTextColor(hdc, colTextOld);
@@ -3257,6 +3265,14 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
         // We need to always paint selected items ourselves as they come
         // out completely wrong in DarkMode_Explorer theme, see the comment
         // before MSWGetDarkModeSupport().
+        wxFont font;
+
+        if ( attr && attr->HasFont() )
+        {
+            font = attr->GetFont();
+            font.WXAdjustToPPI(listctrl->GetDPI());
+        }
+
         pLVCD->clrText = attr && attr->HasTextColour()
                             ? wxColourToRGB(attr->GetTextColour())
                             : wxColourToRGB(listctrl->GetTextColour());
@@ -3264,7 +3280,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
                             ? wxColourToRGB(attr->GetBackgroundColour())
                             : wxColourToRGB(listctrl->GetBackgroundColour());
 
-        HandleItemPaint(pLVCD, nullptr);
+        HandleItemPaint(listctrl, pLVCD, font.IsOk() ? GetHfontOf(font) : nullptr);
         return CDRF_SKIPDEFAULT;
     }
 
@@ -3294,7 +3310,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
             // with recent comctl32.dll versions (5 and 6, it uses to work with
             // 4.something) so we have to draw the item entirely ourselves in
             // this case
-            HandleItemPaint(pLVCD, GetHfontOf(font));
+            HandleItemPaint(listctrl, pLVCD, GetHfontOf(font));
             return CDRF_SKIPDEFAULT;
         }
 
@@ -3315,7 +3331,7 @@ WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
     if ( listctrl->IsSystemThemeDisabled() &&
             pLVCD->clrTextBk == ::GetSysColor(COLOR_BTNFACE) )
     {
-        HandleItemPaint(pLVCD, nullptr);
+        HandleItemPaint(listctrl, pLVCD, nullptr);
         return CDRF_SKIPDEFAULT;
     }
 
@@ -3419,7 +3435,10 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
         return;
     }
 
-    wxPen pen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+    const wxColour penColour(wxSystemSettings::GetColour(wxMSWDarkMode::IsActive()
+                                                         ? wxSYS_COLOUR_GRAYTEXT
+                                                         : wxSYS_COLOUR_3DLIGHT));
+    wxPen pen(penColour);
     dc.SetPen(pen);
     dc.SetBrush(* wxTRANSPARENT_BRUSH);
 
