@@ -107,28 +107,32 @@ public:
 
 public:     // overridable
 
-    virtual long GetDialogStyle() const
+    static long GetDialogStyle(long pickerStyle)
+    {
+        long filedlgstyle = 0;
+
+        if ( pickerStyle & wxFLP_OPEN )
+            filedlgstyle |= wxFD_OPEN;
+        if ( pickerStyle & wxFLP_SAVE )
+            filedlgstyle |= wxFD_SAVE;
+        if ( pickerStyle & wxFLP_OVERWRITE_PROMPT )
+            filedlgstyle |= wxFD_OVERWRITE_PROMPT;
+        if ( pickerStyle & wxFLP_FILE_MUST_EXIST )
+            filedlgstyle |= wxFD_FILE_MUST_EXIST;
+        if ( pickerStyle & wxFLP_CHANGE_DIR )
+            filedlgstyle |= wxFD_CHANGE_DIR;
+
+        return filedlgstyle;
+    }
+
+    long GetDialogStyle() const
     {
         // the derived class must initialize it if it doesn't use the
         // non-default wxGenericFileDirButton ctor
         wxASSERT_MSG( m_pickerStyle != -1,
                       "forgot to initialize m_pickerStyle?" );
 
-
-        long filedlgstyle = 0;
-
-        if ( m_pickerStyle & wxFLP_OPEN )
-            filedlgstyle |= wxFD_OPEN;
-        if ( m_pickerStyle & wxFLP_SAVE )
-            filedlgstyle |= wxFD_SAVE;
-        if ( m_pickerStyle & wxFLP_OVERWRITE_PROMPT )
-            filedlgstyle |= wxFD_OVERWRITE_PROMPT;
-        if ( m_pickerStyle & wxFLP_FILE_MUST_EXIST )
-            filedlgstyle |= wxFD_FILE_MUST_EXIST;
-        if ( m_pickerStyle & wxFLP_CHANGE_DIR )
-            filedlgstyle |= wxFD_CHANGE_DIR;
-
-        return filedlgstyle;
+        return GetDialogStyle(m_pickerStyle);
     }
 
     virtual wxDialog *CreateDialog() override;
@@ -172,16 +176,21 @@ public:
 
 public:     // overridable
 
-    virtual long GetDialogStyle() const
+    static long GetDialogStyle(long pickerStyle)
     {
         long dirdlgstyle = wxDD_DEFAULT_STYLE;
 
-        if ( m_pickerStyle & wxDIRP_DIR_MUST_EXIST )
+        if ( pickerStyle & wxDIRP_DIR_MUST_EXIST )
             dirdlgstyle |= wxDD_DIR_MUST_EXIST;
-        if ( m_pickerStyle & wxDIRP_CHANGE_DIR )
+        if ( pickerStyle & wxDIRP_CHANGE_DIR )
             dirdlgstyle |= wxDD_CHANGE_DIR;
 
         return dirdlgstyle;
+    }
+
+    long GetDialogStyle() const
+    {
+        return GetDialogStyle(m_pickerStyle);
     }
 
     virtual wxDialog *CreateDialog() override;
