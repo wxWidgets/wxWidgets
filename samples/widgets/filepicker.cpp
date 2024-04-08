@@ -25,6 +25,7 @@
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/button.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
     #include "wx/statbox.h"
