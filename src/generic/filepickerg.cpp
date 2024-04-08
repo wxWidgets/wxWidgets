@@ -24,6 +24,8 @@
 #include "wx/filename.h"
 #include "wx/filepicker.h"
 
+#include "wx/generic/filepickerg.h"
+
 #include <memory>
 
 
@@ -98,11 +100,6 @@ void wxGenericFileDirButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
         wxFileDirPickerEvent event(GetEventType(), this, GetId(), m_path);
         GetEventHandler()->ProcessEvent(event);
     }
-}
-
-void wxGenericFileDirButton::SetInitialDirectory(const wxString& dir)
-{
-    m_initialDir = dir;
 }
 
 // ----------------------------------------------------------------------------

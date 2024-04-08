@@ -55,8 +55,6 @@ public:     // overridable
 
     virtual wxEventType GetEventType() const = 0;
 
-    virtual void SetInitialDirectory(const wxString& dir) override;
-
 public:
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -80,9 +78,6 @@ protected:
     // wxButton as some of our bits can conflict with wxButton styles and it
     // just doesn't make sense to use picker styles for wxButton anyhow
     long m_pickerStyle = -1;
-
-    // Initial directory set by SetInitialDirectory() call or empty.
-    wxString m_initialDir;
 };
 
 
