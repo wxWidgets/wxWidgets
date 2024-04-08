@@ -84,7 +84,7 @@ jobs:
           - name: Ubuntu 18.04 wxGTK 3 STL
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --enable-cxx11 --enable-stl --disable-compat30
+            configure_flags: --enable-cxx11 --enable-pch --enable-stl --disable-compat30
             use_xvfb: true
             build_out_of_tree_samples: true
           - name: Ubuntu 20.04 wxGTK 3 with clang
@@ -105,7 +105,7 @@ jobs:
           - name: Ubuntu 18.04 wxX11
             runner: ubuntu-latest
             container: ubuntu:18.04
-            configure_flags: --with-x11 --enable-pch --disable-stc
+            configure_flags: --with-x11 --disable-stc
             skip_samples: true
           - name: Ubuntu 18.04 wxDFB
             runner: ubuntu-latest
