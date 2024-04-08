@@ -180,10 +180,10 @@ struct Date
 static const Date testDates[] =
 {
     {  1, wxDateTime::Jan,  1970, 00, 00, 00, 2440587.5, wxDateTime::Thu,         0 },
-    {  7, wxDateTime::Feb,  2036, 00, 00, 00, 2464730.5, wxDateTime::Thu,        -1 },
-    {  8, wxDateTime::Feb,  2036, 00, 00, 00, 2464731.5, wxDateTime::Fri,        -1 },
-    {  1, wxDateTime::Jan,  2037, 00, 00, 00, 2465059.5, wxDateTime::Thu,        -1 },
-    {  1, wxDateTime::Jan,  2038, 00, 00, 00, 2465424.5, wxDateTime::Fri,        -1 },
+    {  7, wxDateTime::Feb,  2036, 00, 00, 00, 2464730.5, wxDateTime::Thu, 2085955200 },
+    {  8, wxDateTime::Feb,  2036, 00, 00, 00, 2464731.5, wxDateTime::Fri, 2086041600 },
+    {  1, wxDateTime::Jan,  2037, 00, 00, 00, 2465059.5, wxDateTime::Thu, 2114380800 },
+    {  1, wxDateTime::Jan,  2038, 00, 00, 00, 2465424.5, wxDateTime::Fri, 2145916800 },
     { 21, wxDateTime::Jan,  2222, 00, 00, 00, 2532648.5, wxDateTime::Mon,        -1 },
     { 29, wxDateTime::May,  1976, 12, 00, 00, 2442928.0, wxDateTime::Sat, 202219200 },
     { 29, wxDateTime::Feb,  1976, 00, 00, 00, 2442837.5, wxDateTime::Sun, 194400000 },
@@ -710,6 +710,13 @@ void DateTimeTestCase::TestTimeFormat()
         {  6, wxDateTime::Feb, 1856, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
         {  6, wxDateTime::Feb, 1857, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
         { 29, wxDateTime::May, 2076, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        { 29, wxDateTime::Jul, 2030, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        { 29, wxDateTime::Jan, 2031, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+
+        // FIXME: any date within a period of DST will fail the test by 1 hour,
+        // but only between the years [2031, 2037], when the timezone of the
+        // running environment is non-DST, e.g. CET (but not CEST).
+        { 29, wxDateTime::Jul, 2031, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
 
         // FIXME: the test with 02:15:25 time doesn't pass because of DST
         //        computation problems, we get back 03:15:25
@@ -732,6 +739,10 @@ void DateTimeTestCase::TestTimeFormat()
             wxDateTime dt = formatTestDates[d].DT();
             for ( unsigned n = 0; n < WXSIZEOF(formatTestFormats); n++ )
             {
+                INFO("idxtz=" << idxtz);
+                INFO("d=" << d);
+                INFO("n=" << n);
+
                 const char *fmt = formatTestFormats[n].format;
 
                 // skip the check with %p for those locales which have empty AM/PM strings:
@@ -1377,6 +1388,8 @@ void DateTimeTestCase::TestDateParseISO()
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
+        INFO("n=" << n);
+
         wxDateTime dt;
         if ( dt.ParseISODate(parseTestDates[n].str) )
         {
@@ -1386,6 +1399,8 @@ void DateTimeTestCase::TestDateParseISO()
 
             for ( size_t m = 0; m < WXSIZEOF(parseTestTimes); m++ )
             {
+                INFO("m=" << m);
+
                 wxString dtCombined;
                 dtCombined << parseTestDates[n].str
                            << 'T'
