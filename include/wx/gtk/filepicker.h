@@ -127,7 +127,7 @@ public:
     {
         m_pickerStyle = style;
 
-        Create(parent, id, label, path, message, wxEmptyString,
+        Create(parent, id, label, path, message,
                 pos, size, style, validator, name);
     }
 
@@ -141,7 +141,6 @@ public:     // overrides
                 const wxString& label = wxASCII_STR(wxFilePickerWidgetLabel),
                 const wxString &path = wxEmptyString,
                 const wxString &message = wxASCII_STR(wxFileSelectorPromptStr),
-                const wxString &wildcard = wxASCII_STR(wxFileSelectorDefaultWildcardStr),
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,

@@ -226,7 +226,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxDirButton, wxButton);
 
 bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
                         const wxString &label, const wxString &path,
-                        const wxString &message, const wxString &wildcard,
+                        const wxString &message,
                         const wxPoint &pos, const wxSize &size,
                         long style, const wxValidator& validator,
                         const wxString &name )
@@ -247,7 +247,6 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         // create the dialog associated with this button
         SetWindowStyle(style);
         m_message = message;
-        m_wildcard = wildcard;
         if ((m_dialog = CreateDialog()) == nullptr)
             return false;
 
