@@ -325,7 +325,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\samples\sample.rc">
+    <ResourceCompile Include=".\test.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

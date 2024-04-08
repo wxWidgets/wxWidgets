@@ -491,7 +491,7 @@ test_xlocale.obj : [.xlocale]xlocale.cpp
 test_xmltest.obj : [.xml]xmltest.cpp 
 	$(CXXC) /object=[]$@ $(TEST_CXXFLAGS) [.xml]xmltest.cpp
 
-test_gui_sample_rc.obj : [...]samples]sample.rc 
+test_gui_test_rc.obj : test.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5) $(__DEBUG_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir [...]samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)]include
 
 test_gui_asserthelper.obj : asserthelper.cpp 

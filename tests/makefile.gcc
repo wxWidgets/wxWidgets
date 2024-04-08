@@ -28,6 +28,7 @@ TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
 	$(CXXFLAGS)
 TEST_OBJECTS =  \
+	$(OBJS)\test_test_rc.o \
 	$(OBJS)\test_dummy.o \
 	$(OBJS)\test_test.o \
 	$(OBJS)\test_anytest.o \
@@ -123,6 +124,7 @@ TEST_DRAWING_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
 	$(CXXFLAGS)
 TEST_DRAWING_OBJECTS =  \
+	$(OBJS)\test_drawing_test_rc.o \
 	$(OBJS)\test_drawing_dummy.o \
 	$(OBJS)\test_drawing_test.o \
 	$(OBJS)\test_drawing_drawing.o \
@@ -145,7 +147,7 @@ TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
 	$(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
-	$(OBJS)\test_gui_sample_rc.o \
+	$(OBJS)\test_gui_test_rc.o \
 	$(OBJS)\test_gui_dummy.o \
 	$(OBJS)\test_gui_asserthelper.o \
 	$(OBJS)\test_gui_test.o \
@@ -260,7 +262,7 @@ TEST_ALLHEADERS_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
 	$(CXXFLAGS)
 TEST_ALLHEADERS_OBJECTS =  \
-	$(OBJS)\test_allheaders_sample_rc.o \
+	$(OBJS)\test_allheaders_test_rc.o \
 	$(OBJS)\test_allheaders_dummy.o \
 	$(OBJS)\test_allheaders_asserthelper.o \
 	$(OBJS)\test_allheaders_test.o \
@@ -388,37 +390,37 @@ ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
 ifeq ($(WXUNIV),1)
-__WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
+__WXUNIV_DEFINE_p_10 = --define __WXUNIVERSAL__
 endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 endif
 ifeq ($(DEBUG_FLAG),0)
-__DEBUG_DEFINE_p_0 = --define wxDEBUG_LEVEL=0
+__DEBUG_DEFINE_p_10 = --define wxDEBUG_LEVEL=0
 endif
 ifeq ($(BUILD),release)
 __NDEBUG_DEFINE_p = -DNDEBUG
 endif
 ifeq ($(BUILD),release)
-__NDEBUG_DEFINE_p_0 = --define NDEBUG
+__NDEBUG_DEFINE_p_10 = --define NDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
 endif
 ifeq ($(USE_EXCEPTIONS),0)
-__EXCEPTIONS_DEFINE_p_0 = --define wxNO_EXCEPTIONS
+__EXCEPTIONS_DEFINE_p_10 = --define wxNO_EXCEPTIONS
 endif
 ifeq ($(USE_RTTI),0)
 __RTTI_DEFINE_p = -DwxNO_RTTI
 endif
 ifeq ($(USE_RTTI),0)
-__RTTI_DEFINE_p_0 = --define wxNO_RTTI
+__RTTI_DEFINE_p_10 = --define wxNO_RTTI
 endif
 ifeq ($(USE_THREADS),0)
 __THREAD_DEFINE_p = -DwxNO_THREADS
 endif
 ifeq ($(USE_THREADS),0)
-__THREAD_DEFINE_p_0 = --define wxNO_THREADS
+__THREAD_DEFINE_p_10 = --define wxNO_THREADS
 endif
 ifeq ($(USE_CAIRO),1)
 ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
@@ -430,7 +432,7 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(SHARED),1)
-__DLLFLAG_p_0 = --define WXUSINGDLL
+__DLLFLAG_p_10 = --define WXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(USE_WEBVIEW),1)
@@ -523,14 +525,14 @@ clean:
 	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
 	-if exist $(OBJS)\test_allheaders.exe del $(OBJS)\test_allheaders.exe
 
-$(OBJS)\test.exe: $(TEST_OBJECTS)
+$(OBJS)\test.exe: $(TEST_OBJECTS) $(OBJS)\test_test_rc.o
 	$(foreach f,$(subst \,/,$(TEST_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
 	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)     $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
 	@-del $@.rsp
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\test_drawing.exe: $(TEST_DRAWING_OBJECTS)
+$(OBJS)\test_drawing.exe: $(TEST_DRAWING_OBJECTS) $(OBJS)\test_drawing_test_rc.o
 	$(foreach f,$(subst \,/,$(TEST_DRAWING_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
 	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)     $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
@@ -545,7 +547,7 @@ endif
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o
+$(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_test_rc.o
 	$(foreach f,$(subst \,/,$(TEST_GUI_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
 	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)              $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) -limm32 $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_PROPGRID_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  -lwxscintilla$(WXDEBUGFLAG) $(__LIB_LEXILLA_p) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p_2) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
@@ -553,7 +555,7 @@ $(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\test_allheaders.exe: $(TEST_ALLHEADERS_OBJECTS) $(OBJS)\test_allheaders_sample_rc.o
+$(OBJS)\test_allheaders.exe: $(TEST_ALLHEADERS_OBJECTS) $(OBJS)\test_allheaders_test_rc.o
 	$(foreach f,$(subst \,/,$(TEST_ALLHEADERS_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
 	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)       $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p)  $(__WXLIB_STC_p) -limm32 $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  -lwxscintilla$(WXDEBUGFLAG) $(__LIB_LEXILLA_p) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p_3) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
@@ -583,6 +585,9 @@ fr:
 ja: 
 	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\ja\%%f copy .\intl\ja\%%f $(OBJS)\intl\ja
+
+$(OBJS)\test_test_rc.o: ./../tests/test.rc
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_10) $(__DEBUG_DEFINE_p_10) $(__NDEBUG_DEFINE_p_10) $(__EXCEPTIONS_DEFINE_p_10) $(__RTTI_DEFINE_p_10) $(__THREAD_DEFINE_p_10) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_10) --define wxUSE_GUI=0 --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
 
 $(OBJS)\test_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
@@ -845,6 +850,9 @@ $(OBJS)\test_xlocale.o: ./xlocale/xlocale.cpp
 $(OBJS)\test_xmltest.o: ./xml/xmltest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_drawing_test_rc.o: ./../tests/test.rc
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_10) $(__DEBUG_DEFINE_p_10) $(__NDEBUG_DEFINE_p_10) $(__EXCEPTIONS_DEFINE_p_10) $(__RTTI_DEFINE_p_10) $(__THREAD_DEFINE_p_10) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_10) --define wxUSE_GUI=0 --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
+
 $(OBJS)\test_drawing_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
 
@@ -866,8 +874,8 @@ $(OBJS)\test_drawing_fonttest.o: ./drawing/fonttest.cpp
 $(OBJS)\test_drawingplugin_pluginsample.o: ./drawing/pluginsample.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\test_gui_sample_rc.o: ./../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../samples --define NOPCH --include-dir ./../3rdparty/catch/single_include
+$(OBJS)\test_gui_test_rc.o: ./../tests/test.rc
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_10) $(__DEBUG_DEFINE_p_10) $(__NDEBUG_DEFINE_p_10) $(__EXCEPTIONS_DEFINE_p_10) $(__RTTI_DEFINE_p_10) $(__THREAD_DEFINE_p_10) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_10) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../samples --define NOPCH --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
 
 $(OBJS)\test_gui_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
@@ -1187,8 +1195,8 @@ $(OBJS)\test_gui_setsize.o: ./window/setsize.cpp
 $(OBJS)\test_gui_xrctest.o: ./xml/xrctest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\test_allheaders_sample_rc.o: ./../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../samples --define NOPCH --include-dir ./../3rdparty/catch/single_include
+$(OBJS)\test_allheaders_test_rc.o: ./../tests/test.rc
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_10) $(__DEBUG_DEFINE_p_10) $(__NDEBUG_DEFINE_p_10) $(__EXCEPTIONS_DEFINE_p_10) $(__RTTI_DEFINE_p_10) $(__THREAD_DEFINE_p_10) --include-dir $(SETUPHDIR) --include-dir ./../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_10) --define wxUSE_DPI_AWARE_MANIFEST=$(USE_DPI_AWARE_MANIFEST) --include-dir ./../samples --define NOPCH --include-dir ./../samples --include-dir ./../3rdparty/catch/single_include
 
 $(OBJS)\test_allheaders_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_ALLHEADERS_CXXFLAGS) $(CPPDEPS) $<
