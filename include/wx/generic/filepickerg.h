@@ -72,6 +72,11 @@ public:
     void OnButtonClick(wxCommandEvent &);
 
 protected:
+    // Return the path from the button-specific dialog (this is the same dialog
+    // that is returned by CreateDialog()).
+    virtual wxString GetPathFromDialog(wxDialog *p) const = 0;
+
+
     wxString m_message, m_wildcard;
 
     // we just store the style passed to the ctor here instead of passing it to
@@ -141,10 +146,8 @@ public:     // overridable
         { return wxEVT_FILEPICKER_CHANGED; }
 
 protected:
-    void UpdateDialogPath(wxDialog *p) override
-        { wxStaticCast(p, wxFileDialog)->SetPath(m_path); }
-    void UpdatePathFromDialog(wxDialog *p) override
-        { m_path = wxStaticCast(p, wxFileDialog)->GetPath(); }
+    wxString GetPathFromDialog(wxDialog *p) const override
+        { return wxStaticCast(p, wxFileDialog)->GetPath(); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGenericFileButton);
@@ -199,10 +202,8 @@ public:     // overridable
         { return wxEVT_DIRPICKER_CHANGED; }
 
 protected:
-    void UpdateDialogPath(wxDialog *p) override
-        { wxStaticCast(p, wxDirDialog)->SetPath(m_path); }
-    void UpdatePathFromDialog(wxDialog *p) override
-        { m_path = wxStaticCast(p, wxDirDialog)->GetPath(); }
+    wxString GetPathFromDialog(wxDialog *p) const override
+        { return wxStaticCast(p, wxDirDialog)->GetPath(); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxGenericDirButton);

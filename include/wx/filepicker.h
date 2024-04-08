@@ -86,7 +86,7 @@ public:
     virtual ~wxFileDirPickerWidgetBase() = default;
 
     // Path here is the name of the selected file or directory.
-    wxString GetPath() const { return m_path; }
+    virtual wxString GetPath() const { return m_path; }
     virtual void SetPath(const wxString &str) { m_path=str; }
 
     // Set the directory to open the file browse dialog at initially.
@@ -96,9 +96,6 @@ public:
     virtual wxControl *AsControl() = 0;
 
 protected:
-    virtual void UpdateDialogPath(wxDialog *) = 0;
-    virtual void UpdatePathFromDialog(wxDialog *) = 0;
-
     wxString m_path;
 
     // Initial directory set by SetInitialDirectory() call or empty.

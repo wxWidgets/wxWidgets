@@ -94,7 +94,7 @@ void wxGenericFileDirButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
     if (p->ShowModal() == wxID_OK)
     {
         // save updated path in m_path
-        UpdatePathFromDialog(p.get());
+        SetPath(GetPathFromDialog(p.get()));
 
         // fire an event
         wxFileDirPickerEvent event(GetEventType(), this, GetId(), m_path);
