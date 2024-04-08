@@ -57,9 +57,7 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
     // and handle user clicks on it
     Bind(wxEVT_BUTTON, &wxGenericColourButton::OnButtonClick, this, GetId());
 
-    wxBitmap bmp;
-    bmp.CreateWithDIPSize( defaultBitmapSize, GetDPIScaleFactor() );
-    m_bitmap = bmp;
+    m_bitmap.CreateWithDIPSize( defaultBitmapSize, GetDPIScaleFactor() );
     m_colour = col;
     UpdateColour();
     InitColourData();
@@ -123,9 +121,7 @@ void wxGenericColourButton::OnColourChanged(wxColourDialogEvent& ev)
 
 void wxGenericColourButton::OnDPIChanged(wxDPIChangedEvent& event)
 {
-    wxBitmap bmp;
-    bmp.CreateWithDIPSize( defaultBitmapSize, GetDPIScaleFactor() );
-    m_bitmap = bmp;
+    m_bitmap.CreateWithDIPSize( defaultBitmapSize, GetDPIScaleFactor() );
     UpdateColour();
 
     event.Skip();
