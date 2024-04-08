@@ -1958,7 +1958,7 @@ TEST_CASE("wxDateTime::SetOnDST", "[datetime][dst]")
 // Tests random problems that used to appear in BST time zone during DST.
 // This test is disabled by default as it only passes in BST time zone, due to
 // the times hard-coded in it.
-TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
+TEST_CASE("wxDateTime-BST-bugs", "[.]")
 {
     SECTION("bug-17220")
     {
