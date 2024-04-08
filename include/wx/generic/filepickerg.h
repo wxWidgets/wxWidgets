@@ -90,8 +90,6 @@ protected:
 // wxGenericFileButton: a button which brings up a wxFileDialog
 //-----------------------------------------------------------------------------
 
-#define wxFILEBTN_DEFAULT_STYLE                     (wxFLP_OPEN)
-
 class WXDLLIMPEXP_CORE wxGenericFileButton : public wxGenericFileDirButton
 {
 public:
@@ -157,8 +155,6 @@ private:
 //-----------------------------------------------------------------------------
 // wxGenericDirButton: a button which brings up a wxDirDialog
 //-----------------------------------------------------------------------------
-
-#define wxDIRBTN_DEFAULT_STYLE                     0
 
 class WXDLLIMPEXP_CORE wxGenericDirButton : public wxGenericFileDirButton
 {

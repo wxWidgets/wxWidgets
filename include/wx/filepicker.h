@@ -113,12 +113,17 @@ protected:
 #define wxFLP_CHANGE_DIR              0x4000
 #define wxFLP_SMALL                   wxPB_SMALL
 
+#define wxFILEBTN_DEFAULT_STYLE       (wxFLP_OPEN)
+
 // NOTE: wxMULTIPLE is not supported !
 
 
 #define wxDIRP_DIR_MUST_EXIST         0x0008
 #define wxDIRP_CHANGE_DIR             0x0010
 #define wxDIRP_SMALL                  wxPB_SMALL
+
+#define wxDIRBTN_DEFAULT_STYLE        0
+
 
 
 // map platform-dependent controls which implement the wxFileDirPickerWidgetBase
