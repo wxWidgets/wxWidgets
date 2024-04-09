@@ -96,10 +96,9 @@
 // adjusted.
 #define IN_CELL_EXPANDER_BUTTON_X_ADJUST    2
 
+#if WXWIN_COMPATIBILITY_3_0
 namespace
 {
-
-#if WXWIN_COMPATIBILITY_3_0
 // Hash containing for every active wxPG the list of editors and their event handlers
 // to be deleted in the idle event handler.
 // It emulates member variable 'm_deletedEditorObjects' in 3.0 compatibility mode.
@@ -108,24 +107,9 @@ WX_DECLARE_HASH_MAP(wxPropertyGrid*, wxArrayPGObject*,
                     DeletedObjects);
 
 DeletedObjects gs_deletedEditorObjects;
-#endif
-
-// Bit values for wxPropertyGrid::m_coloursCustomized.
-enum CustomColour
-{
-    CustomColour_None           = 0x0000,
-    CustomColour_Margin         = 0x0001,
-    CustomColour_CaptionBg      = 0x0002,
-    CustomColour_CaptionText    = 0x0004,
-    CustomColour_CellBg         = 0x0008,
-    CustomColour_CellText       = 0x0010,
-    CustomColour_SelectionBg    = 0x0020,
-    CustomColour_SelectionText  = 0x0040,
-    CustomColour_Line           = 0x0080,
-    CustomColour_DisabledText   = 0x0100
-};
 
 } // anonymous namespace
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -405,7 +389,7 @@ void wxPropertyGrid::Init1()
     AddActionTrigger(wxPGKeyboardAction::PressButton, WXK_DOWN, wxMOD_ALT);
     AddActionTrigger(wxPGKeyboardAction::PressButton, WXK_F4);
 
-    m_coloursCustomized = CustomColour_None;
+    m_coloursCustomized = 0;
 
     m_doubleBuffer = nullptr;
 
@@ -1438,7 +1422,7 @@ static int wxPGGetColAvg( const wxColour& col )
 
 void wxPropertyGrid::RegainColours()
 {
-    if ( !(m_coloursCustomized & CustomColour_CaptionBg) )
+    if ( !(m_coloursCustomized & 0x0002) )
     {
         wxColour col = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
 
@@ -1455,10 +1439,10 @@ void wxPropertyGrid::RegainColours()
         m_categoryDefaultCell.GetData()->SetBgCol(m_colCapBack);
     }
 
-    if ( !(m_coloursCustomized & CustomColour_Margin) )
+    if ( !(m_coloursCustomized & 0x0001) )
         m_colMargin = m_colCapBack;
 
-    if ( !(m_coloursCustomized & CustomColour_CaptionText) )
+    if ( !(m_coloursCustomized & 0x0004) )
     {
     #ifdef __WXGTK__
         int colDec = -90;
@@ -1473,7 +1457,7 @@ void wxPropertyGrid::RegainColours()
         m_categoryDefaultCell.GetData()->SetFgCol(capForeCol);
     }
 
-    if ( !(m_coloursCustomized & CustomColour_CellBg) )
+    if ( !(m_coloursCustomized & 0x0008) )
     {
         wxColour bgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
         m_colPropBack = bgCol;
@@ -1482,7 +1466,7 @@ void wxPropertyGrid::RegainColours()
             m_unspecifiedAppearance.SetBgCol(bgCol);
     }
 
-    if ( !(m_coloursCustomized & CustomColour_CellText) )
+    if ( !(m_coloursCustomized & 0x0010) )
     {
         wxColour fgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
         m_colPropFore = fgCol;
@@ -1491,16 +1475,16 @@ void wxPropertyGrid::RegainColours()
             m_unspecifiedAppearance.SetFgCol(fgCol);
     }
 
-    if ( !(m_coloursCustomized & CustomColour_SelectionBg) )
+    if ( !(m_coloursCustomized & 0x0020) )
         m_colSelBack = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
 
-    if ( !(m_coloursCustomized & CustomColour_SelectionText) )
+    if ( !(m_coloursCustomized & 0x0040) )
         m_colSelFore = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
-    if ( !(m_coloursCustomized & CustomColour_Line) )
+    if ( !(m_coloursCustomized & 0x0080) )
         m_colLine = m_colCapBack;
 
-    if ( !(m_coloursCustomized & CustomColour_DisabledText) )
+    if ( !(m_coloursCustomized & 0x0100) )
         m_colDisPropFore = m_colCapFore;
 
     m_colEmptySpace = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
@@ -1510,7 +1494,7 @@ void wxPropertyGrid::RegainColours()
 
 void wxPropertyGrid::ResetColours()
 {
-    m_coloursCustomized = CustomColour_None;
+    m_coloursCustomized = 0;
 
     RegainColours();
 
@@ -1539,7 +1523,7 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
 void wxPropertyGrid::SetLineColour( const wxColour& col )
 {
     m_colLine = col;
-    m_coloursCustomized |= CustomColour_Line;
+    m_coloursCustomized |= 0x80;
     Refresh();
 }
 
@@ -1548,7 +1532,7 @@ void wxPropertyGrid::SetLineColour( const wxColour& col )
 void wxPropertyGrid::SetMarginColour( const wxColour& col )
 {
     m_colMargin = col;
-    m_coloursCustomized |= CustomColour_Margin;
+    m_coloursCustomized |= 0x01;
     Refresh();
 }
 
@@ -1557,7 +1541,7 @@ void wxPropertyGrid::SetMarginColour( const wxColour& col )
 void wxPropertyGrid::SetCellBackgroundColour( const wxColour& col )
 {
     m_colPropBack = col;
-    m_coloursCustomized |= CustomColour_CellBg;
+    m_coloursCustomized |= 0x08;
 
     m_propertyDefaultCell.GetData()->SetBgCol(col);
     m_unspecifiedAppearance.SetBgCol(col);
@@ -1570,7 +1554,7 @@ void wxPropertyGrid::SetCellBackgroundColour( const wxColour& col )
 void wxPropertyGrid::SetCellTextColour( const wxColour& col )
 {
     m_colPropFore = col;
-    m_coloursCustomized |= CustomColour_CellText;
+    m_coloursCustomized |= 0x10;
 
     m_propertyDefaultCell.GetData()->SetFgCol(col);
     m_unspecifiedAppearance.SetFgCol(col);
@@ -1592,7 +1576,7 @@ void wxPropertyGrid::SetEmptySpaceColour( const wxColour& col )
 void wxPropertyGrid::SetCellDisabledTextColour( const wxColour& col )
 {
     m_colDisPropFore = col;
-    m_coloursCustomized |= CustomColour_DisabledText;
+    m_coloursCustomized |= 0x100;
     Refresh();
 }
 
@@ -1601,7 +1585,7 @@ void wxPropertyGrid::SetCellDisabledTextColour( const wxColour& col )
 void wxPropertyGrid::SetSelectionBackgroundColour( const wxColour& col )
 {
     m_colSelBack = col;
-    m_coloursCustomized |= CustomColour_SelectionBg;
+    m_coloursCustomized |= 0x20;
     Refresh();
 }
 
@@ -1610,7 +1594,7 @@ void wxPropertyGrid::SetSelectionBackgroundColour( const wxColour& col )
 void wxPropertyGrid::SetSelectionTextColour( const wxColour& col )
 {
     m_colSelFore = col;
-    m_coloursCustomized |= CustomColour_SelectionText;
+    m_coloursCustomized |= 0x40;
     Refresh();
 }
 
@@ -1619,7 +1603,7 @@ void wxPropertyGrid::SetSelectionTextColour( const wxColour& col )
 void wxPropertyGrid::SetCaptionBackgroundColour( const wxColour& col )
 {
     m_colCapBack = col;
-    m_coloursCustomized |= CustomColour_CaptionBg;
+    m_coloursCustomized |= 0x02;
 
     m_categoryDefaultCell.GetData()->SetBgCol(col);
 
@@ -1631,7 +1615,7 @@ void wxPropertyGrid::SetCaptionBackgroundColour( const wxColour& col )
 void wxPropertyGrid::SetCaptionTextColour( const wxColour& col )
 {
     m_colCapFore = col;
-    m_coloursCustomized |= CustomColour_CaptionText;
+    m_coloursCustomized |= 0x04;
 
     m_categoryDefaultCell.GetData()->SetFgCol(col);
 
@@ -5024,8 +5008,10 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
     if ( m_dragStatus > 0 )
     {
-        if ( x > (m_marginWidth + wxPG_DRAG_MARGIN) &&
-             x < (m_pState->GetVirtualWidth() - wxPG_DRAG_MARGIN) )
+        const int dragMargin = FromDIP(wxPG_DRAG_MARGIN);
+
+        if ( x > (m_marginWidth + dragMargin) &&
+             x < (m_pState->GetVirtualWidth() - dragMargin) )
         {
 
             int splitterX = x - splitterHitOffset;

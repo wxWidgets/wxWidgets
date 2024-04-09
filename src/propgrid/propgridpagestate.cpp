@@ -826,7 +826,7 @@ int wxPropertyGridPageState::DoGetSplitterPosition( int splitterColumn ) const
 
 int wxPropertyGridPageState::GetColumnMinWidth( int WXUNUSED(column) ) const
 {
-    return wxPG_DRAG_MARGIN;
+    return m_pPropGrid->FromDIP(wxPG_DRAG_MARGIN);
 }
 
 void wxPropertyGridPageState::PropagateColSizeDec( int column,
@@ -1118,7 +1118,7 @@ void wxPropertyGridPageState::ResetColumnSizes(wxPGSplitterPositionFlags setSpli
 void wxPropertyGridPageState::SetColumnCount( int colCount )
 {
     wxASSERT( colCount >= 2 );
-    m_colWidths.resize(colCount, wxPG_DRAG_MARGIN);
+    m_colWidths.resize(colCount, m_pPropGrid->FromDIP(wxPG_DRAG_MARGIN));
     m_columnProportions.resize(colCount, 1);
 
     CheckColumnWidths();
