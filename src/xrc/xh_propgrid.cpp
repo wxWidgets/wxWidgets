@@ -78,6 +78,7 @@ void wxPropertyGridXmlHandler::InitPopulator()
     wxPropertyGridXrcPopulator* populator
         = new wxPropertyGridXrcPopulator(this);
     m_populator = populator;
+    m_populator->SetGrid( m_pg );
 }
 
 void wxPropertyGridXmlHandler::PopulatePage( wxPropertyGridPageState* state )
