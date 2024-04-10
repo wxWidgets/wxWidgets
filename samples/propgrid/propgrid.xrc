@@ -11,7 +11,6 @@
             <object class="wxPropertyGridManager">
                 <style>wxPG_AUTO_SORT|wxPG_TOOLTIPS|wxPG_TOOLBAR</style>
                 <exstyle>wxPG_EX_MODE_BUTTONS|wxPG_EX_HELP_AS_TOOLTIPS</exstyle>
-                <virtualwidth>0</virtualwidth>
                 <page>
                     <label>Sample Page 1</label>
                     <property class="wxPropertyCategory">
