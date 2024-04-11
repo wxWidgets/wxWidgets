@@ -374,8 +374,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             }
             else
             {
-                DoSetSplitter( newWidth / 2 );
-                m_isSplitterPreSet = false;
+                DoSetSplitter( newWidth / 2, 0, wxPGSplitterPositionFlags::FromAutoCenter );
             }
         }
     }
