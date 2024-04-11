@@ -34,6 +34,7 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
+#include "wx/gtk/private/variant.h"
 #include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
@@ -619,7 +620,7 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
 {
     const char *address = g_dbus_server_get_client_address(dbusServer);
-    GVariant *user_data = g_variant_new("(s)", address);
+    wxGtkVariant user_data(g_variant_new("(s)", address));
 
     // Try to setup extension loading from the location it is supposed to be
     // normally installed in.
@@ -646,7 +647,7 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     }
 
     webkit_web_context_set_web_extensions_initialization_user_data(context,
-                                                                   user_data);
+                                                                   user_data.Release());
 }
 
 static gboolean
@@ -1408,15 +1409,11 @@ void wxWebViewWebKit::DeleteSelection()
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "DeleteSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
-        if (retval)
-        {
-            g_variant_unref(retval);
-        }
+                                                  nullptr, nullptr));
     }
 }
 
@@ -1426,16 +1423,16 @@ bool wxWebViewWebKit::HasSelection() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "HasSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             gboolean has_selection = FALSE;
-            g_variant_get(retval, "(b)", &has_selection);
-            g_variant_unref(retval);
+            retval.Get("(b)", &has_selection);
+
             return has_selection != 0;
         }
     }
@@ -1454,16 +1451,15 @@ wxString wxWebViewWebKit::GetSelectedText() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             char *text;
-            g_variant_get(retval, "(s)", &text);
-            g_variant_unref(retval);
+            retval.Get("(s)", &text);
             return wxString(text, wxConvUTF8);
         }
     }
@@ -1476,16 +1472,15 @@ wxString wxWebViewWebKit::GetSelectedSource() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedSource",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             char *source;
-            g_variant_get(retval, "(s)", &source);
-            g_variant_unref(retval);
+            retval.Get("(s)", &source);
             return wxString(source, wxConvUTF8);
         }
     }
@@ -1498,15 +1493,11 @@ void wxWebViewWebKit::ClearSelection()
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "ClearSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
-        if (retval)
-        {
-            g_variant_unref(retval);
-        }
+                                                  nullptr, nullptr));
     }
 }
 
@@ -1516,16 +1507,15 @@ wxString wxWebViewWebKit::GetPageText() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
-        GVariant *retval = g_dbus_proxy_call_sync(extension,
+        wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetPageText",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
-                                                  nullptr, nullptr);
+                                                  nullptr, nullptr));
         if (retval)
         {
             char *text;
-            g_variant_get(retval, "(s)", &text);
-            g_variant_unref(retval);
+            retval.Get("(s)", &text);
             return wxString(text, wxConvUTF8);
         }
     }
