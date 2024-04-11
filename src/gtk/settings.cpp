@@ -26,6 +26,10 @@
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/value.h"
 
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/variant.h"
+#endif
+
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
 // ----------------------------------------------------------------------------
@@ -186,7 +190,7 @@ static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
 namespace
 {
 
-bool UpdatePreferDark(GVariant* value)
+bool UpdatePreferDark(const wxGtkVariant& value)
 {
     GtkSettings* const settings = gtk_settings_get_default();
     // This shouldn't happen, but don't bother doing anything else if it does.
@@ -194,7 +198,7 @@ bool UpdatePreferDark(GVariant* value)
         return false;
 
     // 0: No preference, 1: Prefer dark appearance, 2: Prefer light appearance
-    gboolean preferDark = g_variant_get_uint32(value) == 1;
+    gboolean preferDark = value.GetUint32() == 1;
 
     char* themeName = nullptr;
     gboolean preferDarkPrev = false;
@@ -235,8 +239,8 @@ proxy_g_signal(GDBusProxy*, const char*, const char* signal_name, GVariant* para
 
     const char* nameSpace;
     const char* key;
-    GVariant* value;
-    g_variant_get(parameters, "(&s&sv)", &nameSpace, &key, &value);
+    wxGtkVariant value;
+    g_variant_get(parameters, "(&s&sv)", &nameSpace, &key, value.ByRef());
     if (strcmp(nameSpace, "org.freedesktop.appearance") == 0 &&
         strcmp(key, "color-scheme") == 0)
     {
@@ -253,7 +257,6 @@ proxy_g_signal(GDBusProxy*, const char*, const char* signal_name, GVariant* para
             }
         }
     }
-    g_variant_unref(value);
 }
 }
 
@@ -1247,18 +1250,14 @@ bool wxSystemSettingsModule::OnInit()
     {
         g_signal_connect(gs_proxyPortalSettings, "g-signal", G_CALLBACK(proxy_g_signal), nullptr);
 
-        GVariant* ret = g_dbus_proxy_call_sync(gs_proxyPortalSettings, "Read",
+        wxGtkVariant ret(g_dbus_proxy_call_sync(gs_proxyPortalSettings, "Read",
             g_variant_new("(ss)", "org.freedesktop.appearance", "color-scheme"),
-            G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr);
+            G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr));
         if (ret)
         {
-            GVariant* child;
-            g_variant_get(ret, "(v)", &child);
-            GVariant* value = g_variant_get_variant(child);
-            UpdatePreferDark(value);
-            g_variant_unref(value);
-            g_variant_unref(child);
-            g_variant_unref(ret);
+            wxGtkVariant child;
+            ret.Get("(v)", child.ByRef());
+            UpdatePreferDark(child.GetVariant());
         }
     }
 #endif // __WXGTK3__
