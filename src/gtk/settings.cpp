@@ -260,20 +260,20 @@ proxy_g_signal(GDBusProxy*, const char*, const char* signal_name, GVariant* para
     const char* key;
     wxGtkVariant value;
     g_variant_get(parameters, "(&s&sv)", &nameSpace, &key, value.ByRef());
-    if (strcmp(nameSpace, "org.freedesktop.appearance") == 0 &&
-        strcmp(key, "color-scheme") == 0)
-    {
-        if (UpdatePreferDark(value))
-        {
-            for (int i = wxSYS_COLOUR_MAX; i--;)
-                gs_systemColorCache[i].UnRef();
+    if (strcmp(nameSpace, "org.freedesktop.appearance") != 0 ||
+        strcmp(key, "color-scheme") != 0)
+        return;
 
-            for (auto* win: wxTopLevelWindows)
-            {
-                wxSysColourChangedEvent event;
-                event.SetEventObject(win);
-                win->HandleWindowEvent(event);
-            }
+    if (UpdatePreferDark(value))
+    {
+        for (int i = wxSYS_COLOUR_MAX; i--;)
+            gs_systemColorCache[i].UnRef();
+
+        for (auto* win: wxTopLevelWindows)
+        {
+            wxSysColourChangedEvent event;
+            event.SetEventObject(win);
+            win->HandleWindowEvent(event);
         }
     }
 }
