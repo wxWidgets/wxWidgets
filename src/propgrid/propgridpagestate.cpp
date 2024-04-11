@@ -368,20 +368,14 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
 
         if ( !m_isSplitterPreSet && m_dontCenterSplitter )
         {
-             wxMilliClock_t timeSinceCreation = ::wxGetLocalTimeMillis() - GetGrid()->m_timeCreated;
-
-            // If too long, don't set splitter
-            if ( timeSinceCreation < 250 )
+            if ( m_properties->HasAnyChild() )
             {
-                if ( m_properties->HasAnyChild() )
-                {
-                    SetSplitterLeft( false );
-                }
-                else
-                {
-                    DoSetSplitter( newWidth / 2 );
-                    m_isSplitterPreSet = false;
-                }
+                SetSplitterLeft( false );
+            }
+            else
+            {
+                DoSetSplitter( newWidth / 2 );
+                m_isSplitterPreSet = false;
             }
         }
     }

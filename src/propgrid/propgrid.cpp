@@ -492,8 +492,6 @@ void wxPropertyGrid::Init2()
     wxSize clientSize = GetClientSize();
     SetVirtualSize(clientSize);
 
-    m_timeCreated = ::wxGetLocalTimeMillis();
-
     m_iFlags |= wxPG_FL_INITIALIZED;
 
     wxSize wndsize = GetSize();
