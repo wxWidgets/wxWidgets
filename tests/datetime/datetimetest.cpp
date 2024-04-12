@@ -1111,6 +1111,12 @@ void DateTimeTestCase::TestParseRFC822()
         },
 
         {
+            "Tue, 12 Apr 2044 10:48:30 -0500",
+            { 12, wxDateTime::Apr, 2044, 15, 48, 30 },
+            true
+        },
+
+        {
             "Sat, 18 Dec 1999 10:48:30 G", // military time zone
             { 18, wxDateTime::Dec, 1999, 17, 48, 30 },
             true
@@ -1282,6 +1288,7 @@ void DateTimeTestCase::TestDateParse()
         { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true, "" },
         { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true, "" },
         { "Thu 20 Jun 2019", { 20, wxDateTime::Jun, 2019 }, true, "" },
+        { "Sun 20 Jun 2049", { 20, wxDateTime::Jun, 2049 }, true, "" },
         { "20 Jun 2019 Thu", { 20, wxDateTime::Jun, 2019 }, true, "" },
         { "Dec sixth 2017",  {  6, wxDateTime::Dec, 2017 }, true, "" },
 
@@ -1429,6 +1436,14 @@ void DateTimeTestCase::TestDateTimeParse()
         {
             "Thu 22 Nov 2007 07:40:00 PM",
             { 22, wxDateTime::Nov, 2007, 19, 40,  0 },
+            true,
+            "",
+            false
+        },
+
+        {
+            "Sun 20 Jun 2049 07:40:00 PM",
+            { 20, wxDateTime::Jun, 2049, 19, 40,  0 },
             true,
             "",
             false
