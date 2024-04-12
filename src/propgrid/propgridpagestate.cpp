@@ -366,11 +366,12 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             widthChange = 0;
         CheckColumnWidths(widthChange);
 
-        if ( !m_isSplitterPreSet && m_dontCenterSplitter )
+        if ( !m_isSplitterPreSet )
         {
-            if ( m_properties->HasAnyChild() )
+            if ( m_dontCenterSplitter )
             {
                 SetSplitterLeft( false );
+                m_isSplitterPreSet = false;
             }
             else
             {
