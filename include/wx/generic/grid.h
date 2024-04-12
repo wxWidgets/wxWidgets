@@ -968,19 +968,24 @@ public:
     void SetCol( int n ) { m_col = n; }
     void Set( int row, int col ) { m_row = row; m_col = col; }
 
+    bool IsFullySpecified() const
+    {
+        return (m_row != -1 && m_col != -1);
+    }
+
     bool operator==( const wxGridCellCoords& other ) const
     {
-        return (m_row == other.m_row  &&  m_col == other.m_col);
+        return (m_row == other.m_row && m_col == other.m_col);
     }
 
     bool operator!=( const wxGridCellCoords& other ) const
     {
-        return (m_row != other.m_row  ||  m_col != other.m_col);
+        return (m_row != other.m_row || m_col != other.m_col);
     }
 
     bool operator!() const
     {
-        return (m_row == -1 && m_col == -1 );
+        return (m_row == -1 && m_col == -1);
     }
 
 private:
