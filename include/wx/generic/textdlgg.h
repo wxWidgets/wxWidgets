@@ -46,9 +46,10 @@ public:
                       const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
-                      const wxPoint& pos = wxDefaultPosition)
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize sz = wxDefaultSize)
     {
-        Create(parent, message, caption, value, style, pos);
+        Create(parent, message, caption, value, style, pos, sz);
     }
 
     bool Create(wxWindow *parent,
@@ -56,7 +57,8 @@ public:
                 const wxString& caption = wxASCII_STR(wxGetTextFromUserPromptStr),
                 const wxString& value = wxEmptyString,
                 long style = wxTextEntryDialogStyle,
-                const wxPoint& pos = wxDefaultPosition);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize sz = wxDefaultSize);
 
     void SetValue(const wxString& val);
     wxString GetValue() const { return m_value; }
