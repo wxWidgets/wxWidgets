@@ -885,8 +885,7 @@ void wxPropertyGridPageState::DoSetSplitter(int newXPos, int splitterColumn,
     if ( splitterColumn == 0 )
         m_fSplitterX = (double) newXPos;
 
-    if ( !(flags & wxPGSplitterPositionFlags::FromAutoCenter) &&
-         !(flags & wxPGSplitterPositionFlags::FromEvent) )
+    if ( !(flags & wxPGSplitterPositionFlags::FromAutoCenter) )
     {
         // Don't allow initial splitter auto-positioning after this.
         m_isSplitterPreSet = true;
