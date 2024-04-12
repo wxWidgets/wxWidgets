@@ -1990,6 +1990,13 @@ public:
     void Set(int row, int col);
 
     /**
+        Returns @c true if neither the row nor column are invalid (-1).
+
+        @since 3.3.0
+     */
+    bool IsFullySpecified() const
+
+    /**
         Assignment operator for coordinate types.
      */
     wxGridCellCoords& operator=(const wxGridCellCoords& other);
