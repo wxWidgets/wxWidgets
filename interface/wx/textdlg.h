@@ -117,7 +117,7 @@ public:
         @param pos
             Dialog position.
         @param sz
-            The size of the dialog.
+            The size of the dialog (this parameter is only available since wxWidgets 3.3.0).
 
         @since 2.9.5
     */
