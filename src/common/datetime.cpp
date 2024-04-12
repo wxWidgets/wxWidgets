@@ -1273,14 +1273,13 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
     // While the range for 64-bit time_t is billions of years per se,
     // we cannot expect the C runtime to support dates thousands of years
     // in the future. MSVC claims to support dates up to 3000-12-31;
-    // what macOS and *nix support is unknown, but let us pick year 2200
-    // as the maximum for now.
+    // however, we do not set an upper limit for the year.
     static const int yearMinInRange = 1970;
-    static const int yearMaxInRange = sizeof(time_t) > 4 ? 2200 : 2037;
+    static const int yearMaxInRange = sizeof(time_t) > 4 ? -1 : 2037;
 
     // test only the year instead of testing for the exact end of the Unix
     // time_t range - it doesn't bring anything to do more precise checks
-    if ( year >= yearMinInRange && year <= yearMaxInRange )
+    if ( year >= yearMinInRange && (yearMaxInRange == -1 || year <= yearMaxInRange) )
     {
         // use the standard library version if the date is in range - this is
         // probably more efficient than our code
