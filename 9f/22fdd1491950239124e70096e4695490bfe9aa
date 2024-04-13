@@ -1,0 +1,1 @@
+wxAll (GUI): Add wxApp::SetAppearance() to explicitly set dark or light mode (#24461).
