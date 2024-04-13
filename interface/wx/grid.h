@@ -1955,7 +1955,7 @@ public:
         Default constructor initializes the object to invalid state.
 
         Initially the row and column are both invalid (-1) and so operator!()
-        for an uninitialized wxGridCellCoords returns false.
+        for an uninitialized wxGridCellCoords returns @false.
      */
     wxGridCellCoords();
 
@@ -2015,7 +2015,7 @@ public:
         Checks whether the coordinates are invalid.
 
         Returns false only if both row and column are -1. Notice that if either
-        row or column (but not both) are -1, this method returns true even if
+        row or column (but not both) are -1, this method returns @true even if
         the object is invalid. This is done because objects in such state
         should actually never exist, i.e. either both coordinates should be -1
         or none of them should be -1.
