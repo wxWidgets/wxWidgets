@@ -1292,18 +1292,17 @@ public:
 #endif // wxLIST_COMPATIBILITY
 
 // delete all list elements
-//
-// NB: the class declaration of the list elements must be visible from the
-//     place where you use this macro, otherwise the proper destructor may not
-//     be called (a decent compiler should give a warning about it, but don't
-//     count on it)!
-#define WX_CLEAR_LIST(type, list)                                            \
-    {                                                                        \
-        type::iterator it, en;                                               \
-        for( it = (list).begin(), en = (list).end(); it != en; ++it )        \
-            delete *it;                                                      \
-        (list).clear();                                                      \
-    }
+template <class T>
+inline void wxClearList(T& list)
+{
+    for ( auto& elem: list )
+        delete elem;
+
+    list.clear();
+}
+
+// Deprecated macro, use wxClearList() instead.
+#define WX_CLEAR_LIST(type, list) wxClearList(list)
 
 // append all element of one list to another one
 //

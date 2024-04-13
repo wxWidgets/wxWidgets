@@ -203,7 +203,7 @@ void ListsTestCase::wxListCtorTest()
 #if !wxUSE_STD_CONTAINERS
         list1.DeleteContents(true);
 #else
-        WX_CLEAR_LIST(wxListBazs, list1);
+        wxClearList(list1);
 #endif
     }
 

@@ -475,3 +475,19 @@ public:
     defining it.
 */
 #define WX_DEFINE_LIST(T, name)
+
+/**
+    Deprecated macro equivalent to wxClearList().
+
+    @deprecated This macro is deprecated, use wxClearList() instead.
+ */
+#define WX_CLEAR_LIST(type, list) wxClearList(list)
+
+/**
+    Function deletes all elements of the given list, which must be pointers.
+
+    This simple helper function just calls delete on each element of the list.
+
+    @since 3.3.0
+ */
+template <typename T> inline void wxClearList(T& list);
