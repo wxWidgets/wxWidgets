@@ -156,6 +156,9 @@ Changes in behaviour which may result in build errors
   be completely removed in the future. If you overrode this function, don't
   do it any longer. If you call it, replace it with wxBORDER_THEME constant.
 
+- wxGTK wxDirButton::Create() doesn't have unused "wildcard" parameter any
+  longer, please just remove it from your code if you used it.
+
 
 3.3.0: (released 2022-??-??)
 ----------------------------
