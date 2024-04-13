@@ -77,6 +77,180 @@ private:
     wxSortCompareFunction m_f;
 };
 
+template <typename elT, typename baseT, typename wxListHelper>
+class wxListImpl : public std::list<elT>
+{
+private:
+    bool m_destroy = false;
+
+    using liT = wxListImpl<elT, baseT, wxListHelper>;
+
+public:
+    using iterator = typename std::list<elT>::iterator;
+
+    class compatibility_iterator
+    {
+    private:
+        using liT = wxListImpl<elT, baseT, wxListHelper>;
+        using iterator = typename std::list<elT>::iterator;
+
+        friend liT;
+
+        iterator m_iter;
+        liT * m_list;
+
+    public:
+        compatibility_iterator()
+            : m_iter(wxListHelper::EmptyList.end()), m_list( nullptr ) {}
+        compatibility_iterator( liT* li, iterator i )
+            : m_iter( i ), m_list( li ) {}
+        compatibility_iterator( const liT* li, iterator i )
+            : m_iter( i ), m_list( const_cast< liT* >( li ) ) {}
+
+        compatibility_iterator* operator->() { return this; }
+        const compatibility_iterator* operator->() const { return this; }
+
+        bool operator==(const compatibility_iterator& i) const
+        {
+            wxASSERT_MSG( m_list && i.m_list,
+                          wxT("comparing invalid iterators is illegal") );
+            return (m_list == i.m_list) && (m_iter == i.m_iter);
+        }
+        bool operator!=(const compatibility_iterator& i) const
+            { return !( operator==( i ) ); }
+        operator bool() const
+            { return m_list ? m_iter != m_list->end() : false; }
+        bool operator !() const
+            { return !( operator bool() ); }
+
+        elT GetData() const
+            { return *m_iter; }
+        void SetData( elT e )
+            { *m_iter = e; }
+
+        compatibility_iterator GetNext() const
+        {
+            iterator i = m_iter;
+            return compatibility_iterator( m_list, ++i );
+        }
+        compatibility_iterator GetPrevious() const
+        {
+            if ( m_iter == m_list->begin() )
+                return compatibility_iterator();
+
+            iterator i = m_iter;
+            return compatibility_iterator( m_list, --i );
+        }
+        int IndexOf() const
+        {
+            return *this ? (int)std::distance( m_list->begin(), m_iter )
+                         : wxNOT_FOUND;
+        }
+    };
+public:
+    wxListImpl() = default;
+
+    compatibility_iterator Find( baseT e ) const
+    {
+      liT* _this = const_cast< liT* >( this );
+      return compatibility_iterator( _this,
+                 std::find( _this->begin(), _this->end(), e ));
+    }
+
+    bool IsEmpty() const
+        { return this->empty(); }
+    size_t GetCount() const
+        { return this->size(); }
+    int Number() const
+        { return static_cast< int >( GetCount() ); }
+
+    compatibility_iterator Item( size_t idx ) const
+    {
+        iterator i = const_cast< liT* >(this)->begin();
+        std::advance( i, idx );
+        return compatibility_iterator( this, i );
+    }
+    elT operator[](size_t idx) const
+    {
+        return Item(idx).GetData();
+    }
+
+    compatibility_iterator GetFirst() const
+    {
+        return compatibility_iterator( this,
+            const_cast< liT* >(this)->begin() );
+    }
+    compatibility_iterator GetLast() const
+    {
+        iterator i = const_cast< liT* >(this)->end();
+        return compatibility_iterator( this, !this->empty() ? --i : i );
+    }
+    bool Member( baseT e ) const
+        { return Find( e ); }
+    compatibility_iterator Nth( int n ) const
+        { return Item( n ); }
+    int IndexOf( baseT e ) const
+        { return Find( e ).IndexOf(); }
+
+    compatibility_iterator Append( elT e )
+    {
+        this->push_back( e );
+        return GetLast();
+    }
+    compatibility_iterator Insert( elT e )
+    {
+        this->push_front( e );
+        return compatibility_iterator( this, this->begin() );
+    }
+    compatibility_iterator Insert(const compatibility_iterator & i, elT e)
+    {
+        return compatibility_iterator( this, this->insert( i.m_iter, e ) );
+    }
+    compatibility_iterator Insert( size_t idx, elT e )
+    {
+        return compatibility_iterator( this,
+                                       this->insert( Item( idx ).m_iter, e ) );
+    }
+
+    void DeleteContents( bool destroy )
+        { m_destroy = destroy; }
+    bool GetDeleteContents() const
+        { return m_destroy; }
+    void Erase( const compatibility_iterator& i )
+    {
+        if ( m_destroy )
+            wxListHelper::DeleteFunction( i->GetData() );
+        this->erase( i.m_iter );
+    }
+    bool DeleteNode( const compatibility_iterator& i )
+    {
+        if( i )
+        {
+            Erase( i );
+            return true;
+        }
+        return false;
+    }
+    bool DeleteObject( baseT e )
+    {
+        return DeleteNode( Find( e ) );
+    }
+    void Clear()
+    {
+        if ( m_destroy )
+            std::for_each( this->begin(), this->end(),
+                           wxListHelper::DeleteFunction );
+        this->clear();
+    }
+    /* Workaround for broken VC6 std::list::sort() see above */
+    void Sort( wxSortCompareFunction compfunc )
+        { sort( wxList_SortFunction<elT>(compfunc ) ); }
+    ~wxListImpl() { Clear(); }
+
+    /* It needs access to our EmptyList */
+    friend class compatibility_iterator;
+};
+
 /*
     Note 1: the outer helper class _WX_LIST_HELPER_##liT below is a workaround
     for mingw 3.2.3 compiler bug that prevents a static function of liT class
@@ -117,170 +291,9 @@ private:
         static void DeleteFunction( _WX_LIST_ITEM_TYPE_##liT X );             \
     };                                                                        \
                                                                               \
-    class liT : public std::list<elT>                                          \
+    class liT : public wxListImpl<elT, const baseT, _WX_LIST_HELPER_##liT>    \
     {                                                                         \
-    private:                                                                  \
-        bool m_destroy;                                                       \
-                                                                              \
-    public:                                                                   \
-        class compatibility_iterator                                           \
-        {                                                                     \
-        private:                                                              \
-            friend class liT;                                                 \
-                                                                              \
-            iterator m_iter;                                                  \
-            liT * m_list;                                                     \
-                                                                              \
-        public:                                                               \
-            compatibility_iterator()                                          \
-                : m_iter(_WX_LIST_HELPER_##liT::EmptyList.end()), m_list( nullptr ) {}                  \
-            compatibility_iterator( liT* li, iterator i )                     \
-                : m_iter( i ), m_list( li ) {}                                \
-            compatibility_iterator( const liT* li, iterator i )               \
-                : m_iter( i ), m_list( const_cast< liT* >( li ) ) {}          \
-                                                                              \
-            compatibility_iterator* operator->() { return this; }             \
-            const compatibility_iterator* operator->() const { return this; } \
-                                                                              \
-            bool operator==(const compatibility_iterator& i) const            \
-            {                                                                 \
-                wxASSERT_MSG( m_list && i.m_list,                             \
-                              wxT("comparing invalid iterators is illegal") ); \
-                return (m_list == i.m_list) && (m_iter == i.m_iter);          \
-            }                                                                 \
-            bool operator!=(const compatibility_iterator& i) const            \
-                { return !( operator==( i ) ); }                              \
-            operator bool() const                                             \
-                { return m_list ? m_iter != m_list->end() : false; }          \
-            bool operator !() const                                           \
-                { return !( operator bool() ); }                              \
-                                                                              \
-            elT GetData() const                                               \
-                { return *m_iter; }                                           \
-            void SetData( elT e )                                             \
-                { *m_iter = e; }                                              \
-                                                                              \
-            compatibility_iterator GetNext() const                            \
-            {                                                                 \
-                iterator i = m_iter;                                          \
-                return compatibility_iterator( m_list, ++i );                 \
-            }                                                                 \
-            compatibility_iterator GetPrevious() const                        \
-            {                                                                 \
-                if ( m_iter == m_list->begin() )                              \
-                    return compatibility_iterator();                          \
-                                                                              \
-                iterator i = m_iter;                                          \
-                return compatibility_iterator( m_list, --i );                 \
-            }                                                                 \
-            int IndexOf() const                                               \
-            {                                                                 \
-                return *this ? (int)std::distance( m_list->begin(), m_iter )  \
-                             : wxNOT_FOUND;                                   \
-            }                                                                 \
-        };                                                                    \
-    public:                                                                   \
-        liT() : m_destroy( false ) {}                                         \
-                                                                              \
-        compatibility_iterator Find( const baseT e ) const                    \
-        {                                                                     \
-          liT* _this = const_cast< liT* >( this );                            \
-          return compatibility_iterator( _this,                               \
-                     std::find( _this->begin(), _this->end(), (const elT)e ));\
-        }                                                                     \
-                                                                              \
-        bool IsEmpty() const                                                  \
-            { return empty(); }                                               \
-        size_t GetCount() const                                               \
-            { return size(); }                                                \
-        int Number() const                                                    \
-            { return static_cast< int >( GetCount() ); }                      \
-                                                                              \
-        compatibility_iterator Item( size_t idx ) const                       \
-        {                                                                     \
-            iterator i = const_cast< liT* >(this)->begin();                   \
-            std::advance( i, idx );                                           \
-            return compatibility_iterator( this, i );                         \
-        }                                                                     \
-        elT operator[](size_t idx) const                                      \
-        {                                                                     \
-            return Item(idx).GetData();                                       \
-        }                                                                     \
-                                                                              \
-        compatibility_iterator GetFirst() const                               \
-        {                                                                     \
-            return compatibility_iterator( this,                              \
-                const_cast< liT* >(this)->begin() );                          \
-        }                                                                     \
-        compatibility_iterator GetLast() const                                \
-        {                                                                     \
-            iterator i = const_cast< liT* >(this)->end();                     \
-            return compatibility_iterator( this, !empty() ? --i : i );        \
-        }                                                                     \
-        bool Member( baseT e ) const                                          \
-            { return Find( e ); }                                             \
-        compatibility_iterator Nth( int n ) const                             \
-            { return Item( n ); }                                             \
-        int IndexOf( baseT e ) const                                          \
-            { return Find( e ).IndexOf(); }                                   \
-                                                                              \
-        compatibility_iterator Append( elT e )                                \
-        {                                                                     \
-            push_back( e );                                                   \
-            return GetLast();                                                 \
-        }                                                                     \
-        compatibility_iterator Insert( elT e )                                \
-        {                                                                     \
-            push_front( e );                                                  \
-            return compatibility_iterator( this, begin() );                   \
-        }                                                                     \
-        compatibility_iterator Insert(const compatibility_iterator & i, elT e)\
-        {                                                                     \
-            return compatibility_iterator( this, insert( i.m_iter, e ) );     \
-        }                                                                     \
-        compatibility_iterator Insert( size_t idx, elT e )                    \
-        {                                                                     \
-            return compatibility_iterator( this,                              \
-                                           insert( Item( idx ).m_iter, e ) ); \
-        }                                                                     \
-                                                                              \
-        void DeleteContents( bool destroy )                                   \
-            { m_destroy = destroy; }                                          \
-        bool GetDeleteContents() const                                        \
-            { return m_destroy; }                                             \
-        void Erase( const compatibility_iterator& i )                         \
-        {                                                                     \
-            if ( m_destroy )                                                  \
-                _WX_LIST_HELPER_##liT::DeleteFunction( i->GetData() );        \
-            erase( i.m_iter );                                                \
-        }                                                                     \
-        bool DeleteNode( const compatibility_iterator& i )                    \
-        {                                                                     \
-            if( i )                                                           \
-            {                                                                 \
-                Erase( i );                                                   \
-                return true;                                                  \
-            }                                                                 \
-            return false;                                                     \
-        }                                                                     \
-        bool DeleteObject( baseT e )                                          \
-        {                                                                     \
-            return DeleteNode( Find( e ) );                                   \
-        }                                                                     \
-        void Clear()                                                          \
-        {                                                                     \
-            if ( m_destroy )                                                  \
-                std::for_each( begin(), end(),                                \
-                               _WX_LIST_HELPER_##liT::DeleteFunction );       \
-            clear();                                                          \
-        }                                                                     \
-        /* Workaround for broken VC6 std::list::sort() see above */           \
-        void Sort( wxSortCompareFunction compfunc )                           \
-            { sort( wxList_SortFunction<elT>(compfunc ) ); }                  \
-        ~liT() { Clear(); }                                                   \
-                                                                              \
-        /* It needs access to our EmptyList */                                \
-        friend class compatibility_iterator;                                  \
+        using wxListImpl::wxListImpl;                                         \
     }
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
