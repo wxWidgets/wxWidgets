@@ -1161,9 +1161,6 @@ inline wxNode *wxListBase::Nth(size_t n) const { return (wxNode *)Item(n); }
 
 #endif
 
-// define this to make a lot of noise about use of the old wxList classes.
-//#define wxWARN_COMPAT_LIST_USE
-
 // ----------------------------------------------------------------------------
 // wxList compatibility class: in fact, it's a list of wxObjects
 // ----------------------------------------------------------------------------
@@ -1174,11 +1171,9 @@ WX_DECLARE_LIST_2(wxObject, wxObjectList, wxObjectListNode,
 class WXDLLIMPEXP_BASE wxList : public wxObjectList
 {
 public:
-#if defined(wxWARN_COMPAT_LIST_USE) && !wxUSE_STD_CONTAINERS
     wxList() = default;
+#if !wxUSE_STD_CONTAINERS
     wxDEPRECATED( wxList(int key_type) );
-#elif !wxUSE_STD_CONTAINERS
-    wxList(int key_type = wxKEY_NONE);
 #endif
 
     // this destructor is required for Darwin
@@ -1224,13 +1219,9 @@ class WXDLLIMPEXP_BASE wxStringList : public wxStringListBase
 public:
     // ctors and such
         // default
-#ifdef wxWARN_COMPAT_LIST_USE
     wxStringList();
+        // deprecated ctor from a list of strings
     wxDEPRECATED( wxStringList(const wxChar *first ...) );
-#else
-    wxStringList();
-    wxStringList(const wxChar *first ...);
-#endif
 
         // copying the string list: the strings are copied, too (extremely
         // inefficient!)
