@@ -50,8 +50,6 @@ typedef wxObjectListNode wxNode;
 
 #if wxUSE_STD_CONTAINERS
 
-#define wxLIST_COMPATIBILITY
-
 #define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
     WX_DECLARE_LIST_3(elT, elT, liT, dummy, decl)
 
@@ -320,10 +318,6 @@ public:
 
 #else // if !wxUSE_STD_CONTAINERS
 
-
-// undef it to get rid of old, deprecated functions
-#define wxLIST_COMPATIBILITY
-
 // -----------------------------------------------------------------------------
 // key stuff: a list may be optionally keyed on integer or string key
 // -----------------------------------------------------------------------------
@@ -410,12 +404,10 @@ public:
     void SetKeyString(const wxString& s) { m_key.string = new wxString(s); }
     void SetKeyInteger(long i) { m_key.integer = i; }
 
-#ifdef wxLIST_COMPATIBILITY
     // compatibility methods, use Get* instead.
     wxDEPRECATED( wxNode *Next() const );
     wxDEPRECATED( wxNode *Previous() const );
     wxDEPRECATED( wxObject *Data() const );
-#endif // wxLIST_COMPATIBILITY
 
 protected:
     // all these are going to be "overloaded" in the derived classes
@@ -489,7 +481,6 @@ public:
     void SetKeyType(wxKeyType keyType)
         { wxASSERT( m_count==0 ); m_keyType = keyType; }
 
-#ifdef wxLIST_COMPATIBILITY
     // compatibility methods from old wxList
     wxDEPRECATED( int Number() const );             // use GetCount instead.
     wxDEPRECATED( wxNode *First() const );          // use GetFirst
@@ -499,7 +490,6 @@ public:
     // kludge for typesafe list migration in core classes.
     wxDEPRECATED( operator wxList&() );
     wxDEPRECATED( operator const wxList&() const );
-#endif // wxLIST_COMPATIBILITY
 
 protected:
 
@@ -1136,8 +1126,6 @@ private:
 // commonly used list classes
 // ----------------------------------------------------------------------------
 
-#if defined(wxLIST_COMPATIBILITY)
-
 // inline compatibility functions
 
 #if !wxUSE_STD_CONTAINERS
@@ -1279,8 +1267,6 @@ public:
 };
 
 #endif // wxUSE_STD_CONTAINERS
-
-#endif // wxLIST_COMPATIBILITY
 
 // delete all list elements
 template <class T>
