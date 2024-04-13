@@ -120,8 +120,6 @@ private:
     class liT : public std::list<elT>                                          \
     {                                                                         \
     private:                                                                  \
-        typedef std::list<elT> BaseListType;                                  \
-                                                                              \
         bool m_destroy;                                                       \
                                                                               \
     public:                                                                   \
