@@ -120,7 +120,7 @@ void wxNotebookBase::AddPageInfo( wxNotebookPageInfo* info )
 const wxNotebookPageInfoList& wxNotebookBase::GetPageInfos() const
 {
     wxNotebookPageInfoList* list = const_cast< wxNotebookPageInfoList* >( &m_pageInfos );
-    WX_CLEAR_LIST( wxNotebookPageInfoList, *list );
+    wxClearList(*list);
     for( size_t i = 0; i < GetPageCount(); ++i )
     {
         wxNotebookPageInfo *info = new wxNotebookPageInfo();

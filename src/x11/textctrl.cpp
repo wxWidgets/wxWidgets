@@ -201,7 +201,7 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent,
 
 wxTextCtrl::~wxTextCtrl()
 {
-    WX_CLEAR_LIST(wxList, m_undos);
+    wxClearList(m_undos);
 }
 
 bool wxTextCtrl::Create( wxWindow *parent,
@@ -403,7 +403,7 @@ void wxTextCtrl::Clear()
 
     SetScrollbars( m_charWidth, m_lineHeight, 0, 0, 0, 0 );
     Refresh();
-    WX_CLEAR_LIST(wxList, m_undos);
+    wxClearList(m_undos);
 }
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)

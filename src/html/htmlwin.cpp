@@ -293,7 +293,7 @@ wxCursor *wxHtmlWindow::ms_cursorDefault = nullptr;
 void wxHtmlWindow::CleanUpStatics()
 {
     wxDELETE(m_DefaultFilter);
-    WX_CLEAR_LIST(wxList, m_Filters);
+    wxClearList(m_Filters);
     wxDELETE(m_GlobalProcessors);
     wxDELETE(ms_cursorLink);
     wxDELETE(ms_cursorText);

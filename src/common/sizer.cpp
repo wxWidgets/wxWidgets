@@ -802,7 +802,7 @@ bool wxSizerItem::IsShown() const
 
 wxSizer::~wxSizer()
 {
-    WX_CLEAR_LIST(wxSizerItemList, m_children);
+    wxClearList(m_children);
 }
 
 wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
@@ -1080,7 +1080,7 @@ void wxSizer::Clear( bool delete_windows )
         DeleteWindows();
 
     // Now empty the list
-    WX_CLEAR_LIST(wxSizerItemList, m_children);
+    wxClearList(m_children);
 }
 
 void wxSizer::DeleteWindows()
