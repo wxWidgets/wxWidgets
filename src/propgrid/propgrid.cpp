@@ -492,8 +492,6 @@ void wxPropertyGrid::Init2()
     wxSize clientSize = GetClientSize();
     SetVirtualSize(clientSize);
 
-    m_timeCreated = ::wxGetLocalTimeMillis();
-
     m_iFlags |= wxPG_FL_INITIALIZED;
 
     wxSize wndsize = GetSize();
@@ -5008,8 +5006,10 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
     if ( m_dragStatus > 0 )
     {
-        if ( x > (m_marginWidth + wxPG_DRAG_MARGIN) &&
-             x < (m_pState->GetVirtualWidth() - wxPG_DRAG_MARGIN) )
+        const int dragMargin = FromDIP(wxPG_DRAG_MARGIN);
+
+        if ( x > (m_marginWidth + dragMargin) &&
+             x < (m_pState->GetVirtualWidth() - dragMargin) )
         {
 
             int splitterX = x - splitterHitOffset;
