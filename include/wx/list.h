@@ -1306,14 +1306,12 @@ public:
     }
 
 // append all element of one list to another one
-#define WX_APPEND_LIST(list, other)                                           \
-    {                                                                         \
-        wxList::compatibility_iterator node = other->GetFirst();              \
-        while ( node )                                                        \
-        {                                                                     \
-            (list)->push_back(node->GetData());                               \
-            node = node->GetNext();                                           \
-        }                                                                     \
-    }
+//
+// This used to be a macro, hence the all uppercase name.
+inline void WX_APPEND_LIST(wxList& list, const wxList& other)
+{
+    for ( auto& elem: other )
+        list.Append(elem);
+}
 
 #endif // _WX_LISTH__
