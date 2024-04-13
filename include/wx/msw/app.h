@@ -37,6 +37,8 @@ public:
     virtual void SetPrintMode(int mode) override { m_printMode = mode; }
     virtual int GetPrintMode() const { return m_printMode; }
 
+    virtual AppearanceResult SetAppearance(Appearance appearance) override;
+
     // MSW-specific function to enable experimental dark mode support.
     //
     // If settings are specified, the function takes ownership of the pointer,

@@ -25,6 +25,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/cmdline.h"
 #include "wx/colordlg.h"
 #include "wx/image.h"
 #include "wx/artprov.h"
@@ -78,8 +79,18 @@ static wxBitmap *gs_bmpNoMask = nullptr,
 class MyApp : public wxApp
 {
 public:
+    MyApp();
+
     // override base class virtuals
     // ----------------------------
+
+#if wxUSE_CMDLINE_PARSER
+    // Override to allow setting the appearance using command line options:
+    // this is useful for testing it under MSW as it can't be changed after
+    // program startup any more there.
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
+#endif // wxUSE_CMDLINE_PARSER
 
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
@@ -88,10 +99,19 @@ public:
 
     virtual int OnExit() override { DeleteBitmaps(); return 0; }
 
+    // Get the menu ID corresponding to the initially selected appearance.
+    int GetInitialAppearanceMenuId() const { return m_initialAppearanceMenuId; }
+
+    // Helper function calling base class SetAppearance() and logging the result.
+    bool DoSetAppearance(int menuId);
+
 protected:
     void DeleteBitmaps();
 
     bool LoadImages();
+
+private:
+    int m_initialAppearanceMenuId;
 };
 
 class MyFrame;
@@ -367,6 +387,10 @@ enum
     TransformMatrix_Reset,
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
+    Colour_AppearanceSystem,
+    Colour_AppearanceLight,
+    Colour_AppearanceDark,
+
 #if wxUSE_COLOURDLG
     Colour_TextForeground,
     Colour_TextBackground,
@@ -397,6 +421,11 @@ wxIMPLEMENT_APP(MyApp);
 // ----------------------------------------------------------------------------
 // the application class
 // ----------------------------------------------------------------------------
+
+MyApp::MyApp()
+{
+    m_initialAppearanceMenuId = Colour_AppearanceSystem;
+}
 
 bool MyApp::LoadImages()
 {
@@ -456,6 +485,46 @@ bool MyApp::LoadImages()
     return true;
 }
 
+#if wxUSE_CMDLINE_PARSER
+
+void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
+{
+    wxApp::OnInitCmdLine(parser);
+
+    parser.AddLongOption("appearance",
+                         R"(Set the appearance ("system", "light" or "dark"))");
+}
+
+bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
+{
+    if ( !wxApp::OnCmdLineParsed(parser) )
+        return false;
+
+    wxString appearanceStr;
+    if ( parser.Found("appearance", &appearanceStr) )
+    {
+        if ( appearanceStr == "light" )
+        {
+            m_initialAppearanceMenuId = Colour_AppearanceLight;
+        }
+        else if ( appearanceStr == "dark" )
+        {
+            m_initialAppearanceMenuId = Colour_AppearanceDark;
+        }
+        else if ( appearanceStr != "system" )
+        {
+            wxLogError(R"(Invalid appearance value "%s".)", appearanceStr);
+            return false;
+        }
+
+        DoSetAppearance(m_initialAppearanceMenuId);
+    }
+
+    return true;
+}
+
+#endif // wxUSE_CMDLINE_PARSER
+
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
@@ -494,6 +563,26 @@ void MyApp::DeleteBitmaps()
     wxDELETE(gs_bmp4);
     wxDELETE(gs_bmp4_mono);
     wxDELETE(gs_bmp36);
+}
+
+bool MyApp::DoSetAppearance(int menuId)
+{
+    switch ( SetAppearance(Appearance(menuId - Colour_AppearanceSystem)) )
+    {
+        case wxApp::AppearanceResult::Failure:
+            wxLogStatus("Appearance couldn't be changed.");
+            break;
+
+        case wxApp::AppearanceResult::Success:
+            wxLogStatus("Appearance changed successfully.");
+            return true;
+
+        case wxApp::AppearanceResult::CannotChange:
+            wxLogStatus("Appearance cannot be changed dynamically.");
+            break;
+    }
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -2415,6 +2504,10 @@ MyFrame::MyFrame(const wxString& title)
 #endif // wxUSE_DC_TRANSFORM_MATRIX
 
     wxMenu *menuColour = new wxMenu;
+    menuColour->AppendRadioItem(Colour_AppearanceSystem, "Use &system appearance");
+    menuColour->AppendRadioItem(Colour_AppearanceLight, "Use &light appearance");
+    menuColour->AppendRadioItem(Colour_AppearanceDark, "Use &dark appearance");
+    menuColour->AppendSeparator();
 #if wxUSE_COLOURDLG
     menuColour->Append( Colour_TextForeground, "Text &foreground..." );
     menuColour->Append( Colour_TextBackground, "Text &background..." );
@@ -2435,6 +2528,8 @@ MyFrame::MyFrame(const wxString& title)
     menuBar->Append(menuTransformMatrix, "&Transformation");
 #endif // wxUSE_DC_TRANSFORM_MATRIX
     menuBar->Append(menuColour, "&Colours");
+
+    menuBar->Check(wxGetApp().GetInitialAppearanceMenuId(), true);
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -2732,6 +2827,13 @@ void MyFrame::OnOption(wxCommandEvent& event)
             m_transform_rot = 0.0;
             break;
 #endif // wxUSE_DC_TRANSFORM_MATRIX
+
+        case Colour_AppearanceSystem:
+        case Colour_AppearanceLight:
+        case Colour_AppearanceDark:
+            if ( wxGetApp().DoSetAppearance(event.GetId()) )
+                Refresh();
+            break;
 
 #if wxUSE_COLOURDLG
         case Colour_TextForeground:

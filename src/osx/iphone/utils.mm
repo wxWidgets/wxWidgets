@@ -91,6 +91,11 @@ void wxApp::DoCleanUp()
 
 #if wxUSE_GUI
 
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance WXUNUSED(appearance))
+{
+    return AppearanceResult::Failure;
+}
+
 // Emit a beeeeeep
 void wxBell()
 {
