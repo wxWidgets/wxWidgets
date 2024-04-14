@@ -222,7 +222,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
 
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitCtrl->GetId(),
-                         wxString( uri, wxConvUTF8 ),
+                         wxString::FromUTF8( uri ),
                          target,
                          wxGetNavigationActionFlags(action));
     event.SetEventObject(webKitCtrl);
@@ -250,8 +250,6 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
 {
     webKitWindow->m_busy = false;
     wxWebViewNavigationError type = wxWEBVIEW_NAV_ERR_OTHER;
-
-    wxString description(error->message, wxConvUTF8);
 
     if (strcmp(g_quark_to_string(error->domain), "soup_http_error_quark") == 0)
     {
@@ -354,7 +352,7 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
                          webKitWindow->GetId(),
                          uri, "");
     event.SetEventObject(webKitWindow);
-    event.SetString(description);
+    event.SetString(wxString::FromUTF8(error->message));
     event.SetInt(type);
 
 
@@ -467,7 +465,7 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                          webKitCtrl->GetCurrentURL(),
                          "");
     event.SetEventObject(webKitCtrl);
-    event.SetString(wxString(title, wxConvUTF8));
+    event.SetString(wxString::FromUTF8(title));
 
     webKitCtrl->HandleWindowEvent(event);
 
@@ -1320,7 +1318,7 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     if (source)
     {
-        wxString wxs(source, wxConvUTF8, length);
+        const wxString& wxs = wxString::FromUTF8((const char*)source, length);
         free(source);
         return wxs;
     }
@@ -1365,8 +1363,8 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType) const
 void wxWebViewWebKit::DoSetPage(const wxString& html, const wxString& baseUri)
 {
     webkit_web_view_load_html(m_web_view,
-                              html.mb_str(wxConvUTF8),
-                              baseUri.mb_str(wxConvUTF8));
+                              html.utf8_str(),
+                              baseUri.utf8_str());
 }
 
 void wxWebViewWebKit::Print()
@@ -1460,7 +1458,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
         {
             char *text;
             retval.Get("(&s)", &text);
-            return wxString(text, wxConvUTF8);
+            return wxString::FromUTF8(text);
         }
     }
     return wxString();
@@ -1481,7 +1479,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
         {
             char *source;
             retval.Get("(&s)", &source);
-            return wxString(source, wxConvUTF8);
+            return wxString::FromUTF8(source);
         }
     }
     return wxString();
@@ -1516,7 +1514,7 @@ wxString wxWebViewWebKit::GetPageText() const
         {
             char *text;
             retval.Get("(&s)", &text);
-            return wxString(text, wxConvUTF8);
+            return wxString::FromUTF8(text);
         }
     }
     return wxString();
