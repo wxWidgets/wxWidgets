@@ -1459,7 +1459,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
         if (retval)
         {
             char *text;
-            retval.Get("(s)", &text);
+            retval.Get("(&s)", &text);
             return wxString(text, wxConvUTF8);
         }
     }
@@ -1480,7 +1480,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
         if (retval)
         {
             char *source;
-            retval.Get("(s)", &source);
+            retval.Get("(&s)", &source);
             return wxString(source, wxConvUTF8);
         }
     }
@@ -1515,7 +1515,7 @@ wxString wxWebViewWebKit::GetPageText() const
         if (retval)
         {
             char *text;
-            retval.Get("(s)", &text);
+            retval.Get("(&s)", &text);
             return wxString(text, wxConvUTF8);
         }
     }
