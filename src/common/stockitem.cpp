@@ -309,7 +309,7 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
         STOCKITEM(wxID_REDO,                wxACCEL_CTRL | wxACCEL_SHIFT,'Z')
         STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'H')
         STOCKITEM(wxID_SAVE,                wxACCEL_CTRL,'S')
-        STOCKITEM(wxID_SAVEAS,              wxACCEL_CTRL | wxACCEL_SHIFT,'S'),
+        STOCKITEM(wxID_SAVEAS,              wxACCEL_CTRL | wxACCEL_SHIFT,'S')
         STOCKITEM(wxID_SELECTALL,           wxACCEL_CTRL,'A')
         STOCKITEM(wxID_UNDO,                wxACCEL_CTRL,'Z')
 #ifdef __WXOSX__
