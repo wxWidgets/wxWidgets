@@ -32,12 +32,14 @@ BAKEFILES=\
   build/bakefiles/files.bkl \
   build/bakefiles/jpeg.bkl \
   build/bakefiles/lexilla.bkl \
+  build/bakefiles/lunasvg.bkl \
   build/bakefiles/mac_bundles.bkl \
   build/bakefiles/monolithic.bkl \
   build/bakefiles/multilib.bkl \
   build/bakefiles/opengl.bkl \
   build/bakefiles/plugins.bkl \
   build/bakefiles/plugins_deps.bkl \
+  build/bakefiles/plutovg.bkl \
   build/bakefiles/png.bkl \
   build/bakefiles/regex.bkl \
   build/bakefiles/scintilla.bkl \

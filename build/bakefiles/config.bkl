@@ -298,6 +298,14 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_LUNASVG">
+        <values>0,1</values>
+        <default-value>1</default-value>
+        <description>
+            Build lunasvg library (USE_GUI must be 1)?
+        </description>
+    </option>
+
     <option name="USE_OPENGL">
         <values>0,1</values>
         <default-value>1</default-value>

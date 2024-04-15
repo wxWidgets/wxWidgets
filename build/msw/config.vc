@@ -112,6 +112,9 @@ USE_RICHTEXT = 1
 # Build wxStyledTextCtrl library (USE_GUI must be 1)? [0,1]
 USE_STC = 1
 
+# Build lunasvg library (USE_GUI must be 1)? [0,1]
+USE_LUNASVG = 1
+
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 USE_OPENGL = 1
 
