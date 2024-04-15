@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <set var="LIB_LUNASVG">
+            <if cond="USE_LUNASVG=='1'">
+                wxlunasvg$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="LIB_LUNASVG">
+            <if cond="USE_LUNASVG=='1'">
+                wxlunasvg$(WXDEBUGFLAG)$(HOST_SUFFIX)
+            </if>
+        </set>
+    </if>
+
+    <template id="wxlunasvg_cppflags">
+        <include>$(TOP_SRCDIR)3rdparty/lunasvg/include</include>
+        <include>$(TOP_SRCDIR)3rdparty/lunasvg/3rdparty/plutovg</include>
+    </template>
+
+    <set var="wxlunasvg_usingdll">
+        <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL</if>
+    </set>
+
+    <lib id="wxlunasvg" template="3rdparty_lib,wxlunasvg_cppflags,msvc_setup_h"
+         cond="USE_LUNASVG=='1' and BUILDING_LIB=='1'">
+        <if cond="FORMAT!='autoconf'">
+            <include>$(SETUPHDIR)</include>
+            <include>$(TOP_SRCDIR)3rdparty/lunasvg/include</include>
+            <include>$(TOP_SRCDIR)3rdparty/lunasvg/3rdparty/plutovg</include>
+        </if>
+        <define>$(wxlunasvg_usingdll)</define>
+        <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
+        <define>$(DEBUG_DEFINE)</define>
+        <dirname>$(LIBDIRNAME)</dirname>
+        <sources>
+            3rdparty/lunasvg/source/canvas.cpp
+            3rdparty/lunasvg/source/clippathelement.cpp
+            3rdparty/lunasvg/source/defselement.cpp
+            3rdparty/lunasvg/source/element.cpp
+            3rdparty/lunasvg/source/gelement.cpp
+            3rdparty/lunasvg/source/geometryelement.cpp
+            3rdparty/lunasvg/source/graphicselement.cpp
+            3rdparty/lunasvg/source/layoutcontext.cpp
+            3rdparty/lunasvg/source/lunasvg.cpp
+            3rdparty/lunasvg/source/markerelement.cpp
+            3rdparty/lunasvg/source/maskelement.cpp
+            3rdparty/lunasvg/source/paintelement.cpp
+            3rdparty/lunasvg/source/parser.cpp
+            3rdparty/lunasvg/source/property.cpp
+            3rdparty/lunasvg/source/stopelement.cpp
+            3rdparty/lunasvg/source/styledelement.cpp
+            3rdparty/lunasvg/source/styleelement.cpp
+            3rdparty/lunasvg/source/svgelement.cpp
+            3rdparty/lunasvg/source/symbolelement.cpp
+            3rdparty/lunasvg/source/useelement.cpp
+        </sources>
+    </lib>
+
+    <!-- used to conditionally link against lunasvg only if it's enabled -->
+    <set var="wxlunasvg_library_link">
+        <if cond="USE_LUNASVG=='1' and BUILDING_LIB=='1'">wxlunasvg</if>
+    </set>
+
+</makefile>

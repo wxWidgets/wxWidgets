@@ -6763,6 +6763,21 @@ if test "$wxUSE_STC" = "yes"; then
    AC_SUBST(COND_PYTHON)
 fi
 
+USE_LUNASVG=0
+if test "$wxUSE_LUNASVG" = "yes"; then
+   if ! test -f "$3rdparty/lunasvg/include/lunasvg.h" ; then
+       AC_MSG_ERROR([
+   The required lunasvg header was not found. You probably need to run
+
+       git submodule update --init 3rdparty/lunasvg
+
+   to fix this.])
+   fi
+
+   AC_DEFINE(wxUSE_LUNASVG)
+   USE_LUNASVG=1
+fi
+
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
     if test "$wxUSE_MENUBAR" = "yes"; then

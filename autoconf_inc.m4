@@ -596,6 +596,12 @@ dnl ### begin block 20_COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin[wx.bkl] ###
         COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
     fi
     AC_SUBST(COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin)
+dnl ### begin block 20_COND_SHARED_0_USE_LUNASVG_1[wx.bkl] ###
+    COND_SHARED_0_USE_LUNASVG_1="#"
+    if test "x$SHARED" = "x0" -a "x$USE_LUNASVG" = "x1" ; then
+        COND_SHARED_0_USE_LUNASVG_1=""
+    fi
+    AC_SUBST(COND_SHARED_0_USE_LUNASVG_1)
 dnl ### begin block 20_COND_SHARED_0_USE_STC_1[wx.bkl] ###
     COND_SHARED_0_USE_STC_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_STC" = "x1" ; then
@@ -890,6 +896,12 @@ dnl ### begin block 20_COND_USE_GUI_1_wxUSE_LIBTIFF_builtin[../../demos/bombs/bo
         COND_USE_GUI_1_wxUSE_LIBTIFF_builtin=""
     fi
     AC_SUBST(COND_USE_GUI_1_wxUSE_LIBTIFF_builtin)
+dnl ### begin block 20_COND_USE_LUNASVG_1[wx.bkl] ###
+    COND_USE_LUNASVG_1="#"
+    if test "x$USE_LUNASVG" = "x1" ; then
+        COND_USE_LUNASVG_1=""
+    fi
+    AC_SUBST(COND_USE_LUNASVG_1)
 dnl ### begin block 20_COND_USE_OPENGL_1[../../samples/opengl/cube/cube.bkl,../../samples/opengl/isosurf/isosurf.bkl,../../samples/opengl/penguin/penguin.bkl,../../samples/opengl/pyramid/pyramid.bkl] ###
     COND_USE_OPENGL_1="#"
     if test "x$USE_OPENGL" = "x1" ; then

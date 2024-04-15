@@ -111,7 +111,7 @@ wx_add_thirdparty_library(wxUSE_EXPAT EXPAT "use expat for XML parsing" DEFAULT_
 wx_add_thirdparty_library(wxUSE_LIBJPEG JPEG "use libjpeg (JPEG file format)")
 wx_add_thirdparty_library(wxUSE_LIBPNG PNG "use libpng (PNG image format)")
 wx_add_thirdparty_library(wxUSE_LIBTIFF TIFF "use libtiff (TIFF file format)")
-wx_add_thirdparty_library(wxUSE_NANOSVG NanoSVG "use NanoSVG for rasterizing SVG" DEFAULT builtin)
+wx_add_thirdparty_library(wxUSE_NANOSVG NanoSVG "use NanoSVG for rasterizing SVG" DEFAULT OFF)
 wx_add_thirdparty_library(wxUSE_LUNASVG LunaSVG "use LunaSVG for rasterizing SVG" DEFAULT builtin)
 
 wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
