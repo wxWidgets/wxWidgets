@@ -445,9 +445,9 @@ WXLEXILLA_OBJECTS =  \
 	wxlexilla_Lexilla.o
 WXLUNASVG_CXXFLAGS = $(WX_CPPFLAGS) -DNDEBUG \
 	-I$(top_srcdir)/3rdparty/lunasvg/include \
-	-I$(top_srcdir)/3rdparty/lunasvg/3rdparty/plutovg $(__wx) \
-	-D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(WX_CXXFLAGS) \
-	$(____SHARED) $(CPPFLAGS) $(CXXFLAGS)
+	-I$(top_srcdir)/3rdparty/lunasvg/3rdparty/plutovg \
+	$(__wxlunasvg_usingdll_p) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(WX_CXXFLAGS) $(____SHARED) $(CPPFLAGS) $(CXXFLAGS)
 WXLUNASVG_OBJECTS =  \
 	wxlunasvg_canvas.o \
 	wxlunasvg_clippathelement.o \
@@ -2433,6 +2433,8 @@ COND_USE_LUNASVG_1___wxlunasvg___depname = \
 @COND_SHARED_0_USE_LUNASVG_1@	= install_wxlunasvg
 @COND_SHARED_0_USE_LUNASVG_1@__uninstall_wxlunasvg___depname \
 @COND_SHARED_0_USE_LUNASVG_1@	= uninstall_wxlunasvg
+@COND_MONOLITHIC_0_SHARED_1@__wxlunasvg_usingdll_p \
+@COND_MONOLITHIC_0_SHARED_1@	= -DWXUSINGDLL LUNASVG_SHARED LUNASVG_EXPORT
 COND_USE_LUNASVG_1___wxplutovg___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wxplutovg$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_USE_LUNASVG_1@__wxplutovg___depname = $(COND_USE_LUNASVG_1___wxplutovg___depname)

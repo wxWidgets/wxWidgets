@@ -428,9 +428,9 @@ WXLUNASVG_CXXFLAGS = /M$(__RUNTIME_LIBS_130)$(__DEBUGRUNTIME) /DWIN32 \
 	/D_CRT_SECURE_NO_WARNINGS /I..\..\3rdparty\lunasvg\include \
 	/I..\..\3rdparty\lunasvg\3rdparty\plutovg /I$(SETUPHDIR) \
 	/I..\..\3rdparty\lunasvg\include \
-	/I..\..\3rdparty\lunasvg\3rdparty\plutovg $(__wx) /D__WXMSW__ \
-	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\3rdparty\lunasvg\3rdparty\plutovg $(__wxlunasvg_usingdll_p) \
+	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXLUNASVG_OBJECTS =  \
 	$(OBJS)\wxlunasvg_canvas.obj \
 	$(OBJS)\wxlunasvg_clippathelement.obj \
@@ -2108,6 +2108,9 @@ __RUNTIME_LIBS_130 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_130 = $(__THREADSFLAG)
+!endif
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
+__wxlunasvg_usingdll_p = /DWXUSINGDLL LUNASVG_SHARED LUNASVG_EXPORT
 !endif
 !if "$(USE_LUNASVG)" == "1"
 __wxplutovg___depname = $(LIBDIRNAME)\wxplutovg$(WXDEBUGFLAG).lib
@@ -5834,11 +5837,11 @@ __SETUP_H_SUBDIR_FILENAMES = univ
 !if "$(USE_STC)" == "1"
 __wxscintilla = $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib
 !endif
-!if "$(USE_STC)" == "1"
-__wxlexilla = $(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).lib
-!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __wx = /DWXUSINGDLL
+!endif
+!if "$(USE_STC)" == "1"
+__wxlexilla = $(LIBDIRNAME)\wxlexilla$(WXDEBUGFLAG).lib
 !endif
 !if "$(USE_LUNASVG)" == "1"
 __wxlunasvg = $(LIBDIRNAME)\wxlunasvg$(WXDEBUGFLAG).lib

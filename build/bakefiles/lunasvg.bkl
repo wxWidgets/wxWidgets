@@ -22,7 +22,7 @@
     </template>
 
     <set var="wxlunasvg_usingdll">
-        <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL</if>
+        <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL LUNASVG_SHARED LUNASVG_EXPORT</if>
     </set>
 
     <lib id="wxlunasvg" template="3rdparty_lib,wxlunasvg_cppflags,msvc_setup_h"
