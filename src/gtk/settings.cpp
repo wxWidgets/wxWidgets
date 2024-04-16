@@ -269,14 +269,21 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
         return;
     }
 
-    // We don't need to enable prefer-dark if the theme is already dark
-    if (strstr(themeName, "-dark") || strstr(themeName, "-Dark"))
-    {
-        wxLogTrace(TRACE_DARKMODE, "Force dark mode for theme \"%s\"", themeName);
-        preferDarkPrev = TRUE;
-    }
+    wxLogTrace(TRACE_DARKMODE, "Current GTK theme is \"%s\"", themeName);
 
+    const wxString theme = wxString::FromUTF8(themeName);
     g_free(themeName);
+
+    // Check if the current theme is a dark variant.
+    constexpr const char* darkVariant = "-dark";
+    constexpr const char* darkVariantU = "-Dark";
+    constexpr size_t lenDark = 5; // strlen(darkVariant) == strlen(darkVariantU)
+    auto posDark = theme.find(darkVariant);
+    if ( posDark == wxString::npos )
+        posDark = theme.find(darkVariantU);
+
+    if ( posDark != wxString::npos )
+        preferDarkPrev = TRUE;
 
     gboolean preferDark = FALSE;
     switch ( colorScheme )
@@ -301,6 +308,19 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
     }
 
     UpdatePreferDark(preferDark);
+
+    if ( posDark != wxString::npos )
+    {
+        // We need to stop using the dark theme variant when switching to the
+        // light application appearance as otherwise it would remain dark.
+        wxString themeNew = theme;
+        themeNew.erase(posDark, lenDark);
+
+        wxLogTrace(TRACE_DARKMODE, "Switching to theme \"%s\"", themeNew);
+
+        g_object_set(gtk_settings_get_default(),
+            "gtk-theme-name", themeNew.utf8_str().data(), nullptr);
+    }
 
     for (int i = wxSYS_COLOUR_MAX; i--;)
         gs_systemColorCache[i].UnRef();
