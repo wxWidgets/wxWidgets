@@ -40,4 +40,4 @@
 	branch = wx
 [submodule "3rdparty/lunasvg"]
 	path = 3rdparty/lunasvg
-	url = https://github.com/sammycage/lunasvg.git
+	url = https://github.com/wxWidgets/lunasvg
