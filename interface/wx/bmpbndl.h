@@ -256,8 +256,8 @@ public:
         - SVG 1.1 filters are not supported.
         - Embedded images are not supported (see note for workaround).
 
-        These limitations may be relaxed in future wxWidgets versions (they are
-        planned, but not yet implemented in LunaSVG).
+        These limitations may be relaxed in future wxWidgets versions (these
+        features are planned, but not yet implemented in LunaSVG).
 
         Please also note that this method is only available in the ports
         providing raw bitmap access via wxPixelData. This is the case for all
