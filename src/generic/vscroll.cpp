@@ -332,7 +332,7 @@ size_t wxVarScrollHelperBase::GetNewScrollPosition(wxScrollWinEvent& event) cons
     }
     else if ( evtType == wxEVT_SCROLLWIN_BOTTOM )
     {
-        return m_unitMax;
+        return m_unitMax - 1;
     }
     else if ( evtType == wxEVT_SCROLLWIN_LINEUP )
     {
@@ -340,7 +340,7 @@ size_t wxVarScrollHelperBase::GetNewScrollPosition(wxScrollWinEvent& event) cons
     }
     else if ( evtType == wxEVT_SCROLLWIN_LINEDOWN )
     {
-        return m_unitFirst + 1;
+        return wxMin(m_unitFirst + 1, m_unitMax - 1);
     }
     else if ( evtType == wxEVT_SCROLLWIN_PAGEUP )
     {
@@ -352,9 +352,9 @@ size_t wxVarScrollHelperBase::GetNewScrollPosition(wxScrollWinEvent& event) cons
     {
         // And page down should do at least as much as line down.
         if ( GetVisibleEnd() )
-            return wxMax(GetVisibleEnd() - 1, m_unitFirst + 1);
+            return wxMax(GetVisibleEnd() - 1, wxMin(m_unitFirst + 1, m_unitMax - 1));
         else
-            return wxMax(GetVisibleEnd(), m_unitFirst + 1);
+            return wxMax(GetVisibleEnd(), wxMin(m_unitFirst + 1, m_unitMax - 1));
     }
     else if ( evtType == wxEVT_SCROLLWIN_THUMBRELEASE )
     {

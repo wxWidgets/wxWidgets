@@ -115,14 +115,13 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
     - name: Set environment variables
       run: |
         echo TZ=UTC >> $GITHUB_ENV
-        echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
         wxPROC_COUNT=`sysctl -n hw.logicalcpu`
         ((wxPROC_COUNT++))
         echo wxPROC_COUNT=$wxPROC_COUNT >> $GITHUB_ENV
@@ -202,12 +201,12 @@ jobs:
         make -C tests $wxBUILD_ARGS failtest
         make -k -C tests $wxBUILD_ARGS "CXXFLAGS=$wxMAKEFILE_CXXFLAGS" "LDFLAGS=$wxMAKEFILE_LDFLAGS"
 
-    - name: Setup Python
-      # actions/setup-python broken on self-hosted https://github.com/actions/setup-python/issues/108
-      if: matrix.runner != 'self-hosted'
-      uses: actions/setup-python@v4
+    - name: Setup Go
+      if: matrix.skip_testing != true
+      uses: actions/setup-go@v5
       with:
-        python-version: '3.10'
+        go-version: '1'
+        cache: false
 
     - name: Testing
       if: matrix.skip_testing != true
@@ -234,7 +233,7 @@ jobs:
         export ASAN_OPTIONS='fast_unwind_on_malloc=0 detect_container_overflow=0'
         # Exclude tests that are currently known to fail
         wx_tests_selection='~[.] ~[valnum] ~wxPersistTLW ~wxPersistDVC ~wxTopLevel::Show ~wxFont::Weight ~wxFont::NativeFontInfo ~WebView ~RadioButton::Single ~RadioButton::Focus ~wxHtmlPrintout::Pagination ~wxTextCtrl::GetBestSize ~TextCtrlTestCase ~wxExecute::RedirectUTF8 ~Ellipsization::NormalCase ~SpinCtrl::* ~SpinCtrlDouble::* ~NotebookTestCase ~SettingsTestCase ~Window::Show ~ModalDialogsTestCase ~Button::Click ~Button::Disabled ~wxDVC::GetItemRect ~wxDVC::AppendTextColumn ~Grid::KeyboardSelection ~Grid::CellClick ~Grid::ReorderedColumnsCellClick ~Grid::CellSelect ~wxStyledTextCtrl::AutoComp ~EvtLoopTestCase ~EventPropagationTestCase'
-        ./test_gui $wx_tests_selection
+        ./test_gui.app/Contents/MacOS/test_gui $wx_tests_selection
 
     - name: Building samples
       if: matrix.skip_testing != true && matrix.skip_samples != true

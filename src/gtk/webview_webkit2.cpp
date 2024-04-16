@@ -43,6 +43,10 @@
 #define wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
 #endif
 
+#if WEBKIT_CHECK_VERSION(2, 16, 0)
+#define wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+#endif
+
 // Function to check webkit version at runtime
 bool wx_check_webkit_version(int major, int minor, int micro)
 {
@@ -724,6 +728,19 @@ public:
     }
 #endif
 
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+    virtual bool EnablePersistentStorage(bool enable) override
+    {
+        if (wx_check_webkit_version(2, 16, 0))
+        {
+            m_persistentStorage = enable;
+            return true;
+        }
+        else
+            return false;
+    }
+#endif
+
     virtual void* GetNativeConfiguration() const override
     {
         return GetOrCreateContext();
@@ -735,11 +752,22 @@ private:
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
     mutable WebKitWebsiteDataManager* m_websiteDataManager = nullptr;
 #endif
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+    bool m_persistentStorage = true;
+#endif
 
     WebKitWebContext* GetOrCreateContext() const
     {
         if (m_webContext)
             return m_webContext;
+
+#ifdef wxHAVE_WEBKIT_EPHEMERAL_CONTEXT
+        if (!m_persistentStorage)
+        {
+            m_webContext = webkit_web_context_new_ephemeral();
+            return m_webContext;
+        }
+#endif
 
 #ifdef wxHAVE_WEBKIT_WEBSITE_DATA_MANAGER
         if (wx_check_webkit_version(2, 10, 0))
@@ -1091,6 +1119,24 @@ void wxWebViewWebKit::EnableHistory(bool)
     // In WebKit2GTK+, history can't be disabled so do nothing here.
 }
 
+/* static */
+wxSharedPtr<wxWebViewHistoryItem>
+wxWebViewWebKit::CreateHistoryItemFromWKItem(WebKitBackForwardListItem* gtkitem)
+{
+    wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
+                          wxString::FromUTF8(webkit_back_forward_list_item_get_uri(gtkitem)),
+                          // Since WebKit 2.43.4 titles are not stored any more
+                          // and the function is deprecated, so don't use it.
+#if !WEBKIT_CHECK_VERSION(2, 43, 4)
+                          wxString::FromUTF8(webkit_back_forward_list_item_get_title(gtkitem))
+#else
+                          wxString()
+#endif
+                          );
+    wxitem->m_histItem = gtkitem;
+    return wxSharedPtr<wxWebViewHistoryItem>(wxitem);
+}
+
 wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory()
 {
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
@@ -1101,12 +1147,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetBackwardHistory
     for(int i = g_list_length(list) - 1; i >= 0 ; i--)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
-        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
-                              webkit_back_forward_list_item_get_uri(gtkitem),
-                              webkit_back_forward_list_item_get_title(gtkitem));
-        wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
-        backhist.push_back(item);
+        backhist.push_back(CreateHistoryItemFromWKItem(gtkitem));
     }
     return backhist;
 }
@@ -1120,12 +1161,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewWebKit::GetForwardHistory(
     for(guint i = 0; i < g_list_length(list); i++)
     {
         WebKitBackForwardListItem* gtkitem = (WebKitBackForwardListItem*)g_list_nth_data(list, i);
-        wxWebViewHistoryItem* wxitem = new wxWebViewHistoryItem(
-                              webkit_back_forward_list_item_get_uri(gtkitem),
-                              webkit_back_forward_list_item_get_title(gtkitem));
-        wxitem->m_histItem = gtkitem;
-        wxSharedPtr<wxWebViewHistoryItem> item(wxitem);
-        forwardhist.push_back(item);
+        forwardhist.push_back(CreateHistoryItemFromWKItem(gtkitem));
     }
     return forwardhist;
 }

@@ -17,6 +17,9 @@
     <ClInclude Include="..\..\src\stc\lexilla\include\Lexilla.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\stc\lexilla\include\LexillaCompat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\stc\lexilla\include\SciLexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -29,7 +32,16 @@
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\DefaultLexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\InList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexAccessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexCharacterCategory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexCharacterSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\stc\lexilla\lexlib\LexerBase.h">
@@ -77,6 +89,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAda.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAsciidoc.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexAPDL.cxx">
@@ -199,6 +214,9 @@
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGAP.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGDScript.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexGui4Cli.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -221,6 +239,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexJSON.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexers\LexJulia.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexers\LexKix.cxx">
@@ -419,6 +440,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\DefaultLexer.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\InList.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexAccessor.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexCharacterCategory.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexCharacterSet.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\stc\lexilla\lexlib\LexerBase.cxx">

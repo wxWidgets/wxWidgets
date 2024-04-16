@@ -366,10 +366,10 @@ wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxList& list, c
 /// Delete all styles
 void wxRichTextStyleSheet::DeleteStyles()
 {
-    WX_CLEAR_LIST(wxList, m_characterStyleDefinitions);
-    WX_CLEAR_LIST(wxList, m_paragraphStyleDefinitions);
-    WX_CLEAR_LIST(wxList, m_listStyleDefinitions);
-    WX_CLEAR_LIST(wxList, m_boxStyleDefinitions);
+    wxClearList(m_characterStyleDefinitions);
+    wxClearList(m_paragraphStyleDefinitions);
+    wxClearList(m_listStyleDefinitions);
+    wxClearList(m_boxStyleDefinitions);
 }
 
 /// Insert into list of style sheets

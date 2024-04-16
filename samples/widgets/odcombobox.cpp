@@ -527,6 +527,8 @@ void ODComboboxWidgetsPage::CreateCombo()
                        0, nullptr,
                        flags);
 
+    NotifyWidgetRecreation(m_combobox);
+
     unsigned int count = items.GetCount();
     for ( unsigned int n = 0; n < count; n++ )
     {

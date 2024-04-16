@@ -518,7 +518,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
     }
 }
 
-void wxListLineData::SetPosition( int x, int y, int spacing )
+void wxListLineData::SetPosition( int x, int y, int WXUNUSED(spacing) )
 {
     wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
@@ -533,19 +533,19 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
 
             if ( item->HasImage() )
             {
-                m_gi->m_rectIcon.x = m_gi->m_rectAll.x + 4;
+                m_gi->m_rectIcon.x = m_gi->m_rectAll.x + 4 +
+                    (m_gi->m_rectAll.width - m_gi->m_rectIcon.width) / 2;
                 m_gi->m_rectIcon.y = m_gi->m_rectAll.y + 4;
             }
 
             if ( item->HasText() )
             {
-                if (m_gi->m_rectAll.width > spacing)
-                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2);
-                else
-                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2) + (spacing / 2) - (m_gi->m_rectLabel.width / 2);
-                m_gi->m_rectLabel.y = m_gi->m_rectAll.y + m_gi->m_rectAll.height + 2 - m_gi->m_rectLabel.height;
-                m_gi->m_rectHighlight.x = m_gi->m_rectLabel.x - 2;
-                m_gi->m_rectHighlight.y = m_gi->m_rectLabel.y - 2;
+                m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2) +
+                    (m_gi->m_rectAll.width - m_gi->m_rectLabel.width) / 2;
+                m_gi->m_rectLabel.y = m_gi->m_rectAll.y + m_gi->m_rectAll.height +
+                    (EXTRA_HEIGHT/2) - m_gi->m_rectLabel.height;
+                m_gi->m_rectHighlight.x = m_gi->m_rectLabel.x - (EXTRA_WIDTH/2);
+                m_gi->m_rectHighlight.y = m_gi->m_rectLabel.y - (EXTRA_HEIGHT/2);
             }
             else // no text, highlight the icon
             {
@@ -1468,7 +1468,7 @@ bool wxListTextCtrlWrapper::CheckForEndEditKey(const wxKeyEvent& event)
 
 void wxListTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
 {
-    if (m_aboutToFinish)
+    if ( !m_aboutToFinish )
     {
         // auto-grow the textctrl:
         wxSize parentSize = m_owner->GetSize();
@@ -2220,7 +2220,10 @@ void wxListMainWindow::HighlightOnly( size_t line, size_t oldLine )
                                : RefreshLine(oldLine); // refresh the old focus to remove it
     }
 
-    if ( selCount > 1 ) // multiple-selection only
+    // Deselect the remaining items we may have when using multiple selection
+    // (for single selection the only selected item is always the highlighted
+    // one, so we would have already returned above).
+    if ( selCount != 0 )
     {
         // Deselecting many items at once will generate wxEVT_XXX_DESELECTED event
         // for each one of them. although this may be inefficient if the number of
@@ -2395,8 +2398,15 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
 
     data->GetItem( 0, le.m_item );
     le.m_item.m_text = value;
-    return !GetParent()->GetEventHandler()->ProcessEvent( le ) ||
-                le.IsAllowed();
+
+    GetParent()->GetEventHandler()->ProcessEvent( le );
+
+    if ( !le.IsAllowed() )
+        return false;
+
+    m_dirty = true;
+
+    return true;
 }
 
 void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
@@ -2542,12 +2552,17 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
         else if (event.LeftDown())
         {
-            // reset the selection and bail out
-            HighlightAll(false);
-            // generate a DESELECTED event for
-            // virtual multi-selection lists
-            if ( IsVirtual() && !IsSingleSel() )
-                SendNotify( m_lineLastClicked, wxEVT_LIST_ITEM_DESELECTED );
+            // reset the selection in multi-selection mode only when Ctrl and
+            // Shift keys are not pressed to mimic MSW behaviour
+            if ( IsSingleSel() || !(event.ControlDown() || event.ShiftDown()) )
+            {
+                // reset the selection and bail out
+                HighlightAll(false);
+                // generate a DESELECTED event for
+                // virtual multi-selection lists
+                if ( IsVirtual() && !IsSingleSel() )
+                    SendNotify( m_lineLastClicked, wxEVT_LIST_ITEM_DESELECTED );
+            }
         }
 
         return;

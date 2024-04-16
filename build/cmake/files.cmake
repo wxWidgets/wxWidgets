@@ -391,6 +391,7 @@ set(QT_SRC
     src/qt/datectrl.cpp
     src/qt/timectrl.cpp
     src/qt/overlay.cpp
+    src/qt/renderer.cpp
 )
 
 set(MEDIA_QT_SRC
@@ -2535,6 +2536,7 @@ set(WEBVIEW_CMN_HDR
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
     wx/webview_chromium.h
+    wx/webview_chromium_impl.h
 )
 
 set(WEBVIEW_OSX_SHARED_HDR
@@ -2850,6 +2852,7 @@ set(PROPGRID_SRC
     src/propgrid/propgridiface.cpp
     src/propgrid/propgridpagestate.cpp
     src/propgrid/props.cpp
+    src/xrc/xh_propgrid.cpp
 )
 
 set(PROPGRID_HDR
@@ -2863,6 +2866,7 @@ set(PROPGRID_HDR
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
     wx/propgrid/private.h
+    wx/xrc/xh_propgrid.h
 )
 
 set(RICHTEXT_SRC

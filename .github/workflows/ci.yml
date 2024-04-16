@@ -166,15 +166,9 @@ jobs:
 
               # Explanation for installing some less obvious packages:
               #   - coreutils contains nproc used in proc_count.sh called below.
-              #   - Python can't be installed using the action as usual because
-              #     it installs an ABI-incompatible version, see (wrongly, IMO)
-              #     closed https://github.com/actions/setup-python/issues/370
-              #   - And python3-cffi can't be installed by pip because it can't
-              #     be built from source with gcc 4.8 any longer (its build
-              #     script uses -Wdate-time option unknown to this compiler).
               #   - xvfb is used for running the GUI tests.
               apt-get update -qq
-              apt-get install -qq coreutils ${compiler-g++} git make pkg-config python3 python3-cffi python3-pip sudo xvfb
+              apt-get install -qq coreutils ${compiler-g++} git make pkg-config sudo xvfb
               ;;
 
             '')
@@ -186,19 +180,31 @@ jobs:
           esac
 
       - name: Checkout
+        if: matrix.container != 'ubuntu:18.04'
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Checkout Ubuntu 18.04
+        if: matrix.container == 'ubuntu:18.04'
         uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
       - name: Install CCache
+        if: matrix.container != 'ubuntu:18.04'
+        uses: hendrikmuhs/ccache-action@v1.2.12
+        with:
+          key: ${{ matrix.name }}
+
+      - name: Install CCache Ubuntu 18.04
+        if: matrix.container == 'ubuntu:18.04'
         uses: hendrikmuhs/ccache-action@v1.2.3
         with:
           key: ${{ matrix.name }}
 
       - name: Set up build environment
         run: |
-          echo LD_LIBRARY_PATH=`pwd`/lib >> $GITHUB_ENV
-
           wxPROC_COUNT=`./build/tools/proc_count.sh`
           echo wxBUILD_ARGS=-j$wxPROC_COUNT >> $GITHUB_ENV
 
@@ -262,6 +268,15 @@ jobs:
           ccache --version
           echo
 
+          echo "Free space:"
+          df -h /
+          echo
+
+      - name: Work around Ubuntu 22.04 runner problem
+        if: matrix.runner == 'ubuntu-22.04'
+        # See https://github.com/actions/runner-images/issues/9491#issuecomment-1989718917
+        run: sudo sysctl vm.mmap_rnd_bits=28
+
       - name: Configuring
         run: |
           wxCONFIGURE_OPTIONS="--disable-optimise $wxCONFIGURE_FLAGS"
@@ -312,11 +327,19 @@ jobs:
         uses: mxschmitt/action-tmate@v3
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_tests }}
 
-      - name: Setup Python
-        if: matrix.container == ''
-        uses: actions/setup-python@v4
+      - name: Setup Go
+        if: matrix.container != 'ubuntu:18.04'
+        uses: actions/setup-go@v5
         with:
-          python-version: '3.10'
+          go-version: '1'
+          cache: false
+
+      - name: Setup Go Ubuntu 18.04
+        if: matrix.container == 'ubuntu:18.04'
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1'
+          cache: false
 
       - name: Testing
         working-directory: tests

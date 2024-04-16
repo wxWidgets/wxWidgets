@@ -17,6 +17,8 @@
     #include "wx/image.h"
 #endif // WX_PRECOMP
 
+#include "wx/filename.h"
+#include "wx/stdpaths.h"
 #include "wx/xpmdecod.h"
 
 #include "wx/osx/private.h"
@@ -191,7 +193,7 @@ ClassicCursor gMacCursors[kwxCursorLast+1] =
 0x1FF8, 0x1FF8, 0x1FF8, 0x0FF0, 0x07E0, 0x07E0, 0x07E0, 0x07E0},
 {0x0008, 0x0008}
 },
-    
+
 };
 
 #endif
@@ -274,15 +276,34 @@ void wxCursor::InitFromImage(const wxImage & image)
 wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX, int hotSpotY)
 {
     m_refData = new wxCursorRefData;
+#if wxUSE_IMAGE
     if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
     {
 #if wxOSX_USE_COCOA
-        wxFAIL_MSG( wxT("Not implemented") );
+        wxImage image;
+        wxFileName fileName( wxStandardPaths::Get().GetResourcesDir(), cursor_file, "png" );
+        if ( image.LoadFile( fileName.GetFullPath(), wxBITMAP_TYPE_PNG ) )
+        {
+            image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX );
+            image.SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY );
+        }
+        else
+        {
+            fileName.SetExt( "cur" );
+            image.LoadFile( fileName.GetFullPath(), wxBITMAP_TYPE_CUR );
+        }
+        if ( image.IsOk() )
+        {
+            m_refData->DecRef();
+            m_refData = nullptr;
+            InitFromImage( image );
+        }
+        else
+            wxLogDebug( "No PNG or CUR cursor image found in Resources" );
 #endif
     }
     else
     {
-#if wxUSE_IMAGE
         wxImage image ;
         image.LoadFile( cursor_file, flags ) ;
         if ( image.IsOk() )
@@ -293,8 +314,13 @@ wxCursor::wxCursor(const wxString& cursor_file, wxBitmapType flags, int hotSpotX
             m_refData = nullptr ;
             InitFromImage( image ) ;
         }
-#endif
     }
+#else
+    wxUnusedVar(cursor_file);
+    wxUnusedVar(flags);
+    wxUnusedVar(hotSpotX);
+    wxUnusedVar(hotSpotY);
+#endif
 }
 
 // Cursors by stock number
@@ -313,10 +339,6 @@ void wxCursor::MacInstall() const
     if ( IsOk() )
         wxMacCocoaSetCursor( M_CURSORDATA->m_hCursor );
 #endif
-}
-
-wxCursor::~wxCursor()
-{
 }
 
 // Global cursor setting

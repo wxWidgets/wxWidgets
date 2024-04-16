@@ -623,10 +623,6 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-wxFont::~wxFont()
-{
-}
-
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
     UnRef();

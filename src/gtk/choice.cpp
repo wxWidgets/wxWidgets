@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/event.h"
 #include "wx/gtk/private/eventsdisabler.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/value.h"
@@ -32,6 +33,26 @@ gtk_choice_changed_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
     choice->SendSelectionChangedEvent(wxEVT_CHOICE);
 }
+
+#ifdef __WXGTK3__
+
+static gboolean
+wx_gtk_choice_enter_notify(GtkWidget* widget,
+                           GdkEventCrossing* gdk_event,
+                           wxChoice *choice)
+{
+    return wxGTKImpl::WindowEnterCallback(widget, gdk_event, choice);
+}
+
+static gboolean
+wx_gtk_choice_leave_notify(GtkWidget* widget,
+                           GdkEventCrossing* gdk_event,
+                           wxChoice* choice)
+{
+    return wxGTKImpl::WindowLeaveCallback(widget, gdk_event, choice);
+}
+
+#endif // __WXGTK3__
 
 }
 
@@ -103,6 +124,35 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 
     g_signal_connect_after (m_widget, "changed",
                             G_CALLBACK (gtk_choice_changed_callback), this);
+
+#ifdef __WXGTK3__
+    // Internal structure of GtkComboBoxText is complicated: it contains a
+    // GtkBox which contains a GtkToggleButton which contains another GtkBox
+    // which, in turn, contains GtkCellView (and more).
+    //
+    // And it's this internal GtkToggleButton which receives the mouse events
+    // and not the main widget itself, so find it and connect to its events.
+
+    // We could find it either by using gtk_container_forall() to get the box
+    // inside GtkComboBoxText and then get its only child, or by doing what we
+    // do here and getting GtkCellView directly and then getting its parent,
+    // which is simpler because GtkComboBoxText sets things up in such a way
+    // that its only child is the GtkCellView (even if, again, this is not how
+    // things really are internally).
+    auto cellView = gtk_bin_get_child(GTK_BIN(m_widget));
+    wxCHECK_MSG( cellView, true, "No cell view in GtkComboBoxText?" );
+
+    auto box = gtk_widget_get_parent(cellView);
+
+    auto button = gtk_widget_get_parent(box);
+    wxCHECK_MSG( GTK_IS_TOGGLE_BUTTON(button), true,
+                 "Unexpected grandparent of GtkCellView in GtkComboBoxText" );
+
+    g_signal_connect(button, "enter_notify_event",
+                     G_CALLBACK(wx_gtk_choice_enter_notify), this);
+    g_signal_connect(button, "leave_notify_event",
+                     G_CALLBACK(wx_gtk_choice_leave_notify), this);
+#endif // __WXGTK3__
 
     return true;
 }

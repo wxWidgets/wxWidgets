@@ -41,8 +41,6 @@ public:
     // override base class (pure) virtuals
     // -----------------------------------
 
-    virtual void Exit();
-
     virtual void WakeUpIdle();
 
     virtual bool OnInitGui();

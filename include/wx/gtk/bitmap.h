@@ -79,7 +79,6 @@ public:
 #endif // wxUSE_IMAGE
     wxBitmap(GdkPixbuf* pixbuf, int depth = 0);
     explicit wxBitmap(const wxCursor& cursor);
-    virtual ~wxBitmap();
 
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) override;
     bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) override

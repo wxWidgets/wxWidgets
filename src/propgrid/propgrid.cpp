@@ -492,8 +492,6 @@ void wxPropertyGrid::Init2()
     wxSize clientSize = GetClientSize();
     SetVirtualSize(clientSize);
 
-    m_timeCreated = ::wxGetLocalTimeMillis();
-
     m_iFlags |= wxPG_FL_INITIALIZED;
 
     wxSize wndsize = GetSize();
@@ -1306,6 +1304,11 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     if ( m_iconWidth < 5 ) m_iconWidth = 5;
     else if ( !(m_iconWidth & 0x01) ) m_iconWidth++; // must be odd
 
+#endif
+
+#ifdef wxPG_ICON_WIDTH
+    // Icons are always square in this case.
+    m_iconHeight = m_iconWidth;
 #endif
 
     m_gutterWidth = m_iconWidth / wxPG_GUTTER_DIV;
@@ -5003,8 +5006,10 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
     if ( m_dragStatus > 0 )
     {
-        if ( x > (m_marginWidth + wxPG_DRAG_MARGIN) &&
-             x < (m_pState->GetVirtualWidth() - wxPG_DRAG_MARGIN) )
+        const int dragMargin = FromDIP(wxPG_DRAG_MARGIN);
+
+        if ( x > (m_marginWidth + dragMargin) &&
+             x < (m_pState->GetVirtualWidth() - dragMargin) )
         {
 
             int splitterX = x - splitterHitOffset;
@@ -6416,9 +6421,22 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
 
 void wxPropertyGridPopulator::AddChildren( wxPGProperty* property )
 {
+    // Preserve inherited attributes to be able to restore them later:
+    // attributes recursively set for the children of this property shouldn't
+    // be inherited by its siblings.
+    const auto inheritedAttributesOrig = m_inheritedAttributes;
+
+    // Apply inherited attributes to the property.
+    for ( const auto& it : m_inheritedAttributes )
+    {
+        property->SetAttribute(it.first, it.second);
+    }
+
     m_propHierarchy.push_back(property);
     DoScanForChildren();
     m_propHierarchy.pop_back();
+
+    m_inheritedAttributes = std::move(inheritedAttributesOrig);
 }
 
 // -----------------------------------------------------------------------
@@ -6540,7 +6558,8 @@ bool wxPropertyGridPopulator::ToLongPCT( const wxString& s, long* pval, long max
 
 bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
                                             const wxString& type,
-                                            const wxString& value )
+                                            const wxString& value,
+                                            wxPGPropertyValuesFlags flags )
 {
     if ( m_propHierarchy.empty() )
         return false;
@@ -6587,6 +6606,11 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
             ProcessError(wxString::Format(wxS("Invalid attribute type '%s'"),type));
             return false;
         }
+    }
+
+    if ( !!(flags & wxPGPropertyValuesFlags::Recurse) )
+    {
+        m_inheritedAttributes[name] = variant;
     }
 
     p->SetAttribute( name, variant );

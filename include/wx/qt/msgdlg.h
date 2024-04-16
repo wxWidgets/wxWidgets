@@ -10,8 +10,6 @@
 
 #include "wx/msgdlg.h"
 
-class QMessageBox;
-
 class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 {
 public:

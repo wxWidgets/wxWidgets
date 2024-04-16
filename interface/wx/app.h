@@ -965,6 +965,69 @@ public:
     */
     bool ProcessMessage(WXMSG* msg);
 
+
+    /**
+        Possible parameters for SetAppearance().
+
+        @since 3.3.0
+    */
+    enum class Appearance
+    {
+        System, ///< Use system default appearance.
+        Light,  ///< Use light appearance.
+        Dark    ///< Use dark appearance.
+    };
+
+    /**
+        Possible values returned by SetAppearance().
+
+        @since 3.3.0
+    */
+    enum class AppearanceResult
+    {
+        Failure,     ///< Changing the appearance failed.
+        Success,     ///< Appearance was successfully changed.
+        CannotChange ///< Appearance can't be changed any more.
+    };
+
+    /**
+        Request using either system default or explicitly light or dark theme
+        for the application.
+
+        Under GTK and macOS applications use the system default appearance by
+        default, and so it is only useful to call this function with either
+        Appearance::Light or Appearance::Dark parameters if you need to
+        override the default system appearance. The effect of calling this
+        function is immediate, i.e. this function returns
+        AppearanceResult::Success, and affects all the existing windows as well
+        as any windows created after this call.
+
+        Under MSW, the default appearance is always light and the applications
+        that want to follow the system appearance need to explicitly call this
+        function with Appearance::System parameter in order to do it. Please
+        note using dark appearance under MSW requires using non-documented
+        system functions and has several known limitations, please see
+        MSWEnableDarkMode() for more details. Also, on this platform the
+        appearance can be only set before any windows are created and calling
+        this function too late will return AppearanceResult::CannotChange.
+
+        Note that to query the current appearance, you can use
+        wxSystemAppearance, see wxSystemSettings::GetAppearance().
+
+        @return AppearanceResult::Success if the appearance was successfully
+            changed or had been already set to the requested value,
+            AppearanceResult::CannotChange if the appearance can't be changed
+            any more because it's too late to do it but could be changed if
+            done immediately on next program launch (only returned by wxMSW
+            currently) or AppearanceResult::Failure if changing the appearance
+            failed for some other reason, e.g. because `GTK_THEME` is defined
+            when using wxGTK of this function is not implemented at all for
+            the current platform.
+
+        @since 3.3.0
+    */
+    bool SetAppearance(Appearance appearance);
+
     /**
         Set display mode to use. This is only used in framebuffer wxWidgets
         ports such as wxDFB.
@@ -1200,7 +1263,8 @@ public:
 
         Note that dark mode can also be enabled by setting the "msw.dark-mode"
         @ref wxSystemOptions "system option" via an environment variable from
-        outside the application.
+        outside the application or by calling SetAppearance() with either
+        `System` or `Dark` parameter.
 
         Known limitations of dark mode support include:
 

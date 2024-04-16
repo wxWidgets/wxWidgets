@@ -788,7 +788,6 @@ COND_MONOLITHIC_1_SHARED_0
 COND_MONOLITHIC_1
 COND_MONOLITHIC_0_USE_XRC_1
 COND_MONOLITHIC_0_USE_XML_1
-COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1
 COND_MONOLITHIC_0_USE_WEBVIEW_1
 COND_MONOLITHIC_0_USE_STC_1
 COND_MONOLITHIC_0_USE_RICHTEXT_1
@@ -891,9 +890,9 @@ RANLIB
 USE_DPI_AWARE_MANIFEST
 HOST_SUFFIX
 HEADER_PAD_OPTION
-SAMPLES_RPATH_FLAG
 DYLIB_RPATH_POSTLINK
 DYLIB_RPATH_INSTALL
+DYLIB_RPATH_FLAG
 TOOLKIT_VERSION
 TOOLKIT_LOWERCASE
 DEBUG_FLAG
@@ -3859,7 +3858,7 @@ DEFAULT_DEFAULT_wxUSE_QT=0
 
 PROGRAM_EXT=
 SAMPLES_CXXFLAGS=
-SAMPLES_RPATH_FLAG=
+DYLIB_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
 
@@ -22949,7 +22948,11 @@ $as_echo "$as_me: WARNING: --enable-macosx_arch is ignored when --enable-univers
     if test "x$wxUSE_UNIVERSAL_BINARY" != xyes; then
         OSX_ARCH_OPTS=$wxUSE_UNIVERSAL_BINARY
     else
-                OSX_ARCH_OPTS=arm64,x86_64
+                        OSX_ARCH_OPTS=x86_64
+
+                if  `sw_vers -productVersion | sed 's/\..*//'` -gt 10 ; then
+            OSX_ARCH_OPTS=arm64,$OSX_ARCH_OPTS
+        fi
     fi
 
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for architectures to use in universal binary" >&5
@@ -31515,12 +31518,12 @@ $as_echo "$wx_cv_cc_visibility_workaround" >&6; }
     fi
 
         if test "x$SUNCXX" = xyes; then
-        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-R\$libdir"
     else
     case "${host}" in
-      *-*-linux* | *-*-gnu* )
-        SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+      *-*-linux* | *-*-gnu* | *-*-freebsd*)
+        DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
         ;;
 
@@ -31547,7 +31550,7 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                 { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                DYLIB_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
                 WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
 
 else
@@ -31572,7 +31575,7 @@ if ac_fn_c_try_link "$LINENO"; then :
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        DYLIB_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
                         WXCONFIG_RPATH="-Wl,-R,\$libdir"
 
 else
@@ -31620,7 +31623,7 @@ EOF
         ;;
 
       *-*-hpux* )
-        SAMPLES_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
+        DYLIB_RPATH_FLAG="-Wl,+b,\$(wx_top_builddir)/lib"
         WXCONFIG_RPATH="-Wl,+b,\$libdir"
         ;;
 
@@ -31628,7 +31631,7 @@ EOF
     fi
 
     if test $wxUSE_RPATH = "no"; then
-        SAMPLES_RPATH_FLAG=''
+        DYLIB_RPATH_FLAG=''
         DYLIB_PATH_POSTLINK=''
         WXCONFIG_RPATH=''
     fi
@@ -38177,10 +38180,6 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" -o "$wxUSE_CLIPBOARD" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
 fi
 
-if test "$wxUSE_CLIPBOARD" = "yes"; then
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS clipboard"
-fi
-
 if test "$wxUSE_SPLINES" = "yes" ; then
   $as_echo "#define wxUSE_SPLINES 1" >>confdefs.h
 
@@ -39915,29 +39914,30 @@ $as_echo "$wx_cv_lib_gdiplus" >&6; }
             wx_has_graphics=1
         fi
 
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if Direct2D is available" >&5
+        if test "$wxUSE_GRAPHICS_DIRECT2D" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking if Direct2D is available" >&5
 $as_echo_n "checking if Direct2D is available... " >&6; }
 if ${wx_cv_lib_direct2d+:} false; then :
   $as_echo_n "(cached) " >&6
 else
 
-                                ac_ext=cpp
+                                        ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+                    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <windows.h>
-                     #include <d2d1.h>
-                     #include <dwrite.h>
+                        #include <d2d1.h>
+                        #include <dwrite.h>
 
 int
 main ()
 {
 
-                        ID2D1Factory* factory = NULL;
+                            ID2D1Factory* factory = NULL;
 
   ;
   return 0;
@@ -39950,7 +39950,7 @@ else
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-                ac_ext=c
+                    ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -39961,6 +39961,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_lib_direct2d" >&5
 $as_echo "$wx_cv_lib_direct2d" >&6; }
+        fi
         if test "$wx_cv_lib_direct2d" = "yes"; then
             $as_echo "#define wxUSE_GRAPHICS_DIRECT2D 1" >>confdefs.h
 
@@ -42352,11 +42353,6 @@ EOF
     COND_MONOLITHIC_0_USE_WEBVIEW_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_WEBVIEW" = "x1" ; then
         COND_MONOLITHIC_0_USE_WEBVIEW_1=""
-    fi
-
-    COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1="#"
-    if test "x$MONOLITHIC" = "x0" -a "x$USE_WEBVIEW_CHROMIUM" = "x1" ; then
-        COND_MONOLITHIC_0_USE_WEBVIEW_CHROMIUM_1=""
     fi
 
     COND_MONOLITHIC_0_USE_XML_1="#"

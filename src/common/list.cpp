@@ -548,8 +548,6 @@ void wxListBase::DeleteNodes(wxNodeBase* first, wxNodeBase* last)
 // compatibility section from now on
 // ============================================================================
 
-#ifdef wxLIST_COMPATIBILITY
-
 // -----------------------------------------------------------------------------
 // wxList (a.k.a. wxObjectList)
 // -----------------------------------------------------------------------------
@@ -727,8 +725,6 @@ wxNode *wxStringList::Prepend(const wxChar *s)
     return (wxNode *)(wxStringListBase::Node *)
             wxStringListBase::Insert(MYcopystring(s));
 }
-
-#endif // wxLIST_COMPATIBILITY
 
 #else // wxUSE_STD_CONTAINERS = 1
 

@@ -819,9 +819,11 @@ TEST_CASE("PropertyGridTestCase", "[propgrid]")
 
 #if wxUSE_DATETIME
         wxDateTime dt1 = wxDateTime::Now();
-        dt1.SetYear(dt1.GetYear() - 1);
+        if ( dt1.GetMonth() == wxDateTime::Feb && dt1.GetDay() == 29 )
+            dt1.SetDay(28);
 
-        wxDateTime dt2 = wxDateTime::Now();
+        wxDateTime dt2 = dt1;
+        dt1.SetYear(dt1.GetYear() - 1);
         dt2.SetYear(dt2.GetYear() - 10);
 #endif
 

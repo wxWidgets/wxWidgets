@@ -129,6 +129,9 @@ public:
     // Contents/Plugins app bundle subdirectory under Mac
     virtual wxString GetPluginsDir() const = 0;
 
+    // return the directory where the shared libraries live
+    virtual wxString GetSharedLibrariesDir() const;
+
     // get resources directory: resources are auxiliary files used by the
     // application and include things like image and sound files
     //
@@ -252,6 +255,7 @@ public:
     virtual wxString GetLocalDataDir() const { return m_prefix; }
     virtual wxString GetUserDataDir() const { return m_prefix; }
     virtual wxString GetPluginsDir() const { return m_prefix; }
+    virtual wxString GetSharedLibrariesDir() const override { return m_prefix; }
     virtual wxString GetUserDir(Dir WXUNUSED(userDir)) const { return m_prefix; }
     virtual wxString
     MakeConfigFileName(const wxString& basename,

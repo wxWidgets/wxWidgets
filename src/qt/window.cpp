@@ -959,6 +959,30 @@ void wxWindowQt::SetWindowStyleFlag( long style )
     GetHandle()->setWindowFlags( qtFlags );
 }
 
+wxSize wxWindowQt::GetWindowBorderSize() const
+{
+    wxCoord border;
+    switch ( GetBorder() )
+    {
+        case wxBORDER_STATIC:
+        case wxBORDER_SIMPLE:
+        case wxBORDER_SUNKEN:
+        case wxBORDER_RAISED:
+        case wxBORDER_THEME:
+            border = 1;
+            break;
+
+        default:
+            wxFAIL_MSG( wxT("unknown border style") );
+            wxFALLTHROUGH;
+
+        case wxBORDER_NONE:
+            border = 0;
+    }
+
+    return 2 * wxSize(border, border);
+}
+
 void wxWindowQt::SetExtraStyle( long exStyle )
 {
     long exStyleOld = GetExtraStyle();
@@ -1176,7 +1200,14 @@ void wxWindowQt::DoSetToolTip( wxToolTip *tip )
 bool wxWindowQt::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->UpdateUI();
-    menu->GetHandle()->exec( GetHandle()->mapToGlobal( QPoint( x, y ) ) );
+
+    QPoint pt;
+    if (x == wxDefaultCoord && y == wxDefaultCoord)
+        pt = QCursor::pos();
+    else
+        pt = GetHandle()->mapToGlobal(QPoint(x, y));
+
+    menu->GetHandle()->exec(pt);
 
     return true;
 }
@@ -1287,8 +1318,11 @@ bool wxWindowQt::SetBackgroundColour(const wxColour& colour)
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return false;
 
-    QWidget *widget = QtGetParentWidget();
-    wxQtChangeRoleColour(widget->backgroundRole(), widget, colour);
+    if ( colour.IsOk() )
+    {
+        QWidget *widget = QtGetParentWidget();
+        wxQtChangeRoleColour(widget->backgroundRole(), widget, colour);
+    }
 
     return true;
 }
@@ -1350,6 +1384,12 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     // QAbstractScrollArea can only draw in it. Start the paint in the widget
     // itself otherwise.
     const bool ok = m_qtPainter->begin( widget );
+
+    if (m_qtPainter->device()->depth() > 1)
+    {
+        m_qtPainter->setRenderHints(QPainter::Antialiasing,
+                                    true);
+    }
 
     if ( ok )
     {
@@ -1828,6 +1868,11 @@ void wxWindowQt::QtSetPicture( QPicture* pict )
 QPainter *wxWindowQt::QtGetPainter()
 {
     return m_qtPainter.get();
+}
+
+bool wxWindowQt::QtCanPaintWithoutActivePainter() const
+{
+    return false;
 }
 
 bool wxWindowQt::EnableTouchEvents(int eventsMask)

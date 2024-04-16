@@ -62,7 +62,6 @@ public:
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
-    virtual ~wxBitmap();
 
     static void InitStandardHandlers();
 

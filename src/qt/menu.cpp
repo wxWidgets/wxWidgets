@@ -137,6 +137,7 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             if ( wxIsStockID( id ) )
             {
                 itemAction->setText( wxQtConvertString( wxGetStockLabel( id ) ) );
+#if wxUSE_ACCEL
                 wxAcceleratorEntry accel = wxGetStockAccelerator( id );
                 QString shortcut;
                 if ( id == wxID_EXIT )
@@ -151,6 +152,7 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
                 {
                     itemAction->setShortcut( QKeySequence( shortcut ) );
                 }
+#endif // wxUSE_ACCEL
             }
             break;
         }

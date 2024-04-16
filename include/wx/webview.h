@@ -155,6 +155,7 @@ public:
     void* GetNativeConfiguration() const;
     void SetDataPath(const wxString& path);
     wxString GetDataPath() const;
+    bool EnablePersistentStorage(bool enable);
 
     const wxString& GetBackend() const { return m_backend; }
 

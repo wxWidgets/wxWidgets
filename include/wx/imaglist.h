@@ -48,7 +48,7 @@ enum
 #define wxIMAGELIST_DRAW_FOCUSED        0x0008
 
 // Define the interface of platform-specific wxImageList class.
-class wxImageListBase : public wxObject
+class WXDLLIMPEXP_CORE wxImageListBase : public wxObject
 {
 public:
     /*

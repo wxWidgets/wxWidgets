@@ -365,6 +365,8 @@ void BookWidgetsPage::RecreateBook()
 
     m_book = CreateBook(flags);
 
+    NotifyWidgetRecreation(m_book);
+
     CreateImageList();
 
     if ( oldBook )

@@ -1955,7 +1955,7 @@ public:
         Default constructor initializes the object to invalid state.
 
         Initially the row and column are both invalid (-1) and so operator!()
-        for an uninitialized wxGridCellCoords returns false.
+        for an uninitialized wxGridCellCoords returns @false.
      */
     wxGridCellCoords();
 
@@ -1990,6 +1990,13 @@ public:
     void Set(int row, int col);
 
     /**
+        Returns @c true if neither the row nor column are invalid (-1).
+
+        @since 3.3.0
+     */
+    bool IsFullySpecified() const
+
+    /**
         Assignment operator for coordinate types.
      */
     wxGridCellCoords& operator=(const wxGridCellCoords& other);
@@ -2008,7 +2015,7 @@ public:
         Checks whether the coordinates are invalid.
 
         Returns false only if both row and column are -1. Notice that if either
-        row or column (but not both) are -1, this method returns true even if
+        row or column (but not both) are -1, this method returns @true even if
         the object is invalid. This is done because objects in such state
         should actually never exist, i.e. either both coordinates should be -1
         or none of them should be -1.
@@ -2099,7 +2106,7 @@ public:
 
     /**
         Return the canonicalized block where top left coordinates is less
-        then bottom right coordinates.
+        than bottom right coordinates.
      */
     wxGridBlockCoords Canonicalize() const;
 
@@ -5000,7 +5007,7 @@ public:
     /**
         Copies all cells that are currently selected.
 
-        Note that the cells most be contiguously selected;
+        Note that the cells must be contiguously selected;
         otherwise, nothing will be copied.
 
         Returns @c true if content is successfully copied,

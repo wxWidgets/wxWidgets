@@ -366,22 +366,16 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             widthChange = 0;
         CheckColumnWidths(widthChange);
 
-        if ( !m_isSplitterPreSet && m_dontCenterSplitter )
+        if ( !m_isSplitterPreSet )
         {
-             wxMilliClock_t timeSinceCreation = ::wxGetLocalTimeMillis() - GetGrid()->m_timeCreated;
-
-            // If too long, don't set splitter
-            if ( timeSinceCreation < 250 )
+            if ( m_dontCenterSplitter )
             {
-                if ( m_properties->HasAnyChild() )
-                {
-                    SetSplitterLeft( false );
-                }
-                else
-                {
-                    DoSetSplitter( newWidth / 2 );
-                    m_isSplitterPreSet = false;
-                }
+                SetSplitterLeft( false );
+                m_isSplitterPreSet = false;
+            }
+            else
+            {
+                DoSetSplitter( newWidth / 2, 0, wxPGSplitterPositionFlags::FromAutoCenter );
             }
         }
     }
@@ -826,7 +820,7 @@ int wxPropertyGridPageState::DoGetSplitterPosition( int splitterColumn ) const
 
 int wxPropertyGridPageState::GetColumnMinWidth( int WXUNUSED(column) ) const
 {
-    return wxPG_DRAG_MARGIN;
+    return m_pPropGrid->FromDIP(wxPG_DRAG_MARGIN);
 }
 
 void wxPropertyGridPageState::PropagateColSizeDec( int column,
@@ -892,8 +886,7 @@ void wxPropertyGridPageState::DoSetSplitter(int newXPos, int splitterColumn,
     if ( splitterColumn == 0 )
         m_fSplitterX = (double) newXPos;
 
-    if ( !(flags & wxPGSplitterPositionFlags::FromAutoCenter) &&
-         !(flags & wxPGSplitterPositionFlags::FromEvent) )
+    if ( !(flags & wxPGSplitterPositionFlags::FromAutoCenter) )
     {
         // Don't allow initial splitter auto-positioning after this.
         m_isSplitterPreSet = true;
@@ -1118,7 +1111,7 @@ void wxPropertyGridPageState::ResetColumnSizes(wxPGSplitterPositionFlags setSpli
 void wxPropertyGridPageState::SetColumnCount( int colCount )
 {
     wxASSERT( colCount >= 2 );
-    m_colWidths.resize(colCount, wxPG_DRAG_MARGIN);
+    m_colWidths.resize(colCount, m_pPropGrid->FromDIP(wxPG_DRAG_MARGIN));
     m_columnProportions.resize(colCount, 1);
 
     CheckColumnWidths();

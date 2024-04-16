@@ -275,6 +275,8 @@ void FileCtrlWidgetsPage::CreateFileCtrl()
     delete m_fileCtrl;
     m_fileCtrl = fileCtrl;
 
+    NotifyWidgetRecreation(m_fileCtrl);
+
     // relayout the sizer
     GetSizer()->Layout();
 }

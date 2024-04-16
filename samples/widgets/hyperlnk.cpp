@@ -288,6 +288,8 @@ void HyperlinkWidgetsPage::CreateHyperlink()
     delete m_hyperlink;
     m_hyperlink = hyp;
 
+    NotifyWidgetRecreation(m_hyperlink);
+
     // relayout the sizer
     GetSizer()->Layout();
 }

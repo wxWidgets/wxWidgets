@@ -35,7 +35,7 @@ WX_CPPFLAGS = @WX_CPPFLAGS@
 WX_CXXFLAGS = @WX_CXXFLAGS@
 WX_LDFLAGS = @WX_LDFLAGS@
 HOST_SUFFIX = @HOST_SUFFIX@
-SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
+DYLIB_RPATH_FLAG = @DYLIB_RPATH_FLAG@
 SAMPLES_CXXFLAGS = @SAMPLES_CXXFLAGS@
 wx_top_builddir = @wx_top_builddir@
 
@@ -208,7 +208,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 bench$(EXEEXT): $(BENCH_OBJECTS)
-	$(CXX) -o $@ $(BENCH_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(BENCH_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)    $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 data: 
 	@mkdir -p .
@@ -223,7 +223,7 @@ data:
 	done
 
 @COND_USE_GUI_1@bench_gui$(EXEEXT): $(BENCH_GUI_OBJECTS) $(__bench_gui___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(BENCH_GUI_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG)  $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(BENCH_GUI_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)     $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@bench_gui.app/Contents/PkgInfo: $(__bench_gui___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p bench_gui.app/Contents
@@ -234,10 +234,10 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.bench_gui/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/bench_gui/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/bench_gui/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/bench_gui version $(WX_VERSION), (c) 2002-2023 wxWidgets/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/bench_gui version $(WX_VERSION), (c) 2002-2024 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >bench_gui.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
@@ -253,7 +253,7 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@bench_gui_bundle: $(____bench_gui_BUNDLE_TGT_REF_DEP)
 
 @COND_USE_GUI_1@bench_graphics$(EXEEXT): $(BENCH_GRAPHICS_OBJECTS) $(__bench_graphics___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(BENCH_GRAPHICS_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG)  $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_OPENGL) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p_1) $(__LIB_LEXILLA_IF_MONO_p_1) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(BENCH_GRAPHICS_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)      $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  -lwx_$(PORTNAME)$(WXUNIVNAME)u$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX) $(EXTRALIBS_OPENGL) $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p_1) $(__LIB_LEXILLA_IF_MONO_p_1) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@bench_graphics.app/Contents/PkgInfo: $(__bench_graphics___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	mkdir -p bench_graphics.app/Contents
@@ -264,10 +264,10 @@ data:
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	sed -e "s/\$${MACOSX_BUNDLE_GUI_IDENTIFIER}/org.wxwidgets.bench_graphics/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_EXECUTABLE_NAME}/bench_graphics/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_NAME}/bench_graphics/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_COPYRIGHT}/Copyright 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_BUNDLE_VERSION}/$(WX_VERSION)/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/bench_graphics version $(WX_VERSION), (c) 2002-2023 wxWidgets/" \
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2023 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_INFO_STRING}/bench_graphics version $(WX_VERSION), (c) 2002-2024 wxWidgets/" \
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_LONG_VERSION_STRING}/$(WX_VERSION), (c) 2002-2024 wxWidgets/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	-e "s/\$${MACOSX_BUNDLE_SHORT_VERSION_STRING}/$(WX_RELEASE)/" \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >bench_graphics.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	

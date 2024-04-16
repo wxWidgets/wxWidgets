@@ -31,6 +31,7 @@ using @ifdef_ and not @if_.
 @itemdef{\__WXGTK210__, GTK+ 2.10 or higher}
 @itemdef{\__WXGTK218__, GTK+ 2.18 or higher}
 @itemdef{\__WXGTK220__, GTK+ 2.20 or higher}
+@itemdef{\__WXGTK3__, GTK+ 3.0 or higher}
 @itemdef{\__WXMAC__, old define, same as <tt>\__WXOSX__</tt>}
 @itemdef{\__WXMOTIF__, Motif (not used any longer).}
 @itemdef{\__WXMOTIF20__, Motif 2.0 or higher (not used any longer).}

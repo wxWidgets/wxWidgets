@@ -741,11 +741,19 @@ void wxWebResponseImpl::ReportDataReceived(size_t sizeReceived)
             break;
 
         case wxWebRequest::Storage_None:
+            m_request.IncRef();
+            const wxWebRequestImplPtr request(&m_request);
+
+            IncRef();
+            const wxWebResponseImplPtr response(this);
+
             wxWebRequestEvent* const evt = new wxWebRequestEvent
                                                (
                                                 wxEVT_WEBREQUEST_DATA,
                                                 m_request.GetId(),
-                                                wxWebRequest::State_Active
+                                                wxWebRequest::State_Active,
+                                                wxWebRequest(request),
+                                                wxWebResponse(response)
                                                );
             evt->SetDataBuffer(m_readBuffer);
 
@@ -1058,6 +1066,11 @@ void wxWebSession::Close()
 wxWebSessionHandle wxWebSession::GetNativeHandle() const
 {
     return m_impl ? m_impl->GetNativeHandle() : nullptr;
+}
+
+bool wxWebSession::EnablePersistentStorage(bool enable)
+{
+    return m_impl->EnablePersistentStorage(enable);
 }
 
 // ----------------------------------------------------------------------------

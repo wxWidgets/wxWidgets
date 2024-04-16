@@ -30,6 +30,10 @@
 #include "wx/gtk/private/log.h"
 #include "wx/gtk/private/threads.h"
 
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/appearance.h"
+#endif
+
 #include "wx/gtk/mimetype.h"
 //-----------------------------------------------------------------------------
 // link GnomeVFS
@@ -347,6 +351,34 @@ bool wxApp::SetNativeTheme(const wxString& theme)
 #endif
 }
 
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
+{
+#ifdef __WXGTK3__
+    wxGTKImpl::ColorScheme colorScheme = wxGTKImpl::ColorScheme::NoPreference;
+    switch ( appearance )
+    {
+        case Appearance::System:
+            // Already set above.
+            break;
+
+        case Appearance::Light:
+            colorScheme = wxGTKImpl::ColorScheme::PreferLight;
+            break;
+
+        case Appearance::Dark:
+            colorScheme = wxGTKImpl::ColorScheme::PreferDark;
+            break;
+    }
+
+    return wxGTKImpl::UpdateColorScheme(colorScheme) ? AppearanceResult::Success
+                                                     : AppearanceResult::Failure;
+#else
+    wxUnusedVar(appearance);
+
+    return AppearanceResult::Failure;
+#endif
+}
+
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )
@@ -568,6 +600,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
 
 void wxApp::CleanUp()
 {
+    wxAppBase::CleanUp();
+
     if (m_idleSourceId != 0)
         g_source_remove(m_idleSourceId);
 
@@ -577,8 +611,6 @@ void wxApp::CleanUp()
         g_type_class_unref(gt);
 
     gdk_threads_leave();
-
-    wxAppBase::CleanUp();
 }
 
 void wxApp::WakeUpIdle()

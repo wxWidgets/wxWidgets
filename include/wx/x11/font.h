@@ -77,8 +77,6 @@ public:
     // DELETEME: no longer seems to be implemented.
     // bool Create(const wxNativeFontInfo& fontinfo);
 
-    virtual ~wxFont();
-
     // implement base class pure virtuals
     virtual double GetFractionalPointSize() const;
     virtual wxFontStyle GetStyle() const;

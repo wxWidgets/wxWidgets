@@ -342,6 +342,10 @@ bool wxRibbonPanel::IsSizingContinuous() const
 // Finds the best width and height given the parent's width and height
 wxSize wxRibbonPanel::GetBestSizeForParentSize(const wxSize& parentSize) const
 {
+    if (!IsShown())
+    {
+        return wxSize(0, 0);
+    }
     if (GetChildren().GetCount() == 1)
     {
         wxWindow* win = GetChildren().GetFirst()->GetData();
@@ -561,6 +565,10 @@ bool wxRibbonPanel::CanAutoMinimise() const
 
 wxSize wxRibbonPanel::GetMinSize() const
 {
+    if (!IsShown())
+    {
+        return wxSize(0, 0);
+    }
     if(m_expanded_panel != nullptr)
     {
         // Minimum size depends upon children, who are currently in the
@@ -580,6 +588,10 @@ wxSize wxRibbonPanel::GetMinSize() const
 
 wxSize wxRibbonPanel::GetMinNotMinimisedSize() const
 {
+    if (!IsShown())
+    {
+        return wxSize(0, 0);
+    }
     // Ask sizer if present
     if(GetSizer())
     {
@@ -699,7 +711,9 @@ bool wxRibbonPanel::Realize()
                 scale = 2.0;
 
             wxImage img(m_minimised_icon.ConvertToImage());
-            img.Rescale(int(scale * bitmap_size.GetWidth()), int(scale * bitmap_size.GetHeight()), wxIMAGE_QUALITY_HIGH);
+            img.Rescale(wxRound(scale * bitmap_size.GetWidth()),
+                        wxRound(scale * bitmap_size.GetHeight()),
+                        wxIMAGE_QUALITY_HIGH);
             m_minimised_icon_resized = wxBitmap(img, -1, scale);
         }
         else

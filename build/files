@@ -386,6 +386,7 @@ QT_SRC=
     src/qt/radiobox.cpp
     src/qt/radiobut.cpp
     src/qt/region.cpp
+    src/qt/renderer.cpp
     src/qt/scrolbar.cpp
     src/qt/settings.cpp
     src/qt/slider.cpp
@@ -2487,6 +2488,7 @@ WEBVIEW_CMN_HDR =
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
     wx/webview_chromium.h
+    wx/webview_chromium_impl.h
 
 WEBVIEW_OSX_SHARED_HDR =
     wx/osx/webviewhistoryitem_webkit.h
@@ -2776,6 +2778,7 @@ PROPGRID_SRC =
     src/propgrid/propgridiface.cpp
     src/propgrid/propgridpagestate.cpp
     src/propgrid/props.cpp
+    src/xrc/xh_propgrid.cpp
 PROPGRID_HDR =
     wx/propgrid/advprops.h
     wx/propgrid/editors.h
@@ -2787,6 +2790,7 @@ PROPGRID_HDR =
     wx/propgrid/propgridpagestate.h
     wx/propgrid/props.h
     wx/propgrid/private.h
+    wx/xrc/xh_propgrid.h
 
 # wxRichTextCtrl
 

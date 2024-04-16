@@ -177,12 +177,9 @@ function(wx_set_common_target_properties target_name)
         target_compile_definitions(${target_name} PUBLIC "-D_FILE_OFFSET_BITS=64")
     endif()
 
-    if(CMAKE_USE_PTHREADS_INIT)
-        target_compile_options(${target_name} PRIVATE "-pthread")
-        # clang++.exe: warning: argument unused during compilation: '-pthread' [-Wunused-command-line-argument]
-        if(NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
-            set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
-        endif()
+    if(CMAKE_THREAD_LIBS_INIT)
+        target_compile_options(${target_name} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+        target_link_libraries(${target_name} PUBLIC ${CMAKE_THREAD_LIBS_INIT})
     endif()
     wx_set_source_groups()
 endfunction()
@@ -323,6 +320,11 @@ function(wx_set_target_properties target_name)
             _WINSOCK_DEPRECATED_NO_WARNINGS=1
             )
     endif()
+
+    if(WIN32)
+        target_compile_definitions(${target_name} PUBLIC UNICODE)
+    endif()
+    target_compile_definitions(${target_name} PUBLIC _UNICODE)
 
     file(RELATIVE_PATH wxSETUP_HEADER_REL ${wxOUTPUT_DIR} ${wxSETUP_HEADER_PATH})
     target_include_directories(${target_name}
@@ -565,6 +567,12 @@ function(wx_set_builtin_target_properties target_name)
         )
     endif()
 
+    if(WIN32)
+        # not needed for wxWidgets anymore (it is always built with unicode)
+        # but keep it here so applications linking to wxWidgets will inherit it
+        target_compile_definitions(${target_name} PUBLIC UNICODE _UNICODE)
+    endif()
+
     target_include_directories(${target_name} BEFORE PRIVATE ${wxSETUP_HEADER_PATH})
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
@@ -582,6 +590,12 @@ endfunction()
 # Add a third party builtin library
 function(wx_add_builtin_library name)
     wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
+
+    list(GET src_list 0 src_file)
+    if(NOT EXISTS "${src_file}")
+        message(FATAL_ERROR "${name} file does not exist: \"${src_file}\".\
+        Make sure you checkout the git submodules.")
+    endif()
 
     if(${name} MATCHES "wx.*")
         string(SUBSTRING ${name} 2 -1 name_short)
@@ -673,7 +687,7 @@ endfunction()
 # Add sample, test, demo or benchmark
 # wx_add(<name> <group> [CONSOLE|CONSOLE_GUI|DLL] [IMPORTANT] [SRC_FILES...]
 #    [LIBRARIES ...] [NAME target_name] [FOLDER folder]
-#    [DATA ...] [DEFINITIONS ...] [RES ...] [PLIST ...)
+#    [DATA ...] [DEFINITIONS ...] [RES ...] [RES_BUNDLE ...] [PLIST ...)
 # name default target name
 # group can be Samples, Tests, Demos or Benchmarks
 # first parameter may be CONSOLE to indicate a console application or DLL to indicate a shared library
@@ -688,6 +702,7 @@ endfunction()
 #   DATA followed by required data files. Use a colon to separate different source and dest paths
 #   DEFINITIONS list of definitions for the target
 #   RES followed by WIN32 .rc files
+#   RES_BUNDLE followed by macOS bundle resource files
 #   PLIST followed by macOS Info.plist.in file
 #
 # Additionally the following variables may be set before calling wx_add_sample:
@@ -714,7 +729,7 @@ function(wx_add name group)
     cmake_parse_arguments(APP
         "CONSOLE;CONSOLE_GUI;DLL;IMPORTANT"
         "NAME;FOLDER"
-        "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES;PLIST"
+        "DATA;DEFINITIONS;DEPENDS;LIBRARIES;RES;RES_BUNDLE;PLIST"
         ${ARGN}
         )
 
@@ -735,7 +750,7 @@ function(wx_add name group)
             return()
         endif()
         set(SUB_DIR "tests")
-        set(DEFAULT_RC_FILE "samples/sample.rc")
+        set(DEFAULT_RC_FILE "tests/test.rc")
     elseif(group STREQUAL Demos)
         set(SUB_DIR "demos/${name}")
         set(DEFAULT_RC_FILE "demos/${name}/${target_name}.rc")
@@ -777,7 +792,13 @@ function(wx_add name group)
             list(APPEND src_files ${wxSOURCE_DIR}/${DEFAULT_RC_FILE})
         endif()
     elseif(APPLE AND NOT IPHONE)
-        list(APPEND src_files ${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns)
+        set(bundle_files "${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns")
+        if(APP_RES_BUNDLE)
+            foreach(res ${APP_RES_BUNDLE})
+                list(APPEND bundle_files "${wxSOURCE_DIR}/${SUB_DIR}/${res}")
+            endforeach()
+        endif()
+        list(APPEND src_files ${bundle_files})
     endif()
 
     if(APP_DLL)
@@ -827,12 +848,12 @@ function(wx_add name group)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/samples)
     elseif(group STREQUAL Tests)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/tests)
+        target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/samples)
         target_include_directories(${target_name} PRIVATE ${wxSOURCE_DIR}/3rdparty/catch/single_include)
         target_include_directories(${target_name} PRIVATE ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 
     if(APP_DATA)
-        # TODO: handle data files differently for OS X bundles
         # Copy data files to output directory
         foreach(data_src ${APP_DATA})
             string(FIND ${data_src} ":" HAS_COLON)
@@ -861,7 +882,7 @@ function(wx_add name group)
             endif()
             set_target_properties(${target_name} PROPERTIES
                 MACOSX_BUNDLE_INFO_PLIST "${PLIST_FILE}"
-                RESOURCE "${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns")
+                RESOURCE "${bundle_files}")
         endif()
         set_target_properties(${target_name} PROPERTIES
             MACOSX_BUNDLE_GUI_IDENTIFIER "org.wxwidgets.${target_name}"

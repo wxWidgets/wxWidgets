@@ -93,6 +93,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     wxFrameBase::SetMenuBar( menuBar );
 }
 
+#if wxUSE_STATUSBAR
 void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 {
     // The current status bar could be deleted by Qt when dereferencing it
@@ -108,7 +109,9 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
     }
     wxFrameBase::SetStatusBar( statusBar );
 }
+#endif // wxUSE_STATUSBAR
 
+#if wxUSE_TOOLBAR
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
     if ( toolbar != nullptr )
@@ -133,6 +136,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     }
     wxFrameBase::SetToolBar( toolbar );
 }
+#endif // wxUSE_TOOLBAR
 
 void wxFrame::SetWindowStyleFlag( long style )
 {

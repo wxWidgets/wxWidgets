@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_GAUGE
+
 #include "wx/gauge.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
@@ -92,3 +94,5 @@ int wxGauge::GetValue() const
 {
     return m_qtProgressBar->value();
 }
+
+#endif // wxUSE_GAUGE

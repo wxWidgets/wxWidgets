@@ -202,6 +202,8 @@ builtinWindowClasses =
     | wxNotebook
     | wxOwnerDrawnComboBox
     | wxPanel
+    | wxPropertyGrid
+    | wxPropertyGridManager
     | wxPropertySheetDialog
     | wxRadioButton
     | wxRadioBox
@@ -305,6 +307,8 @@ builtinClassesNames =
     | "wxNotebook"
     | "wxOwnerDrawnComboBox"
     | "wxPanel"
+    | "wxPropertyGrid"
+    | "wxPropertyGridManager"
     | "wxPropertySheetDialog"
     | "wxRadioButton"
     | "wxRadioBox"
@@ -1273,6 +1277,62 @@ wxPanel =
         stdObjectNodeAttributes &
         stdWindowProperties &
         (sizerNode | windowNode* )?
+    }
+
+
+wxPropertyGrid =
+    element object {
+        attribute class { "wxPropertyGrid" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element virtualwidth {_, t_integer }* &
+        (wxPropertyGridProperty | objectRef)*
+    }
+
+wxPropertyGridManager =
+    element object {
+        attribute class { "wxPropertyGridManager" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element virtualwidth {_, t_integer }* &
+        (wxPropertyGridPage | objectRef)*
+    }
+
+wxPropertyGridPage =
+    element page {
+        [xrc:p="o"] element label    {_, t_text }* &
+        [xrc:p="o"] element columns  {_, t_integer}* &
+        [xrc:p="o"] element splitterpos {
+            attribute index { t_integer }* &
+            # Too lax: it should be t_integer with optional "%", not text.
+            t_text
+        }* &
+        [xrc:p="o"] element choices  {
+            attribute id { t_identifier } &
+            t_text
+        }* &
+        (wxPropertyGridProperty | objectRef)*
+    }
+
+wxPropertyGridProperty =
+    element property {
+        attribute class { t_identifier } &
+        [xrc:p="o"] element label    {_, t_text }* &
+        [xrc:p="o"] element value    {_, t_text }* &
+        [xrc:p="o"] element attribute{
+            attribute name { t_identifier } &
+            t_text
+        }* &
+        # Too lax: choices should either have an id attribute or start with "@"
+        # referencing an ID defined elsewhere.
+        [xrc:p="o"] element choices  {
+            attribute id { t_identifier }* &
+            t_text
+        }* &
+        [xrc:p="o"] element tip      {_, t_text }* &
+        [xrc:p="o"] element expanded {_, t_bool }* &
+        [xrc:p="o"] element flags    {_, t_text }* &
+        (wxPropertyGridProperty | objectRef)*
     }
 
 

@@ -264,7 +264,8 @@ TEST_CASE_METHOD(RequestFixture,
     pos += strlen(expectedKey);
 
     // There may, or not, be a space after it.
-    while ( wxIsspace(response[pos]) )
+    // And the value may be returned in an array.
+    while ( wxIsspace(response[pos]) || response[pos] == '[' )
         pos++;
 
     const char* expectedValue = "\"3.14159265358979323\"";

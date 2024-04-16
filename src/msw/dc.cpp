@@ -2869,8 +2869,8 @@ void wxMSWDCImpl::AddToDCCache(wxDCCacheEntry* entry)
 
 void wxMSWDCImpl::ClearCache()
 {
-    WX_CLEAR_LIST(wxList, sm_dcCache);
-    WX_CLEAR_LIST(wxList, sm_bitmapCache);
+    wxClearList(sm_dcCache);
+    wxClearList(sm_bitmapCache);
 }
 
 // Clean up cache at app exit

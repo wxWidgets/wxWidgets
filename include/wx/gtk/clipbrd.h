@@ -101,7 +101,10 @@ private:
     // add atom to the list of supported targets
     void AddSupportedTarget(GdkAtom atom);
 
-    // check if the given format is supported
+    // get the atom corresponding to the given format if it's supported
+    GdkAtom DoGetTarget(const wxDataFormat& format);
+
+    // just check if the given format is supported
     bool DoIsSupported(const wxDataFormat& format);
 
 
@@ -116,7 +119,7 @@ private:
     wxDataObject *m_receivedData;
 
     // used to pass information about the format we need from DoIsSupported()
-    // to GTKOnTargetReceived()
+    // to GTKOnTargetReceived() and return the supported format from the latter
     GdkAtom m_targetRequested;
 
     GtkWidget *m_clipboardWidget;  // for getting and offering data

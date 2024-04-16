@@ -526,7 +526,7 @@ constexpr wxPGKeyboardAction wxPG_ACTION_PRESS_BUTTON { wxPGKeyboardAction::Pres
 //     clicked on with right mouse button.
 //  EVT_PG_DOUBLE_CLICK(id, func)
 //     Respond to wxEVT_PG_DOUBLE_CLICK event, which occurs when property is
-//     double-clicked onwith left mouse button.
+//     double-clicked on with left mouse button.
 //  EVT_PG_ITEM_COLLAPSED(id, func)
 //     Respond to wxEVT_PG_ITEM_COLLAPSED event, generated when user collapses
 //     a property or category..
@@ -603,7 +603,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_3_2
     void AddActionTrigger(wxPGKeyboardAction action, int keycode, int modifiers = 0);
 
-    // Dedicates a specific keycode to wxPropertyGrid. This means that such
+    // Dedicates a specific key code to wxPropertyGrid. This means that such
     // key presses will not be redirected to editor controls.
     // Using this function allows, for example, navigation between
     // properties using arrow keys even when the focus is in the editor
@@ -659,7 +659,7 @@ public:
     // Two step creation.
     // Whenever the control is created without any parameters, use Create to
     // actually create it. Don't access the control's public methods before
-    // this is called @see @link wndflags Additional Window Styles@endlink
+    // this is called.
     bool Create( wxWindow *parent, wxWindowID id = wxID_ANY,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -2002,11 +2002,11 @@ public:
         return *m_validationInfo;
     }
 
-    // Returns true if you can veto the action that the event is signaling.
+    // Returns true if you can veto the action that the event is signalling.
     bool CanVeto() const { return m_canVeto; }
 
     // Call this from your event handler to veto action that the event is
-    // signaling.
+    // signalling.
     // You can only veto a shutdown if wxPropertyGridEvent::CanVeto returns
     // true.
     // Currently only wxEVT_PG_CHANGING supports vetoing.
@@ -2157,7 +2157,8 @@ public:
     // Empty string mean autodetect.
     bool AddAttribute( const wxString& name,
                        const wxString& type,
-                       const wxString& value );
+                       const wxString& value,
+                       wxPGPropertyValuesFlags flags = wxPGPropertyValuesFlags::DontRecurse );
 
     // Called once in AddChildren.
     virtual void DoScanForChildren() = 0;
@@ -2196,6 +2197,9 @@ protected:
 
     // Tree-hierarchy of added properties (that can have children).
     std::vector<wxPGProperty*> m_propHierarchy;
+
+    // Recursively set attributes.
+    std::unordered_map<wxString, wxVariant> m_inheritedAttributes;
 
     // Hashmap for string-id to wxPGChoicesData mapping.
     std::unordered_map<wxString, wxPGChoicesData*> m_dictIdChoices;

@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_SPINBTN
+
 #include "wx/spinbutt.h"
 #include "wx/qt/private/winevent.h"
 
@@ -118,3 +120,5 @@ QWidget *wxSpinButton::GetHandle() const
 {
     return m_qtSpinBox;
 }
+
+#endif // wxUSE_SPINBTN

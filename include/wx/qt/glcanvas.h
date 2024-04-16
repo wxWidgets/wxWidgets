@@ -24,6 +24,9 @@ public:
 
     virtual bool SetCurrent(const wxGLCanvas& win) const override;
 
+private:
+    QGLContext* m_glContext = nullptr;
+
     wxDECLARE_CLASS(wxGLContext);
 };
 
@@ -78,7 +81,9 @@ public:
 
     virtual bool SwapBuffers() override;
 
-    static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
+    virtual bool QtCanPaintWithoutActivePainter() const override;
+
+    static bool ConvertWXAttrsToQtGL(const wxGLAttributes &glattrs, const wxGLContextAttrs ctxAttrs, QGLFormat &format);
 
 private:
     wxDECLARE_CLASS(wxGLCanvas);

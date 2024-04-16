@@ -149,6 +149,22 @@ void wxAppBase::CleanUp()
     // and any remaining TLWs
     DeleteAllTLWs();
 
+#if wxUSE_LOG
+    // flush the logged messages if any and don't use the current probably
+    // unsafe log target any more: the default one (wxLogGui) can't be used
+    // after the resources are freed below and the user supplied one might be
+    // even worse (using any wxWidgets GUI function is unsafe starting from
+    // now)
+    //
+    // notice that wxLog will still recreate a default log target if any
+    // messages are logged but that one will be safe to use until the very end
+    delete wxLog::SetActiveTarget(nullptr);
+#endif // wxUSE_LOG
+
+    // Starting from now, the application object is no longer valid and
+    // shouldn't be used any longer, so reset the global pointer to it.
+    wxApp::SetInstance(nullptr);
+
     // undo everything we did in Initialize() above
     wxBitmap::CleanUpHandlers();
 

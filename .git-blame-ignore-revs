@@ -68,6 +68,9 @@ a3ef8eb50346e04c080ed1711578390080baff8b
 # cleanup - reformatting, 2006-04-20
 a9339fe22c1815cfbbf2ed9c300c897256644d18
 
+# Source cleaning, warning fixes., 2005-01-13
+2ad1ff540f036e130ed934066b80652c2c5fe158
+
 # Code cleaning: wxID_ANY, wxDefaultSize, wxDefaultPosition, true, false,
 # wxEmptyString, tabs and white spaces, 2004-06-17
 ca65c0440a7163e4e37e48b1c4329709d722db47

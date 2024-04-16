@@ -358,6 +358,8 @@ void RadioWidgetsPage::CreateRadio()
                              majorDim,
                              flags);
 
+    NotifyWidgetRecreation(m_radio);
+
     if ( sel >= 0 && (size_t)sel < count )
     {
         m_radio->SetSelection(sel);

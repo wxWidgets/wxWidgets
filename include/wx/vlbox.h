@@ -95,6 +95,12 @@ public:
     bool IsCurrent() const { return wxVScrolledWindow::IsCurrent(); }
     #endif
 
+    // get current item
+    int GetCurrent() const { return m_current; }
+
+    // set current item
+    void SetCurrent(int current) { DoSetCurrent(current); }
+
     // is this item selected?
     bool IsSelected(size_t item) const;
 

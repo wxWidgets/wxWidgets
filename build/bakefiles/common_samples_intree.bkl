@@ -17,6 +17,9 @@
     <template id="wx_util_b" template="wx">
         <include>$(SRCDIR)</include>
         <define>$(DLLFLAG)</define>
+        <if cond="FORMAT=='autoconf'">
+            <ldflags>$(DYLIB_RPATH_FLAG)</ldflags>
+        </if>
     </template>
 
     <template id="wx_util" template="wx_util_b,wx_dpi">
@@ -52,13 +55,11 @@
     <template id="wx_sample" template="wx_util">
         <if cond="FORMAT=='autoconf'">
             <wx-mac-app-bundle/>
-            <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
             <cxxflags>$(SAMPLES_CXXFLAGS)</cxxflags>
         </if>
     </template>
     <template id="wx_sample_console" template="wx_util_console">
         <if cond="FORMAT=='autoconf'">
-            <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
             <cxxflags>$(SAMPLES_CXXFLAGS)</cxxflags>
         </if>
     </template>

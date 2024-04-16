@@ -11759,7 +11759,7 @@ bool wxRichTextCommand::Undo()
 
 void wxRichTextCommand::ClearActions()
 {
-    WX_CLEAR_LIST(wxList, m_actions);
+    wxClearList(m_actions);
 }
 
 /*!

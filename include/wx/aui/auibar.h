@@ -693,6 +693,13 @@ protected:
     bool m_gripperVisible;
     bool m_overflowVisible;
 
+    // This function is only kept for compatibility, don't use in the new code.
+    bool RealizeHelper(wxClientDC& dc, bool horizontal)
+    {
+        RealizeHelper(dc, horizontal ? wxHORIZONTAL : wxVERTICAL);
+        return true;
+    }
+
     static bool IsPaneValid(long style, const wxAuiPaneInfo& pane);
     bool IsPaneValid(long style) const;
     void SetArtFlags() const;

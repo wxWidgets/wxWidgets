@@ -1728,9 +1728,11 @@ protected:
 
 inline bool wxDateTime::IsInStdRange() const
 {
-    // currently we don't know what is the real type of time_t so prefer to err
-    // on the safe side and limit it to 32 bit values which is safe everywhere
-    return m_time >= 0l && (m_time / TIME_T_FACTOR) < wxINT32_MAX;
+    // if sizeof(time_t) is greater than 32 bits, we assume it
+    // is safe to return values exceeding wxINT32_MAX
+
+    return m_time >= 0l &&
+        ( (sizeof(time_t) > 4 ) || ( (m_time / TIME_T_FACTOR) < wxINT32_MAX) );
 }
 
 /* static */
@@ -1837,7 +1839,7 @@ inline time_t wxDateTime::GetTicks() const
         return (time_t)-1;
     }
 
-    return (time_t)((m_time / (long)TIME_T_FACTOR).ToLong()) + WX_TIME_BASE_OFFSET;
+    return (time_t)((m_time / TIME_T_FACTOR).GetValue()) + WX_TIME_BASE_OFFSET;
 }
 
 inline bool wxDateTime::SetToLastWeekDay(WeekDay weekday,

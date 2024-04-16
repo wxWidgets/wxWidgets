@@ -476,6 +476,8 @@ void ComboboxWidgetsPage::CreateCombo()
     delete m_combobox;
     m_combobox = newCb;
     m_combobox->SetId(ComboPage_Combo);
+
+    NotifyWidgetRecreation(m_combobox);
 }
 
 // ----------------------------------------------------------------------------

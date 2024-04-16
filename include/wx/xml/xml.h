@@ -132,7 +132,7 @@ public:
     const wxString& GetContent() const { return m_content; }
 
     bool IsWhitespaceOnly() const;
-    int GetDepth(wxXmlNode *grandparent = nullptr) const;
+    int GetDepth(const wxXmlNode *grandparent = nullptr) const;
 
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as

@@ -104,7 +104,7 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
 
 bool wxRibbonBar::DismissExpandedPanel()
 {
-    if(m_current_page == -1)
+    if(m_current_page == wxNOT_FOUND)
         return false;
     return m_pages.Item(m_current_page).page->DismissExpandedPanel();
 }
@@ -206,12 +206,12 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
 {
     int x = evt.GetX();
     int y = evt.GetY();
-    int hovered_page = -1;
+    int hovered_page = wxNOT_FOUND;
     bool refresh_tabs = false;
     if(y < m_tab_height)
     {
         // It is quite likely that the mouse moved a small amount and is still over the same tab
-        if(m_current_hovered_page != -1 && m_pages.Item((size_t)m_current_hovered_page).rect.Contains(x, y))
+        if(m_current_hovered_page != wxNOT_FOUND && m_pages.Item((size_t)m_current_hovered_page).rect.Contains(x, y))
         {
             hovered_page = m_current_hovered_page;
             // But be careful, if tabs can be scrolled, then parts of the tab rect may not be valid
@@ -219,7 +219,7 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
             {
                 if(x >= m_tab_scroll_right_button_rect.GetX() || x < m_tab_scroll_left_button_rect.GetRight())
                 {
-                    hovered_page = -1;
+                    hovered_page = wxNOT_FOUND;
                 }
             }
         }
@@ -230,12 +230,12 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
     }
     if(hovered_page != m_current_hovered_page)
     {
-        if(m_current_hovered_page != -1)
+        if(m_current_hovered_page != wxNOT_FOUND)
         {
             m_pages.Item((int)m_current_hovered_page).hovered = false;
         }
         m_current_hovered_page = hovered_page;
-        if(m_current_hovered_page != -1)
+        if(m_current_hovered_page != wxNOT_FOUND)
         {
             m_pages.Item((int)m_current_hovered_page).hovered = true;
         }
@@ -275,10 +275,10 @@ void wxRibbonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     // The ribbon bar is (usually) at the top of a window, and at least on MSW, the mouse
     // can leave the window quickly and leave a tab in the hovered state.
     bool refresh_tabs = false;
-    if(m_current_hovered_page != -1)
+    if(m_current_hovered_page != wxNOT_FOUND)
     {
         m_pages.Item((int)m_current_hovered_page).hovered = false;
-        m_current_hovered_page = -1;
+        m_current_hovered_page = wxNOT_FOUND;
         refresh_tabs = true;
     }
     if(m_tab_scroll_left_button_state & wxRIBBON_SCROLL_BTN_HOVERED)
@@ -367,7 +367,7 @@ void wxRibbonBar::DeletePage(size_t n)
 
         // Schedule page object for destruction and not destroying directly
         // as this function can be called in an event handler and page functions
-        // can be called afeter removing.
+        // can be called after removing.
         // Like in wxRibbonButtonBar::OnMouseUp
         if(!wxTheApp->IsScheduledForDestruction(page))
         {
@@ -378,7 +378,7 @@ void wxRibbonBar::DeletePage(size_t n)
 
         if(m_current_page == static_cast<int>(n))
         {
-            m_current_page = -1;
+            m_current_page = wxNOT_FOUND;
 
             if(m_pages.GetCount() > 0)
             {
@@ -407,7 +407,7 @@ void wxRibbonBar::ClearPages()
         wxRibbonPage *page = m_pages.Item(i).page;
         // Schedule page object for destruction and not destroying directly
         // as this function can be called in an event handler and page functions
-        // can be called afeter removing.
+        // can be called after removing.
         // Like in wxRibbonButtonBar::OnMouseUp
         if(!wxTheApp->IsScheduledForDestruction(page))
         {
@@ -416,7 +416,7 @@ void wxRibbonBar::ClearPages()
     }
     m_pages.Empty();
     Realize();
-    m_current_page = -1;
+    m_current_page = wxNOT_FOUND;
     Refresh();
 }
 
@@ -432,7 +432,7 @@ bool wxRibbonBar::SetActivePage(size_t page)
         return false;
     }
 
-    if(m_current_page != -1)
+    if(m_current_page != wxNOT_FOUND)
     {
         m_pages.Item((size_t)m_current_page).active = false;
         m_pages.Item((size_t)m_current_page).page->Hide();
@@ -732,8 +732,8 @@ wxRibbonBar::wxRibbonBar()
     m_tab_margin_right = 0;
     m_tab_height = 0;
     m_tab_scroll_amount = 0;
-    m_current_page = -1;
-    m_current_hovered_page = -1;
+    m_current_page = wxNOT_FOUND;
+    m_current_hovered_page = wxNOT_FOUND;
     m_tab_scroll_left_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_right_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_buttons_shown = false;
@@ -778,7 +778,7 @@ bool wxRibbonBar::Create(wxWindow* parent,
 
 void wxRibbonBar::CommonInit(long style)
 {
-    SetName(wxT("wxRibbonBar"));
+    SetName("wxRibbonBar");
 
     m_flags = style;
     m_tabs_total_width_ideal = 0;
@@ -791,8 +791,8 @@ void wxRibbonBar::CommonInit(long style)
         m_tab_margin_right += 20;
     m_tab_height = 20; // initial guess
     m_tab_scroll_amount = 0;
-    m_current_page = -1;
-    m_current_hovered_page = -1;
+    m_current_page = wxNOT_FOUND;
+    m_current_hovered_page = wxNOT_FOUND;
     m_tab_scroll_left_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_right_button_state = wxRIBBON_SCROLL_BTN_NORMAL;
     m_tab_scroll_buttons_shown = false;
@@ -964,7 +964,7 @@ void wxRibbonBar::DoEraseBackground(wxDC& dc)
 void wxRibbonBar::OnSize(wxSizeEvent& evt)
 {
     RecalculateTabSizes();
-    if(m_current_page != -1)
+    if(m_current_page != wxNOT_FOUND)
     {
         RepositionPage(m_pages.Item(m_current_page).page);
     }
@@ -1262,7 +1262,7 @@ void wxRibbonBar::RecalculateMinSize()
 wxSize wxRibbonBar::DoGetBestSize() const
 {
     wxSize best(0, 0);
-    if(m_current_page != -1)
+    if(m_current_page != wxNOT_FOUND)
     {
         best = m_pages.Item(m_current_page).page->GetBestSize();
     }

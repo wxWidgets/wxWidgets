@@ -24,12 +24,17 @@
 
 #include "wx/arrstr.h"
 #include "wx/intl.h"
+#include "wx/log.h"
+#include "wx/tokenzr.h"
+#include "wx/utils.h"
 
 #ifndef __WINDOWS__
     #include "wx/language.h"
 #endif
 
 #include "wx/private/uilocale.h"
+
+#define TRACE_I18N wxS("i18n")
 
 // ----------------------------------------------------------------------------
 // helper functions
@@ -399,7 +404,11 @@ wxString wxLocaleIdent::GetTag(wxLocaleTagType tagType) const
             if (!m_charset.empty())
                 tag << '.' << m_charset;
             if (!m_script.empty())
-                tag << '@' << wxUILocale::GetScriptAliasFromName(m_script);
+            {
+                const wxString& script = wxUILocale::GetScriptAliasFromName(m_script);
+                if (!script.empty())
+                    tag << '@' << script;
+            }
             else if (!m_modifier.empty())
                 tag << '@' << m_modifier;
             break;
@@ -678,7 +687,7 @@ int wxUILocale::GetSystemLanguage()
 {
     const wxLanguageInfos& languagesDB = wxGetLanguageInfos();
     size_t count = languagesDB.size();
-    wxVector<wxString> preferred = wxUILocaleImpl::GetPreferredUILanguages();
+    wxVector<wxString> preferred = wxUILocale::GetPreferredUILanguages();
 
     for (wxVector<wxString>::const_iterator j = preferred.begin();
         j != preferred.end();
@@ -743,6 +752,40 @@ int wxUILocale::GetSystemLocale()
 /* static */
 wxVector<wxString> wxUILocale::GetPreferredUILanguages()
 {
+    // The WXLANGUAGE variable may contain a colon separated list of language
+    // codes in the order of preference. It is modelled after GNU's LANGUAGE:
+    // http://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html
+    wxString languageFromEnv;
+    if (wxGetEnv("WXLANGUAGE", &languageFromEnv) && !languageFromEnv.empty())
+    {
+        wxVector<wxString> preferred;
+        wxStringTokenizer tknzr(languageFromEnv, ":");
+        while (tknzr.HasMoreTokens())
+        {
+            const wxString tok = tknzr.GetNextToken();
+            auto ident = wxLocaleIdent::FromTag(tok);
+            if ( ident.IsEmpty() )
+            {
+                wxLogTrace(TRACE_I18N, "Invalid language code '%s' in WXLANGUAGE", tok);
+                continue;
+            }
+
+            if ( !wxUILocale::FindLanguageInfo(ident.GetLanguage()) )
+            {
+                wxLogTrace(TRACE_I18N, "Unknown language in '%s' in WXLANGUAGE", tok);
+                continue;
+            }
+
+            preferred.push_back(ident.GetTag());
+        }
+        if (!preferred.empty())
+        {
+            wxLogTrace(TRACE_I18N, " - using languages override from WXLANGUAGE: [%s]",
+                       wxJoin(preferred, ','));
+            return preferred;
+        }
+    }
+
     return wxUILocaleImpl::GetPreferredUILanguages();
 }
 

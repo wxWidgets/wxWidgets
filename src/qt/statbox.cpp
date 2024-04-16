@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STATBOX
+
 #include "wx/statbox.h"
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
@@ -58,12 +60,14 @@ QWidget *wxStaticBox::GetHandle() const
 
 void wxStaticBox::SetLabel(const wxString& label)
 {
-    m_qtGroupBox->setTitle(wxQtConvertString(label));
+    wxStaticBoxBase::SetLabel( label );
+
+    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 }
 
 wxString wxStaticBox::GetLabel() const
 {
-    return wxQtConvertString(m_qtGroupBox->title());
+    return wxQtConvertString( m_qtGroupBox->title() );
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
@@ -73,3 +77,5 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     // need extra space for the label:
     *borderTop += GetCharHeight();
 }
+
+#endif // wxUSE_STATBOX

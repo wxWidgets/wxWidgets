@@ -7,7 +7,6 @@
     <exe id="helpview" template="wx_util" template_append="wx_append">
         <if cond="FORMAT=='autoconf'">
             <wx-mac-app-bundle/>
-            <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
         </if>
         <sources>
             helpview.cpp

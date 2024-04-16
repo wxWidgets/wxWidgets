@@ -865,6 +865,7 @@ TEST_CASE_METHOD(GridTestCase, "Grid::KeyboardSelection", "[grid][selection]")
     m_grid->SetCellValue(7, 0, "R8C1");
 
     CHECK(m_grid->GetGridCursorCoords() == wxGridCellCoords(0, 0));
+    CHECK(m_grid->GetGridCursorCoords().IsFullySpecified());
 
     m_grid->MoveCursorRight(true);
     CheckSelection(wxGridBlockCoords(0, 0, 0, 1));

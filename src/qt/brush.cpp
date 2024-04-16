@@ -13,6 +13,7 @@
 #include "wx/qt/private/utils.h"
 #include "wx/bitmap.h"
 
+#include <QtGui/QBitmap>
 #include <QtGui/QBrush>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject);
@@ -74,6 +75,38 @@ public:
         m_style = data.m_style;
     }
 
+    void DoSetStipple(const wxBitmap& stipple)
+    {
+        m_style = wxBRUSHSTYLE_STIPPLE;
+
+        if ( !stipple.GetMask() && stipple.GetDepth() == 32 )
+        {
+            m_qtBrush.setTextureImage(stipple.GetHandle()->toImage());
+        }
+        else
+        {
+            if ( stipple.GetMask() || stipple.GetDepth() == 1 )
+            {
+                auto pixmap = stipple.GetMask() ? stipple.GetMask()->GetBitmap().GetHandle()
+                                                : stipple.GetHandle();
+                m_qtBrush.setTexture(*pixmap);
+                m_style = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
+            }
+            else
+            {
+                m_qtBrush.setTexture(*stipple.GetHandle());
+
+                // Note: This code used to be in wxQtDCImpl::SetBrush().
+                //       But, do we really need to do it ?
+
+                //Don't use the mask
+                QPixmap p = m_qtBrush.texture();
+                p.setMask(QBitmap());
+                m_qtBrush.setTexture(p);
+            }
+        }
+    }
+
     bool operator == (const wxBrushRefData& data) const
     {
         return m_qtBrush == data.m_qtBrush;
@@ -113,11 +146,8 @@ wxBrush::wxBrush(const wxColour& col, int style)
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
-    if (stipple.GetMask() != nullptr)
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
-    else
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
+
+    static_cast<wxBrushRefData*>(m_refData)->DoSetStipple(stipple);
 }
 
 
@@ -143,12 +173,8 @@ void wxBrush::SetStyle(wxBrushStyle style)
 void wxBrush::SetStipple(const wxBitmap& stipple)
 {
     AllocExclusive();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
 
-    if (stipple.GetMask() != nullptr)
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
-    else
-        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
+    static_cast<wxBrushRefData*>(m_refData)->DoSetStipple(stipple);
 }
 
 

@@ -319,18 +319,6 @@ public:
     wxPen(const wxPen& pen);
 
     /**
-        Destructor.
-        @see @ref overview_refcount_destruct "reference-counted object destruction"
-
-        @remarks Although all remaining pens are deleted when the application
-                 exits, the application should try to clean up all pens
-                 itself. This is because wxWidgets cannot know if a
-                 pointer to the pen object is stored in an application
-                 data structure, and there is a risk of double deletion.
-    */
-    virtual ~wxPen();
-
-    /**
         Returns the pen cap style, which may be one of @c wxCAP_ROUND,
         @c wxCAP_PROJECTING and @c wxCAP_BUTT.
 

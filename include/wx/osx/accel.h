@@ -20,8 +20,6 @@ public:
     wxAcceleratorTable();
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]); // Load from array
 
-    virtual ~wxAcceleratorTable();
-
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 

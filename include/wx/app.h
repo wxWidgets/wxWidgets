@@ -674,6 +674,26 @@ public:
     // Change the theme used by the application, return true on success.
     virtual bool SetNativeTheme(const wxString& WXUNUSED(theme)) { return false; }
 
+    // Request using system appearance (which is automatic for most platforms
+    // but not MSW) or explicitly request dark or light appearance for this
+    // application.
+    enum class Appearance
+    {
+        System,
+        Light,
+        Dark
+    };
+
+    enum class AppearanceResult
+    {
+        Failure,
+        Success,
+        CannotChange
+    };
+
+    virtual AppearanceResult SetAppearance(Appearance WXUNUSED(appearance))
+        { return AppearanceResult::Failure; }
+
 
     // command line parsing (GUI-specific)
     // ------------------------------------------------------------------------

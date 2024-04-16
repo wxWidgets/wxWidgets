@@ -86,20 +86,20 @@ public:
     virtual ~wxFileDirPickerWidgetBase() = default;
 
     // Path here is the name of the selected file or directory.
-    wxString GetPath() const { return m_path; }
+    virtual wxString GetPath() const { return m_path; }
     virtual void SetPath(const wxString &str) { m_path=str; }
 
     // Set the directory to open the file browse dialog at initially.
-    virtual void SetInitialDirectory(const wxString& dir) = 0;
+    virtual void SetInitialDirectory(const wxString& dir) { m_initialDir = dir; }
 
     // returns the picker widget cast to wxControl
     virtual wxControl *AsControl() = 0;
 
 protected:
-    virtual void UpdateDialogPath(wxDialog *) = 0;
-    virtual void UpdatePathFromDialog(wxDialog *) = 0;
-
     wxString m_path;
+
+    // Initial directory set by SetInitialDirectory() call or empty.
+    wxString m_initialDir;
 };
 
 // Styles which must be supported by all controls implementing wxFileDirPickerWidgetBase
@@ -113,12 +113,17 @@ protected:
 #define wxFLP_CHANGE_DIR              0x4000
 #define wxFLP_SMALL                   wxPB_SMALL
 
+#define wxFILEBTN_DEFAULT_STYLE       (wxFLP_OPEN)
+
 // NOTE: wxMULTIPLE is not supported !
 
 
 #define wxDIRP_DIR_MUST_EXIST         0x0008
 #define wxDIRP_CHANGE_DIR             0x0010
 #define wxDIRP_SMALL                  wxPB_SMALL
+
+#define wxDIRBTN_DEFAULT_STYLE        0
+
 
 
 // map platform-dependent controls which implement the wxFileDirPickerWidgetBase

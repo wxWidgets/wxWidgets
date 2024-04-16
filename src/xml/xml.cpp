@@ -361,7 +361,7 @@ wxString wxXmlNode::GetNodeContent() const
     return wxEmptyString;
 }
 
-int wxXmlNode::GetDepth(wxXmlNode *grandparent) const
+int wxXmlNode::GetDepth(const wxXmlNode *grandparent) const
 {
     const wxXmlNode *n = this;
     int ret = -1;

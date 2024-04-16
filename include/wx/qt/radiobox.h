@@ -79,6 +79,9 @@ public:
     virtual void SetSelection(int n) override;
     virtual int GetSelection() const override;
 
+    virtual void SetLabel(const wxString &label) override;
+    virtual wxString GetLabel() const override;
+
     virtual QWidget *GetHandle() const override;
 
 private:

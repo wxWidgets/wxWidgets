@@ -332,20 +332,7 @@ wxString wxLocaleIdent::GetName() const
 
     wxString name;
     if ( !m_language.empty() )
-    {
-        name << m_language;
-
-        if ( !m_region.empty() )
-            name << "_" << m_region;
-
-        if ( !m_charset.empty() )
-            name << "." << m_charset;
-
-        if ( !m_script.empty() )
-            name << "@" << wxUILocale::GetScriptAliasFromName(m_script);
-        else if ( !m_modifier.empty() )
-            name << "@" << m_modifier;
-    }
+        name = GetTag(wxLOCALE_TAGTYPE_POSIX);
 
     return name;
 }

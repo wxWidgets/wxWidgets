@@ -23,7 +23,6 @@ public:
 
     wxBrush( const wxColour &colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID );
     wxBrush( const wxBitmap &stippleBitmap );
-    virtual ~wxBrush();
 
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }

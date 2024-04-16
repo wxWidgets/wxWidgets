@@ -303,6 +303,8 @@ void ChoiceWidgetsPage::CreateChoice()
                             0, nullptr,
                             flags);
 
+    NotifyWidgetRecreation(m_choice);
+
     m_choice->Set(items);
     m_sizerChoice->Add(m_choice, 0, wxGROW | wxALL, 5);
     m_sizerChoice->Layout();

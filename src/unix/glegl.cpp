@@ -297,10 +297,10 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
 
     m_isOk = false;
 
-    EGLConfig *fbc = win->GetEGLConfig();
+    EGLConfig fbc = win->GetEGLConfig();
     wxCHECK_RET( fbc, "Invalid EGLConfig for OpenGL" );
 
-    m_glContext = eglCreateContext(wxGLCanvasEGL::GetDisplay(), fbc[0],
+    m_glContext = eglCreateContext(wxGLCanvasEGL::GetDisplay(), fbc,
                                    other ? other->m_glContext : EGL_NO_CONTEXT,
                                    contextAttribs);
 
@@ -338,21 +338,6 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 // ----------------------------------------------------------------------------
 // initialization methods and dtor
 // ----------------------------------------------------------------------------
-
-wxGLCanvasEGL::wxGLCanvasEGL()
-{
-    m_config = nullptr;
-    m_display = nullptr;
-    m_surface = EGL_NO_SURFACE;
-    m_wlCompositor = nullptr;
-    m_wlSubcompositor = nullptr;
-    m_wlFrameCallbackHandler = nullptr;
-    m_wlEGLWindow = nullptr;
-    m_wlSurface = nullptr;
-    m_wlRegion = nullptr;
-    m_wlSubsurface = nullptr;
-    m_readyToDraw = false;
-}
 
 bool wxGLCanvasEGL::InitVisual(const wxGLAttributes& dispAttrs)
 {
@@ -534,7 +519,7 @@ bool wxGLCanvasEGL::CreateSurface()
         }
 
         m_xwindow = GDK_WINDOW_XID(window);
-        m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
+        m_surface = eglCreatePlatformWindowSurface(m_display, m_config,
                                                    &m_xwindow, nullptr);
     }
 #endif
@@ -566,7 +551,7 @@ bool wxGLCanvasEGL::CreateSurface()
         wl_surface_set_buffer_scale(m_wlSurface, scale);
         m_wlEGLWindow = wl_egl_window_create(m_wlSurface, w * scale,
                                              h * scale);
-        m_surface = eglCreatePlatformWindowSurface(m_display, *m_config,
+        m_surface = eglCreatePlatformWindowSurface(m_display, m_config,
                                                    m_wlEGLWindow, nullptr);
 
         // We need to use "map-event" instead of "map" to ensure that the
@@ -596,8 +581,6 @@ bool wxGLCanvasEGL::CreateSurface()
 
 wxGLCanvasEGL::~wxGLCanvasEGL()
 {
-    if ( m_config && m_config != ms_glEGLConfig )
-        delete m_config;
     if ( m_surface )
         eglDestroySurface(m_display, m_surface);
 #ifdef GDK_WINDOWING_WAYLAND
@@ -664,7 +647,7 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
 
 
 /* static */
-EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
+EGLConfig wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
 {
     const int* attrsList = dispAttrs.GetGLAttrs();
     if ( !attrsList )
@@ -703,25 +686,73 @@ EGLConfig *wxGLCanvasEGL::InitConfig(const wxGLAttributes& dispAttrs)
         return nullptr;
     }
 
-    EGLConfig *config = new EGLConfig;
-    int returned;
-    // Use the first good match
-    if ( eglChooseConfig(dpy, attrsList, config, 1, &returned) && returned == 1 )
+    EGLint numConfigs = 0;
+
+    // Check if we need to filter out the configs using alpha, as getting one
+    // is unexpected if it hasn't been explicitly requested by using MinRGBA().
+    for ( int i = 0; attrsList[i] != EGL_NONE; i += 2 )
     {
-        return config;
+        if ( attrsList[i] == EGL_ALPHA_SIZE )
+        {
+            if ( attrsList[i + 1] > 0 )
+            {
+                // We can just get the first config proposed by the driver in
+                // this case.
+                EGLConfig config;
+
+                if ( !eglChooseConfig(dpy, attrsList, &config, 1, &numConfigs)
+                        || numConfigs != 1 )
+                {
+                    // This is not necessarily an error, there may just be no
+                    // matches.
+                    return nullptr;
+                }
+
+                return config;
+            }
+        }
     }
-    else
+
+    // We get here only if alpha was not requested or is zero and we want to
+    // ensure that we really return a config not using alpha in this case, so
+    // get all of them and try to find the first one without alpha.
+    if ( !eglChooseConfig(dpy, attrsList, nullptr, 0, &numConfigs) || !numConfigs )
+        return nullptr;
+
+    wxLogTrace(TRACE_EGL, "Enumerated %d matching EGL configs", numConfigs);
+
+    std::vector<EGLConfig> configs(numConfigs);
+    if ( !eglChooseConfig(dpy, attrsList, &configs[0], configs.size(), &numConfigs) )
     {
-        delete config;
+        wxLogTrace(TRACE_EGL, "Failed to get all EGL configs");
         return nullptr;
     }
+
+    for ( auto& config : configs )
+    {
+        EGLint alpha = 0;
+        if ( !eglGetConfigAttrib(dpy, config, EGL_ALPHA_SIZE, &alpha) )
+        {
+            wxLogTrace(TRACE_EGL, "Failed to get EGL_ALPHA_SIZE for config");
+            continue;
+        }
+
+        if ( alpha == 0 )
+        {
+            // We can use this one.
+            return config;
+        }
+    }
+
+    // Choose the first config, it's better to return something using alpha
+    // than nothing at all.
+    return configs.front();
 }
 
 /* static */
 bool wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
 {
-    std::unique_ptr<EGLConfig> config(wxGLCanvasEGL::InitConfig(dispAttrs));
-    return config != nullptr;
+    return wxGLCanvasEGL::InitConfig(dispAttrs) != nullptr;
 }
 
 /* static */
@@ -737,7 +768,7 @@ bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
 // default visual management
 // ----------------------------------------------------------------------------
 
-EGLConfig *wxGLCanvasEGL::ms_glEGLConfig = nullptr;
+EGLConfig wxGLCanvasEGL::ms_glEGLConfig = nullptr;
 
 /* static */
 bool wxGLCanvasEGL::InitDefaultConfig(const int *attribList)
@@ -753,11 +784,7 @@ bool wxGLCanvasEGL::InitDefaultConfig(const int *attribList)
 /* static */
 void wxGLCanvasEGL::FreeDefaultConfig()
 {
-    if ( ms_glEGLConfig )
-    {
-        delete ms_glEGLConfig;
-        ms_glEGLConfig = nullptr;
-    }
+    ms_glEGLConfig = nullptr;
 }
 
 // ----------------------------------------------------------------------------

@@ -119,9 +119,11 @@ public:
     wxString GetDataFile() const;
 
 protected:
-    // Ctor is used by wxWebRequest and wxWebRequestImpl.
+    // Ctor is used by wxWebRequest and implementation classes to create public
+    // objects from the existing implementation pointers.
     friend class wxWebRequest;
     friend class wxWebRequestImpl;
+    friend class wxWebResponseImpl;
     explicit wxWebResponse(const wxWebResponseImplPtr& impl);
 
     wxWebResponseImplPtr m_impl;
@@ -195,9 +197,11 @@ public:
     bool IsPeerVerifyDisabled() const;
 
 private:
-    // Ctor is used by wxWebSession and wxWebRequestImpl.
+    // Ctor is used by wxWebSession and implementation classes to create
+    // wxWebRequest objects from the existing implementation pointers.
     friend class wxWebSession;
     friend class wxWebRequestImpl;
+    friend class wxWebResponseImpl;
     explicit wxWebRequest(const wxWebRequestImplPtr& impl);
 
     wxWebRequestImplPtr m_impl;
@@ -241,6 +245,8 @@ public:
     bool IsOpened() const;
 
     void Close();
+
+    bool EnablePersistentStorage(bool enable = true);
 
     wxWebSessionHandle GetNativeHandle() const;
 

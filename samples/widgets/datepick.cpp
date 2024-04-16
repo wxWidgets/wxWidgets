@@ -285,6 +285,8 @@ void DatePickerWidgetsPage::CreateDatePicker()
                                         wxDefaultPosition, wxDefaultSize,
                                         style);
 
+    NotifyWidgetRecreation(m_datePicker);
+
     m_sizerDatePicker->Add(0, 0, 1, wxCENTRE);
     m_sizerDatePicker->Add(m_datePicker, 1, wxCENTRE);
     m_sizerDatePicker->Add(0, 0, 1, wxCENTRE);

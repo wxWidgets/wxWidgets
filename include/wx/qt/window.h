@@ -112,6 +112,8 @@ public:
     virtual int GetScrollThumb( int orient ) const override;
     virtual int GetScrollRange( int orient ) const override;
 
+    virtual wxSize GetWindowBorderSize() const override;
+
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = nullptr ) override;
@@ -151,6 +153,7 @@ public:
     void QtSetPicture( QPicture* pict );
 
     QPainter *QtGetPainter();
+    virtual bool QtCanPaintWithoutActivePainter() const;
 
     virtual bool QtHandlePaintEvent  ( QWidget *handler, QPaintEvent *event );
     virtual bool QtHandleResizeEvent ( QWidget *handler, QResizeEvent *event );

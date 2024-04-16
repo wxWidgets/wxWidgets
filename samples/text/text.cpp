@@ -152,6 +152,10 @@ public:
 #endif // wxUSE_LOG
 
 private:
+#if wxUSE_CLIPBOARD
+    void SelectClipboardSelection();
+#endif // wxUSE_CLIPBOARD
+
     // get the currently focused text control or return the default one
     // (m_multitext) is no text ctrl has focus -- in any case, returns
     // something non null
@@ -406,6 +410,7 @@ enum
     TEXT_CLIPBOARD_COPY = 200,
     TEXT_CLIPBOARD_PASTE,
     TEXT_CLIPBOARD_VETO,
+    TEXT_CLIPBOARD_USE_PRIMARY,
 
     // tooltip menu
     TEXT_TOOLTIPS_SETDELAY = 300,
@@ -486,6 +491,10 @@ bool MyApp::OnInit()
                           "Copy the selection to the clipboard");
     menuClipboard->Append(TEXT_CLIPBOARD_PASTE, "&Paste\tCtrl-Shift-V",
                           "Paste from clipboard to the text control");
+    menuClipboard->AppendSeparator();
+    menuClipboard->AppendCheckItem(TEXT_CLIPBOARD_USE_PRIMARY,
+        "Use &primary selection\tCtrl-Shift-P",
+        "If checked, use primary selection instead of clipboard");
     menuClipboard->AppendSeparator();
     menuClipboard->AppendCheckItem(TEXT_CLIPBOARD_VETO, "Vet&o\tCtrl-Shift-O",
                                    "Veto all clipboard operations");
@@ -1309,12 +1318,18 @@ wxTextCtrl *MyPanel::GetFocusedText() const
 }
 
 #if wxUSE_CLIPBOARD
+void MyPanel::SelectClipboardSelection()
+{
+    wxFrame *frame = wxDynamicCast(wxGetTopLevelParent(this), wxFrame);
+    wxCHECK_RET( frame, "no parent frame?" );
+
+    wxTheClipboard->UsePrimarySelection(
+        frame->GetMenuBar()->IsChecked(TEXT_CLIPBOARD_USE_PRIMARY));
+}
+
 void MyPanel::DoPasteFromClipboard()
 {
-    // On X11, we want to get the data from the primary selection instead
-    // of the normal clipboard (which isn't normal under X11 at all). This
-    // call has no effect under MSW.
-    wxTheClipboard->UsePrimarySelection();
+    SelectClipboardSelection();
 
     if (!wxTheClipboard->Open())
     {
@@ -1368,10 +1383,7 @@ void MyPanel::DoPasteFromClipboard()
 
 void MyPanel::DoCopyToClipboard()
 {
-    // On X11, we want to get the data from the primary selection instead
-    // of the normal clipboard (which isn't normal under X11 at all). This
-    // call has no effect under MSW.
-    wxTheClipboard->UsePrimarySelection();
+    SelectClipboardSelection();
 
     wxString text( GetFocusedText()->GetStringSelection() );
 

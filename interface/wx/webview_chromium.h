@@ -47,11 +47,16 @@
     2. Unpack the archive into `3rdparty/cef` directory under wxWidgets source
     directory.
     3. Build `libcef_dll_wrapper` using the instructions provided in the CEF
-    distribution, but, in short, just by using `cmake` to do it. Please note
-    that if you use `-DCMAKE_BUILD_TYPE=Debug` under Unix when building it, you
-    need to pass `--enable-cef_debug` option to wxWidgets configure to avoid
-    mismatches between various definitions in the wrapper itself and in
-    wxWidgets.
+    distribution, which basically means using `cmake` to do it. Please note:
+        * Under Windows you must use `-DCEF_RUNTIME_LIBRARY_FLAG=/MD` option
+          to match the default wxWidgets build configuration.
+        * Under Unix remember that if you use `-DCMAKE_BUILD_TYPE=Debug` when
+          building it, you need to pass `--enable-cef_debug` option to
+          wxWidgets configure to avoid mismatches between various definitions
+          in the wrapper itself and in wxWidgets.
+        * Under all platforms you may want to use `-DUSE_SANDBOX=OFF`
+          option to avoid linking with the sandbox library which is not
+          provided in the "Minimal Distribution" if you don't use this feature.
     4. Copy the static library binary in the platform-dependent location:
       - Under MSW, copy `libcefl_dll_wrapper.lib` file to either
       `3rdparty/cef/Release` or `3rdparty/cef/Debug` depending on the build
@@ -381,6 +386,36 @@ public:
         Default value 0 means to use default "INFO" log level.
      */
     int m_logLevel = 0;
+
+    /**
+        Function to create the custom CefClient to use if non-null.
+
+        CEF uses an object of CefClient class to customize handling of many
+        operations, by allowing to return custom objects from its callbacks,
+        and for processing IPC messages received from the other processes used
+        by CEF. By defining this function pointer, the application can use its
+        own CefClient subclass to customize many aspects of CEF behaviour
+        beyond what is possible using the standard wxWebView API.
+
+        Please note that the returned object must delegate all not otherwise
+        implemented functions to the provided @a client (and should always
+        delegate the lifetime-related callbacks). You can ensure that this is
+        the case by deriving your custom CefClient subclass from
+        wxDelegatingCefClient, but you still need to do it manually if not
+        using this class.
+     */
+    CefClient* (*m_clientCreate)(CefClient* client, void* data) = nullptr;
+
+    /**
+        Data to pass to m_clientCreate if it is used.
+
+        This is just an arbitrary pointer, which is passed as argument to
+        m_clientCreate function if it is non-null.
+
+        This pointer itself may be null if it is not necessary to pass any
+        extra data to the client creation function.
+     */
+    void* m_clientCreateData = nullptr;
 };
 
 /**
@@ -410,6 +445,13 @@ public:
         }
     );
     @endcode
+
+    @note Using wxEvent dispatching adds a significant overhead to handling of
+    CEF IPC messages, so if performance is important (i.e. many such messages
+    are expected), it is recommended to configure wxWebViewChromium to use a
+    custom `CefClient` as described in wxWebViewConfigurationChromium
+    documentation and handle the messages directly in the overridden
+    `OnProcessMessageReceived()` of the custom client class.
 
     @since 3.3.0
     @library{wxwebview}

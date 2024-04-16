@@ -203,7 +203,7 @@ public:
         @a grandparent or the @NULL node (which is the parent of non-linked
         nodes or the parent of a wxXmlDocument's root element node).
     */
-    int GetDepth(wxXmlNode* grandparent = nullptr) const;
+    int GetDepth(const wxXmlNode* grandparent = nullptr) const;
 
     /**
         Returns a flag indicating whether encoding conversion is necessary when saving. The default is @false.

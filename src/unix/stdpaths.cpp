@@ -369,4 +369,9 @@ wxStandardPaths::MakeConfigFileName(const wxString& basename,
     return fn.GetFullName();
 }
 
+wxString wxStandardPaths::GetSharedLibrariesDir() const
+{
+    return GetInstallPrefix() + "/lib";
+}
+
 #endif // wxUSE_STDPATHS

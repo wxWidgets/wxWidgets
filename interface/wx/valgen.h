@@ -25,6 +25,9 @@
     A wxLB_SINGLE wxListBox can also use an int.  wxColourPickerCtrl support.
     A 3-state wxCheckBox can use wxCheckBoxState.
 
+    @since 3.3.0
+    A group of wxRadioButton controls can also be associated with an int.
+
     For more information, please see @ref overview_validator.
 
     @library{wxcore}
@@ -79,7 +82,7 @@ public:
     wxGenericValidator(int* valPtr);
     /**
         Constructor taking a wxArrayInt pointer. This will be used for
-        wxListBox, wxCheckListBox.
+        wxListBox, wxCheckListBox, and groups of wxRadioButton.
 
         @param valPtr
             A pointer to a variable that contains the value. This variable

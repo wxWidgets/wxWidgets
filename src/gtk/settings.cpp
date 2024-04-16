@@ -13,6 +13,7 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
     #include "wx/toplevel.h"
     #include "wx/module.h"
 #endif
@@ -25,6 +26,11 @@
 #include "wx/gtk/private/win_gtk.h"
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/value.h"
+
+#ifdef __WXGTK3__
+    #include "wx/gtk/private/appearance.h"
+    #include "wx/gtk/private/variant.h"
+#endif
 
 bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* bottom);
 
@@ -183,39 +189,163 @@ static void notify_gtk_font_name(GObject*, GParamSpec*, void*)
 }
 }
 
-static bool UpdatePreferDark(GVariant* value)
+namespace
+{
+
+constexpr const char* TRACE_DARKMODE = "darkmode";
+
+// This corresponds to the current system value.
+gboolean gs_systemPrefersDark = FALSE;
+
+// This remembers the last value passed to wxApp::SetAppearance() call.
+wxGTKImpl::ColorScheme gs_appScheme = wxGTKImpl::ColorScheme::NoPreference;
+
+
+// Convert raw value to ColorScheme, return NoPreference for unknown values.
+wxGTKImpl::ColorScheme AsColorScheme(guint32 colorScheme)
+{
+    switch ( colorScheme )
+    {
+        case static_cast<guint32>(wxGTKImpl::ColorScheme::NoPreference):
+        case static_cast<guint32>(wxGTKImpl::ColorScheme::PreferDark):
+        case static_cast<guint32>(wxGTKImpl::ColorScheme::PreferLight):
+            return static_cast<wxGTKImpl::ColorScheme>(colorScheme);
+    }
+
+    wxLogTrace(TRACE_DARKMODE, "Unknown color scheme value %u", colorScheme);
+    return wxGTKImpl::ColorScheme::NoPreference;
+}
+
+// Convert ColorScheme to raw "prefer-dark" value.
+gboolean GetPreferDark(wxGTKImpl::ColorScheme colorScheme)
+{
+    switch ( colorScheme )
+    {
+        case wxGTKImpl::ColorScheme::NoPreference:
+        case wxGTKImpl::ColorScheme::PreferLight:
+            return FALSE;
+
+        case wxGTKImpl::ColorScheme::PreferDark:
+            return TRUE;
+    }
+
+    wxFAIL_MSG("Invalid color scheme value");
+    return FALSE;
+}
+
+// UpdateColorScheme() should normally be used instead of this function to
+// avoid changing the preferences unnecessarily and update any
+// appearance-dependent cached settings, but it's enough to call this one on
+// startup, before we have anything cached.
+void UpdatePreferDark(gboolean preferDark)
+{
+    wxLogTrace(TRACE_DARKMODE, "Turning dark mode preference %s",
+               preferDark ? "on" : "off");
+
+    g_object_set(gtk_settings_get_default(),
+        "gtk-application-prefer-dark-theme", preferDark, nullptr);
+}
+
+void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
 {
     GtkSettings* const settings = gtk_settings_get_default();
     // This shouldn't happen, but don't bother doing anything else if it does.
     if (!settings)
-        return false;
-
-    // 0: No preference, 1: Prefer dark appearance, 2: Prefer light appearance
-    gboolean preferDark = g_variant_get_uint32(value) == 1;
+    {
+        wxLogTrace(TRACE_DARKMODE, "Failed to get GTK settings");
+        return;
+    }
 
     char* themeName = nullptr;
-    gboolean preferDarkPrev = false;
+    gboolean preferDarkPrev = FALSE;
     g_object_get(settings,
         "gtk-theme-name", &themeName,
         "gtk-application-prefer-dark-theme", &preferDarkPrev, nullptr);
 
     // This is not supposed to happen neither, but don't crash if it does.
     if (!themeName)
-        return false;
+    {
+        wxLogTrace(TRACE_DARKMODE, "Failed to get GTK theme name");
+        return;
+    }
 
     // We don't need to enable prefer-dark if the theme is already dark
     if (strstr(themeName, "-dark") || strstr(themeName, "-Dark"))
-        preferDark = false;
+    {
+        wxLogTrace(TRACE_DARKMODE, "Force dark mode for theme \"%s\"", themeName);
+        preferDarkPrev = TRUE;
+    }
+
     g_free(themeName);
 
-    const bool changed = preferDark != preferDarkPrev;
-    if (changed)
+    gboolean preferDark = FALSE;
+    switch ( colorScheme )
     {
-        g_object_set(settings,
-            "gtk-application-prefer-dark-theme", preferDark, nullptr);
+        case wxGTKImpl::ColorScheme::NoPreference:
+            preferDark = gs_systemPrefersDark;
+            break;
+
+        case wxGTKImpl::ColorScheme::PreferDark:
+            preferDark = TRUE;
+            break;
+
+        case wxGTKImpl::ColorScheme::PreferLight:
+            preferDark = FALSE;
+            break;
     }
-    return changed;
+
+    if ( preferDark == preferDarkPrev )
+    {
+        wxLogTrace(TRACE_DARKMODE, "Dark mode preference didn't change");
+        return;
+    }
+
+    UpdatePreferDark(preferDark);
+
+    for (int i = wxSYS_COLOUR_MAX; i--;)
+        gs_systemColorCache[i].UnRef();
+
+    for (auto* win: wxTopLevelWindows)
+    {
+        wxSysColourChangedEvent event;
+        event.SetEventObject(win);
+        win->HandleWindowEvent(event);
+    }
 }
+
+// Global GDBusProxy for org.freedesktop.portal.Settings initialized by
+// wxSystemSettingsModule.
+GDBusProxy* gs_proxyPortalSettings = nullptr;
+
+} // anonymous namespace
+
+// Functions declared in wx/gtk/private/appearance.h and used by wxApp.
+namespace wxGTKImpl
+{
+
+bool UpdateColorScheme(ColorScheme colorScheme)
+{
+    // It's possible that we didn't initialize it because GTK_THEME is
+    // explicitly set, so it's not an error -- but we can't change the
+    // appearance in this case (it's overridden by the theme), so don't
+    // bother doing anything.
+    if ( !gs_proxyPortalSettings )
+        return false;
+
+    if ( colorScheme == gs_appScheme )
+    {
+        // Don't do anything if the preference didn't change.
+        return true;
+    }
+
+    gs_appScheme = colorScheme;
+
+    DoUpdateColorScheme(colorScheme);
+
+    return true;
+}
+
+} // namespace wxGTKImpl
 
 // "g-signal" from GDBusProxy
 extern "C" {
@@ -227,25 +357,32 @@ proxy_g_signal(GDBusProxy*, const char*, const char* signal_name, GVariant* para
 
     const char* nameSpace;
     const char* key;
-    GVariant* value;
-    g_variant_get(parameters, "(&s&sv)", &nameSpace, &key, &value);
-    if (strcmp(nameSpace, "org.freedesktop.appearance") == 0 &&
-        strcmp(key, "color-scheme") == 0)
-    {
-        if (UpdatePreferDark(value))
-        {
-            for (int i = wxSYS_COLOUR_MAX; i--;)
-                gs_systemColorCache[i].UnRef();
+    wxGtkVariant value;
+    g_variant_get(parameters, "(&s&sv)", &nameSpace, &key, value.ByRef());
+    if (strcmp(nameSpace, "org.freedesktop.appearance") != 0 ||
+        strcmp(key, "color-scheme") != 0)
+        return;
 
-            for (auto* win: wxTopLevelWindows)
-            {
-                wxSysColourChangedEvent event;
-                event.SetEventObject(win);
-                win->HandleWindowEvent(event);
-            }
-        }
+    const auto colorScheme = AsColorScheme(value.GetUint32());
+
+    // Update gs_systemPrefersDark in any case as we want to keep track of it
+    // even when using app-specified color scheme because this can change later.
+    gs_systemPrefersDark = GetPreferDark(colorScheme);
+
+    if ( gs_appScheme == wxGTKImpl::ColorScheme::NoPreference )
+    {
+        wxLogTrace(TRACE_DARKMODE, "System color scheme changed to %u", colorScheme);
+
+        DoUpdateColorScheme(colorScheme);
     }
-    g_variant_unref(value);
+    else
+    {
+        // Application-set scheme should remain in effect even if the system
+        // scheme changes.
+        wxLogTrace(TRACE_DARKMODE,
+                   "Ignoring new system color scheme %u due to app-set scheme %u",
+                   colorScheme, gs_appScheme);
+    }
 }
 }
 
@@ -1205,9 +1342,6 @@ public:
     virtual bool OnInit() override;
     virtual void OnExit() override;
 
-#ifdef __WXGTK3__
-    GDBusProxy* m_proxy;
-#endif
     wxDECLARE_DYNAMIC_CLASS(wxSystemSettingsModule);
 };
 wxIMPLEMENT_DYNAMIC_CLASS(wxSystemSettingsModule, wxModule);
@@ -1224,8 +1358,6 @@ bool wxSystemSettingsModule::OnInit()
     // change the theme, we propagate it to the GtkSettings
     // 'gtk-application-prefer-dark-theme' property to get a dark theme.
 
-    m_proxy = nullptr;
-
     // If this is not a GUI app
     if (!g_type_class_peek(GTK_TYPE_WIDGET))
         return true;
@@ -1233,29 +1365,34 @@ bool wxSystemSettingsModule::OnInit()
     // GTK_THEME environment variable overrides other settings
     if (getenv("GTK_THEME") == nullptr)
     {
-        m_proxy = g_dbus_proxy_new_for_bus_sync(
+        gs_proxyPortalSettings = g_dbus_proxy_new_for_bus_sync(
             G_BUS_TYPE_SESSION, G_DBUS_PROXY_FLAGS_NONE, nullptr,
             "org.freedesktop.portal.Desktop",
             "/org/freedesktop/portal/desktop",
             "org.freedesktop.portal.Settings",
             nullptr, nullptr);
     }
-    if (m_proxy)
+    if (gs_proxyPortalSettings)
     {
-        g_signal_connect(m_proxy, "g-signal", G_CALLBACK(proxy_g_signal), nullptr);
+        g_signal_connect(gs_proxyPortalSettings, "g-signal", G_CALLBACK(proxy_g_signal), nullptr);
 
-        GVariant* ret = g_dbus_proxy_call_sync(m_proxy, "Read",
+        wxGtkVariant ret(g_dbus_proxy_call_sync(gs_proxyPortalSettings, "Read",
             g_variant_new("(ss)", "org.freedesktop.appearance", "color-scheme"),
-            G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr);
+            G_DBUS_CALL_FLAGS_NONE, -1, nullptr, nullptr));
         if (ret)
         {
-            GVariant* child;
-            g_variant_get(ret, "(v)", &child);
-            GVariant* value = g_variant_get_variant(child);
-            UpdatePreferDark(value);
-            g_variant_unref(value);
-            g_variant_unref(child);
-            g_variant_unref(ret);
+            wxGtkVariant child;
+            ret.Get("(v)", child.ByRef());
+
+            const auto colorScheme = child.GetVariant().GetUint32();
+            wxLogTrace(TRACE_DARKMODE, "Initial color scheme is %u", colorScheme);
+
+            gs_systemPrefersDark = GetPreferDark(AsColorScheme(colorScheme));
+
+            // We only need to do anything here if the color-scheme is dark, as
+            // we use the light one by default anyhow.
+            if ( gs_systemPrefersDark )
+                UpdatePreferDark(TRUE);
         }
     }
 #endif // __WXGTK3__
@@ -1273,8 +1410,11 @@ void wxSystemSettingsModule::OnExit()
         g_signal_handlers_disconnect_by_func(settings,
             (void*)notify_gtk_font_name, nullptr);
     }
-    if (m_proxy)
-        g_object_unref(m_proxy);
+    if (gs_proxyPortalSettings)
+    {
+        g_object_unref(gs_proxyPortalSettings);
+        gs_proxyPortalSettings = nullptr;
+    }
 #endif
     if (gs_tlw_parent)
     {

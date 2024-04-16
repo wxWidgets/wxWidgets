@@ -143,7 +143,7 @@ wxCONSTRUCTOR_DUMMY( wxMenuBar )
 const wxMenuInfoHelperList& wxMenuBarBase::GetMenuInfos() const
 {
     wxMenuInfoHelperList* list = const_cast< wxMenuInfoHelperList* > (& m_menuInfos);
-    WX_CLEAR_LIST( wxMenuInfoHelperList, *list);
+    wxClearList(*list);
     for (size_t i = 0 ; i < GetMenuCount(); ++i)
     {
         wxMenuInfoHelper* info = new wxMenuInfoHelper();
@@ -382,7 +382,7 @@ void wxMenuBase::Init(long style)
 
 wxMenuBase::~wxMenuBase()
 {
-    WX_CLEAR_LIST(wxMenuItemList, m_items);
+    wxClearList(m_items);
 }
 
 // ----------------------------------------------------------------------------
@@ -901,7 +901,7 @@ wxMenuBarBase::wxMenuBarBase()
 
 wxMenuBarBase::~wxMenuBarBase()
 {
-    WX_CLEAR_LIST(wxMenuList, m_menus);
+    wxClearList(m_menus);
 }
 
 // ----------------------------------------------------------------------------

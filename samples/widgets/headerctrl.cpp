@@ -200,6 +200,8 @@ void HeaderCtrlWidgetsPage::RecreateWidget()
                                       wxDefaultPosition, wxDefaultSize,
                                       flags);
 
+    NotifyWidgetRecreation(m_header);
+
     m_header->Bind(wxEVT_HEADER_RESIZING, &HeaderCtrlWidgetsPage::OnResizing, this);
     m_header->Bind(wxEVT_HEADER_BEGIN_RESIZE, &HeaderCtrlWidgetsPage::OnBeginResize, this);
     m_header->Bind(wxEVT_HEADER_END_RESIZE, &HeaderCtrlWidgetsPage::OnEndResize, this);

@@ -45,6 +45,7 @@ public:
     virtual wxString GetPluginsDir() const override;
     virtual wxString GetLocalizedResourcesDir(const wxString& lang,
                                               ResourceCat category) const override;
+    virtual wxString GetSharedLibrariesDir() const override;
 #ifndef __VMS
     virtual wxString GetUserDir(Dir userDir) const override;
 #endif

@@ -253,6 +253,36 @@ bool wxApp::MSWEnableDarkMode(int flags, wxDarkModeSettings* settings)
     return true;
 }
 
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
+{
+    // We currently can't change the appearance of the existing windows because
+    // we initialize/create them differently depending on the mode value in a
+    // lot of places, so don't even try as we risk finishing with a horrible
+    // mix of light and dark mode elements.
+    if ( !wxTopLevelWindows.empty() || gs_appMode != AppMode_Default )
+        return AppearanceResult::CannotChange;
+
+    int flags = 0;
+    switch ( appearance )
+    {
+        case Appearance::System:
+            flags = DarkMode_Auto;
+            break;
+
+        case Appearance::Light:
+            // Nothing to do, this is the default.
+            return AppearanceResult::Success;
+
+        case Appearance::Dark:
+            flags = DarkMode_Always;
+            break;
+    }
+
+    // Do (try to) change it.
+    return MSWEnableDarkMode(flags) ? AppearanceResult::Success
+                                    : AppearanceResult::Failure;
+}
+
 // ----------------------------------------------------------------------------
 // Default wxDarkModeSettings implementation
 // ----------------------------------------------------------------------------
@@ -278,7 +308,6 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INFOBK:
         case wxSYS_COLOUR_LISTBOX:
         case wxSYS_COLOUR_WINDOW:
-        case wxSYS_COLOUR_BTNFACE:
             return wxColour(0x202020);
 
         case wxSYS_COLOUR_BTNTEXT:
@@ -300,6 +329,9 @@ wxColour wxDarkModeSettings::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_INACTIVECAPTION:
         case wxSYS_COLOUR_MENU:
             return wxColour(0x2b2b2b);
+
+        case wxSYS_COLOUR_BTNFACE:
+            return wxColour(0x333333);
 
         case wxSYS_COLOUR_MENUBAR:
             return wxColour(0x626262);
@@ -703,6 +735,11 @@ wxApp::MSWEnableDarkMode(int WXUNUSED(flags),
                          wxDarkModeSettings* WXUNUSED(settings))
 {
     return false;
+}
+
+wxApp::AppearanceResult wxApp::SetAppearance(Appearance WXUNUSED(appearance))
+{
+    return AppearanceResult::Failure;
 }
 
 namespace wxMSWDarkMode

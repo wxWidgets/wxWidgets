@@ -34,6 +34,8 @@ public:
 
     bool IsNative() const;
 
+    void SetOpacity(int alpha);
+
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxDCOverlay;
 

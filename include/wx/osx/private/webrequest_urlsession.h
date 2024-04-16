@@ -149,13 +149,16 @@ public:
         return (wxWebSessionHandle)m_session;
     }
 
-    WX_NSURLSession GetSession() { return m_session; }
+    bool EnablePersistentStorage(bool enable) override;
+
+    WX_NSURLSession GetSession();
 
     WX_wxWebSessionDelegate GetDelegate() { return m_delegate; }
 
 private:
-    WX_NSURLSession m_session;
+    WX_NSURLSession m_session = nullptr;
     WX_wxWebSessionDelegate m_delegate;
+    bool m_persistentStorageEnabled = false;
 
     wxDECLARE_NO_COPY_CLASS(wxWebSessionURLSession);
 };

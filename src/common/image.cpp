@@ -2185,6 +2185,8 @@ unsigned char *wxImage::GetAlpha() const
 
 void wxImage::InitAlpha()
 {
+    wxCHECK_RET( IsOk(), wxT("invalid image") );
+
     wxCHECK_RET( !HasAlpha(), wxT("image already has an alpha channel") );
 
     // initialize memory for alpha channel

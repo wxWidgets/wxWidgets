@@ -265,6 +265,10 @@ public:
 #ifdef __VISUALC__
         m_webViewEnvironmentOptions = Make<CoreWebView2EnvironmentOptions>().Get();
         m_webViewEnvironmentOptions->put_Language(wxUILocale::GetCurrent().GetLocaleId().GetName().wc_str());
+
+        wxCOMPtr<ICoreWebView2EnvironmentOptions3> options3;
+        if (SUCCEEDED(m_webViewEnvironmentOptions->QueryInterface(IID_PPV_ARGS(&options3))))
+            options3->put_IsCustomCrashReportingEnabled(false);
 #endif
     }
 
@@ -291,6 +295,12 @@ public:
 
     virtual void SetDataPath(const wxString& path) override { m_dataPath = path;}
     virtual wxString GetDataPath() const override { return m_dataPath; }
+
+    virtual bool EnablePersistentStorage(bool enable) override
+    {
+        m_persistentStorage = enable;
+        return true;
+    }
 
     bool CreateOrGetEnvironment(wxWebViewEdgeImpl* impl)
     {
@@ -332,6 +342,7 @@ public:
     wxCOMPtr<ICoreWebView2EnvironmentOptions> m_webViewEnvironmentOptions;
     wxCOMPtr<ICoreWebView2Environment> m_webViewEnvironment;
     wxString m_dataPath;
+    bool m_persistentStorage = true;
 };
 
 wxString wxWebViewConfigurationImplEdge::ms_browserExecutableDir;
@@ -470,10 +481,27 @@ bool wxWebViewEdgeImpl::Create()
 void wxWebViewEdgeImpl::EnvironmentAvailable(ICoreWebView2Environment* environment)
 {
     environment->QueryInterface(IID_PPV_ARGS(&m_webViewEnvironment));
-    m_webViewEnvironment->CreateCoreWebView2Controller(
-        m_ctrl->GetHWND(),
-        Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
-            this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+    wxCOMPtr<ICoreWebView2Environment10> environment10;
+    if (SUCCEEDED(m_webViewEnvironment->QueryInterface(IID_PPV_ARGS(&environment10))))
+    {
+        wxCOMPtr<ICoreWebView2ControllerOptions> controllerOptions;
+        if (SUCCEEDED(environment10->CreateCoreWebView2ControllerOptions(&controllerOptions)))
+        {
+            auto config = static_cast<wxWebViewConfigurationImplEdge*>(m_config.GetImpl());
+            controllerOptions->put_IsInPrivateModeEnabled(config->m_persistentStorage ? FALSE : TRUE);
+
+            environment10->CreateCoreWebView2ControllerWithOptions(
+                m_ctrl->GetHWND(),
+                controllerOptions.get(),
+                Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                    this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
+        }
+    }
+    else
+        m_webViewEnvironment->CreateCoreWebView2Controller(
+            m_ctrl->GetHWND(),
+            Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
+                this, &wxWebViewEdgeImpl::OnWebViewCreated).Get());
 }
 
 bool wxWebViewEdgeImpl::Initialize()
@@ -620,6 +648,8 @@ HRESULT wxWebViewEdgeImpl::OnNavigationCompleted(ICoreWebView2* WXUNUSED(sender)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_HOST_NAME_NOT_RESOLVED, wxWEBVIEW_NAV_ERR_CONNECTION)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_REDIRECT_FAILED, wxWEBVIEW_NAV_ERR_OTHER)
                 WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_UNEXPECTED_ERROR, wxWEBVIEW_NAV_ERR_OTHER)
+                WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_VALID_AUTHENTICATION_CREDENTIALS_REQUIRED, wxWEBVIEW_NAV_ERR_AUTH)
+                WX_ERROR2_CASE(COREWEBVIEW2_WEB_ERROR_STATUS_VALID_PROXY_AUTHENTICATION_REQUIRED, wxWEBVIEW_NAV_ERR_AUTH)
             case COREWEBVIEW2_WEB_ERROR_STATUS_OPERATION_CANCELED:
                 // This status is triggered by vetoing a wxEVT_WEBVIEW_NAVIGATING event
                 ignoreStatus = true;
@@ -902,6 +932,10 @@ HRESULT wxWebViewEdgeImpl::OnWebViewCreated(HRESULT result, ICoreWebView2Control
     if (settings)
     {
         settings->put_IsStatusBarEnabled(false);
+
+        wxCOMPtr<ICoreWebView2Settings8> settings8;
+        if (SUCCEEDED(settings->QueryInterface(IID_PPV_ARGS(&settings8))))
+            settings8->put_IsReputationCheckingRequired(false);
     }
     UpdateWebMessageHandler();
 

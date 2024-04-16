@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_RADIOBOX
+
 #include "wx/radiobox.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
@@ -365,3 +367,16 @@ QWidget *wxRadioBox::GetHandle() const
     return m_qtGroupBox;
 }
 
+void wxRadioBox::SetLabel(const wxString& label)
+{
+    wxControlBase::SetLabel( label );
+
+    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
+}
+
+wxString wxRadioBox::GetLabel() const
+{
+    return wxQtConvertString( m_qtGroupBox->title() );
+}
+
+#endif // wxUSE_RADIOBOX

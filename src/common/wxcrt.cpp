@@ -1219,21 +1219,21 @@ int wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap)
     } \
     return d;
 
-long android_wcstol(const wchar_t *nptr, wchar_t **endptr, int base)
+WXDLLEXPORT long android_wcstol(const wchar_t *nptr, wchar_t **endptr, int base)
 {
     ANDROID_WCSTO_START
     long d = strtol(dst, &dstendp, base);
     ANDROID_WCSTO_END
 }
 
-unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int base)
+WXDLLEXPORT unsigned long android_wcstoul(const wchar_t *nptr, wchar_t **endptr, int base)
 {
     ANDROID_WCSTO_START
     unsigned long d = strtoul(dst, &dstendp, base);
     ANDROID_WCSTO_END
 }
 
-double android_wcstod(const wchar_t *nptr, wchar_t **endptr)
+WXDLLEXPORT double android_wcstod(const wchar_t *nptr, wchar_t **endptr)
 {
     ANDROID_WCSTO_START
     double d = strtod(dst, &dstendp);

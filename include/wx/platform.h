@@ -461,6 +461,15 @@
 #        ifndef MAC_OS_VERSION_11_0
 #           define MAC_OS_VERSION_11_0 110000
 #        endif
+#        ifndef MAC_OS_VERSION_12_0
+#           define MAC_OS_VERSION_12_0 120000
+#        endif
+#        ifndef MAC_OS_VERSION_13_0
+#           define MAC_OS_VERSION_13_0 130000
+#        endif
+#        ifndef MAC_OS_VERSION_14_0
+#           define MAC_OS_VERSION_14_0 140000
+#        endif
 #        if __MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #            ifndef NSAppKitVersionNumber10_10
 #                define NSAppKitVersionNumber10_10 1343

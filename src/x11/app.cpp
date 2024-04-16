@@ -198,10 +198,10 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
 
 void wxApp::CleanUp()
 {
+    wxAppBase::CleanUp();
+
     wxDELETE(wxWidgetHashTable);
     wxDELETE(wxClientWidgetHashTable);
-
-    wxAppBase::CleanUp();
 }
 
 wxApp::wxApp()
@@ -789,11 +789,3 @@ Window wxGetWindowParent(Window window)
         return (Window) 0;
 #endif
 }
-
-void wxApp::Exit()
-{
-    wxApp::CleanUp();
-
-    wxAppConsole::Exit();
-}
-

@@ -61,7 +61,8 @@ public:
 
     ~AutoSystemDpiAware()
     {
-        if ( ms_pfnSetThreadDpiAwarenessContext )
+        if ( ms_pfnSetThreadDpiAwarenessContext &&
+                ms_pfnSetThreadDpiAwarenessContext != (SetThreadDpiAwarenessContext_t)-1 )
         {
             ms_pfnSetThreadDpiAwarenessContext(m_prevContext);
         }

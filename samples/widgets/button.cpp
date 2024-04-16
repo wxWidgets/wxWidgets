@@ -562,6 +562,8 @@ void ButtonWidgetsPage::CreateButton()
     m_sizerNote->Show(m_chkCommandLink->GetValue());
 #endif
 
+    NotifyWidgetRecreation(m_button);
+
     if ( !showsBitmap && m_chkTextAndBitmap->GetValue() )
     {
         showsBitmap = true;

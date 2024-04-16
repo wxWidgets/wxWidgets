@@ -140,11 +140,6 @@ void wxFontBase::SetDefaultEncoding(wxFontEncoding encoding)
     ms_encodingDefault = encoding;
 }
 
-wxFontBase::~wxFontBase()
-{
-    // this destructor is required for Darwin
-}
-
 /* static */
 wxFont *wxFontBase::New(int size,
                         wxFontFamily family,

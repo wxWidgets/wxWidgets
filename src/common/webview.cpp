@@ -88,6 +88,11 @@ wxString wxWebViewConfiguration::GetDataPath() const
     return m_impl->GetDataPath();
 }
 
+bool wxWebViewConfiguration::EnablePersistentStorage(bool enable)
+{
+    return m_impl->EnablePersistentStorage(enable);
+}
+
 // wxWebViewWindowFeatures
 wxWebViewWindowFeatures::wxWebViewWindowFeatures(wxWebView * childWebView):
     m_childWebViewWasUsed(false),

@@ -31,7 +31,7 @@ WX_CPPFLAGS = @WX_CPPFLAGS@
 WX_CXXFLAGS = @WX_CXXFLAGS@
 WX_LDFLAGS = @WX_LDFLAGS@
 HOST_SUFFIX = @HOST_SUFFIX@
-SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
+DYLIB_RPATH_FLAG = @DYLIB_RPATH_FLAG@
 SAMPLES_CXXFLAGS = @SAMPLES_CXXFLAGS@
 wx_top_builddir = @wx_top_builddir@
 
@@ -115,7 +115,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch Makefile
 
 secretstore$(EXEEXT): $(SECRETSTORE_OBJECTS)
-	$(CXX) -o $@ $(SECRETSTORE_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(SECRETSTORE_OBJECTS)    -L$(LIBDIRNAME) $(DYLIB_RPATH_FLAG)   $(LDFLAGS)  $(WX_LDFLAGS) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 secretstore_secretstore.o: $(srcdir)/secretstore.cpp
 	$(CXXC) -c -o $@ $(SECRETSTORE_CXXFLAGS) $(srcdir)/secretstore.cpp
