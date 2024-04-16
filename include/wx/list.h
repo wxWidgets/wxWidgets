@@ -240,7 +240,6 @@ public:
                            wxListHelper::DeleteFunction );
         this->clear();
     }
-    /* Workaround for broken VC6 std::list::sort() see above */
     void Sort( wxSortCompareFunction compfunc )
         { this->sort( wxList_SortFunction<elT>(compfunc ) ); }
     ~wxListImpl() { Clear(); }
