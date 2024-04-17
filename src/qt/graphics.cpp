@@ -711,13 +711,16 @@ public:
 
     virtual void Clip(const wxRegion& region) override
     {
-        m_qtPainter->setClipRegion(region.GetHandle());
+        // Notice that setClipRegion() doesn't enable clipping for us.
+        // So we need to enable it explicitly.
+        m_qtPainter->setClipping(true);
+        m_qtPainter->setClipRegion(region.GetHandle(), Qt::IntersectClip);
     }
 
     // clips drawings to the rect
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override
     {
-        m_qtPainter->setClipRect(x, y, w, h);
+        m_qtPainter->setClipRect(x, y, w, h, Qt::IntersectClip);
     }
 
     // resets the clipping to original extent
