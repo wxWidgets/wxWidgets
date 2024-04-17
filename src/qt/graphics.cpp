@@ -645,6 +645,8 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
         m_width = sz.x;
         m_height = sz.y;
 
+        m_internalTransform = m_qtPainter->worldTransform();
+
         SetInitialClipping();
     }
 
@@ -914,23 +916,40 @@ public:
     // concatenates this transform with the current transform of this context
     virtual void ConcatTransform(const wxGraphicsMatrix& matrix) override
     {
-        wxGraphicsMatrix currentMatrix = GetTransform();
-        currentMatrix.Concat(matrix);
-        SetTransform(currentMatrix);
+        if ( !m_qtPainter->isActive() )
+            return;
+
+        const wxQtMatrixData*
+            qmatrix = static_cast<const wxQtMatrixData*>(matrix.GetRefData());
+        m_qtPainter->setTransform(qmatrix->GetQTransform(), true);
     }
 
     // sets the transform of this context
     virtual void SetTransform(const wxGraphicsMatrix& matrix) override
     {
+        if ( !m_qtPainter->isActive() )
+            return;
+
         const wxQtMatrixData*
             qmatrix = static_cast<const wxQtMatrixData*>(matrix.GetRefData());
-        m_qtPainter->setTransform(qmatrix->GetQTransform());
+        m_qtPainter->setTransform(m_internalTransform);
+        m_qtPainter->setTransform(qmatrix->GetQTransform(), true);
     }
 
     // gets the matrix of this context
     virtual wxGraphicsMatrix GetTransform() const override
     {
-        const QTransform& transform = m_qtPainter->transform();
+        if ( !m_qtPainter->isActive() )
+            return CreateMatrix(); // return identity matrix
+
+        QTransform transform = m_qtPainter->transform();
+
+        if ( m_internalTransform.isInvertible() )
+        {
+            const auto intTransformInv = m_internalTransform.inverted();
+            transform *= intTransformInv;
+        }
+
         wxGraphicsMatrix m;
         m.SetRefData(new wxQtMatrixData(GetRenderer(), transform));
         return m;
@@ -1081,7 +1100,8 @@ protected:
         m_qtPainter->drawPixmap(x, y, w, h, pix);
     }
 
-    QPainter* m_qtPainter;
+    QPainter*  m_qtPainter;
+    QTransform m_internalTransform;
 
 private:
     // This pointer may be empty if we don't own m_qtPainter.
