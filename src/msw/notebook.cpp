@@ -1034,6 +1034,11 @@ void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 namespace
 {
 
+// Note that FromDIP() should _not_ be used here, as 2px offset is used
+// even in high DPI.
+constexpr int selectedOffset = 2;
+constexpr int labelOffset = 3*selectedOffset;
+
 // Flags may include:
 // - wxCONTROL_SELECTED for the currently selected tab
 // - wxCONTROL_CURRENT for the "hot" tab, i.e. the one under mouse pointer
@@ -1050,11 +1055,6 @@ DrawNotebookTab(wxWindow* win,
                 wxDirection tabOrient,
                 int flags = wxCONTROL_NONE)
 {
-    // Note that FromDIP() should _not_ be used here, as 2px offset is used
-    // even in high DPI.
-    const int selectedOffset = 2;
-    const int labelOffset = 3*selectedOffset;
-
     wxRect rectTab = rectOrig;
     wxColour colTab;
     if ( flags & wxCONTROL_SELECTED )
