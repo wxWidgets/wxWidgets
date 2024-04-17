@@ -164,7 +164,7 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
     {
         case WM_PAINT:
             // We only customize drawing of disabled labels in dark mode.
-            if ( IsEnabled() || !wxMSWDarkMode::IsActive() )
+            if ( IsThisEnabled() || !wxMSWDarkMode::IsActive() )
                 break;
 
             // For them, the default "greying out" of the text for the disabled
