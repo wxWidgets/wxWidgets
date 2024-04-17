@@ -187,7 +187,6 @@ set(QT_WIN32_SRC
     src/msw/dialup.cpp
     src/msw/dib.cpp
     src/msw/joystick.cpp
-    src/qt/graphics.cpp
 )
 
 set(QT_WIN32_HDR
@@ -392,6 +391,7 @@ set(QT_SRC
     src/qt/timectrl.cpp
     src/qt/overlay.cpp
     src/qt/renderer.cpp
+    src/qt/graphics.cpp
 )
 
 set(MEDIA_QT_SRC

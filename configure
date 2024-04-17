@@ -5041,7 +5041,7 @@ fi
           eval "$wx_cv_use_nanosvg"
 
 
-if test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
+if test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
     wx_needs_cairo_for_gc=1
 fi
 

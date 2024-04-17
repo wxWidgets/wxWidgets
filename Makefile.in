@@ -5565,7 +5565,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_datectrl.o \
 	monodll_qt_timectrl.o \
 	monodll_qt_overlay.o \
-	monodll_qt_renderer.o
+	monodll_qt_renderer.o \
+	monodll_qt_graphics.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_UNIX_1@	monodll_unix_dialup.o monodll_unix_joystick.o \
@@ -5579,8 +5580,7 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
 	monodll_uuid.o \
 	monodll_safearray.o \
 	monodll_msw_sound.o \
-	monodll_automtn.o \
-	monodll_qt_graphics.o
+	monodll_automtn.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontmgrcmn.o \
@@ -7333,7 +7333,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_datectrl.o \
 	monolib_qt_timectrl.o \
 	monolib_qt_overlay.o \
-	monolib_qt_renderer.o
+	monolib_qt_renderer.o \
+	monolib_qt_graphics.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_1 = \
 @COND_PLATFORM_UNIX_1@	monolib_unix_dialup.o monolib_unix_joystick.o \
@@ -7347,8 +7348,7 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_uuid.o \
 	monolib_safearray.o \
 	monolib_msw_sound.o \
-	monolib_automtn.o \
-	monolib_qt_graphics.o
+	monolib_automtn.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontmgrcmn.o \
@@ -9251,7 +9251,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_datectrl.o \
 	coredll_qt_timectrl.o \
 	coredll_qt_overlay.o \
-	coredll_qt_renderer.o
+	coredll_qt_renderer.o \
+	coredll_qt_graphics.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_2 = \
 @COND_PLATFORM_UNIX_1@	coredll_unix_dialup.o coredll_unix_joystick.o \
@@ -9265,8 +9266,7 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
 	coredll_uuid.o \
 	coredll_safearray.o \
 	coredll_msw_sound.o \
-	coredll_automtn.o \
-	coredll_qt_graphics.o
+	coredll_automtn.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontmgrcmn.o \
@@ -10744,7 +10744,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_datectrl.o \
 	corelib_qt_timectrl.o \
 	corelib_qt_overlay.o \
-	corelib_qt_renderer.o
+	corelib_qt_renderer.o \
+	corelib_qt_graphics.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
 @COND_PLATFORM_UNIX_1@__QT_PLATFORM_SRC_OBJECTS_3 = \
 @COND_PLATFORM_UNIX_1@	corelib_unix_dialup.o corelib_unix_joystick.o \
@@ -10758,8 +10759,7 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
 	corelib_uuid.o \
 	corelib_safearray.o \
 	corelib_msw_sound.o \
-	corelib_automtn.o \
-	corelib_qt_graphics.o
+	corelib_automtn.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontmgrcmn.o \
@@ -15857,9 +15857,6 @@ monodll_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(MONODLL_ODEP)
 monodll_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
-monodll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
 monodll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
@@ -15874,6 +15871,9 @@ monodll_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(MONODLL_ODEP)
 
 monodll_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
+
+monodll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
 monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -20618,9 +20618,6 @@ monolib_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(MONOLIB_ODEP)
 monolib_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
-monolib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
 monolib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
@@ -20635,6 +20632,9 @@ monolib_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(MONOLIB_ODEP)
 
 monolib_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
+
+monolib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
 monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -26060,9 +26060,6 @@ coredll_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(COREDLL_ODEP)
 coredll_qt_window.o: $(srcdir)/src/qt/window.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
-coredll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
 coredll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
@@ -26077,6 +26074,9 @@ coredll_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(COREDLL_ODEP)
 
 coredll_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
+
+coredll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
 coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
@@ -29783,9 +29783,6 @@ corelib_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(CORELIB_ODEP)
 corelib_qt_window.o: $(srcdir)/src/qt/window.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
-corelib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
 corelib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
@@ -29800,6 +29797,9 @@ corelib_qt_overlay.o: $(srcdir)/src/qt/overlay.cpp $(CORELIB_ODEP)
 
 corelib_qt_renderer.o: $(srcdir)/src/qt/renderer.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/renderer.cpp
+
+corelib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
 corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
