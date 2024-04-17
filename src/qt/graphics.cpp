@@ -644,6 +644,17 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
         const wxSize sz = dc.GetSize();
         m_width = sz.x;
         m_height = sz.y;
+
+        SetInitialClipping();
+    }
+
+    // Set the initial clipping to the entire surface when the context is
+    // first constructed or when the clipping is reset.
+    void SetInitialClipping()
+    {
+        m_qtPainter->setWorldMatrixEnabled(false);
+        m_qtPainter->setClipRect(0, 0, m_width, m_height);
+        m_qtPainter->setWorldMatrixEnabled(true);
     }
 
 protected:
@@ -726,6 +737,8 @@ public:
     // resets the clipping to original extent
     virtual void ResetClip() override
     {
+        SetInitialClipping();
+
         m_qtPainter->setClipping(false);
     }
 
