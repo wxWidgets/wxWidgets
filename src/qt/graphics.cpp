@@ -730,7 +730,11 @@ public:
     virtual void
     GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) override
     {
-        const QRectF box = m_qtPainter->clipBoundingRect();
+        QRectF box = m_qtPainter->clipBoundingRect();
+
+        if ( box.isEmpty() )
+            box = QRectF();
+
         if ( x )
             *x = box.left();
         if ( y )
