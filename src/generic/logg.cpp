@@ -96,7 +96,6 @@ public:
                 const wxArrayLong& timess,
                 const wxString& caption,
                 long style);
-    virtual ~wxLogDialog();
 
     // event handlers
     void OnOk(wxCommandEvent& event);
@@ -987,14 +986,6 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
 }
 
 #endif // CAN_SAVE_FILES
-
-wxLogDialog::~wxLogDialog()
-{
-    if ( m_listctrl )
-    {
-        delete m_listctrl->GetImageList(wxIMAGE_LIST_SMALL);
-    }
-}
 
 #endif // wxUSE_LOG_DIALOG
 
