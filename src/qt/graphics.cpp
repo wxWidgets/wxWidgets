@@ -846,15 +846,17 @@ public:
 
     virtual void
     FillPath(const wxGraphicsPath& p,
-             wxPolygonFillMode /*fillStyle = wxWINDING_RULE*/) override
+             wxPolygonFillMode fillStyle = wxWINDING_RULE) override
     {
         if ( m_brush.IsNull() )
         {
             return;
         }
 
-        const QPainterPath*
-            pathData = static_cast<QPainterPath*>(p.GetNativePath());
+        QPainterPath* pathData = static_cast<QPainterPath*>(p.GetNativePath());
+        const Qt::FillRule fillRule = fillStyle == wxWINDING_RULE ? Qt::WindingFill : Qt::OddEvenFill;
+        pathData->setFillRule(fillRule);
+
         const QBrush&
             brush = static_cast<wxQtBrushData*>(m_brush.GetRefData())->getBrush();
         m_qtPainter->fillPath(*pathData, brush);
