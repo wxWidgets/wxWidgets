@@ -16,6 +16,7 @@
 
 #include "wx/scrolwin.h"
 #include "wx/recguard.h"
+#include "wx/time.h" // needed for wxMilliClock_t
 
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridiface.h"
