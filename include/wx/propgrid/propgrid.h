@@ -16,7 +16,6 @@
 
 #include "wx/scrolwin.h"
 #include "wx/recguard.h"
-#include "wx/time.h" // needed for wxMilliClock_t
 
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridiface.h"
@@ -1444,9 +1443,6 @@ protected:
     wxPoint             m_wndEditor2PosRel;
 
     wxBitmap            *m_doubleBuffer;
-
-    // Local time ms when control was created.
-    wxMilliClock_t      m_timeCreated;
 
     // wxPGProperty::OnEvent can change value by setting this.
     wxVariant           m_changeInEventValue;
