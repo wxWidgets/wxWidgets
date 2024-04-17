@@ -1039,6 +1039,45 @@ namespace
 constexpr int selectedOffset = 2;
 constexpr int labelOffset = 3*selectedOffset;
 
+// This function expands the passed in rectangle in place and returns the
+// clipping rectangle which should be used when drawing it.
+wxRect
+ExpandSelectedTab(wxRect& rectTab, wxDirection tabOrient)
+{
+    // Selected tab literally stands out, so make it bigger -- but clip
+    // drawing to ensure we don't draw the inner border of the inflated
+    // selected tab rectangle, it shouldn't overflow into the notebook
+    // page area.
+    rectTab.Inflate(selectedOffset);
+
+    wxRect rectClip = rectTab;
+    switch ( tabOrient )
+    {
+        case wxTOP:
+            rectClip.height -= selectedOffset;
+            break;
+
+        case wxBOTTOM:
+            rectClip.y += selectedOffset;
+            rectClip.height -= selectedOffset;
+            break;
+
+        case wxLEFT:
+            rectClip.width -= selectedOffset;
+            break;
+
+        case wxRIGHT:
+            rectClip.x += selectedOffset;
+            rectClip.width -= selectedOffset;
+            break;
+
+        default:
+            wxFAIL_MSG("unreachable");
+    }
+
+    return rectClip;
+}
+
 // Flags may include:
 // - wxCONTROL_SELECTED for the currently selected tab
 // - wxCONTROL_CURRENT for the "hot" tab, i.e. the one under mouse pointer
@@ -1059,38 +1098,7 @@ DrawNotebookTab(wxWindow* win,
     wxColour colTab;
     if ( flags & wxCONTROL_SELECTED )
     {
-        // Selected tab literally stands out, so make it bigger -- but clip
-        // drawing to ensure we don't draw the inner border of the inflated
-        // selected tab rectangle, it shouldn't overflow into the notebook
-        // page area.
-        rectTab.Inflate(selectedOffset);
-
-        wxRect rectClip = rectTab;
-        switch ( tabOrient )
-        {
-            case wxTOP:
-                rectClip.height -= selectedOffset;
-                break;
-
-            case wxBOTTOM:
-                rectClip.y += selectedOffset;
-                rectClip.height -= selectedOffset;
-                break;
-
-            case wxLEFT:
-                rectClip.width -= selectedOffset;
-                break;
-
-            case wxRIGHT:
-                rectClip.x += selectedOffset;
-                rectClip.width -= selectedOffset;
-                break;
-
-            default:
-                wxFAIL_MSG("unreachable");
-        }
-
-        dc.SetClippingRegion(rectClip);
+        dc.SetClippingRegion(ExpandSelectedTab(rectTab, tabOrient));
 
         colTab = win->GetBackgroundColour();
     }
