@@ -415,6 +415,12 @@ void SpinBtnWidgetsPage::CreateSpin()
     m_spinbtn = new wxSpinButton(this, SpinBtnPage_SpinBtn,
                                  wxDefaultPosition, wxDefaultSize,
                                  flags);
+<<<<<<< HEAD
+=======
+
+    NotifyWidgetRecreation(m_spinbtn);
+
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     m_spinbtn->SetValue(val);
     m_spinbtn->SetRange(m_min, m_max);
 
@@ -424,14 +430,22 @@ void SpinBtnWidgetsPage::CreateSpin()
                                 flags | textFlags,
                                 m_min, m_max, val);
 
+<<<<<<< HEAD
+=======
+    NotifyWidgetRecreation(m_spinctrl);
+
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     m_spinctrldbl = new wxSpinCtrlDouble(this, SpinBtnPage_SpinCtrlDouble,
                                          wxString::Format("%d", val),
                                          wxDefaultPosition, wxDefaultSize,
                                          flags | textFlags,
                                          m_min, m_max, val, 0.1);
 
+<<<<<<< HEAD
     NotifyWidgetRecreation(m_spinbtn);
     NotifyWidgetRecreation(m_spinctrl);
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     NotifyWidgetRecreation(m_spinctrldbl);
 
     // Add spacers, labels and spin controls to the sizer.

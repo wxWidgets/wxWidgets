@@ -1034,6 +1034,7 @@ void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 namespace
 {
 
+<<<<<<< HEAD
 // Note that FromDIP() should _not_ be used here, as 2px offset is used
 // even in high DPI.
 constexpr int selectedOffset = 2;
@@ -1078,13 +1079,18 @@ ExpandSelectedTab(wxRect& rectTab, wxDirection tabOrient)
     return rectClip;
 }
 
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 // Flags may include:
 // - wxCONTROL_SELECTED for the currently selected tab
 // - wxCONTROL_CURRENT for the "hot" tab, i.e. the one under mouse pointer
 // - wxCONTROL_SPECIAL for the first tab.
+<<<<<<< HEAD
 //
 // Note that this function relies on the appropriate pen being selected into
 // the DC and uses the current pen for drawing the tab borders.
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 void
 DrawNotebookTab(wxWindow* win,
                 wxDC& dc,
@@ -1094,11 +1100,57 @@ DrawNotebookTab(wxWindow* win,
                 wxDirection tabOrient,
                 int flags = wxCONTROL_NONE)
 {
+<<<<<<< HEAD
+=======
+    // This colour is just an approximation which seems to look acceptable.
+    dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+
+    // Note that FromDIP() should _not_ be used here, as 2px offset is used
+    // even in high DPI.
+    const int selectedOffset = 2;
+    const int labelOffset = 3*selectedOffset;
+
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     wxRect rectTab = rectOrig;
     wxColour colTab;
     if ( flags & wxCONTROL_SELECTED )
     {
+<<<<<<< HEAD
         dc.SetClippingRegion(ExpandSelectedTab(rectTab, tabOrient));
+=======
+        // Selected tab literally stands out, so make it bigger -- but clip
+        // drawing to ensure we don't draw the inner border of the inflated
+        // selected tab rectangle, it shouldn't overflow into the notebook
+        // page area.
+        rectTab.Inflate(selectedOffset);
+
+        wxRect rectClip = rectTab;
+        switch ( tabOrient )
+        {
+            case wxTOP:
+                rectClip.height -= selectedOffset;
+                break;
+
+            case wxBOTTOM:
+                rectClip.y += selectedOffset;
+                rectClip.height -= selectedOffset;
+                break;
+
+            case wxLEFT:
+                rectClip.width -= selectedOffset;
+                break;
+
+            case wxRIGHT:
+                rectClip.x += selectedOffset;
+                rectClip.width -= selectedOffset;
+                break;
+
+            default:
+                wxFAIL_MSG("unreachable");
+        }
+
+        dc.SetClippingRegion(rectClip);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
         colTab = win->GetBackgroundColour();
     }
@@ -1267,6 +1319,7 @@ void wxNotebook::MSWNotebookPaint(wxDC& dc)
     };
 
     const size_t pages = GetPageCount();
+<<<<<<< HEAD
     if ( !pages )
         return;
 
@@ -1313,6 +1366,8 @@ void wxNotebook::MSWNotebookPaint(wxDC& dc)
     dc.DrawLine(ptStart, ptEnd);
 
     // Then draw all the individual tabs.
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     for ( size_t n = 0; n < pages; ++n )
     {
         if ( static_cast<int>(n) == selected )

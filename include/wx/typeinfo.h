@@ -24,6 +24,7 @@
 
 #include "wx/defs.h"
 
+<<<<<<< HEAD
 //
 // Left for compatibility reasons
 //
@@ -34,6 +35,8 @@
 #define WX_DEFINE_TYPEINFO(CLS)
 #define WX_DECLARE_ABSTRACT_TYPEINFO(CLS)
 
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 #ifndef wxNO_RTTI
 
 //
@@ -48,7 +51,17 @@
 #endif
 
 #include <typeinfo>
+<<<<<<< HEAD
 #include <cstring>
+=======
+#include <string.h>
+
+#define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC)
+#define WX_DECLARE_TYPEINFO_INLINE(CLS)
+#define WX_DECLARE_TYPEINFO(CLS)
+#define WX_DEFINE_TYPEINFO(CLS)
+#define WX_DECLARE_ABSTRACT_TYPEINFO(CLS)
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
 #if wxTRUST_CPP_RTTI
 
@@ -95,7 +108,11 @@ private:
 
 //
 // When C++ RTTI is not available, we will have to make the type comparison
+<<<<<<< HEAD
 // using pointer to a dummy static member variable. This will fail if
+=======
+// using pointer to a dummy static member function. This will fail if
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 // declared type is used across DLL boundaries, although using
 // WX_DECLARE_TYPEINFO() and WX_DEFINE_TYPEINFO() pair instead of
 // WX_DECLARE_TYPEINFO_INLINE() should fix this. However, that approach is
@@ -103,6 +120,7 @@ private:
 // class.
 //
 
+<<<<<<< HEAD
 class wxTypeIdentifier
 {
 public:
@@ -149,6 +167,50 @@ wxTypeIdentifier wxTypeId(const T&)
 {
     return wxTypeIdentifier{&wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo};
 }
+=======
+typedef void (*wxTypeIdentifier)();
+
+// Use this macro to declare type info with specified static function
+// IDENTFUNC used as type identifier. Usually you should only use
+// WX_DECLARE_TYPEINFO() or WX_DECLARE_TYPEINFO_INLINE() however.
+#define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC) \
+public: \
+    virtual wxTypeIdentifier GetWxTypeId() const override \
+    { \
+        return reinterpret_cast<wxTypeIdentifier> \
+            (&IDENTFUNC); \
+    }
+
+// Use this macro to declare type info with externally specified
+// type identifier, defined with WX_DEFINE_TYPEINFO().
+#define WX_DECLARE_TYPEINFO(CLS) \
+private: \
+    static CLS sm_wxClassInfo(); \
+_WX_DECLARE_TYPEINFO_CUSTOM(CLS, sm_wxClassInfo)
+
+// Use this macro to implement type identifier function required by
+// WX_DECLARE_TYPEINFO().
+// NOTE: CLS is required to have default ctor. If it doesn't
+//       already, you should provide a private dummy one.
+#define WX_DEFINE_TYPEINFO(CLS) \
+CLS CLS::sm_wxClassInfo() { return CLS(); }
+
+// Use this macro to declare type info fully inline in class.
+// NOTE: CLS is required to have default ctor. If it doesn't
+//       already, you should provide a private dummy one.
+#define WX_DECLARE_TYPEINFO_INLINE(CLS) \
+private: \
+    static CLS sm_wxClassInfo() { return CLS(); } \
+_WX_DECLARE_TYPEINFO_CUSTOM(CLS, sm_wxClassInfo)
+
+#define wxTypeId(OBJ) (OBJ).GetWxTypeId()
+
+// Because abstract classes cannot be instantiated, we use
+// this macro to define pure virtual type interface for them.
+#define WX_DECLARE_ABSTRACT_TYPEINFO(CLS) \
+public: \
+    virtual wxTypeIdentifier GetWxTypeId() const = 0;
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
 #endif // wxNO_RTTI/!wxNO_RTTI
 

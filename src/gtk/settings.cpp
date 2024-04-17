@@ -269,6 +269,7 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
         return;
     }
 
+<<<<<<< HEAD
     wxLogTrace(TRACE_DARKMODE, "Current GTK theme is \"%s\"", themeName);
 
     const wxString theme = wxString::FromUTF8(themeName);
@@ -284,6 +285,16 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
 
     if ( posDark != wxString::npos )
         preferDarkPrev = TRUE;
+=======
+    // We don't need to enable prefer-dark if the theme is already dark
+    if (strstr(themeName, "-dark") || strstr(themeName, "-Dark"))
+    {
+        wxLogTrace(TRACE_DARKMODE, "Force dark mode for theme \"%s\"", themeName);
+        preferDarkPrev = TRUE;
+    }
+
+    g_free(themeName);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
     gboolean preferDark = FALSE;
     switch ( colorScheme )
@@ -309,6 +320,7 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
 
     UpdatePreferDark(preferDark);
 
+<<<<<<< HEAD
     if ( posDark != wxString::npos )
     {
         // We need to stop using the dark theme variant when switching to the
@@ -322,6 +334,8 @@ void DoUpdateColorScheme(wxGTKImpl::ColorScheme colorScheme)
             "gtk-theme-name", themeNew.utf8_str().data(), nullptr);
     }
 
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     for (int i = wxSYS_COLOUR_MAX; i--;)
         gs_systemColorCache[i].UnRef();
 

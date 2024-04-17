@@ -34,7 +34,10 @@
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/webkit.h"
 #include "wx/gtk/private/error.h"
+<<<<<<< HEAD
 #include "wx/gtk/private/variant.h"
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 #include "wx/private/jsscriptwrapper.h"
 #include <webkit2/webkit2.h>
 #include <JavaScriptCore/JSValueRef.h>
@@ -222,7 +225,11 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
 
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitCtrl->GetId(),
+<<<<<<< HEAD
                          wxString::FromUTF8( uri ),
+=======
+                         wxString( uri, wxConvUTF8 ),
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
                          target,
                          wxGetNavigationActionFlags(action));
     event.SetEventObject(webKitCtrl);
@@ -251,6 +258,11 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
     webKitWindow->m_busy = false;
     wxWebViewNavigationError type = wxWEBVIEW_NAV_ERR_OTHER;
 
+<<<<<<< HEAD
+=======
+    wxString description(error->message, wxConvUTF8);
+
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     if (strcmp(g_quark_to_string(error->domain), "soup_http_error_quark") == 0)
     {
         switch (error->code)
@@ -352,7 +364,11 @@ wxgtk_webview_webkit_load_failed(WebKitWebView *,
                          webKitWindow->GetId(),
                          uri, "");
     event.SetEventObject(webKitWindow);
+<<<<<<< HEAD
     event.SetString(wxString::FromUTF8(error->message));
+=======
+    event.SetString(description);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     event.SetInt(type);
 
 
@@ -465,7 +481,11 @@ wxgtk_webview_webkit_title_changed(GtkWidget* widget,
                          webKitCtrl->GetCurrentURL(),
                          "");
     event.SetEventObject(webKitCtrl);
+<<<<<<< HEAD
     event.SetString(wxString::FromUTF8(title));
+=======
+    event.SetString(wxString(title, wxConvUTF8));
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
     webKitCtrl->HandleWindowEvent(event);
 
@@ -618,7 +638,11 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
                                 GDBusServer *dbusServer)
 {
     const char *address = g_dbus_server_get_client_address(dbusServer);
+<<<<<<< HEAD
     wxGtkVariant user_data(g_variant_new("(s)", address));
+=======
+    GVariant *user_data = g_variant_new("(s)", address);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
     // Try to setup extension loading from the location it is supposed to be
     // normally installed in.
@@ -645,7 +669,11 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     }
 
     webkit_web_context_set_web_extensions_initialization_user_data(context,
+<<<<<<< HEAD
                                                                    user_data.Release());
+=======
+                                                                   user_data);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 }
 
 static gboolean
@@ -1318,7 +1346,11 @@ wxString wxWebViewWebKit::GetPageSource() const
 
     if (source)
     {
+<<<<<<< HEAD
         const wxString& wxs = wxString::FromUTF8((const char*)source, length);
+=======
+        wxString wxs(source, wxConvUTF8, length);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         free(source);
         return wxs;
     }
@@ -1363,8 +1395,13 @@ bool wxWebViewWebKit::CanSetZoomType(wxWebViewZoomType) const
 void wxWebViewWebKit::DoSetPage(const wxString& html, const wxString& baseUri)
 {
     webkit_web_view_load_html(m_web_view,
+<<<<<<< HEAD
                               html.utf8_str(),
                               baseUri.utf8_str());
+=======
+                              html.mb_str(wxConvUTF8),
+                              baseUri.mb_str(wxConvUTF8));
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 }
 
 void wxWebViewWebKit::Print()
@@ -1407,11 +1444,23 @@ void wxWebViewWebKit::DeleteSelection()
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
+<<<<<<< HEAD
         wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "DeleteSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   nullptr, nullptr));
+=======
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
+                                                  "DeleteSelection",
+                                                  g_variant_new("(t)", page_id),
+                                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                                  nullptr, nullptr);
+        if (retval)
+        {
+            g_variant_unref(retval);
+        }
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     }
 }
 
@@ -1421,6 +1470,7 @@ bool wxWebViewWebKit::HasSelection() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
+<<<<<<< HEAD
         wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "HasSelection",
                                                   g_variant_new("(t)", page_id),
@@ -1431,6 +1481,18 @@ bool wxWebViewWebKit::HasSelection() const
             gboolean has_selection = FALSE;
             retval.Get("(b)", &has_selection);
 
+=======
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
+                                                  "HasSelection",
+                                                  g_variant_new("(t)", page_id),
+                                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                                  nullptr, nullptr);
+        if (retval)
+        {
+            gboolean has_selection = FALSE;
+            g_variant_get(retval, "(b)", &has_selection);
+            g_variant_unref(retval);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
             return has_selection != 0;
         }
     }
@@ -1449,6 +1511,7 @@ wxString wxWebViewWebKit::GetSelectedText() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
+<<<<<<< HEAD
         wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedText",
                                                   g_variant_new("(t)", page_id),
@@ -1459,6 +1522,19 @@ wxString wxWebViewWebKit::GetSelectedText() const
             char *text;
             retval.Get("(&s)", &text);
             return wxString::FromUTF8(text);
+=======
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
+                                                  "GetSelectedText",
+                                                  g_variant_new("(t)", page_id),
+                                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                                  nullptr, nullptr);
+        if (retval)
+        {
+            char *text;
+            g_variant_get(retval, "(s)", &text);
+            g_variant_unref(retval);
+            return wxString(text, wxConvUTF8);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         }
     }
     return wxString();
@@ -1470,6 +1546,7 @@ wxString wxWebViewWebKit::GetSelectedSource() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
+<<<<<<< HEAD
         wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetSelectedSource",
                                                   g_variant_new("(t)", page_id),
@@ -1480,6 +1557,19 @@ wxString wxWebViewWebKit::GetSelectedSource() const
             char *source;
             retval.Get("(&s)", &source);
             return wxString::FromUTF8(source);
+=======
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
+                                                  "GetSelectedSource",
+                                                  g_variant_new("(t)", page_id),
+                                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                                  nullptr, nullptr);
+        if (retval)
+        {
+            char *source;
+            g_variant_get(retval, "(s)", &source);
+            g_variant_unref(retval);
+            return wxString(source, wxConvUTF8);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         }
     }
     return wxString();
@@ -1491,11 +1581,23 @@ void wxWebViewWebKit::ClearSelection()
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
+<<<<<<< HEAD
         wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "ClearSelection",
                                                   g_variant_new("(t)", page_id),
                                                   G_DBUS_CALL_FLAGS_NONE, -1,
                                                   nullptr, nullptr));
+=======
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
+                                                  "ClearSelection",
+                                                  g_variant_new("(t)", page_id),
+                                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                                  nullptr, nullptr);
+        if (retval)
+        {
+            g_variant_unref(retval);
+        }
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     }
 }
 
@@ -1505,6 +1607,7 @@ wxString wxWebViewWebKit::GetPageText() const
     if (extension)
     {
         guint64 page_id = webkit_web_view_get_page_id(m_web_view);
+<<<<<<< HEAD
         wxGtkVariant retval(g_dbus_proxy_call_sync(extension,
                                                   "GetPageText",
                                                   g_variant_new("(t)", page_id),
@@ -1515,6 +1618,19 @@ wxString wxWebViewWebKit::GetPageText() const
             char *text;
             retval.Get("(&s)", &text);
             return wxString::FromUTF8(text);
+=======
+        GVariant *retval = g_dbus_proxy_call_sync(extension,
+                                                  "GetPageText",
+                                                  g_variant_new("(t)", page_id),
+                                                  G_DBUS_CALL_FLAGS_NONE, -1,
+                                                  nullptr, nullptr);
+        if (retval)
+        {
+            char *text;
+            g_variant_get(retval, "(s)", &text);
+            g_variant_unref(retval);
+            return wxString(text, wxConvUTF8);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         }
     }
     return wxString();

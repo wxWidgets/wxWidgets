@@ -452,11 +452,18 @@ macro(wx_add_library name)
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install
+<<<<<<< HEAD
         if(MSYS OR CYGWIN)
             # configure puts the .dll in the bin directory
             set(runtime_dir "bin")
         else()
             set(runtime_dir "lib")
+=======
+        set(runtime_dir "lib")
+        if(WIN32 AND NOT WIN32_MSVC_NAMING)
+            # configure puts the .dll in the bin directory
+            set(runtime_dir "bin")
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         endif()
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets

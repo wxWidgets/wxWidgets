@@ -555,11 +555,16 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
             wxWebView::GetBackendVersionInfo(backend).ToString());
 
         // Chromium backend can't be used immediately after creation, so wait
+<<<<<<< HEAD
         // until the browser is created before calling GetUserAgent(), but we
         // can't do it unconditionally neither as doing it with WebViewGTK
         // triggers https://gitlab.gnome.org/GNOME/gtk/-/issues/124 and just
         // kills the sample.
         const auto initShow = [this](){
+=======
+        // until the browser is created before calling GetUserAgent().
+        m_browser->Bind(wxEVT_WEBVIEW_CREATED, [this](wxWebViewEvent& event) {
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
             wxLogMessage("Web view created, user agent is \"%s\"", m_browser->GetUserAgent());
 
             // We need to synchronize this call with GetUserAgent() one, as
@@ -568,6 +573,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
             // order and we'd get the wrong user agent string back.
             if (!m_browser->AddScriptMessageHandler("wx"))
                 wxLogError("Could not add script message handler");
+<<<<<<< HEAD
         };
 
 #if wxUSE_WEBVIEW_CHROMIUM
@@ -584,6 +590,11 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
         {
             initShow();
         }
+=======
+
+            event.Skip();
+        });
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
 #ifndef __WXMAC__
         //We register the wxfs:// protocol for testing purposes

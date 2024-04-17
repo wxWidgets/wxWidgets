@@ -313,6 +313,7 @@ public:
     // for wxTextAutoCompleteFixed.
     virtual bool ChangeCompleter(wxTextCompleter* completer) = 0;
 
+<<<<<<< HEAD
     // We need to turn off wxTE_PROCESS_ENTER flag of our wxTextEntry while
     // the completion popup is shown to let it see Enter event and process it
     // on its own (e.g. to dismiss itself). This is done by "grab-notify" signal
@@ -348,6 +349,41 @@ public:
         }
 
         win->ToggleWindowStyle(wxTE_PROCESS_ENTER);
+=======
+    // We should toggle off wxTE_PROCESS_ENTER flag of our wxTextEntry while
+    // the completion popup is shown to let it see Enter event and process it
+    // on its own (e.g. to dismiss itself). This is done by "grab-notify" signal
+    // see wxTextCtrl::OnChar()
+    void ToggleProcessEnterFlag(bool toggleOff)
+    {
+        wxWindow* const win = GetEditableWindow(m_entry);
+
+        long flags = win->GetWindowStyleFlag();
+        if ( toggleOff )
+        {
+            // Store the original window flags before we change them.
+            m_hadProcessEnterFlag = (flags & wxTE_PROCESS_ENTER) != 0;
+            if ( !m_hadProcessEnterFlag )
+            {
+                // No need to do anything, it was already off.
+                return;
+            }
+
+            flags &= ~wxTE_PROCESS_ENTER;
+        }
+        else // Restore the original flags.
+        {
+            if ( !m_hadProcessEnterFlag )
+            {
+                // We hadn't turned it off, no need to turn it back on.
+                return;
+            }
+
+            flags |= wxTE_PROCESS_ENTER;
+        }
+
+        win->SetWindowStyleFlag(flags);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     }
 
     virtual ~wxTextAutoCompleteData()
@@ -378,6 +414,12 @@ protected:
         : m_entry(entry),
           m_widgetEntry(entry->GetEntry())
     {
+<<<<<<< HEAD
+=======
+        // This will be really set in ToggleProcessEnterFlag().
+        m_hadProcessEnterFlag = false;
+
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         GtkEntryCompletion* const completion = gtk_entry_completion_new();
 
         gtk_entry_completion_set_text_column (completion, 0);
@@ -419,6 +461,7 @@ protected:
     // And its GTK widget.
     GtkEntry* const m_widgetEntry;
 
+<<<<<<< HEAD
     // Number of times GTKOnPopupShown() was called with true argument minus
     // the number of times it was called with false argument.
     int m_popupShownCount = 0;
@@ -426,6 +469,11 @@ protected:
     // True if the window had wxTE_PROCESS_ENTER flag before we turned it off
     // in GTKOnPopupShown().
     bool m_hadProcessEnterFlag = false;
+=======
+    // True if the window had wxTE_PROCESS_ENTER flag before we turned it off
+    // in ToggleProcessEnterFlag().
+    bool m_hadProcessEnterFlag;
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
 };
@@ -577,7 +625,11 @@ wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
 {
     g_return_if_fail (GTK_IS_ENTRY(widget));
 
+<<<<<<< HEAD
     bool shown = false;
+=======
+    bool toggleOff = false;
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
     if ( gtk_widget_has_focus(widget) )
     {
@@ -587,10 +639,17 @@ wx_gtk_entry_parent_grab_notify (GtkWidget *widget,
         // shown on screen.
 
         if ( !was_grabbed )
+<<<<<<< HEAD
             shown = true;
     }
 
     data->GTKOnPopupShown(shown);
+=======
+            toggleOff = true;
+    }
+
+    data->ToggleProcessEnterFlag(toggleOff);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 }
 
 } // extern "C"

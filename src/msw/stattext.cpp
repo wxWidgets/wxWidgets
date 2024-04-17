@@ -164,7 +164,11 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
     {
         case WM_PAINT:
             // We only customize drawing of disabled labels in dark mode.
+<<<<<<< HEAD
             if ( IsThisEnabled() || !wxMSWDarkMode::IsActive() )
+=======
+            if ( IsEnabled() || !wxMSWDarkMode::IsActive() )
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
                 break;
 
             // For them, the default "greying out" of the text for the disabled
@@ -186,7 +190,12 @@ wxStaticText::MSWHandleMessage(WXLRESULT *result,
             *result = MSWDefWindowProc(WM_PAINT, wParam, lParam);
 
             updateStyle.TurnOn(WS_DISABLED).Apply();
+<<<<<<< HEAD
             m_foregroundColour = colFgOrig;
+=======
+            if ( m_hasFgCol )
+                m_foregroundColour = colFgOrig;
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
             return true;
     }

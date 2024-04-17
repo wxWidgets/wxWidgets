@@ -199,10 +199,15 @@ protected:
             page->ShowWithEffect(m_showEffect, m_showTimeout);
 
             // Unlike simple Show(), ShowWithEffect() doesn't necessarily give
+<<<<<<< HEAD
             // focus to the window, but we do expect the new page to have focus
             // if it's currently visible.
             if ( page->IsShownOnScreen() )
                 page->SetFocus();
+=======
+            // focus to the window, but we do expect the new page to have focus.
+            page->SetFocus();
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         }
         else
         {

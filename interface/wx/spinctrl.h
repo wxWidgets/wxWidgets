@@ -258,6 +258,7 @@ public:
            The user can use arrow keys to change the value.
     @style{wxSP_WRAP}
            The value wraps at the minimum and maximum.
+<<<<<<< HEAD
     @style{wxTE_PROCESS_ENTER}
         Indicates that the control should generate @c wxEVT_TEXT_ENTER
         events. Using this style will prevent the user from using the Enter key
@@ -270,6 +271,8 @@ public:
         Same as wxTE_CENTRE for wxTextCtrl: the text is centered.
     @style{wxALIGN_RIGHT}
         Same as wxTE_RIGHT for wxTextCtrl: the text is right aligned.
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     @endStyleTable
 
     @beginEventEmissionTable{wxSpinDoubleEvent}

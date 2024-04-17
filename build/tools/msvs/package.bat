@@ -34,7 +34,10 @@ rem Change to wx root folder
 
 set curr_dir1=%cd%
 cd ..\..\..
+<<<<<<< HEAD
 set base_dir=%cd%
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 
 mkdir %packagePath%
 mkdir %packagePath%\%VCver%
@@ -91,6 +94,7 @@ cd %packagePath%\%VCver%
 
 del wxwidgets.props
 
+<<<<<<< HEAD
 rem Change to the directory containing licence file in order to include it
 rem into the archives without any path.
 cd %base_dir%\docs
@@ -103,6 +107,10 @@ cd %base_dir%\docs
 cd %packagePath%\%VCver%
 del sha1.txt
 rem fciv requires a complete path to files
+=======
+del sha1.txt
+rem fciv requies a complete path to files
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 fciv %cd%\. -type *.7z -sha1 -wp >> sha1.txt
 
 

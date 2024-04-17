@@ -46,6 +46,7 @@
 
 namespace // anonymous
 {
+<<<<<<< HEAD
 
 inline COLORREF GetTransparentColor()
 {
@@ -55,6 +56,8 @@ inline COLORREF GetTransparentColor()
     return RGB(0, 1, 2);
 }
 
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
 wxWindow* wxCreateOverlayWindow(const wxRect& rect, int alpha, HWND hWndInsertAfter)
 {
     auto overlayWin = new wxWindow();
@@ -75,9 +78,13 @@ wxWindow* wxCreateOverlayWindow(const wxRect& rect, int alpha, HWND hWndInsertAf
 
     if ( alpha >= 0 )
     {
+<<<<<<< HEAD
         if ( !::SetLayeredWindowAttributes(GetHwndOf(overlayWin),
                                            GetTransparentColor(),
                                            alpha,
+=======
+        if ( !::SetLayeredWindowAttributes(GetHwndOf(overlayWin), 0, alpha,
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
                                            LWA_COLORKEY | LWA_ALPHA) )
         {
             wxLogLastError(wxS("SetLayeredWindowAttributes()"));
@@ -236,7 +243,14 @@ void wxOverlayImpl::Clear(wxDC* WXUNUSED(dc))
 {
     wxCHECK_RET( IsOk(), wxS("overlay not initialized") );
 
+<<<<<<< HEAD
     m_memDC.SetBackground(wxColour(GetTransparentColor()));
+=======
+    // Note that the colour used here is the same one that we specify as
+    // LWA_COLORKEY when creating the layered window, so it is actually
+    // transparent.
+    m_memDC.SetBackground(*wxBLACK);
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     m_memDC.Clear();
 }
 
@@ -263,9 +277,13 @@ void wxOverlayImpl::SetOpacity(int alpha)
     {
         m_alpha = wxClip(alpha, 0, 255);
 
+<<<<<<< HEAD
         if ( !::SetLayeredWindowAttributes(GetHwndOf(m_overlayWindow),
                                            GetTransparentColor(),
                                            m_alpha,
+=======
+        if ( !::SetLayeredWindowAttributes(GetHwndOf(m_overlayWindow), 0, m_alpha,
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
                                            LWA_COLORKEY | LWA_ALPHA) )
         {
             wxLogLastError(wxS("SetLayeredWindowAttributes()"));

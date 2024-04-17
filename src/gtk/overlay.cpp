@@ -167,8 +167,11 @@ void wxOverlayImpl::EndDrawing(wxDC* dc)
         return;
 
     cairo_pattern_t* pattern = cairo_pop_group(m_cr);
+<<<<<<< HEAD
     if (m_surface)
         cairo_surface_destroy(m_surface);
+=======
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
     cairo_pattern_get_surface(pattern, &m_surface);
     cairo_surface_reference(m_surface);
     cairo_pattern_destroy(pattern);

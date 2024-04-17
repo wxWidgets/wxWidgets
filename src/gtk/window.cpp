@@ -4788,12 +4788,17 @@ bool wxWindowGTK::GTKHandleFocusIn()
 
     if ( gs_pendingFocus )
     {
+<<<<<<< HEAD
         if ( gs_pendingFocus != gs_currentFocus )
         {
             wxLogTrace(TRACE_FOCUS, "Resetting pending focus %s on focus set",
                        wxDumpWindow(gs_pendingFocus));
         }
 
+=======
+        wxLogTrace(TRACE_FOCUS, "Resetting pending focus %s on focus set",
+                   wxDumpWindow(gs_pendingFocus));
+>>>>>>> ee309e078a (Restore #include wx/time.h from wx/propgrid/propgrid.h)
         gs_pendingFocus = nullptr;
     }
 
