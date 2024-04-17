@@ -453,7 +453,7 @@ macro(wx_add_library name)
 
         # Setup install
         set(runtime_dir "lib")
-        if(WIN32 AND NOT WIN32_MSVC_NAMING)
+        if(WIN32 AND NOT WIN32_MSVC_NAMING OR CYGWIN)
             # configure puts the .dll in the bin directory
             set(runtime_dir "bin")
         endif()
