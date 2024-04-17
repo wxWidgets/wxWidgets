@@ -32,6 +32,7 @@
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
+#include "wx/qt/private/converter.h"
 
 #include <memory>
 
@@ -364,7 +365,7 @@ public:
         : wxGraphicsObjectRefData(renderer),
           m_color(col.GetQColor())
     {
-        m_font.setFamily(QString(facename));
+        m_font.setFamily(wxQtConvertString(facename));
         m_font.setPixelSize(static_cast<int>(sizeInPixels));
         if ( flags & wxFONTFLAG_LIGHT )
             m_font.setWeight(QFont::Light);
@@ -993,7 +994,7 @@ public:
             metrics = m_qtPainter->fontMetrics();
         }
 
-        const QRect boundingRect = metrics.boundingRect(QString(str));
+        const QRect boundingRect = metrics.boundingRect(wxQtConvertString(str));
 
         if ( width )
             *width = boundingRect.width();
@@ -1031,7 +1032,7 @@ public:
         {
             const wxString subString = text.substr(0, i+1);
             const QRect
-                boundingRect = metrics.boundingRect(QString(subString));
+                boundingRect = metrics.boundingRect(wxQtConvertString(subString));
             widths[i] = boundingRect.width();
         }
     }
@@ -1055,7 +1056,7 @@ protected:
         while ( tokenizer.HasMoreTokens() )
         {
             const wxString line = tokenizer.GetNextToken();
-            m_qtPainter->drawText(x, y + metrics.ascent(), QString(line));
+            m_qtPainter->drawText(x, y + metrics.ascent(), wxQtConvertString(line));
             y += metrics.lineSpacing();
         }
     }
