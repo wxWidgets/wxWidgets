@@ -35,38 +35,6 @@
 
 #include <memory>
 
-namespace
-{
-
-// Ensure that the given painter is active by calling begin() if it isn't. If
-// it already is, don't do anything.
-class EnsurePainterIsActive
-{
-public:
-    explicit EnsurePainterIsActive(QPainter* painter)
-        : m_painter(painter),
-          m_wasActive(painter->isActive())
-    {
-        if ( !m_wasActive )
-            m_painter->begin(&m_picture);
-    }
-
-    ~EnsurePainterIsActive()
-    {
-        if ( !m_wasActive )
-            m_painter->end();
-    }
-
-private:
-    QPainter* m_painter;
-    QPicture m_picture;
-    bool m_wasActive;
-
-    wxDECLARE_NO_COPY_CLASS(EnsurePainterIsActive);
-};
-
-} // anonymous namespace
-
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
 public:
@@ -1015,13 +983,16 @@ public:
         if ( str.empty() && !descent && !externalLeading )
             return;
 
-        EnsurePainterIsActive active(m_qtPainter);
-
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
-        m_qtPainter->setFont(fontData->GetFont());
+        QFontMetrics metrics(fontData->GetFont());
 
-        const QFontMetrics metrics = m_qtPainter->fontMetrics();
+        if ( m_qtPainter->isActive() )
+        {
+            m_qtPainter->setFont(fontData->GetFont());
+            metrics = m_qtPainter->fontMetrics();
+        }
+
         const QRect boundingRect = metrics.boundingRect(QString(str));
 
         if ( width )
@@ -1041,13 +1012,15 @@ public:
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetPartialTextExtents - no valid font set" );
 
-        EnsurePainterIsActive active(m_qtPainter);
-
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
-        m_qtPainter->setFont(fontData->GetFont());
+        QFontMetrics metrics(fontData->GetFont());
 
-        const QFontMetrics metrics = m_qtPainter->fontMetrics();
+        if ( m_qtPainter->isActive() )
+        {
+            m_qtPainter->setFont(fontData->GetFont());
+            metrics = m_qtPainter->fontMetrics();
+        }
 
         const size_t textLength = text.length();
 
