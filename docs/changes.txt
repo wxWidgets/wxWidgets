@@ -297,6 +297,7 @@ wxGTK:
 - Support setting thickness when creating wxGauge with GTK >= 3.20 (#24107).
 - Fix handling binary data in wxSecretStore (Martin Corino, #24351).
 - Make GTKSuppressDiagnostics(), broken since 3.2.1, work again (#24432).
+- Fix wxTE_PROCESS_ENTER in wxGTK comboboxes with autocomplete (#24394).
 
 wxMSW:
 
