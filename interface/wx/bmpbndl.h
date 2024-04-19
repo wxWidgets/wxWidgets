@@ -296,6 +296,19 @@ public:
     /// @overload
     static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
 
+    /**
+        This function is only available when wxUSE_LUNASVG is defined.
+    */
+    static wxBitmapBundle FromSVG(const std::string& data, const wxSize& sizeDef);
+
+    /**
+        This function is only available when wxUSE_LUNASVG is defined.
+
+        @note You must call std::move() to pass the unique_ptr to this
+        function.
+    */
+    static wxBitmapBundle FromSVG(std::unique_ptr<lunasvg::Document> document,
+                                  const wxSize& sizeDef);
 
     /**
         Create a bundle from the SVG image loaded from the given file.
