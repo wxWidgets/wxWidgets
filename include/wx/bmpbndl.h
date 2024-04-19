@@ -20,6 +20,12 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_BASE wxVariant;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
+#if wxUSE_LUNASVG
+namespace lunasvg {
+    class Document;
+}
+#endif
+
 // ----------------------------------------------------------------------------
 // wxBitmapBundle provides 1 or more versions of a bitmap, all bundled together
 // ----------------------------------------------------------------------------
@@ -79,16 +85,26 @@ public:
     // support using wxDC::DrawSpline(), but currently we don't do it and so
     // FromSVG() is only available in the ports providing raw bitmap access.
 #ifdef wxHAS_SVG
-    // Create from the SVG data (data is supposed to be in UTF-8 encoding).
-    // Notice that the data here is non-const because it can be temporarily
-    // modified while parsing it.
+    // Create from the SVG data (data should be in UTF-8 encoding).
+    // Some implementations (e.g. nanosvg) modify the data in place and it's
+    // more efficient to provide them a non-const buffer if it's already
+    // available.
     wxNODISCARD static wxBitmapBundle FromSVG(char* data, const wxSize& sizeDef);
 
-    // This overload currently makes a copy of the data.
+    // If the implementation needs to modify the data, it will first make
+    // a copy of it, so this overload can be used with const data.
     wxNODISCARD static wxBitmapBundle FromSVG(const char* data, const wxSize& sizeDef);
 
     // This overload works for data not terminated with 0
     wxNODISCARD static wxBitmapBundle FromSVG(const wxByte* data, size_t len, const wxSize& sizeDef);
+
+#if wxUSE_LUNASVG
+    wxNODISCARD static wxBitmapBundle FromSVG(const std::string& data, const wxSize& sizeDef);
+
+    // You must pass the document parameter using std::move() so that wxBitmapBundle
+    // can take ownership of it.
+    wxNODISCARD static wxBitmapBundle FromSVG(std::unique_ptr<lunasvg::Document> document, const wxSize& sizeDef);
+#endif
 
     // Load SVG image from the given file (must be a local file, not an URL).
     wxNODISCARD static wxBitmapBundle FromSVGFile(const wxString& path, const wxSize& sizeDef);
