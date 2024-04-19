@@ -15,6 +15,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QBitmap>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPicture>
@@ -29,6 +30,7 @@
 #endif
 
 #include "wx/graphics.h"
+#include "wx/rawbmp.h"
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
@@ -138,29 +140,122 @@ private:
 class WXDLLIMPEXP_CORE wxQtBitmapData : public wxGraphicsBitmapData
 {
 public:
-    wxQtBitmapData(wxGraphicsRenderer* renderer, QPixmap* pixmap)
+    wxQtBitmapData(wxGraphicsRenderer* renderer, QPixmap pixmap)
         : wxGraphicsBitmapData(renderer),
           m_pixmap(pixmap)
     {
     }
 
     wxQtBitmapData(wxGraphicsRenderer* renderer, const wxBitmap& bmp)
-        : wxGraphicsBitmapData(renderer),
-          m_pixmap(bmp.GetHandle())
+        : wxGraphicsBitmapData(renderer)
     {
+        wxCHECK_RET( bmp.IsOk(), "Invalid bitmap");
+
+        const bool isSrcBpp32 = bmp.GetDepth() == 32;
+        const bool hasAlpha = bmp.HasAlpha();
+
+        QImage::Format imgFormat =
+            (isSrcBpp32 && hasAlpha) || bmp.GetMask() != nullptr
+            ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32;
+
+        auto qtImage = QImage(bmp.GetWidth(), bmp.GetHeight(), imgFormat);
+
+        const int stride = qtImage.bytesPerLine();
+
+        wxBitmap bmpSource = bmp;  // we need a non-const instance
+        wxUint32* data = reinterpret_cast<wxUint32*>(qtImage.bits());
+
+        if ( isSrcBpp32 )
+        {
+            // use the bitmap's alpha
+            wxAlphaPixelData pixData(bmpSource);
+            wxCHECK_RET( pixData, "Failed to gain raw access to bitmap data." );
+
+            wxAlphaPixelData::Iterator p(pixData);
+            for ( int y = 0; y < pixData.GetHeight(); ++y )
+            {
+                wxAlphaPixelData::Iterator rowStart = p;
+                wxUint32* const rowStartDst = data;
+                for ( int x = 0; x < pixData.GetWidth(); ++x )
+                {
+                    unsigned char alpha = hasAlpha ? p.Alpha() : wxALPHA_OPAQUE;
+                    // Bitmap pixel bits are already premultiplied.
+                    *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
+                    ++data;
+                    ++p;
+                }
+
+                data = rowStartDst + stride / 4;
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }
+        else // no alpha
+        {
+            wxNativePixelData pixData(bmpSource);
+            wxCHECK_RET( pixData, "Failed to gain raw access to bitmap data." );
+
+            wxNativePixelData::Iterator p(pixData);
+            for ( int y = 0; y < pixData.GetHeight(); ++y )
+            {
+                wxNativePixelData::Iterator rowStart = p;
+                wxUint32* const rowStartDst = data;
+                for ( int x = 0; x < pixData.GetWidth(); ++x )
+                {
+                    *data = (wxALPHA_OPAQUE << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue() );
+                    ++data;
+                    ++p;
+                }
+
+                data = rowStartDst + stride / 4;
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }
+
+        // if there is a mask, set the alpha bytes in the target buffer to
+        // fully transparent or retain original value
+        if ( bmp.GetMask() )
+        {
+            wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
+            data = reinterpret_cast<wxUint32*>(qtImage.bits());
+            wxNativePixelData pixData(bmpMask);
+            wxCHECK_RET( pixData, "Failed to gain raw access to mask data." );
+
+            wxNativePixelData::Iterator p(pixData);
+            for ( int y = 0; y < pixData.GetHeight(); ++y )
+            {
+                wxNativePixelData::Iterator rowStart = p;
+                wxUint32* const rowStartDst = data;
+                for ( int x = 0; x < pixData.GetWidth(); ++x )
+                {
+                    if ( p.Red()+p.Green()+p.Blue() == 0 )
+                        *data = 0;
+
+                    ++data;
+                    ++p;
+                }
+
+                data = rowStartDst + stride / 4;
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }
+
+        m_pixmap = QPixmap::fromImage(qtImage);
     }
 
-    QPixmap* GetPixmap() const
+    QPixmap GetPixmap() const
     {
         return m_pixmap;
     }
 
     virtual void* GetNativeBitmap() const override
     {
-        return m_pixmap;
+        return const_cast<QPixmap*>(&m_pixmap);
     }
 
-    static const QPixmap* GetPixmapFromBitmap(const wxGraphicsBitmap& bitmap)
+    static const QPixmap GetPixmapFromBitmap(const wxGraphicsBitmap& bitmap)
     {
         const wxQtBitmapData* const
             data = static_cast<const wxQtBitmapData*>(bitmap.GetBitmapData());
@@ -169,15 +264,15 @@ public:
 
 
 #if wxUSE_IMAGE
-    wxImage DoConvertToImage() const
+    wxImage ConvertToImage() const
     {
-        wxBitmap bitmap(*m_pixmap);
+        wxBitmap bitmap(m_pixmap);
         return bitmap.ConvertToImage();
     }
 #endif // wxUSE_IMAGE
 
 private:
-    QPixmap* m_pixmap;
+    QPixmap m_pixmap;
 
     wxDECLARE_NO_COPY_CLASS(wxQtBitmapData);
 };
@@ -930,8 +1025,8 @@ public:
     DrawBitmap(const wxGraphicsBitmap& bmp,
                wxDouble x, wxDouble y, wxDouble w, wxDouble h) override
     {
-        const QPixmap* pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
-        m_qtPainter->drawPixmap(x, y, w, h, *pixmap);
+        const auto pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
+        m_qtPainter->drawPixmap(x, y, w, h, pixmap);
     }
 
     virtual void
@@ -1110,8 +1205,8 @@ public:
 
     ~wxQtImageContext()
     {
-        wxQtBitmapData bitmap(GetRenderer(), &m_pixmap);
-        m_image = bitmap.DoConvertToImage();
+        wxQtBitmapData bitmap(GetRenderer(), m_pixmap);
+        m_image = bitmap.ConvertToImage();
     }
 
 private:
@@ -1389,7 +1484,7 @@ wxImage wxQtGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 {
     const wxQtBitmapData* const
         data = static_cast<const wxQtBitmapData*>(bmp.GetBitmapData());
-    return data->DoConvertToImage();
+    return data->ConvertToImage();
 }
 #endif // wxUSE_IMAGE
 
@@ -1399,7 +1494,7 @@ wxQtGraphicsRenderer::CreateBitmapFromNativeBitmap(void* bitmap)
     wxGraphicsBitmap p;
     if ( bitmap != nullptr )
     {
-        p.SetRefData(new wxQtBitmapData(this, (QPixmap*)bitmap));
+        p.SetRefData(new wxQtBitmapData(this, *(QPixmap*)bitmap));
     }
     return p;
 }
@@ -1411,11 +1506,11 @@ wxQtGraphicsRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
 {
     wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
 
-    const QPixmap* sourcePixmap = wxQtBitmapData::GetPixmapFromBitmap(bitmap);
-    wxCHECK_MSG(sourcePixmap, wxNullGraphicsBitmap, wxS("Invalid bitmap"));
+    const auto sourcePixmap = wxQtBitmapData::GetPixmapFromBitmap(bitmap);
+    wxCHECK_MSG(!sourcePixmap.isNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
 
-    const int srcWidth = sourcePixmap->width();
-    const int srcHeight = sourcePixmap->height();
+    const int srcWidth = sourcePixmap.width();
+    const int srcHeight = sourcePixmap.height();
     const int dstWidth = wxRound(w);
     const int dstHeight = wxRound(h);
 
@@ -1423,7 +1518,7 @@ wxQtGraphicsRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
             x + dstWidth <= srcWidth && y + dstHeight <= srcHeight,
             wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
 
-    QPixmap* subPixmap = new QPixmap(sourcePixmap->copy(x, y, w, h));
+    QPixmap subPixmap = sourcePixmap.copy(x, y, w, h);
 
     wxGraphicsBitmap bmpRes;
     bmpRes.SetRefData(new wxQtBitmapData(this, subPixmap));
