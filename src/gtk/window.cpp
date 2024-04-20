@@ -4788,8 +4788,12 @@ bool wxWindowGTK::GTKHandleFocusIn()
 
     if ( gs_pendingFocus )
     {
-        wxLogTrace(TRACE_FOCUS, "Resetting pending focus %s on focus set",
-                   wxDumpWindow(gs_pendingFocus));
+        if ( gs_pendingFocus != gs_currentFocus )
+        {
+            wxLogTrace(TRACE_FOCUS, "Resetting pending focus %s on focus set",
+                       wxDumpWindow(gs_pendingFocus));
+        }
+
         gs_pendingFocus = nullptr;
     }
 
