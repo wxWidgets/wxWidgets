@@ -14,11 +14,7 @@
 // to remain separate from wxDrawOverlayResizeHint().
 inline wxBitmap wxPaneCreateStippleBitmap()
 {
-    // Notice that wxOverlay, under wxMSW, uses the wxBLACK colour i.e.(0,0,0)
-    // as the key colour for transparency. and using it for the stipple bitmap
-    // will make the sash feedback totaly invisible if the window's background
-    // colour is (192,192,192) or so. (1,1,1) is used instead.
-    unsigned char data[] = { 1,1,1,192,192,192, 192,192,192,1,1,1 };
+    unsigned char data[] = { 0,0,0,192,192,192, 192,192,192,0,0,0 };
     wxImage img(2,2,data,true);
     return wxBitmap(img);
 }
