@@ -1499,7 +1499,7 @@ void wxPropertyGrid::RegainColours()
         m_colLine = m_colCapBack;
 
     if ( !(m_coloursCustomized & CustomColour_DisabledText) )
-        m_colDisPropFore = m_colCapFore;
+        m_colDisPropFore = wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
 
     m_colEmptySpace = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
 }
