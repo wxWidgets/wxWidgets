@@ -28,4 +28,3 @@ The following versions of MinGW are actually used to create binaries (they all u
   * MinGW-TDM GCC-10.3.0 downloadable from [here](https://jmeubank.github.io/tdm-gcc/articles/2021-05/10.3.0-release"TDM GCC-10.3.0")
   * MSYS2 MinGW GCC-13.2.0 which is the last version installable using [MSYS2](https://www.msys2.org "www.msys2.org") package manager
   * MSYS2 MinGW GCC-12.2.0 which is the previous version of the MSYS2 installation
-
