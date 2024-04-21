@@ -14,9 +14,12 @@ if "%2" == "" goto :NOPARAMS
 
 rem Define compiler's bin directory
 if "%1" == "1220" (
-    set COMPBINDIR=G:\msys64\mingw%2\bin
+    set COMPBINDIR=G:\msys64-gcc1220\mingw%2\bin
 ) else (
     set COMPBINDIR=G:\MinGW%1-%2\bin
+)
+if "%1" == "1320" (
+    set COMPBINDIR=G:\msys64\mingw%2\bin
 )
 rem Define compiler's version string such as 810, 730_x64, 920TDM
 rem Also define extra spaces for "aligned" logs lines
