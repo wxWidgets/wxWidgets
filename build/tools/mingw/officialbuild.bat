@@ -76,10 +76,10 @@ rem ============================================ Create archives
 title Archives for %COMPNAME%
 cd %WXDIR%\
 if exist %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_Dev.7z del %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_Dev.7z
-%ZIP% a -t7z -mx4 -bb %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_Dev.7z -r %COMPNAME%_dll
+%ZIP% a -t7z -mx4 -bb %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_Dev.7z -r %COMPNAME%_dll docs\licence.txt
 set ERRLVL=%ERRORLEVEL%
 if exist %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_ReleaseDLL.7z del %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_ReleaseDLL.7z
-%ZIP% a -t7z -mx4 -bb %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_ReleaseDLL.7z -r -ir!lib\%COMPNAME%_dll\*.dll -xr!*ud_*.dll
+%ZIP% a -t7z -mx4 -bb %OUTPUTDIR%\%ARCHNAME%%COMPNAME%_ReleaseDLL.7z -r -ir!lib\%COMPNAME%_dll\*.dll -xr!*ud_*.dll docs\licence.txt
 set ERRLVL=%ERRLVL% / %ERRORLEVEL%
 echo %date% %time% : %COMPNAME%%XTRASPCS% archives  : ERRORLEVEL=%ERRLVL% >> %MAINLOGFILE%
 
