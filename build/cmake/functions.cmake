@@ -452,10 +452,11 @@ macro(wx_add_library name)
         set_target_properties(${name} PROPERTIES PROJECT_LABEL ${name_short})
 
         # Setup install
-        set(runtime_dir "lib")
-        if(WIN32 AND NOT WIN32_MSVC_NAMING)
+        if(MSYS OR CYGWIN)
             # configure puts the .dll in the bin directory
             set(runtime_dir "bin")
+        else()
+            set(runtime_dir "lib")
         endif()
         wx_install(TARGETS ${name}
             EXPORT wxWidgetsTargets
