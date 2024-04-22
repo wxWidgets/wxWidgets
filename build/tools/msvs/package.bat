@@ -95,9 +95,9 @@ rem Change to the directory containing licence file in order to include it
 rem into the archives without any path.
 cd %base_dir%\docs
 
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z licence.txt
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleaseDLL.7z licence.txt
-7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z licence.txt
+7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_Dev.7z licence.txt
+7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_ReleaseDLL.7z licence.txt
+7z a -t7z ..\%packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_Dev.7z licence.txt
 7z a -t7z %packagePath%\%VCver%\wxMSW-%wxMAJOR_VERSION%.%wxMINOR_VERSION%.%wxRELEASE_NUMBER%_%VCver%_x64_ReleaseDLL.7z licence.txt
 
 cd %packagePath%\%VCver%
