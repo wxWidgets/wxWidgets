@@ -63,6 +63,7 @@ private:
 class WXDLLIMPEXP_CORE wxPenBase : public wxGDIObject
 {
 public:
+    wxDECLARE_DEFAULT_COPY_AND_DEF(wxPenBase)
     virtual ~wxPenBase() { }
 
     virtual void SetColour(const wxColour& col) = 0;

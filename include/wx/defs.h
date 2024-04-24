@@ -3232,14 +3232,28 @@ typedef const void* WXWidget;
 
 #if defined(__cplusplus) && (__cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(14))
     #define wxMEMBER_DELETE = delete
+
+    // Note that all these macros don't require a semicolon after them because
+    // they are empty in the "#else" branch and can't be followed by a
+    // semicolon in that case.
     #define wxDECLARE_DEFAULT_COPY_CTOR(classname) \
         public:                                    \
             classname(const classname&) = default;
+
+    #define wxDECLARE_DEFAULT_COPY(classname)  \
+        wxDECLARE_DEFAULT_COPY_CTOR(classname) \
+        classname& operator=(const classname&) = default;
+
+    #define wxDECLARE_DEFAULT_COPY_AND_DEF(classname) \
+        classname() = default;                        \
+        wxDECLARE_DEFAULT_COPY(classname)
 #else
     #define wxMEMBER_DELETE
 
     // We can't do this without C++11 "= default".
     #define wxDECLARE_DEFAULT_COPY_CTOR(classname)
+    #define wxDECLARE_DEFAULT_COPY(classname)
+    #define wxDECLARE_DEFAULT_COPY_AND_DEF(classname)
 #endif
 
 #define wxDECLARE_NO_COPY_CLASS(classname)      \

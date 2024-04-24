@@ -50,6 +50,8 @@ public:
         SetPixelSize(pixelSize);
     }
 
+    wxDECLARE_DEFAULT_COPY(wxFont)
+
     bool Create(int size,
                 wxFontFamily family,
                 wxFontStyle style,

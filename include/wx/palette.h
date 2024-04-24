@@ -22,6 +22,8 @@
 class WXDLLIMPEXP_CORE wxPaletteBase: public wxGDIObject
 {
 public:
+    wxDECLARE_DEFAULT_COPY_AND_DEF(wxPaletteBase)
+
     virtual ~wxPaletteBase() { }
 
     virtual int GetColoursCount() const { wxFAIL_MSG( wxT("not implemented") ); return 0; }

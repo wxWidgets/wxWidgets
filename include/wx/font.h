@@ -341,7 +341,8 @@ public:
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     */
 
-    // creator function
+    wxDECLARE_DEFAULT_COPY_AND_DEF(wxFontBase)
+
     virtual ~wxFontBase();
 
 

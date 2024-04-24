@@ -298,6 +298,7 @@ wxGTK:
 - Fix handling binary data in wxSecretStore (Martin Corino, #24351).
 - Make GTKSuppressDiagnostics(), broken since 3.2.1, work again (#24432).
 - Fix wxTE_PROCESS_ENTER in wxGTK comboboxes with autocomplete (#24394).
+- Fix -Wdeprecated-copy-dtor warnings in the headers with gcc 14 (#24502).
 
 wxMSW:
 

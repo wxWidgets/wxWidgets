@@ -41,6 +41,7 @@ enum wxBrushStyle
 class WXDLLIMPEXP_CORE wxBrushBase: public wxGDIObject
 {
 public:
+    wxDECLARE_DEFAULT_COPY_AND_DEF(wxBrushBase)
     virtual ~wxBrushBase() { }
 
     virtual void SetColour(const wxColour& col) = 0;

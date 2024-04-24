@@ -35,6 +35,8 @@ public:
               const char maskBits[] = NULL,
               const wxColour* fg = NULL, const wxColour* bg = NULL);
 
+    wxDECLARE_DEFAULT_COPY(wxCursor)
+
     virtual wxPoint GetHotSpot() const wxOVERRIDE;
 
     virtual ~wxCursor();

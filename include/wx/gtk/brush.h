@@ -23,6 +23,9 @@ public:
 
     wxBrush( const wxColour &colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID );
     wxBrush( const wxBitmap &stippleBitmap );
+
+    wxDECLARE_DEFAULT_COPY(wxBrush)
+
     virtual ~wxBrush();
 
     bool operator==(const wxBrush& brush) const;

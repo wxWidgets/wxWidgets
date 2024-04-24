@@ -22,6 +22,8 @@ public:
 
     wxPen( const wxPenInfo& info );
 
+    wxDECLARE_DEFAULT_COPY(wxPen)
+
     virtual ~wxPen();
 
     bool operator==(const wxPen& pen) const;

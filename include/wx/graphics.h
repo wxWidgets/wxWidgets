@@ -129,6 +129,9 @@ class WXDLLIMPEXP_CORE wxGraphicsObject : public wxObject
 public:
     wxGraphicsObject();
     wxGraphicsObject( wxGraphicsRenderer* renderer );
+
+    wxDECLARE_DEFAULT_COPY(wxGraphicsObject)
+
     virtual ~wxGraphicsObject();
 
     bool IsNull() const;
@@ -208,6 +211,8 @@ class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
 {
 public:
     wxGraphicsMatrix() {}
+
+    wxDECLARE_DEFAULT_COPY(wxGraphicsMatrix)
 
     virtual ~wxGraphicsMatrix() {}
 
