@@ -50,12 +50,12 @@ jobs:
       - run:
           name: Build libraries
           command: |
-            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp'
+            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp -Wno-deprecated-copy-dtor'
 
       - run:
           name: Build tests
           command: |
-            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp' -C tests
+            make -k $wxBUILD_ARGS CXXFLAGS='-Werror -Wno-error=cpp -Wno-deprecated-copy-dtor' -C tests
 
       - run:
           name: Run tests
