@@ -1,0 +1,1 @@
+wxAll: Allow using lambdas with Bind() without RTTI (MapleLeaf-X, #14850).
