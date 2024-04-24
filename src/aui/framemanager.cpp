@@ -778,17 +778,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& paneInfo)
     if (pinfo.best_size == wxDefaultSize &&
         pinfo.window)
     {
-        pinfo.best_size = pinfo.window->GetClientSize();
-
-#if wxUSE_TOOLBAR
-        if (wxDynamicCast(pinfo.window, wxToolBar))
-        {
-            // GetClientSize() doesn't get the best size for
-            // a toolbar under some newer versions of wxWidgets,
-            // so use GetBestSize()
-            pinfo.best_size = pinfo.window->GetBestSize();
-        }
-#endif // wxUSE_TOOLBAR
+        pinfo.best_size = pinfo.window->GetBestSize();
 
         if (pinfo.min_size != wxDefaultSize)
         {

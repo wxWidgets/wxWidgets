@@ -935,6 +935,18 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_BOTTOM);
 }
 
+wxSize wxAuiToolBar::DoGetBestSize() const
+{
+    auto bestSize = GetMinSize();
+
+    if ( !bestSize.IsFullySpecified() )
+    {
+        bestSize.SetDefaults(FromDIP(wxSize(1, 1)));
+    }
+
+    return bestSize;
+}
+
 void wxAuiToolBar::SetArtProvider(wxAuiToolBarArt* art)
 {
     delete m_art;

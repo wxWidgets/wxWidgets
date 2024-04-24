@@ -49,8 +49,9 @@ inline QWidget* wxQtGetDrawingWidget(QAbstractScrollArea* qtContainer,
 
     return qtWidget;
 }
+}
 
-inline wxSize wxQtGetBestSize(QWidget* qtWidget)
+extern wxSize wxQtGetBestSize(QWidget* qtWidget)
 {
     auto size = qtWidget->sizeHint();
     // best effort to ensure a correct size (note that some qt controls
@@ -58,7 +59,7 @@ inline wxSize wxQtGetBestSize(QWidget* qtWidget)
     size = size.expandedTo(qtWidget->minimumSizeHint());
     return wxQtConvertSize(size);
 }
-}
+
 
 // Base Widget helper (no scrollbar, used by wxWindow)
 
@@ -324,6 +325,8 @@ void wxWindowQt::Init()
 #endif
     m_qtWindow = nullptr;
     m_qtContainer = nullptr;
+
+    m_pendingClientSize = wxDefaultSize;
 }
 
 wxWindowQt::wxWindowQt()
@@ -490,8 +493,7 @@ void wxWindowQt::PostCreation(bool generic)
         DoEnable(false);
 
     // The window might have been hidden before Create() and it needs to remain
-    // hidden in this case, so do it (unfortunately there doesn't seem to be
-    // any way to create the window initially hidden with Qt).
+    // hidden in this case.
     GetHandle()->setVisible(m_isShown);
 
     wxWindowCreateEvent event(this);
@@ -515,17 +517,10 @@ bool wxWindowQt::Show( bool show )
 
     // Show can be called before the underlying window is created:
 
-    QWidget *qtWidget = GetHandle();
-    if ( qtWidget == nullptr )
+    if ( QWidget *qtWidget = GetHandle() )
     {
-        return false;
+        qtWidget->setVisible( show );
     }
-
-    qtWidget->setVisible( show );
-
-    wxSizeEvent event(GetSize(), GetId());
-    event.SetEventObject(this);
-    HandleWindowEvent(event);
 
     return true;
 }
@@ -558,19 +553,7 @@ void wxWindowQt::SetFocus()
 
 /* static */ void wxWindowQt::QtReparent( QWidget *child, QWidget *parent )
 {
-    // Backup the attributes which will be changed during the reparenting:
-
-//    QPoint position = child->pos();
-//    bool isVisible = child->isVisible();
-    Qt::WindowFlags windowFlags = child->windowFlags();
-
-    child->setParent( parent );
-
-    // Restore the attributes:
-
-    child->setWindowFlags( windowFlags );
-//    child->move( position );
-//    child->setVisible( isVisible );
+    child->setParent( parent, child->windowFlags() );
 }
 
 bool wxWindowQt::Reparent( wxWindowBase *parent )
@@ -1025,7 +1008,6 @@ void wxWindowQt::DoScreenToClient( int *x, int *y ) const
 void wxWindowQt::DoCaptureMouse()
 {
     wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
-    GetHandle()->grabMouse();
     s_capturedWindow = this;
 }
 
@@ -1033,8 +1015,19 @@ void wxWindowQt::DoCaptureMouse()
 void wxWindowQt::DoReleaseMouse()
 {
     wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
-    GetHandle()->releaseMouse();
     s_capturedWindow = nullptr;
+}
+
+void wxWindowQt::QtReleaseMouseAndNotify()
+{
+    s_capturedWindow = nullptr;
+
+    while ( auto qtWidget = QWidget::mouseGrabber() )
+    {
+        qtWidget->releaseMouse();
+    }
+
+    NotifyCaptureLost();
 }
 
 wxWindowQt *wxWindowBase::GetCapture()
@@ -1122,12 +1115,20 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 
 void wxWindowQt::DoGetClientSize(int *width, int *height) const
 {
-    QWidget *qtWidget = QtGetClientWidget();
-    wxCHECK_RET( qtWidget, "window must be created" );
+    if ( m_pendingClientSize != wxDefaultSize )
+    {
+        if ( width )  *width = m_pendingClientSize.x;
+        if ( height ) *height = m_pendingClientSize.y;
+    }
+    else
+    {
+        QWidget *qtWidget = QtGetClientWidget();
+        wxCHECK_RET( qtWidget, "window must be created" );
 
-    const QRect geometry = qtWidget->geometry();
-    if (width)  *width = geometry.width();
-    if (height) *height = geometry.height();
+        const QRect geometry = qtWidget->geometry();
+        if (width)  *width = geometry.width();
+        if (height) *height = geometry.height();
+    }
 }
 
 
@@ -1148,24 +1149,6 @@ void wxWindowQt::DoSetClientSize(int width, int height)
     }
 }
 
-wxSize wxWindowQt::DoGetBestSize() const
-{
-    const wxSize size = wxWindowBase::DoGetBestSize();
-
-    if ( dynamic_cast<wxQtWidget*>(GetHandle()) )
-    {
-        return size;
-    }
-
-    wxSize bestSize = wxQtGetBestSize( GetHandle() );
-    if ( size.IsFullySpecified() )
-    {
-        bestSize.IncTo(size);
-    }
-
-    return bestSize;
-}
-
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 {
     QWidget *qtWidget = GetHandle();
@@ -1173,6 +1156,11 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
     qtWidget->move( x, y );
 
     wxQtSetClientSize(qtWidget, width, height);
+
+    if ( !qtWidget->isVisible() )
+    {
+        m_pendingClientSize = wxSize(width, height);
+    }
 }
 
 #if wxUSE_TOOLTIPS
@@ -1481,6 +1469,8 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 
 bool wxWindowQt::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEvent *event )
 {
+    m_pendingClientSize = wxDefaultSize;
+
     wxSizeEvent e( wxQtConvertSize( event->size() ) );
     e.SetEventObject(this);
 
