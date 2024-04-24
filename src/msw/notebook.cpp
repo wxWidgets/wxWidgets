@@ -1034,10 +1034,57 @@ void wxNotebook::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 namespace
 {
 
+// Note that FromDIP() should _not_ be used here, as 2px offset is used
+// even in high DPI.
+constexpr int selectedOffset = 2;
+constexpr int labelOffset = 3*selectedOffset;
+
+// This function expands the passed in rectangle in place and returns the
+// clipping rectangle which should be used when drawing it.
+wxRect
+ExpandSelectedTab(wxRect& rectTab, wxDirection tabOrient)
+{
+    // Selected tab literally stands out, so make it bigger -- but clip
+    // drawing to ensure we don't draw the inner border of the inflated
+    // selected tab rectangle, it shouldn't overflow into the notebook
+    // page area.
+    rectTab.Inflate(selectedOffset);
+
+    wxRect rectClip = rectTab;
+    switch ( tabOrient )
+    {
+        case wxTOP:
+            rectClip.height -= selectedOffset;
+            break;
+
+        case wxBOTTOM:
+            rectClip.y += selectedOffset;
+            rectClip.height -= selectedOffset;
+            break;
+
+        case wxLEFT:
+            rectClip.width -= selectedOffset;
+            break;
+
+        case wxRIGHT:
+            rectClip.x += selectedOffset;
+            rectClip.width -= selectedOffset;
+            break;
+
+        default:
+            wxFAIL_MSG("unreachable");
+    }
+
+    return rectClip;
+}
+
 // Flags may include:
 // - wxCONTROL_SELECTED for the currently selected tab
 // - wxCONTROL_CURRENT for the "hot" tab, i.e. the one under mouse pointer
 // - wxCONTROL_SPECIAL for the first tab.
+//
+// Note that this function relies on the appropriate pen being selected into
+// the DC and uses the current pen for drawing the tab borders.
 void
 DrawNotebookTab(wxWindow* win,
                 wxDC& dc,
@@ -1047,50 +1094,11 @@ DrawNotebookTab(wxWindow* win,
                 wxDirection tabOrient,
                 int flags = wxCONTROL_NONE)
 {
-    // This colour is just an approximation which seems to look acceptable.
-    dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
-
-    // Note that FromDIP() should _not_ be used here, as 2px offset is used
-    // even in high DPI.
-    const int selectedOffset = 2;
-    const int labelOffset = 3*selectedOffset;
-
     wxRect rectTab = rectOrig;
     wxColour colTab;
     if ( flags & wxCONTROL_SELECTED )
     {
-        // Selected tab literally stands out, so make it bigger -- but clip
-        // drawing to ensure we don't draw the inner border of the inflated
-        // selected tab rectangle, it shouldn't overflow into the notebook
-        // page area.
-        rectTab.Inflate(selectedOffset);
-
-        wxRect rectClip = rectTab;
-        switch ( tabOrient )
-        {
-            case wxTOP:
-                rectClip.height -= selectedOffset;
-                break;
-
-            case wxBOTTOM:
-                rectClip.y += selectedOffset;
-                rectClip.height -= selectedOffset;
-                break;
-
-            case wxLEFT:
-                rectClip.width -= selectedOffset;
-                break;
-
-            case wxRIGHT:
-                rectClip.x += selectedOffset;
-                rectClip.width -= selectedOffset;
-                break;
-
-            default:
-                wxFAIL_MSG("unreachable");
-        }
-
-        dc.SetClippingRegion(rectClip);
+        dc.SetClippingRegion(ExpandSelectedTab(rectTab, tabOrient));
 
         colTab = win->GetBackgroundColour();
     }
@@ -1259,6 +1267,52 @@ void wxNotebook::MSWNotebookPaint(wxDC& dc)
     };
 
     const size_t pages = GetPageCount();
+    if ( !pages )
+        return;
+
+    // Start by erasing the tabs area background.
+    wxRect rectTabArea = GetTabRect(0);
+    rectTabArea = ExpandSelectedTab(rectTabArea, tabOrient);
+    if ( tabOrient == wxTOP || tabOrient == wxBOTTOM )
+        rectTabArea.SetRight(sizeWindow.x);
+    else
+        rectTabArea.SetBottom(sizeWindow.y);
+    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(rectTabArea);
+
+    // Set colour for tab borders (it's not really the same as menu bar colour,
+    // but this seems to look acceptable, so use it for now).
+    dc.SetPen(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+
+    // Draw the separating line of the tab area.
+    wxPoint ptStart = rectTabArea.GetTopLeft();
+    wxPoint ptEnd = rectTabArea.GetBottomRight();
+    switch ( tabOrient )
+    {
+        case wxTOP:
+            ptStart.y = ptEnd.y;
+            break;
+
+        case wxBOTTOM:
+            ptEnd.y = ptStart.y;
+            break;
+
+        case wxLEFT:
+            ptStart.x = ptEnd.x;
+            break;
+
+        case wxRIGHT:
+            ptEnd.x = ptStart.x;
+            break;
+
+        default:
+            wxFAIL_MSG("unreachable");
+    }
+
+    dc.DrawLine(ptStart, ptEnd);
+
+    // Then draw all the individual tabs.
     for ( size_t n = 0; n < pages; ++n )
     {
         if ( static_cast<int>(n) == selected )
