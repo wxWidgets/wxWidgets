@@ -15,6 +15,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QBitmap>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPicture>
@@ -29,43 +30,13 @@
 #endif
 
 #include "wx/graphics.h"
+#include "wx/rawbmp.h"
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
+#include "wx/qt/private/converter.h"
 
 #include <memory>
-
-namespace
-{
-
-// Ensure that the given painter is active by calling begin() if it isn't. If
-// it already is, don't do anything.
-class EnsurePainterIsActive
-{
-public:
-    explicit EnsurePainterIsActive(QPainter* painter)
-        : m_painter(painter),
-          m_wasActive(painter->isActive())
-    {
-        if ( !m_wasActive )
-            m_painter->begin(&m_picture);
-    }
-
-    ~EnsurePainterIsActive()
-    {
-        if ( !m_wasActive )
-            m_painter->end();
-    }
-
-private:
-    QPainter* m_painter;
-    QPicture m_picture;
-    bool m_wasActive;
-
-    wxDECLARE_NO_COPY_CLASS(EnsurePainterIsActive);
-};
-
-} // anonymous namespace
 
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
@@ -169,29 +140,122 @@ private:
 class WXDLLIMPEXP_CORE wxQtBitmapData : public wxGraphicsBitmapData
 {
 public:
-    wxQtBitmapData(wxGraphicsRenderer* renderer, QPixmap* pixmap)
+    wxQtBitmapData(wxGraphicsRenderer* renderer, QPixmap pixmap)
         : wxGraphicsBitmapData(renderer),
           m_pixmap(pixmap)
     {
     }
 
     wxQtBitmapData(wxGraphicsRenderer* renderer, const wxBitmap& bmp)
-        : wxGraphicsBitmapData(renderer),
-          m_pixmap(bmp.GetHandle())
+        : wxGraphicsBitmapData(renderer)
     {
+        wxCHECK_RET( bmp.IsOk(), "Invalid bitmap");
+
+        const bool isSrcBpp32 = bmp.GetDepth() == 32;
+        const bool hasAlpha = bmp.HasAlpha();
+
+        QImage::Format imgFormat =
+            (isSrcBpp32 && hasAlpha) || bmp.GetMask() != nullptr
+            ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32;
+
+        auto qtImage = QImage(bmp.GetWidth(), bmp.GetHeight(), imgFormat);
+
+        const int stride = qtImage.bytesPerLine();
+
+        wxBitmap bmpSource = bmp;  // we need a non-const instance
+        wxUint32* data = reinterpret_cast<wxUint32*>(qtImage.bits());
+
+        if ( isSrcBpp32 )
+        {
+            // use the bitmap's alpha
+            wxAlphaPixelData pixData(bmpSource);
+            wxCHECK_RET( pixData, "Failed to gain raw access to bitmap data." );
+
+            wxAlphaPixelData::Iterator p(pixData);
+            for ( int y = 0; y < pixData.GetHeight(); ++y )
+            {
+                wxAlphaPixelData::Iterator rowStart = p;
+                wxUint32* const rowStartDst = data;
+                for ( int x = 0; x < pixData.GetWidth(); ++x )
+                {
+                    unsigned char alpha = hasAlpha ? p.Alpha() : wxALPHA_OPAQUE;
+                    // Bitmap pixel bits are already premultiplied.
+                    *data = (alpha << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue());
+                    ++data;
+                    ++p;
+                }
+
+                data = rowStartDst + stride / 4;
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }
+        else // no alpha
+        {
+            wxNativePixelData pixData(bmpSource);
+            wxCHECK_RET( pixData, "Failed to gain raw access to bitmap data." );
+
+            wxNativePixelData::Iterator p(pixData);
+            for ( int y = 0; y < pixData.GetHeight(); ++y )
+            {
+                wxNativePixelData::Iterator rowStart = p;
+                wxUint32* const rowStartDst = data;
+                for ( int x = 0; x < pixData.GetWidth(); ++x )
+                {
+                    *data = (wxALPHA_OPAQUE << 24 | p.Red() << 16 | p.Green() << 8 | p.Blue() );
+                    ++data;
+                    ++p;
+                }
+
+                data = rowStartDst + stride / 4;
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }
+
+        // if there is a mask, set the alpha bytes in the target buffer to
+        // fully transparent or retain original value
+        if ( bmp.GetMask() )
+        {
+            wxBitmap bmpMask = bmp.GetMask()->GetBitmap();
+            data = reinterpret_cast<wxUint32*>(qtImage.bits());
+            wxNativePixelData pixData(bmpMask);
+            wxCHECK_RET( pixData, "Failed to gain raw access to mask data." );
+
+            wxNativePixelData::Iterator p(pixData);
+            for ( int y = 0; y < pixData.GetHeight(); ++y )
+            {
+                wxNativePixelData::Iterator rowStart = p;
+                wxUint32* const rowStartDst = data;
+                for ( int x = 0; x < pixData.GetWidth(); ++x )
+                {
+                    if ( p.Red()+p.Green()+p.Blue() == 0 )
+                        *data = 0;
+
+                    ++data;
+                    ++p;
+                }
+
+                data = rowStartDst + stride / 4;
+                p = rowStart;
+                p.OffsetY(pixData, 1);
+            }
+        }
+
+        m_pixmap = QPixmap::fromImage(qtImage);
     }
 
-    QPixmap* GetPixmap() const
+    QPixmap GetPixmap() const
     {
         return m_pixmap;
     }
 
     virtual void* GetNativeBitmap() const override
     {
-        return m_pixmap;
+        return const_cast<QPixmap*>(&m_pixmap);
     }
 
-    static const QPixmap* GetPixmapFromBitmap(const wxGraphicsBitmap& bitmap)
+    static const QPixmap GetPixmapFromBitmap(const wxGraphicsBitmap& bitmap)
     {
         const wxQtBitmapData* const
             data = static_cast<const wxQtBitmapData*>(bitmap.GetBitmapData());
@@ -200,15 +264,15 @@ public:
 
 
 #if wxUSE_IMAGE
-    wxImage DoConvertToImage() const
+    wxImage ConvertToImage() const
     {
-        wxBitmap bitmap(*m_pixmap);
+        wxBitmap bitmap(m_pixmap);
         return bitmap.ConvertToImage();
     }
 #endif // wxUSE_IMAGE
 
 private:
-    QPixmap* m_pixmap;
+    QPixmap m_pixmap;
 
     wxDECLARE_NO_COPY_CLASS(wxQtBitmapData);
 };
@@ -396,7 +460,7 @@ public:
         : wxGraphicsObjectRefData(renderer),
           m_color(col.GetQColor())
     {
-        m_font.setFamily(QString(facename));
+        m_font.setFamily(wxQtConvertString(facename));
         m_font.setPixelSize(static_cast<int>(sizeInPixels));
         if ( flags & wxFONTFLAG_LIGHT )
             m_font.setWeight(QFont::Light);
@@ -644,6 +708,19 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
         const wxSize sz = dc.GetSize();
         m_width = sz.x;
         m_height = sz.y;
+
+        m_internalTransform = m_qtPainter->worldTransform();
+
+        SetInitialClipping();
+    }
+
+    // Set the initial clipping to the entire surface when the context is
+    // first constructed or when the clipping is reset.
+    void SetInitialClipping()
+    {
+        m_qtPainter->setWorldMatrixEnabled(false);
+        m_qtPainter->setClipRect(0, 0, m_width, m_height);
+        m_qtPainter->setWorldMatrixEnabled(true);
     }
 
 protected:
@@ -711,18 +788,23 @@ public:
 
     virtual void Clip(const wxRegion& region) override
     {
-        m_qtPainter->setClipRegion(region.GetHandle());
+        // Notice that setClipRegion() doesn't enable clipping for us.
+        // So we need to enable it explicitly.
+        m_qtPainter->setClipping(true);
+        m_qtPainter->setClipRegion(region.GetHandle(), Qt::IntersectClip);
     }
 
     // clips drawings to the rect
     virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) override
     {
-        m_qtPainter->setClipRect(x, y, w, h);
+        m_qtPainter->setClipRect(x, y, w, h, Qt::IntersectClip);
     }
 
     // resets the clipping to original extent
     virtual void ResetClip() override
     {
+        SetInitialClipping();
+
         m_qtPainter->setClipping(false);
     }
 
@@ -730,7 +812,11 @@ public:
     virtual void
     GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) override
     {
-        const QRectF box = m_qtPainter->clipBoundingRect();
+        QRectF box = m_qtPainter->clipBoundingRect();
+
+        if ( box.isEmpty() )
+            box = QRectF();
+
         if ( x )
             *x = box.left();
         if ( y )
@@ -855,15 +941,17 @@ public:
 
     virtual void
     FillPath(const wxGraphicsPath& p,
-             wxPolygonFillMode /*fillStyle = wxWINDING_RULE*/) override
+             wxPolygonFillMode fillStyle = wxWINDING_RULE) override
     {
         if ( m_brush.IsNull() )
         {
             return;
         }
 
-        const QPainterPath*
-            pathData = static_cast<QPainterPath*>(p.GetNativePath());
+        QPainterPath* pathData = static_cast<QPainterPath*>(p.GetNativePath());
+        const Qt::FillRule fillRule = fillStyle == wxWINDING_RULE ? Qt::WindingFill : Qt::OddEvenFill;
+        pathData->setFillRule(fillRule);
+
         const QBrush&
             brush = static_cast<wxQtBrushData*>(m_brush.GetRefData())->getBrush();
         m_qtPainter->fillPath(*pathData, brush);
@@ -894,23 +982,40 @@ public:
     // concatenates this transform with the current transform of this context
     virtual void ConcatTransform(const wxGraphicsMatrix& matrix) override
     {
-        wxGraphicsMatrix currentMatrix = GetTransform();
-        currentMatrix.Concat(matrix);
-        SetTransform(currentMatrix);
+        if ( !m_qtPainter->isActive() )
+            return;
+
+        const wxQtMatrixData*
+            qmatrix = static_cast<const wxQtMatrixData*>(matrix.GetRefData());
+        m_qtPainter->setTransform(qmatrix->GetQTransform(), true);
     }
 
     // sets the transform of this context
     virtual void SetTransform(const wxGraphicsMatrix& matrix) override
     {
+        if ( !m_qtPainter->isActive() )
+            return;
+
         const wxQtMatrixData*
             qmatrix = static_cast<const wxQtMatrixData*>(matrix.GetRefData());
-        m_qtPainter->setTransform(qmatrix->GetQTransform());
+        m_qtPainter->setTransform(m_internalTransform);
+        m_qtPainter->setTransform(qmatrix->GetQTransform(), true);
     }
 
     // gets the matrix of this context
     virtual wxGraphicsMatrix GetTransform() const override
     {
-        const QTransform& transform = m_qtPainter->transform();
+        if ( !m_qtPainter->isActive() )
+            return CreateMatrix(); // return identity matrix
+
+        QTransform transform = m_qtPainter->transform();
+
+        if ( m_internalTransform.isInvertible() )
+        {
+            const auto intTransformInv = m_internalTransform.inverted();
+            transform *= intTransformInv;
+        }
+
         wxGraphicsMatrix m;
         m.SetRefData(new wxQtMatrixData(GetRenderer(), transform));
         return m;
@@ -920,8 +1025,8 @@ public:
     DrawBitmap(const wxGraphicsBitmap& bmp,
                wxDouble x, wxDouble y, wxDouble w, wxDouble h) override
     {
-        const QPixmap* pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
-        m_qtPainter->drawPixmap(x, y, w, h, *pixmap);
+        const auto pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
+        m_qtPainter->drawPixmap(x, y, w, h, pixmap);
     }
 
     virtual void
@@ -976,14 +1081,17 @@ public:
         if ( str.empty() && !descent && !externalLeading )
             return;
 
-        EnsurePainterIsActive active(m_qtPainter);
-
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
-        m_qtPainter->setFont(fontData->GetFont());
+        QFontMetrics metrics(fontData->GetFont());
 
-        const QFontMetrics metrics = m_qtPainter->fontMetrics();
-        const QRect boundingRect = metrics.boundingRect(QString(str));
+        if ( m_qtPainter->isActive() )
+        {
+            m_qtPainter->setFont(fontData->GetFont());
+            metrics = m_qtPainter->fontMetrics();
+        }
+
+        const QRect boundingRect = metrics.boundingRect(wxQtConvertString(str));
 
         if ( width )
             *width = boundingRect.width();
@@ -1002,13 +1110,15 @@ public:
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetPartialTextExtents - no valid font set" );
 
-        EnsurePainterIsActive active(m_qtPainter);
-
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
-        m_qtPainter->setFont(fontData->GetFont());
+        QFontMetrics metrics(fontData->GetFont());
 
-        const QFontMetrics metrics = m_qtPainter->fontMetrics();
+        if ( m_qtPainter->isActive() )
+        {
+            m_qtPainter->setFont(fontData->GetFont());
+            metrics = m_qtPainter->fontMetrics();
+        }
 
         const size_t textLength = text.length();
 
@@ -1019,7 +1129,7 @@ public:
         {
             const wxString subString = text.substr(0, i+1);
             const QRect
-                boundingRect = metrics.boundingRect(QString(subString));
+                boundingRect = metrics.boundingRect(wxQtConvertString(subString));
             widths[i] = boundingRect.width();
         }
     }
@@ -1043,7 +1153,7 @@ protected:
         while ( tokenizer.HasMoreTokens() )
         {
             const wxString line = tokenizer.GetNextToken();
-            m_qtPainter->drawText(x, y + metrics.ascent(), QString(line));
+            m_qtPainter->drawText(x, y + metrics.ascent(), wxQtConvertString(line));
             y += metrics.lineSpacing();
         }
     }
@@ -1061,7 +1171,8 @@ protected:
         m_qtPainter->drawPixmap(x, y, w, h, pix);
     }
 
-    QPainter* m_qtPainter;
+    QPainter*  m_qtPainter;
+    QTransform m_internalTransform;
 
 private:
     // This pointer may be empty if we don't own m_qtPainter.
@@ -1094,8 +1205,8 @@ public:
 
     ~wxQtImageContext()
     {
-        wxQtBitmapData bitmap(GetRenderer(), &m_pixmap);
-        m_image = bitmap.DoConvertToImage();
+        wxQtBitmapData bitmap(GetRenderer(), m_pixmap);
+        m_image = bitmap.ConvertToImage();
     }
 
 private:
@@ -1373,7 +1484,7 @@ wxImage wxQtGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 {
     const wxQtBitmapData* const
         data = static_cast<const wxQtBitmapData*>(bmp.GetBitmapData());
-    return data->DoConvertToImage();
+    return data->ConvertToImage();
 }
 #endif // wxUSE_IMAGE
 
@@ -1383,7 +1494,7 @@ wxQtGraphicsRenderer::CreateBitmapFromNativeBitmap(void* bitmap)
     wxGraphicsBitmap p;
     if ( bitmap != nullptr )
     {
-        p.SetRefData(new wxQtBitmapData(this, (QPixmap*)bitmap));
+        p.SetRefData(new wxQtBitmapData(this, *(QPixmap*)bitmap));
     }
     return p;
 }
@@ -1395,11 +1506,11 @@ wxQtGraphicsRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
 {
     wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
 
-    const QPixmap* sourcePixmap = wxQtBitmapData::GetPixmapFromBitmap(bitmap);
-    wxCHECK_MSG(sourcePixmap, wxNullGraphicsBitmap, wxS("Invalid bitmap"));
+    const auto sourcePixmap = wxQtBitmapData::GetPixmapFromBitmap(bitmap);
+    wxCHECK_MSG(!sourcePixmap.isNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
 
-    const int srcWidth = sourcePixmap->width();
-    const int srcHeight = sourcePixmap->height();
+    const int srcWidth = sourcePixmap.width();
+    const int srcHeight = sourcePixmap.height();
     const int dstWidth = wxRound(w);
     const int dstHeight = wxRound(h);
 
@@ -1407,7 +1518,7 @@ wxQtGraphicsRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
             x + dstWidth <= srcWidth && y + dstHeight <= srcHeight,
             wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
 
-    QPixmap* subPixmap = new QPixmap(sourcePixmap->copy(x, y, w, h));
+    QPixmap subPixmap = sourcePixmap.copy(x, y, w, h);
 
     wxGraphicsBitmap bmpRes;
     bmpRes.SetRefData(new wxQtBitmapData(this, subPixmap));

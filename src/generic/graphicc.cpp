@@ -3692,9 +3692,9 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 
 #endif  // wxUSE_CAIRO/!wxUSE_CAIRO
 
-// MSW and OS X and Qt on Windows have their own native default renderers, but the other ports
+// MSW and OS X and Qt have their own native default renderers, but the other ports
 // use Cairo by default.
-#if !(defined(__WXMSW__) || defined(__WXOSX__) || (defined(__WXQT__) && defined(__WIN32__)))
+#if !(defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__))
 wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 {
     return GetCairoRenderer();

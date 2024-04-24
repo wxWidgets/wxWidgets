@@ -100,15 +100,14 @@ wxRegion::wxRegion(const wxRect& rect)
 
 wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
 {
-    QVector< QPoint > qtPoints;
-    for ( uint i = 0; i < n; i++)
+    QPolygon polygon;
+    for ( size_t i = 0; i < n; ++i )
     {
-        qtPoints << wxQtConvertPoint( points[i] );
+        polygon << wxQtConvertPoint( points[i] );
     }
-    QPolygon p( qtPoints );
 
     Qt::FillRule fillingRule = fillStyle == wxODDEVEN_RULE ? Qt::OddEvenFill : Qt::WindingFill;
-    m_refData = new wxRegionRefData( p, fillingRule );
+    m_refData = new wxRegionRefData( polygon, fillingRule );
 }
 
 wxRegion::wxRegion(const wxBitmap& bmp)

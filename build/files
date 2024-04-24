@@ -210,7 +210,6 @@ QT_WIN32_SRC=
     src/msw/dib.cpp
     src/msw/joystick.cpp
     src/msw/sound.cpp
-    src/qt/graphics.cpp
 
 QT_WIN32_HDR=
     wx/msw/ole/automtn.h
@@ -370,6 +369,7 @@ QT_SRC=
     src/qt/fontutil.cpp
     src/qt/frame.cpp
     src/qt/gauge.cpp
+    src/qt/graphics.cpp
     src/qt/listbox.cpp
     src/qt/listctrl.cpp
     src/qt/mdi.cpp
