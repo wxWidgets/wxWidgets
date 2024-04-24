@@ -46,6 +46,15 @@
 
 namespace // anonymous
 {
+
+inline COLORREF GetTransparentColor()
+{
+    // Use some unlikely colour as the transparent one. Notably do not use
+    // black, as we don't want everything drawn with black on the overlay to be
+    // transparent.
+    return RGB(0, 1, 2);
+}
+
 wxWindow* wxCreateOverlayWindow(const wxRect& rect, int alpha, HWND hWndInsertAfter)
 {
     auto overlayWin = new wxWindow();
@@ -66,7 +75,9 @@ wxWindow* wxCreateOverlayWindow(const wxRect& rect, int alpha, HWND hWndInsertAf
 
     if ( alpha >= 0 )
     {
-        if ( !::SetLayeredWindowAttributes(GetHwndOf(overlayWin), 0, alpha,
+        if ( !::SetLayeredWindowAttributes(GetHwndOf(overlayWin),
+                                           GetTransparentColor(),
+                                           alpha,
                                            LWA_COLORKEY | LWA_ALPHA) )
         {
             wxLogLastError(wxS("SetLayeredWindowAttributes()"));
@@ -225,10 +236,7 @@ void wxOverlayImpl::Clear(wxDC* WXUNUSED(dc))
 {
     wxCHECK_RET( IsOk(), wxS("overlay not initialized") );
 
-    // Note that the colour used here is the same one that we specify as
-    // LWA_COLORKEY when creating the layered window, so it is actually
-    // transparent.
-    m_memDC.SetBackground(*wxBLACK);
+    m_memDC.SetBackground(wxColour(GetTransparentColor()));
     m_memDC.Clear();
 }
 
@@ -255,7 +263,9 @@ void wxOverlayImpl::SetOpacity(int alpha)
     {
         m_alpha = wxClip(alpha, 0, 255);
 
-        if ( !::SetLayeredWindowAttributes(GetHwndOf(m_overlayWindow), 0, m_alpha,
+        if ( !::SetLayeredWindowAttributes(GetHwndOf(m_overlayWindow),
+                                           GetTransparentColor(),
+                                           m_alpha,
                                            LWA_COLORKEY | LWA_ALPHA) )
         {
             wxLogLastError(wxS("SetLayeredWindowAttributes()"));

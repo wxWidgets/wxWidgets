@@ -36,6 +36,8 @@
 
 #include "wx/renderer.h"
 
+#include "wx/generic/private/drawresize.h"
+
 #include <stdlib.h>
 
 wxDEFINE_EVENT( wxEVT_SPLITTER_SASH_POS_CHANGED, wxSplitterEvent );
@@ -68,17 +70,6 @@ wxBEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_SET_CURSOR(wxSplitterWindow::OnSetCursor)
 #endif // wxMSW
 wxEND_EVENT_TABLE()
-
-static wxBitmap wxPaneCreateStippleBitmap()
-{
-    // Notice that wxOverlay, under wxMSW, uses the wxBLACK colour i.e.(0,0,0)
-    // as the key colour for transparency. and using it for the stipple bitmap
-    // will make the sash feedback totaly invisible if the window's background
-    // colour is (192,192,192) or so. (1,1,1) is used instead.
-    unsigned char data[] = { 1,1,1,192,192,192, 192,192,192,1,1,1 };
-    wxImage img(2,2,data,true);
-    return wxBitmap(img);
-}
 
 bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
                                    const wxPoint& pos,
@@ -621,16 +612,7 @@ void wxSplitterWindow::DrawSashTracker(int x, int y)
         sizeSash.y = sashTrackerWidth;
     }
 
-    wxClientDC dc(this);
-    wxDCOverlay overlaydc( m_overlay, &dc );
-    overlaydc.Clear();
-
-    wxBitmap stipple = wxPaneCreateStippleBitmap();
-    wxBrush brush(stipple);
-    dc.SetBrush(brush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
-
-    dc.DrawRectangle(posSash, sizeSash);
+    wxDrawOverlayResizeHint(this, m_overlay, wxRect(posSash, sizeSash));
 }
 
 int wxSplitterWindow::GetWindowSize() const

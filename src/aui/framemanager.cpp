@@ -66,6 +66,8 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 
 #include "wx/dcgraph.h"
 
+#include "wx/generic/private/drawresize.h"
+
 #include <memory>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent);
@@ -88,29 +90,6 @@ static wxBitmap wxCreateVenetianBlindsBitmap(wxByte r, wxByte g, wxByte b, wxByt
     img.SetAlpha(alpha,true);
     return wxBitmap(img);
 }
-
-static wxBitmap wxPaneCreateStippleBitmap()
-{
-    // Notice that wxOverlay, under wxMSW, uses the wxBLACK colour i.e.(0,0,0)
-    // as the key colour for transparency. and using it for the stipple bitmap
-    // will make the sash feedback totaly invisible if the window's background
-    // colour is (192,192,192) or so. (1,1,1) is used instead.
-    unsigned char data[] = { 1,1,1,192,192,192, 192,192,192,1,1,1 };
-    wxImage img(2,2,data,true);
-    return wxBitmap(img);
-}
-
-static void DrawResizeHint(wxDC& dc, const wxRect& rect)
-{
-    wxBitmap stipple = wxPaneCreateStippleBitmap();
-    wxBrush brush(stipple);
-    dc.SetBrush(brush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
-
-    dc.DrawRectangle(rect);
-}
-
-
 
 // CopyDocksAndPanes() - this utility function creates copies of
 // the dock and pane info.  wxAuiDockInfo's usually contain pointers
@@ -4285,14 +4264,10 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     m_actionHintRect = wxRect();
                 }
 
-                wxClientDC dc{m_frame};
-                wxDCOverlay overlaydc(m_overlay, &dc);
-                overlaydc.Clear();
-
                 // draw resize hint
                 m_actionHintRect = rect;
                 rect.SetPosition(rect.GetPosition() + m_frame->GetClientAreaOrigin());
-                DrawResizeHint(dc, rect);
+                wxDrawOverlayResizeHint(m_frame, m_overlay, rect);
             }
         }
     }
