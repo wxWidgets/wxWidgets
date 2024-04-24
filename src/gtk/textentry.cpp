@@ -378,6 +378,10 @@ protected:
         : m_entry(entry),
           m_widgetEntry(entry->GetEntry())
     {
+        // This will be really set in ToggleProcessEnterFlag().
+        m_popupShownCount = 0;
+        m_hadProcessEnterFlag = false;
+
         GtkEntryCompletion* const completion = gtk_entry_completion_new();
 
         gtk_entry_completion_set_text_column (completion, 0);
@@ -421,11 +425,11 @@ protected:
 
     // Number of times GTKOnPopupShown() was called with true argument minus
     // the number of times it was called with false argument.
-    int m_popupShownCount = 0;
+    int m_popupShownCount;
 
     // True if the window had wxTE_PROCESS_ENTER flag before we turned it off
     // in GTKOnPopupShown().
-    bool m_hadProcessEnterFlag = false;
+    bool m_hadProcessEnterFlag;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAutoCompleteData);
 };
