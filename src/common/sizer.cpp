@@ -847,7 +847,9 @@ wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
         // later, but by this time the stack trace at the moment of assertion
         // won't point out the culprit any longer).
         if ( m_containingWindow )
+        {
             ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+        }
     }
 
     if ( item->GetSizer() )
@@ -897,7 +899,9 @@ void wxSizer::SetContainingWindow(wxWindow *win)
         if ( m_containingWindow )
         {
             if ( wxWindow* const w = item->GetWindow() )
+            {
                 ASSERT_WINDOW_PARENT_IS(w, m_containingWindow);
+            }
         }
     }
 }
