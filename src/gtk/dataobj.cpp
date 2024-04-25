@@ -188,6 +188,15 @@ extern bool wxGTKIsSameFormat(GdkAtom atom1, GdkAtom atom2)
     return false;
 }
 
+bool wxDataFormat::operator==(const wxDataFormat& other) const
+{
+    if ( m_type != other.m_type )
+        return false;
+
+    return wxGTKIsSameFormat(m_format, other.m_format);
+}
+
+
 //-------------------------------------------------------------------------
 // wxDataObject
 //-------------------------------------------------------------------------
