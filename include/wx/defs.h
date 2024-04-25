@@ -3042,11 +3042,25 @@ typedef const void* WXWidget;
 /*  macros to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
+/* Obsolete macros kept only for compatibility, just use the corresponding
+   C++11 keywords directly in the class definition when writing new code. */
 #define wxMEMBER_DELETE = delete
+
+/* Also note that these macro do _not_ require a semicolon after them for
+   compatibility with wxWidgets 3.2. */
 #define wxDECLARE_DEFAULT_COPY_CTOR(classname) \
     public:                                    \
         classname(const classname&) = default;
 
+#define wxDECLARE_DEFAULT_COPY(classname)  \
+    wxDECLARE_DEFAULT_COPY_CTOR(classname) \
+    classname& operator=(const classname&) = default;
+
+#define wxDECLARE_DEFAULT_COPY_AND_DEF(classname) \
+    classname() = default;                        \
+    wxDECLARE_DEFAULT_COPY(classname);
+
+/* These macros do require a semicolon after them. */
 #define wxDECLARE_NO_COPY_CLASS(classname)      \
     private:                                    \
         classname(const classname&) wxMEMBER_DELETE; \
