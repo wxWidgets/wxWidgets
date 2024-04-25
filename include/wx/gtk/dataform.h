@@ -42,8 +42,7 @@ public:
         { return m_format == (NativeFormat)format; }
     bool operator!=(NativeFormat format) const
         { return m_format != (NativeFormat)format; }
-    bool operator==(const wxDataFormat& other) const
-        { return m_format == other.m_format; }
+    bool operator==(const wxDataFormat& other) const;
     bool operator!=(const wxDataFormat& other) const
         { return m_format != other.m_format; }
 
