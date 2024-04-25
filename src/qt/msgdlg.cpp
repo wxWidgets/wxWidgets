@@ -54,6 +54,10 @@ int wxMessageDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( m_qtWindow, -1, "Invalid dialog" );
 
+    // Break the mouse capture as it would interfere with modal dialog (see
+    // wxDialog::ShowModal)
+    QtReleaseMouseAndNotify();
+
     auto dlg = static_cast<wxQtMessageDialog*>(m_qtWindow);
     dlg->InitializeIfNeeded(*this);
 

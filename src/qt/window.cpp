@@ -1008,7 +1008,6 @@ void wxWindowQt::DoScreenToClient( int *x, int *y ) const
 void wxWindowQt::DoCaptureMouse()
 {
     wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
-    GetHandle()->grabMouse();
     s_capturedWindow = this;
 }
 
@@ -1016,8 +1015,19 @@ void wxWindowQt::DoCaptureMouse()
 void wxWindowQt::DoReleaseMouse()
 {
     wxCHECK_RET( GetHandle() != nullptr, wxT("invalid window") );
-    GetHandle()->releaseMouse();
     s_capturedWindow = nullptr;
+}
+
+void wxWindowQt::QtReleaseMouseAndNotify()
+{
+    s_capturedWindow = nullptr;
+
+    while ( auto qtWidget = QWidget::mouseGrabber() )
+    {
+        qtWidget->releaseMouse();
+    }
+
+    NotifyCaptureLost();
 }
 
 wxWindowQt *wxWindowBase::GetCapture()

@@ -216,6 +216,10 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y) override;
 #endif // wxUSE_MENUS
 
+    // This is called when capture is taken from the window. It will
+    // fire off capture lost events.
+    void QtReleaseMouseAndNotify();
+
     // Return the parent to use for children being reparented to us: this is
     // overridden in wxFrame to use its central widget rather than the frame
     // itself.
