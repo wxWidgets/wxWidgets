@@ -171,9 +171,6 @@ TEST_CASE("wxDC::GetPartialTextExtent", "[dc][text-extent][partial]")
 
 TEST_CASE("wxGC::GetTextExtent", "[dc][text-extent]")
 {
-#ifdef __WXQT__
-    WARN("Skip test known to fail under wxQt");
-#else
     wxGraphicsRenderer* renderer = wxGraphicsRenderer::GetDefaultRenderer();
     REQUIRE(renderer);
     wxGraphicsContext* context = renderer->CreateMeasuringContext();
@@ -188,7 +185,6 @@ TEST_CASE("wxGC::GetTextExtent", "[dc][text-extent]")
     // TODO: Determine a way to make these tests more robust.
     CHECK(width > 0.0);
     CHECK(height > 0.0);
-#endif
 }
 
 #endif // TEST_GC
