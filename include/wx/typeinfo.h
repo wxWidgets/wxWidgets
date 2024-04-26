@@ -115,10 +115,10 @@ private:
         #endif // __VISUALC__/!__VISUALC__
     };
 
-    wxTypeIdentifier(const char* ptr) : m_ptr{ptr} { }
+    wxTypeIdentifier(const char* ptr) : m_ptr(ptr) { }
 
-    template<typename T>
-    friend wxTypeIdentifier wxPrivateTypeId(const T&);
+    template<typename>
+    friend wxTypeIdentifier wxPrivateTypeId();
 
     const char* m_ptr;
 };
@@ -133,7 +133,7 @@ const char wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo{};
 #endif // __VISUALC__/!__VISUALC__
 
 template<typename T>
-wxTypeIdentifier wxPrivateTypeId(const T&)
+wxTypeIdentifier wxPrivateTypeId()
 {
     return wxTypeIdentifier(&wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo);
 }
@@ -141,7 +141,7 @@ wxTypeIdentifier wxPrivateTypeId(const T&)
 // Use this macro to declare type info
 #define WX_DECLARE_TYPEINFO(CLS) \
 public: \
-    virtual wxTypeIdentifier GetWxTypeId() const { \
+    virtual wxTypeIdentifier GetWxTypeId() const override { \
         return wxPrivateTypeId<CLS>(); \
     }
 
