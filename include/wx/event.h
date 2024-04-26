@@ -287,10 +287,7 @@ private:
     wxEvtHandler *m_handler;
     wxEventFunction m_method;
 
-    // Provide a dummy default ctor for type info purposes
-    wxObjectEventFunctor() : m_handler(nullptr), m_method(nullptr) { }
-
-    WX_DECLARE_TYPEINFO_INLINE(wxObjectEventFunctor)
+    WX_DECLARE_TYPEINFO(wxObjectEventFunctor)
 };
 
 // Create a functor for the legacy events: used by Connect()
@@ -460,12 +457,9 @@ private:
     EventHandler *m_handler;
     void (Class::*m_method)(EventArg&);
 
-    // Provide a dummy default ctor for type info purposes
-    wxEventFunctorMethod() = default;
-
     typedef wxEventFunctorMethod<EventTag, Class,
                                  EventArg, EventHandler> thisClass;
-    WX_DECLARE_TYPEINFO_INLINE(thisClass)
+    WX_DECLARE_TYPEINFO(thisClass)
 };
 
 
@@ -516,11 +510,8 @@ public:
 private:
     void (*m_handler)(EventArg&);
 
-    // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunction() = default;
-
     typedef wxEventFunctorFunction<EventTag, EventArg> thisClass;
-    WX_DECLARE_TYPEINFO_INLINE(thisClass)
+    WX_DECLARE_TYPEINFO(thisClass)
 };
 
 
@@ -568,11 +559,8 @@ private:
     // Use the address of the original functor for comparison in IsMatching:
     const void *m_handlerAddr;
 
-    // Provide a dummy default ctor for type info purposes
-    wxEventFunctorFunctor() = default;
-
     typedef wxEventFunctorFunctor<EventTag, Functor> thisClass;
-    WX_DECLARE_TYPEINFO_INLINE(thisClass)
+    WX_DECLARE_TYPEINFO(thisClass)
 };
 
 // Create functors for the templatized events, either allocated on the heap for

@@ -24,16 +24,6 @@
 
 #include "wx/defs.h"
 
-//
-// Left for compatibility reasons
-//
-
-#define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC)
-#define WX_DECLARE_TYPEINFO_INLINE(CLS)
-#define WX_DECLARE_TYPEINFO(CLS)
-#define WX_DEFINE_TYPEINFO(CLS)
-#define WX_DECLARE_ABSTRACT_TYPEINFO(CLS)
-
 #ifndef wxNO_RTTI
 
 //
@@ -49,6 +39,9 @@
 
 #include <typeinfo>
 #include <cstring>
+
+#define WX_DECLARE_TYPEINFO(CLS)
+#define WX_DECLARE_ABSTRACT_TYPEINFO(CLS)
 
 #if wxTRUST_CPP_RTTI
 
@@ -95,12 +88,7 @@ private:
 
 //
 // When C++ RTTI is not available, we will have to make the type comparison
-// using pointer to a dummy static member variable. This will fail if
-// declared type is used across DLL boundaries, although using
-// WX_DECLARE_TYPEINFO() and WX_DEFINE_TYPEINFO() pair instead of
-// WX_DECLARE_TYPEINFO_INLINE() should fix this. However, that approach is
-// usually not possible when type info needs to be declared for a template
-// class.
+// using pointer to a dummy static member variable.
 //
 
 class wxTypeIdentifier
@@ -130,7 +118,7 @@ private:
     wxTypeIdentifier(const char* ptr) : m_ptr{ptr} { }
 
     template<typename T>
-    friend wxTypeIdentifier wxTypeId(const T&);
+    friend wxTypeIdentifier wxPrivateTypeId(const T&);
 
     const char* m_ptr;
 };
@@ -145,10 +133,25 @@ const char wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo{};
 #endif // __VISUALC__/!__VISUALC__
 
 template<typename T>
-wxTypeIdentifier wxTypeId(const T&)
+wxTypeIdentifier wxPrivateTypeId(const T&)
 {
-    return wxTypeIdentifier{&wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo};
+    return wxTypeIdentifier(&wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo);
 }
+
+// Use this macro to declare type info
+#define WX_DECLARE_TYPEINFO(CLS) \
+public: \
+    virtual wxTypeIdentifier GetWxTypeId() const { \
+        return wxPrivateTypeId<CLS>(); \
+    }
+
+#define wxTypeId(OBJ) (OBJ).GetWxTypeId()
+
+// Because abstract classes cannot be instantiated, we use
+// this macro to define pure virtual type interface for them.
+#define WX_DECLARE_ABSTRACT_TYPEINFO(CLS) \
+public: \
+    virtual wxTypeIdentifier GetWxTypeId() const = 0;
 
 #endif // wxNO_RTTI/!wxNO_RTTI
 
