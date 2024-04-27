@@ -104,7 +104,7 @@ class wxOverlayImpl : public wxOverlay::Impl
 {
 public:
     wxOverlayImpl() = default;
-    ~wxOverlayImpl() = default;
+    ~wxOverlayImpl() { Reset(); }
 
     virtual void Reset() override;
     virtual bool IsOk() override;
