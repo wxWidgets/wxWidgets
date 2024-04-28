@@ -316,7 +316,7 @@ wxMSW:
 
 wxOSX:
 
-- Fix clipping when using Sonoma/Xcode 15 SDK (#23916, #24054, #24067, #24073).
+- Updates for macOS 14 Sonoma support (#23916, #24054, #24067, #24073, #24515).
 - Restore activation for non-bundled applications (#24056, #24062).
 - Fix wrong tooltips for cells with custom renderers in wxDataViewCtrl (#24370).
 - Fix handling of nested modal dialogs (WakA, #24418).
