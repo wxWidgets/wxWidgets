@@ -159,7 +159,7 @@ private:
 */
 #define WX_DECLARE_ANY_VALUE_TYPE(CLS) \
     friend class wxAny; \
-    WX_DECLARE_TYPEINFO(CLS) \
+    WX_DECLARE_TYPEINFO_INLINE(CLS) \
 public: \
     static bool IsSameClass(const wxAnyValueType* otherType) \
     { \

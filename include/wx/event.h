@@ -287,7 +287,7 @@ private:
     wxEvtHandler *m_handler;
     wxEventFunction m_method;
 
-    WX_DECLARE_TYPEINFO(wxObjectEventFunctor)
+    WX_DECLARE_TYPEINFO_INLINE(wxObjectEventFunctor)
 };
 
 // Create a functor for the legacy events: used by Connect()
@@ -459,7 +459,7 @@ private:
 
     typedef wxEventFunctorMethod<EventTag, Class,
                                  EventArg, EventHandler> thisClass;
-    WX_DECLARE_TYPEINFO(thisClass)
+    WX_DECLARE_TYPEINFO_INLINE(thisClass)
 };
 
 
@@ -511,7 +511,7 @@ private:
     void (*m_handler)(EventArg&);
 
     typedef wxEventFunctorFunction<EventTag, EventArg> thisClass;
-    WX_DECLARE_TYPEINFO(thisClass)
+    WX_DECLARE_TYPEINFO_INLINE(thisClass)
 };
 
 
@@ -560,7 +560,7 @@ private:
     const void *m_handlerAddr;
 
     typedef wxEventFunctorFunctor<EventTag, Functor> thisClass;
-    WX_DECLARE_TYPEINFO(thisClass)
+    WX_DECLARE_TYPEINFO_INLINE(thisClass)
 };
 
 // Create functors for the templatized events, either allocated on the heap for

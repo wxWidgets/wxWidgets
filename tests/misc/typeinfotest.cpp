@@ -39,7 +39,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TypeInfoTestCase, "TypeInfoTestCase" );
 namespace UserNameSpace {
     class UserType1
     {
-        WX_DECLARE_TYPEINFO(UserType1)
+        WX_DECLARE_TYPEINFO_INLINE(UserType1)
     public:
         virtual ~UserType1() { }
     };
@@ -47,7 +47,7 @@ namespace UserNameSpace {
 
 class UserType1
 {
-    WX_DECLARE_TYPEINFO(UserType1)
+    WX_DECLARE_TYPEINFO_INLINE(UserType1)
 public:
     virtual ~UserType1() { }
 };
@@ -58,6 +58,8 @@ class UserType2
 public:
     virtual ~UserType2() { }
 };
+
+WX_DEFINE_TYPEINFO(UserType2)
 
 void TypeInfoTestCase::Test()
 {

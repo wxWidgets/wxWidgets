@@ -24,13 +24,6 @@
 
 #include "wx/defs.h"
 
-//
-// Left for compatibility reasons.
-//
-
-#define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC)
-#define WX_DEFINE_TYPEINFO(CLS)
-
 #ifndef wxNO_RTTI
 
 //
@@ -47,8 +40,10 @@
 #include <typeinfo>
 #include <cstring>
 
-#define WX_DECLARE_TYPEINFO(CLS)
+#define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC)
 #define WX_DECLARE_TYPEINFO_INLINE(CLS)
+#define WX_DECLARE_TYPEINFO(CLS)
+#define WX_DEFINE_TYPEINFO(CLS)
 #define WX_DECLARE_ABSTRACT_TYPEINFO(CLS)
 
 #if wxTRUST_CPP_RTTI
@@ -96,67 +91,47 @@ private:
 
 //
 // When C++ RTTI is not available, we will have to make the type comparison
-// using pointer to a dummy static member variable.
+// using pointer to a dummy static member function. This will fail if
+// declared type is used across DLL boundaries, although using
+// WX_DECLARE_TYPEINFO() and WX_DEFINE_TYPEINFO() pair instead of
+// WX_DECLARE_TYPEINFO_INLINE() should fix this. However, that approach is
+// usually not possible when type info needs to be declared for a template
+// class.
 //
 
-class wxTypeIdentifier
-{
-public:
-    bool operator==(const wxTypeIdentifier& other) const
-    {
-        return m_ptr == other.m_ptr;
-    }
+typedef void (*wxTypeIdentifier)();
 
-    bool operator!=(const wxTypeIdentifier& other) const
-    {
-        return !(*this == other);
-    }
-private:
-    template<typename>
-    struct wxDummy
-    {
-        #ifdef __VISUALC__
-        // Workaround for msvc's non conforming optimization (/Gy and /OPT:ICF)
-        static char ms_wxClassInfo;
-        #else // !__VISUALC__
-        static const char ms_wxClassInfo;
-        #endif // __VISUALC__/!__VISUALC__
-    };
-
-    wxTypeIdentifier(const char* ptr) : m_ptr(ptr) { }
-
-    template<typename>
-    friend wxTypeIdentifier wxPrivateTypeId();
-
-    const char* m_ptr;
-};
-
-#ifdef __VISUALC__
-// Workaround for msvc's non conforming optimization (/Gy and /OPT:ICF)
-template<typename T>
-char wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo;
-#else // !__VISUALC__
-template<typename T>
-const char wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo{};
-#endif // __VISUALC__/!__VISUALC__
-
-template<typename T>
-wxTypeIdentifier wxPrivateTypeId()
-{
-    return wxTypeIdentifier(&wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo);
-}
-
-// Use this macro to declare type info.
-#define WX_DECLARE_TYPEINFO(CLS) \
+// Use this macro to declare type info with specified static function
+// IDENTFUNC used as type identifier. Usually you should only use
+// WX_DECLARE_TYPEINFO() or WX_DECLARE_TYPEINFO_INLINE() however.
+#define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC) \
 public: \
-    virtual wxTypeIdentifier GetWxTypeId() const override { \
-        return wxPrivateTypeId<CLS>(); \
+    virtual wxTypeIdentifier GetWxTypeId() const override \
+    { \
+        return reinterpret_cast<wxTypeIdentifier> \
+            (&IDENTFUNC); \
     }
 
-// This macro is left for compatibility reasons and it should be replaced by
-// WX_DECLARE_TYPEINFO.
+// Use this macro to declare type info with externally specified
+// type identifier, defined with WX_DEFINE_TYPEINFO().
+#define WX_DECLARE_TYPEINFO(CLS) \
+private: \
+    static char ms_wxDummy; \
+    static void ms_wxClassInfo(); \
+_WX_DECLARE_TYPEINFO_CUSTOM(CLS, ms_wxClassInfo)
+
+// Use this macro to implement type identifier function required by
+// WX_DECLARE_TYPEINFO().
+#define WX_DEFINE_TYPEINFO(CLS) \
+char CLS::ms_wxDummy; \
+void CLS::ms_wxClassInfo() { ms_wxDummy = 0; }
+
+// Use this macro to declare type info fully inline in class.
 #define WX_DECLARE_TYPEINFO_INLINE(CLS) \
-    WX_DECLARE_TYPEINFO(CLS)
+private: \
+    static char ms_wxDummy; \
+    static void ms_wxClassInfo() { ms_wxDummy = 0; } \
+_WX_DECLARE_TYPEINFO_CUSTOM(CLS, ms_wxClassInfo)
 
 #define wxTypeId(OBJ) (OBJ).GetWxTypeId()
 
