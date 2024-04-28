@@ -2784,16 +2784,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
     wxUnusedVar(pMsg);
 #endif // !__WXUNIVERSAL__/__WXUNIVERSAL__
 
-#if wxUSE_TOOLTIPS
-    if ( m_tooltip )
-    {
-        // relay mouse move events to the tooltip control
-        MSG *msg = (MSG *)pMsg;
-        if ( msg->message == WM_MOUSEMOVE )
-            wxToolTip::RelayEvent(pMsg);
-    }
-#endif // wxUSE_TOOLTIPS
-
     return false;
 }
 
