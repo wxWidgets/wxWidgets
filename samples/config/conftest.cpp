@@ -37,7 +37,6 @@ class MyApp: public wxApp
 public:
   // implement base class virtuals
   virtual bool OnInit() override;
-  virtual int OnExit() override;
 };
 
 class MyFrame: public wxFrame
@@ -84,11 +83,13 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    // we're using wxConfig's "create-on-demand" feature: it will create the
-    // config object when it's used for the first time. It has a number of
-    // advantages compared with explicitly creating our wxConfig:
-    //  1) we don't pay for it if we don't use it
-    //  2) there is no danger to create it twice
+    // We can either use wxConfig "create-on-demand" feature, which creates the
+    // config object when it's used for the first time or create it explicitly.
+    //
+    // On demand creation has the advantage of not creating wxConfig at all if
+    // it is not needed, and so is recommended in general, but because we do
+    // always use it here, we can just as well create it directly, as this
+    // allows to customize its creation more easily.
 
     // application and vendor name are used by wxConfig to construct the name
     // of the config file/registry key and must be set before the first call
@@ -97,19 +98,39 @@ bool MyApp::OnInit()
     SetVendorName("wxWidgets");
     SetAppName("conftest"); // not needed, it's the default value
 
-    wxConfigBase *pConfig = wxConfigBase::Get();
+    wxConfigBase* pConfig;
+    if ( wxGetEnv("WX_CONFIG_CREATE_ON_DEMAND", nullptr) )
+    {
+        pConfig = wxConfig::Get();
+    }
+    else
+    {
+        pConfig = new wxConfig
+                      (
+                        GetAppName(),
+                        GetVendorName(),
+                        wxString{}, // use default local file name
+                        wxString{}, // use default global file name
+                        wxCONFIG_USE_LOCAL_FILE
+                        | wxCONFIG_USE_GLOBAL_FILE
+                        //
+                        // When creating the config object explicitly, it's
+                        // easier to customize the flags, e.g. you could
+                        // uncomment the line below to put the local config
+                        // file in a subdirectory.
+                        //
+                        //| wxCONFIG_USE_SUBDIR
+                      );
+
+        // Set it as the global config object: as usual, this also gives its
+        // ownership to wxWidgets, which will delete it.
+        wxConfig::Set(pConfig);
+    }
 
     // uncomment this to force writing back of the defaults for all values
     // if they're not present in the config - this can give the user an idea
     // of all possible settings for this program
     pConfig->SetRecordDefaults();
-
-    // or you could also write something like this:
-    //  wxFileConfig *pConfig = new wxFileConfig("conftest");
-    //  wxConfigBase::Set(pConfig);
-    // where you can also specify the file names explicitly if you wish.
-    // Of course, calling Set() is optional and you only must do it if
-    // you want to later retrieve this pointer with Get().
 
     // create the main program window
     MyFrame *frame = new MyFrame;
@@ -125,16 +146,6 @@ bool MyApp::OnInit()
     }
 
     return true;
-}
-
-int MyApp::OnExit()
-{
-    // clean up: Set() returns the active config object as Get() does, but unlike
-    // Get() it doesn't try to create one if there is none (definitely not what
-    // we want here!)
-    delete wxConfigBase::Set(nullptr);
-
-    return 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -177,13 +188,7 @@ MyFrame::MyFrame()
     panel->SetSizer(sizer);
 
     // restore the control's values from the config
-
-    // NB: in this program, the config object is already created at this moment
-    // because we had called Get() from MyApp::OnInit(). However, if you later
-    // change the code and don't create it before this line, it won't break
-    // anything - unlike if you manually create wxConfig object with Create()
-    // or in any other way (then you must be sure to create it before using it!).
-    wxConfigBase *pConfig = wxConfigBase::Get();
+    wxConfigBase *pConfig = wxConfig::Get();
 
     // we could write Read("/Controls/Text") as well, it's just to show SetPath()
     pConfig->SetPath("/Controls");
