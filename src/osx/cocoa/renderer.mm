@@ -713,12 +713,9 @@ void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
 
         ApplyMacControlFlags(win, cell, flags);
 
-        NSString* title = @("");
-        NSTextAlignment alignment = NSTextAlignmentLeft;
-
         if ( params )
         {
-            title = wxCFStringRef(params->m_labelText).AsNSString();
+            cell.title = wxCFStringRef(params->m_labelText).AsNSString();
             switch( params->m_labelAlignment )
             {
                 case wxALIGN_CENTER:
@@ -733,9 +730,11 @@ void wxRendererMac::DrawMacHeaderCell(wxWindow *win,
             }
 
         }
-
-        cell.title = title;
-        cell.alignment = alignment;
+        else
+        {
+            cell.title = @("");
+            cell.alignment = NSTextAlignmentLeft;
+        }
 
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         CGContextRef cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
