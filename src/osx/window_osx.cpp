@@ -428,7 +428,7 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos,
 #ifndef __WXUNIVERSAL__
     // Don't give scrollbars to wxControls unless they ask for them
     if ( ! IsKindOf(CLASSINFO(wxControl))
-         || (IsKindOf(CLASSINFO(wxControl)) && (HasFlag(wxHSCROLL) || HasFlag(wxVSCROLL))))
+         || (HasFlag(wxHSCROLL) || HasFlag(wxVSCROLL)) )
     {
         MacCreateScrollBars( ) ;
     }
