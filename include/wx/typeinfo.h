@@ -24,6 +24,13 @@
 
 #include "wx/defs.h"
 
+//
+// Left for compatibility reasons.
+//
+
+#define _WX_DECLARE_TYPEINFO_CUSTOM(CLS, IDENTFUNC)
+#define WX_DEFINE_TYPEINFO(CLS)
+
 #ifndef wxNO_RTTI
 
 //
@@ -41,6 +48,7 @@
 #include <cstring>
 
 #define WX_DECLARE_TYPEINFO(CLS)
+#define WX_DECLARE_TYPEINFO_INLINE(CLS)
 #define WX_DECLARE_ABSTRACT_TYPEINFO(CLS)
 
 #if wxTRUST_CPP_RTTI
@@ -138,12 +146,17 @@ wxTypeIdentifier wxPrivateTypeId()
     return wxTypeIdentifier(&wxTypeIdentifier::wxDummy<T>::ms_wxClassInfo);
 }
 
-// Use this macro to declare type info
+// Use this macro to declare type info.
 #define WX_DECLARE_TYPEINFO(CLS) \
 public: \
     virtual wxTypeIdentifier GetWxTypeId() const override { \
         return wxPrivateTypeId<CLS>(); \
     }
+
+// This macro is left for compatibility reasons and it should be replaced by
+// WX_DECLARE_TYPEINFO.
+#define WX_DECLARE_TYPEINFO_INLINE(CLS) \
+    WX_DECLARE_TYPEINFO(CLS)
 
 #define wxTypeId(OBJ) (OBJ).GetWxTypeId()
 
