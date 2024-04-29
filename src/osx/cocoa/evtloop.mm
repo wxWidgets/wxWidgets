@@ -379,7 +379,7 @@ void wxGUIEventLoop::WakeUp()
         NSEvent *event = [NSEvent otherEventWithType:NSApplicationDefined
                                         location:NSMakePoint(0.0, 0.0)
                                    modifierFlags:0
-                                       timestamp:0
+                                       timestamp:[[NSProcessInfo processInfo] systemUptime]
                                     windowNumber:0
                                          context:nil
                                          subtype:0 data1:0 data2:0];
