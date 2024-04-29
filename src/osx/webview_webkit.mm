@@ -812,6 +812,10 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
 - (BOOL)performKeyEquivalent:(NSEvent *)event
 {
+    if (self.window.firstResponder != self) 
+    {
+        return NO;
+    }
     if ([event modifierFlags] & NSCommandKeyMask)
     {
         switch ([event.characters characterAtIndex:0])
