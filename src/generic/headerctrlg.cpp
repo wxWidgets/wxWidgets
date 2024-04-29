@@ -350,6 +350,7 @@ void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
         //else: we had already done the above when we started
 
     }
+    RefreshColsAfter(col);
 }
 
 void wxHeaderCtrl::EndResizing(int xPhysical)
