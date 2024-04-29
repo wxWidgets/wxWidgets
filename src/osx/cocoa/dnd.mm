@@ -18,6 +18,7 @@
 #include "wx/dnd.h"
 #include "wx/clipbrd.h"
 #include "wx/filename.h"
+#include "wx/recguard.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -483,11 +484,17 @@ typedef NSString* NSPasteboardType;
 
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
+    static wxRecursionGuardFlag s_inDragDrop = 0;
+
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
 
     wxDragResult result = wxDragNone;
     if ((m_data == nullptr) || (m_data->GetFormatCount() == 0))
         return result;
+
+    wxRecursionGuard guard(s_inDragDrop);
+    if (guard.IsInside())
+        return wxDragNone;
 
     NSView* view = m_window->GetPeer()->GetWXWidget();
     if (view)
@@ -559,7 +566,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         gCurrentSource = nullptr;
     }
-
 
     return result;
 }
