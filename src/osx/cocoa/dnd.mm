@@ -484,11 +484,16 @@ typedef NSString* NSPasteboardType;
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
-
+    static bool g_in_dnd = false;
+	
     wxDragResult result = wxDragNone;
     if ((m_data == nullptr) || (m_data->GetFormatCount() == 0))
         return result;
-
+	
+	if (g_in_dnd)
+        return wxDragNone;
+    
+    g_in_dnd = true;
     NSView* view = m_window->GetPeer()->GetWXWidget();
     if (view)
     {
@@ -559,8 +564,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
         gCurrentSource = nullptr;
     }
-
-
+	
+	g_in_dnd = false;
     return result;
 }
 
