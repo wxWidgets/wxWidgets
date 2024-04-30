@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_BASE wxVariant;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 #if wxUSE_LUNASVG
-namespace lunasvg {
+namespace wxlunasvg {
     class Document;
 }
 #endif
@@ -103,7 +103,7 @@ public:
 
     // You must pass the document parameter using std::move() so that wxBitmapBundle
     // can take ownership of it.
-    wxNODISCARD static wxBitmapBundle FromSVG(std::unique_ptr<lunasvg::Document> document, const wxSize& sizeDef);
+    wxNODISCARD static wxBitmapBundle FromSVG(std::unique_ptr<wxlunasvg::Document> document, const wxSize& sizeDef);
 #endif
 
     // Load SVG image from the given file (must be a local file, not an URL).

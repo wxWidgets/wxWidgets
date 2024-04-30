@@ -71,7 +71,7 @@
 class wxBitmapBundleImplSVG : public wxBitmapBundleImpl
 {
 public:
-    wxBitmapBundleImplSVG(std::unique_ptr<lunasvg::Document> svg_document, const wxSize& sizeDef);
+    wxBitmapBundleImplSVG(std::unique_ptr<wxlunasvg::Document> svg_document, const wxSize& sizeDef);
 
     virtual wxSize GetDefaultSize() const override;
     virtual wxSize GetPreferredBitmapSizeAtScale(double scale) const override;
@@ -83,7 +83,7 @@ public:
 private:
     wxBitmap DoRasterize(const wxSize& size);
 
-    std::unique_ptr<lunasvg::Document> m_svgDocument;
+    std::unique_ptr<wxlunasvg::Document> m_svgDocument;
 
     const wxSize m_sizeDef;
 
@@ -103,7 +103,7 @@ private:
 // wxBitmapBundleImplSVG implementation
 // ============================================================================
 
-wxBitmapBundleImplSVG::wxBitmapBundleImplSVG(std::unique_ptr<lunasvg::Document> svg_document, const wxSize& sizeDef)
+wxBitmapBundleImplSVG::wxBitmapBundleImplSVG(std::unique_ptr<wxlunasvg::Document> svg_document, const wxSize& sizeDef)
     : m_sizeDef(sizeDef)
 {
     m_svgDocument = std::move(svg_document);
@@ -114,7 +114,7 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const char* data, const wxSize& sizeDef)
 {
     wxCHECK_MSG(data != nullptr, wxBitmapBundle(), "null data pointer");
     wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
-    auto svgDocument = lunasvg::Document::loadFromData(data);
+    auto svgDocument = wxlunasvg::Document::loadFromData(data);
     return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
 }
 
@@ -123,7 +123,7 @@ wxBitmapBundle wxBitmapBundle::FromSVG(char* data, const wxSize& sizeDef)
 {
     wxCHECK_MSG(data != nullptr, wxBitmapBundle(), "null data pointer");
     wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
-    auto svgDocument = lunasvg::Document::loadFromData(data);
+    auto svgDocument = wxlunasvg::Document::loadFromData(data);
     return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
 }
 
@@ -133,7 +133,7 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxS
     wxCHECK_MSG(data != nullptr, wxBitmapBundle(), "null data pointer");
     wxCHECK_MSG(len > 0, wxBitmapBundle(), "zero length data");
     wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
-    auto svgDocument = lunasvg::Document::loadFromData(reinterpret_cast<const char*>(data), len);
+    auto svgDocument = wxlunasvg::Document::loadFromData(reinterpret_cast<const char*>(data), len);
     return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
 }
 
@@ -141,12 +141,12 @@ wxBitmapBundle wxBitmapBundle::FromSVG(const wxByte* data, size_t len, const wxS
 wxBitmapBundle wxBitmapBundle::FromSVG(const std::string& data, const wxSize& sizeDef)
 {
     wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
-    auto svgDocument = lunasvg::Document::loadFromData(data);
+    auto svgDocument = wxlunasvg::Document::loadFromData(data);
     return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(svgDocument), sizeDef));
 }
 
 /* static */
-wxBitmapBundle wxBitmapBundle::FromSVG(std::unique_ptr<lunasvg::Document> document, const wxSize& sizeDef)
+wxBitmapBundle wxBitmapBundle::FromSVG(std::unique_ptr<wxlunasvg::Document> document, const wxSize& sizeDef)
 {
     wxCHECK_MSG(sizeDef.GetWidth() > 0 && sizeDef.GetHeight() > 0, wxBitmapBundle(), "invalid default size");
     return wxBitmapBundle(new wxBitmapBundleImplSVG(std::move(document), sizeDef));
@@ -164,12 +164,12 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
         const auto scale = wxMin(size.x / m_svgDocument->width(), size.y / m_svgDocument->height());
         const auto documentMatrix = m_svgDocument->matrix();
         const auto scaleMatrix = documentMatrix.scaled(scale, scale);
-        lunasvg::Bitmap lbmp(size.x, size.y);
+        wxlunasvg::Bitmap lbmp(size.x, size.y);
 
         lbmp.clear(0);
         m_svgDocument->render(lbmp, scaleMatrix);
 
-        // conversion to wxBitmap is based on the code in lunasvg::Bitmap::convert()
+        // conversion to wxBitmap is based on the code in wxlunasvg::Bitmap::convert()
         if ( lbmp.valid() )
         {
             const auto width = lbmp.width();
@@ -214,7 +214,7 @@ wxBitmap wxBitmapBundleImplSVG::DoRasterize(const wxSize& size)
             return bmp;
         }
         else
-            wxLogDebug("invalid lunasvg::Bitmap");
+            wxLogDebug("invalid wxlunasvg::Bitmap");
     }
 
     return wxBitmap();
