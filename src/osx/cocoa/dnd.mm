@@ -498,8 +498,21 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if (view)
     {
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
-        wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
-
+        // relax the constraint set for DoDragDrop().
+        // if the user start DnD something from a frame rendered by CEF or similar framework, it should be perfectly valid.
+        if (theEvent == nil){
+            NSPoint mouse_location = [NSEvent mouseLocation];
+            theEvent = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDragged 
+                location:mouse_location
+                modifierFlags:0
+                timestamp: 0
+                windowNumber: [NSWindow windowNumberAtPoint:mouse_location belowWindowWithWindowNumber:0]
+                context:nil
+                eventNumber: 0
+                clickCount: 0
+                pressure: 1.0];
+        }
+		
         gCurrentSource = this;
 
         DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
