@@ -500,7 +500,23 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if (view)
     {
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
-        wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
+
+        // Drag and drop operation can be started from an external mouse event
+        // handler, this happens at least when using CEF, so synthesize the
+        // mouse event if we don't have one.
+        if (theEvent == nil)
+        {
+            NSPoint mouse_location = [NSEvent mouseLocation];
+            theEvent = [NSEvent mouseEventWithType:NSEventTypeLeftMouseDragged 
+                location:mouse_location
+                modifierFlags:0
+                timestamp: 0
+                windowNumber: [NSWindow windowNumberAtPoint:mouse_location belowWindowWithWindowNumber:0]
+                context:nil
+                eventNumber: 0
+                clickCount: 0
+                pressure: 1.0];
+        }
 
         gCurrentSource = this;
 
