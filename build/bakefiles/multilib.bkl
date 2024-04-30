@@ -384,7 +384,7 @@
     <!--                            STC                                   -->
     <!-- ================================================================ -->
 
-    <template id="stc_base" template="wxscintilla_cppflags,wxlexilla_cppflags,wxlunasvg_cppflags">
+    <template id="stc_base" template="wxscintilla_cppflags,wxlexilla_cppflags">
         <library>wxscintilla</library>
         <library>wxlexilla</library>
     </template>
@@ -409,5 +409,31 @@
     <wxshortcut id="wxstc" cond="MONOLITHIC=='0' and USE_STC=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">stc=stclib+stcdll</set>
+
+    <!-- ================================================================ -->
+    <!--                            LUNASVG                               -->
+    <!-- ================================================================ -->
+
+    <template id="wxlunasvg_base" template="wxlunasvg_cppflags">
+        <library>wxlunasvg</library>
+        <library>wxlexilla</library>
+    </template>
+
+    <dll id="wxlunasvgdll" template="wx_dll,wxlunasvg_base"
+         cond="SHARED=='1' and USE_LUNASVG=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_LUNASVG</define>
+        <sources>$(LUNASVG_SRC)</sources>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(LUNASVG_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="wxlunasvglib" template="wx_lib,wxlunasvg_base"
+         cond="SHARED=='0' and USE_LUNASVG=='1' and MONOLITHIC=='0'">
+        <sources>$(LUNASVG_SRC)</sources>
+        <msvc-headers>$(LUNASVG_HDR)</msvc-headers>
+    </lib>
+
 
 </makefile>

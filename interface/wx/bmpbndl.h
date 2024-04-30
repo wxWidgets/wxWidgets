@@ -307,7 +307,7 @@ public:
         @note You must call std::move() to pass the unique_ptr to this
         function.
     */
-    static wxBitmapBundle FromSVG(std::unique_ptr<lunasvg::Document> document,
+    static wxBitmapBundle FromSVG(std::unique_ptr<wxlunasvg::Document> document,
                                   const wxSize& sizeDef);
 
     /**

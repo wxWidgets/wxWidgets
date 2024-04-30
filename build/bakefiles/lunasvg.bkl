@@ -18,11 +18,11 @@
 
     <template id="wxlunasvg_cppflags">
         <include>$(TOP_SRCDIR)3rdparty/lunasvg/include</include>
-        <include>$(TOP_SRCDIR)3rdparty/lunasvg/3rdparty/plutovg</include>
+        <include>$(TOP_SRCDIR)3rdparty/lunasvg/source/plutovg</include>
     </template>
 
     <set var="wxlunasvg_usingdll">
-        <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL LUNASVG_SHARED LUNASVG_EXPORT</if>
+        <if cond="SHARED=='1' and MONOLITHIC=='0'">WXUSINGDLL</if>
     </set>
 
     <lib id="wxlunasvg" template="3rdparty_lib,wxlunasvg_cppflags,msvc_setup_h"
@@ -30,7 +30,7 @@
         <if cond="FORMAT!='autoconf'">
             <include>$(SETUPHDIR)</include>
             <include>$(TOP_SRCDIR)3rdparty/lunasvg/include</include>
-            <include>$(TOP_SRCDIR)3rdparty/lunasvg/3rdparty/plutovg</include>
+            <include>$(TOP_SRCDIR)3rdparty/lunasvg/source/plutovg</include>
         </if>
         <define>$(wxlunasvg_usingdll)</define>
         <define>__WX$(TOOLKIT)__</define>
@@ -58,6 +58,16 @@
             3rdparty/lunasvg/source/svgelement.cpp
             3rdparty/lunasvg/source/symbolelement.cpp
             3rdparty/lunasvg/source/useelement.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-blend.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-dash.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-ft-math.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-ft-raster.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-ft-stroker.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-geometry.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-paint.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-rle.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg.cpp
+            3rdparty/lunasvg/source/plutovg/plutovg-private.cpp
         </sources>
     </lib>
 
