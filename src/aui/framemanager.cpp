@@ -1972,8 +1972,6 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                                  wxAuiDockUIPartArray& uiparts,
                                  bool spacer_only)
 {
-    wxBoxSizer* container = new wxBoxSizer(wxVERTICAL);
-
     int pane_borderSize = m_frame->FromDIP(m_art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
     int caption_size = m_frame->FromDIP(m_art->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
     wxSize cli_size = m_frame->GetClientSize();
@@ -2350,8 +2348,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         uiparts.Add(part);
     }
 
-    container->Add(cont, 1, wxEXPAND);
-    return container;
+    return cont;
 }
 
 
