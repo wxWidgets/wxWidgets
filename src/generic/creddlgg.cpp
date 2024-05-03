@@ -74,6 +74,16 @@ void wxGenericCredentialEntryDialog::Init(const wxString& message,
     m_userTextCtrl->SetFocus();
 }
 
+void wxGenericCredentialEntryDialog::SetUser(const wxString& user)
+{
+    m_userTextCtrl->SetValue(user);
+}
+
+void wxGenericCredentialEntryDialog::SetPassword(const wxString& password)
+{
+    m_passwordTextCtrl->SetValue(password);
+}
+
 wxWebCredentials wxGenericCredentialEntryDialog::GetCredentials() const
 {
     return wxWebCredentials(m_userTextCtrl->GetValue(),
