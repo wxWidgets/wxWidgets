@@ -32,9 +32,8 @@ public:
         const wxString& title,
         const wxWebCredentials& cred = wxWebCredentials());
 
-    void SetUser(const wxString& user) { m_userTextCtrl->SetValue(user); }
-    void SetPassword(const wxString& password)
-        { m_passwordTextCtrl->SetValue(password); }
+    void SetUser(const wxString& user);
+    void SetPassword(const wxString& password);
 
     wxWebCredentials GetCredentials() const;
 
