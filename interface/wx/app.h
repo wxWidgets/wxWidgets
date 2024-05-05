@@ -1026,7 +1026,7 @@ public:
 
         @since 3.3.0
     */
-    bool SetAppearance(Appearance appearance);
+    AppearanceResult SetAppearance(Appearance appearance);
 
     /**
         Set display mode to use. This is only used in framebuffer wxWidgets
