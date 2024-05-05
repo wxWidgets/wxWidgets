@@ -178,31 +178,31 @@ DocumentIstream& DoodleSegment::LoadObject(DocumentIstream& istream)
 }
 
 // ----------------------------------------------------------------------------
-// wxTextDocument: wxDocument and wxTextCtrl married
+// TextEditDocument: wxDocument and wxTextCtrl married
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_CLASS(wxTextDocument, wxDocument);
+wxIMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument);
 
-bool wxTextDocument::OnCreate(const wxString& path, long flags)
+bool TextEditDocument::OnCreate(const wxString& path, long flags)
 {
     if ( !wxDocument::OnCreate(path, flags) )
         return false;
 
     // subscribe to changes in the text control to update the document state
     // when it's modified
-    GetTextCtrl()->Bind(wxEVT_TEXT, &wxTextDocument::OnTextChange, this);
+    GetTextCtrl()->Bind(wxEVT_TEXT, &TextEditDocument::OnTextChange, this);
 
     return true;
 }
 
 // Since text windows have their own method for saving to/loading from files,
 // we override DoSave/OpenDocument instead of Save/LoadObject
-bool wxTextDocument::DoSaveDocument(const wxString& filename)
+bool TextEditDocument::DoSaveDocument(const wxString& filename)
 {
     return GetTextCtrl()->SaveFile(filename);
 }
 
-bool wxTextDocument::DoOpenDocument(const wxString& filename)
+bool TextEditDocument::DoOpenDocument(const wxString& filename)
 {
     if ( !GetTextCtrl()->LoadFile(filename) )
         return false;
@@ -213,13 +213,13 @@ bool wxTextDocument::DoOpenDocument(const wxString& filename)
     return true;
 }
 
-bool wxTextDocument::IsModified() const
+bool TextEditDocument::IsModified() const
 {
     wxTextCtrl* wnd = GetTextCtrl();
     return wxDocument::IsModified() || (wnd && wnd->IsModified());
 }
 
-void wxTextDocument::Modify(bool modified)
+void TextEditDocument::Modify(bool modified)
 {
     wxDocument::Modify(modified);
 
@@ -230,18 +230,12 @@ void wxTextDocument::Modify(bool modified)
     }
 }
 
-void wxTextDocument::OnTextChange(wxCommandEvent& event)
+void TextEditDocument::OnTextChange(wxCommandEvent& event)
 {
     Modify(true);
 
     event.Skip();
 }
-
-// ----------------------------------------------------------------------------
-// TextEditDocument implementation
-// ----------------------------------------------------------------------------
-
-wxIMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument);
 
 wxTextCtrl* TextEditDocument::GetTextCtrl() const
 {
