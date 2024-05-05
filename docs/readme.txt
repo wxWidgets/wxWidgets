@@ -32,25 +32,27 @@ installation instructions.
 
 
 
-Changes since 3.2.3
+Changes since 3.2.4
 -------------------
 
-This release comes very soon after 3.2.3 because some of the changes
-in the last release resulted in regressions fixed by this release.
-Notably, 3.2.4 fixes a critical bug which made applications using wxGTK
-but not initializing the GUI to crash (see issue #23981).
+This release contains more than a hundred fixes and improvements for all
+platforms. Some of the most important ones are:
 
-Other bug fixes include:
+- Support macOS 14 Sonoma (#23916, #24054, #24067, #24073, #24515).
+- Wayland-related fixes in wxGTK: clipboard (#24391), OpenGL (#24076, #24395)
+  and other (#24021, #24050, #24051).
+- Fix crash when using wxApp in console wxGTK programs (#24081).
+- Support for dates after 2038 in wxDateTime (#24464).
 
-- Fix regression in wxTranslations::AddCatalog() return value (#24019).
-- Fix possible crash and too high CPU use when using EGL (#24018).
-- Fix losing clipboard contents when clearing a different selection (#23988).
-- Fix possible crash when dragging pages in wxAuiNotebook (#24027).
-- Fix refreshing multiple selection items in generic wxListCtrl.
-- Fix showing windows for background apps under macOS Sonoma (#23893).
+Other changes include:
 
-The only new addition in this release is the possibility to create objects
-of wx legacy "dynamic arrays" class from std::initializer_list<> (#23966).
+- Fix support for using Chinese (zh-Hans-CN) locale under macOS (#24396).
+- Fix alpha channel in bitmaps loaded from SVG in wxGTK (#24064).
+- wxGenericListCtrl improvements (#24292, #24293, #24311, #24312, #24332).
+- wxGrid improvements (#24247, #24286).
+- More high DPI fixes in wxMSW (#24283, #24196, #24456).
+- Avoid new gcc 14 warnings in the headers (#24502).
+
 
 Please see the full change log for more details:
 
@@ -69,7 +71,7 @@ Supported Platforms
 This version of wxWidgets supports the following primary platforms:
 
 * Windows XP, Vista, 7, 8, 10 and 11 (32/64 bits).
-* Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
+* Most Unix variants using the GTK toolkit (version 2.6 or newer)
 * macOS (10.10 or newer) using Cocoa (x86-64 or ARM).
 
 There is some support for the following platforms:
@@ -154,4 +156,4 @@ developed by its users and your contributions to it are always welcome!
 
 Have fun!
 
-The wxWidgets Team, November 2023
+The wxWidgets Team, May 2024
