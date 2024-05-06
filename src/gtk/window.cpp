@@ -6211,7 +6211,20 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
             event = (GdkEvent*)&eventTmp;
         }
         if (x == -1 && y == -1)
-            gdk_window_get_device_position(window, device, &x, &y, nullptr);
+        {
+            if (gdk_device_get_source(device) == GDK_SOURCE_KEYBOARD)
+            {
+                // We can't get the position from this device in this case, as
+                // gdk_window_get_device_position() would just fail with a
+                // "critical" error, so use the global mouse position instead:
+                // it should be what we want anyhow.
+                wxGetMousePosition(&x, &y);
+            }
+            else
+            {
+                gdk_window_get_device_position(window, device, &x, &y, nullptr);
+            }
+        }
 
         const GdkRectangle rect = { x, y, 1, 1 };
         gtk_menu_popup_at_rect(GTK_MENU(menu->m_menu),
