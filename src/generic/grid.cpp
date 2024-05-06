@@ -6459,12 +6459,11 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         // size of the rectangle is reduced to compensate for the thickness of
         // the line. If this is too strange on non-wxMSW platforms then
         // please #ifdef this appropriately.
-#ifndef __WXQT__
         rect.x += penWidth / 2;
         rect.y += penWidth / 2;
         rect.width -= penWidth - 1;
         rect.height -= penWidth - 1;
-#endif
+
         // Now draw the rectangle
         // use the cellHighlightColour if the cell is inside a selection, this
         // will ensure the cell is always visible.
@@ -7502,10 +7501,10 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
     CalcGridWindowScrolledPosition( rect.x, rect.y, &rect.x, &rect.y, gridWindow );
 
 #ifdef __WXQT__
-    // Substract 1 pixel in every dimension to fit in the cell area.
+    // Substract 2 pixel in every dimension to fit in the cell area.
     // If not, Qt will draw the control outside the cell.
     // TODO: Check offsets under Qt.
-    rect.Deflate(1, 1);
+    rect.Deflate(2, 2);
 #endif
 
     if ( !editor->IsCreated() )
@@ -7921,14 +7920,12 @@ wxRect wxGrid::CellToRect( int row, int col ) const
         for (i=row; i < row + cell_rows; i++)
             rect.height += GetRowHeight(i);
 
-#ifndef __WXQT__
         // if grid lines are enabled, then the area of the cell is a bit smaller
         if (m_gridLinesEnabled)
         {
             rect.width -= 1;
             rect.height -= 1;
         }
-#endif
     }
 
     return rect;
