@@ -323,6 +323,7 @@ wxOSX:
 - Fix handling of nested modal dialogs (WakA, #24418).
 - Fix translations when using zh-Hans-CN locale (#24396).
 - Add filters support to wxFileDialog::ShowWindowModal() (Gammasoft, #24438).
+- Fix installation on some Apple Silicon Macs (Thomas Holder, #23143, #24524).
 
 wxQt:
 
