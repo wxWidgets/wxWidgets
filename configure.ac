@@ -3500,6 +3500,10 @@ for dep in \${libnames} ; do
     changes="\${changes} -change \${4}/\${dep} \${3}/\${dep}"
 done
 for i in \${libnames} ; do
+    if test -L \${1}/\${i}; then
+        # skip symbolic links
+        continue
+    fi
     ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${1}/\${i}
 done
 
