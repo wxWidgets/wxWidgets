@@ -70,7 +70,8 @@ wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
     wxCollapsiblePane *collpane = new wxCollapsiblePane(this, wxID_ANY, "Details:");
 
     // add the pane with a zero proportion value to the 'sz' sizer which contains it
-    sz->Add(collpane, 0, wxGROW|wxALL, 5);
+    sz->Add(collpane,
+            wxSizerFlags().Expand().Border(wxALL, wxSizerFlags::GetDefaultBorder()));
 
     // now add a test label in the collapsible pane using a sizer to layout it:
     wxWindow *win = collpane->GetPane();
