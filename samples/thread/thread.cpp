@@ -836,7 +836,7 @@ MyImageDialog::MyImageDialog(wxFrame *parent)
 
     CentreOnScreen();
 
-    // NOTE: no need to lock m_csBmp until the thread isn't started:
+    // NOTE: no need to lock m_csBmp until the thread has started:
 
     // create the bitmap
     if (!m_bmp.Create(GUITHREAD_BMP_SIZE,GUITHREAD_BMP_SIZE) || !m_bmp.IsOk())
