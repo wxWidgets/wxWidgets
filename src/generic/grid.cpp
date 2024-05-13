@@ -11658,10 +11658,33 @@ wxAccStatus wxGridAccessible::GetChild(int childId, wxAccessible** child)
     }
     else
     {
-        if ( !m_gridCellAccessible || m_gridCellAccessible->m_childId!=childId)
+        if ( !m_gridCellAccessible )
         {
+            m_gridCellAccessible = new wxGridCellAccessible(grid, childId);
+        }
+        else if ( m_gridCellAccessible->m_childId != childId )
+        {
+            // pass on the information whether the cell is on the same row or
+            // column than the previous one to avoid redundant coordinate info
+            int previousRow = m_gridCellAccessible->m_row;
+            int previousCol = m_gridCellAccessible->m_col;
+            int previousRowHeader = m_gridCellAccessible->m_isRowHeader;
+            int previousColHeader = m_gridCellAccessible->m_isColHeader;
             delete m_gridCellAccessible;
             m_gridCellAccessible = new wxGridCellAccessible(grid, childId);
+            if ( m_gridCellAccessible->m_row == previousRow &&
+                m_gridCellAccessible->m_isColHeader == previousColHeader )
+            {
+                m_gridCellAccessible->m_isSameRow = true;
+                printf("same row\n");
+            }
+            if ( m_gridCellAccessible->m_col == previousCol &&
+                m_gridCellAccessible->m_isRowHeader == previousRowHeader )
+            {
+                m_gridCellAccessible->m_isSameCol = true;
+                printf("same column\n");
+            }
+                
         }
         *child = m_gridCellAccessible;
     }
@@ -11777,6 +11800,7 @@ wxGridCellAccessible::wxGridCellAccessible(wxGrid* grid, int childId)
 {
     m_childId = childId;
     GetRowCol(grid, childId, &m_row, &m_col, &m_isRowHeader, &m_isColHeader);
+    m_isSameRow = m_isSameCol = false;
 }
 
 // Gets the parent
@@ -11861,15 +11885,25 @@ wxAccStatus wxGridCellAccessible::GetName(int childId, wxString* name)
     if ( childId != wxACC_SELF )
         return wxACC_FAIL;
 
+    // combine coordinate info and value, as JAWS will not handle Name and Value
     if ( m_isColHeader && m_isRowHeader )
         *name = _("Grid Corner");
     else if ( m_isColHeader )
         *name = wxString::Format(_("Column %s Header"), grid->GetColLabelValue(m_col));
     else if ( m_isRowHeader )
         *name = wxString::Format(_("Row %s Header"), grid->GetRowLabelValue(m_row));
+    else if ( m_isSameRow )
+        *name = wxString::Format(_("Column %s: %s"),
+            grid->GetColLabelValue(m_col),
+            grid->GetCellValue(m_row, m_col));
+    else if ( m_isSameCol )
+        *name = wxString::Format(_("Row %s: %s"),
+            grid->GetRowLabelValue(m_row),
+            grid->GetCellValue(m_row, m_col));
     else
-        *name = wxString::Format(_("Row %s, Column %s"),
-            grid->GetRowLabelValue(m_row), grid->GetColLabelValue(m_col));
+        *name = wxString::Format(_("Row %s, Column %s: %s"),
+            grid->GetRowLabelValue(m_row), grid->GetColLabelValue(m_col),
+            grid->GetCellValue(m_row, m_col));
 
     return wxACC_OK;
 }
@@ -11961,6 +11995,8 @@ wxAccStatus wxGridCellAccessible::GetState(int childId, long* state)
             st |= wxACC_STATE_SYSTEM_SELECTED;
         if ( grid->IsVisible(m_row, m_col, false) )
             st |= wxACC_STATE_SYSTEM_OFFSCREEN;
+        if ( grid->IsReadOnly(m_row, m_col) )
+            st |= wxACC_STATE_SYSTEM_READONLY;
     }
 
     *state = st;
@@ -11975,17 +12011,8 @@ wxAccStatus wxGridCellAccessible::GetValue(int childId, wxString* strValue)
 
     if ( childId != wxACC_SELF )
         return wxACC_FAIL;
-
-    if ( m_isColHeader && m_isRowHeader )
-        *strValue = grid->GetCornerLabelValue();
-    else if ( m_isColHeader )
-        *strValue = grid->GetColLabelValue(m_col);
-    else if ( m_isRowHeader )
-        *strValue = grid->GetRowLabelValue(m_row);
-    else
-        *strValue = grid->GetCellValue(m_row, m_col);
-
-    return wxACC_OK;
+    // GetName now returns coordinate and value info at the same time
+    return wxACC_NOT_IMPLEMENTED;
 }
 
 // Gets the window with the keyboard focus.

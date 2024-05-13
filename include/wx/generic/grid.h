@@ -3535,6 +3535,8 @@ private:
     int m_col;
     bool m_isRowHeader;
     bool m_isColHeader;
+    bool m_isSameRow;
+    bool m_isSameCol;
     friend class wxGridAccessible;
     void DoGetLocation(wxGrid* grid, wxRect& rect);
 };
