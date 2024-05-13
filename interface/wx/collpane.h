@@ -57,7 +57,7 @@ wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
     wxCollapsiblePane itself!).
 
     Note that because this control can dynamically (and drastically) change its
-    size at run-time, you should set its proportion to zero if putting it inside 
+    size at run-time, you should set its proportion to zero if putting it inside
     of a sizer. This is because otherwise all other windows with
     non-null proportion values will automatically resize each time the user
     expands or collapse the pane window usually resulting in a weird,
