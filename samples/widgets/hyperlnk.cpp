@@ -244,7 +244,7 @@ void HyperlinkWidgetsPage::CreateContent()
 
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void HyperlinkWidgetsPage::Reset()

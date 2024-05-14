@@ -407,7 +407,7 @@ void ListboxWidgetsPage::CreateContent()
 
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

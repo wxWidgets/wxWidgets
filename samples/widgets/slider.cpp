@@ -412,7 +412,7 @@ void SliderWidgetsPage::CreateContent()
     // final initializations
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

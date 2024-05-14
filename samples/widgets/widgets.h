@@ -206,7 +206,7 @@ protected:
     {
         m_contentCreated = true;
     }
-    
+
 public:
     // the head of the linked list containinginfo about all pages
     static WidgetsPageInfo *ms_widgetPages;

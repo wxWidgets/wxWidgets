@@ -172,7 +172,7 @@ void ColourPickerWidgetsPage::CreateContent()
 
     SetSizer(sz);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void ColourPickerWidgetsPage::CreatePicker()

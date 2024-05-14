@@ -187,7 +187,7 @@ void DirPickerWidgetsPage::CreateContent()
 
     SetSizer(sz);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void DirPickerWidgetsPage::CreatePicker()

@@ -268,7 +268,7 @@ void ChoiceWidgetsPage::CreateContent()
 
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

@@ -230,7 +230,7 @@ void CheckBoxWidgetsPage::CreateContent()
 
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void CheckBoxWidgetsPage::Reset()

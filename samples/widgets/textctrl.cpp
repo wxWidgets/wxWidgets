@@ -620,7 +620,7 @@ void TextWidgetsPage::CreateContent()
 
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

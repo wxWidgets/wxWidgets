@@ -286,7 +286,7 @@ void BookWidgetsPage::CreateContent()
 
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 BookWidgetsPage::~BookWidgetsPage()

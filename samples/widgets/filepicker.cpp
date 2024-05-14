@@ -216,7 +216,7 @@ void FilePickerWidgetsPage::CreateContent()
 
     SetSizer(sz);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void FilePickerWidgetsPage::CreatePicker()

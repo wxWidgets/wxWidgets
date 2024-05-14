@@ -235,7 +235,7 @@ void DirCtrlWidgetsPage::CreateContent()
     // final initializations
     Reset();
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void DirCtrlWidgetsPage::Reset()

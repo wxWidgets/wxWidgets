@@ -263,7 +263,7 @@ void GaugeWidgetsPage::CreateContent()
 
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 GaugeWidgetsPage::~GaugeWidgetsPage()

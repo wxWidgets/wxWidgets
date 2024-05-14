@@ -168,7 +168,7 @@ void SearchCtrlWidgetsPage::CreateContent()
 
     SetSizer(sizer);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void SearchCtrlWidgetsPage::CreateControl()

@@ -347,7 +347,7 @@ void SpinBtnWidgetsPage::CreateContent()
     // final initializations
     SetSizer(sizerTop);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

@@ -166,7 +166,7 @@ void FontPickerWidgetsPage::CreateContent()
 
     SetSizer(sz);
 
-    this->SetContentCreated();
+    SetContentCreated();
 }
 
 void FontPickerWidgetsPage::CreatePicker()
