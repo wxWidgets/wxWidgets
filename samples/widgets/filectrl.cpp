@@ -212,6 +212,8 @@ void FileCtrlWidgetsPage::CreateContent()
     Reset();
 
     SetSizer( sizerTop );
+
+    this->SetContentCreated();
 }
 
 void FileCtrlWidgetsPage::Reset()

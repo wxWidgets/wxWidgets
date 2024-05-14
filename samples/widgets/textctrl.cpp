@@ -619,6 +619,8 @@ void TextWidgetsPage::CreateContent()
     sizerTop->Add(m_sizerText, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

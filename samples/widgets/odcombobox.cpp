@@ -480,6 +480,8 @@ void ODComboboxWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

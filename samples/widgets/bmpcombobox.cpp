@@ -409,6 +409,8 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

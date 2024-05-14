@@ -821,7 +821,7 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
     // create the pages on demand, otherwise the sample startup is too slow as
     // it creates hundreds of controls
     WidgetsPage *curPage = CurrentPage();
-    if ( curPage->GetChildren().empty() )
+    if ( !curPage->HasCreatedContent() )
     {
         wxWindowUpdateLocker noUpdates(curPage);
         curPage->CreateContent();

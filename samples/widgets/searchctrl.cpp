@@ -167,6 +167,8 @@ void SearchCtrlWidgetsPage::CreateContent()
     sizer->Add(m_srchCtrl, wxSizerFlags().Centre().TripleBorder());
 
     SetSizer(sizer);
+
+    this->SetContentCreated();
 }
 
 void SearchCtrlWidgetsPage::CreateControl()

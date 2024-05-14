@@ -390,6 +390,8 @@ void ButtonWidgetsPage::CreateContent()
     CreateButton();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

@@ -118,6 +118,8 @@ void StatBmpWidgetsPage::CreateContent()
 
     m_statbmp = nullptr;
     RecreateWidget();
+
+    this->SetContentCreated();
 }
 
 void StatBmpWidgetsPage::RecreateWidget()

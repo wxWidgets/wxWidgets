@@ -170,6 +170,8 @@ void TimePickerWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 void TimePickerWidgetsPage::Reset()

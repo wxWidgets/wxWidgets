@@ -285,6 +285,8 @@ void BookWidgetsPage::CreateContent()
     CreateImageList();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 BookWidgetsPage::~BookWidgetsPage()

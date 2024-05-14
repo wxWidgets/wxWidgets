@@ -409,6 +409,8 @@ void ComboboxWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 // ----------------------------------------------------------------------------

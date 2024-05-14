@@ -135,6 +135,12 @@ public:
     // lazy creation of the content
     virtual void CreateContent() = 0;
 
+    // checks if content has already been created
+    bool HasCreatedContent() const
+    {
+        return m_contentCreated;
+    }
+
     // some pages show additional controls, in this case override this one to
     // return all of them (including the one returned by GetWidget())
     virtual Widgets GetWidgets() const
@@ -195,12 +201,20 @@ protected:
                                             wxWindowID id = wxID_ANY,
                                             wxWindow* statBoxParent = nullptr);
 
+    // sets flag that content has been created
+    void SetContentCreated()
+    {
+        m_contentCreated = true;
+    }
+    
 public:
     // the head of the linked list containinginfo about all pages
     static WidgetsPageInfo *ms_widgetPages;
 
 private:
     bool m_notifyRecreate = false;
+
+    bool m_contentCreated = false; // flag indicating if content has already been created
 };
 
 // ----------------------------------------------------------------------------

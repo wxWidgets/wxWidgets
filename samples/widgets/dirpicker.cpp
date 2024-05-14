@@ -186,6 +186,8 @@ void DirPickerWidgetsPage::CreateContent()
     sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
 
     SetSizer(sz);
+
+    this->SetContentCreated();
 }
 
 void DirPickerWidgetsPage::CreatePicker()

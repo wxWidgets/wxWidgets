@@ -238,6 +238,8 @@ void DatePickerWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 void DatePickerWidgetsPage::Reset()

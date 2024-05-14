@@ -330,6 +330,8 @@ void ToggleWidgetsPage::CreateContent()
     CreateToggle();
 
     SetSizer(sizerTop);
+
+    this->SetContentCreated();
 }
 
 void ToggleWidgetsPage::Reset()
