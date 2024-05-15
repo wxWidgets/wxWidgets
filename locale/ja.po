@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2024-05-15 22:19+0900\n"
+"PO-Revision-Date: 2024-05-15 23:51+0900\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <wx-translators@wxwidgets.org>\n"
 "Language: ja\n"
@@ -1357,7 +1357,7 @@ msgstr "ファイル '%s' %zu 行目: グループヘッダの後にある '%s' 
 #: ../src/common/fileconf.cpp:603
 #, c-format
 msgid "file '%s', line %zu: '=' expected."
-msgstr "ファイル '%s' %zu 行目: '=' がありません｡"
+msgstr "ファイル '%s' %zu 行目: '=' がありません。"
 
 #: ../src/common/fileconf.cpp:616
 #, c-format
@@ -4225,7 +4225,7 @@ msgstr "%ld 型のアニメーションハンドラーは未定義です。"
 #: ../src/generic/animateg.cpp:145
 #, c-format
 msgid "Animation file is not of type %ld."
-msgstr "アニメーションファイルが %ld 型ではありません｡"
+msgstr "アニメーションファイルが %ld 型ではありません。"
 
 #: ../src/generic/colrdlgg.cpp:155 ../src/gtk/colordlg.cpp:49
 msgid "Choose colour"
@@ -4789,9 +4789,8 @@ msgid "%s Information"
 msgstr "%s 情報"
 
 #: ../src/generic/logg.cpp:236
-#, fuzzy
 msgid "Application"
-msgstr "選択"
+msgstr "アプリケーション"
 
 #: ../src/generic/logg.cpp:509
 msgid "Save log contents to file"
@@ -5650,7 +5649,7 @@ msgstr "DDEML の評価により引数の失敗が検出されました。"
 
 #: ../src/msw/dde.cpp:1156
 msgid "a DDEML application has created a prolonged race condition."
-msgstr "DDEML アプリケーションが競合状態の延長として作成されています｡"
+msgstr "DDEML アプリケーションが競合状態の延長として作成されています。"
 
 #: ../src/msw/dde.cpp:1159
 msgid "a memory allocation failed."
@@ -5811,7 +5810,7 @@ msgstr "タイマーを作成できませんでした"
 #: ../src/msw/dlmsw.cpp:164
 #, c-format
 msgid "(error %d: %s)"
-msgstr " (エラー %d: %s)"
+msgstr "(エラー %d: %s)"
 
 #: ../src/msw/dragimag.cpp:144 ../src/msw/dragimag.cpp:179
 #: ../src/msw/imaglist.cpp:304 ../src/msw/imaglist.cpp:326
@@ -6316,14 +6315,12 @@ msgid "Can't run JavaScript script without a valid HTML document"
 msgstr ""
 
 #: ../src/msw/webview_ie.cpp:1046
-#, fuzzy
 msgid "Can't get the JavaScript object"
-msgstr "スレッド優先度を設定できません"
+msgstr "JavaScript オブジェクトを取得できません"
 
 #: ../src/msw/webview_ie.cpp:1060
-#, fuzzy
 msgid "failed to evaluate"
-msgstr "'%s' の実行に失敗しました\n"
+msgstr "評価に失敗しました"
 
 #: ../src/osx/carbon/fontdlg.cpp:217
 msgid "Background colour"
@@ -6347,7 +6344,7 @@ msgstr "スタイル:"
 
 #: ../src/osx/carbon/fontdlg.cpp:352 ../src/osx/carbon/fontdlg.cpp:354
 msgid "Check to make the font bold."
-msgstr "フォントを太字にするときにチェックしてください｡"
+msgstr "フォントを太字にするときにチェックしてください。"
 
 #: ../src/osx/carbon/fontdlg.cpp:359 ../src/osx/carbon/fontdlg.cpp:361
 msgid "Check to make the font italic."
@@ -6448,14 +6445,14 @@ msgid "Bring All to Front"
 msgstr "すべてを手前に移動"
 
 #: ../src/osx/core/sound.cpp:143
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "リソース \"%s\" を読み取れませんでした。"
+msgstr "\"%s\" からサウンドを読み取れませんでした (エラー %d)。"
 
 #: ../src/osx/fontutil.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid "Font file \"%s\" doesn't exist."
-msgstr "ファイル %s は存在しません。"
+msgstr "フォントファイル \"%s\" は存在しません。"
 
 #: ../src/osx/fontutil.cpp:89
 #, c-format
@@ -6463,6 +6460,8 @@ msgid ""
 "Font file \"%s\" cannot be used as it is not inside the font directory "
 "\"%s\"."
 msgstr ""
+"フォントファイル \"%s\" は、フォントディレクトリ \"%s\" に存在しないため、使"
+"用できません。"
 
 #: ../src/osx/menu_osx.cpp:496
 #, c-format
@@ -6489,17 +6488,17 @@ msgstr "サービス"
 #, c-format
 msgctxt "macOS menu item"
 msgid "Hide %s"
-msgstr "%sを隠す"
+msgstr "%sを非表示"
 
 #: ../src/osx/menu_osx.cpp:522
 msgctxt "macOS menu item"
 msgid "Hide Application"
-msgstr "アプリケーションを隠す"
+msgstr "アプリケーションを非表示"
 
 #: ../src/osx/menu_osx.cpp:525
 msgctxt "macOS menu item"
 msgid "Hide Others"
-msgstr "ほかを隠す"
+msgstr "ほかを非表示"
 
 #: ../src/osx/menu_osx.cpp:527
 msgctxt "macOS menu item"
@@ -7975,7 +7974,7 @@ msgstr ""
 #: ../src/richtext/richtextfontpage.cpp:330
 #: ../src/richtext/richtextfontpage.cpp:332
 msgid "Shows a preview of the font settings."
-msgstr "フォント設定のプレビューを表示します｡"
+msgstr "フォント設定のプレビューを表示します。"
 
 #: ../src/richtext/richtextfontpage.cpp:349
 #: ../src/richtext/richtextfontpage.cpp:353
