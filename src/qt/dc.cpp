@@ -946,6 +946,48 @@ void wxQtDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     ComputeScaleAndOrigin();
 }
 
+void wxQtDCImpl::DoDrawPolyPolygon(int n,
+                                   const int count[],
+                                   const wxPoint points[],
+                                   wxCoord xoffset,
+                                   wxCoord yoffset,
+                                   wxPolygonFillMode fillStyle)
+{
+    if ( n == 1 )
+    {
+        DoDrawPolygon(count[0], points, xoffset, yoffset, fillStyle);
+        return;
+    }
+
+    QPainterPath path;
+
+    int i = 0;
+    for ( int j = 0; j < n; ++j )
+    {
+        wxPoint start = points[i];
+        path.moveTo(start.x + xoffset, start.y + yoffset);
+
+        ++i;
+        int l = count[j];
+        for ( int k = 1; k < l; ++k )
+        {
+            path.lineTo(points[i].x + xoffset, points[i].y + yoffset);
+            ++i;
+        }
+        // close the polygon
+        if ( start != points[i-1] )
+            path.lineTo(start.x + xoffset, start.y + yoffset);
+    }
+
+    QtDCOffsetHelper helper(m_qtPainter);
+
+    m_qtPainter->fillPath(path, m_qtPainter->brush());
+    m_qtPainter->strokePath(path, m_qtPainter->pen());
+
+    // Reset transform
+    ComputeScaleAndOrigin();
+}
+
 void wxQtDCImpl::ComputeScaleAndOrigin()
 {
     QTransform t;

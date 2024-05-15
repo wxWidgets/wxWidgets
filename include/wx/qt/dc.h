@@ -106,6 +106,10 @@ public:
                            wxCoord xoffset, wxCoord yoffset,
                            wxPolygonFillMode fillStyle = wxODDEVEN_RULE) override;
 
+    virtual void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
+                                   wxCoord xoffset, wxCoord yoffset,
+                                   wxPolygonFillMode fillStyle) override;
+
     // Use Qt transformations, as they automatically scale pen widths, text...
     virtual void ComputeScaleAndOrigin() override;
 
