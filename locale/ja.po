@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-06 16:05+0100\n"
-"PO-Revision-Date: 2023-10-11 23:53+0900\n"
+"PO-Revision-Date: 2024-05-15 22:19+0900\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <wx-translators@wxwidgets.org>\n"
 "Language: ja\n"
@@ -12,7 +12,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4\n"
 
 #: ../include/wx/defs.h:2592
 msgid "All files (*.*)|*.*"
@@ -62,7 +61,7 @@ msgstr "ヘルプ"
 
 #: ../include/wx/msw/ole/oleutils.h:51
 msgid "Cannot initialize OLE"
-msgstr "OLEを初期化できません"
+msgstr "OLE を初期化できません"
 
 #: ../include/wx/msw/private/fswatcher.h:48
 #, c-format
@@ -72,19 +71,19 @@ msgstr "'%s' へのハンドルを閉じることができませんでした。"
 #: ../include/wx/msw/private/fswatcher.h:92
 #, c-format
 msgid "Failed to open directory \"%s\" for monitoring."
-msgstr "監視対象のディレクトリー \"%s\" を開くことができませんでした。"
+msgstr "監視対象のディレクトリ \"%s\" を開けませんでした。"
 
 #: ../include/wx/msw/private/fswatcher.h:125
 msgid "Unable to close I/O completion port handle"
-msgstr "I/O完了ポートハンドルを閉じることができませんでした"
+msgstr "I/O 完了ポートハンドルを閉じられません"
 
 #: ../include/wx/msw/private/fswatcher.h:142
 msgid "Unable to associate handle with I/O completion port"
-msgstr "ハンドルをI/O完了ポートに関連づけることができませんでした"
+msgstr "ハンドルを I/O 完了ポートに関連づけできません"
 
 #: ../include/wx/msw/private/fswatcher.h:148
 msgid "Unexpectedly new I/O completion port was created"
-msgstr "予期しない新しいI/O完了ポートが作成されました"
+msgstr "予期しない新しい I/O 完了ポートが作成されました"
 
 #: ../include/wx/msw/private/fswatcher.h:213
 msgid "Unable to post completion status"
@@ -96,7 +95,7 @@ msgstr "完了パケットをキューから取り出せません"
 
 #: ../include/wx/msw/private/fswatcher.h:273
 msgid "Unable to create I/O completion port"
-msgstr "I/O完了ポートを作成できません"
+msgstr "I/O 完了ポートを作成できません"
 
 #: ../include/wx/prntbase.h:267 ../include/wx/richtext/richtextprint.h:109
 #: ../src/common/docview.cpp:2166
@@ -129,7 +128,7 @@ msgstr "表(&T)"
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
-msgstr "オブジェクトのプロパティー"
+msgstr "オブジェクトのプロパティ"
 
 #: ../include/wx/richtext/richtextprint.h:163 ../src/common/prntbase.cpp:532
 #: ../src/html/htmprint.cpp:289
@@ -1011,7 +1010,7 @@ msgstr "0時"
 #: ../src/common/debugrpt.cpp:210
 #, c-format
 msgid "Failed to create directory \"%s\""
-msgstr "ディレクトリー \"%s\" を作成できませんでした"
+msgstr "ディレクトリ \"%s\" を作成できませんでした"
 
 #: ../src/common/debugrpt.cpp:211
 msgid "Debug report couldn't be created."
@@ -1025,7 +1024,7 @@ msgstr "デバッグレポートファイル \"%s\" を削除できませんで�
 #: ../src/common/debugrpt.cpp:240
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "デバッグレポートディレクトリー \"%s\" を全削除できませんでした"
+msgstr "デバッグレポートディレクトリ \"%s\" を全削除できませんでした"
 
 #: ../src/common/debugrpt.cpp:515
 msgid "process context description"
@@ -1044,8 +1043,8 @@ msgstr "デバッグレポートの作成に失敗しました。"
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
-"デバッグレポートの処理に失敗しました。ディレクトリー \"%s\" にファイルを残し"
-"ます。"
+"デバッグレポートの処理に失敗しました。ディレクトリ \"%s\" にファイルを残しま"
+"す。"
 
 #: ../src/common/debugrpt.cpp:574
 msgid "A debug report has been generated. It can be found in"
@@ -1463,12 +1462,12 @@ msgstr "ファイル '%s' を削除できませんでした"
 #: ../src/common/filefn.cpp:641
 #, c-format
 msgid "Directory '%s' couldn't be created"
-msgstr "ディレクトリー '%s' を作成できませんでした"
+msgstr "ディレクトリ '%s' を作成できませんでした"
 
 #: ../src/common/filefn.cpp:655
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
-msgstr "ディレクトリー '%s' を削除できませんでした"
+msgstr "ディレクトリ '%s' を削除できませんでした"
 
 #: ../src/common/filefn.cpp:687
 #, c-format
@@ -1477,11 +1476,11 @@ msgstr "ファイル '%s' を列挙できません"
 
 #: ../src/common/filefn.cpp:765
 msgid "Failed to get the working directory"
-msgstr "作業ディレクトリーを取得できませんでした"
+msgstr "作業ディレクトリを取得できませんでした"
 
 #: ../src/common/filefn.cpp:810
 msgid "Could not set current working directory"
-msgstr "作業ディレクトリーを設定できませんでした"
+msgstr "作業ディレクトリを設定できませんでした"
 
 #: ../src/common/filefn.cpp:941
 #, c-format
@@ -3530,11 +3529,11 @@ msgstr "印刷..."
 #: ../src/common/stockitem.cpp:190 ../src/richtext/richtextctrl.cpp:338
 #: ../src/richtext/richtextctrl.cpp:5488
 msgid "&Properties"
-msgstr "プロパティー(&P)"
+msgstr "プロパティ(&P)"
 
 #: ../src/common/stockitem.cpp:190
 msgid "Properties"
-msgstr "プロパティー"
+msgstr "プロパティ"
 
 #: ../src/common/stockitem.cpp:191 ../src/stc/stc_i18n.cpp:16
 msgid "Redo"
@@ -4029,7 +4028,7 @@ msgstr "識別子が重複しています: %d"
 #: ../src/common/xtixml.cpp:318
 #, c-format
 msgid "Unknown Property %s"
-msgstr "未知のプロパティー %s"
+msgstr "未知のプロパティ %s"
 
 #: ../src/common/xtixml.cpp:409
 msgid "A non empty collection must consist of 'element' nodes"
@@ -4061,11 +4060,11 @@ msgstr "不完全なzipファイルです"
 
 #: ../src/common/zipstrm.cpp:1733
 msgid "can't find central directory in zip"
-msgstr "zip内にセントラルディレクトリー部が見つかりません"
+msgstr "zip 内にセントラルディレクトリが見つかりません"
 
 #: ../src/common/zipstrm.cpp:1822
 msgid "error reading zip central directory"
-msgstr "zipのセントラルディレクトリーを読み取り中にエラーが発生しました"
+msgstr "zip のセントラルディレクトリを読み取り中にエラーが発生しました"
 
 #: ../src/common/zipstrm.cpp:1926
 msgid "error reading zip local header"
@@ -4335,7 +4334,7 @@ msgstr "デバッグレポート \"%s\""
 
 #: ../src/generic/dbgrptg.cpp:317
 msgid "A debug report has been generated in the directory\n"
-msgstr "デバッグレポートが次のディレクトリーに作成されます\n"
+msgstr "デバッグレポートが次のディレクトリに作成されました\n"
 
 #: ../src/generic/dbgrptg.cpp:318
 msgid "The following debug report will be generated\n"
@@ -4401,7 +4400,7 @@ msgstr "セクション"
 
 #: ../src/generic/dirctrlg.cpp:488
 msgid "Home directory"
-msgstr "ホームディレクトリー"
+msgstr "ホームディレクトリ"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/generic/dirctrlg.cpp:490 ../src/propgrid/advprops.cpp:780
@@ -4410,7 +4409,7 @@ msgstr "デスクトップ"
 
 #: ../src/generic/dirctrlg.cpp:534 ../src/generic/filectrlg.cpp:752
 msgid "Illegal directory name."
-msgstr "不正なディレクトリー名です。"
+msgstr "不正なディレクトリ名です。"
 
 #: ../src/generic/dirctrlg.cpp:534 ../src/generic/dirctrlg.cpp:552
 #: ../src/generic/dirctrlg.cpp:563 ../src/generic/dirdlgg.cpp:318
@@ -4432,15 +4431,15 @@ msgstr "処理が許可されていません。"
 
 #: ../src/generic/dirdlgg.cpp:108 ../src/generic/filedlgg.cpp:209
 msgid "Create new directory"
-msgstr "新しいディレクトリーを作成します"
+msgstr "新しいディレクトリを作成します"
 
 #: ../src/generic/dirdlgg.cpp:113 ../src/generic/filedlgg.cpp:205
 msgid "Go to home directory"
-msgstr "ホームディレクトリーへ移動"
+msgstr "ホームディレクトリへ移動"
 
 #: ../src/generic/dirdlgg.cpp:144
 msgid "Show &hidden directories"
-msgstr "隠しディレクトリーを表示する(&H)"
+msgstr "隠しディレクトリを表示する(&H)"
 
 #: ../src/generic/dirdlgg.cpp:197
 #, c-format
@@ -4448,12 +4447,12 @@ msgid ""
 "The directory '%s' does not exist\n"
 "Create it now?"
 msgstr ""
-"ディレクトリー '%s' は存在しません\n"
+"ディレクトリ '%s' は存在しません\n"
 "作成しますか?"
 
 #: ../src/generic/dirdlgg.cpp:199
 msgid "Directory does not exist"
-msgstr "ディレクトリーが存在しません"
+msgstr "ディレクトリが存在しません"
 
 #: ../src/generic/dirdlgg.cpp:215
 #, c-format
@@ -4466,15 +4465,15 @@ msgstr ""
 
 #: ../src/generic/dirdlgg.cpp:217
 msgid "Error creating directory"
-msgstr "ディレクトリー作成エラー"
+msgstr "ディレクトリ作成エラー"
 
 #: ../src/generic/dirdlgg.cpp:282
 msgid "You cannot add a new directory to this section."
-msgstr "このセクションに新しいディレクトリーは追加できません。"
+msgstr "このセクションに新しいディレクトリは追加できません。"
 
 #: ../src/generic/dirdlgg.cpp:283
 msgid "Create directory"
-msgstr "ディレクトリーを作成します"
+msgstr "ディレクトリを作成します"
 
 #: ../src/generic/dirdlgg.cpp:292 ../src/generic/dirdlgg.cpp:302
 #: ../src/generic/filectrlg.cpp:614 ../src/generic/filectrlg.cpp:623
@@ -4531,7 +4530,7 @@ msgstr "すべて置換(&A)"
 
 #: ../src/generic/filectrlg.cpp:246 ../src/generic/filectrlg.cpp:269
 msgid "<DIR>"
-msgstr "<ディレクトリー>"
+msgstr "<ディレクトリ>"
 
 #: ../src/generic/filectrlg.cpp:248 ../src/generic/filectrlg.cpp:271
 msgid "<LINK>"
@@ -4574,7 +4573,7 @@ msgstr "属性"
 
 #: ../src/generic/filectrlg.cpp:936
 msgid "Current directory:"
-msgstr "カレントディレクトリー:"
+msgstr "カレントディレクトリ:"
 
 #: ../src/generic/filectrlg.cpp:979
 msgid "Show &hidden files"
@@ -4586,7 +4585,7 @@ msgstr "ファイル記述子が不正です。"
 
 #: ../src/generic/filectrlg.cpp:1387
 msgid "Directory doesn't exist."
-msgstr "ディレクトリーが存在しません。"
+msgstr "ディレクトリが存在しません。"
 
 #: ../src/generic/filedlgg.cpp:197
 msgid "View files as a list view"
@@ -4598,7 +4597,7 @@ msgstr "詳細情報付きでファイル一覧を見る"
 
 #: ../src/generic/filedlgg.cpp:202
 msgid "Go to parent directory"
-msgstr "親ディレクトリーへ移動"
+msgstr "親ディレクトリへ移動"
 
 #: ../src/generic/filedlgg.cpp:353 ../src/gtk/filedlg.cpp:58
 #, c-format
@@ -4732,7 +4731,7 @@ msgstr ""
 #: ../src/generic/helpext.cpp:258
 #, c-format
 msgid "Help directory \"%s\" not found."
-msgstr "ヘルプディレクトリー \"%s\" が見つかりません。"
+msgstr "ヘルプディレクトリ \"%s\" が見つかりません。"
 
 #: ../src/generic/helpext.cpp:266
 #, c-format
@@ -5063,9 +5062,9 @@ msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr "GTK+を初期化できません。 DISPLAY が不適切の可能性があります。"
 
 #: ../src/gtk/filedlg.cpp:88 ../src/gtk/filepicker.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "ディレクトリー \"%s\" を作成できませんでした。"
+msgstr "カレントディレクトリを \"%s\" に変更できませんでした"
 
 #: ../src/gtk/font.cpp:552
 msgid ""
@@ -5802,7 +5801,7 @@ msgstr "ビットマップデータ用のメモリ割り当て(%luKb)に失敗�
 #: ../src/msw/dir.cpp:260
 #, c-format
 msgid "Cannot enumerate files in directory '%s'"
-msgstr "ディレクトリー '%s' のファイルは列挙できません"
+msgstr "ディレクトリ '%s' のファイルは列挙できません"
 
 #: ../src/msw/dirdlg.cpp:328
 #, fuzzy
@@ -5866,9 +5865,9 @@ msgid "Unable to set up watch for '%s'"
 msgstr "'%s' の監視を準備できませんでした。"
 
 #: ../src/msw/fswatcher.cpp:475
-#, fuzzy, c-format
+#, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
-msgstr "監視対象のディレクトリー \"%s\" を開くことができませんでした。"
+msgstr "存在しないディレクトリ \"%s\" は変更の監視ができません。"
 
 #: ../src/msw/glcanvas.cpp:586 ../src/unix/glx11.cpp:504
 msgid "OpenGL 3.0 or later is not supported by the OpenGL driver."
@@ -5941,9 +5940,9 @@ msgid "Failed to find CLSID of \"%s\""
 msgstr "リソース \"%s\" を読み取れませんでした。"
 
 #: ../src/msw/ole/automtn.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create an instance of \"%s\""
-msgstr "ディレクトリー \"%s\" を作成できませんでした。"
+msgstr "\"%s\" のインスタンスを作成できませんでした"
 
 #: ../src/msw/ole/automtn.cpp:553
 #, fuzzy, c-format
@@ -6247,7 +6246,7 @@ msgstr "タイマーを作成できませんでした"
 
 #: ../src/msw/utils.cpp:360
 msgid "can't find user's HOME, using current directory."
-msgstr "ユーザーのHOMEが見つかりません。カレントディレクトリーを使用します。"
+msgstr "ユーザーの HOME が見つかりません。カレントディレクトリを使用します。"
 
 #: ../src/msw/utils.cpp:661
 #, c-format
@@ -6913,7 +6912,7 @@ msgstr "選択してください:"
 
 #: ../src/propgrid/manager.cpp:401
 msgid "Property"
-msgstr "プロパティー"
+msgstr "プロパティ"
 
 #: ../src/propgrid/manager.cpp:402
 msgid "Value"
@@ -6944,9 +6943,8 @@ msgstr "未指定"
 
 #. TRANSLATORS: Caption of message box displaying any property error
 #: ../src/propgrid/propgrid.cpp:3147 ../src/propgrid/propgrid.cpp:3284
-#, fuzzy
 msgid "Property Error"
-msgstr "プロパティー"
+msgstr "プロパティエラー"
 
 #: ../src/propgrid/propgrid.cpp:3261
 msgid "You have entered invalid value. Press ESC to cancel editing."
@@ -6963,7 +6961,7 @@ msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
-"型の処理 \"%s\" に失敗:  \"%s\" とラベルされたプロパティーは \"%s\" 型で"
+"型の処理 \"%s\" に失敗: \"%s\" とラベルされたプロパティは \"%s\" 型で"
 "す。\"%s\" ではありません。"
 
 #: ../src/propgrid/props.cpp:156
@@ -6993,7 +6991,7 @@ msgstr "%sではない"
 
 #: ../src/propgrid/props.cpp:1866
 msgid "Choose a directory:"
-msgstr "ディレクトリーを選んでください:"
+msgstr "ディレクトリを選んでください:"
 
 #: ../src/propgrid/props.cpp:2151
 msgid "Choose a file"
@@ -7497,9 +7495,8 @@ msgstr "リストスタイルを変更します"
 
 #: ../src/richtext/richtextbuffer.cpp:3975
 #: ../src/richtext/richtextbuffer.cpp:8175
-#, fuzzy
 msgid "Change Properties"
-msgstr "プロパティー (&P)"
+msgstr "プロパティを変更"
 
 #: ../src/richtext/richtextbuffer.cpp:4347
 msgid "Change List Style"
@@ -9092,7 +9089,7 @@ msgstr "kqueue からのイベントを取得できませんでした"
 #: ../src/unix/mediactrl.cpp:967
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "メディア再生エラー: %s"
 
 #: ../src/unix/mediactrl.cpp:1229
 #, fuzzy, c-format
