@@ -5717,6 +5717,64 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
     }
 }
 
+void wxGrid::RefreshBlock(const wxGridCellCoords& coords)
+{
+    if ( !ShouldRefresh() )
+        return;
+
+    if ( coords != wxGridNoCellCoords )
+    {
+        const auto gridWindow = CellToGridWindow(coords);
+
+        wxRect rect = CellToRect(coords);
+        rect.Inflate(1);
+        CalcGridWindowScrolledPosition(rect.x, rect.y, &rect.x, &rect.y, gridWindow);
+
+        RefreshRect(&rect);
+    }
+}
+
+void wxGrid::RefreshRect(wxRect* rect)
+{
+    if ( rect )
+    {
+        // Note that the cells in the first row and first column have y = -1 and x = -1 resp.
+        // we must therefore take this into account.
+        const bool refreshCells = !rect->IsEmpty();
+        const bool refreshColLabels = GetColLabelSize() > 0 && rect->x >= -1 && rect->width > 0;
+        const bool refreshRowLabels = GetRowLabelSize() > 0 && rect->y >= -1 && rect->height > 0;
+
+        rect->Offset(GetRowLabelSize(), GetColLabelSize());
+        rect->Inflate(3); // +2 to fix refresh problems with wxQt under Kubuntu
+
+        // Refresh the cell(s) area
+        if ( refreshCells )
+        {
+            Refresh(false, rect);
+        }
+
+        // Refresh the corresponding col label(s)
+        if ( refreshColLabels )
+        {
+            const wxRect r(rect->x, 0, rect->width, GetColLabelSize() + 2);
+
+            Refresh(false, &r);
+        }
+
+        // Refresh the corresponding row label(s)
+        if ( refreshRowLabels )
+        {
+            const wxRect r(0, rect->y, GetRowLabelSize() + 2, rect->height);
+
+            Refresh(false, &r);
+        }
+    }
+    else
+    {
+        Refresh();
+    }
+}
+
 void wxGrid::RefreshArea(int areas)
 {
     if ( areas == wxGA_All )
@@ -6242,13 +6300,13 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 
         if ( IsVisible( m_currentCellCoords, false ) )
         {
-            RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+            RefreshBlock(m_currentCellCoords);
         }
     }
 
     m_currentCellCoords = coords;
 
-    RefreshBlock(coords, coords);
+    RefreshBlock(coords);
 
 #if wxUSE_ACCESSIBILITY
     int numCols = GetNumberCols();
@@ -7484,7 +7542,7 @@ bool wxGrid::DoShowCellEditControl(const wxGridActivationSource& actSource)
                     editor->DoActivate(row, col, this);
 
                     // Show the new cell value.
-                    RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+                    RefreshBlock(m_currentCellCoords);
 
                     if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == Event_Vetoed )
                     {
@@ -9017,7 +9075,7 @@ void wxGrid::SetCellHighlightColour( const wxColour& colour )
     {
         m_cellHighlightColour = colour;
 
-        RefreshBlock(m_currentCellCoords, m_currentCellCoords);
+        RefreshBlock(m_currentCellCoords);
     }
 }
 

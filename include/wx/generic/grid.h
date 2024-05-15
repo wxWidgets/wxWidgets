@@ -1704,6 +1704,16 @@ public:
     void RefreshBlock(int topRow, int leftCol,
                       int bottomRow, int rightCol);
 
+    // This function simply calls RefreshRect() to refresh the cell at coordinates
+    // _coords_ and its corresponding row and column labels for highlighting.
+    void RefreshBlock(const wxGridCellCoords& coords);
+
+    // Refresh the entire grid if _rect_ is null. If not null, then:
+    // - the intersection of the cells area with the rectangle _rect_ will be refreshed.
+    // - the projection of the rectangle _rect_ on the row label window will be refreshed.
+    // - the projection of the rectangle _rect_ on the col label window will be refreshed.
+    void RefreshRect(wxRect* rect);
+
     // Refresh one or more areas (a combination of wxGridArea enums) entirely.
     void RefreshArea(int areas);
 
