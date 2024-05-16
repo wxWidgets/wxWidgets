@@ -615,8 +615,31 @@ void wxGtkStyleContext::Bg(wxColour& color, int state) const
     // If there is an image, try to get a color out of it.
     if (pattern)
     {
-        if (cairo_pattern_get_type(pattern) == CAIRO_PATTERN_TYPE_SURFACE)
+        int count;
+        switch (cairo_pattern_get_type(pattern))
         {
+        default:
+            break;
+        case CAIRO_PATTERN_TYPE_LINEAR:
+        case CAIRO_PATTERN_TYPE_RADIAL:
+            cairo_pattern_get_color_stop_count(pattern, &count);
+            if (count > 0)
+            {
+                double r, g, b, a;
+                cairo_pattern_get_color_stop_rgba(pattern, 0, nullptr, &r, &g, &b, &a);
+                if (count > 1)
+                {
+                    double r2, g2, b2, a2;
+                    cairo_pattern_get_color_stop_rgba(pattern, count - 1, nullptr, &r2, &g2, &b2, &a2);
+                    r = (r + r2) / 2;
+                    g = (g + g2) / 2;
+                    b = (b + b2) / 2;
+                    a = (a + a2) / 2;
+                }
+                color.Set(guchar(r * 255), guchar(g * 255), guchar(b * 255), guchar(a * 255));
+            }
+            break;
+        case CAIRO_PATTERN_TYPE_SURFACE:
             cairo_surface_t* surf;
             cairo_pattern_get_surface(pattern, &surf);
             if (cairo_surface_get_type(surf) == CAIRO_SURFACE_TYPE_IMAGE)
