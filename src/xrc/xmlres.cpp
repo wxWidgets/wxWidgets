@@ -721,13 +721,13 @@ bool wxXmlResource::UpdateResources()
 {
     bool rt = true;
 
+    // We never do it if this flag is specified.
+    if ( m_flags & wxXRC_NO_RELOADING )
+        return rt;
+
     for ( wxXmlResourceDataRecord& rec : Data() )
     {
         // Check if we need to reload this one.
-
-        // We never do it if this flag is specified.
-        if ( m_flags & wxXRC_NO_RELOADING )
-            continue;
 
         // And we don't do it for the records that were not loaded from a
         // file/URI (or at least not directly) in the first place.
