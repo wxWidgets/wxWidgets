@@ -10958,6 +10958,172 @@ bool wxGrid::CopySelection()
     return true;
 }
 
+void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles) const
+{
+    wxGridBlocks range = GetSelectedBlocks();
+    for ( const auto& coords : range )
+    {
+        const int topRow     = coords.GetTopRow();
+        const int bottomRow  = coords.GetBottomRow();
+        const int leftCol    = coords.GetLeftCol();
+        const int rightCol   = coords.GetRightCol();
+
+        int row = topRow;
+        int col = leftCol;
+
+        // corner grid
+        if ( GetRowPos(topRow) < m_numFrozenRows && GetColPos(leftCol) < m_numFrozenCols && m_frozenCornerGridWin )
+        {
+            row = wxMin(bottomRow, m_numFrozenRows - 1);
+            col = wxMin(rightCol, m_numFrozenCols - 1);
+
+            BlockToDeviceRect(wxGridCellCoords(topRow, leftCol),
+                              wxGridCellCoords(row, col),
+                              m_frozenCornerGridWin, rectangles);
+            ++row; ++col;
+        }
+
+        // frozen cols grid
+        if ( GetColPos(leftCol) < m_numFrozenCols && GetRowPos(bottomRow) >= m_numFrozenRows && m_frozenColGridWin )
+        {
+            col = wxMin(rightCol, m_numFrozenCols - 1);
+            BlockToDeviceRect(wxGridCellCoords(row, leftCol),
+                              wxGridCellCoords(bottomRow, col),
+                              m_frozenColGridWin, rectangles);
+            ++col;
+        }
+
+        // frozen rows grid
+        if ( GetRowPos(topRow) < m_numFrozenRows && GetColPos(rightCol) >= m_numFrozenCols && m_frozenRowGridWin )
+        {
+            row = wxMin(bottomRow, m_numFrozenRows - 1);
+
+            BlockToDeviceRect(wxGridCellCoords(topRow, col),
+                              wxGridCellCoords(row, rightCol),
+                              m_frozenRowGridWin, rectangles);
+            ++row;
+        }
+
+        // main grid
+        if ( GetRowPos(bottomRow) >= m_numFrozenRows && GetColPos(rightCol) >= m_numFrozenCols )
+        {
+            BlockToDeviceRect(wxGridCellCoords(row, col),
+                              wxGridCellCoords(bottomRow, rightCol),
+                              m_gridWin, rectangles);
+        }
+    }
+}
+
+void wxGrid::BlockToDeviceRect(const wxGridCellCoords& topLeft,
+                               const wxGridCellCoords& bottomRight,
+                               wxGridWindow* gridWin, std::vector<wxRect>& rectangles) const
+{
+    int cw, ch;
+    gridWin->GetClientSize(&cw, &ch);
+    const wxPoint offset = GetGridWindowOffset(gridWin);
+
+    // Get the origin coordinates: notice that they will be negative if the
+    // grid is scrolled downwards/to the right.
+    int gridOriginX = 0;
+    int gridOriginY = 0;
+    CalcGridWindowScrolledPosition(gridOriginX, gridOriginY,
+                                   &gridOriginX, &gridOriginY, gridWin);
+
+    const int onScreenLeftmostCol  = internalXToCol(-gridOriginX + offset.x, gridWin);
+    const int onScreenUppermostRow = internalYToRow(-gridOriginY + offset.y, gridWin);
+
+    const int onScreenRightmostCol  = internalXToCol(-gridOriginX + offset.x + cw, gridWin);
+    const int onScreenBottommostRow = internalYToRow(-gridOriginY + offset.y + ch, gridWin);
+
+    // Bound our loop so that we only examine the portion of the selected block
+    // that is shown on screen. Therefore, we compare the Top-Left block values
+    // to the Top-Left screen values, and the Bottom-Right block values to the
+    // Bottom-Right screen values, choosing appropriately.
+    int visibleTopRow     = wxMax(topLeft.GetRow(),       onScreenUppermostRow);
+    int visibleBottomRow  = wxMin(bottomRight.GetRow(),   onScreenBottommostRow);
+    int visibleLeftCol    = wxMax(topLeft.GetCol(),       onScreenLeftmostCol);
+    int visibleRightCol   = wxMin(bottomRight.GetCol(),   onScreenRightmostCol);
+
+    // help drawing selected multicells if/when their main cells are scrolled out of view.
+    bool isBlockVisible = true;
+
+    if ( visibleTopRow > visibleBottomRow )
+    {
+        isBlockVisible = false;
+        wxSwap(visibleTopRow, visibleBottomRow);
+    }
+
+    if ( visibleLeftCol > visibleRightCol )
+    {
+        isBlockVisible = false;
+        wxSwap(visibleLeftCol, visibleRightCol);
+    }
+
+    std::vector<wxGridCellCoords> coords;
+
+    for ( int j = visibleTopRow; j <= visibleBottomRow; ++j )
+    {
+        for ( int i = visibleLeftCol; i <= visibleRightCol; ++i )
+        {
+            int row = j, col = i;
+
+            int cell_rows = 0, cell_cols = 0;
+            const wxGrid::CellSpan cellSpan = GetCellSize(j, i, &cell_rows, &cell_cols);
+
+            if ( cellSpan == CellSpan_None && !isBlockVisible )
+            {
+                continue;
+            }
+
+            if ( cellSpan == CellSpan_Inside )
+            {
+                row += cell_rows;
+                col += cell_cols;
+            }
+
+            if ( IsInSelection(row, col) )
+            {
+                coords.push_back(wxGridCellCoords(row, col));
+            }
+        }
+    }
+
+    for ( const auto& coord : coords )
+    {
+        wxRect rect = CellToRect(coord);
+
+        // For one hand, we need to compensate for the 1 subtracted in CellToRect().
+        // for the other hand, the algorithm responsible for generating the polygons
+        // from these rectangles expects them to overlap. see PolyPolygonHelper.
+        rect.Inflate(1);
+
+        int left, top, right, bottom;
+
+        // Convert to scrolled coords
+        CalcGridWindowScrolledPosition( rect.GetLeft() - offset.x, rect.GetTop() - offset.y,
+                                        &left, &top, gridWin );
+        CalcGridWindowScrolledPosition( rect.GetRight() - offset.x, rect.GetBottom() - offset.y,
+                                        &right, &bottom, gridWin );
+
+        if ( right < 0 || bottom < 0 || left > cw || top > ch )
+        {
+            continue;
+        }
+
+        rect.SetLeft( wxMax(0, left) );
+        rect.SetTop( wxMax(0, top) );
+        rect.SetRight( wxMin(cw, right) );
+        rect.SetBottom( wxMin(ch, bottom) );
+
+        rect.Offset(offset);
+
+        if ( std::find(rectangles.begin(), rectangles.end(), rect) == rectangles.end() )
+        {
+            rectangles.push_back(rect);
+        }
+    }
+}
+
 // This function returns the rectangle that encloses the given block
 // in device coords clipped to the client size of the grid window.
 //

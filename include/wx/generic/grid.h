@@ -2324,6 +2324,9 @@ public:
     wxArrayInt GetSelectedRows() const;
     wxArrayInt GetSelectedCols() const;
 
+    // Return the selected blocks (only the visible ones) as a vector of rects.
+    void GetSelectedRectangles(std::vector<wxRect>& rectangles) const;
+
     // This function returns the rectangle that encloses the block of cells
     // limited by TopLeft and BottomRight cell in device coords and clipped
     //  to the client size of the grid window.
@@ -2331,6 +2334,13 @@ public:
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight,
                               const wxGridWindow *gridWindow = nullptr) const;
+
+    // Similar to BlockToDeviceRect() above but mainly for grid selection use.
+    // i.e. GetSelectedRectangles() uses this function as a helper.
+    void BlockToDeviceRect(const wxGridCellCoords& topLeft,
+                           const wxGridCellCoords& bottomRight,
+                           wxGridWindow* gridWin,
+                           std::vector<wxRect>& rectangles) const;
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
