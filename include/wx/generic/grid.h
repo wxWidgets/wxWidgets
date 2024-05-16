@@ -1642,6 +1642,7 @@ public:
     void DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells);
     void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow );
     void DrawLabelFrozenBorder( wxDC& dc, wxWindow *window, bool isRow );
+    void DrawSelection( wxDC& dc, wxGridWindow *gridWindow );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect ) override;
 
@@ -2277,6 +2278,12 @@ public:
     // make the cell editable/readonly
     void SetReadOnly(int row, int col, bool isReadOnly = true);
 
+    // Return @true if overlay selection can be used (wxUSE_GRAPHICS_CONTEXT=1)
+    // and DisableOverlaySelection() hadn't been called.
+    bool UsesOverlaySelection() const;
+
+    void DisableOverlaySelection();
+
     // ------ select blocks of cells
     //
     void SelectRow( int row, bool addToSelected = false );
@@ -2435,6 +2442,9 @@ public:
     // unset any existing sorting column
     void UnsetSortingColumn() { SetSortingColumn(wxNOT_FOUND); }
 
+    // Invalidate overlay selection whenever the selection changes or scrolls.
+    void InvalidateOverlaySelection();
+
     // override some base class functions
     virtual void Fit() override;
     virtual void SetFocus() override;
@@ -2506,6 +2516,10 @@ protected:
 
     wxColour    m_selectionBackground;
     wxColour    m_selectionForeground;
+
+#if wxUSE_GRAPHICS_CONTEXT
+    bool m_usesOverlaySelection = true;
+#endif
 
     // NB: *never* access m_row/col arrays directly because they are created
     //     on demand, *always* use accessor functions instead!

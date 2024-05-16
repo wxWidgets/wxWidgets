@@ -5265,6 +5265,30 @@ public:
     */
     void SetSelectionMode(wxGridSelectionModes selmode);
 
+    /**
+        Return @true if overlay selection can be used (wxUSE_GRAPHICS_CONTEXT=1)
+        and DisableOverlaySelection() hadn't been called, @false otherwise.
+
+        @since 3.3.0
+
+        @see DisableOverlaySelection()
+    */
+    bool UsesOverlaySelection();
+
+    /**
+        Disable overlay selection if it is enabled.
+
+        Starting from wxWidgets 3.3.0, the wxGrid selection appearance is changed
+        from using a solid and opaque colour to denote selection to using a semi-
+        transparent area overlaid on the selected cells. Notice that the old behaviour
+        is still supported and can be reverted to by calling this function.
+
+        @since 3.3.0
+
+        @see UsesOverlaySelection()
+    */
+    void DisableOverlaySelection();
+
     ///@}
 
 

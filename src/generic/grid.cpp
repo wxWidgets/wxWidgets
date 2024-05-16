@@ -38,11 +38,14 @@
 #endif
 
 #include "wx/dcbuffer.h"
+#include "wx/dcgraph.h"
+#include "wx/graphics.h"
 #include "wx/textfile.h"
 #include "wx/spinctrl.h"
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 #include "wx/headerctrl.h"
+#include "wx/scopeguard.h"
 
 #if wxUSE_CLIPBOARD
     #include "wx/clipbrd.h"
@@ -2250,6 +2253,8 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     m_owner->DrawAllGridWindowLines( dc, reg, this );
 
+    m_owner->DrawSelection( dc, this );
+
     if ( m_type != wxGridWindow::wxGridWindowNormal )
         m_owner->DrawFrozenBorder( dc, this );
 
@@ -2563,6 +2568,8 @@ void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
 
     m_rowLabelWin->ScrollWindow( 0, dy, rect );
     m_colLabelWin->ScrollWindow( dx, 0, rect );
+
+    InvalidateOverlaySelection();
 }
 
 void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
@@ -5824,6 +5831,7 @@ void wxGrid::OnSize(wxSizeEvent& event)
     {
         // reposition our children windows
         CalcWindowSizes();
+        InvalidateOverlaySelection();
         event.Skip();
     }
 }
@@ -6548,9 +6556,10 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         // Now draw the rectangle
         // use the cellHighlightColour if the cell is inside a selection, this
         // will ensure the cell is always visible.
-        dc.SetPen(wxPen(IsInSelection(row,col) ? m_selectionForeground
-                                               : m_cellHighlightColour,
-                        penWidth));
+        const auto penCol = (UsesOverlaySelection() || !IsInSelection(row, col))
+                          ? m_cellHighlightColour : m_selectionForeground;
+
+        dc.SetPen(wxPen(penCol, penWidth));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.DrawRectangle(rect);
     }
@@ -6993,6 +7002,92 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
                    rect, hAlign, vAlign, wxHORIZONTAL);
 }
 
+void wxGrid::DrawSelection(wxDC& paintDC, wxGridWindow *gridWindow)
+{
+    if ( !UsesOverlaySelection() || !IsSelection() )
+        return;
+
+    const auto& polygons = m_selection->GetPolyPolygon();
+
+    wxRect updateRect = polygons.GetBoundingBox();
+
+    if ( updateRect.IsEmpty() )
+    {
+        return; // nothing to draw
+    }
+
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGCDC gdc;
+    auto renderer = wxGraphicsRenderer::GetDefaultRenderer();
+    auto context  = renderer->CreateContext(static_cast<wxPaintDC&>(paintDC));
+
+    gdc.SetBackground(GetBackgroundColour());
+    gdc.SetGraphicsContext(context);
+
+    wxDC& dc = gdc;
+#else
+    wxDC& dc = paintDC;
+#endif
+
+    const wxPoint oldOrig = paintDC.GetLogicalOrigin();
+    const wxPoint orig    = paintDC.GetDeviceOrigin();
+    const wxPoint offset  = GetGridWindowOffset(gridWindow);
+
+    dc.SetLogicalOrigin(orig.x + offset.x, orig.y + offset.y);
+    wxON_BLOCK_EXIT_OBJ2(dc, wxDC::SetLogicalOrigin, oldOrig.x, oldOrig.y);
+
+    wxRect clipRect = gridWindow->GetClientRect();
+    clipRect.Offset(offset);
+
+    // Don't draw selection edges on frozen borders.
+    if ( offset.x > 0 )
+        clipRect.x += 1;
+    if ( offset.y > 0 )
+        clipRect.y += 1;
+
+    wxDCClipper clip(dc, clipRect);
+
+    const wxColour colBg = GetSelectionBackground();
+
+    dc.SetPen(wxPen(colBg));
+    dc.SetBrush(wxColour(colBg.Red(), colBg.Green(), colBg.Blue(), 64));
+
+    const int n = polygons.GetSize();
+
+    if ( n == 0 )
+    {
+        dc.DrawRectangle(updateRect);
+
+        wxLogTrace("gridsel", "[n:0] dc.DrawRectangle()");
+    }
+    else
+    {
+        const int* counts = polygons.GetCounts();
+        const wxPoint* points = polygons.GetPoints();
+
+        if ( n == 1 )
+        {
+            dc.DrawPolygon(counts[0], points);
+
+            wxLogTrace("gridsel", "[n:1] dc.DrawPolygon()");
+        }
+        else
+        {
+            dc.DrawPolyPolygon(n, counts, points);
+
+            wxLogTrace("gridsel", "[n:%d] dc.DrawPolyPolygon()", n);
+        }
+    }
+}
+
+void wxGrid::InvalidateOverlaySelection()
+{
+    if ( UsesOverlaySelection() && IsSelection() )
+    {
+        m_selection->InvalidatePolyPolygon();
+    }
+}
+
 bool wxGrid::UseNativeColHeader(bool native)
 {
     if ( native == m_useNativeHeader )
@@ -7373,6 +7468,7 @@ void wxGrid::EndBatch()
         if ( !m_batchCount )
         {
             CalcDimensions();
+            InvalidateOverlaySelection();
             Refresh();
         }
     }
@@ -9946,6 +10042,8 @@ void wxGrid::DoSetRowSize( int row, int height )
             const wxRect updateRect(0, y, cw, ch - y);
             Refresh(true, &updateRect);
         }
+
+        InvalidateOverlaySelection();
     }
 }
 
@@ -10090,6 +10188,8 @@ void wxGrid::DoSetColSize( int col, int width )
             const wxRect updateRect(x, 0, cw - x, ch);
             Refresh(true, &updateRect);
         }
+
+        InvalidateOverlaySelection();
     }
 }
 
@@ -10611,6 +10711,23 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
 // ----------------------------------------------------------------------------
 // block, row and column selection
 // ----------------------------------------------------------------------------
+
+bool wxGrid::UsesOverlaySelection() const
+{
+#if wxUSE_GRAPHICS_CONTEXT
+    return m_usesOverlaySelection;
+#else
+    // Drawing overlay selection can only be done via a graphics context.
+    return false;
+#endif
+}
+
+void wxGrid::DisableOverlaySelection()
+{
+#if wxUSE_GRAPHICS_CONTEXT
+    m_usesOverlaySelection = false;
+#endif
+}
 
 void wxGrid::SelectRow( int row, bool addToSelected )
 {

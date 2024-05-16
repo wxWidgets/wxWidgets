@@ -48,7 +48,7 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     wxColour clr;
     if ( grid.IsThisEnabled() )
     {
-        if ( isSelected )
+        if ( !grid.UsesOverlaySelection() && isSelected )
         {
             if ( grid.HasFocus() )
                 clr = grid.GetSelectionBackground();
@@ -82,7 +82,7 @@ void wxGridCellRenderer::SetTextColoursAndFont(const wxGrid& grid,
     // different coloured text when the grid is disabled
     if ( grid.IsThisEnabled() )
     {
-        if ( isSelected )
+        if ( !grid.UsesOverlaySelection() && isSelected )
         {
             wxColour clr;
             if ( grid.HasFocus() )

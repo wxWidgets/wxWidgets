@@ -114,6 +114,48 @@ public:
     void EndSelecting();
     void CancelSelecting();
 
+    // A simple interface used by wxGrid::DrawSelection() as a helper to draw
+    // the grid selection(s).
+    class PolyPolygon
+    {
+    public:
+        PolyPolygon() = default;
+        ~PolyPolygon() = default;
+
+        bool IsValid() const;
+
+        // Return the number of polygons to draw.
+        size_t GetSize() const { return m_counts.size(); }
+
+        const int* GetCounts() const { return m_counts.data(); }
+
+        const wxPoint* GetPoints() const { return m_points.data(); }
+
+        void Append(const std::vector<wxPoint>& points);
+
+        // Return the bounding box of the visible selected blocks. Return empty
+        // rectangle if there is no selection.
+        wxRect GetBoundingBox() const;
+
+        void SetBoundingBox(const wxRect& rect);
+
+    private:
+        void CalcBoundingBox(const std::vector<wxPoint>& points);
+
+        // m_counts contains the number of points in each of the polygons in m_points.
+
+        std::vector<int>     m_counts;
+        std::vector<wxPoint> m_points;
+
+        int m_minX = 0, m_maxX = -1,
+            m_minY = 0, m_maxY = -1;
+    };
+
+    // Return the PolyPolygon object. Call ComputePolyPolygon() if necessary.
+    const PolyPolygon& GetPolyPolygon();
+
+    void InvalidatePolyPolygon();
+
 private:
     void SelectBlockNoEvent(const wxGridBlockCoords& block)
     {
@@ -148,6 +190,9 @@ private:
     // Most of the time this will result in just one rectangle.
     static void MergeAdjacentRects(std::vector<wxRect>& rectangles);
 
+    // Called each time the selection changed or scrolled to recompute m_polyPolygon.
+    void ComputePolyPolygon();
+
     // All currently selected blocks. We expect there to be a relatively small
     // amount of them, even for very large grids, as each block must be
     // selected by the user, so we store them unsorted.
@@ -159,6 +204,14 @@ private:
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
+
+    // Used by wxGrid::DrawSelection() to draw a:
+    //
+    // - Simple rectangle (using wxDC::DrawRectangle() if it is empty and the bounding box is valid.
+    // - Simple polygon (using wxDC::DrawPolygon()) if it represents a simple polygon.
+    // - Poly-polygon (using wxDC::DrawPolyPolygon()) if it consists of multiple polygons.
+    //
+    PolyPolygon                         m_polyPolygon;
 
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };
