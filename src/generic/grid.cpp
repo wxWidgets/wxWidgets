@@ -9476,6 +9476,42 @@ bool wxGrid::IsReadOnly(int row, int col) const
     return GetCellAttrPtr(row, col)->IsReadOnly();
 }
 
+bool wxGrid::IsRowLabelHighlighted(int row) const
+{
+    if ( UsesOverlaySelection() )
+    {
+        if ( !IsSelection() )
+            return m_currentCellCoords.GetRow() == row;
+
+        const auto& blocks = m_selection->GetBlocks();
+        if ( blocks.size() == 1 )
+        {
+            return row >= blocks[0].GetTopRow() &&
+                   row <= blocks[0].GetBottomRow();
+        }
+    }
+
+    return false;
+}
+
+bool wxGrid::IsColLabelHighlighted(int col) const
+{
+    if ( UsesOverlaySelection() )
+    {
+        if ( !IsSelection() )
+            return m_currentCellCoords.GetCol() == col;
+
+        const auto& blocks = m_selection->GetBlocks();
+        if ( blocks.size() == 1 )
+        {
+            return col >= blocks[0].GetLeftCol() &&
+                   col <= blocks[0].GetRightCol();
+        }
+    }
+
+    return false;
+}
+
 // ----------------------------------------------------------------------------
 // attribute support: cache, automatic provider creation, ...
 // ----------------------------------------------------------------------------

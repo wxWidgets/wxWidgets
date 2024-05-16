@@ -2249,7 +2249,9 @@ public:
     wxGridCellEditor *GetDefaultEditor() const;
     wxGridCellEditor* GetCellEditor(int row, int col) const;
 
-
+    // Determine (in constant time) whether the row/col should be highlighted or not.
+    bool IsRowLabelHighlighted(int row) const;
+    bool IsColLabelHighlighted(int col) const;
 
     // ------ cell value accessors
     //
