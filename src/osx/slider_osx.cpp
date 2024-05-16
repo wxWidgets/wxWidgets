@@ -379,6 +379,11 @@ wxSize wxSlider::DoGetBestSize() const
 
         if (GetWindowStyle() & wxSL_LABELS)
             size.x += textwidth + wxSLIDER_BORDERTEXT;
+
+        // to let the ticks look good the width of the control has to have an even number,
+        // otherwise, the ticks are not centered with respect to the slider line
+        if ((GetWindowStyle() & wxSL_AUTOTICKS) && ((size.x%2) != 0))
+            size.x += 1;
     }
     else
     {
@@ -394,6 +399,11 @@ wxSize wxSlider::DoGetBestSize() const
             size.y += textheight + wxSLIDER_BORDERTEXT;
             size.x += (mintwidth / 2) + (maxtwidth / 2);
         }
+
+        // to let the ticks look good the height of the control has to have an even number,
+        // otherwise, the ticks are not centered with respect to the slider line
+        if ((GetWindowStyle() & wxSL_AUTOTICKS) && ((size.y%2) != 0))
+            size.y += 1;
     }
 
     return size;

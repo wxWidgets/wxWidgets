@@ -255,6 +255,10 @@ All (GUI):
 
 - Speed up using XRC when using wxXRC_NO_RELOADING (John de Rooij, #24536).
 
+wxOSX:
+
+- Improve wxSlider ticks appearance (Hartwig Wiesmann, #24532).
+
 
 3.2.5: (released 2024-05-14)
 ----------------------------
