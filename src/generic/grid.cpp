@@ -323,11 +323,15 @@ void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
 }
 
 
-void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& grid,
-                                                wxDC& dc,
-                                                wxRect& rect) const
+namespace wxPrivate
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
+int GridRowLabelDrawBorderCommonDefault(const wxGrid& grid,
+                                        wxDC& dc,
+                                        wxRect& rect,
+                                        const wxColour& colOne,
+                                        const wxColour& colTwo)
+{
+    dc.SetPen(wxPen(colOne));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
 
@@ -346,20 +350,22 @@ void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& grid,
         ofs = 1;
     }
 
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT)));
+    dc.SetPen(wxPen(colTwo));
     dc.DrawLine(rect.GetLeft() + ofs, rect.GetTop(),
                 rect.GetLeft() + ofs, rect.GetBottom());
     dc.DrawLine(rect.GetLeft() + ofs, rect.GetTop(),
                 rect.GetRight(), rect.GetTop());
 
-    rect.Deflate(1 + ofs);
+    return ofs;
 }
 
-void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
-                                                   wxDC& dc,
-                                                   wxRect& rect) const
+int GridColLabelDrawBorderCommonDefault(const wxGrid& grid,
+                                        wxDC& dc,
+                                        wxRect& rect,
+                                        const wxColour& colOne,
+                                        const wxColour& colTwo)
 {
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
+    dc.SetPen(wxPen(colOne));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
     dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
@@ -375,11 +381,36 @@ void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
         ofs = 1;
     }
 
-    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT)));
+    dc.SetPen(wxPen(colTwo));
     dc.DrawLine(rect.GetLeft(), rect.GetTop() + ofs,
                 rect.GetLeft(), rect.GetBottom());
     dc.DrawLine(rect.GetLeft(), rect.GetTop() + ofs,
                 rect.GetRight(), rect.GetTop() + ofs);
+
+    return ofs;
+}
+} // wxPrivate namespace
+
+void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& grid,
+                                                wxDC& dc,
+                                                wxRect& rect) const
+{
+    int ofs = wxPrivate::GridRowLabelDrawBorderCommonDefault(
+                grid, dc, rect,
+                wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW),
+                wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+
+    rect.Deflate(1 + ofs);
+}
+
+void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
+                                                   wxDC& dc,
+                                                   wxRect& rect) const
+{
+    int ofs = wxPrivate::GridColLabelDrawBorderCommonDefault(
+                grid, dc, rect,
+                wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW),
+                wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
 
     rect.Deflate(1 + ofs);
 }
