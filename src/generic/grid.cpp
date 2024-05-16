@@ -322,6 +322,12 @@ void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
     grid.DrawTextRectangle(dc, value, rect, horizAlign, vertAlign, textOrientation);
 }
 
+void wxGridHeaderLabelsRenderer::DrawHighlighted(const wxGrid& WXUNUSED(grid),
+                                                 wxDC& WXUNUSED(dc),
+                                                 wxRect& WXUNUSED(rect),
+                                                 int WXUNUSED(rowOrCol)) const
+{
+}
 
 namespace wxPrivate
 {
@@ -403,6 +409,30 @@ void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& grid,
     rect.Deflate(1 + ofs);
 }
 
+void wxGridRowHeaderRendererDefault::DrawHighlighted(const wxGrid& grid,
+                                                     wxDC& dc,
+                                                     wxRect& rect,
+                                                     int row) const
+{
+    const wxColour colBg = grid.GetSelectionBackground();
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(colBg.ChangeLightness(130)));
+    dc.DrawRectangle(rect);
+
+    const int ofs = wxPrivate::GridRowLabelDrawBorderCommonDefault(
+                        grid, dc, rect, colBg, colBg.ChangeLightness(170));
+
+    if ( !grid.IsRowLabelHighlighted(row-1) )
+    {
+        dc.SetPen(wxPen(colBg));
+        dc.DrawLine(rect.GetLeft() + ofs - 1, rect.GetTop() - 1,
+                    rect.GetRight(), rect.GetTop() - 1);
+    }
+
+    rect.Deflate(1 + ofs);
+}
+
 void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                    wxDC& dc,
                                                    wxRect& rect) const
@@ -411,6 +441,30 @@ void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                 grid, dc, rect,
                 wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW),
                 wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT));
+
+    rect.Deflate(1 + ofs);
+}
+
+void wxGridColumnHeaderRendererDefault::DrawHighlighted(const wxGrid& grid,
+                                                        wxDC& dc,
+                                                        wxRect& rect,
+                                                        int col) const
+{
+    const wxColour colBg = grid.GetSelectionBackground();
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(wxBrush(colBg.ChangeLightness(130)));
+    dc.DrawRectangle(rect);
+
+    const int ofs = wxPrivate::GridColLabelDrawBorderCommonDefault(
+                        grid, dc, rect, colBg, colBg.ChangeLightness(170));
+
+    if ( !grid.IsColLabelHighlighted(col-1) )
+    {
+        dc.SetPen(wxPen(colBg));
+        dc.DrawLine(rect.GetLeft() - 1, rect.GetTop() + ofs - 1,
+                    rect.GetLeft() - 1, rect.GetBottom());
+    }
 
     rect.Deflate(1 + ofs);
 }
@@ -7017,7 +7071,10 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     // draw a border if the row is not being drag-moved
     // (in that case it's omitted to have a 'pressed' appearance)
     if (m_cursorMode != WXGRID_CURSOR_MOVE_ROW || row != m_dragMoveRowOrCol)
-        rend.DrawBorder(*this, dc, rect);
+    {
+        IsRowLabelHighlighted(row) ? rend.DrawHighlighted(*this, dc, rect, row)
+                                   : rend.DrawBorder(*this, dc, rect);
+    }
     else
     {
         // just highlight the current row
@@ -7225,15 +7282,14 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     if ( GetColWidth(col) <= 0 || m_colLabelHeight <= 0 )
         return;
 
-    int colLeft = GetColLeft(col);
-
-    wxRect rect(colLeft, 0, GetColWidth(col), m_colLabelHeight);
     wxGridCellAttrProvider * const
         attrProvider = m_table ? m_table->GetAttrProvider() : nullptr;
     const wxGridColumnHeaderRenderer&
         rend = attrProvider ? attrProvider->GetColumnHeaderRenderer(col)
                             : static_cast<wxGridColumnHeaderRenderer&>
                                 (gs_defaultHeaderRenderers.colRenderer);
+
+    wxRect rect(GetColLeft(col), 0, GetColWidth(col), m_colLabelHeight);
 
     if ( m_nativeColumnLabels )
     {
@@ -7267,7 +7323,10 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
         // draw a border if the column is not being drag-moved
         // (in that case it's omitted to have a 'pressed' appearance)
         if (m_cursorMode != WXGRID_CURSOR_MOVE_COL || col != m_dragMoveRowOrCol)
-            rend.DrawBorder(*this, dc, rect);
+        {
+            IsColLabelHighlighted(col) ? rend.DrawHighlighted(*this, dc, rect, col)
+                                       : rend.DrawBorder(*this, dc, rect);
+        }
         else
         {
             // just highlight the current column

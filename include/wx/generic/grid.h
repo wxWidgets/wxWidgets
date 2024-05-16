@@ -613,6 +613,12 @@ public:
                            int horizAlign,
                            int vertAlign,
                            int textOrientation) const;
+
+    // Draw highlighted row/col label.
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int rowOrCol) const;
 };
 
 // Currently the row/column/corner renders don't need any methods other than
@@ -643,6 +649,11 @@ public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
                             wxRect& rect) const override;
+
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int row) const override;
 };
 
 // Column header cells renderers
@@ -653,6 +664,11 @@ public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
                             wxRect& rect) const override;
+
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int col) const override;
 };
 
 // Header corner renderer
