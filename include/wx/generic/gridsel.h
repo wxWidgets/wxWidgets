@@ -139,6 +139,15 @@ private:
     void MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
                          const wxGridBlockCoords& block);
 
+    // Used by Select() and DeselectBlock() to ensure that we always have fewer
+    // blocks selected in m_selection.
+    static void MergeAdjacentBlocks(wxGridBlockCoordsVector& selection);
+
+    // This function attempts to reduce the number of rectangles returned from
+    // wxGrid::GetSelectedRectangles() before trying to convert them to PolyPolygon.
+    // Most of the time this will result in just one rectangle.
+    static void MergeAdjacentRects(std::vector<wxRect>& rectangles);
+
     // All currently selected blocks. We expect there to be a relatively small
     // amount of them, even for very large grids, as each block must be
     // selected by the user, so we store them unsorted.

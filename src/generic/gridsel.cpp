@@ -381,6 +381,8 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
         }
     }
 
+    MergeAdjacentBlocks(m_selection);
+
     // Refresh the screen and send events.
     count = refreshBlocks.size();
     for ( n = 0; n < count; n++ )
@@ -861,6 +863,8 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
 
     m_selection.push_back(block);
 
+    MergeAdjacentBlocks(m_selection);
+
     // Update View:
     if ( !m_grid->GetBatchCount() )
     {
@@ -905,6 +909,110 @@ void wxGridSelection::MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
     }
 
     blocks.push_back(newBlock);
+}
+
+void wxGridSelection::MergeAdjacentBlocks(wxGridBlockCoordsVector& selection)
+{
+    auto CanMergeBlocks = [](const wxGridBlockCoords& b1,
+                             const wxGridBlockCoords& b2) -> bool
+    {
+        if ( b1.GetLeftCol() == b2.GetLeftCol() &&
+             b1.GetRightCol() == b2.GetRightCol() )
+        {
+            if ( std::abs(b1.GetTopRow() - b2.GetBottomRow()) == 1 ||
+                 std::abs(b2.GetTopRow() - b1.GetBottomRow()) == 1 )
+                return true;
+        }
+        else if ( b1.GetTopRow() == b2.GetTopRow() &&
+                  b1.GetBottomRow() == b2.GetBottomRow() )
+        {
+            if ( std::abs(b1.GetLeftCol() - b2.GetRightCol()) == 1 ||
+                 std::abs(b2.GetLeftCol() - b1.GetRightCol()) == 1 )
+                return true;
+        }
+
+        return false;
+    };
+
+    auto outerItr = selection.begin();
+
+    while ( outerItr != selection.end() )
+    {
+        auto& b1 = *outerItr++;
+
+        auto innerItr = outerItr;
+
+        while ( innerItr != selection.end() )
+        {
+            const auto& b2 = *innerItr;
+
+            if ( CanMergeBlocks(b1, b2) )
+            {
+                if ( b2.GetTopRow() < b1.GetTopRow() )
+                    b1.SetTopRow(b2.GetTopRow());
+                if ( b2.GetLeftCol() < b1.GetLeftCol() )
+                    b1.SetLeftCol(b2.GetLeftCol());
+                if ( b2.GetBottomRow() > b1.GetBottomRow() )
+                    b1.SetBottomRow(b2.GetBottomRow());
+                if ( b2.GetRightCol() > b1.GetRightCol() )
+                    b1.SetRightCol(b2.GetRightCol());
+
+                innerItr = selection.erase(innerItr); // get rid of b2
+                outerItr = selection.begin();
+            }
+            else
+            {
+                ++innerItr;
+            }
+        }
+    }
+}
+
+void wxGridSelection::MergeAdjacentRects(std::vector<wxRect>& rectangles)
+{
+    auto CanMergeRects = [](const wxRect& r1, const wxRect& r2) -> bool
+    {
+        if ( r1.x == r2.x && r1.width == r2.width )
+        {
+            if ( (r1.y > r2.y && (r2.y + r2.height == r1.y + 1)) ||
+                 (r2.y > r1.y && (r1.y + r1.height == r2.y + 1)) )
+                return true;
+        }
+        else if ( r1.y == r2.y && r1.height == r2.height )
+        {
+            if ( (r1.x > r2.x && (r2.x + r2.width == r1.x + 1)) ||
+                 (r2.x > r1.x && (r1.x + r1.width == r2.x + 1)) )
+                return true;
+        }
+
+        return false;
+    };
+
+    auto outerItr = rectangles.begin();
+
+    while ( outerItr != rectangles.end() )
+    {
+        auto& r1 = *outerItr++;
+
+        auto innerItr = outerItr;
+
+        while ( innerItr != rectangles.end() )
+        {
+            const auto& r2 = *innerItr;
+
+            if ( CanMergeRects(r1, r2) )
+            {
+                r1 += r2;
+
+                innerItr = rectangles.erase(innerItr); // get rid of r2
+                outerItr = rectangles.begin();
+            }
+            else
+            {
+                ++innerItr;
+            }
+        }
+    }
 }
 
 #endif
