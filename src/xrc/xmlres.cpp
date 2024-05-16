@@ -721,54 +721,54 @@ bool wxXmlResource::UpdateResources()
 {
     bool rt = true;
 
-    for ( wxXmlResourceDataRecord& rec : Data() )
+    // We never do it if this flag is specified.
+    if ( !(m_flags & wxXRC_NO_RELOADING) )
     {
-        // Check if we need to reload this one.
+        for ( wxXmlResourceDataRecord& rec : Data() )
+        {
+            // Check if we need to reload this one.
 
-        // We never do it if this flag is specified.
-        if ( m_flags & wxXRC_NO_RELOADING )
-            continue;
+            // And we don't do it for the records that were not loaded from a
+            // file/URI (or at least not directly) in the first place.
+            if ( !rec.Time.IsValid() )
+                continue;
 
-        // And we don't do it for the records that were not loaded from a
-        // file/URI (or at least not directly) in the first place.
-        if ( !rec.Time.IsValid() )
-            continue;
-
-        // Otherwise check its modification time if we can.
+            // Otherwise check its modification time if we can.
 #if wxUSE_DATETIME
-        wxDateTime lastModTime = GetXRCFileModTime(rec.File);
+            wxDateTime lastModTime = GetXRCFileModTime(rec.File);
 
-        if ( lastModTime.IsValid() && lastModTime <= rec.Time )
+            if ( lastModTime.IsValid() && lastModTime <= rec.Time )
 #else // !wxUSE_DATETIME
-        // Never reload the file contents: we can't know whether it changed or
-        // not in this build configuration and it would be unexpected and
-        // counter-productive to get a performance hit (due to constant
-        // reloading of XRC files) in a minimal wx build which is presumably
-        // used because of resource constraints of the current platform.
+            // Never reload the file contents: we can't know whether it changed or
+            // not in this build configuration and it would be unexpected and
+            // counter-productive to get a performance hit (due to constant
+            // reloading of XRC files) in a minimal wx build which is presumably
+            // used because of resource constraints of the current platform.
 #endif // wxUSE_DATETIME/!wxUSE_DATETIME
-        {
-            // No need to reload, the file wasn't modified since we did it
-            // last.
-            continue;
-        }
+            {
+                // No need to reload, the file wasn't modified since we did it
+                // last.
+                continue;
+            }
 
-        wxXmlDocument * const doc = DoLoadFile(rec.File);
-        if ( !doc )
-        {
-            // Notice that we keep the old XML document: it seems better to
-            // preserve it instead of throwing it away if we have nothing to
-            // replace it with.
-            rt = false;
-            continue;
-        }
+            wxXmlDocument * const doc = DoLoadFile(rec.File);
+            if ( !doc )
+            {
+                // Notice that we keep the old XML document: it seems better to
+                // preserve it instead of throwing it away if we have nothing to
+                // replace it with.
+                rt = false;
+                continue;
+            }
 
-        // Replace the old resource contents with the new one.
-        rec.Doc.reset(doc);
+            // Replace the old resource contents with the new one.
+            rec.Doc.reset(doc);
 
-        // And, now that we loaded it successfully, update the last load time.
+            // And, now that we loaded it successfully, update the last load time.
 #if wxUSE_DATETIME
-        rec.Time = lastModTime.IsValid() ? lastModTime : wxDateTime::Now();
+            rec.Time = lastModTime.IsValid() ? lastModTime : wxDateTime::Now();
 #endif // wxUSE_DATETIME
+        }
     }
 
     return rt;
