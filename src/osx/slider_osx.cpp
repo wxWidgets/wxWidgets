@@ -155,15 +155,19 @@ int wxSlider::GetValue() const
 
 void wxSlider::SetValue(int value)
 {
-    if ( m_macValueStatic )
-    {
-        wxString valuestring;
-        valuestring.Printf( wxT("%d"), value );
-        m_macValueStatic->SetLabel( valuestring );
-    }
-
     // We only invert for the setting of the actual native widget
     GetPeer()->SetValue( ValueInvertOrNot( value ) );
+
+    if ( m_macValueStatic )
+    {
+        wxString valueString;
+
+        // In case the passed value is outside the slider's range,
+        // macOS has bound the value to a valid value;
+        // use this value also for the value string
+        valueString.Printf( "%d", GetValue() );
+        m_macValueStatic->SetLabel( valueString );
+    }
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -174,7 +178,7 @@ void wxSlider::SetRange(int minValue, int maxValue)
     // changing the range.
     const int valueOld = GetValue();
 
-    wxString value;
+    wxString valueString;
 
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
@@ -184,28 +188,19 @@ void wxSlider::SetRange(int minValue, int maxValue)
 
     if (m_macMinimumStatic)
     {
-        value.Printf( wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
-        m_macMinimumStatic->SetLabel( value );
+        valueString.Printf( "%d", ValueInvertOrNot( m_rangeMin ) );
+        m_macMinimumStatic->SetLabel( valueString );
     }
 
     if (m_macMaximumStatic)
     {
-        value.Printf( wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
-        m_macMaximumStatic->SetLabel( value );
+        valueString.Printf( "%d", ValueInvertOrNot( m_rangeMax ) );
+        m_macMaximumStatic->SetLabel( valueString );
     }
 
-    // If the range is out of bounds, set it to a
-    // value that is within bounds
-    // RN: Testing reveals OSX does its own
-    // bounding, perhaps this isn't needed?
-    int currentValue = GetValue();
-
-    if(currentValue < m_rangeMin)
-        SetValue(m_rangeMin);
-    else if(currentValue > m_rangeMax)
-        SetValue(m_rangeMax);
-
-    // Ensure that our value didn't change.
+    // Use our preserved value (see above),
+    // SetValue(int) also does bounds checking, the value may
+    // be changed so that it is within the new range
     SetValue(valueOld);
 }
 
