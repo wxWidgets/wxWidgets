@@ -795,7 +795,10 @@ TEST_CASE("wxDateTime::Format", "[datetime]")
     }
 
     CHECK(wxDateTime::Now().Format("%%") == "%");
+}
 
+TEST_CASE("wxDateTime::ParseFormat", "[datetime]")
+{
     wxDateTime dt;
 
 #if 0
