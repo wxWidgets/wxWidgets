@@ -804,55 +804,68 @@ TEST_CASE("wxDateTime::ParseFormat", "[datetime]")
 #if 0
     // special case which was known to fail
     CHECK( dt.ParseFormat("02/06/1856", "%x") );
-    CHECK( dt.GetYear()  == 1856 );
+    CHECK( dt.GetYear() == 1856 );
 #endif
 
-    // also test %l separately
-    CHECK( dt.ParseFormat("12:23:45.678", "%H:%M:%S.%l") );
-    CHECK( dt.GetMillisecond()  == 678 );
+    SECTION("%l")
+    {
+        REQUIRE( dt.ParseFormat("12:23:45.678", "%H:%M:%S.%l") );
+        CHECK( dt.GetMillisecond() == 678 );
 
-    // test special case of %l matching 0 milliseconds
-    CHECK( dt.ParseFormat("12:23:45.000", "%H:%M:%S.%l") );
-    CHECK( dt.GetMillisecond()  == 0 );
+        // test special case of %l matching 0 milliseconds
+        REQUIRE( dt.ParseFormat("12:23:45.000", "%H:%M:%S.%l") );
+        CHECK( dt.GetMillisecond() == 0 );
+    }
 
-    // test another format modifier not tested above.
-    CHECK( dt.ParseFormat("23", "%e") );
-    CHECK( dt.GetDay()  == 23 );
+    SECTION("%e")
+    {
+        REQUIRE( dt.ParseFormat("23", "%e") );
+        CHECK( dt.GetDay() == 23 );
+    }
 
     // test partially specified dates too
-    wxDateTime dtDef(26, wxDateTime::Sep, 2008);
-    CHECK( dt.ParseFormat("17", "%d", dtDef) );
-    CHECK( dt.GetDay()  == 17 );
-    CHECK( dt.GetMonth()  == wxDateTime::Sep );
-    CHECK( dt.GetYear()  == 2008 );
+    SECTION("partial")
+    {
+        wxDateTime dtDef(26, wxDateTime::Sep, 2008);
+        REQUIRE( dt.ParseFormat("17", "%d", dtDef) );
+        CHECK( dt.GetDay() == 17 );
+        CHECK( dt.GetMonth() == wxDateTime::Sep );
+        CHECK( dt.GetYear() == 2008 );
+    }
 
     // test some degenerate cases
-    CHECK( !dt.ParseFormat("", "%z") );
-    CHECK( !dt.ParseFormat("", "%%") );
+    SECTION("special")
+    {
+        CHECK( !dt.ParseFormat("", "%z") );
+        CHECK( !dt.ParseFormat("", "%%") );
+    }
 
     // test compilation of some calls which should compile (and not result in
     // ambiguity because of char*<->wxCStrData<->wxString conversions)
-    wxString s("foo");
-    CHECK( !dt.ParseFormat("foo") );
-    CHECK( !dt.ParseFormat(wxT("foo")) );
-    CHECK( !dt.ParseFormat(s) );
-    dt.ParseFormat(s.c_str()); // Simply test compilation of this one.
+    SECTION("compile")
+    {
+        wxString s("foo");
+        CHECK( !dt.ParseFormat("foo") );
+        CHECK( !dt.ParseFormat(wxT("foo")) );
+        CHECK( !dt.ParseFormat(s) );
+        dt.ParseFormat(s.c_str()); // Simply test compilation of this one.
 
-    CHECK( !dt.ParseFormat("foo", "%c") );
-    CHECK( !dt.ParseFormat(wxT("foo"), "%c") );
-    CHECK( !dt.ParseFormat(s, "%c") );
-    dt.ParseFormat(s.c_str(), "%c");
+        CHECK( !dt.ParseFormat("foo", "%c") );
+        CHECK( !dt.ParseFormat(wxT("foo"), "%c") );
+        CHECK( !dt.ParseFormat(s, "%c") );
+        dt.ParseFormat(s.c_str(), "%c");
 
-    CHECK( !dt.ParseFormat("foo", wxT("%c")) );
-    CHECK( !dt.ParseFormat(wxT("foo"), wxT("%c")) );
-    CHECK( !dt.ParseFormat(s, "%c") );
-    dt.ParseFormat(s.c_str(), wxT("%c"));
+        CHECK( !dt.ParseFormat("foo", wxT("%c")) );
+        CHECK( !dt.ParseFormat(wxT("foo"), wxT("%c")) );
+        CHECK( !dt.ParseFormat(s, "%c") );
+        dt.ParseFormat(s.c_str(), wxT("%c"));
 
-    wxString spec("%c");
-    CHECK( !dt.ParseFormat("foo", spec) );
-    CHECK( !dt.ParseFormat(wxT("foo"), spec) );
-    CHECK( !dt.ParseFormat(s, spec) );
-    dt.ParseFormat(s.c_str(), spec);
+        wxString spec("%c");
+        CHECK( !dt.ParseFormat("foo", spec) );
+        CHECK( !dt.ParseFormat(wxT("foo"), spec) );
+        CHECK( !dt.ParseFormat(s, spec) );
+        dt.ParseFormat(s.c_str(), spec);
+    }
 }
 
 // Test parsing time in free format.
