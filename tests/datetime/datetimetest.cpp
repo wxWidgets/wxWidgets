@@ -823,6 +823,20 @@ TEST_CASE("wxDateTime::ParseFormat", "[datetime]")
         CHECK( dt.GetDay() == 23 );
     }
 
+    SECTION("%-")
+    {
+        REQUIRE( dt.ParseFormat("17.5.2024", "%-d.%-m.%Y") );
+        CHECK( dt.GetDay() == 17 );
+        CHECK( dt.GetMonth() == wxDateTime::May );
+        CHECK( dt.GetYear() == 2024 );
+
+        REQUIRE( dt.ParseFormat("8.5.2024", "%-d.%-m.%Y") );
+        CHECK( dt.GetDay() == 8 );
+
+        REQUIRE( dt.ParseFormat("11.11.2024", "%-d.%-m.%Y") );
+        CHECK( dt.GetMonth() == wxDateTime::Nov );
+    }
+
     // test partially specified dates too
     SECTION("partial")
     {

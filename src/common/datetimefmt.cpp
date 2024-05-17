@@ -1106,13 +1106,20 @@ wxDateTime::ParseFormat(const wxString& date,
         }
 
         // start of a format specification
+        ++fmt;
+
+        // skip the optional character specifying the padding: this is a GNU
+        // extension which we need to support as this is used in the default
+        // date formats for some locales (but luckily this is simple to do)
+        if ( *fmt == '-' || *fmt == '_' || *fmt == '0' )
+            ++fmt;
 
         // parse the optional width
         size_t width = 0;
-        while ( wxIsdigit(*++fmt) )
+        while ( wxIsdigit(*fmt) )
         {
             width *= 10;
-            width += *fmt - '0';
+            width += *fmt++ - '0';
         }
 
         // the default widths for the various fields
