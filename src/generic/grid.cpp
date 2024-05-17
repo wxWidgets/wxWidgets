@@ -6391,10 +6391,8 @@ bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     {
         DisableCellEditControl();
 
-        if ( IsVisible( m_currentCellCoords, false ) )
-        {
-            RefreshBlock(m_currentCellCoords);
-        }
+        // Ensure the old highlighted row/col labels are refreshed
+        RefreshBlock(m_currentCellCoords);
     }
 
     m_currentCellCoords = coords;

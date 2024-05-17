@@ -191,7 +191,7 @@ private:
     static void MergeAdjacentRects(std::vector<wxRect>& rectangles);
 
     // Called each time the selection changed or scrolled to recompute m_polyPolygon.
-    void ComputePolyPolygon();
+    void ComputePolyPolygon(bool refreshLabelWindows = false);
 
     // All currently selected blocks. We expect there to be a relatively small
     // amount of them, even for very large grids, as each block must be
@@ -212,6 +212,8 @@ private:
     // - Poly-polygon (using wxDC::DrawPolyPolygon()) if it consists of multiple polygons.
     //
     PolyPolygon                         m_polyPolygon;
+
+    size_t                              m_isAnyLabelHighlighted = 0;
 
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };
