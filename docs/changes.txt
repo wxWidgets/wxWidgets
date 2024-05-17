@@ -255,6 +255,10 @@ All (GUI):
 
 - Speed up using XRC when using wxXRC_NO_RELOADING (John de Rooij, #24536).
 
+wxGTK:
+
+- Fix using wxDatePickerCtrl in ca_ES, cz_CZ and some other locales (#24533).
+
 wxOSX:
 
 - Improve wxSlider ticks appearance (Hartwig Wiesmann, #24532).
