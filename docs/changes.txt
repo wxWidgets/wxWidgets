@@ -258,6 +258,7 @@ All (GUI):
 wxOSX:
 
 - Improve wxSlider ticks appearance (Hartwig Wiesmann, #24532).
+- Fix wrong wxSlider label in some cases (Hartwig Wiesmann, #24539).
 
 
 3.2.5: (released 2024-05-14)
