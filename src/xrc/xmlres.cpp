@@ -723,7 +723,7 @@ bool wxXmlResource::UpdateResources()
 
     // We never do it if this flag is specified.
     if ( m_flags & wxXRC_NO_RELOADING )
-        return;
+        return rt;
 
     for ( wxXmlResourceDataRecord& rec : Data() )
     {
