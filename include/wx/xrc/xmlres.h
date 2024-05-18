@@ -269,6 +269,9 @@ public:
     // it checks all the IDs used in XRC.
     static wxString FindXRCIDById(int numId);
 
+    // Determine the total number of ID's that are present in the XML
+    // resource.
+    static int XRCIDCount();
 
     // Returns version information (a.b.c.d = d+ 256*c + 256^2*b + 256^3*a).
     long GetVersion() const { return m_version; }

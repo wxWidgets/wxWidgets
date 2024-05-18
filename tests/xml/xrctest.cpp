@@ -212,6 +212,52 @@ TEST_CASE_METHOD(XrcTestCase, "XRC::IDRanges", "[xrc]")
     }
 }
 
+TEST_CASE_METHOD(XrcTestCase, "XRC::XRCIDCount", "[xrc]")
+{
+    int initialXRCIDs = wxXmlResource::Get()->XRCIDCount();
+    // By default the standard ID's are already loaded
+    CHECK( initialXRCIDs > 0 );
+
+    // Adding a few standard ID's, which should already
+    // be available by default.
+    XRCID("wxID_OK");
+    XRCID("wxID_CANCEL");
+    XRCID("wxID_APPLY");
+    XRCID("wxID_YES");
+    XRCID("wxID_NO");
+    // The number of ID should still be the same
+    CHECK( wxXmlResource::Get()->XRCIDCount() == initialXRCIDs );
+
+    // Add 4 new XRCIDs
+    XRCID("testAdditionalXRCID_1");
+    XRCID("testAdditionalXRCID_2");
+    XRCID("testAdditionalXRCID_3");
+    XRCID("testAdditionalXRCID_4");
+    // The count should be 4 higher
+    CHECK( wxXmlResource::Get()->XRCIDCount() == initialXRCIDs + 4 );
+
+    // Adding the same XRCID again should not increment the count
+    XRCID("testAdditionalXRCID_1");
+    // The count should be 4 higher
+    CHECK( wxXmlResource::Get()->XRCIDCount() == initialXRCIDs + 4 );
+
+    // Spaces in front are creating a new unique ID
+    XRCID("     testAdditionalXRCID_1");
+    // The count should now be 5 higher
+    CHECK( wxXmlResource::Get()->XRCIDCount() == initialXRCIDs + 5 );
+
+    // Spaces at the end are creating a new unique ID
+    XRCID("testAdditionalXRCID_1       ");
+    // The count should now be 6 higher
+    CHECK( wxXmlResource::Get()->XRCIDCount() == initialXRCIDs + 6 );
+
+    // A very long XRCID name, should still be added
+    XRCID("testAdditionalXRCID_WithAVeryLongIdentifier_ToTestIfXRCIDsWithLongIdentifiersAreAllowed_AndCanBeAddedWithoutProblems");
+    // The count should now be 7 higher
+    CHECK(wxXmlResource::Get()->XRCIDCount() == initialXRCIDs + 7);
+
+}
+
 TEST_CASE("XRC::PathWithFragment", "[xrc][uri]")
 {
     wxXmlResource::Get()->AddHandler(new wxBitmapXmlHandler);

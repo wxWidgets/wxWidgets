@@ -3156,17 +3156,21 @@ void AddStdXRCID_Records()
 #undef stdID
 }
 
-} // anonymous namespace
-
-
-/*static*/
-int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
+static void CheckAddStdXRCID_Records()
 {
-    if ( !gs_stdIDsAdded )
+    if (!gs_stdIDsAdded)
     {
         gs_stdIDsAdded = true;
         AddStdXRCID_Records();
     }
+}
+
+} // anonymous namespace
+
+/*static*/
+int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
+{
+    CheckAddStdXRCID_Records();
 
     return XRCID_Lookup(str_id, value_if_not_found);
 }
@@ -3184,6 +3188,24 @@ wxString wxXmlResource::FindXRCIDById(int numId)
     }
 
     return wxString();
+}
+
+/* static */
+int wxXmlResource::XRCIDCount()
+{
+    int count = 0;
+
+    CheckAddStdXRCID_Records();
+
+    for (int i = 0; i < XRCID_TABLE_SIZE; i++)
+    {
+        for (XRCID_record* rec = XRCID_Records[i]; rec; rec = rec->next)
+        {
+            ++count;
+        }
+    }
+
+    return count;
 }
 
 static void CleanXRCID_Record(XRCID_record *rec)
