@@ -1502,7 +1502,7 @@ public:
   wxString& Truncate(size_t uiLen);
     // empty string contents
   void Empty() { clear(); }
-    // empty the string and free memory
+    // empty string contents
   void Clear() { clear(); }
 
   // contents test

@@ -1541,7 +1541,7 @@ public:
         wxStringBuffer and wxStringBufferLength classes may be very useful when working
         with some external API which requires the caller to provide a writable buffer.
 
-        See also the reserve(), resize() and shrink_to_fit() STL-like functions.
+        See also the `reserve()`, `resize()` and `shrink_to_fit()` STL-like functions.
     */
     ///@{
 
@@ -1610,7 +1610,9 @@ public:
     wxString Clone() const;
 
     /**
-        Empties the string and frees memory occupied by it.
+        Clears the string's content, setting its length to zero.
+        To request freeing its memory, call Shrink() or
+        `shrink_to_fit()` afterwards.
 
         @see Empty()
     */
@@ -1635,9 +1637,7 @@ public:
     bool Contains(const wxString& str) const;
 
     /**
-        Makes the string empty, but doesn't free memory occupied by the string.
-
-        @see Clear().
+        This is a synonym for Clear().
     */
     void Empty();
 
