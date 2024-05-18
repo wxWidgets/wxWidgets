@@ -724,6 +724,7 @@ bool wxXmlResource::UpdateResources()
     // We never do it if this flag is specified.
     if ( m_flags & wxXRC_NO_RELOADING )
         return;
+
     for ( wxXmlResourceDataRecord& rec : Data() )
     {
         // Check if we need to reload this one.
