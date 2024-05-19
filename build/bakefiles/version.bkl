@@ -23,7 +23,7 @@
           changes, change C:R:A to C:R+1:A
     -->
     <set var="WX_CURRENT">2</set>
-    <set var="WX_REVISION">3</set>
+    <set var="WX_REVISION">4</set>
     <set var="WX_AGE">2</set>
 
 
