@@ -1611,8 +1611,10 @@ public:
 
     /**
         Clears the string's content, setting its length to zero.
-        To request freeing its memory, call Shrink() or
-        `shrink_to_fit()` afterwards.
+
+        This is the same as `clear()` and does @e not free the memory used by
+        the string. To do this, call standard-like `shrink_to_fit()` or
+        Shrink() after calling this function.
 
         @see Empty()
     */
@@ -1638,6 +1640,10 @@ public:
 
     /**
         This is a synonym for Clear().
+
+        Prefer using `clear()` instead of this function in new code, especially
+        considering that this function is very different from the standard
+        `empty()` function.
     */
     void Empty();
 
