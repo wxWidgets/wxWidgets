@@ -11723,7 +11723,7 @@ wxAccStatus wxGridAccessible::GetState(int childId, long* state)
     // this needs to be returned such that a child below is recognized as focused
     // (check for cursorRow and cursorCol being != -1?)
     if ( grid->HasFocus() )
-        st |=  wxACC_STATE_SYSTEM_FOCUSED;
+        st |= wxACC_STATE_SYSTEM_FOCUSED;
 
     *state = st;
     return wxACC_OK;
