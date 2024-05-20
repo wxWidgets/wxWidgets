@@ -27,6 +27,8 @@
 #include "wx/mimetype.h"
 #include "wx/vector.h"
 
+#include <cinttypes>
+
 class XRCWidgetData
 {
 public:
@@ -590,6 +592,18 @@ static wxString FileToCppArray(wxString filename, int num)
     wxFileOffset offset = file.Length();
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
 
+    // 32-bit Unix systems and 32-bit and 64-bit Windows systems do not support loader modules larger than 4 GiB.
+    // For 64-bit Windows systems, even if the virtual address space of a process exceeds the 32-bit range,
+    // each individual loader module cannot by itself exceed the 32-bit range (https://duckduckgo.com/?q=pecoff_v8).
+    // So even if our resource compiler might support 64-bit-sized files,
+    // it might not be able to process the resulting C++ code on some platforms/toolchains.
+    // Therefore, we limit the size of an individual resource file to 32-bit range:
+    if (offset != static_cast<wxUint32>(offset))
+    {
+        wxLogError(wxT("Resource file is too big (%" PRIx64 "h bytes) !"), static_cast<wxUint64>(offset));
+        return wxEmptyString;
+    }
+
     const size_t lng = wx_truncate_cast(size_t, offset);
     wxASSERT_MSG( static_cast<wxFileOffset>(lng) == offset,
                   wxT("Huge file not supported") );
@@ -655,8 +669,15 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "\n");
 
     for (i = 0; i < flist.GetCount(); i++)
-        file.Write(
-              FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
+    {
+        const wxString result = FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i);
+        if (result.IsEmpty())
+        {
+            retCode = 2;
+            return;
+        }
+        file.Write(result);
+    }
 
     file.Write(""
 "void " + parFuncname + "()\n"
