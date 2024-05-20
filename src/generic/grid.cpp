@@ -11903,8 +11903,6 @@ wxAccStatus wxGridCellAccessible::GetChildCount(int* childCount)
 }
 
 // Gets the specified child (starting from 1).
-// If *child is nullptr and return value is wxACC_OK, this means that the child
-// is a simple element and not an accessible object.
 wxAccStatus wxGridCellAccessible::GetChild(int childId, wxAccessible** child)
 {
     if (childId != wxACC_SELF)
@@ -11988,7 +11986,7 @@ wxAccStatus wxGridCellAccessible::GetState(int childId, long* state)
 }
 
 // Returns a localized string representing the value for the object or child.
-wxAccStatus wxGridCellAccessible::GetValue(int childId, wxString* strValue)
+wxAccStatus wxGridCellAccessible::GetValue(int childId, wxString* WXUNUSED(strValue))
 {
     wxGrid* grid = wxDynamicCast(GetWindow(), wxGrid);
     wxCHECK( grid, wxACC_FAIL );
