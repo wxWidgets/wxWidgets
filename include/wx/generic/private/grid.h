@@ -1292,7 +1292,6 @@ class WXDLLIMPEXP_CORE wxGridAccessible : public wxWindowAccessible
 {
 public:
     explicit wxGridAccessible(wxGrid* win);
-    virtual ~wxGridAccessible();
 
     virtual wxAccStatus HitTest(const wxPoint& pt, int* childId,
         wxAccessible** childObject) override;
