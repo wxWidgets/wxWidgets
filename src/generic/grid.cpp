@@ -11407,32 +11407,39 @@ wxGetContentRect(wxSize contentSize,
 // helpers for wxGridAccessible and wxGridCellAccessible
 //-----------------------------------------------------------------------------
 
-// helper to convert row / col into child object id
-// error handling is not required here
-static int GetChildId(wxGrid* grid, int row, int col)
+namespace
+{
+
+// Helper for converting between grid coordinates and child IDs.
+//
+// Child IDs are 1-based and are used to identify individual cells in the grid
+// in the top-down, left-to-right order.
+
+// Return the child ID corresponding to the given grid cell coordinates.
+int ConvertCoordsToChildId(wxGrid* grid, wxGridCellCoords coords)
 {
     int childId = 0;
     int numberCols = grid->GetNumberCols();
     if ( grid->GetRowLabelSize() )
         numberCols++;
 
-    if ( row == -1 && col == -1 )
+    if ( !coords )
         childId = 1;
-    else if ( row == -1 )
+    else if ( coords.GetRow() == -1 )
     {
-        childId = col + 1;
+        childId = coords.GetCol() + 1;
         if ( grid->GetRowLabelSize() )
             childId++;
     }
-    else if ( col == -1 )
+    else if ( coords.GetCol() == -1 )
     {
-        childId = row * numberCols + 1;
+        childId = coords.GetRow() * numberCols + 1;
         if ( grid->GetColLabelSize() )
             childId += numberCols;
     }
     else
     {
-        childId = row * numberCols + col + 1;
+        childId = coords.GetRow() * numberCols + coords.GetCol() + 1;
         if ( grid->GetColLabelSize() )
             childId += numberCols;
         if ( grid->GetRowLabelSize() )
@@ -11441,8 +11448,9 @@ static int GetChildId(wxGrid* grid, int row, int col)
     return childId;
 }
 
-// helper to calculate row, col, isRowHeader, isColHeader from childId
-wxGridCellCoords GetRowCol(wxGrid* grid, int childId)
+// Get coordinates corresponding to the given child ID (see the converse
+// function above).
+wxGridCellCoords ConvertChildIdToCoords(wxGrid* grid, int childId)
 {
     wxGridCellCoords coords;
 
@@ -11470,9 +11478,11 @@ wxGridCellCoords GetRowCol(wxGrid* grid, int childId)
         coords.SetCol(col);
         coords.SetRow(row);
     }
+
     return coords;
 }
 
+} // anonymous namespace
 
 //-----------------------------------------------------------------------------
 // wxGridAccessible
@@ -11578,7 +11588,7 @@ wxAccStatus wxGridAccessible::HitTest(const wxPoint& pt, int* childId, wxAccessi
     if ( isColHeader )
         row = -1;
 
-    *childId = GetChildId(grid, row, col);
+    *childId = ConvertCoordsToChildId(grid, wxGridCellCoords(row, col));
 
     return wxACC_OK;
 }
@@ -11680,7 +11690,7 @@ wxAccStatus wxGridAccessible::GetRole(int childId, wxAccRole* role)
     else
     {
         // children can be cells or headers
-        wxGridCellCoords coords = GetRowCol(grid, childId);
+        wxGridCellCoords coords = ConvertChildIdToCoords(grid, childId);
         if ( coords.GetRow() == -1 )
             *role = wxROLE_SYSTEM_COLUMNHEADER;
         else if ( coords.GetCol() == -1 )
@@ -11752,7 +11762,7 @@ wxAccStatus wxGridAccessible::GetFocus(int* childId, wxAccessible** child)
         else
         {
             *child = nullptr;
-            *childId = GetChildId(grid, coord.GetRow(), coord.GetCol() );
+            *childId = ConvertCoordsToChildId(grid, coord);
         }
     }
     else
@@ -11772,7 +11782,7 @@ wxAccStatus wxGridAccessible::GetFocus(int* childId, wxAccessible** child)
 wxGridCellAccessible::wxGridCellAccessible(wxGrid* grid, int childId)
     : wxAccessible(grid),
       m_childId{childId},
-      m_coords{GetRowCol(grid, childId)}
+      m_coords{ConvertChildIdToCoords(grid, childId)}
 {
 }
 
