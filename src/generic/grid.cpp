@@ -11459,24 +11459,27 @@ wxGridCellCoords ConvertChildIdToCoords(wxGrid* grid, int childId)
         int numCols = grid->GetNumberCols();
         if ( grid->GetRowLabelSize() )
             numCols++;
-        int row = (childId - 1) / numCols;
-        int col = (childId - 1) % numCols;
-        if ( grid->GetRowLabelSize() )
-        {
-            if ( col == 0 )
-                col = -1;
-            else
-                col--;
+        if ( numCols ) {
+            // actually, numCols == 0 should not happen
+            int row = (childId - 1) / numCols;
+            int col = (childId - 1) % numCols;
+            if ( grid->GetRowLabelSize() )
+            {
+                if ( col == 0 )
+                    col = -1;
+                else
+                    col--;
+            }
+            if ( grid->GetColLabelSize() )
+            {
+                if ( row == 0 )
+                    row = -1;
+                else
+                    row--;
+            }
+            coords.SetCol(col);
+            coords.SetRow(row);
         }
-        if ( grid->GetColLabelSize() )
-        {
-            if ( row == 0 )
-                row = -1;
-            else
-                row--;
-        }
-        coords.SetCol(col);
-        coords.SetRow(row);
     }
 
     return coords;
