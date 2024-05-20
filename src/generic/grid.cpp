@@ -11878,7 +11878,7 @@ wxAccStatus wxGridCellAccessible::GetName(int childId, wxString* name)
     else if ( m_coords.GetRow() == -1 )
         *name = wxString::Format(_("Column %s Header"), grid->GetColLabelValue(m_coords.GetCol()));
     else if ( m_coords.GetCol()  == -1 )
-        *name = wxString::Format(_("Row %s Header"), grid->GetRowLabelValue(m_coords.GetCol()));
+        *name = wxString::Format(_("Row %s Header"), grid->GetRowLabelValue(m_coords.GetRow()));
     else if ( m_isSameRow )
         *name = wxString::Format(_("Column %s: %s"),
             grid->GetColLabelValue(m_coords.GetCol()),
