@@ -11409,23 +11409,22 @@ wxGetContentRect(wxSize contentSize,
 
 // helper to convert row / col into child object id
 // error handling is not required here
-static int GetChildId(wxGrid* grid, int row, int col,
-                      bool isRowHeader, bool isColHeader)
+static int GetChildId(wxGrid* grid, int row, int col)
 {
     int childId = 0;
     int numberCols = grid->GetNumberCols();
     if ( grid->GetRowLabelSize() )
         numberCols++;
 
-    if ( isColHeader && isRowHeader )
+    if ( row == -1 && col == -1 )
         childId = 1;
-    else if ( isColHeader )
+    else if ( row == -1 )
     {
         childId = col + 1;
         if ( grid->GetRowLabelSize() )
             childId++;
     }
-    else if ( isRowHeader )
+    else if ( col == -1 )
     {
         childId = row * numberCols + 1;
         if ( grid->GetColLabelSize() )
@@ -11443,44 +11442,35 @@ static int GetChildId(wxGrid* grid, int row, int col,
 }
 
 // helper to calculate row, col, isRowHeader, isColHeader from childId
-static void GetRowCol(wxGrid* grid, int childId, int* row, int* col,
-                      bool* isRowHeader, bool* isColHeader)
+wxGridCellCoords GetRowCol(wxGrid* grid, int childId)
 {
-    if ( childId == 1 && grid->GetColLabelSize() && grid->GetRowLabelSize() )
+    wxGridCellCoords coords;
+
+    if ( childId != 1 || !grid->GetColLabelSize() || !grid->GetRowLabelSize() )
     {
-        *row = *col = -1;
-        *isRowHeader = true;
-        *isColHeader = true;
-    }
-    else
-    {
-        *isRowHeader = *isColHeader = false;
         int numCols = grid->GetNumberCols();
         if ( grid->GetRowLabelSize() )
             numCols++;
-        *row = (childId - 1) / numCols;
-        *col = (childId - 1) % numCols;
+        int row = (childId - 1) / numCols;
+        int col = (childId - 1) % numCols;
         if ( grid->GetRowLabelSize() )
         {
-            if ( *col == 0 )
-            {
-                *col = -1;
-                *isRowHeader = true;
-            }
+            if ( col == 0 )
+                col = -1;
             else
-                (*col)--;
+                col--;
         }
         if ( grid->GetColLabelSize() )
         {
-            if ( *row == 0 )
-            {
-                *row = -1;
-                *isColHeader = true;
-            }
+            if ( row == 0 )
+                row = -1;
             else
-                (*row)--;
+                row--;
         }
+        coords.SetCol(col);
+        coords.SetRow(row);
     }
+    return coords;
 }
 
 
@@ -11593,7 +11583,12 @@ wxAccStatus wxGridAccessible::HitTest(const wxPoint& pt, int* childId, wxAccessi
         return wxACC_OK;
     }
 
-    *childId = GetChildId(grid, row, col, isRowHeader, isColHeader);
+    if ( isRowHeader )
+        col = -1;
+    if ( isColHeader )
+        row = -1;
+
+    *childId = GetChildId(grid, row, col);
 
     return wxACC_OK;
 }
@@ -11666,25 +11661,17 @@ wxAccStatus wxGridAccessible::GetChild(int childId, wxAccessible** child)
         {
             // pass on the information whether the cell is on the same row or
             // column than the previous one to avoid redundant coordinate info
-            int previousRow = m_gridCellAccessible->m_row;
-            int previousCol = m_gridCellAccessible->m_col;
-            int previousRowHeader = m_gridCellAccessible->m_isRowHeader;
-            int previousColHeader = m_gridCellAccessible->m_isColHeader;
+            wxGridCellCoords previous_coords = m_gridCellAccessible->m_coords;
             delete m_gridCellAccessible;
             m_gridCellAccessible = new wxGridCellAccessible(grid, childId);
-            if ( m_gridCellAccessible->m_row == previousRow &&
-                m_gridCellAccessible->m_isColHeader == previousColHeader )
+            if ( m_gridCellAccessible->m_coords.GetRow() == previous_coords.GetRow() )
             {
                 m_gridCellAccessible->m_isSameRow = true;
-                printf("same row\n");
             }
-            if ( m_gridCellAccessible->m_col == previousCol &&
-                m_gridCellAccessible->m_isRowHeader == previousRowHeader )
+            if ( m_gridCellAccessible->m_coords.GetCol() == previous_coords.GetCol() )
             {
                 m_gridCellAccessible->m_isSameCol = true;
-                printf("same column\n");
             }
-                
         }
         *child = m_gridCellAccessible;
     }
@@ -11704,12 +11691,10 @@ wxAccStatus wxGridAccessible::GetRole(int childId, wxAccRole* role)
     else
     {
         // children can be cells or headers
-        int row, col;
-        bool isRowHeader, isColHeader;
-        GetRowCol(grid, childId, &row, &col, &isRowHeader, &isColHeader);
-        if ( isColHeader )
+        wxGridCellCoords coords = GetRowCol(grid, childId);
+        if ( coords.GetRow() == -1 )
             *role = wxROLE_SYSTEM_COLUMNHEADER;
-        else if ( isRowHeader )
+        else if ( coords.GetCol() == -1 )
             *role = wxROLE_SYSTEM_ROWHEADER;
         else
             *role = wxROLE_SYSTEM_CELL;
@@ -11778,7 +11763,7 @@ wxAccStatus wxGridAccessible::GetFocus(int* childId, wxAccessible** child)
         else
         {
             *child = nullptr;
-            *childId = GetChildId(grid, coord.GetRow(), coord.GetCol(), false, false);
+            *childId = GetChildId(grid, coord.GetRow(), coord.GetCol() );
         }
     }
     else
@@ -11799,7 +11784,7 @@ wxGridCellAccessible::wxGridCellAccessible(wxGrid* grid, int childId)
     : wxAccessible(grid)
 {
     m_childId = childId;
-    GetRowCol(grid, childId, &m_row, &m_col, &m_isRowHeader, &m_isColHeader);
+    m_coords = GetRowCol(grid, childId);
     m_isSameRow = m_isSameCol = false;
 }
 
@@ -11841,25 +11826,27 @@ void wxGridCellAccessible::DoGetLocation(wxGrid* grid, wxRect& rect)
     rect = grid->GetScreenRect();
     wxPoint unscrolledPos = grid->CalcScrolledPosition(rect.GetLeftTop());
 
-    if ( m_isColHeader )
+    int row = m_coords.GetRow();
+    if ( row == -1 )
     {
         rect.height = grid->m_colLabelHeight;
     }
     else
     {
-        if ( m_row >= grid->m_numFrozenRows )
+        if ( row >= grid->m_numFrozenRows )
             rect.y = unscrolledPos.y;
-        rect.y = rect.y + grid->m_colLabelHeight + grid->GetRowTop(m_row);
-        rect.height = grid->GetRowHeight(m_row);
+        rect.y = rect.y + grid->m_colLabelHeight + grid->GetRowTop(row);
+        rect.height = grid->GetRowHeight(row);
     }
-    if ( m_isRowHeader )
+    int col = m_coords.GetCol();
+    if ( col == -1 )
         rect.width = grid->m_rowLabelWidth;
     else
     {
-        if ( m_col >= grid->m_numFrozenCols )
+        if ( col >= grid->m_numFrozenCols )
             rect.x = unscrolledPos.x;
-        rect.x = rect.x + grid->m_rowLabelWidth + grid->GetColLeft(m_col);
-        rect.width = grid->GetColWidth(m_col);
+        rect.x = rect.x + grid->m_rowLabelWidth + grid->GetColLeft(col);
+        rect.width = grid->GetColWidth(col);
     }
 }
 
@@ -11886,24 +11873,24 @@ wxAccStatus wxGridCellAccessible::GetName(int childId, wxString* name)
         return wxACC_FAIL;
 
     // combine coordinate info and value, as JAWS will not handle Name and Value
-    if ( m_isColHeader && m_isRowHeader )
+    if ( !m_coords )
         *name = _("Grid Corner");
-    else if ( m_isColHeader )
-        *name = wxString::Format(_("Column %s Header"), grid->GetColLabelValue(m_col));
-    else if ( m_isRowHeader )
-        *name = wxString::Format(_("Row %s Header"), grid->GetRowLabelValue(m_row));
+    else if ( m_coords.GetRow() == -1 )
+        *name = wxString::Format(_("Column %s Header"), grid->GetColLabelValue(m_coords.GetCol()));
+    else if ( m_coords.GetCol()  == -1 )
+        *name = wxString::Format(_("Row %s Header"), grid->GetRowLabelValue(m_coords.GetCol()));
     else if ( m_isSameRow )
         *name = wxString::Format(_("Column %s: %s"),
-            grid->GetColLabelValue(m_col),
-            grid->GetCellValue(m_row, m_col));
+            grid->GetColLabelValue(m_coords.GetCol()),
+            grid->GetCellValue(m_coords));
     else if ( m_isSameCol )
         *name = wxString::Format(_("Row %s: %s"),
-            grid->GetRowLabelValue(m_row),
-            grid->GetCellValue(m_row, m_col));
+            grid->GetRowLabelValue(m_coords.GetRow()),
+            grid->GetCellValue(m_coords));
     else
         *name = wxString::Format(_("Row %s, Column %s: %s"),
-            grid->GetRowLabelValue(m_row), grid->GetColLabelValue(m_col),
-            grid->GetCellValue(m_row, m_col));
+            grid->GetRowLabelValue(m_coords.GetRow()), grid->GetColLabelValue(m_coords.GetCol()),
+            grid->GetCellValue(m_coords));
 
     return wxACC_OK;
 }
@@ -11933,9 +11920,9 @@ wxAccStatus wxGridCellAccessible::GetRole(int childId, wxAccRole* role)
     if ( childId != wxACC_SELF )
         return wxACC_FAIL;
 
-    if ( m_isColHeader )
+    if ( m_coords.GetRow() == -1 )
         *role = wxROLE_SYSTEM_COLUMNHEADER;
-    else if ( m_isRowHeader )
+    else if ( m_coords.GetCol() == -1 )
         *role = wxROLE_SYSTEM_ROWHEADER;
     else
         *role = wxROLE_SYSTEM_CELL;
@@ -11956,9 +11943,9 @@ wxAccStatus wxGridCellAccessible::GetState(int childId, long* state)
     if ( !grid->IsEnabled() )
         st |= wxACC_STATE_SYSTEM_UNAVAILABLE;
 
-    if ( !m_isColHeader && !grid->IsRowShown(m_row) )
+    if ( m_coords.GetRow() != -1 && !grid->IsRowShown(m_coords.GetRow()) )
         st |= wxACC_STATE_SYSTEM_INVISIBLE;
-    else if ( !m_isRowHeader && !grid->IsColShown(m_col) )
+    else if ( m_coords.GetCol() != -1 && !grid->IsColShown(m_coords.GetCol()) )
         st |= wxACC_STATE_SYSTEM_INVISIBLE;
 
     if( grid->IsFocusable() )
@@ -11966,36 +11953,33 @@ wxAccStatus wxGridCellAccessible::GetState(int childId, long* state)
 
     st |= wxACC_STATE_SYSTEM_SELECTABLE;
 
-    const int cursorRow = grid->GetGridCursorRow();
-    const int cursorCol = grid->GetGridCursorCol();
-
-    if ( !m_isColHeader && !m_isRowHeader && grid->HasFocus() && m_col==cursorCol && m_row==cursorRow)
+    if ( grid->HasFocus() && grid->GetGridCursorCoords() == m_coords )
         st |= wxACC_STATE_SYSTEM_FOCUSED;
 
     // check selection and visibility
-    if ( m_isRowHeader && m_isColHeader )
+    if ( !m_coords )
     {
         // check whether complete grid is selected?
     }
-    else if ( m_isRowHeader )
+    else if ( m_coords.GetCol() == -1 )
     {
         wxArrayInt selectedRows = grid->GetSelectedRows();
-        if ( selectedRows.Index(m_row) != wxNOT_FOUND )
+        if ( selectedRows.Index(m_coords.GetRow()) != wxNOT_FOUND )
             st |= wxACC_STATE_SYSTEM_SELECTED;
     }
-    else if ( m_isColHeader )
+    else if ( m_coords.GetRow() == -1 )
     {
         wxArrayInt selectedCols = grid->GetSelectedCols();
-        if ( selectedCols.Index(m_col) != wxNOT_FOUND )
+        if ( selectedCols.Index(m_coords.GetCol()) != wxNOT_FOUND )
             st |= wxACC_STATE_SYSTEM_SELECTED;
     }
     else
     {
-        if ( grid->IsInSelection(m_row, m_col) )
+        if ( grid->IsInSelection(m_coords) )
             st |= wxACC_STATE_SYSTEM_SELECTED;
-        if ( grid->IsVisible(m_row, m_col, false) )
+        if ( grid->IsVisible(m_coords, false) )
             st |= wxACC_STATE_SYSTEM_OFFSCREEN;
-        if ( grid->IsReadOnly(m_row, m_col) )
+        if ( grid->IsReadOnly(m_coords.GetRow(), m_coords.GetCol()) )
             st |= wxACC_STATE_SYSTEM_READONLY;
     }
 
@@ -12025,10 +12009,7 @@ wxAccStatus wxGridCellAccessible::GetFocus(int* childId, wxAccessible** child)
 
     *childId = wxACC_SELF;
 
-    const int cursorRow = grid->GetGridCursorRow();
-    const int cursorCol = grid->GetGridCursorCol();
-
-    if ( !m_isColHeader && !m_isRowHeader && cursorRow == m_row && cursorCol == m_col )
+    if ( grid->GetGridCursorCoords() == m_coords )
         *child = this;
 
     return wxACC_OK;

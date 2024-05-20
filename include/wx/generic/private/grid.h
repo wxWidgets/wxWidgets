@@ -1330,12 +1330,10 @@ public:
 
 private:
     int m_childId;
-    int m_row;
-    int m_col;
-    bool m_isRowHeader;
-    bool m_isColHeader;
-    bool m_isSameRow;
-    bool m_isSameCol;
+    // row and / or col can be -1 for column or row header
+    wxGridCellCoords m_coords;
+    bool m_isSameRow = false;
+    bool m_isSameCol = false;
     friend class wxGridAccessible;
     void DoGetLocation(wxGrid* grid, wxRect& rect);
 };
