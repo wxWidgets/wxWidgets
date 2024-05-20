@@ -354,13 +354,14 @@ wxString XmlResApp::GetInternalFileName(const wxString& name, const wxArrayStrin
     name2.Replace(wxT("*"), wxT("_"));
     name2.Replace(wxT("?"), wxT("_"));
 
-    wxString s = wxFileNameFromPath(parOutput) + wxT("$") + name2;
+    const wxString parOutput_fileName{wxFileNameFromPath(parOutput)};
+    wxString s{wxString::Format(wxT("%s$%s"), parOutput_fileName, name2)};
 
     if (wxFileExists(s) && flist.Index(s) == wxNOT_FOUND)
     {
         for (int i = 0;; i++)
         {
-            s.Printf(wxFileNameFromPath(parOutput) + wxT("$%03i-") + name2, i);
+            s.Printf(wxT("%s$%03i-%s"), parOutput_fileName, i, name2);
             if (!wxFileExists(s) || flist.Index(s) != wxNOT_FOUND)
                 break;
         }
