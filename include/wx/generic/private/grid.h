@@ -1329,14 +1329,17 @@ public:
     virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
 
 private:
-    int m_childId;
+    const int m_childId;
     // row and / or col can be -1 for column or row header
-    wxGridCellCoords m_coords;
+    const wxGridCellCoords m_coords;
+
     bool m_isSameRow = false;
     bool m_isSameCol = false;
+
     friend class wxGridAccessible;
     void DoGetLocation(wxGrid* grid, wxRect& rect);
 };
+
 #endif // wxUSE_ACCESSIBILITY
 
 #endif // wxUSE_GRID

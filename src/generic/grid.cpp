@@ -11481,15 +11481,6 @@ wxGridCellCoords GetRowCol(wxGrid* grid, int childId)
 wxGridAccessible::wxGridAccessible(wxGrid* win)
     : wxWindowAccessible(win)
 {
-    m_gridCellAccessible = nullptr;
-}
-
-wxGridAccessible::~wxGridAccessible()
-{
-    if ( m_gridCellAccessible )
-    {
-        m_gridCellAccessible.reset();
-    }
 }
 
 // Can return either a child object, or an integer
@@ -11654,14 +11645,14 @@ wxAccStatus wxGridAccessible::GetChild(int childId, wxAccessible** child)
     {
         if ( !m_gridCellAccessible )
         {
-            m_gridCellAccessible.reset( new wxGridCellAccessible(grid, childId) );
+            m_gridCellAccessible.reset(new wxGridCellAccessible(grid, childId));
         }
         else if ( m_gridCellAccessible->m_childId != childId )
         {
             // pass on the information whether the cell is on the same row or
             // column than the previous one to avoid redundant coordinate info
             wxGridCellCoords previous_coords = m_gridCellAccessible->m_coords;
-            m_gridCellAccessible.reset( new wxGridCellAccessible(grid, childId) );
+            m_gridCellAccessible.reset(new wxGridCellAccessible(grid, childId));
             if ( m_gridCellAccessible->m_coords.GetRow() == previous_coords.GetRow() )
             {
                 m_gridCellAccessible->m_isSameRow = true;
@@ -11779,11 +11770,10 @@ wxAccStatus wxGridAccessible::GetFocus(int* childId, wxAccessible** child)
 //-----------------------------------------------------------------------------
 
 wxGridCellAccessible::wxGridCellAccessible(wxGrid* grid, int childId)
-    : wxAccessible(grid)
+    : wxAccessible(grid),
+      m_childId{childId},
+      m_coords{GetRowCol(grid, childId)}
 {
-    m_childId = childId;
-    m_coords = GetRowCol(grid, childId);
-    m_isSameRow = m_isSameCol = false;
 }
 
 // Gets the parent
