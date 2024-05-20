@@ -1307,7 +1307,7 @@ public:
     virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) override;
 
 private:
-    wxGridCellAccessible* m_gridCellAccessible;
+    std::unique_ptr<wxGridCellAccessible> m_gridCellAccessible;
 };
 
 class WXDLLIMPEXP_CORE wxGridCellAccessible : public wxAccessible

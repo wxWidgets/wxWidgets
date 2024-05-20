@@ -11488,8 +11488,7 @@ wxGridAccessible::~wxGridAccessible()
 {
     if ( m_gridCellAccessible )
     {
-        delete m_gridCellAccessible;
-        m_gridCellAccessible = nullptr;
+        m_gridCellAccessible.reset();
     }
 }
 
@@ -11655,15 +11654,14 @@ wxAccStatus wxGridAccessible::GetChild(int childId, wxAccessible** child)
     {
         if ( !m_gridCellAccessible )
         {
-            m_gridCellAccessible = new wxGridCellAccessible(grid, childId);
+            m_gridCellAccessible.reset( new wxGridCellAccessible(grid, childId) );
         }
         else if ( m_gridCellAccessible->m_childId != childId )
         {
             // pass on the information whether the cell is on the same row or
             // column than the previous one to avoid redundant coordinate info
             wxGridCellCoords previous_coords = m_gridCellAccessible->m_coords;
-            delete m_gridCellAccessible;
-            m_gridCellAccessible = new wxGridCellAccessible(grid, childId);
+            m_gridCellAccessible.reset( new wxGridCellAccessible(grid, childId) );
             if ( m_gridCellAccessible->m_coords.GetRow() == previous_coords.GetRow() )
             {
                 m_gridCellAccessible->m_isSameRow = true;
@@ -11673,7 +11671,7 @@ wxAccStatus wxGridAccessible::GetChild(int childId, wxAccessible** child)
                 m_gridCellAccessible->m_isSameCol = true;
             }
         }
-        *child = m_gridCellAccessible;
+        *child = m_gridCellAccessible.get();
     }
     return wxACC_OK;
 }
