@@ -80,7 +80,7 @@ enum
     wxLIST_ALIGN_SNAP_TO_GRID
 };
 
-/// Column format (MSW only except wxLIST_FORMAT_LEFT)
+/// Column format determining alignment of the items in the column.
 enum wxListColumnFormat
 {
     wxLIST_FORMAT_LEFT,
@@ -358,6 +358,12 @@ public:
         This is just a convenient wrapper for InsertColumn() which adds the new
         column after all the existing ones without having to specify its
         position explicitly.
+
+        Note that under MSW the first column always uses left alignment due to
+        the limitation of the underlying native control. If you need to use a
+        different alignment for the first column, add a dummy column, then add
+        another column with the desired alignment and finally call
+        DeleteColumn() to remove the dummy one to achieve the desired result.
 
         @since 2.9.4
      */
