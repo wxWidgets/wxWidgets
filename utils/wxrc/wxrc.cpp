@@ -27,6 +27,8 @@
 #include "wx/mimetype.h"
 #include "wx/vector.h"
 
+#include <memory>
+
 class XRCWidgetData
 {
 public:
@@ -620,8 +622,8 @@ static wxString FileToCppArray(wxString filename, int num)
     // we cannot use string literals because MSVC is dumb wannabe compiler
     // with arbitrary limitation to 2048 strings :(
 
-    unsigned char *buffer = new unsigned char[lng];
-    file.Read(buffer, lng);
+    std::vector<unsigned char> buffer(lng);
+    file.Read(&buffer[0], lng);
 
     for (size_t i = 0, linelng = 0; i < lng; i++)
     {
@@ -635,8 +637,6 @@ static wxString FileToCppArray(wxString filename, int num)
         output << tmp;
         linelng += tmp.length()+1;
     }
-
-    delete[] buffer;
 
     output += wxT("};\n\n");
 
@@ -711,12 +711,10 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 #if wxUSE_MIMETYPE
         else
         {
-            wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
+            std::unique_ptr<wxFileType>
+                ft{wxTheMimeTypesManager->GetFileTypeFromExtension(ext)};
             if ( ft )
-            {
                 ft->GetMimeType(&mime);
-                delete ft;
-            }
         }
 #endif // wxUSE_MIMETYPE
 
@@ -776,8 +774,8 @@ static wxString FileToPythonArray(wxString filename, int num)
     snum.Printf(wxT("%i"), num);
     output = "    xml_res_file_" + snum + " = '''\\\n";
 
-    unsigned char *buffer = new unsigned char[lng];
-    file.Read(buffer, lng);
+    std::vector<unsigned char> buffer(lng);
+    file.Read(&buffer[0], lng);
 
     for (size_t i = 0, linelng = 0; i < lng; i++)
     {
@@ -801,8 +799,6 @@ static wxString FileToPythonArray(wxString filename, int num)
         output << tmp;
         linelng += tmp.length();
     }
-
-    delete[] buffer;
 
     output += wxT("'''\n\n");
 
