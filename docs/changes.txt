@@ -254,6 +254,7 @@ Changes in behaviour which may result in build errors
 All (GUI):
 
 - Speed up using XRC when using wxXRC_NO_RELOADING (John de Rooij, #24536).
+- Fix wxGridBagSizer with different horz/vert gaps (Alex Shvartzkop, #24550).
 
 wxGTK:
 
