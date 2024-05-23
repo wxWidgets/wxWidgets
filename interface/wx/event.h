@@ -432,6 +432,20 @@ public:
             }
         @endcode
 
+        Note that if you want to pass more data than just a single string and/or
+        an integer carried by wxCommandEvent to the main thread, you may use
+        wxThreadEvent instead.
+
+        @code
+            void FunctionInAWorkerThread(int val)
+            {
+                wxThreadEvent evt;
+                evt.SetInt(val);
+
+                wxTheApp->QueueEvent( evt.Clone() );
+            }
+        @endcode
+
         Finally, notice that this method automatically wakes up the event loop
         if it is currently idle by calling ::wxWakeUpIdle() so there is no need
         to do it manually when using it.
