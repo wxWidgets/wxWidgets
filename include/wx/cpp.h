@@ -127,7 +127,7 @@
     #elif defined(__VISUALC__)
         #define __WXFUNCTION_SIG__ __FUNCSIG__
     #elif defined(__clang__)
-        __WXFUNCTION_SIG__ __func__
+        #define __WXFUNCTION_SIG__ __func__
     #elif defined(__GNUG__)
         #define __WXFUNCTION_SIG__ __PRETTY_FUNCTION__
     #else
