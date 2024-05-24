@@ -123,7 +123,7 @@
     #if __cplusplus >= 202002L
         #include <source_location>
         // actually displays the signature, not just the name
-        #define __WXFUNCTION_SIG__ std::source_location::current().function_name() 
+        #define __WXFUNCTION_SIG__ std::source_location::current().function_name()
     #elif __VISUALC__
         #define __WXFUNCTION_SIG__ __FUNCSIG__
     #elif defined(__clang__)
