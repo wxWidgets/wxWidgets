@@ -52,9 +52,32 @@
 
     Please use the standard macro instead.
 
+    @see __WXFUNCTION_SIG__
+
     @header{wx/cpp.h}
 */
 #define __WXFUNCTION__ __func__
+
+/**
+    Expands to the current function's full signature, if available.
+
+    Falls back to the function name (i.e., @c \__func__) if not available.
+
+    As an example, if you have a class named `Calculator` with a
+    `double Add(double, double) const` member function,
+    `__WXFUNCTION_SIG__` may expand to the following:
+
+    `double Calculator::Add(double, double) const`
+
+    While `__func__` will simply expand to:
+
+    `Add`
+
+    @header{wx/cpp.h}
+
+    @since 3.3.0
+*/
+#define __WXFUNCTION_SIG__
 
 ///@}
 
