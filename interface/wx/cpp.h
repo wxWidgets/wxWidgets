@@ -52,9 +52,20 @@
 
     Please use the standard macro instead.
 
+    @see __WXFUNCTION_SIG__
+
     @header{wx/cpp.h}
 */
 #define __WXFUNCTION__ __func__
+
+/**
+    Display the current function's full signature, if available.
+
+    Falls back to the function name (i.e., @c \__func__) if not available.
+
+    @header{wx/cpp.h}
+*/
+#define __WXFUNCTION_SIG__
 
 ///@}
 
