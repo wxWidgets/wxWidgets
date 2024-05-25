@@ -152,7 +152,7 @@ public:
     };
 
     // Return the PolyPolygon object. Call ComputePolyPolygon() if necessary.
-    const PolyPolygon& GetPolyPolygon();
+    const PolyPolygon& GetPolyPolygon(const wxRect& renderExtent);
 
     void InvalidatePolyPolygon();
 
@@ -191,7 +191,7 @@ private:
     static void MergeAdjacentRects(std::vector<wxRect>& rectangles);
 
     // Called each time the selection changed or scrolled to recompute m_polyPolygon.
-    void ComputePolyPolygon(bool refreshLabelWindows = false);
+    void ComputePolyPolygon(bool refreshLabelWindows = false, const wxRect& renderExtent = {});
 
     // All currently selected blocks. We expect there to be a relatively small
     // amount of them, even for very large grids, as each block must be

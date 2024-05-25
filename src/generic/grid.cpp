@@ -2360,6 +2360,11 @@ void wxGrid::Render( wxDC& dc,
 
     // store user settings and reset later
 
+    // Don't show row/col highlight of the current cell when rendering
+    const auto currentCellCoords = m_currentCellCoords;
+    m_currentCellCoords = wxGridNoCellCoords;
+    wxON_BLOCK_EXIT_SET(m_currentCellCoords, currentCellCoords);
+
     // remove grid selection, don't paint selection colour
     // unless we have wxGRID_DRAW_SELECTION
     wxGridSelection* selectionOrig = nullptr;
@@ -2488,6 +2493,48 @@ void wxGrid::Render( wxDC& dc,
     DoRenderBox( dc, style,
                  pointOffSet, sizeCells,
                  leftTop, rightBottom );
+
+    // draw selection overlay if any
+    const wxRect renderExtent = wxRect(pointOffSet, sizeGrid);
+
+    if ( UsesOverlaySelection() )
+    {
+        InvalidateOverlaySelection();
+
+        // We only need the grid window at offset (0, 0) to pass to DrawSelection() below.
+
+        wxGridWindow* gridWin;
+
+        if ( m_frozenCornerGridWin )
+            gridWin = m_frozenCornerGridWin;
+        else if ( m_frozenColGridWin )
+            gridWin = m_frozenColGridWin;
+        else if ( m_frozenRowGridWin )
+            gridWin = m_frozenRowGridWin;
+        else
+            gridWin = m_gridWin;
+
+        DrawSelection( dc, gridWin, renderExtent );
+
+        InvalidateOverlaySelection();
+    }
+
+    // draw frozen row/col borders if any
+    if ( m_frozenColGridWin )
+    {
+        wxRect clip = renderExtent;
+        clip.y -= GetColLabelSize();
+        wxDCClipper clipper( dc, clip );
+        DrawFrozenBorder( dc, m_frozenColGridWin, renderExtent );
+    }
+
+    if ( m_frozenRowGridWin )
+    {
+        wxRect clip = renderExtent;
+        clip.x -= GetRowLabelSize();
+        wxDCClipper clipper( dc, clip );
+        DrawFrozenBorder( dc, m_frozenRowGridWin, renderExtent );
+    }
 
     // restore user setings
     dc.SetDeviceOrigin( userOriginX, userOriginY );
@@ -6733,32 +6780,54 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells)
     }
 }
 
-void wxGrid::DrawFrozenBorder(wxDC& dc, wxGridWindow *gridWindow)
+void wxGrid::DrawFrozenBorder(wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent)
 {
     if ( gridWindow && m_numCols && m_numRows)
     {
+        const bool isFrozenCol = gridWindow->GetType() & wxGridWindow::wxGridWindowFrozenCol;
+        const bool isFrozenRow = gridWindow->GetType() & wxGridWindow::wxGridWindowFrozenRow;
         int top, bottom, left, right;
         int cw, ch;
         wxPoint gridOffset = GetGridWindowOffset(gridWindow);
         gridWindow->GetClientSize(&cw, &ch);
-        CalcGridWindowUnscrolledPosition( gridOffset.x, gridOffset.y, &left, &top, gridWindow );
-        CalcGridWindowUnscrolledPosition( cw + gridOffset.x, ch + gridOffset.y, &right, &bottom, gridWindow );
 
-        if ( gridWindow->GetType() & wxGridWindow::wxGridWindowFrozenRow )
+        int gridFrozenBorderPenWidth = m_gridFrozenBorderPenWidth;
+
+        if ( renderExtent.IsEmpty() )
+        {
+            CalcGridWindowUnscrolledPosition( gridOffset.x, gridOffset.y, &left, &top, gridWindow );
+            CalcGridWindowUnscrolledPosition( cw + gridOffset.x, ch + gridOffset.y, &right, &bottom, gridWindow );
+        }
+        else
+        {
+            // We are rendering on external DC. Offset and scroll position are already
+            // calculated in wxGrid::Render().
+
+            gridFrozenBorderPenWidth /= 2;
+
+            top    = -GetColLabelSize() + renderExtent.x;
+            left   = -GetRowLabelSize() + renderExtent.y;
+            bottom = isFrozenRow ? ch - gridFrozenBorderPenWidth
+                                 : renderExtent.y + renderExtent.height;
+            right  = isFrozenCol ? cw - gridFrozenBorderPenWidth
+                                 : renderExtent.x + renderExtent.width;
+        }
+
+        if ( isFrozenRow )
         {
             right = wxMin(right, GetColRight(m_numCols - 1));
 
             dc.SetPen(wxPen(m_gridFrozenBorderColour,
-                            m_gridFrozenBorderPenWidth));
+                            gridFrozenBorderPenWidth));
             dc.DrawLine(left, bottom, right, bottom);
         }
 
-        if ( gridWindow->GetType() & wxGridWindow::wxGridWindowFrozenCol )
+        if ( isFrozenCol )
         {
             bottom = wxMin(bottom, GetRowBottom(m_numRows - 1));
 
             dc.SetPen(wxPen(m_gridFrozenBorderColour,
-                            m_gridFrozenBorderPenWidth));
+                            gridFrozenBorderPenWidth));
             dc.DrawLine(right, top, right, bottom);
         }
     }
@@ -7088,12 +7157,12 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
                    rect, hAlign, vAlign, wxHORIZONTAL);
 }
 
-void wxGrid::DrawSelection(wxDC& paintDC, wxGridWindow *gridWindow)
+void wxGrid::DrawSelection(wxDC& paintDC, wxGridWindow *gridWindow, const wxRect& renderExtent)
 {
     if ( !UsesOverlaySelection() || !IsSelection() )
         return;
 
-    const auto& polygons = m_selection->GetPolyPolygon();
+    const auto& polygons = m_selection->GetPolyPolygon(renderExtent);
 
     wxRect updateRect = polygons.GetBoundingBox();
 
@@ -7119,10 +7188,20 @@ void wxGrid::DrawSelection(wxDC& paintDC, wxGridWindow *gridWindow)
     const wxPoint orig    = paintDC.GetDeviceOrigin();
     const wxPoint offset  = GetGridWindowOffset(gridWindow);
 
-    dc.SetLogicalOrigin(orig.x + offset.x, orig.y + offset.y);
+    wxRect clipRect;
+
+    if ( renderExtent.IsEmpty() )
+    {
+        dc.SetLogicalOrigin(orig.x + offset.x, orig.y + offset.y);
+        clipRect = gridWindow->GetClientRect();
+    }
+    else // We are rendering on external DC
+    {
+        clipRect = renderExtent;
+    }
+
     wxON_BLOCK_EXIT_OBJ2(dc, wxDC::SetLogicalOrigin, oldOrig.x, oldOrig.y);
 
-    wxRect clipRect = gridWindow->GetClientRect();
     clipRect.Offset(offset);
 
     // Don't draw selection edges on frozen borders.
@@ -11199,7 +11278,7 @@ bool wxGrid::CopySelection()
     return true;
 }
 
-void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles) const
+void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles, const wxRect& renderExtent) const
 {
     wxGridBlocks range = GetSelectedBlocks();
     for ( const auto& coords : range )
@@ -11220,7 +11299,7 @@ void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles) const
 
             BlockToDeviceRect(wxGridCellCoords(topRow, leftCol),
                               wxGridCellCoords(row, col),
-                              m_frozenCornerGridWin, rectangles);
+                              m_frozenCornerGridWin, rectangles, renderExtent);
             ++row; ++col;
         }
 
@@ -11230,7 +11309,7 @@ void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles) const
             col = wxMin(rightCol, m_numFrozenCols - 1);
             BlockToDeviceRect(wxGridCellCoords(row, leftCol),
                               wxGridCellCoords(bottomRow, col),
-                              m_frozenColGridWin, rectangles);
+                              m_frozenColGridWin, rectangles, renderExtent);
             ++col;
         }
 
@@ -11241,7 +11320,7 @@ void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles) const
 
             BlockToDeviceRect(wxGridCellCoords(topRow, col),
                               wxGridCellCoords(row, rightCol),
-                              m_frozenRowGridWin, rectangles);
+                              m_frozenRowGridWin, rectangles, renderExtent);
             ++row;
         }
 
@@ -11250,25 +11329,43 @@ void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles) const
         {
             BlockToDeviceRect(wxGridCellCoords(row, col),
                               wxGridCellCoords(bottomRow, rightCol),
-                              m_gridWin, rectangles);
+                              m_gridWin, rectangles, renderExtent);
         }
     }
 }
 
 void wxGrid::BlockToDeviceRect(const wxGridCellCoords& topLeft,
                                const wxGridCellCoords& bottomRight,
-                               wxGridWindow* gridWin, std::vector<wxRect>& rectangles) const
+                               wxGridWindow* gridWin, std::vector<wxRect>& rectangles,
+                               const wxRect& renderExtent) const
 {
     int cw, ch;
-    gridWin->GetClientSize(&cw, &ch);
-    const wxPoint offset = GetGridWindowOffset(gridWin);
+    wxPoint offset;
 
-    // Get the origin coordinates: notice that they will be negative if the
-    // grid is scrolled downwards/to the right.
     int gridOriginX = 0;
     int gridOriginY = 0;
-    CalcGridWindowScrolledPosition(gridOriginX, gridOriginY,
-                                   &gridOriginX, &gridOriginY, gridWin);
+
+    if ( renderExtent.IsEmpty() )
+    {
+        offset = GetGridWindowOffset(gridWin);
+
+        gridWin->GetClientSize(&cw, &ch);
+        // Get the origin coordinates: notice that they will be negative if the
+        // grid is scrolled downwards/to the right.
+        CalcGridWindowScrolledPosition(gridOriginX, gridOriginY,
+                                       &gridOriginX, &gridOriginY, gridWin);
+    }
+    else
+    {
+        // We are rendering on external DC. Offset and scroll position are already
+        // calculated in wxGrid::Render().
+
+        cw = renderExtent.width;
+        ch = renderExtent.height;
+
+        gridOriginX = -renderExtent.x;
+        gridOriginY = -renderExtent.y;
+    }
 
     const int onScreenLeftmostCol  = internalXToCol(-gridOriginX + offset.x, gridWin);
     const int onScreenUppermostRow = internalYToRow(-gridOriginY + offset.y, gridWin);
@@ -11338,25 +11435,42 @@ void wxGrid::BlockToDeviceRect(const wxGridCellCoords& topLeft,
         // from these rectangles expects them to overlap. see PolyPolygonHelper.
         rect.Inflate(1);
 
-        int left, top, right, bottom;
-
-        // Convert to scrolled coords
-        CalcGridWindowScrolledPosition( rect.GetLeft() - offset.x, rect.GetTop() - offset.y,
-                                        &left, &top, gridWin );
-        CalcGridWindowScrolledPosition( rect.GetRight() - offset.x, rect.GetBottom() - offset.y,
-                                        &right, &bottom, gridWin );
-
-        if ( right < 0 || bottom < 0 || left > cw || top > ch )
+        if ( renderExtent.IsEmpty() )
         {
-            continue;
+            int left, top, right, bottom;
+
+            // Convert to scrolled coords
+            CalcGridWindowScrolledPosition( rect.GetLeft() - offset.x, rect.GetTop() - offset.y,
+                                            &left, &top, gridWin );
+            CalcGridWindowScrolledPosition( rect.GetRight() - offset.x, rect.GetBottom() - offset.y,
+                                            &right, &bottom, gridWin );
+
+            if ( right < 0 || bottom < 0 || left > cw || top > ch )
+            {
+                continue;
+            }
+
+            rect.SetLeft( wxMax(0, left) );
+            rect.SetTop( wxMax(0, top) );
+            rect.SetRight( wxMin(cw, right) );
+            rect.SetBottom( wxMin(ch, bottom) );
+
+            rect.Offset(offset);
         }
+        else
+        {
+            if ( rect.x < 0 )
+            {
+                rect.x = 0;
+                rect.width -= 1;
+            }
 
-        rect.SetLeft( wxMax(0, left) );
-        rect.SetTop( wxMax(0, top) );
-        rect.SetRight( wxMin(cw, right) );
-        rect.SetBottom( wxMin(ch, bottom) );
-
-        rect.Offset(offset);
+            if ( rect.y < 0 )
+            {
+                rect.y = 0;
+                rect.height -= 1;
+            }
+        }
 
         if ( std::find(rectangles.begin(), rectangles.end(), rect) == rectangles.end() )
         {

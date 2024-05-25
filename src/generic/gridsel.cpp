@@ -1240,7 +1240,7 @@ private:
 };
 } // namespace wxPrivate
 
-void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows)
+void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect& renderExtent)
 {
     if ( m_grid->GetBatchCount() )
         return;
@@ -1252,7 +1252,7 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows)
     InvalidatePolyPolygon();
 
     std::vector<wxRect> rectangles;
-    m_grid->GetSelectedRectangles(rectangles);
+    m_grid->GetSelectedRectangles(rectangles, renderExtent);
 
     MergeAdjacentRects(rectangles);
 
@@ -1275,6 +1275,11 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows)
     else // out-of-view selection
     {
         m_isAnyLabelHighlighted = m_selection.size() == 1;
+    }
+
+    if ( !renderExtent.IsEmpty() )
+    {
+        return;
     }
 
     // The following code is only needed when there is an out-of-view selection,
@@ -1323,11 +1328,11 @@ bool wxGridSelection::PolyPolygon::IsValid() const
 }
 
 const wxGridSelection::PolyPolygon&
-wxGridSelection::GetPolyPolygon()
+wxGridSelection::GetPolyPolygon(const wxRect& renderExtent)
 {
     if ( !m_polyPolygon.IsValid() )
     {
-        ComputePolyPolygon();
+        ComputePolyPolygon(false /*refreshLabelWindows*/, renderExtent);
     }
 
     return m_polyPolygon;

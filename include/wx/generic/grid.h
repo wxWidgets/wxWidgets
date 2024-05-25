@@ -1656,9 +1656,9 @@ public:
     void DrawAllGridWindowLines( wxDC& dc, const wxRegion & reg , wxGridWindow *gridWindow);
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells);
-    void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow );
+    void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent = {} );
     void DrawLabelFrozenBorder( wxDC& dc, wxWindow *window, bool isRow );
-    void DrawSelection( wxDC& dc, wxGridWindow *gridWindow );
+    void DrawSelection( wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent = {} );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect ) override;
 
@@ -2350,7 +2350,7 @@ public:
     wxArrayInt GetSelectedCols() const;
 
     // Return the selected blocks (only the visible ones) as a vector of rects.
-    void GetSelectedRectangles(std::vector<wxRect>& rectangles) const;
+    void GetSelectedRectangles(std::vector<wxRect>& rectangles, const wxRect& renderExtent) const;
 
     // This function returns the rectangle that encloses the block of cells
     // limited by TopLeft and BottomRight cell in device coords and clipped
@@ -2365,7 +2365,8 @@ public:
     void BlockToDeviceRect(const wxGridCellCoords& topLeft,
                            const wxGridCellCoords& bottomRight,
                            wxGridWindow* gridWin,
-                           std::vector<wxRect>& rectangles) const;
+                           std::vector<wxRect>& rectangles,
+                           const wxRect& renderExtent) const;
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
