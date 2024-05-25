@@ -1839,7 +1839,11 @@ TEST_CASE("Bitmap::ScaleFactor", "[bitmap][dc][scale]")
     // A bitmap "compatible" with this DC should also use the same scale factor.
     wxBitmap bmp2(4, 4, dc);
     CHECK( bmp2.GetScaleFactor() == 2 );
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
     CHECK( bmp2.GetSize() == wxSize(8, 8) );
+#else
+    CHECK( bmp2.GetSize() == wxSize(4, 4) );
+#endif
 
     // A compatible bitmap created from wxImage and this DC should also inherit
     // the same scale factor, but its size should be still the same as that of
