@@ -115,7 +115,7 @@
 #endif /* __WXFUNCTION__ already defined */
 
 /*
-    Display the current function's full signature, if available.
+    Expands to the current function's full signature, if available.
 
     Falls back to the function name (i.e., __func__) if not available.
  */

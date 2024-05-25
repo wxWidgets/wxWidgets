@@ -59,7 +59,7 @@
 #define __WXFUNCTION__ __func__
 
 /**
-    Display the current function's full signature, if available.
+    Expands to the current function's full signature, if available.
 
     Falls back to the function name (i.e., @c \__func__) if not available.
 
