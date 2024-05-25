@@ -126,8 +126,6 @@
         #define __WXFUNCTION_SIG__ std::source_location::current().function_name()
     #elif defined(__VISUALC__)
         #define __WXFUNCTION_SIG__ __FUNCSIG__
-    #elif defined(__clang__)
-        #define __WXFUNCTION_SIG__ __func__
     #elif defined(__GNUG__)
         #define __WXFUNCTION_SIG__ __PRETTY_FUNCTION__
     #else
