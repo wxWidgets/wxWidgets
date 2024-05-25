@@ -64,6 +64,8 @@
     Falls back to the function name (i.e., @c \__func__) if not available.
 
     @header{wx/cpp.h}
+
+    @since 3.3.0
 */
 #define __WXFUNCTION_SIG__
 
