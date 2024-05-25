@@ -81,7 +81,7 @@ endif
 
 ### Targets: ###
 
-all: access animate archive artprov $(__aui___depname) calendar caret collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treelist treectrl typetest uiaction validate vscroll $(__webview___depname) webrequest widgets wizard wrapsizer $(__xrc___depname)
+all: access animate archive artprov $(__aui___depname) calendar caret collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl kededit di $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treelist treectrl typetest uiaction validate vscroll $(__webview___depname) webrequest widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -122,6 +122,7 @@ clean:
 	$(MAKE) -C keyboard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C layout -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C listctrl -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C maskededit -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) clean
@@ -287,6 +288,9 @@ layout:
 listctrl: 
 	$(MAKE) -C listctrl -f makefile.gcc $(MAKEARGS) all
 
+maskededit: 
+	$(MAKE) -C maskededit -f makefile.gcc $(MAKEARGS) all
+
 mdi: 
 	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) all
 
@@ -448,7 +452,7 @@ endif
 .PHONY: all clean access animate archive artprov aui calendar caret collpane combo \
 	config console dataview dialogs dialup display dll dnd docview dragimag drawing \
 	erase event except exec font grid help htlbox html image internat ipc joytest \
-	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
+	keyboard layout listctrl makededit mdi mediaplayer menu minimal nativdlg notebook oleauto \
 	opengl ownerdrw popup power preferences printing propgrid regtest render ribbon \
 	richtext sashtest scroll secretstore shaped sockets sound splash splitter statbar \
 	stc svg taborder taskbar text thread toolbar treelist treectrl typetest uiaction \

@@ -856,6 +856,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_LISTBOX=no
     DEFAULT_wxUSE_LISTCTRL=no
     DEFAULT_wxUSE_MARKUP=no
+    DEFAULT_wxUSE_MASKED_EDIT=no
     DEFAULT_wxUSE_NOTEBOOK=no
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
@@ -930,6 +931,7 @@ WX_ARG_FEATURE(infobar,     [  --enable-infobar        use wxInfoBar class], wxU
 WX_ARG_FEATURE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
 WX_ARG_FEATURE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
 WX_ARG_FEATURE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
+WX_ARG_FEATURE(maskededit,  [  --enable-maskededit     use wxMaskedEdit class], wxUSE_MASKED_EDIT)
 WX_ARG_FEATURE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
 WX_ARG_FEATURE(notifmsg,    [  --enable-notifmsg       use wxNotificationMessage class], wxUSE_NOTIFICATION_MESSAGE)
 WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
@@ -6415,6 +6417,12 @@ fi
 if test "$wxUSE_EDITABLELISTBOX" = "yes"; then
     AC_DEFINE(wxUSE_EDITABLELISTBOX)
     USES_CONTROLS=1
+fi
+
+if test "$wxUSE_MASKED_EDIT" = "yes"; then
+    AC_DEFINE(wxUSE_MASKED_EDIT)
+    USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS maskededit"
 fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then

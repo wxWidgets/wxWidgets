@@ -1005,6 +1005,13 @@
 // wxHeaderCtrl)
 #define wxUSE_REARRANGECTRL 1
 
+// wxMaskedEditText and wxMaskedEditCombo controls
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_MASKED_EDIT 1
+
 // wxAddRemoveCtrl is a composite control containing a control showing some
 // items (e.g. wxListBox, wxListCtrl, wxTreeCtrl, wxDataViewCtrl, ...) and "+"/
 // "-" buttons allowing to add and remove items to/from the control.

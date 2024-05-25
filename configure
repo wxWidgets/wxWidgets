@@ -1284,6 +1284,7 @@ enable_infobar
 enable_listbook
 enable_listbox
 enable_listctrl
+enable_maskededit
 enable_notebook
 enable_notifmsg
 enable_odcombobox
@@ -2253,6 +2254,7 @@ Optional Features:
   --enable-listbook       use wxListbook class
   --enable-listbox        use wxListBox class
   --enable-listctrl       use wxListCtrl class
+  --enable-maskededit     use wxMaskedEdit class
   --enable-notebook       use wxNotebook class
   --enable-notifmsg       use wxNotificationMessage class
   --enable-odcombobox     use wxOwnerDrawnComboBox class
@@ -9072,6 +9074,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_LISTBOX=no
     DEFAULT_wxUSE_LISTCTRL=no
     DEFAULT_wxUSE_MARKUP=no
+    DEFAULT_wxUSE_MASKED_EDIT=no
     DEFAULT_wxUSE_NOTEBOOK=no
     DEFAULT_wxUSE_POPUPWIN=no
     DEFAULT_wxUSE_RADIOBOX=no
@@ -10291,6 +10294,35 @@ fi
 
 
           eval "$wx_cv_use_listctrl"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-maskededit was given.
+if test "${enable_maskededit+set}" = set; then :
+  enableval=$enable_maskededit;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_maskededit='wxUSE_MASKED_EDIT=yes'
+                          else
+                            wx_cv_use_maskededit='wxUSE_MASKED_EDIT=no'
+                          fi
+
+else
+
+                          wx_cv_use_maskededit='wxUSE_MASKED_EDIT=${'DEFAULT_wxUSE_MASKED_EDIT":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_maskededit"
 
 
           enablestring=
@@ -38521,6 +38553,13 @@ if test "$wxUSE_EDITABLELISTBOX" = "yes"; then
     $as_echo "#define wxUSE_EDITABLELISTBOX 1" >>confdefs.h
 
     USES_CONTROLS=1
+fi
+
+if test "$wxUSE_MASKED_EDIT" = "yes"; then
+    $as_echo "#define wxUSE_MASKED_EDIT 1" >>confdefs.h
+
+    USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS maskededit"
 fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then

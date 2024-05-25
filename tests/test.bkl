@@ -234,6 +234,7 @@
             controls/listctrltest.cpp
             controls/listviewtest.cpp
             controls/markuptest.cpp
+            controls/maskededittest.cpp
             controls/notebooktest.cpp
             controls/ownerdrawncomboboxtest.cpp
             controls/pickerbasetest.cpp

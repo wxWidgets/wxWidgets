@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Common Sources">
@@ -163,6 +163,9 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\dummy.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\effects.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\event.cpp">
@@ -834,6 +837,9 @@
     <ClCompile Include="..\..\src\msw\gdiimage.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\gdiobj.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\gdiplus.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -1077,6 +1083,18 @@
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\bmpbndl.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\bmpbndl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\bmpsvg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\maskededit.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -1309,6 +1327,9 @@
     <ClInclude Include="..\..\include\wx\editlbox.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\effects.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\encinfo.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1481,6 +1502,9 @@
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\numdlgg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\panelg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\printps.h">
@@ -1912,6 +1936,9 @@
     <ClInclude Include="..\..\include\wx\msw\palette.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\panel.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\pen.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -2312,6 +2339,12 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xmlreshandler.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\bmpbndl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\maskededit.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
   </ItemGroup>
