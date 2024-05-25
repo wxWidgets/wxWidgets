@@ -259,6 +259,7 @@ All (GUI):
 wxGTK:
 
 - Fix using wxDatePickerCtrl in ca_ES, cz_CZ and some other locales (#24533).
+- Fix wxListBox minimum size regression in 3.2.5 (#24551).
 
 wxOSX:
 
