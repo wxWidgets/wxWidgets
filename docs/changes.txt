@@ -92,6 +92,10 @@ Changes in behaviour not resulting in compilation errors
   made is behaviour there incompatible with the other platforms. Please call
   wxWebRequest::EnablePersistentStorage() explicitly if you need it.
 
+- In wxMSW, behaviour of wxBitmap::Create(size, dc) overload has changed to
+  not scale the size by the content scale factor of the DC any longer, as the
+  size here is expressed in physical pixels and not in DIPs.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
