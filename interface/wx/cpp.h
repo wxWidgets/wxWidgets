@@ -63,6 +63,16 @@
 
     Falls back to the function name (i.e., @c \__func__) if not available.
 
+    As an example, if you have a class named `Calculator` with a
+    `double Add(double, double) const` member function,
+    `__WXFUNCTION_SIG__` may expand to the following:
+
+    `double Calculator::Add(double, double) const`
+
+    While `__func__` will simply expand to:
+
+    `Add`
+
     @header{wx/cpp.h}
 
     @since 3.3.0
