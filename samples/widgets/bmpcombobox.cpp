@@ -662,8 +662,6 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
     fn.AssignCwd();
     fn.AppendDir("icons");
 
-    wxSetCursor(*wxHOURGLASS_CURSOR);
-
     if ( !wxDir::Exists(fn.GetFullPath()) ||
          !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
     {
@@ -686,7 +684,6 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
                  !wxDir::GetAllFiles(fn.GetFullPath(),strings,"*.xpm") )
             {
                 wxLogWarning("Could not load widget icons.");
-                wxSetCursor(*wxSTANDARD_CURSOR);
                 return;
             }
         }
@@ -731,8 +728,6 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
                 foundSize = bmp.GetSize();
         }
     }
-
-    wxSetCursor(*wxSTANDARD_CURSOR);
 }
 
 void BitmapComboBoxWidgetsPage::OnButtonAddWidgetIcons(wxCommandEvent& WXUNUSED(event))
@@ -887,8 +882,6 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
 
     wxBitmap bitmap;
 
-    ::wxSetCursor( *wxHOURGLASS_CURSOR );
-
     if ( !filepath.empty() )
     {
         if ( pStr )
@@ -903,8 +896,6 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
     {
         wxLogDebug("%i, %i",bitmap.GetWidth(), bitmap.GetHeight());
     }
-
-    ::wxSetCursor( *wxSTANDARD_CURSOR );
 
     return bitmap;
 }
