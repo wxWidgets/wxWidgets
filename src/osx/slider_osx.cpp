@@ -103,19 +103,6 @@ bool wxSlider::Create(wxWindow *parent,
 
     SetPeer(wxWidgetImpl::CreateSlider( this, parent, id, value, minValue, maxValue, pos, size, style, GetExtraStyle() ));
 
-#if 0
-    if (style & wxSL_VERTICAL)
-        // Forces SetSize to use the proper width
-        SetSizeHints(10, -1, 10, -1);
-    else
-        // Forces SetSize to use the proper height
-        SetSizeHints(-1, 10, -1, 10);
-
-    // NB: SetSizeHints is overloaded by wxSlider and will substitute 10 with the
-    // proper dimensions, it also means other people cannot bugger the slider with
-    // other values
-#endif
-    
     if (style & wxSL_MIN_MAX_LABELS)
     {
         m_macMinimumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
