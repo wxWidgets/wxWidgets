@@ -333,9 +333,9 @@ wxSize wxSlider::DoGetBestSize() const
         wxString text;
 
         // Get maximum text label width and height
-        text.Printf( wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
+        text.Printf( "%d", ValueInvertOrNot( m_rangeMin ) );
         GetTextExtent(text, &mintwidth, &mintheight);
-        text.Printf( wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
+        text.Printf( "%d", ValueInvertOrNot( m_rangeMax ) );
         GetTextExtent(text, &maxtwidth, &maxtheight);
 
         if (maxtheight > mintheight)
@@ -419,9 +419,9 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         int ht, valValWidth;
 
         // Get maximum text label width and height
-        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMin ) );
+        text.Printf("%d", ValueInvertOrNot( m_rangeMin ) );
         GetTextExtent(text, &minValWidth, &textheight);
-        text.Printf(wxT("%d"), ValueInvertOrNot( m_rangeMax ) );
+        text.Printf("%d", ValueInvertOrNot( m_rangeMax ) );
         GetTextExtent(text, &maxValWidth, &ht);
 
         if (ht > textheight)
@@ -448,10 +448,10 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
         if (HasFlag(wxSL_VERTICAL))
             // If vertical, use current value
-            text.Printf(wxT("%d"), (int)GetPeer()->GetValue());
+            text.Printf("%d", (int)GetPeer()->GetValue());
         else
             // Use max so that the current value doesn't drift as centering would need to change
-            text.Printf(wxT("%d"), m_rangeMax);
+            text.Printf("%d", m_rangeMax);
 
         GetTextExtent(text, &valValWidth, &ht);
 
