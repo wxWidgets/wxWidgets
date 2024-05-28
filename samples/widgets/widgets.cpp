@@ -825,7 +825,7 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
     bool hasChildren = false;
     for ( const auto child : curPage->GetChildren() )
     {
-        if ( !IsClientAreaChild(child) )
+        if ( curPage->IsClientAreaChild(child) )
         {
             hasChildren = true;
             break;
