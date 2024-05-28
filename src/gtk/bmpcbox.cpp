@@ -28,6 +28,10 @@
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/value.h"
+#include "wx/gtk/private/gtk3-compat.h"
+#ifdef __WXGTK3__
+    #include <cairo-gobject.h>
+#endif
 
 // ============================================================================
 // implementation
@@ -110,7 +114,21 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
 {
     GtkListStore *store;
 
-    store = gtk_list_store_new( 2, G_TYPE_OBJECT, G_TYPE_STRING );
+    GType imageType;
+    const char* imageAttr;
+#ifdef __WXGTK3__
+    if (wx_is_at_least_gtk3(10))
+    {
+        imageType = CAIRO_GOBJECT_TYPE_SURFACE;
+        imageAttr = "surface";
+    }
+    else
+#endif
+    {
+        imageType = G_TYPE_OBJECT;
+        imageAttr = "pixbuf";
+    }
+    store = gtk_list_store_new(2, imageType, G_TYPE_STRING);
 
     if ( HasFlag(wxCB_READONLY) )
     {
@@ -138,7 +156,7 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
     gtk_cell_layout_pack_start( GTK_CELL_LAYOUT(m_widget),
                                 imageRenderer, FALSE);
     gtk_cell_layout_add_attribute( GTK_CELL_LAYOUT(m_widget),
-                                   imageRenderer, "pixbuf", 0);
+                                   imageRenderer, imageAttr, 0);
 
     GtkCellRenderer* textRenderer = gtk_cell_renderer_text_new();
     gtk_cell_layout_pack_end( GTK_CELL_LAYOUT(m_widget),
@@ -199,8 +217,23 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmapBundle& bitma
 
         if ( gtk_tree_model_iter_nth_child( model, &iter, nullptr, n ) )
         {
-            wxGtkValue value0( G_TYPE_OBJECT );
-            g_value_set_object( value0, bmp.GetPixbuf() );
+            wxGtkValue value0;
+#ifdef __WXGTK3__
+            if (wx_is_at_least_gtk3(10))
+            {
+                g_value_init(value0, CAIRO_GOBJECT_TYPE_SURFACE);
+                cairo_surface_t* surface = gdk_cairo_surface_create_from_pixbuf(
+                    bmp.GetPixbuf(), int(bmp.GetScaleFactor()),
+                    gtk_widget_get_window(m_widget));
+                g_value_set_boxed(value0, surface);
+                cairo_surface_destroy(surface);
+            }
+            else
+#endif
+            {
+                g_value_init(value0, G_TYPE_OBJECT);
+                g_value_set_object( value0, bmp.GetPixbuf() );
+            }
             gtk_list_store_set_value( GTK_LIST_STORE(model), &iter,
                                       m_bitmapCellIndex, value0 );
         }
