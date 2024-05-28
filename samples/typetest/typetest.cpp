@@ -941,7 +941,7 @@ void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
             wxFileType::MessageParameters params(filename, type);
             filetype->GetOpenCommand(&open, params);
 
-            textCtrl << "MIME information about extension '" << ext << '\n'
+            textCtrl << "MIME information about extension '" << ext << "'\n"
                      << "\tMIME type: " << ( !type ? wxString("unknown") : type ) << '\n'
                      << "\tDescription: " << ( !desc ? wxString(wxEmptyString) : desc )
                         << '\n'
