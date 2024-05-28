@@ -19,15 +19,15 @@ wxEND_EVENT_TABLE()
 
  // The dimensions of the different styles of sliders (from Aqua document)
 #if wxOSX_USE_COCOA
-    #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 28
-    #define wxSLIDER_DIMENSIONACROSS_ARROW 21
+constexpr int wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS = 28;
+constexpr int wxSLIDER_DIMENSIONACROSS_ARROW         = 21;
 #else
-    #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 24
-    #define wxSLIDER_DIMENSIONACROSS_ARROW 18
+constexpr int wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS = 24;
+constexpr int wxSLIDER_DIMENSIONACROSS_ARROW         = 18;
 #endif
 
 // Distance between slider and text
-#define wxSLIDER_BORDERTEXT 5
+constexpr int wxSLIDER_BORDERTEXT = 5;
 
 // NB: The default orientation for a slider is horizontal; however, if the user specifies
 // some slider styles but doesn't specify the orientation we have to assume he wants a
