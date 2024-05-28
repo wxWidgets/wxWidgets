@@ -11,63 +11,63 @@
 
 #if wxUSE_SLIDER
 
-#include <iostream>
-
 #include "wx/slider.h"
 #include "wx/osx/private.h"
+#include "wx/utils.h"
 
 wxBEGIN_EVENT_TABLE(wxSlider, wxControl)
 wxEND_EVENT_TABLE()
 
 namespace
 {
-    // The dimensions of the different styles of sliders (from Aqua document)
+// The dimensions of the different styles of sliders (from Aqua document)
 #if wxOSX_USE_COCOA
-    const int wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS = 28;
-    const int wxSLIDER_DIMENSIONACROSS               = 28;
+constexpr int wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS = 28;
+constexpr int wxSLIDER_DIMENSIONACROSS               = 28;
 #else
-    const int wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS = 24;
-    const int wxSLIDER_DIMENSIONACROSS               = 18;
+constexpr int wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS = 24;
+constexpr int wxSLIDER_DIMENSIONACROSS               = 18;
 #endif
 
-    const int DISTANCE_SLIDER_TEXT = 5; // Distance between slider and text
+constexpr int DISTANCE_SLIDER_TEXT = 5; // Distance between slider and text
 
-    // Returns the best dimension of the slider perpendicular to the slider's moving direction
-    int GetBestSliderAcrossDimension(wxSlider const* slider)
-    {
-        return (((slider->GetWindowStyle() & wxSL_AUTOTICKS) != 0) ?
-                wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS : wxSLIDER_DIMENSIONACROSS);
-    }
-    // Returns the slider's text position perpendicular to the slider's moving direction
-    /*
-     * When the slider's size prependicular to the slider's moving direction becomes
-     * smaller than the best size, the formula for determining the text position is
-     * not valid anymore. Therefor, the text is aligned under these conditions with
-     * respect to the lower (horizontal slider orientation), respectively to the
-     * right (vertical slider orientation) border of the slider.
-     * Remarks: There is still a small glitch in calculating the position, namely when
-     *          wxWidgets' calculation determines a size of zero in the perpendicular
-     *          dimension. In this case the native control's dimension is still not zero
-     *          because wxWidgets adds some insets. So, the slider is still visible
-     *          while wxWidgets thinks it is already invisble. In this case the
-     *          position calculcation is also wrong as it is based on wxWidgets's data.
-     */
-    int GetTextAcrossPosition(wxSlider const* slider, wxSize const& textDimension)
-    {
-        const wxSize size     = slider->GetSize();
-        const wxSize bestSize = slider->GetBestSize();
+// Returns the best dimension of the slider perpendicular to the slider's moving direction
+int GetBestSliderAcrossDimension(wxSlider const* slider)
+{
+    return (slider->HasFlag(wxSL_AUTOTICKS) ?
+            wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS : wxSLIDER_DIMENSIONACROSS);
+}
+// Returns the slider's text position perpendicular to the slider's moving direction
+/*
+ * When the slider's size prependicular to the slider's moving direction becomes
+ * smaller than the best size, the formula for determining the text position is
+ * not valid anymore. Therefor, the text is aligned under these conditions with
+ * respect to the lower (horizontal slider orientation), respectively to the
+ * right (vertical slider orientation) border of the slider.
+ * Remarks: There is still a small glitch in calculating the position, namely when
+ *          wxWidgets' calculation determines a size of zero in the perpendicular
+ *          dimension. In this case the native control's dimension is still not zero
+ *          because wxWidgets adds some insets. So, the slider is still visible
+ *          while wxWidgets thinks it is already invisble. In this case the
+ *          position calculcation is also wrong as it is based on wxWidgets's data.
+ */
+int GetTextAcrossPosition(wxSlider const* slider, wxSize const& textDimension)
+{
+    const wxSize size     = slider->GetSize();
+    const wxSize bestSize = slider->GetBestSize();
 
 
-        if (slider->GetWindowStyle() & wxSL_VERTICAL)
-            if (size.x >= bestSize.x)
-                return GetBestSliderAcrossDimension(slider)+DISTANCE_SLIDER_TEXT;
-            else
-                return MAX(0,size.x-textDimension.x);
-        else if (size.y >= bestSize.y)
+    if (slider->HasFlag(wxSL_VERTICAL))
+        if (size.x >= bestSize.x)
             return GetBestSliderAcrossDimension(slider)+DISTANCE_SLIDER_TEXT;
         else
-            return MAX(0,size.y-textDimension.y);
-    }
+            return wxMax(0,size.x-textDimension.x);
+    else if (size.y >= bestSize.y)
+        return GetBestSliderAcrossDimension(slider)+DISTANCE_SLIDER_TEXT;
+    else
+        return wxMax(0,size.y-textDimension.y);
+}
+
 }
 
 // NB: The default orientation for a slider is horizontal; however, if the user specifies
@@ -101,7 +101,7 @@ bool wxSlider::Create(wxWindow *parent,
     
     m_macMinimumStatic = nullptr;
     m_macMaximumStatic = nullptr;
-    m_macValueStatic = nullptr;
+    m_macValueStatic   = nullptr;
 
     m_lineSize = 1;
     m_tickFreq = 0;
@@ -200,7 +200,7 @@ void wxSlider::SetValue(int value)
         const wxSize sliderSize = GetSize();
         const wxSize valueSize  = GetTextExtent(valueString);
 
-        if (GetWindowStyle() & wxSL_VERTICAL)
+        if (HasFlag(wxSL_VERTICAL))
             m_macValueStatic->Move(GetPosition().x + GetTextAcrossPosition(this,valueSize), GetPosition().y + (sliderSize.GetHeight() / 2) - (valueSize.GetHeight() / 2));
         else
             m_macValueStatic->Move(GetPosition().x + (sliderSize.GetWidth() / 2) - (valueSize.GetWidth() / 2), GetPosition().y + GetTextAcrossPosition(this,valueSize));
@@ -355,7 +355,7 @@ void wxSlider::DoSetSizeHints( int minW, int minH,
 {
     wxSize size = GetBestSize();
 
-    if (GetWindowStyle() & wxSL_VERTICAL)
+    if (HasFlag(wxSL_VERTICAL))
     {
         SetMinSize( wxSize(size.x,minH) );
         SetMaxSize( wxSize(size.x,maxH) );
@@ -378,7 +378,7 @@ wxSize wxSlider::DoGetBestSize() const
     mintwidth = mintheight = 0;
     maxtwidth = maxtheight = 0;
 
-    if (GetWindowStyle() & wxSL_LABELS)
+    if (HasFlag(wxSL_LABELS))
     {
         wxString text;
 
@@ -388,16 +388,16 @@ wxSize wxSlider::DoGetBestSize() const
         text.Printf( "%d", ValueInvertOrNot( m_rangeMax ) );
         GetTextExtent(text, &maxtwidth, &maxtheight);
 
-        textheight = MAX(mintheight,maxtheight);
-        textwidth  = MAX(mintwidth, maxtwidth);
+        textheight = wxMax(mintheight,maxtheight);
+        textwidth  = wxMax(mintwidth, maxtwidth);
     }
 
-    if (GetWindowStyle() & wxSL_VERTICAL)
+    if (HasFlag(wxSL_VERTICAL))
     {
         size.x = GetBestSliderAcrossDimension(this);
         size.y = 150;
 
-        if (GetWindowStyle() & wxSL_LABELS)
+        if (HasFlag(wxSL_LABELS))
         {
             size.x += DISTANCE_SLIDER_TEXT + textwidth;
             size.y += (mintheight / 2) + (maxtheight / 2);
@@ -405,7 +405,7 @@ wxSize wxSlider::DoGetBestSize() const
 
         // to let the ticks look good the width of the control has to have an even number,
         // otherwise, the ticks are not centered with respect to the slider line
-        if ((GetWindowStyle() & wxSL_AUTOTICKS) && ((size.x%2) != 0))
+        if (HasFlag(wxSL_AUTOTICKS) && ((size.x%2) != 0))
             size.x += 1;
     }
     else
@@ -413,7 +413,7 @@ wxSize wxSlider::DoGetBestSize() const
         size.x = 150;
         size.y = GetBestSliderAcrossDimension(this);
 
-        if (GetWindowStyle() & wxSL_LABELS)
+        if (HasFlag(wxSL_LABELS))
         {
             size.y += DISTANCE_SLIDER_TEXT + textheight;
             size.x += (mintwidth / 2) + (maxtwidth / 2);
@@ -421,7 +421,7 @@ wxSize wxSlider::DoGetBestSize() const
 
         // to let the ticks look good the height of the control has to have an even number,
         // otherwise, the ticks are not centered with respect to the slider line
-        if ((GetWindowStyle() & wxSL_AUTOTICKS) && ((size.y%2) != 0))
+        if (HasFlag(wxSL_AUTOTICKS) && ((size.y%2) != 0))
             size.y += 1;
     }
 
@@ -454,7 +454,7 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     // set the slider's position before adjusting the labels
     wxControl::DoSetSize( x, y, w, h, sizeFlags );
 
-    if (GetWindowStyle() & wxSL_LABELS)
+    if (HasFlag(wxSL_LABELS))
     {
         const int value = GetValue();
 
@@ -470,11 +470,11 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
         text.Printf("%d", value);
         valueSize = GetTextExtent(text);
 
-        wxSize const textSize = wxSize(MAX(rangeMaxSize.x, rangeMinSize.x), MAX(rangeMaxSize.y, rangeMinSize.y));
+        wxSize const textSize = wxSize(wxMax(rangeMaxSize.x, rangeMinSize.x), wxMax(rangeMaxSize.y, rangeMinSize.y));
 
         int relativeAcrossTextPosition = GetTextAcrossPosition(this,textSize);
 
-        if (GetWindowStyle() & wxSL_VERTICAL)
+        if (HasFlag(wxSL_VERTICAL))
         {
             if ( m_macMinimumStatic )
                 m_macMinimumStatic->Move(GetPosition().x + relativeAcrossTextPosition, GetPosition().y + h - rangeMinSize.y);
@@ -500,12 +500,12 @@ int wxSlider::ValueInvertOrNot(int value) const
 {
     int result = 0;
 
-    if (m_windowStyle & wxSL_VERTICAL)
+    if (HasFlag(wxSL_VERTICAL))
     {
         // The reason for the backwards logic is that Mac's vertical sliders are
         // inverted compared to Windows and GTK, hence we want inversion to be the
         // default, and if wxSL_INVERSE is set, then we do not invert (use native)
-        if (m_windowStyle & wxSL_INVERSE)
+        if (HasFlag(wxSL_INVERSE))
             result = value;
         else
             result = (m_rangeMax + m_rangeMin) - value;
