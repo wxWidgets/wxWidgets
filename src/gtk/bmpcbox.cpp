@@ -223,8 +223,9 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmapBundle& bitma
             {
                 g_value_init(value0, CAIRO_GOBJECT_TYPE_SURFACE);
                 cairo_surface_t* surface = gdk_cairo_surface_create_from_pixbuf(
-                    bmp.GetPixbuf(), int(bmp.GetScaleFactor()),
-                    gtk_widget_get_window(m_widget));
+                    bmp.GetPixbuf(), 1, gtk_widget_get_window(m_widget));
+                const double scaleFactor = bmp.GetScaleFactor();
+                cairo_surface_set_device_scale(surface, scaleFactor, scaleFactor);
                 g_value_set_boxed(value0, surface);
                 cairo_surface_destroy(surface);
             }
@@ -253,11 +254,29 @@ wxBitmap wxBitmapComboBox::GetItemBitmap(unsigned int n) const
         wxGtkValue value;
         gtk_tree_model_get_value( model, &iter,
                                   m_bitmapCellIndex, value );
-        GdkPixbuf* pixbuf = (GdkPixbuf*) g_value_get_object( value );
-        if ( pixbuf )
+#ifdef __WXGTK3__
+        if (wx_is_at_least_gtk3(10))
         {
-            g_object_ref( pixbuf );
-            bitmap = wxBitmap(pixbuf);
+            cairo_surface_t* surface = static_cast<cairo_surface_t*>(g_value_get_boxed(value));
+            if (surface)
+            {
+                const int w = cairo_image_surface_get_width(surface);
+                const int h = cairo_image_surface_get_height(surface);
+                bitmap = wxBitmap(gdk_pixbuf_get_from_surface(surface, 0, 0, w, h));
+                double sx, sy;
+                cairo_surface_get_device_scale(surface, &sx, &sy);
+                bitmap.SetScaleFactor(sx);
+            }
+        }
+        else
+#endif
+        {
+            GdkPixbuf* pixbuf = (GdkPixbuf*) g_value_get_object( value );
+            if ( pixbuf )
+            {
+                g_object_ref( pixbuf );
+                bitmap = wxBitmap(pixbuf);
+            }
         }
     }
 
