@@ -31,29 +31,29 @@
 namespace
 {
 
-Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
+Qt::Alignment wxQtConvertTextAlign(wxListColumnFormat align)
 {
     switch (align)
     {
         case wxLIST_FORMAT_LEFT:
-            return Qt::AlignLeft;
+            return Qt::AlignLeft | Qt::AlignVCenter;
         case wxLIST_FORMAT_RIGHT:
-            return Qt::AlignRight;
+            return Qt::AlignRight | Qt::AlignVCenter;
         case wxLIST_FORMAT_CENTRE:
-            return Qt::AlignCenter;
+            return Qt::AlignHCenter | Qt::AlignVCenter;
     }
-    return Qt::AlignLeft;
+    return Qt::AlignLeft | Qt::AlignVCenter;
 }
 
 wxListColumnFormat wxQtConvertAlignFlag(int align)
 {
-    switch (align)
+    switch (align & Qt::AlignHorizontal_Mask)
     {
         case Qt::AlignLeft:
             return wxLIST_FORMAT_LEFT;
         case Qt::AlignRight:
             return wxLIST_FORMAT_RIGHT;
-        case Qt::AlignCenter:
+        case Qt::AlignHCenter:
             return wxLIST_FORMAT_CENTRE;
     }
     return wxLIST_FORMAT_LEFT;
@@ -230,7 +230,7 @@ public:
                     : QVariant();
 
             case Qt::TextAlignmentRole:
-                return columnItem.m_align;
+                return static_cast<int>(columnItem.m_align);
 
             case Qt::CheckStateRole:
                 return col == 0 && m_listCtrl->HasCheckBoxes()
@@ -306,7 +306,7 @@ public:
                 return header.m_label;
 
             case Qt::TextAlignmentRole:
-                return header.m_align;
+                return static_cast<int>(header.m_align);
 
             case Qt::DecorationRole:
             {
@@ -647,14 +647,27 @@ public:
 
         if ( row == -1 || static_cast<size_t>(row) >= m_rows.size() )
         {
-            m_rows.push_back(RowItem(m_headers.size()));
+            size_t colCount = m_headers.size();
+            RowItem rowItem(colCount);
+
+            for (size_t i = 0; i < colCount; i++)
+                rowItem.m_columns[i].m_align = m_headers[i].m_align;
+
+            m_rows.push_back(rowItem);
             newRowIndex = m_rows.size() - 1;
         }
         else
         {
             std::vector<RowItem>::iterator i = m_rows.begin();
             std::advance(i, row);
-            m_rows.insert(i, RowItem(m_headers.size()));
+
+            size_t colCount = m_headers.size();
+            RowItem rowItem(colCount);
+
+            for (size_t col = 0; col < colCount; col++)
+                rowItem.m_columns[col].m_align = m_headers[col].m_align;
+
+            m_rows.insert(i, rowItem);
             newRowIndex = row;
         }
 
@@ -805,7 +818,7 @@ private:
     struct ColumnItem
     {
         ColumnItem() :
-            m_align(Qt::AlignLeft),
+            m_align(Qt::AlignLeft | Qt::AlignVCenter),
             m_image(-1),
             m_selectedImage(-1)
         {
@@ -815,7 +828,7 @@ private:
         QColor m_backgroundColour;
         QColor m_textColour;
         QFont m_font;
-        Qt::AlignmentFlag m_align;
+        Qt::Alignment m_align;
         int m_image;
         int m_selectedImage;
     };
