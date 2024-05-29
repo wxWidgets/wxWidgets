@@ -1006,6 +1006,11 @@ public:
         if (!current_index.isValid())
             return;
 
+        // closeEditor can be called through wxQtLineEdit destructor,
+        // after m_qtEdit in wxTextCtrl has been deleted.
+        if (!m_itemDelegate.GetEditControl() || m_itemDelegate.GetEditControl()->IsBeingDeleted())
+            return;
+
         const wxString editedText = m_itemDelegate.GetEditControl()->GetLineText(0);
 
         wxListEvent event;

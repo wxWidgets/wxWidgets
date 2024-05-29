@@ -697,6 +697,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 wxTextCtrl::~wxTextCtrl()
 {
     delete m_qtEdit;
+    m_qtEdit = nullptr;
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const
