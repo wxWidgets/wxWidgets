@@ -2338,7 +2338,7 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     m_owner->DrawAllGridWindowLines( dc, reg, this );
 
-    m_owner->DrawSelection( dc, this );
+    m_owner->DrawOverlaySelection( dc, this );
 
     if ( m_type != wxGridWindow::wxGridWindowNormal )
         m_owner->DrawFrozenBorder( dc, this );
@@ -2501,7 +2501,7 @@ void wxGrid::Render( wxDC& dc,
     {
         InvalidateOverlaySelection();
 
-        // We only need the grid window at offset (0, 0) to pass to DrawSelection() below.
+        // We only need the grid window at offset (0, 0) to pass to DrawOverlaySelection() below.
 
         wxGridWindow* gridWin;
 
@@ -2514,7 +2514,7 @@ void wxGrid::Render( wxDC& dc,
         else
             gridWin = m_gridWin;
 
-        DrawSelection( dc, gridWin, renderExtent );
+        DrawOverlaySelection( dc, gridWin, renderExtent );
 
         InvalidateOverlaySelection();
     }
@@ -7157,7 +7157,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
                    rect, hAlign, vAlign, wxHORIZONTAL);
 }
 
-void wxGrid::DrawSelection(wxDC& paintDC, wxGridWindow *gridWindow, const wxRect& renderExtent)
+void wxGrid::DrawOverlaySelection(wxDC& paintDC, wxGridWindow *gridWindow, const wxRect& renderExtent)
 {
     if ( !UsesOverlaySelection() || !IsSelection() )
         return;

@@ -1658,7 +1658,7 @@ public:
     void DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells);
     void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent = {} );
     void DrawLabelFrozenBorder( wxDC& dc, wxWindow *window, bool isRow );
-    void DrawSelection( wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent = {} );
+    void DrawOverlaySelection( wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent = {} );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect ) override;
 

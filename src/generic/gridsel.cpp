@@ -1060,8 +1060,8 @@ namespace wxPrivate
 {
 // This class is just a helper that simply converts (using the sweep line algorithm)
 // the selected rectangles (retrieved by wxGrid::GetSelectedRectangles()) to
-// wxGridSelection::PolyPolygon which can then be used in wxGrid::DrawSelection() to
-// draw the transparent selection.
+// wxGridSelection::PolyPolygon which can then be used in wxGrid::DrawOverlaySelection()
+// to draw the selection overlay.
 //
 // The implementation is literally the translation of the Python code found here:
 // https://stackoverflow.com/a/13851341/8528670

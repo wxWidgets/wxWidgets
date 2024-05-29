@@ -114,7 +114,7 @@ public:
     void EndSelecting();
     void CancelSelecting();
 
-    // A simple interface used by wxGrid::DrawSelection() as a helper to draw
+    // A simple interface used by wxGrid::DrawOverlaySelection() as a helper to draw
     // the grid selection(s).
     class PolyPolygon
     {
@@ -205,7 +205,7 @@ private:
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
 
-    // Used by wxGrid::DrawSelection() to draw a:
+    // Used by wxGrid::DrawOverlaySelection() to draw a:
     //
     // - Simple rectangle (using wxDC::DrawRectangle() if it is empty and the bounding box is valid.
     // - Simple polygon (using wxDC::DrawPolygon()) if it represents a simple polygon.
