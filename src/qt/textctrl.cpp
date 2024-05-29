@@ -701,7 +701,11 @@ wxTextCtrl::~wxTextCtrl()
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    return wxTextCtrlBase::DoGetBestSize();
+    if (IsSingleLine())
+        return wxQtConvertSize(m_qtEdit->GetHandle()->sizeHint());
+
+    return wxSize(80,
+                  1 + GetCharHeight() * wxMax(wxMin(GetNumberOfLines(), 10), 2));
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
