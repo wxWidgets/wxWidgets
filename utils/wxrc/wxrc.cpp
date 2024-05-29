@@ -664,13 +664,28 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "#include <wx/xrc/xmlres.h>\n"
 "#include <wx/xrc/xh_all.h>\n"
 "\n"
-"#if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFileWithMimeType(name, data, size, mime)\n"
-"#else\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFile(name, data, size)\n"
-"#endif\n"
+
+// Parameters are of type `const wxChar *` and are passed to the function which expects `const wxString &` arguments
+// => conversions to `wxString` are centralized here (as opposed to at our many call sites)
+// => easier job for the C++ compiler and much smaller generated machine code:
+//
+// For 10,000 binary resources:
+//
+// `g++-11     -g -O2`
+//                     used to consume 158 seconds and 3,316,384 KiB of RAM and used to generate 1,821,235 bytes of x86_64 machine code for InitXmlResource;
+//                     now consumes     16 seconds and   718,080 KiB of RAM and now generates      271,987 bytes of x86_64 machine code for InitXmlResource.
+// `clang++-14 -g -O2`
+//                     used to consume 158 seconds and 5,263,864 KiB of RAM and used to generate 2,820,830 bytes of x86_64 machine code for InitXmlResource;
+//                     now consumes      5 seconds and   544,144 KiB of RAM and now generates      271,080 bytes of x86_64 machine code for InitXmlResource.
+//
+"void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype)\n"
+"{\n"
+"    #if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
+"        return wxMemoryFSHandler::AddFileWithMimeType(filename, binarydata, size, mimetype);\n"
+"    #else\n"
+"        return wxMemoryFSHandler::AddFile(filename, binarydata, size);\n"
+"    #endif\n"
+"}\n"
 "\n");
 
     for (i = 0; i < flist.GetCount(); i++)
@@ -731,8 +746,6 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
     }
 
     file.Write("}\n");
-
-
 }
 
 void XmlResApp::GenCPPHeader()
