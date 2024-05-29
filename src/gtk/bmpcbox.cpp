@@ -29,7 +29,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/value.h"
 #include "wx/gtk/private/gtk3-compat.h"
-#ifdef __WXGTK3__
+#if GTK_CHECK_VERSION(3,10,0)
     #include <cairo-gobject.h>
 #endif
 
@@ -116,7 +116,7 @@ void wxBitmapComboBox::GTKCreateComboBoxWidget()
 
     GType imageType;
     const char* imageAttr;
-#ifdef __WXGTK3__
+#if GTK_CHECK_VERSION(3,10,0)
     if (wx_is_at_least_gtk3(10))
     {
         imageType = CAIRO_GOBJECT_TYPE_SURFACE;
@@ -218,7 +218,7 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmapBundle& bitma
         if ( gtk_tree_model_iter_nth_child( model, &iter, nullptr, n ) )
         {
             wxGtkValue value0;
-#ifdef __WXGTK3__
+#if GTK_CHECK_VERSION(3,10,0)
             if (wx_is_at_least_gtk3(10))
             {
                 g_value_init(value0, CAIRO_GOBJECT_TYPE_SURFACE);
@@ -254,7 +254,7 @@ wxBitmap wxBitmapComboBox::GetItemBitmap(unsigned int n) const
         wxGtkValue value;
         gtk_tree_model_get_value( model, &iter,
                                   m_bitmapCellIndex, value );
-#ifdef __WXGTK3__
+#if GTK_CHECK_VERSION(3,10,0)
         if (wx_is_at_least_gtk3(10))
         {
             cairo_surface_t* surface = static_cast<cairo_surface_t*>(g_value_get_boxed(value));
