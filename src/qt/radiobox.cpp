@@ -36,7 +36,7 @@ public:
           wxQtSignalHandler(handler)
     {
         connect(this,
-                static_cast<void (QButtonGroup::*)(int index)>(&QButtonGroup::buttonClicked),
+                static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
                 this, &wxQtButtonGroup::buttonClicked);
     }
 
@@ -46,17 +46,17 @@ public:
     }
 
 private:
-    void buttonClicked(int index);
+    void buttonClicked(QAbstractButton *qbutton);
 };
 
-void wxQtButtonGroup::buttonClicked(int index)
+void wxQtButtonGroup::buttonClicked(QAbstractButton *qbutton)
 {
     wxRadioBox *handler = GetRadioBox();
     if ( handler )
     {
         wxCommandEvent event( wxEVT_RADIOBOX, handler->GetId() );
-        event.SetInt(index);
-        event.SetString(wxQtConvertString(button(index)->text()));
+        event.SetInt(buttons().indexOf(qbutton));
+        event.SetString(wxQtConvertString(qbutton->text()));
         EmitEvent( event );
     }
 }
