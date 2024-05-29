@@ -423,8 +423,7 @@ public:
     // version does the normal processing (i.e. shows the usual assert failure
     // dialog box)
     //
-    // the arguments are the location of the failed assert (func may be empty
-    // if the compiler doesn't support C99 __FUNCTION__), the text of the
+    // the arguments are the location of the failed assert, the text of the
     // assert itself and the user-specified message
     virtual void OnAssertFailure(const wxChar *file,
                                  int line,

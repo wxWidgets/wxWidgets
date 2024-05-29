@@ -284,8 +284,7 @@ public:
         @param line
             the line number in this file where the assert occurred
         @param func
-            the name of the function where the assert occurred, may be
-            empty if the compiler doesn't support C99 \__FUNCTION__
+            the name of the function where the assert occurred
         @param cond
             the condition of the failed assert in text form
         @param msg
