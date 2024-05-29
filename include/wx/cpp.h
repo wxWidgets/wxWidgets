@@ -120,7 +120,7 @@
     Falls back to the function name (i.e., __func__) if not available.
  */
 #ifndef __WXFUNCTION_SIG__
-    #if __cplusplus >= 202002L
+    #if defined(__cplusplus) && __cplusplus >= 202002L
         #include <source_location>
         // actually displays the signature, not just the name
         #define __WXFUNCTION_SIG__ std::source_location::current().function_name()
