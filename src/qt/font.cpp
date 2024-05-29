@@ -577,7 +577,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    wxMISSING_IMPLEMENTATION( __func__ );
 }
 
 bool wxNativeFontInfo::FromString(const wxString& s)
