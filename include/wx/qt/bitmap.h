@@ -38,6 +38,9 @@ public:
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) override;
     virtual bool Create(int width, int height, const wxDC& dc);
 
+    virtual void SetScaleFactor(double scale);
+    virtual double GetScaleFactor() const;
+
     virtual int GetHeight() const override;
     virtual int GetWidth() const override;
     virtual int GetDepth() const override;
@@ -82,6 +85,8 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const override;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const override;
+
+    virtual bool DoCreate(const wxSize& sz, double scale, int depth) override;
 
 private:
 #if wxUSE_IMAGE

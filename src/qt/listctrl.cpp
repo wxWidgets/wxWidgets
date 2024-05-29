@@ -1898,9 +1898,8 @@ void wxListCtrl::DoUpdateImages(int which)
 
     if ( imageList )
     {
-        int width, height;
-        imageList->GetSize(0, width, height);
-        m_qtTreeWidget->setIconSize(QSize(width, height));
+        const wxBitmap bitmap = imageList->GetBitmap(0);
+        m_qtTreeWidget->setIconSize(wxQtConvertSize(bitmap.GetLogicalSize()));
         m_qtTreeWidget->update();
     }
 }

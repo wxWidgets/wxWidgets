@@ -101,6 +101,10 @@ public:
     // get the (average) character size for the current font
     virtual int GetCharHeight() const override;
     virtual int GetCharWidth() const override;
+    virtual double GetContentScaleFactor() const override;
+
+    virtual wxSize GetDPI() const;
+    virtual double GetDPIScaleFactor() const override;
 
     virtual void SetScrollbar( int orient,
                                int pos,

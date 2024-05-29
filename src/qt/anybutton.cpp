@@ -104,7 +104,7 @@ void wxAnyButton::QtSetBitmap( const wxBitmapBundle &bitmapBundle )
     if ( pixmap != nullptr )
     {
         m_qtPushButton->setIcon(QIcon(*pixmap));
-        m_qtPushButton->setIconSize(pixmap->rect().size());
+        m_qtPushButton->setIconSize(pixmap->rect().size() / pixmap->devicePixelRatio());
 
         InvalidateBestSize();
     }

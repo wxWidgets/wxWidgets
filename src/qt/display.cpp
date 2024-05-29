@@ -11,8 +11,12 @@
 #include "wx/display.h"
 #include "wx/private/display.h"
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QScreen>
 #include "wx/qt/private/converter.h"
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+    #include <QtWidgets/QDesktopWidget>
+#endif
 
 class wxDisplayImplQt : public wxDisplayImpl
 {
@@ -22,6 +26,7 @@ public:
     virtual wxRect GetGeometry() const override;
     virtual wxRect GetClientArea() const override;
     virtual int GetDepth() const override;
+    virtual double GetScaleFactor() const override;
 
 #if wxUSE_DISPLAY
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const override;
@@ -37,17 +42,22 @@ wxDisplayImplQt::wxDisplayImplQt( unsigned n )
 
 wxRect wxDisplayImplQt::GetGeometry() const
 {
-    return wxQtConvertRect( QApplication::desktop()->screenGeometry( GetIndex() ));
+    return wxQtConvertRect(QApplication::screens().value(GetIndex())->geometry());
 }
 
 wxRect wxDisplayImplQt::GetClientArea() const
 {
-    return wxQtConvertRect( QApplication::desktop()->availableGeometry( GetIndex() ));
+    return wxQtConvertRect(QApplication::screens().value(GetIndex())->availableGeometry());
 }
 
 int wxDisplayImplQt::GetDepth() const
 {
-    return IsPrimary() ? QApplication::desktop()->depth() : 0;
+    return QApplication::screens().value(GetIndex())->depth();
+}
+
+double wxDisplayImplQt::GetScaleFactor() const
+{
+    return QApplication::screens().value(GetIndex())->devicePixelRatio();
 }
 
 #if wxUSE_DISPLAY
@@ -58,9 +68,11 @@ wxArrayVideoModes wxDisplayImplQt::GetModes(const wxVideoMode& WXUNUSED(mode)) c
 
 wxVideoMode wxDisplayImplQt::GetCurrentMode() const
 {
-    int width = QApplication::desktop()->width();
-    int height = QApplication::desktop()->height();
-    int depth = QApplication::desktop()->depth();
+    QScreen *screen = QApplication::screens().value(GetIndex());
+
+    int width = screen->size().width();
+    int height = screen->size().height();
+    int depth = screen->depth();
 
     return wxVideoMode( width, height, depth );
 }
@@ -91,12 +103,16 @@ wxDisplayImpl *wxDisplayFactoryQt::CreateDisplay(unsigned n)
 
 unsigned wxDisplayFactoryQt::GetCount()
 {
-    return QApplication::desktop()->screenCount();
+    return QApplication::screens().size();
 }
 
 int wxDisplayFactoryQt::GetFromPoint(const wxPoint& pt)
 {
-    return QApplication::desktop()->screenNumber( wxQtConvertPoint( pt ));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    return QApplication::screens().indexOf(QApplication::screenAt(wxQtConvertPoint(pt)));
+#else
+    return QApplication::desktop()->screenNumber(wxQtConvertPoint(pt));
+#endif
 }
 
 //##############################################################################

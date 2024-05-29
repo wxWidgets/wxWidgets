@@ -11,6 +11,7 @@
 
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
+#include <QtGui/QWindow>
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QApplication>
@@ -677,6 +678,32 @@ int wxWindowQt::GetCharHeight() const
 int wxWindowQt::GetCharWidth() const
 {
     return ( GetHandle()->fontMetrics().averageCharWidth() );
+}
+
+double wxWindowQt::GetContentScaleFactor() const
+{
+    if (GetHandle())
+    {
+        QWidget* npw = GetHandle()->nativeParentWidget();
+
+        if (npw)
+        {
+            QWindow *win = npw->windowHandle();
+            return win->devicePixelRatio();
+        }
+    }
+
+    return qApp->devicePixelRatio();
+}
+
+double wxWindowQt::GetDPIScaleFactor() const
+{
+    return GetContentScaleFactor();
+}
+
+wxSize wxWindowQt::GetDPI() const
+{
+    return MakeDPIFromScaleFactor(GetDPIScaleFactor());
 }
 
 void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *descent,
