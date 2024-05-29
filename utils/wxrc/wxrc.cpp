@@ -664,13 +664,30 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
 "#include <wx/xrc/xmlres.h>\n"
 "#include <wx/xrc/xh_all.h>\n"
 "\n"
-"#if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFileWithMimeType(name, data, size, mime)\n"
-"#else\n"
-"    #define XRC_ADD_FILE(name, data, size, mime) \\\n"
-"        wxMemoryFSHandler::AddFile(name, data, size)\n"
-"#endif\n"
+
+/*
+  Define a helper function to ensure that conversions from `const wxChar *` to
+  `const wxString &` are centralized in a single place, as this results in
+  much faster compilation time and much smaller generated machine code.
+
+  For example, for 10,000 binary resources replacing the previously used macro
+  with this function results in the following changes:
+
+  Compiler (with "-g -O2") | Time (seconds) | RAM (KiB) | Machine code (bytes)
+  -------------------------| -------------- | --------- | ---------------------
+  g++-11 before            |            158 | 3,316,384 |             1,821,235
+  g++-11 now               |             16 |   718,080 |               271,987
+  clang++-14 before        |            158 | 5,263,864 |             2,820,830
+  clang++-14 now           |              5 |   544,144 |               271,080
+*/
+"void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype)\n"
+"{\n"
+"    #if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
+"        return wxMemoryFSHandler::AddFileWithMimeType(filename, binarydata, size, mimetype);\n"
+"    #else\n"
+"        return wxMemoryFSHandler::AddFile(filename, binarydata, size);\n"
+"    #endif\n"
+"}\n"
 "\n");
 
     for (i = 0; i < flist.GetCount(); i++)
