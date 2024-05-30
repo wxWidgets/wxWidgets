@@ -1514,6 +1514,15 @@ private:
     wxDECLARE_NO_COPY_CLASS(PolyPolygonHelper);
 };
 
+// Used by wxGridSelection::Select() and wxGridSelection::DeselectBlock() to ensure
+// that we always have fewer blocks selected in m_selection.
+void MergeAdjacentBlocks(wxGridBlockCoordsVector& selection);
+
+// This function attempts to reduce the number of rectangles returned from
+// wxGrid::GetSelectedRectangles() before trying to convert them to PolyPolygon.
+// Most of the time this will result in just one rectangle.
+void MergeAdjacentRects(std::vector<wxRect>& rectangles);
+
 } // namespace wxGridPrivate
 
 

@@ -149,15 +149,6 @@ private:
     void MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
                          const wxGridBlockCoords& block);
 
-    // Used by Select() and DeselectBlock() to ensure that we always have fewer
-    // blocks selected in m_selection.
-    static void MergeAdjacentBlocks(wxGridBlockCoordsVector& selection);
-
-    // This function attempts to reduce the number of rectangles returned from
-    // wxGrid::GetSelectedRectangles() before trying to convert them to PolyPolygon.
-    // Most of the time this will result in just one rectangle.
-    static void MergeAdjacentRects(std::vector<wxRect>& rectangles);
-
     // Called each time the selection changed or scrolled to recompute m_polyPolygon.
     void ComputePolyPolygon(bool refreshLabelWindows = false, const wxRect& renderExtent = {});
 

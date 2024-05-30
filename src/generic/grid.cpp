@@ -11332,6 +11332,8 @@ void wxGrid::GetSelectedRectangles(std::vector<wxRect>& rectangles, const wxRect
                               m_gridWin, rectangles, renderExtent);
         }
     }
+
+    wxGridPrivate::MergeAdjacentRects(rectangles);
 }
 
 void wxGrid::BlockToDeviceRect(const wxGridCellCoords& topLeft,

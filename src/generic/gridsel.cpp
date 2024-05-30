@@ -387,7 +387,7 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
         }
     }
 
-    MergeAdjacentBlocks(m_selection);
+    wxGridPrivate::MergeAdjacentBlocks(m_selection);
 
     // Refresh the screen and send events.
 
@@ -888,7 +888,7 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
 
     m_selection.push_back(block);
 
-    MergeAdjacentBlocks(m_selection);
+    wxGridPrivate::MergeAdjacentBlocks(m_selection);
 
     // Update View:
     if ( m_grid->UsesOverlaySelection() )
@@ -940,7 +940,7 @@ void wxGridSelection::MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
     blocks.push_back(newBlock);
 }
 
-void wxGridSelection::MergeAdjacentBlocks(wxGridBlockCoordsVector& selection)
+void wxGridPrivate::MergeAdjacentBlocks(wxGridBlockCoordsVector& selection)
 {
     auto CanMergeBlocks = [](const wxGridBlockCoords& b1,
                              const wxGridBlockCoords& b2) -> bool
@@ -997,7 +997,7 @@ void wxGridSelection::MergeAdjacentBlocks(wxGridBlockCoordsVector& selection)
     }
 }
 
-void wxGridSelection::MergeAdjacentRects(std::vector<wxRect>& rectangles)
+void wxGridPrivate::MergeAdjacentRects(std::vector<wxRect>& rectangles)
 {
     auto CanMergeRects = [](const wxRect& r1, const wxRect& r2) -> bool
     {
@@ -1061,8 +1061,6 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect&
 
     std::vector<wxRect> rectangles;
     m_grid->GetSelectedRectangles(rectangles, renderExtent);
-
-    MergeAdjacentRects(rectangles);
 
     if ( !IsSelection() )
     {
