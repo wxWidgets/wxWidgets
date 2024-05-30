@@ -17,7 +17,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
-    #include "wx/dc.h"
     #include "wx/combobox.h"
     #include "wx/settings.h"
     #include "wx/log.h"

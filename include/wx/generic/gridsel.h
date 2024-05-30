@@ -18,6 +18,11 @@
 
 #include "wx/vector.h"
 
+#include <memory>
+
+// Forward declaration
+namespace wxGridPrivate { class PolyPolygon; }
+
 wxDEPRECATED_MSG("use wxGridBlockCoordsVector instead")
 typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
 
@@ -114,45 +119,8 @@ public:
     void EndSelecting();
     void CancelSelecting();
 
-    // A simple interface used by wxGrid::DrawOverlaySelection() as a helper to draw
-    // the grid selection(s).
-    class PolyPolygon
-    {
-    public:
-        PolyPolygon() = default;
-        ~PolyPolygon() = default;
-
-        bool IsValid() const;
-
-        // Return the number of polygons to draw.
-        size_t GetSize() const { return m_counts.size(); }
-
-        const int* GetCounts() const { return m_counts.data(); }
-
-        const wxPoint* GetPoints() const { return m_points.data(); }
-
-        void Append(const std::vector<wxPoint>& points);
-
-        // Return the bounding box of the visible selected blocks. Return empty
-        // rectangle if there is no selection.
-        wxRect GetBoundingBox() const;
-
-        void SetBoundingBox(const wxRect& rect);
-
-    private:
-        void CalcBoundingBox(const std::vector<wxPoint>& points);
-
-        // m_counts contains the number of points in each of the polygons in m_points.
-
-        std::vector<int>     m_counts;
-        std::vector<wxPoint> m_points;
-
-        int m_minX = 0, m_maxX = -1,
-            m_minY = 0, m_maxY = -1;
-    };
-
     // Return the PolyPolygon object. Call ComputePolyPolygon() if necessary.
-    const PolyPolygon& GetPolyPolygon(const wxRect& renderExtent);
+    const wxGridPrivate::PolyPolygon& GetPolyPolygon(const wxRect& renderExtent);
 
     void InvalidatePolyPolygon();
 
@@ -211,9 +179,9 @@ private:
     // - Simple polygon (using wxDC::DrawPolygon()) if it represents a simple polygon.
     // - Poly-polygon (using wxDC::DrawPolyPolygon()) if it consists of multiple polygons.
     //
-    PolyPolygon                         m_polyPolygon;
+    std::unique_ptr<wxGridPrivate::PolyPolygon> m_polyPolygon;
 
-    size_t                              m_isAnyLabelHighlighted = 0;
+    size_t                                      m_isAnyLabelHighlighted = 0;
 
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };

@@ -24,10 +24,7 @@
 #include "wx/generic/gridsel.h"
 #include "wx/dynarray.h"
 
-#include <algorithm>
-#include <iterator>
-#include <set>
-#include <map>
+#include "wx/generic/private/grid.h"
 
 namespace
 {
@@ -1047,209 +1044,20 @@ void wxGridSelection::MergeAdjacentRects(std::vector<wxRect>& rectangles)
     }
 }
 
-//=============================================================================
-// wxGridSelection::PolyPolygon implementation
-//=============================================================================
-
-inline bool operator<(const wxPoint& pt1, const wxPoint& pt2)
-{
-    return (pt1.x < pt2.x) || ((pt1.x == pt2.x) && (pt1.y < pt2.y));
-}
-
-namespace wxPrivate
-{
-// This class is just a helper that simply converts (using the sweep line algorithm)
-// the selected rectangles (retrieved by wxGrid::GetSelectedRectangles()) to
-// wxGridSelection::PolyPolygon which can then be used in wxGrid::DrawOverlaySelection()
-// to draw the selection overlay.
-//
-// The implementation is literally the translation of the Python code found here:
-// https://stackoverflow.com/a/13851341/8528670
-//
-class PolyPolygonHelper
-{
-public:
-    PolyPolygonHelper(wxGridSelection::PolyPolygon& polyPolygon,
-                      const std::vector<wxRect>&    rectangles)
-        : m_polyPolygon(polyPolygon)
-    {
-        std::vector<wxPoint> points = GetVertices(rectangles);
-
-        InitHorzEdges(points);
-        InitVertEdges(points);
-
-        Construct();
-    }
-
-    void Construct()
-    {
-        while ( !m_horzEdges.empty() )
-        {
-            EdgeType::iterator       iter = m_horzEdges.begin();
-            std::pair<wxPoint, bool> pair = std::make_pair((*iter).first, false);
-
-            m_horzEdges.erase(iter);
-
-            // The boolean associated with the vertex is just a marker to help
-            // with the construction of the polygons only.
-            using PolygonType = std::vector<std::pair<wxPoint, bool>>;
-            PolygonType polygon;
-            polygon.push_back(pair);
-
-            while ( true )
-            {
-                pair = polygon.back();
-
-                if ( pair.second )
-                {
-                    iter = m_horzEdges.find(pair.first);
-                    wxASSERT_MSG( iter != m_horzEdges.end(), "vertex not found in m_horzEdges" );
-
-                    const wxPoint& nextVertex = iter->second;
-                    polygon.push_back(std::make_pair(nextVertex, false));
-                    m_horzEdges.erase(iter);
-                }
-                else
-                {
-                    iter = m_vertEdges.find(pair.first);
-                    wxASSERT_MSG ( iter != m_vertEdges.end(), "vertex not found in m_vertEdges" );
-
-                    const wxPoint& nextVertex = iter->second;
-                    polygon.push_back(std::make_pair(nextVertex, true));
-                    m_vertEdges.erase(iter);
-                }
-
-                if ( polygon.front() == polygon.back() )
-                {
-                    // Closed polygon
-                    polygon.pop_back();
-                    break;
-                }
-            }
-
-            // Remove implementation-markers from the polygon.
-            std::vector<wxPoint> poly;
-
-            for ( const auto& p : polygon )
-            {
-                poly.push_back(p.first);
-            }
-
-            for ( const auto& pt : poly )
-            {
-                iter = m_horzEdges.find(pt);
-                if ( iter != m_horzEdges.end() )
-                {
-                    m_horzEdges.erase(iter);
-                }
-
-                iter = m_vertEdges.find(pt);
-                if ( iter != m_vertEdges.end() )
-                {
-                    m_vertEdges.erase(iter);
-                }
-            }
-
-            m_polyPolygon.Append(poly);
-        }
-    }
-
-private:
-    // A helper function to prevent adding duplicates and shared points
-    // to the vector returned by GetVertices().
-    void AddVertex(std::set<wxPoint>& points, const wxPoint& pt)
-    {
-        auto result = points.insert(pt);
-        if ( result.first != points.end() && !result.second )
-            points.erase(result.first);
-    }
-
-    std::vector<wxPoint> GetVertices(const std::vector<wxRect>& rectangles)
-    {
-        std::set<wxPoint> pointSet;
-
-        for ( const wxRect& rect : rectangles )
-        {
-            AddVertex(pointSet, rect.GetTopLeft());
-            AddVertex(pointSet, rect.GetTopRight());
-            AddVertex(pointSet, rect.GetBottomRight());
-            AddVertex(pointSet, rect.GetBottomLeft());
-        }
-
-        std::vector<wxPoint> points;
-        std::copy(pointSet.begin(), pointSet.end(), std::back_inserter(points));
-
-        return points;
-    }
-
-    void InitHorzEdges(const std::vector<wxPoint>& points)
-    {
-        std::vector<wxPoint> sortedPointsY = points;
-        std::sort(sortedPointsY.begin(), sortedPointsY.end(),
-        [](const wxPoint& pt1, const wxPoint& pt2)
-        {
-            // Compare the points by their Y's first
-            return pt1.y < pt2.y || (pt1.y == pt2.y && pt1.x < pt2.x);
-        });
-
-        int i = 0;
-        const int n = static_cast<int>(points.size());
-
-        while ( i < n )
-        {
-            int y = sortedPointsY[i].y;
-
-            while ( i < n && sortedPointsY[i].y == y )
-            {
-                m_horzEdges[sortedPointsY[i]] = sortedPointsY[i + 1];
-                m_horzEdges[sortedPointsY[i + 1]] = sortedPointsY[i];
-                i += 2;
-            }
-        }
-    }
-
-    void InitVertEdges(const std::vector<wxPoint>& points)
-    {
-        std::vector<wxPoint> sortedPointsX = points;
-        std::sort(sortedPointsX.begin(), sortedPointsX.end());
-
-        int i = 0;
-        const int n = static_cast<int>(points.size());
-
-        while ( i < n )
-        {
-            int x = sortedPointsX[i].x;
-
-            while ( i < n && sortedPointsX[i].x == x )
-            {
-                m_vertEdges[sortedPointsX[i]] = sortedPointsX[i + 1];
-                m_vertEdges[sortedPointsX[i + 1]] = sortedPointsX[i];
-                i += 2;
-            }
-        }
-    }
-
-private:
-    wxGridSelection::PolyPolygon& m_polyPolygon;
-
-    using EdgeType = std::map<wxPoint, wxPoint>;
-    EdgeType m_horzEdges;
-    EdgeType m_vertEdges;
-
-    wxDECLARE_NO_COPY_CLASS(PolyPolygonHelper);
-};
-} // namespace wxPrivate
-
 void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect& renderExtent)
 {
     if ( m_grid->GetBatchCount() )
         return;
 
-    // the old rect will be refreshed too.
-    wxRect rect(m_polyPolygon.GetBoundingBox());
-    wxRect* updateRect = &rect;
+    wxRect updateRect;
 
-    InvalidatePolyPolygon();
+    if ( m_polyPolygon )
+    {
+        // the old rect will be refreshed too.
+        updateRect = m_polyPolygon->GetBoundingBox();
+    }
+
+    m_polyPolygon.reset(new wxGridPrivate::PolyPolygon);
 
     std::vector<wxRect> rectangles;
     m_grid->GetSelectedRectangles(rectangles, renderExtent);
@@ -1258,19 +1066,19 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect&
 
     if ( !IsSelection() )
     {
-        updateRect = nullptr;
+        updateRect = {};
     }
     else if ( rectangles.size() == 1 )
     {
-        m_polyPolygon.SetBoundingBox(rectangles[0]);
+        m_polyPolygon->SetBoundingBox(rectangles[0]);
 
-        rect.Union(rectangles[0]);
+        updateRect.Union(rectangles[0]);
     }
     else if ( rectangles.size() > 1 )
     {
-        wxPrivate::PolyPolygonHelper helper(m_polyPolygon, rectangles);
+        wxGridPrivate::PolyPolygonHelper helper(m_polyPolygon.get(), rectangles);
 
-        rect.Union(m_polyPolygon.GetBoundingBox());
+        updateRect.Union(m_polyPolygon->GetBoundingBox());
     }
     else // out-of-view selection
     {
@@ -1296,8 +1104,8 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect&
 
             const wxGridBlockCoords& block = m_selection[0];
 
-            rect  = m_grid->CellToRect(block.GetTopLeft()).Inflate(1);
-            rect += m_grid->CellToRect(block.GetBottomRight()).Inflate(1);
+            updateRect  = m_grid->CellToRect(block.GetTopLeft()).Inflate(1);
+            updateRect += m_grid->CellToRect(block.GetBottomRight()).Inflate(1);
 
             int left, top, right, bottom;
 
@@ -1305,45 +1113,39 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect&
             const wxPoint offset = m_grid->GetGridWindowOffset(gridWin);
 
             // Convert to scrolled coords
-            m_grid->CalcGridWindowScrolledPosition( rect.GetLeft() - offset.x, rect.GetTop() - offset.y,
+            m_grid->CalcGridWindowScrolledPosition( updateRect.GetLeft() - offset.x,
+                                                    updateRect.GetTop() - offset.y,
                                                     &left, &top, gridWin );
-            m_grid->CalcGridWindowScrolledPosition( rect.GetRight() - offset.x, rect.GetBottom() - offset.y,
+            m_grid->CalcGridWindowScrolledPosition( updateRect.GetRight() - offset.x,
+                                                    updateRect.GetBottom() - offset.y,
                                                     &right, &bottom, gridWin );
 
-            rect = wxRect(wxPoint(left, top), wxPoint(right, bottom));
+            updateRect = wxRect(wxPoint(left, top), wxPoint(right, bottom));
 
-            rect.Offset(offset);
+            updateRect.Offset(offset);
         }
     }
 
-    m_grid->RefreshRect(updateRect);
+    m_grid->RefreshRect(!updateRect.IsEmpty() ? &updateRect : nullptr);
 }
 
-bool wxGridSelection::PolyPolygon::IsValid() const
-{
-    return m_minX >= 0 &&
-           m_minY >= 0 &&
-           m_maxX >= m_minX &&
-           m_maxY >= m_minY;
-}
-
-const wxGridSelection::PolyPolygon&
+const wxGridPrivate::PolyPolygon&
 wxGridSelection::GetPolyPolygon(const wxRect& renderExtent)
 {
-    if ( !m_polyPolygon.IsValid() )
+    if ( !m_polyPolygon )
     {
         ComputePolyPolygon(false /*refreshLabelWindows*/, renderExtent);
     }
 
-    return m_polyPolygon;
+    return *m_polyPolygon.get();
 }
 
 void wxGridSelection::InvalidatePolyPolygon()
 {
-    m_polyPolygon = PolyPolygon();
+    m_polyPolygon.reset();
 }
 
-void wxGridSelection::PolyPolygon::Append(const std::vector<wxPoint>& points)
+void wxGridPrivate::PolyPolygon::Append(const std::vector<wxPoint>& points)
 {
     CalcBoundingBox(points);
 
@@ -1352,7 +1154,7 @@ void wxGridSelection::PolyPolygon::Append(const std::vector<wxPoint>& points)
               std::back_inserter(m_points));
 }
 
-void wxGridSelection::PolyPolygon::CalcBoundingBox(const std::vector<wxPoint>& points)
+void wxGridPrivate::PolyPolygon::CalcBoundingBox(const std::vector<wxPoint>& points)
 {
     for ( const auto& point : points )
     {
@@ -1368,17 +1170,14 @@ void wxGridSelection::PolyPolygon::CalcBoundingBox(const std::vector<wxPoint>& p
     }
 }
 
-wxRect wxGridSelection::PolyPolygon::GetBoundingBox() const
+wxRect wxGridPrivate::PolyPolygon::GetBoundingBox() const
 {
-    if ( !IsValid() )
-        return wxRect();
-
     return wxRect(m_minX,  m_minY,
                   m_maxX - m_minX,
                   m_maxY - m_minY);
 }
 
-void wxGridSelection::PolyPolygon::SetBoundingBox(const wxRect& rect)
+void wxGridPrivate::PolyPolygon::SetBoundingBox(const wxRect& rect)
 {
     m_minX = rect.x;
     m_minY = rect.y;
