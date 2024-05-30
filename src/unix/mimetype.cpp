@@ -830,13 +830,18 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
 
     // add all extensions we don't have yet
     wxString ext;
+    wxString ext2;
     size_t count = strExtensions.GetCount();
     for ( size_t i = 0; i < count; i++ )
     {
         ext = strExtensions[i];
         ext += wxT(' ');
 
-        if ( exts.Find(ext) == wxNOT_FOUND )
+        if (exts.StartsWith(ext))
+            continue;
+        ext2 = wxT(' ');
+        ext2 += ext;
+        if (exts.Find(ext2) == wxNOT_FOUND)
         {
             exts += ext;
         }
