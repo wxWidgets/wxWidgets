@@ -723,6 +723,30 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
         m_qtPainter->setWorldMatrixEnabled(true);
     }
 
+    class OffsetHelper
+    {
+    public:
+        OffsetHelper(bool shouldOffset, QPainter* qpainter)
+        {
+            m_shouldOffset = shouldOffset;
+            if ( !m_shouldOffset )
+                return;
+
+            m_qtPainter = qpainter;
+            m_qtPainter->translate(0.5, 0.5);
+        }
+
+        ~OffsetHelper()
+        {
+            if ( m_shouldOffset )
+                m_qtPainter->translate(-0.5, -0.5);
+        }
+
+    private:
+        QPainter* m_qtPainter;
+        bool m_shouldOffset;
+    };
+
 protected:
     // Use the specified painter and take ownership of it, i.e. it will be
     // destroyed in this class dtor.
@@ -783,7 +807,23 @@ public:
 
     virtual bool ShouldOffset() const override
     {
-        return false;
+        if ( m_pen.IsNull() )
+            return false;
+
+        const auto& qpen = static_cast<wxQtPenData*>(m_pen.GetRefData())->GetPen();
+
+        if ( qpen.style() == Qt::NoPen )
+            return false;
+
+        const double width = qpen.widthF();
+
+        // always offset for 1-pixel width
+        if ( width <= 0 )
+            return true;
+
+        // offset if pen width is odd integer
+        const int w = int(width);
+        return (w & 1) && wxIsSameDouble(width, w);
     }
 
     virtual void Clip(const wxRegion& region) override
@@ -932,6 +972,8 @@ public:
             return;
         }
 
+        OffsetHelper helper(ShouldOffset(), m_qtPainter);
+
         const QPainterPath*
             pathData = static_cast<QPainterPath*>(p.GetNativePath());
         const QPen&
@@ -947,6 +989,8 @@ public:
         {
             return;
         }
+
+        OffsetHelper helper(ShouldOffset(), m_qtPainter);
 
         QPainterPath* pathData = static_cast<QPainterPath*>(p.GetNativePath());
         const Qt::FillRule fillRule = fillStyle == wxWINDING_RULE ? Qt::WindingFill : Qt::OddEvenFill;
