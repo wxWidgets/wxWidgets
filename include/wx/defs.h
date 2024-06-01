@@ -1027,6 +1027,7 @@ typedef double wxDouble;
     m(unsigned short) \
     m(int) \
     m(unsigned int) \
+    m(char32_t) \
     m(long) \
     m(unsigned long) \
     wxIF_LONG_LONG_TYPE( m(wxLongLong_t) ) \
@@ -1057,6 +1058,7 @@ typedef double wxDouble;
     m(unsigned short, arg) \
     m(int, arg) \
     m(unsigned int, arg) \
+    m(char32_t, arg) \
     m(long, arg) \
     m(unsigned long, arg) \
     wxIF_LONG_LONG_TYPE( m(wxLongLong_t, arg) ) \

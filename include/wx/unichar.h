@@ -24,10 +24,9 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 class WXDLLIMPEXP_BASE wxUniChar
 {
 public:
-    // NB: this is not wchar_t on purpose, it needs to represent the entire
-    //     Unicode code points range and wchar_t may be too small for that
-    //     (e.g. on Win32 where wchar_t* is encoded in UTF-16)
-    typedef wxUint32 value_type;
+    // NB: the C++11 char32_t type is designed to represent the entire
+    //     Unicode code points range
+    typedef char32_t value_type;
 
     wxUniChar() : m_value(0) {}
 
