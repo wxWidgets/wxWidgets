@@ -161,6 +161,11 @@ class wxBitmapRefData: public wxGDIRefData
 
         virtual ~wxBitmapRefData() { delete m_mask; }
 
+        virtual bool IsOk() const override
+        {
+            return !m_qtPixmap.isNull();
+        }
+
         QPixmap m_qtPixmap;
         QImage m_rawPixelSource;
         wxMask *m_mask;
