@@ -22,6 +22,12 @@ public:
 
     virtual bool Initialize(int& argc, wxChar **argv) override;
 
+#ifdef _WIN32
+    // returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
+    // wasn't found at all
+    static int GetComCtl32Version();
+#endif // _WIN32
+
 private:
     std::unique_ptr<QApplication> m_qtApplication;
     int m_qtArgc;

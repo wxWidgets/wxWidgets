@@ -8,7 +8,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FILEDLG
+// On Windows, the MSW implementation is used to support custom controls in
+// modern-style dialogs.
+#if wxUSE_FILEDLG && !defined( _WIN32 )
 
 #include "wx/filename.h"
 
@@ -260,4 +262,4 @@ QFileDialog *wxDirDialog::GetQFileDialog() const
     return static_cast<QFileDialog *>(m_qtWindow);
 }
 
-#endif // wxUSE_FILEDLG
+#endif // wxUSE_FILEDLG && !defined( _WIN32 )

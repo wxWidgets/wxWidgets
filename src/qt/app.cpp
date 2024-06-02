@@ -15,6 +15,11 @@
 #include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
 
+#ifdef _WIN32
+    #include "wx/dynlib.h"
+    #include <Shlwapi.h>
+#endif // _WIN32
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 wxApp::wxApp()
@@ -83,3 +88,116 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
 
     return true;
 }
+
+// Compatibility for MSW wxFileDialog/wxDirDialog implementations
+#ifdef _WIN32
+
+// ----------------------------------------------------------------------------
+// system DLL versions
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+    // helper function: retrieve the DLL version by using DllGetVersion(), returns
+    // 0 if the DLL doesn't export such function
+    int CallDllGetVersion(wxDynamicLibrary& dll)
+    {
+        // now check if the function is available during run-time
+        wxDYNLIB_FUNCTION(DLLGETVERSIONPROC, DllGetVersion, dll);
+        if (!pfnDllGetVersion)
+            return 0;
+
+        DLLVERSIONINFO dvi;
+        dvi.cbSize = sizeof(dvi);
+
+        HRESULT hr = (*pfnDllGetVersion)(&dvi);
+        if (FAILED(hr))
+        {
+            wxLogApiError(wxT("DllGetVersion"), hr);
+
+            return 0;
+        }
+
+        return 100 * dvi.dwMajorVersion + dvi.dwMinorVersion;
+    }
+
+} // anonymous namespace
+
+/* static */
+int wxApp::GetComCtl32Version()
+{
+    // cache the result
+    //
+    // NB: this is MT-ok as in the worst case we'd compute s_verComCtl32 twice,
+    //     but as its value should be the same both times it doesn't matter
+    static int s_verComCtl32 = -1;
+
+    if (s_verComCtl32 == -1)
+    {
+        // Test for Wine first because its comctl32.dll always returns 581 from
+        // its DllGetVersion() even though it supports the functionality of
+        // much later versions too.
+        wxVersionInfo verWine;
+        if (wxIsRunningUnderWine(&verWine))
+        {
+            // Not sure which version of Wine implements comctl32.dll v6
+            // functionality, but 5 seems to have it already.
+            if (verWine.GetMajor() >= 5)
+                s_verComCtl32 = 610;
+        }
+    }
+
+    if (s_verComCtl32 == -1)
+    {
+        // we're prepared to handle the errors
+        wxLogNull noLog;
+
+        // we don't want to load comctl32.dll, it should be already loaded but,
+        // depending on the OS version and the presence of the manifest, it can
+        // be either v5 or v6 and instead of trying to guess it just get the
+        // handle of the already loaded version
+        wxLoadedDLL dllComCtl32(wxT("comctl32.dll"));
+        if (!dllComCtl32.IsLoaded())
+        {
+            s_verComCtl32 = 0;
+            return 0;
+        }
+
+        // try DllGetVersion() for recent DLLs
+        s_verComCtl32 = CallDllGetVersion(dllComCtl32);
+
+        // if DllGetVersion() is unavailable either during compile or
+        // run-time, try to guess the version otherwise
+        if (!s_verComCtl32)
+        {
+            // InitCommonControlsEx is unique to 4.70 and later
+            void* pfn = dllComCtl32.GetSymbol(wxT("InitCommonControlsEx"));
+            if (!pfn)
+            {
+                // not found, must be 4.00
+                s_verComCtl32 = 400;
+            }
+            else // 4.70+
+            {
+                // many symbols appeared in comctl32 4.71, could use any of
+                // them except may be DllInstall()
+                pfn = dllComCtl32.GetSymbol(wxT("InitializeFlatSB"));
+                if (!pfn)
+                {
+                    // not found, must be 4.70
+                    s_verComCtl32 = 470;
+                }
+                else
+                {
+                    // found, must be 4.71 or later
+                    s_verComCtl32 = 471;
+                }
+            }
+        }
+    }
+
+    return s_verComCtl32;
+}
+
+#endif // _WIN32

@@ -36,6 +36,10 @@
 #include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 
+#ifdef _WIN32
+    #include "wx/msw/private/dpiaware.h"
+#endif // _WIN32
+
 
 #define TRACE_QT_WINDOW "qtwindow"
 
@@ -1894,3 +1898,21 @@ bool wxWindowQt::EnableTouchEvents(int eventsMask)
 
     return true;
 }
+
+// Compatibility for MSW wxFileDialog/wxDirDialog implementations
+#ifdef _WIN32
+
+// ---------------------------------------------------------------------------
+// DPI
+// ---------------------------------------------------------------------------
+
+namespace wxMSWImpl
+{
+
+    AutoSystemDpiAware::SetThreadDpiAwarenessContext_t
+        AutoSystemDpiAware::ms_pfnSetThreadDpiAwarenessContext =
+        (AutoSystemDpiAware::SetThreadDpiAwarenessContext_t)-1;
+
+} // namespace wxMSWImpl
+
+#endif // _WIN32

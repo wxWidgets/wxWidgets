@@ -178,6 +178,8 @@ set(QT_UNIX_HDR
 )
 
 set(QT_WIN32_SRC
+    src/msw/dirdlg.cpp
+    src/msw/filedlg.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/safearray.cpp
     src/msw/sound.cpp
@@ -190,6 +192,8 @@ set(QT_WIN32_SRC
 )
 
 set(QT_WIN32_HDR
+    wx/msw/dirdlg.h
+    wx/msw/filedlg.h
     wx/msw/ole/automtn.h
     wx/msw/joystick.h
     wx/msw/dib.h

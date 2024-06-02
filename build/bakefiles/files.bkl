@@ -255,6 +255,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="QT_WIN32_SRC" hints="files">
+    src/msw/dirdlg.cpp
+    src/msw/filedlg.cpp
     src/msw/ole/comimpl.cpp
     src/msw/dialup.cpp
     src/msw/dib.cpp
@@ -267,6 +269,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="QT_WIN32_HDR" hints="files">
+    wx/msw/dirdlg.h
+    wx/msw/filedlg.h
     wx/msw/dib.h
     wx/msw/ole/automtn.h
     wx/msw/joystick.h
