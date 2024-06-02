@@ -1862,7 +1862,7 @@ void wxListCtrl::SetSingleStyle(long style, bool add)
 void wxListCtrl::SetWindowStyleFlag(long style)
 {
     m_windowStyle = style;
-    m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
+    m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0 || (style & wxLC_REPORT) == 0);
     m_qtTreeWidget->EnableEditLabel((style & wxLC_EDIT_LABELS) != 0);
     m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0
         ? QAbstractItemView::SingleSelection
