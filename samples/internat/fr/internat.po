@@ -140,6 +140,7 @@ msgid "Show coreutils &help"
 msgstr "Afficher l'&aide pour coreutils"
 
 #: internat.cpp:331
+msgctxt "About context"
 msgid "&About"
 msgstr "&A propos"
 

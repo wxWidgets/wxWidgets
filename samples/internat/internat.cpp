@@ -58,7 +58,7 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp() { m_setLocale = Locale_Ask; }
+    MyApp() { m_setLocale = Locale_Set; }
 
     virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
