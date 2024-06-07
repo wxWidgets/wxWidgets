@@ -6016,7 +6016,7 @@ msgstr "Chýba požadovaný parameter."
 #: ../src/msw/ole/automtn.cpp:663
 #, c-format
 msgid "Argument %u not found."
-msgstr "Argument% u sa nenašiel."
+msgstr "Argument %u sa nenašiel."
 
 #: ../src/msw/ole/automtn.cpp:667
 #, c-format

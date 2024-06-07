@@ -1373,7 +1373,7 @@ msgstr "ფაილი %s: ხაზი %zu: მოველოდი \"=\"."
 #, c-format
 msgid "file '%s', line %zu: value for immutable key '%s' ignored."
 msgstr ""
-"ფაილი '% s', ხაზი % zu: მნიშვნელობა უცვლელი გასაღებისთვის '%s' იგნორირებულია."
+"ფაილი '%s', ხაზი %zu: მნიშვნელობა უცვლელი გასაღებისთვის '%s' იგნორირებულია."
 
 #: ../src/common/fileconf.cpp:626
 #, c-format
@@ -2511,7 +2511,7 @@ msgstr "გაშლის უცნობი შეცდომა"
 #: ../src/common/lzmastream.cpp:196
 #, c-format
 msgid "LZMA decompression error: %s"
-msgstr "LZMA დეკომპრესიის შეცდომა: % s"
+msgstr "LZMA დეკომპრესიის შეცდომა: %s"
 
 #: ../src/common/lzmastream.cpp:231
 msgid "Failed to allocate memory for LZMA compression."
