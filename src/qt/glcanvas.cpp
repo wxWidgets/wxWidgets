@@ -682,7 +682,7 @@ bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
 
 bool wxGLApp::InitGLVisual(const int *attribList)
 {
-    wxLogError("Missing implementation of " + wxString(__FUNCTION__));
+    wxLogError("Missing implementation of " + wxString(__func__));
     return false;
 }
 

@@ -285,7 +285,7 @@ void wxQtDCImpl::SetBackgroundMode(int mode)
 #if wxUSE_PALETTE
 void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    wxMISSING_IMPLEMENTATION(__func__);
 }
 #endif // wxUSE_PALETTE
 

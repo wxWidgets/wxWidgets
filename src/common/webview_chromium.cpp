@@ -87,7 +87,7 @@ namespace
 
 constexpr const char* TRACE_CEF = "cef";
 
-#define TRACE_CEF_FUNCTION() wxLogTrace(TRACE_CEF, "%s called", __FUNCTION__)
+#define TRACE_CEF_FUNCTION() wxLogTrace(TRACE_CEF, "%s called", __func__)
 
 } // anonymous namespace
 
