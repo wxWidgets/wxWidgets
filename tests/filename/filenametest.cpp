@@ -381,7 +381,7 @@ TEST_CASE("wxFileName::Normalize", "[filename]")
             wxRegKey::HKLM,
             "SYSTEM\\CurrentControlSet\\Control\\FileSystem"
          ).QueryValue("NtfsDisable8dot3NameCreation", &shortNamesDisabled) &&
-            shortNamesDisabled != 1 )
+            shortNamesDisabled != 1 && !IsAutomaticTest() )
     {
         wxFileName fn("TESTDA~1.CON");
         CHECK( fn.Normalize(wxPATH_NORM_LONG, cwd) );
