@@ -1364,18 +1364,11 @@ TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
     s += s;
     const wxSize sizeVeryLong = getBestSizeFor(s);
 
-#ifndef __WXQT__
     // Control with a few lines of text in it should be taller.
     CHECK( sizeMedium.y > sizeEmpty.y );
 
     // And a control with many lines in it should be even more so.
     CHECK( sizeLong.y > sizeMedium.y );
-#else
-    // Under wxQt, the multiline textctrl has a fixed calculated best size
-    // regardless of its content.
-    CHECK( sizeMedium.y == sizeEmpty.y );
-    CHECK( sizeLong.y == sizeMedium.y );
-#endif
 
     // However there is a cutoff at 10 lines currently, so anything longer than
     // that should still have the same best size.

@@ -230,12 +230,14 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
 }
 
 #if wxUSE_IMAGE
-void wxBitmap::InitFromImage(const wxImage& image, int depth, double WXUNUSED(scale) )
+void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale )
 {
     wxMask* mask = nullptr;
     auto qtImage = depth == 1
                  ? QBitmap::fromImage(ConvertImage(image), Qt::ThresholdDither)
                  : QPixmap::fromImage(ConvertImage(image, &mask));
+
+    qtImage.setDevicePixelRatio(scale);
 
     m_refData = new wxBitmapRefData(qtImage, mask);
 }
@@ -271,9 +273,38 @@ bool wxBitmap::Create(const wxSize& sz, int depth )
     return Create(sz.GetWidth(), sz.GetHeight(), depth);
 }
 
-bool wxBitmap::Create(int width, int height, const wxDC& WXUNUSED(dc))
+bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
-    return Create(width, height);
+    return DoCreate(wxSize(width, height),
+                    dc.GetContentScaleFactor(),
+                    wxBITMAP_SCREEN_DEPTH);
+}
+
+bool wxBitmap::DoCreate(const wxSize& size, double scale, int depth)
+{
+    Create(size*scale, depth);
+    M_PIXDATA.setDevicePixelRatio( scale );
+
+    return true;
+}
+
+void wxBitmap::SetScaleFactor(double scale)
+{
+    wxCHECK_RET( IsOk(), "invalid bitmap" );
+
+    if ( M_PIXDATA.devicePixelRatio() != scale )
+    {
+        AllocExclusive();
+
+        M_PIXDATA.setDevicePixelRatio( scale );
+    }
+}
+
+double wxBitmap::GetScaleFactor() const
+{
+    wxCHECK_MSG( IsOk(), -1, "invalid bitmap" );
+
+    return M_PIXDATA.devicePixelRatio();
 }
 
 int wxBitmap::GetHeight() const
@@ -378,9 +409,23 @@ void wxBitmap::SetMask(wxMask *mask)
     M_MASK = mask;
 }
 
-wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
+wxBitmap wxBitmap::GetSubBitmap(const wxRect& r) const
 {
-    wxBitmap bmp = wxBitmap(M_PIXDATA.copy(wxQtConvertRect(rect)));
+    wxBitmap bmp;
+
+    const double s = M_PIXDATA.devicePixelRatio();
+    const wxRect rect(wxRound(r.x * s), wxRound(r.y * s), wxRound(r.width * s), wxRound(r.height * s));
+
+    const int w = rect.width;
+    const int h = rect.height;
+
+    wxCHECK_MSG(rect.x >= 0 && rect.y >= 0 &&
+                rect.x + w <= M_PIXDATA.width() &&
+                rect.y + h <= M_PIXDATA.height(),
+                bmp, wxT("invalid bitmap region"));
+
+    bmp = wxBitmap(M_PIXDATA.copy(wxQtConvertRect(rect)));
+    bmp.SetScaleFactor(s);
 
     if ( M_MASK && M_MASK->GetHandle() )
     {

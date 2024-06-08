@@ -528,7 +528,7 @@ public:
         The physical size of the bitmap created by this function depends on the
         platform and will be the same as @a size on the platforms for which
         `wxHAS_DPI_INDEPENDENT_PIXELS` is not defined (e.g. wxMSW) or @a size
-        multiplied by @a scale for those where it is (e.g. wxGTK3 and wxOSX).
+        multiplied by @a scale for those where it is (e.g. wxGTK3, wxOSX and wxQt).
         In other words, this function is the same as CreateWithDIPSize() if
         `wxHAS_DPI_INDEPENDENT_PIXELS` is defined, but not otherwise.
 

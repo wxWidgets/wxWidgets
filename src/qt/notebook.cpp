@@ -145,9 +145,8 @@ void wxNotebook::OnImagesChanged()
     {
         wxImageList* const imageList = GetUpdatedImageListFor(this);
 
-        int width, height;
-        imageList->GetSize(0, width, height);
-        m_qtTabWidget->setIconSize(QSize(width, height));
+        const wxBitmap bitmap = imageList->GetBitmap(0);
+        m_qtTabWidget->setIconSize(wxQtConvertSize(bitmap.GetLogicalSize()));
         m_qtTabWidget->update();
     }
 }
