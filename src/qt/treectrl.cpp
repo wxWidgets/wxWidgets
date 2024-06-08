@@ -1308,6 +1308,12 @@ void wxTreeCtrl::SetWindowStyleFlag(long styles)
 {
     wxControl::SetWindowStyleFlag(styles);
 
+    m_qtTreeWidget->setEditTriggers(
+        styles & wxTR_EDIT_LABELS
+        ? (QTreeWidget::SelectedClicked | QTreeWidget::EditKeyPressed)
+        : QTreeWidget::NoEditTriggers
+    );
+
     m_qtTreeWidget->setSelectionMode(
         styles & wxTR_MULTIPLE
             ? QTreeWidget::ExtendedSelection

@@ -1854,14 +1854,33 @@ void wxListCtrl::CheckItem(long item, bool check)
     m_model->CheckItem(item, check);
 }
 
-void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
+void wxListCtrl::SetSingleStyle(long style, bool add)
 {
+    long flag = GetWindowStyleFlag();
+
+    // Get rid of conflicting styles
+    if (add)
+    {
+        if (style & wxLC_MASK_TYPE)
+            flag &= ~wxLC_MASK_TYPE;
+        if (style & wxLC_MASK_ALIGN)
+            flag &= ~wxLC_MASK_ALIGN;
+        if (style & wxLC_MASK_SORT)
+            flag &= ~wxLC_MASK_SORT;
+    }
+
+    if (add)
+        flag |= style;
+    else
+        flag &= ~style;
+
+    SetWindowStyleFlag(flag);
 }
 
 void wxListCtrl::SetWindowStyleFlag(long style)
 {
     m_windowStyle = style;
-    m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
+    m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0 || (style & wxLC_REPORT) == 0);
     m_qtTreeWidget->EnableEditLabel((style & wxLC_EDIT_LABELS) != 0);
     m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0
         ? QAbstractItemView::SingleSelection
