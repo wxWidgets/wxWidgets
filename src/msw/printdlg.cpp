@@ -893,19 +893,39 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     // Currently only one page range is supported.
     if ( data.GetEnablePageNumbers() )
     {
-        pd->nPageRanges = 1;
-        pd->nMaxPageRanges = 1;
-        pd->lpPageRanges = new PRINTPAGERANGE[1];
-        pd->lpPageRanges[0].nFromPage = (DWORD)data.GetFromPage();
-        pd->lpPageRanges[0].nToPage = (DWORD)data.GetToPage();
+        wxVector<wxPrintPageRange> ranges = data.GetPageRanges();
+        if (ranges.empty()) {
+            pd->nPageRanges = 1;
+            pd->nMaxPageRanges = std::max((DWORD)data.GetMaxPageRanges(), pd->nPageRanges);
+            pd->lpPageRanges = new PRINTPAGERANGE[pd->nMaxPageRanges];
+            pd->lpPageRanges[0].nFromPage = (DWORD)data.GetFromPage();
+            pd->lpPageRanges[0].nToPage = (DWORD)data.GetToPage();
 
-        // PrintDlgEx returns E_INVALIDARG if nFromPage is greater than nToPage
-        if (pd->lpPageRanges[0].nToPage < pd->lpPageRanges[0].nFromPage)
-            pd->lpPageRanges[0].nToPage = pd->lpPageRanges[0].nFromPage;
+            // PrintDlgEx returns E_INVALIDARG if nFromPage is greater than nToPage
+            if (pd->lpPageRanges[0].nToPage < pd->lpPageRanges[0].nFromPage)
+                pd->lpPageRanges[0].nToPage = pd->lpPageRanges[0].nFromPage;
+        }
+        else
+        {
+            pd->nPageRanges = (DWORD) ranges.size();
+            pd->nMaxPageRanges = std::max((DWORD) data.GetMaxPageRanges(), pd->nPageRanges);
+            pd->lpPageRanges = new PRINTPAGERANGE[pd->nMaxPageRanges];
+            for (DWORD i = 0; i < pd->nPageRanges; i++) {
+                int fromPage = ranges[i].fromPage;
+                int toPage = ranges[i].toPage;
+                if (toPage < fromPage) {
+                    toPage = fromPage;
+                }
+                pd->lpPageRanges[i].nFromPage = fromPage;
+                pd->lpPageRanges[i].nToPage = toPage;
+            }
+        }
     }
 
     pd->Flags = PD_RETURNDC;
     pd->lStructSize = sizeof(PRINTDLGEX);
+
+    bool hasRange = !data.GetPageRanges().empty() || (data.GetFromPage() > 0 && data.GetToPage() > 0);
 
     if ( data.GetAllPages() )
         pd->Flags |= PD_ALLPAGES;
@@ -925,7 +945,7 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
         pd->Flags |= PD_NOCURRENTPAGE;
     if ( !data.GetEnablePageNumbers() )
         pd->Flags |= PD_NOPAGENUMS;
-    else if ( (!data.GetAllPages()) && (!data.GetSelection()) && (!data.GetCurrentPage()) && (data.GetFromPage() != 0) && (data.GetToPage() != 0))
+    else if ( (!data.GetAllPages()) && (!data.GetSelection()) && (!data.GetCurrentPage()) && (hasRange))
         pd->Flags |= PD_PAGENUMS;
     if ( data.GetEnableHelp() )
         pd->Flags |= PD_SHOWHELP;
@@ -970,8 +990,14 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
 
     if ( pd->lpPageRanges )
     {
-        data.SetFromPage(pd->lpPageRanges[0].nFromPage);
-        data.SetToPage(pd->lpPageRanges[0].nToPage);
+        wxVector<wxPrintPageRange> ranges;
+        for (DWORD i = 0; i < pd->nPageRanges; i++)
+        {
+            int fromPage = pd->lpPageRanges[i].nFromPage;
+            int toPage = pd->lpPageRanges[i].nToPage;
+            ranges.push_back(wxPrintPageRange(fromPage, toPage));
+        }
+        data.SetPageRanges(ranges);
     }
 
     data.SetMinPage( pd->nMinPage );

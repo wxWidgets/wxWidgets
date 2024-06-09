@@ -714,22 +714,41 @@ public:
         and maximum page values that the user can select, and the required page range to
         be printed.
 
-        If the user chose to print only selected pages in the MSW printing
-        dialog, then @a pageFrom and @a pageTo are used to limit the page range
-        and IsPageSelected() is called later to query whether the page is
-        selected and so should be printed.
+        By default this returns (1, 32000) for the page minimum and maximum values, and
+        (1, 1) for the required page range.
 
-        If the user chose to print the current page, then @a pageFrom and
-        @a pageTo should be both set to the current page number.
+        @a minPage must be greater than zero and @a maxPage must be greater
+        than @a minPage.
+
+        This function allows to indicate only a single range of pages to print,
+        consider overriding GetPageInfoRanges() to return multiple ranges.
+    */
+    virtual void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
+                             int* pageTo);
+
+    /**
+        Called by the framework to obtain information from the application about minimum
+        and maximum page values that the user can select, and the required page ranges to
+        be printed.
+
+        If the user chose to print only selected pages or the current page in the MSW printing
+        dialog, then the returned page ranges are used to specify the pages to print.
+
+        If the user chose to print the current page, then the returned ranges should contain one range
+        and the range values are both set to the current page number.
 
         By default this returns (1, 32000) for the page minimum and maximum values, and
         (1, 1) for the required page range.
 
         @a minPage must be greater than zero and @a maxPage must be greater
         than @a minPage.
+
+        The default implementation uses GetPageInfo() and returns one page range based on
+        pageFrom and pageTo.
+
+        @since 3.3.0.
     */
-    virtual void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
-                             int* pageTo);
+    virtual wxVector<wxPrintPageRange> GetPageInfoRanges(int* minPage, int* maxPage);
 
     /**
         Returns the size of the printer page in millimetres.
@@ -789,20 +808,6 @@ public:
         HasPage behaves as if the document has only one page.
     */
     virtual bool HasPage(int pageNum);
-
-    /**
-        Should be overridden to return @true if this page is selected, or @false
-        if not.
-
-        This function is called for all the pages in the valid range when the
-        user chooses "Selection" in the "Page Range" area of the printing
-        dialog under MSW. It is not currently called under the other platforms.
-
-        The default implementation always returns @false.
-
-        @since 3.3.0
-    */
-    virtual bool IsPageSelected(int pageNum);
 
     /**
         Returns @true if the printout is currently being used for previewing.
