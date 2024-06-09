@@ -262,6 +262,10 @@ wxGTK:
 - Fix wxListBox minimum size regression in 3.2.5 (#24551).
 - Allow positioning wxDialog at specified position, at least under X11 (#24552).
 
+wxMSW:
+
+- Recognize Windows Server 2019 in wxGetOsDescription() (PB, #24598).
+
 wxOSX:
 
 - Improve wxSlider ticks appearance (Hartwig Wiesmann, #24532).
