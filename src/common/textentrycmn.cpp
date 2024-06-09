@@ -229,8 +229,17 @@ void wxTextEntryBase::ChangeValue(const wxString& value)
 
 void wxTextEntryBase::AppendText(const wxString& text)
 {
+    bool old;
+    auto textCtrl = dynamic_cast<wxTextCtrl *>( this );
+    if( textCtrl && textCtrl->IsMultiLine() )
+    {
+        old = textCtrl->IsMaxLengthAllowed();
+        textCtrl->SetMaxLengthAllowed( false );
+    }
     SetInsertionPointEnd();
     WriteText(text);
+    if( textCtrl && textCtrl->IsMultiLine() )
+        textCtrl->SetMaxLengthAllowed( old );
 }
 
 void wxTextEntryBase::DoSetValue(const wxString& value, int flags)

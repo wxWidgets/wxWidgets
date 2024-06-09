@@ -805,7 +805,10 @@ public:
     }
     virtual void SetValue(const wxString& value) override
     {
+       auto old = m_maxLengthAllowed;
+       m_maxLengthAllowed = false;
        wxTextEntry::SetValue(value);
+       m_maxLengthAllowed = old;
     }
 
     // wxWindow overrides
@@ -845,7 +848,7 @@ protected:
 #if wxHAS_TEXT_WINDOW_STREAM
     int overflow(int i) override;
 #endif // wxHAS_TEXT_WINDOW_STREAM
-
+    bool m_maxLengthAllowed;
     // Another wxTextAreaBase override.
     virtual bool IsValidPosition(long pos) const override
     {

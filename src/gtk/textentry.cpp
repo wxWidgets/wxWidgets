@@ -272,6 +272,12 @@ DoHandleClipboardCallback( GtkWidget *widget,
         // ourselves in the event handler
         g_signal_stop_emission_by_name (widget, signal_name);
     }
+    wxTextCtrl *text = dynamic_cast<wxTextCtrl *>( win );
+    if( text && text->IsMultiLine() )
+    {
+        auto value = text->GetValue();
+        text->HandleMaxLength( value );
+    }
 }
 
 extern "C"

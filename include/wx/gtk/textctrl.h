@@ -133,6 +133,10 @@ public:
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
 
+    void HandleMaxLength(wxString &text);
+    bool IsMaxLengthAllowed() const { return m_maxLengthAllowed; }
+    void SetMaxLengthAllowed(const bool &allowed) { m_maxLengthAllowed = allowed; }
+
     GtkWidget* GetConnectWidget() override;
 
     void SetUpdateFont(bool WXUNUSED(update)) { }
@@ -227,7 +231,6 @@ private:
 
     bool m_modified;
     bool m_dontMarkDirty;
-
     int         m_countUpdatesToIgnore;
 
     // Our text buffer. Convenient, and holds the buffer while using
