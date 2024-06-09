@@ -873,10 +873,10 @@ wxTreeItemId wxTreeCtrl::GetRootItem() const
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
-    QList<QTreeWidgetItem*> selections = m_qtTreeWidget->selectedItems();
-    return selections.isEmpty()
-        ? wxTreeItemId()
-        : wxQtConvertTreeItem(selections[0]);
+    wxCHECK_MSG( !HasFlag(wxTR_MULTIPLE), wxTreeItemId(),
+                 "this only works with single selection controls" );
+
+    return GetFocusedItem();
 }
 
 size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
