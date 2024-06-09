@@ -1108,6 +1108,8 @@ int wxIsWindowsServer()
     return -1;
 }
 
+static const int WINDOWS_SERVER2019_BUILD = 17763;
+
 // Windows 11 uses the same version as Windows 10 but its build numbers start
 // from 22000, which provides a way to test for it.
 static const int FIRST_WINDOWS11_BUILD = 22000;
@@ -1176,13 +1178,20 @@ wxString wxGetOsDescription()
 
                 case 10:
                     if (info.dwBuildNumber >= FIRST_WINDOWS11_BUILD)
+                    {
                         str = wxIsWindowsServer() == 1
                             ? "Windows Server 2022"
                             : "Windows 11";
+
+                    }
+                    else if ( wxIsWindowsServer() == 1 )
+                    {
+                        str = info.dwBuildNumber >= WINDOWS_SERVER2019_BUILD
+                            ? "Windows Server 2019"
+                            : "Windows Server 2016";
+                    }
                     else
-                        str = wxIsWindowsServer() == 1
-                                ? "Windows Server 2016"
-                                : "Windows 10";
+                        str = "Windows 10";
                     break;
             }
 
