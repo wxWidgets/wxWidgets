@@ -791,17 +791,28 @@ wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
             wxevent.m_linesPerAction = 1;
             wxevent.m_columnsPerAction = 1;
 
-            if ( fabs(deltaX) > fabs(deltaY) )
+            // Should we impose some minimum threshhold here?
+            if ( deltaY != 0 )
             {
+                wxevent.m_wheelRotation = (int)deltaY;
+            }
+
+            if ( deltaX != 0 )
+            {
+                // We can send one or two events depending on whether we have
+                // delta in just one or both directions.
+                wxMouseEvent* wxeventPtr = &wxevent;
+                if ( deltaY != 0 )
+                {
+                    wxevents.push_back(wxevent);
+                    wxeventPtr = &wxevents.back();
+                }
+
                 // wx conventions for horizontal are inverted from vertical (originating from native msw behavior)
                 // right and up are positive values, left and down are negative values, while on OSX right and down
                 // are negative and left and up are positive.
-                wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
-                wxevent.m_wheelRotation = -(int)deltaX;
-            }
-            else
-            {
-                wxevent.m_wheelRotation = (int)deltaY;
+                wxeventPtr->m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+                wxeventPtr->m_wheelRotation = -(int)deltaX;
             }
 
         }
