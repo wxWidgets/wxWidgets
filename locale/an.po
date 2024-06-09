@@ -5545,12 +5545,12 @@ msgstr "Fichero d'aduya HTML comprimiu (*.chm)|*.chm|"
 #: ../src/html/helpwnd.cpp:1670
 #, fuzzy, c-format
 msgid "%i of %u"
-msgstr "%i de %i"
+msgstr "%i de %u"
 
 #: ../src/html/helpwnd.cpp:1708
 #, fuzzy, c-format
 msgid "%u of %u"
-msgstr "%lu de %lu"
+msgstr "%u de %u"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format
@@ -5920,7 +5920,7 @@ msgstr "No s'ha puesto obtener o nombre d'o directorio"
 #: ../src/msw/dlmsw.cpp:164
 #, fuzzy, c-format
 msgid "(error %d: %s)"
-msgstr " (error %ld: %s)"
+msgstr " (error %d: %s)"
 
 #: ../src/msw/dragimag.cpp:144 ../src/msw/dragimag.cpp:179
 #: ../src/msw/imaglist.cpp:304 ../src/msw/imaglist.cpp:326
