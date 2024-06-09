@@ -223,7 +223,7 @@ public:
     {
         m_imageStates[item].SetState(state);
     }
-        
+
     int GetItemState(QTreeWidgetItem *item) const
     {
         const ImageStateMap::const_iterator i = m_imageStates.find(item);
@@ -548,7 +548,7 @@ private:
     typedef std::map<QTreeWidgetItem*,ImageState> ImageStateMap;
     ImageStateMap m_imageStates;
 
-    // Place holder image to reserve enough space in a row 
+    // Place holder image to reserve enough space in a row
     // for us to draw our icon
     QPixmap m_placeHolderImage;
 };
@@ -954,7 +954,7 @@ wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
     const int childCount = qTreeItem->childCount();
-    return childCount == 0 
+    return childCount == 0
         ? wxTreeItemId()
         : wxQtConvertTreeItem(qTreeItem->child(childCount - 1));
 }
@@ -982,7 +982,7 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 
     ++index;
     return index < m_qtTreeWidget->topLevelItemCount()
-        ? wxQtConvertTreeItem(m_qtTreeWidget->topLevelItem(index)) 
+        ? wxQtConvertTreeItem(m_qtTreeWidget->topLevelItem(index))
         : wxTreeItemId();
 }
 
@@ -1431,7 +1431,7 @@ wxTreeItemId wxTreeCtrl::GetNext(const wxTreeItemId &item) const
     {
         return qTreeItem->child(0);
     }
-    
+
     // Try a sibling of this or ancestor instead
     wxTreeItemId p = item;
     wxTreeItemId toFind;
