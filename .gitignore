@@ -10,6 +10,9 @@
 /setup.h
 /*tags
 /autom4te.cache
+/.vs
+/out
+/CMakeSettings.json
 
 # /build/
 
