@@ -592,8 +592,12 @@ void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEven
     wxSetupCoordinates(m_osxView, x, y, nsEvent);
 }
 
-void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
+wxWidgetCocoaImpl::MouseEvents
+wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
 {
+    MouseEvents wxevents(1);
+    auto& wxevent = wxevents.front();
+
     int eventType = [nsEvent type];
     UInt32 modifiers = [nsEvent modifierFlags] ;
     
@@ -832,6 +836,8 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         wxevent.SetEventObject(peer);
         wxevent.SetId(peer->GetId()) ;
     }
+
+    return wxevents;
 }
 
 static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool enable)
@@ -1496,11 +1502,16 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( slf );
             if ( [ event type]  == NSLeftMouseDown && !wxGetMouseState().LeftIsDown() && impl != nullptr )
             {
-                wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-                SetupMouseEvent(wxevent , event) ;
-                wxevent.SetEventType(wxEVT_LEFT_UP);
+                for ( auto wxevent : TranslateMouseEvent(event) )
+                {
+                    if ( wxevent.GetEventType() == wxEVT_LEFT_DOWN )
+                    {
+                        wxevent.SetEventType(wxEVT_LEFT_UP);
 
-                GetWXPeer()->HandleWindowEvent(wxevent);
+                        GetWXPeer()->HandleWindowEvent(wxevent);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -3933,9 +3944,18 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     // this window.
     (void)SetupCursor(event);
 
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent(wxevent , event) ;
-    return GetWXPeer()->HandleWindowEvent(wxevent);
+    bool processed = false;
+    for ( auto& wxevent : TranslateMouseEvent(event) )
+    {
+        // Even if this event was processed, still continue with the other
+        // eveents, if any.
+        if ( GetWXPeer()->HandleWindowEvent(wxevent) )
+            processed = true;
+    }
+
+    // We consider the NSEvent to be processed if any of the wxEvents it was
+    // mapped to was processed, even if not necessarily all of them.
+    return processed;
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusSet()
