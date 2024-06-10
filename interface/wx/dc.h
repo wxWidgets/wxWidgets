@@ -648,7 +648,8 @@ public:
         refers to the right or bottom corner instead.
 
         The current pen is used for the outline and the current brush
-        for filling the shape.
+        for filling the shape.  Special case:  If the current pen is
+        transparent, then the current brush is used for the entire rectangle.
     */
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
