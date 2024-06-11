@@ -1205,7 +1205,8 @@ wxString wxGetOsDescription()
 
             if ( str.empty() )
             {
-                str.Printf("Windows %lu.%lu",
+                str.Printf("Windows %s%lu.%lu",
+                           wxIsWindowsServer() == 1 ? "Server " : "",
                            info.dwMajorVersion,
                            info.dwMinorVersion);
             }
