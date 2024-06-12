@@ -1076,7 +1076,7 @@ void wxGridSelection::ComputeSelectionShape(const wxRect& renderExtent)
     }
     else if ( rectangles.size() > 1 )
     {
-        wxGridPrivate::PolyPolygonHelper helper(m_selectionShape.get(), rectangles);
+        m_selectionShape->FromRectangles(rectangles);
 
         updateRect.Union(m_selectionShape->GetBoundingBox());
     }
@@ -1177,6 +1177,87 @@ void wxGridPrivate::SelectionShape::SetBoundingBox(const wxRect& rect)
     m_minY = rect.y;
     m_maxX = rect.width + rect.x;
     m_maxY = rect.height + rect.y;
+}
+
+void wxGridPrivate::SelectionShape::FromRectangles(const std::vector<wxRect>& rectangles)
+{
+    // The implementation is literally the translation of the Python code found here:
+    // https://stackoverflow.com/a/13851341/8528670
+
+    std::vector<wxPoint> points = GetVertices(rectangles);
+
+    InitHorzEdges(points);
+    InitVertEdges(points);
+
+    while ( !m_horzEdges.empty() )
+    {
+        EdgeType::iterator       iter = m_horzEdges.begin();
+        std::pair<wxPoint, bool> pair = std::make_pair((*iter).first, false);
+
+        m_horzEdges.erase(iter);
+
+        // The boolean associated with the vertex is just a marker to help
+        // with the construction of the polygons only.
+        using PolygonType = std::vector<std::pair<wxPoint, bool>>;
+        PolygonType polygon;
+        polygon.push_back(pair);
+
+        while ( true )
+        {
+            pair = polygon.back();
+
+            if ( pair.second )
+            {
+                iter = m_horzEdges.find(pair.first);
+                wxASSERT_MSG( iter != m_horzEdges.end(), "vertex not found in m_horzEdges" );
+
+                const wxPoint& nextVertex = iter->second;
+                polygon.push_back(std::make_pair(nextVertex, false));
+                m_horzEdges.erase(iter);
+            }
+            else
+            {
+                iter = m_vertEdges.find(pair.first);
+                wxASSERT_MSG ( iter != m_vertEdges.end(), "vertex not found in m_vertEdges" );
+
+                const wxPoint& nextVertex = iter->second;
+                polygon.push_back(std::make_pair(nextVertex, true));
+                m_vertEdges.erase(iter);
+            }
+
+            if ( polygon.front() == polygon.back() )
+            {
+                // Closed polygon
+                polygon.pop_back();
+                break;
+            }
+        }
+
+        // Remove implementation-markers from the polygon.
+        std::vector<wxPoint> poly;
+
+        for ( const auto& p : polygon )
+        {
+            poly.push_back(p.first);
+        }
+
+        for ( const auto& pt : poly )
+        {
+            iter = m_horzEdges.find(pt);
+            if ( iter != m_horzEdges.end() )
+            {
+                m_horzEdges.erase(iter);
+            }
+
+            iter = m_vertEdges.find(pt);
+            if ( iter != m_vertEdges.end() )
+            {
+                m_vertEdges.erase(iter);
+            }
+        }
+
+        Append(poly);
+    }
 }
 
 #endif

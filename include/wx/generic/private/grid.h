@@ -1295,16 +1295,22 @@ TryGetValueAsDate(wxDateTime& result,
 #endif // wxUSE_DATETIME
 
 //=============================================================================
-// SelectionShape & PolyPolygonHelper classes
+// SelectionShape class
 //=============================================================================
 
 // A simple interface used by wxGrid::DrawOverlaySelection() as a helper to draw
-// the grid selection overlay.
+// the grid overlay selection.
 class SelectionShape
 {
 public:
     SelectionShape() = default;
     ~SelectionShape() = default;
+
+    // This function simply converts (using the sweep line algorithm) the selected
+    // rectangles _rectangles_ (retrieved by wxGrid::GetSelectedRectangles()) to
+    // SelectionShape which can then be used in wxGrid::DrawOverlaySelection() to
+    // draw the overlay selection.
+    void FromRectangles(const std::vector<wxRect>& rectangles);
 
     // Return the number of polygons to draw.
     size_t GetSize() const { return m_counts.size(); }
@@ -1313,121 +1319,11 @@ public:
 
     const wxPoint* GetPoints() const { return m_points.data(); }
 
-    void Append(const std::vector<wxPoint>& points);
-
     // Return the bounding box of the visible selected blocks. Return empty
     // rectangle if there is no selection.
     wxRect GetBoundingBox() const;
 
     void SetBoundingBox(const wxRect& rect);
-
-private:
-    void CalcBoundingBox(const std::vector<wxPoint>& points);
-
-    // m_counts contains the number of points in each of the polygons in m_points.
-
-    std::vector<int>     m_counts;
-    std::vector<wxPoint> m_points;
-
-    int m_minX = 0, m_maxX = 0,
-        m_minY = 0, m_maxY = 0;
-};
-
-// This class is just a helper that simply converts (using the sweep line algorithm)
-// the selected rectangles (retrieved by wxGrid::GetSelectedRectangles()) to
-// wxGridSelection::SelectionShape which can then be used in wxGrid::DrawOverlaySelection()
-// to draw the selection overlay.
-//
-// The implementation is literally the translation of the Python code found here:
-// https://stackoverflow.com/a/13851341/8528670
-//
-class PolyPolygonHelper
-{
-public:
-    PolyPolygonHelper(SelectionShape* selectionShape,
-                      const std::vector<wxRect>&    rectangles)
-        : m_selectionShape(selectionShape)
-    {
-        std::vector<wxPoint> points = GetVertices(rectangles);
-
-        InitHorzEdges(points);
-        InitVertEdges(points);
-
-        Construct();
-    }
-
-    void Construct()
-    {
-        while ( !m_horzEdges.empty() )
-        {
-            EdgeType::iterator       iter = m_horzEdges.begin();
-            std::pair<wxPoint, bool> pair = std::make_pair((*iter).first, false);
-
-            m_horzEdges.erase(iter);
-
-            // The boolean associated with the vertex is just a marker to help
-            // with the construction of the polygons only.
-            using PolygonType = std::vector<std::pair<wxPoint, bool>>;
-            PolygonType polygon;
-            polygon.push_back(pair);
-
-            while ( true )
-            {
-                pair = polygon.back();
-
-                if ( pair.second )
-                {
-                    iter = m_horzEdges.find(pair.first);
-                    wxASSERT_MSG( iter != m_horzEdges.end(), "vertex not found in m_horzEdges" );
-
-                    const wxPoint& nextVertex = iter->second;
-                    polygon.push_back(std::make_pair(nextVertex, false));
-                    m_horzEdges.erase(iter);
-                }
-                else
-                {
-                    iter = m_vertEdges.find(pair.first);
-                    wxASSERT_MSG ( iter != m_vertEdges.end(), "vertex not found in m_vertEdges" );
-
-                    const wxPoint& nextVertex = iter->second;
-                    polygon.push_back(std::make_pair(nextVertex, true));
-                    m_vertEdges.erase(iter);
-                }
-
-                if ( polygon.front() == polygon.back() )
-                {
-                    // Closed polygon
-                    polygon.pop_back();
-                    break;
-                }
-            }
-
-            // Remove implementation-markers from the polygon.
-            std::vector<wxPoint> poly;
-
-            for ( const auto& p : polygon )
-            {
-                poly.push_back(p.first);
-            }
-
-            for ( const auto& pt : poly )
-            {
-                iter = m_horzEdges.find(pt);
-                if ( iter != m_horzEdges.end() )
-                {
-                    m_horzEdges.erase(iter);
-                }
-
-                iter = m_vertEdges.find(pt);
-                if ( iter != m_vertEdges.end() )
-                {
-                    m_vertEdges.erase(iter);
-                }
-            }
-
-            m_selectionShape->Append(poly);
-        }
-    }
 
 private:
     // A helper function to prevent adding duplicates and shared points
@@ -1504,14 +1400,24 @@ private:
         }
     }
 
-private:
-    SelectionShape* const m_selectionShape;
+    void Append(const std::vector<wxPoint>& points);
 
+    void CalcBoundingBox(const std::vector<wxPoint>& points);
+
+private:
     using EdgeType = std::map<wxPoint, wxPoint>;
     EdgeType m_horzEdges;
     EdgeType m_vertEdges;
 
-    wxDECLARE_NO_COPY_CLASS(PolyPolygonHelper);
+    // m_counts contains the number of points in each of the polygons in m_points.
+
+    std::vector<int>     m_counts;
+    std::vector<wxPoint> m_points;
+
+    int m_minX = 0, m_maxX = 0,
+        m_minY = 0, m_maxY = 0;
+
+    wxDECLARE_NO_COPY_CLASS(SelectionShape);
 };
 
 // Used by wxGridSelection::Select() and wxGridSelection::DeselectBlock() to ensure
