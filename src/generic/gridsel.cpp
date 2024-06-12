@@ -393,7 +393,7 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
 
     if ( m_grid->UsesOverlaySelection() )
     {
-        ComputePolyPolygon(true /*refreshLabelWindows*/);
+        ComputePolyPolygon();
     }
 
     count = refreshBlocks.size();
@@ -893,7 +893,7 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
     // Update View:
     if ( m_grid->UsesOverlaySelection() )
     {
-        ComputePolyPolygon(true /*refreshLabelWindows*/);
+        ComputePolyPolygon();
     }
     else if ( !m_grid->GetBatchCount() )
     {
@@ -1044,7 +1044,7 @@ void wxGridPrivate::MergeAdjacentRects(std::vector<wxRect>& rectangles)
     }
 }
 
-void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect& renderExtent)
+void wxGridSelection::ComputePolyPolygon(const wxRect& renderExtent)
 {
     if ( m_grid->GetBatchCount() )
         return;
@@ -1065,6 +1065,8 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect&
     if ( !IsSelection() )
     {
         updateRect = {};
+
+        m_updateHighlightedLabels = false;
     }
     else if ( rectangles.size() == 1 )
     {
@@ -1080,48 +1082,42 @@ void wxGridSelection::ComputePolyPolygon(bool refreshLabelWindows, const wxRect&
     }
     else // out-of-view selection
     {
-        m_isAnyLabelHighlighted = m_selection.size() == 1;
+        m_updateHighlightedLabels = m_selection.size() == 1;
     }
 
     if ( !renderExtent.IsEmpty() )
     {
+        // We are rendering on external DC, no need to refresh anything.
         return;
     }
 
-    // The following code is only needed when there is an out-of-view selection,
-    // in which case we need to toggle the highlighted labels on/off depending on
-    // m_selection, i.e. if it's one block (on) or more (off).
-    if ( m_isAnyLabelHighlighted > 0 && refreshLabelWindows )
+    // The following code is only needed when an already selected block is scrolled
+    // out of view and had corresponding labels highlighted. We need to toggle these
+    // labels on or off depending on the currect m_selection. In other words, toggle
+    // them on if m_selection represents only one block, otherwise toggle them off.
+    if ( m_updateHighlightedLabels )
     {
-        const size_t nBlocks = m_selection.size();
+        const wxGridBlockCoords& block = m_selection[0];
 
-        if ( (m_isAnyLabelHighlighted == 1 && nBlocks > 0) ||
-             (m_isAnyLabelHighlighted > 1 && nBlocks == 1) )
-        {
-            m_isAnyLabelHighlighted = nBlocks;
+        updateRect  = m_grid->CellToRect(block.GetTopLeft()).Inflate(1);
+        updateRect += m_grid->CellToRect(block.GetBottomRight()).Inflate(1);
 
-            const wxGridBlockCoords& block = m_selection[0];
+        int left, top, right, bottom;
 
-            updateRect  = m_grid->CellToRect(block.GetTopLeft()).Inflate(1);
-            updateRect += m_grid->CellToRect(block.GetBottomRight()).Inflate(1);
+        wxGridWindow* gridWin = (wxGridWindow*)m_grid->GetGridWindow();
+        const wxPoint offset = m_grid->GetGridWindowOffset(gridWin);
 
-            int left, top, right, bottom;
+        // Convert to scrolled coords
+        m_grid->CalcGridWindowScrolledPosition( updateRect.GetLeft() - offset.x,
+                                                updateRect.GetTop() - offset.y,
+                                                &left, &top, gridWin );
+        m_grid->CalcGridWindowScrolledPosition( updateRect.GetRight() - offset.x,
+                                                updateRect.GetBottom() - offset.y,
+                                                &right, &bottom, gridWin );
 
-            wxGridWindow* gridWin = (wxGridWindow*)m_grid->GetGridWindow();
-            const wxPoint offset = m_grid->GetGridWindowOffset(gridWin);
+        updateRect = wxRect(wxPoint(left, top), wxPoint(right, bottom));
 
-            // Convert to scrolled coords
-            m_grid->CalcGridWindowScrolledPosition( updateRect.GetLeft() - offset.x,
-                                                    updateRect.GetTop() - offset.y,
-                                                    &left, &top, gridWin );
-            m_grid->CalcGridWindowScrolledPosition( updateRect.GetRight() - offset.x,
-                                                    updateRect.GetBottom() - offset.y,
-                                                    &right, &bottom, gridWin );
-
-            updateRect = wxRect(wxPoint(left, top), wxPoint(right, bottom));
-
-            updateRect.Offset(offset);
-        }
+        updateRect.Offset(offset);
     }
 
     m_grid->RefreshRect(!updateRect.IsEmpty() ? &updateRect : nullptr);
@@ -1132,7 +1128,7 @@ wxGridSelection::GetPolyPolygon(const wxRect& renderExtent)
 {
     if ( !m_polyPolygon )
     {
-        ComputePolyPolygon(false /*refreshLabelWindows*/, renderExtent);
+        ComputePolyPolygon(renderExtent);
     }
 
     return *m_polyPolygon.get();
