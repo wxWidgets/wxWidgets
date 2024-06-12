@@ -21,7 +21,9 @@
 #include <memory>
 
 // Forward declaration
-namespace wxGridPrivate { class PolyPolygon; }
+namespace wxGridPrivate { class SelectionShape; }
+
+using wxSelectionShape = wxGridPrivate::SelectionShape;
 
 wxDEPRECATED_MSG("use wxGridBlockCoordsVector instead")
 typedef wxVector<wxGridBlockCoords> wxVectorGridBlockCoords;
@@ -119,10 +121,10 @@ public:
     void EndSelecting();
     void CancelSelecting();
 
-    // Return the PolyPolygon object. Call ComputePolyPolygon() if necessary.
-    const wxGridPrivate::PolyPolygon& GetPolyPolygon(const wxRect& renderExtent);
+    // Return the SelectionShape object. Call ComputeSelectionShape() if necessary.
+    const wxSelectionShape& GetSelectionShape(const wxRect& renderExtent);
 
-    void InvalidatePolyPolygon();
+    void InvalidateSelectionShape();
 
 private:
     void SelectBlockNoEvent(const wxGridBlockCoords& block)
@@ -149,8 +151,8 @@ private:
     void MergeOrAddBlock(wxGridBlockCoordsVector& blocks,
                          const wxGridBlockCoords& block);
 
-    // Called each time the selection changed or scrolled to recompute m_polyPolygon.
-    void ComputePolyPolygon(const wxRect& renderExtent = {});
+    // Called each time the selection changed or scrolled to recompute m_selectionShape.
+    void ComputeSelectionShape(const wxRect& renderExtent = {});
 
     // All currently selected blocks. We expect there to be a relatively small
     // amount of them, even for very large grids, as each block must be
@@ -170,9 +172,9 @@ private:
     // - Simple polygon (using wxDC::DrawPolygon()) if it represents a simple polygon.
     // - Poly-polygon (using wxDC::DrawPolyPolygon()) if it consists of multiple polygons.
     //
-    std::unique_ptr<wxGridPrivate::PolyPolygon> m_polyPolygon;
+    std::unique_ptr<wxSelectionShape> m_selectionShape;
 
-    // See ComputePolyPolygon() definition for explanation.
+    // See ComputeSelectionShape() definition for explanation.
     bool m_updateHighlightedLabels = false;
 
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);

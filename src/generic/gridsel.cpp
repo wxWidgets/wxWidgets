@@ -172,7 +172,7 @@ void wxGridSelection::SetSelectionMode( wxGrid::wxGridSelectionModes selmode )
 
                 if ( m_grid->UsesOverlaySelection() )
                 {
-                    ComputePolyPolygon();
+                    ComputeSelectionShape();
                 }
                 else if ( !m_grid->GetBatchCount() )
                 {
@@ -393,7 +393,7 @@ wxGridSelection::DeselectBlock(const wxGridBlockCoords& block,
 
     if ( m_grid->UsesOverlaySelection() )
     {
-        ComputePolyPolygon();
+        ComputeSelectionShape();
     }
 
     count = refreshBlocks.size();
@@ -430,7 +430,7 @@ void wxGridSelection::ClearSelection()
     {
         m_selection.clear();
 
-        ComputePolyPolygon();
+        ComputeSelectionShape();
     }
     else
     {
@@ -724,7 +724,7 @@ bool wxGridSelection::ExtendCurrentBlock(const wxGridCellCoords& blockStart,
 
     if ( m_grid->UsesOverlaySelection() )
     {
-        ComputePolyPolygon();
+        ComputeSelectionShape();
     }
 
     // Send Event.
@@ -893,7 +893,7 @@ wxGridSelection::Select(const wxGridBlockCoords& block,
     // Update View:
     if ( m_grid->UsesOverlaySelection() )
     {
-        ComputePolyPolygon();
+        ComputeSelectionShape();
     }
     else if ( !m_grid->GetBatchCount() )
     {
@@ -1044,20 +1044,20 @@ void wxGridPrivate::MergeAdjacentRects(std::vector<wxRect>& rectangles)
     }
 }
 
-void wxGridSelection::ComputePolyPolygon(const wxRect& renderExtent)
+void wxGridSelection::ComputeSelectionShape(const wxRect& renderExtent)
 {
     if ( m_grid->GetBatchCount() )
         return;
 
     wxRect updateRect;
 
-    if ( m_polyPolygon )
+    if ( m_selectionShape )
     {
         // the old rect will be refreshed too.
-        updateRect = m_polyPolygon->GetBoundingBox();
+        updateRect = m_selectionShape->GetBoundingBox();
     }
 
-    m_polyPolygon.reset(new wxGridPrivate::PolyPolygon);
+    m_selectionShape.reset(new wxSelectionShape);
 
     std::vector<wxRect> rectangles;
     m_grid->GetSelectedRectangles(rectangles, renderExtent);
@@ -1070,15 +1070,15 @@ void wxGridSelection::ComputePolyPolygon(const wxRect& renderExtent)
     }
     else if ( rectangles.size() == 1 )
     {
-        m_polyPolygon->SetBoundingBox(rectangles[0]);
+        m_selectionShape->SetBoundingBox(rectangles[0]);
 
         updateRect.Union(rectangles[0]);
     }
     else if ( rectangles.size() > 1 )
     {
-        wxGridPrivate::PolyPolygonHelper helper(m_polyPolygon.get(), rectangles);
+        wxGridPrivate::PolyPolygonHelper helper(m_selectionShape.get(), rectangles);
 
-        updateRect.Union(m_polyPolygon->GetBoundingBox());
+        updateRect.Union(m_selectionShape->GetBoundingBox());
     }
     else // out-of-view selection
     {
@@ -1123,23 +1123,23 @@ void wxGridSelection::ComputePolyPolygon(const wxRect& renderExtent)
     m_grid->RefreshRect(!updateRect.IsEmpty() ? &updateRect : nullptr);
 }
 
-const wxGridPrivate::PolyPolygon&
-wxGridSelection::GetPolyPolygon(const wxRect& renderExtent)
+const wxSelectionShape&
+wxGridSelection::GetSelectionShape(const wxRect& renderExtent)
 {
-    if ( !m_polyPolygon )
+    if ( !m_selectionShape )
     {
-        ComputePolyPolygon(renderExtent);
+        ComputeSelectionShape(renderExtent);
     }
 
-    return *m_polyPolygon.get();
+    return *m_selectionShape.get();
 }
 
-void wxGridSelection::InvalidatePolyPolygon()
+void wxGridSelection::InvalidateSelectionShape()
 {
-    m_polyPolygon.reset();
+    m_selectionShape.reset();
 }
 
-void wxGridPrivate::PolyPolygon::Append(const std::vector<wxPoint>& points)
+void wxGridPrivate::SelectionShape::Append(const std::vector<wxPoint>& points)
 {
     CalcBoundingBox(points);
 
@@ -1148,7 +1148,7 @@ void wxGridPrivate::PolyPolygon::Append(const std::vector<wxPoint>& points)
               std::back_inserter(m_points));
 }
 
-void wxGridPrivate::PolyPolygon::CalcBoundingBox(const std::vector<wxPoint>& points)
+void wxGridPrivate::SelectionShape::CalcBoundingBox(const std::vector<wxPoint>& points)
 {
     for ( const auto& point : points )
     {
@@ -1164,14 +1164,14 @@ void wxGridPrivate::PolyPolygon::CalcBoundingBox(const std::vector<wxPoint>& poi
     }
 }
 
-wxRect wxGridPrivate::PolyPolygon::GetBoundingBox() const
+wxRect wxGridPrivate::SelectionShape::GetBoundingBox() const
 {
     return wxRect(m_minX,  m_minY,
                   m_maxX - m_minX,
                   m_maxY - m_minY);
 }
 
-void wxGridPrivate::PolyPolygon::SetBoundingBox(const wxRect& rect)
+void wxGridPrivate::SelectionShape::SetBoundingBox(const wxRect& rect)
 {
     m_minX = rect.x;
     m_minY = rect.y;

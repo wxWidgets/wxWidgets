@@ -7162,9 +7162,9 @@ void wxGrid::DrawOverlaySelection(wxDC& paintDC, wxGridWindow *gridWindow, const
     if ( !UsesOverlaySelection() || !IsSelection() )
         return;
 
-    const auto& polygons = m_selection->GetPolyPolygon(renderExtent);
+    const auto& selectionShape = m_selection->GetSelectionShape(renderExtent);
 
-    wxRect updateRect = polygons.GetBoundingBox();
+    wxRect updateRect = selectionShape.GetBoundingBox();
 
     if ( updateRect.IsEmpty() )
     {
@@ -7217,7 +7217,7 @@ void wxGrid::DrawOverlaySelection(wxDC& paintDC, wxGridWindow *gridWindow, const
     dc.SetPen(wxPen(colBg));
     dc.SetBrush(wxColour(colBg.Red(), colBg.Green(), colBg.Blue(), 64));
 
-    const int n = polygons.GetSize();
+    const int n = selectionShape.GetSize();
 
     if ( n == 0 )
     {
@@ -7227,8 +7227,8 @@ void wxGrid::DrawOverlaySelection(wxDC& paintDC, wxGridWindow *gridWindow, const
     }
     else
     {
-        const int* counts = polygons.GetCounts();
-        const wxPoint* points = polygons.GetPoints();
+        const int* counts = selectionShape.GetCounts();
+        const wxPoint* points = selectionShape.GetPoints();
 
         if ( n == 1 )
         {
@@ -7249,7 +7249,7 @@ void wxGrid::InvalidateOverlaySelection()
 {
     if ( UsesOverlaySelection() && IsSelection() )
     {
-        m_selection->InvalidatePolyPolygon();
+        m_selection->InvalidateSelectionShape();
     }
 }
 

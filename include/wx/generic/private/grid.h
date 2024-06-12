@@ -1295,16 +1295,16 @@ TryGetValueAsDate(wxDateTime& result,
 #endif // wxUSE_DATETIME
 
 //=============================================================================
-// PolyPolygon & PolyPolygonHelper classes
+// SelectionShape & PolyPolygonHelper classes
 //=============================================================================
 
 // A simple interface used by wxGrid::DrawOverlaySelection() as a helper to draw
 // the grid selection overlay.
-class PolyPolygon
+class SelectionShape
 {
 public:
-    PolyPolygon() = default;
-    ~PolyPolygon() = default;
+    SelectionShape() = default;
+    ~SelectionShape() = default;
 
     // Return the number of polygons to draw.
     size_t GetSize() const { return m_counts.size(); }
@@ -1335,7 +1335,7 @@ private:
 
 // This class is just a helper that simply converts (using the sweep line algorithm)
 // the selected rectangles (retrieved by wxGrid::GetSelectedRectangles()) to
-// wxGridSelection::PolyPolygon which can then be used in wxGrid::DrawOverlaySelection()
+// wxGridSelection::SelectionShape which can then be used in wxGrid::DrawOverlaySelection()
 // to draw the selection overlay.
 //
 // The implementation is literally the translation of the Python code found here:
@@ -1344,9 +1344,9 @@ private:
 class PolyPolygonHelper
 {
 public:
-    PolyPolygonHelper(PolyPolygon* polyPolygon,
+    PolyPolygonHelper(SelectionShape* selectionShape,
                       const std::vector<wxRect>&    rectangles)
-        : m_polyPolygon(polyPolygon)
+        : m_selectionShape(selectionShape)
     {
         std::vector<wxPoint> points = GetVertices(rectangles);
 
@@ -1425,7 +1425,7 @@ public:
                 }
             }
 
-            m_polyPolygon->Append(poly);
+            m_selectionShape->Append(poly);
         }
     }
 
@@ -1505,7 +1505,7 @@ private:
     }
 
 private:
-    PolyPolygon* const m_polyPolygon;
+    SelectionShape* const m_selectionShape;
 
     using EdgeType = std::map<wxPoint, wxPoint>;
     EdgeType m_horzEdges;
@@ -1519,7 +1519,7 @@ private:
 void MergeAdjacentBlocks(wxGridBlockCoordsVector& selection);
 
 // This function attempts to reduce the number of rectangles returned from
-// wxGrid::GetSelectedRectangles() before trying to convert them to PolyPolygon.
+// wxGrid::GetSelectedRectangles() before trying to convert them to SelectionShape.
 // Most of the time this will result in just one rectangle.
 void MergeAdjacentRects(std::vector<wxRect>& rectangles);
 
