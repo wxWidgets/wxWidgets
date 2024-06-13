@@ -3827,11 +3827,14 @@ touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
         }
         if (type != wxEVT_NULL)
         {
-            wxMultiTouchEvent event(type);
+            wxMultiTouchEvent event(win->GetId(), type);
+
+            event.SetEventObject(win);
             event.SetPosition(wxPoint(gdk_event->x, gdk_event->y));
             event.SetSequenceIdId(wxTouchSequenceId(gdk_event->sequence));
             event.SetPrimary(gdk_event->emulating_pointer);
-            win->HandleWindowEvent(event);
+
+            win->GTKProcessEvent(event);
         }
     }
 
@@ -4059,17 +4062,14 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
 
     if ( eventsMask & wxTOUCH_RAW_EVENTS )
     {
+        if ( gtk_check_version(3, 4, 0) == nullptr )
+        {
+            gtk_widget_add_events(widget, GDK_TOUCH_MASK);
+        }
+
         eventsMask &= ~wxTOUCH_RAW_EVENTS;
         m_rawTouchEvents = true;
     }
-
-    if ( eventsMask & wxTOUCH_RAW_EVENTS )
-    {
-        eventsMask &= ~wxTOUCH_RAW_EVENTS;
-        m_rawTouchEvents = true;
-    }
-
-    wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
     // GDK_TOUCHPAD_GESTURE_MASK was added in 3.18, but we can just define it
     // ourselves if we use an earlier version when compiling.
@@ -4080,6 +4080,8 @@ void wxWindowGesturesData::Reinit(wxWindowGTK* win,
     {
         gtk_widget_add_events(widget, GDK_TOUCHPAD_GESTURE_MASK);
     }
+
+    wxASSERT_MSG( eventsMask == 0, "Unknown touch event mask bit specified" );
 
     g_signal_connect (widget, "touch-event",
                       G_CALLBACK(touch_callback), win);
