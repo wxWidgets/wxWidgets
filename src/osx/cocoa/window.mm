@@ -2237,7 +2237,7 @@ void wxCocoaGesturesImpl::RawTouchEvent(NSEvent* event, wxEventType type, NSTouc
     {
         NSTouch* touch = [array objectAtIndex:i];
 
-        wxMultiTouchEvent wxevent(type, m_win->GetId());
+        wxMultiTouchEvent wxevent(m_win->GetId(), type);
         wxevent.SetEventObject(m_win);
         wxevent.SetSequenceIdId(wxTouchSequenceId(GetTouchID([touch identity], type)));
         wxevent.SetPrimary(wxevent.SetSequenceId().GetID() == NULL);
