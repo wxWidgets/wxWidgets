@@ -209,22 +209,22 @@ inline wxPoint2DInt wxPoint2DInt::operator-() const
 
 inline wxPoint2DInt& wxPoint2DInt::operator+=(const wxPoint2DInt& pt)
 {
-    m_x = m_x + pt.m_x;
-    m_y = m_y + pt.m_y;
+    m_x += pt.m_x;
+    m_y += pt.m_y;
     return *this;
 }
 
 inline wxPoint2DInt& wxPoint2DInt::operator-=(const wxPoint2DInt& pt)
 {
-    m_x = m_x - pt.m_x;
-    m_y = m_y - pt.m_y;
+    m_x -= pt.m_x;
+    m_y -= pt.m_y;
     return *this;
 }
 
 inline wxPoint2DInt& wxPoint2DInt::operator*=(const wxPoint2DInt& pt)
 {
-    m_x = m_x * pt.m_x;
-    m_y = m_y * pt.m_y;
+    m_x *= pt.m_x;
+    m_y *= pt.m_y;
     return *this;
 }
 
@@ -244,8 +244,8 @@ inline wxPoint2DInt& wxPoint2DInt::operator*=(wxInt32 n)
 
 inline wxPoint2DInt& wxPoint2DInt::operator/=(const wxPoint2DInt& pt)
 {
-    m_x = m_x / pt.m_x;
-    m_y = m_y / pt.m_y;
+    m_x /= pt.m_x;
+    m_y /= pt.m_y;
     return *this;
 }
 
@@ -434,22 +434,22 @@ inline wxPoint2DDouble wxPoint2DDouble::operator-() const
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator+=(const wxPoint2DDouble& pt)
 {
-    m_x = m_x + pt.m_x;
-    m_y = m_y + pt.m_y;
+    m_x += pt.m_x;
+    m_y += pt.m_y;
     return *this;
 }
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator-=(const wxPoint2DDouble& pt)
 {
-    m_x = m_x - pt.m_x;
-    m_y = m_y - pt.m_y;
+    m_x -= pt.m_x;
+    m_y -= pt.m_y;
     return *this;
 }
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator*=(const wxPoint2DDouble& pt)
 {
-    m_x = m_x * pt.m_x;
-    m_y = m_y * pt.m_y;
+    m_x *= pt.m_x;
+    m_y *= pt.m_y;
     return *this;
 }
 
@@ -469,8 +469,8 @@ inline wxPoint2DDouble& wxPoint2DDouble::operator*=(wxInt32 n)
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator/=(const wxPoint2DDouble& pt)
 {
-    m_x = m_x / pt.m_x;
-    m_y = m_y / pt.m_y;
+    m_x /= pt.m_x;
+    m_y /= pt.m_y;
     return *this;
 }
 
