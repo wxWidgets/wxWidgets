@@ -61,10 +61,8 @@ public :
 
     inline wxPoint2DInt& operator+=(const wxPoint2DInt& pt);
     inline wxPoint2DInt& operator-=(const wxPoint2DInt& pt);
-    inline wxPoint2DInt& operator*=(const wxPoint2DInt& pt);
     inline wxPoint2DInt& operator*=(wxDouble n);
     inline wxPoint2DInt& operator*=(wxInt32 n);
-    inline wxPoint2DInt& operator/=(const wxPoint2DInt& pt);
     inline wxPoint2DInt& operator/=(wxDouble n);
     inline wxPoint2DInt& operator/=(wxInt32 n);
     inline operator wxPoint() const;
@@ -81,11 +79,6 @@ public :
         return wxPoint2DInt( pt1.m_x - pt2.m_x , pt1.m_y - pt2.m_y );
     }
 
-
-    friend wxPoint2DInt operator*(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
-    {
-        return wxPoint2DInt( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
-    }
 
     friend wxPoint2DInt operator*(wxInt32 n , const wxPoint2DInt& pt)
     {
@@ -109,11 +102,6 @@ public :
             static_cast<wxInt32>(pt.m_y * n) );
     }
 
-    friend wxPoint2DInt operator/(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
-    {
-        return wxPoint2DInt( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
-    }
-
     friend wxPoint2DInt operator/(const wxPoint2DInt& pt , wxInt32 n)
     {
         return wxPoint2DInt( pt.m_x / n , pt.m_y / n );
@@ -129,6 +117,36 @@ public :
     void WriteTo( wxDataOutputStream &stream ) const;
     void ReadFrom( wxDataInputStream &stream );
 #endif // wxUSE_STREAMS
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    wxPoint2DInt& operator*=(const wxPoint2DInt& pt)
+    {
+        m_x *= pt.m_x;
+        m_y *= pt.m_y;
+        return *this;
+    }
+
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    friend wxPoint2DInt operator*(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
+    {
+        return wxPoint2DInt( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    inline wxPoint2DInt& operator/=(const wxPoint2DInt& pt)
+    {
+        m_x /= pt.m_x;
+        m_y /= pt.m_y;
+        return *this;
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    friend wxPoint2DInt operator/(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2)
+    {
+        return wxPoint2DInt( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     wxInt32 m_x = 0;
     wxInt32 m_y = 0;
@@ -221,13 +239,6 @@ inline wxPoint2DInt& wxPoint2DInt::operator-=(const wxPoint2DInt& pt)
     return *this;
 }
 
-inline wxPoint2DInt& wxPoint2DInt::operator*=(const wxPoint2DInt& pt)
-{
-    m_x *= pt.m_x;
-    m_y *= pt.m_y;
-    return *this;
-}
-
 inline wxPoint2DInt& wxPoint2DInt::operator*=(wxDouble n)
 {
     m_x = wxRound(m_x * n);
@@ -239,13 +250,6 @@ inline wxPoint2DInt& wxPoint2DInt::operator*=(wxInt32 n)
 {
     m_x *= n;
     m_y *= n;
-    return *this;
-}
-
-inline wxPoint2DInt& wxPoint2DInt::operator/=(const wxPoint2DInt& pt)
-{
-    m_x /= pt.m_x;
-    m_y /= pt.m_y;
     return *this;
 }
 
@@ -307,10 +311,8 @@ public :
 
     inline wxPoint2DDouble& operator+=(const wxPoint2DDouble& pt);
     inline wxPoint2DDouble& operator-=(const wxPoint2DDouble& pt);
-    inline wxPoint2DDouble& operator*=(const wxPoint2DDouble& pt);
     inline wxPoint2DDouble& operator*=(wxDouble n);
     inline wxPoint2DDouble& operator*=(wxInt32 n);
-    inline wxPoint2DDouble& operator/=(const wxPoint2DDouble& pt);
     inline wxPoint2DDouble& operator/=(wxDouble n);
     inline wxPoint2DDouble& operator/=(wxInt32 n);
 
@@ -327,11 +329,6 @@ public :
         return wxPoint2DDouble( pt1.m_x - pt2.m_x , pt1.m_y - pt2.m_y );
     }
 
-
-    friend wxPoint2DDouble operator*(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
-    {
-        return wxPoint2DDouble( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
-    }
 
     friend wxPoint2DDouble operator*(wxDouble n , const wxPoint2DDouble& pt)
     {
@@ -353,11 +350,6 @@ public :
         return wxPoint2DDouble( pt.m_x * n , pt.m_y * n );
     }
 
-    friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
-    {
-        return wxPoint2DDouble( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
-    }
-
     friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt , wxDouble n)
     {
         return wxPoint2DDouble( pt.m_x / n , pt.m_y / n );
@@ -367,6 +359,36 @@ public :
     {
         return wxPoint2DDouble( pt.m_x / n , pt.m_y / n );
     }
+
+#if WXWIN_COMPATIBILITY_3_2
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    inline wxPoint2DDouble& operator*=(const wxPoint2DDouble& pt)
+    {
+        m_x *= pt.m_x;
+        m_y *= pt.m_y;
+        return *this;
+    }
+
+    wxDEPRECATED_MSG("Multiplying points doesn't make sense")
+    friend wxPoint2DDouble operator*(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
+    {
+        return wxPoint2DDouble( pt1.m_x * pt2.m_x , pt1.m_y * pt2.m_y );
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    inline wxPoint2DDouble& operator/=(const wxPoint2DDouble& pt)
+    {
+        m_x /= pt.m_x;
+        m_y /= pt.m_y;
+        return *this;
+    }
+
+    wxDEPRECATED_MSG("Dividing points doesn't make sense")
+    friend wxPoint2DDouble operator/(const wxPoint2DDouble& pt1 , const wxPoint2DDouble& pt2)
+    {
+        return wxPoint2DDouble( pt1.m_x / pt2.m_x , pt1.m_y / pt2.m_y );
+    }
+#endif // WXWIN_COMPATIBILITY_3_2
 
     wxDouble m_x = 0.0;
     wxDouble m_y = 0.0;
@@ -446,13 +468,6 @@ inline wxPoint2DDouble& wxPoint2DDouble::operator-=(const wxPoint2DDouble& pt)
     return *this;
 }
 
-inline wxPoint2DDouble& wxPoint2DDouble::operator*=(const wxPoint2DDouble& pt)
-{
-    m_x *= pt.m_x;
-    m_y *= pt.m_y;
-    return *this;
-}
-
 inline wxPoint2DDouble& wxPoint2DDouble::operator*=(wxDouble n)
 {
     m_x *= n;
@@ -464,13 +479,6 @@ inline wxPoint2DDouble& wxPoint2DDouble::operator*=(wxInt32 n)
 {
     m_x *= n;
     m_y *= n;
-    return *this;
-}
-
-inline wxPoint2DDouble& wxPoint2DDouble::operator/=(const wxPoint2DDouble& pt)
-{
-    m_x /= pt.m_x;
-    m_y /= pt.m_y;
     return *this;
 }
 
