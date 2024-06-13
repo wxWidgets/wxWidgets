@@ -1285,3 +1285,14 @@ TEST_CASE("CoordinatesTestCase::wxGCDC(Cairo)", "[coordinates][dc][gcdc][cairo]"
 }
 #endif // wxUSE_CAIRO
 #endif // wxUSE_GRAPHICS_CONTEXT
+
+TEST_CASE("wxPoint2D", "[geometry]")
+{
+    wxPoint2DInt pi(3, 14);
+    pi *= 3;
+    CHECK(pi == wxPoint2DInt(9, 42));
+
+    wxPoint2DDouble pd(3, 4);
+    pd /= 4;
+    CHECK(pd == wxPoint2DDouble(0.75, 1));
+}
