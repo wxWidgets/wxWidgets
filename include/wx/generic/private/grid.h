@@ -1236,11 +1236,6 @@ wxGetContentRect(wxSize contentSize,
                  int hAlign,
                  int vAlign);
 
-inline bool operator<(const wxPoint& pt1, const wxPoint& pt2)
-{
-    return (pt1.x < pt2.x) || ((pt1.x == pt2.x) && (pt1.y < pt2.y));
-}
-
 namespace wxGridPrivate
 {
 
@@ -1298,12 +1293,27 @@ TryGetValueAsDate(wxDateTime& result,
 // SelectionShape class
 //=============================================================================
 
+struct wxPointCmp
+{
+    bool operator()(const wxPoint& pt1, const wxPoint& pt2) const
+    {
+        // Compare the points by their X's first
+        return pt1.x < pt2.x || (pt1.x == pt2.x && pt1.y < pt2.y);
+    }
+};
+
 // A simple interface used by wxGrid::DrawOverlaySelection() as a helper to draw
 // the grid overlay selection.
 class SelectionShape
 {
+    using EdgeType = std::map<wxPoint, wxPoint, wxPointCmp>;
+    using PointSet = std::set<wxPoint, wxPointCmp>;
+
 public:
-    SelectionShape() = default;
+    SelectionShape() : m_horzEdges(EdgeType(wxPointCmp{}))
+                     , m_vertEdges(EdgeType(wxPointCmp{}))
+    {}
+
     ~SelectionShape() = default;
 
     // This function simply converts (using the sweep line algorithm) the selected
@@ -1328,7 +1338,7 @@ public:
 private:
     // A helper function to prevent adding duplicates and shared points
     // to the vector returned by GetVertices().
-    void AddVertex(std::set<wxPoint>& points, const wxPoint& pt)
+    void AddVertex(PointSet& points, const wxPoint& pt)
     {
         auto result = points.insert(pt);
         if ( result.first != points.end() && !result.second )
@@ -1337,7 +1347,7 @@ private:
 
     std::vector<wxPoint> GetVertices(const std::vector<wxRect>& rectangles)
     {
-        std::set<wxPoint> pointSet;
+        PointSet pointSet(wxPointCmp{});
 
         for ( const wxRect& rect : rectangles )
         {
@@ -1382,7 +1392,7 @@ private:
     void InitVertEdges(const std::vector<wxPoint>& points)
     {
         std::vector<wxPoint> sortedPointsX = points;
-        std::sort(sortedPointsX.begin(), sortedPointsX.end());
+        std::sort(sortedPointsX.begin(), sortedPointsX.end(), wxPointCmp{});
 
         int i = 0;
         const int n = static_cast<int>(points.size());
@@ -1405,7 +1415,6 @@ private:
     void CalcBoundingBox(const std::vector<wxPoint>& points);
 
 private:
-    using EdgeType = std::map<wxPoint, wxPoint>;
     EdgeType m_horzEdges;
     EdgeType m_vertEdges;
 
