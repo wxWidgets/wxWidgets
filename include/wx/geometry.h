@@ -35,7 +35,7 @@ enum wxOutCode
 class WXDLLIMPEXP_CORE wxPoint2DInt
 {
 public :
-    inline wxPoint2DInt();
+    wxPoint2DInt() = default;
     inline wxPoint2DInt( wxInt32 x , wxInt32 y );
     inline wxPoint2DInt( const wxPoint &pt );
     // default copy ctor and copy-assign operator are OK
@@ -130,15 +130,9 @@ public :
     void ReadFrom( wxDataInputStream &stream );
 #endif // wxUSE_STREAMS
 
-    wxInt32 m_x;
-    wxInt32 m_y;
+    wxInt32 m_x = 0;
+    wxInt32 m_y = 0;
 };
-
-inline wxPoint2DInt::wxPoint2DInt()
-{
-    m_x = 0;
-    m_y = 0;
-}
 
 inline wxPoint2DInt::wxPoint2DInt( wxInt32 x , wxInt32 y )
 {
@@ -257,7 +251,7 @@ inline bool wxPoint2DInt::operator!=(const wxPoint2DInt& pt) const
 class WXDLLIMPEXP_CORE wxPoint2DDouble
 {
 public :
-    inline wxPoint2DDouble();
+    wxPoint2DDouble() = default;
     inline wxPoint2DDouble( wxDouble x , wxDouble y );
     wxPoint2DDouble( const wxPoint2DInt &pt )
         { m_x = (wxDouble) pt.m_x ; m_y = (wxDouble) pt.m_y ; }
@@ -347,15 +341,9 @@ public :
         return wxPoint2DDouble( pt.m_x / n , pt.m_y / n );
     }
 
-    wxDouble m_x;
-    wxDouble m_y;
+    wxDouble m_x = 0.0;
+    wxDouble m_y = 0.0;
 };
-
-inline wxPoint2DDouble::wxPoint2DDouble()
-{
-    m_x = 0.0;
-    m_y = 0.0;
-}
 
 inline wxPoint2DDouble::wxPoint2DDouble( wxDouble x , wxDouble y )
 {
