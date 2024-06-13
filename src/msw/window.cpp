@@ -994,7 +994,7 @@ bool wxWindowMSW::EnableTouchEvents(int eventsMask)
 
         if ( eventsMask & wxTOUCH_RAW_EVENTS )
         {
-            eventsMask &= wxTOUCH_RAW_EVENTS;
+            eventsMask &= ~wxTOUCH_RAW_EVENTS;
              if ( !GestureFuncs::RegisterTouchWindow() (m_hWnd, 0) )
                 wxLogLastError("SetGestureConfig");
         }
@@ -6351,10 +6351,13 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
                 type = wxEVT_TOUCH_END;
             else
                 continue;
-            wxMultiTouchEvent event(type);
+
+            wxMultiTouchEvent event( GetId(), type);
+
+            event.SetEventObject( this );
             event.SetPosition(pos);
             event.SetSequenceIdId(wxTouchSequenceId(wxUIntToPtr(info[i].dwID + 1)));
-            event.SetPrimary(info[i].dwFlags & TOUCHEVENTF_PRIMARY);
+            event.SetPrimary( (info[i].dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
             HandleWindowEvent(event);
         }
         return true;
