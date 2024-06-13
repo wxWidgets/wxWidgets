@@ -386,8 +386,8 @@ inline void wxPoint2DDouble::GetFloor( wxInt32 *x , wxInt32 *y ) const
 
 inline void wxPoint2DDouble::GetRounded( wxInt32 *x , wxInt32 *y ) const
 {
-    *x = (wxInt32) floor( m_x + 0.5 );
-    *y = (wxInt32) floor( m_y + 0.5);
+    *x = wxRound( m_x );
+    *y = wxRound( m_y );
 }
 
 inline wxDouble wxPoint2DDouble::GetVectorLength() const
