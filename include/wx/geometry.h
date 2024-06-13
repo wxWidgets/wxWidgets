@@ -513,8 +513,7 @@ inline bool wxPoint2DDouble::operator!=(const wxPoint2DDouble& pt) const
 class WXDLLIMPEXP_CORE wxRect2DDouble
 {
 public:
-    wxRect2DDouble()
-        { m_x = m_y = m_width = m_height = 0; }
+    wxRect2DDouble() = default;
     wxRect2DDouble(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
         { m_x = x; m_y = y; m_width = w;  m_height = h; }
 /*
@@ -629,10 +628,10 @@ public:
     inline bool operator != (const wxRect2DDouble& rect) const
         { return !(*this == rect); }
 
-    wxDouble  m_x;
-    wxDouble  m_y;
-    wxDouble  m_width;
-    wxDouble m_height;
+    wxDouble m_x = 0.0;
+    wxDouble m_y = 0.0;
+    wxDouble m_width = 0.0;
+    wxDouble m_height = 0.0;
 };
 
 
@@ -643,7 +642,7 @@ public:
 class WXDLLIMPEXP_CORE wxRect2DInt
 {
 public:
-       wxRect2DInt() { m_x = m_y = m_width = m_height = 0; }
+       wxRect2DInt() = default;
        wxRect2DInt( const wxRect& r ) { m_x = r.x ; m_y = r.y ; m_width = r.width ; m_height = r.height ; }
        wxRect2DInt(wxInt32 x, wxInt32 y, wxInt32 w, wxInt32 h) { m_x = x; m_y = y; m_width = w;  m_height = h; }
        wxRect2DInt(const wxPoint2DInt& topLeft, const wxPoint2DInt& bottomRight);
@@ -734,10 +733,10 @@ public:
        void ReadFrom( wxDataInputStream &stream );
 #endif // wxUSE_STREAMS
 
-       wxInt32 m_x;
-       wxInt32 m_y;
-       wxInt32 m_width;
-       wxInt32 m_height;
+       wxInt32 m_x = 0;
+       wxInt32 m_y = 0;
+       wxInt32 m_width = 0;
+       wxInt32 m_height = 0;
 };
 
 inline wxRect2DInt::wxRect2DInt( const wxPoint2DInt &a , const wxPoint2DInt &b)
