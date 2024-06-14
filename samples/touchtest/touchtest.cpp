@@ -32,6 +32,7 @@ private:
     };
     struct TouchState m_TouchPoints[TOUCH_POINTS];
     wxTouchSequenceId m_MouseId;
+    wxBitmap m_Bitmap;
 
     int FindIndexOfTouchId(const wxTouchSequenceId& id);
 
@@ -51,6 +52,8 @@ public:
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseUp(wxMouseEvent& event);
 
+    void OnPaint(wxPaintEvent& event);
+    void OnSize(wxSizeEvent& event);
     void OnQuit(wxCommandEvent& event);
 
 DECLARE_EVENT_TABLE()
@@ -81,6 +84,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_LEFT_DOWN(MyFrame::OnMouseDown)
     EVT_MOTION(MyFrame::OnMouseMove)
     EVT_LEFT_UP(MyFrame::OnMouseUp)
+
+    EVT_PAINT(MyFrame::OnPaint)
+    EVT_SIZE(MyFrame::OnSize)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
@@ -125,6 +131,22 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(true);
 }
 
+void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    dc.DrawBitmap(m_Bitmap, 0, 0);
+}
+
+void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+    wxSize size = GetClientSize();
+    m_Bitmap = wxBitmap(size.x, size.y, 24);
+
+    wxMemoryDC dc(m_Bitmap);
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.Clear();
+}
+
 int MyFrame::FindIndexOfTouchId(const wxTouchSequenceId& id)
 {
     int idx = -1;
@@ -162,11 +184,13 @@ void MyFrame::DrawUpdate(const wxTouchSequenceId& id, wxPoint pos)
     if (idx == -1)
         return;
 
-    wxClientDC dc(this);
+    wxMemoryDC dc(m_Bitmap);
     dc.SetPen(m_TouchPoints[idx].pen);
     dc.DrawLine(m_TouchPoints[idx].last, pos);
 
     m_TouchPoints[idx].last = pos;
+
+    Refresh();
 }
 
 void MyFrame::DrawEnd(const wxTouchSequenceId& id, wxPoint pos)
@@ -175,11 +199,13 @@ void MyFrame::DrawEnd(const wxTouchSequenceId& id, wxPoint pos)
     if (idx == -1)
         return;
 
-    wxClientDC dc(this);
+    wxMemoryDC dc(m_Bitmap);
     dc.SetPen(m_TouchPoints[idx].pen);
     dc.DrawLine(m_TouchPoints[idx].last, pos);
 
     m_TouchPoints[idx].id.Unset();
+
+    Refresh();
 }
 
 void MyFrame::OnTouchBegin(wxMultiTouchEvent& event)
