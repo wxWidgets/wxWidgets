@@ -186,21 +186,21 @@ void MyFrame::OnTouchBegin(wxMultiTouchEvent& event)
 {
     if (event.IsPrimary())
         return;
-    DrawStart(event.SetSequenceId(), event.GetPosition());
+    DrawStart(event.GetSequenceId(), event.GetPosition());
 }
 
 void MyFrame::OnTouchMove(wxMultiTouchEvent& event)
 {
     if (event.IsPrimary())
         return;
-    DrawUpdate(event.SetSequenceId(), event.GetPosition());
+    DrawUpdate(event.GetSequenceId(), event.GetPosition());
 }
 
 void MyFrame::OnTouchEnd(wxMultiTouchEvent& event)
 {
     if (event.IsPrimary())
         return;
-    DrawEnd(event.SetSequenceId(), event.GetPosition());
+    DrawEnd(event.GetSequenceId(), event.GetPosition());
 }
 
 void MyFrame::OnMouseDown(wxMouseEvent& event)

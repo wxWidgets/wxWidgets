@@ -4000,12 +4000,12 @@ public:
     /**
         Returns the ID of the touch. This allows to track the move of an specific touch point.
     */
-    const wxTouchSequenceId& SetSequenceId() const;
+    const wxTouchSequenceId& GetSequenceId() const;
 
     /**
         Sets the ID of the touch. This allows to track the move of an specific touch point.
     */
-    void SetSequenceIdId(const wxTouchSequenceId& sequence);
+    void SetSequenceId(const wxTouchSequenceId& sequence);
 };
 
 /** @class wxGestureEvent
