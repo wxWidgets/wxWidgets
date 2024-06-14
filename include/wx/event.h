@@ -2010,8 +2010,8 @@ public:
 
     bool IsPrimary() const { return m_isPrimary; }
     void SetPrimary(bool primary) { m_isPrimary = primary; }
-    const wxTouchSequenceId& SetSequenceId() const { return m_sequence; }
-    void SetSequenceIdId(const wxTouchSequenceId& sequence) { m_sequence = sequence; }
+    const wxTouchSequenceId& GetSequenceId() const { return m_sequence; }
+    void SetSequenceId(const wxTouchSequenceId& sequence) { m_sequence = sequence; }
 
     virtual wxEvent *Clone() const override { return new wxMultiTouchEvent(*this); }
 
