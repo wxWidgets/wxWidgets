@@ -6356,7 +6356,7 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
 
             event.SetEventObject( this );
             event.SetPosition(pos);
-            event.SetSequenceIdId(wxTouchSequenceId(wxUIntToPtr(info[i].dwID + 1)));
+            event.SetSequenceId(wxTouchSequenceId(wxUIntToPtr(info[i].dwID + 1)));
             event.SetPrimary( (info[i].dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
             HandleWindowEvent(event);
         }

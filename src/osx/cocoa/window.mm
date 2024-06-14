@@ -2268,8 +2268,8 @@ void wxCocoaGesturesImpl::RawTouchEvent(NSEvent* event, wxEventType type, NSTouc
 
         wxMultiTouchEvent wxevent(m_win->GetId(), type);
         wxevent.SetEventObject(m_win);
-        wxevent.SetSequenceIdId(wxTouchSequenceId(GetTouchID([touch identity], type)));
-        wxevent.SetPrimary(wxevent.SetSequenceId().GetID() == NULL);
+        wxevent.SetSequenceId(wxTouchSequenceId(GetTouchID([touch identity], type)));
+        wxevent.SetPrimary(wxevent.GetSequenceId().GetID() == NULL);
 
         NSRect locationInWindow = NSZeroRect;
         locationInWindow.origin = [touch normalizedPosition];
