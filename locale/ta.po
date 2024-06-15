@@ -8961,7 +8961,7 @@ msgstr "inotify கவனிப்பை ஏற்ற இயலவில்ல�
 #: ../src/unix/fswatcher_inotify.cpp:138
 #, c-format
 msgid "Unable to remove inotify watch %i"
-msgstr "%I inotify கவனிப்பை  நீக்க இயலவில்லை"
+msgstr "%i inotify கவனிப்பை  நீக்க இயலவில்லை"
 
 #: ../src/unix/fswatcher_inotify.cpp:271
 #, c-format

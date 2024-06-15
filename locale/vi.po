@@ -3202,7 +3202,7 @@ msgstr "Việc tìm khớp với biểu thức thông thường gặp lỗi: %s"
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr ""
-"Renderer \"% s\" đã không tương thích với phiên bản% d.% d và không thể được "
+"Renderer \"%s\" đã không tương thích với phiên bản %d.%d và không thể được "
 "nạp."
 
 #: ../src/common/secretstore.cpp:162
@@ -5506,12 +5506,12 @@ msgstr "Nén tập tin Trợ Giúp dạng HTML (*.chm)|*.chm|"
 #: ../src/html/helpwnd.cpp:1670
 #, fuzzy, c-format
 msgid "%i of %u"
-msgstr "%i của %i"
+msgstr "%i của %u"
 
 #: ../src/html/helpwnd.cpp:1708
 #, fuzzy, c-format
 msgid "%u of %u"
-msgstr "%lu của %lu"
+msgstr "%u của %u"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format

@@ -5632,12 +5632,12 @@ msgstr "(Ajuda)"
 #: ../src/html/helpwnd.cpp:1023
 #, fuzzy, c-format
 msgid "%d of %lu"
-msgstr "%i de %i"
+msgstr "%d de %lu"
 
 #: ../src/html/helpwnd.cpp:1025
 #, fuzzy, c-format
 msgid "%lu of %lu"
-msgstr "%i de %i"
+msgstr "%lu de %lu"
 
 #: ../src/html/helpwnd.cpp:1044
 msgid "Search in all books"
@@ -5715,12 +5715,12 @@ msgstr ""
 #: ../src/html/helpwnd.cpp:1670
 #, fuzzy, c-format
 msgid "%i of %u"
-msgstr "%i de %i"
+msgstr "%i de %u"
 
 #: ../src/html/helpwnd.cpp:1708
 #, fuzzy, c-format
 msgid "%u of %u"
-msgstr "%i de %i"
+msgstr "%u de %u"
 
 #: ../src/html/htmlfilt.cpp:134
 #, c-format
@@ -6088,7 +6088,7 @@ msgstr "No s'ha pogut crear un temporitzador"
 #: ../src/msw/dlmsw.cpp:164
 #, fuzzy, c-format
 msgid "(error %d: %s)"
-msgstr " (error %ld: %s)"
+msgstr " (error %d: %s)"
 
 #: ../src/msw/dragimag.cpp:144 ../src/msw/dragimag.cpp:179
 #: ../src/msw/imaglist.cpp:304 ../src/msw/imaglist.cpp:326
