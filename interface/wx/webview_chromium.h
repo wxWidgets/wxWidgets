@@ -388,6 +388,14 @@ public:
     int m_logLevel = 0;
 
     /**
+        Port for remote debugging if non-zero.
+
+        Settings this to non-zero value, e.g. 9223 which is commonly used,
+        enables Chrome remote debugging on the given port.
+     */
+    int m_remoteDebuggingPort = 0;
+
+    /**
         Function to create the custom CefClient to use if non-null.
 
         CEF uses an object of CefClient class to customize handling of many

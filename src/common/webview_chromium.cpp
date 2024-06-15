@@ -1060,6 +1060,12 @@ bool wxWebViewChromium::InitCEF(const wxWebViewConfiguration& config)
 
     CefString(&settings.log_file).FromWString(logFile.ToStdWstring());
 
+    // And remote debugging, if specified.
+    if ( configChrome->m_remoteDebuggingPort )
+    {
+        settings.remote_debugging_port = configChrome->m_remoteDebuggingPort;
+    }
+
 #ifdef __WXMSW__
     CefMainArgs args(wxGetInstance());
 #else

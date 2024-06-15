@@ -205,6 +205,10 @@ public:
     // Logging level must be one of cef_log_severity_t values (0 means default).
     int m_logLevel = 0;
 
+    // If non-zero, specifies the port to use for remote debugging (the usual
+    // value for it is 9223).
+    int m_remoteDebuggingPort = 0;
+
     // Function to create the custom CefClient to use if non-null.
     //
     // The CefClient subclass must delegate all not otherwise implemented
