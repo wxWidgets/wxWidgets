@@ -3980,7 +3980,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @since 3.1.1
+    @since 3.3.0
 */
 class wxMultiTouchEvent : public wxTouchEventBase
 {

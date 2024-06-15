@@ -30,7 +30,7 @@ private:
         wxPoint last;
         wxPen pen;
     };
-    struct TouchState m_TouchPoints[TOUCH_POINTS];
+    TouchState m_TouchPoints[TOUCH_POINTS];
     wxTouchSequenceId m_MouseId;
     wxBitmap m_Bitmap;
 
@@ -56,7 +56,7 @@ public:
     void OnSize(wxSizeEvent& event);
     void OnQuit(wxCommandEvent& event);
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 IMPLEMENT_APP(wxMyApp)
@@ -67,7 +67,7 @@ bool wxMyApp::OnInit()
         return false;
 
     wxFrame* frame = new MyFrame(nullptr, wxT("Multi-touch Test"), wxDefaultPosition,
-        wxSize(500, 400), wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+        wxDefaultSize, wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
     SetTopWindow(frame);
     frame->CenterOnScreen();
     frame->Show(true);
