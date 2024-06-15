@@ -22,9 +22,11 @@
     <wxReleaseRuntimeLibrary>MultiThreaded</wxReleaseRuntimeLibrary>
     <wxDebugRuntimeLibrary>MultiThreadedDebug</wxDebugRuntimeLibrary>
   </PropertyGroup>
+  <PropertyGroup Label="UserMacros">
+    <wxArchSuffix>_unknownplatform</wxArchSuffix>
+  </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='Win32'">
-    <wxArchSuffix>
-    </wxArchSuffix>
+    <wxArchSuffix></wxArchSuffix>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='x64'">
     <wxArchSuffix>_x64</wxArchSuffix>
@@ -34,6 +36,9 @@
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM64'">
     <wxArchSuffix>_arm64</wxArchSuffix>
+  </PropertyGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Platform)'=='ARM64EC'">
+    <wxArchSuffix>_arm64ec</wxArchSuffix>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" Condition="('$(Configuration)'=='Debug' or '$(Configuration)'=='DLL Debug')">
     <wxSuffixDebug>d</wxSuffixDebug>
