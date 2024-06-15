@@ -96,6 +96,7 @@ MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
     m_MouseId(&m_MouseId)
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+    SetClientSize(FromDIP(wxSize(800, 600)));
 
     m_TouchPoints[0].pen = wxPen(*wxBLACK, 2);
     m_TouchPoints[1].pen = wxPen(*wxBLUE, 2);
