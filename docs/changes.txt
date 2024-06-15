@@ -251,6 +251,10 @@ Changes in behaviour which may result in build errors
 3.2.6: (released ????-??-??)
 ----------------------------
 
+All:
+
+- Backport multiple fixes to CMake build system from 3.3 (Maarten Bent, #24616).
+
 All (GUI):
 
 - Speed up using XRC when using wxXRC_NO_RELOADING (John de Rooij, #24536).
