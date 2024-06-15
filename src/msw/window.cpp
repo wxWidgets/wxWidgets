@@ -6338,16 +6338,16 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
     wxVector<TOUCHINPUT> info(count);
     if (GestureFuncs::GetTouchInputInfo() ((HTOUCHINPUT)lParam, count, &info[0], sizeof(TOUCHINPUT)))
     {
-        for(unsigned i = 0; i < count; i++)
+        for ( const auto& input : info )
         {
             // hundredths of a pixel of physical screen coordinates
-            wxPoint pos = ScreenToClient(wxPoint(info[i].x / 100, info[i].y / 100));
+            wxPoint pos = ScreenToClient(wxPoint(input.x / 100, input.y / 100));
             wxEventType type;
-            if ( info[i].dwFlags & TOUCHEVENTF_DOWN )
+            if ( input.dwFlags & TOUCHEVENTF_DOWN )
                 type = wxEVT_TOUCH_BEGIN;
-            else if ( info[i].dwFlags & TOUCHEVENTF_MOVE )
+            else if ( input.dwFlags & TOUCHEVENTF_MOVE )
                 type = wxEVT_TOUCH_MOVE;
-            else if ( info[i].dwFlags & TOUCHEVENTF_UP )
+            else if ( input.dwFlags & TOUCHEVENTF_UP )
                 type = wxEVT_TOUCH_END;
             else
                 continue;
@@ -6356,8 +6356,8 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
 
             event.SetEventObject( this );
             event.SetPosition(pos);
-            event.SetSequenceId(wxTouchSequenceId(wxUIntToPtr(info[i].dwID + 1)));
-            event.SetPrimary( (info[i].dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
+            event.SetSequenceId(wxTouchSequenceId(wxUIntToPtr(input.dwID + 1)));
+            event.SetPrimary( (input.dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
             HandleWindowEvent(event);
         }
         return true;
