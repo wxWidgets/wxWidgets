@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wx.h"
+#include "wx/dcbuffer.h"
 
 // Define a new application
 class wxMyApp: public wxApp
@@ -94,6 +95,8 @@ MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
     : wxFrame(parent, wxID_ANY, title, pos, size, style),
     m_MouseId(&m_MouseId)
 {
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
+
     m_TouchPoints[0].pen = wxPen(*wxBLACK, 2);
     m_TouchPoints[1].pen = wxPen(*wxBLUE, 2);
     m_TouchPoints[2].pen = wxPen(*wxCYAN, 2);
@@ -133,7 +136,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
     dc.DrawBitmap(m_Bitmap, 0, 0);
 }
 
@@ -145,6 +148,8 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
     wxMemoryDC dc(m_Bitmap);
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
+
+    Refresh();
 }
 
 int MyFrame::FindIndexOfTouchId(const wxTouchSequenceId& id)
