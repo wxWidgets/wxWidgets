@@ -1768,7 +1768,7 @@ void MyFrame::OnReload(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
 {
-    wxDialog dialog(this, wxID_ANY, _("HTML"), wxDefaultPosition, wxSize(500, 400), wxDEFAULT_DIALOG_STYLE);
+    wxDialog dialog(this, wxID_ANY, "HTML", wxDefaultPosition, wxSize(500, 400), wxDEFAULT_DIALOG_STYLE);
 
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
     dialog.SetSizer(boxSizer);
