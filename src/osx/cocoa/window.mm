@@ -592,8 +592,12 @@ void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEven
     wxSetupCoordinates(m_osxView, x, y, nsEvent);
 }
 
-void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
+wxWidgetCocoaImpl::MouseEvents
+wxWidgetCocoaImpl::TranslateMouseEvent( NSEvent * nsEvent )
 {
+    MouseEvents wxevents(1);
+    auto& wxevent = wxevents.front();
+
     int eventType = [nsEvent type];
     UInt32 modifiers = [nsEvent modifierFlags] ;
     
@@ -787,17 +791,28 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
             wxevent.m_linesPerAction = 1;
             wxevent.m_columnsPerAction = 1;
 
-            if ( fabs(deltaX) > fabs(deltaY) )
+            // Should we impose some minimum threshold here?
+            if ( deltaY != 0 )
             {
+                wxevent.m_wheelRotation = (int)deltaY;
+            }
+
+            if ( deltaX != 0 )
+            {
+                // We can send one or two events depending on whether we have
+                // delta in just one or both directions.
+                wxMouseEvent* wxeventPtr = &wxevent;
+                if ( deltaY != 0 )
+                {
+                    wxevents.push_back(wxevent);
+                    wxeventPtr = &wxevents.back();
+                }
+
                 // wx conventions for horizontal are inverted from vertical (originating from native msw behavior)
                 // right and up are positive values, left and down are negative values, while on OSX right and down
                 // are negative and left and up are positive.
-                wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
-                wxevent.m_wheelRotation = -(int)deltaX;
-            }
-            else
-            {
-                wxevent.m_wheelRotation = (int)deltaY;
+                wxeventPtr->m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+                wxeventPtr->m_wheelRotation = -(int)deltaX;
             }
 
         }
@@ -832,6 +847,8 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
         wxevent.SetEventObject(peer);
         wxevent.SetId(peer->GetId()) ;
     }
+
+    return wxevents;
 }
 
 static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool enable)
@@ -1496,11 +1513,16 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( slf );
             if ( [ event type]  == NSLeftMouseDown && !wxGetMouseState().LeftIsDown() && impl != nullptr )
             {
-                wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-                SetupMouseEvent(wxevent , event) ;
-                wxevent.SetEventType(wxEVT_LEFT_UP);
+                for ( auto wxevent : TranslateMouseEvent(event) )
+                {
+                    if ( wxevent.GetEventType() == wxEVT_LEFT_DOWN )
+                    {
+                        wxevent.SetEventType(wxEVT_LEFT_UP);
 
-                GetWXPeer()->HandleWindowEvent(wxevent);
+                        GetWXPeer()->HandleWindowEvent(wxevent);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -3933,9 +3955,18 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     // this window.
     (void)SetupCursor(event);
 
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent(wxevent , event) ;
-    return GetWXPeer()->HandleWindowEvent(wxevent);
+    bool processed = false;
+    for ( auto& wxevent : TranslateMouseEvent(event) )
+    {
+        // Even if this event was processed, still continue with the other
+        // events, if any.
+        if ( GetWXPeer()->HandleWindowEvent(wxevent) )
+            processed = true;
+    }
+
+    // We consider the NSEvent to be processed if any of the wxEvents it was
+    // mapped to was processed, even if not necessarily all of them.
+    return processed;
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusSet()
