@@ -19,6 +19,8 @@
     #import <Cocoa/Cocoa.h>
 #endif
 
+#include <vector>
+
 //
 // shared between Cocoa and Carbon
 //
@@ -179,7 +181,10 @@ public :
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 
     virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = NULL);
-    virtual void        SetupMouseEvent(wxMouseEvent &wxevent, NSEvent * nsEvent);
+
+    using MouseEvents = std::vector<wxMouseEvent>;
+    virtual MouseEvents TranslateMouseEvent(NSEvent * nsEvent);
+
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);
 
