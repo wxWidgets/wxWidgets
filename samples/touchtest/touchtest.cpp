@@ -56,10 +56,10 @@ public:
     void OnSize(wxSizeEvent& event);
     void OnQuit(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-IMPLEMENT_APP(wxMyApp)
+wxIMPLEMENT_APP(wxMyApp);
 
 bool wxMyApp::OnInit()
 {
