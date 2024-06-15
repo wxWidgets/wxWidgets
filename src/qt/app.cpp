@@ -17,7 +17,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/dynlib.h"
-    #include <Shlwapi.h>
+    #include <shlwapi.h>
 #endif // __WINDOWS__
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
