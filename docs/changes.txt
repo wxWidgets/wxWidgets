@@ -264,7 +264,7 @@ wxGTK:
 
 wxMSW:
 
-- Recognize Windows Server 2019 in wxGetOsDescription() (PB, #24598).
+- More Windows Server versions in wxGetOsDescription() (PB, #24598, #24603).
 
 wxOSX:
 
