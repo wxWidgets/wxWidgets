@@ -573,7 +573,7 @@ WebFrame::WebFrame(const wxString& url, int flags, wxWebViewWindowFeatures* wind
 #if wxUSE_WEBVIEW_CHROMIUM
         if ( backend == wxWebViewBackendChromium )
         {
-            m_browser->Bind(wxEVT_WEBVIEW_CREATED, [&initShow](wxWebViewEvent& event) {
+            m_browser->Bind(wxEVT_WEBVIEW_CREATED, [initShow](wxWebViewEvent& event) {
                 initShow();
 
                 event.Skip();
