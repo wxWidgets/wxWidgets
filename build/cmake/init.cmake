@@ -8,8 +8,14 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+if(DEFINED CMAKE_CXX_STANDARD)
+    # User has explicitly set a CMAKE_CXX_STANDARD.
+elseif(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
+    # Standard is set using wxBUILD_CXX_STANDARD.
     set(CMAKE_CXX_STANDARD ${wxBUILD_CXX_STANDARD})
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+else()
+    # CMAKE_CXX_STANDARD not defined.
 endif()
 
 if(MSVC)
@@ -118,16 +124,12 @@ wx_string_append(wxBUILD_FILE_ID "${lib_flavour}")
 
 set(wxPLATFORM_ARCH)
 if(CMAKE_GENERATOR_PLATFORM)
-    if (CMAKE_GENERATOR_PLATFORM STREQUAL "x64")
-        set(wxPLATFORM_ARCH "x64")
-    elseif(CMAKE_GENERATOR_PLATFORM STREQUAL "ARM64")
-        set(wxPLATFORM_ARCH "arm64")
+    if(NOT CMAKE_GENERATOR_PLATFORM STREQUAL "Win32")
+        string(TOLOWER ${CMAKE_GENERATOR_PLATFORM} wxPLATFORM_ARCH)
     endif()
 elseif(CMAKE_VS_PLATFORM_NAME)
-    if (CMAKE_VS_PLATFORM_NAME STREQUAL "x64")
-        set(wxPLATFORM_ARCH "x64")
-    elseif(CMAKE_VS_PLATFORM_NAME STREQUAL "ARM64")
-        set(wxPLATFORM_ARCH "arm64")
+    if(NOT CMAKE_VS_PLATFORM_NAME STREQUAL "Win32")
+        string(TOLOWER ${CMAKE_VS_PLATFORM_NAME} wxPLATFORM_ARCH)
     endif()
 else()
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -235,9 +237,9 @@ if(wxUSE_MEDIACTRL AND DEFINED wxUSE_ACTIVEX AND NOT wxUSE_ACTIVEX)
     wx_option_force_value(wxUSE_MEDIACTRL OFF)
 endif()
 
-if(wxUSE_WEBVIEW AND DEFINED wxUSE_ACTIVEX AND NOT wxUSE_ACTIVEX)
-    message(WARNING "wxWebView requires wxActiveXContainer... disabled")
-    wx_option_force_value(wxUSE_WEBVIEW OFF)
+if(wxUSE_WEBVIEW AND wxUSE_WEBVIEW_IE AND DEFINED wxUSE_ACTIVEX AND NOT wxUSE_ACTIVEX)
+    message(WARNING "wxWebViewIE requires wxActiveXContainer... disabled")
+    wx_option_force_value(wxUSE_WEBVIEW_IE OFF)
 endif()
 
 if(wxUSE_OPENGL)
@@ -433,6 +435,11 @@ if(wxUSE_GUI)
             if(WXGTK3 AND OpenGL_EGL_FOUND AND wxUSE_GLCANVAS_EGL)
                 if(TARGET OpenGL::EGL)
                     set(OPENGL_LIBRARIES OpenGL::EGL ${OPENGL_LIBRARIES})
+                else()
+                    # It's possible for OpenGL::EGL not to be set even when EGL
+                    # is found, at least under Cygwin (see #23673), so use the
+                    # library directly like this to avoid link problems.
+                    set(OPENGL_LIBRARIES ${OPENGL_egl_LIBRARY} ${OPENGL_LIBRARIES})
                 endif()
                 set(OPENGL_INCLUDE_DIR ${OPENGL_INCLUDE_DIR} ${OPENGL_EGL_INCLUDE_DIRS})
                 find_package(WAYLANDEGL)

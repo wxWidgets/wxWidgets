@@ -173,12 +173,9 @@ function(wx_set_common_target_properties target_name)
         target_compile_definitions(${target_name} PUBLIC "-D_FILE_OFFSET_BITS=64")
     endif()
 
-    if(CMAKE_USE_PTHREADS_INIT)
-        target_compile_options(${target_name} PRIVATE "-pthread")
-        # clang++.exe: warning: argument unused during compilation: '-pthread' [-Wunused-command-line-argument]
-        if(NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
-            set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
-        endif()
+    if(CMAKE_THREAD_LIBS_INIT)
+        target_compile_options(${target_name} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+        target_link_libraries(${target_name} PUBLIC ${CMAKE_THREAD_LIBS_INIT})
     endif()
     wx_set_source_groups()
 endfunction()
@@ -234,6 +231,12 @@ function(wx_set_target_properties target_name)
     set(dll_suffix "${lib_suffix}")
     if(wxCOMPILER_PREFIX)
         wx_string_append(dll_suffix "_${wxCOMPILER_PREFIX}")
+    endif()
+    # For compatibility with MSVS project files and makefile.vc, use arch
+    # suffix for non-x86 (including x86_64) DLLs.
+    if(MSVC AND wxARCH_SUFFIX)
+        # This one already includes the leading underscore, so don't add another one.
+        wx_string_append(dll_suffix "${wxARCH_SUFFIX}")
     endif()
     if(wxBUILD_VENDOR)
         wx_string_append(dll_suffix "_${wxBUILD_VENDOR}")
@@ -589,6 +592,12 @@ endfunction()
 # Add a third party builtin library
 function(wx_add_builtin_library name)
     wx_list_add_prefix(src_list "${wxSOURCE_DIR}/" ${ARGN})
+
+    list(GET src_list 0 src_file)
+    if(NOT EXISTS "${src_file}")
+        message(FATAL_ERROR "${name} file does not exist: \"${src_file}\".\
+        Make sure you checkout the git submodules.")
+    endif()
 
     if(${name} MATCHES "wx.*")
         string(SUBSTRING ${name} 2 -1 name_short)
