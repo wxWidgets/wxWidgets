@@ -15,10 +15,10 @@
 #include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
 
-#ifdef _WIN32
+#ifdef __WINDOWS__
     #include "wx/dynlib.h"
     #include <Shlwapi.h>
-#endif // _WIN32
+#endif // __WINDOWS__
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
@@ -90,7 +90,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
 }
 
 // Compatibility for MSW wxFileDialog/wxDirDialog implementations
-#ifdef _WIN32
+#ifdef __WINDOWS__
 
 // ----------------------------------------------------------------------------
 // system DLL versions
@@ -200,4 +200,4 @@ int wxApp::GetComCtl32Version()
     return s_verComCtl32;
 }
 
-#endif // _WIN32
+#endif // __WINDOWS__

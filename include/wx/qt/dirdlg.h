@@ -9,7 +9,7 @@
 #define _WX_QT_DIRDLG_H_
 
 // Use MSW implementation to support custom controls in modern-style dialogs.
-#ifdef _WIN32
+#ifdef __WINDOWS__
 #include <wx/msw/dirdlg.h>
 #else
 
@@ -48,6 +48,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS(wxDirDialog);
 };
 
-#endif // _WIN32
+#endif // __WINDOWS__
 
 #endif // _WX_QT_DIRDLG_H_

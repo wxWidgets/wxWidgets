@@ -10,7 +10,7 @@
 
 // On Windows, the MSW implementation is used to support custom controls in
 // modern-style dialogs.
-#if wxUSE_FILEDLG && !defined( _WIN32 )
+#if wxUSE_FILEDLG && !defined( __WINDOWS__ )
 
 #include "wx/filename.h"
 
@@ -262,4 +262,4 @@ QFileDialog *wxDirDialog::GetQFileDialog() const
     return static_cast<QFileDialog *>(m_qtWindow);
 }
 
-#endif // wxUSE_FILEDLG && !defined( _WIN32 )
+#endif // wxUSE_FILEDLG && !defined( __WINDOWS__ )

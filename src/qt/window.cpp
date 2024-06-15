@@ -36,9 +36,9 @@
 #include "wx/qt/private/compat.h"
 #include "wx/qt/private/winevent.h"
 
-#ifdef _WIN32
+#ifdef __WINDOWS__
     #include "wx/msw/private/dpiaware.h"
-#endif // _WIN32
+#endif // __WINDOWS__
 
 
 #define TRACE_QT_WINDOW "qtwindow"
@@ -1900,7 +1900,7 @@ bool wxWindowQt::EnableTouchEvents(int eventsMask)
 }
 
 // Compatibility for MSW wxFileDialog/wxDirDialog implementations
-#ifdef _WIN32
+#ifdef __WINDOWS__
 
 // ---------------------------------------------------------------------------
 // DPI
@@ -1915,4 +1915,4 @@ namespace wxMSWImpl
 
 } // namespace wxMSWImpl
 
-#endif // _WIN32
+#endif // __WINDOWS__
