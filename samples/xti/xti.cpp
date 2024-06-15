@@ -276,13 +276,13 @@ public:
         // this approach would be used if the handler would not
         // be connected really in the designer, so we have to supply
         // the information
-        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty(wxT("Button")) );
+        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty("Button") );
         if ( object == but &&
-             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo(wxT("OnClick")) )
+             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo("OnClick") )
         {
             eventSink = m_frame;
             handlerInfo = m_frame->GetClassInfo()->
-                FindHandlerInfo(wxT("ButtonClickHandler"));
+                FindHandlerInfo("ButtonClickHandler");
             return true;
         }
         return false;
@@ -314,13 +314,13 @@ void RegisterFrameRTTI()
         wx_dynamic_cast( wxDynamicClassInfo *, wxClassInfo::FindClass("MyXTIFrame"));
     if ( dyninfo == nullptr )
     {
-        dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
-                            wxT("MyXTIFrame"),
+        dyninfo = new wxDynamicClassInfo("myxtiframe.h",
+                            "MyXTIFrame",
                             CLASSINFO(wxFrame) );
 
         // this class has a property named "Button" and the relative handler:
-        dyninfo->AddProperty(wxT("Button"), wxGetTypeInfo((wxButton**) nullptr));
-        dyninfo->AddHandler(wxT("ButtonClickHandler"),
+        dyninfo->AddProperty("Button", wxGetTypeInfo((wxButton**) nullptr));
+        dyninfo->AddHandler("ButtonClickHandler",
             nullptr /* no instance of the handler method */, CLASSINFO( wxEvent ) );
     }
 }
@@ -385,7 +385,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
     wxASSERT( info->Create(button, 6, Params ));
-    frameWrapper->SetProperty( wxT("Button"), wxAny( button ) );
+    frameWrapper->SetProperty( "Button", wxAny( button ) );
 
     // other controls page
 

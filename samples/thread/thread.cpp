@@ -304,8 +304,8 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    // uncomment this to get some debugging messages from the trace code
-    // on the console (or just set WXTRACE env variable to include "thread")
+    // get any debugging messages from trace code onto the console
+    // (can also be done by setting the WXTRACE env variable to include "thread")
     wxLog::AddTraceMask("thread");
 
     // Create the main frame window
