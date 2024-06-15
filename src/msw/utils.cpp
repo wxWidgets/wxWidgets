@@ -1108,7 +1108,9 @@ int wxIsWindowsServer()
     return -1;
 }
 
+static const int WINDOWS_SERVER2016_BUILD = 14393;
 static const int WINDOWS_SERVER2019_BUILD = 17763;
+static const int WINDOWS_SERVER2022_BUILD = 20348;
 
 // Windows 11 uses the same version as Windows 10 but its build numbers start
 // from 22000, which provides a way to test for it.
@@ -1177,27 +1179,34 @@ wxString wxGetOsDescription()
                     break;
 
                 case 10:
-                    if (info.dwBuildNumber >= FIRST_WINDOWS11_BUILD)
+                    if ( wxIsWindowsServer() == 1 )
                     {
-                        str = wxIsWindowsServer() == 1
-                            ? "Windows Server 2022"
-                            : "Windows 11";
-
-                    }
-                    else if ( wxIsWindowsServer() == 1 )
-                    {
-                        str = info.dwBuildNumber >= WINDOWS_SERVER2019_BUILD
-                            ? "Windows Server 2019"
-                            : "Windows Server 2016";
+                        switch ( info.dwBuildNumber )
+                        {
+                            case WINDOWS_SERVER2016_BUILD:
+                                str = "Windows Server 2016";
+                                break;
+                            case WINDOWS_SERVER2019_BUILD:
+                                str = "Windows Server 2019";
+                                break;
+                            case WINDOWS_SERVER2022_BUILD:
+                                str = "Windows Server 2022";
+                                break;
+                        }
                     }
                     else
-                        str = "Windows 10";
+                    {
+                        str = info.dwBuildNumber >= FIRST_WINDOWS11_BUILD
+                            ? "Windows 11"
+                            : "Windows 10";
+                    }
                     break;
             }
 
             if ( str.empty() )
             {
-                str.Printf("Windows %lu.%lu",
+                str.Printf("Windows %s%lu.%lu",
+                           wxIsWindowsServer() == 1 ? "Server " : "",
                            info.dwMajorVersion,
                            info.dwMinorVersion);
             }
