@@ -1959,7 +1959,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSetCursorEvent);
 };
 
- // Touch Base Event
+ // Common base class for wxMultiTouchEvent and wxGestureEvent
 
 class WXDLLIMPEXP_CORE wxTouchEventBase : public wxEvent
 {
@@ -1969,10 +1969,7 @@ public:
     {
     }
 
-    wxTouchEventBase(const wxTouchEventBase& event) : wxEvent(event)
-    {
-        m_pos = event.m_pos;
-    }
+    wxTouchEventBase(const wxTouchEventBase& event) = default;
 
     const wxPoint& GetPosition() const { return m_pos; }
     void SetPosition(const wxPoint& pos) { m_pos = pos; }
@@ -2002,11 +1999,7 @@ public:
         m_isPrimary = false;
     }
 
-    wxMultiTouchEvent(const wxMultiTouchEvent& event) : wxTouchEventBase(event)
-    {
-        m_isPrimary = event.m_isPrimary;
-        m_sequence = event.m_sequence;
-    }
+    wxMultiTouchEvent(const wxMultiTouchEvent& event) = default;
 
     bool IsPrimary() const { return m_isPrimary; }
     void SetPrimary(bool primary) { m_isPrimary = primary; }

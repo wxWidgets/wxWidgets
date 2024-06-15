@@ -114,7 +114,9 @@ enum
     wxTOUCH_ALL_GESTURES,
 
     /**
-        Enable raw multitouch events
+        Enable raw multitouch events.
+        
+        @since 3.3.0
      */
     wxTOUCH_RAW_EVENTS
 };
