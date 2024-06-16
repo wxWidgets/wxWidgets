@@ -1890,6 +1890,9 @@ public:
     // Is the system set to do page scrolling?
     bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
 
+    // Check if the event was synthesized from a touch event.
+    bool IsFromTouch() const { return m_fromTouch; }
+
     float GetMagnification() const { return m_magnification; }
     virtual wxEvent *Clone() const override { return new wxMouseEvent(*this); }
     virtual wxEventCategory GetEventCategory() const override { return wxEVT_CATEGORY_USER_INPUT; }
@@ -1911,6 +1914,7 @@ public:
     int           m_linesPerAction;
     int           m_columnsPerAction;
     float         m_magnification;
+    bool          m_fromTouch;
 
 protected:
     void Assign(const wxMouseEvent& evt);

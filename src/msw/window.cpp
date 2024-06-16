@@ -379,6 +379,16 @@ void wxGetCursorPosMSW(POINT* pt)
     }
 }
 
+// Checks if the mouse event originated from a pen or touchscreen.
+// Pass the return value of GetMessageExtraInfo() to extraInfo.
+static bool IsTouchEventMSW(WXLPARAM extraInfo)
+{
+    // From https://learn.microsoft.com/en-us/windows/win32/tablet/system-events-and-mouse-messages
+    const LONG_PTR MI_WP_SIGNATURE = 0xFF515700;
+    const LONG_PTR SIGNATURE_MASK = 0xFFFFFF00;
+    return (extraInfo & SIGNATURE_MASK) == MI_WP_SIGNATURE;
+}
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -3255,7 +3265,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_MOUSEMOVE:
             processed = HandleMouseMove(GET_X_LPARAM(lParam),
                                         GET_Y_LPARAM(lParam),
-                                        wParam);
+                                        wParam,
+                                        ::GetMessageExtraInfo());
             break;
 
         case WM_MOUSELEAVE:
@@ -3274,11 +3285,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
 #if wxUSE_MOUSEWHEEL
         case WM_MOUSEWHEEL:
-            processed = HandleMouseWheel(wxMOUSE_WHEEL_VERTICAL, wParam, lParam);
+            processed = HandleMouseWheel(wxMOUSE_WHEEL_VERTICAL, wParam, lParam,
+                                         ::GetMessageExtraInfo());
             break;
 
         case WM_MOUSEHWHEEL:
-            processed = HandleMouseWheel(wxMOUSE_WHEEL_HORIZONTAL, wParam, lParam);
+            processed = HandleMouseWheel(wxMOUSE_WHEEL_HORIZONTAL, wParam, lParam,
+                                         ::GetMessageExtraInfo());
             break;
 #endif // wxUSE_MOUSEWHEEL
 
@@ -3300,7 +3313,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                 wxWindowMSW *win = this;
 
-                processed = win->HandleMouseEvent(message, x, y, wParam);
+                processed = win->HandleMouseEvent(message, x, y, wParam,
+                                                  ::GetMessageExtraInfo());
 
                 // if the app didn't eat the event, handle it in the default
                 // way, that is by giving this window the focus
@@ -5953,7 +5967,8 @@ bool wxWindowMSW::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
 
 void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
                                  int x, int y,
-                                 WXUINT flags)
+                                 WXUINT flags,
+                                 WXLPARAM extraInfo)
 {
     // our client coords are not quite the same as Windows ones
     wxPoint pt = GetClientAreaOrigin();
@@ -5969,6 +5984,8 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_aux2Down = (flags & MK_XBUTTON2) != 0;
     event.m_altDown = ::wxIsAltDown();
 
+    event.m_fromTouch = ::IsTouchEventMSW(extraInfo);
+
     event.SetTimestamp(::GetMessageTime());
 
     event.SetEventObject(this);
@@ -5978,7 +5995,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     gs_lastMouseEvent.type = event.GetEventType();
 }
 
-bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
+bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags, WXLPARAM extraInfo)
 {
     // the mouse events take consecutive IDs from WM_MOUSEFIRST to
     // WM_MOUSELAST, so it's enough to subtract WM_MOUSEMOVE == WM_MOUSEFIRST
@@ -6017,12 +6034,12 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
     }
 
     wxMouseEvent event(eventsMouse[msg - WM_MOUSEMOVE]);
-    InitMouseEvent(event, x, y, flags);
+    InitMouseEvent(event, x, y, flags, extraInfo);
 
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
+bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags, WXLPARAM extraInfo)
 {
     if ( !m_mouseInWindow )
     {
@@ -6063,7 +6080,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             }
 
             wxMouseEvent event(wxEVT_ENTER_WINDOW);
-            InitMouseEvent(event, x, y, flags);
+            InitMouseEvent(event, x, y, flags, extraInfo);
 
             (void)HandleWindowEvent(event);
         }
@@ -6097,13 +6114,13 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
         }
     }
 
-    return HandleMouseEvent(WM_MOUSEMOVE, x, y, flags);
+    return HandleMouseEvent(WM_MOUSEMOVE, x, y, flags, extraInfo);
 }
 
 
 bool
 wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
-                              WXWPARAM wParam, WXLPARAM lParam)
+                              WXWPARAM wParam, WXLPARAM lParam, WXLPARAM extraInfo)
 {
 #if wxUSE_MOUSEWHEEL
     // notice that WM_MOUSEWHEEL position is in screen coords (as it's
@@ -6119,7 +6136,7 @@ wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
     ::ScreenToClient(GetHwnd(), &pt);
 
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
-    InitMouseEvent(event, pt.x, pt.y, LOWORD(wParam));
+    InitMouseEvent(event, pt.x, pt.y, LOWORD(wParam), extraInfo);
     event.m_wheelRotation = (short)HIWORD(wParam);
     event.m_wheelDelta = WHEEL_DELTA;
     event.m_wheelAxis = axis;
@@ -6190,7 +6207,7 @@ void wxWindowMSW::GenerateMouseLeave()
     pt.y -= rect.top;
 
     wxMouseEvent event(wxEVT_LEAVE_WINDOW);
-    InitMouseEvent(event, pt.x, pt.y, state);
+    InitMouseEvent(event, pt.x, pt.y, state, 0);
 
     (void)HandleWindowEvent(event);
 }

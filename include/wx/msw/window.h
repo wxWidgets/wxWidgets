@@ -368,10 +368,10 @@ public:
 
     bool HandleDropFiles(WXWPARAM wParam);
 
-    bool HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
-    bool HandleMouseMove(int x, int y, WXUINT flags);
+    bool HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags, WXLPARAM extraInfo);
+    bool HandleMouseMove(int x, int y, WXUINT flags, WXLPARAM extraInfo);
     bool HandleMouseWheel(wxMouseWheelAxis axis,
-                          WXWPARAM wParam, WXLPARAM lParam);
+                          WXWPARAM wParam, WXLPARAM lParam, WXLPARAM extraInfo);
 
     // Common gesture event initialization, returns true if it is the initial
     // event (GF_BEGIN set in flags), false otherwise.
@@ -536,7 +536,7 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // initialize various fields of wxMouseEvent (common part of MSWOnMouseXXX)
-    void InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags);
+    void InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags, WXLPARAM extraInfo);
 
     // check if mouse is in the window
     bool IsMouseInWindow() const;
