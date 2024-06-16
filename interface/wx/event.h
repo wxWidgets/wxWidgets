@@ -2941,6 +2941,13 @@ public:
     bool IsPageScroll() const;
 
     /**
+        Returns @true if the event was synthesized from a touch event.
+
+        @since 3.3.0
+    */
+    bool IsFromTouch() const;
+
+    /**
         Returns @true if the mouse was leaving the window.
 
         @see Entering().

@@ -579,6 +579,7 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_linesPerAction = 0;
     m_columnsPerAction = 0;
     m_magnification = 0.0f;
+    m_fromTouch = false;
 }
 
 void wxMouseEvent::Assign(const wxMouseEvent& event)
