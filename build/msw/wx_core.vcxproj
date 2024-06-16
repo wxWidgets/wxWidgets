@@ -754,7 +754,6 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\gdiimage.cpp" />
-    <ClCompile Include="..\..\src\msw\gdiplus.cpp" />
     <ClCompile Include="..\..\src\msw\graphics.cpp" />
     <ClCompile Include="..\..\src\msw\headerctrl.cpp" />
     <ClCompile Include="..\..\src\msw\helpchm.cpp" />
