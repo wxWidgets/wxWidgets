@@ -1347,6 +1347,19 @@ void MyPanel::DoPasteFromClipboard()
 #if wxUSE_LOG
             *m_log << "Successfully retrieved data from the clipboard.\n";
 #endif // wxUSE_LOG
+#ifdef __WXGTK__
+            auto text = data.GetText();
+            if( GetFocusedText()->IsMaxLengthAllowed() )
+            {
+                auto currentSize = GetFocusedText()->GetValue().Length();
+                auto pastedSize = text.Length();
+                if( (unsigned int) currentSize == (unsigned int) GetFocusedText()->GetMaxLength() )
+                    return;
+                else
+                    if( (unsigned int) currentSize + pastedSize > (unsigned int) GetFocusedText()->SetMaxLength() )
+                        text = text.Left( GetFocusedText()->GetMaxLength() - currentSize );
+            }
+#endif
             GetFocusedText()->AppendText(data.GetText());
         }
         else
