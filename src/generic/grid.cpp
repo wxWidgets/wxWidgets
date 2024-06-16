@@ -5077,8 +5077,9 @@ void wxGrid::DoStartMoveRowOrCol(int col)
 void wxGrid::DoEndMoveRow(int pos)
 {
     wxASSERT_MSG( m_dragMoveRowOrCol != -1, "no matching DoStartMoveRow?" );
-
-    if ( SendEvent(wxEVT_GRID_ROW_MOVE, -1, m_dragMoveRowOrCol) != Event_Vetoed )
+    // col is used for the target row
+    wxGridEvent gridEvt(GetId(), wxEVT_GRID_ROW_MOVE, this, m_dragMoveRowOrCol, pos);
+    if ( DoSendEvent(gridEvt) != Event_Vetoed )
         SetRowPos(m_dragMoveRowOrCol, pos);
 
     m_dragMoveRowOrCol = -1;
@@ -5177,8 +5178,9 @@ bool wxGrid::EnableDragRowMove( bool enable )
 void wxGrid::DoEndMoveCol(int pos)
 {
     wxASSERT_MSG( m_dragMoveRowOrCol != -1, "no matching DoStartMoveCol?" );
-
-    if ( SendEvent(wxEVT_GRID_COL_MOVE, -1, m_dragMoveRowOrCol) != Event_Vetoed )
+    // row is used for the target col
+    wxGridEvent gridEvt(GetId(), wxEVT_GRID_COL_MOVE, this, pos, m_dragMoveRowOrCol);
+    if ( DoSendEvent(gridEvt) != Event_Vetoed )
         SetColPos(m_dragMoveRowOrCol, pos);
 
     m_dragMoveRowOrCol = -1;

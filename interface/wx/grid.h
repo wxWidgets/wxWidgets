@@ -6344,28 +6344,30 @@ public:
         Processes a @c wxEVT_GRID_SELECT_CELL event type.
     @event{EVT_GRID_ROW_MOVE(func)}
         The user tries to change the order of the rows in the grid by
-        dragging the row specified by GetRow(). This event can be vetoed to
-        either prevent the user from reordering the row change completely
-        (but notice that if you don't want to allow it at all, you simply
-        shouldn't call wxGrid::EnableDragRowMove() in the first place), vetoed
-        but handled in some way in the handler, e.g. by really moving the
-        row to the new position at the associated table level, or allowed to
-        proceed in which case wxGrid::SetRowPos() is used to reorder the
-        rows display order without affecting the use of the row indices
-        otherwise.
+        dragging the row specified by GetRow() to the position specified
+        by GetNewRow().
+        This event can be vetoed to either prevent the user from reordering
+        the row change completely (but notice that if you don't want to allow
+        it at all, you simply shouldn't call wxGrid::EnableDragRowMove() in
+        the first place), vetoed but handled in some way in the handler,
+        e.g. by really moving the row to the new position at the associated
+        table level, or allowed to proceed in which case wxGrid::SetRowPos()
+        is used to reorder the rows display order without affecting the use
+        of the row indices otherwise.
         This event macro corresponds to @c wxEVT_GRID_ROW_MOVE event type.
         It is only available since wxWidgets 3.1.7.
     @event{EVT_GRID_COL_MOVE(func)}
         The user tries to change the order of the columns in the grid by
-        dragging the column specified by GetCol(). This event can be vetoed to
-        either prevent the user from reordering the column change completely
-        (but notice that if you don't want to allow it at all, you simply
-        shouldn't call wxGrid::EnableDragColMove() in the first place), vetoed
-        but handled in some way in the handler, e.g. by really moving the
-        column to the new position at the associated table level, or allowed to
-        proceed in which case wxGrid::SetColPos() is used to reorder the
-        columns display order without affecting the use of the column indices
-        otherwise.
+        dragging the column specified by GetCol() to the position specified
+        by GetNewCol().
+        This event can be vetoed to either prevent the user from reordering
+        the column change completely (but notice that if you don't want to
+        allow it at all, you simply shouldn't call wxGrid::EnableDragColMove()
+        in the first place), vetoed but handled in some way in the handler,
+        e.g. by really moving the column to the new position at the associated
+        table level, or allowed to proceed in which case wxGrid::SetColPos()
+        is used to reorder the columns display order without affecting the use
+        of the column indices otherwise.
         This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
     @event{EVT_GRID_COL_SORT(func)}
         This event is generated when a column is clicked by the user and its
@@ -6434,6 +6436,20 @@ public:
         retrieved using wxGrid::GetGridCursorRow().
     */
     int GetRow() const;
+
+    /**
+        Target row for wxEVT_GRID_ROW_MOVE
+
+        @since 3.3.0
+    */
+    int GetNewRow() const;
+
+    /**
+        Target column for wxEVT_GRID_COL_MOVE
+
+        @since 3.3.0
+    */
+    int GetNewCol() const;
 
     /**
         Returns @true if the Meta key was down at the time of the event.

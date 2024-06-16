@@ -369,6 +369,9 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
     EVT_GRID_COL_AUTO_SIZE( GridFrame::OnColAutoSize )
+    EVT_GRID_ROW_MOVE( GridFrame::OnRowMove )
+    EVT_GRID_COL_MOVE( GridFrame::OnColMove )
+
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECTING( GridFrame::OnRangeSelecting )
     EVT_GRID_RANGE_SELECTED( GridFrame::OnRangeSelected )
@@ -1710,6 +1713,18 @@ void GridFrame::OnColAutoSize( wxGridSizeEvent &event )
     {
         event.Skip();
     }
+}
+
+void GridFrame::OnRowMove(wxGridEvent& event)
+{
+    wxLogMessage("Moving row %d to %d", event.GetRow(), event.GetNewRow());
+    event.Skip();
+}
+
+void GridFrame::OnColMove(wxGridEvent& event)
+{
+    wxLogMessage("Moving column %d to %d", event.GetCol(), event.GetNewCol());
+    event.Skip();
 }
 
 void GridFrame::OnSelectCell( wxGridEvent& ev )
