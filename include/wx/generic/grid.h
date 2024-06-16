@@ -3170,6 +3170,8 @@ public:
 
     int GetRow() const { return m_row; }
     int GetCol() const { return m_col; }
+    int GetNewRow() const { return m_col; }
+    int GetNewCol() const { return m_row; }
     wxPoint GetPosition() const { return wxPoint( m_x, m_y ); }
     bool Selecting() const { return m_selecting; }
 
