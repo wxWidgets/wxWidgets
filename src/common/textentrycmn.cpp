@@ -229,7 +229,7 @@ void wxTextEntryBase::ChangeValue(const wxString& value)
 
 void wxTextEntryBase::AppendText(const wxString& text)
 {
-    bool old;
+    bool old = false;
     auto textCtrl = dynamic_cast<wxTextCtrl *>( this );
     if( textCtrl && textCtrl->IsMultiLine() )
     {
