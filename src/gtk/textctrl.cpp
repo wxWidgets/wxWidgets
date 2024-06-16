@@ -2376,13 +2376,10 @@ void wxTextCtrl::HandleMaxLength(wxString &text)
     if( count == m_maxlen )
         return;
     auto fullsize = count + text.length();
-    if( fullsize >= 0 )
+    if( (unsigned int) fullsize > (unsigned int) m_maxlen )
     {
-        if( (unsigned int) fullsize > (unsigned int) m_maxlen )
-        {
-            auto newlen = m_maxlen - count;
-            text = text.Left( newlen );
-        }
+        auto newlen = m_maxlen - count;
+        text = text.Left( newlen );
     }
 }
 
