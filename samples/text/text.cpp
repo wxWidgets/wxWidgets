@@ -1356,7 +1356,7 @@ void MyPanel::DoPasteFromClipboard()
                 if( (unsigned int) currentSize == (unsigned int) GetFocusedText()->GetMaxLength() )
                     return;
                 else
-                    if( (unsigned int) currentSize + pastedSize > (unsigned int) GetFocusedText()->SetMaxLength() )
+                    if( (unsigned int) currentSize + pastedSize > (unsigned int) GetFocusedText()->GetMaxLength() )
                         text = text.Left( GetFocusedText()->GetMaxLength() - currentSize );
             }
 #endif
