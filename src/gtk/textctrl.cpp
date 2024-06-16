@@ -955,7 +955,7 @@ void wxTextCtrl::SetMaxLength(unsigned long length)
     if( HasFlag( wxTE_MULTILINE ) )
     {
         m_maxlen = length;
-        m_maxLengthAllowed = true; 
+        m_maxLengthAllowed = true;
         g_signal_connect_after( m_buffer, "insert-text", G_CALLBACK( maxlen_handler ), gpointer( this ) );
     }
     else
