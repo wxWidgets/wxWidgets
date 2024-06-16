@@ -134,8 +134,6 @@ public:
     bool SetBackgroundColour(const wxColour& colour) override;
 
     void HandleMaxLength(wxString &text);
-    bool IsMaxLengthAllowed() const { return m_maxLengthAllowed; }
-    void SetMaxLengthAllowed(const bool &allowed) { m_maxLengthAllowed = allowed; }
 
     GtkWidget* GetConnectWidget() override;
 
