@@ -20,7 +20,7 @@ public:
 
 wxDECLARE_APP(wxMyApp);
 
-constexpr unsigned int TOUCH_POINTS = 16;
+constexpr unsigned int TOUCH_POINTS = 17;
 
 class MyFrame: public wxFrame
 {
@@ -114,6 +114,7 @@ MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
     m_TouchPoints[13].pen = wxPen(*wxYELLOW, 2, wxPENSTYLE_DOT);
     m_TouchPoints[14].pen = wxPen(*wxBLUE, 2, wxPENSTYLE_DOT);
     m_TouchPoints[15].pen = wxPen(*wxRED, 2, wxPENSTYLE_DOT);
+    m_TouchPoints[16].pen = wxPen(*wxLIGHT_GREY, 2, wxPENSTYLE_DOT);
 
     wxMenu *file_menu = new wxMenu;
 
@@ -155,6 +156,10 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 
 int MyFrame::FindIndexOfTouchId(const wxTouchSequenceId& id)
 {
+    // Unique drawing for mouse pointer
+    if (id == m_MouseId)
+        return TOUCH_POINTS - 1;
+
     int idx = -1;
     for (unsigned i = 0; i < TOUCH_POINTS; i++)
     {
