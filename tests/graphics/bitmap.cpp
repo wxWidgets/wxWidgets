@@ -170,6 +170,7 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
             }
         }
 
+        // rectangle transparent pen test
         for ( int size = 4 ; size != 0 ; --size )
         {
             INFO("Red square size:  " << size)
@@ -213,6 +214,118 @@ TEST_CASE("BitmapTestCase::ToImage", "[bitmap][image][convertto]")
                     }
                     rowStartBmp.OffsetY(dataBmp, 1);
                 }
+            }
+        }
+
+        /* ellipse boundary test:  on wxMSW, ellipse goes outside
+            rect on right and bottom */
+        {
+            wxBitmap bmp2 = bmp;
+            // verify bmp starts yellow
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (*wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+
+            // change rectangle to red
+            wxRect rect(wxPoint(3, 3), wxSize(10, 5));
+            {
+                wxMemoryDC dc(bmp2);
+                dc.SetPen(*wxTRANSPARENT_PEN);
+                dc.SetBrush(*wxRED_BRUSH);
+                dc.DrawRectangle(rect);
+            }
+
+            // verify bitmap is still yellow, except rectangle is red
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (rect.Contains(x, y) ? *wxRED : *wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+
+            // draw ellipse with rectangle bottomright moved in 1 (diagonal) pixel
+            {
+                wxMemoryDC dc(bmp2);
+                dc.SetPen(*wxRED_PEN);
+                dc.SetBrush(*wxTRANSPARENT_BRUSH);
+                wxRect rect2(rect.GetTopLeft(), wxSize(rect.GetWidth() - 1, rect.GetHeight() - 1));
+                dc.DrawEllipse(rect2);
+            }
+
+            // verify bitmap is still yellow, except rectangle is red
+            {
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        CHECK_EQUAL_COLOUR_RGB(bmpc, (rect.Contains(x, y) ? *wxRED : *wxYELLOW));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+            }
+
+            // draw ellipse with full rectangle
+            {
+                wxMemoryDC dc(bmp2);
+                dc.SetPen(*wxRED_PEN);
+                dc.SetBrush(*wxTRANSPARENT_BRUSH);
+                dc.DrawEllipse(rect);
+            }
+
+            // verify that ellipse exceeded rect on bottom and right
+            {
+                bool pastBottom = false;
+                bool pastRight = false;
+                wxNativePixelData dataBmp(bmp2);
+                wxNativePixelData::Iterator rowStartBmp(dataBmp);
+                for ( int y = 0; y < bmp2.GetHeight(); ++y )
+                {
+                    wxNativePixelData::Iterator iBmp = rowStartBmp;
+                    for ( int x = 0; x < bmp2.GetWidth(); ++x, ++iBmp )
+                    {
+                        wxColour bmpc(iBmp.Red(), iBmp.Green(), iBmp.Blue());
+                        if (bmpc != (rect.Contains(x, y) ? *wxRED : *wxYELLOW))
+                        {
+                            INFO("x,y:  " << x << ", " << y);
+                            if (y == rect.GetBottom() + 1)
+                            {
+                                pastBottom = true;
+                            }
+                            if (x == rect.GetRight() + 1)
+                            {
+                                pastRight = true;
+                            }
+                        }
+                        CHECK((bmpc == (rect.Contains(x, y) ? *wxRED : *wxYELLOW) ||
+                                y == rect.GetBottom() + 1 ||
+                                x == rect.GetRight() + 1));
+                    }
+                    rowStartBmp.OffsetY(dataBmp, 1);
+                }
+                CHECK((pastBottom && pastRight));
             }
         }
     }
