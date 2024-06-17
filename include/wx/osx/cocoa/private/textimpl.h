@@ -60,6 +60,8 @@ public :
 
     virtual wxString GetStringValue() const override ;
     virtual void SetStringValue( const wxString &str) override ;
+    virtual wxString GetRTFValue() const override { return GetStringValue(); };
+    virtual void SetRTFValue(const wxString& str) override { SetStringValue(str); };
     virtual void Copy() override ;
     virtual void Cut() override ;
     virtual void Paste() override ;

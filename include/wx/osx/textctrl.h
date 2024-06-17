@@ -147,6 +147,9 @@ public:
     void OSXEnableAutomaticDashSubstitution(bool enable);
     void OSXDisableAllSmartSubstitutions();
 
+    wxString OSXGetRTFValue() const;
+    void OSXSetRTFValue(const wxString& val);
+
 protected:
     // common part of all ctors
     void Init();

@@ -149,6 +149,16 @@ void wxTextCtrl::OSXDisableAllSmartSubstitutions()
     OSXEnableAutomaticQuoteSubstitution(false);
 }
 
+wxString wxTextCtrl::OSXGetRTFValue() const
+{
+    return GetTextPeer()->GetRTFValue();
+}
+
+void wxTextCtrl::OSXSetRTFValue(const wxString& val)
+{
+    GetTextPeer()->SetRTFValue(val);
+}
+
 bool wxTextCtrl::SetFont( const wxFont& font )
 {
     if ( !wxTextCtrlBase::SetFont( font ) )
