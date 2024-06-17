@@ -93,7 +93,7 @@ wxEND_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
     const wxSize& size, const long style)
     : wxFrame(parent, wxID_ANY, title, pos, size, style),
-    m_MouseId(&m_MouseId)
+    m_MouseId(wxUIntToPtr(0xFFFFFFFF))
 {
     SetBackgroundStyle(wxBG_STYLE_PAINT);
     SetClientSize(FromDIP(wxSize(800, 600)));
