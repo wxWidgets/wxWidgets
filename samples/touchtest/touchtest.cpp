@@ -221,22 +221,16 @@ void MyFrame::DrawEnd(const wxTouchSequenceId& id, wxPoint pos)
 
 void MyFrame::OnTouchBegin(wxMultiTouchEvent& event)
 {
-    if (event.IsPrimary())
-        return;
     DrawStart(event.GetSequenceId(), event.GetPosition());
 }
 
 void MyFrame::OnTouchMove(wxMultiTouchEvent& event)
 {
-    if (event.IsPrimary())
-        return;
     DrawUpdate(event.GetSequenceId(), event.GetPosition());
 }
 
 void MyFrame::OnTouchEnd(wxMultiTouchEvent& event)
 {
-    if (event.IsPrimary())
-        return;
     DrawEnd(event.GetSequenceId(), event.GetPosition());
 }
 
