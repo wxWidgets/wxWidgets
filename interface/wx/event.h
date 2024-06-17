@@ -2945,7 +2945,7 @@ public:
 
         @since 3.3.0
     */
-    bool IsFromTouch() const;
+    bool IsSynthesized() const;
 
     /**
         Returns @true if the mouse was leaving the window.

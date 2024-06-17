@@ -5984,7 +5984,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_aux2Down = (flags & MK_XBUTTON2) != 0;
     event.m_altDown = ::wxIsAltDown();
 
-    event.m_fromTouch = ::IsTouchEventMSW(extraInfo);
+    event.m_synthesized = ::IsTouchEventMSW(extraInfo);
 
     event.SetTimestamp(::GetMessageTime());
 
