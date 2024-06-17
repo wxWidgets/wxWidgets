@@ -1891,7 +1891,7 @@ public:
     bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
 
     // Check if the event was synthesized from a touch event.
-    bool IsFromTouch() const { return m_fromTouch; }
+    bool IsSynthesized() const { return m_synthesized; }
 
     float GetMagnification() const { return m_magnification; }
     virtual wxEvent *Clone() const override { return new wxMouseEvent(*this); }
@@ -1914,7 +1914,7 @@ public:
     int           m_linesPerAction;
     int           m_columnsPerAction;
     float         m_magnification;
-    bool          m_fromTouch;
+    bool          m_synthesized;
 
 protected:
     void Assign(const wxMouseEvent& evt);
