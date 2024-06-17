@@ -3703,12 +3703,12 @@ wxEmulateMotionEvent(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
 } // anonymous namespace
 
 extern "C" {
-static void
+static gboolean
 touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
 {
     wxWindowGesturesData* const data = wxWindowGestures::FromObject(win);
     if ( !data )
-        return;
+        return false;
 
     if ( data->m_rawTouchEvents)
     {
@@ -3744,7 +3744,8 @@ touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
             event.SetSequenceId(wxTouchSequenceId(gdk_event->sequence));
             event.SetPrimary(gdk_event->emulating_pointer);
 
-            win->GTKProcessEvent(event);
+            if (win->GTKProcessEvent(event))
+                return true;
         }
     }
 
@@ -3842,6 +3843,8 @@ touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
         default:
         break;
     }
+
+    return true;
 }
 }
 
