@@ -431,12 +431,7 @@ protected:
             wxPanGestureEvent evp(win->GetId());
             QPoint pos = QCursor::pos();
             evp.SetPosition( wxQtConvertPoint( pos ) );
-
-            QPoint offset = gesture->offset().toPoint();
-            QPoint offset_last = gesture->lastOffset().toPoint();
-            QPoint delta(offset.x() - offset_last.x(), offset.y() - offset_last.y());
-
-            evp.SetDelta( wxQtConvertPoint( delta ) );
+            evp.SetDelta( wxQtConvertPoint( gesture->delta().toPoint() ) );
 
             switch(gesture->state())
             {
@@ -462,16 +457,14 @@ protected:
         wxWindow *win = wxWindow::QtRetrieveWindowPointer( this );
         if (win)
         {
-
-            qreal this_sf = gesture->scaleFactor();
-            QPoint center_point = gesture->centerPoint().toPoint();
-
-            wxZoomGestureEvent evp(win->GetId());
-            evp.SetPosition( wxQtConvertPoint( center_point ) );
-            evp.SetZoomFactor( this_sf);
-
-            switch(gesture->state())
+            if (gesture->changeFlags() & QPinchGesture::ScaleFactorChanged)
             {
+                wxZoomGestureEvent evp(win->GetId());
+                evp.SetPosition(wxQtConvertPoint(gesture->centerPoint().toPoint()));
+                evp.SetZoomFactor(gesture->totalScaleFactor());
+
+                switch (gesture->state())
+                {
                 case Qt::GestureStarted:
                     evp.SetGestureStart();
                     break;
@@ -481,12 +474,34 @@ protected:
                     break;
                 default:
                     break;
+                }
+
+                win->ProcessWindowEvent(evp);
             }
 
-            win->ProcessWindowEvent( evp );
+            if (gesture->changeFlags() & QPinchGesture::RotationAngleChanged)
+            {
+                wxRotateGestureEvent evp(win->GetId());
+                evp.SetPosition(wxQtConvertPoint(gesture->centerPoint().toPoint()));
+                evp.SetRotationAngle(wxDegToRad(gesture->totalRotationAngle()));
+
+                switch (gesture->state())
+                {
+                case Qt::GestureStarted:
+                    evp.SetGestureStart();
+                    break;
+                case Qt::GestureFinished:
+                case Qt::GestureCanceled:
+                    evp.SetGestureEnd();
+                    break;
+                default:
+                    break;
+                }
+
+                win->ProcessWindowEvent(evp);
+            }
 
             event->accept();
-
         }
     }
 };
