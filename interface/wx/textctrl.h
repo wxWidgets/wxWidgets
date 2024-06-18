@@ -1944,7 +1944,7 @@ public:
     void OSXDisableAllSmartSubstitutions();
 
     /**
-        Returns the content of the text control as RTF (Rich Text Formatted) text.
+        Returns the content of a multiline text control as RTF (Rich Text Formatted) text.
 
         @onlyfor{wxosx}
         @since 3.3.0
@@ -1954,7 +1954,8 @@ public:
     wxString OSXGetRTFValue() const;
 
     /**
-        Sets the content of the text control from a RTF (Rich Text Formatted) buffer.
+        Sets the content of a multiline text control from an RTF
+        (Rich Text Formatted) buffer.
 
         This offers more granular control of content formatting, as well as a
         significant performance benefit with larger content. This also provides the

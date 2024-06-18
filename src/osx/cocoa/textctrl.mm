@@ -846,7 +846,7 @@ wxString wxNSTextViewControl::GetRTFValue() const
     {
         NSData* rtfData = [m_textView RTFFromRange:NSMakeRange(0, [[m_textView textStorage] length])];
         NSMutableString* rtfString = [[NSMutableString alloc] initWithData:rtfData encoding:NSASCIIStringEncoding];
-        wxString result = wxMacConvertNewlines13To10(wxCFStringRef::AsString(rtfString, m_wxPeer->GetFont().GetEncoding()));
+        wxString result = wxMacConvertNewlines13To10(wxCFStringRef::AsString(rtfString));
         [rtfString release];
         return result;
     }
@@ -860,9 +860,9 @@ void wxNSTextViewControl::SetRTFValue(const wxString &str)
     
     if (m_textView)
     {
-        [m_textView setString: wxCFStringRef( wxEmptyString , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
-        NSData* rtfData=[wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString() dataUsingEncoding:NSASCIIStringEncoding];
-        [m_textView replaceCharactersInRange:NSMakeRange(0,0) withRTF:rtfData];
+        [m_textView setString: wxCFStringRef( wxEmptyString ).AsNSString()];
+        NSData* rtfData=[wxCFStringRef( st ).AsNSString() dataUsingEncoding:NSASCIIStringEncoding];
+        [m_textView replaceCharactersInRange:NSMakeRange(0, 0) withRTF:rtfData];
     }
     // Some text styles have to be updated manually.
     DoUpdateTextStyle();
