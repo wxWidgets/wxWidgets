@@ -1288,6 +1288,7 @@ GTK_WIN32_SRC =
 GTK_WIN32_HDR =
     wx/generic/caret.h
     wx/msw/dib.h
+    wx/msw/init.h
     wx/msw/joystick.h
     wx/msw/ole/automtn.h
     wx/msw/ole/comimpl.h

@@ -1393,6 +1393,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/sound.h
     wx/msw/joystick.h
     wx/msw/taskbar.h
+    wx/msw/init.h
 </set>
 <set var="GTK_PLATFORM_SRC" hints="files">
     <if cond="PLATFORM_UNIX=='1'">$(XWIN_LOWLEVEL_SRC)</if>

@@ -1283,6 +1283,7 @@ set(GTK_WIN32_HDR
     wx/msw/sound.h
     wx/msw/taskbar.h
     wx/msw/joystick.h
+    wx/msw/init.h
 )
 
 set(GTK_LOWLEVEL_SRC

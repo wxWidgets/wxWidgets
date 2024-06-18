@@ -2413,7 +2413,8 @@ COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR =  \
 	wx/unix/fontutil.h \
 	wx/msw/sound.h \
 	wx/msw/joystick.h \
-	wx/msw/taskbar.h
+	wx/msw/taskbar.h \
+	wx/msw/init.h
 @COND_PLATFORM_WIN32_1@GTK_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_GTK_PLATFORM_HDR)
 @COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
 @COND_PLATFORM_MACOSX_1@WEBVIEW_HDR_PLATFORM = \
