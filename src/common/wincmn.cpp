@@ -634,26 +634,16 @@ void wxWindowBase::FitInside()
 }
 
 // On Mac, scrollbars are explicitly children.
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
 static bool wxHasRealChildren(const wxWindowBase* win)
 {
-    int realChildCount = 0;
-
-    for ( wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
+    for ( const auto child : win->GetChildren() )
     {
-        wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel() && win->IsShown()
-#if wxUSE_SCROLLBAR
-            && !wxDynamicCast(win, wxScrollBar)
-#endif
-            )
-            realChildCount ++;
+        if ( !child->IsTopLevel() && child->IsShown()
+            && win->IsClientAreaChild(child) )
+            return true;
     }
-    return (realChildCount > 0);
+    return false;
 }
-#endif
 
 void wxWindowBase::InvalidateBestSize()
 {
@@ -713,11 +703,7 @@ wxSize wxWindowBase::DoGetBestSize() const
         best = wxSize(maxX, maxY);
     }
 #endif // wxUSE_CONSTRAINTS
-    else if ( !GetChildren().empty()
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-              && wxHasRealChildren(this)
-#endif
-              )
+    else if ( wxHasRealChildren(this) )
     {
         // our minimal acceptable size is such that all our visible child
         // windows fit inside
@@ -729,10 +715,10 @@ wxSize wxWindowBase::DoGetBestSize() const
               node = node->GetNext() )
         {
             wxWindow *win = node->GetData();
-            if ( win->IsTopLevel()
-                    || !win->IsShown()
+            if ( win->IsTopLevel() || !win->IsShown()
+                || !IsClientAreaChild(win)
 #if wxUSE_STATUSBAR
-                        || wxDynamicCast(win, wxStatusBar)
+                || wxDynamicCast(win, wxStatusBar)
 #endif // wxUSE_STATUSBAR
                )
             {
