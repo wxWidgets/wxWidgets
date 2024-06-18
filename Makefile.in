@@ -13782,7 +13782,8 @@ install-wxconfig:
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/config
 	$(INSTALL_SCRIPT) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(libdir)/wx/config
-	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) $(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+	# Warning! If the --relative symlink fails (e.g. *BSD), then we'd create an absolute symlink, which will be broken if DESTDIR is moved
+	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) --relative $(DESTDIR)$(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || $(LN_S) $(DESTDIR)$(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
 
 locale_install: 
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale
