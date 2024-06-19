@@ -934,7 +934,7 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
 {
 #ifndef __WXOSX__
-    wxASSERT_MSG(fileType == wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
+    wxASSERT_MSG(fileType != wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
     if (fileType == wxTEXT_TYPE_RTF)
     {
         return false;
@@ -978,7 +978,7 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
 bool wxTextAreaBase::DoSaveFile(const wxString& filename, int fileType)
 {
 #ifndef __WXOSX__
-    wxASSERT_MSG(fileType == wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
+    wxASSERT_MSG(fileType != wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
     if (fileType == wxTEXT_TYPE_RTF)
     {
         return false;
