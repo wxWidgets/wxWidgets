@@ -857,7 +857,7 @@ void wxNSTextViewControl::SetRTFValue(const wxString &str)
 {
     wxString st = wxMacConvertNewlines10To13(str);
     wxMacEditHelper helper(m_textView);
-    
+
     if (m_textView)
     {
         [m_textView setString: wxCFStringRef( wxEmptyString ).AsNSString()];
