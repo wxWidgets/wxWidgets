@@ -99,6 +99,11 @@ Changes in behaviour not resulting in compilation errors
 - wxIMAGE_QUALITY_NEAREST has a different numeric value and is not the same
   as wxIMAGE_QUALITY_NORMAL any longer, see documentation for more details.
 
+- wxTextCtrl::{Save,Load}File() will use RTF format when saving/loading files
+  with .rtf extension, and not plain text any longer, by default for the
+  platforms with RTF support. If you need to save/load plain text even for the
+  files with the .rtf extension, specify wxTEXT_TYPE_PLAIN explicitly.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

@@ -30,6 +30,10 @@
 
 #include "wx/ffile.h"
 
+#ifdef wxHAS_TEXTCTRL_RTF
+    #include "wx/filename.h"
+#endif
+
 extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
 
 // ----------------------------------------------------------------------------
@@ -927,12 +931,41 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     return true;
 }
 
+// static
+bool wxTextAreaBase::IsRTFSupported()
+{
+#ifdef wxHAS_TEXTCTRL_RTF
+    return true;
+#else
+    return false;
+#endif
+}
+
+wxString wxTextAreaBase::GetRTFValue() const
+{
+    wxFAIL_MSG("Not implemented for the current platform.");
+
+    return wxEmptyString;
+}
+
+void wxTextAreaBase::SetRTFValue(const wxString& WXUNUSED(val))
+{
+    wxFAIL_MSG("Not implemented for the current platform.");
+}
+
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------
 
-bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
 {
+#ifndef wxHAS_TEXTCTRL_RTF
+    wxASSERT_MSG(fileType != wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
+    if (fileType == wxTEXT_TYPE_RTF)
+    {
+        return false;
+    }
+#endif
 #if wxUSE_FFILE
     wxFFile file(filename);
     if ( file.IsOpened() )
@@ -940,7 +973,30 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
         wxString text;
         if ( file.ReadAll(&text) )
         {
-            SetValue(text);
+            switch ( fileType )
+            {
+                case wxTEXT_TYPE_RTF:
+#ifdef wxHAS_TEXTCTRL_RTF
+                    SetRTFValue(text);
+#else // !wxHAS_TEXTCTRL_RTF
+                    wxFAIL_MSG("RTF support not available under this platform");
+#endif // wxHAS_TEXTCTRL_RTF/!wxHAS_TEXTCTRL_RTF
+                    break;
+
+                case wxTEXT_TYPE_ANY:
+#ifdef wxHAS_TEXTCTRL_RTF
+                    if ( wxFileName(filename).GetExt().CmpNoCase("rtf") == 0 )
+                    {
+                        SetRTFValue(text);
+                        break;
+                    }
+#endif // wxHAS_TEXTCTRL_RTF
+                    wxFALLTHROUGH;
+
+                case wxTEXT_TYPE_PLAIN:
+                    SetValue(text);
+                    break;
+            }
 
             DiscardEdits();
             m_filename = filename;
@@ -957,11 +1013,38 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
     return false;
 }
 
-bool wxTextAreaBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextAreaBase::DoSaveFile(const wxString& filename, int fileType)
 {
 #if wxUSE_FFILE
     wxFFile file(filename, wxT("w"));
-    if ( file.IsOpened() && file.Write(GetValue()) )
+
+    wxString value;
+    switch ( fileType )
+    {
+        case wxTEXT_TYPE_RTF:
+#ifdef wxHAS_TEXTCTRL_RTF
+            value = GetRTFValue();
+#else // !wxHAS_TEXTCTRL_RTF
+            wxFAIL_MSG("RTF support not available under this platform");
+#endif // wxHAS_TEXTCTRL_RTF/!wxHAS_TEXTCTRL_RTF
+            break;
+
+        case wxTEXT_TYPE_ANY:
+#ifdef wxHAS_TEXTCTRL_RTF
+            if ( wxFileName(filename).GetExt().CmpNoCase("rtf") == 0 )
+            {
+                value = GetRTFValue();
+                break;
+            }
+#endif // wxHAS_TEXTCTRL_RTF
+            wxFALLTHROUGH;
+
+        case wxTEXT_TYPE_PLAIN:
+            value = GetValue();
+            break;
+    }
+
+    if ( file.IsOpened() && file.Write(value) )
     {
         // if it worked, save for future calls
         m_filename = filename;

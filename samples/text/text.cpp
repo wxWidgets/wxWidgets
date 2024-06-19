@@ -283,6 +283,8 @@ public:
 #endif // wxUSE_LOG
     void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
+    void OnFileSaveRTF(wxCommandEvent& event);
+    void OnFileLoadRTF(wxCommandEvent& event);
     void OnRichTextTest(wxCommandEvent& event);
 
     void OnSetEditable(wxCommandEvent& event);
@@ -321,6 +323,16 @@ public:
     void OnSetText(wxCommandEvent& WXUNUSED(event))
     {
         m_panel->m_text->SetValue("Hello, world! (what else did you expect?)");
+    }
+
+    void OnSetRTF(wxCommandEvent& WXUNUSED(event))
+    {
+        m_panel->m_textrich->SetRTFValue(R"({\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red79\green129\blue189;\red255\green0\blue0;\red192\green192\blue192;}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1
+ \pard\sa200\sl276\slmult1\cf1\b\i\f0\fs22\lang9 wxWidgets 3.3\cf0\b0\i0\par
+\cf2 A \highlight3\ul cross-platform \highlight0\ulnone GUI library which uses \ul\b native\ulnone\b0  controls.\cf0\par
+})");
     }
 
     void OnChangeText(wxCommandEvent& WXUNUSED(event))
@@ -402,7 +414,9 @@ enum
     TEXT_QUIT = wxID_EXIT,
     TEXT_ABOUT = wxID_ABOUT,
     TEXT_LOAD = 101,
+    TEXT_LOAD_RTF,
     TEXT_SAVE,
+    TEXT_SAVE_RTF,
     TEXT_CLEAR,
     TEXT_RICH_TEXT_TEST,
 
@@ -437,6 +451,7 @@ enum
     TEXT_REPLACE,
     TEXT_SELECT,
     TEXT_SET,
+    TEXT_SET_RTF,
     TEXT_CHANGE,
 
     // log menu
@@ -463,6 +478,15 @@ bool MyApp::OnInit()
                       "Save the text control contents to file");
     file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
                       "Load the sample file into text control");
+
+    if ( wxTextCtrl::IsRTFSupported() )
+    {
+        file_menu->Append(TEXT_SAVE_RTF, "&Save file as RTF",
+            "Save the text control contents to file");
+        file_menu->Append(TEXT_LOAD_RTF, "&Load RTF file",
+            "Load the sample file into text control");
+    }
+
     file_menu->AppendSeparator();
     file_menu->Append(TEXT_RICH_TEXT_TEST, "Show Rich Text Editor");
     file_menu->AppendSeparator();
@@ -510,6 +534,11 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_SELECT, "&Select characters 4 to 8\tCtrl-I");
     menuText->Append(TEXT_SET, "&Set the first text zone value\tCtrl-E");
     menuText->Append(TEXT_CHANGE, "&Change the first text zone value\tShift-Ctrl-E");
+    if ( wxTextCtrl::IsRTFSupported() )
+    {
+        menuText->AppendSeparator();
+        menuText->Append(TEXT_SET_RTF, "Set the rich text zone value from rich text formatted content");
+    }
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
     menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
@@ -1485,6 +1514,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
     EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
+    EVT_MENU(TEXT_SAVE_RTF, MyFrame::OnFileSaveRTF)
+    EVT_MENU(TEXT_LOAD_RTF, MyFrame::OnFileLoadRTF)
     EVT_MENU(TEXT_RICH_TEXT_TEST, MyFrame::OnRichTextTest)
 
     EVT_MENU(TEXT_LOG_KEY,  MyFrame::OnLogKey)
@@ -1532,6 +1563,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_GET_LINELENGTH,     MyFrame::OnGetLineLength)
 
     EVT_MENU(TEXT_SET,                MyFrame::OnSetText)
+    EVT_MENU(TEXT_SET_RTF,            MyFrame::OnSetRTF)
     EVT_MENU(TEXT_CHANGE,             MyFrame::OnChangeText)
 
     EVT_IDLE(MyFrame::OnIdle)
@@ -1647,9 +1679,9 @@ void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
         // verify that the file length is correct
         wxFile file("dummy.txt");
         wxLogStatus(this,
-                    "Successfully saved file (text len = %lu, file size = %ld)",
-                    (unsigned long)m_panel->m_textrich->GetValue().length(),
-                    (long) file.Length());
+                    "Successfully saved file (text len = %zu, file size = %lld)",
+                    m_panel->m_textrich->GetValue().length(),
+                    file.Length());
 #endif
     }
     else
@@ -1659,6 +1691,37 @@ void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnFileLoad(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_panel->m_textrich->LoadFile("dummy.txt") )
+    {
+        wxLogStatus(this, "Successfully loaded file");
+    }
+    else
+    {
+        wxLogStatus(this, "Couldn't load the file");
+    }
+}
+
+void MyFrame::OnFileSaveRTF(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_panel->m_textrich->SaveFile("dummy.rtf", wxTEXT_TYPE_RTF) )
+    {
+#if wxUSE_FILE
+        // verify that the file length is correct
+        wxFile file("dummy.rtf");
+        wxLogStatus(this,
+            "Successfully saved file (text len = %zu, file size = %lld)",
+            m_panel->m_textrich->GetValue().length(),
+            file.Length());
+#endif // wxUSE_FILE
+    }
+    else
+    {
+        wxLogStatus(this, "Couldn't save the file");
+    }
+}
+
+void MyFrame::OnFileLoadRTF(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_panel->m_textrich->LoadFile("dummy.rtf", wxTEXT_TYPE_RTF) )
     {
         wxLogStatus(this, "Successfully loaded file");
     }
