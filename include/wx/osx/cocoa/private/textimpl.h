@@ -63,11 +63,11 @@ public :
     virtual wxString GetRTFValue() const override
     {
         wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
-        return GetStringValue();
+        return wxEmptyString;
     };
     virtual void SetRTFValue(const wxString& WXUNUSED(str)) override
     {
-        wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
+        wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
     };
     virtual void Copy() override ;
     virtual void Cut() override ;

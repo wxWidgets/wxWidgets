@@ -109,6 +109,9 @@ public:
 
     virtual void SetWindowStyleFlag(long style) override;
 
+    virtual wxString GetRTFValue() const override;
+    virtual void SetRTFValue(const wxString& val) override;
+
     // callbacks
     void OnDropFiles(wxDropFilesEvent& event);
     void OnChar(wxKeyEvent& event); // Process 'enter' if required
@@ -146,9 +149,6 @@ public:
     void OSXEnableAutomaticQuoteSubstitution(bool enable);
     void OSXEnableAutomaticDashSubstitution(bool enable);
     void OSXDisableAllSmartSubstitutions();
-
-    wxString GetRTFValue() const;
-    void SetRTFValue(const wxString& val);
 
 protected:
     // common part of all ctors

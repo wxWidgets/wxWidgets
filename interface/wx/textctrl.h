@@ -1637,6 +1637,8 @@ public:
     /**
         Returns the content of a multiline text control as RTF (Rich Text Formatted) text.
 
+        Note that this will return empty string if RTF is not supported by the native control.
+
         @onlyfor{wxosx}
         @since 3.3.0
 
@@ -1651,6 +1653,8 @@ public:
         This offers more granular control of content formatting, as well as a
         significant performance benefit with larger content. This also provides the
         ability read an RTF file and move it directly into the control.
+
+        Note that this will have no effect if RTF is not supported by the native control.
 
         @onlyfor{wxosx}
         @since 3.3.0

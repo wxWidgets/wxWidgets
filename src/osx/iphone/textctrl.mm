@@ -351,12 +351,12 @@ void wxUITextViewControl::SetStringValue( const wxString &str)
 wxString wxUITextViewControl::GetRTFValue() const
 {
     wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
-    return GetStringValue();
+    return wxEmptyString;
 }
 
 void wxUITextViewControl::SetRTFValue(const wxString &str)
 {
-    wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
+    wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
 }
 
 void wxUITextViewControl::Copy()
@@ -569,12 +569,12 @@ void wxUITextFieldControl::SetStringValue( const wxString &str)
 wxString wxUITextFieldControl::GetRTFValue() const
 {
     wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
-    return GetStringValue();
+    return wxEmptyString;
 }
 
 void wxUITextFieldControl::SetRTFValue(const wxString &str)
 {
-    wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
+    wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
 }
 
 wxSize wxUITextFieldControl::GetBestSize() const
