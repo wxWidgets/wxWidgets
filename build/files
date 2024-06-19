@@ -201,6 +201,8 @@ QT_UNIX_HDR=
     wx/unix/sound.h
 
 QT_WIN32_SRC=
+    src/msw/dirdlg.cpp
+    src/msw/filedlg.cpp
     src/msw/ole/automtn.cpp
     src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
@@ -212,6 +214,8 @@ QT_WIN32_SRC=
     src/msw/sound.cpp
 
 QT_WIN32_HDR=
+    wx/msw/dirdlg.h
+    wx/msw/filedlg.h
     wx/msw/ole/automtn.h
     wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h

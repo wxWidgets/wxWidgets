@@ -139,6 +139,12 @@ public:
 
     QWidget *GetHandle() const override;
 
+#ifdef __WINDOWS__
+    // Only for compatibility with MSW wxFileDialog/wxDirDialog implementation. Do not use.
+    WXHWND GetHWND() const { return m_hWnd; }
+    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
+#endif // __WINDOWS__
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) override;
 #endif
@@ -252,6 +258,10 @@ private:
     bool m_mouseInside;
 
     wxSize  m_pendingClientSize;
+
+#ifdef __WINDOWS__
+    WXHWND m_hWnd = nullptr;
+#endif // __WINDOWS__
 
 #if wxUSE_ACCEL
     wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns
