@@ -330,8 +330,8 @@ public:
 #ifdef __WXOSX__
         m_panel->m_textrich->SetRTFValue(R"({\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
 {\colortbl ;\red79\green129\blue189;\red255\green0\blue0;\red192\green192\blue192;}
-{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
-\pard\sa200\sl276\slmult1\cf1\b\i\f0\fs22\lang9 wxWidgets 3.3\cf0\b0\i0\par
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1
+ \pard\sa200\sl276\slmult1\cf1\b\i\f0\fs22\lang9 wxWidgets 3.3\cf0\b0\i0\par
 \cf2 A \highlight3\ul cross-platform \highlight0\ulnone GUI library which uses \ul\b native\ulnone\b0  controls.\cf0\par
 })");
 #endif
