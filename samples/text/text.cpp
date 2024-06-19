@@ -1513,7 +1513,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
     EVT_MENU(TEXT_SAVE_RTF, MyFrame::OnFileSaveRtf)
-    EVT_MENU(TEXT_LOAD_RTF MyFrame::OnFileLoadRtf)
+    EVT_MENU(TEXT_LOAD_RTF, MyFrame::OnFileLoadRtf)
     EVT_MENU(TEXT_RICH_TEXT_TEST, MyFrame::OnRichTextTest)
 
     EVT_MENU(TEXT_LOG_KEY,  MyFrame::OnLogKey)
@@ -1704,7 +1704,7 @@ void MyFrame::OnFileSaveRtf(wxCommandEvent& WXUNUSED(event))
     {
 #if wxUSE_FILE
         // verify that the file length is correct
-        wxFile file("dummy.txt");
+        wxFile file("dummy.rtf");
         wxLogStatus(this,
             "Successfully saved file (text len = %lu, file size = %ld)",
             (unsigned long)m_panel->m_textrich->GetValue().length(),
