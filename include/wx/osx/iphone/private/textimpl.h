@@ -23,6 +23,8 @@ public :
 
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
+    virtual wxString GetRTFValue() const;
+    virtual void SetRTFValue(const wxString& WXUNUSED(str));
     virtual void Copy() ;
     virtual void Cut() ;
     virtual void Paste() ;
@@ -53,6 +55,8 @@ public:
 
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
+    virtual wxString GetRTFValue() const;
+    virtual void SetRTFValue(const wxString& WXUNUSED(str));
     virtual void Copy() ;
     virtual void Cut() ;
     virtual void Paste() ;

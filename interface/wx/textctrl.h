@@ -1624,6 +1624,33 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
+        Returns the content of a multiline text control as RTF (Rich Text Formatted) text.
+
+        @onlyfor{wxosx}
+        @since 3.3.0
+
+        @see SetRTFValue()
+    */
+    wxString GetRTFValue() const;
+
+    /**
+        Sets the content of a multiline text control from an RTF
+        (Rich Text Formatted) buffer.
+
+        This offers more granular control of content formatting, as well as a
+        significant performance benefit with larger content. This also provides the
+        ability read an RTF file and move it directly into the control.
+
+        @onlyfor{wxosx}
+        @since 3.3.0
+
+        @see @ref page_samples_text for a usage example.
+
+        @see GetRTFValue()
+    */
+    void SetRTFValue(const wxString& val);
+
+    /**
         Finds the position of the character at the specified point.
 
         If the return code is not @c wxTE_HT_UNKNOWN the position of the
