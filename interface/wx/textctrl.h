@@ -48,8 +48,19 @@
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
 #define wxTE_RICH2          0x8000
 
-
-#define wxTEXT_TYPE_ANY     0
+/** File types that wxTextCtrl supports for loading and saving.
+    @since 3.3.0
+*/
+enum wxTextCtrlFileType
+{
+    wxTEXT_TYPE_ANY,
+    wxTEXT_TYPE_TEXT = wxTEXT_TYPE_ANY,
+    /** Rich Text Format.
+        @onlyfor{wxosx}
+        @since 3.3.0
+    */
+    wxTEXT_TYPE_RTF
+};
 
 
 /**
@@ -1750,7 +1761,9 @@ public:
         @param filename
             The filename of the file to load.
         @param fileType
-            The type of file to load. This is currently ignored in wxTextCtrl.
+            A wxTextCtrlFileType, specifying the type of file to load.
+            Text is supported on all platforms, and
+            RTF is supported on macOS. @since 3.3.0
 
         @return
             @true if successful, @false otherwise.
@@ -1829,7 +1842,9 @@ public:
         @param filename
             The name of the file in which to save the text.
         @param fileType
-            The type of file to save. This is currently ignored in wxTextCtrl.
+            A wxTextCtrlFileType, specifying the type of file to save as.
+            Text is supported on all platforms, and
+            RTF is supported on macOS. @since 3.3.0
 
         @return
             @true if the operation was successful, @false otherwise.

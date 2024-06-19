@@ -103,7 +103,12 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl file types
 // ----------------------------------------------------------------------------
 
-#define wxTEXT_TYPE_ANY     0
+enum wxTextCtrlFileType
+{
+    wxTEXT_TYPE_ANY,
+    wxTEXT_TYPE_TEXT = wxTEXT_TYPE_ANY,
+    wxTEXT_TYPE_RTF
+};
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl::HitTest return values

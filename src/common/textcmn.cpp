@@ -931,8 +931,15 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 // file IO functions
 // ----------------------------------------------------------------------------
 
-bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
 {
+#ifndef __WXOSX__
+    wxASSERT_MSG(fileType == wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
+    if (fileType == wxTEXT_TYPE_RTF)
+    {
+        return false;
+    }
+#endif
 #if wxUSE_FFILE
     wxFFile file(filename);
     if ( file.IsOpened() )
@@ -940,7 +947,18 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
         wxString text;
         if ( file.ReadAll(&text) )
         {
+#ifdef __WXOSX__
+            if (fileType == wxTEXT_TYPE_RTF)
+            {
+                SetRTFValue(text);
+            }
+            else
+            {
+                SetValue(text);
+            }
+#else
             SetValue(text);
+#endif
 
             DiscardEdits();
             m_filename = filename;
@@ -957,11 +975,24 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
     return false;
 }
 
-bool wxTextAreaBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextAreaBase::DoSaveFile(const wxString& filename, int fileType)
 {
+#ifndef __WXOSX__
+    wxASSERT_MSG(fileType == wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
+    if (fileType == wxTEXT_TYPE_RTF)
+    {
+        return false;
+    }
+#endif
 #if wxUSE_FFILE
-    wxFFile file(filename, wxT("w"));
-    if ( file.IsOpened() && file.Write(GetValue()) )
+    wxFFile file(filename, "w");
+#ifdef __WXOSX__
+    if (file.IsOpened() &&
+        (fileType == wxTEXT_TYPE_RTF ?
+            file.Write(GetRTFValue()) : file.Write(GetValue())))
+#else
+    if (file.IsOpened() && file.Write(GetValue()))
+#endif
     {
         // if it worked, save for future calls
         m_filename = filename;
