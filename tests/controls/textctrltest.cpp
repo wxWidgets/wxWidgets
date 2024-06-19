@@ -1476,8 +1476,13 @@ TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
  \pard\sa200\sl276\slmult1\b\i\f0\fs22\lang9 wxWidg\'e9ts \cf1\i0 3.3\cf0\b0\par
 })");
     // test getting the main text, including an extended ASCII character
-    const wxString result = text->GetRTFValue();
+    wxString result = text->GetValue();
     CHECK(result.find(L"wxWidgéts") != wxString::npos);
+    CHECK(result.find(L"3.3") != wxString::npos);
+
+    result = text->GetRTFValue();
+    // 'é' will be encoded, just see if parts of the content are in there
+    CHECK(result.find(L"wxWidg") != wxString::npos);
     CHECK(result.find(L"3.3") != wxString::npos);
 }
 #endif
