@@ -685,7 +685,7 @@ public:
     virtual wxString GetValue() const = 0;
     virtual void SetValue(const wxString& value) = 0;
 
-    // overridden implemenations are required to actually handle RTF
+    // overridden implementations are required to actually handle RTF
     virtual wxString GetRTFValue() const
     {
         wxFAIL_MSG("GetRTFValue() should only be used with rich, multiline controls.");
