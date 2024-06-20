@@ -168,6 +168,7 @@ library:
 @itemdef{wxUSE_MINIFRAME, Use wxMiniFrame class.}
 @itemdef{wxUSE_MOUSEWHEEL, Support mouse wheel events.}
 @itemdef{wxUSE_MSGDLG, Use wxMessageDialog class and wxMessageBox function.}
+@itemdef{wxUSE_LUNASVG, Use LunaSVG for rasterizing SVG (this option is new since wxWidgets 3.3.0).}
 @itemdef{wxUSE_NANOSVG, Use NanoSVG for rasterizing SVG (this option is new since wxWidgets 3.1.7).}
 @itemdef{wxUSE_NANOSVG_EXTERNAL, Use an external NanoSVG library when wxUSE_NANOSVG is enabled.}
 @itemdef{wxUSE_NANOSVG_EXTERNAL_ENABLE_IMPL, When the external NanoSVG library is header only, define this to enable its implementation.}

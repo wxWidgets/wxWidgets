@@ -534,6 +534,8 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
     <include file="expat.bkl"/>
     <include file="scintilla.bkl"/>
     <include file="lexilla.bkl"/>
+    <include file="lunasvg.bkl"/>
+    <include file="plutovg.bkl"/>
 
 
     <!-- =============================================================== -->
@@ -760,9 +762,11 @@ $(TAB)cl /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
               template="wx_3rdparty_dependencies_base">
         <depends>wxtiff</depends>
         <depends>wxjpeg</depends>
+        <depends>wxplutovg</depends>
         <depends>wxpng</depends>
         <depends>wxscintilla</depends>
         <depends>wxlexilla</depends>
+        <depends>wxlunasvg</depends>
     </template>
 
     <template id="wx_3rdparty_includes_base">

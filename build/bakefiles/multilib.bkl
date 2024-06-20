@@ -384,7 +384,7 @@
     <!--                            STC                                   -->
     <!-- ================================================================ -->
 
-    <template id="stc_base" template="wxscintilla_cppflags,wxlexilla_cppflags">
+    <template id="stc_base" template="wxscintilla_cppflags,wxlexilla_cppflags,wxlunasvg_cppflags">
         <library>wxscintilla</library>
         <library>wxlexilla</library>
     </template>
