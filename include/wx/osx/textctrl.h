@@ -68,7 +68,7 @@ public:
     // operations
     // ----------
 
-
+    virtual void SetMaxLength(unsigned long length) override;
     // sets/clears the dirty flag
     virtual void MarkDirty() override;
     virtual void DiscardEdits() override;
@@ -147,6 +147,7 @@ public:
     void OSXEnableAutomaticDashSubstitution(bool enable);
     void OSXDisableAllSmartSubstitutions();
 
+    unsigned long GetMaxLen() const { return m_maxlen; }
 protected:
     // common part of all ctors
     void Init();
@@ -165,6 +166,8 @@ protected:
 
 private :
     wxMenu  *m_privateContextMenu;
+
+    unsigned long m_maxlen;
 
     wxDECLARE_EVENT_TABLE();
 };
