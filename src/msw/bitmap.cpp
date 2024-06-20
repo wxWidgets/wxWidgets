@@ -784,7 +784,7 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 {
     UnRef();
 
-    wxCHECK_MSG( w > 0 && h > 0, false, wxT("invalid bitmap size") );
+    //wxCHECK_MSG( w > 0 && h > 0, false, wxT("invalid bitmap size") );
 
     m_refData = new wxBitmapRefData;
 
