@@ -1681,7 +1681,9 @@ public:
         Adds @a count copies of @a chPad to the beginning, or to the end of the
         string (the default).
 
-        Removes spaces from the left or from the right (default).
+        By default, appends the given number of spaces to the string. The
+        character being added and whether it is appended or prepended can be
+        changed by providing non-default parameter values.
     */
     wxString& Pad(size_t count, wxUniChar chPad = ' ', bool fromRight = true);
 
