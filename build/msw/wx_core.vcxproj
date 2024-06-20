@@ -592,6 +592,7 @@
     <ClCompile Include="..\..\src\common\wrapsizer.cpp" />
     <ClCompile Include="..\..\src\common\xpmdecod.cpp" />
     <ClCompile Include="..\..\src\generic\bmpsvg.cpp" />
+    <ClCompile Include="..\..\src\generic\maskededit.cpp" />
     <ClCompile Include="..\..\src\generic\preferencesg.cpp" />
     <ClCompile Include="..\..\src\msw\accel.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
@@ -1100,6 +1101,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\bmpbndl.h" />
+    <ClInclude Include="..\..\include\wx\generic\maskededit.h" />
+    <ClInclude Include="..\..\include\wx\maskededit.h" />
     <ClInclude Include="..\..\include\wx\msw\accel.h" />
     <ClInclude Include="..\..\include\wx\msw\appprogress.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\access.h" />

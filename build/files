@@ -11,8 +11,7 @@
 #  - Variable definitions must start with "VAR=" line.
 #  - Anything after one variable definition until the next one is the contents
 #    of the variable. Notice that no variable expansion or anything other
-#    fancy is done here.
-
+#    fancy is done here.mas
 # For the sources used in MSVC project files we also follow a convention that
 # for each FOO_SRC there is a matching FOO_HDR, this allows us to just like FOO
 # in the msvc_projects file instead of listing both the sources and headers.
@@ -914,6 +913,7 @@ GUI_CMN_SRC =
     src/generic/listbkg.cpp
     src/generic/logg.cpp
     src/generic/markuptext.cpp
+    src/generic/maskededit.cp
     src/generic/msgdlgg.cpp
     src/generic/notifmsgg.cpp
     src/generic/numdlgg.cpp
@@ -1072,6 +1072,7 @@ GUI_CMN_HDR =
     wx/generic/hyperlink.h
     wx/generic/infobar.h
     wx/generic/laywin.h
+    wx/generic/maskededit.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/notebook.h
@@ -1125,6 +1126,7 @@ GUI_CMN_HDR =
     wx/joystick.h
     wx/layout.h
     wx/laywin.h
+    wx/maskededit.h
     wx/listbase.h
     wx/listbook.h
     wx/listbox.h

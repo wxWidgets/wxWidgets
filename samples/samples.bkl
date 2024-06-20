@@ -48,6 +48,7 @@
     <subproject id="keyboard" template="sub"/>
     <subproject id="layout" template="sub"/>
     <subproject id="listctrl" template="sub"/>
+    <subproject id="maskededit" template="sub"/>
     <subproject id="mdi" template="sub"/>
     <subproject id="mediaplayer" template="sub" cond="USE_MEDIA=='1'"/>
     <subproject id="menu" template="sub"/>

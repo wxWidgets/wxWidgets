@@ -1028,6 +1028,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/datavgen.cpp
     src/generic/editlbox.cpp
     src/generic/laywin.cpp
+    src/generic/maskededit.cpp
     src/generic/calctrlg.cpp
     src/generic/creddlgg.cpp
     src/generic/rowheightcache.cpp
@@ -1304,6 +1305,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/richtooltip.h
     wx/sound.h
     wx/generic/laywin.h
+    wx/generic/maskededit.h
     wx/generic/splash.h
     wx/generic/calctrlg.h
     wx/generic/sashwin.h
@@ -1311,6 +1313,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/notifmsg.h
     wx/datectrl.h
     wx/laywin.h
+    wx/maskededit.h
     wx/generic/gridsel.h
     wx/aboutdlg.h
     wx/dvrenderers.h
