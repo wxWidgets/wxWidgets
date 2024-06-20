@@ -658,6 +658,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxImage)    wxNullImage;
 #include "wx/imagtiff.h"
 #include "wx/imagpnm.h"
 #include "wx/imagxpm.h"
+#include "wx/imagwebp.h"
 #include "wx/imagiff.h"
 
 #endif // wxUSE_IMAGE

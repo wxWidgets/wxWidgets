@@ -467,6 +467,7 @@ const unsigned char wxIMAGE_ALPHA_THRESHOLD = 0x80;
     - wxICOHandler: For loading and saving.
     - wxCURHandler: For loading and saving.
     - wxANIHandler: For loading only.
+    - wxWEBPHandler: For loading and saving (see below). Includes alpha support.
 
     When saving in PCX format, wxPCXHandler will count the number of different
     colours in the image; if there are 256 or less colours, it will save as 8 bit,
@@ -477,6 +478,8 @@ const unsigned char wxIMAGE_ALPHA_THRESHOLD = 0x80;
 
     Saving GIFs requires images of maximum 8 bpp (see wxQuantize), and the alpha channel converted to a mask (see wxImage::ConvertAlphaToMask).
     Saving an animated GIF requires images of the same size (see wxGIFHandler::SaveAnimation)
+
+    Single WebP images may be loaded, even from animations.
 
     @library{wxcore}
     @category{gdi}
@@ -635,6 +638,7 @@ public:
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
             @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
             @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
+            @li wxBITMAP_TYPE_WEBP: Load a WebP file.
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param index
             Index of the image to load in the case that the image file contains
@@ -1510,6 +1514,7 @@ public:
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
             @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
             @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
+            @li wxBITMAP_TYPE_WEBP: Load a WebP file.
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param index
             Index of the image to load in the case that the image file contains
@@ -2048,6 +2053,7 @@ public:
         @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
         @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
         @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
+        @li wxBITMAP_TYPE_WEBP: Load a WebP file.
         @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
 
         @return Number of available images. For most image handlers, this is 1
