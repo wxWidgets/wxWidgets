@@ -10,6 +10,9 @@
 #ifndef _WX_MSW_TIMECTRL_H_
 #define _WX_MSW_TIMECTRL_H_
 
+#include "wx/uilocale.h"
+#include "wx/msw/private/uilocale.h"
+
 // ----------------------------------------------------------------------------
 // wxTimePickerCtrl
 // ----------------------------------------------------------------------------
@@ -41,9 +44,16 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxTimePickerCtrlNameStr)
     {
-        return MSWCreateDateTimePicker(parent, id, dt,
-                                       pos, size, style,
-                                       validator, name);
+        bool ok = MSWCreateDateTimePicker(parent, id, dt,
+                                          pos, size, style,
+                                          validator, name);
+#if wxUSE_INTL
+        if (ok)
+        {
+            MSWSetTimeFormat(wxLOCALE_TIME_FMT);
+        }
+#endif
+        return ok;
     }
 
     // Override MSW-specific functions used during control creation.
