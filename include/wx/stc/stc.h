@@ -5851,7 +5851,8 @@ public:
         if ( pos == -1 )
             return -1;
 
-        if ( x >= LineLength(y) )
+        int len = LineLength((int)y);
+        if ( x >= len && !((int)y == GetLineCount() - 1 && x == len) )
             return -1;
 
         pos += x;
@@ -5865,7 +5866,8 @@ public:
             return false;
 
         int lx = pos - PositionFromLine(l);
-        if ( lx >= LineLength(l) )
+        int len = LineLength(l);
+        if ( lx >= len && !(l == GetLineCount() - 1 && lx == len) )
             return false;
 
         if ( x )
