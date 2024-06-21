@@ -172,34 +172,6 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti", "[treectrl]")
     CHECK( m_tree->IsSelected(m_grandchild) );
 }
 
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
-{
-#if wxUSE_UIACTIONSIMULATOR
-    EventCounter activated(m_tree, wxEVT_TREE_ITEM_ACTIVATED);
-    EventCounter rclick(m_tree, wxEVT_TREE_ITEM_RIGHT_CLICK);
-
-    wxUIActionSimulator sim;
-
-    wxRect pos;
-    m_tree->GetBoundingRect(m_child1, pos, true);
-
-    // We move in slightly so we are not on the edge
-    wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
-
-    sim.MouseMove(point);
-    wxYield();
-
-    sim.MouseDblClick();
-    wxYield();
-
-    sim.MouseClick(wxMOUSE_BTN_RIGHT);
-    wxYield();
-
-    CHECK(activated.GetCount() == 1);
-    CHECK(rclick.GetCount() == 1);
-#endif // wxUSE_UIACTIONSIMULATOR
-}
-
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem", "[treectrl]")
 {
     EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
@@ -231,6 +203,32 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems", "[treectrl]")
 }
 
 #if wxUSE_UIACTIONSIMULATOR
+
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
+{
+    EventCounter activated(m_tree, wxEVT_TREE_ITEM_ACTIVATED);
+    EventCounter rclick(m_tree, wxEVT_TREE_ITEM_RIGHT_CLICK);
+
+    wxUIActionSimulator sim;
+
+    wxRect pos;
+    m_tree->GetBoundingRect(m_child1, pos, true);
+
+    // We move in slightly so we are not on the edge
+    wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseDblClick();
+    wxYield();
+
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    CHECK(activated.GetCount() == 1);
+    CHECK(rclick.GetCount() == 1);
+}
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit", "[treectrl]")
 {
@@ -379,6 +377,45 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
     wxYield();
 
     CHECK(menu.GetCount() == 1);
+}
+
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation", "[treectrl]")
+{
+    wxUIActionSimulator sim;
+
+    m_tree->CollapseAll();
+
+    m_tree->SelectItem(m_root);
+    wxYield();
+
+    m_tree->SetFocus();
+    sim.Char(WXK_RIGHT);
+    wxYield();
+
+    CHECK(m_tree->IsExpanded(m_root));
+
+#ifdef wxHAS_GENERIC_TREECTRL
+    sim.Char('-');
+#else
+    sim.Char(WXK_LEFT);
+#endif
+
+    wxYield();
+
+    CHECK(!m_tree->IsExpanded(m_root));
+
+    wxYield();
+
+    sim.Char(WXK_RIGHT);
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    CHECK(m_tree->GetSelection() == m_child1);
+
+    sim.Char(WXK_DOWN);
+    wxYield();
+
+    CHECK(m_tree->GetSelection() == m_child2);
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
@@ -545,47 +582,6 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Sort", "[treectrl]")
     CHECK(m_tree->GetNextChild(m_root, cookie) == m_child1);
     CHECK(m_tree->GetNextChild(m_root, cookie) == m_child2);
     CHECK(m_tree->GetNextChild(m_root, cookie) == zitem);
-}
-
-TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation", "[treectrl]")
-{
-#if wxUSE_UIACTIONSIMULATOR
-    wxUIActionSimulator sim;
-
-    m_tree->CollapseAll();
-
-    m_tree->SelectItem(m_root);
-    wxYield();
-
-    m_tree->SetFocus();
-    sim.Char(WXK_RIGHT);
-    wxYield();
-
-    CHECK(m_tree->IsExpanded(m_root));
-
-#ifdef wxHAS_GENERIC_TREECTRL
-    sim.Char('-');
-#else
-    sim.Char(WXK_LEFT);
-#endif
-
-    wxYield();
-
-    CHECK(!m_tree->IsExpanded(m_root));
-
-    wxYield();
-
-    sim.Char(WXK_RIGHT);
-    sim.Char(WXK_DOWN);
-    wxYield();
-
-    CHECK(m_tree->GetSelection() == m_child1);
-
-    sim.Char(WXK_DOWN);
-    wxYield();
-
-    CHECK(m_tree->GetSelection() == m_child2);
-#endif
 }
 
 #endif //wxUSE_TREECTRL
