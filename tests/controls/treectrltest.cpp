@@ -327,8 +327,38 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     // problem in the test.
     m_tree->SetFocus();
 
-    EventCounter changed(m_tree, wxEVT_TREE_SEL_CHANGED);
-    EventCounter changing(m_tree, wxEVT_TREE_SEL_CHANGING);
+    bool vetoChange = false;
+
+    SECTION("Without veto selection change"){ }
+    SECTION("With veto selection change")
+    {
+        vetoChange = true;
+    }
+
+    int changed   = 0;
+    int changing  = 0;
+
+    auto handler = [&](wxTreeEvent& event)
+    {
+        const auto eventType = event.GetEventType();
+
+        if ( eventType == wxEVT_TREE_SEL_CHANGING )
+        {
+            ++changing;
+
+            if ( vetoChange && changed == 1 )
+            {
+                event.Veto();
+            }
+        }
+        else if ( eventType == wxEVT_TREE_SEL_CHANGED )
+        {
+            ++changed;
+        }
+    };
+
+    m_tree->Bind(wxEVT_TREE_SEL_CHANGED, handler);
+    m_tree->Bind(wxEVT_TREE_SEL_CHANGING, handler);
 
     wxUIActionSimulator sim;
 
@@ -346,8 +376,8 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     sim.MouseClick();
     wxYield();
 
-    CHECK(changed.GetCount() == 1);
-    CHECK(changing.GetCount() == 1);
+    CHECK(changed == 1);
+    CHECK(changing == 1);
 
     sim.MouseMove(point2);
     wxYield();
@@ -355,8 +385,19 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     sim.MouseClick();
     wxYield();
 
-    CHECK(changed.GetCount() == 2);
-    CHECK(changing.GetCount() == 2);
+    CHECK(changed == (vetoChange ? 1 : 2));
+    CHECK(changing == 2);
+
+    if ( vetoChange )
+    {
+        CHECK( m_tree->IsSelected(m_child1) );
+        CHECK_FALSE( m_tree->IsSelected(m_child2) );
+    }
+    else
+    {
+        CHECK_FALSE( m_tree->IsSelected(m_child1) );
+        CHECK( m_tree->IsSelected(m_child2) );
+    }
 }
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
