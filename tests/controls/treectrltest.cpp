@@ -30,77 +30,36 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class TreeCtrlTestCase : public CppUnit::TestCase
+class TreeCtrlTestCase
 {
 public:
-    TreeCtrlTestCase() { }
+    TreeCtrlTestCase(int exStyle = 0)
+    {
+        m_tree = new wxTreeCtrl(wxTheApp->GetTopWindow(),
+                                wxID_ANY,
+                                wxDefaultPosition,
+                                wxSize(400, 200),
+                                wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS | exStyle);
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+        m_root = m_tree->AddRoot("root");
+        m_child1 = m_tree->AppendItem(m_root, "child1");
+        m_child2 = m_tree->AppendItem(m_root, "child2");
+        m_grandchild = m_tree->AppendItem(m_child1, "grandchild");
 
-private:
-    CPPUNIT_TEST_SUITE( TreeCtrlTestCase );
-        WXUISIM_TEST( ItemClick );
-        CPPUNIT_TEST( DeleteItem );
-        CPPUNIT_TEST( DeleteChildren );
-        CPPUNIT_TEST( DeleteAllItems );
-        WXUISIM_TEST( LabelEdit );
-        WXUISIM_TEST( KeyDown );
-        WXUISIM_TEST( CollapseExpandEvents );
-        WXUISIM_TEST( SelectionChange );
-        WXUISIM_TEST( Menu );
-        CPPUNIT_TEST( ItemData );
-        CPPUNIT_TEST( Iteration );
-        CPPUNIT_TEST( Parent );
-        CPPUNIT_TEST( CollapseExpand );
-        CPPUNIT_TEST( AssignImageList );
-        CPPUNIT_TEST( Focus );
-        CPPUNIT_TEST( Bold );
-        CPPUNIT_TEST( Visible );
-        CPPUNIT_TEST( Scroll );
-        CPPUNIT_TEST( Sort );
-        WXUISIM_TEST( KeyNavigation );
-        CPPUNIT_TEST( HasChildren );
-        CPPUNIT_TEST( SelectItemSingle );
-        CPPUNIT_TEST( PseudoTest_MultiSelect );
-        CPPUNIT_TEST( SelectItemMulti );
-        CPPUNIT_TEST( PseudoTest_SetHiddenRoot );
-        CPPUNIT_TEST( HasChildren );
-        CPPUNIT_TEST( GetCount );
-    CPPUNIT_TEST_SUITE_END();
+        m_tree->SetSize(400, 200);
+        m_tree->ExpandAll();
+        m_tree->Refresh();
+        m_tree->Update();
+    }
 
-    void ItemClick();
-    void DeleteItem();
-    void DeleteChildren();
-    void DeleteAllItems();
-    void LabelEdit();
-    void KeyDown();
-    void CollapseExpandEvents();
-    void SelectionChange();
-    void Menu();
-    void ItemData();
-    void Iteration();
-    void Parent();
-    void CollapseExpand();
-    void AssignImageList();
-    void Focus();
-    void Bold();
-    void Visible();
-    void Scroll();
-    void Sort();
-    void KeyNavigation();
-    void HasChildren();
-    void GetCount();
-    void SelectItemSingle();
-    void SelectItemMulti();
-    void PseudoTest_MultiSelect() { ms_multiSelect = true; }
-    void PseudoTest_SetHiddenRoot() { ms_hiddenRoot = true; }
+    ~TreeCtrlTestCase()
+    {
+        delete m_tree;
+    }
 
-    static bool ms_multiSelect;
-    static bool ms_hiddenRoot;
-
+protected:
     // the tree control itself
-    wxTreeCtrl *m_tree;
+    wxTreeCtrl *m_tree = nullptr;
 
     // and some of its items
     wxTreeItemId m_root,
@@ -111,134 +70,97 @@ private:
     wxDECLARE_NO_COPY_CLASS(TreeCtrlTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( TreeCtrlTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( TreeCtrlTestCase, "TreeCtrlTestCase" );
-
-// ----------------------------------------------------------------------------
-// test initialization
-// ----------------------------------------------------------------------------
-
-bool TreeCtrlTestCase::ms_multiSelect = false;
-bool TreeCtrlTestCase::ms_hiddenRoot = false;
-
-void TreeCtrlTestCase::setUp()
+// Notice that toggling the wxTR_HIDE_ROOT window style with ToggleWindowStyle
+// has no effect under wxMSW if wxTreeCtrl::AddRoot() has already been called.
+// So we need this fixture (used by HasChildren and GetCount below) to create
+// the wxTreeCtrl with this style before AddRoot() is called.
+class TreeCtrlHideRootTestCase : public TreeCtrlTestCase
 {
-    m_tree = new wxTreeCtrl(wxTheApp->GetTopWindow(),
-                            wxID_ANY,
-                            wxDefaultPosition,
-                            wxSize(400, 200),
-                            wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS);
-
-    if ( ms_multiSelect )
-        m_tree->ToggleWindowStyle(wxTR_MULTIPLE);
-
-    if ( ms_hiddenRoot )
-        m_tree->ToggleWindowStyle(wxTR_HIDE_ROOT); // actually set it
-
-    m_root = m_tree->AddRoot("root");
-    m_child1 = m_tree->AppendItem(m_root, "child1");
-    m_child2 = m_tree->AppendItem(m_root, "child2");
-    m_grandchild = m_tree->AppendItem(m_child1, "grandchild");
-
-    m_tree->SetSize(400, 200);
-    m_tree->ExpandAll();
-    m_tree->Refresh();
-    m_tree->Update();
-}
-
-void TreeCtrlTestCase::tearDown()
-{
-    delete m_tree;
-    m_tree = nullptr;
-
-    m_root =
-    m_child1 =
-    m_child2 =
-    m_grandchild = wxTreeItemId();
-}
+public:
+    TreeCtrlHideRootTestCase() : TreeCtrlTestCase(wxTR_HIDE_ROOT)
+    {
+    }
+};
 
 // ----------------------------------------------------------------------------
 // the tests themselves
 // ----------------------------------------------------------------------------
 
-void TreeCtrlTestCase::HasChildren()
+TEST_CASE_METHOD(TreeCtrlHideRootTestCase, "wxTreeCtrl::HasChildren", "[treectrl]")
 {
-    CPPUNIT_ASSERT( m_tree->HasChildren(m_root) );
-    CPPUNIT_ASSERT( m_tree->HasChildren(m_child1) );
-    CPPUNIT_ASSERT( !m_tree->HasChildren(m_child2) );
-    CPPUNIT_ASSERT( !m_tree->HasChildren(m_grandchild) );
+    CHECK( m_tree->HasChildren(m_root) );
+    CHECK( m_tree->HasChildren(m_child1) );
+    CHECK_FALSE( m_tree->HasChildren(m_child2) );
+    CHECK_FALSE( m_tree->HasChildren(m_grandchild) );
 }
 
-void TreeCtrlTestCase::GetCount()
+TEST_CASE_METHOD(TreeCtrlHideRootTestCase, "wxTreeCtrl::GetCount", "[treectrl]")
 {
-    CPPUNIT_ASSERT_EQUAL(3, m_tree->GetCount());
+    CHECK(m_tree->GetCount() == 3);
 }
 
-void TreeCtrlTestCase::SelectItemSingle()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemSingle", "[treectrl]")
 {
     // this test should be only ran in single-selection control
-    CPPUNIT_ASSERT( !m_tree->HasFlag(wxTR_MULTIPLE) );
+    CHECK_FALSE( m_tree->HasFlag(wxTR_MULTIPLE) );
 
     // initially nothing is selected
-    CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
+    CHECK_FALSE( m_tree->IsSelected(m_child1) );
 
     // selecting an item should make it selected
     m_tree->SelectItem(m_child1);
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child1) );
 
     // selecting it again shouldn't change anything
     m_tree->SelectItem(m_child1);
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child1) );
 
     // selecting another item should switch the selection to it
     m_tree->SelectItem(m_child2);
-    CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+    CHECK_FALSE( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child2) );
 
     // selecting it again still shouldn't change anything
     m_tree->SelectItem(m_child2);
-    CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+    CHECK_FALSE( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child2) );
 
     // deselecting an item should remove the selection entirely
     m_tree->UnselectItem(m_child2);
-    CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
-    CPPUNIT_ASSERT( !m_tree->IsSelected(m_child2) );
+    CHECK_FALSE( m_tree->IsSelected(m_child1) );
+    CHECK_FALSE( m_tree->IsSelected(m_child2) );
 }
 
-void TreeCtrlTestCase::SelectItemMulti()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMulti", "[treectrl]")
 {
     // this test should be only ran in multi-selection control
-    CPPUNIT_ASSERT( m_tree->HasFlag(wxTR_MULTIPLE) );
+    m_tree->ToggleWindowStyle(wxTR_MULTIPLE);
 
     // initially nothing is selected
-    CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
+    CHECK_FALSE( m_tree->IsSelected(m_child1) );
 
     // selecting an item should make it selected
     m_tree->SelectItem(m_child1);
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child1) );
 
     // selecting it again shouldn't change anything
     m_tree->SelectItem(m_child1);
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child1) );
 
     // selecting another item shouldn't deselect the previously selected one
     m_tree->SelectItem(m_child2);
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child1) );
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+    CHECK( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child2) );
 
     // selecting it again still shouldn't change anything
     m_tree->SelectItem(m_child2);
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child1) );
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+    CHECK( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child2) );
 
     // deselecting one of the items should leave the others selected
     m_tree->UnselectItem(m_child1);
-    CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
-    CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+    CHECK_FALSE( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child2) );
 
     // collapsing a branch with selected items should still leave them selected
     m_tree->Expand(m_child1);
@@ -250,7 +172,7 @@ void TreeCtrlTestCase::SelectItemMulti()
     CHECK( m_tree->IsSelected(m_grandchild) );
 }
 
-void TreeCtrlTestCase::ItemClick()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemClick", "[treectrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
     EventCounter activated(m_tree, wxEVT_TREE_ITEM_ACTIVATED);
@@ -273,12 +195,12 @@ void TreeCtrlTestCase::ItemClick()
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, activated.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
+    CHECK(activated.GetCount() == 1);
+    CHECK(rclick.GetCount() == 1);
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
-void TreeCtrlTestCase::DeleteItem()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteItem", "[treectrl]")
 {
     EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
 
@@ -286,10 +208,10 @@ void TreeCtrlTestCase::DeleteItem()
     m_tree->AppendItem(todelete, "deleteme2");
     m_tree->Delete(todelete);
 
-    CPPUNIT_ASSERT_EQUAL(2, deleteitem.GetCount());
+    CHECK(deleteitem.GetCount() == 2);
 }
 
-void TreeCtrlTestCase::DeleteChildren()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteChildren", "[treectrl]")
 {
     EventCounter deletechildren(m_tree, wxEVT_TREE_DELETE_ITEM);
 
@@ -299,7 +221,7 @@ void TreeCtrlTestCase::DeleteChildren()
     CHECK( deletechildren.GetCount() == 2 );
 }
 
-void TreeCtrlTestCase::DeleteAllItems()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::DeleteAllItems", "[treectrl]")
 {
     EventCounter deleteall(m_tree, wxEVT_TREE_DELETE_ITEM);
 
@@ -310,7 +232,7 @@ void TreeCtrlTestCase::DeleteAllItems()
 
 #if wxUSE_UIACTIONSIMULATOR
 
-void TreeCtrlTestCase::LabelEdit()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::LabelEdit", "[treectrl]")
 {
     EventCounter beginedit(m_tree, wxEVT_TREE_BEGIN_LABEL_EDIT);
     EventCounter endedit(m_tree, wxEVT_TREE_END_LABEL_EDIT);
@@ -328,15 +250,15 @@ void TreeCtrlTestCase::LabelEdit()
     sim.Text("newroottext");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, beginedit.GetCount());
+    CHECK(beginedit.GetCount() == 1);
 
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, endedit.GetCount());
+    CHECK(endedit.GetCount() == 1);
 }
 
-void TreeCtrlTestCase::KeyDown()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyDown", "[treectrl]")
 {
     EventCounter keydown(m_tree, wxEVT_TREE_KEY_DOWN);
 
@@ -347,10 +269,10 @@ void TreeCtrlTestCase::KeyDown()
     sim.Text("aAbB");
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(6, keydown.GetCount());
+    CHECK(keydown.GetCount() == 6);
 }
 
-void TreeCtrlTestCase::CollapseExpandEvents()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents", "[treectrl]")
 {
 #ifdef __WXGTK__
     // Works locally, but not when run on Travis CI.
@@ -379,8 +301,8 @@ void TreeCtrlTestCase::CollapseExpandEvents()
     sim.MouseDblClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, expanding.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, expanded.GetCount());
+    CHECK(expanding.GetCount() == 1);
+    CHECK(expanded.GetCount() == 1);
 
 #ifdef __WXGTK__
     // Don't even know the reason why, but GTK has to sleep
@@ -391,11 +313,11 @@ void TreeCtrlTestCase::CollapseExpandEvents()
     sim.MouseDblClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, collapsing.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, collapsed.GetCount());
+    CHECK(collapsing.GetCount() == 1);
+    CHECK(collapsed.GetCount() == 1);
 }
 
-void TreeCtrlTestCase::SelectionChange()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
 {
     m_tree->ExpandAll();
 
@@ -426,8 +348,8 @@ void TreeCtrlTestCase::SelectionChange()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
-    CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
+    CHECK(changed.GetCount() == 1);
+    CHECK(changing.GetCount() == 1);
 
     sim.MouseMove(point2);
     wxYield();
@@ -435,11 +357,11 @@ void TreeCtrlTestCase::SelectionChange()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(2, changed.GetCount());
-    CPPUNIT_ASSERT_EQUAL(2, changing.GetCount());
+    CHECK(changed.GetCount() == 2);
+    CHECK(changing.GetCount() == 2);
 }
 
-void TreeCtrlTestCase::Menu()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
 {
     EventCounter menu(m_tree, wxEVT_TREE_ITEM_MENU);
     wxUIActionSimulator sim;
@@ -456,12 +378,12 @@ void TreeCtrlTestCase::Menu()
     sim.MouseClick(wxMOUSE_BTN_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, menu.GetCount());
+    CHECK(menu.GetCount() == 1);
 }
 
 #endif // wxUSE_UIACTIONSIMULATOR
 
-void TreeCtrlTestCase::ItemData()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::ItemData", "[treectrl]")
 {
     wxTreeItemData* child1data = new wxTreeItemData();
     wxTreeItemData* appenddata = new wxTreeItemData();
@@ -469,79 +391,78 @@ void TreeCtrlTestCase::ItemData()
 
     m_tree->SetItemData(m_child1, child1data);
 
-    CPPUNIT_ASSERT_EQUAL(child1data, m_tree->GetItemData(m_child1));
-    CPPUNIT_ASSERT_EQUAL(m_child1, child1data->GetId());
+    CHECK(m_tree->GetItemData(m_child1) == child1data);
+    CHECK(child1data->GetId() == m_child1);
 
     wxTreeItemId append = m_tree->AppendItem(m_root, "new", -1, -1, appenddata);
 
-    CPPUNIT_ASSERT_EQUAL(appenddata, m_tree->GetItemData(append));
-    CPPUNIT_ASSERT_EQUAL(append, appenddata->GetId());
+    CHECK(m_tree->GetItemData(append) == appenddata);
+    CHECK(appenddata->GetId() == append);
 
     wxTreeItemId insert = m_tree->InsertItem(m_root, m_child1, "new", -1, -1,
                                              insertdata);
 
-    CPPUNIT_ASSERT_EQUAL(insertdata, m_tree->GetItemData(insert));
-    CPPUNIT_ASSERT_EQUAL(insert, insertdata->GetId());
+    CHECK(m_tree->GetItemData(insert) == insertdata);
+    CHECK(insertdata->GetId() == insert);
 }
 
-void TreeCtrlTestCase::Iteration()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Iteration", "[treectrl]")
 {
     // Get first / next / last child
     wxTreeItemIdValue cookie;
-    CPPUNIT_ASSERT_EQUAL(m_tree->GetFirstChild(m_root, cookie), m_child1);
-    CPPUNIT_ASSERT_EQUAL(m_tree->GetNextChild(m_root, cookie),
-                         m_tree->GetLastChild(m_root));
-    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetLastChild(m_root));
+    CHECK(m_tree->GetFirstChild(m_root, cookie) == m_child1);
+    CHECK(m_tree->GetNextChild(m_root, cookie) == m_tree->GetLastChild(m_root));
+    CHECK(m_tree->GetLastChild(m_root) == m_child2);
 
     // Get next / previous sibling
-    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetNextSibling(m_child1));
-    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetPrevSibling(m_child2));
+    CHECK(m_tree->GetNextSibling(m_child1) == m_child2);
+    CHECK(m_tree->GetPrevSibling(m_child2) == m_child1);
 }
 
-void TreeCtrlTestCase::Parent()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Parent", "[treectrl]")
 {
-    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetRootItem());
-    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetItemParent(m_child1));
-    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetItemParent(m_child2));
-    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetItemParent(m_grandchild));
+    CHECK(m_tree->GetRootItem() == m_root);
+    CHECK(m_tree->GetItemParent(m_child1) == m_root);
+    CHECK(m_tree->GetItemParent(m_child2) == m_root);
+    CHECK(m_tree->GetItemParent(m_grandchild) == m_child1);
 }
 
-void TreeCtrlTestCase::CollapseExpand()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpand", "[treectrl]")
 {
     m_tree->ExpandAll();
 
-    CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
-    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+    CHECK(m_tree->IsExpanded(m_root));
+    CHECK(m_tree->IsExpanded(m_child1));
 
     m_tree->CollapseAll();
 
-    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
-    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_child1));
+    CHECK_FALSE(m_tree->IsExpanded(m_root));
+    CHECK_FALSE(m_tree->IsExpanded(m_child1));
 
     m_tree->ExpandAllChildren(m_root);
 
-    CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
-    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+    CHECK(m_tree->IsExpanded(m_root));
+    CHECK(m_tree->IsExpanded(m_child1));
 
     m_tree->CollapseAllChildren(m_child1);
 
-    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_child1));
+    CHECK_FALSE(m_tree->IsExpanded(m_child1));
 
     m_tree->Expand(m_child1);
 
-    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+    CHECK(m_tree->IsExpanded(m_child1));
 
     m_tree->Collapse(m_root);
 
-    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
-    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+    CHECK_FALSE(m_tree->IsExpanded(m_root));
+    CHECK(m_tree->IsExpanded(m_child1));
 
     m_tree->CollapseAndReset(m_root);
 
-    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
+    CHECK_FALSE(m_tree->IsExpanded(m_root));
 }
 
-void TreeCtrlTestCase::AssignImageList()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::AssignImageList", "[treectrl]")
 {
     wxSize size(16, 16);
 
@@ -554,64 +475,64 @@ void TreeCtrlTestCase::AssignImageList()
     m_tree->AssignImageList(imagelist);
     m_tree->AssignStateImageList(statelist);
 
-    CPPUNIT_ASSERT_EQUAL(imagelist, m_tree->GetImageList());
-    CPPUNIT_ASSERT_EQUAL(statelist, m_tree->GetStateImageList());
+    CHECK(m_tree->GetImageList() == imagelist);
+    CHECK(m_tree->GetStateImageList() == statelist);
 }
 
-void TreeCtrlTestCase::Focus()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Focus", "[treectrl]")
 {
     m_tree->SetFocusedItem(m_child1);
 
-    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetFocusedItem());
+    CHECK(m_tree->GetFocusedItem() == m_child1);
 
     m_tree->ClearFocusedItem();
 
-    CPPUNIT_ASSERT(!m_tree->GetFocusedItem());
+    CHECK_FALSE(m_tree->GetFocusedItem());
 }
 
-void TreeCtrlTestCase::Bold()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Bold", "[treectrl]")
 {
-    CPPUNIT_ASSERT(!m_tree->IsBold(m_child1));
+    CHECK_FALSE(m_tree->IsBold(m_child1));
 
     m_tree->SetItemBold(m_child1);
 
-    CPPUNIT_ASSERT(m_tree->IsBold(m_child1));
+    CHECK(m_tree->IsBold(m_child1));
 
     m_tree->SetItemBold(m_child1, false);
 
-    CPPUNIT_ASSERT(!m_tree->IsBold(m_child1));
+    CHECK_FALSE(m_tree->IsBold(m_child1));
 }
 
-void TreeCtrlTestCase::Visible()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Visible", "[treectrl]")
 {
     m_tree->CollapseAll();
 
-    CPPUNIT_ASSERT(m_tree->IsVisible(m_root));
-    CPPUNIT_ASSERT(!m_tree->IsVisible(m_child1));
+    CHECK(m_tree->IsVisible(m_root));
+    CHECK_FALSE(m_tree->IsVisible(m_child1));
 
     m_tree->EnsureVisible(m_grandchild);
 
-    CPPUNIT_ASSERT(m_tree->IsVisible(m_grandchild));
+    CHECK(m_tree->IsVisible(m_grandchild));
 
     m_tree->ExpandAll();
 
-    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetFirstVisibleItem());
-    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetNextVisible(m_root));
-    CPPUNIT_ASSERT_EQUAL(m_grandchild, m_tree->GetNextVisible(m_child1));
-    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetNextVisible(m_grandchild));
+    CHECK(m_tree->GetFirstVisibleItem() == m_root);
+    CHECK(m_tree->GetNextVisible(m_root) == m_child1);
+    CHECK(m_tree->GetNextVisible(m_child1) == m_grandchild);
+    CHECK(m_tree->GetNextVisible(m_grandchild) == m_child2);
 
-    CPPUNIT_ASSERT(!m_tree->GetNextVisible(m_child2));
-    CPPUNIT_ASSERT(!m_tree->GetPrevVisible(m_root));
+    CHECK_FALSE(m_tree->GetNextVisible(m_child2));
+    CHECK_FALSE(m_tree->GetPrevVisible(m_root));
 }
 
-void TreeCtrlTestCase::Scroll()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Scroll", "[treectrl]")
 {
     // This trivial test just checks that calling ScrollTo() with the root item
     // doesn't crash any longer, as it used to do when the root item was hidden.
     m_tree->ScrollTo(m_root);
 }
 
-void TreeCtrlTestCase::Sort()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Sort", "[treectrl]")
 {
     wxTreeItemId zitem = m_tree->AppendItem(m_root, "zzzz");
     wxTreeItemId aitem = m_tree->AppendItem(m_root, "aaaa");
@@ -620,13 +541,13 @@ void TreeCtrlTestCase::Sort()
 
     wxTreeItemIdValue cookie;
 
-    CPPUNIT_ASSERT_EQUAL(aitem, m_tree->GetFirstChild(m_root, cookie));
-    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetNextChild(m_root, cookie));
-    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetNextChild(m_root, cookie));
-    CPPUNIT_ASSERT_EQUAL(zitem, m_tree->GetNextChild(m_root, cookie));
+    CHECK(m_tree->GetFirstChild(m_root, cookie) == aitem);
+    CHECK(m_tree->GetNextChild(m_root, cookie) == m_child1);
+    CHECK(m_tree->GetNextChild(m_root, cookie) == m_child2);
+    CHECK(m_tree->GetNextChild(m_root, cookie) == zitem);
 }
 
-void TreeCtrlTestCase::KeyNavigation()
+TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::KeyNavigation", "[treectrl]")
 {
 #if wxUSE_UIACTIONSIMULATOR
     wxUIActionSimulator sim;
@@ -640,7 +561,7 @@ void TreeCtrlTestCase::KeyNavigation()
     sim.Char(WXK_RIGHT);
     wxYield();
 
-    CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
+    CHECK(m_tree->IsExpanded(m_root));
 
 #ifdef wxHAS_GENERIC_TREECTRL
     sim.Char('-');
@@ -650,7 +571,7 @@ void TreeCtrlTestCase::KeyNavigation()
 
     wxYield();
 
-    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
+    CHECK(!m_tree->IsExpanded(m_root));
 
     wxYield();
 
@@ -658,12 +579,12 @@ void TreeCtrlTestCase::KeyNavigation()
     sim.Char(WXK_DOWN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetSelection());
+    CHECK(m_tree->GetSelection() == m_child1);
 
     sim.Char(WXK_DOWN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetSelection());
+    CHECK(m_tree->GetSelection() == m_child2);
 #endif
 }
 
