@@ -58,6 +58,14 @@ you may need to perform the build several times because the projects
 are not always built in the correct order, and this may result in link
 errors. Simply do the build again, up to 3 times, to fix this.
 
+Note that targeting ARM64 requires VC++ 2017 or newer, while ARM64EC and ARM64X
+require 2019 or newer and SDK 10.0.22621.0 or newer.
+
+The custom build steps have not yet been tailored to support ARM64X, but it
+seems to work well if you build with `Platform=ARM64` first and then
+`Platform=ARM64EC` and `BuildAsX=true` (see the
+[ARM64X build instructions](https://learn.microsoft.com/en-us/windows/arm/arm64x-build)).
+
 
 ### From the command line
 
@@ -85,6 +93,9 @@ to build a 32 bit release DLL version from an x86 command prompt, or
         > nmake /f makefile.vc BUILD=release SHARED=1 TARGET_CPU=X64
 
 to build a 64 bit release DLL version from an x64 command prompt.
+
+TARGET_CPU=ARM64 is supported while TARGET_CPU=ARM64EC is, at present, not
+supported.
 
 See [Make Parameters](#msw_build_make_params) for more information about the
 additional parameters that can be specified on the command line.
