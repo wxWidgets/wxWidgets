@@ -5021,7 +5021,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_msw_fontenum.o \
 	monodll_msw_fontutil.o \
 	monodll_gdiimage.o \
-	monodll_gdiplus.o \
 	monodll_msw_graphics.o \
 	monodll_msw_icon.o \
 	monodll_msw_minifram.o \
@@ -5755,7 +5754,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_msw_fontenum.o \
 	monodll_msw_fontutil.o \
 	monodll_gdiimage.o \
-	monodll_gdiplus.o \
 	monodll_msw_graphics.o \
 	monodll_msw_icon.o \
 	monodll_msw_minifram.o \
@@ -6789,7 +6787,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_msw_fontenum.o \
 	monolib_msw_fontutil.o \
 	monolib_gdiimage.o \
-	monolib_gdiplus.o \
 	monolib_msw_graphics.o \
 	monolib_msw_icon.o \
 	monolib_msw_minifram.o \
@@ -7523,7 +7520,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_msw_fontenum.o \
 	monolib_msw_fontutil.o \
 	monolib_gdiimage.o \
-	monolib_gdiplus.o \
 	monolib_msw_graphics.o \
 	monolib_msw_icon.o \
 	monolib_msw_minifram.o \
@@ -8707,7 +8703,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_msw_fontenum.o \
 	coredll_msw_fontutil.o \
 	coredll_gdiimage.o \
-	coredll_gdiplus.o \
 	coredll_msw_graphics.o \
 	coredll_msw_icon.o \
 	coredll_msw_minifram.o \
@@ -9441,7 +9436,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_msw_fontenum.o \
 	coredll_msw_fontutil.o \
 	coredll_gdiimage.o \
-	coredll_gdiplus.o \
 	coredll_msw_graphics.o \
 	coredll_msw_icon.o \
 	coredll_msw_minifram.o \
@@ -10200,7 +10194,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_msw_fontenum.o \
 	corelib_msw_fontutil.o \
 	corelib_gdiimage.o \
-	corelib_gdiplus.o \
 	corelib_msw_graphics.o \
 	corelib_msw_icon.o \
 	corelib_msw_minifram.o \
@@ -10934,7 +10927,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_msw_fontenum.o \
 	corelib_msw_fontutil.o \
 	corelib_gdiimage.o \
-	corelib_gdiplus.o \
 	corelib_msw_graphics.o \
 	corelib_msw_icon.o \
 	corelib_msw_minifram.o \
@@ -17418,9 +17410,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_gdiimage.o: $(srcdir)/src/msw/gdiimage.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gdiimage.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_gdiplus.o: $(srcdir)/src/msw/gdiplus.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gdiplus.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_graphics.o: $(srcdir)/src/msw/graphics.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
 
@@ -22178,9 +22167,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_gdiimage.o: $(srcdir)/src/msw/gdiimage.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gdiimage.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_gdiplus.o: $(srcdir)/src/msw/gdiplus.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gdiplus.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_graphics.o: $(srcdir)/src/msw/graphics.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
@@ -27030,9 +27016,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_gdiimage.o: $(srcdir)/src/msw/gdiimage.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/gdiimage.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_gdiplus.o: $(srcdir)/src/msw/gdiplus.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/gdiplus.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_graphics.o: $(srcdir)/src/msw/graphics.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp
 
@@ -30752,9 +30735,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_gdiimage.o: $(srcdir)/src/msw/gdiimage.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/gdiimage.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_gdiplus.o: $(srcdir)/src/msw/gdiplus.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/gdiplus.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_graphics.o: $(srcdir)/src/msw/graphics.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/graphics.cpp

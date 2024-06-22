@@ -1725,7 +1725,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
-    src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/icon.cpp
     src/msw/minifram.cpp

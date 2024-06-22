@@ -346,6 +346,8 @@ function(wx_set_target_properties target_name)
             kernel32
             user32
             gdi32
+            gdiplus
+            msimg32
             comdlg32
             winspool
             winmm

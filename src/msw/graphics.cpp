@@ -49,6 +49,10 @@
 #endif
 #include <float.h> // for FLT_MAX, FLT_MIN
 
+#ifdef _MSC_VER
+    #pragma comment(lib, "gdiplus")
+#endif
+
 // Define REAL_MAX, REAL_MIN
 // if it isn't done in GDI+ header(s).
 #ifndef REAL_MAX
@@ -3048,8 +3052,6 @@ class wxGDIPlusRendererModule : public wxModule
 public:
     wxGDIPlusRendererModule()
     {
-        // We must be uninitialized before GDI+ DLL itself is unloaded.
-        AddDependency("wxGdiPlusModule");
     }
 
     virtual bool OnInit() override { return true; }

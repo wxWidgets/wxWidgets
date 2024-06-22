@@ -427,7 +427,7 @@ clean:
 
 $(OBJS)\accesstest.exe: $(ACCESSTEST_OBJECTS) $(OBJS)\accesstest_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\accesstest.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(WIN32_DPI_LINKFLAG) /SUBSYSTEM:WINDOWS   $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
-	$(ACCESSTEST_OBJECTS) $(ACCESSTEST_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
+	$(ACCESSTEST_OBJECTS) $(ACCESSTEST_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregexu$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib gdiplus.lib msimg32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib ws2_32.lib wininet.lib
 <<
 
 $(OBJS)\accesstest_sample.res: .\..\..\samples\sample.rc

@@ -116,6 +116,12 @@ Changes in behaviour which may result in build errors
   wxString to std::[w]string which are not enabled by default now, please set
   wxUSE_STD_STRING_CONV_IN_WXSTRING=1 explicitly if you need them.
 
+- wxMSW now requires linking with gdiplus.lib and msimg32.lib.
+  This is done automatically in most cases, but if you use a static build of
+  the library with a non-MSVC compiler such as MinGW and do not use wx-config,
+  then you will need to add these libraries to your make or project files
+  yourself.
+
 - wxMotif and wxGTK1 ports have been removed, please use wxWidgets 3.2 if you
   still need them.
 
