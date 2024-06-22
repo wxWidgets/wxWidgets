@@ -270,6 +270,7 @@ wxGTK:
 wxMSW:
 
 - More Windows Server versions in wxGetOsDescription() (PB, #24598, #24603).
+- Fix using wx/wxprec.h with vcpkg (Maarten Bent, #24353, #24632).
 
 wxOSX:
 
