@@ -1,0 +1,1 @@
+wxMSW: Link with gdiplus.lib and msimg32.lib directly (Maarten Bent, #24614).
