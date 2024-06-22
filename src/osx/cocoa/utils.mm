@@ -492,7 +492,7 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 
         [NSApp setAppearance:[NSAppearance appearanceNamed:name]];
 
-        return AppearanceResult::Success;
+        return AppearanceResult::Ok;
     }
 #endif // macOS 10.14+
 

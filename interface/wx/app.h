@@ -985,7 +985,7 @@ public:
     enum class AppearanceResult
     {
         Failure,     ///< Changing the appearance failed.
-        Success,     ///< Appearance was successfully changed.
+        Ok,          ///< Appearance was successfully changed.
         CannotChange ///< Appearance can't be changed any more.
     };
 
@@ -998,7 +998,7 @@ public:
         Appearance::Light or Appearance::Dark parameters if you need to
         override the default system appearance. The effect of calling this
         function is immediate, i.e. this function returns
-        AppearanceResult::Success, and affects all the existing windows as well
+        AppearanceResult::Ok, and affects all the existing windows as well
         as any windows created after this call.
 
         Under MSW, the default appearance is always light and the applications
@@ -1013,7 +1013,7 @@ public:
         Note that to query the current appearance, you can use
         wxSystemAppearance, see wxSystemSettings::GetAppearance().
 
-        @return AppearanceResult::Success if the appearance was successfully
+        @return AppearanceResult::Ok if the appearance was successfully
             changed or had been already set to the requested value,
             AppearanceResult::CannotChange if the appearance can't be changed
             any more because it's too late to do it but could be changed if
