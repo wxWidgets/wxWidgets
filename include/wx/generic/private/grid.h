@@ -17,8 +17,17 @@
 
 #include "wx/headerctrl.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/dc.h"
+#endif // WX_PRECOMP
+
 // for wxGridOperations
 #include "wx/generic/gridsel.h"
+
+#include <algorithm>
+#include <iterator>
+#include <set>
+#include <map>
 
 // ----------------------------------------------------------------------------
 // array classes
@@ -1316,6 +1325,155 @@ TryGetValueAsDate(wxDateTime& result,
                   int row, int col);
 
 #endif // wxUSE_DATETIME
+
+//=============================================================================
+// SelectionShape class
+//=============================================================================
+
+struct wxPointCmp
+{
+    bool operator()(const wxPoint& pt1, const wxPoint& pt2) const
+    {
+        // Compare the points by their X's first
+        return pt1.x < pt2.x || (pt1.x == pt2.x && pt1.y < pt2.y);
+    }
+};
+
+// A simple interface used by wxGrid::DrawOverlaySelection() as a helper to draw
+// the grid overlay selection.
+class SelectionShape
+{
+    using EdgeType = std::map<wxPoint, wxPoint, wxPointCmp>;
+    using PointSet = std::set<wxPoint, wxPointCmp>;
+
+public:
+    SelectionShape() : m_horzEdges(EdgeType(wxPointCmp{}))
+                     , m_vertEdges(EdgeType(wxPointCmp{}))
+    {}
+
+    ~SelectionShape() = default;
+
+    // This function simply converts (using the sweep line algorithm) the selected
+    // rectangles _rectangles_ (retrieved by wxGrid::GetSelectedRectangles()) to
+    // SelectionShape which can then be used in wxGrid::DrawOverlaySelection() to
+    // draw the overlay selection.
+    void FromRectangles(const std::vector<wxRect>& rectangles);
+
+    // Return the number of polygons to draw.
+    size_t GetSize() const { return m_counts.size(); }
+
+    const int* GetCounts() const { return m_counts.data(); }
+
+    const wxPoint* GetPoints() const { return m_points.data(); }
+
+    // Return the bounding box of the visible selected blocks. Return empty
+    // rectangle if there is no selection.
+    wxRect GetBoundingBox() const;
+
+    void SetBoundingBox(const wxRect& rect);
+
+private:
+    // A helper function to prevent adding duplicates and shared points
+    // to the vector returned by GetVertices().
+    void AddVertex(PointSet& points, const wxPoint& pt)
+    {
+        auto result = points.insert(pt);
+        if ( result.first != points.end() && !result.second )
+            points.erase(result.first);
+    }
+
+    std::vector<wxPoint> GetVertices(const std::vector<wxRect>& rectangles)
+    {
+        PointSet pointSet(wxPointCmp{});
+
+        for ( const wxRect& rect : rectangles )
+        {
+            AddVertex(pointSet, rect.GetTopLeft());
+            AddVertex(pointSet, rect.GetTopRight());
+            AddVertex(pointSet, rect.GetBottomRight());
+            AddVertex(pointSet, rect.GetBottomLeft());
+        }
+
+        std::vector<wxPoint> points;
+        std::copy(pointSet.begin(), pointSet.end(), std::back_inserter(points));
+
+        return points;
+    }
+
+    void InitHorzEdges(const std::vector<wxPoint>& points)
+    {
+        std::vector<wxPoint> sortedPointsY = points;
+        std::sort(sortedPointsY.begin(), sortedPointsY.end(),
+        [](const wxPoint& pt1, const wxPoint& pt2)
+        {
+            // Compare the points by their Y's first
+            return pt1.y < pt2.y || (pt1.y == pt2.y && pt1.x < pt2.x);
+        });
+
+        int i = 0;
+        const int n = static_cast<int>(points.size());
+
+        while ( i < n )
+        {
+            int y = sortedPointsY[i].y;
+
+            while ( i < n && sortedPointsY[i].y == y )
+            {
+                m_horzEdges[sortedPointsY[i]] = sortedPointsY[i + 1];
+                m_horzEdges[sortedPointsY[i + 1]] = sortedPointsY[i];
+                i += 2;
+            }
+        }
+    }
+
+    void InitVertEdges(const std::vector<wxPoint>& points)
+    {
+        std::vector<wxPoint> sortedPointsX = points;
+        std::sort(sortedPointsX.begin(), sortedPointsX.end(), wxPointCmp{});
+
+        int i = 0;
+        const int n = static_cast<int>(points.size());
+
+        while ( i < n )
+        {
+            int x = sortedPointsX[i].x;
+
+            while ( i < n && sortedPointsX[i].x == x )
+            {
+                m_vertEdges[sortedPointsX[i]] = sortedPointsX[i + 1];
+                m_vertEdges[sortedPointsX[i + 1]] = sortedPointsX[i];
+                i += 2;
+            }
+        }
+    }
+
+    void Append(const std::vector<wxPoint>& points);
+
+    void CalcBoundingBox(const std::vector<wxPoint>& points);
+
+private:
+    EdgeType m_horzEdges;
+    EdgeType m_vertEdges;
+
+    // m_counts contains the number of points in each of the polygons in m_points.
+
+    std::vector<int>     m_counts;
+    std::vector<wxPoint> m_points;
+
+    int m_minX = 0, m_maxX = 0,
+        m_minY = 0, m_maxY = 0;
+
+    wxDECLARE_NO_COPY_CLASS(SelectionShape);
+};
+
+// Used by wxGridSelection::Select() and wxGridSelection::DeselectBlock() to ensure
+// that we always have fewer blocks selected in m_selection.
+void MergeAdjacentBlocks(wxGridBlockCoordsVector& selection);
+
+// This function attempts to reduce the number of rectangles returned from
+// wxGrid::GetSelectedRectangles() before trying to convert them to SelectionShape.
+// Most of the time this will result in just one rectangle.
+void MergeAdjacentRects(std::vector<wxRect>& rectangles);
 
 } // namespace wxGridPrivate
 

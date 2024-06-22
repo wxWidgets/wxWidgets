@@ -84,6 +84,7 @@ class GridFrame : public wxFrame
 
     void FreezeOrThaw( wxCommandEvent& );
 
+    void OnOverlaySelection(wxCommandEvent& event);
     void DeselectCell(wxCommandEvent& event);
     void DeselectCol(wxCommandEvent& event);
     void DeselectRow(wxCommandEvent& event);
@@ -212,6 +213,7 @@ public:
         ID_VTABLE,
         ID_BUGS_TABLE,
         ID_TABULAR_TABLE,
+        ID_SELECT_OVERLAY,
         ID_SELECT_UNSELECT,
         ID_SELECT_ALL,
         ID_SELECT_ROW,

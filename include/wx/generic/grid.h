@@ -613,6 +613,12 @@ public:
                            int horizAlign,
                            int vertAlign,
                            int textOrientation) const;
+
+    // Draw highlighted row/col label.
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int rowOrCol) const;
 };
 
 // Currently the row/column/corner renders don't need any methods other than
@@ -643,6 +649,11 @@ public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
                             wxRect& rect) const override;
+
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int row) const override;
 };
 
 // Column header cells renderers
@@ -653,6 +664,11 @@ public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
                             wxRect& rect) const override;
+
+    virtual void DrawHighlighted(const wxGrid& grid,
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int col) const override;
 };
 
 // Header corner renderer
@@ -1640,8 +1656,9 @@ public:
     void DrawAllGridWindowLines( wxDC& dc, const wxRegion & reg , wxGridWindow *gridWindow);
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawHighlight(wxDC& dc, const wxGridCellCoordsVector& cells);
-    void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow );
+    void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent = {} );
     void DrawLabelFrozenBorder( wxDC& dc, wxWindow *window, bool isRow );
+    void DrawOverlaySelection( wxDC& dc, wxGridWindow *gridWindow, const wxRect& renderExtent = {} );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect ) override;
 
@@ -1703,6 +1720,16 @@ public:
 
     void RefreshBlock(int topRow, int leftCol,
                       int bottomRow, int rightCol);
+
+    // This function simply calls RefreshRect() to refresh the cell at coordinates
+    // _coords_ and its corresponding row and column labels for highlighting.
+    void RefreshBlock(const wxGridCellCoords& coords);
+
+    // Refresh the entire grid if _rect_ is null. If not null, then:
+    // - the intersection of the cells area with the rectangle _rect_ will be refreshed.
+    // - the projection of the rectangle _rect_ on the row label window will be refreshed.
+    // - the projection of the rectangle _rect_ on the col label window will be refreshed.
+    void RefreshRect(wxRect* rect);
 
     // Refresh one or more areas (a combination of wxGridArea enums) entirely.
     void RefreshArea(int areas);
@@ -2255,7 +2282,9 @@ public:
     wxGridCellEditor *GetDefaultEditor() const;
     wxGridCellEditor* GetCellEditor(int row, int col) const;
 
-
+    // Determine (in constant time) whether the row/col should be highlighted or not.
+    bool IsRowLabelHighlighted(int row) const;
+    bool IsColLabelHighlighted(int col) const;
 
     // ------ cell value accessors
     //
@@ -2283,6 +2312,12 @@ public:
 
     // make the cell editable/readonly
     void SetReadOnly(int row, int col, bool isReadOnly = true);
+
+    // Return @true if overlay selection can be used (wxUSE_GRAPHICS_CONTEXT=1)
+    // and DisableOverlaySelection() hadn't been called.
+    bool UsesOverlaySelection() const;
+
+    void DisableOverlaySelection();
 
     // ------ select blocks of cells
     //
@@ -2331,6 +2366,9 @@ public:
     wxArrayInt GetSelectedRows() const;
     wxArrayInt GetSelectedCols() const;
 
+    // Return the selected blocks (only the visible ones) as a vector of rects.
+    void GetSelectedRectangles(std::vector<wxRect>& rectangles, const wxRect& renderExtent) const;
+
     // This function returns the rectangle that encloses the block of cells
     // limited by TopLeft and BottomRight cell in device coords and clipped
     //  to the client size of the grid window.
@@ -2338,6 +2376,14 @@ public:
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight,
                               const wxGridWindow *gridWindow = nullptr) const;
+
+    // Similar to BlockToDeviceRect() above but mainly for grid selection use.
+    // i.e. GetSelectedRectangles() uses this function as a helper.
+    void BlockToDeviceRect(const wxGridCellCoords& topLeft,
+                           const wxGridCellCoords& bottomRight,
+                           wxGridWindow* gridWin,
+                           std::vector<wxRect>& rectangles,
+                           const wxRect& renderExtent) const;
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
@@ -2432,6 +2478,9 @@ public:
     // unset any existing sorting column
     void UnsetSortingColumn() { SetSortingColumn(wxNOT_FOUND); }
 
+    // Invalidate overlay selection whenever the selection changes or scrolls.
+    void InvalidateOverlaySelection();
+
     // override some base class functions
     virtual void Fit() override;
     virtual void SetFocus() override;
@@ -2503,6 +2552,10 @@ protected:
 
     wxColour    m_selectionBackground;
     wxColour    m_selectionForeground;
+
+#if wxUSE_GRAPHICS_CONTEXT
+    bool m_usesOverlaySelection = true;
+#endif
 
     // NB: *never* access m_row/col arrays directly because they are created
     //     on demand, *always* use accessor functions instead!

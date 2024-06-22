@@ -74,6 +74,16 @@ public:
         dc.DrawRectangle(rect);
     }
 
+    virtual void DrawHighlighted(const wxGrid& WXUNUSED(grid),
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int WXUNUSED(rowOrCol)) const override
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(wxColour(240, 20, 15, 180)));
+        dc.DrawRectangle(rect);
+    }
+
 private:
     const wxColour m_colFg, m_colBg;
 };
@@ -337,6 +347,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
     EVT_MENU( ID_TABULAR_TABLE, GridFrame::OnTabularTable)
 
+    EVT_MENU( ID_SELECT_OVERLAY, GridFrame::OnOverlaySelection)
     EVT_MENU( ID_DESELECT_CELL, GridFrame::DeselectCell)
     EVT_MENU( ID_DESELECT_COL, GridFrame::DeselectCol)
     EVT_MENU( ID_DESELECT_ROW, GridFrame::DeselectRow)
@@ -532,6 +543,8 @@ GridFrame::GridFrame()
     editMenu->AppendCheckItem( ID_FREEZE_OR_THAW, "Freeze up to cursor\tCtrl-F" );
 
     wxMenu *selectMenu = new wxMenu;
+    selectMenu->Append( ID_SELECT_OVERLAY, "Disable &overlay selection\tCtrl+Shift+O" );
+    selectMenu->AppendSeparator();
     selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
                         "When off, old selection is deselected before "
                         "selecting the new cells", wxITEM_CHECK );
@@ -1655,6 +1668,14 @@ void GridFrame::SelectRow(wxCommandEvent& WXUNUSED(event))
 void GridFrame::SelectAll(wxCommandEvent& WXUNUSED(event))
 {
       grid->SelectAll();
+}
+
+void GridFrame::OnOverlaySelection(wxCommandEvent& WXUNUSED(event))
+{
+    grid->DisableOverlaySelection();
+    grid->ForceRefresh();
+
+    wxLogMessage("Overlay selection disabled");
 }
 
 void GridFrame::OnAddToSelectToggle(wxCommandEvent& event)

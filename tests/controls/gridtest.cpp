@@ -953,23 +953,45 @@ TEST_CASE_METHOD(GridTestCase, "Grid::SelectionRange", "[grid]")
     REQUIRE( sel.begin() != sel.end() );
     CHECK( *sel.begin() == wxGridBlockCoords(1, 0, 3, 1) );
 
-    m_grid->SelectBlock(4, 0, 7, 1, true);
-    int index = 0;
-    for ( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
+    SECTION("With adjacent blocks")
     {
-        switch ( index )
+        m_grid->SelectBlock(4, 0, 7, 1, true);
+        int index = 0;
+        for ( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
         {
-        case 0:
-            CHECK(block == wxGridBlockCoords(1, 0, 3, 1));
-            break;
-        case 1:
-            CHECK(block == wxGridBlockCoords(4, 0, 7, 1));
-            break;
-        default:
-            FAIL("Unexpected iterations count");
-            break;
+            switch ( index )
+            {
+            case 0:
+                CHECK(block == wxGridBlockCoords(1, 0, 7, 1));
+                break;
+            default:
+                FAIL("Unexpected iterations count");
+                break;
+            }
+            ++index;
         }
-        ++index;
+    }
+
+    SECTION("With non-adjacent blocks")
+    {
+        m_grid->SelectBlock(5, 0, 7, 1, true);
+        int index = 0;
+        for ( const wxGridBlockCoords& block : m_grid->GetSelectedBlocks() )
+        {
+            switch ( index )
+            {
+            case 0:
+                CHECK(block == wxGridBlockCoords(1, 0, 3, 1));
+                break;
+            case 1:
+                CHECK(block == wxGridBlockCoords(5, 0, 7, 1));
+                break;
+            default:
+                FAIL("Unexpected iterations count");
+                break;
+            }
+            ++index;
+        }
     }
 }
 
