@@ -330,11 +330,33 @@ protected:
         }
     }
 
+    // For compatibility with wxMSW.
+    // As we already tell Qt to start editing the item when clicking on it with
+    // setEditTriggers(QTreeWidget::SelectedClicked), we need to block editing if
+    // the item is part of a multiple selection, because wxMSW only deselects the
+    // other items without starting editing the selected item.
+    bool m_blockEditing = false;
+
+    void selectionChanged(const QItemSelection& selected,
+                          const QItemSelection& deselected) override
+    {
+        m_blockEditing = selected.size() == 0;
+
+        QTreeView::selectionChanged(selected, deselected);
+    }
+
     bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) override
     {
         // AllEditTriggers means that editor is about to open, not waiting for double click
         if (trigger == AllEditTriggers)
         {
+            if ( m_blockEditing )
+            {
+                m_blockEditing = false;
+
+                return true;
+            }
+
             // Allow event handlers to veto opening the editor
             wxTreeEvent wx_event(
                 wxEVT_TREE_BEGIN_LABEL_EDIT,
