@@ -3830,6 +3830,8 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 GetEventHandler()->ProcessEvent(nevent);
             }
 
+            bool canStartRenameTimer = true;
+
             // Don't deselect anything if we're just collapsing or expanding
             // the item.
             if ( !(flags & wxTREE_HITTEST_ONITEMBUTTON) )
@@ -3841,6 +3843,12 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                     wxArrayTreeItemIds selections;
                     if ( GetSelections(selections) > 1 )
                     {
+                        // For compatibility with wxMSW.
+                        // We need to block editing if the item is part of a multiple selection,
+                        // because wxMSW only deselects the other items without starting editing
+                        // the selected item.
+                        canStartRenameTimer = false;
+
                         DoSelectItem(item, true, false);
                     }
                 }
@@ -3862,7 +3870,10 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                         m_renameTimer = new wxTreeRenameTimer( this );
                     }
 
-                    m_renameTimer->Start( wxTreeRenameTimer::DELAY, true );
+                    if ( canStartRenameTimer )
+                    {
+                        m_renameTimer->Start( wxTreeRenameTimer::DELAY, true );
+                    }
                 }
 
                 m_lastOnSame = false;
