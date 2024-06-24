@@ -42,15 +42,7 @@ public:
                                 wxSize(400, 200),
                                 wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS);
 
-        m_root = m_tree->AddRoot("root");
-        m_child1 = m_tree->AppendItem(m_root, "child1");
-        m_child2 = m_tree->AppendItem(m_root, "child2");
-        m_grandchild = m_tree->AppendItem(m_child1, "grandchild");
-
-        m_tree->SetSize(400, 200);
-        m_tree->ExpandAll();
-        m_tree->Refresh();
-        m_tree->Update();
+        PopulateTreeCtrl();
     }
 
     ~TreeCtrlTestCase()
@@ -65,6 +57,21 @@ public:
     }
 
 protected:
+    void PopulateTreeCtrl()
+    {
+        m_tree->DeleteAllItems();
+
+        m_root = m_tree->AddRoot("root");
+        m_child1 = m_tree->AppendItem(m_root, "child1");
+        m_child2 = m_tree->AppendItem(m_root, "child2");
+        m_grandchild = m_tree->AppendItem(m_child1, "grandchild");
+
+        m_tree->SetSize(400, 200);
+        m_tree->ExpandAll();
+        m_tree->Refresh();
+        m_tree->Update();
+    }
+
     // the tree control itself
     wxTreeCtrl *m_tree;
 
@@ -85,6 +92,10 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::HasChildren", "[treectrl]")
 {
     m_tree->ToggleWindowStyle(wxTR_HIDE_ROOT); // actually set it
 
+#ifdef __WXMSW__
+    PopulateTreeCtrl();
+#endif
+
     CHECK( m_tree->HasChildren(m_root) );
     CHECK( m_tree->HasChildren(m_child1) );
     CHECK_FALSE( m_tree->HasChildren(m_child2) );
@@ -94,6 +105,10 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::HasChildren", "[treectrl]")
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::GetCount", "[treectrl]")
 {
     m_tree->ToggleWindowStyle(wxTR_HIDE_ROOT); // actually set it
+
+#ifdef __WXMSW__
+    PopulateTreeCtrl();
+#endif
 
     CHECK(m_tree->GetCount() == 3);
 }
@@ -411,6 +426,10 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
     // this test should be only ran in multi-selection control
     m_tree->ToggleWindowStyle(wxTR_MULTIPLE);
 
+#ifdef __WXMSW__
+    PopulateTreeCtrl();
+#endif
+
     m_tree->ExpandAll();
 
     // This is currently needed to work around a problem under wxMSW: clicking
@@ -452,8 +471,9 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
     CHECK( m_tree->IsSelected(m_child2) );
     CHECK( beginedit.GetCount() == 0 );
 
-    // Time needed (in ms) for the editor to display, at least under wxGTK.
-    const int BEGIN_EDIT_TIMEOUT = 510;
+    // Time needed (in ms) for the editor to display. The test will not pass
+    // if the value is less than 400, 510, 800 under wxQt, wxGTK, wxMSW resp.
+    const int BEGIN_EDIT_TIMEOUT = 800;
 
     YieldForAWhile(BEGIN_EDIT_TIMEOUT);
     sim.MouseClick();
