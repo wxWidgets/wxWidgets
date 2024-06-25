@@ -276,7 +276,7 @@ DoHandleClipboardCallback( GtkWidget *widget,
     if( text && text->IsMultiLine() )
     {
         auto value = text->GetValue();
-        text->HandleMaxLength( value );
+        text->GTKHandleMaxLength( value );
     }
 }
 

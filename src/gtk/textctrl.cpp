@@ -1306,7 +1306,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     auto temp = text;
     if( m_maxLengthAllowed )
     {
-        HandleMaxLength( temp );
+        GTKHandleMaxLength( temp );
     }
     const wxScopedCharBuffer buffer(temp.utf8_str());
 
@@ -1822,7 +1822,7 @@ void wxTextCtrl::Paste()
     {
         g_signal_emit_by_name (m_text, "paste-clipboard");
         auto value = GetValue();
-        HandleMaxLength( value );
+        GTKHandleMaxLength( value );
 //        text->SetValue( value );
     }
     else
@@ -2370,7 +2370,7 @@ wxTextCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_entry_new(), true);
 }
 
-void wxTextCtrl::HandleMaxLength(wxString &text)
+void wxTextCtrl::GTKHandleMaxLength(wxString &text)
 {
     auto count = gtk_text_buffer_get_char_count( m_buffer );
     if( count == m_maxlen )

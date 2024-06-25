@@ -133,7 +133,7 @@ public:
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
 
-    void HandleMaxLength(wxString &text);
+    void GTKHandleMaxLength(wxString &text);
 
     GtkWidget* GetConnectWidget() override;
 
