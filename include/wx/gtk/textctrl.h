@@ -233,7 +233,7 @@ private:
 
     bool m_modified;
     bool m_dontMarkDirty;
-
+    
     int         m_countUpdatesToIgnore;
 
     // Our text buffer. Convenient, and holds the buffer while using
