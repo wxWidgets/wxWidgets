@@ -1507,6 +1507,11 @@ wxRect wxListCtrl::GetViewRect() const
     return rect;
 }
 
+wxSize wxListCtrl::DoGetBestClientSize() const
+{
+    return wxQtConvertSize(m_qtTreeWidget->minimumSizeHint());
+}
+
 wxTextCtrl* wxListCtrl::GetEditControl() const
 {
     return m_qtTreeWidget->GetEditControl();
