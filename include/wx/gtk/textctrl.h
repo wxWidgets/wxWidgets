@@ -133,6 +133,10 @@ public:
     bool SetForegroundColour(const wxColour& colour) override;
     bool SetBackgroundColour(const wxColour& colour) override;
 
+    // In GTK only single line text control properly handles max
+    // text length. This function will prevent to enter more
+    // than maximum number of characters in the multiline text
+    // control
     void GTKHandleMaxLength(wxString &text);
 
     GtkWidget* GetConnectWidget() override;
