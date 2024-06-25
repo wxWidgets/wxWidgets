@@ -3058,6 +3058,7 @@ bool wxWindowBase::PopupMenu(wxMenu *menu, int x, int y)
         setInvokingWin(*menu, static_cast<wxWindow *>(this));
 
     wxCurrentPopupMenu = menu;
+    menu->UpdateUI();
     const bool rc = DoPopupMenu(menu, x, y);
     wxCurrentPopupMenu = nullptr;
 
