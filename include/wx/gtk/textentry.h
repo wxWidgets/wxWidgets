@@ -99,7 +99,6 @@ protected:
     // Call this from the overridden wxWindow::GTKIMFilterKeypress() to use
     // GtkEntry IM context.
     int GTKEntryIMFilterKeypress(GdkEventKey* event) const;
-    int m_maxlen = INT_MAX;
     // If GTKEntryIMFilterKeypress() is not called (as multiline wxTextCtrl
     // uses its own IM), call this method instead to still notify wxTextEntry
     // about the key press events in the given widget.
@@ -118,6 +117,7 @@ protected:
     // the dialog containing this control if any.
     bool ClickDefaultButtonIfPossible();
 
+    int m_maxlen = INT_MAX;
 private:
     // implement this to return the associated GtkEntry or another widget
     // implementing GtkEditable
