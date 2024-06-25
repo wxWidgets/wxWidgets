@@ -718,7 +718,6 @@ void wxTextCtrl::Init()
     m_maxLengthAllowed = false;
     m_dontMarkDirty =
     m_modified = false;
-    m_maxlen = INT_MAX;
     m_countUpdatesToIgnore = 0;
 
     SetUpdateFont(false);
