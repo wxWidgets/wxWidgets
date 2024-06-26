@@ -1822,7 +1822,6 @@ void wxTextCtrl::Paste()
         g_signal_emit_by_name (m_text, "paste-clipboard");
         auto value = GetValue();
         GTKHandleMaxLength( value );
-//        text->SetValue( value );
     }
     else
         wxTextEntry::Paste();
