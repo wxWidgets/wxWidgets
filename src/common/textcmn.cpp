@@ -29,6 +29,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/ffile.h"
+#include "wx/filename.h"
 
 extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
 
@@ -952,6 +953,11 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
             {
                 SetRTFValue(text);
             }
+            else if (fileType == wxTEXT_TYPE_ANY &&
+                wxFileName(filename).GetExt().CmpNoCase("rtf") == 0)
+            {
+                SetRTFValue(text);
+            }
             else
             {
                 SetValue(text);
@@ -986,13 +992,15 @@ bool wxTextAreaBase::DoSaveFile(const wxString& filename, int fileType)
 #endif
 #if wxUSE_FFILE
     wxFFile file(filename, "w");
+
 #ifdef __WXOSX__
-    if (file.IsOpened() &&
-        (fileType == wxTEXT_TYPE_RTF ?
-            file.Write(GetRTFValue()) : file.Write(GetValue())))
+    const wxString fileContent = (fileType == wxTEXT_TYPE_TEXT) ? GetValue() :
+        (fileType == wxTEXT_TYPE_RTF ||
+         wxFileName(filename).GetExt().CmpNoCase("rtf") == 0) ? GetRTFValue() : GetValue();
 #else
-    if (file.IsOpened() && file.Write(GetValue()))
+    const wxString fileContent = GetValue();
 #endif
+    if (file.IsOpened() && file.Write(fileContent))
     {
         // if it worked, save for future calls
         m_filename = filename;

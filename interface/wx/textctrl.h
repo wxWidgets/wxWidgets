@@ -53,8 +53,15 @@
 */
 enum wxTextCtrlFileType
 {
+    /** Format determined by file extension when loading/saving the
+        control's content. This will also rely on which formats
+        are supported by the platform's native control.
+    */
     wxTEXT_TYPE_ANY,
-    wxTEXT_TYPE_TEXT = wxTEXT_TYPE_ANY,
+    /** Plain Text Format.
+        @since 3.3.0
+    */
+    wxTEXT_TYPE_TEXT,
     /** Rich Text Format.
         @onlyfor{wxosx}
         @since 3.3.0
