@@ -758,7 +758,7 @@ public:
     bool IsSingleLine() const { return !HasFlag(wxTE_MULTILINE); }
     bool IsMultiLine() const { return !IsSingleLine(); }
     bool IsMaxLengthAllowed() const { return m_maxLengthAllowed; }
-    void SetMaxLengthAllowed(const bool &allowed) { m_maxLengthAllowed = allowed; }
+    void SetMaxLengthAllowed(bool allowed) { m_maxLengthAllowed = allowed; }
 
     // stream-like insertion operators: these are always available, whether we
     // were, or not, compiled with streambuf support
