@@ -909,7 +909,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
             g_signal_connect (m_buffer, "apply_tag",
                               G_CALLBACK (au_apply_tag_callback), nullptr);
 
-            // Check for URLs in the initial string sed to Create
+            // Check for URLs in the initial string passed to Create
             gtk_text_buffer_get_start_iter(m_buffer, &start);
             gtk_text_buffer_get_end_iter(m_buffer, &end);
             au_check_range(&start, &end);
