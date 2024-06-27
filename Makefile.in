@@ -4018,6 +4018,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/aui/tabart.h \
 	wx/xrc/xh_aui.h \
 	wx/xrc/xh_auitoolb.h \
+	wx/aui/serializer.h \
 	$(AUI_GTK_HDR) \
 	$(AUI_PLATFORM_HDR) \
 	wx/propgrid/advprops.h \
