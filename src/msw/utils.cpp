@@ -1107,6 +1107,7 @@ static const int FIRST_WINDOWS11_BUILD = 22000;
 
 } // anonymous namespace
 
+// When adding a new version, update also the table in wxGetOsVersion() docs.
 wxString wxGetOsDescription()
 {
     wxString str;
