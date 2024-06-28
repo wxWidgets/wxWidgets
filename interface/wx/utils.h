@@ -951,13 +951,13 @@ wxString wxGetOsDescription();
             <td>Windows 11</td>
             <td>10</td>
             <td>0</td>
-            <td>&gt;= 22000</td>
+            <td>&ge; 22000</td>
         </tr>
         <tr>
             <td>Windows Server 2022</td>
             <td>10</td>
             <td>0</td>
-            <td>&gt;= 22000</td>
+            <td>20348</td>
         </tr>
         <tr>
             <td>Windows 10</td>
@@ -966,10 +966,16 @@ wxString wxGetOsDescription();
             <td></td>
         </tr>
         <tr>
+            <td>Windows Server 2019</td>
+            <td>10</td>
+            <td>0</td>
+            <td>17763</td>
+        </tr>
+        <tr>
             <td>Windows Server 2016</td>
             <td>10</td>
             <td>0</td>
-            <td></td>
+            <td>14393</td>
         </tr>
         <tr>
             <td>Windows 8.1</td>
@@ -1038,7 +1044,7 @@ wxString wxGetOsDescription();
             <td></td>
         </tr>
     </table>
-    See the <a href="http://msdn.microsoft.com/en-us/library/ms724832(VS.85).aspx">MSDN</a>
+    See the <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version">Microsoft documentation</a>
     for more info about the values above.
 
     @see wxGetOsDescription(), wxPlatformInfo
