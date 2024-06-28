@@ -370,7 +370,7 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
             break;
     }
 
-    return wxGTKImpl::UpdateColorScheme(colorScheme) ? AppearanceResult::Success
+    return wxGTKImpl::UpdateColorScheme(colorScheme) ? AppearanceResult::Ok
                                                      : AppearanceResult::Failure;
 #else
     wxUnusedVar(appearance);

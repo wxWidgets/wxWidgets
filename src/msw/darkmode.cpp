@@ -271,7 +271,7 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
 
         case Appearance::Light:
             // Nothing to do, this is the default.
-            return AppearanceResult::Success;
+            return AppearanceResult::Ok;
 
         case Appearance::Dark:
             flags = DarkMode_Always;
@@ -279,7 +279,7 @@ wxApp::AppearanceResult wxApp::SetAppearance(Appearance appearance)
     }
 
     // Do (try to) change it.
-    return MSWEnableDarkMode(flags) ? AppearanceResult::Success
+    return MSWEnableDarkMode(flags) ? AppearanceResult::Ok
                                     : AppearanceResult::Failure;
 }
 
