@@ -2814,7 +2814,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         processed = true;
                         SetFocus();
 
-                        if ( !HandleMouseEvent(nMsg, x, y, wParam) )
+                        if ( !HandleMouseEvent(nMsg, x, y, wParam, ::GetMessageExtraInfo()) )
                         {
                             if ( !IsExpanded(htItem) )
                             {
@@ -2838,7 +2838,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
                 if ( wParam & MK_CONTROL )
                 {
-                    if ( HandleMouseEvent(nMsg, x, y, wParam) )
+                    if ( HandleMouseEvent(nMsg, x, y, wParam, ::GetMessageExtraInfo()) )
                     {
                         m_htClickedItem.Unset();
                         break;
@@ -2866,7 +2866,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 }
                 else if ( wParam & MK_SHIFT )
                 {
-                    if ( HandleMouseEvent(nMsg, x, y, wParam) )
+                    if ( HandleMouseEvent(nMsg, x, y, wParam, ::GetMessageExtraInfo()) )
                     {
                         m_htClickedItem.Unset();
                         break;
@@ -2932,7 +2932,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                          count > 1 ||
                          HITEM(selections[0]) != htItem )
                     {
-                        if ( HandleMouseEvent(nMsg, x, y, wParam) )
+                        if ( HandleMouseEvent(nMsg, x, y, wParam, ::GetMessageExtraInfo()) )
                         {
                             m_htClickedItem.Unset();
                             break;
@@ -3012,7 +3012,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 processed = true;
                 SetFocus();
 
-                if ( HandleMouseEvent(nMsg, x, y, wParam) || !htItem )
+                if ( HandleMouseEvent(nMsg, x, y, wParam, ::GetMessageExtraInfo()) || !htItem )
                 {
                     break;
                 }
