@@ -103,7 +103,12 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl file types
 // ----------------------------------------------------------------------------
 
-#define wxTEXT_TYPE_ANY     0
+enum wxTextCtrlFileType
+{
+    wxTEXT_TYPE_ANY,
+    wxTEXT_TYPE_TEXT = wxTEXT_TYPE_ANY,
+    wxTEXT_TYPE_RTF
+};
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl::HitTest return values
@@ -679,6 +684,17 @@ public:
                                             wxTextCoord *row) const;
     virtual wxString GetValue() const = 0;
     virtual void SetValue(const wxString& value) = 0;
+
+    // overridden implementations are required to actually handle RTF
+    virtual wxString GetRTFValue() const
+    {
+        wxFAIL_MSG("GetRTFValue() should only be used with rich, multiline controls.");
+        return wxEmptyString;
+    }
+    virtual void SetRTFValue(const wxString& WXUNUSED(val))
+    {
+        wxFAIL_MSG("SetRTFValue() should only be used with rich, multiline controls.");
+    }
 
 protected:
     // implementation of loading/saving

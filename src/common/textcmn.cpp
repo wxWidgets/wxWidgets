@@ -29,6 +29,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/ffile.h"
+#include "wx/filename.h"
 
 extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
 
@@ -931,8 +932,15 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 // file IO functions
 // ----------------------------------------------------------------------------
 
-bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
 {
+#ifndef __WXOSX__
+    wxASSERT_MSG(fileType != wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
+    if (fileType == wxTEXT_TYPE_RTF)
+    {
+        return false;
+    }
+#endif
 #if wxUSE_FFILE
     wxFFile file(filename);
     if ( file.IsOpened() )
@@ -940,7 +948,23 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
         wxString text;
         if ( file.ReadAll(&text) )
         {
+#ifdef __WXOSX__
+            if (fileType == wxTEXT_TYPE_RTF)
+            {
+                SetRTFValue(text);
+            }
+            else if (fileType == wxTEXT_TYPE_ANY &&
+                wxFileName(filename).GetExt().CmpNoCase("rtf") == 0)
+            {
+                SetRTFValue(text);
+            }
+            else
+            {
+                SetValue(text);
+            }
+#else
             SetValue(text);
+#endif
 
             DiscardEdits();
             m_filename = filename;
@@ -957,11 +981,26 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
     return false;
 }
 
-bool wxTextAreaBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextAreaBase::DoSaveFile(const wxString& filename, int fileType)
 {
+#ifndef __WXOSX__
+    wxASSERT_MSG(fileType != wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
+    if (fileType == wxTEXT_TYPE_RTF)
+    {
+        return false;
+    }
+#endif
 #if wxUSE_FFILE
-    wxFFile file(filename, wxT("w"));
-    if ( file.IsOpened() && file.Write(GetValue()) )
+    wxFFile file(filename, "w");
+
+#ifdef __WXOSX__
+    const wxString fileContent = (fileType == wxTEXT_TYPE_TEXT) ? GetValue() :
+        (fileType == wxTEXT_TYPE_RTF ||
+         wxFileName(filename).GetExt().CmpNoCase("rtf") == 0) ? GetRTFValue() : GetValue();
+#else
+    const wxString fileContent = GetValue();
+#endif
+    if (file.IsOpened() && file.Write(fileContent))
     {
         // if it worked, save for future calls
         m_filename = filename;

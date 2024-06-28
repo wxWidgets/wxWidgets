@@ -1463,6 +1463,30 @@ TEST_CASE("wxTextCtrl::EventsOnCreate", "[wxTextCtrl][event]")
     CHECK( updated.GetCount() == 1 );
 }
 
+#ifdef __WXOSX__
+TEST_CASE("wxTextCtrl::Get/SetRTFValue", "[wxTextCtrl][rtf]")
+{
+    wxWindow* const parent = wxTheApp->GetTopWindow();
+
+    std::unique_ptr<wxTextCtrl> text(new wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_RICH2 | wxTE_MULTILINE));
+
+    text->SetRTFValue(R"({\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red192\green80\blue77;}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1
+ \pard\sa200\sl276\slmult1\b\i\f0\fs22\lang9 wxWidg\'e9ts \cf1\i0 3.3\cf0\b0\par
+})");
+    // test getting the main text, including an extended ASCII character
+    wxString result = text->GetValue();
+    CHECK(result.find(L"wxWidgéts") != wxString::npos);
+    CHECK(result.find(L"3.3") != wxString::npos);
+
+    result = text->GetRTFValue();
+    // 'é' will be encoded, just see if parts of the content are in there
+    CHECK(result.find(L"wxWidg") != wxString::npos);
+    CHECK(result.find(L"3.3") != wxString::npos);
+}
+#endif
+
 TEST_CASE("wxTextCtrl::InitialCanUndo", "[wxTextCtrl][undo]")
 {
     long style = 0;
