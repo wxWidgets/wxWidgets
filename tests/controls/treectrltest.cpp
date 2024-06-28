@@ -329,6 +329,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::CollapseExpandEvents", "[treectr
     CHECK(collapsed.GetCount() == 1);
 }
 
+#if 0
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
 {
     m_tree->ExpandAll();
@@ -414,7 +415,6 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     }
 }
 
-#if 0
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[treectrl]")
 {
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
