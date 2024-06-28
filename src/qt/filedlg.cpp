@@ -94,13 +94,18 @@ bool wxFileDialog::Create(wxWindow *parent,
                           const wxString& wildCard,
                           long style,
                           const wxPoint& pos,
-                          const wxSize& sz,
+                          const wxSize& sizeOrig,
                           const wxString& name)
 {
     m_qtWindow = new wxQtFileDialog( parent, this, message, defaultDir,
                                      defaultFile, wildCard, style);
 
-    return wxTopLevelWindow::Create( parent, wxID_ANY, message, pos, sz, style, name );
+    wxSize size(sizeOrig);
+
+    if (!size.IsFullySpecified())
+        size.SetDefaults(wxQtConvertSize(m_qtWindow->sizeHint()));
+
+    return wxTopLevelWindow::Create( parent, wxID_ANY, message, pos, size, style, name );
 }
 
 wxString wxFileDialog::GetPath() const
@@ -234,10 +239,16 @@ bool wxDirDialog::Create(wxWindow *parent,
                          const wxString& defaultPath,
                          long style,
                          const wxPoint& pos,
-                         const wxSize& size,
+                         const wxSize& sizeOrig,
                          const wxString& name)
 {
     m_qtWindow = new wxQtDirDialog( parent, this, message, defaultPath, style);
+
+    wxSize size(sizeOrig);
+
+    if (!size.IsFullySpecified())
+        size.SetDefaults(wxQtConvertSize(m_qtWindow->sizeHint()));
+
     return wxTopLevelWindow::Create( parent, wxID_ANY, message, pos, size, style, name );
 }
 
