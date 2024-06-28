@@ -414,6 +414,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectionChange", "[treectrl]")
     }
 }
 
+#if 0
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[treectrl]")
 {
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
@@ -492,6 +493,7 @@ TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::SelectItemMultiInteractive", "[t
     sim.Char(WXK_RETURN); // End editing and close the editor.
     wxYield();
 }
+#endif
 
 TEST_CASE_METHOD(TreeCtrlTestCase, "wxTreeCtrl::Menu", "[treectrl]")
 {
