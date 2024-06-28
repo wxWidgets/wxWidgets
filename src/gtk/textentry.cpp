@@ -272,6 +272,12 @@ DoHandleClipboardCallback( GtkWidget *widget,
         // ourselves in the event handler
         g_signal_stop_emission_by_name (widget, signal_name);
     }
+    wxTextCtrl *text = dynamic_cast<wxTextCtrl *>( win );
+    if( text && text->IsMultiLine() )
+    {
+        auto value = text->GetValue();
+        text->GTKHandleMaxLength( value );
+    }
 }
 
 extern "C"
@@ -918,10 +924,9 @@ void wxTextEntry::SetEditable(bool editable)
 void wxTextEntry::SetMaxLength(unsigned long len)
 {
     GtkEntry* const entry = (GtkEntry*)GetEditable();
-    if (!GTK_IS_ENTRY(entry))
-        return;
-
-    gtk_entry_set_max_length(entry, len);
+    m_maxlen = len;
+    if( entry )
+        gtk_entry_set_max_length(entry, len);
 }
 
 void wxTextEntry::SendMaxLenEvent()
