@@ -79,7 +79,14 @@ void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
     // the icons for which this function is often used. It's also consistent
     // with what wxDC::DrawBitmap() does, i.e. the fallback method below.
     wxImage img = bmp.ConvertToImage();
-    img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_NEAREST);
+    wxImageResizeQuality quality = wxIMAGE_QUALITY_NEAREST;
+
+    // If we're downscaling, bilinear interpolation gives best results.
+    if( img.GetWidth() > sizeNeeded.x && img.GetHeight() > sizeNeeded.y )
+        quality = wxIMAGE_QUALITY_BILINEAR;
+
+    img.Rescale(sizeNeeded.x, sizeNeeded.y, quality);
+
     bmp = wxBitmap(img);
 #else // !wxUSE_IMAGE
     // Fallback method of scaling the bitmap
