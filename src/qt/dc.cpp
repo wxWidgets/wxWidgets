@@ -403,7 +403,7 @@ wxCoord wxQtDCImpl::GetCharWidth() const
     //FIXME: Returning max width, instead of average
     QFontMetrics metrics(m_qtPainter->isActive() ?
         m_qtPainter->font() : QApplication::font());
-    return wxCoord( metrics.maxWidth() );
+    return wxCoord( metrics.averageCharWidth() );
 }
 
 void wxQtDCImpl::DoGetTextExtent(const wxString& string,

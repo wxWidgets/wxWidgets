@@ -274,8 +274,6 @@ public:
 protected:
     void Init();
 
-    virtual wxSize DoGetBestClientSize() const override;
-
     // Implement base class pure virtual methods.
     virtual long DoInsertColumn(long col, const wxListItem& info) override;
     void DoUpdateImages(int which) override;
