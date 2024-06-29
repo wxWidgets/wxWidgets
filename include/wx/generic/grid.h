@@ -618,7 +618,8 @@ public:
     virtual void DrawHighlighted(const wxGrid& grid,
                                  wxDC& dc,
                                  wxRect& rect,
-                                 int rowOrCol) const;
+                                 int rowOrCol,
+                                 bool pressed = false) const;
 };
 
 // Currently the row/column/corner renders don't need any methods other than
@@ -653,7 +654,8 @@ public:
     virtual void DrawHighlighted(const wxGrid& grid,
                                  wxDC& dc,
                                  wxRect& rect,
-                                 int row) const override;
+                                 int row,
+                                 bool pressed = false) const override;
 };
 
 // Column header cells renderers
@@ -668,7 +670,8 @@ public:
     virtual void DrawHighlighted(const wxGrid& grid,
                                  wxDC& dc,
                                  wxRect& rect,
-                                 int col) const override;
+                                 int col,
+                                 bool pressed = false) const override;
 };
 
 // Header corner renderer
