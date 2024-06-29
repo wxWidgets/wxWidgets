@@ -614,11 +614,18 @@ public:
                            int vertAlign,
                            int textOrientation) const;
 
+    // argument 'flags' for DrawHighlighted
+    enum DrawFlags
+    {
+        Draw_Pressed = 1
+    };
+
     // Draw highlighted row/col label.
     virtual void DrawHighlighted(const wxGrid& grid,
                                  wxDC& dc,
                                  wxRect& rect,
-                                 int rowOrCol) const;
+                                 int rowOrCol,
+                                 int flags = 0) const;
 };
 
 // Currently the row/column/corner renders don't need any methods other than
@@ -653,7 +660,8 @@ public:
     virtual void DrawHighlighted(const wxGrid& grid,
                                  wxDC& dc,
                                  wxRect& rect,
-                                 int row) const override;
+                                 int row,
+                                 int flags = 0) const override;
 };
 
 // Column header cells renderers
@@ -668,7 +676,8 @@ public:
     virtual void DrawHighlighted(const wxGrid& grid,
                                  wxDC& dc,
                                  wxRect& rect,
-                                 int col) const override;
+                                 int col,
+                                 int flags = 0) const override;
 };
 
 // Header corner renderer

@@ -77,7 +77,8 @@ public:
     virtual void DrawHighlighted(const wxGrid& WXUNUSED(grid),
                                  wxDC& dc,
                                  wxRect& rect,
-                                 int WXUNUSED(rowOrCol)) const override
+                                 int WXUNUSED(rowOrCol),
+                                 int WXUNUSED(flags)) const override
     {
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(wxBrush(wxColour(240, 20, 15, 180)));
