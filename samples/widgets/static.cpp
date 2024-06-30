@@ -525,13 +525,10 @@ void StaticWidgetsPage::CreateStatic()
 #endif // wxUSE_MARKUP
     }
 
-    NotifyWidgetRecreation(m_statText);
 
     m_statText->SetToolTip("Tooltip for a label inside the box");
 
 #if wxUSE_MARKUP
-    NotifyWidgetRecreation(m_statMarkup);
-
     m_statMarkup->SetLabelMarkup(m_textLabelWithMarkup->GetValue());
 
     if ( m_chkGreen->GetValue() )
@@ -542,8 +539,6 @@ void StaticWidgetsPage::CreateStatic()
     m_statLine = new wxStaticLine(staticBox, wxID_ANY,
                                   wxDefaultPosition, wxDefaultSize,
                                   isVert ? wxLI_VERTICAL : wxLI_HORIZONTAL);
-
-    NotifyWidgetRecreation(m_statLine);
 #endif // wxUSE_STATLINE
 
     m_sizerStatBox->Add(m_statText, 0, wxGROW);
@@ -553,6 +548,14 @@ void StaticWidgetsPage::CreateStatic()
 #if wxUSE_MARKUP
     m_sizerStatBox->Add(m_statMarkup);
 #endif // wxUSE_MARKUP
+
+    NotifyWidgetRecreation(m_statText);
+#if wxUSE_MARKUP
+    NotifyWidgetRecreation(m_statMarkup);
+#endif
+#if wxUSE_STATLINE
+    NotifyWidgetRecreation(m_statLine);
+#endif
 
     m_sizerStatic->Add(m_sizerStatBox, 0, wxGROW);
 
