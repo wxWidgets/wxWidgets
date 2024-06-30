@@ -4269,59 +4269,57 @@ void wxGrid::ProcessRowColLabelMouseEvent( const wxGridOperations &oper, wxMouse
                 if ( oper.CanDragMove(this) )
                 {
                     ChangeCursorMode(oper.GetCursorModeMove(), headerWin);
-
-                    // Show button as pressed
                     m_dragMoveRowOrCol = line;
+                    // Show button as pressed
                     wxClientDC dc( headerWin );
                     oper.PrepareDCForLabels(this, dc);
                     oper.DrawLineLabel(this, dc, line);
                 }
-                else
-                {
-                    // Check if row/col selection is possible and allowed, before doing
-                    // anything else, including changing the cursor mode to "select
-                    // row"/"select col".
-                    if ( m_selection && m_numRows > 0 && m_numCols > 0 &&
-                            m_selection->GetSelectionMode() != dual.GetSelectionMode() )
-                    {
-                        bool selectNewLine = false,
-                             makeLineCurrent = false;
 
-                        if ( event.ShiftDown() && !event.CmdDown() )
+                // Check if row/col selection is possible and allowed, before doing
+                // anything else, including changing the cursor mode to "select
+                // row"/"select col".
+                if ( m_selection && m_numRows > 0 && m_numCols > 0 &&
+                        m_selection->GetSelectionMode() != dual.GetSelectionMode() )
+                {
+                    bool selectNewLine = false,
+                         makeLineCurrent = false;
+
+                    if ( event.ShiftDown() && !event.CmdDown() )
+                    {
+                        // Continue editing the current selection and don't
+                        // move the grid cursor.
+                        oper.SelectionExtendCurrentBlock(this, line, event);
+                        oper.MakeLineVisible(this, line);
+                    }
+                    else if ( event.CmdDown() && !event.ShiftDown() )
+                    {
+                        if ( oper.IsLineInSelection(this, line) )
                         {
-                            // Continue editing the current selection and don't
-                            // move the grid cursor.
-                            oper.SelectionExtendCurrentBlock(this, line, event);
-                            oper.MakeLineVisible(this, line);
-                        }
-                        else if ( event.CmdDown() && !event.ShiftDown() )
-                        {
-                            if ( oper.IsLineInSelection(this, line) )
-                            {
-                                oper.DeselectLine(this, line);
-                                makeLineCurrent = true;
-                            }
-                            else
-                            {
-                                makeLineCurrent =
-                                selectNewLine = true;
-                            }
+                            oper.DeselectLine(this, line);
+                            makeLineCurrent = true;
                         }
                         else
                         {
-                            ClearSelection();
                             makeLineCurrent =
                             selectNewLine = true;
                         }
-
-                        if ( selectNewLine )
-                            oper.SelectLine(this, line, event);
-
-                        if ( makeLineCurrent )
-                            oper.MakeLineCurrent(this, line);
-
-                        ChangeCursorMode(oper.GetCursorModeSelect(), labelWin);
                     }
+                    else
+                    {
+                        ClearSelection();
+                        makeLineCurrent =
+                        selectNewLine = true;
+                    }
+
+                    if ( selectNewLine )
+                        oper.SelectLine(this, line, event);
+
+                    if ( makeLineCurrent )
+                        oper.MakeLineCurrent(this, line);
+
+                    if ( !oper.CanDragMove(this) )
+                        ChangeCursorMode(oper.GetCursorModeSelect(), labelWin);
                 }
             }
         }
