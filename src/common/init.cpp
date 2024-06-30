@@ -153,7 +153,7 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
 {
     wxASSERT_MSG( !argc && !argv, "initializing twice?" );
 
-#ifndef __WINDOWS__
+#ifndef __WXMSW__
     argvA = argvIn;
 #endif
 
@@ -206,6 +206,30 @@ void wxInitData::MSWInitialize()
 
 void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
 {
+#ifndef __WXMSW__
+    // It's possible that the below checks for argc and argcIn will pass
+    // and thus return, despite argvA not being initialized. For this reason,
+    // the argvA routine must be checked and (if necessary) ran first.
+    //
+    // It's unclear to me if there's ever a condition where argvA is init'd
+    // and argc/argva are not, so instead of returning here the entire
+    // routine is wrapped in the if.
+    if ( !argvA ) {
+        // We need to convert from wide arguments back to the narrow ones.
+        argvA = new char*[argc + 1];
+        argvA[argc] = nullptr;
+
+        ownsArgvA = true;
+
+        for ( int i = 0; i < argc; i++ )
+        {
+            // Try to use the current encoding, but if it fails, it's better to
+            // fall back to UTF-8 than lose an argument entirely.
+            argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
+        }
+    }
+#endif // !__WXMSW__
+
     // Usually, arguments are initialized from "char**" passed to main()
     // elsewhere, but it is also possible to call a wide-char initialization
     // function (wxInitialize(), wxEntryStart() or wxEntry() itself) directly,
@@ -231,20 +255,7 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
 #ifdef __WINDOWS__
     // Not used in this case and shouldn't be passed to LocalFree().
     argvMSW = nullptr;
-#else // !__WINDOWS__
-    // We need to convert from wide arguments back to the narrow ones.
-    argvA = new char*[argc + 1];
-    argvA[argc] = nullptr;
-
-    ownsArgvA = true;
-
-    for ( int i = 0; i < argc; i++ )
-    {
-        // Try to use the current encoding, but if it fails, it's better to
-        // fall back to UTF-8 than lose an argument entirely.
-        argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
-    }
-#endif // __WINDOWS__/!__WINDOWS__
+#endif // __WINDOWS__
 }
 
 void wxInitData::Free()
@@ -267,7 +278,7 @@ void wxInitData::Free()
             free(argv[i]);
         }
 
-#ifndef __WINDOWS__
+#ifndef __WXMSW__
         if ( ownsArgvA )
         {
             for ( int i = 0; i < argc; i++ )
@@ -277,7 +288,7 @@ void wxInitData::Free()
 
             wxDELETEA(argvA);
         }
-#endif // !__WINDOWS__
+#endif // !__WXMSW__
 
         wxDELETEA(argv);
         argc = 0;
