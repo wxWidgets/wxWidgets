@@ -29,6 +29,10 @@
     #include "wx/containr.h"
 #endif
 
+#ifdef __WXMSW__
+    #include "wx/msw/private/darkmode.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
@@ -98,6 +102,14 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
 
     // so that non-solid background renders correctly under GTK+:
     SetThemeEnabled(true);
+
+#ifdef __WXMSW__
+    // explicitly set dark background color for child wxStaticBoxes to inherit
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        SetBackgroundColour(wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
+    }
+#endif
 
     return true;
 }
