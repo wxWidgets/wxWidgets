@@ -1319,6 +1319,11 @@ void wxTreeCtrl::SetWindowStyleFlag(long styles)
             ? QTreeWidget::ExtendedSelection
             : QTreeWidget::SingleSelection
     );
+
+    if ( (styles & wxTR_HIDE_ROOT) != 0 )
+        m_qtTreeWidget->setRootIndex(m_qtTreeWidget->model()->index(0, 0));
+    else
+        m_qtTreeWidget->setRootIndex(QModelIndex());
 }
 
 int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
