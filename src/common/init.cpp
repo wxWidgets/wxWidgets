@@ -200,41 +200,33 @@ void wxInitData::MSWInitialize()
     // argvMSW because it could be allocated by Initialize() if a custom entry
     // point is used.
     argv = argvMSW;
+
+#ifndef __WXMSW__
+    // We need to convert from wide arguments back to the narrow ones.
+    argvA = new char*[argc + 1];
+    argvA[argc] = nullptr;
+
+    ownsArgvA = true;
+
+    for ( int i = 0; i < argc; i++ )
+    {
+        // Try to use the current encoding, but if it fails, it's better to
+        // fall back to UTF-8 than lose an argument entirely.
+        argvA[i] = wxConvWhateverWorks.cWC2MB(argv[i]).release();
+    }
+#endif // !__WXMSW__
 }
 
 #endif // __WINDOWS__
 
 void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
 {
-#ifndef __WXMSW__
-    // It's possible that the below checks for argc and argcIn will pass
-    // and thus return, despite argvA not being initialized. For this reason,
-    // the argvA routine must be checked and (if necessary) ran first.
-    //
-    // It's unclear to me if there's ever a condition where argvA is init'd
-    // and argc/argva are not, so instead of returning here the entire
-    // routine is wrapped in the if.
-    if ( !argvA ) {
-        // We need to convert from wide arguments back to the narrow ones.
-        argvA = new char*[argc + 1];
-        argvA[argc] = nullptr;
-
-        ownsArgvA = true;
-
-        for ( int i = 0; i < argc; i++ )
-        {
-            // Try to use the current encoding, but if it fails, it's better to
-            // fall back to UTF-8 than lose an argument entirely.
-            argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
-        }
-    }
-#endif // !__WXMSW__
 
     // Usually, arguments are initialized from "char**" passed to main()
     // elsewhere, but it is also possible to call a wide-char initialization
     // function (wxInitialize(), wxEntryStart() or wxEntry() itself) directly,
     // so we need to support this case too.
-    if ( argc || !argcIn )
+    if ( argv || !argvIn )
     {
         // Already initialized or nothing to do.
         return;
@@ -251,6 +243,21 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
     {
         argv[i] = wxCRT_StrdupW(argvIn[i]);
     }
+
+#ifndef __WXMSW__
+    // We need to convert from wide arguments back to the narrow ones.
+    argvA = new char*[argc + 1];
+    argvA[argc] = nullptr;
+
+    ownsArgvA = true;
+
+    for ( int i = 0; i < argc; i++ )
+    {
+        // Try to use the current encoding, but if it fails, it's better to
+        // fall back to UTF-8 than lose an argument entirely.
+        argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
+    }
+#endif // !__WXMSW__
 
 #ifdef __WINDOWS__
     // Not used in this case and shouldn't be passed to LocalFree().
