@@ -183,6 +183,26 @@ void wxInitData::Initialize(int argcIn, char **argvIn)
     argv[wargc] = nullptr;
 }
 
+#ifndef __WXMSW__
+
+// This function builds the argvA
+void wxInitData::BuildArgvA() {
+    // We need to convert from wide arguments back to the narrow ones.
+    argvA = new char*[argc + 1];
+    argvA[argc] = nullptr;
+
+    ownsArgvA = true;
+
+    for ( int i = 0; i < argc; i++ )
+    {
+        // Try to use the current encoding, but if it fails, it's better to
+        // fall back to UTF-8 than lose an argument entirely.
+        argvA[i] = wxConvWhateverWorks.cWC2MB(argv[i]).release();
+    }
+}
+
+#endif // !__WXMSW__
+
 #ifdef __WINDOWS__
 
 void wxInitData::MSWInitialize()
@@ -202,18 +222,7 @@ void wxInitData::MSWInitialize()
     argv = argvMSW;
 
 #ifndef __WXMSW__
-    // We need to convert from wide arguments back to the narrow ones.
-    argvA = new char*[argc + 1];
-    argvA[argc] = nullptr;
-
-    ownsArgvA = true;
-
-    for ( int i = 0; i < argc; i++ )
-    {
-        // Try to use the current encoding, but if it fails, it's better to
-        // fall back to UTF-8 than lose an argument entirely.
-        argvA[i] = wxConvWhateverWorks.cWC2MB(argv[i]).release();
-    }
+    BuildArgvA();
 #endif // !__WXMSW__
 }
 
@@ -245,18 +254,7 @@ void wxInitData::InitIfNecessary(int argcIn, wchar_t** argvIn)
     }
 
 #ifndef __WXMSW__
-    // We need to convert from wide arguments back to the narrow ones.
-    argvA = new char*[argc + 1];
-    argvA[argc] = nullptr;
-
-    ownsArgvA = true;
-
-    for ( int i = 0; i < argc; i++ )
-    {
-        // Try to use the current encoding, but if it fails, it's better to
-        // fall back to UTF-8 than lose an argument entirely.
-        argvA[i] = wxConvWhateverWorks.cWC2MB(argvIn[i]).release();
-    }
+    BuildArgvA();
 #endif // !__WXMSW__
 
 #ifdef __WINDOWS__

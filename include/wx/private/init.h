@@ -57,6 +57,10 @@ struct WXDLLIMPEXP_BASE wxInitData
     wchar_t** argvMSW = nullptr;
 #endif // __WINDOWS__
 #ifndef __WXMSW__
+    // Builds argvA from argc and argv. This means that argc and argv
+    // MUST be initialized before calling this function.
+    void BuildArgvA();
+
     // Under other platforms (and under windows when not using wxMSW) we
     // typically need the original, non-Unicode command line version, so we
     // keep it too. This pointer may or not need to be freed, as indicated by
