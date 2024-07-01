@@ -25,6 +25,7 @@
 #include "wx/treectrl.h"
 #include "wx/uiaction.h"
 #include "testableframe.h"
+#include "waitfor.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -64,6 +65,7 @@ private:
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
         CPPUNIT_TEST( SelectItemMulti );
+        WXUISIM_TEST( SelectItemMultiInteractive );
         CPPUNIT_TEST( PseudoTest_SetHiddenRoot );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( GetCount );
@@ -93,6 +95,7 @@ private:
     void GetCount();
     void SelectItemSingle();
     void SelectItemMulti();
+    void SelectItemMultiInteractive();
     void PseudoTest_MultiSelect() { ms_multiSelect = true; }
     void PseudoTest_SetHiddenRoot() { ms_hiddenRoot = true; }
 
@@ -437,6 +440,81 @@ void TreeCtrlTestCase::SelectionChange()
 
     CPPUNIT_ASSERT_EQUAL(2, changed.GetCount());
     CPPUNIT_ASSERT_EQUAL(2, changing.GetCount());
+}
+
+void TreeCtrlTestCase::SelectItemMultiInteractive()
+{
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    // FIXME: This test fails on GitHub CI under wxGTK2 although works fine on
+    //        development machine, no idea why though!
+    if ( IsAutomaticTest() )
+        return;
+#endif // wxGTK2
+
+    // this test should be only ran in multi-selection control
+    REQUIRE( m_tree->HasFlag(wxTR_MULTIPLE) );
+
+    m_tree->ExpandAll();
+
+    // This is currently needed to work around a problem under wxMSW: clicking
+    // on an item in an unfocused control generates two selection change events
+    // because of the SetFocus() call in TVN_SELCHANGED handler in wxMSW code.
+    // This is, of course, wrong on its own, but fixing it without breaking
+    // anything else is non-obvious, so for now at least work around this
+    // problem in the test.
+    m_tree->SetFocus();
+
+    EventCounter beginedit(m_tree, wxEVT_TREE_BEGIN_LABEL_EDIT);
+
+    wxUIActionSimulator sim;
+
+    wxRect poschild1, poschild2;
+    m_tree->GetBoundingRect(m_child1, poschild1, true);
+    m_tree->GetBoundingRect(m_child2, poschild2, true);
+
+    // We move in slightly so we are not on the edge
+    wxPoint point1 = m_tree->ClientToScreen(poschild1.GetPosition()) + wxPoint(4, 4);
+    wxPoint point2 = m_tree->ClientToScreen(poschild2.GetPosition()) + wxPoint(4, 4);
+
+    sim.MouseMove(point1);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    sim.MouseMove(point2);
+    wxYield();
+
+    sim.KeyDown(WXK_CONTROL);
+    sim.MouseClick();
+    sim.KeyUp(WXK_CONTROL);
+    wxYield();
+
+    // m_child1 and m_child2 should be selected.
+    CHECK( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child2) );
+    CHECK( beginedit.GetCount() == 0 );
+
+    // Time needed (in ms) for the editor to display. The test will not pass
+    // if the value is less than 400, 510, 800 under wxQt, wxGTK, wxMSW resp.
+    const int BEGIN_EDIT_TIMEOUT = 800;
+
+    YieldForAWhile(BEGIN_EDIT_TIMEOUT);
+    sim.MouseClick();
+    YieldForAWhile(BEGIN_EDIT_TIMEOUT);
+
+    // Only m_child2 should be selected now.
+    CHECK_FALSE( m_tree->IsSelected(m_child1) );
+    CHECK( m_tree->IsSelected(m_child2) );
+    CHECK( beginedit.GetCount() == 0 ); // No editing should take place in the event of deselection.
+
+    sim.MouseClick();
+    YieldForAWhile(BEGIN_EDIT_TIMEOUT);
+
+    CHECK( beginedit.GetCount() == 1 ); // Start editing as usual.
+
+    sim.Char(WXK_RETURN); // End editing and close the editor.
+    wxYield();
 }
 
 void TreeCtrlTestCase::Menu()
