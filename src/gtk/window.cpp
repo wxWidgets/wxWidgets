@@ -37,6 +37,9 @@
 #ifdef __WXGTK3__
     #include "wx/gtk/dc.h"
 #endif
+#ifdef __WINDOWS__
+    #include <gdk/gdkwin32.h>
+#endif
 
 #include <ctype.h>
 
@@ -4239,6 +4242,19 @@ bool wxWindowGTK::GTKShowFromOnIdle()
 
     return false;
 }
+
+#ifdef __WINDOWS__
+WXHWND wxWindowGTK::GTKGetWin32Handle() const
+{
+    auto gtkWindow{gtk_widget_get_window(m_widget)};
+
+    // If widget is not realized, there's no underlying handle to get.
+    if (!gtkWindow)
+        return nullptr;
+
+    return reinterpret_cast<WXHWND>(gdk_win32_window_get_handle(gtkWindow));
+}
+#endif // __WINDOWS__
 
 void wxWindowGTK::OnInternalIdle()
 {
