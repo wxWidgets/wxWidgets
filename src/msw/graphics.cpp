@@ -2065,7 +2065,7 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
         return;
 
     OffsetHelper helper(this, m_context, m_pen);
-    PointF *cpoints = new PointF[n];
+    PointF* cpoints = new PointF[n + 1];
     for (size_t i = 0; i < n; i++)
     {
         cpoints[i].X = static_cast<REAL>(points[i].m_x);
@@ -2076,7 +2076,12 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
         m_context->FillPolygon( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , cpoints , n ,
                                 fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding ) ;
     if ( !m_pen.IsNull() )
+    {
+        cpoints[n].X = cpoints[0].X;
+        cpoints[n].Y = cpoints[0].Y;
+        n++;
         m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
+    }
     delete[] cpoints;
 }
 
