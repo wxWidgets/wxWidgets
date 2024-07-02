@@ -346,9 +346,13 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map);
     @param p Pointer to the memory block to be zeroed, must be non-null.
     @param n The number of bytes to zero.
 
-    NOTE: If security is vitally important in your use case, please
+    @note If security is vitally important in your use case, please
     have a look at the implementations and decide whether you trust
-    them to behave as promised.
+    them to behave as promised. Depending on the platform and available libraries,
+    this may be implemented as `RtlSecureZeroMemory` (MS Windows),
+    `explicit_bzero()` (FreeBSD), `memset_s()` (macOS),
+    or a generic method which uses `volatile` to avoid the call from
+    being optimized away.
 
     @header{wx/utils.h}
 
