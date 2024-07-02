@@ -30,7 +30,11 @@
 #endif
 
 #ifdef __WXMSW__
-    #include "wx/msw/private/darkmode.h"
+    #if wxUSE_UXTHEME
+        #include "wx/msw/uxtheme.h"
+        #include "wx/msw/private.h"
+        #include "wx/msw/private/darkmode.h"
+    #endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -104,11 +108,13 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
     SetThemeEnabled(true);
 
 #ifdef __WXMSW__
-    // explicitly set dark background color for child wxStaticBoxes to inherit
-    if ( wxMSWDarkMode::IsActive() )
-    {
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
-    }
+    #if wxUSE_UXTHEME
+        // explicitly set dark background color for child wxStaticBoxes to inherit
+        if ( wxMSWDarkMode::IsActive() )
+        {
+            SetBackgroundColour(wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
+        }
+    #endif
 #endif
 
     return true;
