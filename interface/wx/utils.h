@@ -364,7 +364,7 @@ void wxSecureZeroMemory(void *p, size_t n);
     Returns battery state as one of @c wxBATTERY_NORMAL_STATE,
     @c wxBATTERY_LOW_STATE, @c wxBATTERY_CRITICAL_STATE,
     @c wxBATTERY_SHUTDOWN_STATE or @c wxBATTERY_UNKNOWN_STATE.
-    
+
     Currently only implemented on MS Windows; returns @c wxBATTERY_UNKNOWN_STATE elsewhere.
 
     @header{wx/utils.h}
