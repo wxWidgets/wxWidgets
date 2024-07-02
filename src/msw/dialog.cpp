@@ -178,6 +178,12 @@ bool wxDialog::Create(wxWindow *parent,
         Bind(wxEVT_CREATE, &wxDialog::OnWindowCreate, this);
     }
 
+    // explicitly set dark background color for child wxStaticBoxes to inherit
+    if ( wxMSWDarkMode::IsActive() )
+    {
+        SetBackgroundColour(wxSystemSettings::GetColour(wxSystemColour::wxSYS_COLOUR_WINDOW));
+    }
+
     return true;
 }
 
