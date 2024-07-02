@@ -139,6 +139,9 @@ public:
     // --------------
 
     virtual WXWidget GetHandle() const override { return m_widget; }
+#ifdef __WINDOWS__
+    WXHWND GetHWND() const;
+#endif
 
     // many important things are done here, this function must be called
     // regularly
