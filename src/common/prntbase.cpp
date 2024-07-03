@@ -940,7 +940,7 @@ wxScrolledWindow(parent, wxID_ANY, pos, size, style | wxFULL_REPAINT_ON_RESIZE, 
 
     // Use some reasonable default size for this window, roughly proportional
     // to the paper sheet.
-    SetInitialSize(wxSize(600, 750));
+    SetInitialSize(FromDIP(wxSize(600, 750)));
 }
 
 wxPreviewCanvas::~wxPreviewCanvas()
@@ -949,6 +949,9 @@ wxPreviewCanvas::~wxPreviewCanvas()
 
 void wxPreviewCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+    if ( m_printPreview )
+        m_printPreview->UpdatePageRendering();
+
     wxPaintDC dc(this);
     PrepareDC( dc );
 
@@ -1944,6 +1947,9 @@ void wxPrintPreviewBase::CalcRects(wxPreviewCanvas *canvas, wxRect& pageRect, wx
     float screenPrintableWidth = zoomScale * m_pageWidth * m_previewScaleX;
     float screenPrintableHeight = zoomScale * m_pageHeight * m_previewScaleY;
 
+    screenPrintableWidth *= canvas->GetDPIScaleFactor();
+    screenPrintableHeight *= canvas->GetDPIScaleFactor();
+
     wxRect devicePaperRect = m_previewPrintout->GetPaperRectPixels();
     wxCoord devicePrintableWidth, devicePrintableHeight;
     m_previewPrintout->GetPageSizePixels(&devicePrintableWidth, &devicePrintableHeight);
@@ -1976,6 +1982,19 @@ void wxPrintPreviewBase::InvalidatePreviewBitmap()
 
 bool wxPrintPreviewBase::UpdatePageRendering()
 {
+    static double s_sf = 0.0;
+
+    double newScaleFactor = m_previewCanvas->GetDPIScaleFactor() /
+                            m_previewCanvas->GetContentScaleFactor();
+
+    if ( m_previewCanvas && newScaleFactor != s_sf )
+    {
+        InvalidatePreviewBitmap();
+        AdjustScrollbars(m_previewCanvas);
+
+        s_sf = newScaleFactor;
+    }
+
     if ( m_previewBitmap )
         return false;
 
@@ -2002,13 +2021,9 @@ bool wxPrintPreviewBase::PaintPage(wxPreviewCanvas *canvas, wxDC& dc)
 
     wxRect pageRect, paperRect;
     CalcRects(canvas, pageRect, paperRect);
-    wxMemoryDC temp_dc;
-    temp_dc.SelectObject(*m_previewBitmap);
 
-    dc.Blit(pageRect.x, pageRect.y,
-        m_previewBitmap->GetWidth(), m_previewBitmap->GetHeight(), &temp_dc, 0, 0);
+    dc.DrawBitmap(*m_previewBitmap, pageRect.x, pageRect.y);
 
-    temp_dc.SelectObject(wxNullBitmap);
     return true;
 }
 
