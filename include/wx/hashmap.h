@@ -25,8 +25,14 @@
 
 #include <unordered_map>
 
+// Use inheritance instead of simple typedef to allow existing forward
+// declarations of the hash map classes in the applications using wx to work.
 #define _WX_DECLARE_HASH_MAP( KEY_T, VALUE_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP ) \
-    typedef std::unordered_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > CLASSNAME
+    class CLASSNAME : public std::unordered_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T > \
+    { \
+    public: \
+        using std::unordered_map< KEY_T, VALUE_T, HASH_T, KEY_EQ_T >::unordered_map; \
+    }
 
 #else // wxNEEDS_WX_HASH_MAP
 
