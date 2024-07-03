@@ -754,8 +754,6 @@ wxRendererXP::DoDrawButtonLike(wxUxThemeHandle& hTheme,
 {
     wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
 
-    RECT r = ConvertToRECT(dc, rect);
-
     // the base state is always 1, whether it is PBS_NORMAL,
     // {CBS,RBS}_UNCHECKEDNORMAL or CBS_NORMAL
     int state = 1;
@@ -787,6 +785,20 @@ wxRendererXP::DoDrawButtonLike(wxUxThemeHandle& hTheme,
     // wxCONTROL_ISDEFAULT flag is only valid for push buttons
     else if ( part == BP_PUSHBUTTON && (flags & wxCONTROL_ISDEFAULT) )
         state = PBS_DEFAULTED;
+
+    wxRect crect = rect;
+
+    // Checkboxes and radiobuttons must be drawn at native size, otherwise
+    // they get blurry on non-unity display scales
+    if ( part == BP_CHECKBOX || part == BP_RADIOBUTTON )
+    {
+        if ( ::IsThemePartDefined(hTheme, part, 0) )
+        {
+            crect = wxRect(hTheme.GetDrawSize(part, state)).CenterIn(rect);
+        }
+    }
+
+    RECT r = ConvertToRECT(dc, crect);
 
     hTheme.DrawBackground(GetHdcOf(dc.GetTempHDC()), r, part, state);
 }
