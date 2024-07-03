@@ -63,7 +63,7 @@ public :
 
     virtual wxInt32 GetValue() const wxOVERRIDE
     {
-        return wxRound([(wxNSScroller*) m_osxView floatValue] * m_maximum);
+        return wxRound([(wxNSScroller*) m_osxView doubleValue] * m_maximum);
     }
 
     virtual wxInt32 GetMaximum() const wxOVERRIDE
