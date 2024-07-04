@@ -455,3 +455,6 @@
 /utils/wxrc/wxrc_vc[789].sln
 
 /3rdparty/webview2
+
+/build/cmake/output
+CMakePresetsUser.json
