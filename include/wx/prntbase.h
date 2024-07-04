@@ -283,8 +283,11 @@ public:
 
     virtual bool HasPage(int page);
     virtual bool OnPrintPage(int page) = 0;
+
     virtual void GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo);
-    virtual bool IsPageSelected(int page);
+
+    // the default implementation of this new method uses the older GetPageInfo method above
+    virtual std::vector<wxPrintPageRange> GetPageInfoRanges(int* minPage, int* maxPage);
 
     virtual wxString GetTitle() const { return m_printoutTitle; }
 
