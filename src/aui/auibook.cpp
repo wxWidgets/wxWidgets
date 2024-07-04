@@ -1931,9 +1931,14 @@ wxSize wxAuiNotebook::CalculateNewSplitSize()
     }
     else
     {
+        // defaut split to middle size
+        new_split_size = GetClientSize();
+        new_split_size.x /= 2;
+        new_split_size.y /= 2;
+        
         // this is in place of a more complicated calculation
         // that needs to be implemented
-        new_split_size = FromDIP(wxSize(180,180));
+        //new_split_size = wxSize(180,180);
     }
 
     return new_split_size;
@@ -2561,6 +2566,93 @@ void wxAuiNotebook::Split(size_t page, int direction)
     UpdateHintWindowSize();
 }
 
+// UnSplit pageSrc on pageDst
+void wxAuiNotebook::UnSplit(size_t pageSrc, size_t pageDst)
+{
+        // notebooks with 1 or less pages can't be split
+        if (GetPageCount() < 2)
+                return;
+
+        wxWindow* wndCur = this->GetCurrentPage();
+        if (!wndCur)
+                return;
+
+        // get the page's window pointer
+        wxWindow* wndSrc = GetPage(pageSrc);
+        if (!wndSrc)
+                return;
+
+        // get the page's window pointer
+        wxWindow* wndDest = GetPage(pageDst);
+        if (!wndDest)
+                return;
+
+        // find the src tab
+        wxAuiTabCtrl *src_tabs;
+        int src_idx = -1;
+        src_tabs = NULL;
+        if (!FindTab(wndSrc, &src_tabs, &src_idx))
+                return;
+        if (!src_tabs || src_idx == -1)
+                return;
+
+        // find the dst tab
+        wxAuiTabCtrl *dest_tabs;
+        int dst_idx = -1;
+        dest_tabs = NULL;
+        if (!FindTab(wndDest, &dest_tabs, &dst_idx))
+                return;
+        if (!dest_tabs || dst_idx == -1)
+                return;
+
+        if (src_tabs == dest_tabs)
+                return;
+
+        m_mgr.HideHint();
+
+        if ((m_flags & wxAUI_NB_TAB_SPLIT) && m_tabs.GetPageCount() >= 2)
+        {
+                // remove the page from the source tabs
+                wxAuiNotebookPage page_info = src_tabs->GetPage(0);
+                page_info.active = false;
+                src_tabs->RemovePage(page_info.window);
+                if (src_tabs->GetPageCount() > 0)
+                {
+                        src_tabs->SetActivePage(pageDst);
+                        src_tabs->DoShowHide();
+                        src_tabs->Refresh();
+                }
+
+                // add the page to the destination tabs
+                dest_tabs->InsertPage(page_info.window, page_info, pageSrc);
+
+                if (src_tabs->GetPageCount() == 0)
+                {
+                        RemoveEmptyTabFrames();
+                }
+
+                DoSizing();
+                dest_tabs->DoShowHide();
+                dest_tabs->Refresh();
+
+                // force the set selection function reset the selection
+                m_curPage = -1;
+
+                // active the dest page
+                SetSelectionToPage(page_info);
+
+                this->SetSelectionToWindow(wndCur);
+
+                UpdateHintWindowSize();
+        }
+
+        // notify owner that the tab has been dragged
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_DRAG_DONE, m_windowId);
+        e.SetSelection(pageDst);
+        e.SetOldSelection(pageSrc);
+        e.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(e);
+}
 
 void wxAuiNotebook::OnSize(wxSizeEvent& evt)
 {
