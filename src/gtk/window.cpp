@@ -4244,7 +4244,8 @@ bool wxWindowGTK::GTKShowFromOnIdle()
 }
 
 #ifdef __WINDOWS__
-WXHWND wxWindowGTK::GetHWND() const {
+WXHWND wxWindowGTK::GetHWND() const
+{
     // There isn't an underlying HWND if the widget hasn't been realized yet.
     gtk_widget_realize(m_widget);
     return static_cast<WXHWND>(gdk_win32_window_get_handle(gtk_widget_get_window(m_widget)));
