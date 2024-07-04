@@ -1290,12 +1290,8 @@ bool SendCharHookEvent(const wxKeyEvent& event, wxWindow *win)
 // conventions:
 // (a) Ctrl-letter key presses generate key codes in range 1..26
 // (b) Unicode key codes are same as key codes for the codes in ASCII range
-//
-// Return true if the key code was modified.
-bool AdjustCharEventKeyCodes(wxKeyEvent& event)
+void AdjustCharEventKeyCodes(wxKeyEvent& event)
 {
-    bool modified = false;
-
     const int code = event.m_keyCode;
 
     // Check for (a) above.
@@ -1309,11 +1305,15 @@ bool AdjustCharEventKeyCodes(wxKeyEvent& event)
         else if ( code >= 'A' && code <= 'Z' )
             event.m_keyCode = code - 'A' + 1;
 
-        // Adjust the Unicode equivalent in the same way too.
         if ( event.m_keyCode != code )
         {
-            event.m_uniChar = event.m_keyCode;
-            modified = true;
+            // If the Unicode equivalent is also a Latin char,
+            // adjust it in the same way too.
+            if (( event.m_uniChar >= 'a' && event.m_uniChar <= 'z' ) ||
+                ( event.m_uniChar >= 'A' && event.m_uniChar <= 'Z' )) {
+
+                event.m_uniChar = event.m_keyCode;
+            }
         }
     }
 
@@ -1323,10 +1323,7 @@ bool AdjustCharEventKeyCodes(wxKeyEvent& event)
     if ( !event.m_uniChar && code < WXK_DELETE )
     {
         event.m_uniChar = code;
-        modified = true;
     }
-
-    return modified;
 }
 
 } // anonymous namespace
@@ -1446,12 +1443,8 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         {
             wxKeyEvent eventChar(wxEVT_CHAR, event);
 
-            if ( !AdjustCharEventKeyCodes(eventChar) )
-            {
-                // use Unicode values
-                eventChar.m_keyCode = key_code;
-                eventChar.m_uniChar = uniChar;
-            }
+            eventChar.m_uniChar = uniChar;
+            AdjustCharEventKeyCodes(eventChar);
 
             wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), eventChar.m_keyCode);
 
