@@ -4243,12 +4243,19 @@ bool wxWindowGTK::GTKShowFromOnIdle()
     return false;
 }
 
-#ifdef __WINDOWS__
-WXHWND wxWindowGTK::GetHWND() const
+void wxWindowGTK::GTKRealizeWidget()
 {
-    // There isn't an underlying HWND if the widget hasn't been realized yet.
     gtk_widget_realize(m_widget);
-    return static_cast<WXHWND>(gdk_win32_window_get_handle(gtk_widget_get_window(m_widget)));
+}
+
+#ifdef __WINDOWS__
+WXHWND wxWindowGTK::GTKGetWin32Handle() const
+{
+    auto gtkWindow{gtk_widget_get_window(m_widget)};
+    // If widget is not realized, there's no underlying
+    // handle to get.
+    if (!gtkWindow) return nullptr;
+    return static_cast<WXHWND>(gdk_win32_window_get_handle(gtkWindow));
 }
 #endif
 

@@ -140,8 +140,12 @@ public:
 
     virtual WXWidget GetHandle() const override { return m_widget; }
 #ifdef __WINDOWS__
-    WXHWND GetHWND() const;
+    WXHWND GTKGetWin32Handle() const;
 #endif
+
+    // If the underlying GTK widget hasn't been realized yet, do so.
+    // Does nothing if the widget is already realized.
+    void GTKRealizeWidget();
 
     // many important things are done here, this function must be called
     // regularly
