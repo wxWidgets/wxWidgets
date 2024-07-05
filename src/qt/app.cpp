@@ -63,6 +63,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     QSurfaceFormat::setDefaultFormat(format);
 
     m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
+    m_qtApplication->processEvents(); // Avoids SIGPIPE when debugging
 
     // Use the args returned by Qt as it may have deleted (processed) some of them
     // Using QApplication::arguments() forces argument processing
