@@ -1555,7 +1555,7 @@ public:
         // Due to SetOwnFont stuff necessary for GTK+ 1.2, we need to have this
         wxControl::SetFont( parent->GetFont() );
 
-        SetBoxHeight(12);
+        SetBoxHeight(13);
         wxControl::SetBackgroundStyle( wxBG_STYLE_PAINT );
     }
 
@@ -1565,10 +1565,7 @@ public:
     {
         m_boxHeight = height;
         // Box rectangle
-        wxRect rect(GetClientSize());
-        rect.y += 1;
-        rect.width += 1;
-        m_boxRect = GetBoxRect(rect, m_boxHeight);
+        m_boxRect = GetBoxRect(GetClientSize(), m_boxHeight);
     }
 
     static wxRect GetBoxRect(const wxRect& r, int box_h)
