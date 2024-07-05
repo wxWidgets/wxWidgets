@@ -1947,8 +1947,8 @@ void wxPrintPreviewBase::CalcRects(wxPreviewCanvas *canvas, wxRect& pageRect, wx
     float screenPrintableWidth = zoomScale * m_pageWidth * m_previewScaleX;
     float screenPrintableHeight = zoomScale * m_pageHeight * m_previewScaleY;
 
-    screenPrintableWidth *= canvas->GetDPIScaleFactor();
-    screenPrintableHeight *= canvas->GetDPIScaleFactor();
+    screenPrintableWidth *= canvas->GetDPIScaleFactor() / canvas->GetContentScaleFactor();
+    screenPrintableHeight *= canvas->GetDPIScaleFactor() / canvas->GetContentScaleFactor();
 
     wxRect devicePaperRect = m_previewPrintout->GetPaperRectPixels();
     wxCoord devicePrintableWidth, devicePrintableHeight;
@@ -1984,8 +1984,7 @@ bool wxPrintPreviewBase::UpdatePageRendering()
 {
     static double s_sf = 0.0;
 
-    double newScaleFactor = m_previewCanvas->GetDPIScaleFactor() /
-                            m_previewCanvas->GetContentScaleFactor();
+    double newScaleFactor = m_previewCanvas->GetDPIScaleFactor();
 
     if ( m_previewCanvas && newScaleFactor != s_sf )
     {
@@ -2110,7 +2109,8 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     if (!m_previewBitmap)
     {
-        m_previewBitmap = new wxBitmap(pageRect.width, pageRect.height);
+        m_previewBitmap = new wxBitmap;
+        m_previewBitmap->CreateWithLogicalSize(pageRect.width, pageRect.height, m_previewCanvas->GetContentScaleFactor());
 
         if (!m_previewBitmap || !m_previewBitmap->IsOk())
         {
