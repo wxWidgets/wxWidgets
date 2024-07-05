@@ -274,6 +274,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix regression with not accepting focus under macOS 14+ (#24605, #24667).
 - Improve wxSlider ticks appearance (Hartwig Wiesmann, #24532).
 - Fix wrong wxSlider label in some cases (Hartwig Wiesmann, #24539).
 - Fix handling diagonal scrolling when using trackpad (#24516).
