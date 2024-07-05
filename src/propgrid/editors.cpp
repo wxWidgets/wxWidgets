@@ -1564,11 +1564,7 @@ public:
     void SetBoxHeight(int height)
     {
         m_boxHeight = height;
-        // Box rectangle
-        wxRect rect(GetClientSize());
-        rect.y += 1;
-        rect.width += 1;
-        m_boxRect = GetBoxRect(rect, m_boxHeight);
+        m_boxRect = GetBoxRect(GetClientSize(), m_boxHeight);
     }
 
     static wxRect GetBoxRect(const wxRect& r, int box_h)
