@@ -3245,6 +3245,21 @@ bool wxWidgetCocoaImpl::CanFocus() const
 
 @implementation wxNSClipView
 
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self, wxOSXSKIP_DRAW);
+    }
+}
+
+- (BOOL) needsPanelToBecomeKey
+{
+    return YES;
+}
+
 #if wxOSX_USE_NATIVE_FLIPPED
 - (BOOL)isFlipped
 {
@@ -4122,6 +4137,8 @@ void wxWidgetCocoaImpl::UseClippingView()
             m_osxClipView = [[wxNSClipView alloc] initWithFrame: m_osxView.bounds];
             [(NSClipView*)m_osxClipView setDrawsBackground: NO];
             [m_osxView addSubview:m_osxClipView];
+
+            wxWidgetImpl::Associate( m_osxClipView, this ) ;
 
             // TODO check for additional subwindows which might have to be moved to the clip view ?
         }
