@@ -443,8 +443,9 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
         p = pos;
 
     wxSize initialSize = size;
-    initialSize.SetDefaults( IsTopLevel() ? wxTopLevelWindowBase::GetDefaultSize()
-                                          : wxQtGetBestSize( GetHandle() ) );
+    initialSize.SetDefaults( IsTopLevel() && !GetHandle()->inherits("QDialog")
+                                 ? wxTopLevelWindowBase::GetDefaultSize()
+                                 : wxQtGetBestSize( GetHandle() ) );
 
     DoMoveWindow( p.x, p.y, initialSize.GetWidth(), initialSize.GetHeight() );
 
