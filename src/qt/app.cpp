@@ -14,6 +14,7 @@
 #include "wx/qt/private/converter.h"
 #include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
+#include <QSurfaceFormat>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
@@ -55,6 +56,11 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     }
     m_qtArgv[argc] = nullptr;
     m_qtArgc = argc;
+
+    // Use SingleBuffer mode by default to reduce latency.
+    QSurfaceFormat format;
+    format.setSwapBehavior(QSurfaceFormat::SwapBehavior::SingleBuffer);
+    QSurfaceFormat::setDefaultFormat(format);
 
     m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
 
