@@ -34,7 +34,7 @@
 class TreeCtrlTestCase
 {
 public:
-    TreeCtrlTestCase(int exStyle = 0)
+    explicit TreeCtrlTestCase(int exStyle = 0)
     {
         m_tree = new wxTreeCtrl(wxTheApp->GetTopWindow(),
                                 wxID_ANY,
