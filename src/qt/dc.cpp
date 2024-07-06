@@ -839,7 +839,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
 
         //Draw
-        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+        m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
         //Restore saved settings
         m_qtPainter->setBackground(savedBrush);
@@ -847,7 +847,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
         m_qtPainter->setBackgroundMode(Qt::TransparentMode);
     }
     else
-        m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+        m_qtPainter->drawText(0, 0, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
     //Reset to default
     ComputeScaleAndOrigin();
