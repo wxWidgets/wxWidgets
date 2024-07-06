@@ -125,6 +125,51 @@ private:
 
 Q_DECLARE_METATYPE(TreeItemDataQt)
 
+// We use a custom selection model because we need to generate the
+// wxEVT_TREE_SEL_CHANGED event only if it is allowed, that is, only
+// if the wxEVT_TREE_SEL_CHANGING handler returns true.
+class wxQItemSelectionModel : public QItemSelectionModel
+{
+public:
+    wxQItemSelectionModel(QAbstractItemModel* model, QObject* parent)
+        : QItemSelectionModel(model, parent)
+    {}
+
+    virtual void
+    select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command)
+    {
+        if ( m_isSelectionChangeAllowed )
+        {
+            QItemSelectionModel::select(selection, command);
+        }
+    }
+
+    virtual void
+    select(const QModelIndex &index, QItemSelectionModel::SelectionFlags command) override
+    {
+        if ( m_isSelectionChangeAllowed )
+        {
+            QItemSelectionModel::select(index, command);
+        }
+    }
+
+    virtual void
+    setCurrentIndex(const QModelIndex& index, QItemSelectionModel::SelectionFlags command) override
+    {
+        m_isSelectionChangeAllowed = IsSelectionChangeAllowed(index);
+
+        if ( m_isSelectionChangeAllowed )
+        {
+            QItemSelectionModel::setCurrentIndex(index, command);
+        }
+    }
+
+private:
+    bool IsSelectionChangeAllowed(const QModelIndex& index) const;
+
+    bool m_isSelectionChangeAllowed = false;
+};
+
 class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
 {
 public:
@@ -135,6 +180,8 @@ public:
     {
         connect(this, &QTreeWidget::currentItemChanged,
                 this, &wxQTreeWidget::OnCurrentItemChanged);
+        connect(this, &QTreeWidget::itemSelectionChanged,
+                this, &wxQTreeWidget::OnItemSelectionChanged);
         connect(this, &QTreeWidget::itemActivated,
                 this, &wxQTreeWidget::OnItemActivated);
         connect(this, &QTreeWidget::itemCollapsed,
@@ -148,7 +195,16 @@ public:
         setDragEnabled(true);
         viewport()->setAcceptDrops(true);
         setDropIndicatorShown(true);
-        setEditTriggers(QAbstractItemView::SelectedClicked);
+
+        auto selection_model = new wxQItemSelectionModel(model(), this);
+        connect(model(), SIGNAL(destroyed()), selection_model, SLOT(deleteLater()));
+        setSelectionModel(selection_model);
+
+        // These signals must be reconnected if the model or selection model is reset or changed.
+        connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
+                this, SLOT(_q_emitCurrentItemChanged(QModelIndex, QModelIndex)));
+        connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+                this, SLOT(_q_selectionChanged(QItemSelection, QItemSelection)));
     }
 
     virtual void paintEvent (QPaintEvent * event)
@@ -223,7 +279,7 @@ public:
     {
         m_imageStates[item].SetState(state);
     }
-        
+
     int GetItemState(QTreeWidgetItem *item) const
     {
         const ImageStateMap::const_iterator i = m_imageStates.find(item);
@@ -274,11 +330,33 @@ protected:
         }
     }
 
+    // For compatibility with wxMSW.
+    // As we already tell Qt to start editing the item when clicking on it with
+    // setEditTriggers(QTreeWidget::SelectedClicked), we need to block editing if
+    // the item is part of a multiple selection, because wxMSW only deselects the
+    // other items without starting editing the selected item.
+    bool m_blockEditing = false;
+
+    void selectionChanged(const QItemSelection& selected,
+                          const QItemSelection& deselected) override
+    {
+        m_blockEditing = selected.size() == 0;
+
+        QTreeView::selectionChanged(selected, deselected);
+    }
+
     bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) override
     {
         // AllEditTriggers means that editor is about to open, not waiting for double click
         if (trigger == AllEditTriggers)
         {
+            if ( m_blockEditing )
+            {
+                m_blockEditing = false;
+
+                return true;
+            }
+
             // Allow event handlers to veto opening the editor
             wxTreeEvent wx_event(
                 wxEVT_TREE_BEGIN_LABEL_EDIT,
@@ -330,6 +408,28 @@ protected:
         QTreeWidget::closeEditor(editor, hint);
     }
 
+    // Common code to generate wxEVT_TREE_SEL_{CHANGING,CHANGED} events
+    bool EmitSelectChangeEvent(wxEventType commandType)
+    {
+        wxTreeCtrl* const treeCtrl = GetHandler();
+
+        wxTreeEvent changeEvent(
+            commandType,
+            treeCtrl,
+            m_currentItem
+        );
+        changeEvent.SetOldItem(m_previousItem);
+        EmitEvent(changeEvent);
+        return changeEvent.IsAllowed();
+    }
+
+    // for wxEVT_TREE_SEL_{CHANGING,CHANGED} events
+    wxTreeItemId m_currentItem;
+    wxTreeItemId m_previousItem;
+
+    friend class wxQItemSelectionModel;
+    using QTreeWidget::itemFromIndex; // wxQItemSelectionModel needs this function
+
 private:
     void ReplaceIcons(QTreeWidgetItem *item)
     {
@@ -341,40 +441,22 @@ private:
         }
     }
 
-    void OnCurrentItemChanged(
-        QTreeWidgetItem *current,
-        QTreeWidgetItem *previous
-    )
+    void OnCurrentItemChanged(QTreeWidgetItem *current,
+                              QTreeWidgetItem *previous)
     {
-        wxTreeCtrl* treeCtrl = GetHandler();
+        m_currentItem = wxQtConvertTreeItem(current);
+        m_previousItem = wxQtConvertTreeItem(previous);
+    }
 
-        wxTreeEvent changingEvent(
-            wxEVT_TREE_SEL_CHANGING,
-            treeCtrl,
-            wxQtConvertTreeItem(current)
-        );
-
-        changingEvent.SetOldItem(wxQtConvertTreeItem(previous));
-        EmitEvent(changingEvent);
-
-        if ( !changingEvent.IsAllowed() )
-        {
-            wxQtEnsureSignalsBlocked blocker(this);
-            setCurrentItem(previous);
-            return;
-        }
-
-        // QT doesn't update the selection until this signal has been
-        // processed. Deferring this event ensures that
-        // wxTreeCtrl::GetSelection returns the new selection in the
-        // wx event handler.
-        wxTreeEvent changedEvent(
-            wxEVT_TREE_SEL_CHANGED,
-            treeCtrl,
-            wxQtConvertTreeItem(current)
-        );
-        changedEvent.SetOldItem(wxQtConvertTreeItem(previous));
-        wxPostEvent(treeCtrl, changedEvent);
+    void OnItemSelectionChanged()
+    {
+        // QT doesn't update the selection until this signal has been processed.
+        // Deferring this event ensures that wxTreeCtrl::GetSelections() returns
+        // the new selection in the wx event handler.
+        GetHandler()->CallAfter([=]()
+            {
+                EmitSelectChangeEvent(wxEVT_TREE_SEL_CHANGED);
+            });
     }
 
     void OnItemActivated(QTreeWidgetItem *item, int WXUNUSED(column))
@@ -548,10 +630,24 @@ private:
     typedef std::map<QTreeWidgetItem*,ImageState> ImageStateMap;
     ImageStateMap m_imageStates;
 
-    // Place holder image to reserve enough space in a row 
+    // Place holder image to reserve enough space in a row
     // for us to draw our icon
     QPixmap m_placeHolderImage;
 };
+
+bool wxQItemSelectionModel::IsSelectionChangeAllowed(const QModelIndex& index) const
+{
+    if ( !index.isValid() )
+        return true;
+
+    // Cast is safe because wxQItemSelectionModel is only used with wxQTreeWidget
+    const auto qTreeWidget = static_cast<wxQTreeWidget*>(parent());
+
+    qTreeWidget->m_currentItem = wxQtConvertTreeItem(qTreeWidget->itemFromIndex(index));
+    qTreeWidget->m_previousItem = qTreeWidget->GetHandler()->GetFocusedItem();
+
+    return qTreeWidget->EmitSelectChangeEvent(wxEVT_TREE_SEL_CHANGING);
+}
 
 wxTreeCtrl::wxTreeCtrl() :
     m_qtTreeWidget(nullptr)
@@ -873,10 +969,10 @@ wxTreeItemId wxTreeCtrl::GetRootItem() const
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
-    QList<QTreeWidgetItem*> selections = m_qtTreeWidget->selectedItems();
-    return selections.isEmpty()
-        ? wxTreeItemId()
-        : wxQtConvertTreeItem(selections[0]);
+    wxCHECK_MSG( !HasFlag(wxTR_MULTIPLE), wxTreeItemId(),
+                 "this only works with single selection controls" );
+
+    return GetFocusedItem();
 }
 
 size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
@@ -954,7 +1050,7 @@ wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
     const int childCount = qTreeItem->childCount();
-    return childCount == 0 
+    return childCount == 0
         ? wxTreeItemId()
         : wxQtConvertTreeItem(qTreeItem->child(childCount - 1));
 }
@@ -982,7 +1078,7 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 
     ++index;
     return index < m_qtTreeWidget->topLevelItemCount()
-        ? wxQtConvertTreeItem(m_qtTreeWidget->topLevelItem(index)) 
+        ? wxQtConvertTreeItem(m_qtTreeWidget->topLevelItem(index))
         : wxTreeItemId();
 }
 
@@ -1277,6 +1373,7 @@ void wxTreeCtrl::EndEditLabel(
     wxCHECK_RET(item.IsOk(), "invalid tree item");
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
     m_qtTreeWidget->closePersistentEditor(qTreeItem);
+    m_qtTreeWidget->selectionModel()->clearCurrentIndex();
 }
 
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
@@ -1319,6 +1416,11 @@ void wxTreeCtrl::SetWindowStyleFlag(long styles)
             ? QTreeWidget::ExtendedSelection
             : QTreeWidget::SingleSelection
     );
+
+    if ( (styles & wxTR_HIDE_ROOT) != 0 )
+        m_qtTreeWidget->setRootIndex(m_qtTreeWidget->model()->index(0, 0));
+    else
+        m_qtTreeWidget->setRootIndex(QModelIndex());
 }
 
 int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
@@ -1431,7 +1533,7 @@ wxTreeItemId wxTreeCtrl::GetNext(const wxTreeItemId &item) const
     {
         return qTreeItem->child(0);
     }
-    
+
     // Try a sibling of this or ancestor instead
     wxTreeItemId p = item;
     wxTreeItemId toFind;

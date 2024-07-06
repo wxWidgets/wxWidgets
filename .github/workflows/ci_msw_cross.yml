@@ -273,7 +273,7 @@ jobs:
           excluded_gui_tests+=('~SettingsTestCase') # GetFont fails
           excluded_gui_tests+=('~SliderTestCase')   # Thumb
           excluded_gui_tests+=('~TransformMatrixTestCase*')
-          excluded_gui_tests+=('~TreeCtrlTestCase') # LabelEdit
+          excluded_gui_tests+=('~wxTreeCtrl::LabelEdit') # LabelEdit
           excluded_gui_tests+=('~TextCtrlTestCase') # many sub-tests
           excluded_gui_tests+=('~wxTextCtrl::InitialCanUndo')
           excluded_gui_tests+=('~[wxWebView]')

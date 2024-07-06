@@ -77,6 +77,8 @@
     @style{wxTR_HIDE_ROOT}
         Use this style to suppress the display of the root node, effectively
         causing the first-level nodes to appear as a series of root nodes.
+        Note that in wxMSW this style must be set when creating the control and
+        can't be changed later.
     @style{wxTR_ROW_LINES}
         Use this style to draw a contrasting border between displayed rows.
     @style{wxTR_HAS_VARIABLE_ROW_HEIGHT}
