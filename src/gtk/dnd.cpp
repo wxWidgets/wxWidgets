@@ -873,8 +873,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     for (size_t i = 0; i < count; i++)
     {
         GdkAtom atom = array[i];
-        wxLogTrace(TRACE_DND, wxT("Drop source: Supported atom %s"),
-                   gdk_atom_name( atom ));
         gtk_target_list_add( target_list, atom, 0, 0 );
     }
     delete[] array;
@@ -904,6 +902,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                 (GdkEvent*) g_lastMouseEvent );
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
+
+    gtk_target_list_unref(target_list);
 
     if ( !context )
     {
