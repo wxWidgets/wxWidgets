@@ -1984,14 +1984,17 @@ bool wxPrintPreviewBase::UpdatePageRendering()
 {
     static double s_sf = 0.0;
 
-    double newScaleFactor = m_previewCanvas->GetDPIScaleFactor();
-
-    if ( m_previewCanvas && newScaleFactor != s_sf )
+    if ( m_previewCanvas )
     {
-        InvalidatePreviewBitmap();
-        AdjustScrollbars(m_previewCanvas);
+        double newScaleFactor = m_previewCanvas->GetDPIScaleFactor();
 
-        s_sf = newScaleFactor;
+        if ( newScaleFactor != s_sf )
+        {
+            InvalidatePreviewBitmap();
+            AdjustScrollbars(m_previewCanvas);
+
+            s_sf = newScaleFactor;
+        }
     }
 
     if ( m_previewBitmap )
