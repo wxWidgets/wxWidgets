@@ -1964,14 +1964,14 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
             const_cast<wxPropertyGrid*>(this),
             dc,
             r,
-            property->IsExpanded() ? wxCONTROL_EXPANDED : 0
+            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
         );
 #elif wxPG_ICON_WIDTH
     wxRendererNative::GetGeneric().DrawTreeItemButton(
             const_cast<wxPropertyGrid*>(this),
             dc,
             r,
-            property->IsExpanded() ? wxCONTROL_EXPANDED : 0
+            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
         );
 #else
     wxBitmap bmp = property->IsExpanded() ? s_collbmp : s_expandbmp;
