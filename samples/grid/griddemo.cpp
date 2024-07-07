@@ -78,7 +78,7 @@ public:
                                  wxDC& dc,
                                  wxRect& rect,
                                  int WXUNUSED(rowOrCol),
-                                 bool WXUNUSED(pressed)) const override
+                                 int WXUNUSED(flags)) const override
     {
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(wxBrush(wxColour(240, 20, 15, 180)));

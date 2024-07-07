@@ -328,7 +328,7 @@ void wxGridHeaderLabelsRenderer::DrawHighlighted(const wxGrid& WXUNUSED(grid),
                                                  wxDC& WXUNUSED(dc),
                                                  wxRect& WXUNUSED(rect),
                                                  int WXUNUSED(rowOrCol),
-                                                 bool WXUNUSED(pressed)) const
+                                                 int WXUNUSED(flags)) const
 {
 }
 
@@ -416,7 +416,7 @@ void wxGridRowHeaderRendererDefault::DrawHighlighted(const wxGrid& grid,
                                                      wxDC& dc,
                                                      wxRect& rect,
                                                      int row,
-                                                     bool pressed) const
+                                                     int flags) const
 {
     const wxColour colBg = grid.GetSelectionBackground();
 
@@ -425,7 +425,7 @@ void wxGridRowHeaderRendererDefault::DrawHighlighted(const wxGrid& grid,
     dc.DrawRectangle(rect);
 
     int ofs;
-    if ( !pressed ) {
+    if ( !(flags & wxGridRowHeaderRendererDefault::Draw_Pressed) ) {
         ofs = wxPrivate::GridRowLabelDrawBorderCommonDefault(
             grid, dc, rect, colBg, colBg.ChangeLightness(170));
 
@@ -462,7 +462,7 @@ void wxGridColumnHeaderRendererDefault::DrawHighlighted(const wxGrid& grid,
                                                         wxDC& dc,
                                                         wxRect& rect,
                                                         int col,
-                                                        bool pressed) const
+                                                        int flags) const
 {
     const wxColour colBg = grid.GetSelectionBackground();
 
@@ -471,7 +471,7 @@ void wxGridColumnHeaderRendererDefault::DrawHighlighted(const wxGrid& grid,
     dc.DrawRectangle(rect);
 
     int ofs;
-    if ( !pressed ) {
+    if ( !(flags & wxGridRowHeaderRendererDefault::Draw_Pressed) ) {
         ofs = wxPrivate::GridColLabelDrawBorderCommonDefault(
             grid, dc, rect, colBg, colBg.ChangeLightness(170));
 
@@ -7594,7 +7594,8 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
         else
         {
             // just highlight the current column
-            rend.DrawHighlighted(*this, dc, rect, col, true); // pressed
+            rend.DrawHighlighted(*this, dc, rect, col,
+                wxGridRowHeaderRendererDefault::Draw_Pressed);
             rect.Deflate(GetBorder() == wxBORDER_NONE ? 2 : 1);
         }
     }
