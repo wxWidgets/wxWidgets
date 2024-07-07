@@ -34,8 +34,7 @@ TEST_CASE("EventClone", "[wxEvent][clone]")
 
         // is this class derived from wxEvent?
         if ( !ci->IsKindOf(CLASSINFO(wxEvent)) ||
-             cn == "wxEvent" ||
-             cn == "wxTouchEventBase" )
+             cn == "wxEvent" )
             continue;
 
         INFO("Event class \"" << cn << "\"");

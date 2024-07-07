@@ -686,7 +686,6 @@ class WXDLLIMPEXP_FWD_CORE wxInitDialogEvent;
 class WXDLLIMPEXP_FWD_CORE wxUpdateUIEvent;
 class WXDLLIMPEXP_FWD_CORE wxClipboardTextEvent;
 class WXDLLIMPEXP_FWD_CORE wxHelpEvent;
-class WXDLLIMPEXP_FWD_CORE wxTouchEventBase;
 class WXDLLIMPEXP_FWD_CORE wxMultiTouchEvent;
 class WXDLLIMPEXP_FWD_CORE wxGestureEvent;
 class WXDLLIMPEXP_FWD_CORE wxPanGestureEvent;
@@ -1963,28 +1962,6 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSetCursorEvent);
 };
 
- // Common base class for wxMultiTouchEvent and wxGestureEvent
-
-class WXDLLIMPEXP_CORE wxTouchEventBase : public wxEvent
-{
-public:
-    wxTouchEventBase(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
-        : wxEvent(winid, type)
-    {
-    }
-
-    wxTouchEventBase(const wxTouchEventBase& event) = default;
-
-    const wxPoint& GetPosition() const { return m_pos; }
-    void SetPosition(const wxPoint& pos) { m_pos = pos; }
-
-protected:
-    wxPoint m_pos;
-
-    wxDECLARE_ABSTRACT_CLASS(wxTouchEventBase);
-
-};
-
 // MultiTouch Event
 
 class wxTouchSequenceId : public wxItemId<void*>
@@ -1994,17 +1971,18 @@ public:
     explicit wxTouchSequenceId(void* pItem) : wxItemId<void*>(pItem) { }
 };
 
-class WXDLLIMPEXP_CORE wxMultiTouchEvent : public wxTouchEventBase
+class WXDLLIMPEXP_CORE wxMultiTouchEvent : public wxEvent
 {
 public:
     wxMultiTouchEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
-        : wxTouchEventBase(winid, type)
+        : wxEvent(winid, type)
     {
-        m_isPrimary = false;
     }
 
     wxMultiTouchEvent(const wxMultiTouchEvent& event) = default;
 
+    const wxPoint& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint& pos) { m_pos = pos; }
     bool IsPrimary() const { return m_isPrimary; }
     void SetPrimary(bool primary) { m_isPrimary = primary; }
     const wxTouchSequenceId& GetSequenceId() const { return m_sequence; }
@@ -2013,8 +1991,9 @@ public:
     virtual wxEvent *Clone() const override { return new wxMultiTouchEvent(*this); }
 
 protected:
-    bool m_isPrimary;
+    wxPoint m_pos;
     wxTouchSequenceId m_sequence;
+    bool m_isPrimary = false;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMultiTouchEvent);
 
@@ -2024,22 +2003,25 @@ protected:
 
 const unsigned int wxTwoFingerTimeInterval = 200;
 
-class WXDLLIMPEXP_CORE wxGestureEvent : public wxTouchEventBase
+class WXDLLIMPEXP_CORE wxGestureEvent : public wxEvent
 {
 public:
     wxGestureEvent(wxWindowID winid = 0, wxEventType type = wxEVT_NULL)
-        : wxTouchEventBase(winid, type)
+        : wxEvent(winid, type)
     {
         m_isStart = false;
         m_isEnd = false;
     }
 
-    wxGestureEvent(const wxGestureEvent& event) : wxTouchEventBase(event)
+    wxGestureEvent(const wxGestureEvent& event) : wxEvent(event)
+        , m_pos(event.m_pos)
     {
         m_isStart = event.m_isStart;
         m_isEnd = event.m_isEnd;
     }
 
+    const wxPoint& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint& pos) { m_pos = pos; }
     bool IsGestureStart() const { return m_isStart; }
     void SetGestureStart(bool isStart = true) { m_isStart = isStart; }
     bool IsGestureEnd() const { return m_isEnd; }
@@ -2048,6 +2030,7 @@ public:
     virtual wxEvent *Clone() const override { return new wxGestureEvent(*this); }
 
 protected:
+    wxPoint m_pos;
     bool m_isStart, m_isEnd;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGestureEvent);
