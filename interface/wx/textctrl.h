@@ -1659,7 +1659,7 @@ public:
 
         This offers more granular control of content formatting, as well as a
         significant performance benefit with larger content. This also provides the
-        ability read an RTF file and move it directly into the control.
+        ability to read an RTF file and move it directly into the control.
 
         Note that this will have no effect if RTF is not supported by the native control.
 
