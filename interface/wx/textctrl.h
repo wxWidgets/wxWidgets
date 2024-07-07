@@ -1673,6 +1673,15 @@ public:
     void SetRTFValue(const wxString& val);
 
     /**
+        Returns @c true if text controls support reading and writing RTF (Rich Text Format).
+
+        @since 3.3.0
+
+        @see GetRTFValue(), SetRTFValue()
+    */
+    static bool IsRTFSupported();
+
+    /**
         Finds the position of the character at the specified point.
 
         If the return code is not @c wxTE_HT_UNKNOWN the position of the

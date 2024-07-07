@@ -689,6 +689,15 @@ public:
     virtual wxString GetRTFValue() const;
     virtual void SetRTFValue(const wxString& WXUNUSED(val));
 
+    static bool IsRTFSupported()
+    {
+#ifdef __WXOSX__
+        return true;
+#else
+        return false;
+#endif
+    }
+
 protected:
     // implementation of loading/saving
     virtual bool DoLoadFile(const wxString& file, int fileType);
