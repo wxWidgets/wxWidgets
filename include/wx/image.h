@@ -62,16 +62,19 @@ enum wxImageResolution
 enum wxImageResizeQuality
 {
     // different image resizing algorithms used by Scale() and Rescale()
-    wxIMAGE_QUALITY_NEAREST = 0,
+    wxIMAGE_QUALITY_NEAREST = 5,
     wxIMAGE_QUALITY_BILINEAR = 1,
     wxIMAGE_QUALITY_BICUBIC = 2,
     wxIMAGE_QUALITY_BOX_AVERAGE = 3,
 
-    // default quality is low (but fast)
-    wxIMAGE_QUALITY_NORMAL = wxIMAGE_QUALITY_NEAREST,
+    // default quality, suitable for most icons
+    wxIMAGE_QUALITY_NORMAL = 0,
 
-    // highest (but best) quality
-    wxIMAGE_QUALITY_HIGH = 4
+    // "high" quality is not always better, but can be for photos
+    wxIMAGE_QUALITY_HIGH = 4,
+
+    // fastest algorithm, possibly at the expense of quality
+    wxIMAGE_QUALITY_FAST = 6
 };
 
 // Constants for wxImage::Paste() for specifying alpha blending option.

@@ -96,6 +96,9 @@ Changes in behaviour not resulting in compilation errors
   not scale the size by the content scale factor of the DC any longer, as the
   size here is expressed in physical pixels and not in DIPs.
 
+- wxIMAGE_QUALITY_NEAREST has a different numeric value and is not the same
+  as wxIMAGE_QUALITY_NORMAL any longer, see documentation for more details.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
