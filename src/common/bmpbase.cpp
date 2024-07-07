@@ -75,11 +75,8 @@ void wxBitmapHelpers::Rescale(wxBitmap& bmp, const wxSize& sizeNeeded)
     wxCHECK_RET( sizeNeeded.IsFullySpecified(), wxS("New size must be given") );
 
 #if wxUSE_IMAGE
-    // Note that we use "nearest" rescale mode here to preserve sharp edges in
-    // the icons for which this function is often used. It's also consistent
-    // with what wxDC::DrawBitmap() does, i.e. the fallback method below.
     wxImage img = bmp.ConvertToImage();
-    img.Rescale(sizeNeeded.x, sizeNeeded.y, wxIMAGE_QUALITY_NEAREST);
+    img.Rescale(sizeNeeded.x, sizeNeeded.y);
     bmp = wxBitmap(img);
 #else // !wxUSE_IMAGE
     // Fallback method of scaling the bitmap
