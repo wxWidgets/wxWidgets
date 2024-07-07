@@ -928,6 +928,16 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     return true;
 }
 
+wxString wxTextAreaBase::GetRTFValue() const
+{
+    wxFAIL_MSG("Not implemented for the current platform.");
+    return wxEmptyString;
+}
+void wxTextAreaBase::SetRTFValue(const wxString& WXUNUSED(val))
+{
+    wxFAIL_MSG("Not implemented for the current platform.");
+}
+
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------

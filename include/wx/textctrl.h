@@ -686,15 +686,8 @@ public:
     virtual void SetValue(const wxString& value) = 0;
 
     // overridden implementations are required to actually handle RTF
-    virtual wxString GetRTFValue() const
-    {
-        wxFAIL_MSG("GetRTFValue() should only be used with rich, multiline controls.");
-        return wxEmptyString;
-    }
-    virtual void SetRTFValue(const wxString& WXUNUSED(val))
-    {
-        wxFAIL_MSG("SetRTFValue() should only be used with rich, multiline controls.");
-    }
+    virtual wxString GetRTFValue() const;
+    virtual void SetRTFValue(const wxString& WXUNUSED(val));
 
 protected:
     // implementation of loading/saving
