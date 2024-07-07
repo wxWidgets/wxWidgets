@@ -715,7 +715,6 @@ wxDropSource::wxDropSource(wxWindow *win,
 
     m_iconWindow = nullptr;
 
-    m_window = win;
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
 
@@ -736,7 +735,6 @@ wxDropSource::wxDropSource(wxDataObject& data,
 
     m_iconWindow = nullptr;
 
-    m_window = win;
     m_widget = win->m_widget;
     if (win->m_wxwindow) m_widget = win->m_wxwindow;
 

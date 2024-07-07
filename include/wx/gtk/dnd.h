@@ -99,7 +99,6 @@ public:
     GtkWidget       *m_widget;
     GtkWidget       *m_iconWindow;
     GdkDragContext  *m_dragContext;
-    wxWindow        *m_window;
 
     wxDragResult     m_retValue;
     wxIcon           m_iconCopy,
