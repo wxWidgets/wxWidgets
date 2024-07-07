@@ -873,8 +873,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     for (size_t i = 0; i < count; i++)
     {
         GdkAtom atom = array[i];
-        wxLogTrace(TRACE_DND, wxT("Drop source: Supported atom %s"),
-                   gdk_atom_name( atom ));
         gtk_target_list_add( target_list, atom, 0, 0 );
     }
     delete[] array;
@@ -895,6 +893,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
                 (GdkDragAction)allowed_actions,
                 g_lastButtonNumber,  // number of mouse button which started drag
                 (GdkEvent*) g_lastMouseEvent );
+
+    gtk_target_list_unref(target_list);
 
     if ( !context )
     {
