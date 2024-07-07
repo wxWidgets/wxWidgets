@@ -109,10 +109,7 @@ private:
                      m_iconMove,
                      m_iconNone;
 
-    // common part of both ctors
-    void SetIcons(const wxIcon& copy,
-                  const wxIcon& move,
-                  const wxIcon& none);
+    void Init(wxWindow* win);
 
     // GTK implementation
     void GTKConnectDragSignals();

@@ -710,17 +710,11 @@ wxDropSource::wxDropSource(wxWindow *win,
                            const wxIcon &iconCopy,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
+    : m_iconCopy(iconCopy)
+    , m_iconMove(iconMove)
+    , m_iconNone(iconNone)
 {
-    m_waiting = true;
-
-    m_iconWindow = nullptr;
-
-    m_widget = win->m_widget;
-    if (win->m_wxwindow) m_widget = win->m_wxwindow;
-
-    m_retValue = wxDragNone;
-
-    SetIcons(iconCopy, iconMove, iconNone);
+    Init(win);
 }
 
 wxDropSource::wxDropSource(wxDataObject& data,
@@ -728,28 +722,20 @@ wxDropSource::wxDropSource(wxDataObject& data,
                            const wxIcon &iconCopy,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
+    : m_iconCopy(iconCopy)
+    , m_iconMove(iconMove)
+    , m_iconNone(iconNone)
 {
-    m_waiting = true;
-
+    Init(win);
     SetData( data );
-
-    m_iconWindow = nullptr;
-
-    m_widget = win->m_widget;
-    if (win->m_wxwindow) m_widget = win->m_wxwindow;
-
-    m_retValue = wxDragNone;
-
-    SetIcons(iconCopy, iconMove, iconNone);
 }
 
-void wxDropSource::SetIcons(const wxIcon &iconCopy,
-                            const wxIcon &iconMove,
-                            const wxIcon &iconNone)
+void wxDropSource::Init(wxWindow* win)
 {
-    m_iconCopy = iconCopy;
-    m_iconMove = iconMove;
-    m_iconNone = iconNone;
+    m_waiting = true;
+    m_iconWindow = nullptr;
+    m_retValue = wxDragNone;
+    m_widget = win->m_wxwindow ? win->m_wxwindow : win->m_widget;
 
     if ( !m_iconCopy.IsOk() )
         m_iconCopy = wxIcon(page_xpm);
