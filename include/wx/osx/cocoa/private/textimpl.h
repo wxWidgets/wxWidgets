@@ -64,11 +64,11 @@ public :
     {
         wxFAIL_MSG("GetRTFValue() should only be used with multiline controls.");
         return wxEmptyString;
-    };
+    }
     virtual void SetRTFValue(const wxString& WXUNUSED(str)) override
     {
         wxFAIL_MSG("SetRTFValue() should only be used with multiline controls.");
-    };
+    }
     virtual void Copy() override ;
     virtual void Cut() override ;
     virtual void Paste() override ;
