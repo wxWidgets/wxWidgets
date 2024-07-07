@@ -1677,9 +1677,9 @@ void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
         // verify that the file length is correct
         wxFile file("dummy.txt");
         wxLogStatus(this,
-                    "Successfully saved file (text len = %lu, file size = %ld)",
-                    (unsigned long)m_panel->m_textrich->GetValue().length(),
-                    (long) file.Length());
+                    "Successfully saved file (text len = %zu, file size = %lld)",
+                    m_panel->m_textrich->GetValue().length(),
+                    file.Length());
 #endif
     }
     else
