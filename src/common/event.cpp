@@ -101,9 +101,8 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureChangedEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxMouseCaptureLostEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxClipboardTextEvent, wxCommandEvent);
-    wxIMPLEMENT_ABSTRACT_CLASS(wxTouchEventBase, wxEvent);
-    wxIMPLEMENT_DYNAMIC_CLASS(wxMultiTouchEvent, wxTouchEventBase);
-    wxIMPLEMENT_DYNAMIC_CLASS(wxGestureEvent, wxTouchEventBase);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxMultiTouchEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxGestureEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxPanGestureEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxZoomGestureEvent, wxGestureEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxRotateGestureEvent, wxGestureEvent);
