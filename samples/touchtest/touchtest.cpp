@@ -67,7 +67,7 @@ bool wxMyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    wxFrame* frame = new MyFrame(nullptr, wxT("Multi-touch Test"), wxDefaultPosition,
+    wxFrame* frame = new MyFrame(nullptr, "Multi-touch Test", wxDefaultPosition,
         wxDefaultSize, wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
     SetTopWindow(frame);
     frame->CenterOnScreen();
@@ -122,12 +122,12 @@ MyFrame::MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos,
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(file_menu, "&File");
     SetMenuBar(menu_bar);
 
     if (!EnableTouchEvents(wxTOUCH_RAW_EVENTS))
     {
-        wxLogError(wxT("Enabling touch events failed"));
+        wxLogError("Enabling touch events failed");
     }
 }
 
