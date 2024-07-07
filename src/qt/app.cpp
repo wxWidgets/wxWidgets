@@ -65,6 +65,9 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
     m_qtApplication->processEvents(); // Avoids SIGPIPE when debugging
 
+    if ( m_qtApplication->platformName() == "xcb" )
+        m_qtApplication->processEvents(); // Avoids SIGPIPE on X11 when debugging
+
     // Use the args returned by Qt as it may have deleted (processed) some of them
     // Using QApplication::arguments() forces argument processing
     QStringList qtArgs = m_qtApplication->arguments();
