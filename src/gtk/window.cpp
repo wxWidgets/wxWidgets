@@ -4243,11 +4243,6 @@ bool wxWindowGTK::GTKShowFromOnIdle()
     return false;
 }
 
-void wxWindowGTK::GTKRealizeWidget()
-{
-    gtk_widget_realize(m_widget);
-}
-
 #ifdef __WINDOWS__
 WXHWND wxWindowGTK::GTKGetWin32Handle() const
 {
