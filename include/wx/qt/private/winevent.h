@@ -400,7 +400,9 @@ protected:
 
             wxMultiTouchEvent evt(win->GetId(), evtype);
 
-            evt.SetPosition(wxQtConvertPoint(tp.pos().toPoint()));
+            // Use screen position as the event might originate from a different
+            // Qt window than this one.
+            evt.SetPosition(win->ScreenToClient(wxQtConvertPoint(tp.screenPos().toPoint())));
             evt.SetSequenceId(wxTouchSequenceId(wxUIntToPtr((unsigned)tp.id())));
             // Qt doesn't provide the primary point flag
 
