@@ -266,6 +266,7 @@ All (GUI):
 
 wxGTK:
 
+- Fix possible crash during drag-and-drop (#24677).
 - Fix using wxDatePickerCtrl in ca_ES, cz_CZ and some other locales (#24533).
 - Fix wxListBox minimum size regression in 3.2.5 (#24551).
 - Fix wxBitmapComboBox bitmaps scaling in high DPI (#24563).
