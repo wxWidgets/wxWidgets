@@ -3945,8 +3945,10 @@ public:
 
     If the ID is @NULL the wxTouchSequenceId is invalid and wxTouchSequenceId::IsOk will
     return @false.
+
+    @since 3.3.0
 */
-class wxTouchSequenceId
+class wxTouchSequenceId : public wxItemId<void*>
 {
 public:
     /**
@@ -3958,16 +3960,6 @@ public:
         Constructor.
     */
     explicit wxTouchSequenceId(void* id);
-
-    /**
-        Returns the ID.
-    */
-    void* GetID() const;
-
-    /**
-        Returns @true if the ID is not @NULL.
-    */
-    bool IsOk() const;
 };
 
 /** @class wxMultiTouchEvent
