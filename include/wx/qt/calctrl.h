@@ -70,7 +70,7 @@ public:
 
     using wxCalendarCtrlBase::GenerateAllChangeEvents;
 
-    virtual QWidget *GetHandle() const override;
+    QCalendarWidget* GetQCalendarWidget() const;
 
 protected:
     virtual void RefreshHolidays() override;
@@ -79,7 +79,6 @@ private:
     void Init();
     void UpdateStyle();
 
-    QCalendarWidget *m_qtCalendar;
     wxColour m_colHeaderFg,
              m_colHeaderBg,
              m_colHolidayFg,

@@ -46,10 +46,9 @@ public:
     T GetMax() const;
     T GetIncrement() const;
 
-    virtual QWidget *GetHandle() const override;
-
 protected:
-    Widget *m_qtSpinBox;
+    // QSpinBox / QDoubleSpinBox
+    Widget* GetQtSpinBox() const { return static_cast<Widget*>(this->GetHandle()); }
 
 };
 

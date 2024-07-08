@@ -59,10 +59,8 @@ public:
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) override;
-    QWidget *GetHandle() const override;
 
-    // Private, only used by wxFrame.
-    QToolBar *GetQToolBar() const { return m_qtToolBar; }
+    QToolBar* GetQToolBar() const;
 
 protected:
     QActionGroup* GetActionGroup(size_t pos);
@@ -76,8 +74,6 @@ private:
     void Init();
 
     long GetButtonStyle();
-
-    QToolBar *m_qtToolBar;
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
 };

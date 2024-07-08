@@ -97,7 +97,7 @@ bool wxToggleButton::Create(wxWindow *parent,
 {
     // create a checkable push button
     QtCreate(parent);
-    m_qtPushButton->setCheckable(true);
+    GetQPushButton()->setCheckable(true);
 
     // this button is toggleable and has a text label
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
@@ -107,12 +107,12 @@ bool wxToggleButton::Create(wxWindow *parent,
 
 void wxToggleButton::SetValue(bool state)
 {
-    m_qtPushButton->setChecked( state );
+    GetQPushButton()->setChecked( state );
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return m_qtPushButton->isChecked();
+    return GetQPushButton()->isChecked();
 }
 
 #endif // wxUSE_TOGGLEBTN

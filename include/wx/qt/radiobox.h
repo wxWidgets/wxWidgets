@@ -82,12 +82,10 @@ public:
     virtual void SetLabel(const wxString &label) override;
     virtual wxString GetLabel() const override;
 
-    virtual QWidget *GetHandle() const override;
+    // The 'visual' group box:
+    QGroupBox* GetQGroupBox() const;
 
 private:
-    // The 'visual' group box:
-    QGroupBox *m_qtGroupBox;
-
     // Handles the mutual exclusion of buttons:
     QButtonGroup *m_qtButtonGroup;
 

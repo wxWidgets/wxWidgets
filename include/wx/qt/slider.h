@@ -51,13 +51,10 @@ public:
     virtual void SetThumbLength(int lenPixels) override;
     virtual int GetThumbLength() const override;
 
-    virtual QWidget *GetHandle() const override;
+    QSlider* GetQSlider() const;
 
 protected:
     virtual void DoSetTickFreq(int freq) override;
-
-private:
-    QSlider *m_qtSlider;
 
     wxDECLARE_DYNAMIC_CLASS( wxSlider );
 };

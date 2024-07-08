@@ -32,16 +32,13 @@ public:
 
     virtual void SetLabel(const wxString& label) override;
 
-    virtual QWidget *GetHandle() const override;
+    QLabel* GetQLabel() const;
 
 protected:
     virtual wxString WXGetVisibleLabel() const override;
     virtual void WXSetVisibleLabel(const wxString& str) override;
 
-private:
-    QLabel *m_qtLabel;
-
-    wxDECLARE_DYNAMIC_CLASS( wxStaticText );
+    wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };
 
 #endif // _WX_QT_STATTEXT_H_

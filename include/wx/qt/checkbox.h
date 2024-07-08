@@ -35,14 +35,11 @@ public:
     virtual void SetLabel(const wxString& label) override;
     virtual wxString GetLabel() const override;
 
-    virtual QWidget *GetHandle() const override;
+    QCheckBox* GetQCheckBox() const;
 
 protected:
     virtual void DoSet3StateValue(wxCheckBoxState state) override;
     virtual wxCheckBoxState DoGet3StateValue() const override;
-
-private:
-    QCheckBox *m_qtCheckBox;
 
     wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };

@@ -63,9 +63,9 @@ public:
 
     virtual int GetCountPerPage() const override;
 
-    virtual QWidget *GetHandle() const override;
-
     void QtSendEvent(wxEventType evtType, int rowIndex, bool selected);
+
+    QListWidget* GetQListWidget() const;
 
 protected:
     virtual void DoSetFirstItem(int n) override;
@@ -89,8 +89,6 @@ protected:
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
-
-    QListWidget *m_qtListWidget;
 
 private:
     virtual void Init(); //common construction

@@ -49,15 +49,12 @@ public:
     virtual void SetMenuLabel(size_t pos, const wxString& label) override;
     virtual wxString GetMenuLabel(size_t pos) const override;
 
-    QMenuBar *GetQMenuBar() const { return m_qtMenuBar; }
-    virtual QWidget *GetHandle() const override;
+    QMenuBar* GetQMenuBar() const;
 
     virtual void Attach(wxFrame *frame) override;
     virtual void Detach() override;
 
 private:
-    QMenuBar *m_qtMenuBar;
-
     wxDECLARE_DYNAMIC_CLASS(wxMenuBar);
 };
 

@@ -117,7 +117,7 @@ public:
 
     virtual void SetWindowStyleFlag(long styles) override;
 
-    virtual QWidget *GetHandle() const override;
+    wxQTreeWidget* GetQTreeWidget() const;
 
 protected:
     virtual int DoGetItemState(const wxTreeItemId& item) const override;
@@ -148,7 +148,6 @@ private:
 
     void DoUpdateIconsSize(wxImageList *imageList);
 
-    wxQTreeWidget *m_qtTreeWidget;
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 };
 

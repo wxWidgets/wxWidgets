@@ -46,10 +46,7 @@ public:
     virtual void SetValue(const wxDateTime& dt) override;
     virtual wxDateTime GetValue() const override;
 
-    virtual QWidget *GetHandle() const override;
-
-private:
-    QTimeEdit* m_qtTimeEdit;
+    QTimeEdit* GetQTimeEdit() const;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTimePickerCtrl);
 };

@@ -47,7 +47,7 @@ public:
 
     virtual bool DeleteAllPages() override;
 
-    virtual QWidget *GetHandle() const override;
+    QTabWidget* GetQTabWidget() const;
 
 protected:
     virtual wxWindow *DoRemovePage(size_t page) override;
@@ -55,8 +55,6 @@ protected:
     virtual void OnImagesChanged() override;
 
 private:
-    QTabWidget *m_qtTabWidget;
-
     // internal array to store imageId for each page:
     wxVector<int> m_images;
 

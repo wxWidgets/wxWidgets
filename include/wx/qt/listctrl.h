@@ -269,7 +269,7 @@ public:
     virtual int GetSortIndicator() const override;
     virtual bool IsAscendingSortIndicator() const override;
 
-    virtual QWidget *GetHandle() const override;
+    wxQtListTreeWidget* GetQListTreeWidget() const;
 
 protected:
     void Init();
@@ -284,8 +284,6 @@ private:
     // Allow access to OnGetItemXXX() method from the virtual model class.
     friend class wxQtVirtualListModel;
 
-
-    wxQtListTreeWidget *m_qtTreeWidget;
     wxQtListModel *m_model;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );

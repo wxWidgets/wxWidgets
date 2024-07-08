@@ -25,8 +25,7 @@ public:
 };
 
 
-wxStaticBox::wxStaticBox() :
-    m_qtGroupBox(nullptr)
+wxStaticBox::wxStaticBox()
 {
 }
 
@@ -47,27 +46,28 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
-    m_qtGroupBox = new wxQtGroupBox( parent, this );
-    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
+    m_qtWindow = new wxQtGroupBox( parent, this );
+
+    GetQGroupBox()->setTitle( wxQtConvertString( label ) );
 
     return wxStaticBoxBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
-QWidget *wxStaticBox::GetHandle() const
+QGroupBox* wxStaticBox::GetQGroupBox() const
 {
-    return m_qtGroupBox;
+    return static_cast<QGroupBox*>(m_qtWindow);
 }
 
 void wxStaticBox::SetLabel(const wxString& label)
 {
     wxStaticBoxBase::SetLabel( label );
 
-    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
+    GetQGroupBox()->setTitle( wxQtConvertString( label ) );
 }
 
 wxString wxStaticBox::GetLabel() const
 {
-    return wxQtConvertString( m_qtGroupBox->title() );
+    return wxQtConvertString( GetQGroupBox()->title() );
 }
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const

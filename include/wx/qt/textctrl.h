@@ -84,8 +84,6 @@ public:
 
     virtual void SetMaxLength(unsigned long len) override;
 
-    virtual QWidget *GetHandle() const override;
-
 protected:
     virtual wxSize DoGetBestSize() const override;
 

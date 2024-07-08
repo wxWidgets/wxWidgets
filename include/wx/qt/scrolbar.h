@@ -12,8 +12,6 @@
 
 class QScrollBar;
 
-class WXDLLIMPEXP_FWD_CORE wxQtScrollBar;
-
 class WXDLLIMPEXP_CORE wxScrollBar : public wxScrollBarBase
 {
 public:
@@ -42,12 +40,9 @@ public:
                               int range, int pageSize,
                               bool refresh = true) override;
 
-    QScrollBar *GetQScrollBar() const { return m_qtScrollBar; }
-    QWidget *GetHandle() const override;
+    QScrollBar* GetQScrollBar() const;
 
 private:
-    QScrollBar *m_qtScrollBar;
-
     wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 

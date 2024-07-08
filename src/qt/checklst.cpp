@@ -76,7 +76,7 @@ void wxCheckListBox::Init()
 
 bool wxCheckListBox::IsChecked(unsigned int n) const
 {
-    QListWidgetItem* item = m_qtListWidget->item(n);
+    QListWidgetItem* item = GetQListWidget()->item(n);
     wxCHECK_MSG(item != nullptr, false, wxT("wrong listbox index") );
     return item->checkState() == Qt::Checked;
 }
@@ -84,9 +84,9 @@ bool wxCheckListBox::IsChecked(unsigned int n) const
 void wxCheckListBox::Check(unsigned int n, bool check )
 {
     // Prevent the emission of wxEVT_CHECKLISTBOX event by temporarily blocking all
-    // signals on m_qtListWidget object.
-    wxQtEnsureSignalsBlocked blocker(m_qtListWidget);
-    QListWidgetItem* item = m_qtListWidget->item(n);
+    // signals on GetQListWidget() object.
+    wxQtEnsureSignalsBlocked blocker(GetQListWidget());
+    QListWidgetItem* item = GetQListWidget()->item(n);
     wxCHECK_RET(item != nullptr, wxT("wrong listbox index") );
     item->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 }

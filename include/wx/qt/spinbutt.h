@@ -33,10 +33,7 @@ public:
     virtual void SetValue(int val) override;
     virtual void SetRange(int min, int max) override;
 
-    virtual QWidget *GetHandle() const override;
-
-private:
-    QSpinBox *m_qtSpinBox;
+    QSpinBox* GetQSpinBox() const;
 
     wxDECLARE_DYNAMIC_CLASS( wxSpinButton );
 };
