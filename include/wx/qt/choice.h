@@ -13,7 +13,7 @@ class QComboBox;
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
-    wxChoice();
+    wxChoice() = default;
 
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,

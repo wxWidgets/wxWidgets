@@ -38,10 +38,6 @@ class wxQtMdiArea : public wxQtEventSignalHandler< QMdiArea, wxMDIClientWindow >
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame);
 
-wxMDIParentFrame::wxMDIParentFrame()
-{
-}
-
 wxMDIParentFrame::wxMDIParentFrame(wxWindow *parent,
                  wxWindowID id,
                  const wxString& title,
@@ -90,10 +86,6 @@ void wxMDIParentFrame::ActivatePrevious()
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxMDIChildFrameBase)
 
-wxMDIChildFrame::wxMDIChildFrame()
-{
-}
-
 wxMDIChildFrame::wxMDIChildFrame(wxMDIParentFrame *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -132,10 +124,6 @@ void wxMDIChildFrame::Activate()
 //##############################################################################
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow,wxMDIClientWindowBase)
-
-wxMDIClientWindow::wxMDIClientWindow()
-{
-}
 
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long WXUNUSED(style))
 {

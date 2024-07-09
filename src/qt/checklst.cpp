@@ -15,10 +15,6 @@
 
 #include <QtWidgets/QListWidgetItem>
 
-wxCheckListBox::wxCheckListBox()
-{
-}
-
 wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
@@ -66,12 +62,9 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
               const wxValidator& validator,
               const wxString& name )
 {
-    return wxCheckListBoxBase::Create( parent, id, pos, size, choices, style, validator, name );
-}
-
-void wxCheckListBox::Init()
-{
     m_hasCheckBoxes = true;
+
+    return wxCheckListBoxBase::Create( parent, id, pos, size, choices, style, validator, name );
 }
 
 bool wxCheckListBox::IsChecked(unsigned int n) const

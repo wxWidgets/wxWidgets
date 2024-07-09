@@ -136,10 +136,6 @@ void wxQtSlider::sliderReleased()
     }
 }
 
-wxSlider::wxSlider()
-{
-}
-
 wxSlider::wxSlider(wxWindow *parent,
          wxWindowID id,
          int value, int minValue, int maxValue,

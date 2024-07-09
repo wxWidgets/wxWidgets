@@ -19,11 +19,6 @@
 #include <QtWidgets/QSpinBox>
 
 template< typename T, typename Widget >
-wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt()
-{
-}
-
-template< typename T, typename Widget >
 wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt( wxWindow *WXUNUSED(parent), wxWindowID WXUNUSED(id),
     const wxString& WXUNUSED(value), const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size), long WXUNUSED(style),
     T WXUNUSED(min), T WXUNUSED(max), T WXUNUSED(initial), T WXUNUSED(inc), const wxString& WXUNUSED(name) )
@@ -219,11 +214,6 @@ private:
 
 template class wxSpinCtrlQt< int, QSpinBox >;
 
-wxSpinCtrl::wxSpinCtrl()
-{
-    Init();
-}
-
 wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
     const wxPoint& pos, const wxSize& size, long style,
     int min, int max, int initial,
@@ -232,7 +222,6 @@ wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
 : wxSpinCtrlQt< int, QSpinBox >( parent, id, value, pos, size, style,
      min, max, initial, 1, name )
 {
-    Init();
     Create( parent, id, value, pos, size, style, min, max, initial, name );
 }
 
@@ -288,10 +277,6 @@ void wxSpinCtrl::SetValue( const wxString &value )
 template class wxSpinCtrlQt< double, QDoubleSpinBox >;
 
 wxIMPLEMENT_DYNAMIC_CLASS( wxSpinCtrlDouble, wxSpinCtrlBase );
-
-wxSpinCtrlDouble::wxSpinCtrlDouble()
-{
-}
 
 wxSpinCtrlDouble::wxSpinCtrlDouble(wxWindow *parent, wxWindowID id, const wxString& value,
     const wxPoint& pos, const wxSize& size, long style,

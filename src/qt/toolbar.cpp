@@ -147,10 +147,6 @@ wxQtToolbar::wxQtToolbar( wxWindow *parent, wxToolBar *handler )
 }
 
 
-void wxToolBar::Init()
-{
-}
-
 wxToolBar::~wxToolBar()
 {
 }

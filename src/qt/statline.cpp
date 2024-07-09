@@ -14,10 +14,6 @@
 
 #include <QtWidgets/QFrame>
 
-wxStaticLine::wxStaticLine()
-{
-}
-
 wxStaticLine::wxStaticLine( wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos,

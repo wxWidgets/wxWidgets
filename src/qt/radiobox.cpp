@@ -65,12 +65,6 @@ void wxQtButtonGroup::buttonClicked(QAbstractButton *qbutton)
 wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 
-wxRadioBox::wxRadioBox() :
-    m_qtButtonGroup(nullptr),
-    m_qtGridLayout(nullptr)
-{
-}
-
 wxRadioBox::wxRadioBox(wxWindow *parent,
            wxWindowID id,
            const wxString& title,

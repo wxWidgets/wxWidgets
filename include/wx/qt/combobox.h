@@ -13,7 +13,7 @@
 class WXDLLIMPEXP_CORE wxComboBox : public wxChoice, public wxTextEntry
 {
 public:
-    wxComboBox();
+    wxComboBox() = default;
 
     wxComboBox(wxWindow *parent,
                wxWindowID id,

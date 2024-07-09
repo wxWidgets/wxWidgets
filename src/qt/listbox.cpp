@@ -85,11 +85,6 @@ void wxQtListWidgetItem::setData(int role, const QVariant& value)
     }
 }
 
-wxListBox::wxListBox()
-{
-    Init();
-}
-
 wxListBox::wxListBox(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
@@ -180,8 +175,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 void wxListBox::DoCreate(wxWindow* parent, long style)
 {
-    Init();
-
     m_qtWindow = new wxQtListWidget( parent, this );
 
     if ( style & wxLB_SORT )

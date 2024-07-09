@@ -18,10 +18,6 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow);
 // Defined in src/qt/window.cpp
 extern wxSize wxQtGetBestSize(QWidget* qtWidget);
 
-wxControl::wxControl()
-{
-}
-
 wxControl::wxControl(wxWindow *parent, wxWindowID id,
          const wxPoint& pos,
          const wxSize& size, long style,

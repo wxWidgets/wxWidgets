@@ -13,7 +13,8 @@ class QTabWidget;
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
 public:
-    wxNotebook();
+    wxNotebook() = default;
+
     wxNotebook(wxWindow *parent,
              wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
@@ -58,7 +59,7 @@ private:
     // internal array to store imageId for each page:
     wxVector<int> m_images;
 
-    wxDECLARE_DYNAMIC_CLASS( wxNotebook );
+    wxDECLARE_DYNAMIC_CLASS(wxNotebook);
 };
 
 

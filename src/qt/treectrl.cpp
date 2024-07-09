@@ -649,10 +649,6 @@ bool wxQItemSelectionModel::IsSelectionChangeAllowed(const QModelIndex& index) c
     return qTreeWidget->EmitSelectChangeEvent(wxEVT_TREE_SEL_CHANGING);
 }
 
-wxTreeCtrl::wxTreeCtrl()
-{
-}
-
 wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,

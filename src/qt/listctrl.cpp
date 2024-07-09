@@ -1336,11 +1336,6 @@ void wxQtEventSignalHandler< QTreeView, wxListCtrl >::HandleDestroyedSignal()
     this->setModel(nullptr);
 }
 
-wxListCtrl::wxListCtrl()
-{
-    Init();
-}
-
 wxListCtrl::wxListCtrl(wxWindow *parent,
            wxWindowID id,
            const wxPoint& pos,
@@ -1349,7 +1344,6 @@ wxListCtrl::wxListCtrl(wxWindow *parent,
            const wxValidator& validator,
            const wxString& name)
 {
-    Init();
     Create( parent, id, pos, size, style, validator, name );
 }
 
@@ -1382,12 +1376,6 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     SetWindowStyleFlag(style);
     return true;
-}
-
-void wxListCtrl::Init()
-{
-    m_hasCheckBoxes = false;
-    m_model = nullptr;
 }
 
 wxListCtrl::~wxListCtrl()

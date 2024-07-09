@@ -13,7 +13,8 @@ class QSlider;
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
 public:
-    wxSlider();
+    wxSlider() = default;
+
     wxSlider(wxWindow *parent,
              wxWindowID id,
              int value, int minValue, int maxValue,
@@ -56,7 +57,7 @@ public:
 protected:
     virtual void DoSetTickFreq(int freq) override;
 
-    wxDECLARE_DYNAMIC_CLASS( wxSlider );
+    wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };
 
 #endif // _WX_QT_SLIDER_H_

@@ -30,11 +30,6 @@ wxQtProgressBar::wxQtProgressBar( wxWindow *parent, wxGauge *handler )
 {
 }
 
-
-wxGauge::wxGauge()
-{
-}
-
 wxGauge::wxGauge(wxWindow *parent,
         wxWindowID id,
         int range,

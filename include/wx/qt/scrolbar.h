@@ -15,7 +15,8 @@ class QScrollBar;
 class WXDLLIMPEXP_CORE wxScrollBar : public wxScrollBarBase
 {
 public:
-    wxScrollBar();
+    wxScrollBar() = default;
+
     wxScrollBar( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
@@ -42,7 +43,6 @@ public:
 
     QScrollBar* GetQScrollBar() const;
 
-private:
     wxDECLARE_DYNAMIC_CLASS(wxScrollBar);
 };
 

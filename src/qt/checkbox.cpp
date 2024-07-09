@@ -47,11 +47,6 @@ void wxQtCheckBox::clicked( bool checked )
     }
 }
 
-
-wxCheckBox::wxCheckBox()
-{
-}
-
 wxCheckBox::wxCheckBox( wxWindow *parent, wxWindowID id, const wxString& label,
         const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator,
         const wxString& name )

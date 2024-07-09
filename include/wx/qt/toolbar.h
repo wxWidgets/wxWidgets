@@ -16,7 +16,8 @@ class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
 public:
 
-    wxToolBar() { Init(); }
+    wxToolBar() = default;
+
     wxToolBar(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -24,8 +25,6 @@ public:
               long style = wxTB_DEFAULT_STYLE | wxNO_BORDER,
               const wxString& name = wxASCII_STR(wxToolBarNameStr))
     {
-        Init();
-
         Create(parent, id, pos, size, style, name);
     }
 
@@ -71,8 +70,6 @@ protected:
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) override;
 
 private:
-    void Init();
-
     long GetButtonStyle();
 
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);

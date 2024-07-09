@@ -13,7 +13,8 @@ class wxQTreeWidget;
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
 public:
-    wxTreeCtrl();
+    wxTreeCtrl() = default;
+
     wxTreeCtrl(wxWindow *parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,

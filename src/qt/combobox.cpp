@@ -87,11 +87,6 @@ void wxComboBox::SetSelection( int n )
     wxChoice::SetSelection( n );
 }
 
-wxComboBox::wxComboBox()
-{
-}
-
-
 wxComboBox::wxComboBox(wxWindow *parent,
            wxWindowID id,
            const wxString& value,

@@ -25,10 +25,6 @@ public:
 };
 
 
-wxStaticBox::wxStaticBox()
-{
-}
-
 wxStaticBox::wxStaticBox(wxWindow *parent, wxWindowID id,
             const wxString& label,
             const wxPoint& pos,

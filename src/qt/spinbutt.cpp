@@ -62,10 +62,6 @@ void wxQtSpinButton::stepBy(int steps)
 }
 
 
-wxSpinButton::wxSpinButton()
-{
-}
-
 wxSpinButton::wxSpinButton(wxWindow *parent,
              wxWindowID id,
              const wxPoint& pos,

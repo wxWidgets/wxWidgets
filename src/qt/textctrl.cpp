@@ -633,10 +633,6 @@ void wxQtTextEdit::textChanged()
 } // anonymous namespace
 
 
-wxTextCtrl::wxTextCtrl()
-{
-}
-
 wxTextCtrl::wxTextCtrl(wxWindow *parent,
            wxWindowID id,
            const wxString &value,

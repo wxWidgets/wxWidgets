@@ -73,11 +73,6 @@ void wxQtChoice::activated(int WXUNUSED(index))
 
 } // anonymous namespace
 
-
-wxChoice::wxChoice()
-{
-}
-
 void wxChoice::QtInitSort( QComboBox *combo )
 {
     QSortFilterProxyModel *proxyModel = new LexicalSortProxyModel(combo);

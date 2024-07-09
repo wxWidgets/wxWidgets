@@ -29,10 +29,6 @@ class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 };
 
 
-wxScrollBar::wxScrollBar()
-{
-}
-
 wxScrollBar::wxScrollBar( wxWindow *parent, wxWindowID id,
        const wxPoint& pos,
        const wxSize& size,

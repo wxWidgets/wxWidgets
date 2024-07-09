@@ -20,10 +20,6 @@
 
 #include <QtWidgets/QPushButton>
 
-wxButton::wxButton()
-{
-}
-
 wxButton::wxButton(wxWindow *parent, wxWindowID id,
        const wxString& label,
        const wxPoint& pos,

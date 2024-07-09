@@ -11,7 +11,8 @@
 class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
 public:
-    wxMDIParentFrame();
+    wxMDIParentFrame() = default;
+
     wxMDIParentFrame(wxWindow *parent,
                      wxWindowID id,
                      const wxString& title,
@@ -36,8 +37,6 @@ public:
     virtual void ActivateNext() override;
     virtual void ActivatePrevious() override;
 
-protected:
-
 private:
     wxDECLARE_DYNAMIC_CLASS(wxMDIParentFrame);
 };
@@ -47,7 +46,8 @@ private:
 class WXDLLIMPEXP_CORE wxMDIChildFrame : public wxMDIChildFrameBase
 {
 public:
-    wxMDIChildFrame();
+    wxMDIChildFrame() = default;
+
     wxMDIChildFrame(wxMDIParentFrame *parent,
                     wxWindowID id,
                     const wxString& title,
@@ -74,9 +74,10 @@ public:
 class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxMDIClientWindowBase
 {
 public:
-    wxMDIClientWindow();
+    wxMDIClientWindow() = default;
 
     virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL) override;
+
     wxDECLARE_DYNAMIC_CLASS(wxMDIClientWindow);
 };
 

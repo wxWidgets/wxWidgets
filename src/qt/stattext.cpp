@@ -24,10 +24,6 @@ public:
 };
 
 
-wxStaticText::wxStaticText()
-{
-}
-
 wxStaticText::wxStaticText(wxWindow *parent,
              wxWindowID id,
              const wxString &label,

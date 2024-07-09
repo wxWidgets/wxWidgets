@@ -13,7 +13,7 @@ class QFrame;
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
 public:
-    wxStaticLine();
+    wxStaticLine() = default;
 
     wxStaticLine( wxWindow *parent,
                   wxWindowID id = wxID_ANY,

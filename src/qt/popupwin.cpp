@@ -33,10 +33,6 @@ wxQtPopupWindow::wxQtPopupWindow(wxWindow* parent, wxPopupWindow* handler)
 {
 }
 
-wxPopupWindow::wxPopupWindow()
-{
-}
-
 wxPopupWindow::wxPopupWindow(wxWindow *parent, int flags)
 {
    Create(parent, flags);

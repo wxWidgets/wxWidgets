@@ -17,7 +17,7 @@ class wxQtVirtualListModel;
 class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
 {
 public:
-    wxListCtrl();
+    wxListCtrl() = default;
 
     wxListCtrl(wxWindow *parent,
                wxWindowID id = wxID_ANY,
@@ -272,21 +272,19 @@ public:
     wxQtListTreeWidget* GetQListTreeWidget() const;
 
 protected:
-    void Init();
-
     // Implement base class pure virtual methods.
     virtual long DoInsertColumn(long col, const wxListItem& info) override;
     void DoUpdateImages(int which) override;
 
-    bool              m_hasCheckBoxes;
+    bool m_hasCheckBoxes = false;
 
 private:
     // Allow access to OnGetItemXXX() method from the virtual model class.
     friend class wxQtVirtualListModel;
 
-    wxQtListModel *m_model;
+    wxQtListModel *m_model = nullptr;
 
-    wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
+    wxDECLARE_DYNAMIC_CLASS(wxListCtrl);
 };
 
 #endif

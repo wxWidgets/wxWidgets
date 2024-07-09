@@ -100,10 +100,6 @@ public:
     }
 };
 
-wxRadioButton::wxRadioButton()
-{
-}
-
 wxRadioButton::wxRadioButton( wxWindow *parent,
                wxWindowID id,
                const wxString& label,

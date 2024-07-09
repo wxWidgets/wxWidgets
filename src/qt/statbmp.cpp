@@ -27,10 +27,6 @@ public:
 };
 
 
-wxStaticBitmap::wxStaticBitmap()
-{
-}
-
 wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
                 wxWindowID id,
                 const wxBitmapBundle& label,

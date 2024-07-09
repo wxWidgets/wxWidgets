@@ -77,11 +77,6 @@ bool wxQtPushButton::event(QEvent* e)
     return QPushButton::event(e);
 }
 
-wxAnyButton::wxAnyButton()
-{
-}
-
-
 void wxAnyButton::QtCreate(wxWindow *parent)
 {
     // create the basic push button (used in button and bmp button)

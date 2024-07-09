@@ -53,10 +53,6 @@ void wxQtTabWidget::currentChanged(int index)
 }
 
 
-wxNotebook::wxNotebook()
-{
-}
-
 wxNotebook::wxNotebook(wxWindow *parent,
          wxWindowID id,
          const wxPoint& pos,
