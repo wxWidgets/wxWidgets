@@ -22,7 +22,7 @@
 class WXDLLIMPEXP_BASE wxSystemHardwareInfo
 {
 public:
-    
+
     static int GetCPUCount();
 
     static wxString GetCPUArchitectureName();
