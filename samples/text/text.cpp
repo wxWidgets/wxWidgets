@@ -283,8 +283,8 @@ public:
 #endif // wxUSE_LOG
     void OnFileSave(wxCommandEvent& event);
     void OnFileLoad(wxCommandEvent& event);
-    void OnFileSaveRtf(wxCommandEvent& event);
-    void OnFileLoadRtf(wxCommandEvent& event);
+    void OnFileSaveRTF(wxCommandEvent& event);
+    void OnFileLoadRTF(wxCommandEvent& event);
     void OnRichTextTest(wxCommandEvent& event);
 
     void OnSetEditable(wxCommandEvent& event);
@@ -1512,8 +1512,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
     EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
-    EVT_MENU(TEXT_SAVE_RTF, MyFrame::OnFileSaveRtf)
-    EVT_MENU(TEXT_LOAD_RTF, MyFrame::OnFileLoadRtf)
+    EVT_MENU(TEXT_SAVE_RTF, MyFrame::OnFileSaveRTF)
+    EVT_MENU(TEXT_LOAD_RTF, MyFrame::OnFileLoadRTF)
     EVT_MENU(TEXT_RICH_TEXT_TEST, MyFrame::OnRichTextTest)
 
     EVT_MENU(TEXT_LOG_KEY,  MyFrame::OnLogKey)
@@ -1698,7 +1698,7 @@ void MyFrame::OnFileLoad(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnFileSaveRtf(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnFileSaveRTF(wxCommandEvent& WXUNUSED(event))
 {
     if (m_panel->m_textrich->SaveFile("dummy.rtf", wxTEXT_TYPE_RTF))
     {
@@ -1706,16 +1706,16 @@ void MyFrame::OnFileSaveRtf(wxCommandEvent& WXUNUSED(event))
         // verify that the file length is correct
         wxFile file("dummy.rtf");
         wxLogStatus(this,
-            "Successfully saved file (text len = %lu, file size = %ld)",
-            (unsigned long)m_panel->m_textrich->GetValue().length(),
-            (long)file.Length());
+            "Successfully saved file (text len = %zu, file size = %lld)",
+            m_panel->m_textrich->GetValue().length(),
+            file.Length());
 #endif
     }
     else
         wxLogStatus(this, "Couldn't save the file");
 }
 
-void MyFrame::OnFileLoadRtf(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnFileLoadRTF(wxCommandEvent& WXUNUSED(event))
 {
     if (m_panel->m_textrich->LoadFile("dummy.rtf", wxTEXT_TYPE_RTF))
     {
