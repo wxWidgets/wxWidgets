@@ -50,7 +50,7 @@ public:
         The returned string may be empty if the CPU architecture
         couldn't be recognized.
 
-        @see wxGetCpuArchitectureName()
+        @see ::wxGetCpuArchitectureName()
      */
     static wxString GetCPUArchitectureName();
 
