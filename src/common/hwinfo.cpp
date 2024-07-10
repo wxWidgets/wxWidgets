@@ -69,8 +69,8 @@ wxMemorySize wxSystemHardwareInfo::GetPhysicalMemory()
         physicalMemory = status.ullTotalPhys;
     }
 #elif defined(__APPLE__)
-    int64_t memSize{ 0 };
-    size_t sizeOfRetVal{ sizeof(memSize) };
+    int64_t memSize = 0;
+    size_t sizeOfRetVal = sizeof(memSize);
     if (sysctlbyname("hw.memsize", &memSize, &sizeOfRetVal, nullptr, 0) != -1)
     {
         physicalMemory = memSize;
