@@ -110,4 +110,3 @@ bool wxSystemHardwareInfo::IsRunningNatively()
 {
     return wxGetCpuArchitectureName() == wxGetNativeCpuArchitectureName();
 }
-
