@@ -2,7 +2,7 @@
 // Name:        wx/hwinfo.h
 // Purpose:     declaration of the wxSystemHardwareInfo class
 // Author:      Blake Madden
-// Created:     07.09.2024
+// Created:     2024-07-09
 // Copyright:   (c) 2024 Blake Madden
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
