@@ -77,7 +77,7 @@ public:
     /**
         Returns @c true if the architecture that the program is running
         under is the same as the system's architecture. For example, this
-        will be @c if running a 32-bit application under x64 (Windoes) or
+        will be @c if running a 32-bit application under x64 (Windows) or
         running x86_64 under ARM64 (macOS)
     */
     static bool IsRunningNatively();
