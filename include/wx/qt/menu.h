@@ -14,8 +14,8 @@ class QMenuBar;
 class WXDLLIMPEXP_CORE wxMenu : public wxMenuBase
 {
 public:
-    wxMenu(long style = 0);
-    wxMenu(const wxString& title, long style = 0);
+    explicit wxMenu(long style = 0);
+    explicit wxMenu(const wxString& title, long style = 0);
 
     virtual QMenu *GetHandle() const;
 
@@ -36,7 +36,7 @@ class WXDLLIMPEXP_CORE wxMenuBar : public wxMenuBarBase
 {
 public:
     wxMenuBar();
-    wxMenuBar(long style);
+    explicit wxMenuBar(long style);
     wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
 
     virtual bool Append(wxMenu *menu, const wxString& title) override;
