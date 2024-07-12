@@ -852,19 +852,15 @@ void wxDataViewCtrl::OnSize(wxSizeEvent& event)
   event.Skip();
 }
 
-void wxDataViewCtrl::OnContextMenu(wxContextMenuEvent& WXUNUSED(e))
+void wxDataViewCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
-    // get the item information;
-    // theoretically more than one ID can be returned but the event can only
-    // handle one item, therefore only the first item of the array is
-    // returned:
+    wxPoint pos = ScreenToClient(event.GetPosition());
     wxDataViewItem item;
-    wxDataViewItemArray selectedItems;
-    if (GetSelections(selectedItems) > 0)
-        item = selectedItems[0];
+    wxDataViewColumn *col;
+    HitTest(pos, item, col);
 
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, this, item);
-    GetEventHandler()->ProcessEvent(event);
+    wxDataViewEvent event2(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, this, item);
+    GetEventHandler()->ProcessEvent(event2);
 }
 
 wxSize wxDataViewCtrl::DoGetBestSize() const
