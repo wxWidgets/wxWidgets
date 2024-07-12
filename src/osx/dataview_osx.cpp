@@ -852,6 +852,21 @@ void wxDataViewCtrl::OnSize(wxSizeEvent& event)
   event.Skip();
 }
 
+void wxDataViewCtrl::OnContextMenu(wxContextMenuEvent& WXUNUSED(e))
+{
+    // get the item information;
+    // theoretically more than one ID can be returned but the event can only
+    // handle one item, therefore only the first item of the array is
+    // returned:
+    wxDataViewItem item;
+    wxDataViewItemArray selectedItems;
+    if (GetSelections(selectedItems) > 0)
+        item = selectedItems[0];
+
+    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, this, item);
+    GetEventHandler()->ProcessEvent(event);
+}
+
 wxSize wxDataViewCtrl::DoGetBestSize() const
 {
     wxSize best = wxControl::DoGetBestSize();
@@ -864,6 +879,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl,wxDataViewCtrlBase);
 
 wxBEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_SIZE(wxDataViewCtrl::OnSize)
+  EVT_CONTEXT_MENU(wxDataViewCtrl::OnContextMenu)
 wxEND_EVENT_TABLE()
 
 #endif // !wxHAS_GENERIC_DATAVIEWCTRL
