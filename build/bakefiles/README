@@ -1,5 +1,5 @@
 
-This directory contains Bakefile (see http://bakefile.sourceforge.net)
+This directory contains Bakefile (see https://www.bakefile.org)
 files needed to generate native makefiles for wxWidgets library and
 samples.
 
