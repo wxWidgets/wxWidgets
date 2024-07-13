@@ -294,6 +294,9 @@ public :
     inline void GetFloor( wxInt32 *x , wxInt32 *y ) const;
     inline void GetRounded( wxInt32 *x , wxInt32 *y ) const;
 
+    inline wxPoint GetFloor() const;
+    inline wxPoint GetRounded() const;
+
     inline wxDouble GetVectorLength() const;
      wxDouble GetVectorAngle() const ;
     void SetVectorLength( wxDouble length );
@@ -410,6 +413,16 @@ inline void wxPoint2DDouble::GetRounded( wxInt32 *x , wxInt32 *y ) const
 {
     *x = wxRound( m_x );
     *y = wxRound( m_y );
+}
+
+inline wxPoint wxPoint2DDouble::GetFloor() const
+{
+    return wxPoint( (wxInt32) floor( m_x ), (wxInt32) floor( m_y ) );
+}
+
+inline wxPoint wxPoint2DDouble::GetRounded() const
+{
+    return wxPoint( wxRound( m_x ), wxRound( m_y ) );
 }
 
 inline wxDouble wxPoint2DDouble::GetVectorLength() const

@@ -2285,8 +2285,8 @@ void wxCocoaGesturesImpl::RawTouchEvent(NSEvent* event, wxEventType type, NSTouc
         }
 
         NSPoint locationInView = [m_view convertPoint:locationInWindow.origin fromView:nil];
-        wxPoint locationInViewWX = wxFromNSPoint( m_view, locationInView );
-        wxevent.SetPosition(wxPoint (locationInViewWX.x, locationInViewWX.y));
+        wxPoint2DDouble locationInViewWX = wxFromNSPointF( m_view, locationInView );
+        wxevent.SetPosition(locationInViewWX);
         m_win->HandleWindowEvent(wxevent);
     }
 }

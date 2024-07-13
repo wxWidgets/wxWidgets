@@ -3873,7 +3873,7 @@ touch_callback(GtkWidget* widget, GdkEventTouch* gdk_event, wxWindow* win)
             wxMultiTouchEvent event(win->GetId(), type);
 
             event.SetEventObject(win);
-            event.SetPosition(wxPoint(gdk_event->x, gdk_event->y));
+            event.SetPosition(wxPoint2DDouble(gdk_event->x, gdk_event->y));
             event.SetSequenceId(wxTouchSequenceId(gdk_event->sequence));
             event.SetPrimary(gdk_event->emulating_pointer);
 

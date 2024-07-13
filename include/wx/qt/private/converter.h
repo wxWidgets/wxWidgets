@@ -29,9 +29,20 @@ inline wxPoint wxQtConvertPoint( const QPoint &point )
 {
     return wxPoint( point.x(), point.y() );
 }
+
 inline QPoint wxQtConvertPoint( const wxPoint &point )
 {
     return QPoint( point.x, point.y );
+}
+
+inline wxPoint2DDouble wxQtConvertPointF(const QPointF& point)
+{
+    return wxPoint2DDouble(point.x(), point.y());
+}
+
+inline QPointF wxQtConvertPointF(const wxPoint2DDouble& point)
+{
+    return QPointF(point.m_x, point.m_y);
 }
 
 inline wxRect wxQtConvertRect( const QRect &rect )
