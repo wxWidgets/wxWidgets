@@ -6358,7 +6358,10 @@ bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
         for ( const auto& input : info )
         {
             // hundredths of a pixel of physical screen coordinates
-            wxPoint pos = ScreenToClient(wxPoint(input.x / 100, input.y / 100));
+            wxPoint2DDouble pt(input.x / 100.0, input.y / 100.0);
+            wxPoint ref = pt.GetFloor();
+            wxPoint2DDouble pos = ScreenToClient(ref) + (pt - ref);
+
             wxEventType type;
             if ( input.dwFlags & TOUCHEVENTF_DOWN )
                 type = wxEVT_TOUCH_BEGIN;

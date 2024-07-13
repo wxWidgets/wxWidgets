@@ -402,7 +402,10 @@ protected:
 
             // Use screen position as the event might originate from a different
             // Qt window than this one.
-            evt.SetPosition(win->ScreenToClient(wxQtConvertPoint(tp.screenPos().toPoint())));
+            wxPoint2DDouble pt = wxQtConvertPointF(tp.screenPos().toPoint());
+            wxPoint ref = pt.GetFloor();
+
+            evt.SetPosition(win->ScreenToClient(ref) + (pt - ref));
             evt.SetSequenceId(wxTouchSequenceId(wxUIntToPtr((unsigned)tp.id())));
             // Qt doesn't provide the primary point flag
 

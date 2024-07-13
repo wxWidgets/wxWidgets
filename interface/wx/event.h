@@ -3960,12 +3960,12 @@ public:
     /**
         Returns the position where the event took effect, in client coordinates.
     */
-    const wxPoint& GetPosition() const;
+    const wxPoint2DDouble& GetPosition() const;
 
     /**
         Sets the position where the event took effect, in client coordinates.
     */
-    void SetPosition(const wxPoint& pos);
+    void SetPosition(const wxPoint2DDouble& pos);
 
     /**
         Returns @true if the event is a primary (mouse pointer emulating) event.

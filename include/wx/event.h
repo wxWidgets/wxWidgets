@@ -18,6 +18,7 @@
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
+    #include "wx/geometry.h"
     #include "wx/cursor.h"
     #include "wx/mousestate.h"
 #endif
@@ -1979,8 +1980,8 @@ public:
 
     wxMultiTouchEvent(const wxMultiTouchEvent& event) = default;
 
-    const wxPoint& GetPosition() const { return m_pos; }
-    void SetPosition(const wxPoint& pos) { m_pos = pos; }
+    const wxPoint2DDouble& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint2DDouble& pos) { m_pos = pos; }
     bool IsPrimary() const { return m_isPrimary; }
     void SetPrimary(bool primary) { m_isPrimary = primary; }
     const wxTouchSequenceId& GetSequenceId() const { return m_sequence; }
@@ -1989,7 +1990,7 @@ public:
     virtual wxEvent *Clone() const override { return new wxMultiTouchEvent(*this); }
 
 protected:
-    wxPoint m_pos;
+    wxPoint2DDouble m_pos;
     wxTouchSequenceId m_sequence;
     bool m_isPrimary = false;
 

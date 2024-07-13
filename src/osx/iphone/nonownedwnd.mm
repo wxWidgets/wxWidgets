@@ -34,7 +34,7 @@ wxRect wxFromNSRect( UIView* parent, const CGRect& rect )
 CGPoint wxToNSPoint( UIView* parent, const wxPoint& p )
 {
     CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
-    int x = p.x ;
+    int x = p.x;
     int y = p.y;
     return CGPointMake(x, y);
 }
@@ -45,6 +45,22 @@ wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
     int x = p.x;
     int y = p.y;
     return wxPoint( x, y);
+}
+
+CGPoint wxToNSPointF( UIView* parent, const wxPoint2DDouble& p )
+{
+    CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
+    double x = p.m_x;
+    double y = p.m_y;
+    return CGPointMake(x, y);
+}
+
+wxPoint wxFromNSPointF( UIView* parent, const CGPoint& p )
+{
+    CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
+    double x = p.x;
+    double y = p.y;
+    return wxPoint2DDouble(x, y);
 }
 
 @interface wxUIContentViewController : UIViewController
@@ -162,7 +178,7 @@ bool wxNonOwnedWindowIPhoneImpl::Show(bool show)
             wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (GetWXPeer());
             wxShowEvent eventShow(now->GetId(), true);
             eventShow.SetEventObject(now);
-            
+
             now->HandleWindowEvent(eventShow);
 
             m_initialShowSent = true;
@@ -352,10 +368,10 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     [contentview release];
     [contentview setController:controller];
     [contentview setHidden:YES];
-    
+
     wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, Widget_IsRoot );
     impl->InstallEventHandler();
-    
+
     if ([toplevelwindow respondsToSelector:@selector(setRootViewController:)])
     {
         toplevelwindow.rootViewController = controller;
@@ -392,7 +408,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
         wxOSXIPhoneClassAddWXMethods( self );
     }
 }
- 
+
 @end
 
 @implementation wxUIContentViewController
@@ -401,9 +417,9 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
     wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
-    
+
     // TODO: determine NO or YES based on min size requirements (whether it fits on the new orientation)
-    
+
     return YES;
 }
 
@@ -418,15 +434,15 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 {
      return UIInterfaceOrientationMaskAll;
 }
- 
- 
+
+
 
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
     wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
-    
+
     now->HandleResized(0);
 }
 
@@ -435,12 +451,12 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
     wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
     wxNonOwnedWindowIPhoneImpl* nowimpl = dynamic_cast<wxNonOwnedWindowIPhoneImpl*> (now->GetNonOwnedPeer());
-    
+
     if ( nowimpl->InitialShowEventSent() )
     {
         wxShowEvent eventShow(now->GetId(), true);
         eventShow.SetEventObject(now);
-    
+
         now->HandleWindowEvent(eventShow);
     }
 }
@@ -452,12 +468,12 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     {
         wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
         wxNonOwnedWindowIPhoneImpl* nowimpl = dynamic_cast<wxNonOwnedWindowIPhoneImpl*> (now->GetNonOwnedPeer());
-        
+
         if ( nowimpl->InitialShowEventSent() )
         {
             wxShowEvent eventShow(now->GetId(), false);
             eventShow.SetEventObject(now);
-        
+
             now->HandleWindowEvent(eventShow);
         }
     }

@@ -61,10 +61,10 @@ class wxWidgetCocoaNativeKeyDownSuspender
 public:
     // stops sending keydown events for text inserted into this widget
     explicit wxWidgetCocoaNativeKeyDownSuspender(wxWidgetCocoaImpl *target);
-    
+
     // resumes sending keydown events
     ~wxWidgetCocoaNativeKeyDownSuspender();
-    
+
 private:
     wxWidgetCocoaImpl *m_target;
     NSEvent* m_nsevent;
@@ -263,7 +263,7 @@ protected:
     bool m_hasEditor;
 
     friend class wxWidgetCocoaNativeKeyDownSuspender;
-    
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl);
 };
 
@@ -402,6 +402,8 @@ public:
     WXDLLIMPEXP_CORE wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
     WXDLLIMPEXP_CORE NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
     WXDLLIMPEXP_CORE wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
+    WXDLLIMPEXP_CORE NSPoint wxToNSPointF(NSView* parent, const wxPoint2DDouble& p);
+    WXDLLIMPEXP_CORE wxPoint2DDouble wxFromNSPoint(NSView* parent, const NSPoint& p);
 
     NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size ,
         bool adjustForOrigin = true );
