@@ -28,7 +28,7 @@ private:
     struct TouchState
     {
         wxTouchSequenceId id;
-        wxPoint last;
+        wxPoint2DDouble last;
         wxPen pen;
     };
     TouchState m_TouchPoints[TOUCH_POINTS];
@@ -37,9 +37,9 @@ private:
 
     int FindIndexOfTouchId(const wxTouchSequenceId& id);
 
-    void DrawStart(const wxTouchSequenceId& id, wxPoint pos);
-    void DrawUpdate(const wxTouchSequenceId& id, wxPoint pos);
-    void DrawEnd(const wxTouchSequenceId& id, wxPoint pos);
+    void DrawStart(const wxTouchSequenceId& id, wxPoint2DDouble pos);
+    void DrawUpdate(const wxTouchSequenceId& id, wxPoint2DDouble pos);
+    void DrawEnd(const wxTouchSequenceId& id, wxPoint2DDouble pos);
 
 public:
     MyFrame(wxFrame *parent, const wxString& title,
@@ -169,7 +169,7 @@ int MyFrame::FindIndexOfTouchId(const wxTouchSequenceId& id)
     return idx;
 }
 
-void MyFrame::DrawStart(const wxTouchSequenceId& id, wxPoint pos)
+void MyFrame::DrawStart(const wxTouchSequenceId& id, wxPoint2DDouble pos)
 {
     int idx = FindIndexOfTouchId(id);
     if (idx == -1)
@@ -189,7 +189,7 @@ void MyFrame::DrawStart(const wxTouchSequenceId& id, wxPoint pos)
     m_TouchPoints[idx].last = pos;
 }
 
-void MyFrame::DrawUpdate(const wxTouchSequenceId& id, wxPoint pos)
+void MyFrame::DrawUpdate(const wxTouchSequenceId& id, wxPoint2DDouble pos)
 {
     int idx = FindIndexOfTouchId(id);
     if (idx == -1)
@@ -197,14 +197,14 @@ void MyFrame::DrawUpdate(const wxTouchSequenceId& id, wxPoint pos)
 
     wxMemoryDC dc(m_Bitmap);
     dc.SetPen(m_TouchPoints[idx].pen);
-    dc.DrawLine(m_TouchPoints[idx].last, pos);
+    dc.DrawLine(m_TouchPoints[idx].last.GetRounded(), pos.GetRounded());
 
     m_TouchPoints[idx].last = pos;
 
     Refresh();
 }
 
-void MyFrame::DrawEnd(const wxTouchSequenceId& id, wxPoint pos)
+void MyFrame::DrawEnd(const wxTouchSequenceId& id, wxPoint2DDouble pos)
 {
     int idx = FindIndexOfTouchId(id);
     if (idx == -1)
@@ -212,7 +212,7 @@ void MyFrame::DrawEnd(const wxTouchSequenceId& id, wxPoint pos)
 
     wxMemoryDC dc(m_Bitmap);
     dc.SetPen(m_TouchPoints[idx].pen);
-    dc.DrawLine(m_TouchPoints[idx].last, pos);
+    dc.DrawLine(m_TouchPoints[idx].last.GetRounded(), pos.GetRounded());
 
     m_TouchPoints[idx].id.Unset();
 
