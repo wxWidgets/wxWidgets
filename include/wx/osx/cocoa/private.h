@@ -403,7 +403,7 @@ public:
     WXDLLIMPEXP_CORE NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
     WXDLLIMPEXP_CORE wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
     WXDLLIMPEXP_CORE NSPoint wxToNSPointF(NSView* parent, const wxPoint2DDouble& p);
-    WXDLLIMPEXP_CORE wxPoint2DDouble wxFromNSPoint(NSView* parent, const NSPoint& p);
+    WXDLLIMPEXP_CORE wxPoint2DDouble wxFromNSPointF(NSView* parent, const NSPoint& p);
 
     NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size ,
         bool adjustForOrigin = true );
