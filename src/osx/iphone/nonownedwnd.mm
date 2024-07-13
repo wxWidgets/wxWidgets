@@ -55,7 +55,7 @@ CGPoint wxToNSPointF( UIView* parent, const wxPoint2DDouble& p )
     return CGPointMake(x, y);
 }
 
-wxPoint wxFromNSPointF( UIView* parent, const CGPoint& p )
+wxPoint2DDouble wxFromNSPointF( UIView* parent, const CGPoint& p )
 {
     CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
     double x = p.x;
