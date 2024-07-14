@@ -75,7 +75,7 @@ NSPoint wxToNSPointF( NSView* parent, const wxPoint2DDouble& p )
     double x = p.m_x;
     double y = p.m_y;
     if ( parent == nullptr || ![ parent isFlipped ] )
-        y = frame.size.height - ( p.y );
+        y = frame.size.height - y;
     return NSMakePoint(x, y);
 }
 
@@ -85,7 +85,7 @@ wxPoint2DDouble wxFromNSPointF( NSView* parent, const NSPoint& p )
     double x = p.x;
     double y = p.y;
     if ( parent == nullptr || ![ parent isFlipped ] )
-        y = frame.size.height - ( p.y );
+        y = frame.size.height - y;
     return wxPoint2DDouble(x, y);
 }
 
