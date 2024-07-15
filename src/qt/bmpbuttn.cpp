@@ -12,11 +12,6 @@
 
 #include "wx/bmpbuttn.h"
 
-wxBitmapButton::wxBitmapButton()
-{
-}
-
-
 wxBitmapButton::wxBitmapButton(wxWindow *parent,
                wxWindowID id,
                const wxBitmapBundle& bitmap,

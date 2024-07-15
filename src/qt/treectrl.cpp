@@ -649,11 +649,6 @@ bool wxQItemSelectionModel::IsSelectionChangeAllowed(const QModelIndex& index) c
     return qTreeWidget->EmitSelectChangeEvent(wxEVT_TREE_SEL_CHANGING);
 }
 
-wxTreeCtrl::wxTreeCtrl() :
-    m_qtTreeWidget(nullptr)
-{
-}
-
 wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
@@ -671,9 +666,9 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtWindow =
-    m_qtTreeWidget = new wxQTreeWidget(parent, this);
-    m_qtTreeWidget->header()->hide();
+    m_qtWindow = new wxQTreeWidget(parent, this);
+
+    GetQTreeWidget()->header()->hide();
 
     Bind(wxEVT_KEY_DOWN, &wxTreeCtrl::OnKeyDown, this);
 
@@ -689,13 +684,18 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
 
 wxTreeCtrl::~wxTreeCtrl()
 {
-    if ( m_qtTreeWidget != nullptr )
-        m_qtTreeWidget->deleteLater();
+    if ( GetQTreeWidget() )
+        GetQTreeWidget()->deleteLater();
+}
+
+wxQTreeWidget* wxTreeCtrl::GetQTreeWidget() const
+{
+    return static_cast<wxQTreeWidget*>(m_qtWindow);
 }
 
 unsigned wxTreeCtrl::GetCount() const
 {
-    QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
+    QTreeWidgetItem *root = GetQTreeWidget()->invisibleRootItem();
     if ( root->childCount() == 0 )
         return 0;
 
@@ -704,12 +704,12 @@ unsigned wxTreeCtrl::GetCount() const
 
 unsigned wxTreeCtrl::GetIndent() const
 {
-    return m_qtTreeWidget->columnCount();
+    return GetQTreeWidget()->columnCount();
 }
 
 void wxTreeCtrl::SetIndent(unsigned int indent)
 {
-    m_qtTreeWidget->setColumnCount( indent );
+    GetQTreeWidget()->setColumnCount( indent );
 }
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
@@ -723,8 +723,8 @@ void wxTreeCtrl::DoUpdateIconsSize(wxImageList *imageList)
 {
     int width, height;
     imageList->GetSize(0, width, height);
-    m_qtTreeWidget->ResizeIcons(QSize(width, height));
-    m_qtTreeWidget->update();
+    GetQTreeWidget()->ResizeIcons(QSize(width, height));
+    GetQTreeWidget()->update();
 }
 
 void wxTreeCtrl::OnImagesChanged()
@@ -738,13 +738,13 @@ void wxTreeCtrl::OnImagesChanged()
 void wxTreeCtrl::SetStateImages(const wxVector<wxBitmapBundle>& images)
 {
     m_imagesState.SetImages(images);
-    m_qtTreeWidget->update();
+    GetQTreeWidget()->update();
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
 {
     m_imagesState.SetImageList(imageList);
-    m_qtTreeWidget->update();
+    GetQTreeWidget()->update();
 }
 
 wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
@@ -762,7 +762,7 @@ int wxTreeCtrl::GetItemImage(
 ) const
 {
     wxCHECK_MSG(item.IsOk(), -1, "invalid tree item");
-    return m_qtTreeWidget->GetItemImage(wxQtConvertTreeItem(item), which);
+    return GetQTreeWidget()->GetItemImage(wxQtConvertTreeItem(item), which);
 }
 
 wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
@@ -815,7 +815,7 @@ void wxTreeCtrl::SetItemImage(
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
-    m_qtTreeWidget->SetItemImage(wxQtConvertTreeItem(item), image, which);
+    GetQTreeWidget()->SetItemImage(wxQtConvertTreeItem(item), image, which);
 }
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
@@ -908,8 +908,8 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
     wxCHECK_MSG(item.IsOk(), false, "invalid tree item");
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    const QRect itemRect = m_qtTreeWidget->visualItemRect(qTreeItem);
-    const QRect clientRect = m_qtTreeWidget->rect();
+    const QRect itemRect = GetQTreeWidget()->visualItemRect(qTreeItem);
+    const QRect clientRect = GetQTreeWidget()->rect();
     return itemRect.isValid() && clientRect.contains(itemRect);
 }
 
@@ -963,7 +963,7 @@ size_t wxTreeCtrl::GetChildrenCount(
 
 wxTreeItemId wxTreeCtrl::GetRootItem() const
 {
-    const QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
+    const QTreeWidgetItem *root = GetQTreeWidget()->invisibleRootItem();
     return wxQtConvertTreeItem(root->child(0));
 }
 
@@ -977,7 +977,7 @@ wxTreeItemId wxTreeCtrl::GetSelection() const
 
 size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
 {
-    QList<QTreeWidgetItem*> qtSelections = m_qtTreeWidget->selectedItems();
+    QList<QTreeWidgetItem*> qtSelections = GetQTreeWidget()->selectedItems();
 
     const size_t numberOfSelections = qtSelections.size();
     selections.reserve(numberOfSelections);
@@ -993,17 +993,17 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
 void wxTreeCtrl::SetFocusedItem(const wxTreeItemId& item)
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
-    m_qtTreeWidget->setCurrentItem(wxQtConvertTreeItem(item), 0);
+    GetQTreeWidget()->setCurrentItem(wxQtConvertTreeItem(item), 0);
 }
 
 void wxTreeCtrl::ClearFocusedItem()
 {
-    m_qtTreeWidget->setCurrentItem(nullptr);
+    GetQTreeWidget()->setCurrentItem(nullptr);
 }
 
 wxTreeItemId wxTreeCtrl::GetFocusedItem() const
 {
-    return wxQtConvertTreeItem(m_qtTreeWidget->currentItem());
+    return wxQtConvertTreeItem(GetQTreeWidget()->currentItem());
 }
 
 wxTreeItemId wxTreeCtrl::GetItemParent(const wxTreeItemId& item) const
@@ -1073,12 +1073,12 @@ wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
             : wxTreeItemId();
     }
 
-    int index = m_qtTreeWidget->indexOfTopLevelItem(qTreeItem);
+    int index = GetQTreeWidget()->indexOfTopLevelItem(qTreeItem);
     wxASSERT(index != -1);
 
     ++index;
-    return index < m_qtTreeWidget->topLevelItemCount()
-        ? wxQtConvertTreeItem(m_qtTreeWidget->topLevelItem(index))
+    return index < GetQTreeWidget()->topLevelItemCount()
+        ? wxQtConvertTreeItem(GetQTreeWidget()->topLevelItem(index))
         : wxTreeItemId();
 }
 
@@ -1100,12 +1100,12 @@ wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
             : wxTreeItemId();
     }
 
-    int index = m_qtTreeWidget->indexOfTopLevelItem(qTreeItem);
+    int index = GetQTreeWidget()->indexOfTopLevelItem(qTreeItem);
     wxASSERT(index != -1);
 
     --index;
     return index >= 0
-        ? wxQtConvertTreeItem(m_qtTreeWidget->topLevelItem(index))
+        ? wxQtConvertTreeItem(GetQTreeWidget()->topLevelItem(index))
         : wxTreeItemId();
 }
 
@@ -1182,7 +1182,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                              int image, int selImage,
                              wxTreeItemData *data)
 {
-    QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
+    QTreeWidgetItem *root = GetQTreeWidget()->invisibleRootItem();
     wxTreeItemId newItem = DoInsertItem(
         wxQtConvertTreeItem(root),
         0,
@@ -1192,12 +1192,12 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
         data
     );
 
-    m_qtTreeWidget->setCurrentItem(nullptr);
+    GetQTreeWidget()->setCurrentItem(nullptr);
 
     if ( (GetWindowStyleFlag() & wxTR_HIDE_ROOT) != 0 )
-        m_qtTreeWidget->setRootIndex(m_qtTreeWidget->model()->index(0, 0));
+        GetQTreeWidget()->setRootIndex(GetQTreeWidget()->model()->index(0, 0));
     else
-        m_qtTreeWidget->setRootIndex(QModelIndex());
+        GetQTreeWidget()->setRootIndex(QModelIndex());
 
     return newItem;
 }
@@ -1217,7 +1217,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
     }
     else
     {
-        m_qtTreeWidget->removeItemWidget(qTreeItem, 0);
+        GetQTreeWidget()->removeItemWidget(qTreeItem, 0);
     }
 
     SendDeleteEvent(item);
@@ -1230,7 +1230,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    wxQtEnsureSignalsBlocked ensureSignalsBlock(m_qtTreeWidget);
+    wxQtEnsureSignalsBlocked ensureSignalsBlock(GetQTreeWidget());
     while ( qTreeItem->childCount() > 0 )
     {
         QTreeWidgetItem *child = qTreeItem->child(0);
@@ -1245,7 +1245,7 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
-    DeleteChildren(wxQtConvertTreeItem(m_qtTreeWidget->invisibleRootItem()));
+    DeleteChildren(wxQtConvertTreeItem(GetQTreeWidget()->invisibleRootItem()));
 }
 
 void wxTreeCtrl::Expand(const wxTreeItemId& item)
@@ -1282,14 +1282,14 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 
 void wxTreeCtrl::Unselect()
 {
-    QTreeWidgetItem *current = m_qtTreeWidget->currentItem();
+    QTreeWidgetItem *current = GetQTreeWidget()->currentItem();
     if ( current != nullptr )
-        m_qtTreeWidget->select(current, QItemSelectionModel::Deselect);
+        GetQTreeWidget()->select(current, QItemSelectionModel::Deselect);
 }
 
 void wxTreeCtrl::UnselectAll()
 {
-    m_qtTreeWidget->selectionModel()->clearSelection();
+    GetQTreeWidget()->selectionModel()->clearSelection();
 }
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
@@ -1298,17 +1298,17 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 
     if ( !HasFlag(wxTR_MULTIPLE) )
     {
-        m_qtTreeWidget->clearSelection();
+        GetQTreeWidget()->clearSelection();
     }
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
 
     if ( qTreeItem )
     {
-        m_qtTreeWidget->select(qTreeItem, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
-        if ( select && m_qtTreeWidget->selectionMode() == QTreeWidget::SingleSelection )
+        GetQTreeWidget()->select(qTreeItem, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+        if ( select && GetQTreeWidget()->selectionMode() == QTreeWidget::SingleSelection )
         {
-            m_qtTreeWidget->setCurrentItem(qTreeItem);
+            GetQTreeWidget()->setCurrentItem(qTreeItem);
         }
     }
 }
@@ -1322,7 +1322,7 @@ void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
 
     for ( int i = 0; i < childCount; ++i )
     {
-        m_qtTreeWidget->select(qTreeItem->child(i), QItemSelectionModel::Select);
+        GetQTreeWidget()->select(qTreeItem->child(i), QItemSelectionModel::Select);
     }
 }
 
@@ -1347,7 +1347,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    m_qtTreeWidget->scrollToItem(qTreeItem);
+    GetQTreeWidget()->scrollToItem(qTreeItem);
 }
 
 wxTextCtrl *wxTreeCtrl::EditLabel(
@@ -1356,13 +1356,13 @@ wxTextCtrl *wxTreeCtrl::EditLabel(
 )
 {
     wxCHECK_MSG(item.IsOk(), nullptr, "invalid tree item");
-    m_qtTreeWidget->editItem(wxQtConvertTreeItem(item));
-    return m_qtTreeWidget->GetEditControl();
+    GetQTreeWidget()->editItem(wxQtConvertTreeItem(item));
+    return GetQTreeWidget()->GetEditControl();
 }
 
 wxTextCtrl *wxTreeCtrl::GetEditControl() const
 {
-    return m_qtTreeWidget->GetEditControl();
+    return GetQTreeWidget()->GetEditControl();
 }
 
 void wxTreeCtrl::EndEditLabel(
@@ -1372,8 +1372,8 @@ void wxTreeCtrl::EndEditLabel(
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    m_qtTreeWidget->closePersistentEditor(qTreeItem);
-    m_qtTreeWidget->selectionModel()->clearCurrentIndex();
+    GetQTreeWidget()->closePersistentEditor(qTreeItem);
+    GetQTreeWidget()->selectionModel()->clearCurrentIndex();
 }
 
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
@@ -1393,7 +1393,7 @@ bool wxTreeCtrl::GetBoundingRect(
     wxCHECK_MSG(item.IsOk(), false, "invalid tree item");
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    const QRect visualRect = m_qtTreeWidget->visualItemRect(qTreeItem);
+    const QRect visualRect = GetQTreeWidget()->visualItemRect(qTreeItem);
     if ( !visualRect.isValid() )
         return false;
 
@@ -1405,34 +1405,34 @@ void wxTreeCtrl::SetWindowStyleFlag(long styles)
 {
     wxControl::SetWindowStyleFlag(styles);
 
-    m_qtTreeWidget->setEditTriggers(
+    GetQTreeWidget()->setEditTriggers(
         styles & wxTR_EDIT_LABELS
         ? (QTreeWidget::SelectedClicked | QTreeWidget::EditKeyPressed)
         : QTreeWidget::NoEditTriggers
     );
 
-    m_qtTreeWidget->setSelectionMode(
+    GetQTreeWidget()->setSelectionMode(
         styles & wxTR_MULTIPLE
             ? QTreeWidget::ExtendedSelection
             : QTreeWidget::SingleSelection
     );
 
     if ( (styles & wxTR_HIDE_ROOT) != 0 )
-        m_qtTreeWidget->setRootIndex(m_qtTreeWidget->model()->index(0, 0));
+        GetQTreeWidget()->setRootIndex(GetQTreeWidget()->model()->index(0, 0));
     else
-        m_qtTreeWidget->setRootIndex(QModelIndex());
+        GetQTreeWidget()->setRootIndex(QModelIndex());
 }
 
 int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
 {
     wxCHECK_MSG(item.IsOk(), wxTREE_ITEMSTATE_NONE, "invalid tree item");
-    return m_qtTreeWidget->GetItemState(wxQtConvertTreeItem(item));
+    return GetQTreeWidget()->GetItemState(wxQtConvertTreeItem(item));
 }
 
 void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
-    m_qtTreeWidget->SetItemState(wxQtConvertTreeItem(item), state);
+    GetQTreeWidget()->SetItemState(wxQtConvertTreeItem(item), state);
 }
 
 wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
@@ -1452,10 +1452,10 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     TreeItemDataQt treeItemData(data);
     newItem->setData(0, Qt::UserRole, QVariant::fromValue(treeItemData));
 
-    m_qtTreeWidget->SetItemImage(newItem, image, wxTreeItemIcon_Normal);
-    m_qtTreeWidget->SetItemImage(newItem, selImage, wxTreeItemIcon_Selected);
+    GetQTreeWidget()->SetItemImage(newItem, image, wxTreeItemIcon_Normal);
+    GetQTreeWidget()->SetItemImage(newItem, selImage, wxTreeItemIcon_Selected);
 
-    newItem->setIcon(0, m_qtTreeWidget->GetPlaceHolderImage());
+    newItem->setIcon(0, GetQTreeWidget()->GetPlaceHolderImage());
 
     wxTreeItemId wxItem = wxQtConvertTreeItem(newItem);
 
@@ -1506,14 +1506,9 @@ wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
     if ( flags != 0 )
         return wxTreeItemId();
 
-    QTreeWidgetItem *hitItem = m_qtTreeWidget->itemAt(wxQtConvertPoint(point));
+    QTreeWidgetItem *hitItem = GetQTreeWidget()->itemAt(wxQtConvertPoint(point));
     flags = hitItem == nullptr ? wxTREE_HITTEST_NOWHERE : wxTREE_HITTEST_ONITEM;
     return wxQtConvertTreeItem(hitItem);
-}
-
-QWidget *wxTreeCtrl::GetHandle() const
-{
-    return m_qtTreeWidget;
 }
 
 void wxTreeCtrl::SendDeleteEvent(const wxTreeItemId &item)

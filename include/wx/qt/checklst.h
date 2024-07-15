@@ -11,7 +11,8 @@
 class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
 public:
-    wxCheckListBox();
+    wxCheckListBox() = default;
+
     wxCheckListBox(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -48,9 +49,6 @@ public:
 
     virtual bool IsChecked(unsigned int item) const override;
     virtual void Check(unsigned int item, bool check = true) override;
-
-private:
-    virtual void Init() override; //common construction
 
     wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };

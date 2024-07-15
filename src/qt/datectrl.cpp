@@ -68,13 +68,19 @@ wxDatePickerCtrl::Create(wxWindow *parent,
                          const wxValidator& validator,
                          const wxString& name)
 {
-    m_qtDateEdit = new wxQtDateEdit( parent, this );
-    m_qtDateEdit->setDate( dt.IsValid() ? wxQtConvertDate(dt) :
-                                          wxQtConvertDate(wxDateTime::Today()) );
-    m_qtDateEdit->setCalendarPopup(style & wxDP_DROPDOWN);
-    m_qtDateEdit->setDisplayFormat(QLocale::system().dateFormat(QLocale::ShortFormat));
+    m_qtWindow = new wxQtDateEdit( parent, this );
+
+    GetQDateEdit()->setDate( dt.IsValid() ? wxQtConvertDate(dt) :
+                                            wxQtConvertDate(wxDateTime::Today()) );
+    GetQDateEdit()->setCalendarPopup(style & wxDP_DROPDOWN);
+    GetQDateEdit()->setDisplayFormat(QLocale::system().dateFormat(QLocale::ShortFormat));
 
     return wxDatePickerCtrlBase::Create( parent, id, pos, size, style, validator, name );
+}
+
+QDateEdit* wxDatePickerCtrl::GetQDateEdit() const
+{
+    return static_cast<QDateEdit*>(m_qtWindow);
 }
 
 // ----------------------------------------------------------------------------
@@ -88,38 +94,33 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 
     const auto qtDate = wxQtConvertDate(dt);
 
-    if ( qtDate >= m_qtDateEdit->minimumDate() &&
-         qtDate <= m_qtDateEdit->maximumDate() )
+    if ( qtDate >= GetQDateEdit()->minimumDate() &&
+         qtDate <= GetQDateEdit()->maximumDate() )
     {
-        wxQtEnsureSignalsBlocked blocker(m_qtDateEdit);
-        m_qtDateEdit->setDate( qtDate );
+        wxQtEnsureSignalsBlocked blocker(GetQDateEdit());
+        GetQDateEdit()->setDate( qtDate );
     }
 }
 
 wxDateTime wxDatePickerCtrl::GetValue() const
 {
-    return wxQtConvertDate( m_qtDateEdit->date() );
+    return wxQtConvertDate( GetQDateEdit()->date() );
 }
 
 void wxDatePickerCtrl::SetRange(const wxDateTime& dt1, const wxDateTime& dt2)
 {
-    m_qtDateEdit->setDateRange( wxQtConvertDate(dt1), wxQtConvertDate(dt2) );
+    GetQDateEdit()->setDateRange( wxQtConvertDate(dt1), wxQtConvertDate(dt2) );
 }
 
 bool wxDatePickerCtrl::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 {
     if ( dt1 )
-        *dt1 = wxQtConvertDate( m_qtDateEdit->minimumDate() );
+        *dt1 = wxQtConvertDate( GetQDateEdit()->minimumDate() );
 
     if ( dt2 )
-        *dt2 = wxQtConvertDate( m_qtDateEdit->maximumDate() );
+        *dt2 = wxQtConvertDate( GetQDateEdit()->maximumDate() );
 
     return true;
-}
-
-QWidget* wxDatePickerCtrl::GetHandle() const
-{
-    return m_qtDateEdit;
 }
 
 #endif // wxUSE_DATEPICKCTRL

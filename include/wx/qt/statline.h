@@ -13,7 +13,7 @@ class QFrame;
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
 public:
-    wxStaticLine();
+    wxStaticLine() = default;
 
     wxStaticLine( wxWindow *parent,
                   wxWindowID id = wxID_ANY,
@@ -29,12 +29,9 @@ public:
                  long style = wxLI_HORIZONTAL,
                  const wxString &name = wxASCII_STR(wxStaticLineNameStr) );
 
-    virtual QWidget *GetHandle() const override;
+    QFrame* GetQFrame() const;
 
-private:
-    QFrame *m_qtFrame;
-
-    wxDECLARE_DYNAMIC_CLASS( wxStaticLine );
+    wxDECLARE_DYNAMIC_CLASS(wxStaticLine);
 };
 
 #endif // _WX_QT_STATLINE_H_
