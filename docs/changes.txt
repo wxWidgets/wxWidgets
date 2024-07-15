@@ -280,6 +280,7 @@ wxOSX:
 - Fix wrong wxSlider label in some cases (Hartwig Wiesmann, #24539).
 - Fix handling diagonal scrolling when using trackpad (#24516).
 - Improve wxScrollBar precision (Alex Contreras, #24669).
+- Improve context menus in wxDataViewCtrl (Václav Slavík, #24697).
 
 
 3.2.5: (released 2024-05-14)
