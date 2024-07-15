@@ -273,6 +273,7 @@ wxMSW
 
 - Fix regression in wxTreeCtrl indent size in high DPI (Maarten Bent, #25282).
 - Fix using wxNO_IMPLICIT_WXSTRING_ENCODING with PCH (#25568).
+- Fix crash when copying wxBitmaps if GDI resources are exhausted (#24703).
 
 wxOSX:
 
