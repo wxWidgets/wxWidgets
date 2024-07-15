@@ -859,7 +859,7 @@ void wxDataViewCtrl::OnContextMenu(wxContextMenuEvent& event)
     wxDataViewColumn *col;
     HitTest(pos, item, col);
 
-    wxDataViewEvent event2(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, this, item);
+    wxDataViewEvent event2(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, this, col, item);
     GetEventHandler()->ProcessEvent(event2);
 }
 
