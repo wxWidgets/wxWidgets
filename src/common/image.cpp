@@ -463,6 +463,19 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
     // Resample the image using the method as specified.
     switch ( quality )
     {
+        case wxIMAGE_QUALITY_NORMAL:
+            // When downscaling, we prefer to use bilinear resampling as it
+            // results in better quality at reasonable speed.
+            if ( width <= old_width && height <= old_height )
+            {
+                image = ResampleBilinear(width, height);
+                break;
+            }
+
+            // Otherwise use NEAREST for upscaling.
+            wxFALLTHROUGH;
+
+        case wxIMAGE_QUALITY_FAST:
         case wxIMAGE_QUALITY_NEAREST:
             if ( old_width % width == 0 && old_width >= width &&
                 old_height % height == 0 && old_height >= height )
