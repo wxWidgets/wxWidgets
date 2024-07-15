@@ -288,10 +288,10 @@ wxGUIObjectUsage wxGetUsedResources(UseType useType)
 
     const auto hProcess = ::GetCurrentProcess();
 
-    return {
-            ::GetGuiResources(hProcess, flagsGDI),
-            ::GetGuiResources(hProcess, flagsUSER)
-           };
+    wxGUIObjectUsage usage;
+    usage.numGDI = ::GetGuiResources(hProcess, flagsGDI);
+    usage.numUSER = ::GetGuiResources(hProcess, flagsUSER);
+    return usage;
 }
 
 } // anonymous namespace
