@@ -4689,7 +4689,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         }
 
         wxDataViewEvent
-            event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKPathToItem(path));
+            event(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv, dv->GTKColumnToWX(column), dv->GTKPathToItem(path));
 #if GTK_CHECK_VERSION(2,12,0)
         if (wx_is_at_least_gtk2(12))
         {
