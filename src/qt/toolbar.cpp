@@ -147,16 +147,6 @@ wxQtToolbar::wxQtToolbar( wxWindow *parent, wxToolBar *handler )
 }
 
 
-QWidget *wxToolBar::GetHandle() const
-{
-    return m_qtToolBar;
-}
-
-void wxToolBar::Init()
-{
-    m_qtToolBar = nullptr;
-}
-
 wxToolBar::~wxToolBar()
 {
 }
@@ -164,8 +154,9 @@ wxToolBar::~wxToolBar()
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
                        const wxSize& size, long style, const wxString& name)
 {
-    m_qtToolBar = new wxQtToolbar( parent, this );
-    m_qtToolBar->setWindowTitle( wxQtConvertString( name ) );
+    m_qtWindow = new wxQtToolbar( parent, this );
+
+    GetQToolBar()->setWindowTitle( wxQtConvertString( name ) );
 
     if ( !wxControl::Create( parent, id, pos, size, style, wxDefaultValidator, name ) )
     {
@@ -175,6 +166,11 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
     SetWindowStyleFlag(style);
 
     return true;
+}
+
+QToolBar* wxToolBar::GetQToolBar() const
+{
+    return static_cast<QToolBar*>(m_qtWindow);
 }
 
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
@@ -224,10 +220,10 @@ void wxToolBar::SetWindowStyleFlag( long style )
 {
     wxToolBarBase::SetWindowStyleFlag(style);
 
-    if ( !m_qtToolBar )
+    if ( !GetQToolBar() )
         return;
 
-    m_qtToolBar->setOrientation( IsVertical() ? Qt::Vertical : Qt::Horizontal);
+    GetQToolBar()->setOrientation( IsVertical() ? Qt::Vertical : Qt::Horizontal);
 
     Qt::ToolButtonStyle buttonStyle = (Qt::ToolButtonStyle)GetButtonStyle();
 
@@ -272,11 +268,11 @@ QActionGroup* wxToolBar::GetActionGroup(size_t pos)
 {
     QActionGroup *actionGroup = nullptr;
     if (pos > 0)
-        actionGroup = m_qtToolBar->actions().at(pos-1)->actionGroup();
-    if (actionGroup == nullptr && (int)pos < m_qtToolBar->actions().size() - 1)
-        actionGroup = m_qtToolBar->actions().at(pos+1)->actionGroup();
+        actionGroup = GetQToolBar()->actions().at(pos-1)->actionGroup();
+    if (actionGroup == nullptr && (int)pos < GetQToolBar()->actions().size() - 1)
+        actionGroup = GetQToolBar()->actions().at(pos+1)->actionGroup();
     if (actionGroup == nullptr)
-        actionGroup = new QActionGroup(m_qtToolBar);
+        actionGroup = new QActionGroup(GetQToolBar());
     return actionGroup;
 }
 
@@ -284,8 +280,8 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
     QAction *before = nullptr;
-    if (pos < (size_t)m_qtToolBar->actions().size())
-        before = m_qtToolBar->actions().at(pos);
+    if (pos < (size_t)GetQToolBar()->actions().size())
+        before = GetQToolBar()->actions().at(pos);
 
     QAction *action;
     switch ( tool->GetStyle() )
@@ -300,7 +296,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             if (!HasFlag(wxTB_NO_TOOLTIPS))
                 tool->SetToolTip();
 
-            action = m_qtToolBar->insertWidget(before, tool->m_qtToolButton);
+            action = GetQToolBar()->insertWidget(before, tool->m_qtToolButton);
 
             switch (tool->GetKind())
             {
@@ -323,14 +319,14 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             if (tool->IsStretchable()) {
                 QWidget* spacer = new QWidget();
                 spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-                m_qtToolBar->insertWidget(before, spacer);
+                GetQToolBar()->insertWidget(before, spacer);
             } else
-                m_qtToolBar->insertSeparator(before);
+                GetQToolBar()->insertSeparator(before);
             break;
 
         case wxTOOL_STYLE_CONTROL:
             wxWindow* control = tool->GetControl();
-            m_qtToolBar->insertWidget(before, control->GetHandle());
+            GetQToolBar()->insertWidget(before, control->GetHandle());
             break;
     }
 

@@ -4571,6 +4571,24 @@ public:
     bool CanDragRowSize(int row) const;
 
     /**
+        Returns @true if the row labels can be resized by dragging with the
+        mouse.
+
+        @since 3.3.0
+    */
+    bool CanDragRowLabelSize();
+
+    /**
+        Returns @true if the column labels can be resized by dragging with the
+        mouse.
+
+        This is the same as CanDragRowLabelSize() but for column labels.
+
+        @since 3.3.0
+    */
+    bool CanDragColLabelSize();
+
+    /**
         Returns @true if columns can be hidden from the popup menu of the native header.
 
         @since 3.1.3
@@ -4645,6 +4663,24 @@ public:
     void DisableDragRowSize();
 
     /**
+        Disables row label sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragRowLabelSize().
+
+        @since 3.3.0
+    */
+    void DisableDragRowLabelSize();
+
+    /**
+        Disables column label sizing by dragging with the mouse.
+
+        Equivalent to passing @false to EnableDragColLabelSize().
+
+        @since 3.3.0
+    */
+    void DisableDragColLabelSize();
+
+    /**
         Disables column hiding from the header popup menu.
 
         Equivalent to passing @false to EnableHidingColumns().
@@ -4712,6 +4748,24 @@ public:
         @see DisableRowResize()
     */
     void EnableDragRowSize(bool enable = true);
+
+    /**
+        Enables or disables row label sizing by dragging with the mouse.
+
+        @see DisableDragRowLabelSize()
+
+        @since 3.3.0
+    */
+    void EnableDragRowLabelSize(bool enable = true);
+
+    /**
+        Enables or disables col label sizing by dragging with the mouse.
+
+        @see DisableDragColLabelSize()
+
+        @since 3.3.0
+    */
+    void EnableDragColLabelSize(bool enable = true);
 
     /**
         Enables or disables column hiding from the header popup menu.
@@ -5264,6 +5318,30 @@ public:
         rows or columns).
     */
     void SetSelectionMode(wxGridSelectionModes selmode);
+
+    /**
+        Return @true if overlay selection can be used (wxUSE_GRAPHICS_CONTEXT=1)
+        and DisableOverlaySelection() hadn't been called, @false otherwise.
+
+        @since 3.3.0
+
+        @see DisableOverlaySelection()
+    */
+    bool UsesOverlaySelection();
+
+    /**
+        Disable overlay selection if it is enabled.
+
+        Starting from wxWidgets 3.3.0, the wxGrid selection appearance is changed
+        from using a solid and opaque colour to denote selection to using a semi-
+        transparent area overlaid on the selected cells. Notice that the old behaviour
+        is still supported and can be reverted to by calling this function.
+
+        @since 3.3.0
+
+        @see UsesOverlaySelection()
+    */
+    void DisableOverlaySelection();
 
     ///@}
 
@@ -6500,6 +6578,14 @@ public:
         wxWidgets 2.9.5.
     @event{EVT_GRID_ROW_SIZE(func)}
         Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
+    @event{EVT_GRID_ROW_LABEL_SIZE(id, func)}
+        The user resized the row labels.
+        Corresponds to @c wxEVT_GRID_ROW_LABEL_SIZE event type.
+        This is new since wxWidgets 3.3.0.
+    @event{EVT_GRID_COL_LABEL_SIZE(id, func)}
+        The user resized the column labels.
+        Corresponds to @c wxEVT_GRID_COL_LABEL_SIZE event type.
+        This is new since wxWidgets 3.3.0.
     @endEventTable
 
     @library{wxcore}
@@ -6765,6 +6851,8 @@ wxEventType wxEVT_GRID_ROW_SIZE;
 wxEventType wxEVT_GRID_ROW_AUTO_SIZE;
 wxEventType wxEVT_GRID_COL_SIZE;
 wxEventType wxEVT_GRID_COL_AUTO_SIZE;
+wxEventType wxEVT_GRID_ROW_LABEL_SIZE;
+wxEventType wxEVT_GRID_COL_LABEL_SIZE;
 wxEventType wxEVT_GRID_RANGE_SELECTING;
 wxEventType wxEVT_GRID_RANGE_SELECTED;
 wxEventType wxEVT_GRID_CELL_CHANGING;

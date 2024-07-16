@@ -16,6 +16,12 @@ the `bakefile_gen` tool. Run it from `$(wx)/build/bakefiles` directory and it wi
 regenerate all outdated makefiles. See `$(wx)/build/bakefiles/README` for more
 details.
 
+You can also run Bakefile from a Docker or Podman container and avoid the need
+to install it (expanding "$(wx)" to be the path to wx install):
+
+    docker run --rm -v $(wx):$(wx) -w `pwd`
+           ghcr.io/vslavik/bakefile:0.2 bakefile_gen
+
 Note that it generates makefiles for samples, too.
 
 IMPORTANT NOTE: Don't forget to run autoconf in wxWidgets root directory

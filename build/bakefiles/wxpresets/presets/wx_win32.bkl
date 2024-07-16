@@ -275,6 +275,8 @@
             <sys-lib>kernel32</sys-lib>
             <sys-lib>user32</sys-lib>
             <sys-lib>gdi32</sys-lib>
+            <sys-lib>gdiplus</sys-lib>
+            <sys-lib>msimg32</sys-lib>
             <sys-lib>comdlg32</sys-lib>
             <sys-lib>winspool</sys-lib>
             <sys-lib>winmm</sys-lib>

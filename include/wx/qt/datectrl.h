@@ -50,10 +50,7 @@ public:
     virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) override;
     virtual bool GetRange(wxDateTime *dt1, wxDateTime *dt2) const override;
 
-    virtual QWidget *GetHandle() const override;
-
-private:
-    QDateEdit* m_qtDateEdit;
+    QDateEdit* GetQDateEdit() const;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDatePickerCtrl);
 };

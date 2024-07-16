@@ -96,6 +96,9 @@ Changes in behaviour not resulting in compilation errors
   not scale the size by the content scale factor of the DC any longer, as the
   size here is expressed in physical pixels and not in DIPs.
 
+- wxIMAGE_QUALITY_NEAREST has a different numeric value and is not the same
+  as wxIMAGE_QUALITY_NORMAL any longer, see documentation for more details.
+
 - wxTextCtrl::{Save,Load}File() will use RTF format when saving/loading files
   with .rtf extension, and not plain text any longer, by default for the
   platforms with RTF support. If you need to save/load plain text even for the
@@ -120,6 +123,12 @@ Changes in behaviour which may result in build errors
   However previously setting wxUSE_STL=1 enabled implicit conversion from
   wxString to std::[w]string which are not enabled by default now, please set
   wxUSE_STD_STRING_CONV_IN_WXSTRING=1 explicitly if you need them.
+
+- wxMSW now requires linking with gdiplus.lib and msimg32.lib.
+  This is done automatically in most cases, but if you use a static build of
+  the library with a non-MSVC compiler such as MinGW and do not use wx-config,
+  then you will need to add these libraries to your make or project files
+  yourself.
 
 - wxMotif and wxGTK1 ports have been removed, please use wxWidgets 3.2 if you
   still need them.

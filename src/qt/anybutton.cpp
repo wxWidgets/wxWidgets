@@ -77,22 +77,22 @@ bool wxQtPushButton::event(QEvent* e)
     return QPushButton::event(e);
 }
 
-wxAnyButton::wxAnyButton() :
-    m_qtPushButton(nullptr)
-{
-}
-
-
 void wxAnyButton::QtCreate(wxWindow *parent)
 {
     // create the basic push button (used in button and bmp button)
-    m_qtPushButton = new wxQtPushButton(parent, this);
-    m_qtPushButton->setAutoDefault(false);
+    m_qtWindow = new wxQtPushButton(parent, this);
+
+    GetQPushButton()->setAutoDefault(false);
+}
+
+QPushButton* wxAnyButton::GetQPushButton() const
+{
+    return static_cast<QPushButton*>(m_qtWindow);
 }
 
 void wxAnyButton::QtSetBitmap( const wxBitmapBundle &bitmapBundle )
 {
-    wxCHECK_RET(m_qtPushButton, "Invalid button.");
+    wxCHECK_RET(GetHandle(), "Invalid button.");
 
     if ( !bitmapBundle.IsOk() )
         return;
@@ -103,8 +103,8 @@ void wxAnyButton::QtSetBitmap( const wxBitmapBundle &bitmapBundle )
     QPixmap *pixmap = bitmap.GetHandle();
     if ( pixmap != nullptr )
     {
-        m_qtPushButton->setIcon(QIcon(*pixmap));
-        m_qtPushButton->setIconSize(pixmap->rect().size() / pixmap->devicePixelRatio());
+        GetQPushButton()->setIcon(QIcon(*pixmap));
+        GetQPushButton()->setIconSize(pixmap->rect().size() / pixmap->devicePixelRatio());
 
         InvalidateBestSize();
     }
@@ -114,17 +114,12 @@ void wxAnyButton::SetLabel( const wxString &label )
 {
     wxAnyButtonBase::SetLabel( label );
 
-    m_qtPushButton->setText( wxQtConvertString( label ));
+    GetQPushButton()->setText( wxQtConvertString( label ));
 }
 
 wxString wxAnyButton::GetLabel() const
 {
-    return wxQtConvertString( m_qtPushButton->text() );
-}
-
-QWidget *wxAnyButton::GetHandle() const
-{
-    return m_qtPushButton;
+    return wxQtConvertString( GetQPushButton()->text() );
 }
 
 wxBitmap wxAnyButton::DoGetBitmap(State state) const
@@ -148,24 +143,24 @@ void wxAnyButton::DoSetBitmap(const wxBitmapBundle& bitmap, State which)
 
 wxAnyButton::State wxAnyButton::QtGetCurrentState() const
 {
-    wxCHECK_MSG(m_qtPushButton, State_Normal, "Invalid button.");
+    wxCHECK_MSG(GetHandle(), State_Normal, "Invalid button.");
 
-    if ( !m_qtPushButton->isEnabled() )
+    if ( !GetQPushButton()->isEnabled() )
     {
         return State_Disabled;
     }
 
-    if ( m_qtPushButton->isChecked() || m_qtPushButton->isDown() )
+    if ( GetQPushButton()->isChecked() || GetQPushButton()->isDown() )
     {
         return State_Pressed;
     }
 
-    if ( HasCapture() || m_qtPushButton->underMouse() )
+    if ( HasCapture() || GetQPushButton()->underMouse() )
     {
         return State_Current;
     }
 
-    if ( m_qtPushButton->hasFocus() )
+    if ( GetQPushButton()->hasFocus() )
     {
         return State_Focused;
     }

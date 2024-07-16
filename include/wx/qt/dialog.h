@@ -14,7 +14,8 @@ class QDialog;
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
 {
 public:
-    wxDialog();
+    wxDialog() = default;
+
     wxDialog( wxWindow *parent, wxWindowID id,
             const wxString &title,
             const wxPoint &pos = wxDefaultPosition,

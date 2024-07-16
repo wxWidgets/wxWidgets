@@ -28,10 +28,6 @@ wxQtDialog::wxQtDialog( wxWindow *parent, wxDialog *handler )
 {
 }
 
-wxDialog::wxDialog()
-{
-}
-
 wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
         const wxString &title,
         const wxPoint &pos,

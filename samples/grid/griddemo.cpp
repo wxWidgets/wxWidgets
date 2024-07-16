@@ -74,6 +74,17 @@ public:
         dc.DrawRectangle(rect);
     }
 
+    virtual void DrawHighlighted(const wxGrid& WXUNUSED(grid),
+                                 wxDC& dc,
+                                 wxRect& rect,
+                                 int WXUNUSED(rowOrCol),
+                                 int WXUNUSED(flags)) const override
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(wxColour(240, 20, 15, 180)));
+        dc.DrawRectangle(rect);
+    }
+
 private:
     const wxColour m_colFg, m_colBg;
 };
@@ -281,6 +292,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
+    EVT_MENU(ID_TOGGLEROWLABELSIZING, GridFrame::ToggleRowLabelSizing)
+    EVT_MENU(ID_TOGGLECOLLABELSIZING, GridFrame::ToggleColLabelSizing)
     EVT_MENU( ID_TOGGLEROWMOVING, GridFrame::ToggleRowMoving)
     EVT_MENU( ID_TOGGLECOLMOVING, GridFrame::ToggleColMoving )
     EVT_MENU( ID_TOGGLECOLHIDING, GridFrame::ToggleColHiding )
@@ -335,6 +348,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
     EVT_MENU( ID_TABULAR_TABLE, GridFrame::OnTabularTable)
 
+    EVT_MENU( ID_SELECT_OVERLAY, GridFrame::OnOverlaySelection)
     EVT_MENU( ID_DESELECT_CELL, GridFrame::DeselectCell)
     EVT_MENU( ID_DESELECT_COL, GridFrame::DeselectCol)
     EVT_MENU( ID_DESELECT_ROW, GridFrame::DeselectRow)
@@ -369,6 +383,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
     EVT_GRID_COL_AUTO_SIZE( GridFrame::OnColAutoSize )
+    EVT_GRID_ROW_LABEL_SIZE( GridFrame::OnRowLabelSize )
+    EVT_GRID_COL_LABEL_SIZE( GridFrame::OnColLabelSize )
     EVT_GRID_ROW_MOVE( GridFrame::OnRowMove )
     EVT_GRID_COL_MOVE( GridFrame::OnColMove )
 
@@ -441,6 +457,8 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_TOGGLEEDIT,"&Editable");
     viewMenu->AppendCheckItem(ID_TOGGLEROWSIZING, "Ro&w drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLECOLSIZING, "C&ol drag-resize");
+    viewMenu->AppendCheckItem(ID_TOGGLEROWLABELSIZING, "Row label drag-resize");
+    viewMenu->AppendCheckItem(ID_TOGGLECOLLABELSIZING, "Col label drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLEROWMOVING, "Row drag-move");
     viewMenu->AppendCheckItem(ID_TOGGLECOLMOVING, "Col drag-&move");
     viewMenu->AppendCheckItem(ID_TOGGLECOLHIDING, "Col hiding popup menu");
@@ -526,6 +544,8 @@ GridFrame::GridFrame()
     editMenu->AppendCheckItem( ID_FREEZE_OR_THAW, "Freeze up to cursor\tCtrl-F" );
 
     wxMenu *selectMenu = new wxMenu;
+    selectMenu->Append( ID_SELECT_OVERLAY, "Disable &overlay selection\tCtrl+Shift+O" );
+    selectMenu->AppendSeparator();
     selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
                         "When off, old selection is deselected before "
                         "selecting the new cells", wxITEM_CHECK );
@@ -815,6 +835,8 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEEDIT, true );
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
+    GetMenuBar()->Check(ID_TOGGLEROWLABELSIZING, false);
+    GetMenuBar()->Check(ID_TOGGLECOLLABELSIZING, false);
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
     GetMenuBar()->Check( ID_TOGGLECOLHIDING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
@@ -869,6 +891,21 @@ void GridFrame::ToggleColSizing( wxCommandEvent& WXUNUSED(ev) )
     grid->EnableDragColSize(
         GetMenuBar()->IsChecked( ID_TOGGLECOLSIZING ) );
 }
+
+
+void GridFrame::ToggleRowLabelSizing(wxCommandEvent& WXUNUSED(ev))
+{
+    grid->EnableDragRowLabelSize(
+        GetMenuBar()->IsChecked(ID_TOGGLEROWLABELSIZING));
+}
+
+
+void GridFrame::ToggleColLabelSizing(wxCommandEvent& WXUNUSED(ev))
+{
+    grid->EnableDragColLabelSize(
+        GetMenuBar()->IsChecked(ID_TOGGLECOLLABELSIZING));
+}
+
 
 void GridFrame::ToggleRowMoving( wxCommandEvent& WXUNUSED(ev) )
 {
@@ -1634,6 +1671,14 @@ void GridFrame::SelectAll(wxCommandEvent& WXUNUSED(event))
       grid->SelectAll();
 }
 
+void GridFrame::OnOverlaySelection(wxCommandEvent& WXUNUSED(event))
+{
+    grid->DisableOverlaySelection();
+    grid->ForceRefresh();
+
+    wxLogMessage("Overlay selection disabled");
+}
+
 void GridFrame::OnAddToSelectToggle(wxCommandEvent& event)
 {
     m_addToSel = event.IsChecked();
@@ -1713,6 +1758,23 @@ void GridFrame::OnColAutoSize( wxGridSizeEvent &event )
     {
         event.Skip();
     }
+}
+
+
+void GridFrame::OnRowLabelSize(wxGridSizeEvent& ev)
+{
+    wxLogMessage("Resized row label, new width = %d",
+        grid->GetRowLabelSize());
+
+    ev.Skip();
+}
+
+void GridFrame::OnColLabelSize(wxGridSizeEvent& ev)
+{
+    wxLogMessage("Resized column label, new height = %d",
+        grid->GetColLabelSize());
+
+    ev.Skip();
 }
 
 void GridFrame::OnRowMove(wxGridEvent& event)

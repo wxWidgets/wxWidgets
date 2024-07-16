@@ -111,6 +111,14 @@ function(wx_set_common_target_properties target_name)
         set_target_properties(${target_name} PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
     endif()
 
+    if(NOT WIN32 AND wxUSE_VISIBILITY)
+        set_target_properties(${target_name} PROPERTIES
+            C_VISIBILITY_PRESET hidden
+            CXX_VISIBILITY_PRESET hidden
+            VISIBILITY_INLINES_HIDDEN TRUE
+        )
+    endif()
+
     if(MSVC)
         if(wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
             set(MSVC_WARNING_LEVEL "/W3")
@@ -346,6 +354,8 @@ function(wx_set_target_properties target_name)
             kernel32
             user32
             gdi32
+            gdiplus
+            msimg32
             comdlg32
             winspool
             winmm

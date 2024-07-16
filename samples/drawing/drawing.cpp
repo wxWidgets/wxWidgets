@@ -573,7 +573,7 @@ bool MyApp::DoSetAppearance(int menuId)
             wxLogStatus("Appearance couldn't be changed.");
             break;
 
-        case wxApp::AppearanceResult::Success:
+        case wxApp::AppearanceResult::Ok:
             wxLogStatus("Appearance changed successfully.");
             return true;
 

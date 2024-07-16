@@ -100,11 +100,6 @@ public:
     }
 };
 
-wxRadioButton::wxRadioButton() :
-    m_qtRadioButton(nullptr)
-{
-}
-
 wxRadioButton::wxRadioButton( wxWindow *parent,
                wxWindowID id,
                const wxString& label,
@@ -126,8 +121,9 @@ bool wxRadioButton::Create( wxWindow *parent,
              const wxValidator& validator,
              const wxString& name)
 {
-    m_qtRadioButton = new wxQtRadioButton( parent, this );
-    m_qtRadioButton->setText( wxQtConvertString( label ));
+    m_qtWindow = new wxQtRadioButton( parent, this );
+
+    GetQRadioButton()->setText( wxQtConvertString( label ));
 
     if ( !wxRadioButtonBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
@@ -137,7 +133,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     // buttons to prevent them implicitly becoming part of an existing group.
     if ( (style & wxRB_GROUP) || (style & wxRB_SINGLE) )
     {
-        QtStartNewGroup(m_qtRadioButton);
+        QtStartNewGroup(GetQRadioButton());
     }
     else
     {
@@ -152,31 +148,31 @@ bool wxRadioButton::Create( wxWindow *parent,
     return true;
 }
 
+QRadioButton* wxRadioButton::GetQRadioButton() const
+{
+    return static_cast<QRadioButton*>(m_qtWindow);
+}
+
 void wxRadioButton::SetValue(bool value)
 {
-    m_qtRadioButton->setChecked( value );
+    GetQRadioButton()->setChecked( value );
 }
 
 bool wxRadioButton::GetValue() const
 {
-    return m_qtRadioButton->isChecked();
-}
-
-QWidget *wxRadioButton::GetHandle() const
-{
-    return m_qtRadioButton;
+    return GetQRadioButton()->isChecked();
 }
 
 wxString wxRadioButton::GetLabel() const
 {
-    return wxQtConvertString( m_qtRadioButton->text() );
+    return wxQtConvertString( GetQRadioButton()->text() );
 }
 
 void wxRadioButton::SetLabel(const wxString& label)
 {
     wxRadioButtonBase::SetLabel(label);
 
-    m_qtRadioButton->setText( wxQtConvertString(label) );
+    GetQRadioButton()->setText( wxQtConvertString(label) );
 }
 
 #endif // wxUSE_RADIOBTN

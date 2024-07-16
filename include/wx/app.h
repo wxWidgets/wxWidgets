@@ -686,7 +686,7 @@ public:
     enum class AppearanceResult
     {
         Failure,
-        Success,
+        Ok,
         CannotChange
     };
 

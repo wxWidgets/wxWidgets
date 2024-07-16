@@ -852,6 +852,17 @@ void wxDataViewCtrl::OnSize(wxSizeEvent& event)
   event.Skip();
 }
 
+void wxDataViewCtrl::OnContextMenu(wxContextMenuEvent& event)
+{
+    wxPoint pos = ScreenToClient(event.GetPosition());
+    wxDataViewItem item;
+    wxDataViewColumn *col;
+    HitTest(pos, item, col);
+
+    wxDataViewEvent event2(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, this, col, item);
+    GetEventHandler()->ProcessEvent(event2);
+}
+
 wxSize wxDataViewCtrl::DoGetBestSize() const
 {
     wxSize best = wxControl::DoGetBestSize();
@@ -864,6 +875,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl,wxDataViewCtrlBase);
 
 wxBEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_SIZE(wxDataViewCtrl::OnSize)
+  EVT_CONTEXT_MENU(wxDataViewCtrl::OnContextMenu)
 wxEND_EVENT_TABLE()
 
 #endif // !wxHAS_GENERIC_DATAVIEWCTRL

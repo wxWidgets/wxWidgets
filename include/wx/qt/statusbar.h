@@ -30,8 +30,7 @@ public:
     virtual int GetBorderX() const override;
     virtual int GetBorderY() const override;
 
-    QStatusBar *GetQStatusBar() const { return m_qtStatusBar; }
-    QWidget *GetHandle() const override;
+    QStatusBar* GetQStatusBar() const;
 
 protected:
     virtual void DoUpdateStatusText(int number) override;
@@ -39,7 +38,6 @@ protected:
 private:
     void CreateFieldsIfNeeded();
 
-    QStatusBar *m_qtStatusBar = nullptr;
     std::vector<QWidget*> m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);

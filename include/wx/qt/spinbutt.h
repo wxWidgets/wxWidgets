@@ -14,7 +14,8 @@ class QSpinBox;
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
-    wxSpinButton();
+    wxSpinButton() = default;
+
     wxSpinButton(wxWindow *parent,
                  wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -33,12 +34,9 @@ public:
     virtual void SetValue(int val) override;
     virtual void SetRange(int min, int max) override;
 
-    virtual QWidget *GetHandle() const override;
+    QSpinBox* GetQSpinBox() const;
 
-private:
-    QSpinBox *m_qtSpinBox;
-
-    wxDECLARE_DYNAMIC_CLASS( wxSpinButton );
+    wxDECLARE_DYNAMIC_CLASS(wxSpinButton);
 };
 
 #endif // _WX_QT_SPINBUTT_H_

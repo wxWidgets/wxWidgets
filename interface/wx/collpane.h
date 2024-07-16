@@ -56,14 +56,10 @@ wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
     GetPane() as the parent for the controls which must go in the pane, @b not the
     wxCollapsiblePane itself!).
 
-    Note that because this control can dynamically (and drastically) change its
-    size at run-time, you should set its proportion to zero if putting it inside
-    of a sizer. This is because otherwise all other windows with
-    non-null proportion values will automatically resize each time the user
-    expands or collapse the pane window usually resulting in a weird,
-    flickering effect.
-
-    Usage sample:
+    Note that when using this control inside a sizer, you will usually want to
+    call wxWindow::Layout() whenever its size changes due to the pane being
+    opened or closed, in order to adjust the positions of the neighbouring
+    controls, for example:
 
     @code
     wxCollapsiblePane *collpane = new wxCollapsiblePane(this, wxID_ANY, "Details:");
@@ -71,6 +67,12 @@ wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
     // add the pane with a zero proportion value to the 'sz' sizer which contains it
     sz->Add(collpane,
             wxSizerFlags().Expand().Border(wxALL, wxSizerFlags::GetDefaultBorder()));
+
+    // but also ensure that we relayout the entire window when its state
+    // changes to give it enough space when it expands or reduce the space
+    // taken by it when it collapses
+    collpane->Bind(wxEVT_COLLAPSIBLEPANE_CHANGED,
+                   [this](wxCollapsiblePaneEvent &) { Layout(); });
 
     // now add a test label in the collapsible pane using a sizer to layout it:
     wxWindow *win = collpane->GetPane();

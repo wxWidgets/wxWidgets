@@ -866,9 +866,10 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 {
 #ifndef __WXUNIVERSAL__
+    const wxPoint mouse = wxGetMousePosition();
+
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
     {
-        wxPoint mouse = wxGetMousePosition();
         x = mouse.x;
         y = mouse.y;
     }
@@ -876,6 +877,14 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     {
         ClientToScreen( &x , &y ) ;
     }
+
+    if ( x == mouse.x )
+    {
+        // move the menu just off the cursor so that no menu item is pre-selected,
+        // for consistency with native popups and other platforms
+        x += 1;
+    }
+
     menu->GetPeer()->PopUp(this, x, y);
     return true;
 #else

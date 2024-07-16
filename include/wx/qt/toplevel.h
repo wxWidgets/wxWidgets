@@ -12,7 +12,8 @@
 class WXDLLIMPEXP_CORE wxTopLevelWindowQt : public wxTopLevelWindowBase
 {
 public:
-    wxTopLevelWindowQt();
+    wxTopLevelWindowQt() = default;
+
     wxTopLevelWindowQt(wxWindow *parent,
                wxWindowID winid,
                const wxString& title,

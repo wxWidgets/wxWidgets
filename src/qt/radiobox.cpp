@@ -65,13 +65,6 @@ void wxQtButtonGroup::buttonClicked(QAbstractButton *qbutton)
 wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 
-wxRadioBox::wxRadioBox() :
-    m_qtGroupBox(nullptr),
-    m_qtButtonGroup(nullptr),
-    m_qtGridLayout(nullptr)
-{
-}
-
 wxRadioBox::wxRadioBox(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
@@ -118,6 +111,10 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 }
 
+QGroupBox* wxRadioBox::GetQGroupBox() const
+{
+    return static_cast<QGroupBox*>(m_qtWindow);
+}
 
 static void AddChoices( QButtonGroup *qtButtonGroup, QGridLayout *qtGridLayout, int count, const wxString choices[], int style, int majorDim )
 {
@@ -176,9 +173,10 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
-    m_qtGroupBox = new wxQtRadioBox( parent, this );
-    m_qtGroupBox->setTitle( wxQtConvertString( title ) );
-    m_qtButtonGroup = new wxQtButtonGroup( m_qtGroupBox, this );
+    m_qtWindow = new wxQtRadioBox( parent, this );
+
+    GetQGroupBox()->setTitle( wxQtConvertString( title ) );
+    m_qtButtonGroup = new wxQtButtonGroup( GetQGroupBox(), this );
 
     if ( !(style & (wxRA_SPECIFY_ROWS | wxRA_SPECIFY_COLS)) )
         style |= wxRA_SPECIFY_COLS;
@@ -195,7 +193,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     horzLayout->addLayout(vertLayout);
     horzLayout->addStretch();
 
-    m_qtGroupBox->setLayout(horzLayout);
+    GetQGroupBox()->setLayout(horzLayout);
 
     SetMajorDim(majorDim == 0 ? n : majorDim, style);
     return wxControl::Create( parent, id, pos, size, style, val, name );
@@ -218,9 +216,9 @@ static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
-    if ( enable && !m_qtGroupBox->isEnabled() )
+    if ( enable && !GetQGroupBox()->isEnabled() )
     {
-        m_qtGroupBox->setEnabled( true );
+        GetQGroupBox()->setEnabled( true );
 
         for ( unsigned int i = 0; i < GetCount(); ++i )
         {
@@ -242,7 +240,7 @@ bool wxRadioBox::Enable(unsigned int n, bool enable)
 
 bool wxRadioBox::Enable( bool enable )
 {
-    if ( m_qtGroupBox->isEnabled() == enable )
+    if ( GetQGroupBox()->isEnabled() == enable )
     {
         for ( unsigned int i = 0; i < GetCount(); ++i )
         {
@@ -252,16 +250,16 @@ bool wxRadioBox::Enable( bool enable )
         }
     }
 
-    m_qtGroupBox->setEnabled( enable );
+    GetQGroupBox()->setEnabled( enable );
 
     return true;
 }
 
 bool wxRadioBox::Show(unsigned int n, bool show)
 {
-    if ( show && !m_qtGroupBox->isVisible() )
+    if ( show && !GetQGroupBox()->isVisible() )
     {
-        m_qtGroupBox->setVisible(true);
+        GetQGroupBox()->setVisible(true);
 
         for ( unsigned int i = 0; i < GetCount(); ++i )
         {
@@ -287,10 +285,10 @@ bool wxRadioBox::Show( bool show )
     if ( !wxControl::Show(show) )
         return false;
 
-    if ( !m_qtGroupBox )
+    if ( !GetQGroupBox() )
         return false;
 
-    if( m_qtGroupBox->isVisible() == show )
+    if( GetQGroupBox()->isVisible() == show )
     {
         for( unsigned int i = 0; i < GetCount(); ++i )
         {
@@ -300,7 +298,7 @@ bool wxRadioBox::Show( bool show )
         }
     }
 
-    m_qtGroupBox->setVisible( show );
+    GetQGroupBox()->setVisible( show );
 
     return true;
 }
@@ -362,21 +360,16 @@ int wxRadioBox::GetSelection() const
         return wxNOT_FOUND;
 }
 
-QWidget *wxRadioBox::GetHandle() const
-{
-    return m_qtGroupBox;
-}
-
 void wxRadioBox::SetLabel(const wxString& label)
 {
     wxControlBase::SetLabel( label );
 
-    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
+    GetQGroupBox()->setTitle( wxQtConvertString( label ) );
 }
 
 wxString wxRadioBox::GetLabel() const
 {
-    return wxQtConvertString( m_qtGroupBox->title() );
+    return wxQtConvertString( GetQGroupBox()->title() );
 }
 
 #endif // wxUSE_RADIOBOX

@@ -710,18 +710,11 @@ wxDropSource::wxDropSource(wxWindow *win,
                            const wxIcon &iconCopy,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
+    : m_iconCopy(iconCopy)
+    , m_iconMove(iconMove)
+    , m_iconNone(iconNone)
 {
-    m_waiting = true;
-
-    m_iconWindow = nullptr;
-
-    m_window = win;
-    m_widget = win->m_widget;
-    if (win->m_wxwindow) m_widget = win->m_wxwindow;
-
-    m_retValue = wxDragNone;
-
-    SetIcons(iconCopy, iconMove, iconNone);
+    Init(win);
 }
 
 wxDropSource::wxDropSource(wxDataObject& data,
@@ -729,29 +722,20 @@ wxDropSource::wxDropSource(wxDataObject& data,
                            const wxIcon &iconCopy,
                            const wxIcon &iconMove,
                            const wxIcon &iconNone)
+    : m_iconCopy(iconCopy)
+    , m_iconMove(iconMove)
+    , m_iconNone(iconNone)
 {
-    m_waiting = true;
-
+    Init(win);
     SetData( data );
-
-    m_iconWindow = nullptr;
-
-    m_window = win;
-    m_widget = win->m_widget;
-    if (win->m_wxwindow) m_widget = win->m_wxwindow;
-
-    m_retValue = wxDragNone;
-
-    SetIcons(iconCopy, iconMove, iconNone);
 }
 
-void wxDropSource::SetIcons(const wxIcon &iconCopy,
-                            const wxIcon &iconMove,
-                            const wxIcon &iconNone)
+void wxDropSource::Init(wxWindow* win)
 {
-    m_iconCopy = iconCopy;
-    m_iconMove = iconMove;
-    m_iconNone = iconNone;
+    m_waiting = true;
+    m_iconWindow = nullptr;
+    m_retValue = wxDragNone;
+    m_widget = win->m_wxwindow ? win->m_wxwindow : win->m_widget;
 
     if ( !m_iconCopy.IsOk() )
         m_iconCopy = wxIcon(page_xpm);
@@ -873,8 +857,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     for (size_t i = 0; i < count; i++)
     {
         GdkAtom atom = array[i];
-        wxLogTrace(TRACE_DND, wxT("Drop source: Supported atom %s"),
-                   gdk_atom_name( atom ));
         gtk_target_list_add( target_list, atom, 0, 0 );
     }
     delete[] array;
@@ -905,6 +887,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
+    gtk_target_list_unref(target_list);
+
     if ( !context )
     {
         // this can happen e.g. if gdk_pointer_grab() failed
@@ -928,6 +912,16 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     g_signal_handlers_disconnect_by_func (m_iconWindow,
                                           (gpointer) gtk_dnd_window_configure_callback, this);
+#ifdef __WXGTK3__
+    GtkWidget* drawWidget = m_iconWindow;
+    if (gtk_check_version(3,20,0) == nullptr)
+        drawWidget = gtk_bin_get_child(GTK_BIN(drawWidget));
+    if (drawWidget)
+    {
+        g_signal_handlers_disconnect_matched(
+            drawWidget, G_SIGNAL_MATCH_FUNC, 0, 0, nullptr, (void*)draw_icon, nullptr);
+    }
+#endif
     g_object_unref(m_iconWindow);
     m_iconWindow = nullptr;
 

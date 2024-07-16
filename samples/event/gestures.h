@@ -35,6 +35,7 @@ private:
     wxAffineMatrix2D m_affineMatrix;
     double m_lastZoomFactor;
     double m_lastRotationAngle;
+    wxPoint m_lastGesturePos;
 };
 
 #endif // _WX_GESTURES_H_

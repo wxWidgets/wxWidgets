@@ -94,25 +94,22 @@ public:
     // start drag action
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) override;
 
+    // implementation
+
+    GdkDragContext* m_dragContext;
+    wxDragResult m_retValue;
+    bool m_waiting;
+
+private:
     void PrepareIcon( int action, GdkDragContext *context );
 
     GtkWidget       *m_widget;
     GtkWidget       *m_iconWindow;
-    GdkDragContext  *m_dragContext;
-    wxWindow        *m_window;
-
-    wxDragResult     m_retValue;
     wxIcon           m_iconCopy,
                      m_iconMove,
                      m_iconNone;
 
-    bool             m_waiting;
-
-private:
-    // common part of both ctors
-    void SetIcons(const wxIcon& copy,
-                  const wxIcon& move,
-                  const wxIcon& none);
+    void Init(wxWindow* win);
 
     // GTK implementation
     void GTKConnectDragSignals();

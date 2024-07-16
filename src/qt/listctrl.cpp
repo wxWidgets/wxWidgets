@@ -1336,11 +1336,6 @@ void wxQtEventSignalHandler< QTreeView, wxListCtrl >::HandleDestroyedSignal()
     this->setModel(nullptr);
 }
 
-wxListCtrl::wxListCtrl()
-{
-    Init();
-}
-
 wxListCtrl::wxListCtrl(wxWindow *parent,
            wxWindowID id,
            const wxPoint& pos,
@@ -1349,7 +1344,6 @@ wxListCtrl::wxListCtrl(wxWindow *parent,
            const wxValidator& validator,
            const wxString& name)
 {
-    Init();
     Create( parent, id, pos, size, style, validator, name );
 }
 
@@ -1366,14 +1360,14 @@ bool wxListCtrl::Create(wxWindow *parent,
         ? new wxQtVirtualListModel(this)
         : new wxQtListModel(this);
 
-    m_qtWindow =
-    m_qtTreeWidget = new wxQtListTreeWidget(parent, this);
-    m_qtTreeWidget->setModel(m_model);
-    m_model->SetView(m_qtTreeWidget);
+    m_qtWindow = new wxQtListTreeWidget(parent, this);
 
-    m_qtTreeWidget->setRootIsDecorated(false);
-    m_qtTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_qtTreeWidget->setTabKeyNavigation(true);
+    GetQListTreeWidget()->setModel(m_model);
+    m_model->SetView(GetQListTreeWidget());
+
+    GetQListTreeWidget()->setRootIsDecorated(false);
+    GetQListTreeWidget()->setSelectionBehavior(QAbstractItemView::SelectRows);
+    GetQListTreeWidget()->setTabKeyNavigation(true);
 
     if ( !wxListCtrlBase::Create(parent, id, pos, size,
                                  style | wxVSCROLL | wxHSCROLL,
@@ -1384,16 +1378,14 @@ bool wxListCtrl::Create(wxWindow *parent,
     return true;
 }
 
-void wxListCtrl::Init()
-{
-    m_hasCheckBoxes = false;
-    m_model = nullptr;
-    m_qtTreeWidget = nullptr;
-}
-
 wxListCtrl::~wxListCtrl()
 {
     m_model->deleteLater();
+}
+
+wxQtListTreeWidget* wxListCtrl::GetQListTreeWidget() const
+{
+    return static_cast<wxQtListTreeWidget*>(m_qtWindow);
 }
 
 bool wxListCtrl::SetForegroundColour(const wxColour& col)
@@ -1424,12 +1416,12 @@ bool wxListCtrl::SetColumn(int col, const wxListItem& info)
 
 int wxListCtrl::GetColumnWidth(int col) const
 {
-    return m_qtTreeWidget->columnWidth(col);
+    return GetQListTreeWidget()->columnWidth(col);
 }
 
 bool wxListCtrl::SetColumnWidth(int col, int width)
 {
-    const auto header = m_qtTreeWidget->header();
+    const auto header = GetQListTreeWidget()->header();
 
     if ( header &&
          col == GetColumnIndexFromOrder(col) &&
@@ -1442,13 +1434,13 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 
     if ( width >= 0 )
     {
-        m_qtTreeWidget->setColumnWidth(col, width);
+        GetQListTreeWidget()->setColumnWidth(col, width);
     }
     else
     {
         if ( width == wxLIST_AUTOSIZE_USEHEADER )
         {
-            const auto header = m_qtTreeWidget->header();
+            const auto header = GetQListTreeWidget()->header();
             const QHeaderView::ResizeMode oldResizeMode = header->sectionResizeMode(col);
 
             header->setSectionResizeMode(col, QHeaderView::ResizeToContents);
@@ -1460,10 +1452,10 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
             // Temporarily hide the header if it's shown as we don't want the header section
             // to be considered by resizeColumnToContents() because it's size will be honored
             // if it's larger than the column content.
-            const bool wasHidden = m_qtTreeWidget->isHeaderHidden();
-            m_qtTreeWidget->setHeaderHidden(true);
-            m_qtTreeWidget->resizeColumnToContents(col);
-            m_qtTreeWidget->setHeaderHidden(wasHidden);
+            const bool wasHidden = GetQListTreeWidget()->isHeaderHidden();
+            GetQListTreeWidget()->setHeaderHidden(true);
+            GetQListTreeWidget()->resizeColumnToContents(col);
+            GetQListTreeWidget()->setHeaderHidden(wasHidden);
         }
      }
 
@@ -1492,16 +1484,16 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
 
 int wxListCtrl::GetCountPerPage() const
 {
-    wxCHECK_MSG(m_qtTreeWidget->GetRowCount() > 0, 0,
+    wxCHECK_MSG(GetQListTreeWidget()->GetRowCount() > 0, 0,
         "wxListCtrl needs at least one item to calculate the count per page");
-    return m_qtTreeWidget->GetCountPerPage();
+    return GetQListTreeWidget()->GetCountPerPage();
 }
 
 wxRect wxListCtrl::GetViewRect() const
 {
     // this may not be exact but should be a good approximation:
-    wxRect rect = wxQtConvertRect(m_qtTreeWidget->rect());
-    const int h = m_qtTreeWidget->header()->defaultSectionSize();
+    wxRect rect = wxQtConvertRect(GetQListTreeWidget()->rect());
+    const int h = GetQListTreeWidget()->header()->defaultSectionSize();
     rect.SetTop(h);
     rect.SetHeight(rect.GetHeight() - h);
     return rect;
@@ -1509,7 +1501,7 @@ wxRect wxListCtrl::GetViewRect() const
 
 wxTextCtrl* wxListCtrl::GetEditControl() const
 {
-    return m_qtTreeWidget->GetEditControl();
+    return GetQListTreeWidget()->GetEditControl();
 }
 
 bool wxListCtrl::GetItem(wxListItem& info) const
@@ -1633,10 +1625,10 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
 
     // Calculate the union of the bounds of the items in the first and last
     // column for the given row.
-    QRect first = m_qtTreeWidget->visualRect(m_model->index(item, 0));
-    QRect last = m_qtTreeWidget->visualRect(m_model->index(item, columnCount-1));
+    QRect first = GetQListTreeWidget()->visualRect(m_model->index(item, 0));
+    QRect last = GetQListTreeWidget()->visualRect(m_model->index(item, columnCount-1));
     rect = wxQtConvertRect(first.united(last));
-    rect.Offset(0, m_qtTreeWidget->GetHeaderHeight());
+    rect.Offset(0, GetQListTreeWidget()->GetHeaderHeight());
 
     return true;
 }
@@ -1652,9 +1644,9 @@ bool wxListCtrl::GetSubItemRect(long item,
     wxCHECK_MSG(subItem >= 0 && subItem < GetColumnCount(),
         false, "invalid column index in GetSubItemRect");
 
-    const QModelIndex index = m_qtTreeWidget->model()->index(item, subItem);
-    rect = wxQtConvertRect(m_qtTreeWidget->visualRect(index));
-    rect.Offset(0, m_qtTreeWidget->GetHeaderHeight());
+    const QModelIndex index = GetQListTreeWidget()->model()->index(item, subItem);
+    rect = wxQtConvertRect(GetQListTreeWidget()->visualRect(index));
+    rect.Offset(0, GetQListTreeWidget()->GetHeaderHeight());
 
     switch ( code )
     {
@@ -1668,7 +1660,7 @@ bool wxListCtrl::GetSubItemRect(long item,
                 QVariant var = index.data(Qt::DecorationRole);
                 if ( var.isValid() )
                 {
-                    const int iconWidth = m_qtTreeWidget->iconSize().width();
+                    const int iconWidth = GetQListTreeWidget()->iconSize().width();
 
                     if ( code == wxLIST_RECT_ICON )
                     {
@@ -1796,23 +1788,23 @@ wxFont wxListCtrl::GetItemFont( long item ) const
 
 int wxListCtrl::GetSelectedItemCount() const
 {
-    QItemSelectionModel *selectionModel = m_qtTreeWidget->selectionModel();
+    QItemSelectionModel *selectionModel = GetQListTreeWidget()->selectionModel();
     QModelIndexList selectedRows = selectionModel->selectedRows();
     return selectedRows.length();
 }
 
 wxColour wxListCtrl::GetTextColour() const
 {
-    const QPalette palette = m_qtTreeWidget->palette();
+    const QPalette palette = GetQListTreeWidget()->palette();
     const QColor color = palette.color(QPalette::WindowText);
     return wxColour(color);
 }
 
 void wxListCtrl::SetTextColour(const wxColour& col)
 {
-    QPalette palette = m_qtTreeWidget->palette();
+    QPalette palette = GetQListTreeWidget()->palette();
     palette.setColor(QPalette::WindowText, col.GetQColor());
-    m_qtTreeWidget->setPalette(palette);
+    GetQListTreeWidget()->setPalette(palette);
 }
 
 long wxListCtrl::GetTopItem() const
@@ -1880,9 +1872,9 @@ void wxListCtrl::SetSingleStyle(long style, bool add)
 void wxListCtrl::SetWindowStyleFlag(long style)
 {
     m_windowStyle = style;
-    m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0 || (style & wxLC_REPORT) == 0);
-    m_qtTreeWidget->EnableEditLabel((style & wxLC_EDIT_LABELS) != 0);
-    m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0
+    GetQListTreeWidget()->setHeaderHidden((style & wxLC_NO_HEADER) != 0 || (style & wxLC_REPORT) == 0);
+    GetQListTreeWidget()->EnableEditLabel((style & wxLC_EDIT_LABELS) != 0);
+    GetQListTreeWidget()->setSelectionMode((style & wxLC_SINGLE_SEL) != 0
         ? QAbstractItemView::SingleSelection
         : QAbstractItemView::ExtendedSelection
     );
@@ -1894,8 +1886,8 @@ void wxListCtrl::SetWindowStyleFlag(long style)
         m_model = needVirtual
             ? new wxQtVirtualListModel(this)
             : new wxQtListModel(this);
-        m_model->SetView(m_qtTreeWidget);
-        m_qtTreeWidget->setModel(m_model);
+        m_model->SetView(GetQListTreeWidget());
+        GetQListTreeWidget()->setModel(m_model);
         delete oldModel;
     }
 }
@@ -1936,8 +1928,8 @@ void wxListCtrl::DoUpdateImages(int which)
     if ( imageList )
     {
         const wxBitmap bitmap = imageList->GetBitmap(0);
-        m_qtTreeWidget->setIconSize(wxQtConvertSize(bitmap.GetLogicalSize()));
-        m_qtTreeWidget->update();
+        GetQListTreeWidget()->setIconSize(wxQtConvertSize(bitmap.GetLogicalSize()));
+        GetQListTreeWidget()->update();
     }
 }
 
@@ -2025,17 +2017,17 @@ wxTextCtrl* wxListCtrl::EditLabel(long item,
     // Open the editor first so that it's available when handling events as per
     // wx standard.
     const QModelIndex index = m_model->index(item, 0);
-    m_qtTreeWidget->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-    m_qtTreeWidget->openPersistentEditor(index);
+    GetQListTreeWidget()->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+    GetQListTreeWidget()->openPersistentEditor(index);
 
     wxListEvent event;
     InitListEvent(event, this, wxEVT_LIST_BEGIN_LABEL_EDIT, index);
 
     // close the editor again if event is vetoed
     if (HandleWindowEvent(event) && !event.IsAllowed())
-        m_qtTreeWidget->closePersistentEditor(index);
+        GetQListTreeWidget()->closePersistentEditor(index);
 
-    return m_qtTreeWidget->GetEditControl();
+    return GetQListTreeWidget()->GetEditControl();
 }
 
 bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
@@ -2044,7 +2036,7 @@ bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
     if ( item < 0 )
         return false;
 
-    m_qtTreeWidget->closePersistentEditor(m_model->index(item, 0));
+    GetQListTreeWidget()->closePersistentEditor(m_model->index(item, 0));
     return true;
 }
 
@@ -2053,7 +2045,7 @@ bool wxListCtrl::EnsureVisible(long item)
     if ( item < 0 || item >= GetItemCount() )
         return false;
 
-    m_qtTreeWidget->scrollTo(m_model->index(item, 0));
+    GetQListTreeWidget()->scrollTo(m_model->index(item, 0));
     return true;
 }
 
@@ -2063,8 +2055,8 @@ bool wxListCtrl::IsVisible(long item) const
     if ( !GetItemRect(item, itemRect) )
         return false;
 
-    wxRect viewportRect = wxQtConvertRect( m_qtTreeWidget->viewport()->rect() );
-    viewportRect.y += m_qtTreeWidget->GetHeaderHeight();
+    wxRect viewportRect = wxQtConvertRect( GetQListTreeWidget()->viewport()->rect() );
+    viewportRect.y += GetQListTreeWidget()->GetHeaderHeight();
     return !viewportRect.Intersect(itemRect).IsEmpty();
 }
 
@@ -2095,9 +2087,9 @@ long wxListCtrl::HitTest(
 {
     // Remove the header height as qt expects point relative to the table sub widget
     QPoint qPoint = wxQtConvertPoint(point);
-    qPoint.setY(qPoint.y() - m_qtTreeWidget->GetHeaderHeight());
+    qPoint.setY(qPoint.y() - GetQListTreeWidget()->GetHeaderHeight());
 
-    QModelIndex index = m_qtTreeWidget->indexAt(qPoint);
+    QModelIndex index = GetQListTreeWidget()->indexAt(qPoint);
     if ( index.isValid() )
     {
         flags = wxLIST_HITTEST_ONITEM;
@@ -2167,7 +2159,7 @@ void wxListCtrl::SetItemCount(long count)
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
     // approximate, as scrollContentsBy is protected
-    m_qtTreeWidget->scroll(dx, dy);
+    GetQListTreeWidget()->scroll(dx, dy);
     return true;
 }
 
@@ -2182,7 +2174,7 @@ void wxListCtrl::ShowSortIndicator(int col, bool ascending)
     // It seems that wx and Qt are not using the same meaning for the
     // "ascending" order, for that we pass to setSortIndicator() the
     // inverted logic to make things work correctly.
-    const auto header = m_qtTreeWidget->header();
+    const auto header = GetQListTreeWidget()->header();
     if ( header )
         header->setSortIndicator(col, ascending ? Qt::DescendingOrder
                                                 : Qt::AscendingOrder);
@@ -2190,7 +2182,7 @@ void wxListCtrl::ShowSortIndicator(int col, bool ascending)
 
 int wxListCtrl::GetSortIndicator() const
 {
-    const auto header = m_qtTreeWidget->header();
+    const auto header = GetQListTreeWidget()->header();
     if ( header && header->isSortIndicatorShown() )
     {
         // If no section has a sort indicator, sortIndicatorSection()
@@ -2203,16 +2195,11 @@ int wxListCtrl::GetSortIndicator() const
 
 bool wxListCtrl::IsAscendingSortIndicator() const
 {
-    const auto header = m_qtTreeWidget->header();
+    const auto header = GetQListTreeWidget()->header();
     if ( header )
         return header->sortIndicatorOrder() == Qt::AscendingOrder;
 
     return true;
-}
-
-QWidget *wxListCtrl::GetHandle() const
-{
-    return m_qtTreeWidget;
 }
 
 #endif // wxUSE_LISTCTRL

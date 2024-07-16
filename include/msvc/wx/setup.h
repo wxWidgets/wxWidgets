@@ -241,6 +241,8 @@
     #pragma comment(lib, "kernel32")
     #pragma comment(lib, "user32")
     #pragma comment(lib, "gdi32")
+    #pragma comment(lib, "gdiplus")
+    #pragma comment(lib, "msimg32")
     #pragma comment(lib, "comdlg32")
     #pragma comment(lib, "winspool")
     #pragma comment(lib, "winmm")

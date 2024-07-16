@@ -13,7 +13,8 @@ class wxQtEdit;
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
-    wxTextCtrl();
+    wxTextCtrl() = default;
+
     wxTextCtrl(wxWindow *parent,
                wxWindowID id,
                const wxString &value = wxEmptyString,
@@ -84,8 +85,6 @@ public:
 
     virtual void SetMaxLength(unsigned long len) override;
 
-    virtual QWidget *GetHandle() const override;
-
 protected:
     virtual wxSize DoGetBestSize() const override;
 
@@ -96,7 +95,7 @@ protected:
     virtual wxWindow *GetEditableWindow() override { return this; }
 
 private:
-    wxQtEdit *m_qtEdit;
+    wxQtEdit *m_qtEdit = nullptr;
 
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };

@@ -141,5 +141,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
 {
     wxCHECK_RET( m_isWindowPainter || win->QtCanPaintWithoutActivePainter(),
                  "wxPaintDC can't be created outside wxEVT_PAINT handler" );
+
+    m_qtPainter->translate( wxQtConvertPoint(win->GetClientAreaOrigin()) );
 }
 

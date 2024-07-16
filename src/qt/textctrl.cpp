@@ -46,7 +46,6 @@ public:
     virtual long XYToPosition(long x, long y) const = 0;
     virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const = 0;
-    virtual QAbstractScrollArea *ScrollBarsContainer() const = 0;
     virtual void WriteText( const wxString &text ) = 0;
     virtual void SetMaxLength(unsigned long len) = 0;
     virtual void MarkDirty() = 0;
@@ -355,11 +354,6 @@ public:
         m_edit->ensureCursorVisible();
     }
 
-    QAbstractScrollArea *ScrollBarsContainer() const override
-    {
-        return static_cast<QAbstractScrollArea*>(m_edit);
-    }
-
     virtual void SetStyleFlags(long flags) override
     {
         ApplyCommonStyles(m_edit, flags);
@@ -564,11 +558,6 @@ public:
         return wxTE_HT_ON_TEXT;
     }
 
-    virtual QAbstractScrollArea *ScrollBarsContainer() const override
-    {
-        return nullptr;
-    }
-
     virtual void SetStyleFlags(long flags) override
     {
         ApplyCommonStyles(m_edit, flags);
@@ -644,11 +633,6 @@ void wxQtTextEdit::textChanged()
 } // anonymous namespace
 
 
-wxTextCtrl::wxTextCtrl() :
-    m_qtEdit(nullptr)
-{
-}
-
 wxTextCtrl::wxTextCtrl(wxWindow *parent,
            wxWindowID id,
            const wxString &value,
@@ -686,7 +670,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     m_qtEdit->SetStyleFlags(style);
 
-    m_qtWindow = m_qtEdit->ScrollBarsContainer();
+    m_qtWindow = m_qtEdit->GetHandle();
 
     // set the initial text value without sending the event
     ChangeValue( value );
@@ -697,7 +681,6 @@ bool wxTextCtrl::Create(wxWindow *parent,
 wxTextCtrl::~wxTextCtrl()
 {
     delete m_qtEdit;
-    m_qtEdit = nullptr;
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const
@@ -915,11 +898,6 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
         if ( flags & SetValue_SendEvent )
             SendTextUpdatedEventIfAllowed();
     }
-}
-
-QWidget *wxTextCtrl::GetHandle() const
-{
-    return (QWidget *) m_qtEdit->GetHandle();
 }
 
 #endif // wxUSE_TEXTCTRL

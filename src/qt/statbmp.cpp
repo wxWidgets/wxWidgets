@@ -27,11 +27,6 @@ public:
 };
 
 
-wxStaticBitmap::wxStaticBitmap() :
-    m_qtLabel(nullptr)
-{
-}
-
 wxStaticBitmap::wxStaticBitmap( wxWindow *parent,
                 wxWindowID id,
                 const wxBitmapBundle& label,
@@ -51,10 +46,16 @@ bool wxStaticBitmap::Create( wxWindow *parent,
              long style,
              const wxString& name)
 {
-    m_qtLabel = new wxQtStaticBmp( parent, this );
+    m_qtWindow = new wxQtStaticBmp( parent, this );
+
     SetBitmap( label );
 
     return wxStaticBitmapBase::Create( parent, id, pos, size, style, wxDefaultValidator, name );
+}
+
+QLabel* wxStaticBitmap::GetQLabel() const
+{
+    return static_cast<QLabel*>(m_qtWindow);
 }
 
 static void SetPixmap( QLabel *label, const QPixmap *pixMap )
@@ -67,7 +68,7 @@ void wxStaticBitmap::SetBitmap(const wxBitmapBundle& bitmap)
 {
     m_bitmapBundle = bitmap;
 
-    SetPixmap( m_qtLabel, bitmap.GetBitmapFor(this).GetHandle() );
+    SetPixmap( GetQLabel(), bitmap.GetBitmapFor(this).GetHandle() );
 
     InvalidateBestSize();
 }
@@ -77,17 +78,12 @@ wxBitmap wxStaticBitmap::GetBitmap() const
     wxBitmap bitmap = m_bitmapBundle.GetBitmapFor(this);
     if ( !bitmap.IsOk() )
     {
-        const QPixmap* pix = m_qtLabel->pixmap();
+        const QPixmap* pix = GetQLabel()->pixmap();
         if ( pix != nullptr )
             bitmap = wxBitmap( *pix );
     }
 
     return bitmap;
-}
-
-QWidget *wxStaticBitmap::GetHandle() const
-{
-    return m_qtLabel;
 }
 
 #endif // wxUSE_STATBMP

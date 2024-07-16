@@ -207,7 +207,7 @@ clean:
 $(OBJS)\dnd.exe: $(DND_OBJECTS) $(OBJS)\dnd_dnd_rc.o
 	$(foreach f,$(subst \,/,$(DND_OBJECTS)),$(shell echo $f >> $(subst \,/,$@).rsp.tmp))
 	@move /y $@.rsp.tmp $@.rsp >nul
-	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  -Wl,--subsystem,windows -mwindows   $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
+	$(CXX) -o $@ @$@.rsp  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  -Wl,--subsystem,windows -mwindows   $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_LEXILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregexu$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lgdiplus -lmsimg32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lws2_32 -lwininet -loleacc -luxtheme
 	@-del $@.rsp
 
 data: 

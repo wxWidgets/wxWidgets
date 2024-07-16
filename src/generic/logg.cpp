@@ -775,6 +775,8 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 #else
     wxPanel* win = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                wxBORDER_NONE);
+
+    sizerTop->Add(win, wxSizerFlags(1).Expand().Border());
 #endif
     wxSizer * const paneSz = new wxBoxSizer(wxVERTICAL);
 

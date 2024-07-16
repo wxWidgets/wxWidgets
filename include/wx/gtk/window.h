@@ -140,6 +140,11 @@ public:
 
     virtual WXWidget GetHandle() const override { return m_widget; }
 
+#ifdef __WINDOWS__
+    // If on Windows, cut through the GtkWidget abstraction to get HWND.
+    WXHWND GTKGetWin32Handle() const;
+#endif
+
     // many important things are done here, this function must be called
     // regularly
     virtual void OnInternalIdle() override;

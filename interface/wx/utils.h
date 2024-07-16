@@ -346,9 +346,13 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map);
     @param p Pointer to the memory block to be zeroed, must be non-null.
     @param n The number of bytes to zero.
 
-    NOTE: If security is vitally important in your use case, please
+    @note If security is vitally important in your use case, please
     have a look at the implementations and decide whether you trust
-    them to behave as promised.
+    them to behave as promised. Depending on the platform and available libraries,
+    this may be implemented as `RtlSecureZeroMemory` (MS Windows),
+    `explicit_bzero()` (FreeBSD), `memset_s()` (macOS),
+    or a generic method which uses `volatile` to avoid the call from
+    being optimized away.
 
     @header{wx/utils.h}
 
@@ -360,8 +364,8 @@ void wxSecureZeroMemory(void *p, size_t n);
     Returns battery state as one of @c wxBATTERY_NORMAL_STATE,
     @c wxBATTERY_LOW_STATE, @c wxBATTERY_CRITICAL_STATE,
     @c wxBATTERY_SHUTDOWN_STATE or @c wxBATTERY_UNKNOWN_STATE.
-    @c wxBATTERY_UNKNOWN_STATE is also the default on platforms where this
-    feature is not implemented (currently everywhere but MS Windows).
+
+    Currently only implemented on MS Windows; returns @c wxBATTERY_UNKNOWN_STATE elsewhere.
 
     @header{wx/utils.h}
 */
@@ -369,9 +373,9 @@ wxBatteryState wxGetBatteryState();
 
 /**
     Returns the type of power source as one of @c wxPOWER_SOCKET,
-    @c wxPOWER_BATTERY or @c wxPOWER_UNKNOWN. @c wxPOWER_UNKNOWN is also the
-    default on platforms where this feature is not implemented (currently
-    everywhere but MS Windows).
+    @c wxPOWER_BATTERY or @c wxPOWER_UNKNOWN.
+
+    Currently only implemented on MS Windows; returns @c wxPOWER_UNKNOWN elsewhere.
 
     @header{wx/utils.h}
 */
@@ -951,13 +955,13 @@ wxString wxGetOsDescription();
             <td>Windows 11</td>
             <td>10</td>
             <td>0</td>
-            <td>&gt;= 22000</td>
+            <td>&ge; 22000</td>
         </tr>
         <tr>
             <td>Windows Server 2022</td>
             <td>10</td>
             <td>0</td>
-            <td>&gt;= 22000</td>
+            <td>20348</td>
         </tr>
         <tr>
             <td>Windows 10</td>
@@ -966,10 +970,16 @@ wxString wxGetOsDescription();
             <td></td>
         </tr>
         <tr>
+            <td>Windows Server 2019</td>
+            <td>10</td>
+            <td>0</td>
+            <td>17763</td>
+        </tr>
+        <tr>
             <td>Windows Server 2016</td>
             <td>10</td>
             <td>0</td>
-            <td></td>
+            <td>14393</td>
         </tr>
         <tr>
             <td>Windows 8.1</td>
@@ -1038,7 +1048,7 @@ wxString wxGetOsDescription();
             <td></td>
         </tr>
     </table>
-    See the <a href="http://msdn.microsoft.com/en-us/library/ms724832(VS.85).aspx">MSDN</a>
+    See the <a href="https://learn.microsoft.com/en-us/windows/win32/sysinfo/operating-system-version">Microsoft documentation</a>
     for more info about the values above.
 
     @see wxGetOsDescription(), wxPlatformInfo

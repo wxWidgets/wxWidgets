@@ -561,7 +561,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     const int rows = GetRowCount();
 
     // add an extra margin in both directions
-    const int MARGIN = 8;
+    const int MARGIN = FromDIP(8);
     if ( IsVertical() )
     {
         sizeTotal.x += MARGIN;

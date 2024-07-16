@@ -460,7 +460,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if (!ParseAttribList(attribList, dispAttrs, &ctxAttrs))
         return false;
 
-    QSurfaceFormat format;
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
     if (!wxGLCanvas::ConvertWXAttrsToQtGL(dispAttrs, ctxAttrs, format))
         return false;
 
@@ -503,7 +503,6 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
     const int *ctxattrs = wxCtxAttrs.GetGLAttrs();
 
     // set default parameters to false
-    format.setSwapBehavior(QSurfaceFormat::SwapBehavior::SingleBuffer);
     format.setDepthBufferSize(0);
     format.setAlphaBufferSize(0);
     format.setStencilBufferSize(0);
@@ -532,7 +531,9 @@ bool wxGLCanvas::ConvertWXAttrsToQtGL(const wxGLAttributes &wxGLAttrs, const wxG
                 break;
 
             case WX_GL_DOUBLEBUFFER:
-                format.setSwapBehavior(QSurfaceFormat::SwapBehavior::DoubleBuffer);
+                // Since QOpenGLWidget copies the framebuffer data to a
+                // texture, we already have tear-free behaviour.
+                // Using SwapBehavior::DoubleBuffer just increases latency.
                 isBoolAttr = true;
                 break;
 
@@ -662,7 +663,7 @@ bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
     if (!ParseAttribList(attribList, dispAttrs, &ctxAttrs))
         return false;
 
-    QSurfaceFormat format;
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
     if (!wxGLCanvas::ConvertWXAttrsToQtGL(dispAttrs, ctxAttrs, format))
         return false;
 

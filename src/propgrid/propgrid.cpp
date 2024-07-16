@@ -1956,64 +1956,25 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
     r.Offset(m_gutterWidth, m_buttonSpacingY);
     r.width = m_iconWidth; r.height = m_iconHeight;
 
-#if (wxPG_USE_RENDERER_NATIVE)
-    //
-#elif wxPG_ICON_WIDTH
-    // Drawing expand/collapse button manually
-    dc.SetPen(m_colPropFore);
-    if ( property->IsCategory() )
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
-    else
-        dc.SetBrush(m_colPropBack);
-
-    dc.DrawRectangle( r );
-    int _y = r.y+(m_iconWidth/2);
-    dc.DrawLine(r.x+2,_y,r.x+m_iconWidth-2,_y);
-#else
-    wxBitmap bmp;
-#endif
-
-    if ( property->IsExpanded() )
-    {
     // wxRenderer functions are non-mutating in nature, so it
     // should be safe to cast "const wxPropertyGrid*" to "wxWindow*".
     // Hopefully this does not cause problems.
-    #if (wxPG_USE_RENDERER_NATIVE)
-        wxRendererNative::Get().DrawTreeItemButton(
-                const_cast<wxPropertyGrid*>(this),
-                dc,
-                r,
-                wxCONTROL_EXPANDED
-            );
-    #elif wxPG_ICON_WIDTH
-        //
-    #else
-        bmp = s_collbmp;
-    #endif
-
-    }
-    else
-    {
-    #if (wxPG_USE_RENDERER_NATIVE)
-        wxRendererNative::Get().DrawTreeItemButton(
-                const_cast<wxPropertyGrid*>(this),
-                dc,
-                r,
-                0
-            );
-    #elif wxPG_ICON_WIDTH
-        int _x = r.x+(m_iconWidth/2);
-        dc.DrawLine(_x,r.y+2,_x,r.y+m_iconWidth-2);
-    #else
-        bmp = s_expandbmp;
-    #endif
-    }
-
-#if (wxPG_USE_RENDERER_NATIVE)
-    //
+#if wxPG_USE_RENDERER_NATIVE
+    wxRendererNative::Get().DrawTreeItemButton(
+            const_cast<wxPropertyGrid*>(this),
+            dc,
+            r,
+            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
+        );
 #elif wxPG_ICON_WIDTH
-    //
+    wxRendererNative::GetGeneric().DrawTreeItemButton(
+            const_cast<wxPropertyGrid*>(this),
+            dc,
+            r,
+            property->IsExpanded() ? wxCONTROL_EXPANDED : wxCONTROL_NONE
+        );
 #else
+    wxBitmap bmp = property->IsExpanded() ? s_collbmp : s_expandbmp;
     dc.DrawBitmap( bmp, r.x, r.y, true );
 #endif
 }

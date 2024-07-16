@@ -35,10 +35,6 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
 
 /* wxQt specific notes:
  *
- * Remember to implement the Qt object getters on all subclasses:
- *  - GetHandle() returns the Qt object
- *
- *
  * Event handling is achieved by using the template class wxQtEventSignalHandler
  * found in winevent.h to send all Qt events here to QtHandleXXXEvent() methods.
  * All these methods receive the Qt event and the handler. This is done because

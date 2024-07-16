@@ -834,9 +834,6 @@
     <ClCompile Include="..\..\src\msw\gdiimage.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\gdiplus.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\msw\graphics.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>

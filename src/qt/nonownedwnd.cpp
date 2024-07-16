@@ -35,10 +35,6 @@
 // wxNonOwnedWindow implementation
 // ============================================================================
 
-wxNonOwnedWindow::wxNonOwnedWindow()
-{
-}
-
 bool wxNonOwnedWindow::DoClearShape()
 {
     GetHandle()->setMask(QBitmap());
