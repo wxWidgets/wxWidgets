@@ -25,17 +25,8 @@
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
 
-#include "wx/gtk/private/wrapgtk.h"
+#include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/backend.h"
-#ifdef GDK_WINDOWING_WAYLAND
-#include <gdk/gdkwayland.h>
-#endif
-#ifdef GDK_WINDOWING_WIN32
-#include <gdk/gdkwin32.h>
-#endif
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
 
 #if wxDEBUG_LEVEL
     #include "wx/gtk/assertdlg_gtk.h"

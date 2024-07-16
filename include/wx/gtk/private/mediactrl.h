@@ -10,12 +10,7 @@
 #ifndef _WX_GTK_PRIVATE_MEDIACTRL_H_
 #define _WX_GTK_PRIVATE_MEDIACTRL_H_
 
-#ifdef GDK_WINDOWING_X11
-    #include <gdk/gdkx.h>
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-    #include <gdk/gdkwayland.h>
-#endif
+#include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/backend.h"
 
 //-----------------------------------------------------------------------------
