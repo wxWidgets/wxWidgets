@@ -849,15 +849,13 @@ size_t wxBitmapBundleImpl::GetIndexToUpscale(const wxSize& size) const
     const wxSize sizeDef = GetDefaultSize();
     for ( size_t i = 0;; )
     {
-        // Save it before it's updated by GetNextAvailableScale().
-        size_t indexPrev = i;
-
         const double scaleThis = GetNextAvailableScale(i);
         if ( scaleThis == 0.0 )
             break;
 
-        // Only update it now, knowing that this index could have been used.
-        indexLast = indexPrev;
+        // Only update it now, knowing that the index was changed by
+        // GetNextAvailableScale() to be one beyond the actually used one.
+        indexLast = i - 1;
 
         const double scale = size.y / (sizeDef.y*scaleThis);
         if (wxRound(scale) == scale)

@@ -65,6 +65,11 @@ TEST_CASE("BitmapBundle::GetBitmap", "[bmpbundle]")
 
     const wxSize scaledSize(52, 41);
     CHECK( b.GetBitmap(scaledSize).GetSize() == scaledSize );
+
+    // Test upscaling too.
+    b = wxBitmapBundle::FromBitmap(wxBitmap(32, 32));
+    CHECK( b.GetBitmap(wxSize(24, 24)).GetSize() == wxSize(24, 24) );
+    CHECK( b.GetBitmap(wxSize(48, 48)).GetSize() == wxSize(48, 48) );
 }
 
 // Helper functions for the test below.
