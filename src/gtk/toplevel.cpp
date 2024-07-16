@@ -35,6 +35,7 @@
 #include "wx/sysopt.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/wrapgdk.h"
 #include "wx/gtk/private/gtk3-compat.h"
 #include "wx/gtk/private/stylecontext.h"
 #include "wx/gtk/private/win_gtk.h"
@@ -42,12 +43,8 @@
 #include "wx/gtk/private/threads.h"
 
 #ifdef GDK_WINDOWING_X11
-    #include <gdk/gdkx.h>
     #include <X11/Xatom.h>  // XA_CARDINAL
     #include "wx/unix/utilsx11.h"
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-    #include <gdk/gdkwayland.h>
 #endif
 
 #define TRACE_TLWSIZE "tlwsize"
