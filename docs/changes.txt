@@ -254,6 +254,8 @@ Changes in behaviour which may result in build errors
 All:
 
 - Backport multiple fixes to CMake build system from 3.3 (Maarten Bent, #24616).
+- Fix regression in wxTranslations language resolution introduced in 3.2.3 (#24297).
+- Add wxTranslations::AddAvailableCatalog() overload with msgid language (#24297).
 
 All (GUI):
 
