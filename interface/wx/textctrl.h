@@ -48,22 +48,36 @@
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
 #define wxTE_RICH2          0x8000
 
-/** File types that wxTextCtrl supports for loading and saving.
+/**
+    File types supported by wxTextCtrl::LoadFile() and wxTextCtrl::SaveFile().
+
     @since 3.3.0
 */
 enum wxTextCtrlFileType
 {
-    /** Format determined by file extension when loading/saving the
-        control's content. This will also rely on which formats
-        are supported by the platform's native control.
+    /**
+        Format determined by file extension when loading/saving the control's
+        content.
+
+        The supported formats depend on the capabilities of the platform's
+        native control.
     */
     wxTEXT_TYPE_ANY,
-    /** Plain Text Format.
+
+    /**
+        Plain Text Format.
+
+        This format is supported under all platforms.
+
         @since 3.3.0
     */
-    wxTEXT_TYPE_TEXT,
-    /** Rich Text Format.
-        @onlyfor{wxosx}
+    wxTEXT_TYPE_PLAIN,
+
+    /**
+        Rich Text Format.
+
+        This format is only supported under macOS currently.
+
         @since 3.3.0
     */
     wxTEXT_TYPE_RTF
@@ -1642,11 +1656,25 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
 
     /**
-        Returns the content of a multiline text control as RTF (Rich Text Formatted) text.
+        Returns @c true if text controls support reading and writing RTF (Rich
+        Text Format).
 
-        Note that this will return empty string if RTF is not supported by the native control.
+        Currently this function only returns true in wxOSX, which is the only
+        port implementing RTF support in wxTextCtrl.
 
-        @onlyfor{wxosx}
+        @since 3.3.0
+
+        @see GetRTFValue(), SetRTFValue()
+    */
+    static bool IsRTFSupported();
+
+    /**
+        Returns the content of a multiline text control as RTF (Rich Text
+        Formatted) text.
+
+        Don't call this function unless IsRTFSupported() returns @true, as it
+        asserts if called in this case (and returns an empty string).
+
         @since 3.3.0
 
         @see SetRTFValue()
@@ -1654,16 +1682,16 @@ public:
     wxString GetRTFValue() const;
 
     /**
-        Sets the content of a multiline text control from an RTF
-        (Rich Text Formatted) buffer.
+        Sets the content of a multiline text control from an RTF (Rich Text
+        Formatted) buffer.
 
         This offers more granular control of content formatting, as well as a
-        significant performance benefit with larger content. This also provides the
-        ability to read an RTF file and move it directly into the control.
+        significant performance benefit with larger content. This also provides
+        the ability to read an RTF file and move it directly into the control.
 
-        Note that this will have no effect if RTF is not supported by the native control.
+        Don't call this function unless IsRTFSupported() returns @true, as it
+        asserts if called in this case.
 
-        @onlyfor{wxosx}
         @since 3.3.0
 
         @see @ref page_samples_text for a usage example.
@@ -1671,15 +1699,6 @@ public:
         @see GetRTFValue()
     */
     void SetRTFValue(const wxString& val);
-
-    /**
-        Returns @c true if text controls support reading and writing RTF (Rich Text Format).
-
-        @since 3.3.0
-
-        @see GetRTFValue(), SetRTFValue()
-    */
-    static bool IsRTFSupported();
 
     /**
         Finds the position of the character at the specified point.
@@ -1781,9 +1800,10 @@ public:
         @param filename
             The filename of the file to load.
         @param fileType
-            A wxTextCtrlFileType, specifying the type of file to load.
-            Text is supported on all platforms, and
-            RTF is supported on macOS. @since 3.3.0
+            One of the values of wxTextCtrlFileType enum, specifying the type
+            of file to load.
+            Default value and plain text are supported on all platforms, while
+            ::wxTEXT_TYPE_RTF is only supported in wxOSX currently.
 
         @return
             @true if successful, @false otherwise.
@@ -1862,9 +1882,10 @@ public:
         @param filename
             The name of the file in which to save the text.
         @param fileType
-            A wxTextCtrlFileType, specifying the type of file to save as.
-            Text is supported on all platforms, and
-            RTF is supported on macOS. @since 3.3.0
+            One of the values of wxTextCtrlFileType enum, specifying the type
+            of file to save as.
+            Default value and plain text are supported on all platforms, while
+            ::wxTEXT_TYPE_RTF is only supported in wxOSX currently.
 
         @return
             @true if the operation was successful, @false otherwise.

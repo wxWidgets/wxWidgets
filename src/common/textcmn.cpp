@@ -29,7 +29,10 @@
 #endif // WX_PRECOMP
 
 #include "wx/ffile.h"
-#include "wx/filename.h"
+
+#ifdef wxHAS_TEXTCTRL_RTF
+    #include "wx/filename.h"
+#endif
 
 extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[] = "text";
 
@@ -928,11 +931,23 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     return true;
 }
 
+// static
+bool wxTextAreaBase::IsRTFSupported()
+{
+#ifdef wxHAS_TEXTCTRL_RTF
+    return true;
+#else
+    return false;
+#endif
+}
+
 wxString wxTextAreaBase::GetRTFValue() const
 {
     wxFAIL_MSG("Not implemented for the current platform.");
+
     return wxEmptyString;
 }
+
 void wxTextAreaBase::SetRTFValue(const wxString& WXUNUSED(val))
 {
     wxFAIL_MSG("Not implemented for the current platform.");
@@ -944,7 +959,7 @@ void wxTextAreaBase::SetRTFValue(const wxString& WXUNUSED(val))
 
 bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
 {
-#ifndef __WXOSX__
+#ifndef wxHAS_TEXTCTRL_RTF
     wxASSERT_MSG(fileType != wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
     if (fileType == wxTEXT_TYPE_RTF)
     {
@@ -958,23 +973,30 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
         wxString text;
         if ( file.ReadAll(&text) )
         {
-#ifdef __WXOSX__
-            if (fileType == wxTEXT_TYPE_RTF)
+            switch ( fileType )
             {
-                SetRTFValue(text);
+                case wxTEXT_TYPE_RTF:
+#ifdef wxHAS_TEXTCTRL_RTF
+                    SetRTFValue(text);
+#else // !wxHAS_TEXTCTRL_RTF
+                    wxFAIL_MSG("RTF support not available under this platform");
+#endif // wxHAS_TEXTCTRL_RTF/!wxHAS_TEXTCTRL_RTF
+                    break;
+
+                case wxTEXT_TYPE_ANY:
+#ifdef wxHAS_TEXTCTRL_RTF
+                    if ( wxFileName(filename).GetExt().CmpNoCase("rtf") == 0 )
+                    {
+                        SetRTFValue(text);
+                        break;
+                    }
+#endif // wxHAS_TEXTCTRL_RTF
+                    wxFALLTHROUGH;
+
+                case wxTEXT_TYPE_PLAIN:
+                    SetValue(text);
+                    break;
             }
-            else if (fileType == wxTEXT_TYPE_ANY &&
-                wxFileName(filename).GetExt().CmpNoCase("rtf") == 0)
-            {
-                SetRTFValue(text);
-            }
-            else
-            {
-                SetValue(text);
-            }
-#else
-            SetValue(text);
-#endif
 
             DiscardEdits();
             m_filename = filename;
@@ -993,24 +1015,36 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int fileType)
 
 bool wxTextAreaBase::DoSaveFile(const wxString& filename, int fileType)
 {
-#ifndef __WXOSX__
-    wxASSERT_MSG(fileType != wxTEXT_TYPE_RTF, "RTF support is only available on macOS.");
-    if (fileType == wxTEXT_TYPE_RTF)
-    {
-        return false;
-    }
-#endif
 #if wxUSE_FFILE
-    wxFFile file(filename, "w");
+    wxFFile file(filename, wxT("w"));
 
-#ifdef __WXOSX__
-    const wxString fileContent = (fileType == wxTEXT_TYPE_TEXT) ? GetValue() :
-        (fileType == wxTEXT_TYPE_RTF ||
-         wxFileName(filename).GetExt().CmpNoCase("rtf") == 0) ? GetRTFValue() : GetValue();
-#else
-    const wxString fileContent = GetValue();
-#endif
-    if (file.IsOpened() && file.Write(fileContent))
+    wxString value;
+    switch ( fileType )
+    {
+        case wxTEXT_TYPE_RTF:
+#ifdef wxHAS_TEXTCTRL_RTF
+            value = GetRTFValue();
+#else // !wxHAS_TEXTCTRL_RTF
+            wxFAIL_MSG("RTF support not available under this platform");
+#endif // wxHAS_TEXTCTRL_RTF/!wxHAS_TEXTCTRL_RTF
+            break;
+
+        case wxTEXT_TYPE_ANY:
+#ifdef wxHAS_TEXTCTRL_RTF
+            if ( wxFileName(filename).GetExt().CmpNoCase("rtf") == 0 )
+            {
+                value = GetRTFValue();
+                break;
+            }
+#endif // wxHAS_TEXTCTRL_RTF
+            wxFALLTHROUGH;
+
+        case wxTEXT_TYPE_PLAIN:
+            value = GetValue();
+            break;
+    }
+
+    if ( file.IsOpened() && file.Write(value) )
     {
         // if it worked, save for future calls
         m_filename = filename;

@@ -327,14 +327,12 @@ public:
 
     void OnSetRTF(wxCommandEvent& WXUNUSED(event))
     {
-#ifdef __WXOSX__
         m_panel->m_textrich->SetRTFValue(R"({\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
 {\colortbl ;\red79\green129\blue189;\red255\green0\blue0;\red192\green192\blue192;}
 {\*\generator Riched20 10.0.22621}\viewkind4\uc1
  \pard\sa200\sl276\slmult1\cf1\b\i\f0\fs22\lang9 wxWidgets 3.3\cf0\b0\i0\par
 \cf2 A \highlight3\ul cross-platform \highlight0\ulnone GUI library which uses \ul\b native\ulnone\b0  controls.\cf0\par
 })");
-#endif
     }
 
     void OnChangeText(wxCommandEvent& WXUNUSED(event))
@@ -480,12 +478,15 @@ bool MyApp::OnInit()
                       "Save the text control contents to file");
     file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
                       "Load the sample file into text control");
-#ifdef __WXOSX__
-    file_menu->Append(TEXT_SAVE_RTF, "&Save file as RTF",
-        "Save the text control contents to file");
-    file_menu->Append(TEXT_LOAD_RTF, "&Load RTF file",
-        "Load the sample file into text control");
-#endif
+
+    if ( wxTextCtrl::IsRTFSupported() )
+    {
+        file_menu->Append(TEXT_SAVE_RTF, "&Save file as RTF",
+            "Save the text control contents to file");
+        file_menu->Append(TEXT_LOAD_RTF, "&Load RTF file",
+            "Load the sample file into text control");
+    }
+
     file_menu->AppendSeparator();
     file_menu->Append(TEXT_RICH_TEXT_TEST, "Show Rich Text Editor");
     file_menu->AppendSeparator();
@@ -533,10 +534,11 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_SELECT, "&Select characters 4 to 8\tCtrl-I");
     menuText->Append(TEXT_SET, "&Set the first text zone value\tCtrl-E");
     menuText->Append(TEXT_CHANGE, "&Change the first text zone value\tShift-Ctrl-E");
-#ifdef __WXOSX__
-    menuText->AppendSeparator();
-    menuText->Append(TEXT_SET_RTF, "Set the rich text zone value from rich text formatted content");
-#endif
+    if ( wxTextCtrl::IsRTFSupported() )
+    {
+        menuText->AppendSeparator();
+        menuText->Append(TEXT_SET_RTF, "Set the rich text zone value from rich text formatted content");
+    }
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
     menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
@@ -1700,7 +1702,7 @@ void MyFrame::OnFileLoad(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnFileSaveRTF(wxCommandEvent& WXUNUSED(event))
 {
-    if (m_panel->m_textrich->SaveFile("dummy.rtf", wxTEXT_TYPE_RTF))
+    if ( m_panel->m_textrich->SaveFile("dummy.rtf", wxTEXT_TYPE_RTF) )
     {
 #if wxUSE_FILE
         // verify that the file length is correct
@@ -1709,15 +1711,17 @@ void MyFrame::OnFileSaveRTF(wxCommandEvent& WXUNUSED(event))
             "Successfully saved file (text len = %zu, file size = %lld)",
             m_panel->m_textrich->GetValue().length(),
             file.Length());
-#endif
+#endif // wxUSE_FILE
     }
     else
+    {
         wxLogStatus(this, "Couldn't save the file");
+    }
 }
 
 void MyFrame::OnFileLoadRTF(wxCommandEvent& WXUNUSED(event))
 {
-    if (m_panel->m_textrich->LoadFile("dummy.rtf", wxTEXT_TYPE_RTF))
+    if ( m_panel->m_textrich->LoadFile("dummy.rtf", wxTEXT_TYPE_RTF) )
     {
         wxLogStatus(this, "Successfully loaded file");
     }

@@ -96,6 +96,11 @@ Changes in behaviour not resulting in compilation errors
   not scale the size by the content scale factor of the DC any longer, as the
   size here is expressed in physical pixels and not in DIPs.
 
+- wxTextCtrl::{Save,Load}File() will use RTF format when saving/loading files
+  with .rtf extension, and not plain text any longer, by default for the
+  platforms with RTF support. If you need to save/load plain text even for the
+  files with the .rtf extension, specify wxTEXT_TYPE_PLAIN explicitly.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
