@@ -66,7 +66,7 @@ wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
 
     // add the pane with a zero proportion value to the 'sz' sizer which contains it
     sz->Add(collpane,
-            wxSizerFlags().Expand().Border(wxALL, wxSizerFlags::GetDefaultBorder()));
+            wxSizerFlags().Expand().Border();
 
     // but also ensure that we relayout the entire window when its state
     // changes to give it enough space when it expands or reduce the space
@@ -77,7 +77,7 @@ wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
     // now add a test label in the collapsible pane using a sizer to layout it:
     wxWindow *win = collpane->GetPane();
     wxSizer *paneSz = new wxBoxSizer(wxVERTICAL);
-    paneSz->Add(new wxStaticText(win, wxID_ANY, "test!"), 1, wxGROW|wxALL, 2);
+    paneSz->Add(new wxStaticText(win, wxID_ANY, "test!"), wxSizerFlags().Proportion(1).Expand().DoubleBorder());
     win->SetSizer(paneSz);
     paneSz->SetSizeHints(win);
     @endcode
@@ -129,7 +129,7 @@ public:
 
     /**
         @param parent
-            Parent window, must not be non-null.
+            Parent window, must be non-null.
         @param id
             The identifier for the control.
         @param label
