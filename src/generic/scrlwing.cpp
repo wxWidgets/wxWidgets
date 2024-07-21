@@ -641,7 +641,7 @@ int wxScrollHelperBase::CalcScrollInc(wxScrollWinEvent& event)
     return nScrollInc;
 }
 
-void wxScrollHelperBase::DoPrepareDC(wxDC& dc)
+void wxScrollHelperBase::DoPrepareReadOnlyDC(wxReadOnlyDC& dc)
 {
     wxPoint pt = dc.GetDeviceOrigin();
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
@@ -901,6 +901,11 @@ void wxAnyScrollHelperBase::HandleOnChar(wxKeyEvent& event)
         newEvent.SetOrientation(wxHORIZONTAL);
         m_win->ProcessWindowEvent(newEvent);
     }
+}
+
+void wxAnyScrollHelperBase::DoPrepareDC(wxDC& dc)
+{
+    DoPrepareReadOnlyDC(dc);
 }
 
 // ----------------------------------------------------------------------------
