@@ -532,7 +532,7 @@ public:
     void OnIdle(wxIdleEvent& event);
 
     /// Convert units in tends of a millimetre to device units
-    int ConvertTenthsMMToPixels(wxDC& dc, int units) const;
+    int ConvertTenthsMMToPixels(wxReadOnlyDC& dc, int units) const;
 
     /// Can we set the selection based on the editor caret position?
     /// Need to override this if being used in a combobox popup

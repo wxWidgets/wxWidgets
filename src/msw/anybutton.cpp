@@ -531,7 +531,7 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
 
 wxSize wxMSWButton::ComputeBestFittingSize(wxControl *btn, int flags)
 {
-    wxClientDC dc(btn);
+    wxInfoDC dc(btn);
 
     wxSize sizeBtn;
     dc.GetMultiLineTextExtent(btn->GetLabelText(), &sizeBtn.x, &sizeBtn.y);
@@ -686,7 +686,7 @@ wxSize wxAnyButton::DoGetBestSize() const
 #if wxUSE_MARKUP
         if ( m_markupText )
         {
-            wxClientDC dc(self);
+            wxInfoDC dc(self);
             size = wxMSWButton::GetFittingSize(self,
                                                m_markupText->Measure(dc),
                                                flags);

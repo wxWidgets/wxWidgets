@@ -277,7 +277,7 @@ namespace
 
 struct EllipsizeCalculator
 {
-    EllipsizeCalculator(const wxString& s, const wxDC& dc,
+    EllipsizeCalculator(const wxString& s, const wxReadOnlyDC& dc,
                         int maxFinalWidthPx, int replacementWidthPx,
                         int flags)
         :
@@ -445,7 +445,7 @@ struct EllipsizeCalculator
 
     // inputs:
     wxString m_str;
-    const wxDC& m_dc;
+    const wxReadOnlyDC& m_dc;
     int m_maxFinalWidthPx;
     int m_replacementWidthPx;
     wxArrayInt m_charOffsetsPx;
@@ -453,7 +453,7 @@ struct EllipsizeCalculator
     bool m_isOk;
 };
 
-wxString DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
+wxString DoEllipsizeSingleLine(const wxString& curLine, const wxReadOnlyDC& dc,
                                wxEllipsizeMode mode, int maxFinalWidthPx,
                                int replacementWidthPx, int flags)
 {
@@ -571,7 +571,7 @@ wxString DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
 
 
 /* static */
-wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
+wxString wxControlBase::Ellipsize(const wxString& label, const wxReadOnlyDC& dc,
                                   wxEllipsizeMode mode, int maxFinalWidth,
                                   int flags)
 {

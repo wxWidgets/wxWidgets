@@ -227,7 +227,7 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
 
 void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     dc.SetFont(GetFont());
 
     // calculate the length: we want each line be no longer than maxLength

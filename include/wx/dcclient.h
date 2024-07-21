@@ -83,6 +83,9 @@ public:
     const wxReadOnlyDC* operator&() const { return &m_dcClient; }
 
     // wxReadOnlyDC re-exposed here.
+    wxWindow* GetWindow() const { return m_dcClient.GetWindow(); }
+    bool IsOk() const { return m_dcClient.IsOk(); }
+
     bool CanDrawBitmap() const { return m_dcClient.CanDrawBitmap(); }
     bool CanGetTextExtent() const { return m_dcClient.CanGetTextExtent(); }
 

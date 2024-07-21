@@ -125,7 +125,7 @@ void wxGenericHyperlinkCtrl::ConnectMenuHandlers()
 
 wxSize wxGenericHyperlinkCtrl::DoGetBestClientSize() const
 {
-    wxClientDC dc(const_cast<wxGenericHyperlinkCtrl*>(this));
+    wxInfoDC dc(const_cast<wxGenericHyperlinkCtrl*>(this));
     return dc.GetTextExtent(GetLabel());
 }
 

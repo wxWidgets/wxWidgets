@@ -43,7 +43,7 @@ public:
     // return the string extent
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) override;
 
     virtual wxGridCellRenderer *Clone() const override
@@ -52,7 +52,7 @@ public:
 protected:
     // calc the string extent for given string/font
     wxSize DoGetBestSize(const wxGridCellAttr& attr,
-                         wxDC& dc,
+                         wxReadOnlyDC& dc,
                          const wxString& text);
 };
 
@@ -85,12 +85,12 @@ public:
 
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) override;
 
     virtual wxSize GetMaxBestSize(wxGrid& grid,
                                   wxGridCellAttr& attr,
-                                  wxDC& dc) override;
+                                  wxReadOnlyDC& dc) override;
 
     // Optional parameters for this renderer are "<min>,<max>".
     virtual void SetParameters(const wxString& params) override;
@@ -139,7 +139,7 @@ public:
 
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) override;
 
     // parameters string format is "width[,precision[,format]]"
@@ -186,12 +186,12 @@ public:
     // return the checkmark size
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) override;
 
     virtual wxSize GetMaxBestSize(wxGrid& grid,
                                   wxGridCellAttr& attr,
-                                  wxDC& dc) override;
+                                  wxReadOnlyDC& dc) override;
 
     virtual wxGridCellRenderer *Clone() const override
         { return new wxGridCellBoolRenderer(*this); }
@@ -227,12 +227,12 @@ public:
 
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) override;
 
     virtual wxSize GetMaxBestSize(wxGrid& grid,
                                   wxGridCellAttr& attr,
-                                  wxDC& dc) override;
+                                  wxReadOnlyDC& dc) override;
 
     virtual wxGridCellRenderer *Clone() const override
         { return new wxGridCellDateRenderer(*this); }
@@ -288,7 +288,7 @@ public:
 
     virtual wxSize GetMaxBestSize(wxGrid& grid,
                                   wxGridCellAttr& attr,
-                                  wxDC& dc) override;
+                                  wxReadOnlyDC& dc) override;
 
     // Parameters string is a comma-separated list of values.
     virtual void SetParameters(const wxString& params) override;
@@ -328,7 +328,7 @@ public:
 
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) override;
 
     virtual wxGridCellRenderer *Clone() const override
@@ -361,18 +361,18 @@ public:
 
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) override;
 
     virtual int GetBestHeight(wxGrid& grid,
                               wxGridCellAttr& attr,
-                              wxDC& dc,
+                              wxReadOnlyDC& dc,
                               int row, int col,
                               int width) override;
 
     virtual int GetBestWidth(wxGrid& grid,
                               wxGridCellAttr& attr,
-                              wxDC& dc,
+                              wxReadOnlyDC& dc,
                               int row, int col,
                               int height) override;
 
@@ -381,7 +381,7 @@ public:
 
 private:
     wxArrayString GetTextLines( wxGrid& grid,
-                                wxDC& dc,
+                                wxReadOnlyDC& dc,
                                 const wxGridCellAttr& attr,
                                 const wxRect& rect,
                                 int row, int col);
@@ -391,7 +391,7 @@ private:
     // Break a single logical line of text into several physical lines, all of
     // which are added to the lines array. The lines are broken at maxWidth and
     // the dc is used for measuring text extent only.
-    void BreakLine(wxDC& dc,
+    void BreakLine(wxReadOnlyDC& dc,
                    const wxString& logicalLine,
                    wxCoord maxWidth,
                    wxArrayString& lines);
@@ -401,7 +401,7 @@ private:
     // is returned in line output parameter.
     //
     // Returns the width of the last line.
-    wxCoord BreakWord(wxDC& dc,
+    wxCoord BreakWord(wxReadOnlyDC& dc,
                       const wxString& word,
                       wxCoord maxWidth,
                       wxArrayString& lines,

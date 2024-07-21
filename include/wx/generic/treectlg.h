@@ -329,7 +329,7 @@ protected:
     void PaintLevel( wxGenericTreeItem *item, wxDC& dc, int level, int &y );
     void PaintItem( wxGenericTreeItem *item, wxDC& dc);
 
-    void CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y );
+    void CalculateLevel( wxGenericTreeItem *item, wxReadOnlyDC &dc, int level, int &y );
     void CalculatePositions();
 
     void RefreshSubtree( wxGenericTreeItem *item );

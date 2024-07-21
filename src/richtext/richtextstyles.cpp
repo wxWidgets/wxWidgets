@@ -752,7 +752,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 
     if (attr.GetLeftIndent() > 0)
     {
-        wxClientDC dc(const_cast<wxRichTextStyleListBox*>(this));
+        wxInfoDC dc(const_cast<wxRichTextStyleListBox*>(this));
 
         str << wxT("<td width=") << wxMin(50, (ConvertTenthsMMToPixels(dc, attr.GetLeftIndent())/2)) << wxT("></td>");
     }
@@ -892,7 +892,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 }
 
 // Convert units in tends of a millimetre to device units
-int wxRichTextStyleListBox::ConvertTenthsMMToPixels(wxDC& dc, int units) const
+int wxRichTextStyleListBox::ConvertTenthsMMToPixels(wxReadOnlyDC& dc, int units) const
 {
     int ppi = dc.GetPPI().x;
 

@@ -207,7 +207,7 @@ public:
     void ScrollText(wxTextCoord col);
 
     // adjust the DC for horz text control scrolling too
-    virtual void DoPrepareDC(wxDC& dc) override;
+    virtual void DoPrepareReadOnlyDC(wxReadOnlyDC& dc) override;
 
     // implementation only from now on
     // -------------------------------

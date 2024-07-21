@@ -235,7 +235,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
     if (!m_hWnd)
         return;
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
 
     // Get field style, if any
     int style;

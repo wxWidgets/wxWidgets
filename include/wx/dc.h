@@ -703,6 +703,12 @@ class WXDLLIMPEXP_CORE wxReadOnlyDC : public wxObject
 public:
     virtual ~wxReadOnlyDC() { delete m_pimpl; }
 
+    wxWindow *GetWindow() const
+        { return m_pimpl->GetWindow(); }
+
+    bool IsOk() const
+        { return m_pimpl && m_pimpl->IsOk(); }
+
     // query capabilities
 
     bool CanDrawBitmap() const
@@ -929,14 +935,8 @@ public:
     const wxDCImpl *GetImpl() const
         { return m_pimpl; }
 
-    wxWindow *GetWindow() const
-        { return m_pimpl->GetWindow(); }
-
     void *GetHandle() const
         { return m_pimpl->GetHandle(); }
-
-    bool IsOk() const
-        { return m_pimpl && m_pimpl->IsOk(); }
 
     // page and document
 

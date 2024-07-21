@@ -14,6 +14,7 @@
 #include "wx/gdicmn.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
 
 class wxMarkupParserOutput;
 
@@ -36,7 +37,7 @@ public:
     // The font currently selected into the DC is used for measuring (notice
     // that it is changed by this function but normally -- i.e. if markup is
     // valid -- restored to its original value when it returns).
-    wxSize Measure(wxDC& dc, int *visibleHeight = nullptr) const;
+    wxSize Measure(wxReadOnlyDC& dc, int *visibleHeight = nullptr) const;
 
 protected:
     wxMarkupTextBase(const wxString& markup)

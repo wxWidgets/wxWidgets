@@ -2869,9 +2869,9 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
 
     int col;
     wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
-    wxClientDC dc(self);
+    wxInfoDC dc(self);
     dc.SetFont(GetFont());
-    self->DoPrepareDC(dc);
+    self->DoPrepareReadOnlyDC(dc);
 
     wxCoord width;
     dc.GetTextExtent(line, &width, nullptr);
@@ -3474,7 +3474,7 @@ void wxTextCtrl::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
     }
 }
 
-void wxTextCtrl::DoPrepareDC(wxDC& dc)
+void wxTextCtrl::DoPrepareReadOnlyDC(wxReadOnlyDC& dc)
 {
     // for single line controls we only have to deal with SData().m_ofsHorz and it's
     // useless to call base class version as they don't use normal scrolling
@@ -3486,7 +3486,7 @@ void wxTextCtrl::DoPrepareDC(wxDC& dc)
     }
     else
     {
-        wxScrollHelper::DoPrepareDC(dc);
+        wxScrollHelper::DoPrepareReadOnlyDC(dc);
     }
 }
 
@@ -3549,7 +3549,7 @@ wxCoord wxTextCtrl::GetMaxWidth() const
         // OPT: should we remember the widths of all the lines?
 
         wxTextCtrl *self = wxConstCast(this, wxTextCtrl);
-        wxClientDC dc(self);
+        wxInfoDC dc(self);
         dc.SetFont(GetFont());
 
         self->MData().m_widthMax = 0;

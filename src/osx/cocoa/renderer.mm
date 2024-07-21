@@ -107,7 +107,7 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) override;
 
-    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxDC& dc) override;
+    virtual wxSize GetCollapseButtonSize(wxWindow *win, wxReadOnlyDC& dc) override;
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
@@ -879,7 +879,7 @@ void wxRendererMac::DrawCollapseButton(wxWindow *win,
                        kThemeArrowButton, adornment);
 }
 
-wxSize wxRendererMac::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxDC& WXUNUSED(dc))
+wxSize wxRendererMac::GetCollapseButtonSize(wxWindow *WXUNUSED(win), wxReadOnlyDC& WXUNUSED(dc))
 {
     wxSize size;
     SInt32 width, height;

@@ -7780,7 +7780,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines ) const
     }
 }
 
-void wxGrid::GetTextBoxSize( const wxDC& dc,
+void wxGrid::GetTextBoxSize( const wxReadOnlyDC& dc,
                              const wxArrayString& lines,
                              long *width, long *height ) const
 {
@@ -10376,7 +10376,7 @@ void wxGrid::SetRowSize( int row, int height )
     {
         long w, h;
         wxArrayString lines;
-        wxClientDC dc(m_rowLabelWin);
+        wxInfoDC dc(m_rowLabelWin);
         dc.SetFont(GetLabelFont());
         StringToLines(GetRowLabelValue( row ), lines);
         GetTextBoxSize( dc, lines, &w, &h );
@@ -10502,7 +10502,7 @@ void wxGrid::SetColSize( int col, int width )
         {
             long w, h;
             wxArrayString lines;
-            wxClientDC dc(m_colLabelWin);
+            wxInfoDC dc(m_colLabelWin);
             dc.SetFont(GetLabelFont());
             StringToLines(GetColLabelValue(col), lines);
             if ( GetColLabelTextOrientation() == wxHORIZONTAL )
@@ -10701,7 +10701,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             return;
     }
 
-    wxClientDC dc(m_gridWin);
+    wxInfoDC dc(m_gridWin);
 
     AcceptCellEditControlIfShown();
 
@@ -10938,8 +10938,8 @@ wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(wxGridDirection direction)
     // calculate size for the rows or columns?
     const bool calcRows = direction == wxGRID_ROW;
 
-    wxClientDC dc(calcRows ? GetGridRowLabelWindow()
-                           : GetGridColLabelWindow());
+    wxInfoDC dc(calcRows ? GetGridRowLabelWindow()
+                         : GetGridColLabelWindow());
     dc.SetFont(GetLabelFont());
 
     // which dimension should we take into account for calculations?

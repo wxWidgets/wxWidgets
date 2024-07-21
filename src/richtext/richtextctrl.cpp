@@ -605,7 +605,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 {
     SetFocus();
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
@@ -684,7 +684,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
             ReleaseMouse();
 
         // See if we clicked on a URL
-        wxClientDC dc(this);
+        wxInfoDC dc(this);
         PrepareDC(dc);
         dc.SetFont(GetFont());
 
@@ -885,7 +885,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     }
 #endif // wxUSE_DRAG_AND_DROP
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
@@ -1023,7 +1023,7 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
 {
     SetFocus();
 
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
@@ -1073,7 +1073,7 @@ void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& event)
         // Instead, select or deselect the object.
         if (wxRichTextBuffer::GetFloatingLayoutMode())
         {
-            wxClientDC dc(this);
+            wxInfoDC dc(this);
             PrepareDC(dc);
             dc.SetFont(GetFont());
 
@@ -1840,7 +1840,7 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     int leftMargin, rightMargin, topMargin, bottomMargin;
 
     {
-        wxClientDC dc(this);
+        wxInfoDC dc(this);
         wxRichTextObject::GetTotalMargin(dc, & GetBuffer(), GetBuffer().GetAttributes(), leftMargin, rightMargin,
             topMargin, bottomMargin);
     }
@@ -2113,7 +2113,7 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
         pt.y += 2;
 
         long newPos = 0;
-        wxClientDC dc(this);
+        wxInfoDC dc(this);
         PrepareDC(dc);
         dc.SetFont(GetFont());
 
@@ -2310,7 +2310,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     }
 
     long newPos = 0;
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
@@ -3216,7 +3216,7 @@ wxTextCtrlHitTestResult
 wxRichTextCtrl::HitTest(const wxPoint& pt,
                         long * pos) const
 {
-    wxClientDC dc(const_cast<wxRichTextCtrl*>(this));
+    wxInfoDC dc(const_cast<wxRichTextCtrl*>(this));
     const_cast<wxRichTextCtrl*>(this)->PrepareDC(dc);
 
     // Buffer uses logical position (relative to start of buffer)
@@ -3241,7 +3241,7 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 wxRichTextParagraphLayoutBox*
 wxRichTextCtrl::FindContainerAtPoint(const wxPoint& pt, long& position, int& hit, wxRichTextObject* hitObj, int flags/* = 0*/)
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
@@ -3899,7 +3899,7 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 // Returns the number of property commands added.
 int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool addPropertyCommands)
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetFont(GetFont());
 
@@ -4194,7 +4194,7 @@ void wxRichTextCtrl::PositionCaret(wxRichTextParagraphLayoutBox* container)
 /// Get the caret height and position for the given character position
 bool wxRichTextCtrl::GetCaretPositionForIndex(long position, wxRect& rect, wxRichTextParagraphLayoutBox* container)
 {
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
     PrepareDC(dc);
     dc.SetUserScale(GetScale(), GetScale());
     dc.SetFont(GetFont());
@@ -4283,7 +4283,7 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
             availableSpace.SetPosition(GetUnscaledPoint(GetLogicalPoint(wxPoint(0, 0))));
         }
 
-        wxClientDC dc(this);
+        wxInfoDC dc(this);
 
         PrepareDC(dc);
         dc.SetFont(GetFont());
@@ -4307,7 +4307,7 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
     return true;
 }
 
-void wxRichTextCtrl::DoLayoutBuffer(wxRichTextBuffer& buffer, wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int flags)
+void wxRichTextCtrl::DoLayoutBuffer(wxRichTextBuffer& buffer, wxReadOnlyDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int flags)
 {
     buffer.Layout(dc, context, rect, parentRect, flags);
 }
@@ -5269,7 +5269,7 @@ bool wxRichTextCtrl::ProcessDelayedImageLoading(const wxRect& screenRect, wxRich
                             marginRect = imageObj->GetRect(); // outer rectangle, will calculate contentRect
                             if (marginRect.GetSize() != wxDefaultSize)
                             {
-                                wxClientDC dc(this);
+                                wxInfoDC dc(this);
                                 wxRichTextAttr attr(imageObj->GetAttributes());
                                 imageObj->AdjustAttributes(attr, context);
                                 imageObj->GetBoxRects(dc, & GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);

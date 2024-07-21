@@ -732,7 +732,7 @@ void wxVListBoxComboPopup::CalcWidths()
         // I think using wxDC::GetTextExtent is faster than
         // wxWindow::GetTextExtent (assuming same dc is used
         // for all calls, as we do here).
-        wxClientDC dc(m_combo);
+        wxInfoDC dc(m_combo);
         if ( !m_useFont.IsOk() )
             m_useFont = m_combo->GetFont();
         dc.SetFont(m_useFont);

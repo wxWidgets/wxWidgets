@@ -269,7 +269,7 @@ wxSize wxRadioButton::DoGetBestSize() const
 
     if ( s_radioSize.HasChanged(this) )
     {
-        wxClientDC dc(const_cast<wxRadioButton*>(this));
+        wxInfoDC dc(const_cast<wxRadioButton*>(this));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
         s_radioSize.SetAtNewDPI(dc.GetCharHeight());

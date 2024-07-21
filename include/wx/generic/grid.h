@@ -202,7 +202,7 @@ public:
     // get the preferred size of the cell for its contents
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
-                               wxDC& dc,
+                               wxReadOnlyDC& dc,
                                int row, int col) = 0;
 
     // Get the preferred height for a given width. Override this method if the
@@ -211,7 +211,7 @@ public:
     // and vice versa
     virtual int GetBestHeight(wxGrid& grid,
                               wxGridCellAttr& attr,
-                              wxDC& dc,
+                              wxReadOnlyDC& dc,
                               int row, int col,
                               int WXUNUSED(width))
     {
@@ -222,7 +222,7 @@ public:
     // version of GetBestHeight().
     virtual int GetBestWidth(wxGrid& grid,
                              wxGridCellAttr& attr,
-                             wxDC& dc,
+                             wxReadOnlyDC& dc,
                              int row, int col,
                              int WXUNUSED(height))
     {
@@ -238,7 +238,7 @@ public:
     // default.
     virtual wxSize GetMaxBestSize(wxGrid& WXUNUSED(grid),
                                   wxGridCellAttr& WXUNUSED(attr),
-                                  wxDC& WXUNUSED(dc))
+                                  wxReadOnlyDC& WXUNUSED(dc))
     {
         return wxDefaultSize;
     }
@@ -1718,7 +1718,7 @@ public:
     //
     void StringToLines( const wxString& value, wxArrayString& lines ) const;
 
-    void GetTextBoxSize( const wxDC& dc,
+    void GetTextBoxSize( const wxReadOnlyDC& dc,
                          const wxArrayString& lines,
                          long *width, long *height ) const;
 

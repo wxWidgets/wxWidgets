@@ -417,7 +417,7 @@ wxListLineData::wxListLineData( wxListMainWindow *owner )
     InitItems( GetMode() == wxLC_REPORT ? m_owner->GetColumnCount() : 1 );
 }
 
-void wxListLineData::CalculateSize( wxDC *dc, int spacing )
+void wxListLineData::CalculateSize( wxReadOnlyDC *dc, int spacing )
 {
     wxCHECK_RET( !m_items.empty(), wxT("no subitems at all??") );
 
@@ -1679,7 +1679,7 @@ wxCoord wxListMainWindow::GetLineHeight() const
     {
         wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
 
-        wxClientDC dc( self );
+        wxInfoDC dc( self );
         dc.SetFont( GetFont() );
 
         wxCoord y;
@@ -3340,7 +3340,7 @@ int wxListMainWindow::GetItemSpacing( bool isSmall )
 int
 wxListMainWindow::ComputeMinHeaderWidth(const wxListHeaderData* column) const
 {
-    wxClientDC dc(const_cast<wxListMainWindow*>(this));
+    wxInfoDC dc(const_cast<wxListMainWindow*>(this));
 
     int width = dc.GetTextExtent(column->GetText()).x + AUTOSIZE_COL_MARGIN;
 
@@ -3982,7 +3982,7 @@ void wxListMainWindow::RecalculatePositions()
 {
     const int lineHeight = GetLineHeight();
 
-    wxClientDC dc( this );
+    wxInfoDC dc( this );
     dc.SetFont( GetFont() );
 
     const size_t count = GetItemCount();
@@ -4651,7 +4651,7 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
 int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
 {
     int width = 0;
-    wxClientDC dc(this);
+    wxInfoDC dc(this);
 
     dc.SetFont( GetFont() );
 

@@ -88,7 +88,7 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxStaticText::DoGetBestClientSize() const
 {
-    wxClientDC dc(const_cast<wxStaticText *>(this));
+    wxInfoDC dc(const_cast<wxStaticText *>(this));
 
     wxCoord widthTextMax, heightTextTotal;
     dc.GetMultiLineTextExtent(GetLabelText(), &widthTextMax, &heightTextTotal);

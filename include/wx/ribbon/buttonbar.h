@@ -192,7 +192,7 @@ protected:
                      size_t first_btn, size_t* last_button,
                      wxRibbonButtonBarButtonState target_size);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
-        wxRibbonButtonBarButtonState size, wxDC& dc);
+        wxRibbonButtonBarButtonState size, wxReadOnlyDC& dc);
     virtual void UpdateWindowUI(long flags) override;
 
     wxArrayRibbonButtonBarLayout m_layouts;

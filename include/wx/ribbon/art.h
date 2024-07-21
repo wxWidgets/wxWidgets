@@ -22,6 +22,7 @@
 #include "wx/ribbon/bar.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxReadOnlyDC;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 enum wxRibbonArtSetting
@@ -322,7 +323,7 @@ public:
                         const wxRect& rect) = 0;
 
     virtual void GetBarTabWidth(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxString& label,
                         const wxBitmap& bitmap,
@@ -332,39 +333,39 @@ public:
                         int* minimum) = 0;
 
     virtual int GetTabCtrlHeight(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxRibbonPageTabInfoArray& pages) = 0;
 
     virtual wxSize GetScrollButtonMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         long style) = 0;
 
     virtual wxSize GetPanelSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize client_size,
                         wxPoint* client_offset) = 0;
 
     virtual wxSize GetPanelClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset) = 0;
 
     virtual wxRect GetPanelExtButtonArea(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxRect rect) = 0;
 
     virtual wxSize GetGallerySize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize client_size) = 0;
 
     virtual wxSize GetGalleryClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize size,
                         wxPoint* client_offset,
@@ -373,13 +374,13 @@ public:
                         wxRect* extension_button) = 0;
 
     virtual wxRect GetPageBackgroundRedrawArea(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPage* wnd,
                         wxSize page_old_size,
                         wxSize page_new_size) = 0;
 
     virtual bool GetButtonBarButtonSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
@@ -392,18 +393,18 @@ public:
                         wxRect* dropdown_region) = 0;
 
     virtual wxCoord GetButtonBarButtonTextWidth(
-                        wxDC& dc, const wxString& label,
+                        wxReadOnlyDC& dc, const wxString& label,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size) = 0;
 
     virtual wxSize GetMinimisedPanelMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize* desired_bitmap_size,
                         wxDirection* expanded_panel_direction) = 0;
 
     virtual wxSize GetToolSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxSize bitmap_size,
                         wxRibbonButtonKind kind,
@@ -440,7 +441,7 @@ public:
                          const wxColour& tertiary) override;
 
     int GetTabCtrlHeight(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxRibbonPageTabInfoArray& pages) override;
 
@@ -536,7 +537,7 @@ public:
                         const wxRect& rect) override;
 
     void GetBarTabWidth(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxString& label,
                         const wxBitmap& bitmap,
@@ -546,34 +547,34 @@ public:
                         int* minimum) override;
 
     wxSize GetScrollButtonMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         long style) override;
 
     wxSize GetPanelSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize client_size,
                         wxPoint* client_offset) override;
 
     wxSize GetPanelClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset) override;
 
     wxRect GetPanelExtButtonArea(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxRect rect) override;
 
     wxSize GetGallerySize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize client_size) override;
 
     wxSize GetGalleryClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonGallery* wnd,
                         wxSize size,
                         wxPoint* client_offset,
@@ -582,13 +583,13 @@ public:
                         wxRect* extension_button) override;
 
     wxRect GetPageBackgroundRedrawArea(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPage* wnd,
                         wxSize page_old_size,
                         wxSize page_new_size) override;
 
     bool GetButtonBarButtonSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
@@ -601,18 +602,18 @@ public:
                         wxRect* dropdown_region) override;
 
     wxCoord GetButtonBarButtonTextWidth(
-                        wxDC& dc, const wxString& label,
+                        wxReadOnlyDC& dc, const wxString& label,
                         wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size) override;
 
     wxSize GetMinimisedPanelMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize* desired_bitmap_size,
                         wxDirection* expanded_panel_direction) override;
 
     wxSize GetToolSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         wxSize bitmap_size,
                         wxRibbonButtonKind kind,
@@ -805,7 +806,7 @@ public:
     void SetFont(int id, const wxFont& font) override;
 
     wxSize GetScrollButtonMinimumSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         long style) override;
 
@@ -816,19 +817,19 @@ public:
                         long style) override;
 
     wxSize GetPanelSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize client_size,
                         wxPoint* client_offset) override;
 
     wxSize GetPanelClientSize(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset) override;
 
     wxRect GetPanelExtButtonArea(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         const wxRibbonPanel* wnd,
                         wxRect rect) override;
 
@@ -838,12 +839,12 @@ public:
                         const wxRect& rect) override;
 
     int GetTabCtrlHeight(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxRibbonPageTabInfoArray& pages) override;
 
     void GetBarTabWidth(
-                        wxDC& dc,
+                        wxReadOnlyDC& dc,
                         wxWindow* wnd,
                         const wxString& label,
                         const wxBitmap& bitmap,
