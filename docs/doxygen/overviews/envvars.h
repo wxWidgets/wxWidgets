@@ -37,5 +37,11 @@ wxWidgets programs.
          This can be helpful when running older programs recompiled with
          wxWidgets 3.1 or later, as these asserts are mostly harmless and can
          be safely ignored if the code works as expected.}
+@itemdef{WXLANGUAGE,
+         This variable can be set to override OS setting of preferred languages
+         and make wxUILocale::GetPreferredUILanguages() return the set list
+         instead. The format is same as GNU's <a
+         href="https://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html">LANGUAGE</a>
+         variable: a colon-separated list of language codes.}
 */
 

@@ -792,7 +792,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images fr ja
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) $(__test_allheaders___depname) data data-image-sample data-images en_GB fr ja
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -862,6 +862,10 @@ data-images:
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
+
+en_GB: 
+	if not exist $(OBJS)\intl\en_GB mkdir $(OBJS)\intl\en_GB
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\en_GB\%f copy .\intl\en_GB\%f $(OBJS)\intl\en_GB
 
 ja: 
 	if not exist $(OBJS)\intl\ja mkdir $(OBJS)\intl\ja
