@@ -732,7 +732,7 @@ int wxMouseEvent::GetButton() const
 }
 
 // Find the logical position of the event given the DC
-wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
+wxPoint wxMouseEvent::GetLogicalPosition(const wxReadOnlyDC& dc) const
 {
     wxPoint pt(dc.DeviceToLogicalX(m_x), dc.DeviceToLogicalY(m_y));
     return pt;
