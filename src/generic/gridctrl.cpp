@@ -211,7 +211,7 @@ void wxGridCellDateRenderer::Draw(wxGrid& grid,
 
 wxSize wxGridCellDateRenderer::GetBestSize(wxGrid& grid,
                                            wxGridCellAttr& attr,
-                                           wxReadOnlyDC& dc,
+                                           wxDC& dc,
                                            int row, int col)
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
@@ -219,7 +219,7 @@ wxSize wxGridCellDateRenderer::GetBestSize(wxGrid& grid,
 
 wxSize wxGridCellDateRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
                                               wxGridCellAttr& attr,
-                                              wxReadOnlyDC& dc)
+                                              wxDC& dc)
 {
     wxSize size;
 
@@ -277,7 +277,7 @@ wxGridCellChoiceRenderer::wxGridCellChoiceRenderer(const wxGridCellChoiceRendere
 
 wxSize wxGridCellChoiceRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
                                                 wxGridCellAttr& attr,
-                                                wxReadOnlyDC& dc)
+                                                wxDC& dc)
 {
     wxSize size;
 
@@ -350,7 +350,7 @@ void wxGridCellEnumRenderer::Draw(wxGrid& grid,
 
 wxSize wxGridCellEnumRenderer::GetBestSize(wxGrid& grid,
                                             wxGridCellAttr& attr,
-                                            wxReadOnlyDC& dc,
+                                            wxDC& dc,
                                             int row, int col)
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
@@ -534,7 +534,7 @@ wxGridCellAutoWrapStringRenderer::BreakWord(wxReadOnlyDC& dc,
 wxSize
 wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
                                               wxGridCellAttr& attr,
-                                              wxReadOnlyDC& dc,
+                                              wxDC& dc,
                                               int row, int col)
 {
     // We have to make a choice here and fix either width or height because we
@@ -552,7 +552,7 @@ static const int AUTOWRAP_Y_MARGIN = 4;
 int
 wxGridCellAutoWrapStringRenderer::GetBestHeight(wxGrid& grid,
                                                 wxGridCellAttr& attr,
-                                                wxReadOnlyDC& dc,
+                                                wxDC& dc,
                                                 int row, int col,
                                                 int width)
 {
@@ -567,7 +567,7 @@ wxGridCellAutoWrapStringRenderer::GetBestHeight(wxGrid& grid,
 int
 wxGridCellAutoWrapStringRenderer::GetBestWidth(wxGrid& grid,
                                                wxGridCellAttr& attr,
-                                               wxReadOnlyDC& dc,
+                                               wxDC& dc,
                                                int row, int col,
                                                int height)
 {
@@ -610,7 +610,7 @@ wxSize wxGridCellStringRenderer::DoGetBestSize(const wxGridCellAttr& attr,
 
 wxSize wxGridCellStringRenderer::GetBestSize(wxGrid& grid,
                                              wxGridCellAttr& attr,
-                                             wxReadOnlyDC& dc,
+                                             wxDC& dc,
                                              int row, int col)
 {
     return DoGetBestSize(attr, dc, grid.GetCellValue(row, col));
@@ -757,7 +757,7 @@ void wxGridCellNumberRenderer::Draw(wxGrid& grid,
 
 wxSize wxGridCellNumberRenderer::GetBestSize(wxGrid& grid,
                                              wxGridCellAttr& attr,
-                                             wxReadOnlyDC& dc,
+                                             wxDC& dc,
                                              int row, int col)
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
@@ -765,7 +765,7 @@ wxSize wxGridCellNumberRenderer::GetBestSize(wxGrid& grid,
 
 wxSize wxGridCellNumberRenderer::GetMaxBestSize(wxGrid& WXUNUSED(grid),
                                                 wxGridCellAttr& attr,
-                                                wxReadOnlyDC& dc)
+                                                wxDC& dc)
 {
     // In theory, it's possible that there is a value in min..max range which
     // is longer than both min and max, e.g. we could conceivably have "88" be
@@ -886,7 +886,7 @@ void wxGridCellFloatRenderer::Draw(wxGrid& grid,
 
 wxSize wxGridCellFloatRenderer::GetBestSize(wxGrid& grid,
                                             wxGridCellAttr& attr,
-                                            wxReadOnlyDC& dc,
+                                            wxDC& dc,
                                             int row, int col)
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
@@ -977,7 +977,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 
 wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
                                            wxGridCellAttr& attr,
-                                           wxReadOnlyDC& dc,
+                                           wxDC& dc,
                                            int WXUNUSED(row),
                                            int WXUNUSED(col))
 {
@@ -986,7 +986,7 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
 
 wxSize wxGridCellBoolRenderer::GetMaxBestSize(wxGrid& grid,
                                               wxGridCellAttr& WXUNUSED(attr),
-                                              wxReadOnlyDC& WXUNUSED(dc))
+                                              wxDC& WXUNUSED(dc))
 {
     static wxPrivate::DpiDependentValue<wxSize> s_sizeCheckMark;
 

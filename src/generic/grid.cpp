@@ -280,6 +280,53 @@ wxGridCellWorker::~wxGridCellWorker()
 }
 
 // ----------------------------------------------------------------------------
+// wxGridCellRenderer
+// ----------------------------------------------------------------------------
+
+wxSize
+wxGridCellRenderer::GetPreferredSize(wxGrid& WXUNUSED(grid),
+                                     wxGridCellAttr& WXUNUSED(attr),
+                                     wxReadOnlyDC& WXUNUSED(dc),
+                                     int WXUNUSED(row), int WXUNUSED(col))
+{
+    wxFAIL_MSG("Must be overridden if GetBestSize() isn't.");
+    return wxSize();
+}
+
+wxSize wxGridCellRenderer::GetBestSize(wxGrid& grid,
+                                       wxGridCellAttr& attr,
+                                       wxDC& dc,
+                                       int row, int col)
+{
+    return GetPreferredSize(grid, attr, dc, row, col);
+}
+
+int wxGridCellRenderer::GetBestHeight(wxGrid& grid,
+                                      wxGridCellAttr& attr,
+                                      wxDC& dc,
+                                      int row, int col,
+                                      int WXUNUSED(width))
+{
+    return GetBestSize(grid, attr, dc, row, col).GetHeight();
+}
+
+int wxGridCellRenderer::GetBestWidth(wxGrid& grid,
+                                     wxGridCellAttr& attr,
+                                     wxDC& dc,
+                                     int row, int col,
+                                     int WXUNUSED(height))
+{
+    return GetBestSize(grid, attr, dc, row, col).GetWidth();
+}
+
+wxSize wxGridCellRenderer::GetMaxBestSize(wxGrid& grid,
+                                          wxGridCellAttr& attr,
+                                          wxDC& dc)
+{
+    return GetMaxSize(grid, attr, dc);
+}
+
+// ----------------------------------------------------------------------------
 // wxGridHeaderLabelsRenderer and related classes
 // ----------------------------------------------------------------------------
 
@@ -10701,7 +10748,10 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             return;
     }
 
-    wxInfoDC dc(m_gridWin);
+    // We need to create wxClientDC here, and not wxInfoDC, as we have to pass
+    // a wxDC, and not just wxReadOnlyDC, to the virtual functions of
+    // wxGridCellRenderer that we call below.
+    wxClientDC dc(m_gridWin);
 
     AcceptCellEditControlIfShown();
 
