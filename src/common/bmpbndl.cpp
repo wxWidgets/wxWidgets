@@ -282,7 +282,7 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
     // We use linear search instead if binary one because it's simpler and the
     // vector size is small enough (< 10) for it not to matter in practice.
     const size_t n = m_entries.size();
-    size_t lastSmaller = 0;
+    size_t nextBigger = 0;
     for ( size_t i = 0; i < n; ++i )
     {
         const Entry& entry = m_entries[i];
@@ -298,7 +298,7 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
 
             if ( sizeThis.x < size.x )
             {
-                lastSmaller = i;
+                nextBigger = i + 1;
                 continue;
             }
 
@@ -310,7 +310,7 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
         {
             // Don't rescale this one, we prefer to downscale rather than
             // upscale as it results in better-looking bitmaps.
-            lastSmaller = i;
+            nextBigger = i + 1;
             continue;
         }
 
@@ -320,7 +320,7 @@ wxBitmap wxBitmapBundleImplSet::GetBitmap(const wxSize& size)
             // next bigger bitmap, so rescale it to the desired size.
             const Entry entryNew(entry, size);
 
-            m_entries.insert(m_entries.begin() + lastSmaller + 1, entryNew);
+            m_entries.insert(m_entries.begin() + nextBigger, entryNew);
 
             return entryNew.bitmap;
         }
@@ -845,15 +845,13 @@ size_t wxBitmapBundleImpl::GetIndexToUpscale(const wxSize& size) const
     const wxSize sizeDef = GetDefaultSize();
     for ( size_t i = 0;; )
     {
-        // Save it before it's updated by GetNextAvailableScale().
-        size_t indexPrev = i;
-
         const double scaleThis = GetNextAvailableScale(i);
         if ( scaleThis == 0.0 )
             break;
 
-        // Only update it now, knowing that this index could have been used.
-        indexLast = indexPrev;
+        // Only update it now, knowing that the index was changed by
+        // GetNextAvailableScale() to be one beyond the actually used one.
+        indexLast = i - 1;
 
         const double scale = size.y / (sizeDef.y*scaleThis);
         if (wxRound(scale) == scale)

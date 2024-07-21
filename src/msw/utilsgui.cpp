@@ -25,6 +25,8 @@
     #include "wx/utils.h"
 #endif //WX_PRECOMP
 
+#include "wx/msw/private/resource_usage.h"
+
 #include "wx/msw/private.h"     // includes <windows.h>
 
 #include "wx/msw/wrapwin.h"
@@ -249,4 +251,57 @@ extern bool wxEnableFileNameAutoComplete(HWND hwnd)
     }
 
     return true;
+}
+
+// ----------------------------------------------------------------------------
+// GUI resources usage
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Common implementation of the public functions we provide.
+
+enum class UseType
+{
+    Current,
+    Peak
+};
+
+wxGUIObjectUsage wxGetUsedResources(UseType useType)
+{
+    DWORD flagsGDI = 0,
+          flagsUSER = 0;
+
+    switch ( useType )
+    {
+        case UseType::Current:
+            flagsGDI = GR_GDIOBJECTS;
+            flagsUSER = GR_USEROBJECTS;
+            break;
+
+        case UseType::Peak:
+            flagsGDI = GR_GDIOBJECTS_PEAK;
+            flagsUSER = GR_USEROBJECTS_PEAK;
+            break;
+    }
+
+    const auto hProcess = ::GetCurrentProcess();
+
+    wxGUIObjectUsage usage;
+    usage.numGDI = ::GetGuiResources(hProcess, flagsGDI);
+    usage.numUSER = ::GetGuiResources(hProcess, flagsUSER);
+    return usage;
+}
+
+} // anonymous namespace
+
+wxGUIObjectUsage wxGetCurrentlyUsedResources()
+{
+    return wxGetUsedResources(UseType::Current);
+}
+
+wxGUIObjectUsage wxGetMaxUsedResources()
+{
+    return wxGetUsedResources(UseType::Peak);
 }

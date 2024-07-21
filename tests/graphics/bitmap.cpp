@@ -1950,3 +1950,34 @@ TEST_CASE("wxBitmap::GetSubBitmap", "[bitmap]")
 }
 
 #endif // ports with scaled bitmaps support
+
+// This test doesn't run by default because it may bring the system, or at
+// least the GUI layer, down, so please only run if you know what you're doing.
+TEST_CASE("wxBitmap::ResourceExhaustion", "[.]")
+{
+    // Under MSW this creates a DDB and a DIB, which tests 2 different code
+    // paths when copying bitmaps below.
+    wxBitmap bmp1(8, 8);
+    wxBitmap bmp2(8, 8, 24);
+
+    std::vector<wxBitmap> bitmaps;
+    for ( int n = 0;; ++n )
+    {
+        bitmaps.emplace_back(8, 8);
+
+        // This will fail sooner or later, but it shouldn't crash.
+        if ( !bitmaps.back().IsOk() )
+        {
+            WARN("Failed to create bitmap after creating " << n << " of them.");
+            break;
+        }
+    }
+
+    // Copying bitmaps (triggered by modifying the scale factor) doesn't work
+    // neither, but still shouldn't crash.
+    wxBitmap bmp1x2 = bmp1;
+    bmp1x2.SetScaleFactor(2);
+
+    wxBitmap bmp2x2 = bmp2;
+    bmp2x2.SetScaleFactor(2);
+}
