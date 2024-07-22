@@ -24,9 +24,8 @@ inline wxBitmap wxPaneCreateStippleBitmap()
 inline void
 wxDrawOverlayResizeHint(wxWindow* win, wxOverlay& overlay, const wxRect& rect)
 {
-    wxClientDC dc{win};
-    wxDCOverlay overlaydc(overlay, &dc);
-    overlaydc.Clear();
+    wxOverlayDC dc(overlay, win);
+    dc.Clear();
 
     wxBitmap stipple = wxPaneCreateStippleBitmap();
     wxBrush brush(stipple);

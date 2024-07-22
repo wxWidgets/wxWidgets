@@ -2161,11 +2161,10 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         m_currentpoint = wxPoint( xx , yy ) ;
         wxRect newrect ( m_anchorpoint , m_currentpoint ) ;
 
-        wxClientDC dc( this ) ;
-        PrepareDC( dc ) ;
+        wxOverlayDC dc(m_overlay, this);
+        PrepareDC(dc);
 
-        wxDCOverlay overlaydc( m_overlay, &dc );
-        overlaydc.Clear();
+        dc.Clear();
 #ifdef __WXMAC__
         dc.SetPen( *wxGREY_PEN );
         dc.SetBrush( wxColour( 192,192,192,64 ) );
@@ -2197,10 +2196,9 @@ bool MyCanvas::StopRubberBanding()
         return false;
 
     {
-        wxClientDC dc( this );
-        PrepareDC( dc );
-        wxDCOverlay overlaydc( m_overlay, &dc );
-        overlaydc.Clear();
+        wxOverlayDC dc(m_overlay, this);
+        PrepareDC(dc);
+        dc.Clear();
     }
     m_overlay.Reset();
     m_rubberBand = false;

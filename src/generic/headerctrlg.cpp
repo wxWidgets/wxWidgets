@@ -269,10 +269,8 @@ bool wxHeaderCtrl::IsReordering() const
 
 void wxHeaderCtrl::ClearMarkers()
 {
-    wxClientDC dc(this);
-
-    wxDCOverlay dcover(m_overlay, &dc);
-    dcover.Clear();
+    wxOverlayDC dc(m_overlay, this);
+    dc.Clear();
 }
 
 void wxHeaderCtrl::EndDragging()
@@ -372,10 +370,8 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
 
 void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 {
-    wxClientDC dc(this);
-
-    wxDCOverlay dcover(m_overlay, &dc);
-    dcover.Clear();
+    wxOverlayDC dc(m_overlay, this);
+    dc.Clear();
 
     dc.SetPen(*wxBLUE);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
