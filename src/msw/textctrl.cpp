@@ -1203,7 +1203,7 @@ void wxTextCtrl::SetRTFValue(const wxString& val)
         {
             ::SendMessage(GetHwnd(), EM_SETREADONLY, FALSE, 0);
         }
-        
+
         ::SendMessage(GetHwnd(), EM_SETTEXTEX, (WPARAM)&textInfo,
             (LPARAM)static_cast<const wchar_t*>(val));
 
