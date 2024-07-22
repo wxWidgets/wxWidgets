@@ -1004,7 +1004,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     if ( GetBitmapData()->m_bitmapMask )
     {
         wxMemoryBuffer maskbuf ;
-        int rowBytes = static_cast<int>(GetBestBytesPerRow( destwidth * kMaskBytesPerPixel ));
+        int rowBytes = GetBestBytesPerRow( destwidth * kMaskBytesPerPixel );
         size_t maskbufsize = rowBytes * destheight ;
 
         int sourcelinesize = GetBitmapData()->m_bitmapMask->GetBytesPerRow() ;
@@ -1183,7 +1183,7 @@ void wxBitmap::InitFromImage(const wxImage& image, int depth, double scale)
             unsigned char* destinationRowStart = destinationPixels;
 
             wxMemoryBuffer maskbuf ;
-            int maskRowBytes = static_cast<int>(GetBestBytesPerRow( width * kMaskBytesPerPixel ));
+            int maskRowBytes = GetBestBytesPerRow( width * kMaskBytesPerPixel );
             size_t maskbufsize = maskRowBytes * height ;
 
             unsigned char *destinationMask = nullptr;
@@ -1549,17 +1549,17 @@ void *wxMask::GetRawAccess() const
 
 int wxMask::GetBytesPerRow() const
 {
-    return static_cast<int>(CGBitmapContextGetBytesPerRow(m_maskBitmap));
+    return CGBitmapContextGetBytesPerRow(m_maskBitmap);
 }
 
 int wxMask::GetWidth() const
 {
-    return static_cast<int>(CGBitmapContextGetWidth(m_maskBitmap));
+    return CGBitmapContextGetWidth(m_maskBitmap);
 }
 
 int wxMask::GetHeight() const
 {
-    return static_cast<int>(CGBitmapContextGetHeight(m_maskBitmap));
+    return CGBitmapContextGetHeight(m_maskBitmap);
 }
 
 
@@ -1571,7 +1571,7 @@ void wxMask::DoCreateMaskBitmap(int width, int height, int bytesPerRow)
     wxCFRef<CGColorSpaceRef> colorspace = CGColorSpaceCreateDeviceGray();
 
    if ( bytesPerRow < 0 )
-        bytesPerRow = static_cast<int>(GetBestBytesPerRow(width * kMaskBytesPerPixel));
+        bytesPerRow = GetBestBytesPerRow(width * kMaskBytesPerPixel);
 
     m_maskBitmap = CGBitmapContextCreate(nullptr, width, height, kMaskBytesPerPixel * 8, bytesPerRow, colorspace,
         kCGImageAlphaNone);
