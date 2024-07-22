@@ -1123,7 +1123,7 @@ DWORD wxCALLBACK MSWEditStreamOutCallback(DWORD_PTR dwCookie, LPBYTE pbBuff,
     wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
     MSG msg;
-    while ( ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
+    while ( ::PeekMessage(&msg, (HWND)0, 0, 0, PM_REMOVE) )
     {
         if (msg.message != WM_QUIT)
         {
