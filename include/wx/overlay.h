@@ -14,8 +14,7 @@
 
 // ----------------------------------------------------------------------------
 // creates an overlay over an existing window, allowing for manipulations like
-// rubberbanding etc. This API is not stable yet, not to be used outside wx
-// internal code
+// rubberbanding etc.
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxDC;

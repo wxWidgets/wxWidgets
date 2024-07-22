@@ -9,8 +9,20 @@
    @class wxOverlay
 
    Creates an overlay over an existing window, allowing for manipulations like
-   rubberbanding, etc.  On wxOSX the overlay is implemented with native
-   platform APIs, on the other platforms it is simulated using wxMemoryDC.
+   rubber-banding, etc.
+
+   Overlay is implemented internally as a native window shown on top of the
+   window it is used with and it is more efficient to keep the wxOverlay object
+   around instead of recreating it every time it's needed, i.e. typically you
+   would have a member variable of type wxOverlay in your window class.
+
+   The overlay is initialized automatically when it is used but has to be
+   cleared manually, using its Reset() function, when its contents shouldn't be
+   shown any longer.
+
+   Use of this class is shown in the @ref page_samples_drawing where pressing
+   the left mouse button and dragging the mouse creates a rubber band effect
+   using wxOverlay.
 
    @library{wxcore}
 
