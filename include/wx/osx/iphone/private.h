@@ -137,65 +137,65 @@ public :
 
     virtual ~wxNonOwnedWindowIPhoneImpl();
 
-    virtual void WillBeDestroyed() ;
-    void Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
-    long style, long extraStyle, const wxString& name ) ;
+    virtual void WillBeDestroyed() override;
+    void Create(wxWindow* parent, const wxPoint& pos, const wxSize& size,
+                long style, long extraStyle, const wxString& name ) override;
     void Create( wxWindow* parent, WXWindow nativeWindow );
 
-    WXWindow GetWXWindow() const;
-    void Raise();
-    void Lower();
-    bool Show(bool show);
-    bool ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout);
+    WXWindow GetWXWindow() const override;
+    void Raise() override;
+    void Lower() override;
+    bool Show(bool show) override;
+    bool ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout) override;
 
-    void Update();
-    bool SetTransparent(wxByte alpha);
-    bool SetBackgroundColour(const wxColour& col );
-    void SetExtraStyle( long exStyle );
-    bool SetBackgroundStyle(wxBackgroundStyle style);
-    bool CanSetTransparent();
+    void Update() override;
+    bool SetTransparent(wxByte alpha) override;
+    bool SetBackgroundColour(const wxColour& col ) override;
+    void SetExtraStyle( long exStyle ) override;
+    bool SetBackgroundStyle(wxBackgroundStyle style) override;
+    bool CanSetTransparent() override;
 
-    void MoveWindow(int x, int y, int width, int height);
-    void GetPosition( int &x, int &y ) const;
-    void GetSize( int &width, int &height ) const;
+    void MoveWindow(int x, int y, int width, int height) override;
+    void GetPosition( int &x, int &y ) const override;
+    void GetSize( int &width, int &height ) const override;
 
-    void GetContentArea( int &left , int &top , int &width , int &height ) const;
+    void GetContentArea( int &left , int &top , int &width , int &height ) const override;
     bool SetShape(const wxRegion& region);
 
-    virtual void SetTitle( const wxString& title ) ;
+    virtual void SetTitle( const wxString& title ) override;
 
     // Title bar buttons don't exist in iOS.
-    virtual bool EnableCloseButton(bool WXUNUSED(enable)) { return false; }
-    virtual bool EnableMaximizeButton(bool WXUNUSED(enable)) { return false; }
-    virtual bool EnableMinimizeButton(bool WXUNUSED(enable)) { return false; }
+    virtual bool EnableCloseButton(bool WXUNUSED(enable)) override { return false; }
+    virtual bool EnableMaximizeButton(bool WXUNUSED(enable)) override { return false; }
+    virtual bool EnableMinimizeButton(bool WXUNUSED(enable)) override { return false; }
 
-    virtual bool IsMaximized() const;
+    virtual bool IsMaximized() const override;
 
-    virtual bool IsIconized() const;
+    virtual bool IsIconized() const override;
 
-    virtual void Iconize( bool iconize );
+    virtual void Iconize( bool iconize ) override;
 
-    virtual void Maximize(bool maximize);
+    virtual void Maximize(bool maximize) override;
 
-    virtual bool IsFullScreen() const;
+    virtual bool IsFullScreen() const override;
 
-    virtual bool EnableFullScreenView(bool enable, long style);
+    virtual bool EnableFullScreenView(bool enable, long style) override;
 
-    virtual bool ShowFullScreen(bool show, long style);
+    virtual bool ShowFullScreen(bool show, long style) override;
 
     virtual wxContentProtection GetContentProtection() const override
         {  return wxCONTENT_PROTECTION_NONE; }
     virtual bool SetContentProtection(wxContentProtection contentProtection) override
         { return false; }
 
-    virtual void RequestUserAttention(int flags);
+    virtual void RequestUserAttention(int flags) override;
 
-    virtual void ScreenToWindow( int *x, int *y );
+    virtual void ScreenToWindow( int *x, int *y ) override;
 
-    virtual void WindowToScreen( int *x, int *y );
+    virtual void WindowToScreen( int *x, int *y ) override;
 
     // FIXME: Does iPhone have a concept of inactive windows?
-    virtual bool IsActive() { return true; }
+    virtual bool IsActive() override { return true; }
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
