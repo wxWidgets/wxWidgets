@@ -260,6 +260,8 @@ function(wx_set_target_properties target_name)
     set(lib_prefix "lib")
     if(MSVC OR (WIN32 AND wxBUILD_SHARED))
         set(lib_prefix)
+    elseif (CYGWIN AND wxBUILD_SHARED)
+        set(lib_prefix "cyg")
     endif()
 
     # static (and import) library names
