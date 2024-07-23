@@ -806,7 +806,7 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
         cairo_region_destroy(region);
     }
 
-    g_signal_connect(widget, "draw", G_CALLBACK(draw_icon), icon);
+    g_signal_connect(m_iconWindow, "draw", G_CALLBACK(draw_icon), icon);
 
 #else // !__WXGTK3__
 
@@ -919,6 +919,12 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     g_signal_handlers_disconnect_by_func (m_iconWindow,
                                           (gpointer) gtk_dnd_window_configure_callback, this);
+
+#ifdef __WXGTK3__
+    g_signal_handlers_disconnect_matched (m_iconWindow,
+                                          G_SIGNAL_MATCH_FUNC, 0, 0,  NULL, (gpointer) draw_icon, NULL);
+#endif
+
     g_object_unref(m_iconWindow);
     m_iconWindow = NULL;
 
