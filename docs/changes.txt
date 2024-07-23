@@ -262,6 +262,7 @@ All (GUI):
 - Fix resource leak in wxBitmapBundle in some circumstances (#24703).
 - Speed up using XRC when using wxXRC_NO_RELOADING (John de Rooij, #24536).
 - Fix wxGridBagSizer with different horz/vert gaps (Alex Shvartzkop, #24550).
+- Dark mode appearance fixes for wxActivityIndicator, wxHyperlinkCtrl, etc.
 
 wxGTK:
 
