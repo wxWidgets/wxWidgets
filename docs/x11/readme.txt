@@ -41,9 +41,10 @@ Please send problems concerning installation, feature requests,
 bug reports or comments to the wxWidgets users list. Information
 on how to subscribe is available from www.wxwidgets.org.
 
-wxWidgets/X11 doesn't come with any guarantee whatsoever. It might
-crash your hard disk or destroy your monitor. It doesn't claim to be
-suitable for any special or general purpose.
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+General Public Licence for more details.
 
 Status
 ======
