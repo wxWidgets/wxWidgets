@@ -1119,19 +1119,6 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 DWORD wxCALLBACK MSWEditStreamOutCallback(DWORD_PTR dwCookie, LPBYTE pbBuff,
     LONG cb, LONG* WXUNUSED(pcb))
 {
-#if wxUSE_THREADS
-    wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-    MSG msg;
-    while ( ::PeekMessage(&msg, (HWND)0, 0, 0, PM_REMOVE) )
-    {
-        if (msg.message != WM_QUIT)
-        {
-            ::TranslateMessage(&msg);
-            ::DispatchMessage(&msg);
-        }
-    }
-
     // write the text
     std::string* psEntry = reinterpret_cast<std::string*>(dwCookie);
     if ( psEntry != nullptr )
