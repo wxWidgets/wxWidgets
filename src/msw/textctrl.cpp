@@ -1121,10 +1121,7 @@ DWORD wxCALLBACK MSWEditStreamOutCallback(DWORD_PTR dwCookie, LPBYTE pbBuff,
 {
     // write the text
     std::string* psEntry = reinterpret_cast<std::string*>(dwCookie);
-    if ( psEntry != nullptr )
-    {
-        psEntry->append(reinterpret_cast<const char*>(pbBuff), cb);
-    }
+    psEntry->append(reinterpret_cast<const char*>(pbBuff), cb);
 
     return 0;
 }
