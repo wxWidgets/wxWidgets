@@ -1117,11 +1117,12 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 #if wxUSE_RICHEDIT
 
 DWORD wxCALLBACK MSWEditStreamOutCallback(DWORD_PTR dwCookie, LPBYTE pbBuff,
-    LONG cb, LONG* WXUNUSED(pcb))
+    LONG cb, LONG* pcb)
 {
     // write the text
     std::string* psEntry = reinterpret_cast<std::string*>(dwCookie);
     psEntry->append(reinterpret_cast<const char*>(pbBuff), cb);
+    *pcb = cb;
 
     return 0;
 }
