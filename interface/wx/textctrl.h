@@ -1659,14 +1659,15 @@ public:
         Returns @c true if text controls support reading and writing RTF (Rich
         Text Format).
 
-        This function only returns @true in wxOSX and wxMSW (if wxUSE_RICHEDIT is defined),
-        which are the only ports implementing RTF support in wxTextCtrl.
+        This function only returns @true in wxOSX (for multiline contrls) and
+        wxMSW (for rich controls), which are the only ports implementing
+        RTF support in wxTextCtrl.
 
         @since 3.3.0
 
         @see GetRTFValue(), SetRTFValue()
     */
-    static bool IsRTFSupported();
+    bool IsRTFSupported();
 
     /**
         Returns the content of a multiline text control as RTF (Rich Text

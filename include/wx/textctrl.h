@@ -691,7 +691,7 @@ public:
     virtual void SetValue(const wxString& value) = 0;
 
     // Returns whether the RTF-related functions below can be used.
-    static bool IsRTFSupported();
+    virtual bool IsRTFSupported() { return false; };
 
     // Base class implementations simply assert, if IsRTFSupported() returns
     // true, the port must override these functions to really implement them.

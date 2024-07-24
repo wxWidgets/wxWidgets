@@ -43,6 +43,7 @@ public:
 #if wxUSE_RICHEDIT
     virtual wxString GetRTFValue() const override;
     virtual void SetRTFValue(const wxString& val) override;
+    virtual bool IsRTFSupported() override { return IsRich(); }
 #endif // wxUSE_RICHEDIT
 
     virtual bool IsEmpty() const;
