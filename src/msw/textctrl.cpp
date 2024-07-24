@@ -1168,11 +1168,7 @@ wxString wxTextCtrl::GetRTFValue() const
 
 void wxTextCtrl::SetRTFValue(const wxString& val)
 {
-    if ( !IsRich() )
-    {
-        wxFAIL_MSG("RTF support is only available for rich controls!");
-        return;
-    }
+    wxCHECK_RET(IsRich(), "RTF support is only available for rich controls!");
 
     SETTEXTEX textInfo{ 0 };
     textInfo.flags = GetRichVersion() > 1 ? (ST_DEFAULT | ST_UNICODE) : ST_DEFAULT;
