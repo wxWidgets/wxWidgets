@@ -66,11 +66,10 @@ public:
 
     static wxString AsString( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
     static wxString AsStringWithNormalizationFormC( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-#ifdef __WXMAC__
+#ifdef __OBJC__
     static wxString AsString( WX_NSString ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
     static wxString AsStringWithNormalizationFormC( WX_NSString ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-#endif
-#ifdef __OBJC__
+
     WX_NSString AsNSString() const { return (WX_OSX_BRIDGE WX_NSString)(CFStringRef) *this; }
 #endif
 private:
@@ -87,7 +86,7 @@ inline wxCFStringRef wxCFStringRefFromGet(CFStringRef p)
     return wxCFStringRef(wxCFRetain(p));
 }
 
-#ifdef __WXMAC__
+#ifdef __OBJC__
 /*! @function   wxCFStringRefFromGet
     @abstract   Factory function to create wxCFStringRefRef from a NSString* obtained from a Get-rule function
     @param  p           The NSString pointer to retain and create a wxCFStringRefRef from.  May be NULL.
@@ -98,6 +97,7 @@ inline wxCFStringRef wxCFStringRefFromGet(NSString *p)
 {
     return wxCFStringRefFromGet((WX_OSX_BRIDGE CFStringRef)p);
 }
+
 #endif
 
 #endif //__WXCFSTRINGHOLDER_H__

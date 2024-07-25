@@ -688,7 +688,7 @@ wxString wxCFStringRef::AsString(wxFontEncoding encoding) const
     return AsString( get(), encoding );
 }
 
-#ifdef __WXMAC__
+#ifdef __OBJC__
 
 wxString wxCFStringRef::AsString( NSString* ref, wxFontEncoding encoding )
 {
