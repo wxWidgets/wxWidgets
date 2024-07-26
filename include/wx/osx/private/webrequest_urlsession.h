@@ -10,6 +10,15 @@
 #ifndef _WX_OSX_WEBREQUEST_URLSESSION_H
 #define _WX_OSX_WEBREQUEST_URLSESSION_H
 
+#if defined(__OBJC__)
+#define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+@class klass; \
+typedef klass *WX_##klass
+#else /*  not defined(__OBJC__) */
+#define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
+typedef struct klass *WX_##klass
+#endif /*  defined(__OBJC__) */
+
 #if wxUSE_WEBREQUEST_URLSESSION
 
 #include "wx/private/webrequest.h"
@@ -18,6 +27,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSURLCredential);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSession);
 DECLARE_WXCOCOA_OBJC_CLASS(NSURLSessionTask);
 DECLARE_WXCOCOA_OBJC_CLASS(wxWebSessionDelegate);
+DECLARE_WXCOCOA_OBJC_CLASS(NSData);
 
 class wxWebSessionURLSession;
 class wxWebRequestURLSession;
