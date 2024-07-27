@@ -202,7 +202,7 @@ wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
     wxUnusedVar(nCmdShow);
 #endif
 
-    wxInitData().Get().MSWInitialize();
+    wxInitData::Get().MSWInitialize();
 
     return true;
 }
@@ -241,7 +241,7 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
 
 int wxEntry()
 {
-    wxInitData().Get().MSWInitialize();
+    wxInitData::Get().MSWInitialize();
 
     auto& initData = wxInitData::Get();
     return wxEntry(initData.argc, initData.argv);
