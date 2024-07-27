@@ -271,17 +271,17 @@ void wxInitData::Free()
 
         // If argvMSW is non-null, argv must be the same value, so reset it too.
         argv = argvMSW = nullptr;
-        argc = 0;
     }
+#else
+    for ( int i = 0; i < argc; i++ )
+    {
+        free(argv[i]);
+    }
+    wxDELETEA(argv);
 #endif // __WINDOWS__
 
     if ( argc )
     {
-        for ( int i = 0; i < argc; i++ )
-        {
-            free(argv[i]);
-        }
-
 #ifndef __WXMSW__
         if ( ownsArgvA )
         {
@@ -294,7 +294,6 @@ void wxInitData::Free()
         }
 #endif // !__WXMSW__
 
-        wxDELETEA(argv);
         argc = 0;
     }
 }
