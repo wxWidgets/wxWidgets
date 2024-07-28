@@ -2986,9 +2986,8 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
 
 void wxAuiManager::ShowHint(const wxRect& rect)
 {
-    wxClientDC dc(m_frame);
-    wxDCOverlay overlaydc(m_overlay, &dc);
-    overlaydc.Clear();
+    wxOverlayDC dc(m_overlay, m_frame);
+    dc.Clear();
 
     wxDCClipper clip(dc, rect);
 
