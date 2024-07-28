@@ -274,6 +274,7 @@
             exec/exec.cpp
             font/fonttest.cpp
             image/image.cpp
+            image/imagwebp.cpp
             image/rawbmp.cpp
             html/htmlparser.cpp
             html/htmlwindow.cpp
@@ -362,7 +363,8 @@
     <wx-data id="data-image-sample">
         <!-- test data for image/image.cpp test unit: -->
         <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg
-               horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
+               horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm
+               horse.webp</files>
     </wx-data>
 
     <wx-data id="data-images">

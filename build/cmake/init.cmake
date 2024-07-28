@@ -348,6 +348,14 @@ if(wxUSE_LIBLZMA)
     endif()
 endif()
 
+if(wxUSE_LIBWEBP)
+    find_package(WebP) # TODO: select specific components as soon as upstream-supplied WebPConfig.cmake supports it
+    if (NOT ${WebP_FOUND})
+        message(WARNING "libwebp not found, WebP file format will not be supported")
+        wx_option_force_value(wxUSE_LIBWEBP OFF)
+    endif()
+endif()
+
 if (wxUSE_WEBREQUEST)
     if(wxUSE_WEBREQUEST_CURL)
         find_package(CURL)

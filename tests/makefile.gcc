@@ -1123,6 +1123,9 @@ $(OBJS)\test_gui_fonttest.o: ./font/fonttest.cpp
 $(OBJS)\test_gui_image.o: ./image/image.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_imagwebp.o: ./image/imagwebp.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_rawbmp.o: ./image/rawbmp.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
