@@ -18,6 +18,7 @@
 #include "wx/scrolwin.h"
 
 #include <iterator>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 
