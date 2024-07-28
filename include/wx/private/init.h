@@ -59,9 +59,11 @@ public:
     wchar_t** argvMSW = nullptr;
 #endif // __WINDOWS__
 
-    // wxMSW traditionally doesn't use narrow command line arguments, but the
-    // other ports do need them, even under Windows, so we keep them here.
-#ifndef __WXMSW__
+    // At least wxGTK needs narrow command line arguments too and even thought
+    // other ports under Windows typically don't need them (e.g. wxMSW itself
+    // doesn't), we have to have them, as this header is toolkit-independent,
+    // and so can't differ between wxMSW and wxGTK.
+
     // Initializes argvA using argc and argv. This means that argc and argv
     // MUST be initialized before calling this function.
     void InitArgvA();
@@ -69,7 +71,6 @@ public:
     // This pointer may or not need to be freed, as indicated by ownsArgvA flag.
     char** argvA = nullptr;
     bool ownsArgvA = false;
-#endif // !__WXMSW__
 
     wxDECLARE_NO_COPY_CLASS(wxInitData);
 };
