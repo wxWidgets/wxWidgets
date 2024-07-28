@@ -16,8 +16,10 @@
 
 struct WXDLLIMPEXP_BASE wxInitData
 {
+private:
     wxInitData() = default;
 
+public:
     // Get the single global object.
     static wxInitData& Get();
 
