@@ -1997,7 +1997,8 @@ wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayS
 
 wxWindow* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
-    wxVariant string_value = GetChoice( value.GetLong() );
+    wxVariant string_value = value.GetLong() != wxNOT_FOUND ? GetChoice( value.GetLong() )
+                                                            : wxString();
 
     return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
 }
@@ -2014,7 +2015,8 @@ bool wxDataViewChoiceByIndexRenderer::GetValueFromEditorCtrl( wxWindow* editor, 
 
 bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
 {
-    wxVariant string_value = GetChoice( value.GetLong() );
+    wxVariant string_value = value.GetLong() != wxNOT_FOUND ? GetChoice( value.GetLong() )
+                                                            : wxString();
     return wxDataViewChoiceRenderer::SetValue( string_value );
 }
 
