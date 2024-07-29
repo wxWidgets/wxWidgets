@@ -2438,6 +2438,9 @@ public:
 
     /**
         Returns the choice referred to by index.
+
+        @param index A valid index, i.e. a value between 0 and number of
+            choices minus one.
     */
     wxString GetChoice(size_t index) const;
 
@@ -2454,6 +2457,10 @@ public:
     Unlike its base wxDataViewChoiceRenderer class, this one stores the choice
     index, i.e. an @c int, in the variant used by its SetValue() and
     GetValue().
+
+    The index must be either a valid index, i.e. a value between 0 and the
+    number of choices minus one, or @c -1, in which case the renderer shows an
+    empty string.
 
     @library{wxcore}
     @category{dvc}

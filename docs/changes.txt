@@ -263,6 +263,8 @@ All (GUI):
 - Speed up using XRC when using wxXRC_NO_RELOADING (John de Rooij, #24536).
 - Fix wxGridBagSizer with different horz/vert gaps (Alex Shvartzkop, #24550).
 - Dark mode appearance fixes for wxActivityIndicator, wxHyperlinkCtrl, etc.
+- Fix using wxNOT_FOUND index with wxDataViewChoiceByIndexRenderer (Konstantin
+  S. Matveyev, #24741).
 
 wxGTK:
 
