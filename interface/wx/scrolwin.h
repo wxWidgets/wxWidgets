@@ -81,8 +81,9 @@ enum wxScrollbarVisibility
     context (prepared by wxScrolled::DoPrepareDC()).
 
     If you don't wish to calculate your own scrolling, you must call
-    DoPrepareDC() when not drawing from within OnDraw(), to set the device
-    origin for the device context according to the current scroll position.
+    PrepareDC() or PrepareReadOnlyDC() when not drawing from within OnDraw(),
+    to set the device origin for the device context according to the current
+    scroll position.
 
     A wxScrolled will normally scroll itself and therefore its child windows
     as well. It might however be desired to scroll a different window than
@@ -266,40 +267,57 @@ public:
         Call this function to prepare the device context for drawing a scrolled
         image.
 
-        It sets the device origin according to the current scroll position.
+        It sets the device origin according to the current scroll position and
+        also changes the device scale according to the current scaling factor
+        set by SetScale().
+
         DoPrepareDC() is called automatically within the default @c wxEVT_PAINT
         event handler, so your OnDraw() override will be passed an already
         'pre-scrolled' device context. However, if you wish to draw from
         outside of OnDraw() (e.g. from your own @c wxEVT_PAINT handler), you
         must call this function yourself.
 
-        For example:
+        Note that this function can be used only with wxPaintDC, but not
+        wxInfoDC, while DoPrepareReadOnlyDC() can be used with either of these
+        classes.
+     */
+    void DoPrepareDC(wxDC& dc);
+
+    /**
+        Call this function to adjust any device context used with this window.
+
+        It sets the device origin according to the current scroll position and
+        also changes the device scale according to the current scaling factor
+        set by SetScale().
+
+        Unlike DoPrepareDC(), this function can be used with wxInfoDC, which
+        makes it useful when computing the coordinates of mouse events, for
+        example:
+
         @code
         void MyWindow::OnEvent(wxMouseEvent& event)
         {
-          wxClientDC dc(this);
-          DoPrepareDC(dc);
+          wxInfoDC dc(this);
+          DoPrepareReadOnlyDC(dc);
 
-          dc.SetPen(*wxBLACK_PEN);
-          float x, y;
-          event.Position(&x, &y);
-          if (xpos > -1 && ypos > -1 && event.Dragging())
+          if ( event.Dragging() )
           {
-            dc.DrawLine(xpos, ypos, x, y);
+            m_lastDragPosition = event.GetLogicalPosition(dc);
+            Refresh();
           }
-          xpos = x;
-          ypos = y;
         }
         @endcode
 
         Notice that the function sets the origin by moving it relatively to the
         current origin position, so you shouldn't change the origin before
-        calling DoPrepareDC() or, if you do, reset it to (0, 0) later. If you
-        call DoPrepareDC() immediately after device context creation, as in the
+        calling it or, if you do, reset it to (0, 0) later. If you call
+        this function immediately after device context creation, as in the
         example above, this problem doesn't arise, of course, so it is
         customary to do it like this.
+
+        @since 3.3.0
     */
-    void DoPrepareDC(wxDC& dc);
+    void DoPrepareReadOnlyDC(wxDC& dc);
 
     /**
         Enable or disable use of wxWindow::ScrollWindow() for scrolling.
@@ -434,12 +452,32 @@ public:
     virtual void OnDraw(wxDC& dc);
 
     /**
-        This function is for backwards compatibility only and simply calls
-        DoPrepareDC() now. Notice that it is not called by the default paint
-        event handle (DoPrepareDC() is), so overriding this method in your
-        derived class is useless.
+        This function is overridden to call DoPrepareDC().
+
+        It may be more convenient to call this function in the code which only
+        has wxWindow pointer, as this function is available in the base class
+        too, unlike DoPrepareDC().
+
+        Note that, if necessary, you should only override DoPrepareDC(), or
+        DoPrepareReadOnlyDC(), and not this function.
+
+        @see PrepareReadOnlyDC()
     */
-    void PrepareDC(wxDC& dc);
+    virtual void PrepareDC(wxDC& dc);
+
+    /**
+        This function is overridden to call DoPrepareReadOnlyDC().
+
+        It may be more convenient to call this function in the code which only
+        has wxWindow pointer, as this function is available in the base class
+        too, unlike DoPrepareReadOnlyDC().
+
+        Note that, if necessary, you should only override
+        DoPrepareReadOnlyDC(), and not this function.
+
+        @since 3.3.0
+    */
+    virtual void PrepareReadOnlyDC(wxReadOnlyDC& dc);
 
     /**
         Scrolls a window so the view start is at the given point.
@@ -547,7 +585,22 @@ public:
     int GetScrollPageSize(int orient) const;
     void SetScrollPageSize(int orient, int pageSize);
     int GetScrollLines( int orient ) const;
+
+    /**
+        Set the scaling factor for the window.
+
+        This method can be used to scale the window contents, provided that
+        DoPrepareDC() or DoPrepareReadOnlyDC() is called.
+
+        @param xs
+            The horizontal scaling factor.
+        @param ys
+            The vertical scaling factor.
+
+        @see GetScaleX(), GetScaleY()
+    */
     void SetScale(double xs, double ys);
+
     double GetScaleX() const;
     double GetScaleY() const;
 

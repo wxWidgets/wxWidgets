@@ -40,24 +40,10 @@ public:
 /**
     @class wxClientDC
 
-    wxClientDC is primarily useful for obtaining information about the window
-    from outside EVT_PAINT() handler.
+    Deprecated class for drawing on the client area of a window.
 
-    Typical use of this class is to obtain the extent of some text string in
-    order to allocate enough size for a window, e.g.
-    @code
-        // Create the initially empty label with the size big enough to show
-        // the given string.
-        wxClientDC dc(this);
-        wxStaticText* text = new wxStaticText
-            (
-                this, wxID_ANY, "",
-                wxPoint(),
-                dc.GetTextExtent("String of max length"),
-                wxST_NO_AUTORESIZE
-            );
-    }
-    @endcode
+    wxClientDC should not be used any longer, please use wxInfoDC instead for
+    obtaining information about the device context associated with a window.
 
     @note While wxClientDC may also be used for drawing on the client area of a
     window from outside an EVT_PAINT() handler in some ports, this does @em not
@@ -112,6 +98,11 @@ public:
 
 /**
     @class wxWindowDC
+
+    Deprecated class for drawing on the entire window.
+
+    Please don't use this class in the new code, as it doesn't work on modern
+    systems any longer and using it is not guaranteed to have any effect at all.
 
     A wxWindowDC must be constructed if an application wishes to paint on the
     whole area of a window (client and decorations). This should normally be
