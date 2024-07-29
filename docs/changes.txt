@@ -280,6 +280,7 @@ wxMSW:
 - More Windows Server versions in wxGetOsDescription() (PB, #24598, #24603).
 - Fix using wx/wxprec.h with vcpkg (Maarten Bent, #24353, #24632).
 - Fix wxNotebook size calculation in high DPI (#24606).
+- Fix size of dragged text in wxDataViewCtrl in high DPI (taler21, #24648).
 - Fix crash when using static wx libraries in a DLL (#24730).
 - Fix some warnings from Windows SDK headers with MSVC /W4 (#23716).
 

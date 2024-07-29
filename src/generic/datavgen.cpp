@@ -1714,8 +1714,8 @@ public:
                                         wxFRAME_FLOAT_ON_PARENT |
                                         wxFRAME_NO_TASKBAR |
                                         wxNO_BORDER );
-            new wxBitmapCanvas( m_hint, ib, ib.GetSize() );
-            m_hint->SetClientSize(ib.GetSize());
+            new wxBitmapCanvas( m_hint, ib, ib.GetLogicalSize() );
+            m_hint->SetClientSize(ib.GetLogicalSize());
             m_hint->SetTransparent(128);
             m_hint->Show();
         }
@@ -2465,7 +2465,13 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
     }
     width -= indent;
 
-    wxBitmap bitmap( width, height );
+    wxBitmap bitmap;
+#ifdef wxHAS_DPI_INDEPENDENT_PIXELS
+    bitmap.CreateWithDIPSize( width, height, GetDPIScaleFactor() );
+#else
+    bitmap.Create( width, height );
+    bitmap.SetScaleFactor( GetDPIScaleFactor() );
+#endif
     wxMemoryDC dc( bitmap );
     dc.SetFont( GetFont() );
     dc.SetPen( *wxBLACK_PEN );
