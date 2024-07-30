@@ -318,7 +318,7 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
         1, // Vertically stretchable
         wxEXPAND // Horizontal stretching, no border
     );
-    mainColumn->Add(0,5,
+    mainColumn->Add(0, FromDIP(5),
         0, // No vertical stretching
         wxEXPAND // No border, (mostly useless) horizontal stretching
     );
@@ -335,10 +335,10 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
             m_statbmp,
             0, // No horizontal stretching
             wxALL, // Border all around, top alignment
-            5 // Border width
+            FromDIP(5) // Border width
         );
         m_sizerBmpAndPage->Add(
-            5,0,
+            FromDIP(5), 0,
             0, // No horizontal stretching
             wxEXPAND // No border, (mostly useless) vertical stretching
         );
@@ -356,9 +356,9 @@ void wxWizard::AddStaticLine(wxBoxSizer *mainColumn)
         new wxStaticLine(this, wxID_ANY),
         0, // Vertically unstretchable
         wxEXPAND | wxALL, // Border all around, horizontally stretchable
-        5 // Border width
+        FromDIP(5) // Border width
     );
-    mainColumn->Add(0,5,
+    mainColumn->Add(0, FromDIP(5),
         0, // No vertical stretching
         wxEXPAND // No border, (mostly useless) horizontal stretching
     );
@@ -378,11 +378,11 @@ void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
         backNextPair,
         0, // No horizontal stretching
         wxALL, // Border all around
-        5 // Border width
+        FromDIP(5) // Border width
     );
 
     backNextPair->Add(m_btnPrev);
-    backNextPair->Add(10, 0,
+    backNextPair->Add(FromDIP(10), 0,
         0, // No horizontal stretching
         wxEXPAND // No border, (mostly useless) vertical stretching
     );
@@ -476,7 +476,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
             btnHelp,
             0, // Horizontally unstretchable
             wxALL, // Border all around, top aligned
-            5 // Border width
+            FromDIP(5) // Border width
             );
 #ifdef __WXMAC__
         // Put stretchable space between help button and others
@@ -490,7 +490,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
         btnCancel,
         0, // Horizontally unstretchable
         wxALL, // Border all around, top aligned
-        5 // Border width
+        FromDIP(5) // Border width
     );
 }
 
@@ -513,7 +513,7 @@ void wxWizard::DoCreateControls()
         mainColumn,
         1, // Vertical stretching
         mainColumnSizerFlags,
-        5 // Border width
+        FromDIP(5) // Border width
     );
 
     AddBitmapRow(mainColumn);

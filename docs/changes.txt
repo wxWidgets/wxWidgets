@@ -265,6 +265,7 @@ All (GUI):
 - Dark mode appearance fixes for wxActivityIndicator, wxHyperlinkCtrl, etc.
 - Fix using wxNOT_FOUND index with wxDataViewChoiceByIndexRenderer (Konstantin
   S. Matveyev, #24741).
+- Improve wxWizard appearance in high DPI (taler21, #24743).
 
 wxGTK:
 
