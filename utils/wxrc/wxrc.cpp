@@ -680,7 +680,7 @@ void XmlResApp::MakePackageCPP(const wxArrayString& flist)
   clang++-14 before        |            158 | 5,263,864 |             2,820,830
   clang++-14 now           |              5 |   544,144 |               271,080
 */
-"void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype)\n"
+"static void XRC_ADD_FILE(const wxChar *filename, const void *binarydata, size_t size, const wxChar *mimetype)\n"
 "{\n"
 "    #if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n"
 "        return wxMemoryFSHandler::AddFileWithMimeType(filename, binarydata, size, mimetype);\n"
