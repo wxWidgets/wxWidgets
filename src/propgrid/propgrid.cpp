@@ -482,7 +482,7 @@ void wxPropertyGrid::Init2()
     m_cursorSizeWE = wxCursor(wxCURSOR_SIZEWE);
 
     // adjust bitmap icon y position so they are centered
-    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
+    m_vspacing = wxPG_DEFAULT_VSPACING;
 
     CalculateFontAndBitmapStuff( m_vspacing );
 
@@ -1375,7 +1375,6 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
 
 void wxPropertyGrid::OnDPIChanged(wxDPIChangedEvent &event)
 {
-    m_vspacing = FromDIP(wxPG_DEFAULT_VSPACING);
     CalculateFontAndBitmapStuff(m_vspacing);
     Refresh();
 
