@@ -1513,6 +1513,7 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
 #else
     QPoint qPt = event->pos();
 #endif
+    e.m_synthesized = event->source() != Qt::MouseEventSource::MouseEventNotSynthesized;
     e.SetPosition( wxQtConvertPoint( qPt ) );
     e.SetEventObject(this);
 
@@ -1717,6 +1718,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
     wxMouseEvent e( wxType );
     e.SetEventObject(this);
     e.m_clickCount = -1;
+    e.m_synthesized = event->source() != Qt::MouseEventSource::MouseEventNotSynthesized;
     e.SetPosition(mousePos);
 
     // Mouse buttons
@@ -1903,6 +1905,10 @@ bool wxWindowQt::EnableTouchEvents(int eventsMask)
         return true;
     }
 
+    if ( eventsMask & wxTOUCH_RAW_EVENTS )
+    {
+        m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);
+    }
     if ( eventsMask & wxTOUCH_PRESS_GESTURES )
     {
         m_qtWindow->setAttribute(Qt::WA_AcceptTouchEvents, true);

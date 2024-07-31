@@ -236,6 +236,27 @@ public:
         return ms_pfnSetGestureConfig;
     }
 
+    typedef BOOL (WINAPI *RegisterTouchWindow_t)(HWND,ULONG);
+
+    static RegisterTouchWindow_t RegisterTouchWindow()
+    {
+        return ms_pfnRegisterTouchWindow;
+    }
+
+    typedef BOOL (WINAPI *UnregisterTouchWindow_t)(HWND);
+
+    static UnregisterTouchWindow_t UnregisterTouchWindow()
+    {
+        return ms_pfnUnregisterTouchWindow;
+    }
+
+    typedef BOOL (WINAPI *GetTouchInputInfo_t)(HANDLE, UINT, PTOUCHINPUT, int);
+
+    static GetTouchInputInfo_t GetTouchInputInfo()
+    {
+        return ms_pfnGetTouchInputInfo;
+    }
+
 private:
     static void LoadGestureSymbols()
     {
@@ -244,11 +265,17 @@ private:
         wxDL_INIT_FUNC(ms_pfn, GetGestureInfo, dll);
         wxDL_INIT_FUNC(ms_pfn, CloseGestureInfoHandle, dll);
         wxDL_INIT_FUNC(ms_pfn, SetGestureConfig, dll);
+        wxDL_INIT_FUNC(ms_pfn, RegisterTouchWindow, dll);
+        wxDL_INIT_FUNC(ms_pfn, UnregisterTouchWindow, dll);
+        wxDL_INIT_FUNC(ms_pfn, GetTouchInputInfo, dll);
     }
 
     static GetGestureInfo_t ms_pfnGetGestureInfo;
     static CloseGestureInfoHandle_t ms_pfnCloseGestureInfoHandle;
     static SetGestureConfig_t ms_pfnSetGestureConfig;
+    static RegisterTouchWindow_t ms_pfnRegisterTouchWindow;
+    static UnregisterTouchWindow_t ms_pfnUnregisterTouchWindow;
+    static GetTouchInputInfo_t ms_pfnGetTouchInputInfo;
 
     static bool ms_gestureSymbolsLoaded;
 };
@@ -259,6 +286,12 @@ GestureFuncs::CloseGestureInfoHandle_t
     GestureFuncs::ms_pfnCloseGestureInfoHandle = nullptr;
 GestureFuncs::SetGestureConfig_t
     GestureFuncs::ms_pfnSetGestureConfig = nullptr;
+GestureFuncs::RegisterTouchWindow_t
+    GestureFuncs::ms_pfnRegisterTouchWindow = nullptr;
+GestureFuncs::UnregisterTouchWindow_t
+    GestureFuncs::ms_pfnUnregisterTouchWindow = nullptr;
+GestureFuncs::GetTouchInputInfo_t
+    GestureFuncs::ms_pfnGetTouchInputInfo = nullptr;
 
 bool GestureFuncs::ms_gestureSymbolsLoaded = false;
 
@@ -344,6 +377,16 @@ void wxGetCursorPosMSW(POINT* pt)
         pt->x = GET_X_LPARAM(pos);
         pt->y = GET_Y_LPARAM(pos);
     }
+}
+
+// Checks if the mouse event originated from a pen or touchscreen.
+// Pass the return value of GetMessageExtraInfo() to extraInfo.
+static bool IsTouchEventMSW(WXLPARAM extraInfo)
+{
+    // From https://learn.microsoft.com/en-us/windows/win32/tablet/system-events-and-mouse-messages
+    const LONG_PTR MI_WP_SIGNATURE = 0xFF515700;
+    const LONG_PTR SIGNATURE_MASK = 0xFFFFFF00;
+    return (extraInfo & SIGNATURE_MASK) == MI_WP_SIGNATURE;
 }
 
 // ---------------------------------------------------------------------------
@@ -958,6 +1001,17 @@ bool wxWindowMSW::EnableTouchEvents(int eventsMask)
         // This is used only if we need to allocate the configurations
         // dynamically.
         wxVector<GESTURECONFIG> configs;
+
+        if ( eventsMask & wxTOUCH_RAW_EVENTS )
+        {
+            eventsMask &= ~wxTOUCH_RAW_EVENTS;
+             if ( !GestureFuncs::RegisterTouchWindow() (m_hWnd, 0) )
+                wxLogLastError("SetGestureConfig");
+        }
+        else
+        {
+            GestureFuncs::UnregisterTouchWindow() (m_hWnd);
+        }
 
         // There are two simple cases: enabling or disabling all gestures.
         if ( eventsMask == wxTOUCH_NONE )
@@ -3211,7 +3265,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_MOUSEMOVE:
             processed = HandleMouseMove(GET_X_LPARAM(lParam),
                                         GET_Y_LPARAM(lParam),
-                                        wParam);
+                                        wParam,
+                                        ::GetMessageExtraInfo());
             break;
 
         case WM_MOUSELEAVE:
@@ -3230,11 +3285,13 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
 #if wxUSE_MOUSEWHEEL
         case WM_MOUSEWHEEL:
-            processed = HandleMouseWheel(wxMOUSE_WHEEL_VERTICAL, wParam, lParam);
+            processed = HandleMouseWheel(wxMOUSE_WHEEL_VERTICAL, wParam, lParam,
+                                         ::GetMessageExtraInfo());
             break;
 
         case WM_MOUSEHWHEEL:
-            processed = HandleMouseWheel(wxMOUSE_WHEEL_HORIZONTAL, wParam, lParam);
+            processed = HandleMouseWheel(wxMOUSE_WHEEL_HORIZONTAL, wParam, lParam,
+                                         ::GetMessageExtraInfo());
             break;
 #endif // wxUSE_MOUSEWHEEL
 
@@ -3256,7 +3313,8 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                 wxWindowMSW *win = this;
 
-                processed = win->HandleMouseEvent(message, x, y, wParam);
+                processed = win->HandleMouseEvent(message, x, y, wParam,
+                                                  ::GetMessageExtraInfo());
 
                 // if the app didn't eat the event, handle it in the default
                 // way, that is by giving this window the focus
@@ -3555,6 +3613,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxLogLastError("CloseGestureInfoHandle");
                 }
             }
+        }
+        break;
+
+        case WM_TOUCH:
+        {
+            if ( !GestureFuncs::IsOk() )
+                break;
+
+            HandleTouch(wParam, lParam);
+            // Let DefWindowProc handle the touch events too
+            processed = false;
         }
         break;
 #endif // WM_GESTURE
@@ -5898,7 +5967,8 @@ bool wxWindowMSW::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
 
 void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
                                  int x, int y,
-                                 WXUINT flags)
+                                 WXUINT flags,
+                                 WXLPARAM extraInfo)
 {
     // our client coords are not quite the same as Windows ones
     wxPoint pt = GetClientAreaOrigin();
@@ -5914,6 +5984,8 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     event.m_aux2Down = (flags & MK_XBUTTON2) != 0;
     event.m_altDown = ::wxIsAltDown();
 
+    event.m_synthesized = ::IsTouchEventMSW(extraInfo);
+
     event.SetTimestamp(::GetMessageTime());
 
     event.SetEventObject(this);
@@ -5923,7 +5995,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     gs_lastMouseEvent.type = event.GetEventType();
 }
 
-bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
+bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags, WXLPARAM extraInfo)
 {
     // the mouse events take consecutive IDs from WM_MOUSEFIRST to
     // WM_MOUSELAST, so it's enough to subtract WM_MOUSEMOVE == WM_MOUSEFIRST
@@ -5962,12 +6034,12 @@ bool wxWindowMSW::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
     }
 
     wxMouseEvent event(eventsMouse[msg - WM_MOUSEMOVE]);
-    InitMouseEvent(event, x, y, flags);
+    InitMouseEvent(event, x, y, flags, extraInfo);
 
     return HandleWindowEvent(event);
 }
 
-bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
+bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags, WXLPARAM extraInfo)
 {
     if ( !m_mouseInWindow )
     {
@@ -6008,7 +6080,7 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             }
 
             wxMouseEvent event(wxEVT_ENTER_WINDOW);
-            InitMouseEvent(event, x, y, flags);
+            InitMouseEvent(event, x, y, flags, extraInfo);
 
             (void)HandleWindowEvent(event);
         }
@@ -6042,13 +6114,13 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
         }
     }
 
-    return HandleMouseEvent(WM_MOUSEMOVE, x, y, flags);
+    return HandleMouseEvent(WM_MOUSEMOVE, x, y, flags, extraInfo);
 }
 
 
 bool
 wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
-                              WXWPARAM wParam, WXLPARAM lParam)
+                              WXWPARAM wParam, WXLPARAM lParam, WXLPARAM extraInfo)
 {
 #if wxUSE_MOUSEWHEEL
     // notice that WM_MOUSEWHEEL position is in screen coords (as it's
@@ -6064,7 +6136,7 @@ wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
     ::ScreenToClient(GetHwnd(), &pt);
 
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
-    InitMouseEvent(event, pt.x, pt.y, LOWORD(wParam));
+    InitMouseEvent(event, pt.x, pt.y, LOWORD(wParam), extraInfo);
     event.m_wheelRotation = (short)HIWORD(wParam);
     event.m_wheelDelta = WHEEL_DELTA;
     event.m_wheelAxis = axis;
@@ -6135,7 +6207,7 @@ void wxWindowMSW::GenerateMouseLeave()
     pt.y -= rect.top;
 
     wxMouseEvent event(wxEVT_LEAVE_WINDOW);
-    InitMouseEvent(event, pt.x, pt.y, state);
+    InitMouseEvent(event, pt.x, pt.y, state, 0);
 
     (void)HandleWindowEvent(event);
 }
@@ -6276,6 +6348,43 @@ bool wxWindowMSW::HandlePressAndTap(const wxPoint& pt, WXDWORD flags)
 
     return HandleWindowEvent(event);
 }
+
+bool wxWindowMSW::HandleTouch(WXWPARAM wParam, WXLPARAM lParam)
+{
+    const unsigned count = LOWORD(wParam);
+    wxVector<TOUCHINPUT> info(count);
+    if (GestureFuncs::GetTouchInputInfo() ((HTOUCHINPUT)lParam, count, &info[0], sizeof(TOUCHINPUT)))
+    {
+        for ( const auto& input : info )
+        {
+            // hundredths of a pixel of physical screen coordinates
+            wxPoint2DDouble pt(input.x / 100.0, input.y / 100.0);
+            wxPoint ref = pt.GetFloor();
+            wxPoint2DDouble pos = ScreenToClient(ref) + (pt - ref);
+
+            wxEventType type;
+            if ( input.dwFlags & TOUCHEVENTF_DOWN )
+                type = wxEVT_TOUCH_BEGIN;
+            else if ( input.dwFlags & TOUCHEVENTF_MOVE )
+                type = wxEVT_TOUCH_MOVE;
+            else if ( input.dwFlags & TOUCHEVENTF_UP )
+                type = wxEVT_TOUCH_END;
+            else
+                continue;
+
+            wxMultiTouchEvent event( GetId(), type);
+
+            event.SetEventObject( this );
+            event.SetPosition(pos);
+            event.SetSequenceId(wxTouchSequenceId(wxUIntToPtr(input.dwID + 1)));
+            event.SetPrimary( (input.dwFlags & TOUCHEVENTF_PRIMARY) != 0 );
+            HandleWindowEvent(event);
+        }
+        return true;
+    }
+    return false;
+}
+
 #endif // WM_GESTURE
 
 // ---------------------------------------------------------------------------
